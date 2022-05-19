@@ -1,0 +1,109 @@
+Mods:
+{
+    ImproveGame:
+    {
+        ImproveConfigs:
+        {
+            ImproveConfigs_Label: 模组配置
+            NoNeedReload: 无需重新加载
+            LoadModItems_Header: 物品设置
+            LoadModItems_Label: 启用模组物品
+            LoadModItems_Tooltip: 启用后会加载模组的物品，关闭后物品将会在游戏中消失。
+            ItemMaxStack_Label: 物品最大堆叠
+            GrabDistance_Label: 物品拾取范围提升 (单位：格子)
+            GrabDistance_Tooltip: 在原有的基础上增加物品的吸附范围，并且会提升吸附速度。
+            NoConsume_SummonItem_Label: 召唤物不消耗
+            NoConsume_SummonItem_Tooltip: 包括BOSS召唤物和事件召唤物，仅支持原版。
+            AutoReuseWeapon_Label: 自动挥舞武器
+            AutoReuseWeapon_ExclusionList_Label: 自动挥舞排除列表
+            AutoReuseWeapon_ExclusionList_Tooltip: 在启用自动挥舞武器的情况下，会排除此列表的物品。
+            ImproveToolSpeed_Label: 提高部分工具速度
+            ImproveToolSpeed_Tooltip: 会将工作速度 (useTime) 大于 8 的物品的工作速度更改为 8。
+            TileSpeedAndTileRange_Label: 提高物块放置速度和距离
+            NoPlace_BUFFTile_Label: 随身增益站
+            NoPlace_BUFFTile_Tooltip:
+                '''
+                玩家背包中或其他位置的增益站和旗帜会直接给予玩家增益，仅支持原版。
+                （其他位置：存钱罐，保险箱，护卫熔炉，虚空仓库）
+                '''
+            NoConsume_Potion_Label: 药剂 无限续杯
+            NoConsume_Potion_Tooltip:
+                '''
+                所有堆叠数不小于 三十 的药水将不再消耗。
+                玩家背包中或其他位置的增增益药水会直接给予玩家增益。
+                （其他位置：存钱罐，保险箱，护卫熔炉，虚空仓库）
+                '''
+            NoConsume_Ammo_Label: 无限弹药
+            NoConsume_Ammo_Tooltip: 所有堆叠数不小于 三千九百九十六 的弹药将不再消耗。
+            ImprovePrefix_Label: 更好的重铸机制
+            ImprovePrefix_Tooltip: 会随着重铸次数的提升淘汰较差的前缀。
+            ShowPrefixCount_Label: 显示重铸次数
+            ShowItemMoreData_Label: 显示物品更多数据
+            BanTombstone_Label: 禁止生成墓碑
+            TownNPCSpawnInNight_Header: NPC 设置
+            TownNPCSpawnInNight_Label: 允许城镇NPC夜晚刷新
+            TownNPCSpawnSpeed_Label: 城镇NPC刷新速度
+            NoCD_FishermanQuest_Label: 渔夫任务取消冷却
+            NPCCoinDropRate_Label: 敌人钱币掉落倍率
+            BanDamageVar_Header: 游戏机制
+            BanDamageVar_Label: 禁用伤害波动机制
+        }
+        ItemName:
+        {
+            MagickWand: 法爆魔杖
+            SpaceWand: 空间魔杖
+            StarburstWand: 星爆魔杖
+            CreateWand: 虚空魔杖
+            WallPlace: 科技魔杖
+        }
+        ItemTooltip:
+        {
+            MagickWand:
+                '''
+                挖掘鼠标位置小范围内物块
+                镐力相当于背包中最强的镐子
+                右键开启指示器
+                '''
+            SpaceWand:
+                '''
+                选择一个区域放置平台
+                使用背包中的靠前平台
+                物块交换开启尝试替换
+                单次最多放置二百格
+                右键取消放置
+                “我同情这些工具”
+                '''
+            StarburstWand:
+                '''
+                挖掘鼠标位置中等范围内物块
+                镐力相当于背包中最强的镐子
+                右键开启指示器
+                '''
+            WallPlace: 
+                '''
+                在鼠标位置召唤一个放置器
+                自动识别可能的区域并放置背包中的墙体
+                识别的区域至多拥有一千格
+                实体物块，平台，门可作为边界
+                每位玩家至多召唤一个，再次释放来收回它
+                '''
+        }
+        CombatText_Item:
+        {
+            SpaceWand_Cancel: "已取消！"
+            SpaceWand_Lack: "平台不足！"
+            WallPlace_Limit: "此区域过大！"
+            WallPlace_Consume: "预计消耗："
+            WallPlace_Kill: "已停止工作！"
+        }
+        CombatText_Projectile:
+        {
+            PlaceWall_Lack: "墙体不足，停止工作！"
+        }
+        Tips:
+        {
+            PrefixCount: "物品重铸次数："
+            AnglerQuest: "已刷新钓鱼任务！"
+        }
+    }
+}

@@ -1,0 +1,100 @@
+Mods:
+{
+    ImproveGame:
+    {
+        ImproveConfigs:
+        {
+            ImproveConfigs_Label: Mod configs
+            NoNeedReload: No need to reload this mod
+            LoadModItems_Header: Item configs
+            LoadModItems_Label: Enable mod items
+            LoadModItems_Tooltip: Modded items will not be loaded if it is off
+            ItemMaxStack_Label: Max stack
+            GrabDistance_Label: Increase item pickup range (measured in blocks)
+            GrabDistance_Tooltip: Increase pickup range of items. Drawing speed will also increase automatically.
+            NoConsume_SummonItem_Label: No longer consume summon items
+            NoConsume_SummonItem_Tooltip: Only for vanilla boss and event summon items
+            AutoReuseWeapon_Label: Weapon autoswing
+            AutoReuseWeapon_ExclusionList_Label: Autoswing black list
+            AutoReuseWeapon_ExclusionList_Tooltip: If Weapon autoswing is true, items in this list cannot take the effect
+            ImproveToolSpeed_Label: Increase certain tools' using speed
+            ImproveToolSpeed_Tooltip: Tools with use times greater than 8 will have their use times set to 8
+            TileSpeedAndTileRange_Label: Increase placement speed and range
+            NoPlace_BUFFTile_Label: Portable buff stations
+            NoPlace_BUFFTile_Tooltip: Vanilla buff stations and banners in any of your inventories provide you with their buffs
+            NoConsume_Potion_Label: Enable infinite potions
+            NoConsume_Potion_Tooltip: Potions in any of your inventories which stack not less than 30 will not be consumed
+            NoConsume_Ammo_Label: Enable infinite ammos
+            NoConsume_Ammo_Tooltip: Ammos which stack not less than 3996 will not be consumed
+            ImprovePrefix_Label: Better reforging mechanics
+            ImprovePrefix_Tooltip: Filter off bad prefixes as you keep reforging
+            ShowPrefixCount_Label: Shows how many times you have reforged this item
+            ShowItemMoreData_Label: Display reforging count
+            BanTombstone_Label: Disable tombstone spawn
+            TownNPCSpawnInNight_Header: NPC configs
+            TownNPCSpawnInNight_Label: Allow town NPCs to spawn at night time
+            TownNPCSpawnSpeed_Label: Town NPC spawn rate multiplier
+            NoCD_FishermanQuest_Label: Instant refresh Angler's quests
+            NPCCoinDropRate_Label: Enemy money drop multiplier
+            BanDamageVar_Header: Game mechanics
+            BanDamageVar_Label: Disable damage floating
+        }
+        ItemName:
+        {
+            MagickWand: Wand of Brusts
+            SpaceWand: Wand of Space
+            StarburstWand: Wand of Starbursts
+            CreateWand: Wand of Void
+            WallPlace: Wand of Technology
+        }
+        ItemTooltip:
+        {
+            MagickWand:
+                '''
+                Mine blocks within a small range of the cursor
+                The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
+                Right click to open the indicator
+                '''
+            SpaceWand:
+                '''
+                Select an area to place platforms
+                Consumes the first platform in your inventory
+                Can swap blocks if block swap is enabled
+                Can place at most 200 platforms once
+                Right click to cancel placing
+                'I pity these tools'
+                '''
+            StarburstWand:
+                '''
+                Mine blocks within a intermediate range of the cursor
+                The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
+                Right click to open the indicator
+                '''
+            WallPlace: 
+                '''
+                Summons a wall placer at your cursor
+                Automatically recognizes possible rooms and places walls in your inventory
+                The recognized room can have at most 1000 tiles' space
+                Considers tangible blocks, platforms and doors as boundaries
+                Each player can only summon one, use again to recall it
+                '''
+        }
+        CombatText_Item:
+        {
+            SpaceWand_Cancel: "Canceled!"
+            SpaceWand_Lack: "No enough platform!"
+            WallPlace_Limit: "This area is too big!"
+            WallPlace_Consume: "Excepted consumption: "
+            WallPlace_Kill: "Stopped placing!"
+        }
+        CombatText_Projectile:
+        {
+            PlaceWall_Lace: "Stopped placing due to lack of wall"
+        }
+        Tips:
+        {
+            PrefixCount: "Reforging count: "
+            AnglerQuest: "Angler's quest refreshed!"
+        }
+    }
+}

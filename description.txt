@@ -1,0 +1,87 @@
+这些功能也许会为你带来更好的游戏体验
+---------------------------
+默认开启功能：
+物品最大堆叠，武器自动使用，模组物品，非时装饰品也可放置在时装栏
+其他功能需要自行开启
+---------------------------
+更新说明：
+    1.5.4
+        新增功能：随身增益站（详见设置）
+        空间法杖、科技法杖蓝耗降低至五十
+        小版本：
+            增益站补充蜂蜜桶，水蜡烛，和平蜡烛
+    1.5.3
+        翻译完备
+        添加一个新工具，用于放置墙体
+        减少模组工具蓝耗，提高使用速度
+    1.5.2
+        放入猪猪存钱罐，保险箱，护卫熔炉，虚空保险库
+        的物品会像在背包中一样生效，比如手机。
+    1.5.1
+        更新增加了二十二个额外BUFF栏，并且为无限物品
+        添加了额外的识别显示。
+---------------------------
+功能列表（详见设置）：
+    一、   物品最大堆叠
+    二、   武器自动使用
+    三、   提升部分工具速度
+    四、   提升放置速度和工作范围
+    五、   BOSS/事件召唤物不消耗
+    六、   渔夫任务无冷却
+    七、   装备/饰品重铸的前缀会越来越好
+    八、   无限药剂，数量达到三十个后无限使用
+    九、   无限弹药，数量达到三千九百九十六个后无限使用
+    十、   非时装饰品也可放置在时装栏（启用模组直接生效）
+    十一、 控制墓碑掉落
+    十二、 控制物品拾取距离
+    十三、 敌人钱币掉落倍率[c/bb0055:（作弊功能）]
+    十四、 城镇npc夜晚入住
+    十五、 城镇npc刷新速度
+    十六、 模组物品
+    十七、 随身增益站
+---------------------------
+[c/990000:画师：枫林半叶]
+[c/9900ff:翻译：Lastprismer，Lacewing]
+[c/0099ff:代码：自爆局局长]
+
+These features may bring you better gameplay experience
+---------------------------
+Functions toggled by defaut:
+Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
+---------------------------
+Change log:
+    1.5.4
+        New feature: Portable buff stations(details in config)
+        Mana costs of Wand of Space and Wand of Technology are reduced to 50
+    1.5.3
+        Improved English translations
+        Added a tool to place walls
+        Reduced mana costs and increased using speed of this mod's tools
+    1.5.2
+        Information items such as Cell Phone works in piggy bank and such inventories
+    1.5.1
+        Added 22 extra buff slots
+        Added indicators for infinite items
+---------------------------
+Function list:
+    1. Max stack
+    2. Weapons autoswing
+    3. Increased using speed for certain tools
+    4. Increased placement speed and range
+    5. Vanilla boss and event summon items not being consumed
+    6. Instant refresh Angler's quests
+    7. Prefixes get better as you keep reforging
+    8. Infinite potions when stack to at least 30
+    9. Infinite ammos when stack to at least 3996
+    10. Can put non-vanity accessories in social slots
+    11. Disable tombstone spawn
+    12. Adjust item pickup range
+    13. Enemy coin drop multiplier(cheating)
+    14. Town NPCs can spawn at night time
+    15. Town NPC spawn rate
+    16. Enable modded items
+    17. Portable buff stations
+---------------------------
+[c/990000:Spriter: 枫林半叶]
+[c/9900ff:Translators: Lastprismer, Lacewing]
+[c/0099ff:Coder: 自爆局局长]
