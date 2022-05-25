@@ -10,8 +10,6 @@ namespace ImproveGame.Common.GlobalPlayers
     {
         // 保存的物品前缀，哥布林重铸栏
         public int ReforgeItemPrefix = 0;
-        // 忽略防御，管理员作弊指令
-        public bool IgnoreDefense = false;
         public override void SaveData(TagCompound tag)
         {
             if (Main.reforgeItem.type > ItemID.None)

@@ -46,8 +46,6 @@ namespace ImproveGame
             IL.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color;
             // 伤害波动
             On.Terraria.Main.DamageVar += Main_DamageVar;
-            // 管理员作弊之无视防御
-            On.Terraria.Main.CalculateDamageNPCsTake += Main_CalculateDamageNPCsTake;
             // 使存钱罐中物品生效，如同放入背包一样
             On.Terraria.Player.VanillaPreUpdateInventory += Player_VanillaPreUpdateInventory;
             // 旗帜更新
@@ -149,20 +147,6 @@ namespace ImproveGame
             for (int i = 0; i < self.bank4.item.Length; i++)
             {
                 self.VanillaUpdateInventory(self.bank4.item[i]);
-            }
-        }
-
-        private double Main_CalculateDamageNPCsTake(On.Terraria.Main.orig_CalculateDamageNPCsTake orig, int Damage, int Defense)
-        {
-            // 管理员作弊专用（）
-            if (Main.LocalPlayer.GetModPlayer<SaveAndLoadDataPlayer>().IgnoreDefense
-                && (Main.netMode == NetmodeID.MultiplayerClient || Main.netMode == NetmodeID.SinglePlayer))
-            {
-                return Damage * 2;
-            }
-            else
-            {
-                return orig(Damage, Defense);
             }
         }
 

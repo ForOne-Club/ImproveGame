@@ -265,6 +265,7 @@ namespace ImproveGame.Common.GlobalItems
             // 随身增益站
             if (!OpenEffect && Utils.GetConfig().NoPlace_BUFFTile)
             {
+                // 篝火
                 if (item.type == ItemID.HoneyBucket)
                 {
                     OpenEffect = true;
@@ -278,7 +279,7 @@ namespace ImproveGame.Common.GlobalItems
                         break;
                     }
                 }
-                if (!OpenEffect)
+                if (!OpenEffect && item.createTile == TileID.Banners)
                 {
                     int style = item.placeStyle;
                     int frameX = style * 18;
@@ -321,6 +322,77 @@ namespace ImproveGame.Common.GlobalItems
             sb.End();
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+        }
+
+        public override bool OnPickup(Item item, Player player)
+        {
+            return AA(player.bank.item, ref item);
+        }
+
+        public static bool AA(Item[] inv, ref Item item1)
+        {
+            for (int i = 0; i < inv.Length; i++)
+            {
+                Item item2 = inv[i];
+                if (item2.type == item1.type)
+                {
+                    // 如果两个物品相加数量大于最大堆叠
+                    if (item2.stack + item1.stack > item2.maxStack)
+                    {
+                        // 将item1修改为堆叠后的数量
+                        item1.stack = item2.stack + item1.stack - item2.maxStack;
+                        // 设置为最大值
+                        item2.stack = item2.maxStack;
+                        // 还有数量，进行第二轮必定堆叠
+                        return BB(inv, ref item1);
+                    }
+                    else
+                    {
+                        // 堆叠起来不会突破上限，无需就行第二轮堆叠
+                        item2.stack += item1.stack;
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 必定堆叠
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="item1"></param>
+        public static bool BB(Item[] inv, ref Item item1)
+        {
+            for (int i = 0; i < inv.Length; i++)
+            {
+                Item item2 = inv[i];
+                // 空的和ID相同的都堆叠
+                if (item2.type == ItemID.None || item2.type == item1.type)
+                {
+                    // 如果是空的，先设置为指定物品
+                    if (item2.type == ItemID.None)
+                    {
+                        item2.SetDefaults(item1.type);
+                        item2.stack = 0;
+                    }
+
+                    // 相同的堆叠算法
+                    if (item2.stack + item1.stack > item2.maxStack)
+                    {
+                        // 获取剩余数量
+                        item1.stack = item2.stack + item1.stack - item2.maxStack;
+                        // 设置为最大值
+                        item2.stack = item2.maxStack;
+                    }
+                    else
+                    {
+                        item2.stack += item1.stack;
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }
