@@ -326,73 +326,119 @@ namespace ImproveGame.Common.GlobalItems
 
         public override bool OnPickup(Item item, Player player)
         {
-            return AA(player.bank.item, ref item);
-        }
-
-        public static bool AA(Item[] inv, ref Item item1)
-        {
-            for (int i = 0; i < inv.Length; i++)
+            // 仅支持最大堆叠数量大于 1 的
+            if (item.maxStack > 1)
             {
-                Item item2 = inv[i];
-                if (item2.type == item1.type)
-                {
-                    // 如果两个物品相加数量大于最大堆叠
-                    if (item2.stack + item1.stack > item2.maxStack)
-                    {
-                        // 将item1修改为堆叠后的数量
-                        item1.stack = item2.stack + item1.stack - item2.maxStack;
-                        // 设置为最大值
-                        item2.stack = item2.maxStack;
-                        // 还有数量，进行第二轮必定堆叠
-                        return BB(inv, ref item1);
-                    }
-                    else
-                    {
-                        // 堆叠起来不会突破上限，无需就行第二轮堆叠
-                        item2.stack += item1.stack;
-                        return false;
-                    }
-                }
+                TryStackToInventory(player.bank.item, item);
+                TryStackToInventory(player.bank2.item, item);
+                TryStackToInventory(player.bank3.item, item);
+                TryStackToInventory(player.bank4.item, item);
+            }
+            if (item.stack < 1)
+            {
+                Item itemClone = new Item();
+                itemClone.SetDefaults(item.type);
+                itemClone.stack = item.stack;
+                return false;
             }
             return true;
         }
 
         /// <summary>
-        /// 必定堆叠
+        /// 尝试将 item 堆叠到 player 其中一个库存
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="item"></param>
+        public static void TryStackToInventory(Item[] items, Item item)
+        {
+            List<int> list = HasItem(items, item);
+            if (list.Count > 0)
+            {
+                // 分别存储到对应位置
+                for (int i = 0; i < list.Count; i++)
+                {
+                    ItemStack(items[list[i]], item);
+                }
+                // 存储结束后如果还有，就分配到背包的其他位置
+                if (item.stack > 0)
+                {
+                    StackToInventory(items, item);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 将 item 堆叠到指定库存
         /// </summary>
         /// <param name="inv"></param>
         /// <param name="item1"></param>
-        public static bool BB(Item[] inv, ref Item item1)
+        public static void StackToInventory(Item[] inv, Item item1)
         {
             for (int i = 0; i < inv.Length; i++)
             {
                 Item item2 = inv[i];
                 // 空的和ID相同的都堆叠
-                if (item2.type == ItemID.None || item2.type == item1.type)
+                if (item1.stack > 0 && (item2.type == ItemID.None || item2.type == item1.type))
                 {
-                    // 如果是空的，先设置为指定物品
-                    if (item2.type == ItemID.None)
-                    {
-                        item2.SetDefaults(item1.type);
-                        item2.stack = 0;
-                    }
+                    ItemStack(item2, item1);
 
-                    // 相同的堆叠算法
-                    if (item2.stack + item1.stack > item2.maxStack)
+                    // 如果没有数量结束遍历
+                    if (item2.stack <= 0)
                     {
-                        // 获取剩余数量
-                        item1.stack = item2.stack + item1.stack - item2.maxStack;
-                        // 设置为最大值
-                        item2.stack = item2.maxStack;
-                    }
-                    else
-                    {
-                        item2.stack += item1.stack;
-                        return false;
+                        break;
                     }
                 }
             }
-            return true;
+        }
+
+        /// <summary>
+        /// 判断指定 Item[] 中是否有 item
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static List<int> HasItem(Item[] inv, Item item)
+        {
+            // 判断 指定 inv 有没有指定 item
+            List<int> list = new List<int>();
+            for (int i = 0; i < inv.Length; i++)
+            {
+                if (inv[i].type == item.type && inv[i].stack > 0)
+                {
+                    list.Add(i);
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 把 item2 堆叠到 item1
+        /// </summary>
+        /// <param name="item1"></param>
+        /// <param name="item2"></param>
+        public static void ItemStack(Item item1, Item item2)
+        {
+            // 如果是空的，先设置为指定物品
+            if (item1.type == ItemID.None)
+            {
+                item1.SetDefaults(item2.type);
+                item1.stack = 0;
+            }
+
+            // 相同的堆叠算法
+            if (item1.stack + item2.stack > item1.maxStack)
+            {
+                // 获取剩余数量
+                item2.stack = item1.stack + item2.stack - item1.maxStack;
+                // 设置为最大值
+                item1.stack = item1.maxStack;
+            }
+            else
+            {
+                // 堆叠上去，item2数量归零
+                item1.stack += item2.stack;
+                item2.stack = 0;
+            }
         }
     }
 }

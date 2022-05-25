@@ -60,7 +60,7 @@ Mods:
                 Select an area to place platforms
                 Consumes the first platform in your inventory
                 Can swap blocks if block swap is enabled
-                Can place at most 200 platforms once
+                Can place at most 500 platforms once
                 Right click to cancel placing
                 'I pity these tools'
                 '''

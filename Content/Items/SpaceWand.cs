@@ -100,15 +100,15 @@ namespace ImproveGame.Content.Items
             bool consumable = Utils.GetPlatformCount(player.inventory, ref platfromCount);
             if (!consumable)
             {
-                platfromCount = 200;
+                platfromCount = 500;
             }
             TileDraw.MagiskTilesRec.X = (int)MathF.Min(StartPosition.X, EndPosition.X);
-            if (TileDraw.MagiskTilesRec.X < StartPosition.X - MathF.Min(199, platfromCount - 1))
+            if (TileDraw.MagiskTilesRec.X < StartPosition.X - MathF.Min(499, platfromCount - 1))
             {
-                TileDraw.MagiskTilesRec.X = StartPosition.X - (int)MathF.Min(199, platfromCount - 1);
+                TileDraw.MagiskTilesRec.X = StartPosition.X - (int)MathF.Min(499, platfromCount - 1);
             }
             TileDraw.MagiskTilesRec.Y = StartPosition.Y;
-            TileDraw.MagiskTilesRec.Width = (int)MathF.Min(MathF.Abs(StartPosition.X - EndPosition.X) + 1, MathF.Min(200, platfromCount));
+            TileDraw.MagiskTilesRec.Width = (int)MathF.Min(MathF.Abs(StartPosition.X - EndPosition.X) + 1, MathF.Min(500, platfromCount));
             TileDraw.MagiskTilesRec.Height = 1;
             if (Main.mouseLeft)
             {
