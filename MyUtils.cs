@@ -2,18 +2,183 @@
 using ImproveGame.Entitys;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.UI;
 using static ImproveGame.Common.GlobalItems.ImproveItem;
 
 namespace ImproveGame
 {
-    public class Utils
+    /// <summary>
+    /// 局长自用工具
+    /// </summary>
+    public class MyUtils
     {
+        /// <summary>
+        /// 获取 HJson 文字
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string GetText(string str)
+        {
+            return Language.GetTextValue($"Mods.ImproveGame.{str}");
+        }
+
+        public static Asset<Texture2D> GetTexture(string path)
+        {
+            return ModContent.Request<Texture2D>($"ImproveGame/Assets/Images/{path}", AssetRequestMode.ImmediateLoad);
+        }
+
+        /// <summary>
+        /// 绘制一个方框
+        /// </summary>
+        /// <param name="sb"></param>
+        /// <param name="dimensions"></param>
+        /// <param name="texture"></param>
+        /// <param name="color"></param>
+        public static void DrawPanel(SpriteBatch sb, CalculatedStyle dimensions, Texture2D texture, Color color)
+        {
+            Point point = new Point((int)dimensions.X, (int)dimensions.Y);
+            Point point2 = new Point(point.X + (int)dimensions.Width - 12, point.Y + (int)dimensions.Height - 12);
+            int width = point2.X - point.X - 12;
+            int height = point2.Y - point.Y - 12;
+            sb.Draw(texture, new Rectangle(point.X, point.Y, 12, 12), new Rectangle(0, 0, 12, 12), color);
+            sb.Draw(texture, new Rectangle(point2.X, point.Y, 12, 12), new Rectangle(12 + 4, 0, 12, 12), color);
+            sb.Draw(texture, new Rectangle(point.X, point2.Y, 12, 12), new Rectangle(0, 12 + 4, 12, 12), color);
+            sb.Draw(texture, new Rectangle(point2.X, point2.Y, 12, 12), new Rectangle(12 + 4, 12 + 4, 12, 12), color);
+            sb.Draw(texture, new Rectangle(point.X + 12, point.Y, width, 12), new Rectangle(12, 0, 4, 12), color);
+            sb.Draw(texture, new Rectangle(point.X + 12, point2.Y, width, 12), new Rectangle(12, 12 + 4, 4, 12), color);
+            sb.Draw(texture, new Rectangle(point.X, point.Y + 12, 12, height), new Rectangle(0, 12, 12, 4), color);
+            sb.Draw(texture, new Rectangle(point2.X, point.Y + 12, 12, height), new Rectangle(12 + 4, 12, 12, 4), color);
+            sb.Draw(texture, new Rectangle(point.X + 12, point.Y + 12, width, height), new Rectangle(12, 12, 4, 4), color);
+        }
+
+        /// <summary>
+        /// 堆叠物品到仓库
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="item"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        public static Item StackItemToInv(int plr, Item[] inv, Item item, GetItemSettings settings, bool hint = true)
+        {
+            List<int> list = new();
+            // 先填充和物品相同的
+            for (int i = 0; i < inv.Length; i++)
+            {
+                if (inv[i].type == item.type && inv[i].stack > 0 && inv[i].stack < inv[i].maxStack &&
+                    ItemLoader.CanStack(inv[i], item))
+                {
+                    item = StackItemToItem(plr, inv, i, item, settings, hint);
+                    if (item.type == ItemID.None)
+                    {
+                        return item;
+                    }
+                }
+            }
+            // 后填充空位
+            for (int i = 0; i < inv.Length; i++)
+            {
+                if (inv[i].type == ItemID.None || inv[i].stack < 1)
+                {
+                    item = StackItemToItem(plr, inv, i, item, settings, hint);
+                    if (item.type == ItemID.None)
+                    {
+                        return item;
+                    }
+                }
+            }
+            return item;
+        }
+
+        /// <summary>
+        /// 堆叠物品到仓库[i]
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="i"></param>
+        /// <param name="cItem"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        public static Item StackItemToItem(int plr, Item[] inv, int i, Item cItem, GetItemSettings settings, bool hint)
+        {
+            if (inv[i].type == ItemID.None)
+            {
+                if (hint)
+                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cItem, cItem.stack, noStack: false, settings.LongText);
+                inv[i] = cItem;
+                if (plr == Main.myPlayer)
+                {
+                    Recipe.FindRecipes();
+                }
+                return new Item();
+            }
+            if (inv[i].stack + cItem.stack > inv[i].maxStack)
+            {
+                if (hint)
+                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cItem, inv[i].maxStack - inv[i].stack, noStack: false, settings.LongText);
+                cItem.stack -= inv[i].maxStack - inv[i].stack;
+                inv[i].stack = inv[i].maxStack;
+                if (plr == Main.myPlayer)
+                {
+                    Recipe.FindRecipes();
+                }
+                return cItem;
+            }
+            else
+            {
+                if (hint)
+                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cItem, cItem.stack, noStack: false, settings.LongText);
+                inv[i].stack += cItem.stack;
+                if (plr == Main.myPlayer)
+                {
+                    Recipe.FindRecipes();
+                }
+                return new Item();
+            }
+        }
+
+        /// <summary>
+        /// 判断指定 Item[] 中是否有 item 能用的空间
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool HasItemSpace(Item[] inv, Item item, int indexMax = 0)
+        {
+            for (int i = 0; i < (indexMax > 0 ? indexMax : inv.Length); i++)
+            {
+                if (inv[i].type == ItemID.None || (inv[i].type == item.type && inv[i].stack > 0 && inv[i].stack < inv[i].maxStack))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 判断指定 Item[] 中是否有 item
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool HasItem(Item[] inv, Item item, int indexMax = 0)
+        {
+            for (int i = 0; i < (indexMax > 0 ? indexMax : inv.Length); i++)
+            {
+                if (inv[i].type == item.type && inv[i].stack > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // 获取配置
-        public static ImproveConfigs GetConfig()
+        public static ImproveConfigs Config()
         {
             return ModContent.GetInstance<ImproveConfigs>();
         }
@@ -37,7 +202,7 @@ namespace ImproveGame
             return consumable;
         }
 
-        // 获取平台总数
+        // 获取墙总数
         public static bool GetWallCount(Item[] inv, ref int count)
         {
             bool consumable = true;

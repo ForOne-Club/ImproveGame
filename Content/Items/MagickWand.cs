@@ -12,7 +12,7 @@ namespace ImproveGame.Content.Items
     {
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return Utils.GetConfig().LoadModItems;
+            return MyUtils.Config().LoadModItems;
         }
 
         public override void SetStaticDefaults()
@@ -86,7 +86,7 @@ namespace ImproveGame.Content.Items
             {
                 // 开启UI显示
                 TileDraw.MagiskTileColor = new Color(1f, 0.9f, 0.1f, 1f);
-                player.GetModPlayer<Common.ModPlayers.UpdatePlayer>().MagiskKillTiles = OpenUI;
+                player.GetModPlayer<Common.ModPlayers.ImprovePlayer>().MagiskKillTiles = OpenUI;
                 TileDraw.MagiskTilesRec = GetMagiskRectangle(player);
                 if (Main.mouseRight && BeginDownRight)
                 {
@@ -106,7 +106,7 @@ namespace ImproveGame.Content.Items
             {
                 if (player.whoAmI == Main.myPlayer)
                 {
-                    Utils.KillTiles(player, TileDraw.MagiskTilesRec);
+                    MyUtils.KillTiles(player, TileDraw.MagiskTilesRec);
                 }
             }
             return true;

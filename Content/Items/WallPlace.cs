@@ -13,6 +13,10 @@ namespace ImproveGame.Content.Items
 {
     public class WallPlace : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return MyUtils.Config().LoadModItems;
+        }
         public override void SetDefaults()
         {
             Item.useTime = 15;

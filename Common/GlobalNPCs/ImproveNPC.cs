@@ -12,7 +12,7 @@ namespace ImproveGame.Common.GlobalNPCs
     {
         public override void SetDefaults(NPC npc)
         {
-            npc.value *= Utils.GetConfig().NPCCoinDropRate;
+            npc.value *= MyUtils.Config().NPCCoinDropRate;
         }
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)

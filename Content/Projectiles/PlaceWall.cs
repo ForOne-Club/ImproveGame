@@ -50,11 +50,11 @@ namespace ImproveGame.Content.Projectiles
         {
             Player player = Main.player[Projectile.owner];
             Projectile.timeLeft++;
-            if (Timer % 2 == 0)
+            if (Timer % 1 == 0)
             {
                 if (WP < Walls.Count)
                 {
-                    Item item = Utils.GetFirstWall(player);
+                    Item item = MyUtils.GetFirstWall(player);
                     if (item.type == ItemID.None)
                     {
                         CombatText.NewText(Projectile.getRect(), new Color(225, 0, 0),

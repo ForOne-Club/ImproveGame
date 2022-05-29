@@ -10,6 +10,10 @@ namespace ImproveGame.Content.Items
 {
     public class CreateWand : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return MyUtils.Config().LoadModItems;
+        }
         public override void SetDefaults()
         {
             Item.width = 24;
@@ -24,7 +28,7 @@ namespace ImproveGame.Content.Items
             Point point = Main.MouseWorld.ToTileCoordinates(); // 鼠标位置
             point.X -= 5;
             point.Y -= 3;
-            player.GetModPlayer<UpdatePlayer>().MagiskKillTiles = true;
+            player.GetModPlayer<ImprovePlayer>().MagiskKillTiles = true;
             TileDraw.MagiskTilesRec = new Rectangle(point.X, point.Y, 11, 6);
             TileDraw.MagiskTileColor = new Color(0, 165, 255, 255);
         }
@@ -33,8 +37,8 @@ namespace ImproveGame.Content.Items
         {
             if (player.itemAnimation == player.itemAnimationMax)
             {
-                List<TileInfo> tileInfos = Utils.PrisonTiles(19, 0);
-                List<WallInfo> wallInfos = Utils.PrisonWalls(4);
+                List<TileInfo> tileInfos = MyUtils.PrisonTiles(19, 0);
+                List<WallInfo> wallInfos = MyUtils.PrisonWalls(4);
                 Point point = Main.MouseWorld.ToTileCoordinates(); // 鼠标位置
                 point.X -= 5;
                 point.Y -= 3;

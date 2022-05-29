@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ImproveGame.Common.GlobalPlayers;
+using ImproveGame.Common.ModPlayers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -52,7 +54,7 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             // 所有召唤物不会消耗
-            if ((SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)) && Utils.GetConfig().NoConsume_SummonItem)
+            if ((SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)) && MyUtils.Config().NoConsume_SummonItem)
             {
                 item.consumable = false;
                 item.maxStack = 99;
@@ -60,18 +62,18 @@ namespace ImproveGame.Common.GlobalItems
 
             // 自动挥舞
             List<int> ExcludeAutoReuse = new();
-            foreach (var item2 in Utils.GetConfig().AutoReuseWeapon_ExclusionList)
+            foreach (var item2 in MyUtils.Config().AutoReuseWeapon_ExclusionList)
             {
                 ExcludeAutoReuse.Add(item2.Type);
             }
             if (item.damage > 0 && !ExcludeAutoReuse.Contains(item.type)
-                && Utils.GetConfig().AutoReuseWeapon)
+                && MyUtils.Config().AutoReuseWeapon)
             {
                 item.autoReuse = true;
             }
 
             // 工具速度
-            if ((item.axe > 0 || item.pick > 0 || item.hammer > 0) && Utils.GetConfig().ImproveToolSpeed)
+            if ((item.axe > 0 || item.pick > 0 || item.hammer > 0) && MyUtils.Config().ImproveToolSpeed)
             {
                 if (item.useTime > 8)
                 {
@@ -93,7 +95,7 @@ namespace ImproveGame.Common.GlobalItems
         // 更新背包药水BUFF
         public override void UpdateInventory(Item item, Player player)
         {
-            if (Utils.GetConfig().NoConsume_Potion)
+            if (MyUtils.Config().NoConsume_Potion)
             {
                 // 普通药水
                 if (item.stack >= 30 && item.buffType > 0 && item.active)
@@ -102,7 +104,7 @@ namespace ImproveGame.Common.GlobalItems
                 }
             }
             // 随身增益站
-            if (Utils.GetConfig().NoPlace_BUFFTile)
+            if (MyUtils.Config().NoPlace_BUFFTile)
             {
                 // 会给玩家buff的雕像
                 for (int i = 0; i < BUFFTiles.Count; i++)
@@ -123,7 +125,7 @@ namespace ImproveGame.Common.GlobalItems
         // 物品消耗
         public override bool ConsumeItem(Item item, Player player)
         {
-            if (Utils.GetConfig().NoConsume_Potion
+            if (MyUtils.Config().NoConsume_Potion
                 && item.stack >= 30 && (item.buffType > 0 || SpecialMedicines.Contains(item.type)))
             {
                 return false;
@@ -134,7 +136,7 @@ namespace ImproveGame.Common.GlobalItems
         // 弹药消耗
         public override bool CanBeConsumedAsAmmo(Item ammo, Player player)
         {
-            if (Utils.GetConfig().NoConsume_Ammo
+            if (MyUtils.Config().NoConsume_Ammo
                 && ammo.stack >= 3996 && ammo.ammo > 0)
             {
                 return false;
@@ -150,7 +152,7 @@ namespace ImproveGame.Common.GlobalItems
             {
                 return true;
             }
-            if (Utils.GetConfig().ImprovePrefix) // 新的重铸机制
+            if (MyUtils.Config().ImprovePrefix) // 新的重铸机制
             {
                 // 饰品
                 if (PrefixLevel.ContainsKey(pre))
@@ -215,7 +217,7 @@ namespace ImproveGame.Common.GlobalItems
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             // 重铸次数
-            if (Utils.GetConfig().ShowPrefixCount && (item.accessory ||
+            if (MyUtils.Config().ShowPrefixCount && (item.accessory ||
                 (item.damage > 0 && item.maxStack == 1 && item.ammo == AmmoID.None &&
                 item.DamageType != DamageClass.Generic)))
             {
@@ -224,7 +226,7 @@ namespace ImproveGame.Common.GlobalItems
                 tooltips.Add(tooltip);
             }
             // 更多信息
-            if (Utils.GetConfig().ShowItemMoreData)
+            if (MyUtils.Config().ShowItemMoreData)
             {
                 tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
                 tooltips.Add(new(Mod, "UseAnimation", "UseAnimation: " + item.useAnimation));
@@ -241,7 +243,7 @@ namespace ImproveGame.Common.GlobalItems
         // 额外拾取距离
         public override void GrabRange(Item item, Player player, ref int grabRange)
         {
-            grabRange += Utils.GetConfig().GrabDistance * 16;
+            grabRange += MyUtils.Config().GrabDistance * 16;
         }
 
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -249,12 +251,12 @@ namespace ImproveGame.Common.GlobalItems
             // 开启特效
             bool OpenEffect = false;
             // 弹药
-            if (Utils.GetConfig().NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0)
+            if (MyUtils.Config().NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0)
             {
                 OpenEffect = true;
             }
             // 无限药剂 + Tile Buff in 背包生效
-            if (!OpenEffect && Utils.GetConfig().NoConsume_Potion)
+            if (!OpenEffect && MyUtils.Config().NoConsume_Potion)
             {
                 // 药剂
                 if (item.stack >= 30 && (item.buffType > 0 || SpecialMedicines.Contains(item.type)))
@@ -263,7 +265,7 @@ namespace ImproveGame.Common.GlobalItems
                 }
             }
             // 随身增益站
-            if (!OpenEffect && Utils.GetConfig().NoPlace_BUFFTile)
+            if (!OpenEffect && MyUtils.Config().NoPlace_BUFFTile)
             {
                 // 篝火
                 if (item.type == ItemID.HoneyBucket)
@@ -310,8 +312,8 @@ namespace ImproveGame.Common.GlobalItems
                 {
                     lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(Main.time % 30 / 29));
                 }
-                ImproveGame.npcEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-                ImproveGame.npcEffect.CurrentTechnique.Passes["Test"].Apply();
+                ImproveGame.itemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
+                ImproveGame.itemEffect.CurrentTechnique.Passes["Test"].Apply();
                 return true;
             }
             return true;
@@ -324,121 +326,39 @@ namespace ImproveGame.Common.GlobalItems
                 DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
         }
 
-        public override bool OnPickup(Item item, Player player)
-        {
-            // 仅支持最大堆叠数量大于 1 的
-            if (item.maxStack > 1)
-            {
-                TryStackToInventory(player.bank.item, item);
-                TryStackToInventory(player.bank2.item, item);
-                TryStackToInventory(player.bank3.item, item);
-                TryStackToInventory(player.bank4.item, item);
-            }
-            if (item.stack < 1)
-            {
-                Item itemClone = new Item();
-                itemClone.SetDefaults(item.type);
-                itemClone.stack = item.stack;
-                return false;
-            }
-            return true;
-        }
-
         /// <summary>
-        /// 尝试将 item 堆叠到 player 其中一个库存
+        /// 物品是否可吸附处理
         /// </summary>
+        /// <param name="item"></param>
         /// <param name="player"></param>
-        /// <param name="item"></param>
-        public static void TryStackToInventory(Item[] items, Item item)
-        {
-            List<int> list = HasItem(items, item);
-            if (list.Count > 0)
-            {
-                // 分别存储到对应位置
-                for (int i = 0; i < list.Count; i++)
-                {
-                    ItemStack(items[list[i]], item);
-                }
-                // 存储结束后如果还有，就分配到背包的其他位置
-                if (item.stack > 0)
-                {
-                    StackToInventory(items, item);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 将 item 堆叠到指定库存
-        /// </summary>
-        /// <param name="inv"></param>
-        /// <param name="item1"></param>
-        public static void StackToInventory(Item[] inv, Item item1)
-        {
-            for (int i = 0; i < inv.Length; i++)
-            {
-                Item item2 = inv[i];
-                // 空的和ID相同的都堆叠
-                if (item1.stack > 0 && (item2.type == ItemID.None || item2.type == item1.type))
-                {
-                    ItemStack(item2, item1);
-
-                    // 如果没有数量结束遍历
-                    if (item2.stack <= 0)
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 判断指定 Item[] 中是否有 item
-        /// </summary>
-        /// <param name="inv"></param>
-        /// <param name="item"></param>
         /// <returns></returns>
-        public static List<int> HasItem(Item[] inv, Item item)
+        public override bool ItemSpace(Item item, Player player)
         {
-            // 判断 指定 inv 有没有指定 item
-            List<int> list = new List<int>();
-            for (int i = 0; i < inv.Length; i++)
+            ImprovePlayer improvePlayer = ImprovePlayer.G(player);
+            // 猪猪钱罐
+            if (MyUtils.HasItemSpace(player.GetModPlayer<DataPlayer>().SuperVault, item))
             {
-                if (inv[i].type == item.type && inv[i].stack > 0)
+                return true;
+            }
+            if (MyUtils.Config().SuperVoidVault)
+            {
+                // 猪猪钱罐
+                if (improvePlayer.PiggyBank && MyUtils.HasItemSpace(player.bank.item, item))
                 {
-                    list.Add(i);
+                    return true;
+                }
+                // 保险箱
+                if (improvePlayer.Safe && MyUtils.HasItemSpace(player.bank2.item, item))
+                {
+                    return true;
+                }
+                // 护卫熔炉
+                if (improvePlayer.DefendersForge && MyUtils.HasItemSpace(player.bank3.item, item))
+                {
+                    return true;
                 }
             }
-            return list;
-        }
-
-        /// <summary>
-        /// 把 item2 堆叠到 item1
-        /// </summary>
-        /// <param name="item1"></param>
-        /// <param name="item2"></param>
-        public static void ItemStack(Item item1, Item item2)
-        {
-            // 如果是空的，先设置为指定物品
-            if (item1.type == ItemID.None)
-            {
-                item1.SetDefaults(item2.type);
-                item1.stack = 0;
-            }
-
-            // 相同的堆叠算法
-            if (item1.stack + item2.stack > item1.maxStack)
-            {
-                // 获取剩余数量
-                item2.stack = item1.stack + item2.stack - item1.maxStack;
-                // 设置为最大值
-                item1.stack = item1.maxStack;
-            }
-            else
-            {
-                // 堆叠上去，item2数量归零
-                item1.stack += item2.stack;
-                item2.stack = 0;
-            }
+            return false;
         }
     }
 }

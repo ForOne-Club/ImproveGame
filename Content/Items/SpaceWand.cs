@@ -16,7 +16,7 @@ namespace ImproveGame.Content.Items
     {
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return Utils.GetConfig().LoadModItems;
+            return MyUtils.Config().LoadModItems;
         }
 
         public override void SetStaticDefaults()
@@ -69,7 +69,7 @@ namespace ImproveGame.Content.Items
         public override bool CanUseItem(Player player)
         {
             int count = 0;
-            Utils.GetPlatformCount(player.inventory, ref count);
+            MyUtils.GetPlatformCount(player.inventory, ref count);
             if (count < 1)
             {
                 return false;
@@ -97,7 +97,7 @@ namespace ImproveGame.Content.Items
             }
             // 绘制层参数，X、Y 
             int platfromCount = 0;
-            bool consumable = Utils.GetPlatformCount(player.inventory, ref platfromCount);
+            bool consumable = MyUtils.GetPlatformCount(player.inventory, ref platfromCount);
             if (!consumable)
             {
                 platfromCount = 500;
@@ -118,7 +118,7 @@ namespace ImproveGame.Content.Items
             {
                 TileDraw.MagiskTileColor = new Color(255, 0, 0, 255);
             }
-            player.GetModPlayer<Common.ModPlayers.UpdatePlayer>().MagiskKillTiles = true;
+            player.GetModPlayer<Common.ModPlayers.ImprovePlayer>().MagiskKillTiles = true;
             int minI = TileDraw.MagiskTilesRec.X;
             int maxI = TileDraw.MagiskTilesRec.X + TileDraw.MagiskTilesRec.Width - 1;
             int minJ = TileDraw.MagiskTilesRec.Y;
@@ -134,7 +134,7 @@ namespace ImproveGame.Content.Items
                         for (int j = minJ; j <= maxJ; j++)
                         {
                             // 找到背包第一个平台
-                            Item PlatformItem = Utils.GetFirstPlatform(player);
+                            Item PlatformItem = MyUtils.GetFirstPlatform(player);
                             Item BestPickaxe = player.GetBestPickaxe();
                             // 如果有找到平台结束执行
                             if (PlatformItem.type == ItemID.None)
@@ -145,7 +145,7 @@ namespace ImproveGame.Content.Items
                             // 破坏物块
                             if (!Main.tileHammer[Main.tile[i, j].TileType] && BestPickaxe.type != ItemID.None
                                 && player.TileReplacementEnabled // 物块交换
-                                && Utils.IsSameTile(i, j, PlatformItem.createTile, PlatformItem.placeStyle))
+                                && MyUtils.IsSameTile(i, j, PlatformItem.createTile, PlatformItem.placeStyle))
                             {
                                 HitTile.HitTileObject hitTileObject = player.hitTile.data[player.hitTile.HitObject(i, j, 1)];
                                 int damage = hitTileObject.damage;

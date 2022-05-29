@@ -8,6 +8,25 @@ Mods:
             NoNeedReload: 无需重新加载
             LoadModItems_Header: 物品设置
             LoadModItems_Label: 启用模组物品
+            SuperVoidVault_Label: 超级虚空保险库
+            SuperVoidVault_Tooltip:
+                '''
+                使猪猪存钱罐，保险箱，护卫熔炉拥有和虚空袋相同的效果。
+                优先级：虚空保险库 → 猪猪钱罐 → 保险箱 → 护卫熔炉
+                '''
+            SmartVoidVault_Label: 虚空保险库 智能收取
+            SmartVoidVault_Tooltip:
+                '''
+                拾取的物品如果在虚空袋中存在，优先放入其中。
+                如果开启超级虚空保险库，则也会应用，优先级相同。
+                '''
+            SuperVault_Label: 超大背包
+            SuperVault_Tooltip:
+                '''
+                拥有一百格空间的背包，可以与“超级虚空保险库”
+                “虚空宝库 智能收取”联动，优先级最高。
+                （需要在控件中配置模组按键）
+                '''
             LoadModItems_Tooltip: 启用后会加载模组的物品，关闭后物品将会在游戏中消失。
             ItemMaxStack_Label: 物品最大堆叠
             GrabDistance_Label: 物品拾取范围提升 (单位：格子)
@@ -23,8 +42,13 @@ Mods:
             NoPlace_BUFFTile_Label: 随身增益站
             NoPlace_BUFFTile_Tooltip:
                 '''
-                玩家背包中或其他位置的增益站和旗帜会直接给予玩家增益，仅支持原版。
+                玩家背包中或其他位置的增益站和旗帜会直接给予玩家增益（仅支持原版）
                 （其他位置：存钱罐，保险箱，护卫熔炉，虚空仓库）
+                '''
+            NoPlace_BUFFTile_Banner_Label: 随身增益站：旗帜
+            NoPlace_BUFFTile_Banner_Tooltip:
+                '''
+                针对怪物旗帜，同于随身增益站（仅支持原版）
                 '''
             NoConsume_Potion_Label: 药剂 无限续杯
             NoConsume_Potion_Tooltip:
@@ -104,6 +128,10 @@ Mods:
         {
             PrefixCount: "物品重铸次数："
             AnglerQuest: "已刷新钓鱼任务！"
+        }
+        Keybin:
+        {
+            SuperVault: 大背包
         }
     }
 }

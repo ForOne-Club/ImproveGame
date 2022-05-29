@@ -24,7 +24,7 @@ namespace ImproveGame.Content
 
         private static void DrawTiles()
         {
-            if (Main.LocalPlayer.GetModPlayer<Common.ModPlayers.UpdatePlayer>().MagiskKillTiles)
+            if (Main.LocalPlayer.GetModPlayer<Common.ModPlayers.ImprovePlayer>().MagiskKillTiles)
             {
                 Texture2D texture = TextureAssets.MagicPixel.Value;
                 Vector2 UpperLeft = new Vector2(MagiskTilesRec.X, MagiskTilesRec.Y);

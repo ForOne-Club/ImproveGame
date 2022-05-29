@@ -1,5 +1,6 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.GlobalPlayers;
+using ImproveGame.Common.ModPlayers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
@@ -14,24 +15,21 @@ using Terraria.ModLoader;
 namespace ImproveGame
 {
     // 更新任务
-    // 神庙电池（现版本右键使用会消耗），松露虫，光女召唤物下版本更新加入不消耗
+    // 神庙电池（现版本右键使用会消耗），松露虫，光女召唤物下版本更新加入不消耗 ×
     // Tile 工具：自动钓鱼，自动采集，自动挖矿
     // Buff Tile 在背包也可以获得 Buff （已完成）
     // 刷怪率 UI
     public class ImproveGame : Mod
     {
-        public static Effect npcEffect;
-        public static Effect strokeEffect;
-
+        public static Effect itemEffect;
         // 额外BUFF栏
         public override uint ExtraPlayerBuffSlots => 22;
 
         public override void Load()
         {
-            npcEffect = Assets.Request<Effect>("npc", AssetRequestMode.ImmediateLoad).Value;
-            strokeEffect = Assets.Request<Effect>("stroke", AssetRequestMode.ImmediateLoad).Value;
+            itemEffect = Assets.Request<Effect>("npc", AssetRequestMode.ImmediateLoad).Value;
             // 加载前缀信息
-            Utils.LoadPrefixInfo();
+            MyUtils.LoadPrefixInfo();
             // 还原哥布林重铸槽中物品的重铸次数
             On.Terraria.Player.dropItemCheck += Player_dropItemCheck;
             // 死亡是否掉落墓碑
@@ -50,6 +48,78 @@ namespace ImproveGame
             On.Terraria.Player.VanillaPreUpdateInventory += Player_VanillaPreUpdateInventory;
             // 旗帜更新
             On.Terraria.SceneMetrics.ScanAndExportToMain += SceneMetrics_ScanAndExportToMain;
+            // 拾取物品处理方法
+            On.Terraria.Player.PickupItem += Player_PickupItem;
+        }
+
+        private Item Player_PickupItem(On.Terraria.Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp)
+        {
+            ImprovePlayer improvePlayer = ImprovePlayer.G(player);
+            // 智能虚空保险库
+            if (MyUtils.Config().SmartVoidVault)
+            {
+                if (MyUtils.Config().SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp))
+                {
+                    itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault,
+                        itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                }
+                if (itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin)
+                {
+                    if (player.IsVoidVaultEnabled && MyUtils.HasItem(player.bank4.item, itemToPickUp))
+                    {
+                        itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.bank4.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                    }
+                    // 超级虚空保险库
+                    if (MyUtils.Config().SuperVoidVault)
+                    {
+                        if (improvePlayer.PiggyBank && MyUtils.HasItem(player.bank.item, itemToPickUp))
+                        {
+                            itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.bank.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                        }
+                        if (improvePlayer.Safe && MyUtils.HasItem(player.bank2.item, itemToPickUp))
+                        {
+                            itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.bank2.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                        }
+                        if (improvePlayer.DefendersForge && MyUtils.HasItem(player.bank3.item, itemToPickUp))
+                        {
+                            itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.bank3.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                        }
+                    }
+                }
+            }
+            Item item = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
+            if (MyUtils.Config().SuperVault && item.type != ItemID.None && item.stack > 0 && !item.IsACoin)
+            {
+                if (improvePlayer.PiggyBank)
+                {
+                    item = MyUtils.StackItemToInv(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault, item, GetItemSettings.PickupItemFromWorld);
+                }
+            }
+            // 超级虚空保险库
+            if (MyUtils.Config().SuperVoidVault)
+            {
+                if (item.type != ItemID.None && item.stack > 0 && !item.IsACoin)
+                {
+                    if (improvePlayer.PiggyBank)
+                    {
+                        item = MyUtils.StackItemToInv(player.whoAmI, player.bank.item, item, GetItemSettings.PickupItemFromWorld);
+                    }
+                    if (improvePlayer.Safe && item.type != ItemID.None && item.stack > 0)
+                    {
+                        item = MyUtils.StackItemToInv(player.whoAmI, player.bank2.item, item, GetItemSettings.PickupItemFromWorld);
+                    }
+                    if (improvePlayer.DefendersForge && item.type != ItemID.None && item.stack > 0)
+                    {
+                        item = MyUtils.StackItemToInv(player.whoAmI, player.bank3.item, item, GetItemSettings.PickupItemFromWorld);
+                    }
+                }
+            }
+            Main.item[worldItemArrayIndex] = item;
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, worldItemArrayIndex);
+            }
+            return item;
         }
 
         /// <summary>
@@ -87,7 +157,7 @@ namespace ImproveGame
         {
             orig(self, settings);
             // 随身旗帜（增益站）
-            if (Utils.GetConfig().NoPlace_BUFFTile)
+            if (MyUtils.Config().NoPlace_BUFFTile_Banner)
             {
                 Player player = Main.LocalPlayer;
                 for (int i = 0; i < player.inventory.Length; i++)
@@ -125,6 +195,16 @@ namespace ImproveGame
                         continue;
                     AddBannerBuff(self, player, item);
                 }
+                if (MyUtils.Config().SuperVault)
+                {
+                    for (int i = 0; i < player.GetModPlayer<DataPlayer>().SuperVault.Length; i++)
+                    {
+                        Item item = player.GetModPlayer<DataPlayer>().SuperVault[i];
+                        if (item.type == ItemID.None)
+                            continue;
+                        AddBannerBuff(self, player, item);
+                    }
+                }
             }
         }
 
@@ -148,11 +228,19 @@ namespace ImproveGame
             {
                 self.VanillaUpdateInventory(self.bank4.item[i]);
             }
+            if (MyUtils.Config().SuperVault)
+            {
+                DataPlayer dataPlayer = self.GetModPlayer<DataPlayer>();
+                for (int i = 0; i < dataPlayer.SuperVault.Length; i++)
+                {
+                    self.VanillaUpdateInventory(dataPlayer.SuperVault[i]);
+                }
+            }
         }
 
         private int Main_DamageVar(On.Terraria.Main.orig_DamageVar orig, float dmg, float luck)
         {
-            if (Utils.GetConfig().BanDamageVar)
+            if (MyUtils.Config().BanDamageVar)
                 return (int)Math.Round(dmg);
             else
                 return orig(dmg, luck);
@@ -168,7 +256,7 @@ namespace ImproveGame
                 return;
             c.EmitDelegate(() =>
             {
-                if (Utils.GetConfig().TownNPCSpawnInNight)
+                if (MyUtils.Config().TownNPCSpawnInNight)
                 {
                     MethodInfo methodInfo = typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
                     methodInfo.Invoke(null, null);
@@ -186,7 +274,7 @@ namespace ImproveGame
                 return;
             c.EmitDelegate<Func<int, int>>((JiaJi) =>
             {
-                return (int)Math.Pow(2, Utils.GetConfig().TownNPCSpawnSpeed);
+                return (int)Math.Pow(2, MyUtils.Config().TownNPCSpawnSpeed);
             });
         }
 
@@ -209,13 +297,13 @@ namespace ImproveGame
                         if (inv[slot].type == ModContent.ItemType<Content.Items.SpaceWand>())
                         {
                             int count = 0;
-                            Utils.GetPlatformCount(inv, ref count);
+                            MyUtils.GetPlatformCount(inv, ref count);
                             return count;
                         }
                         else if (inv[slot].type == ModContent.ItemType<Content.Items.WallPlace>())
                         {
                             int count = 0;
-                            Utils.GetWallCount(inv, ref count);
+                            MyUtils.GetWallCount(inv, ref count);
                             return count;
                         }
                         return -1;
@@ -230,7 +318,7 @@ namespace ImproveGame
         // 物品吸取速度
         private void Player_PullItem_Common(On.Terraria.Player.orig_PullItem_Common orig, Player player, Item item, float xPullSpeed)
         {
-            if (Utils.GetConfig().GrabDistance > 0)
+            if (MyUtils.Config().GrabDistance > 0)
             {
                 Vector2 velocity = (player.Center - item.Center).SafeNormalize(Vector2.Zero);
                 if (item.velocity.Length() + velocity.Length() > 15f)
@@ -251,7 +339,7 @@ namespace ImproveGame
         // 墓碑掉落
         private void Player_DropTombstone(On.Terraria.Player.orig_DropTombstone orig, Player self, int coinsOwned, Terraria.Localization.NetworkText deathText, int hitDirection)
         {
-            if (!Utils.GetConfig().BanTombstone)
+            if (!MyUtils.Config().BanTombstone)
             {
                 orig(self, coinsOwned, deathText, hitDirection);
             }
@@ -260,11 +348,11 @@ namespace ImproveGame
         // 前缀保存
         private void Player_dropItemCheck(On.Terraria.Player.orig_dropItemCheck orig, Player self)
         {
-            if (Main.reforgeItem.type > ItemID.None && self.GetModPlayer<SaveAndLoadDataPlayer>().ReforgeItemPrefix > 0)
+            if (Main.reforgeItem.type > ItemID.None && self.GetModPlayer<DataPlayer>().ReforgeItemPrefix > 0)
             {
                 Main.reforgeItem.GetGlobalItem<ItemVar>().recastCount =
-                    self.GetModPlayer<SaveAndLoadDataPlayer>().ReforgeItemPrefix;
-                self.GetModPlayer<SaveAndLoadDataPlayer>().ReforgeItemPrefix = 0;
+                    self.GetModPlayer<DataPlayer>().ReforgeItemPrefix;
+                self.GetModPlayer<DataPlayer>().ReforgeItemPrefix = 0;
             }
             orig(self);
         }

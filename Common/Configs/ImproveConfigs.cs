@@ -20,6 +20,33 @@ namespace ImproveGame.Common.Configs
         [ReloadRequired]
         public bool LoadModItems;
 
+        [Label("$Mods.ImproveGame.ImproveConfigs.SuperVoidVault_Label")]
+        [Tooltip("$Mods.ImproveGame.ImproveConfigs.SuperVoidVault_Tooltip")]
+        [DefaultValue(true)]
+        public bool SuperVoidVault;
+
+        [Label("$Mods.ImproveGame.ImproveConfigs.SmartVoidVault_Label")]
+        [Tooltip("$Mods.ImproveGame.ImproveConfigs.SmartVoidVault_Tooltip")]
+        [DefaultValue(true)]
+        public bool SmartVoidVault;
+
+        [Label("$Mods.ImproveGame.ImproveConfigs.SuperVault_Label")]
+        [Tooltip("$Mods.ImproveGame.ImproveConfigs.SuperVault_Tooltip")]
+        [DefaultValue(true)]
+        public bool SuperVault;
+
+        [Label("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Label")]
+        [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Tooltip")]
+        [DefaultValue(false)]
+        [ReloadRequired]
+        public bool NoPlace_BUFFTile;
+
+        [Label("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Banner_Label")]
+        [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Banner_Tooltip")]
+        [DefaultValue(false)]
+        [ReloadRequired]
+        public bool NoPlace_BUFFTile_Banner;
+
         [Label("$Mods.ImproveGame.ImproveConfigs.ItemMaxStack_Label")]
         [DefaultValue(9999)]
         [Range(1, int.MaxValue)]
@@ -61,12 +88,6 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         [ReloadRequired]
         public bool ImproveTileSpeedAndTileRange;
-
-        [Label("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Label")]
-        [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Tooltip")]
-        [DefaultValue(false)]
-        [ReloadRequired]
-        public bool NoPlace_BUFFTile;
 
         [Label("$Mods.ImproveGame.ImproveConfigs.NoConsume_Potion_Label")]
         [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoConsume_Potion_Tooltip")]
