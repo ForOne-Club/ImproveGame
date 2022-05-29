@@ -53,13 +53,18 @@ namespace ImproveGame.Common.ModPlayers
                 Player.pickSpeed -= 0.25f;
             }
         }
+
+        /// <summary>
+        /// 快捷键
+        /// </summary>
+        /// <param name="triggersSet"></param>
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (KeybinSystem.RandomBuffKeybind.JustPressed)
             {
                 if (MyUtils.Config().SuperVault)
                 {
-                    if (VaultUI._visible)
+                    if (VaultUI.Visible)
                     {
                         VaultUI._visible = false;
                     }

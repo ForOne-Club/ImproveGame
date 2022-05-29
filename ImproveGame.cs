@@ -58,13 +58,13 @@ namespace ImproveGame
             // ÖÇÄÜÐé¿Õ±£ÏÕ¿â
             if (MyUtils.Config().SmartVoidVault)
             {
-                if (MyUtils.Config().SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp))
-                {
-                    itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault,
-                        itemToPickUp, GetItemSettings.PickupItemFromWorld);
-                }
                 if (itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin)
                 {
+                    if (MyUtils.Config().SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp))
+                    {
+                        itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault,
+                            itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                    }
                     if (player.IsVoidVaultEnabled && MyUtils.HasItem(player.bank4.item, itemToPickUp))
                     {
                         itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.bank4.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
