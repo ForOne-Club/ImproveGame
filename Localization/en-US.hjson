@@ -9,20 +9,20 @@ Mods:
             LoadModItems_Header: Item configs
             LoadModItems_Label: Enable mod items
             LoadModItems_Tooltip: Modded items will not be loaded if it is off
-            SuperVoidVault_label : Super Void Vault
-            SuperVoidVault_Tooltip : 
+            SuperVoidVault_label: Super Void Vault
+            SuperVoidVault_Tooltip: 
                 '''
                 Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
                 Priority: Void Bag ¡ú Piggy Bank ¡ú Safe ¡ú Defender's Furnance
                 '''
-            SmartVoidVault_Label : Void Vault Smart Pickup
+            SmartVoidVault_Label: Void Vault Smart Pickup
             SmartVoidVault_Tooltip:
                 '''
                 If the picked item already exists in the Void Vault, priorly put the item in it
                 If Super Void Vault is enabled, this will still function, the priority remains the same
                 '''
-            SuperVault_Label : Huge Inventory
-            SuperVault_Tooltip :
+            SuperVault_Label: Huge Inventory
+            SuperVault_Tooltip:
                 '''
                 An inventory with 100 slots, can interact with Super Void Vault and Void Vault Smart Pickup
                 Has the highest priority
@@ -88,7 +88,7 @@ Mods:
                 The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
                 Right click to open the indicator
                 '''
-            WallPlace: 
+            WallPlace:
                 '''
                 Summons a wall placer at your cursor
                 Automatically recognizes possible rooms and places walls in your inventory
@@ -116,7 +116,7 @@ Mods:
         }
         Keybin:
         {
-            SuperVault : Huge Inventory
+            SuperVault: Huge Inventory
         }
     }
 }
