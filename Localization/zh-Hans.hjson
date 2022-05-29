@@ -17,7 +17,7 @@ Mods:
             SmartVoidVault_Label: 虚空保险库 智能收取
             SmartVoidVault_Tooltip:
                 '''
-                拾取的物品如果在虚空袋中存在，优先放入其中。
+                拾取的物品如果在虚空保险库中存在，优先放入其中。
                 如果开启超级虚空保险库，则也会应用，优先级相同。
                 '''
             SuperVault_Label: 超大背包

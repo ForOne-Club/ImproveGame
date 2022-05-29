@@ -52,6 +52,11 @@ Functions toggled by defaut:
 Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
 ---------------------------
 Change log:
+    1.5.5
+        Super Void Vault and Void Vault Smart pickup (Details in configs)
+        A new inventory (Details in configs)
+        Separate Portable Buff Stations and Portable Banners
+        Increased wall-placing speed of Wand of technology
     1.5.4
         New feature: Portable buff stations(details in config)
         Mana costs of Wand of Space and Wand of Technology are reduced to 50
@@ -85,6 +90,9 @@ Function list:
     15. Town NPC spawn rate
     16. Enable modded items
     17. Portable buff stations
+    18. Super Void Vault
+    19. Void Vault Smart Pickup
+    20. A huge extra inventory
 ---------------------------
 [c/990000:Spriter: 枫林半叶]
 [c/9900ff:Translators: Lastprismer, Lacewing]
