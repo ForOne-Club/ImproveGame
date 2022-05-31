@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.Configs
@@ -22,17 +19,17 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.ImproveConfigs.SuperVoidVault_Label")]
         [Tooltip("$Mods.ImproveGame.ImproveConfigs.SuperVoidVault_Tooltip")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool SuperVoidVault;
 
         [Label("$Mods.ImproveGame.ImproveConfigs.SmartVoidVault_Label")]
         [Tooltip("$Mods.ImproveGame.ImproveConfigs.SmartVoidVault_Tooltip")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool SmartVoidVault;
 
         [Label("$Mods.ImproveGame.ImproveConfigs.SuperVault_Label")]
         [Tooltip("$Mods.ImproveGame.ImproveConfigs.SuperVault_Tooltip")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool SuperVault;
 
         [Label("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Label")]

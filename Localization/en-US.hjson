@@ -9,7 +9,7 @@ Mods:
             LoadModItems_Header: Item configs
             LoadModItems_Label: Enable mod items
             LoadModItems_Tooltip: Modded items will not be loaded if it is off
-            SuperVoidVault_label: Super Void Vault
+            SuperVoidVault_Label: Super Void Vault
             SuperVoidVault_Tooltip: 
                 '''
                 Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
@@ -27,6 +27,7 @@ Mods:
                 An inventory with 100 slots, can interact with Super Void Vault and Void Vault Smart Pickup
                 Has the highest priority
                 (Need to setup hot keys in Controls)
+                '''
             ItemMaxStack_Label: Max stack
             GrabDistance_Label: Increase item pickup range (measured in blocks)
             GrabDistance_Tooltip: Increase pickup range of items. Drawing speed will also increase automatically.
@@ -40,6 +41,11 @@ Mods:
             TileSpeedAndTileRange_Label: Increase placement speed and range
             NoPlace_BUFFTile_Label: Portable buff stations
             NoPlace_BUFFTile_Tooltip: Vanilla buff stations and banners in any of your inventories provide you with their buffs
+            NoPlace_BUFFTile_Banner_Label: Portable Banners (Vanilla only)
+            NoPlace_BUFFTile_Banner_Tooltip:
+                '''
+                The same as portable buff stations
+                '''
             NoConsume_Potion_Label: Enable infinite potions
             NoConsume_Potion_Tooltip: Potions in any of your inventories which stack not less than 30 will not be consumed
             NoConsume_Ammo_Label: Enable infinite ammos

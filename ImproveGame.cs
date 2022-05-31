@@ -22,7 +22,7 @@ namespace ImproveGame
     public class ImproveGame : Mod
     {
         public static Effect itemEffect;
-        // 额外BUFF栏
+        // 额外BUFF槽
         public override uint ExtraPlayerBuffSlots => 22;
 
         public override void Load()
@@ -52,6 +52,15 @@ namespace ImproveGame
             On.Terraria.Player.PickupItem += Player_PickupItem;
         }
 
+        /// <summary>
+        /// 拾取物品的时候
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="player"></param>
+        /// <param name="playerIndex"></param>
+        /// <param name="worldItemArrayIndex"></param>
+        /// <param name="itemToPickUp"></param>
+        /// <returns></returns>
         private Item Player_PickupItem(On.Terraria.Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp)
         {
             ImprovePlayer improvePlayer = ImprovePlayer.G(player);
@@ -90,10 +99,7 @@ namespace ImproveGame
             Item item = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
             if (MyUtils.Config().SuperVault && item.type != ItemID.None && item.stack > 0 && !item.IsACoin)
             {
-                if (improvePlayer.PiggyBank)
-                {
-                    item = MyUtils.StackItemToInv(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault, item, GetItemSettings.PickupItemFromWorld);
-                }
+                item = MyUtils.StackItemToInv(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault, item, GetItemSettings.PickupItemFromWorld);
             }
             // 超级虚空保险库
             if (MyUtils.Config().SuperVoidVault)
@@ -153,6 +159,12 @@ namespace ImproveGame
             }
         }
 
+        /// <summary>
+        /// 旗帜增益
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="self"></param>
+        /// <param name="settings"></param>
         private void SceneMetrics_ScanAndExportToMain(On.Terraria.SceneMetrics.orig_ScanAndExportToMain orig, SceneMetrics self, SceneMetricsScanSettings settings)
         {
             orig(self, settings);
@@ -208,7 +220,11 @@ namespace ImproveGame
             }
         }
 
-        // 使存钱罐中物品如同放在背包
+        /// <summary>
+        /// 使存钱罐中物品如同放在背包
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="self"></param>
         private void Player_VanillaPreUpdateInventory(On.Terraria.Player.orig_VanillaPreUpdateInventory orig, Player self)
         {
             orig(self);
@@ -238,6 +254,13 @@ namespace ImproveGame
             }
         }
 
+        /// <summary>
+        /// 伤害波动
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="dmg"></param>
+        /// <param name="luck"></param>
+        /// <returns></returns>
         private int Main_DamageVar(On.Terraria.Main.orig_DamageVar orig, float dmg, float luck)
         {
             if (MyUtils.Config().BanDamageVar)
@@ -315,7 +338,13 @@ namespace ImproveGame
                 });
         }
 
-        // 物品吸取速度
+        /// <summary>
+        /// 物品吸取速度
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="player"></param>
+        /// <param name="item"></param>
+        /// <param name="xPullSpeed"></param>
         private void Player_PullItem_Common(On.Terraria.Player.orig_PullItem_Common orig, Player player, Item item, float xPullSpeed)
         {
             if (MyUtils.Config().GrabDistance > 0)
@@ -336,7 +365,14 @@ namespace ImproveGame
             }
         }
 
-        // 墓碑掉落
+        /// <summary>
+        /// 墓碑掉落
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="self"></param>
+        /// <param name="coinsOwned"></param>
+        /// <param name="deathText"></param>
+        /// <param name="hitDirection"></param>
         private void Player_DropTombstone(On.Terraria.Player.orig_DropTombstone orig, Player self, int coinsOwned, Terraria.Localization.NetworkText deathText, int hitDirection)
         {
             if (!MyUtils.Config().BanTombstone)
@@ -345,7 +381,11 @@ namespace ImproveGame
             }
         }
 
-        // 前缀保存
+        /// <summary>
+        /// 前缀保存
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="self"></param>
         private void Player_dropItemCheck(On.Terraria.Player.orig_dropItemCheck orig, Player self)
         {
             if (Main.reforgeItem.type > ItemID.None && self.GetModPlayer<DataPlayer>().ReforgeItemPrefix > 0)
