@@ -1,4 +1,4 @@
-﻿using ImproveGame.Common.GlobalPlayers;
+﻿using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -52,8 +52,16 @@ namespace ImproveGame.Content.UI
             };
             text.Left.Set(0, 0.2f);
             Append(text);
+
+            UIText text2 = new UIText((index + 1).ToString(), 0.75f)
+            {
+                VAlign = 0.15f
+            };
+            text2.Left.Set(0, 0.15f);
+            Append(text2);
         }
 
+        // 左键点击事件
         public override void MouseDown(UIMouseEvent evt)
         {
             Player player = Main.LocalPlayer;
@@ -101,7 +109,10 @@ namespace ImproveGame.Content.UI
             item.favorited = false;
         }
 
-        public override void RightMouseDown(UIMouseEvent evt)
+        /// <summary>
+        /// 右键持续按住物品，向鼠标物品堆叠数量
+        /// </summary>
+        public void RightMouseKeepPressItem()
         {
             if (Main.mouseItem.type == item.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
             {
@@ -113,22 +124,77 @@ namespace ImproveGame.Content.UI
                 Main.mouseItem = new Item(item.type, 1);
                 item.stack--;
             }
-            if (item.stack < 1)
+            if (item.type != ItemID.None && item.stack < 1)
             {
                 item = new Item();
             }
         }
 
+        // 鼠标右键按住项目计时器，-1代表不进行计时。
+        public int rightMouseDownTimer = -1;
+        /// <summary>
+        /// 鼠标右键按下
+        /// </summary>
+        /// <param name="evt"></param>
+        public override void RightMouseDown(UIMouseEvent evt)
+        {
+            rightMouseDownTimer = 0;
+            RightMouseKeepPressItem();
+        }
+
+        /// <summary>
+        /// 鼠标右键放开
+        /// </summary>
+        /// <param name="evt"></param>
+        public override void RightMouseUp(UIMouseEvent evt)
+        {
+            rightMouseDownTimer = -1;
+        }
+
+        /// <summary>
+        /// Update 更新
+        /// </summary>
+        /// <param name="gameTime"></param>
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            // 右键长按物品持续拿出
+            if (rightMouseDownTimer >= 60)
+            {
+                RightMouseKeepPressItem();
+            }
+            else if (rightMouseDownTimer >= 30 && rightMouseDownTimer % 3 == 0)
+            {
+                RightMouseKeepPressItem();
+            }
+            else if (rightMouseDownTimer >= 15 && rightMouseDownTimer % 6 == 0)
+            {
+                RightMouseKeepPressItem();
+            }
+            if (rightMouseDownTimer != -1)
+            {
+                rightMouseDownTimer++;
+            }
+        }
+
+        /// <summary>
+        /// 绘制内容
+        /// </summary>
+        /// <param name="sb"></param>
         protected override void DrawSelf(SpriteBatch sb)
         {
-            if (ContainsPoint(Main.MouseScreen) && (Main.keyState.IsKeyDown(Keys.LeftControl) || PlayerInput.GetPressedKeys().Contains(Keys.RightControl)))
+            // 按下 Ctrl 改变鼠标指针外观
+            if (ContainsPoint(Main.MouseScreen) && !NotItem(item) && (Main.keyState.IsKeyDown(Keys.LeftControl) ||
+                PlayerInput.GetPressedKeys().Contains(Keys.RightControl)))
             {
                 Main.cursorOverride = 5;
             }
+            // 绘制背景框
             CalculatedStyle dimensions = GetDimensions();
-            sb.Draw(backgroundTexture, dimensions.Position(), null, Color.White, 0f, Vector2.Zero, 1f,
+            sb.Draw(backgroundTexture, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f,
                 SpriteEffects.None, 0f);
 
+            // 绘制物品
             if (!NotItem(item))
             {
                 Rectangle rectangle;
@@ -147,8 +213,11 @@ namespace ImproveGame.Content.UI
                 sb.Draw(texture.Value, dimensions.Center() - rectangle.Size() * size / 2f,
                     new Rectangle?(rectangle), item.GetAlpha(Color.White), 0f, Vector2.Zero, size,
                     SpriteEffects.None, 0f);
+                sb.Draw(texture.Value, dimensions.Center() - rectangle.Size() * size / 2f,
+                    new Rectangle?(rectangle), item.GetColor(Color.White), 0f, Vector2.Zero, size,
+                    SpriteEffects.None, 0f);
             }
-
+            // 物品信息
             if (IsMouseHovering)
             {
                 Main.hoverItemName = item.Name;
@@ -158,6 +227,11 @@ namespace ImproveGame.Content.UI
             text.Recalculate();
         }
 
+        /// <summary>
+        /// 不是物品
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static bool NotItem(Item item)
         {
             return (item.type == ItemID.None || item.stack < 0);

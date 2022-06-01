@@ -1,14 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using static Terraria.Player;
 
 namespace ImproveGame.Content.Items
 {
@@ -37,34 +32,8 @@ namespace ImproveGame.Content.Items
             Item.mana = 50;
         }
 
-        private bool BeginDown = true;
-        private bool RightDown = false;
         Point StartPosition = Point.Zero;
         Point EndPosition = Point.Zero;
-
-        public override void UseItemFrame(Player player)
-        {
-            CompositeArmStretchAmount stretch = CompositeArmStretchAmount.Full;
-            float rotation = player.itemRotation - (float)Math.PI / 2f * (float)player.direction;
-            player.SetCompositeArmFront(enabled: true, stretch, rotation);
-        }
-
-        public override void HoldItem(Player player)
-        {
-            if (!Main.mouseLeft && !BeginDown)
-            {
-                BeginDown = true;
-            }
-            if (Main.mouseRight && !RightDown && !BeginDown)
-            {
-                CombatText.NewText(player.getRect(), new Color(255, 165, 255, 255), Language.GetTextValue($"Mods.ImproveGame.CombatText_Item.SpaceWand_Cancel"));
-                RightDown = true;
-            }
-            if (BeginDown && !Main.mouseRight)
-            {
-                RightDown = false;
-            }
-        }
 
         public override bool CanUseItem(Player player)
         {
@@ -77,104 +46,146 @@ namespace ImproveGame.Content.Items
             return base.CanUseItem(player);
         }
 
+        /// <summary>
+        /// 待起名
+        /// </summary>
+        public bool _flag = true;
+        /// <summary>
+        /// 能否放置平台
+        /// </summary>
+        public bool _allowPlacePlatform;
+
         public override bool? UseItem(Player player)
+        {
+            player.itemAnimation = player.itemAnimationMax / 2;
+            if (_flag && Main.mouseLeft)
+            {
+                _flag = false;
+                UseItem_LeftMouseDown(player);
+            }
+            else if (!_flag && !Main.mouseLeft)
+            {
+                _flag = true;
+                player.itemAnimation = 0;
+                UseItem_LeftMouseUp(player);
+            }
+            UseItem_Update(player);
+            return false;
+        }
+
+        /// <summary>
+        /// 左键点击
+        /// </summary>
+        /// <param name="player"></param>
+        public void UseItem_LeftMouseDown(Player player)
+        {
+            StartPosition = Main.MouseWorld.ToTileCoordinates();
+            _allowPlacePlatform = true;
+        }
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="player"></param>
+        public void UseItem_Update(Player player)
         {
             // 旋转物品
             Vector2 rotaion = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.Zero);
             player.direction = Main.MouseWorld.X < player.Center.X ? -1 : 1;
             player.itemRotation = MathF.Atan2(rotaion.Y * player.direction, rotaion.X * player.direction);
-            // 首次按下
-            if (BeginDown && Main.mouseLeft)
-            {
-                BeginDown = false;
-                StartPosition = Main.MouseWorld.ToTileCoordinates();
-            }
-            // 首次之后按下
-            if (!BeginDown && Main.mouseLeft)
-            {
-                player.itemAnimation = player.itemAnimationMax / 2;
-                EndPosition = Main.MouseWorld.ToTileCoordinates();
-            }
-            // 绘制层参数，X、Y 
+
+            // 指定结束位置
+            EndPosition = Main.MouseWorld.ToTileCoordinates();
+
+            // 平台数量
             int platfromCount = 0;
-            bool consumable = MyUtils.GetPlatformCount(player.inventory, ref platfromCount);
-            if (!consumable)
+            if (!MyUtils.GetPlatformCount(player.inventory, ref platfromCount))
             {
                 platfromCount = 500;
             }
-            TileDraw.MagiskTilesRec.X = (int)MathF.Min(StartPosition.X, EndPosition.X);
-            if (TileDraw.MagiskTilesRec.X < StartPosition.X - MathF.Min(499, platfromCount - 1))
+            // 开启绘制
+            if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
-                TileDraw.MagiskTilesRec.X = StartPosition.X - (int)MathF.Min(499, platfromCount - 1);
-            }
-            TileDraw.MagiskTilesRec.Y = StartPosition.Y;
-            TileDraw.MagiskTilesRec.Width = (int)MathF.Min(MathF.Abs(StartPosition.X - EndPosition.X) + 1, MathF.Min(500, platfromCount));
-            TileDraw.MagiskTilesRec.Height = 1;
-            if (Main.mouseLeft)
-            {
-                TileDraw.MagiskTileColor = new Color(0, 165, 255, 255);
-            }
-            if (RightDown)
-            {
-                TileDraw.MagiskTileColor = new Color(255, 0, 0, 255);
-            }
-            player.GetModPlayer<Common.ModPlayers.ImprovePlayer>().MagiskKillTiles = true;
-            int minI = TileDraw.MagiskTilesRec.X;
-            int maxI = TileDraw.MagiskTilesRec.X + TileDraw.MagiskTilesRec.Width - 1;
-            int minJ = TileDraw.MagiskTilesRec.Y;
-            int maxJ = TileDraw.MagiskTilesRec.Y + TileDraw.MagiskTilesRec.Height - 1;
-            if (player.whoAmI == Main.myPlayer)
-            {
-                // 没有按下
-                if (!BeginDown && !Main.mouseLeft && !RightDown)
+                if (Main.mouseRight && _allowPlacePlatform)
                 {
-                    // 处理图块
-                    for (int i = minI; i <= maxI; i++)
-                    {
-                        for (int j = minJ; j <= maxJ; j++)
-                        {
-                            // 找到背包第一个平台
-                            Item PlatformItem = MyUtils.GetFirstPlatform(player);
-                            Item BestPickaxe = player.GetBestPickaxe();
-                            // 如果有找到平台结束执行
-                            if (PlatformItem.type == ItemID.None)
-                            {
-                                CombatText.NewText(player.getRect(), new Color(255, 0, 0, 255), Language.GetTextValue($"Mods.ImproveGame.CombatText_Item.SpaceWand_Lack"));
-                                return false;
-                            }
-                            // 破坏物块
-                            if (!Main.tileHammer[Main.tile[i, j].TileType] && BestPickaxe.type != ItemID.None
-                                && player.TileReplacementEnabled // 物块交换
-                                && MyUtils.IsSameTile(i, j, PlatformItem.createTile, PlatformItem.placeStyle))
-                            {
-                                HitTile.HitTileObject hitTileObject = player.hitTile.data[player.hitTile.HitObject(i, j, 1)];
-                                int damage = hitTileObject.damage;
-                                int type = Main.tile[i, j].TileType;
-                                player.PickTile(i, j, BestPickaxe.pick);
-                                if (hitTileObject.damage > damage || type != Main.tile[i, j].TileType)
-                                {
-                                    WorldGen.KillTile(i, j);
-                                }
-                            }
-                            // 放置成功，是消耗品，可以被消耗 扣除一个
-                            if (WorldGen.PlaceTile(i, j, PlatformItem.createTile, false, false, player.whoAmI, PlatformItem.placeStyle)
-                                && ItemLoader.ConsumeItem(PlatformItem, player) && PlatformItem.consumable)
-                            {
-                                PlatformItem.stack--;
-                            }
-                        }
-                    }
-                    // 发送数据到服务器
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NetMessage.SendTileSquare(player.whoAmI, minI, minJ, maxI - minI + 1, maxJ - minJ + 1);
+                    _allowPlacePlatform = false;
+                    CombatText.NewText(player.getRect(), new Color(250, 40, 80), Language.GetTextValue($"Mods.ImproveGame.CombatText_Item.SpaceWand_Cancel"));
                 }
+
+                Color color;
+                if (_allowPlacePlatform)
+                    color = new Color(135, 0, 180);
+                else
+                    color = new Color(250, 40, 80);
+
+                Rectangle rect = new();
+                rect.X = (int)MathF.Min(StartPosition.X, EndPosition.X);
+                if (rect.X < StartPosition.X - MathF.Min(499, platfromCount - 1))
+                {
+                    rect.X = StartPosition.X - (int)MathF.Min(499, platfromCount - 1);
+                }
+                rect.Y = StartPosition.Y;
+                rect.Width = (int)MathF.Min(MathF.Abs(StartPosition.X - EndPosition.X) + 1, MathF.Min(500, platfromCount));
+                rect.Height = 1;
+
+                TileDraw.tileColor = color;
+                TileDraw.tileRect = rect;
+                TileDraw.allowDrawBorderRect = true;
             }
-            return false;
         }
 
-        public override void AddRecipes()
+        /// <summary>
+        /// 左键释放
+        /// </summary>
+        /// <param name="player"></param>
+        public void UseItem_LeftMouseUp(Player player)
         {
-
+            // 放置平台
+            if (_allowPlacePlatform && player.whoAmI == Main.myPlayer)
+            {
+                int minI = TileDraw.tileRect.X;
+                int maxI = TileDraw.tileRect.X + TileDraw.tileRect.Width - 1;
+                int minJ = TileDraw.tileRect.Y;
+                int maxJ = TileDraw.tileRect.Y + TileDraw.tileRect.Height - 1;
+                // 处理图块
+                for (int i = minI; i <= maxI; i++)
+                {
+                    for (int j = minJ; j <= maxJ; j++)
+                    {
+                        // 找到背包第一个平台
+                        Item PlatformItem = MyUtils.GetFirstPlatform(player);
+                        Item BestPickaxe = player.GetBestPickaxe();
+                        // 如果有找到平台结束执行
+                        if (PlatformItem.type == ItemID.None)
+                        {
+                            CombatText.NewText(player.getRect(), new Color(255, 0, 0, 255), Language.GetTextValue($"Mods.ImproveGame.CombatText_Item.SpaceWand_Lack"));
+                            return;
+                        }
+                        // 破坏物块
+                        if (!Main.tileHammer[Main.tile[i, j].TileType] && player.TileReplacementEnabled // 物块交换
+                            && MyUtils.IsSameTile(i, j, PlatformItem.createTile, PlatformItem.placeStyle))
+                        {
+                            HitTile.HitTileObject hitTileObject = player.hitTile.data[player.hitTile.HitObject(i, j, 1)];
+                            int damage = hitTileObject.damage;
+                            int type = Main.tile[i, j].TileType;
+                            player.PickTile(i, j, BestPickaxe != null ? BestPickaxe.pick : 1);
+                            if (hitTileObject.damage > damage || type != Main.tile[i, j].TileType)
+                            {
+                                WorldGen.KillTile(i, j);
+                            }
+                        }
+                        // 放置成功，是消耗品，可以被消耗 扣除一个
+                        if (WorldGen.PlaceTile(i, j, PlatformItem.createTile, false, false, player.whoAmI, PlatformItem.placeStyle)
+                            && ItemLoader.ConsumeItem(PlatformItem, player) && PlatformItem.consumable)
+                        {
+                            PlatformItem.stack--;
+                        }
+                    }
+                }
+                // 发送数据到服务器
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendTileSquare(player.whoAmI, minI, minJ, maxI - minI + 1, maxJ - minJ + 1);
+            }
         }
     }
 }

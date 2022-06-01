@@ -74,25 +74,9 @@ namespace ImproveGame.Content.UI
 
         }
 
-        private void UIText_OnClick(UIMouseEvent evt, UIElement listeningElement)
-        {
-            Item[] items = new Item[mainGrid.items.Length];
-            for (int i = 0; i < items.Length; i++)
-            {
-                items[i] = new Item();
-            }
-            for (int i = 0; i < items.Length; i++)
-            {
-                mainGrid.items[i] = MyUtils.StackItemToInv(Main.myPlayer, items, mainGrid.items[i], GetItemSettings.PickupItemFromWorld, false);
-            }
-            for (int i = 0; i < items.Length; i++)
-            {
-                mainGrid.items[i] = items[i];
-            }
-        }
-
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
             if (dragging)
             {
                 position.X = Main.mouseX - offset.X;

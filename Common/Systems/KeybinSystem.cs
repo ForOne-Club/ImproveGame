@@ -7,6 +7,9 @@ using Terraria.ModLoader;
 
 namespace ImproveGame.Common.Systems
 {
+    /// <summary>
+    /// 快捷键
+    /// </summary>
     public class KeybinSystem : ModSystem
     {
         public static ModKeybind RandomBuffKeybind { get; private set; }

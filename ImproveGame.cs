@@ -1,6 +1,7 @@
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.GlobalPlayers;
-using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.Players;
+using ImproveGame.Common.Players;
+using ImproveGame.Content.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;

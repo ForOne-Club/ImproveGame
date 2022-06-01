@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.GlobalPlayers;
-using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.Players;
+using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -93,7 +93,7 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         // 更新背包药水BUFF
-        public override void UpdateInventory(Item item, Player player)
+        public override void UpdateInventory(Item item, Terraria.Player player)
         {
             if (MyUtils.Config().NoConsume_Potion)
             {
@@ -123,7 +123,7 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         // 物品消耗
-        public override bool ConsumeItem(Item item, Player player)
+        public override bool ConsumeItem(Item item, Terraria.Player player)
         {
             if (MyUtils.Config().NoConsume_Potion
                 && item.stack >= 30 && (item.buffType > 0 || SpecialMedicines.Contains(item.type)))
@@ -133,15 +133,21 @@ namespace ImproveGame.Common.GlobalItems
             return base.ConsumeItem(item, player);
         }
 
-        // 弹药消耗
-        public override bool CanBeConsumedAsAmmo(Item ammo, Player player)
+        /// <summary>
+        /// 弹药消耗
+        /// </summary>
+        /// <param name="ammo"></param>
+        /// <param name="weapon"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public override bool CanBeConsumedAsAmmo(Item ammo, Item weapon, Player player)
         {
             if (MyUtils.Config().NoConsume_Ammo
                 && ammo.stack >= 3996 && ammo.ammo > 0)
             {
                 return false;
             }
-            return base.CanBeConsumedAsAmmo(ammo, player);
+            return base.CanBeConsumedAsAmmo(ammo, weapon, player);
         }
 
         // 前缀回滚设置
@@ -241,7 +247,7 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         // 额外拾取距离
-        public override void GrabRange(Item item, Player player, ref int grabRange)
+        public override void GrabRange(Item item, Terraria.Player player, ref int grabRange)
         {
             grabRange += MyUtils.Config().GrabDistance * 16;
         }
@@ -332,7 +338,7 @@ namespace ImproveGame.Common.GlobalItems
         /// <param name="item"></param>
         /// <param name="player"></param>
         /// <returns></returns>
-        public override bool ItemSpace(Item item, Player player)
+        public override bool ItemSpace(Item item, Terraria.Player player)
         {
             ImprovePlayer improvePlayer = ImprovePlayer.G(player);
             // 猪猪钱罐

@@ -1,34 +1,24 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Content.UI;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace ImproveGame.Common.ModPlayers
+namespace ImproveGame.Common.Players
 {
     public class ImprovePlayer : ModPlayer
     {
-        public static ImprovePlayer G(Player player)
+        public static ImprovePlayer G(Terraria.Player player)
         {
             return player.GetModPlayer<ImprovePlayer>();
         }
-        public bool MagiskKillTiles;
         public bool PiggyBank;
         public bool Safe;
         public bool DefendersForge;
         public override void ResetEffects()
         {
-            MagiskKillTiles = false;
             PiggyBank = Player.HasItem(ItemID.PiggyBank);
             Safe = Player.HasItem(ItemID.Safe);
             DefendersForge = Player.HasItem(ItemID.DefendersForge);

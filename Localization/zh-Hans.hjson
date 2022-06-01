@@ -86,6 +86,14 @@ Mods:
                 '''
                 挖掘鼠标位置小范围内物块
                 镐力相当于背包中最强的镐子
+                挖掘会受到挖矿速度影响
+                右键开启指示器
+                '''
+            StarburstWand:
+                '''
+                挖掘鼠标位置中等范围内物块
+                镐力相当于背包中最强的镐子
+                挖掘会受到挖矿速度影响
                 右键开启指示器
                 '''
             SpaceWand:
@@ -96,12 +104,6 @@ Mods:
                 单次最多放置五百格
                 右键取消放置
                 “我同情这些工具”
-                '''
-            StarburstWand:
-                '''
-                挖掘鼠标位置中等范围内物块
-                镐力相当于背包中最强的镐子
-                右键开启指示器
                 '''
             WallPlace: 
                 '''
@@ -114,7 +116,7 @@ Mods:
         }
         CombatText_Item:
         {
-            SpaceWand_Cancel: "已取消！"
+            SpaceWand_Cancel: "取消放置！"
             SpaceWand_Lack: "平台不足！"
             WallPlace_Limit: "此区域过大！"
             WallPlace_Consume: "预计消耗："

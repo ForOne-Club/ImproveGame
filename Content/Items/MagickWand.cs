@@ -28,8 +28,8 @@ namespace ImproveGame.Content.Items
             Item.rare = ItemRarityID.Lime;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.autoReuse = true;
-            Item.useAnimation = 12;
-            Item.useTime = 12;
+            Item.useAnimation = 15;
+            Item.useTime = 15;
             Item.mana = 10;
             Item.UseSound = SoundID.Item1;
             Item.value = Item.sellPrice(0, 1, 0, 0);
@@ -84,10 +84,11 @@ namespace ImproveGame.Content.Items
         {
             if (player.whoAmI == Main.myPlayer)
             {
+                _overrideUseItem--;
                 // 开启UI显示
-                TileDraw.MagiskTileColor = new Color(1f, 0.9f, 0.1f, 1f);
-                player.GetModPlayer<Common.ModPlayers.ImprovePlayer>().MagiskKillTiles = OpenUI;
-                TileDraw.MagiskTilesRec = GetMagiskRectangle(player);
+                TileDraw.allowDrawBorderRect = OpenUI;
+                TileDraw.tileColor = Color.Red;
+                TileDraw.tileRect = GetMagiskRectangle(player);
                 if (Main.mouseRight && BeginDownRight)
                 {
                     BeginDownRight = false;
@@ -100,16 +101,18 @@ namespace ImproveGame.Content.Items
             }
         }
 
+        private float _overrideUseItem;
         public override bool? UseItem(Player player)
         {
-            if (player.itemAnimation == player.itemAnimationMax)
+            if (player.whoAmI == Main.myPlayer)
             {
-                if (player.whoAmI == Main.myPlayer)
+                if (_overrideUseItem <= 0)
                 {
-                    MyUtils.KillTiles(player, TileDraw.MagiskTilesRec);
+                    _overrideUseItem = Item.useTime * player.pickSpeed;
+                    MyUtils.KillTiles(player, TileDraw.tileRect);
                 }
             }
-            return true;
+            return false;
         }
 
         public override void AddRecipes()

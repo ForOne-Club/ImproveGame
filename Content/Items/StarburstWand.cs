@@ -19,8 +19,8 @@ namespace ImproveGame.Content.Items
             Item.rare = ItemRarityID.Yellow;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.autoReuse = true;
-            Item.useAnimation = 10;
-            Item.useTime = 10;
+            Item.useAnimation = 15;
+            Item.useTime = 15;
             Item.mana = 20;
             Item.UseSound = SoundID.Item1;
             Item.value = Item.sellPrice(0, 2, 0, 0);

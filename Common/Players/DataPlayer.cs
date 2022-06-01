@@ -10,16 +10,21 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
-namespace ImproveGame.Common.GlobalPlayers
+namespace ImproveGame.Common.Players
 {
     public class DataPlayer : ModPlayer
     {
-        public override bool CloneNewInstances => false;
         // 保存的物品前缀，哥布林重铸栏
         public int ReforgeItemPrefix = 0;
         public Item[] SuperVault;
         public Vector2 SuperVaultOffset;
         public bool SuperVaultVisable;
+
+        /*public override ModPlayer Clone(Player newEntity)
+        {
+            DataPlayer dataPlayer = (DataPlayer)base.Clone(newEntity);
+            return dataPlayer;
+        }*/
 
         /// <summary>
         /// 初始化数据
@@ -38,7 +43,7 @@ namespace ImproveGame.Common.GlobalPlayers
         /// 进入地图时候
         /// </summary>
         /// <param name="player"></param>
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld(Terraria.Player player)
         {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {

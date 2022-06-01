@@ -11,6 +11,9 @@ using Terraria.UI;
 
 namespace ImproveGame.Common.Systems
 {
+    /// <summary>
+    /// 用户界面
+    /// </summary>
     public class UISystem : ModSystem
     {
         public static UserInterface userInterface;

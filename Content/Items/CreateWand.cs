@@ -1,4 +1,4 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.Players;
 using ImproveGame.Entitys;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -28,9 +28,9 @@ namespace ImproveGame.Content.Items
             Point point = Main.MouseWorld.ToTileCoordinates(); // 鼠标位置
             point.X -= 5;
             point.Y -= 3;
-            player.GetModPlayer<ImprovePlayer>().MagiskKillTiles = true;
-            TileDraw.MagiskTilesRec = new Rectangle(point.X, point.Y, 11, 6);
-            TileDraw.MagiskTileColor = new Color(0, 165, 255, 255);
+            TileDraw.allowDrawBorderRect = true;
+            TileDraw.tileRect = new Rectangle(point.X, point.Y, 11, 6);
+            TileDraw.tileColor = new Color(0, 165, 255, 255);
         }
 
         public override bool? UseItem(Player player)

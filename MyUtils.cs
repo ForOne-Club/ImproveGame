@@ -5,11 +5,13 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using static ImproveGame.Common.GlobalItems.ImproveItem;
+using static Microsoft.Xna.Framework.Vector2;
 
 namespace ImproveGame
 {
@@ -18,6 +20,44 @@ namespace ImproveGame
     /// </summary>
     public class MyUtils
     {
+        public static void DrawBorderRect(Rectangle tileRectangle, Color backgroundColor, Color borderColor)
+        {
+            Texture2D texture = TextureAssets.MagicPixel.Value;
+            Vector2 position = tileRectangle.TopLeft() * 16f - Main.screenPosition;
+            Vector2 scale = new(tileRectangle.Width, tileRectangle.Height);
+            Main.spriteBatch.Draw(
+                    texture,
+                    position,
+                    new(0, 0, 1, 1),
+                    backgroundColor,
+                    0f,
+                    Zero,
+                    16f * scale,
+                    SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(
+                texture,
+                position + UnitX * -2f + UnitY * -2f,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(2f, 16f * scale.Y + 4),
+                SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture,
+                position + UnitX * 16f * scale.X + UnitY * -2f,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(2f, 16f * scale.Y + 4), SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture,
+                position + UnitY * -2f,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(16f * scale.X, 2f), SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture,
+                position + UnitY * 16f * scale.Y,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(16f * scale.X, 2f), SpriteEffects.None, 0f);
+        }
+
         /// <summary>
         /// 获取 HJson 文字
         /// </summary>
@@ -183,7 +223,12 @@ namespace ImproveGame
             return ModContent.GetInstance<ImproveConfigs>();
         }
 
-        // 获取平台总数
+        /// <summary>
+        /// 获取平台总数
+        /// </summary>
+        /// <param name="inv"></param>
+        /// <param name="count">平台的数量</param>
+        /// <returns>是否有不会被消耗的平台</returns>
         public static bool GetPlatformCount(Item[] inv, ref int count)
         {
             bool consumable = true;
@@ -373,7 +418,7 @@ namespace ImproveGame
                     Tile tile = Main.tile[i, j];
                     if (!Main.tileAxe[tile.TileType] && !Main.tileHammer[tile.TileType])
                     {
-                        player.PickTile(i, j, item.pick);
+                        player.PickTile(i, j, item != null ? item.pick : 1);
                         player.hitTile.data[player.hitTile.HitObject(i, j, 1)].timeToLive = 10000;
                     }
                 }
