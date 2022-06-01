@@ -53,6 +53,8 @@ Functions toggled by defaut:
 Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
 ---------------------------
 Change log:
+    1.5.5.7
+        Reduced using speed of Wand of Brusts and Wand of Starbrusts, but can affected by mining speed
     1.5.5
         Super Void Vault and Void Vault Smart pickup (Details in configs)
         A new inventory (Details in configs)
