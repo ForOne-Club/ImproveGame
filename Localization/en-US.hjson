@@ -13,7 +13,7 @@ Mods:
             SuperVoidVault_Tooltip: 
                 '''
                 Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
-                Priority: Void Bag ¡ú Piggy Bank ¡ú Safe ¡ú Defender's Furnance
+                Priority: Void Bag  Piggy Bank  Safe  Defender's Furnance
                 '''
             SmartVoidVault_Label: Void Vault Smart Pickup
             SmartVoidVault_Tooltip:
@@ -92,6 +92,7 @@ Mods:
                 '''
                 Mine blocks within a intermediate range of the cursor
                 The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
+                Affected by mining speed
                 Right click to open the indicator
                 '''
             WallPlace:
