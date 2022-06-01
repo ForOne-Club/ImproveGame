@@ -23,12 +23,16 @@ namespace ImproveGame
     public class ImproveGame : Mod
     {
         public static Effect itemEffect;
+        public static Effect tileEffect;
+        public static Texture2D XingKong;
         // 额外BUFF槽
         public override uint ExtraPlayerBuffSlots => 22;
 
         public override void Load()
         {
             itemEffect = Assets.Request<Effect>("npc", AssetRequestMode.ImmediateLoad).Value;
+            tileEffect = Assets.Request<Effect>("tileEffect", AssetRequestMode.ImmediateLoad).Value;
+            XingKong = Assets.Request<Texture2D>("Assets/Images/XingKong", AssetRequestMode.ImmediateLoad).Value;
             // 加载前缀信息
             MyUtils.LoadPrefixInfo();
             // 还原哥布林重铸槽中物品的重铸次数

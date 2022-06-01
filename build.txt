@@ -1,4 +1,4 @@
 displayName = 更好的体验
 author = 局长 Spriter：delete Translators：Lastprismer, Lacewing
-version = 1.5.5.7
+version = 1.5.5.8
 hideCode = true

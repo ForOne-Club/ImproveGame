@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using System;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,9 +13,10 @@ namespace ImproveGame.Content.Items
             return MyUtils.Config().LoadModItems;
         }
 
-        public override void SetStaticDefaults()
+        public enum UseState
         {
-
+            directly,
+            choose
         }
 
         public override void SetDefaults()
@@ -50,7 +49,7 @@ namespace ImproveGame.Content.Items
         protected int RangeX;
         protected int RangeY;
         protected bool OpenUI;
-        protected bool BeginDownRight = true;
+        protected bool rightMouseDown = true;
 
         protected Rectangle GetMagiskRectangle(Player player)
         {
@@ -79,25 +78,56 @@ namespace ImproveGame.Content.Items
             r.Height = KillTilesHeight;
             return r;
         }
+        public UseState useState;
+        public bool _flag = true;
 
         public override void HoldItem(Player player)
         {
-            if (player.whoAmI == Main.myPlayer)
+            if (!Main.dedServ && player.whoAmI == Main.myPlayer)
             {
-                _overrideUseItem--;
+                if (_flag && Main.mouseRight)
+                {
+                    _flag = false;
+                    HoldItem_RightMouseDown(player);
+                }
+                else if (!_flag && !Main.mouseRight)
+                {
+                    _flag = true;
+                    HoldItem_RightMouseUp(player);
+                }
+                HoldItem_Update(player);
+            }
+        }
+
+        public void HoldItem_RightMouseDown(Player player)
+        {
+
+        }
+
+        public void HoldItem_RightMouseUp(Player player) { }
+
+        public void HoldItem_Update(Player player)
+        {
+            _overrideUseItem--;
+            if (useState == UseState.directly)
+            {
                 // 开启UI显示
                 TileDraw.allowDrawBorderRect = OpenUI;
                 TileDraw.tileColor = Color.Red;
                 TileDraw.tileRect = GetMagiskRectangle(player);
-                if (Main.mouseRight && BeginDownRight)
+                if (Main.mouseRight && rightMouseDown)
                 {
-                    BeginDownRight = false;
+                    rightMouseDown = false;
                     OpenUI = !OpenUI;
                 }
-                if (!Main.mouseRight && !BeginDownRight)
+                if (!Main.mouseRight && !rightMouseDown)
                 {
-                    BeginDownRight = true;
+                    rightMouseDown = true;
                 }
+            }
+            else if (useState == UseState.choose)
+            {
+
             }
         }
 
@@ -106,10 +136,13 @@ namespace ImproveGame.Content.Items
         {
             if (player.whoAmI == Main.myPlayer)
             {
-                if (_overrideUseItem <= 0)
+                if (useState == UseState.directly)
                 {
-                    _overrideUseItem = Item.useTime * player.pickSpeed;
-                    MyUtils.KillTiles(player, TileDraw.tileRect);
+                    if (_overrideUseItem <= 0 && Main.mouseLeft)
+                    {
+                        _overrideUseItem = Item.useTime * player.pickSpeed;
+                        MyUtils.KillTiles(player, TileDraw.tileRect);
+                    }
                 }
             }
             return false;

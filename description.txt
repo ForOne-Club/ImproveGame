@@ -5,7 +5,7 @@
 其他功能需要自行开启
 ---------------------------
 更新说明：
-    1.5.5.7
+    1.5.5.8
         法爆魔杖，星爆魔杖速度降低，但是会受到
         挖矿速度影响
     1.5.5
@@ -53,7 +53,7 @@ Functions toggled by defaut:
 Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
 ---------------------------
 Change log:
-    1.5.5.7
+    1.5.5.8
         Reduced using speed of Wand of Brusts and Wand of Starbrusts, but can affected by mining speed
     1.5.5
         Super Void Vault and Void Vault Smart pickup (Details in configs)
@@ -63,17 +63,10 @@ Change log:
     1.5.4
         New feature: Portable buff stations(details in config)
         Mana costs of Wand of Space and Wand of Technology are reduced to 50
-        1.5.4.2
-            Now Honey Bucket, Water Candle and Peace Candle are considered as buff stations
     1.5.3
         Improved English translations
         Added a tool to place walls
         Reduced mana costs and increased using speed of this mod's tools
-    1.5.2
-        Information items such as Cell Phone works in piggy bank and such inventories
-    1.5.1
-        Added 22 extra buff slots
-        Added indicators for infinite items
 ---------------------------
 Function list:
     1. Max stack

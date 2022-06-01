@@ -1,19 +1,12 @@
 ﻿using ImproveGame.Common.Players;
-using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.Utilities;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -93,7 +86,7 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         // 更新背包药水BUFF
-        public override void UpdateInventory(Item item, Terraria.Player player)
+        public override void UpdateInventory(Item item, Player player)
         {
             if (MyUtils.Config().NoConsume_Potion)
             {
