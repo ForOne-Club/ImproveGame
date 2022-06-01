@@ -77,6 +77,7 @@ Mods:
                 '''
                 Mine blocks within a small range of the cursor
                 The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
+                Affected by mining speed
                 Right click to open the indicator
                 '''
             SpaceWand:
