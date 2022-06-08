@@ -20,9 +20,6 @@ namespace ImproveGame.Common.GlobalNPCs
             if (npc.type == NPCID.KingSlime)
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Content.Items.SpaceWand>(), 1));
-            }
-            if (npc.type == NPCID.EyeofCthulhu)
-            {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Content.Items.WallPlace>(), 1));
             }
         }

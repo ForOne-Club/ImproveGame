@@ -4,29 +4,29 @@ using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.GlobalItems
 {
-    public class ItemVar : GlobalItem
+    public class GlobalItemData : GlobalItem
     {
         public override bool InstancePerEntity => true;
         public int recastCount;
+        public bool InventoryGlow;
 
         // 克隆
         public override GlobalItem Clone(Item item, Item itemClone)
         {
-            ItemVar clone = (ItemVar)MemberwiseClone();
-            return clone;
+            return base.Clone(item, itemClone);
         }
 
         // 保存数据
         public override void SaveData(Item item, TagCompound tag)
         {
-            tag.Add("recastCount", item.GetGlobalItem<ItemVar>().recastCount);
+            tag.Add("recastCount", item.GetGlobalItem<GlobalItemData>().recastCount);
         }
 
         // 加载数据
         public override void LoadData(Item item, TagCompound tag)
         {
             if (tag.ContainsKey("recastCount"))
-                item.GetGlobalItem<ItemVar>().recastCount = tag.GetInt("recastCount");
+                item.GetGlobalItem<GlobalItemData>().recastCount = tag.GetInt("recastCount");
         }
     }
 }

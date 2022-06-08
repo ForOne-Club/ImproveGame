@@ -55,7 +55,7 @@ namespace ImproveGame.Common.Players
         {
             if (Main.reforgeItem.type > ItemID.None)
             {
-                tag.Add("ReforgeItemPrefix", Main.reforgeItem.GetGlobalItem<ItemVar>().recastCount);
+                tag.Add("ReforgeItemPrefix", Main.reforgeItem.GetGlobalItem<GlobalItemData>().recastCount);
             }
             for (int i = 0; i < 100; i++)
             {

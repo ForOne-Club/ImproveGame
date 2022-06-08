@@ -10,15 +10,15 @@ namespace ImproveGame.Common.Players
 {
     public class ImprovePlayer : ModPlayer
     {
-        public static ImprovePlayer G(Terraria.Player player)
-        {
-            return player.GetModPlayer<ImprovePlayer>();
-        }
+        public static ImprovePlayer G(Player player) => player.GetModPlayer<ImprovePlayer>();
+
         public bool PiggyBank;
         public bool Safe;
         public bool DefendersForge;
+        public float PlayerTimer;
         public override void ResetEffects()
         {
+            PlayerTimer++;
             PiggyBank = Player.HasItem(ItemID.PiggyBank);
             Safe = Player.HasItem(ItemID.Safe);
             DefendersForge = Player.HasItem(ItemID.DefendersForge);

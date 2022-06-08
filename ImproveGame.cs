@@ -15,50 +15,46 @@ using Terraria.ModLoader;
 
 namespace ImproveGame
 {
-    // ¸üĞÂÈÎÎñ
-    // ÉñÃíµç³Ø£¨ÏÖ°æ±¾ÓÒ¼üÊ¹ÓÃ»áÏûºÄ£©£¬ËÉÂ¶³æ£¬¹âÅ®ÕÙ»½ÎïÏÂ°æ±¾¸üĞÂ¼ÓÈë²»ÏûºÄ ¡Á
-    // Tile ¹¤¾ß£º×Ô¶¯µöÓã£¬×Ô¶¯²É¼¯£¬×Ô¶¯ÍÚ¿ó
-    // Buff Tile ÔÚ±³°üÒ²¿ÉÒÔ»ñµÃ Buff £¨ÒÑÍê³É£©
-    // Ë¢¹ÖÂÊ UI
+    // æ›´æ–°ä»»åŠ¡
+    // ç¥åº™ç”µæ± ï¼ˆç°ç‰ˆæœ¬å³é”®ä½¿ç”¨ä¼šæ¶ˆè€—ï¼‰ï¼Œæ¾éœ²è™«ï¼Œå…‰å¥³å¬å”¤ç‰©ä¸‹ç‰ˆæœ¬æ›´æ–°åŠ å…¥ä¸æ¶ˆè€— Ã—
+    // Tile å·¥å…·ï¼šè‡ªåŠ¨é’“é±¼ï¼Œè‡ªåŠ¨é‡‡é›†ï¼Œè‡ªåŠ¨æŒ–çŸ¿
+    // Buff Tile åœ¨èƒŒåŒ…ä¹Ÿå¯ä»¥è·å¾— Buff ï¼ˆå·²å®Œæˆï¼‰
+    // åˆ·æ€ªç‡ UI
     public class ImproveGame : Mod
     {
-        public static Effect itemEffect;
-        public static Effect tileEffect;
-        public static Texture2D XingKong;
-        // ¶îÍâBUFF²Û
+        public static readonly Effect ItemEffect = ModContent.Request<Effect>("ImproveGame/npc", AssetRequestMode.ImmediateLoad).Value;
+
+        // é¢å¤–BUFFæ§½
         public override uint ExtraPlayerBuffSlots => 22;
 
         public override void Load()
         {
-            itemEffect = Assets.Request<Effect>("npc", AssetRequestMode.ImmediateLoad).Value;
-            tileEffect = Assets.Request<Effect>("tileEffect", AssetRequestMode.ImmediateLoad).Value;
-            XingKong = Assets.Request<Texture2D>("Assets/Images/XingKong", AssetRequestMode.ImmediateLoad).Value;
-            // ¼ÓÔØÇ°×ºĞÅÏ¢
+            // åŠ è½½å‰ç¼€ä¿¡æ¯
             MyUtils.LoadPrefixInfo();
-            // »¹Ô­¸ç²¼ÁÖÖØÖı²ÛÖĞÎïÆ·µÄÖØÖı´ÎÊı
+            // è¿˜åŸå“¥å¸ƒæ—é‡é“¸æ§½ä¸­ç‰©å“çš„é‡é“¸æ¬¡æ•°
             On.Terraria.Player.dropItemCheck += Player_dropItemCheck;
-            // ËÀÍöÊÇ·ñµôÂäÄ¹±®
+            // æ­»äº¡æ˜¯å¦æ‰è½å¢“ç¢‘
             On.Terraria.Player.DropTombstone += Player_DropTombstone;
-            // ×¥È¡¾àÀëĞŞ¸Ä
+            // æŠ“å–è·ç¦»ä¿®æ”¹
             On.Terraria.Player.PullItem_Common += Player_PullItem_Common;
-            // ÍíÉÏË¢ĞÂ NPC
+            // æ™šä¸Šåˆ·æ–° NPC
             IL.Terraria.Main.UpdateTime += Main_UpdateTime;
-            // ³ÇÕòNPCÈë×¡ËÙ¶ÈĞŞ¸Ä
+            // åŸé•‡NPCå…¥ä½é€Ÿåº¦ä¿®æ”¹
             IL.Terraria.Main.UpdateTime_SpawnTownNPCs += Main_UpdateTime_SpawnTownNPCs;
-            // ĞŞ¸Ä¿Õ¼ä·¨ÕÈÏÔÊ¾Æ½Ì¨Ê£ÓàÊıÁ¿
+            // ä¿®æ”¹ç©ºé—´æ³•æ–æ˜¾ç¤ºå¹³å°å‰©ä½™æ•°é‡
             IL.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color;
-            // ÉËº¦²¨¶¯
+            // ä¼¤å®³æ³¢åŠ¨
             On.Terraria.Main.DamageVar += Main_DamageVar;
-            // Ê¹´æÇ®¹ŞÖĞÎïÆ·ÉúĞ§£¬ÈçÍ¬·ÅÈë±³°üÒ»Ñù
+            // ä½¿å­˜é’±ç½ä¸­ç‰©å“ç”Ÿæ•ˆï¼Œå¦‚åŒæ”¾å…¥èƒŒåŒ…ä¸€æ ·
             On.Terraria.Player.VanillaPreUpdateInventory += Player_VanillaPreUpdateInventory;
-            // ÆìÖÄ¸üĞÂ
+            // æ——å¸œæ›´æ–°
             On.Terraria.SceneMetrics.ScanAndExportToMain += SceneMetrics_ScanAndExportToMain;
-            // Ê°È¡ÎïÆ·´¦Àí·½·¨
+            // æ‹¾å–ç‰©å“å¤„ç†æ–¹æ³•
             On.Terraria.Player.PickupItem += Player_PickupItem;
         }
 
         /// <summary>
-        /// Ê°È¡ÎïÆ·µÄÊ±ºò
+        /// æ‹¾å–ç‰©å“çš„æ—¶å€™
         /// </summary>
         /// <param name="orig"></param>
         /// <param name="player"></param>
@@ -69,7 +65,7 @@ namespace ImproveGame
         private Item Player_PickupItem(On.Terraria.Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp)
         {
             ImprovePlayer improvePlayer = ImprovePlayer.G(player);
-            // ÖÇÄÜĞé¿Õ±£ÏÕ¿â
+            // æ™ºèƒ½è™šç©ºä¿é™©åº“
             if (MyUtils.Config().SmartVoidVault)
             {
                 if (itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin)
@@ -83,7 +79,7 @@ namespace ImproveGame
                     {
                         itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.bank4.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
                     }
-                    // ³¬¼¶Ğé¿Õ±£ÏÕ¿â
+                    // è¶…çº§è™šç©ºä¿é™©åº“
                     if (MyUtils.Config().SuperVoidVault)
                     {
                         if (improvePlayer.PiggyBank && MyUtils.HasItem(player.bank.item, itemToPickUp))
@@ -106,7 +102,7 @@ namespace ImproveGame
             {
                 item = MyUtils.StackItemToInv(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault, item, GetItemSettings.PickupItemFromWorld);
             }
-            // ³¬¼¶Ğé¿Õ±£ÏÕ¿â
+            // è¶…çº§è™šç©ºä¿é™©åº“
             if (MyUtils.Config().SuperVoidVault)
             {
                 if (item.type != ItemID.None && item.stack > 0 && !item.IsACoin)
@@ -134,7 +130,7 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// ÆìÖÄBUFFÔÚ±³°üÉúĞ§
+        /// æ——å¸œBUFFåœ¨èƒŒåŒ…ç”Ÿæ•ˆ
         /// </summary>
         /// <param name="self"></param>
         /// <param name="player"></param>
@@ -165,7 +161,7 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// ÆìÖÄÔöÒæ
+        /// æ——å¸œå¢ç›Š
         /// </summary>
         /// <param name="orig"></param>
         /// <param name="self"></param>
@@ -173,7 +169,7 @@ namespace ImproveGame
         private void SceneMetrics_ScanAndExportToMain(On.Terraria.SceneMetrics.orig_ScanAndExportToMain orig, SceneMetrics self, SceneMetricsScanSettings settings)
         {
             orig(self, settings);
-            // ËæÉíÆìÖÄ£¨ÔöÒæÕ¾£©
+            // éšèº«æ——å¸œï¼ˆå¢ç›Šç«™ï¼‰
             if (MyUtils.Config().NoPlace_BUFFTile_Banner)
             {
                 Player player = Main.LocalPlayer;
@@ -226,7 +222,7 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// Ê¹´æÇ®¹ŞÖĞÎïÆ·ÈçÍ¬·ÅÔÚ±³°ü
+        /// ä½¿å­˜é’±ç½ä¸­ç‰©å“å¦‚åŒæ”¾åœ¨èƒŒåŒ…
         /// </summary>
         /// <param name="orig"></param>
         /// <param name="self"></param>
@@ -260,7 +256,7 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// ÉËº¦²¨¶¯
+        /// ä¼¤å®³æ³¢åŠ¨
         /// </summary>
         /// <param name="orig"></param>
         /// <param name="dmg"></param>
@@ -274,7 +270,7 @@ namespace ImproveGame
                 return orig(dmg, luck);
         }
 
-        // NPC ÍíÉÏË¢ĞÂ
+        // NPC æ™šä¸Šåˆ·æ–°
         private void Main_UpdateTime(ILContext il)
         {
             var c = new ILCursor(il);
@@ -292,7 +288,7 @@ namespace ImproveGame
             });
         }
 
-        // NPC Ë¢ĞÂËÙ¶È
+        // NPC åˆ·æ–°é€Ÿåº¦
         private void Main_UpdateTime_SpawnTownNPCs(ILContext il)
         {
             var c = new ILCursor(il);
@@ -306,18 +302,18 @@ namespace ImproveGame
             });
         }
 
-        // ¿Õ¼ä·¨ÕÈ¼ÆËãÊ£ÓàÆ½Ì¨Êı
+        // ç©ºé—´æ³•æ–è®¡ç®—å‰©ä½™å¹³å°æ•°
         private void ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color(ILContext il)
         {
-            // ¼ÆËãÊ£ÓàÆ½Ì¨
+            // è®¡ç®—å‰©ä½™å¹³å°
             var c = new ILCursor(il);
             if (!c.TryGotoNext(MoveType.After,
                 i => i.Match(OpCodes.Pop),
                 i => i.Match(OpCodes.Ldc_I4_M1)))
                 return;
-            c.Emit(OpCodes.Ldarg_1); // Íæ¼ÒÎïÆ·²Û
+            c.Emit(OpCodes.Ldarg_1); // ç©å®¶ç‰©å“æ§½
             c.Emit(OpCodes.Ldarg_2); // content
-            c.Emit(OpCodes.Ldarg_3); // ÎïÆ·ÔÚÎïÆ·²ÛµÄÎ»ÖÃ
+            c.Emit(OpCodes.Ldarg_3); // ç‰©å“åœ¨ç‰©å“æ§½çš„ä½ç½®
             c.EmitDelegate<Func<int, Item[], int, int, int>>((num11, inv, content, slot) =>
                 {
                     if (content == 13)
@@ -344,7 +340,7 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// ÎïÆ·ÎüÈ¡ËÙ¶È
+        /// ç‰©å“å¸å–é€Ÿåº¦
         /// </summary>
         /// <param name="orig"></param>
         /// <param name="player"></param>
@@ -371,7 +367,7 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// Ä¹±®µôÂä
+        /// å¢“ç¢‘æ‰è½
         /// </summary>
         /// <param name="orig"></param>
         /// <param name="self"></param>
@@ -387,7 +383,7 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// Ç°×º±£´æ
+        /// å‰ç¼€ä¿å­˜
         /// </summary>
         /// <param name="orig"></param>
         /// <param name="self"></param>
@@ -395,7 +391,7 @@ namespace ImproveGame
         {
             if (Main.reforgeItem.type > ItemID.None && self.GetModPlayer<DataPlayer>().ReforgeItemPrefix > 0)
             {
-                Main.reforgeItem.GetGlobalItem<ItemVar>().recastCount =
+                Main.reforgeItem.GetGlobalItem<GlobalItemData>().recastCount =
                     self.GetModPlayer<DataPlayer>().ReforgeItemPrefix;
                 self.GetModPlayer<DataPlayer>().ReforgeItemPrefix = 0;
             }

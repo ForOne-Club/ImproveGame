@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -197,6 +198,24 @@ namespace ImproveGame.Content.UI
             // 绘制物品
             if (!NotItem(item))
             {
+                if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
+                {
+                    sb.End();
+                    sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
+                        DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+                    Color lerpColor;
+                    float time = ImprovePlayer.G(Main.LocalPlayer).PlayerTimer;
+                    if (time % 60f < 30)
+                    {
+                        lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
+                    }
+                    else
+                    {
+                        lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
+                    }
+                    ImproveGame.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
+                    ImproveGame.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
+                }
                 Rectangle rectangle;
                 if (Main.itemAnimations[item.type] == null)
                 {
@@ -216,6 +235,14 @@ namespace ImproveGame.Content.UI
                 sb.Draw(texture.Value, dimensions.Center() - rectangle.Size() * size / 2f,
                     new Rectangle?(rectangle), item.GetColor(Color.White), 0f, Vector2.Zero, size,
                     SpriteEffects.None, 0f);
+
+                if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
+                {
+                    item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
+                    sb.End();
+                    sb.Begin(0, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
+                        DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+                }
             }
             // 物品信息
             if (IsMouseHovering)

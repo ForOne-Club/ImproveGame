@@ -3,8 +3,11 @@ using ImproveGame.Entitys;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
@@ -20,6 +23,98 @@ namespace ImproveGame
     /// </summary>
     public class MyUtils
     {
+        public static Color[] GetColors(Texture2D texture)
+        {
+            var w = texture.Width;
+            var h = texture.Height;
+            var cs = new Color[w * h]; // 创建一个能容下整个贴图颜色信息的 Color[]
+            texture.GetData(cs); // 获取颜色信息
+            return cs;
+        }
+
+        /// <summary>
+        /// 旋转物品使用时候的贴图
+        /// </summary>
+        /// <param name="player"></param>
+        public static void ItemRotation(Player player)
+        {
+            // 旋转物品
+            Vector2 rotaion = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.Zero);
+            player.direction = Main.MouseWorld.X < player.Center.X ? -1 : 1;
+            player.itemRotation = MathF.Atan2(rotaion.Y * player.direction, rotaion.X * player.direction);
+        }
+
+        /// <summary>
+        /// 你猜干嘛用的，bongbong！！！
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        public static void BongBong(Vector2 position, int width, int height)
+        {
+            if (Main.rand.NextBool(6))
+            {
+                Gore.NewGore(null, position + new Vector2(Main.rand.Next(16), Main.rand.Next(16)), Vector2.Zero, Main.rand.Next(61, 64));
+            }
+            if (Main.rand.NextBool(2))
+            {
+                int index = Dust.NewDust(position, width, height, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
+                Main.dust[index].velocity *= 1.4f;
+            }
+            if (Main.rand.NextBool(3))
+            {
+                int index = Dust.NewDust(position, width, height, DustID.Torch, 0f, 0f, 100, default, 2.5f);
+                Main.dust[index].noGravity = true;
+                Main.dust[index].velocity *= 5f;
+                index = Dust.NewDust(position, width, height, DustID.Torch, 0f, 0f, 100, default, 1.5f);
+                Main.dust[index].velocity *= 3f;
+            }
+        }
+
+        /// <summary>
+        /// 限制 Rect 的大小
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static Point LimitRect(Point start, Point end, int width, int height)
+        {
+            width--;
+            height--;
+            if (end.X - start.X < -width)
+                end.X = start.X - width;
+            else if (end.X - start.X > width)
+                end.X = start.X + width;
+
+            if (end.Y - start.Y < -height)
+                end.Y = start.Y - height;
+            else if (end.Y - start.Y > height)
+                end.Y = start.Y + height;
+            return end;
+        }
+
+        /// <summary>
+        /// 尝试破坏物块，需要有镐子，并且挖的动。
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="player"></param>
+        /// <param name="BestPickaxe"></param>
+        /// <returns></returns>
+        public static bool TryKillTile(int x, int y, Player player, Item BestPickaxe)
+        {
+            if (!Main.tileHammer[Main.tile[x, y].TileType])
+            {
+                if (player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.CanKillTile(x, y))
+                {
+                    WorldGen.KillTile(x, y);
+                }
+            }
+            return Main.tile[x, y].TileType == 0;
+        }
+
         public static void DrawBorderRect(Rectangle tileRectangle, Color backgroundColor, Color borderColor)
         {
             Texture2D texture = TextureAssets.MagicPixel.Value;
@@ -396,25 +491,31 @@ namespace ImproveGame
             PrefixLevel.Add(66, 4);
         }
 
+        public delegate void MyDelegate(int i, int j);
+
         // 魔法移除物块方法
-        public static void KillTiles(Player player, Rectangle rectangle)
+        public static void NormalKillTiles(Player player, Rectangle rect, MyDelegate myDelegate = null)
         {
-            // Main.NewText(Main.SmartCursorIsUsed);
             // 获得背包中最好的镐子
             Item item = player.GetBestPickaxe();
-            int minI = rectangle.X;
-            int maxI = rectangle.X + rectangle.Width - 1;
-            int minJ = rectangle.Y;
-            int maxJ = rectangle.Y + rectangle.Height - 1;
+            int minI = rect.X;
+            int maxI = rect.X + rect.Width - 1;
+            int minJ = rect.Y;
+            int maxJ = rect.Y + rect.Height - 1;
             for (int i = 0; i < player.hitTile.data.Length; i++)
             {
                 HitTile.HitTileObject hitTileObject = player.hitTile.data[i];
                 hitTileObject.timeToLive = 10000;
             }
+
             for (int i = minI; i <= maxI; i++)
             {
                 for (int j = minJ; j <= maxJ; j++)
                 {
+                    if (myDelegate is not null)
+                    {
+                        myDelegate(i, j);
+                    }
                     Tile tile = Main.tile[i, j];
                     if (!Main.tileAxe[tile.TileType] && !Main.tileHammer[tile.TileType])
                     {
@@ -430,6 +531,27 @@ namespace ImproveGame
             }
         }
 
+        /// <summary>
+        /// 遍历 Tile
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="rect"></param>
+        /// <param name="myDelegate"></param>
+        public static void ForechTile(Rectangle rect, MyDelegate myDelegate)
+        {
+            int minI = rect.X;
+            int maxI = rect.X + rect.Width - 1;
+            int minJ = rect.Y;
+            int maxJ = rect.Y + rect.Height - 1;
+            for (int i = minI; i <= maxI; i++)
+            {
+                for (int j = minJ; j <= maxJ; j++)
+                {
+                    myDelegate(i, j);
+                }
+            }
+        }
+
         // 判断物块是否相同
         public static bool IsSameTile(int i, int j, int tileType, int tileStyle)
         {
@@ -437,65 +559,67 @@ namespace ImproveGame
                              || Main.tile[i, j].TileType != tileType;
         }
 
-        // Tiles 外围
-        public static List<TileInfo> PrisonTiles(int tileType, int tileStyle = 0)
+        public delegate bool JudgeItem(Item item);
+
+        /// <summary>
+        /// 判断有没有足量的此类物品
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="judge"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public static bool EnoughItem(Player player, JudgeItem judge, int amount)
         {
-            List<TileInfo> PrisonTiles = new List<TileInfo>();
-            for (int i = 0; i < 11; i++)
+            int num = 0;
+            for (int i = 0; i < 50; i++)
             {
-                for (int j = 0; j < 6; j++)
+                Item item = player.inventory[i];
+                if (item.type != ItemID.None && item.stack > 0 && judge(item))
                 {
-                    if (i == 0 || i == 10)
-                    {
-                        PrisonTiles.Add(new(tileType, tileStyle, i, j)); // Tile
-                    }
-                    else
-                    {
-                        if (j == 0 && i != 5)
-                        {
-                            PrisonTiles.Add(new(tileType, tileStyle, i, j)); // Tile
-                        }
-                        else if (j == 0 && i == 5)
-                        {
-                            PrisonTiles.Add(new(30, 0, i, j));
-                        }
-                        if (i == 5 && j == 2)
-                        {
-                            PrisonTiles.Add(new(4, 0, i, j)); // 火把
-                        }
-                        if (j == 5)
-                        {
-                            if (i == 3)
-                            {
-                                PrisonTiles.Add(new(15, 0, i, j)); // 凳子
-                            }
-                            if (i == 5)
-                            {
-                                PrisonTiles.Add(new(14, 0, i, j)); // 桌子
-                            }
-                            if (i == 7)
-                            {
-                                PrisonTiles.Add(new(15, 0, i, j)); // 凳子
-                            }
-                        }
-                    }
+                    if (!item.consumable || !ItemLoader.ConsumeItem(item, player))
+                        return true;
+                    num += item.stack;
                 }
             }
-            return PrisonTiles;
+            if (num >= amount)
+            {
+                return true;
+            }
+            return false;
         }
 
-        // Walls 外围
-        public static List<WallInfo> PrisonWalls(int wallType)
+        /// <summary>
+        /// 消耗物品
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="judge"></param>
+        /// <param name="amount"></param>
+        public static void ConsumeItem(Player player, JudgeItem judge, int amount = 1)
         {
-            List<WallInfo> PrisonWalls = new List<WallInfo>();
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 50; i++)
             {
-                for (int j = 0; j < 5; j++)
+                Item item = player.inventory[i];
+                if (item.type != ItemID.None && item.stack > 0 && judge(item))
                 {
-                    PrisonWalls.Add(new(wallType, i, j));
+                    if (item.consumable && ItemLoader.ConsumeItem(item, player))
+                    {
+                        if (item.stack >= amount)
+                        {
+                            item.stack -= amount;
+                            amount = 0;
+                        }
+                        else
+                        {
+                            amount -= item.stack;
+                            item.stack = 0;
+                        }
+                        if (item.stack < 1)
+                            player.inventory[i] = new Item();
+                        if (amount < 1)
+                            return;
+                    }
                 }
             }
-            return PrisonWalls;
         }
     }
 }

@@ -1,10 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -23,7 +19,7 @@ namespace ImproveGame.Content.Items
             Item.useAnimation = 15;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.rare = ItemRarityID.Lime;
-            Item.value = Terraria.Item.sellPrice(0, 1, 0, 0);
+            Item.value = Item.sellPrice(0, 0, 50, 0);
             Item.mana = 50;
             Item.UseSound = SoundID.Item1;
         }
@@ -145,7 +141,7 @@ namespace ImproveGame.Content.Items
                     CombatText.NewText(player.getRect(), new Color(225, 0, 0), Language.GetTextValue($"Mods.ImproveGame.CombatText_Item.WallPlace_Limit"));
                     return base.UseItem(player);
                 }
-                else if (Walls.Count > 0)
+                else if (Walls.Count > 0 && MyUtils.GetFirstWall(player).type != ItemID.None)
                 {
                     CombatText.NewText(player.getRect(), new Color(0, 155, 255), Language.GetTextValue($"Mods.ImproveGame.CombatText_Item.WallPlace_Consume") + Walls.Count);
                     Projectile proj = Projectile.NewProjectileDirect(null, Main.MouseWorld, Vector2.Zero,

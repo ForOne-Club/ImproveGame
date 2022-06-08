@@ -6,42 +6,27 @@ namespace ImproveGame.Content.Items
 {
     public class StarburstWand : MagickWand
     {
-        public override void SetStaticDefaults()
-        {
-
-        }
-
         public override void SetDefaults()
         {
-            Item.useTurn = true;
+            base.SetDefaults();
             Item.width = 40;
             Item.height = 46;
             Item.rare = ItemRarityID.Yellow;
-            Item.useStyle = ItemUseStyleID.Swing;
-            Item.autoReuse = true;
-            Item.useAnimation = 15;
-            Item.useTime = 15;
-            Item.mana = 20;
-            Item.UseSound = SoundID.Item1;
-            Item.value = Item.sellPrice(0, 2, 0, 0);
+            Item.value = Item.sellPrice(0, 5, 0, 0);
 
-            KillTilesOffsetX = -3;
-            KillTilesOffsetY = -2;
-            KillTilesWidth = 7;
-            KillTilesHeight = 5;
-            RangeX = 10;
-            RangeY = 8;
-            OpenUI = true;
+            killSizeMax = new(40, 20);
+            killSize = new(7, 5);
+            extraRange = new(16, 10);
         }
 
         public override void AddRecipes()
         {
             CreateRecipe().AddIngredient(ModContent.ItemType<MagickWand>())
-                .AddIngredient(520, 5)
-                .AddIngredient(521, 5)
-                .AddIngredient(527, 1)
-                .AddIngredient(528, 1)
-                .AddTile(125).Register();
+                .AddIngredient(ItemID.SoulofLight, 5)
+                .AddIngredient(ItemID.SoulofNight, 5)
+                .AddIngredient(ItemID.DarkShard, 1)
+                .AddIngredient(ItemID.LightShard, 1)
+                .AddTile(TileID.CrystalBall).Register();
         }
     }
 }
