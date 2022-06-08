@@ -20,7 +20,7 @@ namespace ImproveGame.Content.Items
             Item.useStyle = ItemUseStyleID.Swing;
             Item.rare = ItemRarityID.Lime;
             Item.value = Item.sellPrice(0, 0, 50, 0);
-            Item.mana = 50;
+            Item.mana = 20;
             Item.UseSound = SoundID.Item1;
         }
 

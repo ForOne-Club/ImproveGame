@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static ImproveGame.Entitys.TileData;
@@ -75,6 +76,7 @@ namespace ImproveGame.Content.Items
                     Point position = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint();
 
                     List<TileData> tileDatas = new();
+                    SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
 
                     for (int i = 0; i < Colors.Length; i++) // 不会放置椅子和工作台
                     {
@@ -214,8 +216,8 @@ namespace ImproveGame.Content.Items
         {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddIngredient(ItemID.FallenStar, 8)
                 .AddIngredient(ItemID.GoldBar, 6)
-                .AddIngredient(ItemID.Topaz, 2)
                 .Register();
         }
 

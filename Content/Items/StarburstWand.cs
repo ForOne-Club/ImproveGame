@@ -22,10 +22,9 @@ namespace ImproveGame.Content.Items
         public override void AddRecipes()
         {
             CreateRecipe().AddIngredient(ModContent.ItemType<MagickWand>())
-                .AddIngredient(ItemID.SoulofLight, 5)
-                .AddIngredient(ItemID.SoulofNight, 5)
-                .AddIngredient(ItemID.DarkShard, 1)
-                .AddIngredient(ItemID.LightShard, 1)
+                .AddIngredient(ItemID.FallenStar, 8)
+                .AddIngredient(ItemID.SoulofLight, 6)
+                .AddIngredient(ItemID.SoulofNight, 6)
                 .AddTile(TileID.CrystalBall).Register();
         }
     }

@@ -59,7 +59,7 @@ namespace ImproveGame.Content.Items
 
         public override bool CanUseItem(Player player)
         {
-            _allowPlacePlatform = true;
+            _AllowKillTile = true;
             MyUtils.ItemRotation(player);
             if (player.altFunctionUse == 0)
             {
@@ -104,22 +104,29 @@ namespace ImproveGame.Content.Items
             }
             else if (player.altFunctionUse == 2)
             {
+                Item.useAnimation = 18;
+                Item.useTime = 18;
                 ToggleStyle();
             }
             return base.CanUseItem(player);
         }
 
-        private bool _allowPlacePlatform;
+        private bool _AllowKillTile;
         public override bool? UseItem(Player player)
         {
             if (player.altFunctionUse == 0 && state == State.Free && !Main.dedServ && player.whoAmI == Main.myPlayer)
             {
-                if (Main.mouseRight && _allowPlacePlatform)
+                if (Main.mouseRight && _AllowKillTile)
                 {
-                    _allowPlacePlatform = false;
+                    _AllowKillTile = false;
                 }
                 end = MyUtils.LimitRect(start, Main.MouseWorld.ToTileCoordinates(), killSizeMax.X, killSizeMax.Y);
-                Box box = DrawSystem.boxs[Box.NewBox(start, end, new Color(255, 0, 0) * 0.35f, new Color(255, 0, 0))];
+                Color color;
+                if (_AllowKillTile)
+                    color = new(255, 0, 0);
+                else
+                    color = Color.GreenYellow;
+                Box box = DrawSystem.boxs[Box.NewBox(start, end, color * 0.35f, color)];
                 box.ShowWidth = true;
                 box.ShowHeight = true;
                 if (Main.mouseLeft)
@@ -130,46 +137,49 @@ namespace ImproveGame.Content.Items
                 else
                 {
                     player.itemAnimation = 0;
-                    Rectangle tileRect = TileRect;
-                    Item BestPickaxe = player.GetBestPickaxe();
-                    int minI = tileRect.X;
-                    int maxI = tileRect.X + tileRect.Width - 1;
-                    int minJ = tileRect.Y;
-                    int maxJ = tileRect.Y + tileRect.Height - 1;
-                    for (int j = minJ; j <= maxJ; j++)
+                    if (_AllowKillTile)
                     {
-                        for (int i = minI; i <= maxI; i++)
+                        Rectangle tileRect = TileRect;
+                        Item BestPickaxe = player.GetBestPickaxe();
+                        int minI = tileRect.X;
+                        int maxI = tileRect.X + tileRect.Width - 1;
+                        int minJ = tileRect.Y;
+                        int maxJ = tileRect.Y + tileRect.Height - 1;
+                        for (int j = minJ; j <= maxJ; j++)
                         {
-                            SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-                            MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
-                            if (Main.tile[i, j].WallType > 0)
+                            for (int i = minI; i <= maxI; i++)
                             {
-                                WorldGen.KillWall(i, j);
-                                player.statMana -= 1;
-                                if (player.statMana < 1)
+                                SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
+                                MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
+                                if (Main.tile[i, j].WallType > 0)
                                 {
-                                    player.QuickMana();
+                                    WorldGen.KillWall(i, j);
+                                    player.statMana -= 1;
                                     if (player.statMana < 1)
                                     {
-                                        goto superBreak;
+                                        player.QuickMana();
+                                        if (player.statMana < 1)
+                                        {
+                                            goto superBreak;
+                                        }
                                     }
                                 }
-                            }
-                            if (Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player, BestPickaxe))
-                            {
-                                player.statMana -= 1;
-                                if (player.statMana < 1)
+                                if (Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player, BestPickaxe))
                                 {
-                                    player.QuickMana();
+                                    player.statMana -= 1;
                                     if (player.statMana < 1)
                                     {
-                                        goto superBreak;
+                                        player.QuickMana();
+                                        if (player.statMana < 1)
+                                        {
+                                            goto superBreak;
+                                        }
                                     }
                                 }
                             }
                         }
+                    superBreak:;
                     }
-                superBreak:;
                 }
             }
             return base.UseItem(player);
@@ -196,10 +206,10 @@ namespace ImproveGame.Content.Items
 
         public override void AddRecipes()
         {
-            CreateRecipe().AddIngredient(ItemID.FallenStar, 10)
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 18)
                 .AddIngredient(ItemID.JungleSpores, 5)
                 .AddIngredient(ItemID.Ruby, 1)
-                .AddRecipeGroup(RecipeGroupID.Wood, 10)
                 .AddTile(TileID.WorkBenches).Register();
         }
 

@@ -25,7 +25,7 @@ namespace ImproveGame
         public static readonly Effect ItemEffect = ModContent.Request<Effect>("ImproveGame/npc", AssetRequestMode.ImmediateLoad).Value;
 
         // 额外BUFF槽
-        public override uint ExtraPlayerBuffSlots => 22;
+        public override uint ExtraPlayerBuffSlots => (uint)MyUtils.Config().ExtraPlayerBuffSlots;
 
         public override void Load()
         {

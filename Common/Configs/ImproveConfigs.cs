@@ -149,5 +149,13 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         [ReloadRequired]
         public bool BanDamageVar;
+
+        [Label("$Mods.ImproveGame.ImproveConfigs.ExtraPlayerBuffSlots_Label")]
+        [DefaultValue(0)]
+        [Range(0, 44)]
+        [Slider]
+        [Increment(11)]
+        [ReloadRequired]
+        public int ExtraPlayerBuffSlots;
     }
 }
