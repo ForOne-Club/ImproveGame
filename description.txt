@@ -8,7 +8,7 @@
 更新说明（具体请在设置或游戏内查看）：
     1.5.6
         新增建筑魔杖，用于建造房屋。
-        法宝魔杖，星爆魔杖改版，支持框选。
+        法爆魔杖，星爆魔杖改版，支持框选。
         额外BUFF栏支持调节数量。
     1.5.5.8
         法爆魔杖，星爆魔杖速度降低，但是会受到
@@ -50,10 +50,15 @@
 
 These features may bring you better gameplay experience
 ---------------------------
+Only a part of mod functions are toggled by default, the rest need to be toggled in mod config
 Functions toggled by defaut:
 Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
 ---------------------------
-Change log:
+Change log: (View details in mod configs)
+    1.5.6
+        Added Wand of Architecture, to build houses
+        Changed Wand of Brusts and Wand of Starbrusts, added support area selection
+        More Buff Slots now supports number adjustion
     1.5.5.8
         Reduced using speed of Wand of Brusts and Wand of Starbrusts, but can affected by mining speed
     1.5.5
