@@ -152,14 +152,15 @@ Mods:
         }
         TileSort:
         {
-             Solid: 砖块
-             Platform: 平台
-             Torch: 火把
-             Chair: 椅子
-             Table: 桌子
-             WorkBenche: 工作台
-             Wall: 墙
-             Bed: 床
+            MaterialsRequired: "所需材料："
+            Solid: 砖块
+            Platform: 平台
+            Torch: 火把
+            Chair: 椅子
+            Table: 桌子
+            WorkBenche: 工作台
+            Wall: 墙
+            Bed: 床
         }
     }
 }
