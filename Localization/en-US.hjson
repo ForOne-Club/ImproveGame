@@ -68,17 +68,21 @@ Mods:
             MagickWand: Wand of Brusts
             SpaceWand: Wand of Space
             StarburstWand: Wand of Starbursts
-            CreateWand: Wand of Void
+            CreateWand: Wand of Architecture
             WallPlace: Wand of Technology
         }
         ItemTooltip:
         {
             MagickWand:
                 '''
-                Mine blocks within a small range of the cursor
+                Fixed Mode: Destroy tiles in an indicated fixed area
+                Free Mode: Destroy tiles selected
+                Can be affected by mining speed
                 The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
-                Affected by mining speed
-                Right click to open the indicator
+                Mana cost depends on the number of tiles destroyed
+                Right click to swich between the two modes
+                Right click while selecting area to cancel
+                Automatically uses mana potion if necessary
                 '''
             SpaceWand:
                 '''
@@ -91,10 +95,14 @@ Mods:
                 '''
             StarburstWand:
                 '''
-                Mine blocks within a intermediate range of the cursor
+                Fixed Mode: Destroy tiles in an indicated fixed area
+                Free Mode: Destroy tiles selected
+                Can be affected by mining speed
                 The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
-                Affected by mining speed
-                Right click to open the indicator
+                Mana cost depends on the number of tiles destroyed
+                Right click to swich between the two modes
+                Right click while selecting area to cancel
+                Automatically uses mana potion if necessary
                 '''
             WallPlace:
                 '''
@@ -104,11 +112,17 @@ Mods:
                 Considers tangible blocks, platforms and doors as boundaries
                 Each player can only summon one, use again to recall it
                 '''
+            CreateWand:
+                '''
+                Builds a house using materieals in your inventory
+                Right click to change the house style
+                Please prepare enough materials, or the house will not be built completely!
+                '''
         }
         CombatText_Item:
         {
             SpaceWand_Cancel: "Canceled!"
-            SpaceWand_Lack: "No enough platform!"
+            SpaceWand_Lack: "Not enough platform!"
             WallPlace_Limit: "This area is too big!"
             WallPlace_Consume: "Excepted consumption: "
             WallPlace_Kill: "Stopped placing!"
@@ -125,6 +139,18 @@ Mods:
         Keybin:
         {
             SuperVault: Huge Inventory
+        }
+        TileSort:
+        {
+            MaterialsRequired: "Materials Needed: "
+            Solid: Block
+            Platform: Platform
+            Torch: Torch
+            Chair: Chair
+            Table: Table
+            WorkBenche: Work Benche
+            Wall: Wall
+            Bed: Bed
         }
     }
 }
