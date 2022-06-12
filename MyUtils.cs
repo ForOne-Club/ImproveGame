@@ -101,18 +101,22 @@ namespace ImproveGame
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="player"></param>
-        /// <param name="BestPickaxe"></param>
         /// <returns></returns>
-        public static bool TryKillTile(int x, int y, Player player, Item BestPickaxe)
+        public static bool TryKillTile(int x, int y, Player player)
         {
-            if (!Main.tileHammer[Main.tile[x, y].TileType])
+            Tile tile = Main.tile[x, y];
+            if (tile.HasTile && !Main.tileHammer[Main.tile[x, y].TileType])
             {
                 if (player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.CanKillTile(x, y))
                 {
-                    WorldGen.KillTile(x, y);
+                    if ((tile.TileType == 2 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 23 || tile.TileType == 60 || tile.TileType == 70 || tile.TileType == 109 || tile.TileType == 199 || Main.tileMoss[tile.TileType] || TileID.Sets.tileMossBrick[tile.TileType]))
+                    {
+                        player.PickTile(x, y, 10000);
+                    }
+                    player.PickTile(x, y, 10000);
                 }
             }
-            return Main.tile[x, y].TileType == 0;
+            return !Main.tile[x, y].HasTile;
         }
 
         public static void DrawBorderRect(Rectangle tileRectangle, Color backgroundColor, Color borderColor)
@@ -166,6 +170,11 @@ namespace ImproveGame
         public static Asset<Texture2D> GetTexture(string path)
         {
             return ModContent.Request<Texture2D>($"ImproveGame/Assets/Images/{path}", AssetRequestMode.ImmediateLoad);
+        }
+
+        public static Asset<Effect> GetEffect(string path)
+        {
+            return ModContent.Request<Effect>($"ImproveGame/Assets/Effect/{path}", AssetRequestMode.ImmediateLoad);
         }
 
         /// <summary>
@@ -386,13 +395,12 @@ namespace ImproveGame
                     return item;
                 }
             }
-            return new Item();
+            return null;
         }
 
         // 加载前缀
         public static void LoadPrefixInfo()
         {
-            //
             PrefixLevel.Add(1, 1);
             PrefixLevel.Add(2, 1);
             PrefixLevel.Add(3, 1);
@@ -553,7 +561,7 @@ namespace ImproveGame
         }
 
         // 判断物块是否相同
-        public static bool IsSameTile(int i, int j, int tileType, int tileStyle)
+        public static bool NotSameTile(int i, int j, int tileType, int tileStyle)
         {
             return (Main.tile[i, j].TileType == tileType && Main.tile[i, j].TileFrameY != tileStyle * 18)
                              || Main.tile[i, j].TileType != tileType;
@@ -568,24 +576,27 @@ namespace ImproveGame
         /// <param name="judge"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public static bool EnoughItem(Player player, JudgeItem judge, int amount)
+        public static int EnoughItem(Player player, JudgeItem judge, int amount = 1)
         {
+            int oneIndex = -1;
             int num = 0;
             for (int i = 0; i < 50; i++)
             {
                 Item item = player.inventory[i];
                 if (item.type != ItemID.None && item.stack > 0 && judge(item))
                 {
+                    if (oneIndex == -1)
+                        oneIndex = i;
                     if (!item.consumable || !ItemLoader.ConsumeItem(item, player))
-                        return true;
+                        return oneIndex;
                     num += item.stack;
                 }
             }
             if (num >= amount)
             {
-                return true;
+                return oneIndex;
             }
-            return false;
+            return -1;
         }
 
         /// <summary>
@@ -594,7 +605,7 @@ namespace ImproveGame
         /// <param name="player"></param>
         /// <param name="judge"></param>
         /// <param name="amount"></param>
-        public static void ConsumeItem(Player player, JudgeItem judge, int amount = 1)
+        public static void ConsumeItem(Player player, JudgeItem judge)
         {
             for (int i = 0; i < 50; i++)
             {
@@ -603,21 +614,11 @@ namespace ImproveGame
                 {
                     if (item.consumable && ItemLoader.ConsumeItem(item, player))
                     {
-                        if (item.stack >= amount)
-                        {
-                            item.stack -= amount;
-                            amount = 0;
-                        }
-                        else
-                        {
-                            amount -= item.stack;
-                            item.stack = 0;
-                        }
+                        item.stack--;
                         if (item.stack < 1)
-                            player.inventory[i] = new Item();
-                        if (amount < 1)
-                            return;
+                            player.inventory[i].SetDefaults(0);
                     }
+                    return;
                 }
             }
         }

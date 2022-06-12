@@ -1,7 +1,5 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Players;
-using ImproveGame.Common.Players;
-using ImproveGame.Content.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
@@ -22,8 +20,6 @@ namespace ImproveGame
     // 刷怪率 UI
     public class ImproveGame : Mod
     {
-        public static readonly Effect ItemEffect = ModContent.Request<Effect>("ImproveGame/npc", AssetRequestMode.ImmediateLoad).Value;
-
         // 额外BUFF槽
         public override uint ExtraPlayerBuffSlots => (uint)MyUtils.Config().ExtraPlayerBuffSlots;
 

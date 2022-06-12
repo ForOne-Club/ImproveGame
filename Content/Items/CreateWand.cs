@@ -68,11 +68,24 @@ namespace ImproveGame.Content.Items
 
         public override bool CanUseItem(Player player)
         {
+            if (player.altFunctionUse == 0)
+            {
+                Item.mana = 40;
+            }
+            else if (player.altFunctionUse == 2)
+            {
+                Item.mana = 0;
+                ToggleStyle();
+            }
+            return true;
+        }
+
+        public override bool? UseItem(Player player)
+        {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
                 if (player.altFunctionUse == 0)
                 {
-                    Item.mana = 40;
                     Point position = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint();
 
                     List<TileData> tileDatas = new();
@@ -83,7 +96,7 @@ namespace ImproveGame.Content.Items
                         int x = position.X + i % JianYu.Width; // 物块在图片中的 X 坐标
                         int y = position.Y + i / JianYu.Width; // Y 坐标
 
-                        TryKillTile(x, y, player, player.GetBestPickaxe());
+                        TryKillTile(x, y, player);
                         BongBong(new Vector2(x, y) * 16f, 16, 16);
 
                         TileSort tileSort = Color2TileSort(Colors[i]);
@@ -106,7 +119,7 @@ namespace ImproveGame.Content.Items
                             });
                         }
 
-                        if (tileSort != TileSort.None)// 物块
+                        if (tileSort != TileSort.None) // 物块
                         {
                             if (tileSort == TileSort.Torch || tileSort == TileSort.Chair ||
                                 tileSort == TileSort.WorkBenche || tileSort == TileSort.Table ||
@@ -121,7 +134,7 @@ namespace ImproveGame.Content.Items
                                     MyUtils.ConsumeItem(player, (item) =>
                                     {
                                         if (item.createTile > -1 &&
-                                        ((tileSort == TileSort.Solid && Main.tileSolid[item.createTile] && !TileID.Sets.Platforms[item.createTile]) ||
+                                        ((tileSort == TileSort.Solid && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile]) ||
                                         (tileSort == TileSort.Platform && TileID.Sets.Platforms[item.createTile])) &&
                                         WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
                                         {
@@ -158,11 +171,6 @@ namespace ImproveGame.Content.Items
                     }
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                         NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, JianYu.Width, JianYu.Height);
-                }
-                else if (player.altFunctionUse == 2)
-                {
-                    Item.mana = 0;
-                    ToggleStyle();
                 }
             }
             return true;
@@ -204,7 +212,7 @@ namespace ImproveGame.Content.Items
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             CalculateConsume();
-            tooltips.Add(new(Mod, "MaterialConsume", $"[c/ffff00:所需材料列表：]"));
+            tooltips.Add(new(Mod, "MaterialConsume", $"[c/ffff00:{GetText("TileSort.MaterialsRequired")}]"));
             foreach (var item in MaterialConsume)
             {
                 if (item.Key != TileSort.None && item.Value > 0)
@@ -214,10 +222,17 @@ namespace ImproveGame.Content.Items
 
         public override void AddRecipes()
         {
+            // 金锭
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
                 .AddIngredient(ItemID.FallenStar, 8)
                 .AddIngredient(ItemID.GoldBar, 6)
+                .Register();
+            // 铂金锭
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddIngredient(ItemID.FallenStar, 8)
+                .AddIngredient(ItemID.PlatinumBar, 6)
                 .Register();
         }
 
@@ -269,11 +284,5 @@ namespace ImproveGame.Content.Items
         private static readonly Color ZiSe = new(127, 0, 255);
         private static readonly Color QingSe = new(0, 255, 255);
         private static readonly Color Pink = new(255, 0, 255);
-        /*private readonly JudgeItem judgeSolid = new((item) => { return item.createTile > -1 && Main.tileSolid[item.createTile]; });
-        private readonly JudgeItem judgeChairs = new((item) => { return item.createTile == TileID.Chairs; });
-        private readonly JudgeItem judgeWorkBenches = new((item) => { return item.createTile == TileID.WorkBenches; });
-        private readonly JudgeItem judgePlatform = new((item) => { return item.createTile > -1 && TileID.Sets.Platforms[item.createTile]; });
-        private readonly JudgeItem judgeTorch = new((item) => { return item.createTile > -1 && TileID.Sets.Torch[item.createTile]; });
-        private readonly JudgeItem judgeWall = new((item) => { return item.createWall > -1; });*/
     }
 }

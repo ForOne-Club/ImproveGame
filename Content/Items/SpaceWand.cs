@@ -143,23 +143,35 @@ namespace ImproveGame.Content.Items
                 {
                     for (int j = minJ; j <= maxJ; j++)
                     {
-                        // 找到背包第一个平台
-                        Item PlatformItem = MyUtils.GetFirstPlatform(player);
-                        // 如果有找到平台结束执行
-                        if (PlatformItem.type == ItemID.None)
+                        int oneIndex = MyUtils.EnoughItem(player, (item) =>
                         {
-                            CombatText.NewText(player.getRect(), new Color(255, 0, 0, 255), Language.GetTextValue($"Mods.ImproveGame.CombatText_Item.SpaceWand_Lack"));
-                            return;
-                        }
-                        // 破坏物块
-                        if (player.TileReplacementEnabled && MyUtils.IsSameTile(i, j, PlatformItem.createTile, PlatformItem.placeStyle))
-                            MyUtils.TryKillTile(i, j, player, player.GetBestPickaxe());
-                        // 放置成功，是消耗品，可以被消耗 扣除一个
-                        if (WorldGen.PlaceTile(i, j, PlatformItem.createTile, false, Main.tile[i, j].TileType == 0 ? true : false, player.whoAmI, PlatformItem.placeStyle)
-                            && ItemLoader.ConsumeItem(PlatformItem, player) && PlatformItem.consumable)
+                            return item.createTile > -1 && TileID.Sets.Platforms[item.createTile];
+                        });
+                        if (oneIndex > -1)
                         {
-                            PlatformItem.stack--;
+                            Item item = player.inventory[oneIndex];
+                            if (player.TileReplacementEnabled)
+                            {
+                                if (player.TileReplacementEnabled &&
+                                MyUtils.NotSameTile(i, j, item.createTile, item.placeStyle) &&
+                                MyUtils.TryKillTile(i, j, player))
+                                {
+                                    WorldGen.PlaceTile(i, j, item.createTile, false, true, player.whoAmI, item.placeStyle);
+                                }
+                                else
+                                {
+                                    WorldGen.PlaceTile(i, j, item.createTile, false, false, player.whoAmI, item.placeStyle);
+                                }
+                            }
                         }
+                        MyUtils.ConsumeItem(player, (item) =>
+                        {
+                            if (item.createTile > -1 && TileID.Sets.Platforms[item.createTile])
+                            {
+                                return true;
+                            }
+                            return false;
+                        });
                     }
                 }
                 // 发送数据到服务器

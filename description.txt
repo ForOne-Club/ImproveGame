@@ -69,10 +69,6 @@ Change log: (View details in mod configs)
     1.5.4
         New feature: Portable buff stations(details in config)
         Mana costs of Wand of Space and Wand of Technology are reduced to 50
-    1.5.3
-        Improved English translations
-        Added a tool to place walls
-        Reduced mana costs and increased using speed of this mod's tools
 ---------------------------
 Function list:
     1. Max stack

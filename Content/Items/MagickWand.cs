@@ -69,26 +69,29 @@ namespace ImproveGame.Content.Items
                     Item.useTime = (int)(18 * player.pickSpeed);
                     if (player.whoAmI == Main.myPlayer)
                     {
+                        Rectangle rect = GetKillRect(player);
                         SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-                        MyUtils.ForechTile(GetKillRect(player), (i, j) =>
+                        MyUtils.ForechTile(rect, (i, j) =>
                         {
-                            if (Main.tile[i, j].WallType > 0)
+                            if (Main.tile[i, j].WallType > 0 && player.TileReplacementEnabled)
                             {
                                 if (player.statMana < 1)
                                     player.QuickMana();
                                 if (player.statMana >= 1)
                                 {
                                     WorldGen.KillWall(i, j);
+                                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, i, j);
                                     player.statMana -= 1;
                                 }
                             }
-                            if (player.statMana < 1)
+                            if (player.statMana < 2)
                                 player.QuickMana();
-                            if (player.statMana >= 1)
+                            if (player.statMana >= 2)
                             {
-                                if (Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player, player.GetBestPickaxe()))
+                                if (Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player))
                                 {
-                                    player.statMana -= 1;
+                                    player.statMana -= 2;
                                 }
                             }
                             MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
@@ -140,7 +143,6 @@ namespace ImproveGame.Content.Items
                     if (_AllowKillTile)
                     {
                         Rectangle tileRect = TileRect;
-                        Item BestPickaxe = player.GetBestPickaxe();
                         int minI = tileRect.X;
                         int maxI = tileRect.X + tileRect.Width - 1;
                         int minJ = tileRect.Y;
@@ -151,9 +153,11 @@ namespace ImproveGame.Content.Items
                             {
                                 SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
                                 MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
-                                if (Main.tile[i, j].WallType > 0)
+                                if (Main.tile[i, j].WallType > 0 && player.TileReplacementEnabled)
                                 {
                                     WorldGen.KillWall(i, j);
+                                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, i, j);
                                     player.statMana -= 1;
                                     if (player.statMana < 1)
                                     {
@@ -164,16 +168,13 @@ namespace ImproveGame.Content.Items
                                         }
                                     }
                                 }
-                                if (Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player, BestPickaxe))
+                                if (player.statMana < 2)
+                                    player.QuickMana();
+                                if (player.statMana >= 2)
                                 {
-                                    player.statMana -= 1;
-                                    if (player.statMana < 1)
+                                    if (Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player))
                                     {
-                                        player.QuickMana();
-                                        if (player.statMana < 1)
-                                        {
-                                            goto superBreak;
-                                        }
+                                        player.statMana -= 2;
                                     }
                                 }
                             }
@@ -187,7 +188,7 @@ namespace ImproveGame.Content.Items
 
         public override void HoldItem(Player player)
         {
-            if (state == State.Fixed)
+            if (state == State.Fixed && !Main.dedServ && Main.myPlayer == player.whoAmI)
                 Box.NewBox(GetKillRect(player), Color.Red * 0.35f, Color.Red);
         }
 
@@ -208,7 +209,7 @@ namespace ImproveGame.Content.Items
         {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 18)
-                .AddIngredient(ItemID.JungleSpores, 5)
+                .AddIngredient(ItemID.JungleSpores, 6)
                 .AddIngredient(ItemID.Ruby, 1)
                 .AddTile(TileID.WorkBenches).Register();
         }

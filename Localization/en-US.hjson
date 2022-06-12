@@ -62,6 +62,7 @@ Mods:
             NPCCoinDropRate_Label: Enemy money drop multiplier
             BanDamageVar_Header: Game mechanics
             BanDamageVar_Label: Disable damage floating
+            ExtraPlayerBuffSlots_Label: Extra Buff Slots
         }
         ItemName:
         {

@@ -44,7 +44,7 @@ namespace ImproveGame.Content.Projectiles
         {
             Item item = MyUtils.GetFirstWall(Player);
             // 背包中没有墙结束弹幕
-            if (item.type == ItemID.None)
+            if (item is null)
             {
                 CombatText.NewText(Projectile.getRect(), new Color(225, 0, 0),
                     MyUtils.GetText("CombatText_Projectile.PlaceWall_Lack"));

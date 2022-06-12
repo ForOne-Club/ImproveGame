@@ -36,7 +36,7 @@ namespace ImproveGame.Common.GlobalItems
                 && !GoldList.Contains(item.type))
             {
                 item.maxStack = ModContent.GetInstance<Configs.ImproveConfigs>().ItemMaxStack;
-                if (item.type == 74 && item.maxStack > 18888)
+                if (item.type == ItemID.PlatinumCoin && item.maxStack > 18888)
                 {
                     item.maxStack = 18888;
                 }
@@ -280,8 +280,8 @@ namespace ImproveGame.Common.GlobalItems
                 {
                     lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
                 }
-                ImproveGame.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-                ImproveGame.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
+                MyAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
+                MyAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
                 return true;
             }
             return true;
@@ -307,8 +307,8 @@ namespace ImproveGame.Common.GlobalItems
         public override bool ItemSpace(Item item, Player player)
         {
             ImprovePlayer improvePlayer = ImprovePlayer.G(player);
-            // 猪猪钱罐
-            if (MyUtils.HasItemSpace(player.GetModPlayer<DataPlayer>().SuperVault, item))
+
+            if (MyUtils.Config().SuperVault && MyUtils.HasItemSpace(player.GetModPlayer<DataPlayer>().SuperVault, item))
             {
                 return true;
             }

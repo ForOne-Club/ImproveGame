@@ -213,8 +213,8 @@ namespace ImproveGame.Content.UI
                     {
                         lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
                     }
-                    ImproveGame.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-                    ImproveGame.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
+                    MyAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
+                    MyAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
                 }
                 Rectangle rectangle;
                 if (Main.itemAnimations[item.type] == null)
