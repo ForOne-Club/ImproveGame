@@ -21,7 +21,7 @@ namespace ImproveGame.Common.Systems
         public static UserInterface ArchitectureInterface;
 
         public static UserInterface userInterface;
-        public static VaultUI vaultUI;
+        public static JuBigVault vaultUI;
 
         public override void Unload()
         {
@@ -34,7 +34,7 @@ namespace ImproveGame.Common.Systems
         public override void Load()
         {
             if (!Main.dedServ) {
-                vaultUI = new VaultUI();
+                vaultUI = new JuBigVault();
                 vaultUI.Activate();
                 userInterface = new UserInterface();
                 userInterface.SetState(vaultUI);
@@ -47,7 +47,7 @@ namespace ImproveGame.Common.Systems
         }
         public override void UpdateUI(GameTime gameTime)
         {
-            if (VaultUI.Visible)
+            if (JuBigVault.Visible)
             {
                 userInterface.Update(gameTime);
             }
@@ -63,7 +63,7 @@ namespace ImproveGame.Common.Systems
                     "ImproveGame: VaultUI",
                     delegate
                     {
-                        if (VaultUI.Visible)
+                        if (JuBigVault.Visible)
                         {
                             vaultUI.Draw(Main.spriteBatch);
                         }

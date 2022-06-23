@@ -11,12 +11,12 @@ using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.UI;
 
-namespace ImproveGame.UI
+namespace ImproveGame.UI.UIElements
 {
-    public class MyItemSlot : UIElement
+    public class JuItemSlot : UIElement
     {
-        public static Texture2D backgroundTexture = TextureAssets.InventoryBack9.Value;
-        public Asset<Texture2D> texture
+        private static readonly Texture2D backgroundTexture = TextureAssets.InventoryBack9.Value;
+        private Asset<Texture2D> texture
         {
             get
             {
@@ -40,7 +40,7 @@ namespace ImproveGame.UI
 
         public UIText text;
 
-        public MyItemSlot(Item[] SuperVault, int index)
+        public JuItemSlot(Item[] SuperVault, int index)
         {
             this.SuperVault = SuperVault;
             this.index = index;
@@ -226,7 +226,7 @@ namespace ImproveGame.UI
                     rectangle = Main.itemAnimations[item.type].GetFrame(texture.Value);
                 }
                 float textureSize = 30f;
-                float size = (rectangle.Width > textureSize || rectangle.Height > textureSize) ?
+                float size = rectangle.Width > textureSize || rectangle.Height > textureSize ?
                     rectangle.Width > rectangle.Height ? textureSize / rectangle.Width : textureSize / rectangle.Height :
                     1f;
                 sb.Draw(texture.Value, dimensions.Center() - rectangle.Size() * size / 2f,
@@ -261,7 +261,7 @@ namespace ImproveGame.UI
         /// <returns></returns>
         public static bool NotItem(Item item)
         {
-            return (item.type == ItemID.None || item.stack < 0);
+            return item.type == ItemID.None || item.stack < 0;
         }
     }
 }

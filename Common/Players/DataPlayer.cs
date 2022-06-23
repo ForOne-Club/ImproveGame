@@ -61,8 +61,8 @@ namespace ImproveGame.Common.Players
             {
                 tag.Add($"SuperVault_{i}", SuperVault[i]);
             }
-            tag.Add("SuperVaultOffset", VaultUI.position);
-            tag.Add("SuperVaultVisable", VaultUI._visible);
+            tag.Add("SuperVaultOffset", JuBigVault.position);
+            tag.Add("SuperVaultVisable", JuBigVault._visible);
         }
 
         public override void LoadData(TagCompound tag)

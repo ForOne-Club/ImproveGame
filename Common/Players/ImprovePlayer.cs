@@ -54,13 +54,13 @@ namespace ImproveGame.Common.Players
             {
                 if (MyUtils.Config().SuperVault)
                 {
-                    if (VaultUI.Visible)
+                    if (JuBigVault.Visible)
                     {
-                        VaultUI._visible = false;
+                        JuBigVault._visible = false;
                     }
                     else
                     {
-                        VaultUI._visible = true;
+                        JuBigVault._visible = true;
                         Main.playerInventory = true;
                     }
                 }

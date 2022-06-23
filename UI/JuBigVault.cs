@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using ImproveGame.UI.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -7,7 +8,7 @@ using Terraria.UI;
 
 namespace ImproveGame.UI
 {
-    public class VaultUI : UIState
+    public class JuBigVault : UIState
     {
         public static bool _visible = true;
         public static Vector2 offset = Vector2.Zero;
@@ -26,7 +27,7 @@ namespace ImproveGame.UI
         }
 
         public UIPanel mainPanel;
-        public UIGrid mainGrid;
+        public JuItemGrid mainGrid;
         public UIImageButton closeButton;
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace ImproveGame.UI
             mainPanel.Append(uIText);*/
 
             // 加载数据
-            mainGrid = new UIGrid(SuperVault);
+            mainGrid = new JuItemGrid(SuperVault);
             mainGrid.Top.Set(30, 0f);
             mainPanel.Append(mainGrid);
             mainPanel.Width.Set(mainGrid.Width.Pixels + mainPanel.PaddingLeft + mainPanel.PaddingRight, 0f);
