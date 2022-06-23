@@ -26,12 +26,17 @@ namespace ImproveGame.UI.UIElements
         /// 该槽位内的饰品/装备是否可在被右键时自动装备
         /// </summary>
         public bool AllowSwapEquip;
+        /// <summary>
+        /// 该槽位内的物品可否Alt键收藏
+        /// </summary>
+        public bool AllowFavorite;
 
         public ModItemSlot(float scale = 0.85f) {
             Item = new Item();
             Item.SetDefaults();
             Scale = scale;
             AllowSwapEquip = false;
+            AllowFavorite = true;
         }
 
         private void SetCursorOverride() {
@@ -40,7 +45,9 @@ namespace ImproveGame.UI.UIElements
                     Main.cursorOverride = 8; // 快捷放回物品栏图标
                 }
                 if (Main.keyState.IsKeyDown(Main.FavoriteKey)) {
-                    Main.cursorOverride = 3; // 收藏图标
+                    if (AllowFavorite) {
+                        Main.cursorOverride = 3; // 收藏图标
+                    }
                     if (Main.drawingPlayerChat) {
                         Main.cursorOverride = 2; // 放大镜图标 - 输入到聊天框
                     }
@@ -152,17 +159,24 @@ namespace ImproveGame.UI.UIElements
             }
         }
 
+        /// <summary>
+        /// 可以在这里写额外的物品放置判定，第一个Item是当前槽位存储物品，第二个Item是<see cref="Main.mouseItem">
+        /// </summary>
+        internal Func<Item, Item, bool> OnCanPlaceItem;
         private bool CanPlaceItem() {
             bool canPlace = true;
 
+            if (Item is null) {
+                Item = new Item();
+                Item.SetDefaults();
+            }
+
             if (OnCanPlaceItem is not null) {
-                canPlace = OnCanPlaceItem;
+                canPlace = OnCanPlaceItem.Invoke(Item, Main.mouseItem);
             }
 
             return canPlace;
         }
-
-        internal Action OnCanPlaceItem;
         
         // 原版里这个是private的，我正在请求tML把这个改成public，在那之前就先用这个吧（懒得反射了）
         private static void SellOrTrash(Item[] inv, int context, int slot) {

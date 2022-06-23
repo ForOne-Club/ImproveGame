@@ -8,6 +8,9 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.UI;
 using ImproveGame.UI.UIElements;
+using System.Collections.Generic;
+using ImproveGame.Content.Items;
+using System;
 
 namespace ImproveGame.UI.ArchitectureUI
 {
@@ -25,13 +28,13 @@ namespace ImproveGame.UI.ArchitectureUI
         private Vector2 Offset;
 
         private UIPanel basePanel;
-        private ModItemSlot itemSlot;
+        private Dictionary<string, ModItemSlot> itemSlot = new();
 
         public override void OnInitialize() {
             panelLeft = 300f;
             panelTop = 300f;
-            panelHeight = 100f;
-            panelWidth = 100f;
+            panelHeight = 190f;
+            panelWidth = 190f;
 
             basePanel = new UIPanel();
             basePanel.Left.Set(panelLeft, 0f);
@@ -42,12 +45,47 @@ namespace ImproveGame.UI.ArchitectureUI
             basePanel.OnMouseUp += DragEnd;
             Append(basePanel);
 
-            itemSlot = new ModItemSlot(InventoryScale);
-            itemSlot.Left.Set(10f, 0f);
-            itemSlot.Top.Set(10f, 0f);
-            itemSlot.Width.Set(40f, 0f);
-            itemSlot.Height.Set(40f, 0f);
-            basePanel.Append(itemSlot);
+            // 排布
+            // O O O
+            // O O O
+            // O
+            // 排布如上
+            const float slotFirst = 0f;
+            const float slotSecond = 60f;
+            const float slotThird = 120f;
+            itemSlot = new() {
+                [nameof(CreateWand.Block)] = CreateItemSlot(slotFirst, slotFirst, (Item i, Item item) =>
+                    SlotPlace(i, item) || (item.createTile > -1 && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile])),
+                [nameof(CreateWand.Wall)] = CreateItemSlot(slotSecond, slotFirst, (Item i, Item item) =>
+                    SlotPlace(i, item) || item.createWall > -1),
+                [nameof(CreateWand.Platform)] = CreateItemSlot(slotThird, slotFirst, (Item i, Item item) =>
+                    SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Platforms[item.createTile])),
+
+                [nameof(CreateWand.Torch)] = CreateItemSlot(slotFirst, slotSecond, (Item i, Item item) =>
+                    SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Torch[item.createTile])),
+                [nameof(CreateWand.Chair)] = CreateItemSlot(slotSecond, slotSecond, (Item i, Item item) =>
+                    SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Chairs)),
+                [nameof(CreateWand.Workbench)] = CreateItemSlot(slotThird, slotSecond, (Item i, Item item) =>
+                    SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.WorkBenches)),
+
+                [nameof(CreateWand.Bed)] = CreateItemSlot(slotFirst, slotThird, (Item i, Item item) =>
+                    SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Beds))
+            };
+        }
+
+        private bool SlotPlace(Item slotItem, Item mouseItem) {
+            return slotItem.type == mouseItem.type || mouseItem.IsAir;
+        }
+
+        private ModItemSlot CreateItemSlot(float x, float y, Func<Item, Item, bool> canPlace) {
+            ModItemSlot slot = new(InventoryScale);
+            slot.Left.Set(x, 0f);
+            slot.Top.Set(y, 0f);
+            slot.Width.Set(50f, 0f);
+            slot.Height.Set(50f, 0f);
+            slot.OnCanPlaceItem += canPlace;
+            basePanel.Append(slot);
+            return slot;
         }
 
         private void DragStart(UIMouseEvent evt, UIElement listeningElement) {
