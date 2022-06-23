@@ -1,0 +1,47 @@
+﻿These features may bring you better gameplay experience
+---------------------------
+Only a part of mod functions are toggled by default, the rest need to be toggled in mod config
+Functions toggled by defaut:
+Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
+---------------------------
+Change log: (View details in mod configs)
+    1.5.6
+        Added Wand of Architecture, to build houses
+        Changed Wand of Brusts and Wand of Starbrusts, added support area selection
+        More Buff Slots now supports number adjustion
+    1.5.5.8
+        Reduced using speed of Wand of Brusts and Wand of Starbrusts, but can affected by mining speed
+    1.5.5
+        Super Void Vault and Void Vault Smart pickup (Details in configs)
+        A new inventory (Details in configs)
+        Separate Portable Buff Stations and Portable Banners
+        Increased wall-placing speed of Wand of technology
+    1.5.4
+        New feature: Portable buff stations(details in config)
+        Mana costs of Wand of Space and Wand of Technology are reduced to 50
+---------------------------
+Function list:
+    1. Max stack
+    2. Weapons autoswing
+    3. Increased using speed for certain tools
+    4. Increased placement speed and range
+    5. Vanilla boss and event summon items not being consumed
+    6. Instant refresh Angler's quests
+    7. Prefixes get better as you keep reforging
+    8. Infinite potions when stack to at least 30
+    9. Infinite ammos when stack to at least 3996
+    10. Can put non-vanity accessories in social slots
+    11. Disable tombstone spawn
+    12. Adjust item pickup range
+    13. Enemy coin drop multiplier(cheating)
+    14. Town NPCs can spawn at night time
+    15. Town NPC spawn rate
+    16. Enable modded items
+    17. Portable buff stations
+    18. Super Void Vault
+    19. Void Vault Smart Pickup
+    20. A huge extra inventory
+---------------------------
+Spriter: 枫林半叶
+Translators: Lastprismer, Lacewing
+Coder: 自爆局局长

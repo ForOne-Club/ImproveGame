@@ -12,10 +12,10 @@ using Terraria.UI;
 
 namespace ImproveGame.Common.Systems
 {
-	/// <summary>
-	/// 用户界面
-	/// </summary>
-	public class UISystem : ModSystem
+    /// <summary>
+    /// 用户界面
+    /// </summary>
+    public class UISystem : ModSystem
     {
         public ArchitectureGUI ArchitectureGUI;
         public static UserInterface ArchitectureInterface;

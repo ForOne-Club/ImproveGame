@@ -13,7 +13,7 @@ using static ImproveGame.MyUtils;
 
 namespace ImproveGame.Content.Items
 {
-	public class CreateWand : ModItem
+    public class CreateWand : ModItem
     {
         public override bool IsLoadingEnabled(Mod mod) => Config().LoadModItems;
         public override bool AltFunctionUse(Player player) => true;
