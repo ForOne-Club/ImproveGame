@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Entitys;
+using ImproveGame.UI.ArchitectureUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -6,12 +7,13 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using static ImproveGame.Entitys.TileData;
 using static ImproveGame.MyUtils;
 
 namespace ImproveGame.Content.Items
 {
-    public class CreateWand : ModItem
+	public class CreateWand : ModItem
     {
         public override bool IsLoadingEnabled(Mod mod) => Config().LoadModItems;
         public override bool AltFunctionUse(Player player) => true;
@@ -34,6 +36,36 @@ namespace ImproveGame.Content.Items
             {
                 Index = 0;
             }
+        }
+
+        internal Item Block;
+        internal Item Wall;
+        internal Item Platform;
+        internal Item Torch;
+        internal Item Chair;
+        internal Item Workbench;
+        internal Item Bed;
+
+        public override void SaveData(TagCompound tag)
+        {
+            tag[nameof(Block)] = Block;
+            tag[nameof(Wall)] = Wall;
+            tag[nameof(Platform)] = Platform;
+            tag[nameof(Torch)] = Torch;
+            tag[nameof(Chair)] = Chair;
+            tag[nameof(Workbench)] = Workbench;
+            tag[nameof(Bed)] = Bed;
+        }
+
+        public override void LoadData(TagCompound tag)
+        {
+            Block = tag.Get<Item>(nameof(Block));
+            Wall = tag.Get<Item>(nameof(Wall));
+            Platform = tag.Get<Item>(nameof(Platform));
+            Torch = tag.Get<Item>(nameof(Torch));
+            Chair = tag.Get<Item>(nameof(Chair));
+            Workbench = tag.Get<Item>(nameof(Workbench));
+            Bed = tag.Get<Item>(nameof(Bed));
         }
 
         public override void SetStaticDefaults()
@@ -76,6 +108,15 @@ namespace ImproveGame.Content.Items
             {
                 Item.mana = 0;
                 ToggleStyle();
+                // 暂时写的，以后再改
+                if (!Main.dedServ && player.whoAmI == Main.myPlayer) {
+                    if (!ArchitectureGUI.Visible) {
+                        ArchitectureGUI.Open();
+                    }
+                    else {
+                        ArchitectureGUI.Close();
+                    }
+                }
             }
             return true;
         }

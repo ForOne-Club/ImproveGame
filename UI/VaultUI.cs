@@ -5,7 +5,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace ImproveGame.Content.UI
+namespace ImproveGame.UI
 {
     public class VaultUI : UIState
     {
