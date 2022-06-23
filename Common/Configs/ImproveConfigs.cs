@@ -32,24 +32,6 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool SuperVault;
 
-        [Label("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Label")]
-        [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Tooltip")]
-        [DefaultValue(false)]
-        [ReloadRequired]
-        public bool NoPlace_BUFFTile;
-
-        [Label("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Banner_Label")]
-        [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Banner_Tooltip")]
-        [DefaultValue(false)]
-        [ReloadRequired]
-        public bool NoPlace_BUFFTile_Banner;
-
-        [Label("$Mods.ImproveGame.ImproveConfigs.ItemMaxStack_Label")]
-        [DefaultValue(9999)]
-        [Range(1, int.MaxValue)]
-        [ReloadRequired]
-        public int ItemMaxStack;
-
         [Label("$Mods.ImproveGame.ImproveConfigs.GrabDistance_Label")]
         [Tooltip("$Mods.ImproveGame.ImproveConfigs.GrabDistance_Tooltip")]
         [DefaultValue(0)]
@@ -58,11 +40,11 @@ namespace ImproveGame.Common.Configs
         [ReloadRequired]
         public int GrabDistance;
 
-        [Label("$Mods.ImproveGame.ImproveConfigs.NoConsume_SummonItem_Label")]
-        [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoConsume_SummonItem_Tooltip")]
-        [DefaultValue(false)]
+        [Label("$Mods.ImproveGame.ImproveConfigs.ItemMaxStack_Label")]
+        [DefaultValue(9999)]
+        [Range(1, int.MaxValue)]
         [ReloadRequired]
-        public bool NoConsume_SummonItem;
+        public int ItemMaxStack;
 
         [Label("$Mods.ImproveGame.ImproveConfigs.AutoReuseWeapon_Label")]
         [DefaultValue(true)]
@@ -85,6 +67,24 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         [ReloadRequired]
         public bool ImproveTileSpeedAndTileRange;
+
+        [Label("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Label")]
+        [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Tooltip")]
+        [DefaultValue(false)]
+        [ReloadRequired]
+        public bool NoPlace_BUFFTile;
+
+        [Label("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Banner_Label")]
+        [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoPlace_BUFFTile_Banner_Tooltip")]
+        [DefaultValue(false)]
+        [ReloadRequired]
+        public bool NoPlace_BUFFTile_Banner;
+
+        [Label("$Mods.ImproveGame.ImproveConfigs.NoConsume_SummonItem_Label")]
+        [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoConsume_SummonItem_Tooltip")]
+        [DefaultValue(false)]
+        [ReloadRequired]
+        public bool NoConsume_SummonItem;
 
         [Label("$Mods.ImproveGame.ImproveConfigs.NoConsume_Potion_Label")]
         [Tooltip("$Mods.ImproveGame.ImproveConfigs.NoConsume_Potion_Tooltip")]
@@ -152,7 +152,7 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.ImproveConfigs.ExtraPlayerBuffSlots_Label")]
         [DefaultValue(0)]
-        [Range(0, 44)]
+        [Range(0, 99)]
         [Slider]
         [Increment(11)]
         [ReloadRequired]

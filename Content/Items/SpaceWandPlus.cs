@@ -9,7 +9,7 @@ using static ImproveGame.MyUtils;
 
 namespace ImproveGame.Content.Items
 {
-    public class SpaceWand : ModItem
+    public class SpaceWandPlus : ModItem
     {
         public override bool IsLoadingEnabled(Mod mod) => Config().LoadModItems;
         public override void SetStaticDefaults() => Item.staff[Type] = true;
@@ -23,7 +23,6 @@ namespace ImproveGame.Content.Items
             Item.useAnimation = 15;
             Item.useTime = 15;
             Item.value = Item.sellPrice(0, 0, 50, 0);
-
             Item.mana = 20;
         }
 

@@ -1,13 +1,10 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Entitys;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
@@ -78,7 +75,7 @@ namespace ImproveGame
         /// <param name="end"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <returns></returns>
+        /// <returns>end的位置</returns>
         public static Point LimitRect(Point start, Point end, int width, int height)
         {
             width--;

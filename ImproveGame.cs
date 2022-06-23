@@ -1,10 +1,8 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using ReLogic.Content;
 using System;
 using System.Reflection;
 using Terraria;
