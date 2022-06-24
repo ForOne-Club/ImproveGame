@@ -27,8 +27,9 @@ namespace ImproveGame.Interface.UIElements
 
         #region 各种设置方法
         public void SetCenter(int x, int y) {
-            Left.Set(x - _texture.Width() / 2, 0f);
-            Top.Set(y - _texture.Height() / 2, 0f);
+            CalculatedStyle dimensions = GetDimensions();
+            Left.Set(x - dimensions.Width / 2, 0f);
+            Top.Set(y - dimensions.Height / 2, 0f);
         }
 
         public void SetSound(SoundStyle sound) {
@@ -48,10 +49,12 @@ namespace ImproveGame.Interface.UIElements
             _borderTexture = texture;
         }
 
-        public void SetImage(Asset<Texture2D> texture) {
+        public void SetImage(Asset<Texture2D> texture, bool changeSize = false) {
             _texture = texture;
-            Width.Set(_texture.Width(), 0f);
-            Height.Set(_texture.Height(), 0f);
+            if (changeSize) {
+                Width.Set(_texture.Width(), 0f);
+                Height.Set(_texture.Height(), 0f);
+            }
         }
         #endregion
 

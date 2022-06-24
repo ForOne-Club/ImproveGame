@@ -50,7 +50,7 @@ namespace ImproveGame.Content.Items
 
         public override bool CanUseItem(Player player)
         {
-            _AllowKillTile = true;
+            _allowKillTile = true;
             MyUtils.ItemRotation(player);
             if (player.altFunctionUse == 0)
             {
@@ -98,29 +98,24 @@ namespace ImproveGame.Content.Items
             }
             else if (player.altFunctionUse == 2)
             {
-                if (!BrustGUI.Visible) {
-                    BrustGUI.Open();
-                }
-                else {
-                    BrustGUI.Close();
-                }
                 return false;
             }
             return base.CanUseItem(player);
         }
 
-        private bool _AllowKillTile;
+        private bool _allowKillTile;
+
         public override bool? UseItem(Player player)
         {
             if (player.altFunctionUse == 0 && !BrustWandSystem.FixedMode && !Main.dedServ && player.whoAmI == Main.myPlayer)
             {
-                if (Main.mouseRight && _AllowKillTile)
+                if (Main.mouseRight && _allowKillTile)
                 {
-                    _AllowKillTile = false;
+                    _allowKillTile = false;
                 }
                 end = MyUtils.LimitRect(start, Main.MouseWorld.ToTileCoordinates(), killSizeMax.X, killSizeMax.Y);
                 Color color;
-                if (_AllowKillTile)
+                if (_allowKillTile)
                     color = new(255, 0, 0);
                 else
                     color = Color.GreenYellow;
@@ -135,7 +130,7 @@ namespace ImproveGame.Content.Items
                 else
                 {
                     player.itemAnimation = 0;
-                    if (_AllowKillTile)
+                    if (_allowKillTile)
                     {
                         Rectangle tileRect = TileRect;
                         int minI = tileRect.X;
@@ -183,8 +178,19 @@ namespace ImproveGame.Content.Items
 
         public override void HoldItem(Player player)
         {
-            if (BrustWandSystem.FixedMode && !Main.dedServ && Main.myPlayer == player.whoAmI)
-                Box.NewBox(GetKillRect(player), Color.Red * 0.35f, Color.Red);
+            if (!Main.dedServ && Main.myPlayer == player.whoAmI) {
+                if (BrustWandSystem.FixedMode) {
+                    Box.NewBox(GetKillRect(player), Color.Red * 0.35f, Color.Red);
+                }
+                if (Main.mouseRight && Main.mouseRightRelease) {
+                    if (!BrustGUI.Visible) {
+                        BrustGUI.Open();
+                    }
+                    else {
+                        BrustGUI.Close();
+                    }
+                }
+            }
         }
 
         protected Rectangle GetKillRect(Player player)
