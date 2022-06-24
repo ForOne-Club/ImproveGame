@@ -5,6 +5,7 @@ using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
@@ -616,6 +617,21 @@ namespace ImproveGame
                 }
             }
             return -1;
+        }
+
+        /// <summary>
+        /// 先炸掉，然后再放物块
+        /// </summary>
+        public static bool BongBongPlace(int i, int j, int Type, bool mute = false, bool forced = false, int plr = -1, int style = 0, bool playSound = false) {
+            TryKillTile(i, j, Main.player[plr]);
+            bool success = WorldGen.PlaceTile(i, j, Type, mute, forced, plr, style);
+            if (success) {
+                BongBong(new Vector2(i, j) * 16f, 16, 16);
+                if (playSound) {
+                    SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
+                }
+            }
+            return success;
         }
 
         public static bool TryConsumeItem(ref Item item, Player player) {
