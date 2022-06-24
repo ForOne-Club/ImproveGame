@@ -1,4 +1,6 @@
-﻿using ImproveGame.Entitys;
+﻿using ImproveGame.Common.Systems;
+using ImproveGame.Entitys;
+using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -28,17 +30,6 @@ namespace ImproveGame.Content.Items
         protected Point start;
         protected Point end;
         protected Rectangle TileRect => new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y), (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);
-        private enum State { Fixed, Free };
-        private State state;
-
-        private void ToggleStyle()
-        {
-            state++;
-            if (state > State.Free)
-            {
-                state = State.Fixed;
-            }
-        }
 
         public override void SetDefaults()
         {
@@ -63,7 +54,7 @@ namespace ImproveGame.Content.Items
             MyUtils.ItemRotation(player);
             if (player.altFunctionUse == 0)
             {
-                if (state == State.Fixed)
+                if (BrustWandSystem.FixedMode)
                 {
                     Item.useAnimation = (int)(18 * player.pickSpeed);
                     Item.useTime = (int)(18 * player.pickSpeed);
@@ -73,7 +64,7 @@ namespace ImproveGame.Content.Items
                         SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
                         MyUtils.ForechTile(rect, (i, j) =>
                         {
-                            if (Main.tile[i, j].WallType > 0 && player.TileReplacementEnabled)
+                            if (Main.tile[i, j].WallType > 0 && BrustWandSystem.WallMode)
                             {
                                 if (player.statMana < 1)
                                     player.QuickMana();
@@ -89,7 +80,7 @@ namespace ImproveGame.Content.Items
                                 player.QuickMana();
                             if (player.statMana >= 2)
                             {
-                                if (Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player))
+                                if (BrustWandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player))
                                 {
                                     player.statMana -= 2;
                                 }
@@ -98,7 +89,7 @@ namespace ImproveGame.Content.Items
                         });
                     }
                 }
-                else if (state == State.Free)
+                else
                 {
                     Item.useAnimation = 18;
                     Item.useTime = 18;
@@ -107,9 +98,13 @@ namespace ImproveGame.Content.Items
             }
             else if (player.altFunctionUse == 2)
             {
-                Item.useAnimation = 18;
-                Item.useTime = 18;
-                ToggleStyle();
+                if (!BrustGUI.Visible) {
+                    BrustGUI.Open();
+                }
+                else {
+                    BrustGUI.Close();
+                }
+                return false;
             }
             return base.CanUseItem(player);
         }
@@ -117,7 +112,7 @@ namespace ImproveGame.Content.Items
         private bool _AllowKillTile;
         public override bool? UseItem(Player player)
         {
-            if (player.altFunctionUse == 0 && state == State.Free && !Main.dedServ && player.whoAmI == Main.myPlayer)
+            if (player.altFunctionUse == 0 && !BrustWandSystem.FixedMode && !Main.dedServ && player.whoAmI == Main.myPlayer)
             {
                 if (Main.mouseRight && _AllowKillTile)
                 {
@@ -153,7 +148,7 @@ namespace ImproveGame.Content.Items
                             {
                                 SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
                                 MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
-                                if (Main.tile[i, j].WallType > 0 && player.TileReplacementEnabled)
+                                if (Main.tile[i, j].WallType > 0 && BrustWandSystem.WallMode)
                                 {
                                     WorldGen.KillWall(i, j);
                                     if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -172,7 +167,7 @@ namespace ImproveGame.Content.Items
                                     player.QuickMana();
                                 if (player.statMana >= 2)
                                 {
-                                    if (Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player))
+                                    if (BrustWandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player))
                                     {
                                         player.statMana -= 2;
                                     }
@@ -188,7 +183,7 @@ namespace ImproveGame.Content.Items
 
         public override void HoldItem(Player player)
         {
-            if (state == State.Fixed && !Main.dedServ && Main.myPlayer == player.whoAmI)
+            if (BrustWandSystem.FixedMode && !Main.dedServ && Main.myPlayer == player.whoAmI)
                 Box.NewBox(GetKillRect(player), Color.Red * 0.35f, Color.Red);
         }
 
@@ -212,19 +207,6 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.JungleSpores, 6)
                 .AddIngredient(ItemID.Ruby, 1)
                 .AddTile(TileID.WorkBenches).Register();
-        }
-
-        public override void LoadData(TagCompound tag)
-        {
-            if (tag.ContainsKey("state"))
-            {
-                state = (State)tag.GetInt("state");
-            }
-        }
-
-        public override void SaveData(TagCompound tag)
-        {
-            tag.Add("state", (int)state);
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using ImproveGame.UI.ArchitectureUI;
+﻿using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.UI;
 
-namespace ImproveGame.UI.UIElements
+namespace ImproveGame.Interface.UIElements
 {
     public class JuItemGrid : UIElement
     {

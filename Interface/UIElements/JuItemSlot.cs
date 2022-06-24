@@ -14,7 +14,7 @@ using Terraria.ID;
 using Terraria.UI;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.UI.UIElements
+namespace ImproveGame.Interface.UIElements
 {
     public class JuItemSlot : UIElement
     {
