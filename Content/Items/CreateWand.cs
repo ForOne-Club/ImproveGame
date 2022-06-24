@@ -124,6 +124,7 @@ namespace ImproveGame.Content.Items
                 else {
                     ArchitectureGUI.Close();
                 }
+                return false;
             }
             return true;
         }

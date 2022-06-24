@@ -1,17 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ImproveGame.Content.Items;
+using ImproveGame.UI.UIElements;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
+using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
-using Terraria.UI;
-using ImproveGame.UI.UIElements;
-using System.Collections.Generic;
-using ImproveGame.Content.Items;
-using System;
 using Terraria.Localization;
+using Terraria.UI;
 
 namespace ImproveGame.UI.ArchitectureUI
 {
