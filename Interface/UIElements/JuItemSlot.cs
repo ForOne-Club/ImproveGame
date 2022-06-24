@@ -16,33 +16,8 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.UIElements
 {
-    public class JuItemSlot : UIElement
+    partial class JuItemSlot : UIElement
     {
-        private static Texture2D Back9 {
-            get => TextureAssets.InventoryBack9.Value;
-        }
-        private static Texture2D Back10 {
-            get => TextureAssets.InventoryBack10.Value;
-        }
-        private Asset<Texture2D> texture {
-            get {
-                Main.instance.LoadItem(item.type);
-                return TextureAssets.Item[item.type];
-            }
-        }
-        public Item[] SuperVault;
-        public int index;
-        public Item item {
-            get {
-                return SuperVault[index];
-            }
-            set {
-                SuperVault[index] = value;
-            }
-        }
-
-        public UIText text;
-
         public JuItemSlot(Item[] SuperVault, int index) {
             this.SuperVault = SuperVault;
             this.index = index;
@@ -72,27 +47,24 @@ namespace ImproveGame.Interface.UIElements
         /// 右键持续按住物品，向鼠标物品堆叠数量
         /// </summary>
         public void RightMouseKeepPressItem() {
-            if (Main.mouseItem.type == item.type && Main.mouseItem.stack < Main.mouseItem.maxStack) {
+            if (Main.mouseItem.type == Item.type && Main.mouseItem.stack < Main.mouseItem.maxStack) {
                 Main.mouseItem.stack++;
-                item.stack--;
+                Item.stack--;
             }
-            else if (Main.mouseItem.IsAir && !item.IsAir && item.maxStack > 1) {
-                Main.mouseItem = new Item(item.type, 1);
-                item.stack--;
+            else if (Main.mouseItem.IsAir && !Item.IsAir && Item.maxStack > 1) {
+                Main.mouseItem = new Item(Item.type, 1);
+                Item.stack--;
             }
-            if (item.type != ItemID.None && item.stack < 1) {
-                item = new Item();
+            if (Item.type != ItemID.None && Item.stack < 1) {
+                Item = new Item();
             }
         }
-
-        // 鼠标右键按住项目计时器，-1代表不进行计时。
-        public int rightMouseDownTimer = -1;
         /// <summary>
         /// 鼠标右键按下
         /// </summary>
         /// <param name="evt"></param>
         public override void RightMouseDown(UIMouseEvent evt) {
-            rightMouseDownTimer = 0;
+            RightMouseTimer = 0;
             RightMouseKeepPressItem();
         }
 
@@ -101,7 +73,7 @@ namespace ImproveGame.Interface.UIElements
         /// </summary>
         /// <param name="evt"></param>
         public override void RightMouseUp(UIMouseEvent evt) {
-            rightMouseDownTimer = -1;
+            RightMouseTimer = -1;
         }
 
         /// <summary>
@@ -111,17 +83,17 @@ namespace ImproveGame.Interface.UIElements
         public override void Update(GameTime gameTime) {
             base.Update(gameTime);
             // 右键长按物品持续拿出
-            if (rightMouseDownTimer >= 60) {
+            if (RightMouseTimer >= 60) {
                 RightMouseKeepPressItem();
             }
-            else if (rightMouseDownTimer >= 30 && rightMouseDownTimer % 3 == 0) {
+            else if (RightMouseTimer >= 30 && RightMouseTimer % 3 == 0) {
                 RightMouseKeepPressItem();
             }
-            else if (rightMouseDownTimer >= 15 && rightMouseDownTimer % 6 == 0) {
+            else if (RightMouseTimer >= 15 && RightMouseTimer % 6 == 0) {
                 RightMouseKeepPressItem();
             }
-            if (rightMouseDownTimer != -1) {
-                rightMouseDownTimer++;
+            if (RightMouseTimer != -1) {
+                RightMouseTimer++;
             }
         }
 
@@ -131,12 +103,12 @@ namespace ImproveGame.Interface.UIElements
         /// <param name="sb"></param>
         protected override void DrawSelf(SpriteBatch sb) {
             // 按下 Ctrl 改变鼠标指针外观
-            if (IsMouseHovering && !item.IsAir) {
+            if (IsMouseHovering && !Item.IsAir) {
                 SetCursorOverride();
             }
             // 绘制背景框
             CalculatedStyle dimensions = GetDimensions();
-            if (item.favorited) {
+            if (Item.favorited) {
                 sb.Draw(Back10, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f,
                     SpriteEffects.None, 0f);
             }
@@ -146,8 +118,8 @@ namespace ImproveGame.Interface.UIElements
             }
 
             // 绘制物品
-            if (!item.IsAir) {
-                if (item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
+            if (!Item.IsAir) {
+                if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                     sb.End();
                     sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                         DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
@@ -163,25 +135,25 @@ namespace ImproveGame.Interface.UIElements
                     MyAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
                 }
                 Rectangle rectangle;
-                if (Main.itemAnimations[item.type] == null) {
-                    rectangle = texture.Frame(1, 1, 0, 0);
+                if (Main.itemAnimations[Item.type] == null) {
+                    rectangle = ItemTexture2D.Frame(1, 1, 0, 0);
                 }
                 else {
-                    rectangle = Main.itemAnimations[item.type].GetFrame(texture.Value);
+                    rectangle = Main.itemAnimations[Item.type].GetFrame(ItemTexture2D.Value);
                 }
                 float textureSize = 30f;
                 float size = rectangle.Width > textureSize || rectangle.Height > textureSize ?
                     rectangle.Width > rectangle.Height ? textureSize / rectangle.Width : textureSize / rectangle.Height :
                     1f;
-                sb.Draw(texture.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                    new Rectangle?(rectangle), item.GetAlpha(Color.White), 0f, Vector2.Zero, size,
+                sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
+                    new Rectangle?(rectangle), Item.GetAlpha(Color.White), 0f, Vector2.Zero, size,
                     SpriteEffects.None, 0f);
-                sb.Draw(texture.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                    new Rectangle?(rectangle), item.GetColor(Color.White), 0f, Vector2.Zero, size,
+                sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
+                    new Rectangle?(rectangle), Item.GetColor(Color.White), 0f, Vector2.Zero, size,
                     SpriteEffects.None, 0f);
 
-                if (item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
-                    item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
+                if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
+                    Item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
                     sb.End();
                     sb.Begin(0, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                         DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
@@ -189,98 +161,11 @@ namespace ImproveGame.Interface.UIElements
             }
             // 物品信息
             if (IsMouseHovering) {
-                Main.hoverItemName = item.Name;
-                Main.HoverItem = item.Clone();
+                Main.hoverItemName = Item.Name;
+                Main.HoverItem = Item.Clone();
             }
-            text.SetText(item.IsAir || item.stack <= 1 ? "" : item.stack.ToString(), 0.8f, false);
+            text.SetText(Item.IsAir || Item.stack <= 1 ? "" : Item.stack.ToString(), 0.8f, false);
             text.Recalculate();
-        }
-
-        /// <summary>
-        /// 改原版的<see cref="Main.cursorOverride"/>
-        /// </summary>
-        private void SetCursorOverride() {
-            if (!item.IsAir) {
-                if (Main.keyState.IsKeyDown(Main.FavoriteKey)) {
-                    Main.cursorOverride = 3; // 收藏图标
-                    if (Main.drawingPlayerChat) {
-                        Main.cursorOverride = 2; // 放大镜图标 - 输入到聊天框
-                    }
-                }
-                void TryTrashCursorOverride() {
-                    if (!item.favorited) {
-                        if (Main.npcShop > 0) {
-                            Main.cursorOverride = 10; // 卖出图标
-                        }
-                        else {
-                            Main.cursorOverride = 8; // 拿回背包图标
-                        }
-                    }
-                }
-                if (ItemSlot.ControlInUse && ItemSlot.Options.DisableLeftShiftTrashCan && !ItemSlot.ShiftForcedOn) {
-                    TryTrashCursorOverride();
-                }
-                if (!ItemSlot.Options.DisableLeftShiftTrashCan && ItemSlot.ShiftInUse) {
-                    TryTrashCursorOverride();
-                }
-            }
-        }
-
-        private void LeftClickItem() {
-            // 放大镜图标 - 输入到聊天框
-            if (Main.cursorOverride == 2) {
-                if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(item), Vector2.One))
-                    SoundEngine.PlaySound(SoundID.MenuTick);
-                return;
-            }
-
-            // 收藏图标
-            if (Main.cursorOverride == 3) {
-                item.favorited = !item.favorited;
-                SoundEngine.PlaySound(SoundID.MenuTick);
-                return;
-            }
-
-            // 垃圾箱图标
-            if (Main.cursorOverride == 8) {
-                // 假装自己是一个物品栏物品
-                Main.LocalPlayer.trashItem = item;
-                item = new(0);
-                return;
-            }
-
-            // 放回物品栏图标
-            if (Main.cursorOverride == 8) {
-                item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, item, GetItemSettings.InventoryEntityToPlayerInventorySettings);
-                SoundEngine.PlaySound(SoundID.Grab);
-                return;
-            }
-
-            // 常规单点
-            if (Main.mouseItem.IsAir && !item.IsAir) {
-                Main.mouseItem = item;
-                item = new Item();
-            }
-            else if (item.IsAir && !Main.mouseItem.IsAir) {
-                item = Main.mouseItem;
-                Main.mouseItem = new Item();
-            }
-            else if (!Main.mouseItem.IsAir && !item.IsAir) {
-                if (Main.mouseItem.type == item.type && item.stack < item.maxStack) {
-                    if (item.stack + Main.mouseItem.stack < Main.mouseItem.maxStack) {
-                        item.stack += Main.mouseItem.stack;
-                        Main.mouseItem = new Item();
-                    }
-                    else {
-                        Main.mouseItem.stack -= item.maxStack - item.stack;
-                        item.stack = item.maxStack;
-                    }
-                }
-                else {
-                    // 可以这么交换
-                    (item, Main.mouseItem) = (Main.mouseItem, item);
-                }
-            }
         }
     }
 }
