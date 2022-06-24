@@ -1,5 +1,4 @@
-﻿using ImproveGame.UI;
-using ImproveGame.UI.ArchitectureUI;
+﻿using ImproveGame.UI.ArchitectureUI;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -20,24 +19,22 @@ namespace ImproveGame.Common.Systems
         public ArchitectureGUI ArchitectureGUI;
         public static UserInterface ArchitectureInterface;
 
-        public static UserInterface userInterface;
-        public static JuBigVault vaultUI;
+        public static JuBigVaultGUI JuVaultUIGUI;
+        public static UserInterface JuBigVaultInterface;
 
-        public override void Unload()
-        {
+        public override void Unload() {
             ArchitectureGUI = null;
             ArchitectureInterface = null;
-            userInterface = null;
-            vaultUI = null;
+            JuVaultUIGUI = null;
+            JuBigVaultInterface = null;
         }
 
-        public override void Load()
-        {
+        public override void Load() {
             if (!Main.dedServ) {
-                vaultUI = new JuBigVault();
-                vaultUI.Activate();
-                userInterface = new UserInterface();
-                userInterface.SetState(vaultUI);
+                JuVaultUIGUI = new JuBigVaultGUI();
+                JuVaultUIGUI.Activate();
+                JuBigVaultInterface = new UserInterface();
+                JuBigVaultInterface.SetState(JuVaultUIGUI);
 
                 ArchitectureGUI = new ArchitectureGUI();
                 ArchitectureGUI.Activate();
@@ -45,27 +42,23 @@ namespace ImproveGame.Common.Systems
                 ArchitectureInterface.SetState(ArchitectureGUI);
             }
         }
-        public override void UpdateUI(GameTime gameTime)
-        {
-            if (JuBigVault.Visible)
-            {
-                userInterface.Update(gameTime);
+        public override void UpdateUI(GameTime gameTime) {
+            if (JuBigVaultGUI.Visible) {
+                JuBigVaultInterface.Update(gameTime);
             }
-            ArchitectureInterface?.Update(gameTime);
+            if (ArchitectureGUI.Visible && Main.playerInventory) {
+                ArchitectureInterface?.Update(gameTime);
+            }
         }
 
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
             int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            if (MouseTextIndex != -1)
-            {
+            if (MouseTextIndex != -1) {
                 layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
                     "ImproveGame: VaultUI",
-                    delegate
-                    {
-                        if (JuBigVault.Visible)
-                        {
-                            vaultUI.Draw(Main.spriteBatch);
+                    delegate {
+                        if (JuBigVaultGUI.Visible) {
+                            JuVaultUIGUI.Draw(Main.spriteBatch);
                         }
                         return true;
                     },
@@ -78,8 +71,7 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: ArchitectureGUI", DrawArchitectureGUI, InterfaceScaleType.UI));
         }
 
-        private static bool DrawArchitectureGUI()
-        {
+        private static bool DrawArchitectureGUI() {
             Player player = Main.LocalPlayer;
             if (ArchitectureGUI.Visible && Main.playerInventory && player.HeldItem is not null) {
                 ArchitectureInterface.Draw(Main.spriteBatch, new GameTime());
