@@ -34,12 +34,17 @@ namespace ImproveGame
         /// <summary>
         /// 旋转物品使用时候的贴图
         /// </summary>
-        /// <param name="player"></param>
-        public static void ItemRotation(Player player) {
+        /// <param name="player">被操作的玩家实例</param>
+        /// <param name="shouldSync">是否应该进行网络同步</param>
+        public static void ItemRotation(Player player, bool shouldSync = true) {
             // 旋转物品
-            Vector2 rotaion = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.Zero);
+            Vector2 rotaion = (Main.MouseWorld - player.Center).SafeNormalize(Zero);
             player.direction = Main.MouseWorld.X < player.Center.X ? -1 : 1;
             player.itemRotation = MathF.Atan2(rotaion.Y * player.direction, rotaion.X * player.direction);
+            if (shouldSync && Main.netMode != NetmodeID.SinglePlayer) {
+                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, player.whoAmI);
+                NetMessage.SendData(MessageID.ItemAnimation, -1, -1, null, player.whoAmI);
+            }
         }
 
         /// <summary>

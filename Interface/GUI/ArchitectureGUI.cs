@@ -30,6 +30,8 @@ namespace ImproveGame.Interface.GUI
 
         private const float InventoryScale = 0.85f;
 
+        private static bool PrevMouseRight;
+        private static bool HoveringOnSlots;
         private bool Dragging;
         private Vector2 Offset;
 
@@ -126,6 +128,7 @@ namespace ImproveGame.Interface.GUI
             slot.Top.Set(y, 0f);
             slot.Width.Set(46f, 0f);
             slot.Height.Set(46f, 0f);
+            slot.OnUpdate += (UIElement _) => HoveringOnSlots |= slot.IsMouseHovering;
             if (canPlace is not null)
                 slot.OnCanPlaceItem += canPlace;
             if (onItemChanged is not null)
@@ -159,9 +162,17 @@ namespace ImproveGame.Interface.GUI
                 return;
             }
 
+            HoveringOnSlots = false;
+
             base.Update(gameTime);
 
             if (!Main.playerInventory) {
+                Close();
+                return;
+            }
+
+            // 右键点击空白直接关闭
+            if (Main.mouseRight && !PrevMouseRight && basePanel.IsMouseHovering && !HoveringOnSlots) {
                 Close();
                 return;
             }
@@ -171,6 +182,8 @@ namespace ImproveGame.Interface.GUI
                 basePanel.Top.Set(Main.mouseY - Offset.Y, 0f);
                 Recalculate();
             }
+
+            PrevMouseRight = Main.mouseRight;
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
@@ -205,6 +218,7 @@ namespace ImproveGame.Interface.GUI
         /// </summary>
         public static void Open() {
             Main.playerInventory = true;
+            PrevMouseRight = true; // 防止一打开就关闭
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 
@@ -225,6 +239,7 @@ namespace ImproveGame.Interface.GUI
         public static void Close() {
             CurrentSlot = -1;
             Visible = false;
+            PrevMouseRight = false;
             Main.blockInput = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
         }

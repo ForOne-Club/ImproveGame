@@ -52,9 +52,9 @@ namespace ImproveGame.Content.Items
         public override bool CanUseItem(Player player)
         {
             _allowKillTile = true;
-            MyUtils.ItemRotation(player);
             if (player.altFunctionUse == 0)
             {
+                MyUtils.ItemRotation(player);
                 if (BrustWandSystem.FixedMode)
                 {
                     Item.useAnimation = (int)(18 * player.pickSpeed);
