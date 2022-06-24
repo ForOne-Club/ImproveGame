@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Content.Items;
-using ImproveGame.UI.UIElements;
+using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,7 +11,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.UI;
 
-namespace ImproveGame.UI.ArchitectureUI
+namespace ImproveGame.Interface.GUI
 {
     public class ArchitectureGUI : UIState
     {

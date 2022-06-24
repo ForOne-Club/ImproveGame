@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.UI.UIElements
+namespace ImproveGame.Interface.UIElements
 {
     /// <summary>
     /// 一个仿原版制作的物品UI格，由于是单独的所以应该适配

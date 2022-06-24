@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
-using ImproveGame.UI.ArchitectureUI;
+using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

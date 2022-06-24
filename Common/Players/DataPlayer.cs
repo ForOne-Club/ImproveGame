@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Systems;
-using ImproveGame.UI.ArchitectureUI;
+using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;

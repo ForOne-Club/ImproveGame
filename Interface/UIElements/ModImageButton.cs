@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.UI;
 
-namespace ImproveGame.UI.UIElements
+namespace ImproveGame.Interface.UIElements
 {
     public class ModImageButton : UIElement
     {

@@ -11,7 +11,7 @@ using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.UI;
 
-namespace ImproveGame.UI.UIElements
+namespace ImproveGame.Interface.UIElements
 {
     public class JuItemSlot : UIElement
     {

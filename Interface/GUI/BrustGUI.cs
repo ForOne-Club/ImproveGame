@@ -1,19 +1,13 @@
 ﻿using ImproveGame.Common.Systems;
-using ImproveGame.Content.Items;
-using ImproveGame.UI.UIElements;
+using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
 using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace ImproveGame.UI.ArchitectureUI
+namespace ImproveGame.Interface.GUI
 {
     public class BrustGUI : UIState
     {
@@ -41,9 +35,9 @@ namespace ImproveGame.UI.ArchitectureUI
                 activeColor: activeColor, inactiveColor: inactiveColor);
             modeButton.SetHoverImage(hoverImage);
             modeButton.SetBackgroundImage(backgroundImage);
-            modeButton.SetCenter(0, 0);
             modeButton.Width.Set(40, 0f);
             modeButton.Height.Set(40, 0f);
+            modeButton.OnRightMouseDown += RightClickClose;
             modeButton.DrawColor += () => Color.White;
             modeButton.OnMouseDown += SwitchMode;
             Append(modeButton);
@@ -53,9 +47,9 @@ namespace ImproveGame.UI.ArchitectureUI
                 activeColor: activeColor, inactiveColor: inactiveColor);
             tileButton.SetHoverImage(hoverImage);
             tileButton.SetBackgroundImage(backgroundImage);
-            tileButton.SetCenter(-40, -40);
             tileButton.Width.Set(40, 0f);
             tileButton.Height.Set(40, 0f);
+            tileButton.OnRightMouseDown += RightClickClose;
             tileButton.DrawColor += () => BrustWandSystem.TileMode ? Color.White : inactiveColor;
             tileButton.OnMouseDown += (UIMouseEvent _, UIElement _) => BrustWandSystem.TileMode = !BrustWandSystem.TileMode;
             Append(tileButton);
@@ -65,12 +59,19 @@ namespace ImproveGame.UI.ArchitectureUI
                 activeColor: activeColor, inactiveColor: inactiveColor);
             wallButton.SetHoverImage(hoverImage);
             wallButton.SetBackgroundImage(backgroundImage);
-            wallButton.SetCenter(40, -40);
             wallButton.Width.Set(40, 0f);
             wallButton.Height.Set(40, 0f);
+            wallButton.OnRightMouseDown += RightClickClose;
             wallButton.DrawColor += () => BrustWandSystem.WallMode ? Color.White : inactiveColor;
             wallButton.OnMouseDown += (UIMouseEvent _, UIElement _) => BrustWandSystem.WallMode = !BrustWandSystem.WallMode;
             Append(wallButton);
+        }
+
+        /// <summary>
+        /// 右键点击按钮也会关闭，就跟蓝图一样
+        /// </summary>
+        private void RightClickClose(UIMouseEvent evt, UIElement listeningElement) {
+            Close();
         }
 
         private void SwitchMode(UIMouseEvent evt, UIElement listeningElement) {
@@ -84,7 +85,7 @@ namespace ImproveGame.UI.ArchitectureUI
         public static void Open() {
             modeButton.SetCenter(Main.mouseX, Main.mouseY);
             tileButton.SetCenter(Main.mouseX - 40, Main.mouseY - 40);
-            wallButton.SetCenter(Main.mouseX + 40, Main.mouseY - 40);
+            wallButton.SetCenter(Main.mouseX + 30, Main.mouseY - 40);
             modeButton.SetImage(BrustWandSystem.FixedMode ? fixedModeButton : freeModeButton);
             Visible = true;
         }

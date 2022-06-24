@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
-using ImproveGame.UI.ArchitectureUI;
+using ImproveGame.Interface.GUI;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;

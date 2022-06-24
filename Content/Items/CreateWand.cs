@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Entitys;
-using ImproveGame.UI.ArchitectureUI;
+using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

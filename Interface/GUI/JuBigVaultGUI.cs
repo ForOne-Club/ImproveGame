@@ -1,12 +1,12 @@
 ﻿using ImproveGame.Common.Systems;
-using ImproveGame.UI.UIElements;
+using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace ImproveGame.UI.ArchitectureUI
+namespace ImproveGame.Interface.GUI
 {
     public class JuBigVaultGUI : UIState
     {
