@@ -2,67 +2,120 @@ Mods:
 {
     ImproveGame:
     {
-        ImproveConfigs:
+        Config:
         {
-            ImproveConfigs_Label: Mod configs
+            ImproveConfigs.Label: Mod Configs
             NoNeedReload: No need to reload this mod
-            LoadModItems_Header: Item configs
-            LoadModItems_Label: Enable mod items
-            LoadModItems_Tooltip: Modded items will not be loaded if it is off
-            SuperVoidVault_Label: Super Void Vault
-            SuperVoidVault_Tooltip: 
-                '''
-                Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
-                Priority: Void Bag  Piggy Bank  Safe  Defender's Furnance
-                '''
-            SmartVoidVault_Label: Void Vault Smart Pickup
-            SmartVoidVault_Tooltip:
-                '''
-                If the picked item already exists in the Void Vault, priorly put the item in it
-                If Super Void Vault is enabled, this will still function, the priority remains the same
-                '''
-            SuperVault_Label: Huge Inventory
-            SuperVault_Tooltip:
-                '''
-                An inventory with 100 slots, can interact with Super Void Vault and Void Vault Smart Pickup
-                Has the highest priority
-                (Need to setup hot keys in Controls)
-                '''
-            ItemMaxStack_Label: Max stack
-            GrabDistance_Label: Increase item pickup range (measured in blocks)
-            GrabDistance_Tooltip: Increase pickup range of items. Drawing speed will also increase automatically.
-            NoConsume_SummonItem_Label: No longer consume summon items
-            NoConsume_SummonItem_Tooltip: Only for vanilla boss and event summon items
-            AutoReuseWeapon_Label: Weapon autoswing
-            AutoReuseWeapon_ExclusionList_Label: Autoswing black list
-            AutoReuseWeapon_ExclusionList_Tooltip: If Weapon autoswing is true, items in this list cannot take the effect
-            ImproveToolSpeed_Label: Increase certain tools' using speed
-            ImproveToolSpeed_Tooltip: Tools with use times greater than 8 will have their use times set to 8
-            TileSpeedAndTileRange_Label: Increase placement speed and range
-            NoPlace_BUFFTile_Label: Portable buff stations
-            NoPlace_BUFFTile_Tooltip: Vanilla buff stations and banners in any of your inventories provide you with their buffs
-            NoPlace_BUFFTile_Banner_Label: Portable Banners (Vanilla only)
-            NoPlace_BUFFTile_Banner_Tooltip:
-                '''
-                The same as portable buff stations
-                '''
-            NoConsume_Potion_Label: Enable infinite potions
-            NoConsume_Potion_Tooltip: Potions in any of your inventories which stack not less than 30 will not be consumed
-            NoConsume_Ammo_Label: Enable infinite ammos
-            NoConsume_Ammo_Tooltip: Ammos which stack not less than 3996 will not be consumed
-            ImprovePrefix_Label: Better reforging mechanics
-            ImprovePrefix_Tooltip: Filter off bad prefixes as you keep reforging
-            ShowPrefixCount_Label: Shows how many times you have reforged this item
-            ShowItemMoreData_Label: Display reforging count
-            BanTombstone_Label: Disable tombstone spawn
-            TownNPCSpawnInNight_Header: NPC configs
-            TownNPCSpawnInNight_Label: Allow town NPCs to spawn at night time
-            TownNPCSpawnSpeed_Label: Town NPC spawn rate multiplier
-            NoCD_FishermanQuest_Label: Instant refresh Angler's quests
-            NPCCoinDropRate_Label: Enemy money drop multiplier
-            BanDamageVar_Header: Game mechanics
-            BanDamageVar_Label: Disable damage floating
-            ExtraPlayerBuffSlots_Label: Extra Buff Slots
+            LoadModItems:
+            {
+                Header: Item Configs
+                Label: Enable mod items
+                Tooltip: Modded items will not be loaded if it is off
+            }
+            SuperVoidVault:
+            {
+                Label: Super Void Vault
+                Tooltip:
+                    '''
+                    Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
+                    Priority: Void Bag  Piggy Bank  Safe  Defender's Furnance
+                    '''
+            }
+            SmartVoidVault:
+            {
+                Label: Void Vault Smart Pickup
+                Tooltip:
+                    '''
+                    If the picked item already exists in the Void Vault, priorly put the item in it
+                    If Super Void Vault is enabled, this will still function, the priority remains the same
+                    '''
+            }
+            SuperVault:
+            {
+                Label: Huge Inventory
+                Tooltip:
+                    '''
+                    An inventory with 100 slots, can interact with Super Void Vault and Void Vault Smart Pickup
+                    Has the highest priority
+                    (Need to setup hot keys in Controls)
+                    '''
+            }
+            ItemMaxStack.Label: Max stack
+            GrabDistance:
+            {
+                Label: Increase item pickup range (measured in blocks)
+                Tooltip: Increase pickup range of items. Drawing speed will also increase automatically
+            }
+            NoConsume_SummonItem:
+            {
+                Label: No longer consume summon items
+                Tooltip: Only for vanilla boss and event summon items
+            }
+            AutoReuseWeapon.Label: Weapon autoswing
+            AutoReuseWeapon_ExclusionList:
+            {
+                Label: Autoswing black list
+                Tooltip: If Weapon autoswing is true, items in this list cannot take the effect
+            }
+            ImproveToolSpeed:
+            {
+                Label: Increase certain tools' using speed
+                Tooltip: Tools with use times greater than 8 will have their use times set to 8
+            }
+            TileSpeedAndTileRange.Label: Increase placement speed and range
+            NoPlace_BUFFTile:
+            {
+                Label: Portable buff stations
+                Tooltip: Vanilla buff stations and banners in any of your inventories provide you with their buffs
+            }
+            NoPlace_BUFFTile_Banner:
+            {
+                Label: Portable Banners (Vanilla only)
+                Tooltip:
+                    '''
+                    The same as portable buff stations
+                    '''
+            }
+            NoConsume_Potion:
+            {
+                Label: Enable infinite potions
+                Tooltip: Potions in any of your inventories which stack not less than 30 will not be consumed
+            }
+            NoConsume_Ammo:
+            {
+                Label: Enable infinite ammos
+                Tooltip: Ammos which stack not less than 3996 will not be consumed
+            }
+            ImprovePrefix:
+            {
+                Label: Better reforging mechanics
+                Tooltip: Filter off bad prefixes as you keep reforging
+            }
+            ShowPrefixCount:
+            {
+                Label: Display reforging count
+                Tooltip: Shows how many times you have reforged this item
+            }
+            ShowItemMoreData:
+            {
+                Label: Display item debug data
+                Tooltip: Display item debug data in tooltip
+            }
+            BanTombstone.Label: Disable tombstone spawn
+            TownNPCSpawnInNight:
+            {
+                Header: NPC Configs
+                Label: Allow town NPCs to spawn at night time
+            }
+            TownNPCSpawnSpeed.Label: Town NPC spawn rate multiplier
+            NoCD_FishermanQuest.Label: Instant refresh Angler's quests
+            NPCCoinDropRate.Label: Enemy money drop multiplier
+            BanDamageVar:
+            {
+                Header: Game Mechanics
+                Label: Disable damage floating
+            }
+            ExtraPlayerBuffSlots.Label: Extra Buff Slots
         }
         ItemName:
         {
