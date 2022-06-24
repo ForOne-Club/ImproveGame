@@ -58,10 +58,10 @@ namespace ImproveGame
         private Item Player_PickupItem(On.Terraria.Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp) {
             ImprovePlayer improvePlayer = player.GetModPlayer<ImprovePlayer>();
             // 智能虚空保险库
-            if (MyUtils.Config().SmartVoidVault) {
+            if (MyUtils.Config.SmartVoidVault) {
                 if (!itemToPickUp.IsACoin) {
                     // 大背包
-                    if (!itemToPickUp.IsAir && MyUtils.Config().SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp)) {
+                    if (!itemToPickUp.IsAir && MyUtils.Config.SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp)) {
                         itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp, GetItemSettings.PickupItemFromWorld);
                     }
                     // 虚空保险库
@@ -69,7 +69,7 @@ namespace ImproveGame
                         itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.bank4.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
                     }
                     // 其他
-                    if (MyUtils.Config().SuperVoidVault) {
+                    if (MyUtils.Config.SuperVoidVault) {
                         if (!itemToPickUp.IsAir && improvePlayer.PiggyBank && MyUtils.HasItem(player.bank.item, itemToPickUp)) {
                             itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.bank.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
                         }
@@ -86,7 +86,7 @@ namespace ImproveGame
                 itemToPickUp = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
             }
             // 大背包
-            if (!itemToPickUp.IsAir && MyUtils.Config().SuperVault && itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin) {
+            if (!itemToPickUp.IsAir && MyUtils.Config.SuperVault && itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin) {
                 itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp, GetItemSettings.PickupItemFromWorld);
             }
             // 超级虚空保险库
@@ -252,7 +252,7 @@ namespace ImproveGame
                 i => i.Match(OpCodes.Ldc_I4_1)))
                 return;
             c.EmitDelegate<Func<int, int>>((JiaJi) => {
-                return (int)Math.Pow(2, MyUtils.Config().TownNPCSpawnSpeed);
+                return (int)Math.Pow(2, MyUtils.Config.TownNPCSpawnSpeed);
             });
         }
 
