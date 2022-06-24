@@ -41,7 +41,7 @@ namespace ImproveGame.UI.UIElements
         /// <summary>
         /// 物品槽UI元件
         /// </summary>
-        /// <param name="scale">物品在槽内显示的大小</param>
+        /// <param name="scale">物品在槽内显示的大小，0.85是游戏内物品栏的大小</param>
         /// <param name="emptyTexturePath">当槽内无物品时，显示的贴图</param>
         public ModItemSlot(float scale = 0.85f, string emptyTexturePath = null) {
             Item = new Item();
@@ -54,6 +54,9 @@ namespace ImproveGame.UI.UIElements
             }
         }
 
+        /// <summary>
+        /// 改原版的<see cref="Main.cursorOverride"/>
+        /// </summary>
         private void SetCursorOverride() {
             if (!Item.IsAir) {
                 if (!Item.favorited && ItemSlot.ShiftInUse) {
@@ -95,6 +98,7 @@ namespace ImproveGame.UI.UIElements
 
             int lastStack = Item.stack;
             int lastType = Item.type;
+            // 我把右键长按放在这里执行了
             if (IsMouseHovering) {
                 SetCursorOverride();
                 // 伪装，然后进行原版右键尝试
@@ -119,6 +123,7 @@ namespace ImproveGame.UI.UIElements
             temp[10] = Item;
             ItemSlot.Draw(Main.spriteBatch, temp, context, 10, origin);
 
+            // 空物品的话显示空贴图
             if (Item.IsAir && _emptyTexture is not null) {
                 origin = _emptyTexture.Size() / 2f;
                 Main.spriteBatch.Draw(_emptyTexture.Value, GetDimensions().Center(), null, Color.White * emptyTextureOpacity, 0f, origin, emptyTextureScale, SpriteEffects.None, 0f);
@@ -127,6 +132,9 @@ namespace ImproveGame.UI.UIElements
             Main.inventoryScale = oldScale;
         }
 
+        /// <summary>
+        /// 修改MouseText的
+        /// </summary>
         public void DrawText() {
             if (!Item.IsAir && (Main.mouseItem is null || Main.mouseItem.IsAir)) {
                 Main.HoverItem = Item.Clone();
@@ -165,12 +173,15 @@ namespace ImproveGame.UI.UIElements
                 return;
             }
 
+            // 常规单点
             if (Main.mouseItem is not null && CanPlaceItem()) {
+                // type不同直接切换吧
                 if (Item.type != Main.mouseItem.type || Item.prefix != Main.mouseItem.prefix) {
                     SwapItem(ref Main.mouseItem);
                     SoundEngine.PlaySound(SoundID.Grab);
                     return;
                 }
+                // type相同，里面的能堆叠，放进去
                 if (!Item.IsAir && ItemLoader.CanStack(Item, Main.mouseItem)) {
                     int stackAvailable = Item.maxStack - Item.stack;
                     int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);

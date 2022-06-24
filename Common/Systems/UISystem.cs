@@ -46,7 +46,7 @@ namespace ImproveGame.Common.Systems
             if (JuBigVaultGUI.Visible) {
                 JuBigVaultInterface.Update(gameTime);
             }
-            if (ArchitectureGUI.Visible && Main.playerInventory) {
+            if (ArchitectureGUI.Visible) {
                 ArchitectureInterface?.Update(gameTime);
             }
         }

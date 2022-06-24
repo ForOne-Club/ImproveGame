@@ -109,23 +109,20 @@ namespace ImproveGame.Content.Items
             }
         }
 
+        public override void ModifyManaCost(Player player, ref float reduce, ref float mult) {
+            if (player.altFunctionUse == 2) {
+                reduce = 0;
+            }
+        }
+
         public override bool CanUseItem(Player player)
         {
-            if (player.altFunctionUse == 0)
-            {
-                Item.mana = 40;
-            }
-            else if (player.altFunctionUse == 2)
-            {
-                Item.mana = 0;
-                // 暂时写的，以后再改
-                if (!Main.dedServ && player.whoAmI == Main.myPlayer) {
-                    if (!ArchitectureGUI.Visible) {
-                        ArchitectureGUI.Open();
-                    }
-                    else {
-                        ArchitectureGUI.Close();
-                    }
+            if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer) {
+                if (!ArchitectureGUI.Visible) {
+                    ArchitectureGUI.Open();
+                }
+                else {
+                    ArchitectureGUI.Close();
                 }
             }
             return true;
@@ -197,20 +194,20 @@ namespace ImproveGame.Content.Items
             }
         }
 
+        /// <summary>
+        /// 就为了实现一个“如果不放东西就没爆炸声音”的功能
+        /// </summary>
+        private static bool _playedSound = false;
         public override bool? UseItem(Player player) {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI && player.altFunctionUse == 0) {
                 Point position = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint();
 
                 List<TileData> tileDatas = new();
-                SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
 
                 for (int i = 0; i < Colors.Length; i++) // 不会放置椅子和工作台
                 {
                     int x = position.X + i % JianYu.Width; // 物块在图片中的 X 坐标
                     int y = position.Y + i / JianYu.Width; // Y 坐标
-
-                    TryKillTile(x, y, player);
-                    BongBong(new Vector2(x, y) * 16f, 16, 16);
 
                     TileSort tileSort = Color2TileSort(Colors[i]);
 
@@ -218,9 +215,9 @@ namespace ImproveGame.Content.Items
                     if (ShouldPlaceWall(tileSort)) 
                     {
                         if (Wall.IsAir || Wall.createWall <= WallID.None) {
-                            PickItemInInventory(player, (item) => TryPlaceWall(item, x, y), true);
+                            PickItemInInventory(player, (item) => TryPlaceWall(item, player, x, y), true);
                         }
-                        else if (TryPlaceWall(Wall, x, y)) {
+                        else if (TryPlaceWall(Wall, player, x, y)) {
                             TryConsumeItem(ref Wall, player);
                         }
                     }
@@ -258,7 +255,7 @@ namespace ImproveGame.Content.Items
                     // 进行其他的放置尝试
                     switch (tileDatas[i].tileSort) {
                         case TileSort.Torch:
-                            TryPlace(ref Torch, player, x, y, (Item item) => TileID.Sets.Torch[item.createTile]);
+                            TryPlace(ref Torch, player, x, y, (Item item) => item.createTile >= TileID.Dirt && TileID.Sets.Torch[item.createTile]);
                             break;
                         case TileSort.Workbench:
                             TryPlace(ref Workbench, player, x, y, (Item item) => item.createTile == TileID.WorkBenches);
@@ -286,6 +283,7 @@ namespace ImproveGame.Content.Items
                 // 同步UI物品
                 ArchitectureGUI.RefreshSlots(this);
             }
+            _playedSound = false;
             return true;
         }
 
@@ -300,25 +298,31 @@ namespace ImproveGame.Content.Items
         private static void TryPlace(ref Item storedItem, Player player, int x, int y, Func<Item, bool> tryMethod) {
             // 没有存储物品，在物品栏里面找    
             if (storedItem.IsAir || storedItem.createTile < TileID.Dirt) {
-                PickItemInInventory(player, (item) =>
-                    tryMethod(item) &&
-                    WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle),
+                int i = PickItemInInventory(player, (item) =>
+                    item is not null && tryMethod(item) &&
+                    BongBongPlace(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle, !_playedSound),
                     true);
+                if (i != -1) {
+                    _playedSound = true;
+                }
             }
             // 进行存储物品的放置尝试
-            else if (tryMethod(storedItem) && WorldGen.PlaceTile(x, y, storedItem.createTile, true, true, player.whoAmI, storedItem.placeStyle)) {
+            else if (storedItem is not null && tryMethod(storedItem) && BongBongPlace(x, y, storedItem.createTile, true, true, player.whoAmI, storedItem.placeStyle, !_playedSound)) {
                 TryConsumeItem(ref storedItem, player);
+                _playedSound = true;
             }
         }
 
         private static bool TryPlacePlatform(Item item) =>
-            TileID.Sets.Platforms[item.createTile];
+            item.createTile >= TileID.Dirt && TileID.Sets.Platforms[item.createTile];
 
-        private static bool TryPlaceTile(Item item) => 
-            Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile];
+        private static bool TryPlaceTile(Item item) =>
+            item.createTile >= TileID.Dirt && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile];
 
-        private static bool TryPlaceWall(Item item, int x, int y) {
+        private static bool TryPlaceWall(Item item, Player player, int x, int y) {
             if (item.createWall > -1) {
+                TryKillTile(x, y, player);
+                BongBong(new Vector2(x, y) * 16f, 16, 16);
                 WorldGen.KillWall(x, y);
                 if (Main.tile[x, y].WallType == 0) {
                     WorldGen.PlaceWall(x, y, item.createWall, true);

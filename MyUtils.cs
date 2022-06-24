@@ -5,6 +5,7 @@ using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
@@ -618,6 +619,21 @@ namespace ImproveGame
             return -1;
         }
 
+        /// <summary>
+        /// 先炸掉，然后再放物块
+        /// </summary>
+        public static bool BongBongPlace(int i, int j, int Type, bool mute = false, bool forced = false, int plr = -1, int style = 0, bool playSound = false) {
+            TryKillTile(i, j, Main.player[plr]);
+            bool success = WorldGen.PlaceTile(i, j, Type, mute, forced, plr, style);
+            if (success) {
+                BongBong(new Vector2(i, j) * 16f, 16, 16);
+                if (playSound) {
+                    SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
+                }
+            }
+            return success;
+        }
+
         public static bool TryConsumeItem(ref Item item, Player player) {
             if (!item.IsAir && item.consumable && ItemLoader.ConsumeItem(item, player)) {
                 item.stack--;
@@ -628,5 +644,13 @@ namespace ImproveGame
             }
             return false;
         }
+
+        /// <summary>
+        /// 普遍性的可否放置判断
+        /// </summary>
+        /// <param name="slotItem">槽内物品</param>
+        /// <param name="mouseItem">手持物品</param>
+        /// <returns>一般判断返回值</returns>
+        public static bool SlotPlace(Item slotItem, Item mouseItem) => slotItem.type == mouseItem.type || mouseItem.IsAir;
     }
 }
