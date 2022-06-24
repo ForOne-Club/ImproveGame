@@ -9,7 +9,7 @@ namespace ImproveGame.Interface.UIElements
     public class JuItemGrid : UIElement
     {
         public ItemList itemList;
-        public FixedUIScrollbar scrollbar;
+        public JuFixedUIScrollbar scrollbar;
         public Item[] items;
 
         public JuItemGrid(Item[] SuperVault)

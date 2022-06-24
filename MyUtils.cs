@@ -21,8 +21,7 @@ namespace ImproveGame
     /// </summary>
     public class MyUtils
     {
-        public static Color[] GetColors(Texture2D texture)
-        {
+        public static Color[] GetColors(Texture2D texture) {
             var w = texture.Width;
             var h = texture.Height;
             var cs = new Color[w * h]; // 创建一个能容下整个贴图颜色信息的 Color[]
@@ -34,8 +33,7 @@ namespace ImproveGame
         /// 旋转物品使用时候的贴图
         /// </summary>
         /// <param name="player"></param>
-        public static void ItemRotation(Player player)
-        {
+        public static void ItemRotation(Player player) {
             // 旋转物品
             Vector2 rotaion = (Main.MouseWorld - player.Center).SafeNormalize(Vector2.Zero);
             player.direction = Main.MouseWorld.X < player.Center.X ? -1 : 1;
@@ -48,19 +46,15 @@ namespace ImproveGame
         /// <param name="position"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        public static void BongBong(Vector2 position, int width, int height)
-        {
-            if (Main.rand.NextBool(6))
-            {
+        public static void BongBong(Vector2 position, int width, int height) {
+            if (Main.rand.NextBool(6)) {
                 Gore.NewGore(null, position + new Vector2(Main.rand.Next(16), Main.rand.Next(16)), Vector2.Zero, Main.rand.Next(61, 64));
             }
-            if (Main.rand.NextBool(2))
-            {
+            if (Main.rand.NextBool(2)) {
                 int index = Dust.NewDust(position, width, height, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
                 Main.dust[index].velocity *= 1.4f;
             }
-            if (Main.rand.NextBool(3))
-            {
+            if (Main.rand.NextBool(3)) {
                 int index = Dust.NewDust(position, width, height, DustID.Torch, 0f, 0f, 100, default, 2.5f);
                 Main.dust[index].noGravity = true;
                 Main.dust[index].velocity *= 5f;
@@ -77,8 +71,7 @@ namespace ImproveGame
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns>end的位置</returns>
-        public static Point LimitRect(Point start, Point end, int width, int height)
-        {
+        public static Point LimitRect(Point start, Point end, int width, int height) {
             width--;
             height--;
             if (end.X - start.X < -width)
@@ -100,15 +93,11 @@ namespace ImproveGame
         /// <param name="y"></param>
         /// <param name="player"></param>
         /// <returns></returns>
-        public static bool TryKillTile(int x, int y, Player player)
-        {
+        public static bool TryKillTile(int x, int y, Player player) {
             Tile tile = Main.tile[x, y];
-            if (tile.HasTile && !Main.tileHammer[Main.tile[x, y].TileType])
-            {
-                if (player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.CanKillTile(x, y))
-                {
-                    if ((tile.TileType == 2 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 23 || tile.TileType == 60 || tile.TileType == 70 || tile.TileType == 109 || tile.TileType == 199 || Main.tileMoss[tile.TileType] || TileID.Sets.tileMossBrick[tile.TileType]))
-                    {
+            if (tile.HasTile && !Main.tileHammer[Main.tile[x, y].TileType]) {
+                if (player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.CanKillTile(x, y)) {
+                    if ((tile.TileType == 2 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 23 || tile.TileType == 60 || tile.TileType == 70 || tile.TileType == 109 || tile.TileType == 199 || Main.tileMoss[tile.TileType] || TileID.Sets.tileMossBrick[tile.TileType])) {
                         player.PickTile(x, y, 10000);
                     }
                     player.PickTile(x, y, 10000);
@@ -117,8 +106,7 @@ namespace ImproveGame
             return !Main.tile[x, y].HasTile;
         }
 
-        public static void DrawBorderRect(Rectangle tileRectangle, Color backgroundColor, Color borderColor)
-        {
+        public static void DrawBorderRect(Rectangle tileRectangle, Color backgroundColor, Color borderColor) {
             Texture2D texture = TextureAssets.MagicPixel.Value;
             Vector2 position = tileRectangle.TopLeft() * 16f - Main.screenPosition;
             Vector2 scale = new(tileRectangle.Width, tileRectangle.Height);
@@ -160,18 +148,15 @@ namespace ImproveGame
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string GetText(string str, params object[] arg)
-        {
+        public static string GetText(string str, params object[] arg) {
             return Language.GetTextValue($"Mods.ImproveGame.{str}", arg);
         }
 
-        public static Asset<Texture2D> GetTexture(string path)
-        {
+        public static Asset<Texture2D> GetTexture(string path) {
             return ModContent.Request<Texture2D>($"ImproveGame/Assets/Images/{path}", AssetRequestMode.ImmediateLoad);
         }
 
-        public static Asset<Effect> GetEffect(string path)
-        {
+        public static Asset<Effect> GetEffect(string path) {
             return ModContent.Request<Effect>($"ImproveGame/Assets/Effect/{path}", AssetRequestMode.ImmediateLoad);
         }
 
@@ -182,8 +167,7 @@ namespace ImproveGame
         /// <param name="dimensions"></param>
         /// <param name="texture"></param>
         /// <param name="color"></param>
-        public static void DrawPanel(SpriteBatch sb, CalculatedStyle dimensions, Texture2D texture, Color color)
-        {
+        public static void DrawPanel(SpriteBatch sb, CalculatedStyle dimensions, Texture2D texture, Color color) {
             Point point = new Point((int)dimensions.X, (int)dimensions.Y);
             Point point2 = new Point(point.X + (int)dimensions.Width - 12, point.Y + (int)dimensions.Height - 12);
             int width = point2.X - point.X - 12;
@@ -202,36 +186,24 @@ namespace ImproveGame
         /// <summary>
         /// 堆叠物品到仓库
         /// </summary>
-        /// <param name="inv"></param>
+        /// <param name="inventory"></param>
         /// <param name="item"></param>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public static Item StackItemToInv(int plr, Item[] inv, Item item, GetItemSettings settings, bool hint = true)
-        {
-            List<int> list = new();
+        public static Item PutItemInInventory(int whoAmI, Item[] inventory, Item item, GetItemSettings settings, bool hint = true, int EndIndex = -1) {
+            EndIndex = (EndIndex == -1 ? inventory.Length : EndIndex);
             // 先填充和物品相同的
-            for (int i = 0; i < inv.Length; i++)
-            {
-                if (inv[i].type == item.type && inv[i].stack > 0 && inv[i].stack < inv[i].maxStack &&
-                    ItemLoader.CanStack(inv[i], item))
-                {
-                    item = StackItemToItem(plr, inv, i, item, settings, hint);
-                    if (item.type == ItemID.None)
-                    {
-                        return item;
-                    }
+            for (int i = 0; i < EndIndex; i++) {
+                if (!inventory[i].IsAir && inventory[i].type == item.type && inventory[i].stack < inventory[i].maxStack) {
+                    item = MergenItem(whoAmI, inventory, i, item, settings, hint);
+                    if (item.IsAir) return item;
                 }
             }
             // 后填充空位
-            for (int i = 0; i < inv.Length; i++)
-            {
-                if (inv[i].type == ItemID.None || inv[i].stack < 1)
-                {
-                    item = StackItemToItem(plr, inv, i, item, settings, hint);
-                    if (item.type == ItemID.None)
-                    {
-                        return item;
-                    }
+            for (int i = 0; i < EndIndex; i++) {
+                if (inventory[i].IsAir) {
+                    item = MergenItem(whoAmI, inventory, i, item, settings, hint);
+                    if (item.IsAir) return item;
                 }
             }
             return item;
@@ -240,46 +212,43 @@ namespace ImproveGame
         /// <summary>
         /// 堆叠物品到仓库[i]
         /// </summary>
-        /// <param name="inv"></param>
+        /// <param name="inventory"></param>
         /// <param name="i"></param>
-        /// <param name="cItem"></param>
+        /// <param name="WorldItem"></param>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public static Item StackItemToItem(int plr, Item[] inv, int i, Item cItem, GetItemSettings settings, bool hint)
-        {
-            if (inv[i].type == ItemID.None)
-            {
-                if (hint)
-                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cItem, cItem.stack, noStack: false, settings.LongText);
-                inv[i] = cItem;
-                if (plr == Main.myPlayer)
-                {
+        public static Item MergenItem(int whoAmI, Item[] inventory, int i, Item WorldItem, GetItemSettings settings, bool hint) {
+            if (inventory[i].IsAir) {
+                if (hint) {
+                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, WorldItem, WorldItem.stack, noStack: false, settings.LongText);
+                }
+                (inventory[i], WorldItem) = (WorldItem, inventory[i]);
+                if (whoAmI == Main.myPlayer) {
                     Recipe.FindRecipes();
                 }
-                return new Item();
+                return WorldItem;
             }
-            if (inv[i].stack + cItem.stack > inv[i].maxStack)
-            {
-                if (hint)
-                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cItem, inv[i].maxStack - inv[i].stack, noStack: false, settings.LongText);
-                cItem.stack -= inv[i].maxStack - inv[i].stack;
-                inv[i].stack = inv[i].maxStack;
-                if (plr == Main.myPlayer)
-                {
+            if (inventory[i].stack + WorldItem.stack > inventory[i].maxStack) {
+                if (hint) {
+                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, WorldItem, inventory[i].maxStack - inventory[i].stack, noStack: false, settings.LongText);
+                }
+                WorldItem.stack -= inventory[i].maxStack - inventory[i].stack;
+                inventory[i].stack = inventory[i].maxStack;
+                if (whoAmI == Main.myPlayer) {
                     Recipe.FindRecipes();
                 }
-                return cItem;
+                return WorldItem;
             }
-            else
-            {
-                if (hint)
-                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cItem, cItem.stack, noStack: false, settings.LongText);
-                inv[i].stack += cItem.stack;
-                if (plr == Main.myPlayer)
-                {
+            else {
+                if (hint) {
+                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, WorldItem, WorldItem.stack, noStack: false, settings.LongText);
+                }
+                inventory[i].stack += WorldItem.stack;
+                WorldItem.SetDefaults(0);
+                if (whoAmI == Main.myPlayer) {
                     Recipe.FindRecipes();
                 }
-                return new Item();
+                return WorldItem;
             }
         }
 
@@ -289,12 +258,9 @@ namespace ImproveGame
         /// <param name="inv"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static bool HasItemSpace(Item[] inv, Item item, int indexMax = 0)
-        {
-            for (int i = 0; i < (indexMax > 0 ? indexMax : inv.Length); i++)
-            {
-                if (inv[i].type == ItemID.None || (inv[i].type == item.type && inv[i].stack > 0 && inv[i].stack < inv[i].maxStack))
-                {
+        public static bool HasItemSpace(Item[] inv, Item item, int indexMax = 0) {
+            for (int i = 0; i < (indexMax > 0 ? indexMax : inv.Length); i++) {
+                if (inv[i].type == ItemID.None || (inv[i].type == item.type && inv[i].stack > 0 && inv[i].stack < inv[i].maxStack)) {
                     return true;
                 }
             }
@@ -307,12 +273,9 @@ namespace ImproveGame
         /// <param name="inv"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static bool HasItem(Item[] inv, Item item, int indexMax = 0)
-        {
-            for (int i = 0; i < (indexMax > 0 ? indexMax : inv.Length); i++)
-            {
-                if (inv[i].type == item.type && inv[i].stack > 0)
-                {
+        public static bool HasItem(Item[] inv, Item item, int indexMax = 0) {
+            for (int i = 0; i < (indexMax > 0 ? indexMax : inv.Length); i++) {
+                if (inv[i].type == item.type && inv[i].stack > 0) {
                     return true;
                 }
             }
@@ -320,8 +283,7 @@ namespace ImproveGame
         }
 
         // 获取配置
-        public static ImproveConfigs Config()
-        {
+        public static ImproveConfigs Config() {
             return ModContent.GetInstance<ImproveConfigs>();
         }
 
@@ -331,17 +293,13 @@ namespace ImproveGame
         /// <param name="inv"></param>
         /// <param name="count">平台的数量</param>
         /// <returns>是否有不会被消耗的平台</returns>
-        public static bool GetPlatformCount(Item[] inv, ref int count)
-        {
+        public static bool GetPlatformCount(Item[] inv, ref int count) {
             bool consumable = true;
-            for (int i = 0; i < 50; i++)
-            {
+            for (int i = 0; i < 50; i++) {
                 Item item = inv[i];
-                if (item.createTile != -1 && TileID.Sets.Platforms[item.createTile])
-                {
+                if (item.createTile != -1 && TileID.Sets.Platforms[item.createTile]) {
                     count += item.stack;
-                    if (!item.consumable || !ItemLoader.ConsumeItem(item, Main.player[item.playerIndexTheItemIsReservedFor]))
-                    {
+                    if (!item.consumable || !ItemLoader.ConsumeItem(item, Main.player[item.playerIndexTheItemIsReservedFor])) {
                         consumable = false;
                     }
                 }
@@ -350,17 +308,13 @@ namespace ImproveGame
         }
 
         // 获取墙总数
-        public static bool GetWallCount(Item[] inv, ref int count)
-        {
+        public static bool GetWallCount(Item[] inv, ref int count) {
             bool consumable = true;
-            for (int i = 0; i < 50; i++)
-            {
+            for (int i = 0; i < 50; i++) {
                 Item item = inv[i];
-                if (item.createWall > 0)
-                {
+                if (item.createWall > 0) {
                     count += item.stack;
-                    if (!item.consumable || !ItemLoader.ConsumeItem(item, Main.player[item.playerIndexTheItemIsReservedFor]))
-                    {
+                    if (!item.consumable || !ItemLoader.ConsumeItem(item, Main.player[item.playerIndexTheItemIsReservedFor])) {
                         consumable = false;
                     }
                 }
@@ -369,13 +323,10 @@ namespace ImproveGame
         }
 
         // 获取背包第一个平台
-        public static Item GetFirstPlatform(Player player)
-        {
-            for (int i = 0; i < 50; i++)
-            {
+        public static Item GetFirstPlatform(Player player) {
+            for (int i = 0; i < 50; i++) {
                 Item item = player.inventory[i];
-                if (item.stack > 0 && item.createTile > -1 && TileID.Sets.Platforms[item.createTile])
-                {
+                if (item.stack > 0 && item.createTile > -1 && TileID.Sets.Platforms[item.createTile]) {
                     return item;
                 }
             }
@@ -383,13 +334,10 @@ namespace ImproveGame
         }
 
         // 获取背包第一个平台
-        public static Item GetFirstWall(Player player)
-        {
-            for (int i = 0; i < 50; i++)
-            {
+        public static Item GetFirstWall(Player player) {
+            for (int i = 0; i < 50; i++) {
                 Item item = player.inventory[i];
-                if (item.stack > 0 && item.createWall > 0)
-                {
+                if (item.stack > 0 && item.createWall > 0) {
                     return item;
                 }
             }
@@ -397,8 +345,7 @@ namespace ImproveGame
         }
 
         // 加载前缀
-        public static void LoadPrefixInfo()
-        {
+        public static void LoadPrefixInfo() {
             PrefixLevel.Add(1, 1);
             PrefixLevel.Add(2, 1);
             PrefixLevel.Add(3, 1);
@@ -500,38 +447,31 @@ namespace ImproveGame
         public delegate void MyDelegate(int i, int j);
 
         // 魔法移除物块方法
-        public static void NormalKillTiles(Player player, Rectangle rect, MyDelegate myDelegate = null)
-        {
+        public static void NormalKillTiles(Player player, Rectangle rect, MyDelegate myDelegate = null) {
             // 获得背包中最好的镐子
             Item item = player.GetBestPickaxe();
             int minI = rect.X;
             int maxI = rect.X + rect.Width - 1;
             int minJ = rect.Y;
             int maxJ = rect.Y + rect.Height - 1;
-            for (int i = 0; i < player.hitTile.data.Length; i++)
-            {
+            for (int i = 0; i < player.hitTile.data.Length; i++) {
                 HitTile.HitTileObject hitTileObject = player.hitTile.data[i];
                 hitTileObject.timeToLive = 10000;
             }
 
-            for (int i = minI; i <= maxI; i++)
-            {
-                for (int j = minJ; j <= maxJ; j++)
-                {
-                    if (myDelegate is not null)
-                    {
+            for (int i = minI; i <= maxI; i++) {
+                for (int j = minJ; j <= maxJ; j++) {
+                    if (myDelegate is not null) {
                         myDelegate(i, j);
                     }
                     Tile tile = Main.tile[i, j];
-                    if (!Main.tileAxe[tile.TileType] && !Main.tileHammer[tile.TileType])
-                    {
+                    if (!Main.tileAxe[tile.TileType] && !Main.tileHammer[tile.TileType]) {
                         player.PickTile(i, j, item != null ? item.pick : 1);
                         player.hitTile.data[player.hitTile.HitObject(i, j, 1)].timeToLive = 10000;
                     }
                 }
             }
-            for (int i = 0; i < player.hitTile.data.Length; i++)
-            {
+            for (int i = 0; i < player.hitTile.data.Length; i++) {
                 HitTile.HitTileObject hitTileObject = player.hitTile.data[i];
                 hitTileObject.timeToLive = 60;
             }
@@ -543,24 +483,20 @@ namespace ImproveGame
         /// <param name="player"></param>
         /// <param name="rect"></param>
         /// <param name="myDelegate"></param>
-        public static void ForechTile(Rectangle rect, MyDelegate myDelegate)
-        {
+        public static void ForechTile(Rectangle rect, MyDelegate myDelegate) {
             int minI = rect.X;
             int maxI = rect.X + rect.Width - 1;
             int minJ = rect.Y;
             int maxJ = rect.Y + rect.Height - 1;
-            for (int i = minI; i <= maxI; i++)
-            {
-                for (int j = minJ; j <= maxJ; j++)
-                {
+            for (int i = minI; i <= maxI; i++) {
+                for (int j = minJ; j <= maxJ; j++) {
                     myDelegate(i, j);
                 }
             }
         }
 
         // 判断物块是否相同
-        public static bool NotSameTile(int i, int j, int tileType, int tileStyle)
-        {
+        public static bool NotSameTile(int i, int j, int tileType, int tileStyle) {
             return (Main.tile[i, j].TileType == tileType && Main.tile[i, j].TileFrameY != tileStyle * 18)
                              || Main.tile[i, j].TileType != tileType;
         }
@@ -574,15 +510,12 @@ namespace ImproveGame
         /// <param name="judge"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public static int EnoughItem(Player player, JudgeItem judge, int amount = 1)
-        {
+        public static int EnoughItem(Player player, JudgeItem judge, int amount = 1) {
             int oneIndex = -1;
             int num = 0;
-            for (int i = 0; i < 50; i++)
-            {
+            for (int i = 0; i < 50; i++) {
                 Item item = player.inventory[i];
-                if (item.type != ItemID.None && item.stack > 0 && judge(item))
-                {
+                if (item.type != ItemID.None && item.stack > 0 && judge(item)) {
                     if (oneIndex == -1)
                         oneIndex = i;
                     if (!item.consumable || !ItemLoader.ConsumeItem(item, player))
@@ -590,8 +523,7 @@ namespace ImproveGame
                     num += item.stack;
                 }
             }
-            if (num >= amount)
-            {
+            if (num >= amount) {
                 return oneIndex;
             }
             return -1;
@@ -604,10 +536,8 @@ namespace ImproveGame
         /// <param name="shouldPick">选取物品的依据</param>
         /// <param name="tryConsume">是否尝试消耗</param>
         /// <returns></returns>
-        public static int PickItemInInventory(Player player, Func<Item, bool> shouldPick, bool tryConsume)
-        {
-            for (int i = 0; i < 50; i++)
-            {
+        public static int PickItemInInventory(Player player, Func<Item, bool> shouldPick, bool tryConsume) {
+            for (int i = 0; i < 50; i++) {
                 ref Item item = ref player.inventory[i];
                 if (!item.IsAir && shouldPick.Invoke(item)) {
                     if (tryConsume) {

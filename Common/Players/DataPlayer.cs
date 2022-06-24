@@ -47,7 +47,7 @@ namespace ImproveGame.Common.Players
         {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
-                UISystem.JuVaultUIGUI.MyInitialize(SuperVault, SuperVaultOffset, SuperVaultVisable);
+                UISystem.JuVaultUIGUI.JuInitialize(SuperVault, SuperVaultOffset, SuperVaultVisable);
             }
         }
 

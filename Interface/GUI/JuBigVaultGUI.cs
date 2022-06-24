@@ -32,7 +32,7 @@ namespace ImproveGame.Interface.GUI
         /// </summary>
         /// <param name="SuperVault"></param>
         /// <param name="SuperVaultOffset"></param>
-        public void MyInitialize(Item[] SuperVault, Vector2 SuperVaultOffset, bool Visible) {
+        public void JuInitialize(Item[] SuperVault, Vector2 SuperVaultOffset, bool Visible) {
             RemoveAllChildren();
             _visible = Visible;
             mainPanel = new UIPanel() {
@@ -103,23 +103,6 @@ namespace ImproveGame.Interface.GUI
 
         private void CloseButton_OnClick(UIMouseEvent evt, UIElement listeningElement) {
             Visible = false;
-        }
-    }
-
-    public class FixedUIScrollbar : UIScrollbar
-    {
-        protected override void DrawSelf(SpriteBatch spriteBatch) {
-            UserInterface temp = UserInterface.ActiveInstance;
-            UserInterface.ActiveInstance = UISystem.JuBigVaultInterface;
-            base.DrawSelf(spriteBatch);
-            UserInterface.ActiveInstance = temp;
-        }
-
-        public override void MouseDown(UIMouseEvent evt) {
-            UserInterface temp = UserInterface.ActiveInstance;
-            UserInterface.ActiveInstance = UISystem.JuBigVaultInterface;
-            base.MouseDown(evt);
-            UserInterface.ActiveInstance = temp;
         }
     }
 }
