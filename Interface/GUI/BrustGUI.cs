@@ -6,12 +6,14 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.ID;
 
 namespace ImproveGame.Interface.GUI
 {
     public class BrustGUI : UIState
     {
         public static bool Visible { get; private set; }
+        internal static bool MouseOnMenu;
 
         private static Asset<Texture2D> fixedModeButton;
         private static Asset<Texture2D> freeModeButton;
@@ -39,6 +41,8 @@ namespace ImproveGame.Interface.GUI
             modeButton.Height.Set(40, 0f);
             modeButton.DrawColor += () => Color.White;
             modeButton.OnMouseDown += SwitchMode;
+            modeButton.OnMouseOver += MouseOver;
+            modeButton.OnMouseOut += MouseOut;
             Append(modeButton);
 
             tileButton = new ModImageButton(
@@ -48,6 +52,8 @@ namespace ImproveGame.Interface.GUI
             tileButton.SetBackgroundImage(backgroundImage);
             tileButton.Width.Set(40, 0f);
             tileButton.Height.Set(40, 0f);
+            tileButton.OnMouseOver += MouseOver;
+            tileButton.OnMouseOut += MouseOut;
             tileButton.DrawColor += () => BrustWandSystem.TileMode ? Color.White : inactiveColor;
             tileButton.OnMouseDown += (UIMouseEvent _, UIElement _) => BrustWandSystem.TileMode = !BrustWandSystem.TileMode;
             Append(tileButton);
@@ -59,9 +65,34 @@ namespace ImproveGame.Interface.GUI
             wallButton.SetBackgroundImage(backgroundImage);
             wallButton.Width.Set(40, 0f);
             wallButton.Height.Set(40, 0f);
+            wallButton.OnMouseOver += MouseOver;
+            wallButton.OnMouseOut += MouseOut;
             wallButton.DrawColor += () => BrustWandSystem.WallMode ? Color.White : inactiveColor;
             wallButton.OnMouseDown += (UIMouseEvent _, UIElement _) => BrustWandSystem.WallMode = !BrustWandSystem.WallMode;
             Append(wallButton);
+        }
+
+        private void MouseOut(UIMouseEvent evt, UIElement listeningElement) {
+            MouseOnMenu = false;
+        }
+
+        private void MouseOver(UIMouseEvent evt, UIElement listeningElement) {
+            MouseOnMenu = true;
+        }
+
+        public override void Update(GameTime gameTime) {
+            // 与蓝图相同的UI关闭机制
+            if (Main.LocalPlayer.mouseInterface && !MouseOnMenu) {
+                Close();
+                return;
+            }
+
+            if (Main.LocalPlayer.dead || Main.mouseItem.type > ItemID.None) {
+                Close();
+                return;
+            }
+
+            base.Update(gameTime);
         }
 
         private void SwitchMode(UIMouseEvent evt, UIElement listeningElement) {
@@ -73,9 +104,12 @@ namespace ImproveGame.Interface.GUI
         /// 打开GUI界面
         /// </summary>
         public static void Open() {
-            modeButton.SetCenter(Main.mouseX, Main.mouseY);
-            tileButton.SetCenter(Main.mouseX - 44, Main.mouseY);
-            wallButton.SetCenter(Main.mouseX + 44, Main.mouseY);
+            // 缩放修复
+            int x = (int)(Main.mouseX / Main.UIScale);
+            int y = (int)(Main.mouseY / Main.UIScale);
+            modeButton.SetCenter(x, y);
+            tileButton.SetCenter(x - 44, y);
+            wallButton.SetCenter(x + 44, y);
             modeButton.SetImage(BrustWandSystem.FixedMode ? fixedModeButton : freeModeButton);
             Visible = true;
         }

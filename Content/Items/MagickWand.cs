@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -182,13 +183,14 @@ namespace ImproveGame.Content.Items
                 if (BrustWandSystem.FixedMode) {
                     Box.NewBox(GetKillRect(player), Color.Red * 0.35f, Color.Red);
                 }
-                if (Main.mouseRight && Main.mouseRightRelease) {
-                    if (!BrustGUI.Visible) {
-                        BrustGUI.Open();
-                    }
-                    else {
-                        BrustGUI.Close();
-                    }
+                if (!Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1) {
+                    return;
+                }
+                if (!BrustGUI.Visible) {
+                    BrustGUI.Open();
+                }
+                else {
+                    BrustGUI.Close();
                 }
             }
         }
