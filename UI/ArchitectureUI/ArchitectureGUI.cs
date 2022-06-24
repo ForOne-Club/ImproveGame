@@ -11,6 +11,7 @@ using ImproveGame.UI.UIElements;
 using System.Collections.Generic;
 using ImproveGame.Content.Items;
 using System;
+using Terraria.Localization;
 
 namespace ImproveGame.UI.ArchitectureUI
 {
@@ -22,17 +23,26 @@ namespace ImproveGame.UI.ArchitectureUI
         private static float panelTop;
         private static float panelHeight;
 
+        public static int CurrentSlot;
+        public static Item CurrentItem {
+            get => Main.LocalPlayer.inventory[CurrentSlot];
+            set => Main.LocalPlayer.inventory[CurrentSlot] = value;
+        }
+        public static CreateWand CurrentWand => CurrentItem.ModItem as CreateWand;
+
         private const float InventoryScale = 0.85f;
 
         private bool Dragging;
         private Vector2 Offset;
 
-        private UIPanel basePanel;
-        private Dictionary<string, ModItemSlot> itemSlot = new();
+        private static UIPanel basePanel;
+        private static Dictionary<string, ModItemSlot> itemSlot = new();
+        private static UIText materialTitle;
+        private static UIIconTextButton styleButton;
 
         public override void OnInitialize() {
-            panelLeft = 300f;
-            panelTop = 300f;
+            panelLeft = 600f;
+            panelTop = 80f;
             panelHeight = 190f;
             panelWidth = 190f;
 
@@ -54,36 +64,65 @@ namespace ImproveGame.UI.ArchitectureUI
             const float slotSecond = 60f;
             const float slotThird = 120f;
             itemSlot = new() {
-                [nameof(CreateWand.Block)] = CreateItemSlot(slotFirst, slotFirst, (Item i, Item item) =>
-                    SlotPlace(i, item) || (item.createTile > -1 && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile])),
-                [nameof(CreateWand.Wall)] = CreateItemSlot(slotSecond, slotFirst, (Item i, Item item) =>
-                    SlotPlace(i, item) || item.createWall > -1),
-                [nameof(CreateWand.Platform)] = CreateItemSlot(slotThird, slotFirst, (Item i, Item item) =>
-                    SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Platforms[item.createTile])),
+                [nameof(CreateWand.Block)] = CreateItemSlot(slotFirst, slotFirst, nameof(CreateWand.Block),
+                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile]), 
+                    (Item item) => CurrentWand.SetItem(nameof(CreateWand.Block), item.Clone(), CurrentSlot)),
 
-                [nameof(CreateWand.Torch)] = CreateItemSlot(slotFirst, slotSecond, (Item i, Item item) =>
-                    SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Torch[item.createTile])),
-                [nameof(CreateWand.Chair)] = CreateItemSlot(slotSecond, slotSecond, (Item i, Item item) =>
-                    SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Chairs)),
-                [nameof(CreateWand.Workbench)] = CreateItemSlot(slotThird, slotSecond, (Item i, Item item) =>
-                    SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.WorkBenches)),
+                [nameof(CreateWand.Wall)] = CreateItemSlot(slotSecond, slotFirst, nameof(CreateWand.Wall),
+                    (Item i, Item item) => SlotPlace(i, item) || item.createWall > -1,
+                    (Item item) => CurrentWand.SetItem(nameof(CreateWand.Wall), item.Clone(), CurrentSlot)),
 
-                [nameof(CreateWand.Bed)] = CreateItemSlot(slotFirst, slotThird, (Item i, Item item) =>
-                    SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Beds))
+                [nameof(CreateWand.Platform)] = CreateItemSlot(slotThird, slotFirst, nameof(CreateWand.Platform),
+                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Platforms[item.createTile]),
+                    (Item item) => CurrentWand.SetItem(nameof(CreateWand.Platform), item.Clone(), CurrentSlot)),
+
+                [nameof(CreateWand.Torch)] = CreateItemSlot(slotFirst, slotSecond, nameof(CreateWand.Torch),
+                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Torch[item.createTile]),
+                    (Item item) => CurrentWand.SetItem(nameof(CreateWand.Torch), item.Clone(), CurrentSlot)),
+
+                [nameof(CreateWand.Chair)] = CreateItemSlot(slotSecond, slotSecond, nameof(CreateWand.Chair),
+                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Chairs),
+                    (Item item) => CurrentWand.SetItem(nameof(CreateWand.Chair), item.Clone(), CurrentSlot)),
+
+                [nameof(CreateWand.Workbench)] = CreateItemSlot(slotThird, slotSecond, nameof(CreateWand.Workbench),
+                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.WorkBenches),
+                    (Item item) => CurrentWand.SetItem(nameof(CreateWand.Workbench), item.Clone(), CurrentSlot)),
+
+                [nameof(CreateWand.Bed)] = CreateItemSlot(slotFirst, slotThird, nameof(CreateWand.Bed),
+                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Beds),
+                    (Item item) => CurrentWand.SetItem(nameof(CreateWand.Bed), item.Clone(), CurrentSlot))
             };
+
+            materialTitle = new("Materials", 0.5f, large: true) {
+                HAlign = 0.5f
+            };
+            materialTitle.Left.Set(0, 0f);
+            materialTitle.Top.Set(-40, 0f);
+            materialTitle.Width.Set(panelWidth, 0f);
+            materialTitle.Height.Set(40, 0f);
+            basePanel.Append(materialTitle);
+
+            styleButton = new(Language.GetText("Mods.ImproveGame.Architecture.StyleChange"), Color.White, "Images/UI/DisplaySlots_5");
+            styleButton.Left.Set(slotSecond, 0f);
+            styleButton.Top.Set(slotThird, 0f);
+            styleButton.Width.Set(104f, 0f);
+            styleButton.Height.Set(42f, 0f);
+            styleButton.OnClick += (UIMouseEvent _, UIElement _) => CreateWand.ToggleStyle();
+            basePanel.Append(styleButton);
         }
 
-        private bool SlotPlace(Item slotItem, Item mouseItem) {
-            return slotItem.type == mouseItem.type || mouseItem.IsAir;
-        }
+        private bool SlotPlace(Item slotItem, Item mouseItem) => slotItem.type == mouseItem.type || mouseItem.IsAir;
 
-        private ModItemSlot CreateItemSlot(float x, float y, Func<Item, Item, bool> canPlace) {
-            ModItemSlot slot = new(InventoryScale);
+        private ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null) {
+            ModItemSlot slot = new(InventoryScale, $"ImproveGame/Assets/Images/UI/Icon_{iconTextureName}");
             slot.Left.Set(x, 0f);
             slot.Top.Set(y, 0f);
-            slot.Width.Set(50f, 0f);
-            slot.Height.Set(50f, 0f);
-            slot.OnCanPlaceItem += canPlace;
+            slot.Width.Set(46f, 0f);
+            slot.Height.Set(46f, 0f);
+            if (canPlace is not null)
+                slot.OnCanPlaceItem += canPlace;
+            if (onItemChanged is not null)
+                slot.OnItemChange += onItemChanged;
             basePanel.Append(slot);
             return slot;
         }
@@ -104,8 +143,12 @@ namespace ImproveGame.UI.ArchitectureUI
             listeningElement.Recalculate();
         }
 
-
         public override void Update(GameTime gameTime) {
+            if (!Main.LocalPlayer.inventory.IndexInRange(CurrentSlot) || CurrentItem is null || CurrentItem.ModItem is not CreateWand) {
+                Close();
+                return;
+            }
+
             base.Update(gameTime);
 
             if (!Main.playerInventory && Visible) {
@@ -132,14 +175,32 @@ namespace ImproveGame.UI.ArchitectureUI
             }
         }
 
+        public static void RefreshSlots(CreateWand createWand) {
+            itemSlot[nameof(CreateWand.Block)].Item = createWand.Block;
+            itemSlot[nameof(CreateWand.Wall)].Item = createWand.Wall;
+            itemSlot[nameof(CreateWand.Platform)].Item = createWand.Platform;
+            itemSlot[nameof(CreateWand.Torch)].Item = createWand.Torch;
+            itemSlot[nameof(CreateWand.Chair)].Item = createWand.Chair;
+            itemSlot[nameof(CreateWand.Workbench)].Item = createWand.Workbench;
+            itemSlot[nameof(CreateWand.Bed)].Item = createWand.Bed;
+        }
+
         public static void Open() {
             Main.playerInventory = true;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Recipe.FindRecipes();
+
+            CurrentSlot = Main.LocalPlayer.selectedItem;
+            RefreshSlots(CurrentWand);
+
+            // UI刚加载（即OnInit）时还未加载翻译，因此我们要在这里设置一遍文本
+            materialTitle.SetText(Language.GetText("Mods.ImproveGame.Architecture.Materials"));
+            styleButton.SetText(Language.GetText("Mods.ImproveGame.Architecture.StyleChange"), 1f, Color.White);
         }
 
         public static void Close() {
+            CurrentSlot = -1;
             Visible = false;
             Main.blockInput = false;
             SoundEngine.PlaySound(SoundID.MenuClose);

@@ -2,7 +2,9 @@
 using ImproveGame.UI.ArchitectureUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -29,7 +31,7 @@ namespace ImproveGame.Content.Items
         private static Color[] Colors { get { return colors[Index]; } }
 
         // 切换样式
-        private static void ToggleStyle()
+        public static void ToggleStyle()
         {
             Index++;
             if (Index >= jianYu.Length)
@@ -38,12 +40,19 @@ namespace ImproveGame.Content.Items
             }
         }
 
+        [CloneByReference]
         internal Item Block;
+        [CloneByReference]
         internal Item Wall;
+        [CloneByReference]
         internal Item Platform;
+        [CloneByReference]
         internal Item Torch;
+        [CloneByReference]
         internal Item Chair;
+        [CloneByReference]
         internal Item Workbench;
+        [CloneByReference]
         internal Item Bed;
 
         public override void SaveData(TagCompound tag)
@@ -92,9 +101,11 @@ namespace ImproveGame.Content.Items
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
                 Point point = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint(); // 鼠标位置
-                Box box = DrawSystem.boxs[Box.NewBox(new Rectangle(point.X, point.Y, JianYu.Width, JianYu.Height),
-                    Color.Yellow * 0f, Color.Yellow * 0f)];
-                box.PreView = JianYu_PreView;
+                int boxIndex = Box.NewBox(new Rectangle(point.X, point.Y, JianYu.Width, JianYu.Height), Color.Yellow * 0f, Color.Yellow * 0f);
+                if (DrawSystem.boxs.IndexInRange(boxIndex)) {
+                    Box box = DrawSystem.boxs[boxIndex];
+                    box.PreView = JianYu_PreView;
+                }
             }
         }
 
@@ -107,7 +118,6 @@ namespace ImproveGame.Content.Items
             else if (player.altFunctionUse == 2)
             {
                 Item.mana = 0;
-                ToggleStyle();
                 // 暂时写的，以后再改
                 if (!Main.dedServ && player.whoAmI == Main.myPlayer) {
                     if (!ArchitectureGUI.Visible) {
@@ -121,112 +131,213 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
-        public override bool? UseItem(Player player)
-        {
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI)
-            {
-                if (player.altFunctionUse == 0)
+        /// <summary>
+        /// 从<see cref="string"/>类型的名称获取对应的物品实例，为了方便而设置
+        /// </summary>
+        /// <param name="itemType">物品实例名称</param>
+        /// <param name="item">物品实例</param>
+        internal void GetStoredItemInstance(string itemType, out Item item) {
+            item = new Item(ItemID.None);
+            switch (itemType) {
+                case nameof(Block):
+                    item = Block;
+                    return;
+                case nameof(Platform):
+                    item = Platform;
+                    return;
+                case nameof(Wall):
+                    item = Wall;
+                    return;
+                case nameof(Torch):
+                    item = Torch;
+                    return;
+                case nameof(Workbench):
+                    item = Workbench;
+                    return;
+                case nameof(Chair):
+                    item = Chair;
+                    return;
+                case nameof(Bed):
+                    item = Bed;
+                    return;
+            }
+        }
+
+        /// <summary>
+        /// 设置物品，用于UI和物品存储数据间的同步
+        /// </summary>
+        /// <param name="itemType">物品存储类型</param>
+        /// <param name="item">物品实例</param>
+        internal void SetItem(string itemType, Item item, int inventoryIndex) {
+            switch (itemType) {
+                case nameof(Block):
+                    Block = item;
+                    break;
+                case nameof(Platform):
+                    Platform = item;
+                    break;
+                case nameof(Wall):
+                    Wall = item;
+                    break;
+                case nameof(Torch):
+                    Torch = item;
+                    break;
+                case nameof(Workbench):
+                    Workbench = item;
+                    break;
+                case nameof(Chair):
+                    Chair = item;
+                    break;
+                case nameof(Bed):
+                    Bed = item;
+                    break;
+            }
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, inventoryIndex, Main.LocalPlayer.inventory[inventoryIndex].prefix);
+            }
+        }
+
+        public override bool? UseItem(Player player) {
+            if (!Main.dedServ && Main.myPlayer == player.whoAmI && player.altFunctionUse == 0) {
+                Point position = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint();
+
+                List<TileData> tileDatas = new();
+                SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
+
+                for (int i = 0; i < Colors.Length; i++) // 不会放置椅子和工作台
                 {
-                    Point position = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint();
+                    int x = position.X + i % JianYu.Width; // 物块在图片中的 X 坐标
+                    int y = position.Y + i / JianYu.Width; // Y 坐标
 
-                    List<TileData> tileDatas = new();
-                    SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
+                    TryKillTile(x, y, player);
+                    BongBong(new Vector2(x, y) * 16f, 16, 16);
 
-                    for (int i = 0; i < Colors.Length; i++) // 不会放置椅子和工作台
+                    TileSort tileSort = Color2TileSort(Colors[i]);
+
+                    // 墙体
+                    if (ShouldPlaceWall(tileSort)) 
                     {
-                        int x = position.X + i % JianYu.Width; // 物块在图片中的 X 坐标
-                        int y = position.Y + i / JianYu.Width; // Y 坐标
-
-                        TryKillTile(x, y, player);
-                        BongBong(new Vector2(x, y) * 16f, 16, 16);
-
-                        TileSort tileSort = Color2TileSort(Colors[i]);
-                        // 墙体
-                        if (tileSort != TileSort.Solid && tileSort != TileSort.Platform &&
-                            tileSort != TileSort.NoWall) // 平台或实体块位置不放置
-                        {
-                            MyUtils.ConsumeItem(player, (item) =>
-                            {
-                                if (item.createWall > -1)
-                                {
-                                    WorldGen.KillWall(x, y);
-                                    if (Main.tile[x, y].WallType == 0)
-                                    {
-                                        WorldGen.PlaceWall(x, y, item.createWall, true);
-                                        return true;
-                                    }
-                                }
-                                return false;
-                            });
+                        if (Wall.IsAir || Wall.createWall <= WallID.None) {
+                            PickItemInInventory(player, (item) => TryPlaceWall(item, x, y), true);
                         }
-
-                        if (tileSort != TileSort.None) // 物块
-                        {
-                            if (tileSort == TileSort.Torch || tileSort == TileSort.Chair ||
-                                tileSort == TileSort.WorkBenche || tileSort == TileSort.Table ||
-                                tileSort == TileSort.Bed) // 火把，椅子，工作台，桌子，床
-                            {
-                                tileDatas.Add(new(tileSort, x, y));
-                            }
-                            else
-                            {
-                                if (!Main.tile[x, y].HasTile) // 考虑到玩家和位置重叠导致不强制放置就放不出来的问题
-                                {
-                                    MyUtils.ConsumeItem(player, (item) =>
-                                    {
-                                        if (item.createTile > -1 &&
-                                        ((tileSort == TileSort.Solid && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile]) ||
-                                        (tileSort == TileSort.Platform && TileID.Sets.Platforms[item.createTile])) &&
-                                        WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
-                                        {
-                                            return true;
-                                        }
-                                        return false;
-                                    });
-                                }
-                            }
+                        else if (TryPlaceWall(Wall, x, y)) {
+                            TryConsumeItem(ref Wall, player);
                         }
                     }
 
-                    for (int i = 0; i < tileDatas.Count; i++) // 火把，椅子，工作台，桌子，床
-                    {
-                        MyUtils.ConsumeItem(player, (item) =>
-                        {
-                            if (!Main.tile[tileDatas[i].x, tileDatas[i].y].HasTile && item.createTile > -1 &&
-                            ((tileDatas[i].tileSort == TileSort.Torch && TileID.Sets.Torch[item.createTile]) ||
-                            (tileDatas[i].tileSort == TileSort.WorkBenche && item.createTile == TileID.WorkBenches) ||
-                            (tileDatas[i].tileSort == TileSort.Chair && item.createTile == TileID.Chairs) ||
-                            (tileDatas[i].tileSort == TileSort.Table && item.createTile == TileID.Tables) ||
-                            (tileDatas[i].tileSort == TileSort.Bed && item.createTile == TileID.Beds)) &&
-                            WorldGen.PlaceTile(tileDatas[i].x, tileDatas[i].y, item.createTile, true, false, player.whoAmI, item.placeStyle))
-                            {
-                                if (item.createTile == TileID.Chairs)
-                                {
-                                    Main.tile[tileDatas[i].x, tileDatas[i].y].TileFrameX += 18;
-                                    Main.tile[tileDatas[i].x, tileDatas[i].y - 1].TileFrameX += 18;
-                                }
-                                return true;
-                            }
-                            return false;
-                        });
+                    if (!Main.tile[x, y].HasTile) {
+                        switch (tileSort) {
+                            case TileSort.Block:
+                                TryPlace(ref Block, player, x, y, TryPlaceTile);
+                                break;
+                            case TileSort.Platform:
+                                TryPlace(ref Platform, player, x, y, TryPlacePlatform);
+                                break;
+                        }
                     }
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, JianYu.Width, JianYu.Height);
+
+                    if (tileSort != TileSort.None) // 物块
+                    {
+                        if (tileSort == TileSort.Torch || tileSort == TileSort.Chair ||
+                            tileSort == TileSort.Workbench || tileSort == TileSort.Table ||
+                            tileSort == TileSort.Bed) // 火把，椅子，工作台，桌子，床
+                        {
+                            tileDatas.Add(new(tileSort, x, y));
+                        }
+                    }
                 }
+
+                for (int i = 0; i < tileDatas.Count; i++) // 火把，椅子，工作台，桌子，床
+                {
+                    int x = tileDatas[i].x;
+                    int y = tileDatas[i].y;
+                    if (Main.tile[x, y].HasTile) {
+                        continue;
+                    }
+
+                    // 进行其他的放置尝试
+                    switch (tileDatas[i].tileSort) {
+                        case TileSort.Torch:
+                            TryPlace(ref Torch, player, x, y, (Item item) => TileID.Sets.Torch[item.createTile]);
+                            break;
+                        case TileSort.Workbench:
+                            TryPlace(ref Workbench, player, x, y, (Item item) => item.createTile == TileID.WorkBenches);
+                            break;
+                        case TileSort.Chair:
+                            TryPlace(ref Chair, player, x, y, (Item item) => item.createTile == TileID.Chairs);
+                            Main.tile[tileDatas[i].x, tileDatas[i].y].TileFrameX += 18;
+                            Main.tile[tileDatas[i].x, tileDatas[i].y - 1].TileFrameX += 18;
+                            break;
+                        // 目前似乎没有桌子的需求，而且我整UI的时候也没给桌子整
+                        //case TileSort.Table:
+                        //    TryPlace(ref Table, player, x, y, (Item item) => item.createTile == TileID.Tables);
+                        //    break;
+                        case TileSort.Bed:
+                            TryPlace(ref Bed, player, x, y, (Item item) => item.createTile == TileID.Beds);
+                            break;
+                    }
+                }
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, JianYu.Width, JianYu.Height);
+                }
+
+                // 重新刷新合成配方，这样如果一个物品没了就可以把它的合成配方刷新掉
+                Recipe.FindRecipes();
+                // 同步UI物品
+                ArchitectureGUI.RefreshSlots(this);
             }
             return true;
+        }
+
+        /// <summary>
+        /// 为了避免代码过长和减少重复工作，设置的放置判断“总开关”
+        /// </summary>
+        /// <param name="storedItem">指向仓库物品，即可能的存储物</param>
+        /// <param name="player">玩家，一般应该是<see cref="Main.LocalPlayer"></param>
+        /// <param name="x">放置目标X坐标</param>
+        /// <param name="y">放置目标Y坐标</param>
+        /// <param name="tryMethod">进行放置尝试的方法，只有符合条件的才会放置</param>
+        private static void TryPlace(ref Item storedItem, Player player, int x, int y, Func<Item, bool> tryMethod) {
+            // 没有存储物品，在物品栏里面找    
+            if (storedItem.IsAir || storedItem.createTile < TileID.Dirt) {
+                PickItemInInventory(player, (item) =>
+                    tryMethod(item) &&
+                    WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle),
+                    true);
+            }
+            // 进行存储物品的放置尝试
+            else if (tryMethod(storedItem) && WorldGen.PlaceTile(x, y, storedItem.createTile, true, true, player.whoAmI, storedItem.placeStyle)) {
+                TryConsumeItem(ref storedItem, player);
+            }
+        }
+
+        private static bool TryPlacePlatform(Item item) =>
+            TileID.Sets.Platforms[item.createTile];
+
+        private static bool TryPlaceTile(Item item) => 
+            Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile];
+
+        private static bool TryPlaceWall(Item item, int x, int y) {
+            if (item.createWall > -1) {
+                WorldGen.KillWall(x, y);
+                if (Main.tile[x, y].WallType == 0) {
+                    WorldGen.PlaceWall(x, y, item.createWall, true);
+                    return true;
+                }
+            }
+            return false;
         }
 
         private static readonly Dictionary<TileSort, int> MaterialConsume = new()
                 {
                     { TileSort.None, 0 },
-                    { TileSort.Solid, 0 },
+                    { TileSort.Block, 0 },
                     { TileSort.Wall, 0 },
                     { TileSort.Platform, 0 },
                     { TileSort.Torch, 0 },
                     { TileSort.Chair, 0 },
                     { TileSort.Table, 0 },
-                    { TileSort.WorkBenche, 0 },
+                    { TileSort.Workbench, 0 },
                     { TileSort.Bed, 0 },
                     { TileSort.NoWall, 0 }
                 };
@@ -243,21 +354,50 @@ namespace ImproveGame.Content.Items
             {
                 tileSort = Color2TileSort(Colors[i]);
                 MaterialConsume[tileSort]++;
-                if (tileSort != TileSort.Solid && tileSort != TileSort.Platform && tileSort != TileSort.NoWall)
+                if (tileSort != TileSort.Block && tileSort != TileSort.Platform && tileSort != TileSort.NoWall)
                 {
                     MaterialConsume[TileSort.Wall]++;
                 }
             }
         }
 
+        public override void NetSend(BinaryWriter writer) {
+            ItemIO.Send(Block, writer, true, true);
+            ItemIO.Send(Wall, writer, true, true);
+            ItemIO.Send(Platform, writer, true, true);
+            ItemIO.Send(Torch, writer, true, true);
+            ItemIO.Send(Chair, writer, true, true);
+            ItemIO.Send(Workbench, writer, true, true);
+            ItemIO.Send(Bed, writer, true, true);
+        }
+
+        public override void NetReceive(BinaryReader reader) {
+            Block = ItemIO.Receive(reader, true, true);
+            Wall = ItemIO.Receive(reader, true, true);
+            Platform = ItemIO.Receive(reader, true, true);
+            Torch = ItemIO.Receive(reader, true, true);
+            Chair = ItemIO.Receive(reader, true, true);
+            Workbench = ItemIO.Receive(reader, true, true);
+            Bed = ItemIO.Receive(reader, true, true);
+        }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             CalculateConsume();
-            tooltips.Add(new(Mod, "MaterialConsume", $"[c/ffff00:{GetText("TileSort.MaterialsRequired")}]"));
-            foreach (var item in MaterialConsume)
-            {
-                if (item.Key != TileSort.None && item.Value > 0)
-                    tooltips.Add(new(Mod, $"{item.Key}", $"[c/ffff00:{GetText($"TileSort.{item.Key}")}: {MaterialConsume[item.Key]}]"));
+            tooltips.Add(new(Mod, "MaterialConsume", $"[c/ffff00:{GetText("Architecture.MaterialsRequired")}]"));
+            foreach (var item in MaterialConsume) {
+                if (item.Key != TileSort.None && item.Value > 0) {
+                    GetStoredItemInstance(item.Key.ToString(), out var storedItem);
+                    int stack = 0;
+                    if (storedItem is not null && !storedItem.IsAir) {
+                        stack = storedItem.stack;
+                    }
+
+                    string neededText = $"[c/ffff00:{GetText($"Architecture.{item.Key}")}: {MaterialConsume[item.Key]}]";
+                    string hasText = $"[c/00a7df:{GetText($"Architecture.StoredMaterials", stack)}]";
+
+                    tooltips.Add(new(Mod, $"MaterialConsume.{item.Key}", $"{neededText}   {hasText}"));
+                }
             }
         }
 
@@ -286,7 +426,7 @@ namespace ImproveGame.Content.Items
         {
             if (color == Color.Red)
             {
-                return TileSort.Solid; // 实体块
+                return TileSort.Block; // 实体块
             }
             else if (color == Color.Black)
             {
@@ -306,7 +446,7 @@ namespace ImproveGame.Content.Items
             }
             else if (color == Color.Blue)
             {
-                return TileSort.WorkBenche; // 工作台
+                return TileSort.Workbench; // 工作台
             }
             else if (color == ZiSe)
             {

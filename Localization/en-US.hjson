@@ -81,8 +81,8 @@ Mods:
                 Can be affected by mining speed
                 The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
                 Mana cost depends on the number of tiles destroyed
-                Right click to swich between the two modes
-                Right click while selecting area to cancel
+                <right> to swich between the two modes
+                <right> while selecting area to cancel
                 Automatically uses mana potion if necessary
                 '''
             SpaceWand:
@@ -91,7 +91,7 @@ Mods:
                 Consumes the first platform in your inventory
                 Can swap blocks if block swap is enabled
                 Can place at most 500 platforms once
-                Right click to cancel placing
+                <right> to cancel placing
                 'I pity these tools'
                 '''
             StarburstWand:
@@ -101,8 +101,8 @@ Mods:
                 Can be affected by mining speed
                 The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
                 Mana cost depends on the number of tiles destroyed
-                Right click to swich between the two modes
-                Right click while selecting area to cancel
+                <right> to swich between the two modes
+                <right> while selecting area to cancel
                 Automatically uses mana potion if necessary
                 '''
             WallPlace:
@@ -115,9 +115,11 @@ Mods:
                 '''
             CreateWand:
                 '''
-                Builds a house using materieals in your inventory
-                Right click to change the house style
+                Builds a house using materials stored in it
+                If there are no materials stored, will use the materials in your inventory
+                <right> to open the material storage and house style switch panel
                 Please prepare enough materials, or the house will not be built completely!
+                [c/ff0000:If the item is discarded, the stored materials inside will not be returned!]
                 '''
         }
         CombatText_Item:
@@ -141,15 +143,18 @@ Mods:
         {
             SuperVault: Huge Inventory
         }
-        TileSort:
+        Architecture:
         {
+            Materials: "House Materials"
+            StoredMaterials: "(Stored: {0})"
+            StyleChange: "Switch"
             MaterialsRequired: "Materials Needed: "
-            Solid: Block
+            Block: Block
             Platform: Platform
             Torch: Torch
             Chair: Chair
             Table: Table
-            WorkBenche: Work Benche
+            Workbench: Workbench
             Wall: Wall
             Bed: Bed
         }

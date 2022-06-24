@@ -159,9 +159,9 @@ namespace ImproveGame
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string GetText(string str)
+        public static string GetText(string str, params object[] arg)
         {
-            return Language.GetTextValue($"Mods.ImproveGame.{str}");
+            return Language.GetTextValue($"Mods.ImproveGame.{str}", arg);
         }
 
         public static Asset<Texture2D> GetTexture(string path)
@@ -597,27 +597,36 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// 消耗物品
+        /// 从物品栏里找到对应物品，返回值为在<see cref="Player.inventory"/>中的索引
         /// </summary>
-        /// <param name="player"></param>
-        /// <param name="judge"></param>
-        /// <param name="amount"></param>
-        public static void ConsumeItem(Player player, JudgeItem judge)
+        /// <param name="player">对应玩家</param>
+        /// <param name="shouldPick">选取物品的依据</param>
+        /// <param name="tryConsume">是否尝试消耗</param>
+        /// <returns></returns>
+        public static int PickItemInInventory(Player player, Func<Item, bool> shouldPick, bool tryConsume)
         {
             for (int i = 0; i < 50; i++)
             {
-                Item item = player.inventory[i];
-                if (item.type != ItemID.None && item.stack > 0 && judge(item))
-                {
-                    if (item.consumable && ItemLoader.ConsumeItem(item, player))
-                    {
-                        item.stack--;
-                        if (item.stack < 1)
-                            player.inventory[i].SetDefaults(0);
+                ref Item item = ref player.inventory[i];
+                if (!item.IsAir && shouldPick.Invoke(item)) {
+                    if (tryConsume) {
+                        TryConsumeItem(ref item, player);
                     }
-                    return;
+                    return i;
                 }
             }
+            return -1;
+        }
+
+        public static bool TryConsumeItem(ref Item item, Player player) {
+            if (!item.IsAir && item.consumable && ItemLoader.ConsumeItem(item, player)) {
+                item.stack--;
+                if (item.stack < 1) {
+                    item.TurnToAir();
+                }
+                return true;
+            }
+            return false;
         }
     }
 }

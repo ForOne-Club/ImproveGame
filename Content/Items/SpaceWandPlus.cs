@@ -152,7 +152,7 @@ namespace ImproveGame.Content.Items
                             {
                                 SoundEngine.PlaySound(SoundID.Dig);
                                 WorldGen.PlaceTile(i, j, item.createTile, true, true, player.whoAmI, item.placeStyle);
-                                MyUtils.ConsumeItem(player, JudgePlatform);
+                                PickItemInInventory(player, JudgePlatform, true);
                             }
                         }
                     }
@@ -184,6 +184,6 @@ namespace ImproveGame.Content.Items
             return rect;
         }
 
-        private readonly static JudgeItem JudgePlatform = (item) => { return item.createTile > -1 && TileID.Sets.Platforms[item.createTile]; };
+        private static bool JudgePlatform(Item item) => item.createTile > -1 && TileID.Sets.Platforms[item.createTile];
     }
 }

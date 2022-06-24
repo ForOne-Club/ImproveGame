@@ -19,6 +19,13 @@ namespace ImproveGame.UI.UIElements
     /// </summary>
     public class ModItemSlot : UIElement
     {
+        /// <summary>
+        /// 无物品时显示的贴图
+        /// </summary>
+        private readonly Asset<Texture2D> _emptyTexture;
+        public float emptyTextureScale = 1f;
+        public float emptyTextureOpacity = 0.5f;
+
         public Item Item;
         public float Scale = 1f;
 
@@ -31,17 +38,25 @@ namespace ImproveGame.UI.UIElements
         /// </summary>
         public bool AllowFavorite;
 
-        public ModItemSlot(float scale = 0.85f) {
+        /// <summary>
+        /// 物品槽UI元件
+        /// </summary>
+        /// <param name="scale">物品在槽内显示的大小</param>
+        /// <param name="emptyTexturePath">当槽内无物品时，显示的贴图</param>
+        public ModItemSlot(float scale = 0.85f, string emptyTexturePath = null) {
             Item = new Item();
             Item.SetDefaults();
             Scale = scale;
             AllowSwapEquip = false;
             AllowFavorite = true;
+            if (emptyTexturePath is not null && ModContent.HasAsset(emptyTexturePath)) {
+                _emptyTexture = ModContent.Request<Texture2D>(emptyTexturePath);
+            }
         }
 
         private void SetCursorOverride() {
             if (!Item.IsAir) {
-                if (ItemSlot.ShiftInUse) {
+                if (!Item.favorited && ItemSlot.ShiftInUse) {
                     Main.cursorOverride = 8; // 快捷放回物品栏图标
                 }
                 if (Main.keyState.IsKeyDown(Main.FavoriteKey)) {
@@ -72,14 +87,25 @@ namespace ImproveGame.UI.UIElements
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch) {
+            if (Item is null) {
+                Item = new Item();
+                Item.SetDefaults();
+                ItemChange();
+            }
+
+            int lastStack = Item.stack;
+            int lastType = Item.type;
             if (IsMouseHovering) {
-                DrawText();
                 SetCursorOverride();
                 // 伪装，然后进行原版右键尝试
                 // 千万不要伪装成箱子，因为那样多人会传同步信息，然后理所当然得出Bug
                 if (Item is not null && !Item.IsAir) {
                     ItemSlot.RightClick(ref Item, AllowSwapEquip ? ItemSlot.Context.InventoryItem : ItemSlot.Context.CreativeSacrifice);
                 }
+                DrawText();
+            }
+            if (lastStack != Item.stack || lastType != Item.type) {
+                ItemChange();
             }
 
             Vector2 origin = GetDimensions().Position();
@@ -93,26 +119,22 @@ namespace ImproveGame.UI.UIElements
             temp[10] = Item;
             ItemSlot.Draw(Main.spriteBatch, temp, context, 10, origin);
 
+            if (Item.IsAir && _emptyTexture is not null) {
+                origin = _emptyTexture.Size() / 2f;
+                Main.spriteBatch.Draw(_emptyTexture.Value, GetDimensions().Center(), null, Color.White * emptyTextureOpacity, 0f, origin, emptyTextureScale, SpriteEffects.None, 0f);
+            }
+
             Main.inventoryScale = oldScale;
         }
 
         public void DrawText() {
-            if (!Item.IsAir) {
+            if (!Item.IsAir && (Main.mouseItem is null || Main.mouseItem.IsAir)) {
                 Main.HoverItem = Item.Clone();
                 Main.instance.MouseText(string.Empty);
             }
         }
 
-        public override void Click(UIMouseEvent evt) {
-            base.Click(evt);
-
-            if (Item is null) {
-                Item = new Item();
-                Item.SetDefaults();
-            }
-
-            SetCursorOverride(); // Click在Update执行，因此必须在这里设置一次
-
+        public void LeftClickItem() {
             // 放大镜图标 - 输入到聊天框
             if (Main.cursorOverride == 2) {
                 if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item), Vector2.One))
@@ -159,6 +181,27 @@ namespace ImproveGame.UI.UIElements
             }
         }
 
+        public override void MouseDown(UIMouseEvent evt) {
+            base.MouseDown(evt);
+
+            if (Item is null) {
+                Item = new Item();
+                Item.SetDefaults();
+                ItemChange();
+            }
+
+            int lastStack = Item.stack;
+            int lastType = Item.type;
+            int lastPrefix = Item.prefix;
+
+            SetCursorOverride(); // Click在Update执行，因此必须在这里设置一次
+            LeftClickItem();
+
+            if (lastStack != Item.stack || lastType != Item.type || lastPrefix != Item.prefix) {
+                ItemChange();
+            }
+        }
+
         /// <summary>
         /// 可以在这里写额外的物品放置判定，第一个Item是当前槽位存储物品，第二个Item是<see cref="Main.mouseItem">
         /// </summary>
@@ -177,7 +220,22 @@ namespace ImproveGame.UI.UIElements
 
             return canPlace;
         }
-        
+
+        /// <summary>
+        /// 物品改变后执行，可以写保存之类的
+        /// </summary>
+        internal Action<Item> OnItemChange;
+        private void ItemChange() {
+            if (Item is null) {
+                Item = new Item();
+                Item.SetDefaults();
+            }
+
+            if (OnItemChange is not null) {
+                OnItemChange.Invoke(Item);
+            }
+        }
+
         // 原版里这个是private的，我正在请求tML把这个改成public，在那之前就先用这个吧（懒得反射了）
         private static void SellOrTrash(Item[] inv, int context, int slot) {
             Player player = Main.player[Main.myPlayer];
