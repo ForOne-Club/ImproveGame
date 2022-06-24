@@ -37,7 +37,6 @@ namespace ImproveGame.Interface.GUI
             modeButton.SetBackgroundImage(backgroundImage);
             modeButton.Width.Set(40, 0f);
             modeButton.Height.Set(40, 0f);
-            modeButton.OnRightMouseDown += RightClickClose;
             modeButton.DrawColor += () => Color.White;
             modeButton.OnMouseDown += SwitchMode;
             Append(modeButton);
@@ -49,7 +48,6 @@ namespace ImproveGame.Interface.GUI
             tileButton.SetBackgroundImage(backgroundImage);
             tileButton.Width.Set(40, 0f);
             tileButton.Height.Set(40, 0f);
-            tileButton.OnRightMouseDown += RightClickClose;
             tileButton.DrawColor += () => BrustWandSystem.TileMode ? Color.White : inactiveColor;
             tileButton.OnMouseDown += (UIMouseEvent _, UIElement _) => BrustWandSystem.TileMode = !BrustWandSystem.TileMode;
             Append(tileButton);
@@ -61,17 +59,9 @@ namespace ImproveGame.Interface.GUI
             wallButton.SetBackgroundImage(backgroundImage);
             wallButton.Width.Set(40, 0f);
             wallButton.Height.Set(40, 0f);
-            wallButton.OnRightMouseDown += RightClickClose;
             wallButton.DrawColor += () => BrustWandSystem.WallMode ? Color.White : inactiveColor;
             wallButton.OnMouseDown += (UIMouseEvent _, UIElement _) => BrustWandSystem.WallMode = !BrustWandSystem.WallMode;
             Append(wallButton);
-        }
-
-        /// <summary>
-        /// 右键点击按钮也会关闭，就跟蓝图一样
-        /// </summary>
-        private void RightClickClose(UIMouseEvent evt, UIElement listeningElement) {
-            Close();
         }
 
         private void SwitchMode(UIMouseEvent evt, UIElement listeningElement) {
@@ -84,8 +74,8 @@ namespace ImproveGame.Interface.GUI
         /// </summary>
         public static void Open() {
             modeButton.SetCenter(Main.mouseX, Main.mouseY);
-            tileButton.SetCenter(Main.mouseX - 40, Main.mouseY - 40);
-            wallButton.SetCenter(Main.mouseX + 30, Main.mouseY - 40);
+            tileButton.SetCenter(Main.mouseX - 44, Main.mouseY);
+            wallButton.SetCenter(Main.mouseX + 44, Main.mouseY);
             modeButton.SetImage(BrustWandSystem.FixedMode ? fixedModeButton : freeModeButton);
             Visible = true;
         }
