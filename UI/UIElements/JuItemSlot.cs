@@ -5,57 +5,57 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.UI.Chat;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.UI;
+using Terraria.UI.Chat;
 
 namespace ImproveGame.UI.UIElements
 {
     public class JuItemSlot : UIElement
     {
-        private static readonly Texture2D backgroundTexture = TextureAssets.InventoryBack9.Value;
-        private Asset<Texture2D> texture
-        {
-            get
-            {
+        private static Texture2D Back9 {
+            get => TextureAssets.InventoryBack9.Value;
+        }
+        private static Texture2D Back10 {
+            get => TextureAssets.InventoryBack10.Value;
+        }
+        private Asset<Texture2D> texture {
+            get {
                 Main.instance.LoadItem(item.type);
                 return TextureAssets.Item[item.type];
             }
         }
         public Item[] SuperVault;
         public int index;
-        public Item item
-        {
-            get
-            {
+        public Item item {
+            get {
                 return SuperVault[index];
             }
-            set
-            {
+            set {
                 SuperVault[index] = value;
             }
         }
 
         public UIText text;
 
-        public JuItemSlot(Item[] SuperVault, int index)
-        {
+        public JuItemSlot(Item[] SuperVault, int index) {
             this.SuperVault = SuperVault;
             this.index = index;
-            Width.Set(backgroundTexture.Width, 0f);
-            Height.Set(backgroundTexture.Height, 0f);
+            Width.Set(Back9.Width, 0f);
+            Height.Set(Back9.Height, 0f);
 
-            text = new UIText("")
-            {
+            text = new UIText("") {
                 VAlign = 0.8f
             };
             text.Left.Set(0, 0.2f);
             Append(text);
 
-            UIText text2 = new UIText((index + 1).ToString(), 0.75f)
-            {
+            UIText text2 = new UIText((index + 1).ToString(), 0.75f) {
                 VAlign = 0.15f
             };
             text2.Left.Set(0, 0.15f);
@@ -63,45 +63,35 @@ namespace ImproveGame.UI.UIElements
         }
 
         // 左键点击事件
-        public override void MouseDown(UIMouseEvent evt)
-        {
+        public override void MouseDown(UIMouseEvent evt) {
             Player player = Main.LocalPlayer;
-            if (NotItem(Main.mouseItem) && !NotItem(item))
-            {
+            if (Main.mouseItem.IsAir && !item.IsAir) {
                 // Ctrl 放入垃圾桶
-                if (Main.keyState.IsKeyDown(Keys.LeftControl) || PlayerInput.GetPressedKeys().Contains(Keys.RightControl))
-                {
+                if (Main.keyState.IsKeyDown(Keys.LeftControl) || PlayerInput.GetPressedKeys().Contains(Keys.RightControl)) {
                     player.trashItem = item;
                     item = new Item();
                 }
-                else
-                {
+                else {
                     Main.mouseItem = item;
                     item = new Item();
                 }
             }
-            else if (NotItem(item) && !NotItem(Main.mouseItem))
-            {
+            else if (item.IsAir && !Main.mouseItem.IsAir) {
                 item = Main.mouseItem;
                 Main.mouseItem = new Item();
             }
-            else if (!NotItem(Main.mouseItem) && !NotItem(item))
-            {
-                if (Main.mouseItem.type == item.type && item.stack < item.maxStack)
-                {
-                    if (item.stack + Main.mouseItem.stack < Main.mouseItem.maxStack)
-                    {
+            else if (!Main.mouseItem.IsAir && !item.IsAir) {
+                if (Main.mouseItem.type == item.type && item.stack < item.maxStack) {
+                    if (item.stack + Main.mouseItem.stack < Main.mouseItem.maxStack) {
                         item.stack += Main.mouseItem.stack;
                         Main.mouseItem = new Item();
                     }
-                    else
-                    {
+                    else {
                         Main.mouseItem.stack -= item.maxStack - item.stack;
                         item.stack = item.maxStack;
                     }
                 }
-                else
-                {
+                else {
                     Item mouseItem = Main.mouseItem;
                     Main.mouseItem = item;
                     item = mouseItem;
@@ -113,20 +103,16 @@ namespace ImproveGame.UI.UIElements
         /// <summary>
         /// 右键持续按住物品，向鼠标物品堆叠数量
         /// </summary>
-        public void RightMouseKeepPressItem()
-        {
-            if (Main.mouseItem.type == item.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
-            {
+        public void RightMouseKeepPressItem() {
+            if (Main.mouseItem.type == item.type && Main.mouseItem.stack < Main.mouseItem.maxStack) {
                 Main.mouseItem.stack++;
                 item.stack--;
             }
-            else if (NotItem(Main.mouseItem) && !NotItem(item) && item.maxStack > 1)
-            {
+            else if (Main.mouseItem.IsAir && !item.IsAir && item.maxStack > 1) {
                 Main.mouseItem = new Item(item.type, 1);
                 item.stack--;
             }
-            if (item.type != ItemID.None && item.stack < 1)
-            {
+            if (item.type != ItemID.None && item.stack < 1) {
                 item = new Item();
             }
         }
@@ -137,8 +123,7 @@ namespace ImproveGame.UI.UIElements
         /// 鼠标右键按下
         /// </summary>
         /// <param name="evt"></param>
-        public override void RightMouseDown(UIMouseEvent evt)
-        {
+        public override void RightMouseDown(UIMouseEvent evt) {
             rightMouseDownTimer = 0;
             RightMouseKeepPressItem();
         }
@@ -147,8 +132,7 @@ namespace ImproveGame.UI.UIElements
         /// 鼠标右键放开
         /// </summary>
         /// <param name="evt"></param>
-        public override void RightMouseUp(UIMouseEvent evt)
-        {
+        public override void RightMouseUp(UIMouseEvent evt) {
             rightMouseDownTimer = -1;
         }
 
@@ -156,24 +140,19 @@ namespace ImproveGame.UI.UIElements
         /// Update 更新
         /// </summary>
         /// <param name="gameTime"></param>
-        public override void Update(GameTime gameTime)
-        {
+        public override void Update(GameTime gameTime) {
             base.Update(gameTime);
             // 右键长按物品持续拿出
-            if (rightMouseDownTimer >= 60)
-            {
+            if (rightMouseDownTimer >= 60) {
                 RightMouseKeepPressItem();
             }
-            else if (rightMouseDownTimer >= 30 && rightMouseDownTimer % 3 == 0)
-            {
+            else if (rightMouseDownTimer >= 30 && rightMouseDownTimer % 3 == 0) {
                 RightMouseKeepPressItem();
             }
-            else if (rightMouseDownTimer >= 15 && rightMouseDownTimer % 6 == 0)
-            {
+            else if (rightMouseDownTimer >= 15 && rightMouseDownTimer % 6 == 0) {
                 RightMouseKeepPressItem();
             }
-            if (rightMouseDownTimer != -1)
-            {
+            if (rightMouseDownTimer != -1) {
                 rightMouseDownTimer++;
             }
         }
@@ -182,47 +161,44 @@ namespace ImproveGame.UI.UIElements
         /// 绘制内容
         /// </summary>
         /// <param name="sb"></param>
-        protected override void DrawSelf(SpriteBatch sb)
-        {
+        protected override void DrawSelf(SpriteBatch sb) {
             // 按下 Ctrl 改变鼠标指针外观
-            if (ContainsPoint(Main.MouseScreen) && !NotItem(item) && (Main.keyState.IsKeyDown(Keys.LeftControl) ||
-                PlayerInput.GetPressedKeys().Contains(Keys.RightControl)))
-            {
-                Main.cursorOverride = 5;
+            if (IsMouseHovering && !item.IsAir) {
+                SetCursorOverride();
             }
             // 绘制背景框
             CalculatedStyle dimensions = GetDimensions();
-            sb.Draw(backgroundTexture, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f,
-                SpriteEffects.None, 0f);
+            if (item.favorited) {
+                sb.Draw(Back10, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f,
+                    SpriteEffects.None, 0f);
+            }
+            else {
+                sb.Draw(Back9, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f,
+                    SpriteEffects.None, 0f);
+            }
 
             // 绘制物品
-            if (!NotItem(item))
-            {
-                if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
-                {
+            if (!item.IsAir) {
+                if (item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                     sb.End();
                     sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                         DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
                     Color lerpColor;
                     float time = ImprovePlayer.G(Main.LocalPlayer).PlayerTimer;
-                    if (time % 60f < 30)
-                    {
+                    if (time % 60f < 30) {
                         lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
                     }
-                    else
-                    {
+                    else {
                         lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
                     }
                     MyAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
                     MyAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
                 }
                 Rectangle rectangle;
-                if (Main.itemAnimations[item.type] == null)
-                {
+                if (Main.itemAnimations[item.type] == null) {
                     rectangle = texture.Frame(1, 1, 0, 0);
                 }
-                else
-                {
+                else {
                     rectangle = Main.itemAnimations[item.type].GetFrame(texture.Value);
                 }
                 float textureSize = 30f;
@@ -236,8 +212,7 @@ namespace ImproveGame.UI.UIElements
                     new Rectangle?(rectangle), item.GetColor(Color.White), 0f, Vector2.Zero, size,
                     SpriteEffects.None, 0f);
 
-                if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
-                {
+                if (item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                     item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
                     sb.End();
                     sb.Begin(0, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
@@ -245,23 +220,93 @@ namespace ImproveGame.UI.UIElements
                 }
             }
             // 物品信息
-            if (IsMouseHovering)
-            {
+            if (IsMouseHovering) {
                 Main.hoverItemName = item.Name;
                 Main.HoverItem = item.Clone();
             }
-            text.SetText(NotItem(item) || item.stack <= 1 ? "" : item.stack.ToString(), 0.8f, false);
+            text.SetText(item.IsAir || item.stack <= 1 ? "" : item.stack.ToString(), 0.8f, false);
             text.Recalculate();
         }
 
         /// <summary>
-        /// 不是物品
+        /// 改原版的<see cref="Main.cursorOverride"/>
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static bool NotItem(Item item)
-        {
-            return item.type == ItemID.None || item.stack < 0;
+        private void SetCursorOverride() {
+            if (!item.IsAir) {
+                if (!item.favorited && ItemSlot.ShiftInUse) {
+                    Main.cursorOverride = 8; // 快捷放回物品栏图标
+                }
+                if (Main.keyState.IsKeyDown(Main.FavoriteKey)) {
+                    Main.cursorOverride = 3; // 收藏图标
+                    if (Main.drawingPlayerChat) {
+                        Main.cursorOverride = 2; // 放大镜图标 - 输入到聊天框
+                    }
+                }
+                void TryTrashCursorOverride() {
+                    if (!item.favorited) {
+                        if (Main.npcShop > 0) {
+                            Main.cursorOverride = 10; // 卖出图标
+                        }
+                        else {
+                            Main.cursorOverride = 6; // 垃圾箱图标
+                        }
+                    }
+                }
+                if (ItemSlot.ControlInUse && ItemSlot.Options.DisableLeftShiftTrashCan && !ItemSlot.ShiftForcedOn) {
+                    TryTrashCursorOverride();
+                }
+                if (!ItemSlot.Options.DisableLeftShiftTrashCan && ItemSlot.ShiftInUse) {
+                    TryTrashCursorOverride();
+                }
+            }
+        }
+
+        private void LeftClickItem() {
+            // 放大镜图标 - 输入到聊天框
+            if (Main.cursorOverride == 2) {
+                if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(item), Vector2.One))
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+                return;
+            }
+
+            // 收藏图标
+            if (Main.cursorOverride == 3) {
+                item.favorited = !item.favorited;
+                SoundEngine.PlaySound(SoundID.MenuTick);
+                return;
+            }
+
+            // 垃圾箱图标
+            if (Main.cursorOverride == 6) {
+                // 假装自己是一个物品栏物品
+                
+                return;
+            }
+
+            // 放回物品栏图标
+            if (Main.cursorOverride == 8) {
+                item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, item, GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                SoundEngine.PlaySound(SoundID.Grab);
+                return;
+            }
+
+            // 常规单点
+            if (Main.mouseItem is not null && CanPlaceItem()) {
+                // type不同直接切换吧
+                if (Item.type != Main.mouseItem.type || Item.prefix != Main.mouseItem.prefix) {
+                    SwapItem(ref Main.mouseItem);
+                    SoundEngine.PlaySound(SoundID.Grab);
+                    return;
+                }
+                // type相同，里面的能堆叠，放进去
+                if (!Item.IsAir && ItemLoader.CanStack(Item, Main.mouseItem)) {
+                    int stackAvailable = Item.maxStack - Item.stack;
+                    int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);
+                    Main.mouseItem.stack -= stackAddition;
+                    Item.stack += stackAddition;
+                    SoundEngine.PlaySound(SoundID.Grab);
+                }
+            }
         }
     }
 }
