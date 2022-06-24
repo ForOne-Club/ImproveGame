@@ -17,7 +17,7 @@ namespace ImproveGame.Content.Items
 {
     public class CreateWand : ModItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config().LoadModItems;
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
         public override bool AltFunctionUse(Player player) => true;
 
         private static readonly Texture2D[] jianYu = new[] { GetTexture("JianYu").Value, GetTexture("JianYu2").Value, GetTexture("JianYu3").Value };

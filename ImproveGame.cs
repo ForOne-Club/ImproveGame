@@ -19,7 +19,7 @@ namespace ImproveGame
     public class ImproveGame : Mod
     {
         // 额外BUFF槽
-        public override uint ExtraPlayerBuffSlots => (uint)MyUtils.Config().ExtraPlayerBuffSlots;
+        public override uint ExtraPlayerBuffSlots => (uint)MyUtils.Config.ExtraPlayerBuffSlots;
 
         public override void Load()
         {
@@ -60,11 +60,11 @@ namespace ImproveGame
         {
             ImprovePlayer improvePlayer = ImprovePlayer.G(player);
             // 智能虚空保险库
-            if (MyUtils.Config().SmartVoidVault)
+            if (MyUtils.Config.SmartVoidVault)
             {
                 if (itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin)
                 {
-                    if (MyUtils.Config().SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp))
+                    if (MyUtils.Config.SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp))
                     {
                         itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault,
                             itemToPickUp, GetItemSettings.PickupItemFromWorld);
@@ -74,7 +74,7 @@ namespace ImproveGame
                         itemToPickUp = MyUtils.StackItemToInv(player.whoAmI, player.bank4.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
                     }
                     // 超级虚空保险库
-                    if (MyUtils.Config().SuperVoidVault)
+                    if (MyUtils.Config.SuperVoidVault)
                     {
                         if (improvePlayer.PiggyBank && MyUtils.HasItem(player.bank.item, itemToPickUp))
                         {
@@ -92,12 +92,12 @@ namespace ImproveGame
                 }
             }
             Item item = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
-            if (MyUtils.Config().SuperVault && item.type != ItemID.None && item.stack > 0 && !item.IsACoin)
+            if (MyUtils.Config.SuperVault && item.type != ItemID.None && item.stack > 0 && !item.IsACoin)
             {
                 item = MyUtils.StackItemToInv(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault, item, GetItemSettings.PickupItemFromWorld);
             }
             // 超级虚空保险库
-            if (MyUtils.Config().SuperVoidVault)
+            if (MyUtils.Config.SuperVoidVault)
             {
                 if (item.type != ItemID.None && item.stack > 0 && !item.IsACoin)
                 {
@@ -164,7 +164,7 @@ namespace ImproveGame
         {
             orig(self, settings);
             // 随身旗帜（增益站）
-            if (MyUtils.Config().NoPlace_BUFFTile_Banner)
+            if (MyUtils.Config.NoPlace_BUFFTile_Banner)
             {
                 Player player = Main.LocalPlayer;
                 for (int i = 0; i < player.inventory.Length; i++)
@@ -202,7 +202,7 @@ namespace ImproveGame
                         continue;
                     AddBannerBuff(self, player, item);
                 }
-                if (MyUtils.Config().SuperVault)
+                if (MyUtils.Config.SuperVault)
                 {
                     for (int i = 0; i < player.GetModPlayer<DataPlayer>().SuperVault.Length; i++)
                     {
@@ -239,7 +239,7 @@ namespace ImproveGame
             {
                 self.VanillaUpdateInventory(self.bank4.item[i]);
             }
-            if (MyUtils.Config().SuperVault)
+            if (MyUtils.Config.SuperVault)
             {
                 DataPlayer dataPlayer = self.GetModPlayer<DataPlayer>();
                 for (int i = 0; i < dataPlayer.SuperVault.Length; i++)
@@ -258,7 +258,7 @@ namespace ImproveGame
         /// <returns></returns>
         private int Main_DamageVar(On.Terraria.Main.orig_DamageVar orig, float dmg, float luck)
         {
-            if (MyUtils.Config().BanDamageVar)
+            if (MyUtils.Config.BanDamageVar)
                 return (int)Math.Round(dmg);
             else
                 return orig(dmg, luck);
@@ -274,7 +274,7 @@ namespace ImproveGame
                 return;
             c.EmitDelegate(() =>
             {
-                if (MyUtils.Config().TownNPCSpawnInNight)
+                if (MyUtils.Config.TownNPCSpawnInNight)
                 {
                     MethodInfo methodInfo = typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
                     methodInfo.Invoke(null, null);
@@ -292,7 +292,7 @@ namespace ImproveGame
                 return;
             c.EmitDelegate<Func<int, int>>((JiaJi) =>
             {
-                return (int)Math.Pow(2, MyUtils.Config().TownNPCSpawnSpeed);
+                return (int)Math.Pow(2, MyUtils.Config.TownNPCSpawnSpeed);
             });
         }
 
@@ -342,7 +342,7 @@ namespace ImproveGame
         /// <param name="xPullSpeed"></param>
         private void Player_PullItem_Common(On.Terraria.Player.orig_PullItem_Common orig, Player player, Item item, float xPullSpeed)
         {
-            if (MyUtils.Config().GrabDistance > 0)
+            if (MyUtils.Config.GrabDistance > 0)
             {
                 Vector2 velocity = (player.Center - item.Center).SafeNormalize(Vector2.Zero);
                 if (item.velocity.Length() + velocity.Length() > 15f)
@@ -370,7 +370,7 @@ namespace ImproveGame
         /// <param name="hitDirection"></param>
         private void Player_DropTombstone(On.Terraria.Player.orig_DropTombstone orig, Player self, int coinsOwned, Terraria.Localization.NetworkText deathText, int hitDirection)
         {
-            if (!MyUtils.Config().BanTombstone)
+            if (!MyUtils.Config.BanTombstone)
             {
                 orig(self, coinsOwned, deathText, hitDirection);
             }

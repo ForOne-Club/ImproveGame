@@ -7,10 +7,12 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.UI.Gamepad;
 using static ImproveGame.Common.GlobalItems.ImproveItem;
 using static Microsoft.Xna.Framework.Vector2;
 
@@ -237,6 +239,13 @@ namespace ImproveGame
             return item;
         }
 
+        public static readonly List<int> Bank2Items = new() { ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem };
+        public static readonly List<int> Bank3Items = new() { ItemID.Safe };
+        public static readonly List<int> Bank4Items = new() { ItemID.DefendersForge };
+        public static readonly List<int> Bank5Items = new() { ItemID.VoidLens, ItemID.VoidVault };
+
+        public static bool IsBankItem(int type) => Bank2Items.Contains(type) || Bank3Items.Contains(type) || Bank4Items.Contains(type) || Bank5Items.Contains(type);
+
         /// <summary>
         /// 堆叠物品到仓库[i]
         /// </summary>
@@ -319,11 +328,40 @@ namespace ImproveGame
             return false;
         }
 
-        // 获取配置
-        public static ImproveConfigs Config()
-        {
-            return ModContent.GetInstance<ImproveConfigs>();
+        /// <summary>
+        /// 快捷开关箱子
+        /// </summary>
+        /// <param name="player">玩家实例</param>
+        /// <param name="chestID">箱子ID（对于便携储存是-2/-3/-4/-5，对于其他箱子是在<see cref="Main.chest"/>的索引）</param>
+        public static void ToggleChest(ref Player player, int chestID, int x = -1, int y = -1) {
+            if (player.chest == chestID) {
+                player.chest = -1;
+            }
+            else {
+                x = x == -1 ? player.Center.ToTileCoordinates().X : x;
+                y = y == -1 ? player.Center.ToTileCoordinates().Y : y;
+                // 以后版本TML会加的东西，只不过现在stable还没有，现在就先放在这里吧
+                //player.OpenChest(x, y, chestID);
+                player.chest = chestID;
+                for (int i = 0; i < 40; i++) {
+                    ItemSlot.SetGlow(i, -1f, chest: true);
+                }
+
+                player.chestX = x;
+                player.chestY = y;
+                player.SetTalkNPC(-1);
+                Main.SetNPCShopIndex(0);
+
+                UILinkPointNavigator.ForceMovementCooldown(120);
+                if (PlayerInput.GrappleAndInteractAreShared)
+                    PlayerInput.Triggers.JustPressed.Grapple = false;
+            }
+            Main.playerInventory = true;
+            Recipe.FindRecipes();
         }
+
+        // 获取配置
+        public static ImproveConfigs Config => ModContent.GetInstance<ImproveConfigs>();
 
         /// <summary>
         /// 获取平台总数

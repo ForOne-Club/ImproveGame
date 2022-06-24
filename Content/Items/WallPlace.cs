@@ -11,7 +11,7 @@ namespace ImproveGame.Content.Items
     {
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return MyUtils.Config().LoadModItems;
+            return MyUtils.Config.LoadModItems;
         }
         public override void SetDefaults()
         {

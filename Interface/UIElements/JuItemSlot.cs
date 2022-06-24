@@ -277,9 +277,8 @@ namespace ImproveGame.Interface.UIElements
                     }
                 }
                 else {
-                    Item mouseItem = Main.mouseItem;
-                    Main.mouseItem = item;
-                    item = mouseItem;
+                    // 可以这么交换
+                    (item, Main.mouseItem) = (Main.mouseItem, item);
                 }
             }
         }

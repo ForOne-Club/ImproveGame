@@ -11,7 +11,7 @@ namespace ImproveGame.Content.Items
 {
     public class SpaceWandPlus : ModItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config().LoadModItems;
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
         public override void SetStaticDefaults() => Item.staff[Type] = true;
 
         public override void SetDefaults()

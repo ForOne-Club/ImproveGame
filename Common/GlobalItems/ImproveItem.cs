@@ -53,7 +53,7 @@ namespace ImproveGame.Common.GlobalItems
         // 用这个和公式来加成工具速度，这样就不需要Reload了
         // 同时不会太BT，原先的写法的使用速度实际上是 8*0.75=6 非常快，因为有个 pickSpeed -0.25 在ImprovePlayer
         public override float UseSpeedMultiplier(Item item, Player player) {
-            if ((item.axe > 0 || item.pick > 0 || item.hammer > 0) && item.useTime > 8 && MyUtils.Config().ImproveToolSpeed) {
+            if ((item.axe > 0 || item.pick > 0 || item.hammer > 0) && item.useTime > 8 && MyUtils.Config.ImproveToolSpeed) {
                 return item.useTime / 8f;
             }
             return base.UseSpeedMultiplier(item, player);
@@ -63,8 +63,8 @@ namespace ImproveGame.Common.GlobalItems
         public override bool? CanAutoReuseItem(Item item, Player player) {
             // 自动挥舞
             ItemDefinition itemd = new(item.type);
-            if (item.damage > 0 && MyUtils.Config().AutoReuseWeapon
-                && !MyUtils.Config().AutoReuseWeapon_ExclusionList.Contains(itemd)) {
+            if (item.damage > 0 && MyUtils.Config.AutoReuseWeapon
+                && !MyUtils.Config.AutoReuseWeapon_ExclusionList.Contains(itemd)) {
                 return true;
             }
             return base.CanAutoReuseItem(item, player);
@@ -73,7 +73,7 @@ namespace ImproveGame.Common.GlobalItems
         // 更新背包药水BUFF
         public override void UpdateInventory(Item item, Player player)
         {
-            if (MyUtils.Config().NoConsume_Potion)
+            if (MyUtils.Config.NoConsume_Potion)
             {
                 // 普通药水
                 if (item.stack >= 30 && item.buffType > 0 && item.active)
@@ -83,7 +83,7 @@ namespace ImproveGame.Common.GlobalItems
                 }
             }
             // 随身增益站：普通
-            if (MyUtils.Config().NoPlace_BUFFTile)
+            if (MyUtils.Config.NoPlace_BUFFTile)
             {
                 // 会给玩家buff的雕像
                 for (int i = 0; i < BUFFTiles.Count; i++)
@@ -102,7 +102,7 @@ namespace ImproveGame.Common.GlobalItems
                 }
             }
             // 随身增益站：旗帜
-            if (MyUtils.Config().NoPlace_BUFFTile_Banner)
+            if (MyUtils.Config.NoPlace_BUFFTile_Banner)
             {
                 if (item.createTile == TileID.Banners)
                 {
@@ -121,7 +121,7 @@ namespace ImproveGame.Common.GlobalItems
                 }
             }
             // 弹药
-            if (MyUtils.Config().NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0)
+            if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0)
             {
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
             }
@@ -130,13 +130,13 @@ namespace ImproveGame.Common.GlobalItems
         // 物品消耗
         public override bool ConsumeItem(Item item, Terraria.Player player)
         {
-            if (MyUtils.Config().NoConsume_Potion && item.stack >= 30 && (item.buffType > 0 || SpecialPotions.Contains(item.type)))
+            if (MyUtils.Config.NoConsume_Potion && item.stack >= 30 && (item.buffType > 0 || SpecialPotions.Contains(item.type)))
             {
                 return false;
             }
 
             // 所有召唤物不会消耗
-            if ((SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)) && MyUtils.Config().NoConsume_SummonItem) {
+            if ((SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)) && MyUtils.Config.NoConsume_SummonItem) {
                 return false;
             }
 
@@ -145,7 +145,7 @@ namespace ImproveGame.Common.GlobalItems
 
         public override bool CanBeConsumedAsAmmo(Item ammo, Item weapon, Player player)
         {
-            if (MyUtils.Config().NoConsume_Ammo && ammo.stack >= 3996 && ammo.ammo > 0)
+            if (MyUtils.Config.NoConsume_Ammo && ammo.stack >= 3996 && ammo.ammo > 0)
             {
                 return false;
             }
@@ -160,7 +160,7 @@ namespace ImproveGame.Common.GlobalItems
             {
                 return true;
             }
-            if (MyUtils.Config().ImprovePrefix) // 新的重铸机制
+            if (MyUtils.Config.ImprovePrefix) // 新的重铸机制
             {
                 // 饰品
                 if (PrefixLevel.ContainsKey(pre))
@@ -225,7 +225,7 @@ namespace ImproveGame.Common.GlobalItems
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             // 重铸次数
-            if (MyUtils.Config().ShowPrefixCount && (item.accessory ||
+            if (MyUtils.Config.ShowPrefixCount && (item.accessory ||
                 (item.damage > 0 && item.maxStack == 1 && item.ammo == AmmoID.None &&
                 item.DamageType != DamageClass.Generic)))
             {
@@ -234,7 +234,7 @@ namespace ImproveGame.Common.GlobalItems
                 tooltips.Add(tooltip);
             }
             // 更多信息
-            if (MyUtils.Config().ShowItemMoreData)
+            if (MyUtils.Config.ShowItemMoreData)
             {
                 tooltips.Add(new(Mod, "Type", "Type: " + item.type));
                 tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
@@ -253,7 +253,7 @@ namespace ImproveGame.Common.GlobalItems
         // 额外拾取距离
         public override void GrabRange(Item item, Player player, ref int grabRange)
         {
-            grabRange += MyUtils.Config().GrabDistance * 16;
+            grabRange += MyUtils.Config.GrabDistance * 16;
         }
 
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -301,11 +301,11 @@ namespace ImproveGame.Common.GlobalItems
         {
             ImprovePlayer improvePlayer = ImprovePlayer.G(player);
 
-            if (MyUtils.Config().SuperVault && MyUtils.HasItemSpace(player.GetModPlayer<DataPlayer>().SuperVault, item))
+            if (MyUtils.Config.SuperVault && MyUtils.HasItemSpace(player.GetModPlayer<DataPlayer>().SuperVault, item))
             {
                 return true;
             }
-            if (MyUtils.Config().SuperVoidVault)
+            if (MyUtils.Config.SuperVoidVault)
             {
                 // 猪猪钱罐
                 if (improvePlayer.PiggyBank && MyUtils.HasItemSpace(player.bank.item, item))

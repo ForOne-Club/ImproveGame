@@ -109,7 +109,13 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool BanTombstone;
 
+        [Label("$Mods.ImproveGame.Config.MiddleEnableBank.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.MiddleEnableBank.Tooltip")]
+        [DefaultValue(true)]
+        public bool MiddleEnableBank;
+
         [Header("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Header")]
+
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Label")]
         [DefaultValue(false)]
         [ReloadRequired]
@@ -135,6 +141,7 @@ namespace ImproveGame.Common.Configs
         public int NPCCoinDropRate;
 
         [Header("$Mods.ImproveGame.Config.BanDamageVar.Header")]
+
         [Label("$Mods.ImproveGame.Config.BanDamageVar.Label")]
         [DefaultValue(false)]
         [ReloadRequired]

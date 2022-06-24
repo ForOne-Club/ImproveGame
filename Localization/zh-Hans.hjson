@@ -110,6 +110,16 @@ Mods:
                 Label: 显示物品调试数据
                 Tooltip: 在物品提示栏显示调试数据
             }
+            MiddleEnableBank:
+            {
+                Label: "[i:87] 中键打开便携收纳"
+                Tooltip: 
+                    '''
+                    当你用中键点击物品栏的某个便携收纳物品时，会打开相应储存
+                    同时也会关闭对便携收纳的距离限制
+                    ([i:87][i:3213][i:4076][i:4131][i:346][i:3813][i:5098])
+                    '''
+            }
             BanTombstone.Label: 禁止生成墓碑
             TownNPCSpawnInNight:
             {
@@ -201,6 +211,8 @@ Mods:
         {
             PrefixCount: "物品重铸次数："
             AnglerQuest: "已刷新钓鱼任务！"
+            BankEnableOn: "中键单击以打开个人储存库"
+            BankEnableOff: "中键单击以关闭个人储存库"
         }
         Keybin:
         {

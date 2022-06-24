@@ -22,7 +22,7 @@ namespace ImproveGame.Common.Players
             PiggyBank = Player.HasItem(ItemID.PiggyBank);
             Safe = Player.HasItem(ItemID.Safe);
             DefendersForge = Player.HasItem(ItemID.DefendersForge);
-            if (MyUtils.Config().NoCD_FishermanQuest)
+            if (MyUtils.Config.NoCD_FishermanQuest)
             {
                 if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name))
                 {
@@ -31,14 +31,14 @@ namespace ImproveGame.Common.Players
                     Main.NewText(Language.GetTextValue($"Mods.ImproveGame.Tips.AnglerQuest"), ItemRarityID.Pink);
                 }
             }
-            if (Player.whoAmI == Main.myPlayer && MyUtils.Config().ImproveTileSpeedAndTileRange)
+            if (Player.whoAmI == Main.myPlayer && MyUtils.Config.ImproveTileSpeedAndTileRange)
             {
                 Player.tileSpeed += 1.5f;
                 Player.wallSpeed += 1f;
                 Player.tileRangeX += 5;
                 Player.tileRangeY += 4;
             }
-            if (MyUtils.Config().ImproveToolSpeed)
+            if (MyUtils.Config.ImproveToolSpeed)
             {
                 Player.pickSpeed -= 0.25f;
             }
@@ -52,7 +52,7 @@ namespace ImproveGame.Common.Players
         {
             if (KeybinSystem.RandomBuffKeybind.JustPressed)
             {
-                if (MyUtils.Config().SuperVault)
+                if (MyUtils.Config.SuperVault)
                 {
                     if (JuBigVaultGUI.Visible)
                     {

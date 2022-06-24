@@ -15,7 +15,7 @@ namespace ImproveGame.Content.Items
 {
     public class MagickWand : ModItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => MyUtils.Config().LoadModItems;
+        public override bool IsLoadingEnabled(Mod mod) => MyUtils.Config.LoadModItems;
 
         public override bool AltFunctionUse(Player player) => true;
 

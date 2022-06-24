@@ -101,6 +101,17 @@ Mods:
                 Label: Display item debug data
                 Tooltip: Display item debug data in tooltip
             }
+            MiddleEnableBank:
+            {
+                Label: "[i:87] Middle click open portable storage"
+                Tooltip: 
+                    '''
+                    When you click on a portable storage item in the inventory with the middle button, 
+                    it will open the corresponding storage
+                    It will also turn off the distance limit for portable storage
+                    ([i:87][i:3213][i:4076][i:4131][i:346][i:3813][i:5098])
+                    '''
+            }
             BanTombstone.Label: Disable tombstone spawn
             TownNPCSpawnInNight:
             {
@@ -192,6 +203,8 @@ Mods:
         {
             PrefixCount: "Reforging count: "
             AnglerQuest: "Angler's quest refreshed!"
+            BankEnableOn: "Middle click to open personal storage"
+            BankEnableOff: "Middle click to close personal storage"
         }
         Keybin:
         {
