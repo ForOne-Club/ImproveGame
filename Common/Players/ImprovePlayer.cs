@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
-using ImproveGame.UI;
+using ImproveGame.UI.ArchitectureUI;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
@@ -54,13 +54,13 @@ namespace ImproveGame.Common.Players
             {
                 if (MyUtils.Config().SuperVault)
                 {
-                    if (JuBigVault.Visible)
+                    if (JuBigVaultGUI.Visible)
                     {
-                        JuBigVault._visible = false;
+                        JuBigVaultGUI._visible = false;
                     }
                     else
                     {
-                        JuBigVault._visible = true;
+                        JuBigVaultGUI._visible = true;
                         Main.playerInventory = true;
                     }
                 }

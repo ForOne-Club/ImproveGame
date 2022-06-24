@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Systems;
-using ImproveGame.UI;
+using ImproveGame.UI.ArchitectureUI;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
@@ -47,7 +47,7 @@ namespace ImproveGame.Common.Players
         {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
-                UISystem.vaultUI.MyInitialize(SuperVault, SuperVaultOffset, SuperVaultVisable);
+                UISystem.JuVaultUIGUI.MyInitialize(SuperVault, SuperVaultOffset, SuperVaultVisable);
             }
         }
 
@@ -61,8 +61,8 @@ namespace ImproveGame.Common.Players
             {
                 tag.Add($"SuperVault_{i}", SuperVault[i]);
             }
-            tag.Add("SuperVaultOffset", JuBigVault.position);
-            tag.Add("SuperVaultVisable", JuBigVault._visible);
+            tag.Add("SuperVaultOffset", JuBigVaultGUI.position);
+            tag.Add("SuperVaultVisable", JuBigVaultGUI._visible);
         }
 
         public override void LoadData(TagCompound tag)

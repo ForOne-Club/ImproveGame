@@ -6,22 +6,19 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace ImproveGame.UI
+namespace ImproveGame.UI.ArchitectureUI
 {
-    public class JuBigVault : UIState
+    public class JuBigVaultGUI : UIState
     {
         public static bool _visible = true;
         public static Vector2 offset = Vector2.Zero;
         public static Vector2 position = Vector2.Zero;
         public bool dragging;
-        public static bool Visible
-        {
-            get
-            {
+        public static bool Visible {
+            get {
                 return Main.playerInventory && _visible;
             }
-            set
-            {
+            set {
                 _visible = value;
             }
         }
@@ -35,12 +32,10 @@ namespace ImproveGame.UI
         /// </summary>
         /// <param name="SuperVault"></param>
         /// <param name="SuperVaultOffset"></param>
-        public void MyInitialize(Item[] SuperVault, Vector2 SuperVaultOffset, bool Visible)
-        {
+        public void MyInitialize(Item[] SuperVault, Vector2 SuperVaultOffset, bool Visible) {
             RemoveAllChildren();
             _visible = Visible;
-            mainPanel = new UIPanel()
-            {
+            mainPanel = new UIPanel() {
                 HAlign = 0.5f,
                 VAlign = 0.5f
             };
@@ -48,8 +43,7 @@ namespace ImproveGame.UI
             mainPanel.OnMouseUp += MainPanel_OnMouseUp;
             Append(mainPanel);
 
-            closeButton = new(MyUtils.GetTexture("Close"))
-            {
+            closeButton = new(MyUtils.GetTexture("Close")) {
                 HAlign = 1f
             };
             closeButton.Left.Set(-2, 0);
@@ -70,16 +64,13 @@ namespace ImproveGame.UI
             SetPosition(SuperVaultOffset);
         }
 
-        public override void OnInitialize()
-        {
+        public override void OnInitialize() {
 
         }
 
-        public override void Update(GameTime gameTime)
-        {
+        public override void Update(GameTime gameTime) {
             base.Update(gameTime);
-            if (dragging)
-            {
+            if (dragging) {
                 position.X = Main.mouseX - offset.X;
                 position.Y = Main.mouseY - offset.Y;
                 mainPanel.Left.Set(position.X, 0f);
@@ -87,54 +78,46 @@ namespace ImproveGame.UI
                 mainPanel.Recalculate();
             }
 
-            if (mainPanel.IsMouseHovering)
-            {
+            if (mainPanel.IsMouseHovering) {
                 Main.LocalPlayer.mouseInterface = true;
             }
         }
 
-        public void SetPosition(Vector2 pos)
-        {
+        public void SetPosition(Vector2 pos) {
             position = pos;
             mainPanel.Left.Set(position.X, 0f);
             mainPanel.Top.Set(position.Y, 0f);
             mainPanel.Recalculate();
         }
 
-        private void MainPanel_OnMouseDown(UIMouseEvent evt, UIElement listeningElement)
-        {
-            if (!mainGrid.ContainsPoint(evt.MousePosition) && !closeButton.ContainsPoint(evt.MousePosition))
-            {
+        private void MainPanel_OnMouseDown(UIMouseEvent evt, UIElement listeningElement) {
+            if (!mainGrid.ContainsPoint(evt.MousePosition) && !closeButton.ContainsPoint(evt.MousePosition)) {
                 dragging = true;
                 offset = new Vector2(evt.MousePosition.X - mainPanel.Left.Pixels, evt.MousePosition.Y - mainPanel.Top.Pixels);
             }
         }
 
-        private void MainPanel_OnMouseUp(UIMouseEvent evt, UIElement listeningElement)
-        {
+        private void MainPanel_OnMouseUp(UIMouseEvent evt, UIElement listeningElement) {
             dragging = false;
         }
 
-        private void CloseButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
-        {
+        private void CloseButton_OnClick(UIMouseEvent evt, UIElement listeningElement) {
             Visible = false;
         }
     }
 
     public class FixedUIScrollbar : UIScrollbar
     {
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
+        protected override void DrawSelf(SpriteBatch spriteBatch) {
             UserInterface temp = UserInterface.ActiveInstance;
-            UserInterface.ActiveInstance = UISystem.userInterface;
+            UserInterface.ActiveInstance = UISystem.JuBigVaultInterface;
             base.DrawSelf(spriteBatch);
             UserInterface.ActiveInstance = temp;
         }
 
-        public override void MouseDown(UIMouseEvent evt)
-        {
+        public override void MouseDown(UIMouseEvent evt) {
             UserInterface temp = UserInterface.ActiveInstance;
-            UserInterface.ActiveInstance = UISystem.userInterface;
+            UserInterface.ActiveInstance = UISystem.JuBigVaultInterface;
             base.MouseDown(evt);
             UserInterface.ActiveInstance = temp;
         }

@@ -23,25 +23,26 @@ namespace ImproveGame.Common.Systems
 
         public BrustGUI BrustGUI;
         public static UserInterface BrustInterface;
-
-        public static UserInterface userInterface;
-        public static JuBigVault vaultUI;
+        public static JuBigVaultGUI JuVaultUIGUI;
+        public static UserInterface JuBigVaultInterface;
 
         public override void Unload() {
             ArchitectureGUI = null;
             ArchitectureInterface = null;
+
             BrustGUI = null;
             BrustInterface = null;
-            userInterface = null;
-            vaultUI = null;
+
+            JuVaultUIGUI = null;
+            JuBigVaultInterface = null;
         }
 
         public override void Load() {
             if (!Main.dedServ) {
-                vaultUI = new JuBigVault();
-                vaultUI.Activate();
-                userInterface = new UserInterface();
-                userInterface.SetState(vaultUI);
+                JuVaultUIGUI = new JuBigVaultGUI();
+                JuVaultUIGUI.Activate();
+                JuBigVaultInterface = new UserInterface();
+                JuBigVaultInterface.SetState(JuVaultUIGUI);
 
                 ArchitectureGUI = new ArchitectureGUI();
                 ArchitectureGUI.Activate();
@@ -55,8 +56,8 @@ namespace ImproveGame.Common.Systems
             }
         }
         public override void UpdateUI(GameTime gameTime) {
-            if (JuBigVault.Visible) {
-                userInterface.Update(gameTime);
+            if (JuBigVaultGUI.Visible) {
+                JuBigVaultInterface.Update(gameTime);
             }
             if (ArchitectureGUI.Visible) {
                 ArchitectureInterface?.Update(gameTime);
@@ -72,8 +73,8 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
                     "ImproveGame: Vault UI",
                     delegate {
-                        if (JuBigVault.Visible) {
-                            vaultUI.Draw(Main.spriteBatch);
+                        if (JuBigVaultGUI.Visible) {
+                            JuVaultUIGUI.Draw(Main.spriteBatch);
                         }
                         return true;
                     },

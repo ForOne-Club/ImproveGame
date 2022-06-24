@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ImproveGame.UI.ArchitectureUI;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.UI;
