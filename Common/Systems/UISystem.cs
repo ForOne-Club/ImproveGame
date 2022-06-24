@@ -51,7 +51,9 @@ namespace ImproveGame.Common.Systems
             {
                 userInterface.Update(gameTime);
             }
-            ArchitectureInterface?.Update(gameTime);
+            if (ArchitectureGUI.Visible) {
+                ArchitectureInterface?.Update(gameTime);
+            }
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

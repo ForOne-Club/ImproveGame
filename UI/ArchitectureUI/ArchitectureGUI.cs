@@ -58,41 +58,42 @@ namespace ImproveGame.UI.ArchitectureUI
             // 排布
             // O O O
             // O O O
-            // O
+            // O 切换
             // 排布如上
             const float slotFirst = 0f;
             const float slotSecond = 60f;
             const float slotThird = 120f;
             itemSlot = new() {
                 [nameof(CreateWand.Block)] = CreateItemSlot(slotFirst, slotFirst, nameof(CreateWand.Block),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile]), 
+                    (Item i, Item item) => MyUtils.SlotPlace(i, item) || (item.createTile > -1 && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile]), 
                     (Item item) => CurrentWand.SetItem(nameof(CreateWand.Block), item.Clone(), CurrentSlot)),
 
                 [nameof(CreateWand.Wall)] = CreateItemSlot(slotSecond, slotFirst, nameof(CreateWand.Wall),
-                    (Item i, Item item) => SlotPlace(i, item) || item.createWall > -1,
+                    (Item i, Item item) => MyUtils.SlotPlace(i, item) || item.createWall > -1,
                     (Item item) => CurrentWand.SetItem(nameof(CreateWand.Wall), item.Clone(), CurrentSlot)),
 
                 [nameof(CreateWand.Platform)] = CreateItemSlot(slotThird, slotFirst, nameof(CreateWand.Platform),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Platforms[item.createTile]),
+                    (Item i, Item item) => MyUtils.SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Platforms[item.createTile]),
                     (Item item) => CurrentWand.SetItem(nameof(CreateWand.Platform), item.Clone(), CurrentSlot)),
 
                 [nameof(CreateWand.Torch)] = CreateItemSlot(slotFirst, slotSecond, nameof(CreateWand.Torch),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Torch[item.createTile]),
+                    (Item i, Item item) => MyUtils.SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Torch[item.createTile]),
                     (Item item) => CurrentWand.SetItem(nameof(CreateWand.Torch), item.Clone(), CurrentSlot)),
 
                 [nameof(CreateWand.Chair)] = CreateItemSlot(slotSecond, slotSecond, nameof(CreateWand.Chair),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Chairs),
+                    (Item i, Item item) => MyUtils.SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Chairs),
                     (Item item) => CurrentWand.SetItem(nameof(CreateWand.Chair), item.Clone(), CurrentSlot)),
 
                 [nameof(CreateWand.Workbench)] = CreateItemSlot(slotThird, slotSecond, nameof(CreateWand.Workbench),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.WorkBenches),
+                    (Item i, Item item) => MyUtils.SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.WorkBenches),
                     (Item item) => CurrentWand.SetItem(nameof(CreateWand.Workbench), item.Clone(), CurrentSlot)),
 
                 [nameof(CreateWand.Bed)] = CreateItemSlot(slotFirst, slotThird, nameof(CreateWand.Bed),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Beds),
+                    (Item i, Item item) => MyUtils.SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Beds),
                     (Item item) => CurrentWand.SetItem(nameof(CreateWand.Bed), item.Clone(), CurrentSlot))
             };
 
+            // 头顶大字
             materialTitle = new("Materials", 0.5f, large: true) {
                 HAlign = 0.5f
             };
@@ -102,6 +103,7 @@ namespace ImproveGame.UI.ArchitectureUI
             materialTitle.Height.Set(40, 0f);
             basePanel.Append(materialTitle);
 
+            // 房屋样式修改按钮
             styleButton = new(Language.GetText("Mods.ImproveGame.Architecture.StyleChange"), Color.White, "Images/UI/DisplaySlots_5");
             styleButton.Left.Set(slotSecond, 0f);
             styleButton.Top.Set(slotThird, 0f);
@@ -111,8 +113,15 @@ namespace ImproveGame.UI.ArchitectureUI
             basePanel.Append(styleButton);
         }
 
-        private bool SlotPlace(Item slotItem, Item mouseItem) => slotItem.type == mouseItem.type || mouseItem.IsAir;
-
+        /// <summary>
+        /// 快捷做一个ItemSlot
+        /// </summary>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        /// <param name="iconTextureName">空物品时显示的贴图</param>
+        /// <param name="canPlace">是否可以放入物品的判断</param>
+        /// <param name="onItemChanged">物品更改时执行</param>
+        /// <returns>一个<see cref="ModItemSlot"/>实例</returns>
         private ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null) {
             ModItemSlot slot = new(InventoryScale, $"ImproveGame/Assets/Images/UI/Icon_{iconTextureName}");
             slot.Left.Set(x, 0f);
@@ -127,12 +136,14 @@ namespace ImproveGame.UI.ArchitectureUI
             return slot;
         }
 
+        // 可拖动界面
         private void DragStart(UIMouseEvent evt, UIElement listeningElement) {
             var dimensions = listeningElement.GetDimensions().ToRectangle();
             Offset = new Vector2(evt.MousePosition.X - dimensions.Left, evt.MousePosition.Y - dimensions.Top);
             Dragging = true;
         }
 
+        // 可拖动界面
         private void DragEnd(UIMouseEvent evt, UIElement listeningElement) {
             Vector2 end = evt.MousePosition;
             Dragging = false;
@@ -143,6 +154,7 @@ namespace ImproveGame.UI.ArchitectureUI
             listeningElement.Recalculate();
         }
 
+        // 主要是可拖动和一些判定吧
         public override void Update(GameTime gameTime) {
             if (!Main.LocalPlayer.inventory.IndexInRange(CurrentSlot) || CurrentItem is null || CurrentItem.ModItem is not CreateWand) {
                 Close();
@@ -151,8 +163,9 @@ namespace ImproveGame.UI.ArchitectureUI
 
             base.Update(gameTime);
 
-            if (!Main.playerInventory && Visible) {
+            if (!Main.playerInventory) {
                 Close();
+                return;
             }
 
             if (Dragging) {
@@ -175,6 +188,10 @@ namespace ImproveGame.UI.ArchitectureUI
             }
         }
 
+        /// <summary>
+        /// 更新GUI物品槽与物品的同步
+        /// </summary>
+        /// <param name="createWand">建筑魔杖<see cref="CreateWand"/>实例</param>
         public static void RefreshSlots(CreateWand createWand) {
             itemSlot[nameof(CreateWand.Block)].Item = createWand.Block;
             itemSlot[nameof(CreateWand.Wall)].Item = createWand.Wall;
@@ -185,11 +202,13 @@ namespace ImproveGame.UI.ArchitectureUI
             itemSlot[nameof(CreateWand.Bed)].Item = createWand.Bed;
         }
 
+        /// <summary>
+        /// 打开GUI界面
+        /// </summary>
         public static void Open() {
             Main.playerInventory = true;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
-            Recipe.FindRecipes();
 
             CurrentSlot = Main.LocalPlayer.selectedItem;
             RefreshSlots(CurrentWand);
@@ -197,14 +216,19 @@ namespace ImproveGame.UI.ArchitectureUI
             // UI刚加载（即OnInit）时还未加载翻译，因此我们要在这里设置一遍文本
             materialTitle.SetText(Language.GetText("Mods.ImproveGame.Architecture.Materials"));
             styleButton.SetText(Language.GetText("Mods.ImproveGame.Architecture.StyleChange"), 1f, Color.White);
+            // 翻源码发现UIIconTextButton.SetText之后会重设Width和Height，尚且不知道为啥，不过我们可以给他改回来
+            styleButton.Width.Set(104f, 0f);
+            styleButton.Height.Set(42f, 0f);
         }
 
+        /// <summary>
+        /// 关闭GUI界面
+        /// </summary>
         public static void Close() {
             CurrentSlot = -1;
             Visible = false;
             Main.blockInput = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
-            Recipe.FindRecipes();
         }
     }
 }

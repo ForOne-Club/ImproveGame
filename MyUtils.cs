@@ -628,5 +628,13 @@ namespace ImproveGame
             }
             return false;
         }
+
+        /// <summary>
+        /// 普遍性的可否放置判断
+        /// </summary>
+        /// <param name="slotItem">槽内物品</param>
+        /// <param name="mouseItem">手持物品</param>
+        /// <returns>一般判断返回值</returns>
+        public static bool SlotPlace(Item slotItem, Item mouseItem) => slotItem.type == mouseItem.type || mouseItem.IsAir;
     }
 }
