@@ -2,76 +2,129 @@ Mods:
 {
     ImproveGame:
     {
-        ImproveConfigs:
+        Config:
         {
-            ImproveConfigs_Label: 模组配置
+            ImproveConfigs.Label: 模组配置
             NoNeedReload: 无需重新加载
-            LoadModItems_Header: 物品设置
-            LoadModItems_Label: 启用模组物品
-            SuperVoidVault_Label: 超级虚空保险库
-            SuperVoidVault_Tooltip:
-                '''
-                使猪猪存钱罐，保险箱，护卫熔炉拥有和虚空袋相同的效果。
-                优先级：虚空保险库 → 猪猪钱罐 → 保险箱 → 护卫熔炉
-                '''
-            SmartVoidVault_Label: 虚空保险库 智能收取
-            SmartVoidVault_Tooltip:
-                '''
-                拾取的物品如果在虚空保险库中存在，优先放入其中。
-                如果开启超级虚空保险库，则也会应用，优先级相同。
-                '''
-            SuperVault_Label: 超大背包
-            SuperVault_Tooltip:
-                '''
-                拥有一百格空间的背包，可以与“超级虚空保险库”
-                “虚空宝库 智能收取”联动，优先级最高。
-                （需要在控件中配置模组按键）
-                '''
-            LoadModItems_Tooltip: 启用后会加载模组的物品，关闭后物品将会在游戏中消失。
-            ItemMaxStack_Label: 物品最大堆叠
-            GrabDistance_Label: 物品拾取范围提升 (单位：格子)
-            GrabDistance_Tooltip: 在原有的基础上增加物品的吸附范围，并且会提升吸附速度。
-            NoConsume_SummonItem_Label: 召唤物不消耗
-            NoConsume_SummonItem_Tooltip: 包括BOSS召唤物和事件召唤物，仅支持原版。
-            AutoReuseWeapon_Label: 自动挥舞武器
-            AutoReuseWeapon_ExclusionList_Label: 自动挥舞排除列表
-            AutoReuseWeapon_ExclusionList_Tooltip: 在启用自动挥舞武器的情况下，会排除此列表的物品。
-            ImproveToolSpeed_Label: 提高部分工具速度
-            ImproveToolSpeed_Tooltip: 会将工作速度 (useTime) 大于 8 的物品的工作速度更改为 8。
-            TileSpeedAndTileRange_Label: 提高物块放置速度和距离
-            NoPlace_BUFFTile_Label: 随身增益站
-            NoPlace_BUFFTile_Tooltip:
-                '''
-                玩家背包中或其他位置的增益站和旗帜会直接给予玩家增益（仅支持原版）
-                （其他位置：存钱罐，保险箱，护卫熔炉，虚空仓库）
-                '''
-            NoPlace_BUFFTile_Banner_Label: 随身增益站：旗帜
-            NoPlace_BUFFTile_Banner_Tooltip:
-                '''
-                针对怪物旗帜，同于随身增益站（仅支持原版）
-                '''
-            NoConsume_Potion_Label: 药剂 无限续杯
-            NoConsume_Potion_Tooltip:
-                '''
-                所有堆叠数不小于 三十 的药水将不再消耗。
-                玩家背包中或其他位置的增增益药水会直接给予玩家增益。
-                （其他位置：存钱罐，保险箱，护卫熔炉，虚空仓库）
-                '''
-            NoConsume_Ammo_Label: 无限弹药
-            NoConsume_Ammo_Tooltip: 所有堆叠数不小于 三千九百九十六 的弹药将不再消耗。
-            ImprovePrefix_Label: 更好的重铸机制
-            ImprovePrefix_Tooltip: 会随着重铸次数的提升淘汰较差的前缀。
-            ShowPrefixCount_Label: 显示重铸次数
-            ShowItemMoreData_Label: 显示物品更多数据
-            BanTombstone_Label: 禁止生成墓碑
-            TownNPCSpawnInNight_Header: NPC 设置
-            TownNPCSpawnInNight_Label: 允许城镇NPC夜晚刷新
-            TownNPCSpawnSpeed_Label: 城镇NPC刷新速度
-            NoCD_FishermanQuest_Label: 渔夫任务取消冷却
-            NPCCoinDropRate_Label: 敌人钱币掉落倍率
-            BanDamageVar_Header: 游戏机制
-            BanDamageVar_Label: 禁用伤害波动机制
-            ExtraPlayerBuffSlots_Label: 额外BUFF栏
+            LoadModItems:
+            {
+                Header: 物品设置
+                Label: 启用模组物品
+                Tooltip: 启用后会加载模组的物品，关闭后物品将会在游戏中消失。
+            }
+            SuperVoidVault:
+            {
+                Label: 超级虚空保险库
+                Tooltip: 
+                    '''
+                    使猪猪存钱罐，保险箱，护卫熔炉拥有和虚空袋相同的效果。
+                    优先级：虚空保险库 → 猪猪钱罐 → 保险箱 → 护卫熔炉
+                    '''
+            }
+            SmartVoidVault:
+            {
+                Label: 虚空保险库 智能收取
+                Tooltip: 
+                    '''
+                    拾取的物品如果在虚空保险库中存在，优先放入其中。
+                    如果开启超级虚空保险库，则也会应用，优先级相同。
+                    '''
+            }
+            SuperVault:
+            {
+                Label: 超大背包
+                Tooltip: 
+                    '''
+                    拥有一百格空间的背包，可以与“超级虚空保险库”
+                    “虚空宝库 智能收取”联动，优先级最高。
+                    （需要在控件中配置模组按键）
+                    '''
+            }
+            ItemMaxStack.Label: 物品最大堆叠
+            GrabDistance:
+            {
+                Label: 物品拾取范围提升 (单位：格子)
+                Tooltip: 在原有的基础上增加物品的吸附范围，并且会提升吸附速度。
+            }
+            NoConsume_SummonItem:
+            {
+                Label: 召唤物不消耗
+                Tooltip: 包括BOSS召唤物和事件召唤物，仅支持原版。
+            }
+            AutoReuseWeapon.Label: 自动挥舞武器
+            AutoReuseWeapon_ExclusionList:
+            {
+                Label: 自动挥舞排除列表
+                Tooltip: 在启用自动挥舞武器的情况下，会排除此列表的物品。
+            }
+            ImproveToolSpeed:
+            {
+                Label: 提高部分工具速度
+                Tooltip: 会将工作速度 (useTime) 大于 8 的物品的工作速度更改为 8。
+            }
+            TileSpeedAndTileRange.Label: 提高物块放置速度和距离
+            NoPlace_BUFFTile:
+            {
+                Label: 随身增益站
+                Tooltip: 
+                    '''
+                    玩家背包中或其他位置的增益站和旗帜会直接给予玩家增益（仅支持原版）
+                    （其他位置：存钱罐，保险箱，护卫熔炉，虚空仓库）
+                    '''
+            }
+            NoPlace_BUFFTile_Banner:
+            {
+                Label: 随身增益站：旗帜
+                Tooltip: 
+                    '''
+                    针对怪物旗帜，同于随身增益站（仅支持原版）
+                    '''
+            }
+            NoConsume_Potion:
+            {
+                Label: 药剂 无限续杯
+                Tooltip: 
+                    '''
+                    所有堆叠数不小于 三十 的药水将不再消耗。
+                    玩家背包中或其他位置的增增益药水会直接给予玩家增益。
+                    （其他位置：存钱罐，保险箱，护卫熔炉，虚空仓库）
+                    '''
+            }
+            NoConsume_Ammo:
+            {
+                Label: 无限弹药
+                Tooltip: 所有堆叠数不小于 三千九百九十六 的弹药将不再消耗。
+            }
+            ImprovePrefix:
+            {
+                Label: 更好的重铸机制
+                Tooltip: 会随着重铸次数的提升淘汰较差的前缀。
+            }
+            ShowPrefixCount:
+            {
+                Label: 显示重铸次数
+                Tooltip: 显示你重铸了多少次当前物品
+            }
+            ShowItemMoreData:
+            {
+                Label: 显示物品调试数据
+                Tooltip: 在物品提示栏显示调试数据
+            }
+            BanTombstone.Label: 禁止生成墓碑
+            TownNPCSpawnInNight:
+            {
+                Header: NPC 设置
+                Label: 允许城镇NPC夜晚刷新
+            }
+            TownNPCSpawnSpeed.Label: 城镇NPC刷新速度
+            NoCD_FishermanQuest.Label: 渔夫任务取消冷却
+            NPCCoinDropRate.Label: 敌人钱币掉落倍率
+            BanDamageVar:
+            {
+                Header: 游戏机制
+                Label: 禁用伤害波动机制
+            }
+            ExtraPlayerBuffSlots.Label: 额外BUFF栏
         }
         ItemName:
         {

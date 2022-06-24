@@ -7,6 +7,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -21,7 +22,7 @@ namespace ImproveGame.Common.GlobalItems
         // 前缀等级
         public static readonly Dictionary<int, int> PrefixLevel = new();
         // 特殊药水
-        public static readonly List<int> SpecialMedicines = new() { 2350, 2351, 2997, 4870 };
+        public static readonly List<int> SpecialPotions = new() { 2350, 2351, 2997, 4870 };
         // 增益 Tile 巴斯特雕像，篝火，红心灯笼，星星瓶，向日葵，弹药箱，施法桌，水晶球，蛋糕块，利器站，水蜡烛，和平蜡烛
         public static readonly List<List<int>> BUFFTiles = new() { new() { 506, 0, 215 }, new() { 215, 0, 87 }, new() { 42, 9, 89 }, new() { 42, 7, 158 }, new() { 27, 0, 146 }, new() { 287, 0, 93 }, new() { 354, 0, 150 }, new() { 125, 0, 29 }, new() { 621, 0, 192 }, new() { 377, 0, 159 }, new() { 49, 0, 86 }, new() { 372, 0, 157 } };
 
@@ -42,43 +43,31 @@ namespace ImproveGame.Common.GlobalItems
                 }
             }
 
-            // 所有召唤物不会消耗
-            if ((SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)) && MyUtils.Config().NoConsume_SummonItem)
-            {
-                item.consumable = false;
-                item.maxStack = 99;
-            }
-
-            // 自动挥舞
-            List<int> ExcludeAutoReuse = new();
-            foreach (var item2 in MyUtils.Config().AutoReuseWeapon_ExclusionList)
-            {
-                ExcludeAutoReuse.Add(item2.Type);
-            }
-            if (item.damage > 0 && !ExcludeAutoReuse.Contains(item.type)
-                && MyUtils.Config().AutoReuseWeapon)
-            {
-                item.autoReuse = true;
-            }
-
-            // 工具速度
-            if ((item.axe > 0 || item.pick > 0 || item.hammer > 0) && MyUtils.Config().ImproveToolSpeed)
-            {
-                if (item.useTime > 8)
-                {
-                    item.useTime = 8;
-                }
-                if (item.useAnimation > 15)
-                {
-                    item.useAnimation = 15;
-                }
-            }
-
             // 所有饰品可放在时装槽
             if (item.accessory)
             {
                 item.canBePlacedInVanityRegardlessOfConditions = true;
             }
+        }
+
+        // 用这个和公式来加成工具速度，这样就不需要Reload了
+        // 同时不会太BT，原先的写法的使用速度实际上是 8*0.75=6 非常快，因为有个 pickSpeed -0.25 在ImprovePlayer
+        public override float UseSpeedMultiplier(Item item, Player player) {
+            if ((item.axe > 0 || item.pick > 0 || item.hammer > 0) && item.useTime > 8 && MyUtils.Config().ImproveToolSpeed) {
+                return item.useTime / 8f;
+            }
+            return base.UseSpeedMultiplier(item, player);
+        }
+
+
+        public override bool? CanAutoReuseItem(Item item, Player player) {
+            // 自动挥舞
+            ItemDefinition itemd = new(item.type);
+            if (item.damage > 0 && MyUtils.Config().AutoReuseWeapon
+                && !MyUtils.Config().AutoReuseWeapon_ExclusionList.Contains(itemd)) {
+                return true;
+            }
+            return base.CanAutoReuseItem(item, player);
         }
 
         // 更新背包药水BUFF
@@ -141,18 +130,22 @@ namespace ImproveGame.Common.GlobalItems
         // 物品消耗
         public override bool ConsumeItem(Item item, Terraria.Player player)
         {
-            if (MyUtils.Config().NoConsume_Potion
-                && item.stack >= 30 && (item.buffType > 0 || SpecialMedicines.Contains(item.type)))
+            if (MyUtils.Config().NoConsume_Potion && item.stack >= 30 && (item.buffType > 0 || SpecialPotions.Contains(item.type)))
             {
                 return false;
             }
+
+            // 所有召唤物不会消耗
+            if ((SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)) && MyUtils.Config().NoConsume_SummonItem) {
+                return false;
+            }
+
             return base.ConsumeItem(item, player);
         }
 
         public override bool CanBeConsumedAsAmmo(Item ammo, Item weapon, Player player)
         {
-            if (MyUtils.Config().NoConsume_Ammo
-                && ammo.stack >= 3996 && ammo.ammo > 0)
+            if (MyUtils.Config().NoConsume_Ammo && ammo.stack >= 3996 && ammo.ammo > 0)
             {
                 return false;
             }
