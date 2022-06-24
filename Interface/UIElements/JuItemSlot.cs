@@ -64,40 +64,8 @@ namespace ImproveGame.Interface.UIElements
 
         // 左键点击事件
         public override void MouseDown(UIMouseEvent evt) {
-            Player player = Main.LocalPlayer;
-            if (Main.mouseItem.IsAir && !item.IsAir) {
-                // Ctrl 放入垃圾桶
-                if (Main.keyState.IsKeyDown(Keys.LeftControl) || PlayerInput.GetPressedKeys().Contains(Keys.RightControl)) {
-                    player.trashItem = item;
-                    item = new Item();
-                }
-                else {
-                    Main.mouseItem = item;
-                    item = new Item();
-                }
-            }
-            else if (item.IsAir && !Main.mouseItem.IsAir) {
-                item = Main.mouseItem;
-                Main.mouseItem = new Item();
-            }
-            else if (!Main.mouseItem.IsAir && !item.IsAir) {
-                if (Main.mouseItem.type == item.type && item.stack < item.maxStack) {
-                    if (item.stack + Main.mouseItem.stack < Main.mouseItem.maxStack) {
-                        item.stack += Main.mouseItem.stack;
-                        Main.mouseItem = new Item();
-                    }
-                    else {
-                        Main.mouseItem.stack -= item.maxStack - item.stack;
-                        item.stack = item.maxStack;
-                    }
-                }
-                else {
-                    Item mouseItem = Main.mouseItem;
-                    Main.mouseItem = item;
-                    item = mouseItem;
-                }
-            }
-            item.favorited = false;
+            SetCursorOverride();
+            LeftClickItem();
         }
 
         /// <summary>
@@ -233,9 +201,6 @@ namespace ImproveGame.Interface.UIElements
         /// </summary>
         private void SetCursorOverride() {
             if (!item.IsAir) {
-                if (!item.favorited && ItemSlot.ShiftInUse) {
-                    Main.cursorOverride = 8; // 快捷放回物品栏图标
-                }
                 if (Main.keyState.IsKeyDown(Main.FavoriteKey)) {
                     Main.cursorOverride = 3; // 收藏图标
                     if (Main.drawingPlayerChat) {
@@ -248,7 +213,7 @@ namespace ImproveGame.Interface.UIElements
                             Main.cursorOverride = 10; // 卖出图标
                         }
                         else {
-                            Main.cursorOverride = 6; // 垃圾箱图标
+                            Main.cursorOverride = 8; // 拿回背包图标
                         }
                     }
                 }
@@ -277,9 +242,10 @@ namespace ImproveGame.Interface.UIElements
             }
 
             // 垃圾箱图标
-            if (Main.cursorOverride == 6) {
+            if (Main.cursorOverride == 8) {
                 // 假装自己是一个物品栏物品
-                
+                Main.LocalPlayer.trashItem = item;
+                item = new(0);
                 return;
             }
 
@@ -291,20 +257,29 @@ namespace ImproveGame.Interface.UIElements
             }
 
             // 常规单点
-            if (Main.mouseItem is not null && CanPlaceItem()) {
-                // type不同直接切换吧
-                if (Item.type != Main.mouseItem.type || Item.prefix != Main.mouseItem.prefix) {
-                    SwapItem(ref Main.mouseItem);
-                    SoundEngine.PlaySound(SoundID.Grab);
-                    return;
+            if (Main.mouseItem.IsAir && !item.IsAir) {
+                Main.mouseItem = item;
+                item = new Item();
+            }
+            else if (item.IsAir && !Main.mouseItem.IsAir) {
+                item = Main.mouseItem;
+                Main.mouseItem = new Item();
+            }
+            else if (!Main.mouseItem.IsAir && !item.IsAir) {
+                if (Main.mouseItem.type == item.type && item.stack < item.maxStack) {
+                    if (item.stack + Main.mouseItem.stack < Main.mouseItem.maxStack) {
+                        item.stack += Main.mouseItem.stack;
+                        Main.mouseItem = new Item();
+                    }
+                    else {
+                        Main.mouseItem.stack -= item.maxStack - item.stack;
+                        item.stack = item.maxStack;
+                    }
                 }
-                // type相同，里面的能堆叠，放进去
-                if (!Item.IsAir && ItemLoader.CanStack(Item, Main.mouseItem)) {
-                    int stackAvailable = Item.maxStack - Item.stack;
-                    int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);
-                    Main.mouseItem.stack -= stackAddition;
-                    Item.stack += stackAddition;
-                    SoundEngine.PlaySound(SoundID.Grab);
+                else {
+                    Item mouseItem = Main.mouseItem;
+                    Main.mouseItem = item;
+                    item = mouseItem;
                 }
             }
         }
