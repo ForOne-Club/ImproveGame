@@ -124,6 +124,7 @@ Mods:
         }
         CombatText_Item:
         {
+            CreateWand_NotEnough: "Missing materials!"
             SpaceWand_Cancel: "Canceled!"
             SpaceWand_Lack: "Not enough platform!"
             WallPlace_Limit: "This area is too big!"
