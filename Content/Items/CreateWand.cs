@@ -283,6 +283,9 @@ namespace ImproveGame.Content.Items
                 // 同步UI物品
                 ArchitectureGUI.RefreshSlots(this);
             }
+            if (!_playedSound && player.altFunctionUse == 0) {
+                CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.CreateWand_NotEnough"), true);
+            }
             _playedSound = false;
             return true;
         }

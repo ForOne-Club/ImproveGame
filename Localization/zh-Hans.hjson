@@ -133,6 +133,7 @@ Mods:
         }
         CombatText_Item:
         {
+            CreateWand_NotEnough: "材料不足！"
             SpaceWand_Cancel: "取消放置！"
             SpaceWand_Lack: "平台不足！"
             WallPlace_Limit: "此区域过大！"
