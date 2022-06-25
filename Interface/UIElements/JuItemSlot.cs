@@ -1,33 +1,28 @@
-﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Players;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using ReLogic.Content;
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.GameContent.UI.Chat;
 using Terraria.GameContent.UI.Elements;
-using Terraria.GameInput;
-using Terraria.ID;
 using Terraria.UI;
-using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.UIElements
 {
     partial class JuItemSlot : UIElement
     {
-        public JuItemSlot(Item[] SuperVault, int index) {
-            this.SuperVault = SuperVault;
+        public JuItemSlot(Item[] items, int index) {
+            this.items = items;
             this.index = index;
-            Width.Set(Back.Width, 0f);
-            Height.Set(Back.Height, 0f);
+            Width.Set(TextureAssets.InventoryBack.Value.Width, 0f);
+            Height.Set(TextureAssets.InventoryBack.Value.Height, 0f);
 
-            text = new UIText("") {
+            UIText text = new UIText((index + 1).ToString(), 0.75f) {
                 VAlign = 0.8f
             };
             text.Left.Set(0, 0.2f);
+            text.OnUpdate += (uie) => {
+                (uie as UIText).SetText(Item.IsAir || Item.stack <= 1 ? string.Empty : Item.stack.ToString());
+                (uie as UIText).Recalculate();
+            };
             Append(text);
 
             UIText text2 = new UIText((index + 1).ToString(), 0.75f) {
@@ -73,12 +68,16 @@ namespace ImproveGame.Interface.UIElements
             }
             // 绘制背景框
             CalculatedStyle dimensions = GetDimensions();
-            sb.Draw(backgroundTexture2D, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f, 0, 0f);
+            sb.Draw(Background, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f, 0, 0f);
 
             DrawItem(sb, Item, dimensions);
 
-            text.SetText(Item.IsAir || Item.stack <= 1 ? "" : Item.stack.ToString(), 0.8f, false);
-            text.Recalculate();
+            /*Vector2 position = dimensions.Position();
+            string text = Item.IsAir || Item.stack <= 1 ? "" : Item.stack.ToString();
+            Vector2 textSize = MyUtils.GetStringSize(text) * 0.8f;
+            position.Y += this.Height() * 0.8f;
+            position.X += this.Width() * 0.2f;
+            MyUtils.DrawString(position, text, Color.White, Color.Black, 0.8f);*/
         }
     }
 }

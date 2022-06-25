@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.UI;
+﻿using Terraria.UI;
 
-namespace PointShop
+namespace ImproveGame
 {
     public static class UIElementHelper
     {

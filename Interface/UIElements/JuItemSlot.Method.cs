@@ -2,14 +2,12 @@
 using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Chat;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.UI.Chat;
 
@@ -17,16 +15,10 @@ namespace ImproveGame.Interface.UIElements
 {
     partial class JuItemSlot
     {
-        private static Texture2D Back => TextureAssets.InventoryBack.Value;
-        private static Texture2D Back10 => TextureAssets.InventoryBack10.Value;
-        private Texture2D backgroundTexture2D => Item.favorited ? Back10 : Back;
-        public Item[] SuperVault;
+        private readonly Item[] items;
+        public Texture2D Background => Item.favorited ? TextureAssets.InventoryBack10.Value : TextureAssets.InventoryBack.Value;
         public int index;
-        public Item Item {
-            get => SuperVault[index];
-            set => SuperVault[index] = value;
-        }
-        public UIText text;
+        public Item Item { get => items[index]; set => items[index] = value; }
         private int RightMouseTimer = -1;
 
         /// <summary>

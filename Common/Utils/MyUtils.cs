@@ -7,12 +7,10 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
-using Terraria.UI.Gamepad;
 using static ImproveGame.Common.GlobalItems.ImproveItem;
 using static Microsoft.Xna.Framework.Vector2;
 
@@ -23,6 +21,20 @@ namespace ImproveGame
     /// </summary>
     partial class MyUtils
     {
+        public static Vector2 GetStringSize(string text) {
+            return FontAssets.MouseText.Value.MeasureString(text);
+        }
+
+        public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f) {
+            DrawString(position, text, textColor, borderColor, Zero, scale);
+        }
+
+        public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, Vector2 origin, float scale) {
+            var sb = Main.spriteBatch;
+            var font = FontAssets.MouseText.Value;
+            Utils.DrawBorderStringFourWay(sb, font, text, position.X, position.Y, textColor, borderColor, origin, scale);
+        }
+
         public static Color[] GetColors(Texture2D texture) {
             var w = texture.Width;
             var h = texture.Height;
@@ -152,25 +164,62 @@ namespace ImproveGame
         /// </summary>
         /// <param name="inventory"></param>
         /// <param name="item"></param>
-        /// <param name="settings"></param>
-        /// <returns></returns>
-        public static Item PutItemInInventory(int whoAmI, Item[] inventory, Item item, GetItemSettings settings, bool hint = true, int EndIndex = -1) {
+        /// <returns>堆叠后剩余的物品</returns>
+        public static Item ItemStackToInventory(Item[] inventory, Item item, bool hint = true, int EndIndex = -1) {
             EndIndex = (EndIndex == -1 ? inventory.Length : EndIndex);
             // 先填充和物品相同的
             for (int i = 0; i < EndIndex; i++) {
-                if (!inventory[i].IsAir && inventory[i].type == item.type && inventory[i].stack < inventory[i].maxStack) {
-                    item = MergenItem(whoAmI, inventory, i, item, settings, hint);
-                    if (item.IsAir) return item;
+                item = ItemStackToInventoryItem(inventory, i, item, hint);
+                if (item.IsAir) {
+                    Recipe.FindRecipes();
+                    return item;
                 }
             }
             // 后填充空位
             for (int i = 0; i < EndIndex; i++) {
                 if (inventory[i].IsAir) {
-                    item = MergenItem(whoAmI, inventory, i, item, settings, hint);
-                    if (item.IsAir) return item;
+                    if (hint) {
+                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack);
+                        SoundEngine.PlaySound(SoundID.Grab);
+                    }
+                    (inventory[i], item) = (item, inventory[i]);
+                    Recipe.FindRecipes();
+                    return item;
                 }
             }
+            Recipe.FindRecipes();
             return item;
+        }
+
+        /// <summary>
+        /// 堆叠物品到仓库某位置
+        /// </summary>
+        /// <param name="inventory">仓库</param>
+        /// <param name="slot">槽位</param>
+        /// <param name="item">来自外来物品</param>
+        /// <returns>堆叠后剩余的物品</returns>
+        public static Item ItemStackToInventoryItem(Item[] inventory, int slot, Item item, bool hint) {
+            if (!inventory[slot].IsAir && inventory[slot].type == item.type) {
+                if (inventory[slot].stack + item.stack > inventory[slot].maxStack) {
+                    if (hint) {
+                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, inventory[slot].maxStack - inventory[slot].stack);
+                        SoundEngine.PlaySound(SoundID.Grab);
+                    }
+                    item.stack -= inventory[slot].maxStack - inventory[slot].stack;
+                    inventory[slot].stack = inventory[slot].maxStack;
+                    return item;
+                }
+                else {
+                    if (hint) {
+                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack, noStack: false);
+                        SoundEngine.PlaySound(SoundID.Grab);
+                    }
+                    inventory[slot].stack += item.stack;
+                    item.SetDefaults(0);
+                    return item;
+                }
+            }
+            return inventory[slot];
         }
 
         public static readonly List<int> Bank2Items = new() { ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem };
@@ -179,49 +228,6 @@ namespace ImproveGame
         public static readonly List<int> Bank5Items = new() { ItemID.VoidLens, ItemID.VoidVault };
 
         public static bool IsBankItem(int type) => Bank2Items.Contains(type) || Bank3Items.Contains(type) || Bank4Items.Contains(type) || Bank5Items.Contains(type);
-
-        /// <summary>
-        /// 堆叠物品到仓库[i]
-        /// </summary>
-        /// <param name="inventory"></param>
-        /// <param name="i"></param>
-        /// <param name="WorldItem"></param>
-        /// <param name="settings"></param>
-        /// <returns></returns>
-        public static Item MergenItem(int whoAmI, Item[] inventory, int i, Item WorldItem, GetItemSettings settings, bool hint) {
-            if (inventory[i].IsAir) {
-                if (hint) {
-                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, WorldItem, WorldItem.stack, noStack: false, settings.LongText);
-                }
-                (inventory[i], WorldItem) = (WorldItem, inventory[i]);
-                if (whoAmI == Main.myPlayer) {
-                    Recipe.FindRecipes();
-                }
-                return WorldItem;
-            }
-            if (inventory[i].stack + WorldItem.stack > inventory[i].maxStack) {
-                if (hint) {
-                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, WorldItem, inventory[i].maxStack - inventory[i].stack, noStack: false, settings.LongText);
-                }
-                WorldItem.stack -= inventory[i].maxStack - inventory[i].stack;
-                inventory[i].stack = inventory[i].maxStack;
-                if (whoAmI == Main.myPlayer) {
-                    Recipe.FindRecipes();
-                }
-                return WorldItem;
-            }
-            else {
-                if (hint) {
-                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, WorldItem, WorldItem.stack, noStack: false, settings.LongText);
-                }
-                inventory[i].stack += WorldItem.stack;
-                WorldItem.SetDefaults(0);
-                if (whoAmI == Main.myPlayer) {
-                    Recipe.FindRecipes();
-                }
-                return WorldItem;
-            }
-        }
 
         /// <summary>
         /// 判断指定 Item[] 中是否有 item 能用的空间

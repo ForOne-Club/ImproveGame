@@ -36,7 +36,7 @@ namespace ImproveGame.Common.Players
             if (Player.chest == -1 & Player.talkNPC == -1 && !inventory[slot].IsAir && !inventory[slot].favorited) {
 
                 if (BigBagGUI.Visible && context == ItemSlot.Context.InventoryItem) {
-                    inventory[slot] = MyUtils.PutItemInInventory(Player.whoAmI, Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], GetItemSettings.PickupItemFromWorld, false);
+                    inventory[slot] = MyUtils.ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
                     SoundEngine.PlaySound(SoundID.Grab);
                 }
 

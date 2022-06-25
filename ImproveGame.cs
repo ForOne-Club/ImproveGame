@@ -62,22 +62,22 @@ namespace ImproveGame
                 if (!itemToPickUp.IsACoin) {
                     // 大背包
                     if (!itemToPickUp.IsAir && MyUtils.Config.SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp)) {
-                        itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                        itemToPickUp = MyUtils.ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
                     }
                     // 虚空保险库
                     if (!itemToPickUp.IsAir && player.IsVoidVaultEnabled && MyUtils.HasItem(player.bank4.item, itemToPickUp)) {
-                        itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.bank4.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank4.item, itemToPickUp);
                     }
                     // 其他
                     if (MyUtils.Config.SuperVoidVault) {
                         if (!itemToPickUp.IsAir && improvePlayer.PiggyBank && MyUtils.HasItem(player.bank.item, itemToPickUp)) {
-                            itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.bank.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                            itemToPickUp = MyUtils.ItemStackToInventory(player.bank.item, itemToPickUp);
                         }
                         if (!itemToPickUp.IsAir && improvePlayer.Safe && MyUtils.HasItem(player.bank2.item, itemToPickUp)) {
-                            itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.bank2.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                            itemToPickUp = MyUtils.ItemStackToInventory(player.bank2.item, itemToPickUp);
                         }
                         if (!itemToPickUp.IsAir && improvePlayer.DefendersForge && MyUtils.HasItem(player.bank3.item, itemToPickUp)) {
-                            itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.bank3.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                            itemToPickUp = MyUtils.ItemStackToInventory(player.bank3.item, itemToPickUp);
                         }
                     }
                 }
@@ -87,19 +87,19 @@ namespace ImproveGame
             }
             // 大背包
             if (!itemToPickUp.IsAir && MyUtils.Config.SuperVault && itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin) {
-                itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                itemToPickUp = MyUtils.ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
             }
             // 超级虚空保险库
             if (MyUtils.Config.SuperVoidVault) {
                 if (itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin) {
                     if (!itemToPickUp.IsAir && improvePlayer.PiggyBank) {
-                        itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.bank.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank.item, itemToPickUp);
                     }
                     if (!itemToPickUp.IsAir && improvePlayer.Safe && itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0) {
-                        itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.bank2.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank2.item, itemToPickUp);
                     }
                     if (!itemToPickUp.IsAir && improvePlayer.DefendersForge && itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0) {
-                        itemToPickUp = MyUtils.PutItemInInventory(player.whoAmI, player.bank3.item, itemToPickUp, GetItemSettings.PickupItemFromWorld);
+                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank3.item, itemToPickUp);
                     }
                 }
             }
