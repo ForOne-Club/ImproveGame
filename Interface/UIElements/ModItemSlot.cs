@@ -235,8 +235,8 @@ namespace ImproveGame.Interface.UIElements
         /// <summary>
         /// 物品改变后执行，可以写保存之类的
         /// </summary>
-        internal Action<Item> OnItemChange;
-        private void ItemChange() {
+        public Action<Item> OnItemChange;
+        public void ItemChange() {
             if (Item is null) {
                 Item = new Item();
                 Item.SetDefaults();

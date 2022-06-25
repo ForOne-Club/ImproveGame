@@ -41,10 +41,10 @@ namespace ImproveGame
             Vector2 rotaion = (Main.MouseWorld - player.Center).SafeNormalize(Zero);
             player.direction = Main.MouseWorld.X < player.Center.X ? -1 : 1;
             player.itemRotation = MathF.Atan2(rotaion.Y * player.direction, rotaion.X * player.direction);
-            if (shouldSync && Main.netMode != NetmodeID.SinglePlayer) {
-                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, player.whoAmI);
-                NetMessage.SendData(MessageID.ItemAnimation, -1, -1, null, player.whoAmI);
-            }
+            //if (shouldSync && Main.netMode != NetmodeID.SinglePlayer) {
+            //    NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, player.whoAmI);
+            //    NetMessage.SendData(MessageID.ItemAnimation, -1, -1, null, player.whoAmI);
+            //}
         }
 
         /// <summary>
