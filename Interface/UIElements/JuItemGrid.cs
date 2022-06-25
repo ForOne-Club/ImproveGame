@@ -51,7 +51,8 @@ namespace ImproveGame.Interface.UIElements
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
-            scrollbar.ViewPosition -= evt.ScrollWheelValue;
+            scrollbar.SetViewPosition(evt.ScrollWheelValue);
+            // scrollbar.ViewPosition -= evt.ScrollWheelValue;
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)

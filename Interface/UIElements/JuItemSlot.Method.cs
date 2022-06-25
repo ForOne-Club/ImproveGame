@@ -33,6 +33,24 @@ namespace ImproveGame.Interface.UIElements
         private int RightMouseTimer = -1;
 
         /// <summary>
+        /// 右键持续按住物品，向鼠标物品堆叠数量
+        /// </summary>
+        public void RightMouseKeepPressItem() {
+            if (Main.mouseItem.type == Item.type && Main.mouseItem.stack < Main.mouseItem.maxStack) {
+                Main.mouseItem.stack++;
+                Item.stack--;
+            }
+            else if (Main.mouseItem.IsAir && !Item.IsAir && Item.maxStack > 1) {
+                Main.mouseItem = new Item(Item.type, 1);
+                Item.stack--;
+            }
+            if (Item.type != ItemID.None && Item.stack < 1) {
+                Item = new Item();
+            }
+            SoundEngine.PlaySound(SoundID.MenuTick);
+        }
+
+        /// <summary>
         /// 改原版的<see cref="Main.cursorOverride"/>
         /// </summary>
         private void SetCursorOverride() {
@@ -46,7 +64,7 @@ namespace ImproveGame.Interface.UIElements
                 void TryTrashCursorOverride() {
                     if (!Item.favorited) {
                         if (Main.npcShop > 0) {
-                            Main.cursorOverride = 10; // 卖出图标
+                            Main.cursorOverride = 8; /*10*/ // 卖出图标
                         }
                         else {
                             Main.cursorOverride = 8; // 拿回背包图标

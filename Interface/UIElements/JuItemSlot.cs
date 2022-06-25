@@ -42,23 +42,6 @@ namespace ImproveGame.Interface.UIElements
             SetCursorOverride();
             LeftClickItem();
         }
-
-        /// <summary>
-        /// 右键持续按住物品，向鼠标物品堆叠数量
-        /// </summary>
-        public void RightMouseKeepPressItem() {
-            if (Main.mouseItem.type == Item.type && Main.mouseItem.stack < Main.mouseItem.maxStack) {
-                Main.mouseItem.stack++;
-                Item.stack--;
-            }
-            else if (Main.mouseItem.IsAir && !Item.IsAir && Item.maxStack > 1) {
-                Main.mouseItem = new Item(Item.type, 1);
-                Item.stack--;
-            }
-            if (Item.type != ItemID.None && Item.stack < 1) {
-                Item = new Item();
-            }
-        }
         /// <summary>
         /// 鼠标右键按下
         /// </summary>
@@ -120,9 +103,13 @@ namespace ImproveGame.Interface.UIElements
             // 绘制物品
             if (!Item.IsAir) {
                 if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
+                    RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
+                    Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;
                     sb.End();
+                    sb.GraphicsDevice.RasterizerState = rasterizerState;
+                    sb.GraphicsDevice.ScissorRectangle = rectangle1;
                     sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                        DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+                        DepthStencilState.None, rasterizerState, null, Main.UIScaleMatrix);
                     Color lerpColor;
                     float time = ImprovePlayer.G(Main.LocalPlayer).PlayerTimer;
                     if (time % 60f < 30) {
@@ -154,9 +141,13 @@ namespace ImproveGame.Interface.UIElements
 
                 if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                     Item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
+                    RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
+                    Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;
                     sb.End();
-                    sb.Begin(0, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                        DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+                    sb.GraphicsDevice.RasterizerState = rasterizerState;
+                    sb.GraphicsDevice.ScissorRectangle = rectangle1;
+                    sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
+                        DepthStencilState.None, rasterizerState, null, Main.UIScaleMatrix);
                 }
             }
             // 物品信息
