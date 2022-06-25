@@ -91,14 +91,7 @@ namespace ImproveGame.Interface.UIElements
             }
             // 绘制背景框
             CalculatedStyle dimensions = GetDimensions();
-            if (Item.favorited) {
-                sb.Draw(Back10, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f,
-                    SpriteEffects.None, 0f);
-            }
-            else {
-                sb.Draw(Back9, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f,
-                    SpriteEffects.None, 0f);
-            }
+            sb.Draw(backgroundTexture2D, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f, 0, 0f);
 
             // 绘制物品
             if (!Item.IsAir) {

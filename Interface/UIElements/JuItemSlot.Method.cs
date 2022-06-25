@@ -17,6 +17,7 @@ namespace ImproveGame.Interface.UIElements
     {
         private static Texture2D Back9 => TextureAssets.InventoryBack9.Value;
         private static Texture2D Back10 => TextureAssets.InventoryBack10.Value;
+        private Texture2D backgroundTexture2D => Item.favorited ? Back10 : Back9;
         private Asset<Texture2D> ItemTexture2D {
             get {
                 Main.instance.LoadItem(Item.type);
@@ -44,8 +45,8 @@ namespace ImproveGame.Interface.UIElements
                 Main.mouseItem = new Item(Item.type, 1);
                 Item.stack--;
             }
-            if (Item.type != ItemID.None && Item.stack < 1) {
-                Item = new Item();
+            if (Item.IsAir) {
+                Item.SetDefaults(0);
             }
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
@@ -104,6 +105,9 @@ namespace ImproveGame.Interface.UIElements
                 SoundEngine.PlaySound(SoundID.Grab);
                 return;
             }
+
+            if (ItemSlot.ShiftInUse)
+                return;
 
             // 常规单点
             if (Item.IsAir) {

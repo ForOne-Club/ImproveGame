@@ -44,4 +44,4 @@ Function list:
 ---------------------------
 Spriter: 枫林半叶
 Translators: Lastprismer, Lacewing
-Coder: 自爆局局长
+Coder: 自爆局局长, Cyril
