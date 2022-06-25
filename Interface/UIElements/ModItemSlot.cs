@@ -83,9 +83,10 @@ namespace ImproveGame.Interface.UIElements
                 if (ItemSlot.ControlInUse && ItemSlot.Options.DisableLeftShiftTrashCan && !ItemSlot.ShiftForcedOn) {
                     TryTrashCursorOverride();
                 }
-                if (!ItemSlot.Options.DisableLeftShiftTrashCan && ItemSlot.ShiftInUse) {
-                    TryTrashCursorOverride();
-                }
+                // 如果左Shift快速丢弃打开了，按原版物品栏的物品应该是丢弃，但是我们这应该算箱子物品，所以不丢弃
+                //if (!ItemSlot.Options.DisableLeftShiftTrashCan && ItemSlot.ShiftInUse) {
+                //    TryTrashCursorOverride();
+                //}
             }
         }
 
