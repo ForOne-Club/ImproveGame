@@ -94,7 +94,7 @@ namespace ImproveGame.Content.Items
         }
 
         public override void HoldItem(Player player) {
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI) {
+            if (!Main.dedServ && Main.myPlayer == player.whoAmI && !Main.LocalPlayer.mouseInterface) {
                 if (BrustWandSystem.FixedMode) {
                     Box.NewBox(GetKillRect(player), Color.Red * 0.35f, Color.Red);
                 }
