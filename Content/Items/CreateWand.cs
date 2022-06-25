@@ -31,11 +31,9 @@ namespace ImproveGame.Content.Items
         private static Color[] Colors { get { return colors[Index]; } }
 
         // 切换样式
-        public static void ToggleStyle()
-        {
+        public static void ToggleStyle() {
             Index++;
-            if (Index >= jianYu.Length)
-            {
+            if (Index >= jianYu.Length) {
                 Index = 0;
             }
         }
@@ -55,8 +53,7 @@ namespace ImproveGame.Content.Items
         [CloneByReference]
         internal Item Bed;
 
-        public override void SaveData(TagCompound tag)
-        {
+        public override void SaveData(TagCompound tag) {
             tag[nameof(Block)] = Block;
             tag[nameof(Wall)] = Wall;
             tag[nameof(Platform)] = Platform;
@@ -66,8 +63,7 @@ namespace ImproveGame.Content.Items
             tag[nameof(Bed)] = Bed;
         }
 
-        public override void LoadData(TagCompound tag)
-        {
+        public override void LoadData(TagCompound tag) {
             Block = tag.Get<Item>(nameof(Block));
             Wall = tag.Get<Item>(nameof(Wall));
             Platform = tag.Get<Item>(nameof(Platform));
@@ -77,13 +73,11 @@ namespace ImproveGame.Content.Items
             Bed = tag.Get<Item>(nameof(Bed));
         }
 
-        public override void SetStaticDefaults()
-        {
+        public override void SetStaticDefaults() {
             Item.staff[Type] = true;
         }
 
-        public override void SetDefaults()
-        {
+        public override void SetDefaults() {
             Item.width = 42;
             Item.width = 42;
             Item.mana = 20;
@@ -94,12 +88,10 @@ namespace ImproveGame.Content.Items
             Item.value = Item.sellPrice(0, 1, 0, 0);
         }
 
-        public override void HoldItem(Player player)
-        {
+        public override void HoldItem(Player player) {
             if (player.itemAnimation == 0)
                 Item.mana = 40;
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI)
-            {
+            if (!Main.dedServ && Main.myPlayer == player.whoAmI && !Main.LocalPlayer.mouseInterface) {
                 Point point = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint(); // 鼠标位置
                 int boxIndex = Box.NewBox(new Rectangle(point.X, point.Y, JianYu.Width, JianYu.Height), Color.Yellow * 0f, Color.Yellow * 0f);
                 if (DrawSystem.boxs.IndexInRange(boxIndex)) {
@@ -115,8 +107,7 @@ namespace ImproveGame.Content.Items
             }
         }
 
-        public override bool CanUseItem(Player player)
-        {
+        public override bool CanUseItem(Player player) {
             if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer) {
                 if (!ArchitectureGUI.Visible) {
                     ArchitectureGUI.Open();
@@ -213,8 +204,7 @@ namespace ImproveGame.Content.Items
                     TileSort tileSort = Color2TileSort(Colors[i]);
 
                     // 墙体
-                    if (ShouldPlaceWall(tileSort)) 
-                    {
+                    if (ShouldPlaceWall(tileSort)) {
                         if (Wall.IsAir || Wall.createWall <= WallID.None) {
                             PickItemInInventory(player, (item) => TryPlaceWall(item, player, x, y), true);
                         }
@@ -349,19 +339,15 @@ namespace ImproveGame.Content.Items
                 };
 
         // 计算消耗
-        private static void CalculateConsume()
-        {
-            foreach (var item in MaterialConsume)
-            {
+        private static void CalculateConsume() {
+            foreach (var item in MaterialConsume) {
                 MaterialConsume[item.Key] = 0;
             }
             TileSort tileSort;
-            for (int i = 0; i < Colors.Length; i++)
-            {
+            for (int i = 0; i < Colors.Length; i++) {
                 tileSort = Color2TileSort(Colors[i]);
                 MaterialConsume[tileSort]++;
-                if (tileSort != TileSort.Block && tileSort != TileSort.Platform && tileSort != TileSort.NoWall)
-                {
+                if (tileSort != TileSort.Block && tileSort != TileSort.Platform && tileSort != TileSort.NoWall) {
                     MaterialConsume[TileSort.Wall]++;
                 }
             }
@@ -387,8 +373,7 @@ namespace ImproveGame.Content.Items
             Bed = ItemIO.Receive(reader, true, true);
         }
 
-        public override void ModifyTooltips(List<TooltipLine> tooltips)
-        {
+        public override void ModifyTooltips(List<TooltipLine> tooltips) {
             CalculateConsume();
             tooltips.Add(new(Mod, "MaterialConsume", $"[c/ffff00:{GetText("Architecture.MaterialsRequired")}]"));
             foreach (var item in MaterialConsume) {
@@ -407,8 +392,7 @@ namespace ImproveGame.Content.Items
             }
         }
 
-        public override void AddRecipes()
-        {
+        public override void AddRecipes() {
             // 金锭
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
@@ -428,42 +412,32 @@ namespace ImproveGame.Content.Items
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        private static TileSort Color2TileSort(Color color)
-        {
-            if (color == Color.Red)
-            {
+        private static TileSort Color2TileSort(Color color) {
+            if (color == Color.Red) {
                 return TileSort.Block; // 实体块
             }
-            else if (color == Color.Black)
-            {
+            else if (color == Color.Black) {
                 return TileSort.Platform; // 平台
             }
-            else if (color == Color.White)
-            {
+            else if (color == Color.White) {
                 return TileSort.Torch; // 火把
             }
-            else if (color == Color.Yellow)
-            {
+            else if (color == Color.Yellow) {
                 return TileSort.Chair; // 椅子
             }
-            else if (color == Pink)
-            {
+            else if (color == Pink) {
                 return TileSort.Table; // 桌子
             }
-            else if (color == Color.Blue)
-            {
+            else if (color == Color.Blue) {
                 return TileSort.Workbench; // 工作台
             }
-            else if (color == ZiSe)
-            {
+            else if (color == ZiSe) {
                 return TileSort.Bed; // 床
             }
-            else if (color == QingSe)
-            {
+            else if (color == QingSe) {
                 return TileSort.NoWall; // 禁止放置墙体
             }
-            else
-            {
+            else {
                 return TileSort.None; // 没有任何
             }
         }

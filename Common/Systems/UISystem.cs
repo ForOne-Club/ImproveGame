@@ -18,7 +18,7 @@ namespace ImproveGame.Common.Systems
 
         public BrustGUI BrustGUI;
         public static UserInterface BrustInterface;
-        public static JuBigVaultGUI JuVaultUIGUI;
+        public static BigBagGUI JuVaultUIGUI;
         public static UserInterface JuBigVaultInterface;
 
         public override void Unload() {
@@ -34,7 +34,7 @@ namespace ImproveGame.Common.Systems
 
         public override void Load() {
             if (!Main.dedServ) {
-                JuVaultUIGUI = new JuBigVaultGUI();
+                JuVaultUIGUI = new BigBagGUI();
                 JuVaultUIGUI.Activate();
                 JuBigVaultInterface = new UserInterface();
                 JuBigVaultInterface.SetState(JuVaultUIGUI);
@@ -51,7 +51,7 @@ namespace ImproveGame.Common.Systems
             }
         }
         public override void UpdateUI(GameTime gameTime) {
-            if (JuBigVaultGUI.Visible) {
+            if (BigBagGUI.Visible) {
                 JuBigVaultInterface.Update(gameTime);
             }
             if (ArchitectureGUI.Visible) {
@@ -68,7 +68,7 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
                     "ImproveGame: Vault UI",
                     delegate {
-                        if (JuBigVaultGUI.Visible) {
+                        if (BigBagGUI.Visible) {
                             JuVaultUIGUI.Draw(Main.spriteBatch);
                         }
                         return true;

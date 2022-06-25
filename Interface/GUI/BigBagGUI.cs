@@ -8,7 +8,7 @@ using Terraria.UI;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class JuBigVaultGUI : UIState
+    public class BigBagGUI : UIState
     {
         public static bool _visible = true;
         public static Vector2 offset = Vector2.Zero;
