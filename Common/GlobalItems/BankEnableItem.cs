@@ -53,16 +53,17 @@ namespace ImproveGame.Common.GlobalItems
                 }
 
                 tooltips.Add(new(Mod, "BankEnable", tooltip) { OverrideColor = Color.LightGreen });
-                
+
+                SoundStyle? sound = null;
                 if (Main.mouseMiddle && Main.mouseMiddleRelease) {
                     if (MyUtils.Bank2Items.Contains(item.type)) {
-                        MyUtils.ToggleChest(ref player, -2);
                         if (item.type == ItemID.ChesterPetItem) {
-                            SoundEngine.PlaySound(player.chest == -2 ? SoundID.ChesterOpen : SoundID.ChesterClose);
+                            sound = player.chest == -2 ? SoundID.ChesterOpen : SoundID.ChesterClose;
                         }
                         if (item.type == ItemID.MoneyTrough) {
-                            SoundEngine.PlaySound(SoundID.Item59);
+                            sound = SoundID.Item59;
                         }
+                        MyUtils.ToggleChest(ref player, -2, sound: sound);
                         return;
                     }
                     if (MyUtils.Bank3Items.Contains(item.type)) {
@@ -74,10 +75,10 @@ namespace ImproveGame.Common.GlobalItems
                         return;
                     }
                     if (MyUtils.Bank5Items.Contains(item.type)) {
-                        MyUtils.ToggleChest(ref player, -5);
                         if (item.type == ItemID.VoidLens) {
-                            SoundEngine.PlaySound(SoundID.Item130);
+                            sound = SoundID.Item130;
                         }
+                        MyUtils.ToggleChest(ref player, -5, sound: sound);
                         return;
                     }
                 }
