@@ -220,10 +220,10 @@ Mods:
         {
             PrefixCount: "物品重铸次数："
             AnglerQuest: "已刷新钓鱼任务！"
-            BuffApplied: "物品Buff[{0}]已自动应用"
+            BuffApplied: "物品增益 [{0}] 已自动应用"
             BuffHided: 
                 '''
-                Buff已从Buff栏中隐藏
+                Buff增益图标已从Buff栏中隐藏
                 如果想要显示请在模组配置中修改
                 '''
             BankEnableOn: "中键单击以打开个人储存库"
