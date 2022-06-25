@@ -21,8 +21,8 @@ namespace ImproveGame.Interface.UIElements
         public JuItemSlot(Item[] SuperVault, int index) {
             this.SuperVault = SuperVault;
             this.index = index;
-            Width.Set(Back9.Width, 0f);
-            Height.Set(Back9.Height, 0f);
+            Width.Set(Back.Width, 0f);
+            Height.Set(Back.Height, 0f);
 
             text = new UIText("") {
                 VAlign = 0.8f
@@ -37,53 +37,33 @@ namespace ImproveGame.Interface.UIElements
             Append(text2);
         }
 
-        // 左键点击事件
         public override void MouseDown(UIMouseEvent evt) {
             SetCursorOverride();
             LeftClickItem();
         }
-        /// <summary>
-        /// 鼠标右键按下
-        /// </summary>
-        /// <param name="evt"></param>
+
         public override void RightMouseDown(UIMouseEvent evt) {
             RightMouseTimer = 0;
-            RightMouseKeepPressItem();
+            TakeSlotItemToMouseItem();
         }
 
-        /// <summary>
-        /// 鼠标右键放开
-        /// </summary>
-        /// <param name="evt"></param>
-        public override void RightMouseUp(UIMouseEvent evt) {
-            RightMouseTimer = -1;
-        }
-
-        /// <summary>
-        /// Update 更新
-        /// </summary>
-        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime) {
             base.Update(gameTime);
             // 右键长按物品持续拿出
-            if (RightMouseTimer >= 60) {
-                RightMouseKeepPressItem();
-            }
-            else if (RightMouseTimer >= 30 && RightMouseTimer % 3 == 0) {
-                RightMouseKeepPressItem();
-            }
-            else if (RightMouseTimer >= 15 && RightMouseTimer % 6 == 0) {
-                RightMouseKeepPressItem();
-            }
-            if (RightMouseTimer != -1) {
+            if (Main.mouseRight && IsMouseHovering) {
+                if (RightMouseTimer >= 60) {
+                    TakeSlotItemToMouseItem();
+                }
+                else if (RightMouseTimer >= 30 && RightMouseTimer % 3 == 0) {
+                    TakeSlotItemToMouseItem();
+                }
+                else if (RightMouseTimer >= 15 && RightMouseTimer % 6 == 0) {
+                    TakeSlotItemToMouseItem();
+                }
                 RightMouseTimer++;
             }
         }
 
-        /// <summary>
-        /// 绘制内容
-        /// </summary>
-        /// <param name="sb"></param>
         protected override void DrawSelf(SpriteBatch sb) {
             // 按下 Ctrl 改变鼠标指针外观
             if (IsMouseHovering && !Item.IsAir) {
@@ -95,56 +75,8 @@ namespace ImproveGame.Interface.UIElements
             CalculatedStyle dimensions = GetDimensions();
             sb.Draw(backgroundTexture2D, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f, 0, 0f);
 
-            // 绘制物品
-            if (!Item.IsAir) {
-                if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
-                    RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
-                    Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;
-                    sb.End();
-                    sb.GraphicsDevice.RasterizerState = rasterizerState;
-                    sb.GraphicsDevice.ScissorRectangle = rectangle1;
-                    sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                        DepthStencilState.None, rasterizerState, null, Main.UIScaleMatrix);
-                    Color lerpColor;
-                    float time = ImprovePlayer.G(Main.LocalPlayer).PlayerTimer;
-                    if (time % 60f < 30) {
-                        lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
-                    }
-                    else {
-                        lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
-                    }
-                    MyAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-                    MyAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
-                }
-                Rectangle rectangle;
-                if (Main.itemAnimations[Item.type] == null) {
-                    rectangle = ItemTexture2D.Frame(1, 1, 0, 0);
-                }
-                else {
-                    rectangle = Main.itemAnimations[Item.type].GetFrame(ItemTexture2D.Value);
-                }
-                float textureSize = 30f;
-                float size = rectangle.Width > textureSize || rectangle.Height > textureSize ?
-                    rectangle.Width > rectangle.Height ? textureSize / rectangle.Width : textureSize / rectangle.Height :
-                    1f;
-                sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                    new Rectangle?(rectangle), Item.GetAlpha(Color.White), 0f, Vector2.Zero, size,
-                    SpriteEffects.None, 0f);
-                sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                    new Rectangle?(rectangle), Item.GetColor(Color.White), 0f, Vector2.Zero, size,
-                    SpriteEffects.None, 0f);
+            DrawItem(sb, Item, dimensions);
 
-                if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
-                    Item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
-                    RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
-                    Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;
-                    sb.End();
-                    sb.GraphicsDevice.RasterizerState = rasterizerState;
-                    sb.GraphicsDevice.ScissorRectangle = rectangle1;
-                    sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                        DepthStencilState.None, rasterizerState, null, Main.UIScaleMatrix);
-                }
-            }
             text.SetText(Item.IsAir || Item.stack <= 1 ? "" : Item.stack.ToString(), 0.8f, false);
             text.Recalculate();
         }

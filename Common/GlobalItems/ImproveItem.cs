@@ -170,7 +170,7 @@ namespace ImproveGame.Common.GlobalItems
                 sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                     DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
                 Color lerpColor;
-                float time = ImprovePlayer.G(Main.LocalPlayer).PlayerTimer;
+                float time = Main.LocalPlayer.GetModPlayer<ImprovePlayer>().PlayerTimer;
                 if (time % 60f < 30) {
                     lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
                 }
@@ -200,7 +200,7 @@ namespace ImproveGame.Common.GlobalItems
         /// <param name="player"></param>
         /// <returns></returns>
         public override bool ItemSpace(Item item, Player player) {
-            ImprovePlayer improvePlayer = ImprovePlayer.G(player);
+            ImprovePlayer improvePlayer = Main.LocalPlayer.GetModPlayer<ImprovePlayer>();
 
             if (MyUtils.Config.SuperVault && MyUtils.HasItemSpace(player.GetModPlayer<DataPlayer>().SuperVault, item)) {
                 return true;

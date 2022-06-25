@@ -20,7 +20,7 @@ namespace ImproveGame.Common.Players
         private void ApplyHover(On.Terraria.UI.ItemSlot.orig_OverrideHover_ItemArray_int_int orig, Item[] inv, int context, int slot) {
             if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 &&
                 ItemSlot.ShiftInUse && !inv[slot].IsAir && !inv[slot].favorited) {
-                if (ArchitectureGUI.Visible && context == ItemSlot.Context.InventoryItem &&
+                if ((ArchitectureGUI.Visible || BigBagGUI.Visible) && context == ItemSlot.Context.InventoryItem &&
                     ArchitectureGUI.ItemSlot.Any(s => s.Value.CanPlaceItem(inv[slot]))) {
                     Main.cursorOverride = 9;
                     return;
@@ -34,7 +34,13 @@ namespace ImproveGame.Common.Players
         /// </summary>
         public override bool ShiftClickSlot(Item[] inventory, int context, int slot) {
             if (Player.chest == -1 & Player.talkNPC == -1 && !inventory[slot].IsAir && !inventory[slot].favorited) {
-                if (ArchitectureGUI.Visible && context == ItemSlot.Context.InventoryItem) {
+
+                if (BigBagGUI.Visible && context == ItemSlot.Context.InventoryItem) {
+                    inventory[slot] = MyUtils.PutItemInInventory(Player.whoAmI, Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], GetItemSettings.PickupItemFromWorld, false);
+                    SoundEngine.PlaySound(SoundID.Grab);
+                }
+
+                if (!inventory[slot].IsAir && ArchitectureGUI.Visible && context == ItemSlot.Context.InventoryItem) {
                     foreach (var itemSlot in from s in ArchitectureGUI.ItemSlot
                                              where s.Value.CanPlaceItem(inventory[slot])
                                              select s) {
@@ -59,7 +65,7 @@ namespace ImproveGame.Common.Players
                     }
                 }
             }
-            return base.ShiftClickSlot(inventory, context, slot);
+            return false;
         }
     }
 }

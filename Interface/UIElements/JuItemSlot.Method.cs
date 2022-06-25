@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Players;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
@@ -15,15 +17,9 @@ namespace ImproveGame.Interface.UIElements
 {
     partial class JuItemSlot
     {
-        private static Texture2D Back9 => TextureAssets.InventoryBack9.Value;
+        private static Texture2D Back => TextureAssets.InventoryBack.Value;
         private static Texture2D Back10 => TextureAssets.InventoryBack10.Value;
-        private Texture2D backgroundTexture2D => Item.favorited ? Back10 : Back9;
-        private Asset<Texture2D> ItemTexture2D {
-            get {
-                Main.instance.LoadItem(Item.type);
-                return TextureAssets.Item[Item.type];
-            }
-        }
+        private Texture2D backgroundTexture2D => Item.favorited ? Back10 : Back;
         public Item[] SuperVault;
         public int index;
         public Item Item {
@@ -36,7 +32,7 @@ namespace ImproveGame.Interface.UIElements
         /// <summary>
         /// 右键持续按住物品，向鼠标物品堆叠数量
         /// </summary>
-        public void RightMouseKeepPressItem() {
+        public void TakeSlotItemToMouseItem() {
             if (Main.mouseItem.type == Item.type && Main.mouseItem.stack < Main.mouseItem.maxStack) {
                 Main.mouseItem.stack++;
                 Item.stack--;
@@ -153,6 +149,70 @@ namespace ImproveGame.Interface.UIElements
                     SoundEngine.PlaySound(SoundID.Grab);
                 }
             }
+        }
+
+        public static void DrawItem(SpriteBatch sb, Item Item, CalculatedStyle dimensions, float ItemSize = 30f) {
+            // 绘制物品
+            if (!Item.IsAir) {
+                if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
+                    OpenItemGlow(sb);
+                }
+
+                Main.instance.LoadItem(Item.type);
+                var ItemTexture2D = TextureAssets.Item[Item.type];
+
+                Rectangle rectangle;
+                if (Main.itemAnimations[Item.type] == null)
+                    rectangle = ItemTexture2D.Frame(1, 1, 0, 0);
+                else
+                    rectangle = Main.itemAnimations[Item.type].GetFrame(ItemTexture2D.Value);
+
+                float size = rectangle.Width > ItemSize || rectangle.Height > ItemSize ?
+                    rectangle.Width > rectangle.Height ? ItemSize / rectangle.Width : ItemSize / rectangle.Height :
+                    1f;
+
+                sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
+                    new Rectangle?(rectangle), Item.GetAlpha(Color.White), 0f, Vector2.Zero, size,
+                    SpriteEffects.None, 0f);
+                sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
+                    new Rectangle?(rectangle), Item.GetColor(Color.White), 0f, Vector2.Zero, size,
+                    SpriteEffects.None, 0f);
+
+                if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
+                    Item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
+                    CloseItemGlow(sb);
+                }
+            }
+        }
+
+        public static void OpenItemGlow(SpriteBatch sb) {
+            var rasterizerState = sb.GraphicsDevice.RasterizerState;
+            var rectangle1 = sb.GraphicsDevice.ScissorRectangle;
+            sb.End();
+            sb.GraphicsDevice.RasterizerState = rasterizerState;
+            sb.GraphicsDevice.ScissorRectangle = rectangle1;
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
+                DepthStencilState.None, rasterizerState, null, Main.UIScaleMatrix);
+            Color lerpColor;
+            float time = Main.LocalPlayer.GetModPlayer<ImprovePlayer>().PlayerTimer;
+            if (time % 60f < 30) {
+                lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
+            }
+            else {
+                lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
+            }
+            MyAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
+            MyAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
+        }
+
+        public static void CloseItemGlow(SpriteBatch sb) {
+            RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
+            Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;
+            sb.End();
+            sb.GraphicsDevice.RasterizerState = rasterizerState;
+            sb.GraphicsDevice.ScissorRectangle = rectangle1;
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
+                DepthStencilState.None, rasterizerState, null, Main.UIScaleMatrix);
         }
     }
 }

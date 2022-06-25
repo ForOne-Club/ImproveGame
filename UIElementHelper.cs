@@ -7,7 +7,7 @@ using Terraria.UI;
 
 namespace PointShop
 {
-    public static class UIElementUtils
+    public static class UIElementHelper
     {
         public static void SetPos(this UIElement uie, float x, float y, float precentX = 0, float precentY = 0) {
             uie.Left.Set(x, precentX);

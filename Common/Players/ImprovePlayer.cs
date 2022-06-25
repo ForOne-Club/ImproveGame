@@ -10,8 +10,6 @@ namespace ImproveGame.Common.Players
 {
     public class ImprovePlayer : ModPlayer
     {
-        public static ImprovePlayer G(Player player) => player.GetModPlayer<ImprovePlayer>();
-
         public bool PiggyBank;
         public bool Safe;
         public bool DefendersForge;
