@@ -231,7 +231,7 @@ Mods:
             CreateWandOn: "中键单击以开启房屋材料面板"
             CreateWandOff: "中键单击以关闭房屋材料面板"
         }
-        Keybin:
+        Keybind:
         {
             SuperVault: 大背包
         }

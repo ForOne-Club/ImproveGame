@@ -16,7 +16,7 @@ namespace ImproveGame.Common.Systems
 
         public override void Load()
         {
-            RandomBuffKeybind = KeybindLoader.RegisterKeybind(Mod, MyUtils.GetText("Keybin.SuperVault"), "I");
+            RandomBuffKeybind = KeybindLoader.RegisterKeybind(Mod, MyUtils.GetText("Keybind.SuperVault"), "I");
         }
 
         public override void Unload()

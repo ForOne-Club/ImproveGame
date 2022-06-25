@@ -3,6 +3,7 @@ using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
@@ -49,6 +50,14 @@ namespace ImproveGame.Interface.GUI
             closeButton.Left.Set(-2, 0);
             closeButton.OnClick += CloseButton_OnClick;
             mainPanel.Append(closeButton);
+
+            string titleText = MyUtils.GetText("Keybind.SuperVault");
+            UIText title = new(titleText, 0.5f, large: true);
+            title.Left.Set(4, 0f);
+            title.Top.Set(4, 0f);
+            title.Width.Set(FontAssets.DeathText.Value.MeasureString(titleText).X * 0.5f, 0f);
+            title.Height.Set(30, 0f);
+            mainPanel.Append(title);
 
             /*UIText uIText = new("整理");
             uIText.OnClick += UIText_OnClick;

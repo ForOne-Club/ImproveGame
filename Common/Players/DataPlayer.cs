@@ -43,7 +43,7 @@ namespace ImproveGame.Common.Players
         /// 进入地图时候
         /// </summary>
         /// <param name="player"></param>
-        public override void OnEnterWorld(Terraria.Player player)
+        public override void OnEnterWorld(Player player)
         {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {

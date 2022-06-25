@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ImproveGame.Common.Players;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
@@ -29,6 +30,14 @@ namespace ImproveGame.Common.GlobalItems
             for (int i = 0; i < Main.LocalPlayer.inventory.Length; i++) {
                 if (Main.LocalPlayer.inventory[i].type == item.type) {
                     hasItemInInventory = true;
+                }
+            }
+            // 判断一下大背包
+            if (Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var modPlayer)) {
+                for (int i = 0; i < modPlayer.SuperVault.Length; i++) {
+                    if (modPlayer.SuperVault[i].type == item.type) {
+                        hasItemInInventory = true;
+                    }
                 }
             }
             if (Main.HoverItem == item && hasItemInInventory && MyUtils.IsBankItem(item.type)) {

@@ -218,7 +218,7 @@ Mods:
             CreateWandOn: "Middle click to open house material panel"
             CreateWandOff: "Middle click to close house material panel"
         }
-        Keybin:
+        Keybind:
         {
             SuperVault: Huge Inventory
         }
