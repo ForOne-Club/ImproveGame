@@ -7,12 +7,14 @@
 ---------------------------
 更新说明（具体请在设置或游戏内查看）：
     1.5.7
-        建筑&爆破&星爆魔杖新增控制面板。
-        （右键调出）
+        新增隐藏无限续杯BUFF图标功能。
+        （不同于luiafk，只是纯粹的隐藏）
         新增中键打开便携收纳功能。
-        修复大背包显示BUG，以及：
-            按下Shift鼠标左键点击取出物品。
-            收藏功能（仅防止一键取出）
+        建筑&爆破&星爆魔杖新增控制面板。（右键调出）
+        大背包：
+            修复显示BUG（增加滚动动画）
+            Shift 快速取出物品
+            Alt 收藏物品
     1.5.6
         新增建筑魔杖，用于建造房屋。
         法爆魔杖，星爆魔杖改版，支持框选。
@@ -60,16 +62,11 @@ Change log: (View details in mod configs)
         Added Wand of Architecture, to build houses
         Changed Wand of Brusts and Wand of Starbrusts, added support area selection
         More Buff Slots now supports number adjustion
-    1.5.5.8
-        Reduced using speed of Wand of Brusts and Wand of Starbrusts, but can affected by mining speed
     1.5.5
         Super Void Vault and Void Vault Smart pickup (Details in configs)
         A new inventory (Details in configs)
         Separate Portable Buff Stations and Portable Banners
         Increased wall-placing speed of Wand of technology
-    1.5.4
-        New feature: Portable buff stations(details in config)
-        Mana costs of Wand of Space and Wand of Technology are reduced to 50
 ---------------------------
 Function list:
     1. Max stack

@@ -28,6 +28,9 @@ namespace ImproveGame.Common.GlobalItems
                 BuffTypesShouldHide.Add(buffType);
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
             }
+            if (MyUtils.Config.NoConsume_Potion && item.stack >= 30 && SpecialPotions.Contains(item.type)) {
+                item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
+            }
         }
 
         public static int GetItemBuffType(Item item) {
