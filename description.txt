@@ -58,6 +58,15 @@ Functions toggled by defaut:
 Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
 ---------------------------
 Change log: (View details in mod configs)
+    1.5.7
+        New function to hide buff icons of the Infinite Potions
+        (Different from LiuAFK, this function only hides the buff icons)
+        New function to open personal inventories(Piggy Bank, Safe, ect.) by Mouse 3(Scroll click)
+        New control panels for Wand of Architecture/Brusts/Starbrusts(Right click to open)
+        Huge Inventory:
+            Fixed display bugs(Added animation for scrolling)
+            Shift + Left Click to quickly transfer
+            Alt + Left Click to mark as favorite
     1.5.6
         Added Wand of Architecture, to build houses
         Changed Wand of Brusts and Wand of Starbrusts, added support area selection
