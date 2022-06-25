@@ -52,6 +52,9 @@ namespace ImproveGame.Interface.UIElements
         /// </summary>
         private void SetCursorOverride() {
             if (!Item.IsAir) {
+                if (!Item.favorited && ItemSlot.ShiftInUse) {
+                    Main.cursorOverride = 8; // 快捷放回物品栏图标
+                }
                 if (Main.keyState.IsKeyDown(Main.FavoriteKey)) {
                     Main.cursorOverride = 3; // 收藏图标
                     if (Main.drawingPlayerChat) {
@@ -60,20 +63,16 @@ namespace ImproveGame.Interface.UIElements
                 }
                 void TryTrashCursorOverride() {
                     if (!Item.favorited) {
-                        if (Main.npcShop > 0) {
-                            Main.cursorOverride = 8; /*10*/ // 卖出图标
-                        }
-                        else {
-                            Main.cursorOverride = 8; // 拿回背包图标
-                        }
+                        Main.cursorOverride = 6; // 垃圾箱图标
                     }
                 }
                 if (ItemSlot.ControlInUse && ItemSlot.Options.DisableLeftShiftTrashCan && !ItemSlot.ShiftForcedOn) {
                     TryTrashCursorOverride();
                 }
-                if (!ItemSlot.Options.DisableLeftShiftTrashCan && ItemSlot.ShiftInUse) {
-                    TryTrashCursorOverride();
-                }
+                // 如果左Shift快速丢弃打开了，按原版物品栏的物品应该是丢弃，但是我们这应该算箱子物品，所以不丢弃
+                //if (!ItemSlot.Options.DisableLeftShiftTrashCan && ItemSlot.ShiftInUse) {
+                //    TryTrashCursorOverride();
+                //}
             }
         }
 
