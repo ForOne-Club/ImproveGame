@@ -104,9 +104,9 @@ namespace ImproveGame.Interface.GUI
         /// 打开GUI界面
         /// </summary>
         public static void Open() {
-            // 缩放修复
-            int x = (int)(Main.mouseX / Main.UIScale);
-            int y = (int)(Main.mouseY / Main.UIScale);
+            int x = Main.mouseX;
+            int y = Main.mouseY;
+            MyUtils.TransformToUIPosition(ref x, ref y);
             modeButton.SetCenter(x, y);
             tileButton.SetCenter(x - 44, y);
             wallButton.SetCenter(x + 44, y);

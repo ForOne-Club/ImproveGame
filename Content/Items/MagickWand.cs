@@ -59,7 +59,7 @@ namespace ImproveGame.Content.Items
                     if (player.whoAmI == Main.myPlayer) {
                         Rectangle rect = GetKillRect(player);
                         SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-                        MyUtils.ForechTile(rect, (i, j) => {
+                        MyUtils.ForeachTile(rect, (i, j) => {
                             if (Main.tile[i, j].WallType > 0 && BrustWandSystem.WallMode) {
                                 if (player.statMana < 1)
                                     player.QuickMana();

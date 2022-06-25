@@ -223,15 +223,13 @@ namespace ImproveGame.Content.Items
                         }
                     }
 
-                    if (!Main.tile[x, y].HasTile) {
-                        switch (tileSort) {
-                            case TileSort.Block:
-                                TryPlace(ref Block, player, x, y, TryPlaceTile);
-                                break;
-                            case TileSort.Platform:
-                                TryPlace(ref Platform, player, x, y, TryPlacePlatform);
-                                break;
-                        }
+                    switch (tileSort) {
+                        case TileSort.Block:
+                            TryPlace(ref Block, player, x, y, TryPlaceTile);
+                            break;
+                        case TileSort.Platform:
+                            TryPlace(ref Platform, player, x, y, TryPlacePlatform);
+                            break;
                     }
 
                     if (tileSort != TileSort.None) // 物块
