@@ -6,17 +6,16 @@ namespace ImproveGame.Content.Items
 {
     public class StarburstWand : MagickWand
     {
-        public override void SetDefaults()
+        public override void SetItemDefaults()
         {
-            base.SetDefaults();
             Item.width = 40;
             Item.height = 46;
             Item.rare = ItemRarityID.Yellow;
             Item.value = Item.sellPrice(0, 5, 0, 0);
 
-            killSizeMax = new(40, 20);
-            killSize = new(7, 5);
-            extraRange = new(16, 10);
+            SelectRange = new(40, 20);
+            KillSize = new(7, 5);
+            ExtraRange = new(16, 10);
         }
 
         public override void AddRecipes()

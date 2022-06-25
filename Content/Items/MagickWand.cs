@@ -2,75 +2,68 @@
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items
 {
-    public class MagickWand : ModItem
+    public class MagickWand : SelectorItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => MyUtils.Config.LoadModItems;
+        public override bool ModifySelectedTiles(Player player, int i, int j) {
+            SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
+            MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
+            if (Main.tile[i, j].WallType > 0 && BrustWandSystem.WallMode) {
+                WorldGen.KillWall(i, j);
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, i, j);
+                player.statMana -= 1;
+                if (player.statMana < 1) {
+                    player.QuickMana();
+                    if (player.statMana < 1) {
+                        return false;
+                    }
+                }
+            }
+            if (player.statMana < 2)
+                player.QuickMana();
+            if (player.statMana >= 2) {
+                if (BrustWandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player)) {
+                    player.statMana -= 2;
+                }
+            }
+            return true;
+        }
 
         public override bool AltFunctionUse(Player player) => true;
 
-        public override void SetStaticDefaults()
-        {
-            Item.staff[Type] = true;
-        }
+        protected Point ExtraRange;
+        protected Point KillSize;
 
-        protected Point killSizeMax;
-        protected Point extraRange;
-        protected Point killSize;
-        protected Point start;
-        protected Point end;
-        protected Rectangle TileRect => new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y), (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);
-
-        public override void SetDefaults()
-        {
-            Item.width = 28;
-            Item.height = 28;
+        public override void SetItemDefaults() {
             Item.rare = ItemRarityID.Lime;
-            Item.useStyle = ItemUseStyleID.Shoot;
-            Item.autoReuse = true;
-            Item.useAnimation = 18;
-            Item.useTime = 18;
-            Item.UseSound = SoundID.Item1;
             Item.value = Item.sellPrice(0, 1, 0, 0);
 
-            killSizeMax = new(20, 10);
-            killSize = new(5, 3);
-            extraRange = new(5, 3);
+            SelectRange = new(20, 10);
+            KillSize = new(5, 3);
+            ExtraRange = new(5, 3);
         }
 
-        public override bool CanUseItem(Player player)
-        {
-            _allowKillTile = true;
-            if (player.altFunctionUse == 0)
-            {
+        public override bool StartUseItem(Player player) {
+            if (player.altFunctionUse == 0) {
                 MyUtils.ItemRotation(player);
-                if (BrustWandSystem.FixedMode)
-                {
+                if (BrustWandSystem.FixedMode) {
                     Item.useAnimation = (int)(18 * player.pickSpeed);
                     Item.useTime = (int)(18 * player.pickSpeed);
-                    if (player.whoAmI == Main.myPlayer)
-                    {
+                    if (player.whoAmI == Main.myPlayer) {
                         Rectangle rect = GetKillRect(player);
                         SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-                        MyUtils.ForechTile(rect, (i, j) =>
-                        {
-                            if (Main.tile[i, j].WallType > 0 && BrustWandSystem.WallMode)
-                            {
+                        MyUtils.ForechTile(rect, (i, j) => {
+                            if (Main.tile[i, j].WallType > 0 && BrustWandSystem.WallMode) {
                                 if (player.statMana < 1)
                                     player.QuickMana();
-                                if (player.statMana >= 1)
-                                {
+                                if (player.statMana >= 1) {
                                     WorldGen.KillWall(i, j);
                                     if (Main.netMode == NetmodeID.MultiplayerClient)
                                         NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, i, j);
@@ -79,10 +72,8 @@ namespace ImproveGame.Content.Items
                             }
                             if (player.statMana < 2)
                                 player.QuickMana();
-                            if (player.statMana >= 2)
-                            {
-                                if (BrustWandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player))
-                                {
+                            if (player.statMana >= 2) {
+                                if (BrustWandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player)) {
                                     player.statMana -= 2;
                                 }
                             }
@@ -90,100 +81,25 @@ namespace ImproveGame.Content.Items
                         });
                     }
                 }
-                else
-                {
-                    Item.useAnimation = 18;
-                    Item.useTime = 18;
-                    start = Main.MouseWorld.ToTileCoordinates();
-                }
             }
-            else if (player.altFunctionUse == 2)
-            {
+            else if (player.altFunctionUse == 2) {
                 return false;
             }
-            return base.CanUseItem(player);
+
+            return base.StartUseItem(player);
         }
 
-        private bool _allowKillTile;
-
-        public override bool? UseItem(Player player)
-        {
-            if (player.altFunctionUse == 0 && !BrustWandSystem.FixedMode && !Main.dedServ && player.whoAmI == Main.myPlayer)
-            {
-                if (Main.mouseRight && _allowKillTile)
-                {
-                    _allowKillTile = false;
-                }
-                end = MyUtils.LimitRect(start, Main.MouseWorld.ToTileCoordinates(), killSizeMax.X, killSizeMax.Y);
-                Color color;
-                if (_allowKillTile)
-                    color = new(255, 0, 0);
-                else
-                    color = Color.GreenYellow;
-                Box box = DrawSystem.boxs[Box.NewBox(start, end, color * 0.35f, color)];
-                box.ShowWidth = true;
-                box.ShowHeight = true;
-                if (Main.mouseLeft)
-                {
-                    player.itemAnimation = 8;
-                    MyUtils.ItemRotation(player);
-                }
-                else
-                {
-                    player.itemAnimation = 0;
-                    if (_allowKillTile)
-                    {
-                        Rectangle tileRect = TileRect;
-                        int minI = tileRect.X;
-                        int maxI = tileRect.X + tileRect.Width - 1;
-                        int minJ = tileRect.Y;
-                        int maxJ = tileRect.Y + tileRect.Height - 1;
-                        for (int j = minJ; j <= maxJ; j++)
-                        {
-                            for (int i = minI; i <= maxI; i++)
-                            {
-                                SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-                                MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
-                                if (Main.tile[i, j].WallType > 0 && BrustWandSystem.WallMode)
-                                {
-                                    WorldGen.KillWall(i, j);
-                                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, i, j);
-                                    player.statMana -= 1;
-                                    if (player.statMana < 1)
-                                    {
-                                        player.QuickMana();
-                                        if (player.statMana < 1)
-                                        {
-                                            goto superBreak;
-                                        }
-                                    }
-                                }
-                                if (player.statMana < 2)
-                                    player.QuickMana();
-                                if (player.statMana >= 2)
-                                {
-                                    if (BrustWandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player))
-                                    {
-                                        player.statMana -= 2;
-                                    }
-                                }
-                            }
-                        }
-                    superBreak:;
-                    }
-                }
-            }
-            return base.UseItem(player);
+        public override bool CanUseSelector(Player player) {
+            return !BrustWandSystem.FixedMode;
         }
 
-        public override void HoldItem(Player player)
-        {
+        public override void HoldItem(Player player) {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI) {
                 if (BrustWandSystem.FixedMode) {
                     Box.NewBox(GetKillRect(player), Color.Red * 0.35f, Color.Red);
                 }
-                if (!Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1) {
+                // 还在用物品的时候不能打开UI
+                if (player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1) {
                     return;
                 }
                 if (!BrustGUI.Visible) {
@@ -195,21 +111,19 @@ namespace ImproveGame.Content.Items
             }
         }
 
-        protected Rectangle GetKillRect(Player player)
-        {
+        protected Rectangle GetKillRect(Player player) {
             Rectangle rect = new();
             Point playerCenter = player.Center.ToTileCoordinates();
             Point mousePosition = Main.MouseWorld.ToTileCoordinates();
-            mousePosition = MyUtils.LimitRect(playerCenter, mousePosition, Player.tileRangeX + extraRange.X, Player.tileRangeY + extraRange.Y);
-            rect.X = mousePosition.X - killSize.X / 2;
-            rect.Y = mousePosition.Y - killSize.Y / 2;
-            rect.Width = killSize.X;
-            rect.Height = killSize.Y;
+            mousePosition = MyUtils.LimitRect(playerCenter, mousePosition, Player.tileRangeX + ExtraRange.X, Player.tileRangeY + ExtraRange.Y);
+            rect.X = mousePosition.X - KillSize.X / 2;
+            rect.Y = mousePosition.Y - KillSize.Y / 2;
+            rect.Width = KillSize.X;
+            rect.Height = KillSize.Y;
             return rect;
         }
 
-        public override void AddRecipes()
-        {
+        public override void AddRecipes() {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 18)
                 .AddIngredient(ItemID.JungleSpores, 6)
