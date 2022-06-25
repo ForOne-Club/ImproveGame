@@ -81,9 +81,12 @@ namespace ImproveGame.Content.Items
                     color = new(255, 0, 0);
                 else
                     color = Color.GreenYellow;
-                Box box = DrawSystem.boxs[Box.NewBox(Start, End, color * 0.35f, color)];
-                box.ShowWidth = true;
-                box.ShowHeight = true;
+                int boxIndex = Box.NewBox(Start, End, color * 0.35f, color);
+                if (boxIndex is not -1) {
+                    Box box = DrawSystem.boxs[Box.NewBox(Start, End, color * 0.35f, color)];
+                    box.ShowWidth = true;
+                    box.ShowHeight = true;
+                }
                 if (Main.mouseLeft) {
                     player.itemAnimation = 8;
                     MyUtils.ItemRotation(player);
