@@ -14,7 +14,7 @@ namespace ImproveGame.Content.Items
         public override bool ModifySelectedTiles(Player player, int i, int j) {
             SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
             MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
-            if (Main.tile[i, j].WallType > 0 && BrustWandSystem.WallMode) {
+            if (Main.tile[i, j].WallType > 0 && WandSystem.WallMode) {
                 WorldGen.KillWall(i, j);
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, i, j);
@@ -29,7 +29,7 @@ namespace ImproveGame.Content.Items
             if (player.statMana < 2)
                 player.QuickMana();
             if (player.statMana >= 2) {
-                if (BrustWandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player)) {
+                if (WandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player)) {
                     player.statMana -= 2;
                 }
             }
@@ -53,14 +53,14 @@ namespace ImproveGame.Content.Items
         public override bool StartUseItem(Player player) {
             if (player.altFunctionUse == 0) {
                 MyUtils.ItemRotation(player);
-                if (BrustWandSystem.FixedMode) {
+                if (WandSystem.FixedMode) {
                     Item.useAnimation = (int)(18 * player.pickSpeed);
                     Item.useTime = (int)(18 * player.pickSpeed);
                     if (player.whoAmI == Main.myPlayer) {
                         Rectangle rect = GetKillRect(player);
                         SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
                         MyUtils.ForeachTile(rect, (i, j) => {
-                            if (Main.tile[i, j].WallType > 0 && BrustWandSystem.WallMode) {
+                            if (Main.tile[i, j].WallType > 0 && WandSystem.WallMode) {
                                 if (player.statMana < 1)
                                     player.QuickMana();
                                 if (player.statMana >= 1) {
@@ -73,7 +73,7 @@ namespace ImproveGame.Content.Items
                             if (player.statMana < 2)
                                 player.QuickMana();
                             if (player.statMana >= 2) {
-                                if (BrustWandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player)) {
+                                if (WandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player)) {
                                     player.statMana -= 2;
                                 }
                             }
@@ -90,12 +90,12 @@ namespace ImproveGame.Content.Items
         }
 
         public override bool CanUseSelector(Player player) {
-            return !BrustWandSystem.FixedMode;
+            return !WandSystem.FixedMode;
         }
 
         public override void HoldItem(Player player) {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI && !Main.LocalPlayer.mouseInterface) {
-                if (BrustWandSystem.FixedMode) {
+                if (WandSystem.FixedMode) {
                     Box.NewBox(GetKillRect(player), Color.Red * 0.35f, Color.Red);
                 }
                 // 还在用物品的时候不能打开UI

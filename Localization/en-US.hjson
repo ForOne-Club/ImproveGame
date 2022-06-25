@@ -9,12 +9,12 @@ Mods:
             LoadModItems:
             {
                 Header: Item Configs
-                Label: Enable mod items
+                Label: "[i:1344] Enable mod items"
                 Tooltip: Modded items will not be loaded if it is off
             }
             SuperVoidVault:
             {
-                Label: Super Void Vault
+                Label: "[i:4131] Super Void Vault"
                 Tooltip:
                     '''
                     Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
@@ -23,7 +23,7 @@ Mods:
             }
             SmartVoidVault:
             {
-                Label: Void Vault Smart Pickup
+                Label: "[i:4131] Void Vault Smart Pickup"
                 Tooltip:
                     '''
                     If the picked item already exists in the Void Vault, priorly put the item in it
@@ -32,7 +32,7 @@ Mods:
             }
             SuperVault:
             {
-                Label: Huge Inventory
+                Label: "[i:3813] Huge Inventory"
                 Tooltip:
                     '''
                     An inventory with 100 slots, can interact with Super Void Vault and Void Vault Smart Pickup
@@ -40,37 +40,37 @@ Mods:
                     (Need to setup hot keys in Controls)
                     '''
             }
-            ItemMaxStack.Label: Max stack
+            ItemMaxStack.Label: "[i:9] Max stack"
             GrabDistance:
             {
-                Label: Increase item pickup range (measured in blocks)
+                Label: "[i:5010] Increase item pickup range (measured in blocks)"
                 Tooltip: Increase pickup range of items. Drawing speed will also increase automatically
             }
             NoConsume_SummonItem:
             {
-                Label: No longer consume summon items
+                Label: "[i:560] No longer consume summon items"
                 Tooltip: Only for vanilla boss and event summon items
             }
-            AutoReuseWeapon.Label: Weapon autoswing
+            AutoReuseWeapon.Label: "[i:211] Weapon autoswing"
             AutoReuseWeapon_ExclusionList:
             {
-                Label: Autoswing black list
+                Label: "[i:3334] Autoswing black list"
                 Tooltip: If Weapon autoswing is true, items in this list cannot take the effect
             }
             ImproveToolSpeed:
             {
-                Label: Increase certain tools' using speed
+                Label: "[i:4056] Increase certain tools' using speed"
                 Tooltip: Tools with use times greater than 8 will have their use times set to 8
             }
-            TileSpeedAndTileRange.Label: Increase placement speed and range
+            TileSpeedAndTileRange.Label: "[i:2215] Increase placement speed and range"
             NoPlace_BUFFTile:
             {
-                Label: Portable buff stations
+                Label: "[i:3198] Portable buff stations"
                 Tooltip: Vanilla buff stations and banners in any of your inventories provide you with their buffs
             }
             NoPlace_BUFFTile_Banner:
             {
-                Label: Portable Banners (Vanilla only)
+                Label: "[i:2901] Portable Banners (Vanilla only)"
                 Tooltip:
                     '''
                     The same as portable buff stations
@@ -78,55 +78,54 @@ Mods:
             }
             NoConsume_Potion:
             {
-                Label: Enable infinite potions
+                Label: "[i:227] Enable infinite potions"
                 Tooltip: Potions in any of your inventories which stack not less than 30 will not be consumed
             }
             NoConsume_Ammo:
             {
-                Label: Enable infinite ammos
+                Label: "[i:3104] Enable infinite ammos"
                 Tooltip: Ammos which stack not less than 3996 will not be consumed
             }
             ImprovePrefix:
             {
-                Label: Better reforging mechanics
+                Label: "[i:1551] Better reforging mechanics"
                 Tooltip: Filter off bad prefixes as you keep reforging
             }
             ShowPrefixCount:
             {
-                Label: Display reforging count
+                Label: "[i:455] Display reforging count"
                 Tooltip: Shows how many times you have reforged this item
             }
             ShowItemMoreData:
             {
-                Label: Display item debug data
+                Label: "[i:1344] Display item debug data"
                 Tooltip: Display item debug data in tooltip
             }
             MiddleEnableBank:
             {
-                Label: "[i:87] Middle click open portable storage"
+                Label: "[i:87]  Middle click open portable storage"
                 Tooltip: 
                     '''
                     When you click on a portable storage item in the inventory with the middle button, 
                     it will open the corresponding storage
                     It will also turn off the distance limit for portable storage
-                    ([i:87][i:3213][i:4076][i:4131][i:346][i:3813][i:5098])
                     '''
             }
-            BanTombstone.Label: Disable tombstone spawn
+            BanTombstone.Label: "[i:3230] Disable tombstone spawn"
             TownNPCSpawnInNight:
             {
-                Header: NPC Configs
-                Label: Allow town NPCs to spawn at night time
+                Header: "[i:4382] NPC Configs"
+                Label: "[i:4081] Allow town NPCs to spawn at night time"
             }
-            TownNPCSpawnSpeed.Label: Town NPC spawn rate multiplier
-            NoCD_FishermanQuest.Label: Instant refresh Angler's quests
-            NPCCoinDropRate.Label: Enemy money drop multiplier
+            TownNPCSpawnSpeed.Label: "[i:4910] Town NPC spawn rate multiplier"
+            NoCD_FishermanQuest.Label: "[i:4608] Instant refresh Angler's quests"
+            NPCCoinDropRate.Label: "[i:73] Enemy money drop multiplier"
             BanDamageVar:
             {
-                Header: Game Mechanics
-                Label: Disable damage floating
+                Header: "[i:1344] Game Mechanics"
+                Label: "[i:6] Disable damage floating"
             }
-            ExtraPlayerBuffSlots.Label: Extra Buff Slots
+            ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
         }
         ItemName:
         {
@@ -183,7 +182,7 @@ Mods:
                 If there are no materials stored, will use the materials in your inventory
                 <right> to open the material storage and house style switch panel
                 Please prepare enough materials, or the house will not be built completely!
-                [c/ff0000:If the item is discarded, the stored materials inside will not be returned!]
+                [c/ff0000:If the item is discarded, the stored materials inside will not be returned!] 
                 '''
         }
         CombatText_Item:

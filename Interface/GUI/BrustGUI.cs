@@ -54,8 +54,8 @@ namespace ImproveGame.Interface.GUI
             tileButton.Height.Set(40, 0f);
             tileButton.OnMouseOver += MouseOver;
             tileButton.OnMouseOut += MouseOut;
-            tileButton.DrawColor += () => BrustWandSystem.TileMode ? Color.White : inactiveColor;
-            tileButton.OnMouseDown += (UIMouseEvent _, UIElement _) => BrustWandSystem.TileMode = !BrustWandSystem.TileMode;
+            tileButton.DrawColor += () => WandSystem.TileMode ? Color.White : inactiveColor;
+            tileButton.OnMouseDown += (UIMouseEvent _, UIElement _) => WandSystem.TileMode = !WandSystem.TileMode;
             Append(tileButton);
 
             wallButton = new ModImageButton(
@@ -67,8 +67,8 @@ namespace ImproveGame.Interface.GUI
             wallButton.Height.Set(40, 0f);
             wallButton.OnMouseOver += MouseOver;
             wallButton.OnMouseOut += MouseOut;
-            wallButton.DrawColor += () => BrustWandSystem.WallMode ? Color.White : inactiveColor;
-            wallButton.OnMouseDown += (UIMouseEvent _, UIElement _) => BrustWandSystem.WallMode = !BrustWandSystem.WallMode;
+            wallButton.DrawColor += () => WandSystem.WallMode ? Color.White : inactiveColor;
+            wallButton.OnMouseDown += (UIMouseEvent _, UIElement _) => WandSystem.WallMode = !WandSystem.WallMode;
             Append(wallButton);
         }
 
@@ -96,8 +96,8 @@ namespace ImproveGame.Interface.GUI
         }
 
         private void SwitchMode(UIMouseEvent evt, UIElement listeningElement) {
-            BrustWandSystem.FixedMode = !BrustWandSystem.FixedMode;
-            modeButton.SetImage(BrustWandSystem.FixedMode ? fixedModeButton : freeModeButton);
+            WandSystem.FixedMode = !WandSystem.FixedMode;
+            modeButton.SetImage(WandSystem.FixedMode ? fixedModeButton : freeModeButton);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace ImproveGame.Interface.GUI
             modeButton.SetCenter(x, y);
             tileButton.SetCenter(x - 44, y);
             wallButton.SetCenter(x + 44, y);
-            modeButton.SetImage(BrustWandSystem.FixedMode ? fixedModeButton : freeModeButton);
+            modeButton.SetImage(WandSystem.FixedMode ? fixedModeButton : freeModeButton);
             Visible = true;
         }
 

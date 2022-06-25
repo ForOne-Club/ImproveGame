@@ -21,7 +21,14 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
-            if (Main.HoverItem == item && MyUtils.IsBankItem(item.type)) {
+            // 确保物品栏里面有才能用，不然就作弊了（比如把物品打到聊天框里面直接中键）
+            bool hasItemInInventory = false;
+            for (int i = 0; i < Main.LocalPlayer.inventory.Length; i++) {
+                if (Main.LocalPlayer.inventory[i].type == item.type) {
+                    hasItemInInventory = true;
+                }
+            }
+            if (Main.HoverItem == item && hasItemInInventory && MyUtils.IsBankItem(item.type)) {
                 var player = Main.LocalPlayer;
 
                 // 决定文本显示的是“开启”还是“关闭”
