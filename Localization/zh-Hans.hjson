@@ -102,6 +102,7 @@ Mods:
                     '''
                     自动隐藏已无限续杯的增益效果
                     增益仍然以Buff形式存在，但不会在Buff栏中显示
+                    （不同于luiafk，只是纯粹的隐藏）
                     '''
             }
             ImprovePrefix:
