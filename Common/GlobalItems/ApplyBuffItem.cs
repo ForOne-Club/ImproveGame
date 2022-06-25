@@ -20,15 +20,38 @@ namespace ImproveGame.Common.GlobalItems
         // 增益 Tile 巴斯特雕像，篝火，红心灯笼，星星瓶，向日葵，弹药箱，施法桌，水晶球，蛋糕块，利器站，水蜡烛，和平蜡烛
         public static readonly List<List<int>> BUFFTiles = new() { new() { 506, 0, 215 }, new() { 215, 0, 87 }, new() { 42, 9, 89 }, new() { 42, 7, 158 }, new() { 27, 0, 146 }, new() { 287, 0, 93 }, new() { 354, 0, 150 }, new() { 125, 0, 29 }, new() { 621, 0, 192 }, new() { 377, 0, 159 }, new() { 49, 0, 86 }, new() { 372, 0, 157 } };
 
-        // 更新背包药水BUFF
         public override void UpdateInventory(Item item, Player player) {
+            UpdateInventoryGlow(item, player);
+        }
+
+        public static void UpdateInventoryGlow(Item item, Player player) {
             int buffType = GetItemBuffType(item);
             if (buffType is not -1) {
                 player.AddBuff(buffType, 2);
                 BuffTypesShouldHide.Add(buffType);
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
             }
+            // 非增益药剂
             if (MyUtils.Config.NoConsume_Potion && item.stack >= 30 && SpecialPotions.Contains(item.type)) {
+                item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
+            }
+            // 随身增益站：旗帜
+            if (MyUtils.Config.NoPlace_BUFFTile_Banner) {
+                if (item.createTile == TileID.Banners) {
+                    int style = item.placeStyle;
+                    int frameX = style * 18;
+                    int frameY = 0;
+                    if (style >= 90) {
+                        frameX -= 1620;
+                        frameY += 54;
+                    }
+                    if (frameX >= 396 || frameY >= 54) {
+                        item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
+                    }
+                }
+            }
+            // 弹药
+            if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0) {
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
             }
         }

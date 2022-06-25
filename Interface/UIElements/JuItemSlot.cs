@@ -87,6 +87,8 @@ namespace ImproveGame.Interface.UIElements
         protected override void DrawSelf(SpriteBatch sb) {
             // 按下 Ctrl 改变鼠标指针外观
             if (IsMouseHovering && !Item.IsAir) {
+                Main.hoverItemName = Item.Name;
+                Main.HoverItem = Item.Clone();
                 SetCursorOverride();
             }
             // 绘制背景框
@@ -142,11 +144,6 @@ namespace ImproveGame.Interface.UIElements
                     sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                         DepthStencilState.None, rasterizerState, null, Main.UIScaleMatrix);
                 }
-            }
-            // 物品信息
-            if (IsMouseHovering) {
-                Main.hoverItemName = Item.Name;
-                Main.HoverItem = Item.Clone();
             }
             text.SetText(Item.IsAir || Item.stack <= 1 ? "" : Item.stack.ToString(), 0.8f, false);
             text.Recalculate();

@@ -22,26 +22,22 @@ namespace ImproveGame.Common.GlobalItems
         // 前缀等级
         public static readonly Dictionary<int, int> PrefixLevel = new();
 
-        public override void SetDefaults(Item item)
-        {
+        public override void SetDefaults(Item item) {
             // 最大堆叠，修改条件
             // 物品最大值 == 1
             // 不为有伤害的近战武器
             // 不为铜币，银币，金币
             if (item.maxStack > 1
                 && !(item.DamageType == DamageClass.Melee && item.damage > 0)
-                && !GoldList.Contains(item.type))
-            {
+                && !GoldList.Contains(item.type)) {
                 item.maxStack = ModContent.GetInstance<Configs.ImproveConfigs>().ItemMaxStack;
-                if (item.type == ItemID.PlatinumCoin && item.maxStack > 18888)
-                {
+                if (item.type == ItemID.PlatinumCoin && item.maxStack > 18888) {
                     item.maxStack = 18888;
                 }
             }
 
             // 所有饰品可放在时装槽
-            if (item.accessory)
-            {
+            if (item.accessory) {
                 item.canBePlacedInVanityRegardlessOfConditions = true;
             }
         }
@@ -66,38 +62,8 @@ namespace ImproveGame.Common.GlobalItems
             return base.CanAutoReuseItem(item, player);
         }
 
-        // 更新背包药水BUFF
-        public override void UpdateInventory(Item item, Player player)
-        {
-            // 随身增益站：旗帜
-            if (MyUtils.Config.NoPlace_BUFFTile_Banner)
-            {
-                if (item.createTile == TileID.Banners)
-                {
-                    int style = item.placeStyle;
-                    int frameX = style * 18;
-                    int frameY = 0;
-                    if (style >= 90)
-                    {
-                        frameX -= 1620;
-                        frameY += 54;
-                    }
-                    if (frameX >= 396 || frameY >= 54)
-                    {
-                        item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
-                    }
-                }
-            }
-            // 弹药
-            if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0)
-            {
-                item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
-            }
-        }
-
         // 物品消耗
-        public override bool ConsumeItem(Item item, Player player)
-        {
+        public override bool ConsumeItem(Item item, Player player) {
             // 所有召唤物不会消耗
             if ((SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)) && MyUtils.Config.NoConsume_SummonItem) {
                 return false;
@@ -106,69 +72,53 @@ namespace ImproveGame.Common.GlobalItems
             return base.ConsumeItem(item, player);
         }
 
-        public override bool CanBeConsumedAsAmmo(Item ammo, Item weapon, Player player)
-        {
-            if (MyUtils.Config.NoConsume_Ammo && ammo.stack >= 3996 && ammo.ammo > 0)
-            {
+        public override bool CanBeConsumedAsAmmo(Item ammo, Item weapon, Player player) {
+            if (MyUtils.Config.NoConsume_Ammo && ammo.stack >= 3996 && ammo.ammo > 0) {
                 return false;
             }
             return base.CanBeConsumedAsAmmo(ammo, weapon, player);
         }
 
         // 前缀回滚
-        public override bool AllowPrefix(Item item, int pre)
-        {
+        public override bool AllowPrefix(Item item, int pre) {
             GlobalItemData itemVar = item.GetGlobalItem<GlobalItemData>();
-            if (itemVar.recastCount == 0)
-            {
+            if (itemVar.recastCount == 0) {
                 return true;
             }
             if (MyUtils.Config.ImprovePrefix) // 新的重铸机制
             {
                 // 饰品
-                if (PrefixLevel.ContainsKey(pre))
-                {
-                    if (item.accessory)
-                    {
-                        if (itemVar.recastCount < 2)
-                        {
+                if (PrefixLevel.ContainsKey(pre)) {
+                    if (item.accessory) {
+                        if (itemVar.recastCount < 2) {
                             return PrefixLevel[pre] >= 1;
                         }
-                        else if (itemVar.recastCount < 4)
-                        {
+                        else if (itemVar.recastCount < 4) {
                             return PrefixLevel[pre] >= 2;
                         }
-                        else if (itemVar.recastCount < 6)
-                        {
+                        else if (itemVar.recastCount < 6) {
                             return PrefixLevel[pre] >= 3;
                         }
-                        else
-                        {
+                        else {
                             return PrefixLevel[pre] >= 4;
                         }
                     }
-                    else
-                    {
+                    else {
                         // 工具
-                        if (pre == 15 && (item.axe > 0 || item.hammer > 0 || item.pick > 0))
-                        {
+                        if (pre == 15 && (item.axe > 0 || item.hammer > 0 || item.pick > 0)) {
                             return true;
                         }
                         // 召唤武器，但是不算入鞭子
-                        if (pre == 57 && item.DamageType == DamageClass.Summon)
-                        {
+                        if (pre == 57 && item.DamageType == DamageClass.Summon) {
                             return true;
                         }
-                        if (itemVar.recastCount < 3)
-                        {
+                        if (itemVar.recastCount < 3) {
                             return PrefixLevel[pre] >= 0;
                         }
-                        else if (itemVar.recastCount < 6)
-                        {
+                        else if (itemVar.recastCount < 6) {
                             return PrefixLevel[pre] >= 1;
                         }
-                        else
-                        {
+                        else {
                             return PrefixLevel[pre] >= 2;
                         }
                     }
@@ -178,27 +128,23 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         // 重铸次数统计
-        public override void PostReforge(Item item)
-        {
+        public override void PostReforge(Item item) {
             GlobalItemData itemVar = item.GetGlobalItem<GlobalItemData>();
             itemVar.recastCount++;
         }
 
         // 额外提示
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
-        {
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
             // 重铸次数
             if (MyUtils.Config.ShowPrefixCount && (item.accessory ||
                 (item.damage > 0 && item.maxStack == 1 && item.ammo == AmmoID.None &&
-                item.DamageType != DamageClass.Generic)))
-            {
+                item.DamageType != DamageClass.Generic))) {
                 GlobalItemData itemVar = item.GetGlobalItem<GlobalItemData>();
                 TooltipLine tooltip = new TooltipLine(Mod, "重铸次数", Language.GetTextValue($"Mods.ImproveGame.Tips.PrefixCount") + itemVar.recastCount);
                 tooltips.Add(tooltip);
             }
             // 更多信息
-            if (MyUtils.Config.ShowItemMoreData)
-            {
+            if (MyUtils.Config.ShowItemMoreData) {
                 tooltips.Add(new(Mod, "Type", "Type: " + item.type));
                 tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
                 tooltips.Add(new(Mod, "UseAnimation", "UseAnimation: " + item.useAnimation));
@@ -214,26 +160,21 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         // 额外拾取距离
-        public override void GrabRange(Item item, Player player, ref int grabRange)
-        {
+        public override void GrabRange(Item item, Player player, ref int grabRange) {
             grabRange += MyUtils.Config.GrabDistance * 16;
         }
 
-        public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-        {
-            if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
-            {
+        public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+            if (item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                 sb.End();
                 sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                     DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
                 Color lerpColor;
                 float time = ImprovePlayer.G(Main.LocalPlayer).PlayerTimer;
-                if (time % 60f < 30)
-                {
+                if (time % 60f < 30) {
                     lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
                 }
-                else
-                {
+                else {
                     lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
                 }
                 MyAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
@@ -243,10 +184,8 @@ namespace ImproveGame.Common.GlobalItems
             return true;
         }
 
-        public override void PostDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-        {
-            if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
-            {
+        public override void PostDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+            if (item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
                 sb.End();
                 sb.Begin(0, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
@@ -260,29 +199,23 @@ namespace ImproveGame.Common.GlobalItems
         /// <param name="item"></param>
         /// <param name="player"></param>
         /// <returns></returns>
-        public override bool ItemSpace(Item item, Player player)
-        {
+        public override bool ItemSpace(Item item, Player player) {
             ImprovePlayer improvePlayer = ImprovePlayer.G(player);
 
-            if (MyUtils.Config.SuperVault && MyUtils.HasItemSpace(player.GetModPlayer<DataPlayer>().SuperVault, item))
-            {
+            if (MyUtils.Config.SuperVault && MyUtils.HasItemSpace(player.GetModPlayer<DataPlayer>().SuperVault, item)) {
                 return true;
             }
-            if (MyUtils.Config.SuperVoidVault)
-            {
+            if (MyUtils.Config.SuperVoidVault) {
                 // 猪猪钱罐
-                if (improvePlayer.PiggyBank && MyUtils.HasItemSpace(player.bank.item, item))
-                {
+                if (improvePlayer.PiggyBank && MyUtils.HasItemSpace(player.bank.item, item)) {
                     return true;
                 }
                 // 保险箱
-                if (improvePlayer.Safe && MyUtils.HasItemSpace(player.bank2.item, item))
-                {
+                if (improvePlayer.Safe && MyUtils.HasItemSpace(player.bank2.item, item)) {
                     return true;
                 }
                 // 护卫熔炉
-                if (improvePlayer.DefendersForge && MyUtils.HasItemSpace(player.bank3.item, item))
-                {
+                if (improvePlayer.DefendersForge && MyUtils.HasItemSpace(player.bank3.item, item)) {
                     return true;
                 }
             }
