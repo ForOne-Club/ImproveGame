@@ -88,8 +88,12 @@ Mods:
             }
             HideNoConsumeBuffs:
             {
-                Label: "[i:297] Hide infinite buffs"
-                Tooltip: Prevent the display of buffs
+                Label: "[i:297] Hide buff icons of Infinite Potions"
+                Tooltip: 
+                    '''
+                    Hide buff icons of Infinite Potions
+                    The effects are still provided by their original buffs, but are not displayed
+                    '''
             }
             ImprovePrefix:
             {
@@ -108,12 +112,12 @@ Mods:
             }
             MiddleEnableBank:
             {
-                Label: "[i:87]  Middle click open portable storage"
+                Label: "[i:87]  Scroll click to open personal inventories"
                 Tooltip: 
                     '''
-                    When you click on a portable storage item in the inventory with the middle button, 
-                    it will open the corresponding storage
-                    It will also turn off the distance limit for portable storage
+                    When you scroll click a personal inventory item in your inventory
+                    it will open the corresponding inventory
+                    Also disables the distance limit of portable inventories
                     '''
             }
             BanTombstone.Label: "[i:3230] Disable tombstone spawn"
@@ -207,16 +211,16 @@ Mods:
         {
             PrefixCount: "Reforging count: "
             AnglerQuest: "Angler's quest refreshed!"
-            BuffApplied: "The buff [{0}] are already applied"
+            BuffApplied: "The buff [{0}] is already applied"
             BuffHided: 
                 '''
-                The buff is hiden due to the Mod Configuration
-                If you want to display it, please set the "Hide infinite buffs" off in the Mod Configuration
+                Buff icons have been hiden
+                To display them, disable "Hide buff icons of infinite potions" in Mod Configuration
                 '''
-            BankEnableOn: "Middle click to open personal storage"
-            BankEnableOff: "Middle click to close personal storage"
-            CreateWandOn: "Middle click to open house material panel"
-            CreateWandOff: "Middle click to close house material panel"
+            BankEnableOn: "Scroll click to open personal inventory"
+            BankEnableOff: "Scroll click to close personal inventory"
+            CreateWandOn: "Scroll click to open house material panel"
+            CreateWandOff: "Scroll click to close house material panel"
         }
         Keybind:
         {
