@@ -142,7 +142,7 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        public void LeftClickItem() {
+        public void LeftClickItem(ref Item placeItem) {
             // 放大镜图标 - 输入到聊天框
             if (Main.cursorOverride == 2) {
                 if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item), Vector2.One))
@@ -174,18 +174,18 @@ namespace ImproveGame.Interface.UIElements
             }
 
             // 常规单点
-            if (Main.mouseItem is not null && CanPlaceItem()) {
+            if (placeItem is not null && CanPlaceItem(placeItem)) {
                 // type不同直接切换吧
-                if (Item.type != Main.mouseItem.type || Item.prefix != Main.mouseItem.prefix) {
-                    SwapItem(ref Main.mouseItem);
+                if (Item.type != placeItem.type || Item.prefix != placeItem.prefix) {
+                    SwapItem(ref placeItem);
                     SoundEngine.PlaySound(SoundID.Grab);
                     return;
                 }
                 // type相同，里面的能堆叠，放进去
-                if (!Item.IsAir && ItemLoader.CanStack(Item, Main.mouseItem)) {
+                if (!Item.IsAir && ItemLoader.CanStack(Item, placeItem)) {
                     int stackAvailable = Item.maxStack - Item.stack;
-                    int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);
-                    Main.mouseItem.stack -= stackAddition;
+                    int stackAddition = Math.Min(placeItem.stack, stackAvailable);
+                    placeItem.stack -= stackAddition;
                     Item.stack += stackAddition;
                     SoundEngine.PlaySound(SoundID.Grab);
                 }
@@ -206,7 +206,7 @@ namespace ImproveGame.Interface.UIElements
             int lastPrefix = Item.prefix;
 
             SetCursorOverride(); // Click在Update执行，因此必须在这里设置一次
-            LeftClickItem();
+            LeftClickItem(ref Main.mouseItem);
 
             if (lastStack != Item.stack || lastType != Item.type || lastPrefix != Item.prefix) {
                 ItemChange();
@@ -216,8 +216,8 @@ namespace ImproveGame.Interface.UIElements
         /// <summary>
         /// 可以在这里写额外的物品放置判定，第一个Item是当前槽位存储物品，第二个Item是<see cref="Main.mouseItem">
         /// </summary>
-        internal Func<Item, Item, bool> OnCanPlaceItem;
-        private bool CanPlaceItem() {
+        public Func<Item, Item, bool> OnCanPlaceItem;
+        public bool CanPlaceItem(Item item) {
             bool canPlace = true;
 
             if (Item is null) {
@@ -226,7 +226,7 @@ namespace ImproveGame.Interface.UIElements
             }
 
             if (OnCanPlaceItem is not null) {
-                canPlace = OnCanPlaceItem.Invoke(Item, Main.mouseItem);
+                canPlace = OnCanPlaceItem.Invoke(Item, item);
             }
 
             return canPlace;

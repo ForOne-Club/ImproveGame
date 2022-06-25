@@ -28,6 +28,8 @@ namespace ImproveGame.Interface.GUI
         }
         public static CreateWand CurrentWand => CurrentItem.ModItem as CreateWand;
 
+        public static Dictionary<string, ModItemSlot> ItemSlot => itemSlot;
+
         private const float InventoryScale = 0.85f;
 
         private static bool PrevMouseRight;
