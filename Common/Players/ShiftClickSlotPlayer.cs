@@ -11,6 +11,8 @@ namespace ImproveGame.Common.Players
 {
     public class ShiftClickSlotPlayer : ModPlayer
     {
+        // 现在还没开放OverrideHover的接口，只能On了
+        // 等我的PR: https://github.com/tModLoader/tModLoader/pull/2620 被接受就可以改掉了
         public override void Load() {
             On.Terraria.UI.ItemSlot.OverrideHover_ItemArray_int_int += ApplyHover;
         }

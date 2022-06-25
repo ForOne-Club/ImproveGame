@@ -218,13 +218,16 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 打开GUI界面
         /// </summary>
-        public static void Open() {
+        public static void Open(int setSlotIndex = -1) {
             Main.playerInventory = true;
             PrevMouseRight = true; // 防止一打开就关闭
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 
             CurrentSlot = Main.LocalPlayer.selectedItem;
+            if (setSlotIndex is not -1) {
+                CurrentSlot = setSlotIndex;
+            }
             RefreshSlots(CurrentWand);
 
             // UI刚加载（即OnInit）时还未加载翻译，因此我们要在这里设置一遍文本

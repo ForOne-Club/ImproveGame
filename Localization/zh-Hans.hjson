@@ -95,6 +95,15 @@ Mods:
                 Label: "[i:3104] 无限弹药"
                 Tooltip: 所有堆叠数不小于 三千九百九十六 的弹药将不再消耗。
             }
+            HideNoConsumeBuffs:
+            {
+                Label: "[i:297] 隐藏无限续杯增益"
+                Tooltip:
+                    '''
+                    自动隐藏已无限续杯的增益效果
+                    增益仍然以Buff形式存在，但不会在Buff栏中显示
+                    '''
+            }
             ImprovePrefix:
             {
                 Label: "[i:1551] 更好的重铸机制"
@@ -210,8 +219,16 @@ Mods:
         {
             PrefixCount: "物品重铸次数："
             AnglerQuest: "已刷新钓鱼任务！"
+            BuffApplied: "物品Buff[{0}]已自动应用"
+            BuffHided: 
+                '''
+                Buff已从Buff栏中隐藏
+                如果想要显示请在模组配置中修改
+                '''
             BankEnableOn: "中键单击以打开个人储存库"
             BankEnableOff: "中键单击以关闭个人储存库"
+            CreateWandOn: "中键单击以开启房屋材料面板"
+            CreateWandOff: "中键单击以关闭房屋材料面板"
         }
         Keybin:
         {

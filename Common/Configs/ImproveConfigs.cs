@@ -89,6 +89,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool NoConsume_Ammo;
 
+        [Label("$Mods.ImproveGame.Config.HideNoConsumeBuffs.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.HideNoConsumeBuffs.Tooltip")]
+        [DefaultValue(true)]
+        public bool HideNoConsumeBuffs;
+
         [Label("$Mods.ImproveGame.Config.ImprovePrefix.Label")]
         [Tooltip("$Mods.ImproveGame.Config.ImprovePrefix.Tooltip")]
         [DefaultValue(false)]

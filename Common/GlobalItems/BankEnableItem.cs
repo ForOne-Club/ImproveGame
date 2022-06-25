@@ -21,6 +21,9 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
+            if (!MyUtils.Config.MiddleEnableBank)
+                return;
+
             // 确保物品栏里面有才能用，不然就作弊了（比如把物品打到聊天框里面直接中键）
             bool hasItemInInventory = false;
             for (int i = 0; i < Main.LocalPlayer.inventory.Length; i++) {

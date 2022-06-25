@@ -10,6 +10,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.UI;
 using static ImproveGame.Entitys.TileData;
 using static ImproveGame.MyUtils;
 
@@ -373,7 +374,42 @@ namespace ImproveGame.Content.Items
             Bed = ItemIO.Receive(reader, true, true);
         }
 
+        public bool ItemInInventory;
+
+        // 现在还没开放OverrideHover的接口，只能On了
+        // 等我的PR: https://github.com/tModLoader/tModLoader/pull/2620 被接受就可以改掉了
+        public override void Load() {
+            On.Terraria.UI.ItemSlot.OverrideHover_ItemArray_int_int += ApplyHover;
+        }
+
+        // 为了确保只有在物品栏才能用
+        private void ApplyHover(On.Terraria.UI.ItemSlot.orig_OverrideHover_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+            if (context == ItemSlot.Context.InventoryItem && inv[slot].type == ModContent.ItemType<CreateWand>() && inv[slot].ModItem is CreateWand) {
+                (inv[slot].ModItem as CreateWand).ItemInInventory = true;
+                if (Main.mouseMiddle && Main.mouseMiddleRelease) {
+                    if (!ArchitectureGUI.Visible) {
+                        ArchitectureGUI.Open(slot);
+                    }
+                    else {
+                        ArchitectureGUI.Close();
+                    }
+                }
+            }
+            orig.Invoke(inv, context, slot);
+        }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips) {
+            // 决定文本显示的是“开启”还是“关闭”
+            if (ItemInInventory) {
+                string tooltip = GetText("Tips.CreateWandOn");
+                if (ArchitectureGUI.Visible) {
+                    tooltip = GetText("Tips.CreateWandOff");
+                }
+
+                tooltips.Add(new(Mod, "CreateWand", tooltip) { OverrideColor = Color.LightGreen });
+            }
+            ItemInInventory = false;
+
             CalculateConsume();
             tooltips.Add(new(Mod, "MaterialConsume", $"[c/ffff00:{GetText("Architecture.MaterialsRequired")}]"));
             foreach (var item in MaterialConsume) {

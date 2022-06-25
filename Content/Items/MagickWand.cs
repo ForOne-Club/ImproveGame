@@ -2,10 +2,12 @@
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace ImproveGame.Content.Items
 {

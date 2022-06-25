@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.ID;
+using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -104,8 +105,9 @@ namespace ImproveGame.Interface.GUI
         /// 打开GUI界面
         /// </summary>
         public static void Open() {
-            int x = Main.mouseX;
-            int y = Main.mouseY;
+            bool center = PlayerInput.UsingGamepad && Main.SmartCursorWanted;
+            int x = center ? Main.screenWidth / 2 : Main.mouseX;
+            int y = center ? Main.screenHeight / 2 - 60 : Main.mouseY;
             MyUtils.TransformToUIPosition(ref x, ref y);
             modeButton.SetCenter(x, y);
             tileButton.SetCenter(x - 44, y);
