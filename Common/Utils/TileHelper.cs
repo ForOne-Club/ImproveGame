@@ -16,9 +16,15 @@ namespace ImproveGame
         /// </summary>
         /// <param name="player">玩家实例</param>
         /// <param name="chestID">箱子ID（对于便携储存是-2/-3/-4/-5，对于其他箱子是在<see cref="Main.chest"/>的索引）</param>
-        public static void ToggleChest(ref Player player, int chestID, int x = -1, int y = -1) {
+        public static void ToggleChest(ref Player player, int chestID, int x = -1, int y = -1, SoundStyle? sound = null) {
             if (player.chest == chestID) {
                 player.chest = -1;
+                if (sound is null) {
+                    SoundEngine.PlaySound(SoundID.MenuClose);
+                }
+                else {
+                    SoundEngine.PlaySound(sound.Value);
+                }
             }
             else {
                 x = x == -1 ? player.Center.ToTileCoordinates().X : x;
@@ -38,6 +44,13 @@ namespace ImproveGame
                 UILinkPointNavigator.ForceMovementCooldown(120);
                 if (PlayerInput.GrappleAndInteractAreShared)
                     PlayerInput.Triggers.JustPressed.Grapple = false;
+
+                if (sound is null) {
+                    SoundEngine.PlaySound(SoundID.MenuOpen);
+                }
+                else {
+                    SoundEngine.PlaySound(sound.Value);
+                }
             }
             Main.playerInventory = true;
             Recipe.FindRecipes();
