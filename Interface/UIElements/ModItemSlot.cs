@@ -129,7 +129,7 @@ namespace ImproveGame.Interface.UIElements
 
             // 空物品的话显示空贴图
             if (Item.IsAir) {
-                if (_emptyText is not null && IsMouseHovering) {
+                if (_emptyText is not null && IsMouseHovering && Main.mouseItem.IsAir) {
                     Main.instance.MouseText(_emptyText.Invoke());
                 }
                 if (_emptyTexture is not null) {
@@ -184,14 +184,16 @@ namespace ImproveGame.Interface.UIElements
 
             // 常规单点
             if (placeItem is not null && CanPlaceItem(placeItem)) {
+                byte placeMode = MyUtils.CanPlaceInSlot(Item, placeItem);
+
                 // type不同直接切换吧
-                if (Item.type != placeItem.type || Item.prefix != placeItem.prefix) {
+                if (placeMode == 1) {
                     SwapItem(ref placeItem);
                     SoundEngine.PlaySound(SoundID.Grab);
                     return;
                 }
                 // type相同，里面的能堆叠，放进去
-                if (!Item.IsAir && ItemLoader.CanStack(Item, placeItem)) {
+                if (placeMode == 2) {
                     int stackAvailable = Item.maxStack - Item.stack;
                     int stackAddition = Math.Min(placeItem.stack, stackAvailable);
                     placeItem.stack -= stackAddition;

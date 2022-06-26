@@ -8,7 +8,7 @@ Mods:
             NoNeedReload: No need to reload this mod
             LoadModItems:
             {
-                Header: Item Configs
+                Header: "[i:29] Item Configs"
                 Label: "[i:1344] Enable mod items"
                 Tooltip: Modded items will not be loaded if it is off
             }

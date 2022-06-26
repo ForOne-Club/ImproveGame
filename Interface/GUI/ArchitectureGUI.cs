@@ -30,8 +30,6 @@ namespace ImproveGame.Interface.GUI
 
         public static Dictionary<string, ModItemSlot> ItemSlot => itemSlot;
 
-        private const float InventoryScale = 0.85f;
-
         private static bool PrevMouseRight;
         private static bool HoveringOnSlots;
         private bool Dragging;
@@ -122,27 +120,9 @@ namespace ImproveGame.Interface.GUI
             basePanel.Append(styleButton);
         }
 
-        /// <summary>
-        /// 快捷做一个ItemSlot
-        /// </summary>
-        /// <param name="x">X</param>
-        /// <param name="y">Y</param>
-        /// <param name="iconTextureName">空物品时显示的贴图</param>
-        /// <param name="canPlace">是否可以放入物品的判断</param>
-        /// <param name="onItemChanged">物品更改时执行</param>
-        /// <returns>一个<see cref="ModItemSlot"/>实例</returns>
-        private static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null, Func<string> emptyText = null) {
-            ModItemSlot slot = new(InventoryScale, $"ImproveGame/Assets/Images/UI/Icon_{iconTextureName}", emptyText);
-            slot.Left.Set(x, 0f);
-            slot.Top.Set(y, 0f);
-            slot.Width.Set(46f, 0f);
-            slot.Height.Set(46f, 0f);
+        public static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null, Func<string> emptyText = null) {
+            ModItemSlot slot = MyUtils.CreateItemSlot(x, y, iconTextureName, 0.85f, canPlace, onItemChanged, emptyText, basePanel);
             slot.OnUpdate += (UIElement _) => HoveringOnSlots |= slot.IsMouseHovering;
-            if (canPlace is not null)
-                slot.OnCanPlaceItem += canPlace;
-            if (onItemChanged is not null)
-                slot.OnItemChange += onItemChanged;
-            basePanel.Append(slot);
             return slot;
         }
 
@@ -198,9 +178,6 @@ namespace ImproveGame.Interface.GUI
         public override void Draw(SpriteBatch spriteBatch) {
             Player player = Main.LocalPlayer;
 
-            //Initialize();
-
-            //basePanel.Draw(spriteBatch);
             base.Draw(spriteBatch);
 
             if (basePanel.ContainsPoint(Main.MouseScreen)) {
@@ -236,6 +213,9 @@ namespace ImproveGame.Interface.GUI
                 CurrentSlot = setSlotIndex;
             }
             RefreshSlots(CurrentWand);
+
+            // 关掉本Mod其他的同类UI
+            if (LiquidWandGUI.Visible) LiquidWandGUI.Close();
 
             // UI刚加载（即OnInit）时还未加载翻译，因此我们要在这里设置一遍文本
             materialTitle.SetText(Language.GetText("Mods.ImproveGame.Architecture.Materials"));

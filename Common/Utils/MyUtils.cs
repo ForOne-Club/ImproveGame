@@ -473,6 +473,25 @@ namespace ImproveGame
         }
 
         /// <summary>
+        /// 强制性的可否放置判断，只有满足条件才能放置物品，没有例外
+        /// </summary>
+        /// <param name="slotItem">槽内物品</param>
+        /// <param name="mouseItem">手持物品</param>
+        /// <returns>
+        /// 强制判断返回值，判断放物类型
+        /// <br>0: 不可放物</br>
+        /// <br>1: 两物品不同，应该切换</br>
+        /// <br>2: 两物品相同，应该堆叠</br>
+        /// </returns>
+        public static byte CanPlaceInSlot(Item slotItem, Item mouseItem) {
+            if (mouseItem.type != slotItem.type || mouseItem.prefix != slotItem.prefix)
+                return 1;
+            if (!slotItem.IsAir && slotItem.stack < slotItem.maxStack && ItemLoader.CanStack(slotItem, mouseItem))
+                return 2;
+            return 0;
+        }
+
+        /// <summary>
         /// 普遍性的可否放置判断
         /// </summary>
         /// <param name="slotItem">槽内物品</param>

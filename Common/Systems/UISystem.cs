@@ -13,15 +13,22 @@ namespace ImproveGame.Common.Systems
     /// </summary>
     public class UISystem : ModSystem
     {
+        public LiquidWandGUI LiquidWandGUI;
+        public static UserInterface LiquidWandInterface;
+
         public ArchitectureGUI ArchitectureGUI;
         public static UserInterface ArchitectureInterface;
 
         public BrustGUI BrustGUI;
         public static UserInterface BrustInterface;
+
         public static BigBagGUI JuVaultUIGUI;
         public static UserInterface JuBigVaultInterface;
 
         public override void Unload() {
+            LiquidWandGUI = null;
+            LiquidWandInterface = null;
+
             ArchitectureGUI = null;
             ArchitectureInterface = null;
 
@@ -34,6 +41,11 @@ namespace ImproveGame.Common.Systems
 
         public override void Load() {
             if (!Main.dedServ) {
+                LiquidWandGUI = new LiquidWandGUI();
+                LiquidWandGUI.Activate();
+                LiquidWandInterface = new UserInterface();
+                LiquidWandInterface.SetState(LiquidWandGUI);
+
                 JuVaultUIGUI = new BigBagGUI();
                 JuVaultUIGUI.Activate();
                 JuBigVaultInterface = new UserInterface();
@@ -51,6 +63,9 @@ namespace ImproveGame.Common.Systems
             }
         }
         public override void UpdateUI(GameTime gameTime) {
+            if (LiquidWandGUI.Visible) {
+                LiquidWandInterface.Update(gameTime);
+            }
             if (BigBagGUI.Visible) {
                 JuBigVaultInterface.Update(gameTime);
             }
@@ -78,13 +93,23 @@ namespace ImproveGame.Common.Systems
             }
 
             int inventoryIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Inventory");
-            if (inventoryIndex != -1)
+            if (inventoryIndex != -1) {
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
+            }
 
 
             int wireIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Wire Selection");
             if (wireIndex != -1)
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
+        }
+
+        private static bool DrawLiquidWandGUI() {
+            Player player = Main.LocalPlayer;
+            if (LiquidWandGUI.Visible && Main.playerInventory && player.HeldItem is not null) {
+                LiquidWandInterface.Draw(Main.spriteBatch, new GameTime());
+            }
+            return true;
         }
 
         private static bool DrawArchitectureGUI() {

@@ -8,7 +8,7 @@ Mods:
             NoNeedReload: 无需重新加载
             LoadModItems:
             {
-                Header: 物品设置
+                Header: "[i:29] 物品设置"
                 Label: "[i:1344] 启用模组物品"
                 Tooltip: 启用后会加载模组的物品，关闭后物品将会在游戏中消失。
             }
