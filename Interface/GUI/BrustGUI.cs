@@ -15,6 +15,7 @@ namespace ImproveGame.Interface.GUI
     {
         public static bool Visible { get; private set; }
         internal static bool MouseOnMenu;
+        private static bool _mouseRightPrev;
 
         private static Asset<Texture2D> fixedModeButton;
         private static Asset<Texture2D> freeModeButton;
@@ -93,6 +94,13 @@ namespace ImproveGame.Interface.GUI
                 return;
             }
 
+            if (!_mouseRightPrev && Main.mouseRight) {
+                Close();
+                return;
+            }
+
+            _mouseRightPrev = Main.mouseRight;
+
             base.Update(gameTime);
         }
 
@@ -114,6 +122,7 @@ namespace ImproveGame.Interface.GUI
             wallButton.SetCenter(x + 44, y);
             modeButton.SetImage(WandSystem.FixedMode ? fixedModeButton : freeModeButton);
             Visible = true;
+            _mouseRightPrev = true; // 防止一打开就关闭
         }
 
         /// <summary>
