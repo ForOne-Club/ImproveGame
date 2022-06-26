@@ -219,7 +219,7 @@ namespace ImproveGame
                     return item;
                 }
             }
-            return inventory[slot];
+            return item;
         }
 
         public static readonly List<int> Bank2Items = new() { ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem };
