@@ -15,7 +15,7 @@ namespace ImproveGame.Interface.UIElements
             Width.Set(TextureAssets.InventoryBack.Value.Width, 0f);
             Height.Set(TextureAssets.InventoryBack.Value.Height, 0f);
 
-            UIText text = new UIText((index + 1).ToString(), 0.75f) {
+            UIText text = new(string.Empty, 0.75f) {
                 VAlign = 0.8f
             };
             text.Left.Set(0, 0.2f);
@@ -25,7 +25,7 @@ namespace ImproveGame.Interface.UIElements
             };
             Append(text);
 
-            UIText text2 = new UIText((index + 1).ToString(), 0.75f) {
+            UIText text2 = new((index + 1).ToString(), 0.75f) {
                 VAlign = 0.15f
             };
             text2.Left.Set(0, 0.15f);
