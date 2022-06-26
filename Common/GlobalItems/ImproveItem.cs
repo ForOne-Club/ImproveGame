@@ -148,14 +148,23 @@ namespace ImproveGame.Common.GlobalItems
                 tooltips.Add(new(Mod, "Type", "Type: " + item.type));
                 tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
                 tooltips.Add(new(Mod, "UseAnimation", "UseAnimation: " + item.useAnimation));
-                tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot));
-                tooltips.Add(new(Mod, "ShootSpeed", "ShootSpeed: " + item.shootSpeed));
-                tooltips.Add(new(Mod, "Ammo", "Ammo: " + item.ammo));
-                tooltips.Add(new(Mod, "BuffType", "BuffType: " + item.buffType));
-                tooltips.Add(new(Mod, "BuffTime", "BuffTime: " + item.buffTime));
-                tooltips.Add(new(Mod, "CreateTile", "CreateTile: " + item.createTile));
-                tooltips.Add(new(Mod, "PlaceStyle", "PlaceStyle: " + item.placeStyle));
-                tooltips.Add(new(Mod, "CreateWall", "CreateWall: " + item.createWall));
+                if (item.shoot > ProjectileID.None) {
+                    tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot));
+                    tooltips.Add(new(Mod, "ShootSpeed", "ShootSpeed: " + item.shootSpeed));
+                }
+                if (item.ammo > ItemID.None)
+                    tooltips.Add(new(Mod, "Ammo", "Ammo: " + item.ammo));
+                if (item.buffType > 0) {
+                    tooltips.Add(new(Mod, "BuffType", "BuffType: " + item.buffType));
+                    tooltips.Add(new(Mod, "BuffTime", "BuffTime: " + item.buffTime));
+                }
+                if (item.createTile > -1) {
+                    tooltips.Add(new(Mod, "CreateTile", "CreateTile: " + item.createTile));
+                    if (item.placeStyle > 0)
+                        tooltips.Add(new(Mod, "PlaceStyle", "PlaceStyle: " + item.placeStyle));
+                }
+                if (item.createWall > -1)
+                    tooltips.Add(new(Mod, "CreateWall", "CreateWall: " + item.createWall));
             }
         }
 
