@@ -25,6 +25,7 @@ namespace ImproveGame.Interface.UIElements
         private readonly Asset<Texture2D> _emptyTexture;
         public float emptyTextureScale = 1f;
         public float emptyTextureOpacity = 0.5f;
+        private readonly Func<string> _emptyText; // 无物品的悬停文本
 
         public Item Item;
         public float Scale = 1f;
@@ -43,7 +44,8 @@ namespace ImproveGame.Interface.UIElements
         /// </summary>
         /// <param name="scale">物品在槽内显示的大小，0.85是游戏内物品栏的大小</param>
         /// <param name="emptyTexturePath">当槽内无物品时，显示的贴图</param>
-        public ModItemSlot(float scale = 0.85f, string emptyTexturePath = null) {
+        /// <param name="emptyText">当槽内无物品时，悬停显示的文本</param>
+        public ModItemSlot(float scale = 0.85f, string emptyTexturePath = null, Func<string> emptyText = null) {
             Item = new Item();
             Item.SetDefaults();
             Scale = scale;
@@ -52,6 +54,7 @@ namespace ImproveGame.Interface.UIElements
             if (emptyTexturePath is not null && ModContent.HasAsset(emptyTexturePath)) {
                 _emptyTexture = ModContent.Request<Texture2D>(emptyTexturePath);
             }
+            _emptyText = emptyText;
         }
 
         /// <summary>
@@ -125,9 +128,14 @@ namespace ImproveGame.Interface.UIElements
             ItemSlot.Draw(Main.spriteBatch, temp, context, 10, origin);
 
             // 空物品的话显示空贴图
-            if (Item.IsAir && _emptyTexture is not null) {
-                origin = _emptyTexture.Size() / 2f;
-                Main.spriteBatch.Draw(_emptyTexture.Value, GetDimensions().Center(), null, Color.White * emptyTextureOpacity, 0f, origin, emptyTextureScale, SpriteEffects.None, 0f);
+            if (Item.IsAir) {
+                if (_emptyText is not null && IsMouseHovering) {
+                    Main.instance.MouseText(_emptyText.Invoke());
+                }
+                if (_emptyTexture is not null) {
+                    origin = _emptyTexture.Size() / 2f;
+                    Main.spriteBatch.Draw(_emptyTexture.Value, GetDimensions().Center(), null, Color.White * emptyTextureOpacity, 0f, origin, emptyTextureScale, SpriteEffects.None, 0f);
+                }
             }
 
             Main.inventoryScale = oldScale;

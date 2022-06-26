@@ -10,19 +10,21 @@ namespace ImproveGame.Interface.UIElements
 {
     public class ModImageButton : UIElement
     {
-        private Asset<Texture2D> _texture;
-        private Color _colorActive;
-        private Color _colorInactive;
-        private SoundStyle? _playSound = null;
-        private Asset<Texture2D> _borderTexture;
-        private Asset<Texture2D> _backgroundTexture;
+        public Func<Color> DrawColor;
+        public Asset<Texture2D> Texture { get; private set; }
+        public Color ColorActive { get; private set; }
+        public Color ColorInactive { get; private set; }
+        public SoundStyle? PlaySound { get; private set; }
+        public Asset<Texture2D> BorderTexture { get; private set; }
+        public Asset<Texture2D> BackgroundTexture { get; private set; }
 
         public ModImageButton(Asset<Texture2D> texture, Color activeColor = default, Color inactiveColor = default) {
-            _texture = texture;
-            Width.Set(_texture.Width(), 0f);
-            Height.Set(_texture.Height(), 0f);
-            _colorActive = activeColor;
-            _colorInactive = inactiveColor;
+            Texture = texture;
+            Width.Set(Texture.Width(), 0f);
+            Height.Set(Texture.Height(), 0f);
+            ColorActive = activeColor;
+            ColorInactive = inactiveColor;
+            PlaySound = null;
         }
 
         #region 各种设置方法
@@ -33,27 +35,27 @@ namespace ImproveGame.Interface.UIElements
         }
 
         public void SetSound(SoundStyle sound) {
-            _playSound = sound;
+            PlaySound = sound;
         }
 
         public void SetColor(Color? activeColor = null, Color? inactiveColor = null) {
-            _colorActive = activeColor ?? _colorActive;
-            _colorInactive = inactiveColor ?? _colorActive;
+            ColorActive = activeColor ?? ColorActive;
+            ColorInactive = inactiveColor ?? ColorActive;
         }
 
         public void SetBackgroundImage(Asset<Texture2D> texture) {
-            _backgroundTexture = texture;
+            BackgroundTexture = texture;
         }
 
         public void SetHoverImage(Asset<Texture2D> texture) {
-            _borderTexture = texture;
+            BorderTexture = texture;
         }
 
         public void SetImage(Asset<Texture2D> texture, bool changeSize = false) {
-            _texture = texture;
+            Texture = texture;
             if (changeSize) {
-                Width.Set(_texture.Width(), 0f);
-                Height.Set(_texture.Height(), 0f);
+                Width.Set(Texture.Width(), 0f);
+                Height.Set(Texture.Height(), 0f);
             }
         }
         #endregion
@@ -65,29 +67,27 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        public Func<Color> DrawColor;
-
         protected override void DrawSelf(SpriteBatch spriteBatch) {
             CalculatedStyle dimensions = GetDimensions();
 
-            var mainColor = IsMouseHovering ? _colorActive : _colorInactive;
+            var mainColor = IsMouseHovering ? ColorActive : ColorInactive;
             if (DrawColor is not null) {
                 mainColor = DrawColor.Invoke();
             }
 
-            if (_backgroundTexture != null) {
-                spriteBatch.Draw(_backgroundTexture.Value, dimensions.Center(), null, mainColor, 0f, _backgroundTexture.Size() / 2f, 1f, SpriteEffects.None, 0f);
+            if (BackgroundTexture != null) {
+                spriteBatch.Draw(BackgroundTexture.Value, dimensions.Center(), null, mainColor, 0f, BackgroundTexture.Size() / 2f, 1f, SpriteEffects.None, 0f);
             }
-            spriteBatch.Draw(_texture.Value, dimensions.Center(), null, mainColor, 0f, _texture.Size() / 2f, 1f, SpriteEffects.None, 0f);
-            if (_borderTexture != null && IsMouseHovering) {
-                spriteBatch.Draw(_borderTexture.Value, dimensions.Center(), null, mainColor * 1.4f, 0f, _borderTexture.Size() / 2f, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Texture.Value, dimensions.Center(), null, mainColor, 0f, Texture.Size() / 2f, 1f, SpriteEffects.None, 0f);
+            if (BorderTexture != null && IsMouseHovering) {
+                spriteBatch.Draw(BorderTexture.Value, dimensions.Center(), null, mainColor * 1.4f, 0f, BorderTexture.Size() / 2f, 1f, SpriteEffects.None, 0f);
             }
         }
 
         public override void MouseOver(UIMouseEvent evt) {
             base.MouseOver(evt);
-            if (_playSound.HasValue) {
-                SoundEngine.PlaySound(_playSound.Value);
+            if (PlaySound.HasValue) {
+                SoundEngine.PlaySound(PlaySound.Value);
             }
         }
 
