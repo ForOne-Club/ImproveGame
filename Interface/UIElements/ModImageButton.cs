@@ -19,9 +19,11 @@ namespace ImproveGame.Interface.UIElements
         public Asset<Texture2D> BackgroundTexture { get; private set; }
 
         public ModImageButton(Asset<Texture2D> texture, Color activeColor = default, Color inactiveColor = default) {
-            Texture = texture;
-            Width.Set(Texture.Width(), 0f);
-            Height.Set(Texture.Height(), 0f);
+            if (texture is not null) {
+                Texture = texture;
+                Width.Set(Texture.Width(), 0f);
+                Height.Set(Texture.Height(), 0f);
+            }
             ColorActive = activeColor;
             ColorInactive = inactiveColor;
             PlaySound = null;
@@ -75,11 +77,11 @@ namespace ImproveGame.Interface.UIElements
                 mainColor = DrawColor.Invoke();
             }
 
-            if (BackgroundTexture != null) {
+            if (BackgroundTexture is not null) {
                 spriteBatch.Draw(BackgroundTexture.Value, dimensions.Center(), null, mainColor, 0f, BackgroundTexture.Size() / 2f, 1f, SpriteEffects.None, 0f);
             }
             spriteBatch.Draw(Texture.Value, dimensions.Center(), null, mainColor, 0f, Texture.Size() / 2f, 1f, SpriteEffects.None, 0f);
-            if (BorderTexture != null && IsMouseHovering) {
+            if (BorderTexture is not null && IsMouseHovering) {
                 spriteBatch.Draw(BorderTexture.Value, dimensions.Center(), null, mainColor * 1.4f, 0f, BorderTexture.Size() / 2f, 1f, SpriteEffects.None, 0f);
             }
         }

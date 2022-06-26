@@ -66,6 +66,11 @@ namespace ImproveGame.Content.Items
         private bool _unCancelled;
 
         /// <summary>
+        /// 在对框选物块执行操作后的方法，
+        /// </summary>
+        public virtual void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ) { }
+
+        /// <summary>
         /// 对被框选的物块进行修改的方法，如果返回值为false，则会立刻终止后面的操作，默认为true
         /// </summary>
         public virtual bool ModifySelectedTiles(Player player, int i, int j) => true;
@@ -102,10 +107,12 @@ namespace ImproveGame.Content.Items
                         for (int j = minJ; j <= maxJ; j++) {
                             for (int i = minI; i <= maxI; i++) {
                                 if (!ModifySelectedTiles(player, i, j)) {
+                                    PostModifyTiles(player, minI, minJ, i, j);
                                     return base.UseItem(player);
                                 }
                             }
                         }
+                        PostModifyTiles(player, minI, minJ, maxI, maxJ);
                     }
                 }
             }

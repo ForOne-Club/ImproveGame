@@ -2,6 +2,7 @@
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
@@ -15,36 +16,71 @@ namespace ImproveGame.Content.Items
 {
     public class LiquidWand : SelectorItem
     {
+        public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ) {
+            for (int j = minJ; j <= maxJ; j++) {
+                for (int i = minI; i <= maxI; i++) {
+                    WorldGen.SquareTileFrame(i, j, false);
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                        NetMessage.sendWater(i, j);
+                    else
+                        Liquid.AddWater(i, j);
+                }
+            }
+        }
+
         public override bool ModifySelectedTiles(Player player, int i, int j) {
+            Tile t = Main.tile[i, j];
+            // 吸收模式
             if (WandSystem.AbsorptionMode) {
-                
+                if (t.LiquidAmount > 0) {
+                    LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, true);
+                }
+            }
+            // 放置模式
+            else if (!t.HasTile || !WorldGen.SolidTile(new Point(i, j))) {
+                // 原来没有液体的
+                if (t.LiquidAmount == 0) {
+                    int oldType = t.LiquidType;
+                    t.LiquidType = WandSystem.LiquidMode; // 设置成相应的液体
+                    LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
+                    // 还是没有液体，设置回来（虽然我不知道有啥用）
+                    if (t.LiquidAmount == 0) {
+                        t.LiquidType = oldType;
+                    }
+                }
+                else {
+                    LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
+                }
             }
             return true;
         }
 
         [CloneByReference]
-        internal Item Bucket;
+        internal float Water;
+        [CloneByReference]
+        internal float Lava;
+        [CloneByReference]
+        internal float Honey;
 
         public override void SaveData(TagCompound tag) {
-            tag[nameof(Bucket)] = Bucket;
+            tag[nameof(Water)] = Water;
+            tag[nameof(Lava)] = Lava;
+            tag[nameof(Honey)] = Honey;
         }
 
         public override void LoadData(TagCompound tag) {
-            Bucket = tag.Get<Item>(nameof(Bucket));
+            Water = tag.Get<float>(nameof(Water));
+            Lava = tag.Get<float>(nameof(Lava));
+            Honey = tag.Get<float>(nameof(Honey));
         }
 
         public override bool AltFunctionUse(Player player) => true;
-
-        protected Point ExtraRange;
-        protected Point KillSize;
 
         public override void SetItemDefaults() {
             Item.rare = ItemRarityID.Lime;
             Item.value = Item.sellPrice(0, 1, 0, 0);
 
-            SelectRange = new(20, 10);
-            KillSize = new(5, 3);
-            ExtraRange = new(5, 3);
+            SelectRange = new(20, 5);
         }
 
         public override bool StartUseItem(Player player) {
@@ -60,27 +96,17 @@ namespace ImproveGame.Content.Items
 
         public override void HoldItem(Player player) {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI) {
+                LiquidWandGUI.CurrentSlot = player.selectedItem;
                 // 还在用物品的时候不能打开UI
-                if (player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1) {
+                if (player.mouseInterface || player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1) {
                     return;
                 }
-                if (!BrustGUI.Visible) {
+                if (!LiquidWandGUI.Visible) {
                     LiquidWandGUI.Open();
                 }
                 else {
                     LiquidWandGUI.Close();
                 }
-            }
-        }
-
-        /// <summary>
-        /// 设置物品，用于UI和物品存储数据间的同步
-        /// </summary>
-        /// <param name="item">物品实例</param>
-        internal void SetBucket(Item item, int inventoryIndex) {
-            Bucket = item;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
-                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, inventoryIndex, Main.LocalPlayer.inventory[inventoryIndex].prefix);
             }
         }
 
@@ -112,7 +138,7 @@ namespace ImproveGame.Content.Items
             // 决定文本显示的是“开启”还是“关闭”
             if (ItemInInventory) {
                 string tooltip = MyUtils.GetText("Tips.LiquidWandOn");
-                if (ArchitectureGUI.Visible) {
+                if (LiquidWandGUI.Visible) {
                     tooltip = MyUtils.GetText("Tips.LiquidWandOff");
                 }
 

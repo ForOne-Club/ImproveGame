@@ -1,4 +1,4 @@
-Mods:
+﻿Mods:
 {
     ImproveGame:
     {
@@ -230,6 +230,8 @@ Mods:
             BankEnableOff: "中键单击以关闭个人储存库"
             CreateWandOn: "中键单击以开启房屋材料面板"
             CreateWandOff: "中键单击以关闭房屋材料面板"
+            LiquidWandOn: "中键单击以开启液体控制面板"
+            LiquidWandOff: "中键单击以关闭液体控制面板"
         }
         Keybind:
         {
@@ -239,7 +241,6 @@ Mods:
         {
             Materials: "房屋材料"
             StoredMaterials: "(存有: {0})"
-            StyleChange: "切换"
             MaterialsRequired: "所需材料："
             Block: 砖块
             Platform: 平台
@@ -249,6 +250,20 @@ Mods:
             Workbench: 工作台
             Wall: 墙
             Bed: 床
+        }
+        LiquidWand:
+        {
+            Title: "液体控制"
+            Water: "水 ({0})"
+            Lava: "熔岩 ({0})"
+            Honey: "蜂蜜 ({0})"
+            ClickIn: "<left>以存入液体，长按以批量存入"
+            ClickOut: "<left>以提取液体，长按以批量提取"
+            ClickAbsorption: "<left>以吸走液体，长按以批量吸走"
+        }
+        Common:
+        {
+            Switch: "切换"
         }
     }
 }

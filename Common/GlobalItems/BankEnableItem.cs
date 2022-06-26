@@ -26,20 +26,10 @@ namespace ImproveGame.Common.GlobalItems
                 return;
 
             // 确保物品栏里面有才能用，不然就作弊了（比如把物品打到聊天框里面直接中键）
-            bool hasItemInInventory = false;
-            for (int i = 0; i < Main.LocalPlayer.inventory.Length; i++) {
-                if (Main.LocalPlayer.inventory[i].type == item.type) {
-                    hasItemInInventory = true;
-                }
-            }
-            // 判断一下大背包
-            if (Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var modPlayer)) {
-                for (int i = 0; i < modPlayer.SuperVault.Length; i++) {
-                    if (modPlayer.SuperVault[i].type == item.type) {
-                        hasItemInInventory = true;
-                    }
-                }
-            }
+            bool hasItemInInventory = Main.LocalPlayer.HasItem(item.type) ? true :
+            // 没有的话再判断一下大背包
+                Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var modPlayer) ? MyUtils.HasItem(modPlayer.SuperVault, item) : false;
+
             if (Main.HoverItem == item && hasItemInInventory && MyUtils.IsBankItem(item.type)) {
                 var player = Main.LocalPlayer;
 

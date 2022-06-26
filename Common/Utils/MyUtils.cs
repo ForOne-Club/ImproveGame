@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -125,7 +126,41 @@ namespace ImproveGame
         /// <param name="str"></param>
         /// <returns></returns>
         public static string GetText(string str, params object[] arg) {
-            return Language.GetTextValue($"Mods.ImproveGame.{str}", arg);
+            string text = Language.GetTextValue($"Mods.ImproveGame.{str}", arg);
+
+            // 支持输入<left>和<right>，就和ItemTooltip一样（原版只有Tooltip支持）
+            if (text.Contains("<right>")) {
+                InputMode inputMode = InputMode.XBoxGamepad;
+                if (PlayerInput.UsingGamepad)
+                    inputMode = InputMode.XBoxGamepadUI;
+
+                if (inputMode == InputMode.XBoxGamepadUI) {
+                    KeyConfiguration keyConfiguration = PlayerInput.CurrentProfile.InputModes[inputMode];
+                    string input = PlayerInput.BuildCommand("", true, keyConfiguration.KeyStatus["MouseRight"]);
+                    input = input.Replace(": ", "");
+                    text = text.Replace("<right>", input);
+                }
+                else {
+                    text = text.Replace("<right>", Language.GetTextValue("Controls.RightClick"));
+                }
+            }
+            if (text.Contains("<left>")) {
+                InputMode inputMode2 = InputMode.XBoxGamepad;
+                if (PlayerInput.UsingGamepad)
+                    inputMode2 = InputMode.XBoxGamepadUI;
+
+                if (inputMode2 == InputMode.XBoxGamepadUI) {
+                    KeyConfiguration keyConfiguration2 = PlayerInput.CurrentProfile.InputModes[inputMode2];
+                    string input = PlayerInput.BuildCommand("", true, keyConfiguration2.KeyStatus["MouseLeft"]);
+                    input = input.Replace(": ", "");
+                    text = text.Replace("<left>", input);
+                }
+                else {
+                    text = text.Replace("<left>", Language.GetTextValue("Controls.LeftClick"));
+                }
+            }
+
+            return text;
         }
 
         public static Asset<Texture2D> GetTexture(string path) {
@@ -135,6 +170,22 @@ namespace ImproveGame
         public static Asset<Effect> GetEffect(string path) {
             return ModContent.Request<Effect>($"ImproveGame/Assets/Effect/{path}", AssetRequestMode.ImmediateLoad);
         }
+
+        /// <summary>
+        /// 将存储float液体量转换为原版int整数液体量
+        /// <br>0.5%(0.005f) -> 255</br>
+        /// </summary>
+        /// <param name="amount">float液体量</param>
+        /// <returns>整数液体量</returns>
+        public static int LiquidAmountToInt(float amount) => (int)Math.Round(amount / 0.005f * 255);
+
+        /// <summary>
+        /// 将原版int整数液体量转换为存储float液体量
+        /// <br>255 -> 0.05%(0.005f)</br>
+        /// </summary>
+        /// <param name="amount">整数液体量</param>
+        /// <returns>float液体量</returns>
+        public static float LiquidAmountToFloat(int amount) => amount / 255f * 0.005f;
 
         /// <summary>
         /// 绘制一个方框

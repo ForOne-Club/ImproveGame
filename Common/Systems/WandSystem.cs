@@ -10,6 +10,13 @@ namespace ImproveGame.Common.Systems
         public static bool WallMode = true;
 
         // 液体法杖
-        public static bool AbsorptionMode = true;
+        public static bool AbsorptionMode = false;
+        public static int LiquidMode = 0;
+
+        /// <summary>
+        /// 切换吸收模式
+        /// </summary>
+        /// <returns>切换后当前模式</returns>
+        public static bool ChangeAbsorptionMode() => AbsorptionMode = !AbsorptionMode;
     }
 }

@@ -38,7 +38,7 @@ namespace ImproveGame.Interface.GUI
         private static UIPanel basePanel;
         private static Dictionary<string, ModItemSlot> itemSlot = new();
         private static UIText materialTitle;
-        private static UIIconTextButton styleButton;
+        private static ModIconTextButton styleButton;
 
         public override void OnInitialize() {
             panelLeft = 600f;
@@ -111,7 +111,7 @@ namespace ImproveGame.Interface.GUI
             basePanel.Append(materialTitle);
 
             // 房屋样式修改按钮
-            styleButton = new(Language.GetText("Mods.ImproveGame.Architecture.StyleChange"), Color.White, "Images/UI/DisplaySlots_5");
+            styleButton = new(Language.GetText("Mods.ImproveGame.Common.Switch"), Color.White, "Images/UI/DisplaySlots_5");
             styleButton.Left.Set(slotSecond, 0f);
             styleButton.Top.Set(slotThird, 0f);
             styleButton.Width.Set(104f, 0f);
@@ -219,10 +219,7 @@ namespace ImproveGame.Interface.GUI
 
             // UI刚加载（即OnInit）时还未加载翻译，因此我们要在这里设置一遍文本
             materialTitle.SetText(Language.GetText("Mods.ImproveGame.Architecture.Materials"));
-            styleButton.SetText(Language.GetText("Mods.ImproveGame.Architecture.StyleChange"), 1f, Color.White);
-            // 翻源码发现UIIconTextButton.SetText之后会重设Width和Height，尚且不知道为啥，不过我们可以给他改回来
-            styleButton.Width.Set(104f, 0f);
-            styleButton.Height.Set(42f, 0f);
+            styleButton.SetText(Language.GetText("Mods.ImproveGame.Common.Switch"), 1f, Color.White);
         }
 
         /// <summary>
