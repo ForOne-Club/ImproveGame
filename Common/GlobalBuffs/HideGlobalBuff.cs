@@ -178,7 +178,6 @@ namespace ImproveGame.Common.GlobalBuffs
                             HidedBuffCountThisFrame++;
                         return -10000;
                     }
-                    Main.NewText(i - HidedBuffCountThisFrame);
                     return i - HidedBuffCountThisFrame; // 当前的减去需要隐藏的
                 }
 
