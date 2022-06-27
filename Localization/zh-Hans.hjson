@@ -144,10 +144,22 @@
             GameMechanics.Header: "[i:1344] 游戏机制"
             TreeGrowFaster:
             {
-                Label: "[i:87] 树木迅速生长"
-                Tooltip: "使树木生长速度变为原来的十倍"
+                Label: "[i:1182] 树木迅速生长"
+                Tooltip: 
+                    '''
+                    使树木生长速度变为原来的五倍
+                    不会影响自然生成的丛林树和发光蘑菇树
+                    '''
             }
-            ShakeTreeFruit.Label: 摇树总是掉落水果
+            ShakeTreeFruit:
+            {
+                Label: "[i:4009] 摇树总是掉落水果"
+                Tooltip:
+                    '''
+                    大大提升掉落水果的概率 (其他物品掉落概率不会因此受到影响)
+                    如果还是什么都不掉，请确保该树有树冠，而且还未被摇过
+                    '''
+            }
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
         }
