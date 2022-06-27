@@ -149,10 +149,12 @@ namespace ImproveGame.Common.Configs
         [Header("$Mods.ImproveGame.Config.GameMechanics.Header")]
 
         [Label("$Mods.ImproveGame.Config.TreeGrowFaster.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.ShakeTreeFruit.Tooltip")]
         [DefaultValue(true)]
         public bool TreeGrowFaster;
 
         [Label("$Mods.ImproveGame.Config.ShakeTreeFruit.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.ShakeTreeFruit.Tooltip")]
         [DefaultValue(false)]
         public bool ShakeTreeFruit;
 
