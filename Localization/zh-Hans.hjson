@@ -6,9 +6,9 @@
         {
             ImproveConfigs.Label: 模组配置
             NoNeedReload: 无需重新加载
+            ItemConfigs.Header: "[i:29] 物品设置"
             LoadModItems:
             {
-                Header: "[i:29] 物品设置"
                 Label: "[i:1344] 启用模组物品"
                 Tooltip: 启用后会加载模组的物品，关闭后物品将会在游戏中消失。
             }
@@ -130,19 +130,21 @@
                     '''
             }
             BanTombstone.Label: "[i:3230] 禁止生成墓碑"
-            TownNPCSpawnInNight:
-            {
-                Header: "[i:4382] NPC 设置"
-                Label: "[i:4081] 允许城镇NPC夜晚刷新"
-            }
+
+            NPCConfigs.Header: "[i:4382] NPC 设置"
+            TownNPCSpawnInNight.Label: "[i:4081] 允许城镇NPC夜晚刷新"
             TownNPCSpawnSpeed.Label: "[i:4910] 城镇NPC刷新速度"
             NoCD_FishermanQuest.Label: "[i:4608] 渔夫任务取消冷却"
             NPCCoinDropRate.Label: "[i:73] 敌人钱币掉落倍率"
-            BanDamageVar:
+
+            GameMechanics.Header: "[i:1344] 游戏机制"
+            TreeGrowFaster:
             {
-                Header: "[i:1344] 游戏机制"
-                Label: "[i:6] 禁用伤害波动机制"
+                Label: "[i:87] 树木迅速生长"
+                Tooltip: "使树木生长速度变为原来的十倍"
             }
+            ShakeTreeFruit.Label: 摇树总是掉落水果
+            BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
         }
         ItemName:

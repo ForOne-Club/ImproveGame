@@ -6,9 +6,9 @@
         {
             ImproveConfigs.Label: Mod Configuration
             NoNeedReload: No need to reload this mod
+            ItemConfigs.Header: "[i:29] Item Configs"
             LoadModItems:
             {
-                Header: "[i:29] Item Configs"
                 Label: "[i:1344] Enable mod items"
                 Tooltip: Modded items will not be loaded if it is off
             }
@@ -121,19 +121,21 @@
                     '''
             }
             BanTombstone.Label: "[i:3230] Disable tombstone spawn"
-            TownNPCSpawnInNight:
-            {
-                Header: "[i:4382] NPC Configs"
-                Label: "[i:4081] Allow town NPCs to spawn at night time"
-            }
+
+            NPCConfigs.Header: "[i:4382] NPC Configs"
+            TownNPCSpawnInNight.Label: "[i:4081] Allow town NPCs to spawn at night time"
             TownNPCSpawnSpeed.Label: "[i:4910] Town NPC spawn rate multiplier"
             NoCD_FishermanQuest.Label: "[i:4608] Instant refresh Angler's quests"
             NPCCoinDropRate.Label: "[i:73] Enemy money drop multiplier"
-            BanDamageVar:
+
+            GameMechanics.Header: "[i:1344] Game Mechanics"
+            TreeGrowFaster:
             {
-                Header: "[i:1344] Game Mechanics"
-                Label: "[i:6] Disable damage floating"
+                Label: "[i:87] 树木迅速生长"
+                Tooltip: "使树木生长速度变为原来的十倍"
             }
+            ShakeTreeFruit.Label: 摇树总是掉落水果
+            BanDamageVar.Label: "[i:6] Disable damage floating"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
         }
         ItemName:
