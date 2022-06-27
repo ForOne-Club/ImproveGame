@@ -1,9 +1,14 @@
-﻿using Terraria.UI;
+﻿using Microsoft.Xna.Framework;
+using Terraria.UI;
 
 namespace ImproveGame
 {
     public static class UIElementHelper
     {
+        public static void SetPos(this UIElement uie, Vector2 position, float precentX = 0, float precentY = 0) {
+            uie.SetPos(position.X, position.Y, precentX, precentY);
+        }
+
         public static void SetPos(this UIElement uie, float x, float y, float precentX = 0, float precentY = 0) {
             uie.Left.Set(x, precentX);
             uie.Top.Set(y, precentY);

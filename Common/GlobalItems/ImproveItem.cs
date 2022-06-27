@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Players;
+using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
@@ -56,7 +57,7 @@ namespace ImproveGame.Common.GlobalItems
                 return;
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Action<Player>>((player) => {
-                player.SetItemTime((int)MathHelper.Max(1, player.itemTime * (1f - MyUtils.Config.ExtraToolSpeed)));
+                player.SetItemTime((int)MathHelper.Max(1, MathF.Round(player.itemTime * (1f - MyUtils.Config.ExtraToolSpeed))));
             });
         }
         private void TryHittingWall(ILContext il) {
@@ -67,7 +68,7 @@ namespace ImproveGame.Common.GlobalItems
                 return;
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Action<Player>>((player) => {
-                player.SetItemTime((int)MathHelper.Max(1, player.itemTime * (1f - MyUtils.Config.ExtraToolSpeed)));
+                player.SetItemTime((int)MathHelper.Max(1, MathF.Round(player.itemTime * (1f - MyUtils.Config.ExtraToolSpeed))));
             });
         }
 
@@ -194,19 +195,7 @@ namespace ImproveGame.Common.GlobalItems
 
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
-                sb.End();
-                sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                    DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
-                Color lerpColor;
-                float time = Main.LocalPlayer.GetModPlayer<ImprovePlayer>().PlayerTimer;
-                if (time % 60f < 30) {
-                    lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
-                }
-                else {
-                    lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
-                }
-                MyAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-                MyAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
+                JuItemSlot.OpenItemGlow(sb);
                 return true;
             }
             return true;
@@ -215,9 +204,7 @@ namespace ImproveGame.Common.GlobalItems
         public override void PostDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
-                sb.End();
-                sb.Begin(0, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                    DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+                JuItemSlot.CloseItemGlow(sb);
             }
         }
 

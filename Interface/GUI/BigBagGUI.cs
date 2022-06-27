@@ -1,55 +1,61 @@
-﻿using ImproveGame.Common.Systems;
-using ImproveGame.Interface.UIElements;
+﻿using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.UI;
 
 namespace ImproveGame.Interface.GUI
 {
     public class BigBagGUI : UIState
     {
-        public static bool _visible = true;
-        public static Vector2 offset = Vector2.Zero;
-        public static Vector2 position = Vector2.Zero;
+        private static bool _visible = true;
+        private static Vector2 offset = Vector2.Zero;
         public bool dragging;
         public static bool Visible {
-            get {
-                return Main.playerInventory && _visible;
-            }
-            set {
-                _visible = value;
-            }
+            get => Main.playerInventory && _visible;
+            set => _visible = value;
         }
 
-        public UIPanel mainPanel;
-        public JuItemGrid mainGrid;
-        public UIImageButton closeButton;
+        public UIPanel MainPanel;
+        public UIImageButton CloseButton;
+        public JuItemGrid ItemGrid;
 
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
-        /// <param name="SuperVault"></param>
-        /// <param name="SuperVaultOffset"></param>
-        public void JuInitialize(Item[] SuperVault, Vector2 SuperVaultOffset, bool Visible) {
-            RemoveAllChildren();
+        public void SetSuperVault(Item[] items, Vector2 SuperVaultPos) {
+            ItemGrid.SetInventory(items);
+
+            MainPanel.SetPos(SuperVaultPos);
+            MainPanel.Width.Pixels = MainPanel.HPadding() + ItemGrid.Width();
+            MainPanel.Height.Pixels = MainPanel.VPadding() + ItemGrid.Height() + ItemGrid.Top();
             _visible = Visible;
-            mainPanel = new UIPanel() {
-                HAlign = 0.5f,
-                VAlign = 0.5f
-            };
-            mainPanel.OnMouseDown += MainPanel_OnMouseDown;
-            mainPanel.OnMouseUp += MainPanel_OnMouseUp;
-            Append(mainPanel);
+            Recalculate();
+        }
 
-            closeButton = new(MyUtils.GetTexture("Close")) {
-                HAlign = 1f
+        public override void OnInitialize() {
+            MainPanel = new UIPanel();
+            MainPanel.OnMouseDown += (evt, uie) => {
+                if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering) {
+                    dragging = true;
+                    offset = evt.MousePosition - uie.GetDimensions().Position();
+                }
             };
-            closeButton.Left.Set(-2, 0);
-            closeButton.OnClick += CloseButton_OnClick;
-            mainPanel.Append(closeButton);
+            MainPanel.OnMouseUp += (evt, uie) => dragging = false;
+            MainPanel.OnUpdate += (uie) => {
+                if (dragging) {
+                    uie.SetPos(Main.MouseScreen - offset);
+                    uie.Recalculate();
+                }
+                if (!Collision.CheckAABBvAABBCollision(uie.GetDimensions().Position(), uie.GetDimensions().ToRectangle().Size(), Vector2.Zero, Main.ScreenSize.ToVector2())) {
+                    uie.SetPos(Vector2.Zero);
+                    uie.Recalculate();
+                }
+                if (uie.IsMouseHovering) {
+                    Main.LocalPlayer.mouseInterface = true;
+                }
+            };
+            Append(MainPanel);
 
             string titleText = MyUtils.GetText("Keybind.SuperVault");
             UIText title = new(titleText, 0.5f, large: true);
@@ -57,61 +63,29 @@ namespace ImproveGame.Interface.GUI
             title.Top.Set(4, 0f);
             title.Width.Set(FontAssets.DeathText.Value.MeasureString(titleText).X * 0.5f, 0f);
             title.Height.Set(30, 0f);
-            mainPanel.Append(title);
+            MainPanel.Append(title);
 
-            /*UIText uIText = new("整理");
-            uIText.OnClick += UIText_OnClick;
-            mainPanel.Append(uIText);*/
+            CloseButton = new(MyUtils.GetTexture("Close")) {
+                HAlign = 1f
+            };
+            CloseButton.Left.Set(-2, 0);
+            CloseButton.OnClick += (evt, uie) => Visible = false;
+            MainPanel.Append(CloseButton);
 
-            // 加载数据
-            mainGrid = new JuItemGrid(SuperVault);
-            mainGrid.Top.Set(30, 0f);
-            mainPanel.Append(mainGrid);
-            mainPanel.Width.Set(mainGrid.Width.Pixels + mainPanel.PaddingLeft + mainPanel.PaddingRight, 0f);
-            mainPanel.Height.Set(30 + mainGrid.Height.Pixels + mainPanel.PaddingTop + mainPanel.PaddingBottom, 0f);
-            Recalculate();
-            SetPosition(SuperVaultOffset);
+            ItemGrid = new JuItemGrid();
+            ItemGrid.Top.Pixels = 30f;
+            MainPanel.Append(ItemGrid);
         }
 
-        public override void OnInitialize() {
-
+        public static void Open() {
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+            Main.playerInventory = true;
+            _visible = true;
         }
 
-        public override void Update(GameTime gameTime) {
-            base.Update(gameTime);
-            if (dragging) {
-                position.X = Main.mouseX - offset.X;
-                position.Y = Main.mouseY - offset.Y;
-                mainPanel.Left.Set(position.X, 0f);
-                mainPanel.Top.Set(position.Y, 0f);
-                mainPanel.Recalculate();
-            }
-
-            if (mainPanel.IsMouseHovering) {
-                Main.LocalPlayer.mouseInterface = true;
-            }
-        }
-
-        public void SetPosition(Vector2 pos) {
-            position = pos;
-            mainPanel.Left.Set(position.X, 0f);
-            mainPanel.Top.Set(position.Y, 0f);
-            mainPanel.Recalculate();
-        }
-
-        private void MainPanel_OnMouseDown(UIMouseEvent evt, UIElement listeningElement) {
-            if (!mainGrid.ContainsPoint(evt.MousePosition) && !closeButton.ContainsPoint(evt.MousePosition)) {
-                dragging = true;
-                offset = new Vector2(evt.MousePosition.X - mainPanel.Left.Pixels, evt.MousePosition.Y - mainPanel.Top.Pixels);
-            }
-        }
-
-        private void MainPanel_OnMouseUp(UIMouseEvent evt, UIElement listeningElement) {
-            dragging = false;
-        }
-
-        private void CloseButton_OnClick(UIMouseEvent evt, UIElement listeningElement) {
-            Visible = false;
+        public static void Close() {
+            SoundEngine.PlaySound(SoundID.MenuClose);
+            _visible = false;
         }
     }
 }

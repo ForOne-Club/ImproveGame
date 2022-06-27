@@ -1,91 +1,90 @@
-﻿using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.UI;
 
 namespace ImproveGame.Interface.UIElements
 {
     public class JuItemGrid : UIElement
     {
-        public ItemList itemList;
-        public JuFixedUIScrollbar scrollbar;
-        public Item[] items;
+        public static Vector2 SlotSize => TextureAssets.InventoryBack.Size();
 
-        public JuItemGrid(Item[] SuperVault)
-        {
-            items = SuperVault;
+        public JuItemList ItemList;
+        public JuFixedUIScrollbar Scrollbar;
+
+        public JuItemGrid() {
             SetPadding(0);
             OverflowHidden = true;
 
-            scrollbar = new();
-            itemList = new();
-            itemList.SetPadding(0);
-            int widthCount = 10;
-            for (int i = 0; i < SuperVault.Length; i++)
-            {
-                JuItemSlot slot = new JuItemSlot(SuperVault, i);
-                slot.Left.Set(i % widthCount * (slot.Width.Pixels + 10f), 0f);
-                slot.Top.Set(i / widthCount * (slot.Height.Pixels + 10f), 0f);
-                itemList.Append(slot);
-                if (i == 0)
-                {
-                    itemList.Width.Set(slot.Width.Pixels * widthCount + 10f * widthCount - 10f, 0f);
-                    itemList.Height.Set(slot.Height.Pixels * 5 + 10f * 5 - 10f, 0f);
-                    Append(itemList);
+            ItemList = new();
+            ItemList.Width.Pixels = SlotSize.X * JuItemList.HCount + 10f * (JuItemList.HCount - 1);
+            ItemList.Height.Pixels = SlotSize.Y * JuItemList.VCount + 10f * (JuItemList.VCount - 1);
+            Append(ItemList);
+            Width.Pixels = ItemList.Width.Pixels;
+            Height.Pixels = ItemList.Height.Pixels;
 
-                    Width.Set(itemList.Width.Pixels, 0f);
-                    Height.Set(itemList.Height.Pixels, 0f);
-
-                    scrollbar.SetView(Height.Pixels,
-                        slot.Height.Pixels * (SuperVault.Length / widthCount) + 10f * (SuperVault.Length / widthCount) - 10f);
-                    scrollbar.Height.Set(Height.Pixels - 12f, 0f);
-                    scrollbar.HAlign = 1f;
-                    scrollbar.VAlign = 0.5f;
-                    Width.Pixels += scrollbar.Width.Pixels + 10f;
-                    Append(scrollbar);
-                }
-            }
+            Scrollbar = new();
+            Scrollbar.Height.Set(Height.Pixels - 12f, 0f);
+            Scrollbar.HAlign = 1f;
+            Scrollbar.VAlign = 0.5f;
+            Width.Pixels += Scrollbar.Width.Pixels + 10f;
+            Append(Scrollbar);
         }
 
-        public override void ScrollWheel(UIScrollWheelEvent evt)
-        {
+        public void SetInventory(Item[] items) {
+            Scrollbar.SetView(Height.Pixels, SlotSize.Y * (items.Length / JuItemList.HCount) + 10f * (items.Length / JuItemList.HCount) - 10f);
+            ItemList.SetInventory(items);
+        }
+
+        public override void ScrollWheel(UIScrollWheelEvent evt) {
             base.ScrollWheel(evt);
-            scrollbar.SetViewPosition(evt.ScrollWheelValue);
-            // scrollbar.ViewPosition -= evt.ScrollWheelValue;
+            Scrollbar.SetViewPosition(evt.ScrollWheelValue);
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            if (scrollbar != null)
-            {
-                itemList.Top.Set(-scrollbar.GetValue(), 0);
+        protected override void DrawSelf(SpriteBatch spriteBatch) {
+            if (Scrollbar != null) {
+                ItemList.Top.Set(-Scrollbar.GetValue(), 0);
             }
-            itemList.Recalculate();
+            ItemList.Recalculate();
+        }
+    }
+
+    /// <summary>
+    /// 显示物品的列表
+    /// </summary>
+    public class JuItemList : UIElement
+    {
+        public readonly static int HCount = 10;
+        public readonly static int VCount = 5;
+
+        public Item[] items;
+
+        public void SetInventory(Item[] items) {
+            this.items = items;
+            for (int i = 0; i < items.Length; i++) {
+                var ItemSlot = new JuItemSlot(this, i);
+                ItemSlot.Left.Pixels = i % HCount * (ItemSlot.Width.Pixels + 10f);
+                ItemSlot.Top.Pixels = i / HCount * (ItemSlot.Height.Pixels + 10f);
+                Append(ItemSlot);
+            }
         }
 
-        /// <summary>
-        /// 显示物品的列表
-        /// </summary>
-        public class ItemList : UIElement
-        {
-            public override bool ContainsPoint(Vector2 point)
-            {
-                return true;
-            }
+        public override void OnInitialize() {
+            SetPadding(0);
+        }
 
-            protected override void DrawChildren(SpriteBatch spriteBatch)
-            {
-                Vector2 position = Parent.GetDimensions().Position();
-                Vector2 dimensions = new Vector2(Parent.GetDimensions().Width, Parent.GetDimensions().Height);
-                foreach (UIElement current in Elements)
-                {
-                    Vector2 position2 = current.GetDimensions().Position();
-                    Vector2 dimensions2 = new Vector2(current.GetDimensions().Width, current.GetDimensions().Height);
-                    if (Collision.CheckAABBvAABBCollision(position, dimensions, position2, dimensions2))
-                    {
-                        current.Draw(spriteBatch);
-                    }
+        public override bool ContainsPoint(Vector2 point) => true;
+
+        protected override void DrawChildren(SpriteBatch spriteBatch) {
+            var position = Parent.GetDimensions().Position();
+            var dimensions = new Vector2(Parent.GetDimensions().Width, Parent.GetDimensions().Height);
+            foreach (UIElement current in Elements) {
+                var position2 = current.GetDimensions().Position();
+                var dimensions2 = new Vector2(current.GetDimensions().Width, current.GetDimensions().Height);
+                if (Collision.CheckAABBvAABBCollision(position, dimensions, position2, dimensions2)) {
+                    current.Draw(spriteBatch);
                 }
             }
         }
