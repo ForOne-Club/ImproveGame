@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Terraria;
 using Terraria.ID;
@@ -195,23 +196,9 @@ namespace ImproveGame
         /// <param name="self"></param>
         private void Player_VanillaPreUpdateInventory(On.Terraria.Player.orig_VanillaPreUpdateInventory orig, Player self) {
             orig(self);
-            for (int i = 0; i < self.bank.item.Length; i++) {
-                self.VanillaUpdateInventory(self.bank.item[i]);
-            }
-            for (int i = 0; i < self.bank2.item.Length; i++) {
-                self.VanillaUpdateInventory(self.bank2.item[i]);
-            }
-            for (int i = 0; i < self.bank3.item.Length; i++) {
-                self.VanillaUpdateInventory(self.bank3.item[i]);
-            }
-            for (int i = 0; i < self.bank4.item.Length; i++) {
-                self.VanillaUpdateInventory(self.bank4.item[i]);
-            }
-            if (MyUtils.Config.SuperVault) {
-                DataPlayer dataPlayer = self.GetModPlayer<DataPlayer>();
-                for (int i = 0; i < dataPlayer.SuperVault.Length; i++) {
-                    self.VanillaUpdateInventory(dataPlayer.SuperVault[i]);
-                }
+            var items = MyUtils.GetAllInventoryItemsList(self, true);
+            foreach (var item in items) {
+                self.VanillaUpdateInventory(item);
             }
         }
 

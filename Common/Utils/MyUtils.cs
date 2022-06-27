@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -239,6 +240,45 @@ namespace ImproveGame
                 }
             }
             Recipe.FindRecipes();
+            return item;
+        }
+
+        /// <summary>
+        /// 获取所有物品栏的物品
+        /// </summary>
+        /// <param name="player">玩家实例</param>
+        /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
+        /// <returns>包含全部物品数组的List</returns>
+        public static List<Item[]> GetAllInventoryItems(Player player, bool ignoreInventory) {
+            List<Item[]> items = new() {
+                player.bank.item,
+                player.bank2.item,
+                player.bank3.item,
+                player.bank4.item,
+            };
+            if (!ignoreInventory) {
+                items.Insert(0, player.inventory);
+            }
+            if (Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer)) {
+                items.Add(modPlayer.SuperVault);
+            }
+            return items;
+        }
+
+        /// <summary>
+        /// 获取所有物品栏的物品
+        /// </summary>
+        /// <param name="player">玩家实例</param>
+        /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
+        /// <returns>包含全部物品的List</returns>
+        public static List<Item> GetAllInventoryItemsList(Player player, bool ignoreInventory) {
+            var item = new List<Item>();
+            var items = GetAllInventoryItems(player, ignoreInventory);
+            foreach (var itemArray in items) {
+                for (int i = 0; i < itemArray.Length; i++) {
+                    item.Add(itemArray[i]);
+                }
+            }
             return item;
         }
 

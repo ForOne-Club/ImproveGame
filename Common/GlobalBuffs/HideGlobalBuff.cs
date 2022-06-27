@@ -95,12 +95,12 @@ namespace ImproveGame.Common.GlobalBuffs
                     return;
                 }
                 c.Index++;
-                c.EmitDelegate<Func<int, int>>((x) => {
+                c.EmitDelegate<Func<int, int>>((y) => {
                     if (!UseRegularMethod_Inventory && MyUtils.Config.HideNoConsumeBuffs && ApplyBuffItem.BuffTypesShouldHide.Contains(Main.LocalPlayer.buffType[index])) {
-                        // x设置成-100000
+                        // y设置成-100000
                         return -100000;
                     }
-                    return x;
+                    return y;
                 });
                 #endregion
 
@@ -171,12 +171,14 @@ namespace ImproveGame.Common.GlobalBuffs
             try {
                 ILCursor c = new(il);
 
-                static int ModifyDrawingIndex(int i, int buffType) {
+                static int ModifyDrawingIndex(int i, int buffType, bool addCount = false) {
                     if (!UseRegularMethod_NoInventory && MyUtils.Config.HideNoConsumeBuffs && ApplyBuffItem.BuffTypesShouldHide.Contains(buffType)) {
                         // 作为-10000传入
-                        HidedBuffCountThisFrame++;
+                        if (addCount)
+                            HidedBuffCountThisFrame++;
                         return -10000;
                     }
+                    Main.NewText(i - HidedBuffCountThisFrame);
                     return i - HidedBuffCountThisFrame; // 当前的减去需要隐藏的
                 }
 
@@ -190,7 +192,7 @@ namespace ImproveGame.Common.GlobalBuffs
                     ErrorHappenedInterface();
                     return;
                 }
-                c.EmitDelegate<Func<int, int>>((i) => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i]));
+                c.EmitDelegate<Func<int, int>>((i) => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i], true));
 
                 // 修改第二个
                 if (!c.TryGotoNext(MoveType.After,
@@ -245,7 +247,9 @@ namespace ImproveGame.Common.GlobalBuffs
                 if (MyUtils.Config.HideNoConsumeBuffs) {
                     // 干掉鼠标和文本
                     drawParams.MouseRectangle = Rectangle.Empty;
-                    HidedBuffCountThisFrame++;
+                    if (UseRegularMethod_NoInventory || Main.playerInventory) {
+                        HidedBuffCountThisFrame++;
+                    }
                     return false;
                 }
             }
