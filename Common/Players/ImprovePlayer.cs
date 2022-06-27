@@ -36,10 +36,6 @@ namespace ImproveGame.Common.Players
                 Player.tileRangeX += 5;
                 Player.tileRangeY += 4;
             }
-            if (MyUtils.Config.ImproveToolSpeed)
-            {
-                Player.pickSpeed -= 0.25f;
-            }
         }
 
         /// <summary>

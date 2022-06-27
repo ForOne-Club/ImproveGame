@@ -40,19 +40,19 @@ namespace ImproveGame.Content.Items
         }
 
         [CloneByReference]
-        internal Item Block;
+        internal Item Block = new();
         [CloneByReference]
-        internal Item Wall;
+        internal Item Wall = new();
         [CloneByReference]
-        internal Item Platform;
+        internal Item Platform = new();
         [CloneByReference]
-        internal Item Torch;
+        internal Item Torch = new();
         [CloneByReference]
-        internal Item Chair;
+        internal Item Chair = new();
         [CloneByReference]
-        internal Item Workbench;
+        internal Item Workbench = new();
         [CloneByReference]
-        internal Item Bed;
+        internal Item Bed = new();
 
         public override void SaveData(TagCompound tag) {
             tag[nameof(Block)] = Block;
@@ -65,13 +65,20 @@ namespace ImproveGame.Content.Items
         }
 
         public override void LoadData(TagCompound tag) {
-            Block = tag.Get<Item>(nameof(Block));
-            Wall = tag.Get<Item>(nameof(Wall));
-            Platform = tag.Get<Item>(nameof(Platform));
-            Torch = tag.Get<Item>(nameof(Torch));
-            Chair = tag.Get<Item>(nameof(Chair));
-            Workbench = tag.Get<Item>(nameof(Workbench));
-            Bed = tag.Get<Item>(nameof(Bed));
+            if (tag.ContainsKey(nameof(Block)))
+                Block = tag.Get<Item>(nameof(Block));
+            if (tag.ContainsKey(nameof(Wall)))
+                Wall = tag.Get<Item>(nameof(Wall));
+            if (tag.ContainsKey(nameof(Platform)))
+                Platform = tag.Get<Item>(nameof(Platform));
+            if (tag.ContainsKey(nameof(Torch)))
+                Torch = tag.Get<Item>(nameof(Torch));
+            if (tag.ContainsKey(nameof(Chair)))
+                Chair = tag.Get<Item>(nameof(Chair));
+            if (tag.ContainsKey(nameof(Workbench)))
+                Workbench = tag.Get<Item>(nameof(Workbench));
+            if (tag.ContainsKey(nameof(Bed)))
+                Bed = tag.Get<Item>(nameof(Bed));
         }
 
         public override void SetStaticDefaults() {

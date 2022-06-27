@@ -1,9 +1,11 @@
 ﻿using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using System;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -44,13 +46,30 @@ namespace ImproveGame.Common.GlobalItems
 
         // 用这个和公式来加成工具速度，这样就不需要Reload了
         // 同时不会太BT，原先的写法的使用速度实际上是 8*0.75=6 非常快，因为有个 pickSpeed -0.25 在ImprovePlayer
-        public override float UseSpeedMultiplier(Item item, Player player) {
-            if ((item.axe > 0 || item.pick > 0 || item.hammer > 0) && item.useTime > 8 && MyUtils.Config.ImproveToolSpeed) {
-                return item.useTime / 8f;
-            }
-            return base.UseSpeedMultiplier(item, player);
+        // Ju 2022.6.27: 去掉 ImprovePlayer 的额外速度，工具速度提升方式：减少工具使用间隔。（并非为提升工具速度）
+        private void ActuallyUseMiningTool(ILContext il) {
+            var c = new ILCursor(il);
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Ldarg_0),
+                i => i.Match(OpCodes.Ldarg_1),
+                i => i.Match(OpCodes.Ldloc_0)))
+                return;
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate<Action<Player>>((player) => {
+                player.SetItemTime((int)MathHelper.Max(1, player.itemTime * (1f - MyUtils.Config.ExtraToolSpeed)));
+            });
         }
-
+        private void TryHittingWall(ILContext il) {
+            var c = new ILCursor(il);
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Div),
+                i => i.Match(OpCodes.Stfld)))
+                return;
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate<Action<Player>>((player) => {
+                player.SetItemTime((int)MathHelper.Max(1, player.itemTime * (1f - MyUtils.Config.ExtraToolSpeed)));
+            });
+        }
 
         public override bool? CanAutoReuseItem(Item item, Player player) {
             // 自动挥舞
@@ -229,6 +248,13 @@ namespace ImproveGame.Common.GlobalItems
                 }
             }
             return false;
+        }
+
+        public override void Load() {
+            // 对 Tile 操作的工具
+            IL.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += ActuallyUseMiningTool;
+            // 对 Wall 操作的工具
+            IL.Terraria.Player.ItemCheck_UseMiningTools_TryHittingWall += TryHittingWall;
         }
     }
 }

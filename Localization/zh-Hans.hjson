@@ -59,8 +59,12 @@
             }
             ImproveToolSpeed:
             {
-                Label: "[i:4056] 提高部分工具速度"
-                Tooltip: 会将工作速度 (useTime) 大于 8 的物品的工作速度更改为 8。
+                Label: "[i:4056] 工具使用速度提升"
+                Tooltip:
+                '''
+                设置为 0 不会提升速度，值越大速度越快
+                计算方式：itemTime × ( 1 - value )
+                '''
             }
             TileSpeedAndTileRange.Label: "[i:2215] 提高物块放置速度和距离"
             NoPlace_BUFFTile:
