@@ -34,7 +34,7 @@ namespace ImproveGame.Interface.UIElements
 
         public override void MouseDown(UIMouseEvent evt) {
             SetCursorOverride();
-            LeftClickItem();
+            MouseClickSlot();
         }
 
         public override void RightMouseDown(UIMouseEvent evt) {

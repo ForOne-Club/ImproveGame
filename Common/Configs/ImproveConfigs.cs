@@ -58,8 +58,11 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.ImproveToolSpeed.Label")]
         [Tooltip("$Mods.ImproveGame.Config.ImproveToolSpeed.Tooltip")]
-        [DefaultValue(false)]
-        public bool ImproveToolSpeed;
+        [DefaultValue(0)]
+        [Range(0, 1f)]
+        [Slider]
+        [Increment(0.125f)]
+        public float ExtraToolSpeed;
 
         [Label("$Mods.ImproveGame.Config.TileSpeedAndTileRange.Label")]
         [DefaultValue(false)]

@@ -71,7 +71,10 @@ namespace ImproveGame.Interface.UIElements
         /// <summary>
         /// 左键点击物品
         /// </summary>
-        private void LeftClickItem() {
+        private void MouseClickSlot() {
+            if (Main.LocalPlayer.ItemAnimationActive)
+                return;
+
             // 放大镜图标 - 输入到聊天框
             if (Main.cursorOverride == 2) {
                 if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item), Vector2.One))
