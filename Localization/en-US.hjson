@@ -250,9 +250,21 @@
             Water: "Water ({0})"
             Lava: "Lava ({0})"
             Honey: "Honey ({0})"
-            ClickIn: "<left>以存入液体，长按以批量存入"
-            ClickOut: "<left>以提取液体，长按以批量提取"
-            ClickAbsorbant: "<left>以吸走液体，长按以批量吸走"
+            ClickIn: 
+                '''
+                <left>以存入液体
+                长按以批量存入
+                '''
+            ClickOut: 
+                '''
+                <left>以提取液体
+                长按以批量提取
+                '''
+            ClickAbsorbant: 
+                '''
+                <left>以吸走液体
+                长按以批量吸走
+                '''
         }
         Common:
         {

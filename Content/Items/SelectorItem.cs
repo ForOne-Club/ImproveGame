@@ -75,17 +75,25 @@ namespace ImproveGame.Content.Items
         /// </summary>
         public virtual bool ModifySelectedTiles(Player player, int i, int j) => true;
 
+        /// <summary>
+        /// 修改Box和文本的颜色
+        /// </summary>
+        /// <param name="cancelled">是否取消选中</param>
+        /// <returns>颜色</returns>
+        public virtual Color ModifyColor(bool cancelled) {
+            if (!cancelled)
+                return new(255, 0, 0);
+            else
+                return Color.GreenYellow;
+        }
+
         public override bool? UseItem(Player player) {
             if (CanUseSelector(player)&& !Main.dedServ && player.whoAmI == Main.myPlayer) {
                 if (Main.mouseRight && _unCancelled) {
                     _unCancelled = false;
                 }
                 End = MyUtils.LimitRect(Start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
-                Color color;
-                if (_unCancelled)
-                    color = new(255, 0, 0);
-                else
-                    color = Color.GreenYellow;
+                Color color = ModifyColor(!_unCancelled);
                 int boxIndex = Box.NewBox(Start, End, color * 0.35f, color);
                 if (boxIndex is not -1) {
                     Box box = DrawSystem.boxs[Box.NewBox(Start, End, color * 0.35f, color)];

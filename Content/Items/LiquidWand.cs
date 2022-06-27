@@ -28,6 +28,16 @@ namespace ImproveGame.Content.Items
             }
         }
 
+        public override Color ModifyColor(bool cancelled) {
+            if (cancelled)
+                return base.ModifyColor(cancelled);
+            return WandSystem.LiquidMode switch {
+                LiquidID.Lava => new(253, 32, 3),
+                LiquidID.Honey => new(255, 156, 12),
+                _ => new(9, 61, 191),
+            };
+        }
+
         public override bool ModifySelectedTiles(Player player, int i, int j) {
             Tile t = Main.tile[i, j];
             // 吸收模式
