@@ -10,7 +10,9 @@ namespace ImproveGame.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        [Header("$Mods.ImproveGame.Config.LoadModItems.Header")]
+        // 物品设置
+        [Header("$Mods.ImproveGame.Config.ItemConfigs.Header")]
+
         [Label("$Mods.ImproveGame.Config.LoadModItems.Label")]
         [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
         [DefaultValue(true)]
@@ -37,7 +39,6 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(0)]
         [Slider]
         [Range(0, 25)]
-        [ReloadRequired]
         public int GrabDistance;
 
         [Label("$Mods.ImproveGame.Config.ItemMaxStack.Label")]
@@ -122,23 +123,20 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool MiddleEnableBank;
 
-        [Header("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Header")]
+        [Header("$Mods.ImproveGame.Config.NPCConfigs.Header")]
 
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Label")]
         [DefaultValue(false)]
-        [ReloadRequired]
         public bool TownNPCSpawnInNight;
 
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnSpeed.Label")]
         [Slider]
         [Range(0, 12)]
         [DefaultValue(0)]
-        [ReloadRequired]
         public int TownNPCSpawnSpeed;
 
         [Label("$Mods.ImproveGame.Config.NoCD_FishermanQuest.Label")]
         [DefaultValue(false)]
-        [ReloadRequired]
         public bool NoCD_FishermanQuest;
 
         [Label("$Mods.ImproveGame.Config.NPCCoinDropRate.Label")]
@@ -148,11 +146,18 @@ namespace ImproveGame.Common.Configs
         [ReloadRequired]
         public int NPCCoinDropRate;
 
-        [Header("$Mods.ImproveGame.Config.BanDamageVar.Header")]
+        [Header("$Mods.ImproveGame.Config.GameMechanics.Header")]
+
+        [Label("$Mods.ImproveGame.Config.TreeGrowFaster.Label")]
+        [DefaultValue(true)]
+        public bool TreeGrowFaster;
+
+        [Label("$Mods.ImproveGame.Config.ShakeTreeFruit.Label")]
+        [DefaultValue(false)]
+        public bool ShakeTreeFruit;
 
         [Label("$Mods.ImproveGame.Config.BanDamageVar.Label")]
         [DefaultValue(false)]
-        [ReloadRequired]
         public bool BanDamageVar;
 
         [Label("$Mods.ImproveGame.Config.ExtraPlayerBuffSlots.Label")]
@@ -160,7 +165,6 @@ namespace ImproveGame.Common.Configs
         [Range(0, 99)]
         [Slider]
         [Increment(11)]
-        [ReloadRequired]
         public int ExtraPlayerBuffSlots;
     }
 }
