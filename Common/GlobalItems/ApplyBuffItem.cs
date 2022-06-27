@@ -16,18 +16,22 @@ namespace ImproveGame.Common.GlobalItems
         internal static List<int> BuffTypesShouldHide = new();
 
         // 特殊药水
-        public static readonly List<int> SpecialPotions = new() { 2350, 2351, 2997, 4870 };
+        public static readonly List<int> SpecialPotions = new() { 2350, 2351, ItemID.WormholePotion, ItemID.PotionOfReturn };
         // 增益 Tile 巴斯特雕像，篝火，红心灯笼，星星瓶，向日葵，弹药箱，施法桌，水晶球，蛋糕块，利器站，水蜡烛，和平蜡烛
         public static readonly List<List<int>> BUFFTiles = new() { new() { 506, 0, 215 }, new() { 215, 0, 87 }, new() { 42, 9, 89 }, new() { 42, 7, 158 }, new() { 27, 0, 146 }, new() { 287, 0, 93 }, new() { 354, 0, 150 }, new() { 125, 0, 29 }, new() { 621, 0, 192 }, new() { 377, 0, 159 }, new() { 49, 0, 86 }, new() { 372, 0, 157 } };
 
         public override void UpdateInventory(Item item, Player player) {
-            UpdateInventoryGlow(item, player);
-        }
-
-        public static void UpdateInventoryGlow(Item item, Player player) {
             int buffType = GetItemBuffType(item);
             if (buffType is not -1) {
                 player.AddBuff(buffType, 2);
+            }
+            // 我发现游戏暂停时，不会调用UpdateInventory，导致InventoryGlow没了，所以我调用放到了ImproveItem里面
+            //UpdateInventoryGlow(item, player);
+        }
+
+        public static void UpdateInventoryGlow(Item item) {
+            int buffType = GetItemBuffType(item);
+            if (buffType is not -1) {
                 BuffTypesShouldHide.Add(buffType);
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
             }
