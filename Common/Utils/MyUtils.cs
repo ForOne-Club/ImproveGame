@@ -223,6 +223,30 @@ namespace ImproveGame
         }
 
         /// <summary>
+        /// 可否使用当前物块魔杖，并返回物块魔杖目标在背包的索引
+        /// </summary>
+        /// <param name="item">物品</param>
+        /// <param name="index">对应物品在背包的索引</param>
+        /// <returns>是否可以使用</returns>
+        public static bool CheckWandUsability(Item item, Player player, out int index) {
+            bool canUse = true;
+            index = -1;
+
+            if (item.tileWand > 0) {
+                canUse = false;
+                for (int i = 0; i < 58; i++) {
+                    if (item.tileWand == player.inventory[i].type && player.inventory[i].stack > 0) {
+                        canUse = true;
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            return canUse;
+        }
+
+        /// <summary>
         /// 堆叠物品到仓库
         /// </summary>
         /// <param name="inventory"></param>
@@ -563,8 +587,15 @@ namespace ImproveGame
             return -1;
         }
 
-        public static bool TryConsumeItem(ref Item item, Player player) {
-            if (!item.IsAir && item.consumable && ItemLoader.ConsumeItem(item, player)) {
+        /// <summary>
+        /// 尝试消耗某个物品
+        /// </summary>
+        /// <param name="item">物品实例</param>
+        /// <param name="player">玩家实例</param>
+        /// <param name="ignoreConsumable">是否无视<see cref="Item.consumable"/>判定，即无论如何都消耗</param>
+        /// <returns>是否成功消耗</returns>
+        public static bool TryConsumeItem(ref Item item, Player player, bool ignoreConsumable = false) {
+            if (!item.IsAir && (item.consumable || ignoreConsumable) && ItemLoader.ConsumeItem(item, player)) {
                 item.stack--;
                 if (item.stack < 1) {
                     item.TurnToAir();

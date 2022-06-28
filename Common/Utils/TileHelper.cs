@@ -102,9 +102,16 @@ namespace ImproveGame
         /// <summary>
         /// 先炸掉，然后再放物块
         /// </summary>
-        public static bool BongBongPlace(int i, int j, int Type, bool mute = false, bool forced = false, int plr = -1, int style = 0, bool playSound = false) {
-            TryKillTile(i, j, Main.player[plr]);
-            bool success = WorldGen.PlaceTile(i, j, Type, mute, forced, plr, style);
+        public static bool BongBongPlace(int i, int j, Item item, Player player, bool mute = false, bool forced = false, bool playSound = false) {
+            // 物块魔杖特判    
+            if (item.tileWand > 0) {
+                if (CheckWandUsability(item, player, out int index) && index != -1)
+                    TryConsumeItem(ref player.inventory[index], player, true);
+                else return false;
+            }
+
+            TryKillTile(i, j, player);
+            bool success = WorldGen.PlaceTile(i, j, item.createTile, mute, forced, player.whoAmI, item.placeStyle);
             if (success) {
                 BongBong(new Vector2(i, j) * 16f, 16, 16);
                 if (playSound) {

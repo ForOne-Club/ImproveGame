@@ -300,14 +300,14 @@ namespace ImproveGame.Content.Items
             if (storedItem.IsAir || storedItem.createTile < TileID.Dirt) {
                 int i = PickItemInInventory(player, (item) =>
                     item is not null && tryMethod(item) &&
-                    BongBongPlace(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle, !_playedSound),
+                    BongBongPlace(x, y, item, player, true, true, !_playedSound),
                     true);
                 if (i != -1) {
                     _playedSound = true;
                 }
             }
             // 进行存储物品的放置尝试
-            else if (storedItem is not null && tryMethod(storedItem) && BongBongPlace(x, y, storedItem.createTile, true, true, player.whoAmI, storedItem.placeStyle, !_playedSound)) {
+            else if (storedItem is not null && tryMethod(storedItem) && BongBongPlace(x, y, storedItem, player, true, true, !_playedSound)) {
                 TryConsumeItem(ref storedItem, player);
                 _playedSound = true;
             }

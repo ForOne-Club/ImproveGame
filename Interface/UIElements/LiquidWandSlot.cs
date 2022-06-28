@@ -113,7 +113,7 @@ namespace ImproveGame.Interface.UIElements
             }
 
             #region 液体绘制 代码好乱我下次来写就看不懂了
-            byte fillLimit = (byte)(6f / scale);
+            byte fillLimit = (byte)(6f / scale - 1);
             if (originalFrame.Height > fillLimit) {
                 // 下部frame矩形，用于直接填充下部分纯色区域
                 Rectangle downFrame = originalFrame;
