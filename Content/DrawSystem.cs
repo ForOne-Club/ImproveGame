@@ -43,19 +43,18 @@ namespace ImproveGame.Content
                     {
                         Main.spriteBatch.Draw(box.PreView, new Vector2(box.X, box.Y) * 16f - Main.screenPosition, null, Color.White * 0.5f, 0, Vector2.Zero, 1f, 0, 0);
                     }
+
                     box.Draw();
-                    if (box.ShowHeight && box.ShowWidth)
-                    {
-                        Vector2 size = FontAssets.MouseText.Value.MeasureString(box.Width.ToString()) * 1.2f;
-                        Vector2 position = Main.MouseScreen + new Vector2(16, -size.Y + 6);
-                        Utils.DrawBorderString(Main.spriteBatch, $"{box.Width}×{box.Height}", position, box.borderColor, 1.2f);
-                    }
-                    else if (box.ShowWidth)
-                    {
-                        Vector2 size = FontAssets.MouseText.Value.MeasureString(box.Width.ToString()) * 1.2f;
-                        Vector2 position = Main.MouseScreen + new Vector2(16, -size.Y + 6);
-                        Utils.DrawBorderString(Main.spriteBatch, $"{box.Width}", position, box.borderColor, 1.2f);
-                    }
+
+                    string text = "";
+                    if (box.ShowWidth)
+                        text = box.Width.ToString();
+                    if (box.ShowHeight)
+                        text = box.ShowWidth ? $"{box.Width}×{box.Height}" : box.Height.ToString();
+                    Vector2 size = FontAssets.MouseText.Value.MeasureString(box.Width.ToString()) * 1.2f;
+                    Vector2 position = Main.MouseScreen + new Vector2(16, -size.Y + 6);
+                    Utils.DrawBorderString(Main.spriteBatch, text, position, box.borderColor, 1.2f);
+
                     boxs[i] = null;
                 }
             }

@@ -34,8 +34,9 @@ namespace ImproveGame.Content.Items
                 if (WandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player)) {
                     player.statMana -= 2;
                 }
+                return true;
             }
-            return true;
+            return false;
         }
 
         public override bool AltFunctionUse(Player player) => true;

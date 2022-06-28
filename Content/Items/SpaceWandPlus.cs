@@ -107,7 +107,8 @@ namespace ImproveGame.Content.Items
                 else
                     color = new Color(250, 40, 80);
                 int box = Box.NewBox(GetPlatfromRect(player), color * 0.35f, color);
-                DrawSystem.boxs[box].ShowWidth = true;
+                if (box is not -1)
+                    DrawSystem.boxs[box].ShowWidth = true;
             }
         }
 

@@ -44,6 +44,8 @@ namespace ImproveGame.Content.Items
             if (WandSystem.AbsorptionMode) {
                 if (t.LiquidAmount > 0) {
                     LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, true);
+                    if (!MyUtils.TryConsumeMana(player, 2))
+                        return false;
                 }
             }
             // 放置模式
@@ -56,10 +58,22 @@ namespace ImproveGame.Content.Items
                     // 还是没有液体，设置回来（虽然我不知道有啥用）
                     if (t.LiquidAmount == 0) {
                         t.LiquidType = oldType;
+                        return true;
                     }
+                    int manaCost = t.LiquidAmount / 120; // 根据液体放置了多少分成两个阶段
+                    if (t.LiquidType != LiquidID.Water && manaCost > 0)
+                        manaCost++; // 熔岩和蜂蜜额外耗蓝
+                    if (!MyUtils.TryConsumeMana(player, manaCost))
+                        return false;
                 }
                 else {
+                    byte liquidAmountPrev = t.LiquidAmount;
                     LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
+                    int manaCost = (t.LiquidAmount - liquidAmountPrev) / 120; // 根据液体放置了多少分成两个阶段
+                    if (t.LiquidType != LiquidID.Water && manaCost > 0)
+                        manaCost++; // 熔岩和蜂蜜额外耗蓝
+                    if (!MyUtils.TryConsumeMana(player, manaCost))
+                        return false;
                 }
             }
             return true;
@@ -79,9 +93,9 @@ namespace ImproveGame.Content.Items
         }
 
         public override void LoadData(TagCompound tag) {
-            Water = tag.Get<float>(nameof(Water));
-            Lava = tag.Get<float>(nameof(Lava));
-            Honey = tag.Get<float>(nameof(Honey));
+            tag.TryGet(nameof(Water), out Water);
+            tag.TryGet(nameof(Lava), out Lava);
+            tag.TryGet(nameof(Honey), out Honey);
         }
 
         public override bool AltFunctionUse(Player player) => true;
@@ -90,7 +104,7 @@ namespace ImproveGame.Content.Items
             Item.rare = ItemRarityID.Lime;
             Item.value = Item.sellPrice(0, 1, 0, 0);
 
-            SelectRange = new(20, 5);
+            SelectRange = new(15, 10);
         }
 
         public override bool StartUseItem(Player player) {

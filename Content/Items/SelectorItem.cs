@@ -96,7 +96,7 @@ namespace ImproveGame.Content.Items
                 Color color = ModifyColor(!_unCancelled);
                 int boxIndex = Box.NewBox(Start, End, color * 0.35f, color);
                 if (boxIndex is not -1) {
-                    Box box = DrawSystem.boxs[Box.NewBox(Start, End, color * 0.35f, color)];
+                    Box box = DrawSystem.boxs[boxIndex];
                     box.ShowWidth = true;
                     box.ShowHeight = true;
                 }

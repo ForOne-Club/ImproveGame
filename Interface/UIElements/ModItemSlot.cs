@@ -206,6 +206,10 @@ namespace ImproveGame.Interface.UIElements
         public override void MouseDown(UIMouseEvent evt) {
             base.MouseDown(evt);
 
+            if (!Main.LocalPlayer.ItemTimeIsZero || Main.LocalPlayer.itemAnimation != 0) {
+                return;
+            }
+
             if (Item is null) {
                 Item = new Item();
                 Item.SetDefaults();

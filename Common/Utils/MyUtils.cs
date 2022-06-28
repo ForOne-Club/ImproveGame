@@ -172,6 +172,17 @@ namespace ImproveGame
             return ModContent.Request<Effect>($"ImproveGame/Assets/Effect/{path}", AssetRequestMode.ImmediateLoad);
         }
 
+        public static bool TryConsumeMana(Player player, int cost) {
+            player.statMana -= cost;
+            if (player.statMana < cost) {
+                player.QuickMana();
+                if (player.statMana < cost) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         /// <summary>
         /// 将存储float液体量转换为原版int整数液体量
         /// <br>0.5%(0.005f) -> 255</br>

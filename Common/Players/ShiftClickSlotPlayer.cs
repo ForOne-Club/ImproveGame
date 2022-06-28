@@ -63,6 +63,8 @@ namespace ImproveGame.Common.Players
                             itemSlot.Value.SwapItem(ref placeItem);
                             SoundEngine.PlaySound(SoundID.Grab);
                             Recipe.FindRecipes();
+                            // 和魔杖实例同步
+                            itemSlot.Value.ItemChange();
                             return true; // 阻止原版代码运行
                         }
                         // type相同，里面的能堆叠，放进去
@@ -73,6 +75,8 @@ namespace ImproveGame.Common.Players
                             slotItem.stack += stackAddition;
                             SoundEngine.PlaySound(SoundID.Grab);
                             Recipe.FindRecipes();
+                            // 和魔杖实例同步
+                            itemSlot.Value.ItemChange();
                             return true; // 阻止原版代码运行
                         }
                     }
