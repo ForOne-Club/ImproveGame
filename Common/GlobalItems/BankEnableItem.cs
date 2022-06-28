@@ -25,12 +25,16 @@ namespace ImproveGame.Common.GlobalItems
             if (!MyUtils.Config.MiddleEnableBank)
                 return;
 
+            if (MyUtils.Bank2Items.Contains(item.type) && MyUtils.Config.AutoSaveMoney) {
+                tooltips.Add(new(Mod, "AutoSaveMoneyEnabled", MyUtils.GetText("Tips.AutoSaveMoneyEnabled")) { OverrideColor = Color.SkyBlue });
+            }
+
             // 确保物品栏里面有才能用，不然就作弊了（比如把物品打到聊天框里面直接中键）
             bool hasItemInInventory = Main.LocalPlayer.HasItem(item.type) ? true :
             // 没有的话再判断一下大背包
-                Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var modPlayer) ? MyUtils.HasItem(modPlayer.SuperVault, item) : false;
+                Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var modPlayer) ? MyUtils.HasItem(modPlayer.SuperVault, -1, item.type) : false;
 
-            if (Main.HoverItem == item && hasItemInInventory && MyUtils.IsBankItem(item.type)) {
+            if (hasItemInInventory && MyUtils.IsBankItem(item.type)) {
                 var player = Main.LocalPlayer;
 
                 // 决定文本显示的是“开启”还是“关闭”

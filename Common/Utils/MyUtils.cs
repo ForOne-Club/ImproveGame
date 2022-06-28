@@ -45,6 +45,14 @@ namespace ImproveGame
             return cs;
         }
 
+        public static bool IntArrayContains(int[] array, int value) {
+            for (int i = 0; i < array.Length; i++) {
+                if (array[i] == value)
+                    return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// 旋转物品使用时候的贴图
         /// </summary>
@@ -373,12 +381,9 @@ namespace ImproveGame
         /// <summary>
         /// 判断指定 Item[] 中是否有 item
         /// </summary>
-        /// <param name="inv"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static bool HasItem(Item[] inv, Item item, int indexMax = 0) {
+        public static bool HasItem(Item[] inv, int indexMax, params int[] itemTypes) {
             for (int i = 0; i < (indexMax > 0 ? indexMax : inv.Length); i++) {
-                if (inv[i].type == item.type && inv[i].stack > 0) {
+                if (IntArrayContains(itemTypes, inv[i].type) && inv[i].stack > 0) {
                     return true;
                 }
             }

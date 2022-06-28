@@ -27,6 +27,8 @@ namespace ImproveGame.Common.Systems
             On.Terraria.Player.PullItem_Common += Player_PullItem_Common;
             // 晚上刷新 NPC
             IL.Terraria.Main.UpdateTime += TweakNPCNightSpawn;
+            // 商人生成同时计算存钱罐内物品
+            On.Terraria.Main.UpdateTime_SpawnTownNPCs += TweakMerchantSpawn;
             // 城镇NPC入住速度修改
             IL.Terraria.Main.UpdateTime_SpawnTownNPCs += SpeedUpNPCSpawn;
             // 修改空间法杖显示平台剩余数量
@@ -44,6 +46,53 @@ namespace ImproveGame.Common.Systems
         }
 
         /// <summary>
+        /// 商人生成同时计算存钱罐内物品
+        /// </summary>
+        private void TweakMerchantSpawn(On.Terraria.Main.orig_UpdateTime_SpawnTownNPCs orig) {
+            orig.Invoke();
+
+            bool hasMerchant = false;
+            int moneyCount = 0;
+            for (int l = 0; l < 255; l++) {
+
+                // 放在一起统计，开销更小
+                if (l < 200 && !hasMerchant && Main.npc[l].active && Main.npc[l].townNPC && Main.npc[l].type == NPCID.Merchant) {
+                    hasMerchant = true;
+                }
+
+                if (!Main.player[l].active)
+                    continue;
+
+                for (int m = 0; m < 58; m++) {
+                    if (Main.player[l].inventory[m] == null || Main.player[l].inventory[m].stack <= 0)
+                        continue;
+
+                    if (moneyCount < 2000000000) {
+                        //Patch context: this is the amount of money.
+                        if (Main.player[l].inventory[m].type == ItemID.CopperCoin)
+                            moneyCount += Main.player[l].inventory[m].stack;
+
+                        if (Main.player[l].inventory[m].type == ItemID.SilverCoin)
+                            moneyCount += Main.player[l].inventory[m].stack * 100;
+
+                        if (Main.player[l].inventory[m].type == ItemID.GoldCoin)
+                            moneyCount += Main.player[l].inventory[m].stack * 10000;
+
+                        if (Main.player[l].inventory[m].type == ItemID.PlatinumCoin)
+                            moneyCount += Main.player[l].inventory[m].stack * 1000000;
+                    }
+                }
+            }
+
+            if (!hasMerchant && moneyCount > 5000) {
+                Main.townNPCCanSpawn[NPCID.Merchant] = true;
+                if (WorldGen.prioritizedTownNPCType == 0) {
+                    WorldGen.prioritizedTownNPCType = NPCID.Merchant;
+                }
+            }
+        }
+
+        /// <summary>
         /// 拾取物品的时候
         /// </summary>
         private Item Player_PickupItem(On.Terraria.Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp) {
@@ -52,22 +101,22 @@ namespace ImproveGame.Common.Systems
             if (MyUtils.Config.SmartVoidVault) {
                 if (!itemToPickUp.IsACoin) {
                     // 大背包
-                    if (!itemToPickUp.IsAir && MyUtils.Config.SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp)) {
+                    if (!itemToPickUp.IsAir && MyUtils.Config.SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type)) {
                         itemToPickUp = MyUtils.ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
                     }
                     // 虚空保险库
-                    if (!itemToPickUp.IsAir && player.IsVoidVaultEnabled && MyUtils.HasItem(player.bank4.item, itemToPickUp)) {
+                    if (!itemToPickUp.IsAir && player.IsVoidVaultEnabled && MyUtils.HasItem(player.bank4.item, -1, itemToPickUp.type)) {
                         itemToPickUp = MyUtils.ItemStackToInventory(player.bank4.item, itemToPickUp);
                     }
                     // 其他
                     if (MyUtils.Config.SuperVoidVault) {
-                        if (!itemToPickUp.IsAir && improvePlayer.PiggyBank && MyUtils.HasItem(player.bank.item, itemToPickUp)) {
+                        if (!itemToPickUp.IsAir && improvePlayer.PiggyBank && MyUtils.HasItem(player.bank.item, -1, itemToPickUp.type)) {
                             itemToPickUp = MyUtils.ItemStackToInventory(player.bank.item, itemToPickUp);
                         }
-                        if (!itemToPickUp.IsAir && improvePlayer.Safe && MyUtils.HasItem(player.bank2.item, itemToPickUp)) {
+                        if (!itemToPickUp.IsAir && improvePlayer.Safe && MyUtils.HasItem(player.bank2.item, -1, itemToPickUp.type)) {
                             itemToPickUp = MyUtils.ItemStackToInventory(player.bank2.item, itemToPickUp);
                         }
-                        if (!itemToPickUp.IsAir && improvePlayer.DefendersForge && MyUtils.HasItem(player.bank3.item, itemToPickUp)) {
+                        if (!itemToPickUp.IsAir && improvePlayer.DefendersForge && MyUtils.HasItem(player.bank3.item, -1, itemToPickUp.type)) {
                             itemToPickUp = MyUtils.ItemStackToInventory(player.bank3.item, itemToPickUp);
                         }
                     }

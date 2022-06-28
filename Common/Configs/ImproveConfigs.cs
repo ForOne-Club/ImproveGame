@@ -123,6 +123,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool MiddleEnableBank;
 
+        [Label("$Mods.ImproveGame.Config.AutoSaveMoney.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.AutoSaveMoney.Tooltip")]
+        [DefaultValue(true)]
+        public bool AutoSaveMoney;
+
         [Header("$Mods.ImproveGame.Config.NPCConfigs.Header")]
 
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Label")]

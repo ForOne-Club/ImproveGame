@@ -112,12 +112,22 @@
             }
             MiddleEnableBank:
             {
-                Label: "[i:87]  Scroll click to open personal inventories"
+                Label: "[i:87] Scroll click to open personal inventories"
                 Tooltip: 
                     '''
                     When you scroll click a personal inventory item in your inventory
                     it will open the corresponding inventory
                     Also disables the distance limit of portable inventories
+                    '''
+            }
+            AutoSaveMoney:
+            {
+                Label: "[i:73] 有钱币槽时自动存钱"
+                Tooltip: 
+                    '''
+                    如果存钱罐，保险箱，护卫熔炉，虚空仓库中有任何猪猪存钱罐、钱币槽、眼骨
+                    则会自动存放你放在钱币栏中的钱币到猪猪存钱罐中
+                    商人的生成条件会同时计算存钱罐内的钱币
                     '''
             }
             BanTombstone.Label: "[i:3230] Disable tombstone spawn"
@@ -230,6 +240,12 @@
                 '''
                 Buff icons have been hiden
                 To display them, disable "Hide buff icons of infinite potions" in Mod Configuration
+                '''
+            AutoSaveMoneyEnabled:
+                '''
+                已开启自动存钱，在你的任意储存有该物品时，钱币会自动存入存钱罐
+                如果想要关闭请在模组配置中修改
+                商人的生成条件会同时计算存钱罐内的钱币
                 '''
             BankEnableOn: "Scroll click to open personal inventory"
             BankEnableOff: "Scroll click to close personal inventory"
