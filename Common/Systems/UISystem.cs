@@ -13,6 +13,9 @@ namespace ImproveGame.Common.Systems
     /// </summary>
     public class UISystem : ModSystem
     {
+        public BuffTrackerGUI BuffTrackerGUI;
+        public static UserInterface BuffTrackerInterface;
+
         public LiquidWandGUI LiquidWandGUI;
         public static UserInterface LiquidWandInterface;
 
@@ -26,6 +29,9 @@ namespace ImproveGame.Common.Systems
         public static UserInterface JuBigVaultInterface;
 
         public override void Unload() {
+            BuffTrackerGUI = null;
+            BuffTrackerInterface = null;
+
             LiquidWandGUI = null;
             LiquidWandInterface = null;
 
@@ -41,6 +47,11 @@ namespace ImproveGame.Common.Systems
 
         public override void Load() {
             if (!Main.dedServ) {
+                BuffTrackerGUI = new BuffTrackerGUI();
+                BuffTrackerGUI.Activate();
+                BuffTrackerInterface = new UserInterface();
+                BuffTrackerInterface.SetState(BuffTrackerGUI);
+
                 LiquidWandGUI = new LiquidWandGUI();
                 LiquidWandGUI.Activate();
                 LiquidWandInterface = new UserInterface();
@@ -63,6 +74,9 @@ namespace ImproveGame.Common.Systems
             }
         }
         public override void UpdateUI(GameTime gameTime) {
+            if (BuffTrackerGUI.Visible) {
+                BuffTrackerInterface.Update(gameTime);
+            }
             if (LiquidWandGUI.Visible) {
                 LiquidWandInterface.Update(gameTime);
             }
@@ -94,6 +108,7 @@ namespace ImproveGame.Common.Systems
 
             int inventoryIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Inventory");
             if (inventoryIndex != -1) {
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Buff Tracker GUI", DrawBuffTrackerGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
             }
@@ -102,6 +117,13 @@ namespace ImproveGame.Common.Systems
             int wireIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Wire Selection");
             if (wireIndex != -1)
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
+        }
+
+        private static bool DrawBuffTrackerGUI() {
+            if (BuffTrackerGUI.Visible) {
+                BuffTrackerInterface.Draw(Main.spriteBatch, new GameTime());
+            }
+            return true;
         }
 
         private static bool DrawLiquidWandGUI() {

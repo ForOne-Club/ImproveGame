@@ -22,7 +22,7 @@ namespace ImproveGame.Common.GlobalItems
 
         public override void UpdateInventory(Item item, Player player) {
             int buffType = GetItemBuffType(item);
-            if (buffType is not -1) {
+            if (buffType is not -1 && InfBuffPlayer.Get(player).CheckInfBuffEnable(buffType)) {
                 player.AddBuff(buffType, 2);
             }
             // 我发现游戏暂停时，不会调用UpdateInventory，导致InventoryGlow没了，所以我调用放到了ImproveItem里面
@@ -109,6 +109,13 @@ namespace ImproveGame.Common.GlobalItems
                 int buffType = GetItemBuffType(item);
 
                 if (buffType is -1) return;
+
+                if (InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType)) {
+                    tooltips.Add(new(Mod, "BuffDisabled", MyUtils.GetText("Tips.BuffDisabled", Lang.GetBuffName(buffType))) {
+                        OverrideColor = Color.SkyBlue
+                    });
+                    return;
+                }
 
                 tooltips.Add(new(Mod, "BuffApplied", MyUtils.GetText("Tips.BuffApplied", Lang.GetBuffName(buffType))) {
                     OverrideColor = Color.LightGreen

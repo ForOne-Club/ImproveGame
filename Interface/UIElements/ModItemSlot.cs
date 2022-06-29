@@ -262,8 +262,8 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        // 原版里这个是private的，我正在请求tML把这个改成public，在那之前就先用这个吧（懒得反射了）
-        private static void SellOrTrash(Item[] inv, int context, int slot) {
+        // 原版里这个是private的，已经发pr让tML把这个改成public了，不过还得等一个月，在那之前就先用这个吧（懒得反射了）
+        public static void SellOrTrash(Item[] inv, int context, int slot) {
             Player player = Main.player[Main.myPlayer];
             if (inv[slot].type <= ItemID.None)
                 return;

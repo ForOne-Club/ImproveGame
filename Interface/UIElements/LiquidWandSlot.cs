@@ -236,11 +236,11 @@ namespace ImproveGame.Interface.UIElements
 
         public void DrawLiquid(Vector2 drawPosition, Rectangle originalFrame, Color mainColor, int frame, int waterStyle, float scale, float bottomY) {
             // -------------------------- 水面部分 --------------------------
-            // 水面绘制矩形（矩形涉及的部分就是水面被绘制上去的部分）（分两半绘制）
+            // 水面绘制矩形（矩形涉及的部分就是水面被绘制上去的部分）
             float surfaceDrawHeight = Math.Min(bottomY - drawPosition.Y, 10);
             Rectangle surfaceRectangle = new((int)drawPosition.X,
                                              (int)drawPosition.Y,
-                                             (int)(originalFrame.Width * scale) + 1, // 有一部分重叠起来防止空隙
+                                             (int)(originalFrame.Width * scale) + 1,
                                              (int)surfaceDrawHeight);
 
             float onePixelX = 1f / TextureAssets.Liquid[waterStyle].Width();

@@ -160,6 +160,15 @@ namespace ImproveGame.Interface.UIElements
                 return;
             }
 
+            // 垃圾箱图标
+            if (Main.cursorOverride == 6) {
+                // 假装自己是一个物品栏物品
+                var temp = new Item[1];
+                temp[0] = Item;
+                ModItemSlot.SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
+                return;
+            }
+
             // 放回物品栏图标
             if (Main.cursorOverride == 8) {
                 Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item, GetItemSettings.InventoryEntityToPlayerInventorySettings);

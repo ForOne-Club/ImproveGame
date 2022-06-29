@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Systems;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,11 +12,16 @@ namespace ImproveGame.Common.Players
 {
     public class DataPlayer : ModPlayer
     {
+        public static DataPlayer Get(Player player) => player.GetModPlayer<DataPlayer>();
+
         // 保存的物品前缀，哥布林重铸栏
         public int ReforgeItemPrefix = 0;
         public Item[] SuperVault;
         public bool SuperVaultVisable;
         private Vector2 SuperVaultPos;
+
+        public List<int> InfBuffDisabledVanilla; // 记录ID
+        public List<string> InfBuffDisabledMod; // 格式：Mod内部名/Buff类名
 
         /*public override ModPlayer Clone(Player newEntity)
         {
@@ -51,6 +58,9 @@ namespace ImproveGame.Common.Players
                 tag.Add($"SuperVault_{i}", SuperVault[i]);
             }
             tag["SuperVaultPos"] = UISystem.JuVaultUIGUI.MainPanel.GetDimensions().Position();
+
+            tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
+            tag["InfBuffDisabledMod"] = InfBuffDisabledMod;
         }
 
         public override void LoadData(TagCompound tag) {
@@ -61,6 +71,13 @@ namespace ImproveGame.Common.Players
                 }
             }
             tag.TryGet("SuperVaultPos", out SuperVaultPos);
+
+            InfBuffDisabledVanilla = new();
+            InfBuffDisabledMod = new();
+            if (tag.TryGet("InfBuffDisabledVanilla", out List<int> listBuffVanilla))
+                InfBuffDisabledVanilla = listBuffVanilla;
+            if (tag.TryGet("InfBuffDisabledMod", out List<string> listBuffMod))
+                InfBuffDisabledMod = listBuffMod;
         }
     }
 }

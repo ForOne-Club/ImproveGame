@@ -57,7 +57,7 @@ namespace ImproveGame.Interface.GUI
             tileButton.OnMouseOver += MouseOver;
             tileButton.OnMouseOut += MouseOut;
             tileButton.DrawColor += () => WandSystem.TileMode ? Color.White : inactiveColor;
-            tileButton.OnMouseDown += (UIMouseEvent _, UIElement _) => WandSystem.TileMode = !WandSystem.TileMode;
+            tileButton.OnMouseDown += (_, _) => WandSystem.TileMode = !WandSystem.TileMode;
             Append(tileButton);
 
             wallButton = new ModImageButton(
@@ -70,7 +70,7 @@ namespace ImproveGame.Interface.GUI
             wallButton.OnMouseOver += MouseOver;
             wallButton.OnMouseOut += MouseOut;
             wallButton.DrawColor += () => WandSystem.WallMode ? Color.White : inactiveColor;
-            wallButton.OnMouseDown += (UIMouseEvent _, UIElement _) => WandSystem.WallMode = !WandSystem.WallMode;
+            wallButton.OnMouseDown += (_, _) => WandSystem.WallMode = !WandSystem.WallMode;
             Append(wallButton);
         }
 

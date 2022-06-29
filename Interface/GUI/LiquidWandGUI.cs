@@ -72,7 +72,7 @@ namespace ImproveGame.Interface.GUI
             waterSlot.Top.Set(slotSecond, 0f);
             waterSlot.Width.Set(40f, 0f);
             waterSlot.Height.Set(40f, 0f);
-            waterSlot.OnMouseDown += (UIMouseEvent _, UIElement _) => {
+            waterSlot.OnMouseDown += (_, _) => {
                 LeftMouseTimer = 0;
                 if (WandSystem.LiquidMode != LiquidID.Water && !SpecialClickSlot) {
                     WandSystem.LiquidMode = LiquidID.Water;
@@ -87,7 +87,7 @@ namespace ImproveGame.Interface.GUI
             lavaSlot.Top.Set(slotSecond, 0f);
             lavaSlot.Width.Set(40f, 0f);
             lavaSlot.Height.Set(40f, 0f);
-            lavaSlot.OnMouseDown += (UIMouseEvent _, UIElement _) => {
+            lavaSlot.OnMouseDown += (_, _) => {
                 LeftMouseTimer = 0;
                 if (WandSystem.LiquidMode != LiquidID.Lava && !SpecialClickSlot) {
                     WandSystem.LiquidMode = LiquidID.Lava;
@@ -102,7 +102,7 @@ namespace ImproveGame.Interface.GUI
             honeySlot.Top.Set(slotSecond, 0f);
             honeySlot.Width.Set(40f, 0f);
             honeySlot.Height.Set(40f, 0f);
-            honeySlot.OnMouseDown += (UIMouseEvent _, UIElement _) => {
+            honeySlot.OnMouseDown += (_, _) => {
                 LeftMouseTimer = 0;
                 if (WandSystem.LiquidMode != LiquidID.Honey && !SpecialClickSlot) {
                     WandSystem.LiquidMode = LiquidID.Honey;

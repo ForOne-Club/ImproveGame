@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
@@ -238,6 +239,18 @@ namespace ImproveGame.Common.GlobalBuffs
         /// 本帧被隐藏的Buff数量，便于后面的Buff重设绘制坐标
         /// </summary>
         internal static int HidedBuffCountThisFrame;
+
+        public override void ModifyBuffTip(int type, ref string tip, ref int rare) {
+            tip += "\n左键点击以打开无限Buff追踪器";
+            if (Main.mouseLeft && Main.mouseLeftRelease) {
+                if (BuffTrackerGUI.Visible) {
+                    BuffTrackerGUI.Close();
+                }
+                else {
+                    BuffTrackerGUI.Open();
+                }
+            }
+        }
 
         public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams) {
             if (ApplyBuffItem.BuffTypesShouldHide.Contains(type)) {
