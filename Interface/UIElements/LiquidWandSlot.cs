@@ -115,7 +115,7 @@ namespace ImproveGame.Interface.UIElements
                 mainColor = DrawColor.Invoke();
             }
 
-            int frame = LiquidID != Terraria.ID.LiquidID.Water ? 1 : (int)Main.wFrame;
+            int frame = LiquidID != Terraria.ID.LiquidID.Water ? 0 : (int)Main.wFrame;
             float bottomY = dimensions.Position().Y + dimensions.Height;
 
             spriteBatch.End();
@@ -160,7 +160,7 @@ namespace ImproveGame.Interface.UIElements
                 text, stringPosition, Color.White * AltHoverTimer, 0f, origin, new Vector2(0.4f), -1, 1);
         }
 
-        private void DrawTriangleLiquid(List<VertexInfo> triangleList, Texture2D liquidTexture, bool isSurface, float xCoordStart, float xCoordEnd, bool swap) {
+        private void DrawTriangleLiquid(List<VertexInfo> triangleList, Texture2D liquidTexture, bool isSurface, float xCoordStart, float xCoordEnd) {
 
             var screenCenter = Main.ScreenSize.ToVector2() / 2f;
             var screenSize = Main.ScreenSize.ToVector2();
@@ -183,7 +183,6 @@ namespace ImproveGame.Interface.UIElements
             ResourceManager.LiquidSurface.Value.Parameters["uXStart"].SetValue(xCoordStart);
             ResourceManager.LiquidSurface.Value.Parameters["uXEnd"].SetValue(xCoordEnd);
             ResourceManager.LiquidSurface.Value.Parameters["uTime"].SetValue(uTime);
-            ResourceManager.LiquidSurface.Value.Parameters["uAdd"].SetValue(swap ? 0.025f : 0f); // 为啥是0.025，别问，问就是magic number（逃
             ResourceManager.LiquidSurface.Value.Parameters["uWaveScale"].SetValue(uWaveScale);
 
             Main.instance.GraphicsDevice.Textures[0] = liquidTexture;
@@ -241,18 +240,13 @@ namespace ImproveGame.Interface.UIElements
             float surfaceDrawHeight = Math.Min(bottomY - drawPosition.Y, 10);
             Rectangle surfaceRectangle = new((int)drawPosition.X,
                                              (int)drawPosition.Y,
-                                             (int)(originalFrame.Width * scale * 0.5f) + 1, // 有一部分重叠起来防止空隙
+                                             (int)(originalFrame.Width * scale) + 1, // 有一部分重叠起来防止空隙
                                              (int)surfaceDrawHeight);
 
             float onePixelX = 1f / TextureAssets.Liquid[waterStyle].Width();
             float onePixelY = 1f / TextureAssets.Liquid[waterStyle].Height();
-            // 左半
             var surfaceTriangle = PrepareTriangleList(surfaceRectangle, mainColor, frame, onePixelX, 0f, onePixelY * surfaceDrawHeight, true, out float xCoordStart, out float xCoordEnd);
-            DrawTriangleLiquid(surfaceTriangle, TextureAssets.Liquid[waterStyle].Value, true, xCoordStart, xCoordEnd, false);
-            // 右半
-            surfaceRectangle.X += surfaceRectangle.Width - 1; // 另一半，绘制区域x坐标加上一半的
-            surfaceTriangle = PrepareTriangleList(surfaceRectangle, mainColor, frame, onePixelX, 0f, onePixelY * surfaceDrawHeight, true, out xCoordStart, out xCoordEnd);
-            DrawTriangleLiquid(surfaceTriangle, TextureAssets.Liquid[waterStyle].Value, true, xCoordStart, xCoordEnd, true);
+            DrawTriangleLiquid(surfaceTriangle, TextureAssets.Liquid[waterStyle].Value, true, xCoordStart, xCoordEnd);
 
             // -------------------------- 水面部分 --------------------------
             // 水下绘制矩形（矩形涉及的部分就是水下被绘制上去的部分）(有一部分重叠起来防止空隙）
@@ -262,7 +256,7 @@ namespace ImproveGame.Interface.UIElements
                                              (int)(originalFrame.Height * scale) - surfaceRectangle.Height + 4);
             if (deepRectangle.Height > 0) {
                 var deepTriangle = PrepareTriangleList(deepRectangle, mainColor, frame, onePixelX, onePixelY * 10f, 1f, false, out float xStart, out float xEnd);
-                DrawTriangleLiquid(deepTriangle, TextureAssets.Liquid[waterStyle].Value, false, xStart, xEnd, false);
+                DrawTriangleLiquid(deepTriangle, TextureAssets.Liquid[waterStyle].Value, false, xStart, xEnd);
             }
         }
     }
