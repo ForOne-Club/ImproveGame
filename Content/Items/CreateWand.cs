@@ -1,4 +1,5 @@
-﻿using ImproveGame.Entitys;
+﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,7 +17,7 @@ using static ImproveGame.MyUtils;
 
 namespace ImproveGame.Content.Items
 {
-    public class CreateWand : ModItem
+    public class CreateWand : ModItem, IItemOverrideHover
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
         public override bool AltFunctionUse(Player player) => true;
@@ -381,18 +382,12 @@ namespace ImproveGame.Content.Items
             Bed = ItemIO.Receive(reader, true, true);
         }
 
+
         public bool ItemInInventory;
 
-        // 现在还没开放OverrideHover的接口，只能On了
-        // 等我的PR: https://github.com/tModLoader/tModLoader/pull/2620 被接受就可以改掉了
-        public override void Load() {
-            On.Terraria.UI.ItemSlot.OverrideHover_ItemArray_int_int += ApplyHover;
-        }
-
-        // 为了确保只有在物品栏才能用
-        private void ApplyHover(On.Terraria.UI.ItemSlot.orig_OverrideHover_ItemArray_int_int orig, Item[] inv, int context, int slot) {
-            if (context == ItemSlot.Context.InventoryItem && inv[slot].type == ModContent.ItemType<CreateWand>() && inv[slot].ModItem is CreateWand) {
-                (inv[slot].ModItem as CreateWand).ItemInInventory = true;
+        public bool OverrideHover(Item[] inventory, int context, int slot) {
+            if (context == ItemSlot.Context.InventoryItem) {
+                ItemInInventory = true;
                 if (Main.mouseMiddle && Main.mouseMiddleRelease) {
                     if (!ArchitectureGUI.Visible) {
                         ArchitectureGUI.Open(slot);
@@ -402,7 +397,7 @@ namespace ImproveGame.Content.Items
                     }
                 }
             }
-            orig.Invoke(inv, context, slot);
+            return false;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips) {

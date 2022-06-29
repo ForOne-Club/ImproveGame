@@ -1,11 +1,9 @@
-﻿using ImproveGame.Common.Systems;
-using ImproveGame.Entitys;
+﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using Terraria;
-using Terraria.Audio;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,7 +12,7 @@ using Terraria.UI;
 
 namespace ImproveGame.Content.Items
 {
-    public class LiquidWand : SelectorItem
+    public class LiquidWand : SelectorItem, IItemOverrideHover
     {
         public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ) {
             for (int j = minJ; j <= maxJ; j++) {
@@ -136,16 +134,9 @@ namespace ImproveGame.Content.Items
 
         public bool ItemInInventory;
 
-        // 现在还没开放OverrideHover的接口，只能On了
-        // 等我的PR: https://github.com/tModLoader/tModLoader/pull/2620 被接受就可以改掉了
-        public override void Load() {
-            On.Terraria.UI.ItemSlot.OverrideHover_ItemArray_int_int += ApplyHover;
-        }
-
-        // 为了确保只有在物品栏才能用
-        private void ApplyHover(On.Terraria.UI.ItemSlot.orig_OverrideHover_ItemArray_int_int orig, Item[] inv, int context, int slot) {
-            if (context == ItemSlot.Context.InventoryItem && inv[slot].type == ModContent.ItemType<LiquidWand>() && inv[slot].ModItem is LiquidWand) {
-                (inv[slot].ModItem as LiquidWand).ItemInInventory = true;
+        public bool OverrideHover(Item[] inventory, int context, int slot) {
+            if (context == ItemSlot.Context.InventoryItem) {
+                ItemInInventory = true;
                 if (Main.mouseMiddle && Main.mouseMiddleRelease) {
                     if (!LiquidWandGUI.Visible) {
                         LiquidWandGUI.Open(slot);
@@ -155,7 +146,7 @@ namespace ImproveGame.Content.Items
                     }
                 }
             }
-            orig.Invoke(inv, context, slot);
+            return false;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips) {

@@ -11,13 +11,7 @@ namespace ImproveGame.Common.Players
 {
     public class ShiftClickSlotPlayer : ModPlayer
     {
-        // 现在还没开放OverrideHover的接口，只能On了
-        // 等我的PR: https://github.com/tModLoader/tModLoader/pull/2620 被接受就可以改掉了
-        public override void Load() {
-            On.Terraria.UI.ItemSlot.OverrideHover_ItemArray_int_int += ApplyHover;
-        }
-
-        private void ApplyHover(On.Terraria.UI.ItemSlot.orig_OverrideHover_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+        public bool ApplyHover(Item[] inv, int context, int slot) {
             if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 && context == ItemSlot.Context.InventoryItem
                 && ItemSlot.ShiftInUse && !inv[slot].IsAir && !inv[slot].favorited) {
                 if (ArchitectureGUI.Visible &&
@@ -25,15 +19,15 @@ namespace ImproveGame.Common.Players
                                                  s.Value.CanPlaceItem(inv[slot]) &&
                                                  MyUtils.CanPlaceInSlot(s.Value.Item, inv[slot]) != 0)) {
                     Main.cursorOverride = 9;
-                    return;
+                    return true;
                 }
                 if (BigBagGUI.Visible && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var modPlayer) &&
                     modPlayer.SuperVault.Any(s => MyUtils.CanPlaceInSlot(s, inv[slot]) != 0)) {
                     Main.cursorOverride = 9;
-                    return;
+                    return true;
                 }
             }
-            orig.Invoke(inv, context, slot);
+            return false;
         }
 
         /// <summary>
