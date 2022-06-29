@@ -235,7 +235,12 @@
         {
             PrefixCount: "Reforging count: "
             AnglerQuest: "Angler's quest refreshed!"
-            BuffApplied: "The buff [{0}] is already applied"
+            BuffDisabled:
+                '''
+                物品增益 [{BuffName}] 已因设置被禁用
+                左键点击一个增益图标开启增益追踪器，以控制增益是否启用
+                '''
+            BuffApplied: "The buff [{BuffName}] is already applied"
             BuffHided: 
                 '''
                 Buff icons have been hiden
@@ -247,6 +252,8 @@
                 如果想要关闭请在模组配置中修改
                 商人的生成条件会同时计算存钱罐内的钱币
                 '''
+            BuffTrackerOn: "<left> to open buff tracker"
+            BuffTrackerOff: "<left> to close buff tracker"
             BankEnableOn: "Scroll click to open personal inventory"
             BankEnableOff: "Scroll click to close personal inventory"
             CreateWandOn: "Scroll click to open house material panel"
@@ -258,10 +265,16 @@
         {
             SuperVault: Huge Inventory
         }
+        BuffTracker:
+        {
+            Title: "Buff Tracker"
+            LeftClickDisable: "\n<left>以禁用该无限增益"
+            LeftClickEnable: "\n<left>以启用该无限增益"
+        }
         Architecture:
         {
             Materials: "House Materials"
-            StoredMaterials: "(Stored: {0})"
+            StoredMaterials: "(Stored: {MaterialCount})"
             MaterialsRequired: "Materials Needed: "
             Block: Block
             Platform: Platform
@@ -275,9 +288,9 @@
         LiquidWand:
         {
             Title: "Liquid Control"
-            Water: "Water ({0})"
-            Lava: "Lava ({0})"
-            Honey: "Honey ({0})"
+            Water: "Water ({LiquidAmount})"
+            Lava: "Lava ({LiquidAmount})"
+            Honey: "Honey ({LiquidAmount})"
             ClickIn: 
                 '''
                 <left>以存入液体

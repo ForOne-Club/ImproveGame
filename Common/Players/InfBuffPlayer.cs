@@ -1,13 +1,5 @@
-﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Systems;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Terraria;
-using Terraria.ID;
+﻿using Terraria;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.Players
 {

@@ -40,10 +40,10 @@ namespace ImproveGame.Common.Players
             if (KeybinSystem.RandomBuffKeybind.JustPressed) {
                 if (MyUtils.Config.SuperVault) {
                     if (BigBagGUI.Visible) {
-                        BigBagGUI.Close();
+                        UISystem.Instance.JuVaultUIGUI.Close();
                     }
                     else {
-                        BigBagGUI.Open();
+                        UISystem.Instance.JuVaultUIGUI.Open();
                     }
                 }
             }

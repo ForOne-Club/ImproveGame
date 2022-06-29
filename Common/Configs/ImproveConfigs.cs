@@ -10,6 +10,8 @@ namespace ImproveGame.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
+        public override void OnLoaded() => MyUtils.Config = this;
+
         // 物品设置
         [Header("$Mods.ImproveGame.Config.ItemConfigs.Header")]
 

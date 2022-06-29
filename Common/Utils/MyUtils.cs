@@ -132,11 +132,17 @@ namespace ImproveGame
         /// <summary>
         /// 获取 HJson 文字
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
         public static string GetText(string str, params object[] arg) {
             string text = Language.GetTextValue($"Mods.ImproveGame.{str}", arg);
+            return ConvertLeftRight(text);
+        }
 
+        public static string GetTextWith(string str, object arg) {
+            string text = Language.GetTextValueWith($"Mods.ImproveGame.{str}", arg);
+            return ConvertLeftRight(text);
+        }
+
+        public static string ConvertLeftRight(string text) {
             // 支持输入<left>和<right>，就和ItemTooltip一样（原版只有Tooltip支持）
             if (text.Contains("<right>")) {
                 InputMode inputMode = InputMode.XBoxGamepad;
@@ -168,7 +174,6 @@ namespace ImproveGame
                     text = text.Replace("<left>", Language.GetTextValue("Controls.LeftClick"));
                 }
             }
-
             return text;
         }
 
@@ -391,7 +396,7 @@ namespace ImproveGame
         }
 
         // 获取配置
-        public static ImproveConfigs Config => ModContent.GetInstance<ImproveConfigs>();
+        public static ImproveConfigs Config;
 
         /// <summary>
         /// 获取平台总数

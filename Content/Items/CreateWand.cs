@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
@@ -119,10 +120,10 @@ namespace ImproveGame.Content.Items
         public override bool CanUseItem(Player player) {
             if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer) {
                 if (!ArchitectureGUI.Visible) {
-                    ArchitectureGUI.Open();
+                    UISystem.Instance.ArchitectureGUI.Open();
                 }
                 else {
-                    ArchitectureGUI.Close();
+                    UISystem.Instance.ArchitectureGUI.Close();
                 }
                 return false;
             }
@@ -279,7 +280,7 @@ namespace ImproveGame.Content.Items
                 // 重新刷新合成配方，这样如果一个物品没了就可以把它的合成配方刷新掉
                 Recipe.FindRecipes();
                 // 同步UI物品
-                ArchitectureGUI.RefreshSlots(this);
+                UISystem.Instance.ArchitectureGUI.RefreshSlots(this);
             }
             if (!_playedSound && player.altFunctionUse == 0) {
                 CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.CreateWand_NotEnough"), true);
@@ -390,10 +391,10 @@ namespace ImproveGame.Content.Items
                 ItemInInventory = true;
                 if (Main.mouseMiddle && Main.mouseMiddleRelease) {
                     if (!ArchitectureGUI.Visible) {
-                        ArchitectureGUI.Open(slot);
+                        UISystem.Instance.ArchitectureGUI.Open(slot);
                     }
                     else {
-                        ArchitectureGUI.Close();
+                        UISystem.Instance.ArchitectureGUI.Close();
                     }
                 }
             }
@@ -423,7 +424,7 @@ namespace ImproveGame.Content.Items
                     }
 
                     string neededText = $"[c/ffff00:{GetText($"Architecture.{item.Key}")}: {MaterialConsume[item.Key]}]";
-                    string hasText = $"[c/00a7df:{GetText($"Architecture.StoredMaterials", stack)}]";
+                    string hasText = $"[c/00a7df:{GetTextWith($"Architecture.StoredMaterials", new { MaterialCount = stack })}]";
 
                     tooltips.Add(new(Mod, $"MaterialConsume.{item.Key}", $"{neededText}   {hasText}"));
                 }

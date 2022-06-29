@@ -1,4 +1,5 @@
-﻿using ImproveGame.Interface.GUI;
+﻿using ImproveGame.Common.Systems;
+using ImproveGame.Interface.GUI;
 using System;
 using System.Linq;
 using Terraria;
@@ -15,7 +16,7 @@ namespace ImproveGame.Common.Players
             if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 && context == ItemSlot.Context.InventoryItem
                 && ItemSlot.ShiftInUse && !inv[slot].IsAir && !inv[slot].favorited) {
                 if (ArchitectureGUI.Visible &&
-                    ArchitectureGUI.ItemSlot.Any(s =>
+                    UISystem.Instance.ArchitectureGUI.ItemSlot.Any(s =>
                                                  s.Value.CanPlaceItem(inv[slot]) &&
                                                  MyUtils.CanPlaceInSlot(s.Value.Item, inv[slot]) != 0)) {
                     Main.cursorOverride = 9;
@@ -43,7 +44,7 @@ namespace ImproveGame.Common.Players
                 }
 
                 if (!inventory[slot].IsAir && ArchitectureGUI.Visible) {
-                    foreach (var itemSlot in from s in ArchitectureGUI.ItemSlot
+                    foreach (var itemSlot in from s in UISystem.Instance.ArchitectureGUI.ItemSlot
                                              where s.Value.CanPlaceItem(inventory[slot])
                                              select s) {
                         // 放到建筑GUI里面

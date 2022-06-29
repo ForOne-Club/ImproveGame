@@ -1,19 +1,14 @@
 ﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Players;
-using ImproveGame.Content.Items;
-using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.UI;
 
 namespace ImproveGame.Interface.GUI
@@ -34,10 +29,10 @@ namespace ImproveGame.Interface.GUI
         /// </summary>
         private static int page = 0;
 
-        private static UIPanel basePanel;
-        private static UIText title;
-        private static UIText pageText;
-        private static Asset<Texture2D> BuffHoverBorder;
+        private UIPanel basePanel;
+        private UIText title;
+        private UIText pageText;
+        private Asset<Texture2D> BuffHoverBorder;
 
         public override void OnInitialize() {
             panelLeft = 630f;
@@ -53,16 +48,6 @@ namespace ImproveGame.Interface.GUI
             basePanel.OnMouseDown += DragStart;
             basePanel.OnMouseUp += DragEnd;
             Append(basePanel);
-
-            // 头顶大字
-            title = new("Buff Tracker", 0.5f, large: true) {
-                HAlign = 0.5f
-            };
-            title.Left.Set(0, 0f);
-            title.Top.Set(-40, 0f);
-            title.Width.Set(panelWidth, 0f);
-            title.Height.Set(40, 0f);
-            basePanel.Append(title);
 
             UIImageButton backButton = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Back"));
             backButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Border"));
@@ -108,7 +93,18 @@ namespace ImproveGame.Interface.GUI
             closeButton.OnMouseDown += (_, _) => Close();
             basePanel.Append(closeButton);
 
-            UIHorizontalSeparator separator = new UIHorizontalSeparator {
+            // 标题
+            string titleText = "Buff Tracker";
+            int titleWidth = (int)(FontAssets.DeathText.Value.MeasureString(titleText).X * 0.5f);
+            title = new(titleText, 0.5f, large: true) {
+                Left = new StyleDimension(-126f - titleWidth * 0.5f, 1f),
+                Top = StyleDimension.FromPixels(8f),
+                Width = StyleDimension.FromPixels(titleWidth),
+                Height = StyleDimension.FromPixels(28f)
+            };
+            basePanel.Append(title);
+
+            UIHorizontalSeparator separator = new() {
                 Top = StyleDimension.FromPixels(backButton.Width.Pixels + 5f),
                 Width = StyleDimension.FromPercent(1f),
                 Color = Color.Lerp(Color.White, new Color(63, 65, 151, 255), 0.85f) * 0.9f
@@ -125,7 +121,6 @@ namespace ImproveGame.Interface.GUI
         }
 
         private void TryBackPage(UIMouseEvent evt, UIElement listeningElement) {
-            int count = ApplyBuffItem.BuffTypesShouldHide.Count;
             if (page > 0) {
                 page--;
             }
@@ -175,7 +170,7 @@ namespace ImproveGame.Interface.GUI
             base.Update(gameTime);
         }
 
-        public static void SetPageText(int page) {
+        public void SetPageText(int page) {
             int count = ApplyBuffItem.BuffTypesShouldHide.Count;
             int currentPageMaxBuffIndex = Math.Min(page * 44 + 45, count);
             pageText.SetText($"{page * 44 + 1} - {currentPageMaxBuffIndex} ({count})");
@@ -212,11 +207,11 @@ namespace ImproveGame.Interface.GUI
                 Texture2D texture = buffAsset.Value;
                 int width = buffAsset.Width();
                 int height = buffAsset.Height();
-                float opacity = 1f;
+                float grayScale = 1f;
                 if (!buffEnabled) {
-                    opacity = 0.4f;
+                    grayScale = 0.4f;
                 }
-                spriteBatch.Draw(texture, drawPosition, new Color(opacity, opacity, opacity));
+                spriteBatch.Draw(texture, drawPosition, new Color(grayScale, grayScale, grayScale));
 
                 Rectangle mouseRectangle = new((int)drawPosition.X, (int)drawPosition.Y, width, height);
                 if (mouseRectangle.Intersects(new Rectangle(Main.mouseX, Main.mouseY, 1, 1))) {
@@ -228,10 +223,10 @@ namespace ImproveGame.Interface.GUI
 
                     string mouseText = Lang.GetBuffName(buffType);
                     if (buffEnabled) {
-                        mouseText += "\n左键点击以禁用该无限增益";
+                        mouseText += MyUtils.GetText("BuffTracker.LeftClickDisable");
                     }
                     else {
-                        mouseText += "\n左键点击以启用该无限增益";
+                        mouseText += MyUtils.GetText("BuffTracker.LeftClickEnable");
                     }
                     Main.instance.MouseText(mouseText);
 
@@ -251,15 +246,30 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 打开GUI界面
         /// </summary>
-        public static void Open() {
+        public void Open() {
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
+
+            title.SetText(MyUtils.GetText("BuffTracker.Title"));
+            int titleWidth = (int)(FontAssets.DeathText.Value.MeasureString(title.Text).X * 0.5f);
+            title.Left = new StyleDimension(-120f - titleWidth * 0.5f, 1f);
+            title.Width = StyleDimension.FromPixels(titleWidth);
+
+            SetPageText(page);
+            ApplyBuffItem.BuffTypesShouldHide.Sort(); // 升序排序
+            // 去掉重复的
+            for (int i = 1; i < ApplyBuffItem.BuffTypesShouldHide.Count; i++) {
+                if (ApplyBuffItem.BuffTypesShouldHide[i] == ApplyBuffItem.BuffTypesShouldHide[i - 1]) {
+                    ApplyBuffItem.BuffTypesShouldHide.RemoveAt(i);
+                    i--;
+                }
+            }
         }
 
         /// <summary>
         /// 关闭GUI界面
         /// </summary>
-        public static void Close() {
+        public void Close() {
             Visible = false;
             Main.blockInput = false;
             SoundEngine.PlaySound(SoundID.MenuClose);

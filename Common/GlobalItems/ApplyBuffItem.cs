@@ -23,13 +23,20 @@ namespace ImproveGame.Common.GlobalItems
         public override void UpdateInventory(Item item, Player player) {
             int buffType = GetItemBuffType(item);
             if (buffType is not -1 && InfBuffPlayer.Get(player).CheckInfBuffEnable(buffType)) {
+                // 饱食三级Buff不应该覆盖，而是取最高级
+                bool wellFed3Enabled = player.FindBuffIndex(BuffID.WellFed3) != -1;
+                if (buffType == BuffID.WellFed && (player.FindBuffIndex(BuffID.WellFed2) != -1 || wellFed3Enabled))
+                        return;
+                if (buffType == BuffID.WellFed2 && wellFed3Enabled)
+                    return;
+
                 player.AddBuff(buffType, 2);
             }
             // 我发现游戏暂停时，不会调用UpdateInventory，导致InventoryGlow没了，所以我调用放到了ImproveItem里面
             //UpdateInventoryGlow(item, player);
         }
 
-        public static void UpdateInventoryGlow(Item item) {
+        public void UpdateInventoryGlow(Item item) {
             int buffType = GetItemBuffType(item);
             if (buffType is not -1) {
                 BuffTypesShouldHide.Add(buffType);
@@ -60,7 +67,7 @@ namespace ImproveGame.Common.GlobalItems
             }
         }
 
-        public static int GetItemBuffType(Item item) {
+        public int GetItemBuffType(Item item) {
             if (MyUtils.Config.NoConsume_Potion) {
                 // 普通药水
                 if (item.stack >= 30 && item.buffType > 0 && item.active) {
@@ -80,7 +87,7 @@ namespace ImproveGame.Common.GlobalItems
             return -1;
         }
 
-        public static bool IsBuffTileItem(Item item, out int buffType) {
+        public bool IsBuffTileItem(Item item, out int buffType) {
             // 会给玩家buff的雕像
             for (int i = 0; i < BUFFTiles.Count; i++) {
                 if (item.createTile == BUFFTiles[i][0] && item.placeStyle == BUFFTiles[i][1]) {
@@ -111,13 +118,13 @@ namespace ImproveGame.Common.GlobalItems
                 if (buffType is -1) return;
 
                 if (InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType)) {
-                    tooltips.Add(new(Mod, "BuffDisabled", MyUtils.GetText("Tips.BuffDisabled", Lang.GetBuffName(buffType))) {
+                    tooltips.Add(new(Mod, "BuffDisabled", MyUtils.GetTextWith("Tips.BuffDisabled", new { BuffName = Lang.GetBuffName(buffType) })) {
                         OverrideColor = Color.SkyBlue
                     });
                     return;
                 }
 
-                tooltips.Add(new(Mod, "BuffApplied", MyUtils.GetText("Tips.BuffApplied", Lang.GetBuffName(buffType))) {
+                tooltips.Add(new(Mod, "BuffApplied", MyUtils.GetTextWith("Tips.BuffApplied", new { BuffName = Lang.GetBuffName(buffType) })) {
                     OverrideColor = Color.LightGreen
                 });
 

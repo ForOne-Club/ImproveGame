@@ -4,7 +4,6 @@ using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
@@ -22,19 +21,19 @@ namespace ImproveGame.Interface.GUI
         private static float panelTop;
         private static float panelHeight;
 
-        public static int CurrentSlot;
-        public static Item CurrentItem {
+        public int CurrentSlot;
+        public Item CurrentItem {
             get => Main.LocalPlayer.inventory[CurrentSlot];
             set => Main.LocalPlayer.inventory[CurrentSlot] = value;
         }
-        public static LiquidWand CurrentWand => CurrentItem.ModItem as LiquidWand;
+        public LiquidWand CurrentWand => CurrentItem.ModItem as LiquidWand;
 
-        private static UIPanel basePanel;
-        private static LiquidWandSlot waterSlot;
-        private static LiquidWandSlot lavaSlot;
-        private static LiquidWandSlot honeySlot;
-        private static UIText title;
-        private static ModIconTextButton modeButton;
+        private UIPanel basePanel;
+        private LiquidWandSlot waterSlot;
+        private LiquidWandSlot lavaSlot;
+        private LiquidWandSlot honeySlot;
+        private UIText title;
+        private ModIconTextButton modeButton;
 
         private static bool PrevMouseRight;
         private static bool HoveringOnSlots;
@@ -143,7 +142,7 @@ namespace ImproveGame.Interface.GUI
         /// <param name="addAmount">更改数量</param>
         /// <param name="store">true则使用存液体模式，false则使用放液体模式</param>
         /// <param name="ignoreLiquidMode">是否无视<see cref="WandSystem.LiquidMode"/>判断</param>
-        public static void TryChangeLiquidAmount(byte liquidType, ref byte addAmount, bool store, bool ignoreLiquidMode = false) {
+        public void TryChangeLiquidAmount(byte liquidType, ref byte addAmount, bool store, bool ignoreLiquidMode = false) {
             if (liquidType != WandSystem.LiquidMode && !ignoreLiquidMode)
                 return;
             switch (liquidType) {
@@ -165,7 +164,7 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null, Func<string> emptyText = null) {
+        public ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null, Func<string> emptyText = null) {
             ModItemSlot slot = MyUtils.CreateItemSlot(x, y, iconTextureName, 0.85f, canPlace, onItemChanged, emptyText, basePanel);
             slot.OnUpdate += (UIElement _) => HoveringOnSlots |= slot.IsMouseHovering;
             return slot;
@@ -227,7 +226,7 @@ namespace ImproveGame.Interface.GUI
             LiquidWandSlot listeningSlot = null;
 
             if (waterSlot.IsMouseHovering) {
-                hoverText = MyUtils.GetText("LiquidWand.Water", $"{waterSlot.GetLiquidAmount():p1}");
+                hoverText = MyUtils.GetTextWith("LiquidWand.Water", new {LiquidAmount = $"{waterSlot.GetLiquidAmount():p1}"});
                 // 如果遮挡到百分比文本，就虚化百分比文本
                 int lengthToMouse = Main.mouseX - (int)waterSlot.GetDimensions().X;
                 waterSlot.IsAltHovering = lengthToMouse <= 21;
@@ -260,7 +259,7 @@ namespace ImproveGame.Interface.GUI
             }
 
             if (lavaSlot.IsMouseHovering) {
-                hoverText = MyUtils.GetText("LiquidWand.Lava", $"{lavaSlot.GetLiquidAmount():p1}");
+                hoverText = MyUtils.GetTextWith("LiquidWand.Lava", new { LiquidAmount = $"{lavaSlot.GetLiquidAmount():p1}" });
                 // 如果遮挡到百分比文本，就虚化百分比文本
                 int lengthToMouse = Main.mouseX - (int)lavaSlot.GetDimensions().X;
                 lavaSlot.IsAltHovering = lengthToMouse <= 21;
@@ -292,7 +291,7 @@ namespace ImproveGame.Interface.GUI
             }
 
             if (honeySlot.IsMouseHovering) {
-                hoverText = MyUtils.GetText("LiquidWand.Honey", $"{honeySlot.GetLiquidAmount():p1}");
+                hoverText = MyUtils.GetTextWith("LiquidWand.Honey", new { LiquidAmount = $"{honeySlot.GetLiquidAmount():p1}" });
                 // 如果遮挡到百分比文本，就虚化百分比文本
                 int lengthToMouse = Main.mouseX - (int)honeySlot.GetDimensions().X;
                 honeySlot.IsAltHovering = lengthToMouse <= 21;
@@ -407,7 +406,7 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public static void SetIconTexture() {
+        public void SetIconTexture() {
             int iconItemID = WandSystem.AbsorptionMode ? ItemID.SuperAbsorbantSponge : ItemID.WaterBucket;
             switch (WandSystem.LiquidMode) {
                 case LiquidID.Lava:
@@ -423,7 +422,7 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 打开GUI界面
         /// </summary>
-        public static void Open(int setSlotIndex = -1) {
+        public void Open(int setSlotIndex = -1) {
             Main.playerInventory = true;
             PrevMouseRight = true; // 防止一打开就关闭
             Visible = true;
@@ -442,7 +441,7 @@ namespace ImproveGame.Interface.GUI
             SetIconTexture();
 
             // 关掉本Mod其他的同类UI
-            if (ArchitectureGUI.Visible) ArchitectureGUI.Close();
+            if (ArchitectureGUI.Visible) UISystem.Instance.ArchitectureGUI.Close();
 
             // UI刚加载（即OnInit）时还未加载翻译，因此我们要在这里设置一遍文本
             title.SetText(Language.GetText("Mods.ImproveGame.LiquidWand.Title"));
@@ -452,7 +451,7 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 关闭GUI界面
         /// </summary>
-        public static void Close() {
+        public void Close() {
             CurrentSlot = -1;
             Visible = false;
             PrevMouseRight = false;

@@ -15,7 +15,7 @@ namespace ImproveGame.Common.Systems
 
             var items = MyUtils.GetAllInventoryItemsList(Main.LocalPlayer, false);
             foreach (var item in items) {
-                ApplyBuffItem.UpdateInventoryGlow(item);
+                item.GetGlobalItem<ApplyBuffItem>().UpdateInventoryGlow(item);
             }
         }
     }

@@ -13,6 +13,8 @@ namespace ImproveGame.Common.Systems
     /// </summary>
     public class UISystem : ModSystem
     {
+        public static UISystem Instance;
+
         public BuffTrackerGUI BuffTrackerGUI;
         public static UserInterface BuffTrackerInterface;
 
@@ -25,10 +27,12 @@ namespace ImproveGame.Common.Systems
         public BrustGUI BrustGUI;
         public static UserInterface BrustInterface;
 
-        public static BigBagGUI JuVaultUIGUI;
+        public BigBagGUI JuVaultUIGUI;
         public static UserInterface JuBigVaultInterface;
 
         public override void Unload() {
+            Instance = null;
+
             BuffTrackerGUI = null;
             BuffTrackerInterface = null;
 
@@ -46,6 +50,7 @@ namespace ImproveGame.Common.Systems
         }
 
         public override void Load() {
+            Instance = this;
             if (!Main.dedServ) {
                 BuffTrackerGUI = new BuffTrackerGUI();
                 BuffTrackerGUI.Activate();
@@ -73,6 +78,7 @@ namespace ImproveGame.Common.Systems
                 BrustInterface.SetState(BrustGUI);
             }
         }
+
         public override void UpdateUI(GameTime gameTime) {
             if (BuffTrackerGUI.Visible) {
                 BuffTrackerInterface.Update(gameTime);
@@ -146,7 +152,7 @@ namespace ImproveGame.Common.Systems
             Player player = Main.LocalPlayer;
             if (BrustGUI.Visible && player.HeldItem is not null) {
                 if (player.HeldItem.ModItem is null || player.HeldItem.ModItem is not MagickWand) {
-                    BrustGUI.Close();
+                    UISystem.Instance.BrustGUI.Close();
                     return true;
                 }
                 BrustInterface.Draw(Main.spriteBatch, new GameTime());

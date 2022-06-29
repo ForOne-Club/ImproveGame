@@ -12,7 +12,7 @@ namespace ImproveGame.Interface.GUI
     public class BigBagGUI : UIState
     {
         private static bool _visible = true;
-        private static Vector2 offset = Vector2.Zero;
+        private Vector2 offset = Vector2.Zero;
         public bool dragging;
         public static bool Visible {
             get => Main.playerInventory && _visible;
@@ -77,13 +77,13 @@ namespace ImproveGame.Interface.GUI
             MainPanel.Append(ItemGrid);
         }
 
-        public static void Open() {
+        public void Open() {
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
             _visible = true;
         }
 
-        public static void Close() {
+        public void Close() {
             SoundEngine.PlaySound(SoundID.MenuClose);
             _visible = false;
         }

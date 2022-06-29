@@ -17,12 +17,12 @@ namespace ImproveGame.Interface.GUI
         internal static bool MouseOnMenu;
         private static bool _mouseRightPrev;
 
-        private static Asset<Texture2D> fixedModeButton;
-        private static Asset<Texture2D> freeModeButton;
+        private Asset<Texture2D> fixedModeButton;
+        private Asset<Texture2D> freeModeButton;
 
-        private static ModImageButton modeButton;
-        private static ModImageButton tileButton;
-        private static ModImageButton wallButton;
+        private ModImageButton modeButton;
+        private ModImageButton tileButton;
+        private ModImageButton wallButton;
 
         public override void OnInitialize() {
             base.OnInitialize();
@@ -112,7 +112,7 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 打开GUI界面
         /// </summary>
-        public static void Open() {
+        public void Open() {
             bool center = PlayerInput.UsingGamepad && Main.SmartCursorWanted;
             int x = center ? Main.screenWidth / 2 : Main.mouseX;
             int y = center ? Main.screenHeight / 2 - 60 : Main.mouseY;
@@ -128,7 +128,7 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 关闭GUI界面
         /// </summary>
-        public static void Close() {
+        public void Close() {
             Visible = false;
             Main.blockInput = false;
         }

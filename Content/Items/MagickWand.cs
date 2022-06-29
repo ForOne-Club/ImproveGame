@@ -106,10 +106,10 @@ namespace ImproveGame.Content.Items
                     return;
                 }
                 if (!BrustGUI.Visible) {
-                    BrustGUI.Open();
+                    UISystem.Instance.BrustGUI.Open();
                 }
                 else {
-                    BrustGUI.Close();
+                    UISystem.Instance.BrustGUI.Close();
                 }
             }
         }

@@ -46,7 +46,7 @@ namespace ImproveGame.Common.Players
         /// <param name="player"></param>
         public override void OnEnterWorld(Player player) {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI) {
-                UISystem.JuVaultUIGUI.SetSuperVault(SuperVault, SuperVaultPos);
+                UISystem.Instance.JuVaultUIGUI.SetSuperVault(SuperVault, SuperVaultPos);
             }
         }
 
@@ -57,7 +57,7 @@ namespace ImproveGame.Common.Players
             for (int i = 0; i < 100; i++) {
                 tag.Add($"SuperVault_{i}", SuperVault[i]);
             }
-            tag["SuperVaultPos"] = UISystem.JuVaultUIGUI.MainPanel.GetDimensions().Position();
+            tag["SuperVaultPos"] = UISystem.Instance.JuVaultUIGUI.MainPanel.GetDimensions().Position();
 
             tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
             tag["InfBuffDisabledMod"] = InfBuffDisabledMod;

@@ -30,5 +30,11 @@ namespace ImproveGame
             // On和IL移动到了Common.Systems.MinorModifySystem.cs
             Instance = this;
         }
+
+        public override void Unload() {
+            Instance = null;
+            MyUtils.Config = null;
+            GC.Collect();
+        }
     }
 }

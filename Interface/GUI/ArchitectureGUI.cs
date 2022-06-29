@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items;
+﻿using ImproveGame.Common.Systems;
+using ImproveGame.Content.Items;
 using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,24 +22,24 @@ namespace ImproveGame.Interface.GUI
         private static float panelTop;
         private static float panelHeight;
 
-        public static int CurrentSlot;
-        public static Item CurrentItem {
+        public int CurrentSlot;
+        public Item CurrentItem {
             get => Main.LocalPlayer.inventory[CurrentSlot];
             set => Main.LocalPlayer.inventory[CurrentSlot] = value;
         }
-        public static CreateWand CurrentWand => CurrentItem.ModItem as CreateWand;
+        public CreateWand CurrentWand => CurrentItem.ModItem as CreateWand;
 
-        public static Dictionary<string, ModItemSlot> ItemSlot => itemSlot;
+        public Dictionary<string, ModItemSlot> ItemSlot => itemSlot;
 
         private static bool PrevMouseRight;
         private static bool HoveringOnSlots;
         private bool Dragging;
         private Vector2 Offset;
 
-        private static UIPanel basePanel;
-        private static Dictionary<string, ModItemSlot> itemSlot = new();
-        private static UIText materialTitle;
-        private static ModIconTextButton styleButton;
+        private UIPanel basePanel;
+        private Dictionary<string, ModItemSlot> itemSlot = new();
+        private UIText materialTitle;
+        private ModIconTextButton styleButton;
 
         public override void OnInitialize() {
             panelLeft = 600f;
@@ -120,7 +121,7 @@ namespace ImproveGame.Interface.GUI
             basePanel.Append(styleButton);
         }
 
-        public static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null, Func<string> emptyText = null) {
+        public ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null, Func<string> emptyText = null) {
             ModItemSlot slot = MyUtils.CreateItemSlot(x, y, iconTextureName, 0.85f, canPlace, onItemChanged, emptyText, basePanel);
             slot.OnUpdate += (UIElement _) => HoveringOnSlots |= slot.IsMouseHovering;
             return slot;
@@ -189,7 +190,7 @@ namespace ImproveGame.Interface.GUI
         /// 更新GUI物品槽与物品的同步
         /// </summary>
         /// <param name="createWand">建筑魔杖<see cref="CreateWand"/>实例</param>
-        public static void RefreshSlots(CreateWand createWand) {
+        public void RefreshSlots(CreateWand createWand) {
             itemSlot[nameof(CreateWand.Block)].Item = createWand.Block;
             itemSlot[nameof(CreateWand.Wall)].Item = createWand.Wall;
             itemSlot[nameof(CreateWand.Platform)].Item = createWand.Platform;
@@ -202,7 +203,7 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 打开GUI界面
         /// </summary>
-        public static void Open(int setSlotIndex = -1) {
+        public void Open(int setSlotIndex = -1) {
             Main.playerInventory = true;
             PrevMouseRight = true; // 防止一打开就关闭
             Visible = true;
@@ -215,7 +216,7 @@ namespace ImproveGame.Interface.GUI
             RefreshSlots(CurrentWand);
 
             // 关掉本Mod其他的同类UI
-            if (LiquidWandGUI.Visible) LiquidWandGUI.Close();
+            if (LiquidWandGUI.Visible) UISystem.Instance.LiquidWandGUI.Close();
 
             // UI刚加载（即OnInit）时还未加载翻译，因此我们要在这里设置一遍文本
             materialTitle.SetText(Language.GetText("Mods.ImproveGame.Architecture.Materials"));
@@ -225,7 +226,7 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 关闭GUI界面
         /// </summary>
-        public static void Close() {
+        public void Close() {
             CurrentSlot = -1;
             Visible = false;
             PrevMouseRight = false;

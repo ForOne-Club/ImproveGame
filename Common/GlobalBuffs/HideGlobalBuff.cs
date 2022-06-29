@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -241,13 +242,13 @@ namespace ImproveGame.Common.GlobalBuffs
         internal static int HidedBuffCountThisFrame;
 
         public override void ModifyBuffTip(int type, ref string tip, ref int rare) {
-            tip += "\n左键点击以打开无限Buff追踪器";
+            tip += $"\n{MyUtils.GetText($"Tips.BuffTracker{(BuffTrackerGUI.Visible ? "Off" : "On")}")}";
             if (Main.mouseLeft && Main.mouseLeftRelease) {
                 if (BuffTrackerGUI.Visible) {
-                    BuffTrackerGUI.Close();
+                    UISystem.Instance.BuffTrackerGUI.Close();
                 }
                 else {
-                    BuffTrackerGUI.Open();
+                    UISystem.Instance.BuffTrackerGUI.Open();
                 }
             }
         }

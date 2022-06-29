@@ -248,10 +248,15 @@
         {
             PrefixCount: "物品重铸次数："
             AnglerQuest: "已刷新钓鱼任务！"
-            BuffApplied: "物品增益 [{0}] 已自动应用"
+            BuffDisabled:
+                '''
+                物品增益 [{BuffName}] 已因设置被禁用
+                左键点击一个增益图标开启增益追踪器，以控制增益是否启用
+                '''
+            BuffApplied: "物品增益 [{BuffName}] 已自动应用"
             BuffHided: 
                 '''
-                Buff增益图标已从Buff栏中隐藏
+                增益图标已从Buff栏中隐藏
                 如果想要显示请在模组配置中修改
                 '''
             AutoSaveMoneyEnabled:
@@ -260,6 +265,8 @@
                 如果想要关闭请在模组配置中修改
                 商人的生成条件会同时计算存钱罐内的钱币
                 '''
+            BuffTrackerOn: "<left>以打开增益追踪器"
+            BuffTrackerOff: "<left>以关闭增益追踪器"
             BankEnableOn: "中键单击以打开个人储存库"
             BankEnableOff: "中键单击以关闭个人储存库"
             CreateWandOn: "中键单击以开启房屋材料面板"
@@ -271,10 +278,16 @@
         {
             SuperVault: 大背包
         }
+        BuffTracker:
+        {
+            Title: "增益追踪器"
+            LeftClickDisable: "\n<left>以禁用该无限增益"
+            LeftClickEnable: "\n<left>以启用该无限增益"
+        }
         Architecture:
         {
             Materials: "房屋材料"
-            StoredMaterials: "(存有: {0})"
+            StoredMaterials: "(存有: {MaterialCount})"
             MaterialsRequired: "所需材料："
             Block: 砖块
             Platform: 平台
@@ -288,9 +301,9 @@
         LiquidWand:
         {
             Title: "液体控制"
-            Water: "水 ({0})"
-            Lava: "熔岩 ({0})"
-            Honey: "蜂蜜 ({0})"
+            Water: "水 ({LiquidAmount})"
+            Lava: "熔岩 ({LiquidAmount})"
+            Honey: "蜂蜜 ({LiquidAmount})"
             ClickIn: 
                 '''
                 <left>以存入液体

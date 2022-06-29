@@ -41,7 +41,7 @@ namespace ImproveGame.Content.Items
             // 吸收模式
             if (WandSystem.AbsorptionMode) {
                 if (t.LiquidAmount > 0) {
-                    LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, true);
+                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, true);
                     if (!MyUtils.TryConsumeMana(player, 2))
                         return false;
                 }
@@ -52,7 +52,7 @@ namespace ImproveGame.Content.Items
                 if (t.LiquidAmount == 0) {
                     int oldType = t.LiquidType;
                     t.LiquidType = WandSystem.LiquidMode; // 设置成相应的液体
-                    LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
+                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
                     // 还是没有液体，设置回来（虽然我不知道有啥用）
                     if (t.LiquidAmount == 0) {
                         t.LiquidType = oldType;
@@ -66,7 +66,7 @@ namespace ImproveGame.Content.Items
                 }
                 else {
                     byte liquidAmountPrev = t.LiquidAmount;
-                    LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
+                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
                     int manaCost = (t.LiquidAmount - liquidAmountPrev) / 120; // 根据液体放置了多少分成两个阶段
                     if (t.LiquidType != LiquidID.Water && manaCost > 0)
                         manaCost++; // 熔岩和蜂蜜额外耗蓝
@@ -118,16 +118,16 @@ namespace ImproveGame.Content.Items
 
         public override void HoldItem(Player player) {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI) {
-                LiquidWandGUI.CurrentSlot = player.selectedItem;
+                UISystem.Instance.LiquidWandGUI.CurrentSlot = player.selectedItem;
                 // 还在用物品的时候不能打开UI
                 if (player.mouseInterface || player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1) {
                     return;
                 }
                 if (!LiquidWandGUI.Visible) {
-                    LiquidWandGUI.Open();
+                    UISystem.Instance.LiquidWandGUI.Open();
                 }
                 else {
-                    LiquidWandGUI.Close();
+                    UISystem.Instance.LiquidWandGUI.Close();
                 }
             }
         }
@@ -139,10 +139,10 @@ namespace ImproveGame.Content.Items
                 ItemInInventory = true;
                 if (Main.mouseMiddle && Main.mouseMiddleRelease) {
                     if (!LiquidWandGUI.Visible) {
-                        LiquidWandGUI.Open(slot);
+                        UISystem.Instance.LiquidWandGUI.Open(slot);
                     }
                     else {
-                        LiquidWandGUI.Close();
+                        UISystem.Instance.LiquidWandGUI.Close();
                     }
                 }
             }
