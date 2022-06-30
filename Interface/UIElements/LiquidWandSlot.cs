@@ -170,11 +170,12 @@ namespace ImproveGame.Interface.UIElements
             var model = Matrix.CreateTranslation(new Vector3(-screenPos.X, -screenPos.Y, 0));
 
             // 把变换和所需信息丢给shader
+            float speed = LiquidID == Terraria.ID.LiquidID.Water ? 0.5f : 0.3f;
             int milliSeconds = (int)Main.gameTimeCache.TotalGameTime.TotalMilliseconds;
-            float uTime = milliSeconds % 10000f / 10000f * 0.3f;
+            float uTime = milliSeconds % 10000f / 10000f * speed;
             if (milliSeconds % 20000f > 10000f) {
                 // 10-20s时反过来，这样就连续了（
-                uTime = (1 - milliSeconds % 10000f / 10000f) * 0.3f;
+                uTime = (1 - milliSeconds % 10000f / 10000f) * speed;
             }
             uTime += LiquidID * 0.3f; // 让每个槽看起来不一样
 
@@ -204,8 +205,14 @@ namespace ImproveGame.Interface.UIElements
 
             // 矩形描出框
             Vector2 topPos = new(source.X, source.Y);
-            if (isSurface) // 防止液体出框还要判断_liquidAmount，不是表面也没有偏移
-                topPos.Y -= _liquidAmount > 0.9f ? (1.0f - _liquidAmount) * 5f : 5f;
+            if (isSurface) { // 防止液体出框或者没液体出水波，还要判断_liquidAmount，不是表面也没有偏移
+                if (_liquidAmount > 0.9f)
+                    topPos.Y -= MathHelper.Lerp(0f, 5f, (1.0f - _liquidAmount) * 10f);
+                else if (_liquidAmount < 0.1f)
+                    topPos.Y -= MathHelper.Lerp(0f, 5f, _liquidAmount * 10f);
+                else
+                    topPos.Y -= 5f;
+            }
             Vector2 bottomPos = new(source.X, source.Y + source.Height);
             bars.Add(new VertexInfo(topPos, mainColor, new(xCoordStart, minY, 0)));
             bars.Add(new VertexInfo(bottomPos, mainColor, new(xCoordStart, maxY, 0)));

@@ -125,7 +125,7 @@ Mods:
                 Label: "[i:73] Automatically save money"
                 Tooltip: 
                     '''
-                    If there is any Piggy Bank, Money Trough or Eye Bone inside your Piggy Bank, Safe, Defender's Forge or Void Vault
+                    If there is any Piggy Bank, Money Trough or Eye Bone inside one of your personal inventories
                     Your coins in coin slots will be automatically saved into the Piggy Bank
                     The Merchant's spawning condition counts coins in the Piggy Bank
                     '''
@@ -153,10 +153,11 @@ Mods:
                 Label: "[i:4009] Shaking trees always drops fruit"
                 Tooltip:
                     '''
-                    Greatly increases drop rate of fruit(Drop rates of other items are not affected )
+                    Greatly increases drop rate of fruit (Drop rates of other items are not affected)
                     If it seems doing nothing, please check Terraria Wiki for the conditions
                     '''
             }
+            RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
             BanDamageVar.Label: "[i:6] Disable damage floating"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
         }
@@ -275,8 +276,8 @@ Mods:
         BuffTracker:
         {
             Title: "Buff Tracker"
-            LeftClickDisable: "\n<left>to disable this buff"
-            LeftClickEnable: "\n<left>to enable this buff"
+            LeftClickDisable: "\n<left> to disable this buff"
+            LeftClickEnable: "\n<left> to enable this buff"
         }
         Architecture:
         {
@@ -300,17 +301,17 @@ Mods:
             Honey: "Honey ({LiquidAmount})"
             ClickIn: 
                 '''
-                <left>to store liquid
+                <left> to store liquid
                 Hold to store quickly
                 '''
             ClickOut: 
                 '''
-                <left>to extract liquid
+                <left> to extract liquid
                 Hold to extract quickly
                 '''
             ClickAbsorbant: 
                 '''
-                <left>to absorb liquid
+                <left> to absorb liquid
                 Hold to absorb quickly
                 '''
         }

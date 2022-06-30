@@ -165,6 +165,10 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool ShakeTreeFruit;
 
+        [Label("$Mods.ImproveGame.Config.RespawnWithFullHP.Label")]
+        [DefaultValue(false)]
+        public bool RespawnWithFullHP;
+
         [Label("$Mods.ImproveGame.Config.BanDamageVar.Label")]
         [DefaultValue(false)]
         public bool BanDamageVar;

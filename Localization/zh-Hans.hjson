@@ -170,6 +170,7 @@
                     如果还是什么都不掉，请确保该树有树冠，而且还未被摇过
                     '''
             }
+            RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
         }

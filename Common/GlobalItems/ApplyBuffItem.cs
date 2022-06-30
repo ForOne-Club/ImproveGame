@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
+using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -130,7 +131,10 @@ namespace ImproveGame.Common.GlobalItems
                 if (buffType is -1) return;
 
                 if (Main.mouseMiddle && Main.mouseMiddleRelease) {
-                    UISystem.Instance.BuffTrackerGUI.Open();
+                    if (BuffTrackerGUI.Visible)
+                        UISystem.Instance.BuffTrackerGUI.Close();
+                    else
+                        UISystem.Instance.BuffTrackerGUI.Open();
                 }
 
                 if (!InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType)) {
