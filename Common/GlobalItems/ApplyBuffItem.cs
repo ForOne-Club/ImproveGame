@@ -137,16 +137,18 @@ namespace ImproveGame.Common.GlobalItems
                         UISystem.Instance.BuffTrackerGUI.Open();
                 }
 
-                if (!InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType)) {
-                    tooltips.Add(new(Mod, "BuffDisabled", MyUtils.GetTextWith("Tips.BuffDisabled", new { BuffName = Lang.GetBuffName(buffType) })) {
-                        OverrideColor = Color.SkyBlue
-                    });
-                    return;
-                }
-                else {
-                    tooltips.Add(new(Mod, "BuffEnabled", MyUtils.GetText("Tips.BuffEnabled")) {
-                        OverrideColor = Color.SkyBlue
-                    });
+                if (!BuffTrackerGUI.Visible) {
+                    if (!InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType)) {
+                        tooltips.Add(new(Mod, "BuffDisabled", MyUtils.GetTextWith("Tips.BuffDisabled", new { BuffName = Lang.GetBuffName(buffType) })) {
+                            OverrideColor = Color.SkyBlue
+                        });
+                        return;
+                    }
+                    else {
+                        tooltips.Add(new(Mod, "BuffEnabled", MyUtils.GetText("Tips.BuffEnabled")) {
+                            OverrideColor = Color.SkyBlue
+                        });
+                    }
                 }
 
                 tooltips.Add(new(Mod, "BuffApplied", MyUtils.GetTextWith("Tips.BuffApplied", new { BuffName = Lang.GetBuffName(buffType) })) {
