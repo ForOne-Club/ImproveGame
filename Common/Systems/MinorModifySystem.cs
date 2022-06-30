@@ -244,7 +244,7 @@ namespace ImproveGame.Common.Systems
         }
 
         /// <summary>
-        // NPC 晚上刷新
+        /// NPC 晚上刷新
         /// </summary>
         private void TweakNPCNightSpawn(ILContext il) {
             var c = new ILCursor(il);
@@ -261,7 +261,7 @@ namespace ImproveGame.Common.Systems
         }
 
         /// <summary>
-        // NPC 刷新速度
+        /// NPC 刷新速度
         /// </summary>
         private void SpeedUpNPCSpawn(ILContext il) {
             var c = new ILCursor(il);
@@ -275,7 +275,7 @@ namespace ImproveGame.Common.Systems
         }
 
         /// <summary>
-        // 空间法杖计算剩余平台数
+        /// 空间法杖计算剩余平台数
         /// </summary>
         private void TweakDrawCountInventory(ILContext il) {
             // 计算剩余平台

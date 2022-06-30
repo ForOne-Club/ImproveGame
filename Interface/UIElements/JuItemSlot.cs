@@ -126,7 +126,10 @@ namespace ImproveGame.Interface.UIElements
                 }
                 void TryTrashCursorOverride() {
                     if (!Item.favorited) {
-                        Main.cursorOverride = 6; // 垃圾箱图标
+                        if (Main.npcShop <= 0)
+                            Main.cursorOverride = 6; // 垃圾箱图标
+                        else
+                            Main.cursorOverride = 10;
                     }
                 }
                 if (ItemSlot.ControlInUse && ItemSlot.Options.DisableLeftShiftTrashCan && !ItemSlot.ShiftForcedOn) {
@@ -161,7 +164,7 @@ namespace ImproveGame.Interface.UIElements
             }
 
             // 垃圾箱图标
-            if (Main.cursorOverride == 6) {
+            if (Main.cursorOverride == 6 || Main.cursorOverride == 10) {
                 // 假装自己是一个物品栏物品
                 var temp = new Item[1];
                 temp[0] = Item;

@@ -23,8 +23,12 @@ namespace ImproveGame
     /// </summary>
     partial class MyUtils
     {
-        public static Vector2 GetStringSize(string text) {
+        public static Vector2 GetTextSize(string text) {
             return FontAssets.MouseText.Value.MeasureString(text);
+        }
+
+        public static Vector2 GetBigTextSize(string text) {
+            return FontAssets.DeathText.Value.MeasureString(text);
         }
 
         public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f) {
@@ -265,10 +269,10 @@ namespace ImproveGame
         /// <param name="inventory"></param>
         /// <param name="item"></param>
         /// <returns>堆叠后剩余的物品</returns>
-        public static Item ItemStackToInventory(Item[] inventory, Item item, bool hint = true, int EndIndex = -1) {
-            EndIndex = (EndIndex == -1 ? inventory.Length : EndIndex);
+        public static Item ItemStackToInventory(Item[] inventory, Item item, bool hint = true, int end = -1, int begin = 0) {
+            end = (end == -1 ? inventory.Length : end);
             // 先填充和物品相同的
-            for (int i = 0; i < EndIndex; i++) {
+            for (int i = begin; i < end; i++) {
                 item = ItemStackToInventoryItem(inventory, i, item, hint);
                 if (item.IsAir) {
                     Recipe.FindRecipes();
@@ -276,7 +280,7 @@ namespace ImproveGame
                 }
             }
             // 后填充空位
-            for (int i = 0; i < EndIndex; i++) {
+            for (int i = begin; i < end; i++) {
                 if (inventory[i].IsAir) {
                     if (hint) {
                         PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack);

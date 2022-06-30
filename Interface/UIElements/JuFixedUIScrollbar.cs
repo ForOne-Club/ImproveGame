@@ -22,10 +22,10 @@ namespace ImproveGame.Interface.UIElements
             UserInterface.ActiveInstance = UISystem.JuBigVaultInterface;
             base.MouseDown(evt);
             UserInterface.ActiveInstance = temp;
-            ScrollWheelValue = -120;
+            ScrollWheelValue = 0;
         }
 
-        /*private float ScrollWheelValue = -120;
+        private float ScrollWheelValue;
         public void SetViewPosition(int ScrollWheelValue) {
             this.ScrollWheelValue -= ScrollWheelValue;
         }
@@ -40,10 +40,9 @@ namespace ImproveGame.Interface.UIElements
                     ScrollWheelValue = 0;
                 }
             }
-            Main.NewText($"{ScrollWheelValue} {ViewPosition}");
-        }*/
+        }
 
-        private float ScrollWheelValue = -120;
+        /*private float ScrollWheelValue = -120;
         public void SetViewPosition(int ScrollWheelValue) {
             this.ScrollWheelValue = ViewPosition - ScrollWheelValue;
         }
@@ -53,6 +52,6 @@ namespace ImproveGame.Interface.UIElements
             if (ScrollWheelValue > -120) {
                 ViewPosition += (ScrollWheelValue - ViewPosition) / 5f;
             }
-        }
+        }*/
     }
 }

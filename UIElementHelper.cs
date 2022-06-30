@@ -14,6 +14,10 @@ namespace ImproveGame
             uie.Top.Set(y, precentY);
         }
 
+        public static void SetSize(this UIElement uie, Vector2 size, float precentWidth = 0, float precentHeight = 0) {
+            uie.SetSize(size.X, size.Y, precentWidth, precentHeight);
+        }
+
         public static void SetSize(this UIElement uie, float width, float height, float precentWidth = 0, float precentHeight = 0) {
             uie.Width.Set(width, precentWidth);
             uie.Height.Set(height, precentHeight);
@@ -22,6 +26,10 @@ namespace ImproveGame
         public static float Left(this UIElement uie) => uie.Left.Pixels;
 
         public static float Top(this UIElement uie) => uie.Top.Pixels;
+
+        public static float Right(this UIElement uie) => uie.Left.Pixels + uie.Width.Pixels;
+
+        public static float Bottom(this UIElement uie) => uie.Top.Pixels + uie.Height.Pixels;
 
         public static float Width(this UIElement uie) => uie.Width.Pixels;
 
