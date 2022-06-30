@@ -36,7 +36,7 @@ namespace ImproveGame.Common.GlobalItems
             //UpdateInventoryGlow(item, player);
         }
 
-        public void UpdateInventoryGlow(Item item) {
+        public static void UpdateInventoryGlow(Item item) {
             int buffType = GetItemBuffType(item);
             if (buffType is not -1) {
                 BuffTypesShouldHide.Add(buffType);
@@ -67,7 +67,7 @@ namespace ImproveGame.Common.GlobalItems
             }
         }
 
-        public int GetItemBuffType(Item item) {
+        public static int GetItemBuffType(Item item) {
             if (MyUtils.Config.NoConsume_Potion) {
                 // 普通药水
                 if (item.stack >= 30 && item.buffType > 0 && item.active) {
@@ -87,7 +87,7 @@ namespace ImproveGame.Common.GlobalItems
             return -1;
         }
 
-        public bool IsBuffTileItem(Item item, out int buffType) {
+        public static bool IsBuffTileItem(Item item, out int buffType) {
             // 会给玩家buff的雕像
             for (int i = 0; i < BUFFTiles.Count; i++) {
                 if (item.createTile == BUFFTiles[i][0] && item.placeStyle == BUFFTiles[i][1]) {
@@ -117,7 +117,7 @@ namespace ImproveGame.Common.GlobalItems
 
                 if (buffType is -1) return;
 
-                if (InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType)) {
+                if (!InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType)) {
                     tooltips.Add(new(Mod, "BuffDisabled", MyUtils.GetTextWith("Tips.BuffDisabled", new { BuffName = Lang.GetBuffName(buffType) })) {
                         OverrideColor = Color.SkyBlue
                     });

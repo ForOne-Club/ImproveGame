@@ -14,9 +14,8 @@ namespace ImproveGame.Common.Players
         public bool PiggyBank => Player.HasItem(ItemID.PiggyBank);
         public bool Safe => Player.HasItem(ItemID.Safe);
         public bool DefendersForge => Player.HasItem(ItemID.DefendersForge);
-        public float PlayerTimer;
+
         public override void ResetEffects() {
-            PlayerTimer++;
             if (MyUtils.Config.NoCD_FishermanQuest) {
                 if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name)) {
                     Main.anglerQuestFinished = false;

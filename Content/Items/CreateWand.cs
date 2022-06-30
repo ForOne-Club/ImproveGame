@@ -23,15 +23,47 @@ namespace ImproveGame.Content.Items
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
         public override bool AltFunctionUse(Player player) => true;
 
-        private static readonly Texture2D[] jianYu = new[] { GetTexture("JianYu").Value, GetTexture("JianYu2").Value, GetTexture("JianYu3").Value };
-        private static readonly Texture2D[] jianYu_PreView = new[] { GetTexture("JianYu_PreView").Value, GetTexture("JianYu_PreView2").Value, GetTexture("JianYu_PreView3").Value };
-        private static readonly Color[][] colors = new[] { GetColors(jianYu[0]), GetColors(jianYu[1]), GetColors(jianYu[2]) };
+        private static Texture2D[] jianYu;
+        private static Texture2D[] jianYu_PreView;
+        private static Color[][] colors;
 
+        private static bool ColorsLoaded = false;
         private static int Index = 0;
 
-        private static Texture2D JianYu { get { return jianYu[Index]; } }
-        private static Texture2D JianYu_PreView { get { return jianYu_PreView[Index]; } }
-        private static Color[] Colors { get { return colors[Index]; } }
+        private Texture2D JianYu => jianYu[Index];
+        private Texture2D JianYu_PreView => jianYu_PreView[Index];
+        private Color[] Colors => colors[Index];
+
+        public override void Load() {
+            if (!Main.dedServ) {
+                ColorsLoaded = false;
+                // 把读取放到主线程上
+                On.Terraria.Main.Update += LoadBeautifulSatisfyNPCHouses;
+            }
+            else {
+                ColorsLoaded = true;
+            }
+        }
+
+        private void LoadBeautifulSatisfyNPCHouses(On.Terraria.Main.orig_Update orig, Main self, GameTime gameTime) {
+            if (!ColorsLoaded) {
+                jianYu = new[] { GetTexture("JianYu").Value, GetTexture("JianYu2").Value, GetTexture("JianYu3").Value };
+                jianYu_PreView = new[] { GetTexture("JianYu_PreView").Value, GetTexture("JianYu_PreView2").Value, GetTexture("JianYu_PreView3").Value };
+                colors = new[] { GetColors(jianYu[0]), GetColors(jianYu[1]), GetColors(jianYu[2]) };
+                ColorsLoaded = true;
+            }
+            
+            orig(self, gameTime);
+        }
+
+        public override void Unload() {
+            if (!Main.dedServ) {
+                jianYu = null;
+                jianYu_PreView = null;
+                colors = null;
+            }
+            ColorsLoaded = false;
+        }
 
         // 切换样式
         public static void ToggleStyle() {
@@ -201,6 +233,10 @@ namespace ImproveGame.Content.Items
         /// </summary>
         private static bool _playedSound = false;
         public override bool? UseItem(Player player) {
+            if (!ColorsLoaded || colors is null) {
+                ImproveGame.Instance.Logger.Error("Create Wand Colors didn't load. Please report to mod developers.");
+                return base.UseItem(player);
+            }
             if (!Main.dedServ && Main.myPlayer == player.whoAmI && player.altFunctionUse == 0) {
                 Point position = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint();
 
@@ -334,7 +370,7 @@ namespace ImproveGame.Content.Items
             return false;
         }
 
-        private static readonly Dictionary<TileSort, int> MaterialConsume = new()
+        private readonly Dictionary<TileSort, int> MaterialConsume = new()
                 {
                     { TileSort.None, 0 },
                     { TileSort.Block, 0 },
@@ -349,10 +385,15 @@ namespace ImproveGame.Content.Items
                 };
 
         // 计算消耗
-        private static void CalculateConsume() {
+        private void CalculateConsume() {
             foreach (var item in MaterialConsume) {
                 MaterialConsume[item.Key] = 0;
             }
+            if (!ColorsLoaded || colors is null) {
+                ImproveGame.Instance.Logger.Error("Create Wand Colors didn't load. Please report to mod developers.");
+                return;
+            }
+
             TileSort tileSort;
             for (int i = 0; i < Colors.Length; i++) {
                 tileSort = Color2TileSort(Colors[i]);

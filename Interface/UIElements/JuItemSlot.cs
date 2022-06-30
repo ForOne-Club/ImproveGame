@@ -232,25 +232,7 @@ namespace ImproveGame.Interface.UIElements
                     OpenItemGlow(sb);
                 }
 
-                Main.instance.LoadItem(Item.type);
-                var ItemTexture2D = TextureAssets.Item[Item.type];
-
-                Rectangle rectangle;
-                if (Main.itemAnimations[Item.type] == null)
-                    rectangle = ItemTexture2D.Frame(1, 1, 0, 0);
-                else
-                    rectangle = Main.itemAnimations[Item.type].GetFrame(ItemTexture2D.Value);
-
-                float size = rectangle.Width > ItemSize || rectangle.Height > ItemSize ?
-                    rectangle.Width > rectangle.Height ? ItemSize / rectangle.Width : ItemSize / rectangle.Height :
-                    1f;
-
-                sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                    new Rectangle?(rectangle), Item.GetAlpha(Color.White), 0f, Vector2.Zero, size,
-                    SpriteEffects.None, 0f);
-                sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                    new Rectangle?(rectangle), Item.GetColor(Color.White), 0f, Vector2.Zero, size,
-                    SpriteEffects.None, 0f);
+                DrawItemInternal(sb, Item, Color.White, dimensions, ItemSize);
 
                 if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                     Item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
@@ -259,16 +241,39 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
+        public static void DrawItemInternal(SpriteBatch sb, Item Item, Color lightColor, CalculatedStyle dimensions, float ItemSize = 30f) {
+            Main.instance.LoadItem(Item.type);
+            var ItemTexture2D = TextureAssets.Item[Item.type];
+
+            Rectangle rectangle;
+            if (Main.itemAnimations[Item.type] is null)
+                rectangle = ItemTexture2D.Frame(1, 1, 0, 0);
+            else
+                rectangle = Main.itemAnimations[Item.type].GetFrame(ItemTexture2D.Value);
+
+            float size = rectangle.Width > ItemSize || rectangle.Height > ItemSize ?
+                rectangle.Width > rectangle.Height ? ItemSize / rectangle.Width : ItemSize / rectangle.Height :
+                1f;
+
+            sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
+                new Rectangle?(rectangle), Item.GetAlpha(lightColor), 0f, Vector2.Zero, size,
+                SpriteEffects.None, 0f);
+            sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
+                new Rectangle?(rectangle), Item.GetColor(lightColor), 0f, Vector2.Zero, size,
+                SpriteEffects.None, 0f);
+        }
+
         public static void OpenItemGlow(SpriteBatch sb) {
-            var rasterizerState = sb.GraphicsDevice.RasterizerState;
-            var rectangle1 = sb.GraphicsDevice.ScissorRectangle;
+            //var rasterizerState = sb.GraphicsDevice.RasterizerState;
+            //var rectangle1 = sb.GraphicsDevice.ScissorRectangle;
             sb.End();
-            sb.GraphicsDevice.RasterizerState = rasterizerState;
-            sb.GraphicsDevice.ScissorRectangle = rectangle1;
+            //sb.GraphicsDevice.RasterizerState = rasterizerState;
+            //sb.GraphicsDevice.ScissorRectangle = rectangle1;
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                DepthStencilState.None, rasterizerState, null, Main.UIScaleMatrix);
+                DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
             Color lerpColor;
-            float time = Main.LocalPlayer.GetModPlayer<ImprovePlayer>().PlayerTimer;
+            int milliSeconds = (int)Main.gameTimeCache.TotalGameTime.TotalMilliseconds;
+            float time = milliSeconds * 0.05f;
             if (time % 60f < 30) {
                 lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
             }
@@ -280,13 +285,13 @@ namespace ImproveGame.Interface.UIElements
         }
 
         public static void CloseItemGlow(SpriteBatch sb) {
-            RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
-            Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;
+            //RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
+            //Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;
             sb.End();
-            sb.GraphicsDevice.RasterizerState = rasterizerState;
-            sb.GraphicsDevice.ScissorRectangle = rectangle1;
-            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                DepthStencilState.None, rasterizerState, null, Main.UIScaleMatrix);
+            //sb.GraphicsDevice.RasterizerState = rasterizerState;
+            //sb.GraphicsDevice.ScissorRectangle = rectangle1;
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
+                DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
         }
     }
 }

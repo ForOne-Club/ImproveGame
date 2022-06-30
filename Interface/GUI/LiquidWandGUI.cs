@@ -426,6 +426,7 @@ namespace ImproveGame.Interface.GUI
             Main.playerInventory = true;
             PrevMouseRight = true; // 防止一打开就关闭
             Visible = true;
+            Dragging = false;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 
             CurrentSlot = Main.LocalPlayer.selectedItem;

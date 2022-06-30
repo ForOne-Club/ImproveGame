@@ -24,5 +24,12 @@ namespace ImproveGame.Common.Systems
             }
             base.PostSetupContent();
         }
+
+        public override void Unload() {
+            if (!Main.dedServ) {
+                LiquidSurface = null;
+                Perlin = null;
+            }
+        }
     }
 }

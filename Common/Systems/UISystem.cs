@@ -152,7 +152,7 @@ namespace ImproveGame.Common.Systems
             Player player = Main.LocalPlayer;
             if (BrustGUI.Visible && player.HeldItem is not null) {
                 if (player.HeldItem.ModItem is null || player.HeldItem.ModItem is not MagickWand) {
-                    UISystem.Instance.BrustGUI.Close();
+                    Instance.BrustGUI.Close();
                     return true;
                 }
                 BrustInterface.Draw(Main.spriteBatch, new GameTime());

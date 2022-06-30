@@ -80,6 +80,7 @@ namespace ImproveGame.Interface.GUI
         public void Open() {
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
+            dragging = false;
             _visible = true;
         }
 

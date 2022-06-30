@@ -136,6 +136,9 @@ namespace ImproveGame.Interface.GUI
 
         // 可拖动界面
         private void DragEnd(UIMouseEvent evt, UIElement listeningElement) {
+            if (!Dragging)
+                return;
+
             Vector2 end = evt.MousePosition;
             Dragging = false;
 
@@ -206,6 +209,7 @@ namespace ImproveGame.Interface.GUI
         public void Open(int setSlotIndex = -1) {
             Main.playerInventory = true;
             PrevMouseRight = true; // 防止一打开就关闭
+            Dragging = false;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 

@@ -21,7 +21,7 @@ namespace ImproveGame.Common.Players
             //        Player.ClearBuff(modBuff.Type);
             //}
             for (int i = 0; i < Player.MaxBuffs; i++) {
-            if (Player.buffType[i] > 0) {
+                if (Player.buffType[i] > 0) {
                     foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
                         if (Player.buffType[i] == buffType) {
                             Player.DelBuff(i);
