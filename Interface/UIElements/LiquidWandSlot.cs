@@ -30,8 +30,8 @@ namespace ImproveGame.Interface.UIElements
             LiquidID = liquidID;
             _hoverColor = hoverColor;
             _normalColor = normalColor;
-            SetHoverImage(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/LiquidSlot_Highlight"));
-            SetBackgroundImage(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/LiquidSlot_Border"));
+            SetHoverImage(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/LiquidSlot/Highlight"));
+            SetBackgroundImage(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/LiquidSlot/Border"));
         }
 
         /// <summary>

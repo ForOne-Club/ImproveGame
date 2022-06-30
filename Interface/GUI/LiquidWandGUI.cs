@@ -164,12 +164,6 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null, Func<string> emptyText = null) {
-            ModItemSlot slot = MyUtils.CreateItemSlot(x, y, iconTextureName, 0.85f, canPlace, onItemChanged, emptyText, basePanel);
-            slot.OnUpdate += (UIElement _) => HoveringOnSlots |= slot.IsMouseHovering;
-            return slot;
-        }
-
         // 可拖动界面
         private void DragStart(UIMouseEvent evt, UIElement listeningElement) {
             var dimensions = listeningElement.GetDimensions().ToRectangle();
