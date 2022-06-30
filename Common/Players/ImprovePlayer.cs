@@ -36,7 +36,7 @@ namespace ImproveGame.Common.Players
         /// </summary>
         /// <param name="triggersSet"></param>
         public override void ProcessTriggers(TriggersSet triggersSet) {
-            if (KeybinSystem.RandomBuffKeybind.JustPressed) {
+            if (KeybindSystem.SuperVaultKeybind.JustPressed) {
                 if (MyUtils.Config.SuperVault) {
                     if (BigBagGUI.Visible) {
                         UISystem.Instance.JuVaultUIGUI.Close();
