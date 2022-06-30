@@ -52,7 +52,7 @@ namespace ImproveGame.Common.GlobalItems
                 if (Main.mouseMiddle && Main.mouseMiddleRelease) {
                     if (MyUtils.Bank2Items.Contains(item.type)) {
                         if (item.type == ItemID.ChesterPetItem) {
-                            sound = player.chest == -2 ? SoundID.ChesterOpen : SoundID.ChesterClose;
+                            sound = player.chest == -2 ? SoundID.ChesterClose : SoundID.ChesterOpen;
                         }
                         if (item.type == ItemID.MoneyTrough) {
                             sound = SoundID.Item59;

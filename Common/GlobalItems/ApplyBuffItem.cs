@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Players;
+using ImproveGame.Common.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -70,8 +71,12 @@ namespace ImproveGame.Common.GlobalItems
         public static int GetItemBuffType(Item item) {
             if (MyUtils.Config.NoConsume_Potion) {
                 // 普通药水
-                if (item.stack >= 30 && item.buffType > 0 && item.active) {
-                    return item.buffType;
+                if (item.stack >= 30 && item.active) {
+                    if (item.buffType > 0)
+                        return item.buffType;
+                    // 其他Mod的，自行添加了引用
+                    if (ModIntegrationsSystem.ModdedPotionBuffs.ContainsKey(item.type))
+                        return ModIntegrationsSystem.ModdedPotionBuffs[item.type];
                 }
             }
             // 随身增益站：普通
@@ -92,6 +97,13 @@ namespace ImproveGame.Common.GlobalItems
             for (int i = 0; i < BUFFTiles.Count; i++) {
                 if (item.createTile == BUFFTiles[i][0] && item.placeStyle == BUFFTiles[i][1]) {
                     buffType = BUFFTiles[i][2];
+                    return true;
+                }
+            }
+            // 其他Mod的，自行添加了引用
+            foreach (var moddedBuff in ModIntegrationsSystem.ModdedPlaceableItemBuffs) {
+                if (item.type == moddedBuff.Key) {
+                    buffType = moddedBuff.Value;
                     return true;
                 }
             }
@@ -117,11 +129,20 @@ namespace ImproveGame.Common.GlobalItems
 
                 if (buffType is -1) return;
 
+                if (Main.mouseMiddle && Main.mouseMiddleRelease) {
+                    UISystem.Instance.BuffTrackerGUI.Open();
+                }
+
                 if (!InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType)) {
                     tooltips.Add(new(Mod, "BuffDisabled", MyUtils.GetTextWith("Tips.BuffDisabled", new { BuffName = Lang.GetBuffName(buffType) })) {
                         OverrideColor = Color.SkyBlue
                     });
                     return;
+                }
+                else {
+                    tooltips.Add(new(Mod, "BuffEnabled", MyUtils.GetText("Tips.BuffEnabled")) {
+                        OverrideColor = Color.SkyBlue
+                    });
                 }
 
                 tooltips.Add(new(Mod, "BuffApplied", MyUtils.GetTextWith("Tips.BuffApplied", new { BuffName = Lang.GetBuffName(buffType) })) {

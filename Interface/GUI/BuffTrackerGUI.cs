@@ -177,7 +177,7 @@ namespace ImproveGame.Interface.GUI
 
         public void SetPageText(int page) {
             int count = ApplyBuffItem.BuffTypesShouldHide.Count;
-            int currentPageMaxBuffIndex = Math.Min(page * 44 + 45, count);
+            int currentPageMaxBuffIndex = Math.Min(page * 44 + 44, count);
             pageText.SetText($"{page * 44 + 1} - {currentPageMaxBuffIndex} ({count})");
         }
 
@@ -195,8 +195,8 @@ namespace ImproveGame.Interface.GUI
 
             var panelDimensions = basePanel.GetDimensions();
             bool hoverOnBuff = false;
-            int viewMax = Math.Min(page * 44 + 43, ApplyBuffItem.BuffTypesShouldHide.Count);
-            for (int i = page * 44; i < viewMax; i++) {
+            int viewMax = Math.Min(43, ApplyBuffItem.BuffTypesShouldHide.Count - 1);
+            for (int i = 0; i <= viewMax; i++) {
                 int x = 14 + i * 38;
                 int y = 56;
                 if (i >= 11) {
@@ -204,7 +204,10 @@ namespace ImproveGame.Interface.GUI
                     y += 40 * (i / 11);
                 }
 
-                int buffType = ApplyBuffItem.BuffTypesShouldHide[i];
+                if (i + page * 44 >= ApplyBuffItem.BuffTypesShouldHide.Count)
+                    break;
+
+                int buffType = ApplyBuffItem.BuffTypesShouldHide[i + page * 44];
                 bool buffEnabled = InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType);
 
                 Vector2 drawPosition = new(x + panelDimensions.X, y + panelDimensions.Y);
