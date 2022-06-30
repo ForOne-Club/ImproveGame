@@ -1,4 +1,4 @@
-﻿Mods:
+Mods:
 {
     ImproveGame:
     {
@@ -122,12 +122,12 @@
             }
             AutoSaveMoney:
             {
-                Label: "[i:73] 有钱币槽时自动存钱"
+                Label: "[i:73] Automatically save money"
                 Tooltip: 
                     '''
-                    如果存钱罐，保险箱，护卫熔炉，虚空仓库中有任何猪猪存钱罐、钱币槽、眼骨
-                    则会自动存放你放在钱币栏中的钱币到猪猪存钱罐中
-                    商人的生成条件会同时计算存钱罐内的钱币
+                    If there is any Piggy Bank, Money Trough or Eye Bone inside your Piggy Bank, Safe, Defender's Forge or Void Vault
+                    Your coins in coin slots will be automatically saved into the Piggy Bank
+                    The Merchant's spawning condition counts coins in the Piggy Bank
                     '''
             }
             BanTombstone.Label: "[i:3230] Disable tombstone spawn"
@@ -141,20 +141,20 @@
             GameMechanics.Header: "[i:1344] Game Mechanics"
             TreeGrowFaster:
             {
-                Label: "[i:1182] 树木迅速生长"
+                Label: "[i:1182] Trees grow rapidly"
                 Tooltip: 
                     '''
-                    使树木生长速度变为原来的五倍
-                    不会影响自然生成的丛林树和发光蘑菇树
+                    Growing speed of trees * 500%
+                    Will not affect naturally generated Jungle Trees or Giant Glowing Mushrooms
                     '''
             }
             ShakeTreeFruit:
             {
-                Label: "[i:4009] 摇树总是掉落水果"
+                Label: "[i:4009] Shaking trees always drops fruit"
                 Tooltip:
                     '''
-                    大大提升掉落水果的概率 (其他物品掉落概率不会因此受到影响)
-                    如果还是什么都不掉，请确保该树有树冠，而且还未被摇过
+                    Greatly increases drop rate of fruit(Drop rates of other items are not affected )
+                    If it seems doing nothing, please check Terraria Wiki for the conditions
                     '''
             }
             BanDamageVar.Label: "[i:6] Disable damage floating"
@@ -237,13 +237,13 @@
             AnglerQuest: "Angler's quest refreshed!"
             BuffDisabled:
                 '''
-                物品增益 [{BuffName}] 已因设置被禁用
-                左键点击一个增益图标开启增益追踪器，以控制增益是否启用
+                Item buff [{BuffName}] has been disabled due to configuration
+                Left click on a buff icon to open buff tracker, to enable/disable that buff
                 '''
             BuffEnabled:
                 '''
-                如果你想要单独禁用该物品的增益
-                请中键点击该物品或左键点击增益图标开启增益追踪器，以控制增益是否启用
+                If you just want to disable buff of this item
+                Please scroll click on this item or left click on the buff icon to open buff tracker, to enable/disable that buff
                 '''
             BuffApplied: "The buff [{BuffName}] is already applied"
             BuffHided: 
@@ -253,9 +253,11 @@
                 '''
             AutoSaveMoneyEnabled:
                 '''
-                已开启自动存钱，在你的任意储存有该物品时，钱币会自动存入存钱罐
-                如果想要关闭请在模组配置中修改
-                商人的生成条件会同时计算存钱罐内的钱币
+                Automatically save money is enabled
+                If there is any Piggy Bank, Money Trough or Eye Bone inside your Piggy Bank, Safe, Defender's Forge or Void Vault
+                Your coins in coin slots will be automatically saved into the Piggy Bank
+                The Merchant's spawning condition counts coins in the Piggy Bank
+                You may disable this function in Mod Configuration
                 '''
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"
@@ -273,8 +275,8 @@
         BuffTracker:
         {
             Title: "Buff Tracker"
-            LeftClickDisable: "\n<left>以禁用该无限增益"
-            LeftClickEnable: "\n<left>以启用该无限增益"
+            LeftClickDisable: "\n<left>to disable this buff"
+            LeftClickEnable: "\n<left>to enable this buff"
         }
         Architecture:
         {
@@ -298,18 +300,18 @@
             Honey: "Honey ({LiquidAmount})"
             ClickIn: 
                 '''
-                <left>以存入液体
-                长按以批量存入
+                <left>to store liquid
+                Hold to store quickly
                 '''
             ClickOut: 
                 '''
-                <left>以提取液体
-                长按以批量提取
+                <left>to extract liquid
+                Hold to extract quickly
                 '''
             ClickAbsorbant: 
                 '''
-                <left>以吸走液体
-                长按以批量吸走
+                <left>to absorb liquid
+                Hold to absorb quickly
                 '''
         }
         Common:
