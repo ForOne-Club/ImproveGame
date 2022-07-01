@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
 using System;
 using Terraria;
@@ -251,7 +250,7 @@ namespace ImproveGame.Interface.UIElements
         /// 物品改变后执行，可以写保存之类的
         /// </summary>
         public Action<Item> OnItemChange;
-        public void ItemChange() {
+        public virtual void ItemChange() {
             if (Item is null) {
                 Item = new Item();
                 Item.SetDefaults();

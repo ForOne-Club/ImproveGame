@@ -161,7 +161,6 @@ namespace ImproveGame.Interface.UIElements
         }
 
         private void DrawTriangleLiquid(List<VertexInfo> triangleList, Texture2D liquidTexture, bool isSurface, float xCoordStart, float xCoordEnd) {
-
             var screenCenter = Main.ScreenSize.ToVector2() / 2f;
             var screenSize = Main.ScreenSize.ToVector2();
             var screenPos = screenCenter - screenSize / 2f;

@@ -13,6 +13,9 @@ namespace ImproveGame.Common.Systems
         public static bool AbsorptionMode = false;
         public static int LiquidMode = 0;
 
+        // 自动钓鱼机
+        public static bool SelectPoolMode = false;
+
         /// <summary>
         /// 切换吸收模式
         /// </summary>

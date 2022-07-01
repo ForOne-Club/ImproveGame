@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,8 +12,12 @@ namespace ImproveGame.Content.Items
 {
     public class SpaceWandPlus : ModItem
     {
+        public override void SetStaticDefaults() {
+            Item.staff[Type] = true;
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
+
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
-        public override void SetStaticDefaults() => Item.staff[Type] = true;
 
         public override void SetDefaults()
         {

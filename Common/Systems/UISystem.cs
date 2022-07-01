@@ -13,7 +13,10 @@ namespace ImproveGame.Common.Systems
     /// </summary>
     public class UISystem : ModSystem
     {
-        public static UISystem Instance;
+        internal static UISystem Instance;
+
+        public AutofisherGUI AutofisherGUI;
+        public static UserInterface AutofisherInterface;
 
         public BuffTrackerGUI BuffTrackerGUI;
         public static UserInterface BuffTrackerInterface;
@@ -32,6 +35,9 @@ namespace ImproveGame.Common.Systems
 
         public override void Unload() {
             Instance = null;
+
+            AutofisherGUI = null;
+            AutofisherInterface = null;
 
             BuffTrackerGUI = null;
             BuffTrackerInterface = null;
@@ -52,34 +58,31 @@ namespace ImproveGame.Common.Systems
         public override void Load() {
             Instance = this;
             if (!Main.dedServ) {
+                AutofisherGUI = new AutofisherGUI();
                 BuffTrackerGUI = new BuffTrackerGUI();
-                BuffTrackerGUI.Activate();
-                BuffTrackerInterface = new UserInterface();
-                BuffTrackerInterface.SetState(BuffTrackerGUI);
-
                 LiquidWandGUI = new LiquidWandGUI();
-                LiquidWandGUI.Activate();
-                LiquidWandInterface = new UserInterface();
-                LiquidWandInterface.SetState(LiquidWandGUI);
-
                 JuVaultUIGUI = new BigBagGUI();
-                JuVaultUIGUI.Activate();
-                JuBigVaultInterface = new UserInterface();
-                JuBigVaultInterface.SetState(JuVaultUIGUI);
-
                 ArchitectureGUI = new ArchitectureGUI();
-                ArchitectureGUI.Activate();
-                ArchitectureInterface = new UserInterface();
-                ArchitectureInterface.SetState(ArchitectureGUI);
-
                 BrustGUI = new BrustGUI();
-                BrustGUI.Activate();
-                BrustInterface = new UserInterface();
-                BrustInterface.SetState(BrustGUI);
+                LoadGUI(ref AutofisherGUI, out AutofisherInterface);
+                LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
+                LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
+                LoadGUI(ref JuVaultUIGUI, out JuBigVaultInterface);
+                LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
+                LoadGUI(ref BrustGUI, out BrustInterface);
             }
         }
 
+        public static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface) where T : UIState {
+            uiState.Activate();
+            uiInterface = new UserInterface();
+            uiInterface.SetState(uiState);
+        }
+
         public override void UpdateUI(GameTime gameTime) {
+            if (AutofisherGUI.Visible) {
+                AutofisherInterface.Update(gameTime);
+            }
             if (BuffTrackerGUI.Visible) {
                 BuffTrackerInterface.Update(gameTime);
             }
@@ -117,12 +120,19 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Buff Tracker GUI", DrawBuffTrackerGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Autofisher GUI", DrawAutofishGUI, InterfaceScaleType.UI));
             }
 
 
             int wireIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Wire Selection");
             if (wireIndex != -1)
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
+        }
+
+        private static bool DrawAutofishGUI() {
+            if (AutofisherGUI.Visible)
+                AutofisherInterface.Draw(Main.spriteBatch, new GameTime());
+            return true;
         }
 
         private static bool DrawBuffTrackerGUI() {
