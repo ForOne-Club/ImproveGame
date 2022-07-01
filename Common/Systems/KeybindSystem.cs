@@ -11,7 +11,7 @@ namespace ImproveGame.Common.Systems
 
         public override void Load()
         {
-            SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "大背包快捷键 Huge Inventory Keybind", "I");
+            SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "大背包 Huge Inventory", "I");
         }
 
         public override void Unload()

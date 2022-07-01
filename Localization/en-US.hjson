@@ -281,9 +281,10 @@ Mods:
             LiquidWandOn: "Scroll click to open liquid control panel"
             LiquidWandOff: "Scroll click to close liquid control panel"
         }
-        Keybind:
+        SuperVault:
         {
-            SuperVault: Huge Inventory
+            Name: Huge Inventory
+            Sort: Sort
         }
         BuffTracker:
         {
