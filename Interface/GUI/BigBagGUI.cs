@@ -57,9 +57,9 @@ namespace ImproveGame.Interface.GUI
             };
             Append(MainPanel);
 
-            UIText title = new("大背包", 0.5f, true);
+            UIText title = new(MyUtils.GetText("Keybind.SuperVault"), 0.5f, true);
             title.Top.Pixels = 10f;
-            title.SetSize(MyUtils.GetBigTextSize("大背包") * 0.5f);
+            title.SetSize(MyUtils.GetBigTextSize(MyUtils.GetText("Keybind.SuperVault")) * 0.5f);
             MainPanel.Append(title);
 
             JuButton button1 = new(MyUtils.GetTexture("UI/Quick").Value, Lang.inter[29].Value);
