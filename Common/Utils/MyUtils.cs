@@ -343,15 +343,20 @@ namespace ImproveGame
         /// <returns>堆叠后剩余的物品</returns>
         public static Item ItemStackToInventoryItem(Item[] inventory, int slot, Item item, bool hint) {
             if (!inventory[slot].IsAir && inventory[slot].type == item.type) {
-                if (inventory[slot].stack + item.stack > inventory[slot].maxStack) {
-                    if (hint) {
-                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, inventory[slot].maxStack - inventory[slot].stack);
-                        SoundEngine.PlaySound(SoundID.Grab);
+                // 堆叠部分
+                if (inventory[slot].stack + item.stack >= inventory[slot].maxStack) {
+                    int reduce = inventory[slot].maxStack - inventory[slot].stack;
+                    if (reduce > 0) {
+                        if (hint) {
+                            PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, inventory[slot].maxStack - inventory[slot].stack);
+                            SoundEngine.PlaySound(SoundID.Grab);
+                        }
+                        item.stack -= reduce;
+                        inventory[slot].stack = inventory[slot].maxStack;
                     }
-                    item.stack -= inventory[slot].maxStack - inventory[slot].stack;
-                    inventory[slot].stack = inventory[slot].maxStack;
                     return item;
                 }
+                // 全部堆叠
                 else {
                     if (hint) {
                         PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack, noStack: false);

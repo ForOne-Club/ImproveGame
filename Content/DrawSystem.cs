@@ -1,7 +1,12 @@
-﻿using ImproveGame.Entitys;
+﻿using ImproveGame.Common.Players;
+using ImproveGame.Common.Systems;
+using ImproveGame.Entitys;
+using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -30,6 +35,124 @@ namespace ImproveGame.Content
                     },
                     InterfaceScaleType.Game)
                 );
+                layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
+                    "ImproveGame: Pools Select",
+                    delegate {
+                        Point16 fisherPos = AutofishPlayer.LocalPlayer.Autofisher;
+                        if (fisherPos.X > 0 && fisherPos.Y > 0 && AutofisherGUI.Visible) {
+                            DrawPoolsBorder();
+                        }
+                        return true;
+                    },
+                    InterfaceScaleType.Game)
+                );
+            }
+        }
+
+        private static void DrawPoolsBorder() {
+            if (WandSystem.SelectPoolMode)
+                return;
+
+            Main.cursorOverride = 15;
+            Main.cursorColor = Color.SkyBlue;
+
+            Vector2 fisherPos = AutofishPlayer.LocalPlayer.Autofisher.ToVector2();
+            fisherPos.X += 1f; // 修正到物块中心
+            fisherPos.Y += 1f; // 修正到物块中心
+            const float width = 50;
+            const float height = 30;
+
+            int extraRangeX = 12;
+            int extraRangeY = 10;
+            Point screenOverdrawOffset = Main.GetScreenOverdrawOffset();
+            Rectangle drawRange = new(((int)Main.screenPosition.X >> 4) - extraRangeX + screenOverdrawOffset.X,
+                ((int)Main.screenPosition.Y >> 4) - extraRangeY + screenOverdrawOffset.Y,
+                (Main.screenWidth >> 4) + (extraRangeX - screenOverdrawOffset.X << 1),
+                (Main.screenHeight >> 4) + (extraRangeY - screenOverdrawOffset.Y << 1));
+
+            // 这个是拿来记录悬停的相邻液体的
+            bool[,] mouseHovering = new bool[drawRange.Width + 1, drawRange.Height + 1];
+            // 递归可不能把已经检查过的重新检查，不然死循环了
+            bool[,] tileChecked = new bool[drawRange.Width + 1, drawRange.Height + 1];
+            Point16 mouseWorldPosition = Main.MouseWorld.ToTileCoordinates16();
+            RecursionSetHovered(mouseWorldPosition.X, mouseWorldPosition.Y);
+            // 通过递归设置鼠标悬停的区域
+            void RecursionSetHovered(int i, int j) {
+                if (i < drawRange.Left || j < drawRange.Top || i > drawRange.Right || j > drawRange.Bottom || tileChecked[i - drawRange.X, j - drawRange.Y])
+                    return;
+                if (Math.Abs(fisherPos.X - i) > width || Math.Abs(fisherPos.Y - j) > height)
+                    return;
+
+                tileChecked[i - drawRange.X, j - drawRange.Y] = true;
+                var tile = Framing.GetTileSafely(i, j);
+                if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(i, j) && i >= drawRange.Left && j >= drawRange.Top && i <= drawRange.Right && j <= drawRange.Bottom) {
+                    mouseHovering[i - drawRange.X, j - drawRange.Y] = true;
+                    Main.LocalPlayer.mouseInterface = true;
+                    Main.cursorColor = new(50, 255, 50);
+                    // 递归临近的四个物块
+                    RecursionSetHovered(i - 1, j);
+                    RecursionSetHovered(i + 1, j);
+                    RecursionSetHovered(i, j - 1);
+                    RecursionSetHovered(i, j + 1);
+                    return;
+                }
+                return; // 虽然不是必要的，但是写上感觉规范点
+            }
+
+            for (int i = drawRange.Left; i < drawRange.Right; i++) {
+                for (int j = drawRange.Top; j < drawRange.Bottom; j++) {
+                    var tile = Framing.GetTileSafely(i, j);
+                    if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(i, j)) {
+                        Vector2 worldPosition = new(i << 4, j << 4);
+
+                        // 液体离格子顶部的高度
+                        int liquidHeightToTileTop = 16 - (int)MathHelper.Lerp(0f, 16f, tile.LiquidAmount / 255f);
+                        var blockDrawPosition = new Vector2(worldPosition.X, worldPosition.Y + liquidHeightToTileTop) - Main.screenPosition;
+                        var rect = new Rectangle?(new Rectangle(0, 0, 16, 16 - liquidHeightToTileTop));
+
+                        bool selectable = true;
+                        float opacity = 0.2f;
+                        Color color = Color.SkyBlue;
+                        if (mouseHovering[i - drawRange.X, j - drawRange.Y])
+                            color = new(50, 255, 50);
+                        // 不在可选范围内，黑白
+                        if (Math.Abs(fisherPos.X - i) > width || Math.Abs(fisherPos.Y - j) > height) {
+                            color = new(60, 60, 60);
+                            opacity = 0.3f;
+                            selectable = false;
+                        }
+                        if (Lighting.Brightness(i, j) < 0.02f)
+                            color = Color.Transparent;
+                        Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, blockDrawPosition, rect, color * opacity);
+
+                        // 画边缘线，旁边不是可用水体或者是可选不可选分界线时
+                        var leftTile = Framing.GetTileSafely(i - 1, j);
+                        var rightTile = Framing.GetTileSafely(i + 1, j);
+                        var upTile = Framing.GetTileSafely(i, j - 1);
+                        var bottomTile = Framing.GetTileSafely(i, j + 1);
+                        if (leftTile.LiquidAmount == 0 || WorldGen.SolidTile(leftTile) || (selectable && (Math.Abs(fisherPos.X - (i - 1)) > width || Math.Abs(fisherPos.Y - j) > height))) {
+                            Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X, worldPosition.Y + liquidHeightToTileTop), new Vector2(worldPosition.X, worldPosition.Y + 18), color, color, 2f);
+                        }
+                        if (rightTile.LiquidAmount == 0 || WorldGen.SolidTile(rightTile) || (selectable && (Math.Abs(fisherPos.X - (i + 1)) > width || Math.Abs(fisherPos.Y - j) > height))) {
+                            Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X + 16, worldPosition.Y + liquidHeightToTileTop), new Vector2(worldPosition.X + 16, worldPosition.Y + 16), color, color, 2f);
+                        }
+                        if (upTile.LiquidAmount == 0 || WorldGen.SolidTile(upTile) || (selectable && (Math.Abs(fisherPos.X - i) > width || Math.Abs(fisherPos.Y - (j - 1)) > height))) {
+                            Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X, worldPosition.Y + liquidHeightToTileTop), new Vector2(worldPosition.X + 16, worldPosition.Y + liquidHeightToTileTop), color, color, 2f);
+                        }
+                        if (bottomTile.LiquidAmount == 0 || WorldGen.SolidTile(bottomTile)) {
+                            Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X, worldPosition.Y + 16), new Vector2(worldPosition.X + 16, worldPosition.Y + 16), color, color, 2f);
+                        }
+                        // 下面的是不可选的，分界线要在下面的绘制（也就是我不可选，我上面的可选）不然会被覆盖，我希望分界线是绿色的
+                        if (!selectable && upTile.LiquidAmount > 0 && !WorldGen.SolidTile(upTile) && Math.Abs(fisherPos.X - i) <= width && Math.Abs(fisherPos.Y - (j - 1)) <= height) {
+                            color = Color.SkyBlue;
+                            if (mouseHovering[i - drawRange.X, j - 1 - drawRange.Y])
+                                color = new(50, 255, 50);
+                            if (Lighting.Brightness(i, j - 1) < 0.02f)
+                                color = Color.Transparent;
+                            Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X - 2, worldPosition.Y), new Vector2(worldPosition.X + 16, worldPosition.Y), color, color, 2f);
+                        }
+                    }
+                }
             }
         }
 

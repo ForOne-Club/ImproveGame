@@ -23,10 +23,13 @@ namespace ImproveGame
         /// <param name="parent">该元件的父元件</param>
         /// <param name="folderName">贴图资源在Assets/Images/UI文件夹里面的子文件夹名称</param>
         /// <returns>一个<see cref="ModItemSlot"/>实例</returns>
-        public static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, float scale = 0.85f, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null, Func<string> emptyText = null, UIElement parent = null, string folderName = null) {
-            string path = $"ImproveGame/Assets/Images/UI/{iconTextureName}";
-            if (folderName is not null)
-                path = $"ImproveGame/Assets/Images/UI/{folderName}/{iconTextureName}";
+        public static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName = null, float scale = 0.85f, Func<Item, Item, bool> canPlace = null, Action<Item> onItemChanged = null, Func<string> emptyText = null, UIElement parent = null, string folderName = null) {
+            string path = null;
+            if (iconTextureName is not null) {
+                path = $"ImproveGame/Assets/Images/UI/{iconTextureName}";
+                if (folderName is not null)
+                    path = $"ImproveGame/Assets/Images/UI/{folderName}/{iconTextureName}";
+            }
             ModItemSlot slot = new(scale, path, emptyText);
             slot.Left.Set(x, 0f);
             slot.Top.Set(y, 0f);

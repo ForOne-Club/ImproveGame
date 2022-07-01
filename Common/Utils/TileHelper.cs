@@ -2,6 +2,7 @@
 using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.UI;
@@ -11,6 +12,40 @@ namespace ImproveGame
 {
     partial class MyUtils
     {
+        /// <summary>
+        /// 获取多格物块的左上角位置
+        /// </summary>
+        /// <param name="i">物块的 X 坐标</param>
+        /// <param name="j">物块的 Y 坐标</param>
+        public static Point16 GetTileOrigin(int i, int j) {
+            Tile tile = Framing.GetTileSafely(i, j);
+
+            Point16 coord = new(i, j);
+            Point16 frame = new(tile.TileFrameX / 18, tile.TileFrameY / 18);
+
+            return coord - frame;
+        }
+
+        /// <summary>
+        /// 通过 <seealso cref="GetTileOrigin(int, int)"/> 快速获取处于 (<paramref name="i"/>, <paramref name="j"/>) 的 <see cref="TileEntity"/> 实例.
+        /// </summary>
+        /// <typeparam name="T">实例类型，应为 <see cref="TileEntity"/></typeparam>
+        /// <param name="i">物块的 X 坐标</param>
+        /// <param name="j">物块的 Y 坐标</param>
+        /// <param name="entity">找到的 <typeparamref name="T"/> 实例，如果没有则是null</param>
+        /// <returns>返回 <see langword="true"/> 如果找到了 <typeparamref name="T"/> 实例，返回 <see langword="false"/> 如果没有实例或者该实体并非为 <typeparamref name="T"/></returns>
+        public static bool TryGetTileEntityAs<T>(int i, int j, out T entity) where T : TileEntity {
+            Point16 origin = GetTileOrigin(i, j);
+
+            if (TileEntity.ByPosition.TryGetValue(origin, out TileEntity existing) && existing is T existingAsT) {
+                entity = existingAsT;
+                return true;
+            }
+
+            entity = null;
+            return false;
+        }
+
         /// <summary>
         /// 快捷开关箱子
         /// </summary>
