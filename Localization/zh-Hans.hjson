@@ -292,9 +292,10 @@
             LiquidWandOn: "中键单击以开启液体控制面板"
             LiquidWandOff: "中键单击以关闭液体控制面板"
         }
-        Keybind:
+        SuperVault:
         {
-            SuperVault: 大背包
+            Name: 大背包
+            Sort: 排序
         }
         BuffTracker:
         {

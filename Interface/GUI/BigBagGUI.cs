@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -15,15 +16,37 @@ namespace ImproveGame.Interface.GUI
         private Vector2 offset = Vector2.Zero;
         public bool dragging;
         public static bool Visible {
-            get => Main.playerInventory && _visible;
+            get {
+                if (!Main.playerInventory)
+                    _visible = false;
+                return _visible;
+            }
             set => _visible = value;
         }
 
+        public UIText title;
         public UIPanel MainPanel;
         public UIImageButton CloseButton;
         public JuItemGrid ItemGrid;
 
+        public JuButton[] buttons = new JuButton[4];
+
         public void SetSuperVault(Item[] items, Vector2 SuperVaultPos) {
+            title.SetText(MyUtils.GetText("SuperVault.Name"));
+            title.SetSize(MyUtils.GetBigTextSize(MyUtils.GetText("SuperVault.Name")) * 0.5f);
+            
+            buttons[0].SetText(Lang.inter[29].Value);
+            buttons[0].SetPos(0f, title.Bottom() - 10f);
+
+            buttons[1].SetText(Lang.inter[30].Value);
+            buttons[1].SetPos(buttons[0].Right() + 10f, buttons[0].Top());
+
+            buttons[2].SetText(Lang.inter[31].Value);
+            buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
+
+            buttons[3].SetText(MyUtils.GetText("SuperVault.Sort"));
+            buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
+
             ItemGrid.SetInventory(items);
 
             MainPanel.SetPos(SuperVaultPos);
@@ -57,50 +80,60 @@ namespace ImproveGame.Interface.GUI
             };
             Append(MainPanel);
 
-            UIText title = new("大背包", 0.5f, true);
+            title = new(MyUtils.GetText("SuperVault.Name"), 0.5f, true);
             title.Top.Pixels = 10f;
-            title.SetSize(MyUtils.GetBigTextSize("大背包") * 0.5f);
+            title.SetSize(MyUtils.GetBigTextSize(MyUtils.GetText("SuperVault.Name")) * 0.5f);
             MainPanel.Append(title);
 
-            JuButton button1 = new(MyUtils.GetTexture("UI/Quick").Value, Lang.inter[29].Value);
-            button1.Top.Pixels = title.Bottom() - 10f;
-            button1.Width.Pixels = MyUtils.GetTextSize(Lang.inter[29].Value).X + button1.HPadding() + 75;
-            button1.Height.Pixels = 40f;
-            button1.OnClick += (evt, uie) => {
-                QuickTakeOutToPlayerInventory();
-            };
-            MainPanel.Append(button1);
+            buttons[0] = new(MyUtils.GetTexture("UI/Quick").Value, Lang.inter[29].Value);
+            buttons[0].SetPos(0f, title.Bottom() - 10f);
+            buttons[0].OnClick += (_, _) => QuickTakeOutToPlayerInventory();
+            MainPanel.Append(buttons[0]);
 
-            JuButton button2 = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[30].Value);
-            button2.Top.Pixels = button1.Top();
-            button2.Width.Pixels = MyUtils.GetTextSize(Lang.inter[30].Value).X + button1.HPadding() + 75;
-            button2.Height.Pixels = 40f;
-            button2.Left.Pixels = button1.Right() + 10f;
-            button2.OnClick += (evt, uie) => {
-                PutAll();
-            };
-            MainPanel.Append(button2);
+            buttons[1] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[30].Value);
+            buttons[1].SetPos(buttons[0].Right() + 10f, buttons[0].Top());
+            buttons[1].OnClick += (_, _) => PutAll();
+            MainPanel.Append(buttons[1]);
 
-            JuButton button3 = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[31].Value);
-            button3.Top.Pixels = button1.Top();
-            button3.Width.Pixels = MyUtils.GetTextSize(Lang.inter[31].Value).X + button1.HPadding() + 75;
-            button3.Height.Pixels = 40f;
-            button3.Left.Pixels = button2.Right() + 10f;
-            button3.OnClick += (evt, uie) => {
-                Replenish();
-            };
-            MainPanel.Append(button3);
+            buttons[2] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[31].Value);
+            buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
+            buttons[2].OnClick += (_, _) => Replenish();
+            MainPanel.Append(buttons[2]);
 
-            CloseButton = new(MyUtils.GetTexture("Close")) {
-                HAlign = 1f
-            };
+            buttons[3] = new(MyUtils.GetTexture("UI/Put").Value, MyUtils.GetText("SuperVault.Sort"));
+            buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
+            buttons[3].OnClick += (_, _) => Sort();
+            MainPanel.Append(buttons[3]);
+
+            CloseButton = new(MyUtils.GetTexture("Close")) { HAlign = 1f };
             CloseButton.Left.Set(-2, 0);
             CloseButton.OnClick += (evt, uie) => Visible = false;
             MainPanel.Append(CloseButton);
 
             ItemGrid = new JuItemGrid();
-            ItemGrid.Top.Pixels = button1.Top() + button1.Height() + 10f;
+            ItemGrid.Top.Pixels = buttons[0].Top() + buttons[0].Height() + 10f;
             MainPanel.Append(ItemGrid);
+        }
+
+        public void Sort() {
+            SoundEngine.PlaySound(SoundID.Grab);
+            Item[] items = ItemGrid.ItemList.items;
+
+            List<Item> testSort = new();
+            for (int i = 0; i < items.Length; i++) {
+                if (!items[i].IsAir && !items[i].favorited) {
+                    testSort.Add(items[i]);
+                    items[i] = new();
+                }
+            }
+
+            testSort.Sort((a, b) => {
+                return -a.rare.CompareTo(b.rare) * 100 - a.stack.CompareTo(b.stack) * 10 + a.type.CompareTo(b.type);
+            });
+
+            for (int i = 0; i < testSort.Count; i++) {
+                MyUtils.ItemStackToInventory(items, testSort[i], false);
+            }
         }
 
         public void Replenish() {

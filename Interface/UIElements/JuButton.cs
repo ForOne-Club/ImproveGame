@@ -26,6 +26,9 @@ namespace ImproveGame.Interface.UIElements
             Background = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/PanelGrayscale");
             BackgroundBorder = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder");
 
+            Width.Pixels = MyUtils.GetTextSize(text).X + this.HPadding() + 75;
+            Height.Pixels = 40f;
+
             UIImage = new(texture) {
                 VAlign = 0.5f
             };
@@ -61,6 +64,7 @@ namespace ImproveGame.Interface.UIElements
         }
 
         public void SetText(string text) {
+            Width.Pixels = MyUtils.GetTextSize(text).X + this.HPadding() + 75;
             UIText.SetText(text);
         }
 
