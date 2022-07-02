@@ -78,7 +78,7 @@ Max stack, weapons autoswing, enable modded items, can put non-vanity accessorie
 Change log: (View details in mod configs)
     1.5.8
         ● BUG fix
-            1. Fix the bug of sound effect inverse while scroll clicking the Eyebone
+            1. Fix the bug of sound effect inverse while middle clicking the Eyebone
             2. Fixed the problem that the infinite buffs of the special campfires do not take effect
         ● New content
             1. Add a Liquid Wand, which can drain/place liquid
