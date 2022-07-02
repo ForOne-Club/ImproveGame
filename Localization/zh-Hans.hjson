@@ -302,6 +302,7 @@
             Title: "增益追踪器"
             LeftClickDisable: "\n<left>以禁用该无限增益"
             LeftClickEnable: "\n<left>以启用该无限增益"
+            NoInfBuff: "当前没有可用的无限增益"
         }
         Architecture:
         {
@@ -342,6 +343,7 @@
         Common:
         {
             Switch: "切换"
+            Unavailable: "不可用"
         }
     }
 }

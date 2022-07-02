@@ -7,6 +7,8 @@ namespace ImproveGame.Content.Items.Placeable
 {
     public class Autofisher : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod) => false;
+
         public override void SetStaticDefaults() {
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }

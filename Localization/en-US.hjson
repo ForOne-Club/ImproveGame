@@ -291,6 +291,7 @@ Mods:
             Title: "Buff Tracker"
             LeftClickDisable: "\n<left> to disable this buff"
             LeftClickEnable: "\n<left> to enable this buff"
+            NoInfBuff: "当前没有可用的无限增益"
         }
         Architecture:
         {
@@ -331,6 +332,7 @@ Mods:
         Common:
         {
             Switch: "Switch"
+            Unavailable: "不可用"
         }
     }
 }

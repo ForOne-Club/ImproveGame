@@ -151,7 +151,7 @@ namespace ImproveGame.Interface.GUI
         }
 
         public override void Update(GameTime gameTime) {
-            ApplyBuffItem.BuffTypesShouldHide.Sort(); // 升序排序
+                ApplyBuffItem.BuffTypesShouldHide.Sort(); // 升序排序
             // 去掉重复的
             for (int i = 1; i < ApplyBuffItem.BuffTypesShouldHide.Count; i++) {
                 if (ApplyBuffItem.BuffTypesShouldHide[i] == ApplyBuffItem.BuffTypesShouldHide[i - 1]) {
@@ -159,12 +159,16 @@ namespace ImproveGame.Interface.GUI
                     i--;
                 }
             }
-
             int count = ApplyBuffItem.BuffTypesShouldHide.Count;
-            while (count <= page * 44) {
-                page--;
+            if (count > 0) {
+                while (count <= page * 44) {
+                    page--;
+                }
+                SetPageText(page);
             }
-            SetPageText(page);
+            else {
+                pageText.SetText(MyUtils.GetText("Common.Unavailable"));
+            }
 
             base.Update(gameTime);
 
@@ -196,6 +200,17 @@ namespace ImproveGame.Interface.GUI
             var panelDimensions = basePanel.GetDimensions();
             bool hoverOnBuff = false;
             int viewMax = Math.Min(43, ApplyBuffItem.BuffTypesShouldHide.Count - 1);
+
+            if (viewMax == -1) { // 没Buff 显示提示
+                Vector2 drawCenter = panelDimensions.Center();
+                float scale = 0.5f;
+                string text = MyUtils.GetText("BuffTracker.NoInfBuff");
+                float textWidth = FontAssets.DeathText.Value.MeasureString(text).X * 0.5f;
+                Vector2 origin = new(textWidth, 0f);
+                Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.DeathText.Value, text, drawCenter.X, drawCenter.Y, Color.White, Color.Black, origin, scale);
+                return;
+            }
+
             for (int i = 0; i <= viewMax; i++) {
                 int x = 14 + i * 38;
                 int y = 56;

@@ -3,6 +3,7 @@ using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -18,6 +19,20 @@ namespace ImproveGame.Content
     /// </summary>
     public class DrawSystem : ModSystem
     {
+        public override void Load() {
+            On.Terraria.Main.DrawInterface_36_Cursor += Main_DrawInterface_36_Cursor;
+        }
+
+        private void Main_DrawInterface_36_Cursor(On.Terraria.Main.orig_DrawInterface_36_Cursor orig) {
+            if (Main.cursorOverride == 15) {
+                // 修正鼠标坐标
+                Main.mouseX -= 12;
+                Main.mouseY -= 12;
+                Main.cursorScale = 1f;
+            }
+            orig.Invoke();
+        }
+
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Ruler"));
@@ -47,8 +62,23 @@ namespace ImproveGame.Content
         }
 
         private static void DrawPoolsBorder() {
-            if (WandSystem.SelectPoolMode)
+            // 绘制现有定位点光标
+            var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
+            if (autofisher is not null && autofisher.locatePoint.X > 0 && autofisher.locatePoint.Y > 0) {
+                var position = autofisher.locatePoint.ToWorldCoordinates() - Main.screenPosition;
+                var color = Color.SkyBlue;
+                var tex = TextureAssets.Cursors[15].Value;
+                position -= tex.Size() / 2f;
+                Main.spriteBatch.Draw(tex, position, null, color);
+            }
+
+            if (!WandSystem.SelectPoolMode)
                 return;
+
+            if (Main.mouseRight && Main.mouseRightRelease) {
+                UISystem.Instance.AutofisherGUI.ToggleSelectPool();
+                return;
+            }
 
             Main.cursorOverride = 15;
             Main.cursorColor = Color.SkyBlue;
@@ -71,8 +101,8 @@ namespace ImproveGame.Content
             bool[,] mouseHovering = new bool[drawRange.Width + 1, drawRange.Height + 1];
             // 递归可不能把已经检查过的重新检查，不然死循环了
             bool[,] tileChecked = new bool[drawRange.Width + 1, drawRange.Height + 1];
-            Point16 mouseWorldPosition = Main.MouseWorld.ToTileCoordinates16();
-            RecursionSetHovered(mouseWorldPosition.X, mouseWorldPosition.Y);
+            Point16 mouseTilePosition = Main.MouseWorld.ToTileCoordinates16();
+            RecursionSetHovered(mouseTilePosition.X, mouseTilePosition.Y);
             // 通过递归设置鼠标悬停的区域
             void RecursionSetHovered(int i, int j) {
                 if (i < drawRange.Left || j < drawRange.Top || i > drawRange.Right || j > drawRange.Bottom || tileChecked[i - drawRange.X, j - drawRange.Y])
@@ -147,6 +177,11 @@ namespace ImproveGame.Content
                             if (Lighting.Brightness(i, j - 1) < 0.02f)
                                 color = Color.Transparent;
                             Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X - 2, worldPosition.Y), new Vector2(worldPosition.X + 16, worldPosition.Y), color, color, 2f);
+                        }
+
+                        if (mouseHovering[i - drawRange.X, j - drawRange.Y] && Main.mouseLeft && Main.mouseLeftRelease) {
+                            AutofishPlayer.LocalPlayer.SetLocatePoint(AutofishPlayer.LocalPlayer.GetAutofisher(), mouseTilePosition);
+                            UISystem.Instance.AutofisherGUI.ToggleSelectPool();
                         }
                     }
                 }
