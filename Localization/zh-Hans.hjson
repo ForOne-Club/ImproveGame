@@ -170,6 +170,15 @@
                     如果还是什么都不掉，请确保该树有树冠，而且还未被摇过
                     '''
             }
+            DisableAlchemyPlantRipeCondition:
+            {
+                    Label: "炼金植物成熟条件禁用"
+                    Tooltip:
+                        '''
+                        启用后所有炼金植物生长将没有条件，
+                        例如启用后，太阳花会在夜晚成熟。
+                        '''
+            }
             RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"

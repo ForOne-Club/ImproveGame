@@ -165,6 +165,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool ShakeTreeFruit;
 
+        [Label("$Mods.ImproveGame.Config.DisableAlchemyPlantRipeCondition.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.DisableAlchemyPlantRipeCondition.Tooltip")]
+        [DefaultValue(false)]
+        public bool DisableAlchemyPlantRipeCondition;
+
         [Label("$Mods.ImproveGame.Config.RespawnWithFullHP.Label")]
         [DefaultValue(false)]
         public bool RespawnWithFullHP;
