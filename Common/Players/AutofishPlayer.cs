@@ -28,6 +28,13 @@ namespace ImproveGame.Common.Players
             Autofisher = point;
         }
 
+        public void SetLocatePoint(TEAutofisher autofisher, Point16 point) {
+            autofisher.locatePoint = point;
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, autofisher.ID, autofisher.Position.X, autofisher.Position.Y);
+            }
+        }
+
         public override void UpdateDead() {
             if (Player.whoAmI == Main.myPlayer && AutofisherGUI.Visible)
                 UISystem.Instance.AutofisherGUI.Close();

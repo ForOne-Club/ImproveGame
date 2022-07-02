@@ -6,6 +6,7 @@ using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -26,11 +27,14 @@ namespace ImproveGame.Interface.GUI
         private static float panelTop;
         private static float panelHeight;
 
+        private Asset<Texture2D> selectPoolOff;
+        private Asset<Texture2D> selectPoolOn;
+
         private UIPanel basePanel;
         private ModItemSlot fishingPoleSlot = new();
         private ModItemSlot baitSlot = new();
         private FishItemSlot[] fishSlot = new FishItemSlot[15];
-        private UIImageButton relocateButton;
+        private UIImage relocateButton;
 
         internal static bool RequireRefresh = false;
 
@@ -77,12 +81,23 @@ namespace ImproveGame.Interface.GUI
                 basePanel.Append(fishSlot[i]);
             }
 
-            relocateButton = new(Main.Assets.Request<Texture2D>("Images/UI/DisplaySlots_5"));
+            selectPoolOff = MyUtils.GetTexture("UI/Autofisher/SelectPoolOff");
+            selectPoolOn = MyUtils.GetTexture("UI/Autofisher/SelectPoolOn");
+            relocateButton = new(selectPoolOff);
             relocateButton.Left.Set(150f, 0f);
             relocateButton.Top.Set(0f, 0f);
             relocateButton.Width.Set(46f, 0f);
             relocateButton.Height.Set(46f, 0f);
+            relocateButton.OnMouseDown += (_, _) => ToggleSelectPool();
             basePanel.Append(relocateButton);
+        }
+
+        public void ToggleSelectPool() {
+            WandSystem.SelectPoolMode = !WandSystem.SelectPoolMode;
+            if (WandSystem.SelectPoolMode)
+                relocateButton.SetImage(selectPoolOn);
+            else
+                relocateButton.SetImage(selectPoolOff);
         }
 
         private void ChangeFishingPoleSlot(Item item) {
@@ -167,6 +182,7 @@ namespace ImproveGame.Interface.GUI
         /// 打开GUI界面
         /// </summary>
         public void Open(Point16 point) {
+            WandSystem.SelectPoolMode = false;
             Main.playerInventory = true;
             SoundEngine.PlaySound(AutofishPlayer.LocalPlayer.Autofisher != Point16.NegativeOne ? SoundID.MenuTick : SoundID.MenuOpen);
             AutofishPlayer.LocalPlayer.SetAutofisher(point);
@@ -178,6 +194,7 @@ namespace ImproveGame.Interface.GUI
         /// 关闭GUI界面
         /// </summary>
         public void Close() {
+            WandSystem.SelectPoolMode = false;
             AutofishPlayer.LocalPlayer.SetAutofisher(Point16.NegativeOne);
             Visible = false;
             Main.blockInput = false;
