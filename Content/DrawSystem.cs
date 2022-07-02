@@ -33,16 +33,19 @@ namespace ImproveGame.Content
             orig.Invoke();
         }
 
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
             int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Ruler"));
-            if (MouseTextIndex != -1)
-            {
+            if (MouseTextIndex != -1) {
                 layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
                     "ImproveGame: BorderRect",
-                    delegate
-                    {
+                    delegate {
                         DrawBorderRect();
+                        Point point = Main.MouseWorld.ToTileCoordinates();
+                        if (Main.tile[point].HasTile) {
+                            MyUtils.DrawString(Main.MouseScreen + new Vector2(30, 20), Main.tile[point].TileType.ToString(), Color.White, Color.Red);
+                            MyUtils.DrawString(Main.MouseScreen + new Vector2(30, 40), Main.tile[point].TileFrameX.ToString(), Color.White, Color.Red);
+                            MyUtils.DrawString(Main.MouseScreen + new Vector2(30, 60), (Main.tile[point].TileFrameX / 18).ToString(), Color.White, Color.Red);
+                        }
                         return true;
                     },
                     InterfaceScaleType.Game)
@@ -190,15 +193,11 @@ namespace ImproveGame.Content
 
         public static readonly Box[] boxs = new Box[10];
 
-        private static void DrawBorderRect()
-        {
-            for (int i = 0; i < boxs.Length; i++)
-            {
-                if (boxs[i] != null)
-                {
+        private static void DrawBorderRect() {
+            for (int i = 0; i < boxs.Length; i++) {
+                if (boxs[i] != null) {
                     Box box = boxs[i];
-                    if (box.PreView is not null)
-                    {
+                    if (box.PreView is not null) {
                         Main.spriteBatch.Draw(box.PreView, new Vector2(box.X, box.Y) * 16f - Main.screenPosition, null, Color.White * 0.5f, 0, Vector2.Zero, 1f, 0, 0);
                     }
 

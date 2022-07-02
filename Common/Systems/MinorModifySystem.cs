@@ -43,6 +43,48 @@ namespace ImproveGame.Common.Systems
             On.Terraria.Player.PickupItem += Player_PickupItem;
             // 摇树总是掉落水果
             IL.Terraria.WorldGen.ShakeTree += TweakShakeTree;
+            // “炼金植物” 绘制的是否是开花图案
+            On.Terraria.GameContent.Drawing.TileDrawing.IsAlchemyPlantHarvestable += TileDrawing_IsAlchemyPlantHarvestable;
+            // “”
+            IL.Terraria.WorldGen.GrowAlch += WorldGen_GrowAlch;
+        }
+
+        private void WorldGen_GrowAlch(ILContext il) {
+            var c = new ILCursor(il);
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Ret),
+                i => i.MatchLdsfld<int>("dayTime")))
+                return;
+            c.EmitDelegate<Func<bool, bool>>(flag => false); // “太阳花”
+
+            /*if (!c.TryGotoNext(MoveType.Before,
+                i => i.Match(OpCodes.Ret),
+                i => i.Match(OpCodes.Ldsfld)))
+                return;
+            c.EmitDelegate<Func<bool, bool>>(flag => false); // “月光草”*/
+
+            /*if (!c.TryGotoNext(MoveType.Before,
+                i => i.Match(OpCodes.Ret),
+                i => i.Match(OpCodes.Ldsfld)))
+                return;
+            c.EmitDelegate<Func<bool, bool>>(flag => true); // “幌菊”*/
+
+            /*if (!c.TryGotoNext(MoveType.Before,
+                i => i.Match(OpCodes.Conv_R8),
+                i => i.Match(OpCodes.Ldsfld)))
+                return;
+            c.EmitDelegate<Func<double, double>>(x => 0); // “闪耀根”
+
+            if (!c.TryGotoNext(MoveType.Before,
+                i => i.Match(OpCodes.Ldsfld),
+                i => i.Match(OpCodes.Ldc_I4),
+                i => i.Match(OpCodes.Sub)))
+                return;
+            c.EmitDelegate<Func<int, int>>(x => 0); // “火焰花”*/
+        }
+
+        private bool TileDrawing_IsAlchemyPlantHarvestable(On.Terraria.GameContent.Drawing.TileDrawing.orig_IsAlchemyPlantHarvestable orig, Terraria.GameContent.Drawing.TileDrawing self, int style) {
+            return true;
         }
 
         /// <summary>
