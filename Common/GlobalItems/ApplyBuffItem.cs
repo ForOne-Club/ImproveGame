@@ -20,7 +20,7 @@ namespace ImproveGame.Common.GlobalItems
         // 特殊药水
         public static readonly List<int> SpecialPotions = new() { 2350, 2351, ItemID.WormholePotion, ItemID.PotionOfReturn };
         // 增益 Tile 巴斯特雕像，篝火，红心灯笼，星星瓶，向日葵，弹药箱，施法桌，水晶球，蛋糕块，利器站，水蜡烛，和平蜡烛
-        public static readonly List<List<int>> BUFFTiles = new() { new() { 506, 0, 215 }, new() { 215, 0, 87 }, new() { 42, 9, 89 }, new() { 42, 7, 158 }, new() { 27, 0, 146 }, new() { 287, 0, 93 }, new() { 354, 0, 150 }, new() { 125, 0, 29 }, new() { 621, 0, 192 }, new() { 377, 0, 159 }, new() { 49, 0, 86 }, new() { 372, 0, 157 } };
+        public static readonly List<List<int>> BUFFTiles = new() { new() { 506, -1, 215 }, new() { 215, -1, 87 }, new() { 42, 9, 89 }, new() { 42, 7, 158 }, new() { 27, -1, 146 }, new() { 287, -1, 93 }, new() { 354, -1, 150 }, new() { 125, -1, 29 }, new() { 621, -1, 192 }, new() { 377, -1, 159 }, new() { 49, -1, 86 }, new() { 372, -1, 157 } };
 
         public override void UpdateInventory(Item item, Player player) {
             int buffType = GetItemBuffType(item);
@@ -42,11 +42,13 @@ namespace ImproveGame.Common.GlobalItems
             int buffType = GetItemBuffType(item);
             if (buffType is not -1) {
                 BuffTypesShouldHide.Add(buffType);
-                item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
+                if (item.TryGetGlobalItem<GlobalItemData>(out var globalItem))
+                    globalItem.InventoryGlow = true;
             }
             // 非增益药剂
             if (MyUtils.Config.NoConsume_Potion && item.stack >= 30 && SpecialPotions.Contains(item.type)) {
-                item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
+                if (item.TryGetGlobalItem<GlobalItemData>(out var globalItem))
+                    globalItem.InventoryGlow = true;
             }
             // 随身增益站：旗帜
             if (MyUtils.Config.NoPlace_BUFFTile_Banner) {
@@ -59,13 +61,15 @@ namespace ImproveGame.Common.GlobalItems
                         frameY += 54;
                     }
                     if (frameX >= 396 || frameY >= 54) {
-                        item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
+                        if (item.TryGetGlobalItem<GlobalItemData>(out var globalItem))
+                            globalItem.InventoryGlow = true;
                     }
                 }
             }
             // 弹药
             if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0) {
-                item.GetGlobalItem<GlobalItemData>().InventoryGlow = true;
+                if (item.TryGetGlobalItem<GlobalItemData>(out var globalItem))
+                    globalItem.InventoryGlow = true;
             }
         }
 
@@ -96,7 +100,7 @@ namespace ImproveGame.Common.GlobalItems
         public static bool IsBuffTileItem(Item item, out int buffType) {
             // 会给玩家buff的雕像
             for (int i = 0; i < BUFFTiles.Count; i++) {
-                if (item.createTile == BUFFTiles[i][0] && item.placeStyle == BUFFTiles[i][1]) {
+                if (item.createTile == BUFFTiles[i][0] && (item.placeStyle == BUFFTiles[i][1] || BUFFTiles[i][1] == -1)) {
                     buffType = BUFFTiles[i][2];
                     return true;
                 }
