@@ -3,6 +3,7 @@ using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
@@ -167,7 +168,27 @@ namespace ImproveGame.Common.GlobalItems
                         OverrideColor = Color.LightGreen
                     });
                 }
+
+                if (GameCulture.FromCultureName(GameCulture.CultureName.Chinese).IsActive)
+                    tooltips.Add(new(Mod, "WhatIsMiddleClick", "\n\n"));
             }
+        }
+
+        private static Asset<Texture2D> WhatIsMiddleClick;
+        public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset) {
+            if (line.Name == "WhatIsMiddleClick" && line.Mod == Mod.Name) {
+                yOffset = WhatIsMiddleClick.Height() + 10;
+                Main.spriteBatch.Draw(WhatIsMiddleClick.Value, new Vector2(line.X, line.Y), Color.White);
+            }
+            return base.PreDrawTooltipLine(item, line, ref yOffset);
+        }
+
+        public override void Load() {
+            WhatIsMiddleClick = MyUtils.GetTexture("WhatIsMiddleClick");
+        }
+
+        public override void Unload() {
+            WhatIsMiddleClick = null;
         }
     }
 }

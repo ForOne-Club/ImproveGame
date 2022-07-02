@@ -1,8 +1,10 @@
 using ImproveGame.Common.Utils;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -17,6 +19,8 @@ namespace ImproveGame.Content.Tiles
         internal Item fishingPole = new();
         internal Item bait = new();
         internal Item[] fish = new Item[15];
+        internal const int checkWidth = 50;
+        internal const int checkHeight = 30;
 
         public override bool IsTileValidForEntity(int x, int y) {
             Tile tile = Main.tile[x, y];
@@ -46,8 +50,14 @@ namespace ImproveGame.Content.Tiles
 
         public int FishingTimer;
         public override void Update() {
-            if (Main.netMode != NetmodeID.Server)
+            if (Main.netMode != NetmodeID.Server && Main.netMode != NetmodeID.SinglePlayer)
                 return;
+            if (locatePoint.X < 0 || locatePoint.Y < 0)
+                return;
+            if (Framing.GetTileSafely(locatePoint).LiquidAmount == 0) {
+                locatePoint = Point16.NegativeOne;
+                return;
+            }
 
             int finalFishingLevel = GetFishingConditions().FinalFishingLevel;
             if (Main.rand.Next(300) < finalFishingLevel)
@@ -58,207 +68,224 @@ namespace ImproveGame.Content.Tiles
             if (Main.rand.NextBool(60))
                 FishingTimer += 60;
 
-            if (FishingTimer > 660f) {
+            if (FishingTimer > 60f) {
                 FishingTimer = 0;
-                //FishingCheck();
+                FishingCheck();
             }
         }
 
-        //public void FishingCheck() {
-        //    FishingAttempt fisher = default(FishingAttempt);
-        //    fisher.X = Position.X;
-        //    fisher.Y = Position.Y;
-        //    fisher.bobberType = type;
-        //    GetFishingPondState(fisher.X, fisher.Y, out fisher.inLava, out fisher.inHoney, out fisher.waterTilesCount, out fisher.chumsInWater);
+        public void FishingCheck() {
+            var player = GetClosestPlayer(Position);
 
-        //    fisher.playerFishingConditions = Main.player[owner].GetFishingConditions();
-        //    if (fisher.playerFishingConditions.BaitItemType == 2673) {
-        //        Main.player[owner].displayedFishingInfo = Language.GetTextValue("GameUI.FishingWarning");
-        //        if ((fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000 && !NPC.AnyNPCs(370)) {
-        //            ai[1] = Main.rand.Next(-180, -60) - 100;
-        //            localAI[1] = 1f;
-        //            netUpdate = true;
-        //        }
+            FishingAttempt fisher = default(FishingAttempt);
+            fisher.X = locatePoint.X;
+            fisher.Y = locatePoint.Y;
+            fisher.bobberType = ProjectileID.BobberGolden;
+            GetFishingPondState(fisher.X, fisher.Y, out fisher.inLava, out fisher.inHoney, out fisher.waterTilesCount, out fisher.chumsInWater);
 
-        //        return;
-        //    }
-
-        //    fisher.fishingLevel = fisher.playerFishingConditions.FinalFishingLevel;
-        //    if (fisher.fishingLevel == 0)
-        //        return;
-
-        //    fisher.CanFishInLava = (ItemID.Sets.CanFishInLava[fisher.playerFishingConditions.PoleItemType] || ItemID.Sets.IsLavaBait[fisher.playerFishingConditions.BaitItemType] || Main.player[owner].accLavaFishing);
-        //    if (fisher.chumsInWater > 0)
-        //        fisher.fishingLevel += 11;
-
-        //    if (fisher.chumsInWater > 1)
-        //        fisher.fishingLevel += 6;
-
-        //    if (fisher.chumsInWater > 2)
-        //        fisher.fishingLevel += 3;
-
-        //    Main.player[owner].displayedFishingInfo = Language.GetTextValue("GameUI.FishingPower", fisher.fishingLevel);
-        //    fisher.waterNeededToFish = 300;
-        //    float num = Main.maxTilesX / 4200;
-        //    num *= num;
-        //    fisher.atmo = (float)((double)(position.Y / 16f - (60f + 10f * num)) / (Main.worldSurface / 6.0));
-        //    if ((double)fisher.atmo < 0.25)
-        //        fisher.atmo = 0.25f;
-
-        //    if (fisher.atmo > 1f)
-        //        fisher.atmo = 1f;
-
-        //    fisher.waterNeededToFish = (int)((float)fisher.waterNeededToFish * fisher.atmo);
-        //    fisher.waterQuality = (float)fisher.waterTilesCount / (float)fisher.waterNeededToFish;
-        //    if (fisher.waterQuality < 1f)
-        //        fisher.fishingLevel = (int)((float)fisher.fishingLevel * fisher.waterQuality);
-
-        //    fisher.waterQuality = 1f - fisher.waterQuality;
-        //    if (fisher.waterTilesCount < fisher.waterNeededToFish)
-        //        Main.player[owner].displayedFishingInfo = Language.GetTextValue("GameUI.FullFishingPower", fisher.fishingLevel, 0.0 - Math.Round(fisher.waterQuality * 100f));
-
-        //    if (Main.player[owner].luck < 0f) {
-        //        if (Main.rand.NextFloat() < 0f - Main.player[owner].luck)
-        //            fisher.fishingLevel = (int)((double)fisher.fishingLevel * (0.9 - (double)Main.rand.NextFloat() * 0.3));
-        //    }
-        //    else if (Main.rand.NextFloat() < Main.player[owner].luck) {
-        //        fisher.fishingLevel = (int)((double)fisher.fishingLevel * (1.1 + (double)Main.rand.NextFloat() * 0.3));
-        //    }
-
-        //    int num2 = (fisher.fishingLevel + 75) / 2;
-        //    if (Main.rand.Next(100) > num2)
-        //        return;
-
-        //    fisher.heightLevel = 0;
-        //    if ((double)fisher.Y < Main.worldSurface * 0.5)
-        //        fisher.heightLevel = 0;
-        //    else if ((double)fisher.Y < Main.worldSurface)
-        //        fisher.heightLevel = 1;
-        //    else if ((double)fisher.Y < Main.rockLayer)
-        //        fisher.heightLevel = 2;
-        //    else if (fisher.Y < Main.maxTilesY - 300)
-        //        fisher.heightLevel = 3;
-        //    else
-        //        fisher.heightLevel = 4;
-
-        //    FishingCheck_RollDropLevels(fisher.fishingLevel, out fisher.common, out fisher.uncommon, out fisher.rare, out fisher.veryrare, out fisher.legendary, out fisher.crate);
-        //    FishingCheck_ProbeForQuestFish(ref fisher);
-        //    FishingCheck_RollEnemySpawns(ref fisher);
-        //    FishingCheck_RollItemDrop(ref fisher);
-        //    bool flag = false;
-        //    AdvancedPopupRequest sonar = new AdvancedPopupRequest();
-        //    //Bobber position as default
-        //    Vector2 sonarPosition = new Vector2(position.X, position.Y);
-        //    PlayerLoader.CatchFish(Main.player[owner], fisher, ref fisher.rolledItemDrop, ref fisher.rolledEnemySpawn, ref sonar, ref sonarPosition);
-
-        //    if (sonar.Text != null && Main.player[owner].sonarPotion) {
-        //        PopupText.AssignAsSonarText(PopupText.NewText(sonar, sonarPosition));
-        //    }
-
-        //    if (fisher.rolledItemDrop > 0) {
-        //        if (sonar.Text == null && Main.player[owner].sonarPotion) {
-        //            Item item = new Item();
-        //            item.SetDefaults(fisher.rolledItemDrop);
-        //            item.position = position;
-        //            PopupText.AssignAsSonarText(PopupText.NewText(PopupTextContext.SonarAlert, item, 1, noStack: true));
-        //        }
-
-        //        float num3 = fisher.fishingLevel;
-        //        ai[1] = (float)Main.rand.Next(-240, -90) - num3;
-        //        localAI[1] = fisher.rolledItemDrop;
-        //        netUpdate = true;
-        //        flag = true;
-        //    }
-
-        //    if (fisher.rolledEnemySpawn > 0) {
-        //        if (sonar.Text == null && Main.player[owner].sonarPotion)
-        //            PopupText.AssignAsSonarText(PopupText.NewText(PopupTextContext.SonarAlert, fisher.rolledEnemySpawn, base.Center, stay5TimesLonger: false));
-
-        //        float num4 = fisher.fishingLevel;
-        //        ai[1] = (float)Main.rand.Next(-240, -90) - num4;
-        //        localAI[1] = -fisher.rolledEnemySpawn;
-        //        netUpdate = true;
-        //        flag = true;
-        //    }
-
-        //    if (!flag && fisher.inLava) {
-        //        int num5 = 0;
-        //        if (ItemID.Sets.IsLavaBait[fisher.playerFishingConditions.BaitItemType])
-        //            num5++;
-
-        //        if (ItemID.Sets.CanFishInLava[fisher.playerFishingConditions.PoleItemType])
-        //            num5++;
-
-        //        if (Main.player[owner].accLavaFishing)
-        //            num5++;
-
-        //        if (num5 >= 2)
-        //            localAI[1] += 240f;
-        //    }
-
-        //    if (fisher.CanFishInLava && fisher.inLava)
-        //        AchievementsHelper.HandleSpecialEvent(Main.player[owner], 19);
-        //}
-
-        //private static void GetFishingPondState(int x, int y, out bool lava, out bool honey, out int numWaters, out int chumCount) {
-        //    lava = false;
-        //    honey = false;
-        //    numWaters = 0;
-        //    chumCount = 0;
-        //    Point tileCoords = new Point(0, 0);
-        //    GetFishingPondWidth(x, y, out int minX, out int maxX);
-        //    for (int i = minX; i <= maxX; i++) {
-        //        int num = y;
-        //        while (Main.tile[i, num].liquid > 0 && !WorldGen.SolidTile(i, num) && num < Main.maxTilesY - 10) {
-        //            numWaters++;
-        //            num++;
-        //            //patch file: flag, num4
-        //            if (Main.tile[i, num].lava())
-        //                lava = true;
-        //            else if (Main.tile[i, num].honey())
-        //                //patch file: flag2
-        //                honey = true;
-
-        //            tileCoords.X = i;
-        //            tileCoords.Y = num;
-        //            chumCount += Main.instance.ChumBucketProjectileHelper.GetChumsInLocation(tileCoords);
-        //        }
-        //    }
-
-        //    void RecursionSetHovered(int i, int j) {
-        //        if (tileChecked[i - drawRange.X, j - drawRange.Y])
-        //            return;
-        //        if (Math.Abs(fisherPos.X - i) > width || Math.Abs(fisherPos.Y - j) > height)
-        //            return;
-
-        //        tileChecked[i - drawRange.X, j - drawRange.Y] = true;
-        //        var tile = Framing.GetTileSafely(i, j);
-        //        if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(i, j) && i >= drawRange.Left && j >= drawRange.Top && i <= drawRange.Right && j <= drawRange.Bottom) {
-        //            mouseHovering[i - drawRange.X, j - drawRange.Y] = true;
-        //            // 递归临近的四个物块
-        //            RecursionSetHovered(i - 1, j);
-        //            RecursionSetHovered(i + 1, j);
-        //            RecursionSetHovered(i, j - 1);
-        //            RecursionSetHovered(i, j + 1);
-        //            return;
-        //        }
-        //        return; // 虽然不是必要的，但是写上感觉规范点
-        //    }
-
-        //    if (honey)
-        //        numWaters = (int)((double)numWaters * 1.5);
-        //}
-
-        private static void GetFishingPondWidth(int x, int y, out int minX, out int maxX) {
-            minX = x;
-            maxX = x;
-            while (minX > 10 && Main.tile[minX, y].LiquidType > 0 && !WorldGen.SolidTile(minX, y)) {
-                minX--;
+            fisher.playerFishingConditions = GetFishingConditions();
+            if (fisher.playerFishingConditions.BaitItemType == ItemID.TruffleWorm) {
+                // 召唤猪鲨 （？？？）
+                return;
             }
 
-            while (maxX < Main.maxTilesX - 10 && Main.tile[maxX, y].LiquidType > 0 && !WorldGen.SolidTile(maxX, y)) {
-                maxX++;
+            fisher.fishingLevel = fisher.playerFishingConditions.FinalFishingLevel;
+            if (fisher.fishingLevel == 0)
+                return;
+
+            fisher.CanFishInLava = ItemID.Sets.CanFishInLava[fisher.playerFishingConditions.PoleItemType] || ItemID.Sets.IsLavaBait[fisher.playerFishingConditions.BaitItemType]/* || Main.player[owner].accLavaFishing*/;
+            if (fisher.chumsInWater > 0)
+                fisher.fishingLevel += 11;
+
+            if (fisher.chumsInWater > 1)
+                fisher.fishingLevel += 6;
+
+            if (fisher.chumsInWater > 2)
+                fisher.fishingLevel += 3;
+
+            fisher.waterNeededToFish = 300;
+            float num = Main.maxTilesX / 4200;
+            num *= num;
+            fisher.atmo = (float)((double)(Position.Y - (60f + 10f * num)) / (Main.worldSurface / 6.0));
+            if ((double)fisher.atmo < 0.25)
+                fisher.atmo = 0.25f;
+
+            if (fisher.atmo > 1f)
+                fisher.atmo = 1f;
+
+            fisher.waterNeededToFish = (int)((float)fisher.waterNeededToFish * fisher.atmo);
+            fisher.waterQuality = (float)fisher.waterTilesCount / (float)fisher.waterNeededToFish;
+            if (fisher.waterQuality < 1f)
+                fisher.fishingLevel = (int)((float)fisher.fishingLevel * fisher.waterQuality);
+
+            fisher.waterQuality = 1f - fisher.waterQuality;
+
+            if (player.active && !player.dead) {
+                if (player.luck < 0f) {
+                    if (Main.rand.NextFloat() < 0f - player.luck)
+                        fisher.fishingLevel = (int)((double)fisher.fishingLevel * (0.9 - (double)Main.rand.NextFloat() * 0.3));
+                }
+                else if (Main.rand.NextFloat() < player.luck) {
+                    fisher.fishingLevel = (int)((double)fisher.fishingLevel * (1.1 + (double)Main.rand.NextFloat() * 0.3));
+                }
             }
+
+            int fishChance = (fisher.fishingLevel + 75) / 2;
+            if (Main.rand.Next(100) > fishChance)
+                return;
+
+            fisher.heightLevel = 0;
+            if ((double)fisher.Y < Main.worldSurface * 0.5)
+                fisher.heightLevel = 0;
+            else if ((double)fisher.Y < Main.worldSurface)
+                fisher.heightLevel = 1;
+            else if ((double)fisher.Y < Main.rockLayer)
+                fisher.heightLevel = 2;
+            else if (fisher.Y < Main.maxTilesY - 300)
+                fisher.heightLevel = 3;
+            else
+                fisher.heightLevel = 4;
+
+            FishingCheck_RollDropLevels(player, fisher.fishingLevel, out fisher.common, out fisher.uncommon, out fisher.rare, out fisher.veryrare, out fisher.legendary, out fisher.crate);
+            //FishingCheck_ProbeForQuestFish(ref fisher);
+            //FishingCheck_RollEnemySpawns(ref fisher);
+
+            // 伪装一个proj，用反射调用Projectile.FishingCheck_RollItemDrop
+            var fakeProj = new Projectile {
+                owner = 250
+            };
+            int tileType1 = Main.tile[Position.X, Position.Y + 2].TileType;
+            int tileType2 = Main.tile[Position.X + 1, Position.Y + 2].TileType;
+
+            bool dungeon = Main.player[250].ZoneDungeon;
+            bool beach = Main.player[250].ZoneBeach;
+            bool corrupt = Main.player[250].ZoneCorrupt;
+            bool crimson = Main.player[250].ZoneCrimson;
+            bool hallow = Main.player[250].ZoneHallow;
+            bool jungle = Main.player[250].ZoneJungle;
+            bool snow = Main.player[250].ZoneSnow;
+            bool desert = Main.player[250].ZoneDesert;
+
+            Main.player[250].ZoneDungeon = IsDungeonBrick(tileType1) || IsDungeonBrick(tileType2);
+            Main.player[250].ZoneBeach = tileType1 == TileID.ShellPile || tileType2 == TileID.ShellPile;
+            Main.player[250].ZoneCorrupt = TileID.Sets.Corrupt[tileType1] || TileID.Sets.Corrupt[tileType2];
+            Main.player[250].ZoneCrimson = TileID.Sets.Crimson[tileType1] || TileID.Sets.Crimson[tileType2];
+            Main.player[250].ZoneHallow = TileID.Sets.Hallow[tileType1] || TileID.Sets.Hallow[tileType2];
+            Main.player[250].ZoneJungle = IsJungleTile(tileType1) || IsJungleTile(tileType2);
+            Main.player[250].ZoneSnow = TileID.Sets.Snow[tileType1] || TileID.Sets.Snow[tileType2];
+            Main.player[250].ZoneDesert = TileID.Sets.isDesertBiomeSand[tileType1] || TileID.Sets.isDesertBiomeSand[tileType2];
+            Main.NewText(Main.player[250].ZoneDungeon);
+            // 反射调用 FishingCheck_RollItemDrop(ref fisher);
+            var targetMethod = fakeProj.GetType().GetMethod("FishingCheck_RollItemDrop",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            var args = new object[] { fisher };
+            targetMethod.Invoke(fakeProj, args);
+            fisher = (FishingAttempt)args[0];
+            Main.NewText($"[i:{fisher.rolledItemDrop}]");
+
+            Main.player[250].ZoneDungeon = dungeon;
+            Main.player[250].ZoneBeach = beach;
+            Main.player[250].ZoneCorrupt = corrupt;
+            Main.player[250].ZoneCrimson = crimson;
+            Main.player[250].ZoneHallow = hallow;
+            Main.player[250].ZoneJungle = jungle;
+            Main.player[250].ZoneSnow = snow;
+            Main.player[250].ZoneDesert = desert;
+        }
+
+        private static bool IsDungeonBrick(int type) => type == TileID.BlueDungeonBrick || type == TileID.PinkDungeonBrick || type == TileID.GreenDungeonBrick;
+
+        private static bool IsJungleTile(int type) => type == TileID.JungleGrass || type == TileID.LihzahrdBrick;
+
+        private static void FishingCheck_RollDropLevels(Player closetPlayer, int fishingLevel, out bool common, out bool uncommon, out bool rare, out bool veryrare, out bool legendary, out bool crate) {
+            int commonChance = 150 / fishingLevel;
+            int uncommonChance = 150 * 2 / fishingLevel;
+            int rareChance = 150 * 7 / fishingLevel;
+            int veryRareChance = 150 * 15 / fishingLevel;
+            int legendaryChance = 150 * 30 / fishingLevel;
+            int crateChance = 10;
+            if (closetPlayer.cratePotion)
+                crateChance += 10;
+
+            if (commonChance < 2)
+                commonChance = 2;
+
+            if (uncommonChance < 3)
+                uncommonChance = 3;
+
+            if (rareChance < 4)
+                rareChance = 4;
+
+            if (veryRareChance < 5)
+                veryRareChance = 5;
+
+            if (legendaryChance < 6)
+                legendaryChance = 6;
+
+            common = false;
+            uncommon = false;
+            rare = false;
+            veryrare = false;
+            legendary = false;
+            crate = false;
+            if (Main.rand.NextBool(commonChance))
+                common = true;
+
+            if (Main.rand.NextBool(uncommonChance))
+                uncommon = true;
+
+            if (Main.rand.NextBool(rareChance))
+                rare = true;
+
+            if (Main.rand.NextBool(veryRareChance))
+                veryrare = true;
+
+            if (Main.rand.NextBool(legendaryChance))
+                legendary = true;
+
+            if (Main.rand.Next(100) < crateChance)
+                crate = true;
+        }
+
+        private void GetFishingPondState(int x, int y, out bool lava, out bool honey, out int numWaters, out int chumCount) {
+            chumCount = 0;
+
+            lava = false;
+            honey = false;
+            for (int i = 0; i < tileChecked.GetLength(0); i++) {
+                for (int j = 0; j < tileChecked.GetLength(1); j++) {
+                    tileChecked[i, j] = false;
+                }
+            }
+            numWaters = GetFishingPondSize(x, y, ref lava, ref honey);
+
+            if (honey)
+                numWaters = (int)((double)numWaters * 1.5);
+        }
+
+        private bool[,] tileChecked = new bool[checkWidth * 2 + 1, checkHeight * 2 + 1];
+        private int GetFishingPondSize(int x, int y, ref bool lava, ref bool honey) {
+            Point16 arrayLeftTop = new(Position.X + 1 - checkWidth, Position.Y + 1 - checkHeight);
+            if (x - arrayLeftTop.X < 0 || x - arrayLeftTop.X > checkWidth * 2 || y - arrayLeftTop.Y < 0 || y - arrayLeftTop.Y > checkHeight * 2)
+                return 0;
+            if (tileChecked[x - arrayLeftTop.X, y - arrayLeftTop.Y])
+                return 0;
+
+            tileChecked[x - arrayLeftTop.X, y - arrayLeftTop.Y] = true;
+            var tile = Framing.GetTileSafely(x, y);
+            if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(x, y)) {
+                if (tile.LiquidType == LiquidID.Lava)
+                    lava = true;
+                if (tile.LiquidType == LiquidID.Honey)
+                    honey = true;
+                // 递归临近的四个物块
+                int left = GetFishingPondSize(x - 1, y, ref lava, ref honey);
+                int right = GetFishingPondSize(x + 1, y, ref lava, ref honey);
+                int up = GetFishingPondSize(x, y - 1, ref lava, ref honey);
+                int bottom = GetFishingPondSize(x, y + 1, ref lava, ref honey);
+                return left + right + up + bottom + 1;
+            }
+            return 0;
         }
 
         public PlayerFishingConditions GetFishingConditions() {

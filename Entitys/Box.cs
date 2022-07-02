@@ -1,4 +1,4 @@
-﻿using ImproveGame.Content;
+﻿using ImproveGame.Common.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -76,6 +77,9 @@ namespace ImproveGame.Common.GlobalItems
                         return;
                     }
                 }
+
+                if (GameCulture.FromCultureName(GameCulture.CultureName.Chinese).IsActive)
+                    tooltips.Add(new(Mod, "WhatIsMiddleClick", "\n\n"));
             }
         }
     }

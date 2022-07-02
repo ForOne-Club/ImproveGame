@@ -53,7 +53,7 @@ namespace ImproveGame.Interface.GUI
 
             fishingPoleSlot = MyUtils.CreateItemSlot(
                 50f, 0f,
-                canPlace: (Item i, Item item) => item.fishingPole > 0,
+                canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || item.fishingPole > 0,
                 onItemChanged: ChangeFishingPoleSlot,
                 emptyText: () => MyUtils.GetText($"Autofisher.FishingPole"),
                 parent: basePanel
@@ -62,7 +62,7 @@ namespace ImproveGame.Interface.GUI
 
             baitSlot = MyUtils.CreateItemSlot(
                 100f, 0f,
-                canPlace: (Item i, Item item) => item.bait > 0,
+                canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || item.bait > 0,
                 onItemChanged: ChangeBaitSlot,
                 emptyText: () => MyUtils.GetText($"Autofisher.Bait"),
                 parent: basePanel
@@ -194,6 +194,7 @@ namespace ImproveGame.Interface.GUI
         /// 关闭GUI界面
         /// </summary>
         public void Close() {
+            relocateButton.SetImage(selectPoolOff);
             WandSystem.SelectPoolMode = false;
             AutofishPlayer.LocalPlayer.SetAutofisher(Point16.NegativeOne);
             Visible = false;

@@ -16,9 +16,12 @@ namespace ImproveGame.Common.Systems
         /// </summary>
         internal static Dictionary<int, int> ModdedPotionBuffs = new();
 
+        internal static bool NoLakeSizePenaltyLoaded = false;
+
         public override void PostSetupContent() {
             DoCalamityModIntegration();
             DoFargowiltasIntegration();
+            NoLakeSizePenaltyLoaded = ModLoader.HasMod("NoLakeSizePenalty");
         }
 
         private static void DoCalamityModIntegration() {
@@ -54,6 +57,7 @@ namespace ImproveGame.Common.Systems
         public override void Unload() {
             ModdedPlaceableItemBuffs = null;
             ModdedPotionBuffs = null;
+            NoLakeSizePenaltyLoaded = false;
         }
     }
 }
