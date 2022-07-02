@@ -77,32 +77,32 @@ Max stack, weapons autoswing, enable modded items, can put non-vanity accessorie
 ---------------------------
 Change log: (View details in mod configs)
     1.5.8
-        ● BUG修复
-            1. 修复眼骨中键打开音效翻转BUG
-            2. 修复特殊篝火无限增益不生效的问题
-        ● 新增内容
-            1. 添加液体魔杖，可以吸取/放置液体
+        ● BUG fix
+            1. Fix the bug of turning on the sound effect with the middle button of the eyebone
+            2. Fixed the problem that the special bonfire infinite buff did not take effect
+        ● New content
+            1. Add liquid wand, which can draw/place liquid
             ([i:206][i:1128][i:207])
-            2. 添加增益追踪器，可以禁用
-            某些生效的无限Buff，左键Buff图标打开
-            3. 无限增益添加对灾厄, 
-            Fargo's Mutant Mod放置Buff物品的支持
-            4. 添加自动存钱功能
-            5. 添加满血复活功能
-            6. 添加加速树木生长功能
-            7. 添加大大提升摇树出水果概率功能
-            8. 工具速度提升修改为滑条调节。
-            9. 炼金植物成熟条件关闭功能
-            10. 大背包：
-                ● 全部存入
-                ● 全部取出
-                ● 快速堆叠
-                ● 一键整理
-                ● Ctrl 快速删除/出售
-        ● 其他
-            1. 优化帧数，修为某些情况下的卡顿
-            2. 额外Buff栏默认值设为99（即拉满）
-            3. 修复了重复加载多次模组后内存占用过大问题
+            2. Added gain tracker, which can be disabled
+            Some valid infinite buffs, left-click the buff icon to open
+            3. Infinite buffs are added to Calamity,
+            Fargo's Mutant Mod support for placing Buff items
+            4. Add automatic deposit function
+            5. Add full blood resurrection function
+            6. Add the function of accelerating tree growth
+            7. Add a function that greatly increases the probability of fruit from tree shaking
+            8. The tool speed increase is modified to the slider adjustment.
+            9. Alchemy plant mature condition close function
+            10. Large Backpack:
+                ● Deposit all
+                ● Remove all
+                ● Fast stacking
+                ● One-click sorting
+                ● Ctrl quick delete/sell
+        ● Others
+            1. Optimize the number of frames, fix it to freeze in some cases
+            2. The default value of the extra Buff column is set to 99 (that is, full)
+            3. Fixed the problem of excessive memory usage after repeated loading of multiple modules
     1.5.7
         New function to hide buff icons of the Infinite Potions
         (Different from LiuAFK, this function only hides the buff icons)
