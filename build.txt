@@ -1,4 +1,4 @@
 displayName = Quality of Life 更好的体验
-author = 局长, Cyril, delete, Lastprismer, Lacewing
-version = 1.5.8.1
+author = 局长, Cyril, delete, Lacewing, Lastprismer
+version = 1.5.8.3
 hideCode = true

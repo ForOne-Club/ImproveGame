@@ -162,9 +162,31 @@ namespace ImproveGame.Content.Items
             ItemInInventory = false;
         }
 
-        //public override void AddRecipes() {
-        //    CreateRecipe()
-        //        .AddTile(TileID.WorkBenches).Register();
-        //}
+        public override void AddRecipes() {
+            // 金锭
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddIngredient(ItemID.ShadowScale, 18)
+                .AddIngredient(ItemID.GoldBar, 12)
+                .Register();
+            // 铂金锭
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddIngredient(ItemID.ShadowScale, 18)
+                .AddIngredient(ItemID.PlatinumBar, 12)
+                .Register();
+            // 金锭
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddIngredient(ItemID.TissueSample, 18)
+                .AddIngredient(ItemID.GoldBar, 12)
+                .Register();
+            // 铂金锭
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddIngredient(ItemID.TissueSample, 18)
+                .AddIngredient(ItemID.PlatinumBar, 12)
+                .Register();
+        }
     }
 }
