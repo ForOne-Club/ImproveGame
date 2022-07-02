@@ -11,11 +11,16 @@ namespace ImproveGame.Common.Players
 {
     public class ImprovePlayer : ModPlayer
     {
-        public bool PiggyBank => Player.HasItem(ItemID.PiggyBank);
-        public bool Safe => Player.HasItem(ItemID.Safe);
-        public bool DefendersForge => Player.HasItem(ItemID.DefendersForge);
+        public bool PiggyBank;
+        public bool Safe;
+        public bool DefendersForge;
 
         public override void ResetEffects() {
+
+            PiggyBank = Player.HasItem(ItemID.PiggyBank);
+            Safe = Player.HasItem(ItemID.Safe);
+            DefendersForge = Player.HasItem(ItemID.DefendersForge);
+
             if (MyUtils.Config.NoCD_FishermanQuest) {
                 if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name)) {
                     Main.anglerQuestFinished = false;
