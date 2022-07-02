@@ -32,7 +32,7 @@ namespace ImproveGame.Common.GlobalItems
                 // 饱食三级Buff不应该覆盖，而是取最高级
                 bool wellFed3Enabled = player.FindBuffIndex(BuffID.WellFed3) != -1;
                 if (buffType == BuffID.WellFed && (player.FindBuffIndex(BuffID.WellFed2) != -1 || wellFed3Enabled))
-                        return;
+                    return;
                 if (buffType == BuffID.WellFed2 && wellFed3Enabled)
                     return;
 
@@ -177,7 +177,6 @@ namespace ImproveGame.Common.GlobalItems
         private static Asset<Texture2D> WhatIsMiddleClick;
         public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset) {
             if (line.Name == "WhatIsMiddleClick" && line.Mod == Mod.Name) {
-                yOffset = WhatIsMiddleClick.Height() + 10;
                 Main.spriteBatch.Draw(WhatIsMiddleClick.Value, new Vector2(line.X, line.Y), Color.White);
             }
             return base.PreDrawTooltipLine(item, line, ref yOffset);
