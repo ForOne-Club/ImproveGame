@@ -17,7 +17,7 @@ namespace ImproveGame.Common.Players
                 return;
 
             // 堆叠钱币
-            if ((_delayStackMoney == 0 && _delayStackMoney > -1) || _failDepositTimer == 0) {
+            if (_delayStackMoney == 0 || _failDepositTimer == 0) {
                 StackMoneyInPiggy();
                 _delayStackMoney = -1;
                 _failDepositTimer = -1;
@@ -83,7 +83,7 @@ namespace ImproveGame.Common.Players
                 }
             }
 
-            if (_failDepositTimer == 0) {
+            if (_failDepositTimer <= 0) {
                 _delayStackMoney = 10;
             }
         }

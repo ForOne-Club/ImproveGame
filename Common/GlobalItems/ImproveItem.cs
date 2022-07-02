@@ -160,7 +160,7 @@ namespace ImproveGame.Common.GlobalItems
                 (item.damage > 0 && item.maxStack == 1 && item.ammo == AmmoID.None &&
                 item.DamageType != DamageClass.Generic))) {
                 GlobalItemData itemVar = item.GetGlobalItem<GlobalItemData>();
-                TooltipLine tooltip = new TooltipLine(Mod, "重铸次数", Language.GetTextValue($"Mods.ImproveGame.Tips.PrefixCount") + itemVar.recastCount);
+                TooltipLine tooltip = new TooltipLine(Mod, "ReforgeCount", Language.GetTextValue($"Mods.ImproveGame.Tips.PrefixCount") + itemVar.recastCount);
                 tooltips.Add(tooltip);
             }
             // 更多信息

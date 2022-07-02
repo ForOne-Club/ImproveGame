@@ -23,6 +23,9 @@ namespace ImproveGame.Common.GlobalItems
         public static readonly List<List<int>> BUFFTiles = new() { new() { 506, -1, 215 }, new() { 215, -1, 87 }, new() { 42, 9, 89 }, new() { 42, 7, 158 }, new() { 27, -1, 146 }, new() { 287, -1, 93 }, new() { 354, -1, 150 }, new() { 125, -1, 29 }, new() { 621, -1, 192 }, new() { 377, -1, 159 }, new() { 49, -1, 86 }, new() { 372, -1, 157 } };
 
         public override void UpdateInventory(Item item, Player player) {
+            if (player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
+                return;
+
             int buffType = GetItemBuffType(item);
             if (buffType is not -1 && InfBuffPlayer.Get(player).CheckInfBuffEnable(buffType)) {
                 // 饱食三级Buff不应该覆盖，而是取最高级
