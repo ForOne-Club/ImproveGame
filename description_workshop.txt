@@ -5,6 +5,33 @@ Functions toggled by defaut:
 Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
 ---------------------------
 Change log: (View details in mod configs)
+    1.5.8
+        ● BUG修复
+            1. 修复眼骨中键打开音效翻转BUG
+            2. 修复特殊篝火无限增益不生效的问题
+        ● 新增内容
+            1. 添加液体魔杖，可以吸取/放置液体
+            ([i:206][i:1128][i:207])
+            2. 添加增益追踪器，可以禁用
+            某些生效的无限Buff，左键Buff图标打开
+            3. 无限增益添加对灾厄, 
+            Fargo's Mutant Mod放置Buff物品的支持
+            4. 添加自动存钱功能
+            5. 添加满血复活功能
+            6. 添加加速树木生长功能
+            7. 添加大大提升摇树出水果概率功能
+            8. 工具速度提升修改为滑条调节。
+            9. 炼金植物成熟条件关闭功能
+            10. 大背包：
+                ● 全部存入
+                ● 全部取出
+                ● 快速堆叠
+                ● 一键整理
+                ● Ctrl 快速删除/出售
+        ● 其他
+            1. 优化帧数，修为某些情况下的卡顿
+            2. 额外Buff栏默认值设为99（即拉满）
+            3. 修复了重复加载多次模组后内存占用过大问题
     1.5.7
         New function to hide buff icons of the Infinite Potions
         (Different from LiuAFK, this function only hides the buff icons)
@@ -14,15 +41,6 @@ Change log: (View details in mod configs)
             Fixed display bugs(Added animation for scrolling)
             Shift + Left Click to quickly transfer
             Alt + Left Click to mark as favorite
-    1.5.6
-        Added Wand of Architecture, to build houses
-        Changed Wand of Brusts and Wand of Starbrusts, added support area selection
-        More Buff Slots now supports number adjustion
-    1.5.5
-        Super Void Vault and Void Vault Smart pickup (Details in configs)
-        A new inventory (Details in configs)
-        Separate Portable Buff Stations and Portable Banners
-        Increased wall-placing speed of Wand of technology
 ---------------------------
 Function list:
     1. Max stack
