@@ -40,12 +40,13 @@ namespace ImproveGame.Content
                     "ImproveGame: BorderRect",
                     delegate {
                         DrawBorderRect();
-                        Point point = Main.MouseWorld.ToTileCoordinates();
+                        // 鼠标显示物块信息
+                        /*Point point = Main.MouseWorld.ToTileCoordinates();
                         if (Main.tile[point].HasTile) {
                             MyUtils.DrawString(Main.MouseScreen + new Vector2(30, 20), Main.tile[point].TileType.ToString(), Color.White, Color.Red);
                             MyUtils.DrawString(Main.MouseScreen + new Vector2(30, 40), Main.tile[point].TileFrameX.ToString(), Color.White, Color.Red);
                             MyUtils.DrawString(Main.MouseScreen + new Vector2(30, 60), (Main.tile[point].TileFrameX / 18).ToString(), Color.White, Color.Red);
-                        }
+                        }*/
                         return true;
                     },
                     InterfaceScaleType.Game)
