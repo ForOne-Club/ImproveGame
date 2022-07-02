@@ -157,15 +157,20 @@ Mods:
                     If it seems doing nothing, please check Terraria Wiki for the conditions
                     '''
             }
-            DisableAlchemyPlantRipeCondition:
+            AlchemyGrassGrowsFaster:
             {
-                     Label: "[i:313] Disable bloom conditions of herbs"
-                     Tooltip:
-                         '''
-                         All herbs can bloom without limitation after this is enabled
-                         For example, the Daybloom can bloom at night time
-                         Do take note that they still need time to grow
-                         '''
+                    Label: "[i:318] 草药迅速生长"
+                    Tooltip: "使所有草药可以在任何时候开花，收获种子"
+            }
+            AlchemyGrassAlwaysBlooms:
+            {
+                    Label: "[i:316] 草药允许在任何情况下开花"
+                    Tooltip: "使所有草药可以在任何时候开花，收获种子"
+            }
+            StaffOfRegenerationAutomaticPlanting:
+            {
+                    Label: "[i:213] 再生法杖自动种植"
+                    Tooltip: "根据收获时的草药种植"
             }
             RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
             BanDamageVar.Label: "[i:6] Disable damage floating"

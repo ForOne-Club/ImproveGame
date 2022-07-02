@@ -165,10 +165,20 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool ShakeTreeFruit;
 
-        [Label("$Mods.ImproveGame.Config.DisableAlchemyPlantRipeCondition.Label")]
-        [Tooltip("$Mods.ImproveGame.Config.DisableAlchemyPlantRipeCondition.Tooltip")]
+        [Label("$Mods.ImproveGame.Config.AlchemyGrassGrowsFaster.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.AlchemyGrassGrowsFaster.Tooltip")]
         [DefaultValue(false)]
-        public bool DisableAlchemyPlantRipeCondition;
+        public bool AlchemyGrassGrowsFaster;
+
+        [Label("$Mods.ImproveGame.Config.AlchemyGrassAlwaysBlooms.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.AlchemyGrassAlwaysBlooms.Tooltip")]
+        [DefaultValue(false)]
+        public bool AlchemyGrassAlwaysBlooms;
+
+        [Label("$Mods.ImproveGame.Config.StaffOfRegenerationAutomaticPlanting.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.StaffOfRegenerationAutomaticPlanting.Tooltip")]
+        [DefaultValue(false)]
+        public bool StaffOfRegenerationAutomaticPlanting;
 
         [Label("$Mods.ImproveGame.Config.RespawnWithFullHP.Label")]
         [DefaultValue(false)]

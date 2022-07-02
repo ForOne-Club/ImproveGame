@@ -43,15 +43,76 @@ namespace ImproveGame.Common.Systems
             On.Terraria.Player.PickupItem += Player_PickupItem;
             // 摇树总是掉落水果
             IL.Terraria.WorldGen.ShakeTree += TweakShakeTree;
-            // “炼金植物” 绘制的是否是开花图案
-            // On.Terraria.GameContent.Drawing.TileDrawing.IsAlchemyPlantHarvestable += (_, _, _) => true;
-            // “炼金植物” 成熟条件
+            // “草药” 生长速度
             IL.Terraria.WorldGen.GrowAlch += WorldGen_GrowAlch;
+            // “草药” 绘制的是否是开花图案
+            On.Terraria.GameContent.Drawing.TileDrawing.IsAlchemyPlantHarvestable += TileDrawing_IsAlchemyPlantHarvestable;
+            // “草药” 是否可以被 “再生法杖” 收割
+            IL.Terraria.Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
+            // “草药” 是否掉落成熟时候物品
+            // IL.Terraria.WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
+            On.Terraria.WorldGen.IsHarvestableHerbWithSeed += WorldGen_IsHarvestableHerbWithSeed;
         }
 
-        private void WorldGen_GrowAlch(ILContext il) {
+        private bool TileDrawing_IsAlchemyPlantHarvestable(On.Terraria.GameContent.Drawing.TileDrawing.orig_IsAlchemyPlantHarvestable orig, Terraria.GameContent.Drawing.TileDrawing self, int style) {
+            return MyUtils.Config.AlchemyGrassAlwaysBlooms || orig.Invoke(self, style);
+        }
+
+        private bool WorldGen_IsHarvestableHerbWithSeed(On.Terraria.WorldGen.orig_IsHarvestableHerbWithSeed orig, int type, int style) {
+            return MyUtils.Config.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style);
+        }
+
+        // “草药” 是否掉落成熟时候物品
+        /*private void WorldGen_KillTile_GetItemDrops(ILContext il) {
             var c = new ILCursor(il);
             if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Ret),
+                i => i.Match(OpCodes.Ldloc_S)))
+                return;
+            c.EmitDelegate<Func<bool, bool>>(flag => MyUtils.Config.AlchemyGrassAlwaysBlooms || flag);
+        }*/
+
+        // “草药” 是否可以被 “再生法杖” 收割
+        private static int style = -1;
+        private void Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(ILContext il) {
+            var c = new ILCursor(il);
+
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Ldc_R8, 40500d),
+                i => i.Match(OpCodes.Ble_Un_S),
+                i => i.Match(OpCodes.Ldc_I4_1),
+                i => i.Match(OpCodes.Stloc_S),
+                i => i.Match(OpCodes.Ldloc_S)))
+                return;
+            c.EmitDelegate<Func<bool, bool>>(flag => {
+                if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting) {
+                    style = Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18;
+                }
+                return MyUtils.Config.AlchemyGrassAlwaysBlooms || flag;
+            });
+
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Ldc_I4_0),
+                i => i.Match(OpCodes.Call)))
+                return;
+            c.EmitDelegate(() => {
+                if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting) {
+                    WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, 82, false, false, -1, style);
+                }
+            });
+        }
+
+        // 提升草药生长速度
+        private void WorldGen_GrowAlch(ILContext il) {
+            var c = new ILCursor(il);
+
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Call),
+                i => i.Match(OpCodes.Ldc_I4_S)))
+                return;
+            c.EmitDelegate<Func<int, int>>(num => MyUtils.Config.AlchemyGrassGrowsFaster ? 1 : num);
+
+            /*if (!c.TryGotoNext(MoveType.After,
                 i => i.Match(OpCodes.Ret),
                 i => i.Match(OpCodes.Ldsfld)))
                 return;
@@ -80,7 +141,7 @@ namespace ImproveGame.Common.Systems
                 i => i.Match(OpCodes.Ldc_I4),
                 i => i.Match(OpCodes.Sub)))
                 return;
-            c.EmitDelegate<Func<int, int>>(x => MyUtils.Config.DisableAlchemyPlantRipeCondition ? 0 : x); // “火焰花”
+            c.EmitDelegate<Func<int, int>>(x => MyUtils.Config.DisableAlchemyPlantRipeCondition ? 0 : x); // “火焰花”*/
         }
 
         /// <summary>

@@ -170,14 +170,20 @@
                     如果还是什么都不掉，请确保该树有树冠，而且还未被摇过
                     '''
             }
-            DisableAlchemyPlantRipeCondition:
+            AlchemyGrassGrowsFaster:
             {
-                    Label: "[i:313] 炼金植物成熟条件禁用"
-                    Tooltip:
-                        '''
-                        启用后所有炼金植物生长将没有条件，
-                        例如启用后，太阳花会在夜晚成熟。
-                        '''
+                    Label: "[i:313] 草药迅速生长"
+                    Tooltip: "使所有草药可以在任何时候开花，收获种子"
+            }
+            AlchemyGrassAlwaysBlooms:
+            {
+                    Label: "[i:316] 草药允许在任何情况下开花"
+                    Tooltip: "使所有草药可以在任何时候开花，收获种子"
+            }
+            StaffOfRegenerationAutomaticPlanting:
+            {
+                    Label: "[i:213] 再生法杖自动种植"
+                    Tooltip: "根据收获时的草药种植"
             }
             RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
