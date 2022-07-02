@@ -173,12 +173,12 @@
             AlchemyGrassGrowsFaster:
             {
                     Label: "[i:313] 草药迅速生长"
-                    Tooltip: "使所有草药可以在任何时候开花，收获种子"
+                    Tooltip: "使所有草药生长的更快"
             }
             AlchemyGrassAlwaysBlooms:
             {
                     Label: "[i:316] 草药允许在任何情况下开花"
-                    Tooltip: "使所有草药可以在任何时候开花，收获种子"
+                    Tooltip: "使所有草药可以在任何时候开花，收获种子。"
             }
             StaffOfRegenerationAutomaticPlanting:
             {
