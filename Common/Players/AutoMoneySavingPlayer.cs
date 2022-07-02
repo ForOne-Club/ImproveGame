@@ -81,6 +81,7 @@ namespace ImproveGame.Common.Players
                     if (Player.inventory[i].stack == 100 && Player.inventory[i].type == ItemID.GoldCoin)
                         Player.inventory[i].SetDefaults(ItemID.PlatinumCoin);
                     Player.inventory[i] = MyUtils.ItemStackToInventory(Player.bank.item, Player.inventory[i], false);
+                    Recipe.FindRecipes();
                     // 如果某一帧突然装不下，要及时整理背包让它装得下
                     if (Player.inventory[i].stack > 0 && _failDepositTimer < 0)
                         _failDepositTimer = 6;

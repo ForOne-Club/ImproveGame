@@ -274,10 +274,8 @@ namespace ImproveGame
             // 先填充和物品相同的
             for (int i = begin; i < end; i++) {
                 item = ItemStackToInventoryItem(inventory, i, item, hint);
-                if (item.IsAir) {
-                    Recipe.FindRecipes();
+                if (item.IsAir)
                     return item;
-                }
             }
             // 后填充空位
             for (int i = begin; i < end; i++) {
@@ -287,11 +285,9 @@ namespace ImproveGame
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
                     (inventory[i], item) = (item, inventory[i]);
-                    Recipe.FindRecipes();
                     return item;
                 }
             }
-            Recipe.FindRecipes();
             return item;
         }
 

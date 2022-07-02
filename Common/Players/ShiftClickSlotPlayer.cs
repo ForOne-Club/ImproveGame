@@ -39,6 +39,7 @@ namespace ImproveGame.Common.Players
                 !inventory[slot].IsAir && !inventory[slot].favorited) {
                 if (BigBagGUI.Visible) {
                     inventory[slot] = MyUtils.ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
+                    Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);
                     return true; // 阻止原版代码运行
                 }

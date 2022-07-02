@@ -134,6 +134,7 @@ namespace ImproveGame.Interface.GUI
             for (int i = 0; i < testSort.Count; i++) {
                 MyUtils.ItemStackToInventory(items, testSort[i], false);
             }
+            Recipe.FindRecipes();
         }
 
         public void Replenish() {
@@ -147,6 +148,7 @@ namespace ImproveGame.Interface.GUI
                     }
                 }
             }
+            Recipe.FindRecipes();
         }
 
         public void PutAll() {
@@ -157,6 +159,7 @@ namespace ImproveGame.Interface.GUI
                 if (!inventory[i].IsAir && !inventory[i].favorited && !inventory[i].IsACoin)
                     inventory[i] = MyUtils.ItemStackToInventory(BigBag, inventory[i], false);
             }
+            Recipe.FindRecipes();
         }
 
         public void QuickTakeOutToPlayerInventory() {
@@ -168,6 +171,7 @@ namespace ImproveGame.Interface.GUI
                     BigBag[i] = MyUtils.ItemStackToInventory(inventory, BigBag[i], false, 50);
                 }
             }
+            Recipe.FindRecipes();
         }
 
         public void Open() {
