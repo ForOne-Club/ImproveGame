@@ -67,7 +67,7 @@
 ---------------------------
 [c/990000:画师：枫林半叶]
 [c/9900ff:翻译：Lastprismer，Lacewing]
-[c/0099ff:代码：自爆局局长, Cyril]
+[c/0099ff:代码：局长, Cyril]
 
 These features may bring you better gameplay experience
 ---------------------------
@@ -138,4 +138,4 @@ Function list:
 ---------------------------
 [c/990000:Spriter: 枫林半叶]
 [c/9900ff:Translators: Lastprismer, Lacewing]
-[c/0099ff:Coder: 自爆局局长, Cyril]
+[c/0099ff:Coder: 局长, Cyril]

@@ -1,69 +1,69 @@
-﻿These features may bring you better gameplay experience
+﻿这些功能也许会为你带来更好的游戏体验
 ---------------------------
-Only a part of mod functions are toggled by default, the rest need to be toggled in mod config
-Functions toggled by defaut:
-Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
+模组默认仅开启部分功能，其他功能需在设置中开启。
+默认开启功能：
+物品最大堆叠，武器自动使用，模组物品，
+非时装饰品也可放置在时装栏。
 ---------------------------
-Change log: (View details in mod configs)
+更新说明（具体请在设置或游戏内查看）：
     1.5.8
-        ● BUG fix
-            1. Fix the bug of turning on the sound effect with the middle button of the eyebone
-            2. Fixed the problem that the special bonfire infinite buff did not take effect
-        ● New content
-            1. Add liquid wand, which can draw/place liquid
-            ([i:206][i:1128][i:207])
-            2. Added gain tracker, which can be disabled
-            Some valid infinite buffs, left-click the buff icon to open
-            3. Infinite buffs are added to Calamity,
-            Fargo's Mutant Mod support for placing Buff items
-            4. Add automatic deposit function
-            5. Add full blood resurrection function
-            6. Add the function of accelerating tree growth
-            7. Add a function that greatly increases the probability of fruit from tree shaking
-            8. The tool speed increase is modified to the slider adjustment.
-            9. Alchemy plant mature condition close function
-            10. Large Backpack:
-                ● Deposit all
-                ● Remove all
-                ● Fast stacking
-                ● One-click sorting
-                ● Ctrl quick delete/sell
-        ● Others
-            1. Optimize the number of frames, fix it to freeze in some cases
-            2. The default value of the extra Buff column is set to 99 (that is, full)
-            3. Fixed the problem of excessive memory usage after repeated loading of multiple modules
+        ● BUG修复
+            1. 修复眼骨中键打开音效翻转BUG
+            2. 修复特殊篝火无限增益不生效的问题
+        ● 新增内容
+            1. 添加液体魔杖，可以吸取/放置液体
+            2. 添加增益追踪器，可以禁用
+            某些生效的无限Buff，左键Buff图标打开
+            3. 无限增益添加对灾厄, 
+            Fargo's Mutant Mod放置Buff物品的支持
+            4. 添加自动存钱功能
+            5. 添加满血复活功能
+            6. 添加加速树木生长功能
+            7. 添加大大提升摇树出水果概率功能
+            8. 工具速度提升修改为滑条调节。
+            9. 炼金植物成熟条件关闭功能
+            10. 大背包：
+                ● 全部存入
+                ● 全部取出
+                ● 快速堆叠
+                ● 一键整理
+                ● Ctrl 快速删除/出售
+        ● 其他
+            1. 优化帧数，修复某些情况下的卡顿
+            2. 额外Buff栏默认值设为99（即拉满）
+            3. 修复了重复加载多次模组后内存占用过大问题
     1.5.7
-        New function to hide buff icons of the Infinite Potions
-        (Different from LiuAFK, this function only hides the buff icons)
-        New function to open personal inventories(Piggy Bank, Safe, ect.) by Mouse 3(Scroll click)
-        New control panels for Wand of Architecture/Brusts/Starbrusts(Right click to open)
-        Huge Inventory:
-            Fixed display bugs(Added animation for scrolling)
-            Shift + Left Click to quickly transfer
-            Alt + Left Click to mark as favorite
+        新增隐藏无限续杯BUFF图标功能。
+        （不同于luiafk，只是纯粹的隐藏）
+        新增中键打开便携收纳功能。
+        建筑&爆破&星爆魔杖新增控制面板。（右键调出）
+        大背包：
+            修复显示BUG（增加滚动动画）
+            Shift 快速取出物品
+            Alt 收藏物品
 ---------------------------
-Function list:
-    1. Max stack
-    2. Weapons autoswing
-    3. Increased using speed for certain tools
-    4. Increased placement speed and range
-    5. Vanilla boss and event summon items not being consumed
-    6. Instant refresh Angler's quests
-    7. Prefixes get better as you keep reforging
-    8. Infinite potions when stack to at least 30
-    9. Infinite ammos when stack to at least 3996
-    10. Can put non-vanity accessories in social slots
-    11. Disable tombstone spawn
-    12. Adjust item pickup range
-    13. Enemy coin drop multiplier(cheating)
-    14. Town NPCs can spawn at night time
-    15. Town NPC spawn rate
-    16. Enable modded items
-    17. Portable buff stations
-    18. Super Void Vault
-    19. Void Vault Smart Pickup
-    20. A huge extra inventory
+功能列表（详见设置）：
+    一、   物品最大堆叠
+    二、   武器自动使用
+    三、   提升部分工具速度
+    四、   提升放置速度和工作范围
+    五、   BOSS/事件召唤物不消耗
+    六、   渔夫任务无冷却
+    七、   装备/饰品重铸的前缀会越来越好
+    八、   无限药剂，数量达到三十个后无限使用
+    九、   无限弹药，数量达到三千九百九十六个后无限使用
+    十、   非时装饰品也可放置在时装栏（启用模组直接生效）
+    十一、 控制墓碑掉落
+    十二、 控制物品拾取距离
+    十三、 敌人钱币掉落倍率（作弊功能）
+    十四、 城镇npc夜晚入住
+    十五、 城镇npc刷新速度
+    十六、 模组物品
+    十七、 随身增益站
+    十八、 超级虚空保险库
+    十九、 智能虚空保险库
+    二十、 额外的背包
 ---------------------------
-Spriter: 枫林半叶
-Translators: Lastprismer, Lacewing
-Coder: 自爆局局长, Cyril
+画师：枫林半叶
+翻译：Lastprismer，Lacewing
+代码：局长, Cyril
