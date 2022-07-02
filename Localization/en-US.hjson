@@ -115,7 +115,7 @@ Mods:
                 Label: "[i:87] Scroll click to open personal inventories"
                 Tooltip: 
                     '''
-                    When you scroll click a personal inventory item in your inventory
+                    When you middle click a personal inventory item in your inventory
                     it will open the corresponding inventory
                     Also disables the distance limit of portable inventories
                     '''
@@ -277,7 +277,7 @@ Mods:
             BuffEnabled:
                 '''
                 If you just want to disable buff of this item
-                Please scroll click on this item or left click on the buff icon to open buff tracker, to enable/disable that buff
+                Please middle click on this item or left click on the buff icon to open buff tracker, to enable/disable that buff
                 '''
             BuffApplied: "The buff [{BuffName}] is already applied"
             BuffHided: 
