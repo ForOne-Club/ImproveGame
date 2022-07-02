@@ -18,6 +18,7 @@ namespace ImproveGame.Common.Systems
 
         public override void PostSetupContent() {
             DoCalamityModIntegration();
+            DoFargowiltasIntegration();
         }
 
         private static void DoCalamityModIntegration() {
@@ -35,6 +36,14 @@ namespace ImproveGame.Common.Systems
             AddBuffIntegration(calamityMod, "CorruptionEffigy", "CorruptionEffigyBuff", true);
         }
 
+        private static void DoFargowiltasIntegration() {
+            if (!ModLoader.TryGetMod("Fargowiltas", out Mod fargowiltas)) {
+                return;
+            }
+            AddBuffIntegration(fargowiltas, "Omnistation", "Omnistation", true);
+            AddBuffIntegration(fargowiltas, "Omnistation2", "Omnistation", true);
+        }
+
         public static void AddBuffIntegration(Mod mod, string itemName, string buffName, bool isPlaceable) {
             if (isPlaceable)
                 ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = mod.Find<ModBuff>(buffName).Type;
@@ -44,6 +53,7 @@ namespace ImproveGame.Common.Systems
 
         public override void Unload() {
             ModdedPlaceableItemBuffs = null;
+            ModdedPotionBuffs = null;
         }
     }
 }
