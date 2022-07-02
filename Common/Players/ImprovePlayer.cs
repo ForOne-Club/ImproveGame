@@ -16,10 +16,13 @@ namespace ImproveGame.Common.Players
         public bool DefendersForge;
 
         public override void ResetEffects() {
-
-            PiggyBank = Player.HasItem(ItemID.PiggyBank);
-            Safe = Player.HasItem(ItemID.Safe);
-            DefendersForge = Player.HasItem(ItemID.DefendersForge);
+            if (Player.whoAmI == Main.myPlayer) {
+                if (MyUtils.Config.SuperVoidVault) {
+                    PiggyBank = Player.HasItem(ItemID.PiggyBank);
+                    Safe = Player.HasItem(ItemID.Safe);
+                    DefendersForge = Player.HasItem(ItemID.DefendersForge);
+                }
+            }
 
             if (MyUtils.Config.NoCD_FishermanQuest) {
                 if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name)) {

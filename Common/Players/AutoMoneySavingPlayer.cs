@@ -1,11 +1,6 @@
-﻿using ImproveGame.Interface.GUI;
-using System;
-using System.Linq;
-using Terraria;
-using Terraria.Audio;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace ImproveGame.Common.Players
 {

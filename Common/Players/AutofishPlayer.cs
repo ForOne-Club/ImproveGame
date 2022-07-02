@@ -1,12 +1,6 @@
 ﻿using ImproveGame.Common.Systems;
-using ImproveGame.Common.Utils;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.GUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
