@@ -21,7 +21,6 @@ namespace ImproveGame.Interface.GUI
         private static float panelTop;
         private static float panelHeight;
 
-        private bool HoverOnClose;
         private bool HoverOnBuff;
         private bool Dragging;
         private Vector2 Offset;
@@ -130,8 +129,6 @@ namespace ImproveGame.Interface.GUI
 
         // 可拖动界面
         private void DragStart(UIMouseEvent evt, UIElement listeningElement) {
-            if (HoverOnClose) return;
-
             var dimensions = listeningElement.GetDimensions().ToRectangle();
             Offset = new Vector2(evt.MousePosition.X - dimensions.Left, evt.MousePosition.Y - dimensions.Top);
             Dragging = true;
@@ -139,7 +136,7 @@ namespace ImproveGame.Interface.GUI
 
         // 可拖动界面
         private void DragEnd(UIMouseEvent evt, UIElement listeningElement) {
-            if (HoverOnClose || !Dragging) return;
+            if (!Dragging) return;
 
             Vector2 end = evt.MousePosition;
             Dragging = false;

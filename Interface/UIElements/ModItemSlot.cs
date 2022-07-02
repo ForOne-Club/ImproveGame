@@ -112,7 +112,8 @@ namespace ImproveGame.Interface.UIElements
                 DrawText();
             }
             if (lastStack != Item.stack || lastType != Item.type) {
-                ItemChange();
+                ItemChange(true);
+                RightClickItemChange(Item.stack - lastStack, lastType != Item.type);
             }
 
             Vector2 origin = GetDimensions().Position();
@@ -249,15 +250,30 @@ namespace ImproveGame.Interface.UIElements
         /// <summary>
         /// 物品改变后执行，可以写保存之类的
         /// </summary>
-        public Action<Item> OnItemChange;
-        public virtual void ItemChange() {
+        public Action<Item, bool> OnItemChange;
+        public virtual void ItemChange(bool rightClick = false) {
             if (Item is null) {
                 Item = new Item();
                 Item.SetDefaults();
             }
 
             if (OnItemChange is not null) {
-                OnItemChange.Invoke(Item);
+                OnItemChange.Invoke(Item, rightClick);
+            }
+        }
+
+        /// <summary>
+        /// 右键物品改变了才执行
+        /// </summary>
+        public Action<Item, int, bool> OnRightClickItemChange;
+        public virtual void RightClickItemChange(int stackChange, bool typeChange) {
+            if (Item is null) {
+                Item = new Item();
+                Item.SetDefaults();
+            }
+
+            if (OnRightClickItemChange is not null) {
+                OnRightClickItemChange.Invoke(Item, stackChange, typeChange);
             }
         }
 

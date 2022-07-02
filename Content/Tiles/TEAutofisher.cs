@@ -1,9 +1,6 @@
 using ImproveGame.Common.Systems;
 using ImproveGame.Common.Utils;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Terraria;
@@ -74,7 +71,7 @@ namespace ImproveGame.Content.Tiles
                 FishingTimer += 60;
 
             // 钓鱼机冷却在这里改，原版写的是660
-            if (FishingTimer > 6600f) {
+            if (FishingTimer > 60f) {
                 FishingTimer = 0;
                 ApplyAccessories();
                 FishingCheck();
@@ -296,7 +293,10 @@ namespace ImproveGame.Content.Tiles
                 TryConsumeBait(player);
             }
 
-            UISystem.Instance.AutofisherGUI.RefreshItems();
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                UISystem.Instance.AutofisherGUI.RefreshItems();
+            else
+                NetHelper.Autofish_ServerSendSyncItem(Position, 18);
         }
 
         private void TryConsumeBait(Player player) {
@@ -516,7 +516,7 @@ namespace ImproveGame.Content.Tiles
             ItemIO.Receive(bait, reader, true, false);
             ItemIO.Receive(accessory, reader, true, false);
             for (int i = 0; i < 15; i++)
-                ItemIO.Receive(fish[i], reader, true, false);
+                fish[i] = ItemIO.Receive(reader, true, false).Clone();
         }
     }
 }

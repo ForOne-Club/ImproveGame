@@ -1,14 +1,15 @@
 ﻿using ImproveGame.Common.Players;
+using ImproveGame.Common.Utils;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -184,6 +185,9 @@ namespace ImproveGame.Common.Systems
                         if (mouseHovering[i - drawRange.X, j - drawRange.Y] && Main.mouseLeft && Main.mouseLeftRelease) {
                             AutofishPlayer.LocalPlayer.SetLocatePoint(AutofishPlayer.LocalPlayer.GetAutofisher(), mouseTilePosition);
                             UISystem.Instance.AutofisherGUI.ToggleSelectPool();
+                            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                                NetHelper.Autofish_ClientSendLocatePoint(AutofishPlayer.LocalPlayer.Autofisher, mouseTilePosition);
+                            }
                             return;
                         }
                     }

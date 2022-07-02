@@ -76,6 +76,7 @@ namespace ImproveGame.Interface.GUI
                 emptyText: () => MyUtils.GetText($"Autofisher.Bait"),
                 parent: basePanel
             );
+            baitSlot.OnRightClickItemChange += ChangeBaitSlotStack;
             baitSlot.AllowFavorite = false;
 
             const int slotFirst = 50;
@@ -86,7 +87,8 @@ namespace ImproveGame.Interface.GUI
                 fishSlot[i].SetPos(x, y);
                 fishSlot[i].SetSize(46f, 46f);
                 fishSlot[i].AllowFavorite = false;
-                fishSlot[i].OnFishChange += SyncFish;
+                fishSlot[i].OnFishChange += ChangeFishSlot;
+                fishSlot[i].OnFishRightClickChange += ChangeFishSlotStack;
                 basePanel.Append(fishSlot[i]);
             }
 
@@ -123,7 +125,7 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        private void ChangeAccessorySlot(Item item) {
+        private void ChangeAccessorySlot(Item item, bool rightClick) {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
@@ -134,7 +136,7 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        private void ChangeFishingPoleSlot(Item item) {
+        private void ChangeFishingPoleSlot(Item item, bool rightClick) {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
@@ -145,25 +147,43 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        private void ChangeBaitSlot(Item item) {
+        private void ChangeBaitSlot(Item item, bool rightClick) {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
 
             autofisher.bait = item;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick) {
                 NetHelper.Autofish_ClientSendItem(16, item, AutofishPlayer.LocalPlayer.Autofisher);
+            }
+        } 
+
+        private void ChangeBaitSlotStack(Item item, int stackChange, bool typeChange) {
+            var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
+            if (autofisher is null)
+                return;
+            if (!typeChange && stackChange != 0) {
+                NetHelper.Autofish_ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange);
             }
         }
 
-        private void SyncFish(Item item, int i) {
+        private void ChangeFishSlot(Item item, int i, bool rightClick) {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
 
             autofisher.fish[i] = item;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick) {
                 NetHelper.Autofish_ClientSendItem((byte)i, item, AutofishPlayer.LocalPlayer.Autofisher);
+            }
+        }
+
+        private void ChangeFishSlotStack(Item item, int i, int stackChange, bool typeChange) {
+            var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
+            if (autofisher is null)
+                return;
+            if (!typeChange && stackChange != 0) {
+                NetHelper.Autofish_ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
             }
         }
 
@@ -219,10 +239,10 @@ namespace ImproveGame.Interface.GUI
         public void Open(Point16 point) {
             WandSystem.SelectPoolMode = false;
             Main.playerInventory = true;
-            SoundEngine.PlaySound(AutofishPlayer.LocalPlayer.Autofisher != Point16.NegativeOne ? SoundID.MenuTick : SoundID.MenuOpen);
-            AutofishPlayer.LocalPlayer.SetAutofisher(point);
             Visible = true;
             title.SetText(MyUtils.GetText("Autofisher.Title"));
+            AutofishPlayer.LocalPlayer.SetAutofisher(point);
+            SoundEngine.PlaySound(AutofishPlayer.LocalPlayer.Autofisher != Point16.NegativeOne ? SoundID.MenuTick : SoundID.MenuOpen);
             RefreshItems();
         }
 

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Players;
+using ImproveGame.Common.Systems;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.GUI;
 using System;
@@ -31,9 +32,103 @@ namespace ImproveGame.Common.Utils
                 case MessageType.Autofish_ClientReceiveSyncItem:
                     Autofish_ClientReceiveSyncItem(reader);
                     break;
+                case MessageType.Autofish_ServerReceiveLocatePoint:
+                    Autofish_ServerReceiveLocatePoint(reader, sender);
+                    break;
+                case MessageType.Autofish_ClientReceiveLocatePoint:
+                    Autofish_ClientReceiveLocatePoint(reader);
+                    break;
+                case MessageType.Autofish_ServerReceiveStackChange:
+                    Autofish_ServerReceiveStackChange(reader, sender);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public static void Autofish_ServerReceiveStackChange(BinaryReader reader, int sender) {
+            short x = reader.ReadInt16();
+            short y = reader.ReadInt16();
+            byte type = reader.ReadByte();
+            int stackChange = reader.ReadInt32();
+            // 同步个堆叠
+            if (MyUtils.TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
+                // 发送鱼
+                if (type <= 14) {
+                    autofisher.fish[type].stack += stackChange;
+                }
+                // 发送鱼饵
+                if (type == 16) {
+                    autofisher.bait.stack += stackChange;
+                }
+                // 发送到其他的所有客户端
+                Autofish_ServerSendSyncItem(new Point16(x, y), type, sender);
+            }
+        }
+
+        /// <summary>
+        /// 由客户端执行，向服务器发送更改堆叠而不是发送物品（避免延迟导致两端不同步而刷物品）
+        /// </summary>
+        /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
+        /// <param name="type">请求类型，小于或等于14为请求相应的fish，16为鱼饵，其他的没必要同步</param>
+        /// <param name="stackChange">更改的堆叠量</param>
+        public static void Autofish_ClientSendStackChange(Point16 point, byte type, int stackChange) {
+            var packet = ImproveGame.Instance.GetPacket();
+            packet.Write((byte)MessageType.Autofish_ServerReceiveStackChange);
+            packet.Write(point.X);
+            packet.Write(point.Y);
+            packet.Write(type);
+            packet.Write(stackChange);
+            packet.Send(-1, -1);
+        }
+
+        public static void Autofish_ServerReceiveLocatePoint(BinaryReader reader, int sender) {
+            short x = reader.ReadInt16();
+            short y = reader.ReadInt16();
+            short locateX = reader.ReadInt16();
+            short locateY = reader.ReadInt16();
+            // 发送到其他的所有客户端
+            if (MyUtils.TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
+                autofisher.locatePoint = new(locateX, locateY);
+                var packet = ImproveGame.Instance.GetPacket();
+                packet.Write((byte)MessageType.Autofish_ClientReceiveLocatePoint);
+                packet.Write(x);
+                packet.Write(y);
+                packet.Write(locateX);
+                packet.Write(locateY);
+                packet.Send(-1, sender);
+            }
+            // 没有东西，传过去告诉他这TE没了
+            else {
+                var origin = MyUtils.GetTileOrigin(x, y);
+                NetMessage.SendTileSquare(-1, origin.X, origin.Y, 2, 2, TileChangeType.None);
+            }
+        }
+
+        public static void Autofish_ClientReceiveLocatePoint(BinaryReader reader) {
+            short x = reader.ReadInt16();
+            short y = reader.ReadInt16();
+            short locateX = reader.ReadInt16();
+            short locateY = reader.ReadInt16();
+            // 发送到请求的客户端
+            if (MyUtils.TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
+                autofisher.locatePoint = new(locateX, locateY);
+            }
+        }
+
+        /// <summary>
+        /// 由客户端执行，向服务器同步定位点
+        /// </summary>
+        /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
+        /// <param name="locatePoint">定位点坐标</param>
+        public static void Autofish_ClientSendLocatePoint(Point16 point, Point16 locatePoint) {
+            var packet = ImproveGame.Instance.GetPacket();
+            packet.Write((byte)MessageType.Autofish_ServerReceiveLocatePoint);
+            packet.Write(point.X);
+            packet.Write(point.Y);
+            packet.Write(locatePoint.X);
+            packet.Write(locatePoint.Y);
+            packet.Send(-1, -1);
         }
 
         public static void Autofish_ClientReceiveSyncItem(BinaryReader reader) {
@@ -80,6 +175,8 @@ namespace ImproveGame.Common.Utils
                 if (type == 18)
                     autofisher.fish = fish;
                 AutofisherGUI.RequireRefresh = true;
+                if (AutofisherGUI.Visible)
+                    UISystem.Instance.AutofisherGUI.RefreshItems();
             }
         }
 
@@ -101,8 +198,12 @@ namespace ImproveGame.Common.Utils
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             byte type = reader.ReadByte();
+            Autofish_ServerSendSyncItem(new Point16(x, y), type, sender);
+        }
+
+        public static void Autofish_ServerSendSyncItem(Point16 point, byte type, int sender = -1) {
             // 发送到请求的客户端
-            if (MyUtils.TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
+            if (MyUtils.TryGetTileEntityAs<TEAutofisher>(point.X, point.Y, out var autofisher)) {
                 var packet = ImproveGame.Instance.GetPacket();
                 packet.Write((byte)MessageType.Autofish_ClientReceiveSyncItem);
                 packet.Write(type);
@@ -130,13 +231,13 @@ namespace ImproveGame.Common.Utils
                     for (int i = 0; i < 15; i++)
                         ItemIO.Send(autofisher.fish[i], packet, true);
                 }
-                packet.Write(x);
-                packet.Write(y);
+                packet.Write(point.X);
+                packet.Write(point.Y);
                 packet.Send(sender, -1);
             }
             // 没有东西，传过去告诉他这TE没了
             else {
-                var origin = MyUtils.GetTileOrigin(x, y);
+                var origin = MyUtils.GetTileOrigin(point.X, point.Y);
                 NetMessage.SendTileSquare(-1, origin.X, origin.Y, 2, 2, TileChangeType.None);
             }
         }
@@ -191,6 +292,8 @@ namespace ImproveGame.Common.Utils
                     autofisher.accessory = item;
                 }
                 AutofisherGUI.RequireRefresh = true;
+                if (AutofisherGUI.Visible)
+                    UISystem.Instance.AutofisherGUI.RefreshItems();
             }
         }
 
@@ -216,6 +319,9 @@ namespace ImproveGame.Common.Utils
         Autofish_ServerReceiveItem,
         Autofish_ClientReceiveItem,
         Autofish_ServerSyncItem,
-        Autofish_ClientReceiveSyncItem
+        Autofish_ClientReceiveSyncItem,
+        Autofish_ServerReceiveLocatePoint,
+        Autofish_ClientReceiveLocatePoint,
+        Autofish_ServerReceiveStackChange
     }
 }

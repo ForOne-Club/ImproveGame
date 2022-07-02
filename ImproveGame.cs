@@ -1,10 +1,12 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Players;
+using ImproveGame.Common.Utils;
 using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Terraria;
 using Terraria.ID;
@@ -35,6 +37,10 @@ namespace ImproveGame
             Instance = null;
             MyUtils.Config = null;
             GC.Collect();
+        }
+
+        public override void HandlePacket(BinaryReader reader, int whoAmI) {
+            NetHelper.HandlePacket(reader, whoAmI);
         }
     }
 }
