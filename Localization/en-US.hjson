@@ -159,18 +159,13 @@ Mods:
             }
             DisableAlchemyPlantRipeCondition:
             {
-                    # Label: "[i:313] 炼金植物成熟条件禁用"
-                    # Tooltip:
-                    #     '''
-                    #     启用后所有炼金植物生长将没有条件，
-                    #     例如启用后，太阳花会在夜晚成熟。
-                    #     '''
-                    Label: "[i:313] Herbs always bloom"
-                    Tooltip:
-                        '''
-                        Herbs will bloom without condition
-                        Do note that they still need time to grow
-                        '''
+                     Label: "[i:313] Disable bloom conditions of herbs"
+                     Tooltip:
+                         '''
+                         All herbs can bloom without limitation after this is enabled
+                         For example, the Daybloom can bloom at night time
+                         Do take note that they still need time to grow
+                         '''
             }
             RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
             BanDamageVar.Label: "[i:6] Disable damage floating"
@@ -239,11 +234,14 @@ Mods:
                 '''
             LiquidWand:
                 '''
-                Absorb/Deposit a amount of liquid
+                Absorb/Place an amount of liquid
                 <right> while holding to open the liquid control panel
-                Absorption Mode: Absorbs the selected liquid within the selected range
-                Deposit Mode: Fill the selected area with the specified liquid
-                If there is too much/too little liquid, no new liquid will be absorbed/placed
+                Absorbing Mode: Absorbs the selected liquid within the selected area
+                Placing Mode: Fills the selected area with the selected liquid
+                If there is too much/too little liquid, no excess liquid will be absorbed/placed
+                Hold Empty Bucket(s) and long-press a liquid slot to deposit the liquid in the slot to the bucket
+                Hold Bucket(s) with liquid inside and long-press a liquid slot to store the liquid into the slot
+                Hold an Absorbant Sponge and long-press the corresponding liquid slot to absorb the liquid inside
                 # 吸收/放置指定量的液体
                 # <right>使用打开液体控制面板
                 # 吸收模式：吸收框选范围内的指定液体
@@ -315,7 +313,7 @@ Mods:
             LeftClickDisable: "\n<left> to disable this buff"
             LeftClickEnable: "\n<left> to enable this buff"
             # NoInfBuff: "当前没有可用的无限增益"
-            NoInfBuff: "No infinite buff currently available"
+            NoInfBuff: "Currently no infinite buff available"
         }
         Architecture:
         {

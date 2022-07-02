@@ -30,7 +30,7 @@
                 ● 一键整理
                 ● Ctrl 快速删除/出售
         ● 其他
-            1. 优化帧数，修为某些情况下的卡顿
+            1. 优化帧数，修复某些情况下的卡顿
             2. 额外Buff栏默认值设为99（即拉满）
             3. 修复了重复加载多次模组后内存占用过大问题
     1.5.7
@@ -78,34 +78,35 @@ Max stack, weapons autoswing, enable modded items, can put non-vanity accessorie
 Change log: (View details in mod configs)
     1.5.8
         ● BUG fix
-            1. Fix the bug of turning on the sound effect with the middle button of the eyebone
-            2. Fixed the problem that the special bonfire infinite buff did not take effect
+            1. Fix the bug of sound effect inverse while scroll clicking the Eyebone
+            2. Fixed the problem that the infinite buffs of the special campfires do not take effect
         ● New content
-            1. Add liquid wand, which can draw/place liquid
+            1. Add a Liquid Wand, which can drain/place liquid
             ([i:206][i:1128][i:207])
-            2. Added gain tracker, which can be disabled
-            Some valid infinite buffs, left-click the buff icon to open
+            2. Added buff tracker, which can be disabled
+            Left-click the infinite buff icon to open
             3. Infinite buffs are added to Calamity,
             Fargo's Mutant Mod support for placing Buff items
-            4. Add automatic deposit function
-            5. Add full blood resurrection function
-            6. Add the function of accelerating tree growth
-            7. Add a function that greatly increases the probability of fruit from tree shaking
-            8. The tool speed increase is modified to the slider adjustment.
-            9. Alchemy plant mature condition close function
+            3. Added support of Infinite Potions and Protable Buff Stations to Calamity Mod and Fargo's Mutant Mod
+            4. Added auto-deposit function
+            5. Added Respawn with Full Life function
+            6. Added a function to accelerate tree growth
+            7. Added a function which greatly increases the drop rate of fruit of tree shaking
+            8. The tool speed boost now can be modified by a slider.
+            9. Herbs' blooming condition now can be disbled
             10. Large Backpack:
                 ● Deposit all
-                ● Remove all
-                ● Fast stacking
-                ● One-click sorting
-                ● Ctrl quick delete/sell
+                ● Loot all
+                ● Quick stacking
+                ● Quick sorting
+                ● Ctrl + left click to trash/sell
         ● Others
-            1. Optimize the number of frames, fix it to freeze in some cases
-            2. The default value of the extra Buff column is set to 99 (that is, full)
-            3. Fixed the problem of excessive memory usage after repeated loading of multiple modules
+            1. Optimization, fixed lagging in certain condition
+            2. The default value of the Extra Buff Slot is set to 99 (maximum value)
+            3. Fixed the unloading problem
     1.5.7
         New function to hide buff icons of the Infinite Potions
-        (Different from LiuAFK, this function only hides the buff icons)
+        (Different from LuiAFK, this function only hides the buff icons)
         New function to open personal inventories(Piggy Bank, Safe, ect.) by Mouse 3(Scroll click)
         New control panels for Wand of Architecture/Brusts/Starbrusts(Right click to open)
         Huge Inventory:
