@@ -8,6 +8,8 @@ namespace ImproveGame.Common.Players
         public static InfBuffPlayer Get(Player player) => player.GetModPlayer<InfBuffPlayer>();
 
         public override void PreUpdateBuffs() {
+            if (Main.myPlayer != Player.whoAmI)
+                return;
             DataPlayer dataPlayer = DataPlayer.Get(Player);
             // 同情况下测试，下面的代码平均可以省下0.001ms，虽然很小，上面这个注释掉了
             //foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
