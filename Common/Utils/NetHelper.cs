@@ -40,6 +40,7 @@ namespace ImproveGame.Common.Utils
             byte type = reader.ReadByte();
             Item fishingPole = null;
             Item bait = null;
+            Item accessory = null;
             Item[] fish = new Item[15];
             // 发送鱼
             if (type <= 14) {
@@ -53,10 +54,15 @@ namespace ImproveGame.Common.Utils
             if (type == 16) {
                 bait = ItemIO.Receive(reader, true);
             }
-            // 全部发送
+            // 发送饰品
             if (type == 17) {
+                accessory = ItemIO.Receive(reader, true);
+            }
+            // 全部发送
+            if (type == 18) {
                 fishingPole = ItemIO.Receive(reader, true);
                 bait = ItemIO.Receive(reader, true);
+                accessory = ItemIO.Receive(reader, true);
                 for (int i = 0; i < 15; i++)
                     fish[i] = ItemIO.Receive(reader, true);
             }
@@ -67,9 +73,11 @@ namespace ImproveGame.Common.Utils
                     autofisher.fishingPole = fishingPole;
                 if (bait is not null)
                     autofisher.bait = bait;
+                if (accessory is not null)
+                    autofisher.accessory = accessory;
                 if (type <= 14)
                     autofisher.fish[type] = fish[type];
-                if (type == 17)
+                if (type == 18)
                     autofisher.fish = fish;
                 AutofisherGUI.RequireRefresh = true;
             }
@@ -79,7 +87,7 @@ namespace ImproveGame.Common.Utils
         /// 由客户端执行，向服务器发送获取 <seealso cref="TEAutofisher"/> 物品的请求
         /// </summary>
         /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
-        /// <param name="type">请求类型，小于或等于14为请求相应的fish，15为钓竿，16为鱼饵，17为全部</param>
+        /// <param name="type">请求类型，小于或等于14为请求相应的fish，15为钓竿，16为鱼饵，17为饰品，18为全部</param>
         public static void Autofish_ClientSendSyncItem(Point16 point, byte type) {
             var packet = ImproveGame.Instance.GetPacket();
             packet.Write((byte)MessageType.Autofish_ServerSyncItem);
@@ -110,10 +118,15 @@ namespace ImproveGame.Common.Utils
                 if (type == 16) {
                     ItemIO.Send(autofisher.bait, packet, true);
                 }
-                // 全部发送
+                // 发送饰品
                 if (type == 17) {
+                    ItemIO.Send(autofisher.accessory, packet, true);
+                }
+                // 全部发送
+                if (type == 18) {
                     ItemIO.Send(autofisher.fishingPole, packet, true);
                     ItemIO.Send(autofisher.bait, packet, true);
+                    ItemIO.Send(autofisher.accessory, packet, true);
                     for (int i = 0; i < 15; i++)
                         ItemIO.Send(autofisher.fish[i], packet, true);
                 }
@@ -144,6 +157,9 @@ namespace ImproveGame.Common.Utils
                 if (type == 16) {
                     autofisher.bait = item;
                 }
+                if (type == 17) {
+                    autofisher.accessory = item;
+                }
             }
             // 发送到客户端
             var packet = ImproveGame.Instance.GetPacket();
@@ -171,6 +187,9 @@ namespace ImproveGame.Common.Utils
                 if (type == 16) {
                     autofisher.bait = item;
                 }
+                if (type == 17) {
+                    autofisher.accessory = item;
+                }
                 AutofisherGUI.RequireRefresh = true;
             }
         }
@@ -178,7 +197,7 @@ namespace ImproveGame.Common.Utils
         /// <summary>
         /// 由客户端执行，向服务器同步客户端的 <seealso cref="TEAutofisher"/> 内某物品
         /// </summary>
-        /// <param name="type">请求类型，小于或等于14为请求相应的fish，15为钓竿，16为鱼饵</param>
+        /// <param name="type">请求类型，小于或等于14为请求相应的fish，15为钓竿，16为鱼饵，17为饰品</param>
         /// <param name="item">物品的实例</param>
         /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
         public static void Autofish_ClientSendItem(byte type, Item item, Point16 point) {

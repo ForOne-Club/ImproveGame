@@ -67,6 +67,10 @@ namespace ImproveGame.Content.Tiles
                 Main.npcChatCornerItem = 0;
                 Main.npcChatText = string.Empty;
             }
+            if (player.chest != -1) {
+                player.chest = -1;
+                SoundEngine.PlaySound(SoundID.MenuClose);
+            }
 
             return base.RightClick(i, j);
         }

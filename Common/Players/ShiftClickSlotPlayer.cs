@@ -22,8 +22,12 @@ namespace ImproveGame.Common.Players
                     Main.cursorOverride = 9;
                     return true;
                 }
-                if (BigBagGUI.Visible && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var modPlayer) &&
-                    modPlayer.SuperVault.Any(s => MyUtils.CanPlaceInSlot(s, inv[slot]) != 0)) {
+                if (BigBagGUI.Visible && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var dataPlayer) &&
+                    dataPlayer.SuperVault.Any(s => MyUtils.CanPlaceInSlot(s, inv[slot]) != 0)) {
+                    Main.cursorOverride = 9;
+                    return true;
+                }
+                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher) && fisher.fish.Any(s => MyUtils.CanPlaceInSlot(s, inv[slot]) != 0)) {
                     Main.cursorOverride = 9;
                     return true;
                 }
@@ -39,6 +43,14 @@ namespace ImproveGame.Common.Players
                 !inventory[slot].IsAir && !inventory[slot].favorited) {
                 if (BigBagGUI.Visible) {
                     inventory[slot] = MyUtils.ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
+                    Recipe.FindRecipes();
+                    SoundEngine.PlaySound(SoundID.Grab);
+                    return true; // 阻止原版代码运行
+                }
+
+                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher)) {
+                    inventory[slot] = MyUtils.ItemStackToInventory(fisher.fish, inventory[slot], false);
+                    UISystem.Instance.AutofisherGUI.RefreshItems();
                     Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);
                     return true; // 阻止原版代码运行

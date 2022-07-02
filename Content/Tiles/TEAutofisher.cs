@@ -1,3 +1,4 @@
+using ImproveGame.Common.Systems;
 using ImproveGame.Common.Utils;
 using Microsoft.Xna.Framework;
 using System;
@@ -6,8 +7,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Terraria;
+using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -18,6 +21,7 @@ namespace ImproveGame.Content.Tiles
         internal Point16 locatePoint = Point16.NegativeOne;
         internal Item fishingPole = new();
         internal Item bait = new();
+        internal Item accessory = new();
         internal Item[] fish = new Item[15];
         internal const int checkWidth = 50;
         internal const int checkHeight = 30;
@@ -60,6 +64,7 @@ namespace ImproveGame.Content.Tiles
             }
 
             int finalFishingLevel = GetFishingConditions().FinalFishingLevel;
+
             if (Main.rand.Next(300) < finalFishingLevel)
                 FishingTimer += Main.rand.Next(1, 3);
 
@@ -68,9 +73,41 @@ namespace ImproveGame.Content.Tiles
             if (Main.rand.NextBool(60))
                 FishingTimer += 60;
 
-            if (FishingTimer > 60f) {
+            // 钓鱼机冷却在这里改，原版写的是660
+            if (FishingTimer > 6600f) {
                 FishingTimer = 0;
+                ApplyAccessories();
                 FishingCheck();
+            }
+        }
+
+        private bool lavaFishing = false;
+        private bool tackleBox = false;
+        private int fishingSkill = 0;
+
+        private void ApplyAccessories() {
+            lavaFishing = false;
+            tackleBox = false;
+            fishingSkill = 0;
+            switch (accessory.type) {
+                case ItemID.TackleBox:
+                    tackleBox = true;
+                    break;
+                case ItemID.AnglerEarring:
+                    fishingSkill += 10;
+                    break;
+                case ItemID.AnglerTackleBag:
+                    tackleBox = true;
+                    fishingSkill += 10;
+                    break;
+                case ItemID.LavaFishingHook:
+                    lavaFishing = true;
+                    break;
+                case ItemID.LavaproofTackleBag:
+                    tackleBox = true;
+                    fishingSkill += 10;
+                    lavaFishing = true;
+                    break;
             }
         }
 
@@ -80,12 +117,23 @@ namespace ImproveGame.Content.Tiles
             FishingAttempt fisher = default(FishingAttempt);
             fisher.X = locatePoint.X;
             fisher.Y = locatePoint.Y;
-            fisher.bobberType = ProjectileID.BobberGolden;
+            fisher.bobberType = fishingPole.shoot;
             GetFishingPondState(fisher.X, fisher.Y, out fisher.inLava, out fisher.inHoney, out fisher.waterTilesCount, out fisher.chumsInWater);
+            if (fisher.waterTilesCount < 75) {
+                return;
+            }
 
             fisher.playerFishingConditions = GetFishingConditions();
             if (fisher.playerFishingConditions.BaitItemType == ItemID.TruffleWorm) {
-                // 召唤猪鲨 （？？？）
+                if ((fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000/* && !NPC.AnyNPCs(370)*/) {
+                    // 召唤猪鲨 （？？？
+                    NPC.SpawnOnPlayer(player.whoAmI, 370);
+
+                    if (Main.netMode == NetmodeID.SinglePlayer)
+                        Main.NewText(MyUtils.GetText("Autofisher.CarefulNextTime"), 175, 75);
+                    if (Main.netMode == NetmodeID.Server)
+                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Mods.ImproveGame.Autofisher.CarefulNextTime"), new(175, 75, 255));
+                }
                 return;
             }
 
@@ -93,7 +141,7 @@ namespace ImproveGame.Content.Tiles
             if (fisher.fishingLevel == 0)
                 return;
 
-            fisher.CanFishInLava = ItemID.Sets.CanFishInLava[fisher.playerFishingConditions.PoleItemType] || ItemID.Sets.IsLavaBait[fisher.playerFishingConditions.BaitItemType]/* || Main.player[owner].accLavaFishing*/;
+            fisher.CanFishInLava = ItemID.Sets.CanFishInLava[fisher.playerFishingConditions.PoleItemType] || ItemID.Sets.IsLavaBait[fisher.playerFishingConditions.BaitItemType] || lavaFishing;
             if (fisher.chumsInWater > 0)
                 fisher.fishingLevel += 11;
 
@@ -166,22 +214,26 @@ namespace ImproveGame.Content.Tiles
             bool snow = Main.player[250].ZoneSnow;
             bool desert = Main.player[250].ZoneDesert;
 
-            Main.player[250].ZoneDungeon = IsDungeonBrick(tileType1) || IsDungeonBrick(tileType2);
-            Main.player[250].ZoneBeach = tileType1 == TileID.ShellPile || tileType2 == TileID.ShellPile;
+            Main.player[250].ZoneDungeon = (IsDungeonBrick(tileType1) || IsDungeonBrick(tileType2)) && NPC.downedBoss3;
+            Main.player[250].ZoneBeach = (fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000; // 注意: 原版代码里渔获是根据传入的position判定海边，这里是为了开启海洋匣
             Main.player[250].ZoneCorrupt = TileID.Sets.Corrupt[tileType1] || TileID.Sets.Corrupt[tileType2];
             Main.player[250].ZoneCrimson = TileID.Sets.Crimson[tileType1] || TileID.Sets.Crimson[tileType2];
             Main.player[250].ZoneHallow = TileID.Sets.Hallow[tileType1] || TileID.Sets.Hallow[tileType2];
             Main.player[250].ZoneJungle = IsJungleTile(tileType1) || IsJungleTile(tileType2);
             Main.player[250].ZoneSnow = TileID.Sets.Snow[tileType1] || TileID.Sets.Snow[tileType2];
             Main.player[250].ZoneDesert = TileID.Sets.isDesertBiomeSand[tileType1] || TileID.Sets.isDesertBiomeSand[tileType2];
-            Main.NewText(Main.player[250].ZoneDungeon);
+            
             // 反射调用 FishingCheck_RollItemDrop(ref fisher);
             var targetMethod = fakeProj.GetType().GetMethod("FishingCheck_RollItemDrop",
                 BindingFlags.Instance | BindingFlags.NonPublic);
             var args = new object[] { fisher };
             targetMethod.Invoke(fakeProj, args);
-            fisher = (FishingAttempt)args[0];
-            Main.NewText($"[i:{fisher.rolledItemDrop}]");
+
+            fisher = (FishingAttempt)args[0]; // ref之后用这个获取
+            if (fisher.rolledItemDrop != 0) {
+                GiveItemToStorage(player, fisher.rolledItemDrop);
+                //Main.NewText($"[i:{fisher.rolledItemDrop}]");
+            }
 
             Main.player[250].ZoneDungeon = dungeon;
             Main.player[250].ZoneBeach = beach;
@@ -191,6 +243,85 @@ namespace ImproveGame.Content.Tiles
             Main.player[250].ZoneJungle = jungle;
             Main.player[250].ZoneSnow = snow;
             Main.player[250].ZoneDesert = desert;
+        }
+
+        private void GiveItemToStorage(Player player, int itemType) {
+            Item item = new();
+            item.SetDefaults(itemType);
+            int finalFishingLevel = player.GetFishingConditions().FinalFishingLevel;
+            if (itemType == ItemID.BombFish) {
+                int minStack = (finalFishingLevel / 20 + 3) / 2;
+                int maxStack = (finalFishingLevel / 10 + 6) / 2;
+                if (Main.rand.Next(50) < finalFishingLevel)
+                    maxStack++;
+
+                if (Main.rand.Next(100) < finalFishingLevel)
+                    maxStack++;
+
+                if (Main.rand.Next(150) < finalFishingLevel)
+                    maxStack++;
+
+                if (Main.rand.Next(200) < finalFishingLevel)
+                    maxStack++;
+
+                item.stack = Main.rand.Next(minStack, maxStack + 1);
+            }
+
+            if (itemType == 3197) {
+                int minStack = (finalFishingLevel / 4 + 15) / 2;
+                int maxStack = (finalFishingLevel / 2 + 30) / 2;
+                if (Main.rand.Next(50) < finalFishingLevel)
+                    maxStack += 4;
+
+                if (Main.rand.Next(100) < finalFishingLevel)
+                    maxStack += 4;
+
+                if (Main.rand.Next(150) < finalFishingLevel)
+                    maxStack += 4;
+
+                if (Main.rand.Next(200) < finalFishingLevel)
+                    maxStack += 4;
+
+                item.stack = Main.rand.Next(minStack, maxStack + 1);
+            }
+
+            //PlayerLoader.ModifyCaughtFish(player, item);
+            ItemLoader.CaughtFishStack(item);
+            item.newAndShiny = true;
+            int oldStack = item.stack;
+            item = MyUtils.ItemStackToInventory(fish, item, false);
+
+            // 必须是消耗了，也就是真的能存
+            if (item.stack != oldStack) {
+                TryConsumeBait(player);
+            }
+
+            UISystem.Instance.AutofisherGUI.RefreshItems();
+        }
+
+        private void TryConsumeBait(Player player) {
+            bool canCunsume = false;
+            float num2 = 1f + (float)bait.bait / 6f;
+            if (num2 < 1f)
+                num2 = 1f;
+
+            if (tackleBox)
+                num2 += 1f;
+
+            if (Main.rand.NextFloat() * num2 < 1f)
+                canCunsume = true;
+
+            if (bait.type == ItemID.TruffleWorm)
+                canCunsume = true;
+
+            if (CombinedHooks.CanConsumeBait(player, bait) ?? canCunsume) {
+                if (bait.type == ItemID.LadyBug || bait.type == ItemID.GoldLadyBug)
+                    NPC.LadyBugKilled(Position.ToWorldCoordinates(), bait.type == ItemID.GoldLadyBug);
+
+                bait.stack--;
+                if (bait.stack <= 0)
+                    bait.SetDefaults();
+            }
         }
 
         private static bool IsDungeonBrick(int type) => type == TileID.BlueDungeonBrick || type == TileID.PinkDungeonBrick || type == TileID.GreenDungeonBrick;
@@ -249,7 +380,6 @@ namespace ImproveGame.Content.Tiles
 
         private void GetFishingPondState(int x, int y, out bool lava, out bool honey, out int numWaters, out int chumCount) {
             chumCount = 0;
-
             lava = false;
             honey = false;
             for (int i = 0; i < tileChecked.GetLength(0); i++) {
@@ -257,14 +387,17 @@ namespace ImproveGame.Content.Tiles
                     tileChecked[i, j] = false;
                 }
             }
-            numWaters = GetFishingPondSize(x, y, ref lava, ref honey);
+
+            numWaters = GetFishingPondSize(x, y, ref lava, ref honey, ref chumCount);
+            if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded) // 不用if else是为了判定是否在熔岩/蜂蜜
+                numWaters = 10000;
 
             if (honey)
                 numWaters = (int)((double)numWaters * 1.5);
         }
 
         private bool[,] tileChecked = new bool[checkWidth * 2 + 1, checkHeight * 2 + 1];
-        private int GetFishingPondSize(int x, int y, ref bool lava, ref bool honey) {
+        private int GetFishingPondSize(int x, int y, ref bool lava, ref bool honey, ref int chumCount) {
             Point16 arrayLeftTop = new(Position.X + 1 - checkWidth, Position.Y + 1 - checkHeight);
             if (x - arrayLeftTop.X < 0 || x - arrayLeftTop.X > checkWidth * 2 || y - arrayLeftTop.Y < 0 || y - arrayLeftTop.Y > checkHeight * 2)
                 return 0;
@@ -278,11 +411,12 @@ namespace ImproveGame.Content.Tiles
                     lava = true;
                 if (tile.LiquidType == LiquidID.Honey)
                     honey = true;
+                chumCount += Main.instance.ChumBucketProjectileHelper.GetChumsInLocation(new Point(x, y));
                 // 递归临近的四个物块
-                int left = GetFishingPondSize(x - 1, y, ref lava, ref honey);
-                int right = GetFishingPondSize(x + 1, y, ref lava, ref honey);
-                int up = GetFishingPondSize(x, y - 1, ref lava, ref honey);
-                int bottom = GetFishingPondSize(x, y + 1, ref lava, ref honey);
+                int left = GetFishingPondSize(x - 1, y, ref lava, ref honey, ref chumCount);
+                int right = GetFishingPondSize(x + 1, y, ref lava, ref honey, ref chumCount);
+                int up = GetFishingPondSize(x, y - 1, ref lava, ref honey, ref chumCount);
+                int bottom = GetFishingPondSize(x, y + 1, ref lava, ref honey, ref chumCount);
                 return left + right + up + bottom + 1;
             }
             return 0;
@@ -295,11 +429,11 @@ namespace ImproveGame.Content.Tiles
             if (result.BaitItemType == ItemID.TruffleWorm)
                 return result;
 
-            if (result.BaitPower == 0 || result.PolePower == 0)
+            if (result.BaitPower == 0 || result.PolePower == 1) // 原版PolePower判断的是0，但我发现这个最小(没鱼竿)其实是1
                 return result;
 
             var player = GetClosestPlayer(Position);
-            int num = result.BaitPower + result.PolePower + player.fishingSkill;
+            int num = result.BaitPower + result.PolePower + fishingSkill;
             result.LevelMultipliers = Fishing_GetPowerMultiplier(result.Pole, result.Bait, player);
             result.FinalFishingLevel = (int)((float)num * result.LevelMultipliers);
             return result;
@@ -351,6 +485,7 @@ namespace ImproveGame.Content.Tiles
             locatePoint = tag.Get<Point16>("locatePoint");
             fishingPole = tag.Get<Item>("fishingPole");
             bait = tag.Get<Item>("bait");
+            accessory = tag.Get<Item>("accessory");
             for (int i = 0; i < 15; i++)
                 if (tag.TryGet<Item>($"fish{i}", out var savedFish))
                     fish[i] = savedFish;
@@ -360,6 +495,7 @@ namespace ImproveGame.Content.Tiles
             tag["locatePoint"] = locatePoint;
             tag["fishingPole"] = fishingPole;
             tag["bait"] = bait;
+            tag["accessory"] = accessory;
             for (int i = 0; i < 15; i++)
                 tag[$"fish{i}"] = fish[i];
         }
@@ -369,6 +505,7 @@ namespace ImproveGame.Content.Tiles
             writer.Write(locatePoint.Y);
             ItemIO.Send(fishingPole, writer, true, false);
             ItemIO.Send(bait, writer, true, false);
+            ItemIO.Send(accessory, writer, true, false);
             for (int i = 0; i < 15; i++)
                 ItemIO.Send(fish[i], writer, true, false);
         }
@@ -377,6 +514,7 @@ namespace ImproveGame.Content.Tiles
             locatePoint = new(reader.ReadInt16(), reader.ReadInt16());
             ItemIO.Receive(fishingPole, reader, true, false);
             ItemIO.Receive(bait, reader, true, false);
+            ItemIO.Receive(accessory, reader, true, false);
             for (int i = 0; i < 15; i++)
                 ItemIO.Receive(fish[i], reader, true, false);
         }

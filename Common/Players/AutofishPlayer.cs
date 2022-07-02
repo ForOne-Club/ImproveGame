@@ -66,6 +66,15 @@ namespace ImproveGame.Common.Players
             }
         }
 
+        public bool TryGetAutofisher(out TEAutofisher autofisher) {
+            autofisher = GetAutofisher();
+            if (autofisher == null) {
+                autofisher = new();
+                return false;
+            }
+            return true;
+        }
+
         public TEAutofisher GetAutofisher() {
             if (Autofisher.X < 0 || Autofisher.Y < 0)
                 return null;

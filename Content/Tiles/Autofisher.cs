@@ -42,5 +42,19 @@ namespace ImproveGame.Content.Tiles
             }
             return true;
         }
+
+        public override bool CanKillTile(int i, int j, ref bool blockDamaged) {
+            if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(i, j, out var autofisher))
+                return true;
+            if (autofisher.accessory.IsAir && autofisher.bait.IsAir && autofisher.fishingPole.IsAir) {
+                for (int k = 0; k < autofisher.fish.Length; k++) {
+                    if (!autofisher.fish[k].IsAir) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
     }
 }

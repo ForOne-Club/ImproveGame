@@ -1,20 +1,16 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using ImproveGame.Common.Utils;
-using ImproveGame.Content.Items;
-using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.UI;
 
 namespace ImproveGame.Interface.GUI
@@ -31,12 +27,16 @@ namespace ImproveGame.Interface.GUI
         private Asset<Texture2D> selectPoolOn;
 
         private UIPanel basePanel;
+        private ModItemSlot accessorySlot = new();
         private ModItemSlot fishingPoleSlot = new();
         private ModItemSlot baitSlot = new();
         private FishItemSlot[] fishSlot = new FishItemSlot[15];
+        private UIText title;
         private UIImage relocateButton;
 
         internal static bool RequireRefresh = false;
+
+        internal static List<int> FishingAccessories = new() { ItemID.TackleBox/*, ItemID.HighTestFishingLine*/, ItemID.AnglerEarring, ItemID.AnglerTackleBag, ItemID.LavaFishingHook, ItemID.LavaproofTackleBag };
 
         public override void OnInitialize() {
             panelTop = Main.instance.invBottom + 60;
@@ -51,8 +51,17 @@ namespace ImproveGame.Interface.GUI
             basePanel.Height.Set(panelHeight, 0f);
             Append(basePanel);
 
+            accessorySlot = MyUtils.CreateItemSlot(
+                25f, 0f,
+                canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || FishingAccessories.Contains(item.type),
+                onItemChanged: ChangeAccessorySlot,
+                emptyText: () => MyUtils.GetText($"Autofisher.Accessory"),
+                parent: basePanel
+            );
+            accessorySlot.AllowFavorite = false;
+
             fishingPoleSlot = MyUtils.CreateItemSlot(
-                50f, 0f,
+                75f, 0f,
                 canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || item.fishingPole > 0,
                 onItemChanged: ChangeFishingPoleSlot,
                 emptyText: () => MyUtils.GetText($"Autofisher.FishingPole"),
@@ -61,7 +70,7 @@ namespace ImproveGame.Interface.GUI
             fishingPoleSlot.AllowFavorite = false;
 
             baitSlot = MyUtils.CreateItemSlot(
-                100f, 0f,
+                125f, 0f,
                 canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || item.bait > 0,
                 onItemChanged: ChangeBaitSlot,
                 emptyText: () => MyUtils.GetText($"Autofisher.Bait"),
@@ -81,10 +90,20 @@ namespace ImproveGame.Interface.GUI
                 basePanel.Append(fishSlot[i]);
             }
 
+            // 头顶大字
+            title = new("Autofisher", 0.5f, large: true) {
+                HAlign = 0.5f
+            };
+            title.Left.Set(0, 0f);
+            title.Top.Set(-40, 0f);
+            title.Width.Set(panelWidth, 0f);
+            title.Height.Set(40, 0f);
+            basePanel.Append(title);
+
             selectPoolOff = MyUtils.GetTexture("UI/Autofisher/SelectPoolOff");
             selectPoolOn = MyUtils.GetTexture("UI/Autofisher/SelectPoolOn");
             relocateButton = new(selectPoolOff);
-            relocateButton.Left.Set(150f, 0f);
+            relocateButton.Left.Set(175f, 0f);
             relocateButton.Top.Set(0f, 0f);
             relocateButton.Width.Set(46f, 0f);
             relocateButton.Height.Set(46f, 0f);
@@ -94,10 +113,25 @@ namespace ImproveGame.Interface.GUI
 
         public void ToggleSelectPool() {
             WandSystem.SelectPoolMode = !WandSystem.SelectPoolMode;
-            if (WandSystem.SelectPoolMode)
+            if (WandSystem.SelectPoolMode) {
+                title.SetText(MyUtils.GetText("Autofisher.SelectPool"));
                 relocateButton.SetImage(selectPoolOn);
-            else
+            }
+            else {
+                title.SetText(MyUtils.GetText("Autofisher.Title"));
                 relocateButton.SetImage(selectPoolOff);
+            }
+        }
+
+        private void ChangeAccessorySlot(Item item) {
+            var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
+            if (autofisher is null)
+                return;
+
+            autofisher.accessory = item;
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                NetHelper.Autofish_ClientSendItem(17, item, AutofishPlayer.LocalPlayer.Autofisher);
+            }
         }
 
         private void ChangeFishingPoleSlot(Item item) {
@@ -133,14 +167,14 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        private void RefreshItems() {
+        public void RefreshItems(byte slotType = 18) {
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 if (RequireRefresh) {
                     SyncFromTileEntity();
                     RequireRefresh = false;
                 }
                 else {
-                    NetHelper.Autofish_ClientSendSyncItem(AutofishPlayer.LocalPlayer.Autofisher, 17);
+                    NetHelper.Autofish_ClientSendSyncItem(AutofishPlayer.LocalPlayer.Autofisher, slotType);
                 }
             }
             else {
@@ -153,6 +187,7 @@ namespace ImproveGame.Interface.GUI
             if (autofisher is not null) {
                 fishingPoleSlot.Item = autofisher.fishingPole;
                 baitSlot.Item = autofisher.bait;
+                accessorySlot.Item = autofisher.accessory;
                 for (int i = 0; i < 15; i++) {
                     fishSlot[i].Item = autofisher.fish[i];
                 }
@@ -187,6 +222,7 @@ namespace ImproveGame.Interface.GUI
             SoundEngine.PlaySound(AutofishPlayer.LocalPlayer.Autofisher != Point16.NegativeOne ? SoundID.MenuTick : SoundID.MenuOpen);
             AutofishPlayer.LocalPlayer.SetAutofisher(point);
             Visible = true;
+            title.SetText(MyUtils.GetText("Autofisher.Title"));
             RefreshItems();
         }
 

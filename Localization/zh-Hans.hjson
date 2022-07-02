@@ -306,6 +306,15 @@
             Name: 大背包
             Sort: 排序
         }
+        Autofisher:
+        {
+            Title: "自动钓鱼机"
+            Accessory: "钓鱼饰品"
+            FishingPole: "钓竿"
+            Bait: "鱼饵"
+            SelectPool: "请选择鱼池"
+            CarefulNextTime: "下次注意点！" # 这个是钓鱼机不小心把猪鲨钓上来了
+        }
         BuffTracker:
         {
             Title: "增益追踪器"
