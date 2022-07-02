@@ -172,7 +172,7 @@
             }
             DisableAlchemyPlantRipeCondition:
             {
-                    Label: "炼金植物成熟条件禁用"
+                    Label: "[i:313] 炼金植物成熟条件禁用"
                     Tooltip:
                         '''
                         启用后所有炼金植物生长将没有条件，
