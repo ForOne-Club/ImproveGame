@@ -53,7 +53,7 @@ namespace ImproveGame.Common.Systems
             var c = new ILCursor(il);
             if (!c.TryGotoNext(MoveType.After,
                 i => i.Match(OpCodes.Ret),
-                i => i.MatchLdsfld<int>("dayTime")))
+                i => i.Match(OpCodes.Ldsfld)))
                 return;
             c.EmitDelegate<Func<bool, bool>>(flag => MyUtils.Config.DisableAlchemyPlantRipeCondition ? true : flag); // “太阳花”
 
