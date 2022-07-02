@@ -73,7 +73,7 @@ namespace ImproveGame.Common.Systems
         }*/
 
         // “草药” 是否可以被 “再生法杖” 收割
-        private static int style = -1;
+        private static int style = 0;
         private void Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(ILContext il) {
             var c = new ILCursor(il);
 
