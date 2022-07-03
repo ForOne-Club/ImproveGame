@@ -81,7 +81,7 @@ namespace ImproveGame.Common.GlobalBuffs
                 }
                 c.Index++;
                 c.EmitDelegate<Func<int, int>>((x) => {
-                    if (!UseRegularMethod_Inventory && MyUtils.Config.HideNoConsumeBuffs && ApplyBuffItem.BuffTypesShouldHide.Contains(Main.LocalPlayer.buffType[index])) {
+                    if (!UseRegularMethod_Inventory && MyUtils.Config.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]]) {
                         // x设置成-100000
                         return -100000;
                     }
@@ -98,7 +98,7 @@ namespace ImproveGame.Common.GlobalBuffs
                 }
                 c.Index++;
                 c.EmitDelegate<Func<int, int>>((y) => {
-                    if (!UseRegularMethod_Inventory && MyUtils.Config.HideNoConsumeBuffs && ApplyBuffItem.BuffTypesShouldHide.Contains(Main.LocalPlayer.buffType[index])) {
+                    if (!UseRegularMethod_Inventory && MyUtils.Config.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]]) {
                         // y设置成-100000
                         return -100000;
                     }
@@ -128,7 +128,7 @@ namespace ImproveGame.Common.GlobalBuffs
                 }
 
                 c.EmitDelegate<Func<int, int>>((add) => {
-                    if (!UseRegularMethod_Inventory && MyUtils.Config.HideNoConsumeBuffs && ApplyBuffItem.BuffTypesShouldHide.Contains(Main.LocalPlayer.buffType[index])) {
+                    if (!UseRegularMethod_Inventory && MyUtils.Config.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]]) {
                         // 不让他+1，让他+0
                         return 0;
                     }
@@ -174,7 +174,7 @@ namespace ImproveGame.Common.GlobalBuffs
                 ILCursor c = new(il);
 
                 static int ModifyDrawingIndex(int i, int buffType, bool addCount = false) {
-                    if (!UseRegularMethod_NoInventory && MyUtils.Config.HideNoConsumeBuffs && ApplyBuffItem.BuffTypesShouldHide.Contains(buffType)) {
+                    if (!UseRegularMethod_NoInventory && MyUtils.Config.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[buffType]) {
                         // 作为-10000传入
                         if (addCount)
                             HidedBuffCountThisFrame++;
@@ -254,7 +254,7 @@ namespace ImproveGame.Common.GlobalBuffs
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams) {
-            if (ApplyBuffItem.BuffTypesShouldHide.Contains(type)) {
+            if (HideBuffSystem.BuffTypesShouldHide[type]) {
                 // 不管开不开都有的功能 —— 隐藏剩余时间文本
                 drawParams.TextPosition = new Vector2(-100f, -100f);
                 if (MyUtils.Config.HideNoConsumeBuffs) {
