@@ -39,8 +39,11 @@ namespace ImproveGame.Common.Utils.NetHelpers
                 case MessageType.Autofish_ServerReceiveAutofisherPosition:
                     Autofish_ServerReceiveAutofisherPosition(reader, sender);
                     break;
-                case MessageType.Autofish_ClientReceiveAutofisherPosition:
-                    Autofish_ClientReceiveAutofisherPosition(reader);
+                case MessageType.Autofish_ClientReceiveOpenRequest:
+                    Autofish_ClientReceiveOpenRequest(reader);
+                    break;
+                case MessageType.Autofish_ServerReceiveOpenRequest:
+                    Autofish_ServerReceiveOpenRequest(reader, sender);
                     break;
             }
         }
@@ -230,12 +233,10 @@ namespace ImproveGame.Common.Utils.NetHelpers
                 packet.Write(type);
                 // 发送鱼
                 if (type <= 14) {
-                    for (int i = 0; i < 15; i++) {
-                        if (autofisher.fish[type] is null)
-                            ItemIO.Send(new(), packet, true);
-                        else
-                            ItemIO.Send(autofisher.fish[type], packet, true);
-                    }
+                    if (autofisher.fish[type] is null)
+                        ItemIO.Send(new(), packet, true);
+                    else
+                        ItemIO.Send(autofisher.fish[type], packet, true);
                 }
                 // 发送鱼竿
                 if (type == 15) {
@@ -351,25 +352,78 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Send(-1, -1); // 不发回给发送端
         }
 
-        public static void Autofish_ClientReceiveAutofisherPosition(BinaryReader reader) {
-            byte plr = reader.ReadByte();
-            short x = reader.ReadInt16();
-            short y = reader.ReadInt16();
-            Main.player[plr].GetModPlayer<AutofishPlayer>().SetAutofisher(new(x, y), false);
-        }
-
         public static void Autofish_ServerReceiveAutofisherPosition(BinaryReader reader, int sender) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             // 服务端的设置好
             Main.player[sender].GetModPlayer<AutofishPlayer>().SetAutofisher(new(x, y), false);
-            // 发送到客户端
+        }
+
+        // 这个只会在服务器允许打开才发生，要是不允许服务器没有任何回应
+        public static void Autofish_ClientReceiveOpenRequest(BinaryReader reader) {
+            short x = reader.ReadInt16();
+            short y = reader.ReadInt16();
+            var fishingPole = ItemIO.Receive(reader, true);
+            var bait = ItemIO.Receive(reader, true);
+            var accessory = ItemIO.Receive(reader, true);
+            Item[] fish = new Item[15];
+            for (int i = 0; i < 15; i++)
+                fish[i] = ItemIO.Receive(reader, true);
+            if (TileLoader.GetTile(Main.tile[x, y].TileType) is Autofisher && MyUtils.TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
+                var fisherTile = TileLoader.GetTile(Main.tile[x, y].TileType) as Autofisher;
+                fisherTile.ServerOpenRequest = true;
+                // 为了放置开箱一瞬间拿上次开的东西，在这里顺便把机内容同步了
+                AutofisherGUI.RequireRefresh = true;
+                autofisher.fishingPole = fishingPole;
+                autofisher.bait = bait;
+                autofisher.accessory = accessory;
+                autofisher.fish = fish;
+                fisherTile.RightClick(x, y);
+            }
+        }
+
+        public static void Autofish_ServerReceiveOpenRequest(BinaryReader reader, int sender) {
+            short x = reader.ReadInt16();
+            short y = reader.ReadInt16();
+            for (int k = 0; k < Main.maxPlayers; k++) {
+                var player = Main.player[k];
+                var origin = new Point16(x, y);
+                if (player.active && !player.dead && player.TryGetModPlayer<AutofishPlayer>(out var modPlayer) && modPlayer.Autofisher == origin) {
+                    return;
+                }
+            }
+
+            if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher))
+                return;
+
+            // 没玩家，发允许包
             var packet = ImproveGame.Instance.GetPacket();
-            packet.Write((byte)MessageType.Autofish_ClientReceiveAutofisherPosition);
-            packet.Write((byte)sender);
+            packet.Write((byte)MessageType.Autofish_ClientReceiveOpenRequest);
             packet.Write(x);
             packet.Write(y);
-            packet.Send(-1, sender); // 不发回给发送端
+            // 为了放置开箱一瞬间拿上次开的东西，在这里顺便把机器内容同步了
+            ItemIO.Send(autofisher.fishingPole, packet, true);
+            ItemIO.Send(autofisher.bait, packet, true);
+            ItemIO.Send(autofisher.accessory, packet, true);
+            for (int i = 0; i < 15; i++) {
+                if (autofisher.fish[i] is null)
+                    ItemIO.Send(new(), packet, true);
+                else
+                    ItemIO.Send(autofisher.fish[i], packet, true);
+            }
+            packet.Send(sender, -1); // 只发回给发送端
+        }
+
+        /// <summary>
+        /// 客户端执行，问服务器可不可以开箱
+        /// </summary>
+        /// <param name="point">位置</param>
+        public static void Autofish_ClientSendOpenRequest(Point16 point) {
+            var packet = ImproveGame.Instance.GetPacket();
+            packet.Write((byte)MessageType.Autofish_ServerReceiveOpenRequest);
+            packet.Write(point.X);
+            packet.Write(point.Y);
+            packet.Send(-1, -1);
         }
     }
 }
