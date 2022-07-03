@@ -41,8 +41,33 @@ namespace ImproveGame.Common.Utils
                 case MessageType.Autofish_ServerReceiveStackChange:
                     Autofish_ServerReceiveStackChange(reader, sender);
                     break;
+                case MessageType.Autofish_ClientReceiveTipChange:
+                    Autofish_ClientReceiveTipChange(reader);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        /// <summary>
+        /// 由服务器执行，向所有玩家同步钓鱼信息提示
+        /// </summary>
+        /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
+        public static void Autofish_ServerSendTipChange(Point16 point, string tip) {
+            var packet = ImproveGame.Instance.GetPacket();
+            packet.Write((byte)MessageType.Autofish_ClientReceiveTipChange);
+            packet.Write(point.X);
+            packet.Write(point.Y);
+            packet.Write(tip);
+            packet.Send(-1, -1);
+        }
+
+        public static void Autofish_ClientReceiveTipChange(BinaryReader reader) {
+            short x = reader.ReadInt16();
+            short y = reader.ReadInt16();
+            string tip = reader.ReadString();
+            if (MyUtils.TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
+                autofisher.SetFishingTip(tip);
             }
         }
 
@@ -331,6 +356,7 @@ namespace ImproveGame.Common.Utils
         Autofish_ClientReceiveSyncItem,
         Autofish_ServerReceiveLocatePoint,
         Autofish_ClientReceiveLocatePoint,
-        Autofish_ServerReceiveStackChange
+        Autofish_ServerReceiveStackChange,
+        Autofish_ClientReceiveTipChange
     }
 }

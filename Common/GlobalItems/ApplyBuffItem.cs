@@ -168,8 +168,13 @@ namespace ImproveGame.Common.GlobalItems
                         OverrideColor = Color.LightGreen
                     });
                 }
+                else {
+                    tooltips.Add(new(Mod, "BuffHided", MyUtils.GetText("Tips.BuffVisible")) {
+                        OverrideColor = Color.LightGreen
+                    });
+                }
 
-                if (GameCulture.FromCultureName(GameCulture.CultureName.Chinese).IsActive)
+                if (!BuffTrackerGUI.Visible && GameCulture.FromCultureName(GameCulture.CultureName.Chinese).IsActive)
                     tooltips.Add(new(Mod, "WhatIsMiddleClick", "\n\n"));
             }
         }

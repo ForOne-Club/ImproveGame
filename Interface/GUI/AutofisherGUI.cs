@@ -11,6 +11,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.UI;
 
 namespace ImproveGame.Interface.GUI
@@ -31,6 +32,7 @@ namespace ImproveGame.Interface.GUI
         private ModItemSlot fishingPoleSlot = new();
         private ModItemSlot baitSlot = new();
         private FishItemSlot[] fishSlot = new FishItemSlot[15];
+        private UIText tipText;
         private UIText title;
         private UIImage relocateButton;
 
@@ -41,7 +43,7 @@ namespace ImproveGame.Interface.GUI
         public override void OnInitialize() {
             panelTop = Main.instance.invBottom + 60;
             panelLeft = 100f;
-            panelHeight = 220f;
+            panelHeight = 250f;
             panelWidth = 270f;
 
             basePanel = new UIPanel();
@@ -101,6 +103,22 @@ namespace ImproveGame.Interface.GUI
             title.Width.Set(panelWidth, 0f);
             title.Height.Set(40, 0f);
             basePanel.Append(title);
+
+            UIPanel textPanel = new() {
+                HAlign = 0.5f,
+                Top = StyleDimension.FromPixels(200f),
+                Width = StyleDimension.FromPixels(basePanel.Width.Pixels - 16f),
+                Height = StyleDimension.FromPixels(30f),
+                BackgroundColor = new Color(35, 40, 83),
+                BorderColor = new Color(35, 40, 83)
+            };
+            textPanel.SetPadding(0f);
+            basePanel.Append(textPanel);
+            tipText = new("Error", 0.8f) {
+                HAlign = 0.5f,
+                VAlign = 0.5f
+            };
+            textPanel.Append(tipText);
 
             selectPoolOff = MyUtils.GetTexture("UI/Autofisher/SelectPoolOff");
             selectPoolOn = MyUtils.GetTexture("UI/Autofisher/SelectPoolOn");
@@ -226,10 +244,21 @@ namespace ImproveGame.Interface.GUI
         public override void Draw(SpriteBatch spriteBatch) {
             Player player = Main.LocalPlayer;
 
-            base.Draw(spriteBatch);
+            if (AutofishPlayer.LocalPlayer.TryGetAutofisher(out var autofisher)) {
+                if (baitSlot.Item.type == ItemID.TruffleWorm) {
+                    autofisher.SetFishingTip(Language.GetTextValue("GameUI.FishingWarning"));
+                }
+                if (baitSlot.Item.IsAir || fishingPoleSlot.Item.IsAir || autofisher.FishingTip == "Error") {
+                    autofisher.SetFishingTip(MyUtils.GetText("Autofisher.Unavailable"));
+                }
 
-            if (basePanel.ContainsPoint(Main.MouseScreen)) {
-                player.mouseInterface = true;
+                tipText.SetText(autofisher.FishingTip);
+
+                base.Draw(spriteBatch);
+
+                if (basePanel.ContainsPoint(Main.MouseScreen)) {
+                    player.mouseInterface = true;
+                }
             }
         }
 

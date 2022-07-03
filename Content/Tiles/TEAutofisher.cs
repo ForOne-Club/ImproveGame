@@ -1,6 +1,8 @@
 using ImproveGame.Common.Systems;
 using ImproveGame.Common.Utils;
+using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
+using System;
 using System.IO;
 using System.Reflection;
 using Terraria;
@@ -22,10 +24,19 @@ namespace ImproveGame.Content.Tiles
         internal Item[] fish = new Item[15];
         internal const int checkWidth = 50;
         internal const int checkHeight = 30;
+        internal string FishingTip { get; private set; } = "Error";
+        internal double FishingTipTimer { get; private set; } = 0;
 
         public override bool IsTileValidForEntity(int x, int y) {
             Tile tile = Main.tile[x, y];
             return tile.HasTile && tile.TileType == ModContent.TileType<Autofisher>();
+        }
+
+        public void SetFishingTip(string text) {
+            FishingTip = text;
+            FishingTipTimer = 0;
+            if (Main.netMode == NetmodeID.Server)
+                NetHelper.Autofish_ServerSendTipChange(Position, FishingTip);
         }
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
@@ -58,6 +69,7 @@ namespace ImproveGame.Content.Tiles
 
         public int FishingTimer;
         public override void Update() {
+            FishingTipTimer += 1.0 / 60.0;
             if (Main.netMode != NetmodeID.Server && Main.netMode != NetmodeID.SinglePlayer)
                 return;
             if (locatePoint.X < 0 || locatePoint.Y < 0)
@@ -124,16 +136,15 @@ namespace ImproveGame.Content.Tiles
             fisher.bobberType = fishingPole.shoot;
             GetFishingPondState(fisher.X, fisher.Y, out fisher.inLava, out fisher.inHoney, out fisher.waterTilesCount, out fisher.chumsInWater);
             if (fisher.waterTilesCount < 75) {
+                SetFishingTip(Language.GetTextValue("GameUI.NotEnoughWater"));
                 return;
             }
 
             fisher.playerFishingConditions = GetFishingConditions();
             if (fisher.playerFishingConditions.BaitItemType == ItemID.TruffleWorm) {
-                if ((fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000/* && !NPC.AnyNPCs(370)*/) {
+                SetFishingTip(Language.GetTextValue("GameUI.FishingWarning"));
+                if (Main.rand.NextBool(5) && (fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000 && player.active && !player.dead && player.Distance(new(fisher.X * 16, fisher.Y * 16)) <= 2000 && NPC.CountNPCS(NPCID.DukeFishron) < 3) {
                     // 召唤猪鲨 （？？？   上限是3个
-                    if (!player.active || player.dead || player.Distance(new(fisher.X * 16, fisher.Y * 16)) > 2000 || NPC.CountNPCS(NPCID.DukeFishron) >= 3)
-                        return;
-
                     int npc = NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), fisher.X * 16, fisher.Y * 16, NPCID.DukeFishron, 1);
                     if (npc == 200)
                         return;
@@ -177,6 +188,7 @@ namespace ImproveGame.Content.Tiles
             if (fisher.chumsInWater > 2)
                 fisher.fishingLevel += 3;
 
+            SetFishingTip(Language.GetTextValue("GameUI.FishingPower", fisher.fishingLevel));
             fisher.waterNeededToFish = 300;
             float num = Main.maxTilesX / 4200;
             num *= num;
@@ -193,6 +205,8 @@ namespace ImproveGame.Content.Tiles
                 fisher.fishingLevel = (int)((float)fisher.fishingLevel * fisher.waterQuality);
 
             fisher.waterQuality = 1f - fisher.waterQuality;
+            if (fisher.waterTilesCount < fisher.waterNeededToFish)
+                SetFishingTip(Language.GetTextValue("GameUI.FullFishingPower", fisher.fishingLevel, 0.0 - Math.Round(fisher.waterQuality * 100f)));
 
             if (player.active && !player.dead) {
                 if (player.luck < 0f) {

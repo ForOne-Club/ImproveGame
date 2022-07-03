@@ -279,7 +279,7 @@
             BuffDisabled:
                 '''
                 物品增益 [{BuffName}] 已因设置被禁用
-                左键点击一个增益图标开启增益追踪器，以控制增益是否启用
+                中键点击该物品或左键点击增益图标开启增益追踪器，以控制增益是否启用
                 '''
             BuffEnabled:
                 '''
@@ -287,6 +287,7 @@
                 请中键点击该物品或左键点击增益图标开启增益追踪器，以控制增益是否启用
                 '''
             BuffApplied: "物品增益 [{BuffName}] 已自动应用"
+            BuffVisible: "如果想要隐藏无限续杯增益图标，请在模组配置中修改"
             BuffHided: 
                 '''
                 增益图标已从Buff栏中隐藏
@@ -320,6 +321,7 @@
             Bait: "鱼饵"
             SelectPool: "请选择鱼池"
             CarefulNextTime: "下次注意点！" # 这个是钓鱼机不小心把猪鲨钓上来了
+            Unavailable: "暂无钓鱼信息"
         }
         BuffTracker:
         {
@@ -327,6 +329,7 @@
             LeftClickDisable: "\n<left>以禁用该无限增益"
             LeftClickEnable: "\n<left>以启用该无限增益"
             NoInfBuff: "当前没有可用的无限增益"
+            NoInfBuffAlt: "请在模组配置中打开无限续杯功能"
         }
         Architecture:
         {

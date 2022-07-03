@@ -183,7 +183,6 @@ Mods:
             StarburstWand: Wand of Starbursts
             CreateWand: Wand of Architecture
             WallPlace: Wand of Technology
-            # LiquidWand: 液体魔杖
             LiquidWand: Wand of Liquids
         }
         ItemTooltip:
@@ -195,7 +194,6 @@ Mods:
                 Can be affected by mining speed
                 The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
                 Mana cost depends on the number of tiles destroyed
-                # <right>可编辑爆破设置
                 <right> while holding to edit destruction settings
                 <right> while selecting area to cancel
                 Automatically uses mana potion if necessary
@@ -216,7 +214,6 @@ Mods:
                 Can be affected by mining speed
                 The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
                 Mana cost depends on the number of tiles destroyed
-                # <right>可编辑爆破设置
                 <right> while holding to edit destruction settings
                 <right> while selecting area to cancel
                 Automatically uses mana potion if necessary
@@ -247,14 +244,6 @@ Mods:
                 Hold Empty Bucket(s) and long-press a liquid slot to deposit the liquid in the slot to the bucket
                 Hold Bucket(s) with liquid inside and long-press a liquid slot to store the liquid into the slot
                 Hold an Absorbant Sponge and long-press the corresponding liquid slot to absorb the liquid inside
-                # 吸收/放置指定量的液体
-                # <right>使用打开液体控制面板
-                # 吸收模式：吸收框选范围内的指定液体
-                # 放置模式：将框选范围填满指定液体
-                # 若液体过多/过少，将不会吸收/放置新液体
-                # 手持空桶长按某液体槽，可将槽内液体存入液体桶
-                # 手持液体桶长按对应液体槽，可将其内液体存入魔杖
-                # 手持液体吸收棉长按对应液体槽，可吸收其内液体
                 '''
         }
         CombatText_Item:
@@ -277,7 +266,7 @@ Mods:
             BuffDisabled:
                 '''
                 Item buff [{BuffName}] has been disabled due to configuration
-                Left click on a buff icon to open buff tracker, to enable/disable that buff
+                Middle click on this item or left click on the buff icon to open buff tracker, to enable/disable that buff
                 '''
             BuffEnabled:
                 '''
@@ -285,6 +274,7 @@ Mods:
                 Please middle click on this item or left click on the buff icon to open buff tracker, to enable/disable that buff
                 '''
             BuffApplied: "The buff [{BuffName}] is already applied"
+            BuffVisible: "如果想要隐藏无限续杯增益图标，请在模组配置中修改"
             BuffHided: 
                 '''
                 Buff icons have been hiden
@@ -320,14 +310,15 @@ Mods:
             Bait: "鱼饵"
             SelectPool: "请选择鱼池"
             CarefulNextTime: "下次注意点！" # 这个是钓鱼机不小心把猪鲨钓上来了
+            Unavailable: "暂无钓鱼信息"
         }
         BuffTracker:
         {
             Title: "Buff Tracker"
             LeftClickDisable: "\n<left> to disable this buff"
             LeftClickEnable: "\n<left> to enable this buff"
-            # NoInfBuff: "当前没有可用的无限增益"
             NoInfBuff: "Currently no infinite buff available"
+            NoInfBuffAlt: "请在模组配置中打开无限续杯功能"
         }
         Architecture:
         {
@@ -368,7 +359,6 @@ Mods:
         Common:
         {
             Switch: "Switch"
-            # Unavailable: "不可用"
             Unavailable: "Not available"
         }
     }

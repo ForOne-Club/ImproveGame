@@ -200,8 +200,19 @@ namespace ImproveGame.Interface.GUI
 
             if (viewMax == -1) { // 没Buff 显示提示
                 Vector2 drawCenter = panelDimensions.Center();
+                drawCenter.Y += 10f; // 加上顶栏的一半高度，保证绘制在下面区域的中央
                 float scale = 0.5f;
                 string text = MyUtils.GetText("BuffTracker.NoInfBuff");
+                // 设置都没开，加个提示
+                if (!MyUtils.Config.NoConsume_Potion) {
+                    string textAlt = $"{MyUtils.GetText("BuffTracker.NoInfBuffAlt")}";
+                    float height = FontAssets.DeathText.Value.MeasureString(textAlt).Y * 0.5f;
+                    drawCenter.Y += height * 0.5f;
+                    float textAltWidth = FontAssets.DeathText.Value.MeasureString(textAlt).X * 0.5f;
+                    Vector2 originAlt = new(textAltWidth, 0f);
+                    Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.DeathText.Value, textAlt, drawCenter.X, drawCenter.Y, Color.White, Color.Black, originAlt, scale);
+                    drawCenter.Y -= height;
+                }
                 float textWidth = FontAssets.DeathText.Value.MeasureString(text).X * 0.5f;
                 Vector2 origin = new(textWidth, 0f);
                 Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.DeathText.Value, text, drawCenter.X, drawCenter.Y, Color.White, Color.Black, origin, scale);

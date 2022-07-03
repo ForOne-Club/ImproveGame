@@ -72,12 +72,12 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.NoPlace_BUFFTile.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoPlace_BUFFTile.Tooltip")]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool NoPlace_BUFFTile;
 
         [Label("$Mods.ImproveGame.Config.NoPlace_BUFFTile_Banner.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoPlace_BUFFTile_Banner.Tooltip")]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool NoPlace_BUFFTile_Banner;
 
         [Label("$Mods.ImproveGame.Config.NoConsume_SummonItem.Label")]
@@ -87,7 +87,7 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.NoConsume_Potion.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoConsume_Potion.Tooltip")]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool NoConsume_Potion;
 
         [Label("$Mods.ImproveGame.Config.NoConsume_Ammo.Label")]
@@ -97,7 +97,7 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.HideNoConsumeBuffs.Label")]
         [Tooltip("$Mods.ImproveGame.Config.HideNoConsumeBuffs.Tooltip")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool HideNoConsumeBuffs;
 
         [Label("$Mods.ImproveGame.Config.ImprovePrefix.Label")]
