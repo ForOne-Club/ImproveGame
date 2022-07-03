@@ -46,7 +46,6 @@ namespace ImproveGame.Common.Configs
         [Label("$Mods.ImproveGame.Config.ItemMaxStack.Label")]
         [DefaultValue(9999)]
         [Range(1, int.MaxValue)]
-        [ReloadRequired]
         public int ItemMaxStack;
 
         [Label("$Mods.ImproveGame.Config.AutoReuseWeapon.Label")]
@@ -150,7 +149,6 @@ namespace ImproveGame.Common.Configs
         [Range(1, 25)]
         [DefaultValue(1)]
         [Slider]
-        [ReloadRequired]
         public int NPCCoinDropRate;
 
         [Header("$Mods.ImproveGame.Config.GameMechanics.Header")]

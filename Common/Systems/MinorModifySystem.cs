@@ -95,7 +95,8 @@ namespace ImproveGame.Common.Systems
                 i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Call)))
                 return;
-            c.EmitDelegate(() => {
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate<Action<Player>>((player) => {
                 if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting) {
                     WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, 82, false, false, -1, style);
                 }
