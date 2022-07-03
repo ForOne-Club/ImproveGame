@@ -29,6 +29,12 @@ namespace ImproveGame.Content.Tiles
                 UISystem.Instance.AutofisherGUI.Close();
             }
             else {
+                for (int k = 0; k < Main.maxPlayers; k++) {
+                    var player = Main.player[k];
+                    if (player.active && !player.dead && player.TryGetModPlayer<AutofishPlayer>(out var modPlayer) && modPlayer.Autofisher == origin) {
+                        return false;
+                    }
+                }
                 UISystem.Instance.AutofisherGUI.Open(origin);
             }
             return true;

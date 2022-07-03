@@ -1,16 +1,11 @@
-using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Players;
-using ImproveGame.Common.Utils;
-using Microsoft.Xna.Framework;
-using Mono.Cecil.Cil;
-using MonoMod.Cil;
-using System;
-using System.Collections.Generic;
+global using ImproveGame.Common.Utils;
+global using ImproveGame.Common.Utils.NetHelpers;
+global using Microsoft.Xna.Framework;
+global using System;
+global using Terraria;
+global using Terraria.ID;
+global using Terraria.ModLoader;
 using System.IO;
-using System.Reflection;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ImproveGame
 {

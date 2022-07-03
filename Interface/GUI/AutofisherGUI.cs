@@ -1,16 +1,12 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
-using ImproveGame.Common.Utils;
 using ImproveGame.Interface.UIElements;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Collections.Generic;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
 using Terraria.Localization;
 using Terraria.UI;
 
@@ -150,7 +146,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.accessory = item;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                NetHelper.Autofish_ClientSendItem(17, item, AutofishPlayer.LocalPlayer.Autofisher);
+                NetAutofish.Autofish_ClientSendItem(17, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         }
 
@@ -161,7 +157,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.fishingPole = item;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                NetHelper.Autofish_ClientSendItem(15, item, AutofishPlayer.LocalPlayer.Autofisher);
+                NetAutofish.Autofish_ClientSendItem(15, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         }
 
@@ -172,7 +168,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.bait = item;
             if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick) {
-                NetHelper.Autofish_ClientSendItem(16, item, AutofishPlayer.LocalPlayer.Autofisher);
+                NetAutofish.Autofish_ClientSendItem(16, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         } 
 
@@ -181,7 +177,7 @@ namespace ImproveGame.Interface.GUI
             if (autofisher is null)
                 return;
             if (!typeChange && stackChange != 0) {
-                NetHelper.Autofish_ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange);
+                NetAutofish.Autofish_ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange);
             }
         }
 
@@ -192,7 +188,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.fish[i] = item;
             if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick) {
-                NetHelper.Autofish_ClientSendItem((byte)i, item, AutofishPlayer.LocalPlayer.Autofisher);
+                NetAutofish.Autofish_ClientSendItem((byte)i, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         }
 
@@ -201,7 +197,7 @@ namespace ImproveGame.Interface.GUI
             if (autofisher is null)
                 return;
             if (!typeChange && stackChange != 0) {
-                NetHelper.Autofish_ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
+                NetAutofish.Autofish_ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
             }
         }
 
@@ -212,7 +208,7 @@ namespace ImproveGame.Interface.GUI
                     RequireRefresh = false;
                 }
                 else {
-                    NetHelper.Autofish_ClientSendSyncItem(AutofishPlayer.LocalPlayer.Autofisher, slotType);
+                    NetAutofish.Autofish_ClientSendSyncItem(AutofishPlayer.LocalPlayer.Autofisher, slotType);
                 }
             }
             else {

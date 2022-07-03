@@ -1,11 +1,6 @@
-﻿using ImproveGame.Common.Utils;
-using Microsoft.Xna.Framework;
-using Terraria;
-using Terraria.Audio;
+﻿using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace ImproveGame.Content.Tiles

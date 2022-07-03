@@ -1,16 +1,9 @@
 using ImproveGame.Common.Systems;
-using ImproveGame.Common.Utils;
-using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework;
-using System;
 using System.IO;
 using System.Reflection;
-using Terraria;
 using Terraria.Chat;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Tiles
@@ -36,7 +29,7 @@ namespace ImproveGame.Content.Tiles
             FishingTip = text;
             FishingTipTimer = 0;
             if (Main.netMode == NetmodeID.Server)
-                NetHelper.Autofish_ServerSendTipChange(Position, FishingTip);
+                NetAutofish.Autofish_ServerSendTipChange(Position, FishingTip);
         }
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
@@ -66,6 +59,8 @@ namespace ImproveGame.Content.Tiles
         }
 
         public static Player GetClosestPlayer(Point16 Position) => Main.player[Player.FindClosest(new Vector2(Position.X * 16, Position.Y * 16), 1, 1)];
+
+        #region Еігу
 
         public int FishingTimer;
         public override void Update() {
@@ -339,7 +334,7 @@ namespace ImproveGame.Content.Tiles
             if (Main.netMode == NetmodeID.SinglePlayer)
                 UISystem.Instance.AutofisherGUI.RefreshItems();
             else
-                NetHelper.Autofish_ServerSendSyncItem(Position, 18);
+                NetAutofish.Autofish_ServerSendSyncItem(Position, 18);
         }
 
         private void TryConsumeBait(Player player) {
@@ -517,6 +512,8 @@ namespace ImproveGame.Content.Tiles
             PlayerLoader.GetFishingLevel(player, pole, bait, ref num);
             return num;
         }
+
+        #endregion
 
         public override void OnNetPlace() {
             if (Main.netMode == NetmodeID.Server) {

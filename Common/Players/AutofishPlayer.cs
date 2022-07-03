@@ -1,11 +1,8 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.GUI;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ImproveGame.Common.Players
 {
@@ -18,8 +15,10 @@ namespace ImproveGame.Common.Players
             Autofisher = Point16.NegativeOne;
         }
 
-        public void SetAutofisher(Point16 point) {
+        public void SetAutofisher(Point16 point, bool needSync = true) {
             Autofisher = point;
+            if (needSync)
+                NetAutofish.Autofish_ClientSendAutofisherPosition(point.X, point.Y);
         }
 
         public void SetLocatePoint(TEAutofisher autofisher, Point16 point) {
