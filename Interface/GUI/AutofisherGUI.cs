@@ -196,7 +196,7 @@ namespace ImproveGame.Interface.GUI
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
-            if (!typeChange && stackChange != 0) {
+            if (Main.netMode == NetmodeID.MultiplayerClient && !typeChange && stackChange != 0) {
                 NetAutofish.Autofish_ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
             }
         }
@@ -266,8 +266,8 @@ namespace ImproveGame.Interface.GUI
             Main.playerInventory = true;
             Visible = true;
             title.SetText(MyUtils.GetText("Autofisher.Title"));
-            AutofishPlayer.LocalPlayer.SetAutofisher(point);
             SoundEngine.PlaySound(AutofishPlayer.LocalPlayer.Autofisher != Point16.NegativeOne ? SoundID.MenuTick : SoundID.MenuOpen);
+            AutofishPlayer.LocalPlayer.SetAutofisher(point);
             RefreshItems();
         }
 

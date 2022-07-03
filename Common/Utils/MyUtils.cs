@@ -58,7 +58,7 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// 旋转物品使用时候的贴图
+        /// 设置物品旋转（带上玩家方向改变）
         /// </summary>
         /// <param name="player">被操作的玩家实例</param>
         /// <param name="shouldSync">是否应该进行网络同步</param>

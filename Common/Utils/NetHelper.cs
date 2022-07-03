@@ -24,6 +24,7 @@ namespace ImproveGame.Common.Utils
         Autofish_ServerReceiveStackChange,
         Autofish_ClientReceiveTipChange,
         Autofish_ServerReceiveAutofisherPosition,
-        Autofish_ClientReceiveAutofisherPosition
+        Autofish_ClientReceiveOpenRequest,
+        Autofish_ServerReceiveOpenRequest
     }
 }

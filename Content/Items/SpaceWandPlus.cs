@@ -73,6 +73,7 @@ namespace ImproveGame.Content.Items
                 return true;
             }
             UseItem_PostUpdate(player);
+            player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
             return false;
         }
 

@@ -1,18 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using ReLogic.Content;
-using System;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.GameContent.UI.Chat;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.UI;
-using Terraria.UI.Chat;
-
-namespace ImproveGame.Interface.UIElements
+﻿namespace ImproveGame.Interface.UIElements
 {
     internal class FishItemSlot : ModItemSlot
     {

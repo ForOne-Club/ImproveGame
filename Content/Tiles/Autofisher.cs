@@ -23,18 +23,18 @@ namespace ImproveGame.Content.Tiles
             player.noThrow = 2;
         }
 
+        public bool ServerOpenRequest = false;
         public override bool OnRightClick(int i, int j) {
             var origin = MyUtils.GetTileOrigin(i, j);
             if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.Autofisher == origin) {
                 UISystem.Instance.AutofisherGUI.Close();
             }
             else {
-                for (int k = 0; k < Main.maxPlayers; k++) {
-                    var player = Main.player[k];
-                    if (player.active && !player.dead && player.TryGetModPlayer<AutofishPlayer>(out var modPlayer) && modPlayer.Autofisher == origin) {
-                        return false;
-                    }
+                if (Main.netMode == NetmodeID.MultiplayerClient && !ServerOpenRequest) {
+                    NetAutofish.Autofish_ClientSendOpenRequest(origin);
+                    return false;
                 }
+                ServerOpenRequest = false;
                 UISystem.Instance.AutofisherGUI.Open(origin);
             }
             return true;

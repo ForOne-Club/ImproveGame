@@ -86,7 +86,7 @@ namespace ImproveGame.Content.Items
         }
 
         public override bool? UseItem(Player player) {
-            if (CanUseSelector(player)&& !Main.dedServ && player.whoAmI == Main.myPlayer) {
+            if (CanUseSelector(player)&& Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer) {
                 if (Main.mouseRight && _unCancelled) {
                     _unCancelled = false;
                 }
@@ -114,7 +114,7 @@ namespace ImproveGame.Content.Items
                             for (int i = minI; i <= maxI; i++) {
                                 if (!ModifySelectedTiles(player, i, j)) {
                                     PostModifyTiles(player, minI, minJ, i, j);
-                                    return base.UseItem(player);
+                                    goto End;
                                 }
                             }
                         }
@@ -122,6 +122,8 @@ namespace ImproveGame.Content.Items
                     }
                 }
             }
+            End:;
+            player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
             return base.UseItem(player);
         }
     }

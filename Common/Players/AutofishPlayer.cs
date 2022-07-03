@@ -17,7 +17,7 @@ namespace ImproveGame.Common.Players
 
         public void SetAutofisher(Point16 point, bool needSync = true) {
             Autofisher = point;
-            if (needSync)
+            if (needSync && Main.netMode != NetmodeID.SinglePlayer)
                 NetAutofish.Autofish_ClientSendAutofisherPosition(point.X, point.Y);
         }
 
@@ -34,8 +34,12 @@ namespace ImproveGame.Common.Players
         }
 
         public override void ResetEffects() {
-            if (Player.whoAmI != Main.myPlayer)
+            if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
                 return;
+
+            if (!AutofisherGUI.Visible && Autofisher.X > 0 && Autofisher.Y > 0) {
+                SetAutofisher(Point16.NegativeOne);
+            }
 
             if (AutofisherGUI.Visible && GetAutofisher() is null) {
                 UISystem.Instance.AutofisherGUI.Close();
