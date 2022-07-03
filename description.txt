@@ -82,10 +82,10 @@ Max stack, weapons autoswing, enable modded items, can put non-vanity accessorie
 ---------------------------
 Change log: (View details in mod configs)
     1.5.8.4
-        ● 新增内容
-            草药生长加速
-            草药允许在任何情况下开花
-            再升法杖收取时候种植
+        ● New contents
+            Accelerate herb growth
+            Herbs can bloom in any condition
+            Staff of Regrowth will plant seeds while gathering herbs
     1.5.8
         ● BUG fix
             1. Fix the bug of sound effect inverse while middle clicking the Eyebone

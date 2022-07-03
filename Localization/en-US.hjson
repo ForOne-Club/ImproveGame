@@ -159,18 +159,18 @@ Mods:
             }
             AlchemyGrassGrowsFaster:
             {
-                    Label: "[i:313] 草药迅速生长"
-                    Tooltip: "使所有草药生长的更快"
+                    Label: "[i:313] Accelerate herb growth"
+                    Tooltip: "Makes all the herbs grow faster"
             }
             AlchemyGrassAlwaysBlooms:
             {
-                    Label: "[i:316] 草药允许在任何情况下开花"
-                    Tooltip: "使所有草药可以在任何时候开花，收获种子。"
+                    Label: "[i:316] Herbs can bloom in any condition"
+                    Tooltip: "Makes all the herbs able to bloom and to drop seeds"
             }
             StaffOfRegenerationAutomaticPlanting:
             {
-                    Label: "[i:213] 再生法杖自动种植"
-                    Tooltip: "根据收获时的草药种植 (暂时无法联机)"
+                    Label: "[i:213] Staff of Regrowth auto-plant"
+                    Tooltip: "Automatically plant the gathered herb (Currently does not support multiplayer)"
             }
             RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
             BanDamageVar.Label: "[i:6] Disable damage floating"
