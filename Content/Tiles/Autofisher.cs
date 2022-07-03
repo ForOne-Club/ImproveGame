@@ -1,22 +1,13 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using System.Collections.Concurrent;
-using Terraria.DataStructures;
-using Terraria.ObjectData;
-using Microsoft.Xna.Framework;
-using Terraria.GameContent.ObjectInteractions;
+using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Common.Players;
+using Terraria;
+using Terraria.GameContent.ObjectInteractions;
+using Terraria.ModLoader;
 
 namespace ImproveGame.Content.Tiles
 {
-	public class Autofisher : TETileBase
+    public class Autofisher : TETileBase
     {
         public override ModTileEntity GetTileEntity() => ModContent.GetInstance<TEAutofisher>();
 
@@ -47,8 +38,10 @@ namespace ImproveGame.Content.Tiles
             if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(i, j, out var autofisher))
                 return true;
             if (autofisher.accessory.IsAir && autofisher.bait.IsAir && autofisher.fishingPole.IsAir) {
-                for (int k = 0; k < autofisher.fish.Length; k++) {
-                    if (!autofisher.fish[k].IsAir) {
+                if (autofisher.fish is null)
+                    return true;
+                for (int k = 0; k < 15; k++) {
+                    if (autofisher.fish[k] is not null && !autofisher.fish[k].IsAir) {
                         return false;
                     }
                 }

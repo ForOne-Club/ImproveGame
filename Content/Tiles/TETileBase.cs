@@ -22,6 +22,8 @@ namespace ImproveGame.Content.Tiles
             ModTileEntity tileEntity = GetTileEntity();
             if (tileEntity is not null)
                 TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(tileEntity.Hook_AfterPlacement, -1, 0, false);
+            else
+                TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(TEAutofisher.Hook_AfterPlacement_NoEntity, -1, 0, false);
 
             TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
             TileObjectData.newAlternate.AnchorBottom = AnchorData.Empty;
@@ -83,11 +85,11 @@ namespace ImproveGame.Content.Tiles
         public abstract int ItemType(int frameX, int frameY);
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-            var source = new EntitySource_TileBreak(i, j);
-            Item.NewItem(source, i * 16, j * 16, 32, 32, ItemType(frameX, frameY));
+            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ItemType(frameX, frameY));
             ModTileEntity tileEntity = GetTileEntity();
             if (tileEntity is not null) {
-                tileEntity.Kill(i, j);
+                Point16 origin = MyUtils.GetTileOrigin(i, j);
+                tileEntity.Kill(origin.X, origin.Y);
             }
         }
     }

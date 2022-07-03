@@ -29,22 +29,29 @@ namespace ImproveGame.Content.Tiles
         }
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
-                //Sync the entire multitile's area.  Modify "width" and "height" to the size of your multitile in tiles
-                int width = 2;
-                int height = 2;
-                NetMessage.SendTileSquare(Main.myPlayer, i, j, width, height);
+            for (int k = 0; k < 15; k++) {
+                fish[k] = new();
+            }
+            fishingPole = new();
+            bait = new();
+            accessory = new();
 
-                //Sync the placement of the tile entity with other clients
-                //The "type" parameter refers to the tile type which placed the tile entity, so "Type" (the type of the tile entity) needs to be used here instead
-                NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type);
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendTileSquare(Main.myPlayer, i - 1, j - 1, 2, 2);
+                NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i - 1, j - 1, Type);
+                return -1;
             }
 
-            //ModTileEntity.Place() handles checking if the entity can be placed, then places it for you
-            //Set "tileOrigin" to the same value you set TileObjectData.newTile.Origin to in the ModTile
-            Point16 tileOrigin = new(1, 1);
-            int placedEntity = Place(i - tileOrigin.X, j - tileOrigin.Y);
+            int placedEntity = Place(i - 1, j - 1);
             return placedEntity;
+        }
+
+        public static int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction, int alternate) {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendTileSquare(Main.myPlayer, i - 1, j - 1, 2, 2);
+                return 0;
+            }
+            return 0;
         }
 
         public static Player GetClosestPlayer(Point16 Position) => Main.player[Player.FindClosest(new Vector2(Position.X * 16, Position.Y * 16), 1, 1)];
@@ -71,7 +78,7 @@ namespace ImproveGame.Content.Tiles
                 FishingTimer += 60;
 
             // 钓鱼机冷却在这里改，原版写的是660
-            if (FishingTimer > 60f) {
+            if (FishingTimer > 6600f) {
                 FishingTimer = 0;
                 ApplyAccessories();
                 FishingCheck();
@@ -123,13 +130,35 @@ namespace ImproveGame.Content.Tiles
             fisher.playerFishingConditions = GetFishingConditions();
             if (fisher.playerFishingConditions.BaitItemType == ItemID.TruffleWorm) {
                 if ((fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000/* && !NPC.AnyNPCs(370)*/) {
-                    // 召唤猪鲨 （？？？
-                    NPC.SpawnOnPlayer(player.whoAmI, 370);
+                    // 召唤猪鲨 （？？？   上限是3个
+                    if (!player.active || player.dead || player.Distance(new(fisher.X * 16, fisher.Y * 16)) > 2000 || NPC.CountNPCS(NPCID.DukeFishron) >= 3)
+                        return;
 
-                    if (Main.netMode == NetmodeID.SinglePlayer)
+                    int npc = NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), fisher.X * 16, fisher.Y * 16, NPCID.DukeFishron, 1);
+                    if (npc == 200)
+                        return;
+
+                    Main.npc[npc].alpha = 255;
+                    Main.npc[npc].target = player.whoAmI;
+                    Main.npc[npc].timeLeft *= 20;
+                    string typeName = Main.npc[npc].TypeName;
+                    if (Main.netMode == NetmodeID.Server && npc < 200)
+                        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc);
+
+                    if (Main.netMode == NetmodeID.SinglePlayer) {
                         Main.NewText(MyUtils.GetText("Autofisher.CarefulNextTime"), 175, 75);
-                    if (Main.netMode == NetmodeID.Server)
+                        Main.NewText(Language.GetTextValue("Announcement.HasAwoken", typeName), 175, 75);
+                    }
+                    else if (Main.netMode == NetmodeID.Server) {
                         ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Mods.ImproveGame.Autofisher.CarefulNextTime"), new(175, 75, 255));
+                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", Main.npc[npc].GetTypeNetName()), new Color(175, 75, 255));
+                    }
+
+                    bait.stack--;
+                    if (bait.stack <= 0)
+                        bait = new();
+
+                    UISystem.Instance.AutofisherGUI.RefreshItems(16);
                 }
                 return;
             }
@@ -506,15 +535,19 @@ namespace ImproveGame.Content.Tiles
             ItemIO.Send(fishingPole, writer, true, false);
             ItemIO.Send(bait, writer, true, false);
             ItemIO.Send(accessory, writer, true, false);
-            for (int i = 0; i < 15; i++)
-                ItemIO.Send(fish[i], writer, true, false);
+            for (int i = 0; i < 15; i++) {
+                if (fish[i] is null)
+                    ItemIO.Send(new(), writer, true, false);
+                else
+                    ItemIO.Send(fish[i], writer, true, false);
+            }
         }
 
         public override void NetReceive(BinaryReader reader) {
             locatePoint = new(reader.ReadInt16(), reader.ReadInt16());
-            ItemIO.Receive(fishingPole, reader, true, false);
-            ItemIO.Receive(bait, reader, true, false);
-            ItemIO.Receive(accessory, reader, true, false);
+            fishingPole = ItemIO.Receive(reader, true, false);
+            bait = ItemIO.Receive(reader, true, false);
+            accessory = ItemIO.Receive(reader, true, false);
             for (int i = 0; i < 15; i++)
                 fish[i] = ItemIO.Receive(reader, true, false).Clone();
         }

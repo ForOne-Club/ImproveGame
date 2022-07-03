@@ -40,12 +40,11 @@ namespace ImproveGame.Common.Players
 
             if (AutofisherGUI.Visible && GetAutofisher() is null) {
                 UISystem.Instance.AutofisherGUI.Close();
-                Recipe.FindRecipes();
+                return;
             }
 
             if (AutofisherGUI.Visible && Autofisher.X >= 0 && Autofisher.Y >= 0 && (Player.chest != -1 || !Main.playerInventory || Player.sign > -1 || Player.talkNPC > -1)) {
                 UISystem.Instance.AutofisherGUI.Close();
-                Recipe.FindRecipes();
             }
             else if (AutofisherGUI.Visible && Autofisher.X >= 0 && Autofisher.Y >= 0) {
                 int playerX = (int)(Player.Center.X / 16f);
@@ -56,12 +55,10 @@ namespace ImproveGame.Common.Players
                      playerY > Autofisher.Y + Player.lastTileRangeY + 1) {
                     SoundEngine.PlaySound(SoundID.MenuClose);
                     UISystem.Instance.AutofisherGUI.Close();
-                    Recipe.FindRecipes();
                 }
                 else if (TileLoader.GetTile(Main.tile[Autofisher.X, Autofisher.Y].TileType) is not Content.Tiles.Autofisher) {
                     SoundEngine.PlaySound(SoundID.MenuClose);
                     UISystem.Instance.AutofisherGUI.Close();
-                    Recipe.FindRecipes();
                 }
             }
         }

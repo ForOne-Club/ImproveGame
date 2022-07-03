@@ -209,7 +209,12 @@ namespace ImproveGame.Common.Utils
                 packet.Write(type);
                 // 发送鱼
                 if (type <= 14) {
-                    ItemIO.Send(autofisher.fish[type], packet, true);
+                    for (int i = 0; i < 15; i++) {
+                        if (autofisher.fish[type] is null)
+                            ItemIO.Send(new(), packet, true);
+                        else
+                            ItemIO.Send(autofisher.fish[type], packet, true);
+                    }
                 }
                 // 发送鱼竿
                 if (type == 15) {
@@ -228,8 +233,12 @@ namespace ImproveGame.Common.Utils
                     ItemIO.Send(autofisher.fishingPole, packet, true);
                     ItemIO.Send(autofisher.bait, packet, true);
                     ItemIO.Send(autofisher.accessory, packet, true);
-                    for (int i = 0; i < 15; i++)
-                        ItemIO.Send(autofisher.fish[i], packet, true);
+                    for (int i = 0; i < 15; i++) {
+                        if (autofisher.fish[i] is null)
+                            ItemIO.Send(new(), packet, true);
+                        else
+                            ItemIO.Send(autofisher.fish[i], packet, true);
+                    }
                 }
                 packet.Write(point.X);
                 packet.Write(point.Y);
