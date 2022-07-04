@@ -23,12 +23,6 @@ namespace ImproveGame.Common.Players
         public List<int> InfBuffDisabledVanilla; // 记录ID
         public List<string> InfBuffDisabledMod; // 格式：Mod内部名/Buff类名
 
-        /*public override ModPlayer Clone(Player newEntity)
-        {
-            DataPlayer dataPlayer = (DataPlayer)base.Clone(newEntity);
-            return dataPlayer;
-        }*/
-
         /// <summary>
         /// 初始化数据
         /// </summary>
@@ -78,6 +72,15 @@ namespace ImproveGame.Common.Players
                 InfBuffDisabledVanilla = listBuffVanilla;
             if (tag.TryGet("InfBuffDisabledMod", out List<string> listBuffMod))
                 InfBuffDisabledMod = listBuffMod;
+            // 新版格式换了，所以把旧版的（试图）转换一下
+            for (int i = 0; i < InfBuffDisabledMod.Count; i++) {
+                string buffFullName = InfBuffDisabledMod[i];
+                string[] names = buffFullName.Split('/');
+                string modName = names[0];
+                if (modName.Contains('.')) {
+                    InfBuffDisabledMod[i] = $"{modName.Split('.')[0]}/{names[1]}";
+                }
+            }
         }
     }
 }
