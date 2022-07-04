@@ -14,7 +14,7 @@ Mods:
             }
             SuperVoidVault:
             {
-                Label: "[i:4131] Super Void Vault"
+                Label: "[i:4131] Super Void Vault [c/FF2222:(可能会造成游戏卡顿)]"
                 Tooltip:
                     '''
                     Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
@@ -23,7 +23,7 @@ Mods:
             }
             SmartVoidVault:
             {
-                Label: "[i:4131] Void Vault Smart Pickup"
+                Label: "[i:4131] Void Vault Smart Pickup [c/FF2222:(可能会造成游戏卡顿)]"
                 Tooltip:
                     '''
                     If the picked item already exists in the Void Vault, priorly put the item in it
@@ -63,6 +63,14 @@ Mods:
                 Tooltip: Tools with use times greater than 8 will have their use times set to 8
             }
             TileSpeedAndTileRange.Label: "[i:2215] Increase placement speed and range"
+            TileSpeed_Blacklist:
+            {
+                Label: "[i:1448] 物块放置速度和距离提升黑名单"
+                Tooltip:
+                    '''
+                    物品名字中包含以下文本的物品的放置速度和距离不会提升
+                    '''
+            }
             NoPlace_BUFFTile:
             {
                 Label: "[i:3198] Portable buff stations"

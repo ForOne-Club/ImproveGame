@@ -14,7 +14,7 @@
             }
             SuperVoidVault:
             {
-                Label: "[i:4131] 超级虚空保险库"
+                Label: "[i:4131] 超级虚空保险库 [c/FF2222:(可能会造成游戏卡顿)]"
                 Tooltip: 
                     '''
                     使猪猪存钱罐，保险箱，护卫熔炉拥有和虚空袋相同的效果。
@@ -23,7 +23,7 @@
             }
             SmartVoidVault:
             {
-                Label: "[i:4131] 虚空保险库 智能收取"
+                Label: "[i:4131] 虚空保险库 智能收取 [c/FF2222:(可能会造成游戏卡顿)]"
                 Tooltip: 
                     '''
                     拾取的物品如果在虚空保险库中存在，优先放入其中。
@@ -67,6 +67,15 @@
                 '''
             }
             TileSpeedAndTileRange.Label: "[i:2215] 提高物块放置速度和距离"
+            TileSpeed_Blacklist:
+            {
+                Label: "[i:1448] 物块放置速度和距离提升黑名单"
+                Tooltip:
+                    '''
+                    物品名字中包含以下文本的物品的放置速度和距离不会提升
+                    中英文均可被检测
+                    '''
+            }
             NoPlace_BUFFTile:
             {
                 Label: "[i:3198] 随身增益站"

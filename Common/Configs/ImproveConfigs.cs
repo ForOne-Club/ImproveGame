@@ -69,6 +69,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool ImproveTileSpeedAndTileRange;
 
+        [Label("$Mods.ImproveGame.Config.TileSpeed_Blacklist.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.TileSpeed_Blacklist.Tooltip")]
+        public List<string> TileSpeed_Blacklist =
+            new() { new("torch") };
+
         [Label("$Mods.ImproveGame.Config.NoPlace_BUFFTile.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoPlace_BUFFTile.Tooltip")]
         [DefaultValue(true)]
