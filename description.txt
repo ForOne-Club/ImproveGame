@@ -90,6 +90,15 @@ Functions toggled by defaut:
 Max stack, weapons autoswing, enable modded items, can put non-vanity accessories in social slots
 ---------------------------
 Change log: (View details in mod configs)
+    1.5.8.5
+        ● Bug fixes
+            Fixed the Buff Tracker flashing in certian conditions
+            Fixed the wands'animation bug in multiplayer mode
+            Fixed the auto-collected coins not combining into the higher-class coin in multiplayer mode
+            Fixed the Wand of Liquids losing liquids in multiplayer mode
+            Fixed the Staff of Regrowth auto-plant function not working in multiplayer mode
+        ● New content
+            Blacklist for tile placeing speed boost
     1.5.8.4
         ● New contents
             Accelerate herb growth
