@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-
-namespace ImproveGame.Common.Players
+﻿namespace ImproveGame.Common.Players
 {
     public class InfBuffPlayer : ModPlayer
     {
@@ -10,18 +7,11 @@ namespace ImproveGame.Common.Players
         public override void PreUpdateBuffs() {
             if (Main.myPlayer != Player.whoAmI)
                 return;
+            DeleteBuffs();
+        }
+
+        public void DeleteBuffs() {
             DataPlayer dataPlayer = DataPlayer.Get(Player);
-            // 同情况下测试，下面的代码平均可以省下0.001ms，虽然很小，上面这个注释掉了
-            //foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
-            //    Player.ClearBuff(buffType);
-            //}
-            //foreach (string buffFullName in dataPlayer.InfBuffDisabledMod) {
-            //    string[] names = buffFullName.Split('/');
-            //    string modName = names[0];
-            //    string buffName = names[1];
-            //    if (ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff))
-            //        Player.ClearBuff(modBuff.Type);
-            //}
             for (int i = 0; i < Player.MaxBuffs; i++) {
                 if (Player.buffType[i] > 0) {
                     foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {

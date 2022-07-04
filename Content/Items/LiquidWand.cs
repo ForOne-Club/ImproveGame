@@ -3,6 +3,7 @@ using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
@@ -78,11 +79,11 @@ namespace ImproveGame.Content.Items
         }
 
         [CloneByReference]
-        internal float Water;
+        internal float Water = 0f;
         [CloneByReference]
-        internal float Lava;
+        internal float Lava = 0f;
         [CloneByReference]
-        internal float Honey;
+        internal float Honey = 0f;
 
         public override void SaveData(TagCompound tag) {
             tag[nameof(Water)] = Water;
@@ -91,9 +92,24 @@ namespace ImproveGame.Content.Items
         }
 
         public override void LoadData(TagCompound tag) {
-            tag.TryGet(nameof(Water), out Water);
-            tag.TryGet(nameof(Lava), out Lava);
-            tag.TryGet(nameof(Honey), out Honey);
+            if (tag.ContainsKey(nameof(Water)))
+                Water = tag.GetFloat(nameof(Water));
+            if (tag.ContainsKey(nameof(Lava)))
+                Lava = tag.GetFloat(nameof(Lava));
+            if (tag.ContainsKey(nameof(Honey)))
+                Honey = tag.GetFloat(nameof(Honey));
+        }
+
+        public override void NetSend(BinaryWriter writer) {
+            writer.Write(Water);
+            writer.Write(Lava);
+            writer.Write(Honey);
+        }
+
+        public override void NetReceive(BinaryReader reader) {
+            Water = reader.ReadSingle();
+            Lava = reader.ReadSingle();
+            Honey = reader.ReadSingle();
         }
 
         public override bool AltFunctionUse(Player player) => true;

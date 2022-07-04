@@ -35,28 +35,15 @@
                 return;
 
             int[] PiggyBanks = new int[] { ItemID.PiggyBank, ItemID.ChesterPetItem, ItemID.MoneyTrough };
-            bool hasPiggyInInventory;
             // 每帧判断一个储存是否有猪猪，尽量避免卡顿
-            switch (_saveCounter % 6) {
-                case 1:
-                    hasPiggyInInventory = MyUtils.HasItem(Player.bank.item, -1, PiggyBanks);
-                    break;
-                case 2:
-                    hasPiggyInInventory = MyUtils.HasItem(Player.bank2.item, -1, PiggyBanks);
-                    break;
-                case 3:
-                    hasPiggyInInventory = MyUtils.HasItem(Player.bank3.item, -1, PiggyBanks);
-                    break;
-                case 4:
-                    hasPiggyInInventory = MyUtils.HasItem(Player.bank4.item, -1, PiggyBanks);
-                    break;
-                case 5:
-                    hasPiggyInInventory = MyUtils.HasItem(Player.GetModPlayer<DataPlayer>().SuperVault, -1, PiggyBanks);
-                    break;
-                default:
-                    hasPiggyInInventory = MyUtils.HasItem(Player.inventory, -1, PiggyBanks);
-                    break;
-            }
+            var hasPiggyInInventory = (_saveCounter % 6) switch {
+                1 => MyUtils.HasItem(Player.bank.item, -1, PiggyBanks),
+                2 => MyUtils.HasItem(Player.bank2.item, -1, PiggyBanks),
+                3 => MyUtils.HasItem(Player.bank3.item, -1, PiggyBanks),
+                4 => MyUtils.HasItem(Player.bank4.item, -1, PiggyBanks),
+                5 => MyUtils.HasItem(Player.GetModPlayer<DataPlayer>().SuperVault, -1, PiggyBanks),
+                _ => MyUtils.HasItem(Player.inventory, -1, PiggyBanks),
+            };
             _saveCounter++;
             if (!hasPiggyInInventory)
                 return;

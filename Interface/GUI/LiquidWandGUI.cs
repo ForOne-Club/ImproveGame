@@ -162,6 +162,9 @@ namespace ImproveGame.Interface.GUI
                     CurrentWand.Honey = honeySlot.GetLiquidAmount();
                     break;
             }
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, CurrentSlot, Main.LocalPlayer.inventory[CurrentSlot].prefix);
+            }
         }
 
         // 可拖动界面
