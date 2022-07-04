@@ -69,6 +69,7 @@ Mods:
                 Tooltip:
                     '''
                     物品名字中包含以下文本的物品的放置速度和距离不会提升
+                    不区分大小写
                     '''
             }
             NoPlace_BUFFTile:
