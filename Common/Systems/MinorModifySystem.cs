@@ -92,6 +92,9 @@ namespace ImproveGame.Common.Systems
             });
 
             if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Ldc_R4),
+                i => i.Match(OpCodes.Ldc_I4_0),
+                i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Call)))
                 return;
@@ -99,6 +102,7 @@ namespace ImproveGame.Common.Systems
             c.EmitDelegate<Action<Player>>((player) => {
                 if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting) {
                     WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, 82, false, false, -1, style);
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, 82, style);
                 }
             });
         }

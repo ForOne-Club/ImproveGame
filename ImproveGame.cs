@@ -10,7 +10,6 @@ using System.IO;
 namespace ImproveGame
 {
     // 更新任务
-    // 神庙电池（现版本右键使用会消耗），松露虫，光女召唤物下版本更新加入不消耗 ×
     // Tile 工具：自动钓鱼，自动采集，自动挖矿
     // Buff Tile 在背包也可以获得 Buff （已完成）
     // 刷怪率 UI

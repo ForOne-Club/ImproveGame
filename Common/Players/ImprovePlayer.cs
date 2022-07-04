@@ -32,8 +32,8 @@ namespace ImproveGame.Common.Players
                 }
             }
             if (Player.whoAmI == Main.myPlayer && MyUtils.Config.ImproveTileSpeedAndTileRange) {
-                Player.tileSpeed += 1.5f;
-                Player.wallSpeed += 1f;
+                Player.tileSpeed = 3f;
+                Player.wallSpeed = 3f;
                 Player.tileRangeX += 5;
                 Player.tileRangeY += 4;
             }
