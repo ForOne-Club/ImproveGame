@@ -184,6 +184,10 @@ Mods:
             RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
             BanDamageVar.Label: "[i:6] Disable damage floating"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
+            ItemPickSoundReplace:
+            {
+		        Label: "Change the pick-with-mouse sound effect of some items"
+	        }
         }
         ItemName:
         {
