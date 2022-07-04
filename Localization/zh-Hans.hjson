@@ -197,10 +197,6 @@
             RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
-            ItemPickSoundReplace:
-            {
-		        Label: "更换某些物品的拿起音效"
-	        }
         }
         ItemName:
         {
