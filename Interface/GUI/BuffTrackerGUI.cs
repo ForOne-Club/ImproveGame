@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Players;
+using ImproveGame.Common.Systems;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.Audio;
@@ -109,7 +110,7 @@ namespace ImproveGame.Interface.GUI
         }
 
         private void TryForwardPage(UIMouseEvent evt, UIElement listeningElement) {
-            int count = ApplyBuffItem.BuffTypesShouldHide.Count;
+            int count = HideBuffSystem.HideBuffCount();
             if (page * 44 < count) {
                 page++;
             }
@@ -144,15 +145,7 @@ namespace ImproveGame.Interface.GUI
         }
 
         public override void Update(GameTime gameTime) {
-                ApplyBuffItem.BuffTypesShouldHide.Sort(); // 升序排序
-            // 去掉重复的
-            for (int i = 1; i < ApplyBuffItem.BuffTypesShouldHide.Count; i++) {
-                if (ApplyBuffItem.BuffTypesShouldHide[i] == ApplyBuffItem.BuffTypesShouldHide[i - 1]) {
-                    ApplyBuffItem.BuffTypesShouldHide.RemoveAt(i);
-                    i--;
-                }
-            }
-            int count = ApplyBuffItem.BuffTypesShouldHide.Count;
+            int count = HideBuffSystem.HideBuffCount();
             if (count > 0) {
                 while (count <= page * 44) {
                     page--;
@@ -173,7 +166,7 @@ namespace ImproveGame.Interface.GUI
         }
 
         public void SetPageText(int page) {
-            int count = ApplyBuffItem.BuffTypesShouldHide.Count;
+            int count = HideBuffSystem.HideBuffCount();
             int currentPageMaxBuffIndex = Math.Min(page * 44 + 44, count);
             pageText.SetText($"{page * 44 + 1} - {currentPageMaxBuffIndex} ({count})");
         }
@@ -192,7 +185,7 @@ namespace ImproveGame.Interface.GUI
 
             var panelDimensions = basePanel.GetDimensions();
             bool hoverOnBuff = false;
-            int viewMax = Math.Min(43, ApplyBuffItem.BuffTypesShouldHide.Count - 1);
+            int viewMax = Math.Min(43, HideBuffSystem.HideBuffCount() - 1);
 
             if (viewMax == -1) { // 没Buff 显示提示
                 Vector2 drawCenter = panelDimensions.Center();
@@ -215,18 +208,24 @@ namespace ImproveGame.Interface.GUI
                 return;
             }
 
-            for (int i = 0; i <= viewMax; i++) {
-                int x = 14 + i * 38;
+            int buffCount = -1;
+            for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++) {
+                if (!HideBuffSystem.BuffTypesShouldHide[i])
+                    continue;
+                buffCount++;
+                if (buffCount > viewMax + page * 44)
+                    break;
+                if (buffCount < page * 44)
+                    continue;
+                int buffPageCount = buffCount - page * 44;
+                int x = 14 + buffPageCount * 38;
                 int y = 56;
-                if (i >= 11) {
-                    x = 14 + Math.Abs(i % 11) * 38;
-                    y += 40 * (i / 11);
+                if (buffPageCount >= 11) {
+                    x = 14 + Math.Abs(buffPageCount % 11) * 38;
+                    y += 40 * (buffPageCount / 11);
                 }
 
-                if (i + page * 44 >= ApplyBuffItem.BuffTypesShouldHide.Count)
-                    break;
-
-                int buffType = ApplyBuffItem.BuffTypesShouldHide[i + page * 44];
+                int buffType = i;
                 bool buffEnabled = InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType);
 
                 Vector2 drawPosition = new(x + panelDimensions.X, y + panelDimensions.Y);
@@ -284,14 +283,6 @@ namespace ImproveGame.Interface.GUI
             title.Width = StyleDimension.FromPixels(titleWidth);
 
             SetPageText(page);
-            ApplyBuffItem.BuffTypesShouldHide.Sort(); // 升序排序
-            // 去掉重复的
-            for (int i = 1; i < ApplyBuffItem.BuffTypesShouldHide.Count; i++) {
-                if (ApplyBuffItem.BuffTypesShouldHide[i] == ApplyBuffItem.BuffTypesShouldHide[i - 1]) {
-                    ApplyBuffItem.BuffTypesShouldHide.RemoveAt(i);
-                    i--;
-                }
-            }
         }
 
         /// <summary>

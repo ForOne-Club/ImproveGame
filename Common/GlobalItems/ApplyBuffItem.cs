@@ -1,23 +1,15 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Collections.Generic;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.GlobalItems
 {
     public class ApplyBuffItem : GlobalItem
     {
-        internal static List<int> BuffTypesShouldHide = new();
-
         // 特殊药水
         public static readonly List<int> SpecialPotions = new() { 2350, 2351, ItemID.WormholePotion, ItemID.PotionOfReturn };
         // 增益 Tile 巴斯特雕像，篝火，红心灯笼，星星瓶，向日葵，弹药箱，施法桌，水晶球，蛋糕块，利器站，水蜡烛，和平蜡烛
@@ -45,7 +37,7 @@ namespace ImproveGame.Common.GlobalItems
         public static void UpdateInventoryGlow(Item item) {
             int buffType = GetItemBuffType(item);
             if (buffType is not -1) {
-                BuffTypesShouldHide.Add(buffType);
+                HideBuffSystem.BuffTypesShouldHide[buffType] = true;
                 if (item.TryGetGlobalItem<GlobalItemData>(out var globalItem))
                     globalItem.InventoryGlow = true;
             }

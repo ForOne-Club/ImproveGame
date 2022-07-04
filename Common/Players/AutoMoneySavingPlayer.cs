@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ImproveGame.Common.Players
+﻿namespace ImproveGame.Common.Players
 {
     // 自动省钱玩家（（
     public class AutoMoneySavingPlayer : ModPlayer
@@ -13,7 +9,7 @@ namespace ImproveGame.Common.Players
         private static int _failDepositTimer = 0;
 
         public override void PostUpdateEquips() {
-            if (!MyUtils.Config.AutoSaveMoney)
+            if (!MyUtils.Config.AutoSaveMoney || Main.myPlayer != Player.whoAmI || Main.netMode == NetmodeID.Server)
                 return;
 
             // 堆叠钱币
