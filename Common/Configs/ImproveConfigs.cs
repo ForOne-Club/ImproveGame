@@ -198,5 +198,34 @@ namespace ImproveGame.Common.Configs
         [Increment(11)]
         [ReloadRequired]
         public int ExtraPlayerBuffSlots;
+
+        [Header("$Mods.ImproveGame.Config.ModSettings.Header")]
+
+        [Label("$Mods.ImproveGame.Config.OnlyHost.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.OnlyHost.Tooltip")]
+        [DefaultValue(false)]
+        public bool OnlyHost;
+
+        public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message) {
+            if ((pendingConfig as ImproveConfigs).OnlyHost != OnlyHost) {
+                return TryAcceptChanges(pendingConfig, whoAmI, ref message);
+            }
+            else if (OnlyHost) {
+                return TryAcceptChanges(pendingConfig, whoAmI, ref message);
+            }
+            return base.AcceptClientChanges(pendingConfig, whoAmI, ref message);
+        }
+
+        public static bool TryAcceptChanges(ModConfig pendingConfig, int whoAmI, ref string message) {
+            // DoesPlayerSlotCountAsAHost是preview的，stable还没有，又被坑了
+            // if (MessageBuffer.DoesPlayerSlotCountAsAHost(whoAmI)) {
+            if (Netplay.Clients[whoAmI].Socket.GetRemoteAddress().IsLocalHost()) {
+                    return true;
+            }
+            else {
+                message = MyUtils.GetText("Config.OnlyHost.Unaccepted");
+                return false;
+            }
+        }
     }
 }

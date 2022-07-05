@@ -176,6 +176,10 @@ namespace ImproveGame.Interface.GUI
                 BuffHoverBorder = MyUtils.GetTexture("UI/Buff_HoverBorder");
 
             Player player = Main.LocalPlayer;
+            if (player.dead || !player.active) {
+                Close();
+                return;
+            }
 
             base.Draw(spriteBatch);
 

@@ -12,6 +12,7 @@ namespace ImproveGame.Common.Players
 {
     public class DataPlayer : ModPlayer
     {
+        public static bool TryGet(Player player, out DataPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
         public static DataPlayer Get(Player player) => player.GetModPlayer<DataPlayer>();
 
         // 保存的物品前缀，哥布林重铸栏

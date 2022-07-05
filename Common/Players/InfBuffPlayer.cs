@@ -3,14 +3,14 @@
     public class InfBuffPlayer : ModPlayer
     {
         public static InfBuffPlayer Get(Player player) => player.GetModPlayer<InfBuffPlayer>();
+        public static bool TryGet(Player player, out InfBuffPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
 
         public override void Load() {
             On.Terraria.Player.AddBuff += BanBuffs;
         }
 
         private void BanBuffs(On.Terraria.Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet, bool foodHack) {
-            if (Main.myPlayer == Player.whoAmI) {
-                DataPlayer dataPlayer = DataPlayer.Get(player);
+            if (Main.myPlayer == player.whoAmI && DataPlayer.TryGet(player, out var dataPlayer)) {
                 foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
                     if (type == buffType) {
                         return;
@@ -29,13 +29,12 @@
         }
 
         public override void PreUpdateBuffs() {
-            if (Main.myPlayer != Player.whoAmI)
+            if (Main.myPlayer != Player.whoAmI || !DataPlayer.TryGet(Player, out var dataPlayer))
                 return;
-            DeleteBuffs();
+            DeleteBuffs(dataPlayer);
         }
 
-        public void DeleteBuffs() {
-            DataPlayer dataPlayer = DataPlayer.Get(Player);
+        public void DeleteBuffs(DataPlayer dataPlayer) {
             for (int i = 0; i < Player.MaxBuffs; i++) {
                 if (Player.buffType[i] > 0) {
                     foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
