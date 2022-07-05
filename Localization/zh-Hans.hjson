@@ -181,18 +181,18 @@
             }
             AlchemyGrassGrowsFaster:
             {
-                    Label: "[i:313] 草药迅速生长"
-                    Tooltip: "使所有草药生长的更快"
+                Label: "[i:313] 草药迅速生长"
+                Tooltip: "使所有草药生长的更快"
             }
             AlchemyGrassAlwaysBlooms:
             {
-                    Label: "[i:316] 草药允许在任何情况下开花"
-                    Tooltip: "使所有草药可以在任何时候开花，收获种子。"
+                Label: "[i:316] 草药允许在任何情况下开花"
+                Tooltip: "使所有草药可以在任何时候开花，收获种子。"
             }
             StaffOfRegenerationAutomaticPlanting:
             {
-                    Label: "[i:213] 再生法杖自动种植"
-                    Tooltip: "根据收获时的草药种植 (暂时无法联机)"
+                Label: "[i:213] 再生法杖自动种植"
+                Tooltip: "根据收获时的草药种植 (暂时无法联机)"
             }
             RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
@@ -201,14 +201,34 @@
             ModSettings.Header: "[i:ImproveGame/CreateWand] 模组设置"
             OnlyHost:
             {
-                    Label: "[i:2203] 仅主机可调节配置"
-                    Tooltip:
-                        '''
-                        单人模式下无用
-                        开启后，仅主机玩家(即IP为127.0.0.1)可调节模组配置
-                        该选项仅主机玩家可控制开关
-                        '''
-                    Unaccepted: "无法更改: 你不是服务器主机玩家！"
+                Label: "[i:2203] 仅主机可调节配置 (端口映射无效)"
+                Tooltip:
+                    '''
+                    单人模式下无用
+                    开启后，仅主机玩家(即IP为127.0.0.1)可调节模组配置
+                    该选项仅主机玩家可控制开关
+                    如果你使用端口映射手段开服，请使用下面那个选项
+                    '''
+                Unaccepted: "无法更改: 你不是服务器主机玩家！"
+            }
+            OnlyHostByPassword:
+            {
+                Label: "[i:2203] 仅密码验证通过的玩家可调节设置"
+                Tooltip:
+                    '''
+                    单人模式下无用，需要重新加载模组
+                    开启后，仅密码验证通过的玩家可以调节模组设置
+                    在服务器启动时，会在服务器控制台发送一串随机生成的八位数字密钥
+                    玩家可以通过输入 /qolpassword <密码> 验证身份
+                    若密码正确，将获得调节模组设置的权限
+                    对于端口映射手段开服有用，因为此时IP无法验证身份(均为127.0.0.1)
+                    '''
+                Unaccepted: "无法更改: 你没有通过密码验证！"
+                Registered: "你已获得修改配置权限，无需认证"
+                Correct: "密码正确，你已获得修改配置权限"
+                Incorrect: "密码错误！"
+                ServerPassword: "[Quality of Life] 模组配置认证密码: {Password}"
+                CommandDescription: "用于验证客户端身份，请求获得配置修改权限"
             }
         }
         ItemName:
