@@ -30,8 +30,8 @@ namespace ImproveGame.Common.Systems
         public BrustGUI BrustGUI;
         public static UserInterface BrustInterface;
 
-        public BigBagGUI JuVaultUIGUI;
-        public static UserInterface JuBigVaultInterface;
+        public BigBagGUI BigBagGUI;
+        public static UserInterface BigBagInterface;
 
         public override void Unload() {
             Instance = null;
@@ -51,8 +51,8 @@ namespace ImproveGame.Common.Systems
             BrustGUI = null;
             BrustInterface = null;
 
-            JuVaultUIGUI = null;
-            JuBigVaultInterface = null;
+            BigBagGUI = null;
+            BigBagInterface = null;
         }
 
         public override void Load() {
@@ -61,13 +61,13 @@ namespace ImproveGame.Common.Systems
                 AutofisherGUI = new AutofisherGUI();
                 BuffTrackerGUI = new BuffTrackerGUI();
                 LiquidWandGUI = new LiquidWandGUI();
-                JuVaultUIGUI = new BigBagGUI();
+                BigBagGUI = new BigBagGUI();
                 ArchitectureGUI = new ArchitectureGUI();
                 BrustGUI = new BrustGUI();
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
                 LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
                 LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
-                LoadGUI(ref JuVaultUIGUI, out JuBigVaultInterface);
+                LoadGUI(ref BigBagGUI, out BigBagInterface);
                 LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
                 LoadGUI(ref BrustGUI, out BrustInterface);
             }
@@ -90,7 +90,7 @@ namespace ImproveGame.Common.Systems
                 LiquidWandInterface.Update(gameTime);
             }
             if (BigBagGUI.Visible) {
-                JuBigVaultInterface.Update(gameTime);
+                BigBagInterface.Update(gameTime);
             }
             if (ArchitectureGUI.Visible) {
                 ArchitectureInterface?.Update(gameTime);
@@ -107,7 +107,7 @@ namespace ImproveGame.Common.Systems
                     "ImproveGame: Vault UI",
                     delegate {
                         if (BigBagGUI.Visible) {
-                            JuVaultUIGUI.Draw(Main.spriteBatch);
+                            BigBagGUI.Draw(Main.spriteBatch);
                         }
                         return true;
                     },

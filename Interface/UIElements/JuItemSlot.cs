@@ -267,11 +267,11 @@ namespace ImproveGame.Interface.UIElements
         }
 
         public static void OpenItemGlow(SpriteBatch sb) {
-            //var rasterizerState = sb.GraphicsDevice.RasterizerState;
-            //var rectangle1 = sb.GraphicsDevice.ScissorRectangle;
+            /*var rasterizerState = sb.GraphicsDevice.RasterizerState;
+            var rectangle1 = sb.GraphicsDevice.ScissorRectangle;*/
             sb.End();
-            //sb.GraphicsDevice.RasterizerState = rasterizerState;
-            //sb.GraphicsDevice.ScissorRectangle = rectangle1;
+            /*sb.GraphicsDevice.RasterizerState = rasterizerState;
+            sb.GraphicsDevice.ScissorRectangle = rectangle1;*/
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                 DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
             Color lerpColor;
@@ -283,16 +283,16 @@ namespace ImproveGame.Interface.UIElements
             else {
                 lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
             }
-            MyAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-            MyAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
+            ModAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
+            ModAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
         }
 
         public static void CloseItemGlow(SpriteBatch sb) {
-            //RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
-            //Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;
+            /*RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
+            Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;*/
             sb.End();
-            //sb.GraphicsDevice.RasterizerState = rasterizerState;
-            //sb.GraphicsDevice.ScissorRectangle = rectangle1;
+            /*sb.GraphicsDevice.RasterizerState = rasterizerState;
+            sb.GraphicsDevice.ScissorRectangle = rectangle1;*/
             sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                 DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
         }
