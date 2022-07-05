@@ -15,6 +15,7 @@ https://www.bilibili.com/read/cv17018658?spm_id_from=333.1007.0.0
         ● BUG修复
             修复了某些情况下Buff追踪器关闭Buff失效的BUG
             修复了人物卡住的BUG
+            修复了某种情况下无限续杯物品没有闪光特效的BUG
             添加了服务器配置修改认证
     1.5.8.5
         ● BUG修复
