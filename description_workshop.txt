@@ -5,6 +5,11 @@
 物品最大堆叠，武器自动使用，模组物品，
 非时装饰品也可放置在时装栏。
 ---------------------------
+了解此模组推荐观看 BiliBili@承影_chengying 的介绍视频：
+https://www.bilibili.com/video/BV1V3411372X?share_source=copy_pc
+或者 BiliBili@世界第一可爱9 的专栏
+https://www.bilibili.com/read/cv17018658?spm_id_from=333.1007.0.0
+---------------------------
 更新说明（具体请在设置或游戏内查看）：
     1.5.8.6
         ● BUG修复
