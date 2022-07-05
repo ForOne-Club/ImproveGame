@@ -9,18 +9,20 @@
         }
 
         private void BanBuffs(On.Terraria.Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet, bool foodHack) {
-            DataPlayer dataPlayer = DataPlayer.Get(player);
-            foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
-                if (type == buffType) {
-                    return;
+            if (Main.myPlayer == Player.whoAmI) {
+                DataPlayer dataPlayer = DataPlayer.Get(player);
+                foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
+                    if (type == buffType) {
+                        return;
+                    }
                 }
-            }
-            foreach (string buffFullName in dataPlayer.InfBuffDisabledMod) {
-                string[] names = buffFullName.Split('/');
-                string modName = names[0];
-                string buffName = names[1];
-                if (ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff) && type == modBuff.Type) {
-                    return;
+                foreach (string buffFullName in dataPlayer.InfBuffDisabledMod) {
+                    string[] names = buffFullName.Split('/');
+                    string modName = names[0];
+                    string buffName = names[1];
+                    if (ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff) && type == modBuff.Type) {
+                        return;
+                    }
                 }
             }
             orig.Invoke(player, type, timeToAdd, quiet, foodHack);
