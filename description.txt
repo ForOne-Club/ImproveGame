@@ -102,8 +102,11 @@ Max stack, weapons autoswing, enable modded items, can put non-vanity accessorie
 ---------------------------
 Change log: (View details in mod configs)
     1.5.8.6
-        ● BUG修复
-            修复了某些情况下Buff追踪器关闭Buff失效的BUG
+        ● Bug fixes
+            Fixed sometimes closing the Buff Tracker also dsiables buffs
+            Fixed the player character just stuck there
+            Fixed sometimes the infinite items are not glowing
+            Added an verification system for changing the server's mod configs
     1.5.8.5
         ● Bug fixes
             Fixed the Buff Tracker flashing in certian conditions
@@ -149,7 +152,7 @@ Change log: (View details in mod configs)
     1.5.7
         New function to hide buff icons of the Infinite Potions
         (Different from LuiAFK, this function only hides the buff icons)
-        New function to open personal inventories(Piggy Bank, Safe, ect.) by Mouse 3(Scroll click)
+        New function to open personal inventories(Piggy Bank, Safe, ect.) by Mouse 3(Middle click)
         New control panels for Wand of Architecture/Brusts/Starbrusts(Right click to open)
         Huge Inventory:
             Fixed display bugs(Added animation for scrolling)

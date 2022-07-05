@@ -14,7 +14,7 @@ Mods:
             }
             SuperVoidVault:
             {
-                Label: "[i:4131] Super Void Vault [c/FF2222:(可能会造成游戏卡顿)]"
+                Label: "[i:4131] Super Void Vault [c/FF2222:(May lag the game!)]"
                 Tooltip:
                     '''
                     Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
@@ -23,7 +23,7 @@ Mods:
             }
             SmartVoidVault:
             {
-                Label: "[i:4131] Void Vault Smart Pickup [c/FF2222:(可能会造成游戏卡顿)]"
+                Label: "[i:4131] Void Vault Smart Pickup [c/FF2222:(May lag the game!)]"
                 Tooltip:
                     '''
                     If the picked item already exists in the Void Vault, priorly put the item in it
@@ -65,11 +65,11 @@ Mods:
             TileSpeedAndTileRange.Label: "[i:2215] Increase placement speed and range"
             TileSpeed_Blacklist:
             {
-                Label: "[i:1448] 物块放置速度和距离提升黑名单"
+                Label: "[i:1448] Blacklist of tile placing boost"
                 Tooltip:
                     '''
-                    物品名字中包含以下文本的物品的放置速度和距离不会提升
-                    不区分大小写
+                    Tile's placing speed and range won't be boosted if its name contains any of the following texts
+                    Case-insensitive
                     '''
             }
             NoPlace_BUFFTile:
@@ -121,7 +121,7 @@ Mods:
             }
             MiddleEnableBank:
             {
-                Label: "[i:87] Scroll click to open personal inventories"
+                Label: "[i:87] Middle click to open personal inventories"
                 Tooltip: 
                     '''
                     When you middle click a personal inventory item in your inventory
@@ -185,37 +185,37 @@ Mods:
             BanDamageVar.Label: "[i:6] Disable damage floating"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
             
-            ModSettings.Header: "[i:ImproveGame/CreateWand] 模组设置"
+            ModSettings.Header: "[i:ImproveGame/CreateWand] Mod Config"
             OnlyHost:
             {
-                    Label: "[i:2203] 仅主机可调节配置 (端口映射无效)"
+                    Label: "[i:2203] Only the host can change the mod configs(does not work with port forwarding)"
                     Tooltip:
                         '''
-                        单人模式下无用
-                        开启后，仅主机玩家(即IP为127.0.0.1)可调节模组配置
-                        该选项仅主机玩家可控制开关
-                        如果你使用端口映射手段开服，请使用下面那个选项
+                        Does not work in single player mode
+                        After enabled, only the host(IP: 127.0.0.1) can change the mod configs
+                        Only the host can toggle this on/off
+                        If the server is ran with port forwarding, please use the function below
                         '''
-                    Unaccepted: "无法更改: 你不是服务器主机玩家！"
+                    Unaccepted: "Cannot save changes: you are not the host!"
             }
             OnlyHostByPassword:
             {
-                Label: "[i:2203] 仅密码验证通过的玩家可调节设置"
+                Label: "[i:2203] Only the player(s) with verified password can change the mod configs"
                 Tooltip:
                     '''
-                    单人模式下无用，需要重新加载模组
-                    开启后，仅密码验证通过的玩家可以调节模组设置
-                    在服务器启动时，会在服务器控制台发送一串随机生成的八位数字密钥
-                    玩家可以通过输入 /qolpassword <密码> 验证身份
-                    若密码正确，将获得调节模组设置的权限
-                    对于端口映射手段开服有用，因为此时IP无法验证身份(均为127.0.0.1)
+                    Does not work in single player mode, reloading is required
+                    After enabled, only the player(s) with verified password can change the mod configs
+                    While starting the server, a random 8-digit password will be send in the server console
+                    Players can type /qolpassword <password> to verify
+                    If the password is correct, the player will be able to change mod configs
+                    Effective to servers with port forwarding, as the IP verification does not work
                     '''
-                Unaccepted: "无法更改: 你没有通过密码验证！"
-                Registered: "你已获得修改配置权限，无需认证"
-                Correct: "密码正确，你已获得修改配置权限"
-                Incorrect: "密码错误！"
-                ServerPassword: "[Quality of Life] 模组配置认证密码: {Password}"
-                CommandDescription: "用于验证客户端身份，请求获得配置修改权限"
+                Unaccepted: "Cannot save changes: your password is not verified!"
+                Registered: "You can change the mod configs already"
+                Correct: "Correct password, you can change the mod configs"
+                Incorrect: "Incorrect password!"
+                ServerPassword: "[Quality of Life] Password for ModConfig verification: {Password}"
+                CommandDescription: "To verify the client, asking permission to change the mod configs"
             }
         }
         ItemName:
@@ -316,7 +316,7 @@ Mods:
                 Please middle click on this item or left click on the buff icon to open buff tracker, to enable/disable that buff
                 '''
             BuffApplied: "The buff [{BuffName}] is already applied"
-            BuffVisible: "如果想要隐藏无限续杯增益图标，请在模组配置中修改"
+            BuffVisible: "Change the mod config to hide infinite buff icons"
             BuffHided: 
                 '''
                 Buff icons have been hiden
@@ -332,12 +332,12 @@ Mods:
                 '''
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"
-            BankEnableOn: "Scroll click to open personal inventory"
-            BankEnableOff: "Scroll click to close personal inventory"
-            CreateWandOn: "Scroll click to open house material panel"
-            CreateWandOff: "Scroll click to close house material panel"
-            LiquidWandOn: "Scroll click to open liquid control panel"
-            LiquidWandOff: "Scroll click to close liquid control panel"
+            BankEnableOn: "Middle click to open personal inventory"
+            BankEnableOff: "Middle click to close personal inventory"
+            CreateWandOn: "Middle click to open house material panel"
+            CreateWandOff: "Middle click to close house material panel"
+            LiquidWandOn: "Middle click to open liquid control panel"
+            LiquidWandOff: "Middle click to close liquid control panel"
         }
         SuperVault:
         {
@@ -346,13 +346,13 @@ Mods:
         }
         Autofisher:
         {
-            Title: "自动钓鱼机"
-            Accessory: "钓鱼饰品"
-            FishingPole: "钓竿"
-            Bait: "鱼饵"
-            SelectPool: "请选择鱼池"
-            CarefulNextTime: "下次注意点！" # 这个是钓鱼机不小心把猪鲨钓上来了
-            Unavailable: "暂无钓鱼信息"
+            Title: "Fishing Machine"
+            Accessory: "Accessories for fishing"
+            FishingPole: "Fishing rod"
+            Bait: "Bait"
+            SelectPool: "Please select fishing pool"
+            CarefulNextTime: "Be careflu next time!" # 这个是钓鱼机不小心把猪鲨钓上来了
+            Unavailable: "Currently no fishing info"
         }
         BuffTracker:
         {
@@ -360,7 +360,7 @@ Mods:
             LeftClickDisable: "\n<left> to disable this buff"
             LeftClickEnable: "\n<left> to enable this buff"
             NoInfBuff: "Currently no infinite buff available"
-            NoInfBuffAlt: "请在模组配置中打开无限续杯功能"
+            NoInfBuffAlt: "Enable the Infinite Potions in the mod config"
         }
         Architecture:
         {
