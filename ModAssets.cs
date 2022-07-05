@@ -1,17 +1,28 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 
 namespace ImproveGame
 {
     public class ModAssets : ModSystem
     {
-        public static Effect ItemEffect = MyUtils.GetEffect("item").Value;
+        internal static Effect ItemEffect;
+        internal static Asset<Effect> LiquidSurface;
+        internal static Asset<Texture2D> Perlin;
 
         public override void Load() {
-            ItemEffect = MyUtils.GetEffect("item").Value;
+            if (!Main.dedServ) {
+                ItemEffect = MyUtils.GetEffect("item").Value;
+                LiquidSurface = MyUtils.GetEffect("LiquidSurface");
+                Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");
+            }
         }
 
         public override void Unload() {
-            ItemEffect = null;
+            if (!Main.dedServ) {
+                ItemEffect = null;
+                LiquidSurface = null;
+                Perlin = null;
+            }
         }
     }
 }
