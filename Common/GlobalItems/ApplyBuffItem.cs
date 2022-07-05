@@ -35,16 +35,19 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         public static void UpdateInventoryGlow(Item item) {
+            bool globalItemNotNull = item.TryGetGlobalItem<GlobalItemData>(out var globalItem);
+            if (globalItemNotNull)
+                globalItem.InventoryGlow = false;
+
             int buffType = GetItemBuffType(item);
             if (buffType is not -1) {
                 HideBuffSystem.BuffTypesShouldHide[buffType] = true;
-                if (item.TryGetGlobalItem<GlobalItemData>(out var globalItem))
+                if (globalItemNotNull)
                     globalItem.InventoryGlow = true;
             }
             // 非增益药剂
-            if (MyUtils.Config.NoConsume_Potion && item.stack >= 30 && SpecialPotions.Contains(item.type)) {
-                if (item.TryGetGlobalItem<GlobalItemData>(out var globalItem))
-                    globalItem.InventoryGlow = true;
+            if (MyUtils.Config.NoConsume_Potion && item.stack >= 30 && SpecialPotions.Contains(item.type) && globalItemNotNull) {
+                globalItem.InventoryGlow = true;
             }
             // 随身增益站：旗帜
             if (MyUtils.Config.NoPlace_BUFFTile_Banner) {
@@ -56,16 +59,14 @@ namespace ImproveGame.Common.GlobalItems
                         frameX -= 1620;
                         frameY += 54;
                     }
-                    if (frameX >= 396 || frameY >= 54) {
-                        if (item.TryGetGlobalItem<GlobalItemData>(out var globalItem))
-                            globalItem.InventoryGlow = true;
+                    if (globalItemNotNull && (frameX >= 396 || frameY >= 54)) {
+                        globalItem.InventoryGlow = true;
                     }
                 }
             }
             // 弹药
-            if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0) {
-                if (item.TryGetGlobalItem<GlobalItemData>(out var globalItem))
-                    globalItem.InventoryGlow = true;
+            if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0 && globalItemNotNull) {
+                globalItem.InventoryGlow = true;
             }
         }
 

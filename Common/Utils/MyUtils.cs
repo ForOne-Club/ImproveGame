@@ -307,6 +307,8 @@ namespace ImproveGame
             };
             if (!ignoreInventory) {
                 items.Insert(0, player.inventory);
+                if (Main.netMode != NetmodeID.Server)
+                    items.Insert(0, new Item[] { Main.mouseItem });
             }
             if (Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer)) {
                 items.Add(modPlayer.SuperVault);

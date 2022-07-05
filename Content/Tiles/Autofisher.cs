@@ -1,6 +1,7 @@
 using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ModLoader;
@@ -31,7 +32,7 @@ namespace ImproveGame.Content.Tiles
             }
             else {
                 if (Main.netMode == NetmodeID.MultiplayerClient && !ServerOpenRequest) {
-                    NetAutofish.Autofish_ClientSendOpenRequest(origin);
+                    NetAutofish.ClientSendOpenRequest(origin);
                     return false;
                 }
                 ServerOpenRequest = false;
@@ -54,6 +55,24 @@ namespace ImproveGame.Content.Tiles
                 return true;
             }
             return false;
+        }
+
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+            if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(i, j, out var fisher))
+                return;
+            if (Main.tile[i, j].TileFrameX != 0 || Main.tile[i, j].TileFrameY != 0)
+                return;
+
+            Vector2 offScreen = new(Main.offScreenRange);
+            if (Main.drawToScreen) {
+                offScreen = Vector2.Zero;
+            }
+
+            var worldPos = new Point(i, j).ToWorldCoordinates(-4, -20);
+            var screenPos = worldPos + offScreen - Main.screenPosition;
+            string text = fisher.Opened ? "On" : "Off";
+            Color textColor = fisher.Opened ? new(20, 240, 20) : new(240, 20, 20);
+            Utils.DrawBorderString(spriteBatch, text, screenPos, textColor);
         }
     }
 }

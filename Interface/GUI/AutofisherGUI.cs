@@ -146,7 +146,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.accessory = item;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                NetAutofish.Autofish_ClientSendItem(17, item, AutofishPlayer.LocalPlayer.Autofisher);
+                NetAutofish.ClientSendItem(17, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         }
 
@@ -157,7 +157,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.fishingPole = item;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                NetAutofish.Autofish_ClientSendItem(15, item, AutofishPlayer.LocalPlayer.Autofisher);
+                NetAutofish.ClientSendItem(15, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         }
 
@@ -168,7 +168,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.bait = item;
             if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick) {
-                NetAutofish.Autofish_ClientSendItem(16, item, AutofishPlayer.LocalPlayer.Autofisher);
+                NetAutofish.ClientSendItem(16, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         } 
 
@@ -177,7 +177,7 @@ namespace ImproveGame.Interface.GUI
             if (autofisher is null)
                 return;
             if (!typeChange && stackChange != 0) {
-                NetAutofish.Autofish_ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange);
+                NetAutofish.ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange);
             }
         }
 
@@ -188,7 +188,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.fish[i] = item;
             if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick) {
-                NetAutofish.Autofish_ClientSendItem((byte)i, item, AutofishPlayer.LocalPlayer.Autofisher);
+                NetAutofish.ClientSendItem((byte)i, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         }
 
@@ -197,7 +197,7 @@ namespace ImproveGame.Interface.GUI
             if (autofisher is null)
                 return;
             if (Main.netMode == NetmodeID.MultiplayerClient && !typeChange && stackChange != 0) {
-                NetAutofish.Autofish_ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
+                NetAutofish.ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
             }
         }
 
@@ -208,7 +208,7 @@ namespace ImproveGame.Interface.GUI
                     RequireRefresh = false;
                 }
                 else {
-                    NetAutofish.Autofish_ClientSendSyncItem(AutofishPlayer.LocalPlayer.Autofisher, slotType);
+                    NetAutofish.ClientSendSyncItem(AutofishPlayer.LocalPlayer.Autofisher, slotType);
                 }
             }
             else {

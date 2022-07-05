@@ -25,6 +25,7 @@ namespace ImproveGame.Common.Utils
         Autofish_ClientReceiveTipChange,
         Autofish_ServerReceiveAutofisherPosition,
         Autofish_ClientReceiveOpenRequest,
-        Autofish_ServerReceiveOpenRequest
+        Autofish_ServerReceiveOpenRequest,
+        Autofish_ClientReceivePlayersToggle
     }
 }

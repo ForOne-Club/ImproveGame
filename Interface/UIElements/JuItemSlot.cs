@@ -238,7 +238,6 @@ namespace ImproveGame.Interface.UIElements
                 DrawItemInternal(sb, Item, Color.White, dimensions, ItemSize);
 
                 if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
-                    Item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
                     CloseItemGlow(sb);
                 }
             }
@@ -283,8 +282,8 @@ namespace ImproveGame.Interface.UIElements
             else {
                 lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
             }
-            ModAssets.ItemEffect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-            ModAssets.ItemEffect.CurrentTechnique.Passes["Test"].Apply();
+            ModAssets.ItemEffect.Value.Parameters["uColor"].SetValue(lerpColor.ToVector4());
+            ModAssets.ItemEffect.Value.CurrentTechnique.Passes["Test"].Apply();
         }
 
         public static void CloseItemGlow(SpriteBatch sb) {

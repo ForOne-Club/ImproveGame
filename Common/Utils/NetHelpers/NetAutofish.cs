@@ -13,37 +13,40 @@ namespace ImproveGame.Common.Utils.NetHelpers
         public static void HandlePacket(BinaryReader reader, int sender, MessageType type) {
             switch (type) {
                 case MessageType.Autofish_ServerReceiveItem:
-                    Autofish_ServerReceiveItem(reader, sender);
+                    ServerReceiveItem(reader, sender);
                     break;
                 case MessageType.Autofish_ClientReceiveItem:
-                    Autofish_ClientReceiveItem(reader);
+                    ClientReceiveItem(reader);
                     break;
                 case MessageType.Autofish_ServerSyncItem:
-                    Autofish_ServerSyncItem(reader, sender);
+                    ServerSyncItem(reader, sender);
                     break;
                 case MessageType.Autofish_ClientReceiveSyncItem:
-                    Autofish_ClientReceiveSyncItem(reader);
+                    ClientReceiveSyncItem(reader);
                     break;
                 case MessageType.Autofish_ServerReceiveLocatePoint:
-                    Autofish_ServerReceiveLocatePoint(reader, sender);
+                    ServerReceiveLocatePoint(reader, sender);
                     break;
                 case MessageType.Autofish_ClientReceiveLocatePoint:
-                    Autofish_ClientReceiveLocatePoint(reader);
+                    ClientReceiveLocatePoint(reader);
                     break;
                 case MessageType.Autofish_ServerReceiveStackChange:
-                    Autofish_ServerReceiveStackChange(reader, sender);
+                    ServerReceiveStackChange(reader, sender);
                     break;
                 case MessageType.Autofish_ClientReceiveTipChange:
-                    Autofish_ClientReceiveTipChange(reader);
+                    ClientReceiveTipChange(reader);
                     break;
                 case MessageType.Autofish_ServerReceiveAutofisherPosition:
-                    Autofish_ServerReceiveAutofisherPosition(reader, sender);
+                    ServerReceiveAutofisherPosition(reader, sender);
                     break;
                 case MessageType.Autofish_ClientReceiveOpenRequest:
-                    Autofish_ClientReceiveOpenRequest(reader);
+                    ClientReceiveOpenRequest(reader);
                     break;
                 case MessageType.Autofish_ServerReceiveOpenRequest:
-                    Autofish_ServerReceiveOpenRequest(reader, sender);
+                    ServerReceiveOpenRequest(reader, sender);
+                    break;
+                case MessageType.Autofish_ClientReceivePlayersToggle:
+                    ClientReceivePlayersToggle(reader);
                     break;
             }
         }
@@ -52,7 +55,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
         /// 由服务器执行，向所有玩家同步钓鱼信息提示
         /// </summary>
         /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
-        public static void Autofish_ServerSendTipChange(Point16 point, string tip) {
+        public static void ServerSendTipChange(Point16 point, string tip) {
             var packet = ImproveGame.Instance.GetPacket();
             packet.Write((byte)MessageType.Autofish_ClientReceiveTipChange);
             packet.Write(point.X);
@@ -61,7 +64,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Send(-1, -1);
         }
 
-        public static void Autofish_ClientReceiveTipChange(BinaryReader reader) {
+        public static void ClientReceiveTipChange(BinaryReader reader) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             string tip = reader.ReadString();
@@ -70,7 +73,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             }
         }
 
-        public static void Autofish_ServerReceiveStackChange(BinaryReader reader, int sender) {
+        public static void ServerReceiveStackChange(BinaryReader reader, int sender) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             byte type = reader.ReadByte();
@@ -86,7 +89,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
                     autofisher.bait.stack += stackChange;
                 }
                 // 发送到其他的所有客户端
-                Autofish_ServerSendSyncItem(new Point16(x, y), type, sender);
+                ServerSendSyncItem(new Point16(x, y), type, sender);
             }
         }
 
@@ -96,7 +99,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
         /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
         /// <param name="type">请求类型，小于或等于14为请求相应的fish，16为鱼饵，其他的没必要同步</param>
         /// <param name="stackChange">更改的堆叠量</param>
-        public static void Autofish_ClientSendStackChange(Point16 point, byte type, int stackChange) {
+        public static void ClientSendStackChange(Point16 point, byte type, int stackChange) {
             var packet = ImproveGame.Instance.GetPacket();
             packet.Write((byte)MessageType.Autofish_ServerReceiveStackChange);
             packet.Write(point.X);
@@ -106,7 +109,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Send(-1, -1);
         }
 
-        public static void Autofish_ServerReceiveLocatePoint(BinaryReader reader, int sender) {
+        public static void ServerReceiveLocatePoint(BinaryReader reader, int sender) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             short locateX = reader.ReadInt16();
@@ -129,7 +132,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             }
         }
 
-        public static void Autofish_ClientReceiveLocatePoint(BinaryReader reader) {
+        public static void ClientReceiveLocatePoint(BinaryReader reader) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             short locateX = reader.ReadInt16();
@@ -145,7 +148,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
         /// </summary>
         /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
         /// <param name="locatePoint">定位点坐标</param>
-        public static void Autofish_ClientSendLocatePoint(Point16 point, Point16 locatePoint) {
+        public static void ClientSendLocatePoint(Point16 point, Point16 locatePoint) {
             var packet = ImproveGame.Instance.GetPacket();
             packet.Write((byte)MessageType.Autofish_ServerReceiveLocatePoint);
             packet.Write(point.X);
@@ -155,7 +158,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Send(-1, -1);
         }
 
-        public static void Autofish_ClientReceiveSyncItem(BinaryReader reader) {
+        public static void ClientReceiveSyncItem(BinaryReader reader) {
             byte type = reader.ReadByte();
             Item fishingPole = null;
             Item bait = null;
@@ -209,7 +212,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
         /// </summary>
         /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
         /// <param name="type">请求类型，小于或等于14为请求相应的fish，15为钓竿，16为鱼饵，17为饰品，18为全部</param>
-        public static void Autofish_ClientSendSyncItem(Point16 point, byte type) {
+        public static void ClientSendSyncItem(Point16 point, byte type) {
             var packet = ImproveGame.Instance.GetPacket();
             packet.Write((byte)MessageType.Autofish_ServerSyncItem);
             packet.Write(point.X);
@@ -218,14 +221,14 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Send(-1, -1);
         }
 
-        public static void Autofish_ServerSyncItem(BinaryReader reader, int sender) {
+        public static void ServerSyncItem(BinaryReader reader, int sender) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             byte type = reader.ReadByte();
-            Autofish_ServerSendSyncItem(new Point16(x, y), type, sender);
+            ServerSendSyncItem(new Point16(x, y), type, sender);
         }
 
-        public static void Autofish_ServerSendSyncItem(Point16 point, byte type, int sender = -1) {
+        public static void ServerSendSyncItem(Point16 point, byte type, int sender = -1) {
             // 发送到请求的客户端
             if (MyUtils.TryGetTileEntityAs<TEAutofisher>(point.X, point.Y, out var autofisher)) {
                 var packet = ImproveGame.Instance.GetPacket();
@@ -273,7 +276,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             }
         }
 
-        public static void Autofish_ServerReceiveItem(BinaryReader reader, int sender) {
+        public static void ServerReceiveItem(BinaryReader reader, int sender) {
             byte type = reader.ReadByte();
             var item = ItemIO.Receive(reader, true);
             short x = reader.ReadInt16();
@@ -303,7 +306,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Send(-1, sender); // 不发回给发送端
         }
 
-        public static void Autofish_ClientReceiveItem(BinaryReader reader) {
+        public static void ClientReceiveItem(BinaryReader reader) {
             byte type = reader.ReadByte();
             var item = ItemIO.Receive(reader, true);
             short x = reader.ReadInt16();
@@ -334,7 +337,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
         /// <param name="type">请求类型，小于或等于14为请求相应的fish，15为钓竿，16为鱼饵，17为饰品</param>
         /// <param name="item">物品的实例</param>
         /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
-        public static void Autofish_ClientSendItem(byte type, Item item, Point16 point) {
+        public static void ClientSendItem(byte type, Item item, Point16 point) {
             var packet = ImproveGame.Instance.GetPacket();
             packet.Write((byte)MessageType.Autofish_ServerReceiveItem);
             packet.Write(type);
@@ -344,7 +347,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Send();
         }
 
-        public static void Autofish_ClientSendAutofisherPosition(short x, short y) {
+        public static void ClientSendAutofisherPosition(short x, short y) {
             var packet = ImproveGame.Instance.GetPacket();
             packet.Write((byte)MessageType.Autofish_ServerReceiveAutofisherPosition);
             packet.Write(x);
@@ -352,15 +355,17 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Send(-1, -1); // 不发回给发送端
         }
 
-        public static void Autofish_ServerReceiveAutofisherPosition(BinaryReader reader, int sender) {
+        public static void ServerReceiveAutofisherPosition(BinaryReader reader, int sender) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             // 服务端的设置好
             Main.player[sender].GetModPlayer<AutofishPlayer>().SetAutofisher(new(x, y), false);
+            // 给其他玩家发开关包
+            ServerSendPlayerToggle(new(x, y), (byte)sender, -1, sender);
         }
 
         // 这个只会在服务器允许打开才发生，要是不允许服务器没有任何回应
-        public static void Autofish_ClientReceiveOpenRequest(BinaryReader reader) {
+        public static void ClientReceiveOpenRequest(BinaryReader reader) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             var fishingPole = ItemIO.Receive(reader, true);
@@ -382,12 +387,12 @@ namespace ImproveGame.Common.Utils.NetHelpers
             }
         }
 
-        public static void Autofish_ServerReceiveOpenRequest(BinaryReader reader, int sender) {
+        public static void ServerReceiveOpenRequest(BinaryReader reader, int sender) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
+            var origin = new Point16(x, y);
             for (int k = 0; k < Main.maxPlayers; k++) {
                 var player = Main.player[k];
-                var origin = new Point16(x, y);
                 if (player.active && !player.dead && player.TryGetModPlayer<AutofishPlayer>(out var modPlayer) && modPlayer.Autofisher == origin) {
                     return;
                 }
@@ -412,18 +417,44 @@ namespace ImproveGame.Common.Utils.NetHelpers
                     ItemIO.Send(autofisher.fish[i], packet, true);
             }
             packet.Send(sender, -1); // 只发回给发送端
+
+            // 服务器设置好
+            Main.player[sender].GetModPlayer<AutofishPlayer>().SetAutofisher(origin, false);
         }
 
         /// <summary>
         /// 客户端执行，问服务器可不可以开箱
         /// </summary>
         /// <param name="point">位置</param>
-        public static void Autofish_ClientSendOpenRequest(Point16 point) {
+        public static void ClientSendOpenRequest(Point16 point) {
             var packet = ImproveGame.Instance.GetPacket();
             packet.Write((byte)MessageType.Autofish_ServerReceiveOpenRequest);
             packet.Write(point.X);
             packet.Write(point.Y);
             packet.Send(-1, -1);
+        }
+
+        public static void ClientReceivePlayersToggle(BinaryReader reader) {
+            short x = reader.ReadInt16();
+            short y = reader.ReadInt16();
+            byte plr = reader.ReadByte();
+            if (AutofishPlayer.TryGet(Main.player[plr], out var modPlayer)) {
+                modPlayer.SetAutofisher(new(x, y), false);
+            }
+        }
+
+        /// <summary>
+        /// 给除了打开玩家以外的其他玩家发送状态同步包，告诉它哪个玩家执行了打开
+        /// </summary>
+        /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
+        /// <param name="plr">  <seealso cref="Entity.whoAmI"/>  </param>
+        public static void ServerSendPlayerToggle(Point16 point, byte plr, int toWho, int ignoreWho) {
+            var packet = ImproveGame.Instance.GetPacket();
+            packet.Write((byte)MessageType.Autofish_ClientReceivePlayersToggle);
+            packet.Write(point.X);
+            packet.Write(point.Y);
+            packet.Write(plr);
+            packet.Send(toWho, ignoreWho);
         }
     }
 }

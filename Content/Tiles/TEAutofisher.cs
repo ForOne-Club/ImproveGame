@@ -17,8 +17,11 @@ namespace ImproveGame.Content.Tiles
         internal Item[] fish = new Item[15];
         internal const int checkWidth = 50;
         internal const int checkHeight = 30;
+
         internal string FishingTip { get; private set; } = "Error";
         internal double FishingTipTimer { get; private set; } = 0;
+        internal bool Opened = false;
+        internal int OpenAnimationTimer = 0;
 
         public override bool IsTileValidForEntity(int x, int y) {
             Tile tile = Main.tile[x, y];
@@ -29,7 +32,7 @@ namespace ImproveGame.Content.Tiles
             FishingTip = text;
             FishingTipTimer = 0;
             if (Main.netMode == NetmodeID.Server)
-                NetAutofish.Autofish_ServerSendTipChange(Position, FishingTip);
+                NetAutofish.ServerSendTipChange(Position, FishingTip);
         }
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
@@ -334,7 +337,7 @@ namespace ImproveGame.Content.Tiles
             if (Main.netMode == NetmodeID.SinglePlayer)
                 UISystem.Instance.AutofisherGUI.RefreshItems();
             else
-                NetAutofish.Autofish_ServerSendSyncItem(Position, 18);
+                NetAutofish.ServerSendSyncItem(Position, 18);
         }
 
         private void TryConsumeBait(Player player) {

@@ -10,21 +10,51 @@ namespace ImproveGame.Common.Players
     {
         public static AutofishPlayer LocalPlayer => Main.LocalPlayer.GetModPlayer<AutofishPlayer>();
         internal Point16 Autofisher { get; private set; } = Point16.NegativeOne;
+        public static bool TryGet(Player player, out AutofishPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
 
         public override void OnEnterWorld(Player player) {
             Autofisher = Point16.NegativeOne;
         }
 
+        public override void PlayerDisconnect(Player player) {
+            // 这是其他客户端和服务器都执行的
+            if (TryGet(player, out var modPlayer)) {
+                modPlayer.SetAutofisher(Point16.NegativeOne, false);
+            }
+        }
+
         public void SetAutofisher(Point16 point, bool needSync = true) {
+            // 切换两边（如果有的话）Autofisher的状态
+            TryGetAutofisher(out var fisherOld);
+            fisherOld.Opened = false;
+            if (MyUtils.TryGetTileEntityAs<TEAutofisher>(point.X, point.Y, out var fisherNew)) {
+                fisherNew.Opened = true;
+            }
+
+            // 应用开关
             Autofisher = point;
+
+            // 设置传输
             if (needSync && Main.netMode != NetmodeID.SinglePlayer)
-                NetAutofish.Autofish_ClientSendAutofisherPosition(point.X, point.Y);
+                NetAutofish.ClientSendAutofisherPosition(point.X, point.Y);
         }
 
         public void SetLocatePoint(TEAutofisher autofisher, Point16 point) {
             autofisher.locatePoint = point;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, autofisher.ID, autofisher.Position.X, autofisher.Position.Y);
+            }
+        }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer) {
+            // 服务器给新玩家发开箱了的玩家的箱子状态包
+            if (Main.netMode == NetmodeID.Server) {
+                for (byte i = 0; i < Main.maxPlayers; i++) {
+                    var player = Main.player[i];
+                    if (player.active && !player.dead && TryGet(player, out var modPlayer) && modPlayer.Autofisher.X > 0 && modPlayer.Autofisher.Y > 0) {
+                        NetAutofish.ServerSendPlayerToggle(modPlayer.Autofisher, i, toWho, fromWho);
+                    }
+                }
             }
         }
 

@@ -180,7 +180,7 @@ namespace ImproveGame.Common.Systems
                             AutofishPlayer.LocalPlayer.SetLocatePoint(AutofishPlayer.LocalPlayer.GetAutofisher(), mouseTilePosition);
                             UISystem.Instance.AutofisherGUI.ToggleSelectPool();
                             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                                NetAutofish.Autofish_ClientSendLocatePoint(AutofishPlayer.LocalPlayer.Autofisher, mouseTilePosition);
+                                NetAutofish.ClientSendLocatePoint(AutofishPlayer.LocalPlayer.Autofisher, mouseTilePosition);
                             }
                             return;
                         }
