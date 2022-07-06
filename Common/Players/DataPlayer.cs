@@ -28,35 +28,17 @@ namespace ImproveGame.Common.Players
 
         // 有些数据必须在这里初始化。
         public override void Initialize() {
-            SuperVault = new Item[100];
+            SuperVault ??= new Item[100];
             for (int i = 0; i < SuperVault.Length; i++) {
                 SuperVault[i] = new();
             }
         }
 
-        /// <summary>
-        /// 进入地图时候
-        /// </summary>
-        /// <param name="player"></param>
+        // 进入地图时候
         public override void OnEnterWorld(Player player) {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI) {
                 UISystem.Instance.BigBagGUI.SetSuperVault(SuperVault, SuperVaultPos);
             }
-        }
-
-        public override void SaveData(TagCompound tag) {
-            if (Main.reforgeItem.type > ItemID.None) {
-                tag.Add("ReforgeItemPrefix", Main.reforgeItem.GetGlobalItem<GlobalItemData>().recastCount);
-            }
-
-            for (int i = 0; i < 100; i++) {
-                tag.Add($"SuperVault_{i}", SuperVault[i]);
-            }
-
-            tag["SuperVaultPos"] = UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position();
-
-            tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
-            tag["InfBuffDisabledMod"] = InfBuffDisabledMod;
         }
 
         public override void LoadData(TagCompound tag) {
@@ -78,6 +60,21 @@ namespace ImproveGame.Common.Players
             // MOD Buff 禁用列表
             tag.TryGet("InfBuffDisabledMod", out InfBuffDisabledMod);
             InfBuffDisabledMod ??= new();
+        }
+
+        public override void SaveData(TagCompound tag) {
+            if (Main.reforgeItem.type > ItemID.None) {
+                tag.Add("ReforgeItemPrefix", Main.reforgeItem.GetGlobalItem<GlobalItemData>().recastCount);
+            }
+
+            for (int i = 0; i < 100; i++) {
+                tag.Add($"SuperVault_{i}", SuperVault[i]);
+            }
+
+            tag["SuperVaultPos"] = UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position();
+
+            tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
+            tag["InfBuffDisabledMod"] = InfBuffDisabledMod;
         }
     }
 }

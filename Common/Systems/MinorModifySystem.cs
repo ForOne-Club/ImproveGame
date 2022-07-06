@@ -287,40 +287,39 @@ namespace ImproveGame.Common.Systems
                 Player player = Main.LocalPlayer;
                 for (int i = 0; i < player.inventory.Length; i++) {
                     Item item = player.inventory[i];
-                    if (item.type == ItemID.None)
+                    if (item.IsAir)
                         continue;
                     AddBannerBuff(self, player, item);
                 }
                 for (int i = 0; i < player.bank.item.Length; i++) {
                     Item item = player.bank.item[i];
-                    if (item.type == ItemID.None)
+                    if (item.IsAir)
                         continue;
                     AddBannerBuff(self, player, item);
                 }
                 for (int i = 0; i < player.bank2.item.Length; i++) {
                     Item item = player.bank2.item[i];
-                    if (item.type == ItemID.None)
+                    if (item.IsAir)
                         continue;
                     AddBannerBuff(self, player, item);
                 }
                 for (int i = 0; i < player.bank3.item.Length; i++) {
                     Item item = player.bank3.item[i];
-                    if (item.type == ItemID.None)
+                    if (item.IsAir)
                         continue;
                     AddBannerBuff(self, player, item);
                 }
                 for (int i = 0; i < player.bank4.item.Length; i++) {
                     Item item = player.bank4.item[i];
-                    if (item.type == ItemID.None)
+                    if (item.IsAir)
                         continue;
                     AddBannerBuff(self, player, item);
                 }
                 if (MyUtils.Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var DataPlayer) && DataPlayer.SuperVault is not null) {
                     for (int i = 0; i < DataPlayer.SuperVault.Length; i++) {
-                        Item item = DataPlayer.SuperVault[i];
-                        if (item.type == ItemID.None)
+                        if (DataPlayer.SuperVault[i] is not null && DataPlayer.SuperVault[i].IsAir)
                             continue;
-                        AddBannerBuff(self, player, item);
+                        AddBannerBuff(self, player, DataPlayer.SuperVault[i]);
                     }
                 }
             }
