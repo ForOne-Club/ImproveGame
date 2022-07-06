@@ -19,15 +19,8 @@ namespace ImproveGame.Common.Players
         public List<int> InfBuffDisabledVanilla; // 记录ID
         public List<string> InfBuffDisabledMod; // 格式：Mod内部名/Buff类名
 
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
         public override void Initialize() {
-            SuperVault = new Item[100];
-            for (int i = 0; i < SuperVault.Length; i++) {
-                SuperVault[i] = new Item();
-            }
-            SuperVaultPos = Vector2.Zero;
+            SuperVault ??= new Item[100];
         }
 
         /// <summary>
@@ -54,11 +47,12 @@ namespace ImproveGame.Common.Players
         }
 
         public override void LoadData(TagCompound tag) {
-            ReforgeItemPrefix = tag.GetInt("ReforgeItemPrefix");
+            tag.TryGet("ReforgeItemPrefix", out ReforgeItemPrefix);
+
+            SuperVault ??= new Item[100];
             for (int i = 0; i < SuperVault.Length; i++) {
-                if (tag.ContainsKey($"SuperVault_{i}")) {
-                    SuperVault[i] = tag.Get<Item>($"SuperVault_{i}");
-                }
+                tag.TryGet($"SuperVault_{i}", out SuperVault[i]);
+                SuperVault[i] ??= new();
             }
             tag.TryGet("SuperVaultPos", out SuperVaultPos);
 
