@@ -315,9 +315,9 @@ namespace ImproveGame.Common.Systems
                         continue;
                     AddBannerBuff(self, player, item);
                 }
-                if (MyUtils.Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer) && modPlayer.SuperVault is not null) {
-                    for (int i = 0; i < modPlayer.SuperVault.Length; i++) {
-                        Item item = modPlayer.SuperVault[i];
+                if (MyUtils.Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var DataPlayer) && DataPlayer.SuperVault is not null) {
+                    for (int i = 0; i < DataPlayer.SuperVault.Length; i++) {
+                        Item item = DataPlayer.SuperVault[i];
                         if (item.type == ItemID.None)
                             continue;
                         AddBannerBuff(self, player, item);

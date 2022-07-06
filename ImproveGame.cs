@@ -3,8 +3,10 @@ global using ImproveGame.Common.Utils.NetHelpers;
 global using Microsoft.Xna.Framework;
 global using System;
 global using Terraria;
+global using Terraria.Audio;
 global using Terraria.ID;
 global using Terraria.ModLoader;
+global using Terraria.UI;
 using System.IO;
 
 namespace ImproveGame
@@ -17,7 +19,6 @@ namespace ImproveGame
     {
         // 额外BUFF槽
         public override uint ExtraPlayerBuffSlots => (uint)MyUtils.Config.ExtraPlayerBuffSlots;
-
         public static ImproveGame Instance;
 
         public override void Load() {

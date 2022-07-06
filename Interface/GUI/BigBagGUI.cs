@@ -1,12 +1,6 @@
 ﻿using ImproveGame.Interface.UIElements;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
-using Terraria.UI;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -119,6 +113,7 @@ namespace ImproveGame.Interface.GUI
             SoundEngine.PlaySound(SoundID.Grab);
             Item[] items = ItemGrid.ItemList.items;
 
+            // 拿出来非空非收藏的物品
             List<Item> testSort = new();
             for (int i = 0; i < items.Length; i++) {
                 if (!items[i].IsAir && !items[i].favorited) {
@@ -127,10 +122,12 @@ namespace ImproveGame.Interface.GUI
                 }
             }
 
+            // 优先级排序
             testSort.Sort((a, b) => {
                 return -a.rare.CompareTo(b.rare) * 100 - a.stack.CompareTo(b.stack) * 10 + a.type.CompareTo(b.type);
             });
 
+            // 放入背包
             for (int i = 0; i < testSort.Count; i++) {
                 MyUtils.ItemStackToInventory(items, testSort[i], false);
             }
