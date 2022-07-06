@@ -39,6 +39,12 @@ namespace ImproveGame.Common.Systems
             AddBuffIntegration(calamityMod, "CorruptionEffigy", "CorruptionEffigyBuff", true);
         }
 
+        internal static void DoCalamityModBuffConflictsRemove(int buffType) {
+            if (buffType == ModContent.Find<ModBuff>("CalamityMod", "CadancesGrace").Type) {
+
+            }
+        }
+
         private static void DoFargowiltasIntegration() {
             if (!ModLoader.TryGetMod("Fargowiltas", out Mod fargowiltas)) {
                 return;

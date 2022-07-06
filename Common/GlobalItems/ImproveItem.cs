@@ -204,6 +204,7 @@ namespace ImproveGame.Common.GlobalItems
         public override void PostDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                 JuItemSlot.CloseItemGlow(sb);
+                item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
             }
         }
 

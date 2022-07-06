@@ -1,8 +1,6 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria.Localization;
 
@@ -14,25 +12,6 @@ namespace ImproveGame.Common.GlobalItems
         public static readonly List<int> SpecialPotions = new() { 2350, 2351, ItemID.WormholePotion, ItemID.PotionOfReturn };
         // 增益 Tile 巴斯特雕像，篝火，红心灯笼，星星瓶，向日葵，弹药箱，施法桌，水晶球，蛋糕块，利器站，水蜡烛，和平蜡烛
         public static readonly List<List<int>> BUFFTiles = new() { new() { 506, -1, 215 }, new() { 215, -1, 87 }, new() { 42, 9, 89 }, new() { 42, 7, 158 }, new() { 27, -1, 146 }, new() { 287, -1, 93 }, new() { 354, -1, 150 }, new() { 125, -1, 29 }, new() { 621, -1, 192 }, new() { 377, -1, 159 }, new() { 49, -1, 86 }, new() { 372, -1, 157 } };
-
-        public override void UpdateInventory(Item item, Player player) {
-            if (player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
-                return;
-
-            int buffType = GetItemBuffType(item);
-            if (buffType is not -1 && InfBuffPlayer.Get(player).CheckInfBuffEnable(buffType)) {
-                // 饱食三级Buff不应该覆盖，而是取最高级
-                bool wellFed3Enabled = player.FindBuffIndex(BuffID.WellFed3) != -1;
-                if (buffType == BuffID.WellFed && (player.FindBuffIndex(BuffID.WellFed2) != -1 || wellFed3Enabled))
-                    return;
-                if (buffType == BuffID.WellFed2 && wellFed3Enabled)
-                    return;
-
-                player.AddBuff(buffType, 2);
-            }
-            // 我发现游戏暂停时，不会调用UpdateInventory，导致InventoryGlow没了，所以我调用放到了ImproveItem里面
-            //UpdateInventoryGlow(item, player);
-        }
 
         public static void UpdateInventoryGlow(Item item) {
             bool globalItemNotNull = item.TryGetGlobalItem<GlobalItemData>(out var globalItem);
@@ -166,26 +145,7 @@ namespace ImproveGame.Common.GlobalItems
                         OverrideColor = Color.LightGreen
                     });
                 }
-
-                if (!BuffTrackerGUI.Visible && GameCulture.FromCultureName(GameCulture.CultureName.Chinese).IsActive)
-                    tooltips.Add(new(Mod, "WhatIsMiddleClick", "\n\n"));
             }
-        }
-
-        private static Asset<Texture2D> WhatIsMiddleClick;
-        public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset) {
-            if (line.Name == "WhatIsMiddleClick" && line.Mod == Mod.Name) {
-                Main.spriteBatch.Draw(WhatIsMiddleClick.Value, new Vector2(line.X, line.Y), Color.White);
-            }
-            return base.PreDrawTooltipLine(item, line, ref yOffset);
-        }
-
-        public override void Load() {
-            WhatIsMiddleClick = MyUtils.GetTexture("WhatIsMiddleClick");
-        }
-
-        public override void Unload() {
-            WhatIsMiddleClick = null;
         }
     }
 }

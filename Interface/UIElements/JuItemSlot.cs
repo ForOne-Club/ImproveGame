@@ -231,6 +231,8 @@ namespace ImproveGame.Interface.UIElements
         public static void DrawItem(SpriteBatch sb, Item Item, CalculatedStyle dimensions, float ItemSize = 30f) {
             // 绘制物品
             if (!Item.IsAir) {
+                ApplyBuffItem.UpdateInventoryGlow(Item);
+
                 if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) {
                     OpenItemGlow(sb);
                 }

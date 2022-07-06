@@ -77,9 +77,6 @@ namespace ImproveGame.Common.GlobalItems
                         return;
                     }
                 }
-
-                if (GameCulture.FromCultureName(GameCulture.CultureName.Chinese).IsActive)
-                    tooltips.Add(new(Mod, "WhatIsMiddleClick", "\n\n"));
             }
         }
     }

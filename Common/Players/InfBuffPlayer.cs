@@ -1,4 +1,7 @@
-﻿namespace ImproveGame.Common.Players
+﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Systems;
+
+namespace ImproveGame.Common.Players
 {
     public class InfBuffPlayer : ModPlayer
     {
@@ -7,6 +10,26 @@
 
         public override void Load() {
             On.Terraria.Player.AddBuff += BanBuffs;
+        }
+
+        public override void PostUpdateBuffs() {
+            if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
+                return;
+
+            var items = MyUtils.GetAllInventoryItemsList(Player, false);
+            foreach (var item in items) {
+                int buffType = ApplyBuffItem.GetItemBuffType(item);
+                if (buffType is not -1 && CheckInfBuffEnable(buffType)) {
+                    // 饱食三级Buff不应该覆盖，而是取最高级
+                    bool wellFed3Enabled = Player.FindBuffIndex(BuffID.WellFed3) != -1;
+                    if (buffType == BuffID.WellFed && (Player.FindBuffIndex(BuffID.WellFed2) != -1 || wellFed3Enabled))
+                        return;
+                    if (buffType == BuffID.WellFed2 && wellFed3Enabled)
+                        return;
+
+                    Player.AddBuff(buffType, 2);
+                }
+            }
         }
 
         private void BanBuffs(On.Terraria.Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet, bool foodHack) {

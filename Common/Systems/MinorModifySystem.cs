@@ -331,6 +331,10 @@ namespace ImproveGame.Common.Systems
         /// </summary>
         private void TweakExtraUpdateInventory(On.Terraria.Player.orig_VanillaPreUpdateInventory orig, Player self) {
             orig(self);
+
+            if (Main.myPlayer != self.whoAmI)
+                return;
+
             var items = MyUtils.GetAllInventoryItemsList(self, true);
             foreach (var item in items) {
                 self.VanillaUpdateInventory(item);

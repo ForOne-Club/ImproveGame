@@ -14,6 +14,8 @@ https://www.bilibili.com/read/cv17018658?spm_id_from=333.1007.0.0
     1.5.8.7
         ● BUG修复
             修复了人物卡住的BUG
+            移除了“中键是什么”提示
+            修复了无限灾厄韵律药水不禁用生命力药水与恢复药水的BUG
     1.5.8.6
         ● BUG修复
             修复了某些情况下Buff追踪器关闭Buff失效的BUG
