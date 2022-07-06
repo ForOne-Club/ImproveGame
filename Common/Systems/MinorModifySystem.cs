@@ -315,9 +315,9 @@ namespace ImproveGame.Common.Systems
                         continue;
                     AddBannerBuff(self, player, item);
                 }
-                if (MyUtils.Config.SuperVault) {
-                    for (int i = 0; i < player.GetModPlayer<DataPlayer>().SuperVault.Length; i++) {
-                        Item item = player.GetModPlayer<DataPlayer>().SuperVault[i];
+                if (MyUtils.Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer) && modPlayer.SuperVault is not null) {
+                    for (int i = 0; i < modPlayer.SuperVault.Length; i++) {
+                        Item item = modPlayer.SuperVault[i];
                         if (item.type == ItemID.None)
                             continue;
                         AddBannerBuff(self, player, item);
@@ -373,7 +373,9 @@ namespace ImproveGame.Common.Systems
                 i => i.MatchLdsfld(typeof(Main), nameof(Main.checkForSpawns)),
                 i => i.Match(OpCodes.Ldc_I4_1)))
                 return;
-            c.EmitDelegate<Func<int, int>>((JiaJi) => {
+            c.EmitDelegate<Func<int, int>>((defaultValue) => {
+                if (MyUtils.Config.TownNPCSpawnSpeed is -1)
+                    return defaultValue;
                 return (int)Math.Pow(2, MyUtils.Config.TownNPCSpawnSpeed);
             });
         }

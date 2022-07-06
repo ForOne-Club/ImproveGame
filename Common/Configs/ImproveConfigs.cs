@@ -142,9 +142,10 @@ namespace ImproveGame.Common.Configs
         public bool TownNPCSpawnInNight;
 
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnSpeed.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.TownNPCSpawnSpeed.Tooltip")]
         [Slider]
-        [Range(0, 12)]
-        [DefaultValue(0)]
+        [Range(-1, 12)]
+        [DefaultValue(-1)]
         public int TownNPCSpawnSpeed;
 
         [Label("$Mods.ImproveGame.Config.NoCD_FishermanQuest.Label")]
