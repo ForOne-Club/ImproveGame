@@ -37,7 +37,14 @@
 
             for (int i = 0; i < 8; i++)
                 ConfigPassword += Main.rand.Next(10).ToString();
-            Console.WriteLine(MyUtils.GetTextWith("Config.OnlyHostByPassword.ServerPassword", new { Password = ConfigPassword }));
+
+            ImproveGame.Instance.Logger.Info(MyUtils.GetTextWith("Config.OnlyHostByPassword.ServerPasswordLog", new {
+                Password = ConfigPassword
+            }));
+
+            Console.WriteLine(MyUtils.GetTextWith("Config.OnlyHostByPassword.ServerPassword", new {
+                Password = ConfigPassword
+            }));
         }
     }
 }
