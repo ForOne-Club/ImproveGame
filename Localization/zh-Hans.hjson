@@ -231,7 +231,8 @@
                 Registered: "你已获得修改配置权限，无需认证"
                 Correct: "密码正确，你已获得修改配置权限"
                 Incorrect: "密码错误！"
-                ServerPassword: "[Quality of Life] 模组配置认证密码: {Password}"
+                ServerPassword: "[更好的体验] 模组配置认证密码: {Password}"
+                ServerPasswordLog: "模组配置认证密码: {Password}"
                 CommandDescription: "用于验证客户端身份，请求获得配置修改权限"
             }
         }
