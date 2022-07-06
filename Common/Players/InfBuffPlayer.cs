@@ -22,9 +22,9 @@ namespace ImproveGame.Common.Players
                     // 饱食三级Buff不应该覆盖，而是取最高级
                     bool wellFed3Enabled = Player.FindBuffIndex(BuffID.WellFed3) != -1;
                     if (buffType == BuffID.WellFed && (Player.FindBuffIndex(BuffID.WellFed2) != -1 || wellFed3Enabled))
-                        return;
+                        continue;
                     if (buffType == BuffID.WellFed2 && wellFed3Enabled)
-                        return;
+                        continue;
 
                     Player.AddBuff(buffType, 2);
                 }
