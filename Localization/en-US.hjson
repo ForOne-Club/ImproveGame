@@ -142,7 +142,11 @@ Mods:
             BanTombstone.Label: "[i:3230] Disable tombstone spawn"
 
             NPCConfigs.Header: "[i:4382] NPC Configs"
-            TownNPCSpawnInNight.Label: "[i:4081] Allow town NPCs to spawn at night time"
+            TownNPCSpawnInNight:
+            {
+                Label: "[i:4081] Allow town NPCs to spawn at night time"
+                Tooltip: "Disable this modification by setting the value to -1"
+            }
             TownNPCSpawnSpeed.Label: "[i:4910] Town NPC spawn rate multiplier"
             NoCD_FishermanQuest.Label: "[i:4608] Instant refresh Angler's quests"
             NPCCoinDropRate.Label: "[i:73] Enemy money drop multiplier"
@@ -182,7 +186,7 @@ Mods:
                     Tooltip: "Automatically plant the gathered herb (Currently does not support multiplayer)"
             }
             RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
-            BanDamageVar.Label: "[i:6] Disable damage floating"
+            BanDamageVar.Label: "[i:6] Disable damage spread"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
             
             ModSettings.Header: "[i:ImproveGame/CreateWand] Mod Config"

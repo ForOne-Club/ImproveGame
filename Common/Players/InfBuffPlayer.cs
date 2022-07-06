@@ -11,17 +11,21 @@
 
         private void BanBuffs(On.Terraria.Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet, bool foodHack) {
             if (Main.myPlayer == player.whoAmI && DataPlayer.TryGet(player, out var dataPlayer)) {
-                foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
-                    if (type == buffType) {
-                        return;
+                if (dataPlayer.InfBuffDisabledVanilla is not null) {
+                    foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
+                        if (type == buffType) {
+                            return;
+                        }
                     }
                 }
-                foreach (string buffFullName in dataPlayer.InfBuffDisabledMod) {
-                    string[] names = buffFullName.Split('/');
-                    string modName = names[0];
-                    string buffName = names[1];
-                    if (ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff) && type == modBuff.Type) {
-                        return;
+                if (dataPlayer.InfBuffDisabledMod is not null) {
+                    foreach (string buffFullName in dataPlayer.InfBuffDisabledMod) {
+                        string[] names = buffFullName.Split('/');
+                        string modName = names[0];
+                        string buffName = names[1];
+                        if (ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff) && type == modBuff.Type) {
+                            return;
+                        }
                     }
                 }
             }
@@ -37,19 +41,23 @@
         public void DeleteBuffs(DataPlayer dataPlayer) {
             for (int i = 0; i < Player.MaxBuffs; i++) {
                 if (Player.buffType[i] > 0) {
-                    foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
-                        if (Player.buffType[i] == buffType) {
-                            Player.DelBuff(i);
-                            i--;
+                    if (dataPlayer.InfBuffDisabledVanilla is not null) {
+                        foreach (int buffType in dataPlayer.InfBuffDisabledVanilla) {
+                            if (Player.buffType[i] == buffType) {
+                                Player.DelBuff(i);
+                                i--;
+                            }
                         }
                     }
-                    foreach (string buffFullName in dataPlayer.InfBuffDisabledMod) {
-                        string[] names = buffFullName.Split('/');
-                        string modName = names[0];
-                        string buffName = names[1];
-                        if (ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff) && Player.buffType[i] == modBuff.Type) {
-                            Player.DelBuff(i);
-                            i--;
+                    if (dataPlayer.InfBuffDisabledVanilla is not null) {
+                        foreach (string buffFullName in dataPlayer.InfBuffDisabledMod) {
+                            string[] names = buffFullName.Split('/');
+                            string modName = names[0];
+                            string buffName = names[1];
+                            if (ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff) && Player.buffType[i] == modBuff.Type) {
+                                Player.DelBuff(i);
+                                i--;
+                            }
                         }
                     }
                 }
@@ -60,7 +68,7 @@
             DataPlayer dataPlayer = DataPlayer.Get(Player);
             ModBuff modBuff = BuffLoader.GetBuff(buffType);
             if (modBuff is null) { // 原版
-                if (!dataPlayer.InfBuffDisabledVanilla.Contains(buffType)) {
+                if (dataPlayer.InfBuffDisabledVanilla is null || !dataPlayer.InfBuffDisabledVanilla.Contains(buffType)) {
                     return true;
                 }
                 else {
@@ -69,7 +77,7 @@
             }
             else {
                 string fullName = $"{modBuff.Mod.Name}/{modBuff.Name}";
-                if (!dataPlayer.InfBuffDisabledMod.Contains(fullName)) {
+                if (dataPlayer.InfBuffDisabledMod is null || !dataPlayer.InfBuffDisabledMod.Contains(fullName)) {
                     return true;
                 }
                 else {
