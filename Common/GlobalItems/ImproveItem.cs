@@ -215,12 +215,13 @@ namespace ImproveGame.Common.GlobalItems
         /// <param name="player"></param>
         /// <returns></returns>
         public override bool ItemSpace(Item item, Player player) {
-            ImprovePlayer improvePlayer = Main.LocalPlayer.GetModPlayer<ImprovePlayer>();
+            if (!DataPlayer.TryGet(Main.LocalPlayer, out var dataPlayer))
+                return false;
 
-            if (MyUtils.Config.SuperVault && MyUtils.HasItemSpace(player.GetModPlayer<DataPlayer>().SuperVault, item)) {
+            if (MyUtils.Config.SuperVault && dataPlayer.SuperVault is not null && MyUtils.HasItemSpace(dataPlayer.SuperVault, item)) {
                 return true;
             }
-            if (MyUtils.Config.SuperVoidVault) {
+            if (MyUtils.Config.SuperVoidVault && Main.LocalPlayer.TryGetModPlayer<ImprovePlayer>(out var improvePlayer)) {
                 // 猪猪钱罐
                 if (improvePlayer.PiggyBank && MyUtils.HasItemSpace(player.bank.item, item)) {
                     return true;

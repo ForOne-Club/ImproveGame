@@ -383,8 +383,10 @@ namespace ImproveGame
         /// <param name="item"></param>
         /// <returns></returns>
         public static bool HasItemSpace(Item[] inv, Item item) {
+            if (inv is null)
+                return false;
             for (int i = 0; i < inv.Length; i++) {
-                if (inv[i].IsAir || (inv[i].type == item.type && inv[i].stack < inv[i].maxStack)) {
+                if (inv[i] is not null && (inv[i].IsAir || (inv[i].type == item.type && inv[i].stack < inv[i].maxStack))) {
                     return true;
                 }
             }
