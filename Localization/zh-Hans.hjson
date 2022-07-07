@@ -202,7 +202,7 @@
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
             
-            ModSettings.Header: "[i:ImproveGame/CreateWand] 模组设置"
+            ModSettings.Header: "[i:ImproveGame/CreateWand] 服务器设置"
             OnlyHost:
             {
                 Label: "[i:2203] 仅主机可调节配置 (端口映射无效)"
@@ -234,6 +234,17 @@
                 ServerPassword: "[更好的体验] 模组配置认证密码: {Password}"
                 ServerPasswordLog: "模组配置认证密码: {Password}"
                 CommandDescription: "用于验证客户端身份，请求获得配置修改权限"
+            }
+            SpawnRateMaxValue:
+            {
+                Label: "[i:2649] 敌人生成速度倍率最大值"
+                Tooltip:
+                    '''
+                    玩家可通过敌人生成速度面板调节的最大生成倍率限制
+                    注意: 此面板只有同时拥有[向日葵][和平蜡烛][镇静药水][水蜡烛][战争药水]
+                    的增益无限物品组合才会出现
+                    服务器内如果你不想让玩家调节过高生成倍率，可以通过此选项限制
+                    '''
             }
         }
         ItemName:
@@ -377,6 +388,7 @@
             LeftClickEnable: "\n<left>以启用该无限增益"
             NoInfBuff: "当前没有可用的无限增益"
             NoInfBuffAlt: "请在模组配置中打开无限续杯功能"
+            NPCSpawnRatePanel: "敌人生成速度面板"
         }
         Architecture:
         {

@@ -189,7 +189,7 @@ Mods:
             BanDamageVar.Label: "[i:6] Disable damage spread"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
             
-            ModSettings.Header: "[i:ImproveGame/CreateWand] Mod Config"
+            ModSettings.Header: "[i:ImproveGame/CreateWand] Server Config"
             OnlyHost:
             {
                     Label: "[i:2203] Only the host can change the mod configs(does not work with port forwarding)"
@@ -221,6 +221,17 @@ Mods:
                 ServerPassword: "[Quality of Life] Password for ModConfig verification: {Password}"
                 ServerPasswordLog: "Password for ModConfig verification: {Password}"
                 CommandDescription: "To verify the client, asking permission to change the mod configs"
+            }
+            SpawnRateMaxValue:
+            {
+                Label: "[i:2649] 敌人生成速度倍率最大值"
+                Tooltip:
+                    '''
+                    玩家可通过敌人生成速度面板调节的最大生成倍率限制
+                    注意: 此面板只有同时拥有[向日葵][和平蜡烛][镇静药水][水蜡烛][战争药水]
+                    的增益无限物品组合才会出现
+                    服务器内如果你不想让玩家调节过高生成倍率，可以通过此选项限制
+                    '''
             }
         }
         ItemName:
@@ -366,6 +377,7 @@ Mods:
             LeftClickEnable: "\n<left> to enable this buff"
             NoInfBuff: "Currently no infinite buff available"
             NoInfBuffAlt: "Enable the Infinite Potions in the mod config"
+            NPCSpawnRatePanel: "Enemy Spawn Rate Panel"
         }
         Architecture:
         {

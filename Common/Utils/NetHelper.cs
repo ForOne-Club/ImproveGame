@@ -8,6 +8,7 @@ namespace ImproveGame.Common.Utils
             MessageType type = (MessageType)reader.ReadByte();
             NetAutofish.HandlePacket(reader, sender, type);
             NetGeneric.HandlePacket(reader, sender, type);
+            NetBuffTracker.HandlePacket(reader, sender, type);
         }
     }
 
@@ -26,6 +27,8 @@ namespace ImproveGame.Common.Utils
         Autofish_ServerReceiveAutofisherPosition,
         Autofish_ClientReceiveOpenRequest,
         Autofish_ServerReceiveOpenRequest,
-        Autofish_ClientReceivePlayersToggle
+        Autofish_ClientReceivePlayersToggle,
+        BuffTracker_ServerReceiveSpawnRateSlider,
+        BuffTracker_ClientReceiveSpawnRateSlider
     }
 }

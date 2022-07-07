@@ -214,6 +214,12 @@ namespace ImproveGame.Common.Configs
         [ReloadRequired]
         public bool OnlyHostByPassword;
 
+        [Label("$Mods.ImproveGame.Config.SpawnRateMaxValue.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.SpawnRateMaxValue.Tooltip")]
+        [DefaultValue(200)]
+        [Range(1, 200)]
+        public int SpawnRateMaxValue;
+
         public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message) {
             if (OnlyHostByPassword) {
                 if (!NetPasswordSystem.Registered[whoAmI]) {

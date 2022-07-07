@@ -58,12 +58,12 @@ namespace ImproveGame.Common.Systems
         public override void Load() {
             Instance = this;
             if (!Main.dedServ) {
-                AutofisherGUI = new AutofisherGUI();
-                BuffTrackerGUI = new BuffTrackerGUI();
-                LiquidWandGUI = new LiquidWandGUI();
-                BigBagGUI = new BigBagGUI();
-                ArchitectureGUI = new ArchitectureGUI();
-                BrustGUI = new BrustGUI();
+                AutofisherGUI = new();
+                BuffTrackerGUI = new();
+                LiquidWandGUI = new();
+                BigBagGUI = new();
+                ArchitectureGUI = new();
+                BrustGUI = new();
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
                 LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
                 LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
@@ -75,7 +75,7 @@ namespace ImproveGame.Common.Systems
 
         public static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface) where T : UIState {
             uiState.Activate();
-            uiInterface = new UserInterface();
+            uiInterface = new();
             uiInterface.SetState(uiState);
         }
 
