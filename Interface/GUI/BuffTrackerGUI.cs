@@ -1,12 +1,9 @@
-﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
-using Terraria.UI;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -164,7 +161,7 @@ namespace ImproveGame.Interface.GUI
             }
 
             base.Update(gameTime);
-            BuffTrackerBattler.Update(gameTime);
+            BuffTrackerBattler.Update();
 
             if (Dragging) {
                 basePanel.Left.Set(Main.mouseX - Offset.X, 0f);

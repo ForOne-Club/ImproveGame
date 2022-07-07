@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Systems;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;

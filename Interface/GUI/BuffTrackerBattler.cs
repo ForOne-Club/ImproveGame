@@ -126,7 +126,7 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public void Update(GameTime gameTime) {
+        public void Update() {
             if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer) && modPlayer.HasRequiredBuffs()) {
                 int rate = MyUtils.Config.SpawnRateMaxValue;
                 maxRateText.SetText($"x{rate}");
