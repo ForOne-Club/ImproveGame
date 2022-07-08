@@ -52,6 +52,13 @@ namespace ImproveGame.Common.Systems
             // “草药” 是否掉落成熟时候物品
             // IL.Terraria.WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
             On.Terraria.WorldGen.IsHarvestableHerbWithSeed += WorldGen_IsHarvestableHerbWithSeed;
+            // 旅商永远不离开
+            On.Terraria.WorldGen.UnspawnTravelNPC += TravelNPCStay;
+        }
+
+        private void TravelNPCStay(On.Terraria.WorldGen.orig_UnspawnTravelNPC orig) {
+            if (!MyUtils.Config.TravellingMerchantStay)
+                orig.Invoke();
         }
 
         private bool TileDrawing_IsAlchemyPlantHarvestable(On.Terraria.GameContent.Drawing.TileDrawing.orig_IsAlchemyPlantHarvestable orig, Terraria.GameContent.Drawing.TileDrawing self, int style) {
@@ -158,7 +165,6 @@ namespace ImproveGame.Common.Systems
             bool hasMerchant = false;
             int moneyCount = 0;
             for (int l = 0; l < 255; l++) {
-
                 // 放在一起统计，开销更小
                 if (l < 200 && !hasMerchant && Main.npc[l].active && Main.npc[l].townNPC && Main.npc[l].type == NPCID.Merchant) {
                     hasMerchant = true;
@@ -167,23 +173,23 @@ namespace ImproveGame.Common.Systems
                 if (!Main.player[l].active)
                     continue;
 
-                for (int m = 0; m < 58; m++) {
-                    if (Main.player[l].inventory[m] == null || Main.player[l].inventory[m].stack <= 0)
+                for (int m = 0; m < 40; m++) {
+                    if (Main.player[l].bank.item[m] == null || Main.player[l].bank.item[m].stack <= 0)
                         continue;
 
                     if (moneyCount < 2000000000) {
                         //Patch context: this is the amount of money.
-                        if (Main.player[l].inventory[m].type == ItemID.CopperCoin)
-                            moneyCount += Main.player[l].inventory[m].stack;
+                        if (Main.player[l].bank.item[m].type == ItemID.CopperCoin)
+                            moneyCount += Main.player[l].bank.item[m].stack;
 
-                        if (Main.player[l].inventory[m].type == ItemID.SilverCoin)
-                            moneyCount += Main.player[l].inventory[m].stack * 100;
+                        if (Main.player[l].bank.item[m].type == ItemID.SilverCoin)
+                            moneyCount += Main.player[l].bank.item[m].stack * 100;
 
-                        if (Main.player[l].inventory[m].type == ItemID.GoldCoin)
-                            moneyCount += Main.player[l].inventory[m].stack * 10000;
+                        if (Main.player[l].bank.item[m].type == ItemID.GoldCoin)
+                            moneyCount += Main.player[l].bank.item[m].stack * 10000;
 
-                        if (Main.player[l].inventory[m].type == ItemID.PlatinumCoin)
-                            moneyCount += Main.player[l].inventory[m].stack * 1000000;
+                        if (Main.player[l].bank.item[m].type == ItemID.PlatinumCoin)
+                            moneyCount += Main.player[l].bank.item[m].stack * 1000000;
                     }
                 }
             }

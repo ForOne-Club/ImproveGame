@@ -150,26 +150,13 @@ Mods:
             TownNPCSpawnSpeed.Label: "[i:4910] Town NPC spawn rate multiplier"
             NoCD_FishermanQuest.Label: "[i:4608] Instant refresh Angler's quests"
             NPCCoinDropRate.Label: "[i:73] Enemy money drop multiplier"
+            TravellingMerchantStay:
+            {
+                Label: "[i:2222] 旅商永远不离开"
+                Tooltip: "开启后，除非死亡，否则旅商不会离开"
+            }
 
             GameMechanics.Header: "[i:1344] Game Mechanics"
-            TreeGrowFaster:
-            {
-                Label: "[i:1182] Trees grow rapidly"
-                Tooltip: 
-                    '''
-                    Growing speed of trees * 500%
-                    Will not affect naturally generated Jungle Trees or Giant Glowing Mushrooms
-                    '''
-            }
-            ShakeTreeFruit:
-            {
-                Label: "[i:4009] Shaking trees always drops fruit"
-                Tooltip:
-                    '''
-                    Greatly increases drop rate of fruit (Drop rates of other items are not affected)
-                    If it seems doing nothing, please check Terraria Wiki for the conditions
-                    '''
-            }
             AlchemyGrassGrowsFaster:
             {
                     Label: "[i:313] Accelerate herb growth"
@@ -189,6 +176,46 @@ Mods:
             BanDamageVar.Label: "[i:6] Disable damage spread"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
             
+            TreeConfigs.Header: "[i:27] Tree Config"
+            TreeGrowFaster:
+            {
+                Label: "[i:1182] Trees grow rapidly"
+                Tooltip: 
+                    '''
+                    Growing speed of trees * 500%
+                    Will not affect naturally generated Jungle Trees or Giant Glowing Mushrooms
+                    '''
+            }
+            ShakeTreeFruit:
+            {
+                Label: "[i:4009] Shaking trees always drops fruit"
+                Tooltip:
+                    '''
+                    Greatly increases drop rate of fruit (Drop rates of other items are not affected)
+                    If it seems doing nothing, please check Terraria Wiki for the conditions
+                    '''
+            }
+            GemTreeAlwaysDropGem:
+            {
+                Label: "[i:3649] 宝石树总是掉落宝石"
+                Tooltip: "使宝石树每个部分都会掉落宝石或宝石果"
+            }
+            MostTree:
+            {
+                LabelMin: "[i:9] Minimum Regular Tree Height (Default: 7)"
+                LabelMax: "[i:9] Maximum Regular Tree Height (Default: 12)"
+            }
+            PalmTree:
+            {
+                LabelMin: "[i:2504] Minimum Palm Tree Height (Default: 10)"
+                LabelMax: "[i:2504] Maximum Palm Tree Height (Default: 20)"
+            }
+            GemTree:
+            {
+                LabelMin: "[i:4856] Minimum Gem Tree Height (Default: 7)"
+                LabelMax: "[i:4856] Maximum Gem Tree Height (Default: 12)"
+            }
+
             ModSettings.Header: "[i:ImproveGame/CreateWand] Server Config"
             OnlyHost:
             {

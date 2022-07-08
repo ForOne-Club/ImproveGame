@@ -163,26 +163,13 @@
             TownNPCSpawnSpeed.Label: "[i:4910] 城镇NPC刷新速度"
             NoCD_FishermanQuest.Label: "[i:4608] 渔夫任务取消冷却"
             NPCCoinDropRate.Label: "[i:73] 敌人钱币掉落倍率"
+            TravellingMerchantStay:
+            {
+                Label: "[i:2222] 旅商永远不离开"
+                Tooltip: "“旅商已死去!”\n开启后，除非死亡，否则旅商不会离开"
+            }
 
             GameMechanics.Header: "[i:1344] 游戏机制"
-            TreeGrowFaster:
-            {
-                Label: "[i:1182] 树木迅速生长"
-                Tooltip: 
-                    '''
-                    使树木生长速度变为原来的五倍
-                    不会影响自然生成的丛林树和发光蘑菇树
-                    '''
-            }
-            ShakeTreeFruit:
-            {
-                Label: "[i:4009] 摇树总是掉落水果"
-                Tooltip:
-                    '''
-                    大大提升掉落水果的概率 (其他物品掉落概率不会因此受到影响)
-                    如果还是什么都不掉，请确保该树有树冠，而且还未被摇过
-                    '''
-            }
             AlchemyGrassGrowsFaster:
             {
                 Label: "[i:313] 草药迅速生长"
@@ -201,6 +188,46 @@
             RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
+            
+            TreeConfigs.Header: "[i:27] 树木设置"
+            TreeGrowFaster:
+            {
+                Label: "[i:1182] 树木迅速生长"
+                Tooltip: 
+                    '''
+                    使树木生长速度变为原来的五倍
+                    不会影响自然生成的丛林树和发光蘑菇树
+                    '''
+            }
+            ShakeTreeFruit:
+            {
+                Label: "[i:4009] 摇树总是掉落水果"
+                Tooltip:
+                    '''
+                    大大提升掉落水果的概率 (其他物品掉落概率不会因此受到影响)
+                    如果还是什么都不掉，请确保该树有树冠，而且还未被摇过
+                    '''
+            }
+            GemTreeAlwaysDropGem:
+            {
+                Label: "[i:3649] 宝石树总是掉落宝石"
+                Tooltip: "使宝石树每个部分都会掉落宝石或宝石果"
+            }
+            MostTree:
+            {
+                LabelMin: "[i:9] 普遍树最小高度 (默认: 7)"
+                LabelMax: "[i:9] 普遍树最大高度 (默认: 12)"
+            }
+            PalmTree:
+            {
+                LabelMin: "[i:2504] 棕榈树最小高度 (默认: 10)"
+                LabelMax: "[i:2504] 棕榈树最大高度 (默认: 20)"
+            }
+            GemTree:
+            {
+                LabelMin: "[i:4856] 宝石树最小高度 (默认: 7)"
+                LabelMax: "[i:4856] 宝石树最大高度 (默认: 12)"
+            }
             
             ModSettings.Header: "[i:ImproveGame/CreateWand] 服务器设置"
             OnlyHost:

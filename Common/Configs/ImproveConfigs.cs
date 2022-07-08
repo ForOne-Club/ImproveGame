@@ -157,17 +157,12 @@ namespace ImproveGame.Common.Configs
         [Slider]
         public int NPCCoinDropRate;
 
-        [Header("$Mods.ImproveGame.Config.GameMechanics.Header")]
-
-        [Label("$Mods.ImproveGame.Config.TreeGrowFaster.Label")]
-        [Tooltip("$Mods.ImproveGame.Config.TreeGrowFaster.Tooltip")]
-        [DefaultValue(true)]
-        public bool TreeGrowFaster;
-
-        [Label("$Mods.ImproveGame.Config.ShakeTreeFruit.Label")]
-        [Tooltip("$Mods.ImproveGame.Config.ShakeTreeFruit.Tooltip")]
+        [Label("$Mods.ImproveGame.Config.TravellingMerchantStay.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.TravellingMerchantStay.Tooltip")]
         [DefaultValue(false)]
-        public bool ShakeTreeFruit;
+        public bool TravellingMerchantStay;
+
+        [Header("$Mods.ImproveGame.Config.GameMechanics.Header")]
 
         [Label("$Mods.ImproveGame.Config.AlchemyGrassGrowsFaster.Label")]
         [Tooltip("$Mods.ImproveGame.Config.AlchemyGrassGrowsFaster.Tooltip")]
@@ -200,6 +195,53 @@ namespace ImproveGame.Common.Configs
         [ReloadRequired]
         public int ExtraPlayerBuffSlots;
 
+        [Header("$Mods.ImproveGame.Config.TreeConfigs.Header")]
+
+        [Label("$Mods.ImproveGame.Config.TreeGrowFaster.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.TreeGrowFaster.Tooltip")]
+        [DefaultValue(true)]
+        public bool TreeGrowFaster;
+
+        [Label("$Mods.ImproveGame.Config.ShakeTreeFruit.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.ShakeTreeFruit.Tooltip")]
+        [DefaultValue(false)]
+        public bool ShakeTreeFruit;
+
+        [Label("$Mods.ImproveGame.Config.GemTreeAlwaysDropGem.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.GemTreeAlwaysDropGem.Tooltip")]
+        [DefaultValue(false)]
+        public bool GemTreeAlwaysDropGem;
+
+        [Range(1, 100)]
+        [DefaultValue(5)]
+        [Label("$Mods.ImproveGame.Config.MostTree.LabelMin")]
+        public int MostTreeMin;
+
+        [Range(1, 100)]
+        [DefaultValue(16)]
+        [Label("$Mods.ImproveGame.Config.MostTree.LabelMax")]
+        public int MostTreeMax;
+
+        [Range(1, 100)]
+        [DefaultValue(10)]
+        [Label("$Mods.ImproveGame.Config.PalmTree.LabelMin")]
+        public int PalmTreeMin;
+
+        [Range(1, 100)]
+        [DefaultValue(20)]
+        [Label("$Mods.ImproveGame.Config.PalmTree.LabelMax")]
+        public int PalmTreeMax;
+
+        [Range(1, 100)]
+        [DefaultValue(7)]
+        [Label("$Mods.ImproveGame.Config.GemTree.LabelMin")]
+        public int GemTreeMin;
+
+        [Range(1, 100)]
+        [DefaultValue(12)]
+        [Label("$Mods.ImproveGame.Config.GemTree.LabelMax")]
+        public int GemTreeMax;
+
         [Header("$Mods.ImproveGame.Config.ModSettings.Header")]
 
         [Label("$Mods.ImproveGame.Config.OnlyHost.Label")]
@@ -218,6 +260,19 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(200)]
         [Range(1, 200)]
         public int SpawnRateMaxValue;
+
+        public override void OnChanged() {
+            if (MostTreeMin > MostTreeMax) {
+                MostTreeMin = MostTreeMax;
+            }
+            if (GemTreeMin > GemTreeMax) {
+                GemTreeMin = GemTreeMax;
+            }
+            if (PalmTreeMin > PalmTreeMax) {
+                PalmTreeMin = PalmTreeMax;
+            }
+            HigherTreeSystem.SetTreeHeights(GemTreeMin, GemTreeMax, MostTreeMin, MostTreeMax);
+        }
 
         public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message) {
             if (OnlyHostByPassword) {
