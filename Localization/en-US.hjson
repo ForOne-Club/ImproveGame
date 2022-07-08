@@ -224,13 +224,14 @@ Mods:
             }
             SpawnRateMaxValue:
             {
-                Label: "[i:2649] 敌人生成速度倍率最大值"
+                Label: "[i:2649] Max Enemy Spawn Rate Multiplier"
                 Tooltip:
                     '''
-                    玩家可通过敌人生成速度面板调节的最大生成倍率限制
-                    注意: 此面板只有同时拥有[向日葵][和平蜡烛][镇静药水][水蜡烛][战争药水]
-                    的增益无限物品组合才会出现
-                    服务器内如果你不想让玩家调节过高生成倍率，可以通过此选项限制
+                    Allows players to adjust the maximum spawn rate of enemies
+                    Notification:
+                    This panel only appears when you have the infinite buff stations/potions combination of
+                    [Sun Flower][Peace Candle][Calm Potion][Water Candle] and [Battle Potion]
+                    If you don't want players in a server to raise the enemy spawn rate too high, you may use this function
                     '''
             }
         }
@@ -242,7 +243,7 @@ Mods:
             CreateWand: Wand of Architecture
             WallPlace: Wand of Technology
             LiquidWand: Wand of Liquids
-            PotionBag: 药水袋
+            PotionBag: Potion Bag
         }
         ItemTooltip:
         {
@@ -306,10 +307,10 @@ Mods:
                 '''
             PotionBag:
                 '''
-                存储你的增益药水
-                手持药水<left>该物品以将药水存入
-                在物品栏中<right>该物品以取出药水
-                最多可存入20组药水
+                Stores you buff potions
+                <left> the Potion Bag while holding a potion to deposit
+                <right> the Potion Bag while holding it to take out potions
+                Maximum stores 20 stacks of potions
                 '''
         }
         CombatText_Item:
@@ -362,12 +363,12 @@ Mods:
             CreateWandOff: "Middle click to close house material panel"
             LiquidWandOn: "Middle click to open liquid control panel"
             LiquidWandOff: "Middle click to close liquid control panel"
-            PotionBagCurrent: "该药水袋内目前拥有下列药水({StoredCount}/20):"
-            PotionBagCurrentFull: "该药水袋内目前拥有下列药水(已满!):"
-            PotionBagNone: "该药水袋未装有药水"
-            PotionBagAvailable: "(生效中)"     # 药水袋中药水数量 >= 30
-            PotionBagUnavailable: "(未生效)"   # 药水袋中药水数量 < 30
-            PotionBagDisabled: "(被禁用)"
+            PotionBagCurrent: "Contains the following potions({StoredCount}/20):"
+            PotionBagCurrentFull: "Contains the following potions(Full!):"
+            PotionBagNone: "Empty"
+            PotionBagAvailable: "(Active)"     # 药水袋中药水数量 >= 30
+            PotionBagUnavailable: "(Inactive)"   # 药水袋中药水数量 < 30
+            PotionBagDisabled: "(Disabled)"
         }
         SuperVault:
         {
