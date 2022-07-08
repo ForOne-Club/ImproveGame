@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Content.Items;
 
 namespace ImproveGame.Common.Players
 {
@@ -17,17 +18,29 @@ namespace ImproveGame.Common.Players
 
             var items = MyUtils.GetAllInventoryItemsList(Player, false);
             foreach (var item in items) {
-                int buffType = ApplyBuffItem.GetItemBuffType(item);
-                if (buffType is not -1 && CheckInfBuffEnable(buffType)) {
-                    // 饱食三级Buff不应该覆盖，而是取最高级
-                    bool wellFed3Enabled = Player.FindBuffIndex(BuffID.WellFed3) != -1;
-                    if (buffType == BuffID.WellFed && (Player.FindBuffIndex(BuffID.WellFed2) != -1 || wellFed3Enabled))
-                        continue;
-                    if (buffType == BuffID.WellFed2 && wellFed3Enabled)
-                        continue;
-
-                    Player.AddBuff(buffType, 2);
+                HandleBuffItem(item);
+                if (!item.IsAir && item.type == ModContent.ItemType<PotionBag>() &&
+                    item.ModItem is not null && item.ModItem is PotionBag &&
+                    (item.ModItem as PotionBag).storedPotions.Count > 0) {
+                    var potionBag = item.ModItem as PotionBag;
+                    foreach (var p in potionBag.storedPotions) {
+                        HandleBuffItem(p);
+                    }
                 }
+            }
+        }
+
+        public void HandleBuffItem(Item item) {
+            int buffType = ApplyBuffItem.GetItemBuffType(item);
+            if (buffType is not -1 && CheckInfBuffEnable(buffType)) {
+                // 饱食三级Buff不应该覆盖，而是取最高级
+                bool wellFed3Enabled = Player.FindBuffIndex(BuffID.WellFed3) != -1;
+                if (buffType == BuffID.WellFed && (Player.FindBuffIndex(BuffID.WellFed2) != -1 || wellFed3Enabled))
+                    return;
+                if (buffType == BuffID.WellFed2 && wellFed3Enabled)
+                    return;
+
+                Player.AddBuff(buffType, 2);
             }
         }
 

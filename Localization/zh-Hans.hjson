@@ -255,6 +255,7 @@
             WallPlace: 科技魔杖
             CreateWand: 建造魔杖
             LiquidWand: 液体魔杖
+            PotionBag: 药水袋
         }
         ItemTooltip:
         {
@@ -365,6 +366,10 @@
             CreateWandOff: "中键单击以关闭房屋材料面板"
             LiquidWandOn: "中键单击以开启液体控制面板"
             LiquidWandOff: "中键单击以关闭液体控制面板"
+            PotionBagCurrent: "该药水袋内目前拥有下列药水:"
+            PotionBagNone: "该药水袋未装有药水"
+            PotionBagAvailable: "(生效中)"
+            PotionBagUnavailable: "(未生效)"
         }
         SuperVault:
         {

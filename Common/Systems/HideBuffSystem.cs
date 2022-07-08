@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.GlobalBuffs;
 using ImproveGame.Common.GlobalItems;
+using ImproveGame.Content.Items;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ImproveGame.Common.Systems
@@ -35,6 +36,14 @@ namespace ImproveGame.Common.Systems
             var items = MyUtils.GetAllInventoryItemsList(Main.LocalPlayer, false);
             foreach (var item in items) {
                 ApplyBuffItem.UpdateInventoryGlow(item);
+                if (!item.IsAir && item.type == ModContent.ItemType<PotionBag>() &&
+                    item.ModItem is not null && item.ModItem is PotionBag &&
+                    (item.ModItem as PotionBag).storedPotions.Count > 0) {
+                    var potionBag = item.ModItem as PotionBag;
+                    foreach (var p in potionBag.storedPotions) {
+                        BuffTypesShouldHide[p.buffType] = true;
+                    }
+                }
             }
         }
     }

@@ -242,6 +242,7 @@ Mods:
             CreateWand: Wand of Architecture
             WallPlace: Wand of Technology
             LiquidWand: Wand of Liquids
+            PotionBag: 药水袋
         }
         ItemTooltip:
         {
@@ -354,6 +355,10 @@ Mods:
             CreateWandOff: "Middle click to close house material panel"
             LiquidWandOn: "Middle click to open liquid control panel"
             LiquidWandOff: "Middle click to close liquid control panel"
+            PotionBagCurrent: "该药水袋内目前拥有下列药水:"
+            PotionBagNone: "该药水袋未装有药水"
+            PotionBagAvailable: "(生效中)"     # 药水袋中药水数量 >= 30
+            PotionBagUnavailable: "(未生效)"   # 药水袋中药水数量 < 30
         }
         SuperVault:
         {
