@@ -84,8 +84,7 @@ namespace ImproveGame.Content.Items
                     string text = $"[i:{potion.type}] [{Lang.GetItemNameValue(potion.type)}] x{potion.stack}";
                     // 有30个
                     if (available) {
-                        bool buffEnabled = InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(potion.buffType);
-                        if (!buffEnabled) { // 被禁用了
+                        if (!MyUtils.Config.NoConsume_Potion || !InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(potion.buffType)) { // 被禁用了
                             text += $"  {MyUtils.GetText("Tips.PotionBagDisabled")}";
                         }
                         else {
