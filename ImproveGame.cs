@@ -2,6 +2,7 @@ global using ImproveGame.Common.Utils;
 global using ImproveGame.Common.Utils.NetHelpers;
 global using Microsoft.Xna.Framework;
 global using System;
+global using System.Linq;
 global using Terraria;
 global using Terraria.Audio;
 global using Terraria.ID;

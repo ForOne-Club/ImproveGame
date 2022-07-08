@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Common.Players;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items
 {
-    public class PotionBag : ModItem
+    public class PotionBag : ModItem, IItemOverrideLeftClick
     {
         [CloneByReference]
         public List<Item> storedPotions = new();
@@ -18,60 +22,83 @@ namespace ImproveGame.Content.Items
 
         public override bool ConsumeItem(Player player) => false;
 
-        public override void Load() {
-            On.Terraria.UI.ItemSlot.OverrideLeftClick += TryPutInPotions;
-        }
+        /// <summary>
+        /// 只有在这些地方才可以放药水进去
+        /// </summary>
+        private static readonly List<int> availableContexts = new() {
+            ItemSlot.Context.InventoryItem,
+            ItemSlot.Context.ChestItem,
+            114514
+        };
 
-        private bool TryPutInPotions(On.Terraria.UI.ItemSlot.orig_OverrideLeftClick orig, Item[] inv, int context, int slot) {
-            var item = inv[slot];
+        public bool OverrideLeftClick(Item[] inventory, int context, int slot) {
             // 很多的条件
-            if (item.IsAir || item.type != ModContent.ItemType<PotionBag>() ||
-                ItemSlot.ShiftInUse || ItemSlot.ControlInUse || context != ItemSlot.Context.InventoryItem ||
-                Main.mouseItem.IsAir || !Main.mouseItem.consumable || Main.mouseItem.buffType <= 0 ||
-                item.ModItem is null || item.ModItem is not PotionBag || !Main.mouseLeft || !Main.mouseLeftRelease) {
-                return orig.Invoke(inv, context, slot);
+            if (ItemSlot.ShiftInUse || ItemSlot.ControlInUse || !availableContexts.Contains(context) ||
+                Main.mouseItem.IsAir || !Main.mouseItem.consumable || Main.mouseItem.buffType <= 0) {
+                return false;
             }
-            var potionBag = item.ModItem as PotionBag;
-            for (int i = 0; i < potionBag.storedPotions.Count; i++) {
-                if (potionBag.storedPotions[i].IsAir) {
-                    potionBag.storedPotions.RemoveAt(i);
+            for (int i = 0; i < storedPotions.Count; i++) {
+                if (storedPotions[i].IsAir) {
+                    storedPotions.RemoveAt(i);
                     i--;
                     continue;
                 }
-                if (potionBag.storedPotions[i].type == Main.mouseItem.type && potionBag.storedPotions[i].stack < potionBag.storedPotions[i].maxStack && ItemLoader.CanStack(potionBag.storedPotions[i], Main.mouseItem)) {
-                    int stackAvailable = potionBag.storedPotions[i].maxStack - potionBag.storedPotions[i].stack;
+                if (storedPotions[i].type == Main.mouseItem.type && storedPotions[i].stack < storedPotions[i].maxStack && ItemLoader.CanStack(storedPotions[i], Main.mouseItem)) {
+                    int stackAvailable = storedPotions[i].maxStack - storedPotions[i].stack;
                     int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);
                     Main.mouseItem.stack -= stackAddition;
-                    potionBag.storedPotions[i].stack += stackAddition;
+                    storedPotions[i].stack += stackAddition;
                     SoundEngine.PlaySound(SoundID.Grab);
                     Recipe.FindRecipes();
                     if (Main.mouseItem.stack <= 0)
                         Main.mouseItem.TurnToAir();
                 }
             }
-            if (!Main.mouseItem.IsAir) {
-                potionBag.storedPotions.Add(Main.mouseItem.Clone());
+            if (!Main.mouseItem.IsAir && storedPotions.Count < 20) {
+                storedPotions.Add(Main.mouseItem.Clone());
                 Main.mouseItem.TurnToAir();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
-                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inv[slot].prefix);
+            if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient) {
+                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
             }
             return true;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips) {
             if (storedPotions is not null && storedPotions.Count > 0) {
-                tooltips.Add(new(Mod, "PotionBagCurrent", MyUtils.GetText("Tips.PotionBagCurrent")) {
-                    OverrideColor = Color.LightGreen
-                });
+                if (storedPotions.Count >= 20) {
+                    tooltips.Add(new(Mod, "PotionBagCurrent", MyUtils.GetText("Tips.PotionBagCurrentFull")) {
+                        OverrideColor = Color.LightGreen
+                    });
+                }
+                else {
+                    tooltips.Add(new(Mod, "PotionBagCurrent", MyUtils.GetTextWith("Tips.PotionBagCurrent", new { StoredCount = storedPotions.Count })) {
+                        OverrideColor = Color.LightGreen
+                    });
+                }
                 for (int i = 0; i < storedPotions.Count; i++) {
                     var potion = storedPotions[i];
+                    var color = Color.SkyBlue;
                     bool available = potion.stack >= 30;
                     string text = $"[i:{potion.type}] [{Lang.GetItemNameValue(potion.type)}] x{potion.stack}";
-                    text += $"  {MyUtils.GetText($"Tips.PotionBag{(available ? "Available" : "Unavailable")}")}";
+                    // 有30个
+                    if (available) {
+                        bool buffEnabled = InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(potion.buffType);
+                        if (!buffEnabled) { // 被禁用了
+                            text += $"  {MyUtils.GetText("Tips.PotionBagDisabled")}";
+                        }
+                        else {
+                            text += $"  {MyUtils.GetText("Tips.PotionBagAvailable")}";
+                            color = Color.LightGreen;
+                        }
+                    }
+                    // 没有30个
+                    else {
+                        text += $"  {MyUtils.GetText("Tips.PotionBagUnavailable")}";
+                    }
                     tooltips.Add(new(Mod, $"PotionBagP{i}", text) {
-                        OverrideColor = available ? Color.LightGreen : Color.SkyBlue
+                        OverrideColor = color
                     });
                 }
             }

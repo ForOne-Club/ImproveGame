@@ -304,6 +304,13 @@ Mods:
                 Hold Bucket(s) with liquid inside and long-press a liquid slot to store the liquid into the slot
                 Hold an Absorbant Sponge and long-press the corresponding liquid slot to absorb the liquid inside
                 '''
+            PotionBag:
+                '''
+                存储你的增益药水
+                手持药水<left>该物品以将药水存入
+                在物品栏中<right>该物品以取出药水
+                最多可存入20组药水
+                '''
         }
         CombatText_Item:
         {
@@ -355,10 +362,12 @@ Mods:
             CreateWandOff: "Middle click to close house material panel"
             LiquidWandOn: "Middle click to open liquid control panel"
             LiquidWandOff: "Middle click to close liquid control panel"
-            PotionBagCurrent: "该药水袋内目前拥有下列药水:"
+            PotionBagCurrent: "该药水袋内目前拥有下列药水({StoredCount}/20):"
+            PotionBagCurrentFull: "该药水袋内目前拥有下列药水(已满!):"
             PotionBagNone: "该药水袋未装有药水"
             PotionBagAvailable: "(生效中)"     # 药水袋中药水数量 >= 30
             PotionBagUnavailable: "(未生效)"   # 药水袋中药水数量 < 30
+            PotionBagDisabled: "(被禁用)"
         }
         SuperVault:
         {
