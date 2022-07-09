@@ -434,10 +434,11 @@ Mods:
                 {
                     Battle:
                         '''
-                        [镇静药水][向日葵][和平蜡烛][水蜡烛][战争药水]
+                        [c/88CCEE:增益组合: ][i:CalmingPotion][i:Sunflower][i:PeaceCandle][i:WaterCandle][i:BattlePotion]
                         当你同时拥有以上无限增益物品时
-                        在增益追踪器右侧会显示一个生物生成速度滑块
-                        允许你将生物生成速度调至 x0-x{MaxSpawn}
+                        在增益追踪器右侧会显示一个生物生成
+                        速度滑块，允许你将生物生成速度调至
+                        x0-x{MaxSpawn}
                         '''
                 }
             }
