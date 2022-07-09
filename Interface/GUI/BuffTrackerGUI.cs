@@ -1,12 +1,9 @@
-﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
-using Terraria.UI;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -30,6 +27,7 @@ namespace ImproveGame.Interface.GUI
         private UIText title;
         private UIText pageText;
         private Asset<Texture2D> BuffHoverBorder;
+        internal BuffTrackerBattler BuffTrackerBattler;
 
         public override void OnInitialize() {
             panelLeft = 630f;
@@ -107,6 +105,12 @@ namespace ImproveGame.Interface.GUI
                 Color = Color.Lerp(Color.White, new Color(63, 65, 151, 255), 0.85f) * 0.9f
             };
             basePanel.Append(separator);
+
+            BuffTrackerBattler = new();
+            BuffTrackerBattler.Initialize();
+            BuffTrackerBattler.MainPanel.Left = new StyleDimension(16f, 1f);
+            BuffTrackerBattler.MainPanel.Top = StyleDimension.FromPixels(0f);
+            basePanel.Append(BuffTrackerBattler.MainPanel);
         }
 
         private void TryForwardPage(UIMouseEvent evt, UIElement listeningElement) {
@@ -157,6 +161,7 @@ namespace ImproveGame.Interface.GUI
             }
 
             base.Update(gameTime);
+            BuffTrackerBattler.Update();
 
             if (Dragging) {
                 basePanel.Left.Set(Main.mouseX - Offset.X, 0f);

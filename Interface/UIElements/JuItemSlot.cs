@@ -1,5 +1,7 @@
 ﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Players;
+using ImproveGame.Content.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -52,6 +54,30 @@ namespace ImproveGame.Interface.UIElements
         public override void RightMouseDown(UIMouseEvent evt) {
             RightMouseTimer = 0;
             TakeSlotItemToMouseItem();
+
+            if (ItemID.Sets.BossBag[Item.type] || ItemLoader.IsModBossBag(Item) || ItemID.Sets.IsFishingCrate[Item.type]) {
+                if (ItemID.Sets.BossBag[Item.type] || ItemLoader.IsModBossBag(Item))
+                    Main.LocalPlayer.OpenBossBag(Item.type);
+                if (ItemID.Sets.IsFishingCrate[Item.type])
+                    Main.LocalPlayer.OpenFishingCrate(Item.type);
+                if (ItemLoader.ConsumeItem(Item, Main.LocalPlayer))
+                    Item.stack--;
+
+                if (Item.stack == 0)
+                    Item.SetDefaults();
+
+                SoundEngine.PlaySound(SoundID.Grab);
+                Main.stackSplit = 30;
+                Main.mouseRightRelease = false;
+                Recipe.FindRecipes();
+                return;
+            }
+            if (ItemLoader.CanRightClick(Item)) {
+                Main.mouseRightRelease = true;
+                ItemLoader.RightClick(Item, Main.LocalPlayer);
+                Main.mouseRightRelease = false;
+                return;
+            }
         }
 
         public override void Update(GameTime gameTime) {
@@ -147,6 +173,12 @@ namespace ImproveGame.Interface.UIElements
         /// </summary>
         private void MouseClickSlot() {
             if (Main.LocalPlayer.ItemAnimationActive)
+                return;
+
+            bool result = false;
+            if (Item.ModItem is IItemOverrideLeftClick)
+                result |= (Item.ModItem as IItemOverrideLeftClick).OverrideLeftClick(ItemList.items, 114514, index);
+            if (result)
                 return;
 
             // 放大镜图标 - 输入到聊天框

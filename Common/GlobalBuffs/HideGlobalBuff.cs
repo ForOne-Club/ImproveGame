@@ -137,7 +137,8 @@ namespace ImproveGame.Common.GlobalBuffs
                 #endregion
 
             }
-            catch {
+            catch (Exception e) {
+                ImproveGame.Instance.Logger.Error(e.Message);
                 ErrorHappenedInventory();
                 return;
             }
@@ -225,7 +226,8 @@ namespace ImproveGame.Common.GlobalBuffs
                 }
                 c.EmitDelegate<Func<int, int>>((i) => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i]));
             }
-            catch {
+            catch (Exception e) {
+                ImproveGame.Instance.Logger.Error(e.Message);
                 ErrorHappenedInterface();
                 return;
             }

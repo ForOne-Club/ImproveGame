@@ -1,0 +1,23 @@
+﻿using ImproveGame.Common.Players;
+
+namespace ImproveGame.Common.GlobalNPCs
+{
+    public class BattlerSpawnTweakNPC : GlobalNPC
+    {
+        public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns) {
+            if (!player.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer)) {
+                return;
+            }
+
+            if (battlerPlayer.GetShouldDisableSpawns) {
+                maxSpawns = 0;
+                spawnRate = 114514;
+                return;
+            }
+
+            float rate = BattlerPlayer.RemapSliderValueToPowerValue(battlerPlayer.SpawnRateSliderValue);
+            spawnRate = (int)((float)spawnRate / rate);
+            maxSpawns = (int)((float)maxSpawns * rate);
+        }
+    }
+}

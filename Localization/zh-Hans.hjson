@@ -155,34 +155,21 @@
             BanTombstone.Label: "[i:3230] 禁止生成墓碑"
 
             NPCConfigs.Header: "[i:4382] NPC 设置"
-            TownNPCSpawnInNight:
+            TownNPCSpawnInNight.Label: "[i:4081] 允许城镇NPC夜晚刷新"
+            TownNPCSpawnSpeed
             {
-                Label: "[i:4081] 允许城镇NPC夜晚刷新"
+                Label: "[i:4910] 城镇NPC刷新速度"
                 Tooltip: "设为 -1 将禁用此项修改"
             }
-            TownNPCSpawnSpeed.Label: "[i:4910] 城镇NPC刷新速度"
             NoCD_FishermanQuest.Label: "[i:4608] 渔夫任务取消冷却"
             NPCCoinDropRate.Label: "[i:73] 敌人钱币掉落倍率"
+            TravellingMerchantStay:
+            {
+                Label: "[i:2222] 旅商永远不离开"
+                Tooltip: "“旅商已死去!”\n开启后，除非死亡，否则旅商不会离开"
+            }
 
             GameMechanics.Header: "[i:1344] 游戏机制"
-            TreeGrowFaster:
-            {
-                Label: "[i:1182] 树木迅速生长"
-                Tooltip: 
-                    '''
-                    使树木生长速度变为原来的五倍
-                    不会影响自然生成的丛林树和发光蘑菇树
-                    '''
-            }
-            ShakeTreeFruit:
-            {
-                Label: "[i:4009] 摇树总是掉落水果"
-                Tooltip:
-                    '''
-                    大大提升掉落水果的概率 (其他物品掉落概率不会因此受到影响)
-                    如果还是什么都不掉，请确保该树有树冠，而且还未被摇过
-                    '''
-            }
             AlchemyGrassGrowsFaster:
             {
                 Label: "[i:313] 草药迅速生长"
@@ -202,7 +189,47 @@
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
             
-            ModSettings.Header: "[i:ImproveGame/CreateWand] 模组设置"
+            TreeConfigs.Header: "[i:27] 树木设置"
+            TreeGrowFaster:
+            {
+                Label: "[i:1182] 树木迅速生长"
+                Tooltip: 
+                    '''
+                    使树木生长速度变为原来的五倍
+                    不会影响自然生成的丛林树和发光蘑菇树
+                    '''
+            }
+            ShakeTreeFruit:
+            {
+                Label: "[i:4009] 摇树总是掉落水果"
+                Tooltip:
+                    '''
+                    大大提升掉落水果的概率 (其他物品掉落概率不会因此受到影响)
+                    如果还是什么都不掉，请确保该树有树冠，而且还未被摇过
+                    '''
+            }
+            GemTreeAlwaysDropGem:
+            {
+                Label: "[i:3649] 宝石树总是掉落宝石"
+                Tooltip: "使宝石树每个部分都会掉落宝石或宝石果"
+            }
+            MostTree:
+            {
+                LabelMin: "[i:9] 普遍树最小高度 (默认: 7)"
+                LabelMax: "[i:9] 普遍树最大高度 (默认: 12)"
+            }
+            PalmTree:
+            {
+                LabelMin: "[i:2504] 棕榈树最小高度 (默认: 10)"
+                LabelMax: "[i:2504] 棕榈树最大高度 (默认: 20)"
+            }
+            GemTree:
+            {
+                LabelMin: "[i:4856] 宝石树最小高度 (默认: 7)"
+                LabelMax: "[i:4856] 宝石树最大高度 (默认: 12)"
+            }
+            
+            ModSettings.Header: "[i:ImproveGame/CreateWand] 服务器设置"
             OnlyHost:
             {
                 Label: "[i:2203] 仅主机可调节配置 (端口映射无效)"
@@ -235,6 +262,17 @@
                 ServerPasswordLog: "模组配置认证密码: {Password}"
                 CommandDescription: "用于验证客户端身份，请求获得配置修改权限"
             }
+            SpawnRateMaxValue:
+            {
+                Label: "[i:2649] 敌人生成速度倍率最大值"
+                Tooltip:
+                    '''
+                    玩家可通过敌人生成速度面板调节的最大生成倍率限制
+                    注意: 此面板只有同时拥有[向日葵][和平蜡烛][镇静药水][水蜡烛][战争药水]
+                    的增益无限物品组合才会出现
+                    服务器内如果你不想让玩家调节过高生成倍率，可以通过此选项限制
+                    '''
+            }
         }
         ItemName:
         {
@@ -244,6 +282,7 @@
             WallPlace: 科技魔杖
             CreateWand: 建造魔杖
             LiquidWand: 液体魔杖
+            PotionBag: 药水袋
         }
         ItemTooltip:
         {
@@ -305,6 +344,13 @@
                 手持液体桶长按对应液体槽，可将其内液体存入魔杖
                 手持液体吸收棉长按对应液体槽，可吸收其内液体
                 '''
+            PotionBag:
+                '''
+                存储你的增益药水
+                手持药水<left>该物品以将药水存入
+                在物品栏中<right>该物品以取出药水
+                最多可存入20组药水
+                '''
         }
         CombatText_Item:
         {
@@ -354,6 +400,12 @@
             CreateWandOff: "中键单击以关闭房屋材料面板"
             LiquidWandOn: "中键单击以开启液体控制面板"
             LiquidWandOff: "中键单击以关闭液体控制面板"
+            PotionBagCurrent: "该药水袋内目前拥有下列药水({StoredCount}/20):"
+            PotionBagCurrentFull: "该药水袋内目前拥有下列药水(已满!):"
+            PotionBagNone: "该药水袋未装有药水"
+            PotionBagAvailable: "(生效中)"
+            PotionBagUnavailable: "(未生效)"
+            PotionBagDisabled: "(被禁用)"
         }
         SuperVault:
         {
@@ -377,6 +429,7 @@
             LeftClickEnable: "\n<left>以启用该无限增益"
             NoInfBuff: "当前没有可用的无限增益"
             NoInfBuffAlt: "请在模组配置中打开无限续杯功能"
+            NPCSpawnRatePanel: "敌人生成速度面板"
         }
         Architecture:
         {

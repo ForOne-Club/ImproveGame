@@ -13,6 +13,19 @@ namespace ImproveGame.Common.ModHooks
         // 等我的PR: https://github.com/tModLoader/tModLoader/pull/2620 被接受就可以改掉了
         public override void Load() {
             On.Terraria.UI.ItemSlot.OverrideHover_ItemArray_int_int += ApplyHover;
+            On.Terraria.UI.ItemSlot.OverrideLeftClick += ApplyLeftClick;
+        }
+
+        private bool ApplyLeftClick(On.Terraria.UI.ItemSlot.orig_OverrideLeftClick orig, Item[] inv, int context, int slot) {
+            if (Main.mouseLeft && Main.mouseLeftRelease) {
+                bool result = false;
+                if (inv[slot].ModItem is IItemOverrideLeftClick)
+                    result |= (inv[slot].ModItem as IItemOverrideLeftClick).OverrideLeftClick(inv, context, slot);
+                if (!result)
+                    return orig.Invoke(inv, context, slot);
+                return true;
+            }
+            return orig.Invoke(inv, context, slot);
         }
 
         // 为了确保只有在物品栏才能用

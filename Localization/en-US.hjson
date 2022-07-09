@@ -142,34 +142,21 @@ Mods:
             BanTombstone.Label: "[i:3230] Disable tombstone spawn"
 
             NPCConfigs.Header: "[i:4382] NPC Configs"
-            TownNPCSpawnInNight:
+            TownNPCSpawnInNight.Label: "[i:4081] Allow town NPCs to spawn at night time"
+            TownNPCSpawnSpeed:
             {
-                Label: "[i:4081] Allow town NPCs to spawn at night time"
+                Label: "[i:4910] Town NPC spawn rate multiplier"
                 Tooltip: "Disable this modification by setting the value to -1"
             }
-            TownNPCSpawnSpeed.Label: "[i:4910] Town NPC spawn rate multiplier"
             NoCD_FishermanQuest.Label: "[i:4608] Instant refresh Angler's quests"
             NPCCoinDropRate.Label: "[i:73] Enemy money drop multiplier"
+            TravellingMerchantStay:
+            {
+                Label: "[i:2222] 旅商永远不离开"
+                Tooltip: "开启后，除非死亡，否则旅商不会离开"
+            }
 
             GameMechanics.Header: "[i:1344] Game Mechanics"
-            TreeGrowFaster:
-            {
-                Label: "[i:1182] Trees grow rapidly"
-                Tooltip: 
-                    '''
-                    Growing speed of trees * 500%
-                    Will not affect naturally generated Jungle Trees or Giant Glowing Mushrooms
-                    '''
-            }
-            ShakeTreeFruit:
-            {
-                Label: "[i:4009] Shaking trees always drops fruit"
-                Tooltip:
-                    '''
-                    Greatly increases drop rate of fruit (Drop rates of other items are not affected)
-                    If it seems doing nothing, please check Terraria Wiki for the conditions
-                    '''
-            }
             AlchemyGrassGrowsFaster:
             {
                     Label: "[i:313] Accelerate herb growth"
@@ -189,7 +176,47 @@ Mods:
             BanDamageVar.Label: "[i:6] Disable damage spread"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
             
-            ModSettings.Header: "[i:ImproveGame/CreateWand] Mod Config"
+            TreeConfigs.Header: "[i:27] Tree Config"
+            TreeGrowFaster:
+            {
+                Label: "[i:1182] Trees grow rapidly"
+                Tooltip: 
+                    '''
+                    Growing speed of trees * 500%
+                    Will not affect naturally generated Jungle Trees or Giant Glowing Mushrooms
+                    '''
+            }
+            ShakeTreeFruit:
+            {
+                Label: "[i:4009] Shaking trees always drops fruit"
+                Tooltip:
+                    '''
+                    Greatly increases drop rate of fruit (Drop rates of other items are not affected)
+                    If it seems doing nothing, please check Terraria Wiki for the conditions
+                    '''
+            }
+            GemTreeAlwaysDropGem:
+            {
+                Label: "[i:3649] 宝石树总是掉落宝石"
+                Tooltip: "使宝石树每个部分都会掉落宝石或宝石果"
+            }
+            MostTree:
+            {
+                LabelMin: "[i:9] Minimum Regular Tree Height (Default: 7)"
+                LabelMax: "[i:9] Maximum Regular Tree Height (Default: 12)"
+            }
+            PalmTree:
+            {
+                LabelMin: "[i:2504] Minimum Palm Tree Height (Default: 10)"
+                LabelMax: "[i:2504] Maximum Palm Tree Height (Default: 20)"
+            }
+            GemTree:
+            {
+                LabelMin: "[i:4856] Minimum Gem Tree Height (Default: 7)"
+                LabelMax: "[i:4856] Maximum Gem Tree Height (Default: 12)"
+            }
+
+            ModSettings.Header: "[i:ImproveGame/CreateWand] Server Config"
             OnlyHost:
             {
                     Label: "[i:2203] Only the host can change the mod configs(does not work with port forwarding)"
@@ -222,6 +249,18 @@ Mods:
                 ServerPasswordLog: "Password for ModConfig verification: {Password}"
                 CommandDescription: "To verify the client, asking permission to change the mod configs"
             }
+            SpawnRateMaxValue:
+            {
+                Label: "[i:2649] Max Enemy Spawn Rate Multiplier"
+                Tooltip:
+                    '''
+                    Allows players to adjust the maximum spawn rate of enemies
+                    Notification:
+                    This panel only appears when you have the infinite buff stations/potions combination of
+                    [Sun Flower][Peace Candle][Calm Potion][Water Candle] and [Battle Potion]
+                    If you don't want players in a server to raise the enemy spawn rate too high, you may use this function
+                    '''
+            }
         }
         ItemName:
         {
@@ -231,6 +270,7 @@ Mods:
             CreateWand: Wand of Architecture
             WallPlace: Wand of Technology
             LiquidWand: Wand of Liquids
+            PotionBag: Potion Bag
         }
         ItemTooltip:
         {
@@ -292,6 +332,13 @@ Mods:
                 Hold Bucket(s) with liquid inside and long-press a liquid slot to store the liquid into the slot
                 Hold an Absorbant Sponge and long-press the corresponding liquid slot to absorb the liquid inside
                 '''
+            PotionBag:
+                '''
+                Stores you buff potions
+                <left> the Potion Bag while holding a potion to deposit
+                <right> the Potion Bag while holding it to take out potions
+                Maximum stores 20 stacks of potions
+                '''
         }
         CombatText_Item:
         {
@@ -343,6 +390,12 @@ Mods:
             CreateWandOff: "Middle click to close house material panel"
             LiquidWandOn: "Middle click to open liquid control panel"
             LiquidWandOff: "Middle click to close liquid control panel"
+            PotionBagCurrent: "Contains the following potions({StoredCount}/20):"
+            PotionBagCurrentFull: "Contains the following potions(Full!):"
+            PotionBagNone: "Empty"
+            PotionBagAvailable: "(Active)"     # 药水袋中药水数量 >= 30
+            PotionBagUnavailable: "(Inactive)"   # 药水袋中药水数量 < 30
+            PotionBagDisabled: "(Disabled)"
         }
         SuperVault:
         {
@@ -366,6 +419,7 @@ Mods:
             LeftClickEnable: "\n<left> to enable this buff"
             NoInfBuff: "Currently no infinite buff available"
             NoInfBuffAlt: "Enable the Infinite Potions in the mod config"
+            NPCSpawnRatePanel: "Enemy Spawn Rate Panel"
         }
         Architecture:
         {
