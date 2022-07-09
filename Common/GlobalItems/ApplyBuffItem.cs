@@ -2,6 +2,7 @@
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Terraria.Localization;
 
 namespace ImproveGame.Common.GlobalItems
@@ -117,36 +118,30 @@ namespace ImproveGame.Common.GlobalItems
                         UISystem.Instance.BuffTrackerGUI.Open();
                 }
 
-                bool buffEnabled = InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType);
-
-                if (!buffEnabled) {
-                    tooltips.Add(new(Mod, "BuffDisabled", MyUtils.GetTextWith("Tips.BuffDisabled", new { BuffName = Lang.GetBuffName(buffType) })) {
-                        OverrideColor = Color.SkyBlue
-                    });
-                    return;
-                }
-
-                if (!BuffTrackerGUI.Visible && buffEnabled) {
-                    tooltips.Add(new(Mod, "BuffEnabled", MyUtils.GetText("Tips.BuffEnabled")) {
-                        OverrideColor = Color.SkyBlue
-                    });
-                }
-
-                tooltips.Add(new(Mod, "BuffApplied", MyUtils.GetTextWith("Tips.BuffApplied", new { BuffName = Lang.GetBuffName(buffType) })) {
-                    OverrideColor = Color.LightGreen
-                });
-
-                if (MyUtils.Config.HideNoConsumeBuffs) {
-                    tooltips.Add(new(Mod, "BuffHided", MyUtils.GetText("Tips.BuffHided")) {
-                        OverrideColor = Color.LightGreen
-                    });
-                }
-                else {
-                    tooltips.Add(new(Mod, "BuffHided", MyUtils.GetText("Tips.BuffVisible")) {
-                        OverrideColor = Color.LightGreen
-                    });
-                }
+                TagItem.ModifyBuffTooltips(Mod, item.type, buffType, tooltips);
             }
+        }
+
+        public override bool PreDrawTooltip(Item item, ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y) {
+            if (!item.TryGetGlobalItem<GlobalItemData>(out var global) || !global.InventoryGlow)
+                return base.PreDrawTooltip(item, lines, ref x, ref y);
+
+            if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket ||
+                (item.stack >= 30 && item.buffType > 0 && item.active)) {
+                int buffType = GetItemBuffType(item);
+
+                if (buffType is -1)
+                    return base.PreDrawTooltip(item, lines, ref x, ref y);
+
+                object arg = new {
+                    BuffName = Lang.GetBuffName(buffType),
+                    MaxSpawn = MyUtils.Config.SpawnRateMaxValue
+                };
+                if (ItemSlot.ShiftInUse)
+                    TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines, arg), x, y);
+            }
+
+            return base.PreDrawTooltip(item, lines, ref x, ref y);
         }
     }
 }

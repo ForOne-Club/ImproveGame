@@ -156,7 +156,7 @@
 
             NPCConfigs.Header: "[i:4382] NPC 设置"
             TownNPCSpawnInNight.Label: "[i:4081] 允许城镇NPC夜晚刷新"
-            TownNPCSpawnSpeed
+            TownNPCSpawnSpeed:
             {
                 Label: "[i:4910] 城镇NPC刷新速度"
                 Tooltip: "设为 -1 将禁用此项修改"
@@ -369,29 +369,7 @@
         {
             PrefixCount: "物品重铸次数："
             AnglerQuest: "已刷新钓鱼任务！"
-            BuffDisabled:
-                '''
-                物品增益 [{BuffName}] 已因设置被禁用
-                中键点击该物品或左键点击增益图标开启增益追踪器，以控制增益是否启用
-                '''
-            BuffEnabled:
-                '''
-                如果你想要单独禁用该物品的增益
-                请中键点击该物品或左键点击增益图标开启增益追踪器，以控制增益是否启用
-                '''
-            BuffApplied: "物品增益 [{BuffName}] 已自动应用"
-            BuffVisible: "如果想要隐藏无限续杯增益图标，请在模组配置中修改"
-            BuffHided: 
-                '''
-                增益图标已从Buff栏中隐藏
-                如果想要显示请在模组配置中修改
-                '''
-            AutoSaveMoneyEnabled:
-                '''
-                已开启自动存钱，在你的任意储存有该物品时，钱币会自动存入存钱罐
-                如果想要关闭请在模组配置中修改
-                商人的生成条件会同时计算存钱罐内的钱币
-                '''
+
             BuffTrackerOn: "<left>以打开增益追踪器"
             BuffTrackerOff: "<left>以关闭增益追踪器"
             BankEnableOn: "中键单击以打开个人储存库"
@@ -400,12 +378,69 @@
             CreateWandOff: "中键单击以关闭房屋材料面板"
             LiquidWandOn: "中键单击以开启液体控制面板"
             LiquidWandOff: "中键单击以关闭液体控制面板"
+
             PotionBagCurrent: "该药水袋内目前拥有下列药水({StoredCount}/20):"
             PotionBagCurrentFull: "该药水袋内目前拥有下列药水(已满!):"
             PotionBagNone: "该药水袋未装有药水"
             PotionBagAvailable: "(生效中)"
             PotionBagUnavailable: "(未生效)"
             PotionBagDisabled: "(被禁用)"
+            
+            Tag:
+            {
+                ShiftEnable: "[按住 [c/88CCEE:Shift] 键以了解更多信息]"
+            }
+            TagDetailed:
+            {
+                Enabled: "[已启用]"
+                Disabled: "[已禁用]"
+                Hided: "[增益图标已隐藏]"
+                NonHided: "[增益图标未隐藏]"
+                CombinedBuff: "[存在可用的增益组合]"
+                AutoCollect: "[自动存钱]"
+            }
+            TagDetailedTip:
+            {
+                Enabled:
+                    '''
+                    物品增益 [c/88CCEE:[{BuffName}][c/88CCEE:]] 已自动应用
+                    如果你想要单独禁用该物品的增益
+                    请中键点击该物品或左键点击增益图标
+                    开启增益追踪器，以控制增益是否启用
+                    '''
+                Disabled:
+                    '''
+                    物品增益 [c/88CCEE:[{BuffName}][c/88CCEE:]] 已因设置被禁用
+                    中键点击该物品或左键点击增益图标
+                    开启增益追踪器，以控制增益是否启用
+                    '''
+                Hided:
+                    '''
+                    增益图标已从Buff栏中隐藏
+                    如果想要显示请在模组配置中修改
+                    '''
+                NonHided: 
+                    '''
+                    如果想要隐藏无限续杯增益图标，请在模组配置中修改
+                    '''
+                AutoCollect:
+                    '''
+                    已开启自动存钱，在你的任意储存有该物品时，
+                    钱币会自动存入存钱罐
+                    如果想要关闭请在模组配置中修改
+                    商人的生成条件会同时计算存钱罐内的钱币
+                    '''
+                CombinedBuff:
+                {
+                    Battle:
+                        '''
+                        [镇静药水][向日葵][和平蜡烛][水蜡烛][战争药水]
+                        当你同时拥有以上无限增益物品时
+                        在增益追踪器右侧会显示一个生物生成速度滑块
+                        允许你将生物生成速度调至 x0-x{MaxSpawn}
+                        '''
+                }
+            }
         }
         SuperVault:
         {
