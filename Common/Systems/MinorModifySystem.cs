@@ -19,6 +19,7 @@ namespace ImproveGame.Common.Systems
     public class MinorModifySystem : ModSystem
     {
         public override void Load() {
+            Load_MethodInfo();
             // 还原哥布林重铸槽中物品的重铸次数
             On.Terraria.Player.dropItemCheck += SaveReforgePrefix;
             // 死亡是否掉落墓碑
@@ -26,7 +27,8 @@ namespace ImproveGame.Common.Systems
             // 抓取距离修改
             On.Terraria.Player.PullItem_Common += Player_PullItem_Common;
             // 晚上刷新 NPC
-            IL.Terraria.Main.UpdateTime += TweakNPCNightSpawn;
+            // IL.Terraria.Main.UpdateTime += TweakNPCNightSpawn; // 我发现落星处理处就能直接用插入
+            On.Terraria.Main.HandleMeteorFall += Main_HandleMeteorFall;
             // 商人生成同时计算存钱罐内物品
             On.Terraria.Main.UpdateTime_SpawnTownNPCs += TweakMerchantSpawn;
             // 城镇NPC入住速度修改
@@ -59,6 +61,10 @@ namespace ImproveGame.Common.Systems
         private void TravelNPCStay(On.Terraria.WorldGen.orig_UnspawnTravelNPC orig) {
             if (!MyUtils.Config.TravellingMerchantStay)
                 orig.Invoke();
+        }
+
+        public void Load_MethodInfo() {
+            SpawnTownNPCs = typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
         }
 
         private bool TileDrawing_IsAlchemyPlantHarvestable(On.Terraria.GameContent.Drawing.TileDrawing.orig_IsAlchemyPlantHarvestable orig, Terraria.GameContent.Drawing.TileDrawing self, int style) {
@@ -356,10 +362,19 @@ namespace ImproveGame.Common.Systems
                 return orig(dmg, luck);
         }
 
+        public MethodInfo SpawnTownNPCs;
         /// <summary>
         /// NPC 晚上刷新
         /// </summary>
-        private void TweakNPCNightSpawn(ILContext il) {
+        private void Main_HandleMeteorFall(On.Terraria.Main.orig_HandleMeteorFall orig) {
+            SpawnTownNPCs.Invoke(null, null);
+            orig.Invoke();
+        }
+
+        /// <summary>
+        /// NPC 晚上刷新
+        /// </summary>
+        /*private void TweakNPCNightSpawn(ILContext il) {
             var c = new ILCursor(il);
             if (!c.TryGotoNext(MoveType.After,
                 i => i.MatchCall(typeof(Main), "UpdateTime_StartDay"),
@@ -367,11 +382,10 @@ namespace ImproveGame.Common.Systems
                 return;
             c.EmitDelegate(() => {
                 if (MyUtils.Config.TownNPCSpawnInNight) {
-                    MethodInfo methodInfo = typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
-                    methodInfo.Invoke(null, null);
+                    SpawnTownNPCs.Invoke(null, null);
                 }
             });
-        }
+        }*/
 
         /// <summary>
         /// NPC 刷新速度
