@@ -155,12 +155,12 @@
             BanTombstone.Label: "[i:3230] 禁止生成墓碑"
 
             NPCConfigs.Header: "[i:4382] NPC 设置"
-            TownNPCSpawnInNight:
+            TownNPCSpawnInNight.Label: "[i:4081] 允许城镇NPC夜晚刷新"
+            TownNPCSpawnSpeed
             {
-                Label: "[i:4081] 允许城镇NPC夜晚刷新"
+                Label: "[i:4910] 城镇NPC刷新速度"
                 Tooltip: "设为 -1 将禁用此项修改"
             }
-            TownNPCSpawnSpeed.Label: "[i:4910] 城镇NPC刷新速度"
             NoCD_FishermanQuest.Label: "[i:4608] 渔夫任务取消冷却"
             NPCCoinDropRate.Label: "[i:73] 敌人钱币掉落倍率"
             TravellingMerchantStay:
