@@ -384,7 +384,7 @@ Mods:
                 Disabled: "[已禁用]"
                 Hided: "[增益图标已隐藏]"
                 NonHided: "[增益图标未隐藏]"
-                CombineBuff: "[存在可用的增益组合]"
+                CombinedBuff: "[存在可用的增益组合]"
                 AutoCollect: "[自动存钱]"
             }
             # 每行长度最好限制在30-40字母之间
