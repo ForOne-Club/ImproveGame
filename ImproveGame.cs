@@ -22,20 +22,23 @@ namespace ImproveGame
         public override uint ExtraPlayerBuffSlots => (uint)MyUtils.Config.ExtraPlayerBuffSlots;
         public static ImproveGame Instance;
 
-        public override void Load() {
+        public override void Load()
+        {
             // 加载前缀信息
             MyUtils.LoadPrefixInfo();
             // On和IL移动到了Common.Systems.MinorModifySystem.cs
             Instance = this;
         }
 
-        public override void Unload() {
+        public override void Unload()
+        {
             Instance = null;
             MyUtils.Config = null;
             GC.Collect();
         }
 
-        public override void HandlePacket(BinaryReader reader, int whoAmI) {
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
             NetHelper.HandlePacket(reader, whoAmI);
         }
     }
