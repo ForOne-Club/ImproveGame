@@ -21,7 +21,6 @@ namespace ImproveGame.Content.Tiles
                 TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(TEAutofisher.Hook_AfterPlacement_NoEntity, -1, 0, false);
 
             TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-            TileObjectData.newAlternate.AnchorBottom = AnchorData.Empty;
             TileObjectData.addAlternate(0);
 
             TileObjectData.addTile(Type);

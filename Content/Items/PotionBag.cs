@@ -1,9 +1,13 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items
@@ -118,6 +122,39 @@ namespace ImproveGame.Content.Items
             Item.maxStack = 1;
             Item.rare = ItemRarityID.LightRed;
             Item.expert = false;
+            Item.width = 48;
+            Item.height = 42;
+        }
+
+        public override void SetStaticDefaults() => CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
+
+
+        public static Asset<Texture2D> FullTexture = null;
+
+        public override void Load()
+        {
+            FullTexture = ModContent.Request<Texture2D>(Texture + "_Full");
+        }
+
+        public override void Unload()
+        {
+            FullTexture = null;
+        }
+
+        public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            var texture = storedPotions.Count == 0 ? TextureAssets.Item[Type] : FullTexture;
+            spriteBatch.Draw(texture.Value, position, frame, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
+            return false;
+        }
+
+        public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+        {
+            var texture = storedPotions.Count == 0 ? TextureAssets.Item[Type] : FullTexture;
+            var position = Item.Center - Main.screenPosition;
+            var origin = texture.Size() * 0.5f;
+            spriteBatch.Draw(texture.Value, position, null, lightColor, rotation, origin, scale, SpriteEffects.None, 0f);
+            return false;
         }
 
         public override void LoadData(TagCompound tag) {
