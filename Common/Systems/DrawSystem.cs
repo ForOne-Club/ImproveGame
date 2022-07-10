@@ -67,8 +67,8 @@ namespace ImproveGame.Common.Systems
                 var position = autofisher.locatePoint.ToWorldCoordinates() - Main.screenPosition;
                 var color = Color.SkyBlue;
                 var tex = TextureAssets.Cursors[15].Value;
-                position -= tex.Size() / 2f;
-                Main.spriteBatch.Draw(tex, position, null, color);
+                var origin = tex.Size() / 2f;
+                Main.spriteBatch.Draw(tex, position, null, color, 0f, origin, 0.8f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0f);
             }
 
             if (!WandSystem.SelectPoolMode)

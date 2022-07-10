@@ -21,7 +21,9 @@ namespace ImproveGame.Content.Tiles
                 TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(TEAutofisher.Hook_AfterPlacement_NoEntity, -1, 0, false);
 
             TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-            TileObjectData.addAlternate(0);
+            int alternateStyle = 0;
+            ModifyObjectDataAlternate(ref alternateStyle);
+            TileObjectData.addAlternate(alternateStyle);
 
             TileObjectData.addTile(Type);
 
@@ -71,8 +73,9 @@ namespace ImproveGame.Content.Tiles
             return base.RightClick(i, j);
         }
 
-        public virtual void ModifyObjectData() {
-        }
+        public virtual void ModifyObjectData() { }
+
+        public virtual void ModifyObjectDataAlternate(ref int alternateStyle) { }
 
         public abstract ModTileEntity GetTileEntity();
 

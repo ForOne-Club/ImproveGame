@@ -361,6 +361,10 @@
                 最多可存入20组药水
                 '''
         }
+		MapObject:
+        {
+			Autofisher: 自动钓鱼机
+		}
         CombatText_Item:
         {
             CreateWand_NotEnough: "材料不足！"

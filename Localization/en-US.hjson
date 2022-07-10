@@ -354,6 +354,10 @@ Mods:
                 Maximum stores 20 stacks of potions
                 '''
         }
+		MapObject:
+        {
+			Autofisher: Autofisher
+		}
         CombatText_Item:
         {
             CreateWand_NotEnough: "Missing materials!"

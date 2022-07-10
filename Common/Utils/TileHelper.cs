@@ -5,6 +5,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.ObjectData;
 using Terraria.UI;
 using Terraria.UI.Gamepad;
 
@@ -19,9 +20,18 @@ namespace ImproveGame
         /// <param name="j">物块的 Y 坐标</param>
         public static Point16 GetTileOrigin(int i, int j) {
             Tile tile = Framing.GetTileSafely(i, j);
+            TileObjectData tileData = TileObjectData.GetTileData(tile.TileType, 0, 0);
+            if (tileData == null)
+            {
+                return Point16.NegativeOne;
+            }
+            int frameX = tile.TileFrameX;
+            int frameY = tile.TileFrameY;
+            int subX = frameX % tileData.CoordinateFullWidth;
+            int subY = frameY % tileData.CoordinateFullHeight;
 
             Point16 coord = new(i, j);
-            Point16 frame = new(tile.TileFrameX / 18, tile.TileFrameY / 18);
+            Point16 frame = new(subX / 18, subY / 18);
 
             return coord - frame;
         }

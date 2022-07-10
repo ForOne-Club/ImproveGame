@@ -3,12 +3,15 @@ using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace ImproveGame.Content.Tiles
 {
-    public class Autofisher : TETileBase
+    public class Autofisher : TETileBase, ITileContainer
     {
         public override ModTileEntity GetTileEntity() => ModContent.GetInstance<TEAutofisher>();
 
@@ -57,22 +60,35 @@ namespace ImproveGame.Content.Tiles
             return false;
         }
 
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
-            if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(i, j, out var fisher))
-                return;
-            if (Main.tile[i, j].TileFrameX != 0 || Main.tile[i, j].TileFrameY != 0)
-                return;
-
-            Vector2 offScreen = new(Main.offScreenRange);
-            if (Main.drawToScreen) {
-                offScreen = Vector2.Zero;
-            }
-
-            var worldPos = new Point(i, j).ToWorldCoordinates(-4, -20);
-            var screenPos = worldPos + offScreen - Main.screenPosition;
-            string text = fisher.Opened ? "On" : "Off";
-            Color textColor = fisher.Opened ? new(20, 240, 20) : new(240, 20, 20);
-            Utils.DrawBorderString(spriteBatch, text, screenPos, textColor);
+        public override void ModifyObjectData()
+        {
+            TileObjectData.newTile.Direction = TileObjectDirection.PlaceRight;
+            TileObjectData.newTile.DrawYOffset = 2;
+            TileObjectData.newTile.StyleHorizontal = true;
         }
+
+        public override void ModifyObjectDataAlternate(ref int alternateStyle)
+        {
+            TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceLeft;
+            alternateStyle = 1;
+        }
+
+        //public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        //    if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(i, j, out var fisher))
+        //        return;
+        //    if (Main.tile[i, j].TileFrameX != 0 || Main.tile[i, j].TileFrameY != 0)
+        //        return;
+
+        //    Vector2 offScreen = new(Main.offScreenRange);
+        //    if (Main.drawToScreen) {
+        //        offScreen = Vector2.Zero;
+        //    }
+
+        //    var worldPos = new Point(i, j).ToWorldCoordinates(-4, -20);
+        //    var screenPos = worldPos + offScreen - Main.screenPosition;
+        //    string text = fisher.Opened ? "On" : "Off";
+        //    Color textColor = fisher.Opened ? new(20, 240, 20) : new(240, 20, 20);
+        //    Utils.DrawBorderString(spriteBatch, text, screenPos, textColor);
+        //}
     }
 }
