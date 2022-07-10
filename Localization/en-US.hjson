@@ -91,7 +91,7 @@ Mods:
                 Tooltip: 
                     '''
                     Potions in your inventory or personal inventories(Piggy bank, Safe, etc.)
-                    Which stack above a certain number no longer consume and grant you infinite buffs
+                    Which stack not less than a certain number no longer consume and grant you infinite buffs
                     Requirement is in th next config
                     '''
             }
@@ -100,7 +100,7 @@ Mods:
                 Label: "[i:TeleportationPotion] Infinite Potion requirement"
                 Tooltip: 
                     '''
-                    Only potions stack above this number grant you infinite buff
+                    Only potions stack not less than this number grant you infinite buff
                     Range: 30~999
                     '''
             }
