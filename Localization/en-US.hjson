@@ -357,31 +357,7 @@ Mods:
         {
             PrefixCount: "Reforging count: "
             AnglerQuest: "Angler's quest refreshed!"
-            BuffDisabled:
-                '''
-                Item buff [{BuffName}] has been disabled due to configuration
-                Middle click on this item or left click on the buff icon to open buff tracker, to enable/disable that buff
-                '''
-            BuffEnabled:
-                '''
-                If you just want to disable buff of this item
-                Please middle click on this item or left click on the buff icon to open buff tracker, to enable/disable that buff
-                '''
-            BuffApplied: "The buff [{BuffName}] is already applied"
-            BuffVisible: "Change the mod config to hide infinite buff icons"
-            BuffHided: 
-                '''
-                Buff icons have been hiden
-                To display them, disable "Hide buff icons of infinite potions" in Mod Configuration
-                '''
-            AutoSaveMoneyEnabled:
-                '''
-                Automatically save money is enabled
-                If there is any Piggy Bank, Money Trough or Eye Bone inside your Piggy Bank, Safe, Defender's Forge or Void Vault
-                Your coins in coin slots will be automatically saved into the Piggy Bank
-                The Merchant's spawning condition counts coins in the Piggy Bank
-                You may disable this function in Mod Configuration
-                '''
+
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"
             BankEnableOn: "Middle click to open personal inventory"
@@ -390,12 +366,82 @@ Mods:
             CreateWandOff: "Middle click to close house material panel"
             LiquidWandOn: "Middle click to open liquid control panel"
             LiquidWandOff: "Middle click to close liquid control panel"
+
             PotionBagCurrent: "Contains the following potions({StoredCount}/20):"
             PotionBagCurrentFull: "Contains the following potions(Full!):"
             PotionBagNone: "Empty"
             PotionBagAvailable: "(Active)"     # 药水袋中药水数量 >= 30
             PotionBagUnavailable: "(Inactive)"   # 药水袋中药水数量 < 30
             PotionBagDisabled: "(Disabled)"
+
+            Tag:
+            {
+                ShiftEnable: "[按住 [c/88CCEE:Shift] 键以了解更多信息]"
+            }
+            TagDetailed:
+            {
+                Enabled: "[已启用]"
+                Disabled: "[已禁用]"
+                Hided: "[增益图标已隐藏]"
+                NonHided: "[增益图标未隐藏]"
+                CombinedBuff: "[存在可用的增益组合]"
+                AutoCollect: "[自动存钱]"
+            }
+            # 每行长度最好限制在30-40字母之间
+            TagDetailedTip:
+            {
+                Enabled:
+                    '''
+                    The buff [c/88CCEE:[{BuffName}][c/88CCEE:]] is already applied.
+                    If you just want to disable buff of this item,
+                    please middle click on this item or left click
+                    on the buff icon to open buff tracker,
+                    to enable/disable that buff.
+                    '''
+                Disabled:
+                    '''
+                    Item buff [c/88CCEE:[{BuffName}][c/88CCEE:]] has been disabled
+                    due to configuration.
+                    Middle click on this item or left click on the
+                    buff icon to open buff tracker, to
+                    enable/disable that buff.
+                    '''
+                Hided:
+                    '''
+                    Buff icons have been hiden.
+                    To display them, disable "Hide buff icons of
+                    infinite potions" in Mod Configuration.
+                    '''
+                NonHided: 
+                    '''
+                    Change the mod config to hide infinite buff
+                    icons if you want.
+                    '''
+                AutoCollect:
+                    '''
+                    Automatically save money is enabled.
+                    If there is any Piggy Bank, Money Trough or
+                    Eye Bone inside your Piggy Bank, Safe,
+                    Defender's Forge or Void Vault,
+                    your coins in coin slots will be automatically
+                    saved into the Piggy Bank.
+                    The Merchant's spawning condition counts coins
+                    in the Piggy Bank.
+                    You may disable this function in Mod Configuration.
+                    '''
+                # 组合Buff: 固定Buff同时出现时会有组合效果
+                CombinedBuff:
+                {
+                    Battle:
+                        '''
+                        [c/88CCEE:增益组合: ][i:CalmingPotion][i:Sunflower][i:PeaceCandle][i:WaterCandle][i:BattlePotion]
+                        当你同时拥有以上无限增益物品时
+                        在增益追踪器右侧会显示一个生物生成
+                        速度滑块，允许你将生物生成速度调至
+                        x0-x{MaxSpawn}
+                        '''
+                }
+            }
         }
         SuperVault:
         {

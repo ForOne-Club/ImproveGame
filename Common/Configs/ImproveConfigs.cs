@@ -257,7 +257,7 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.SpawnRateMaxValue.Label")]
         [Tooltip("$Mods.ImproveGame.Config.SpawnRateMaxValue.Tooltip")]
-        [DefaultValue(200)]
+        [DefaultValue(100)]
         [Range(1, 200)]
         public int SpawnRateMaxValue;
 
