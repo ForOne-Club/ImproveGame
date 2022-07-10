@@ -24,24 +24,22 @@ namespace ImproveGame.Common.GlobalItems
                 tooltips.Add(new(Mod, "TagDetailed.Disabled", MyUtils.GetText("Tips.TagDetailed.Disabled")) {
                     OverrideColor = Color.SkyBlue
                 });
-                return;
             }
             else {
                 tooltips.Add(new(Mod, "TagDetailed.Enabled", MyUtils.GetText("Tips.TagDetailed.Enabled")) {
                     OverrideColor = Color.SkyBlue
                 });
-            }
-
-            // 是否被隐藏
-            if (MyUtils.Config.HideNoConsumeBuffs) {
-                tooltips.Add(new(Mod, "TagDetailed.Hided", MyUtils.GetText("Tips.TagDetailed.Hided")) {
-                    OverrideColor = Color.LightGreen
-                });
-            }
-            else {
-                tooltips.Add(new(Mod, "TagDetailed.NonHided", MyUtils.GetText("Tips.TagDetailed.NonHided")) {
-                    OverrideColor = Color.LightGreen
-                });
+                // 图标是否被隐藏
+                if (MyUtils.Config.HideNoConsumeBuffs) {
+                    tooltips.Add(new(Mod, "TagDetailed.Hided", MyUtils.GetText("Tips.TagDetailed.Hided")) {
+                        OverrideColor = Color.LightGreen
+                    });
+                }
+                else {
+                    tooltips.Add(new(Mod, "TagDetailed.NonHided", MyUtils.GetText("Tips.TagDetailed.NonHided")) {
+                        OverrideColor = Color.LightGreen
+                    });
+                }
             }
 
             // 可能的组合增益

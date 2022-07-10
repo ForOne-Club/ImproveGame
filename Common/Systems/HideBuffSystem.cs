@@ -40,7 +40,7 @@ namespace ImproveGame.Common.Systems
                     item.ModItem is not null && item.ModItem is PotionBag &&
                     (item.ModItem as PotionBag).storedPotions.Count > 0) {
                     var potionBag = item.ModItem as PotionBag;
-                    foreach (var potion in from p in potionBag.storedPotions where p.stack >= 30 select p) {
+                    foreach (var potion in from p in potionBag.storedPotions where p.stack >= MyUtils.Config.NoConsume_PotionRequirement select p) {
                         BuffTypesShouldHide[potion.buffType] = true;
                     }
                 }

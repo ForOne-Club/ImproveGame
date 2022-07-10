@@ -80,7 +80,7 @@ namespace ImproveGame.Content.Items
                 for (int i = 0; i < storedPotions.Count; i++) {
                     var potion = storedPotions[i];
                     var color = Color.SkyBlue;
-                    bool available = potion.stack >= 30;
+                    bool available = potion.stack >= MyUtils.Config.NoConsume_PotionRequirement;
                     string text = $"[i:{potion.type}] [{Lang.GetItemNameValue(potion.type)}] x{potion.stack}";
                     // 有30个
                     if (available) {

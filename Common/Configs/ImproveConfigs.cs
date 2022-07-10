@@ -94,6 +94,12 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool NoConsume_Potion;
 
+        [Label("$Mods.ImproveGame.Config.NoConsume_PotionRequirement.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.NoConsume_PotionRequirement.Tooltip")]
+        [DefaultValue(30)]
+        [Range(30, 999)]
+        public int NoConsume_PotionRequirement;
+
         [Label("$Mods.ImproveGame.Config.NoConsume_Ammo.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoConsume_Ammo.Tooltip")]
         [DefaultValue(false)]

@@ -8,6 +8,7 @@ namespace ImproveGame.Common.GlobalItems
     {
         public override bool InstancePerEntity => true;
         public int recastCount;
+        public bool ShouldHaveInvGlowForBanner = false;
         public bool InventoryGlow;
 
         // 克隆

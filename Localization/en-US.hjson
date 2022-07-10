@@ -14,7 +14,7 @@ Mods:
             }
             SuperVoidVault:
             {
-                Label: "[i:4131] Super Void Vault [c/FF2222:(May lag the game!)]"
+                Label: "[i:4131] Super Void Vault"
                 Tooltip:
                     '''
                     Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
@@ -23,7 +23,7 @@ Mods:
             }
             SmartVoidVault:
             {
-                Label: "[i:4131] Void Vault Smart Pickup [c/FF2222:(May lag the game!)]"
+                Label: "[i:4131] Void Vault Smart Pickup"
                 Tooltip:
                     '''
                     If the picked item already exists in the Void Vault, priorly put the item in it
@@ -79,7 +79,7 @@ Mods:
             }
             NoPlace_BUFFTile_Banner:
             {
-                Label: "[i:2901] Portable Banners (Vanilla only)"
+                Label: "[i:2901] Portable Banners"
                 Tooltip:
                     '''
                     The same as portable buff stations
@@ -88,7 +88,21 @@ Mods:
             NoConsume_Potion:
             {
                 Label: "[i:227] Enable infinite potions"
-                Tooltip: Potions in any of your inventories which stack not less than 30 will not be consumed
+                Tooltip: 
+                    '''
+                    有一定堆叠数的药水将不再消耗(需求数量见下一条配置选项)
+                    玩家背包中或其他位置的增增益药水会直接给予玩家增益
+                    （其他位置：存钱罐，保险箱，护卫熔炉，虚空仓库）
+                    '''
+            }
+            NoConsume_PotionRequirement:
+            {
+                Label: "[i:TeleportationPotion] 药剂 无限续杯 需求量"
+                Tooltip: 
+                    '''
+                    只有堆叠数超过此值的药剂才可无限获得增益
+                    调节范围为 30-999
+                    '''
             }
             NoConsume_Ammo:
             {
