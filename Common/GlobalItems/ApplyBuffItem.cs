@@ -26,23 +26,12 @@ namespace ImproveGame.Common.GlobalItems
                     globalItem.InventoryGlow = true;
             }
             // 非增益药剂
-            if (MyUtils.Config.NoConsume_Potion && item.stack >= 30 && SpecialPotions.Contains(item.type) && globalItemNotNull) {
+            if (MyUtils.Config.NoConsume_Potion && item.stack >= MyUtils.Config.NoConsume_PotionRequirement && SpecialPotions.Contains(item.type) && globalItemNotNull) {
                 globalItem.InventoryGlow = true;
             }
             // 随身增益站：旗帜
-            if (MyUtils.Config.NoPlace_BUFFTile_Banner) {
-                if (item.createTile == TileID.Banners) {
-                    int style = item.placeStyle;
-                    int frameX = style * 18;
-                    int frameY = 0;
-                    if (style >= 90) {
-                        frameX -= 1620;
-                        frameY += 54;
-                    }
-                    if (globalItemNotNull && (frameX >= 396 || frameY >= 54)) {
-                        globalItem.InventoryGlow = true;
-                    }
-                }
+            if (MyUtils.Config.NoPlace_BUFFTile_Banner && globalItemNotNull && globalItem.ShouldHaveInvGlowForBanner) {
+                globalItem.InventoryGlow = true;
             }
             // 弹药
             if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0 && globalItemNotNull) {
@@ -53,7 +42,7 @@ namespace ImproveGame.Common.GlobalItems
         public static int GetItemBuffType(Item item) {
             if (MyUtils.Config.NoConsume_Potion) {
                 // 普通药水
-                if (item.stack >= 30 && item.active) {
+                if (item.stack >= MyUtils.Config.NoConsume_PotionRequirement && item.active) {
                     if (item.buffType > 0)
                         return item.buffType;
                     // 其他Mod的，自行添加了引用
@@ -95,7 +84,7 @@ namespace ImproveGame.Common.GlobalItems
 
         // 物品消耗
         public override bool ConsumeItem(Item item, Player player) {
-            if (MyUtils.Config.NoConsume_Potion && item.stack >= 30 && (item.buffType > 0 || SpecialPotions.Contains(item.type))) {
+            if (MyUtils.Config.NoConsume_Potion && item.stack >= MyUtils.Config.NoConsume_PotionRequirement && (item.buffType > 0 || SpecialPotions.Contains(item.type))) {
                 return false;
             }
             return base.ConsumeItem(item, player);
@@ -106,7 +95,7 @@ namespace ImproveGame.Common.GlobalItems
                 return;
 
             if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket ||
-                (item.stack >= 30 && item.buffType > 0 && item.active)) {
+                (item.stack >= MyUtils.Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
                 int buffType = GetItemBuffType(item);
 
                 if (buffType is -1) return;
@@ -127,7 +116,7 @@ namespace ImproveGame.Common.GlobalItems
                 return base.PreDrawTooltip(item, lines, ref x, ref y);
 
             if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket ||
-                (item.stack >= 30 && item.buffType > 0 && item.active)) {
+                (item.stack >= MyUtils.Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
                 int buffType = GetItemBuffType(item);
 
                 if (buffType is -1)

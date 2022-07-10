@@ -14,7 +14,7 @@ Mods:
             }
             SuperVoidVault:
             {
-                Label: "[i:4131] Super Void Vault [c/FF2222:(May lag the game!)]"
+                Label: "[i:4131] Super Void Vault"
                 Tooltip:
                     '''
                     Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
@@ -23,7 +23,7 @@ Mods:
             }
             SmartVoidVault:
             {
-                Label: "[i:4131] Void Vault Smart Pickup [c/FF2222:(May lag the game!)]"
+                Label: "[i:4131] Void Vault Smart Pickup"
                 Tooltip:
                     '''
                     If the picked item already exists in the Void Vault, priorly put the item in it
@@ -79,7 +79,7 @@ Mods:
             }
             NoPlace_BUFFTile_Banner:
             {
-                Label: "[i:2901] Portable Banners (Vanilla only)"
+                Label: "[i:2901] Portable Banners"
                 Tooltip:
                     '''
                     The same as portable buff stations
@@ -88,7 +88,21 @@ Mods:
             NoConsume_Potion:
             {
                 Label: "[i:227] Enable infinite potions"
-                Tooltip: Potions in any of your inventories which stack not less than 30 will not be consumed
+                Tooltip: 
+                    '''
+                    Potions in your inventory or personal inventories(Piggy bank, Safe, etc.)
+                    Which stack not less than a certain number no longer consume and grant you infinite buffs
+                    Requirement is in th next config
+                    '''
+            }
+            NoConsume_PotionRequirement:
+            {
+                Label: "[i:TeleportationPotion] Infinite Potion requirement"
+                Tooltip: 
+                    '''
+                    Only potions stack not less than this number grant you infinite buff
+                    Range: 30~999
+                    '''
             }
             NoConsume_Ammo:
             {
@@ -152,8 +166,8 @@ Mods:
             NPCCoinDropRate.Label: "[i:73] Enemy money drop multiplier"
             TravellingMerchantStay:
             {
-                Label: "[i:2222] 旅商永远不离开"
-                Tooltip: "开启后，除非死亡，否则旅商不会离开"
+                Label: "[i:2222] The Travelling Merchant doesn't depart"
+                Tooltip: "The Travelling Merchant will not depart unless been killed"
             }
 
             GameMechanics.Header: "[i:1344] Game Mechanics"
@@ -197,8 +211,8 @@ Mods:
             }
             GemTreeAlwaysDropGem:
             {
-                Label: "[i:3649] 宝石树总是掉落宝石"
-                Tooltip: "使宝石树每个部分都会掉落宝石或宝石果"
+                Label: "[i:3649] Gem trees always drop gem"
+                Tooltip: "Every part of a gem tree will drop gem or Gemcorn"
             }
             MostTree:
             {
@@ -380,12 +394,12 @@ Mods:
             }
             TagDetailed:
             {
-                Enabled: "[已启用]"
-                Disabled: "[已禁用]"
-                Hided: "[增益图标已隐藏]"
-                NonHided: "[增益图标未隐藏]"
-                CombinedBuff: "[存在可用的增益组合]"
-                AutoCollect: "[自动存钱]"
+                Enabled: "[Enabled]"
+                Disabled: "[Disabled]"
+                Hided: "[Buff icons hiden]"
+                NonHided: "[Buff icons shown]"
+                CombinedBuff: "[Has available buff combination]"
+                AutoCollect: "[Auto-deposit]"
             }
             # 每行长度最好限制在30-40字母之间
             TagDetailedTip:
@@ -434,10 +448,10 @@ Mods:
                 {
                     Battle:
                         '''
-                        [c/88CCEE:增益组合: ][i:CalmingPotion][i:Sunflower][i:PeaceCandle][i:WaterCandle][i:BattlePotion]
-                        当你同时拥有以上无限增益物品时
-                        在增益追踪器右侧会显示一个生物生成
-                        速度滑块，允许你将生物生成速度调至
+                        [c/88CCEE:Buff Combination: ][i:CalmingPotion][i:Sunflower][i:PeaceCandle][i:WaterCandle][i:BattlePotion]
+                        When you have all the infinite buff items above
+                        A spawn rate slider will appear at right side of the Buff Tracker
+                        Allows you to multiply the spawn rate from
                         x0-x{MaxSpawn}
                         '''
                 }

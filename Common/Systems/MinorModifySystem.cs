@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Terraria;
 using Terraria.Enums;
@@ -269,7 +270,11 @@ namespace ImproveGame.Common.Systems
         /// <summary>
         /// 旗帜BUFF在背包生效
         /// </summary>
-        private static void AddBannerBuff(SceneMetrics self, Player player, Item item) {
+        private static void AddBannerBuff(SceneMetrics scene, Item item) {
+            bool globalItemNotNull = item.TryGetGlobalItem<GlobalItemData>(out var itemData);
+            if (globalItemNotNull)
+                itemData.ShouldHaveInvGlowForBanner = false;
+
             if (item.createTile == TileID.Banners) {
                 int style = item.placeStyle;
                 int frameX = style * 18;
@@ -283,8 +288,25 @@ namespace ImproveGame.Common.Systems
                     for (int num4 = frameY; num4 >= 54; num4 -= 54) {
                         styleX += 90;
                     }
-                    self.NPCBannerBuff[styleX] = true;
-                    self.hasBanner = true;
+                    int bannerItem = Item.BannerToItem(styleX);
+                    if (ItemID.Sets.BannerStrength.IndexInRange(bannerItem) && ItemID.Sets.BannerStrength[bannerItem].Enabled) {
+                        scene.NPCBannerBuff[styleX] = true;
+                        scene.hasBanner = true;
+                        if (globalItemNotNull)
+                            itemData.ShouldHaveInvGlowForBanner = true;
+                    }
+                }
+            }
+            // 反射获取NPCLoader.bannerToItem以支持模组旗帜
+            var bannerToItem = (IDictionary<int, int>)typeof(NPCLoader).GetField("bannerToItem",
+                BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+            // 应用
+            foreach (var dict in bannerToItem) {
+                if (dict.Value == item.type && scene.NPCBannerBuff.IndexInRange(dict.Key)) {
+                    scene.NPCBannerBuff[dict.Key] = true;
+                    scene.hasBanner = true;
+                    if (globalItemNotNull)
+                        itemData.ShouldHaveInvGlowForBanner = true;
                 }
             }
         }
@@ -301,37 +323,37 @@ namespace ImproveGame.Common.Systems
                     Item item = player.inventory[i];
                     if (item.IsAir)
                         continue;
-                    AddBannerBuff(self, player, item);
+                    AddBannerBuff(self, item);
                 }
                 for (int i = 0; i < player.bank.item.Length; i++) {
                     Item item = player.bank.item[i];
                     if (item.IsAir)
                         continue;
-                    AddBannerBuff(self, player, item);
+                    AddBannerBuff(self, item);
                 }
                 for (int i = 0; i < player.bank2.item.Length; i++) {
                     Item item = player.bank2.item[i];
                     if (item.IsAir)
                         continue;
-                    AddBannerBuff(self, player, item);
+                    AddBannerBuff(self, item);
                 }
                 for (int i = 0; i < player.bank3.item.Length; i++) {
                     Item item = player.bank3.item[i];
                     if (item.IsAir)
                         continue;
-                    AddBannerBuff(self, player, item);
+                    AddBannerBuff(self, item);
                 }
                 for (int i = 0; i < player.bank4.item.Length; i++) {
                     Item item = player.bank4.item[i];
                     if (item.IsAir)
                         continue;
-                    AddBannerBuff(self, player, item);
+                    AddBannerBuff(self, item);
                 }
                 if (MyUtils.Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var DataPlayer) && DataPlayer.SuperVault is not null) {
                     for (int i = 0; i < DataPlayer.SuperVault.Length; i++) {
                         if (DataPlayer.SuperVault[i] is not null && DataPlayer.SuperVault[i].IsAir)
                             continue;
-                        AddBannerBuff(self, player, DataPlayer.SuperVault[i]);
+                        AddBannerBuff(self, DataPlayer.SuperVault[i]);
                     }
                 }
             }
