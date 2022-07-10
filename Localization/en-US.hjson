@@ -390,7 +390,7 @@ Mods:
 
             Tag:
             {
-                ShiftEnable: "[按住 [c/88CCEE:Shift] 键以了解更多信息]"
+                ShiftEnable: "[Hold [c/88CCEE:Shift] for more information]"
             }
             TagDetailed:
             {
