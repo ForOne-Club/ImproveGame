@@ -388,9 +388,9 @@
             LiquidWandOn: "中键单击以开启液体控制面板"
             LiquidWandOff: "中键单击以关闭液体控制面板"
 
-            PotionBagCurrent: "该药水袋内目前拥有下列药水({StoredCount}/20):"
-            PotionBagCurrentFull: "该药水袋内目前拥有下列药水(已满!):"
-            PotionBagNone: "该药水袋未装有药水"
+            PotionBagCurrent: "该药水袋内目前拥有下列药水 ({StoredCount}/20):"
+            PotionBagCurrentFull: "该药水袋内目前拥有下列药水 (已满!):"
+            PotionBagNone: "该药水袋未装有药水 (0/20)"
             PotionBagAvailable: "(生效中)"
             PotionBagUnavailable: "(未生效)"
             PotionBagDisabled: "(被禁用)"
