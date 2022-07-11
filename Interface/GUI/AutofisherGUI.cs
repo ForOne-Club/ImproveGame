@@ -103,7 +103,7 @@ namespace ImproveGame.Interface.GUI
             title.Width.Set(panelWidth, 0f);
             title.Height.Set(30, 0f);
             basePanel.Append(title);
-
+            
             textPanel = new() {
                 HAlign = 0.5f,
                 Top = StyleDimension.FromPixels(200f),

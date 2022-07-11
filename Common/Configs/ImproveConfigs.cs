@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
@@ -266,6 +267,10 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(100)]
         [Range(1, 200)]
         public int SpawnRateMaxValue;
+
+        [Header("$Mods.ImproveGame.Config.OtherFunctions.Header")]
+        [Label("$Mods.ImproveGame.Config.OtherFunctions.Label")]
+        public bool OtherFunctions => true;
 
         public override void OnChanged() {
             if (MostTreeMin > MostTreeMax) {

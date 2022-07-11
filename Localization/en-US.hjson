@@ -275,6 +275,17 @@ Mods:
                     If you don't want players in a server to raise the enemy spawn rate too high, you may use this function
                     '''
             }
+
+            OtherFunctions:
+            {
+                Label: "[i:ThePlan] 其他不可调节功能"
+                Header:
+                    '''
+                    以下是本模组的其他不可调节功能:
+                    - 便携存储内的虫洞药水生效
+                    - 时装配饰栏可放入任何配饰
+                    '''
+            }
         }
         ItemName:
         {
