@@ -87,8 +87,35 @@ namespace ImproveGame.Content.Tiles
             if (Main.rand.NextBool(60))
                 FishingTimer += 60;
 
-            // 钓鱼机冷却在这里改，原版写的是660
-            if (FishingTimer > 6600f) {
+            float fishingSpeedBonus = 1f;
+
+            //配饰为AnglerEarring可使钓鱼速度*200%
+            //配饰为AnglerTackleBag可使钓鱼速度*300%
+            //配饰为LavaproofTackleBag可使钓鱼速度*500%
+            switch (accessory.type)
+            {
+                case ItemID.AnglerEarring:
+                    fishingSpeedBonus = 2f;
+                    break;
+                case ItemID.AnglerTackleBag:
+                    fishingSpeedBonus = 3f;
+                    break;
+                case ItemID.LavaproofTackleBag:
+                    fishingSpeedBonus = 5f;
+                    break;
+            }
+
+            // 存储的 Bass 将以 20:1 的比例转化为钓鱼速度加成，最高可达 500% 加成
+            int bassCount = 0;
+            for (int i = 0; i < 15; i++) {
+            if (fish[i].type == ItemID.Bass) {
+                    bassCount += fish[i].stack;
+            }
+            }
+            fishingSpeedBonus += Math.Min(bassCount / 20f, 5f);
+
+            float fishingCooldown = 6600f; // 钓鱼机基础冷却在这里改，原版写的是660
+            if (FishingTimer > fishingCooldown / fishingSpeedBonus) {
                 FishingTimer = 0;
                 ApplyAccessories();
                 FishingCheck();

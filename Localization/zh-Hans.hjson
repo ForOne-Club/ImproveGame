@@ -292,6 +292,7 @@
             CreateWand: 建造魔杖
             LiquidWand: 液体魔杖
             PotionBag: 药水袋
+            Autofisher: 自动钓鱼机
         }
         ItemTooltip:
         {
@@ -359,6 +360,20 @@
                 手持药水<left>该物品以将药水存入
                 在物品栏中<right>该物品以取出药水
                 最多可存入20组药水
+                '''
+            Autofisher:
+                '''
+                自动钓鱼
+                右键点击放置的自动钓鱼机，即可打开钓鱼面板
+                点击第一行右侧的 "+" 以选择钓鱼水域
+                放入鱼竿与诱饵即可自动钓鱼，钓鱼判定与手动钓鱼一致
+                你可以放入饰品，以提升其渔力，或获得熔岩钓鱼的能力
+                初始钓鱼速度为手动钓鱼的 10%，你可以通过以下方式提升钓鱼速度:
+                - 存储的 [i:Bass] 将以 20:1 的比例转化为钓鱼速度加成，最高可达 500% 加成 ([i:Bass] x100)
+                - 配饰为 [i:AnglerEarring] 可使钓鱼速度*200%
+                - 配饰为 [i:AnglerTackleBag] 可使钓鱼速度*300%
+                - 配饰为 [i:LavaproofTackleBag] 可使钓鱼速度*500%
+                [c/AAAAAA:由于没有鱼线，你不能在配饰槽中放入] [i:HighTestFishingLine]
                 '''
         }
 		MapObject:

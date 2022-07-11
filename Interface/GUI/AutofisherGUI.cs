@@ -1,14 +1,17 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
+using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
 using Terraria.UI;
+using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -31,6 +34,7 @@ namespace ImproveGame.Interface.GUI
         private UIText tipText;
         private UIText title;
         private UIImage relocateButton;
+        private UIPanel textPanel;
 
         internal static bool RequireRefresh = false;
 
@@ -97,10 +101,10 @@ namespace ImproveGame.Interface.GUI
             title.Left.Set(0, 0f);
             title.Top.Set(-40, 0f);
             title.Width.Set(panelWidth, 0f);
-            title.Height.Set(40, 0f);
+            title.Height.Set(30, 0f);
             basePanel.Append(title);
 
-            UIPanel textPanel = new() {
+            textPanel = new() {
                 HAlign = 0.5f,
                 Top = StyleDimension.FromPixels(200f),
                 Width = StyleDimension.FromPixels(basePanel.Width.Pixels - 16f),
@@ -254,6 +258,38 @@ namespace ImproveGame.Interface.GUI
 
                 if (basePanel.ContainsPoint(Main.MouseScreen)) {
                     player.mouseInterface = true;
+                }
+            }
+
+            // 用 title.IsMouseHovering 出框之后就会没
+            if (title.GetDimensions().ToRectangle().Intersects(new(Main.mouseX, Main.mouseY, 1, 1)) || textPanel.IsMouseHovering)
+            {
+                var dimension = basePanel.GetDimensions();
+                var position = dimension.Position() + new Vector2(dimension.Width + 20f, 0f);
+
+                var tooltip = Lang.GetTooltip(ModContent.ItemType<Autofisher>());
+                int lines = tooltip.Lines;
+                var font = FontAssets.MouseText.Value;
+                int widthOffset = 14;
+                int heightOffset = 9;
+                float lengthX = 0f;
+                float lengthY = 0f;
+
+                for (int i = 0; i < lines; i++)
+                {
+                    string line = tooltip.GetLine(i);
+                    var stringSize = ChatManager.GetStringSize(font, line, Vector2.One);
+                    lengthX = Math.Max(lengthX, stringSize.X + 8);
+                    lengthY += stringSize.Y;
+                }
+
+                Utils.DrawInvBG(Main.spriteBatch, new Rectangle((int)position.X - widthOffset, (int)position.Y - heightOffset, (int)lengthX + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
+
+                for (int i = 0; i < lines; i++)
+                {
+                    string line = tooltip.GetLine(i);
+                    ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, line, position, Color.White, 0f, Vector2.Zero, Vector2.One, spread: 1.6f);
+                    position.Y += (int)ChatManager.GetStringSize(font, line, Vector2.One).Y;
                 }
             }
         }
