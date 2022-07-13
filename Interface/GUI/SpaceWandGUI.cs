@@ -33,6 +33,7 @@ namespace ImproveGame.Interface.GUI
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 SpaceWand.placeType = SpaceWand.PlaceType.platform;
+                RefreshText();
             };
             platform.Top.Pixels = text.Bottom() + 5;
 
@@ -41,6 +42,7 @@ namespace ImproveGame.Interface.GUI
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 SpaceWand.placeType = SpaceWand.PlaceType.soild;
+                RefreshText();
             };
             soild.Top.Pixels = platform.Bottom() + 10f;
 
@@ -49,6 +51,7 @@ namespace ImproveGame.Interface.GUI
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 SpaceWand.placeType = SpaceWand.PlaceType.rope;
+                RefreshText();
             };
             rope.Top.Pixels = soild.Bottom() + 10f;
 
@@ -75,11 +78,20 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public void RefreshText()
         {
             text.SetText($"{MyUtils.GetText("SpaceWand.placeType")}: {MyUtils.GetText($"SpaceWand.{SpaceWand.placeType}")}");
             text.Recalculate();
-            base.MouseDown(evt);
+        }
+
+        public void RefreshButton()
+        {
+            platform.SetText($"{MyUtils.GetText("SpaceWand.platform")}");
+            soild.SetText($"{MyUtils.GetText("SpaceWand.soild")}");
+            rope.SetText($"{MyUtils.GetText("SpaceWand.rope")}");
+            platform.Recalculate();
+            soild.Recalculate();
+            rope.Recalculate();
         }
 
         public void Open(SpaceWand spaceWand)
@@ -87,14 +99,8 @@ namespace ImproveGame.Interface.GUI
             SoundEngine.PlaySound(SoundID.MenuOpen);
             SpaceWand = spaceWand;
             Visible = true;
-            text.SetText($"{MyUtils.GetText("SpaceWand.placeType")}: {MyUtils.GetText($"SpaceWand.{SpaceWand.placeType}")}");
-            platform.SetText($"{MyUtils.GetText("SpaceWand.platform")}");
-            soild.SetText($"{MyUtils.GetText("SpaceWand.soild")}");
-            rope.SetText($"{MyUtils.GetText("SpaceWand.rope")}");
-            text.Recalculate();
-            platform.Recalculate();
-            soild.Recalculate();
-            rope.Recalculate();
+            RefreshText();
+            RefreshButton();
         }
 
         public void Close()
