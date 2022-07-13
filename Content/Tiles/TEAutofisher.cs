@@ -155,7 +155,7 @@ namespace ImproveGame.Content.Tiles
         public void FishingCheck() {
             var player = GetClosestPlayer(Position);
 
-            FishingAttempt fisher = default(FishingAttempt);
+            FishingAttempt fisher = default;
             fisher.X = locatePoint.X;
             fisher.Y = locatePoint.Y;
             fisher.bobberType = fishingPole.shoot;

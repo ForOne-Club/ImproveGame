@@ -58,7 +58,9 @@ namespace ImproveGame.Interface.GUI
                 canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || FishingAccessories.Contains(item.type),
                 onItemChanged: ChangeAccessorySlot,
                 emptyText: () => MyUtils.GetText($"Autofisher.Accessory"),
-                parent: basePanel
+                parent: basePanel,
+                folderName: "Autofisher",
+                iconTextureName: "Slot_Accessory"
             );
             accessorySlot.AllowFavorite = false;
 
@@ -67,7 +69,9 @@ namespace ImproveGame.Interface.GUI
                 canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || item.fishingPole > 0,
                 onItemChanged: ChangeFishingPoleSlot,
                 emptyText: () => MyUtils.GetText($"Autofisher.FishingPole"),
-                parent: basePanel
+                parent: basePanel,
+                folderName: "Autofisher",
+                iconTextureName: "Slot_FishingPole"
             );
             fishingPoleSlot.AllowFavorite = false;
 
@@ -76,7 +80,9 @@ namespace ImproveGame.Interface.GUI
                 canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || item.bait > 0,
                 onItemChanged: ChangeBaitSlot,
                 emptyText: () => MyUtils.GetText($"Autofisher.Bait"),
-                parent: basePanel
+                parent: basePanel,
+                folderName: "Autofisher",
+                iconTextureName: "Slot_Bait"
             );
             baitSlot.OnRightClickItemChange += ChangeBaitSlotStack;
             baitSlot.AllowFavorite = false;
