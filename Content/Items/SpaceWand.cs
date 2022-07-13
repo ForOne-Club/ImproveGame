@@ -1,20 +1,27 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.Audio;
+using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
-using Terraria.ID;
-using Terraria.ModLoader;
 using static ImproveGame.MyUtils;
 
 namespace ImproveGame.Content.Items
 {
     public class SpaceWand : ModItem
     {
+        public enum PlaceType
+        {
+            platform,
+            soild,
+            rope
+        }
+
+        public PlaceType placeType;
+
+        // 准备加上一个纵向的
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
-        public override void SetStaticDefaults() {
+        public override bool AltFunctionUse(Player player) => true;
+        public override void SetStaticDefaults()
+        {
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
             Item.staff[Type] = true;
         }
@@ -28,46 +35,44 @@ namespace ImproveGame.Content.Items
             Item.useAnimation = 15;
             Item.useTime = 15;
             Item.value = Item.sellPrice(0, 0, 50, 0);
+            Item.channel = true;
 
             Item.mana = 20;
         }
 
-        private Point start = Point.Zero;
-        private Point end = Point.Zero;
+        private Point start;
+        private Point end;
 
         public override bool CanUseItem(Player player)
         {
-            // 有平台的时候才允许使用
-            int count = 0;
-            GetPlatformCount(player.inventory, ref count);
+            if (player.altFunctionUse == 2)
+            {
+                if (SpaceWandGUI.Visible)
+                    UISystem.Instance.SpaceWandGUI.Close();
+                else
+                    UISystem.Instance.SpaceWandGUI.Open(this);
+                return false;
+            }
+            GetPlatformCount(player.inventory, out int count);
             if (count < 1)
             {
                 return false;
             }
             ItemRotation(player);
-            return base.CanUseItem(player);
+            start = Main.MouseWorld.ToTileCoordinates();
+            CanPlace = true;
+            return true;
         }
 
         /// <summary>
-        /// 待起名
-        /// </summary>
-        private bool MouseLeftPress;
-        /// <summary>
         /// 能否放置平台
         /// </summary>
-        private bool CanPlacePlatform;
-
+        private bool CanPlace;
         public override bool? UseItem(Player player)
         {
             UseItem_PreUpdate(player);
-            if (!MouseLeftPress && Main.mouseLeft)
+            if (!Main.mouseLeft)
             {
-                MouseLeftPress = true;
-                UseItem_LeftMouseDown(player);
-            }
-            else if (MouseLeftPress && !Main.mouseLeft)
-            {
-                MouseLeftPress = false;
                 player.itemAnimation = 0;
                 UseItem_LeftMouseUp(player);
                 return true;
@@ -83,15 +88,9 @@ namespace ImproveGame.Content.Items
         /// <param name="player"></param>
         public void UseItem_PreUpdate(Player player)
         {
-            player.itemAnimation = player.itemAnimationMax / 2;
-
+            player.itemAnimation = player.itemAnimationMax;
             ItemRotation(player);
-
-            // 开启绘制
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI)
-            {
-                end = Main.MouseWorld.ToTileCoordinates();
-            }
+            end = Main.MouseWorld.ToTileCoordinates();
         }
 
         /// <summary>
@@ -103,13 +102,13 @@ namespace ImproveGame.Content.Items
             // 开启绘制
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
-                if (Main.mouseRight && CanPlacePlatform)
+                if (Main.mouseRight && CanPlace)
                 {
-                    CanPlacePlatform = false;
+                    CanPlace = false;
                     CombatText.NewText(player.getRect(), new Color(250, 40, 80), GetText("CombatText_Item.SpaceWand_Cancel"));
                 }
                 Color color;
-                if (CanPlacePlatform)
+                if (CanPlace)
                     color = new Color(135, 0, 180);
                 else
                     color = new Color(250, 40, 80);
@@ -119,23 +118,13 @@ namespace ImproveGame.Content.Items
         }
 
         /// <summary>
-        /// 左键点击
-        /// </summary>
-        /// <param name="player"></param>
-        public void UseItem_LeftMouseDown(Player player)
-        {
-            start = Main.MouseWorld.ToTileCoordinates();
-            CanPlacePlatform = true;
-        }
-
-        /// <summary>
         /// 左键释放
         /// </summary>
         /// <param name="player"></param>
         public void UseItem_LeftMouseUp(Player player)
         {
             // 放置平台
-            if (CanPlacePlatform && player.whoAmI == Main.myPlayer && !Main.dedServ)
+            if (CanPlace && player.whoAmI == Main.myPlayer && !Main.dedServ)
             {
                 Rectangle platfromRect = GetPlatfromRect(player);
                 int minI = platfromRect.X;
@@ -180,12 +169,18 @@ namespace ImproveGame.Content.Items
         {
             int maxWidth = Main.netMode == NetmodeID.MultiplayerClient ? 244 : 500;
             // 平台数量
-            int platfromCount = 0;
-            if (!GetPlatformCount(player.inventory, ref platfromCount) || platfromCount > maxWidth)
+            if (!GetPlatformCount(player.inventory, out int platfromCount) || platfromCount > maxWidth)
             {
                 platfromCount = maxWidth;
             }
-            end = LimitRect(start, end, platfromCount, 1);
+            if (MathF.Abs(start.X - end.X) > MathF.Abs(start.Y - end.Y))
+            {
+                end = LimitRect(start, end, platfromCount, 1);
+            }
+            else
+            {
+                end = LimitRect(start, end, 1, platfromCount);
+            }
             Rectangle rect = new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y),
                  (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);
             return rect;

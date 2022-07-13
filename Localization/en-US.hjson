@@ -547,6 +547,13 @@ Mods:
                 Hold to absorb quickly
                 '''
         }
+        SpaceWand:
+        {
+            placeType: 放置类型
+            platform: 平台
+            soild: 方块
+            rope: 绳子
+        }
         Common:
         {
             Switch: "Switch"

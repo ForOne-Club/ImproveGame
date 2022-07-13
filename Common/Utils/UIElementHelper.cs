@@ -5,20 +5,44 @@ namespace ImproveGame.Common.Utils
 {
     public static class UIElementHelper
     {
-        public static void SetPos(this UIElement uie, Vector2 position, float precentX = 0, float precentY = 0) {
+        public static void AppendS(this UIElement parent, params UIElement[] uies)
+        {
+            foreach (var uie in uies)
+            {
+                parent.Append(uie);
+            }
+        }
+
+        public static void SetHPadding(this UIElement uie, float padding)
+        {
+            uie.PaddingLeft = padding;
+            uie.PaddingRight = padding;
+        }
+
+        public static void SetVPadding(this UIElement uie, float padding)
+        {
+            uie.PaddingTop = padding;
+            uie.PaddingBottom = padding;
+        }
+
+        public static void SetPos(this UIElement uie, Vector2 position, float precentX = 0, float precentY = 0)
+        {
             uie.SetPos(position.X, position.Y, precentX, precentY);
         }
 
-        public static void SetPos(this UIElement uie, float x, float y, float precentX = 0, float precentY = 0) {
+        public static void SetPos(this UIElement uie, float x, float y, float precentX = 0, float precentY = 0)
+        {
             uie.Left.Set(x, precentX);
             uie.Top.Set(y, precentY);
         }
 
-        public static void SetSize(this UIElement uie, Vector2 size, float precentWidth = 0, float precentHeight = 0) {
+        public static void SetSize(this UIElement uie, Vector2 size, float precentWidth = 0, float precentHeight = 0)
+        {
             uie.SetSize(size.X, size.Y, precentWidth, precentHeight);
         }
 
-        public static void SetSize(this UIElement uie, float width, float height, float precentWidth = 0, float precentHeight = 0) {
+        public static void SetSize(this UIElement uie, float width, float height, float precentWidth = 0, float precentHeight = 0)
+        {
             uie.Width.Set(width, precentWidth);
             uie.Height.Set(height, precentHeight);
         }

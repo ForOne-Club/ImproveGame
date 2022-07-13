@@ -33,7 +33,11 @@ namespace ImproveGame.Common.Systems
         public BigBagGUI BigBagGUI;
         public static UserInterface BigBagInterface;
 
-        public override void Unload() {
+        public SpaceWandGUI SpaceWandGUI;
+        public static UserInterface SpaceWandInterface;
+
+        public override void Unload()
+        {
             Instance = null;
 
             AutofisherGUI = null;
@@ -53,61 +57,88 @@ namespace ImproveGame.Common.Systems
 
             BigBagGUI = null;
             BigBagInterface = null;
+
+            SpaceWandGUI = null;
+            SpaceWandInterface = null;
         }
 
-        public override void Load() {
+        public override void Load()
+        {
             Instance = this;
-            if (!Main.dedServ) {
+            if (!Main.dedServ)
+            {
                 AutofisherGUI = new();
                 BuffTrackerGUI = new();
                 LiquidWandGUI = new();
                 BigBagGUI = new();
                 ArchitectureGUI = new();
                 BrustGUI = new();
+                SpaceWandGUI = new();
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
                 LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
                 LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
                 LoadGUI(ref BigBagGUI, out BigBagInterface);
                 LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
                 LoadGUI(ref BrustGUI, out BrustInterface);
+                LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
             }
         }
 
-        public static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface) where T : UIState {
+        public static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface) where T : UIState
+        {
             uiState.Activate();
             uiInterface = new();
             uiInterface.SetState(uiState);
         }
 
-        public override void UpdateUI(GameTime gameTime) {
-            if (AutofisherGUI.Visible) {
+        public override void UpdateUI(GameTime gameTime)
+        {
+            if (AutofisherGUI.Visible)
+            {
                 AutofisherInterface.Update(gameTime);
             }
-            if (BuffTrackerGUI.Visible) {
+            if (BuffTrackerGUI.Visible)
+            {
                 BuffTrackerInterface.Update(gameTime);
             }
-            if (LiquidWandGUI.Visible) {
+            if (LiquidWandGUI.Visible)
+            {
                 LiquidWandInterface.Update(gameTime);
             }
-            if (BigBagGUI.Visible) {
+            if (BigBagGUI.Visible)
+            {
                 BigBagInterface.Update(gameTime);
             }
-            if (ArchitectureGUI.Visible) {
+            if (ArchitectureGUI.Visible)
+            {
                 ArchitectureInterface?.Update(gameTime);
             }
-            if (BrustGUI.Visible) {
+            if (BrustGUI.Visible)
+            {
                 BrustInterface?.Update(gameTime);
+            }
+            if (SpaceWandGUI.Visible)
+            {
+                SpaceWandInterface?.Update(gameTime);
             }
         }
 
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+        {
             int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            if (MouseTextIndex != -1) {
+            if (MouseTextIndex != -1)
+            {
                 layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
                     "ImproveGame: Vault UI",
-                    delegate {
-                        if (BigBagGUI.Visible) {
+                    delegate
+                    {
+                        if (BigBagGUI.Visible)
+                        {
                             BigBagGUI.Draw(Main.spriteBatch);
+                        }
+                        if (SpaceWandGUI.Visible)
+                        {
+                            SpaceWandGUI.Draw(Main.spriteBatch);
                         }
                         return true;
                     },
@@ -116,7 +147,8 @@ namespace ImproveGame.Common.Systems
             }
 
             int inventoryIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Inventory");
-            if (inventoryIndex != -1) {
+            if (inventoryIndex != -1)
+            {
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Buff Tracker GUI", DrawBuffTrackerGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
@@ -129,39 +161,49 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
         }
 
-        private static bool DrawAutofishGUI() {
+        private static bool DrawAutofishGUI()
+        {
             if (AutofisherGUI.Visible)
                 AutofisherInterface.Draw(Main.spriteBatch, new GameTime());
             return true;
         }
 
-        private static bool DrawBuffTrackerGUI() {
-            if (BuffTrackerGUI.Visible) {
+        private static bool DrawBuffTrackerGUI()
+        {
+            if (BuffTrackerGUI.Visible)
+            {
                 BuffTrackerInterface.Draw(Main.spriteBatch, new GameTime());
             }
             return true;
         }
 
-        private static bool DrawLiquidWandGUI() {
+        private static bool DrawLiquidWandGUI()
+        {
             Player player = Main.LocalPlayer;
-            if (LiquidWandGUI.Visible && Main.playerInventory && player.HeldItem is not null) {
+            if (LiquidWandGUI.Visible && Main.playerInventory && player.HeldItem is not null)
+            {
                 LiquidWandInterface.Draw(Main.spriteBatch, new GameTime());
             }
             return true;
         }
 
-        private static bool DrawArchitectureGUI() {
+        private static bool DrawArchitectureGUI()
+        {
             Player player = Main.LocalPlayer;
-            if (ArchitectureGUI.Visible && Main.playerInventory && player.HeldItem is not null) {
+            if (ArchitectureGUI.Visible && Main.playerInventory && player.HeldItem is not null)
+            {
                 ArchitectureInterface.Draw(Main.spriteBatch, new GameTime());
             }
             return true;
         }
 
-        private static bool DrawBrustGUI() {
+        private static bool DrawBrustGUI()
+        {
             Player player = Main.LocalPlayer;
-            if (BrustGUI.Visible && player.HeldItem is not null) {
-                if (player.HeldItem.ModItem is null || player.HeldItem.ModItem is not MagickWand) {
+            if (BrustGUI.Visible && player.HeldItem is not null)
+            {
+                if (player.HeldItem.ModItem is null || player.HeldItem.ModItem is not MagickWand)
+                {
                     Instance.BrustGUI.Close();
                     return true;
                 }

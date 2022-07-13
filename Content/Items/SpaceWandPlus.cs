@@ -13,7 +13,8 @@ namespace ImproveGame.Content.Items
 {
     public class SpaceWandPlus : ModItem
     {
-        public override void SetStaticDefaults() {
+        public override void SetStaticDefaults()
+        {
             Item.staff[Type] = true;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
@@ -38,8 +39,7 @@ namespace ImproveGame.Content.Items
         public override bool CanUseItem(Player player)
         {
             // 有平台的时候才允许使用
-            int count = 0;
-            GetPlatformCount(player.inventory, ref count);
+            GetPlatformCount(player.inventory, out int count);
             if (count < 1)
             {
                 return false;
@@ -181,8 +181,7 @@ namespace ImproveGame.Content.Items
         {
             int maxWidth = Main.netMode == NetmodeID.MultiplayerClient ? 244 : 500;
             // 平台数量
-            int platfromCount = 0;
-            if (!GetPlatformCount(player.inventory, ref platfromCount) || platfromCount > maxWidth)
+            if (!GetPlatformCount(player.inventory, out int platfromCount) || platfromCount > maxWidth)
             {
                 platfromCount = maxWidth;
             }

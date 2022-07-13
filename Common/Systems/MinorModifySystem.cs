@@ -441,8 +441,7 @@ namespace ImproveGame.Common.Systems
             c.EmitDelegate<Func<int, Item[], int, int, int>>((num11, inv, content, slot) => {
                 if (content == 13) {
                     if (inv[slot].type == ModContent.ItemType<Content.Items.SpaceWand>()) {
-                        int count = 0;
-                        MyUtils.GetPlatformCount(inv, ref count);
+                        MyUtils.GetPlatformCount(inv, out int count);
                         return count;
                     }
                     else if (inv[slot].type == ModContent.ItemType<Content.Items.WallPlace>()) {
