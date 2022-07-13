@@ -382,7 +382,7 @@ Mods:
         }
 		MapObject:
         {
-			Autofisher: Autofisher
+			Autofisher: Fishing Machine
 		}
         CombatText_Item:
         {
@@ -499,7 +499,7 @@ Mods:
             FishingPole: "Fishing rod"
             Bait: "Bait"
             SelectPool: "Please select fishing pool"
-            CarefulNextTime: "Be careflu next time!" # 这个是钓鱼机不小心把猪鲨钓上来了
+            CarefulNextTime: "Be careful next time!" # 这个是钓鱼机不小心把猪鲨钓上来了
             Unavailable: "Currently no fishing info"
         }
         BuffTracker:
