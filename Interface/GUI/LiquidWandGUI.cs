@@ -22,7 +22,8 @@ namespace ImproveGame.Interface.GUI
         private static float panelHeight;
 
         public int CurrentSlot;
-        public Item CurrentItem {
+        public Item CurrentItem
+        {
             get => Main.LocalPlayer.inventory[CurrentSlot];
             set => Main.LocalPlayer.inventory[CurrentSlot] = value;
         }
@@ -43,7 +44,8 @@ namespace ImproveGame.Interface.GUI
 
         private static int LeftMouseTimer = 0;
 
-        public override void OnInitialize() {
+        public override void OnInitialize()
+        {
             panelLeft = 600f;
             panelTop = 80f;
             panelHeight = 148f;
@@ -71,9 +73,11 @@ namespace ImproveGame.Interface.GUI
             waterSlot.Top.Set(slotSecond, 0f);
             waterSlot.Width.Set(40f, 0f);
             waterSlot.Height.Set(40f, 0f);
-            waterSlot.OnMouseDown += (_, _) => {
+            waterSlot.OnMouseDown += (_, _) =>
+            {
                 LeftMouseTimer = 0;
-                if (WandSystem.LiquidMode != LiquidID.Water && !SpecialClickSlot) {
+                if (WandSystem.LiquidMode != LiquidID.Water && !SpecialClickSlot)
+                {
                     WandSystem.LiquidMode = LiquidID.Water;
                     int iconItemID = WandSystem.AbsorptionMode ? ItemID.SuperAbsorbantSponge : ItemID.WaterBucket;
                     modeButton.SetIconTexture($"Images/Item_{iconItemID}", true);
@@ -86,9 +90,11 @@ namespace ImproveGame.Interface.GUI
             lavaSlot.Top.Set(slotSecond, 0f);
             lavaSlot.Width.Set(40f, 0f);
             lavaSlot.Height.Set(40f, 0f);
-            lavaSlot.OnMouseDown += (_, _) => {
+            lavaSlot.OnMouseDown += (_, _) =>
+            {
                 LeftMouseTimer = 0;
-                if (WandSystem.LiquidMode != LiquidID.Lava && !SpecialClickSlot) {
+                if (WandSystem.LiquidMode != LiquidID.Lava && !SpecialClickSlot)
+                {
                     WandSystem.LiquidMode = LiquidID.Lava;
                     int iconItemID = WandSystem.AbsorptionMode ? ItemID.LavaAbsorbantSponge : ItemID.LavaBucket;
                     modeButton.SetIconTexture($"Images/Item_{iconItemID}", true);
@@ -101,9 +107,11 @@ namespace ImproveGame.Interface.GUI
             honeySlot.Top.Set(slotSecond, 0f);
             honeySlot.Width.Set(40f, 0f);
             honeySlot.Height.Set(40f, 0f);
-            honeySlot.OnMouseDown += (_, _) => {
+            honeySlot.OnMouseDown += (_, _) =>
+            {
                 LeftMouseTimer = 0;
-                if (WandSystem.LiquidMode != LiquidID.Honey && !SpecialClickSlot) {
+                if (WandSystem.LiquidMode != LiquidID.Honey && !SpecialClickSlot)
+                {
                     WandSystem.LiquidMode = LiquidID.Honey;
                     // 1.4.4出来之后把这块换成蜂蜜吸水棉
                     int iconItemID = WandSystem.AbsorptionMode ? ItemID.SuperAbsorbantSponge : ItemID.HoneyBucket;
@@ -113,7 +121,8 @@ namespace ImproveGame.Interface.GUI
             basePanel.Append(honeySlot);
 
             // 头顶大字
-            title = new("Materials", 0.5f, large: true) {
+            title = new("Materials", 0.5f, large: true)
+            {
                 HAlign = 0.5f
             };
             title.Left.Set(0, 0f);
@@ -128,7 +137,8 @@ namespace ImproveGame.Interface.GUI
             modeButton.Top.Set(slotFirst, 0f);
             modeButton.Width.Set(166f, 0f);
             modeButton.Height.Set(42f, 0f);
-            modeButton.OnMouseDown += (UIMouseEvent _, UIElement _) => {
+            modeButton.OnMouseDown += (UIMouseEvent _, UIElement _) =>
+            {
                 WandSystem.ChangeAbsorptionMode();
                 SetIconTexture();
             };
@@ -142,10 +152,13 @@ namespace ImproveGame.Interface.GUI
         /// <param name="addAmount">更改数量</param>
         /// <param name="store">true则使用存液体模式，false则使用放液体模式</param>
         /// <param name="ignoreLiquidMode">是否无视<see cref="WandSystem.LiquidMode"/>判断</param>
-        public void TryChangeLiquidAmount(byte liquidType, ref byte addAmount, bool store, bool ignoreLiquidMode = false) {
+        public void TryChangeLiquidAmount(byte liquidType, ref byte addAmount, bool store, bool ignoreLiquidMode = false)
+        {
+            Main.NewText($"TryChangeLiquidAmount");
             if (liquidType != WandSystem.LiquidMode && !ignoreLiquidMode)
                 return;
-            switch (liquidType) {
+            switch (liquidType)
+            {
                 case LiquidID.Water:
                     if (store) waterSlot.StoreLiquid(ref addAmount);
                     else waterSlot.TakeLiquid(ref addAmount);
@@ -162,25 +175,29 @@ namespace ImproveGame.Interface.GUI
                     CurrentWand.Honey = honeySlot.GetLiquidAmount();
                     break;
             }
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, CurrentSlot, Main.LocalPlayer.inventory[CurrentSlot].prefix);
             }
         }
 
         // 可拖动界面
-        private void DragStart(UIMouseEvent evt, UIElement listeningElement) {
+        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
+        {
             var dimensions = listeningElement.GetDimensions().ToRectangle();
             Offset = new Vector2(evt.MousePosition.X - dimensions.Left, evt.MousePosition.Y - dimensions.Top);
             Dragging = true;
         }
 
         // 可拖动界面
-        private void MouseUpDragEnd(UIMouseEvent evt, UIElement listeningElement) {
+        private void MouseUpDragEnd(UIMouseEvent evt, UIElement listeningElement)
+        {
             if (Dragging)
                 DragEnd(evt.MousePosition, listeningElement);
         }
 
-        private void DragEnd(Vector2 mousePosition, UIElement listeningElement) {
+        private void DragEnd(Vector2 mousePosition, UIElement listeningElement)
+        {
             Dragging = false;
 
             listeningElement.Left.Set(mousePosition.X - Offset.X, 0f);
@@ -190,8 +207,10 @@ namespace ImproveGame.Interface.GUI
         }
 
         // 主要是可拖动和一些判定吧
-        public override void Update(GameTime gameTime) {
-            if (!Main.LocalPlayer.inventory.IndexInRange(CurrentSlot) || CurrentItem is null || CurrentItem.ModItem is not LiquidWand) {
+        public override void Update(GameTime gameTime)
+        {
+            if (!Main.LocalPlayer.inventory.IndexInRange(CurrentSlot) || CurrentItem is null || CurrentItem.ModItem is not LiquidWand)
+            {
                 Close();
                 return;
             }
@@ -200,13 +219,15 @@ namespace ImproveGame.Interface.GUI
 
             base.Update(gameTime);
 
-            if (!Main.playerInventory) {
+            if (!Main.playerInventory)
+            {
                 Close();
                 return;
             }
 
             // 右键点击空白直接关闭
-            if (Main.mouseRight && !PrevMouseRight && basePanel.IsMouseHovering && !HoveringOnSlots) {
+            if (Main.mouseRight && !PrevMouseRight && basePanel.IsMouseHovering && !HoveringOnSlots)
+            {
                 Close();
                 return;
             }
@@ -222,16 +243,19 @@ namespace ImproveGame.Interface.GUI
             int mode = -1;
             LiquidWandSlot listeningSlot = null;
 
-            if (waterSlot.IsMouseHovering) {
-                hoverText = MyUtils.GetTextWith("LiquidWand.Water", new {LiquidAmount = $"{waterSlot.GetLiquidAmount():p1}"});
+            if (waterSlot.IsMouseHovering)
+            {
+                hoverText = MyUtils.GetTextWith("LiquidWand.Water", new { LiquidAmount = $"{waterSlot.GetLiquidAmount():p1}" });
                 // 如果遮挡到百分比文本，就虚化百分比文本
                 int lengthToMouse = Main.mouseX - (int)waterSlot.GetDimensions().X;
                 waterSlot.IsAltHovering = lengthToMouse <= 21;
                 lavaSlot.IsAltHovering = true;
                 honeySlot.IsAltHovering = lengthToMouse > 8;
                 // 附加文本
-                if (!Main.mouseItem.IsAir) {
-                    switch (Main.mouseItem.type) {
+                if (!Main.mouseItem.IsAir)
+                {
+                    switch (Main.mouseItem.type)
+                    {
                         case ItemID.EmptyBucket:
                             hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickOut");
                             listeningSlot = waterSlot;
@@ -255,15 +279,18 @@ namespace ImproveGame.Interface.GUI
                 }
             }
 
-            if (lavaSlot.IsMouseHovering) {
+            if (lavaSlot.IsMouseHovering)
+            {
                 hoverText = MyUtils.GetTextWith("LiquidWand.Lava", new { LiquidAmount = $"{lavaSlot.GetLiquidAmount():p1}" });
                 // 如果遮挡到百分比文本，就虚化百分比文本
                 int lengthToMouse = Main.mouseX - (int)lavaSlot.GetDimensions().X;
                 lavaSlot.IsAltHovering = lengthToMouse <= 21;
                 honeySlot.IsAltHovering = true;
                 // 附加文本
-                if (!Main.mouseItem.IsAir) {
-                    switch (Main.mouseItem.type) {
+                if (!Main.mouseItem.IsAir)
+                {
+                    switch (Main.mouseItem.type)
+                    {
                         case ItemID.EmptyBucket:
                             hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickOut");
                             listeningSlot = lavaSlot;
@@ -287,14 +314,17 @@ namespace ImproveGame.Interface.GUI
                 }
             }
 
-            if (honeySlot.IsMouseHovering) {
+            if (honeySlot.IsMouseHovering)
+            {
                 hoverText = MyUtils.GetTextWith("LiquidWand.Honey", new { LiquidAmount = $"{honeySlot.GetLiquidAmount():p1}" });
                 // 如果遮挡到百分比文本，就虚化百分比文本
                 int lengthToMouse = Main.mouseX - (int)honeySlot.GetDimensions().X;
                 honeySlot.IsAltHovering = lengthToMouse <= 21;
                 // 附加文本（还没有无底蜂蜜桶和蜂蜜吸收棉呢，不过我看1.4.4马上就会有了，而且也是这个ID名）
-                if (!Main.mouseItem.IsAir) {
-                    switch (Main.mouseItem.type) {
+                if (!Main.mouseItem.IsAir)
+                {
+                    switch (Main.mouseItem.type)
+                    {
                         case ItemID.EmptyBucket:
                             hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickOut");
                             listeningSlot = honeySlot;
@@ -317,11 +347,13 @@ namespace ImproveGame.Interface.GUI
                 }
             }
 
-            if (hoverText is not "") {
+            if (hoverText is not "")
+            {
                 Main.instance.MouseText(hoverText);
             }
 
-            if (listeningSlot is not null && mode is not -1 && SpecialClickSlot && Main.mouseLeft) {
+            if (listeningSlot is not null && mode is not -1 && SpecialClickSlot && Main.mouseLeft)
+            {
                 if (LeftMouseTimer >= 60)
                     ApplySpecialClick(mode, listeningSlot);
                 else if (LeftMouseTimer >= 30 && LeftMouseTimer % 3 == 0)
@@ -333,19 +365,23 @@ namespace ImproveGame.Interface.GUI
                 LeftMouseTimer++;
             }
 
-            if (Dragging) {
+            if (Dragging)
+            {
                 basePanel.Left.Set(Main.mouseX - Offset.X, 0f);
                 basePanel.Top.Set(Main.mouseY - Offset.Y, 0f);
                 Recalculate();
                 // 正在放东西，别拉了
-                if (SpecialClickSlot) {
+                if (SpecialClickSlot)
+                {
                     DragEnd(Main.MouseScreen, basePanel);
                 }
             }
         }
 
-        public void ApplySpecialClick(int mode, LiquidWandSlot slot) {
-            switch (mode) {
+        public void ApplySpecialClick(int mode, LiquidWandSlot slot)
+        {
+            switch (mode)
+            {
                 case 0: // 空桶带走
                     // 传进去的是液体需求量，所以这里假装我们需要255个液体则要传0
                     byte reduceNumber = 0;
@@ -354,7 +390,8 @@ namespace ImproveGame.Interface.GUI
                     if (reduceNumber <= 20)
                         return;
                     Main.mouseItem.stack--;
-                    switch (slot.LiquidID) {
+                    switch (slot.LiquidID)
+                    {
                         case LiquidID.Water:
                             Main.LocalPlayer.PutItemInInventoryFromItemUsage(ItemID.WaterBucket, Main.LocalPlayer.selectedItem);
                             break;
@@ -370,11 +407,13 @@ namespace ImproveGame.Interface.GUI
                     byte addNumber = 255;
                     TryChangeLiquidAmount(slot.LiquidID, ref addNumber, true, true);
                     // 没变，说明没必要加了
-                    if (addNumber == 255) {
+                    if (addNumber == 255)
+                    {
                         break;
                     }
 
-                    if (Main.mouseItem.UseSound is not null) {
+                    if (Main.mouseItem.UseSound is not null)
+                    {
                         SoundEngine.PlaySound(Main.mouseItem.UseSound.Value);
                     }
 
@@ -393,19 +432,23 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch) {
+        public override void Draw(SpriteBatch spriteBatch)
+        {
             Player player = Main.LocalPlayer;
 
             base.Draw(spriteBatch);
 
-            if (basePanel.ContainsPoint(Main.MouseScreen)) {
+            if (basePanel.ContainsPoint(Main.MouseScreen))
+            {
                 player.mouseInterface = true;
             }
         }
 
-        public void SetIconTexture() {
+        public void SetIconTexture()
+        {
             int iconItemID = WandSystem.AbsorptionMode ? ItemID.SuperAbsorbantSponge : ItemID.WaterBucket;
-            switch (WandSystem.LiquidMode) {
+            switch (WandSystem.LiquidMode)
+            {
                 case LiquidID.Lava:
                     iconItemID = WandSystem.AbsorptionMode ? ItemID.LavaAbsorbantSponge : ItemID.LavaBucket;
                     break;
@@ -419,7 +462,8 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 打开GUI界面
         /// </summary>
-        public void Open(int setSlotIndex = -1) {
+        public void Open(int setSlotIndex = -1)
+        {
             Main.playerInventory = true;
             PrevMouseRight = true; // 防止一打开就关闭
             Visible = true;
@@ -427,7 +471,8 @@ namespace ImproveGame.Interface.GUI
             SoundEngine.PlaySound(SoundID.MenuOpen);
 
             CurrentSlot = Main.LocalPlayer.selectedItem;
-            if (setSlotIndex is not -1) {
+            if (setSlotIndex is not -1)
+            {
                 CurrentSlot = setSlotIndex;
             }
 
@@ -449,7 +494,8 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 关闭GUI界面
         /// </summary>
-        public void Close() {
+        public void Close()
+        {
             CurrentSlot = -1;
             Visible = false;
             PrevMouseRight = false;
