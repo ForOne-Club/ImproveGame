@@ -278,12 +278,12 @@ Mods:
 
             OtherFunctions:
             {
-                Label: "[i:ThePlan] 其他不可调节功能"
+                Label: "[i:ThePlan] Other non-configurable functions"
                 Header:
                     '''
-                    以下是本模组的其他不可调节功能:
-                    - 便携存储内的虫洞药水生效
-                    - 时装配饰栏可放入任何配饰
+                    Following are other non-configurable functions of this mod:
+                    - Wormhole Potion works in personal inventories
+                    - Any accessory can be worn in vanity slots
                     '''
             }
         }
@@ -296,7 +296,7 @@ Mods:
             WallPlace: Wand of Technology
             LiquidWand: Wand of Liquids
             PotionBag: Potion Bag
-            Autofisher: 自动钓鱼机
+            Autofisher: Fishing Machine
         }
         ItemTooltip:
         {
@@ -367,17 +367,17 @@ Mods:
                 '''
             Autofisher:
                 '''
-                自动钓鱼
-                右键点击放置的自动钓鱼机，即可打开钓鱼面板
-                点击第一行右侧的 "+" 以选择钓鱼水域
-                放入鱼竿与诱饵即可自动钓鱼，钓鱼判定与手动钓鱼一致
-                你可以放入饰品，以提升其渔力，或获得熔岩钓鱼的能力
-                初始钓鱼速度为手动钓鱼的 10%，你可以通过以下方式提升钓鱼速度:
-                - 存储的 [i:Bass] 将以 20:1 的比例转化为钓鱼速度加成，最高可达 500% 加成 ([i/s100:Bass])
-                - 配饰为 [i:AnglerEarring] 可使钓鱼速度*200%
-                - 配饰为 [i:AnglerTackleBag] 可使钓鱼速度*300%
-                - 配饰为 [i:LavaproofTackleBag] 可使钓鱼速度*500%
-                [c/AAAAAA:由于没有鱼线，你不能在配饰槽中放入] [i:HighTestFishingLine]
+                Auto-fishing
+                Right click on a placed Fishing Machine to open the fishing panel
+                Click the "+" in the first row to choose water type
+                Put in a fishing rod and baits to start, mechanics are the same as manul-fishing
+                You may also put in accessories to increase fishing power or grant ability to fish in lava
+                The initial fishing speed is 10% of the manul-fishing speed, you may speed up the fishing process by:
+                - Bass [i:Bass] stored will be converted to percentage fishing speed bonus by 20 : 1, caps at 500% ([i/s100:Bass])
+                - [i:AnglerEarring] increases fishing speed by * 200%
+                - [i:AnglerTackleBag] increases fishing speed by * 300%
+                - [i:LavaproofTackleBag] increases fishing speed by * 500%
+                [c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
                 '''
         }
 		MapObject:
@@ -549,10 +549,10 @@ Mods:
         }
         SpaceWand:
         {
-            placeType: 放置类型
-            platform: 平台
-            soild: 方块
-            rope: 绳子
+            placeType: Type of tiles placed
+            platform: Platforms
+            soild: Solid blocks
+            rope: Ropes
         }
         Common:
         {
