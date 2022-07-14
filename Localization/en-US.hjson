@@ -424,6 +424,7 @@ Mods:
             }
             TagDetailed:
             {
+                GardenGnome: "[Garden Gnome]"
                 Enabled: "[Enabled]"
                 Disabled: "[Disabled]"
                 Hided: "[Buff icons hiden]"
@@ -434,6 +435,11 @@ Mods:
             # 每行长度最好限制在30-40字母之间
             TagDetailedTip:
             {
+                GardenGnome:
+                    '''
+                    Luck bonus of the Garden Gnome has been applied
+                    You could not disable this effect as it is not a 'buff'
+                    '''
                 Enabled:
                     '''
                     The buff [c/88CCEE:[{BuffName}][c/88CCEE:]] is already applied.

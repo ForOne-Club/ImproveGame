@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 
 namespace ImproveGame.Common.Players
@@ -39,8 +40,36 @@ namespace ImproveGame.Common.Players
                     return;
                 if (buffType == BuffID.WellFed2 && wellFed3Enabled)
                     return;
-
+                if (item.type == ItemID.LuckPotionLesser || item.type == ItemID.LuckPotion || item.type == ItemID.LuckPotionGreater)
+                {
+                    Player.AddBuff(buffType, item.buffTime - 1);
+                    return;
+                }
                 Player.AddBuff(buffType, 2);
+            }
+            HandleSceneMetrics(item);
+        }
+
+        public static void HandleSceneMetrics(Item item)
+        {
+            switch (item.createTile)
+            {
+                case TileID.Fireplace:
+                case TileID.Campfire:
+                    HideBuffSystem.HasCampfire = true;
+                    break;
+                case TileID.HangingLanterns:
+                    if (item.placeStyle == 9)
+                        HideBuffSystem.HasHeartLantern = true;
+                    if (item.placeStyle == 7)
+                        HideBuffSystem.HasStarInBottle = true;
+                    break;
+                case TileID.Sunflower:
+                    HideBuffSystem.HasSunflower = true;
+                    break;
+                case TileID.GardenGnome:
+                    HideBuffSystem.HasGardenGnome = true;
+                    break;
             }
         }
 

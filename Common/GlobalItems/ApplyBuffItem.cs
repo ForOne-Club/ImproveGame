@@ -1,18 +1,35 @@
-﻿using ImproveGame.Common.Players;
-using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Terraria.Localization;
 
 namespace ImproveGame.Common.GlobalItems
 {
     public class ApplyBuffItem : GlobalItem
     {
         // 特殊药水
-        public static readonly List<int> SpecialPotions = new() { 2350, 2351, ItemID.WormholePotion, ItemID.PotionOfReturn };
-        // 增益 Tile 巴斯特雕像，篝火，红心灯笼，星星瓶，向日葵，弹药箱，施法桌，水晶球，蛋糕块，利器站，水蜡烛，和平蜡烛
-        public static readonly List<List<int>> BUFFTiles = new() { new() { 506, -1, 215 }, new() { 215, -1, 87 }, new() { 42, 9, 89 }, new() { 42, 7, 158 }, new() { 27, -1, 146 }, new() { 287, -1, 93 }, new() { 354, -1, 150 }, new() { 125, -1, 29 }, new() { 621, -1, 192 }, new() { 377, -1, 159 }, new() { 49, -1, 86 }, new() { 372, -1, 157 } };
+        public static readonly List<int> SpecialPotions = new() {
+            ItemID.RecallPotion,
+            ItemID.TeleportationPotion,
+            ItemID.WormholePotion,
+            ItemID.PotionOfReturn
+        };
+
+        public static readonly List<List<int>> BuffTiles = new() {
+            new() { TileID.CatBast, -1, BuffID.CatBast }, // 巴斯特雕像
+            new() { TileID.Campfire, -1, BuffID.Campfire }, // 篝火
+            new() { TileID.Fireplace, -1, BuffID.Campfire }, // 壁炉
+            new() { TileID.HangingLanterns, 9, BuffID.HeartLamp }, // 红心灯笼
+            new() { TileID.HangingLanterns, 7, BuffID.StarInBottle }, // 星星瓶
+            new() { TileID.Sunflower, -1, BuffID.Sunflower }, // 向日葵
+            new() { TileID.AmmoBox, -1, BuffID.AmmoBox }, // 弹药箱
+            new() { TileID.BewitchingTable, -1, BuffID.Bewitched }, // 施法桌
+            new() { TileID.CrystalBall, -1, BuffID.Clairvoyance }, // 水晶球
+            new() { TileID.SliceOfCake, -1, BuffID.SugarRush }, // 蛋糕块
+            new() { TileID.SharpeningStation, -1, BuffID.Sharpened }, // 利器站
+            new() { TileID.WaterCandle, -1, BuffID.WaterCandle }, // 水蜡烛
+            new() { TileID.PeaceCandle, -1, BuffID.PeaceCandle } // 和平蜡烛
+        };
 
         public static void UpdateInventoryGlow(Item item) {
             bool globalItemNotNull = item.TryGetGlobalItem<GlobalItemData>(out var globalItem);
@@ -25,18 +42,22 @@ namespace ImproveGame.Common.GlobalItems
                 if (globalItemNotNull)
                     globalItem.InventoryGlow = true;
             }
+
             // 非增益药剂
-            if (MyUtils.Config.NoConsume_Potion && item.stack >= MyUtils.Config.NoConsume_PotionRequirement && SpecialPotions.Contains(item.type) && globalItemNotNull) {
+            if (MyUtils.Config.NoConsume_Potion && item.stack >= MyUtils.Config.NoConsume_PotionRequirement && SpecialPotions.Contains(item.type) && globalItemNotNull)
                 globalItem.InventoryGlow = true;
-            }
+
             // 随身增益站：旗帜
-            if (MyUtils.Config.NoPlace_BUFFTile_Banner && globalItemNotNull && globalItem.ShouldHaveInvGlowForBanner) {
+            if (MyUtils.Config.NoPlace_BUFFTile_Banner && globalItemNotNull && globalItem.ShouldHaveInvGlowForBanner)
                 globalItem.InventoryGlow = true;
-            }
+
             // 弹药
-            if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0 && globalItemNotNull) {
+            if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0 && globalItemNotNull)
                 globalItem.InventoryGlow = true;
-            }
+
+            // 花园侏儒
+            if (item.type == ItemID.GardenGnome && globalItemNotNull)
+                globalItem.InventoryGlow = true;
         }
 
         public static int GetItemBuffType(Item item) {
@@ -65,9 +86,9 @@ namespace ImproveGame.Common.GlobalItems
 
         public static bool IsBuffTileItem(Item item, out int buffType) {
             // 会给玩家buff的雕像
-            for (int i = 0; i < BUFFTiles.Count; i++) {
-                if (item.createTile == BUFFTiles[i][0] && (item.placeStyle == BUFFTiles[i][1] || BUFFTiles[i][1] == -1)) {
-                    buffType = BUFFTiles[i][2];
+            for (int i = 0; i < BuffTiles.Count; i++) {
+                if (item.createTile == BuffTiles[i][0] && (item.placeStyle == BuffTiles[i][1] || BuffTiles[i][1] == -1)) {
+                    buffType = BuffTiles[i][2];
                     return true;
                 }
             }
@@ -94,11 +115,11 @@ namespace ImproveGame.Common.GlobalItems
             if (!item.TryGetGlobalItem<GlobalItemData>(out var global) || !global.InventoryGlow)
                 return;
 
-            if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket ||
+            if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket || item.type == ItemID.GardenGnome ||
                 (item.stack >= MyUtils.Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
                 int buffType = GetItemBuffType(item);
 
-                if (buffType is -1) return;
+                if (buffType is -1 && item.type != ItemID.GardenGnome) return;
 
                 if (Main.mouseMiddle && Main.mouseMiddleRelease) {
                     if (BuffTrackerGUI.Visible)
@@ -114,6 +135,12 @@ namespace ImproveGame.Common.GlobalItems
         public override bool PreDrawTooltip(Item item, ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y) {
             if (!item.TryGetGlobalItem<GlobalItemData>(out var global) || !global.InventoryGlow)
                 return base.PreDrawTooltip(item, lines, ref x, ref y);
+
+            if (item.type == ItemID.GardenGnome && ItemSlot.ShiftInUse)
+            {
+                TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines), x, y);
+                return base.PreDrawTooltip(item, lines, ref x, ref y);
+            }
 
             if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket ||
                 (item.stack >= MyUtils.Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
