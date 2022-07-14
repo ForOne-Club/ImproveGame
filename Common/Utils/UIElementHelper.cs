@@ -25,7 +25,12 @@ namespace ImproveGame.Common.Utils
             uie.PaddingBottom = padding;
         }
 
-        public static void SetPos(this UIElement uie, Vector2 position, float precentX = 0, float precentY = 0)
+        public static Vector2 GetPPos(this UIElement uie)
+        {
+            return new(uie.Left.Pixels, uie.Top.Pixels);
+        }
+
+        public static void SetPPos(this UIElement uie, Vector2 position, float precentX = 0, float precentY = 0)
         {
             uie.SetPos(position.X, position.Y, precentX, precentY);
         }

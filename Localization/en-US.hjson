@@ -549,7 +549,7 @@ Mods:
         }
         SpaceWand:
         {
-            placeType: Type of tiles placed
+            placeType: Tile type
             platform: Platforms
             soild: Solid blocks
             rope: Ropes

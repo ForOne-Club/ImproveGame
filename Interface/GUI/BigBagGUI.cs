@@ -43,7 +43,7 @@ namespace ImproveGame.Interface.GUI
 
             ItemGrid.SetInventory(items);
 
-            MainPanel.SetPos(SuperVaultPos);
+            MainPanel.SetPPos(SuperVaultPos);
             MainPanel.Width.Pixels = MainPanel.HPadding() + ItemGrid.Width();
             MainPanel.Height.Pixels = MainPanel.VPadding() + ItemGrid.Height() + ItemGrid.Top();
             _visible = Visible;
@@ -61,11 +61,11 @@ namespace ImproveGame.Interface.GUI
             MainPanel.OnMouseUp += (evt, uie) => dragging = false;
             MainPanel.OnUpdate += (uie) => {
                 if (dragging) {
-                    uie.SetPos(Main.MouseScreen - offset);
+                    uie.SetPPos(Main.MouseScreen - offset);
                     uie.Recalculate();
                 }
                 if (!Collision.CheckAABBvAABBCollision(uie.GetDimensions().Position(), uie.GetDimensions().ToRectangle().Size(), Vector2.Zero, Main.ScreenSize.ToVector2())) {
-                    uie.SetPos(Vector2.Zero);
+                    uie.SetPPos(Vector2.Zero);
                     uie.Recalculate();
                 }
                 if (uie.IsMouseHovering) {
