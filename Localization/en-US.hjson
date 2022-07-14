@@ -424,7 +424,7 @@ Mods:
             }
             TagDetailed:
             {
-                GardenGnome: "[花园侏儒]"
+                GardenGnome: "[Garden Gnome]"
                 Enabled: "[Enabled]"
                 Disabled: "[Disabled]"
                 Hided: "[Buff icons hiden]"
@@ -437,8 +437,8 @@ Mods:
             {
                 GardenGnome:
                     '''
-                    花园侏儒的幸运加成已应用
-                    你无法开关此效果，因为这不是一个增益
+                    Luck bonus of the Garden Gnome has been applied
+                    You could not disable this effect as it is not a 'buff'
                     '''
                 Enabled:
                     '''
