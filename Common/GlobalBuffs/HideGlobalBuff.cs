@@ -256,13 +256,19 @@ namespace ImproveGame.Common.GlobalBuffs
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams) {
-            if (HideBuffSystem.BuffTypesShouldHide[type] && MyUtils.Config.HideNoConsumeBuffs) {
-                // 干掉鼠标和文本
-                drawParams.MouseRectangle = Rectangle.Empty;
-                if (UseRegularMethod_NoInventory || Main.playerInventory) {
-                    HidedBuffCountThisFrame++;
+            if (HideBuffSystem.BuffTypesShouldHide[type]) {
+                // 不管咋样都不显示文本
+                drawParams.TextPosition = new(-114514f);
+                if (MyUtils.Config.HideNoConsumeBuffs)
+                {
+                    // 干掉指针显示
+                    drawParams.MouseRectangle = Rectangle.Empty;
+                    if (UseRegularMethod_NoInventory || Main.playerInventory)
+                    {
+                        HidedBuffCountThisFrame++;
+                    }
+                    return false;
                 }
-                return false;
             }
             if (HidedBuffCountThisFrame > 0) {
                 int i = buffIndex - HidedBuffCountThisFrame;

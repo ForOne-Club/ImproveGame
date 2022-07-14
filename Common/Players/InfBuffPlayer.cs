@@ -40,7 +40,11 @@ namespace ImproveGame.Common.Players
                     return;
                 if (buffType == BuffID.WellFed2 && wellFed3Enabled)
                     return;
-
+                if (item.type == ItemID.LuckPotionLesser || item.type == ItemID.LuckPotion || item.type == ItemID.LuckPotionGreater)
+                {
+                    Player.AddBuff(buffType, item.buffTime - 1);
+                    return;
+                }
                 Player.AddBuff(buffType, 2);
             }
             HandleSceneMetrics(item);
