@@ -424,6 +424,7 @@ Mods:
             }
             TagDetailed:
             {
+                GardenGnome: "[花园侏儒]"
                 Enabled: "[Enabled]"
                 Disabled: "[Disabled]"
                 Hided: "[Buff icons hiden]"
@@ -434,6 +435,11 @@ Mods:
             # 每行长度最好限制在30-40字母之间
             TagDetailedTip:
             {
+                GardenGnome:
+                    '''
+                    花园侏儒的幸运加成已应用
+                    你无法开关此效果，因为这不是一个增益
+                    '''
                 Enabled:
                     '''
                     The buff [c/88CCEE:[{BuffName}][c/88CCEE:]] is already applied.

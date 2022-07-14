@@ -431,6 +431,7 @@
             }
             TagDetailed:
             {
+                GardenGnome: "[花园侏儒]"
                 Enabled: "[已启用]"
                 Disabled: "[已禁用]"
                 Hided: "[增益图标已隐藏]"
@@ -440,6 +441,11 @@
             }
             TagDetailedTip:
             {
+                GardenGnome:
+                    '''
+                    花园侏儒的幸运加成已应用
+                    你无法开关此效果，因为这不是一个增益
+                    '''
                 Enabled:
                     '''
                     物品增益 [c/88CCEE:[{BuffName}][c/88CCEE:]] 已自动应用

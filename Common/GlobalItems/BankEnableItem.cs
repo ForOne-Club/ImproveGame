@@ -1,13 +1,6 @@
 ﻿using ImproveGame.Common.Players;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -29,6 +22,7 @@ namespace ImproveGame.Common.GlobalItems
 
             if (MyUtils.Bank2Items.Contains(item.type) && MyUtils.Config.AutoSaveMoney) {
                 tooltips.Add(new(Mod, "TagDetailed.AutoCollect", MyUtils.GetText("Tips.TagDetailed.AutoCollect")) { OverrideColor = Color.SkyBlue });
+                TagItem.AddShiftForMoreTooltip(tooltips);
             }
 
             // 确保物品栏里面有才能用，不然就作弊了（比如把物品打到聊天框里面直接中键）
