@@ -112,6 +112,7 @@
     18、 超级虚空保险库
     19、 智能虚空保险库
     20、 额外的背包
+    999、 所有功能都可以在设置查看，懒得写了 QAQ
 ---------------------------
 [c/990000:画师：枫林半叶]
 [c/9900ff:翻译：Lastprismer，Lacewing]
@@ -242,6 +243,7 @@ Function list:
     18. Super Void Vault
     19. Void Vault Smart Pickup
     20. A huge extra inventory
+    999、 所有功能都可以在设置查看，懒得写了 QAQ
 ---------------------------
 [c/990000:Spriter: 枫林半叶]
 [c/9900ff:Translators: Lastprismer, Lacewing]
