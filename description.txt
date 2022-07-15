@@ -121,18 +121,18 @@
 
 These features may bring you better gameplay experience
 ---------------------------
-默认仅开启部分功能，详情请查看模组设置。
+Only some functions are enabled by default, please check mod configurations for details
 ---------------------------
-模组物品获得方式：
-药水袋: 丝绸x8
-自动钓鱼机: 铁锭(铅锭)x12 铜锭(锡锭)x6 玻璃x20
-科技魔杖: 史莱姆王掉落
-空间魔杖: 史莱姆王掉落
-液体魔杖: 金锭(铂金锭)x12 暗影鳞片(组织样本)x18 木材x24
-建筑魔杖: 木材x24 落星x8 金锭(铂金锭)x12
-法爆魔杖: 木材x18 丛林孢子x6 红玉x1
-星爆魔杖: 法爆法杖x1 落星x8 光明之魂x6 暗影之魂x6
-(你可以使用 Recipe Browser(合成表) 模组的物品图鉴功能以在游戏内查阅来源!)
+How to obtain mod items: 
+Potion Bag: Silk * 8
+Fishing Machine: Any Iron Bar * 12 + Any Copper Bar * 6 + Glass * 20
+Wand of Technology: Dropped by the King Slime
+Wand of Space: Dropped by the King Slime
+Wand of Liquid: Any Gold Bar * 12 + Shadow Scale/Tissue Sample * 18 + Wood * 24
+Wand of Architecture: Wood * 24 + Fallen Star * 8 + Any Gold Bar * 12
+Wand of Brusts: Wood * 18 + Jungle Spores * 6 + Ruby * 1
+Wand of Star Brusts: Wand of Brusts * 1 + Fallen Star * 8 + Soul of Light * 6 + Soul of Night * 6
+(You may use the Bestiary of the Recipe Browser to check their sources!)
 ---------------------------
 Change log: (View details in mod configs)
     1.5.9
@@ -243,9 +243,9 @@ Function list:
     18. Super Void Vault
     19. Void Vault Smart Pickup
     20. A huge extra inventory
-    999、 所有功能都可以在设置查看，懒得写了 QAQ
+    999. Go to the mod configurations please
 ---------------------------
 [c/990000:Spriter: 枫林半叶]
 [c/9900ff:Translators: Lastprismer, Lacewing]
 [c/0099ff:Coder: 局长, Cyril]
-[c/00ff99:特别感谢: @ChevyRay 的协程类]
+[c/00ff99:Special thanks: @ChevyRay's coroutine class]
