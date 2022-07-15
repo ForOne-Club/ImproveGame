@@ -134,7 +134,7 @@ namespace ImproveGame.Content.Items
                         PostModifyTiles(player, minI, minJ, i, j);
                         yield break;
                     }
-                    if (countTiles >= 6) {
+                    if (countTiles >= 30) {
                         countTiles = 0;
                         yield return 0;
                     }

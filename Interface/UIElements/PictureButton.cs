@@ -3,7 +3,10 @@ using ReLogic.Content;
 
 namespace ImproveGame.Interface.UIElements
 {
-    public class JuButton : UIElement
+    /// <summary>
+    /// 图片按钮
+    /// </summary>
+    public class PictureButton : UIElement
     {
         private Asset<Texture2D> Background;
         private Asset<Texture2D> BackgroundBorder;
@@ -14,7 +17,7 @@ namespace ImproveGame.Interface.UIElements
         public UIImage UIImage;
         public UIText UIText;
 
-        public JuButton(Texture2D texture, string text)
+        public PictureButton(Texture2D texture, string text)
         {
             _playSound = true;
             data = new int[5];

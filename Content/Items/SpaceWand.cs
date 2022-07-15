@@ -13,7 +13,8 @@ namespace ImproveGame.Content.Items
         {
             platform,
             soild,
-            rope
+            rope,
+            rail
         }
 
         public PlaceType placeType;
@@ -145,7 +146,7 @@ namespace ImproveGame.Content.Items
                         if (oneIndex > -1)
                         {
                             Item item = player.inventory[oneIndex];
-                            if (player.TileReplacementEnabled && NotSameTile(i, j, item.createTile, item.placeStyle))
+                            if (player.TileReplacementEnabled && !SameTile(i, j, item.createTile, item.placeStyle, (placeType == PlaceType.soild || placeType == PlaceType.rope) ? CheckType.Type : default))
                             {
                                 TryKillTile(i, j, player);
                             }
@@ -206,15 +207,19 @@ namespace ImproveGame.Content.Items
         {
             if (placeType is PlaceType.platform)
             {
-                return (item) => item.createTile != -1 && (TileID.Sets.Platforms[item.createTile] || item.createTile == TileID.PlanterBox);
+                return (item) => item.consumable && item.createTile != -1 && (TileID.Sets.Platforms[item.createTile] || item.createTile == TileID.PlanterBox);
             }
             else if (placeType is PlaceType.soild)
             {
-                return (item) => item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile];
+                return (item) => item.consumable && item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile];
             }
             else if (placeType is PlaceType.rope)
             {
-                return (item) => item.createTile > -1 && Main.tileRope[item.createTile];
+                return (item) => item.consumable && item.createTile > -1 && Main.tileRope[item.createTile];
+            }
+            else if (placeType is PlaceType.rail)
+            {
+                return (item) => item.consumable && item.createTile == TileID.MinecartTrack;
             }
             return (item) => false;
         }

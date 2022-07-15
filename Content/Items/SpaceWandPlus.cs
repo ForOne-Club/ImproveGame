@@ -152,7 +152,7 @@ namespace ImproveGame.Content.Items
                         if (oneIndex > -1)
                         {
                             Item item = player.inventory[oneIndex];
-                            if (player.TileReplacementEnabled && NotSameTile(i, j, item.createTile, item.placeStyle))
+                            if (player.TileReplacementEnabled && !SameTile(i, j, item.createTile, item.placeStyle))
                             {
                                 TryKillTile(i, j, player);
                             }

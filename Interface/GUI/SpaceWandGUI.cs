@@ -17,9 +17,10 @@ namespace ImproveGame.Interface.GUI
 
         public UIPanel MainPanel;
         public UIText text;
-        public JuButton platform;
-        public JuButton soild;
-        public JuButton rope;
+        public PictureButton platform;
+        public PictureButton soild;
+        public PictureButton rope;
+        public PictureButton rail;
         public SpaceWand SpaceWand;
 
 
@@ -80,9 +81,18 @@ namespace ImproveGame.Interface.GUI
             };
             rope.Top.Pixels = soild.Bottom() + 10f;
 
+            rail = new(MyUtils.GetTexture("UI/SpaceWand/rail").Value, "") { HAlign = 0.5f };
+            rail.OnClick += (evt, uie) =>
+            {
+                SoundEngine.PlaySound(SoundID.MenuTick);
+                SpaceWand.placeType = SpaceWand.PlaceType.rail;
+                UpdateText();
+            };
+            rail.Top.Pixels = rope.Bottom() + 10f;
+
             MainPanel.Width.Pixels = 175 + MainPanel.HPadding();
-            MainPanel.Height.Pixels = rope.Bottom() + MainPanel.VPadding();
-            MainPanel.AppendS(text, platform, soild, rope);
+            MainPanel.Height.Pixels = rail.Bottom() + MainPanel.VPadding();
+            MainPanel.AppendS(text, platform, soild, rope, rail);
             Append(MainPanel);
         }
 
@@ -118,13 +128,16 @@ namespace ImproveGame.Interface.GUI
             platform.SetText($"{MyUtils.GetText("SpaceWand.platform")}");
             soild.SetText($"{MyUtils.GetText("SpaceWand.soild")}");
             rope.SetText($"{MyUtils.GetText("SpaceWand.rope")}");
+            rail.SetText($"{MyUtils.GetText("SpaceWand.rail")}");
             platform.Width.Pixels = 175;
             soild.Width.Pixels = 175;
             rope.Width.Pixels = 175;
+            rail.Width.Pixels = 175;
             platform.TextAlignCenter();
             soild.TextAlignCenter();
             rope.TextAlignCenter();
-            MyUtils.RecalculateS(platform, soild, rope);
+            rail.TextAlignCenter();
+            MyUtils.RecalculateS(platform, soild, rope, rail);
         }
 
         public void Open(SpaceWand spaceWand)

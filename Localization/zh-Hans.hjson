@@ -555,6 +555,7 @@
             platform: 平台
             soild: 方块
             rope: 绳子
+            rail: 轨道
         }
         Common:
         {

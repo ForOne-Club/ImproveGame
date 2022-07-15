@@ -560,6 +560,7 @@ Mods:
             platform: Platforms
             soild: Solid blocks
             rope: Ropes
+            rail: ¹ìµÀ
         }
         Common:
         {

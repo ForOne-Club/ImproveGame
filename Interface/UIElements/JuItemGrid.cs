@@ -67,7 +67,7 @@ namespace ImproveGame.Interface.UIElements
             this.items = items;
             for (int i = 0; i < items.Length; i++)
             {
-                var ItemSlot = new JuItemSlot(this, i);
+                var ItemSlot = new ArrayItemSlot(this, i);
                 ItemSlot.Left.Pixels = i % HCount * (ItemSlot.Width.Pixels + 10f);
                 ItemSlot.Top.Pixels = i / HCount * (ItemSlot.Height.Pixels + 10f);
                 Append(ItemSlot);

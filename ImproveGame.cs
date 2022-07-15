@@ -5,6 +5,7 @@ global using System;
 global using System.Linq;
 global using Terraria;
 global using Terraria.Audio;
+global using Terraria.GameContent;
 global using Terraria.GameContent.UI.Elements;
 global using Terraria.ID;
 global using Terraria.ModLoader;

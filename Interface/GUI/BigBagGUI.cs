@@ -25,7 +25,7 @@ namespace ImproveGame.Interface.GUI
         public UIImageButton CloseButton;
         public JuItemGrid ItemGrid;
 
-        public JuButton[] buttons = new JuButton[4];
+        public PictureButton[] buttons = new PictureButton[4];
 
         public void SetSuperVault(Item[] items, Vector2 SuperVaultPos)
         {
