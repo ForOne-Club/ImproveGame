@@ -313,13 +313,13 @@ Mods:
                 '''
             SpaceWand:
                 '''
-                [c/0099ff:右键使用开启控制面板]
-                在指示器位置放置所选类型物块
-                消耗背包中此类型的物块
-                物块交换开启会尝试替换不同类型物块
-                单次最多放置五百格 (服务器中单次至多244)
-                使用状态下<right>取消放置
-                “我同情这些工具”
+                [c/0099ff:Right click to open the control panel]
+                Places selected type of tile in the indicated area
+                Consumes that type of tile in your inventory
+                Will try to swap tiles in different types if Block Swap is enabled
+                Can place 500(244 in servers) tiles once
+                <right> while selecting area to cancel placement
+                'I pity these tools'
                 '''
             StarburstWand:
                 '''
@@ -560,7 +560,7 @@ Mods:
             platform: Platforms
             soild: Solid blocks
             rope: Ropes
-            rail: 轨道
+            rail: Minecart Tracks
         }
         Common:
         {
