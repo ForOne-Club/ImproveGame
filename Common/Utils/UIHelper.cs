@@ -17,9 +17,11 @@ namespace ImproveGame
         /// <param name="parent">该元件的父元件</param>
         /// <param name="folderName">贴图资源在Assets/Images/UI文件夹里面的子文件夹名称</param>
         /// <returns>一个<see cref="ModItemSlot"/>实例</returns>
-        public static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName = null, float scale = 0.85f, Func<Item, Item, bool> canPlace = null, Action<Item, bool> onItemChanged = null, Func<string> emptyText = null, UIElement parent = null, string folderName = null) {
+        public static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName = null, float scale = 0.85f, Func<Item, Item, bool> canPlace = null, Action<Item, bool> onItemChanged = null, Func<string> emptyText = null, UIElement parent = null, string folderName = null)
+        {
             string path = null;
-            if (iconTextureName is not null) {
+            if (iconTextureName is not null)
+            {
                 path = $"ImproveGame/Assets/Images/UI/{iconTextureName}";
                 if (folderName is not null)
                     path = $"ImproveGame/Assets/Images/UI/{folderName}/{iconTextureName}";
@@ -36,6 +38,25 @@ namespace ImproveGame
             if (parent is not null)
                 parent.Append(slot);
             return slot;
+        }
+
+        public static float GetWidestUI(params UIElement[] uies)
+        {
+            float width = 0;
+            foreach (var uie in uies)
+            {
+                if (uie.Width() > width)
+                    width = uie.Width();
+            }
+            return width;
+        }
+
+        public static void RecalculateS(params UIElement[] uies)
+        {
+            foreach (var uie in uies)
+            {
+                uie.Recalculate();
+            }
         }
     }
 }

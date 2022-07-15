@@ -462,48 +462,22 @@ namespace ImproveGame
         // 获取配置
         public static ImproveConfigs Config;
 
-        /// <summary>
-        /// 获取平台总数
-        /// </summary>
-        /// <param name="inv"></param>
-        /// <param name="count">平台的数量</param>
-        /// <returns>是否有不会被消耗的平台</returns>
-        public static bool GetPlatformCount(Item[] inv, out int count)
+        public static bool GetItemCount(Item[] inv, Func<Item, bool> func, out int count)
         {
-            count = default;
-            bool consumable = true;
-            for (int i = 0; i < 50; i++)
+            bool infinite = false;
+            count = 0;
+            for (int i = 0; i < inv.Length; i++)
             {
-                Item item = inv[i];
-                if (item.createTile != -1 && TileID.Sets.Platforms[item.createTile])
+                if (!inv[i].IsAir && func(inv[i]))
                 {
-                    count += item.stack;
-                    if (!item.consumable || !ItemLoader.ConsumeItem(item, Main.player[item.playerIndexTheItemIsReservedFor]))
+                    count += inv[i].stack;
+                    if (!inv[i].consumable)
                     {
-                        consumable = false;
+                        infinite = true;
                     }
                 }
             }
-            return consumable;
-        }
-
-        // 获取墙总数
-        public static bool GetWallCount(Item[] inv, ref int count)
-        {
-            bool consumable = true;
-            for (int i = 0; i < 50; i++)
-            {
-                Item item = inv[i];
-                if (item.createWall > 0)
-                {
-                    count += item.stack;
-                    if (!item.consumable || !ItemLoader.ConsumeItem(item, Main.player[item.playerIndexTheItemIsReservedFor]))
-                    {
-                        consumable = false;
-                    }
-                }
-            }
-            return consumable;
+            return infinite;
         }
 
         // 获取背包第一个平台
@@ -638,18 +612,18 @@ namespace ImproveGame
         /// <summary>
         /// 判断有没有足量的此类物品
         /// </summary>
-        public static int EnoughItem(Player player, Func<Item, bool> judge, int amount = 1)
+        public static int EnoughItem(Player player, Func<Item, bool> condition, int amount = 1)
         {
             int oneIndex = -1;
             int num = 0;
             for (int i = 0; i < 50; i++)
             {
                 Item item = player.inventory[i];
-                if (item.type != ItemID.None && item.stack > 0 && judge(item))
+                if (item.type != ItemID.None && item.stack > 0 && condition(item))
                 {
                     if (oneIndex == -1)
                         oneIndex = i;
-                    if (!item.consumable || !ItemLoader.ConsumeItem(item, player))
+                    if (!item.consumable)
                         return oneIndex;
                     num += item.stack;
                 }

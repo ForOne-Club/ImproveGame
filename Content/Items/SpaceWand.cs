@@ -3,6 +3,7 @@ using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
 using static ImproveGame.MyUtils;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items
 {
@@ -53,21 +54,21 @@ namespace ImproveGame.Content.Items
                     UISystem.Instance.SpaceWandGUI.Open(this);
                 return false;
             }
-            GetPlatformCount(player.inventory, out int count);
+            GetItemCount(player.inventory, (item) => item.createTile != -1 && TileID.Sets.Platforms[item.createTile], out int count);
             if (count < 1)
             {
                 return false;
             }
             ItemRotation(player);
             start = Main.MouseWorld.ToTileCoordinates();
-            CanPlace = true;
+            CanPlaceTile = true;
             return true;
         }
 
         /// <summary>
-        /// 能否放置平台
+        /// 能否放置
         /// </summary>
-        private bool CanPlace;
+        private bool CanPlaceTile;
         public override bool? UseItem(Player player)
         {
             UseItem_PreUpdate(player);
@@ -102,18 +103,19 @@ namespace ImproveGame.Content.Items
             // 开启绘制
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
-                if (Main.mouseRight && CanPlace)
+                if (Main.mouseRight && CanPlaceTile)
                 {
-                    CanPlace = false;
+                    CanPlaceTile = false;
                     CombatText.NewText(player.getRect(), new Color(250, 40, 80), GetText("CombatText_Item.SpaceWand_Cancel"));
                 }
                 Color color;
-                if (CanPlace)
+                if (CanPlaceTile)
                     color = new Color(135, 0, 180);
                 else
                     color = new Color(250, 40, 80);
-                int box = Box.NewBox(GetPlatfromRect(player), color * 0.35f, color);
+                int box = Box.NewBox(GetRectangle(player), color * 0.35f, color);
                 DrawSystem.boxs[box].ShowWidth = true;
+                DrawSystem.boxs[box].ShowHeight = true;
             }
         }
 
@@ -124,9 +126,11 @@ namespace ImproveGame.Content.Items
         public void UseItem_LeftMouseUp(Player player)
         {
             // 放置平台
-            if (CanPlace && player.whoAmI == Main.myPlayer && !Main.dedServ)
+            if (CanPlaceTile && player.whoAmI == Main.myPlayer && !Main.dedServ)
             {
-                Rectangle platfromRect = GetPlatfromRect(player);
+                bool playSound = false;
+
+                Rectangle platfromRect = GetRectangle(player);
                 int minI = platfromRect.X;
                 int maxI = platfromRect.X + platfromRect.Width - 1;
                 int minJ = platfromRect.Y;
@@ -136,7 +140,8 @@ namespace ImproveGame.Content.Items
                 {
                     for (int j = minJ; j <= maxJ; j++)
                     {
-                        int oneIndex = EnoughItem(player, JudgePlatform);
+                        Func<Item, bool> condition = GetCondition();
+                        int oneIndex = EnoughItem(player, condition);
                         if (oneIndex > -1)
                         {
                             Item item = player.inventory[oneIndex];
@@ -146,13 +151,17 @@ namespace ImproveGame.Content.Items
                             }
                             if (!Main.tile[i, j].HasTile)
                             {
-                                SoundEngine.PlaySound(SoundID.Dig);
+                                playSound = true;
                                 WorldGen.PlaceTile(i, j, item.createTile, true, true, player.whoAmI, item.placeStyle);
-                                PickItemInInventory(player, JudgePlatform, true);
+                                PickItemInInventory(player, GetCondition(), true);
                             }
                         }
                     }
                 }
+
+                if (playSound)
+                    SoundEngine.PlaySound(SoundID.Dig);
+
                 // 发送数据到服务器
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
@@ -165,27 +174,49 @@ namespace ImproveGame.Content.Items
             }
         }
 
-        public Rectangle GetPlatfromRect(Player player)
+        public Rectangle GetRectangle(Player player)
         {
             int maxWidth = Main.netMode == NetmodeID.MultiplayerClient ? 244 : 500;
             // 平台数量
-            if (!GetPlatformCount(player.inventory, out int platfromCount) || platfromCount > maxWidth)
+            if (!TileCount(player.inventory, out int count) || count > maxWidth)
             {
-                platfromCount = maxWidth;
+                count = maxWidth;
             }
             if (MathF.Abs(start.X - end.X) > MathF.Abs(start.Y - end.Y))
             {
-                end = LimitRect(start, end, platfromCount, 1);
+                end = LimitRect(start, end, count, 1);
             }
             else
             {
-                end = LimitRect(start, end, 1, platfromCount);
+                end = LimitRect(start, end, 1, count);
             }
             Rectangle rect = new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y),
                  (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);
             return rect;
         }
 
-        private static bool JudgePlatform(Item item) => item.createTile > -1 && TileID.Sets.Platforms[item.createTile];
+        // 获取背包中此类物品的数量
+        public bool TileCount(Item[] inventory, out int count)
+        {
+            return GetItemCount(inventory, GetCondition(), out count);
+        }
+
+        // 获取使用的条件
+        public Func<Item, bool> GetCondition()
+        {
+            if (placeType is PlaceType.platform)
+            {
+                return (item) => item.createTile != -1 && (TileID.Sets.Platforms[item.createTile] || item.createTile == TileID.PlanterBox);
+            }
+            else if (placeType is PlaceType.soild)
+            {
+                return (item) => item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile];
+            }
+            else if (placeType is PlaceType.rope)
+            {
+                return (item) => item.createTile > -1 && Main.tileRope[item.createTile];
+            }
+            return (item) => false;
+        }
     }
 }

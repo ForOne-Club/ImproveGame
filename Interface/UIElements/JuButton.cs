@@ -1,11 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
-using Terraria.UI;
 
 namespace ImproveGame.Interface.UIElements
 {
@@ -20,7 +14,8 @@ namespace ImproveGame.Interface.UIElements
         public UIImage UIImage;
         public UIText UIText;
 
-        public JuButton(Texture2D texture, string text) {
+        public JuButton(Texture2D texture, string text)
+        {
             _playSound = true;
             data = new int[5];
             Background = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/PanelGrayscale");
@@ -29,46 +24,64 @@ namespace ImproveGame.Interface.UIElements
             Width.Pixels = MyUtils.GetTextSize(text).X + this.HPadding() + 75;
             Height.Pixels = 40f;
 
-            UIImage = new(texture) {
+            UIImage = new(texture)
+            {
                 VAlign = 0.5f
             };
             UIImage.Left.Pixels = 30f - UIImage.Width() / 2f;
             Append(UIImage);
 
-            UIText = new(text) {
+            UIText = new(text)
+            {
                 VAlign = 0.5f
             };
             UIText.Left.Pixels = 50f;
             Append(UIText);
         }
 
-        public override void Update(GameTime gameTime) {
+        public override void Update(GameTime gameTime)
+        {
             base.Update(gameTime);
-            if (IsMouseHovering) {
-                if (_playSound) {
+            if (IsMouseHovering)
+            {
+                if (_playSound)
+                {
                     _playSound = false;
                     SoundEngine.PlaySound(SoundID.MenuTick);
                 }
             }
-            else {
+            else
+            {
                 _playSound = true;
             }
         }
 
-        protected override void DrawSelf(SpriteBatch sb) {
+        protected override void DrawSelf(SpriteBatch sb)
+        {
             var rectangle = GetDimensions().ToRectangle();
             Utils.DrawSplicedPanel(sb, Background.Value, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 10, 10, 10, 10, Colors.InventoryDefaultColor);
-            if (IsMouseHovering) {
+            if (IsMouseHovering)
+            {
                 Utils.DrawSplicedPanel(sb, BackgroundBorder.Value, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 10, 10, 10, 10, Color.White);
             }
         }
 
-        public void SetText(string text) {
+        public void TextAlignCenter()
+        {
+            float left = 30f + (this.WidthInside() - 30f) / 2f;
+            UIText.Left.Pixels = left - UIText.Width() / 2f;
+            UIText.Recalculate();
+        }
+
+        public void SetText(string text)
+        {
             Width.Pixels = MyUtils.GetTextSize(text).X + this.HPadding() + 75;
+            UIText.Width.Pixels = MyUtils.GetTextSize(text).X;
             UIText.SetText(text);
         }
 
-        public void SetImage(Texture2D texture) {
+        public void SetImage(Texture2D texture)
+        {
             UIImage.SetImage(texture);
             UIImage.Left.Pixels = 15 + UIImage.Width() / 2f;
         }

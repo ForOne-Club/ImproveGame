@@ -39,7 +39,7 @@ namespace ImproveGame.Content.Items
         public override bool CanUseItem(Player player)
         {
             // 有平台的时候才允许使用
-            GetPlatformCount(player.inventory, out int count);
+            GetItemCount(player.inventory, (item) => item.createTile != -1 && TileID.Sets.Platforms[item.createTile], out int count);
             if (count < 1)
             {
                 return false;
@@ -181,11 +181,11 @@ namespace ImproveGame.Content.Items
         {
             int maxWidth = Main.netMode == NetmodeID.MultiplayerClient ? 244 : 500;
             // 平台数量
-            if (!GetPlatformCount(player.inventory, out int platfromCount) || platfromCount > maxWidth)
+            if (!GetItemCount(player.inventory, (item) => item.createTile != -1 && TileID.Sets.Platforms[item.createTile], out int count) || count > maxWidth)
             {
-                platfromCount = maxWidth;
+                count = maxWidth;
             }
-            end = LimitRect(start, end, platfromCount, 1);
+            end = LimitRect(start, end, count, 1);
             Rectangle rect = new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y),
                  (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);
             return rect;

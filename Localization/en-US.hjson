@@ -313,12 +313,13 @@ Mods:
                 '''
             SpaceWand:
                 '''
-                Select an area to place platforms
-                Consumes the first platform in your inventory
-                Can swap blocks if block swap is enabled
-                Can place at most 500 platforms once
-                <right> to cancel placing
-                'I pity these tools'
+                [c/0099ff:右键使用开启控制面板]
+                在指示器位置放置所选类型物块
+                消耗背包中此类型的物块
+                物块交换开启会尝试替换不同类型物块
+                单次最多放置五百格 (服务器中单次至多244)
+                使用状态下<right>取消放置
+                “我同情这些工具”
                 '''
             StarburstWand:
                 '''
@@ -424,7 +425,7 @@ Mods:
             }
             TagDetailed:
             {
-                GardenGnome: "[花园侏儒]"
+                GardenGnome: "[Garden Gnome]"
                 Enabled: "[Enabled]"
                 Disabled: "[Disabled]"
                 Hided: "[Buff icons hiden]"
@@ -437,8 +438,8 @@ Mods:
             {
                 GardenGnome:
                     '''
-                    花园侏儒的幸运加成已应用
-                    你无法开关此效果，因为这不是一个增益
+                    Luck bonus of the Garden Gnome has been applied
+                    You could not disable this effect as it is not a 'buff'
                     '''
                 Enabled:
                     '''
@@ -555,7 +556,7 @@ Mods:
         }
         SpaceWand:
         {
-            placeType: Type of tiles placed
+            placeType: Tile type
             platform: Platforms
             soild: Solid blocks
             rope: Ropes
