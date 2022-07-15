@@ -1,13 +1,7 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.Audio;
 using Terraria.GameInput;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ImproveGame.Content.Items
 {
@@ -60,27 +54,27 @@ namespace ImproveGame.Content.Items
                     Item.useAnimation = (int)(18 * player.pickSpeed);
                     Item.useTime = (int)(18 * player.pickSpeed);
                     if (player.whoAmI == Main.myPlayer) {
-                        Rectangle rect = GetKillRect(player);
+                        Rectangle Reactangle = GetRectangle(player);
                         SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-                        MyUtils.ForeachTile(rect, (i, j) => {
-                            if (Main.tile[i, j].WallType > 0 && WandSystem.WallMode) {
+                        MyUtils.ForeachTile(Reactangle, (x, y) => {
+                            if (Main.tile[x, y].WallType > 0 && WandSystem.WallMode) {
                                 if (player.statMana < 1)
                                     player.QuickMana();
                                 if (player.statMana >= 1) {
-                                    WorldGen.KillWall(i, j);
+                                    WorldGen.KillWall(x, y);
                                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, i, j);
+                                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, x, y);
                                     player.statMana -= 1;
                                 }
                             }
                             if (player.statMana < 2)
                                 player.QuickMana();
                             if (player.statMana >= 2) {
-                                if (WandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player)) {
+                                if (WandSystem.TileMode && Main.tile[x, y].HasTile && MyUtils.TryKillTile(x, y, player)) {
                                     player.statMana -= 2;
                                 }
                             }
-                            MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
+                            MyUtils.BongBong(new Vector2(x, y) * 16f, 16, 16);
                         });
                     }
                 }
@@ -99,7 +93,7 @@ namespace ImproveGame.Content.Items
         public override void HoldItem(Player player) {
             if (!Main.dedServ && Main.myPlayer == player.whoAmI && !Main.LocalPlayer.mouseInterface) {
                 if (WandSystem.FixedMode) {
-                    Box.NewBox(GetKillRect(player), Color.Red * 0.35f, Color.Red);
+                    Box.NewBox(GetRectangle(player), Color.Red * 0.35f, Color.Red);
                 }
                 // 还在用物品的时候不能打开UI
                 if (player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1) {
@@ -114,11 +108,11 @@ namespace ImproveGame.Content.Items
             }
         }
 
-        protected Rectangle GetKillRect(Player player) {
+        protected Rectangle GetRectangle(Player player) {
             Rectangle rect = new();
             Point playerCenter = player.Center.ToTileCoordinates();
             Point mousePosition = Main.MouseWorld.ToTileCoordinates();
-            mousePosition = MyUtils.LimitRect(playerCenter, mousePosition, Player.tileRangeX + ExtraRange.X, Player.tileRangeY + ExtraRange.Y);
+            mousePosition = MyUtils.ModifySize(playerCenter, mousePosition, Player.tileRangeX + ExtraRange.X, Player.tileRangeY + ExtraRange.Y);
             rect.X = mousePosition.X - KillSize.X / 2;
             rect.Y = mousePosition.Y - KillSize.Y / 2;
             rect.Width = KillSize.X;

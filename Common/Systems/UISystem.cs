@@ -70,14 +70,16 @@ namespace ImproveGame.Common.Systems
                 AutofisherGUI = new();
                 BuffTrackerGUI = new();
                 LiquidWandGUI = new();
-                BigBagGUI = new();
                 ArchitectureGUI = new();
                 BrustGUI = new();
                 SpaceWandGUI = new();
+                BigBagInterface = new();
+                BigBagGUI = new(BigBagInterface);
+                BigBagGUI.Activate();
+                BigBagInterface.SetState(BigBagGUI);
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
                 LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
                 LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
-                LoadGUI(ref BigBagGUI, out BigBagInterface);
                 LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
                 LoadGUI(ref BrustGUI, out BrustInterface);
                 LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);

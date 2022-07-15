@@ -93,7 +93,7 @@ namespace ImproveGame.Content.Items
                 if (Main.mouseRight && _unCancelled) {
                     _unCancelled = false;
                 }
-                End = MyUtils.LimitRect(Start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
+                End = MyUtils.ModifySize(Start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
                 Color color = ModifyColor(!_unCancelled);
                 int boxIndex = Box.NewBox(Start, End, color * 0.35f, color);
                 if (boxIndex is not -1) {

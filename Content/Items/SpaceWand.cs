@@ -184,11 +184,11 @@ namespace ImproveGame.Content.Items
             }
             if (MathF.Abs(start.X - end.X) > MathF.Abs(start.Y - end.Y))
             {
-                end = LimitRect(start, end, count, 1);
+                end = ModifySize(start, end, count, 1);
             }
             else
             {
-                end = LimitRect(start, end, 1, count);
+                end = ModifySize(start, end, 1, count);
             }
             Rectangle rect = new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y),
                  (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);

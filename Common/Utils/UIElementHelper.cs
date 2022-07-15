@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria.UI;
-
-namespace ImproveGame.Common.Utils
+﻿namespace ImproveGame.Common.Utils
 {
     public static class UIElementHelper
     {

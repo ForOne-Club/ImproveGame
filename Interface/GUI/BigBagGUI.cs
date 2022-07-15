@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Interface.UIElements;
 using System.Collections.Generic;
-using Terraria.GameContent.UI.Elements;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -9,8 +8,10 @@ namespace ImproveGame.Interface.GUI
         private static bool _visible = true;
         private Vector2 offset = Vector2.Zero;
         public bool dragging;
-        public static bool Visible {
-            get {
+        public static bool Visible
+        {
+            get
+            {
                 if (!Main.playerInventory)
                     _visible = false;
                 return _visible;
@@ -18,6 +19,7 @@ namespace ImproveGame.Interface.GUI
             set => _visible = value;
         }
 
+        public UserInterface UserInterface;
         public UIText title;
         public UIPanel MainPanel;
         public UIImageButton CloseButton;
@@ -25,10 +27,11 @@ namespace ImproveGame.Interface.GUI
 
         public JuButton[] buttons = new JuButton[4];
 
-        public void SetSuperVault(Item[] items, Vector2 SuperVaultPos) {
+        public void SetSuperVault(Item[] items, Vector2 SuperVaultPos)
+        {
             title.SetText(MyUtils.GetText("SuperVault.Name"));
             title.SetSize(MyUtils.GetBigTextSize(MyUtils.GetText("SuperVault.Name")) * 0.5f);
-            
+
             buttons[0].SetText(Lang.inter[29].Value);
             buttons[0].SetPos(0f, title.Bottom() - 10f);
 
@@ -50,25 +53,37 @@ namespace ImproveGame.Interface.GUI
             Recalculate();
         }
 
-        public override void OnInitialize() {
+        public BigBagGUI(UserInterface userInterface)
+        {
+            UserInterface = userInterface;
+        }
+
+        public override void OnInitialize()
+        {
             MainPanel = new UIPanel();
-            MainPanel.OnMouseDown += (evt, uie) => {
-                if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering) {
+            MainPanel.OnMouseDown += (evt, uie) =>
+            {
+                if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering)
+                {
                     dragging = true;
                     offset = evt.MousePosition - uie.GetDimensions().Position();
                 }
             };
             MainPanel.OnMouseUp += (evt, uie) => dragging = false;
-            MainPanel.OnUpdate += (uie) => {
-                if (dragging) {
+            MainPanel.OnUpdate += (uie) =>
+            {
+                if (dragging)
+                {
                     uie.SetPPos(Main.MouseScreen - offset);
                     uie.Recalculate();
                 }
-                if (!Collision.CheckAABBvAABBCollision(uie.GetDimensions().Position(), uie.GetDimensions().ToRectangle().Size(), Vector2.Zero, Main.ScreenSize.ToVector2())) {
+                if (!Collision.CheckAABBvAABBCollision(uie.GetDimensions().Position(), uie.GetDimensions().ToRectangle().Size(), Vector2.Zero, Main.ScreenSize.ToVector2()))
+                {
                     uie.SetPPos(Vector2.Zero);
                     uie.Recalculate();
                 }
-                if (uie.IsMouseHovering) {
+                if (uie.IsMouseHovering)
+                {
                     Main.LocalPlayer.mouseInterface = true;
                 }
             };
@@ -104,43 +119,52 @@ namespace ImproveGame.Interface.GUI
             CloseButton.OnClick += (evt, uie) => Visible = false;
             MainPanel.Append(CloseButton);
 
-            ItemGrid = new JuItemGrid();
+            ItemGrid = new JuItemGrid(UserInterface);
             ItemGrid.Top.Pixels = buttons[0].Top() + buttons[0].Height() + 10f;
             MainPanel.Append(ItemGrid);
         }
 
-        public void Sort() {
+        public void Sort()
+        {
             SoundEngine.PlaySound(SoundID.Grab);
             Item[] items = ItemGrid.ItemList.items;
 
             // 拿出来非空非收藏的物品
             List<Item> testSort = new();
-            for (int i = 0; i < items.Length; i++) {
-                if (!items[i].IsAir && !items[i].favorited) {
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (!items[i].IsAir && !items[i].favorited)
+                {
                     testSort.Add(items[i]);
                     items[i] = new();
                 }
             }
 
             // 优先级排序
-            testSort.Sort((a, b) => {
+            testSort.Sort((a, b) =>
+            {
                 return -a.rare.CompareTo(b.rare) * 100 - a.stack.CompareTo(b.stack) * 10 + a.type.CompareTo(b.type);
             });
 
             // 放入背包
-            for (int i = 0; i < testSort.Count; i++) {
+            for (int i = 0; i < testSort.Count; i++)
+            {
                 MyUtils.ItemStackToInventory(items, testSort[i], false);
             }
             Recipe.FindRecipes();
         }
 
-        public void Replenish() {
+        public void Replenish()
+        {
             SoundEngine.PlaySound(SoundID.Grab);
             Item[] inventory = Main.LocalPlayer.inventory;
             Item[] BigBag = ItemGrid.ItemList.items;
-            for (int i = 10; i < 58; i++) {
-                if (!inventory[i].IsAir && !inventory[i].favorited && !inventory[i].IsACoin) {
-                    if (MyUtils.HasItem(BigBag, -1, inventory[i].type)) {
+            for (int i = 10; i < 58; i++)
+            {
+                if (!inventory[i].IsAir && !inventory[i].favorited && !inventory[i].IsACoin)
+                {
+                    if (MyUtils.HasItem(BigBag, -1, inventory[i].type))
+                    {
                         inventory[i] = MyUtils.ItemStackToInventory(BigBag, inventory[i], false);
                     }
                 }
@@ -148,37 +172,44 @@ namespace ImproveGame.Interface.GUI
             Recipe.FindRecipes();
         }
 
-        public void PutAll() {
+        public void PutAll()
+        {
             SoundEngine.PlaySound(SoundID.Grab);
             Item[] inventory = Main.LocalPlayer.inventory;
             Item[] BigBag = ItemGrid.ItemList.items;
-            for (int i = 10; i < 50; i++) {
+            for (int i = 10; i < 50; i++)
+            {
                 if (!inventory[i].IsAir && !inventory[i].favorited && !inventory[i].IsACoin)
                     inventory[i] = MyUtils.ItemStackToInventory(BigBag, inventory[i], false);
             }
             Recipe.FindRecipes();
         }
 
-        public void QuickTakeOutToPlayerInventory() {
+        public void QuickTakeOutToPlayerInventory()
+        {
             SoundEngine.PlaySound(SoundID.Grab);
             Item[] inventory = Main.LocalPlayer.inventory;
             Item[] BigBag = ItemGrid.ItemList.items;
-            for (int i = 0; i < BigBag.Length; i++) {
-                if (!BigBag[i].IsAir && !BigBag[i].favorited && !BigBag[i].IsACoin) {
+            for (int i = 0; i < BigBag.Length; i++)
+            {
+                if (!BigBag[i].IsAir && !BigBag[i].favorited && !BigBag[i].IsACoin)
+                {
                     BigBag[i] = MyUtils.ItemStackToInventory(inventory, BigBag[i], false, 50);
                 }
             }
             Recipe.FindRecipes();
         }
 
-        public void Open() {
+        public void Open()
+        {
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
             dragging = false;
             _visible = true;
         }
 
-        public void Close() {
+        public void Close()
+        {
             SoundEngine.PlaySound(SoundID.MenuClose);
             _visible = false;
         }

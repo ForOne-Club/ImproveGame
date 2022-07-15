@@ -84,14 +84,14 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// 限制 Rect 的大小
+        /// 修改 Reangle 的大小，起点不会变，终点改变。（大于限制，小于不变，这个名字比 Limit 好看而已）
         /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns>end的位置</returns>
-        public static Point LimitRect(Point start, Point end, int width, int height)
+        /// <param name="start">起点</param>
+        /// <param name="end">终点</param>
+        /// <param name="width">限制后的宽度</param>
+        /// <param name="height">限制的高度</param>
+        /// <returns>终点的位置</returns>
+        public static Point ModifySize(Point start, Point end, int width, int height)
         {
             width--;
             height--;
