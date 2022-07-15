@@ -1,5 +1,8 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading;
 using Terraria.GameContent.Creative;
 
 namespace ImproveGame.Content.Items
@@ -105,26 +108,40 @@ namespace ImproveGame.Content.Items
                 else {
                     player.itemAnimation = 0;
                     if (_unCancelled) {
-                        Rectangle tileRect = TileRect;
-                        int minI = tileRect.X;
-                        int maxI = tileRect.X + tileRect.Width - 1;
-                        int minJ = tileRect.Y;
-                        int maxJ = tileRect.Y + tileRect.Height - 1;
-                        for (int j = minJ; j <= maxJ; j++) {
-                            for (int i = minI; i <= maxI; i++) {
-                                if (!ModifySelectedTiles(player, i, j)) {
-                                    PostModifyTiles(player, minI, minJ, i, j);
-                                    goto End;
-                                }
-                            }
-                        }
-                        PostModifyTiles(player, minI, minJ, maxI, maxJ);
+                        CoroutineSystem.TileRunner.Run(ModifyTiles(player));
                     }
                 }
             }
-            End:;
             player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
             return base.UseItem(player);
+        }
+
+        IEnumerator ModifyTiles(Player player)
+        {
+            int countTiles = 0;
+            Rectangle tileRect = TileRect;
+            int minI = tileRect.X;
+            int maxI = tileRect.X + tileRect.Width - 1;
+            int minJ = tileRect.Y;
+            int maxJ = tileRect.Y + tileRect.Height - 1;
+            for (int j = minJ; j <= maxJ; j++)
+            {
+                for (int i = minI; i <= maxI; i++)
+                {
+                    countTiles++;
+                    if (!ModifySelectedTiles(player, i, j))
+                    {
+                        PostModifyTiles(player, minI, minJ, i, j);
+                        yield break;
+                    }
+                    if (countTiles >= 6) {
+                        countTiles = 0;
+                        yield return 0;
+                    }
+                }
+            }
+            yield return 0;
+            PostModifyTiles(player, minI, minJ, maxI, maxJ);
         }
     }
 }

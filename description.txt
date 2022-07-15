@@ -102,6 +102,7 @@ https://www.bilibili.com/read/cv17018658?spm_id_from=333.1007.0.0
 [c/990000:画师：枫林半叶]
 [c/9900ff:翻译：Lastprismer，Lacewing]
 [c/0099ff:代码：局长, Cyril]
+[c/00ff99:特别感谢: @ChevyRay 的协程类]
 
 These features may bring you better gameplay experience
 ---------------------------
@@ -211,3 +212,4 @@ Function list:
 [c/990000:Spriter: 枫林半叶]
 [c/9900ff:Translators: Lastprismer, Lacewing]
 [c/0099ff:Coder: 局长, Cyril]
+[c/00ff99:特别感谢: @ChevyRay 的协程类]

@@ -154,7 +154,7 @@ namespace ImproveGame.Interface.GUI
         /// <param name="ignoreLiquidMode">是否无视<see cref="WandSystem.LiquidMode"/>判断</param>
         public void TryChangeLiquidAmount(byte liquidType, ref byte addAmount, bool store, bool ignoreLiquidMode = false)
         {
-            Main.NewText($"TryChangeLiquidAmount");
+            //Main.NewText($"TryChangeLiquidAmount");
             if (liquidType != WandSystem.LiquidMode && !ignoreLiquidMode)
                 return;
             switch (liquidType)
@@ -163,16 +163,22 @@ namespace ImproveGame.Interface.GUI
                     if (store) waterSlot.StoreLiquid(ref addAmount);
                     else waterSlot.TakeLiquid(ref addAmount);
                     CurrentWand.Water = waterSlot.GetLiquidAmount();
+                    if (CurrentSlot == 58 && Main.mouseItem.ModItem is not null && Main.mouseItem.ModItem is LiquidWand)
+                        (Main.mouseItem.ModItem as LiquidWand).Water = waterSlot.GetLiquidAmount();
                     break;
                 case LiquidID.Lava:
                     if (store) lavaSlot.StoreLiquid(ref addAmount);
                     else lavaSlot.TakeLiquid(ref addAmount);
                     CurrentWand.Lava = lavaSlot.GetLiquidAmount();
+                    if (CurrentSlot == 58 && Main.mouseItem.ModItem is not null && Main.mouseItem.ModItem is LiquidWand)
+                        (Main.mouseItem.ModItem as LiquidWand).Lava = lavaSlot.GetLiquidAmount();
                     break;
                 case LiquidID.Honey:
                     if (store) honeySlot.StoreLiquid(ref addAmount);
                     else honeySlot.TakeLiquid(ref addAmount);
                     CurrentWand.Honey = honeySlot.GetLiquidAmount();
+                    if (CurrentSlot == 58 && Main.mouseItem.ModItem is not null && Main.mouseItem.ModItem is LiquidWand)
+                        (Main.mouseItem.ModItem as LiquidWand).Honey = honeySlot.GetLiquidAmount();
                     break;
             }
             if (Main.netMode == NetmodeID.MultiplayerClient)

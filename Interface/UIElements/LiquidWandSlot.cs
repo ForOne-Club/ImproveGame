@@ -178,7 +178,7 @@ namespace ImproveGame.Interface.UIElements
             }
             uTime += LiquidID * 0.3f; // 让每个槽看起来不一样
 
-            float uWaveScale = _liquidAmount > 0.9f ? (1.0f - _liquidAmount) * 0.4f : 0.4f;
+            float uWaveScale = _liquidAmount > 0.9f ? (1.0f - _liquidAmount) * 4f : 0.4f;
             ModAssets.LiquidSurface.Value.Parameters["uTransform"].SetValue(model * projection);
             ModAssets.LiquidSurface.Value.Parameters["uXStart"].SetValue(xCoordStart);
             ModAssets.LiquidSurface.Value.Parameters["uXEnd"].SetValue(xCoordEnd);

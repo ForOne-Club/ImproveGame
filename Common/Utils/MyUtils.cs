@@ -228,19 +228,19 @@ namespace ImproveGame
 
         /// <summary>
         /// 将存储float液体量转换为原版int整数液体量
-        /// <br>0.5%(0.005f) -> 255</br>
+        /// <br>0.25%(0.005f) -> 255</br>
         /// </summary>
         /// <param name="amount">float液体量</param>
         /// <returns>整数液体量</returns>
-        public static int LiquidAmountToInt(float amount) => (int)Math.Round(amount / 0.005f * 255);
+        public static int LiquidAmountToInt(float amount) => (int)Math.Round(amount / 0.0025f * 255);
 
         /// <summary>
         /// 将原版int整数液体量转换为存储float液体量
-        /// <br>255 -> 0.05%(0.005f)</br>
+        /// <br>255 -> 0.025%(0.0025f)</br>
         /// </summary>
         /// <param name="amount">整数液体量</param>
         /// <returns>float液体量</returns>
-        public static float LiquidAmountToFloat(int amount) => amount / 255f * 0.005f;
+        public static float LiquidAmountToFloat(int amount) => amount / 255f * 0.0025f;
 
         /// <summary>
         /// 绘制一个方框
