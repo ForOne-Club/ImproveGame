@@ -563,5 +563,14 @@
             Switch: "切换"
             Unavailable: "不可用"
         }
+        RecipeGroup:
+        {
+            GoldGroup: 金(铂金)锭
+            SilverGroup: 银(钨)锭
+            IronGroup: 铁(铅)锭
+            CopperGroup: 铜(锡)锭
+            DemoniteGroup: 魔矿(猩红矿)锭
+            ShadowGroup: 暗影鳞片(组织样本)
+        }
     }
 }

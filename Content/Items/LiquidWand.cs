@@ -73,7 +73,8 @@ namespace ImproveGame.Content.Items
                         manaCost++; // 熔岩和蜂蜜额外耗蓝
                     if (!MyUtils.TryConsumeMana(player, manaCost))
                         return false;
-                } else
+                }
+                else
                 {
                     byte liquidAmountPrev = t.LiquidAmount;
                     UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
@@ -137,7 +138,8 @@ namespace ImproveGame.Content.Items
             if (player.altFunctionUse == 0)
             {
                 MyUtils.ItemRotation(player);
-            } else if (player.altFunctionUse == 2)
+            }
+            else if (player.altFunctionUse == 2)
             {
                 return false;
             }
@@ -158,7 +160,8 @@ namespace ImproveGame.Content.Items
                 if (!LiquidWandGUI.Visible)
                 {
                     UISystem.Instance.LiquidWandGUI.Open();
-                } else
+                }
+                else
                 {
                     UISystem.Instance.LiquidWandGUI.Close();
                 }
@@ -177,7 +180,8 @@ namespace ImproveGame.Content.Items
                     if (!LiquidWandGUI.Visible)
                     {
                         UISystem.Instance.LiquidWandGUI.Open(slot);
-                    } else
+                    }
+                    else
                     {
                         UISystem.Instance.LiquidWandGUI.Close();
                     }
@@ -204,29 +208,10 @@ namespace ImproveGame.Content.Items
 
         public override void AddRecipes()
         {
-            // 金锭
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddIngredient(ItemID.ShadowScale, 18)
-                .AddIngredient(ItemID.GoldBar, 12)
-                .Register();
-            // 铂金锭
-            CreateRecipe()
-                .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddIngredient(ItemID.ShadowScale, 18)
-                .AddIngredient(ItemID.PlatinumBar, 12)
-                .Register();
-            // 金锭
-            CreateRecipe()
-                .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddIngredient(ItemID.TissueSample, 18)
-                .AddIngredient(ItemID.GoldBar, 12)
-                .Register();
-            // 铂金锭
-            CreateRecipe()
-                .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddIngredient(ItemID.TissueSample, 18)
-                .AddIngredient(ItemID.PlatinumBar, 12)
+                .AddRecipeGroup(ModRecipeGroup.ShadowGroup, 18)
+                .AddRecipeGroup(ModRecipeGroup.GoldGroup, 12)
                 .Register();
         }
     }

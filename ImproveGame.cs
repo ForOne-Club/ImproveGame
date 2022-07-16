@@ -9,6 +9,7 @@ global using Terraria.Audio;
 global using Terraria.GameContent;
 global using Terraria.GameContent.UI.Elements;
 global using Terraria.ID;
+global using Terraria.Localization;
 global using Terraria.ModLoader;
 global using Terraria.UI;
 global using static ImproveGame.MyUtils;

@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent.Creative;
+﻿using ImproveGame.Common.Systems;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 
 namespace ImproveGame.Content.Items.Placeable
@@ -28,26 +29,9 @@ namespace ImproveGame.Content.Items.Placeable
 
         public override void AddRecipes()
         {
-            // 金锭
             CreateRecipe()
-                .AddIngredient(ItemID.IronBar, 12)
-                .AddIngredient(ItemID.CopperBar, 6)
-                .AddIngredient(ItemID.Glass, 20)
-                .Register();
-            // 铂金锭
-            CreateRecipe()
-                .AddIngredient(ItemID.TinBar, 12)
-                .AddIngredient(ItemID.CopperBar, 6)
-                .AddIngredient(ItemID.Glass, 20)
-                .Register();
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 12)
-                .AddIngredient(ItemID.CopperBar, 6)
-                .AddIngredient(ItemID.Glass, 20)
-                .Register();
-            CreateRecipe()
-                .AddIngredient(ItemID.LeadBar, 12)
-                .AddIngredient(ItemID.TinBar, 6)
+                .AddRecipeGroup(ModRecipeGroup.IronGroup, 12)
+                .AddRecipeGroup(ModRecipeGroup.CopperGroup, 16)
                 .AddIngredient(ItemID.Glass, 20)
                 .Register();
         }
