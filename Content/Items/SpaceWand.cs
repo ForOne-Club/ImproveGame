@@ -82,10 +82,6 @@ namespace ImproveGame.Content.Items
             return false;
         }
 
-        /// <summary>
-        /// 前更新
-        /// </summary>
-        /// <param name="player"></param>
         public void UseItem_PreUpdate(Player player)
         {
             player.itemAnimation = player.itemAnimationMax;
@@ -93,10 +89,6 @@ namespace ImproveGame.Content.Items
             end = Main.MouseWorld.ToTileCoordinates();
         }
 
-        /// <summary>
-        /// 后更新
-        /// </summary>
-        /// <param name="player"></param>
         public void UseItem_PostUpdate(Player player)
         {
             // 开启绘制
@@ -118,10 +110,6 @@ namespace ImproveGame.Content.Items
             }
         }
 
-        /// <summary>
-        /// 左键释放
-        /// </summary>
-        /// <param name="player"></param>
         public void UseItem_LeftMouseUp(Player player)
         {
             // 放置平台
@@ -203,23 +191,14 @@ namespace ImproveGame.Content.Items
         // 获取使用的条件
         public Func<Item, bool> GetCondition()
         {
-            if (placeType is PlaceType.platform)
+            return placeType switch
             {
-                return (item) => item.consumable && item.createTile != -1 && (TileID.Sets.Platforms[item.createTile] || item.createTile == TileID.PlanterBox);
-            }
-            else if (placeType is PlaceType.soild)
-            {
-                return (item) => item.consumable && item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile];
-            }
-            else if (placeType is PlaceType.rope)
-            {
-                return (item) => item.consumable && item.createTile > -1 && Main.tileRope[item.createTile];
-            }
-            else if (placeType is PlaceType.rail)
-            {
-                return (item) => item.consumable && item.createTile == TileID.MinecartTrack;
-            }
-            return (item) => false;
+                PlaceType.platform => (item) => item.consumable && item.createTile > -1 && (TileID.Sets.Platforms[item.createTile] || item.createTile == TileID.PlanterBox),
+                PlaceType.soild => (item) => item.consumable && item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile],
+                PlaceType.rope => (item) => item.consumable && item.createTile > -1 && Main.tileRope[item.createTile],
+                PlaceType.rail => (item) => item.consumable && item.createTile == TileID.MinecartTrack,
+                _ => (item) => false,
+            };
         }
     }
 }
