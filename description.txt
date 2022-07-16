@@ -90,13 +90,14 @@ Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + 
 Change log: (View details in mod configs)
     1.5.9.1
         ● Bug fixes
-            1. 修复了自动钓鱼机无法使用的BUG
-            2. 修复了药水袋多人模式下无法正确存储药水的BUG
-            3. 修复了空间魔杖没有平台时无法使用的BUG
-            4. 为增益追踪器添加了热键
-            5. 修复了新合成的药水袋共享空间的BUG
-        ● 其他
-            1. 合成表用上了 RecipeGroup
+            1. Fixed the Fishing Machine not working
+            2. Fixed the Potion Bag unable to store potions in multiplayer mode
+            3. Fixed the Wand of Space cannot be used without having a platform
+            4. Fixed newly crafted Potion Bags share the same inventory
+        ● Addition
+            1. Added a hotkey for the Buff Tracker
+        ● Misc
+            1. Recipes of mod items now use RecipeGroup
     1.5.9
         ● Bug fixes
             1. Fixed the Merchant's spawn condition not counting coins in the Money Trough
