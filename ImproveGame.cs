@@ -17,9 +17,9 @@ global using static ImproveGame.MyUtils;
 namespace ImproveGame
 {
     // 更新任务
-    // Tile 工具：自动钓鱼，自动采集，自动挖矿
-    // Buff Tile 在背包也可以获得 Buff （已完成）
-    // 刷怪率 UI
+    // Tile 工具：自动钓鱼: true, 自动采集: false, 自动挖矿: false.
+    // Buff Tile 在背包也可以获得 Buff: true
+    // 刷怪率 UI: true
     public class ImproveGame : Mod
     {
         // 额外BUFF槽
