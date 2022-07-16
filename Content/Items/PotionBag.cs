@@ -10,6 +10,7 @@ using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
+using System.IO;
 
 namespace ImproveGame.Content.Items
 {
@@ -199,6 +200,22 @@ namespace ImproveGame.Content.Items
                 {
                     ["potion"] = item
                 }).ToList();
+            }
+        }
+
+        public override void NetSend(BinaryWriter writer)
+        {
+            writer.Write((byte)storedPotions.Count);
+            foreach (var p in storedPotions)
+                ItemIO.Send(p, writer, true);
+        }
+
+        public override void NetReceive(BinaryReader reader)
+        {
+            byte count = reader.ReadByte();
+            for (int i = 0; i < count; i++)
+            {
+                storedPotions.Add(ItemIO.Receive(reader, true));
             }
         }
 

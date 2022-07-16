@@ -66,7 +66,16 @@ namespace ImproveGame.Content.Tiles
         #region 钓鱼
 
         public int FishingTimer;
-        public override void Update() {
+        public override void Update()
+        {
+            for (int i = 0; i < fish.Length; i++)
+            {
+                if (fish[i] is null)
+                {
+                    fish[i] = new();
+                }
+            }
+
             FishingTipTimer += 1.0 / 60.0;
             if (Main.netMode != NetmodeID.Server && Main.netMode != NetmodeID.SinglePlayer)
                 return;
@@ -107,10 +116,12 @@ namespace ImproveGame.Content.Tiles
 
             // 存储的 Bass 将以 20:1 的比例转化为钓鱼速度加成，最高可达 500% 加成
             int bassCount = 0;
-            for (int i = 0; i < 15; i++) {
-            if (fish[i].type == ItemID.Bass) {
+            for (int i = 0; i < 15; i++)
+            {
+                if (fish[i].type == ItemID.Bass)
+                {
                     bassCount += fish[i].stack;
-            }
+                }
             }
             fishingSpeedBonus += Math.Min(bassCount / 20f, 5f);
 

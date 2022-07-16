@@ -50,7 +50,11 @@ namespace ImproveGame.Common.Players
 
                 if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher)) {
                     inventory[slot] = MyUtils.ItemStackToInventory(fisher.fish, inventory[slot], false);
+                    AutofisherGUI.RequireRefresh = true;
                     UISystem.Instance.AutofisherGUI.RefreshItems();
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                        for (int i = 0; i <= 14; i++)
+                            NetAutofish.ClientSendItem((byte)i, fisher.fish[i], AutofishPlayer.LocalPlayer.Autofisher);
                     Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);
                     return true; // 阻止原版代码运行
