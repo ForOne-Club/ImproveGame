@@ -2,6 +2,7 @@ global using ImproveGame.Common.Utils;
 global using ImproveGame.Common.Utils.NetHelpers;
 global using Microsoft.Xna.Framework;
 global using System;
+global using System.IO;
 global using System.Linq;
 global using Terraria;
 global using Terraria.Audio;
@@ -10,7 +11,7 @@ global using Terraria.GameContent.UI.Elements;
 global using Terraria.ID;
 global using Terraria.ModLoader;
 global using Terraria.UI;
-using System.IO;
+global using static ImproveGame.MyUtils;
 
 namespace ImproveGame
 {
