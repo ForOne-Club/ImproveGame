@@ -371,9 +371,9 @@ Mods:
                 Auto-fishing
                 Right click on a placed Fishing Machine to open the fishing panel
                 Click the "+" in the first row to choose water type
-                Put in a fishing rod and baits to start, mechanics are the same as manul-fishing
+                Put in a fishing rod and baits to start, mechanics are the same as manual-fishing
                 You may also put in accessories to increase fishing power or grant ability to fish in lava
-                The initial fishing speed is 10% of the manul-fishing speed, you may speed up the fishing process by:
+                The initial fishing speed is 10% of the manual-fishing speed, you may speed up the fishing process by:
                 - Bass [i:Bass] stored will be converted to percentage fishing speed bonus by 20 : 1, caps at 500% ([i/s100:Bass])
                 - [i:AnglerEarring] increases fishing speed by * 200%
                 - [i:AnglerTackleBag] increases fishing speed by * 300%
