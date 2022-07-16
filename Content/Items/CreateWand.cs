@@ -586,8 +586,8 @@ namespace ImproveGame.Content.Items
             // 金锭
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddRecipeGroup(ModRecipeGroup.GoldGroup, 12)
                 .AddIngredient(ItemID.FallenStar, 8)
-                .AddRecipeGroup(ModRecipeGroup.GoldGroup, 24)
                 .Register();
         }
     }

@@ -31,7 +31,7 @@ namespace ImproveGame.Content.Items.Placeable
         {
             CreateRecipe()
                 .AddRecipeGroup(ModRecipeGroup.IronGroup, 12)
-                .AddRecipeGroup(ModRecipeGroup.CopperGroup, 16)
+                .AddRecipeGroup(ModRecipeGroup.CopperGroup, 6)
                 .AddIngredient(ItemID.Glass, 20)
                 .Register();
         }
