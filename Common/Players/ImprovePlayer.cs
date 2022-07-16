@@ -52,7 +52,7 @@ namespace ImproveGame.Common.Players
         /// <param name="triggersSet"></param>
         public override void ProcessTriggers(TriggersSet triggersSet) {
             if (KeybindSystem.SuperVaultKeybind.JustPressed) {
-                if (MyUtils.Config.SuperVault) {
+                if (Config.SuperVault) {
                     if (BigBagGUI.Visible) {
                         UISystem.Instance.BigBagGUI.Close();
                     }
@@ -60,6 +60,13 @@ namespace ImproveGame.Common.Players
                         UISystem.Instance.BigBagGUI.Open();
                     }
                 }
+            }
+            if (KeybindSystem.BuffTrackerKeybind.JustPressed)
+            {
+                if (BuffTrackerGUI.Visible)
+                    UISystem.Instance.BuffTrackerGUI.Close();
+                else
+                    UISystem.Instance.BuffTrackerGUI.Open();
             }
         }
     }
