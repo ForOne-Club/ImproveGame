@@ -2,8 +2,6 @@
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
-using static ImproveGame.MyUtils;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Items
 {
@@ -55,7 +53,7 @@ namespace ImproveGame.Content.Items
                     UISystem.Instance.SpaceWandGUI.Open(this);
                 return false;
             }
-            GetItemCount(player.inventory, (item) => item.createTile != -1 && TileID.Sets.Platforms[item.createTile], out int count);
+            TileCount(player.inventory, out int count);
             if (count < 1)
             {
                 return false;
