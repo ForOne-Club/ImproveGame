@@ -379,6 +379,7 @@ Mods:
                 - [i:AnglerTackleBag] increases fishing speed by * 300%
                 - [i:LavaproofTackleBag] increases fishing speed by * 500%
                 [c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
+                [c/AAAAAA:Modded accessories are not supported]
                 '''
         }
 		MapObject:

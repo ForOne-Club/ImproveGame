@@ -19,6 +19,7 @@
             1. 修复了自动钓鱼机无法使用的BUG
             2. 修复了药水袋多人模式下无法正确存储药水的BUG
             3. 修复了空间魔杖没有平台时无法使用的BUG
+            4. 为增益追踪器添加了热键
     1.5.9
         ● BUG修复
             1. 修复商人生成条件不计算钱币槽钱币的BUG
@@ -79,11 +80,17 @@ Wand of Technology: Dropped by the King Slime
 Wand of Space: Dropped by the King Slime
 Wand of Liquid: Any Gold Bar * 12 + Shadow Scale/Tissue Sample * 18 + Wood * 24
 Wand of Architecture: Wood * 24 + Fallen Star * 8 + Any Gold Bar * 12
-Wand of Brusts: Wood * 18 + Jungle Spores * 6 + Ruby * 1
-Wand of Star Brusts: Wand of Brusts * 1 + Fallen Star * 8 + Soul of Light * 6 + Soul of Night * 6
+Wand of Bursts: Wood * 18 + Jungle Spores * 6 + Ruby * 1
+Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + Soul of Night * 6
 (You may use the Bestiary of the Recipe Browser to check their sources!)
 ---------------------------
 Change log: (View details in mod configs)
+    1.5.9.1
+        ● Bug fixes
+            1. 修复了自动钓鱼机无法使用的BUG
+            2. 修复了药水袋多人模式下无法正确存储药水的BUG
+            3. 修复了空间魔杖没有平台时无法使用的BUG
+            4. 为增益追踪器添加了热键
     1.5.9
         ● Bug fixes
             1. Fixed the Merchant's spawn condition not counting coins in the Money Trough
@@ -104,72 +111,6 @@ Change log: (View details in mod configs)
             10. The Wormhole Potion functions in personal inventories
             11. The Garden Gnome functions in inventory
             12. The Wand of Space now support horizontal and vertical placement and you can choose which type of tile to place: platforms, solid blocks, ropes or minecart tracks
-    1.5.8.8
-        ● Bug fixes
-            Fixed well-fed buffs disabling other buffs
-            Fixed incorrect potion tooltips
-    1.5.8.7
-        ● Bug fixes
-            Fixed the player character just stuck somewhere again
-            Removed the "What is middle click" tooltip
-            Fixed Cadance (a Calamity buff) not disabling Lifeforce and Regeneration
-    1.5.8.6
-        ● Bug fixes
-            Fixed sometimes closing the Buff Tracker also dsiables buffs
-            Fixed the player character just stuck there
-            Fixed sometimes the infinite items are not glowing
-            Added an verification system for changing the server's mod configs
-    1.5.8.5
-        ● Bug fixes
-            Fixed the Buff Tracker flashing in certian conditions
-            Fixed the wands'animation bug in multiplayer mode
-            Fixed the auto-collected coins not combining into the higher-class coin in multiplayer mode
-            Fixed the Wand of Liquids losing liquids in multiplayer mode
-            Fixed the Staff of Regrowth auto-plant function not working in multiplayer mode
-        ● New content
-            Blacklist for tile placeing speed boost
-    1.5.8.4
-        ● New contents
-            Accelerate herb growth
-            Herbs can bloom in any condition
-            Staff of Regrowth will plant seeds while gathering herbs
-    1.5.8
-        ● BUG fix
-            1. Fix the bug of sound effect inverse while middle clicking the Eyebone
-            2. Fixed the problem that the infinite buffs of the special campfires do not take effect
-        ● New content
-            1. Add a Liquid Wand, which can drain/place liquid
-            ([i:206][i:1128][i:207])
-            2. Added buff tracker, which can be disabled
-            Left-click the infinite buff icon to open
-            3. Infinite buffs are added to Calamity,
-            Fargo's Mutant Mod support for placing Buff items
-            3. Added support of Infinite Potions and Protable Buff Stations to Calamity Mod and Fargo's Mutant Mod
-            4. Added auto-deposit function
-            5. Added Respawn with Full Life function
-            6. Added a function to accelerate tree growth
-            7. Added a function which greatly increases the drop rate of fruit of tree shaking
-            8. The tool speed boost now can be modified by a slider.
-            9. Herbs' blooming condition now can be disbled
-            10. Large Backpack:
-                ● Deposit all
-                ● Loot all
-                ● Quick stacking
-                ● Quick sorting
-                ● Ctrl + left click to trash/sell
-        ● Others
-            1. Optimization, fixed lagging in certain condition
-            2. The default value of the Extra Buff Slot is set to 99 (maximum value)
-            3. Fixed the unloading problem
-    1.5.7
-        New function to hide buff icons of the Infinite Potions
-        (Different from LuiAFK, this function only hides the buff icons)
-        New function to open personal inventories(Piggy Bank, Safe, ect.) by Mouse 3(Middle click)
-        New control panels for Wand of Architecture/Brusts/Starbrusts(Right click to open)
-        Huge Inventory:
-            Fixed display bugs(Added animation for scrolling)
-            Shift + Left Click to quickly transfer
-            Alt + Left Click to mark as favorite
 ---------------------------
 Function list:
     1. Max stack
