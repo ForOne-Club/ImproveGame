@@ -182,7 +182,7 @@ namespace ImproveGame.Content.Items
             return rect;
         }
 
-        // 获取背包中此类物品的数量
+        // 获取背包中 选中物块类型 的数量
         public bool TileCount(Item[] inventory, out int count)
         {
             return GetItemCount(inventory, GetCondition(), out count);
