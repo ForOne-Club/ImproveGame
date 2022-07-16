@@ -570,12 +570,12 @@ Mods:
         }
         RecipeGroup:
         {
-            GoldGroup: ½ð(²¬½ð)¶§
-            SilverGroup: Òø(ÎÙ)¶§
-            IronGroup: Ìú(Ç¦)¶§
-            CopperGroup: Í­(Îý)¶§
-            DemoniteGroup: Ä§¿ó(ÐÉºì¿ó)¶§
-            ShadowGroup: °µÓ°ÁÛÆ¬(×éÖ¯Ñù±¾)
+            GoldGroup: Gold/Platinum Bar
+            SilverGroup: Silver/Tungsten Bar
+            IronGroup: Iron/Lead Bar
+            CopperGroup: Copper/Tin Bar
+            DemoniteGroup: Demonite/Crimson Bar
+            ShadowGroup: Shadow Scale/Tissue Sample
         }
     }
 }
