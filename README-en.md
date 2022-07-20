@@ -1,9 +1,9 @@
 # 更好的体验，一个让模组游玩体验大大提升的Mod
 本模组致力于给模组游玩体验提一个档次，成为一个广泛使用的辅助Mod
 
-[English version here | 英文版](README-en.md)
+[Chinese version here | 中文版](README.md)
 
-[更新日志](ChangeLog.md)
+[Change log](ChangeLog-en.md)
 
 # Mod.Call
 ## IgnoreInfItem

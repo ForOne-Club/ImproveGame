@@ -13,6 +13,7 @@ global using Terraria.Localization;
 global using Terraria.ModLoader;
 global using Terraria.UI;
 global using static ImproveGame.MyUtils;
+using ImproveGame.Common.Systems;
 
 namespace ImproveGame
 {
@@ -23,13 +24,13 @@ namespace ImproveGame
     public class ImproveGame : Mod
     {
         // 额外BUFF槽
-        public override uint ExtraPlayerBuffSlots => (uint)MyUtils.Config.ExtraPlayerBuffSlots;
+        public override uint ExtraPlayerBuffSlots => (uint)Config.ExtraPlayerBuffSlots;
         public static ImproveGame Instance;
 
         public override void Load()
         {
             // 加载前缀信息
-            MyUtils.LoadPrefixInfo();
+            LoadPrefixInfo();
             // On和IL移动到了Common.Systems.MinorModifySystem.cs
             Instance = this;
         }
@@ -37,13 +38,12 @@ namespace ImproveGame
         public override void Unload()
         {
             Instance = null;
-            MyUtils.Config = null;
+            Config = null;
             GC.Collect();
         }
 
-        public override void HandlePacket(BinaryReader reader, int whoAmI)
-        {
-            NetHelper.HandlePacket(reader, whoAmI);
-        }
+        public override void HandlePacket(BinaryReader reader, int whoAmI) => NetHelper.HandlePacket(reader, whoAmI);
+
+        public override object Call(params object[] args) => ModIntegrationsSystem.Call(args);
     }
 }
