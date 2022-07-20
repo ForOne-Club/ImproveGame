@@ -47,7 +47,8 @@ namespace ImproveGame.Common.Players
                 }
                 Player.AddBuff(buffType, 2);
             }
-            HandleSceneMetrics(item);
+            if (Config.NoPlace_BUFFTile)
+                HandleSceneMetrics(item);
         }
 
         public static void HandleSceneMetrics(Item item)

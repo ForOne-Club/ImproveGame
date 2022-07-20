@@ -1,5 +1,4 @@
 using ImproveGame.Common.Systems;
-using System.IO;
 using System.Reflection;
 using Terraria.Chat;
 using Terraria.DataStructures;
@@ -125,7 +124,7 @@ namespace ImproveGame.Content.Tiles
             }
             fishingSpeedBonus += Math.Min(bassCount / 20f, 5f);
 
-            float fishingCooldown = 6600f; // 钓鱼机基础冷却在这里改，原版写的是660
+            float fishingCooldown = 66f; // 钓鱼机基础冷却在这里改，原版写的是660
             if (FishingTimer > fishingCooldown / fishingSpeedBonus) {
                 FishingTimer = 0;
                 ApplyAccessories();
@@ -276,50 +275,35 @@ namespace ImproveGame.Content.Tiles
 
             // 伪装一个proj，用反射调用Projectile.FishingCheck_RollItemDrop
             var fakeProj = new Projectile {
-                owner = 250
+                owner = 255
             };
-            int tileType1 = Main.tile[Position.X, Position.Y + 2].TileType;
-            int tileType2 = Main.tile[Position.X + 1, Position.Y + 2].TileType;
 
-            bool dungeon = Main.player[250].ZoneDungeon;
-            bool beach = Main.player[250].ZoneBeach;
-            bool corrupt = Main.player[250].ZoneCorrupt;
-            bool crimson = Main.player[250].ZoneCrimson;
-            bool hallow = Main.player[250].ZoneHallow;
-            bool jungle = Main.player[250].ZoneJungle;
-            bool snow = Main.player[250].ZoneSnow;
-            bool desert = Main.player[250].ZoneDesert;
+            Main.player[255].Center = Position.ToWorldCoordinates();
+            TileCounter tileCounter = new();
+            tileCounter.ScanAndExportToMain(Position);
+            tileCounter.Simulate(Main.player[255]);
 
-            Main.player[250].ZoneDungeon = (IsDungeonBrick(tileType1) || IsDungeonBrick(tileType2)) && NPC.downedBoss3;
-            Main.player[250].ZoneBeach = (fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000; // 注意: 原版代码里渔获是根据传入的position判定海边，这里是为了开启海洋匣
-            Main.player[250].ZoneCorrupt = TileID.Sets.Corrupt[tileType1] || TileID.Sets.Corrupt[tileType2];
-            Main.player[250].ZoneCrimson = TileID.Sets.Crimson[tileType1] || TileID.Sets.Crimson[tileType2];
-            Main.player[250].ZoneHallow = TileID.Sets.Hallow[tileType1] || TileID.Sets.Hallow[tileType2];
-            Main.player[250].ZoneJungle = IsJungleTile(tileType1) || IsJungleTile(tileType2);
-            Main.player[250].ZoneSnow = TileID.Sets.Snow[tileType1] || TileID.Sets.Snow[tileType2];
-            Main.player[250].ZoneDesert = TileID.Sets.isDesertBiomeSand[tileType1] || TileID.Sets.isDesertBiomeSand[tileType2];
-            
             // 反射调用 FishingCheck_RollItemDrop(ref fisher);
             var targetMethod = fakeProj.GetType().GetMethod("FishingCheck_RollItemDrop",
                 BindingFlags.Instance | BindingFlags.NonPublic);
             var args = new object[] { fisher };
             targetMethod.Invoke(fakeProj, args);
-
             fisher = (FishingAttempt)args[0]; // ref之后用这个获取
+
+            AdvancedPopupRequest sonar = new();
+            Vector2 sonarPosition = new(-1145141f, -919810f); // 直接fake到世界外面
+            PlayerLoader.CatchFish(Main.player[255], fisher, ref fisher.rolledItemDrop, ref fisher.rolledEnemySpawn, ref sonar, ref sonarPosition);
+
             if (fisher.rolledItemDrop != 0) {
                 GiveItemToStorage(player, fisher.rolledItemDrop);
                 //Main.NewText($"[i:{fisher.rolledItemDrop}]");
             }
 
-            Main.player[250].ZoneDungeon = dungeon;
-            Main.player[250].ZoneBeach = beach;
-            Main.player[250].ZoneCorrupt = corrupt;
-            Main.player[250].ZoneCrimson = crimson;
-            Main.player[250].ZoneHallow = hallow;
-            Main.player[250].ZoneJungle = jungle;
-            Main.player[250].ZoneSnow = snow;
-            Main.player[250].ZoneDesert = desert;
+            // 单人模式里这还作为视效的判定，因此得强制更新
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                Main.LocalPlayer.ForceUpdateBiomes();
         }
+
 
         private void GiveItemToStorage(Player player, int itemType) {
             Item item = new();

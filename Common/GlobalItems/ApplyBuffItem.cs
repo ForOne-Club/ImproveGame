@@ -61,6 +61,8 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         public static int GetItemBuffType(Item item) {
+            if (ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type))
+                return -1;
             if (MyUtils.Config.NoConsume_Potion) {
                 // 普通药水
                 if (item.stack >= MyUtils.Config.NoConsume_PotionRequirement && item.active) {
