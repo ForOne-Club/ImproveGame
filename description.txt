@@ -67,8 +67,8 @@
     20、 额外的背包
     999、 所有功能都可以在设置查看，懒得写了 QAQ
 ---------------------------
-[c/990000:画师：枫林半叶]
-[c/9900ff:翻译：Lastprismer，Lacewing]
+[c/990000:画师：枫林半叶, 逆风而行的信鸽]
+[c/9900ff:翻译：Lastprismer, Lacewing]
 [c/0099ff:代码：局长, Cyril]
 [c/00ff99:特别感谢: @ChevyRay 的协程类]
 
@@ -142,7 +142,7 @@ Function list:
     20. A huge extra inventory
     999. Go to the mod configurations please
 ---------------------------
-[c/990000:Spriter: 枫林半叶]
+[c/990000:Spriter: 枫林半叶, 逆风而行的信鸽]
 [c/9900ff:Translators: Lastprismer, Lacewing]
 [c/0099ff:Coder: 局长, Cyril]
 [c/00ff99:Special thanks: @ChevyRay's coroutine class]

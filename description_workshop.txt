@@ -71,7 +71,7 @@ https://www.bilibili.com/read/cv17018658?spm_id_from=333.1007.0.0
     19、 智能虚空保险库
     20、 额外的背包
 ---------------------------
-画师：枫林半叶
+画师：枫林半叶, 逆风而行的信鸽
 翻译：Lastprismer，Lacewing
 代码：局长, Cyril
 特别感谢: @ChevyRay 的协程类 (https://github.com/ChevyRay/Coroutines)
