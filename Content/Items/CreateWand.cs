@@ -2,19 +2,10 @@
 using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using Terraria.UI;
 using static ImproveGame.Entitys.TileData;
-using static ImproveGame.MyUtils;
 
 namespace ImproveGame.Content.Items
 {
@@ -34,47 +25,56 @@ namespace ImproveGame.Content.Items
         private Texture2D JianYu_PreView => jianYu_PreView[Index];
         private Color[] Colors => colors[Index];
 
-        public override void Load() {
-            if (!Main.dedServ) {
+        public override void Load()
+        {
+            if (!Main.dedServ)
+            {
                 ColorsLoaded = false;
                 // 把读取放到主线程上
                 On.Terraria.Main.Update += LoadBeautifulSatisfyNPCHouses;
             }
-            else {
+            else
+            {
                 ColorsLoaded = true;
             }
         }
 
-        private void LoadBeautifulSatisfyNPCHouses(On.Terraria.Main.orig_Update orig, Main self, GameTime gameTime) {
-            try {
-                if (!ColorsLoaded) {
+        private void LoadBeautifulSatisfyNPCHouses(On.Terraria.Main.orig_Update orig, Main self, GameTime gameTime)
+        {
+            try
+            {
+                if (!ColorsLoaded)
+                {
                     jianYu = new[] { GetTexture("JianYu").Value, GetTexture("JianYu2").Value, GetTexture("JianYu3").Value };
                     jianYu_PreView = new[] { GetTexture("JianYu_PreView").Value, GetTexture("JianYu_PreView2").Value, GetTexture("JianYu_PreView3").Value };
                     colors = new[] { GetColors(jianYu[0]), GetColors(jianYu[1]), GetColors(jianYu[2]) };
                     ColorsLoaded = true;
                 }
-            }
-            catch { }
-            
+            } catch { }
+
             orig(self, gameTime);
         }
 
-        public override void Unload() {
-            try {
-                if (!Main.dedServ) {
+        public override void Unload()
+        {
+            try
+            {
+                if (!Main.dedServ)
+                {
                     jianYu = null;
                     jianYu_PreView = null;
                     colors = null;
                 }
-            }
-            catch { }
+            } catch { }
             ColorsLoaded = false;
         }
 
         // 切换样式
-        public static void ToggleStyle() {
+        public static void ToggleStyle()
+        {
             Index++;
-            if (Index >= jianYu.Length) {
+            if (Index >= jianYu.Length)
+            {
                 Index = 0;
             }
         }
@@ -94,7 +94,8 @@ namespace ImproveGame.Content.Items
         [CloneByReference]
         internal Item Bed = new();
 
-        public override void SaveData(TagCompound tag) {
+        public override void SaveData(TagCompound tag)
+        {
             tag[nameof(Block)] = Block;
             tag[nameof(Wall)] = Wall;
             tag[nameof(Platform)] = Platform;
@@ -104,7 +105,8 @@ namespace ImproveGame.Content.Items
             tag[nameof(Bed)] = Bed;
         }
 
-        public override void LoadData(TagCompound tag) {
+        public override void LoadData(TagCompound tag)
+        {
             if (tag.ContainsKey(nameof(Block)))
                 Block = tag.Get<Item>(nameof(Block));
             if (tag.ContainsKey(nameof(Wall)))
@@ -121,11 +123,13 @@ namespace ImproveGame.Content.Items
                 Bed = tag.Get<Item>(nameof(Bed));
         }
 
-        public override void SetStaticDefaults() {
+        public override void SetStaticDefaults()
+        {
             Item.staff[Type] = true;
         }
 
-        public override void SetDefaults() {
+        public override void SetDefaults()
+        {
             Item.width = 42;
             Item.width = 42;
             Item.mana = 20;
@@ -136,31 +140,40 @@ namespace ImproveGame.Content.Items
             Item.value = Item.sellPrice(0, 1, 0, 0);
         }
 
-        public override void HoldItem(Player player) {
+        public override void HoldItem(Player player)
+        {
             if (player.itemAnimation == 0)
                 Item.mana = 40;
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI && !Main.LocalPlayer.mouseInterface) {
+            if (!Main.dedServ && Main.myPlayer == player.whoAmI && !Main.LocalPlayer.mouseInterface)
+            {
                 Point point = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint(); // 鼠标位置
                 int boxIndex = Box.NewBox(new Rectangle(point.X, point.Y, JianYu.Width, JianYu.Height), Color.Yellow * 0f, Color.Yellow * 0f);
-                if (DrawSystem.boxs.IndexInRange(boxIndex)) {
+                if (DrawSystem.boxs.IndexInRange(boxIndex))
+                {
                     Box box = DrawSystem.boxs[boxIndex];
                     box.PreView = JianYu_PreView;
                 }
             }
         }
 
-        public override void ModifyManaCost(Player player, ref float reduce, ref float mult) {
-            if (player.altFunctionUse == 2) {
+        public override void ModifyManaCost(Player player, ref float reduce, ref float mult)
+        {
+            if (player.altFunctionUse == 2)
+            {
                 reduce = 0;
             }
         }
 
-        public override bool CanUseItem(Player player) {
-            if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer) {
-                if (!ArchitectureGUI.Visible) {
+        public override bool CanUseItem(Player player)
+        {
+            if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer)
+            {
+                if (!ArchitectureGUI.Visible)
+                {
                     UISystem.Instance.ArchitectureGUI.Open();
                 }
-                else {
+                else
+                {
                     UISystem.Instance.ArchitectureGUI.Close();
                 }
                 return false;
@@ -173,9 +186,11 @@ namespace ImproveGame.Content.Items
         /// </summary>
         /// <param name="itemType">物品实例名称</param>
         /// <param name="item">物品实例</param>
-        internal void GetStoredItemInstance(string itemType, out Item item) {
+        internal void GetStoredItemInstance(string itemType, out Item item)
+        {
             item = new Item(ItemID.None);
-            switch (itemType) {
+            switch (itemType)
+            {
                 case nameof(Block):
                     item = Block;
                     return;
@@ -205,8 +220,10 @@ namespace ImproveGame.Content.Items
         /// </summary>
         /// <param name="itemType">物品存储类型</param>
         /// <param name="item">物品实例</param>
-        internal void SetItem(string itemType, Item item, int inventoryIndex) {
-            switch (itemType) {
+        internal void SetItem(string itemType, Item item, int inventoryIndex)
+        {
+            switch (itemType)
+            {
                 case nameof(Block):
                     Block = item;
                     break;
@@ -229,7 +246,8 @@ namespace ImproveGame.Content.Items
                     Bed = item;
                     break;
             }
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, inventoryIndex, Main.LocalPlayer.inventory[inventoryIndex].prefix);
             }
         }
@@ -238,12 +256,15 @@ namespace ImproveGame.Content.Items
         /// 就为了实现一个“如果不放东西就没爆炸声音”的功能
         /// </summary>
         private static bool _playedSound = false;
-        public override bool? UseItem(Player player) {
-            if (!ColorsLoaded || colors is null) {
+        public override bool? UseItem(Player player)
+        {
+            if (!ColorsLoaded || colors is null)
+            {
                 ImproveGame.Instance.Logger.Error("Create Wand Colors didn't load. Please report to mod developers.");
                 return base.UseItem(player);
             }
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI && player.altFunctionUse == 0) {
+            if (!Main.dedServ && Main.myPlayer == player.whoAmI && player.altFunctionUse == 0)
+            {
                 Point position = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint();
 
                 List<TileData> tileDatas = new();
@@ -256,16 +277,20 @@ namespace ImproveGame.Content.Items
                     TileSort tileSort = Color2TileSort(Colors[i]);
 
                     // 墙体
-                    if (ShouldPlaceWall(tileSort)) {
-                        if (Wall.IsAir || Wall.createWall <= WallID.None) {
+                    if (ShouldPlaceWall(tileSort))
+                    {
+                        if (Wall.IsAir || Wall.createWall <= WallID.None)
+                        {
                             PickItemInInventory(player, (item) => TryPlaceWall(item, player, x, y), true);
                         }
-                        else if (TryPlaceWall(Wall, player, x, y)) {
+                        else if (TryPlaceWall(Wall, player, x, y))
+                        {
                             TryConsumeItem(ref Wall, player);
                         }
                     }
 
-                    switch (tileSort) {
+                    switch (tileSort)
+                    {
                         case TileSort.Block:
                             TryPlace(ref Block, player, x, y, TryPlaceTile);
                             break;
@@ -289,12 +314,14 @@ namespace ImproveGame.Content.Items
                 {
                     int x = tileDatas[i].x;
                     int y = tileDatas[i].y;
-                    if (Main.tile[x, y].HasTile) {
+                    if (Main.tile[x, y].HasTile)
+                    {
                         continue;
                     }
 
                     // 进行其他的放置尝试
-                    switch (tileDatas[i].tileSort) {
+                    switch (tileDatas[i].tileSort)
+                    {
                         case TileSort.Torch:
                             TryPlace(ref Torch, player, x, y, (Item item) => item.createTile >= TileID.Dirt && TileID.Sets.Torch[item.createTile]);
                             break;
@@ -315,7 +342,8 @@ namespace ImproveGame.Content.Items
                             break;
                     }
                 }
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
                     NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, JianYu.Width, JianYu.Height);
                 }
 
@@ -324,7 +352,8 @@ namespace ImproveGame.Content.Items
                 // 同步UI物品
                 UISystem.Instance.ArchitectureGUI.RefreshSlots(this);
             }
-            if (!_playedSound && player.altFunctionUse == 0) {
+            if (!_playedSound && player.altFunctionUse == 0)
+            {
                 CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.CreateWand_NotEnough"), true);
             }
             _playedSound = false;
@@ -339,19 +368,23 @@ namespace ImproveGame.Content.Items
         /// <param name="x">放置目标X坐标</param>
         /// <param name="y">放置目标Y坐标</param>
         /// <param name="tryMethod">进行放置尝试的方法，只有符合条件的才会放置</param>
-        private static void TryPlace(ref Item storedItem, Player player, int x, int y, Func<Item, bool> tryMethod) {
+        private static void TryPlace(ref Item storedItem, Player player, int x, int y, Func<Item, bool> tryMethod)
+        {
             // 没有存储物品，在物品栏里面找    
-            if (storedItem.IsAir || storedItem.createTile < TileID.Dirt) {
+            if (storedItem.IsAir || storedItem.createTile < TileID.Dirt)
+            {
                 int i = PickItemInInventory(player, (item) =>
                     item is not null && tryMethod(item) &&
                     BongBongPlace(x, y, item, player, true, true, !_playedSound),
                     true);
-                if (i != -1) {
+                if (i != -1)
+                {
                     _playedSound = true;
                 }
             }
             // 进行存储物品的放置尝试
-            else if (storedItem is not null && tryMethod(storedItem) && BongBongPlace(x, y, storedItem, player, true, true, !_playedSound)) {
+            else if (storedItem is not null && tryMethod(storedItem) && BongBongPlace(x, y, storedItem, player, true, true, !_playedSound))
+            {
                 TryConsumeItem(ref storedItem, player);
                 _playedSound = true;
             }
@@ -363,12 +396,15 @@ namespace ImproveGame.Content.Items
         private static bool TryPlaceTile(Item item) =>
             item.createTile >= TileID.Dirt && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile];
 
-        private static bool TryPlaceWall(Item item, Player player, int x, int y) {
-            if (item.createWall > -1) {
+        private static bool TryPlaceWall(Item item, Player player, int x, int y)
+        {
+            if (item.createWall > -1)
+            {
                 TryKillTile(x, y, player);
                 BongBong(new Vector2(x, y) * 16f, 16, 16);
                 WorldGen.KillWall(x, y);
-                if (Main.tile[x, y].WallType == 0) {
+                if (Main.tile[x, y].WallType == 0)
+                {
                     WorldGen.PlaceWall(x, y, item.createWall, true);
                     return true;
                 }
@@ -391,26 +427,32 @@ namespace ImproveGame.Content.Items
                 };
 
         // 计算消耗
-        private void CalculateConsume() {
-            foreach (var item in MaterialConsume) {
+        private void CalculateConsume()
+        {
+            foreach (var item in MaterialConsume)
+            {
                 MaterialConsume[item.Key] = 0;
             }
-            if (!ColorsLoaded || colors is null) {
+            if (!ColorsLoaded || colors is null)
+            {
                 ImproveGame.Instance.Logger.Error("Create Wand Colors didn't load. Please report to mod developers.");
                 return;
             }
 
             TileSort tileSort;
-            for (int i = 0; i < Colors.Length; i++) {
+            for (int i = 0; i < Colors.Length; i++)
+            {
                 tileSort = Color2TileSort(Colors[i]);
                 MaterialConsume[tileSort]++;
-                if (tileSort != TileSort.Block && tileSort != TileSort.Platform && tileSort != TileSort.NoWall) {
+                if (tileSort != TileSort.Block && tileSort != TileSort.Platform && tileSort != TileSort.NoWall)
+                {
                     MaterialConsume[TileSort.Wall]++;
                 }
             }
         }
 
-        public override void NetSend(BinaryWriter writer) {
+        public override void NetSend(BinaryWriter writer)
+        {
             ItemIO.Send(Block, writer, true, true);
             ItemIO.Send(Wall, writer, true, true);
             ItemIO.Send(Platform, writer, true, true);
@@ -420,7 +462,8 @@ namespace ImproveGame.Content.Items
             ItemIO.Send(Bed, writer, true, true);
         }
 
-        public override void NetReceive(BinaryReader reader) {
+        public override void NetReceive(BinaryReader reader)
+        {
             Block = ItemIO.Receive(reader, true, true);
             Wall = ItemIO.Receive(reader, true, true);
             Platform = ItemIO.Receive(reader, true, true);
@@ -433,14 +476,19 @@ namespace ImproveGame.Content.Items
 
         public bool ItemInInventory;
 
-        public bool OverrideHover(Item[] inventory, int context, int slot) {
-            if (context == ItemSlot.Context.InventoryItem) {
+        public bool OverrideHover(Item[] inventory, int context, int slot)
+        {
+            if (context == ItemSlot.Context.InventoryItem)
+            {
                 ItemInInventory = true;
-                if (Main.mouseMiddle && Main.mouseMiddleRelease) {
-                    if (!ArchitectureGUI.Visible) {
+                if (Main.mouseMiddle && Main.mouseMiddleRelease)
+                {
+                    if (!ArchitectureGUI.Visible)
+                    {
                         UISystem.Instance.ArchitectureGUI.Open(slot);
                     }
-                    else {
+                    else
+                    {
                         UISystem.Instance.ArchitectureGUI.Close();
                     }
                 }
@@ -448,11 +496,14 @@ namespace ImproveGame.Content.Items
             return false;
         }
 
-        public override void ModifyTooltips(List<TooltipLine> tooltips) {
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
             // 决定文本显示的是“开启”还是“关闭”
-            if (ItemInInventory) {
+            if (ItemInInventory)
+            {
                 string tooltip = GetText("Tips.CreateWandOn");
-                if (ArchitectureGUI.Visible) {
+                if (ArchitectureGUI.Visible)
+                {
                     tooltip = GetText("Tips.CreateWandOff");
                 }
 
@@ -462,11 +513,14 @@ namespace ImproveGame.Content.Items
 
             CalculateConsume();
             tooltips.Add(new(Mod, "MaterialConsume", $"[c/ffff00:{GetText("Architecture.MaterialsRequired")}]"));
-            foreach (var item in MaterialConsume) {
-                if (item.Key != TileSort.None && item.Value > 0) {
+            foreach (var item in MaterialConsume)
+            {
+                if (item.Key != TileSort.None && item.Value > 0)
+                {
                     GetStoredItemInstance(item.Key.ToString(), out var storedItem);
                     int stack = 0;
-                    if (storedItem is not null && !storedItem.IsAir) {
+                    if (storedItem is not null && !storedItem.IsAir)
+                    {
                         stack = storedItem.stack;
                     }
 
@@ -478,52 +532,47 @@ namespace ImproveGame.Content.Items
             }
         }
 
-        public override void AddRecipes() {
-            // 金锭
-            CreateRecipe()
-                .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddIngredient(ItemID.FallenStar, 8)
-                .AddIngredient(ItemID.GoldBar, 6)
-                .Register();
-            // 铂金锭
-            CreateRecipe()
-                .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddIngredient(ItemID.FallenStar, 8)
-                .AddIngredient(ItemID.PlatinumBar, 6)
-                .Register();
-        }
-
         /// <summary>
         /// 颜色对应的物块类型
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        private static TileSort Color2TileSort(Color color) {
-            if (color == Color.Red) {
+        private static TileSort Color2TileSort(Color color)
+        {
+            if (color == Color.Red)
+            {
                 return TileSort.Block; // 实体块
             }
-            else if (color == Color.Black) {
+            else if (color == Color.Black)
+            {
                 return TileSort.Platform; // 平台
             }
-            else if (color == Color.White) {
+            else if (color == Color.White)
+            {
                 return TileSort.Torch; // 火把
             }
-            else if (color == Color.Yellow) {
+            else if (color == Color.Yellow)
+            {
                 return TileSort.Chair; // 椅子
             }
-            else if (color == Pink) {
+            else if (color == Pink)
+            {
                 return TileSort.Table; // 桌子
             }
-            else if (color == Color.Blue) {
+            else if (color == Color.Blue)
+            {
                 return TileSort.Workbench; // 工作台
             }
-            else if (color == ZiSe) {
+            else if (color == ZiSe)
+            {
                 return TileSort.Bed; // 床
             }
-            else if (color == QingSe) {
+            else if (color == QingSe)
+            {
                 return TileSort.NoWall; // 禁止放置墙体
             }
-            else {
+            else
+            {
                 return TileSort.None; // 没有任何
             }
         }
@@ -531,5 +580,15 @@ namespace ImproveGame.Content.Items
         private static readonly Color ZiSe = new(127, 0, 255);
         private static readonly Color QingSe = new(0, 255, 255);
         private static readonly Color Pink = new(255, 0, 255);
+
+        public override void AddRecipes()
+        {
+            // 金锭
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddRecipeGroup(ModRecipeGroup.GoldGroup, 12)
+                .AddIngredient(ItemID.FallenStar, 8)
+                .Register();
+        }
     }
 }

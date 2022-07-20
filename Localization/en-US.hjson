@@ -569,5 +569,14 @@ Mods:
             Switch: "Switch"
             Unavailable: "Not available"
         }
+        RecipeGroup:
+        {
+            GoldGroup: Gold/Platinum Bar
+            SilverGroup: Silver/Tungsten Bar
+            IronGroup: Iron/Lead Bar
+            CopperGroup: Copper/Tin Bar
+            DemoniteGroup: Demonite/Crimson Bar
+            ShadowGroup: Shadow Scale/Tissue Sample
+        }
     }
 }

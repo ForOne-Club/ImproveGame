@@ -636,7 +636,7 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// 从物品栏里找到对应物品，返回值为在<see cref="Player.inventory"/>中的索引
+        /// 从物品栏里找到对应物品，返回值为在 <see cref="Player.inventory"/> 中的索引
         /// </summary>
         /// <param name="player">对应玩家</param>
         /// <param name="shouldPick">选取物品的依据</param>

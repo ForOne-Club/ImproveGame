@@ -3,21 +3,22 @@ using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
-using Terraria.ID;
-using System.IO;
 
 namespace ImproveGame.Content.Items
 {
     public class PotionBag : ModItem, IItemOverrideLeftClick
     {
-        [CloneByReference]
         public List<Item> storedPotions = new();
+
+        // 克隆内容不克隆引用
+        public override ModItem Clone(Item newEntity)
+        {
+            PotionBag bag = base.Clone(newEntity) as PotionBag;
+            bag.storedPotions = new(storedPotions); // 创建一个新的集合，依旧会拷贝 list 内的引用，但是它本身是一个新的对象。
+            return bag;
+        }
 
         public override bool CanRightClick() => storedPotions is not null && storedPotions.Count != 0;
 

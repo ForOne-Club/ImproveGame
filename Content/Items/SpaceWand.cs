@@ -16,6 +16,7 @@ namespace ImproveGame.Content.Items
         }
 
         public PlaceType placeType;
+        public int[] GrassSeed = new int[] { 2, 23, 60, 70, 199, 109 };
 
         // 准备加上一个纵向的
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
@@ -132,6 +133,15 @@ namespace ImproveGame.Content.Items
                         if (oneIndex > -1)
                         {
                             Item item = player.inventory[oneIndex];
+                            if (GrassSeed.Contains(item.createTile))
+                            {
+                                if (WorldGen.PlaceTile(i, j, item.createTile, true, false, player.whoAmI, item.placeStyle))
+                                {
+                                    playSound = true;
+                                    PickItemInInventory(player, GetCondition(), true);
+                                }
+                                break;
+                            }
                             if (player.TileReplacementEnabled && !SameTile(i, j, item.createTile, item.placeStyle, (placeType == PlaceType.soild || placeType == PlaceType.rope) ? CheckType.Type : default))
                             {
                                 TryKillTile(i, j, player);
@@ -182,7 +192,7 @@ namespace ImproveGame.Content.Items
             return rect;
         }
 
-        // 获取背包中此类物品的数量
+        // 获取背包中 选中物块类型 的数量
         public bool TileCount(Item[] inventory, out int count)
         {
             return GetItemCount(inventory, GetCondition(), out count);
