@@ -22,10 +22,14 @@
 public override void PostSetupContent() {
     if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame)) {
         improveGame.Call(
-            "AddStation",
-            ModContent.ItemType<MyStation>(), // 物品ID
-            ModContent.BuffType<MyStationBuff>() // Buff ID
-        ); // 只有当玩家朝右时才会显示
+            "AddStation",//加入你自己的增益站1
+            ModContent.ItemType<MyStation1>(), // 物品ID 1
+            ModContent.BuffType<MyStationBuff1>() // BuffID 1
+        );
+        improveGame.Call(
+            "AddStation",//加入你自己的增益站2
+            ModContent.ItemType<MyStation2>(), // 物品ID 2
+            ModContent.BuffType<MyStationBuff2>() // BuffID 2
     }
 }
 ```

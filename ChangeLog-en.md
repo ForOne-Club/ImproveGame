@@ -14,7 +14,7 @@
 - **[v1.5.9.1]** Fixed the Potion Bag unable to store potions in multiplayer mode
 - **[v1.5.9.1]** Fixed the Wand of Space cannot be used without having a platform
 - **[v1.5.9.1]** Fixed newly crafted Potion Bags share the same inventory
-- **[v1.5.9.2]** 修复了自动钓鱼机环境判定的BUG
+- **[v1.5.9.2]** BUGFixed the Fishing Machine not fishing from correct biomes
 ## Additions
 - Added enemy spawn rate slider, only available while having the infinite [Battle Potion][Water Candle][Peace Cadnle][Sunflower] and [Calm Potion]
 - Added Potion Bag, can cotain 20 buff potions at most, potions inside also take effects
@@ -29,7 +29,7 @@
 - The Garden Gnome functions in inventory
 - The Wand of Space now support horizontal and vertical placement and you can choose which type of tile to place: platforms, solid blocks, ropes or minecart tracks
 - **[v1.5.9.1]** Added a hotkey for the Buff Tracker
-- **[v1.5.9.2]** 钓鱼机现已支持模组环境
+- **[v1.5.9.2]** The Fishing Machine now supports mod biomes
 ## Misc
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
 
