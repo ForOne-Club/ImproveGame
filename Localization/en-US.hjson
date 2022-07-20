@@ -380,6 +380,7 @@ Mods:
                 - [i:LavaproofTackleBag] increases fishing speed by * 500%
                 [c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
                 [c/AAAAAA:Modded accessories are not supported]
+                环境判定机制与玩家判定大致相同，需使钓鱼机处于相应环境内，支持模组环境
                 '''
         }
 		MapObject:

@@ -5,12 +5,8 @@ using ImproveGame.Interface.UIElements;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System.Collections.Generic;
-using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
-using Terraria.UI;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.GUI
@@ -53,33 +49,33 @@ namespace ImproveGame.Interface.GUI
             basePanel.Height.Set(panelHeight, 0f);
             Append(basePanel);
 
-            accessorySlot = MyUtils.CreateItemSlot(
+            accessorySlot = CreateItemSlot(
                 25f, 0f,
-                canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || FishingAccessories.Contains(item.type),
+                canPlace: (Item i, Item item) => SlotPlace(i, item) || FishingAccessories.Contains(item.type),
                 onItemChanged: ChangeAccessorySlot,
-                emptyText: () => MyUtils.GetText($"Autofisher.Accessory"),
+                emptyText: () => GetText($"Autofisher.Accessory"),
                 parent: basePanel,
                 folderName: "Autofisher",
                 iconTextureName: "Slot_Accessory"
             );
             accessorySlot.AllowFavorite = false;
 
-            fishingPoleSlot = MyUtils.CreateItemSlot(
+            fishingPoleSlot = CreateItemSlot(
                 75f, 0f,
-                canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || item.fishingPole > 0,
+                canPlace: (Item i, Item item) => SlotPlace(i, item) || item.fishingPole > 0,
                 onItemChanged: ChangeFishingPoleSlot,
-                emptyText: () => MyUtils.GetText($"Autofisher.FishingPole"),
+                emptyText: () => GetText($"Autofisher.FishingPole"),
                 parent: basePanel,
                 folderName: "Autofisher",
                 iconTextureName: "Slot_FishingPole"
             );
             fishingPoleSlot.AllowFavorite = false;
 
-            baitSlot = MyUtils.CreateItemSlot(
+            baitSlot = CreateItemSlot(
                 125f, 0f,
-                canPlace: (Item i, Item item) => MyUtils.SlotPlace(i, item) || item.bait > 0,
+                canPlace: (Item i, Item item) => SlotPlace(i, item) || item.bait > 0,
                 onItemChanged: ChangeBaitSlot,
-                emptyText: () => MyUtils.GetText($"Autofisher.Bait"),
+                emptyText: () => GetText($"Autofisher.Bait"),
                 parent: basePanel,
                 folderName: "Autofisher",
                 iconTextureName: "Slot_Bait"
@@ -126,8 +122,8 @@ namespace ImproveGame.Interface.GUI
             };
             textPanel.Append(tipText);
 
-            selectPoolOff = MyUtils.GetTexture("UI/Autofisher/SelectPoolOff");
-            selectPoolOn = MyUtils.GetTexture("UI/Autofisher/SelectPoolOn");
+            selectPoolOff = GetTexture("UI/Autofisher/SelectPoolOff");
+            selectPoolOn = GetTexture("UI/Autofisher/SelectPoolOn");
             relocateButton = new(selectPoolOff);
             relocateButton.Left.Set(175f, 0f);
             relocateButton.Top.Set(0f, 0f);
@@ -140,11 +136,11 @@ namespace ImproveGame.Interface.GUI
         public void ToggleSelectPool() {
             WandSystem.SelectPoolMode = !WandSystem.SelectPoolMode;
             if (WandSystem.SelectPoolMode) {
-                title.SetText(MyUtils.GetText("Autofisher.SelectPool"));
+                title.SetText(GetText("Autofisher.SelectPool"));
                 relocateButton.SetImage(selectPoolOn);
             }
             else {
-                title.SetText(MyUtils.GetText("Autofisher.Title"));
+                title.SetText(GetText("Autofisher.Title"));
                 relocateButton.SetImage(selectPoolOff);
             }
         }
@@ -255,7 +251,7 @@ namespace ImproveGame.Interface.GUI
                     autofisher.SetFishingTip(Language.GetTextValue("GameUI.FishingWarning"));
                 }
                 if (baitSlot.Item.IsAir || fishingPoleSlot.Item.IsAir || autofisher.FishingTip == "Error") {
-                    autofisher.SetFishingTip(MyUtils.GetText("Autofisher.Unavailable"));
+                    autofisher.SetFishingTip(GetText("Autofisher.Unavailable"));
                 }
 
                 tipText.SetText(autofisher.FishingTip);
@@ -307,7 +303,7 @@ namespace ImproveGame.Interface.GUI
             WandSystem.SelectPoolMode = false;
             Main.playerInventory = true;
             Visible = true;
-            title.SetText(MyUtils.GetText("Autofisher.Title"));
+            title.SetText(GetText("Autofisher.Title"));
             SoundEngine.PlaySound(AutofishPlayer.LocalPlayer.Autofisher != Point16.NegativeOne ? SoundID.MenuTick : SoundID.MenuOpen);
             AutofishPlayer.LocalPlayer.SetAutofisher(point);
             RefreshItems();

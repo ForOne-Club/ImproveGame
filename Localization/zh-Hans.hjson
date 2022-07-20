@@ -387,6 +387,7 @@
                 - 配饰为 [i:LavaproofTackleBag] 可使钓鱼速度*500%
                 [c/AAAAAA:由于钓鱼机不用鱼线，你不能在配饰槽中放入] [i:HighTestFishingLine]
                 [c/AAAAAA:饰品栏不支持放入非原版钓鱼饰品]
+                环境判定机制与玩家判定大致相同，需使钓鱼机处于相应环境内，支持模组环境
                 '''
         }
 		MapObject:

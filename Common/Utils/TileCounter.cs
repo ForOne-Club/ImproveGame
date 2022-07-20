@@ -1,0 +1,219 @@
+﻿using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using System.Reflection;
+using Terraria.DataStructures;
+using Terraria.WorldBuilding;
+
+namespace ImproveGame.Common.Utils
+{
+    public class TileCounter : ILoadable
+    {
+        public int CorruptionTileCount { get; set; }
+
+        public int HallowTileCount { get; set; }
+
+        public int SandTileCount { get; set; }
+
+        public int MushroomTileCount { get; set; }
+
+        public int SnowTileCount { get; set; }
+
+        public int CrimsonTileCount { get; set; }
+
+        public int JungleTileCount { get; set; }
+
+        public int DungeonTileCount { get; set; }
+
+        public int MeteorTileCount { get; set; }
+
+        public int GraveyardTileCount { get; set; }
+
+        public bool EnoughTilesForJungle => JungleTileCount >= SceneMetrics.JungleTileThreshold;
+
+        public bool EnoughTilesForHallow => HallowTileCount >= SceneMetrics.HallowTileThreshold;
+
+        public bool EnoughTilesForSnow => SnowTileCount >= SceneMetrics.SnowTileThreshold;
+
+        public bool EnoughTilesForGlowingMushroom => MushroomTileCount >= SceneMetrics.MushroomTileThreshold;
+
+        public bool EnoughTilesForDesert => SandTileCount >= SceneMetrics.DesertTileThreshold;
+
+        public bool EnoughTilesForCorruption => CorruptionTileCount >= SceneMetrics.CorruptionTileThreshold;
+
+        public bool EnoughTilesForCrimson => CrimsonTileCount >= SceneMetrics.CrimsonTileThreshold;
+
+        public bool EnoughTilesForMeteor => MeteorTileCount >= SceneMetrics.MeteorTileThreshold;
+
+        public bool EnoughTilesForGraveyard => GraveyardTileCount >= SceneMetrics.GraveyardTileThreshold;
+
+        internal int[] _tileCounts = new int[TileLoader.TileCount];
+
+        private static bool Simulating;
+
+        public TileCounter()
+        {
+            Reset();
+        }
+
+        public void Load(Mod mod) {
+            On.Terraria.Player.InZonePurity += Player_InZonePurity;
+            IL.Terraria.Player.UpdateBiomes += SimulateUpdateBiomes;
+        }
+
+        private bool Player_InZonePurity(On.Terraria.Player.orig_InZonePurity orig, Player self)
+        {
+            return orig(self);
+        }
+
+        private void SimulateUpdateBiomes(ILContext il)
+        {
+            var c = new ILCursor(il);
+            if (!c.TryGotoNext(MoveType.After, i => i.MatchCallvirt<BiomeLoader>(nameof(BiomeLoader.UpdateBiomes)))) {
+                return;
+            }
+            var label = c.DefineLabel(); // 记录位置
+            c.Emit(OpCodes.Ldsfld, typeof(TileCounter).GetField(nameof(Simulating), BindingFlags.Static | BindingFlags.NonPublic));
+            c.Emit(OpCodes.Brfalse_S, label); // 为false就跳到下面
+            c.Emit(OpCodes.Ret); // 为true直接return
+            c.MarkLabel(label);
+        }
+
+        public void Unload() { }
+
+        public void Simulate(Player player) {
+            Simulating = true;
+
+            int evilTileCount = Main.SceneMetrics.EvilTileCount;
+            int holyTileCount = Main.SceneMetrics.HolyTileCount;
+            int sandTileCount = Main.SceneMetrics.SandTileCount;
+            int mushroomTileCount = Main.SceneMetrics.MushroomTileCount;
+            int snowTileCount = Main.SceneMetrics.SnowTileCount;
+            int bloodTileCount = Main.SceneMetrics.BloodTileCount;
+            int jungleTileCount = Main.SceneMetrics.JungleTileCount;
+            int meteorTileCount = Main.SceneMetrics.MeteorTileCount;
+            int graveyardTileCount = Main.SceneMetrics.GraveyardTileCount;
+            int dungeonTileCount = Main.SceneMetrics.DungeonTileCount;
+
+            Main.SceneMetrics.EvilTileCount = CorruptionTileCount;
+            Main.SceneMetrics.HolyTileCount = HallowTileCount;
+            Main.SceneMetrics.SandTileCount = SandTileCount;
+            Main.SceneMetrics.MushroomTileCount = MushroomTileCount;
+            Main.SceneMetrics.SnowTileCount = SnowTileCount;
+            Main.SceneMetrics.BloodTileCount = CrimsonTileCount;
+            Main.SceneMetrics.JungleTileCount = JungleTileCount;
+            Main.SceneMetrics.MeteorTileCount = MeteorTileCount;
+            Main.SceneMetrics.GraveyardTileCount = GraveyardTileCount;
+            // 就你地牢最特殊
+            var dungeonTileCountProperty = Main.SceneMetrics.GetType().GetProperty(nameof(Main.SceneMetrics.DungeonTileCount), BindingFlags.Instance | BindingFlags.Public);
+            dungeonTileCountProperty.SetValue(Main.SceneMetrics, DungeonTileCount);
+
+            player.UpdateBiomes();
+
+            Main.SceneMetrics.EvilTileCount = evilTileCount;
+            Main.SceneMetrics.HolyTileCount = holyTileCount;
+            Main.SceneMetrics.SandTileCount = sandTileCount;
+            Main.SceneMetrics.MushroomTileCount = mushroomTileCount;
+            Main.SceneMetrics.SnowTileCount = snowTileCount;
+            Main.SceneMetrics.BloodTileCount = bloodTileCount;
+            Main.SceneMetrics.JungleTileCount = jungleTileCount;
+            Main.SceneMetrics.MeteorTileCount = meteorTileCount;
+            Main.SceneMetrics.GraveyardTileCount = graveyardTileCount;
+            dungeonTileCountProperty.SetValue(Main.SceneMetrics, dungeonTileCount);
+
+            Simulating = false;
+        }
+
+        public void ScanAndExportToMain(Point16 tileCoord)
+        {
+            // 咱们是new完了直接用，已经Reset了
+            // Reset();
+
+            SystemLoader.ResetNearbyTileEffects();
+
+            Rectangle tileRectangle = new Rectangle(tileCoord.X - Main.buffScanAreaWidth / 2, tileCoord.Y - Main.buffScanAreaHeight / 2, Main.buffScanAreaWidth, Main.buffScanAreaHeight);
+            tileRectangle = WorldUtils.ClampToWorld(tileRectangle);
+            for (int i = tileRectangle.Left; i < tileRectangle.Right; i++)
+            {
+                for (int j = tileRectangle.Top; j < tileRectangle.Bottom; j++)
+                {
+                    if (!tileRectangle.Contains(i, j))
+                        continue;
+
+                    Tile tile = Main.tile[i, j];
+                    if (tile == null || !tile.HasTile)
+                        continue;
+
+                    tileRectangle.Contains(i, j);
+                    if (!TileID.Sets.isDesertBiomeSand[tile.TileType] || !WorldGen.oceanDepths(i, j))
+                        _tileCounts[tile.TileType]++;
+                }
+            }
+
+            ExportTileCountsToMain();
+            SystemLoader.TileCountsAvailable(_tileCounts);
+        }
+
+
+        /// <summary>
+        /// 将Counts应用到各大环境里面
+        /// </summary>
+        private void ExportTileCountsToMain()
+        {
+            HallowTileCount = _tileCounts[109] + _tileCounts[492] + _tileCounts[110] + _tileCounts[113] + _tileCounts[117] + _tileCounts[116] + _tileCounts[164] + _tileCounts[403] + _tileCounts[402];
+            CorruptionTileCount = _tileCounts[23] + _tileCounts[24] + _tileCounts[25] + _tileCounts[32] + _tileCounts[112] + _tileCounts[163] + _tileCounts[400] + _tileCounts[398] + -10 * _tileCounts[27];
+            CrimsonTileCount = _tileCounts[199] + _tileCounts[203] + _tileCounts[200] + _tileCounts[401] + _tileCounts[399] + _tileCounts[234] + _tileCounts[352] - 10 * _tileCounts[27];
+            SnowTileCount = _tileCounts[147] + _tileCounts[148] + _tileCounts[161] + _tileCounts[162] + _tileCounts[164] + _tileCounts[163] + _tileCounts[200];
+            JungleTileCount = _tileCounts[60] + _tileCounts[61] + _tileCounts[62] + _tileCounts[74] + _tileCounts[226] + _tileCounts[225];
+            MushroomTileCount = _tileCounts[70] + _tileCounts[71] + _tileCounts[72] + _tileCounts[528];
+            MeteorTileCount = _tileCounts[37];
+            DungeonTileCount = _tileCounts[41] + _tileCounts[43] + _tileCounts[44] + _tileCounts[481] + _tileCounts[482] + _tileCounts[483];
+            SandTileCount = _tileCounts[53] + _tileCounts[112] + _tileCounts[116] + _tileCounts[234] + _tileCounts[397] + _tileCounts[398] + _tileCounts[402] + _tileCounts[399] + _tileCounts[396] + _tileCounts[400] + _tileCounts[403] + _tileCounts[401];
+            GraveyardTileCount = _tileCounts[85];
+            GraveyardTileCount -= _tileCounts[27] / 2;
+
+            if (GraveyardTileCount < 0)
+                GraveyardTileCount = 0;
+
+            if (HallowTileCount < 0)
+                HallowTileCount = 0;
+
+            if (CorruptionTileCount < 0)
+                CorruptionTileCount = 0;
+
+            if (CrimsonTileCount < 0)
+                CrimsonTileCount = 0;
+
+            int hallowTileCount = HallowTileCount;
+            HallowTileCount -= CorruptionTileCount;
+            HallowTileCount -= CrimsonTileCount;
+            CorruptionTileCount -= hallowTileCount;
+            CrimsonTileCount -= hallowTileCount;
+            if (HallowTileCount < 0)
+                HallowTileCount = 0;
+
+            if (CorruptionTileCount < 0)
+                CorruptionTileCount = 0;
+
+            if (CrimsonTileCount < 0)
+                CrimsonTileCount = 0;
+        }
+
+        public int GetTileCount(ushort tileId) => _tileCounts[tileId];
+
+        public void Reset()
+        {
+            Array.Clear(_tileCounts, 0, _tileCounts.Length);
+            SandTileCount = 0;
+            CorruptionTileCount = 0;
+            CrimsonTileCount = 0;
+            GraveyardTileCount = 0;
+            MushroomTileCount = 0;
+            SnowTileCount = 0;
+            HallowTileCount = 0;
+            MeteorTileCount = 0;
+            JungleTileCount = 0;
+            DungeonTileCount = 0;
+            SystemLoader.TileCountsAvailable(_tileCounts);
+        }
+    }
+}
