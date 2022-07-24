@@ -4,6 +4,7 @@
 - v1.5.9.0
 - v1.5.9.1
 - v1.5.9.2
+- v1.5.9.3
 ## BUG fix
 - Fixed the Merchant's spawn condition not counting coins in the Money Trough
 - Corrected the description of the NPC spawn speed multiplier
@@ -15,6 +16,7 @@
 - **[v1.5.9.1]** Fixed the Wand of Space cannot be used without having a platform
 - **[v1.5.9.1]** Fixed newly crafted Potion Bags share the same inventory
 - **[v1.5.9.2]** Fixed the Fishing Machine not fishing from correct biomes
+- **[v1.5.9.3]** 修复了钓鱼机速度过快的BUG
 ## Additions
 - Added enemy spawn rate slider, only available while having the infinite [Battle Potion][Water Candle][Peace Cadnle][Sunflower] and [Calm Potion]
 - Added Potion Bag, can cotain 20 buff potions at most, potions inside also take effects
