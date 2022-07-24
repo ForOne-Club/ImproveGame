@@ -5,18 +5,17 @@ namespace ImproveGame.Interface.GUI
 {
     public class BigBagGUI : UIState
     {
-        private static bool _visible = true;
+        private static bool visible = true;
         private Vector2 offset = Vector2.Zero;
         public bool dragging;
         public static bool Visible
         {
             get
             {
-                if (!Main.playerInventory)
-                    _visible = false;
-                return _visible;
+                if (!Main.playerInventory) visible = false;
+                return visible;
             }
-            set => _visible = value;
+            set => visible = value;
         }
 
         public UserInterface UserInterface;
@@ -49,7 +48,7 @@ namespace ImproveGame.Interface.GUI
             MainPanel.SetPPos(SuperVaultPos);
             MainPanel.Width.Pixels = MainPanel.HPadding() + ItemGrid.Width();
             MainPanel.Height.Pixels = MainPanel.VPadding() + ItemGrid.Height() + ItemGrid.Top();
-            _visible = Visible;
+            visible = Visible;
             Recalculate();
         }
 
@@ -205,13 +204,13 @@ namespace ImproveGame.Interface.GUI
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
             dragging = false;
-            _visible = true;
+            visible = true;
         }
 
         public void Close()
         {
             SoundEngine.PlaySound(SoundID.MenuClose);
-            _visible = false;
+            visible = false;
         }
     }
 }
