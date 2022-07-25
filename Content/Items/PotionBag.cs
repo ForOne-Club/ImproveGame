@@ -151,15 +151,19 @@ namespace ImproveGame.Content.Items
         public override void SetStaticDefaults() => CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
 
 
-        public static Asset<Texture2D> FullTexture = null;
+        internal static Asset<Texture2D> FullTexture = null;
 
         public override void Load()
         {
+            if (Main.dedServ)
+                return;
             FullTexture = ModContent.Request<Texture2D>(Texture + "_Full");
         }
 
         public override void Unload()
         {
+            if (Main.dedServ)
+                return;
             FullTexture = null;
         }
 
@@ -225,7 +229,6 @@ namespace ImproveGame.Content.Items
             CreateRecipe()
                 .AddIngredient(ItemID.Silk, 8)
                 .AddTile(TileID.WorkBenches).Register();
-
         }
     }
 }

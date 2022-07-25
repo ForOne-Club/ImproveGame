@@ -281,7 +281,7 @@ namespace ImproveGame.Content.Items
                     {
                         if (Wall.IsAir || Wall.createWall <= WallID.None)
                         {
-                            PickItemInInventory(player, (item) => TryPlaceWall(item, player, x, y), true);
+                            PickItemInInventory(player, (item) => TryPlaceWall(item, player, x, y), true, out _);
                         }
                         else if (TryPlaceWall(Wall, player, x, y))
                         {
@@ -373,11 +373,11 @@ namespace ImproveGame.Content.Items
             // 没有存储物品，在物品栏里面找    
             if (storedItem.IsAir || storedItem.createTile < TileID.Dirt)
             {
-                int i = PickItemInInventory(player, (item) =>
+                PickItemInInventory(player, (item) =>
                     item is not null && tryMethod(item) &&
                     BongBongPlace(x, y, item, player, true, true, !_playedSound),
-                    true);
-                if (i != -1)
+                    true, out int index);
+                if (index != -1)
                 {
                     _playedSound = true;
                 }

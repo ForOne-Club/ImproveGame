@@ -30,37 +30,37 @@ namespace ImproveGame.Interface.GUI
 
             Main.instance.LoadItem(94);
             RoundButtons[0] = new(TextureAssets.Item[94]);
-            RoundButtons[0].getColor = GetColor(SpaceWand.PlaceType.platform);
+            RoundButtons[0].GetColor = GetColor(SpaceWand.PlaceType.platform);
             RoundButtons[0].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.platform);
             MainPanel.Append(RoundButtons[0]);
 
             Main.instance.LoadItem(9);
             RoundButtons[1] = new(TextureAssets.Item[9]);
-            RoundButtons[1].getColor = GetColor(SpaceWand.PlaceType.soild);
+            RoundButtons[1].GetColor = GetColor(SpaceWand.PlaceType.soild);
             RoundButtons[1].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.soild);
             MainPanel.Append(RoundButtons[1]);
 
             Main.instance.LoadItem(2996);
             RoundButtons[2] = new(TextureAssets.Item[2996]);
-            RoundButtons[2].getColor = GetColor(SpaceWand.PlaceType.rope);
+            RoundButtons[2].GetColor = GetColor(SpaceWand.PlaceType.rope);
             RoundButtons[2].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.rope);
             MainPanel.Append(RoundButtons[2]);
 
             Main.instance.LoadItem(2340);
             RoundButtons[3] = new(TextureAssets.Item[2340]);
-            RoundButtons[3].getColor = GetColor(SpaceWand.PlaceType.rail);
+            RoundButtons[3].GetColor = GetColor(SpaceWand.PlaceType.rail);
             RoundButtons[3].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.rail);
             MainPanel.Append(RoundButtons[3]);
 
             Main.instance.LoadItem(62);
             RoundButtons[4] = new(TextureAssets.Item[62]);
-            RoundButtons[4].getColor = GetColor(SpaceWand.PlaceType.grassSeed);
+            RoundButtons[4].GetColor = GetColor(SpaceWand.PlaceType.grassSeed);
             RoundButtons[4].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.grassSeed);
             MainPanel.Append(RoundButtons[4]);
 
             Main.instance.LoadItem(3215);
             RoundButtons[5] = new(TextureAssets.Item[3215]);
-            RoundButtons[5].getColor = GetColor(SpaceWand.PlaceType.plantPot);
+            RoundButtons[5].GetColor = GetColor(SpaceWand.PlaceType.plantPot);
             RoundButtons[5].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.plantPot);
             MainPanel.Append(RoundButtons[5]);
 

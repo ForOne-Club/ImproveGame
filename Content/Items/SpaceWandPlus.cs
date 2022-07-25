@@ -153,7 +153,7 @@ namespace ImproveGame.Content.Items
                             {
                                 SoundEngine.PlaySound(SoundID.Dig);
                                 WorldGen.PlaceTile(i, j, item.createTile, true, true, player.whoAmI, item.placeStyle);
-                                PickItemInInventory(player, JudgePlatform, true);
+                                PickItemInInventory(player, JudgePlatform, true, out _);
                             }
                         }
                     }

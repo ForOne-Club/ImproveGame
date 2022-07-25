@@ -36,6 +36,9 @@ namespace ImproveGame.Common.Systems
         public SpaceWandGUI SpaceWandGUI;
         public static UserInterface SpaceWandInterface;
 
+        public PaintWandGUI PaintWandGUI;
+        public static UserInterface PaintWandInterface;
+
         public override void Unload()
         {
             Instance = null;
@@ -60,6 +63,9 @@ namespace ImproveGame.Common.Systems
 
             SpaceWandGUI = null;
             SpaceWandInterface = null;
+
+            PaintWandGUI = null;
+            PaintWandInterface = null;
         }
 
         public override void Load()
@@ -73,16 +79,17 @@ namespace ImproveGame.Common.Systems
                 ArchitectureGUI = new();
                 BrustGUI = new();
                 SpaceWandGUI = new();
-                BigBagInterface = new();
-                BigBagGUI = new(BigBagInterface);
-                BigBagGUI.Activate();
-                BigBagInterface.SetState(BigBagGUI);
+                BigBagGUI = new();
+                PaintWandGUI = new();
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
                 LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
                 LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
                 LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
                 LoadGUI(ref BrustGUI, out BrustInterface);
                 LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
+                LoadGUI(ref BigBagGUI, out BigBagInterface);
+                LoadGUI(ref PaintWandGUI, out PaintWandInterface);
+                BigBagGUI.UserInterface = BigBagInterface;
             }
         }
 
@@ -115,13 +122,17 @@ namespace ImproveGame.Common.Systems
             {
                 ArchitectureInterface?.Update(gameTime);
             }
-            if (BrustGUI.Visible)
+            if (BrustGUI.Visible || BrustGUI.AnimationTimer > 0f)
             {
                 BrustInterface?.Update(gameTime);
             }
             if (SpaceWandGUI.Visible)
             {
                 SpaceWandInterface?.Update(gameTime);
+            }
+            if (PaintWandGUI.Visible)
+            {
+                PaintWandInterface?.Update(gameTime);
             }
         }
 
@@ -160,7 +171,10 @@ namespace ImproveGame.Common.Systems
 
             int wireIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Wire Selection");
             if (wireIndex != -1)
+            {
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
+                layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Paint GUI", DrawPaintGUI, InterfaceScaleType.UI));
+            }
         }
 
         private static bool DrawAutofishGUI()
@@ -173,9 +187,7 @@ namespace ImproveGame.Common.Systems
         private static bool DrawBuffTrackerGUI()
         {
             if (BuffTrackerGUI.Visible)
-            {
                 BuffTrackerInterface.Draw(Main.spriteBatch, new GameTime());
-            }
             return true;
         }
 
@@ -199,17 +211,20 @@ namespace ImproveGame.Common.Systems
             return true;
         }
 
-        private static bool DrawBrustGUI()
+        private bool DrawBrustGUI()
         {
-            Player player = Main.LocalPlayer;
-            if (BrustGUI.Visible && player.HeldItem is not null)
+            if (BrustGUI.Visible || BrustGUI.AnimationTimer > 0f)
             {
-                if (player.HeldItem.ModItem is null || player.HeldItem.ModItem is not MagickWand)
-                {
-                    Instance.BrustGUI.Close();
-                    return true;
-                }
                 BrustInterface.Draw(Main.spriteBatch, new GameTime());
+            }
+            return true;
+        }
+
+        private static bool DrawPaintGUI()
+        {
+            if (PaintWandGUI.Visible)
+            {
+                PaintWandInterface.Draw(Main.spriteBatch, new GameTime());
             }
             return true;
         }
