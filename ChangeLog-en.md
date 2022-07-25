@@ -32,6 +32,7 @@
 - The Wand of Space now support horizontal and vertical placement and you can choose which type of tile to place: platforms, solid blocks, ropes or minecart tracks
 - **[v1.5.9.1]** Added a hotkey for the Buff Tracker
 - **[v1.5.9.2]** The Fishing Machine now supports mod biomes
+- **[v1.5.9.3]** 空间魔杖控制面板重置, 增加新的分类.
 ## Misc
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
 

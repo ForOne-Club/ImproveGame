@@ -14,6 +14,7 @@ namespace ImproveGame.Interface.GUI
 
         public UIElement MainPanel;
         public RoundButton[] RoundButtons;
+        // public RoundButton ModeButton;
 
         public SpaceWand SpaceWand;
 
@@ -62,6 +63,23 @@ namespace ImproveGame.Interface.GUI
             RoundButtons[5].getColor = GetColor(SpaceWand.PlaceType.plantPot);
             RoundButtons[5].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.plantPot);
             MainPanel.Append(RoundButtons[5]);
+
+            /*ModeButton = new(GetTexture("UI/SpaceWand/FreeMode"));
+            ModeButton.SetCenter(MainPanel.GetSizeInside() / 2f);
+            ModeButton.getColor = () =>
+            {
+                Color color = Color.White;
+                if (mode == UIMode.open)
+                {
+                    color *= 1 - animationTimer / animationTimerMax;
+                }
+                else if (mode == UIMode.close)
+                {
+                    color *= animationTimer / animationTimerMax;
+                }
+                return color;
+            };
+            MainPanel.Append(ModeButton);*/
         }
 
         private Func<Color> GetColor(SpaceWand.PlaceType placeType)
@@ -97,13 +115,14 @@ namespace ImproveGame.Interface.GUI
                     Close();
                 }
             }
+
             bool flag = false;
             foreach (var button in RoundButtons)
             {
                 if (button.IsMouseHovering)
                     flag = true;
             }
-            if (mode is not UIMode.close && flag)
+            if (mode is not UIMode.close && (flag /*|| ModeButton.IsMouseHovering*/))
             {
                 Main.LocalPlayer.mouseInterface = true;
             }

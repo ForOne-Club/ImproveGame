@@ -1,13 +1,6 @@
-﻿using ImproveGame.Entitys;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria;
+﻿using ImproveGame.Common.Systems;
+using ImproveGame.Entitys;
 using Terraria.GameContent.Creative;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using static ImproveGame.MyUtils;
-using ImproveGame.Common.Systems;
 
 namespace ImproveGame.Content.Items
 {
