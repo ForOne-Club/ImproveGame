@@ -51,7 +51,10 @@ namespace ImproveGame.Content.Items
         {
             if (player.altFunctionUse == 2)
             {
-                UISystem.Instance.SpaceWandGUI.ToggleMode(this);
+                if (SpaceWandGUI.Visible && !UISystem.Instance.SpaceWandGUI.IsClose)
+                    UISystem.Instance.SpaceWandGUI.Close();
+                else
+                    UISystem.Instance.SpaceWandGUI.Open(this);
                 return false;
             }
             TileCount(player.inventory, out int count);

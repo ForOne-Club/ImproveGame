@@ -2,11 +2,8 @@
 using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Interface.UIElements;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria.DataStructures;
-using Terraria.Localization;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.GUI

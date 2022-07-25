@@ -13,54 +13,56 @@ namespace ImproveGame.Interface.GUI
         }
 
         public UIElement MainPanel;
-        public RoundButton[] RoundButtons;
+        public readonly RoundButton[] RoundButtons;
         // public RoundButton ModeButton;
-
         public SpaceWand SpaceWand;
+
+        public SpaceWandGUI()
+        {
+            RoundButtons = new RoundButton[6];
+        }
 
         public override void OnInitialize()
         {
             MainPanel = new();
             MainPanel.SetPadding(0);
-            MainPanel.Width.Pixels = 120;
-            MainPanel.Height.Pixels = 120;
+            MainPanel.Width.Pixels = 200;
+            MainPanel.Height.Pixels = 200;
             Append(MainPanel);
-
-            RoundButtons = new RoundButton[6];
 
             Main.instance.LoadItem(94);
             RoundButtons[0] = new(TextureAssets.Item[94]);
-            RoundButtons[0].GetColor = GetColor(SpaceWand.PlaceType.platform);
+            RoundButtons[0].OnGetColor = GetColor(SpaceWand.PlaceType.platform);
             RoundButtons[0].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.platform);
             MainPanel.Append(RoundButtons[0]);
 
             Main.instance.LoadItem(9);
             RoundButtons[1] = new(TextureAssets.Item[9]);
-            RoundButtons[1].GetColor = GetColor(SpaceWand.PlaceType.soild);
+            RoundButtons[1].OnGetColor = GetColor(SpaceWand.PlaceType.soild);
             RoundButtons[1].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.soild);
             MainPanel.Append(RoundButtons[1]);
 
             Main.instance.LoadItem(2996);
             RoundButtons[2] = new(TextureAssets.Item[2996]);
-            RoundButtons[2].GetColor = GetColor(SpaceWand.PlaceType.rope);
+            RoundButtons[2].OnGetColor = GetColor(SpaceWand.PlaceType.rope);
             RoundButtons[2].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.rope);
             MainPanel.Append(RoundButtons[2]);
 
             Main.instance.LoadItem(2340);
             RoundButtons[3] = new(TextureAssets.Item[2340]);
-            RoundButtons[3].GetColor = GetColor(SpaceWand.PlaceType.rail);
+            RoundButtons[3].OnGetColor = GetColor(SpaceWand.PlaceType.rail);
             RoundButtons[3].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.rail);
             MainPanel.Append(RoundButtons[3]);
 
             Main.instance.LoadItem(62);
             RoundButtons[4] = new(TextureAssets.Item[62]);
-            RoundButtons[4].GetColor = GetColor(SpaceWand.PlaceType.grassSeed);
+            RoundButtons[4].OnGetColor = GetColor(SpaceWand.PlaceType.grassSeed);
             RoundButtons[4].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.grassSeed);
             MainPanel.Append(RoundButtons[4]);
 
             Main.instance.LoadItem(3215);
             RoundButtons[5] = new(TextureAssets.Item[3215]);
-            RoundButtons[5].GetColor = GetColor(SpaceWand.PlaceType.plantPot);
+            RoundButtons[5].OnGetColor = GetColor(SpaceWand.PlaceType.plantPot);
             RoundButtons[5].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.plantPot);
             MainPanel.Append(RoundButtons[5]);
 
@@ -87,14 +89,10 @@ namespace ImproveGame.Interface.GUI
             return () =>
             {
                 Color color = SpaceWand.placeType == placeType ? Color.White : Color.Gray;
-                if (mode == UIMode.open)
-                {
+                if (IsOpen)
                     color *= 1 - animationTimer / animationTimerMax;
-                }
-                else if (mode == UIMode.close)
-                {
+                else if (IsClose)
                     color *= animationTimer / animationTimerMax;
-                }
                 return color;
             };
         }
@@ -105,32 +103,37 @@ namespace ImproveGame.Interface.GUI
             SpaceWand.placeType = placeType;
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (Visible) base.Draw(spriteBatch);
+        }
+
         protected override void DrawChildren(SpriteBatch spriteBatch)
         {
             base.DrawChildren(spriteBatch);
             if (RoundButtons[0].IsMouseHovering)
             {
-                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.platform"), Color.White, new Color(135, 0, 180));
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(20), GetText("SpaceWandGUI.platform"), Color.White, new Color(135, 0, 180));
             }
             else if (RoundButtons[1].IsMouseHovering)
             {
-                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.soild"), Color.White, new Color(135, 0, 180));
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(20), GetText("SpaceWandGUI.soild"), Color.White, new Color(135, 0, 180));
             }
             else if (RoundButtons[2].IsMouseHovering)
             {
-                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.rope"), Color.White, new Color(135, 0, 180));
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(20), GetText("SpaceWandGUI.rope"), Color.White, new Color(135, 0, 180));
             }
             else if (RoundButtons[3].IsMouseHovering)
             {
-                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.rail"), Color.White, new Color(135, 0, 180));
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(20), GetText("SpaceWandGUI.rail"), Color.White, new Color(135, 0, 180));
             }
             else if (RoundButtons[4].IsMouseHovering)
             {
-                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.grassSeed"), Color.White, new Color(135, 0, 180));
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(20), GetText("SpaceWandGUI.grassSeed"), Color.White, new Color(135, 0, 180));
             }
             else if (RoundButtons[5].IsMouseHovering)
             {
-                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.plantPot"), Color.White, new Color(135, 0, 180));
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(20), GetText("SpaceWandGUI.plantPot"), Color.White, new Color(135, 0, 180));
             }
         }
 
@@ -139,7 +142,7 @@ namespace ImproveGame.Interface.GUI
             base.Update(gameTime);
             if (SpaceWand is not null)
             {
-                if (Main.LocalPlayer.HeldItem != SpaceWand.Item && mode is not UIMode.close)
+                if (Main.LocalPlayer.HeldItem != SpaceWand.Item && Mode is not UIMode.Close)
                 {
                     Close();
                 }
@@ -151,7 +154,7 @@ namespace ImproveGame.Interface.GUI
                 if (button.IsMouseHovering)
                     flag = true;
             }
-            if (mode is not UIMode.close && (flag /*|| ModeButton.IsMouseHovering*/))
+            if (Mode is not UIMode.Close && (flag /*|| ModeButton.IsMouseHovering*/))
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
@@ -161,14 +164,14 @@ namespace ImproveGame.Interface.GUI
         // 更细动画
         public void UpdateAnimation()
         {
-            if (isOpen || isClose)
+            if (IsOpen || IsClose)
             {
                 animationTimer -= animationTimer / 5f;
                 if (animationTimer < 1f)
                 {
                     animationTimer = 0f;
-                    if (mode == UIMode.open) mode = UIMode.normal;
-                    if (mode == UIMode.close) Visible = false;
+                    if (Mode == UIMode.Open) Mode = UIMode.Normal;
+                    if (Mode == UIMode.Close) Visible = false;
                 }
                 UpdateButton();
             }
@@ -184,12 +187,12 @@ namespace ImproveGame.Interface.GUI
                 Vector2 center = MainPanel.GetSizeInside() / 2f;
                 float angle = startAngle + includedAngle * i;
                 float length = 48f;
-                if (isOpen)
+                if (IsOpen)
                 {
                     // angle -= animationTimer / 60f;
                     length += animationTimer / 4f;
                 }
-                else if (isClose)
+                else if (IsClose)
                 {
                     // angle -= (animationTimerMax - animationTimer) / 60f;
                     length += (animationTimerMax - animationTimer) / 4f;
@@ -200,19 +203,19 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public bool isOpen => mode == UIMode.open;
-        public bool isClose => mode == UIMode.close;
-        public enum UIMode { open, close, normal }
-        public UIMode mode;
+        public bool IsOpen => Mode == UIMode.Open;
+        public bool IsClose => Mode == UIMode.Close;
+        public enum UIMode { Open, Close, Normal }
+        public UIMode Mode;
         public readonly float animationTimerMax = 100;
         public float animationTimer;
-        public void Open()
+        public void Open(SpaceWand spaceWand)
         {
-            mode = UIMode.open;
+            SpaceWand = spaceWand;
+            Mode = UIMode.Open;
             MainPanel.SetCenter(TransformToUIPosition(Main.MouseScreen));
             MainPanel.Recalculate();
             animationTimer = animationTimerMax;
-
             UpdateButton();
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Visible = true;
@@ -220,19 +223,9 @@ namespace ImproveGame.Interface.GUI
 
         public void Close()
         {
-            mode = UIMode.close;
+            Mode = UIMode.Close;
             animationTimer = animationTimerMax;
-
             SoundEngine.PlaySound(SoundID.MenuClose);
-        }
-
-        public void ToggleMode(SpaceWand spaceWand)
-        {
-            SpaceWand = spaceWand;
-            if (Visible && mode != UIMode.close)
-                Close();
-            else
-                Open();
         }
     }
 }

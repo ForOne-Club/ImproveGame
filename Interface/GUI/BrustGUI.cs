@@ -28,20 +28,20 @@ namespace ImproveGame.Interface.GUI
             modeButton.OnMouseDown += SwitchMode;
             modeButton.OnMouseOver += MouseOver;
             modeButton.OnMouseOut += MouseOut;
-            modeButton.GetColor += GetColor(() => true);
+            modeButton.OnGetColor += GetColor(() => true);
             Append(modeButton);
 
             tileButton = new(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/TileMode"));
             tileButton.OnMouseOver += MouseOver;
             tileButton.OnMouseOut += MouseOut;
-            tileButton.GetColor += GetColor(() => WandSystem.TileMode);
+            tileButton.OnGetColor += GetColor(() => WandSystem.TileMode);
             tileButton.OnMouseDown += (_, _) => WandSystem.TileMode = !WandSystem.TileMode;
             Append(tileButton);
 
             wallButton = new(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/WallMode"));
             wallButton.OnMouseOver += MouseOver;
             wallButton.OnMouseOut += MouseOut;
-            wallButton.GetColor += GetColor(() => WandSystem.WallMode);
+            wallButton.OnGetColor += GetColor(() => WandSystem.WallMode);
             wallButton.OnMouseDown += (_, _) => WandSystem.WallMode = !WandSystem.WallMode;
             Append(wallButton);
         }

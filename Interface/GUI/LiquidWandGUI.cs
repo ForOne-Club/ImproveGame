@@ -1,15 +1,6 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.UIElements;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.UI;
 
 namespace ImproveGame.Interface.GUI
 {

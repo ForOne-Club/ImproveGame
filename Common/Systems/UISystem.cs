@@ -87,16 +87,16 @@ namespace ImproveGame.Common.Systems
                 LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
                 LoadGUI(ref BrustGUI, out BrustInterface);
                 LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
-                LoadGUI(ref BigBagGUI, out BigBagInterface);
+                LoadGUI(ref BigBagGUI, out BigBagInterface, () => BigBagGUI.UserInterface = BigBagInterface);
                 LoadGUI(ref PaintWandGUI, out PaintWandInterface);
-                BigBagGUI.UserInterface = BigBagInterface;
             }
         }
 
-        public static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface) where T : UIState
+        public static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface, Action PreActive = null) where T : UIState
         {
-            uiState.Activate();
             uiInterface = new();
+            PreActive?.Invoke();
+            uiState.Activate();
             uiInterface.SetState(uiState);
         }
 
@@ -138,27 +138,6 @@ namespace ImproveGame.Common.Systems
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            if (MouseTextIndex != -1)
-            {
-                layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
-                    "ImproveGame: Vault UI",
-                    delegate
-                    {
-                        if (BigBagGUI.Visible)
-                        {
-                            BigBagGUI.Draw(Main.spriteBatch);
-                        }
-                        if (SpaceWandGUI.Visible)
-                        {
-                            SpaceWandGUI.Draw(Main.spriteBatch);
-                        }
-                        return true;
-                    },
-                    InterfaceScaleType.UI)
-                );
-            }
-
             int inventoryIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Inventory");
             if (inventoryIndex != -1)
             {
@@ -166,12 +145,18 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Autofisher GUI", DrawAutofishGUI, InterfaceScaleType.UI));
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: SpaceWand GUI",
+                    () => { if (BigBagGUI.Visible) BigBagGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI)
+                );
             }
 
 
             int wireIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Wire Selection");
             if (wireIndex != -1)
             {
+                layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: SpaceWand GUI",
+                    () => { SpaceWandGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI)
+                );
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Paint GUI", DrawPaintGUI, InterfaceScaleType.UI));
             }
