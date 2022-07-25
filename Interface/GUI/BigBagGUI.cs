@@ -22,7 +22,7 @@ namespace ImproveGame.Interface.GUI
         public UIText title;
         public UIPanel MainPanel;
         public UIImageButton CloseButton;
-        public JuItemGrid ItemGrid;
+        public ModItemGrid ItemGrid;
 
         public PictureButton[] buttons = new PictureButton[4];
 
@@ -118,7 +118,7 @@ namespace ImproveGame.Interface.GUI
             CloseButton.OnClick += (evt, uie) => Visible = false;
             MainPanel.Append(CloseButton);
 
-            ItemGrid = new JuItemGrid(UserInterface);
+            ItemGrid = new ModItemGrid(UserInterface);
             ItemGrid.Top.Pixels = buttons[0].Top() + buttons[0].Height() + 10f;
             MainPanel.Append(ItemGrid);
         }

@@ -1,12 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 using Terraria.GameInput;
-using Terraria.ID;
 using Terraria.ObjectData;
-using Terraria.UI;
 using Terraria.UI.Gamepad;
 
 namespace ImproveGame
@@ -126,7 +120,7 @@ namespace ImproveGame
             {
                 if (player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.CanKillTile(x, y))
                 {
-                    if ((tile.TileType == 2 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 23 || tile.TileType == 60 || tile.TileType == 70 || tile.TileType == 109 || tile.TileType == 199 || Main.tileMoss[tile.TileType] || TileID.Sets.tileMossBrick[tile.TileType]))
+                    if (tile.TileType == 2 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 23 || tile.TileType == 60 || tile.TileType == 70 || tile.TileType == 109 || tile.TileType == 199 || Main.tileMoss[tile.TileType] || TileID.Sets.tileMossBrick[tile.TileType])
                     {
                         player.PickTile(x, y, 10000);
                     }
@@ -259,12 +253,12 @@ namespace ImproveGame
         /// <summary>
         /// 遍历 Tile
         /// </summary>
-        public static void ForeachTile(Rectangle rect, Action<int, int> action)
+        public static void ForeachTile(Rectangle rectangle, Action<int, int> action, Action<int, int, int, int> lastMethod = null)
         {
-            int minI = rect.X;
-            int maxI = rect.X + rect.Width - 1;
-            int minJ = rect.Y;
-            int maxJ = rect.Y + rect.Height - 1;
+            int minI = rectangle.X;
+            int maxI = rectangle.X + rectangle.Width - 1;
+            int minJ = rectangle.Y;
+            int maxJ = rectangle.Y + rectangle.Height - 1;
             for (int i = minI; i <= maxI; i++)
             {
                 for (int j = minJ; j <= maxJ; j++)
@@ -272,6 +266,7 @@ namespace ImproveGame
                     action(i, j);
                 }
             }
+            lastMethod?.Invoke(minI, minJ, maxI - minI + 1, maxJ - minJ + 1);
         }
     }
 }

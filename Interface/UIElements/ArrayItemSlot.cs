@@ -11,7 +11,7 @@ namespace ImproveGame.Interface.UIElements
     /// </summary>
     public class ArrayItemSlot : UIElement
     {
-        private readonly JuItemList ItemList;
+        private readonly Item[] items;
         public Texture2D Texture
         {
             get
@@ -24,12 +24,12 @@ namespace ImproveGame.Interface.UIElements
             }
         }
         public int index;
-        public Item Item { get => ItemList.items[index]; set => ItemList.items[index] = value; }
+        public Item Item { get => items[index]; set => items[index] = value; }
         private int RightMouseTimer = -1;
 
-        public ArrayItemSlot(JuItemList ItemList, int index)
+        public ArrayItemSlot(Item[] items, int index)
         {
-            this.ItemList = ItemList;
+            this.items = items;
             this.index = index;
             Width.Set(TextureAssets.InventoryBack.Value.Width, 0f);
             Height.Set(TextureAssets.InventoryBack.Value.Height, 0f);
@@ -202,7 +202,7 @@ namespace ImproveGame.Interface.UIElements
 
             bool result = false;
             if (Item.ModItem is IItemOverrideLeftClick)
-                result |= (Item.ModItem as IItemOverrideLeftClick).OverrideLeftClick(ItemList.items, 114514, index);
+                result |= (Item.ModItem as IItemOverrideLeftClick).OverrideLeftClick(items, 114514, index);
             if (result)
                 return;
 

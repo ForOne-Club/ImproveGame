@@ -2,6 +2,22 @@
 {
     public static class UIElementHelper
     {
+        public static void SetCenter(this UIElement uie, Vector2 center)
+        {
+            uie.Left.Pixels = center.X - uie.Width.Pixels / 2f;
+            uie.Top.Pixels = center.Y - uie.Height.Pixels / 2f;
+        }
+        public static void SetCenter(this UIElement uie, float x, float y)
+        {
+            uie.Left.Pixels = x - uie.Width.Pixels / 2f;
+            uie.Top.Pixels = y - uie.Height.Pixels / 2f;
+        }
+
+        public static Vector2 GetCenter(this UIElement uie)
+        {
+            return new(uie.Left.Pixels + uie.Width.Pixels / 2f, uie.Height.Pixels + uie.Height.Pixels / 2f);
+        }
+
         public static void AppendS(this UIElement parent, params UIElement[] uies)
         {
             foreach (var uie in uies)
@@ -25,6 +41,16 @@
         public static Vector2 GetPPos(this UIElement uie)
         {
             return new(uie.Left.Pixels, uie.Top.Pixels);
+        }
+
+        public static Vector2 GetSize(this UIElement uie)
+        {
+            return new(uie.Width.Pixels, uie.Height.Pixels);
+        }
+
+        public static Vector2 GetSizeInside(this UIElement uie)
+        {
+            return new(uie.Width.Pixels - uie.HPadding(), uie.Height.Pixels - uie.VPadding());
         }
 
         public static void SetPPos(this UIElement uie, Vector2 position, float precentX = 0, float precentY = 0)

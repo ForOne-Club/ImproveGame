@@ -1,6 +1,8 @@
 global using ImproveGame.Common.Utils;
 global using ImproveGame.Common.Utils.NetHelpers;
 global using Microsoft.Xna.Framework;
+global using Microsoft.Xna.Framework.Graphics;
+global using ReLogic.Content;
 global using System;
 global using System.IO;
 global using System.Linq;

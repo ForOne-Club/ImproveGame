@@ -2,17 +2,20 @@
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
+using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items
 {
     public class SpaceWand : ModItem
     {
-        public enum PlaceType
+        public enum PlaceType : byte
         {
-            platform,
-            soild,
-            rope,
-            rail
+            platform, // 平台
+            soild, // 方块
+            rope, // 绳子
+            rail, // 轨道
+            grassSeed, // 草种
+            plantPot // 种植盆
         }
 
         public PlaceType placeType;
@@ -48,10 +51,7 @@ namespace ImproveGame.Content.Items
         {
             if (player.altFunctionUse == 2)
             {
-                if (SpaceWandGUI.Visible)
-                    UISystem.Instance.SpaceWandGUI.Close();
-                else
-                    UISystem.Instance.SpaceWandGUI.Open(this);
+                UISystem.Instance.SpaceWandGUI.ToggleMode(this);
                 return false;
             }
             TileCount(player.inventory, out int count);
@@ -117,58 +117,53 @@ namespace ImproveGame.Content.Items
             if (CanPlaceTile && player.whoAmI == Main.myPlayer && !Main.dedServ)
             {
                 bool playSound = false;
-
                 Rectangle platfromRect = GetRectangle(player);
-                int minI = platfromRect.X;
-                int maxI = platfromRect.X + platfromRect.Width - 1;
-                int minJ = platfromRect.Y;
-                int maxJ = platfromRect.Y + platfromRect.Height - 1;
-                // 处理图块
-                for (int i = minI; i <= maxI; i++)
+                ForeachTile(platfromRect, (x, y) =>
                 {
-                    for (int j = minJ; j <= maxJ; j++)
+                    Func<Item, bool> condition = GetCondition();
+                    int oneIndex = EnoughItem(player, condition);
+                    if (oneIndex > -1)
                     {
-                        Func<Item, bool> condition = GetCondition();
-                        int oneIndex = EnoughItem(player, condition);
-                        if (oneIndex > -1)
+                        Item item = player.inventory[oneIndex];
+                        if (GrassSeed.Contains(item.createTile))
                         {
-                            Item item = player.inventory[oneIndex];
-                            if (GrassSeed.Contains(item.createTile))
+                            if (WorldGen.PlaceTile(x, y, item.createTile, true, false, player.whoAmI, item.placeStyle))
                             {
-                                if (WorldGen.PlaceTile(i, j, item.createTile, true, false, player.whoAmI, item.placeStyle))
+                                playSound = true;
+                                PickItemInInventory(player, GetCondition(), true);
+                            }
+                        }
+                        else
+                        {
+                            if (NeedKillTile(player, item, x, y))
+                            {
+                                TryKillTile(x, y, player);
+                            }
+                            if (!Main.tile[x, y].HasTile)
+                            {
+                                if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
                                 {
                                     playSound = true;
                                     PickItemInInventory(player, GetCondition(), true);
                                 }
-                                break;
-                            }
-                            if (player.TileReplacementEnabled && !SameTile(i, j, item.createTile, item.placeStyle, (placeType == PlaceType.soild || placeType == PlaceType.rope) ? CheckType.Type : default))
-                            {
-                                TryKillTile(i, j, player);
-                            }
-                            if (!Main.tile[i, j].HasTile)
-                            {
-                                playSound = true;
-                                WorldGen.PlaceTile(i, j, item.createTile, true, true, player.whoAmI, item.placeStyle);
-                                PickItemInInventory(player, GetCondition(), true);
                             }
                         }
                     }
-                }
-
-                if (playSound)
-                    SoundEngine.PlaySound(SoundID.Dig);
-
-                // 发送数据到服务器
-                if (Main.netMode == NetmodeID.MultiplayerClient)
+                }, (x, y, width, height) =>
                 {
-                    int x = minI;
-                    int y = minJ;
-                    int width = maxI - minI + 1;
-                    int height = maxJ - minJ + 1;
-                    NetMessage.SendData(MessageID.TileSquare, player.whoAmI, -1, null, x, y, width, height);
-                }
+                    if (playSound) SoundEngine.PlaySound(SoundID.Dig);
+
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        NetMessage.SendData(MessageID.TileSquare, player.whoAmI, -1, null, x, y, width, height);
+                    }
+                });
             }
+        }
+
+        public bool NeedKillTile(Player player, Item item, int x, int y)
+        {
+            return Main.tile[x, y].HasTile && player.TileReplacementEnabled && !SameTile(x, y, item.createTile, item.placeStyle, (placeType == PlaceType.soild || placeType == PlaceType.rope) ? CheckType.Type : default);
         }
 
         public Rectangle GetRectangle(Player player)
@@ -203,12 +198,24 @@ namespace ImproveGame.Content.Items
         {
             return placeType switch
             {
-                PlaceType.platform => (item) => item.consumable && item.createTile > -1 && (TileID.Sets.Platforms[item.createTile] || item.createTile == TileID.PlanterBox),
-                PlaceType.soild => (item) => item.consumable && item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile],
+                PlaceType.platform => (item) => item.consumable && item.createTile > -1 && TileID.Sets.Platforms[item.createTile],
+                PlaceType.soild => (item) => item.consumable && item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile] && !GrassSeed.Contains(item.createTile),
                 PlaceType.rope => (item) => item.consumable && item.createTile > -1 && Main.tileRope[item.createTile],
                 PlaceType.rail => (item) => item.consumable && item.createTile == TileID.MinecartTrack,
+                PlaceType.grassSeed => (item) => item.consumable && GrassSeed.Contains(item.createTile),
+                PlaceType.plantPot => (item) => item.consumable && item.createTile == TileID.PlanterBox,
                 _ => (item) => false,
             };
+        }
+
+        public override void LoadData(TagCompound tag)
+        {
+            if (tag.TryGet("placeType", out byte _placeType)) placeType = (PlaceType)_placeType;
+        }
+
+        public override void SaveData(TagCompound tag)
+        {
+            tag.Add("placeType", (byte)placeType);
         }
     }
 }

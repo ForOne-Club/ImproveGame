@@ -95,7 +95,7 @@ namespace ImproveGame.Content.Items
                 if (WandSystem.FixedMode) {
                     Box.NewBox(GetRectangle(player), Color.Red * 0.35f, Color.Red);
                 }
-                // 还在用物品的时候不能打开UI
+                // 还在用物品的时候不能打开UI (直接写在 CanUseItem 似乎就没有问题了)
                 if (player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1) {
                     return;
                 }
