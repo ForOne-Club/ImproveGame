@@ -556,13 +556,15 @@ Mods:
                 Hold to absorb quickly
                 '''
         }
-        SpaceWand:
+        SpaceWandGUI:
         {
             placeType: Tile type
             platform: Platforms
             soild: Solid blocks
             rope: Ropes
             rail: Minecart Tracks
+            grassSeed: ²ÝÖÖ
+            plantPot: ÖÖÖ²Åè
         }
         Common:
         {

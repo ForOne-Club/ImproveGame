@@ -198,12 +198,12 @@ namespace ImproveGame.Content.Items
         {
             return placeType switch
             {
-                PlaceType.platform => (item) => item.consumable && item.createTile > -1 && TileID.Sets.Platforms[item.createTile],
-                PlaceType.soild => (item) => item.consumable && item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile] && !GrassSeed.Contains(item.createTile),
-                PlaceType.rope => (item) => item.consumable && item.createTile > -1 && Main.tileRope[item.createTile],
-                PlaceType.rail => (item) => item.consumable && item.createTile == TileID.MinecartTrack,
-                PlaceType.grassSeed => (item) => item.consumable && GrassSeed.Contains(item.createTile),
-                PlaceType.plantPot => (item) => item.consumable && item.createTile == TileID.PlanterBox,
+                PlaceType.platform => (item) => item.createTile > -1 && TileID.Sets.Platforms[item.createTile],
+                PlaceType.soild => (item) => item.tileWand < 0 && item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile] && !GrassSeed.Contains(item.createTile),
+                PlaceType.rope => (item) => item.createTile > -1 && Main.tileRope[item.createTile],
+                PlaceType.rail => (item) => item.createTile == TileID.MinecartTrack,
+                PlaceType.grassSeed => (item) => GrassSeed.Contains(item.createTile),
+                PlaceType.plantPot => (item) => item.createTile == TileID.PlanterBox,
                 _ => (item) => false,
             };
         }

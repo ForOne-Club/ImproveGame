@@ -551,13 +551,15 @@
                 长按以批量吸走
                 '''
         }
-        SpaceWand:
+        SpaceWandGUI:
         {
             placeType: 放置类型
             platform: 平台
             soild: 方块
             rope: 绳子
             rail: 轨道
+            grassSeed: 草种
+            plantPot: 种植盆
         }
         Common:
         {

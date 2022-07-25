@@ -14,6 +14,7 @@ namespace ImproveGame.Interface.GUI
 
         public UIElement MainPanel;
         public RoundButton[] RoundButtons;
+        // public RoundButton ModeButton;
 
         public SpaceWand SpaceWand;
 
@@ -62,6 +63,23 @@ namespace ImproveGame.Interface.GUI
             RoundButtons[5].getColor = GetColor(SpaceWand.PlaceType.plantPot);
             RoundButtons[5].OnClick += (evt, uie) => ModifyPlaceType(SpaceWand.PlaceType.plantPot);
             MainPanel.Append(RoundButtons[5]);
+
+            /*ModeButton = new(GetTexture("UI/SpaceWand/FreeMode"));
+            ModeButton.SetCenter(MainPanel.GetSizeInside() / 2f);
+            ModeButton.getColor = () =>
+            {
+                Color color = Color.White;
+                if (mode == UIMode.open)
+                {
+                    color *= 1 - animationTimer / animationTimerMax;
+                }
+                else if (mode == UIMode.close)
+                {
+                    color *= animationTimer / animationTimerMax;
+                }
+                return color;
+            };
+            MainPanel.Append(ModeButton);*/
         }
 
         private Func<Color> GetColor(SpaceWand.PlaceType placeType)
@@ -87,6 +105,35 @@ namespace ImproveGame.Interface.GUI
             SpaceWand.placeType = placeType;
         }
 
+        protected override void DrawChildren(SpriteBatch spriteBatch)
+        {
+            base.DrawChildren(spriteBatch);
+            if (RoundButtons[0].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.platform"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[1].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.soild"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[2].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.rope"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[3].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.rail"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[4].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.grassSeed"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[5].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.plantPot"), Color.White, new Color(135, 0, 180));
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -97,13 +144,14 @@ namespace ImproveGame.Interface.GUI
                     Close();
                 }
             }
+
             bool flag = false;
             foreach (var button in RoundButtons)
             {
                 if (button.IsMouseHovering)
                     flag = true;
             }
-            if (mode is not UIMode.close && flag)
+            if (mode is not UIMode.close && (flag /*|| ModeButton.IsMouseHovering*/))
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
