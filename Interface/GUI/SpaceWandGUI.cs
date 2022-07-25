@@ -105,6 +105,35 @@ namespace ImproveGame.Interface.GUI
             SpaceWand.placeType = placeType;
         }
 
+        protected override void DrawChildren(SpriteBatch spriteBatch)
+        {
+            base.DrawChildren(spriteBatch);
+            if (RoundButtons[0].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.platform"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[1].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.soild"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[2].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.rope"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[3].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.rail"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[4].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.grassSeed"), Color.White, new Color(135, 0, 180));
+            }
+            else if (RoundButtons[5].IsMouseHovering)
+            {
+                MyUtils.DrawString(Main.MouseScreen + new Vector2(15), GetText("SpaceWandGUI.plantPot"), Color.White, new Color(135, 0, 180));
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
