@@ -122,7 +122,7 @@ namespace ImproveGame.Common.Systems
             {
                 ArchitectureInterface?.Update(gameTime);
             }
-            if (BrustGUI.Visible)
+            if (BrustGUI.Visible || BrustGUI.AnimationTimer > 0f)
             {
                 BrustInterface?.Update(gameTime);
             }
@@ -211,16 +211,10 @@ namespace ImproveGame.Common.Systems
             return true;
         }
 
-        private static bool DrawBrustGUI()
+        private bool DrawBrustGUI()
         {
-            Player player = Main.LocalPlayer;
-            if (BrustGUI.Visible && player.HeldItem is not null)
+            if (BrustGUI.Visible || BrustGUI.AnimationTimer > 0f)
             {
-                if (player.HeldItem.ModItem is null || player.HeldItem.ModItem is not MagickWand)
-                {
-                    Instance.BrustGUI.Close();
-                    return true;
-                }
                 BrustInterface.Draw(Main.spriteBatch, new GameTime());
             }
             return true;

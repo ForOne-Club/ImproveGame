@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items
 {
@@ -19,6 +20,38 @@ namespace ImproveGame.Content.Items
                 if (tile.WallColor > 0 && tile.WallType > 0)
                 {
                     WorldGen.paintWall(i, j, 0, broadCast: true);
+                }
+
+                // 漆铲可用于清除图格上的苔藓
+                if (tile.TileType != TileID.LongMoss)
+                    return true;
+
+                WorldGen.KillTile(i, j);
+                if (tile.HasTile)
+                    return true;
+
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+
+                if (Main.rand.NextBool(9))
+                {
+                    int frameX = tile.TileFrameX;
+                    int type = 4349 + frameX / 22;
+                    switch (frameX / 22)
+                    {
+                        case 6:
+                            type = 4377;
+                            break;
+                        case 7:
+                            type = 4378;
+                            break;
+                        case 8:
+                            type = 4389;
+                            break;
+                    }
+
+                    int number = Item.NewItem(new EntitySource_ItemUse(player, player.HeldItem), player.Center, 16, 16, type);
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
                 }
             }
             else
@@ -59,7 +92,7 @@ namespace ImproveGame.Content.Items
             Item.rare = ItemRarityID.Lime;
             Item.value = Item.sellPrice(0, 1, 0, 0);
 
-            SelectRange = new(30, 30);
+            SelectRange = new(1000, 1000);
         }
 
         public override bool StartUseItem(Player player)

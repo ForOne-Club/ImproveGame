@@ -33,8 +33,11 @@
 - **[v1.5.9.1]** Added a hotkey for the Buff Tracker
 - **[v1.5.9.2]** The Fishing Machine now supports mod biomes
 - **[v1.5.9.3]** 空间魔杖控制面板重置, 增加新的分类.
+- **[v1.5.9.3]** 漆涂法杖，可用于大范围刷漆
 ## Misc
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
+- **[v1.5.9.2]** Added Mod.Calls
+- **[v1.5.9.3]** 优化两个爆破法杖的UI动画
 
 # v1.5.8
 ## Subversions

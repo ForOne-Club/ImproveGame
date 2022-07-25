@@ -25,15 +25,15 @@ namespace ImproveGame.Interface.GUI
             RoundButtons = new RoundButton[] {
                 new(TextureAssets.Item[ItemID.Paintbrush])
                 {
-                    getColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Tile)
+                    GetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Tile)
                 },
                 new(TextureAssets.Item[ItemID.PaintRoller])
                 {
-                    getColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Wall)
+                    GetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Wall)
                 },
                 new(TextureAssets.Item[ItemID.PaintScraper])
                 {
-                    getColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Remove)
+                    GetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Remove)
                 }
             };
 
@@ -60,6 +60,26 @@ namespace ImproveGame.Interface.GUI
                 }
                 return color;
             };
+        }
+
+        protected override void DrawChildren(SpriteBatch spriteBatch)
+        {
+            base.DrawChildren(spriteBatch);
+            var position = Main.MouseScreen + new Vector2(15);
+            var borderColor = new Color(135, 0, 180);
+            var textColor = Color.White;
+            if (RoundButtons[0].IsMouseHovering)
+            {
+                DrawString(position, GetText("PaintWandGUI.Paintbrush"), textColor, borderColor);
+            }
+            else if (RoundButtons[1].IsMouseHovering)
+            {
+                DrawString(position, GetText("PaintWandGUI.PaintRoller"), textColor, borderColor);
+            }
+            else if (RoundButtons[2].IsMouseHovering)
+            {
+                DrawString(position, GetText("PaintWandGUI.PaintScraper"), textColor, borderColor);
+            }
         }
 
         public override void Update(GameTime gameTime)

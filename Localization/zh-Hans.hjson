@@ -304,6 +304,7 @@
             LiquidWand: 液体魔杖
             PotionBag: 药水袋
             Autofisher: 自动钓鱼机
+            PaintWand: 漆涂法杖
         }
         ItemTooltip:
         {
@@ -388,6 +389,13 @@
                 [c/AAAAAA:由于钓鱼机不用鱼线，你不能在配饰槽中放入] [i:HighTestFishingLine]
                 [c/AAAAAA:饰品栏不支持放入非原版钓鱼饰品]
                 环境判定机制与玩家判定大致相同，需使钓鱼机处于相应环境内，支持模组环境
+                '''
+            PaintWand:
+                '''
+                [c/0099ff:<right>以打开刷漆模式选择面板]
+                选取一个范围给物块/墙上漆，或去除他们的漆
+                去漆功能对清除物块上的苔藓也有效，如同[i:PaintScraper]
+                堆叠超过999的漆不会消耗
                 '''
         }
 		MapObject:
@@ -550,6 +558,12 @@
                 <left>以吸走液体
                 长按以批量吸走
                 '''
+        }
+        PaintWandGUI:
+        {
+            Paintbrush: 物块刷漆
+            PaintRoller: 墙刷漆
+            PaintScraper: 移除漆
         }
         SpaceWandGUI:
         {

@@ -297,6 +297,7 @@ Mods:
             LiquidWand: Wand of Liquids
             PotionBag: Potion Bag
             Autofisher: Fishing Machine
+            PaintWand: 漆涂法杖
         }
         ItemTooltip:
         {
@@ -382,6 +383,13 @@ Mods:
                 [c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
                 [c/AAAAAA:Modded accessories are not supported]
                 '''
+            PaintWand:
+                '''
+                [c/0099ff:<right> 以打开刷漆模式选择面板]
+                选取一个范围给物块/墙上漆，或去除他们的漆
+                去漆功能对清除物块上的苔藓也有效，如同[i:PaintScraper]
+                堆叠超过999的漆不会消耗
+                '''
         }
 		MapObject:
         {
@@ -417,8 +425,8 @@ Mods:
             PotionBagCurrent: "Contains the following potions ({StoredCount}/20):"
             PotionBagCurrentFull: "Contains the following potions (Full!):"
             PotionBagNone: "Empty (0/20)"
-            PotionBagAvailable: "(Active)"     # 药水袋中药水数量 >= 30
-            PotionBagUnavailable: "(Inactive)"   # 药水袋中药水数量 < 30
+            PotionBagAvailable: "(Active)"     # 药水袋中药水数量 >= 20
+            PotionBagUnavailable: "(Inactive)"   # 药水袋中药水数量 < 20
             PotionBagDisabled: "(Disabled)"
 
             Tag:
@@ -555,6 +563,12 @@ Mods:
                 <left> to absorb liquid
                 Hold to absorb quickly
                 '''
+        }
+        PaintWandGUI:
+        {
+            Paintbrush: 物块刷漆
+            PaintRoller: 墙刷漆
+            PaintScraper: 移除漆
         }
         SpaceWandGUI:
         {
