@@ -11,10 +11,14 @@ namespace ImproveGame.Common.Systems
 
         // 液体法杖
         public static bool AbsorptionMode = false;
-        public static int LiquidMode = 0;
+        public static byte LiquidMode = 0;
 
         // 自动钓鱼机
         public static bool SelectPoolMode = false;
+
+        // 画画魔杖
+        public enum PaintMode : byte { Tile, Wall, Remove };
+        public static PaintMode PaintWandMode = PaintMode.Tile;
 
         /// <summary>
         /// 切换吸收模式

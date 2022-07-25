@@ -642,21 +642,38 @@ namespace ImproveGame
         /// <param name="shouldPick">选取物品的依据</param>
         /// <param name="tryConsume">是否尝试消耗</param>
         /// <returns></returns>
-        public static int PickItemInInventory(Player player, Func<Item, bool> shouldPick, bool tryConsume)
+        public static Item PickItemInInventory(Player player, Func<Item, bool> shouldPick, bool tryConsume, out int index)
         {
+            for (int i = 54; i < 58; i++)
+            {
+                ref Item item = ref player.inventory[i];
+                if (!item.IsAir && shouldPick.Invoke(item))
+                {
+                    var returnItem = item.Clone();
+                    if (tryConsume)
+                    {
+                        TryConsumeItem(ref item, player);
+                    }
+                    index = i;
+                    return returnItem; // 要是consume完了就没了，所以clone一下
+                }
+            }
             for (int i = 0; i < 50; i++)
             {
                 ref Item item = ref player.inventory[i];
                 if (!item.IsAir && shouldPick.Invoke(item))
                 {
+                    var returnItem = item.Clone();
                     if (tryConsume)
                     {
                         TryConsumeItem(ref item, player);
                     }
-                    return i;
+                    index = i;
+                    return returnItem; // 要是consume完了就没了，所以clone一下
                 }
             }
-            return -1;
+            index = -1;
+            return new();
         }
 
         /// <summary>

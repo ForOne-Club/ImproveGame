@@ -130,7 +130,7 @@ namespace ImproveGame.Content.Items
                             if (WorldGen.PlaceTile(x, y, item.createTile, true, false, player.whoAmI, item.placeStyle))
                             {
                                 playSound = true;
-                                PickItemInInventory(player, GetCondition(), true);
+                                PickItemInInventory(player, GetCondition(), true, out _);
                             }
                         }
                         else
@@ -144,7 +144,7 @@ namespace ImproveGame.Content.Items
                                 if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
                                 {
                                     playSound = true;
-                                    PickItemInInventory(player, GetCondition(), true);
+                                    PickItemInInventory(player, GetCondition(), true, out _);
                                 }
                             }
                         }

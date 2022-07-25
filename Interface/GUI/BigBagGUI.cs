@@ -52,11 +52,6 @@ namespace ImproveGame.Interface.GUI
             Recalculate();
         }
 
-        public BigBagGUI(UserInterface userInterface)
-        {
-            UserInterface = userInterface;
-        }
-
         public override void OnInitialize()
         {
             MainPanel = new UIPanel();

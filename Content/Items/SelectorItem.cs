@@ -129,7 +129,7 @@ namespace ImproveGame.Content.Items
                 for (int i = minI; i <= maxI; i++)
                 {
                     countTiles++;
-                    if (!ModifySelectedTiles(player, i, j))
+                    if (WorldGen.InWorld(i, j) && !ModifySelectedTiles(player, i, j))
                     {
                         PostModifyTiles(player, minI, minJ, i, j);
                         yield break;

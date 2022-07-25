@@ -47,7 +47,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
         }
 
         /// <summary>
-        /// 客户端执行，发送 <seealso cref="Player.itemRotation"/>, <seealso cref="Player.direction"/> 和 <seealso cref="Player.itemAnimation"/> 信息到服务器和其他所有玩家
+        /// 客户端执行，发送 <seealso cref="Player.itemRotation"/>, <seealso cref="Entity.direction"/> 和 <seealso cref="Player.itemAnimation"/> 信息到服务器和其他所有玩家
         /// </summary>
         /// <param name="player"> <seealso cref="Player"/>实例 </param>
         public static void ClientSendPlrItemUsing(Player player) {
