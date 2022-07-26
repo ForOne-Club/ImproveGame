@@ -171,20 +171,20 @@ Mods:
             }
             TravellingMerchantRefresh:
             {
-                Label: "[i:2222] 旅商商店自动刷新"
+                Label: "[i:2222] Automatically refreshes the Travelling Merchant's shop"
                 Tooltip:
                     '''
-                    每次打开旅商商店页面时，其出售物品自动刷新
-                    在多人模式下会导致每个玩家看到的出售列表不一致
+                    Each time you open his shop page, the goods will be rerolled
+                    Players may see different goods in multiplayer mode
                     '''
             }
             QuickNurse:
             {
-                Label: "[i:AdhesiveBandage] 快捷护士"
+                Label: "[i:AdhesiveBandage] Emergency treatment"
                 Tooltip:
                     '''
-                    右键点开护士对话则立即回血
-                    消耗的钱币数量会从玩家头上弹出
+                    The Nurse will heal you once you right click to talk to her
+                    Money cost will be displayed above the player
                     '''
             }
 
@@ -315,7 +315,7 @@ Mods:
             LiquidWand: Wand of Liquids
             PotionBag: Potion Bag
             Autofisher: Fishing Machine
-            PaintWand: 漆涂法杖
+            PaintWand: Wand of Painting
         }
         ItemTooltip:
         {
@@ -403,10 +403,10 @@ Mods:
                 '''
             PaintWand:
                 '''
-                [c/0099ff:<right> 以打开刷漆模式选择面板]
-                选取一个范围给物块/墙上漆，或去除他们的漆
-                去漆功能对清除物块上的苔藓也有效，如同[i:PaintScraper]
-                堆叠超过999的漆不会消耗
+                [c/0099ff:<right> to open painting mode panel]
+                Select an area to paint/remove paint on tiles within the area
+                Also removes moss on the tiles while removing paints, like the [i:PaintScraper]
+                Paint which stacks above 999 will not be consumed
                 '''
         }
 		MapObject:
@@ -584,9 +584,9 @@ Mods:
         }
         PaintWandGUI:
         {
-            Paintbrush: 物块刷漆
-            PaintRoller: 墙刷漆
-            PaintScraper: 移除漆
+            Paintbrush: Paint tiles
+            PaintRoller: Paint walls
+            PaintScraper: Remove paints
         }
         SpaceWandGUI:
         {
@@ -595,8 +595,8 @@ Mods:
             soild: Solid blocks
             rope: Ropes
             rail: Minecart Tracks
-            grassSeed: 草种
-            plantPot: 种植盆
+            grassSeed: Grass Seeds
+            plantPot: Planter Boxes
         }
         Common:
         {
