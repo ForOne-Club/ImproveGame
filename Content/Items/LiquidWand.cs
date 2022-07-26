@@ -2,7 +2,6 @@
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
-using System.IO;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 
@@ -38,6 +37,8 @@ namespace ImproveGame.Content.Items
                 _ => new(9, 61, 191),
             };
         }
+
+        public override bool CanDrawRectangle() => Main.mouseLeft;
 
         // 修改选择的方块
         public override bool ModifySelectedTiles(Player player, int i, int j)

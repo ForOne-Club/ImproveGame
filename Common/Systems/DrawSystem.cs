@@ -4,8 +4,6 @@ using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.UI;
 
 namespace ImproveGame.Common.Systems
 {
@@ -14,12 +12,21 @@ namespace ImproveGame.Common.Systems
     /// </summary>
     public class DrawSystem : ModSystem
     {
-        public override void Load() {
+        public override void Load()
+        {
             On.Terraria.Main.DrawInterface_36_Cursor += Main_DrawInterface_36_Cursor;
         }
+        public Animation animation = new(GetTexture("A255").Value);
+        public void DrawTest()
+        {
+            animation.Update();
+            animation.Draw();
+        }
 
-        private void Main_DrawInterface_36_Cursor(On.Terraria.Main.orig_DrawInterface_36_Cursor orig) {
-            if (Main.cursorOverride == 15) {
+        private void Main_DrawInterface_36_Cursor(On.Terraria.Main.orig_DrawInterface_36_Cursor orig)
+        {
+            if (Main.cursorOverride == 15)
+            {
                 // 修正鼠标坐标
                 Main.mouseX -= 12;
                 Main.mouseY -= 12;
@@ -28,13 +35,17 @@ namespace ImproveGame.Common.Systems
             orig.Invoke();
         }
 
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+        {
             int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Ruler"));
-            if (MouseTextIndex != -1) {
+            if (MouseTextIndex != -1)
+            {
                 layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
                     "ImproveGame: BorderRect",
-                    delegate {
-                        DrawBorderRect();
+                    delegate
+                    {
+                        DrawBox();
+                        DrawTest();
                         // 鼠标显示物块信息
                         /*Point point = Main.MouseWorld.ToTileCoordinates();
                         if (Main.tile[point].HasTile) {
@@ -48,9 +59,11 @@ namespace ImproveGame.Common.Systems
                 );
                 layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
                     "ImproveGame: Pools Select",
-                    delegate {
+                    delegate
+                    {
                         Point16 fisherPos = AutofishPlayer.LocalPlayer.Autofisher;
-                        if (fisherPos.X > 0 && fisherPos.Y > 0 && AutofisherGUI.Visible) {
+                        if (fisherPos.X > 0 && fisherPos.Y > 0 && AutofisherGUI.Visible)
+                        {
                             DrawPoolsBorder();
                         }
                         return true;
@@ -60,10 +73,12 @@ namespace ImproveGame.Common.Systems
             }
         }
 
-        private static void DrawPoolsBorder() {
+        private static void DrawPoolsBorder()
+        {
             // 绘制现有定位点光标
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
-            if (autofisher is not null && autofisher.locatePoint.X > 0 && autofisher.locatePoint.Y > 0) {
+            if (autofisher is not null && autofisher.locatePoint.X > 0 && autofisher.locatePoint.Y > 0)
+            {
                 var position = autofisher.locatePoint.ToWorldCoordinates() - Main.screenPosition;
                 var color = Color.SkyBlue;
                 var tex = TextureAssets.Cursors[15].Value;
@@ -74,7 +89,8 @@ namespace ImproveGame.Common.Systems
             if (!WandSystem.SelectPoolMode)
                 return;
 
-            if (Main.mouseRight && Main.mouseRightRelease) {
+            if (Main.mouseRight && Main.mouseRightRelease)
+            {
                 UISystem.Instance.AutofisherGUI.ToggleSelectPool();
                 return;
             }
@@ -101,7 +117,8 @@ namespace ImproveGame.Common.Systems
             Point16 mouseTilePosition = Main.MouseWorld.ToTileCoordinates16();
             RecursionSetHovered(mouseTilePosition.X, mouseTilePosition.Y);
             // 通过递归设置鼠标悬停的区域
-            void RecursionSetHovered(int i, int j) {
+            void RecursionSetHovered(int i, int j)
+            {
                 if (i < drawRange.Left || j < drawRange.Top || i > drawRange.Right || j > drawRange.Bottom || tileChecked[i - drawRange.X, j - drawRange.Y])
                     return;
                 if (Math.Abs(fisherPos.X - i) > TEAutofisher.checkWidth || Math.Abs(fisherPos.Y - j) > TEAutofisher.checkHeight)
@@ -109,7 +126,8 @@ namespace ImproveGame.Common.Systems
 
                 tileChecked[i - drawRange.X, j - drawRange.Y] = true;
                 var tile = Framing.GetTileSafely(i, j);
-                if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(i, j) && i >= drawRange.Left && j >= drawRange.Top && i <= drawRange.Right && j <= drawRange.Bottom) {
+                if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(i, j) && i >= drawRange.Left && j >= drawRange.Top && i <= drawRange.Right && j <= drawRange.Bottom)
+                {
                     mouseHovering[i - drawRange.X, j - drawRange.Y] = true;
                     Main.LocalPlayer.mouseInterface = true;
                     Main.cursorColor = new(50, 255, 50);
@@ -123,10 +141,13 @@ namespace ImproveGame.Common.Systems
                 return; // 虽然不是必要的，但是写上感觉规范点
             }
 
-            for (int i = drawRange.Left; i < drawRange.Right; i++) {
-                for (int j = drawRange.Top; j < drawRange.Bottom; j++) {
+            for (int i = drawRange.Left; i < drawRange.Right; i++)
+            {
+                for (int j = drawRange.Top; j < drawRange.Bottom; j++)
+                {
                     var tile = Framing.GetTileSafely(i, j);
-                    if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(i, j)) {
+                    if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(i, j))
+                    {
                         Vector2 worldPosition = new(i << 4, j << 4);
 
                         // 液体离格子顶部的高度
@@ -140,7 +161,8 @@ namespace ImproveGame.Common.Systems
                         if (mouseHovering[i - drawRange.X, j - drawRange.Y])
                             color = new(50, 255, 50);
                         // 不在可选范围内，黑白
-                        if (Math.Abs(fisherPos.X - i) > TEAutofisher.checkWidth || Math.Abs(fisherPos.Y - j) > TEAutofisher.checkHeight) {
+                        if (Math.Abs(fisherPos.X - i) > TEAutofisher.checkWidth || Math.Abs(fisherPos.Y - j) > TEAutofisher.checkHeight)
+                        {
                             color = new(60, 60, 60);
                             opacity = 0.3f;
                             selectable = false;
@@ -154,20 +176,25 @@ namespace ImproveGame.Common.Systems
                         var rightTile = Framing.GetTileSafely(i + 1, j);
                         var upTile = Framing.GetTileSafely(i, j - 1);
                         var bottomTile = Framing.GetTileSafely(i, j + 1);
-                        if (leftTile.LiquidAmount == 0 || WorldGen.SolidTile(leftTile) || selectable && (Math.Abs(fisherPos.X - (i - 1)) > TEAutofisher.checkWidth || Math.Abs(fisherPos.Y - j) > TEAutofisher.checkHeight)) {
+                        if (leftTile.LiquidAmount == 0 || WorldGen.SolidTile(leftTile) || selectable && (Math.Abs(fisherPos.X - (i - 1)) > TEAutofisher.checkWidth || Math.Abs(fisherPos.Y - j) > TEAutofisher.checkHeight))
+                        {
                             Terraria.Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X, worldPosition.Y + liquidHeightToTileTop), new Vector2(worldPosition.X, worldPosition.Y + 18), color, color, 2f);
                         }
-                        if (rightTile.LiquidAmount == 0 || WorldGen.SolidTile(rightTile) || selectable && (Math.Abs(fisherPos.X - (i + 1)) > TEAutofisher.checkWidth || Math.Abs(fisherPos.Y - j) > TEAutofisher.checkHeight)) {
+                        if (rightTile.LiquidAmount == 0 || WorldGen.SolidTile(rightTile) || selectable && (Math.Abs(fisherPos.X - (i + 1)) > TEAutofisher.checkWidth || Math.Abs(fisherPos.Y - j) > TEAutofisher.checkHeight))
+                        {
                             Terraria.Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X + 16, worldPosition.Y + liquidHeightToTileTop), new Vector2(worldPosition.X + 16, worldPosition.Y + 18), color, color, 2f);
                         }
-                        if (upTile.LiquidAmount == 0 || WorldGen.SolidTile(upTile) || selectable && (Math.Abs(fisherPos.X - i) > TEAutofisher.checkWidth || Math.Abs(fisherPos.Y - (j - 1)) > TEAutofisher.checkHeight)) {
+                        if (upTile.LiquidAmount == 0 || WorldGen.SolidTile(upTile) || selectable && (Math.Abs(fisherPos.X - i) > TEAutofisher.checkWidth || Math.Abs(fisherPos.Y - (j - 1)) > TEAutofisher.checkHeight))
+                        {
                             Terraria.Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X, worldPosition.Y + liquidHeightToTileTop), new Vector2(worldPosition.X + 16, worldPosition.Y + liquidHeightToTileTop), color, color, 2f);
                         }
-                        if (bottomTile.LiquidAmount == 0 || WorldGen.SolidTile(bottomTile)) {
+                        if (bottomTile.LiquidAmount == 0 || WorldGen.SolidTile(bottomTile))
+                        {
                             Terraria.Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X, worldPosition.Y + 16), new Vector2(worldPosition.X + 16, worldPosition.Y + 16), color, color, 2f);
                         }
                         // 下面的是不可选的，分界线要在下面的绘制（也就是我不可选，我上面的可选）不然会被覆盖，我希望分界线是绿色的
-                        if (!selectable && upTile.LiquidAmount > 0 && !WorldGen.SolidTile(upTile) && Math.Abs(fisherPos.X - i) <= TEAutofisher.checkWidth && Math.Abs(fisherPos.Y - (j - 1)) <= TEAutofisher.checkHeight) {
+                        if (!selectable && upTile.LiquidAmount > 0 && !WorldGen.SolidTile(upTile) && Math.Abs(fisherPos.X - i) <= TEAutofisher.checkWidth && Math.Abs(fisherPos.Y - (j - 1)) <= TEAutofisher.checkHeight)
+                        {
                             color = Color.SkyBlue;
                             if (mouseHovering[i - drawRange.X, j - 1 - drawRange.Y])
                                 color = new(50, 255, 50);
@@ -176,10 +203,12 @@ namespace ImproveGame.Common.Systems
                             Terraria.Utils.DrawLine(Main.spriteBatch, new Vector2(worldPosition.X - 2, worldPosition.Y), new Vector2(worldPosition.X + 16, worldPosition.Y), color, color, 2f);
                         }
 
-                        if (mouseHovering[i - drawRange.X, j - drawRange.Y] && Main.mouseLeft && Main.mouseLeftRelease) {
+                        if (mouseHovering[i - drawRange.X, j - drawRange.Y] && Main.mouseLeft && Main.mouseLeftRelease)
+                        {
                             AutofishPlayer.LocalPlayer.SetLocatePoint(AutofishPlayer.LocalPlayer.GetAutofisher(), mouseTilePosition);
                             UISystem.Instance.AutofisherGUI.ToggleSelectPool();
-                            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                            {
                                 NetAutofish.ClientSendLocatePoint(AutofishPlayer.LocalPlayer.Autofisher, mouseTilePosition);
                             }
                             return;
@@ -191,26 +220,23 @@ namespace ImproveGame.Common.Systems
 
         public static readonly Box[] boxs = new Box[10];
 
-        private static void DrawBorderRect() {
-            for (int i = 0; i < boxs.Length; i++) {
-                if (boxs[i] != null) {
+        private static void DrawBox()
+        {
+            for (int i = 0; i < boxs.Length; i++)
+            {
+                if (boxs[i] is not null)
+                {
                     Box box = boxs[i];
-                    if (box.PreView is not null) {
-                        Main.spriteBatch.Draw(box.PreView, new Vector2(box.X, box.Y) * 16f - Main.screenPosition, null, Color.White * 0.5f, 0, Vector2.Zero, 1f, 0, 0);
+                    if ((box?.CanDraw() ?? false) && box.Parent.Type == Main.LocalPlayer.HeldItem.type)
+                    {
+                        box.DrawPreView();
+                        box.Draw();
+                        box.DrawString();
                     }
-
-                    box.Draw();
-
-                    string text = "";
-                    if (box.ShowWidth)
-                        text = box.Width.ToString();
-                    if (box.ShowHeight)
-                        text = box.ShowWidth ? $"{box.Width}×{box.Height}" : box.Height.ToString();
-                    Vector2 size = FontAssets.MouseText.Value.MeasureString(box.Width.ToString()) * 1.2f;
-                    Vector2 position = Main.MouseScreen + new Vector2(16, -size.Y + 6);
-                    Terraria.Utils.DrawBorderString(Main.spriteBatch, text, position, box.borderColor, 1.2f);
-
-                    boxs[i] = null;
+                    else
+                    {
+                        boxs[i] = null;
+                    }
                 }
             }
         }

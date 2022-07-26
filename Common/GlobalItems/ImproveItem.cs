@@ -237,7 +237,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
             {
-                ArrayItemSlot.OpenItemGlow(sb);
+                ArrayItemSlot.OpenItemGlow(sb, item);
                 return true;
             }
             return true;

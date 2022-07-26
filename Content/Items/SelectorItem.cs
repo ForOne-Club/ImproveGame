@@ -1,8 +1,6 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using Terraria.GameContent.Creative;
 
 namespace ImproveGame.Content.Items
@@ -14,7 +12,8 @@ namespace ImproveGame.Content.Items
     {
         public override bool IsLoadingEnabled(Mod mod) => MyUtils.Config.LoadModItems;
 
-        public override void SetStaticDefaults() {
+        public override void SetStaticDefaults()
+        {
             Item.staff[Type] = true;
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
@@ -28,7 +27,8 @@ namespace ImproveGame.Content.Items
         /// 封装了原来的SetDefaults()，现在用这个，在里面应该设置SelectRange
         /// </summary>
         public virtual void SetItemDefaults() { }
-        public sealed override void SetDefaults() {
+        public sealed override void SetDefaults()
+        {
             // 基本属性
             Item.width = 28;
             Item.height = 28;
@@ -51,9 +51,11 @@ namespace ImproveGame.Content.Items
         /// </summary>
         public virtual bool CanUseSelector(Player player) => true;
 
-        public override bool CanUseItem(Player player) {
+        public override bool CanUseItem(Player player)
+        {
             bool flag = StartUseItem(player);
-            if (flag && CanUseSelector(player)) {
+            if (flag && CanUseSelector(player))
+            {
                 MyUtils.ItemRotation(player);
                 _unCancelled = true;
                 Start = Main.MouseWorld.ToTileCoordinates();
@@ -81,39 +83,51 @@ namespace ImproveGame.Content.Items
         /// </summary>
         /// <param name="cancelled">是否取消选中</param>
         /// <returns>颜色</returns>
-        public virtual Color ModifyColor(bool cancelled) {
+        public virtual Color ModifyColor(bool cancelled)
+        {
             if (!cancelled)
                 return new(255, 0, 0);
             else
                 return Color.GreenYellow;
         }
 
-        public override bool? UseItem(Player player) {
-            if (CanUseSelector(player)&& Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer) {
-                if (Main.mouseRight && _unCancelled) {
+        public override bool? UseItem(Player player)
+        {
+            if (CanUseSelector(player) && Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer)
+            {
+                if (Main.mouseRight && _unCancelled)
+                {
                     _unCancelled = false;
                 }
                 End = MyUtils.ModifySize(Start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
                 Color color = ModifyColor(!_unCancelled);
-                int boxIndex = Box.NewBox(Start, End, color * 0.35f, color);
-                if (boxIndex is not -1) {
+                int boxIndex = Box.NewBox(this, CanDrawRectangle, Start, End, color * 0.35f, color);
+                if (boxIndex is not -1)
+                {
                     Box box = DrawSystem.boxs[boxIndex];
-                    box.ShowWidth = true;
-                    box.ShowHeight = true;
+                    box.textDisplayMode = TextDisplayMode.All;
                 }
-                if (Main.mouseLeft) {
+                if (Main.mouseLeft)
+                {
                     player.itemAnimation = 8;
                     MyUtils.ItemRotation(player);
                 }
-                else {
+                else
+                {
                     player.itemAnimation = 0;
-                    if (_unCancelled) {
+                    if (_unCancelled)
+                    {
                         CoroutineSystem.TileRunner.Run(ModifyTiles(player));
                     }
                 }
             }
             player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
             return base.UseItem(player);
+        }
+
+        public virtual bool CanDrawRectangle()
+        {
+            return true;
         }
 
         IEnumerator ModifyTiles(Player player)
@@ -134,7 +148,8 @@ namespace ImproveGame.Content.Items
                         PostModifyTiles(player, minI, minJ, i, j);
                         yield break;
                     }
-                    if (countTiles >= 30) {
+                    if (countTiles >= 30)
+                    {
                         countTiles = 0;
                         yield return 0;
                     }

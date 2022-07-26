@@ -144,10 +144,13 @@ namespace ImproveGame.Content.Items
         {
             if (player.itemAnimation == 0)
                 Item.mana = 40;
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI && !Main.LocalPlayer.mouseInterface)
+            if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
                 Point point = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint(); // 鼠标位置
-                int boxIndex = Box.NewBox(new Rectangle(point.X, point.Y, JianYu.Width, JianYu.Height), Color.Yellow * 0f, Color.Yellow * 0f);
+                int boxIndex = Box.NewBox(this, () =>
+                {
+                    return player.HeldItem.type == Type;
+                }, new Rectangle(point.X, point.Y, JianYu.Width, JianYu.Height), Color.Yellow * 0f, Color.Yellow * 0f);
                 if (DrawSystem.boxs.IndexInRange(boxIndex))
                 {
                     Box box = DrawSystem.boxs[boxIndex];
@@ -583,7 +586,6 @@ namespace ImproveGame.Content.Items
 
         public override void AddRecipes()
         {
-            // 金锭
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
                 .AddRecipeGroup(ModRecipeGroup.GoldGroup, 12)

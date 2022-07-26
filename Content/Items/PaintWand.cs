@@ -85,6 +85,11 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
+        public override bool CanDrawRectangle()
+        {
+            return Main.mouseLeft;
+        }
+
         public override bool AltFunctionUse(Player player) => true;
 
         public override void SetItemDefaults()

@@ -108,9 +108,12 @@ namespace ImproveGame.Content.Items
                     color = new Color(135, 0, 180);
                 else
                     color = new Color(250, 40, 80);
-                int box = Box.NewBox(GetRectangle(player), color * 0.35f, color);
-                DrawSystem.boxs[box].ShowWidth = true;
-                DrawSystem.boxs[box].ShowHeight = true;
+                int box = Box.NewBox(this, () =>
+                {
+                    return Main.mouseLeft;
+                }, GetRectangle(player), color * 0.35f, color);
+                if (DrawSystem.boxs.IndexInRange(box))
+                    DrawSystem.boxs[box].textDisplayMode = TextDisplayMode.All;
             }
         }
 

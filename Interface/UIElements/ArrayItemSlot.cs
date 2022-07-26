@@ -127,7 +127,7 @@ namespace ImproveGame.Interface.UIElements
             CalculatedStyle dimensions = GetDimensions();
             sb.Draw(Texture, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f, 0, 0f);
 
-            DrawCanGlowItem(sb, Item, dimensions);
+            DrawHasGlowItem(sb, Item, dimensions);
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        public static void DrawCanGlowItem(SpriteBatch sb, Item Item, CalculatedStyle dimensions, float ItemSize = 30f)
+        public static void DrawHasGlowItem(SpriteBatch sb, Item Item, CalculatedStyle dimensions, float ItemSize = 30f)
         {
             // 绘制物品
             if (!Item.IsAir)
@@ -311,7 +311,7 @@ namespace ImproveGame.Interface.UIElements
 
                 if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow)
                 {
-                    OpenItemGlow(sb);
+                    OpenItemGlow(sb, Item);
                 }
 
                 DrawItem(sb, Item, Color.White, dimensions, ItemSize);
@@ -346,13 +346,12 @@ namespace ImproveGame.Interface.UIElements
                 SpriteEffects.None, 0f);
         }
 
-        public static void OpenItemGlow(SpriteBatch sb)
+        public static void OpenItemGlow(SpriteBatch sb, Item item)
         {
-            /*var rasterizerState = sb.GraphicsDevice.RasterizerState;
-            var rectangle1 = sb.GraphicsDevice.ScissorRectangle;*/
+            Main.instance.LoadItem(item.type);
+            Texture2D texture = TextureAssets.Item[item.type].Value;
+
             sb.End();
-            /*sb.GraphicsDevice.RasterizerState = rasterizerState;
-            sb.GraphicsDevice.ScissorRectangle = rectangle1;*/
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
                 DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
             Color lerpColor;
@@ -367,7 +366,7 @@ namespace ImproveGame.Interface.UIElements
                 lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
             }
             ModAssets.ItemEffect.Value.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-            ModAssets.ItemEffect.Value.CurrentTechnique.Passes["Test"].Apply();
+            ModAssets.ItemEffect.Value.CurrentTechnique.Passes["ColorPut"].Apply();
         }
 
         public static void CloseItemGlow(SpriteBatch sb)
