@@ -103,7 +103,7 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.NoConsume_Ammo.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoConsume_Ammo.Tooltip")]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool NoConsume_Ammo;
 
         [Label("$Mods.ImproveGame.Config.HideNoConsumeBuffs.Label")]
@@ -169,6 +169,16 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool TravellingMerchantStay;
 
+        [Label("$Mods.ImproveGame.Config.TravellingMerchantRefresh.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.TravellingMerchantRefresh.Tooltip")]
+        [DefaultValue(false)]
+        public bool TravellingMerchantRefresh;
+
+        [Label("$Mods.ImproveGame.Config.QuickNurse.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.QuickNurse.Tooltip")]
+        [DefaultValue(true)]
+        public bool QuickNurse;
+
         [Header("$Mods.ImproveGame.Config.GameMechanics.Header")]
 
         [Label("$Mods.ImproveGame.Config.AlchemyGrassGrowsFaster.Label")]
@@ -187,7 +197,7 @@ namespace ImproveGame.Common.Configs
         public bool StaffOfRegenerationAutomaticPlanting;
 
         [Label("$Mods.ImproveGame.Config.RespawnWithFullHP.Label")]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool RespawnWithFullHP;
 
         [Label("$Mods.ImproveGame.Config.BanDamageVar.Label")]

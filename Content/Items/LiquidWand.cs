@@ -50,8 +50,6 @@ namespace ImproveGame.Content.Items
                 if (t.LiquidAmount > 0)
                 {
                     UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, true);
-                    if (!MyUtils.TryConsumeMana(player, 2))
-                        return false;
                 }
             }
             // 放置模式
@@ -69,21 +67,10 @@ namespace ImproveGame.Content.Items
                         t.LiquidType = oldType;
                         return true;
                     }
-                    int manaCost = t.LiquidAmount / 120; // 根据液体放置了多少分成两个阶段
-                    if (t.LiquidType != LiquidID.Water && manaCost > 0)
-                        manaCost++; // 熔岩和蜂蜜额外耗蓝
-                    if (!MyUtils.TryConsumeMana(player, manaCost))
-                        return false;
                 }
                 else
                 {
-                    byte liquidAmountPrev = t.LiquidAmount;
                     UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
-                    int manaCost = (t.LiquidAmount - liquidAmountPrev) / 120; // 根据液体放置了多少分成两个阶段
-                    if (t.LiquidType != LiquidID.Water && manaCost > 0)
-                        manaCost++; // 熔岩和蜂蜜额外耗蓝
-                    if (!MyUtils.TryConsumeMana(player, manaCost))
-                        return false;
                 }
             }
             return true;
@@ -130,6 +117,7 @@ namespace ImproveGame.Content.Items
         {
             Item.rare = ItemRarityID.Lime;
             Item.value = Item.sellPrice(0, 1, 0, 0);
+            Item.mana = 20;
 
             SelectRange = new(15, 10);
         }

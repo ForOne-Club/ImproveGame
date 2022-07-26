@@ -16,7 +16,7 @@
 - **[v1.5.9.1]** Fixed the Wand of Space cannot be used without having a platform
 - **[v1.5.9.1]** Fixed newly crafted Potion Bags share the same inventory
 - **[v1.5.9.2]** Fixed the Fishing Machine not fishing from correct biomes
-- **[v1.5.9.3]** 修复了钓鱼机速度过快的BUG
+- **[v1.5.9.3]** Fixed the fishing speed of the Fishing Machine being dramatically fast
 ## Additions
 - Added enemy spawn rate slider, only available while having the infinite [Battle Potion][Water Candle][Peace Cadnle][Sunflower] and [Calm Potion]
 - Added Potion Bag, can cotain 20 buff potions at most, potions inside also take effects
@@ -32,12 +32,15 @@
 - The Wand of Space now support horizontal and vertical placement and you can choose which type of tile to place: platforms, solid blocks, ropes or minecart tracks
 - **[v1.5.9.1]** Added a hotkey for the Buff Tracker
 - **[v1.5.9.2]** The Fishing Machine now supports mod biomes
-- **[v1.5.9.3]** 空间魔杖控制面板重置, 增加新的分类.
-- **[v1.5.9.3]** 漆涂法杖，可用于大范围刷漆
+- **[v1.5.9.3]** Reworked control panel of the Wand of Space, added new categories
+- **[v1.5.9.3]** Added a Wand of Painting, can paint/remove paint of a large area
+- **[v1.5.9.3]** Added a auto-refreshing function for Travelling Merchant's shop(each time you open his shop page, the goods will be rerolled)
+- **[v1.5.9.3]** Added a function that makes the Nurse to heal you instantly when you talk to her
+- **[v1.5.9.3]** The Wand of Liquids no longer consumes mana
 ## Misc
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
 - **[v1.5.9.2]** Added Mod.Calls
-- **[v1.5.9.3]** 优化两个爆破法杖的UI动画
+- **[v1.5.9.3]** Improved UI animations of the two Wands of Bursts
 
 # v1.5.8
 ## Subversions
