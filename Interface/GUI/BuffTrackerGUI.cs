@@ -1,9 +1,5 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria.GameContent;
-using Terraria.GameContent.UI.Elements;
 
 namespace ImproveGame.Interface.GUI
 {

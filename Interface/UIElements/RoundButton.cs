@@ -5,7 +5,7 @@
         public Asset<Texture2D> background;
         public Asset<Texture2D> hover;
         public Asset<Texture2D> mainImage;
-        public Func<Color> GetColor;
+        public Func<Color> OnGetColor;
 
         public RoundButton(Asset<Texture2D> mainImage)
         {
@@ -16,12 +16,17 @@
             this.mainImage = mainImage;
         }
 
+        public Color GetColor()
+        {
+            return OnGetColor();
+        }
+
         protected override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
             Vector2 position = dimensions.Position() + this.GetSize() / 2f;
 
-            Color color = GetColor is null ? Color.White : GetColor();
+            Color color = OnGetColor is null ? Color.White : GetColor();
             sb.Draw(background.Value, position, null, color, 0, this.GetSize() / 2f, 1f, 0, 0f);
             if (IsMouseHovering)
             {

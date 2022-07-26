@@ -25,15 +25,15 @@ namespace ImproveGame.Interface.GUI
             RoundButtons = new RoundButton[] {
                 new(TextureAssets.Item[ItemID.Paintbrush])
                 {
-                    GetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Tile)
+                    OnGetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Tile)
                 },
                 new(TextureAssets.Item[ItemID.PaintRoller])
                 {
-                    GetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Wall)
+                    OnGetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Wall)
                 },
                 new(TextureAssets.Item[ItemID.PaintScraper])
                 {
-                    GetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Remove)
+                    OnGetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Remove)
                 }
             };
 

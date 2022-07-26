@@ -1,8 +1,5 @@
 ﻿using ImproveGame.Common.Players;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.Creative;
-using Terraria.GameContent.UI.Elements;
-using Terraria.Localization;
 
 namespace ImproveGame.Interface.GUI
 {

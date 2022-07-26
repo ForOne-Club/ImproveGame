@@ -19,7 +19,7 @@ namespace ImproveGame.Content.Items
         }
 
         public PlaceType placeType;
-        public int[] GrassSeed = new int[] { 2, 23, 60, 70, 199, 109 };
+        public int[] GrassSeed = new int[] { 2, 23, 60, 70, 199, 109, 82 };
 
         // 准备加上一个纵向的
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
@@ -51,7 +51,10 @@ namespace ImproveGame.Content.Items
         {
             if (player.altFunctionUse == 2)
             {
-                UISystem.Instance.SpaceWandGUI.ToggleMode(this);
+                if (SpaceWandGUI.Visible && !UISystem.Instance.SpaceWandGUI.IsClose)
+                    UISystem.Instance.SpaceWandGUI.Close();
+                else
+                    UISystem.Instance.SpaceWandGUI.Open(this);
                 return false;
             }
             TileCount(player.inventory, out int count);
