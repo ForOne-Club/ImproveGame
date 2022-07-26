@@ -33,7 +33,9 @@
 - **[v1.5.9.1]** Added a hotkey for the Buff Tracker
 - **[v1.5.9.2]** The Fishing Machine now supports mod biomes
 - **[v1.5.9.3]** 空间魔杖控制面板重置, 增加新的分类.
-- **[v1.5.9.3]** 漆涂法杖，可用于大范围刷漆
+- **[v1.5.9.3]** 漆涂法杖，可用于大范围刷漆/去漆
+- **[v1.5.9.3]** 添加旅商商店自动刷新功能 （每次打开旅商商店页面时，其出售物品自动刷新）
+- **[v1.5.9.3]** 添加右键点开护士对话则立即回血功能
 ## Misc
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
 - **[v1.5.9.2]** Added Mod.Calls

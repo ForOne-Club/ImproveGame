@@ -175,7 +175,25 @@
             TravellingMerchantStay:
             {
                 Label: "[i:2222] 旅商永远不离开"
-                Tooltip: "“旅商已死去!”\n开启后，除非死亡，否则旅商不会离开"
+                Tooltip: "“旅商已死去!”\n开启后，除非死亡或退出游戏，否则旅商不会离开"
+            }
+            TravellingMerchantRefresh:
+            {
+                Label: "[i:2222] 旅商商店自动刷新"
+                Tooltip:
+                    '''
+                    每次打开旅商商店页面时，其出售物品自动刷新
+                    在多人模式下会导致每个玩家看到的出售列表不一致
+                    '''
+            }
+            QuickNurse:
+            {
+                Label: "[i:AdhesiveBandage] 快捷护士"
+                Tooltip:
+                    '''
+                    右键点开护士对话则立即回血
+                    消耗的钱币数量会从玩家头上弹出
+                    '''
             }
 
             GameMechanics.Header: "[i:1344] 游戏机制"

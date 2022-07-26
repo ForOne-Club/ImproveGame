@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Terraria;
 using Terraria.Enums;
+using Terraria.GameContent.Achievements;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -59,6 +60,18 @@ namespace ImproveGame.Common.Systems
             On.Terraria.WorldGen.IsHarvestableHerbWithSeed += WorldGen_IsHarvestableHerbWithSeed;
             // 旅商永远不离开
             On.Terraria.WorldGen.UnspawnTravelNPC += TravelNPCStay;
+            // 旅商刷新
+            On.Terraria.Chest.SetupShop += RefreshTravelShop;
+        }
+
+        private void RefreshTravelShop(On.Terraria.Chest.orig_SetupShop orig, Chest self, int type)
+        {
+            // 19 旅商商店ID
+            if (type == 19 && Config.TravellingMerchantRefresh)
+            {
+                Chest.SetupTravelShop();
+            }
+            orig.Invoke(self, type);
         }
 
         private void TravelNPCStay(On.Terraria.WorldGen.orig_UnspawnTravelNPC orig)
@@ -548,7 +561,7 @@ namespace ImproveGame.Common.Systems
         /// <summary>
         /// 墓碑掉落
         /// </summary>
-        private void DisableDropTombstone(On.Terraria.Player.orig_DropTombstone orig, Player self, int coinsOwned, Terraria.Localization.NetworkText deathText, int hitDirection)
+        private void DisableDropTombstone(On.Terraria.Player.orig_DropTombstone orig, Player self, int coinsOwned, NetworkText deathText, int hitDirection)
         {
             if (!MyUtils.Config.BanTombstone)
             {
