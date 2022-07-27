@@ -40,31 +40,31 @@ namespace ImproveGame.Interface.GUI
             RoundButtons[0] = new(TextureAssets.Item[94]);
             RoundButtons[0].text = () => GetText("SpaceWandGUI.platform");
             RoundButtons[0].OnGetColor = GetColor(PlaceType.platform);
-            RoundButtons[0].OnClick += (evt, uie) => ModifyPlaceType(PlaceType.platform);
+            RoundButtons[0].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.platform);
 
             Main.instance.LoadItem(9);
             RoundButtons[1] = new(TextureAssets.Item[9]);
             RoundButtons[1].text = () => GetText("SpaceWandGUI.soild");
             RoundButtons[1].OnGetColor = GetColor(PlaceType.soild);
-            RoundButtons[1].OnClick += (evt, uie) => ModifyPlaceType(PlaceType.soild);
+            RoundButtons[1].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.soild);
 
             Main.instance.LoadItem(2996);
             RoundButtons[2] = new(TextureAssets.Item[2996]);
             RoundButtons[2].text = () => GetText("SpaceWandGUI.rope");
             RoundButtons[2].OnGetColor = GetColor(PlaceType.rope);
-            RoundButtons[2].OnClick += (evt, uie) => ModifyPlaceType(PlaceType.rope);
+            RoundButtons[2].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.rope);
 
             Main.instance.LoadItem(2340);
             RoundButtons[3] = new(TextureAssets.Item[2340]);
             RoundButtons[3].text = () => GetText("SpaceWandGUI.rail");
             RoundButtons[3].OnGetColor = GetColor(PlaceType.rail);
-            RoundButtons[3].OnClick += (evt, uie) => ModifyPlaceType(PlaceType.rail);
+            RoundButtons[3].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.rail);
 
             Main.instance.LoadItem(62);
             RoundButtons[4] = new(TextureAssets.Item[62]);
             RoundButtons[4].text = () => GetText("SpaceWandGUI.grassSeed");
             RoundButtons[4].OnGetColor = GetColor(PlaceType.grassSeed);
-            RoundButtons[4].OnClick += (evt, uie) => ModifyPlaceType(PlaceType.grassSeed);
+            RoundButtons[4].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.grassSeed);
 
             Main.instance.LoadItem(3215);
             RoundButtons[5] = new(TextureAssets.Item[3215])
@@ -99,17 +99,17 @@ namespace ImproveGame.Interface.GUI
                 foreach (RoundButton button in RoundButtons)
                 {
                     // 一对一动画
-                    AnimationTimer timer = button.timer;
+                    // AnimationTimer timer = button.timer;
                     Round round = button.round;
                     round.Draw();
-                    if (button.IsMouseHovering && !timer.IsClose)
+                    /*if (button.IsMouseHovering && !timer.IsClose)
                     {
                         timer.Close();
                     }
                     else if (!button.IsMouseHovering && timer.InCloseComplete)
                     {
                         timer.State = AnimationState.Initial;
-                    }
+                    }*/
                 }
             base.DrawChildren(spriteBatch);
             if (!timer.IsInitial)

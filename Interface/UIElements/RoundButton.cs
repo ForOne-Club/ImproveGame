@@ -21,11 +21,17 @@ namespace ImproveGame.Interface.UIElements
             this.mainImage = mainImage;
 
             timer = new();
-            round = new(timer, Color.Black, Color.Black, 40f, 20f)
+            round = new(timer, Color.Black, Color.Black, 40f, 40f)
             {
                 border = 4f,
                 Center = () => this.GetDimensions().Position() + this.GetSize() / 2f
             };
+        }
+
+        public override void MouseDown(UIMouseEvent evt)
+        {
+            timer.Close();
+            base.MouseDown(evt);
         }
 
         public override void Update(GameTime gameTime)
