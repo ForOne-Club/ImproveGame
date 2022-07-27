@@ -141,6 +141,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool AutoSaveMoney;
 
+        [Label("$Mods.ImproveGame.Config.FasterExtractinator.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.FasterExtractinator.Tooltip")]
+        [DefaultValue(true)]
+        public bool FasterExtractinator;
+
         [Header("$Mods.ImproveGame.Config.NPCConfigs.Header")]
 
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Label")]

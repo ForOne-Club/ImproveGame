@@ -154,6 +154,11 @@ Mods:
                     '''
             }
             BanTombstone.Label: "[i:3230] Disable tombstone spawn"
+            FasterExtractinator:
+            {
+                Label: "[i:Extractinator] 加速提炼机"
+                Tooltip: "极大地加快使用提炼机的速度"
+            }
 
             NPCConfigs.Header: "[i:4382] NPC Configs"
             TownNPCSpawnInNight.Label: "[i:4081] Allow town NPCs to spawn at night time"

@@ -162,6 +162,11 @@
                     '''
             }
             BanTombstone.Label: "[i:3230] 禁止生成墓碑"
+            FasterExtractinator:
+            {
+                Label: "[i:Extractinator] 加速提炼机"
+                Tooltip: "极大地加快使用提炼机的速度"
+            }
 
             NPCConfigs.Header: "[i:4382] NPC 设置"
             TownNPCSpawnInNight.Label: "[i:4081] 允许城镇NPC夜晚刷新"
