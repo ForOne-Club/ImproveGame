@@ -8,6 +8,7 @@ float uXEnd;
 float uTime;
 float uWaveScale;
 
+// 顶点着色器参数
 struct VSInput
 {
     float2 Pos : POSITION0;
@@ -15,6 +16,7 @@ struct VSInput
     float3 Texcoord : TEXCOORD0;
 };
 
+// 像素着色器参数
 struct PSInput
 {
     float4 Pos : SV_POSITION;

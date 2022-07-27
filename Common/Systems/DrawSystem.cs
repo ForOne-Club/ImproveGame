@@ -16,11 +16,10 @@ namespace ImproveGame.Common.Systems
         {
             On.Terraria.Main.DrawInterface_36_Cursor += Main_DrawInterface_36_Cursor;
         }
-        public Animation animation = new(GetTexture("A255").Value);
+
         public void DrawTest()
         {
-            animation.Update();
-            animation.Draw();
+
         }
 
         private void Main_DrawInterface_36_Cursor(On.Terraria.Main.orig_DrawInterface_36_Cursor orig)

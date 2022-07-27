@@ -5,6 +5,7 @@ namespace ImproveGame
 {
     public class ModAssets : ModSystem
     {
+        internal static Asset<Effect> BorderRound;
         internal static Asset<Effect> ItemEffect;
         internal static Asset<Effect> LiquidSurface;
         internal static Asset<Texture2D> Perlin;
@@ -13,6 +14,7 @@ namespace ImproveGame
         {
             if (!Main.dedServ)
             {
+                BorderRound = MyUtils.GetEffect("BorderRound");
                 ItemEffect = MyUtils.GetEffect("item");
                 LiquidSurface = MyUtils.GetEffect("LiquidSurface");
                 Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");
@@ -23,6 +25,7 @@ namespace ImproveGame
         {
             if (!Main.dedServ)
             {
+                BorderRound = null;
                 ItemEffect = null;
                 LiquidSurface = null;
                 Perlin = null;

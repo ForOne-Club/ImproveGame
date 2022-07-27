@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Interface.UIElements
+﻿using ImproveGame.Common.Animations;
+
+namespace ImproveGame.Interface.UIElements
 {
     public class RoundButton : UIElement
     {
@@ -6,6 +8,9 @@
         public Asset<Texture2D> hover;
         public Asset<Texture2D> mainImage;
         public Func<Color> OnGetColor;
+        public AnimationTimer timer;
+        public Round round;
+        public Func<string> text;
 
         public RoundButton(Asset<Texture2D> mainImage)
         {
@@ -14,6 +19,19 @@
             this.SetSize(background.Size());
 
             this.mainImage = mainImage;
+
+            timer = new();
+            round = new(timer, Color.Black, Color.Black, 40f, 20f)
+            {
+                border = 4f,
+                Center = () => this.GetDimensions().Position() + this.GetSize() / 2f
+            };
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            timer.Update();
+            base.Update(gameTime);
         }
 
         public Color GetColor()

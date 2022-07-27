@@ -154,8 +154,14 @@ namespace ImproveGame.Common.Systems
             int wireIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Wire Selection");
             if (wireIndex != -1)
             {
-                layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: SpaceWand GUI",
-                    () => { SpaceWandGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI)
+                layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: SpaceWand GUI", () =>
+                    {
+                        if (SpaceWandGUI.Visible)
+                        {
+                            SpaceWandGUI.Draw(Main.spriteBatch);
+                        }
+                        return true;
+                    }, InterfaceScaleType.UI)
                 );
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Paint GUI", DrawPaintGUI, InterfaceScaleType.UI));

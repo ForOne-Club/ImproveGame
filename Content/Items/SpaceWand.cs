@@ -6,17 +6,18 @@ using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items
 {
+    public enum PlaceType : byte
+    {
+        platform, // 平台
+        soild, // 方块
+        rope, // 绳子
+        rail, // 轨道
+        grassSeed, // 草种
+        plantPot // 种植盆
+    }
+
     public class SpaceWand : ModItem
     {
-        public enum PlaceType : byte
-        {
-            platform, // 平台
-            soild, // 方块
-            rope, // 绳子
-            rail, // 轨道
-            grassSeed, // 草种
-            plantPot // 种植盆
-        }
 
         public PlaceType placeType;
         public int[] GrassSeed = new int[] { 2, 23, 60, 70, 199, 109, 82 };
@@ -51,7 +52,7 @@ namespace ImproveGame.Content.Items
         {
             if (player.altFunctionUse == 2)
             {
-                if (SpaceWandGUI.Visible && !UISystem.Instance.SpaceWandGUI.IsClose)
+                if (SpaceWandGUI.Visible && UISystem.Instance.SpaceWandGUI.timer.IsOpen)
                     UISystem.Instance.SpaceWandGUI.Close();
                 else
                     UISystem.Instance.SpaceWandGUI.Open(this);
