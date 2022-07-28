@@ -4,25 +4,25 @@ namespace ImproveGame.Entitys
 {
     public class Box
     {
-        public Rectangle Rectangle;
-        public Color borderColor;
-        public Color backgroundColor;
-        public TextDisplayMode textDisplayMode;
-        public bool ShowHeight;
-        public Texture2D PreView;
-        public Func<bool> CanDraw;
-        public ModItem Parent;
+        public Rectangle Rectangle; // √
+        public Color borderColor; // √
+        public Color backgroundColor; // √
+        public TextDisplayMode textDisplayMode; // √
+        public Texture2D PreView; // x
+        /// <summary>
+        /// 杀死 Box 的条件, 达到之后会从 DrawSystem.boxs 删除
+        /// </summary>
+        public Func<bool> NeedKill; // √
+        public ModItem Parent; // √
 
-        public static int HasBox(ModItem item)
+        public Box(ModItem Parent, Func<bool> NeedKill, Rectangle Rectangle, Color backgroundColor, Color borderColor, TextDisplayMode textDisplayMode)
         {
-            Box[] boxs = DrawSystem.boxs;
-            for (int i = 0; i < boxs.Length; i++)
-            {
-                Box box = boxs[i];
-                if (box is not null && box.Parent.Type == item.Type)
-                    return i;
-            }
-            return -1;
+            this.Parent = Parent;
+            this.NeedKill = NeedKill;
+            this.Rectangle = Rectangle;
+            this.borderColor = borderColor;
+            this.backgroundColor = backgroundColor;
+            this.textDisplayMode = textDisplayMode;
         }
 
         /// <summary>
@@ -30,23 +30,25 @@ namespace ImproveGame.Entitys
         /// 第一个参数是 Box 对应的 ModItem, 每一个 Box 都必须绑定一个 ModItem <para/>
         /// 第二个参数是用来判断是否绘制的, 如果返回值为 <see langword="false"/> 会直接删除 box 对象再 <see cref="DrawSystem.boxs"/> 中的引用 <para/>
         /// </summary>
+        /// <param name="Rectangle"></param>
         /// <returns>它在 <see cref="DrawSystem.boxs"/> 的下标. 返回 -1 代表没有位置了, 那样子就不会生成了</returns>
-        public static int NewBox(ModItem Parent, Func<bool> CanDraw, Rectangle Rectangle, Color backgroundColor, Color borderColor)
+        public static int NewBox(ModItem Parent, Func<bool> NeedKill, Rectangle Rectangle, Color backgroundColor, Color borderColor, TextDisplayMode textDisplayMode = TextDisplayMode.None)
         {
             Box[] boxs = DrawSystem.boxs;
             int index = HasBox(Parent);
             if (boxs.IndexInRange(index))
             {
                 Box box = boxs[index];
-                box.CanDraw = CanDraw;
+                box.NeedKill = NeedKill;
                 box.Rectangle = Rectangle;
                 box.backgroundColor = backgroundColor;
                 box.borderColor = borderColor;
+                box.textDisplayMode = textDisplayMode;
                 return index;
             }
             else
             {
-                Box box = new(Parent, CanDraw, Rectangle, backgroundColor, borderColor);
+                Box box = new(Parent, NeedKill, Rectangle, backgroundColor, borderColor, textDisplayMode);
                 for (int i = 0; i < DrawSystem.boxs.Length; i++)
                 {
                     if (DrawSystem.boxs[i] == null)
@@ -59,18 +61,21 @@ namespace ImproveGame.Entitys
             return -1;
         }
 
-        public static int NewBox(ModItem Parent, Func<bool> CanDraw, Point start, Point end, Color backgroundColor, Color borderColor)
+        public static int NewBox(ModItem Parent, Func<bool> NeedKill, Point start, Point end, Color backgroundColor, Color borderColor, TextDisplayMode textDisplayMode = TextDisplayMode.None)
         {
-            return NewBox(Parent, CanDraw, new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y), (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1), backgroundColor, borderColor);
+            return NewBox(Parent, NeedKill, new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y), (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1), backgroundColor, borderColor, textDisplayMode);
         }
 
-        public Box(ModItem Parent, Func<bool> CanDraw, Rectangle Rectangle, Color backgroundColor, Color borderColor)
+        public static int HasBox(ModItem item)
         {
-            this.Parent = Parent;
-            this.CanDraw = CanDraw;
-            this.Rectangle = Rectangle;
-            this.borderColor = borderColor;
-            this.backgroundColor = backgroundColor;
+            Box[] boxs = DrawSystem.boxs;
+            for (int i = 0; i < boxs.Length; i++)
+            {
+                Box box = boxs[i];
+                if (box is not null && box.Parent.Type == item.Type)
+                    return i;
+            }
+            return -1;
         }
 
         public void Draw()

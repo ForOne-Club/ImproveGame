@@ -44,9 +44,17 @@ namespace ImproveGame.Content.Items
         protected Point ExtraRange;
         protected Point KillSize;
 
-        public override bool CanDrawRectangle()
+        public override bool IsNeedKill()
         {
-            return (WandSystem.FixedMode) || (!WandSystem.FixedMode && Main.mouseLeft);
+            if (WandSystem.FixedMode)
+            {
+                return false;
+            }
+            else if (!WandSystem.FixedMode)
+            {
+                return !Main.mouseLeft;
+            }
+            return true;
         }
 
         public override void SetItemDefaults()
@@ -119,10 +127,7 @@ namespace ImproveGame.Content.Items
             {
                 if (WandSystem.FixedMode)
                 {
-                    Box.NewBox(this, () =>
-                    {
-                        return WandSystem.FixedMode;
-                    }, GetRectangle(player), Color.Red * 0.35f, Color.Red);
+                    Box.NewBox(this, () => !WandSystem.FixedMode, GetRectangle(player), Color.Red * 0.35f, Color.Red);
                 }
                 // 还在用物品的时候不能打开UI (直接写在 CanUseItem 似乎就没有问题了)
                 if (player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1)

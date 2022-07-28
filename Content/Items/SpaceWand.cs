@@ -52,7 +52,7 @@ namespace ImproveGame.Content.Items
         {
             if (player.altFunctionUse == 2)
             {
-                if (SpaceWandGUI.Visible && UISystem.Instance.SpaceWandGUI.timer.IsOpen)
+                if (SpaceWandGUI.Visible && UISystem.Instance.SpaceWandGUI.timer.AnyOpen)
                     UISystem.Instance.SpaceWandGUI.Close();
                 else
                     UISystem.Instance.SpaceWandGUI.Open(this);
@@ -109,12 +109,8 @@ namespace ImproveGame.Content.Items
                     color = new Color(135, 0, 180);
                 else
                     color = new Color(250, 40, 80);
-                int box = Box.NewBox(this, () =>
-                {
-                    return Main.mouseLeft;
-                }, GetRectangle(player), color * 0.35f, color);
-                if (DrawSystem.boxs.IndexInRange(box))
-                    DrawSystem.boxs[box].textDisplayMode = TextDisplayMode.All;
+                Rectangle rectangle = GetRectangle(player);
+                Box.NewBox(this, () => !Main.mouseLeft, rectangle, color * 0.35f, color, GetTextDisplayMode(rectangle));
             }
         }
 
@@ -166,6 +162,11 @@ namespace ImproveGame.Content.Items
                     }
                 });
             }
+        }
+
+        public TextDisplayMode GetTextDisplayMode(Rectangle rectangle)
+        {
+            return rectangle.Width >= rectangle.Height ? TextDisplayMode.Width : TextDisplayMode.Height;
         }
 
         public bool NeedKillTile(Player player, Item item, int x, int y)

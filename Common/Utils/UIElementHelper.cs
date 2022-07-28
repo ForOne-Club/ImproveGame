@@ -2,15 +2,17 @@
 {
     public static class UIElementHelper
     {
-        public static void SetCenter(this UIElement uie, Vector2 center)
+        public static UIElement SetCenter(this UIElement uie, Vector2 center)
         {
             uie.Left.Pixels = center.X - uie.Width.Pixels / 2f;
             uie.Top.Pixels = center.Y - uie.Height.Pixels / 2f;
+            return uie;
         }
-        public static void SetCenter(this UIElement uie, float x, float y)
+        public static UIElement SetCenter(this UIElement uie, float x, float y)
         {
             uie.Left.Pixels = x - uie.Width.Pixels / 2f;
             uie.Top.Pixels = y - uie.Height.Pixels / 2f;
+            return uie;
         }
 
         public static Vector2 GetCenter(this UIElement uie)
@@ -26,16 +28,18 @@
             }
         }
 
-        public static void SetHPadding(this UIElement uie, float padding)
+        public static UIElement SetHPadding(this UIElement uie, float padding)
         {
             uie.PaddingLeft = padding;
             uie.PaddingRight = padding;
+            return uie;
         }
 
-        public static void SetVPadding(this UIElement uie, float padding)
+        public static UIElement SetVPadding(this UIElement uie, float padding)
         {
             uie.PaddingTop = padding;
             uie.PaddingBottom = padding;
+            return uie;
         }
 
         public static Vector2 GetPPos(this UIElement uie)
@@ -53,26 +57,30 @@
             return new(uie.Width.Pixels - uie.HPadding(), uie.Height.Pixels - uie.VPadding());
         }
 
-        public static void SetPPos(this UIElement uie, Vector2 position, float precentX = 0, float precentY = 0)
+        public static UIElement SetPos(this UIElement uie, Vector2 position, float precentX = 0, float precentY = 0)
         {
             uie.SetPos(position.X, position.Y, precentX, precentY);
+            return uie;
         }
 
-        public static void SetPos(this UIElement uie, float x, float y, float precentX = 0, float precentY = 0)
+        public static UIElement SetPos(this UIElement uie, float x, float y, float precentX = 0, float precentY = 0)
         {
             uie.Left.Set(x, precentX);
             uie.Top.Set(y, precentY);
+            return uie;
         }
 
-        public static void SetSize(this UIElement uie, Vector2 size, float precentWidth = 0, float precentHeight = 0)
+        public static UIElement SetSize(this UIElement uie, Vector2 size, float precentWidth = 0, float precentHeight = 0)
         {
             uie.SetSize(size.X, size.Y, precentWidth, precentHeight);
+            return uie;
         }
 
-        public static void SetSize(this UIElement uie, float width, float height, float precentWidth = 0, float precentHeight = 0)
+        public static UIElement SetSize(this UIElement uie, float width, float height, float precentWidth = 0, float precentHeight = 0)
         {
             uie.Width.Set(width, precentWidth);
             uie.Height.Set(height, precentHeight);
+            return uie;
         }
 
         public static float Left(this UIElement uie) => uie.Left.Pixels;

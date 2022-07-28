@@ -101,12 +101,7 @@ namespace ImproveGame.Content.Items
                 }
                 End = MyUtils.ModifySize(Start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
                 Color color = ModifyColor(!_unCancelled);
-                int boxIndex = Box.NewBox(this, CanDrawRectangle, Start, End, color * 0.35f, color);
-                if (boxIndex is not -1)
-                {
-                    Box box = DrawSystem.boxs[boxIndex];
-                    box.textDisplayMode = TextDisplayMode.All;
-                }
+                Box.NewBox(this, IsNeedKill, Start, End, color * 0.35f, color, TextDisplayMode.All);
                 if (Main.mouseLeft)
                 {
                     player.itemAnimation = 8;
@@ -125,7 +120,7 @@ namespace ImproveGame.Content.Items
             return base.UseItem(player);
         }
 
-        public virtual bool CanDrawRectangle()
+        public virtual bool IsNeedKill()
         {
             return true;
         }

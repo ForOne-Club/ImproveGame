@@ -85,9 +85,9 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
-        public override bool CanDrawRectangle()
+        public override bool IsNeedKill()
         {
-            return Main.mouseLeft;
+            return !Main.mouseLeft;
         }
 
         public override bool AltFunctionUse(Player player) => true;

@@ -226,15 +226,15 @@ namespace ImproveGame.Common.Systems
                 if (boxs[i] is not null)
                 {
                     Box box = boxs[i];
-                    if ((box?.CanDraw() ?? false) && box.Parent.Type == Main.LocalPlayer.HeldItem.type)
+                    if ((box?.NeedKill() ?? true) || box.Parent.Type != Main.LocalPlayer.HeldItem.type)
+                    {
+                        boxs[i] = null;
+                    }
+                    else
                     {
                         box.DrawPreView();
                         box.Draw();
                         box.DrawString();
-                    }
-                    else
-                    {
-                        boxs[i] = null;
                     }
                 }
             }

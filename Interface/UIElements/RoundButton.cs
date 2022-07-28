@@ -11,6 +11,7 @@ namespace ImproveGame.Interface.UIElements
         public AnimationTimer timer;
         public Round round;
         public Func<string> text;
+        public string Text => text?.Invoke();
 
         public RoundButton(Asset<Texture2D> mainImage)
         {
@@ -20,7 +21,7 @@ namespace ImproveGame.Interface.UIElements
 
             this.mainImage = mainImage;
 
-            timer = new();
+            timer = new(6);
             round = new(timer, Color.Black, Color.Black, 40f, 40f)
             {
                 border = 4f,

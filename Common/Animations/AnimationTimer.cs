@@ -1,6 +1,6 @@
 ﻿namespace ImproveGame.Common.Animations
 {
-    public enum AnimationState
+    public enum AnimationState // 动画当前的状态
     {
         Initial,
         Open,
@@ -10,8 +10,8 @@
     }
     public enum AnimationMode
     {
-        Linear,
-        Nonlinear,
+        Linear, // 线性变化 (就一种类型, 还是一个大分类)
+        Nonlinear, // 缓动动画 (最简单的非线性动画). 如果能学到其他的非线性动画, 我就都加进来.
     }
 
     // 动画计时器
@@ -31,9 +31,9 @@
         public bool InClose => State == AnimationState.Close;
         public bool InOpenComplete => State == AnimationState.OpenComplete;
         public bool InCloseComplete => State == AnimationState.CloseComplete;
-        public bool IsInitial => State == AnimationState.Initial;
-        public bool IsOpen => State == AnimationState.Open || State == AnimationState.OpenComplete;
-        public bool IsClose => State == AnimationState.Close || State == AnimationState.CloseComplete;
+        public bool InInitial => State == AnimationState.Initial;
+        public bool AnyOpen => State == AnimationState.Open || State == AnimationState.OpenComplete;
+        public bool AnyClose => State == AnimationState.Close || State == AnimationState.CloseComplete;
 
         public AnimationTimer(float Speed = 5f, AnimationMode mode = AnimationMode.Nonlinear, float TimerMax = 100f)
         {
@@ -59,37 +59,47 @@
             switch (State)
             {
                 case AnimationState.Open:
-                    if (Mode == AnimationMode.Linear)
-                    {
-                        Timer += Speed;
-                    }
-                    else if (Mode == AnimationMode.Nonlinear)
-                    {
-                        Timer += (TimerMax - Timer) / Speed;
-                    }
-                    if (TimerMax - Timer < 1f)
-                    {
-                        Timer = 100;
-                        State = AnimationState.OpenComplete;
-                        OnOpenComplete?.Invoke();
-                    }
+                    Update_Open();
                     break;
                 case AnimationState.Close:
-                    if (Mode == AnimationMode.Linear)
-                    {
-                        Timer -= Speed;
-                    }
-                    else if (Mode == AnimationMode.Nonlinear)
-                    {
-                        Timer -= Timer / Speed;
-                    }
-                    if (Timer < 1f)
-                    {
-                        Timer = 0;
-                        State = AnimationState.CloseComplete;
-                        OnCloseComplete?.Invoke();
-                    }
+                    Update_Close();
                     break;
+            }
+        }
+
+        private void Update_Open()
+        {
+            if (Mode == AnimationMode.Linear)
+            {
+                Timer += Speed;
+            }
+            else if (Mode == AnimationMode.Nonlinear)
+            {
+                Timer += (TimerMax - Timer) / Speed;
+            }
+            if (TimerMax - Timer < 1f)
+            {
+                Timer = 100;
+                State = AnimationState.OpenComplete;
+                OnOpenComplete?.Invoke();
+            }
+        }
+
+        private void Update_Close()
+        {
+            if (Mode == AnimationMode.Linear)
+            {
+                Timer -= Speed;
+            }
+            else if (Mode == AnimationMode.Nonlinear)
+            {
+                Timer -= Timer / Speed;
+            }
+            if (Timer < 1f)
+            {
+                Timer = 0;
+                State = AnimationState.CloseComplete;
+                OnCloseComplete?.Invoke();
             }
         }
     }

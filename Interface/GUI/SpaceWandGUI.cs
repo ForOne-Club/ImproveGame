@@ -14,134 +14,76 @@ namespace ImproveGame.Interface.GUI
         }
 
         public UIElement MainPanel;
-        public readonly RoundButton[] RoundButtons;
         public SpaceWand SpaceWand;
         public AnimationTimer timer;
 
-        public SpaceWandGUI()
-        {
-            RoundButtons = new RoundButton[6];
-        }
-
+        // 这么写能剩下很多重复的代码, 但是你必须保证他们长度是相同的.
+        public readonly RoundButton[] RoundButtons = new RoundButton[6];
+        public readonly int[] itemTypes = new int[] { 94, 9, 2996, 2340, 62, 3215 };
+        public readonly PlaceType[] placeTypes = new PlaceType[] { PlaceType.platform, PlaceType.soild, PlaceType.rope, PlaceType.rail, PlaceType.grassSeed, PlaceType.plantPot };
         public override void OnInitialize()
         {
-            timer = new()
+            timer = new() { OnCloseComplete = () => Visible = false };
+
+            Append(MainPanel = new());
+            MainPanel.SetSize(200f, 200f).SetPadding(0);
+
+            for (int i = 0; i < RoundButtons.Length; i++)
             {
-                OnCloseComplete = () => Visible = false
-            };
-
-            MainPanel = new();
-            MainPanel.SetPadding(0);
-            MainPanel.Width.Pixels = 200;
-            MainPanel.Height.Pixels = 200;
-            Append(MainPanel);
-
-            Main.instance.LoadItem(94);
-            RoundButtons[0] = new(TextureAssets.Item[94]);
-            RoundButtons[0].text = () => GetText("SpaceWandGUI.platform");
-            RoundButtons[0].OnGetColor = GetColor(PlaceType.platform);
-            RoundButtons[0].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.platform);
-
-            Main.instance.LoadItem(9);
-            RoundButtons[1] = new(TextureAssets.Item[9]);
-            RoundButtons[1].text = () => GetText("SpaceWandGUI.soild");
-            RoundButtons[1].OnGetColor = GetColor(PlaceType.soild);
-            RoundButtons[1].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.soild);
-
-            Main.instance.LoadItem(2996);
-            RoundButtons[2] = new(TextureAssets.Item[2996]);
-            RoundButtons[2].text = () => GetText("SpaceWandGUI.rope");
-            RoundButtons[2].OnGetColor = GetColor(PlaceType.rope);
-            RoundButtons[2].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.rope);
-
-            Main.instance.LoadItem(2340);
-            RoundButtons[3] = new(TextureAssets.Item[2340]);
-            RoundButtons[3].text = () => GetText("SpaceWandGUI.rail");
-            RoundButtons[3].OnGetColor = GetColor(PlaceType.rail);
-            RoundButtons[3].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.rail);
-
-            Main.instance.LoadItem(62);
-            RoundButtons[4] = new(TextureAssets.Item[62]);
-            RoundButtons[4].text = () => GetText("SpaceWandGUI.grassSeed");
-            RoundButtons[4].OnGetColor = GetColor(PlaceType.grassSeed);
-            RoundButtons[4].OnMouseDown += (evt, uie) => ModifyPlaceType(PlaceType.grassSeed);
-
-            Main.instance.LoadItem(3215);
-            RoundButtons[5] = new(TextureAssets.Item[3215])
-            {
-                text = () => GetText($"SpaceWandGUI.{PlaceType.plantPot}"),
-                OnGetColor = GetColor(PlaceType.plantPot)
-            };
-            RoundButtons[5].OnClick += (evt, uie) => ModifyPlaceType(PlaceType.plantPot);
-
-            MainPanel.AppendS(RoundButtons);
+                int itemType = itemTypes[i];
+                PlaceType placeType = placeTypes[i];
+                Main.instance.LoadItem(itemType);
+                MainPanel.Append(RoundButtons[i] = new(TextureAssets.Item[itemType])
+                {
+                    text = () => GetText($"SpaceWandGUI.{placeType}"),
+                    OnGetColor = () =>
+                    {
+                        Color color = SpaceWand.placeType == placeType ? Color.White : Color.Gray;
+                        color *= timer.Schedule;
+                        return color;
+                    }
+                });
+                RoundButtons[i].OnMouseDown += (_, _) =>
+                {
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+                    SpaceWand.placeType = placeType;
+                };
+            }
         }
 
-        private Func<Color> GetColor(PlaceType placeType)
-        {
-            return () =>
-            {
-                Color color = SpaceWand.placeType == placeType ? Color.White : Color.Gray;
-                color *= timer.Schedule;
-                return color;
-            };
-        }
-
-        public void ModifyPlaceType(PlaceType placeType)
-        {
-            SoundEngine.PlaySound(SoundID.MenuTick);
-            SpaceWand.placeType = placeType;
-        }
-
+        private Color textColor = new(135, 0, 180);
         protected override void DrawChildren(SpriteBatch spriteBatch)
         {
-            if (!timer.IsInitial)
-                foreach (RoundButton button in RoundButtons)
-                {
-                    // 一对一动画
-                    // AnimationTimer timer = button.timer;
-                    Round round = button.round;
-                    round.Draw();
-                    /*if (button.IsMouseHovering && !timer.IsClose)
-                    {
-                        timer.Close();
-                    }
-                    else if (!button.IsMouseHovering && timer.InCloseComplete)
-                    {
-                        timer.State = AnimationState.Initial;
-                    }*/
-                }
+            if (!timer.AnyClose) // 确保在关闭的时候不显示
+            {
+                foreach (RoundButton button in RoundButtons) button.round.Draw();
+            }
             base.DrawChildren(spriteBatch);
-            if (!timer.IsInitial)
+            if (!timer.AnyClose)
+            {
                 foreach (RoundButton button in RoundButtons)
                 {
                     // 悬浮文本
                     if (button.IsMouseHovering)
-                        DrawString(Main.MouseScreen + new Vector2(20), button.text?.Invoke(), Color.White, new Color(135, 0, 180));
+                        DrawString(MouseScreenOffset(20), button.Text, Color.White, textColor);
                 }
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
             timer.Update();
             base.Update(gameTime);
-            if (SpaceWand is not null)
+            if (Main.LocalPlayer.HeldItem != SpaceWand?.Item && !timer.AnyClose)
             {
-                if (Main.LocalPlayer.HeldItem != SpaceWand.Item && timer.IsOpen)
-                {
-                    Close();
-                }
+                Close();
             }
-
-            bool flag = false;
             foreach (var button in RoundButtons)
             {
-                if (button.IsMouseHovering)
-                    flag = true;
-            }
-            if (timer.IsOpen && (flag /*|| ModeButton.IsMouseHovering*/))
-            {
-                Main.LocalPlayer.mouseInterface = true;
+                if (button.IsMouseHovering && timer.AnyOpen)
+                {
+                    Main.LocalPlayer.mouseInterface = true;
+                }
             }
             UpdateButton();
         }
@@ -149,34 +91,31 @@ namespace ImproveGame.Interface.GUI
         // 更新按钮
         public void UpdateButton()
         {
+            Vector2 center = MainPanel.GetSizeInside() / 2f;
             float includedAngle = MathF.PI * 2 / RoundButtons.Length; // 夹角
             float startAngle = -MathF.PI / 2 - includedAngle / 2; // 起始角度
             for (int i = 0; i < RoundButtons.Length; i++)
             {
-                Vector2 center = MainPanel.GetSizeInside() / 2f;
                 float angle = startAngle + includedAngle * i;
                 float length = 48 + (1 - timer.Schedule) * 25f;
-                RoundButton button = RoundButtons[i];
-                button.SetCenter(center + angle.ToRotationVector2() * length);
-                button.Recalculate();
+                RoundButtons[i].SetCenter(center + angle.ToRotationVector2() * length).Recalculate();
             }
         }
 
-        public void Open(SpaceWand spaceWand)
+        public void Open(SpaceWand SpaceWand)
         {
-            timer.Open();
-            SpaceWand = spaceWand;
-            MainPanel.SetCenter(TransformToUIPosition(Main.MouseScreen));
-            MainPanel.Recalculate();
-            UpdateButton();
             SoundEngine.PlaySound(SoundID.MenuOpen);
+            timer.Open();
+            this.SpaceWand = SpaceWand;
+            MainPanel.SetCenter(MouseScreenUI).Recalculate();
+            UpdateButton();
             Visible = true;
         }
 
         public void Close()
         {
-            timer.Close();
             SoundEngine.PlaySound(SoundID.MenuClose);
+            timer.Close();
         }
     }
 }

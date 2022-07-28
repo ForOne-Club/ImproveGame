@@ -38,7 +38,7 @@ namespace ImproveGame.Content.Items
             };
         }
 
-        public override bool CanDrawRectangle() => Main.mouseLeft;
+        public override bool IsNeedKill() => !Main.mouseLeft;
 
         // 修改选择的方块
         public override bool ModifySelectedTiles(Player player, int i, int j)

@@ -32,5 +32,10 @@ namespace ImproveGame
             vector.Y = (int)(vector.Y / Main.UIScale) + (int)(oppositeY * (Main.GameZoomTarget - 1f));
             return new(vector.X, vector.Y);
         }
+
+        public static Vector2 MouseScreenUI => TransformToUIPosition(Main.MouseScreen);
+        public static Vector2 MouseScreenOffset(float offset) => Main.MouseScreen + new Vector2(offset);
+        public static Vector2 MouseScreenOffset(float x, float y) => Main.MouseScreen + new Vector2(x, y);
+        public static Vector2 MouseScreenOffset(Vector2 offset) => Main.MouseScreen + offset;
     }
 }
