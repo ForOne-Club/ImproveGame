@@ -80,10 +80,7 @@ namespace ImproveGame.Interface.GUI
             }
             foreach (var button in RoundButtons)
             {
-                if (button.IsMouseHovering && timer.AnyOpen)
-                {
-                    Main.LocalPlayer.mouseInterface = true;
-                }
+                if (button.IsMouseHovering) Main.LocalPlayer.mouseInterface = true;
             }
             UpdateButton();
         }

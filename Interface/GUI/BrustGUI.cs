@@ -18,7 +18,8 @@ namespace ImproveGame.Interface.GUI
         private RoundButton tileButton;
         private RoundButton wallButton;
 
-        public override void OnInitialize() {
+        public override void OnInitialize()
+        {
             base.OnInitialize();
 
             fixedModeButton = ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/FixedMode");
@@ -46,11 +47,13 @@ namespace ImproveGame.Interface.GUI
             Append(wallButton);
         }
 
-        private void MouseOut(UIMouseEvent evt, UIElement listeningElement) {
+        private void MouseOut(UIMouseEvent evt, UIElement listeningElement)
+        {
             MouseOnMenu = false;
         }
 
-        private void MouseOver(UIMouseEvent evt, UIElement listeningElement) {
+        private void MouseOver(UIMouseEvent evt, UIElement listeningElement)
+        {
             MouseOnMenu = true;
         }
 
@@ -72,17 +75,21 @@ namespace ImproveGame.Interface.GUI
             };
         }
 
-        public override void Update(GameTime gameTime) {
+        public override void Update(GameTime gameTime)
+        {
             // 与蓝图相同的UI关闭机制
-            if (Main.LocalPlayer.mouseInterface && !MouseOnMenu) {
+            if (Main.LocalPlayer.mouseInterface && !MouseOnMenu)
+            {
                 Close();
             }
 
-            if (Main.LocalPlayer.dead || Main.mouseItem.type > ItemID.None || Main.LocalPlayer.HeldItem?.ModItem is not MagickWand) {
+            if (Main.LocalPlayer.dead || Main.mouseItem.type > ItemID.None || Main.LocalPlayer.HeldItem?.ModItem is not MagickWand)
+            {
                 Close();
             }
 
-            if (!_mouseRightPrev && Main.mouseRight) {
+            if (!_mouseRightPrev && Main.mouseRight)
+            {
                 Close();
             }
 
@@ -91,6 +98,10 @@ namespace ImproveGame.Interface.GUI
             _mouseRightPrev = Main.mouseRight;
 
             base.Update(gameTime);
+            if (wallButton.IsMouseHovering || tileButton.IsMouseHovering || modeButton.IsMouseHovering)
+            {
+                Main.LocalPlayer.mouseInterface = true;
+            }
         }
 
         // 更细动画
@@ -120,13 +131,12 @@ namespace ImproveGame.Interface.GUI
             {
                 length += (AnimationTimerMax - AnimationTimer) / 4f;
             }
-            tileButton.SetCenter(center + new Vector2(-1, 0) * length);
-            tileButton.Recalculate();
-            wallButton.SetCenter(center + new Vector2(1, 0) * length);
-            wallButton.Recalculate();
+            tileButton.SetCenter(center + new Vector2(-1, 0) * length).Recalculate();
+            wallButton.SetCenter(center + new Vector2(1, 0) * length).Recalculate();
         }
 
-        private void SwitchMode(UIMouseEvent evt, UIElement listeningElement) {
+        private void SwitchMode(UIMouseEvent evt, UIElement listeningElement)
+        {
             WandSystem.FixedMode = !WandSystem.FixedMode;
             modeButton.mainImage = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
         }
