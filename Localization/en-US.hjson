@@ -157,8 +157,8 @@ Mods:
             BanTombstone.Label: "[i:3230] Disable tombstone spawn"
             FasterExtractinator:
             {
-                Label: "[i:Extractinator] 加速提炼机"
-                Tooltip: "极大地加快使用提炼机的速度"
+                Label: "[i:Extractinator] Fast Extractinator"
+                Tooltip: "Greatly increases the extracting speed of the Extractinator"
             }
 
             NPCConfigs.Header: "[i:4382] NPC Configs"
@@ -308,8 +308,8 @@ Mods:
                     Following are other non-configurable functions of this mod:
                     - Wormhole Potion works in personal inventories
                     - Any accessory can be worn in vanity slots
-                    - 显示物品、NPC所属模组
-                    - 快捷键展示摸彩袋物品明细（需绑定快捷键）
+                    - Display which mod are the items and NPCs from
+                    - Display detailed item drop of a grab bag while holding the binded key(a hotkey is needed)
                     '''
             }
         }
@@ -438,9 +438,9 @@ Mods:
         {
             PrefixCount: "Reforging count: "
             AnglerQuest: "Angler's quest refreshed!"
-            FromMod: "所属模组 {DisplayName}"
-            LootDisplay: "按下 [{KeybindName}] 以查看摸彩袋物品明细"
-            LootDisplayBindless: "(您尚未绑定快捷键，请到控件处绑定以使用此功能)"
+            FromMod: "From mod {DisplayName}"
+            LootDisplay: "Press [{KeybindName}] to see detailed item drop"
+            LootDisplayBindless: "(You have not bind a hotkey for this function, please do so in Controls)"
 
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"
@@ -613,7 +613,7 @@ Mods:
         {
             Switch: "Switch"
             Unavailable: "Not available"
-            KeybindNone: "未绑定"
+            KeybindNone: "NONE"
         }
         RecipeGroup:
         {
@@ -628,7 +628,7 @@ Mods:
         {
             HugeInventory: "Huge Inventory"
             BuffTracker: "Buff Tracker"
-            GrabBagLoot: "显示摸彩袋物品明细"
+            GrabBagLoot: "Display detailed item drop of grab bags"
         }
     }
 }

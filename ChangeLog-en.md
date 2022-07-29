@@ -17,7 +17,7 @@
 - **[v1.5.9.1]** Fixed newly crafted Potion Bags share the same inventory
 - **[v1.5.9.2]** Fixed the Fishing Machine not fishing from correct biomes
 - **[v1.5.9.3]** Fixed the fishing speed of the Fishing Machine being dramatically fast
-- **[v1.5.9.3]** 修复了负重石在便携存储生效的BUG
+- **[v1.5.9.3]** Fixed the Encumbering Stone working in personal inventories
 ## Additions
 - Added enemy spawn rate slider, only available while having the infinite [Battle Potion][Water Candle][Peace Cadnle][Sunflower] and [Calm Potion]
 - Added Potion Bag, can cotain 20 buff potions at most, potions inside also take effects
@@ -38,14 +38,14 @@
 - **[v1.5.9.3]** Added a auto-refreshing function for Travelling Merchant's shop(each time you open his shop page, the goods will be rerolled)
 - **[v1.5.9.3]** Added a function that makes the Nurse to heal you instantly when you talk to her
 - **[v1.5.9.3]** The Wand of Liquids no longer consumes mana
-- **[v1.5.9.3]** 添加加速提炼机功能
-- **[v1.5.9.3]** 添加显示物品、NPC所属Mod功能
-- **[v1.5.9.3]** 添加显示摸彩袋物品掉率功能
+- **[v1.5.9.3]** Added Fast Extractinator function
+- **[v1.5.9.3]** Added 'Which Mod Is This From' function, showing which mod is an item or a NPC from
+- **[v1.5.9.3]** Added a Grab Bag Item Drop Rate Display function
 ## Misc
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
 - **[v1.5.9.2]** Added Mod.Calls
 - **[v1.5.9.3]** Improved UI animations of the two Wands of Bursts
-- **[v1.5.9.3]** 快捷键现支持根据语言实时更新翻译文本
+- **[v1.5.9.3]** Keybinds now can be translated without reloading this mod
 
 # v1.5.8
 ## Subversions
