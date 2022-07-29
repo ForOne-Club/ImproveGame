@@ -10,8 +10,8 @@ namespace ImproveGame.Common.Players
             if (Main.myPlayer != Player.whoAmI || ModIntegrationsSystem.WMITFLoaded)
                 return;
 
-            DrawSystem.MouseText = string.Empty;
-            DrawSystem.SecondLine = false;
+            BoxSystem.MouseText = string.Empty;
+            BoxSystem.SecondLine = false;
 
             var mousePos = Main.MouseWorld;
             for (int i = 0; i < Main.maxNPCs; i++)
@@ -31,8 +31,8 @@ namespace ImproveGame.Common.Players
                     var modNPC = NPCLoader.GetNPC(npc.type);
                     if (modNPC != null && npc.active && !NPCID.Sets.ProjectileNPC[npc.type])
                     {
-                        DrawSystem.MouseText = GetTextWith("Tips.FromMod", new { modNPC.Mod.DisplayName });
-                        DrawSystem.SecondLine = true;
+                        BoxSystem.MouseText = GetTextWith("Tips.FromMod", new { modNPC.Mod.DisplayName });
+                        BoxSystem.SecondLine = true;
                         break;
                     }
                 }
