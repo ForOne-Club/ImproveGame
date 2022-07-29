@@ -36,12 +36,7 @@ namespace ImproveGame.Interface.GUI
                 MainPanel.Append(RoundButtons[i] = new(TextureAssets.Item[itemType])
                 {
                     text = () => GetText($"SpaceWandGUI.{placeType}"),
-                    OnGetColor = () =>
-                    {
-                        Color color = SpaceWand.placeType == placeType ? Color.White : Color.Gray;
-                        color *= timer.Schedule;
-                        return color;
-                    }
+                    Selected = () => SpaceWand.placeType == placeType
                 });
                 RoundButtons[i].OnMouseDown += (_, _) =>
                 {
@@ -54,10 +49,6 @@ namespace ImproveGame.Interface.GUI
         private Color textColor = new(135, 0, 180);
         protected override void DrawChildren(SpriteBatch spriteBatch)
         {
-            if (!timer.AnyClose) // 确保在关闭的时候不显示
-            {
-                foreach (RoundButton button in RoundButtons) button.round.Draw();
-            }
             base.DrawChildren(spriteBatch);
             if (!timer.AnyClose)
             {
@@ -92,6 +83,7 @@ namespace ImproveGame.Interface.GUI
                     Main.LocalPlayer.mouseInterface = true;
                 float angle = startAngle + includedAngle * i;
                 float length = 48 + (1 - timer.Schedule) * 25f;
+                RoundButtons[i].Opacity = timer.Schedule;
                 RoundButtons[i].SetCenter(center + angle.ToRotationVector2() * length).Recalculate();
             }
         }

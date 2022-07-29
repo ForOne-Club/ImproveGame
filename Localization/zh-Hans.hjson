@@ -216,7 +216,7 @@
             StaffOfRegenerationAutomaticPlanting:
             {
                 Label: "[i:213] 再生法杖自动种植"
-                Tooltip: "根据收获时的草药种植 (暂时无法联机)"
+                Tooltip: "根据收获时的草药种植"
             }
             RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"

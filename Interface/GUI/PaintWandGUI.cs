@@ -29,15 +29,15 @@ namespace ImproveGame.Interface.GUI
             RoundButtons = new RoundButton[] {
                 new(TextureAssets.Item[ItemID.Paintbrush])
                 {
-                    OnGetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Tile)
+                    Selected =() => WandSystem.PaintWandMode == WandSystem.PaintMode.Tile
                 },
                 new(TextureAssets.Item[ItemID.PaintRoller])
                 {
-                    OnGetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Wall)
+                    Selected = () => WandSystem.PaintWandMode == WandSystem.PaintMode.Wall
                 },
                 new(TextureAssets.Item[ItemID.PaintScraper])
                 {
-                    OnGetColor = GetColor(() => WandSystem.PaintWandMode == WandSystem.PaintMode.Remove)
+                    Selected = () => WandSystem.PaintWandMode == WandSystem.PaintMode.Remove
                 }
             };
 
@@ -47,16 +47,6 @@ namespace ImproveGame.Interface.GUI
             MainPanel.Append(RoundButtons[0]);
             MainPanel.Append(RoundButtons[1]);
             MainPanel.Append(RoundButtons[2]);
-        }
-
-        private Func<Color> GetColor(Func<bool> white)
-        {
-            return () =>
-            {
-                Color color = white.Invoke() ? Color.White : Color.Gray;
-                color *= Timer.Schedule;
-                return color;
-            };
         }
 
         protected override void DrawChildren(SpriteBatch spriteBatch)
@@ -111,6 +101,7 @@ namespace ImproveGame.Interface.GUI
                 float angle = startAngle + includedAngle * i;
                 float length = 34f + (1 - Timer.Schedule) * 25f;
                 RoundButton button = RoundButtons[i];
+                button.Opacity = Timer.Schedule;
                 button.SetCenter(center + angle.ToRotationVector2() * length).Recalculate();
             }
         }

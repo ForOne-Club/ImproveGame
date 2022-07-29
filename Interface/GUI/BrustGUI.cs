@@ -34,20 +34,20 @@ namespace ImproveGame.Interface.GUI
             modeButton.OnMouseDown += SwitchMode;
             modeButton.OnMouseOver += MouseOver;
             modeButton.OnMouseOut += MouseOut;
-            modeButton.OnGetColor += GetColor(() => true);
+            modeButton.Selected += () => true;
             Append(modeButton);
 
             tileButton = new(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/TileMode"));
             tileButton.OnMouseOver += MouseOver;
             tileButton.OnMouseOut += MouseOut;
-            tileButton.OnGetColor += GetColor(() => WandSystem.TileMode);
+            tileButton.Selected += () => WandSystem.TileMode;
             tileButton.OnMouseDown += (_, _) => WandSystem.TileMode = !WandSystem.TileMode;
             Append(tileButton);
 
             wallButton = new(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/WallMode"));
             wallButton.OnMouseOver += MouseOver;
             wallButton.OnMouseOut += MouseOut;
-            wallButton.OnGetColor += GetColor(() => WandSystem.WallMode);
+            wallButton.Selected += () => WandSystem.WallMode;
             wallButton.OnMouseDown += (_, _) => WandSystem.WallMode = !WandSystem.WallMode;
             Append(wallButton);
         }
@@ -108,8 +108,11 @@ namespace ImproveGame.Interface.GUI
         {
             Vector2 center = modeButton.GetDimensions().Center();
             float length = 44f + (1 - Timer.Schedule) * 25f;
+            tileButton.Opacity = Timer.Schedule;
             tileButton.SetCenter(center + new Vector2(-1, 0) * length).Recalculate();
+            wallButton.Opacity = Timer.Schedule;
             wallButton.SetCenter(center + new Vector2(1, 0) * length).Recalculate();
+            modeButton.Opacity = Timer.Schedule;
         }
 
         private void SwitchMode(UIMouseEvent evt, UIElement listeningElement)
