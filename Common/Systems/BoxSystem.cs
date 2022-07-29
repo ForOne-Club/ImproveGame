@@ -263,10 +263,6 @@ namespace ImproveGame.Common.Systems
                     box.DrawPreView();
                     box.Draw();
                     box.DrawString();
-                    if ((box?.NeedKill() ?? true) || box.Parent.Type != Main.LocalPlayer.HeldItem.type)
-                    {
-                        boxs[i] = null;
-                    }
                 }
             }
         }

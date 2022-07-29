@@ -122,7 +122,7 @@ namespace ImproveGame.Content.Items
 
         public override void HoldItem(Player player)
         {
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI && !Main.LocalPlayer.mouseInterface)
+            if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
                 if (WandSystem.FixedMode)
                 {

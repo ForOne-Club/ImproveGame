@@ -83,7 +83,7 @@ namespace ImproveGame.Entitys
         public void Update()
         {
             Box[] boxs = BoxSystem.boxs;
-            if ((NeedKill?.Invoke() ?? true) || Parent.Type != Main.LocalPlayer.HeldItem.type || Main.LocalPlayer.mouseInterface)
+            if ((NeedKill?.Invoke() ?? true) || Parent.Type != Main.LocalPlayer.HeldItem.type)
             {
                 boxs[whoAmI] = null;
             }
