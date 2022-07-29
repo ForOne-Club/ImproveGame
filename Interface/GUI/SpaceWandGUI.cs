@@ -15,7 +15,7 @@ namespace ImproveGame.Interface.GUI
 
         public UIElement MainPanel;
         public SpaceWand SpaceWand;
-        public AnimationTimer timer;
+        public AnimationTimer timer; // 这是一个计时器哦~
 
         // 这么写能剩下很多重复的代码, 但是你必须保证他们长度是相同的.
         public readonly RoundButton[] RoundButtons = new RoundButton[6];
@@ -74,18 +74,13 @@ namespace ImproveGame.Interface.GUI
         {
             timer.Update();
             base.Update(gameTime);
-            if (Main.LocalPlayer.HeldItem != SpaceWand?.Item && !timer.AnyClose)
+            if (Main.LocalPlayer.HeldItem != SpaceWand.Item && !timer.AnyClose)
             {
                 Close();
-            }
-            foreach (var button in RoundButtons)
-            {
-                if (button.IsMouseHovering) Main.LocalPlayer.mouseInterface = true;
             }
             UpdateButton();
         }
 
-        // 更新按钮
         public void UpdateButton()
         {
             Vector2 center = MainPanel.GetSizeInside() / 2f;
@@ -93,6 +88,8 @@ namespace ImproveGame.Interface.GUI
             float startAngle = -MathF.PI / 2 - includedAngle / 2; // 起始角度
             for (int i = 0; i < RoundButtons.Length; i++)
             {
+                if (RoundButtons[i].IsMouseHovering)
+                    Main.LocalPlayer.mouseInterface = true;
                 float angle = startAngle + includedAngle * i;
                 float length = 48 + (1 - timer.Schedule) * 25f;
                 RoundButtons[i].SetCenter(center + angle.ToRotationVector2() * length).Recalculate();
@@ -101,12 +98,12 @@ namespace ImproveGame.Interface.GUI
 
         public void Open(SpaceWand SpaceWand)
         {
+            this.SpaceWand = SpaceWand;
+            Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             timer.Open();
-            this.SpaceWand = SpaceWand;
             MainPanel.SetCenter(MouseScreenUI).Recalculate();
             UpdateButton();
-            Visible = true;
         }
 
         public void Close()

@@ -1,18 +1,11 @@
 ﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Players;
 using ImproveGame.Content.Items;
-using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Terraria;
 using Terraria.Enums;
-using Terraria.GameContent.Achievements;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
 
 namespace ImproveGame.Common.Systems
 {
