@@ -4,6 +4,7 @@ namespace ImproveGame.Entitys
 {
     public class Box
     {
+        public int whoAmI;
         public Rectangle Rectangle; // √
         public Color borderColor; // √
         public Color backgroundColor; // √
@@ -28,13 +29,13 @@ namespace ImproveGame.Entitys
         /// <summary>
         /// 创建一个Box, 如果你创建的Box已经存在 (通过 ModItem 来判断是否存在), 则直接修改已经存在的Box <para/>
         /// 第一个参数是 Box 对应的 ModItem, 每一个 Box 都必须绑定一个 ModItem <para/>
-        /// 第二个参数是用来判断是否绘制的, 如果返回值为 <see langword="false"/> 会直接删除 box 对象再 <see cref="DrawSystem.boxs"/> 中的引用 <para/>
+        /// 第二个参数是用来判断是否绘制的, 如果返回值为 <see langword="false"/> 会直接删除 box 对象再 <see cref="BoxSystem.boxs"/> 中的引用 <para/>
         /// </summary>
         /// <param name="Rectangle"></param>
-        /// <returns>它在 <see cref="DrawSystem.boxs"/> 的下标. 返回 -1 代表没有位置了, 那样子就不会生成了</returns>
+        /// <returns>它在 <see cref="BoxSystem.boxs"/> 的下标. 返回 -1 代表没有位置了, 那样子就不会生成了</returns>
         public static int NewBox(ModItem Parent, Func<bool> NeedKill, Rectangle Rectangle, Color backgroundColor, Color borderColor, TextDisplayMode textDisplayMode = TextDisplayMode.None)
         {
-            Box[] boxs = DrawSystem.boxs;
+            Box[] boxs = BoxSystem.boxs;
             int index = HasBox(Parent);
             if (boxs.IndexInRange(index))
             {
@@ -49,11 +50,12 @@ namespace ImproveGame.Entitys
             else
             {
                 Box box = new(Parent, NeedKill, Rectangle, backgroundColor, borderColor, textDisplayMode);
-                for (int i = 0; i < DrawSystem.boxs.Length; i++)
+                for (int i = 0; i < BoxSystem.boxs.Length; i++)
                 {
-                    if (DrawSystem.boxs[i] == null)
+                    if (BoxSystem.boxs[i] == null)
                     {
-                        DrawSystem.boxs[i] = box;
+                        BoxSystem.boxs[i] = box;
+                        box.whoAmI = i;
                         return i;
                     }
                 }
@@ -68,7 +70,7 @@ namespace ImproveGame.Entitys
 
         public static int HasBox(ModItem item)
         {
-            Box[] boxs = DrawSystem.boxs;
+            Box[] boxs = BoxSystem.boxs;
             for (int i = 0; i < boxs.Length; i++)
             {
                 Box box = boxs[i];
@@ -76,6 +78,15 @@ namespace ImproveGame.Entitys
                     return i;
             }
             return -1;
+        }
+
+        public void Update()
+        {
+            Box[] boxs = BoxSystem.boxs;
+            if ((NeedKill?.Invoke() ?? true) || Parent.Type != Main.LocalPlayer.HeldItem.type || Main.LocalPlayer.mouseInterface)
+            {
+                boxs[whoAmI] = null;
+            }
         }
 
         public void Draw()

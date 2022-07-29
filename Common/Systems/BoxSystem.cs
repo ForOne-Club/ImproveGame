@@ -11,16 +11,11 @@ namespace ImproveGame.Common.Systems
     /// <summary>
     /// 绘制方框
     /// </summary>
-    public class DrawSystem : ModSystem
+    public class BoxSystem : ModSystem
     {
         public override void Load()
         {
             On.Terraria.Main.DrawInterface_36_Cursor += Main_DrawInterface_36_Cursor;
-        }
-
-        public void DrawTest()
-        {
-
         }
 
         private void Main_DrawInterface_36_Cursor(On.Terraria.Main.orig_DrawInterface_36_Cursor orig)
@@ -70,7 +65,6 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(rulerIndex, new LegacyGameInterfaceLayer("ImproveGame: BorderRect", delegate
                     {
                         DrawBox();
-                        DrawTest();
                         // 鼠标显示物块信息
                         /*Point point = Main.MouseWorld.ToTileCoordinates();
                         if (Main.tile[point].HasTile) {
@@ -243,6 +237,22 @@ namespace ImproveGame.Common.Systems
 
         public static readonly Box[] boxs = new Box[10];
 
+        public override void PostUpdateEverything()
+        {
+            UpdateBox();
+        }
+
+        private static void UpdateBox()
+        {
+            for (int i = 0; i < boxs.Length; i++)
+            {
+                if (boxs[i] is not null)
+                {
+                    boxs[i].Update();
+                }
+            }
+        }
+
         private static void DrawBox()
         {
             for (int i = 0; i < boxs.Length; i++)
@@ -250,15 +260,12 @@ namespace ImproveGame.Common.Systems
                 if (boxs[i] is not null)
                 {
                     Box box = boxs[i];
+                    box.DrawPreView();
+                    box.Draw();
+                    box.DrawString();
                     if ((box?.NeedKill() ?? true) || box.Parent.Type != Main.LocalPlayer.HeldItem.type)
                     {
                         boxs[i] = null;
-                    }
-                    else
-                    {
-                        box.DrawPreView();
-                        box.Draw();
-                        box.DrawString();
                     }
                 }
             }
