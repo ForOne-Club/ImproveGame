@@ -45,6 +45,7 @@
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
 - **[v1.5.9.2]** Added Mod.Calls
 - **[v1.5.9.3]** Improved UI animations of the two Wands of Bursts
+- **[v1.5.9.3]** 快捷键现支持根据语言实时更新翻译文本
 
 # v1.5.8
 ## Subversions
