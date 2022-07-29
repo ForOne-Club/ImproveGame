@@ -95,7 +95,11 @@ Function list:
 [c/0099ff:Coder: 局长, Cyril]
 [c/00ff99:Special thanks: @ChevyRay's coroutine class]
 ---------------------------
-版权声明:
-本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
-附: WMITF开源链接: https://github.com/gardenappl/WMITF
-    本模组开源链接: https://gitee.com/MyGoold/improve-game
+Copyright Statement:
+A part of the source code of the 'showing which mod is an item or a NPC from' function is from mod 'WMITF', this mod and WMITF are open-source using the MIT licence, which means 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.'
+Hence there is no copyright voilation in this mod.
+p.s
+Source code of:
+WMITF: https://github.com/gardenappl/WMITF
+This mod: https://gitee.com/MyGoold/improve-game
