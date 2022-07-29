@@ -50,11 +50,10 @@ namespace ImproveGame.Content.Items
             {
                 return false;
             }
-            else if (!WandSystem.FixedMode)
+            else
             {
                 return !Main.mouseLeft;
             }
-            return true;
         }
 
         public override void SetItemDefaults()

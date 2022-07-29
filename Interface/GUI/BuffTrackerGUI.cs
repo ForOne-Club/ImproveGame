@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
+using ImproveGame.Interface.UIElements;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -12,14 +13,12 @@ namespace ImproveGame.Interface.GUI
         private static float panelHeight;
 
         private bool HoverOnBuff;
-        private bool Dragging;
-        private Vector2 Offset;
         /// <summary>
         /// 当前是哪一页（一页44个Buff）
         /// </summary>
         private static int page = 0;
 
-        private UIPanel basePanel;
+        private ModUIPanel basePanel;
         private UIText title;
         private UIText pageText;
         private Asset<Texture2D> BuffHoverBorder;
@@ -31,13 +30,11 @@ namespace ImproveGame.Interface.GUI
             panelHeight = 220f;
             panelWidth = 436f;
 
-            basePanel = new UIPanel();
+            basePanel = new ModUIPanel();
             basePanel.Left.Set(panelLeft, 0f);
             basePanel.Top.Set(panelTop, 0f);
             basePanel.Width.Set(panelWidth, 0f);
             basePanel.Height.Set(panelHeight, 0f);
-            basePanel.OnMouseDown += DragStart;
-            basePanel.OnMouseUp += DragEnd;
             Append(basePanel);
 
             UIImageButton backButton = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Back"));
@@ -124,26 +121,6 @@ namespace ImproveGame.Interface.GUI
             SetPageText(page);
         }
 
-        // 可拖动界面
-        private void DragStart(UIMouseEvent evt, UIElement listeningElement) {
-            var dimensions = listeningElement.GetDimensions().ToRectangle();
-            Offset = new Vector2(evt.MousePosition.X - dimensions.Left, evt.MousePosition.Y - dimensions.Top);
-            Dragging = true;
-        }
-
-        // 可拖动界面
-        private void DragEnd(UIMouseEvent evt, UIElement listeningElement) {
-            if (!Dragging) return;
-
-            Vector2 end = evt.MousePosition;
-            Dragging = false;
-
-            listeningElement.Left.Set(end.X - Offset.X, 0f);
-            listeningElement.Top.Set(end.Y - Offset.Y, 0f);
-
-            listeningElement.Recalculate();
-        }
-
         public override void Update(GameTime gameTime) {
             int count = HideBuffSystem.HideBuffCount();
             if (count > 0) {
@@ -158,12 +135,6 @@ namespace ImproveGame.Interface.GUI
 
             base.Update(gameTime);
             BuffTrackerBattler.Update();
-
-            if (Dragging) {
-                basePanel.Left.Set(Main.mouseX - Offset.X, 0f);
-                basePanel.Top.Set(Main.mouseY - Offset.Y, 0f);
-                Recalculate();
-            }
         }
 
         public void SetPageText(int page) {
@@ -278,7 +249,7 @@ namespace ImproveGame.Interface.GUI
         /// 打开GUI界面
         /// </summary>
         public void Open() {
-            Dragging = false;
+            basePanel.Dragging = false;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 

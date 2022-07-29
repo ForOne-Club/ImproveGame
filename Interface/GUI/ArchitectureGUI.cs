@@ -24,10 +24,8 @@ namespace ImproveGame.Interface.GUI
 
         private static bool PrevMouseRight;
         private static bool HoveringOnSlots;
-        private bool Dragging;
-        private Vector2 Offset;
 
-        private UIPanel basePanel;
+        private ModUIPanel basePanel;
         private Dictionary<string, ModItemSlot> itemSlot = new();
         private UIText materialTitle;
         private ModIconTextButton styleButton;
@@ -38,13 +36,11 @@ namespace ImproveGame.Interface.GUI
             panelHeight = 190f;
             panelWidth = 190f;
 
-            basePanel = new UIPanel();
+            basePanel = new();
             basePanel.Left.Set(panelLeft, 0f);
             basePanel.Top.Set(panelTop, 0f);
             basePanel.Width.Set(panelWidth, 0f);
             basePanel.Height.Set(panelHeight, 0f);
-            basePanel.OnMouseDown += DragStart;
-            basePanel.OnMouseUp += DragEnd;
             Append(basePanel);
 
             // 排布
@@ -118,27 +114,6 @@ namespace ImproveGame.Interface.GUI
             return slot;
         }
 
-        // 可拖动界面
-        private void DragStart(UIMouseEvent evt, UIElement listeningElement) {
-            var dimensions = listeningElement.GetDimensions().ToRectangle();
-            Offset = new Vector2(evt.MousePosition.X - dimensions.Left, evt.MousePosition.Y - dimensions.Top);
-            Dragging = true;
-        }
-
-        // 可拖动界面
-        private void DragEnd(UIMouseEvent evt, UIElement listeningElement) {
-            if (!Dragging)
-                return;
-
-            Vector2 end = evt.MousePosition;
-            Dragging = false;
-
-            listeningElement.Left.Set(end.X - Offset.X, 0f);
-            listeningElement.Top.Set(end.Y - Offset.Y, 0f);
-
-            listeningElement.Recalculate();
-        }
-
         // 主要是可拖动和一些判定吧
         public override void Update(GameTime gameTime) {
             if (!Main.LocalPlayer.inventory.IndexInRange(CurrentSlot) || CurrentItem is null || CurrentItem.ModItem is not CreateWand) {
@@ -159,12 +134,6 @@ namespace ImproveGame.Interface.GUI
             if (Main.mouseRight && !PrevMouseRight && basePanel.IsMouseHovering && !HoveringOnSlots) {
                 Close();
                 return;
-            }
-
-            if (Dragging) {
-                basePanel.Left.Set(Main.mouseX - Offset.X, 0f);
-                basePanel.Top.Set(Main.mouseY - Offset.Y, 0f);
-                Recalculate();
             }
 
             PrevMouseRight = Main.mouseRight;
@@ -200,7 +169,7 @@ namespace ImproveGame.Interface.GUI
         public void Open(int setSlotIndex = -1) {
             Main.playerInventory = true;
             PrevMouseRight = true; // 防止一打开就关闭
-            Dragging = false;
+            basePanel.Dragging = false;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 

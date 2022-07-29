@@ -15,10 +15,10 @@ namespace ImproveGame.Interface.GUI
         public static int ItemID { get; private set; }
         public UserInterface UserInterface;
 
-        private ModUIPanel BasePanel;
-        public ModScrollbar Scrollbar;
-        public UIList UIList;
-        public ModItemSlot ItemSlot;
+        private ModUIPanel BasePanel; // 背景板
+        public ModScrollbar Scrollbar; // 拖动条
+        public UIList UIList; // 明细列表
+        public ModItemSlot ItemSlot; // 当前物品展示
 
         public override void OnInitialize()
         {

@@ -50,15 +50,15 @@ namespace ImproveGame.Common.Systems
                         string coloredString = String.Format("[c/{1}:[{0}][c/{1}:]]", MouseText, Colors.RarityBlue.Hex3());
                         var text = ChatManager.ParseMessage(coloredString, Color.White).ToArray();
                         //float x = Main.fontMouseText.MeasureString(MouseText).X;
-                        float x = ChatManager.GetStringSize(Terraria.GameContent.FontAssets.MouseText.Value, text, Vector2.One).X;
+                        float x = ChatManager.GetStringSize(FontAssets.MouseText.Value, text, Vector2.One).X;
                         var pos = Main.MouseScreen + new Vector2(16f, 16f);
                         if (pos.Y > (float)(Main.screenHeight - 30))
                             pos.Y = (float)(Main.screenHeight - 30);
                         if (pos.X > (float)(Main.screenWidth - x))
                             pos.X = (float)(Main.screenWidth - x);
                         if (SecondLine)
-                            pos.Y += Terraria.GameContent.FontAssets.MouseText.Value.LineSpacing;
-                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, Terraria.GameContent.FontAssets.MouseText.Value, text, pos, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet);
+                            pos.Y += FontAssets.MouseText.Value.LineSpacing;
+                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, pos, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet);
                     }
                     return true;
                 }, InterfaceScaleType.UI));

@@ -130,7 +130,7 @@ namespace ImproveGame.Common.Systems
             {
                 ArchitectureInterface?.Update(gameTime);
             }
-            if (BrustGUI.Visible || BrustGUI.AnimationTimer > 0f)
+            if (BrustGUI.Visible)
             {
                 BrustInterface?.Update(gameTime);
             }
@@ -219,7 +219,7 @@ namespace ImproveGame.Common.Systems
 
         private bool DrawBrustGUI()
         {
-            if (BrustGUI.Visible || BrustGUI.AnimationTimer > 0f)
+            if (BrustGUI.Visible)
             {
                 BrustInterface.Draw(Main.spriteBatch, new GameTime());
             }
