@@ -438,7 +438,10 @@ namespace ImproveGame.Common.Systems
             var items = MyUtils.GetAllInventoryItemsList(self, true);
             foreach (var item in items)
             {
-                self.VanillaUpdateInventory(item);
+                if (item.type != ItemID.EncumberingStone)
+                {
+                    self.VanillaUpdateInventory(item);
+                }
             }
         }
 
