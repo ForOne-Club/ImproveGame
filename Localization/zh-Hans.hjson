@@ -2,6 +2,7 @@
 {
     ImproveGame:
     {
+        ModName: "更好的体验"
         Config:
         {
             ImproveConfigs.Label: 模组配置
@@ -617,6 +618,12 @@
             CopperGroup: 铜(锡)锭
             DemoniteGroup: 魔矿(猩红矿)锭
             ShadowGroup: 暗影鳞片(组织样本)
+        }
+        Keybind:
+        {
+            HugeInventory: "大背包"
+            BuffTracker: "增益追踪器"
+            GrabBagLoot: "显示摸彩袋物品明细"
         }
     }
 }

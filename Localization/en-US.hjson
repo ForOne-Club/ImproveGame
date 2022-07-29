@@ -2,6 +2,7 @@ Mods:
 {
     ImproveGame:
     {
+        ModName: "Quality of Life"
         Config:
         {
             ImproveConfigs.Label: Mod Configuration
@@ -622,6 +623,12 @@ Mods:
             CopperGroup: Copper/Tin Bar
             DemoniteGroup: Demonite/Crimson Bar
             ShadowGroup: Shadow Scale/Tissue Sample
+        }
+        Keybind:
+        {
+            HugeInventory: "Huge Inventory"
+            BuffTracker: "Buff Tracker"
+            GrabBagLoot: "显示摸彩袋物品明细"
         }
     }
 }
