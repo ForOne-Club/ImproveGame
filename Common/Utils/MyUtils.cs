@@ -347,8 +347,8 @@ namespace ImproveGame
                         PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack);
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
-                    (inventory[i], item) = (item, inventory[i]);
-                    return item;
+                    inventory[i] = item;
+                    return new Item();
                 }
             }
             return item;
@@ -407,7 +407,7 @@ namespace ImproveGame
         /// <param name="inventory">仓库</param>
         /// <param name="slot">槽位</param>
         /// <param name="item">来自外来物品</param>
-        /// <returns>堆叠后剩余的物品</returns>
+        /// <returns>堆叠后剩余的物品, 如果没有剩余物品就会 new Item</returns>
         public static Item ItemStackToInventoryItem(Item[] inventory, int slot, Item item, bool hint)
         {
             if (!inventory[slot].IsAir && inventory[slot].type == item.type)
@@ -437,8 +437,7 @@ namespace ImproveGame
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
                     inventory[slot].stack += item.stack;
-                    item.SetDefaults(0);
-                    return item;
+                    return new Item();
                 }
             }
             return item;
