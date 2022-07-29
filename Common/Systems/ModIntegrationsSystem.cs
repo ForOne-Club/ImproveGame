@@ -21,12 +21,18 @@ namespace ImproveGame.Common.Systems
         internal static List<int> ModdedInfBuffsIgnore = new();
 
         internal static bool NoLakeSizePenaltyLoaded = false;
+        internal static bool WMITFLoaded = false;
+
+        internal static int UnloadedItemType;
+        internal static int AprilFoolsItemType;
 
         public override void PostSetupContent()
         {
             DoCalamityModIntegration();
             DoFargowiltasIntegration();
+            DoModLoaderIntegration();
             NoLakeSizePenaltyLoaded = ModLoader.HasMod("NoLakeSizePenalty");
+            WMITFLoaded = ModLoader.HasMod("WMITF");
         }
 
         private static void DoCalamityModIntegration()
@@ -54,6 +60,15 @@ namespace ImproveGame.Common.Systems
             }
             AddBuffIntegration(fargowiltas, "Omnistation", "Omnistation", true);
             AddBuffIntegration(fargowiltas, "Omnistation2", "Omnistation", true);
+        }
+
+        private static void DoModLoaderIntegration() {
+            if (!ModLoader.TryGetMod("ModLoader", out Mod modloader))
+            {
+                return;
+            }
+            UnloadedItemType = modloader.Find<ModItem>("UnloadedItem").Type;
+            AprilFoolsItemType = modloader.Find<ModItem>("AprilFools").Type;
         }
 
         public static void AddBuffIntegration(Mod mod, string itemName, string buffName, bool isPlaceable)

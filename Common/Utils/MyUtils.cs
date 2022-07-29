@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -81,6 +82,32 @@ namespace ImproveGame
                 //NetMessage.SendData(MessageID.ItemAnimation, -1, -1, null, player.whoAmI);
                 NetGeneric.ClientSendPlrItemUsing(player);
             }
+        }
+
+        /// <summary>
+        /// 获取相应热键的当前绑定名称
+        /// </summary>
+        public static bool TryGetKeybindString(ModKeybind keybind, out string bindName)
+        {
+            if (Main.dedServ || keybind == null)
+            {
+                bindName = "";
+                return false;
+            }
+            List<string> keys = keybind.GetAssignedKeys(InputMode.Keyboard);
+            if (keys.Count == 0)
+            {
+                bindName = GetText("Common.KeybindNone");
+                return false;
+            }
+            StringBuilder sb = new(16);
+            sb.Append(keys[0]);
+            for (int i = 1; i < keys.Count; i++)
+            {
+                sb.Append(" / ").Append(keys[i]);
+            }
+            bindName = sb.ToString();
+            return true;
         }
 
         /// <summary>

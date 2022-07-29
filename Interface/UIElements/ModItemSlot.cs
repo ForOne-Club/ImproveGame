@@ -1,14 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
-using Terraria.GameContent.UI.Chat;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.UI;
+﻿using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.UIElements
@@ -29,6 +19,10 @@ namespace ImproveGame.Interface.UIElements
         public Item Item;
         public float Scale = 1f;
 
+        /// <summary>
+        /// 是否可交互，否则不能执行左右键操作
+        /// </summary>
+        public bool Interactable;
         /// <summary>
         /// 该槽位内的饰品/装备是否可在被右键时自动装备
         /// </summary>
@@ -94,24 +88,34 @@ namespace ImproveGame.Interface.UIElements
 
         protected override void DrawSelf(SpriteBatch spriteBatch) {
             if (Item is null) {
-                Item = new Item();
-                Item.SetDefaults();
+                Item = new Item(0);
                 ItemChange();
             }
+
+            // 在Panel外的也有IsMouseHovering
+            var dimensions = GetDimensions();
+            bool isMouseHovering = dimensions.ToRectangle().Contains(Main.MouseScreen.ToPoint());
 
             int lastStack = Item.stack;
             int lastType = Item.type;
             // 我把右键长按放在这里执行了
-            if (IsMouseHovering) {
-                SetCursorOverride();
-                // 伪装，然后进行原版右键尝试
-                // 千万不要伪装成箱子，因为那样多人会传同步信息，然后理所当然得出Bug
-                if (Item is not null && !Item.IsAir) {
-                    ItemSlot.RightClick(ref Item, AllowSwapEquip ? ItemSlot.Context.InventoryItem : ItemSlot.Context.CreativeSacrifice);
+            if (isMouseHovering)
+            {
+                Main.LocalPlayer.mouseInterface = true;
+                if (Interactable)
+                {
+                    SetCursorOverride();
+                    // 伪装，然后进行原版右键尝试
+                    // 千万不要伪装成箱子，因为那样多人会传同步信息，然后理所当然得出Bug
+                    if (Item is not null && !Item.IsAir)
+                    {
+                        ItemSlot.RightClick(ref Item, AllowSwapEquip ? ItemSlot.Context.InventoryItem : ItemSlot.Context.CreativeSacrifice);
+                    }
                 }
                 DrawText();
             }
-            if (lastStack != Item.stack || lastType != Item.type) {
+            if (lastStack != Item.stack || lastType != Item.type)
+            {
                 ItemChange(true);
                 RightClickItemChange(Item.stack - lastStack, lastType != Item.type);
             }
@@ -129,7 +133,7 @@ namespace ImproveGame.Interface.UIElements
 
             // 空物品的话显示空贴图
             if (Item.IsAir) {
-                if (_emptyText is not null && IsMouseHovering && Main.mouseItem.IsAir) {
+                if (_emptyText is not null && isMouseHovering && Main.mouseItem.IsAir) {
                     Main.instance.MouseText(_emptyText.Invoke());
                 }
                 if (_emptyTexture is not null) {
@@ -171,7 +175,7 @@ namespace ImproveGame.Interface.UIElements
                 // 假装自己是一个物品栏物品
                 var temp = new Item[1];
                 temp[0] = Item;
-                SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
+                ItemSlot.SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
                 return;
             }
 
@@ -206,7 +210,7 @@ namespace ImproveGame.Interface.UIElements
         public override void MouseDown(UIMouseEvent evt) {
             base.MouseDown(evt);
 
-            if (!Main.LocalPlayer.ItemTimeIsZero || Main.LocalPlayer.itemAnimation != 0) {
+            if (!Main.LocalPlayer.ItemTimeIsZero || Main.LocalPlayer.itemAnimation != 0 || !Interactable) {
                 return;
             }
 
@@ -274,43 +278,6 @@ namespace ImproveGame.Interface.UIElements
 
             if (OnRightClickItemChange is not null) {
                 OnRightClickItemChange.Invoke(Item, stackChange, typeChange);
-            }
-        }
-
-        // 原版里这个是private的，已经发pr让tML把这个改成public了，不过还得等一个月，在那之前就先用这个吧（懒得反射了）
-        public static void SellOrTrash(Item[] inv, int context, int slot) {
-            Player player = Main.player[Main.myPlayer];
-            if (inv[slot].type <= ItemID.None)
-                return;
-
-            if (Main.npcShop > 0 && !inv[slot].favorited) {
-                Chest chest = Main.instance.shop[Main.npcShop];
-                if (inv[slot].type < ItemID.CopperCoin || inv[slot].type > ItemID.PlatinumCoin && PlayerLoader.CanSellItem(player, Main.npc[player.talkNPC], chest.item, inv[slot])) {
-                    if (player.SellItem(inv[slot])) {
-                        ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(inv[slot], context, 15));
-                        int soldItemIndex = chest.AddItemToShop(inv[slot]);
-                        inv[slot].TurnToAir();
-                        SoundEngine.PlaySound(SoundID.Coins);
-                        Recipe.FindRecipes();
-                        PlayerLoader.PostSellItem(player, Main.npc[player.talkNPC], chest.item, chest.item[soldItemIndex]);
-                    }
-                    else if (inv[slot].value == 0) {
-                        ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(inv[slot], context, 15));
-                        int soldItemIndex = chest.AddItemToShop(inv[slot]);
-                        inv[slot].TurnToAir();
-                        SoundEngine.PlaySound(SoundID.Grab);
-                        Recipe.FindRecipes();
-                        PlayerLoader.PostSellItem(player, Main.npc[player.talkNPC], chest.item, chest.item[soldItemIndex]);
-                    }
-                }
-            }
-            else if (!inv[slot].favorited) {
-                SoundEngine.PlaySound(SoundID.Grab);
-                player.trashItem = inv[slot].Clone();
-                ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(player.trashItem, context, 6));
-                inv[slot].TurnToAir();
-
-                Recipe.FindRecipes();
             }
         }
 

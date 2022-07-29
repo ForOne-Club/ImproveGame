@@ -38,6 +38,8 @@
 - **[v1.5.9.3]** Added a function that makes the Nurse to heal you instantly when you talk to her
 - **[v1.5.9.3]** The Wand of Liquids no longer consumes mana
 - **[v1.5.9.3]** 添加加速提炼机功能
+- **[v1.5.9.3]** 添加显示物品、NPC所属Mod功能
+- **[v1.5.9.3]** 添加显示摸彩袋物品掉率功能
 ## Misc
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
 - **[v1.5.9.2]** Added Mod.Calls
