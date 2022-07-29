@@ -68,6 +68,15 @@ namespace ImproveGame.Common.Players
                 else
                     UISystem.Instance.BuffTrackerGUI.Open();
             }
+            if (KeybindSystem.GrabBagKeybind.JustPressed && Main.HoverItem is not null)
+            {
+                var item = Main.HoverItem;
+                bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: false).Count > 0;
+                if (GrabBagInfoGUI.Visible && (GrabBagInfoGUI.ItemID == item.type || item.IsAir || !hasLoot))
+                    UISystem.Instance.GrabBagInfoGUI.Close();
+                else if (item is not null && hasLoot)
+                    UISystem.Instance.GrabBagInfoGUI.Open(Main.HoverItem.type);
+            }
         }
     }
 }

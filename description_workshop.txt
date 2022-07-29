@@ -19,6 +19,7 @@ https://www.bilibili.com/video/BV1V3411372X?share_source=copy_pc
 https://www.bilibili.com/read/cv17018658?spm_id_from=333.1007.0.0
 ---------------------------
 更新日志: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog.md
+开源链接: https://gitee.com/MyGoold/improve-game
 ---------------------------
 功能列表（详见设置）：
     1、  物品最大堆叠
@@ -46,3 +47,8 @@ https://www.bilibili.com/read/cv17018658?spm_id_from=333.1007.0.0
 翻译：Lastprismer，Lacewing
 代码：局长, Cyril
 特别感谢: @ChevyRay 的协程类 (https://github.com/ChevyRay/Coroutines)
+---------------------------
+版权声明:
+本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
+附: WMITF开源链接: https://github.com/gardenappl/WMITF
+    本模组开源链接: https://gitee.com/MyGoold/improve-game

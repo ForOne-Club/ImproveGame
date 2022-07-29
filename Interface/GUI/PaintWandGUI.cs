@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.UIElements;
 
@@ -9,9 +10,12 @@ namespace ImproveGame.Interface.GUI
         public static bool Visible;
         public UIElement MainPanel;
         public RoundButton[] RoundButtons;
+        public AnimationTimer Timer;
 
         public override void OnInitialize()
         {
+            Timer = new() { OnCloseComplete = () => Visible = false };
+
             MainPanel = new();
             MainPanel.SetPadding(0);
             MainPanel.Width.Pixels = 120;
@@ -50,14 +54,7 @@ namespace ImproveGame.Interface.GUI
             return () =>
             {
                 Color color = white.Invoke() ? Color.White : Color.Gray;
-                if (Mode == UIMode.Open)
-                {
-                    color *= 1 - animationTimer / animationTimerMax;
-                }
-                else if (Mode == UIMode.Close)
-                {
-                    color *= animationTimer / animationTimerMax;
-                }
+                color *= Timer.Schedule;
                 return color;
             };
         }
@@ -85,7 +82,7 @@ namespace ImproveGame.Interface.GUI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<PaintWand>() && Mode is not UIMode.Close)
+            if (Main.LocalPlayer.HeldItem.type != ModContent.ItemType<PaintWand>() && !Timer.AnyClose)
             {
                 Close();
             }
@@ -95,27 +92,12 @@ namespace ImproveGame.Interface.GUI
                 if (button.IsMouseHovering)
                     flag = true;
             }
-            if (Mode is not UIMode.Close && flag)
+            if (!Timer.AnyClose && flag)
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
-            UpdateAnimation();
-        }
-
-        // 更细动画
-        public void UpdateAnimation()
-        {
-            if (IsOpen || IsClose)
-            {
-                animationTimer -= animationTimer / 5f;
-                if (animationTimer < 1f)
-                {
-                    animationTimer = 0f;
-                    if (Mode == UIMode.Open) Mode = UIMode.Normal;
-                    if (Mode == UIMode.Close) Visible = false;
-                }
-                UpdateButton();
-            }
+            Timer.Update();
+            UpdateButton();
         }
 
         // 更新按钮
@@ -127,35 +109,17 @@ namespace ImproveGame.Interface.GUI
             {
                 Vector2 center = MainPanel.GetSizeInside() / 2f;
                 float angle = startAngle + includedAngle * i;
-                float length = 34f;
-                if (IsOpen)
-                {
-                    // angle -= animationTimer / 60f;
-                    length += animationTimer / 4f;
-                }
-                else if (IsClose)
-                {
-                    // angle -= (animationTimerMax - animationTimer) / 60f;
-                    length += (animationTimerMax - animationTimer) / 4f;
-                }
+                float length = 34f + (1 - Timer.Schedule) * 25f;
                 RoundButton button = RoundButtons[i];
-                button.SetCenter(center + angle.ToRotationVector2() * length);
-                button.Recalculate();
+                button.SetCenter(center + angle.ToRotationVector2() * length).Recalculate();
             }
         }
 
-        public bool IsOpen => Mode == UIMode.Open;
-        public bool IsClose => Mode == UIMode.Close;
-        public enum UIMode { Open, Close, Normal }
-        public UIMode Mode;
-        public readonly float animationTimerMax = 100;
-        public float animationTimer;
         public void Open()
         {
-            Mode = UIMode.Open;
             MainPanel.SetCenter(TransformToUIPosition(Main.MouseScreen));
             MainPanel.Recalculate();
-            animationTimer = animationTimerMax;
+            Timer.Open();
 
             UpdateButton();
             Visible = true;
@@ -163,13 +127,12 @@ namespace ImproveGame.Interface.GUI
 
         public void Close()
         {
-            Mode = UIMode.Close;
-            animationTimer = animationTimerMax;
+            Timer.Close();
         }
 
         public void ToggleMode()
         {
-            if (Visible && Mode != UIMode.Close)
+            if (Visible && !Timer.AnyClose)
                 Close();
             else
                 Open();

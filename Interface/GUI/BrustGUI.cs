@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
@@ -18,9 +19,13 @@ namespace ImproveGame.Interface.GUI
         private RoundButton tileButton;
         private RoundButton wallButton;
 
+        public AnimationTimer Timer;
+
         public override void OnInitialize()
         {
             base.OnInitialize();
+
+            Timer = new() { OnCloseComplete = () => Visible = false };
 
             fixedModeButton = ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/FixedMode");
             freeModeButton = ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/FreeMode");
@@ -63,14 +68,7 @@ namespace ImproveGame.Interface.GUI
             return () =>
             {
                 Color color = white.Invoke() ? Color.White : inactiveColor;
-                if (Visible)
-                {
-                    color *= 1 - AnimationTimer / AnimationTimerMax;
-                }
-                else
-                {
-                    color *= AnimationTimer / AnimationTimerMax;
-                }
+                color *= Timer.Schedule;
                 return color;
             };
         }
@@ -93,7 +91,8 @@ namespace ImproveGame.Interface.GUI
                 Close();
             }
 
-            UpdateAnimation();
+            Timer.Update();
+            UpdateButton();
 
             _mouseRightPrev = Main.mouseRight;
 
@@ -104,33 +103,11 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        // 更细动画
-        public void UpdateAnimation()
-        {
-            if (AnimationTimer > 1f)
-            {
-                AnimationTimer -= AnimationTimer / 5f;
-                if (AnimationTimer < 1f)
-                {
-                    AnimationTimer = 0f;
-                }
-                UpdateButton();
-            }
-        }
-
         // 更新按钮
         public void UpdateButton()
         {
             Vector2 center = modeButton.GetDimensions().Center();
-            float length = 44f;
-            if (Visible)
-            {
-                length += AnimationTimer / 4f;
-            }
-            else
-            {
-                length += (AnimationTimerMax - AnimationTimer) / 4f;
-            }
+            float length = 44f + (1 - Timer.Schedule) * 25f;
             tileButton.SetCenter(center + new Vector2(-1, 0) * length).Recalculate();
             wallButton.SetCenter(center + new Vector2(1, 0) * length).Recalculate();
         }
@@ -141,9 +118,6 @@ namespace ImproveGame.Interface.GUI
             modeButton.mainImage = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
         }
 
-        public readonly float AnimationTimerMax = 100;
-        public float AnimationTimer;
-
         /// <summary>
         /// 打开GUI界面
         /// </summary>
@@ -153,7 +127,7 @@ namespace ImproveGame.Interface.GUI
             int x = center ? Main.screenWidth / 2 : Main.mouseX;
             int y = center ? Main.screenHeight / 2 - 60 : Main.mouseY;
             MyUtils.TransformToUIPosition(ref x, ref y);
-            AnimationTimer = AnimationTimerMax;
+            Timer.Open();
             modeButton.SetCenter(x, y);
             modeButton.mainImage = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
             Visible = true;
@@ -165,10 +139,10 @@ namespace ImproveGame.Interface.GUI
         /// </summary>
         public void Close()
         {
-            if (!Visible)
+            if (Timer.AnyClose)
                 return;
-            AnimationTimer = AnimationTimerMax;
-            Visible = false;
+            Timer.Close();
+            //Visible = false;
             Main.blockInput = false;
         }
     }

@@ -65,9 +65,9 @@ namespace ImproveGame.Interface.UIElements
             RightMouseTimer = 0;
             TakeSlotItemToMouseItem();
 
-            if (ItemID.Sets.BossBag[Item.type] || ItemLoader.IsModBossBag(Item) || ItemID.Sets.IsFishingCrate[Item.type])
+            if (ItemID.Sets.BossBag[Item.type] || ItemID.Sets.BossBag[Item.type] || ItemID.Sets.IsFishingCrate[Item.type])
             {
-                if (ItemID.Sets.BossBag[Item.type] || ItemLoader.IsModBossBag(Item))
+                if (ItemID.Sets.BossBag[Item.type] || ItemID.Sets.BossBag[Item.type])
                     Main.LocalPlayer.OpenBossBag(Item.type);
                 if (ItemID.Sets.IsFishingCrate[Item.type])
                     Main.LocalPlayer.OpenFishingCrate(Item.type);
@@ -228,7 +228,7 @@ namespace ImproveGame.Interface.UIElements
                 // 假装自己是一个物品栏物品
                 var temp = new Item[1];
                 temp[0] = Item;
-                ModItemSlot.SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
+                ItemSlot.SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
                 return;
             }
 

@@ -14,6 +14,7 @@
 (你可以使用 Recipe Browser(合成表) 模组的物品图鉴功能以在游戏内查阅来源!)
 ---------------------------
 更新日志: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog.md
+开源链接: https://gitee.com/MyGoold/improve-game
 ---------------------------
 功能列表（详见设置）：
     1、  物品最大堆叠
@@ -42,6 +43,11 @@
 [c/9900ff:翻译：Lastprismer, Lacewing]
 [c/0099ff:代码：局长, Cyril]
 [c/00ff99:特别感谢: @ChevyRay 的协程类]
+---------------------------
+版权声明:
+本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
+附: WMITF开源链接: https://github.com/gardenappl/WMITF
+    本模组开源链接: https://gitee.com/MyGoold/improve-game
 
 These features may bring you better gameplay experience
 ---------------------------
@@ -59,6 +65,7 @@ Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + 
 (You may use the Bestiary of the Recipe Browser to check their sources!)
 ---------------------------
 Change log: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog-en.md
+Source code: https://gitee.com/MyGoold/improve-game
 ---------------------------
 Function list:
     1. Max stack
@@ -87,3 +94,8 @@ Function list:
 [c/9900ff:Translators: Lastprismer, Lacewing]
 [c/0099ff:Coder: 局长, Cyril]
 [c/00ff99:Special thanks: @ChevyRay's coroutine class]
+---------------------------
+版权声明:
+本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
+附: WMITF开源链接: https://github.com/gardenappl/WMITF
+    本模组开源链接: https://gitee.com/MyGoold/improve-game

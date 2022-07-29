@@ -20,7 +20,7 @@ namespace ImproveGame.Interface.GUI
         }
         public LiquidWand CurrentWand => CurrentItem.ModItem as LiquidWand;
 
-        private UIPanel basePanel;
+        private ModUIPanel basePanel;
         private LiquidWandSlot waterSlot;
         private LiquidWandSlot lavaSlot;
         private LiquidWandSlot honeySlot;
@@ -30,8 +30,6 @@ namespace ImproveGame.Interface.GUI
         private static bool PrevMouseRight;
         private static bool HoveringOnSlots;
         private static bool SpecialClickSlot;
-        private bool Dragging;
-        private Vector2 Offset;
 
         private static int LeftMouseTimer = 0;
 
@@ -42,13 +40,11 @@ namespace ImproveGame.Interface.GUI
             panelHeight = 148f;
             panelWidth = 190f;
 
-            basePanel = new UIPanel();
+            basePanel = new ModUIPanel();
             basePanel.Left.Set(panelLeft, 0f);
             basePanel.Top.Set(panelTop, 0f);
             basePanel.Width.Set(panelWidth, 0f);
             basePanel.Height.Set(panelHeight, 0f);
-            basePanel.OnMouseDown += DragStart;
-            basePanel.OnMouseUp += MouseUpDragEnd;
             Append(basePanel);
 
             const float slotFirst = 0f;
@@ -176,31 +172,6 @@ namespace ImproveGame.Interface.GUI
             {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, CurrentSlot, Main.LocalPlayer.inventory[CurrentSlot].prefix);
             }
-        }
-
-        // 可拖动界面
-        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
-        {
-            var dimensions = listeningElement.GetDimensions().ToRectangle();
-            Offset = new Vector2(evt.MousePosition.X - dimensions.Left, evt.MousePosition.Y - dimensions.Top);
-            Dragging = true;
-        }
-
-        // 可拖动界面
-        private void MouseUpDragEnd(UIMouseEvent evt, UIElement listeningElement)
-        {
-            if (Dragging)
-                DragEnd(evt.MousePosition, listeningElement);
-        }
-
-        private void DragEnd(Vector2 mousePosition, UIElement listeningElement)
-        {
-            Dragging = false;
-
-            listeningElement.Left.Set(mousePosition.X - Offset.X, 0f);
-            listeningElement.Top.Set(mousePosition.Y - Offset.Y, 0f);
-
-            listeningElement.Recalculate();
         }
 
         // 主要是可拖动和一些判定吧
@@ -362,16 +333,10 @@ namespace ImproveGame.Interface.GUI
                 LeftMouseTimer++;
             }
 
-            if (Dragging)
+            // 正在放东西，别拉了
+            if (basePanel.Dragging && SpecialClickSlot)
             {
-                basePanel.Left.Set(Main.mouseX - Offset.X, 0f);
-                basePanel.Top.Set(Main.mouseY - Offset.Y, 0f);
-                Recalculate();
-                // 正在放东西，别拉了
-                if (SpecialClickSlot)
-                {
-                    DragEnd(Main.MouseScreen, basePanel);
-                }
+                basePanel.Dragging = false;
             }
         }
 
@@ -464,7 +429,7 @@ namespace ImproveGame.Interface.GUI
             Main.playerInventory = true;
             PrevMouseRight = true; // 防止一打开就关闭
             Visible = true;
-            Dragging = false;
+            basePanel.Dragging = false;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 
             CurrentSlot = Main.LocalPlayer.selectedItem;
