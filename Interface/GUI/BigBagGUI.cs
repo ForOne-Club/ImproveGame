@@ -32,16 +32,16 @@ namespace ImproveGame.Interface.GUI
             title.SetSize(MyUtils.GetBigTextSize(MyUtils.GetText("SuperVault.Name")) * 0.5f);
 
             buttons[0].SetText(Lang.inter[29].Value);
-            buttons[0].SetPPos(0f, title.Bottom() - 10f);
+            buttons[0].SetPos(0f, title.Bottom() - 10f);
 
             buttons[1].SetText(Lang.inter[30].Value);
-            buttons[1].SetPPos(buttons[0].Right() + 10f, buttons[0].Top());
+            buttons[1].SetPos(buttons[0].Right() + 10f, buttons[0].Top());
 
             buttons[2].SetText(Lang.inter[31].Value);
-            buttons[2].SetPPos(buttons[1].Right() + 10f, buttons[0].Top());
+            buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
 
             buttons[3].SetText(MyUtils.GetText("SuperVault.Sort"));
-            buttons[3].SetPPos(buttons[2].Right() + 10f, buttons[0].Top());
+            buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
 
             ItemGrid.SetInventory(items);
 
@@ -89,22 +89,22 @@ namespace ImproveGame.Interface.GUI
             MainPanel.Append(title);
 
             buttons[0] = new(MyUtils.GetTexture("UI/Quick").Value, Lang.inter[29].Value);
-            buttons[0].SetPPos(0f, title.Bottom() - 10f);
+            buttons[0].SetPos(0f, title.Bottom() - 10f);
             buttons[0].OnClick += (_, _) => QuickTakeOutToPlayerInventory();
             MainPanel.Append(buttons[0]);
 
             buttons[1] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[30].Value);
-            buttons[1].SetPPos(buttons[0].Right() + 10f, buttons[0].Top());
+            buttons[1].SetPos(buttons[0].Right() + 10f, buttons[0].Top());
             buttons[1].OnClick += (_, _) => PutAll();
             MainPanel.Append(buttons[1]);
 
             buttons[2] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[31].Value);
-            buttons[2].SetPPos(buttons[1].Right() + 10f, buttons[0].Top());
+            buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
             buttons[2].OnClick += (_, _) => Replenish();
             MainPanel.Append(buttons[2]);
 
             buttons[3] = new(MyUtils.GetTexture("UI/Put").Value, MyUtils.GetText("SuperVault.Sort"));
-            buttons[3].SetPPos(buttons[2].Right() + 10f, buttons[0].Top());
+            buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
             buttons[3].OnClick += (_, _) => Sort();
             MainPanel.Append(buttons[3]);
 

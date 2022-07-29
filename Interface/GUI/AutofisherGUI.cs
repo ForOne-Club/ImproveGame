@@ -85,7 +85,7 @@ namespace ImproveGame.Interface.GUI
                 int x = i % 5 * slotFirst;
                 int y = i / 5 * slotFirst + slotFirst;
                 fishSlot[i] = new(i);
-                fishSlot[i].SetPPos(x, y);
+                fishSlot[i].SetPos(x, y);
                 fishSlot[i].SetSize(46f, 46f);
                 fishSlot[i].AllowFavorite = false;
                 fishSlot[i].OnFishChange += ChangeFishSlot;
