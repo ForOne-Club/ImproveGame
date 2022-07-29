@@ -13,10 +13,13 @@
 星爆魔杖: 法爆法杖x1 落星x8 光明之魂x6 暗影之魂x6
 (你可以使用 Recipe Browser(合成表) 模组的物品图鉴功能以在游戏内查阅来源!)
 ---------------------------
-了解此模组推荐观看 BiliBili@承影_chengying 的介绍视频：
-https://www.bilibili.com/video/BV1V3411372X?share_source=copy_pc
-或者 BiliBili@世界第一可爱9 的专栏
-https://www.bilibili.com/read/cv17018658?spm_id_from=333.1007.0.0
+关于此模组的介绍视频或者专栏:
+BiliBili@承影_chengying 的介绍视频:
+https://www.bilibili.com/video/BV1V3411372X
+BiliBili@世界第一可爱9 的介绍专栏:
+https://www.bilibili.com/read/cv17018658
+BiliBili@柠檬茶Zero 的介绍视频:
+https://www.bilibili.com/video/BV1EN4y1T7r6
 ---------------------------
 更新日志: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog.md
 开源链接: https://gitee.com/MyGoold/improve-game
