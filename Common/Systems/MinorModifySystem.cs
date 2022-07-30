@@ -6,6 +6,7 @@ using MonoMod.Cil;
 using System.Collections.Generic;
 using System.Reflection;
 using Terraria.Enums;
+using Terraria.GameContent.Bestiary;
 
 namespace ImproveGame.Common.Systems
 {

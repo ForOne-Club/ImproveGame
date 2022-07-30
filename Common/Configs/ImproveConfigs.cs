@@ -201,6 +201,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool StaffOfRegenerationAutomaticPlanting;
 
+        [Label("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Tooltip")]
+        [DefaultValue(true)]
+        public bool BestiaryQuickUnlock;
+
         [Label("$Mods.ImproveGame.Config.RespawnWithFullHP.Label")]
         [DefaultValue(true)]
         public bool RespawnWithFullHP;
