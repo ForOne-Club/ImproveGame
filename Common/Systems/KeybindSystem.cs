@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using static On.Terraria.GameContent.UI.Elements.UIKeybindingListItem;
+using static On.Terraria.GameContent.UI.States.UIManageControls;
 
 namespace ImproveGame.Common.Systems
 {
@@ -12,12 +14,62 @@ namespace ImproveGame.Common.Systems
         public static ModKeybind BuffTrackerKeybind { get; private set; }
         public static ModKeybind GrabBagKeybind { get; private set; }
 
+        // 为各种Mod控件特制的翻译
+        private readonly static Dictionary<string, string> zhTranslationSupports = new()
+        {
+            {"CalamityMod: Normality Relocator", "Calamity Mod (灾厄): 常态定位仪" },
+            {"CalamityMod: Rage Mode", "Calamity Mod (灾厄): 怒气模式" },
+            {"CalamityMod: Adrenaline Mode", "Calamity Mod (灾厄): 肾上腺素" },
+            {"CalamityMod: Elysian Guard", "Calamity Mod (灾厄): 极乐守护" },
+            {"CalamityMod: Armor Set Bonus", "Calamity Mod (灾厄): 套装奖励" },
+            {"CalamityMod: Astral Teleport", "Calamity Mod (灾厄): 天魔星石传送" },
+            {"CalamityMod: Astral Arcanum UI Toggle", "Calamity Mod (灾厄): 开关星辉秘术UI" },
+            {"CalamityMod: Momentum Capacitor Effect", "Calamity Mod (灾厄): 动量变压器" },
+            {"CalamityMod: Sand Cloak Effect", "Calamity Mod (灾厄): 沙尘披风" },
+            {"CalamityMod: Spectral Veil Teleport", "Calamity Mod (灾厄): 幽灵披风传送" },
+            {"CalamityMod: Booster Dash", "Calamity Mod (灾厄): 瘟疫燃料背包冲刺" },
+            {"CalamityMod: Angelic Alliance Blessing", "Calamity Mod (灾厄): 圣天誓盟祝福" },
+            {"CalamityMod: God Slayer Dash", "Calamity Mod (灾厄): 弑神者冲刺" },
+            {"CalamityMod: Exo Chair Speed Up", "Calamity Mod (灾厄): 星流飞椅加速" },
+            {"CalamityMod: Exo Chair Slow Down", "Calamity Mod (灾厄): 星流飞椅减速" },
+            {"AlchemistNPCLite: Discord Buff Teleportation", "Alchemist NPC Lite: 混沌传送增益一键传送" },
+            {"RecipeBrowser: Toggle Recipe Browser", "Recipe Browser (合成表): 开关合成表查询UI" },
+            {"RecipeBrowser: Query Hovered Item", "Recipe Browser (合成表): 一键查询指定物品" },
+            {"RecipeBrowser: Toggle Favorited Recipes Window", "Recipe Browser (合成表): 开关收藏配方展示界面" },
+            {"Fargowiltas: Quick Recall/Mirror", "Fargo之突变: 快捷返回药水/魔镜" },
+            {"Fargowiltas: Quick Use Custom (Bottom Left Inventory Slot)", "Fargo之突变: 快捷使用物品栏左下角物品" },
+            {"Fargowiltas: Open Stat Sheet", "Fargo之突变: 开关玩家数据UI" },
+            {"BossChecklist: Toggle Boss Checklist", "Boss Checklist (Boss清单): 开关Boss清单" },
+            {"BossChecklist: Toggle Boss Log", "Boss Checklist (Boss清单): 开关Boss日志" },
+            {"HEROsMod: Quick Stack", "HERO's Mod: 快速堆叠至附近的箱子" },
+            {"HEROsMod: Sort Inventory", "HERO's Mod: 快捷整理物品栏" },
+            {"HEROsMod: Swap Hotbar", "HERO's Mod: 切换快捷栏物品" },
+            {"CheatSheet: Toggle Cheat Sheet Hotbar", "Cheat Sheet (作弊小抄): 切换快捷栏物品" },
+        };
+
         public override void Load()
         {
             GetFriendlyName += TranslatedFriendlyName;
+            CreateBindingGroup += AddModifyTip;
             SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.HugeInventory", "I");
             BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.BuffTracker", "NumPad3");
             GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.GrabBagLoot", "OemQuotes");
+        }
+
+        private Terraria.GameContent.UI.States.UISortableElement AddModifyTip(orig_CreateBindingGroup orig, Terraria.GameContent.UI.States.UIManageControls self, int elementIndex, List<string> bindings, Terraria.GameInput.InputMode currentInputMode)
+        {
+            var uISortableElement = orig.Invoke(self, elementIndex, bindings, currentInputMode);
+            if (Language.ActiveCulture.Name == "zh-Hans" && elementIndex == 5)
+            {
+                UIText text = new("部分控件汉化由“更好的体验”提供", 0.8f)
+                {
+                    VAlign = 0f,
+                    HAlign = 0f
+                };
+                uISortableElement.Append(text);
+                uISortableElement.Recalculate();
+            }
+            return uISortableElement;
         }
 
         // 不让我用翻译是吧，我直接给你On掉
@@ -29,6 +81,9 @@ namespace ImproveGame.Common.Systems
                 keybindName = Language.GetTextValue(keybindName["ImproveGame: $".Length..]);
                 keybindName = GetText("ModName") + ": " + keybindName;
                 return Language.GetTextValue(keybindName);
+            }
+            if (Language.ActiveCulture.Name == "zh-Hans" && zhTranslationSupports.TryGetValue(keybindName, out string translatedString)) {
+                return translatedString;
             }
             return orig.Invoke(item);
         }

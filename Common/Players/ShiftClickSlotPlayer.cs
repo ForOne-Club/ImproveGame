@@ -19,16 +19,16 @@ namespace ImproveGame.Common.Players
                     UISystem.Instance.ArchitectureGUI.ItemSlot.Any(s =>
                                                  s.Value.CanPlaceItem(inv[slot]) &&
                                                  MyUtils.CanPlaceInSlot(s.Value.Item, inv[slot]) != 0)) {
-                    Main.cursorOverride = 9;
+                    Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }
                 if (BigBagGUI.Visible && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var dataPlayer) &&
                     dataPlayer.SuperVault.Any(s => MyUtils.CanPlaceInSlot(s, inv[slot]) != 0)) {
-                    Main.cursorOverride = 9;
+                    Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }
                 if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher) && fisher.fish.Any(s => MyUtils.CanPlaceInSlot(s, inv[slot]) != 0)) {
-                    Main.cursorOverride = 9;
+                    Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }
             }
