@@ -30,8 +30,8 @@ namespace ImproveGame.Content.Items.Placeable
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddRecipeGroup(ModRecipeGroup.IronGroup, 12)
-                .AddRecipeGroup(ModRecipeGroup.CopperGroup, 6)
+                .AddRecipeGroup(ModRecipeGroup.IronGroup, 8)
+                .AddRecipeGroup(ModRecipeGroup.CopperGroup, 4)
                 .AddIngredient(ItemID.Glass, 20)
                 .Register();
         }

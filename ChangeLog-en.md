@@ -20,6 +20,7 @@
 ## 其他
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
+- 钓鱼机配方修改为 8铁锭 4铜锭 20玻璃
 
 # v1.5.9
 ## Subversions
