@@ -12,7 +12,7 @@
         // 可以在 new 的时候将其他元素也初始化, 或者在执行 Active() 的时候初始化.
         public ModItemGrid(UserInterface userInterface)
         {
-            SlotSize = TextureAssets.InventoryBack.Size();
+            SlotSize = new(52);
             SetPadding(0);
             OverflowHidden = true; // 隐藏超过显示范围的部分, 计算 padding 后的.
 

@@ -16,8 +16,7 @@
                 float col = i % HCount;
                 float row = i / HCount;
                 ArrayItemSlot ItemSlot = new(items, i);
-                ItemSlot.Left.Pixels = col * (ItemSlot.Width() + 10f);
-                ItemSlot.Top.Pixels = row * (ItemSlot.Height() + 10f);
+                ItemSlot.SetPos(col * (ItemSlot.Width() + 10f), row * (ItemSlot.Height() + 10f));
                 Append(ItemSlot);
             }
         }

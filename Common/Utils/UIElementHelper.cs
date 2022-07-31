@@ -76,6 +76,13 @@
             return uie;
         }
 
+        public static UIElement SetSizeInside(this UIElement uie, float x, float y, float precentX = 0, float precentY = 0)
+        {
+            uie.Width.Set(x + uie.HPadding(), precentX);
+            uie.Height.Set(y + uie.VPadding(), precentY);
+            return uie;
+        }
+
         public static UIElement SetSize(this UIElement uie, float width, float height, float precentWidth = 0, float precentHeight = 0)
         {
             uie.Width.Set(width, precentWidth);

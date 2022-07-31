@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
+﻿using ImproveGame.Common.Animations;
 
 namespace ImproveGame.Interface.UIElements
 {
@@ -8,43 +7,45 @@ namespace ImproveGame.Interface.UIElements
     /// </summary>
     public class PictureButton : UIElement
     {
-        private Asset<Texture2D> Background;
-        private Asset<Texture2D> BackgroundBorder;
+        private readonly Texture2D Background;
+        private readonly Texture2D BackgroundBorder;
 
         public bool _playSound;
 
         public int[] data;
         public UIImage UIImage;
         public UIText UIText;
+        public AnimationTimer HoverTimer;
 
         public PictureButton(Texture2D texture, string text)
         {
             _playSound = true;
             data = new int[5];
-            Background = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/PanelGrayscale");
-            BackgroundBorder = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder");
+            Background = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/PanelGrayscale").Value;
+            BackgroundBorder = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder").Value;
 
             Width.Pixels = MyUtils.GetTextSize(text).X + this.HPadding() + 75;
             Height.Pixels = 40f;
 
-            UIImage = new(texture)
+            Append(UIImage = new(texture)
             {
                 VAlign = 0.5f
-            };
+            });
             UIImage.Left.Pixels = 30f - UIImage.Width() / 2f;
-            Append(UIImage);
 
-            UIText = new(text)
+            Append(UIText = new(text)
             {
                 VAlign = 0.5f
-            };
+            });
             UIText.Left.Pixels = 50f;
-            Append(UIText);
+
+            HoverTimer = new(2);
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            HoverTimer.Update();
             if (IsMouseHovering)
             {
                 if (_playSound)
@@ -59,14 +60,23 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
+        public override void MouseOver(UIMouseEvent evt)
+        {
+            base.MouseOver(evt);
+            HoverTimer.Open();
+        }
+
+        public override void MouseOut(UIMouseEvent evt)
+        {
+            base.MouseOut(evt);
+            HoverTimer.Close();
+        }
+
         protected override void DrawSelf(SpriteBatch sb)
         {
             var rectangle = GetDimensions().ToRectangle();
-            Utils.DrawSplicedPanel(sb, Background.Value, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 10, 10, 10, 10, Colors.InventoryDefaultColor);
-            if (IsMouseHovering)
-            {
-                Utils.DrawSplicedPanel(sb, BackgroundBorder.Value, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 10, 10, 10, 10, Color.White);
-            }
+            Utils.DrawSplicedPanel(sb, Background, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 10, 10, 10, 10, Colors.InventoryDefaultColor);
+            Utils.DrawSplicedPanel(sb, BackgroundBorder, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 10, 10, 10, 10, Color.White * HoverTimer.Schedule);
         }
 
         public void TextAlignCenter()
