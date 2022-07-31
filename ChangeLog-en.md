@@ -1,14 +1,14 @@
 [Chinese version here | 中文版](ChangeLog.md)
 
 # v1.6
-## 子版本:
+## Subversions:
 - v1.6
-## BUG 修复:
+## BUG Fixes:
 - Fixed the fishing speed of the Fishing Machine being dramatically fast
 - Fixed the Encumbering Stone working in personal inventories
-- 修复了下矿时可能出现卡顿的BUG
-- 修复了闪耀根和寒颤棘自动播种有几率失败的BUG
-## 新增内容:
+- Fixed possible lagging while mining
+- Fixed the Blinkroot and Shiverthorn sometimes not been re-planted
+## Additions:
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
 - Added a auto-refreshing function for Travelling Merchant's shop(each time you open his shop page, the goods will be rerolled)
@@ -17,14 +17,15 @@
 - Added Fast Extractinator function
 - Added 'Which Mod Is This From' function, showing which mod is an item or a NPC from
 - Added a Grab Bag Item Drop Rate Display function
-- 添加一次击杀即可完全解锁图鉴功能
-- 添加可调节获得旗帜所需杀敌数倍率功能
-- 添加旗帜箱，可最多装200组旗帜
-- 添加便携制作站功能
-## 其他
+- Added a function to completely unlock a creature's bestiary upon killing it
+- Added a function to adjust the number of kills needed to obtain a banner
+- Added a Banner Box to store up to 200 stacks of banners
+- Added a Portable Crafting Station feature
+## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
-- 钓鱼机配方修改为 8铁锭 4铜锭 20玻璃
+- The Fishing Machine is now be crafted by Any Iron Bar * 8 + Any Copper Bar * 4 + Glass Block * 20
+- The Wand Of Space can also be crafted by Any Wood * 24 + Any Evil Bar * 8 + Amethyst * 8
 
 # v1.5.9
 ## Subversions
