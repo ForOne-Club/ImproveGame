@@ -73,6 +73,17 @@ Mods:
                     Case-insensitive
                     '''
             }
+            PortableCraftingStation:
+            {
+                Label: "[i:WorkBench] 便携制作站"
+                Tooltip:
+                    '''
+                    物品栏以及便携存储中存有的制作站将直接生效
+                    而不需要将其放下并站在其旁边，再来制作相应的物品
+                    （如：只要你身上有熔炉，就可以随时把矿做成锭）
+                    水桶可充当水源、熔岩桶与蜂蜜桶亦然
+                    '''
+            }
             NoPlace_BUFFTile:
             {
                 Label: "[i:3198] Portable buff stations"
