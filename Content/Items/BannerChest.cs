@@ -200,7 +200,7 @@ namespace ImproveGame.Content.Items
         {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.IronBar, 12)
-                .AddTile(TileID.WorkBenches).Register();
+                .AddTile(TileID.Anvils).Register();
         }
     }
 }
