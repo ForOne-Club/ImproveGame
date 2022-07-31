@@ -348,6 +348,7 @@ Mods:
             WallPlace: Wand of Technology
             LiquidWand: Wand of Liquids
             PotionBag: Potion Bag
+            BannerChest: 旗帜盒
             Autofisher: Fishing Machine
             PaintWand: Wand of Painting
         }
@@ -418,6 +419,13 @@ Mods:
                 <left> the Potion Bag while holding a potion to deposit
                 <right> the Potion Bag while holding it to take out potions
                 Maximum stores 20 stacks of potions
+                '''
+            BannerChest:
+                '''
+                存储你的旗帜
+                手持旗帜<left>该物品以将旗帜存入
+                在物品栏中<right>该物品以取出旗帜
+                最多可存入200组旗帜
                 '''
             Autofisher:
                 '''
@@ -659,7 +667,7 @@ Mods:
         {
             HugeInventory: "Huge Inventory"
             BuffTracker: "Buff Tracker"
-            GrabBagLoot: "Display detailed item drop of grab bags"
+            GrabBagLoot: "Display grab bag loot"
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ImproveGame.Interface.UIElements;
+using System.Collections.Generic;
 using System.Reflection;
 using static On.Terraria.GameContent.UI.Elements.UIKeybindingListItem;
 using static On.Terraria.GameContent.UI.States.UIManageControls;
@@ -10,6 +11,8 @@ namespace ImproveGame.Common.Systems
     /// </summary>
     public class KeybindSystem : ModSystem
     {
+        internal static bool UseKeybindTranslation = true;
+
         public static ModKeybind SuperVaultKeybind { get; private set; }
         public static ModKeybind BuffTrackerKeybind { get; private set; }
         public static ModKeybind GrabBagKeybind { get; private set; }
@@ -36,7 +39,7 @@ namespace ImproveGame.Common.Systems
             {"RecipeBrowser: Toggle Recipe Browser", "Recipe Browser (合成表): 开关合成表查询UI" },
             {"RecipeBrowser: Query Hovered Item", "Recipe Browser (合成表): 一键查询指定物品" },
             {"RecipeBrowser: Toggle Favorited Recipes Window", "Recipe Browser (合成表): 开关收藏配方展示界面" },
-            {"Fargowiltas: Quick Recall/Mirror", "Fargo之突变: 快捷返回药水/魔镜" },
+            {"Fargowiltas: Quick Recall/Mirror", "Fargo之突变: 快捷回忆药水/魔镜" },
             {"Fargowiltas: Quick Use Custom (Bottom Left Inventory Slot)", "Fargo之突变: 快捷使用物品栏左下角物品" },
             {"Fargowiltas: Open Stat Sheet", "Fargo之突变: 开关玩家数据UI" },
             {"BossChecklist: Toggle Boss Checklist", "Boss Checklist (Boss清单): 开关Boss清单" },
@@ -47,8 +50,25 @@ namespace ImproveGame.Common.Systems
             {"CheatSheet: Toggle Cheat Sheet Hotbar", "Cheat Sheet (作弊小抄): 切换快捷栏物品" },
         };
 
+        private readonly static Dictionary<string, string> zhTranslationKeybind = new()
+        {
+            {"Mouse1", "鼠标左键" }, {"Mouse2", "鼠标右键" }, {"Mouse3", "鼠标中键" },
+            {"Mouse4", "鼠标侧键1" }, {"Mouse5", "鼠标侧键2" }, {"Space", "空格" },
+            {"Escape", "Esc键" }, { "Back", "退格" }, {"Enter", "回车" }, 
+            {"LeftShift", "左Shift" }, {"LeftControl", "左Ctrl" }, {"LeftAlt", "左Alt" },
+            {"RightShift", "右Shift" }, {"RightControl", "右Ctrl" }, {"RightAlt", "右Alt" },
+            {"VolumeUp", "提高音量"},{"VolumeDown", "减少音量"},
+            {"Divide", "小键盘 /" }, {"Add", "小键盘 +" },
+            {"Subtract", "小键盘 -" }, {"Multiply", "小键盘 *" },
+            {"OemComma", "</," }, {"OemPeriod", ">/." }, {"OemQuestion", "? /" },
+            {"OemSemicolon", ":/;" }, {"OemQuotes", "\"/\'" }, {"OemPipe", "| \\" },
+            {"OemOpenBrackets", "[/{" }, {"OemCloseBrackets", "]/}" },
+            {"OemPlus", "+/=" }, {"OemMinus", "-/_" }, {"OemTilde", "~/`"}
+        };
+
         public override void Load()
         {
+            GenInput += TranslatedInput;
             GetFriendlyName += TranslatedFriendlyName;
             CreateBindingGroup += AddModifyTip;
             SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.HugeInventory", "I");
@@ -56,17 +76,67 @@ namespace ImproveGame.Common.Systems
             GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.GrabBagLoot", "OemQuotes");
         }
 
+        private string TranslatedInput(orig_GenInput orig, UIKeybindingListItem self, List<string> list)
+        {
+            if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans")
+            {
+                var displayTexts = new List<string>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    string text = list[i].Replace("NumPad", "小键盘 ");
+                    if (zhTranslationKeybind.TryGetValue(list[i], out string translatedString))
+                    {
+                        text = translatedString;
+                    }
+                    displayTexts.Add(text);
+                }
+                return orig.Invoke(self, displayTexts);
+            }
+            return orig.Invoke(self, list);
+        }
+
         private Terraria.GameContent.UI.States.UISortableElement AddModifyTip(orig_CreateBindingGroup orig, Terraria.GameContent.UI.States.UIManageControls self, int elementIndex, List<string> bindings, Terraria.GameInput.InputMode currentInputMode)
         {
             var uISortableElement = orig.Invoke(self, elementIndex, bindings, currentInputMode);
-            if (Language.ActiveCulture.Name == "zh-Hans" && elementIndex == 5)
+            if (Language.ActiveCulture.Name == "zh-Hans" && (elementIndex == 5 || elementIndex == 0))
             {
-                UIText text = new("部分控件汉化由“更好的体验”提供", 0.8f)
+                string str = "部分控件汉化由“更好的体验”提供";
+                if (elementIndex == 0)
+                    str = "“更好的体验”提供了键位汉化";
+                UIText text = new(str, 0.8f)
                 {
                     VAlign = 0f,
                     HAlign = 0f
                 };
                 uISortableElement.Append(text);
+
+                UIPanel button = new()
+                {
+                    Width = new(100f, 0f),
+                    Height = new(30f, 0f),
+                    Left = new(-100f, 1f),
+                    Top = new(0f, 0f)
+                };
+                if (UseKeybindTranslation)
+                    str = "快换回去";
+                else
+                    str = "让我看看";
+                UIText buttonText = new(str, 0.8f)
+                {
+                    VAlign = 0.5f,
+                    HAlign = 0.5f
+                };
+                button.OnMouseDown += (_, _) => {
+                    UseKeybindTranslation = !UseKeybindTranslation;
+                    if (UseKeybindTranslation)
+                        str = "快换回去";
+                    else
+                        str = "让我看看";
+                    buttonText.SetText(str);
+                };
+                button.Append(buttonText);
+                uISortableElement.Append(button);
+
                 uISortableElement.Recalculate();
             }
             return uISortableElement;
@@ -82,7 +152,7 @@ namespace ImproveGame.Common.Systems
                 keybindName = GetText("ModName") + ": " + keybindName;
                 return Language.GetTextValue(keybindName);
             }
-            if (Language.ActiveCulture.Name == "zh-Hans" && zhTranslationSupports.TryGetValue(keybindName, out string translatedString)) {
+            if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans" && zhTranslationSupports.TryGetValue(keybindName, out string translatedString)) {
                 return translatedString;
             }
             return orig.Invoke(item);
