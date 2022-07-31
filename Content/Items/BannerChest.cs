@@ -199,8 +199,8 @@ namespace ImproveGame.Content.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.Silk, 8)
-                .AddTile(TileID.WorkBenches).Register();
+                .AddRecipeGroup(RecipeGroupID.IronBar, 12)
+                .AddTile(TileID.Anvils).Register();
         }
     }
 }
