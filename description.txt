@@ -55,7 +55,7 @@ Only some functions are enabled by default, please check mod configurations for 
 ---------------------------
 How to obtain mod items: 
 Potion Bag: Silk * 8
-Fishing Machine: Any Iron Bar * 12 + Any Copper Bar * 6 + Glass * 20
+Fishing Machine: Any Iron Bar * 8 + Any Copper Bar * 4 + Glass * 20
 Wand of Technology: Dropped by the King Slime
 Wand of Space: Dropped by the King Slime
 Wand of Liquid: Any Gold Bar * 12 + Shadow Scale/Tissue Sample * 18 + Wood * 24
