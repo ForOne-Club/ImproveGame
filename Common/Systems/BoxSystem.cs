@@ -20,7 +20,7 @@ namespace ImproveGame.Common.Systems
 
         private void Main_DrawInterface_36_Cursor(On.Terraria.Main.orig_DrawInterface_36_Cursor orig)
         {
-            if (Main.cursorOverride == 15)
+            if (Main.cursorOverride == CursorOverrideID.GamepadDefaultCursor)
             {
                 // 修正鼠标坐标
                 Main.mouseX -= 12;
@@ -112,7 +112,7 @@ namespace ImproveGame.Common.Systems
                 return;
             }
 
-            Main.cursorOverride = 15;
+            Main.cursorOverride = CursorOverrideID.GamepadDefaultCursor;
             Main.cursorColor = Color.SkyBlue;
 
             Vector2 fisherPos = AutofishPlayer.LocalPlayer.Autofisher.ToVector2();

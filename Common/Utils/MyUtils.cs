@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Terraria;
 using Terraria.Audio;
@@ -268,6 +269,47 @@ namespace ImproveGame
         /// <param name="amount">整数液体量</param>
         /// <returns>float液体量</returns>
         public static float LiquidAmountToFloat(int amount) => amount / 255f * 0.0025f;
+
+        public static int ItemToBanner(Item item)
+        {
+            if (!ItemID.Sets.BannerStrength.IndexInRange(item.type) || !ItemID.Sets.BannerStrength[item.type].Enabled)
+                return -1;
+
+            if (item.createTile == TileID.Banners)
+            {
+                int style = item.placeStyle;
+                int frameX = style * 18;
+                int frameY = 0;
+                if (style >= 90)
+                {
+                    frameX -= 1620;
+                    frameY += 54;
+                }
+                if (frameX >= 396 || frameY >= 54)
+                {
+                    int styleX = frameX / 18 - 21;
+                    for (int num4 = frameY; num4 >= 54; num4 -= 54)
+                    {
+                        styleX += 90;
+                    }
+                    return styleX;
+                }
+            }
+
+            // 反射获取NPCLoader.bannerToItem以支持模组旗帜
+            var bannerToItem = (IDictionary<int, int>)typeof(NPCLoader).GetField("bannerToItem",
+                BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+            // 应用
+            foreach (var dict in bannerToItem)
+            {
+                if (dict.Value == item.type && Main.SceneMetrics.NPCBannerBuff.IndexInRange(dict.Key))
+                {
+                    return dict.Key;
+                }
+            }
+
+            return -1;
+        }
 
         /// <summary>
         /// 绘制一个方框

@@ -16,6 +16,8 @@
         internal event ElementEvent OnDrag;
         internal event ElementEvent OnResize;
 
+        internal Asset<Texture2D> ResizeIndicator;
+
         public ModUIPanel(bool draggable = true, bool resizeable = false, int minResizeWidth = 160, int minResizeHeight = 90)
         {
             Draggable = draggable;
@@ -24,6 +26,7 @@
             OnMouseUp += DragEnd;
             _minResizeWidth = minResizeWidth;
             _minResizeHeight = minResizeHeight;
+            ResizeIndicator = GetTexture("UI/Resize");
         }
 
         public override void Recalculate()
@@ -32,13 +35,22 @@
             OnRecalculate?.Invoke(this);
         }
 
+        public Rectangle ResizeRectangle
+        {
+            get
+            {
+                CalculatedStyle innerDimensions = GetInnerDimensions();
+                return new Rectangle((int)(innerDimensions.X + innerDimensions.Width - 12), (int)(innerDimensions.Y + innerDimensions.Height - 12), 12 + (int)PaddingRight, 12 + (int)PaddingBottom);
+            }
+        }
+
         // 可拖动/调整大小界面
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
             CalculatedStyle innerDimensions = GetInnerDimensions();
-            if (Resizeable && new Rectangle((int)(innerDimensions.X + innerDimensions.Width - 12), (int)(innerDimensions.Y + innerDimensions.Height - 12), 12 + 6, 12 + 6).Contains(evt.MousePosition.ToPoint()))
+            if (Resizeable && ResizeRectangle.Contains(evt.MousePosition.ToPoint()))
             {
-                Offset = new Vector2(evt.MousePosition.X - innerDimensions.X - innerDimensions.Width - 6, evt.MousePosition.Y - innerDimensions.Y - innerDimensions.Height - 6);
+                Offset = new Vector2(evt.MousePosition.X - innerDimensions.X - innerDimensions.Width - 12, evt.MousePosition.Y - innerDimensions.Y - innerDimensions.Height - 12);
                 Resizing = true;
             }
             else if (Draggable)
@@ -53,6 +65,24 @@
         {
             Dragging = false;
             Resizing = false;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            if (Resizeable)
+            {
+                var dimensions = GetInnerDimensions();
+                var position = dimensions.ToRectangle().BottomRight() - new Vector2(4f);
+                var texture = ResizeIndicator.Value;
+
+                spriteBatch.Draw(texture, position, BorderColor);
+
+                if (ResizeRectangle.Contains(Main.MouseScreen.ToPoint()) || Resizing) {
+                    Main.cursorOverride = CursorOverrideID.GamepadDefaultCursor;
+                    Main.cursorColor = Color.SkyBlue;
+                }
+            }
         }
 
         public override void Update(GameTime gameTime)

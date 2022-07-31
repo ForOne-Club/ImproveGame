@@ -1,10 +1,9 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Players;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
+using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
@@ -102,8 +101,8 @@ namespace ImproveGame.Content.Items
                 {
                     var potion = storedPotions[i];
                     var color = Color.SkyBlue;
-                    bool available = potion.stack >= MyUtils.Config.NoConsume_PotionRequirement;
-                    string text = $"[i:{potion.type}] [{Lang.GetItemNameValue(potion.type)}] x{potion.stack}";
+                    bool available = potion.stack >= Config.NoConsume_PotionRequirement;
+                    string text = $"[i/s{potion.stack}:{potion.type}] [{Lang.GetItemNameValue(potion.type)}]";
                     // 有30个
                     if (available)
                     {
@@ -120,7 +119,7 @@ namespace ImproveGame.Content.Items
                     // 没有30个
                     else
                     {
-                        text += $"  {MyUtils.GetText("Tips.PotionBagUnavailable")}";
+                        text += $"  {MyUtils.GetText("Tips.PotionBagUnavailable")} ({potion.stack}/{Config.NoConsume_PotionRequirement})";
                     }
                     tooltips.Add(new(Mod, $"PotionBagP{i}", text)
                     {
@@ -135,6 +134,21 @@ namespace ImproveGame.Content.Items
                     OverrideColor = Color.SkyBlue
                 });
             }
+        }
+
+        public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
+        {
+            if (line.Mod == Mod.Name && line.Name.StartsWith("PotionBagP") && Main.SettingsEnabled_OpaqueBoxBehindTooltips)
+            {
+                var font = FontAssets.MouseText.Value;
+                var position = new Vector2(line.X, line.Y);
+                var color = line.OverrideColor ?? line.Color;
+                TextSnippet[] snippets = ChatManager.ParseMessage(line.Text, color).ToArray();
+                ChatManager.ConvertNormalSnippets(snippets);
+                ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f, Vector2.Zero, Vector2.One, out _, -1);
+                return false;
+            }
+            return base.PreDrawTooltipLine(line, ref yOffset);
         }
 
         public override void SetDefaults()

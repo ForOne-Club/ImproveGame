@@ -184,6 +184,14 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool QuickNurse;
 
+        [Label("$Mods.ImproveGame.Config.BannerRequirement.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.BannerRequirement.Tooltip")]
+        [Slider]
+        [Range(0.1f, 10f)]
+        [Increment(0.05f)]
+        [DefaultValue(1f)]
+        public float BannerRequirement;
+
         [Header("$Mods.ImproveGame.Config.GameMechanics.Header")]
 
         [Label("$Mods.ImproveGame.Config.AlchemyGrassGrowsFaster.Label")]
@@ -200,6 +208,11 @@ namespace ImproveGame.Common.Configs
         [Tooltip("$Mods.ImproveGame.Config.StaffOfRegenerationAutomaticPlanting.Tooltip")]
         [DefaultValue(false)]
         public bool StaffOfRegenerationAutomaticPlanting;
+
+        [Label("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Tooltip")]
+        [DefaultValue(true)]
+        public bool BestiaryQuickUnlock;
 
         [Label("$Mods.ImproveGame.Config.RespawnWithFullHP.Label")]
         [DefaultValue(true)]
@@ -279,8 +292,8 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.SpawnRateMaxValue.Label")]
         [Tooltip("$Mods.ImproveGame.Config.SpawnRateMaxValue.Tooltip")]
-        [DefaultValue(100)]
-        [Range(1, 200)]
+        [DefaultValue(50)]
+        [Range(1, 100)]
         public int SpawnRateMaxValue;
 
         [Header("$Mods.ImproveGame.Config.OtherFunctions.Header")]

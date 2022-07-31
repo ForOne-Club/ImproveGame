@@ -16,9 +16,13 @@
 - Added Fast Extractinator function
 - Added 'Which Mod Is This From' function, showing which mod is an item or a NPC from
 - Added a Grab Bag Item Drop Rate Display function
+- 添加一次击杀即可完全解锁图鉴功能
+- 添加可调节获得旗帜所需杀敌数倍率功能
+- 添加旗帜箱，可最多装200组旗帜
 ## 其他
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
+- 钓鱼机配方修改为 8铁锭 4铜锭 20玻璃
 
 # v1.5.9
 ## Subversions

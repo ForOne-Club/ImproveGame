@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -87,7 +88,8 @@ namespace ImproveGame.Interface.GUI
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
-            Scrollbar.SetViewPosition(evt.ScrollWheelValue);
+            if (BasePanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
+                Scrollbar.SetViewPosition(evt.ScrollWheelValue);
         }
 
         public override void MouseDown(UIMouseEvent evt)
@@ -107,6 +109,10 @@ namespace ImproveGame.Interface.GUI
                 innerList.Top.Set(-Scrollbar.GetValue(), 0);
             }
             UIList.Recalculate();
+
+            if (IsMouseHovering) {
+                PlayerInput.LockVanillaMouseScroll("ImproveGame: Grab Bag Info GUI");
+            }
 
             base.DrawSelf(spriteBatch);
         }

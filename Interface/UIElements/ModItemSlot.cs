@@ -56,23 +56,23 @@ namespace ImproveGame.Interface.UIElements
         private void SetCursorOverride() {
             if (!Item.IsAir) {
                 if (!Item.favorited && ItemSlot.ShiftInUse) {
-                    Main.cursorOverride = 8; // 快捷放回物品栏图标
+                    Main.cursorOverride = CursorOverrideID.ChestToInventory; // 快捷放回物品栏图标
                 }
                 if (Main.keyState.IsKeyDown(Main.FavoriteKey)) {
                     if (AllowFavorite) {
-                        Main.cursorOverride = 3; // 收藏图标
+                        Main.cursorOverride = CursorOverrideID.FavoriteStar; // 收藏图标
                     }
                     if (Main.drawingPlayerChat) {
-                        Main.cursorOverride = 2; // 放大镜图标 - 输入到聊天框
+                        Main.cursorOverride = CursorOverrideID.Magnifiers; // 放大镜图标 - 输入到聊天框
                     }
                 }
                 void TryTrashCursorOverride() {
                     if (!Item.favorited) {
                         if (Main.npcShop > 0) {
-                            Main.cursorOverride = 10; // 卖出图标
+                            Main.cursorOverride = CursorOverrideID.QuickSell; // 卖出图标
                         }
                         else {
-                            Main.cursorOverride = 6; // 垃圾箱图标
+                            Main.cursorOverride = CursorOverrideID.TrashCan; // 垃圾箱图标
                         }
                     }
                 }
@@ -157,21 +157,21 @@ namespace ImproveGame.Interface.UIElements
 
         public void LeftClickItem(ref Item placeItem) {
             // 放大镜图标 - 输入到聊天框
-            if (Main.cursorOverride == 2) {
+            if (Main.cursorOverride == CursorOverrideID.Magnifiers) {
                 if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item), Vector2.One))
                     SoundEngine.PlaySound(SoundID.MenuTick);
                 return;
             }
 
             // 收藏图标
-            if (Main.cursorOverride == 3) {
+            if (Main.cursorOverride == CursorOverrideID.FavoriteStar) {
                 Item.favorited = !Item.favorited;
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 return;
             }
 
             // 垃圾箱图标
-            if (Main.cursorOverride == 6) {
+            if (Main.cursorOverride == CursorOverrideID.TrashCan) {
                 // 假装自己是一个物品栏物品
                 var temp = new Item[1];
                 temp[0] = Item;
@@ -180,7 +180,7 @@ namespace ImproveGame.Interface.UIElements
             }
 
             // 放回物品栏图标
-            if (Main.cursorOverride == 8) {
+            if (Main.cursorOverride == CursorOverrideID.ChestToInventory) {
                 Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item, GetItemSettings.InventoryEntityToPlayerInventorySettings);
                 SoundEngine.PlaySound(SoundID.Grab);
                 return;

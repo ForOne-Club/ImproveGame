@@ -17,13 +17,10 @@ namespace ImproveGame.Common.Players
             if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
                 return;
 
-            var items = MyUtils.GetAllInventoryItemsList(Player, false);
+            var items = GetAllInventoryItemsList(Player, false);
             foreach (var item in items) {
                 HandleBuffItem(item);
-                if (!item.IsAir && item.type == ModContent.ItemType<PotionBag>() &&
-                    item.ModItem is not null && item.ModItem is PotionBag &&
-                    (item.ModItem as PotionBag).storedPotions.Count > 0) {
-                    var potionBag = item.ModItem as PotionBag;
+                if (!item.IsAir && item.ModItem is not null && item.ModItem is PotionBag potionBag && potionBag.storedPotions.Count > 0) {
                     foreach (var p in potionBag.storedPotions) {
                         HandleBuffItem(p);
                     }
