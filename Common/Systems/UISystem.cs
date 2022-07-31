@@ -112,19 +112,19 @@ namespace ImproveGame.Common.Systems
         {
             if (AutofisherGUI.Visible)
             {
-                AutofisherInterface.Update(gameTime);
+                AutofisherInterface?.Update(gameTime);
             }
             if (BuffTrackerGUI.Visible)
             {
-                BuffTrackerInterface.Update(gameTime);
+                BuffTrackerInterface?.Update(gameTime);
             }
             if (LiquidWandGUI.Visible)
             {
-                LiquidWandInterface.Update(gameTime);
+                LiquidWandInterface?.Update(gameTime);
             }
             if (BigBagGUI.Visible)
             {
-                BigBagInterface.Update(gameTime);
+                BigBagInterface?.Update(gameTime);
             }
             if (ArchitectureGUI.Visible)
             {

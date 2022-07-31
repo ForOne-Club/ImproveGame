@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Interface.UIElements;
 using System.Collections.Generic;
+using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -22,9 +23,8 @@ namespace ImproveGame.Interface.GUI
         public UIText title;
         public UIPanel MainPanel;
         public UIImageButton CloseButton;
-        public ModItemGrid ItemGrid;
-
         public PictureButton[] buttons = new PictureButton[4];
+        public ModItemGrid ItemGrid;
 
         public void SetSuperVault(Item[] items, Vector2 SuperVaultPos)
         {
@@ -45,11 +45,9 @@ namespace ImproveGame.Interface.GUI
 
             ItemGrid.SetInventory(items);
 
-            MainPanel.SetPos(SuperVaultPos);
-            MainPanel.Width.Pixels = MainPanel.HPadding() + ItemGrid.Width();
-            MainPanel.Height.Pixels = MainPanel.VPadding() + ItemGrid.Height() + ItemGrid.Top();
-            visible = Visible;
-            Recalculate();
+            MainPanel.SetPos(SuperVaultPos)
+                .SetSizeInside(ItemGrid.Width(), ItemGrid.Height() + ItemGrid.Top())
+                .Recalculate();
         }
 
         public override void OnInitialize()
@@ -68,25 +66,18 @@ namespace ImproveGame.Interface.GUI
             {
                 if (dragging)
                 {
-                    uie.SetPos(Main.MouseScreen - offset);
-                    uie.Recalculate();
+                    uie.SetPos(Main.MouseScreen - offset).Recalculate();
                 }
-                if (!Collision.CheckAABBvAABBCollision(uie.GetDimensions().Position(), uie.GetDimensions().ToRectangle().Size(), Vector2.Zero, Main.ScreenSize.ToVector2()))
+                if (!uie.GetDimensions().ToRectangle().Intersects(uie.GetDimensions().ToRectangle()))
                 {
-                    uie.SetPos(Vector2.Zero);
-                    uie.Recalculate();
-                }
-                if (uie.IsMouseHovering)
-                {
-                    Main.LocalPlayer.mouseInterface = true;
+                    uie.SetPos(Vector2.Zero).Recalculate();
                 }
             };
             Append(MainPanel);
 
-            title = new(MyUtils.GetText("SuperVault.Name"), 0.5f, true);
+            MainPanel.Append(title = new(MyUtils.GetText("SuperVault.Name"), 0.5f, true));
             title.Top.Pixels = 10f;
             title.SetSize(MyUtils.GetBigTextSize(MyUtils.GetText("SuperVault.Name")) * 0.5f);
-            MainPanel.Append(title);
 
             buttons[0] = new(MyUtils.GetTexture("UI/Quick").Value, Lang.inter[29].Value);
             buttons[0].SetPos(0f, title.Bottom() - 10f);
@@ -116,6 +107,36 @@ namespace ImproveGame.Interface.GUI
             ItemGrid = new ModItemGrid(UserInterface);
             ItemGrid.Top.Pixels = buttons[0].Top() + buttons[0].Height() + 10f;
             MainPanel.Append(ItemGrid);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            if (MainPanel.IsMouseHovering)
+                Main.LocalPlayer.mouseInterface = true;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            if (MainPanel.IsMouseHovering)
+            {
+                PlayerInput.LockVanillaMouseScroll("ImproveGame: BigBagGUI");
+            }
+        }
+
+        public void Open()
+        {
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+            Main.playerInventory = true;
+            dragging = false;
+            visible = true;
+        }
+
+        public void Close()
+        {
+            SoundEngine.PlaySound(SoundID.MenuClose);
+            visible = false;
         }
 
         public void Sort()
@@ -192,20 +213,6 @@ namespace ImproveGame.Interface.GUI
                 }
             }
             Recipe.FindRecipes();
-        }
-
-        public void Open()
-        {
-            SoundEngine.PlaySound(SoundID.MenuOpen);
-            Main.playerInventory = true;
-            dragging = false;
-            visible = true;
-        }
-
-        public void Close()
-        {
-            SoundEngine.PlaySound(SoundID.MenuClose);
-            visible = false;
         }
     }
 }

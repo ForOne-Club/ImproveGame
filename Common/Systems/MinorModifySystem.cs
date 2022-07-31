@@ -103,6 +103,32 @@ namespace ImproveGame.Common.Systems
         private void Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(ILContext il)
         {
             var c = new ILCursor(il);
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Ldc_I4_S, (sbyte)84),
+                i => i.Match(OpCodes.Bne_Un_S)))
+                return;
+            c.EmitDelegate(() =>
+            {
+                if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting)
+                {
+                    style = Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18;
+                }
+            });
+
+            if (!c.TryGotoNext(MoveType.After,
+                i => i.Match(OpCodes.Ldc_I4_0),
+                i => i.Match(OpCodes.Ldc_I4_0),
+                i => i.Match(OpCodes.Ldc_I4_0),
+                i => i.Match(OpCodes.Call)))
+                return;
+            c.EmitDelegate(() =>
+            {
+                if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting)
+                {
+                    WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, 82, false, false, -1, style);
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, 82, style);
+                }
+            });
 
             if (!c.TryGotoNext(MoveType.After,
                 i => i.Match(OpCodes.Ldc_R8, 40500d),
@@ -127,8 +153,7 @@ namespace ImproveGame.Common.Systems
                 i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Call)))
                 return;
-            c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Action<Player>>((player) =>
+            c.EmitDelegate(() =>
             {
                 if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting)
                 {
