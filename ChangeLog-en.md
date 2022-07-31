@@ -7,6 +7,7 @@
 - Fixed the fishing speed of the Fishing Machine being dramatically fast
 - Fixed the Encumbering Stone working in personal inventories
 - 修复了下矿时可能出现卡顿的BUG
+- 修复了闪耀根和寒颤棘自动播种有几率失败的BUG
 ## 新增内容:
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
@@ -19,6 +20,7 @@
 - 添加一次击杀即可完全解锁图鉴功能
 - 添加可调节获得旗帜所需杀敌数倍率功能
 - 添加旗帜箱，可最多装200组旗帜
+- 添加便携制作站功能
 ## 其他
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
