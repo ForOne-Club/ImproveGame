@@ -13,6 +13,22 @@ namespace ImproveGame.Common.GlobalItems
             { "Battle", new() { ItemID.PeaceCandle, ItemID.WaterCandle, ItemID.BattlePotion, ItemID.Sunflower, ItemID.CalmingPotion} }
         };
 
+        public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
+        {
+            if (line.Mod == Mod.Name && line.Name.StartsWith("CombinedBuff") && Main.SettingsEnabled_OpaqueBoxBehindTooltips)
+            {
+                // 这样绘制，没有黑框，就有一种特殊的效果，挺好看的
+                var font = FontAssets.MouseText.Value;
+                var position = new Vector2(line.X, line.Y);
+                var color = line.OverrideColor ?? line.Color;
+                TextSnippet[] snippets = ChatManager.ParseMessage(line.Text, color).ToArray();
+                ChatManager.ConvertNormalSnippets(snippets);
+                ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f, Vector2.Zero, Vector2.One, out _, -1);
+                return false;
+            }
+            return base.PreDrawTooltipLine(item, line, ref yOffset);
+        }
+
         /// <summary>
         /// 为药水物品简介添加Tag标题文本
         /// </summary>
@@ -67,7 +83,7 @@ namespace ImproveGame.Common.GlobalItems
                 {
                     tooltips.Add(new(Mod, $"CombinedBuff.{dict.Key}", MyUtils.GetText("Tips.TagDetailed.CombinedBuff"))
                     {
-                        OverrideColor = Color.Cyan
+                        OverrideColor = Color.Turquoise
                     });
                 }
             }

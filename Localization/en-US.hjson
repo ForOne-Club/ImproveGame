@@ -193,6 +193,16 @@ Mods:
                     Money cost will be displayed above the player
                     '''
             }
+            BannerRequirement:
+            {
+                Label: "[i:2990] 获得旗帜所需杀敌数倍率"
+                Tooltip:
+                    '''
+                    调整获得敌怪旗帜所需的杀敌数，值越小所需杀敌数越少
+                    作为参考，当倍率设置为0.1时(即10%)，击杀5只蓝史莱姆即可获得旗帜
+                    当倍率设置为10时(即1000%)，击杀500只蓝史莱姆才可获得旗帜
+                    '''
+            }
 
             GameMechanics.Header: "[i:1344] Game Mechanics"
             AlchemyGrassGrowsFaster:
@@ -462,6 +472,11 @@ Mods:
             PotionBagAvailable: "(Active)"     # 药水袋中药水数量 >= 20
             PotionBagUnavailable: "(Inactive)"   # 药水袋中药水数量 < 20
             PotionBagDisabled: "(Disabled)"
+
+            BannerChestCurrent: "该旗帜箱内目前拥有下列旗帜 ({StoredCount}/200):"
+            BannerChestCurrentFull: "该旗帜箱内目前拥有下列旗帜 (已满!):"
+            BannerChestNone: "该旗帜箱未装有旗帜 (0/200)"
+            BannerChestUseless: "便携旗帜功能未开启，放入其中的旗帜不会有任何用处"
 
             Tag:
             {

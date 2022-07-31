@@ -37,8 +37,6 @@ namespace ImproveGame.Common.Systems
             On.Terraria.Main.DamageVar += DisableDamageVar;
             // 使存钱罐中物品生效，如同放入背包一样
             On.Terraria.Player.VanillaPreUpdateInventory += TweakExtraUpdateInventory;
-            // 旗帜更新
-            On.Terraria.SceneMetrics.ScanAndExportToMain += TweakBannerSceneMetrics;
             // 拾取物品处理方法
             On.Terraria.Player.PickupItem += Player_PickupItem;
             // 摇树总是掉落水果
@@ -56,6 +54,18 @@ namespace ImproveGame.Common.Systems
             On.Terraria.WorldGen.UnspawnTravelNPC += TravelNPCStay;
             // 旅商刷新
             On.Terraria.Chest.SetupShop += RefreshTravelShop;
+            // 修改旗帜需求
+            On.Terraria.NPC.CountKillForBannersAndDropThem += NPC_CountKillForBannersAndDropThem;
+        }
+
+        private void NPC_CountKillForBannersAndDropThem(On.Terraria.NPC.orig_CountKillForBannersAndDropThem orig, NPC npc)
+        {
+            int bannerID = Item.NPCtoBanner(npc.BannerID());
+            int itemID = Item.BannerToItem(bannerID);
+            int originalRequirement = ItemID.Sets.KillsToBanner[itemID];
+            ItemID.Sets.KillsToBanner[itemID] = (int)(ItemID.Sets.KillsToBanner[itemID] * Config.BannerRequirement);
+            orig.Invoke(npc);
+            ItemID.Sets.KillsToBanner[itemID] = originalRequirement;
         }
 
         private void RefreshTravelShop(On.Terraria.Chest.orig_SetupShop orig, Chest self, int type)
@@ -313,107 +323,37 @@ namespace ImproveGame.Common.Systems
         /// <summary>
         /// 旗帜BUFF在背包生效
         /// </summary>
-        private static void AddBannerBuff(SceneMetrics scene, Item item)
+        private static void AddBannerBuff(Item item)
         {
             bool globalItemNotNull = item.TryGetGlobalItem<GlobalItemData>(out var itemData);
             if (globalItemNotNull)
                 itemData.ShouldHaveInvGlowForBanner = false;
 
-            if (item.createTile == TileID.Banners)
+            int bannerID = ItemToBanner(item);
+            if (bannerID != -1)
             {
-                int style = item.placeStyle;
-                int frameX = style * 18;
-                int frameY = 0;
-                if (style >= 90)
-                {
-                    frameX -= 1620;
-                    frameY += 54;
-                }
-                if (frameX >= 396 || frameY >= 54)
-                {
-                    int styleX = frameX / 18 - 21;
-                    for (int num4 = frameY; num4 >= 54; num4 -= 54)
-                    {
-                        styleX += 90;
-                    }
-                    int bannerItem = Item.BannerToItem(styleX);
-                    if (ItemID.Sets.BannerStrength.IndexInRange(bannerItem) && ItemID.Sets.BannerStrength[bannerItem].Enabled)
-                    {
-                        scene.NPCBannerBuff[styleX] = true;
-                        scene.hasBanner = true;
-                        if (globalItemNotNull)
-                            itemData.ShouldHaveInvGlowForBanner = true;
-                    }
-                }
-            }
-            // 反射获取NPCLoader.bannerToItem以支持模组旗帜
-            var bannerToItem = (IDictionary<int, int>)typeof(NPCLoader).GetField("bannerToItem",
-                BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
-            // 应用
-            foreach (var dict in bannerToItem)
-            {
-                if (dict.Value == item.type && scene.NPCBannerBuff.IndexInRange(dict.Key))
-                {
-                    scene.NPCBannerBuff[dict.Key] = true;
-                    scene.hasBanner = true;
-                    if (globalItemNotNull)
-                        itemData.ShouldHaveInvGlowForBanner = true;
-                }
+                Main.SceneMetrics.NPCBannerBuff[bannerID] = true;
+                Main.SceneMetrics.hasBanner = true;
+                if (globalItemNotNull)
+                    itemData.ShouldHaveInvGlowForBanner = true;
             }
         }
 
-        /// <summary>
-        /// 旗帜增益
-        /// </summary>
-        private void TweakBannerSceneMetrics(On.Terraria.SceneMetrics.orig_ScanAndExportToMain orig, SceneMetrics self, SceneMetricsScanSettings settings)
+        public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         {
-            orig(self, settings);
             // 随身旗帜（增益站）
-            if (MyUtils.Config.NoPlace_BUFFTile_Banner)
+            if (Config.NoPlace_BUFFTile_Banner)
             {
-                Player player = Main.LocalPlayer;
-                for (int i = 0; i < player.inventory.Length; i++)
+                var items = GetAllInventoryItemsList(Main.LocalPlayer, false);
+                foreach (var item in items)
                 {
-                    Item item = player.inventory[i];
-                    if (item.IsAir)
-                        continue;
-                    AddBannerBuff(self, item);
-                }
-                for (int i = 0; i < player.bank.item.Length; i++)
-                {
-                    Item item = player.bank.item[i];
-                    if (item.IsAir)
-                        continue;
-                    AddBannerBuff(self, item);
-                }
-                for (int i = 0; i < player.bank2.item.Length; i++)
-                {
-                    Item item = player.bank2.item[i];
-                    if (item.IsAir)
-                        continue;
-                    AddBannerBuff(self, item);
-                }
-                for (int i = 0; i < player.bank3.item.Length; i++)
-                {
-                    Item item = player.bank3.item[i];
-                    if (item.IsAir)
-                        continue;
-                    AddBannerBuff(self, item);
-                }
-                for (int i = 0; i < player.bank4.item.Length; i++)
-                {
-                    Item item = player.bank4.item[i];
-                    if (item.IsAir)
-                        continue;
-                    AddBannerBuff(self, item);
-                }
-                if (MyUtils.Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var DataPlayer) && DataPlayer.SuperVault is not null)
-                {
-                    for (int i = 0; i < DataPlayer.SuperVault.Length; i++)
+                    AddBannerBuff(item);
+                    if (!item.IsAir && item.ModItem is not null && item.ModItem is BannerChest bannerChest && bannerChest.storedBanners.Count > 0)
                     {
-                        if (DataPlayer.SuperVault[i] is not null && DataPlayer.SuperVault[i].IsAir)
-                            continue;
-                        AddBannerBuff(self, DataPlayer.SuperVault[i]);
+                        foreach (var p in bannerChest.storedBanners)
+                        {
+                            AddBannerBuff(p);
+                        }
                     }
                 }
             }
