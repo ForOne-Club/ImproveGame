@@ -19,6 +19,11 @@ namespace ImproveGame.Common.Systems
         /// A list of the items that don't apply infinite buffs
         /// </summary>
         internal static List<int> ModdedInfBuffsIgnore = new();
+        /// <summary>
+        /// 添加物品ID对应的一系列Tile
+        /// <br>Key为物品ID，Value为一个TileID的列表</br>
+        /// </summary>
+        internal static Dictionary<int, List<int>> PortableStations = new();
 
         internal static bool NoLakeSizePenaltyLoaded = false;
         internal static bool WMITFLoaded = false;
@@ -69,6 +74,11 @@ namespace ImproveGame.Common.Systems
             }
             UnloadedItemType = modloader.Find<ModItem>("UnloadedItem").Type;
             AprilFoolsItemType = modloader.Find<ModItem>("AprilFools").Type;
+        }
+
+        public static void AddCraftStationIntegration(Mod mod, string itemName, List<int> tileIDs)
+        {
+            PortableStations[mod.Find<ModItem>(itemName).Type] = tileIDs;
         }
 
         public static void AddBuffIntegration(Mod mod, string itemName, string buffName, bool isPlaceable)
@@ -122,6 +132,13 @@ namespace ImproveGame.Common.Systems
                                 var itemType = Convert.ToInt32(args[1]); // Item ID
                                 var buffType = Convert.ToInt32(args[2]); // Buff ID
                                 ModdedPlaceableItemBuffs[itemType] = buffType;
+                                return true;
+                            }
+                        case "AddPortableCraftingStation":
+                            {
+                                var itemType = Convert.ToInt32(args[1]); // Item ID
+                                var tileIDs = AsListOfInt(args[2]); // Tile IDs
+                                PortableStations[itemType] = tileIDs;
                                 return true;
                             }
                         default:

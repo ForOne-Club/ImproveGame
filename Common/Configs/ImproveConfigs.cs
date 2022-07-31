@@ -75,6 +75,11 @@ namespace ImproveGame.Common.Configs
         public List<string> TileSpeed_Blacklist =
             new() { new("torch") };
 
+        [Label("$Mods.ImproveGame.Config.PortableCraftingStation.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.PortableCraftingStation.Tooltip")]
+        [DefaultValue(true)]
+        public bool PortableCraftingStation;
+
         [Label("$Mods.ImproveGame.Config.NoPlace_BUFFTile.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoPlace_BUFFTile.Tooltip")]
         [DefaultValue(true)]

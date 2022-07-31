@@ -73,6 +73,17 @@ Mods:
                     Case-insensitive
                     '''
             }
+            PortableCraftingStation:
+            {
+                Label: "[i:WorkBench] 便携制作站"
+                Tooltip:
+                    '''
+                    物品栏以及便携存储中存有的制作站将直接生效
+                    而不需要将其放下并站在其旁边，再来制作相应的物品
+                    （如：只要你身上有熔炉，就可以随时把矿做成锭）
+                    水桶可充当水源、熔岩桶与蜂蜜桶亦然
+                    '''
+            }
             NoPlace_BUFFTile:
             {
                 Label: "[i:3198] Portable buff stations"
@@ -337,6 +348,7 @@ Mods:
             WallPlace: Wand of Technology
             LiquidWand: Wand of Liquids
             PotionBag: Potion Bag
+            BannerChest: 旗帜盒
             Autofisher: Fishing Machine
             PaintWand: Wand of Painting
         }
@@ -407,6 +419,13 @@ Mods:
                 <left> the Potion Bag while holding a potion to deposit
                 <right> the Potion Bag while holding it to take out potions
                 Maximum stores 20 stacks of potions
+                '''
+            BannerChest:
+                '''
+                存储你的旗帜
+                手持旗帜<left>该物品以将旗帜存入
+                在物品栏中<right>该物品以取出旗帜
+                最多可存入200组旗帜
                 '''
             Autofisher:
                 '''
@@ -648,7 +667,7 @@ Mods:
         {
             HugeInventory: "Huge Inventory"
             BuffTracker: "Buff Tracker"
-            GrabBagLoot: "Display detailed item drop of grab bags"
+            GrabBagLoot: "Display grab bag loot"
         }
     }
 }

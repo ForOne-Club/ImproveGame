@@ -77,6 +77,17 @@
                     中英文均可被检测，英文不区分大小写
                     '''
             }
+            PortableCraftingStation:
+            {
+                Label: "[i:WorkBench] 便携制作站"
+                Tooltip:
+                    '''
+                    物品栏以及便携存储中存有的制作站将直接生效
+                    而不需要将其放下并站在其旁边，再来制作相应的物品
+                    （如：只要你身上有熔炉，就可以随时把矿做成锭）
+                    水桶可充当水源、熔岩桶与蜂蜜桶亦然
+                    '''
+            }
             NoPlace_BUFFTile:
             {
                 Label: "[i:3198] 随身增益站"
@@ -345,6 +356,7 @@
             CreateWand: 建造魔杖
             LiquidWand: 液体魔杖
             PotionBag: 药水袋
+            BannerChest: 旗帜盒
             Autofisher: 自动钓鱼机
             PaintWand: 漆涂法杖
         }
@@ -415,6 +427,13 @@
                 手持药水<left>该物品以将药水存入
                 在物品栏中<right>该物品以取出药水
                 最多可存入20组药水
+                '''
+            BannerChest:
+                '''
+                存储你的旗帜
+                手持旗帜<left>该物品以将旗帜存入
+                在物品栏中<right>该物品以取出旗帜
+                最多可存入200组旗帜
                 '''
             Autofisher:
                 '''
