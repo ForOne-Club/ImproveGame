@@ -174,6 +174,11 @@ namespace ImproveGame.Common.Configs
         [Slider]
         public int NPCCoinDropRate;
 
+        [Label("$Mods.ImproveGame.Config.LavalessLavaSlime.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.LavalessLavaSlime.Tooltip")]
+        [DefaultValue(false)]
+        public bool LavalessLavaSlime;
+
         [Label("$Mods.ImproveGame.Config.TravellingMerchantStay.Label")]
         [Tooltip("$Mods.ImproveGame.Config.TravellingMerchantStay.Tooltip")]
         [DefaultValue(false)]

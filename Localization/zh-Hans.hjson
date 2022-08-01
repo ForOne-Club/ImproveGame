@@ -189,6 +189,11 @@
             }
             NoCD_FishermanQuest.Label: "[i:4608] 渔夫任务取消冷却"
             NPCCoinDropRate.Label: "[i:73] 敌人钱币掉落倍率"
+            LavalessLavaSlime:
+            {
+                Label: "[i:LavaSlimeBanner] 熔岩史莱姆不生成熔岩"
+                Tooltip: "专家或大师模式下的熔岩史莱姆被击杀时不再会生成熔岩"
+            }
             TravellingMerchantStay:
             {
                 Label: "[i:2222] 旅商永远不离开"

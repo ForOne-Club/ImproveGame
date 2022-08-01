@@ -12,7 +12,7 @@
 ## Additions:
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
-- Added a Refresh button for the Travelling Merchant's shop to replace the 'auto-refresh function'
+- Added a Refresh Shop button for the Travelling Merchant to refresh the shop immediately
 - Added a function that makes the Nurse to heal you instantly when you talk to her
 - The Wand of Liquids no longer consumes mana
 - Added Fast Extractinator function
@@ -22,6 +22,7 @@
 - Added a function to adjust the number of kills needed to obtain a banner
 - Added a Banner Box to store up to 200 stacks of banners
 - Added a Portable Crafting Station feature
+- Added a lavaless lava slime function, to stop lava slime from spawning lava
 - Added Together Happier(multiplayer) functions
   - Shared Portable Crafting Stations for teamates
   - Shared Infinite Buffs for teamates

@@ -181,6 +181,11 @@ Mods:
             }
             NoCD_FishermanQuest.Label: "[i:4608] Instant refresh Angler's quests"
             NPCCoinDropRate.Label: "[i:73] Enemy money drop multiplier"
+            LavalessLavaSlime:
+            {
+                Label: "[i:LavaSlimeBanner] Lavaless lava slime"
+                Tooltip: "Killing lava slime no longer spawns lava in expert or master mode"
+            }
             TravellingMerchantStay:
             {
                 Label: "[i:2222] The Travelling Merchant doesn't depart"
@@ -505,7 +510,7 @@ Mods:
             LootDisplay: "Press [{KeybindName}] to see detailed item drop"
             LootDisplayBindless: "(You have not bind a hotkey for this function, please do so in Controls)"
             Refreshing: "Refreshing"
-            Refresh: "Ë¢ÐÂÉÌµê"
+            Refresh: "Refresh Shop"
 
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"

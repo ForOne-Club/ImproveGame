@@ -54,6 +54,28 @@ namespace ImproveGame.Common.Systems
             On.Terraria.WorldGen.UnspawnTravelNPC += TravelNPCStay;
             // 修改旗帜需求
             On.Terraria.NPC.CountKillForBannersAndDropThem += NPC_CountKillForBannersAndDropThem;
+            // 熔岩史莱姆不生成熔岩
+            IL.Terraria.NPC.VanillaHitEffect_Inner += LavalessLavaSlime;
+        }
+
+        private void LavalessLavaSlime(ILContext il)
+        {
+            var c = new ILCursor(il);
+
+            if (!c.TryGotoNext(
+                MoveType.After,
+                i => i.MatchCall(typeof(Main), "get_expertMode"),
+                i => i.Match(OpCodes.Brfalse_S),
+                i => i.Match(OpCodes.Ldarg_0),
+                i => i.MatchLdfld(typeof(NPC), nameof(NPC.type)),
+                i => i.MatchLdcI4(NPCID.LavaSlime)
+            ))
+                return;
+
+            c.EmitDelegate<Func<int, int>>((returnValue) => {
+                // 把if (type == 59) 的59换掉，NPC.type不可能为NPCLoader.NPCCount
+                return Config.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue;
+            });
         }
 
         private void NPC_CountKillForBannersAndDropThem(On.Terraria.NPC.orig_CountKillForBannersAndDropThem orig, NPC npc)
