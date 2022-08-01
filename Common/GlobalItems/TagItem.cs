@@ -33,7 +33,7 @@ namespace ImproveGame.Common.GlobalItems
         /// 为药水物品简介添加Tag标题文本
         /// </summary>
         public static void ModifyBuffTooltips(Mod Mod, int itemType, int buffType, List<TooltipLine> tooltips) {
-            bool buffEnabled = InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType);
+            bool buffEnabled = InfBuffPlayer.CheckInfBuffEnable(buffType);
 
             if (itemType == ItemID.GardenGnome)
             {

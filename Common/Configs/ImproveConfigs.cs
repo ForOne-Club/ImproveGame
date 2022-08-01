@@ -282,6 +282,24 @@ namespace ImproveGame.Common.Configs
         [Label("$Mods.ImproveGame.Config.GemTree.LabelMax")]
         public int GemTreeMax;
 
+        [Header("$Mods.ImproveGame.Config.TogetherConfigs.Header")]
+
+        [Label("$Mods.ImproveGame.Config.ShareCraftingStation.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.ShareCraftingStation.Tooltip")]
+        [DefaultValue(true)]
+        public bool ShareCraftingStation;
+
+        [Label("$Mods.ImproveGame.Config.ShareInfBuffs.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.ShareInfBuffs.Tooltip")]
+        [DefaultValue(false)]
+        public bool ShareInfBuffs;
+
+        [Label("$Mods.ImproveGame.Config.ShareRange.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.ShareRange.Tooltip")]
+        [DefaultValue(-1)]
+        [Range(-1, 2000)]
+        public int ShareRange;
+
         [Header("$Mods.ImproveGame.Config.ModSettings.Header")]
 
         [Label("$Mods.ImproveGame.Config.OnlyHost.Label")]

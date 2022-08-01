@@ -202,7 +202,7 @@ namespace ImproveGame.Interface.GUI
                 }
 
                 int buffType = i;
-                bool buffEnabled = InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(buffType);
+                bool buffEnabled = InfBuffPlayer.CheckInfBuffEnable(buffType);
 
                 Vector2 drawPosition = new(x + panelDimensions.X, y + panelDimensions.Y);
                 Asset<Texture2D> buffAsset = TextureAssets.Buff[buffType];

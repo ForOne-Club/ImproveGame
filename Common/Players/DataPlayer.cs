@@ -12,6 +12,7 @@ namespace ImproveGame.Common.Players
 
         // 保存的物品前缀，哥布林重铸栏
         public int ReforgeItemPrefix = 0;
+        private readonly int[] oldSuperVaultStack = new int[100]; // 上一帧的SuperVault的stack情况
         public readonly Item[] SuperVault = new Item[100];
         public bool SuperVaultVisable;
         private Vector2 SuperVaultPos;
@@ -29,10 +30,8 @@ namespace ImproveGame.Common.Players
         // 进入地图时候
         public override void OnEnterWorld(Player player)
         {
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI)
-            {
-                UISystem.Instance.BigBagGUI.SetSuperVault(SuperVault, SuperVaultPos);
-            }
+            // 这个方法仅在加入端调用，在服务器和其他端均不调用
+            UISystem.Instance.BigBagGUI.SetSuperVault(SuperVault, SuperVaultPos);
         }
 
         public override void LoadData(TagCompound tag)
@@ -75,6 +74,35 @@ namespace ImproveGame.Common.Players
 
             tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
             tag["InfBuffDisabledMod"] = InfBuffDisabledMod;
+        }
+
+        public override void PostUpdate()
+        {
+            if (Main.myPlayer != Player.whoAmI || Main.netMode != NetmodeID.MultiplayerClient)
+                return;
+
+            // 侦测stack，如果有变化就发包
+            for (int i = 0; i < 100; i++)
+            {
+                if (SuperVault[i] is null)
+                {
+                    SuperVault[i] = new();
+                    continue;
+                }
+                if (SuperVault[i].stack != oldSuperVaultStack[i])
+                {
+                    NetBigBag.SendSlot(i, SuperVault[i], Main.myPlayer, -1, -1);
+                }
+                oldSuperVaultStack[i] = SuperVault[i].stack;
+                if (SuperVault[i].IsAir)
+                    oldSuperVaultStack[i] = 0;
+            }
+        }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            // 按照Example的写法 - 直接写就完了！
+            NetBigBag.SendAllSlot(this, toWho, fromWho);
         }
     }
 }

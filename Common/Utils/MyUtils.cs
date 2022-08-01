@@ -86,6 +86,30 @@ namespace ImproveGame
         }
 
         /// <summary>
+        /// 为 <seealso cref="ImproveConfigs.ShareRange"/> 范围内的同队玩家执行Action
+        /// </summary>
+        public static void CheckTeamPlayers(int myselfIndex, Action<Player> whatToDo)
+        {
+            if (myselfIndex < 0 || myselfIndex >= 255 || Main.netMode is NetmodeID.SinglePlayer)
+            {
+                return;
+            }
+            for (int i = 0; i < 255; i++)
+            {
+                var player = Main.player[i];
+                if (i != myselfIndex && player.active && !player.DeadOrGhost && player.team is not 0 && player.team == Main.player[myselfIndex].team)
+                {
+                    // 范围检测
+                    if (Config.ShareRange != -1 && player.Distance(Main.player[myselfIndex].Center) / 16f > Config.ShareRange)
+                    {
+                        continue;
+                    }
+                    whatToDo(player);
+                }
+            }
+        }
+
+        /// <summary>
         /// 获取相应热键的当前绑定名称
         /// </summary>
         public static bool TryGetKeybindString(ModKeybind keybind, out string bindName)

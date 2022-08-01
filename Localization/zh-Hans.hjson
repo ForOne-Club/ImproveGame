@@ -284,6 +284,39 @@
                 LabelMax: "[i:4856] 宝石树最大高度 (默认: 12)"
             }
             
+            TogetherConfigs.Header: "[i:GolfCupFlagRed] 独乐不如众乐"
+            ShareCraftingStation:
+            {
+                Label: "[i:WorkBench] 共享便携制作站"
+                Tooltip: 
+                    '''
+                    与你同队的玩家将共享便携制作站
+                    即: 若你队伍中有一名玩家携带了工作台，则你不需要携带即可合成椅子
+                    需要同时打开功能“便携制作站”以生效
+                    （玩家过多时(超过100个)计算量大，可能会造成卡顿）
+                    '''
+            }
+            ShareInfBuffs:
+            {
+                Label: "[i:227] 共享无尽增益"
+                Tooltip: 
+                    '''
+                    与你同队的玩家将共享无尽增益，包括旗帜增益
+                    即: 若你队伍中有一名玩家携带了蛋糕，则你不需要携带即可获得糖果冲刺增益
+                    需要打开至少一个无尽增益相关选项以生效
+                    （玩家过多时(超过100个)计算量大，可能会造成卡顿）
+                    '''
+            }
+            ShareRange:
+            {
+                Label: "[i:TeamBlockRed] 共享范围(格)"
+                Tooltip: 
+                    '''
+                    在一定共享范围内的同队玩家才会享受效果共享
+                    默认为 -1，即无限制，只要同队均会享受效果
+                    '''
+            }
+            
             ModSettings.Header: "[i:ImproveGame/CreateWand] 服务器设置"
             OnlyHost:
             {

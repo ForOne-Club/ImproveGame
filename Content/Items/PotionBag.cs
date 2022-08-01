@@ -106,7 +106,7 @@ namespace ImproveGame.Content.Items
                     // 有30个
                     if (available)
                     {
-                        if (!MyUtils.Config.NoConsume_Potion || !InfBuffPlayer.Get(Main.LocalPlayer).CheckInfBuffEnable(potion.buffType))
+                        if (!MyUtils.Config.NoConsume_Potion || !InfBuffPlayer.CheckInfBuffEnable(potion.buffType))
                         { // 被禁用了
                             text += $"  {MyUtils.GetText("Tips.PotionBagDisabled")}";
                         }

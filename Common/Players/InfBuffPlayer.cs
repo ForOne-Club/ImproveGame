@@ -16,33 +16,47 @@ namespace ImproveGame.Common.Players
         public override void PostUpdateBuffs() {
             if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
                 return;
+            HandleBuff(Player);
+            if (Config.ShareInfBuffs)
+                CheckTeamPlayers(Player.whoAmI, HandleBuff);
+        }
 
-            var items = GetAllInventoryItemsList(Player, false);
-            foreach (var item in items) {
+        /// <summary>
+        /// 加无尽Buff
+        /// </summary>
+        /// <param name="player">从某个玩家身上获取物品列表</param>
+        public static void HandleBuff(Player player)
+        {
+            var items = GetAllInventoryItemsList(player, false);
+            foreach (var item in items)
+            {
                 HandleBuffItem(item);
-                if (!item.IsAir && item.ModItem is not null && item.ModItem is PotionBag potionBag && potionBag.storedPotions.Count > 0) {
-                    foreach (var p in potionBag.storedPotions) {
+                if (!item.IsAir && item.ModItem is not null && item.ModItem is PotionBag potionBag && potionBag.storedPotions.Count > 0)
+                {
+                    foreach (var p in potionBag.storedPotions)
+                    {
                         HandleBuffItem(p);
                     }
                 }
             }
         }
 
-        public void HandleBuffItem(Item item) {
+        // 由于多人模式共享选项，这里原有的Player改成了Main.LocalPlayer，然后用了static
+        public static void HandleBuffItem(Item item) {
             int buffType = ApplyBuffItem.GetItemBuffType(item);
             if (buffType is not -1 && CheckInfBuffEnable(buffType)) {
                 // 饱食三级Buff不应该覆盖，而是取最高级
-                bool wellFed3Enabled = Player.FindBuffIndex(BuffID.WellFed3) != -1;
-                if (buffType == BuffID.WellFed && (Player.FindBuffIndex(BuffID.WellFed2) != -1 || wellFed3Enabled))
+                bool wellFed3Enabled = Main.LocalPlayer.FindBuffIndex(BuffID.WellFed3) != -1;
+                if (buffType == BuffID.WellFed && (Main.LocalPlayer.FindBuffIndex(BuffID.WellFed2) != -1 || wellFed3Enabled))
                     return;
                 if (buffType == BuffID.WellFed2 && wellFed3Enabled)
                     return;
                 if (item.type == ItemID.LuckPotionLesser || item.type == ItemID.LuckPotion || item.type == ItemID.LuckPotionGreater)
                 {
-                    Player.AddBuff(buffType, item.buffTime - 1);
+                    Main.LocalPlayer.AddBuff(buffType, item.buffTime - 1);
                     return;
                 }
-                Player.AddBuff(buffType, 2);
+                Main.LocalPlayer.AddBuff(buffType, 2);
             }
             if (Config.NoPlace_BUFFTile)
                 HandleSceneMetrics(item);
@@ -126,8 +140,9 @@ namespace ImproveGame.Common.Players
             }
         }
 
-        public bool CheckInfBuffEnable(int buffType) {
-            DataPlayer dataPlayer = DataPlayer.Get(Player);
+        // 由于多人模式共享选项，这里原有的Player改成了Main.LocalPlayer，然后用了static
+        public static bool CheckInfBuffEnable(int buffType) {
+            DataPlayer dataPlayer = DataPlayer.Get(Main.LocalPlayer);
             ModBuff modBuff = BuffLoader.GetBuff(buffType);
             if (modBuff is null) { // 原版
                 if (dataPlayer.InfBuffDisabledVanilla is null || !dataPlayer.InfBuffDisabledVanilla.Contains(buffType)) {

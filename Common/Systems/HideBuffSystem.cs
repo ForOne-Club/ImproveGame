@@ -33,14 +33,33 @@ namespace ImproveGame.Common.Systems
             ClearHideBuffArray();
             HideGlobalBuff.HidedBuffCountThisFrame = 0;
 
-            var items = MyUtils.GetAllInventoryItemsList(Main.LocalPlayer, false);
-            foreach (var item in items) {
-                ApplyBuffItem.UpdateInventoryGlow(item);
-                if (!item.IsAir && item.type == ModContent.ItemType<PotionBag>() &&
-                    item.ModItem is not null && item.ModItem is PotionBag &&
-                    (item.ModItem as PotionBag).storedPotions.Count > 0) {
-                    var potionBag = item.ModItem as PotionBag;
-                    foreach (var potion in from p in potionBag.storedPotions where p.stack >= MyUtils.Config.NoConsume_PotionRequirement select p) {
+            UpdateVisualBuffs(Main.LocalPlayer, true);
+            if (Config.ShareInfBuffs)
+                CheckTeamPlayers(Main.myPlayer, (player) => UpdateVisualBuffs(player, false));
+        }
+
+        // 更新InventoryGlow和BuffTypesShouldHide
+        private static void UpdateVisualBuffs(Player inventorySource, bool useInventoryGlow)
+        {
+            var items = GetAllInventoryItemsList(inventorySource, false);
+            foreach (var item in items)
+            {
+                if (useInventoryGlow)
+                {
+                    ApplyBuffItem.UpdateInventoryGlow(item);
+                }
+                else
+                {
+                    int buffType = ApplyBuffItem.GetItemBuffType(item);
+                    if (buffType is not -1)
+                    {
+                        BuffTypesShouldHide[buffType] = true;
+                    }
+                }
+                if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.storedPotions.Count > 0)
+                {
+                    foreach (var potion in from p in potionBag.storedPotions where p.stack >= Config.NoConsume_PotionRequirement select p)
+                    {
                         BuffTypesShouldHide[potion.buffType] = true;
                     }
                 }
