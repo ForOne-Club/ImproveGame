@@ -106,7 +106,17 @@ namespace ImproveGame.Interface.GUI
 
             ItemGrid = new ModItemGrid(UserInterface);
             ItemGrid.Top.Pixels = buttons[0].Top() + buttons[0].Height() + 10f;
+            ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
             MainPanel.Append(ItemGrid);
+        }
+
+        // 点击操作，将物品发送给服务器（因为像药水袋和旗帜盒这俩左键是不改stack的，所以这来个同步）
+        private void NetSyncItem(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient && listeningElement is ArrayItemSlot itemSlot)
+            {
+                NetBigBag.SendSlot(itemSlot.index, itemSlot.Item, Main.myPlayer, -1, -1);
+            }
         }
 
         public override void Update(GameTime gameTime)

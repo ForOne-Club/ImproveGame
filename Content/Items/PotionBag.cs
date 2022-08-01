@@ -181,22 +181,6 @@ namespace ImproveGame.Content.Items
             FullTexture = null;
         }
 
-        public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
-        {
-            var texture = storedPotions.Count == 0 ? TextureAssets.Item[Type] : FullTexture;
-            spriteBatch.Draw(texture.Value, position, frame, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
-            return false;
-        }
-
-        public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
-        {
-            var texture = storedPotions.Count == 0 ? TextureAssets.Item[Type] : FullTexture;
-            var position = Item.Center - Main.screenPosition;
-            var origin = texture.Size() * 0.5f;
-            spriteBatch.Draw(texture.Value, position, null, lightColor, rotation, origin, scale, SpriteEffects.None, 0f);
-            return false;
-        }
-
         public override void LoadData(TagCompound tag)
         {
             List<Item> list = new();

@@ -58,6 +58,7 @@ namespace ImproveGame.Interface.UIElements
         {
             SetCursorOverride();
             MouseClickSlot();
+            base.MouseDown(evt);
         }
 
         public override void RightMouseDown(UIMouseEvent evt)
@@ -90,6 +91,7 @@ namespace ImproveGame.Interface.UIElements
                 Main.mouseRightRelease = false;
                 return;
             }
+            base.MouseDown(evt);
         }
 
         public override void Update(GameTime gameTime)

@@ -6,6 +6,7 @@
         public readonly static int VCount = 5; // 纵向格子的数量
 
         public Item[] items;
+        public ArrayItemSlot ItemSlot;
 
         public void SetInventory(Item[] items)
         {
@@ -15,11 +16,14 @@
             {
                 float col = i % HCount;
                 float row = i / HCount;
-                ArrayItemSlot ItemSlot = new(items, i);
+                ItemSlot = new(items, i);
+                ItemSlot.OnMouseDown += OnMouseDownSlot;
                 ItemSlot.SetPos(col * (ItemSlot.Width() + 10f), row * (ItemSlot.Height() + 10f));
                 Append(ItemSlot);
             }
         }
+
+        public event MouseEvent OnMouseDownSlot;
 
         public ModItemList(Vector2 SlotSize)
         {
