@@ -213,6 +213,11 @@
                     消耗的钱币数量会从玩家头上弹出
                     '''
             }
+            BestiaryQuickUnlock:
+            {
+                Label: "[i:DontHurtCrittersBook] 一次击杀即可完全解锁图鉴"
+                Tooltip: "只要该生物的图鉴被解锁，无论击杀数，都会显示它的全部信息（如掉落、简介等）"
+            }
             BannerRequirement:
             {
                 Label: "[i:2990] 获得旗帜所需杀敌数倍率"
@@ -240,12 +245,12 @@
                 Label: "[i:213] 再生法杖自动种植"
                 Tooltip: "根据收获时的草药种植"
             }
-            BestiaryQuickUnlock:
-            {
-                Label: "[i:DontHurtCrittersBook] 一次击杀即可完全解锁图鉴"
-                Tooltip: "只要该生物的图鉴被解锁，无论击杀数，都会显示它的全部信息（如掉落、简介等）"
-            }
             RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
+            DontDeleteBuff:
+            {
+                Label: "[i:FlaskofNanites] 死亡保存增益"
+                Tooltip: "使增益在死后依然会维持激活状态"
+            }
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
             

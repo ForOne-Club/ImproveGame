@@ -56,6 +56,46 @@ namespace ImproveGame.Common.Systems
             On.Terraria.NPC.CountKillForBannersAndDropThem += NPC_CountKillForBannersAndDropThem;
             // 熔岩史莱姆不生成熔岩
             IL.Terraria.NPC.VanillaHitEffect_Inner += LavalessLavaSlime;
+            // 死后保存Buff
+            IL.Terraria.Player.UpdateDead += KeepBuffOnUpdateDead;
+        }
+
+        // 只想要保存增益，不要减益，于是复杂了起来
+        private void KeepBuffOnUpdateDead(ILContext il)
+        {
+            var c = new ILCursor(il);
+
+            /* IL_01C0: ldsfld    bool[] Terraria.Main::persistentBuff
+             * IL_01C5: ldarg.0
+             * IL_01C6: ldfld     int32[] Terraria.Player::buffType
+             * IL_01CB: ldloc.2
+             * IL_01CC: ldelem.i4
+             * IL_01CD: ldelem.u1
+             * IL_01CE: brtrue.s  IL_01E2
+             */
+            if (!c.TryGotoNext(
+                MoveType.After,
+                i => i.MatchLdsfld<Main>(nameof(Main.persistentBuff)),
+                i => i.Match(OpCodes.Ldarg_0),
+                i => i.MatchLdfld<Player>(nameof(Player.buffType)),
+                i => i.Match(OpCodes.Ldloc_2),
+                i => i.Match(OpCodes.Ldelem_I4),
+                i => i.Match(OpCodes.Ldelem_U1)
+            ))
+                return;
+
+            c.Emit(OpCodes.Ldarg_0); // Player实例
+            c.Emit(OpCodes.Ldfld, typeof(Player).GetField(nameof(Player.buffType), BindingFlags.Instance | BindingFlags.Public)); // buffType数组
+            c.Emit(OpCodes.Ldloc_2); // 索引 i
+            c.Emit(OpCodes.Ldelem_I4); // 结合出int32
+            c.EmitDelegate<Func<bool, int, bool>>((returnValue, buffType) => {
+                if (Config.DontDeleteBuff)
+                {
+                    // 返回false就会进入删除
+                    return !Main.debuff[buffType] && !Main.buffNoSave[buffType] && !Main.lightPet[buffType] && !Main.vanityPet[buffType];
+                }
+                return returnValue;
+            });
         }
 
         private void LavalessLavaSlime(ILContext il)

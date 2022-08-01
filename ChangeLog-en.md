@@ -15,7 +15,7 @@
 - Added a Refresh Shop button for the Travelling Merchant to refresh the shop immediately
 - Added a function that makes the Nurse to heal you instantly when you talk to her
 - The Wand of Liquids no longer consumes mana
-- Added Fast Extractinator function
+- Added Faster Extractinator function
 - Added 'Which Mod Is This From' function, showing which mod is an item or a NPC from
 - Added a Grab Bag Item Drop Rate Display function
 - Added a function to completely unlock a creature's bestiary upon killing it
@@ -23,6 +23,7 @@
 - Added a Banner Box to store up to 200 stacks of banners
 - Added a Portable Crafting Station feature
 - Added a lavaless lava slime function, to stop lava slime from spawning lava
+- Added the function of keeping buff after death
 - Added Together Happier(multiplayer) functions
   - Shared Portable Crafting Stations for teamates
   - Shared Infinite Buffs for teamates

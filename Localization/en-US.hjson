@@ -205,6 +205,11 @@ Mods:
                     Money cost will be displayed above the player
                     '''
             }
+            BestiaryQuickUnlock:
+            {
+                Label: "[i:DontHurtCrittersBook] Lesson Learned"
+                Tooltip: "As long as a creature's bestiary is unlocked, its bestiary will be completely unlocked regardless the killing count"
+            }
             BannerRequirement:
             {
                 Label: "[i:2990] Number of kills to obtain a banner"
@@ -232,12 +237,12 @@ Mods:
                     Label: "[i:213] Staff of Regrowth auto-plant"
                     Tooltip: "Automatically plant the gathered herb"
             }
-            BestiaryQuickUnlock:
-            {
-                Label: "[i:DontHurtCrittersBook] Lesson Learned"
-                Tooltip: "As long as a creatire's bestiary is unlocked, its bestiary will be completely unlocked regardless the killing count"
-            }
             RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
+            DontDeleteBuff:
+            {
+                Label: "[i:FlaskofNanites] Keep buffs after death"
+                Tooltip: "Make all buffs stay active after death"
+            }
             BanDamageVar.Label: "[i:6] Disable damage spread"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
             

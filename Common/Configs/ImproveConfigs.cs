@@ -194,6 +194,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool QuickNurse;
 
+        [Label("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Tooltip")]
+        [DefaultValue(true)]
+        public bool BestiaryQuickUnlock;
+
         [Label("$Mods.ImproveGame.Config.BannerRequirement.Label")]
         [Tooltip("$Mods.ImproveGame.Config.BannerRequirement.Tooltip")]
         [Slider]
@@ -219,14 +224,14 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool StaffOfRegenerationAutomaticPlanting;
 
-        [Label("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Label")]
-        [Tooltip("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Tooltip")]
-        [DefaultValue(true)]
-        public bool BestiaryQuickUnlock;
-
         [Label("$Mods.ImproveGame.Config.RespawnWithFullHP.Label")]
         [DefaultValue(true)]
         public bool RespawnWithFullHP;
+
+        [Label("$Mods.ImproveGame.Config.DontDeleteBuff.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.DontDeleteBuff.Tooltip")]
+        [DefaultValue(true)]
+        public bool DontDeleteBuff;
 
         [Label("$Mods.ImproveGame.Config.BanDamageVar.Label")]
         [DefaultValue(false)]
