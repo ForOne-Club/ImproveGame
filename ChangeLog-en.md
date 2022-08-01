@@ -28,7 +28,7 @@
   - Shared Portable Crafting Stations for teamates
   - Shared Infinite Buffs for teamates
   - Range of the shared effects can be adjusted, unlimited by default
-- 添加了两款预设
+- Added 2 configuration presets
 ## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
