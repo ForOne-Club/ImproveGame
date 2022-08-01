@@ -225,5 +225,15 @@ namespace ImproveGame.Content.Items
         {
             tag.Add("placeType", (byte)placeType);
         }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddRecipeGroup(ModRecipeGroup.DemoniteGroup, 8)
+                .AddIngredient(ItemID.Amethyst, 8)
+                .AddTile(TileID.WorkBenches)
+                .Register();
+        }
     }
 }

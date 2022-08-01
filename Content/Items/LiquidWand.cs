@@ -201,6 +201,7 @@ namespace ImproveGame.Content.Items
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
                 .AddRecipeGroup(ModRecipeGroup.ShadowGroup, 18)
                 .AddRecipeGroup(ModRecipeGroup.GoldGroup, 12)
+                .AddTile(TileID.Anvils)
                 .Register();
         }
     }
