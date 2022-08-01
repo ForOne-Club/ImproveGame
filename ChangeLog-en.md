@@ -65,11 +65,6 @@
 - The Wand of Space now support horizontal and vertical placement and you can choose which type of tile to place: platforms, solid blocks, ropes or minecart tracks
 - **[v1.5.9.1]** Added a hotkey for the Buff Tracker
 - **[v1.5.9.2]** The Fishing Machine now supports mod biomes
-- **[v1.5.9.3]** Reworked control panel of the Wand of Space, added new categories
-- **[v1.5.9.3]** Added a Wand of Painting, can paint/remove paint of a large area
-- **[v1.5.9.3]** Added a auto-refreshing function for Travelling Merchant's shop(each time you open his shop page, the goods will be rerolled)
-- **[v1.5.9.3]** Added a function that makes the Nurse to heal you instantly when you talk to her
-- **[v1.5.9.3]** The Wand of Liquids no longer consumes mana
 ## Misc
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
 - **[v1.5.9.2]** Added Mod.Calls
