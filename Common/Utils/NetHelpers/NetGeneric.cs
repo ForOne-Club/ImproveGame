@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using ImproveGame.Common.Systems;
+using System.IO;
 
 namespace ImproveGame.Common.Utils.NetHelpers
 {
@@ -11,6 +12,9 @@ namespace ImproveGame.Common.Utils.NetHelpers
                     break;
                 case MessageType.ClientReceivePlrItemUsing:
                     ClientReceivePlrItemUsing(reader);
+                    break;
+                case MessageType.ReceiveRefreshTravelShop:
+                    ReceiveRefreshTravelShop(reader);
                     break;
             }
         }
@@ -59,6 +63,39 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Write(itemRotation);
             packet.Write(directionBool);
             packet.Write((short)player.itemAnimation);
+            packet.Send(-1, -1);
+        }
+
+        public static void ReceiveRefreshTravelShop(BinaryReader reader)
+        {
+            if (Main.netMode == NetmodeID.Server)
+            {
+                Chest.SetupTravelShop();
+
+                var packet = ImproveGame.Instance.GetPacket();
+                packet.Write((byte)MessageType.ReceiveRefreshTravelShop);
+                for (int i = 0; i < 40; i++)
+                {
+                    packet.Write((short)Main.travelShop[i]);
+                }
+                packet.Send(-1, -1);
+            }
+            else {
+                for (int i = 0; i < 40; i++)
+                {
+                    Main.travelShop[i] = reader.ReadInt16();
+                }
+                RefreshTravelShopSystem.Refreshing = false;
+            }
+        }
+
+        /// <summary>
+        /// 找服务器更新旅行商店
+        /// </summary>
+        public static void ClientSendRefreshTravelShop()
+        {
+            var packet = ImproveGame.Instance.GetPacket();
+            packet.Write((byte)MessageType.ReceiveRefreshTravelShop);
             packet.Send(-1, -1);
         }
     }

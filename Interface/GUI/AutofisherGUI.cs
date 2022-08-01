@@ -148,7 +148,7 @@ namespace ImproveGame.Interface.GUI
                 return;
 
             autofisher.accessory = item;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode is NetmodeID.MultiplayerClient) {
                 NetAutofish.ClientSendItem(17, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         }
@@ -159,7 +159,7 @@ namespace ImproveGame.Interface.GUI
                 return;
 
             autofisher.fishingPole = item;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode is NetmodeID.MultiplayerClient) {
                 NetAutofish.ClientSendItem(15, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         }
@@ -170,7 +170,7 @@ namespace ImproveGame.Interface.GUI
                 return;
 
             autofisher.bait = item;
-            if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick) {
+            if (Main.netMode is NetmodeID.MultiplayerClient && !rightClick) {
                 NetAutofish.ClientSendItem(16, item, AutofishPlayer.LocalPlayer.Autofisher);
             }
         } 
@@ -180,7 +180,7 @@ namespace ImproveGame.Interface.GUI
             if (autofisher is null)
                 return;
             if (!typeChange && stackChange != 0) {
-                NetAutofish.ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange);
+                NetAutofish.SendStackChange(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange);
             }
         }
 
@@ -199,13 +199,13 @@ namespace ImproveGame.Interface.GUI
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
-            if (Main.netMode == NetmodeID.MultiplayerClient && !typeChange && stackChange != 0) {
-                NetAutofish.ClientSendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
+            if (Main.netMode is NetmodeID.MultiplayerClient && !typeChange && stackChange != 0) {
+                NetAutofish.SendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
             }
         }
 
         public void RefreshItems(byte slotType = 18) {
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode is NetmodeID.MultiplayerClient) {
                 if (RequireRefresh) {
                     SyncFromTileEntity();
                     RequireRefresh = false;

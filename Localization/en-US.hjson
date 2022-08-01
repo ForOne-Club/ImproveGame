@@ -188,12 +188,8 @@ Mods:
             }
             TravellingMerchantRefresh:
             {
-                Label: "[i:2222] Automatically refreshes the Travelling Merchant's shop"
-                Tooltip:
-                    '''
-                    Each time you open his shop page, the goods will be rerolled
-                    Players may see different goods in multiplayer mode
-                    '''
+                Label: "[i:2222] 旅商商店可刷新"
+                Tooltip: "在旅商的对话面板添加一个按钮，可手动刷新其商店商品"
             }
             QuickNurse:
             {
@@ -475,6 +471,8 @@ Mods:
             FromMod: "From mod {DisplayName}"
             LootDisplay: "Press [{KeybindName}] to see detailed item drop"
             LootDisplayBindless: "(You have not bind a hotkey for this function, please do so in Controls)"
+            Refreshing: "Refreshing"
+            Refresh: "Refresh Shop"
 
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"

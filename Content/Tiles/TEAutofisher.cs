@@ -1,4 +1,5 @@
 using ImproveGame.Common.Systems;
+using System.Collections.Generic;
 using System.Reflection;
 using Terraria.Chat;
 using Terraria.DataStructures;
@@ -124,7 +125,7 @@ namespace ImproveGame.Content.Tiles
             }
             fishingSpeedBonus += Math.Min(bassCount / 20f, 5f);
 
-            float fishingCooldown = 6600f; // 钓鱼机基础冷却在这里改，原版写的是660
+            float fishingCooldown = 66f; // 钓鱼机基础冷却在这里改，原版写的是660
             if (FishingTimer > fishingCooldown / fishingSpeedBonus) {
                 FishingTimer = 0;
                 ApplyAccessories();
@@ -349,17 +350,49 @@ namespace ImproveGame.Content.Tiles
             ItemLoader.CaughtFishStack(item);
             item.newAndShiny = true;
             int oldStack = item.stack;
-            item = MyUtils.ItemStackToInventory(fish, item, false);
+
+            // 先填充和物品相同的
+            for (int i = 0; i < 15; i++)
+            {
+                int oldStackSlot = fish[i].stack;
+                item = ItemStackToInventoryItem(fish, i, item, false);
+                if (fish[i].stack != oldStackSlot && Main.netMode is NetmodeID.Server)
+                {
+                    NetAutofish.SendStackChange(Position, (byte)i, fish[i].stack - oldStackSlot);
+                }
+                if (item.IsAir)
+                    goto FilledEnd;
+            }
+            // 后填充空位
+            for (int i = 0; i < 15; i++)
+            {
+                if (fish[i].IsAir)
+                {
+                    fish[i] = item.Clone();
+                    if (Main.netMode is NetmodeID.Server)
+                    {
+                        NetAutofish.ServerSendSyncItem(Position, (byte)i);
+                    }
+                    item = new();
+                    goto FilledEnd;
+                }
+            }
+
+            FilledEnd:;
 
             // 必须是消耗了，也就是真的能存
             if (item.stack != oldStack) {
                 TryConsumeBait(player);
+                if (Main.netMode is NetmodeID.Server)
+                {
+                    NetAutofish.ServerSendSyncItem(Position, 16); // 同步鱼饵
+                }
             }
 
             if (Main.netMode == NetmodeID.SinglePlayer)
+            {
                 UISystem.Instance.AutofisherGUI.RefreshItems();
-            else
-                NetAutofish.ServerSendSyncItem(Position, 18);
+            }
         }
 
         private void TryConsumeBait(Player player) {
@@ -386,10 +419,6 @@ namespace ImproveGame.Content.Tiles
                     bait.SetDefaults();
             }
         }
-
-        private static bool IsDungeonBrick(int type) => type == TileID.BlueDungeonBrick || type == TileID.PinkDungeonBrick || type == TileID.GreenDungeonBrick;
-
-        private static bool IsJungleTile(int type) => type == TileID.JungleGrass || type == TileID.LihzahrdBrick;
 
         private static void FishingCheck_RollDropLevels(Player closetPlayer, int fishingLevel, out bool common, out bool uncommon, out bool rare, out bool veryrare, out bool legendary, out bool crate) {
             int commonChance = 150 / fishingLevel;

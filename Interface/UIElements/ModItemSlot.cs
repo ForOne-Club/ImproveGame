@@ -22,7 +22,7 @@ namespace ImproveGame.Interface.UIElements
         /// <summary>
         /// 是否可交互，否则不能执行左右键操作
         /// </summary>
-        public bool Interactable;
+        public bool Interactable = true;
         /// <summary>
         /// 该槽位内的饰品/装备是否可在被右键时自动装备
         /// </summary>

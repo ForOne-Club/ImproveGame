@@ -30,8 +30,8 @@ namespace ImproveGame.Common.Utils.NetHelpers
                 case MessageType.Autofish_ClientReceiveLocatePoint:
                     ClientReceiveLocatePoint(reader);
                     break;
-                case MessageType.Autofish_ServerReceiveStackChange:
-                    ServerReceiveStackChange(reader, sender);
+                case MessageType.Autofish_ReceiveStackChange:
+                    ReceiveStackChange(reader, sender);
                     break;
                 case MessageType.Autofish_ClientReceiveTipChange:
                     ClientReceiveTipChange(reader);
@@ -73,7 +73,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             }
         }
 
-        public static void ServerReceiveStackChange(BinaryReader reader, int sender) {
+        public static void ReceiveStackChange(BinaryReader reader, int sender) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
             byte type = reader.ReadByte();
@@ -89,19 +89,29 @@ namespace ImproveGame.Common.Utils.NetHelpers
                     autofisher.bait.stack += stackChange;
                 }
                 // 发送到其他的所有客户端
-                ServerSendSyncItem(new Point16(x, y), type, sender);
+                if (Main.netMode is NetmodeID.Server)
+                {
+                    ServerSendSyncItem(new Point16(x, y), type, sender);
+                }
+                // 客户端刷新框
+                else
+                {
+                    AutofisherGUI.RequireRefresh = true;
+                    if (AutofisherGUI.Visible)
+                        UISystem.Instance.AutofisherGUI.RefreshItems();
+                }
             }
         }
 
         /// <summary>
-        /// 由客户端执行，向服务器发送更改堆叠而不是发送物品（避免延迟导致两端不同步而刷物品）
+        /// 两端均可调用，向服务器/全客户端发送更改堆叠而不是发送物品（避免延迟导致两端不同步而刷物品）
         /// </summary>
         /// <param name="point"> <seealso cref="TEAutofisher"/> 坐标</param>
         /// <param name="type">请求类型，小于或等于14为请求相应的fish，16为鱼饵，其他的没必要同步</param>
         /// <param name="stackChange">更改的堆叠量</param>
-        public static void ClientSendStackChange(Point16 point, byte type, int stackChange) {
+        public static void SendStackChange(Point16 point, byte type, int stackChange) {
             var packet = ImproveGame.Instance.GetPacket();
-            packet.Write((byte)MessageType.Autofish_ServerReceiveStackChange);
+            packet.Write((byte)MessageType.Autofish_ReceiveStackChange);
             packet.Write(point.X);
             packet.Write(point.Y);
             packet.Write(type);

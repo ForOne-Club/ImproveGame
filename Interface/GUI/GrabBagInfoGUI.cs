@@ -60,7 +60,10 @@ namespace ImproveGame.Interface.GUI
             SetupScrollBar();
             BasePanel.Append(Scrollbar);
 
-            ItemSlot = new(1f);
+            ItemSlot = new(1f)
+            {
+                Interactable = false
+            };
             ItemSlot.SetSize(new(60f, 60f)).SetPos(-72f, -12f);
             BasePanel.Append(ItemSlot);
         }

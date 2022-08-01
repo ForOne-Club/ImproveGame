@@ -48,6 +48,9 @@ namespace ImproveGame.Common.Systems
             {"HEROsMod: Sort Inventory", "HERO's Mod: 快捷整理物品栏" },
             {"HEROsMod: Swap Hotbar", "HERO's Mod: 切换快捷栏物品" },
             {"CheatSheet: Toggle Cheat Sheet Hotbar", "Cheat Sheet (作弊小抄): 切换快捷栏物品" },
+            {"OreExcavator: Excavate (while mining)", "Ore Excavator (连锁挖矿): 开启连锁" },
+            {"OreExcavator: Whitelist hovered", "Ore Excavator (连锁挖矿): 加入白名单" },
+            {"OreExcavator: Un-whitelist hovered", "Ore Excavator (连锁挖矿): 取消白名单" },
         };
 
         private readonly static Dictionary<string, string> zhTranslationKeybind = new()

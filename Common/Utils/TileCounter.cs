@@ -48,7 +48,7 @@ namespace ImproveGame.Common.Utils
 
         internal int[] _tileCounts = new int[TileLoader.TileCount];
 
-        private static bool Simulating;
+        public static bool Simulating { get; private set; }
 
         public TileCounter()
         {
@@ -72,7 +72,7 @@ namespace ImproveGame.Common.Utils
                 return;
             }
             var label = c.DefineLabel(); // 记录位置
-            c.Emit(OpCodes.Ldsfld, typeof(TileCounter).GetField(nameof(Simulating), BindingFlags.Static | BindingFlags.NonPublic));
+            c.Emit(OpCodes.Call, typeof(TileCounter).GetMethod($"get_{nameof(Simulating)}", BindingFlags.Static | BindingFlags.Public));
             c.Emit(OpCodes.Brfalse_S, label); // 为false就跳到下面
             c.Emit(OpCodes.Ret); // 为true直接return
             c.MarkLabel(label);

@@ -196,12 +196,8 @@
             }
             TravellingMerchantRefresh:
             {
-                Label: "[i:2222] 旅商商店自动刷新"
-                Tooltip:
-                    '''
-                    每次打开旅商商店页面时，其出售物品自动刷新
-                    在多人模式下会导致每个玩家看到的出售列表不一致
-                    '''
+                Label: "[i:2222] 旅商商店可刷新"
+                Tooltip: "在旅商的对话面板添加一个按钮，可手动刷新其商店商品"
             }
             QuickNurse:
             {
@@ -483,6 +479,8 @@
             FromMod: "所属模组 {DisplayName}"
             LootDisplay: "按下 [{KeybindName}] 以查看摸彩袋物品明细"
             LootDisplayBindless: "(您尚未绑定快捷键，请到控件处绑定以使用此功能)"
+            Refreshing: "刷新中"
+            Refresh: "刷新商店"
 
             BuffTrackerOn: "<left>以打开增益追踪器"
             BuffTrackerOff: "<left>以关闭增益追踪器"

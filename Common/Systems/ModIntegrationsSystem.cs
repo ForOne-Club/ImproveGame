@@ -27,6 +27,7 @@ namespace ImproveGame.Common.Systems
 
         internal static bool NoLakeSizePenaltyLoaded = false;
         internal static bool WMITFLoaded = false;
+        internal static bool DialogueTweakLoaded = false;
 
         internal static int UnloadedItemType;
         internal static int AprilFoolsItemType;
@@ -35,6 +36,7 @@ namespace ImproveGame.Common.Systems
         {
             DoCalamityModIntegration();
             DoFargowiltasIntegration();
+            DoDialogueTweakIntegration();
             DoModLoaderIntegration();
             NoLakeSizePenaltyLoaded = ModLoader.HasMod("NoLakeSizePenalty");
             WMITFLoaded = ModLoader.HasMod("WMITF");
@@ -65,6 +67,37 @@ namespace ImproveGame.Common.Systems
             }
             AddBuffIntegration(fargowiltas, "Omnistation", "Omnistation", true);
             AddBuffIntegration(fargowiltas, "Omnistation2", "Omnistation", true);
+        }
+
+        private static void DoDialogueTweakIntegration()
+        {
+            if (!ModLoader.TryGetMod("DialogueTweak", out Mod dialogueTweak))
+            {
+                return;
+            }
+            DialogueTweakLoaded = true;
+            dialogueTweak.Call("AddButton",
+                NPCID.TravellingMerchant, // NPC ID
+                () => RefreshTravelShopSystem.DisplayText, // 文本
+                "DialogueTweak/Interfaces/Assets/Icon_Help", // 显示的icon
+                () => // 点击操作
+                {
+                    if (Main.mouseLeft && !RefreshTravelShopSystem.OldMouseLeft)
+                    {
+                        if (Main.netMode == NetmodeID.SinglePlayer)
+                        {
+                            Chest.SetupTravelShop();
+                            SoundEngine.PlaySound(SoundID.Chat);
+                        }
+                        else if (!RefreshTravelShopSystem.Refreshing)
+                        {
+                            NetGeneric.ClientSendRefreshTravelShop();
+                            RefreshTravelShopSystem.Refreshing = true;
+                        }
+                    }
+                },
+                () => Config.TravellingMerchantRefresh // 什么时候可用
+            );
         }
 
         private static void DoModLoaderIntegration() {

@@ -52,8 +52,6 @@ namespace ImproveGame.Common.Systems
             On.Terraria.WorldGen.IsHarvestableHerbWithSeed += WorldGen_IsHarvestableHerbWithSeed;
             // 旅商永远不离开
             On.Terraria.WorldGen.UnspawnTravelNPC += TravelNPCStay;
-            // 旅商刷新
-            On.Terraria.Chest.SetupShop += RefreshTravelShop;
             // 修改旗帜需求
             On.Terraria.NPC.CountKillForBannersAndDropThem += NPC_CountKillForBannersAndDropThem;
             // 便携制作站
@@ -129,15 +127,15 @@ namespace ImproveGame.Common.Systems
                             CheckChainedStations(tileID, player);
                         }
                     }
-                    if (item.type == ItemID.WaterBucket || item.type == ItemID.BottomlessBucket)
+                    if (item.type is ItemID.WaterBucket or ItemID.BottomlessBucket)
                     {
                         player.adjWater = true;
                     }
-                    if (item.type == ItemID.LavaBucket || item.type == ItemID.BottomlessLavaBucket)
+                    if (item.type is ItemID.LavaBucket or ItemID.BottomlessLavaBucket)
                     {
                         player.adjLava = true;
                     }
-                    if (item.type == ItemID.HoneyBucket /*|| item.type == ItemID.BottomlessHoneyBucket*/)
+                    if (item.type is ItemID.HoneyBucket /*or ItemID.BottomlessHoneyBucket*/)
                     {
                         player.adjHoney = true;
                     }
@@ -153,16 +151,6 @@ namespace ImproveGame.Common.Systems
             ItemID.Sets.KillsToBanner[itemID] = (int)(ItemID.Sets.KillsToBanner[itemID] * Config.BannerRequirement);
             orig.Invoke(npc);
             ItemID.Sets.KillsToBanner[itemID] = originalRequirement;
-        }
-
-        private void RefreshTravelShop(On.Terraria.Chest.orig_SetupShop orig, Chest self, int type)
-        {
-            // 19 旅商商店ID
-            if (type == 19 && Config.TravellingMerchantRefresh)
-            {
-                Chest.SetupTravelShop();
-            }
-            orig.Invoke(self, type);
         }
 
         private void TravelNPCStay(On.Terraria.WorldGen.orig_UnspawnTravelNPC orig)
@@ -437,6 +425,9 @@ namespace ImproveGame.Common.Systems
         /// </summary>
         private static void AddBannerBuff(Item item)
         {
+            if (item is null)
+                return;
+
             bool globalItemNotNull = item.TryGetGlobalItem<GlobalItemData>(out var itemData);
             if (globalItemNotNull)
                 itemData.ShouldHaveInvGlowForBanner = false;
@@ -453,14 +444,17 @@ namespace ImproveGame.Common.Systems
 
         public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
         {
+            // 不要模拟
+            if (TileCounter.Simulating)
+                return;
             // 随身旗帜（增益站）
-            if (Config.NoPlace_BUFFTile_Banner)
+            if (Config.NoPlace_BUFFTile_Banner && Main.netMode is not NetmodeID.Server)
             {
                 var items = GetAllInventoryItemsList(Main.LocalPlayer, false);
                 foreach (var item in items)
                 {
                     AddBannerBuff(item);
-                    if (!item.IsAir && item.ModItem is not null && item.ModItem is BannerChest bannerChest && bannerChest.storedBanners.Count > 0)
+                    if (item is not null && !item.IsAir && item.ModItem is not null && item.ModItem is BannerChest bannerChest && bannerChest.storedBanners.Count > 0)
                     {
                         foreach (var p in bannerChest.storedBanners)
                         {

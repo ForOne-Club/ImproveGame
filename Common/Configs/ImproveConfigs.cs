@@ -181,7 +181,7 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.TravellingMerchantRefresh.Label")]
         [Tooltip("$Mods.ImproveGame.Config.TravellingMerchantRefresh.Tooltip")]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool TravellingMerchantRefresh;
 
         [Label("$Mods.ImproveGame.Config.QuickNurse.Label")]
