@@ -472,7 +472,7 @@ Mods:
             LootDisplay: "Press [{KeybindName}] to see detailed item drop"
             LootDisplayBindless: "(You have not bind a hotkey for this function, please do so in Controls)"
             Refreshing: "Refreshing"
-            Refresh: "Refresh Shop"
+            Refresh: "Ë¢ÐÂÉÌµê"
 
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"

@@ -380,12 +380,20 @@ namespace ImproveGame.Content.Tiles
 
             FilledEnd:;
 
-            // 必须是消耗了，也就是真的能存
-            if (item.stack != oldStack) {
-                TryConsumeBait(player);
+            // 必须是消耗了，也就是真的能存 | TryConsumeBait返回true表示真的消耗了
+            if (item.stack != oldStack && TryConsumeBait(player))
+            {
                 if (Main.netMode is NetmodeID.Server)
                 {
-                    NetAutofish.ServerSendSyncItem(Position, 16); // 同步鱼饵
+                    // 没了
+                    if (bait.IsAir)
+                    {
+                        NetAutofish.ServerSendSyncItem(Position, 16); // 同步鱼饵
+                    }
+                    else // 还在，同步stack
+                    {
+                        NetAutofish.SendStackChange(Position, 16, -1);
+                    }
                 }
             }
 
@@ -395,7 +403,7 @@ namespace ImproveGame.Content.Tiles
             }
         }
 
-        private void TryConsumeBait(Player player) {
+        private bool TryConsumeBait(Player player) {
             bool canCunsume = false;
             float num2 = 1f + (float)bait.bait / 6f;
             if (num2 < 1f)
@@ -417,7 +425,9 @@ namespace ImproveGame.Content.Tiles
                 bait.stack--;
                 if (bait.stack <= 0)
                     bait.SetDefaults();
+                return true;
             }
+            return false;
         }
 
         private static void FishingCheck_RollDropLevels(Player closetPlayer, int fishingLevel, out bool common, out bool uncommon, out bool rare, out bool veryrare, out bool legendary, out bool crate) {
@@ -521,7 +531,7 @@ namespace ImproveGame.Content.Tiles
             if (result.BaitItemType == ItemID.TruffleWorm)
                 return result;
 
-            if (result.BaitPower == 0 || result.PolePower == 1) // 原版PolePower判断的是0，但我发现这个最小(没鱼竿)其实是1
+            if (result.BaitPower == 0 || result.PolePower == 0)
                 return result;
 
             var player = GetClosestPlayer(Position);

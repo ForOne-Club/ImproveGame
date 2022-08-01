@@ -181,8 +181,14 @@ namespace ImproveGame.Interface.UIElements
 
             // 放回物品栏图标
             if (Main.cursorOverride == CursorOverrideID.ChestToInventory) {
+                int oldStack = Item.stack;
                 Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item, GetItemSettings.InventoryEntityToPlayerInventorySettings);
-                SoundEngine.PlaySound(SoundID.Grab);
+                if (Item.stack != oldStack) // 成功了
+                {
+                    if (Item.stack <= 0)
+                        Item.SetDefaults();
+                    SoundEngine.PlaySound(SoundID.Grab);
+                }
                 return;
             }
 

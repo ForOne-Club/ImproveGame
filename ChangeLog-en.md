@@ -8,10 +8,11 @@
 - Fixed the Encumbering Stone working in personal inventories
 - Fixed possible lagging while mining
 - Fixed the Blinkroot and Shiverthorn sometimes not been re-planted
+- 修复了钓鱼机在多人模式下刷物品的BUG
 ## Additions:
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
-- Added a auto-refreshing function for Travelling Merchant's shop(each time you open his shop page, the goods will be rerolled)
+- 添加旅商商店手动刷新功能 (为旅商添加一个“刷新商店”按钮)
 - Added a function that makes the Nurse to heal you instantly when you talk to her
 - The Wand of Liquids no longer consumes mana
 - Added Fast Extractinator function
