@@ -9,6 +9,8 @@ namespace ImproveGame.Content.Items
 {
     public class PotionBag : ModItem, IItemOverrideLeftClick
     {
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
+
         public List<Item> storedPotions = new();
 
         // 克隆内容不克隆引用

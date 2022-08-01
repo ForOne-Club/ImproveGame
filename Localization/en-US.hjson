@@ -7,12 +7,34 @@ Mods:
         {
             ImproveConfigs.Label: Mod Configuration
             NoNeedReload: No need to reload this mod
-            ItemConfigs.Header: "[i:29] Item Configs"
-            LoadModItems:
+
+            Presets.Header: "[i:ImproveGame/PaintWand] 预设"
+            ILoveBalance:
             {
-                Label: "[i:1344] Enable mod items"
-                Tooltip: Modded items will not be loaded if it is off
+                Label: "[i:ImproveGame/MagickWand] 平衡我爱死你啦"
+                Tooltip:
+                    '''
+                    如果你想要一个在原版的基础上更进一步的体验，这款预设会是首选
+                    在此预设中，关闭了无限增益，以死亡保存增益取而代之
+                    大多数设置都调节到了相对平衡的水平
+                    让你在享受难度与原版相当的模组同时，拥有一个不错的体验
+                    （模组物品是否开启请自觉斟酌，因为有些模组物品不加以限制可能缺乏平衡）
+                    （在选择预设后，你仍然可以手动调节你想要的选项）
+                    '''
             }
+            FukMeCalamity:
+            {
+                Label: "[i:ImproveGame/StarburstWand] 泰拉无双启动"
+                Tooltip:
+                    '''
+                    这款预设包括了大多数方便的功能，大幅度降低了游戏流程的重复与枯燥程度
+                    如果你在玩灾厄模组复仇模式或Fargo魂石模组永恒模式，这会是很好的选择
+                    大多数设置以便利为第一标准，使游戏流程更集中于推进进度与击杀Boss
+                    （在选择预设后，你仍然可以手动调节你想要的选项）
+                    '''
+            }
+
+            ItemConfigs.Header: "[i:29] Item Configs"
             SuperVoidVault:
             {
                 Label: "[i:4131] Super Void Vault"
@@ -319,7 +341,7 @@ Mods:
                     '''
             }
 
-            ModSettings.Header: "[i:ImproveGame/CreateWand] Server Config"
+            ServerSettings.Header: "[i:ImproveGame/CreateWand] Server Config"
             OnlyHost:
             {
                     Label: "[i:2203] Only the host can change the mod configs(does not work with port forwarding)"
@@ -362,6 +384,15 @@ Mods:
                     This panel only appears when you have the infinite buff stations/potions combination of
                     [Sun Flower][Peace Candle][Calm Potion][Water Candle] and [Battle Potion]
                     If you don't want players in a server to raise the enemy spawn rate too high, you may use this function
+                    '''
+            }
+            LoadModItems:
+            {
+                Label: "[i:ImproveGame/WallPlace] Enable mod items"
+                Tooltip:
+                    '''
+                    Modded items will not be loaded if it is off
+                    The mod item icons contained in the config will become text
                     '''
             }
 

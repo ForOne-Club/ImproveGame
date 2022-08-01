@@ -1,15 +1,12 @@
 ﻿using ImproveGame.Common.Systems;
-using Terraria.GameContent.Creative;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Items.Placeable
 {
     public class Autofisher : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-        }
+        public override void SetStaticDefaults() => SacrificeTotal = 1;
+
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
 
         public override void SetDefaults()
         {

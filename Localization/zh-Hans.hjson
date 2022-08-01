@@ -7,12 +7,34 @@
         {
             ImproveConfigs.Label: 模组配置
             NoNeedReload: 无需重新加载
-            ItemConfigs.Header: "[i:29] 物品设置"
-            LoadModItems:
+
+            Presets.Header: "[i:ImproveGame/PaintWand] 预设"
+            ILoveBalance:
             {
-                Label: "[i:1344] 启用模组物品"
-                Tooltip: 启用后会加载模组的物品，关闭后物品将会在游戏中消失。
+                Label: "[i:ImproveGame/MagickWand] 平衡我爱死你啦"
+                Tooltip:
+                    '''
+                    如果你想要一个在原版的基础上更进一步的体验，这款预设会是首选
+                    在此预设中，关闭了无限增益，以死亡保存增益取而代之
+                    大多数设置都调节到了相对平衡的水平
+                    让你在享受难度与原版相当的模组同时，拥有一个不错的体验
+                    （模组物品是否开启请自觉斟酌，因为有些模组物品不加以限制可能缺乏平衡）
+                    （在选择预设后，你仍然可以手动调节你想要的选项）
+                    '''
             }
+            FukMeCalamity:
+            {
+                Label: "[i:ImproveGame/StarburstWand] 泰拉无双启动"
+                Tooltip:
+                    '''
+                    这款预设包括了大多数方便的功能，大幅度降低了游戏流程的重复与枯燥程度
+                    如果你在玩灾厄模组复仇模式或Fargo魂石模组永恒模式，这会是很好的选择
+                    大多数设置以便利为第一标准，使游戏流程更集中于推进进度与击杀Boss
+                    （在选择预设后，你仍然可以手动调节你想要的选项）
+                    '''
+            }
+
+            ItemConfigs.Header: "[i:29] 物品设置"
             SuperVoidVault:
             {
                 Label: "[i:4131] 超级虚空保险库"
@@ -327,7 +349,7 @@
                     '''
             }
             
-            ModSettings.Header: "[i:ImproveGame/CreateWand] 服务器设置"
+            ServerSettings.Header: "[i:ImproveGame/CreateWand] 服务器设置"
             OnlyHost:
             {
                 Label: "[i:2203] 仅主机可调节配置 (端口映射无效)"
@@ -369,6 +391,15 @@
                     注意: 此面板只有同时拥有[向日葵][和平蜡烛][镇静药水][水蜡烛][战争药水]
                     的增益无限物品组合才会出现
                     服务器内如果你不想让玩家调节过高生成倍率，可以通过此选项限制
+                    '''
+            }
+            LoadModItems:
+            {
+                Label: "[i:ImproveGame/WallPlace] 启用模组物品"
+                Tooltip:
+                    '''
+                    关闭后，本模组添加的物品将会从游戏中消失
+                    本配置页面包含的模组物品图标会变作一串字符
                     '''
             }
 
