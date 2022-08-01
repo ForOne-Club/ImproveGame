@@ -8,11 +8,11 @@
 - Fixed the Encumbering Stone working in personal inventories
 - Fixed possible lagging while mining
 - Fixed the Blinkroot and Shiverthorn sometimes not been re-planted
-- 修复了钓鱼机在多人模式下刷物品的BUG
+- Fixed the Fishing Machine duplicating items in multiplayer mode
 ## Additions:
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
-- 添加旅商商店手动刷新功能 (为旅商添加一个“刷新商店”按钮)
+- Added a Refresh button for the Travelling Merchant's shop to replace the 'auto-refresh function'
 - Added a function that makes the Nurse to heal you instantly when you talk to her
 - The Wand of Liquids no longer consumes mana
 - Added Fast Extractinator function
@@ -22,16 +22,16 @@
 - Added a function to adjust the number of kills needed to obtain a banner
 - Added a Banner Box to store up to 200 stacks of banners
 - Added a Portable Crafting Station feature
-- 添加 独乐不如众乐选项
-  - 共享便携制作站，可与同队玩家共享物品栏即便携存储内的制作站
-  - 共享无尽增益，可与同队玩家共享所有的无尽增益
-  - 共享范围可以调节，默认为无限制
+- Added Together Happier(multiplayer) functions
+  - Shared Portable Crafting Stations for teamates
+  - Shared Infinite Buffs for teamates
+  - Range of the shared effects can be adjusted, unlimited by default
 ## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
 - The Fishing Machine is now be crafted by Any Iron Bar * 8 + Any Copper Bar * 4 + Glass Block * 20
 - The Wand Of Space can also be crafted by Any Wood * 24 + Any Evil Bar * 8 + Amethyst * 8
-- 取消了药水袋装有药水时更换样式的效果
+- Removed change in styles of the Potion Bags while containing potions
 
 # v1.5.9
 ## Subversions
