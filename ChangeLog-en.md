@@ -22,11 +22,16 @@
 - Added a function to adjust the number of kills needed to obtain a banner
 - Added a Banner Box to store up to 200 stacks of banners
 - Added a Portable Crafting Station feature
+- 添加 独乐不如众乐选项
+  - 共享便携制作站，可与同队玩家共享物品栏即便携存储内的制作站
+  - 共享无尽增益，可与同队玩家共享所有的无尽增益
+  - 共享范围可以调节，默认为无限制
 ## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
 - The Fishing Machine is now be crafted by Any Iron Bar * 8 + Any Copper Bar * 4 + Glass Block * 20
 - The Wand Of Space can also be crafted by Any Wood * 24 + Any Evil Bar * 8 + Amethyst * 8
+- 取消了药水袋装有药水时更换样式的效果
 
 # v1.5.9
 ## Subversions
