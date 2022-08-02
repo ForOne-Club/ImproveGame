@@ -203,7 +203,18 @@
             }
 
             NPCConfigs.Header: "[i:4382] NPC 设置"
-            TownNPCSpawnInNight.Label: "[i:4081] 允许城镇NPC夜晚刷新"
+            TownNPCGetTFIntoHouse:
+            {
+                Label: "[i:MusicBoxTownDay] 更好的城镇NPC入住机制"
+                Tooltip:
+                    '''
+                    哥布林、酒保、法师、机械师、税收官在满足生成条件后，
+                    若有空房子会直接入住，不需要寻找，一旦入住即视为已被找到状态
+                    在图鉴中被解锁的城镇NPC将会无视入住条件，只要有房子即可入住
+                    （注意：你需要与城镇NPC至少对话一次来解锁图鉴）
+                    '''
+            }
+            TownNPCSpawnInNight.Label: "[i:MusicBoxTownNight] 允许城镇NPC夜晚入住"
             TownNPCSpawnSpeed:
             {
                 Label: "[i:4910] 城镇NPC刷新速度"

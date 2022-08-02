@@ -24,9 +24,10 @@
 - Added a Portable Crafting Station feature
 - Added a lavaless lava slime function, to stop lava slime from spawning lava
 - Added the function of keeping buff after death
+- 添加更好的城镇NPC入住机制功能
 - Added Together Happier(multiplayer) functions
-  - Shared Portable Crafting Stations for teamates
-  - Shared Infinite Buffs for teamates
+  - Shared Portable Crafting Stations for teammates
+  - Shared Infinite Buffs for teammates
   - Range of the shared effects can be adjusted, unlimited by default
 - Added 2 configuration presets
 ## Misc

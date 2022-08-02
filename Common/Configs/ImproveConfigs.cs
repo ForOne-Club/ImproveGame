@@ -146,6 +146,11 @@ namespace ImproveGame.Common.Configs
 
         [Header("$Mods.ImproveGame.Config.NPCConfigs.Header")]
 
+        [Label("$Mods.ImproveGame.Config.TownNPCGetTFIntoHouse.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.TownNPCGetTFIntoHouse.Tooltip")]
+        [DefaultValue(false)]
+        public bool TownNPCGetTFIntoHouse;
+
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Label")]
         [DefaultValue(false)]
         public bool TownNPCSpawnInNight;
@@ -155,7 +160,7 @@ namespace ImproveGame.Common.Configs
         [Slider]
         [Range(-1, 12)]
         [DefaultValue(-1)]
-        public int TownNPCSpawnSpeed;
+        public float TownNPCSpawnSpeed;
 
         [Label("$Mods.ImproveGame.Config.NoCD_FishermanQuest.Label")]
         [DefaultValue(false)]
@@ -354,6 +359,7 @@ namespace ImproveGame.Common.Configs
                 MiddleEnableBank is true &&
                 AutoSaveMoney is true &&
                 FasterExtractinator is true &&
+                TownNPCGetTFIntoHouse is false &&
                 TownNPCSpawnInNight is true &&
                 TownNPCSpawnSpeed is -1 &&
                 NoCD_FishermanQuest is true &&
@@ -399,6 +405,7 @@ namespace ImproveGame.Common.Configs
                     MiddleEnableBank = true;
                     AutoSaveMoney = true;
                     FasterExtractinator = true;
+                    TownNPCGetTFIntoHouse = false;
                     TownNPCSpawnInNight = true;
                     TownNPCSpawnSpeed = -1;
                     NoCD_FishermanQuest = true;
@@ -449,6 +456,7 @@ namespace ImproveGame.Common.Configs
                 MiddleEnableBank is true &&
                 AutoSaveMoney is true &&
                 FasterExtractinator is true &&
+                TownNPCGetTFIntoHouse is true &&
                 TownNPCSpawnInNight is true &&
                 TownNPCSpawnSpeed is 12 &&
                 NoCD_FishermanQuest is true &&
@@ -494,6 +502,7 @@ namespace ImproveGame.Common.Configs
                     MiddleEnableBank = true;
                     AutoSaveMoney = true;
                     FasterExtractinator = true;
+                    TownNPCGetTFIntoHouse = true;
                     TownNPCSpawnInNight = true;
                     TownNPCSpawnSpeed = 12;
                     NoCD_FishermanQuest = true;
@@ -541,7 +550,7 @@ namespace ImproveGame.Common.Configs
         public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message) {
             if (OnlyHostByPassword) {
                 if (!NetPasswordSystem.Registered[whoAmI]) {
-                    message = MyUtils.GetText("Config.OnlyHostByPassword.Unaccepted");
+                    message = GetText("Config.OnlyHostByPassword.Unaccepted");
                 }
                 return NetPasswordSystem.Registered[whoAmI];
             }
@@ -562,7 +571,7 @@ namespace ImproveGame.Common.Configs
                 return true;
             }
             else {
-                message = MyUtils.GetText("Config.OnlyHost.Unaccepted");
+                message = GetText("Config.OnlyHost.Unaccepted");
                 return false;
             }
         }
