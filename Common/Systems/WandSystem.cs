@@ -23,6 +23,7 @@ namespace ImproveGame.Common.Systems
         // 构造法杖
         public enum Construct : byte { Save, Place };
         public static Construct ConstructMode = Construct.Save;
+        public static string ConstructFilePath;
 
         /// <summary>
         /// 切换吸收模式

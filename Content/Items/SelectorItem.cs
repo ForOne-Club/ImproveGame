@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
 using System.Collections;
-using Terraria.GameContent.Creative;
 
 namespace ImproveGame.Content.Items
 {
@@ -10,12 +9,12 @@ namespace ImproveGame.Content.Items
     /// </summary>
     public abstract class SelectorItem : ModItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => MyUtils.Config.LoadModItems;
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
 
         public override void SetStaticDefaults()
         {
             Item.staff[Type] = true;
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            SacrificeTotal = 1;
         }
 
         private Point Start;

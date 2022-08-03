@@ -43,6 +43,9 @@ namespace ImproveGame.Common.Systems
         public GrabBagInfoGUI GrabBagInfoGUI;
         public static UserInterface GrabBagInfoInterface;
 
+        public StructureGUI StructureGUI;
+        public static UserInterface StructureInterface;
+
         public override void Unload()
         {
             Instance = null;
@@ -73,6 +76,9 @@ namespace ImproveGame.Common.Systems
 
             GrabBagInfoGUI = null;
             GrabBagInfoInterface = null;
+
+            StructureGUI = null;
+            StructureInterface = null;
         }
 
         public override void Load()
@@ -89,6 +95,7 @@ namespace ImproveGame.Common.Systems
                 BigBagGUI = new();
                 PaintWandGUI = new();
                 GrabBagInfoGUI = new();
+                StructureGUI = new();
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
                 LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
                 LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
@@ -98,6 +105,7 @@ namespace ImproveGame.Common.Systems
                 LoadGUI(ref BigBagGUI, out BigBagInterface, () => BigBagGUI.UserInterface = BigBagInterface);
                 LoadGUI(ref PaintWandGUI, out PaintWandInterface);
                 LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
+                LoadGUI(ref StructureGUI, out StructureInterface, () => StructureGUI.UserInterface = StructureInterface);
             }
         }
 
@@ -147,6 +155,10 @@ namespace ImproveGame.Common.Systems
             {
                 GrabBagInfoInterface?.Update(gameTime);
             }
+            if (StructureGUI.Visible)
+            {
+                StructureInterface?.Update(gameTime);
+            }
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -164,7 +176,6 @@ namespace ImproveGame.Common.Systems
                     () => { if (GrabBagInfoGUI.Visible) GrabBagInfoGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
             }
 
-
             int wireIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Wire Selection");
             if (wireIndex != -1)
             {
@@ -175,10 +186,22 @@ namespace ImproveGame.Common.Systems
                             SpaceWandGUI.Draw(Main.spriteBatch);
                         }
                         return true;
-                    }, InterfaceScaleType.UI)
-                );
+                    }, InterfaceScaleType.UI));
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Paint GUI", DrawPaintGUI, InterfaceScaleType.UI));
+            }
+
+            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
+            if (mouseTextIndex != -1)
+            {
+                layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Structure GUI", () =>
+                {
+                    if (StructureGUI.Visible)
+                    {
+                        StructureGUI.Draw(Main.spriteBatch);
+                    }
+                    return true;
+                }, InterfaceScaleType.UI));
             }
         }
 
