@@ -6,7 +6,7 @@ namespace ImproveGame.Common.GlobalNPCs
     {
         public override void GetChat(NPC npc, ref string chat)
         {
-            if (!Config.QuickNurse)
+            if (!Config.QuickNurse || npc.type is not NPCID.Nurse)
                 return;
 
             int health = Main.LocalPlayer.statLifeMax2 - Main.LocalPlayer.statLife;
