@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Interface.UIElements;
+using ImproveGame.Interface.UIElements_Shader;
 using System.Collections.Generic;
 using Terraria.GameInput;
 
@@ -21,7 +22,7 @@ namespace ImproveGame.Interface.GUI
 
         public UserInterface UserInterface;
         public UIText title;
-        public UIPanel MainPanel;
+        public SUIPanel MainPanel;
         public UIImageButton CloseButton;
         public PictureButton[] buttons = new PictureButton[4];
         public ModItemGrid ItemGrid;
@@ -52,7 +53,7 @@ namespace ImproveGame.Interface.GUI
 
         public override void OnInitialize()
         {
-            MainPanel = new UIPanel();
+            MainPanel = new(Color.Black, new(44, 57, 105, 160));
             MainPanel.OnMouseDown += (evt, uie) =>
             {
                 if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering)
@@ -81,22 +82,22 @@ namespace ImproveGame.Interface.GUI
 
             buttons[0] = new(MyUtils.GetTexture("UI/Quick").Value, Lang.inter[29].Value);
             buttons[0].SetPos(0f, title.Bottom() - 10f);
-            buttons[0].OnClick += (_, _) => QuickTakeOutToPlayerInventory();
+            buttons[0].OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
             MainPanel.Append(buttons[0]);
 
             buttons[1] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[30].Value);
             buttons[1].SetPos(buttons[0].Right() + 10f, buttons[0].Top());
-            buttons[1].OnClick += (_, _) => PutAll();
+            buttons[1].OnMouseDown += (_, _) => PutAll();
             MainPanel.Append(buttons[1]);
 
             buttons[2] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[31].Value);
             buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
-            buttons[2].OnClick += (_, _) => Replenish();
+            buttons[2].OnMouseDown += (_, _) => Replenish();
             MainPanel.Append(buttons[2]);
 
             buttons[3] = new(MyUtils.GetTexture("UI/Put").Value, MyUtils.GetText("SuperVault.Sort"));
             buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
-            buttons[3].OnClick += (_, _) => Sort();
+            buttons[3].OnMouseDown += (_, _) => Sort();
             MainPanel.Append(buttons[3]);
 
             CloseButton = new(MyUtils.GetTexture("Close")) { HAlign = 1f };

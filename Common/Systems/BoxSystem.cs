@@ -68,9 +68,14 @@ namespace ImproveGame.Common.Systems
                     {
                         DrawBox();
 
-                        Vector2 size = new(200, 100);
-                        PixelShader.DrawBox(MouseScreenUI - size / 2f, size, 20, 10, Color.White, Color.White, new(0x37, 0x9b, 0xff),
-                            new(0xc1, 0x80, 0xff));
+                        //Color gray = new(241, 241, 241);
+                        //Color gray2 = new(193, 193, 193);
+
+                        //Vector2 size = new(28, 300);
+                        //PixelShader.DrawBox(Main.UIScaleMatrix, MouseScreenUI - size / 2f, size, 14, 4, gray, gray);
+
+                        //size = new(16, 168);
+                        //PixelShader.DrawBox(Main.UIScaleMatrix, MouseScreenUI - size / 2f, size, 8, 4, gray2, gray2);
 
                         // 鼠标显示物块信息
                         /*Point point = Main.MouseWorld.ToTileCoordinates();
