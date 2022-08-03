@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.GameContent.ItemDropRules;
 
 namespace ImproveGame.Common.GlobalNPCs
 {
@@ -37,15 +31,15 @@ namespace ImproveGame.Common.GlobalNPCs
 
         public bool CanDrop(DropAttemptInfo info)
         {
-            if (info.player.HasItem(itemType))
+            if (!info.IsInSimulation)
             {
-                return false;
+                return !info.player.HasItem(itemType);
             }
-            return true;
+            return false;
         }
 
         public bool CanShowItemDropInUI() => true;
 
-        public string GetConditionDescription() => "玩家拥有当前物品时不会再次掉落";
+        public string GetConditionDescription() => GetText("ItemDropRule.WandDrop");
     }
 }
