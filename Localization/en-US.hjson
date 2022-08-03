@@ -18,8 +18,8 @@ Mods:
                     In this preset, you will keep buffs on death instead of having infinite buffs
                     Most functions are adjusted to a relatively balanced level
                     To let you have a decent gameplay while enjoying a vanilla-like difficulty
-                    (Use this mod's items on your onw consideration, as some of them might be IMBA)
-                    (You can still make adjustions after choosing a preset)
+                    (Use this mod's items on your own consideration, as some of them might be IMBA)
+                    (You can still make adjustments after choosing a preset)
                     '''
             }
             FukMeCalamity:
@@ -27,10 +27,10 @@ Mods:
                 Label: "[i:ImproveGame/StarburstWand] tIMBALoader"
                 Tooltip:
                     '''
-                    This preset includs most convenient features, significantly reduces repetitive works
-                    If you are playing Calamity's Revenge Mdoe or Fargo's Souls's Eternity Mode, it would be a nice option
+                    This preset includes most convenient features, significantly reduces repetitive works
+                    If you are playing Calamity's Revenge Mode or Fargo's Souls's Eternity Mode, it would be a nice option
                     Most configurations are for convenience, make the gameplay focus on progressing and defeating bosses
-                    (You can still make adjustions after choosing a preset)
+                    (You can still make adjustments after choosing a preset)
                     '''
             }
 
@@ -40,8 +40,8 @@ Mods:
                 Label: "[i:4131] Super Void Vault"
                 Tooltip:
                     '''
-                    Makes Piggy Bank,Safe and Defender's Furnance have the same effect as Void Bag
-                    Priority: Void Bag  Piggy Bank  Safe  Defender's Furnance
+                    Makes Piggy Bank, Safe and Defender's Furnace have the same effect as Void Bag
+                    Priority: Void Bag > Piggy Bank > Safe > Defender's Furnace
                     '''
             }
             SmartVoidVault:
@@ -60,7 +60,7 @@ Mods:
                     '''
                     An inventory with 100 slots, can interact with Super Void Vault and Void Vault Smart Pickup
                     Has the highest priority
-                    (Need to setup hot keys in Controls)
+                    (Need to set up hot keys in Controls)
                     '''
             }
             ItemMaxStack.Label: "[i:9] Max stack"
@@ -102,7 +102,7 @@ Mods:
                     '''
                     Crafting stations in your inventory and personal inventories will function as they are placed
                     No need to place them down
-                    E.g. You have a furnance in your inventory, so you can craft ores into bars at anywhere
+                    E.g. You have a Furnace in your inventory, so you can craft ores into bars at anywhere
                     Water Bucket is considered as a source of water, similarly for Lava Bucket and Honey Bucket
                     '''
             }
@@ -126,7 +126,7 @@ Mods:
                     '''
                     Potions in your inventory or personal inventories(Piggy bank, Safe, etc.)
                     Which stack not less than a certain number no longer consume and grant you infinite buffs
-                    Requirement is in th next config
+                    Requirement is in the next config
                     '''
             }
             NoConsume_PotionRequirement:
@@ -140,8 +140,8 @@ Mods:
             }
             NoConsume_Ammo:
             {
-                Label: "[i:3104] Enable infinite ammos"
-                Tooltip: Ammos which stack not less than 3996 will not be consumed
+                Label: "[i:3104] Enable infinite ammo"
+                Tooltip: Ammo which stack not less than 3996 will not be consumed
             }
             HideNoConsumeBuffs:
             {
@@ -195,7 +195,18 @@ Mods:
             }
 
             NPCConfigs.Header: "[i:4382] NPC Configs"
-            TownNPCSpawnInNight.Label: "[i:4081] Allow town NPCs to spawn at night time"
+            TownNPCGetTFIntoHouse:
+            {
+                Label: "[i:MusicBoxTownDay] Town NPC spawn mechanics improvement"
+                Tooltip:
+                    '''
+                    When the spawn conditions of unsaved Goblin Tinkerer, Tavernkeep, Wizard, Mechanic or Tax Collector are met
+                    They don't need to be saved, but will be able to spawn if there are valid houses. They will be considered as saved once they spawn
+                    Once an NPC's bestiary entry is unlocked, they will spawn as soon as there is a valid house, regardless of their spawn conditions
+                    (You have to talk to any town NPCs at least once to unlock their bestiary entry)
+                    '''
+            }
+            TownNPCSpawnInNight.Label: "[i:MusicBoxTownNight] Allow town NPCs to spawn at nighttime"
             TownNPCSpawnSpeed:
             {
                 Label: "[i:4910] Town NPC spawn rate multiplier"
@@ -238,7 +249,7 @@ Mods:
                 Tooltip:
                     '''
                     Adjusts number of kills to obtain a banner, smaller the multiplier the fewer kills you need to get a banner
-                    For referance, when the multiplier is set to 0.1(10%), killing 5 Blue Slimes will grant you a Blue Slime Banner instead of 50
+                    For reference, when the multiplier is set to 0.1(10%), killing 5 Blue Slimes will grant you a Blue Slime Banner instead of 50
                     When the multiplier is set to 10(1000%), killing 500 Blue Slimes will grant you a Blue Slime Banner instead of 50
                     '''
             }
@@ -290,7 +301,7 @@ Mods:
             GemTreeAlwaysDropGem:
             {
                 Label: "[i:3649] Gem trees always drop gem"
-                Tooltip: "Every part of a gem tree will drop gem or Gemcorn"
+                Tooltip: "Every part of a gem tree will drop gem or gemcorn"
             }
             MostTree:
             {
@@ -333,12 +344,17 @@ Mods:
             }
             ShareRange:
             {
-                Label: "[i:TeamBlockRed] Range of Shared Effects(in tiles)"
+                Label: "[i:WorldGlobe] Range of Shared Effects(in tiles)"
                 Tooltip: 
                     '''
-                    Only teamates within this range will share the shared effects
+                    Only teammates within this range will share the shared effects
                     -1 by default, which means infinite range
                     '''
+            }
+            TeamAutoJoin:
+            {
+                Label: "[i:TeamBlockRed] Automatically Join Red Team"
+                Tooltip: "Newly joined players will automatically join the red team in multiplayer mode"
             }
 
             ServerSettings.Header: "[i:ImproveGame/CreateWand] Server Config"
@@ -350,7 +366,7 @@ Mods:
                         Does not work in single player mode
                         After enabled, only the host(IP: 127.0.0.1) can change the mod configs
                         Only the host can toggle this on/off
-                        If the server is ran with port forwarding, please use the function below
+                        If the server runs with port forwarding, please use the function below
                         '''
                     Unaccepted: "Cannot save changes: you are not the host!"
             }
@@ -405,7 +421,9 @@ Mods:
                     - Wormhole Potion works in personal inventories
                     - Any accessory can be worn in vanity slots
                     - Display which mod are the items and NPCs from
-                    - Display detailed item drop of a grab bag while holding the binded key(a hotkey is needed)
+                    - Display detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
+                    - A hotkey to swap the hotbar with the second row of inventory
+                    - Display minion slot occupancy in tooltip
                     '''
             }
         }
@@ -547,6 +565,8 @@ Mods:
             LootDisplayBindless: "(You have not bind a hotkey for this function, please do so in Controls)"
             Refreshing: "Refreshing"
             Refresh: "Refresh Shop"
+            SummonSlot: "Minion slot occupancy: [c/22CC22:{Current}/{Total}]"
+            SummonSlotFull: "Minion slot occupancy: [c/CC2222:{Current}/{Total} (ÒÑÂú!)]"
 
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"
@@ -740,6 +760,8 @@ Mods:
             HugeInventory: "Huge Inventory"
             BuffTracker: "Buff Tracker"
             GrabBagLoot: "Display grab bag loot"
+            HotbarSwitch: "Swap hotbar"
+            HotbarSwitch.Tip: "Swap items in the first row with the second row in inventory"
         }
     }
 }

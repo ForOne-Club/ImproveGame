@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Players;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;
@@ -53,6 +54,7 @@ namespace ImproveGame.Common.Systems
                             pos.X = (float)(Main.screenWidth - x);
                         if (SecondLine)
                             pos.Y += FontAssets.MouseText.Value.LineSpacing;
+
                         ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, pos, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet);
                     }
                     return true;
@@ -65,6 +67,9 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(rulerIndex, new LegacyGameInterfaceLayer("ImproveGame: BorderRect", delegate
                     {
                         DrawBox();
+                        /*Vector2 size = new(200, 100);
+                        PixelShader.DrawBox(Main.MouseScreen - size / 2f, size, 10, 4, Color.White, Color.White, new(0x37, 0x9b, 0xff),
+                            new(0xc1, 0x80, 0xff));*/
                         // 鼠标显示物块信息
                         /*Point point = Main.MouseWorld.ToTileCoordinates();
                         if (Main.tile[point].HasTile) {

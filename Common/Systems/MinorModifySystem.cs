@@ -17,18 +17,12 @@ namespace ImproveGame.Common.Systems
     {
         public override void Load()
         {
-            Load_MethodInfo();
             // 还原哥布林重铸槽中物品的重铸次数
             On.Terraria.Player.dropItemCheck += SaveReforgePrefix;
             // 死亡是否掉落墓碑
             On.Terraria.Player.DropTombstone += DisableDropTombstone;
             // 抓取距离修改
             On.Terraria.Player.PullItem_Common += Player_PullItem_Common;
-            // 晚上刷新 NPC
-            // IL.Terraria.Main.UpdateTime += TweakNPCNightSpawn; // 我发现落星处理处就能直接用插入
-            On.Terraria.Main.HandleMeteorFall += Main_HandleMeteorFall;
-            // 商人生成同时计算存钱罐内物品
-            On.Terraria.Main.UpdateTime_SpawnTownNPCs += TweakMerchantSpawn;
             // 城镇NPC入住速度修改
             IL.Terraria.Main.UpdateTime_SpawnTownNPCs += SpeedUpNPCSpawn;
             // 修改空间法杖显示平台剩余数量
@@ -132,11 +126,6 @@ namespace ImproveGame.Common.Systems
         {
             if (!MyUtils.Config.TravellingMerchantStay)
                 orig.Invoke();
-        }
-
-        public void Load_MethodInfo()
-        {
-            SpawnTownNPCs = typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
         }
 
         private bool TileDrawing_IsAlchemyPlantHarvestable(On.Terraria.GameContent.Drawing.TileDrawing.orig_IsAlchemyPlantHarvestable orig, Terraria.GameContent.Drawing.TileDrawing self, int style)
@@ -265,59 +254,6 @@ namespace ImproveGame.Common.Systems
                 i => i.Match(OpCodes.Sub)))
                 return;
             c.EmitDelegate<Func<int, int>>(x => MyUtils.Config.DisableAlchemyPlantRipeCondition ? 0 : x); // “火焰花”*/
-        }
-
-        /// <summary>
-        /// 商人生成同时计算存钱罐内物品
-        /// </summary>
-        private void TweakMerchantSpawn(On.Terraria.Main.orig_UpdateTime_SpawnTownNPCs orig)
-        {
-            orig.Invoke();
-
-            bool hasMerchant = false;
-            int moneyCount = 0;
-            for (int l = 0; l < 255; l++)
-            {
-                // 放在一起统计，开销更小
-                if (l < 200 && !hasMerchant && Main.npc[l].active && Main.npc[l].townNPC && Main.npc[l].type == NPCID.Merchant)
-                {
-                    hasMerchant = true;
-                }
-
-                if (!Main.player[l].active)
-                    continue;
-
-                for (int m = 0; m < 40; m++)
-                {
-                    if (Main.player[l].bank.item[m] == null || Main.player[l].bank.item[m].stack <= 0)
-                        continue;
-
-                    if (moneyCount < 2000000000)
-                    {
-                        //Patch context: this is the amount of money.
-                        if (Main.player[l].bank.item[m].type == ItemID.CopperCoin)
-                            moneyCount += Main.player[l].bank.item[m].stack;
-
-                        if (Main.player[l].bank.item[m].type == ItemID.SilverCoin)
-                            moneyCount += Main.player[l].bank.item[m].stack * 100;
-
-                        if (Main.player[l].bank.item[m].type == ItemID.GoldCoin)
-                            moneyCount += Main.player[l].bank.item[m].stack * 10000;
-
-                        if (Main.player[l].bank.item[m].type == ItemID.PlatinumCoin)
-                            moneyCount += Main.player[l].bank.item[m].stack * 1000000;
-                    }
-                }
-            }
-
-            if (!hasMerchant && moneyCount > 5000)
-            {
-                Main.townNPCCanSpawn[NPCID.Merchant] = true;
-                if (WorldGen.prioritizedTownNPCType == 0)
-                {
-                    WorldGen.prioritizedTownNPCType = NPCID.Merchant;
-                }
-            }
         }
 
         /// <summary>
@@ -476,16 +412,6 @@ namespace ImproveGame.Common.Systems
                 return (int)Math.Round(dmg);
             else
                 return orig(dmg, luck);
-        }
-
-        public MethodInfo SpawnTownNPCs;
-        /// <summary>
-        /// NPC 晚上刷新
-        /// </summary>
-        private void Main_HandleMeteorFall(On.Terraria.Main.orig_HandleMeteorFall orig)
-        {
-            SpawnTownNPCs.Invoke(null, null);
-            orig.Invoke();
         }
 
         /// <summary>

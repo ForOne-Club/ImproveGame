@@ -24,11 +24,15 @@
 - Added a Portable Crafting Station feature
 - Added a lavaless lava slime function, to stop lava slime from spawning lava
 - Added the function of keeping buff after death
+- Added a Better Town NPC Spawn&Respawn Mechanics function
 - Added Together Happier(multiplayer) functions
-  - Shared Portable Crafting Stations for teamates
-  - Shared Infinite Buffs for teamates
+  - Shared Portable Crafting Stations for teammates
+  - Shared Infinite Buffs for teammates
   - Range of the shared effects can be adjusted, unlimited by default
 - Added 2 configuration presets
+- Added a automatically-join-red-team function
+- Added a Hotbar Swap function
+- Added a function which displays minion slot occupancy in tooltip
 ## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod

@@ -4,7 +4,7 @@ using Terraria.ModLoader.Default;
 
 namespace ImproveGame.Common.GlobalItems
 {
-    internal class TooltipModName : GlobalItem
+    internal class TooltipMiscModify : GlobalItem
     {
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
@@ -21,6 +21,20 @@ namespace ImproveGame.Common.GlobalItems
                     };
                     tooltips.Add(line);
                 }
+            }
+            if (item.DamageType == DamageClass.Summon && !item.sentry)
+            {
+                string key = "Tips.SummonSlot";
+                if (Main.LocalPlayer.slotsMinions >= Main.LocalPlayer.maxMinions)
+                {
+                    key += "Full";
+                }
+                string text = GetTextWith(key, new {
+                    Current = Main.LocalPlayer.slotsMinions,
+                    Total = Main.LocalPlayer.maxMinions
+                });
+                TooltipLine line = new(Mod, Mod.Name, text);
+                tooltips.Add(line);
             }
         }
     }

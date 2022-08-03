@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Systems;
 
 namespace ImproveGame.Entitys
 {
@@ -91,6 +92,7 @@ namespace ImproveGame.Entitys
 
         public void Draw()
         {
+            // PixelShader.DrawBox(Rectangle.TopLeft() * 16 + new Vector2(-2) - Main.screenPosition, Rectangle.Size() * 16 + new Vector2(4), 4, 2, new(0, 0xff, 0xa9), new(0xd, 0x4d, 0xff), new(0, 0xff, 0xa9, 150), new(0xd, 0x4d, 0xff, 150));
             MyUtils.DrawBorderRect(Rectangle, backgroundColor, borderColor);
         }
 
