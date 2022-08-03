@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Players;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.GUI;

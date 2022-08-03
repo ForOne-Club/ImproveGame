@@ -1,10 +1,8 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-
-namespace ImproveGame
+﻿namespace ImproveGame
 {
     public class ModAssets : ModSystem
     {
+        internal static Asset<Effect> BoxShader;
         internal static Asset<Effect> BorderRound;
         internal static Asset<Effect> ItemEffect;
         internal static Asset<Effect> LiquidSurface;
@@ -14,6 +12,7 @@ namespace ImproveGame
         {
             if (!Main.dedServ)
             {
+                BoxShader = GetEffect("Box");
                 BorderRound = MyUtils.GetEffect("BorderRound");
                 ItemEffect = MyUtils.GetEffect("item");
                 LiquidSurface = MyUtils.GetEffect("LiquidSurface");
@@ -25,6 +24,7 @@ namespace ImproveGame
         {
             if (!Main.dedServ)
             {
+                BoxShader = null;
                 BorderRound = null;
                 ItemEffect = null;
                 LiquidSurface = null;

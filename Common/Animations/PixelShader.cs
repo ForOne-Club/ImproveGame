@@ -1,12 +1,12 @@
 ﻿namespace ImproveGame.Common.Animations
 {
-    public class Round
+    public class PixelShader
     {
+        public static readonly Texture2D texture = GetTexture("255").Value; // √
         public AnimationTimer timer; // √
         public float border; // √
         public float scale; // √
         public float extraScale; // √
-        public Texture2D texture; // √
         public Color borderColor; // √
         public Color background; // √
 
@@ -33,7 +33,7 @@
             }
         }
 
-        public Round(AnimationTimer timer, float border, Color borderColor, Color background, float scale = 50f, float extraScale = 50f)
+        public PixelShader(AnimationTimer timer, float border, Color borderColor, Color background, float scale = 50f, float extraScale = 50f)
         {
             this.timer = timer;
             this.border = border;
@@ -41,8 +41,6 @@
             this.background = background;
             this.scale = scale;
             this.extraScale = extraScale;
-
-            texture = GetTexture("255").Value;
         }
 
         public void Draw()
@@ -58,12 +56,30 @@
             Effect effect = ModAssets.BorderRound.Value;
             effect.Parameters["border"].SetValue(border);
             effect.Parameters["borderColor"].SetValue(borderColor);
-            effect.Parameters["background"].SetValue(background);
+            effect.Parameters["background1"].SetValue(new Vector4(1f, 1f, 1f, 0.5f));
             effect.Parameters["imageSize"].SetValue(new Vector2(scale));
 
-            sb.BeginEffect(effect, Main.UIScaleMatrix);
+            sb.Begin(effect, Main.UIScaleMatrix);
             sb.Draw(texture, center, null, Color.White, 0, texture.Size() / 2f, scale, 0, 1f);
-            sb.EndEffect(Main.UIScaleMatrix);
+            sb.Begin(null, Main.UIScaleMatrix);
+        }
+
+        public static void DrawBox(Vector2 position, Vector2 size, float radius, float border, Color borderColor1, Color borderColor2, Color background1, Color background2)
+        {
+            SpriteBatch sb = Main.spriteBatch;
+            Effect effect = ModAssets.BoxShader.Value;
+
+            effect.Parameters["size"].SetValue(size);
+            effect.Parameters["radius"].SetValue(radius);
+            effect.Parameters["border"].SetValue(border);
+            effect.Parameters["borderColor1"].SetValue(borderColor1.ToVector4());
+            effect.Parameters["borderColor2"].SetValue(borderColor2.ToVector4());
+            effect.Parameters["background1"].SetValue(background1.ToVector4());
+            effect.Parameters["background2"].SetValue(background2.ToVector4());
+
+            sb.Begin(effect, Main.Transform);
+            sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
+            sb.Begin(null, Main.Transform);
         }
     }
 }
