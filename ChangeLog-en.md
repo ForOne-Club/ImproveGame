@@ -12,20 +12,26 @@
 ## Additions:
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
-- Added a Refresh button for the Travelling Merchant's shop to replace the 'auto-refresh function'
+- Added a Refresh Shop button for the Travelling Merchant to refresh the shop immediately
 - Added a function that makes the Nurse to heal you instantly when you talk to her
 - The Wand of Liquids no longer consumes mana
-- Added Fast Extractinator function
+- Added Faster Extractinator function
 - Added 'Which Mod Is This From' function, showing which mod is an item or a NPC from
 - Added a Grab Bag Item Drop Rate Display function
 - Added a function to completely unlock a creature's bestiary upon killing it
 - Added a function to adjust the number of kills needed to obtain a banner
 - Added a Banner Box to store up to 200 stacks of banners
 - Added a Portable Crafting Station feature
+- Added a lavaless lava slime function, to stop lava slime from spawning lava
+- Added the function of keeping buff after death
+- Added a Better Town NPC Spawn&Respawn Mechanics function
 - Added Together Happier(multiplayer) functions
-  - Shared Portable Crafting Stations for teamates
-  - Shared Infinite Buffs for teamates
+  - Shared Portable Crafting Stations for teammates
+  - Shared Infinite Buffs for teammates
   - Range of the shared effects can be adjusted, unlimited by default
+- Added 2 configuration presets
+- 添加自动加入红队功能
+- 添加快捷栏切换功能
 ## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
@@ -64,11 +70,6 @@
 - The Wand of Space now support horizontal and vertical placement and you can choose which type of tile to place: platforms, solid blocks, ropes or minecart tracks
 - **[v1.5.9.1]** Added a hotkey for the Buff Tracker
 - **[v1.5.9.2]** The Fishing Machine now supports mod biomes
-- **[v1.5.9.3]** Reworked control panel of the Wand of Space, added new categories
-- **[v1.5.9.3]** Added a Wand of Painting, can paint/remove paint of a large area
-- **[v1.5.9.3]** Added a auto-refreshing function for Travelling Merchant's shop(each time you open his shop page, the goods will be rerolled)
-- **[v1.5.9.3]** Added a function that makes the Nurse to heal you instantly when you talk to her
-- **[v1.5.9.3]** The Wand of Liquids no longer consumes mana
 ## Misc
 - **[v1.5.9.1]** Recipes of mod items now use RecipeGroup
 - **[v1.5.9.2]** Added Mod.Calls

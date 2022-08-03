@@ -54,6 +54,7 @@ namespace ImproveGame.Common.Systems
                             pos.X = (float)(Main.screenWidth - x);
                         if (SecondLine)
                             pos.Y += FontAssets.MouseText.Value.LineSpacing;
+
                         ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, pos, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet);
                     }
                     return true;

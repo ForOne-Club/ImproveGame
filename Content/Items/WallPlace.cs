@@ -1,20 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.GameContent.Creative;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
+﻿using System.Collections.Generic;
 
 namespace ImproveGame.Content.Items
 {
     public class WallPlace : ModItem
     {
-        public override void SetStaticDefaults() {
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-        }
+        public override void SetStaticDefaults() => SacrificeTotal = 1;
 
-        public override bool IsLoadingEnabled(Mod mod) =>MyUtils.Config.LoadModItems;
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
 
         public override void SetDefaults()
         {

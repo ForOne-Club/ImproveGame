@@ -1,6 +1,6 @@
-﻿using ImproveGame.Interface.UIElements;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
+using Terraria.UI.Chat;
 using static On.Terraria.GameContent.UI.Elements.UIKeybindingListItem;
 using static On.Terraria.GameContent.UI.States.UIManageControls;
 
@@ -16,6 +16,7 @@ namespace ImproveGame.Common.Systems
         public static ModKeybind SuperVaultKeybind { get; private set; }
         public static ModKeybind BuffTrackerKeybind { get; private set; }
         public static ModKeybind GrabBagKeybind { get; private set; }
+        public static ModKeybind HotbarSwitchKeybind { get; private set; }
 
         // 为各种Mod控件特制的翻译
         private readonly static Dictionary<string, string> zhTranslationSupports = new()
@@ -71,12 +72,25 @@ namespace ImproveGame.Common.Systems
 
         public override void Load()
         {
+            DrawSelf += DrawHoverText;
             GenInput += TranslatedInput;
             GetFriendlyName += TranslatedFriendlyName;
             CreateBindingGroup += AddModifyTip;
             SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.HugeInventory", "I");
             BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.BuffTracker", "NumPad3");
             GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.GrabBagLoot", "OemQuotes");
+            HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.HotbarSwitch", "OemQuestion");
+        }
+
+        private void DrawHoverText(orig_DrawSelf orig, UIKeybindingListItem self, SpriteBatch spriteBatch)
+        {
+            orig.Invoke(self, spriteBatch);
+
+            string _keybind = self.GetType().GetField("_keybind", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(self) as string;
+            if (_keybind == "ImproveGame: $Mods.ImproveGame.Keybind.HotbarSwitch" && self.IsMouseHovering)
+            {
+                Main.instance.MouseText(GetText("Keybind.HotbarSwitch.Tip"));
+            }
         }
 
         private string TranslatedInput(orig_GenInput orig, UIKeybindingListItem self, List<string> list)
@@ -136,6 +150,7 @@ namespace ImproveGame.Common.Systems
                     else
                         str = "让我看看";
                     buttonText.SetText(str);
+                    SoundEngine.PlaySound(SoundID.MenuTick);
                 };
                 button.Append(buttonText);
                 uISortableElement.Append(button);

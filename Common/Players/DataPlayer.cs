@@ -34,6 +34,15 @@ namespace ImproveGame.Common.Players
             UISystem.Instance.BigBagGUI.SetSuperVault(SuperVault, SuperVaultPos);
         }
 
+        public override void ResetEffects()
+        {
+            for (int i = 0; i < SuperVault.Length; i++)
+            {
+                if (SuperVault[i] is null)
+                    SuperVault[i] = new Item();
+            }
+        }
+
         public override void LoadData(TagCompound tag)
         {
             // 哥布林重铸栏内属于 Mod 的数据无法保存，这个是专门用于保存这个无法保存到 Item 上的数据。

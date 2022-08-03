@@ -7,6 +7,8 @@ namespace ImproveGame.Content.Items
 {
     public class BannerChest : ModItem, IItemOverrideLeftClick
     {
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
+
         public List<Item> storedBanners = new();
 
         // 克隆内容不克隆引用

@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Systems;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
@@ -11,16 +10,10 @@ namespace ImproveGame.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        public override void OnLoaded() => MyUtils.Config = this;
+        public override void OnLoaded() => Config = this;
 
         // 物品设置
         [Header("$Mods.ImproveGame.Config.ItemConfigs.Header")]
-
-        [Label("$Mods.ImproveGame.Config.LoadModItems.Label")]
-        [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
-        [DefaultValue(true)]
-        [ReloadRequired]
-        public bool LoadModItems;
 
         [Label("$Mods.ImproveGame.Config.SuperVoidVault.Label")]
         [Tooltip("$Mods.ImproveGame.Config.SuperVoidVault.Tooltip")]
@@ -153,6 +146,11 @@ namespace ImproveGame.Common.Configs
 
         [Header("$Mods.ImproveGame.Config.NPCConfigs.Header")]
 
+        [Label("$Mods.ImproveGame.Config.TownNPCGetTFIntoHouse.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.TownNPCGetTFIntoHouse.Tooltip")]
+        [DefaultValue(false)]
+        public bool TownNPCGetTFIntoHouse;
+
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Label")]
         [DefaultValue(false)]
         public bool TownNPCSpawnInNight;
@@ -162,7 +160,7 @@ namespace ImproveGame.Common.Configs
         [Slider]
         [Range(-1, 12)]
         [DefaultValue(-1)]
-        public int TownNPCSpawnSpeed;
+        public float TownNPCSpawnSpeed;
 
         [Label("$Mods.ImproveGame.Config.NoCD_FishermanQuest.Label")]
         [DefaultValue(false)]
@@ -173,6 +171,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(1)]
         [Slider]
         public int NPCCoinDropRate;
+
+        [Label("$Mods.ImproveGame.Config.LavalessLavaSlime.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.LavalessLavaSlime.Tooltip")]
+        [DefaultValue(false)]
+        public bool LavalessLavaSlime;
 
         [Label("$Mods.ImproveGame.Config.TravellingMerchantStay.Label")]
         [Tooltip("$Mods.ImproveGame.Config.TravellingMerchantStay.Tooltip")]
@@ -188,6 +191,11 @@ namespace ImproveGame.Common.Configs
         [Tooltip("$Mods.ImproveGame.Config.QuickNurse.Tooltip")]
         [DefaultValue(true)]
         public bool QuickNurse;
+
+        [Label("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Tooltip")]
+        [DefaultValue(true)]
+        public bool BestiaryQuickUnlock;
 
         [Label("$Mods.ImproveGame.Config.BannerRequirement.Label")]
         [Tooltip("$Mods.ImproveGame.Config.BannerRequirement.Tooltip")]
@@ -214,14 +222,14 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool StaffOfRegenerationAutomaticPlanting;
 
-        [Label("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Label")]
-        [Tooltip("$Mods.ImproveGame.Config.BestiaryQuickUnlock.Tooltip")]
-        [DefaultValue(true)]
-        public bool BestiaryQuickUnlock;
-
         [Label("$Mods.ImproveGame.Config.RespawnWithFullHP.Label")]
         [DefaultValue(true)]
         public bool RespawnWithFullHP;
+
+        [Label("$Mods.ImproveGame.Config.DontDeleteBuff.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.DontDeleteBuff.Tooltip")]
+        [DefaultValue(true)]
+        public bool DontDeleteBuff;
 
         [Label("$Mods.ImproveGame.Config.BanDamageVar.Label")]
         [DefaultValue(false)]
@@ -300,7 +308,12 @@ namespace ImproveGame.Common.Configs
         [Range(-1, 2000)]
         public int ShareRange;
 
-        [Header("$Mods.ImproveGame.Config.ModSettings.Header")]
+        [Label("$Mods.ImproveGame.Config.TeamAutoJoin.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.TeamAutoJoin.Tooltip")]
+        [DefaultValue(false)]
+        public bool TeamAutoJoin;
+
+        [Header("$Mods.ImproveGame.Config.ServerSettings.Header")]
 
         [Label("$Mods.ImproveGame.Config.OnlyHost.Label")]
         [Tooltip("$Mods.ImproveGame.Config.OnlyHost.Tooltip")]
@@ -318,6 +331,209 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(50)]
         [Range(1, 100)]
         public int SpawnRateMaxValue;
+
+        [Label("$Mods.ImproveGame.Config.LoadModItems.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+        [DefaultValue(true)]
+        [ReloadRequired]
+        public bool LoadModItems;
+
+        // 预设
+        [Header("$Mods.ImproveGame.Config.Presets.Header")]
+
+        [Label("$Mods.ImproveGame.Config.ILoveBalance.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.ILoveBalance.Tooltip")]
+        [DefaultValue(false)]
+        public bool ILoveBalance
+        {
+            get =>
+                SuperVoidVault is false &&
+                SmartVoidVault is false &&
+                SuperVault is false &&
+                ItemMaxStack is 9999 &&
+                GrabDistance is 5 &&
+                NoConsume_SummonItem is false &&
+                AutoReuseWeapon is false &&
+                ExtraToolSpeed is 0.125f &&
+                ImproveTileSpeedAndTileRange is true &&
+                PortableCraftingStation is true &&
+                NoPlace_BUFFTile_Banner is false &&
+                NoConsume_Potion is false &&
+                NoConsume_Ammo is true &&
+                ImprovePrefix is false &&
+                MiddleEnableBank is true &&
+                AutoSaveMoney is true &&
+                FasterExtractinator is true &&
+                TownNPCGetTFIntoHouse is false &&
+                TownNPCSpawnInNight is true &&
+                TownNPCSpawnSpeed is -1 &&
+                NoCD_FishermanQuest is true &&
+                NPCCoinDropRate is 1 &&
+                LavalessLavaSlime is true &&
+                TravellingMerchantStay is false &&
+                TravellingMerchantRefresh is true &&
+                BestiaryQuickUnlock is false &&
+                AlchemyGrassGrowsFaster is false &&
+                AlchemyGrassAlwaysBlooms is false &&
+                StaffOfRegenerationAutomaticPlanting is true &&
+                RespawnWithFullHP is true &&
+                DontDeleteBuff is true &&
+                ExtraPlayerBuffSlots is 99 &&
+                TreeGrowFaster is false &&
+                ShakeTreeFruit is false &&
+                GemTreeAlwaysDropGem is false &&
+                MostTreeMin is 10 &&
+                MostTreeMax is 20 &&
+                PalmTreeMin is 10 &&
+                PalmTreeMax is 20 &&
+                GemTreeMin is 7 &&
+                GemTreeMax is 12
+            ;
+            set
+            {
+                if (value)
+                {
+                    SuperVoidVault = false;
+                    SmartVoidVault = false;
+                    SuperVault = false;
+                    ItemMaxStack = 9999;
+                    GrabDistance = 5;
+                    NoConsume_SummonItem = false;
+                    AutoReuseWeapon = false;
+                    ExtraToolSpeed = 0.125f;
+                    ImproveTileSpeedAndTileRange = true;
+                    PortableCraftingStation = true;
+                    NoPlace_BUFFTile_Banner = false;
+                    NoConsume_Potion = false;
+                    NoConsume_Ammo = true;
+                    ImprovePrefix = false;
+                    MiddleEnableBank = true;
+                    AutoSaveMoney = true;
+                    FasterExtractinator = true;
+                    TownNPCGetTFIntoHouse = false;
+                    TownNPCSpawnInNight = true;
+                    TownNPCSpawnSpeed = -1;
+                    NoCD_FishermanQuest = true;
+                    NPCCoinDropRate = 1;
+                    LavalessLavaSlime = true;
+                    TravellingMerchantStay = false;
+                    TravellingMerchantRefresh = true;
+                    BestiaryQuickUnlock = false;
+                    AlchemyGrassGrowsFaster = false;
+                    AlchemyGrassAlwaysBlooms = false;
+                    StaffOfRegenerationAutomaticPlanting = true;
+                    RespawnWithFullHP = true;
+                    DontDeleteBuff = true;
+                    ExtraPlayerBuffSlots = 99;
+                    TreeGrowFaster = false;
+                    ShakeTreeFruit = false;
+                    GemTreeAlwaysDropGem = false;
+                    MostTreeMin = 10;
+                    MostTreeMax = 20;
+                    PalmTreeMin = 10;
+                    PalmTreeMax = 20;
+                    GemTreeMin = 7;
+                    GemTreeMax = 12;
+                }
+            }
+        }
+
+        [Label("$Mods.ImproveGame.Config.FukMeCalamity.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.FukMeCalamity.Tooltip")]
+        [DefaultValue(false)]
+        public bool FukMeCalamity
+        {
+            get =>
+                SuperVoidVault is true &&
+                SmartVoidVault is true &&
+                SuperVault is true &&
+                ItemMaxStack is 9999 &&
+                GrabDistance is 5 &&
+                NoConsume_SummonItem is true &&
+                AutoReuseWeapon is true &&
+                ExtraToolSpeed is 0.5f &&
+                ImproveTileSpeedAndTileRange is true &&
+                PortableCraftingStation is true &&
+                NoPlace_BUFFTile_Banner is true &&
+                NoConsume_Potion is true &&
+                NoConsume_Ammo is true &&
+                ImprovePrefix is true &&
+                MiddleEnableBank is true &&
+                AutoSaveMoney is true &&
+                FasterExtractinator is true &&
+                TownNPCGetTFIntoHouse is true &&
+                TownNPCSpawnInNight is true &&
+                TownNPCSpawnSpeed is 12 &&
+                NoCD_FishermanQuest is true &&
+                NPCCoinDropRate is 8 &&
+                LavalessLavaSlime is true &&
+                TravellingMerchantStay is true &&
+                TravellingMerchantRefresh is true &&
+                BestiaryQuickUnlock is true &&
+                AlchemyGrassGrowsFaster is true &&
+                AlchemyGrassAlwaysBlooms is true &&
+                StaffOfRegenerationAutomaticPlanting is true &&
+                RespawnWithFullHP is true &&
+                DontDeleteBuff is true &&
+                ExtraPlayerBuffSlots is 99 &&
+                TreeGrowFaster is true &&
+                ShakeTreeFruit is true &&
+                GemTreeAlwaysDropGem is true &&
+                MostTreeMin is 22 &&
+                MostTreeMax is 36 &&
+                PalmTreeMin is 22 &&
+                PalmTreeMax is 36 &&
+                GemTreeMin is 20 &&
+                GemTreeMax is 30
+            ;
+            set
+            {
+                if (value)
+                {
+                    SuperVoidVault = true;
+                    SmartVoidVault = true;
+                    SuperVault = true;
+                    ItemMaxStack = 9999;
+                    GrabDistance = 5;
+                    NoConsume_SummonItem = true;
+                    AutoReuseWeapon = true;
+                    ExtraToolSpeed = 0.5f;
+                    ImproveTileSpeedAndTileRange = true;
+                    PortableCraftingStation = true;
+                    NoPlace_BUFFTile_Banner = true;
+                    NoConsume_Potion = true;
+                    NoConsume_Ammo = true;
+                    ImprovePrefix = true;
+                    MiddleEnableBank = true;
+                    AutoSaveMoney = true;
+                    FasterExtractinator = true;
+                    TownNPCGetTFIntoHouse = true;
+                    TownNPCSpawnInNight = true;
+                    TownNPCSpawnSpeed = 12;
+                    NoCD_FishermanQuest = true;
+                    NPCCoinDropRate = 8;
+                    LavalessLavaSlime = true;
+                    TravellingMerchantStay = true;
+                    TravellingMerchantRefresh = true;
+                    BestiaryQuickUnlock = true;
+                    AlchemyGrassGrowsFaster = true;
+                    AlchemyGrassAlwaysBlooms = true;
+                    StaffOfRegenerationAutomaticPlanting = true;
+                    RespawnWithFullHP = true;
+                    DontDeleteBuff = true;
+                    ExtraPlayerBuffSlots = 99;
+                    TreeGrowFaster = true;
+                    ShakeTreeFruit = true;
+                    GemTreeAlwaysDropGem = true;
+                    MostTreeMin = 22;
+                    MostTreeMax = 36;
+                    PalmTreeMin = 22;
+                    PalmTreeMax = 36;
+                    GemTreeMin = 20;
+                    GemTreeMax = 30;
+                }
+            }
+        }
 
         [Header("$Mods.ImproveGame.Config.OtherFunctions.Header")]
         [Label("$Mods.ImproveGame.Config.OtherFunctions.Label")]
@@ -339,7 +555,7 @@ namespace ImproveGame.Common.Configs
         public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message) {
             if (OnlyHostByPassword) {
                 if (!NetPasswordSystem.Registered[whoAmI]) {
-                    message = MyUtils.GetText("Config.OnlyHostByPassword.Unaccepted");
+                    message = GetText("Config.OnlyHostByPassword.Unaccepted");
                 }
                 return NetPasswordSystem.Registered[whoAmI];
             }
@@ -360,7 +576,7 @@ namespace ImproveGame.Common.Configs
                 return true;
             }
             else {
-                message = MyUtils.GetText("Config.OnlyHost.Unaccepted");
+                message = GetText("Config.OnlyHost.Unaccepted");
                 return false;
             }
         }

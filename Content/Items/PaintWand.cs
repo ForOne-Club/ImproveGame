@@ -113,11 +113,13 @@ namespace ImproveGame.Content.Items
 
         public override void AddRecipes()
         {
-            //CreateRecipe()
-            //    .AddRecipeGroup(RecipeGroupID.Wood, 18)
-            //    .AddIngredient(ItemID.JungleSpores, 6)
-            //    .AddIngredient(ItemID.Ruby, 1)
-            //    .AddTile(TileID.WorkBenches).Register();
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 18)
+                .AddRecipeGroup(RecipeGroupID.IronBar, 6)
+                .AddIngredient(ItemID.Paintbrush, 1)
+                .AddIngredient(ItemID.PaintRoller, 1)
+                .AddIngredient(ItemID.PaintScraper, 1)
+                .AddTile(TileID.Anvils).Register();
         }
     }
 }

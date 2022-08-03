@@ -7,12 +7,34 @@
         {
             ImproveConfigs.Label: 模组配置
             NoNeedReload: 无需重新加载
-            ItemConfigs.Header: "[i:29] 物品设置"
-            LoadModItems:
+
+            Presets.Header: "[i:ImproveGame/PaintWand] 预设"
+            ILoveBalance:
             {
-                Label: "[i:1344] 启用模组物品"
-                Tooltip: 启用后会加载模组的物品，关闭后物品将会在游戏中消失。
+                Label: "[i:ImproveGame/MagickWand] 平衡我爱死你啦"
+                Tooltip:
+                    '''
+                    如果你想要一个在原版的基础上更进一步的体验，这款预设会是首选
+                    在此预设中，关闭了无限增益，以死亡保存增益取而代之
+                    大多数设置都调节到了相对平衡的水平
+                    让你在享受难度与原版相当的模组同时，拥有一个不错的体验
+                    （模组物品是否开启请自觉斟酌，因为有些模组物品不加以限制可能缺乏平衡）
+                    （在选择预设后，你仍然可以手动调节你想要的选项）
+                    '''
             }
+            FukMeCalamity:
+            {
+                Label: "[i:ImproveGame/StarburstWand] 泰拉无双启动"
+                Tooltip:
+                    '''
+                    这款预设包括了大多数方便的功能，大幅度降低了游戏流程的重复与枯燥程度
+                    如果你在玩灾厄模组复仇模式或Fargo魂石模组永恒模式，这会是很好的选择
+                    大多数设置以便利为第一标准，使游戏流程更集中于推进进度与击杀Boss
+                    （在选择预设后，你仍然可以手动调节你想要的选项）
+                    '''
+            }
+
+            ItemConfigs.Header: "[i:29] 物品设置"
             SuperVoidVault:
             {
                 Label: "[i:4131] 超级虚空保险库"
@@ -181,7 +203,18 @@
             }
 
             NPCConfigs.Header: "[i:4382] NPC 设置"
-            TownNPCSpawnInNight.Label: "[i:4081] 允许城镇NPC夜晚刷新"
+            TownNPCGetTFIntoHouse:
+            {
+                Label: "[i:MusicBoxTownDay] 更好的城镇NPC入住机制"
+                Tooltip:
+                    '''
+                    哥布林、酒保、法师、机械师、税收官在满足生成条件后，
+                    若有空房子会直接入住，不需要寻找，一旦入住即视为已被找到状态
+                    在图鉴中被解锁的城镇NPC将会无视入住条件，只要有房子即可入住
+                    （注意：你需要与城镇NPC至少对话一次来解锁图鉴）
+                    '''
+            }
+            TownNPCSpawnInNight.Label: "[i:MusicBoxTownNight] 允许城镇NPC夜晚入住"
             TownNPCSpawnSpeed:
             {
                 Label: "[i:4910] 城镇NPC刷新速度"
@@ -189,6 +222,11 @@
             }
             NoCD_FishermanQuest.Label: "[i:4608] 渔夫任务取消冷却"
             NPCCoinDropRate.Label: "[i:73] 敌人钱币掉落倍率"
+            LavalessLavaSlime:
+            {
+                Label: "[i:LavaSlimeBanner] 熔岩史莱姆不生成熔岩"
+                Tooltip: "专家或大师模式下的熔岩史莱姆被击杀时不再会生成熔岩"
+            }
             TravellingMerchantStay:
             {
                 Label: "[i:2222] 旅商永远不离开"
@@ -207,6 +245,11 @@
                     右键点开护士对话则立即回血
                     消耗的钱币数量会从玩家头上弹出
                     '''
+            }
+            BestiaryQuickUnlock:
+            {
+                Label: "[i:DontHurtCrittersBook] 一次击杀即可完全解锁图鉴"
+                Tooltip: "只要该生物的图鉴被解锁，无论击杀数，都会显示它的全部信息（如掉落、简介等）"
             }
             BannerRequirement:
             {
@@ -235,12 +278,12 @@
                 Label: "[i:213] 再生法杖自动种植"
                 Tooltip: "根据收获时的草药种植"
             }
-            BestiaryQuickUnlock:
-            {
-                Label: "[i:DontHurtCrittersBook] 一次击杀即可完全解锁图鉴"
-                Tooltip: "只要该生物的图鉴被解锁，无论击杀数，都会显示它的全部信息（如掉落、简介等）"
-            }
             RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
+            DontDeleteBuff:
+            {
+                Label: "[i:FlaskofNanites] 死亡保存增益"
+                Tooltip: "使增益在死后依然会维持激活状态"
+            }
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
             
@@ -309,15 +352,20 @@
             }
             ShareRange:
             {
-                Label: "[i:TeamBlockRed] 共享范围(格)"
+                Label: "[i:WorldGlobe] 共享范围(格)"
                 Tooltip: 
                     '''
                     在一定共享范围内的同队玩家才会享受效果共享
                     默认为 -1，即无限制，只要同队均会享受效果
                     '''
             }
+            TeamAutoJoin:
+            {
+                Label: "[i:TeamBlockRed] 自动加红队"
+                Tooltip: "开启后，在多人模式下新加入的玩家会自动加入红队"
+            }
             
-            ModSettings.Header: "[i:ImproveGame/CreateWand] 服务器设置"
+            ServerSettings.Header: "[i:ImproveGame/CreateWand] 服务器设置"
             OnlyHost:
             {
                 Label: "[i:2203] 仅主机可调节配置 (端口映射无效)"
@@ -361,6 +409,15 @@
                     服务器内如果你不想让玩家调节过高生成倍率，可以通过此选项限制
                     '''
             }
+            LoadModItems:
+            {
+                Label: "[i:ImproveGame/WallPlace] 启用模组物品"
+                Tooltip:
+                    '''
+                    关闭后，本模组添加的物品将会从游戏中消失
+                    本配置页面包含的模组物品图标会变作一串字符
+                    '''
+            }
 
             OtherFunctions:
             {
@@ -372,6 +429,7 @@
                     - 时装配饰栏可放入任何配饰
                     - 显示物品、NPC所属模组
                     - 快捷键展示摸彩袋物品明细（需绑定快捷键）
+                    - 快捷键可切换第二行物品至快捷栏
                     - [中文特供] 汉化各大Mod的键位设置
                     '''
             }
@@ -695,6 +753,8 @@
             HugeInventory: "大背包"
             BuffTracker: "增益追踪器"
             GrabBagLoot: "显示摸彩袋物品明细"
+            HotbarSwitch: "切换快捷栏"
+            HotbarSwitch.Tip: "按下快捷键后，物品栏第一栏与第二栏的物品将会互换"
         }
     }
 }
