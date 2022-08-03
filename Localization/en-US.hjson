@@ -353,8 +353,8 @@ Mods:
             }
             TeamAutoJoin:
             {
-                Label: "[i:TeamBlockRed] 自动加红队"
-                Tooltip: "开启后，在多人模式下新加入的玩家会自动加入红队"
+                Label: "[i:TeamBlockRed] Automatically Join Red Team"
+                Tooltip: "Newly joined players will automatically join the red team in multiplayer mode"
             }
 
             ServerSettings.Header: "[i:ImproveGame/CreateWand] Server Config"
@@ -422,8 +422,8 @@ Mods:
                     - Any accessory can be worn in vanity slots
                     - Display which mod are the items and NPCs from
                     - Display detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
-                    - 快捷键可切换第二行物品至快捷栏
-                    - 物品简介显示召唤物槽位占用情况
+                    - A hotkey to swap the hotbar with the second row of inventory
+                    - Display minion slot occupancy in tooltip
                     '''
             }
         }
@@ -565,8 +565,8 @@ Mods:
             LootDisplayBindless: "(You have not bind a hotkey for this function, please do so in Controls)"
             Refreshing: "Refreshing"
             Refresh: "Refresh Shop"
-            SummonSlot: "召唤栏位占用: [c/22CC22:{Current}/{Total}]"
-            SummonSlotFull: "召唤栏位占用: [c/CC2222:{Current}/{Total} (已满!)]"
+            SummonSlot: "Minion slot occupancy: [c/22CC22:{Current}/{Total}]"
+            SummonSlotFull: "Minion slot occupancy: [c/CC2222:{Current}/{Total} (已满!)]"
 
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"
@@ -760,8 +760,8 @@ Mods:
             HugeInventory: "Huge Inventory"
             BuffTracker: "Buff Tracker"
             GrabBagLoot: "Display grab bag loot"
-            HotbarSwitch: "切换快捷栏"
-            HotbarSwitch.Tip: "按下快捷键后，物品栏第一栏与第二栏的物品将会互换"
+            HotbarSwitch: "Swap hotbar"
+            HotbarSwitch.Tip: "Swap items in the first row with the second row in inventory"
         }
     }
 }
