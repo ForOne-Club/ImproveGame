@@ -12,6 +12,7 @@
 - Fixed the Fishing Machine duplicating items in multiplayer mode
 - **[v1.6.0.2]** Fixed issue where traveling merchants could benefit from Better Town NPC Spawn Mechanics
 - **[v1.6.0.2]** Fixed every town NPC can heal you if Emergency Treatment is on
+- **[v1.6.0.3]** 修复了加载有添加NPC的模组会报错的BUG
 ## Additions:
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
@@ -42,7 +43,8 @@
 - The Fishing Machine is now be crafted by Any Iron Bar * 8 + Any Copper Bar * 4 + Glass Block * 20
 - The Wand Of Space can also be crafted by Any Wood * 24 + Any Evil Bar * 8 + Amethyst * 8
 - Removed change in styles of the Potion Bags while containing potions
-- **[v1.6.0.2]** 联机模式下, 空间/科技魔杖会为每位玩家掉落, 且当玩家拥有魔杖时不会再次掉落
+- **[v1.6.0.2]** Wand of space and wand of technology will drop for each player in multiplayer, and will not drop again when the player already has one.
+- **[v1.6.0.3]** 钓鱼机速度加速了一倍
 
 # v1.5.9
 ## Subversions

@@ -125,7 +125,7 @@ namespace ImproveGame.Content.Tiles
             }
             fishingSpeedBonus += Math.Min(bassCount / 20f, 5f);
 
-            float fishingCooldown = 6600f; // 钓鱼机基础冷却在这里改，原版写的是660
+            float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版写的是660
             if (FishingTimer > fishingCooldown / fishingSpeedBonus) {
                 FishingTimer = 0;
                 ApplyAccessories();

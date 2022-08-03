@@ -543,6 +543,10 @@ Mods:
         {
 			Autofisher: Fishing Machine
 		}
+        ItemDropRule:
+        {
+            WandDrop: Won't drop if the player already has one in the inventory
+        }
         CombatText_Item:
         {
             CreateWand_NotEnough: "Missing materials!"
