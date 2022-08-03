@@ -551,6 +551,10 @@
         {
 			Autofisher: 自动钓鱼机
 		}
+        ItemDropRule:
+        {
+            WandDrop: 玩家拥有当前物品时不会再次掉落
+        }
         CombatText_Item:
         {
             CreateWand_NotEnough: "材料不足！"

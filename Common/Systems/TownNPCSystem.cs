@@ -41,7 +41,8 @@ namespace ImproveGame.Common.Systems
             foreach (ModNPC modNPC in modNPCs)
             {
                 var npc = modNPC.NPC;
-                if (npc.townNPC && NPC.TypeToDefaultHeadIndex(npc.type) >= 0 && !NPCHeadID.Sets.CannotBeDrawnInHousingUI[npc.type] && !modNPC.TownNPCStayingHomeless)
+                int head = NPC.TypeToDefaultHeadIndex(npc.type);
+                if (npc.townNPC && head >= 0 && !NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] && !modNPC.TownNPCStayingHomeless)
                 {
                     TownNPCIDs.Add(npc.type);
                 }

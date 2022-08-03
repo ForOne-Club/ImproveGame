@@ -543,6 +543,10 @@ Mods:
         {
 			Autofisher: Fishing Machine
 		}
+        ItemDropRule:
+        {
+            WandDrop: Won't drop if the player already has one in the inventory
+        }
         CombatText_Item:
         {
             CreateWand_NotEnough: "Missing materials!"
@@ -566,7 +570,7 @@ Mods:
             Refreshing: "Refreshing"
             Refresh: "Refresh Shop"
             SummonSlot: "Minion slot occupancy: [c/22CC22:{Current}/{Total}]"
-            SummonSlotFull: "Minion slot occupancy: [c/CC2222:{Current}/{Total} (ÒÑÂú!)]"
+            SummonSlotFull: "Minion slot occupancy: [c/CC2222:{Current}/{Total} (Full!)]"
 
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"

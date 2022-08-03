@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.GameContent.ItemDropRules;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.GameContent.ItemDropRules;
 
 namespace ImproveGame.Common.GlobalNPCs
 {
@@ -19,9 +13,33 @@ namespace ImproveGame.Common.GlobalNPCs
         {
             if (npc.type == NPCID.KingSlime)
             {
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Content.Items.SpaceWand>(), 1));
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Content.Items.WallPlace>(), 1));
+                int itemType = ModContent.ItemType<Content.Items.SpaceWand>();
+                npcLoot.Add(new DropPerPlayerOnThePlayer(itemType, 1, 1, 1, new WandDrop(itemType)));
+                itemType = ModContent.ItemType<Content.Items.WallPlace>();
+                npcLoot.Add(new DropPerPlayerOnThePlayer(itemType, 1, 1, 1, new WandDrop(itemType)));
             }
         }
+    }
+
+    public class WandDrop : IItemDropRuleCondition
+    {
+        public int itemType;
+        public WandDrop(int itemType)
+        {
+            this.itemType = itemType;
+        }
+
+        public bool CanDrop(DropAttemptInfo info)
+        {
+            if (!info.IsInSimulation)
+            {
+                return !info.player.HasItem(itemType);
+            }
+            return false;
+        }
+
+        public bool CanShowItemDropInUI() => true;
+
+        public string GetConditionDescription() => GetText("ItemDropRule.WandDrop");
     }
 }
