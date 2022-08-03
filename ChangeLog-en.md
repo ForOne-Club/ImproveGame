@@ -24,7 +24,7 @@
 - Added a Portable Crafting Station feature
 - Added a lavaless lava slime function, to stop lava slime from spawning lava
 - Added the function of keeping buff after death
-- 添加更好的城镇NPC入住机制功能
+- Added a Better Town NPC Spawn&Respawn Mechanics function
 - Added Together Happier(multiplayer) functions
   - Shared Portable Crafting Stations for teammates
   - Shared Infinite Buffs for teammates

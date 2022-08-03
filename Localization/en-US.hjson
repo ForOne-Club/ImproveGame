@@ -197,13 +197,13 @@ Mods:
             NPCConfigs.Header: "[i:4382] NPC Configs"
             TownNPCGetTFIntoHouse:
             {
-                Label: "[i:MusicBoxTownDay] 更好的城镇NPC入住机制"
+                Label: "[i:MusicBoxTownDay] Better Town NPC Spawn&Respawn Mechanics更好的城镇NPC入住机制"
                 Tooltip:
                     '''
-                    哥布林、酒保、法师、机械师、税收官在满足生成条件后，
-                    若有空房子会直接入住，不需要寻找，一旦入住即视为已被找到状态
-                    在图鉴中被解锁的城镇NPC将会无视入住条件，只要有房子即可入住
-                    （注意：你需要与城镇NPC至少对话一次来解锁图鉴）
+                    When the spawn conditions of unsaved Goblin Tinker, Tavernkeep, Wizard, Mechanic or Tax Collector are met
+                    They need not to be saved, but will be able to spawn if there are vacant houses and be considered as saved once they spawn
+                    Unlocked town NPCs will be able to respawn regardless most respawn conditions but 'a vacant house'
+                    (You have to talk to town NPCs at least once to unlock their bestiary entries)
                     '''
             }
             TownNPCSpawnInNight.Label: "[i:MusicBoxTownNight] Allow town NPCs to spawn at nighttime"
