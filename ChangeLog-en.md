@@ -30,6 +30,8 @@
   - Shared Infinite Buffs for teammates
   - Range of the shared effects can be adjusted, unlimited by default
 - Added 2 configuration presets
+- 添加自动加入红队功能
+- 添加快捷栏切换功能
 ## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod

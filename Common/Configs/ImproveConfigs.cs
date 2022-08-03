@@ -308,6 +308,11 @@ namespace ImproveGame.Common.Configs
         [Range(-1, 2000)]
         public int ShareRange;
 
+        [Label("$Mods.ImproveGame.Config.TeamAutoJoin.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.TeamAutoJoin.Tooltip")]
+        [DefaultValue(false)]
+        public bool TeamAutoJoin;
+
         [Header("$Mods.ImproveGame.Config.ServerSettings.Header")]
 
         [Label("$Mods.ImproveGame.Config.OnlyHost.Label")]

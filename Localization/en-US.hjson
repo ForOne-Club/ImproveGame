@@ -197,13 +197,13 @@ Mods:
             NPCConfigs.Header: "[i:4382] NPC Configs"
             TownNPCGetTFIntoHouse:
             {
-                Label: "[i:MusicBoxTownDay] Better Town NPC Spawn&Respawn Mechanics更好的城镇NPC入住机制"
+                Label: "[i:MusicBoxTownDay] Town NPC spawn mechanics improvement"
                 Tooltip:
                     '''
-                    When the spawn conditions of unsaved Goblin Tinker, Tavernkeep, Wizard, Mechanic or Tax Collector are met
-                    They need not to be saved, but will be able to spawn if there are vacant houses and be considered as saved once they spawn
-                    Unlocked town NPCs will be able to respawn regardless most respawn conditions but 'a vacant house'
-                    (You have to talk to town NPCs at least once to unlock their bestiary entries)
+                    When the spawn conditions of unsaved Goblin Tinkerer, Tavernkeep, Wizard, Mechanic or Tax Collector are met
+                    They don't need to be saved, but will be able to spawn if there are valid houses. They will be considered as saved once they spawn
+                    Once an NPC's bestiary entry is unlocked, they will spawn as soon as there is a valid house, regardless of their spawn conditions
+                    (You have to talk to any town NPCs at least once to unlock their bestiary entry)
                     '''
             }
             TownNPCSpawnInNight.Label: "[i:MusicBoxTownNight] Allow town NPCs to spawn at nighttime"
@@ -344,12 +344,17 @@ Mods:
             }
             ShareRange:
             {
-                Label: "[i:TeamBlockRed] Range of Shared Effects(in tiles)"
+                Label: "[i:WorldGlobe] Range of Shared Effects(in tiles)"
                 Tooltip: 
                     '''
                     Only teammates within this range will share the shared effects
                     -1 by default, which means infinite range
                     '''
+            }
+            TeamAutoJoin:
+            {
+                Label: "[i:TeamBlockRed] 自动加红队"
+                Tooltip: "开启后，在多人模式下新加入的玩家会自动加入红队"
             }
 
             ServerSettings.Header: "[i:ImproveGame/CreateWand] Server Config"
@@ -417,6 +422,7 @@ Mods:
                     - Any accessory can be worn in vanity slots
                     - Display which mod are the items and NPCs from
                     - Display detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
+                    - 快捷键可切换第二行物品至快捷栏
                     '''
             }
         }
@@ -751,6 +757,8 @@ Mods:
             HugeInventory: "Huge Inventory"
             BuffTracker: "Buff Tracker"
             GrabBagLoot: "Display grab bag loot"
+            HotbarSwitch: "切换快捷栏"
+            HotbarSwitch.Tip: "按下快捷键后，物品栏第一栏与第二栏的物品将会互换"
         }
     }
 }

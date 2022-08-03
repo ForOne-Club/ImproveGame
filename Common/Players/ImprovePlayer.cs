@@ -1,11 +1,6 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
-using Terraria;
-using Terraria.Audio;
 using Terraria.GameInput;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
 
 namespace ImproveGame.Common.Players
 {
@@ -14,6 +9,16 @@ namespace ImproveGame.Common.Players
         public bool PiggyBank;
         public bool Safe;
         public bool DefendersForge;
+
+        public bool ShouldUpdateTeam;
+
+        public override void OnEnterWorld(Player player)
+        {
+            if (Config.TeamAutoJoin && Main.netMode is NetmodeID.MultiplayerClient)
+            {
+                ShouldUpdateTeam = true;
+            }
+        }
 
         public override void ResetEffects()
         {
@@ -24,6 +29,12 @@ namespace ImproveGame.Common.Players
                     PiggyBank = Player.HasItem(ItemID.PiggyBank);
                     Safe = Player.HasItem(ItemID.Safe);
                     DefendersForge = Player.HasItem(ItemID.DefendersForge);
+                }
+                if (ShouldUpdateTeam)
+                {
+                    Player.team = 1;
+                    NetMessage.SendData(MessageID.PlayerTeam, -1, -1, null, Player.whoAmI);
+                    ShouldUpdateTeam = false;
                 }
             }
 
@@ -57,7 +68,6 @@ namespace ImproveGame.Common.Players
         /// <summary>
         /// 快捷键
         /// </summary>
-        /// <param name="triggersSet"></param>
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (KeybindSystem.SuperVaultKeybind.JustPressed)
@@ -84,11 +94,23 @@ namespace ImproveGame.Common.Players
             if (KeybindSystem.GrabBagKeybind.JustPressed && Main.HoverItem is not null)
             {
                 var item = Main.HoverItem;
-                bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: false).Count > 0;
+                bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: true).Count > 0;
                 if (GrabBagInfoGUI.Visible && (GrabBagInfoGUI.ItemID == item.type || item.IsAir || !hasLoot))
                     UISystem.Instance.GrabBagInfoGUI.Close();
                 else if (item is not null && hasLoot)
                     UISystem.Instance.GrabBagInfoGUI.Open(Main.HoverItem.type);
+            }
+            if (KeybindSystem.HotbarSwitchKeybind.JustPressed)
+            {
+                for (int i = 0; i <= 9; i++)
+                {
+                    (Player.inventory[i], Player.inventory[i + 10]) = (Player.inventory[i + 10], Player.inventory[i]);
+                    if (Main.netMode is NetmodeID.MultiplayerClient)
+                    {
+                        NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i, number3: Main.LocalPlayer.inventory[i].prefix);
+                        NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i + 10, number3: Main.LocalPlayer.inventory[i].prefix);
+                    }
+                }
             }
         }
     }
