@@ -24,55 +24,72 @@ float4 BoxFunc(float2 coords : TEXCOORD0) : COLOR0
     
     float r = radius - border;
     
-    if (length1 <= radius || length2 <= radius || length3 <= radius || length4 <= radius)
+    if ((length1 - radius) <= 0.5f && (length1 - radius) >= -0.5f)
     {
-        if ((length1 <= radius && length1 >= r) ||
-            (length2 <= radius && length2 >= r) ||
-            (length3 <= radius && length3 >= r) ||
-            (length4 <= radius && length4 >= r))
-        {
-            color = borderColor;
-        }
-        else
-        {
-            if (length1 <= radius && length1 >= r - 1)
-            {
-                color = lerp(borderColor, background, r - length1);
-            }
-            else if (length2 <= radius && length2 >= r - 1)
-            {
-                color = lerp(borderColor, background, r - length2);
-            }
-            else if (length3 <= radius && length3 >= r - 1)
-            {
-                color = lerp(borderColor, background, r - length3);
-            }
-            else if (length4 <= radius && length4 >= r - 1)
-            {
-                color = lerp(borderColor, background, r - length4);
-            }
-            else
-            {
-                color = background;
-            }
-        }
+        color = lerp(borderColor, float4(0, 0, 0, 0), pow((length1 - radius) + 0.5, 2));
     }
-    if (length1 <= radius && length1 >= radius - 1)
+    else if ((length1 - r) <= 0.5f && (length1 - r) >= -0.5f)
     {
-        color = lerp(borderColor, float4(0, 0, 0, 0), length1 - (radius - 1));
+        color = lerp(borderColor, background, pow((1 - ((length1 - r) + 0.5)), 2));
     }
-    else if (length2 <= radius && length2 >= radius - 1)
+    else if (length1 <= r)
     {
-        color = lerp(borderColor, float4(0, 0, 0, 0), length2 - (radius - 1));
+        color = background;
     }
-    else if (length3 <= radius && length3 >= radius - 1)
+    else if (length1 <= radius)
     {
-        color = lerp(borderColor, float4(0, 0, 0, 0), length3 - (radius - 1));
+        color = borderColor;
     }
-    else if (length4 <= radius && length4 >= radius - 1)
-    {
-        color = lerp(borderColor, float4(0, 0, 0, 0), length4 - (radius - 1));
-    }
+    
+    //if (length1 <= radius || length2 <= radius || length3 <= radius || length4 <= radius)
+    //{
+    //    if ((length1 <= radius && length1 >= r) ||
+    //        (length2 <= radius && length2 >= r) ||
+    //        (length3 <= radius && length3 >= r) ||
+    //        (length4 <= radius && length4 >= r))
+    //    {
+    //        color = borderColor;
+    //    }
+    //    else
+    //    {
+    //        if (length1 <= radius && length1 >= r - 1)
+    //        {
+    //            color = lerp(borderColor, background, r - length1);
+    //        }
+    //        else if (length2 <= radius && length2 >= r - 1)
+    //        {
+    //            color = lerp(borderColor, background, r - length2);
+    //        }
+    //        else if (length3 <= radius && length3 >= r - 1)
+    //        {
+    //            color = lerp(borderColor, background, r - length3);
+    //        }
+    //        else if (length4 <= radius && length4 >= r - 1)
+    //        {
+    //            color = lerp(borderColor, background, r - length4);
+    //        }
+    //        else
+    //        {
+    //            color = background;
+    //        }
+    //    }
+    //}
+    //if (length1 <= radius && length1 >= radius - 1)
+    //{
+    //    color = lerp(borderColor, float4(0, 0, 0, 0), length1 - (radius - 1));
+    //}
+    //else if (length2 <= radius && length2 >= radius - 1)
+    //{
+    //    color = lerp(borderColor, float4(0, 0, 0, 0), length2 - (radius - 1));
+    //}
+    //else if (length3 <= radius && length3 >= radius - 1)
+    //{
+    //    color = lerp(borderColor, float4(0, 0, 0, 0), length3 - (radius - 1));
+    //}
+    //else if (length4 <= radius && length4 >= radius - 1)
+    //{
+    //    color = lerp(borderColor, float4(0, 0, 0, 0), length4 - (radius - 1));
+    //}
     
     if ((position.x > radius && position.x < size.x - radius) ||
         (position.y > radius && position.y < size.y - radius))
