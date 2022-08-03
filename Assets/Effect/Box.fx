@@ -16,11 +16,16 @@ float4 BoxFunc(float2 coords : TEXCOORD0) : COLOR0
     float4 borderColor = lerp(borderColor1, borderColor2, coords.x);
     float4 background = lerp(background1, background2, coords.x);
     
+    // 中心 - 圆角半径
     float2 origin = size / 2 - float2(radius, radius);
+    
+    // 中心 - 边框
     float2 corner = size / 2 - float2(border, border);
+    
+    // 位置 - 中心
     float2 dxy = abs(position - size / 2);
     
-    int2 insxy = step(dxy, origin);
+    int2 insxy = step(dxy, origin); // step x <= y 返回 1 否则 0
     int2 outsxy = step(dxy, corner);
     int outside = (insxy.x + insxy.y) % 2;
     float length = distance(dxy, origin) * (1 - insxy.x) * (1 - insxy.y) + (dxy.x - (size.x / 2 - radius)) * outside * insxy.y + (dxy.y - (size.y / 2 - radius)) * outside * insxy.x;

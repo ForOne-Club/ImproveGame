@@ -64,7 +64,12 @@
             sb.Begin(null, Main.UIScaleMatrix);
         }
 
-        public static void DrawBox(Vector2 position, Vector2 size, float radius, float border, Color borderColor1, Color borderColor2, Color background1, Color background2)
+        public static void DrawBox(Matrix matrix, Vector2 position, Vector2 size, float radius, float border, Color borderColor, Color background)
+        {
+            DrawBox(matrix, position, size, radius, border, borderColor, borderColor, background, background);
+        }
+
+        public static void DrawBox(Matrix matrix, Vector2 position, Vector2 size, float radius, float border, Color borderColor1, Color borderColor2, Color background1, Color background2)
         {
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.BoxShader.Value;
@@ -80,13 +85,13 @@
             SamplerState samplerState = sb.GraphicsDevice.SamplerStates[0];
             sb.End();
             sb.Begin(0, sb.GraphicsDevice.BlendState, SamplerState.AnisotropicClamp,
-                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, Main.UIScaleMatrix);
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, matrix);
 
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
 
             sb.End();
             sb.Begin(0, sb.GraphicsDevice.BlendState, samplerState,
-                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, matrix);
         }
     }
 }

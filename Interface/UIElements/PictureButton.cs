@@ -72,11 +72,23 @@ namespace ImproveGame.Interface.UIElements
             HoverTimer.Close();
         }
 
+        private readonly Color borderColor = new(233, 176, 0);
+        private readonly Color light1 = new(192, 130, 255);
+        private readonly Color drak1 = new(96, 65, 127);
+        private readonly Color light2 = new(56, 156, 255);
+        private readonly Color drak2 = new(28, 78, 127);
         protected override void DrawSelf(SpriteBatch sb)
         {
             var rectangle = GetDimensions().ToRectangle();
-            Utils.DrawSplicedPanel(sb, Background, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 10, 10, 10, 10, Colors.InventoryDefaultColor);
-            Utils.DrawSplicedPanel(sb, BackgroundBorder, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, 10, 10, 10, 10, Color.White * HoverTimer.Schedule);
+
+            Color borderColor = Color.Lerp(drak1, light1, HoverTimer.Schedule);
+            /*PixelShader.DrawBox(Main.UIScaleMatrix, GetDimensions().Position(), this.GetSize(),
+                4, 3, drak1, drak2, light1, light2);*/
+
+            Utils.DrawSplicedPanel(sb, Background, rectangle.X, rectangle.Y, rectangle.Width,
+                rectangle.Height, 10, 10, 10, 10, Colors.InventoryDefaultColor);
+            Utils.DrawSplicedPanel(sb, BackgroundBorder, rectangle.X, rectangle.Y, rectangle.Width,
+                rectangle.Height, 10, 10, 10, 10, Color.White * HoverTimer.Schedule);
         }
 
         public void TextAlignCenter()

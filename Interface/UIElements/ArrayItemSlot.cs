@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.GlobalItems;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Chat;
@@ -116,8 +117,14 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
+        private readonly Color FavoritedBorderColor = new(233, 176, 0, 200);
+        private readonly Color NotFavoritedBorderColor = new(18, 18, 38, 200);
+        private readonly Color FavoritedBackground = new(83, 88, 151, 200);
+        private readonly Color NotFavoritedBackground = new(63, 65, 151, 200);
         protected override void DrawSelf(SpriteBatch sb)
         {
+            CalculatedStyle dimensions = GetDimensions();
+
             // 按下 Ctrl 改变鼠标指针外观
             if (IsMouseHovering && !Item.IsAir)
             {
@@ -125,9 +132,15 @@ namespace ImproveGame.Interface.UIElements
                 Main.HoverItem = Item.Clone();
                 SetCursorOverride();
             }
+
+            Color borderColor = Item.favorited ? FavoritedBorderColor : NotFavoritedBorderColor;
+            Color background = Item.favorited ? FavoritedBackground : NotFavoritedBackground;
             // 绘制背景框
-            CalculatedStyle dimensions = GetDimensions();
-            sb.Draw(Texture, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f, 0, 0f);
+            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), this.GetSize(), 12, 3,
+                borderColor, background);
+
+            // 原来的边框
+            // sb.Draw(Texture, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f, 0, 0f);
 
             DrawHasGlowItem(sb, Item, dimensions);
         }
