@@ -24,7 +24,7 @@ float4 BoxFunc(float2 coords : TEXCOORD0) : COLOR0
     int2 outsxy = step(dxy, corner);
     int outside = (insxy.x + insxy.y) % 2;
     float length = distance(dxy, origin) * (1 - insxy.x) * (1 - insxy.y) + (dxy.x - (size.x / 2 - radius)) * outside * insxy.y + (dxy.y - (size.y / 2 - radius)) * outside * insxy.x;
-    float4 color = lerp(lerp(background, borderColor, smoothstep(radius - border, radius - border + GLURRANGE, length)), float4(0, 0, 0, 0), clamp(length - radius + GLURRANGE, 0, 1));
+    float4 color = lerp(lerp(background, borderColor, smoothstep(radius - border, radius - border + GLURRANGE, length)), float4(0, 0, 0, 0), clamp((length - radius + GLURRANGE) / GLURRANGE, 0, 1));
     return color;
 }
 

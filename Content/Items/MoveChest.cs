@@ -2,6 +2,7 @@
 
 namespace ImproveGame.Content.Items
 {
+    [Autoload(false)]
     internal class MoveChest : ModItem
     {
         protected override bool CloneNewInstances => true;
