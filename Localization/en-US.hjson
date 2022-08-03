@@ -423,6 +423,7 @@ Mods:
                     - Display which mod are the items and NPCs from
                     - Display detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
                     - 快捷键可切换第二行物品至快捷栏
+                    - 物品简介显示召唤物槽位占用情况
                     '''
             }
         }
@@ -564,6 +565,8 @@ Mods:
             LootDisplayBindless: "(You have not bind a hotkey for this function, please do so in Controls)"
             Refreshing: "Refreshing"
             Refresh: "Refresh Shop"
+            SummonSlot: "召唤栏位占用: [c/22CC22:{Current}/{Total}]"
+            SummonSlotFull: "召唤栏位占用: [c/CC2222:{Current}/{Total} (已满!)]"
 
             BuffTrackerOn: "<left> to open buff tracker"
             BuffTrackerOff: "<left> to close buff tracker"

@@ -430,6 +430,7 @@
                     - 显示物品、NPC所属模组
                     - 快捷键展示摸彩袋物品明细（需绑定快捷键）
                     - 快捷键可切换第二行物品至快捷栏
+                    - 物品简介显示召唤物槽位占用情况
                     - [中文特供] 汉化各大Mod的键位设置
                     '''
             }
@@ -572,6 +573,8 @@
             LootDisplayBindless: "(您尚未绑定快捷键，请到控件处绑定以使用此功能)"
             Refreshing: "刷新中"
             Refresh: "刷新商店"
+            SummonSlot: "召唤栏位占用: [c/22CC22:{Current}/{Total}]"
+            SummonSlotFull: "召唤栏位占用: [c/CC2222:{Current}/{Total} (已满!)]"
 
             BuffTrackerOn: "<left>以打开增益追踪器"
             BuffTrackerOff: "<left>以关闭增益追踪器"

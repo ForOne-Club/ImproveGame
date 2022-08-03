@@ -1,33 +1,37 @@
-﻿using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
-using System;
-using System.Linq;
-using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace ImproveGame.Common.Players
 {
     public class ShiftClickSlotPlayer : ModPlayer
     {
-        public bool ApplyHover(Item[] inv, int context, int slot) {
+        public override bool HoverSlot(Item[] inventory, int context, int slot)
+        {
+            var item = inventory[slot];
+
+            if (item.ModItem is IItemOverrideHover overrideHover && overrideHover.OverrideHover(inventory, context, slot))
+                return true;
+
             if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 && context == ItemSlot.Context.InventoryItem
-                && ItemSlot.ShiftInUse && !inv[slot].IsAir && !inv[slot].favorited) {
+                && ItemSlot.ShiftInUse && !item.IsAir && !item.favorited)
+            {
                 if (ArchitectureGUI.Visible &&
                     UISystem.Instance.ArchitectureGUI.ItemSlot.Any(s =>
-                                                 s.Value.CanPlaceItem(inv[slot]) &&
-                                                 MyUtils.CanPlaceInSlot(s.Value.Item, inv[slot]) != 0)) {
+                                                 s.Value.CanPlaceItem(item) &&
+                                                 CanPlaceInSlot(s.Value.Item, item) != 0))
+                {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }
                 if (BigBagGUI.Visible && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var dataPlayer) &&
-                    dataPlayer.SuperVault.Any(s => MyUtils.CanPlaceInSlot(s, inv[slot]) != 0)) {
+                    dataPlayer.SuperVault.Any(s => CanPlaceInSlot(s, item) != 0))
+                {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }
-                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher) && fisher.fish.Any(s => MyUtils.CanPlaceInSlot(s, inv[slot]) != 0)) {
+                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher) && fisher.fish.Any(s => MyUtils.CanPlaceInSlot(s, item) != 0))
+                {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }

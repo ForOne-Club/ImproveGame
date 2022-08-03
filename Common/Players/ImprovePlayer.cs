@@ -65,6 +65,8 @@ namespace ImproveGame.Common.Players
             }
         }
 
+        private bool _cacheSwitchSlot;
+
         /// <summary>
         /// 快捷键
         /// </summary>
@@ -100,16 +102,24 @@ namespace ImproveGame.Common.Players
                 else if (item is not null && hasLoot)
                     UISystem.Instance.GrabBagInfoGUI.Open(Main.HoverItem.type);
             }
-            if (KeybindSystem.HotbarSwitchKeybind.JustPressed)
+            if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
             {
-                for (int i = 0; i <= 9; i++)
+                if (Main.LocalPlayer.ItemTimeIsZero && Main.LocalPlayer.itemAnimation is 0)
                 {
-                    (Player.inventory[i], Player.inventory[i + 10]) = (Player.inventory[i + 10], Player.inventory[i]);
-                    if (Main.netMode is NetmodeID.MultiplayerClient)
+                    for (int i = 0; i <= 9; i++)
                     {
-                        NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i, number3: Main.LocalPlayer.inventory[i].prefix);
-                        NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i + 10, number3: Main.LocalPlayer.inventory[i].prefix);
+                        (Player.inventory[i], Player.inventory[i + 10]) = (Player.inventory[i + 10], Player.inventory[i]);
+                        if (Main.netMode is NetmodeID.MultiplayerClient)
+                        {
+                            NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i, number3: Main.LocalPlayer.inventory[i].prefix);
+                            NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i + 10, number3: Main.LocalPlayer.inventory[i].prefix);
+                        }
                     }
+                    _cacheSwitchSlot = false;
+                }
+                else
+                {
+                    _cacheSwitchSlot = true;
                 }
             }
         }

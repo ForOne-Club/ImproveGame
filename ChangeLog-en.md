@@ -32,6 +32,7 @@
 - Added 2 configuration presets
 - 添加自动加入红队功能
 - 添加快捷栏切换功能
+- 添加物品简介显示召唤物槽位占用情况功能
 ## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
