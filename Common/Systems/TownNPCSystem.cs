@@ -27,23 +27,21 @@ namespace ImproveGame.Common.Systems
             //        TownNPCIDs.Add(netID);
             //    }
             //}
-            for (int i = 0; i < TownNPCIDs.Count; i++)
+
+            // 你个浓眉大眼的到底是不是城镇NPC?
+            TownNPCIDs.RemoveAll(id =>
             {
                 var npc = new NPC();
-                npc.SetDefaults(TownNPCIDs[i]);
-                // 你个浓眉大眼的到底是不是城镇NPC?
-                if (!npc.townNPC || NPC.TypeToDefaultHeadIndex(npc.type) < 0)
-                {
-                    TownNPCIDs.RemoveAt(i);
-                    i--;
-                }
-            }
+                npc.SetDefaults(id);
+                int head = NPC.TypeToDefaultHeadIndex(id);
+                return !npc.townNPC || head < 0 || head >= NPCHeadLoader.NPCHeadCount || NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] || npc.ModNPC?.TownNPCStayingHomeless is true;
+            });
+
             var modNPCs = typeof(NPCLoader).GetField("npcs", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null) as IList<ModNPC>;
             foreach (ModNPC modNPC in modNPCs)
             {
                 var npc = modNPC.NPC;
-
-                if (npc.townNPC && NPC.TypeToDefaultHeadIndex(npc.type) >= 0)
+                if (npc.townNPC && NPC.TypeToDefaultHeadIndex(npc.type) >= 0 && !NPCHeadID.Sets.CannotBeDrawnInHousingUI[npc.type] && !modNPC.TownNPCStayingHomeless)
                 {
                     TownNPCIDs.Add(npc.type);
                 }

@@ -3,12 +3,15 @@
 # v1.6
 ## Subversions:
 - v1.6
+- v1.6.0.1
 ## BUG Fixes:
 - Fixed the fishing speed of the Fishing Machine being dramatically fast
 - Fixed the Encumbering Stone working in personal inventories
 - Fixed possible lagging while mining
 - Fixed the Blinkroot and Shiverthorn sometimes not been re-planted
 - Fixed the Fishing Machine duplicating items in multiplayer mode
+- **[v1.6.0.1]** Fixed issue where traveling merchants could benefit from Better Town NPC Spawn Mechanics
+- **[v1.6.0.1]** Fixed every town NPC can heal you if Emergency Treatment is on
 ## Additions:
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
@@ -24,7 +27,7 @@
 - Added a Portable Crafting Station feature
 - Added a lavaless lava slime function, to stop lava slime from spawning lava
 - Added the function of keeping buff after death
-- Added a Better Town NPC Spawn&Respawn Mechanics function
+- Added a Better Town NPC Spawn Mechanics function
 - Added Together Happier(multiplayer) functions
   - Shared Portable Crafting Stations for teammates
   - Shared Infinite Buffs for teammates
