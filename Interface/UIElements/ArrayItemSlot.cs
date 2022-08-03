@@ -364,11 +364,8 @@ namespace ImproveGame.Interface.UIElements
         public static void OpenItemGlow(SpriteBatch sb, Item item)
         {
             Main.instance.LoadItem(item.type);
-            Texture2D texture = TextureAssets.Item[item.type].Value;
+            Effect effect = ModAssets.ItemEffect.Value;
 
-            sb.End();
-            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
             Color lerpColor;
             int milliSeconds = (int)Main.gameTimeCache.TotalGameTime.TotalMilliseconds;
             float time = milliSeconds * 0.05f;
@@ -380,19 +377,14 @@ namespace ImproveGame.Interface.UIElements
             {
                 lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
             }
-            ModAssets.ItemEffect.Value.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-            ModAssets.ItemEffect.Value.CurrentTechnique.Passes["ColorPut"].Apply();
+            effect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
+            effect.CurrentTechnique.Passes["ColorPut"].Apply();
+            sb.Begin(effect, Main.UIScaleMatrix);
         }
 
         public static void CloseItemGlow(SpriteBatch sb)
         {
-            /*RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
-            Rectangle rectangle1 = sb.GraphicsDevice.ScissorRectangle;*/
-            sb.End();
-            /*sb.GraphicsDevice.RasterizerState = rasterizerState;
-            sb.GraphicsDevice.ScissorRectangle = rectangle1;*/
-            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp,
-                DepthStencilState.None, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
+            sb.Begin(null, Main.UIScaleMatrix);
         }
     }
 }

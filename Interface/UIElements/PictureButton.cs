@@ -7,108 +7,95 @@ namespace ImproveGame.Interface.UIElements
     /// </summary>
     public class PictureButton : UIElement
     {
-        private readonly Texture2D Background;
-        private readonly Texture2D BackgroundBorder;
+        // private readonly Texture2D Background = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/PanelGrayscale").Value;
+        // private readonly Texture2D BackgroundBorder = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder").Value;
 
-        public bool _playSound;
+        public int[] data = new int[5];
+        public AnimationTimer HoverTimer = new(2);
 
-        public int[] data;
-        public UIImage UIImage;
-        public UIText UIText;
-        public AnimationTimer HoverTimer;
+        public string text;
+        public Vector2 textSize;
+        public Vector2 TextPosition => new(imagePosition.X + imageSize.X + 10, 6 + this.Height() / 2 - textSize.Y / 2);
+
+        public Texture2D image;
+        public Vector2 imageSize;
+        public Vector2 imagePosition;
 
         public PictureButton(Texture2D texture, string text)
         {
-            _playSound = true;
-            data = new int[5];
-            Background = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/PanelGrayscale").Value;
-            BackgroundBorder = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder").Value;
-
             Width.Pixels = MyUtils.GetTextSize(text).X + this.HPadding() + 75;
             Height.Pixels = 40f;
 
-            Append(UIImage = new(texture)
-            {
-                VAlign = 0.5f
-            });
-            UIImage.Left.Pixels = 30f - UIImage.Width() / 2f;
+            image = texture;
+            imageSize = texture.Size();
+            imagePosition = new Vector2(30, this.Height() / 2) - imageSize / 2;
 
-            Append(UIText = new(text)
-            {
-                VAlign = 0.5f
-            });
-            UIText.Left.Pixels = 50f;
+            this.text = text;
+            textSize = GetTextSize(text);
+        }
 
-            HoverTimer = new(2);
+        public override void Recalculate()
+        {
+            base.Recalculate();
+            Width.Pixels = GetTextSize(text).X + this.HPadding() + 75;
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             HoverTimer.Update();
-            if (IsMouseHovering)
-            {
-                if (_playSound)
-                {
-                    _playSound = false;
-                    SoundEngine.PlaySound(SoundID.MenuTick);
-                }
-            }
-            else
-            {
-                _playSound = true;
-            }
+        }
+
+        private readonly Color BorderColor1 = new(18, 18, 38);
+        private readonly Color BorderColor2 = new(233, 176, 0);
+        private readonly Color BackgroundColor1 = new(54, 56, 130);
+        protected override void DrawSelf(SpriteBatch sb)
+        {
+            CalculatedStyle dimensions = GetDimensions();
+            Vector2 position = dimensions.Position();
+            Color borderColor = Color.Lerp(BorderColor1, BorderColor2, HoverTimer.Schedule);
+            PixelShader.DrawBox(Main.UIScaleMatrix, position, this.GetSize(), 12, 3, borderColor,
+                BackgroundColor1);
+
+            sb.Draw(image, position + imagePosition, Color.White);
+            MyUtils.DrawString(position + TextPosition, text, Color.White, Color.Black);
+
+            // 原绘制
+            /*var rectangle = GetDimensions().ToRectangle();
+            Utils.DrawSplicedPanel(sb, Background, rectangle.X, rectangle.Y, rectangle.Width,
+                rectangle.Height, 10, 10, 10, 10, Colors.InventoryDefaultColor);
+            Utils.DrawSplicedPanel(sb, BackgroundBorder, rectangle.X, rectangle.Y, rectangle.Width,
+                rectangle.Height, 10, 10, 10, 10, Color.White * HoverTimer.Schedule);*/
+        }
+
+        public void SetText(string text)
+        {
+            this.text = text;
+            textSize = GetTextSize(text);
+        }
+
+        public void SetImage(Texture2D texture)
+        {
+            image = texture;
+            imageSize = texture.Size();
+        }
+
+        public override void Click(UIMouseEvent evt)
+        {
+            base.Click(evt);
         }
 
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
             HoverTimer.Open();
+            SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         public override void MouseOut(UIMouseEvent evt)
         {
             base.MouseOut(evt);
             HoverTimer.Close();
-        }
-
-        private readonly Color borderColor = new(233, 176, 0);
-        private readonly Color light1 = new(192, 130, 255);
-        private readonly Color drak1 = new(96, 65, 127);
-        private readonly Color light2 = new(56, 156, 255);
-        private readonly Color drak2 = new(28, 78, 127);
-        protected override void DrawSelf(SpriteBatch sb)
-        {
-            var rectangle = GetDimensions().ToRectangle();
-
-            Color borderColor = Color.Lerp(drak1, light1, HoverTimer.Schedule);
-            /*PixelShader.DrawBox(Main.UIScaleMatrix, GetDimensions().Position(), this.GetSize(),
-                4, 3, drak1, drak2, light1, light2);*/
-
-            Utils.DrawSplicedPanel(sb, Background, rectangle.X, rectangle.Y, rectangle.Width,
-                rectangle.Height, 10, 10, 10, 10, Colors.InventoryDefaultColor);
-            Utils.DrawSplicedPanel(sb, BackgroundBorder, rectangle.X, rectangle.Y, rectangle.Width,
-                rectangle.Height, 10, 10, 10, 10, Color.White * HoverTimer.Schedule);
-        }
-
-        public void TextAlignCenter()
-        {
-            float left = 30f + (this.WidthInside() - 30f) / 2f;
-            UIText.Left.Pixels = left - UIText.Width() / 2f;
-            UIText.Recalculate();
-        }
-
-        public void SetText(string text)
-        {
-            Width.Pixels = MyUtils.GetTextSize(text).X + this.HPadding() + 75;
-            UIText.Width.Pixels = MyUtils.GetTextSize(text).X;
-            UIText.SetText(text);
-        }
-
-        public void SetImage(Texture2D texture)
-        {
-            UIImage.SetImage(texture);
-            UIImage.Left.Pixels = 15 + UIImage.Width() / 2f;
         }
     }
 }
