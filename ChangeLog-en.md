@@ -4,6 +4,7 @@
 ## Subversions:
 - v1.6
 - v1.6.0.2
+- v1.6.0.3
 ## BUG Fixes:
 - Fixed the fishing speed of the Fishing Machine being dramatically fast
 - Fixed the Encumbering Stone working in personal inventories

@@ -12,7 +12,7 @@
         {
             if (!Main.dedServ)
             {
-                BoxShader = GetEffect("Box");
+                BoxShader = GetEffect("BoxJu");
                 BorderRound = MyUtils.GetEffect("BorderRound");
                 ItemEffect = MyUtils.GetEffect("item");
                 LiquidSurface = MyUtils.GetEffect("LiquidSurface");

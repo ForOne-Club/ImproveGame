@@ -8,6 +8,30 @@ float4 borderColor2; // 边框颜色2
 float4 background1; // 背景颜色1
 float4 background2; // 背景颜色2
 
+float4 GetColor(float length, float4 color, float4 borderColor, float4 background)
+{
+    float r = radius - border;
+    // 外圈向外模糊
+    if ((length - radius) <= 0.5f && (length - radius) >= -0.5f)
+    {
+        color = lerp(borderColor, float4(0, 0, 0, 0), (length - radius) + 0.5);
+    }
+    // 内圈模糊
+    else if ((length - r) <= 0.5f && (length - r) >= -0.5f)
+    {
+        color = lerp(background, borderColor, (length - r) + 0.5);
+    }
+    else if (length <= r)
+    {
+        color = background;
+    }
+    else if (length <= radius)
+    {
+        color = borderColor;
+    }
+    return color;
+}
+
 float4 BoxFunc(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 position = coords * size;
@@ -24,22 +48,10 @@ float4 BoxFunc(float2 coords : TEXCOORD0) : COLOR0
     
     float r = radius - border;
     
-    if ((length1 - radius) <= 0.5f && (length1 - radius) >= -0.5f)
-    {
-        color = lerp(borderColor, float4(0, 0, 0, 0), pow((length1 - radius) + 0.5, 2));
-    }
-    else if ((length1 - r) <= 0.5f && (length1 - r) >= -0.5f)
-    {
-        color = lerp(borderColor, background, pow((1 - ((length1 - r) + 0.5)), 2));
-    }
-    else if (length1 <= r)
-    {
-        color = background;
-    }
-    else if (length1 <= radius)
-    {
-        color = borderColor;
-    }
+    color = GetColor(length1, color, borderColor, background);
+    color = GetColor(length2, color, borderColor, background);
+    color = GetColor(length3, color, borderColor, background);
+    color = GetColor(length4, color, borderColor, background);
     
     //if (length1 <= radius || length2 <= radius || length3 <= radius || length4 <= radius)
     //{
