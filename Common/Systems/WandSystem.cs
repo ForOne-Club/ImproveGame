@@ -20,6 +20,10 @@ namespace ImproveGame.Common.Systems
         public enum PaintMode : byte { Tile, Wall, Remove };
         public static PaintMode PaintWandMode = PaintMode.Tile;
 
+        // 构造法杖
+        public enum Construct : byte { Save, Place };
+        public static Construct ConstructMode = Construct.Save;
+
         /// <summary>
         /// 切换吸收模式
         /// </summary>

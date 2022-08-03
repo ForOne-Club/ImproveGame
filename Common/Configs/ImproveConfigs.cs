@@ -160,7 +160,7 @@ namespace ImproveGame.Common.Configs
         [Slider]
         [Range(-1, 12)]
         [DefaultValue(-1)]
-        public float TownNPCSpawnSpeed;
+        public int TownNPCSpawnSpeed;
 
         [Label("$Mods.ImproveGame.Config.NoCD_FishermanQuest.Label")]
         [DefaultValue(false)]

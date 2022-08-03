@@ -8,11 +8,15 @@ namespace ImproveGame.Common.Systems
         public MethodInfo SpawnTownNPCs;
         public List<int> TownNPCIDs = new();
 
+        public override void Load()
+        {
+            On.Terraria.Main.UpdateTime_SpawnTownNPCs += TweakNPCSpawn;
+        }
+
         public override void PostSetupContent()
         {
             SpawnTownNPCs = typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
             SetupTownNPCList();
-            On.Terraria.Main.UpdateTime_SpawnTownNPCs += TweakNPCSpawn;
         }
 
         /// <summary>设立城镇NPC列表</summary>
@@ -109,8 +113,7 @@ namespace ImproveGame.Common.Systems
                 {
                     int id = TownNPCIDs[i];
                     // 已经被解锁
-                    var idkState = Terraria.GameContent.Bestiary.BestiaryEntryUnlockState.NotKnownAtAll_0;
-                    if (Main.BestiaryDB.FindEntryByNPCID(id).UIInfoProvider.GetEntryUICollectionInfo().UnlockState != idkState)
+                    if (Main.BestiaryTracker.Chats.GetWasChatWith(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[id]))
                     {
                         SetNPCSpawn(id);
                     }

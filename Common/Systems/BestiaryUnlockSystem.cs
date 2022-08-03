@@ -9,6 +9,9 @@ namespace ImproveGame.Common.Systems
     {
         public override void PostSetupContent()
         {
+            if (Main.dedServ)
+                return;
+
             // 获取所有继承IBestiaryUICollectionInfoProvider的类
             var providers = typeof(Main).Assembly.GetTypes()
                 .Where(t => !t.IsAbstract && !t.ContainsGenericParameters)
