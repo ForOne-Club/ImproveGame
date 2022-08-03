@@ -19,9 +19,33 @@ namespace ImproveGame.Common.GlobalNPCs
         {
             if (npc.type == NPCID.KingSlime)
             {
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Content.Items.SpaceWand>(), 1));
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Content.Items.WallPlace>(), 1));
+                int itemType = ModContent.ItemType<Content.Items.SpaceWand>();
+                npcLoot.Add(new DropPerPlayerOnThePlayer(itemType, 1, 1, 1, new WandDrop(itemType)));
+                itemType = ModContent.ItemType<Content.Items.WallPlace>();
+                npcLoot.Add(new DropPerPlayerOnThePlayer(itemType, 1, 1, 1, new WandDrop(itemType)));
             }
         }
+    }
+
+    public class WandDrop : IItemDropRuleCondition
+    {
+        public int itemType;
+        public WandDrop(int itemType)
+        {
+            this.itemType = itemType;
+        }
+
+        public bool CanDrop(DropAttemptInfo info)
+        {
+            if (info.player.HasItem(itemType))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool CanShowItemDropInUI() => true;
+
+        public string GetConditionDescription() => "玩家拥有当前物品时不会再次掉落";
     }
 }

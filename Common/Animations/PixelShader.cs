@@ -77,9 +77,16 @@
             effect.Parameters["background1"].SetValue(background1.ToVector4());
             effect.Parameters["background2"].SetValue(background2.ToVector4());
 
-            sb.Begin(effect, Main.Transform);
+            SamplerState samplerState = sb.GraphicsDevice.SamplerStates[0];
+            sb.End();
+            sb.Begin(0, sb.GraphicsDevice.BlendState, SamplerState.AnisotropicClamp,
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, Main.UIScaleMatrix);
+
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
-            sb.Begin(null, Main.Transform);
+
+            sb.End();
+            sb.Begin(0, sb.GraphicsDevice.BlendState, samplerState,
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
         }
     }
 }

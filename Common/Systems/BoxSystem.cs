@@ -67,9 +67,11 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(rulerIndex, new LegacyGameInterfaceLayer("ImproveGame: BorderRect", delegate
                     {
                         DrawBox();
+
                         /*Vector2 size = new(200, 100);
-                        PixelShader.DrawBox(Main.MouseScreen - size / 2f, size, 10, 4, Color.White, Color.White, new(0x37, 0x9b, 0xff),
+                        PixelShader.DrawBox(MouseScreenUI - size / 2f, size, 10, 4, Color.White, Color.White, new(0x37, 0x9b, 0xff),
                             new(0xc1, 0x80, 0xff));*/
+
                         // 鼠标显示物块信息
                         /*Point point = Main.MouseWorld.ToTileCoordinates();
                         if (Main.tile[point].HasTile) {

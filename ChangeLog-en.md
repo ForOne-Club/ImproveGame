@@ -39,6 +39,7 @@
 - The Fishing Machine is now be crafted by Any Iron Bar * 8 + Any Copper Bar * 4 + Glass Block * 20
 - The Wand Of Space can also be crafted by Any Wood * 24 + Any Evil Bar * 8 + Amethyst * 8
 - Removed change in styles of the Potion Bags while containing potions
+- 联机模式下, 空间/科技魔杖会为每位玩家掉落, 且当玩家拥有魔杖时不会再次掉落
 
 # v1.5.9
 ## Subversions
