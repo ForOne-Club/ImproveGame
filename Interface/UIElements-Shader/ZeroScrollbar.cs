@@ -44,15 +44,15 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         public override void Update(GameTime gameTime)
         {
-            Main.NewText($"ViewPosition: {ViewPosition}  BufferViewPosition: {BufferViewPosition}");
-            Main.NewText($"ViewSize: {viewSize}  MaxViewSize: {maxViewSize}");
-            Main.NewText($"Height: {Height.Pixels}");
             base.Update(gameTime);
             if (dragging)
             {
                 CalculatedStyle InnerDimensions = GetInnerDimensions();
-                Main.NewText($"offset.Y: {offsetY}");
-                Main.NewText($"剩余距离: {Main.MouseScreen.Y - InnerDimensions.Y}");
+                //Main.NewText($"ViewPosition: {ViewPosition}  BufferViewPosition: {BufferViewPosition}");
+                //Main.NewText($"ViewSize: {viewSize}  MaxViewSize: {maxViewSize}");
+                //Main.NewText($"Height: {Height.Pixels}");
+                //Main.NewText($"offset.Y: {offsetY}");
+                //Main.NewText($"剩余距离: {Main.MouseScreen.Y - InnerDimensions.Y}");
                 ViewPosition = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) / (InnerDimensions.Height * (1 - viewScale)) * maxViewPoisition;
             }
 
@@ -78,7 +78,7 @@ namespace ImproveGame.Interface.UIElements_Shader
                 if (InnerDimensions.Contains(Main.MouseScreen))
                 {
                     dragging = true;
-                    offsetY = evt.MousePosition.Y - InnerDimensions.Y - (InnerDimensions.Height * viewScale * (viewPosition / maxViewPoisition));
+                    offsetY = evt.MousePosition.Y - InnerDimensions.Y - (InnerDimensions.Height * (1 - viewScale) * (viewPosition / maxViewPoisition));
                 }
                 BufferViewPosition = 0;
             }
