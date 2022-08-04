@@ -40,14 +40,14 @@ namespace ImproveGame.Interface.UIElements
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
-            zeroScrollbar.SetViewPosition(evt.ScrollWheelValue);
+            zeroScrollbar.BufferViewPosition -= evt.ScrollWheelValue;
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             if (zeroScrollbar != null)
             {
-                ItemList.Top.Set(-zeroScrollbar.GetValue(), 0);
+                ItemList.Top.Set(-zeroScrollbar.ViewPosition, 0);
             }
             ItemList.Recalculate();
         }

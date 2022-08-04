@@ -8,31 +8,26 @@ namespace ImproveGame.Interface.UIElements_Shader
     /// </summary>
     public class ZeroScrollbar : UIElement
     {
-        private float _viewPosition;
+        private float _viewPosition; // 滚动条当前位置
 
-        private float _viewSize = 1f;
+        private float _viewSize = 1f; // 显示出来的高度
 
-        private float _maxViewSize = 20f;
+        private float _maxViewSize = 20f; // 控制元素的高度
 
+        // 用于拖动内滚动条
         private float offsetY;
         public bool dragging;
 
         public float ViewPosition
         {
-            get
-            {
-                return _viewPosition;
-            }
-            set
-            {
-                _viewPosition = MathHelper.Clamp(value, 0f, _maxViewSize - _viewSize);
-            }
+            get => _viewPosition;
+            set => _viewPosition = MathHelper.Clamp(value, 0f, _maxViewSize - _viewSize);
         }
 
-        public bool CanScroll => _maxViewSize != _viewSize;
-
-        // 后
-        private float ScrollWheelValue;
+        /// <summary>
+        /// 缓冲距离, 不想使用动画就直接设置 <see cref="ViewPosition"/>
+        /// </summary>
+        public float BufferViewPosition;
 
         public ZeroScrollbar()
         {
@@ -49,32 +44,24 @@ namespace ImproveGame.Interface.UIElements_Shader
             _maxViewSize = maxViewSize;
         }
 
-        public float GetValue()
-        {
-            return _viewPosition;
-        }
-
-        public void SetViewPosition(int ScrollWheelValue)
-        {
-            this.ScrollWheelValue -= ScrollWheelValue;
-        }
-
         public override void Update(GameTime gameTime)
         {
             if (dragging)
             {
-                InnerBox(out _, out Vector2 size);
-                ViewPosition = (Main.MouseScreen.Y - offsetY - GetInnerDimensions().Y) / (this.HeightInside() - size.Y) * (_maxViewSize - _viewSize);
+                CalculatedStyle InnerDimensions = GetInnerDimensions();
+                Vector2 size = InnerDimensions.Size();
+
+                ViewPosition = (Main.MouseScreen.Y - offsetY - InnerDimensions.Y) / (InnerDimensions.Height - size.Y) * (_maxViewSize - _viewSize);
             }
 
-            if (ScrollWheelValue != 0)
+            if (BufferViewPosition != 0)
             {
-                ViewPosition += ScrollWheelValue * 0.2f;
-                ScrollWheelValue *= 0.8f;
-                if (MathF.Abs(ScrollWheelValue) < 0.001f)
+                ViewPosition += BufferViewPosition * 0.2f;
+                BufferViewPosition *= 0.8f;
+                if (MathF.Abs(BufferViewPosition) < 0.001f)
                 {
                     ViewPosition = MathF.Round(ViewPosition, 3);
-                    ScrollWheelValue = 0;
+                    BufferViewPosition = 0;
                 }
             }
         }
@@ -84,14 +71,14 @@ namespace ImproveGame.Interface.UIElements_Shader
             base.MouseDown(evt);
             if (evt.Target == this)
             {
-                InnerBox(out Vector2 position, out _);
-                InnerBox(out Rectangle rectangle);
-                if (rectangle.Contains(Main.MouseScreen.ToPoint()))
+                CalculatedStyle InnerDimensions = GetInnerDimensions();
+
+                if (InnerDimensions.Contains(Main.MouseScreen))
                 {
-                    offsetY = evt.MousePosition.Y - position.Y;
+                    offsetY = evt.MousePosition.Y - InnerDimensions.Y;
                     dragging = true;
                 }
-                ScrollWheelValue = 0;
+                BufferViewPosition = 0;
             }
         }
 
@@ -113,27 +100,15 @@ namespace ImproveGame.Interface.UIElements_Shader
         {
             CalculatedStyle dimension = GetDimensions();
             Vector2 position = dimension.Position();
-            Vector2 size = this.GetSize();
+            Vector2 size = dimension.Size();
 
             PixelShader.DrawBox(Main.UIScaleMatrix, position, size, size.X / 2, 3, Color.Black, background1);
 
-            InnerBox(out Vector2 innerPosition, out Vector2 innerSize);
+            CalculatedStyle innerDimensions = GetInnerDimensions();
+            Vector2 innerPosition = innerDimensions.Position();
+            Vector2 innerSize = innerDimensions.Position();
+
             PixelShader.DrawBox(Main.UIScaleMatrix, innerPosition, innerSize, innerSize.X / 2, 0, Color.White, Color.White);
-        }
-
-        public void InnerBox(out Vector2 innerPosition, out Vector2 innerSize)
-        {
-            CalculatedStyle innerDimension = GetInnerDimensions();
-            innerPosition = innerDimension.Position();
-            innerSize = this.GetSizeInside();
-            innerSize.Y *= _viewSize / _maxViewSize;
-            innerPosition.Y += (_viewPosition / (_maxViewSize - _viewSize)) * (this.HeightInside() - innerSize.Y);
-        }
-
-        public void InnerBox(out Rectangle rectangle)
-        {
-            InnerBox(out Vector2 innerPosition, out Vector2 innerSize);
-            rectangle = new((int)innerPosition.X, (int)innerPosition.Y, (int)innerSize.X, (int)innerSize.Y);
         }
     }
 }
