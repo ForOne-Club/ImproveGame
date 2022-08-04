@@ -82,15 +82,14 @@
             effect.Parameters["background1"].SetValue(background1.ToVector4());
             effect.Parameters["background2"].SetValue(background2.ToVector4());
 
-            SamplerState samplerState = sb.GraphicsDevice.SamplerStates[0];
             sb.End();
-            sb.Begin(0, sb.GraphicsDevice.BlendState, SamplerState.AnisotropicClamp,
+            sb.Begin(0, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
                 sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, matrix);
 
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
 
             sb.End();
-            sb.Begin(0, sb.GraphicsDevice.BlendState, samplerState,
+            sb.Begin(0, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
                 sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, matrix);
         }
     }

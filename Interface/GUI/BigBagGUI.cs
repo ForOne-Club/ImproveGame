@@ -20,7 +20,6 @@ namespace ImproveGame.Interface.GUI
             set => visible = value;
         }
 
-        public UserInterface UserInterface;
         public UIText title;
         public SUIPanel MainPanel;
         public UIImageButton CloseButton;
@@ -41,7 +40,7 @@ namespace ImproveGame.Interface.GUI
             buttons[2].SetText(Lang.inter[31].Value);
             buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
 
-            buttons[3].SetText(MyUtils.GetText("SuperVault.Sort"));
+            buttons[3].SetText(GetText("SuperVault.Sort"));
             buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
 
             ItemGrid.SetInventory(items);
@@ -105,7 +104,7 @@ namespace ImproveGame.Interface.GUI
             CloseButton.OnClick += (evt, uie) => Visible = false;
             MainPanel.Append(CloseButton);
 
-            ItemGrid = new ModItemGrid(UserInterface);
+            ItemGrid = new ModItemGrid();
             ItemGrid.Top.Pixels = buttons[0].Top() + buttons[0].Height() + 10f;
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
             MainPanel.Append(ItemGrid);

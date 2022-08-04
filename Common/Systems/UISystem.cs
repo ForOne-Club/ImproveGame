@@ -102,7 +102,7 @@ namespace ImproveGame.Common.Systems
                 LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
                 LoadGUI(ref BrustGUI, out BrustInterface);
                 LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
-                LoadGUI(ref BigBagGUI, out BigBagInterface, () => BigBagGUI.UserInterface = BigBagInterface);
+                LoadGUI(ref BigBagGUI, out BigBagInterface);
                 LoadGUI(ref PaintWandGUI, out PaintWandInterface);
                 LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
                 LoadGUI(ref StructureGUI, out StructureInterface, () => StructureGUI.UserInterface = StructureInterface);

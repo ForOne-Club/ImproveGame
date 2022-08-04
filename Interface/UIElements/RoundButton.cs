@@ -40,12 +40,14 @@ namespace ImproveGame.Interface.UIElements
 
         public override void MouseOver(UIMouseEvent evt)
         {
+            Main.NewText($"{typeof(RoundButton)}.MouseOver");
             base.MouseOver(evt);
             HoverTimer.Open();
         }
 
         public override void MouseOut(UIMouseEvent evt)
         {
+            Main.NewText($"{typeof(RoundButton)}.MouseOut");
             base.MouseOut(evt);
             HoverTimer.Close();
         }
