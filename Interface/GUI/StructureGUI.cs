@@ -1,5 +1,8 @@
 ﻿using ImproveGame.Common.ConstructCore;
+using ImproveGame.Common.Systems;
 using ImproveGame.Interface.UIElements;
+using ImproveGame.Interface.UIElements_Shader;
+using System.Diagnostics;
 using System.Reflection;
 using Terraria.GameInput;
 
@@ -8,6 +11,10 @@ namespace ImproveGame.Interface.GUI
     public class StructureGUI : UIState
     {
         public static bool Visible { get; private set; }
+        public bool CacheSetupStructures; // 缓存，在下一帧Setup
+
+        public Asset<Texture2D> ButtonPanel;
+        public Asset<Texture2D> ButtonPanel_Highlight;
 
         public UserInterface UserInterface;
 
@@ -17,6 +24,9 @@ namespace ImproveGame.Interface.GUI
 
         public override void OnInitialize()
         {
+            ButtonPanel = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel");
+            ButtonPanel_Highlight = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder");
+
             BasePanel = new(draggable: false)
             {
                 Top = StyleDimension.FromPixels(90f),
@@ -43,11 +53,50 @@ namespace ImproveGame.Interface.GUI
                 VAlign = 0.5f
             };
             Scrollbar.Left.Set(-2f, 0f);
-            Scrollbar.Height.Set(-20f, 1f);
+            Scrollbar.Height.Set(-10f, 1f);
             Scrollbar.SetView(100f, 1000f);
             //UIList.SetScrollbar(Scrollbar); // 用自己的代码
             SetupScrollBar();
             BasePanel.Append(Scrollbar);
+
+            var refreshButton = QuickButton(GetTexture("UI/Construct/Folder"));
+            refreshButton.SetPos(new(-296f, 40f), 0.5f, 0f);
+            refreshButton.OnMouseDown += (_, _) =>
+            {
+                FileOperator.CachedStructureDatas.Clear();
+                SetupStructures();
+            };
+            Append(refreshButton);
+
+            var folderButton = QuickButton(GetTexture("UI/Construct/Folder"));
+            folderButton.SetPos(new(-246f, 40f), 0.5f, 0f);
+            folderButton.OnMouseDown += (_, _) => TrUtils.OpenFolder(FileOperator.SavePath);
+            Append(folderButton);
+
+            var modeButton = QuickButton(GetTexture("UI/Construct/Folder"));
+            modeButton.SetPos(new(-196f, 40f), 0.5f, 0f);
+            modeButton.OnMouseDown += (_, _) =>
+            {
+                if (WandSystem.ConstructMode == WandSystem.Construct.Place)
+                    WandSystem.ConstructMode = WandSystem.Construct.Save;
+                else
+                    WandSystem.ConstructMode = WandSystem.Construct.Place;
+            };
+            Append(modeButton);
+
+            var closeButton = QuickButton(GetTexture("Close"));
+            closeButton.SetPos(new(246f, 40f), 0.5f, 0f);
+            closeButton.OnMouseDown += (_, _) => Close();
+            Append(closeButton);
+        }
+
+        private ModImageButton QuickButton(Asset<Texture2D> texture)
+        {
+            var button = new ModImageButton(texture, Color.White, Color.White);
+            button.SetBackgroundImage(ButtonPanel);
+            button.SetHoverImage(ButtonPanel_Highlight);
+            button.SetSize(44, 44);
+            return button;
         }
 
         private void SetupScrollBar(bool resetViewPosition = true)
@@ -79,6 +128,12 @@ namespace ImproveGame.Interface.GUI
 
         public override void Update(GameTime gameTime)
         {
+            if (CacheSetupStructures)
+            {
+                SetupStructures();
+                CacheSetupStructures = false;
+            }
+
             Recalculate();
 
             base.Update(gameTime);
@@ -96,7 +151,10 @@ namespace ImproveGame.Interface.GUI
             var filePaths = Directory.GetFiles(FileOperator.SavePath);
             foreach (string path in filePaths)
             {
-                UIList.Add(new StructurePanel(path));
+                if (Path.GetExtension(path) == FileOperator.Extension)
+                {
+                    UIList.Add(new StructurePanel(path));
+                }
             }
 
             Recalculate();

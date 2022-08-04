@@ -7,7 +7,7 @@ namespace ImproveGame.Content.Items
 {
     public class ConstructWand : SelectorItem
     {
-        public override bool ModifySelectedTiles(Player player, int i, int j) => false;
+        public override bool ModifySelectedTiles(Player player, int i, int j) => true;
 
         public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ)
         {

@@ -21,6 +21,9 @@ namespace ImproveGame.Common.ConstructCore
             WallFrameY = wallFrameY;
         }
 
+        // tML反射获取叫这个的Field，获取不到就报错，不能删啊
+        public static Func<TagCompound, TileDefinition> DESERIALIZER = s => DeserializeData(s);
+
         public static TileDefinition DeserializeData(TagCompound tag)
         {
             var output = new TileDefinition(
