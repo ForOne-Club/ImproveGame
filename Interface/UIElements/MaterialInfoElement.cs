@@ -35,7 +35,7 @@
                 IgnoresMouseInteraction = true,
                 DrawPanel = false,
                 VAlign = 0.5f,
-                Left = new StyleDimension(-250f, 1f)
+                Left = new StyleDimension(-280f, 1f)
             };
             Append(StackCheckedInfo);
 
@@ -53,7 +53,7 @@
         {
             // 只检测物品栏
             int stackChecked = 0;
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < 50; i++)
             {
                 if (Main.LocalPlayer.inventory[i].type == ItemType)
                 {

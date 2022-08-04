@@ -161,9 +161,15 @@ namespace ImproveGame
 
         public static void DrawBorderRect(Rectangle tileRectangle, Color backgroundColor, Color borderColor)
         {
+            var position = tileRectangle.TopLeft() * 16f - Main.screenPosition;
+            DrawBorder(position, tileRectangle.Width * 16, tileRectangle.Height * 16, backgroundColor, borderColor);
+        }
+
+        public static void DrawBorderRectangle(Rectangle tileRectangleInScreen, Color backgroundColor, Color borderColor)
+        {
             Texture2D texture = TextureAssets.MagicPixel.Value;
-            Vector2 position = tileRectangle.TopLeft() * 16f - Main.screenPosition;
-            Vector2 scale = new(tileRectangle.Width, tileRectangle.Height);
+            Vector2 position = tileRectangleInScreen.TopLeft() * 16f;
+            Vector2 scale = new(tileRectangleInScreen.Width, tileRectangleInScreen.Height);
             Main.spriteBatch.Draw(
                     texture,
                     position,
@@ -195,6 +201,43 @@ namespace ImproveGame
                 new(0, 0, 1, 1),
                 borderColor, 0f, Zero,
                 new Vector2(16f * scale.X, 2f), SpriteEffects.None, 0f);
+        }
+
+        public static void DrawBorder(Vector2 position, float width, float height, Color backgroundColor, Color borderColor)
+        {
+            Texture2D texture = TextureAssets.MagicPixel.Value;
+            Vector2 scale = new(width, height);
+            Main.spriteBatch.Draw(
+                    texture,
+                    position,
+                    new(0, 0, 1, 1),
+                    backgroundColor,
+                    0f,
+                    Zero,
+                    scale,
+                    SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(
+                texture,
+                position + UnitX * -2f + UnitY * -2f,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(2f, scale.Y + 4),
+                SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture,
+                position + UnitX * scale.X + UnitY * -2f,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(2f, scale.Y + 4), SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture,
+                position + UnitY * -2f,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(scale.X, 2f), SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture,
+                position + UnitY * scale.Y,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(scale.X, 2f), SpriteEffects.None, 0f);
         }
 
         /// <summary>

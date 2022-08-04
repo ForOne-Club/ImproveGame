@@ -30,6 +30,19 @@ namespace ImproveGame.Content.Items
             if (player.altFunctionUse == 0)
             {
                 ItemRotation(player);
+
+                if (!Main.dedServ && Main.myPlayer == player.whoAmI && // 多人客户端或者单人
+                    WandSystem.ConstructMode is WandSystem.Construct.Place && // 模式为放置
+                    !string.IsNullOrEmpty(WandSystem.ConstructFilePath) && // 有路径
+                    File.Exists(WandSystem.ConstructFilePath)) // 路径存在文件
+                {
+                    var tag = FileOperator.GetTagFromFile(WandSystem.ConstructFilePath);
+
+                    if (tag is null)
+                        return false;
+
+                    GenerateCore.GenerateFromTag(tag, Main.MouseWorld.ToTileCoordinates());
+                }
             }
             else if (player.altFunctionUse == 2)
             {

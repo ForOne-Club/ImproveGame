@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+﻿using ImproveGame.Common.ConstructCore;
+using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ObjectData;
 using Terraria.UI.Gamepad;
@@ -7,6 +8,42 @@ namespace ImproveGame
 {
     partial class MyUtils
     {
+        public static int GetItemTile(int itemType)
+        {
+            if (MaterialCore.FinishSetup && MaterialCore.ItemToTile.ContainsKey(itemType))
+            {
+                return MaterialCore.ItemToTile[itemType];
+            }
+            return -1;
+        }
+
+        public static int GetTileItem(int tileType)
+        {
+            if (MaterialCore.FinishSetup && MaterialCore.ItemToTile.ContainsValue(tileType))
+            {
+                return MaterialCore.ItemToTile.FirstOrDefault(i => i.Value == tileType).Key;
+            }
+            return -1;
+        }
+
+        public static int GetItemWall(int itemType)
+        {
+            if (MaterialCore.FinishSetup && MaterialCore.ItemToWall.ContainsKey(itemType))
+            {
+                return MaterialCore.ItemToWall[itemType];
+            }
+            return -1;
+        }
+
+        public static int GetWallItem(int wallType)
+        {
+            if (MaterialCore.FinishSetup && MaterialCore.ItemToWall.ContainsValue(wallType))
+            {
+                return MaterialCore.ItemToWall.FirstOrDefault(i => i.Value == wallType).Key;
+            }
+            return -1;
+        }
+
         /// <summary>
         /// 获取多格物块的左上角位置
         /// </summary>
@@ -181,6 +218,26 @@ namespace ImproveGame
                 }
             }
             return success;
+        }
+
+        /// <summary>
+        /// 放物块，但是有魔杖特判
+        /// </summary>
+        public static bool TryPlaceTile(int i, int j, Item item, Player player, bool mute = false, bool forced = false)
+        {
+            // 物块魔杖特判    
+            if (item.tileWand > 0)
+            {
+                if (CheckWandUsability(item, player, out int index) && index != -1)
+                    TryConsumeItem(ref player.inventory[index], player, true);
+                else return false;
+            }
+            int targetTile = item.createTile;
+            if (TileID.Sets.Grass[targetTile])
+            {
+                targetTile = TileID.Dirt;
+            }
+            return WorldGen.PlaceTile(i, j, targetTile, mute, forced, player.whoAmI, item.placeStyle);
         }
 
         public enum CheckType

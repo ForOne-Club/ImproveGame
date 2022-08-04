@@ -14,7 +14,10 @@ namespace ImproveGame.Interface.GUI
         public bool CacheSetupStructures; // 缓存，在下一帧Setup
         public bool CacheSetupStructureInfos; // 缓存，在下一帧Setup
         public string CacheStructureInfoPath;
+        private bool _inInfoPage = false;
 
+        public Asset<Texture2D> RefreshTexture;
+        public Asset<Texture2D> BackTexture;
         public Asset<Texture2D> ButtonPanel;
         public Asset<Texture2D> ButtonPanel_Highlight;
 
@@ -23,18 +26,21 @@ namespace ImproveGame.Interface.GUI
         private ModUIPanel BasePanel; // 背景板
         public ModScrollbar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
+        public ModImageButton RefreshButton; // 刷新/回退按钮
 
         public override void OnInitialize()
         {
+            RefreshTexture = GetTexture("UI/Construct/Folder");
+            BackTexture = GetTexture("UI/Construct/Back");
             ButtonPanel = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel");
             ButtonPanel_Highlight = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder");
 
             BasePanel = new(draggable: false)
             {
-                Top = StyleDimension.FromPixels(90f),
+                Top = StyleDimension.FromPixels(100f),
                 HAlign = 0.5f
             };
-            BasePanel.SetSize(600f, 0f, precentHeight: 0.8f);
+            BasePanel.SetSize(600f, 0f, precentHeight: 0.7f);
             BasePanel.BorderColor = new(29, 34, 70);
             Append(BasePanel);
 
@@ -61,22 +67,22 @@ namespace ImproveGame.Interface.GUI
             SetupScrollBar();
             BasePanel.Append(Scrollbar);
 
-            var refreshButton = QuickButton(GetTexture("UI/Construct/Folder"));
-            refreshButton.SetPos(new(-296f, 40f), 0.5f, 0f);
-            refreshButton.OnMouseDown += (_, _) =>
+            RefreshButton = QuickButton(RefreshTexture);
+            RefreshButton.SetPos(new(-296f, 50f), 0.5f, 0f);
+            RefreshButton.OnMouseDown += (_, _) =>
             {
                 FileOperator.CachedStructureDatas.Clear();
                 SetupStructuresList();
             };
-            Append(refreshButton);
+            Append(RefreshButton);
 
             var folderButton = QuickButton(GetTexture("UI/Construct/Folder"));
-            folderButton.SetPos(new(-246f, 40f), 0.5f, 0f);
+            folderButton.SetPos(new(-246f, 50f), 0.5f, 0f);
             folderButton.OnMouseDown += (_, _) => TrUtils.OpenFolder(FileOperator.SavePath);
             Append(folderButton);
 
             var modeButton = QuickButton(GetTexture("UI/Construct/Folder"));
-            modeButton.SetPos(new(-196f, 40f), 0.5f, 0f);
+            modeButton.SetPos(new(-196f, 50f), 0.5f, 0f);
             modeButton.OnMouseDown += (_, _) =>
             {
                 if (WandSystem.ConstructMode == WandSystem.Construct.Place)
@@ -87,7 +93,7 @@ namespace ImproveGame.Interface.GUI
             Append(modeButton);
 
             var closeButton = QuickButton(GetTexture("Close"));
-            closeButton.SetPos(new(246f, 40f), 0.5f, 0f);
+            closeButton.SetPos(new(246f, 50f), 0.5f, 0f);
             closeButton.OnMouseDown += (_, _) => Close();
             Append(closeButton);
         }
@@ -98,6 +104,7 @@ namespace ImproveGame.Interface.GUI
             button.SetBackgroundImage(ButtonPanel);
             button.SetHoverImage(ButtonPanel_Highlight);
             button.SetSize(44, 44);
+            button.OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
             return button;
         }
 
@@ -175,6 +182,9 @@ namespace ImproveGame.Interface.GUI
                 UIList.Add(new MaterialInfoElement(itemType, stack));
             }
 
+            _inInfoPage = true;
+            RefreshButton.SetImage(BackTexture);
+
             Recalculate();
             SetupScrollBar();
         }
@@ -191,6 +201,9 @@ namespace ImproveGame.Interface.GUI
                     UIList.Add(new StructurePanel(path));
                 }
             }
+
+            _inInfoPage = false;
+            RefreshButton.SetImage(RefreshTexture);
 
             Recalculate();
             SetupScrollBar();

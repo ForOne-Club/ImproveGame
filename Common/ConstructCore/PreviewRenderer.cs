@@ -78,6 +78,11 @@ namespace ImproveGame.Common.ConstructCore
             // 对齐左上角 + 转换到屏幕坐标
             Vector2 originPos = position.ToTileCoordinates().ToWorldCoordinates(0f, 0f) - Main.screenPosition;
 
+            int width = tag.GetInt("Width");
+            int height = tag.GetInt("Height");
+            var color = Color.GreenYellow;
+
+            DrawBorder(originPos, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
             DrawPreviewFromTag(sb, tag, originPos, 1f, Main.LocalPlayer.gravDir is -1);
         }
 
@@ -112,7 +117,7 @@ namespace ImproveGame.Common.ConstructCore
                 return false;
             }
 
-            var spriteEffects = flip ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            var spriteEffects = SpriteEffects.None;
 
             var samplerState = Main.graphics.GraphicsDevice.SamplerStates[0];
             Main.graphics.GraphicsDevice.SamplerStates[0] = Main.DefaultSamplerState;
@@ -120,6 +125,13 @@ namespace ImproveGame.Common.ConstructCore
             Color color = Color.White;
             int width = tag.GetInt("Width");
             int height = tag.GetInt("Height");
+
+            // 翻转调整
+            if (flip)
+            {
+                origin.Y -= height * 16f; // 和生成保持一致
+                spriteEffects = SpriteEffects.FlipVertically;
+            }
 
             for (int x = 0; x <= width; x++)
             {
@@ -160,7 +172,7 @@ namespace ImproveGame.Common.ConstructCore
                     int drawY = flip ? height - y : y;
                     var position = origin + new Point(x, drawY).ToWorldCoordinates(0f, flip ? 0f : 8f);
 
-                    if (tileType > 0) // Tile
+                    if (tileType != -1) // Tile
                     {
                         Main.instance.LoadTiles(tileType);
                         Texture2D texture = TextureAssets.Tile[tileType].Value;

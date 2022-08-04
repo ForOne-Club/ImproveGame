@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
+using Terraria.ObjectData;
 
 namespace ImproveGame.Common.ConstructCore
 {
     public class MaterialCore : ModSystem
     {
+        public static Dictionary<int, int> ItemToPlaceStyle { get; private set; } = new();
         public static Dictionary<int, int> ItemToTile { get; private set; } = new();
         public static Dictionary<int, int> ItemToWall { get; private set; } = new();
         internal static bool FinishSetup { get; private set; } = false;
@@ -25,15 +28,37 @@ namespace ImproveGame.Common.ConstructCore
 
             foreach (var tileData in data)
             {
-                int tileItemType = GetTileItem(FileOperator.ParseTileType(tileData.Tile));
-                int wallItemType = GetWallItem(FileOperator.ParseTileType(tileData.Wall));
+                int tileType = FileOperator.ParseTileType(tileData.Tile);
+                if (tileType is not -1 && TileID.Sets.Grass[tileType])
+                {
+                    tileType = TileID.Dirt;
+                }
+                int tileItemType = GetTileItem(tileType);
                 if (tileItemType != -1)
                 {
-                    if (!materialDictionary.ContainsKey(tileItemType))
-                        materialDictionary[tileItemType] = 1;
+                    var tileObjectData = TileObjectData.GetTileData(tileType, ItemToPlaceStyle[tileItemType]);
+                    bool isMaterialVaild;
+                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 18 && tileObjectData.CoordinateFullHeight <= 18))
+                    {
+                        isMaterialVaild = true;
+                    }
                     else
-                        materialDictionary[tileItemType]++;
+                    {
+                        int subX = tileData.TileFrameX % tileObjectData.CoordinateFullWidth;
+                        int subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
+                        Point16 frame = new(subX / 18, subY / 18);
+                        isMaterialVaild = frame.X == tileObjectData.Origin.X && frame.Y == tileObjectData.Origin.Y;
+                    }
+                    if (isMaterialVaild)
+                    {
+                        if (!materialDictionary.ContainsKey(tileItemType))
+                            materialDictionary[tileItemType] = 1;
+                        else
+                            materialDictionary[tileItemType]++;
+                    }
                 }
+
+                int wallItemType = GetWallItem(FileOperator.ParseTileType(tileData.Wall));
                 if (wallItemType != -1)
                 {
                     if (!materialDictionary.ContainsKey(wallItemType))
@@ -56,7 +81,9 @@ namespace ImproveGame.Common.ConstructCore
                     var item = new Item(i);
                     if (item.createTile != -1)
                     {
-                        ItemToTile.Add(i, item.createTile);
+                        int targetTile = item.createTile;
+                        ItemToTile.Add(i, targetTile);
+                        ItemToPlaceStyle.Add(i, item.placeStyle);
                     }
                     if (item.createWall != -1)
                     {
@@ -66,42 +93,6 @@ namespace ImproveGame.Common.ConstructCore
                 FinishSetup = true;
             });
             setupThread.Start();
-        }
-
-        public static int GetItemTile(int itemType)
-        {
-            if (FinishSetup && ItemToTile.ContainsKey(itemType))
-            {
-                return ItemToTile[itemType];
-            }
-            return -1;
-        }
-
-        public static int GetTileItem(int tileType)
-        {
-            if (FinishSetup && ItemToTile.ContainsValue(tileType))
-            {
-                return ItemToTile.FirstOrDefault(i => i.Value == tileType).Key;
-            }
-            return -1;
-        }
-
-        public static int GetItemWall(int itemType)
-        {
-            if (FinishSetup && ItemToWall.ContainsKey(itemType))
-            {
-                return ItemToWall[itemType];
-            }
-            return -1;
-        }
-
-        public static int GetWallItem(int wallType)
-        {
-            if (FinishSetup && ItemToWall.ContainsValue(wallType))
-            {
-                return ItemToWall.FirstOrDefault(i => i.Value == wallType).Key;
-            }
-            return -1;
         }
     }
 }
