@@ -5,7 +5,7 @@
 - v1.6
 - v1.6.0.2
 - v1.6.0.3
-- v1.6.0.4
+- v1.6.1
 ## BUG Fixes:
 - Fixed the fishing speed of the Fishing Machine being dramatically fast
 - Fixed the Encumbering Stone working in personal inventories
@@ -15,7 +15,7 @@
 - **[v1.6.0.2]** Fixed issue where traveling merchants could benefit from Better Town NPC Spawn Mechanics
 - **[v1.6.0.2]** Fixed every town NPC can heal you if Emergency Treatment is on
 - **[v1.6.0.3]** Fixed mod can't load with mods that add any NPCs
-- **[v1.6.0.4]** 修复了无法开启服务器的BUG
+- **[v1.6.1]** 修复了无法开启服务器的BUG
 ## Additions:
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
@@ -40,7 +40,7 @@
 - Added a automatically-join-red-team function
 - Added a Hotbar Swap function
 - Added a function which displays minion slot occupancy in tooltip
-- **[v1.6.0.4]** 大背包UI重置, 更圆润更丝滑.
+- **[v1.6.1]** 大背包UI重置, 更圆润更丝滑.
 ## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod
