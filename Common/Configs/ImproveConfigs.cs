@@ -338,6 +338,10 @@ namespace ImproveGame.Common.Configs
         [ReloadRequired]
         public bool LoadModItems;
 
+        [Label("$Mods.ImproveGame.Config.ShowModName.Label")]
+        [DefaultValue(true)]
+        public bool ShowModName;
+
         // 预设
         [Header("$Mods.ImproveGame.Config.Presets.Header")]
 

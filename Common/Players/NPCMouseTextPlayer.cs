@@ -7,7 +7,7 @@ namespace ImproveGame.Common.Players
     {
         public override void PostUpdate()
         {
-            if (Main.myPlayer != Player.whoAmI || ModIntegrationsSystem.WMITFLoaded)
+            if (Main.myPlayer != Player.whoAmI || ModIntegrationsSystem.WMITFLoaded || !Config.ShowModName)
                 return;
 
             BoxSystem.MouseText = string.Empty;
