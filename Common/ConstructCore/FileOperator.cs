@@ -64,6 +64,10 @@ namespace ImproveGame.Common.ConstructCore
                         var modWall = ModContent.GetModWall(tile.WallType);
                         wallName = $"{modWall.Mod.Name}/{modWall.Name}";
                     }
+                    if (!tile.HasTile)
+                    {
+                        tileName = "-1";
+                    }
 
                     data.Add(
                         new TileDefinition(
@@ -106,6 +110,32 @@ namespace ImproveGame.Common.ConstructCore
             }
 
             return tag;
+        }
+
+        public static int ParseTileType(string tileTypeSerialized)
+        {
+            if (!int.TryParse(tileTypeSerialized, out int tileType))
+            {
+                string[] parts = tileTypeSerialized.Split('/');
+
+                if (parts.Length > 1 && ModLoader.GetMod(parts[0]) != null && ModLoader.GetMod(parts[0]).TryFind(parts[1], out ModTile modTileType))
+                    tileType = modTileType.Type;
+
+                else tileType = 0;
+            }
+            return tileType;
+        }
+
+        public static int ParseWallType(string wallTypeSerialized)
+        {
+            if (!int.TryParse(wallTypeSerialized, out int wallType))
+            {
+                string[] parts = wallTypeSerialized.Split('/');
+                if (parts.Length > 1 && ModLoader.GetMod(parts[0]) != null && ModLoader.GetMod(parts[0]).TryFind(parts[1], out ModWall modWallType))
+                    wallType = modWallType.Type;
+                else wallType = 0;
+            }
+            return wallType;
         }
     }
 }

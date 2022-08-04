@@ -12,6 +12,8 @@ namespace ImproveGame.Interface.GUI
     {
         public static bool Visible { get; private set; }
         public bool CacheSetupStructures; // 缓存，在下一帧Setup
+        public bool CacheSetupStructureInfos; // 缓存，在下一帧Setup
+        public string CacheStructureInfoPath;
 
         public Asset<Texture2D> ButtonPanel;
         public Asset<Texture2D> ButtonPanel_Highlight;
@@ -64,7 +66,7 @@ namespace ImproveGame.Interface.GUI
             refreshButton.OnMouseDown += (_, _) =>
             {
                 FileOperator.CachedStructureDatas.Clear();
-                SetupStructures();
+                SetupStructuresList();
             };
             Append(refreshButton);
 
@@ -130,8 +132,13 @@ namespace ImproveGame.Interface.GUI
         {
             if (CacheSetupStructures)
             {
-                SetupStructures();
+                SetupStructuresList();
                 CacheSetupStructures = false;
+            }
+            if (CacheSetupStructureInfos)
+            {
+                SetupCurrentStructureList();
+                CacheSetupStructureInfos = false;
             }
 
             Recalculate();
@@ -144,7 +151,35 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public void SetupStructures()
+        // 当前结构的信息
+        public void SetupCurrentStructureList()
+        {
+            if (string.IsNullOrEmpty(CacheStructureInfoPath) || !File.Exists(CacheStructureInfoPath))
+            {
+                SetupStructuresList();
+                return;
+            }
+
+            UIList.Clear();
+
+            var tag = FileOperator.GetTagFromFile(CacheStructureInfoPath);
+            if (tag is null)
+            {
+                SetupStructuresList();
+                return;
+            }
+
+            var materialsAndStacks = MaterialCore.CountMaterials(tag);
+            foreach ((int itemType, int stack) in materialsAndStacks)
+            {
+                UIList.Add(new MaterialInfoElement(itemType, stack));
+            }
+
+            Recalculate();
+            SetupScrollBar();
+        }
+
+        public void SetupStructuresList()
         {
             UIList.Clear();
 
@@ -168,7 +203,7 @@ namespace ImproveGame.Interface.GUI
         {
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
-            SetupStructures();
+            SetupStructuresList();
         }
 
         /// <summary>

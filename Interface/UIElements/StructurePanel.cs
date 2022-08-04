@@ -59,7 +59,7 @@ namespace ImproveGame.Interface.UIElements
                 Top = new StyleDimension(separator.Height.Pixels + separator.Top.Pixels + 3f, 0f),
                 Left = new StyleDimension(-20f, 1f)
             }.SetSize(24f, 24f);
-            detailButton.OnClick += DeleteButtonClick;
+            detailButton.OnClick += DetailButtonClick;
             Append(detailButton);
 
             var deleteButton = new UIImageButton(Main.Assets.Request<Texture2D>("Images/UI/ButtonDelete"))
@@ -102,6 +102,15 @@ namespace ImproveGame.Interface.UIElements
             SetSizedText();
 
             Height = StyleDimension.FromPixels(PathPanel.Top.Pixels + PathPanel.Height.Pixels + 22f);
+        }
+
+        private void DetailButtonClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (UISystem.Instance.StructureGUI is not null)
+            {
+                UISystem.Instance.StructureGUI.CacheSetupStructureInfos = true;
+                UISystem.Instance.StructureGUI.CacheStructureInfoPath = FilePath;
+            }
         }
 
         private void RenameButtonClick()

@@ -129,14 +129,7 @@ namespace ImproveGame.Common.ConstructCore
 
                     TileDefinition tileData = data[index];
 
-                    if (!int.TryParse(tileData.Wall, out int wallType))
-                    {
-                        string[] parts = tileData.Wall.Split('/');
-                        if (parts.Length > 1 && ModLoader.GetMod(parts[0]) != null && ModLoader.GetMod(parts[0]).TryFind(parts[1], out ModWall modWallType))
-                            wallType = modWallType.Type;
-
-                        else wallType = 0;
-                    }
+                    int wallType = FileOperator.ParseWallType(tileData.Wall);
 
                     int drawY = flip ? height - y : y;
                     var position = origin + new Point(x, drawY).ToWorldCoordinates(0f, flip ? 0f : 8f);
@@ -162,15 +155,7 @@ namespace ImproveGame.Common.ConstructCore
 
                     TileDefinition tileData = data[index];
 
-                    if (!int.TryParse(tileData.Tile, out int tileType))
-                    {
-                        string[] parts = tileData.Tile.Split('/');
-
-                        if (parts.Length > 1 && ModLoader.GetMod(parts[0]) != null && ModLoader.GetMod(parts[0]).TryFind(parts[1], out ModTile modTileType))
-                            tileType = modTileType.Type;
-
-                        else tileType = 0;
-                    }
+                    int tileType = FileOperator.ParseTileType(tileData.Tile);
 
                     int drawY = flip ? height - y : y;
                     var position = origin + new Point(x, drawY).ToWorldCoordinates(0f, flip ? 0f : 8f);
