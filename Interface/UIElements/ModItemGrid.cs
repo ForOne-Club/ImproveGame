@@ -10,7 +10,7 @@ namespace ImproveGame.Interface.UIElements
 
         public ModItemList ItemList;
         // public ModScrollbar Scrollbar;
-        public ZeroScrollbar zeroScrollbar;
+        public ZeroScrollbar ZeroScrollbar;
 
         // 可以在 new 的时候将其他元素也初始化, 或者在执行 Active() 的时候初始化.
         public ModItemGrid()
@@ -22,34 +22,35 @@ namespace ImproveGame.Interface.UIElements
             ItemList = new(SlotSize);
             Append(ItemList);
 
-            Append(zeroScrollbar = new());
-            zeroScrollbar.Height.Pixels = ItemList.Height();
-            zeroScrollbar.HAlign = 1f;
-            zeroScrollbar.VAlign = 0.5f;
+            Append(ZeroScrollbar = new());
+            ZeroScrollbar.Height.Pixels = ItemList.Height();
+            ZeroScrollbar.HAlign = 1f;
+            ZeroScrollbar.VAlign = 0.5f;
 
-            Width.Pixels = ItemList.Width() + zeroScrollbar.Width() + 10.1f;
+            Width.Pixels = ItemList.Width() + ZeroScrollbar.Width() + 10.1f;
             Height.Pixels = ItemList.Height() + 0.1f;
         }
 
         public void SetInventory(Item[] items)
         {
-            zeroScrollbar.SetView(Height.Pixels, SlotSize.Y * (items.Length / ModItemList.HCount) + 10f * (items.Length / ModItemList.HCount) - 10f);
+            ZeroScrollbar.SetView(Height.Pixels, SlotSize.Y * (items.Length / ModItemList.HCount) + 10f * (items.Length / ModItemList.HCount) - 10f);
             ItemList.SetInventory(items);
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
-            zeroScrollbar.BufferViewPosition -= evt.ScrollWheelValue;
+            // evt.ScrollWheelValue 鼠标滚轮 下滑: - 上滑: +
+            ZeroScrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            if (zeroScrollbar != null)
+            if (ZeroScrollbar.ViewPosition != Top.Pixels)
             {
-                ItemList.Top.Set(-zeroScrollbar.ViewPosition, 0);
+                ItemList.Top.Pixels = -ZeroScrollbar.ViewPosition;
+                ItemList.Recalculate();
             }
-            ItemList.Recalculate();
         }
     }
 }
