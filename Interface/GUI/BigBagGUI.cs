@@ -50,9 +50,10 @@ namespace ImproveGame.Interface.GUI
                 .Recalculate();
         }
 
+        private readonly Color background = new(44, 57, 105, 160);
         public override void OnInitialize()
         {
-            MainPanel = new(Color.Black, new(44, 57, 105, 160));
+            MainPanel = new(Color.Black, background);
             MainPanel.OnMouseDown += (evt, uie) =>
             {
                 if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering)

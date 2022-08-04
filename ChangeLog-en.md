@@ -40,6 +40,7 @@
 - Added a automatically-join-red-team function
 - Added a Hotbar Swap function
 - Added a function which displays minion slot occupancy in tooltip
+- **[v1.6.0.4]** 大背包UI重置, 更圆润更丝滑.
 ## Misc
 - Improved UI animations of the two Wands of Bursts
 - Keybinds now can be translated without reloading this mod

@@ -67,11 +67,11 @@ namespace ImproveGame.Interface.UIElements
             return Color.Lerp(Color.Gray, Color.White, SelectedTimer.Schedule);
         }
 
-        private readonly Color borderColor = new(233, 176, 0);
+        /*private readonly Color borderColor = new(233, 176, 0);
         private readonly Color light1 = new(192, 130, 255);
         private readonly Color drak1 = new(96, 65, 127);
         private readonly Color light2 = new(56, 156, 255);
-        private readonly Color drak2 = new(28, 78, 127);
+        private readonly Color drak2 = new(28, 78, 127);*/
 
         protected override void DrawSelf(SpriteBatch sb)
         {
@@ -79,19 +79,19 @@ namespace ImproveGame.Interface.UIElements
             Vector2 position = dimensions.Position() + this.GetSize() / 2f;
             Color color = GetColor() * Opacity;
 
-            // sb.Draw(background.Value, position, null, color, 0, this.GetSize() / 2f, 1f, 0, 0f);
+            sb.Draw(background.Value, position, null, color, 0, this.GetSize() / 2f, 1f, 0, 0f);
 
             // color * 1.4f => 高光边框贴图应该亮一点
-            // Color borderColor = color * 1.4f * HoverTimer.Schedule;
-            // sb.Draw(hover.Value, position, null, borderColor, 0, this.GetSize() / 2f, 1f, 0, 0f);
+            Color borderColor = color * 1.4f * HoverTimer.Schedule;
+            sb.Draw(hover.Value, position, null, borderColor, 0, this.GetSize() / 2f, 1f, 0, 0f);
 
-            Color borderColor = Color.Lerp(Color.White, this.borderColor, HoverTimer.Schedule);
+            /*Color borderColor = Color.Lerp(Color.White, this.borderColor, HoverTimer.Schedule);
             Color background1 = Color.Lerp(drak1, light1, SelectedTimer.Schedule);
             Color background2 = Color.Lerp(drak2, light2, SelectedTimer.Schedule);
 
             PixelShader.DrawBox(Main.UIScaleMatrix, GetDimensions().Position(),
                 this.GetSize(), Width.Pixels / 2, 3, borderColor * Opacity, borderColor * Opacity,
-                background1 * Opacity, background2 * Opacity);
+                background1 * Opacity, background2 * Opacity);*/
 
             sb.Draw(mainImage.Value, position, null, color, 0, mainImage.Size() / 2f, 0.8f, 0, 0f);
         }

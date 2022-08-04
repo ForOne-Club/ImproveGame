@@ -27,8 +27,8 @@ namespace ImproveGame.Interface.UIElements
             zeroScrollbar.HAlign = 1f;
             zeroScrollbar.VAlign = 0.5f;
 
-            Width.Pixels = ItemList.Width() + zeroScrollbar.Width() + 10f;
-            Height.Pixels = ItemList.Height();
+            Width.Pixels = ItemList.Width() + zeroScrollbar.Width() + 10.1f;
+            Height.Pixels = ItemList.Height() + 0.1f;
         }
 
         public void SetInventory(Item[] items)
