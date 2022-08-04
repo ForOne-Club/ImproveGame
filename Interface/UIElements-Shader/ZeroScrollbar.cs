@@ -22,7 +22,7 @@ namespace ImproveGame.Interface.UIElements_Shader
         public float ViewPosition
         {
             get => viewPosition;
-            set => viewPosition = MathHelper.Clamp(value, 0f, maxViewSize - viewSize);
+            set => viewPosition = MathHelper.Clamp(value, 0f, viewScale);
         }
 
         private float _bufferViewPosition;
@@ -96,8 +96,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             PlayerInput.LockVanillaMouseScroll("ModLoader/UIScrollbar");
         }
 
-        public readonly Color background1 = new(43, 56, 101);
-        public readonly Color borderColor2 = new(93, 88, 93);
+        public readonly Color background = new(43, 56, 101);
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimension = GetDimensions();
@@ -105,7 +104,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             Vector2 size = dimension.Size();
 
             // 滚动条背板
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, size.X / 2, 3, Color.Black, background1);
+            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, size.X / 2, 3, Color.Black, background);
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();
