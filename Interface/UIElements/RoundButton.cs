@@ -40,14 +40,12 @@ namespace ImproveGame.Interface.UIElements
 
         public override void MouseOver(UIMouseEvent evt)
         {
-            Main.NewText($"{typeof(RoundButton)}.MouseOver");
             base.MouseOver(evt);
             HoverTimer.Open();
         }
 
         public override void MouseOut(UIMouseEvent evt)
         {
-            Main.NewText($"{typeof(RoundButton)}.MouseOut");
             base.MouseOut(evt);
             HoverTimer.Close();
         }
@@ -67,11 +65,10 @@ namespace ImproveGame.Interface.UIElements
             return Color.Lerp(Color.Gray, Color.White, SelectedTimer.Schedule);
         }
 
-        private readonly Color borderColor = new(233, 176, 0);
-        private readonly Color light1 = new(192, 130, 255);
-        private readonly Color drak1 = new(96, 65, 127);
-        private readonly Color light2 = new(56, 156, 255);
-        private readonly Color drak2 = new(28, 78, 127);
+        /*private readonly Color BorderColor1 = new(233, 176, 0, 200);
+        private readonly Color BorderColor2 = new(18, 18, 38, 200);
+        private readonly Color Background1 = new(83, 88, 151, 200);
+        private readonly Color Background2 = new(63, 65, 151, 200);*/
 
         protected override void DrawSelf(SpriteBatch sb)
         {
@@ -79,19 +76,15 @@ namespace ImproveGame.Interface.UIElements
             Vector2 position = dimensions.Position() + this.GetSize() / 2f;
             Color color = GetColor() * Opacity;
 
-            // sb.Draw(background.Value, position, null, color, 0, this.GetSize() / 2f, 1f, 0, 0f);
-
+            sb.Draw(background.Value, position, null, color, 0, this.GetSize() / 2f, 1f, 0, 0f);
             // color * 1.4f => 高光边框贴图应该亮一点
-            // Color borderColor = color * 1.4f * HoverTimer.Schedule;
-            // sb.Draw(hover.Value, position, null, borderColor, 0, this.GetSize() / 2f, 1f, 0, 0f);
+            sb.Draw(hover.Value, position, null, color * 1.4f * HoverTimer.Schedule, 0, this.GetSize() / 2f, 1f, 0, 0f);
 
-            Color borderColor = Color.Lerp(Color.White, this.borderColor, HoverTimer.Schedule);
-            Color background1 = Color.Lerp(drak1, light1, SelectedTimer.Schedule);
-            Color background2 = Color.Lerp(drak2, light2, SelectedTimer.Schedule);
+            /*Color borderColor = Color.Lerp(BorderColor2, BorderColor1, HoverTimer.Schedule);
+            Color background = Color.Lerp(Background2, Background1, SelectedTimer.Schedule);
 
             PixelShader.DrawBox(Main.UIScaleMatrix, GetDimensions().Position(),
-                this.GetSize(), Width.Pixels / 2, 3, borderColor * Opacity, borderColor * Opacity,
-                background1 * Opacity, background2 * Opacity);
+                this.GetSize(), Width.Pixels / 2, 3, borderColor * Opacity, background * Opacity);*/
 
             sb.Draw(mainImage.Value, position, null, color, 0, mainImage.Size() / 2f, 0.8f, 0, 0f);
         }

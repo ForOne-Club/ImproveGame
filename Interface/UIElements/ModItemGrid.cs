@@ -27,8 +27,8 @@ namespace ImproveGame.Interface.UIElements
             zeroScrollbar.HAlign = 1f;
             zeroScrollbar.VAlign = 0.5f;
 
-            Width.Pixels = ItemList.Width() + zeroScrollbar.Width() + 10f;
-            Height.Pixels = ItemList.Height();
+            Width.Pixels = ItemList.Width() + zeroScrollbar.Width() + 10.1f;
+            Height.Pixels = ItemList.Height() + 0.1f;
         }
 
         public void SetInventory(Item[] items)
@@ -40,14 +40,14 @@ namespace ImproveGame.Interface.UIElements
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
-            zeroScrollbar.SetViewPosition(evt.ScrollWheelValue);
+            zeroScrollbar.BufferViewPosition -= evt.ScrollWheelValue;
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             if (zeroScrollbar != null)
             {
-                ItemList.Top.Set(-zeroScrollbar.GetValue(), 0);
+                ItemList.Top.Set(-zeroScrollbar.ViewPosition, 0);
             }
             ItemList.Recalculate();
         }
