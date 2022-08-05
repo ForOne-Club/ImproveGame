@@ -7,6 +7,8 @@
 ## BUG Fixes:
 - **[v1.6.1.0]** Fixed an issue with launching servers
 - **[v1.6.1.1]** "超级虚空保险库"修复失效BUG
+- **[v1.6.1.1]** 修复了大背包在没有拿出物品的时候仍然有音效的BUG
+- **[v1.6.1.1]** 修复了大背包开启"宝藏带"与"钓鱼箱"时会将物品拿到鼠标的BUG
 ## Additions:
 - **[v1.6.1.0]** Reworked the Huge Inventory's UI, now looks nicer
 - **[v1.6.1.0]** 显示物品、NPC所属模组功能现在可开关了
