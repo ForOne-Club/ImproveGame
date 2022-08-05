@@ -96,11 +96,10 @@ namespace ImproveGame.Common.GlobalItems
         public override bool ConsumeItem(Item item, Player player)
         {
             // 所有召唤物不会消耗
-            if ((SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)) && MyUtils.Config.NoConsume_SummonItem)
+            if (MyUtils.Config.NoConsume_SummonItem && (SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)))
             {
                 return false;
             }
-
             return base.ConsumeItem(item, player);
         }
 
@@ -260,14 +259,15 @@ namespace ImproveGame.Common.GlobalItems
         /// <returns></returns>
         public override bool ItemSpace(Item item, Player player)
         {
-            if (!DataPlayer.TryGet(Main.LocalPlayer, out var dataPlayer))
+            if (!DataPlayer.TryGet(player, out var dataPlayer))
                 return false;
 
             if (MyUtils.Config.SuperVault && dataPlayer.SuperVault is not null && MyUtils.HasItemSpace(dataPlayer.SuperVault, item))
             {
                 return true;
             }
-            if (MyUtils.Config.SuperVoidVault && Main.LocalPlayer.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+
+            if (MyUtils.Config.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
             {
                 // 猪猪钱罐
                 if (improvePlayer.PiggyBank && MyUtils.HasItemSpace(player.bank.item, item))
