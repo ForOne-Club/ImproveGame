@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.ConstructCore;
 using ImproveGame.Common.Systems;
-using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.UIElements_Shader;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
@@ -244,14 +243,14 @@ namespace ImproveGame.Interface.UIElements
             float scale = 0.7f;
             float dotWidth = font.MeasureString("...").X * scale;
             float pathWidth = font.MeasureString("Path: ").X * scale;
-            if (font.MeasureString(FilePath).X * scale >= innerDimensions.Width - 6f - pathWidth - dotWidth)
+            if (font.MeasureString(FilePath).X * scale >= innerDimensions.Width - 16f - pathWidth - dotWidth)
             {
                 float width = 0f;
                 int i;
                 for (i = FilePath.Length - 1; i > 0; i--)
                 {
                     width += font.MeasureString(FilePath[i].ToString()).X * scale;
-                    if (width >= innerDimensions.Width - 6f - pathWidth - dotWidth)
+                    if (width >= innerDimensions.Width - 16f - pathWidth - dotWidth)
                     {
                         break;
                     }

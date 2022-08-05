@@ -14,8 +14,9 @@ namespace ImproveGame.Interface.GUI
         public bool CacheSetupStructures; // 缓存，在下一帧Setup
         public bool CacheSetupStructureInfos; // 缓存，在下一帧Setup
         public string CacheStructureInfoPath;
-        private bool _inInfoPage = false;
 
+        public Asset<Texture2D> SaveTexture;
+        public Asset<Texture2D> LoadTexture;
         public Asset<Texture2D> RefreshTexture;
         public Asset<Texture2D> BackTexture;
         public Asset<Texture2D> ButtonPanel;
@@ -30,7 +31,9 @@ namespace ImproveGame.Interface.GUI
 
         public override void OnInitialize()
         {
-            RefreshTexture = GetTexture("UI/Construct/Folder");
+            SaveTexture = GetTexture("UI/Construct/Save");
+            LoadTexture = GetTexture("UI/Construct/Load");
+            RefreshTexture = GetTexture("UI/Construct/Refresh");
             BackTexture = GetTexture("UI/Construct/Back");
             ButtonPanel = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel");
             ButtonPanel_Highlight = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder");
@@ -80,7 +83,7 @@ namespace ImproveGame.Interface.GUI
             folderButton.OnMouseDown += (_, _) => TrUtils.OpenFolder(FileOperator.SavePath);
             Append(folderButton);
 
-            var modeButton = QuickButton(GetTexture("UI/Construct/Folder"));
+            var modeButton = QuickButton(SaveTexture);
             modeButton.SetPos(new(-196f, 50f), 0.5f, 0f);
             modeButton.OnMouseDown += (_, _) =>
             {
@@ -89,9 +92,16 @@ namespace ImproveGame.Interface.GUI
                 else
                     WandSystem.ConstructMode = WandSystem.Construct.Place;
             };
+            modeButton.OnUpdate += (_) =>
+            {
+                if (WandSystem.ConstructMode == WandSystem.Construct.Place)
+                    modeButton.SetImage(LoadTexture);
+                else
+                    modeButton.SetImage(SaveTexture);
+            };
             Append(modeButton);
 
-            var closeButton = QuickButton(GetTexture("Close"));
+            var closeButton = QuickButton(GetTexture("UI/Construct/Close"));
             closeButton.SetPos(new(246f, 50f), 0.5f, 0f);
             closeButton.OnMouseDown += (_, _) => Close();
             Append(closeButton);
@@ -182,7 +192,10 @@ namespace ImproveGame.Interface.GUI
                 UIList.Add(new MaterialInfoElement(itemType, stack));
             }
 
-            _inInfoPage = true;
+            var viewPanel = new StructurePreviewPanel(CacheStructureInfoPath);
+            viewPanel.OnResetHeight += (_) => SetupScrollBar(false);
+            UIList.Add(viewPanel);
+
             RefreshButton.SetImage(BackTexture);
 
             Recalculate();
@@ -202,7 +215,6 @@ namespace ImproveGame.Interface.GUI
                 }
             }
 
-            _inInfoPage = false;
             RefreshButton.SetImage(RefreshTexture);
 
             Recalculate();

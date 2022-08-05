@@ -2,12 +2,15 @@
 using ImproveGame.Content.Items;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
+using Terraria.ObjectData;
 
 namespace ImproveGame.Common.ConstructCore
 {
     internal class PreviewRenderer : ModSystem
     {
         internal static RenderTarget2D PreviewTarget;
+        internal static string UIPreviewPath;
+        internal static RenderTarget2D UIPreviewTarget; // 不知道为什么，Preview绘制就不会裂开
 
         public override void Load()
         {
@@ -75,14 +78,15 @@ namespace ImproveGame.Common.ConstructCore
                 position.Y += 8f;
             }
 
-            // 对齐左上角 + 转换到屏幕坐标
-            Vector2 originPos = position.ToTileCoordinates().ToWorldCoordinates(0f, 0f) - Main.screenPosition;
-
             int width = tag.GetInt("Width");
             int height = tag.GetInt("Height");
             var color = Color.GreenYellow;
 
-            DrawBorder(originPos, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
+            // 对齐左上角 + 转换到屏幕坐标
+            Vector2 originPos = position.ToTileCoordinates().ToWorldCoordinates(0f, 0f) - Main.screenPosition;
+            Vector2 borderPos = Main.LocalPlayer.gravDir is -1 ? originPos + new Vector2(0f, -height * 16f - 8) : originPos;
+
+            DrawBorder(borderPos, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
             DrawPreviewFromTag(sb, tag, originPos, 1f, Main.LocalPlayer.gravDir is -1);
         }
 
@@ -103,6 +107,29 @@ namespace ImproveGame.Common.ConstructCore
 
             Main.spriteBatch.End();
             Main.graphics.GraphicsDevice.SetRenderTarget(null);
+
+            if (!string.IsNullOrEmpty(UIPreviewPath) && File.Exists(UIPreviewPath))
+            {
+                Main.spriteBatch.Begin();
+
+                Main.graphics.GraphicsDevice.SetRenderTarget(UIPreviewTarget);
+                Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+
+                var tag = FileOperator.GetTagFromFile(UIPreviewPath);
+
+                if (tag is null)
+                    return;
+
+                int width = tag.GetInt("Width");
+                int height = tag.GetInt("Height");
+                var color = Color.GreenYellow;
+                var position = Vector2.Zero + new Vector2(2f, 2f);
+                DrawBorder(position, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
+                DrawPreviewFromTag(Main.spriteBatch, tag, position, 1f, false);
+
+                Main.spriteBatch.End();
+                Main.graphics.GraphicsDevice.SetRenderTarget(null);
+            }
 
             orig();
         }
@@ -169,6 +196,7 @@ namespace ImproveGame.Common.ConstructCore
                     int drawY = flip ? height - y : y;
                     var position = origin + new Point(x, drawY).ToWorldCoordinates(0f, flip ? 0f : 8f);
 
+                    // 这绘制...不想再写第二遍了
                     if (tileType != -1) // Tile
                     {
                         Main.instance.LoadTiles(tileType);
@@ -237,16 +265,27 @@ namespace ImproveGame.Common.ConstructCore
                         }
                         EndSlopeDraw:;
 
-                        int num7 = ((int)tileData.BlockType <= 3) ? 14 : 0;
-                        sb.Draw(texture, (position + new Vector2(0f, num7)) * scale, new Rectangle(tileData.TileFrameX, tileData.TileFrameY + num7, 16, 2), color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
-                        
+                        int tileItemType = GetTileItem(tileType);
+                        TileObjectData tileObjectData = null;
+                        if (tileItemType is not -1)
+                        {
+                            tileObjectData = TileObjectData.GetTileData(tileType, MaterialCore.ItemToPlaceStyle[tileItemType]);
+                        }
+
+                        bool multiTile = tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 18 || tileObjectData.CoordinateFullHeight > 18);
+                        if (!multiTile)
+                        {
+                            int num7 = ((int)tileData.BlockType <= 3) ? 14 : 0;
+                            sb.Draw(texture, (position + new Vector2(0f, num7)) * scale, new Rectangle(tileData.TileFrameX, tileData.TileFrameY + num7, 16, 2), color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                        }
+
                         if (tileData.BlockType is BlockType.HalfBlock)
                         {
                             position.Y += 8f;
                             sb.Draw(texture, (position + new Vector2(0f, 4f)) * scale, new Rectangle(144, 66, 16, 4), color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
                             sb.Draw(texture, position * scale, normalTileRect.Modified(0, 0, 0, -4), color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
                         }
-                        if (tileData.BlockType is BlockType.Solid || TileID.Sets.Platforms[tileType])
+                        if (tileData.BlockType is BlockType.Solid || TileID.Sets.Platforms[tileType] || multiTile)
                         {
                             sb.Draw(texture, position * scale, normalTileRect, color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
                         }
