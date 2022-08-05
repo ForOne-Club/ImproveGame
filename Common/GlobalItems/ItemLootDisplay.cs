@@ -7,6 +7,9 @@ namespace ImproveGame.Common.GlobalItems
     {
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
+            if (!ItemLoader.CanRightClick(item))
+                return;
+
             bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: false).Count > 0;
             if (hasLoot) {
                 bool hasKeybind = TryGetKeybindString(KeybindSystem.GrabBagKeybind, out var keybind);

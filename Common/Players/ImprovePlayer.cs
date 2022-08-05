@@ -94,7 +94,7 @@ namespace ImproveGame.Common.Players
                 else
                     UISystem.Instance.BuffTrackerGUI.Open();
             }
-            if (KeybindSystem.GrabBagKeybind.JustPressed && Main.HoverItem is not null)
+            if (KeybindSystem.GrabBagKeybind.JustPressed && Main.HoverItem is not null && ItemLoader.CanRightClick(Main.HoverItem))
             {
                 var item = Main.HoverItem;
                 bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: true).Count > 0;
