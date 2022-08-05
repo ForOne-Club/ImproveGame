@@ -80,6 +80,18 @@ namespace ImproveGame.Common.ConstructCore
                                 item.type == tileItemType &&
                                 TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
                                 true, out _);
+                            if (WorldGen.CanPoundTile(placePosition.X, placePosition.Y))
+                            {
+                                if (tileData.BlockType is BlockType.HalfBlock)
+                                {
+                                    WorldGen.SlopeTile(placePosition.X, placePosition.Y, 0);
+                                    WorldGen.PoundTile(placePosition.X, placePosition.Y);
+                                }
+                                else if (tileData.BlockType is not BlockType.Solid)
+                                {
+                                    WorldGen.SlopeTile(placePosition.X, placePosition.Y, (int)tileData.BlockType - 1);
+                                }
+                            }
                             yield return null;
                         }
                     }
@@ -160,7 +172,14 @@ namespace ImproveGame.Common.ConstructCore
                 for (int y = 0; y <= height; y++)
                 {
                     var placePosition = position + new Point(x, y);
-                    WorldGen.SquareTileFrame(placePosition.X, position.Y);
+                    if (Main.tile[placePosition].HasTile)
+                    {
+                        WorldGen.TileFrame(placePosition.X, position.Y, true, false);
+                    }
+                    if (Main.tile[placePosition].WallType > 0)
+                    {
+                        Framing.WallFrame(placePosition.X, position.Y, true);
+                    }
                 }
                 yield return null;
             }

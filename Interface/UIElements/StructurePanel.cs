@@ -1,12 +1,13 @@
 ﻿using ImproveGame.Common.ConstructCore;
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.GUI;
+using ImproveGame.Interface.UIElements_Shader;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.UIElements
 {
-    internal class StructurePanel : UIPanel
+    internal class StructurePanel : SUIPanel
     {
         public string FilePath { get; private set; }
         public string Name { get; private set; }
@@ -16,24 +17,22 @@ namespace ImproveGame.Interface.UIElements
         private int _cursorTimer;
         private bool _oldMouseLeft;
 
-        public readonly Color BorderSelectedColor = new(89, 116, 213);
-        public readonly Color BorderUnselectedColor = new(39, 46, 100);
-        public readonly Color SelectedColor = new(73, 94, 171);
-        public readonly Color UnselectedColor = new(62, 80, 146);
+        public static readonly Color BorderSelectedColor = new(89, 116, 213);
+        public static readonly Color BorderUnselectedColor = new(39, 46, 100);
+        public static readonly Color SelectedColor = new(73, 94, 171);
+        public static readonly Color UnselectedColor = new(62, 80, 146);
 
         public UIText NameText;
         public UIText PathText;
         public UIImageButton RenameButton;
-        public UIPanel PathPanel;
+        public SUIPanel PathPanel;
 
-        public StructurePanel(string filePath) : base()
+        public StructurePanel(string filePath) : base(BorderUnselectedColor, UnselectedColor, CalculateBorder: false)
         {
             FilePath = filePath;
 
             _oldMouseLeft = true;
 
-            BorderColor = BorderUnselectedColor;
-            BackgroundColor = UnselectedColor;
             Width = StyleDimension.FromPixels(540f);
 
             string name = FilePath.Split('\\').Last();
@@ -78,18 +77,16 @@ namespace ImproveGame.Interface.UIElements
             RenameButton.SetSize(24f, 24f);
             Append(RenameButton);
 
-            PathPanel = new()
+            PathPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), radius: 10, CalculateBorder: false)
             {
                 Top = detailButton.Top,
-                BackgroundColor = new Color(35, 40, 83),
-                BorderColor = new Color(35, 40, 83),
                 OverflowHidden = true,
                 PaddingLeft = 6f,
                 PaddingRight = 6f,
                 PaddingBottom = 0f,
                 PaddingTop = 0f
             };
-            PathPanel.SetSize(new(Width.Pixels + RenameButton.Left.Pixels - 26f, 20f));
+            PathPanel.SetSize(new(Width.Pixels + RenameButton.Left.Pixels - 34f, 23f));
             Append(PathPanel);
             PathText = new($"Path: {FilePath}", 0.7f)
             {
@@ -170,14 +167,14 @@ namespace ImproveGame.Interface.UIElements
 
             if (IsMouseHovering)
             {
-                BorderColor = BorderSelectedColor;
-                BackgroundColor = SelectedColor;
+                borderColor = BorderSelectedColor;
+                backgroundColor = SelectedColor;
                 NameText.TextColor = Color.White;
             }
             else
             {
-                BorderColor = BorderUnselectedColor;
-                BackgroundColor = UnselectedColor;
+                borderColor = BorderUnselectedColor;
+                backgroundColor = UnselectedColor;
                 NameText.TextColor = Color.LightGray;
             }
             if (WandSystem.ConstructFilePath == FilePath)

@@ -119,9 +119,6 @@ namespace ImproveGame.Common.ConstructCore
 
             var spriteEffects = SpriteEffects.None;
 
-            var samplerState = Main.graphics.GraphicsDevice.SamplerStates[0];
-            Main.graphics.GraphicsDevice.SamplerStates[0] = Main.DefaultSamplerState;
-
             Color color = Color.White;
             int width = tag.GetInt("Width");
             int height = tag.GetInt("Height");
@@ -176,14 +173,86 @@ namespace ImproveGame.Common.ConstructCore
                     {
                         Main.instance.LoadTiles(tileType);
                         Texture2D texture = TextureAssets.Tile[tileType].Value;
-                        Rectangle? value = new Rectangle(tileData.TileFrameX, tileData.TileFrameY, 16, 16);
-                        Vector2 pos = position;
-                        sb.Draw(texture, pos * scale, value, color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                        var normalTileRect = new Rectangle(tileData.TileFrameX, tileData.TileFrameY, 16, 16);
+
+                        if (tileData.BlockType is not BlockType.HalfBlock or BlockType.Solid)
+                        {
+                            if (TileID.Sets.Platforms[tileType])
+                            {
+                                if (tileData.PlatformSlopeDrawType is 1 or 2)
+                                {
+                                    Rectangle value = new(198, tileData.TileFrameY, 16, 16);
+                                    if (tileData.PlatformSlopeDrawType is 2)
+                                        value.X = 324;
+
+                                    Main.spriteBatch.Draw(texture, (position + new Vector2(0f, 16f)) * scale, value, color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                                }
+                                else if (tileData.PlatformSlopeDrawType is 3 or 4)
+                                {
+                                    Rectangle value = new(162, tileData.TileFrameY, 16, 16);
+                                    if (tileData.PlatformSlopeDrawType is 4)
+                                        value.X = 306;
+
+                                    Main.spriteBatch.Draw(texture, (position + new Vector2(0f, 16f)) * scale, value, color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                                }
+                                goto EndSlopeDraw;
+                            }
+                            if (TileID.Sets.HasSlopeFrames[tileType])
+                            {
+                                Main.spriteBatch.Draw(texture, position * scale, normalTileRect, color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                                continue;
+                            }
+
+                            int num2 = 2;
+                            for (int i = 0; i < 8; i++)
+                            {
+                                int num3 = i * -2;
+                                int num4 = 16 - i * 2;
+                                int num5 = 16 - num4;
+                                int num6;
+                                switch (tileData.BlockType)
+                                {
+                                    case BlockType.SlopeDownLeft:
+                                        num3 = 0;
+                                        num6 = i * 2;
+                                        num4 = 14 - i * 2;
+                                        num5 = 0;
+                                        break;
+                                    case BlockType.SlopeDownRight:
+                                        num3 = 0;
+                                        num6 = 16 - i * 2 - 2;
+                                        num4 = 14 - i * 2;
+                                        num5 = 0;
+                                        break;
+                                    case BlockType.SlopeUpLeft:
+                                        num6 = i * 2;
+                                        break;
+                                    default:
+                                        num6 = 16 - i * 2 - 2;
+                                        break;
+                                }
+
+                                sb.Draw(texture, (position + new Vector2(num6, i * num2 + num3)) * scale, new Rectangle(tileData.TileFrameX + num6, tileData.TileFrameY + num5, num2, num4), color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                            }
+                        }
+                        EndSlopeDraw:;
+
+                        int num7 = ((int)tileData.BlockType <= 3) ? 14 : 0;
+                        sb.Draw(texture, (position + new Vector2(0f, num7)) * scale, new Rectangle(tileData.TileFrameX, tileData.TileFrameY + num7, 16, 2), color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                        
+                        if (tileData.BlockType is BlockType.HalfBlock)
+                        {
+                            position.Y += 8f;
+                            sb.Draw(texture, (position + new Vector2(0f, 4f)) * scale, new Rectangle(144, 66, 16, 4), color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                            sb.Draw(texture, position * scale, normalTileRect.Modified(0, 0, 0, -4), color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                        }
+                        if (tileData.BlockType is BlockType.Solid || TileID.Sets.Platforms[tileType])
+                        {
+                            sb.Draw(texture, position * scale, normalTileRect, color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                        }
                     }
                 }
             }
-
-            Main.graphics.GraphicsDevice.SamplerStates[0] = samplerState;
             return true;
         }
     }

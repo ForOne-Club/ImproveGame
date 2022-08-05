@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using ImproveGame.Common.Systems;
+using ImproveGame.Interface.GUI;
+using System.Collections.Generic;
 using Terraria.ModLoader.IO;
-using Terraria.ObjectData;
 
 namespace ImproveGame.Common.ConstructCore
 {
-    public class FileOperator
+    public class FileOperator : ILoadable
     {
         internal static Dictionary<string, TagCompound> CachedStructureDatas = new();
         internal static string SavePath => Path.Combine(ModLoader.ModPath, "ImproveGame");
@@ -35,6 +36,12 @@ namespace ImproveGame.Common.ConstructCore
 
             var tag = SaveStructure(rectInWorld);
             TagIO.ToFile(tag, thisPath);
+
+            CachedStructureDatas.Clear();
+            if (StructureGUI.Visible && UISystem.Instance.StructureGUI is not null)
+            {
+                UISystem.Instance.StructureGUI.CacheSetupStructures = true;
+            }
         }
 
         public static TagCompound SaveStructure(Rectangle rectInWorld)
@@ -69,14 +76,37 @@ namespace ImproveGame.Common.ConstructCore
                         tileName = "-1";
                     }
 
+                    byte platformDrawSlopeType = 0;
+                    #region 平台斜坡绘制信息
+                    if (TileID.Sets.Platforms[tile.TileType])
+                    {
+                        if (tile.Slope == SlopeType.SlopeDownLeft && Main.tile[x + 1, y + 1].HasTile && Main.tileSolid[Main.tile[x + 1, y + 1].TileType] && Main.tile[x + 1, y + 1].Slope is not SlopeType.SlopeDownRight && Main.tile[x + 1, y + 1].BlockType is not BlockType.HalfBlock && (!Main.tile[x, y + 1].HasTile || (Main.tile[x, y + 1].BlockType != BlockType.Solid && Main.tile[x, y + 1].BlockType != BlockType.SlopeUpRight) || (!TileID.Sets.BlocksStairs[Main.tile[x, y + 1].TileType] && !TileID.Sets.BlocksStairsAbove[Main.tile[x, y + 1].TileType])))
+                        {
+                            if (TileID.Sets.Platforms[Main.tile[x + 1, y + 1].TileType] && Main.tile[x + 1, y + 1].Slope == SlopeType.Solid)
+                                platformDrawSlopeType = 2;
+                            else
+                                platformDrawSlopeType = 1;
+                        }
+                        else if (tile.Slope == SlopeType.SlopeDownRight && Main.tile[x - 1, y + 1].HasTile && Main.tileSolid[Main.tile[x - 1, y + 1].TileType] && Main.tile[x - 1, y + 1].Slope is not SlopeType.SlopeDownLeft && Main.tile[x - 1, y + 1].BlockType is not BlockType.HalfBlock && (!Main.tile[x, y + 1].HasTile || (Main.tile[x, y + 1].BlockType != BlockType.Solid && Main.tile[x, y + 1].BlockType != BlockType.SlopeUpLeft) || (!TileID.Sets.BlocksStairs[Main.tile[x, y + 1].TileType] && !TileID.Sets.BlocksStairsAbove[Main.tile[x, y + 1].TileType])))
+                        {
+                            if (TileID.Sets.Platforms[Main.tile[x - 1, y + 1].TileType] && Main.tile[x - 1, y + 1].Slope == SlopeType.Solid)
+                                platformDrawSlopeType = 4;
+                            else
+                                platformDrawSlopeType = 3;
+                        }
+                    }
+                    # endregion
+
                     data.Add(
                         new TileDefinition(
                             tileName,
+                            tile.BlockType,
                             wallName,
                             tile.TileFrameX,
                             tile.TileFrameY,
                             tile.WallFrameX,
-                            tile.WallFrameY
+                            tile.WallFrameY,
+                            platformDrawSlopeType
                         ));
                 }
             }
@@ -137,5 +167,9 @@ namespace ImproveGame.Common.ConstructCore
             }
             return wallType;
         }
+
+        public void Load(Mod mod) { }
+
+        public void Unload() => CachedStructureDatas = null;
     }
 }

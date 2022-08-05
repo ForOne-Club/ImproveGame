@@ -23,7 +23,7 @@ namespace ImproveGame.Interface.GUI
 
         public UserInterface UserInterface;
 
-        private ModUIPanel BasePanel; // 背景板
+        private SUIPanel BasePanel; // 背景板
         public ModScrollbar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
         public ModImageButton RefreshButton; // 刷新/回退按钮
@@ -35,13 +35,12 @@ namespace ImproveGame.Interface.GUI
             ButtonPanel = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel");
             ButtonPanel_Highlight = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder");
 
-            BasePanel = new(draggable: false)
+            BasePanel = new(new(29, 34, 70), new(44, 57, 105, 160))
             {
                 Top = StyleDimension.FromPixels(100f),
                 HAlign = 0.5f
             };
-            BasePanel.SetSize(600f, 0f, precentHeight: 0.7f);
-            BasePanel.BorderColor = new(29, 34, 70);
+            BasePanel.SetSize(600f, 0f, precentHeight: 0.7f).SetPadding(12f);
             Append(BasePanel);
 
             UIList = new UIList
@@ -155,6 +154,7 @@ namespace ImproveGame.Interface.GUI
             if (BasePanel.IsMouseHovering)
             {
                 PlayerInput.LockVanillaMouseScroll("ImproveGame: Structure GUI");
+                Main.LocalPlayer.mouseInterface = true;
             }
         }
 
