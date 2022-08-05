@@ -61,7 +61,7 @@ namespace ImproveGame.Content.Items
             Item.rare = ItemRarityID.Lime;
             Item.value = Item.sellPrice(0, 1, 0, 0);
 
-            SelectRange = new(20, 10);
+            SelectRange = new(20, 20);
             KillSize = new(5, 3);
             ExtraRange = new(5, 3);
         }

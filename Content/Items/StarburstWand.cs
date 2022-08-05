@@ -13,7 +13,7 @@ namespace ImproveGame.Content.Items
             Item.rare = ItemRarityID.Yellow;
             Item.value = Item.sellPrice(0, 5, 0, 0);
 
-            SelectRange = new(40, 20);
+            SelectRange = new(40, 40);
             KillSize = new(7, 5);
             ExtraRange = new(16, 10);
         }

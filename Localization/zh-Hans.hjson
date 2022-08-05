@@ -365,7 +365,7 @@
                 Tooltip: "开启后，在多人模式下新加入的玩家会自动加入红队"
             }
             
-            ServerSettings.Header: "[i:ImproveGame/CreateWand] 服务器设置"
+            ServerSettings.Header: "[i:ImproveGame/CreateWand] 模组设置"
             OnlyHost:
             {
                 Label: "[i:2203] 仅主机可调节配置 (端口映射无效)"
@@ -418,6 +418,7 @@
                     本配置页面包含的模组物品图标会变作一串字符
                     '''
             }
+            ShowModName.Label: "[i:ImproveGame/SpaceWand] 显示物品、NPC所属模组"
 
             OtherFunctions:
             {
@@ -427,7 +428,6 @@
                     以下是本模组的其他不可调节功能:
                     - 便携存储内的虫洞药水生效
                     - 时装配饰栏可放入任何配饰
-                    - 显示物品、NPC所属模组
                     - 快捷键展示摸彩袋物品明细（需绑定快捷键）
                     - 快捷键可切换第二行物品至快捷栏
                     - 物品简介显示召唤物槽位占用情况

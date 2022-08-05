@@ -82,7 +82,8 @@ namespace ImproveGame.Common.Systems
             c.Emit(OpCodes.Ldfld, typeof(Player).GetField(nameof(Player.buffType), BindingFlags.Instance | BindingFlags.Public)); // buffType数组
             c.Emit(OpCodes.Ldloc_2); // 索引 i
             c.Emit(OpCodes.Ldelem_I4); // 结合出int32
-            c.EmitDelegate<Func<bool, int, bool>>((returnValue, buffType) => {
+            c.EmitDelegate<Func<bool, int, bool>>((returnValue, buffType) =>
+            {
                 if (Config.DontDeleteBuff)
                 {
                     // 返回false就会进入删除
@@ -106,7 +107,8 @@ namespace ImproveGame.Common.Systems
             ))
                 return;
 
-            c.EmitDelegate<Func<int, int>>((returnValue) => {
+            c.EmitDelegate<Func<int, int>>((returnValue) =>
+            {
                 // 把if (type == 59) 的59换掉，NPC.type不可能为NPCLoader.NPCCount
                 return Config.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue;
             });
@@ -263,35 +265,32 @@ namespace ImproveGame.Common.Systems
         {
             ImprovePlayer improvePlayer = player.GetModPlayer<ImprovePlayer>();
             // 智能虚空保险库
-            if (MyUtils.Config.SmartVoidVault)
+            if (MyUtils.Config.SmartVoidVault && !itemToPickUp.IsACoin)
             {
-                if (!itemToPickUp.IsACoin)
+                // 大背包
+                if (MyUtils.Config.SuperVault && !itemToPickUp.IsAir && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))
                 {
-                    // 大背包
-                    if (!itemToPickUp.IsAir && MyUtils.Config.SuperVault && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))
+                    itemToPickUp = MyUtils.ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
+                }
+                // 虚空保险库
+                if (player.IsVoidVaultEnabled && !itemToPickUp.IsAir && MyUtils.HasItem(player.bank4.item, -1, itemToPickUp.type))
+                {
+                    itemToPickUp = MyUtils.ItemStackToInventory(player.bank4.item, itemToPickUp);
+                }
+                // 其他
+                if (MyUtils.Config.SuperVoidVault)
+                {
+                    if (improvePlayer.PiggyBank && !itemToPickUp.IsAir && MyUtils.HasItem(player.bank.item, -1, itemToPickUp.type))
                     {
-                        itemToPickUp = MyUtils.ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
+                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank.item, itemToPickUp);
                     }
-                    // 虚空保险库
-                    if (!itemToPickUp.IsAir && player.IsVoidVaultEnabled && MyUtils.HasItem(player.bank4.item, -1, itemToPickUp.type))
+                    if (improvePlayer.Safe && !itemToPickUp.IsAir && MyUtils.HasItem(player.bank2.item, -1, itemToPickUp.type))
                     {
-                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank4.item, itemToPickUp);
+                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank2.item, itemToPickUp);
                     }
-                    // 其他
-                    if (MyUtils.Config.SuperVoidVault)
+                    if (improvePlayer.DefendersForge && !itemToPickUp.IsAir && MyUtils.HasItem(player.bank3.item, -1, itemToPickUp.type))
                     {
-                        if (!itemToPickUp.IsAir && improvePlayer.PiggyBank && MyUtils.HasItem(player.bank.item, -1, itemToPickUp.type))
-                        {
-                            itemToPickUp = MyUtils.ItemStackToInventory(player.bank.item, itemToPickUp);
-                        }
-                        if (!itemToPickUp.IsAir && improvePlayer.Safe && MyUtils.HasItem(player.bank2.item, -1, itemToPickUp.type))
-                        {
-                            itemToPickUp = MyUtils.ItemStackToInventory(player.bank2.item, itemToPickUp);
-                        }
-                        if (!itemToPickUp.IsAir && improvePlayer.DefendersForge && MyUtils.HasItem(player.bank3.item, -1, itemToPickUp.type))
-                        {
-                            itemToPickUp = MyUtils.ItemStackToInventory(player.bank3.item, itemToPickUp);
-                        }
+                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank3.item, itemToPickUp);
                     }
                 }
             }
@@ -299,25 +298,25 @@ namespace ImproveGame.Common.Systems
             {
                 itemToPickUp = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
             }
-            // 大背包
-            if (!itemToPickUp.IsAir && MyUtils.Config.SuperVault && itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin)
+            if (!itemToPickUp.IsACoin)
             {
-                itemToPickUp = MyUtils.ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
-            }
-            // 超级虚空保险库
-            if (MyUtils.Config.SuperVoidVault)
-            {
-                if (itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0 && !itemToPickUp.IsACoin)
+                // 大背包
+                if (MyUtils.Config.SuperVault && !itemToPickUp.IsAir)
                 {
-                    if (!itemToPickUp.IsAir && improvePlayer.PiggyBank)
+                    itemToPickUp = MyUtils.ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
+                }
+                // 超级虚空保险库
+                if (MyUtils.Config.SuperVoidVault)
+                {
+                    if (improvePlayer.PiggyBank && !itemToPickUp.IsAir)
                     {
                         itemToPickUp = MyUtils.ItemStackToInventory(player.bank.item, itemToPickUp);
                     }
-                    if (!itemToPickUp.IsAir && improvePlayer.Safe && itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0)
+                    if (improvePlayer.Safe && !itemToPickUp.IsAir)
                     {
                         itemToPickUp = MyUtils.ItemStackToInventory(player.bank2.item, itemToPickUp);
                     }
-                    if (!itemToPickUp.IsAir && improvePlayer.DefendersForge && itemToPickUp.type != ItemID.None && itemToPickUp.stack > 0)
+                    if (improvePlayer.DefendersForge && !itemToPickUp.IsAir)
                     {
                         itemToPickUp = MyUtils.ItemStackToInventory(player.bank3.item, itemToPickUp);
                     }

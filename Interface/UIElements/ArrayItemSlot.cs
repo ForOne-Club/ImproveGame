@@ -64,15 +64,20 @@ namespace ImproveGame.Interface.UIElements
 
         public override void RightMouseDown(UIMouseEvent evt)
         {
-            RightMouseTimer = 0;
-            TakeSlotItemToMouseItem();
+            if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
+            {
+                RightMouseTimer = 0;
+                TakeSlotItemToMouseItem();
+            }
 
-            if (ItemID.Sets.BossBag[Item.type] || ItemID.Sets.BossBag[Item.type] || ItemID.Sets.IsFishingCrate[Item.type])
+            if (ItemID.Sets.BossBag[Item.type] || ItemID.Sets.IsFishingCrate[Item.type])
             {
                 if (ItemID.Sets.BossBag[Item.type] || ItemID.Sets.BossBag[Item.type])
                     Main.LocalPlayer.OpenBossBag(Item.type);
+
                 if (ItemID.Sets.IsFishingCrate[Item.type])
                     Main.LocalPlayer.OpenFishingCrate(Item.type);
+
                 if (ItemLoader.ConsumeItem(Item, Main.LocalPlayer))
                     Item.stack--;
 
@@ -99,7 +104,7 @@ namespace ImproveGame.Interface.UIElements
         {
             base.Update(gameTime);
             // 右键长按物品持续拿出
-            if (Main.mouseRight && IsMouseHovering)
+            if (Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
                 if (RightMouseTimer >= 60)
                 {
@@ -150,21 +155,25 @@ namespace ImproveGame.Interface.UIElements
         /// </summary>
         public void TakeSlotItemToMouseItem()
         {
+            bool CanPlaySound = false;
             if (Main.mouseItem.type == Item.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
             {
                 Main.mouseItem.stack++;
                 Item.stack--;
+                if (Item.IsAir)
+                    Item.SetDefaults();
+                CanPlaySound = true;
             }
             else if (Main.mouseItem.IsAir && !Item.IsAir && Item.maxStack > 1)
             {
                 Main.mouseItem = new Item(Item.type, 1);
                 Item.stack--;
+                if (Item.IsAir)
+                    Item.SetDefaults();
+                CanPlaySound = true;
             }
-            if (Item.IsAir)
-            {
-                Item.SetDefaults(0);
-            }
-            SoundEngine.PlaySound(SoundID.MenuTick);
+            if (CanPlaySound)
+                SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         /// <summary>

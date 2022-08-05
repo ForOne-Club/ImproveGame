@@ -87,7 +87,7 @@ namespace ImproveGame.Common.Players
 
         public override void PostUpdate()
         {
-            if (Main.myPlayer != Player.whoAmI || Main.netMode != NetmodeID.MultiplayerClient)
+            if (Main.myPlayer != Player.whoAmI)
                 return;
 
             // 侦测stack，如果有变化就发包
@@ -100,7 +100,11 @@ namespace ImproveGame.Common.Players
                 }
                 if (SuperVault[i].stack != oldSuperVaultStack[i])
                 {
-                    NetBigBag.SendSlot(i, SuperVault[i], Main.myPlayer, -1, -1);
+                    Recipe.FindRecipes(); // 刷新配方
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        NetBigBag.SendSlot(i, SuperVault[i], Main.myPlayer, -1, -1);
+                    }
                 }
                 oldSuperVaultStack[i] = SuperVault[i].stack;
                 if (SuperVault[i].IsAir)

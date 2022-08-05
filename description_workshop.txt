@@ -1,8 +1,9 @@
-﻿这些功能也许会为你带来更好的游戏体验
----------------------------
+﻿[h1]更好的体验，一个让模组游玩体验大大提升的Mod[/h1]
+这些功能会为你带来更好的游戏体验
 默认仅开启部分功能，详情请查看模组设置。
----------------------------
-模组物品获得方式：
+
+[h1]模组物品[/h1]
+旗帜盒: 铁锭(铅锭)x12
 药水袋: 丝绸x8
 自动钓鱼机: 铁锭(铅锭)x8 铜锭(锡锭)x4 玻璃x20
 科技魔杖: 史莱姆王掉落
@@ -12,7 +13,8 @@
 法爆魔杖: 木材x18 丛林孢子x6 红玉x1
 星爆魔杖: 法爆法杖x1 落星x8 光明之魂x6 暗影之魂x6
 (你可以使用 Recipe Browser(合成表) 模组的物品图鉴功能以在游戏内查阅来源!)
----------------------------
+
+[h1]简要介绍[/h1]
 关于此模组的介绍视频或者专栏:
 BiliBili@承影_chengying 的介绍视频:
 https://www.bilibili.com/video/BV1V3411372X
@@ -20,11 +22,13 @@ BiliBili@世界第一可爱9 的介绍专栏:
 https://www.bilibili.com/read/cv17018658
 BiliBili@柠檬茶Zero 的介绍视频:
 https://www.bilibili.com/video/BV1EN4y1T7r6
----------------------------
+
+[h1]开源仓库 与 更新日志[/h1]
 更新日志: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog.md
 开源链接: https://gitee.com/MyGoold/improve-game
----------------------------
-功能列表（详见设置）：
+
+[h1]功能列表[/h1]
+[b]详细列表请到模组配置或更新日志中查看[/b]
     1、  物品最大堆叠
     2、  武器自动使用
     3、  提升部分工具速度
@@ -45,13 +49,18 @@ https://www.bilibili.com/video/BV1EN4y1T7r6
     18、 超级虚空保险库
     19、 智能虚空保险库
     20、 额外的背包
----------------------------
+
+[h1]作者 与 额外声明[/h1]
 画师：枫林半叶, 逆风而行的信鸽
 翻译：Lastprismer，Lacewing
 代码：局长, Cyril
 特别感谢: @ChevyRay 的协程类 (https://github.com/ChevyRay/Coroutines)
----------------------------
+
 版权声明:
 本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
 附: WMITF开源链接: https://github.com/gardenappl/WMITF
     本模组开源链接: https://gitee.com/MyGoold/improve-game
+
+[h1]QQ交流群[/h1]
+模组交流群: 971038831
+(BUG反馈, 创意建议, 聊天划水, 发癫)

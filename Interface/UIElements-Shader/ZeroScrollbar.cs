@@ -9,11 +9,11 @@ namespace ImproveGame.Interface.UIElements_Shader
     public class ZeroScrollbar : UIElement
     {
         private float viewPosition; // 滚动条当前位置
-        private float maxViewPoisition;
+        private float MaxViewPoisition => maxViewSize - viewSize;
 
         private float viewSize = 1f; // 显示出来的高度
         private float maxViewSize = 20f; // 控制元素的高度
-        private float viewScale;
+        private float ViewScale => viewSize / maxViewSize;
 
         // 用于拖动内滚动条
         private float offsetY;
@@ -22,7 +22,7 @@ namespace ImproveGame.Interface.UIElements_Shader
         public float ViewPosition
         {
             get => viewPosition;
-            set => viewPosition = MathHelper.Clamp(value, 0f, maxViewSize - viewSize);
+            set => viewPosition = MathHelper.Clamp(value, 0f, MaxViewPoisition);
         }
 
         private float _bufferViewPosition;
@@ -44,16 +44,16 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         public override void Update(GameTime gameTime)
         {
-            Main.NewText($"ViewPosition: {ViewPosition}  BufferViewPosition: {BufferViewPosition}");
-            Main.NewText($"ViewSize: {viewSize}  MaxViewSize: {maxViewSize}");
-            Main.NewText($"Height: {Height.Pixels}");
             base.Update(gameTime);
             if (dragging)
             {
                 CalculatedStyle InnerDimensions = GetInnerDimensions();
-                Main.NewText($"offset.Y: {offsetY}");
-                Main.NewText($"剩余距离: {Main.MouseScreen.Y - InnerDimensions.Y}");
-                ViewPosition = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) / (InnerDimensions.Height * (1 - viewScale)) * maxViewPoisition;
+                //Main.NewText($"ViewPosition: {ViewPosition}  BufferViewPosition: {BufferViewPosition}");
+                //Main.NewText($"ViewSize: {viewSize}  MaxViewSize: {maxViewSize}");
+                //Main.NewText($"Height: {Height.Pixels}");
+                //Main.NewText($"offset.Y: {offsetY}");
+                //Main.NewText($"剩余距离: {Main.MouseScreen.Y - InnerDimensions.Y}");
+                ViewPosition = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) / (InnerDimensions.Height * (1 - ViewScale)) * MaxViewPoisition;
             }
 
             if (BufferViewPosition != 0)
@@ -78,7 +78,7 @@ namespace ImproveGame.Interface.UIElements_Shader
                 if (InnerDimensions.Contains(Main.MouseScreen))
                 {
                     dragging = true;
-                    offsetY = evt.MousePosition.Y - InnerDimensions.Y - (InnerDimensions.Height * viewScale * (viewPosition / maxViewPoisition));
+                    offsetY = evt.MousePosition.Y - InnerDimensions.Y - (InnerDimensions.Height * (1 - ViewScale) * (viewPosition / MaxViewPoisition));
                 }
                 BufferViewPosition = 0;
             }
@@ -96,8 +96,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             PlayerInput.LockVanillaMouseScroll("ModLoader/UIScrollbar");
         }
 
-        public readonly Color background1 = new(43, 56, 101);
-        public readonly Color borderColor2 = new(93, 88, 93);
+        public readonly Color background = new(43, 56, 101);
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimension = GetDimensions();
@@ -105,13 +104,14 @@ namespace ImproveGame.Interface.UIElements_Shader
             Vector2 size = dimension.Size();
 
             // 滚动条背板
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, size.X / 2, 3, Color.Black, background1);
+            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, size.X / 2, 3, Color.Black, background);
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();
             Vector2 innerSize = innerDimensions.Size();
-            innerPosition.Y += (innerSize.Y - innerSize.Y * viewScale) * (ViewPosition / maxViewPoisition);
-            innerSize.Y *= viewScale;
+            if (MaxViewPoisition != 0)
+                innerPosition.Y += innerDimensions.Height * (1 - ViewScale) * (ViewPosition / MaxViewPoisition);
+            innerSize.Y *= ViewScale;
 
             // 滚动条拖动块
             PixelShader.DrawBox(Main.UIScaleMatrix, innerPosition, innerSize, innerSize.X / 2, 0, Color.White, Color.White);
@@ -121,11 +121,9 @@ namespace ImproveGame.Interface.UIElements_Shader
         {
             viewSize = MathHelper.Clamp(viewSize, 0f, maxViewSize);
             viewPosition = MathHelper.Clamp(viewPosition, 0f, maxViewSize - viewSize);
-            this.maxViewPoisition = maxViewSize - viewSize;
 
             this.viewSize = viewSize;
             this.maxViewSize = maxViewSize;
-            viewScale = viewSize / maxViewSize;
         }
     }
 }

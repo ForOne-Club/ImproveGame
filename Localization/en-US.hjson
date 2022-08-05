@@ -411,6 +411,7 @@ Mods:
                     The mod item icons contained in the config will become text
                     '''
             }
+            ShowModName.Label: "[i:ImproveGame/SpaceWand] Display which mod are the items and NPCs from"
 
             OtherFunctions:
             {
@@ -420,7 +421,6 @@ Mods:
                     Following are other non-configurable functions of this mod:
                     - Wormhole Potion works in personal inventories
                     - Any accessory can be worn in vanity slots
-                    - Display which mod are the items and NPCs from
                     - Display detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
                     - A hotkey to swap the hotbar with the second row of inventory
                     - Display minion slot occupancy in tooltip

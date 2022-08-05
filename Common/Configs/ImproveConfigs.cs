@@ -34,7 +34,7 @@ namespace ImproveGame.Common.Configs
         [Tooltip("$Mods.ImproveGame.Config.GrabDistance.Tooltip")]
         [DefaultValue(0)]
         [Slider]
-        [Range(0, 25)]
+        [Range(0, 50)]
         public int GrabDistance;
 
         [Label("$Mods.ImproveGame.Config.ItemMaxStack.Label")]
@@ -53,7 +53,7 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.ImproveToolSpeed.Label")]
         [Tooltip("$Mods.ImproveGame.Config.ImproveToolSpeed.Tooltip")]
-        [DefaultValue(0)]
+        [DefaultValue(0d)]
         [Range(0, 1f)]
         [Slider]
         [Increment(0.125f)]
@@ -338,6 +338,10 @@ namespace ImproveGame.Common.Configs
         [ReloadRequired]
         public bool LoadModItems;
 
+        [Label("$Mods.ImproveGame.Config.ShowModName.Label")]
+        [DefaultValue(true)]
+        public bool ShowModName;
+
         // 预设
         [Header("$Mods.ImproveGame.Config.Presets.Header")]
 
@@ -539,43 +543,55 @@ namespace ImproveGame.Common.Configs
         [Label("$Mods.ImproveGame.Config.OtherFunctions.Label")]
         public bool OtherFunctions => true;
 
-        public override void OnChanged() {
-            if (MostTreeMin > MostTreeMax) {
+        public override void OnChanged()
+        {
+            if (MostTreeMin > MostTreeMax)
+            {
                 MostTreeMin = MostTreeMax;
             }
-            if (GemTreeMin > GemTreeMax) {
+            if (GemTreeMin > GemTreeMax)
+            {
                 GemTreeMin = GemTreeMax;
             }
-            if (PalmTreeMin > PalmTreeMax) {
+            if (PalmTreeMin > PalmTreeMax)
+            {
                 PalmTreeMin = PalmTreeMax;
             }
             HigherTreeSystem.SetTreeHeights(GemTreeMin, GemTreeMax, MostTreeMin, MostTreeMax);
         }
 
-        public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message) {
-            if (OnlyHostByPassword) {
-                if (!NetPasswordSystem.Registered[whoAmI]) {
+        public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref string message)
+        {
+            if (OnlyHostByPassword)
+            {
+                if (!NetPasswordSystem.Registered[whoAmI])
+                {
                     message = GetText("Config.OnlyHostByPassword.Unaccepted");
                 }
                 return NetPasswordSystem.Registered[whoAmI];
             }
 
-            if ((pendingConfig as ImproveConfigs).OnlyHost != OnlyHost) {
+            if ((pendingConfig as ImproveConfigs).OnlyHost != OnlyHost)
+            {
                 return TryAcceptChanges(whoAmI, ref message);
             }
-            else if (OnlyHost) {
+            else if (OnlyHost)
+            {
                 return TryAcceptChanges(whoAmI, ref message);
             }
             return base.AcceptClientChanges(pendingConfig, whoAmI, ref message);
         }
 
-        public static bool TryAcceptChanges(int whoAmI, ref string message) {
+        public static bool TryAcceptChanges(int whoAmI, ref string message)
+        {
             // DoesPlayerSlotCountAsAHost是preview的，stable还没有，又被坑了
             // if (MessageBuffer.DoesPlayerSlotCountAsAHost(whoAmI)) {
-            if (Netplay.Clients[whoAmI].Socket.GetRemoteAddress().IsLocalHost()) {
+            if (Netplay.Clients[whoAmI].Socket.GetRemoteAddress().IsLocalHost())
+            {
                 return true;
             }
-            else {
+            else
+            {
                 message = GetText("Config.OnlyHost.Unaccepted");
                 return false;
             }
