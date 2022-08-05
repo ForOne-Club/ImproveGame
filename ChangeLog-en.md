@@ -3,11 +3,13 @@
 # v1.6.1
 ## Subversions:
 - v1.6.1.0
+- v1.6.1.1
 ## BUG Fixes:
 - **[v1.6.1.0]** Fixed an issue with launching servers
 ## Additions:
 - **[v1.6.1.0]** Reworked the Huge Inventory's UI, now looks nicer
 - **[v1.6.1.0]** 显示物品、NPC所属模组功能现在可开关了
+- **[v1.6.1.1]** 大背包内的物品现在可以作为制作材料了
 
 # v1.6.0
 ## Subversions:
