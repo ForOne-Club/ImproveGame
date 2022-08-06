@@ -28,6 +28,10 @@ namespace ImproveGame.Common.ConstructCore
             int width = tag.GetInt("Width");
             int height = tag.GetInt("Height");
 
+            // 添加Origin偏移
+            position.X -= tag.GetInt("OriginX");
+            position.Y -= tag.GetInt("OriginY");
+
             var currentTask = CoroutineSystem.TileRunner.Run(KillTiles(position, width, height));
             while (currentTask.IsRunning)
                 yield return null;

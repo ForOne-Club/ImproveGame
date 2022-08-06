@@ -51,6 +51,8 @@ namespace ImproveGame.Common.ConstructCore
             tag.Add("ModVersion", ImproveGame.Instance.Version.ToString());
             tag.Add("Width", rectInWorld.Width);
             tag.Add("Height", rectInWorld.Height);
+            tag.Add("OriginX", 0);
+            tag.Add("OriginY", 0);
 
             List<TileDefinition> data = new();
             for (int x = rectInWorld.X; x <= rectInWorld.X + rectInWorld.Width; x++)

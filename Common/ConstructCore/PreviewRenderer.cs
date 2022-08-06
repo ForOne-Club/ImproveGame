@@ -51,7 +51,9 @@ namespace ImproveGame.Common.ConstructCore
                         File.Exists(WandSystem.ConstructFilePath))
                     {
                         var color = Color.White * 0.6f;
-                        Main.spriteBatch.Draw(PreviewTarget, Vector2.Zero, color);
+                        var drawPosition = PreviewTarget.Size() / 2f;
+                        var spriteEffects = Main.LocalPlayer.gravDir is -1 ? SpriteEffects.FlipVertically : SpriteEffects.None;
+                        Main.spriteBatch.Draw(PreviewTarget, drawPosition, null, color, 0f, PreviewTarget.Size() / 2f, 1f, spriteEffects, 0f);
                     }
                     return true;
                 }, InterfaceScaleType.Game));
@@ -71,12 +73,12 @@ namespace ImproveGame.Common.ConstructCore
             float oppositeY = (position.Y - Main.screenHeight / 2) / Main.GameZoomTarget;
             position.X -= oppositeX * (Main.GameZoomTarget - 1f);
             position.Y -= oppositeY * (Main.GameZoomTarget - 1f);
+            if (Main.LocalPlayer.gravDir is -1) // 不知道为啥
+            {
+                position.Y -= 8f;
+            }
 
             position += Main.screenPosition;
-            if (Main.LocalPlayer.gravDir is -1) // 为啥？我不到啊...
-            {
-                position.Y += 8f;
-            }
 
             int width = tag.GetInt("Width");
             int height = tag.GetInt("Height");
@@ -84,10 +86,18 @@ namespace ImproveGame.Common.ConstructCore
 
             // 对齐左上角 + 转换到屏幕坐标
             Vector2 originPos = position.ToTileCoordinates().ToWorldCoordinates(0f, 0f) - Main.screenPosition;
-            Vector2 borderPos = Main.LocalPlayer.gravDir is -1 ? originPos + new Vector2(0f, -height * 16f - 8) : originPos;
+            // 添加Origin偏移
+            originPos.X -= tag.GetInt("OriginX") * 16f;
+            originPos.Y -= tag.GetInt("OriginY") * 16f * Main.LocalPlayer.gravDir;
+            if (Main.LocalPlayer.gravDir is -1) // 做一个重力转换
+            {
+                oppositeY = (originPos.Y - Main.screenHeight / 2);
+                originPos.Y -= oppositeY * 2f;
+                originPos.Y -= 24f; // 不知道啊不知道
+            }
 
-            DrawBorder(borderPos, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
-            DrawPreviewFromTag(sb, tag, originPos, 1f, Main.LocalPlayer.gravDir is -1);
+            DrawBorder(originPos, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
+            DrawPreviewFromTag(sb, tag, originPos, 1f);
         }
 
         private void DrawTarget(On.Terraria.Main.orig_CheckMonoliths orig)
@@ -125,7 +135,7 @@ namespace ImproveGame.Common.ConstructCore
                 var color = Color.GreenYellow;
                 var position = Vector2.Zero + new Vector2(2f, 2f);
                 DrawBorder(position, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
-                DrawPreviewFromTag(Main.spriteBatch, tag, position, 1f, false);
+                DrawPreviewFromTag(Main.spriteBatch, tag, position, 1f);
 
                 Main.spriteBatch.End();
                 Main.graphics.GraphicsDevice.SetRenderTarget(null);
@@ -134,7 +144,7 @@ namespace ImproveGame.Common.ConstructCore
             orig();
         }
 
-        public static bool DrawPreviewFromTag(SpriteBatch sb, TagCompound tag, Vector2 origin, float scale = 1f, bool flip = false)
+        public static bool DrawPreviewFromTag(SpriteBatch sb, TagCompound tag, Vector2 origin, float scale = 1f)
         {
             List<TileDefinition> data = (List<TileDefinition>)tag.GetList<TileDefinition>("StructureData");
 
@@ -150,13 +160,6 @@ namespace ImproveGame.Common.ConstructCore
             int width = tag.GetInt("Width");
             int height = tag.GetInt("Height");
 
-            // 翻转调整
-            if (flip)
-            {
-                origin.Y -= height * 16f; // 和生成保持一致
-                spriteEffects = SpriteEffects.FlipVertically;
-            }
-
             for (int x = 0; x <= width; x++)
             {
                 for (int y = 0; y <= height; y++)
@@ -167,8 +170,7 @@ namespace ImproveGame.Common.ConstructCore
 
                     int wallType = FileOperator.ParseWallType(tileData.Wall);
 
-                    int drawY = flip ? height - y : y;
-                    var position = origin + new Point(x, drawY).ToWorldCoordinates(0f, flip ? 0f : 8f);
+                    var position = origin + new Point(x, y).ToWorldCoordinates(0f, 8f);
 
                     if (wallType > 0) // Wall
                     {
@@ -193,8 +195,7 @@ namespace ImproveGame.Common.ConstructCore
 
                     int tileType = FileOperator.ParseTileType(tileData.Tile);
 
-                    int drawY = flip ? height - y : y;
-                    var position = origin + new Point(x, drawY).ToWorldCoordinates(0f, flip ? 0f : 8f);
+                    var position = origin + new Point(x, y).ToWorldCoordinates(0f, 8f);
 
                     // 这绘制...不想再写第二遍了
                     if (tileType != -1) // Tile
@@ -260,7 +261,7 @@ namespace ImproveGame.Common.ConstructCore
                                         break;
                                 }
 
-                                sb.Draw(texture, (position + new Vector2(num6, i * num2 + num3)) * scale, new Rectangle(tileData.TileFrameX + num6, tileData.TileFrameY + num5, num2, num4), color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                                sb.Draw(texture, (position + new Vector2(num6, i * num2 + num3)) * scale, new Rectangle(tileData.TileFrameX + num6, tileData.TileFrameY + num5, num2, num4), color, 0f, new Vector2(0f, 8f), scale, SpriteEffects.None, 0f);
                             }
                         }
                         EndSlopeDraw:;
