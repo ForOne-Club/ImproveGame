@@ -80,11 +80,6 @@ namespace ImproveGame.Interface.UIElements
             imageSize = texture.Size();
         }
 
-        public override void Click(UIMouseEvent evt)
-        {
-            base.Click(evt);
-        }
-
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
