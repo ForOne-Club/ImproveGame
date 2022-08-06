@@ -103,7 +103,7 @@ namespace ImproveGame.Interface.UIElements
                 Height.Pixels = uiHeight * ViewScale;
                 Recalculate();
                 _cacheUpdateResetHeight = true;
-                PreviewRenderer.UIPreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)StructureWidth * 16 + 20, (int)StructureHeight * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
+                PreviewRenderer.UIPreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, StructureWidth * 16 + 20, StructureHeight * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
                 PreviewRenderer.ResetUIPreviewTarget = true;
             }
 

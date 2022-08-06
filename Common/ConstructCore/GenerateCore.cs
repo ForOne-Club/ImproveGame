@@ -145,6 +145,8 @@ namespace ImproveGame.Common.ConstructCore
                     int index = y + x * (height + 1);
                     TileDefinition tileData = data[index];
                     int tileType = FileOperator.ParseTileType(tileData.Tile);
+                    if (tileType is -1)
+                        continue;
                     var tileObjectData = TileObjectData.GetTileData(tileType, 0);
                     if (tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 18 || tileObjectData.CoordinateFullHeight > 18))
                     {

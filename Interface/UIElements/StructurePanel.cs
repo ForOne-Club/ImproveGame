@@ -197,8 +197,20 @@ namespace ImproveGame.Interface.UIElements
                 WandSystem.ConstructFilePath = string.Empty;
                 return;
             }
-            WandSystem.ConstructFilePath = FilePath;
-            PreviewRenderer.ResetPreviewTarget = true;
+
+            if (string.IsNullOrEmpty(FilePath) || !File.Exists(FilePath))
+                return;
+
+            var tag = FileOperator.GetTagFromFile(FilePath);
+
+            if (tag is not null)
+            {
+                WandSystem.ConstructFilePath = FilePath;
+                PreviewRenderer.ResetPreviewTarget = true;
+                int width = tag.GetInt("Width");
+                int height = tag.GetInt("Height");
+                PreviewRenderer.PreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width * 16 + 20, height * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

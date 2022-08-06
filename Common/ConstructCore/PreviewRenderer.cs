@@ -23,22 +23,16 @@ namespace ImproveGame.Common.ConstructCore
 
             On.Terraria.Main.SetDisplayMode += RefreshTarget;
             On.Terraria.Main.CheckMonoliths += DrawTarget;
-
-            Main.RunOnMainThread(() => {
-                PreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight, false, default, default, default, RenderTargetUsage.PreserveContents);
-            });
         }
 
         public override void Unload()
         {
             PreviewTarget = null;
+            UIPreviewTarget = null;
         }
 
         private void RefreshTarget(On.Terraria.Main.orig_SetDisplayMode orig, int width, int height, bool fullscreen)
         {
-            if (!Main.gameInactive && (width != Main.screenWidth || height != Main.screenHeight))
-                PreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height, false, default, default, default, RenderTargetUsage.PreserveContents);
-
             orig(width, height, fullscreen);
         }
 
@@ -66,12 +60,12 @@ namespace ImproveGame.Common.ConstructCore
 
                         // 添加Origin偏移
                         drawPosition.X -= tag.GetInt("OriginX") * 16f;
-                        drawPosition.Y -= tag.GetInt("OriginY") * 16f * Main.LocalPlayer.gravDir;
+                        drawPosition.Y -= tag.GetInt("OriginY") * 16f;
                         if (Main.LocalPlayer.gravDir is -1) // 做一个重力转换
                         {
                             float oppositeY = (drawPosition.Y - Main.screenHeight / 2);
                             drawPosition.Y -= oppositeY * 2f;
-                            drawPosition.Y -= Main.screenHeight; // 不知道啊不知道
+                            drawPosition.Y -= PreviewTarget.Height; // 由于FlipVertically特性，这里要调回来
                         }
                         drawPosition -= new Vector2(2f, 2f * Main.LocalPlayer.gravDir);
 
@@ -128,8 +122,22 @@ namespace ImproveGame.Common.ConstructCore
                 WandSystem.ConstructMode == WandSystem.Construct.Place;
             if (((canDraw && !_canDrawLastFrame) || ResetPreviewTarget) && !string.IsNullOrEmpty(WandSystem.ConstructFilePath) && File.Exists(WandSystem.ConstructFilePath))
             {
-                DrawPreviewToRender(PreviewTarget, WandSystem.ConstructFilePath);
-                ResetPreviewTarget = false;
+                if (PreviewTarget is null)
+                {
+                    var tag = FileOperator.GetTagFromFile(WandSystem.ConstructFilePath);
+
+                    if (tag is not null)
+                    {
+                        int width = tag.GetInt("Width");
+                        int height = tag.GetInt("Height");
+                        PreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width * 16 + 20, height * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
+                    }
+                }
+                if (PreviewTarget is not null)
+                {
+                    DrawPreviewToRender(PreviewTarget, WandSystem.ConstructFilePath);
+                    ResetPreviewTarget = false;
+                }
             }
             _canDrawLastFrame = canDraw;
 
