@@ -5,8 +5,42 @@ using System.Reflection;
 
 namespace ImproveGame.Common.Systems
 {
-    public class BigBagRecipeSystem : ModSystem
+    public class RecipeSystem : ModSystem
     {
+        public static RecipeGroup GoldGroup;
+        public static RecipeGroup SilverGroup;
+        public static RecipeGroup IronGroup;
+        public static RecipeGroup CopperGroup;
+        public static RecipeGroup DemoniteGroup;
+        public static RecipeGroup ShadowGroup;
+
+        public override void Unload()
+        {
+            GoldGroup = null;
+            SilverGroup = null;
+            IronGroup = null;
+            CopperGroup = null;
+            DemoniteGroup = null;
+            ShadowGroup = null;
+        }
+
+        public override void AddRecipeGroups()
+        {
+            GoldGroup = new(() => GetText("RecipeGroup.GoldGroup"), 19, 706);
+            SilverGroup = new(() => GetText("RecipeGroup.SilverGroup"), 21, 705);
+            IronGroup = new(() => GetText("RecipeGroup.IronGroup"), 22, 704);
+            CopperGroup = new(() => GetText("RecipeGroup.CopperGroup"), 20, 703);
+            ShadowGroup = new(() => GetText("RecipeGroup.ShadowGroup"), 86, 1329);
+            DemoniteGroup = new(() => GetText("RecipeGroup.DemoniteGroup"), 57, 1257);
+
+            RecipeGroup.RegisterGroup("ImproveGame:GoldGroup", GoldGroup);
+            RecipeGroup.RegisterGroup("ImproveGame:SilverGroup", SilverGroup);
+            RecipeGroup.RegisterGroup("ImproveGame:IronGroup", IronGroup);
+            RecipeGroup.RegisterGroup("ImproveGame:CopperGroup", CopperGroup);
+            RecipeGroup.RegisterGroup("ImproveGame:ShadowGroup", ShadowGroup);
+            RecipeGroup.RegisterGroup("ImproveGame:DemoniteGroup", DemoniteGroup);
+        }
+
         private static bool _loadedSuperVault; // 本次运行是否加载了大背包，全局字段避免出问题
 
         public override void Load()
@@ -51,7 +85,7 @@ namespace ImproveGame.Common.Systems
                 return;
 
             var label = c.DefineLabel(); // 记录位置
-            c.Emit(OpCodes.Ldsfld, typeof(BigBagRecipeSystem).GetField(nameof(_loadedSuperVault), BindingFlags.Static | BindingFlags.NonPublic));
+            c.Emit(OpCodes.Ldsfld, typeof(RecipeSystem).GetField(nameof(_loadedSuperVault), BindingFlags.Static | BindingFlags.NonPublic));
             c.Emit(OpCodes.Brfalse, label); // 如果没加载，跳出
             c.Emit(OpCodes.Pop); // 直接丢弃，因为sbyte不支持127以上
             c.Emit(OpCodes.Ldc_I4, 59 + 100); // 玩家背包 + 大背包
@@ -85,7 +119,7 @@ namespace ImproveGame.Common.Systems
         private Item[] GetWholeInventory(Item[] inventory)
         {
             _loadedSuperVault = false;
-            if (Config.SuperVault && DataPlayer.TryGet(Main.LocalPlayer, out var modPlayer) && modPlayer.SuperVault is not null)
+            if (Config.SuperVault && Config.SuperVaultMaterial && DataPlayer.TryGet(Main.LocalPlayer, out var modPlayer) && modPlayer.SuperVault is not null)
             {
                 _loadedSuperVault = true;
                 var superVault = modPlayer.SuperVault;

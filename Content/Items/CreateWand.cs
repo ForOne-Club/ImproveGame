@@ -585,7 +585,7 @@ namespace ImproveGame.Content.Items
         {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddRecipeGroup(ModRecipeGroup.GoldGroup, 12)
+                .AddRecipeGroup(RecipeSystem.GoldGroup, 12)
                 .AddIngredient(ItemID.FallenStar, 8)
                 .Register();
         }

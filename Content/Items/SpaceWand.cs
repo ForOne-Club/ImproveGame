@@ -230,7 +230,7 @@ namespace ImproveGame.Content.Items
         {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddRecipeGroup(ModRecipeGroup.DemoniteGroup, 8)
+                .AddRecipeGroup(RecipeSystem.DemoniteGroup, 8)
                 .AddIngredient(ItemID.Amethyst, 8)
                 .AddTile(TileID.WorkBenches)
                 .Register();

@@ -63,6 +63,11 @@ Mods:
                     (Need to set up hot keys in Controls)
                     '''
             }
+            SuperVaultMaterial:
+            {
+                Label: "[i:3813] 允许超大背包内材料参与合成"
+                Tooltip:  "开启后，超大背包内的材料将可以直接用于合成"
+            }
             ItemMaxStack:
             {
                 Label: "[i:9] Max stack"

@@ -30,6 +30,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool SuperVault;
 
+        [Label("$Mods.ImproveGame.Config.SuperVaultMaterial.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.SuperVaultMaterial.Tooltip")]
+        [DefaultValue(false)]
+        public bool SuperVaultMaterial;
+
         [Label("$Mods.ImproveGame.Config.GrabDistance.Label")]
         [Tooltip("$Mods.ImproveGame.Config.GrabDistance.Tooltip")]
         [DefaultValue(0)]
