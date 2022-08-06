@@ -144,7 +144,7 @@ namespace ImproveGame.Interface.UIElements_Shader
                 innerPosition.Y += innerDimensions.Height * (1 - ViewScale) * (ViewPosition / MaxViewPoisition);
             innerSize.Y *= ViewScale;
 
-            Color hoverColor = Color.Lerp(hoveredColor, Color.White, HoverTimer.Schedule);
+            Color hoverColor = Color.Lerp(hoveredColor, Color.White, dragging ? 1 : HoverTimer.Schedule);
 
             // 滚动条拖动块
             PixelShader.DrawBox(Main.UIScaleMatrix, innerPosition, innerSize, innerSize.X / 2, 0, hoverColor, hoverColor);
