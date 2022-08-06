@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.Systems;
-using ImproveGame.Content.Items;
+﻿using ImproveGame.Content.Items;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 using System.Collections.Generic;
 

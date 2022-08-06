@@ -53,9 +53,15 @@ namespace ImproveGame.Interface.UIElements
         {
             CalculatedStyle dimensions = GetDimensions();
             Vector2 position = dimensions.Position();
+            Vector2 size = dimensions.Size();
+
             Color borderColor = Color.Lerp(BorderColor1, BorderColor2, HoverTimer.Schedule);
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, this.GetSize(), 10, 3, borderColor,
+            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 10, 3, borderColor,
                 BackgroundColor1);
+
+            dimensions = GetInnerDimensions();
+            position = dimensions.Position();
+            size = dimensions.Size();
 
             sb.Draw(image, position + imagePosition, Color.White);
             MyUtils.DrawString(position + TextPosition, text, Color.White, Color.Black);

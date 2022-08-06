@@ -1,5 +1,5 @@
 using ImproveGame.Common.Players;
-using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;

@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.Systems;
-using ImproveGame.Content.Tiles;
+﻿using ImproveGame.Content.Tiles;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.Audio;
 using Terraria.DataStructures;

@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Interface.Common
 {
     /// <summary>
     /// 用户界面
@@ -95,7 +95,6 @@ namespace ImproveGame.Common.Systems
                 LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
                 LoadGUI(ref BrustGUI, out BrustInterface);
                 LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
-                LoadGUI(ref BigBagGUI, out BigBagInterface);
                 LoadGUI(ref PaintWandGUI, out PaintWandInterface);
                 LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
             }

@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
-using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 
 namespace ImproveGame.Common.Players

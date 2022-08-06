@@ -2,6 +2,7 @@
 using ImproveGame.Common.Players;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Entitys;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
 using Terraria.DataStructures;

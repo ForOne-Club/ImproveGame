@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items

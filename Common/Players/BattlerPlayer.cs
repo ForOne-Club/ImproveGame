@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using System.Collections.Generic;
 
 namespace ImproveGame.Common.Players

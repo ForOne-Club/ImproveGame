@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
