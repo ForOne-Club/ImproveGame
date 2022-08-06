@@ -36,9 +36,9 @@ namespace ImproveGame.Common.GlobalItems
                 && !GoldList.Contains(item.type))
             {
                 item.maxStack = ModContent.GetInstance<Configs.ImproveConfigs>().ItemMaxStack;
-                if (item.type == ItemID.PlatinumCoin && item.maxStack > 18888)
+                if (item.type == ItemID.PlatinumCoin && item.maxStack > 2000)
                 {
-                    item.maxStack = 18888;
+                    item.maxStack = 2000;
                 }
             }
 

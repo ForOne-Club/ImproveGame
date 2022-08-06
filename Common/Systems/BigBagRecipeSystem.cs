@@ -58,8 +58,28 @@ namespace ImproveGame.Common.Systems
             c.MarkLabel(label); // pop和ldc_i4之后，直接跳到这里就没那两句
         }
 
-        // 两边代码异常相似，所以我直接用上面的了
-        private void ConsumeBigBagMaterial(ILContext il) => AllowBigBagAsMeterial(il);
+        private void ConsumeBigBagMaterial(ILContext il)
+        {
+            AllowBigBagAsMeterial(il);
+
+            var c = new ILCursor(il);
+            /* IL_01A8: ldloc.0
+             * IL_01A9: ldloc.s   k
+             * IL_01AB: newobj    instance void Terraria.Item::.ctor()
+             * IL_01B0: stelem.ref
+             */
+            if (!c.TryGotoNext(
+                MoveType.After,
+                i => i.Match(OpCodes.Ldloc_0),
+                i => i.Match(OpCodes.Ldloc_S),
+                i => i.Match(OpCodes.Newobj),
+                i => i.Match(OpCodes.Stelem_Ref)
+            ))
+                return;
+
+            c.Emit(OpCodes.Ldloc_1);
+            c.Emit(OpCodes.Call, typeof(Item).GetMethod(nameof(Item.TurnToAir), BindingFlags.Instance | BindingFlags.Public));
+        }
 
         // 两边代码异常相似，所以我封装成一个方法了
         private Item[] GetWholeInventory(Item[] inventory)

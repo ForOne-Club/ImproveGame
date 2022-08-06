@@ -113,7 +113,7 @@ namespace ImproveGame.Interface.GUI
             }
             UIList.Recalculate();
 
-            if (IsMouseHovering) {
+            if (BasePanel.IsMouseHovering) {
                 PlayerInput.LockVanillaMouseScroll("ImproveGame: Grab Bag Info GUI");
             }
 

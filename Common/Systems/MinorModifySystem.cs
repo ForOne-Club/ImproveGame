@@ -582,7 +582,7 @@ namespace ImproveGame.Common.Systems
                         }
                         y++;
 
-                        int fruit = MyUtils.GetShakeTreeFruit(treeType);
+                        int fruit = CollectHelper.GetShakeTreeFruit(treeType);
                         if (fruit > -1)
                         {
                             Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), x * 16, y * 16, 16, 16, fruit);

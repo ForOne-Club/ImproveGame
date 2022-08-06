@@ -87,9 +87,17 @@ namespace ImproveGame.Common.Systems
             orig.Invoke(self, spriteBatch);
 
             string _keybind = self.GetType().GetField("_keybind", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(self) as string;
-            if (_keybind == "ImproveGame: $Mods.ImproveGame.Keybind.HotbarSwitch" && self.IsMouseHovering)
+            if (self.IsMouseHovering)
             {
-                Main.instance.MouseText(GetText("Keybind.HotbarSwitch.Tip"));
+                switch (_keybind)
+                {
+                    case "ImproveGame: $Mods.ImproveGame.Keybind.HotbarSwitch":
+                        Main.instance.MouseText(GetText("Keybind.HotbarSwitch.Tip"));
+                        break;
+                    case "ImproveGame: $Mods.ImproveGame.Keybind.BuffTracker":
+                        Main.instance.MouseText(GetText("Keybind.BuffTracker.Tip"));
+                        break;
+                }
             }
         }
 

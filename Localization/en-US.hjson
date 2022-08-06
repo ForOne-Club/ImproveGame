@@ -63,7 +63,15 @@ Mods:
                     (Need to set up hot keys in Controls)
                     '''
             }
-            ItemMaxStack.Label: "[i:9] Max stack"
+            ItemMaxStack:
+            {
+                Label: "[i:9] Max stack"
+                Tooltip: 
+                    '''
+                    设置一组物品的最大可堆叠量
+                    铂金币最大堆叠不可超过2000
+                    '''
+            }
             GrabDistance:
             {
                 Label: "[i:5010] Increase item pickup range (measured in blocks)"
@@ -763,6 +771,7 @@ Mods:
         {
             HugeInventory: "Huge Inventory"
             BuffTracker: "Buff Tracker"
+            BuffTracker.Tip: "设置快捷键后，点击增益图标不再会打开增益追踪器"
             GrabBagLoot: "Display grab bag loot"
             HotbarSwitch: "Swap hotbar"
             HotbarSwitch.Tip: "Swap items in the first row with the second row in inventory"

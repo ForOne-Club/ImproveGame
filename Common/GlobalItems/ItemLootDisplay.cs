@@ -7,7 +7,7 @@ namespace ImproveGame.Common.GlobalItems
     {
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (!ItemLoader.CanRightClick(item))
+            if (!CollectHelper.ItemCanRightClick[item.type] && !ItemLoader.CanRightClick(item))
                 return;
 
             bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: false).Count > 0;

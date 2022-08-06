@@ -63,7 +63,15 @@
                     （需要在控件中配置模组按键）
                     '''
             }
-            ItemMaxStack.Label: "[i:9] 物品最大堆叠"
+            ItemMaxStack:
+            {
+                Label: "[i:9] 物品最大堆叠"
+                Tooltip: 
+                    '''
+                    设置一组物品的最大可堆叠量
+                    铂金币最大堆叠不可超过2000
+                    '''
+            }
             GrabDistance:
             {
                 Label: "[i:5010] 物品拾取范围提升 (单位：格子)"
@@ -759,6 +767,7 @@
         {
             HugeInventory: "大背包"
             BuffTracker: "增益追踪器"
+            BuffTracker.Tip: "设置快捷键后，点击增益图标不再会打开增益追踪器"
             GrabBagLoot: "显示摸彩袋物品明细"
             HotbarSwitch: "切换快捷栏"
             HotbarSwitch.Tip: "按下快捷键后，物品栏第一栏与第二栏的物品将会互换"
