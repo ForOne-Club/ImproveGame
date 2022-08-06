@@ -10,9 +10,6 @@ namespace ImproveGame.Common.Players
             if (Main.myPlayer != Player.whoAmI || ModIntegrationsSystem.WMITFLoaded || !Config.ShowModName)
                 return;
 
-            BoxSystem.MouseText = string.Empty;
-            BoxSystem.SecondLine = false;
-
             var mousePos = Main.MouseWorld;
             for (int i = 0; i < Main.maxNPCs; i++)
             {

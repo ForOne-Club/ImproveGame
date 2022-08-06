@@ -57,6 +57,8 @@ namespace ImproveGame.Common.Systems
 
                         ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, pos, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet);
                     }
+                    MouseText = string.Empty;
+                    SecondLine = false;
                     return true;
                 }, InterfaceScaleType.UI));
             }
