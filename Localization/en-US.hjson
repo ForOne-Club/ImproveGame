@@ -65,16 +65,16 @@ Mods:
             }
             SuperVaultMaterial:
             {
-                Label: "[i:3813] 允许超大背包内材料参与合成"
-                Tooltip:  "开启后，超大背包内的材料将可以直接用于合成"
+                Label: "[i:3813] Craft using materials in Huge Inventory"
+                Tooltip:  "Materials in Huge Inventory can be used in crafting directly"
             }
             ItemMaxStack:
             {
                 Label: "[i:9] Max stack"
                 Tooltip: 
                     '''
-                    设置一组物品的最大可堆叠量
-                    铂金币最大堆叠不可超过2000
+                    Set the max stack of items
+                    Platinum Coins cannot stack over 2000
                     '''
             }
             GrabDistance:
@@ -283,7 +283,7 @@ Mods:
                     Label: "[i:213] Staff of Regrowth auto-plant"
                     Tooltip: "Automatically plant the gathered herb"
             }
-            NoBiomeSpread.Label: "[i:TeleportationPylonVictory] 禁止邪恶生物群落蔓延"
+            NoBiomeSpread.Label: "[i:TeleportationPylonVictory] Stop the evil biomes and the Hallow biome from spreading"
             RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
             DontDeleteBuff:
             {
@@ -777,7 +777,7 @@ Mods:
         {
             HugeInventory: "Huge Inventory"
             BuffTracker: "Buff Tracker"
-            BuffTracker.Tip: "设置快捷键后，点击增益图标不再会打开增益追踪器"
+            BuffTracker.Tip: "Clicking on a buff icon no longer opens the Buff Tracker if the keybind is set"
             GrabBagLoot: "Display grab bag loot"
             HotbarSwitch: "Swap hotbar"
             HotbarSwitch.Tip: "Swap items in the first row with the second row in inventory"
