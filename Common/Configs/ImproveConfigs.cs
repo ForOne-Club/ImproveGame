@@ -222,6 +222,10 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool StaffOfRegenerationAutomaticPlanting;
 
+        [Label("$Mods.ImproveGame.Config.NoBiomeSpread.Label")]
+        [DefaultValue(true)]
+        public bool NoBiomeSpread;
+
         [Label("$Mods.ImproveGame.Config.RespawnWithFullHP.Label")]
         [DefaultValue(true)]
         public bool RespawnWithFullHP;
@@ -380,6 +384,7 @@ namespace ImproveGame.Common.Configs
                 AlchemyGrassGrowsFaster is false &&
                 AlchemyGrassAlwaysBlooms is false &&
                 StaffOfRegenerationAutomaticPlanting is true &&
+                NoBiomeSpread is false &&
                 RespawnWithFullHP is true &&
                 DontDeleteBuff is true &&
                 ExtraPlayerBuffSlots is 99 &&
@@ -426,6 +431,7 @@ namespace ImproveGame.Common.Configs
                     AlchemyGrassGrowsFaster = false;
                     AlchemyGrassAlwaysBlooms = false;
                     StaffOfRegenerationAutomaticPlanting = true;
+                    NoBiomeSpread = false;
                     RespawnWithFullHP = true;
                     DontDeleteBuff = true;
                     ExtraPlayerBuffSlots = 99;
@@ -477,6 +483,7 @@ namespace ImproveGame.Common.Configs
                 AlchemyGrassGrowsFaster is true &&
                 AlchemyGrassAlwaysBlooms is true &&
                 StaffOfRegenerationAutomaticPlanting is true &&
+                NoBiomeSpread is true &&
                 RespawnWithFullHP is true &&
                 DontDeleteBuff is true &&
                 ExtraPlayerBuffSlots is 99 &&
@@ -523,6 +530,7 @@ namespace ImproveGame.Common.Configs
                     AlchemyGrassGrowsFaster = true;
                     AlchemyGrassAlwaysBlooms = true;
                     StaffOfRegenerationAutomaticPlanting = true;
+                    NoBiomeSpread = true;
                     RespawnWithFullHP = true;
                     DontDeleteBuff = true;
                     ExtraPlayerBuffSlots = 99;

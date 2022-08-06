@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.GlobalItems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Players;
 using ImproveGame.Content.Items;
 using Mono.Cecil.Cil;
@@ -50,21 +51,50 @@ namespace ImproveGame.Common.Systems
             IL.Terraria.NPC.VanillaHitEffect_Inner += LavalessLavaSlime;
             // 死后保存Buff
             IL.Terraria.Player.UpdateDead += KeepBuffOnUpdateDead;
+            // 禁止腐化蔓延
+            IL.Terraria.WorldGen.UpdateWorld_Inner += DisableBiomeSpread;
+        }
+
+        private void DisableBiomeSpread(ILContext il)
+        {
+            var c = new ILCursor(il);
+            /* IL_0022: ldc.i4.0
+             * IL_0023: ceq
+             * IL_0025: stsfld    bool Terraria.WorldGen::AllowedToSpreadInfections
+             * (原版设置的后面 插入)
+             * IL_002A: ldc.i4.3
+             * IL_002B: stloc.1
+             */
+            if (!c.TryGotoNext(
+                MoveType.After,
+                i => i.Match(OpCodes.Ldc_I4_0),
+                i => i.Match(OpCodes.Ceq),
+                i => i.MatchStsfld<WorldGen>(nameof(WorldGen.AllowedToSpreadInfections))
+            ))
+                return;
+
+            var label = c.DefineLabel();
+            c.Emit<MyUtils>(OpCodes.Ldsfld, nameof(Config));
+            c.Emit<ImproveConfigs>(OpCodes.Ldfld, nameof(Config.NoBiomeSpread));
+            c.Emit(OpCodes.Brfalse, label); // 为False，跳走
+            c.Emit(OpCodes.Ldc_I4_0); // 推一个0，也就是False，设置到AllowedToSpreadInfections
+            c.Emit<WorldGen>(OpCodes.Stsfld, nameof(WorldGen.AllowedToSpreadInfections));
+            c.MarkLabel(label);
         }
 
         // 只想要保存增益，不要减益，于是复杂了起来
         private void KeepBuffOnUpdateDead(ILContext il)
-        {
-            var c = new ILCursor(il);
+            {
+                var c = new ILCursor(il);
 
-            /* IL_01C0: ldsfld    bool[] Terraria.Main::persistentBuff
-             * IL_01C5: ldarg.0
-             * IL_01C6: ldfld     int32[] Terraria.Player::buffType
-             * IL_01CB: ldloc.2
-             * IL_01CC: ldelem.i4
-             * IL_01CD: ldelem.u1
-             * IL_01CE: brtrue.s  IL_01E2
-             */
+                /* IL_01C0: ldsfld    bool[] Terraria.Main::persistentBuff
+                 * IL_01C5: ldarg.0
+                 * IL_01C6: ldfld     int32[] Terraria.Player::buffType
+                 * IL_01CB: ldloc.2
+                 * IL_01CC: ldelem.i4
+                 * IL_01CD: ldelem.u1
+                 * IL_01CE: brtrue.s  IL_01E2
+                 */
             if (!c.TryGotoNext(
                 MoveType.After,
                 i => i.MatchLdsfld<Main>(nameof(Main.persistentBuff)),

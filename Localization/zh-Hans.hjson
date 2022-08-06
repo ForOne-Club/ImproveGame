@@ -286,6 +286,7 @@
                 Label: "[i:213] 再生法杖自动种植"
                 Tooltip: "根据收获时的草药种植"
             }
+            NoBiomeSpread.Label: "[i:TeleportationPylonVictory] 禁止邪恶生物群落蔓延"
             RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
             DontDeleteBuff:
             {

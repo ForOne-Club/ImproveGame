@@ -278,6 +278,7 @@ Mods:
                     Label: "[i:213] Staff of Regrowth auto-plant"
                     Tooltip: "Automatically plant the gathered herb"
             }
+            NoBiomeSpread.Label: "[i:TeleportationPylonVictory] ½ûÖ¹Ğ°¶ñÉúÎïÈºÂäÂûÑÓ"
             RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
             DontDeleteBuff:
             {
