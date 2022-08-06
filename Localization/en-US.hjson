@@ -425,7 +425,7 @@ Mods:
                     The mod item icons contained in the config will become text
                     '''
             }
-            ShowModName.Label: "[i:ImproveGame/SpaceWand] Display which mod are the items and NPCs from"
+            ShowModName.Label: "[i:ImproveGame/SpaceWand] Display which mod are the items from"
 
             OtherFunctions:
             {

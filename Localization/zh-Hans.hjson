@@ -432,7 +432,7 @@
                     本配置页面包含的模组物品图标会变作一串字符
                     '''
             }
-            ShowModName.Label: "[i:ImproveGame/SpaceWand] 显示物品、NPC所属模组"
+            ShowModName.Label: "[i:ImproveGame/SpaceWand] 显示物品所属模组"
 
             OtherFunctions:
             {
