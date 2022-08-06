@@ -244,7 +244,7 @@ namespace ImproveGame.Common.GlobalBuffs
         internal static int HidedBuffCountThisFrame;
 
         public override void ModifyBuffTip(int type, ref string tip, ref int rare) {
-            if (!TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _))
+            if (TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _))
                 return;
 
             tip += $"\n{GetText($"Tips.BuffTracker{(BuffTrackerGUI.Visible ? "Off" : "On")}")}";
