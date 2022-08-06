@@ -32,7 +32,7 @@ namespace ImproveGame.Interface.UIElements
 
             _oldMouseLeft = true;
 
-            Width = StyleDimension.FromPixels(540f);
+            Width = StyleDimension.FromPixels(580f);
 
             string name = FilePath.Split('\\').Last();
             name = name[..^FileOperator.Extension.Length]; // name.Substring(0, name.Length - FileOperator.Extension.Length)
@@ -85,7 +85,7 @@ namespace ImproveGame.Interface.UIElements
                 PaddingBottom = 0f,
                 PaddingTop = 0f
             };
-            PathPanel.SetSize(new(Width.Pixels + RenameButton.Left.Pixels - 34f, 23f));
+            PathPanel.SetSize(new(Width.Pixels + RenameButton.Left.Pixels - 44f, 23f));
             Append(PathPanel);
             PathText = new($"Path: {FilePath}", 0.7f)
             {
@@ -198,6 +198,7 @@ namespace ImproveGame.Interface.UIElements
                 return;
             }
             WandSystem.ConstructFilePath = FilePath;
+            PreviewRenderer.ResetPreviewTarget = true;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -243,14 +244,14 @@ namespace ImproveGame.Interface.UIElements
             float scale = 0.7f;
             float dotWidth = font.MeasureString("...").X * scale;
             float pathWidth = font.MeasureString("Path: ").X * scale;
-            if (font.MeasureString(FilePath).X * scale >= innerDimensions.Width - 16f - pathWidth - dotWidth)
+            if (font.MeasureString(FilePath).X * scale >= innerDimensions.Width - 6f - pathWidth - dotWidth)
             {
                 float width = 0f;
                 int i;
                 for (i = FilePath.Length - 1; i > 0; i--)
                 {
                     width += font.MeasureString(FilePath[i].ToString()).X * scale;
-                    if (width >= innerDimensions.Width - 16f - pathWidth - dotWidth)
+                    if (width >= innerDimensions.Width - 6f - pathWidth - dotWidth)
                     {
                         break;
                     }

@@ -174,6 +174,14 @@ namespace ImproveGame.Common.Systems
                     () => { if (BigBagGUI.Visible) BigBagGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Grab Bag Info GUI",
                     () => { if (GrabBagInfoGUI.Visible) GrabBagInfoGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Structure GUI", () =>
+                {
+                    if (StructureGUI.Visible)
+                    {
+                        StructureGUI.Draw(Main.spriteBatch);
+                    }
+                    return true;
+                }, InterfaceScaleType.UI));
             }
 
             int wireIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Wire Selection");
@@ -189,19 +197,6 @@ namespace ImproveGame.Common.Systems
                     }, InterfaceScaleType.UI));
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Paint GUI", DrawPaintGUI, InterfaceScaleType.UI));
-            }
-
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            if (mouseTextIndex != -1)
-            {
-                layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Structure GUI", () =>
-                {
-                    if (StructureGUI.Visible)
-                    {
-                        StructureGUI.Draw(Main.spriteBatch);
-                    }
-                    return true;
-                }, InterfaceScaleType.UI));
             }
         }
 

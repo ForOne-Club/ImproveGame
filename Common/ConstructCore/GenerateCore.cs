@@ -73,10 +73,10 @@ namespace ImproveGame.Common.ConstructCore
                     {
                         tileType = TileID.Dirt;
                     }
-                    int tileItemType = GetTileItem(tileType);
+                    int tileItemType = GetTileItem(tileType, tileData.TileFrameX, tileData.TileFrameY);
                     if (tileItemType != -1)
                     {
-                        var tileObjectData = TileObjectData.GetTileData(tileType, MaterialCore.ItemToPlaceStyle[tileItemType]);
+                        var tileObjectData = TileObjectData.GetTileData(tileType, 0);
                         if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 18 && tileObjectData.CoordinateFullHeight <= 18))
                         {
                             var placePosition = position + new Point(x, y);
@@ -145,14 +145,17 @@ namespace ImproveGame.Common.ConstructCore
                     int index = y + x * (height + 1);
                     TileDefinition tileData = data[index];
                     int tileType = FileOperator.ParseTileType(tileData.Tile);
-                    int tileItemType = GetTileItem(tileType);
-                    if (tileItemType != -1)
+                    var tileObjectData = TileObjectData.GetTileData(tileType, 0);
+                    if (tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 18 || tileObjectData.CoordinateFullHeight > 18))
                     {
-                        var tileObjectData = TileObjectData.GetTileData(tileType, MaterialCore.ItemToPlaceStyle[tileItemType]);
-                        if (tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 18 || tileObjectData.CoordinateFullHeight > 18))
+                        // 转换为帧坐标
+                        int subX = (tileData.TileFrameX / tileObjectData.CoordinateFullWidth) * tileObjectData.CoordinateFullWidth;
+                        int subY = (tileData.TileFrameY / tileObjectData.CoordinateFullHeight) * tileObjectData.CoordinateFullHeight;
+                        int tileItemType = GetTileItem(tileType, subX, subY);
+                        if (tileItemType != -1)
                         {
-                            int subX = tileData.TileFrameX % tileObjectData.CoordinateFullWidth;
-                            int subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
+                            subX = tileData.TileFrameX % tileObjectData.CoordinateFullWidth;
+                            subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
                             Point16 frame = new(subX / 18, subY / 18);
                             if (frame.X == tileObjectData.Origin.X && frame.Y == tileObjectData.Origin.Y)
                             {

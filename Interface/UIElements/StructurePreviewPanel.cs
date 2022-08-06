@@ -7,6 +7,7 @@ namespace ImproveGame.Interface.UIElements
     {
         public string FilePath { get; private set; }
 
+        internal float ViewScale;
         internal int StructureWidth;
         internal int StructureHeight;
         internal int OriginX;
@@ -21,7 +22,7 @@ namespace ImproveGame.Interface.UIElements
         {
             FilePath = path;
             PreviewRenderer.UIPreviewPath = path;
-            this.SetSize(540f, 10f);
+            this.SetSize(580f, 10f);
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -36,6 +37,7 @@ namespace ImproveGame.Interface.UIElements
             {
                 scale = 500f / PreviewRenderer.UIPreviewTarget.Width;
             }
+            ViewScale = scale;
 
             spriteBatch.Draw(PreviewRenderer.UIPreviewTarget, center, null, Color.White, 0f, PreviewRenderer.UIPreviewTarget.Size() / 2f, scale, SpriteEffects.None, 0f);
 
@@ -96,12 +98,13 @@ namespace ImproveGame.Interface.UIElements
             OriginY = tag.GetInt("OriginY");
 
             float uiHeight = StructureHeight * 16f + 50f;
-            if (Height.Pixels != uiHeight)
+            if (Height.Pixels != uiHeight * ViewScale)
             {
-                Height.Pixels = uiHeight;
+                Height.Pixels = uiHeight * ViewScale;
                 Recalculate();
                 _cacheUpdateResetHeight = true;
                 PreviewRenderer.UIPreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)StructureWidth * 16 + 20, (int)StructureHeight * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
+                PreviewRenderer.ResetUIPreviewTarget = true;
             }
 
             base.Update(gameTime);

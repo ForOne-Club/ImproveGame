@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ConstructCore;
+using System.Collections.Generic;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ObjectData;
@@ -10,36 +11,36 @@ namespace ImproveGame
     {
         public static int GetItemTile(int itemType)
         {
-            if (MaterialCore.FinishSetup && MaterialCore.ItemToTile.ContainsKey(itemType))
+            if (MaterialCore.FinishSetup && MaterialCore.ItemToTile.TryGetValue(itemType, out int tileType))
             {
-                return MaterialCore.ItemToTile[itemType];
+                return tileType;
             }
             return -1;
         }
 
-        public static int GetTileItem(int tileType)
+        public static int GetTileItem(int tileType, int tileFrameX, int tileFrameY)
         {
-            if (MaterialCore.FinishSetup && MaterialCore.ItemToTile.ContainsValue(tileType))
+            if (MaterialCore.FinishSetup && MaterialCore.TileToItem.TryGetValue(tileType, out List<int> itemTypes))
             {
-                return MaterialCore.ItemToTile.FirstOrDefault(i => i.Value == tileType).Key;
+                return itemTypes.FirstOrDefault(i => (MaterialCore.ItemToPlaceStyle[i] == TileFrameToPlaceStyle(tileType, tileFrameX, tileFrameY) || i >= Main.maxItemTypes), -1);
             }
             return -1;
         }
 
         public static int GetItemWall(int itemType)
         {
-            if (MaterialCore.FinishSetup && MaterialCore.ItemToWall.ContainsKey(itemType))
+            if (MaterialCore.FinishSetup && MaterialCore.ItemToWall.TryGetValue(itemType, out int wallType))
             {
-                return MaterialCore.ItemToWall[itemType];
+                return MaterialCore.ItemToWall[wallType];
             }
             return -1;
         }
 
         public static int GetWallItem(int wallType)
         {
-            if (MaterialCore.FinishSetup && MaterialCore.ItemToWall.ContainsValue(wallType))
+            if (MaterialCore.FinishSetup && MaterialCore.WallToItem.TryGetValue(wallType, out int itemType))
             {
-                return MaterialCore.ItemToWall.FirstOrDefault(i => i.Value == wallType).Key;
+                return itemType;
             }
             return -1;
         }

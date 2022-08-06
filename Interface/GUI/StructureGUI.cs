@@ -15,6 +15,9 @@ namespace ImproveGame.Interface.GUI
         public bool CacheSetupStructureInfos; // 缓存，在下一帧Setup
         public string CacheStructureInfoPath;
 
+        private int oldScreenWidth;
+        private int oldScreenHeight;
+
         public Asset<Texture2D> SaveTexture;
         public Asset<Texture2D> LoadTexture;
         public Asset<Texture2D> RefreshTexture;
@@ -40,10 +43,10 @@ namespace ImproveGame.Interface.GUI
 
             BasePanel = new(new(29, 34, 70), new(44, 57, 105, 160))
             {
-                Top = StyleDimension.FromPixels(100f),
+                Top = StyleDimension.FromPixels(150f),
                 HAlign = 0.5f
             };
-            BasePanel.SetSize(600f, 0f, precentHeight: 0.7f).SetPadding(12f);
+            BasePanel.SetSize(600f, 0f, precentHeight: 0.6f).SetPadding(12f);
             Append(BasePanel);
 
             UIList = new UIList
@@ -55,22 +58,20 @@ namespace ImproveGame.Interface.GUI
                 ListPadding = 4f,
             };
             UIList.SetPadding(2f);
+            UIList.ManualSortMethod = (list) => { }; // 阻止他自动排序
             BasePanel.Append(UIList);
 
-            Scrollbar = new(UserInterface)
-            {
-                HAlign = 1f,
-                VAlign = 0.5f
-            };
-            Scrollbar.Left.Set(-2f, 0f);
-            Scrollbar.Height.Set(-10f, 1f);
+            Scrollbar = new(UserInterface);
+            Scrollbar.Left.Set(310f, 0.5f);
+            Scrollbar.Top.Set(154f, 0f);
+            Scrollbar.Height.Set(-8f, 0.6f);
             Scrollbar.SetView(100f, 1000f);
             //UIList.SetScrollbar(Scrollbar); // 用自己的代码
             SetupScrollBar();
-            BasePanel.Append(Scrollbar);
+            Append(Scrollbar);
 
             RefreshButton = QuickButton(RefreshTexture);
-            RefreshButton.SetPos(new(-296f, 50f), 0.5f, 0f);
+            RefreshButton.SetPos(new(-296f, 100f), 0.5f, 0f);
             RefreshButton.OnMouseDown += (_, _) =>
             {
                 FileOperator.CachedStructureDatas.Clear();
@@ -79,12 +80,12 @@ namespace ImproveGame.Interface.GUI
             Append(RefreshButton);
 
             var folderButton = QuickButton(GetTexture("UI/Construct/Folder"));
-            folderButton.SetPos(new(-246f, 50f), 0.5f, 0f);
+            folderButton.SetPos(new(-246f, 100f), 0.5f, 0f);
             folderButton.OnMouseDown += (_, _) => TrUtils.OpenFolder(FileOperator.SavePath);
             Append(folderButton);
 
             var modeButton = QuickButton(SaveTexture);
-            modeButton.SetPos(new(-196f, 50f), 0.5f, 0f);
+            modeButton.SetPos(new(-196f, 100f), 0.5f, 0f);
             modeButton.OnMouseDown += (_, _) =>
             {
                 if (WandSystem.ConstructMode == WandSystem.Construct.Place)
@@ -102,7 +103,7 @@ namespace ImproveGame.Interface.GUI
             Append(modeButton);
 
             var closeButton = QuickButton(GetTexture("UI/Construct/Close"));
-            closeButton.SetPos(new(246f, 50f), 0.5f, 0f);
+            closeButton.SetPos(new(246f, 100f), 0.5f, 0f);
             closeButton.OnMouseDown += (_, _) => Close();
             Append(closeButton);
         }
@@ -120,9 +121,16 @@ namespace ImproveGame.Interface.GUI
         private void SetupScrollBar(bool resetViewPosition = true)
         {
             float height = UIList.GetInnerDimensions().Height;
-            Scrollbar.SetView(height, UIList.GetTotalHeight());
+            float totalHeight = UIList.GetTotalHeight();
+            Scrollbar.SetView(height, totalHeight);
             if (resetViewPosition)
                 Scrollbar.ViewPosition = 0f;
+
+            Scrollbar.Visible = true;
+            if (height >= totalHeight)
+            {
+                Scrollbar.Visible = false;
+            }
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)
@@ -163,9 +171,19 @@ namespace ImproveGame.Interface.GUI
 
             if (BasePanel.IsMouseHovering)
             {
-                PlayerInput.LockVanillaMouseScroll("ImproveGame: Structure GUI");
+                if (Scrollbar.Visible)
+                {
+                    PlayerInput.LockVanillaMouseScroll("ImproveGame: Structure GUI");
+                }
                 Main.LocalPlayer.mouseInterface = true;
             }
+
+            if (oldScreenHeight != Main.screenHeight)
+            {
+                SetupScrollBar(false);
+            }
+
+            oldScreenHeight = Main.screenHeight;
         }
 
         // 当前结构的信息
@@ -186,11 +204,38 @@ namespace ImproveGame.Interface.GUI
                 return;
             }
 
+            static UIText QuickUIText(string text, float originY) => new(text, 0.6f, true)
+            {
+                Height = StyleDimension.FromPixels(50f),
+                Width = StyleDimension.FromPercent(1f),
+                TextOriginX = 0.5f,
+                TextOriginY = originY
+            };
+            static UIText QuickSmallUIText(string text) => new(text)
+            {
+                Height = StyleDimension.FromPixels(24f),
+                Width = StyleDimension.FromPercent(1f),
+                TextOriginX = 0.5f,
+                TextOriginY = 0f
+            };
+
+            UIList.Add(QuickUIText("文件信息", 0.5f));
+            string name = CacheStructureInfoPath.Split('\\').Last();
+            name = name[..^FileOperator.Extension.Length];
+            UIList.Add(QuickSmallUIText($"文件名: {name}"));
+            UIList.Add(QuickSmallUIText($"版本号: v{tag.GetString("ModVersion")}"));
+            UIList.Add(QuickSmallUIText($"结构尺寸: {tag.GetInt("Width")}x{tag.GetInt("Height")}"));
+
+            UIList.Add(QuickUIText("材料明细", 0.8f));
+
             var materialsAndStacks = MaterialCore.CountMaterials(tag);
-            foreach ((int itemType, int stack) in materialsAndStacks)
+            var sortedResult = from pair in materialsAndStacks orderby pair.Key ascending select pair; // 排序
+            foreach ((int itemType, int stack) in sortedResult)
             {
                 UIList.Add(new MaterialInfoElement(itemType, stack));
             }
+
+            UIList.Add(QuickUIText("结构预览", 0.85f));
 
             var viewPanel = new StructurePreviewPanel(CacheStructureInfoPath);
             viewPanel.OnResetHeight += (_) => SetupScrollBar(false);

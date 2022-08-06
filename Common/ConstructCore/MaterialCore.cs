@@ -11,6 +11,9 @@ namespace ImproveGame.Common.ConstructCore
         public static Dictionary<int, int> ItemToPlaceStyle { get; private set; } = new();
         public static Dictionary<int, int> ItemToTile { get; private set; } = new();
         public static Dictionary<int, int> ItemToWall { get; private set; } = new();
+        // 反表
+        public static Dictionary<int, List<int>> TileToItem { get; private set; } = new();
+        public static Dictionary<int, int> WallToItem { get; private set; } = new();
         internal static bool FinishSetup { get; private set; } = false;
 
         public static Dictionary<int, int> CountMaterials(TagCompound tag)
@@ -29,27 +32,31 @@ namespace ImproveGame.Common.ConstructCore
             foreach (var tileData in data)
             {
                 int tileType = FileOperator.ParseTileType(tileData.Tile);
-                if (tileType is not -1 && TileID.Sets.Grass[tileType])
+                if (tileType is not -1)
                 {
-                    tileType = TileID.Dirt;
-                }
-                int tileItemType = GetTileItem(tileType);
-                if (tileItemType != -1)
-                {
-                    var tileObjectData = TileObjectData.GetTileData(tileType, ItemToPlaceStyle[tileItemType]);
+                    if (TileID.Sets.Grass[tileType])
+                        tileType = TileID.Dirt;
+
+                    int tileItemType;
+                    var tileObjectData = TileObjectData.GetTileData(tileType, 0);
                     bool isMaterialVaild;
                     if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 18 && tileObjectData.CoordinateFullHeight <= 18))
                     {
+                        tileItemType = GetTileItem(tileType, tileData.TileFrameX, tileData.TileFrameY);
                         isMaterialVaild = true;
                     }
                     else
                     {
-                        int subX = tileData.TileFrameX % tileObjectData.CoordinateFullWidth;
-                        int subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
+                        int subX = (tileData.TileFrameX / tileObjectData.CoordinateFullWidth) * tileObjectData.CoordinateFullWidth;
+                        int subY = (tileData.TileFrameY / tileObjectData.CoordinateFullHeight) * tileObjectData.CoordinateFullHeight;
+                        tileItemType = GetTileItem(tileType, subX, subY);
+
+                        subX = tileData.TileFrameX % tileObjectData.CoordinateFullWidth;
+                        subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
                         Point16 frame = new(subX / 18, subY / 18);
                         isMaterialVaild = frame.X == tileObjectData.Origin.X && frame.Y == tileObjectData.Origin.Y;
                     }
-                    if (isMaterialVaild)
+                    if (isMaterialVaild && tileItemType is not -1)
                     {
                         if (!materialDictionary.ContainsKey(tileItemType))
                             materialDictionary[tileItemType] = 1;
@@ -84,10 +91,19 @@ namespace ImproveGame.Common.ConstructCore
                         int targetTile = item.createTile;
                         ItemToTile.Add(i, targetTile);
                         ItemToPlaceStyle.Add(i, item.placeStyle);
+                        if (TileToItem.ContainsKey(targetTile))
+                        {
+                            TileToItem[targetTile].Add(i);
+                        }
+                        else
+                        {
+                            TileToItem.Add(targetTile, new() { i });
+                        }
                     }
                     if (item.createWall != -1)
                     {
                         ItemToWall.Add(i, item.createWall);
+                        WallToItem.Add(item.createWall, i);
                     }
                 }
                 FinishSetup = true;

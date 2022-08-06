@@ -13,7 +13,7 @@
 
         public MaterialInfoElement(int itemType, int stackRequired)
         {
-            this.SetSize(new Vector2(0f, 30f), 1f);
+            this.SetSize(new Vector2(0f, 28f), 1f);
             BorderColor = Color.Transparent;
             BackgroundColor = Color.Transparent;
 
@@ -26,7 +26,7 @@
                 IgnoresMouseInteraction = true,
                 DrawPanel = false,
                 VAlign = 0.5f,
-                Left = new StyleDimension(-150f, 1f)
+                Left = new StyleDimension(-110f, 1f)
             };
             Append(StackInfo);
 
@@ -35,7 +35,7 @@
                 IgnoresMouseInteraction = true,
                 DrawPanel = false,
                 VAlign = 0.5f,
-                Left = new StyleDimension(-280f, 1f)
+                Left = new StyleDimension(-250f, 1f)
             };
             Append(StackCheckedInfo);
 
@@ -83,12 +83,13 @@
             base.DrawSelf(spriteBatch);
 
             var dimensions = GetDimensions();
-            dimensions.Width = 30f;
+            dimensions.Width = 28f;
+            dimensions.X += 16f;
             ArrayItemSlot.DrawItem(sb: spriteBatch,
                                    Item: iconItem,
                                    lightColor: Color.White,
                                    dimensions: dimensions,
-                                   ItemSize: 28);
+                                   ItemSize: 26);
         }
 
         public override void Update(GameTime gameTime)

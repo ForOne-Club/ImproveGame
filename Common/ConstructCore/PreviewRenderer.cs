@@ -9,8 +9,12 @@ namespace ImproveGame.Common.ConstructCore
     internal class PreviewRenderer : ModSystem
     {
         internal static RenderTarget2D PreviewTarget;
+        internal static bool ResetPreviewTarget;
+        private bool _canDrawLastFrame;
+
         internal static string UIPreviewPath;
         internal static RenderTarget2D UIPreviewTarget; // 不知道为什么，Preview绘制就不会裂开
+        internal static bool ResetUIPreviewTarget;
 
         public override void Load()
         {
@@ -51,9 +55,27 @@ namespace ImproveGame.Common.ConstructCore
                         File.Exists(WandSystem.ConstructFilePath))
                     {
                         var color = Color.White * 0.6f;
-                        var drawPosition = PreviewTarget.Size() / 2f;
+                        var drawPosition = Main.MouseWorld;
+                        drawPosition = drawPosition.ToTileCoordinates().ToWorldCoordinates(0f, 0f) - Main.screenPosition;
                         var spriteEffects = Main.LocalPlayer.gravDir is -1 ? SpriteEffects.FlipVertically : SpriteEffects.None;
-                        Main.spriteBatch.Draw(PreviewTarget, drawPosition, null, color, 0f, PreviewTarget.Size() / 2f, 1f, spriteEffects, 0f);
+
+                        var tag = FileOperator.GetTagFromFile(WandSystem.ConstructFilePath);
+
+                        if (tag is null)
+                            return true;
+
+                        // 添加Origin偏移
+                        drawPosition.X -= tag.GetInt("OriginX") * 16f;
+                        drawPosition.Y -= tag.GetInt("OriginY") * 16f * Main.LocalPlayer.gravDir;
+                        if (Main.LocalPlayer.gravDir is -1) // 做一个重力转换
+                        {
+                            float oppositeY = (drawPosition.Y - Main.screenHeight / 2);
+                            drawPosition.Y -= oppositeY * 2f;
+                            drawPosition.Y -= Main.screenHeight; // 不知道啊不知道
+                        }
+                        drawPosition -= new Vector2(2f, 2f * Main.LocalPlayer.gravDir);
+
+                        Main.spriteBatch.Draw(PreviewTarget, drawPosition, null, color, 0f, Vector2.Zero, 1f, spriteEffects, 0f);
                     }
                     return true;
                 }, InterfaceScaleType.Game));
@@ -102,46 +124,49 @@ namespace ImproveGame.Common.ConstructCore
 
         private void DrawTarget(On.Terraria.Main.orig_CheckMonoliths orig)
         {
-            Main.spriteBatch.Begin();
-
-            Main.graphics.GraphicsDevice.SetRenderTarget(PreviewTarget);
-            Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-
-            if (Main.LocalPlayer.HeldItem?.type == ModContent.ItemType<ConstructWand>() &&
-                WandSystem.ConstructMode == WandSystem.Construct.Place &&
-                !string.IsNullOrEmpty(WandSystem.ConstructFilePath) &&
-                File.Exists(WandSystem.ConstructFilePath))
+            bool canDraw = Main.LocalPlayer.HeldItem?.type == ModContent.ItemType<ConstructWand>() &&
+                WandSystem.ConstructMode == WandSystem.Construct.Place;
+            if (((canDraw && !_canDrawLastFrame) || ResetPreviewTarget) && !string.IsNullOrEmpty(WandSystem.ConstructFilePath) && File.Exists(WandSystem.ConstructFilePath))
             {
-                DrawStrcturePreview(Main.spriteBatch);
+                DrawPreviewToRender(PreviewTarget, WandSystem.ConstructFilePath);
+                ResetPreviewTarget = false;
             }
+            _canDrawLastFrame = canDraw;
 
-            Main.spriteBatch.End();
-            Main.graphics.GraphicsDevice.SetRenderTarget(null);
-
-            if (!string.IsNullOrEmpty(UIPreviewPath) && File.Exists(UIPreviewPath))
+            if (!string.IsNullOrEmpty(UIPreviewPath) && File.Exists(UIPreviewPath) && ResetUIPreviewTarget)
             {
-                Main.spriteBatch.Begin();
-
-                Main.graphics.GraphicsDevice.SetRenderTarget(UIPreviewTarget);
-                Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-
-                var tag = FileOperator.GetTagFromFile(UIPreviewPath);
-
-                if (tag is null)
-                    return;
-
-                int width = tag.GetInt("Width");
-                int height = tag.GetInt("Height");
-                var color = Color.GreenYellow;
-                var position = Vector2.Zero + new Vector2(2f, 2f);
-                DrawBorder(position, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
-                DrawPreviewFromTag(Main.spriteBatch, tag, position, 1f);
-
-                Main.spriteBatch.End();
-                Main.graphics.GraphicsDevice.SetRenderTarget(null);
+                DrawPreviewToRender(UIPreviewTarget, UIPreviewPath);
+                ResetUIPreviewTarget = false;
             }
 
             orig();
+        }
+
+        private static void DrawPreviewToRender(RenderTarget2D renderTarget, string filePath)
+        {
+            Main.spriteBatch.Begin();
+
+            Main.graphics.GraphicsDevice.SetRenderTarget(renderTarget);
+            Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+
+            var tag = FileOperator.GetTagFromFile(filePath);
+
+            if (tag is null)
+            {
+                Main.spriteBatch.End();
+                Main.graphics.GraphicsDevice.SetRenderTarget(null);
+                return;
+            }
+
+            int width = tag.GetInt("Width");
+            int height = tag.GetInt("Height");
+            var color = Color.GreenYellow;
+            var position = Vector2.Zero + new Vector2(2f, 2f);
+            DrawBorder(position, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
+            DrawPreviewFromTag(Main.spriteBatch, tag, position, 1f);
+
+            Main.spriteBatch.End();
+            Main.graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
         public static bool DrawPreviewFromTag(SpriteBatch sb, TagCompound tag, Vector2 origin, float scale = 1f)
@@ -204,7 +229,15 @@ namespace ImproveGame.Common.ConstructCore
                         Texture2D texture = TextureAssets.Tile[tileType].Value;
                         var normalTileRect = new Rectangle(tileData.TileFrameX, tileData.TileFrameY, 16, 16);
 
-                        if (tileData.BlockType is not BlockType.HalfBlock or BlockType.Solid)
+                        int tileItemType = GetTileItem(tileType, tileData.TileFrameX, tileData.TileFrameY);
+                        TileObjectData tileObjectData = null;
+                        if (tileItemType is not -1)
+                        {
+                            tileObjectData = TileObjectData.GetTileData(tileType, MaterialCore.ItemToPlaceStyle[tileItemType]);
+                        }
+                        bool multiTile = tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 18 || tileObjectData.CoordinateFullHeight > 18);
+
+                        if (tileData.BlockType is not BlockType.HalfBlock or BlockType.Solid && !multiTile)
                         {
                             if (TileID.Sets.Platforms[tileType])
                             {
@@ -266,14 +299,6 @@ namespace ImproveGame.Common.ConstructCore
                         }
                         EndSlopeDraw:;
 
-                        int tileItemType = GetTileItem(tileType);
-                        TileObjectData tileObjectData = null;
-                        if (tileItemType is not -1)
-                        {
-                            tileObjectData = TileObjectData.GetTileData(tileType, MaterialCore.ItemToPlaceStyle[tileItemType]);
-                        }
-
-                        bool multiTile = tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 18 || tileObjectData.CoordinateFullHeight > 18);
                         if (!multiTile)
                         {
                             int num7 = ((int)tileData.BlockType <= 3) ? 14 : 0;
