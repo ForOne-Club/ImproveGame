@@ -31,38 +31,8 @@ namespace ImproveGame.Common.Systems
             orig.Invoke();
         }
 
-        static public string MouseText;
-        static public bool SecondLine;
-
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            if (mouseTextIndex != -1)
-            {
-                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer("ImproveGame: Mouse Text", delegate
-                {
-                    if (!string.IsNullOrEmpty(MouseText))
-                    {
-                        string coloredString = String.Format("[c/{1}:[{0}][c/{1}:]]", MouseText, Colors.RarityBlue.Hex3());
-                        var text = ChatManager.ParseMessage(coloredString, Color.White).ToArray();
-                        //float x = Main.fontMouseText.MeasureString(MouseText).X;
-                        float x = ChatManager.GetStringSize(FontAssets.MouseText.Value, text, Vector2.One).X;
-                        var pos = Main.MouseScreen + new Vector2(16f, 16f);
-                        if (pos.Y > (float)(Main.screenHeight - 30))
-                            pos.Y = (float)(Main.screenHeight - 30);
-                        if (pos.X > (float)(Main.screenWidth - x))
-                            pos.X = (float)(Main.screenWidth - x);
-                        if (SecondLine)
-                            pos.Y += FontAssets.MouseText.Value.LineSpacing;
-
-                        ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, text, pos, 0f, Vector2.Zero, Vector2.One, out int hoveredSnippet);
-                    }
-                    MouseText = string.Empty;
-                    SecondLine = false;
-                    return true;
-                }, InterfaceScaleType.UI));
-            }
-
             int rulerIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Ruler"));
             if (rulerIndex != -1)
             {
