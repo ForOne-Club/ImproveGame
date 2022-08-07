@@ -20,31 +20,16 @@ namespace ImproveGame.Interface.GUI
             set => visible = value;
         }
 
-        public UIText title;
+        public UITitle title;
         public SUIPanel MainPanel;
-        public UIImageButton CloseButton;
+        public BackgroundImage CloseButton;
         public PictureButton[] buttons = new PictureButton[4];
         public ModItemGrid ItemGrid;
+        public Checkbox[] checkbox = new Checkbox[3];
 
         public void SetSuperVault(Item[] items, Vector2 SuperVaultPos)
         {
-            title.SetText(MyUtils.GetText("SuperVault.Name"));
-            title.SetSize(MyUtils.GetBigTextSize(MyUtils.GetText("SuperVault.Name")) * 0.5f);
-
-            buttons[0].SetText(Lang.inter[29].Value);
-            buttons[0].SetPos(0f, title.Bottom() - 10f);
-
-            buttons[1].SetText(Lang.inter[30].Value);
-            buttons[1].SetPos(buttons[0].Right() + 10f, buttons[0].Top());
-
-            buttons[2].SetText(Lang.inter[31].Value);
-            buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
-
-            buttons[3].SetText(GetText("SuperVault.Sort"));
-            buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
-
             ItemGrid.SetInventory(items);
-
             MainPanel.SetPos(SuperVaultPos)
                 .SetSizeInside(ItemGrid.Width(), ItemGrid.Height() + ItemGrid.Top())
                 .Recalculate();
@@ -76,34 +61,48 @@ namespace ImproveGame.Interface.GUI
             };
             Append(MainPanel);
 
-            MainPanel.Append(title = new(MyUtils.GetText("SuperVault.Name"), 0.5f, true));
-            title.Top.Pixels = 10f;
-            title.SetSize(MyUtils.GetBigTextSize(MyUtils.GetText("SuperVault.Name")) * 0.5f);
+            MainPanel.Append(title = new(GetText("SuperVault.Name"), 0.5f) { HAlign = 0f });
+            title.Top.Pixels = 5f;
+
+            MainPanel.Append(CloseButton = new(GetTexture("Close").Value) { HAlign = 1f });
+            CloseButton.Height.Pixels = title.Height();
+            CloseButton.Top.Pixels = 5f;
+            CloseButton.OnMouseDown += (evt, uie) => Visible = false;
+
+            MainPanel.Append(checkbox[0] = new Checkbox("参与合成", 0.8f));
+            checkbox[0].Top.Pixels = title.Bottom() + 10f;
+
+            MainPanel.Append(checkbox[1] = new Checkbox("智能拾取", 0.8f));
+            checkbox[1].Left.Pixels = checkbox[0].Right() + 10;
+            checkbox[1].Top.Pixels = checkbox[0].Top();
+
+            MainPanel.Append(checkbox[2] = new Checkbox("背包溢出自动拾取", 0.8f));
+            checkbox[2].Left.Pixels = checkbox[1].Right() + 10;
+            checkbox[2].Top.Pixels = checkbox[0].Top();
 
             buttons[0] = new(MyUtils.GetTexture("UI/Quick").Value, Lang.inter[29].Value);
-            buttons[0].SetPos(0f, title.Bottom() - 10f);
+            buttons[0].SetText(Lang.inter[29].Value);
+            buttons[0].SetPos(0f, checkbox[0].Bottom() + 10f);
             buttons[0].OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
             MainPanel.Append(buttons[0]);
 
             buttons[1] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[30].Value);
+            buttons[1].SetText(Lang.inter[30].Value);
             buttons[1].SetPos(buttons[0].Right() + 10f, buttons[0].Top());
             buttons[1].OnMouseDown += (_, _) => PutAll();
             MainPanel.Append(buttons[1]);
 
             buttons[2] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[31].Value);
+            buttons[2].SetText(Lang.inter[31].Value);
             buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
             buttons[2].OnMouseDown += (_, _) => Replenish();
             MainPanel.Append(buttons[2]);
 
             buttons[3] = new(MyUtils.GetTexture("UI/Put").Value, MyUtils.GetText("SuperVault.Sort"));
+            buttons[3].SetText(GetText("SuperVault.Sort"));
             buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
             buttons[3].OnMouseDown += (_, _) => Sort();
             MainPanel.Append(buttons[3]);
-
-            CloseButton = new(MyUtils.GetTexture("Close")) { HAlign = 1f };
-            CloseButton.Left.Set(-2, 0);
-            CloseButton.OnClick += (evt, uie) => Visible = false;
-            MainPanel.Append(CloseButton);
 
             ItemGrid = new ModItemGrid();
             ItemGrid.Top.Pixels = buttons[0].Top() + buttons[0].Height() + 10f;

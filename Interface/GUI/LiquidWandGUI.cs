@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 
 namespace ImproveGame.Interface.GUI

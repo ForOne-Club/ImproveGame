@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
 using Terraria.GameInput;
@@ -199,8 +200,8 @@ namespace ImproveGame.Content.Items
         {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddRecipeGroup(ModRecipeGroup.ShadowGroup, 18)
-                .AddRecipeGroup(ModRecipeGroup.GoldGroup, 12)
+                .AddRecipeGroup(RecipeSystem.ShadowGroup, 18)
+                .AddRecipeGroup(RecipeSystem.GoldGroup, 12)
                 .AddTile(TileID.Anvils)
                 .Register();
         }

@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
 
@@ -15,7 +15,7 @@ namespace ImproveGame.Common.Players
         private readonly int[] oldSuperVaultStack = new int[100]; // 上一帧的SuperVault的stack情况
         public readonly Item[] SuperVault = new Item[100];
         public bool SuperVaultVisable;
-        private Vector2 SuperVaultPos;
+        public Vector2 SuperVaultPos;
 
         /// <summary>
         /// 记录ID
@@ -26,13 +26,6 @@ namespace ImproveGame.Common.Players
         /// 格式：Mod内部名/Buff类名
         /// </summary>
         public List<string> InfBuffDisabledMod;
-
-        // 进入地图时候
-        public override void OnEnterWorld(Player player)
-        {
-            // 这个方法仅在加入端调用，在服务器和其他端均不调用
-            UISystem.Instance.BigBagGUI.SetSuperVault(SuperVault, SuperVaultPos);
-        }
 
         public override void ResetEffects()
         {

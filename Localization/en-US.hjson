@@ -63,7 +63,20 @@ Mods:
                     (Need to set up hot keys in Controls)
                     '''
             }
-            ItemMaxStack.Label: "[i:9] Max stack"
+            SuperVaultMaterial:
+            {
+                Label: "[i:3813] Craft using materials in Huge Inventory"
+                Tooltip:  "Materials in Huge Inventory can be used in crafting directly"
+            }
+            ItemMaxStack:
+            {
+                Label: "[i:9] Max stack"
+                Tooltip: 
+                    '''
+                    Set the max stack of items
+                    Platinum Coins cannot stack over 2000
+                    '''
+            }
             GrabDistance:
             {
                 Label: "[i:5010] Increase item pickup range (measured in blocks)"
@@ -270,6 +283,7 @@ Mods:
                     Label: "[i:213] Staff of Regrowth auto-plant"
                     Tooltip: "Automatically plant the gathered herb"
             }
+            NoBiomeSpread.Label: "[i:TeleportationPylonVictory] Stop the evil biomes and the Hallow biome from spreading"
             RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
             DontDeleteBuff:
             {
@@ -411,7 +425,7 @@ Mods:
                     The mod item icons contained in the config will become text
                     '''
             }
-            ShowModName.Label: "[i:ImproveGame/SpaceWand] Display which mod are the items and NPCs from"
+            ShowModName.Label: "[i:ImproveGame/SpaceWand] Display which mod are the items from"
 
             OtherFunctions:
             {
@@ -763,6 +777,7 @@ Mods:
         {
             HugeInventory: "Huge Inventory"
             BuffTracker: "Buff Tracker"
+            BuffTracker.Tip: "Clicking on a buff icon no longer opens the Buff Tracker if the keybind is set"
             GrabBagLoot: "Display grab bag loot"
             HotbarSwitch: "Swap hotbar"
             HotbarSwitch.Tip: "Swap items in the first row with the second row in inventory"

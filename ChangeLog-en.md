@@ -4,15 +4,19 @@
 ## Subversions:
 - v1.6.1.0
 - v1.6.1.1
+- v1.6.1.2
 ## BUG Fixes:
 - **[v1.6.1.0]** Fixed an issue with launching servers
-- **[v1.6.1.1]** "超级虚空保险库"修复失效BUG
-- **[v1.6.1.1]** 修复了大背包在没有拿出物品的时候仍然有音效的BUG
-- **[v1.6.1.1]** 修复了大背包开启"宝藏带"与"钓鱼箱"时会将物品拿到鼠标的BUG
+- **[v1.6.1.1]** Fixed the Super Void Vault feature not working
+- **[v1.6.1.1]** Fixed the Huge Inventory playing a sound without an item been taken out
+- **[v1.6.1.1]** Fixed certain treasure bags and crates being taken up when right click them in the Huge Inventory
+- **[v1.6.1.2]** Fixed an issue with infinite ingredients
 ## Additions:
 - **[v1.6.1.0]** Reworked the Huge Inventory's UI, now looks nicer
-- **[v1.6.1.0]** 显示物品、NPC所属模组功能现在可开关了
-- **[v1.6.1.1]** 大背包内的物品现在可以作为制作材料了
+- **[v1.6.1.0]** The 'WMITF' feature now can be toggled off
+- **[v1.6.1.1]** Items in the Huge Inventory now can be used as crafting materials directly
+- **[v1.6.1.2]** The feature above can be toggled off
+- **[v1.6.1.2]** Can stop the spread of the Corruption, the Crimson and the Hallow biomes
 
 # v1.6.0
 ## Subversions:

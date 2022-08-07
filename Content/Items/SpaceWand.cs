@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
@@ -230,7 +231,7 @@ namespace ImproveGame.Content.Items
         {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddRecipeGroup(ModRecipeGroup.DemoniteGroup, 8)
+                .AddRecipeGroup(RecipeSystem.DemoniteGroup, 8)
                 .AddIngredient(ItemID.Amethyst, 8)
                 .AddTile(TileID.WorkBenches)
                 .Register();

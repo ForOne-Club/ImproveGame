@@ -2,8 +2,8 @@
 {
     public class ModItemList : UIElement
     {
-        public readonly static int HCount = 10; // 横向格子的数量
-        public readonly static int VCount = 5; // 纵向格子的数量
+        public int HCount = 10; // 横向格子的数量
+        public int VCount = 5; // 纵向格子的数量
 
         public Item[] items;
         public ArrayItemSlot ItemSlot;
@@ -21,37 +21,38 @@
                 ItemSlot.SetPos(col * (ItemSlot.Width() + 10f), row * (ItemSlot.Height() + 10f));
                 Append(ItemSlot);
             }
+            int VCount = items.Length / HCount;
+            Height.Pixels = 52 * VCount + 10f * (VCount - 1);
         }
 
         public event MouseEvent OnMouseDownSlot;
 
-        public ModItemList(Vector2 SlotSize)
-        {
-            ModifySize(SlotSize);
-        }
-
-        public void ModifySize(Vector2 SlotSize)
-        {
-            Width.Pixels = SlotSize.X * HCount + 10f * (HCount - 1);
-            Height.Pixels = SlotSize.Y * VCount + 10f * (VCount - 1);
-        }
-
-        public override void OnInitialize()
+        public ModItemList(int HCount = 10, int VCount = 5)
         {
             SetPadding(0);
+
+            this.HCount = HCount;
+            this.VCount = VCount;
+
+            Width.Pixels = 52 * HCount + 10f * (HCount - 1);
+            Height.Pixels = 52 * VCount + 10f * (VCount - 1);
         }
 
+        // 因为,
         public override bool ContainsPoint(Vector2 point) => true;
 
+        // 只绘制范围内的孩子.
         protected override void DrawChildren(SpriteBatch spriteBatch)
         {
-            var position = Parent.GetDimensions().Position();
-            var dimensions = new Vector2(Parent.GetDimensions().Width, Parent.GetDimensions().Height);
+            CalculatedStyle dimensions1 = Parent.GetDimensions();
+            var position1 = dimensions1.Position();
+            var size1 = dimensions1.Size();
             foreach (UIElement uie in Elements)
             {
-                var position2 = uie.GetDimensions().Position();
-                var dimensions2 = new Vector2(uie.GetDimensions().Width, uie.GetDimensions().Height);
-                if (Collision.CheckAABBvAABBCollision(position, dimensions, position2, dimensions2))
+                CalculatedStyle dimensions2 = uie.GetDimensions();
+                var position2 = dimensions2.Position();
+                var size2 = dimensions2.Size();
+                if (Collision.CheckAABBvAABBCollision(position1, size1, position2, size2))
                 {
                     uie.Draw(spriteBatch);
                 }

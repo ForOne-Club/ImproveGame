@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameInput;
 
@@ -94,10 +95,11 @@ namespace ImproveGame.Common.Players
                 else
                     UISystem.Instance.BuffTrackerGUI.Open();
             }
-            if (KeybindSystem.GrabBagKeybind.JustPressed && Main.HoverItem is not null && ItemLoader.CanRightClick(Main.HoverItem))
+            if (KeybindSystem.GrabBagKeybind.JustPressed && Main.HoverItem is not null)
             {
                 var item = Main.HoverItem;
                 bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: true).Count > 0;
+                hasLoot &= CollectHelper.ItemCanRightClick[Main.HoverItem.type] || ItemLoader.CanRightClick(Main.HoverItem);
                 if (GrabBagInfoGUI.Visible && (GrabBagInfoGUI.ItemID == item.type || item.IsAir || !hasLoot))
                     UISystem.Instance.GrabBagInfoGUI.Close();
                 else if (item is not null && hasLoot)

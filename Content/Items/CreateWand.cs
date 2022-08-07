@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -585,7 +586,7 @@ namespace ImproveGame.Content.Items
         {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddRecipeGroup(ModRecipeGroup.GoldGroup, 12)
+                .AddRecipeGroup(RecipeSystem.GoldGroup, 12)
                 .AddIngredient(ItemID.FallenStar, 8)
                 .Register();
         }

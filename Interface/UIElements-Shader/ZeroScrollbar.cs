@@ -14,10 +14,13 @@ namespace ImproveGame.Interface.UIElements_Shader
         private float viewSize = 1f; // 显示出来的高度
         private float maxViewSize = 20f; // 控制元素的高度
         private float ViewScale => viewSize / maxViewSize;
+        private bool innerHovered;
 
         // 用于拖动内滚动条
         private float offsetY;
         public bool dragging;
+
+        public AnimationTimer HoverTimer = new(3);
 
         public float ViewPosition
         {
@@ -44,15 +47,31 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         public override void Update(GameTime gameTime)
         {
+            CalculatedStyle InnerDimensions = GetInnerDimensions();
+            CalculatedStyle InnerRectangle = InnerDimensions;
+            InnerRectangle.Y += (ViewPosition / MaxViewPoisition) * (InnerDimensions.Height * (1 - ViewScale));
+            InnerRectangle.Height = InnerDimensions.Height * ViewScale;
+            if (InnerRectangle.Contains(Main.MouseScreen))
+            {
+                if (!innerHovered)
+                {
+                    innerHovered = true;
+                    InnerMouseOver();
+                }
+            }
+            else
+            {
+                if (innerHovered)
+                {
+                    InnerMouseOut();
+                }
+                innerHovered = false;
+            }
+            HoverTimer.Update();
             base.Update(gameTime);
+
             if (dragging)
             {
-                CalculatedStyle InnerDimensions = GetInnerDimensions();
-                //Main.NewText($"ViewPosition: {ViewPosition}  BufferViewPosition: {BufferViewPosition}");
-                //Main.NewText($"ViewSize: {viewSize}  MaxViewSize: {maxViewSize}");
-                //Main.NewText($"Height: {Height.Pixels}");
-                //Main.NewText($"offset.Y: {offsetY}");
-                //Main.NewText($"剩余距离: {Main.MouseScreen.Y - InnerDimensions.Y}");
                 ViewPosition = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) / (InnerDimensions.Height * (1 - ViewScale)) * MaxViewPoisition;
             }
 
@@ -66,6 +85,17 @@ namespace ImproveGame.Interface.UIElements_Shader
                     BufferViewPosition = 0;
                 }
             }
+        }
+
+        public virtual void InnerMouseOver()
+        {
+            HoverTimer.Open();
+            SoundEngine.PlaySound(SoundID.MenuTick);
+        }
+
+        public virtual void InnerMouseOut()
+        {
+            HoverTimer.Close();
         }
 
         public override void MouseDown(UIMouseEvent evt)
@@ -97,6 +127,7 @@ namespace ImproveGame.Interface.UIElements_Shader
         }
 
         public readonly Color background = new(43, 56, 101);
+        public readonly Color hoveredColor = new(220, 220, 220);
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimension = GetDimensions();
@@ -113,8 +144,10 @@ namespace ImproveGame.Interface.UIElements_Shader
                 innerPosition.Y += innerDimensions.Height * (1 - ViewScale) * (ViewPosition / MaxViewPoisition);
             innerSize.Y *= ViewScale;
 
+            Color hoverColor = Color.Lerp(hoveredColor, Color.White, dragging ? 1 : HoverTimer.Schedule);
+
             // 滚动条拖动块
-            PixelShader.DrawBox(Main.UIScaleMatrix, innerPosition, innerSize, innerSize.X / 2, 0, Color.White, Color.White);
+            PixelShader.DrawBox(Main.UIScaleMatrix, innerPosition, innerSize, innerSize.X / 2, 0, hoverColor, hoverColor);
         }
 
         public void SetView(float viewSize, float maxViewSize)
