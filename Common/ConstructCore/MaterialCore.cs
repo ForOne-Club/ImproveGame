@@ -16,9 +16,9 @@ namespace ImproveGame.Common.ConstructCore
         public static Dictionary<int, int> WallToItem { get; private set; } = new();
         internal static bool FinishSetup { get; private set; } = false;
 
-        public static Dictionary<int, int> CountMaterials(TagCompound tag)
+        public static Dictionary<int, int> CountMaterials(QoLStructure structure)
         {
-            List<TileDefinition> data = (List<TileDefinition>)tag.GetList<TileDefinition>("StructureData");
+            List<TileDefinition> data = structure.StructureDatas;
 
             if (data is null || data.Count is 0)
             {
@@ -31,7 +31,7 @@ namespace ImproveGame.Common.ConstructCore
 
             foreach (var tileData in data)
             {
-                int tileType = FileOperator.ParseTileType(tileData.Tile);
+                int tileType = structure.ParseTileType(tileData);
                 if (tileType is not -1)
                 {
                     if (TileID.Sets.Grass[tileType])
@@ -65,7 +65,7 @@ namespace ImproveGame.Common.ConstructCore
                     }
                 }
 
-                int wallItemType = GetWallItem(FileOperator.ParseTileType(tileData.Wall));
+                int wallItemType = GetWallItem(structure.ParseWallType(tileData));
                 if (wallItemType != -1)
                 {
                     if (!materialDictionary.ContainsKey(wallItemType))

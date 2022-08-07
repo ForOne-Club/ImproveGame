@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ConstructCore;
 using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements_Shader;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
@@ -207,8 +208,8 @@ namespace ImproveGame.Interface.UIElements
             {
                 WandSystem.ConstructFilePath = FilePath;
                 PreviewRenderer.ResetPreviewTarget = true;
-                int width = tag.GetInt("Width");
-                int height = tag.GetInt("Height");
+                int width = tag.GetShort("Width");
+                int height = tag.GetShort("Height");
                 PreviewRenderer.PreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width * 16 + 20, height * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
             }
         }

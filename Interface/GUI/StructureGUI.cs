@@ -197,8 +197,9 @@ namespace ImproveGame.Interface.GUI
 
             UIList.Clear();
 
-            var tag = FileOperator.GetTagFromFile(CacheStructureInfoPath);
-            if (tag is null)
+            var structure = new QoLStructure(CacheStructureInfoPath);
+
+            if (structure.Tag is null)
             {
                 SetupStructuresList();
                 return;
@@ -223,16 +224,20 @@ namespace ImproveGame.Interface.GUI
             string name = CacheStructureInfoPath.Split('\\').Last();
             name = name[..^FileOperator.Extension.Length];
             UIList.Add(QuickSmallUIText($"文件名: {name}"));
-            UIList.Add(QuickSmallUIText($"版本号: v{tag.GetString("ModVersion")}"));
-            UIList.Add(QuickSmallUIText($"结构尺寸: {tag.GetInt("Width")}x{tag.GetInt("Height")}"));
+            UIList.Add(QuickSmallUIText($"保存时间: {DateTime.Parse(structure.BuildTime)}"));
+            UIList.Add(QuickSmallUIText($"版本号: v{structure.ModVersion}"));
+            UIList.Add(QuickSmallUIText($"结构尺寸: {structure.Width + 1}x{structure.Height + 1}"));
 
-            UIList.Add(QuickUIText("材料明细", 0.8f));
-
-            var materialsAndStacks = MaterialCore.CountMaterials(tag);
-            var sortedResult = from pair in materialsAndStacks orderby pair.Key ascending select pair; // 排序
-            foreach ((int itemType, int stack) in sortedResult)
+            var materialsAndStacks = MaterialCore.CountMaterials(structure);
+            if (materialsAndStacks.Count > 0)
             {
-                UIList.Add(new MaterialInfoElement(itemType, stack));
+                UIList.Add(QuickUIText("材料明细", 0.8f));
+
+                var sortedResult = from pair in materialsAndStacks orderby pair.Key ascending select pair; // 排序
+                foreach ((int itemType, int stack) in sortedResult)
+                {
+                    UIList.Add(new MaterialInfoElement(itemType, stack));
+                }
             }
 
             UIList.Add(QuickUIText("结构预览", 0.85f));

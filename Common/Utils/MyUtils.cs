@@ -468,22 +468,27 @@ namespace ImproveGame
         /// </summary>
         /// <param name="player">玩家实例</param>
         /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
+        /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
+        /// <param name="ignorePortable">是否不获取便携储存的物品</param>
+        /// <param name="ignoreBigBag">是否不获取大背包的物品</param>
         /// <returns>包含全部物品数组的List</returns>
-        public static List<Item[]> GetAllInventoryItems(Player player, bool ignoreInventory)
+        public static List<Item[]> GetAllInventoryItems(Player player, bool ignoreInventory, bool ignorePortable = false, bool ignoreBigBag = false)
         {
-            List<Item[]> items = new() {
-                player.bank.item,
-                player.bank2.item,
-                player.bank3.item,
-                player.bank4.item,
-            };
+            List<Item[]> items = new();
             if (!ignoreInventory)
             {
-                items.Insert(0, player.inventory);
-                if (Main.netMode != NetmodeID.Server)
-                    items.Insert(0, new Item[] { Main.mouseItem });
+                items.Add(player.inventory);
             }
-            if (Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer))
+            if (!ignorePortable)
+            {
+                items.AddRange(new List<Item[]>() {
+                    player.bank.item,
+                    player.bank2.item,
+                    player.bank3.item,
+                    player.bank4.item,
+                });
+            }
+            if (!ignoreBigBag && Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer))
             {
                 items.Add(modPlayer.SuperVault);
             }
@@ -495,11 +500,13 @@ namespace ImproveGame
         /// </summary>
         /// <param name="player">玩家实例</param>
         /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
+        /// <param name="ignorePortable">是否不获取便携储存的物品</param>
+        /// <param name="ignoreBigBag">是否不获取大背包的物品</param>
         /// <returns>包含全部物品的List</returns>
-        public static List<Item> GetAllInventoryItemsList(Player player, bool ignoreInventory)
+        public static List<Item> GetAllInventoryItemsList(Player player, bool ignoreInventory = false, bool ignorePortable = false, bool ignoreBigBag = false)
         {
             var item = new List<Item>();
-            var items = GetAllInventoryItems(player, ignoreInventory);
+            var items = GetAllInventoryItems(player, ignoreInventory, ignorePortable, ignoreBigBag);
             foreach (var itemArray in items)
             {
                 for (int i = 0; i < itemArray.Length; i++)
@@ -812,6 +819,33 @@ namespace ImproveGame
         }
 
         /// <summary>
+        /// 从物品数组里找到对应物品，返回值为在数组中的索引
+        /// </summary>
+        /// <param name="player">对应玩家</param>
+        /// <param name="shouldPick">选取物品的依据</param>
+        /// <param name="tryConsume">是否尝试消耗</param>
+        /// <returns></returns>
+        public static Item PickItemInInventory(Player player, Item[] inventory, Func<Item, bool> shouldPick, bool tryConsume, out int index)
+        {
+            for (int i = 0; i < inventory.Length; i++)
+            {
+                ref Item item = ref inventory[i];
+                if (!item.IsAir && shouldPick.Invoke(item))
+                {
+                    var returnItem = item.Clone();
+                    if (tryConsume)
+                    {
+                        TryConsumeItem(ref item, player);
+                    }
+                    index = i;
+                    return returnItem; // 要是consume完了就没了，所以clone一下
+                }
+            }
+            index = -1;
+            return new();
+        }
+
+        /// <summary>
         /// 尝试消耗某个物品
         /// </summary>
         /// <param name="item">物品实例</param>
@@ -859,5 +893,19 @@ namespace ImproveGame
         /// <param name="mouseItem">手持物品</param>
         /// <returns>一般判断返回值</returns>
         public static bool SlotPlace(Item slotItem, Item mouseItem) => slotItem.type == mouseItem.type || mouseItem.IsAir;
+
+        /// <summary>
+        /// 将未缩放的屏幕坐标转换为缩放后的屏幕坐标
+        /// </summary>
+        /// <param name="originalPosition">原坐标</param>
+        /// <returns>缩放后坐标</returns>
+        public static Vector2 GetZoomedPosition(Vector2 originalPosition)
+        {
+            float oppositeX = (originalPosition.X - Main.screenWidth / 2) / Main.GameZoomTarget;
+            float oppositeY = (originalPosition.Y - Main.screenHeight / 2) / Main.GameZoomTarget;
+            originalPosition.X -= oppositeX * (Main.GameZoomTarget - 1f);
+            originalPosition.Y -= oppositeY * (Main.GameZoomTarget - 1f);
+            return originalPosition;
+        }
     }
 }

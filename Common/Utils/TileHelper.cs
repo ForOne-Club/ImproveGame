@@ -20,7 +20,12 @@ namespace ImproveGame
 
         public static int GetTileItem(int tileType, int tileFrameX, int tileFrameY)
         {
-            if (MaterialCore.FinishSetup && MaterialCore.TileToItem.TryGetValue(tileType, out List<int> itemTypes))
+            int getItemTileType = tileType; // 用于找到物品的type（主要是给门用），到时候placeStyle是用tileType
+            if (getItemTileType is TileID.OpenDoor)
+            {
+                getItemTileType = TileID.ClosedDoor;
+            }
+            if (MaterialCore.FinishSetup && MaterialCore.TileToItem.TryGetValue(getItemTileType, out List<int> itemTypes))
             {
                 return itemTypes.FirstOrDefault(i => (MaterialCore.ItemToPlaceStyle[i] == TileFrameToPlaceStyle(tileType, tileFrameX, tileFrameY) || i >= Main.maxItemTypes), -1);
             }
@@ -38,9 +43,80 @@ namespace ImproveGame
 
         public static int GetWallItem(int wallType)
         {
-            if (MaterialCore.FinishSetup && MaterialCore.WallToItem.TryGetValue(wallType, out int itemType))
+            if (MaterialCore.FinishSetup)
             {
-                return itemType;
+                // 合 并 同 类 项 https://terraria.wiki.gg/zh/wiki/%E5%A2%99_ID
+                if (wallType is WallID.DirtUnsafe or WallID.DirtUnsafe1 or WallID.DirtUnsafe2 or WallID.DirtUnsafe3 or WallID.DirtUnsafe4)
+                    wallType = WallID.Dirt;
+                if (wallType is WallID.HellstoneBrickUnsafe)
+                    wallType = WallID.HellstoneBrick;
+                if (wallType is WallID.ObsidianBrickUnsafe)
+                    wallType = WallID.ObsidianBrick;
+                if (wallType is WallID.MudUnsafe)
+                    wallType = WallID.MudWallEcho;
+                if (wallType is WallID.SpiderUnsafe)
+                    wallType = WallID.SpiderEcho;
+                if (wallType is WallID.ObsidianBackUnsafe)
+                    wallType = WallID.ObsidianBackEcho;
+                if (wallType is WallID.MushroomUnsafe)
+                    wallType = WallID.Mushroom;
+                if (wallType is WallID.HiveUnsafe)
+                    wallType = WallID.Hive;
+                if (wallType is WallID.LihzahrdBrickUnsafe)
+                    wallType = WallID.LihzahrdBrick;
+                // 大理石与花岗岩
+                if (wallType is WallID.MarbleUnsafe)
+                    wallType = WallID.Marble;
+                if (wallType is WallID.GraniteUnsafe)
+                    wallType = WallID.Granite;
+                // 普通石墙系列
+                if (wallType is WallID.EbonstoneUnsafe) // 黑檀石墙
+                    wallType = WallID.EbonstoneEcho;
+                if (wallType is WallID.CrimstoneUnsafe) // 猩红石墙
+                    wallType = WallID.CrimstoneEcho;
+                if (wallType is WallID.PearlstoneBrickUnsafe) // 珍珠石墙
+                    wallType = WallID.PearlstoneEcho;
+                // 草墙 丛林墙 花墙
+                if (wallType >= 63 && wallType <= 65)
+                    wallType = wallType - 63 + 66;
+                if (wallType is WallID.HallowedGrassUnsafe) // 神圣草墙
+                    wallType = WallID.HallowedGrassEcho;
+                if (wallType is WallID.CrimsonGrassUnsafe) // 猩红草墙
+                    wallType = WallID.CrimsonGrassEcho;
+                if (wallType is WallID.CorruptGrassUnsafe) // 腐化草墙
+                    wallType = WallID.CorruptGrassEcho;
+                if (wallType is WallID.EbonstoneUnsafe)
+                    // https://terraria.wiki.gg/zh/wiki/%E5%AE%9D%E7%9F%B3%E5%A2%99 宝石墙
+                    if (wallType >= 48 && wallType <= 53)
+                    wallType = wallType - 48 + 250;
+                // https://terraria.wiki.gg/zh/wiki/%E5%9C%B0%E7%89%A2%E7%A0%96%E5%A2%99 地牢砖墙
+                if (wallType >= 7 && wallType <= 9)
+                    wallType = wallType - 7 + 17;
+                if (wallType >= 94 && wallType <= 99)
+                    wallType = wallType - 94 + 100;
+                // https://terraria.wiki.gg/zh/wiki/%E6%B2%99%E5%B2%A9%E5%A2%99 沙岩墙
+                // https://terraria.wiki.gg/zh/wiki/%E8%85%90%E5%8C%96%E5%A2%99 腐化墙
+                // https://terraria.wiki.gg/zh/wiki/%E7%8C%A9%E7%BA%A2%E5%A2%99 猩红墙
+                // https://terraria.wiki.gg/zh/wiki/%E5%9C%9F%E5%A2%99%EF%BC%88%E5%A4%A9%E7%84%B6%EF%BC%89 斑驳的土墙
+                // https://terraria.wiki.gg/zh/wiki/%E7%A5%9E%E5%9C%A3%E5%A2%99 神圣墙
+                // https://terraria.wiki.gg/zh/wiki/%E4%B8%9B%E6%9E%97%E5%A2%99%EF%BC%88%E5%A4%A9%E7%84%B6%EF%BC%89 特殊丛林墙
+                // https://terraria.wiki.gg/zh/wiki/%E7%86%94%E5%B2%A9%E5%A2%99 熔岩墙
+                // https://terraria.wiki.gg/zh/wiki/%E6%B4%9E%E5%A3%81 洞壁 (一部分)
+                // https://terraria.wiki.gg/zh/wiki/%E7%A1%AC%E5%8C%96%E6%B2%99%E5%A2%99 硬化沙墙
+                // https://terraria.wiki.gg/zh/wiki/%E6%B2%99%E6%BC%A0%E5%8C%96%E7%9F%B3%E5%A2%99 沙漠化石墙
+                if (wallType >= 187 && wallType <= 223)
+                    wallType = wallType - 188 + 275;
+                // https://terraria.wiki.gg/zh/wiki/%E6%B4%9E%E5%A3%81 洞壁
+                if (wallType >= 54 && wallType <= 59)
+                    wallType = wallType - 54 + 256;
+                if (wallType is WallID.Cave7Unsafe)
+                    wallType = WallID.Cave7Echo;
+                if (wallType is WallID.Cave8Unsafe)
+                    wallType = WallID.Cave8Echo;
+                if (wallType >= 170 && wallType <= 171)
+                    wallType = wallType - 170 + 270;
+                if (MaterialCore.WallToItem.TryGetValue(wallType, out int itemType))
+                    return itemType;
             }
             return -1;
         }
@@ -234,10 +310,6 @@ namespace ImproveGame
                 else return false;
             }
             int targetTile = item.createTile;
-            if (TileID.Sets.Grass[targetTile])
-            {
-                targetTile = TileID.Dirt;
-            }
             return WorldGen.PlaceTile(i, j, targetTile, mute, forced, player.whoAmI, item.placeStyle);
         }
 

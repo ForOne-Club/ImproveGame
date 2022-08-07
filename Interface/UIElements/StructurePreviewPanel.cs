@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ConstructCore;
+using System.Threading;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Interface.UIElements
@@ -8,10 +9,10 @@ namespace ImproveGame.Interface.UIElements
         public string FilePath { get; private set; }
 
         internal float ViewScale;
-        internal int StructureWidth;
-        internal int StructureHeight;
-        internal int OriginX;
-        internal int OriginY;
+        internal short StructureWidth;
+        internal short StructureHeight;
+        internal short OriginX;
+        internal short OriginY;
         private bool _cacheUpdateResetHeight; // 不知道为啥当场设置没用，摆烂下一帧设置
         private bool _cacheSetOrigin;
         private bool _oldMouseLeft; // 经典点击判断
@@ -27,7 +28,7 @@ namespace ImproveGame.Interface.UIElements
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            if (string.IsNullOrEmpty(FilePath) || !File.Exists(FilePath) || PreviewRenderer.UIPreviewTarget is null || StructureWidth is 0 || StructureHeight is 0)
+            if (string.IsNullOrEmpty(FilePath) || !File.Exists(FilePath) || PreviewRenderer.UIPreviewTarget is null)
                 return;
 
             var center = GetDimensions().Center();
@@ -46,7 +47,7 @@ namespace ImproveGame.Interface.UIElements
             // 获取鼠标相对左上角的位置，也就是将坐标映射到RT2D坐标上
             var mouseInUI = Main.MouseScreen - leftTop;
             // 将鼠标的RT2D坐标转换为物块坐标
-            var mouseInUITiles = (mouseInUI / 16f / scale).ToPoint();
+            var mouseInUITiles = (mouseInUI / 16f / scale).ToPoint16();
 
             if (mouseInUITiles.X <= StructureWidth && mouseInUITiles.Y <= StructureHeight && mouseInUI.X >= 0 && mouseInUI.Y >= 0)
             {
@@ -77,30 +78,28 @@ namespace ImproveGame.Interface.UIElements
                 _cacheUpdateResetHeight = false;
             }
 
-            var tag = FileOperator.GetTagFromFile(FilePath);
+            var structure = new QoLStructure(FilePath);
 
-            if (tag is null)
+            if (structure.Tag is null)
                 return;
 
             if (_cacheSetOrigin)
             {
-                tag.Set("OriginX", OriginX, true);
-                tag.Set("OriginY", OriginY, true);
-                TagIO.ToFile(tag, FilePath);
-                FileOperator.CachedStructureDatas.Remove(FilePath);
-                tag = FileOperator.GetTagFromFile(FilePath);
+                structure.Tag.Set("OriginX", OriginX, true);
+                structure.Tag.Set("OriginY", OriginY, true);
+                QoLStructure.SetValue(structure.Tag, FilePath);
                 _cacheSetOrigin = false;
             }
 
-            StructureWidth = tag.GetInt("Width");
-            StructureHeight = tag.GetInt("Height");
-            OriginX = tag.GetInt("OriginX");
-            OriginY = tag.GetInt("OriginY");
+            StructureWidth = structure.Width;
+            StructureHeight = structure.Height;
+            OriginX = structure.OriginX;
+            OriginY = structure.OriginY;
 
-            float uiHeight = StructureHeight * 16f + 50f;
-            if (Height.Pixels != uiHeight * ViewScale)
+            float uiHeight = StructureHeight * 16f * ViewScale + 30f;
+            if (Height.Pixels != uiHeight)
             {
-                Height.Pixels = uiHeight * ViewScale;
+                Height.Pixels = uiHeight;
                 Recalculate();
                 _cacheUpdateResetHeight = true;
                 PreviewRenderer.UIPreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, StructureWidth * 16 + 20, StructureHeight * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);

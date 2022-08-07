@@ -1,0 +1,195 @@
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using Terraria.ModLoader.IO;
+
+namespace ImproveGame.Common.ConstructCore
+{
+    public class QoLStructure
+    {
+        public TagCompound Tag;
+
+        public Dictionary<string, ushort> entries = new();
+        public Dictionary<ushort, ushort> typeMaping = new();
+
+        public string BuildTime;
+        public string ModVersion;
+        public short Width;
+        public short Height;
+        public short OriginX;
+        public short OriginY;
+        public List<TileDefinition> StructureDatas;
+
+        public int GetOrAddEntry(string fullName)
+        {
+            if (entries.ContainsKey(fullName))
+            {
+                return entries[fullName];
+            }
+            entries.Add(fullName, (ushort)entries.Count);
+            return entries.Count - 1;
+        }
+
+        internal QoLStructure(string pathName)
+        {
+            Tag = FileOperator.GetTagFromFile(pathName);
+            if (Tag is null)
+                return;
+            Setup();
+        }
+
+        internal QoLStructure(TagCompound tag)
+        {
+            Tag = tag;
+            Setup();
+        }
+
+        internal QoLStructure(Rectangle rectInWorld)
+        {
+            Tag = new();
+            Tag.Add(nameof(BuildTime), DateTime.Now.ToString("s"));
+            Tag.Add(nameof(ModVersion), ImproveGame.Instance.Version.ToString());
+            Tag.Add(nameof(Width), (short)rectInWorld.Width);
+            Tag.Add(nameof(Height), (short)rectInWorld.Height);
+            Tag.Add(nameof(OriginX), (short)0);
+            Tag.Add(nameof(OriginY), (short)0);
+
+            List<TileDefinition> data = new();
+            for (int x = rectInWorld.X; x <= rectInWorld.X + rectInWorld.Width; x++)
+            {
+                for (int y = rectInWorld.Y; y <= rectInWorld.Y + rectInWorld.Height; y++)
+                {
+                    Tile tile = Framing.GetTileSafely(x, y);
+
+                    short tileIndex = (short)tile.TileType;
+                    bool vanillaTile = true;
+                    short wallIndex = (short)tile.WallType;
+                    bool vanillaWall = true;
+                    if (tile.TileType >= TileID.Count)
+                    {
+                        var modTile = ModContent.GetModTile(tile.TileType);
+                        tileIndex = (short)GetOrAddEntry($"{modTile.FullName}t");
+                        vanillaTile = false;
+                    }
+                    if (tile.WallType >= WallID.Count)
+                    {
+                        var modWall = ModContent.GetModWall(tile.WallType);
+                        tileIndex = (short)GetOrAddEntry($"{modWall.FullName}w");
+                        vanillaWall = false;
+                    }
+                    if (!tile.HasTile)
+                    {
+                        tileIndex = -1;
+                    }
+
+                    byte platformDrawSlopeType = 0;
+                    #region 平台斜坡绘制信息 由于懒得在绘制时获取周围信息，就这么搞
+                    if (TileID.Sets.Platforms[tile.TileType])
+                    {
+                        if (tile.Slope == SlopeType.SlopeDownLeft && Main.tile[x + 1, y + 1].HasTile && Main.tileSolid[Main.tile[x + 1, y + 1].TileType] && Main.tile[x + 1, y + 1].Slope is not SlopeType.SlopeDownRight && Main.tile[x + 1, y + 1].BlockType is not BlockType.HalfBlock && (!Main.tile[x, y + 1].HasTile || (Main.tile[x, y + 1].BlockType != BlockType.Solid && Main.tile[x, y + 1].BlockType != BlockType.SlopeUpRight) || (!TileID.Sets.BlocksStairs[Main.tile[x, y + 1].TileType] && !TileID.Sets.BlocksStairsAbove[Main.tile[x, y + 1].TileType])))
+                        {
+                            if (TileID.Sets.Platforms[Main.tile[x + 1, y + 1].TileType] && Main.tile[x + 1, y + 1].Slope == SlopeType.Solid)
+                                platformDrawSlopeType = 1;
+                        }
+                        else if (tile.Slope == SlopeType.SlopeDownRight && Main.tile[x - 1, y + 1].HasTile && Main.tileSolid[Main.tile[x - 1, y + 1].TileType] && Main.tile[x - 1, y + 1].Slope is not SlopeType.SlopeDownLeft && Main.tile[x - 1, y + 1].BlockType is not BlockType.HalfBlock && (!Main.tile[x, y + 1].HasTile || (Main.tile[x, y + 1].BlockType != BlockType.Solid && Main.tile[x, y + 1].BlockType != BlockType.SlopeUpLeft) || (!TileID.Sets.BlocksStairs[Main.tile[x, y + 1].TileType] && !TileID.Sets.BlocksStairsAbove[Main.tile[x, y + 1].TileType])))
+                        {
+                            if (TileID.Sets.Platforms[Main.tile[x - 1, y + 1].TileType] && Main.tile[x - 1, y + 1].Slope == SlopeType.Solid)
+                                platformDrawSlopeType = 3;
+                            else
+                                platformDrawSlopeType = 2;
+                        }
+                    }
+                    # endregion
+                    var extraDatas = TileDefinition.GetExtraData(vanillaTile, vanillaWall, platformDrawSlopeType, tile.BlockType);
+
+                    data.Add(
+                        new TileDefinition(
+                            tileIndex,
+                            wallIndex,
+                            tile.TileFrameX,
+                            tile.TileFrameY,
+                            (short)tile.WallFrameX,
+                            (short)tile.WallFrameY,
+                            extraDatas
+                        ));
+                }
+            }
+
+            Tag.Add("StructureData", data);
+
+            var stringList = new List<string>();
+            var indexList = new List<ushort>();
+            foreach (var (name, type) in entries)
+            {
+                stringList.Add(name);
+                indexList.Add(type);
+            }
+            Tag.Add("EntriesName", stringList);
+            Tag.Add("EntriesType", indexList);
+        }
+
+        private void Setup()
+        {
+            BuildTime = Tag.GetString(nameof(BuildTime));
+            ModVersion = Tag.GetString(nameof(ModVersion));
+            Width = Tag.GetShort(nameof(Width));
+            Height = Tag.GetShort(nameof(Height));
+            OriginX = Tag.GetShort(nameof(OriginX));
+            OriginY = Tag.GetShort(nameof(OriginY));
+            StructureDatas = (List<TileDefinition>)Tag.GetList<TileDefinition>("StructureData");
+            SetupEntry();
+        }
+
+        private void SetupEntry()
+        {
+            var names = Tag.GetList<string>("EntriesName");
+            var types = Tag.GetList<ushort>("EntriesType");
+            for (int i = 0; i < names.Count; i++)
+            {
+                string name = names[i];
+                ushort type = types[i];
+                entries.Add(name, type);
+
+                if (name.EndsWith("t")) // Tile
+                {
+                    if (ModContent.TryFind<ModTile>(name[..^1], out var tile))
+                    {
+                        typeMaping.Add(type, tile.Type);
+                    }
+                }
+                else if (name.EndsWith("w")) // Wall
+                {
+                    if (ModContent.TryFind<ModWall>(name[..^1], out var wall))
+                    {
+                        typeMaping.Add(type, wall.Type);
+                    }
+                }
+                else
+                {
+                    Debug.Fail("Fail to find a modblock");
+                }
+            }
+        }
+
+        public static void SetValue(TagCompound tag, string filePath)
+        {
+            TagIO.ToFile(tag, filePath);
+            FileOperator.CachedStructureDatas.Remove(filePath);
+        }
+
+        public int ParseTileType(TileDefinition tileData)
+        {
+            if (tileData.VanillaTile)
+                return tileData.TileIndex;
+            else
+                return typeMaping[(ushort)tileData.TileIndex];
+        }
+
+        public int ParseWallType(TileDefinition tileData)
+        {
+            if (tileData.VanillaWall)
+                return tileData.WallIndex;
+            else
+                return typeMaping[(ushort)tileData.WallIndex];
+        }
+    }
+}

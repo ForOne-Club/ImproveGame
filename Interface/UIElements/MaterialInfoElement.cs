@@ -51,26 +51,14 @@
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            // 只检测物品栏
-            int stackChecked = 0;
-            for (int i = 0; i < 50; i++)
+            var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+            GetItemCount(inventory, (item) => item.type == ItemType, out int stackCount);
+            StackCheckedInfo.SetText($"已有: {stackCount}");
+            if (stackCount >= 100000)
             {
-                if (Main.LocalPlayer.inventory[i].type == ItemType)
-                {
-                    stackChecked += Main.LocalPlayer.inventory[i].stack;
-                }
-                if (stackChecked > 9999)
-                {
-                    stackChecked = 10000;
-                    break;
-                }
+                StackCheckedInfo.SetText($"已有: >99999");
             }
-            StackCheckedInfo.SetText($"已有: {stackChecked}");
-            if (stackChecked == 10000)
-            {
-                StackCheckedInfo.SetText($"已有: >9999");
-            }
-            if (stackChecked < StackRequired)
+            if (stackCount < StackRequired)
             {
                 StackCheckedInfo.TextColor = Color.Yellow;
             }

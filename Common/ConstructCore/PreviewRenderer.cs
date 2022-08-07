@@ -8,12 +8,13 @@ namespace ImproveGame.Common.ConstructCore
 {
     internal class PreviewRenderer : ModSystem
     {
+        // 用RT2D绘制一次，之后直接放RT，就不需要一直绘制降低性能了
         internal static RenderTarget2D PreviewTarget;
         internal static bool ResetPreviewTarget;
         private bool _canDrawLastFrame;
 
         internal static string UIPreviewPath;
-        internal static RenderTarget2D UIPreviewTarget; // 不知道为什么，Preview绘制就不会裂开
+        internal static RenderTarget2D UIPreviewTarget;
         internal static bool ResetUIPreviewTarget;
 
         public override void Load()
@@ -59,8 +60,8 @@ namespace ImproveGame.Common.ConstructCore
                             return true;
 
                         // 添加Origin偏移
-                        drawPosition.X -= tag.GetInt("OriginX") * 16f;
-                        drawPosition.Y -= tag.GetInt("OriginY") * 16f;
+                        drawPosition.X -= tag.GetShort("OriginX") * 16f;
+                        drawPosition.Y -= tag.GetShort("OriginY") * 16f;
                         if (Main.LocalPlayer.gravDir is -1) // 做一个重力转换
                         {
                             float oppositeY = (drawPosition.Y - Main.screenHeight / 2);
@@ -76,46 +77,6 @@ namespace ImproveGame.Common.ConstructCore
             }
         }
 
-        private static void DrawStrcturePreview(SpriteBatch sb)
-        {
-            var tag = FileOperator.GetTagFromFile(WandSystem.ConstructFilePath);
-
-            if (tag is null)
-                return;
-
-            // 缩放适配（碰巧碰出来的）
-            var position = Main.MouseScreen;
-            float oppositeX = (position.X - Main.screenWidth / 2) / Main.GameZoomTarget;
-            float oppositeY = (position.Y - Main.screenHeight / 2) / Main.GameZoomTarget;
-            position.X -= oppositeX * (Main.GameZoomTarget - 1f);
-            position.Y -= oppositeY * (Main.GameZoomTarget - 1f);
-            if (Main.LocalPlayer.gravDir is -1) // 不知道为啥
-            {
-                position.Y -= 8f;
-            }
-
-            position += Main.screenPosition;
-
-            int width = tag.GetInt("Width");
-            int height = tag.GetInt("Height");
-            var color = Color.GreenYellow;
-
-            // 对齐左上角 + 转换到屏幕坐标
-            Vector2 originPos = position.ToTileCoordinates().ToWorldCoordinates(0f, 0f) - Main.screenPosition;
-            // 添加Origin偏移
-            originPos.X -= tag.GetInt("OriginX") * 16f;
-            originPos.Y -= tag.GetInt("OriginY") * 16f * Main.LocalPlayer.gravDir;
-            if (Main.LocalPlayer.gravDir is -1) // 做一个重力转换
-            {
-                oppositeY = (originPos.Y - Main.screenHeight / 2);
-                originPos.Y -= oppositeY * 2f;
-                originPos.Y -= 24f; // 不知道啊不知道
-            }
-
-            DrawBorder(originPos, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
-            DrawPreviewFromTag(sb, tag, originPos, 1f);
-        }
-
         private void DrawTarget(On.Terraria.Main.orig_CheckMonoliths orig)
         {
             bool canDraw = Main.LocalPlayer.HeldItem?.type == ModContent.ItemType<ConstructWand>() &&
@@ -128,8 +89,8 @@ namespace ImproveGame.Common.ConstructCore
 
                     if (tag is not null)
                     {
-                        int width = tag.GetInt("Width");
-                        int height = tag.GetInt("Height");
+                        int width = tag.GetShort("Width");
+                        int height = tag.GetShort("Height");
                         PreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width * 16 + 20, height * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
                     }
                 }
@@ -157,29 +118,27 @@ namespace ImproveGame.Common.ConstructCore
             Main.graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             Main.graphics.GraphicsDevice.Clear(Color.Transparent);
 
-            var tag = FileOperator.GetTagFromFile(filePath);
+            var structure = new QoLStructure(filePath);
 
-            if (tag is null)
+            if (structure.Tag is null)
             {
                 Main.spriteBatch.End();
                 Main.graphics.GraphicsDevice.SetRenderTarget(null);
                 return;
             }
 
-            int width = tag.GetInt("Width");
-            int height = tag.GetInt("Height");
             var color = Color.GreenYellow;
             var position = Vector2.Zero + new Vector2(2f, 2f);
-            DrawBorder(position, (width + 1) * 16f, (height + 1) * 16f, color * 0.35f, color); // 背景边框
-            DrawPreviewFromTag(Main.spriteBatch, tag, position, 1f);
+            DrawBorder(position, (structure.Width + 1) * 16f, (structure.Height + 1) * 16f, color * 0.35f, color); // 背景边框
+            DrawPreviewFromTag(Main.spriteBatch, structure, position, 1f);
 
             Main.spriteBatch.End();
             Main.graphics.GraphicsDevice.SetRenderTarget(null);
         }
 
-        public static bool DrawPreviewFromTag(SpriteBatch sb, TagCompound tag, Vector2 origin, float scale = 1f)
+        public static bool DrawPreviewFromTag(SpriteBatch sb, QoLStructure structure, Vector2 origin, float scale = 1f)
         {
-            List<TileDefinition> data = (List<TileDefinition>)tag.GetList<TileDefinition>("StructureData");
+            List<TileDefinition> data = structure.StructureDatas;
 
             if (data is null || data.Count is 0)
             {
@@ -190,8 +149,8 @@ namespace ImproveGame.Common.ConstructCore
             var spriteEffects = SpriteEffects.None;
 
             Color color = Color.White;
-            int width = tag.GetInt("Width");
-            int height = tag.GetInt("Height");
+            int width = structure.Width;
+            int height = structure.Height;
 
             for (int x = 0; x <= width; x++)
             {
@@ -201,7 +160,7 @@ namespace ImproveGame.Common.ConstructCore
 
                     TileDefinition tileData = data[index];
 
-                    int wallType = FileOperator.ParseWallType(tileData.Wall);
+                    int wallType = structure.ParseWallType(tileData);
 
                     var position = origin + new Point(x, y).ToWorldCoordinates(0f, 8f);
 
@@ -226,7 +185,7 @@ namespace ImproveGame.Common.ConstructCore
 
                     TileDefinition tileData = data[index];
 
-                    int tileType = FileOperator.ParseTileType(tileData.Tile);
+                    int tileType = structure.ParseTileType(tileData);
 
                     var position = origin + new Point(x, y).ToWorldCoordinates(0f, 8f);
 
@@ -249,18 +208,19 @@ namespace ImproveGame.Common.ConstructCore
                         {
                             if (TileID.Sets.Platforms[tileType])
                             {
-                                if (tileData.PlatformSlopeDrawType is 1 or 2)
+                                int platformDrawType = tileData.GetPlatformDrawType();
+                                if (platformDrawType is 0 or 1)
                                 {
                                     Rectangle value = new(198, tileData.TileFrameY, 16, 16);
-                                    if (tileData.PlatformSlopeDrawType is 2)
+                                    if (platformDrawType is 1)
                                         value.X = 324;
 
                                     Main.spriteBatch.Draw(texture, (position + new Vector2(0f, 16f)) * scale, value, color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
                                 }
-                                else if (tileData.PlatformSlopeDrawType is 3 or 4)
+                                else if (platformDrawType is 2 or 3)
                                 {
                                     Rectangle value = new(162, tileData.TileFrameY, 16, 16);
-                                    if (tileData.PlatformSlopeDrawType is 4)
+                                    if (platformDrawType is 3)
                                         value.X = 306;
 
                                     Main.spriteBatch.Draw(texture, (position + new Vector2(0f, 16f)) * scale, value, color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
