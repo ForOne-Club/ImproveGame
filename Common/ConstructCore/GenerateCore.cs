@@ -44,6 +44,9 @@ namespace ImproveGame.Common.ConstructCore
             currentTask = CoroutineSystem.GenerateRunner.Run(GenerateMultiTiles(structure, position));
             while (currentTask.IsRunning)
                 yield return null;
+            currentTask = CoroutineSystem.GenerateRunner.Run(GenerateOutSet(structure, position));
+            while (currentTask.IsRunning)
+                yield return null;
             CoroutineSystem.GenerateRunner.Run(SquareTiles(structure, position));
         }
 
@@ -139,7 +142,7 @@ namespace ImproveGame.Common.ConstructCore
                     int index = y + x * (height + 1);
                     var placePosition = position + new Point(x, y);
                     TileDefinition tileData = structure.StructureDatas[index];
-                    int wallItemType = GetWallItem(structure.ParseTileType(tileData));
+                    int wallItemType = GetWallItem(structure.ParseWallType(tileData));
                     if (wallItemType != -1)
                     {
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
@@ -230,6 +233,50 @@ namespace ImproveGame.Common.ConstructCore
                                 yield return null;
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        public static IEnumerator GenerateOutSet(QoLStructure structure, Point position)
+        {
+            int width = structure.Width;
+            int height = structure.Height;
+            for (int x = 0; x <= width; x++)
+            {
+                for (int y = 0; y <= height; y++)
+                {
+                    int index = y + x * (height + 1);
+                    TileDefinition tileData = structure.StructureDatas[index];
+
+                    var placePosition = position + new Point(x, y);
+                    var tile = Main.tile[placePosition];
+                    tile.IsActuated = tileData.ExtraDatas[2];
+                    tile.RedWire = tileData.ExtraDatas2[3];
+                    tile.GreenWire = tileData.ExtraDatas2[4];
+                    tile.BlueWire = tileData.ExtraDatas2[5];
+                    tile.YellowWire = tileData.ExtraDatas2[6];
+                    if (tileData.ExtraDatas2[7]) // 促动器
+                    {
+                        bool tryConsume(Item item)
+                        {
+                            if (item is not null && item.type == ItemID.Actuator)
+                            {
+                                tile.HasActuator = true;
+                                return true;
+                            }
+                            return false;
+                        }
+                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                        PickItemInInventory(Main.LocalPlayer, inventory, tryConsume,
+                            true, out _);
+                    }
+
+                    _taskProcessed++;
+                    if (_taskProcessed >= 50)
+                    {
+                        _taskProcessed = 0;
+                        yield return null;
                     }
                 }
             }

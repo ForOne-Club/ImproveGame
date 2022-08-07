@@ -61,27 +61,27 @@ namespace ImproveGame.Common.ConstructCore
                     Tile tile = Framing.GetTileSafely(x, y);
 
                     short tileIndex = (short)tile.TileType;
-                    bool vanillaTile = true;
                     short wallIndex = (short)tile.WallType;
-                    bool vanillaWall = true;
                     if (tile.TileType >= TileID.Count)
                     {
                         var modTile = ModContent.GetModTile(tile.TileType);
                         tileIndex = (short)GetOrAddEntry($"{modTile.FullName}t");
-                        vanillaTile = false;
                     }
                     if (tile.WallType >= WallID.Count)
                     {
                         var modWall = ModContent.GetModWall(tile.WallType);
-                        tileIndex = (short)GetOrAddEntry($"{modWall.FullName}w");
-                        vanillaWall = false;
+                        wallIndex = (short)GetOrAddEntry($"{modWall.FullName}w");
                     }
                     if (!tile.HasTile)
                     {
                         tileIndex = -1;
                     }
+                    if (tile.WallType is 0)
+                    {
+                        wallIndex = -1; // 统一一点
+                    }
 
-                    byte platformDrawSlopeType = 0;
+                    byte platformDrawSlopeType = 4;
                     #region 平台斜坡绘制信息 由于懒得在绘制时获取周围信息，就这么搞
                     if (TileID.Sets.Platforms[tile.TileType])
                     {
@@ -89,6 +89,8 @@ namespace ImproveGame.Common.ConstructCore
                         {
                             if (TileID.Sets.Platforms[Main.tile[x + 1, y + 1].TileType] && Main.tile[x + 1, y + 1].Slope == SlopeType.Solid)
                                 platformDrawSlopeType = 1;
+                            else
+                                platformDrawSlopeType = 0;
                         }
                         else if (tile.Slope == SlopeType.SlopeDownRight && Main.tile[x - 1, y + 1].HasTile && Main.tileSolid[Main.tile[x - 1, y + 1].TileType] && Main.tile[x - 1, y + 1].Slope is not SlopeType.SlopeDownLeft && Main.tile[x - 1, y + 1].BlockType is not BlockType.HalfBlock && (!Main.tile[x, y + 1].HasTile || (Main.tile[x, y + 1].BlockType != BlockType.Solid && Main.tile[x, y + 1].BlockType != BlockType.SlopeUpLeft) || (!TileID.Sets.BlocksStairs[Main.tile[x, y + 1].TileType] && !TileID.Sets.BlocksStairsAbove[Main.tile[x, y + 1].TileType])))
                         {
@@ -99,17 +101,16 @@ namespace ImproveGame.Common.ConstructCore
                         }
                     }
                     # endregion
-                    var extraDatas = TileDefinition.GetExtraData(vanillaTile, vanillaWall, platformDrawSlopeType, tile.BlockType);
+                    var extraDatas = TileDefinition.GetExtraData(tile);
+                    var extraDatas2 = TileDefinition.GetExtraData2(tile, platformDrawSlopeType);
 
                     data.Add(
                         new TileDefinition(
                             tileIndex,
                             wallIndex,
-                            tile.TileFrameX,
-                            tile.TileFrameY,
-                            (short)tile.WallFrameX,
-                            (short)tile.WallFrameY,
-                            extraDatas
+                            tile,
+                            extraDatas,
+                            extraDatas2
                         ));
                 }
             }

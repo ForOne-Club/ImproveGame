@@ -8,16 +8,16 @@ namespace ImproveGame.Common.ConstructCore
         public short WallIndex;
         public short TileFrameX;
         public short TileFrameY;
+        public byte TileColor;
         public short WallFrameX;
         public short WallFrameY;
+        public byte WallColor;
 
         /// <summary>
         /// ExtraDatas:
-        /// <br>0, 1分别为tileVanilla, wallVanilla</br>
-        /// <br>2,3均false: platformType为0;</br>
-        /// <br>2为true: platformType为1;</br>
-        /// <br>3为true: platformType为2;</br>
-        /// <br>2,3均为true: platformType为3</br>
+        /// <br>0, 1分别为!tileVanilla, !wallVanilla，即true就不是原版, false就是</br>
+        /// <br>2为actuated，是否被虚化</br>
+        /// <br>3被Extra2取走了，暂无用处</br>
         /// <br>4为true: 为Solid（则后面的不执行）</br>
         /// <br>5为true: 为HalfBlock（则后面的不执行）</br>
         /// <br>6为true: Slope为上, 为false: Slope为下</br>
@@ -25,8 +25,20 @@ namespace ImproveGame.Common.ConstructCore
         /// </summary>
         public BitsByte ExtraDatas;
 
-        public bool VanillaTile => ExtraDatas[0];
-        public bool VanillaWall => ExtraDatas[1];
+        /// <summary>
+        /// ExtraDatas2 (不同于Extra1，这个是必存的):
+        /// <br>0, 为是否有特殊platformType, 为false的话后面的就不管了</br>
+        /// <br>1,2均false: platformType为0;</br>
+        /// <br>1为true: platformType为1;</br>
+        /// <br>2为true: platformType为2;</br>
+        /// <br>1,2均为true: platformType为3</br>
+        /// <br>3,4,5,6分别为红绿蓝黄线</br>
+        /// <br>7为是否有促动器</br>
+        /// </summary>
+        public BitsByte ExtraDatas2;
+
+        public bool VanillaTile => !ExtraDatas[0];
+        public bool VanillaWall => !ExtraDatas[1];
         public BlockType BlockType
         {
             get
@@ -49,35 +61,30 @@ namespace ImproveGame.Common.ConstructCore
             }
         }
 
-        public TileDefinition(short tileIndex, short wallIndex, short frameX, short frameY, short wallFrameX, short wallFrameY, BitsByte extraDatas)
+        // 存的时候另外做的
+        public TileDefinition() { }
+
+        public TileDefinition(short tileIndex, short wallIndex, Tile tile, BitsByte extraDatas, BitsByte extraDatas2)
         {
             TileIndex = tileIndex;
             WallIndex = wallIndex;
-            TileFrameX = frameX;
-            TileFrameY = frameY;
-            WallFrameX = wallFrameX;
-            WallFrameY = wallFrameY;
+            TileFrameX = tile.TileFrameX;
+            TileFrameY = tile.TileFrameY;
+            TileColor = tile.TileColor;
+            WallFrameX = (short)tile.WallFrameX;
+            WallFrameY = (short)tile.WallFrameY;
+            WallColor = tile.WallColor;
             ExtraDatas = extraDatas;
+            ExtraDatas2 = extraDatas2;
         }
 
-        public static BitsByte GetExtraData(bool tileVanilla, bool wallVanilla, byte platformType, BlockType blockType)
+        public static BitsByte GetExtraData(Tile tile)
         {
             BitsByte data = new();
-            data[0] = tileVanilla;
-            data[1] = wallVanilla;
-            switch (platformType)
-            {
-                case 1:
-                    data[2] = true;
-                    break;
-                case 2:
-                    data[3] = true;
-                    break;
-                case 3:
-                    data[2] = true;
-                    data[3] = true;
-                    break;
-            }
+            data[0] = tile.TileType >= TileID.Count;
+            data[1] = tile.WallType >= WallID.Count;
+            data[2] = tile.IsActuated;
+            var blockType = tile.BlockType;
             switch (blockType)
             {
                 case BlockType.Solid:
@@ -94,15 +101,48 @@ namespace ImproveGame.Common.ConstructCore
             return data;
         }
 
+        public static BitsByte GetExtraData2(Tile tile, byte platformType)
+        {
+            BitsByte data = new();
+
+            switch (platformType)
+            {
+                case 0:
+                    data[0] = true;
+                    break;
+                case 1:
+                    data[0] = true;
+                    data[1] = true;
+                    break;
+                case 2:
+                    data[0] = true;
+                    data[2] = true;
+                    break;
+                case 3:
+                    data[0] = true;
+                    data[1] = true;
+                    data[2] = true;
+                    break;
+            }
+            data[3] = tile.RedWire;
+            data[4] = tile.GreenWire;
+            data[5] = tile.BlueWire;
+            data[6] = tile.YellowWire;
+            data[7] = tile.HasActuator;
+            return data;
+        }
+
         public int GetPlatformDrawType()
         {
-            if (!ExtraDatas[2] && !ExtraDatas[3])
+            if (!ExtraDatas2[0])
+                return -1;
+            if (!ExtraDatas2[1] && !ExtraDatas2[2])
                 return 0;
-            if (ExtraDatas[2] && !ExtraDatas[3])
+            if (ExtraDatas2[1] && !ExtraDatas2[2])
                 return 1;
-            if (!ExtraDatas[2] && ExtraDatas[3])
+            if (!ExtraDatas2[1] && ExtraDatas2[2])
                 return 2;
-            if (ExtraDatas[2] && ExtraDatas[3])
+            if (ExtraDatas2[1] && ExtraDatas2[2])
                 return 3;
             return 0; // 这个是不可能达到的
         }
@@ -112,30 +152,57 @@ namespace ImproveGame.Common.ConstructCore
 
         public static TileDefinition DeserializeData(TagCompound tag)
         {
-            var output = new TileDefinition(
-                tag.GetShort("TileIndex"),
-                tag.GetShort("WallIndex"),
-                tag.GetShort("TileFrameX"),
-                tag.GetShort("TileFrameY"),
-                tag.GetShort("WallFrameX"),
-                tag.GetShort("WallFrameY"),
-                (BitsByte)tag.GetByte("ExtraDatas")
-            );
+            var output = new TileDefinition
+            {
+                TileIndex = -1,
+                WallIndex = -1
+            };
+            if (tag.TryGet("TileIndex", out short tileIndex))
+            {
+                output.TileIndex = tileIndex;
+                output.TileFrameX = tag.GetShort("TileFrameX");
+                output.TileFrameY = tag.GetShort("TileFrameY");
+                tag.TryGet("TileColor", out output.TileColor);
+            }
+            if (tag.TryGet("WallIndex", out short wallIndex))
+            {
+                output.WallIndex = wallIndex;
+                output.WallFrameX = tag.GetShort("WallFrameX");
+                output.WallFrameY = tag.GetShort("WallFrameY");
+                tag.TryGet("WallColor", out output.WallColor);
+            }
+            if (output.TileIndex is not -1 || output.WallIndex is not -1)
+            {
+                output.ExtraDatas = tag.GetByte("ExtraDatas");
+            }
+            output.ExtraDatas2 = tag.GetByte("ExtraDatas2");
             return output;
         }
 
         public TagCompound SerializeData()
         {
-            var tag = new TagCompound()
+            var tag = new TagCompound();
+            if (TileIndex is not -1)
             {
-                ["TileIndex"] = TileIndex,
-                ["WallIndex"] = WallIndex,
-                ["TileFrameX"] = TileFrameX,
-                ["TileFrameY"] = TileFrameY,
-                ["WallFrameX"] = WallFrameX,
-                ["WallFrameY"] = WallFrameY,
-                ["ExtraDatas"] = (byte)ExtraDatas
-            };
+                tag["TileIndex"] = TileIndex;
+                tag["TileFrameX"] = TileFrameX;
+                tag["TileFrameY"] = TileFrameY;
+                if (TileColor is not 0)
+                    tag["TileColor"] = TileColor;
+            }
+            if (WallIndex is not -1)
+            {
+                tag["WallIndex"] = WallIndex;
+                tag["WallFrameX"] = WallFrameX;
+                tag["WallFrameY"] = WallFrameY;
+                if (WallColor is not 0)
+                    tag["WallColor"] = WallColor;
+            }
+            if (TileIndex is not -1 || WallIndex is not -1)
+            {
+                tag["ExtraDatas"] = (byte)ExtraDatas;
+            }
+            tag["ExtraDatas2"] = (byte)ExtraDatas2;
 
             return tag;
         }

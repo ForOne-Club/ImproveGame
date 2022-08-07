@@ -2,6 +2,7 @@
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
+using System.IO.Compression;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.ConstructCore
@@ -16,13 +17,13 @@ namespace ImproveGame.Common.ConstructCore
         {
             TrUtils.TryCreatingDirectory(SavePath);
 
-            string name = $"QoLStructure_v{ImproveGame.Instance.Version}.qolstruct";
+            string name = $"QoLStructure.qolstruct";
             string thisPath = Path.Combine(SavePath, name);
             if (File.Exists(thisPath))
             {
                 for (int i = 2; i <= 999; i++)
                 {
-                    name = $"QoLStructure_v{ImproveGame.Instance.Version} ({i}){Extension}";
+                    name = $"QoLStructure ({i}){Extension}";
                     thisPath = Path.Combine(SavePath, name);
                     if (!File.Exists(thisPath))
                     {
@@ -32,11 +33,9 @@ namespace ImproveGame.Common.ConstructCore
             }
 
             Main.NewText("Structure saved as " + thisPath, Color.Yellow);
-            FileStream stream = File.Create(thisPath);
-            stream.Close();
 
             TagIO.ToFile(new QoLStructure(rectInWorld).Tag, thisPath);
-
+            
             CachedStructureDatas.Clear();
             if (StructureGUI.Visible && UISystem.Instance.StructureGUI is not null)
             {
