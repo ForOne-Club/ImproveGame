@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Interface.Common;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
@@ -22,8 +23,9 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
-            player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
-            storedBanners.RemoveAt(storedBanners.Count - 1);
+            //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
+            //storedBanners.RemoveAt(storedBanners.Count - 1);
+            UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name);
         }
 
         public override bool ConsumeItem(Player player) => false;
@@ -125,7 +127,8 @@ namespace ImproveGame.Content.Items
                     var banner = storedBanners[i];
                     string text = $"[i/s{banner.stack}:{banner.type}]";
                     cachedText += text;
-                    if ((i + 1) % 20 == 0) {
+                    if ((i + 1) % 20 == 0)
+                    {
                         tooltips.Add(new(Mod, "BannerList", cachedText));
                         cachedText = string.Empty;
                     }
@@ -133,7 +136,7 @@ namespace ImproveGame.Content.Items
                 if (!string.IsNullOrEmpty(cachedText))
                 {
                     tooltips.Add(new(Mod, "BannerList", cachedText));
-                } 
+                }
             }
             else
             {

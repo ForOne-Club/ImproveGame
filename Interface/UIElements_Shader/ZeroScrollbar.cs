@@ -72,7 +72,8 @@ namespace ImproveGame.Interface.UIElements_Shader
 
             if (dragging)
             {
-                ViewPosition = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) / (InnerDimensions.Height * (1 - ViewScale)) * MaxViewPoisition;
+                if (ViewScale != 1)
+                    ViewPosition = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) / (InnerDimensions.Height * (1 - ViewScale)) * MaxViewPoisition;
             }
 
             if (BufferViewPosition != 0)

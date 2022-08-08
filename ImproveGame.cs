@@ -4,6 +4,7 @@ global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using ReLogic.Content;
 global using System;
+global using System.Collections.Generic;
 global using System.IO;
 global using System.Linq;
 global using Terraria;
@@ -15,7 +16,6 @@ global using Terraria.Localization;
 global using Terraria.ModLoader;
 global using Terraria.UI;
 global using static ImproveGame.MyUtils;
-global using TrUtils = Terraria.Utils;
 using ImproveGame.Common.Systems;
 
 namespace ImproveGame

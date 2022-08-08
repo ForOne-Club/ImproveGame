@@ -7,7 +7,6 @@ namespace ImproveGame.Interface.UIElements
     public class ModItemGrid : UIElement
     {
         public ModItemList ItemList;
-        // public ModScrollbar Scrollbar;
         public ZeroScrollbar Scrollbar;
 
         // 可以在 new 的时候将其他元素也初始化, 或者在执行 Active() 的时候初始化.
@@ -23,7 +22,7 @@ namespace ImproveGame.Interface.UIElements
             Append(ItemList = new());
 
             // 滚动条, 一定要放到滚动主体后面, 问就是 UIElement 的锅.
-            Append(Scrollbar = new() { HAlign = 1f, VAlign = 0.5f });
+            Append(Scrollbar = new() { HAlign = 1f });
             Scrollbar.Left.Pixels = -1;
             Scrollbar.Height.Pixels = ItemList.Height();
 
@@ -38,7 +37,7 @@ namespace ImproveGame.Interface.UIElements
             // 初始化 ItemList 的时候会计算高度, 但是计算的是显示的高度.
             // 在 SetInventory 之后还会再计算一次, 计算的是 添加 items 之后的实际高度.
             ItemList.SetInventory(items);
-            Scrollbar.SetView(Height.Pixels, ItemList.Height.Pixels);
+            Scrollbar.SetView(MathF.Min(Height.Pixels - 1, ItemList.Height.Pixels), ItemList.Height.Pixels);
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)
