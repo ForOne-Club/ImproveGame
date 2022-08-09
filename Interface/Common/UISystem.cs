@@ -104,7 +104,7 @@ namespace ImproveGame.Interface.Common
                 LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
                 LoadGUI(ref PaintWandGUI, out PaintWandInterface);
                 LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
-                LoadGUI(ref StructureGUI, out StructureInterface, () => StructureGUI.UserInterface = StructureInterface);
+                LoadGUI(ref StructureGUI, out StructureInterface);
             }
         }
 

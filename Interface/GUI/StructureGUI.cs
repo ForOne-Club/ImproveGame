@@ -25,10 +25,8 @@ namespace ImproveGame.Interface.GUI
         public Asset<Texture2D> ButtonPanel;
         public Asset<Texture2D> ButtonPanel_Highlight;
 
-        public UserInterface UserInterface;
-
         private SUIPanel BasePanel; // 背景板
-        public ModScrollbar Scrollbar; // 拖动条
+        public ZeroScrollbar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
         public ModImageButton RefreshButton; // 刷新/回退按钮
 
@@ -61,7 +59,7 @@ namespace ImproveGame.Interface.GUI
             UIList.ManualSortMethod = (list) => { }; // 阻止他自动排序
             BasePanel.Append(UIList);
 
-            Scrollbar = new(UserInterface);
+            Scrollbar = new();
             Scrollbar.Left.Set(310f, 0.5f);
             Scrollbar.Top.Set(154f, 0f);
             Scrollbar.Height.Set(-8f, 0.6f);
@@ -126,18 +124,18 @@ namespace ImproveGame.Interface.GUI
             if (resetViewPosition)
                 Scrollbar.ViewPosition = 0f;
 
-            Scrollbar.Visible = true;
+            /*Scrollbar.Visible = true;
             if (height >= totalHeight)
             {
                 Scrollbar.Visible = false;
-            }
+            }*/
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
             if (BasePanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
-                Scrollbar.SetViewPosition(evt.ScrollWheelValue);
+                Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -145,7 +143,7 @@ namespace ImproveGame.Interface.GUI
             var innerList = UIList.GetType().GetField("_innerList", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(UIList) as UIElement;
             if (Scrollbar is not null && innerList is not null)
             {
-                innerList.Top.Set(-Scrollbar.GetValue(), 0);
+                innerList.Top.Set(-Scrollbar.ViewPosition, 0);
             }
             UIList.Recalculate();
 
@@ -171,10 +169,10 @@ namespace ImproveGame.Interface.GUI
 
             if (BasePanel.IsMouseHovering)
             {
-                if (Scrollbar.Visible)
-                {
+                //if (Scrollbar.Visible)
+                //{
                     PlayerInput.LockVanillaMouseScroll("ImproveGame: Structure GUI");
-                }
+                //}
                 Main.LocalPlayer.mouseInterface = true;
             }
 
