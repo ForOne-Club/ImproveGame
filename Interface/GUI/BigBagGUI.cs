@@ -1,4 +1,5 @@
-﻿using ImproveGame.Interface.UIElements;
+﻿using ImproveGame.Common.Players;
+using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.UIElements_Shader;
 using System.Collections.Generic;
 using Terraria.GameInput;
@@ -24,15 +25,23 @@ namespace ImproveGame.Interface.GUI
         public SUIPanel MainPanel;
         public BackgroundImage CloseButton;
         public PictureButton[] buttons = new PictureButton[4];
+        // 物品列表
         public ModItemGrid ItemGrid;
         public Checkbox[] checkbox = new Checkbox[3];
 
-        public void SetSuperVault(Item[] items, Vector2 SuperVaultPos)
+        private BackgroundImage BackButton;
+        public void AddBackButton()
         {
-            ItemGrid.SetInventory(items);
-            MainPanel.SetPos(SuperVaultPos)
-                .SetSizeInside(ItemGrid.Width(), ItemGrid.Height() + ItemGrid.Top())
-                .Recalculate();
+            if (MainPanel.HasChild(BackButton))
+                MainPanel.RemoveChild(BackButton);
+            MainPanel.Append(BackButton = new(GetTexture("Bank").Value) { HAlign = 1f });
+            BackButton.OnMouseDown += (uie, evt) =>
+            {
+                ItemGrid.SetInventory(Main.LocalPlayer.GetModPlayer<DataPlayer>().SuperVault);
+                MainPanel.RemoveChild(BackButton);
+            };
+            BackButton.Height.Pixels = CloseButton.Height.Pixels;
+            BackButton.Left.Pixels = -BackButton.Width.Pixels - 10;
         }
 
         private readonly Color background = new(44, 57, 105, 160);
@@ -54,7 +63,7 @@ namespace ImproveGame.Interface.GUI
                 {
                     uie.SetPos(Main.MouseScreen - offset).Recalculate();
                 }
-                if (!uie.GetDimensions().ToRectangle().Intersects(uie.GetDimensions().ToRectangle()))
+                if (!GetDimensions().ToRectangle().Intersects(uie.GetDimensions().ToRectangle()))
                 {
                     uie.SetPos(Vector2.Zero).Recalculate();
                 }
@@ -62,11 +71,9 @@ namespace ImproveGame.Interface.GUI
             Append(MainPanel);
 
             MainPanel.Append(title = new(GetText("SuperVault.Name"), 0.5f) { HAlign = 0f });
-            title.Top.Pixels = 5f;
 
             MainPanel.Append(CloseButton = new(GetTexture("Close").Value) { HAlign = 1f });
             CloseButton.Height.Pixels = title.Height();
-            CloseButton.Top.Pixels = 5f;
             CloseButton.OnMouseDown += (evt, uie) => Visible = false;
 
             MainPanel.Append(checkbox[0] = new Checkbox("参与合成", 0.8f));
@@ -107,6 +114,7 @@ namespace ImproveGame.Interface.GUI
             ItemGrid = new ModItemGrid();
             ItemGrid.Top.Pixels = buttons[0].Top() + buttons[0].Height() + 10f;
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
+            MainPanel.SetSizeInside(ItemGrid.Width(), ItemGrid.Height() + ItemGrid.Top()).Recalculate();
             MainPanel.Append(ItemGrid);
         }
 

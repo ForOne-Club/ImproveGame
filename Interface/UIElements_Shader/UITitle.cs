@@ -18,6 +18,8 @@ namespace ImproveGame.Interface.UIElements_Shader
             {
                 text = value;
                 textSize = GetBigTextSize(text) * scale;
+                Width.Pixels = textSize.X + this.HPadding();
+                Height.Pixels = textSize.Y + this.VPadding();
             }
         }
 

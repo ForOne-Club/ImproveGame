@@ -165,7 +165,7 @@ namespace ImproveGame.Content.Items
             if (context == ItemSlot.Context.InventoryItem)
             {
                 ItemInInventory = true;
-                if (Main.mouseMiddle && Main.mouseMiddleRelease)
+                if (PlayerInput.Triggers.JustPressed.MouseMiddle)
                 {
                     if (!LiquidWandGUI.Visible)
                     {

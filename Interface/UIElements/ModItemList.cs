@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Interface.UIElements
+﻿using ImproveGame.Interface.UIElements_Shader;
+
+namespace ImproveGame.Interface.UIElements
 {
     public class ModItemList : UIElement
     {
@@ -6,7 +8,6 @@
         public int VCount = 5; // 纵向格子的数量
 
         public Item[] items;
-        public ArrayItemSlot ItemSlot;
 
         public void SetInventory(Item[] items)
         {
@@ -16,12 +17,12 @@
             {
                 float col = i % HCount;
                 float row = i / HCount;
-                ItemSlot = new(items, i);
+                ArrayItemSlot ItemSlot = new(items, i);
                 ItemSlot.OnMouseDown += OnMouseDownSlot;
                 ItemSlot.SetPos(col * (ItemSlot.Width() + 10f), row * (ItemSlot.Height() + 10f));
                 Append(ItemSlot);
             }
-            int VCount = items.Length / HCount;
+            int VCount = items.Length / HCount + (items.Length % HCount > 0 ? 1 : 0);
             Height.Pixels = 52 * VCount + 10f * (VCount - 1);
         }
 

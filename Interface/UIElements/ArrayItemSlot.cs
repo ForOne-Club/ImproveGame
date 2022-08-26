@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
-using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
@@ -12,7 +12,10 @@ namespace ImproveGame.Interface.UIElements
     /// </summary>
     public class ArrayItemSlot : UIElement
     {
-        private readonly Item[] items;
+        private int mode;
+        private List<Item> items2;
+        private Item[] items;
+        public Item[] Items => items;
         public Texture2D Texture
         {
             get
@@ -25,12 +28,59 @@ namespace ImproveGame.Interface.UIElements
             }
         }
         public int index;
-        public Item Item { get => items[index]; set => items[index] = value; }
+        public Item Item
+        {
+            get
+            {
+                if (mode == 0)
+                    return items[index];
+                else
+                {
+                    return items2[index];
+                }
+            }
+            set
+            {
+                if (mode == 0)
+                    items[index] = value;
+                else
+                    items2[index] = value;
+            }
+        }
         private int RightMouseTimer = -1;
 
         public ArrayItemSlot(Item[] items, int index)
         {
+            mode = 0;
             this.items = items;
+            this.index = index;
+            Width.Set(TextureAssets.InventoryBack.Value.Width, 0f);
+            Height.Set(TextureAssets.InventoryBack.Value.Height, 0f);
+
+            UIText text = new(string.Empty, 0.75f)
+            {
+                VAlign = 0.8f
+            };
+            text.Left.Set(0, 0.2f);
+            text.OnUpdate += (uie) =>
+            {
+                text.SetText(Item.IsAir || Item.stack <= 1 ? string.Empty : Item.stack.ToString());
+                text.Recalculate();
+            };
+            Append(text);
+
+            UIText text2 = new((index + 1).ToString(), 0.75f)
+            {
+                VAlign = 0.15f
+            };
+            text2.Left.Set(0, 0.15f);
+            Append(text2);
+        }
+
+        public ArrayItemSlot(List<Item> items, int index)
+        {
+            mode = 1;
+            this.items2 = items;
             this.index = index;
             Width.Set(TextureAssets.InventoryBack.Value.Width, 0f);
             Height.Set(TextureAssets.InventoryBack.Value.Height, 0f);
@@ -59,6 +109,14 @@ namespace ImproveGame.Interface.UIElements
         {
             SetCursorOverride();
             MouseClickSlot();
+            if (mode == 1)
+            {
+                if (Item.IsAir)
+                {
+                    items2.RemoveAt(index);
+                    Parent.RemoveChild(Parent.Children.ToList()[^1]);
+                }
+            }
             base.MouseDown(evt);
         }
 
@@ -96,6 +154,14 @@ namespace ImproveGame.Interface.UIElements
                 ItemLoader.RightClick(Item, Main.LocalPlayer);
                 Main.mouseRightRelease = false;
                 return;
+            }
+            if (mode == 1)
+            {
+                if (Item.IsAir)
+                {
+                    items2.RemoveAt(index);
+                    Parent.RemoveChild(Parent.Children.ToList()[^1]);
+                }
             }
             base.MouseDown(evt);
         }
@@ -141,7 +207,7 @@ namespace ImproveGame.Interface.UIElements
             Color borderColor = Item.favorited ? FavoritedBorderColor : NotFavoritedBorderColor;
             Color background = Item.favorited ? FavoritedBackground : NotFavoritedBackground;
             // 绘制背景框
-            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), this.GetSize(), 12, 3,
+            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3,
                 borderColor, background);
 
             // 原来的边框

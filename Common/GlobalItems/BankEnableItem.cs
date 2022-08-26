@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Players;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Terraria.GameInput;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -45,7 +46,7 @@ namespace ImproveGame.Common.GlobalItems
                 tooltips.Add(new(Mod, "BankEnable", tooltip) { OverrideColor = Color.LightGreen });
 
                 SoundStyle? sound = null;
-                if (Main.mouseMiddle && Main.mouseMiddleRelease) {
+                if (PlayerInput.Triggers.JustPressed.MouseMiddle) {
                     if (MyUtils.Bank2Items.Contains(item.type)) {
                         if (item.type == ItemID.ChesterPetItem) {
                             sound = player.chest == -2 ? SoundID.ChesterClose : SoundID.ChesterOpen;

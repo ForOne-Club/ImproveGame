@@ -9,9 +9,10 @@ namespace ImproveGame.Interface.Common
         public override void OnEnterWorld(Player player)
         {
             DataPlayer dataPlayer = player.GetModPlayer<DataPlayer>();
-            BigBagInterface = new();
+            PackageInterface.SetState(Instance.PackageGUI = new());
             BigBagInterface.SetState(Instance.BigBagGUI = new());
-            Instance.BigBagGUI.SetSuperVault(dataPlayer.SuperVault, dataPlayer.SuperVaultPos);
+            Instance.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
+            Instance.BigBagGUI.MainPanel.SetPos(dataPlayer.SuperVaultPos).Recalculate();
         }
     }
 }

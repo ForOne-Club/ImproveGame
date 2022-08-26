@@ -46,6 +46,9 @@ namespace ImproveGame.Interface.Common
         public StructureGUI StructureGUI;
         public static UserInterface StructureInterface;
 
+        public PackageGUI PackageGUI;
+        public static UserInterface PackageInterface;
+
         public override void Unload()
         {
             Instance = null;
@@ -79,6 +82,9 @@ namespace ImproveGame.Interface.Common
 
             StructureGUI = null;
             StructureInterface = null;
+
+            PackageGUI = null;
+            PackageInterface = null;
         }
 
         public override void Load()
@@ -96,6 +102,8 @@ namespace ImproveGame.Interface.Common
                 PaintWandGUI = new();
                 GrabBagInfoGUI = new();
                 StructureGUI = new();
+                BigBagInterface = new();
+                PackageInterface = new();
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
                 LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
                 LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
@@ -134,6 +142,10 @@ namespace ImproveGame.Interface.Common
             {
                 BigBagInterface?.Update(gameTime);
             }
+            if (PackageGUI.Visible)
+            {
+                PackageInterface?.Update(gameTime);
+            }
             if (ArchitectureGUI.Visible)
             {
                 ArchitectureInterface?.Update(gameTime);
@@ -169,8 +181,10 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Autofisher GUI", DrawAutofishGUI, InterfaceScaleType.UI));
-                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: SpaceWand GUI",
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: BigBag GUI",
                     () => { if (BigBagGUI.Visible) BigBagGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Package GUI",
+                    () => { if (PackageGUI.Visible) PackageGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Grab Bag Info GUI",
                     () => { if (GrabBagInfoGUI.Visible) GrabBagInfoGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Structure GUI", () =>
