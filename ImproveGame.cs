@@ -16,6 +16,7 @@ global using Terraria.Localization;
 global using Terraria.ModLoader;
 global using Terraria.UI;
 global using static ImproveGame.MyUtils;
+global using TrUtils = Terraria.Utils;
 using ImproveGame.Common.Systems;
 
 namespace ImproveGame
