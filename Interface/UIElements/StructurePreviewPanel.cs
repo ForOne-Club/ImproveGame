@@ -49,7 +49,7 @@ namespace ImproveGame.Interface.UIElements
             // 将鼠标的RT2D坐标转换为物块坐标
             var mouseInUITiles = (mouseInUI / 16f / scale).ToPoint16();
 
-            if (mouseInUITiles.X <= StructureWidth && mouseInUITiles.Y <= StructureHeight && mouseInUI.X >= 0 && mouseInUI.Y >= 0)
+            if (mouseInUITiles.X <= StructureWidth && mouseInUITiles.Y <= StructureHeight && mouseInUI.X >= 0 && mouseInUI.Y >= 0 && !(mouseInUITiles.X == OriginX && mouseInUITiles.Y == OriginY))
             {
                 // 转换回屏幕坐标
                 var mouseTiledInScreen = mouseInUITiles.ToVector2() * 16f * scale + leftTop;
@@ -61,6 +61,8 @@ namespace ImproveGame.Interface.UIElements
                     OriginY = mouseInUITiles.Y;
                     _cacheSetOrigin = true;
                 }
+
+                Main.instance.MouseText(GetText("ConstructGUI.Preview.CenterSet"));
             }
 
             // 绘制Tag存储的OriginX, Y

@@ -461,6 +461,7 @@
             BannerChest: 旗帜盒
             Autofisher: 自动钓鱼机
             PaintWand: 漆涂法杖
+            ConstructWand: 构造法杖
         }
         ItemTooltip:
         {
@@ -559,6 +560,16 @@
                 选取一个范围给物块/墙上漆，或去除他们的漆
                 去漆功能对清除物块上的苔藓也有效，如同[i:PaintScraper]
                 堆叠超过999的漆不会消耗
+                '''
+            ConstructWand:
+                '''
+                [c/0099ff:<right>以打开结构面板]
+                具有自由放置结构的能力
+                存储模式 - 允许框选并将一定范围内的结构存为文件
+                放置模式 - 在材料充足的情况下一键放置结构
+                不会存储/放置液体
+                电线与促动器不会在预览中显示
+                [c/AAAAAA:尚处于测试阶段，发生问题请在Steam创意工坊页面评论]
                 '''
         }
 		MapObject:
@@ -678,6 +689,37 @@
                 }
             }
         }
+        ConstructGUI:
+        {
+            SaveMode: "当前为存储模式"
+            LoadMode: "当前为放置模式"
+            Path: "文件路径: "
+            RenameTip:
+            {
+                Exists: "已经存在一个相同名称的文件"
+                TooLong: "名称不能超过40个字符"
+                Illegal: "文件名不能包含以下字符: \\、/、:、*、?、\"、<、>、|"
+            }
+            FileInfo:
+            {
+                Title: "文件信息"
+                Name: "文件名: {Name}"
+                Time: "保存时间: {Tile}"
+                Version: "版本号: {Version}"
+                Size: "结构尺寸: {Size}"
+            }
+            MaterialInfo:
+            {
+                Title: "材料明细"
+                Stored: "已有: {Stack}"
+                Requirement: "需求: {Stack}"
+            }
+            Preview:
+            {
+                Title: "结构预览"
+                CenterSet: "点击以将其设置为放置中心点"
+            }
+        }
         SuperVault:
         {
             Name: 大背包
@@ -756,6 +798,7 @@
         }
         Common:
         {
+            Refresh: "刷新"
             Switch: "切换"
             Unavailable: "不可用"
             KeybindNone: "未绑定"

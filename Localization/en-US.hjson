@@ -453,6 +453,7 @@ Mods:
             BannerChest: Banner Box
             Autofisher: Fishing Machine
             PaintWand: Wand of Painting
+            ConstructWand: 构造法杖
         }
         ItemTooltip:
         {
@@ -552,6 +553,16 @@ Mods:
                 Also removes moss on the tiles while removing paints, like the [i:PaintScraper]
                 Paint which stacks above 999 will not be consumed
                 '''
+            ConstructWand:
+                '''
+                [c/0099ff:<right>以打开结构面板]
+                具有自由放置结构的能力
+                存储模式 - 允许框选并将一定范围内的结构存为文件
+                放置模式 - 在材料充足的情况下一键放置结构
+                不会存储/放置液体
+                电线与促动器不会在预览中显示
+                [c/AAAAAA:尚处于测试阶段，发生问题请在Steam创意工坊页面评论]
+                '''
         }
 		MapObject:
         {
@@ -598,8 +609,8 @@ Mods:
             PotionBagCurrent: "Contains the following potions ({StoredCount}/20):"
             PotionBagCurrentFull: "Contains the following potions (Full!):"
             PotionBagNone: "Empty (0/20)"
-            PotionBagAvailable: "(Active)"     # ҩˮ����ҩˮ���� >= 20
-            PotionBagUnavailable: "(Inactive)"   # ҩˮ����ҩˮ���� < 20
+            PotionBagAvailable: "(Active)"     # ҩˮ����ҩˮ���� >= 20
+            PotionBagUnavailable: "(Inactive)"   # ҩˮ����ҩˮ���� < 20
             PotionBagDisabled: "(Disabled)"
 
             BannerChestCurrent: "Stored banners: ({StoredCount}/200):"
@@ -621,7 +632,7 @@ Mods:
                 CombinedBuff: "[Has available buff combination]"
                 AutoCollect: "[Auto-deposit]"
             }
-            # ÿ�г������������30-40��ĸ֮��
+            # ÿ�г������������30-40��ĸ֮��
             TagDetailedTip:
             {
                 GardenGnome:
@@ -668,7 +679,7 @@ Mods:
                     in the Piggy Bank.
                     You may disable this function in Mod Configuration.
                     '''
-                # ���Buff: �̶�Buffͬʱ����ʱ�������Ч��
+                # ���Buff: �̶�Buffͬʱ����ʱ�������Ч��
                 CombinedBuff:
                 {
                     Battle:
@@ -680,6 +691,37 @@ Mods:
                         to multiply the spawn rate from x0-x{MaxSpawn}
                         '''
                 }
+            }
+        }
+        ConstructGUI:
+        {
+            SaveMode: "当前为存储模式"
+            LoadMode: "当前为放置模式"
+            Path: "文件路径: "
+            RenameTip:
+            {
+                Exists: "已经存在一个相同名称的文件"
+                TooLong: "名称不能超过40个字符"
+                Illegal: "文件名不能包含以下字符: \\、/、:、*、?、\"、<、>、|"
+            }
+            FileInfo:
+            {
+                Title: "文件信息"
+                Name: "文件名"
+                Time: "保存时间"
+                Version: "版本号"
+                Size: "结构尺寸"
+            }
+            MaterialInfo:
+            {
+                Title: "材料明细"
+                Stored: "已有: {Stack}"
+                Requirement: "需求: {Stack}"
+            }
+            Preview:
+            {
+                Title: "结构预览"
+                CenterSet: "点击以将其设置为放置中心点"
             }
         }
         SuperVault:
@@ -694,7 +736,7 @@ Mods:
             FishingPole: "Fishing rod"
             Bait: "Bait"
             SelectPool: "Please select fishing pool"
-            CarefulNextTime: "Be careful next time!" # ����ǵ������С�İ������������
+            CarefulNextTime: "Be careful next time!" # ����ǵ������С�İ������������
             Unavailable: "Currently no fishing info"
         }
         BuffTracker:
@@ -760,6 +802,7 @@ Mods:
         }
         Common:
         {
+            Refresh: "Refresh"
             Switch: "Switch"
             Unavailable: "Not available"
             KeybindNone: "NONE"

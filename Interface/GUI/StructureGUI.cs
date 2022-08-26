@@ -68,7 +68,7 @@ namespace ImproveGame.Interface.GUI
             SetupScrollBar();
             Append(Scrollbar);
 
-            RefreshButton = QuickButton(RefreshTexture);
+            RefreshButton = QuickButton(RefreshTexture, "{$Mods.ImproveGame.Common.Refresh}");
             RefreshButton.SetPos(new(-296f, 100f), 0.5f, 0f);
             RefreshButton.OnMouseDown += (_, _) =>
             {
@@ -77,12 +77,12 @@ namespace ImproveGame.Interface.GUI
             };
             Append(RefreshButton);
 
-            var folderButton = QuickButton(GetTexture("UI/Construct/Folder"));
+            var folderButton = QuickButton(GetTexture("UI/Construct/Folder"), "{$LegacyInterface.110}");
             folderButton.SetPos(new(-246f, 100f), 0.5f, 0f);
             folderButton.OnMouseDown += (_, _) => TrUtils.OpenFolder(FileOperator.SavePath);
             Append(folderButton);
 
-            var modeButton = QuickButton(SaveTexture);
+            var modeButton = QuickButton(SaveTexture, "");
             modeButton.SetPos(new(-196f, 100f), 0.5f, 0f);
             modeButton.OnMouseDown += (_, _) =>
             {
@@ -94,25 +94,32 @@ namespace ImproveGame.Interface.GUI
             modeButton.OnUpdate += (_) =>
             {
                 if (WandSystem.ConstructMode == WandSystem.Construct.Place)
+                {
                     modeButton.SetImage(LoadTexture);
+                    modeButton.HoverText = "{$Mods.ImproveGame.ConstructGUI.LoadMode}";
+                }
                 else
+                {
                     modeButton.SetImage(SaveTexture);
+                    modeButton.HoverText = "{$Mods.ImproveGame.ConstructGUI.SaveMode}";
+                }
             };
             Append(modeButton);
 
-            var closeButton = QuickButton(GetTexture("UI/Construct/Close"));
+            var closeButton = QuickButton(GetTexture("UI/Construct/Close"), "{$LegacyInterface.71}");
             closeButton.SetPos(new(246f, 100f), 0.5f, 0f);
             closeButton.OnMouseDown += (_, _) => Close();
             Append(closeButton);
         }
 
-        private ModImageButton QuickButton(Asset<Texture2D> texture)
+        private ModImageButton QuickButton(Asset<Texture2D> texture, string hoverText)
         {
             var button = new ModImageButton(texture, Color.White, Color.White);
             button.SetBackgroundImage(ButtonPanel);
             button.SetHoverImage(ButtonPanel_Highlight);
             button.SetSize(44, 44);
             button.OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
+            button.HoverText = hoverText;
             return button;
         }
 
@@ -218,33 +225,34 @@ namespace ImproveGame.Interface.GUI
                 TextOriginY = 0f
             };
 
-            UIList.Add(QuickUIText("文件信息", 0.5f));
+            UIList.Add(QuickUIText(GetText("ConstructGUI.FileInfo.Title"), 0.5f));
             string name = CacheStructureInfoPath.Split('\\').Last();
             name = name[..^FileOperator.Extension.Length];
-            UIList.Add(QuickSmallUIText($"文件名: {name}"));
-            UIList.Add(QuickSmallUIText($"保存时间: {DateTime.Parse(structure.BuildTime)}"));
-            UIList.Add(QuickSmallUIText($"版本号: v{structure.ModVersion}"));
-            UIList.Add(QuickSmallUIText($"结构尺寸: {structure.Width + 1}x{structure.Height + 1}"));
+            UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Name", new { Name = name }))); // 文件名
+            UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Time", new { Time = DateTime.Parse(structure.BuildTime) }))); // 保存时间
+            UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Version", new { Version = $"v{structure.ModVersion}"}))); // 模组版本
+            UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Size", new { Size = $"{structure.Width + 1}x{structure.Height + 1}" }))); // 结构尺寸
 
             var materialsAndStacks = MaterialCore.CountMaterials(structure);
             if (materialsAndStacks.Count > 0)
             {
-                UIList.Add(QuickUIText("材料明细", 0.8f));
+                UIList.Add(QuickUIText(GetText("ConstructGUI.MaterialInfo.Title"), 0.8f));
 
                 var sortedResult = from pair in materialsAndStacks orderby pair.Key ascending select pair; // 排序
-                foreach ((int itemType, int stack) in sortedResult)
+                foreach ((int itemType, int stack) in from mat in sortedResult where mat.Value > 0 select mat)
                 {
                     UIList.Add(new MaterialInfoElement(itemType, stack));
                 }
             }
 
-            UIList.Add(QuickUIText("结构预览", 0.85f));
+            UIList.Add(QuickUIText(GetText("ConstructGUI.Preview.Title"), 0.85f));
 
             var viewPanel = new StructurePreviewPanel(CacheStructureInfoPath);
             viewPanel.OnResetHeight += (_) => SetupScrollBar(false);
             UIList.Add(viewPanel);
 
             RefreshButton.SetImage(BackTexture);
+            RefreshButton.HoverText = "{$UI.Back}";
 
             Recalculate();
             SetupScrollBar();
@@ -264,6 +272,7 @@ namespace ImproveGame.Interface.GUI
             }
 
             RefreshButton.SetImage(RefreshTexture);
+            RefreshButton.HoverText = "{$Mods.ImproveGame.Common.Refresh}";
 
             Recalculate();
             SetupScrollBar();

@@ -251,12 +251,26 @@ namespace ImproveGame.Common.ConstructCore
 
                     var placePosition = position + new Point(x, y);
                     var tile = Main.tile[placePosition];
-                    tile.IsActuated = tileData.ExtraDatas[2];
-                    tile.RedWire = tileData.ExtraDatas2[3];
-                    tile.GreenWire = tileData.ExtraDatas2[4];
-                    tile.BlueWire = tileData.ExtraDatas2[5];
-                    tile.YellowWire = tileData.ExtraDatas2[6];
-                    if (tileData.ExtraDatas2[7]) // 促动器
+                    if (tileData.ExtraDatas[2]) {
+                        Wiring.ActuateForced(placePosition.X, placePosition.Y);
+                    }
+                    if (tileData.ExtraDatas2[3] && !tile.RedWire && TryConsumeWire())
+                    {
+                        tile.RedWire = true;
+                    }
+                    if (tileData.ExtraDatas2[4] && !tile.GreenWire && TryConsumeWire())
+                    {
+                        tile.GreenWire = true;
+                    }
+                    if (tileData.ExtraDatas2[5] && !tile.BlueWire && TryConsumeWire())
+                    {
+                        tile.BlueWire = true;
+                    }
+                    if (tileData.ExtraDatas2[6] && !tile.YellowWire && TryConsumeWire())
+                    {
+                        tile.YellowWire = true;
+                    }
+                    if (tileData.ExtraDatas2[7] && !tile.HasActuator) // 促动器
                     {
                         bool tryConsume(Item item)
                         {
@@ -270,6 +284,26 @@ namespace ImproveGame.Common.ConstructCore
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
                         PickItemInInventory(Main.LocalPlayer, inventory, tryConsume,
                             true, out _);
+                    }
+                    tile.WallColor = tileData.WallColor;
+                    tile.TileColor = tileData.TileColor;
+
+                    bool TryConsumeWire()
+                    {
+                        bool hasWire = false;
+                        bool tryConsume(Item item)
+                        {
+                            if (item is not null && item.type == ItemID.Actuator)
+                            {
+                                hasWire = true;
+                                return true;
+                            }
+                            return false;
+                        }
+                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                        PickItemInInventory(Main.LocalPlayer, inventory, tryConsume,
+                            true, out _);
+                        return hasWire;
                     }
 
                     _taskProcessed++;

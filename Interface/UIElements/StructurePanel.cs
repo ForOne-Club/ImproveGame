@@ -16,6 +16,7 @@ namespace ImproveGame.Interface.UIElements
         private bool _renaming;
         private int _cursorTimer;
         private bool _oldMouseLeft;
+        private string _selectedButtonName = "";
 
         public static readonly Color BorderSelectedColor = new(89, 116, 213);
         public static readonly Color BorderUnselectedColor = new(39, 46, 100);
@@ -45,6 +46,22 @@ namespace ImproveGame.Interface.UIElements
             };
             Append(NameText);
 
+            var buttonNameText = new UIText("")
+            {
+                Left = StyleDimension.FromPercent(1f),
+                Top = StyleDimension.FromPixels(4f),
+                Height = StyleDimension.FromPixels(20f)
+            };
+            buttonNameText.OnUpdate += (_) =>
+            {
+                string text = Language.GetTextValue(_selectedButtonName);
+                var font = FontAssets.MouseText.Value;
+                buttonNameText.SetText(text);
+                buttonNameText.Left = new StyleDimension(-font.MeasureString(text).X, 1f);
+                _selectedButtonName = "";
+            };
+            Append(buttonNameText);
+
             UIHorizontalSeparator separator = new()
             {
                 Top = StyleDimension.FromPixels(NameText.Height.Pixels - 2f),
@@ -57,24 +74,44 @@ namespace ImproveGame.Interface.UIElements
             {
                 Top = new StyleDimension(separator.Height.Pixels + separator.Top.Pixels + 3f, 0f),
                 Left = new StyleDimension(-20f, 1f)
-            }.SetSize(24f, 24f);
+            };
+            detailButton.SetSize(24f, 24f);
             detailButton.OnClick += DetailButtonClick;
+            detailButton.OnUpdate += (_) => {
+                if (detailButton.IsMouseHovering)
+                {
+                    _selectedButtonName = "tModLoader.ModsMoreInfo";
+                }
+            };
             Append(detailButton);
 
             var deleteButton = new UIImageButton(Main.Assets.Request<Texture2D>("Images/UI/ButtonDelete"))
             {
                 Top = detailButton.Top,
                 Left = new StyleDimension(detailButton.Left.Pixels - 24f, 1f)
-            }.SetSize(24f, 24f);
+            };
+            deleteButton.SetSize(24f, 24f);
             deleteButton.OnClick += DeleteButtonClick;
+            deleteButton.OnUpdate += (_) => {
+                if (deleteButton.IsMouseHovering)
+                {
+                    _selectedButtonName = "UI.Delete";
+                }
+            };
             Append(deleteButton);
 
-            RenameButton = new UIImageButton(Main.Assets.Request<Texture2D>("Images/UI/ButtonRename"))
+            RenameButton = new(Main.Assets.Request<Texture2D>("Images/UI/ButtonRename"))
             {
                 Top = detailButton.Top,
                 Left = new StyleDimension(deleteButton.Left.Pixels - 24f, 1f)
             };
             RenameButton.SetSize(24f, 24f);
+            RenameButton.OnUpdate += (_) => {
+                if (RenameButton.IsMouseHovering)
+                {
+                    _selectedButtonName = "UI.Rename";
+                }
+            };
             Append(RenameButton);
 
             PathPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), radius: 10, CalculateBorder: false)
@@ -88,7 +125,7 @@ namespace ImproveGame.Interface.UIElements
             };
             PathPanel.SetSize(new(Width.Pixels + RenameButton.Left.Pixels - 44f, 23f));
             Append(PathPanel);
-            PathText = new($"Path: {FilePath}", 0.7f)
+            PathText = new($"{GetText("ConstructGUI.Path")}{FilePath}", 0.7f)
             {
                 Left = StyleDimension.FromPixels(2f),
                 HAlign = 0f,
@@ -126,7 +163,7 @@ namespace ImproveGame.Interface.UIElements
             string newPath = FilePath.Replace(Name, _inputName);
             if (File.Exists(newPath) && Name != _inputName)
             {
-                Main.NewText("已经存在一个相同名称的文件");
+                Main.NewText(GetText("ConstructGUI.RenameTip.Exists"));
                 NameText.SetText(Name);
                 return;
             }
@@ -226,11 +263,11 @@ namespace ImproveGame.Interface.UIElements
                 if (inputText.Length > 40)
                 {
                     inputText = inputText[..40];
-                    Main.NewText("名称不能超过40个字符");
+                    Main.NewText(GetText("ConstructGUI.RenameTip.TooLong"));
                 }
                 if (inputText.Contains('\\') || inputText.Contains('/') || inputText.Contains(':') || inputText.Contains('*') || inputText.Contains('?') || inputText.Contains('\"') || inputText.Contains('\'') || inputText.Contains('<') || inputText.Contains('>') || inputText.Contains('|'))
                 {
-                    Main.NewText("文件名不能包含以下字符: \\、/、:、*、?、\"、<、>、|");
+                    Main.NewText(GetText("ConstructGUI.RenameTip.Illegal"));
                     return;
                 }
                 else
@@ -252,11 +289,12 @@ namespace ImproveGame.Interface.UIElements
 
         public void SetSizedText()
         {
+            string pathString = GetText("ConstructGUI.Path");
             var innerDimensions = PathPanel.GetInnerDimensions();
             var font = FontAssets.MouseText.Value;
             float scale = 0.7f;
             float dotWidth = font.MeasureString("...").X * scale;
-            float pathWidth = font.MeasureString("Path: ").X * scale;
+            float pathWidth = font.MeasureString(pathString).X * scale;
             if (font.MeasureString(FilePath).X * scale >= innerDimensions.Width - 6f - pathWidth - dotWidth)
             {
                 float width = 0f;
@@ -269,7 +307,7 @@ namespace ImproveGame.Interface.UIElements
                         break;
                     }
                 }
-                PathText.SetText($"Path: ...{FilePath[i..]}");
+                PathText.SetText($"{pathString}...{FilePath[i..]}");
             }
         }
 

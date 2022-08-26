@@ -56,22 +56,25 @@ namespace ImproveGame.Common.ConstructCore
                         Point16 frame = new(subX / 18, subY / 18);
                         isMaterialVaild = frame.X == tileObjectData.Origin.X && frame.Y == tileObjectData.Origin.Y;
                     }
+
                     if (isMaterialVaild && tileItemType is not -1)
-                    {
-                        if (!materialDictionary.ContainsKey(tileItemType))
-                            materialDictionary[tileItemType] = 1;
-                        else
-                            materialDictionary[tileItemType]++;
-                    }
+                        PlusMaterial(tileItemType);
                 }
 
                 int wallItemType = GetWallItem(structure.ParseWallType(tileData));
                 if (wallItemType != -1)
+                    PlusMaterial(wallItemType);
+
+                PlusMaterial(ItemID.Wire, tileData.ExtraDatas2[3].ToInt() + tileData.ExtraDatas2[4].ToInt() + tileData.ExtraDatas2[5].ToInt() + tileData.ExtraDatas2[6].ToInt());
+                if (tileData.ExtraDatas2[7])
+                    PlusMaterial(ItemID.Actuator);
+
+                void PlusMaterial(int itemID, int amount = 1)
                 {
-                    if (!materialDictionary.ContainsKey(wallItemType))
-                        materialDictionary[wallItemType] = 1;
+                    if (!materialDictionary.ContainsKey(itemID))
+                        materialDictionary[itemID] = amount;
                     else
-                        materialDictionary[wallItemType]++;
+                        materialDictionary[itemID] += amount;
                 }
             }
 
