@@ -65,8 +65,8 @@ namespace ImproveGame.Common.ConstructCore
                 if (wallItemType != -1)
                     PlusMaterial(wallItemType);
 
-                PlusMaterial(ItemID.Wire, tileData.ExtraDatas2[3].ToInt() + tileData.ExtraDatas2[4].ToInt() + tileData.ExtraDatas2[5].ToInt() + tileData.ExtraDatas2[6].ToInt());
-                if (tileData.ExtraDatas2[7])
+                PlusMaterial(ItemID.Wire, tileData.RedWire.ToInt() + tileData.GreenWire.ToInt() + tileData.BlueWire.ToInt() + tileData.YellowWire.ToInt());
+                if (tileData.HasActuator)
                     PlusMaterial(ItemID.Actuator);
 
                 void PlusMaterial(int itemID, int amount = 1)

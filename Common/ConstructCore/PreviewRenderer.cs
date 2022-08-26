@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 using System.Collections.Generic;
+using System.Reflection;
+using Terraria.GameContent.Drawing;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 
@@ -148,7 +150,6 @@ namespace ImproveGame.Common.ConstructCore
 
             var spriteEffects = SpriteEffects.None;
 
-            Color color = Color.White;
             int width = structure.Width;
             int height = structure.Height;
 
@@ -166,8 +167,11 @@ namespace ImproveGame.Common.ConstructCore
 
                     if (wallType > 0) // Wall
                     {
-                        Main.instance.LoadWall(wallType);
-                        Texture2D textureWall = TextureAssets.Wall[wallType].Value;
+                        Color color = Color.White;
+                        if (wallType == WallID.RainbowBrick)
+                            color = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB);
+
+                        Texture2D textureWall = GetWallDrawTexture(tileData.WallColor, wallType);
 
                         int wallFrame = Main.wallFrame[wallType] * 180;
                         Rectangle value = new(tileData.WallFrameX, tileData.WallFrameY + wallFrame, 32, 32);
@@ -192,8 +196,39 @@ namespace ImproveGame.Common.ConstructCore
                     // 这绘制...不想再写第二遍了
                     if (tileType != -1) // Tile
                     {
-                        Main.instance.LoadTiles(tileType);
-                        Texture2D texture = TextureAssets.Tile[tileType].Value;
+                        Color color = Color.White;
+
+                        if (tileData.ExtraDatas[2])
+                            color = color.MultiplyRGB(Color.White * 0.4f);
+                        else
+                        {
+                            var targetMethod = typeof(TileDrawing).GetMethod("ShouldTileShine", BindingFlags.Static | BindingFlags.NonPublic);
+                            var resultObj = targetMethod.Invoke(null, new object[] { (ushort)tileType, (short)tileData.TileFrameX });
+                            if (resultObj is bool result && result)
+                                color = Main.shine(color, tileType);
+                        }
+                        switch (tileType)
+                        {
+                            case 51:
+                                color *= 0.5f;
+                                break;
+                            case TileID.RainbowBrick:
+                                {
+                                    color = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 255);
+                                    if (tileData.ExtraDatas[2])
+                                        color = color.MultiplyRGB(Color.White * 0.4f);
+                                    break;
+                                }
+                            case 129:
+                                {
+                                    color = new Color(255, 255, 255, 100);
+                                    if (tileData.TileFrameX >= 324)
+                                        color = Color.Transparent;
+                                    break;
+                                }
+                        }
+
+                        Texture2D texture = GetTileDrawTexture(tileData.TileColor, tileType);
                         var normalTileRect = new Rectangle(tileData.TileFrameX, tileData.TileFrameY, 16, 16);
 
                         int tileItemType = GetTileItem(tileType, tileData.TileFrameX, tileData.TileFrameY);
@@ -284,9 +319,67 @@ namespace ImproveGame.Common.ConstructCore
                             sb.Draw(texture, position * scale, normalTileRect, color, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
                         }
                     }
+
+                    if (tileData.HasActuator)
+                    {
+                        Color actColor = Color.White * 0.7f;
+                        sb.Draw(TextureAssets.Actuator.Value, position * scale, null, actColor, 0f, new Vector2(0f, 8f), scale, spriteEffects, 0f);
+                    }
                 }
             }
             return true;
+        }
+
+        //private void PrepareTileShader(int paintColor, int tileType)
+        //{
+        //    var holder = new TilePaintSystemV2.TileRenderTargetHolder();
+        //    int tileStyle = 0;
+        //    switch (tileType)
+        //    {
+        //        case TileID.Trees:
+        //            tileStyle = -1;
+        //            break;
+        //        case TileID.PalmTree:
+        //            tileStyle = 0;
+        //            break;
+        //    }
+        //    holder.Key.PaintColor = paintColor;
+        //    holder.Key.TileStyle = tileStyle;
+        //    holder.Key.TileType = tileType;
+        //    holder.PrepareShader();
+        //}
+
+        public static Texture2D GetTileDrawTexture(int paintColor, int tileType)
+        {
+            Main.instance.LoadTiles(tileType);
+            Texture2D result = TextureAssets.Tile[tileType].Value;
+            int tileStyle = 0;
+            switch (tileType)
+            {
+                case TileID.Trees:
+                    tileStyle = -1;
+                    break;
+                case TileID.PalmTree:
+                    tileStyle = 0;
+                    break;
+            }
+
+            Texture2D texture2D = Main.instance.TilePaintSystem.TryGetTileAndRequestIfNotReady(tileType, tileStyle, paintColor);
+            if (texture2D != null)
+                result = texture2D;
+
+            return result;
+        }
+
+        public static Texture2D GetWallDrawTexture(int paintColor, int wallType)
+        {
+            Main.instance.LoadWall(wallType);
+            Texture2D result = TextureAssets.Tile[wallType].Value;
+            Texture2D texture2D = Main.instance.TilePaintSystem.TryGetWallAndRequestIfNotReady(wallType, paintColor);
+            if (texture2D != null)
+                result = texture2D;
+
+            return result;
         }
     }
 }

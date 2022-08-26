@@ -15,15 +15,10 @@ namespace ImproveGame.Interface.GUI
         public bool CacheSetupStructureInfos; // 缓存，在下一帧Setup
         public string CacheStructureInfoPath;
 
-        private int oldScreenWidth;
         private int oldScreenHeight;
 
-        public Asset<Texture2D> SaveTexture;
-        public Asset<Texture2D> LoadTexture;
         public Asset<Texture2D> RefreshTexture;
         public Asset<Texture2D> BackTexture;
-        public Asset<Texture2D> ButtonPanel;
-        public Asset<Texture2D> ButtonPanel_Highlight;
 
         private SUIPanel BasePanel; // 背景板
         public ZeroScrollbar Scrollbar; // 拖动条
@@ -32,12 +27,12 @@ namespace ImproveGame.Interface.GUI
 
         public override void OnInitialize()
         {
-            SaveTexture = GetTexture("UI/Construct/Save");
-            LoadTexture = GetTexture("UI/Construct/Load");
+            var saveTexture = GetTexture("UI/Construct/Save");
+            var loadTexture = GetTexture("UI/Construct/Load");
+            var explodeAndPlaceTexture = GetTexture("UI/Construct/ExplodeAndPlace");
+            var placeOnlyTexture = GetTexture("UI/Construct/PlaceOnly");
             RefreshTexture = GetTexture("UI/Construct/Refresh");
             BackTexture = GetTexture("UI/Construct/Back");
-            ButtonPanel = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel");
-            ButtonPanel_Highlight = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder");
 
             BasePanel = new(new(29, 34, 70), new(44, 57, 105, 160))
             {
@@ -82,7 +77,7 @@ namespace ImproveGame.Interface.GUI
             folderButton.OnMouseDown += (_, _) => TrUtils.OpenFolder(FileOperator.SavePath);
             Append(folderButton);
 
-            var modeButton = QuickButton(SaveTexture, "");
+            var modeButton = QuickButton(saveTexture, "");
             modeButton.SetPos(new(-196f, 100f), 0.5f, 0f);
             modeButton.OnMouseDown += (_, _) =>
             {
@@ -95,28 +90,57 @@ namespace ImproveGame.Interface.GUI
             {
                 if (WandSystem.ConstructMode == WandSystem.Construct.Place)
                 {
-                    modeButton.SetImage(LoadTexture);
+                    modeButton.SetImage(loadTexture);
                     modeButton.HoverText = "{$Mods.ImproveGame.ConstructGUI.LoadMode}";
                 }
                 else
                 {
-                    modeButton.SetImage(SaveTexture);
+                    modeButton.SetImage(saveTexture);
                     modeButton.HoverText = "{$Mods.ImproveGame.ConstructGUI.SaveMode}";
                 }
             };
             Append(modeButton);
 
+            var explodeButton = QuickButton(saveTexture, "");
+            explodeButton.SetPos(new(-146f, 100f), 0.5f, 0f);
+            explodeButton.OnMouseDown += (_, _) =>
+            {
+                if (WandSystem.ExplodeMode == WandSystem.Construct.Place)
+                    WandSystem.ExplodeMode = WandSystem.Construct.ExplodeAndPlace;
+                else
+                    WandSystem.ExplodeMode = WandSystem.Construct.Place;
+            };
+            explodeButton.OnUpdate += (_) =>
+            {
+                if (WandSystem.ExplodeMode == WandSystem.Construct.Place)
+                {
+                    explodeButton.SetImage(placeOnlyTexture);
+                    explodeButton.HoverText = "{$Mods.ImproveGame.ConstructGUI.PlaceOnly}";
+                }
+                else
+                {
+                    explodeButton.SetImage(explodeAndPlaceTexture);
+                    explodeButton.HoverText = "{$Mods.ImproveGame.ConstructGUI.ExplodeAndPlace}";
+                }
+            };
+            Append(explodeButton);
+
             var closeButton = QuickButton(GetTexture("UI/Construct/Close"), "{$LegacyInterface.71}");
             closeButton.SetPos(new(246f, 100f), 0.5f, 0f);
             closeButton.OnMouseDown += (_, _) => Close();
             Append(closeButton);
+
+            var tutorialButton = QuickButton(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Icon_Locked"), "{$Mods.ImproveGame.ConstructGUI.Tutorial}");
+            tutorialButton.SetPos(new(196f, 100f), 0.5f, 0f);
+            tutorialButton.OnMouseDown += (_, _) => SetupTutorialPage();
+            Append(tutorialButton);
         }
 
-        private ModImageButton QuickButton(Asset<Texture2D> texture, string hoverText)
+        private static ModImageButton QuickButton(Asset<Texture2D> texture, string hoverText)
         {
             var button = new ModImageButton(texture, Color.White, Color.White);
-            button.SetBackgroundImage(ButtonPanel);
-            button.SetHoverImage(ButtonPanel_Highlight);
+            button.SetBackgroundImage(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel"));
+            button.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder"));
             button.SetSize(44, 44);
             button.OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
             button.HoverText = hoverText;
@@ -210,13 +234,7 @@ namespace ImproveGame.Interface.GUI
                 return;
             }
 
-            static UIText QuickUIText(string text, float originY) => new(text, 0.6f, true)
-            {
-                Height = StyleDimension.FromPixels(50f),
-                Width = StyleDimension.FromPercent(1f),
-                TextOriginX = 0.5f,
-                TextOriginY = originY
-            };
+
             static UIText QuickSmallUIText(string text) => new(text)
             {
                 Height = StyleDimension.FromPixels(24f),
@@ -225,7 +243,7 @@ namespace ImproveGame.Interface.GUI
                 TextOriginY = 0f
             };
 
-            UIList.Add(QuickUIText(GetText("ConstructGUI.FileInfo.Title"), 0.5f));
+            UIList.Add(QuickTitleText(GetText("ConstructGUI.FileInfo.Title"), 0.5f));
             string name = CacheStructureInfoPath.Split('\\').Last();
             name = name[..^FileOperator.Extension.Length];
             UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Name", new { Name = name }))); // 文件名
@@ -236,7 +254,7 @@ namespace ImproveGame.Interface.GUI
             var materialsAndStacks = MaterialCore.CountMaterials(structure);
             if (materialsAndStacks.Count > 0)
             {
-                UIList.Add(QuickUIText(GetText("ConstructGUI.MaterialInfo.Title"), 0.8f));
+                UIList.Add(QuickTitleText(GetText("ConstructGUI.MaterialInfo.Title"), 0.8f));
 
                 var sortedResult = from pair in materialsAndStacks orderby pair.Key ascending select pair; // 排序
                 foreach ((int itemType, int stack) in from mat in sortedResult where mat.Value > 0 select mat)
@@ -245,7 +263,7 @@ namespace ImproveGame.Interface.GUI
                 }
             }
 
-            UIList.Add(QuickUIText(GetText("ConstructGUI.Preview.Title"), 0.85f));
+            UIList.Add(QuickTitleText(GetText("ConstructGUI.Preview.Title"), 0.85f));
 
             var viewPanel = new StructurePreviewPanel(CacheStructureInfoPath);
             viewPanel.OnResetHeight += (_) => SetupScrollBar(false);
@@ -258,6 +276,7 @@ namespace ImproveGame.Interface.GUI
             SetupScrollBar();
         }
 
+        // 结构列表
         public void SetupStructuresList()
         {
             UIList.Clear();
@@ -277,6 +296,28 @@ namespace ImproveGame.Interface.GUI
             Recalculate();
             SetupScrollBar();
         }
+
+        // 显示“教程”
+        public void SetupTutorialPage()
+        {
+            UIList.Clear();
+
+            UIList.Add(new GIFImage("SaveStructureZh", 14, 9, 118, 2));
+
+            RefreshButton.SetImage(BackTexture);
+            RefreshButton.HoverText = "{$UI.Back}";
+
+            Recalculate();
+            SetupScrollBar();
+        }
+
+        private static UIText QuickTitleText(string text, float originY) => new(text, 0.6f, true)
+        {
+            Height = StyleDimension.FromPixels(50f),
+            Width = StyleDimension.FromPercent(1f),
+            TextOriginX = 0.5f,
+            TextOriginY = originY
+        };
 
         /// <summary>
         /// 打开GUI界面

@@ -821,27 +821,21 @@ namespace ImproveGame
         /// <summary>
         /// 从物品数组里找到对应物品，返回值为在数组中的索引
         /// </summary>
-        /// <param name="player">对应玩家</param>
-        /// <param name="shouldPick">选取物品的依据</param>
-        /// <param name="tryConsume">是否尝试消耗</param>
-        /// <returns></returns>
-        public static Item PickItemInInventory(Player player, Item[] inventory, Func<Item, bool> shouldPick, bool tryConsume, out int index)
+        /// <returns>物品实例</returns>
+        public static Item PickItemFromArray(Player player, Item[] itemArray, Func<Item, bool> shouldPick, bool tryConsume)
         {
-            for (int i = 0; i < inventory.Length; i++)
+            for (int i = 0; i < itemArray.Length; i++)
             {
-                ref Item item = ref inventory[i];
+                ref Item item = ref itemArray[i];
                 if (!item.IsAir && shouldPick.Invoke(item))
                 {
-                    var returnItem = item.Clone();
                     if (tryConsume)
                     {
                         TryConsumeItem(ref item, player);
                     }
-                    index = i;
-                    return returnItem; // 要是consume完了就没了，所以clone一下
+                    return item;
                 }
             }
-            index = -1;
             return new();
         }
 

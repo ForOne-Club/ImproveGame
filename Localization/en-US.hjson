@@ -695,8 +695,13 @@ Mods:
         }
         ConstructGUI:
         {
-            SaveMode: "当前为存储模式"
-            LoadMode: "当前为放置模式"
+            Structure: "QoL Structure" # 这个是存储后的文件名
+            SavedAs: "结构已存储为文件 " # 后接文件全路径(所属文件夹路径+文件名)
+            SaveMode: "存储模式"
+            LoadMode: "放置模式"
+            ExplodeAndPlace: "爆破并放置"
+            PlaceOnly: "仅放置"
+            Tutorial: "功能介绍"
             Path: "文件路径: "
             RenameTip:
             {
@@ -707,10 +712,10 @@ Mods:
             FileInfo:
             {
                 Title: "文件信息"
-                Name: "文件名"
-                Time: "保存时间"
-                Version: "版本号"
-                Size: "结构尺寸"
+                Name: "文件名: {Name}"
+                Time: "保存时间: {Tile}"
+                Version: "版本号: {Version}"
+                Size: "结构尺寸: {Size}"
             }
             MaterialInfo:
             {
@@ -722,6 +727,23 @@ Mods:
             {
                 Title: "结构预览"
                 CenterSet: "点击以将其设置为放置中心点"
+            }
+            Tutorial:
+            {
+                Saving:
+                    '''
+                    面板上方左侧的第三个按钮可以切换模式为放置或存储
+
+                    在存储模式下，你可以左键使用构造法杖以框选结构，并将结构以文件形式存储到你的电脑上。以便在不同的世界以及服务器中放置结构。
+                    此处有一个动图，展示了如何框选并保存结构：
+                    '''
+                Place:
+                    '''
+                    在放置模式下，你需要在主界面选择一个结构，如果结构名称显示为黄色，则表明当前选择了此结构。
+                    如果在你的物品栏与大背包内有足够的材料，左键使用即可将结构放置到世界上，否则结构可能会残缺一部分。
+                    某些物块的朝向可能会出现问题，属于正常现象
+                    此处有一个动图，作为一个放置结构的例子：
+                    '''
             }
         }
         SuperVault:
@@ -802,6 +824,7 @@ Mods:
         }
         Common:
         {
+            Loading: "Loading..."
             Refresh: "Refresh"
             Switch: "Switch"
             Unavailable: "Not available"

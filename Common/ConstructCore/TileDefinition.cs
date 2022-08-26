@@ -37,6 +37,12 @@ namespace ImproveGame.Common.ConstructCore
         /// </summary>
         public BitsByte ExtraDatas2;
 
+        public bool RedWire => ExtraDatas2[3];
+        public bool GreenWire => ExtraDatas2[4];
+        public bool BlueWire => ExtraDatas2[5];
+        public bool YellowWire => ExtraDatas2[6];
+        public bool HasActuator => ExtraDatas2[7];
+
         public bool VanillaTile => !ExtraDatas[0];
         public bool VanillaWall => !ExtraDatas[1];
         public BlockType BlockType

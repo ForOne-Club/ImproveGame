@@ -17,13 +17,13 @@ namespace ImproveGame.Common.ConstructCore
         {
             TrUtils.TryCreatingDirectory(SavePath);
 
-            string name = $"QoLStructure.qolstruct";
+            string name = $"{GetText("ConstructGUI.Structure")}{Extension}";
             string thisPath = Path.Combine(SavePath, name);
             if (File.Exists(thisPath))
             {
                 for (int i = 2; i <= 999; i++)
                 {
-                    name = $"QoLStructure ({i}){Extension}";
+                    name = $"{GetText("ConstructGUI.Structure")} ({i}){Extension}";
                     thisPath = Path.Combine(SavePath, name);
                     if (!File.Exists(thisPath))
                     {
@@ -32,7 +32,7 @@ namespace ImproveGame.Common.ConstructCore
                 }
             }
 
-            Main.NewText("Structure saved as " + thisPath, Color.Yellow);
+            Main.NewText(GetText("ConstructGUI.SavedAs") + thisPath, Color.Yellow);
 
             TagIO.ToFile(new QoLStructure(rectInWorld).Tag, thisPath);
             

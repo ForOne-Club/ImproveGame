@@ -21,8 +21,9 @@ namespace ImproveGame.Common.Systems
         public static PaintMode PaintWandMode = PaintMode.Tile;
 
         // 构造法杖
-        public enum Construct : byte { Save, Place };
+        public enum Construct : byte { Save, Place, ExplodeAndPlace };
         public static Construct ConstructMode = Construct.Save;
+        public static Construct ExplodeMode = Construct.ExplodeAndPlace;
         public static string ConstructFilePath;
 
         /// <summary>
