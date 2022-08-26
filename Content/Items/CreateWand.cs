@@ -5,6 +5,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using static ImproveGame.Entitys.TileData;
 
@@ -482,7 +483,7 @@ namespace ImproveGame.Content.Items
             if (context == ItemSlot.Context.InventoryItem)
             {
                 ItemInInventory = true;
-                if (Main.mouseMiddle && Main.mouseMiddleRelease)
+                if (PlayerInput.Triggers.JustPressed.MouseMiddle)
                 {
                     if (!ArchitectureGUI.Visible)
                     {

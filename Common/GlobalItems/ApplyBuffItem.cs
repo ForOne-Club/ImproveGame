@@ -3,6 +3,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Terraria.GameInput;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -124,7 +125,7 @@ namespace ImproveGame.Common.GlobalItems
 
                 if (buffType is -1 && item.type != ItemID.GardenGnome) return;
 
-                if (Main.mouseMiddle && Main.mouseMiddleRelease) {
+                if (PlayerInput.Triggers.JustPressed.MouseMiddle) {
                     if (BuffTrackerGUI.Visible)
                         UISystem.Instance.BuffTrackerGUI.Close();
                     else
