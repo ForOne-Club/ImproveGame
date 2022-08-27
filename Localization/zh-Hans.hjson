@@ -697,7 +697,6 @@
             LoadMode: "放置模式"
             ExplodeAndPlace: "爆破并放置"
             PlaceOnly: "仅放置"
-            Tutorial: "功能介绍"
             Path: "文件路径: "
             RenameTip:
             {
@@ -726,19 +725,47 @@
             }
             Tutorial:
             {
-                Saving:
+                Button: "功能介绍"
+                Save.Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
+                Save.Text:
                     '''
                     面板上方左侧的第三个按钮可以切换模式为放置或存储
 
                     在存储模式下，你可以左键使用构造法杖以框选结构，并将结构以文件形式存储到你的电脑上。以便在不同的世界以及服务器中放置结构。
-                    此处有一个动图，展示了如何框选并保存结构：
+                    
+                    下图展示了如何框选并保存结构:
                     '''
-                Place:
+                Place.Title: "{$Mods.ImproveGame.ConstructGUI.LoadMode}"
+                Place.Text:
                     '''
                     在放置模式下，你需要在主界面选择一个结构，如果结构名称显示为黄色，则表明当前选择了此结构。
+                    
                     如果在你的物品栏与大背包内有足够的材料，左键使用即可将结构放置到世界上，否则结构可能会残缺一部分。
                     某些物块的朝向可能会出现问题，属于正常现象
-                    此处有一个动图，作为一个放置结构的例子：
+                    
+                    此处是一个放置结构的例子:
+                    '''
+                Explode.Title: "爆破模式"
+                Explode.Text:
+                    '''
+                    如果你选择了“爆破并放置”，那么在放置结构前，相应区域的物块将会被爆破，以给结构腾出足够的空间。
+                    '''
+                Panel.Title: "结构列表"
+                Panel.Text:
+                    '''
+                    在UI主界面显示了当前存储于你的电脑上的结构列表，每个结构单元包含了文件名称、路径信息。
+                    
+                    点击右方的“更多信息”按钮即可查看材料明细与结构预览，同时可以在预览界面选择结构放置时的中心点。
+                    '''
+                Materials.Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
+                Materials.Text:
+                    '''
+                    在材料明细区域中可以查看各种材料的需求量以及当前存储于你的物品栏和大背包的数量，以便你准备相应的材料
+                    '''
+                Preview.Title: "{$Mods.ImproveGame.ConstructGUI.Preview.Title}"
+                Preview.Text:
+                    '''
+                    结构预览区域可供查看结构，并调节结构的放置中心点，即放置结构时鼠标指针所指向的物块。黄框标示的物块即为放置中心点
                     '''
             }
         }

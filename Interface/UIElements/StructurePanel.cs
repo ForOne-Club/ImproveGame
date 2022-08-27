@@ -244,7 +244,7 @@ namespace ImproveGame.Interface.UIElements
             if (tag is not null)
             {
                 WandSystem.ConstructFilePath = FilePath;
-                PreviewRenderer.ResetPreviewTarget = true;
+                PreviewRenderer.ResetPreviewTarget = PreviewRenderer.ResetState.WaitReset;
                 int width = tag.GetShort("Width");
                 int height = tag.GetShort("Height");
                 PreviewRenderer.PreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width * 16 + 20, height * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);

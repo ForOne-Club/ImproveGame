@@ -105,7 +105,7 @@ namespace ImproveGame.Interface.UIElements
                 Recalculate();
                 _cacheUpdateResetHeight = true;
                 PreviewRenderer.UIPreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, StructureWidth * 16 + 20, StructureHeight * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
-                PreviewRenderer.ResetUIPreviewTarget = true;
+                PreviewRenderer.ResetUIPreviewTarget = PreviewRenderer.ResetState.WaitReset;
             }
 
             base.Update(gameTime);
