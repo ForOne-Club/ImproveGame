@@ -555,13 +555,13 @@ Mods:
                 '''
             ConstructWand:
                 '''
-                [c/0099ff:<right>以打开结构面板]
-                具有自由放置结构的能力
-                存储模式 - 允许框选并将一定范围内的结构存为文件
-                放置模式 - 在材料充足的情况下一键放置结构
-                不会存储/放置液体
-                电线与促动器不会在预览中显示
-                [c/AAAAAA:尚处于测试阶段，发生问题请在Steam创意工坊页面评论]
+                [c/0099ff:<right> to open Construction Panel]
+                Has ability to place structures freely
+                Recording Mode - Saves selected structures as files
+                Placing Mode - Places structures while material is sufficient
+                Will not record/place liquids
+                Wire or Actuator will not be shown in preview
+                [c/AAAAAA:Beta test feature, kindly report bugs in this mod's Steam workshop page]
                 '''
         }
 		MapObject:
@@ -696,80 +696,81 @@ Mods:
         ConstructGUI:
         {
             Structure: "QoL Structure" # 这个是存储后的文件名
-            SavedAs: "结构已存储为文件 " # 后接文件全路径(所属文件夹路径+文件名)
-            SaveMode: "存储模式"
-            LoadMode: "放置模式"
-            ExplodeAndPlace: "爆破并放置"
-            PlaceOnly: "仅放置"
-            Path: "文件路径: "
+            SavedAs: "Structure has been saved as a file" # 后接文件全路径(所属文件夹路径+文件名)
+            SaveMode: "Recording Mode"
+            LoadMode: "Placing Mode"
+            ExplodeAndPlace: "Destroy then Place"
+            PlaceOnly: "Place"
+            Path: "File path: "
             RenameTip:
             {
-                Exists: "已经存在一个相同名称的文件"
-                TooLong: "名称不能超过40个字符"
-                Illegal: "文件名不能包含以下字符: \\、/、:、*、?、\"、<、>、|"
+                Exists: "A file with the same name already exists"
+                TooLong: "File name must not exceed 40 characters"
+                Illegal: "File name must not include following characterts: \\, /, :, *, ?, \", <, > or |"
             }
             FileInfo:
             {
-                Title: "文件信息"
-                Name: "文件名: {Name}"
-                Time: "保存时间: {Tile}"
-                Version: "版本号: {Version}"
-                Size: "结构尺寸: {Size}"
+                Title: "File Info"
+                Name: "File name: {Name}"
+                Time: "Time saved: {Time}"
+                Version: "Version: {Version}"
+                Size: "Structure size: {Size}"
             }
             MaterialInfo:
             {
-                Title: "材料明细"
-                Stored: "已有: {Stack}"
-                Requirement: "需求: {Stack}"
+                Title: "Material Info"
+                Stored: "Has: {Stack}"
+                Requirement: "Needed: {Stack}"
             }
             Preview:
             {
-                Title: "结构预览"
-                CenterSet: "点击以将其设置为放置中心点"
+                Title: "Structure Preview"
+                CenterSet: "Click to set it as the placement center"
             }
             Tutorial:
             {
-                Button: "功能介绍"
+                Button: "Introduction"
                 Save.Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
                 Save.Text:
                     '''
-                    面板上方左侧的第三个按钮可以切换模式为放置或存储
+                    The third button at the left top of the panel can switch mode to Recording Mode or Placing Mode
 
-                    在存储模式下，你可以左键使用构造法杖以框选结构，并将结构以文件形式存储到你的电脑上。以便在不同的世界以及服务器中放置结构。
+                    In recording mode, you can hold the left key and drag to select structures
+                    Then save them on your PC as files to place them even in different worlds and servers
                     
-                    下图展示了如何框选并保存结构:
+                    The picture below shows how to select and save structures:
                     '''
                 Place.Title: "{$Mods.ImproveGame.ConstructGUI.LoadMode}"
                 Place.Text:
                     '''
-                    在放置模式下，你需要在主界面选择一个结构，如果结构名称显示为黄色，则表明当前选择了此结构。
+                    In placing mode, you need to choose a structure in the main panel, a structure is selected if its name is in yellow
                     
-                    如果在你的物品栏与大背包内有足够的材料，左键使用即可将结构放置到世界上，否则结构可能会残缺一部分。
-                    某些物块的朝向可能会出现问题，属于正常现象
+                    if material in your inventory or the Huge Inventory is sufficient, left click to place the structure
+                    Directions of certain tiles may be incorrect
                     
-                    此处是一个放置结构的例子:
+                    Here is an example of placing structures: 
                     '''
-                Explode.Title: "爆破模式"
+                Explode.Title: "Destroy Then Place"
                 Explode.Text:
                     '''
-                    如果你选择了“爆破并放置”，那么在放置结构前，相应区域的物块将会被爆破，以给结构腾出足够的空间。
+                    If you choose 'Destroy Then Place', the area to place the structure will be cleared for enough placement space
                     '''
-                Panel.Title: "结构列表"
+                Panel.Title: "Structure List"
                 Panel.Text:
                     '''
-                    在UI主界面显示了当前存储于你的电脑上的结构列表，每个结构单元包含了文件名称、路径信息。
+                    The main panel displays structure files on your PC, including file name and path
                     
-                    点击右方的“更多信息”按钮即可查看材料明细与结构预览，同时可以在预览界面选择结构放置时的中心点。
+                    Click 'More Info' button at the right side to check detailed info and preview, placement center can be adjusted in the preview
                     '''
                 Materials.Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
                 Materials.Text:
                     '''
-                    在材料明细区域中可以查看各种材料的需求量以及当前存储于你的物品栏和大背包的数量，以便你准备相应的材料
+                    You can check needed and stored materials in Material Info
                     '''
                 Preview.Title: "{$Mods.ImproveGame.ConstructGUI.Preview.Title}"
                 Preview.Text:
                     '''
-                    结构预览区域可供查看结构，并调节结构的放置中心点，即放置结构时鼠标指针所指向的物块。黄框标示的物块即为放置中心点
+                    Structure preview also shows the placement center(the yellow box), which is the position of the cursor while placing.
                     '''
             }
         }
