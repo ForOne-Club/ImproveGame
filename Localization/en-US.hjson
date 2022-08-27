@@ -590,7 +590,7 @@ Mods:
             PrefixCount: "Reforging count: "
             AnglerQuest: "Angler's quest refreshed!"
             FromMod: "From mod {DisplayName}"
-            LootDisplay: "Press [{KeybindName}] to see detailed item drop"
+            LootDisplay: "Press {KeybindName} to see detailed item drop"
             LootDisplayBindless: "(You have not bind a hotkey for this function, please do so in Controls)"
             Refreshing: "Refreshing"
             Refresh: "Refresh Shop"
@@ -854,7 +854,6 @@ Mods:
             Refresh: "Refresh"
             Switch: "Switch"
             Unavailable: "Not available"
-            KeybindNone: "NONE"
         }
         RecipeGroup:
         {

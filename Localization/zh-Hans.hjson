@@ -598,7 +598,7 @@
             PrefixCount: "物品重铸次数："
             AnglerQuest: "已刷新钓鱼任务！"
             FromMod: "所属模组 {DisplayName}"
-            LootDisplay: "按下 [{KeybindName}] 以查看摸彩袋物品明细"
+            LootDisplay: "按下 {KeybindName} 以查看摸彩袋物品明细"
             LootDisplayBindless: "(您尚未绑定快捷键，请到控件处绑定以使用此功能)"
             Refreshing: "刷新中"
             Refresh: "刷新商店"
@@ -851,7 +851,6 @@
             Refresh: "刷新"
             Switch: "切换"
             Unavailable: "不可用"
-            KeybindNone: "未绑定"
         }
         RecipeGroup:
         {

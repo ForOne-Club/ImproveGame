@@ -116,22 +116,24 @@ namespace ImproveGame
         {
             if (Main.dedServ || keybind == null)
             {
-                bindName = "";
+                bindName = "ERROR";
                 return false;
             }
             List<string> keys = keybind.GetAssignedKeys(InputMode.Keyboard);
             if (keys.Count == 0)
             {
-                bindName = GetText("Common.KeybindNone");
+                bindName = Language.GetTextValue("LegacyMenu.195"); // <未绑定>
                 return false;
             }
-            StringBuilder sb = new(16);
-            sb.Append(keys[0]);
-            for (int i = 1; i < keys.Count; i++)
-            {
-                sb.Append(" / ").Append(keys[i]);
-            }
-            bindName = sb.ToString();
+            var keybindListItem = new UIKeybindingListItem(keys[0], InputMode.Keyboard, Color.White);
+            bindName = keybindListItem.GetType().GetMethod("GenInput", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(keybindListItem, new object[] { keys }) as string;
+            //StringBuilder sb = new(16);
+            //sb.Append(keys[0]);
+            //for (int i = 1; i < keys.Count; i++)
+            //{
+            //    sb.Append(" / ").Append(keys[i]);
+            //}
+            //bindName = sb.ToString();
             return true;
         }
 
