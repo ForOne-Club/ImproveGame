@@ -70,6 +70,15 @@
             return uie;
         }
 
+        public static UIElement SetAlign(this UIElement uie, float horizontalAlign = -1f, float verticalAlign = -1f)
+        {
+            if (horizontalAlign is not -1f)
+                uie.HAlign = horizontalAlign;
+            if (verticalAlign is not -1f)
+                uie.VAlign = verticalAlign;
+            return uie;
+        }
+
         public static UIElement SetSize(this UIElement uie, Vector2 size, float precentWidth = 0, float precentHeight = 0)
         {
             uie.SetSize(size.X, size.Y, precentWidth, precentHeight);

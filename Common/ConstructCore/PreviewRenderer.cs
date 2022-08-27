@@ -10,14 +10,16 @@ namespace ImproveGame.Common.ConstructCore
 {
     internal class PreviewRenderer : ModSystem
     {
+        internal enum ResetState { WaitReset, Drawing, Finished }
+
         // 用RT2D绘制一次，之后直接放RT，就不需要一直绘制降低性能了
         internal static RenderTarget2D PreviewTarget;
-        internal static bool ResetPreviewTarget;
+        internal static ResetState ResetPreviewTarget;
         private bool _canDrawLastFrame;
 
         internal static string UIPreviewPath;
         internal static RenderTarget2D UIPreviewTarget;
-        internal static bool ResetUIPreviewTarget;
+        internal static ResetState ResetUIPreviewTarget;
 
         public override void Load()
         {
@@ -83,7 +85,7 @@ namespace ImproveGame.Common.ConstructCore
         {
             bool canDraw = Main.LocalPlayer.HeldItem?.type == ModContent.ItemType<ConstructWand>() &&
                 WandSystem.ConstructMode == WandSystem.Construct.Place;
-            if (((canDraw && !_canDrawLastFrame) || ResetPreviewTarget) && !string.IsNullOrEmpty(WandSystem.ConstructFilePath) && File.Exists(WandSystem.ConstructFilePath))
+            if (((canDraw && !_canDrawLastFrame) || ResetPreviewTarget == ResetState.WaitReset) && !string.IsNullOrEmpty(WandSystem.ConstructFilePath) && File.Exists(WandSystem.ConstructFilePath))
             {
                 if (PreviewTarget is null)
                 {
@@ -98,16 +100,20 @@ namespace ImproveGame.Common.ConstructCore
                 }
                 if (PreviewTarget is not null)
                 {
+                    ResetPreviewTarget = ResetState.Drawing;
                     DrawPreviewToRender(PreviewTarget, WandSystem.ConstructFilePath);
-                    ResetPreviewTarget = false;
+                    if (ResetPreviewTarget != ResetState.WaitReset)
+                        ResetPreviewTarget = ResetState.Finished;
                 }
             }
             _canDrawLastFrame = canDraw;
 
-            if (!string.IsNullOrEmpty(UIPreviewPath) && File.Exists(UIPreviewPath) && ResetUIPreviewTarget)
+            if (!string.IsNullOrEmpty(UIPreviewPath) && File.Exists(UIPreviewPath) && ResetUIPreviewTarget == ResetState.WaitReset)
             {
+                ResetUIPreviewTarget = ResetState.Drawing;
                 DrawPreviewToRender(UIPreviewTarget, UIPreviewPath);
-                ResetUIPreviewTarget = false;
+                if (ResetUIPreviewTarget != ResetState.WaitReset)
+                    ResetUIPreviewTarget = ResetState.Finished;
             }
 
             orig();
@@ -330,25 +336,6 @@ namespace ImproveGame.Common.ConstructCore
             return true;
         }
 
-        //private void PrepareTileShader(int paintColor, int tileType)
-        //{
-        //    var holder = new TilePaintSystemV2.TileRenderTargetHolder();
-        //    int tileStyle = 0;
-        //    switch (tileType)
-        //    {
-        //        case TileID.Trees:
-        //            tileStyle = -1;
-        //            break;
-        //        case TileID.PalmTree:
-        //            tileStyle = 0;
-        //            break;
-        //    }
-        //    holder.Key.PaintColor = paintColor;
-        //    holder.Key.TileStyle = tileStyle;
-        //    holder.Key.TileType = tileType;
-        //    holder.PrepareShader();
-        //}
-
         public static Texture2D GetTileDrawTexture(int paintColor, int tileType)
         {
             Main.instance.LoadTiles(tileType);
@@ -365,8 +352,21 @@ namespace ImproveGame.Common.ConstructCore
             }
 
             Texture2D texture2D = Main.instance.TilePaintSystem.TryGetTileAndRequestIfNotReady(tileType, tileStyle, paintColor);
-            if (texture2D != null)
+            if (texture2D is not null)
+            {
                 result = texture2D;
+            }
+            else // 下一帧重设，给这些Request一帧时间让他们加载
+            {
+                if (ResetPreviewTarget == ResetState.Drawing)
+                {
+                    ResetPreviewTarget = ResetState.WaitReset;
+                }
+                if (ResetUIPreviewTarget == ResetState.Drawing)
+                {
+                    ResetUIPreviewTarget = ResetState.WaitReset;
+                }
+            }
 
             return result;
         }
@@ -374,10 +374,24 @@ namespace ImproveGame.Common.ConstructCore
         public static Texture2D GetWallDrawTexture(int paintColor, int wallType)
         {
             Main.instance.LoadWall(wallType);
-            Texture2D result = TextureAssets.Tile[wallType].Value;
+            Texture2D result = TextureAssets.Wall[wallType].Value;
+
             Texture2D texture2D = Main.instance.TilePaintSystem.TryGetWallAndRequestIfNotReady(wallType, paintColor);
-            if (texture2D != null)
+            if (texture2D is not null)
+            {
                 result = texture2D;
+            }
+            else // 下一帧重设，给这些Request一帧时间让他们加载
+            {
+                if (ResetPreviewTarget == ResetState.Drawing)
+                {
+                    ResetPreviewTarget = ResetState.WaitReset;
+                }
+                if (ResetUIPreviewTarget == ResetState.Drawing)
+                {
+                    ResetUIPreviewTarget = ResetState.WaitReset;
+                }
+            }
 
             return result;
         }

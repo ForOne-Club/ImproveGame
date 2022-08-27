@@ -21,7 +21,7 @@
             ItemType = itemType;
             iconItem = new(ItemType);
 
-            StackInfo = new($"需求: {stackRequired}", 1f)
+            StackInfo = new(GetTextWith("ConstructGUI.MaterialInfo.Requirement", new { Stack = stackRequired }), 1f)
             {
                 IgnoresMouseInteraction = true,
                 DrawPanel = false,
@@ -53,10 +53,10 @@
         {
             var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
             GetItemCount(inventory, (item) => item.type == ItemType, out int stackCount);
-            StackCheckedInfo.SetText($"已有: {stackCount}");
-            if (stackCount >= 100000)
+            StackCheckedInfo.SetText(GetTextWith("ConstructGUI.MaterialInfo.Stored", new { Stack = stackCount }));
+            if (stackCount > 99999)
             {
-                StackCheckedInfo.SetText($"已有: >99999");
+                StackCheckedInfo.SetText(GetTextWith("ConstructGUI.MaterialInfo.Stored", new { Stack = ">99999" }));
             }
             if (stackCount < StackRequired)
             {
@@ -79,10 +79,103 @@
                                    dimensions: dimensions,
                                    ItemSize: 26);
         }
+    }
 
-        public override void Update(GameTime gameTime)
+    /// <summary>
+    /// 用于在教程页面展示的
+    /// </summary>
+    public class MaterialInfoDoll : UIPanel
+    {
+        private readonly Item iconItem;
+        public int ItemType;
+        public int StackRequired;
+        public UITextPanel<string> StackInfo;
+        public UITextPanel<string> StackCheckedInfo;
+
+        public MaterialInfoDoll(int itemType, int stackRequired)
         {
-            base.Update(gameTime);
+            this.SetSize(315f, 28f);
+            BorderColor = Color.Transparent;
+            BackgroundColor = Color.Transparent;
+
+            StackRequired = stackRequired;
+            ItemType = itemType;
+            iconItem = new(ItemType);
+
+            StackInfo = new(GetTextWith("ConstructGUI.MaterialInfo.Requirement", new { Stack = stackRequired }), 1f)
+            {
+                IgnoresMouseInteraction = true,
+                DrawPanel = false,
+                VAlign = 0.5f,
+                Left = new StyleDimension(-90f, 1f)
+            };
+            float textWidth = FontAssets.MouseText.Value.MeasureString(StackInfo.Text).X;
+            if (textWidth > 70f)
+            {
+                StackInfo.TextScale = 70f / textWidth;
+            }
+            Append(StackInfo);
+
+            StackCheckedInfo = new(stackRequired.ToString(), 1f)
+            {
+                IgnoresMouseInteraction = true,
+                DrawPanel = false,
+                VAlign = 0.5f,
+                Left = new StyleDimension(-180f, 1f)
+            };
+            Append(StackCheckedInfo);
+
+            var text = Lang.GetItemNameValue(ItemType);
+            UITextPanel<string> itemNameInfo = new(text, 1f)
+            {
+                IgnoresMouseInteraction = true,
+                DrawPanel = false,
+                VAlign = 0.5f,
+                Left = new StyleDimension(30f, 0f)
+            };
+            textWidth = FontAssets.MouseText.Value.MeasureString(text).X;
+            if (textWidth > 80)
+            {
+                itemNameInfo.TextScale = 80f / textWidth;
+                itemNameInfo.Left.Pixels -= 8f;
+            }
+            Append(itemNameInfo);
+        }
+
+        protected override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+            GetItemCount(inventory, (item) => item.type == ItemType, out int stackCount);
+            StackCheckedInfo.SetText(GetTextWith("ConstructGUI.MaterialInfo.Stored", new { Stack = stackCount }));
+            if (stackCount > 99)
+            {
+                StackCheckedInfo.SetText(GetTextWith("ConstructGUI.MaterialInfo.Stored", new { Stack = ">99" }));
+            }
+            if (stackCount < StackRequired)
+            {
+                StackCheckedInfo.TextColor = Color.Yellow;
+            }
+            else
+            {
+                StackCheckedInfo.TextColor = Color.LightGreen;
+            }
+            float textWidth = FontAssets.MouseText.Value.MeasureString(StackCheckedInfo.Text).X;
+            if (textWidth > 80)
+            {
+                StackCheckedInfo.TextScale = 80f / textWidth;
+            }
+            Recalculate();
+
+            base.DrawSelf(spriteBatch);
+
+            var dimensions = GetDimensions();
+            dimensions.Width = 28f;
+            dimensions.X += 16f;
+            ArrayItemSlot.DrawItem(sb: spriteBatch,
+                                   Item: iconItem,
+                                   lightColor: Color.White,
+                                   dimensions: dimensions,
+                                   ItemSize: 26);
         }
     }
 }

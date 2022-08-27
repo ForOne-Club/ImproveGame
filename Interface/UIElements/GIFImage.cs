@@ -29,6 +29,17 @@
             Height = StyleDimension.FromPixels(Texture.Height);
         }
 
+        public GIFImage(string texPath, int horizontalFrames, int verticalFrames, int totalFrames, int ticksPerFrame, string parentPath)
+        {
+            Texture = new(GetTexture($"{parentPath}/{texPath}").Value, horizontalFrames, verticalFrames, totalFrames, ticksPerFrame)
+            {
+                ShouldLoop = true
+            };
+            Texture.Play();
+            Width = StyleDimension.FromPixels(Texture.Width);
+            Height = StyleDimension.FromPixels(Texture.Height);
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);

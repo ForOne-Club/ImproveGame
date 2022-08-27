@@ -19,6 +19,7 @@ namespace ImproveGame.Interface.GUI
 
         public Asset<Texture2D> RefreshTexture;
         public Asset<Texture2D> BackTexture;
+        public Asset<Texture2D> ButtonBackgroundTexture;
 
         private SUIPanel BasePanel; // 背景板
         public ZeroScrollbar Scrollbar; // 拖动条
@@ -33,6 +34,7 @@ namespace ImproveGame.Interface.GUI
             var placeOnlyTexture = GetTexture("UI/Construct/PlaceOnly");
             RefreshTexture = GetTexture("UI/Construct/Refresh");
             BackTexture = GetTexture("UI/Construct/Back");
+            ButtonBackgroundTexture = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel");
 
             BasePanel = new(new(29, 34, 70), new(44, 57, 105, 160))
             {
@@ -44,8 +46,8 @@ namespace ImproveGame.Interface.GUI
 
             UIList = new UIList
             {
-                Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
-                Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
+                Width = StyleDimension.FromPercent(1f),
+                Height = StyleDimension.FromPercent(1f),
                 PaddingBottom = 4f,
                 PaddingTop = 4f,
                 ListPadding = 4f,
@@ -130,16 +132,16 @@ namespace ImproveGame.Interface.GUI
             closeButton.OnMouseDown += (_, _) => Close();
             Append(closeButton);
 
-            var tutorialButton = QuickButton(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Icon_Locked"), "{$Mods.ImproveGame.ConstructGUI.Tutorial}");
+            var tutorialButton = QuickButton(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Icon_Locked"), "{$Mods.ImproveGame.ConstructGUI.Tutorial.Button}");
             tutorialButton.SetPos(new(196f, 100f), 0.5f, 0f);
             tutorialButton.OnMouseDown += (_, _) => SetupTutorialPage();
             Append(tutorialButton);
         }
 
-        private static ModImageButton QuickButton(Asset<Texture2D> texture, string hoverText)
+        private ModImageButton QuickButton(Asset<Texture2D> texture, string hoverText)
         {
             var button = new ModImageButton(texture, Color.White, Color.White);
-            button.SetBackgroundImage(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel"));
+            button.SetBackgroundImage(ButtonBackgroundTexture);
             button.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder"));
             button.SetSize(44, 44);
             button.OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
@@ -165,7 +167,7 @@ namespace ImproveGame.Interface.GUI
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
-            if (BasePanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
+            if (BasePanel.GetOuterDimensions().Contains(evt.MousePosition.ToPoint()) || Scrollbar.GetOuterDimensions().Contains(evt.MousePosition.ToPoint()))
                 Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
 
@@ -198,7 +200,7 @@ namespace ImproveGame.Interface.GUI
 
             base.Update(gameTime);
 
-            if (BasePanel.IsMouseHovering)
+            if (BasePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
             {
                 //if (Scrollbar.Visible)
                 //{
@@ -290,6 +292,7 @@ namespace ImproveGame.Interface.GUI
                 }
             }
 
+            BasePanel.backgroundColor = new(44, 57, 105, 160);
             RefreshButton.SetImage(RefreshTexture);
             RefreshButton.HoverText = "{$Mods.ImproveGame.Common.Refresh}";
 
@@ -302,8 +305,204 @@ namespace ImproveGame.Interface.GUI
         {
             UIList.Clear();
 
-            UIList.Add(new GIFImage("SaveStructureZh", 14, 9, 118, 2));
+            UIList.Add(QuickTitleText(GetText("ConstructGUI.Tutorial.Button"), 0.5f));
 
+            static UIPanel QuickTransparentPanel() {
+                var panel = (UIPanel)new UIPanel()
+                {
+                    BackgroundColor = Color.Transparent,
+                    BorderColor = Color.Transparent
+                }.SetSize(new Vector2(600f, 6f));
+                panel.SetPadding(6f);
+                return panel;
+            };
+
+            static void Seperate(UIList list)
+            {
+                list.Add(QuickTransparentPanel()); // 创建大的空域
+                list.Add(QuickSeparator());
+                list.Add(QuickTransparentPanel()); // 创建大的空域
+            };
+
+            #region 保存
+            var panel = QuickTransparentPanel();
+
+            UIList.Add(QuickTitleText(GetText("ConstructGUI.Tutorial.Save.Title"), 0.5f, 0f).SetPos(6f, 0f));
+            var uiText = new UIText(GetText("ConstructGUI.Tutorial.Save.Text"))
+            {
+                IsWrapped = true,
+                TextOriginX = 0f,
+                Width = StyleDimension.FromPixels(460f)
+            };
+            uiText.Recalculate();
+            panel.Append(uiText);
+
+            var buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(490f, -10f).SetAlign(verticalAlign: 0.5f);
+            buttonExample.Append(new UIImage(GetTexture("UI/Construct/Save")).SetAlign(0.5f, 0.5f));
+            panel.Append(buttonExample);
+
+            panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);
+            panel.Recalculate();
+
+            UIList.Add(panel);
+            UIList.Add(new GIFImage("SaveStructureZh", 14, 9, 118, 2).SetAlign(0.5f));
+
+            Seperate(UIList);
+            #endregion
+
+            #region 放置
+            panel = QuickTransparentPanel();
+
+            UIList.Add(QuickTitleText(GetText("ConstructGUI.Tutorial.Place.Title"), 0.5f, 0f).SetPos(6f, 0f));
+            uiText = new UIText(GetText("ConstructGUI.Tutorial.Place.Text"))
+            {
+                IsWrapped = true,
+                TextOriginX = 0f,
+                Width = StyleDimension.FromPixels(470f)
+            };
+            uiText.Recalculate();
+            panel.Append(uiText);
+
+            buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(490f, -10f).SetAlign(verticalAlign: 0.5f);
+            buttonExample.Append(new UIImage(GetTexture("UI/Construct/Load")).SetAlign(0.5f, 0.5f));
+            panel.Append(buttonExample);
+
+            panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);
+            panel.Recalculate();
+
+            UIList.Add(panel);
+            UIList.Add(new GIFImage("PlaceStructure", 16, 5, 77, 2).SetAlign(0.5f));
+
+            Seperate(UIList);
+            #endregion
+
+            #region 爆破
+            panel = QuickTransparentPanel();
+
+            UIList.Add(QuickTitleText(GetText("ConstructGUI.Tutorial.Explode.Title"), 0.5f, 0f).SetPos(6f, 0f));
+            uiText = new UIText(GetText("ConstructGUI.Tutorial.Explode.Text"))
+            {
+                IsWrapped = true,
+                TextOriginX = 0f,
+                Width = StyleDimension.FromPixels(430f)
+            };
+            uiText.Recalculate();
+            panel.Append(uiText);
+
+            buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(490f, -20f).SetAlign(verticalAlign: 0.5f);
+            buttonExample.Append(new UIImage(GetTexture("UI/Construct/ExplodeAndPlace")).SetAlign(0.5f, 0.5f));
+            panel.Append(buttonExample);
+
+            buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(440f, -20f).SetAlign(verticalAlign: 0.5f);
+            buttonExample.Append(new UIImage(GetTexture("UI/Construct/PlaceOnly")).SetAlign(0.5f, 0.5f));
+            panel.Append(buttonExample);
+
+            panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);
+            panel.Recalculate();
+
+            UIList.Add(panel);
+            UIList.Add(new GIFImage("ExplodePlace", 15, 5, 75, 2).SetAlign(0.5f));
+
+            Seperate(UIList);
+            #endregion
+
+            #region 列表单元
+            panel = QuickTransparentPanel();
+
+            UIList.Add(QuickTitleText(GetText("ConstructGUI.Tutorial.Panel.Title"), 0.5f, 0f).SetPos(6f, 0f));
+            uiText = new UIText(GetText("ConstructGUI.Tutorial.Panel.Text"))
+            {
+                IsWrapped = true,
+                TextOriginX = 0f,
+                Width = StyleDimension.FromPixels(562f)
+            };
+            uiText.Recalculate();
+            panel.Append(uiText);
+
+            panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);
+            panel.Recalculate();
+
+            UIList.Add(panel);
+
+            var uiImage = new UIImage(GetTexture("UI/Construct/Tutorial_StructList"));
+            uiImage.SetPos(-30f, 0f);
+            uiImage.ImageScale = 0.9f;
+            UIList.Add(uiImage);
+
+            Seperate(UIList);
+            #endregion
+
+            #region 材料明细
+            panel = QuickTransparentPanel();
+
+            panel.Append(QuickTitleText(GetText("ConstructGUI.Tutorial.Materials.Title"), 0.5f, 0f).SetPos(0f, -10f));
+            uiText = new UIText(GetText("ConstructGUI.Tutorial.Materials.Text"))
+            {
+                IsWrapped = true,
+                TextOriginX = 0f,
+                Top = StyleDimension.FromPixels(50f),
+                Width = StyleDimension.FromPixels(260f)
+            };
+            uiText.Recalculate();
+            panel.Append(uiText);
+
+            //uiImage = new UIImage(GetTexture("UI/Construct/Tutorial_Materials"));
+            //uiImage.SetPos(250f, -20f).SetAlign(verticalAlign: 0.5f);
+            //uiImage.ImageScale = 0.92f;
+            //panel.Append(uiImage);
+
+            var dollList = new UIList
+            {
+                Left = StyleDimension.FromPixels(260f),
+                Width = StyleDimension.FromPixels(325f),
+                Height = StyleDimension.FromPercent(1f),
+                PaddingBottom = 4f,
+                PaddingTop = 4f,
+                ListPadding = 4f,
+            };
+            dollList.SetPadding(2f);
+            dollList.ManualSortMethod = (list) => { }; // 阻止他自动排序
+            dollList.Add(new MaterialInfoDoll(ItemID.Torch, 3));
+            dollList.Add(new MaterialInfoDoll(ItemID.Wood, 45));
+            dollList.Add(new MaterialInfoDoll(ItemID.WoodenChair, 3));
+            dollList.Add(new MaterialInfoDoll(ItemID.WorkBench, 3));
+            dollList.Add(new MaterialInfoDoll(ItemID.WoodWall, 87));
+            dollList.Add(new MaterialInfoDoll(ItemID.WoodPlatform, 28));
+            panel.Append(dollList);
+
+            panel.Height = StyleDimension.FromPixels(Math.Max(uiText.MinHeight.Pixels + 50f, dollList.GetTotalHeight()) + 10f);
+            panel.Recalculate();
+
+            UIList.Add(panel);
+
+            Seperate(UIList);
+            #endregion
+
+            #region 结构预览
+            panel = QuickTransparentPanel();
+
+            panel.Append(QuickTitleText(GetText("ConstructGUI.Tutorial.Preview.Title"), 0.5f, 0f).SetPos(0f, -10f));
+            uiText = new UIText(GetText("ConstructGUI.Tutorial.Preview.Text"))
+            {
+                IsWrapped = true,
+                TextOriginX = 0f,
+                Top = StyleDimension.FromPixels(50f),
+                Width = StyleDimension.FromPixels(280f)
+            };
+            uiText.Recalculate();
+            panel.Append(uiText);
+
+            uiImage = new UIImage(GetTexture("UI/Construct/Tutorial_Preview"));
+            uiImage.SetPos(290f, 8f).SetAlign(verticalAlign: 0.5f);
+            panel.Append(uiImage);
+
+            panel.Height = StyleDimension.FromPixels(Math.Max(uiText.MinHeight.Pixels, uiImage.Height.Pixels) + 26f);
+            panel.Recalculate();
+
+            UIList.Add(panel);
+            #endregion
+
+            BasePanel.backgroundColor = new(49, 67, 125, 190);
             RefreshButton.SetImage(BackTexture);
             RefreshButton.HoverText = "{$UI.Back}";
 
@@ -311,11 +510,17 @@ namespace ImproveGame.Interface.GUI
             SetupScrollBar();
         }
 
-        private static UIText QuickTitleText(string text, float originY) => new(text, 0.6f, true)
+        private static UIHorizontalSeparator QuickSeparator() => new()
+        {
+            Width = StyleDimension.FromPercent(1f),
+            Color = Color.Lerp(Color.White, new Color(63, 65, 151, 255), 0.85f) * 0.9f
+        };
+
+        private static UIText QuickTitleText(string text, float originY, float originX = 0.5f) => new(text, 0.6f, true)
         {
             Height = StyleDimension.FromPixels(50f),
             Width = StyleDimension.FromPercent(1f),
-            TextOriginX = 0.5f,
+            TextOriginX = originX,
             TextOriginY = originY
         };
 
