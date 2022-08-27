@@ -20,6 +20,8 @@ namespace ImproveGame.Interface.UIElements_Shader
         private float offsetY;
         public bool dragging;
 
+        public bool Visible;
+
         public AnimationTimer HoverTimer = new(3);
 
         public float ViewPosition
@@ -40,6 +42,7 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         public ZeroScrollbar()
         {
+            Visible = true;
             Width.Pixels = 20;
             MaxWidth.Pixels = 20;
             SetPadding(5);
@@ -47,6 +50,9 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         public override void Update(GameTime gameTime)
         {
+            if (!Visible)
+                return;
+
             CalculatedStyle InnerDimensions = GetInnerDimensions();
             CalculatedStyle InnerRectangle = InnerDimensions;
             InnerRectangle.Y += (ViewPosition / MaxViewPoisition) * (InnerDimensions.Height * (1 - ViewScale));
@@ -102,6 +108,10 @@ namespace ImproveGame.Interface.UIElements_Shader
         public override void MouseDown(UIMouseEvent evt)
         {
             base.MouseDown(evt);
+
+            if (!Visible)
+                return;
+
             if (evt.Target == this)
             {
                 CalculatedStyle InnerDimensions = GetInnerDimensions();
@@ -118,12 +128,16 @@ namespace ImproveGame.Interface.UIElements_Shader
         public override void MouseUp(UIMouseEvent evt)
         {
             base.MouseUp(evt);
+            if (!Visible)
+                return;
             dragging = false;
         }
 
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
+            if (!Visible)
+                return;
             PlayerInput.LockVanillaMouseScroll("ModLoader/UIScrollbar");
         }
 
@@ -131,6 +145,9 @@ namespace ImproveGame.Interface.UIElements_Shader
         public readonly Color hoveredColor = new(220, 220, 220);
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
+            if (!Visible)
+                return;
+
             CalculatedStyle dimension = GetDimensions();
             Vector2 position = dimension.Position();
             Vector2 size = dimension.Size();

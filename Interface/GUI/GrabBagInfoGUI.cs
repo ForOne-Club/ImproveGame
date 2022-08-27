@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Interface.UIElements;
+using ImproveGame.Interface.UIElements_Shader;
 using System.Collections.Generic;
 using System.Reflection;
 using Terraria.GameContent.ItemDropRules;
@@ -17,7 +18,7 @@ namespace ImproveGame.Interface.GUI
         public UserInterface UserInterface;
 
         private ModUIPanel BasePanel; // 背景板
-        public ModScrollbar Scrollbar; // 拖动条
+        public ZeroScrollbar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
         public ModItemSlot ItemSlot; // 当前物品展示
 
@@ -48,7 +49,7 @@ namespace ImproveGame.Interface.GUI
             UIList.SetPadding(2f);
             BasePanel.Append(UIList);
 
-            Scrollbar = new(UserInterface)
+            Scrollbar = new()
             {
                 HAlign = 1f,
                 VAlign = 0.5f
@@ -56,15 +57,15 @@ namespace ImproveGame.Interface.GUI
             Scrollbar.Left.Set(-6f, 0f);
             Scrollbar.Height.Set(-20f, 1f);
             Scrollbar.SetView(100f, 1000f);
-            //UIList.SetScrollbar(Scrollbar); // 用自己的代码
             SetupScrollBar();
             BasePanel.Append(Scrollbar);
 
             ItemSlot = new(1f)
             {
-                Interactable = false
+                Interactable = false,
+                RoundBorder = true
             };
-            ItemSlot.SetSize(new(60f, 60f)).SetPos(-72f, -12f);
+            ItemSlot.SetPos(-72f, -12f);
             BasePanel.Append(ItemSlot);
         }
 
@@ -92,7 +93,7 @@ namespace ImproveGame.Interface.GUI
         {
             base.ScrollWheel(evt);
             if (BasePanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
-                Scrollbar.SetViewPosition(evt.ScrollWheelValue);
+                Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
 
         public override void MouseDown(UIMouseEvent evt)
@@ -109,7 +110,7 @@ namespace ImproveGame.Interface.GUI
             var innerList = UIList.GetType().GetField("_innerList", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(UIList) as UIElement;
             if (Scrollbar is not null && innerList is not null)
             {
-                innerList.Top.Set(-Scrollbar.GetValue(), 0);
+                innerList.Top.Set(-Scrollbar.ViewPosition, 0);
             }
             UIList.Recalculate();
 

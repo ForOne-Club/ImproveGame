@@ -157,11 +157,11 @@ namespace ImproveGame.Interface.GUI
             if (resetViewPosition)
                 Scrollbar.ViewPosition = 0f;
 
-            /*Scrollbar.Visible = true;
+            Scrollbar.Visible = true;
             if (height >= totalHeight)
             {
                 Scrollbar.Visible = false;
-            }*/
+            }
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)
@@ -200,12 +200,12 @@ namespace ImproveGame.Interface.GUI
 
             base.Update(gameTime);
 
-            if (BasePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
+            if (BasePanel.IsMouseHovering || (Scrollbar.IsMouseHovering && Scrollbar.Visible))
             {
-                //if (Scrollbar.Visible)
-                //{
+                if (Scrollbar.Visible)
+                {
                     PlayerInput.LockVanillaMouseScroll("ImproveGame: Structure GUI");
-                //}
+                }
                 Main.LocalPlayer.mouseInterface = true;
             }
 
@@ -345,7 +345,15 @@ namespace ImproveGame.Interface.GUI
             panel.Recalculate();
 
             UIList.Add(panel);
-            UIList.Add(new GIFImage("SaveStructureZh", 14, 9, 118, 2).SetAlign(0.5f));
+            int horizontalFrames = 13;
+            int verticalFrames = 8;
+            int totalFrames = 93;
+            string gifName = "SaveStructureEn";
+            if (Language.ActiveCulture.Name == "zh-Hans")
+            {
+                gifName = "SaveStructureZh";
+            }
+            UIList.Add(new GIFImage(gifName, horizontalFrames, verticalFrames, totalFrames, 2).SetAlign(0.5f));
 
             Seperate(UIList);
             #endregion
@@ -424,9 +432,10 @@ namespace ImproveGame.Interface.GUI
 
             UIList.Add(panel);
 
-            var uiImage = new UIImage(GetTexture("UI/Construct/Tutorial_StructList"));
-            uiImage.SetPos(-30f, 0f);
-            uiImage.ImageScale = 0.9f;
+            string imageName = "Tutorial_StructList_En";
+            if (Language.ActiveCulture.Name == "zh-Hans")
+                imageName = "Tutorial_StructList_Zh";
+            var uiImage = new UIImage(GetTexture($"UI/Construct/{imageName}"));
             UIList.Add(uiImage);
 
             Seperate(UIList);
@@ -445,11 +454,6 @@ namespace ImproveGame.Interface.GUI
             };
             uiText.Recalculate();
             panel.Append(uiText);
-
-            //uiImage = new UIImage(GetTexture("UI/Construct/Tutorial_Materials"));
-            //uiImage.SetPos(250f, -20f).SetAlign(verticalAlign: 0.5f);
-            //uiImage.ImageScale = 0.92f;
-            //panel.Append(uiImage);
 
             var dollList = new UIList
             {

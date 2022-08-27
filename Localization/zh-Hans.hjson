@@ -755,7 +755,7 @@
                     '''
                     在UI主界面显示了当前存储于你的电脑上的结构列表，每个结构单元包含了文件名称、路径信息。
                     
-                    点击右方的“更多信息”按钮即可查看材料明细与结构预览，同时可以在预览界面选择结构放置时的中心点。
+                    点击右方的“{$tModLoader.ModsMoreInfo}”按钮即可查看材料明细与结构预览，同时可以在预览界面选择结构放置时的中心点。
                     '''
                 Materials.Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
                 Materials.Text:

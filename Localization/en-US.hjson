@@ -453,7 +453,7 @@ Mods:
             BannerChest: Banner Box
             Autofisher: Fishing Machine
             PaintWand: Wand of Painting
-            ConstructWand: 构造法杖
+            ConstructWand: Wand of Construction
         }
         ItemTooltip:
         {
@@ -609,8 +609,8 @@ Mods:
             PotionBagCurrent: "Contains the following potions ({StoredCount}/20):"
             PotionBagCurrentFull: "Contains the following potions (Full!):"
             PotionBagNone: "Empty (0/20)"
-            PotionBagAvailable: "(Active)"     # ҩˮ����ҩˮ���� >= 20
-            PotionBagUnavailable: "(Inactive)"   # ҩˮ����ҩˮ���� < 20
+            PotionBagAvailable: "(Active)"
+            PotionBagUnavailable: "(Inactive)"
             PotionBagDisabled: "(Disabled)"
 
             BannerChestCurrent: "Stored banners: ({StoredCount}/200):"
@@ -632,7 +632,6 @@ Mods:
                 CombinedBuff: "[Has available buff combination]"
                 AutoCollect: "[Auto-deposit]"
             }
-            # ÿ�г������������30-40��ĸ֮��
             TagDetailedTip:
             {
                 GardenGnome:
@@ -679,7 +678,6 @@ Mods:
                     in the Piggy Bank.
                     You may disable this function in Mod Configuration.
                     '''
-                # ���Buff: �̶�Buffͬʱ����ʱ�������Ч��
                 CombinedBuff:
                 {
                     Battle:
@@ -696,7 +694,7 @@ Mods:
         ConstructGUI:
         {
             Structure: "QoL Structure" # 这个是存储后的文件名
-            SavedAs: "Structure has been saved as a file" # 后接文件全路径(所属文件夹路径+文件名)
+            SavedAs: "Structure has been saved as " # 后接文件全路径(所属文件夹路径+文件名)
             SaveMode: "Recording Mode"
             LoadMode: "Placing Mode"
             ExplodeAndPlace: "Destroy then Place"
@@ -760,7 +758,7 @@ Mods:
                     '''
                     The main panel displays structure files on your PC, including file name and path
                     
-                    Click 'More Info' button at the right side to check detailed info and preview, placement center can be adjusted in the preview
+                    Click '{$tModLoader.ModsMoreInfo}' button at the right side to check detailed info and preview, placement center can be adjusted in the preview
                     '''
                 Materials.Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
                 Materials.Text:
