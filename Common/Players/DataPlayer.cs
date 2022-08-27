@@ -72,7 +72,10 @@ namespace ImproveGame.Common.Players
                 tag.Add($"SuperVault_{i}", SuperVault[i]);
             }
 
-            tag["SuperVaultPos"] = UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position();
+            if (Main.netMode is NetmodeID.Server)
+                tag["SuperVaultPos"] = new Vector2(500f);
+            else
+                tag["SuperVaultPos"] = UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position();
 
             tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
             tag["InfBuffDisabledMod"] = InfBuffDisabledMod;
