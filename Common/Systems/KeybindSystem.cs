@@ -64,10 +64,10 @@ namespace ImproveGame.Common.Systems
             {"VolumeUp", "提高音量"},{"VolumeDown", "减少音量"},
             {"Divide", "小键盘 /" }, {"Add", "小键盘 +" },
             {"Subtract", "小键盘 -" }, {"Multiply", "小键盘 *" },
-            {"OemComma", "</," }, {"OemPeriod", ">/." }, {"OemQuestion", "? /" },
-            {"OemSemicolon", ":/;" }, {"OemQuotes", "\"/\'" }, {"OemPipe", "| \\" },
-            {"OemOpenBrackets", "[/{" }, {"OemCloseBrackets", "]/}" },
-            {"OemPlus", "+/=" }, {"OemMinus", "-/_" }, {"OemTilde", "~/`"}
+            {"OemComma", "< ," }, {"OemPeriod", "> ." }, {"OemQuestion", "? /" },
+            {"OemSemicolon", ": ;" }, {"OemQuotes", "\" \'" }, {"OemPipe", "| \\" },
+            {"OemOpenBrackets", "[ {" }, {"OemCloseBrackets", "] }" },
+            {"OemPlus", "+ =" }, {"OemMinus", "- _" }, {"OemTilde", "~ `"}
         };
 
         public override void Load()

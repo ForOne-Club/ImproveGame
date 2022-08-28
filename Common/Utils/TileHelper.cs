@@ -115,8 +115,8 @@ namespace ImproveGame
                     wallType = WallID.Cave8Echo;
                 if (wallType >= 170 && wallType <= 171)
                     wallType = wallType - 170 + 270;
-                if (MaterialCore.WallToItem.TryGetValue(wallType, out int itemType))
-                    return itemType;
+                if (MaterialCore.WallToItem.TryGetValue(wallType, out var itemType))
+                    return itemType[0]; // 可以多对一，但我懒得写了
             }
             return -1;
         }

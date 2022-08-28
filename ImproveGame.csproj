@@ -18,4 +18,7 @@
       <HintPath>lib\SixLabors.ImageSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common\Packets\" />
+  </ItemGroup>
 </Project>

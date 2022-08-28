@@ -1,9 +1,13 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items.Placeable;
+using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.UIElements;
+using ImproveGame.Interface.UIElements_Shader;
 using System.Collections.Generic;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.GUI
@@ -19,7 +23,7 @@ namespace ImproveGame.Interface.GUI
         private Asset<Texture2D> selectPoolOff;
         private Asset<Texture2D> selectPoolOn;
 
-        private UIPanel basePanel;
+        private SUIPanel basePanel;
         private ModItemSlot accessorySlot = new();
         private ModItemSlot fishingPoleSlot = new();
         private ModItemSlot baitSlot = new();
@@ -27,7 +31,7 @@ namespace ImproveGame.Interface.GUI
         private UIText tipText;
         private UIText title;
         private UIImage relocateButton;
-        private UIPanel textPanel;
+        private SUIPanel textPanel;
 
         internal static bool RequireRefresh = false;
 
@@ -39,11 +43,8 @@ namespace ImproveGame.Interface.GUI
             panelHeight = 250f;
             panelWidth = 270f;
 
-            basePanel = new UIPanel();
-            basePanel.Left.Set(panelLeft, 0f);
-            basePanel.Top.Set(panelTop, 0f);
-            basePanel.Width.Set(panelWidth, 0f);
-            basePanel.Height.Set(panelHeight, 0f);
+            basePanel = new(new(29, 34, 70), new(44, 57, 105, 160));
+            basePanel.SetPos(panelLeft, panelTop).SetSize(panelWidth, panelHeight);
             Append(basePanel);
 
             accessorySlot = CreateItemSlot(
@@ -103,13 +104,12 @@ namespace ImproveGame.Interface.GUI
             title.Height.Set(30, 0f);
             basePanel.Append(title);
             
-            textPanel = new() {
+            textPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), radius: 10, CalculateBorder: false)
+            {
                 HAlign = 0.5f,
                 Top = StyleDimension.FromPixels(200f),
                 Width = StyleDimension.FromPixels(basePanel.Width.Pixels - 16f),
-                Height = StyleDimension.FromPixels(30f),
-                BackgroundColor = new Color(35, 40, 83),
-                BorderColor = new Color(35, 40, 83)
+                Height = StyleDimension.FromPixels(30f)
             };
             textPanel.SetPadding(0f);
             basePanel.Append(textPanel);
@@ -128,6 +128,24 @@ namespace ImproveGame.Interface.GUI
             relocateButton.Height.Set(46f, 0f);
             relocateButton.OnMouseDown += (_, _) => ToggleSelectPool();
             basePanel.Append(relocateButton);
+
+            float filtersX = panelLeft + panelWidth + 10f;
+            float filtersY = panelTop + 8f;
+            var filter = new CatchCratesFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
+            filter = new CatchAccessoriesFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
+            filter = new CatchToolsFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
+            filter = new CatchWhiteRarityCatchesFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
+            filter = new CatchNormalCatchesFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
         }
 
         public void ToggleSelectPool() {
@@ -266,7 +284,7 @@ namespace ImproveGame.Interface.GUI
                 var dimension = basePanel.GetDimensions();
                 var position = dimension.Position() + new Vector2(dimension.Width + 20f, 0f);
 
-                var tooltip = Lang.GetTooltip(ModContent.ItemType<Autofisher>());
+                var tooltip = Lang.GetTooltip(ModContent.ItemType<Content.Items.Placeable.Autofisher>());
                 int lines = tooltip.Lines;
                 var font = FontAssets.MouseText.Value;
                 int widthOffset = 14;
@@ -316,6 +334,162 @@ namespace ImproveGame.Interface.GUI
             Visible = false;
             Main.blockInput = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
+        }
+    }
+
+    internal class CatchCratesFilter : AutofisherFilterButton
+    {
+        internal CatchCratesFilter() : base(ItemID.WoodenCrate) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchCrates;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            autofisher.CatchCrates = !autofisher.CatchCrates;
+            if (Main.netMode is NetmodeID.MultiplayerClient)
+                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchCrates, 0);
+        }
+    }
+
+    internal class CatchAccessoriesFilter : AutofisherFilterButton
+    {
+        internal CatchAccessoriesFilter() : base(ItemID.FrogLeg) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchAccessories;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            autofisher.CatchAccessories = !autofisher.CatchAccessories;
+            if (Main.netMode is NetmodeID.MultiplayerClient)
+                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchAccessories, 1);
+        }
+    }
+
+    internal class CatchToolsFilter : AutofisherFilterButton
+    {
+        internal CatchToolsFilter() : base(ItemID.CrystalSerpent) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchTools;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            autofisher.CatchTools = !autofisher.CatchTools;
+            if (Main.netMode is NetmodeID.MultiplayerClient)
+                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchTools, 2);
+        }
+    }
+
+    internal class CatchWhiteRarityCatchesFilter : AutofisherFilterButton
+    {
+        internal CatchWhiteRarityCatchesFilter() : base(ItemID.Bass) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchWhiteRarityCatches;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            autofisher.CatchWhiteRarityCatches = !autofisher.CatchWhiteRarityCatches;
+            if (Main.netMode is NetmodeID.MultiplayerClient)
+                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchWhiteRarityCatches, 3);
+        }
+    }
+
+    internal class CatchNormalCatchesFilter : AutofisherFilterButton
+    {
+        internal CatchNormalCatchesFilter() : base(ItemID.GoldenCarp) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchNormalCatches;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            autofisher.CatchNormalCatches = !autofisher.CatchNormalCatches;
+            if (Main.netMode is NetmodeID.MultiplayerClient)
+                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchNormalCatches, 4);
+        }
+    }
+
+    internal abstract class AutofisherFilterButton : UIElement
+    {
+        internal int ItemType;
+        private AnimationTimer _timer; // 这是一个计时器哦~
+
+        internal virtual bool IsActivated(TEAutofisher autofisher) => true;
+
+        internal virtual void Clicked(TEAutofisher autofisher) { }
+
+        internal AutofisherFilterButton(int itemType)
+        {
+            ItemType = itemType;
+            _timer = new(TimerMax: 90f)
+            {
+                State = AnimationState.Close
+            };
+            Main.instance.LoadItem(itemType);
+            this.SetSize(TextureAssets.Item[itemType].Size());
+        }
+
+        public override void MouseDown(UIMouseEvent evt)
+        {
+            if (!AutofishPlayer.LocalPlayer.TryGetAutofisher(out var autofisher))
+                return;
+            Clicked(autofisher);
+            SoundEngine.PlaySound(SoundID.MenuTick);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            _timer.Update();
+        }
+
+        protected override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            CalculatedStyle dimensions = GetDimensions();
+            var tex = TextureAssets.Item[ItemType];
+            if (IsMouseHovering)
+            {
+                if (!_timer.AnyOpen)
+                {
+                    _timer.Open();
+                }
+
+                Main.LocalPlayer.mouseInterface = true;
+
+                Main.instance.MouseText(GetText($"Autofisher.{GetType().Name}"));
+
+            }
+            else if (!_timer.AnyClose)
+            {
+                _timer.Close();
+            }
+
+            if (_timer.Timer > 10)
+            {
+                Main.spriteBatch.End(); // End后Begin来使用shader绘制描边
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+
+                Main.pixelShader.CurrentTechnique.Passes["ColorOnly"].Apply(); // 全白Shader
+                for (int k = -1; k <= 1; k++)
+                {
+                    for (int l = -1; l <= 1; l++)
+                    {
+                        if (Math.Abs(k) + Math.Abs(l) == 1)
+                        {
+                            var offset = new Vector2(k * 2f, l * 2f) * _timer.Schedule;
+                            spriteBatch.Draw(tex.Value, dimensions.Position() + offset, Main.OurFavoriteColor);
+                        }
+                    }
+                }
+
+                Main.spriteBatch.End(); // End之后Begin恢复原状
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.SamplerStateForCursor, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
+            }
+
+            if (!AutofishPlayer.LocalPlayer.TryGetAutofisher(out var autofisher))
+                return;
+
+            var color = Color.White;
+            if (!IsActivated(autofisher))
+                color = color.MultiplyRGB(Color.White * 0.4f);
+            spriteBatch.Draw(tex.Value, dimensions.Position(), color);
         }
     }
 }

@@ -30,6 +30,7 @@ namespace ImproveGame.Common.Utils
         Autofish_ClientReceiveOpenRequest,
         Autofish_ServerReceiveOpenRequest,
         Autofish_ClientReceivePlayersToggle,
+        Autofish_ServerReceiveFilterSet,
         BuffTracker_ServerReceiveSpawnRateSlider,
         BuffTracker_ClientReceiveSpawnRateSlider,
         BigBag_ReceiveSlot,

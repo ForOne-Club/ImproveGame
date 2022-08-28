@@ -101,7 +101,7 @@ namespace ImproveGame.Common.Configs
         [Label("$Mods.ImproveGame.Config.NoConsume_PotionRequirement.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoConsume_PotionRequirement.Tooltip")]
         [DefaultValue(30)]
-        [Range(30, 999)]
+        [Range(20, 999)]
         public int NoConsume_PotionRequirement;
 
         [Label("$Mods.ImproveGame.Config.NoConsume_Ammo.Label")]
@@ -350,6 +350,11 @@ namespace ImproveGame.Common.Configs
         [Label("$Mods.ImproveGame.Config.ShowModName.Label")]
         [DefaultValue(true)]
         public bool ShowModName;
+
+        [Label("$Mods.ImproveGame.Config.EmptyAutofisher.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.EmptyAutofisher.Tooltip")]
+        [DefaultValue(true)]
+        public bool EmptyAutofisher;
 
         // 预设
         [Header("$Mods.ImproveGame.Config.Presets.Header")]

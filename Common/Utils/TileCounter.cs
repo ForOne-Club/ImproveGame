@@ -28,6 +28,8 @@ namespace ImproveGame.Common.Utils
 
         public int GraveyardTileCount { get; set; }
 
+        public int ActiveFountainColor { get; private set; }
+
         public bool EnoughTilesForJungle => JungleTileCount >= SceneMetrics.JungleTileThreshold;
 
         public bool EnoughTilesForHallow => HallowTileCount >= SceneMetrics.HallowTileThreshold;
@@ -146,13 +148,35 @@ namespace ImproveGame.Common.Utils
                     tileRectangle.Contains(i, j);
                     if (!TileID.Sets.isDesertBiomeSand[tile.TileType] || !WorldGen.oceanDepths(i, j))
                         _tileCounts[tile.TileType]++;
+
+                    if (tile.TileType is TileID.WaterFountain)
+                    {
+                        if (tile.TileFrameY >= 72)
+                        {
+                            // 原版代码
+                            ActiveFountainColor = (tile.TileFrameX / 36) switch
+                            {
+                                0 => 0,
+                                1 => 12,
+                                2 => 3,
+                                3 => 5,
+                                4 => 2,
+                                5 => 10,
+                                6 => 4,
+                                7 => 9,
+                                8 => 8,
+                                9 => 6,
+                                _ => -1,
+                            };
+                        }
+                        break;
+                    }
                 }
             }
 
             ExportTileCountsToMain();
             SystemLoader.TileCountsAvailable(_tileCounts);
         }
-
 
         /// <summary>
         /// 将Counts应用到各大环境里面
@@ -196,6 +220,18 @@ namespace ImproveGame.Common.Utils
 
             if (CrimsonTileCount < 0)
                 CrimsonTileCount = 0;
+        }
+
+        public void FargosFountainSupport(Player player)
+        {
+            int activeFountainColor = Main.SceneMetrics.ActiveFountainColor;
+            var activeFountainColorProperty = Main.SceneMetrics.GetType().GetProperty(nameof(Main.SceneMetrics.ActiveFountainColor), BindingFlags.Instance | BindingFlags.Public);
+            activeFountainColorProperty.SetValue(Main.SceneMetrics, ActiveFountainColor);
+
+            // 暂时用作Fargo喷泉的适配，有问题再改回来
+            PlayerLoader.PostUpdateMiscEffects(player);
+
+            activeFountainColorProperty.SetValue(Main.SceneMetrics, activeFountainColor);
         }
 
         public int GetTileCount(ushort tileId) => _tileCounts[tileId];

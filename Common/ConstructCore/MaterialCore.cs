@@ -13,7 +13,7 @@ namespace ImproveGame.Common.ConstructCore
         public static Dictionary<int, int> ItemToWall { get; private set; } = new();
         // 反表
         public static Dictionary<int, List<int>> TileToItem { get; private set; } = new();
-        public static Dictionary<int, int> WallToItem { get; private set; } = new();
+        public static Dictionary<int, List<int>> WallToItem { get; private set; } = new();
         internal static bool FinishSetup { get; private set; } = false;
 
         public static Dictionary<int, int> CountMaterials(QoLStructure structure)
@@ -106,7 +106,14 @@ namespace ImproveGame.Common.ConstructCore
                     if (item.createWall != -1)
                     {
                         ItemToWall.Add(i, item.createWall);
-                        WallToItem.Add(item.createWall, i);
+                        if (WallToItem.ContainsKey(item.createWall))
+                        {
+                            WallToItem[item.createWall].Add(i);
+                        }
+                        else
+                        {
+                            WallToItem.Add(item.createWall, new() { i });
+                        }
                     }
                 }
                 FinishSetup = true;

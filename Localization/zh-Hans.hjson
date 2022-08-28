@@ -156,7 +156,7 @@
                 Tooltip: 
                     '''
                     只有堆叠数大于或等于此值的药剂才可无限获得增益
-                    调节范围为 30-999
+                    调节范围为 20-999
                     '''
             }
             NoConsume_Ammo:
@@ -433,6 +433,16 @@
                     '''
             }
             ShowModName.Label: "[i:ImproveGame/SpaceWand] 显示物品所属模组"
+            EmptyAutofisher:
+            {
+                Label: "[i:ImproveGame/Autofisher] 钓鱼机鱼饵用光提示"
+                Tooltip:
+                    '''
+                    开启后，若存储于钓鱼机的鱼饵用光，会在聊天栏显示一行信息:
+                    “位于 [水平位置, 深度] 的自动钓鱼机已用光鱼饵”
+                    '''
+                Tip: "位于 [c/15d36a:{Compass}, {Depth}] 的自动钓鱼机已用光鱼饵"
+            }
 
             OtherFunctions:
             {
@@ -540,19 +550,19 @@
                 '''
             Autofisher:
                 '''
-                自动钓鱼
                 右键点击放置的自动钓鱼机，即可打开钓鱼面板
                 点击第一行右侧的 "+" 以选择钓鱼水域
-                放入鱼竿与诱饵即可自动钓鱼，钓鱼判定与手动钓鱼一致
+                放入钓竿与鱼饵即可自动钓鱼，钓鱼判定与手动钓鱼一致
                 你可以放入饰品，以提升其渔力，或获得熔岩钓鱼的能力
-                初始钓鱼速度为手动钓鱼的 10%，你可以通过以下方式提升钓鱼速度:
+                初始钓鱼速度为手动钓鱼的 20%，你可以通过以下方式提升钓鱼速度:
                 - 存储的 [i:Bass] 将以 20:1 的比例转化为钓鱼速度加成，最高可达 500% 加成 ([i/s100:Bass])
                 - 配饰为 [i:AnglerEarring] 可使钓鱼速度*200%
                 - 配饰为 [i:AnglerTackleBag] 可使钓鱼速度*300%
                 - 配饰为 [i:LavaproofTackleBag] 可使钓鱼速度*500%
                 [c/AAAAAA:由于钓鱼机不用鱼线，你不能在配饰槽中放入] [i:HighTestFishingLine]
-                [c/AAAAAA:饰品栏不支持放入非原版钓鱼饰品]
+                [c/AAAAAA:饰品栏不支持放入模组钓鱼饰品]
                 环境判定机制与玩家判定大致相同，需使钓鱼机处于相应环境内，支持模组环境
+                设置过滤器选项后，钓鱼机只会钓上满足相应调节的渔获。同时满足多个条件时优先级由上至下
                 '''
             PaintWand:
                 '''
@@ -567,8 +577,9 @@
                 具有自由放置结构的能力
                 记录模式 - 允许框选并将一定范围内的结构存为文件
                 放置模式 - 在材料充足的情况下一键放置结构
-                不会存储/放置液体
-                电线与促动器不会在预览中显示
+                不会记录/放置液体
+                电线不会在预览中显示，但会被记录并放置
+                点击结构面板右上角按钮“功能介绍”以了解更多信息
                 [c/AAAAAA:尚处于测试阶段，发生问题请在Steam创意工坊页面评论]
                 '''
         }
@@ -783,6 +794,11 @@
             SelectPool: "请选择鱼池"
             CarefulNextTime: "下次注意点！" # 这个是钓鱼机不小心把猪鲨钓上来了
             Unavailable: "暂无钓鱼信息"
+            CatchCratesFilter: "钓宝匣"
+            CatchAccessoriesFilter: "钓配饰"
+            CatchToolsFilter: "钓工具与武器"
+            CatchWhiteRarityCatchesFilter: "钓白色稀有度渔获"
+            CatchNormalCatchesFilter: "钓高于白色稀有度渔获"
         }
         BuffTracker:
         {

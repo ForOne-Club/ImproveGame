@@ -48,6 +48,48 @@ namespace ImproveGame.Common.Utils.NetHelpers
                 case MessageType.Autofish_ClientReceivePlayersToggle:
                     ClientReceivePlayersToggle(reader);
                     break;
+                case MessageType.Autofish_ServerReceiveFilterSet:
+                    ServerReceiveFilterSet(reader);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 仅客户端执行，向服务器发送过滤器开关信息
+        /// </summary>
+        public static void ClientSendFilterSet(Point16 point, bool toggle, byte filterType)
+        {
+            var packet = ImproveGame.Instance.GetPacket();
+            packet.Write((byte)MessageType.Autofish_ServerReceiveFilterSet);
+            packet.Write(point.X);
+            packet.Write(point.Y);
+            packet.Write(toggle);
+            packet.Write(filterType);
+            packet.Send(-1, -1); // 发送到服务器
+        }
+
+        public static void ServerReceiveFilterSet(BinaryReader reader)
+        {
+            short x = reader.ReadInt16();
+            short y = reader.ReadInt16();
+            bool toggle = reader.ReadBoolean();
+            // CatchCrates = 0
+            // CatchAccessories = 1
+            // CatchTools = 2
+            // CatchWhiteRarityCatches = 3
+            // CatchNormalCatches = 4
+            byte filterType = reader.ReadByte();
+
+            if (!TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher))
+                return;
+
+            switch (filterType)
+            {
+                case 0: autofisher.CatchCrates = toggle; break;
+                case 1: autofisher.CatchAccessories = toggle; break;
+                case 2: autofisher.CatchTools = toggle; break;
+                case 3: autofisher.CatchWhiteRarityCatches = toggle; break;
+                case 4: autofisher.CatchNormalCatches = toggle; break;
             }
         }
 
@@ -148,7 +190,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             short locateX = reader.ReadInt16();
             short locateY = reader.ReadInt16();
             // 发送到请求的客户端
-            if (MyUtils.TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
+            if (TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
                 autofisher.locatePoint = new(locateX, locateY);
             }
         }
@@ -378,13 +420,24 @@ namespace ImproveGame.Common.Utils.NetHelpers
         public static void ClientReceiveOpenRequest(BinaryReader reader) {
             short x = reader.ReadInt16();
             short y = reader.ReadInt16();
+
             var fishingPole = ItemIO.Receive(reader, true);
             var bait = ItemIO.Receive(reader, true);
             var accessory = ItemIO.Receive(reader, true);
             Item[] fish = new Item[15];
             for (int i = 0; i < 15; i++)
                 fish[i] = ItemIO.Receive(reader, true);
-            if (TileLoader.GetTile(Main.tile[x, y].TileType) is Autofisher && MyUtils.TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
+
+            short locateX = reader.ReadInt16();
+            short locateY = reader.ReadInt16();
+
+            bool catchCrates = reader.ReadBoolean();
+            bool catchAccessories = reader.ReadBoolean();
+            bool catchTools = reader.ReadBoolean();
+            bool catchWhiteRarityCatches = reader.ReadBoolean();
+            bool catchNormalCatches = reader.ReadBoolean();
+
+            if (TileLoader.GetTile(Main.tile[x, y].TileType) is Autofisher && TryGetTileEntityAs<TEAutofisher>(x, y, out var autofisher)) {
                 var fisherTile = TileLoader.GetTile(Main.tile[x, y].TileType) as Autofisher;
                 fisherTile.ServerOpenRequest = true;
                 // 为了放置开箱一瞬间拿上次开的东西，在这里顺便把机内容同步了
@@ -394,6 +447,13 @@ namespace ImproveGame.Common.Utils.NetHelpers
                 autofisher.accessory = accessory;
                 autofisher.fish = fish;
                 fisherTile.RightClick(x, y);
+
+                autofisher.CatchCrates = catchCrates;
+                autofisher.CatchAccessories = catchAccessories;
+                autofisher.CatchTools = catchTools;
+                autofisher.CatchWhiteRarityCatches = catchWhiteRarityCatches;
+                autofisher.CatchNormalCatches = catchNormalCatches;
+                autofisher.locatePoint = new(locateX, locateY);
             }
         }
 
@@ -416,6 +476,7 @@ namespace ImproveGame.Common.Utils.NetHelpers
             packet.Write((byte)MessageType.Autofish_ClientReceiveOpenRequest);
             packet.Write(x);
             packet.Write(y);
+
             // 为了放置开箱一瞬间拿上次开的东西，在这里顺便把机器内容同步了
             ItemIO.Send(autofisher.fishingPole, packet, true);
             ItemIO.Send(autofisher.bait, packet, true);
@@ -426,6 +487,16 @@ namespace ImproveGame.Common.Utils.NetHelpers
                 else
                     ItemIO.Send(autofisher.fish[i], packet, true);
             }
+
+            packet.Write(autofisher.locatePoint.X);
+            packet.Write(autofisher.locatePoint.Y);
+
+            packet.Write(autofisher.CatchCrates);
+            packet.Write(autofisher.CatchAccessories);
+            packet.Write(autofisher.CatchTools);
+            packet.Write(autofisher.CatchWhiteRarityCatches);
+            packet.Write(autofisher.CatchNormalCatches);
+
             packet.Send(sender, -1); // 只发回给发送端
 
             // 服务器设置好

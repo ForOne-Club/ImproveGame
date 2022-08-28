@@ -24,6 +24,12 @@ namespace ImproveGame.Content.Tiles
         internal bool Opened = false;
         internal int OpenAnimationTimer = 0;
 
+        public bool CatchCrates = true;
+        public bool CatchAccessories = true;
+        public bool CatchTools = true;
+        public bool CatchWhiteRarityCatches = true;
+        public bool CatchNormalCatches = true;
+
         public override bool IsTileValidForEntity(int x, int y) {
             Tile tile = Main.tile[x, y];
             return tile.HasTile && tile.TileType == ModContent.TileType<Autofisher>();
@@ -284,6 +290,7 @@ namespace ImproveGame.Content.Tiles
             TileCounter tileCounter = new();
             tileCounter.ScanAndExportToMain(Position);
             tileCounter.Simulate(Main.player[255]);
+            tileCounter.FargosFountainSupport(Main.player[255]);
 
             // 反射调用 FishingCheck_RollItemDrop(ref fisher);
             var targetMethod = fakeProj.GetType().GetMethod("FishingCheck_RollItemDrop",
@@ -306,11 +313,36 @@ namespace ImproveGame.Content.Tiles
                 Main.LocalPlayer.ForceUpdateBiomes();
         }
 
-
         private void GiveItemToStorage(Player player, int itemType) {
-            Item item = new();
-            item.SetDefaults(itemType);
+            Item item = new(itemType);
+
+            int fishType = 0; // 0 普通鱼 (稀有度大于白)
+            if (ItemID.Sets.IsFishingCrate[itemType]) fishType = 1; // 1 宝匣
+            else if (item.accessory) fishType = 2; // 2 饰品
+            else if (item.damage > 0) fishType = 3; // 3 工具武器
+            else if (item.OriginalRarity <= ItemRarityID.White) fishType = 4; // 4 白色稀有度
+
+            switch (fishType)
+            {
+                case 1:
+                    if (!CatchCrates) return;
+                    break;
+                case 2:
+                    if (!CatchAccessories) return;
+                    break;
+                case 3:
+                    if (!CatchTools) return;
+                    break;
+                case 4:
+                    if (!CatchWhiteRarityCatches) return;
+                    break;
+                default:
+                    if (!CatchNormalCatches) return;
+                    break;
+            }
+
             int finalFishingLevel = player.GetFishingConditions().FinalFishingLevel;
+
             if (itemType == ItemID.BombFish) {
                 int minStack = (finalFishingLevel / 20 + 3) / 2;
                 int maxStack = (finalFishingLevel / 10 + 6) / 2;
@@ -329,7 +361,7 @@ namespace ImproveGame.Content.Tiles
                 item.stack = Main.rand.Next(minStack, maxStack + 1);
             }
 
-            if (itemType == 3197) {
+            if (itemType == ItemID.FrostDaggerfish) {
                 int minStack = (finalFishingLevel / 4 + 15) / 2;
                 int maxStack = (finalFishingLevel / 2 + 30) / 2;
                 if (Main.rand.Next(50) < finalFishingLevel)
@@ -347,7 +379,7 @@ namespace ImproveGame.Content.Tiles
                 item.stack = Main.rand.Next(minStack, maxStack + 1);
             }
 
-            //PlayerLoader.ModifyCaughtFish(player, item);
+            PlayerLoader.ModifyCaughtFish(player, item);
             ItemLoader.CaughtFishStack(item);
             item.newAndShiny = true;
             int oldStack = item.stack;
@@ -406,14 +438,14 @@ namespace ImproveGame.Content.Tiles
 
         private bool TryConsumeBait(Player player) {
             bool canCunsume = false;
-            float num2 = 1f + (float)bait.bait / 6f;
-            if (num2 < 1f)
-                num2 = 1f;
+            float chanceDenominator = 1f + bait.bait / 6f;
+            if (chanceDenominator < 1f)
+                chanceDenominator = 1f;
 
             if (tackleBox)
-                num2 += 1f;
+                chanceDenominator += 1f;
 
-            if (Main.rand.NextFloat() * num2 < 1f)
+            if (Main.rand.NextFloat() * chanceDenominator < 1f)
                 canCunsume = true;
 
             if (bait.type == ItemID.TruffleWorm)
@@ -425,7 +457,34 @@ namespace ImproveGame.Content.Tiles
 
                 bait.stack--;
                 if (bait.stack <= 0)
+                {
                     bait.SetDefaults();
+                    if (Config.EmptyAutofisher)
+                    {
+                        var center = new Point(Position.X + 1, Position.Y + 2);
+
+                        // 原版代码，不多评价
+                        int compass = center.X * 2 - Main.maxTilesX;
+                        string compassText = (compass > 0) ? Language.GetTextValue("GameUI.CompassEast", compass) : ((compass >= 0) ? Language.GetTextValue("GameUI.CompassCenter") : Language.GetTextValue("GameUI.CompassWest", -compass));
+                        
+                        int depthToSurface = (int)(center.Y - Main.worldSurface) * 2;
+                        float num23 = Main.maxTilesX / 4200;
+                        num23 *= num23;
+                        int num24 = 1200;
+                        float num25 = (float)((double)(center.Y - (65f + 10f * num23)) / (Main.worldSurface / 5.0));
+                        var layer = ((center.Y > (float)((Main.maxTilesY - 204))) ? Language.GetTextValue("GameUI.LayerUnderworld") : ((center.Y > Main.rockLayer + (double)(num24 / 2) + 16.0) ? Language.GetTextValue("GameUI.LayerCaverns") : ((depthToSurface > 0) ? Language.GetTextValue("GameUI.LayerUnderground") : ((!(num25 >= 1f)) ? Language.GetTextValue("GameUI.LayerSpace") : Language.GetTextValue("GameUI.LayerSurface")))));
+                        depthToSurface = Math.Abs(depthToSurface);
+                        string depth = ((depthToSurface != 0) ? Language.GetTextValue("GameUI.Depth", depthToSurface) : Language.GetTextValue("GameUI.DepthLevel"));
+                        string depthText = depth + " " + layer;
+
+                        string finalText = GetTextWith("Config.EmptyAutofisher.Tip", new
+                        {
+                            Compass = compassText,
+                            Depth = depthText
+                        });
+                        WorldGen.BroadcastText(NetworkText.FromLiteral(finalText), Color.OrangeRed);
+                    }
+                }
                 return true;
             }
             return false;
@@ -594,6 +653,17 @@ namespace ImproveGame.Content.Tiles
             for (int i = 0; i < 15; i++)
                 if (tag.TryGet<Item>($"fish{i}", out var savedFish))
                     fish[i] = savedFish;
+
+            if (!tag.TryGet("CatchCrates", out CatchCrates))
+                CatchCrates = true;
+            if (!tag.TryGet("CatchAccessories", out CatchAccessories))
+                CatchAccessories = true;
+            if (!tag.TryGet("CatchTools", out CatchTools))
+                CatchTools = true;
+            if (!tag.TryGet("CatchWhiteRarityCatches", out CatchWhiteRarityCatches))
+                CatchWhiteRarityCatches = true;
+            if (!tag.TryGet("CatchNormalCatches", out CatchNormalCatches))
+                CatchNormalCatches = true;
         }
 
         public override void SaveData(TagCompound tag) {
@@ -603,6 +673,12 @@ namespace ImproveGame.Content.Tiles
             tag["accessory"] = accessory;
             for (int i = 0; i < 15; i++)
                 tag[$"fish{i}"] = fish[i];
+
+            tag["CatchCrates"] = CatchCrates;
+            tag["CatchAccessories"] = CatchAccessories;
+            tag["CatchTools"] = CatchTools;
+            tag["CatchWhiteRarityCatches"] = CatchWhiteRarityCatches;
+            tag["CatchNormalCatches"] = CatchNormalCatches;
         }
 
         public override void NetSend(BinaryWriter writer) {
