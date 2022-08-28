@@ -428,13 +428,13 @@ Mods:
             ShowModName.Label: "[i:ImproveGame/SpaceWand] Display which mod are the items from"
             EmptyAutofisher:
             {
-                Label: "[i:ImproveGame/Autofisher] 钓鱼机鱼饵用光提示"
+                Label: "[i:ImproveGame/Autofisher] Bait Insufficient Warning"
                 Tooltip:
                     '''
-                    开启后，若存储于钓鱼机的鱼饵用光，会在聊天栏显示一行信息:
-                    “位于 [水平位置, 深度] 的自动钓鱼机已用光鱼饵”
+                    If a Fishing Machine runs out of bait, a message will be displayed: 
+                    “\"The Fishing Machine at [horizontal position, depth] has no bait\"
                     '''
-                Tip: "位于 [c/15d36a:{Compass}, {Depth}] 的自动钓鱼机已用光鱼饵"
+                Tip: "The Fishing Machine at [c/15d36a:{Compass}, {Depth}] has no bait"
             }
 
             OtherFunctions:
@@ -554,7 +554,7 @@ Mods:
                 [c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
                 [c/AAAAAA:Modded accessories are not supported]
                 Supports most modded biomes
-                设置过滤器选项后，钓鱼机只会钓上满足相应调节的渔获。同时满足多个条件时优先级由上至下
+                Only filterd items will be caught, first match upper criteria
                 '''
             PaintWand:
                 '''
@@ -571,7 +571,7 @@ Mods:
                 Placing Mode - Places structures while material is sufficient
                 Will not record/place liquids
                 Wires will not be shown in preview, but will be recorded and placed
-                点击结构面板右上角按钮“Introduction”以了解更多信息
+                Click the 'Introduction' at the right top for more information
                 [c/AAAAAA:Beta test feature, kindly report bugs in this mod's Steam workshop page]
                 '''
         }
@@ -797,11 +797,11 @@ Mods:
             SelectPool: "Please select fishing pool"
             CarefulNextTime: "Be careful next time!"
             Unavailable: "Currently no fishing info"
-            CatchCratesFilter: "钓宝匣"
-            CatchAccessoriesFilter: "钓配饰"
-            CatchToolsFilter: "钓工具与武器"
-            CatchWhiteRarityCatchesFilter: "钓白色稀有度渔获"
-            CatchNormalCatchesFilter: "钓高于白色稀有度渔获"
+            CatchCratesFilter: "Crates"
+            CatchAccessoriesFilter: "Accessories"
+            CatchToolsFilter: "Tools and weapons"
+            CatchWhiteRarityCatchesFilter: "White rarity"
+            CatchNormalCatchesFilter: "Higher than white rarity"
         }
         BuffTracker:
         {
