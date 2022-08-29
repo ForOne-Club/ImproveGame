@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Packets;
+using ImproveGame.Common.Players;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.UIElements_Shader;
 using System.Collections.Generic;
@@ -123,7 +124,8 @@ namespace ImproveGame.Interface.GUI
         {
             if (Main.netMode == NetmodeID.MultiplayerClient && listeningElement is ArrayItemSlot itemSlot)
             {
-                NetBigBag.SendSlot(itemSlot.index, itemSlot.Item, Main.myPlayer, -1, -1);
+                var packet = BigBagSlotPacket.Get(itemSlot.Item, Main.myPlayer, itemSlot.index);
+                packet.Send(runLocally: false);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.Packets;
 using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -79,9 +80,7 @@ namespace ImproveGame
             player.itemRotation = MathF.Atan2(rotaion.Y * player.direction, rotaion.X * player.direction);
             if (shouldSync && Main.netMode != NetmodeID.SinglePlayer && player.whoAmI == Main.myPlayer)
             {
-                //NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, player.whoAmI);
-                //NetMessage.SendData(MessageID.ItemAnimation, -1, -1, null, player.whoAmI);
-                NetGeneric.ClientSendPlrItemUsing(player);
+                ItemUsePacket.Get(player);
             }
         }
 

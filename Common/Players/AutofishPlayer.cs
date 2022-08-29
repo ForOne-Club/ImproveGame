@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Tiles;
+﻿using ImproveGame.Common.Packets.NetAutofisher;
+using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.Audio;
@@ -36,13 +37,8 @@ namespace ImproveGame.Common.Players
 
             // 设置传输
             if (needSync && Main.netMode != NetmodeID.SinglePlayer)
-                NetAutofish.ClientSendAutofisherPosition(point.X, point.Y);
-        }
-
-        public void SetLocatePoint(TEAutofisher autofisher, Point16 point) {
-            autofisher.locatePoint = point;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
-                NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, autofisher.ID, autofisher.Position.X, autofisher.Position.Y);
+            {
+                SyncOpenPacket.Get(point, Main.myPlayer).Send(runLocally: false);
             }
         }
 
@@ -51,8 +47,9 @@ namespace ImproveGame.Common.Players
             if (Main.netMode == NetmodeID.Server) {
                 for (byte i = 0; i < Main.maxPlayers; i++) {
                     var player = Main.player[i];
-                    if (player.active && !player.dead && TryGet(player, out var modPlayer) && modPlayer.Autofisher.X > 0 && modPlayer.Autofisher.Y > 0) {
-                        NetAutofish.ServerSendPlayerToggle(modPlayer.Autofisher, i, toWho, fromWho);
+                    if (player.active && !player.dead && TryGet(player, out var modPlayer) && modPlayer.Autofisher.X > 0 && modPlayer.Autofisher.Y > 0)
+                    {
+                        SyncOpenPacket.Get(modPlayer.Autofisher, Main.myPlayer).Send(toWho, fromWho, runLocally: false);
                     }
                 }
             }
@@ -108,10 +105,10 @@ namespace ImproveGame.Common.Players
         public TEAutofisher GetAutofisher() {
             if (Autofisher.X < 0 || Autofisher.Y < 0)
                 return null;
-            Tile tile = Main.tile[Autofisher.X, Autofisher.Y];
+            Tile tile = Main.tile[Autofisher.ToPoint()];
             if (!tile.HasTile)
                 return null;
-            if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(Autofisher.X, Autofisher.Y, out var fisher))
+            if (!TryGetTileEntityAs<TEAutofisher>(Autofisher.X, Autofisher.Y, out var fisher))
                 return null;
             return fisher;
         }

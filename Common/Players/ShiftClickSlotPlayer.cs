@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 
@@ -46,19 +47,19 @@ namespace ImproveGame.Common.Players
             if (Player.chest == -1 & Player.talkNPC == -1 && context == ItemSlot.Context.InventoryItem &&
                 !inventory[slot].IsAir && !inventory[slot].favorited) {
                 if (BigBagGUI.Visible) {
-                    inventory[slot] = MyUtils.ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
+                    inventory[slot] = ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
                     Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);
                     return true; // 阻止原版代码运行
                 }
 
                 if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher)) {
-                    inventory[slot] = MyUtils.ItemStackToInventory(fisher.fish, inventory[slot], false);
+                    inventory[slot] = ItemStackToInventory(fisher.fish, inventory[slot], false);
                     AutofisherGUI.RequireRefresh = true;
                     UISystem.Instance.AutofisherGUI.RefreshItems();
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                         for (int i = 0; i <= 14; i++)
-                            NetAutofish.ClientSendItem((byte)i, fisher.fish[i], AutofishPlayer.LocalPlayer.Autofisher);
+                            ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, (byte)i).Send(runLocally: false);
                     Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);
                     return true; // 阻止原版代码运行

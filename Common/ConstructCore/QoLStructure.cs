@@ -182,7 +182,7 @@ namespace ImproveGame.Common.ConstructCore
             if (tileData.VanillaTile)
                 return tileData.TileIndex;
             else
-                return typeMaping[(ushort)tileData.TileIndex];
+                return typeMaping.Count > tileData.TileIndex ? typeMaping[(ushort)tileData.TileIndex] : -1;
         }
 
         public int ParseWallType(TileDefinition tileData)
@@ -190,7 +190,7 @@ namespace ImproveGame.Common.ConstructCore
             if (tileData.VanillaWall)
                 return tileData.WallIndex;
             else
-                return typeMaping[(ushort)tileData.WallIndex];
+                return typeMaping.Count > tileData.WallIndex ? typeMaping[(ushort)tileData.WallIndex] : -1;
         }
     }
 }

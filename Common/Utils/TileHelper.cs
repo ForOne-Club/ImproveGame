@@ -145,6 +145,19 @@ namespace ImproveGame
             return coord - frame;
         }
 
+        /// <inheritdoc cref="TryGetTileEntityAs{T}(Point, out T)"/>
+        public static bool TryGetTileEntityAs<T>(Point16 position, out T entity) where T : TileEntity
+        {
+            return TryGetTileEntityAs(position.X, position.Y, out entity);
+        }
+
+        /// <inheritdoc cref="TryGetTileEntityAs{T}(int, int, out T)"/>
+        /// <param name="position">物块的坐标</param>
+        public static bool TryGetTileEntityAs<T>(Point position, out T entity) where T : TileEntity
+        {
+            return TryGetTileEntityAs(position.X, position.Y, out entity);
+        }
+
         /// <summary>
         /// 通过 <seealso cref="GetTileOrigin(int, int)"/> 快速获取处于 (<paramref name="i"/>, <paramref name="j"/>) 的 <see cref="TileEntity"/> 实例.
         /// </summary>

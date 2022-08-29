@@ -1,3 +1,4 @@
+using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
@@ -29,13 +30,13 @@ namespace ImproveGame.Content.Tiles
 
         public bool ServerOpenRequest = false;
         public override bool OnRightClick(int i, int j) {
-            var origin = MyUtils.GetTileOrigin(i, j);
+            var origin = GetTileOrigin(i, j);
             if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.Autofisher == origin) {
                 UISystem.Instance.AutofisherGUI.Close();
             }
             else {
                 if (Main.netMode == NetmodeID.MultiplayerClient && !ServerOpenRequest) {
-                    NetAutofish.ClientSendOpenRequest(origin);
+                    OpenRequestPacket.Get(origin).Send(runLocally: false);
                     return false;
                 }
                 ServerOpenRequest = false;

@@ -1,3 +1,4 @@
+using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.Common;
 using System.Collections.Generic;
@@ -39,7 +40,9 @@ namespace ImproveGame.Content.Tiles
             FishingTip = text;
             FishingTipTimer = 0;
             if (Main.netMode == NetmodeID.Server)
-                NetAutofish.ServerSendTipChange(Position, FishingTip);
+            {
+                FishingTipPacket.Get(Position, FishingTip).Send(runLocally: false);
+            }
         }
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
@@ -391,7 +394,7 @@ namespace ImproveGame.Content.Tiles
                 item = ItemStackToInventoryItem(fish, i, item, false);
                 if (fish[i].stack != oldStackSlot && Main.netMode is NetmodeID.Server)
                 {
-                    NetAutofish.SendStackChange(Position, (byte)i, fish[i].stack - oldStackSlot);
+                    ItemsStackChangePacket.Get(Position, (byte)i, fish[i].stack - oldStackSlot).Send(runLocally: false);
                 }
                 if (item.IsAir)
                     goto FilledEnd;
@@ -404,7 +407,7 @@ namespace ImproveGame.Content.Tiles
                     fish[i] = item.Clone();
                     if (Main.netMode is NetmodeID.Server)
                     {
-                        NetAutofish.ServerSendSyncItem(Position, (byte)i);
+                        ItemSyncPacket.Get(Position, (byte)i).Send(runLocally: false);
                     }
                     item = new();
                     goto FilledEnd;
@@ -421,11 +424,11 @@ namespace ImproveGame.Content.Tiles
                     // 没了
                     if (bait.IsAir)
                     {
-                        NetAutofish.ServerSendSyncItem(Position, 16); // 同步鱼饵
+                        ItemSyncPacket.Get(Position, 16).Send(runLocally: false);
                     }
                     else // 还在，同步stack
                     {
-                        NetAutofish.SendStackChange(Position, 16, -1);
+                        ItemsStackChangePacket.Get(Position, 16, -1).Send(runLocally: false);
                     }
                 }
             }

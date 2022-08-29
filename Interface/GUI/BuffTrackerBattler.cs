@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Packets;
+using ImproveGame.Common.Players;
 using Terraria.GameContent.Creative;
 
 namespace ImproveGame.Interface.GUI
@@ -68,12 +69,7 @@ namespace ImproveGame.Interface.GUI
             _needsToCommitChange = false;
             _sliderCurrentValueCache = newSliderValue;
             _nextTimeWeCanPush = DateTime.UtcNow;
-            if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer)) {
-                modPlayer.SpawnRateSliderValue = _sliderCurrentValueCache;
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    NetBuffTracker.ClientSendSpawnRateSlider(_sliderCurrentValueCache);
-                }
-            }
+            SpawnRateSlider.Get(Main.myPlayer, _sliderCurrentValueCache).Send(runLocally: true);
         }
 
         internal void SetValueKeyboard(float value) {
@@ -117,8 +113,7 @@ namespace ImproveGame.Interface.GUI
                 if (playerIndex == Main.myPlayer) {
                     _currentTargetValue = BattlerPlayer.SliderDefaultValue;
                     _sliderCurrentValueCache = BattlerPlayer.SliderDefaultValue;
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NetBuffTracker.ClientSendSpawnRateSlider(_sliderCurrentValueCache);
+                    SpawnRateSlider.Get(Main.myPlayer, _sliderCurrentValueCache).Send(runLocally: false);
                 }
             }
         }

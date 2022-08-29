@@ -54,12 +54,15 @@ https://www.bilibili.com/video/BV1EN4y1T7r6
 画师：枫林半叶, 逆风而行的信鸽
 翻译：Lastprismer，Lacewing
 代码：局长, Cyril
-特别感谢: @ChevyRay 的协程类 (https://github.com/ChevyRay/Coroutines)
+特别感谢:
+  @ChevyRay的协程类
 
 版权声明:
 本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
-附: WMITF开源链接: https://github.com/gardenappl/WMITF
-    本模组开源链接: https://gitee.com/MyGoold/improve-game
+附:
+本模组开源链接: https://gitee.com/MyGoold/improve-game
+WMITF开源链接: https://github.com/gardenappl/WMITF
+ChevyRay的协程类: https://github.com/ChevyRay/Coroutines
 
 [h1]QQ交流群[/h1]
 模组交流群: 971038831

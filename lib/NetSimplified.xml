@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NetSimplified</name>
+    </assembly>
+    <members>
+        <member name="T:NetSimplified.AggregateModule">
+            <summary>
+            以一个 <see cref="T:Terraria.ModLoader.ModPacket"/> 包的形式发送多个 <see cref="T:NetSimplified.NetModule"/> 包, 能有效避免分散性地多次发包。
+            <br>与普通包一样, 发包时调用 <see cref="M:NetSimplified.NetModule.Send(System.Int32,System.Int32,System.Boolean)"/> 即可</br>
+            <br>正常情况下, 其 <see cref="P:NetSimplified.NetModule.Type"/> 应为0, 获取时应调用 <see cref="M:NetSimplified.AggregateModule.Get(System.Collections.Generic.List{NetSimplified.NetModule})"/> 而不是 <see cref="M:NetSimplified.NetModuleLoader.Get``1"/>, 否则会获取到 <see langword="null"/> 值</br>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.AggregateModule.SetStaticDefaults">
+            <inheritdoc/>
+        </member>
+        <member name="P:NetSimplified.AggregateModule.Modules">
+            <summary>所有要发的包</summary>
+        </member>
+        <member name="M:NetSimplified.AggregateModule.Get(System.Collections.Generic.List{NetSimplified.NetModule})">
+            <summary>
+            创建一个 <see cref="T:NetSimplified.AggregateModule"/> 包实例
+            </summary>
+            <param name="modules">所有要发的 <see cref="T:NetSimplified.NetModule"/> 包</param>
+        </member>
+        <member name="M:NetSimplified.AggregateModule.Read(System.IO.BinaryReader)">
+            <inheritdoc/>
+        </member>
+        <member name="M:NetSimplified.AggregateModule.Receive">
+            <inheritdoc/>
+        </member>
+        <member name="M:NetSimplified.AggregateModule.Send(Terraria.ModLoader.ModPacket)">
+            <inheritdoc/>
+        </member>
+        <member name="M:NetSimplified.AggregateModule.Send(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            请不要对 <see cref="T:NetSimplified.AggregateModule"/> 使用这个, 去用 <see cref="M:NetSimplified.AggregateModule.Send(Terraria.ModLoader.Mod,System.Int32,System.Int32,System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.AggregateModule.Send(Terraria.ModLoader.Mod,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            通过 <see cref="T:Terraria.ModLoader.ModPacket"/> 发包
+            </summary>
+            <param name="mod">该 <see cref="T:NetSimplified.AggregateModule"/> 包是由哪个 <see cref="T:Terraria.ModLoader.Mod"/> 发出的</param>
+            <param name="toClient">如果不是 -1, 则包<b>只会</b>发送给对应的客户端</param>
+            <param name="ignoreClient">如果不是 -1, 则包<b>不会</b>发送给对应的客户端</param>
+            <param name="runLocally">如果为 <see langword="true"/> 则在发包时会调用 <see cref="M:NetSimplified.AggregateModule.Receive"/> 方法</param>
+        </member>
+        <member name="T:NetSimplified.Extensions">
+            <summary>
+            发包的一些实用方法
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Microsoft.Xna.Framework.Point)">
+            <summary>
+            写入 <see cref="T:Microsoft.Xna.Framework.Point"/> 坐标
+            <br>对应: <see cref="M:NetSimplified.Extensions.ReadPoint(System.IO.BinaryReader)"/></br>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Extensions.ReadPoint(System.IO.BinaryReader)">
+            <summary>
+            读取 <see cref="T:Microsoft.Xna.Framework.Point"/> 坐标
+            <br>对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Microsoft.Xna.Framework.Point)"/></br>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.DataStructures.Point16)">
+            <summary>
+            写入 <see cref="T:Terraria.DataStructures.Point16"/> 坐标
+            <br>对应: <see cref="M:NetSimplified.Extensions.ReadPoint16(System.IO.BinaryReader)"/></br>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Extensions.ReadPoint16(System.IO.BinaryReader)">
+            <summary>
+            读取 <see cref="T:Terraria.DataStructures.Point16"/> 坐标
+            <br>对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.DataStructures.Point16)"/></br>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item[],System.Boolean,System.Boolean)">
+            <summary>
+            写入 <see cref="T:Terraria.Item"/> 数组, 若存在值为 <see langword="null"/> 的物品则直接实例化一个空 <see cref="T:Terraria.Item"/>
+            <br>对应: <see cref="M:NetSimplified.Extensions.ReadItemArray(System.IO.BinaryReader,System.Boolean,System.Boolean)"/></br>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Extensions.ReadItemArray(System.IO.BinaryReader,System.Boolean,System.Boolean)">
+            <summary>
+            读取 <see cref="T:Terraria.Item"/> 数组
+            <br>对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item[],System.Boolean,System.Boolean)"/></br>
+            </summary>
+        </member>
+        <member name="T:NetSimplified.NetModule">
+            <summary>
+            用于写入、读取 <see cref="T:Terraria.ModLoader.ModPacket"/> 的基类
+            </summary>
+        </member>
+        <member name="P:NetSimplified.NetModule.Sender">
+            <summary>包的发送者</summary>
+        </member>
+        <member name="P:NetSimplified.NetModule.Type">
+            <summary>该 <see cref="T:NetSimplified.NetModule"/> 被分配到的ID</summary>
+        </member>
+        <member name="M:NetSimplified.NetModule.Send(Terraria.ModLoader.ModPacket)">
+            <summary>
+            使用这个函数来自行发送字段
+            </summary>
+            <param name="p">用于发包的 <see cref="T:Terraria.ModLoader.ModPacket"/> 实例</param>
+        </member>
+        <member name="M:NetSimplified.NetModule.Send(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            通过 <see cref="T:Terraria.ModLoader.ModPacket"/> 发包
+            </summary>
+            <param name="toClient">如果不是 -1, 则包<b>只会</b>发送给对应的客户端</param>
+            <param name="ignoreClient">如果不是 -1, 则包<b>不会</b>发送给对应的客户端</param>
+            <param name="runLocally">如果为 <see langword="true"/> 则在发包时会调用 <see cref="M:NetSimplified.NetModule.Receive"/> 方法</param>
+        </member>
+        <member name="M:NetSimplified.NetModule.Read(System.IO.BinaryReader)">
+            <summary>
+            使用这个函数来自行读取字段
+            </summary>
+            <param name="r">用于读取的 <see cref="T:System.IO.BinaryReader"/> 实例</param>
+        </member>
+        <member name="M:NetSimplified.NetModule.Receive">
+            <summary>
+            使用这个函数来进行接收后的操作 (与 <see cref="M:NetSimplified.NetModule.Read(System.IO.BinaryReader)"/> 分开以适配 runLocally)
+            </summary>
+        </member>
+        <member name="M:NetSimplified.NetModule.PreSend(System.Int32,System.Int32)">
+            <summary>发包前调用, 返回 <see langword="false"/> 则不会发包, 也不会调用 <see cref="M:NetSimplified.NetModule.Receive"/>。 默认为 <see langword="true"/>.</summary>
+        </member>
+        <member name="M:NetSimplified.NetModule.ReceiveModule(System.IO.BinaryReader,System.Int32)">
+            <summary>接收来自你的Mod的发包, 请在 <see cref="M:Terraria.ModLoader.Mod.HandlePacket(System.IO.BinaryReader,System.Int32)"/> 调用</summary>
+        </member>
+        <member name="T:NetSimplified.NetModuleLoader">
+            <summary>
+            用于加载 <see cref="T:NetSimplified.NetModule"/> 的类
+            </summary>
+        </member>
+        <member name="M:NetSimplified.NetModuleLoader.Get(System.Int32)">
+            <summary>
+            根据 <paramref name="type"/> 获取相应的 <see cref="T:NetSimplified.NetModule"/> 实例
+            </summary>
+            <returns><see cref="T:NetSimplified.NetModule"/> 实例</returns>
+        </member>
+        <member name="M:NetSimplified.NetModuleLoader.Get``1">
+            <summary>
+            获取带有Mod与Type信息的 <see cref="T:NetSimplified.NetModule"/> 实例
+            </summary>
+            <returns><see cref="T:NetSimplified.NetModule"/> 实例</returns>
+        </member>
+    </members>
+</doc>

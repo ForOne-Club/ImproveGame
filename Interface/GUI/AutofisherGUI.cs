@@ -1,13 +1,11 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
-using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.UIElements_Shader;
-using System.Collections.Generic;
 using Terraria.DataStructures;
-using Terraria.Graphics.Shaders;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.GUI
@@ -40,8 +38,8 @@ namespace ImproveGame.Interface.GUI
         public override void OnInitialize() {
             panelTop = Main.instance.invBottom + 60;
             panelLeft = 100f;
-            panelHeight = 250f;
-            panelWidth = 270f;
+            panelHeight = 256f;
+            panelWidth = 280f;
 
             basePanel = new(new(29, 34, 70), new(44, 57, 105, 160));
             basePanel.SetPos(panelLeft, panelTop).SetSize(panelWidth, panelHeight);
@@ -108,7 +106,7 @@ namespace ImproveGame.Interface.GUI
             {
                 HAlign = 0.5f,
                 Top = StyleDimension.FromPixels(200f),
-                Width = StyleDimension.FromPixels(basePanel.Width.Pixels - 16f),
+                Width = StyleDimension.FromPercent(1f),
                 Height = StyleDimension.FromPixels(30f)
             };
             textPanel.SetPadding(0f);
@@ -167,7 +165,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.accessory = item;
             if (Main.netMode is NetmodeID.MultiplayerClient) {
-                NetAutofish.ClientSendItem(17, item, AutofishPlayer.LocalPlayer.Autofisher);
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, 17).Send(runLocally: false);
             }
         }
 
@@ -178,7 +176,7 @@ namespace ImproveGame.Interface.GUI
 
             autofisher.fishingPole = item;
             if (Main.netMode is NetmodeID.MultiplayerClient) {
-                NetAutofish.ClientSendItem(15, item, AutofishPlayer.LocalPlayer.Autofisher);
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, 15).Send(runLocally: false);
             }
         }
 
@@ -188,8 +186,9 @@ namespace ImproveGame.Interface.GUI
                 return;
 
             autofisher.bait = item;
-            if (Main.netMode is NetmodeID.MultiplayerClient && !rightClick) {
-                NetAutofish.ClientSendItem(16, item, AutofishPlayer.LocalPlayer.Autofisher);
+            if (Main.netMode is NetmodeID.MultiplayerClient && !rightClick)
+            {
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, 16).Send(runLocally: false);
             }
         } 
 
@@ -198,7 +197,7 @@ namespace ImproveGame.Interface.GUI
             if (autofisher is null)
                 return;
             if (!typeChange && stackChange != 0) {
-                NetAutofish.SendStackChange(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange);
+                ItemsStackChangePacket.Get(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange).Send(runLocally: false);
             }
         }
 
@@ -208,8 +207,9 @@ namespace ImproveGame.Interface.GUI
                 return;
 
             autofisher.fish[i] = item;
-            if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick) {
-                NetAutofish.ClientSendItem((byte)i, item, AutofishPlayer.LocalPlayer.Autofisher);
+            if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick)
+            {
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, (byte)i).Send(runLocally: false);
             }
         }
 
@@ -218,7 +218,7 @@ namespace ImproveGame.Interface.GUI
             if (autofisher is null)
                 return;
             if (Main.netMode is NetmodeID.MultiplayerClient && !typeChange && stackChange != 0) {
-                NetAutofish.SendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
+                ItemsStackChangePacket.Get(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange).Send(runLocally: false);
             }
         }
 
@@ -229,7 +229,7 @@ namespace ImproveGame.Interface.GUI
                     RequireRefresh = false;
                 }
                 else {
-                    NetAutofish.ClientSendSyncItem(AutofishPlayer.LocalPlayer.Autofisher, slotType);
+                    RequestItemPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, slotType).Send(runLocally: false);
                 }
             }
             else {
@@ -345,9 +345,7 @@ namespace ImproveGame.Interface.GUI
 
         internal override void Clicked(TEAutofisher autofisher)
         {
-            autofisher.CatchCrates = !autofisher.CatchCrates;
-            if (Main.netMode is NetmodeID.MultiplayerClient)
-                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchCrates, 0);
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchCrates, 0).Send(runLocally: true);
         }
     }
 
@@ -359,9 +357,7 @@ namespace ImproveGame.Interface.GUI
 
         internal override void Clicked(TEAutofisher autofisher)
         {
-            autofisher.CatchAccessories = !autofisher.CatchAccessories;
-            if (Main.netMode is NetmodeID.MultiplayerClient)
-                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchAccessories, 1);
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchAccessories, 1).Send(runLocally: true);
         }
     }
 
@@ -373,9 +369,7 @@ namespace ImproveGame.Interface.GUI
 
         internal override void Clicked(TEAutofisher autofisher)
         {
-            autofisher.CatchTools = !autofisher.CatchTools;
-            if (Main.netMode is NetmodeID.MultiplayerClient)
-                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchTools, 2);
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchTools, 2).Send(runLocally: true);
         }
     }
 
@@ -387,9 +381,7 @@ namespace ImproveGame.Interface.GUI
 
         internal override void Clicked(TEAutofisher autofisher)
         {
-            autofisher.CatchWhiteRarityCatches = !autofisher.CatchWhiteRarityCatches;
-            if (Main.netMode is NetmodeID.MultiplayerClient)
-                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchWhiteRarityCatches, 3);
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchWhiteRarityCatches, 3).Send(runLocally: true);
         }
     }
 
@@ -401,9 +393,7 @@ namespace ImproveGame.Interface.GUI
 
         internal override void Clicked(TEAutofisher autofisher)
         {
-            autofisher.CatchNormalCatches = !autofisher.CatchNormalCatches;
-            if (Main.netMode is NetmodeID.MultiplayerClient)
-                NetAutofish.ClientSendFilterSet(autofisher.Position, autofisher.CatchNormalCatches, 4);
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchNormalCatches, 4).Send(runLocally: true);
         }
     }
 

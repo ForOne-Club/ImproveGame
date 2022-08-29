@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Players;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Entitys;
@@ -207,12 +208,8 @@ namespace ImproveGame.Common.Systems
 
                         if (mouseHovering[i - drawRange.X, j - drawRange.Y] && Main.mouseLeft && Main.mouseLeftRelease)
                         {
-                            AutofishPlayer.LocalPlayer.SetLocatePoint(AutofishPlayer.LocalPlayer.GetAutofisher(), mouseTilePosition);
+                            LocatePointPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, mouseTilePosition).Send(runLocally: true);
                             UISystem.Instance.AutofisherGUI.ToggleSelectPool();
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                            {
-                                NetAutofish.ClientSendLocatePoint(AutofishPlayer.LocalPlayer.Autofisher, mouseTilePosition);
-                            }
                             return;
                         }
                     }

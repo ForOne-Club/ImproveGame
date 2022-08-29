@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ImproveGame.Common.Packets;
+using System.Collections.Generic;
 using Terraria.ModLoader;
 
 namespace ImproveGame.Common.Systems
@@ -84,16 +85,7 @@ namespace ImproveGame.Common.Systems
                 {
                     if (Main.mouseLeft && !RefreshTravelShopSystem.OldMouseLeft)
                     {
-                        if (Main.netMode == NetmodeID.SinglePlayer)
-                        {
-                            Chest.SetupTravelShop();
-                            SoundEngine.PlaySound(SoundID.Chat);
-                        }
-                        else if (!RefreshTravelShopSystem.Refreshing)
-                        {
-                            NetGeneric.ClientSendRefreshTravelShop();
-                            RefreshTravelShopSystem.Refreshing = true;
-                        }
+                        RefreshShopPacket.Get().Send(runLocally: true);
                     }
                 },
                 () => Config.TravellingMerchantRefresh // 什么时候可用
