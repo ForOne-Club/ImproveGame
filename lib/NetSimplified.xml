@@ -7,7 +7,7 @@
         <member name="T:NetSimplified.AggregateModule">
             <summary>
             以一个 <see cref="T:Terraria.ModLoader.ModPacket"/> 包的形式发送多个 <see cref="T:NetSimplified.NetModule"/> 包, 能有效避免分散性地多次发包。
-            <br>与普通包一样, 发包时调用 <see cref="M:NetSimplified.NetModule.Send(System.Int32,System.Int32,System.Boolean)"/> 即可</br>
+            <br>与普通包一样, 发包时调用 <see cref="M:NetSimplified.AggregateModule.Send(Terraria.ModLoader.Mod,System.Int32,System.Int32,System.Boolean)"/> 即可</br>
             <br>正常情况下, 其 <see cref="P:NetSimplified.NetModule.Type"/> 应为0, 获取时应调用 <see cref="M:NetSimplified.AggregateModule.Get(System.Collections.Generic.List{NetSimplified.NetModule})"/> 而不是 <see cref="M:NetSimplified.NetModuleLoader.Get``1"/>, 否则会获取到 <see langword="null"/> 值</br>
             </summary>
         </member>
@@ -73,6 +73,18 @@
             <summary>
             读取 <see cref="T:Terraria.DataStructures.Point16"/> 坐标
             <br>对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.DataStructures.Point16)"/></br>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item,System.Boolean,System.Boolean)">
+            <summary>
+            写入 <see cref="T:Terraria.Item"/> 若值为 <see langword="null"/> 则直接实例化一个空 <see cref="T:Terraria.Item"/>
+            <br>对应: <see cref="M:NetSimplified.Extensions.ReadItem(System.IO.BinaryReader,System.Boolean,System.Boolean)"/></br>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Extensions.ReadItem(System.IO.BinaryReader,System.Boolean,System.Boolean)">
+            <summary>
+            读取 <see cref="T:Terraria.Item"/>
+            <br>对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item,System.Boolean,System.Boolean)"/></br>
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item[],System.Boolean,System.Boolean)">
