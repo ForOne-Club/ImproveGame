@@ -16,28 +16,17 @@
 更新日志: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog.md
 开源链接: https://gitee.com/MyGoold/improve-game
 ---------------------------
-功能列表（详见设置）：
-    1、  物品最大堆叠
-    2、  武器自动使用
-    3、  提升部分工具速度
-    4、  提升放置速度和工作范围
-    5、  BOSS/事件召唤物不消耗
-    6、  渔夫任务无冷却
-    7、  装备/饰品重铸的前缀会越来越好
-    8、  无限药剂，数量达到三十个后无限使用
-    9、  无限弹药，数量达到三千九百九十六个后无限使用
-    10、 非时装饰品也可放置在时装栏（启用模组直接生效）
-    11、 控制墓碑掉落
-    12、 控制物品拾取距离
-    13、 敌人钱币掉落倍率（作弊功能）
-    14、 城镇npc夜晚入住
-    15、 城镇npc刷新速度
-    16、 模组物品
-    17、 随身增益站
-    18、 超级虚空保险库
-    19、 智能虚空保险库
-    20、 额外的背包
-    999、 所有功能都可以在设置查看，懒得写了 QAQ
+功能概要（详见设置）：
+  1、 物品最大堆叠、武器自动使用等辅助Mod普遍功能(对标老牌辅助Luiafk)
+  2、 非时装饰品也可放置在时装栏（启用模组直接生效）
+  3、 城镇NPC入住机制修改: 夜晚入住、图鉴解锁后无视条件入住
+  4、 空间魔杖、建筑魔杖、法爆魔杖等大大优化游戏体验的模组物品
+  5、 渔夫任务无冷却、控制墓碑是否掉落等辅助模组功能的整合
+  6、 随身增益、随身制作站等节省时间的功能
+  7、 与同队好友共享无尽增益、制作站等专为联机设置的功能
+  8、 含100格的超大背包，再也不用担心旗帜和药水放在哪了
+  9、 药水袋与旗帜盒，更方便地将你的药水旗帜整合在一个物品，节省空间
+  10、几乎所有功能都是可以调节的，自行选择适合你的功能
 ---------------------------
 [c/990000:画师：枫林半叶, 逆风而行的信鸽]
 [c/9900ff:翻译：Lastprismer, Lacewing]
@@ -70,28 +59,17 @@ Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + 
 Change log: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog-en.md
 Source code: https://gitee.com/MyGoold/improve-game
 ---------------------------
-Function list:
-    1. Max stack
-    2. Weapons autoswing
-    3. Increased using speed for certain tools
-    4. Increased placement speed and range
-    5. Vanilla boss and event summon items not being consumed
-    6. Instant refresh Angler's quests
-    7. Prefixes get better as you keep reforging
-    8. Infinite potions when stack to at least 30
-    9. Infinite ammos when stack to at least 3996
-    10. Can put non-vanity accessories in social slots
-    11. Disable tombstone spawn
-    12. Adjust item pickup range
-    13. Enemy coin drop multiplier(cheating)
-    14. Town NPCs can spawn at night time
-    15. Town NPC spawn rate
-    16. Enable modded items
-    17. Portable buff stations
-    18. Super Void Vault
-    19. Void Vault Smart Pickup
-    20. A huge extra inventory
-    999. Go to the mod configurations please
+功能概要（详见设置）：
+  1、 物品最大堆叠、武器自动使用等辅助Mod普遍功能(对标老牌辅助Luiafk)
+  2、 非时装饰品也可放置在时装栏（启用模组直接生效）
+  3、 城镇NPC入住机制修改: 夜晚入住、图鉴解锁后无视条件入住
+  4、 空间魔杖、建筑魔杖、法爆魔杖等大大优化游戏体验的模组物品
+  5、 渔夫任务无冷却、控制墓碑是否掉落等辅助模组功能的整合
+  6、 随身增益、随身制作站等节省时间的功能
+  7、 与同队好友共享无尽增益、制作站等专为联机设置的功能
+  8、 含100格的超大背包，再也不用担心旗帜和药水放在哪了
+  9、 药水袋与旗帜盒，更方便地将你的药水旗帜整合在一个物品，节省空间
+  10、几乎所有功能都是可以调节的，自行选择适合你的功能
 ---------------------------
 [c/990000:Spriter: 枫林半叶, 逆风而行的信鸽]
 [c/9900ff:Translators: Lastprismer, Lacewing]
