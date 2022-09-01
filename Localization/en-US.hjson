@@ -217,9 +217,14 @@ Mods:
                     They don't need to be saved, but will be able to spawn if there are valid houses. They will be considered as saved once they spawn
                     Once an NPC's bestiary entry is unlocked, they will spawn as soon as there is a valid house, regardless of their spawn conditions
                     (You have to talk to any town NPCs at least once to unlock their bestiary entry)
+                    Town NPCs will spawn at nighttime
                     '''
             }
-            TownNPCSpawnInNight.Label: "[i:MusicBoxTownNight] Allow town NPCs to spawn at nighttime"
+            NPCLiveInEvil:
+            {
+                Label: "[i:MusicBoxTownNight] 城镇NPC可住在邪恶环境"
+                Tooltip: "城镇NPC可以住在腐化与血腥环境内"
+            }
             TownNPCSpawnSpeed:
             {
                 Label: "[i:4910] Town NPC spawn rate multiplier"

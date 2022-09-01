@@ -53,6 +53,31 @@ namespace ImproveGame.Common.Systems
             IL.Terraria.Player.UpdateDead += KeepBuffOnUpdateDead;
             // 禁止腐化蔓延
             IL.Terraria.WorldGen.UpdateWorld_Inner += DisableBiomeSpread;
+            // NPC住在腐化
+            IL.Terraria.WorldGen.ScoreRoom += LiveInCorrupt;
+        }
+
+        private void LiveInCorrupt(ILContext il)
+        {
+            // int num3 = -WorldGen.GetTileTypeCountByCategory(tileTypeCounts, TileScanGroup.TotalGoodEvil);
+            // if (num3 < 50) { ... }
+            // IL_005F: call      int32 Terraria.WorldGen::GetTileTypeCountByCategory(int32[], valuetype Terraria.Enums.TileScanGroup)
+            // IL_0064: neg
+            // IL_0065: stloc.s   num3
+            // IL_0067: ldloc.s   num3
+            // IL_0069: ldc.i4.s  50
+            // IL_006B: bge.s     IL_0070
+            var c = new ILCursor(il);
+            if (!c.TryGotoNext(
+                MoveType.After,
+                i => i.MatchCall(typeof(WorldGen).GetMethod("GetTileTypeCountByCategory")),
+                i => i.Match(OpCodes.Neg),
+                i => i.Match(OpCodes.Stloc_S),
+                i => i.Match(OpCodes.Ldloc_S),
+                i => i.Match(OpCodes.Ldc_I4_S)))
+                return;
+            // < 50则会设置为0，开选项的时候把这个设置成114514就行了
+            c.EmitDelegate<Func<int, int>>((returnValue) => Config.NPCLiveInEvil ? 114514 : returnValue);
         }
 
         private void DisableBiomeSpread(ILContext il)

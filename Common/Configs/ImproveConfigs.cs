@@ -156,9 +156,10 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool TownNPCGetTFIntoHouse;
 
-        [Label("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Label")]
-        [DefaultValue(false)]
-        public bool TownNPCSpawnInNight;
+        [Label("$Mods.ImproveGame.Config.NPCLiveInEvil.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.NPCLiveInEvil.Tooltip")]
+        [DefaultValue(true)]
+        public bool NPCLiveInEvil;
 
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnSpeed.Label")]
         [Tooltip("$Mods.ImproveGame.Config.TownNPCSpawnSpeed.Tooltip")]
@@ -383,7 +384,7 @@ namespace ImproveGame.Common.Configs
                 AutoSaveMoney is true &&
                 FasterExtractinator is true &&
                 TownNPCGetTFIntoHouse is false &&
-                TownNPCSpawnInNight is true &&
+                NPCLiveInEvil is true &&
                 TownNPCSpawnSpeed is -1 &&
                 NoCD_FishermanQuest is true &&
                 NPCCoinDropRate is 1 &&
@@ -430,7 +431,7 @@ namespace ImproveGame.Common.Configs
                     AutoSaveMoney = true;
                     FasterExtractinator = true;
                     TownNPCGetTFIntoHouse = false;
-                    TownNPCSpawnInNight = true;
+                    NPCLiveInEvil = true;
                     TownNPCSpawnSpeed = -1;
                     NoCD_FishermanQuest = true;
                     NPCCoinDropRate = 1;
@@ -482,7 +483,7 @@ namespace ImproveGame.Common.Configs
                 AutoSaveMoney is true &&
                 FasterExtractinator is true &&
                 TownNPCGetTFIntoHouse is true &&
-                TownNPCSpawnInNight is true &&
+                NPCLiveInEvil is true &&
                 TownNPCSpawnSpeed is 12 &&
                 NoCD_FishermanQuest is true &&
                 NPCCoinDropRate is 8 &&
@@ -529,7 +530,7 @@ namespace ImproveGame.Common.Configs
                     AutoSaveMoney = true;
                     FasterExtractinator = true;
                     TownNPCGetTFIntoHouse = true;
-                    TownNPCSpawnInNight = true;
+                    NPCLiveInEvil = true;
                     TownNPCSpawnSpeed = 12;
                     NoCD_FishermanQuest = true;
                     NPCCoinDropRate = 8;

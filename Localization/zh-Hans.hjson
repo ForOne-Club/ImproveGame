@@ -225,9 +225,14 @@
                     若有空房子会直接入住，不需要寻找，一旦入住即视为已被找到状态
                     在图鉴中被解锁的城镇NPC将会无视入住条件，只要有房子即可入住
                     （注意：你需要与城镇NPC至少对话一次来解锁图鉴）
+                    城镇NPC可在夜晚入住
                     '''
             }
-            TownNPCSpawnInNight.Label: "[i:MusicBoxTownNight] 允许城镇NPC夜晚入住"
+            NPCLiveInEvil:
+            {
+                Label: "[i:MusicBoxTownNight] 城镇NPC可住在邪恶环境"
+                Tooltip: "城镇NPC可以住在腐化与血腥环境内"
+            }
             TownNPCSpawnSpeed:
             {
                 Label: "[i:4910] 城镇NPC刷新速度"

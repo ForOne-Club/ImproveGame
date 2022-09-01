@@ -123,7 +123,7 @@ namespace ImproveGame.Common.Systems
 
         public override void PostUpdateTime()
         {
-            if (!Main.dayTime && Config.TownNPCSpawnInNight)
+            if (!Main.dayTime && Config.TownNPCGetTFIntoHouse)
                 SpawnTownNPCs.Invoke(null, null);
         }
 
