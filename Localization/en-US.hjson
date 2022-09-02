@@ -222,8 +222,8 @@ Mods:
             }
             NPCLiveInEvil:
             {
-                Label: "[i:MusicBoxTownNight] 城镇NPC可住在邪恶环境"
-                Tooltip: "城镇NPC可以住在腐化与血腥环境内"
+                Label: "[i:MusicBoxTownNight] Town NPCs can live in evil biomes"
+                Tooltip: "Town NPCs can live in the Corruption and the Crimson"
             }
             TownNPCSpawnSpeed:
             {

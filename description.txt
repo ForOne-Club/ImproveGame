@@ -20,7 +20,7 @@
   1、 物品最大堆叠、武器自动使用等辅助Mod普遍功能(对标老牌辅助Luiafk)
   2、 非时装饰品也可放置在时装栏（启用模组直接生效）
   3、 城镇NPC入住机制修改: 夜晚入住、图鉴解锁后无视条件入住
-  4、 空间魔杖、建筑魔杖、法爆魔杖等大大优化游戏体验的模组物品
+  4、 空间魔杖、建筑魔杖、法爆魔杖和钓鱼机等大大优化游戏体验的模组物品
   5、 渔夫任务无冷却、控制墓碑是否掉落等辅助模组功能的整合
   6、 随身增益、随身制作站等节省时间的功能
   7、 与同队好友共享无尽增益、制作站等专为联机设置的功能
@@ -59,17 +59,17 @@ Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + 
 Change log: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog-en.md
 Source code: https://gitee.com/MyGoold/improve-game
 ---------------------------
-功能概要（详见设置）：
-  1、 物品最大堆叠、武器自动使用等辅助Mod普遍功能(对标老牌辅助Luiafk)
-  2、 非时装饰品也可放置在时装栏（启用模组直接生效）
-  3、 城镇NPC入住机制修改: 夜晚入住、图鉴解锁后无视条件入住
-  4、 空间魔杖、建筑魔杖、法爆魔杖等大大优化游戏体验的模组物品
-  5、 渔夫任务无冷却、控制墓碑是否掉落等辅助模组功能的整合
-  6、 随身增益、随身制作站等节省时间的功能
-  7、 与同队好友共享无尽增益、制作站等专为联机设置的功能
-  8、 含100格的超大背包，再也不用担心旗帜和药水放在哪了
-  9、 药水袋与旗帜盒，更方便地将你的药水旗帜整合在一个物品，节省空间
-  10、几乎所有功能都是可以调节的，自行选择适合你的功能
+Feature highlights: 
+  1. General features like max stack, weapon auto reuse (benchmarking Luiafk the classic qol mod)
+  2. Non-vanity accessories can be worn in vanity slots
+  3. Town NPC spawn mechanic improvements: can respawn during nighttime, ignore respwaning limitations if bestiary is unlocked
+  4. Mod items such as Wand of Space, Wand of Architecture, Wand of Bursts and Fishing Machine which greatly improve gameplay experience
+  5. Integration of qol features like instantly refreash Angler's quests and disable tomb stone spawning
+  6. Time-saving features like Infinite Buffs and Portable Crafting Stations
+  7. Features specially made for multiplayer, for example sharing your infinite buffs, portable crafting stations and even more with your teammates
+  8. A Huge Inventory providing 100 item slots, no warries of storing your potions and banners
+  9. Potion Bag and Banner Box, integrate all your potions or banners as a single item (and you are free to take them out)
+  10. Most features are configurable, use on your own preference
 ---------------------------
 [c/990000:Spriter: 枫林半叶, 逆风而行的信鸽]
 [c/9900ff:Translators: Lastprismer, Lacewing]
