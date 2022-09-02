@@ -88,25 +88,25 @@ namespace ImproveGame.Interface.GUI
             checkbox[2].Left.Pixels = checkbox[1].Right() + 10;
             checkbox[2].Top.Pixels = checkbox[0].Top();
 
-            buttons[0] = new(MyUtils.GetTexture("UI/Quick").Value, Lang.inter[29].Value);
+            buttons[0] = new(GetTexture("UI/Quick").Value, Lang.inter[29].Value);
             buttons[0].SetText(Lang.inter[29].Value);
             buttons[0].SetPos(0f, checkbox[0].Bottom() + 10f);
             buttons[0].OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
             MainPanel.Append(buttons[0]);
 
-            buttons[1] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[30].Value);
+            buttons[1] = new(GetTexture("UI/Put").Value, Lang.inter[30].Value);
             buttons[1].SetText(Lang.inter[30].Value);
             buttons[1].SetPos(buttons[0].Right() + 10f, buttons[0].Top());
             buttons[1].OnMouseDown += (_, _) => PutAll();
             MainPanel.Append(buttons[1]);
 
-            buttons[2] = new(MyUtils.GetTexture("UI/Put").Value, Lang.inter[31].Value);
+            buttons[2] = new(GetTexture("UI/Put").Value, Lang.inter[31].Value);
             buttons[2].SetText(Lang.inter[31].Value);
             buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
             buttons[2].OnMouseDown += (_, _) => Replenish();
             MainPanel.Append(buttons[2]);
 
-            buttons[3] = new(MyUtils.GetTexture("UI/Put").Value, MyUtils.GetText("SuperVault.Sort"));
+            buttons[3] = new(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"));
             buttons[3].SetText(GetText("SuperVault.Sort"));
             buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
             buttons[3].OnMouseDown += (_, _) => Sort();
@@ -184,7 +184,7 @@ namespace ImproveGame.Interface.GUI
             // 放入背包
             for (int i = 0; i < testSort.Count; i++)
             {
-                MyUtils.ItemStackToInventory(items, testSort[i], false);
+                ItemStackToInventory(items, testSort[i], false);
             }
             Recipe.FindRecipes();
         }
@@ -198,9 +198,9 @@ namespace ImproveGame.Interface.GUI
             {
                 if (!inventory[i].IsAir && !inventory[i].favorited && !inventory[i].IsACoin)
                 {
-                    if (MyUtils.HasItem(BigBag, -1, inventory[i].type))
+                    if (HasItem(BigBag, -1, inventory[i].type))
                     {
-                        inventory[i] = MyUtils.ItemStackToInventory(BigBag, inventory[i], false);
+                        inventory[i] = ItemStackToInventory(BigBag, inventory[i], false);
                     }
                 }
             }
@@ -215,7 +215,7 @@ namespace ImproveGame.Interface.GUI
             for (int i = 10; i < 50; i++)
             {
                 if (!inventory[i].IsAir && !inventory[i].favorited && !inventory[i].IsACoin)
-                    inventory[i] = MyUtils.ItemStackToInventory(BigBag, inventory[i], false);
+                    inventory[i] = ItemStackToInventory(BigBag, inventory[i], false);
             }
             Recipe.FindRecipes();
         }
@@ -229,7 +229,7 @@ namespace ImproveGame.Interface.GUI
             {
                 if (!BigBag[i].IsAir && !BigBag[i].favorited && !BigBag[i].IsACoin)
                 {
-                    BigBag[i] = MyUtils.ItemStackToInventory(inventory, BigBag[i], false, 50);
+                    BigBag[i] = ItemStackToInventory(inventory, BigBag[i], false, 50);
                 }
             }
             Recipe.FindRecipes();

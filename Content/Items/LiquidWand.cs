@@ -2,7 +2,6 @@
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using System.Collections.Generic;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 
@@ -127,7 +126,7 @@ namespace ImproveGame.Content.Items
         {
             if (player.altFunctionUse == 0)
             {
-                MyUtils.ItemRotation(player);
+                ItemRotation(player);
             }
             else if (player.altFunctionUse == 2)
             {
@@ -185,10 +184,10 @@ namespace ImproveGame.Content.Items
             // 决定文本显示的是“开启”还是“关闭”
             if (ItemInInventory)
             {
-                string tooltip = MyUtils.GetText("Tips.LiquidWandOn");
+                string tooltip = GetText("Tips.LiquidWandOn");
                 if (LiquidWandGUI.Visible)
                 {
-                    tooltip = MyUtils.GetText("Tips.LiquidWandOff");
+                    tooltip = GetText("Tips.LiquidWandOff");
                 }
 
                 tooltips.Add(new(Mod, "LiquidWand", tooltip) { OverrideColor = Color.LightGreen });

@@ -28,7 +28,7 @@ namespace ImproveGame.Common.Players
             // 切换两边（如果有的话）Autofisher的状态
             TryGetAutofisher(out var fisherOld);
             fisherOld.Opened = false;
-            if (MyUtils.TryGetTileEntityAs<TEAutofisher>(point.X, point.Y, out var fisherNew)) {
+            if (TryGetTileEntityAs<TEAutofisher>(point.X, point.Y, out var fisherNew)) {
                 fisherNew.Opened = true;
             }
 

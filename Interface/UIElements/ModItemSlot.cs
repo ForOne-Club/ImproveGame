@@ -211,7 +211,7 @@ namespace ImproveGame.Interface.UIElements
 
             // 常规单点
             if (placeItem is not null && CanPlaceItem(placeItem)) {
-                byte placeMode = MyUtils.CanPlaceInSlot(Item, placeItem);
+                byte placeMode = CanPlaceInSlot(Item, placeItem);
 
                 // type不同直接切换吧
                 if (placeMode == 1) {

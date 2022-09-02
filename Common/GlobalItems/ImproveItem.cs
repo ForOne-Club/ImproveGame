@@ -1,15 +1,7 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Interface.UIElements;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.GlobalItems
@@ -63,7 +55,7 @@ namespace ImproveGame.Common.GlobalItems
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Action<Player>>((player) =>
             {
-                player.SetItemTime((int)MathHelper.Max(1, MathF.Round(player.itemTime * (1f - MyUtils.Config.ExtraToolSpeed))));
+                player.SetItemTime((int)MathHelper.Max(1, MathF.Round(player.itemTime * (1f - Config.ExtraToolSpeed))));
             });
         }
         private void TryHittingWall(ILContext il)
@@ -76,7 +68,7 @@ namespace ImproveGame.Common.GlobalItems
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Action<Player>>((player) =>
             {
-                player.SetItemTime((int)MathHelper.Max(1, MathF.Round(player.itemTime * (1f - MyUtils.Config.ExtraToolSpeed))));
+                player.SetItemTime((int)MathHelper.Max(1, MathF.Round(player.itemTime * (1f - Config.ExtraToolSpeed))));
             });
         }
 
@@ -84,8 +76,8 @@ namespace ImproveGame.Common.GlobalItems
         {
             // 自动挥舞
             ItemDefinition itemd = new(item.type);
-            if (item.damage > 0 && MyUtils.Config.AutoReuseWeapon
-                && !MyUtils.Config.AutoReuseWeapon_ExclusionList.Contains(itemd))
+            if (item.damage > 0 && Config.AutoReuseWeapon
+                && !Config.AutoReuseWeapon_ExclusionList.Contains(itemd))
             {
                 return true;
             }
@@ -96,7 +88,7 @@ namespace ImproveGame.Common.GlobalItems
         public override bool ConsumeItem(Item item, Player player)
         {
             // 所有召唤物不会消耗
-            if (MyUtils.Config.NoConsume_SummonItem && (SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)))
+            if (Config.NoConsume_SummonItem && (SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)))
             {
                 return false;
             }
@@ -105,7 +97,7 @@ namespace ImproveGame.Common.GlobalItems
 
         public override bool CanBeConsumedAsAmmo(Item ammo, Item weapon, Player player)
         {
-            if (MyUtils.Config.NoConsume_Ammo && ammo.stack >= 3996 && ammo.ammo > 0)
+            if (Config.NoConsume_Ammo && ammo.stack >= 3996 && ammo.ammo > 0)
             {
                 return false;
             }
@@ -120,7 +112,7 @@ namespace ImproveGame.Common.GlobalItems
             {
                 return true;
             }
-            if (MyUtils.Config.ImprovePrefix) // 新的重铸机制
+            if (Config.ImprovePrefix) // 新的重铸机制
             {
                 // 饰品
                 if (PrefixLevel.ContainsKey(pre))
@@ -185,16 +177,15 @@ namespace ImproveGame.Common.GlobalItems
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             // 重铸次数
-            if (MyUtils.Config.ShowPrefixCount && (item.accessory ||
+            if (Config.ShowPrefixCount && (item.accessory ||
                 (item.damage > 0 && item.maxStack == 1 && item.ammo == AmmoID.None &&
                 item.DamageType != DamageClass.Generic)))
             {
                 GlobalItemData itemVar = item.GetGlobalItem<GlobalItemData>();
-                TooltipLine tooltip = new TooltipLine(Mod, "ReforgeCount", Language.GetTextValue($"Mods.ImproveGame.Tips.PrefixCount") + itemVar.recastCount);
-                tooltips.Add(tooltip);
+                tooltips.Add(new TooltipLine(Mod, "ReforgeCount", Language.GetTextValue($"Mods.ImproveGame.Tips.PrefixCount") + itemVar.recastCount));
             }
             // 更多信息
-            if (MyUtils.Config.ShowItemMoreData)
+            if (Config.ShowItemMoreData)
             {
                 tooltips.Add(new(Mod, "Type", "Type: " + item.type));
                 tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
@@ -229,7 +220,7 @@ namespace ImproveGame.Common.GlobalItems
         // 额外拾取距离
         public override void GrabRange(Item item, Player player, ref int grabRange)
         {
-            grabRange += MyUtils.Config.GrabDistance * 16;
+            grabRange += Config.GrabDistance * 16;
         }
 
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -262,25 +253,25 @@ namespace ImproveGame.Common.GlobalItems
             if (!DataPlayer.TryGet(player, out var dataPlayer))
                 return false;
 
-            if (MyUtils.Config.SuperVault && dataPlayer.SuperVault is not null && MyUtils.HasItemSpace(dataPlayer.SuperVault, item))
+            if (Config.SuperVault && dataPlayer.SuperVault is not null && HasItemSpace(dataPlayer.SuperVault, item))
             {
                 return true;
             }
 
-            if (MyUtils.Config.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+            if (Config.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
             {
                 // 猪猪钱罐
-                if (improvePlayer.PiggyBank && MyUtils.HasItemSpace(player.bank.item, item))
+                if (improvePlayer.PiggyBank && HasItemSpace(player.bank.item, item))
                 {
                     return true;
                 }
                 // 保险箱
-                if (improvePlayer.Safe && MyUtils.HasItemSpace(player.bank2.item, item))
+                if (improvePlayer.Safe && HasItemSpace(player.bank2.item, item))
                 {
                     return true;
                 }
                 // 护卫熔炉
-                if (improvePlayer.DefendersForge && MyUtils.HasItemSpace(player.bank3.item, item))
+                if (improvePlayer.DefendersForge && HasItemSpace(player.bank3.item, item))
                 {
                     return true;
                 }

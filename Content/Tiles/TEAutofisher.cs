@@ -203,7 +203,7 @@ namespace ImproveGame.Content.Tiles
                         NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc);
 
                     if (Main.netMode == NetmodeID.SinglePlayer) {
-                        Main.NewText(MyUtils.GetText("Autofisher.CarefulNextTime"), 175, 75);
+                        Main.NewText(GetText("Autofisher.CarefulNextTime"), 175, 75);
                         Main.NewText(Language.GetTextValue("Announcement.HasAwoken", typeName), 175, 75);
                     }
                     else if (Main.netMode == NetmodeID.Server) {

@@ -46,7 +46,7 @@ namespace ImproveGame.Content.Tiles
         }
 
         public override bool CanKillTile(int i, int j, ref bool blockDamaged) {
-            if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(i, j, out var autofisher))
+            if (!TryGetTileEntityAs<TEAutofisher>(i, j, out var autofisher))
                 return true;
             if (autofisher.accessory.IsAir && autofisher.bait.IsAir && autofisher.fishingPole.IsAir) {
                 if (autofisher.fish is null)

@@ -9,7 +9,7 @@ namespace ImproveGame.Common.GlobalTiles
         // 秉承着能不用IL就不用的稳定至上原则，这里直接RandomUpdate了（其实就是懒）
         public override void RandomUpdate(int i, int j, int type) {
             // HasTile为false一般不可能，但还是判断一下
-            if (!MyUtils.Config.TreeGrowFaster || !Main.tile[i, j].HasTile) {
+            if (!Config.TreeGrowFaster || !Main.tile[i, j].HasTile) {
                 return;
             }
             // 原版试了一次，我们这里多尝试4次不就5倍了吗

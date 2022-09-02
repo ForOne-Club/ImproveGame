@@ -87,14 +87,14 @@ namespace ImproveGame.Content.Items
             {
                 if (storedPotions.Count >= 20)
                 {
-                    tooltips.Add(new(Mod, "PotionBagCurrent", MyUtils.GetText("Tips.PotionBagCurrentFull"))
+                    tooltips.Add(new(Mod, "PotionBagCurrent", GetText("Tips.PotionBagCurrentFull"))
                     {
                         OverrideColor = Color.LightGreen
                     });
                 }
                 else
                 {
-                    tooltips.Add(new(Mod, "PotionBagCurrent", MyUtils.GetTextWith("Tips.PotionBagCurrent", new { StoredCount = storedPotions.Count }))
+                    tooltips.Add(new(Mod, "PotionBagCurrent", GetTextWith("Tips.PotionBagCurrent", new { StoredCount = storedPotions.Count }))
                     {
                         OverrideColor = Color.LightGreen
                     });
@@ -108,20 +108,20 @@ namespace ImproveGame.Content.Items
                     // 有30个
                     if (available)
                     {
-                        if (!MyUtils.Config.NoConsume_Potion || !InfBuffPlayer.CheckInfBuffEnable(potion.buffType))
+                        if (!Config.NoConsume_Potion || !InfBuffPlayer.CheckInfBuffEnable(potion.buffType))
                         { // 被禁用了
-                            text += $"  {MyUtils.GetText("Tips.PotionBagDisabled")}";
+                            text += $"  {GetText("Tips.PotionBagDisabled")}";
                         }
                         else
                         {
-                            text += $"  {MyUtils.GetText("Tips.PotionBagAvailable")}";
+                            text += $"  {GetText("Tips.PotionBagAvailable")}";
                             color = Color.LightGreen;
                         }
                     }
                     // 没有30个
                     else
                     {
-                        text += $"  {MyUtils.GetText("Tips.PotionBagUnavailable")} ({potion.stack}/{Config.NoConsume_PotionRequirement})";
+                        text += $"  {GetText("Tips.PotionBagUnavailable")} ({potion.stack}/{Config.NoConsume_PotionRequirement})";
                     }
                     tooltips.Add(new(Mod, $"PotionBagP{i}", text)
                     {
@@ -131,7 +131,7 @@ namespace ImproveGame.Content.Items
             }
             else
             {
-                tooltips.Add(new(Mod, "PotionBagNone", MyUtils.GetText("Tips.PotionBagNone"))
+                tooltips.Add(new(Mod, "PotionBagNone", GetText("Tips.PotionBagNone"))
                 {
                     OverrideColor = Color.SkyBlue
                 });

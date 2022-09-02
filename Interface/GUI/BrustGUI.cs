@@ -129,7 +129,7 @@ namespace ImproveGame.Interface.GUI
             bool center = PlayerInput.UsingGamepad && Main.SmartCursorWanted;
             int x = center ? Main.screenWidth / 2 : Main.mouseX;
             int y = center ? Main.screenHeight / 2 - 60 : Main.mouseY;
-            MyUtils.TransformToUIPosition(ref x, ref y);
+            TransformToUIPosition(ref x, ref y);
             Timer.Open();
             modeButton.SetCenter(x, y);
             modeButton.mainImage = WandSystem.FixedMode ? fixedModeButton : freeModeButton;

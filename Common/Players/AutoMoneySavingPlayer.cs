@@ -9,7 +9,7 @@
         private static int _failDepositTimer = 0;
 
         public override void PostUpdateEquips() {
-            if (!MyUtils.Config.AutoSaveMoney || Main.myPlayer != Player.whoAmI || Main.netMode == NetmodeID.Server)
+            if (!Config.AutoSaveMoney || Main.myPlayer != Player.whoAmI || Main.netMode == NetmodeID.Server)
                 return;
 
             // 堆叠钱币
@@ -37,12 +37,12 @@
             int[] PiggyBanks = new int[] { ItemID.PiggyBank, ItemID.ChesterPetItem, ItemID.MoneyTrough };
             // 每帧判断一个储存是否有猪猪，尽量避免卡顿
             var hasPiggyInInventory = (_saveCounter % 6) switch {
-                1 => MyUtils.HasItem(Player.bank.item, -1, PiggyBanks),
-                2 => MyUtils.HasItem(Player.bank2.item, -1, PiggyBanks),
-                3 => MyUtils.HasItem(Player.bank3.item, -1, PiggyBanks),
-                4 => MyUtils.HasItem(Player.bank4.item, -1, PiggyBanks),
-                5 => MyUtils.HasItem(Player.GetModPlayer<DataPlayer>().SuperVault, -1, PiggyBanks),
-                _ => MyUtils.HasItem(Player.inventory, -1, PiggyBanks),
+                1 => HasItem(Player.bank.item, -1, PiggyBanks),
+                2 => HasItem(Player.bank2.item, -1, PiggyBanks),
+                3 => HasItem(Player.bank3.item, -1, PiggyBanks),
+                4 => HasItem(Player.bank4.item, -1, PiggyBanks),
+                5 => HasItem(Player.GetModPlayer<DataPlayer>().SuperVault, -1, PiggyBanks),
+                _ => HasItem(Player.inventory, -1, PiggyBanks),
             };
             _saveCounter++;
             if (!hasPiggyInInventory)
@@ -58,7 +58,7 @@
                         Player.inventory[i].SetDefaults(ItemID.GoldCoin);
                     if (Player.inventory[i].stack == 100 && Player.inventory[i].type == ItemID.GoldCoin)
                         Player.inventory[i].SetDefaults(ItemID.PlatinumCoin);
-                    Player.inventory[i] = MyUtils.ItemStackToInventory(Player.bank.item, Player.inventory[i], false);
+                    Player.inventory[i] = ItemStackToInventory(Player.bank.item, Player.inventory[i], false);
                     Recipe.FindRecipes();
                     // 如果某一帧突然装不下，要及时整理背包让它装得下
                     if (Player.inventory[i].stack > 0 && _failDepositTimer < 0)

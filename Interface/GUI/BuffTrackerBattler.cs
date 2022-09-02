@@ -98,7 +98,7 @@ namespace ImproveGame.Interface.GUI
                 Main.instance.MouseTextNoOverride(originalText, 0, 0);
             }
             else if (MainPanel.GetDimensions().ToRectangle().Intersects(new(Main.mouseX, Main.mouseY, 1, 1))) {
-                string text = MyUtils.GetText("BuffTracker.NPCSpawnRatePanel");
+                string text = GetText("BuffTracker.NPCSpawnRatePanel");
                 Main.instance.MouseTextNoOverride(text, 0, 0);
             }
 
@@ -120,7 +120,7 @@ namespace ImproveGame.Interface.GUI
 
         public void Update() {
             if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer) && modPlayer.HasRequiredBuffs()) {
-                int rate = MyUtils.Config.SpawnRateMaxValue;
+                int rate = Config.SpawnRateMaxValue;
                 maxRateText.SetText($"x{rate}");
                 maxRateText.HAlign = rate < 100 ? rate < 10 ? 0.7f : 1f : 1.4f;
             }

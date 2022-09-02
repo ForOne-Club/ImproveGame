@@ -179,18 +179,18 @@ namespace ImproveGame.Common.Systems
 
         private void TravelNPCStay(On.Terraria.WorldGen.orig_UnspawnTravelNPC orig)
         {
-            if (!MyUtils.Config.TravellingMerchantStay)
+            if (!Config.TravellingMerchantStay)
                 orig.Invoke();
         }
 
         private bool TileDrawing_IsAlchemyPlantHarvestable(On.Terraria.GameContent.Drawing.TileDrawing.orig_IsAlchemyPlantHarvestable orig, Terraria.GameContent.Drawing.TileDrawing self, int style)
         {
-            return MyUtils.Config.AlchemyGrassAlwaysBlooms || orig.Invoke(self, style);
+            return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(self, style);
         }
 
         private bool WorldGen_IsHarvestableHerbWithSeed(On.Terraria.WorldGen.orig_IsHarvestableHerbWithSeed orig, int type, int style)
         {
-            return MyUtils.Config.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style);
+            return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style);
         }
 
         // “草药” 是否掉落成熟时候物品
@@ -214,7 +214,7 @@ namespace ImproveGame.Common.Systems
                 return;
             c.EmitDelegate(() =>
             {
-                if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting)
+                if (Config.StaffOfRegenerationAutomaticPlanting)
                 {
                     style = Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18;
                 }
@@ -228,7 +228,7 @@ namespace ImproveGame.Common.Systems
                 return;
             c.EmitDelegate(() =>
             {
-                if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting)
+                if (Config.StaffOfRegenerationAutomaticPlanting)
                 {
                     WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, 82, false, false, -1, style);
                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, 82, style);
@@ -244,11 +244,11 @@ namespace ImproveGame.Common.Systems
                 return;
             c.EmitDelegate<Func<bool, bool>>(flag =>
             {
-                if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting)
+                if (Config.StaffOfRegenerationAutomaticPlanting)
                 {
                     style = Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18;
                 }
-                return MyUtils.Config.AlchemyGrassAlwaysBlooms || flag;
+                return Config.AlchemyGrassAlwaysBlooms || flag;
             });
 
             if (!c.TryGotoNext(MoveType.After,
@@ -260,7 +260,7 @@ namespace ImproveGame.Common.Systems
                 return;
             c.EmitDelegate(() =>
             {
-                if (MyUtils.Config.StaffOfRegenerationAutomaticPlanting)
+                if (Config.StaffOfRegenerationAutomaticPlanting)
                 {
                     WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, 82, false, false, -1, style);
                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, 82, style);
@@ -277,7 +277,7 @@ namespace ImproveGame.Common.Systems
                 i => i.Match(OpCodes.Call),
                 i => i.Match(OpCodes.Ldc_I4_S)))
                 return;
-            c.EmitDelegate<Func<int, int>>(num => MyUtils.Config.AlchemyGrassGrowsFaster ? 1 : num);
+            c.EmitDelegate<Func<int, int>>(num => Config.AlchemyGrassGrowsFaster ? 1 : num);
 
             /*if (!c.TryGotoNext(MoveType.After,
                 i => i.Match(OpCodes.Ret),
@@ -318,32 +318,32 @@ namespace ImproveGame.Common.Systems
         {
             ImprovePlayer improvePlayer = player.GetModPlayer<ImprovePlayer>();
             // 智能虚空保险库
-            if (MyUtils.Config.SmartVoidVault && !itemToPickUp.IsACoin)
+            if (Config.SmartVoidVault && !itemToPickUp.IsACoin)
             {
                 // 大背包
-                if (MyUtils.Config.SuperVault && !itemToPickUp.IsAir && MyUtils.HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))
+                if (Config.SuperVault && !itemToPickUp.IsAir && HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))
                 {
-                    itemToPickUp = MyUtils.ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
+                    itemToPickUp = ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
                 }
                 // 虚空保险库
-                if (player.IsVoidVaultEnabled && !itemToPickUp.IsAir && MyUtils.HasItem(player.bank4.item, -1, itemToPickUp.type))
+                if (player.IsVoidVaultEnabled && !itemToPickUp.IsAir && HasItem(player.bank4.item, -1, itemToPickUp.type))
                 {
-                    itemToPickUp = MyUtils.ItemStackToInventory(player.bank4.item, itemToPickUp);
+                    itemToPickUp = ItemStackToInventory(player.bank4.item, itemToPickUp);
                 }
                 // 其他
-                if (MyUtils.Config.SuperVoidVault)
+                if (Config.SuperVoidVault)
                 {
-                    if (improvePlayer.PiggyBank && !itemToPickUp.IsAir && MyUtils.HasItem(player.bank.item, -1, itemToPickUp.type))
+                    if (improvePlayer.PiggyBank && !itemToPickUp.IsAir && HasItem(player.bank.item, -1, itemToPickUp.type))
                     {
-                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank.item, itemToPickUp);
+                        itemToPickUp = ItemStackToInventory(player.bank.item, itemToPickUp);
                     }
-                    if (improvePlayer.Safe && !itemToPickUp.IsAir && MyUtils.HasItem(player.bank2.item, -1, itemToPickUp.type))
+                    if (improvePlayer.Safe && !itemToPickUp.IsAir && HasItem(player.bank2.item, -1, itemToPickUp.type))
                     {
-                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank2.item, itemToPickUp);
+                        itemToPickUp = ItemStackToInventory(player.bank2.item, itemToPickUp);
                     }
-                    if (improvePlayer.DefendersForge && !itemToPickUp.IsAir && MyUtils.HasItem(player.bank3.item, -1, itemToPickUp.type))
+                    if (improvePlayer.DefendersForge && !itemToPickUp.IsAir && HasItem(player.bank3.item, -1, itemToPickUp.type))
                     {
-                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank3.item, itemToPickUp);
+                        itemToPickUp = ItemStackToInventory(player.bank3.item, itemToPickUp);
                     }
                 }
             }
@@ -354,24 +354,24 @@ namespace ImproveGame.Common.Systems
             if (!itemToPickUp.IsACoin)
             {
                 // 大背包
-                if (MyUtils.Config.SuperVault && !itemToPickUp.IsAir)
+                if (Config.SuperVault && !itemToPickUp.IsAir)
                 {
-                    itemToPickUp = MyUtils.ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
+                    itemToPickUp = ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
                 }
                 // 超级虚空保险库
-                if (MyUtils.Config.SuperVoidVault)
+                if (Config.SuperVoidVault)
                 {
                     if (improvePlayer.PiggyBank && !itemToPickUp.IsAir)
                     {
-                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank.item, itemToPickUp);
+                        itemToPickUp = ItemStackToInventory(player.bank.item, itemToPickUp);
                     }
                     if (improvePlayer.Safe && !itemToPickUp.IsAir)
                     {
-                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank2.item, itemToPickUp);
+                        itemToPickUp = ItemStackToInventory(player.bank2.item, itemToPickUp);
                     }
                     if (improvePlayer.DefendersForge && !itemToPickUp.IsAir)
                     {
-                        itemToPickUp = MyUtils.ItemStackToInventory(player.bank3.item, itemToPickUp);
+                        itemToPickUp = ItemStackToInventory(player.bank3.item, itemToPickUp);
                     }
                 }
             }
@@ -445,7 +445,7 @@ namespace ImproveGame.Common.Systems
             if (Main.myPlayer != self.whoAmI)
                 return;
 
-            var items = MyUtils.GetAllInventoryItemsList(self, true);
+            var items = GetAllInventoryItemsList(self, true);
             foreach (var item in items)
             {
                 if (item.type != ItemID.EncumberingStone)
@@ -460,7 +460,7 @@ namespace ImproveGame.Common.Systems
         /// </summary>
         private int DisableDamageVar(On.Terraria.Main.orig_DamageVar orig, float dmg, float luck)
         {
-            if (MyUtils.Config.BanDamageVar)
+            if (Config.BanDamageVar)
                 return (int)Math.Round(dmg);
             else
                 return orig(dmg, luck);
@@ -494,9 +494,9 @@ namespace ImproveGame.Common.Systems
                 return;
             c.EmitDelegate<Func<int, int>>((defaultValue) =>
             {
-                if (MyUtils.Config.TownNPCSpawnSpeed is -1)
+                if (Config.TownNPCSpawnSpeed is -1)
                     return defaultValue;
-                return (int)Math.Pow(2, MyUtils.Config.TownNPCSpawnSpeed);
+                return (int)Math.Pow(2, Config.TownNPCSpawnSpeed);
             });
         }
 
@@ -526,7 +526,7 @@ namespace ImproveGame.Common.Systems
                     }
                     else if (inv[slot].ModItem is WallPlace)
                     {
-                        MyUtils.GetItemCount(inv, (item) => item.createWall > -1, out int count);
+                        GetItemCount(inv, (item) => item.createWall > -1, out int count);
                         return count;
                     }
                     return -1;
@@ -543,7 +543,7 @@ namespace ImproveGame.Common.Systems
         /// </summary>
         private void Player_PullItem_Common(On.Terraria.Player.orig_PullItem_Common orig, Player player, Item item, float xPullSpeed)
         {
-            if (MyUtils.Config.GrabDistance > 0)
+            if (Config.GrabDistance > 0)
             {
                 Vector2 velocity = (player.Center - item.Center).SafeNormalize(Vector2.Zero);
                 if (item.velocity.Length() + velocity.Length() > 15f)
@@ -566,7 +566,7 @@ namespace ImproveGame.Common.Systems
         /// </summary>
         private void DisableDropTombstone(On.Terraria.Player.orig_DropTombstone orig, Player self, int coinsOwned, NetworkText deathText, int hitDirection)
         {
-            if (!MyUtils.Config.BanTombstone)
+            if (!Config.BanTombstone)
             {
                 orig(self, coinsOwned, deathText, hitDirection);
             }
@@ -620,7 +620,7 @@ namespace ImproveGame.Common.Systems
                 c.Index++;
                 c.EmitDelegate<Func<bool, bool>>((shackSucceed) =>
                 {
-                    if (!shackSucceed && MyUtils.Config.ShakeTreeFruit)
+                    if (!shackSucceed && Config.ShakeTreeFruit)
                     {
                         int x = WorldGen.treeShakeX[WorldGen.numTreeShakes - 1];
                         int y = WorldGen.treeShakeY[WorldGen.numTreeShakes - 1];

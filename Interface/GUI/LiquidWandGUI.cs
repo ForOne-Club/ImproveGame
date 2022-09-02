@@ -214,7 +214,7 @@ namespace ImproveGame.Interface.GUI
 
             if (waterSlot.IsMouseHovering)
             {
-                hoverText = MyUtils.GetTextWith("LiquidWand.Water", new { LiquidAmount = $"{waterSlot.GetLiquidAmount():p1}" });
+                hoverText = GetTextWith("LiquidWand.Water", new { LiquidAmount = $"{waterSlot.GetLiquidAmount():p1}" });
                 // 如果遮挡到百分比文本，就虚化百分比文本
                 int lengthToMouse = Main.mouseX - (int)waterSlot.GetDimensions().X;
                 waterSlot.IsAltHovering = lengthToMouse <= 21;
@@ -226,20 +226,20 @@ namespace ImproveGame.Interface.GUI
                     switch (Main.mouseItem.type)
                     {
                         case ItemID.EmptyBucket:
-                            hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickOut");
+                            hoverText += "\n" + GetText("LiquidWand.ClickOut");
                             listeningSlot = waterSlot;
                             mode = 0;
                             SpecialClickSlot = true;
                             break;
                         case ItemID.WaterBucket:
                         case ItemID.BottomlessBucket:
-                            hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickIn");
+                            hoverText += "\n" + GetText("LiquidWand.ClickIn");
                             listeningSlot = waterSlot;
                             mode = 1;
                             SpecialClickSlot = true;
                             break;
                         case ItemID.SuperAbsorbantSponge:
-                            hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickAbsorbant");
+                            hoverText += "\n" + GetText("LiquidWand.ClickAbsorbant");
                             listeningSlot = waterSlot;
                             mode = 2;
                             SpecialClickSlot = true;
@@ -250,7 +250,7 @@ namespace ImproveGame.Interface.GUI
 
             if (lavaSlot.IsMouseHovering)
             {
-                hoverText = MyUtils.GetTextWith("LiquidWand.Lava", new { LiquidAmount = $"{lavaSlot.GetLiquidAmount():p1}" });
+                hoverText = GetTextWith("LiquidWand.Lava", new { LiquidAmount = $"{lavaSlot.GetLiquidAmount():p1}" });
                 // 如果遮挡到百分比文本，就虚化百分比文本
                 int lengthToMouse = Main.mouseX - (int)lavaSlot.GetDimensions().X;
                 lavaSlot.IsAltHovering = lengthToMouse <= 21;
@@ -261,20 +261,20 @@ namespace ImproveGame.Interface.GUI
                     switch (Main.mouseItem.type)
                     {
                         case ItemID.EmptyBucket:
-                            hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickOut");
+                            hoverText += "\n" + GetText("LiquidWand.ClickOut");
                             listeningSlot = lavaSlot;
                             mode = 0;
                             SpecialClickSlot = true;
                             break;
                         case ItemID.LavaBucket:
                         case ItemID.BottomlessLavaBucket:
-                            hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickIn");
+                            hoverText += "\n" + GetText("LiquidWand.ClickIn");
                             listeningSlot = lavaSlot;
                             mode = 1;
                             SpecialClickSlot = true;
                             break;
                         case ItemID.LavaAbsorbantSponge:
-                            hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickAbsorbant");
+                            hoverText += "\n" + GetText("LiquidWand.ClickAbsorbant");
                             listeningSlot = lavaSlot;
                             mode = 2;
                             SpecialClickSlot = true;
@@ -285,7 +285,7 @@ namespace ImproveGame.Interface.GUI
 
             if (honeySlot.IsMouseHovering)
             {
-                hoverText = MyUtils.GetTextWith("LiquidWand.Honey", new { LiquidAmount = $"{honeySlot.GetLiquidAmount():p1}" });
+                hoverText = GetTextWith("LiquidWand.Honey", new { LiquidAmount = $"{honeySlot.GetLiquidAmount():p1}" });
                 // 如果遮挡到百分比文本，就虚化百分比文本
                 int lengthToMouse = Main.mouseX - (int)honeySlot.GetDimensions().X;
                 honeySlot.IsAltHovering = lengthToMouse <= 21;
@@ -295,14 +295,14 @@ namespace ImproveGame.Interface.GUI
                     switch (Main.mouseItem.type)
                     {
                         case ItemID.EmptyBucket:
-                            hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickOut");
+                            hoverText += "\n" + GetText("LiquidWand.ClickOut");
                             listeningSlot = honeySlot;
                             mode = 0;
                             SpecialClickSlot = true;
                             break;
                         case ItemID.HoneyBucket:
                             //case ItemID.BottomlessHoneyBucket:
-                            hoverText += "\n" + MyUtils.GetText("LiquidWand.ClickIn");
+                            hoverText += "\n" + GetText("LiquidWand.ClickIn");
                             listeningSlot = honeySlot;
                             mode = 1;
                             SpecialClickSlot = true;

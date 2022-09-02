@@ -31,7 +31,7 @@ namespace ImproveGame.Common.Players
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }
-                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher) && fisher.fish.Any(s => MyUtils.CanPlaceInSlot(s, item) != 0))
+                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher) && fisher.fish.Any(s => CanPlaceInSlot(s, item) != 0))
                 {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
@@ -73,7 +73,7 @@ namespace ImproveGame.Common.Players
                         ref Item slotItem = ref itemSlot.Value.Item;
                         ref Item placeItem = ref inventory[slot];
 
-                        byte placeMode = MyUtils.CanPlaceInSlot(slotItem, placeItem);
+                        byte placeMode = CanPlaceInSlot(slotItem, placeItem);
 
                         // type不同直接切换吧
                         if (placeMode == 1) {

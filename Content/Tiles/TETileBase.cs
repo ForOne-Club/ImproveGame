@@ -85,7 +85,7 @@ namespace ImproveGame.Content.Tiles
             Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ItemType(frameX, frameY));
             ModTileEntity tileEntity = GetTileEntity();
             if (tileEntity is not null) {
-                Point16 origin = MyUtils.GetTileOrigin(i, j);
+                Point16 origin = GetTileOrigin(i, j);
                 tileEntity.Kill(origin.X, origin.Y);
             }
         }

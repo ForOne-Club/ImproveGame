@@ -23,7 +23,7 @@ namespace ImproveGame.Interface.UIElements
 
         public PictureButton(Texture2D texture, string text)
         {
-            Width.Pixels = MyUtils.GetTextSize(text).X + this.HPadding() + 75;
+            Width.Pixels = GetTextSize(text).X + this.HPadding() + 75;
             Height.Pixels = 40f;
 
             image = texture;
@@ -64,7 +64,7 @@ namespace ImproveGame.Interface.UIElements
             size = dimensions.Size();
 
             sb.Draw(image, position + imagePosition, Color.White);
-            MyUtils.DrawString(position + TextPosition, text, Color.White, Color.Black);
+            DrawString(position + TextPosition, text, Color.White, Color.Black);
 
             // 原绘制
             /*var rectangle = GetDimensions().ToRectangle();

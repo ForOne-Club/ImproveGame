@@ -55,7 +55,7 @@ namespace ImproveGame.Content.Items
             bool flag = StartUseItem(player);
             if (flag && CanUseSelector(player))
             {
-                MyUtils.ItemRotation(player);
+                ItemRotation(player);
                 _unCancelled = true;
                 Start = Main.MouseWorld.ToTileCoordinates();
             }
@@ -98,13 +98,13 @@ namespace ImproveGame.Content.Items
                 {
                     _unCancelled = false;
                 }
-                End = MyUtils.ModifySize(Start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
+                End = ModifySize(Start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
                 Color color = ModifyColor(!_unCancelled);
                 Box.NewBox(this, IsNeedKill, Start, End, color * 0.35f, color, TextDisplayMode.All);
                 if (Main.mouseLeft)
                 {
                     player.itemAnimation = 8;
-                    MyUtils.ItemRotation(player);
+                    ItemRotation(player);
                 }
                 else
                 {
