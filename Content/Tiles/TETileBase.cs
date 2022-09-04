@@ -1,13 +1,12 @@
-﻿using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.Localization;
+﻿using Terraria.DataStructures;
 using Terraria.ObjectData;
 
 namespace ImproveGame.Content.Tiles
 {
     public abstract class TETileBase : ModTile
     {
-        public override void SetStaticDefaults() {
+        public override void SetStaticDefaults()
+        {
             Main.tileFrameImportant[Type] = true;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
@@ -37,7 +36,8 @@ namespace ImproveGame.Content.Tiles
 
         public virtual bool OnRightClick(int i, int j) => false;
 
-        public override bool RightClick(int i, int j) {
+        public override bool RightClick(int i, int j)
+        {
             Player player = Main.LocalPlayer;
 
             if (!OnRightClick(i, j))
@@ -45,27 +45,32 @@ namespace ImproveGame.Content.Tiles
 
             Main.mouseRightRelease = false;
 
-            if (player.sign > -1) {
+            if (player.sign > -1)
+            {
                 SoundEngine.PlaySound(SoundID.MenuClose);
                 player.sign = -1;
                 Main.editSign = false;
                 Main.npcChatText = string.Empty;
             }
-            if (Main.editChest) {
+            if (Main.editChest)
+            {
                 SoundEngine.PlaySound(SoundID.MenuOpen);
                 Main.editChest = false;
                 Main.npcChatText = string.Empty;
             }
-            if (player.editedChestName) {
+            if (player.editedChestName)
+            {
                 NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f, 0f, 0f, 0, 0, 0);
                 player.editedChestName = false;
             }
-            if (player.talkNPC > -1) {
+            if (player.talkNPC > -1)
+            {
                 player.SetTalkNPC(-1);
                 Main.npcChatCornerItem = 0;
                 Main.npcChatText = string.Empty;
             }
-            if (player.chest != -1) {
+            if (player.chest != -1)
+            {
                 player.chest = -1;
                 SoundEngine.PlaySound(SoundID.MenuClose);
             }
@@ -81,13 +86,11 @@ namespace ImproveGame.Content.Tiles
 
         public abstract int ItemType(int frameX, int frameY);
 
-        public override void KillMultiTile(int i, int j, int frameX, int frameY) {
+        public override void KillMultiTile(int i, int j, int frameX, int frameY)
+        {
             Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ItemType(frameX, frameY));
-            ModTileEntity tileEntity = GetTileEntity();
-            if (tileEntity is not null) {
-                Point16 origin = GetTileOrigin(i, j);
-                tileEntity.Kill(origin.X, origin.Y);
-            }
+
+            GetTileEntity()?.Kill(i, j);
         }
     }
 }

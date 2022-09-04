@@ -1,11 +1,9 @@
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.Common;
-using System.Collections.Generic;
 using System.Reflection;
 using Terraria.Chat;
 using Terraria.DataStructures;
-using Terraria.Localization;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Tiles
@@ -31,12 +29,14 @@ namespace ImproveGame.Content.Tiles
         public bool CatchWhiteRarityCatches = true;
         public bool CatchNormalCatches = true;
 
-        public override bool IsTileValidForEntity(int x, int y) {
+        public override bool IsTileValidForEntity(int x, int y)
+        {
             Tile tile = Main.tile[x, y];
             return tile.HasTile && tile.TileType == ModContent.TileType<Autofisher>();
         }
 
-        public void SetFishingTip(string text) {
+        public void SetFishingTip(string text)
+        {
             FishingTip = text;
             FishingTipTimer = 0;
             if (Main.netMode == NetmodeID.Server)
@@ -45,15 +45,18 @@ namespace ImproveGame.Content.Tiles
             }
         }
 
-        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
-            for (int k = 0; k < 15; k++) {
+        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
+        {
+            for (int k = 0; k < 15; k++)
+            {
                 fish[k] = new();
             }
             fishingPole = new();
             bait = new();
             accessory = new();
 
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
                 NetMessage.SendTileSquare(Main.myPlayer, i - 1, j - 1, 2, 2);
                 NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i - 1, j - 1, Type);
                 return -1;
@@ -63,10 +66,11 @@ namespace ImproveGame.Content.Tiles
             return placedEntity;
         }
 
-        public static int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction, int alternate) {
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
+        public static int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction, int alternate)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
                 NetMessage.SendTileSquare(Main.myPlayer, i - 1, j - 1, 2, 2);
-                return 0;
             }
             return 0;
         }
@@ -80,10 +84,7 @@ namespace ImproveGame.Content.Tiles
         {
             for (int i = 0; i < fish.Length; i++)
             {
-                if (fish[i] is null)
-                {
-                    fish[i] = new();
-                }
+                fish[i] ??= new();
             }
 
             FishingTipTimer += 1.0 / 60.0;
@@ -91,7 +92,8 @@ namespace ImproveGame.Content.Tiles
                 return;
             if (locatePoint.X < 0 || locatePoint.Y < 0)
                 return;
-            if (Framing.GetTileSafely(locatePoint).LiquidAmount == 0) {
+            if (Framing.GetTileSafely(locatePoint).LiquidAmount == 0)
+            {
                 locatePoint = Point16.NegativeOne;
                 return;
             }
@@ -106,23 +108,16 @@ namespace ImproveGame.Content.Tiles
             if (Main.rand.NextBool(60))
                 FishingTimer += 60;
 
-            float fishingSpeedBonus = 1f;
-
             //配饰为AnglerEarring可使钓鱼速度*200%
             //配饰为AnglerTackleBag可使钓鱼速度*300%
             //配饰为LavaproofTackleBag可使钓鱼速度*500%
-            switch (accessory.type)
+            float fishingSpeedBonus = accessory.type switch
             {
-                case ItemID.AnglerEarring:
-                    fishingSpeedBonus = 2f;
-                    break;
-                case ItemID.AnglerTackleBag:
-                    fishingSpeedBonus = 3f;
-                    break;
-                case ItemID.LavaproofTackleBag:
-                    fishingSpeedBonus = 5f;
-                    break;
-            }
+                ItemID.AnglerEarring => 2f,
+                ItemID.AnglerTackleBag => 3f,
+                ItemID.LavaproofTackleBag => 5f,
+                _ => 1f
+            };
 
             // 存储的 Bass 将以 20:1 的比例转化为钓鱼速度加成，最高可达 500% 加成
             int bassCount = 0;
@@ -135,23 +130,26 @@ namespace ImproveGame.Content.Tiles
             }
             fishingSpeedBonus += Math.Min(bassCount / 20f, 5f);
 
-            float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版写的是660
-            if (FishingTimer > fishingCooldown / fishingSpeedBonus) {
+            const float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版写的是660
+            if (FishingTimer > fishingCooldown / fishingSpeedBonus)
+            {
                 FishingTimer = 0;
                 ApplyAccessories();
                 FishingCheck();
             }
         }
 
-        private bool lavaFishing = false;
-        private bool tackleBox = false;
-        private int fishingSkill = 0;
+        private bool lavaFishing;
+        private bool tackleBox;
+        private int fishingSkill;
 
-        private void ApplyAccessories() {
+        private void ApplyAccessories()
+        {
             lavaFishing = false;
             tackleBox = false;
             fishingSkill = 0;
-            switch (accessory.type) {
+            switch (accessory.type)
+            {
                 case ItemID.TackleBox:
                     tackleBox = true;
                     break;
@@ -173,7 +171,8 @@ namespace ImproveGame.Content.Tiles
             }
         }
 
-        public void FishingCheck() {
+        public void FishingCheck()
+        {
             var player = GetClosestPlayer(Position);
 
             FishingAttempt fisher = default;
@@ -181,15 +180,18 @@ namespace ImproveGame.Content.Tiles
             fisher.Y = locatePoint.Y;
             fisher.bobberType = fishingPole.shoot;
             GetFishingPondState(fisher.X, fisher.Y, out fisher.inLava, out fisher.inHoney, out fisher.waterTilesCount, out fisher.chumsInWater);
-            if (fisher.waterTilesCount < 75) {
+            if (fisher.waterTilesCount < 75)
+            {
                 SetFishingTip(Language.GetTextValue("GameUI.NotEnoughWater"));
                 return;
             }
 
             fisher.playerFishingConditions = GetFishingConditions();
-            if (fisher.playerFishingConditions.BaitItemType == ItemID.TruffleWorm) {
+            if (fisher.playerFishingConditions.BaitItemType == ItemID.TruffleWorm)
+            {
                 SetFishingTip(Language.GetTextValue("GameUI.FishingWarning"));
-                if (Main.rand.NextBool(5) && (fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000 && player.active && !player.dead && player.Distance(new(fisher.X * 16, fisher.Y * 16)) <= 2000 && NPC.CountNPCS(NPCID.DukeFishron) < 3) {
+                if (Main.rand.NextBool(5) && (fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000 && player.active && !player.dead && player.Distance(new(fisher.X * 16, fisher.Y * 16)) <= 2000 && NPC.CountNPCS(NPCID.DukeFishron) < 3)
+                {
                     // 召唤猪鲨 （？？？   上限是3个
                     int npc = NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), fisher.X * 16, fisher.Y * 16, NPCID.DukeFishron, 1);
                     if (npc == 200)
@@ -202,13 +204,16 @@ namespace ImproveGame.Content.Tiles
                     if (Main.netMode == NetmodeID.Server && npc < 200)
                         NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npc);
 
-                    if (Main.netMode == NetmodeID.SinglePlayer) {
-                        Main.NewText(GetText("Autofisher.CarefulNextTime"), 175, 75);
-                        Main.NewText(Language.GetTextValue("Announcement.HasAwoken", typeName), 175, 75);
-                    }
-                    else if (Main.netMode == NetmodeID.Server) {
-                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Mods.ImproveGame.Autofisher.CarefulNextTime"), new(175, 75, 255));
-                        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", Main.npc[npc].GetTypeNetName()), new Color(175, 75, 255));
+                    switch (Main.netMode)
+                    {
+                        case NetmodeID.SinglePlayer:
+                            Main.NewText(GetText("Autofisher.CarefulNextTime"), 175, 75);
+                            Main.NewText(Language.GetTextValue("Announcement.HasAwoken", typeName), 175, 75);
+                            break;
+                        case NetmodeID.Server:
+                            ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Mods.ImproveGame.Autofisher.CarefulNextTime"), new(175, 75, 255));
+                            ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", Main.npc[npc].GetTypeNetName()), new Color(175, 75, 255));
+                            break;
                     }
 
                     bait.stack--;
@@ -238,29 +243,32 @@ namespace ImproveGame.Content.Tiles
             fisher.waterNeededToFish = 300;
             float num = Main.maxTilesX / 4200;
             num *= num;
-            fisher.atmo = (float)((double)(Position.Y - (60f + 10f * num)) / (Main.worldSurface / 6.0));
-            if ((double)fisher.atmo < 0.25)
+            fisher.atmo = (float)((Position.Y - (60f + 10f * num)) / (Main.worldSurface / 6.0));
+            if (fisher.atmo < 0.25)
                 fisher.atmo = 0.25f;
 
             if (fisher.atmo > 1f)
                 fisher.atmo = 1f;
 
-            fisher.waterNeededToFish = (int)((float)fisher.waterNeededToFish * fisher.atmo);
-            fisher.waterQuality = (float)fisher.waterTilesCount / (float)fisher.waterNeededToFish;
+            fisher.waterNeededToFish = (int)(fisher.waterNeededToFish * fisher.atmo);
+            fisher.waterQuality = fisher.waterTilesCount / (float)fisher.waterNeededToFish;
             if (fisher.waterQuality < 1f)
-                fisher.fishingLevel = (int)((float)fisher.fishingLevel * fisher.waterQuality);
+                fisher.fishingLevel = (int)(fisher.fishingLevel * fisher.waterQuality);
 
             fisher.waterQuality = 1f - fisher.waterQuality;
             if (fisher.waterTilesCount < fisher.waterNeededToFish)
                 SetFishingTip(Language.GetTextValue("GameUI.FullFishingPower", fisher.fishingLevel, 0.0 - Math.Round(fisher.waterQuality * 100f)));
 
-            if (player.active && !player.dead) {
-                if (player.luck < 0f) {
+            if (player.active && !player.dead)
+            {
+                if (player.luck < 0f)
+                {
                     if (Main.rand.NextFloat() < 0f - player.luck)
-                        fisher.fishingLevel = (int)((double)fisher.fishingLevel * (0.9 - (double)Main.rand.NextFloat() * 0.3));
+                        fisher.fishingLevel = (int)(fisher.fishingLevel * (0.9 - Main.rand.NextFloat() * 0.3));
                 }
-                else if (Main.rand.NextFloat() < player.luck) {
-                    fisher.fishingLevel = (int)((double)fisher.fishingLevel * (1.1 + (double)Main.rand.NextFloat() * 0.3));
+                else if (Main.rand.NextFloat() < player.luck)
+                {
+                    fisher.fishingLevel = (int)(fisher.fishingLevel * (1.1 + Main.rand.NextFloat() * 0.3));
                 }
             }
 
@@ -269,11 +277,11 @@ namespace ImproveGame.Content.Tiles
                 return;
 
             fisher.heightLevel = 0;
-            if ((double)fisher.Y < Main.worldSurface * 0.5)
+            if (fisher.Y < Main.worldSurface * 0.5)
                 fisher.heightLevel = 0;
-            else if ((double)fisher.Y < Main.worldSurface)
+            else if (fisher.Y < Main.worldSurface)
                 fisher.heightLevel = 1;
-            else if ((double)fisher.Y < Main.rockLayer)
+            else if (fisher.Y < Main.rockLayer)
                 fisher.heightLevel = 2;
             else if (fisher.Y < Main.maxTilesY - 300)
                 fisher.heightLevel = 3;
@@ -285,7 +293,8 @@ namespace ImproveGame.Content.Tiles
             //FishingCheck_RollEnemySpawns(ref fisher);
 
             // 伪装一个proj，用反射调用Projectile.FishingCheck_RollItemDrop
-            var fakeProj = new Projectile {
+            var fakeProj = new Projectile
+            {
                 owner = 255
             };
 
@@ -299,14 +308,15 @@ namespace ImproveGame.Content.Tiles
             var targetMethod = fakeProj.GetType().GetMethod("FishingCheck_RollItemDrop",
                 BindingFlags.Instance | BindingFlags.NonPublic);
             var args = new object[] { fisher };
-            targetMethod.Invoke(fakeProj, args);
+            targetMethod?.Invoke(fakeProj, args);
             fisher = (FishingAttempt)args[0]; // ref之后用这个获取
 
             AdvancedPopupRequest sonar = new();
             Vector2 sonarPosition = new(-1145141f, -919810f); // 直接fake到世界外面
             PlayerLoader.CatchFish(Main.player[255], fisher, ref fisher.rolledItemDrop, ref fisher.rolledEnemySpawn, ref sonar, ref sonarPosition);
 
-            if (fisher.rolledItemDrop != 0) {
+            if (fisher.rolledItemDrop != 0)
+            {
                 GiveItemToStorage(player, fisher.rolledItemDrop);
                 //Main.NewText($"[i:{fisher.rolledItemDrop}]");
             }
@@ -316,7 +326,8 @@ namespace ImproveGame.Content.Tiles
                 Main.LocalPlayer.ForceUpdateBiomes();
         }
 
-        private void GiveItemToStorage(Player player, int itemType) {
+        private void GiveItemToStorage(Player player, int itemType)
+        {
             Item item = new(itemType);
 
             int fishType = 0; // 0 普通鱼 (稀有度大于白)
@@ -346,7 +357,8 @@ namespace ImproveGame.Content.Tiles
 
             int finalFishingLevel = player.GetFishingConditions().FinalFishingLevel;
 
-            if (itemType == ItemID.BombFish) {
+            if (itemType == ItemID.BombFish)
+            {
                 int minStack = (finalFishingLevel / 20 + 3) / 2;
                 int maxStack = (finalFishingLevel / 10 + 6) / 2;
                 if (Main.rand.Next(50) < finalFishingLevel)
@@ -364,7 +376,8 @@ namespace ImproveGame.Content.Tiles
                 item.stack = Main.rand.Next(minStack, maxStack + 1);
             }
 
-            if (itemType == ItemID.FrostDaggerfish) {
+            if (itemType == ItemID.FrostDaggerfish)
+            {
                 int minStack = (finalFishingLevel / 4 + 15) / 2;
                 int maxStack = (finalFishingLevel / 2 + 30) / 2;
                 if (Main.rand.Next(50) < finalFishingLevel)
@@ -439,7 +452,8 @@ namespace ImproveGame.Content.Tiles
             }
         }
 
-        private bool TryConsumeBait(Player player) {
+        private bool TryConsumeBait(Player player)
+        {
             bool canCunsume = false;
             float chanceDenominator = 1f + bait.bait / 6f;
             if (chanceDenominator < 1f)
@@ -454,7 +468,8 @@ namespace ImproveGame.Content.Tiles
             if (bait.type == ItemID.TruffleWorm)
                 canCunsume = true;
 
-            if (CombinedHooks.CanConsumeBait(player, bait) ?? canCunsume) {
+            if (CombinedHooks.CanConsumeBait(player, bait) ?? canCunsume)
+            {
                 if (bait.type == ItemID.LadyBug || bait.type == ItemID.GoldLadyBug)
                     NPC.LadyBugKilled(Position.ToWorldCoordinates(), bait.type == ItemID.GoldLadyBug);
 
@@ -469,13 +484,13 @@ namespace ImproveGame.Content.Tiles
                         // 原版代码，不多评价
                         int compass = center.X * 2 - Main.maxTilesX;
                         string compassText = (compass > 0) ? Language.GetTextValue("GameUI.CompassEast", compass) : ((compass >= 0) ? Language.GetTextValue("GameUI.CompassCenter") : Language.GetTextValue("GameUI.CompassWest", -compass));
-                        
+
                         int depthToSurface = (int)(center.Y - Main.worldSurface) * 2;
                         float num23 = Main.maxTilesX / 4200;
                         num23 *= num23;
                         int num24 = 1200;
-                        float num25 = (float)((double)(center.Y - (65f + 10f * num23)) / (Main.worldSurface / 5.0));
-                        var layer = ((center.Y > (float)((Main.maxTilesY - 204))) ? Language.GetTextValue("GameUI.LayerUnderworld") : ((center.Y > Main.rockLayer + (double)(num24 / 2) + 16.0) ? Language.GetTextValue("GameUI.LayerCaverns") : ((depthToSurface > 0) ? Language.GetTextValue("GameUI.LayerUnderground") : ((!(num25 >= 1f)) ? Language.GetTextValue("GameUI.LayerSpace") : Language.GetTextValue("GameUI.LayerSurface")))));
+                        float num25 = (float)((center.Y - (65f + 10f * num23)) / (Main.worldSurface / 5.0));
+                        var layer = ((center.Y > (float)((Main.maxTilesY - 204))) ? Language.GetTextValue("GameUI.LayerUnderworld") : ((center.Y > Main.rockLayer + num24 / 2 + 16.0) ? Language.GetTextValue("GameUI.LayerCaverns") : ((depthToSurface > 0) ? Language.GetTextValue("GameUI.LayerUnderground") : ((!(num25 >= 1f)) ? Language.GetTextValue("GameUI.LayerSpace") : Language.GetTextValue("GameUI.LayerSurface")))));
                         depthToSurface = Math.Abs(depthToSurface);
                         string depth = ((depthToSurface != 0) ? Language.GetTextValue("GameUI.Depth", depthToSurface) : Language.GetTextValue("GameUI.DepthLevel"));
                         string depthText = depth + " " + layer;
@@ -493,7 +508,8 @@ namespace ImproveGame.Content.Tiles
             return false;
         }
 
-        private static void FishingCheck_RollDropLevels(Player closetPlayer, int fishingLevel, out bool common, out bool uncommon, out bool rare, out bool veryrare, out bool legendary, out bool crate) {
+        private static void FishingCheck_RollDropLevels(Player closetPlayer, int fishingLevel, out bool common, out bool uncommon, out bool rare, out bool veryrare, out bool legendary, out bool crate)
+        {
             int commonChance = 150 / fishingLevel;
             int uncommonChance = 150 * 2 / fishingLevel;
             int rareChance = 150 * 7 / fishingLevel;
@@ -543,12 +559,15 @@ namespace ImproveGame.Content.Tiles
                 crate = true;
         }
 
-        private void GetFishingPondState(int x, int y, out bool lava, out bool honey, out int numWaters, out int chumCount) {
+        private void GetFishingPondState(int x, int y, out bool lava, out bool honey, out int numWaters, out int chumCount)
+        {
             chumCount = 0;
             lava = false;
             honey = false;
-            for (int i = 0; i < tileChecked.GetLength(0); i++) {
-                for (int j = 0; j < tileChecked.GetLength(1); j++) {
+            for (int i = 0; i < tileChecked.GetLength(0); i++)
+            {
+                for (int j = 0; j < tileChecked.GetLength(1); j++)
+                {
                     tileChecked[i, j] = false;
                 }
             }
@@ -558,11 +577,19 @@ namespace ImproveGame.Content.Tiles
                 numWaters = 10000;
 
             if (honey)
-                numWaters = (int)((double)numWaters * 1.5);
+                numWaters = (int)(numWaters * 1.5);
         }
 
         private bool[,] tileChecked = new bool[checkWidth * 2 + 1, checkHeight * 2 + 1];
-        private int GetFishingPondSize(int x, int y, ref bool lava, ref bool honey, ref int chumCount) {
+
+        public TEAutofisher()
+        {
+            tackleBox = false;
+            fishingSkill = 0;
+        }
+
+        private int GetFishingPondSize(int x, int y, ref bool lava, ref bool honey, ref int chumCount)
+        {
             Point16 arrayLeftTop = new(Position.X + 1 - checkWidth, Position.Y + 1 - checkHeight);
             if (x - arrayLeftTop.X < 0 || x - arrayLeftTop.X > checkWidth * 2 || y - arrayLeftTop.Y < 0 || y - arrayLeftTop.Y > checkHeight * 2)
                 return 0;
@@ -571,7 +598,8 @@ namespace ImproveGame.Content.Tiles
 
             tileChecked[x - arrayLeftTop.X, y - arrayLeftTop.Y] = true;
             var tile = Framing.GetTileSafely(x, y);
-            if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(x, y)) {
+            if (tile.LiquidAmount > 0 && !WorldGen.SolidTile(x, y))
+            {
                 if (tile.LiquidType == LiquidID.Lava)
                     lava = true;
                 if (tile.LiquidType == LiquidID.Honey)
@@ -587,7 +615,8 @@ namespace ImproveGame.Content.Tiles
             return 0;
         }
 
-        public PlayerFishingConditions GetFishingConditions() {
+        public PlayerFishingConditions GetFishingConditions()
+        {
             PlayerFishingConditions result = default;
             result.Pole = fishingPole;
             result.Bait = bait;
@@ -600,11 +629,12 @@ namespace ImproveGame.Content.Tiles
             var player = GetClosestPlayer(Position);
             int num = result.BaitPower + result.PolePower + fishingSkill;
             result.LevelMultipliers = Fishing_GetPowerMultiplier(result.Pole, result.Bait, player);
-            result.FinalFishingLevel = (int)((float)num * result.LevelMultipliers);
+            result.FinalFishingLevel = (int)(num * result.LevelMultipliers);
             return result;
         }
 
-        private float Fishing_GetPowerMultiplier(Item pole, Item bait, Player player) {
+        private float Fishing_GetPowerMultiplier(Item pole, Item bait, Player player)
+        {
             float num = 1f;
             if (Main.raining)
                 num *= 1.2f;
@@ -612,26 +642,34 @@ namespace ImproveGame.Content.Tiles
             if (Main.cloudBGAlpha > 0f)
                 num *= 1.1f;
 
-            if (Main.dayTime && (Main.time < 5400.0 || Main.time > 48600.0))
-                num *= 1.3f;
+            switch (Main.dayTime)
+            {
+                case true when Main.time is < 5400.0 or > 48600.0: // 早上
+                    num *= 1.3f;
+                    break;
+                case true when Main.time is > 16200.0 and < 37800.0: // 早上
+                case false when Main.time is > 6480.0 and < 25920.0: // 晚上
+                    num *= 0.8f;
+                    break;
+            }
 
-            if (Main.dayTime && Main.time > 16200.0 && Main.time < 37800.0)
-                num *= 0.8f;
-
-            if (!Main.dayTime && Main.time > 6480.0 && Main.time < 25920.0)
-                num *= 0.8f;
-
-            if (Main.moonPhase == 0)
-                num *= 1.1f;
-
-            if (Main.moonPhase == 1 || Main.moonPhase == 7)
-                num *= 1.05f;
-
-            if (Main.moonPhase == 3 || Main.moonPhase == 5)
-                num *= 0.95f;
-
-            if (Main.moonPhase == 4)
-                num *= 0.9f;
+            switch (Main.moonPhase)
+            {
+                case 0:
+                    num *= 1.1f;
+                    break;
+                case 1:
+                case 7:
+                    num *= 1.05f;
+                    break;
+                case 3:
+                case 5:
+                    num *= 0.95f;
+                    break;
+                case 4:
+                    num *= 0.9f;
+                    break;
+            }
 
             if (Main.bloodMoon)
                 num *= 1.1f;
@@ -642,13 +680,16 @@ namespace ImproveGame.Content.Tiles
 
         #endregion
 
-        public override void OnNetPlace() {
-            if (Main.netMode == NetmodeID.Server) {
+        public override void OnNetPlace()
+        {
+            if (Main.netMode == NetmodeID.Server)
+            {
                 NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
             }
         }
 
-        public override void LoadData(TagCompound tag) {
+        public override void LoadData(TagCompound tag)
+        {
             locatePoint = tag.Get<Point16>("locatePoint");
             fishingPole = tag.Get<Item>("fishingPole");
             bait = tag.Get<Item>("bait");
@@ -669,7 +710,8 @@ namespace ImproveGame.Content.Tiles
                 CatchNormalCatches = true;
         }
 
-        public override void SaveData(TagCompound tag) {
+        public override void SaveData(TagCompound tag)
+        {
             tag["locatePoint"] = locatePoint;
             tag["fishingPole"] = fishingPole;
             tag["bait"] = bait;
@@ -684,27 +726,27 @@ namespace ImproveGame.Content.Tiles
             tag["CatchNormalCatches"] = CatchNormalCatches;
         }
 
-        public override void NetSend(BinaryWriter writer) {
+        public override void NetSend(BinaryWriter writer)
+        {
             writer.Write(locatePoint.X);
             writer.Write(locatePoint.Y);
-            ItemIO.Send(fishingPole, writer, true, false);
-            ItemIO.Send(bait, writer, true, false);
-            ItemIO.Send(accessory, writer, true, false);
-            for (int i = 0; i < 15; i++) {
-                if (fish[i] is null)
-                    ItemIO.Send(new(), writer, true, false);
-                else
-                    ItemIO.Send(fish[i], writer, true, false);
+            ItemIO.Send(fishingPole, writer, true);
+            ItemIO.Send(bait, writer, true);
+            ItemIO.Send(accessory, writer, true);
+            for (int i = 0; i < 15; i++)
+            {
+                ItemIO.Send(fish[i] ?? new(), writer, true);
             }
         }
 
-        public override void NetReceive(BinaryReader reader) {
+        public override void NetReceive(BinaryReader reader)
+        {
             locatePoint = new(reader.ReadInt16(), reader.ReadInt16());
-            fishingPole = ItemIO.Receive(reader, true, false);
-            bait = ItemIO.Receive(reader, true, false);
-            accessory = ItemIO.Receive(reader, true, false);
+            fishingPole = ItemIO.Receive(reader, true);
+            bait = ItemIO.Receive(reader, true);
+            accessory = ItemIO.Receive(reader, true);
             for (int i = 0; i < 15; i++)
-                fish[i] = ItemIO.Receive(reader, true, false).Clone();
+                fish[i] = ItemIO.Receive(reader, true).Clone();
         }
     }
 }

@@ -77,7 +77,7 @@ namespace ImproveGame.Common.GlobalItems
             // 自动挥舞
             ItemDefinition itemd = new(item.type);
             if (item.damage > 0 && Config.AutoReuseWeapon
-                && !Config.AutoReuseWeapon_ExclusionList.Contains(itemd))
+                && !Config.AutoReuseWeaponExclusionList.Contains(itemd))
             {
                 return true;
             }
@@ -112,58 +112,39 @@ namespace ImproveGame.Common.GlobalItems
             {
                 return true;
             }
-            if (Config.ImprovePrefix) // 新的重铸机制
+            // 新的重铸机制
+            if (!Config.ImprovePrefix || !PrefixLevel.ContainsKey(pre))
             {
-                // 饰品
-                if (PrefixLevel.ContainsKey(pre))
-                {
-                    if (item.accessory)
-                    {
-                        if (itemVar.recastCount < 2)
-                        {
-                            return PrefixLevel[pre] >= 1;
-                        }
-                        else if (itemVar.recastCount < 4)
-                        {
-                            return PrefixLevel[pre] >= 2;
-                        }
-                        else if (itemVar.recastCount < 6)
-                        {
-                            return PrefixLevel[pre] >= 3;
-                        }
-                        else
-                        {
-                            return PrefixLevel[pre] >= 4;
-                        }
-                    }
-                    else
-                    {
-                        // 工具
-                        if (pre == 15 && (item.axe > 0 || item.hammer > 0 || item.pick > 0))
-                        {
-                            return true;
-                        }
-                        // 召唤武器，但是不算入鞭子
-                        if (pre == 57 && item.DamageType == DamageClass.Summon)
-                        {
-                            return true;
-                        }
-                        if (itemVar.recastCount < 3)
-                        {
-                            return PrefixLevel[pre] >= 0;
-                        }
-                        else if (itemVar.recastCount < 6)
-                        {
-                            return PrefixLevel[pre] >= 1;
-                        }
-                        else
-                        {
-                            return PrefixLevel[pre] >= 2;
-                        }
-                    }
-                }
+                return true;
             }
-            return true;
+
+            // 饰品
+            if (item.accessory)
+            {
+                return itemVar.recastCount switch
+                {
+                    < 2 => PrefixLevel[pre] >= 1,
+                    < 4 => PrefixLevel[pre] >= 2,
+                    < 6 => PrefixLevel[pre] >= 3,
+                    _ => PrefixLevel[pre] >= 4
+                };
+            }
+
+            switch (pre)
+            {
+                // 工具
+                case 15 when item.axe > 0 || item.hammer > 0 || item.pick > 0:
+                // 召唤武器，但是不算入鞭子
+                case 57 when item.DamageType == DamageClass.Summon:
+                    return true;
+            }
+
+            return itemVar.recastCount switch
+            {
+                < 3 => PrefixLevel[pre] >= 0,
+                < 6 => PrefixLevel[pre] >= 1,
+                _ => PrefixLevel[pre] >= 2
+            };
         }
 
         // 重铸次数统计

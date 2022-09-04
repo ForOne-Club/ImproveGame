@@ -16,7 +16,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common\Utils\NetHelpers\" />
     <Folder Include="lib\" />
   </ItemGroup>
 </Project>

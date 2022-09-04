@@ -1,7 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
@@ -101,47 +99,52 @@ namespace ImproveGame.Common.ConstructCore
                         tileItemFindType = TileID.Dirt;
                     }
                     int tileItemType = GetTileItem(tileItemFindType, tileData.TileFrameX, tileData.TileFrameY);
-                    if (tileItemType != -1 && !Main.tile[placePosition].HasTile)
+                    if (tileItemType == -1 || Main.tile[placePosition].HasTile)
                     {
-                        var tileObjectData = TileObjectData.GetTileData(tileType, 0);
-                        if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 && tileObjectData.CoordinateFullHeight <= 22))
+                        continue;
+                    }
+
+                    var tileObjectData = TileObjectData.GetTileData(tileType, 0);
+                    if (tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 22 ||
+                                                       tileObjectData.CoordinateFullHeight > 22))
+                    {
+                        continue;
+                    }
+
+                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                    PickItemFromArray(Main.LocalPlayer, inventory, (item) =>
+                            item.type == tileItemType &&
+                            TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
+                        true);
+                    // 挖掉重来！
+                    if (TileID.Sets.Grass[tileType])
+                    {
+                        Main.tile[placePosition].ResetToType((ushort)tileType);
+                        WorldGen.TileFrame(placePosition.X, position.Y, true, false);
+                    }
+                    if (WorldGen.CanPoundTile(placePosition.X, placePosition.Y))
+                    {
+                        if (tileData.BlockType is BlockType.HalfBlock)
                         {
-                            var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
-                            PickItemFromArray(Main.LocalPlayer, inventory, (item) =>
-                                    item.type == tileItemType &&
-                                TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
-                                true);
-                            // 挖掉重来！
-                            if (TileID.Sets.Grass[tileType])
-                            {
-                                Main.tile[placePosition].ResetToType((ushort)tileType);
-                                WorldGen.TileFrame(placePosition.X, position.Y, true, false);
-                            }
-                            if (WorldGen.CanPoundTile(placePosition.X, placePosition.Y))
-                            {
-                                if (tileData.BlockType is BlockType.HalfBlock)
-                                {
-                                    WorldGen.SlopeTile(placePosition.X, placePosition.Y, 0);
-                                    WorldGen.PoundTile(placePosition.X, placePosition.Y);
-                                }
-                                else if (tileData.BlockType is not BlockType.Solid)
-                                {
-                                    WorldGen.SlopeTile(placePosition.X, placePosition.Y, (int)tileData.BlockType - 1);
-                                }
-                            }
-                            var tile = Main.tile[placePosition];
-                            tile.TileColor = tileData.TileColor;
-                            if (tileData.ExtraDatas[2] && !tile.IsActuated)
-                            {
-                                Wiring.ActuateForced(placePosition.X, placePosition.Y);
-                            }
-                            _taskProcessed++;
-                            if (_taskProcessed >= 6)
-                            {
-                                _taskProcessed = 0;
-                                yield return null;
-                            }
+                            WorldGen.SlopeTile(placePosition.X, placePosition.Y, 0);
+                            WorldGen.PoundTile(placePosition.X, placePosition.Y);
                         }
+                        else if (tileData.BlockType is not BlockType.Solid)
+                        {
+                            WorldGen.SlopeTile(placePosition.X, placePosition.Y, (int)tileData.BlockType - 1);
+                        }
+                    }
+                    var tile = Main.tile[placePosition];
+                    tile.TileColor = tileData.TileColor;
+                    if (tileData.ExtraDatas[2] && !tile.IsActuated)
+                    {
+                        Wiring.ActuateForced(placePosition.X, placePosition.Y);
+                    }
+                    _taskProcessed++;
+                    if (_taskProcessed >= 6)
+                    {
+                        _taskProcessed = 0;
+                        yield return null;
                     }
                 }
             }
@@ -159,21 +162,23 @@ namespace ImproveGame.Common.ConstructCore
                     var placePosition = position + new Point(x, y);
                     TileDefinition tileData = structure.StructureDatas[index];
                     int wallItemType = GetWallItem(structure.ParseWallType(tileData));
-                    if (wallItemType != -1 && Main.tile[placePosition].WallType == 0)
+                    if (wallItemType == -1 || Main.tile[placePosition].WallType != 0)
                     {
-                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
-                        PickItemFromArray(Main.LocalPlayer, inventory, (item) =>
+                        continue;
+                    }
+
+                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                    PickItemFromArray(Main.LocalPlayer, inventory, (item) =>
                             item.type == wallItemType &&
                             TryPlaceWall(item, placePosition.X, placePosition.Y),
-                            true);
-                        var tile = Main.tile[placePosition];
-                        tile.WallColor = tileData.WallColor;
-                        _taskProcessed++;
-                        if (_taskProcessed >= 10)
-                        {
-                            _taskProcessed = 0;
-                            yield return null;
-                        }
+                        true);
+                    var tile = Main.tile[placePosition];
+                    tile.WallColor = tileData.WallColor;
+                    _taskProcessed++;
+                    if (_taskProcessed >= 10)
+                    {
+                        _taskProcessed = 0;
+                        yield return null;
                     }
                 }
             }
@@ -181,12 +186,13 @@ namespace ImproveGame.Common.ConstructCore
 
         private static bool TryPlaceWall(Item item, int x, int y)
         {
-            if (Main.tile[x, y].WallType == 0)
+            if (Main.tile[x, y].WallType != 0)
             {
-                WorldGen.PlaceWall(x, y, item.createWall);
-                return true;
+                return false;
             }
-            return false;
+
+            WorldGen.PlaceWall(x, y, item.createWall);
+            return true;
         }
 
         public static IEnumerator GenerateMultiTiles(QoLStructure structure, Point position)
@@ -204,53 +210,61 @@ namespace ImproveGame.Common.ConstructCore
                     if (tileType is -1)
                         continue;
                     var tileObjectData = TileObjectData.GetTileData(tileType, 0);
-                    if (tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 22 || tileObjectData.CoordinateFullHeight > 22))
+                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 &&
+                                                   tileObjectData.CoordinateFullHeight <= 22))
                     {
-                        // 转换为帧坐标
-                        int subX = (tileData.TileFrameX / tileObjectData.CoordinateFullWidth) * tileObjectData.CoordinateFullWidth;
-                        int subY = (tileData.TileFrameY / tileObjectData.CoordinateFullHeight) * tileObjectData.CoordinateFullHeight;
-                        int tileItemType = GetTileItem(tileType, subX, subY);
-                        if (tileItemType != -1)
-                        {
-                            subX = tileData.TileFrameX % tileObjectData.CoordinateFullWidth;
-                            subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
-                            Point16 frame = new(subX / 18, subY / 18);
-                            var origin = tileObjectData.Origin.ToPoint();
-                            if (tileType is TileID.OpenDoor && tileData.TileFrameX / tileObjectData.CoordinateFullWidth % 2 == 1) // 开启的门实际上OriginX为0，这里对于向左开的要重新定位到他的轴心
-                            {
-                                origin.X = 1;
-                            }
-                            if (frame.X == origin.X && frame.Y == origin.Y)
-                            {
-                                var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
-                                PickItemFromArray(Main.LocalPlayer, inventory, (item) =>
-                                    item is not null && item.type == tileItemType &&
-                                    TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
-                                    true);
-                                // 什么怪玩意，还要我特判
-                                if (tileType == TileID.Banners)
-                                {
-                                    int placeStyle = MaterialCore.ItemToPlaceStyle[tileItemType];
-                                    short frameX = (short)(placeStyle % 111 * 18);
-                                    short frameY = (short)(placeStyle / 111 * 54);
-                                    for (int j = 0; j <= 2; j++)
-                                    {
-                                        var tilePosition = placePosition;
-                                        tilePosition.Y += j;
+                        continue;
+                    }
 
-                                        var tile = Main.tile[tilePosition];
-                                        var stateData = tile.Get<TileWallWireStateData>(); // 只想替换掉TileType，其他数据先存一存
-                                        tile.ResetToType((ushort)tileType);
-                                        tile.Get<TileWallWireStateData>() = stateData; // 还原其他数据
-                                        tile.HasTile = true;
-                                        tile.TileFrameX = frameX;
-                                        tile.TileFrameY = (short)(frameY + j * 18);
-                                    }
-                                }
-                                yield return null;
-                            }
+                    // 转换为帧坐标
+                    int subX = (tileData.TileFrameX / tileObjectData.CoordinateFullWidth) * tileObjectData.CoordinateFullWidth;
+                    int subY = (tileData.TileFrameY / tileObjectData.CoordinateFullHeight) * tileObjectData.CoordinateFullHeight;
+                    int tileItemType = GetTileItem(tileType, subX, subY);
+                    if (tileItemType == -1)
+                    {
+                        continue;
+                    }
+
+                    subX = tileData.TileFrameX % tileObjectData.CoordinateFullWidth;
+                    subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
+                    Point16 frame = new(subX / 18, subY / 18);
+                    var origin = tileObjectData.Origin.ToPoint();
+                    if (tileType is TileID.OpenDoor && tileData.TileFrameX / tileObjectData.CoordinateFullWidth % 2 == 1) // 开启的门实际上OriginX为0，这里对于向左开的要重新定位到他的轴心
+                    {
+                        origin.X = 1;
+                    }
+
+                    if (frame.X != origin.X || frame.Y != origin.Y)
+                    {
+                        continue;
+                    }
+
+                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                    PickItemFromArray(Main.LocalPlayer, inventory, item =>
+                            item is not null && item.type == tileItemType &&
+                            TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
+                        true);
+                    // 什么怪玩意，还要我特判
+                    if (tileType is TileID.Banners)
+                    {
+                        int placeStyle = MaterialCore.ItemToPlaceStyle[tileItemType];
+                        short frameX = (short)(placeStyle % 111 * 18);
+                        short frameY = (short)(placeStyle / 111 * 54);
+                        for (int j = 0; j <= 2; j++)
+                        {
+                            var tilePosition = placePosition;
+                            tilePosition.Y += j;
+
+                            var tile = Main.tile[tilePosition];
+                            var stateData = tile.Get<TileWallWireStateData>(); // 只想替换掉TileType，其他数据先存一存
+                            tile.ResetToType((ushort)tileType);
+                            tile.Get<TileWallWireStateData>() = stateData; // 还原其他数据
+                            tile.HasTile = true;
+                            tile.TileFrameX = frameX;
+                            tile.TileFrameY = (short)(frameY + j * 18);
                         }
                     }
+                    yield return null;
                 }
             }
         }
@@ -290,7 +304,7 @@ namespace ImproveGame.Common.ConstructCore
                     }
                     if (tileData.HasActuator && !tile.HasActuator) // 促动器
                     {
-                        bool tryConsume(Item item)
+                        bool TryConsume(Item item)
                         {
                             if (item.type == ItemID.Actuator)
                             {
@@ -300,7 +314,7 @@ namespace ImproveGame.Common.ConstructCore
                             return false;
                         }
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
-                        var item = PickItemFromArray(Main.LocalPlayer, inventory, tryConsume, false);
+                        var item = PickItemFromArray(Main.LocalPlayer, inventory, TryConsume, false);
                         TryConsumeItem(ref item, Main.LocalPlayer, true); // 要手动consume (即无视consumable)
                     }
 
@@ -310,17 +324,18 @@ namespace ImproveGame.Common.ConstructCore
                     bool TryConsumeWire()
                     {
                         bool hasWire = false;
-                        bool tryConsume(Item item)
+                        bool TryConsume(Item item)
                         {
-                            if (item.type == ItemID.Wire)
+                            if (item.type != ItemID.Wire)
                             {
-                                hasWire = true;
-                                return true;
+                                return false;
                             }
-                            return false;
+
+                            hasWire = true;
+                            return true;
                         }
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
-                        var item = PickItemFromArray(Main.LocalPlayer, inventory, tryConsume, false);
+                        var item = PickItemFromArray(Main.LocalPlayer, inventory, TryConsume, false);
                         TryConsumeItem(ref item, Main.LocalPlayer, true); // 要手动consume (即无视consumable)
                         return hasWire;
                     }

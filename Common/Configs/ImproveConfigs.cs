@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Systems;
-using System.Collections.Generic;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
@@ -53,8 +52,7 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.AutoReuseWeapon_ExclusionList.Label")]
         [Tooltip("$Mods.ImproveGame.Config.AutoReuseWeapon_ExclusionList.Tooltip")]
-        public List<ItemDefinition> AutoReuseWeapon_ExclusionList =
-            new List<ItemDefinition> { new(218), new(113), new(495) };
+        public List<ItemDefinition> AutoReuseWeaponExclusionList = new() { new(218), new(113), new(495) };
 
         [Label("$Mods.ImproveGame.Config.ImproveToolSpeed.Label")]
         [Tooltip("$Mods.ImproveGame.Config.ImproveToolSpeed.Tooltip")]
@@ -590,7 +588,7 @@ namespace ImproveGame.Common.Configs
                 return NetPasswordSystem.Registered[whoAmI];
             }
 
-            if ((pendingConfig as ImproveConfigs).OnlyHost != OnlyHost)
+            if (((ImproveConfigs)pendingConfig).OnlyHost != OnlyHost)
             {
                 return TryAcceptChanges(whoAmI, ref message);
             }

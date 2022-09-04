@@ -6,6 +6,8 @@
 ## BUG Fixes:
 - **[v1.6.2.0]** Fixed some issues with multiplayer mode
 - **[v1.6.2.0]** Fixed the pool cursor not showing in multiplayer mode
+- **[v1.6.2.0]** 修复了钓鱼机无法打开的BUG
+- **[v1.6.2.0]** 修复了钓鱼机的TileEntity实例无法正常消失的BUG
 ## Additions:
 - **[v1.6.2.0]** Wand of Construction, can save structures as files and place them while having enough material
 - **[v1.6.2.0]** Improved hotkey tooltip texts
