@@ -10,7 +10,8 @@ namespace ImproveGame.Interface.GUI
         {
             get
             {
-                if (!Main.playerInventory) visible = false;
+                if (!Main.playerInventory)
+                    visible = false;
                 return visible;
             }
             set => visible = value;
@@ -22,6 +23,7 @@ namespace ImproveGame.Interface.GUI
         public SUIPanel mainPanel;
         public UITitle title;
         public BackgroundImage button;
+        public SUIPanel gridPanel;
         public PackageGrid grid;
 
         private readonly Color background = new(44, 57, 105, 160);
@@ -54,15 +56,14 @@ namespace ImproveGame.Interface.GUI
                 Visible = false;
             };
 
-            SUIPanel panel = new(title.background, title.background * 0.75f, 12, 0, false);
-            mainPanel.Append(panel);
-            panel.Append(grid = new());
-            panel.Top.Pixels = title.Bottom() + 10;
-            panel.Width.Pixels = grid.Width.Pixels + panel.HPadding();
-            panel.Height.Pixels = grid.Height.Pixels + panel.VPadding();
+            mainPanel.Append(gridPanel = new(title.background, title.background, 12, 0, false));
+            gridPanel.Append(grid = new());
+            gridPanel.Top.Pixels = title.Bottom() + 10;
+            gridPanel.Width.Pixels = grid.Width.Pixels + gridPanel.HPadding();
+            gridPanel.Height.Pixels = grid.Height.Pixels + gridPanel.VPadding();
 
-            mainPanel.Width.Pixels = panel.Width.Pixels + mainPanel.HPadding();
-            mainPanel.Height.Pixels = panel.Bottom() + mainPanel.VPadding() - 1;
+            mainPanel.Width.Pixels = gridPanel.Width.Pixels + mainPanel.HPadding();
+            mainPanel.Height.Pixels = gridPanel.Bottom() + mainPanel.VPadding() - 1;
         }
 
         public override void Update(GameTime gameTime)
@@ -122,7 +123,7 @@ namespace ImproveGame.Interface.GUI
         // 如果少于原来的数量就重新计算
         public override void Update(GameTime gameTime)
         {
-            if (items is not null && list.Children.Count() != items.Count + 1)
+            if (items is not null && list.Children.Count() != items.Count)
             {
                 SetInventory(items);
                 scrollbar.SetView(MathF.Min(scrollbar.Height.Pixels, list.Height.Pixels), list.Height.Pixels);
@@ -186,37 +187,41 @@ namespace ImproveGame.Interface.GUI
 
         public override void MouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);// 很多的条件
-            int bannerID = ItemToBanner(Main.mouseItem);
-            if (bannerID == -1)
+            base.MouseDown(evt);
+            if (evt.Target == this)
             {
-                return;
-            }
-            for (int i = 0; i < items.Count; i++)
-            {
-                if (items[i].IsAir)
+                int bannerID = ItemToBanner(Main.mouseItem);
+                if (bannerID == -1)
                 {
-                    items.RemoveAt(i);
-                    i--;
-                    continue;
+                    return;
                 }
-                if (items[i].type == Main.mouseItem.type && items[i].stack < items[i].maxStack && ItemLoader.CanStack(items[i], Main.mouseItem))
+                for (int i = 0; i < items.Count; i++)
                 {
-                    int stackAvailable = items[i].maxStack - items[i].stack;
-                    int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);
-                    Main.mouseItem.stack -= stackAddition;
-                    items[i].stack += stackAddition;
+                    if (items[i].IsAir)
+                    {
+                        items.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                    if (items[i].type == Main.mouseItem.type && items[i].stack < items[i].maxStack && ItemLoader.CanStack(items[i], Main.mouseItem))
+                    {
+                        int stackAvailable = items[i].maxStack - items[i].stack;
+                        int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);
+                        Main.mouseItem.stack -= stackAddition;
+                        items[i].stack += stackAddition;
+                        SoundEngine.PlaySound(SoundID.Grab);
+                        Recipe.FindRecipes();
+                        if (Main.mouseItem.stack <= 0)
+                            Main.mouseItem.TurnToAir();
+                    }
+                }
+                if (!Main.mouseItem.IsAir && items.Count < 200)
+                {
+                    items.Add(Main.mouseItem.Clone());
+                    Main.mouseItem.TurnToAir();
                     SoundEngine.PlaySound(SoundID.Grab);
-                    Recipe.FindRecipes();
-                    if (Main.mouseItem.stack <= 0)
-                        Main.mouseItem.TurnToAir();
                 }
-            }
-            if (!Main.mouseItem.IsAir && items.Count < 200)
-            {
-                items.Add(Main.mouseItem.Clone());
-                Main.mouseItem.TurnToAir();
-                SoundEngine.PlaySound(SoundID.Grab);
+
             }
         }
 

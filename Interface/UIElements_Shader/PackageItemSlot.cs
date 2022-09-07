@@ -22,7 +22,7 @@ namespace ImproveGame.Interface.UIElements_Shader
                 if (value is null || value.IsAir)
                 {
                     items.RemoveAt(index);
-                    Parent.RemoveChild(Parent.Children.ToArray()[^1]);
+                    Parent.RemoveChild(Parent.Children.Last());
                 }
                 else
                 {
@@ -33,52 +33,33 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         public PackageItemSlot(List<Item> items, int index)
         {
-            this.SetSize(52, 52);
+            Width.Pixels = 52;
+            Height.Pixels = 52;
             this.items = items;
             this.index = index;
-
-            UIText text = new(string.Empty, 0.75f)
-            {
-                VAlign = 0.8f
-            };
-            text.Left.Set(0, 0.2f);
-            text.OnUpdate += (uie) =>
-            {
-                text.SetText(Item.stack.ToString());
-                text.Recalculate();
-            };
-            Append(text);
-
-            UIText text2 = new((index + 1).ToString(), 0.75f)
-            {
-                VAlign = 0.15f
-            };
-            text2.Left.Set(0, 0.15f);
-            Append(text2);
         }
 
         public override void MouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
-            SetCursor();
-            MouseDown_ItemSlot();
+            if (Main.mouseItem.IsAir)
+            {
+                SetCursor();
+                MouseDown_ItemSlot();
+            }
         }
 
         public override void RightMouseDown(UIMouseEvent evt)
         {
-            if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
-            {
-                RightMouseTimer = 0;
-                TakeSlotItemToMouseItem();
-            }
             base.MouseDown(evt);
+            RightMouseTimer = 0;
+            TakeSlotItemToMouseItem();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             // 右键长按物品持续拿出
-            if (Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
+            if (Main.mouseRight && IsMouseHovering && !Item.IsAir)
             {
                 if (RightMouseTimer >= 60)
                 {
@@ -101,10 +82,15 @@ namespace ImproveGame.Interface.UIElements_Shader
             CalculatedStyle dimensions = GetDimensions();
             PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, BorderColor, Background);
 
-            if (Item.IsAir)
-                return;
-
             DrawItem(sb, Item, Color.White, dimensions, 30);
+
+            Vector2 textSize = GetTextSize(index.ToString()) * 0.75f;
+            Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
+            Utils.DrawBorderString(sb, index.ToString(), textPos, Color.White, 0.75f);
+
+            textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
+            textPos = dimensions.Position() + new Vector2(52 * 0.2f, (52 - textSize.Y) * 0.9f);
+            Utils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
 
             if (IsMouseHovering)
             {
@@ -124,23 +110,19 @@ namespace ImproveGame.Interface.UIElements_Shader
             {
                 Main.mouseItem.stack++;
                 Item.stack--;
-                if (Item.IsAir)
-                    Item.SetDefaults();
                 CanPlaySound = true;
             }
-            else if (Main.mouseItem.IsAir && !Item.IsAir && Item.maxStack > 1)
+            else if (Main.mouseItem.IsAir)
             {
                 Main.mouseItem = new Item(Item.type, 1);
                 Item.stack--;
-                if (Item.IsAir)
-                    Item.SetDefaults();
                 CanPlaySound = true;
             }
             if (CanPlaySound)
                 SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
-        private void SetCursor()
+        private static void SetCursor()
         {
             // 快速取出
             if (ItemSlot.ShiftInUse)

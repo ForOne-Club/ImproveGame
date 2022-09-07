@@ -44,7 +44,7 @@ namespace ImproveGame.Interface.Common
         public static UserInterface GrabBagInfoInterface;
 
         public PackageGUI PackageGUI;
-        public static UserInterface PackageInterface;
+        public static UserInterface PackageInterface { get; set; }
 
         public override void Unload()
         {
@@ -130,13 +130,13 @@ namespace ImproveGame.Interface.Common
             {
                 LiquidWandInterface?.Update(gameTime);
             }
-            if (BigBagGUI.Visible)
-            {
-                BigBagInterface?.Update(gameTime);
-            }
             if (PackageGUI.Visible)
             {
                 PackageInterface?.Update(gameTime);
+            }
+            if (BigBagGUI.Visible)
+            {
+                BigBagInterface?.Update(gameTime);
             }
             if (ArchitectureGUI.Visible)
             {
@@ -169,10 +169,19 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Autofisher GUI", DrawAutofishGUI, InterfaceScaleType.UI));
+
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: BigBag GUI",
                     () => { if (BigBagGUI.Visible) BigBagGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
-                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Package GUI",
-                    () => { if (PackageGUI.Visible) PackageGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
+
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Package GUI", () =>
+                    {
+                        if (PackageGUI.Visible)
+                        {
+                            PackageGUI.Draw(Main.spriteBatch);
+                        }
+                        return true;
+                    }, InterfaceScaleType.UI));
+
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Grab Bag Info GUI",
                     () => { if (GrabBagInfoGUI.Visible) GrabBagInfoGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
             }

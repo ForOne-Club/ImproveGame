@@ -47,13 +47,13 @@ namespace ImproveGame.Interface.GUI
         private readonly Color background = new(44, 57, 105, 160);
         public override void OnInitialize()
         {
-            MainPanel = new(Color.Black, background);
+            Append(MainPanel = new(Color.Black, background) { HAlign = 0.5f, VAlign = 0.5f });
             MainPanel.OnMouseDown += (evt, uie) =>
             {
                 if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering)
                 {
                     dragging = true;
-                    offset = evt.MousePosition - uie.GetDimensions().Position();
+                    offset = evt.MousePosition - uie.GetPPos();
                 }
             };
             MainPanel.OnMouseUp += (evt, uie) => dragging = false;
@@ -68,7 +68,6 @@ namespace ImproveGame.Interface.GUI
                     uie.SetPos(Vector2.Zero).Recalculate();
                 }
             };
-            Append(MainPanel);
 
             MainPanel.Append(title = new(GetText("SuperVault.Name"), 0.5f) { HAlign = 0f });
 
