@@ -1,4 +1,5 @@
 ﻿[h1]更好的体验，一个让模组游玩体验大大提升的Mod[/h1]
+[h2][url=https://discord.gg/rEmGMQv5z7] Discord [/url][/h2]
 这些功能会为你带来更好的游戏体验
 默认仅开启部分功能，详情请查看模组设置。
 
@@ -27,39 +28,32 @@ https://www.bilibili.com/video/BV1EN4y1T7r6
 更新日志: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog.md
 开源链接: https://gitee.com/MyGoold/improve-game
 
-[h1]功能列表[/h1]
+[h1]功能概要[/h1]
 [b]详细列表请到模组配置或更新日志中查看[/b]
-    1、  物品最大堆叠
-    2、  武器自动使用
-    3、  提升部分工具速度
-    4、  提升放置速度和工作范围
-    5、  BOSS/事件召唤物不消耗
-    6、  渔夫任务无冷却
-    7、  装备/饰品重铸的前缀会越来越好
-    8、  无限药剂，数量达到三十个后无限使用
-    9、  无限弹药，数量达到三千九百九十六个后无限使用
-    10、 非时装饰品也可放置在时装栏（启用模组直接生效）
-    11、 控制墓碑掉落
-    12、 控制物品拾取距离
-    13、 敌人钱币掉落倍率（作弊功能）
-    14、 城镇npc夜晚入住
-    15、 城镇npc刷新速度
-    16、 模组物品
-    17、 随身增益站
-    18、 超级虚空保险库
-    19、 智能虚空保险库
-    20、 额外的背包
+  1、 物品最大堆叠、武器自动使用等辅助Mod普遍功能(对标老牌辅助Luiafk)
+  2、 非时装饰品也可放置在时装栏（启用模组直接生效）
+  3、 城镇NPC入住机制修改: 夜晚入住、图鉴解锁后无视条件入住
+  4、 空间魔杖、建筑魔杖、法爆魔杖等大大优化游戏体验的模组物品
+  5、 渔夫任务无冷却、控制墓碑是否掉落等辅助模组功能的整合
+  6、 随身增益、随身制作站等节省时间的功能
+  7、 与同队好友共享无尽增益、制作站等专为联机设置的功能
+  8、 含100格的超大背包，再也不用担心旗帜和药水放在哪了
+  9、 药水袋与旗帜盒，更方便地将你的药水旗帜整合在一个物品，节省空间
+  10、几乎所有功能都是可以调节的，自行选择适合你的功能
 
 [h1]作者 与 额外声明[/h1]
 画师：枫林半叶, 逆风而行的信鸽
 翻译：Lastprismer，Lacewing
 代码：局长, Cyril
-特别感谢: @ChevyRay 的协程类 (https://github.com/ChevyRay/Coroutines)
+特别感谢:
+  @ChevyRay的协程类
 
 版权声明:
 本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
-附: WMITF开源链接: https://github.com/gardenappl/WMITF
-    本模组开源链接: https://gitee.com/MyGoold/improve-game
+附:
+本模组开源链接: https://gitee.com/MyGoold/improve-game
+WMITF开源链接: https://github.com/gardenappl/WMITF
+ChevyRay的协程类: https://github.com/ChevyRay/Coroutines
 
 [h1]QQ交流群[/h1]
 模组交流群: 971038831

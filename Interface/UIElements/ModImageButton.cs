@@ -10,6 +10,7 @@ namespace ImproveGame.Interface.UIElements
 {
     public class ModImageButton : UIElement
     {
+        public string HoverText = "";
         public Func<Color> DrawColor;
         public Asset<Texture2D> Texture { get; private set; }
         public Color ColorActive { get; private set; }
@@ -66,6 +67,15 @@ namespace ImproveGame.Interface.UIElements
             base.Update(gameTime);
             if (IsMouseHovering) {
                 Main.LocalPlayer.mouseInterface = true;
+                if (!string.IsNullOrEmpty(HoverText))
+                {
+                    string text = HoverText;
+                    if (HoverText.StartsWith("{$") && HoverText.EndsWith("}"))
+                    {
+                        text = Language.GetTextValue(HoverText.Substring("{$".Length, HoverText.Length - "{$}".Length));
+                    }
+                    Main.instance.MouseText(text);
+                }
             }
         }
 

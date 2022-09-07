@@ -3,6 +3,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Terraria.GameInput;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -45,15 +46,15 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             // 非增益药剂
-            if (MyUtils.Config.NoConsume_Potion && item.stack >= MyUtils.Config.NoConsume_PotionRequirement && SpecialPotions.Contains(item.type) && globalItemNotNull)
+            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && SpecialPotions.Contains(item.type) && globalItemNotNull)
                 globalItem.InventoryGlow = true;
 
             // 随身增益站：旗帜
-            if (MyUtils.Config.NoPlace_BUFFTile_Banner && globalItemNotNull && globalItem.ShouldHaveInvGlowForBanner)
+            if (Config.NoPlace_BUFFTile_Banner && globalItemNotNull && globalItem.ShouldHaveInvGlowForBanner)
                 globalItem.InventoryGlow = true;
 
             // 弹药
-            if (MyUtils.Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0 && globalItemNotNull)
+            if (Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0 && globalItemNotNull)
                 globalItem.InventoryGlow = true;
 
             // 花园侏儒
@@ -64,9 +65,9 @@ namespace ImproveGame.Common.GlobalItems
         public static int GetItemBuffType(Item item) {
             if (ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type))
                 return -1;
-            if (MyUtils.Config.NoConsume_Potion) {
+            if (Config.NoConsume_Potion) {
                 // 普通药水
-                if (item.stack >= MyUtils.Config.NoConsume_PotionRequirement && item.active) {
+                if (item.stack >= Config.NoConsume_PotionRequirement && item.active) {
                     if (item.buffType > 0)
                         return item.buffType;
                     // 其他Mod的，自行添加了引用
@@ -75,7 +76,7 @@ namespace ImproveGame.Common.GlobalItems
                 }
             }
             // 随身增益站：普通
-            if (MyUtils.Config.NoPlace_BUFFTile) {
+            if (Config.NoPlace_BUFFTile) {
                 IsBuffTileItem(item, out int buffType);
                 if (buffType is not -1)
                     return buffType;
@@ -108,7 +109,7 @@ namespace ImproveGame.Common.GlobalItems
 
         // 物品消耗
         public override bool ConsumeItem(Item item, Player player) {
-            if (MyUtils.Config.NoConsume_Potion && item.stack >= MyUtils.Config.NoConsume_PotionRequirement && (item.buffType > 0 || SpecialPotions.Contains(item.type))) {
+            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && (item.buffType > 0 || SpecialPotions.Contains(item.type))) {
                 return false;
             }
             return base.ConsumeItem(item, player);
@@ -119,12 +120,12 @@ namespace ImproveGame.Common.GlobalItems
                 return;
 
             if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket || item.type == ItemID.GardenGnome ||
-                (item.stack >= MyUtils.Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
+                (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
                 int buffType = GetItemBuffType(item);
 
                 if (buffType is -1 && item.type != ItemID.GardenGnome) return;
 
-                if (Main.mouseMiddle && Main.mouseMiddleRelease) {
+                if (PlayerInput.Triggers.JustPressed.MouseMiddle) {
                     if (BuffTrackerGUI.Visible)
                         UISystem.Instance.BuffTrackerGUI.Close();
                     else
@@ -146,7 +147,7 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket ||
-                (item.stack >= MyUtils.Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
+                (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
                 int buffType = GetItemBuffType(item);
 
                 if (buffType is -1)
@@ -154,7 +155,7 @@ namespace ImproveGame.Common.GlobalItems
 
                 object arg = new {
                     BuffName = Lang.GetBuffName(buffType),
-                    MaxSpawn = MyUtils.Config.SpawnRateMaxValue
+                    MaxSpawn = Config.SpawnRateMaxValue
                 };
                 if (ItemSlot.ShiftInUse)
                     TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines, arg), x, y);

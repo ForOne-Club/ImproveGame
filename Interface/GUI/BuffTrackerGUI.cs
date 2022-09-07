@@ -69,7 +69,7 @@ namespace ImproveGame.Interface.GUI
             };
             textPanel.Append(pageText);
 
-            UIImageButton closeButton = new(MyUtils.GetTexture("UI/Button_Close")) {
+            UIImageButton closeButton = new(GetTexture("UI/Button_Close")) {
                 Left = new StyleDimension(-28f, 1f),
                 Top = backButton.Top,
                 Width = StyleDimension.FromPixels(28f),
@@ -130,7 +130,7 @@ namespace ImproveGame.Interface.GUI
                 SetPageText(page);
             }
             else {
-                pageText.SetText(MyUtils.GetText("Common.Unavailable"));
+                pageText.SetText(GetText("Common.Unavailable"));
             }
 
             base.Update(gameTime);
@@ -145,7 +145,7 @@ namespace ImproveGame.Interface.GUI
 
         public override void Draw(SpriteBatch spriteBatch) {
             if (BuffHoverBorder is null)
-                BuffHoverBorder = MyUtils.GetTexture("UI/Buff_HoverBorder");
+                BuffHoverBorder = GetTexture("UI/Buff_HoverBorder");
 
             Player player = Main.LocalPlayer;
             if (player.dead || !player.active) {
@@ -167,10 +167,10 @@ namespace ImproveGame.Interface.GUI
                 Vector2 drawCenter = panelDimensions.Center();
                 drawCenter.Y += 10f; // 加上顶栏的一半高度，保证绘制在下面区域的中央
                 float scale = 0.5f;
-                string text = MyUtils.GetText("BuffTracker.NoInfBuff");
+                string text = GetText("BuffTracker.NoInfBuff");
                 // 设置都没开，加个提示
-                if (!MyUtils.Config.NoConsume_Potion) {
-                    string textAlt = $"{MyUtils.GetText("BuffTracker.NoInfBuffAlt")}";
+                if (!Config.NoConsume_Potion) {
+                    string textAlt = $"{GetText("BuffTracker.NoInfBuffAlt")}";
                     float height = FontAssets.DeathText.Value.MeasureString(textAlt).Y * 0.5f;
                     drawCenter.Y += height * 0.5f;
                     float textAltWidth = FontAssets.DeathText.Value.MeasureString(textAlt).X * 0.5f;
@@ -225,10 +225,10 @@ namespace ImproveGame.Interface.GUI
 
                     string mouseText = Lang.GetBuffName(buffType);
                     if (buffEnabled) {
-                        mouseText += MyUtils.GetText("BuffTracker.LeftClickDisable");
+                        mouseText += GetText("BuffTracker.LeftClickDisable");
                     }
                     else {
-                        mouseText += MyUtils.GetText("BuffTracker.LeftClickEnable");
+                        mouseText += GetText("BuffTracker.LeftClickEnable");
                     }
                     Main.instance.MouseText(mouseText);
 
@@ -253,7 +253,7 @@ namespace ImproveGame.Interface.GUI
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 
-            title.SetText(MyUtils.GetText("BuffTracker.Title"));
+            title.SetText(GetText("BuffTracker.Title"));
             int titleWidth = (int)(FontAssets.DeathText.Value.MeasureString(title.Text).X * 0.5f);
             title.Left = new StyleDimension(-120f - titleWidth * 0.5f, 1f);
             title.Width = StyleDimension.FromPixels(titleWidth);

@@ -1,12 +1,9 @@
+using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
-using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace ImproveGame.Content.Tiles
@@ -18,8 +15,9 @@ namespace ImproveGame.Content.Tiles
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
         public override int ItemType(int frameX, int frameY) => ModContent.ItemType<Items.Placeable.Autofisher>();
-        
-        public override void MouseOver(int i, int j) {
+
+        public override void MouseOver(int i, int j)
+        {
             Player player = Main.LocalPlayer;
             Tile tile = Main.tile[i, j];
             player.cursorItemIconEnabled = true;
@@ -28,14 +26,18 @@ namespace ImproveGame.Content.Tiles
         }
 
         public bool ServerOpenRequest = false;
-        public override bool OnRightClick(int i, int j) {
-            var origin = MyUtils.GetTileOrigin(i, j);
-            if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.Autofisher == origin) {
+        public override bool OnRightClick(int i, int j)
+        {
+            var origin = GetTileOrigin(i, j);
+            if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.Autofisher == origin)
+            {
                 UISystem.Instance.AutofisherGUI.Close();
             }
-            else {
-                if (Main.netMode == NetmodeID.MultiplayerClient && !ServerOpenRequest) {
-                    NetAutofish.ClientSendOpenRequest(origin);
+            else
+            {
+                if (Main.netMode == NetmodeID.MultiplayerClient && !ServerOpenRequest)
+                {
+                    OpenRequestPacket.Get(origin).Send(runLocally: false);
                     return false;
                 }
                 ServerOpenRequest = false;
@@ -44,20 +46,25 @@ namespace ImproveGame.Content.Tiles
             return true;
         }
 
-        public override bool CanKillTile(int i, int j, ref bool blockDamaged) {
-            if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(i, j, out var autofisher))
+        public override bool CanKillTile(int i, int j, ref bool blockDamaged)
+        {
+            if (!TryGetTileEntityAs<TEAutofisher>(i, j, out var autofisher))
                 return true;
-            if (autofisher.accessory.IsAir && autofisher.bait.IsAir && autofisher.fishingPole.IsAir) {
-                if (autofisher.fish is null)
-                    return true;
-                for (int k = 0; k < 15; k++) {
-                    if (autofisher.fish[k] is not null && !autofisher.fish[k].IsAir) {
-                        return false;
-                    }
-                }
-                return true;
+            if (!autofisher.accessory.IsAir || !autofisher.bait.IsAir || !autofisher.fishingPole.IsAir)
+            {
+                return false;
             }
-            return false;
+
+            if (autofisher.fish is null)
+                return true;
+            for (int k = 0; k < 15; k++)
+            {
+                if (autofisher.fish[k] is not null && !autofisher.fish[k].IsAir)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public override void ModifyObjectData()

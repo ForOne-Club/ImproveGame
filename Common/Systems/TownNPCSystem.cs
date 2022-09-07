@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace ImproveGame.Common.Systems
 {
@@ -41,7 +40,7 @@ namespace ImproveGame.Common.Systems
                 return !npc.townNPC || head < 0 || head >= NPCHeadLoader.NPCHeadCount || NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] || npc.ModNPC?.TownNPCStayingHomeless is true;
             });
 
-            var modNPCs = typeof(NPCLoader).GetField("npcs", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null) as IList<ModNPC>;
+            var modNPCs = typeof(NPCLoader).GetField("npcs", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) as IList<ModNPC>;
             foreach (ModNPC modNPC in modNPCs)
             {
                 var npc = modNPC.NPC;
@@ -72,17 +71,21 @@ namespace ImproveGame.Common.Systems
                     {
                         //Patch context: this is the amount of money.
                         int itemType = Main.player[l].bank.item[m].type;
-                        if (itemType == ItemID.CopperCoin)
-                            moneyCount += Main.player[l].bank.item[m].stack;
-
-                        if (itemType == ItemID.SilverCoin)
-                            moneyCount += Main.player[l].bank.item[m].stack * 100;
-
-                        if (itemType == ItemID.GoldCoin)
-                            moneyCount += Main.player[l].bank.item[m].stack * 10000;
-
-                        if (itemType == ItemID.PlatinumCoin)
-                            moneyCount += Main.player[l].bank.item[m].stack * 1000000;
+                        switch (itemType)
+                        {
+                            case ItemID.CopperCoin:
+                                moneyCount += Main.player[l].bank.item[m].stack;
+                                break;
+                            case ItemID.SilverCoin:
+                                moneyCount += Main.player[l].bank.item[m].stack * 100;
+                                break;
+                            case ItemID.GoldCoin:
+                                moneyCount += Main.player[l].bank.item[m].stack * 10000;
+                                break;
+                            case ItemID.PlatinumCoin:
+                                moneyCount += Main.player[l].bank.item[m].stack * 1000000;
+                                break;
+                        }
                     }
                 }
             }
@@ -90,52 +93,54 @@ namespace ImproveGame.Common.Systems
             if (moneyCount > 5000)
                 SetNPCSpawn(NPCID.Merchant);
 
-            if (Config.TownNPCGetTFIntoHouse)
+            if (!Config.TownNPCGetTFIntoHouse)
             {
-                if (NPC.downedGoblins)
-                    SetNPCSpawn(NPCID.GoblinTinkerer);
-                if (NPC.downedBoss2)
-                    SetNPCSpawn(NPCID.DD2Bartender);
-                if (NPC.downedBoss3)
-                    SetNPCSpawn(NPCID.Mechanic);
-                if (Main.hardMode)
-                {
-                    SetNPCSpawn(NPCID.Wizard);
-                    SetNPCSpawn(NPCID.TaxCollector);
-                }
+                return;
+            }
 
-                if (TownNPCIDs is null || TownNPCIDs.Count < 0)
-                {
-                    SetupTownNPCList();
-                }
+            if (NPC.downedGoblins)
+                SetNPCSpawn(NPCID.GoblinTinkerer);
+            if (NPC.downedBoss2)
+                SetNPCSpawn(NPCID.DD2Bartender);
+            if (NPC.downedBoss3)
+                SetNPCSpawn(NPCID.Mechanic);
+            if (Main.hardMode)
+            {
+                SetNPCSpawn(NPCID.Wizard);
+                SetNPCSpawn(NPCID.TaxCollector);
+            }
 
-                for (int i = 0; i < TownNPCIDs.Count; i++)
-                {
-                    int id = TownNPCIDs[i];
-                    // 已经被解锁
-                    if (Main.BestiaryTracker.Chats.GetWasChatWith(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[id]))
-                    {
-                        SetNPCSpawn(id);
-                    }
-                }
+            if (TownNPCIDs is null || TownNPCIDs.Count < 0)
+            {
+                SetupTownNPCList();
+            }
+
+            if (TownNPCIDs == null)
+            {
+                return;
+            }
+
+            foreach (var id in TownNPCIDs.Where(id => Main.BestiaryTracker.Chats.GetWasChatWith(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[id])))
+            {
+                SetNPCSpawn(id);
             }
         }
 
         public override void PostUpdateTime()
         {
-            if (!Main.dayTime && Config.TownNPCSpawnInNight)
+            if (!Main.dayTime && Config.TownNPCGetTFIntoHouse)
                 SpawnTownNPCs.Invoke(null, null);
         }
 
-        public static void SetNPCSpawn(int npcID)
+        public static void SetNPCSpawn(int npcId)
         {
-            if (NPC.AnyNPCs(npcID))
+            if (NPC.AnyNPCs(npcId))
                 return;
 
-            Main.townNPCCanSpawn[npcID] = true;
+            Main.townNPCCanSpawn[npcId] = true;
             if (WorldGen.prioritizedTownNPCType == 0)
             {
-                WorldGen.prioritizedTownNPCType = npcID;
+                WorldGen.prioritizedTownNPCType = npcId;
             }
         }
     }

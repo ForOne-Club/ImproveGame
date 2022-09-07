@@ -28,7 +28,7 @@
         private void SendPassword(On.Terraria.Netplay.orig_StartServer orig) {
             orig.Invoke();
 
-            if (!MyUtils.Config.OnlyHostByPassword)
+            if (!Config.OnlyHostByPassword)
                 return;
 
             for (int i = 0; i < 255; i++) {
@@ -38,11 +38,11 @@
             for (int i = 0; i < 8; i++)
                 ConfigPassword += Main.rand.Next(10).ToString();
 
-            ImproveGame.Instance.Logger.Info(MyUtils.GetTextWith("Config.OnlyHostByPassword.ServerPasswordLog", new {
+            ImproveGame.Instance.Logger.Info(GetTextWith("Config.OnlyHostByPassword.ServerPasswordLog", new {
                 Password = ConfigPassword
             }));
 
-            Console.WriteLine(MyUtils.GetTextWith("Config.OnlyHostByPassword.ServerPassword", new {
+            Console.WriteLine(GetTextWith("Config.OnlyHostByPassword.ServerPassword", new {
                 Password = ConfigPassword
             }));
         }

@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+﻿using ImproveGame.Common.ConstructCore;
+using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ObjectData;
 using Terraria.UI.Gamepad;
@@ -7,6 +8,119 @@ namespace ImproveGame
 {
     partial class MyUtils
     {
+        public static int GetItemTile(int itemType)
+        {
+            if (MaterialCore.FinishSetup && MaterialCore.ItemToTile.TryGetValue(itemType, out int tileType))
+            {
+                return tileType;
+            }
+            return -1;
+        }
+
+        public static int GetTileItem(int tileType, int tileFrameX, int tileFrameY)
+        {
+            int getItemTileType = tileType; // 用于找到物品的type（主要是给门用），到时候placeStyle是用tileType
+            if (getItemTileType is TileID.OpenDoor)
+            {
+                getItemTileType = TileID.ClosedDoor;
+            }
+            if (MaterialCore.FinishSetup && MaterialCore.TileToItem.TryGetValue(getItemTileType, out List<int> itemTypes))
+            {
+                return itemTypes.FirstOrDefault(i => (MaterialCore.ItemToPlaceStyle[i] == TileFrameToPlaceStyle(tileType, tileFrameX, tileFrameY) || i >= Main.maxItemTypes), -1);
+            }
+            return -1;
+        }
+
+        public static int GetItemWall(int itemType)
+        {
+            if (MaterialCore.FinishSetup && MaterialCore.ItemToWall.TryGetValue(itemType, out int wallType))
+            {
+                return MaterialCore.ItemToWall[wallType];
+            }
+            return -1;
+        }
+
+        public static int GetWallItem(int wallType)
+        {
+            if (!MaterialCore.FinishSetup)
+            {
+                return -1;
+            }
+
+            // 合 并 同 类 项 https://terraria.wiki.gg/zh/wiki/%E5%A2%99_ID
+            if (wallType is WallID.DirtUnsafe or WallID.DirtUnsafe1 or WallID.DirtUnsafe2 or WallID.DirtUnsafe3 or WallID.DirtUnsafe4)
+                wallType = WallID.Dirt;
+            if (wallType is WallID.HellstoneBrickUnsafe)
+                wallType = WallID.HellstoneBrick;
+            if (wallType is WallID.ObsidianBrickUnsafe)
+                wallType = WallID.ObsidianBrick;
+            if (wallType is WallID.MudUnsafe)
+                wallType = WallID.MudWallEcho;
+            if (wallType is WallID.SpiderUnsafe)
+                wallType = WallID.SpiderEcho;
+            if (wallType is WallID.ObsidianBackUnsafe)
+                wallType = WallID.ObsidianBackEcho;
+            if (wallType is WallID.MushroomUnsafe)
+                wallType = WallID.Mushroom;
+            if (wallType is WallID.HiveUnsafe)
+                wallType = WallID.Hive;
+            if (wallType is WallID.LihzahrdBrickUnsafe)
+                wallType = WallID.LihzahrdBrick;
+            // 大理石与花岗岩
+            if (wallType is WallID.MarbleUnsafe)
+                wallType = WallID.Marble;
+            if (wallType is WallID.GraniteUnsafe)
+                wallType = WallID.Granite;
+            // 普通石墙系列
+            if (wallType is WallID.EbonstoneUnsafe) // 黑檀石墙
+                wallType = WallID.EbonstoneEcho;
+            if (wallType is WallID.CrimstoneUnsafe) // 猩红石墙
+                wallType = WallID.CrimstoneEcho;
+            if (wallType is WallID.PearlstoneBrickUnsafe) // 珍珠石墙
+                wallType = WallID.PearlstoneEcho;
+            // 草墙 丛林墙 花墙
+            if (wallType is >= 63 and <= 65)
+                wallType = wallType - 63 + 66;
+            if (wallType is WallID.HallowedGrassUnsafe) // 神圣草墙
+                wallType = WallID.HallowedGrassEcho;
+            if (wallType is WallID.CrimsonGrassUnsafe) // 猩红草墙
+                wallType = WallID.CrimsonGrassEcho;
+            if (wallType is WallID.CorruptGrassUnsafe) // 腐化草墙
+                wallType = WallID.CorruptGrassEcho;
+            // https://terraria.wiki.gg/zh/wiki/%E5%AE%9D%E7%9F%B3%E5%A2%99 宝石墙
+            if (wallType is >= 48 and <= 53)
+                wallType = wallType - 48 + 250;
+            // https://terraria.wiki.gg/zh/wiki/%E5%9C%B0%E7%89%A2%E7%A0%96%E5%A2%99 地牢砖墙
+            if (wallType is >= 7 and <= 9)
+                wallType = wallType - 7 + 17;
+            if (wallType is >= 94 and <= 99)
+                wallType = wallType - 94 + 100;
+            // https://terraria.wiki.gg/zh/wiki/%E6%B2%99%E5%B2%A9%E5%A2%99 沙岩墙
+            // https://terraria.wiki.gg/zh/wiki/%E8%85%90%E5%8C%96%E5%A2%99 腐化墙
+            // https://terraria.wiki.gg/zh/wiki/%E7%8C%A9%E7%BA%A2%E5%A2%99 猩红墙
+            // https://terraria.wiki.gg/zh/wiki/%E5%9C%9F%E5%A2%99%EF%BC%88%E5%A4%A9%E7%84%B6%EF%BC%89 斑驳的土墙
+            // https://terraria.wiki.gg/zh/wiki/%E7%A5%9E%E5%9C%A3%E5%A2%99 神圣墙
+            // https://terraria.wiki.gg/zh/wiki/%E4%B8%9B%E6%9E%97%E5%A2%99%EF%BC%88%E5%A4%A9%E7%84%B6%EF%BC%89 特殊丛林墙
+            // https://terraria.wiki.gg/zh/wiki/%E7%86%94%E5%B2%A9%E5%A2%99 熔岩墙
+            // https://terraria.wiki.gg/zh/wiki/%E6%B4%9E%E5%A3%81 洞壁 (一部分)
+            // https://terraria.wiki.gg/zh/wiki/%E7%A1%AC%E5%8C%96%E6%B2%99%E5%A2%99 硬化沙墙
+            // https://terraria.wiki.gg/zh/wiki/%E6%B2%99%E6%BC%A0%E5%8C%96%E7%9F%B3%E5%A2%99 沙漠化石墙
+            if (wallType is >= 187 and <= 223)
+                wallType = wallType - 188 + 275;
+            // https://terraria.wiki.gg/zh/wiki/%E6%B4%9E%E5%A3%81 洞壁
+            if (wallType is >= 54 and <= 59)
+                wallType = wallType - 54 + 256;
+            if (wallType is WallID.Cave7Unsafe)
+                wallType = WallID.Cave7Echo;
+            if (wallType is WallID.Cave8Unsafe)
+                wallType = WallID.Cave8Echo;
+            if (wallType is >= 170 and <= 171)
+                wallType = wallType - 170 + 270;
+            if (MaterialCore.WallToItem.TryGetValue(wallType, out var itemType))
+                return itemType[0]; // 可以多对一，但我懒得写了
+            return -1;
+        }
+
         /// <summary>
         /// 获取多格物块的左上角位置
         /// </summary>
@@ -15,7 +129,7 @@ namespace ImproveGame
         public static Point16 GetTileOrigin(int i, int j)
         {
             Tile tile = Framing.GetTileSafely(i, j);
-            TileObjectData tileData = TileObjectData.GetTileData(tile.TileType, 0, 0);
+            TileObjectData tileData = TileObjectData.GetTileData(tile.TileType, 0);
             if (tileData == null)
             {
                 return Point16.NegativeOne;
@@ -29,6 +143,19 @@ namespace ImproveGame
             Point16 frame = new(subX / 18, subY / 18);
 
             return coord - frame;
+        }
+
+        /// <inheritdoc cref="TryGetTileEntityAs{T}(Point, out T)"/>
+        public static bool TryGetTileEntityAs<T>(Point16 position, out T entity) where T : TileEntity
+        {
+            return TryGetTileEntityAs(position.X, position.Y, out entity);
+        }
+
+        /// <inheritdoc cref="TryGetTileEntityAs{T}(int, int, out T)"/>
+        /// <param name="position">物块的坐标</param>
+        public static bool TryGetTileEntityAs<T>(Point position, out T entity) where T : TileEntity
+        {
+            return TryGetTileEntityAs(position.X, position.Y, out entity);
         }
 
         /// <summary>
@@ -57,20 +184,13 @@ namespace ImproveGame
         /// 快捷开关箱子
         /// </summary>
         /// <param name="player">玩家实例</param>
-        /// <param name="chestID">箱子ID（对于便携储存是-2/-3/-4/-5，对于其他箱子是在<see cref="Main.chest"/>的索引）</param>
-        public static void ToggleChest(ref Player player, int chestID, int x = -1, int y = -1, SoundStyle? sound = null)
+        /// <param name="chestId">箱子ID（对于便携储存是-2/-3/-4/-5，对于其他箱子是在<see cref="Main.chest"/>的索引）</param>
+        public static void ToggleChest(ref Player player, int chestId, int x = -1, int y = -1, SoundStyle? sound = null)
         {
-            if (player.chest == chestID)
+            if (player.chest == chestId)
             {
                 player.chest = -1;
-                if (sound is null)
-                {
-                    SoundEngine.PlaySound(SoundID.MenuClose);
-                }
-                else
-                {
-                    SoundEngine.PlaySound(sound.Value);
-                }
+                SoundEngine.PlaySound(sound ?? SoundID.MenuClose);
             }
             else
             {
@@ -78,7 +198,7 @@ namespace ImproveGame
                 y = y == -1 ? player.Center.ToTileCoordinates().Y : y;
                 // 以后版本TML会加的东西，只不过现在stable还没有，现在就先放在这里吧
                 //player.OpenChest(x, y, chestID);
-                player.chest = chestID;
+                player.chest = chestId;
                 for (int i = 0; i < 40; i++)
                 {
                     ItemSlot.SetGlow(i, -1f, chest: true);
@@ -93,14 +213,7 @@ namespace ImproveGame
                 if (PlayerInput.GrappleAndInteractAreShared)
                     PlayerInput.Triggers.JustPressed.Grapple = false;
 
-                if (sound is null)
-                {
-                    SoundEngine.PlaySound(SoundID.MenuOpen);
-                }
-                else
-                {
-                    SoundEngine.PlaySound(sound.Value);
-                }
+                SoundEngine.PlaySound(sound ?? SoundID.MenuOpen);
             }
             Main.playerInventory = true;
             Recipe.FindRecipes();
@@ -120,7 +233,7 @@ namespace ImproveGame
             {
                 if (player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.CanKillTile(x, y))
                 {
-                    if (tile.TileType == 2 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 23 || tile.TileType == 60 || tile.TileType == 70 || tile.TileType == 109 || tile.TileType == 199 || Main.tileMoss[tile.TileType] || TileID.Sets.tileMossBrick[tile.TileType])
+                    if (tile.TileType is 2 or 477 or 492 or 23 or 60 or 70 or 109 or 199 || Main.tileMoss[tile.TileType] || TileID.Sets.tileMossBrick[tile.TileType])
                     {
                         player.PickTile(x, y, 10000);
                     }
@@ -181,6 +294,27 @@ namespace ImproveGame
                 }
             }
             return success;
+        }
+
+        /// <summary>
+        /// 放物块，但是有魔杖特判
+        /// </summary>
+        public static bool TryPlaceTile(int i, int j, Item item, Player player, bool mute = false, bool forced = false)
+        {
+            if (Main.tile[i, j].HasTile)
+                return false;
+            // 物块魔杖特判    
+            if (item.tileWand > 0)
+            {
+                if (CheckWandUsability(item, player, out int index) && index != -1)
+                    TryConsumeItem(ref player.inventory[index], player, true);
+                else return false;
+            }
+            int targetTile = item.createTile;
+            bool placed = WorldGen.PlaceTile(i, j, targetTile, mute, forced, player.whoAmI, item.placeStyle);
+            // PlaceTile其实不管放没放下都是true，只有一部分情况为false，因此这里二次判断
+            placed &= Main.tile[i, j].TileType == targetTile;
+            return placed;
         }
 
         public enum CheckType

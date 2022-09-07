@@ -42,12 +42,12 @@ namespace ImproveGame.Content.Projectiles
 
         public override void AI()
         {
-            Item item = MyUtils.GetFirstWall(Player);
+            Item item = GetFirstWall(Player);
             // 背包中没有墙结束弹幕
             if (item is null)
             {
                 CombatText.NewText(Projectile.getRect(), new Color(225, 0, 0),
-                    MyUtils.GetText("CombatText_Projectile.PlaceWall_Lack"));
+                    GetText("CombatText_Projectile.PlaceWall_Lack"));
                 Projectile.Kill();
             }
             Projectile.timeLeft++;

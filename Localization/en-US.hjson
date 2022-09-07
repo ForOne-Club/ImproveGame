@@ -148,7 +148,7 @@ Mods:
                 Tooltip: 
                     '''
                     Only potions stack not less than this number grant you infinite buff
-                    Range: 30~999
+                    Range: 20~999
                     '''
             }
             NoConsume_Ammo:
@@ -217,9 +217,14 @@ Mods:
                     They don't need to be saved, but will be able to spawn if there are valid houses. They will be considered as saved once they spawn
                     Once an NPC's bestiary entry is unlocked, they will spawn as soon as there is a valid house, regardless of their spawn conditions
                     (You have to talk to any town NPCs at least once to unlock their bestiary entry)
+                    Town NPCs will spawn at nighttime
                     '''
             }
-            TownNPCSpawnInNight.Label: "[i:MusicBoxTownNight] Allow town NPCs to spawn at nighttime"
+            NPCLiveInEvil:
+            {
+                Label: "[i:MusicBoxTownNight] Town NPCs can live in evil biomes"
+                Tooltip: "Town NPCs can live in the Corruption and the Crimson"
+            }
             TownNPCSpawnSpeed:
             {
                 Label: "[i:4910] Town NPC spawn rate multiplier"
@@ -426,6 +431,16 @@ Mods:
                     '''
             }
             ShowModName.Label: "[i:ImproveGame/SpaceWand] Display which mod are the items from"
+            EmptyAutofisher:
+            {
+                Label: "[i:ImproveGame/Autofisher] Bait Insufficient Warning"
+                Tooltip:
+                    '''
+                    If a Fishing Machine runs out of bait, a message will be displayed: 
+                    â€œ\"The Fishing Machine at [horizontal position, depth] has no bait\"
+                    '''
+                Tip: "The Fishing Machine at [c/15d36a:{Compass}, {Depth}] has no bait"
+            }
 
             OtherFunctions:
             {
@@ -453,6 +468,7 @@ Mods:
             BannerChest: Banner Box
             Autofisher: Fishing Machine
             PaintWand: Wand of Painting
+            ConstructWand: Wand of Construction
         }
         ItemTooltip:
         {
@@ -531,19 +547,19 @@ Mods:
                 '''
             Autofisher:
                 '''
-                Auto-fishing
                 Right click on a placed Fishing Machine to open the fishing panel
                 Click the "+" in the first row to choose water type
                 Put in a fishing rod and baits to start, mechanics are the same as manual-fishing
-                Supports mod biomes
                 You may also put in accessories to increase fishing power or grant ability to fish in lava
-                The initial fishing speed is 10% of the manual-fishing speed, you may speed up the fishing process by:
+                The initial fishing speed is 20% of the manual-fishing speed, you may speed up the fishing process by:
                 - Bass [i:Bass] stored will be converted to percentage fishing speed bonus by 20 : 1, caps at 500% ([i/s100:Bass])
                 - [i:AnglerEarring] increases fishing speed by * 200%
                 - [i:AnglerTackleBag] increases fishing speed by * 300%
                 - [i:LavaproofTackleBag] increases fishing speed by * 500%
                 [c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
                 [c/AAAAAA:Modded accessories are not supported]
+                Supports most modded biomes
+                Only filterd items will be caught, first match upper criteria
                 '''
             PaintWand:
                 '''
@@ -551,6 +567,17 @@ Mods:
                 Select an area to paint/remove paint on tiles within the area
                 Also removes moss on the tiles while removing paints, like the [i:PaintScraper]
                 Paint which stacks above 999 will not be consumed
+                '''
+            ConstructWand:
+                '''
+                [c/0099ff:<right> to open Construction Panel]
+                Has ability to place structures freely
+                Recording Mode - Saves selected structures as files
+                Placing Mode - Places structures while material is sufficient
+                Will not record/place liquids
+                Wires will not be shown in preview, but will be recorded and placed
+                Click the 'Introduction' at the right top for more information
+                [c/AAAAAA:Beta test feature, kindly report bugs in this mod's Steam workshop page]
                 '''
         }
 		MapObject:
@@ -579,7 +606,7 @@ Mods:
             PrefixCount: "Reforging count: "
             AnglerQuest: "Angler's quest refreshed!"
             FromMod: "From mod {DisplayName}"
-            LootDisplay: "Press [{KeybindName}] to see detailed item drop"
+            LootDisplay: "Press {KeybindName} to see detailed item drop"
             LootDisplayBindless: "(You have not bind a hotkey for this function, please do so in Controls)"
             Refreshing: "Refreshing"
             Refresh: "Refresh Shop"
@@ -598,8 +625,8 @@ Mods:
             PotionBagCurrent: "Contains the following potions ({StoredCount}/20):"
             PotionBagCurrentFull: "Contains the following potions (Full!):"
             PotionBagNone: "Empty (0/20)"
-            PotionBagAvailable: "(Active)"     # Ò©Ë®´üÖÐÒ©Ë®ÊýÁ¿ >= 20
-            PotionBagUnavailable: "(Inactive)"   # Ò©Ë®´üÖÐÒ©Ë®ÊýÁ¿ < 20
+            PotionBagAvailable: "(Active)"
+            PotionBagUnavailable: "(Inactive)"
             PotionBagDisabled: "(Disabled)"
 
             BannerChestCurrent: "Stored banners: ({StoredCount}/200):"
@@ -621,7 +648,6 @@ Mods:
                 CombinedBuff: "[Has available buff combination]"
                 AutoCollect: "[Auto-deposit]"
             }
-            # Ã¿ÐÐ³¤¶È×îºÃÏÞÖÆÔÚ30-40×ÖÄ¸Ö®¼ä
             TagDetailedTip:
             {
                 GardenGnome:
@@ -668,7 +694,6 @@ Mods:
                     in the Piggy Bank.
                     You may disable this function in Mod Configuration.
                     '''
-                # ×éºÏBuff: ¹Ì¶¨BuffÍ¬Ê±³öÏÖÊ±»áÓÐ×éºÏÐ§¹û
                 CombinedBuff:
                 {
                     Battle:
@@ -680,6 +705,87 @@ Mods:
                         to multiply the spawn rate from x0-x{MaxSpawn}
                         '''
                 }
+            }
+        }
+        ConstructGUI:
+        {
+            Structure: "QoL Structure" # è¿™ä¸ªæ˜¯å­˜å‚¨åŽçš„æ–‡ä»¶å
+            SavedAs: "Structure has been saved as " # åŽæŽ¥æ–‡ä»¶å…¨è·¯å¾„(æ‰€å±žæ–‡ä»¶å¤¹è·¯å¾„+æ–‡ä»¶å)
+            SaveMode: "Recording Mode"
+            LoadMode: "Placing Mode"
+            ExplodeAndPlace: "Destroy then Place"
+            PlaceOnly: "Place"
+            Path: "File path: "
+            RenameTip:
+            {
+                Exists: "A file with the same name already exists"
+                TooLong: "File name must not exceed 40 characters"
+                Illegal: "File name must not include following characterts: \\, /, :, *, ?, \", <, > or |"
+            }
+            FileInfo:
+            {
+                Title: "File Info"
+                Name: "File name: {Name}"
+                Time: "Time saved: {Time}"
+                Version: "Version: {Version}"
+                Size: "Structure size: {Size}"
+            }
+            MaterialInfo:
+            {
+                Title: "Material Info"
+                Stored: "Has: {Stack}"
+                Requirement: "Needed: {Stack}"
+            }
+            Preview:
+            {
+                Title: "Structure Preview"
+                CenterSet: "Click to set it as the placement center"
+            }
+            Tutorial:
+            {
+                Button: "Introduction"
+                Save.Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
+                Save.Text:
+                    '''
+                    The third button at the left top of the panel can switch mode to Recording Mode or Placing Mode
+
+                    In recording mode, you can hold the left key and drag to select structures
+                    Then save them on your PC as files to place them even in different worlds and servers
+                    
+                    The picture below shows how to select and save structures:
+                    '''
+                Place.Title: "{$Mods.ImproveGame.ConstructGUI.LoadMode}"
+                Place.Text:
+                    '''
+                    In placing mode, you need to choose a structure in the main panel, a structure is selected if its name is in yellow
+                    
+                    if material in your inventory or the Huge Inventory is sufficient, left click to place the structure
+                    Directions of certain tiles may be incorrect
+                    
+                    Here is an example of placing structures: 
+                    '''
+                Explode.Title: "Destroy Then Place"
+                Explode.Text:
+                    '''
+                    If you choose 'Destroy Then Place', the area to place the structure will be cleared for enough placement space
+                    '''
+                Panel.Title: "Structure List"
+                Panel.Text:
+                    '''
+                    The main panel displays structure files on your PC, including file name and path
+                    
+                    Click '{$tModLoader.ModsMoreInfo}' button at the right side to check detailed info and preview, placement center can be adjusted in the preview
+                    '''
+                Materials.Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
+                Materials.Text:
+                    '''
+                    You can check needed and stored materials in Material Info
+                    '''
+                Preview.Title: "{$Mods.ImproveGame.ConstructGUI.Preview.Title}"
+                Preview.Text:
+                    '''
+                    Structure preview also shows the placement center(the yellow box), which is the position of the cursor while placing.
+                    '''
             }
         }
         SuperVault:
@@ -694,8 +800,13 @@ Mods:
             FishingPole: "Fishing rod"
             Bait: "Bait"
             SelectPool: "Please select fishing pool"
-            CarefulNextTime: "Be careful next time!" # Õâ¸öÊÇµöÓã»ú²»Ð¡ÐÄ°ÑÖíöèµöÉÏÀ´ÁË
+            CarefulNextTime: "Be careful next time!"
             Unavailable: "Currently no fishing info"
+            CatchCratesFilter: "Crates"
+            CatchAccessoriesFilter: "Accessories"
+            CatchToolsFilter: "Tools and weapons"
+            CatchWhiteRarityCatchesFilter: "White rarity"
+            CatchNormalCatchesFilter: "Higher than white rarity"
         }
         BuffTracker:
         {
@@ -760,9 +871,10 @@ Mods:
         }
         Common:
         {
+            Loading: "Loading..."
+            Refresh: "Refresh"
             Switch: "Switch"
             Unavailable: "Not available"
-            KeybindNone: "NONE"
         }
         RecipeGroup:
         {

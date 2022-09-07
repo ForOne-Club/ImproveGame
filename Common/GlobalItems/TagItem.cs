@@ -37,7 +37,7 @@ namespace ImproveGame.Common.GlobalItems
 
             if (itemType == ItemID.GardenGnome)
             {
-                tooltips.Add(new(Mod, "TagDetailed.GardenGnome", MyUtils.GetText("Tips.TagDetailed.GardenGnome"))
+                tooltips.Add(new(Mod, "TagDetailed.GardenGnome", GetText("Tips.TagDetailed.GardenGnome"))
                 {
                     OverrideColor = Color.SkyBlue
                 });
@@ -48,28 +48,28 @@ namespace ImproveGame.Common.GlobalItems
             // 是否被增益追踪器禁用
             if (!buffEnabled)
             {
-                tooltips.Add(new(Mod, "TagDetailed.Disabled", MyUtils.GetText("Tips.TagDetailed.Disabled"))
+                tooltips.Add(new(Mod, "TagDetailed.Disabled", GetText("Tips.TagDetailed.Disabled"))
                 {
                     OverrideColor = Color.SkyBlue
                 });
             }
             else
             {
-                tooltips.Add(new(Mod, "TagDetailed.Enabled", MyUtils.GetText("Tips.TagDetailed.Enabled"))
+                tooltips.Add(new(Mod, "TagDetailed.Enabled", GetText("Tips.TagDetailed.Enabled"))
                 {
                     OverrideColor = Color.SkyBlue
                 });
                 // 图标是否被隐藏
-                if (MyUtils.Config.HideNoConsumeBuffs)
+                if (Config.HideNoConsumeBuffs)
                 {
-                    tooltips.Add(new(Mod, "TagDetailed.Hided", MyUtils.GetText("Tips.TagDetailed.Hided"))
+                    tooltips.Add(new(Mod, "TagDetailed.Hided", GetText("Tips.TagDetailed.Hided"))
                     {
                         OverrideColor = Color.LightGreen
                     });
                 }
                 else
                 {
-                    tooltips.Add(new(Mod, "TagDetailed.NonHided", MyUtils.GetText("Tips.TagDetailed.NonHided"))
+                    tooltips.Add(new(Mod, "TagDetailed.NonHided", GetText("Tips.TagDetailed.NonHided"))
                     {
                         OverrideColor = Color.LightGreen
                     });
@@ -81,7 +81,7 @@ namespace ImproveGame.Common.GlobalItems
             {
                 if (dict.Value.Contains(itemType))
                 {
-                    tooltips.Add(new(Mod, $"CombinedBuff.{dict.Key}", MyUtils.GetText("Tips.TagDetailed.CombinedBuff"))
+                    tooltips.Add(new(Mod, $"CombinedBuff.{dict.Key}", GetText("Tips.TagDetailed.CombinedBuff"))
                     {
                         OverrideColor = Color.Turquoise
                     });
@@ -95,7 +95,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             // Shift显示更多信息
             if (!ItemSlot.ShiftInUse)
-                tooltips.Add(new(ImproveGame.Instance, "Tag.ShiftEnable", MyUtils.GetText("Tips.Tag.ShiftEnable"))
+                tooltips.Add(new(ImproveGame.Instance, "Tag.ShiftEnable", GetText("Tips.Tag.ShiftEnable"))
                 {
                     OverrideColor = Color.Orange
                 });
@@ -137,10 +137,10 @@ namespace ImproveGame.Common.GlobalItems
                     // 添加到list里面
                     void AddToList(string key) {
                         if (arg is not null) {
-                            list.Add(new(Mod, key, MyUtils.GetTextWith(key, arg)));
+                            list.Add(new(Mod, key, GetTextWith(key, arg)));
                         }
                         else {
-                            list.Add(new(Mod, key, MyUtils.GetText(key)));
+                            list.Add(new(Mod, key, GetText(key)));
                         }
                     }
                 }
@@ -178,7 +178,7 @@ namespace ImproveGame.Common.GlobalItems
                 lengthY += stringSize.Y;
             }
             if (Main.SettingsEnabled_OpaqueBoxBehindTooltips) {
-                Terraria.Utils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
+                TrUtils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
             }
 
             foreach (TooltipLine line in tagTooltips) {

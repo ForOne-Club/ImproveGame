@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Systems;
-using System.Collections.Generic;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
@@ -53,8 +52,7 @@ namespace ImproveGame.Common.Configs
 
         [Label("$Mods.ImproveGame.Config.AutoReuseWeapon_ExclusionList.Label")]
         [Tooltip("$Mods.ImproveGame.Config.AutoReuseWeapon_ExclusionList.Tooltip")]
-        public List<ItemDefinition> AutoReuseWeapon_ExclusionList =
-            new List<ItemDefinition> { new(218), new(113), new(495) };
+        public List<ItemDefinition> AutoReuseWeaponExclusionList = new() { new(218), new(113), new(495) };
 
         [Label("$Mods.ImproveGame.Config.ImproveToolSpeed.Label")]
         [Tooltip("$Mods.ImproveGame.Config.ImproveToolSpeed.Tooltip")]
@@ -101,7 +99,7 @@ namespace ImproveGame.Common.Configs
         [Label("$Mods.ImproveGame.Config.NoConsume_PotionRequirement.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoConsume_PotionRequirement.Tooltip")]
         [DefaultValue(30)]
-        [Range(30, 999)]
+        [Range(20, 999)]
         public int NoConsume_PotionRequirement;
 
         [Label("$Mods.ImproveGame.Config.NoConsume_Ammo.Label")]
@@ -156,9 +154,10 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool TownNPCGetTFIntoHouse;
 
-        [Label("$Mods.ImproveGame.Config.TownNPCSpawnInNight.Label")]
-        [DefaultValue(false)]
-        public bool TownNPCSpawnInNight;
+        [Label("$Mods.ImproveGame.Config.NPCLiveInEvil.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.NPCLiveInEvil.Tooltip")]
+        [DefaultValue(true)]
+        public bool NPCLiveInEvil;
 
         [Label("$Mods.ImproveGame.Config.TownNPCSpawnSpeed.Label")]
         [Tooltip("$Mods.ImproveGame.Config.TownNPCSpawnSpeed.Tooltip")]
@@ -351,6 +350,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool ShowModName;
 
+        [Label("$Mods.ImproveGame.Config.EmptyAutofisher.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.EmptyAutofisher.Tooltip")]
+        [DefaultValue(true)]
+        public bool EmptyAutofisher;
+
         // 预设
         [Header("$Mods.ImproveGame.Config.Presets.Header")]
 
@@ -378,7 +382,7 @@ namespace ImproveGame.Common.Configs
                 AutoSaveMoney is true &&
                 FasterExtractinator is true &&
                 TownNPCGetTFIntoHouse is false &&
-                TownNPCSpawnInNight is true &&
+                NPCLiveInEvil is true &&
                 TownNPCSpawnSpeed is -1 &&
                 NoCD_FishermanQuest is true &&
                 NPCCoinDropRate is 1 &&
@@ -425,7 +429,7 @@ namespace ImproveGame.Common.Configs
                     AutoSaveMoney = true;
                     FasterExtractinator = true;
                     TownNPCGetTFIntoHouse = false;
-                    TownNPCSpawnInNight = true;
+                    NPCLiveInEvil = true;
                     TownNPCSpawnSpeed = -1;
                     NoCD_FishermanQuest = true;
                     NPCCoinDropRate = 1;
@@ -477,7 +481,7 @@ namespace ImproveGame.Common.Configs
                 AutoSaveMoney is true &&
                 FasterExtractinator is true &&
                 TownNPCGetTFIntoHouse is true &&
-                TownNPCSpawnInNight is true &&
+                NPCLiveInEvil is true &&
                 TownNPCSpawnSpeed is 12 &&
                 NoCD_FishermanQuest is true &&
                 NPCCoinDropRate is 8 &&
@@ -524,7 +528,7 @@ namespace ImproveGame.Common.Configs
                     AutoSaveMoney = true;
                     FasterExtractinator = true;
                     TownNPCGetTFIntoHouse = true;
-                    TownNPCSpawnInNight = true;
+                    NPCLiveInEvil = true;
                     TownNPCSpawnSpeed = 12;
                     NoCD_FishermanQuest = true;
                     NPCCoinDropRate = 8;
@@ -584,7 +588,7 @@ namespace ImproveGame.Common.Configs
                 return NetPasswordSystem.Registered[whoAmI];
             }
 
-            if ((pendingConfig as ImproveConfigs).OnlyHost != OnlyHost)
+            if (((ImproveConfigs)pendingConfig).OnlyHost != OnlyHost)
             {
                 return TryAcceptChanges(whoAmI, ref message);
             }

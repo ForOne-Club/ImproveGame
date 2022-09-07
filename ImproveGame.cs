@@ -1,7 +1,7 @@
 global using ImproveGame.Common.Utils;
-global using ImproveGame.Common.Utils.NetHelpers;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
+global using NetSimplified;
 global using ReLogic.Content;
 global using System;
 global using System.Collections.Generic;
@@ -16,6 +16,7 @@ global using Terraria.Localization;
 global using Terraria.ModLoader;
 global using Terraria.UI;
 global using static ImproveGame.MyUtils;
+global using TrUtils = Terraria.Utils;
 using ImproveGame.Common.Systems;
 
 namespace ImproveGame
@@ -34,7 +35,6 @@ namespace ImproveGame
         {
             // 加载前缀信息
             LoadPrefixInfo();
-            // On和IL移动到了Common.Systems.MinorModifySystem.cs
             Instance = this;
         }
 
@@ -45,7 +45,11 @@ namespace ImproveGame
             GC.Collect();
         }
 
-        public override void HandlePacket(BinaryReader reader, int whoAmI) => NetHelper.HandlePacket(reader, whoAmI);
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            //NetHelper.HandlePacket(reader, whoAmI);
+            NetModule.ReceiveModule(reader, whoAmI);
+        }
 
         public override object Call(params object[] args) => ModIntegrationsSystem.Call(args);
     }

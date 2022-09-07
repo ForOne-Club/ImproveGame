@@ -9,29 +9,29 @@ namespace ImproveGame.Common.Systems
             ILCursor c = new(il);
             c.GotoNext(MoveType.After, i => i.MatchCall<WorldGen>("get_genRand"),
                                        i => i.Match(OpCodes.Ldc_I4_S, (sbyte)10));
-            c.EmitDelegate((int min) => MyUtils.Config.PalmTreeMin);
+            c.EmitDelegate((int min) => Config.PalmTreeMin);
             c.GotoNext(MoveType.After, i => i.Match(OpCodes.Ldc_I4_S, (sbyte)21));
-            c.EmitDelegate((int max) => MyUtils.Config.PalmTreeMax + 1);
+            c.EmitDelegate((int max) => Config.PalmTreeMax + 1);
         }
 
         // 通过简单的IL修改一般树木高度
         private void ModifyMostTrees(ILContext il) {
             ILCursor c = new(il);
             c.GotoNext(MoveType.After, i => i.MatchLdcI4(5));
-            c.EmitDelegate((int min) => MyUtils.Config.MostTreeMin);
+            c.EmitDelegate((int min) => Config.MostTreeMin);
             c.GotoNext(MoveType.After, i => i.MatchLdcI4(17));
-            c.EmitDelegate((int max) => MyUtils.Config.MostTreeMax + 1);
+            c.EmitDelegate((int max) => Config.MostTreeMax + 1);
         }
 
         public override void Load() {
             IL.Terraria.WorldGen.GrowTree += ModifyMostTrees;
             IL.Terraria.WorldGen.GrowPalmTree += ModifyPalmTrees;
             On.Terraria.WorldGen.SetGemTreeDrops += GemAlwaysTweak;
-            SetTreeHeights(MyUtils.Config.GemTreeMin, MyUtils.Config.GemTreeMax, MyUtils.Config.MostTreeMin, MyUtils.Config.MostTreeMax);
+            SetTreeHeights(Config.GemTreeMin, Config.GemTreeMax, Config.MostTreeMin, Config.MostTreeMax);
         }
 
         private void GemAlwaysTweak(On.Terraria.WorldGen.orig_SetGemTreeDrops orig, int gemType, int seedType, Tile tileCache, ref int dropItem, ref int secondaryItem) {
-            if (MyUtils.Config.GemTreeAlwaysDropGem) {
+            if (Config.GemTreeAlwaysDropGem) {
                 dropItem = gemType;
                 secondaryItem = seedType;
             }

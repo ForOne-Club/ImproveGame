@@ -1,8 +1,10 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Packets.NetAutofisher;
+using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
-using ImproveGame.Content.Items.Placeable;
+using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.UIElements;
-using System.Collections.Generic;
+using ImproveGame.Interface.UIElements_Shader;
 using Terraria.DataStructures;
 using Terraria.UI.Chat;
 
@@ -19,7 +21,7 @@ namespace ImproveGame.Interface.GUI
         private Asset<Texture2D> selectPoolOff;
         private Asset<Texture2D> selectPoolOn;
 
-        private UIPanel basePanel;
+        private SUIPanel basePanel;
         private ModItemSlot accessorySlot = new();
         private ModItemSlot fishingPoleSlot = new();
         private ModItemSlot baitSlot = new();
@@ -27,23 +29,21 @@ namespace ImproveGame.Interface.GUI
         private UIText tipText;
         private UIText title;
         private UIImage relocateButton;
-        private UIPanel textPanel;
+        private SUIPanel textPanel;
 
         internal static bool RequireRefresh = false;
 
         internal static List<int> FishingAccessories = new() { ItemID.TackleBox/*, ItemID.HighTestFishingLine*/, ItemID.AnglerEarring, ItemID.AnglerTackleBag, ItemID.LavaFishingHook, ItemID.LavaproofTackleBag };
 
-        public override void OnInitialize() {
+        public override void OnInitialize()
+        {
             panelTop = Main.instance.invBottom + 60;
             panelLeft = 100f;
-            panelHeight = 250f;
-            panelWidth = 270f;
+            panelHeight = 256f;
+            panelWidth = 280f;
 
-            basePanel = new UIPanel();
-            basePanel.Left.Set(panelLeft, 0f);
-            basePanel.Top.Set(panelTop, 0f);
-            basePanel.Width.Set(panelWidth, 0f);
-            basePanel.Height.Set(panelHeight, 0f);
+            basePanel = new(new(29, 34, 70), new(44, 57, 105, 160));
+            basePanel.SetPos(panelLeft, panelTop).SetSize(panelWidth, panelHeight);
             Append(basePanel);
 
             accessorySlot = CreateItemSlot(
@@ -81,7 +81,8 @@ namespace ImproveGame.Interface.GUI
             baitSlot.AllowFavorite = false;
 
             const int slotFirst = 50;
-            for (int i = 0; i < fishSlot.Length; i++) {
+            for (int i = 0; i < fishSlot.Length; i++)
+            {
                 int x = i % 5 * slotFirst;
                 int y = i / 5 * slotFirst + slotFirst;
                 fishSlot[i] = new(i);
@@ -94,7 +95,8 @@ namespace ImproveGame.Interface.GUI
             }
 
             // 头顶大字
-            title = new("Autofisher", 0.5f, large: true) {
+            title = new("Autofisher", 0.5f, large: true)
+            {
                 HAlign = 0.5f
             };
             title.Left.Set(0, 0f);
@@ -102,18 +104,18 @@ namespace ImproveGame.Interface.GUI
             title.Width.Set(panelWidth, 0f);
             title.Height.Set(30, 0f);
             basePanel.Append(title);
-            
-            textPanel = new() {
+
+            textPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), radius: 10, CalculateBorder: false)
+            {
                 HAlign = 0.5f,
                 Top = StyleDimension.FromPixels(200f),
-                Width = StyleDimension.FromPixels(basePanel.Width.Pixels - 16f),
-                Height = StyleDimension.FromPixels(30f),
-                BackgroundColor = new Color(35, 40, 83),
-                BorderColor = new Color(35, 40, 83)
+                Width = StyleDimension.FromPercent(1f),
+                Height = StyleDimension.FromPixels(30f)
             };
             textPanel.SetPadding(0f);
             basePanel.Append(textPanel);
-            tipText = new("Error", 0.8f) {
+            tipText = new("Error", 0.8f)
+            {
                 HAlign = 0.5f,
                 VAlign = 0.5f
             };
@@ -128,126 +130,173 @@ namespace ImproveGame.Interface.GUI
             relocateButton.Height.Set(46f, 0f);
             relocateButton.OnMouseDown += (_, _) => ToggleSelectPool();
             basePanel.Append(relocateButton);
+
+            float filtersX = panelLeft + panelWidth + 10f;
+            float filtersY = panelTop + 8f;
+            var filter = new CatchCratesFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
+            filter = new CatchAccessoriesFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
+            filter = new CatchToolsFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
+            filter = new CatchWhiteRarityCatchesFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
+            filter = new CatchNormalCatchesFilter().SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
         }
 
-        public void ToggleSelectPool() {
+        public void ToggleSelectPool()
+        {
             WandSystem.SelectPoolMode = !WandSystem.SelectPoolMode;
-            if (WandSystem.SelectPoolMode) {
+            if (WandSystem.SelectPoolMode)
+            {
                 title.SetText(GetText("Autofisher.SelectPool"));
                 relocateButton.SetImage(selectPoolOn);
             }
-            else {
+            else
+            {
                 title.SetText(GetText("Autofisher.Title"));
                 relocateButton.SetImage(selectPoolOff);
             }
         }
 
-        private void ChangeAccessorySlot(Item item, bool rightClick) {
+        private void ChangeAccessorySlot(Item item, bool rightClick)
+        {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
 
             autofisher.accessory = item;
-            if (Main.netMode is NetmodeID.MultiplayerClient) {
-                NetAutofish.ClientSendItem(17, item, AutofishPlayer.LocalPlayer.Autofisher);
+            if (Main.netMode is NetmodeID.MultiplayerClient)
+            {
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, 17).Send(runLocally: false);
             }
         }
 
-        private void ChangeFishingPoleSlot(Item item, bool rightClick) {
+        private void ChangeFishingPoleSlot(Item item, bool rightClick)
+        {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
 
             autofisher.fishingPole = item;
-            if (Main.netMode is NetmodeID.MultiplayerClient) {
-                NetAutofish.ClientSendItem(15, item, AutofishPlayer.LocalPlayer.Autofisher);
+            if (Main.netMode is NetmodeID.MultiplayerClient)
+            {
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, 15).Send(runLocally: false);
             }
         }
 
-        private void ChangeBaitSlot(Item item, bool rightClick) {
+        private void ChangeBaitSlot(Item item, bool rightClick)
+        {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
 
             autofisher.bait = item;
-            if (Main.netMode is NetmodeID.MultiplayerClient && !rightClick) {
-                NetAutofish.ClientSendItem(16, item, AutofishPlayer.LocalPlayer.Autofisher);
-            }
-        } 
-
-        private void ChangeBaitSlotStack(Item item, int stackChange, bool typeChange) {
-            var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
-            if (autofisher is null)
-                return;
-            if (!typeChange && stackChange != 0) {
-                NetAutofish.SendStackChange(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange);
+            if (Main.netMode is NetmodeID.MultiplayerClient && !rightClick)
+            {
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, 16).Send(runLocally: false);
             }
         }
 
-        private void ChangeFishSlot(Item item, int i, bool rightClick) {
+        private void ChangeBaitSlotStack(Item item, int stackChange, bool typeChange)
+        {
+            var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
+            if (autofisher is null)
+                return;
+            if (!typeChange && stackChange != 0)
+            {
+                ItemsStackChangePacket.Get(AutofishPlayer.LocalPlayer.Autofisher, 16, stackChange).Send(runLocally: false);
+            }
+        }
+
+        private void ChangeFishSlot(Item item, int i, bool rightClick)
+        {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
 
             autofisher.fish[i] = item;
-            if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick) {
-                NetAutofish.ClientSendItem((byte)i, item, AutofishPlayer.LocalPlayer.Autofisher);
+            if (Main.netMode == NetmodeID.MultiplayerClient && !rightClick)
+            {
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, (byte)i).Send(runLocally: false);
             }
         }
 
-        private void ChangeFishSlotStack(Item item, int i, int stackChange, bool typeChange) {
+        private void ChangeFishSlotStack(Item item, int i, int stackChange, bool typeChange)
+        {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
             if (autofisher is null)
                 return;
-            if (Main.netMode is NetmodeID.MultiplayerClient && !typeChange && stackChange != 0) {
-                NetAutofish.SendStackChange(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange);
+            if (Main.netMode is NetmodeID.MultiplayerClient && !typeChange && stackChange != 0)
+            {
+                ItemsStackChangePacket.Get(AutofishPlayer.LocalPlayer.Autofisher, (byte)i, stackChange).Send(runLocally: false);
             }
         }
 
-        public void RefreshItems(byte slotType = 18) {
-            if (Main.netMode is NetmodeID.MultiplayerClient) {
-                if (RequireRefresh) {
+        public void RefreshItems(byte slotType = 18)
+        {
+            if (Main.netMode is NetmodeID.MultiplayerClient)
+            {
+                if (RequireRefresh)
+                {
                     SyncFromTileEntity();
                     RequireRefresh = false;
                 }
-                else {
-                    NetAutofish.ClientSendSyncItem(AutofishPlayer.LocalPlayer.Autofisher, slotType);
+                else
+                {
+                    RequestItemPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, slotType).Send(runLocally: false);
                 }
             }
-            else {
+            else
+            {
                 SyncFromTileEntity();
             }
         }
 
-        private void SyncFromTileEntity() {
+        private void SyncFromTileEntity()
+        {
             var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
-            if (autofisher is not null) {
+            if (autofisher is not null)
+            {
                 fishingPoleSlot.Item = autofisher.fishingPole;
                 baitSlot.Item = autofisher.bait;
                 accessorySlot.Item = autofisher.accessory;
-                for (int i = 0; i < 15; i++) {
+                for (int i = 0; i < 15; i++)
+                {
                     fishSlot[i].Item = autofisher.fish[i];
                 }
             }
         }
 
-        public override void Update(GameTime gameTime) {
+        public override void Update(GameTime gameTime)
+        {
             base.Update(gameTime);
 
-            if (!Main.playerInventory) {
+            if (!Main.playerInventory)
+            {
                 Close();
                 return;
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch) {
+        public override void Draw(SpriteBatch spriteBatch)
+        {
             Player player = Main.LocalPlayer;
 
-            if (AutofishPlayer.LocalPlayer.TryGetAutofisher(out var autofisher)) {
-                if (baitSlot.Item.type == ItemID.TruffleWorm) {
+            if (AutofishPlayer.LocalPlayer.TryGetAutofisher(out var autofisher))
+            {
+                if (baitSlot.Item.type == ItemID.TruffleWorm)
+                {
                     autofisher.SetFishingTip(Language.GetTextValue("GameUI.FishingWarning"));
                 }
-                if (baitSlot.Item.IsAir || fishingPoleSlot.Item.IsAir || autofisher.FishingTip == "Error") {
+                if (baitSlot.Item.IsAir || fishingPoleSlot.Item.IsAir || autofisher.FishingTip == "Error")
+                {
                     autofisher.SetFishingTip(GetText("Autofisher.Unavailable"));
                 }
 
@@ -255,7 +304,8 @@ namespace ImproveGame.Interface.GUI
 
                 base.Draw(spriteBatch);
 
-                if (basePanel.ContainsPoint(Main.MouseScreen)) {
+                if (basePanel.ContainsPoint(Main.MouseScreen))
+                {
                     player.mouseInterface = true;
                 }
             }
@@ -266,7 +316,7 @@ namespace ImproveGame.Interface.GUI
                 var dimension = basePanel.GetDimensions();
                 var position = dimension.Position() + new Vector2(dimension.Width + 20f, 0f);
 
-                var tooltip = Lang.GetTooltip(ModContent.ItemType<Autofisher>());
+                var tooltip = Lang.GetTooltip(ModContent.ItemType<Content.Items.Placeable.Autofisher>());
                 int lines = tooltip.Lines;
                 var font = FontAssets.MouseText.Value;
                 int widthOffset = 14;
@@ -296,7 +346,8 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 打开GUI界面
         /// </summary>
-        public void Open(Point16 point) {
+        public void Open(Point16 point)
+        {
             WandSystem.SelectPoolMode = false;
             Main.playerInventory = true;
             Visible = true;
@@ -309,13 +360,160 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 关闭GUI界面
         /// </summary>
-        public void Close() {
+        public void Close()
+        {
             relocateButton.SetImage(selectPoolOff);
             WandSystem.SelectPoolMode = false;
             AutofishPlayer.LocalPlayer.SetAutofisher(Point16.NegativeOne);
             Visible = false;
             Main.blockInput = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
+        }
+    }
+
+    internal class CatchCratesFilter : AutofisherFilterButton
+    {
+        internal CatchCratesFilter() : base(ItemID.WoodenCrate) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchCrates;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchCrates, 0).Send(runLocally: true);
+        }
+    }
+
+    internal class CatchAccessoriesFilter : AutofisherFilterButton
+    {
+        internal CatchAccessoriesFilter() : base(ItemID.FrogLeg) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchAccessories;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchAccessories, 1).Send(runLocally: true);
+        }
+    }
+
+    internal class CatchToolsFilter : AutofisherFilterButton
+    {
+        internal CatchToolsFilter() : base(ItemID.CrystalSerpent) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchTools;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchTools, 2).Send(runLocally: true);
+        }
+    }
+
+    internal class CatchWhiteRarityCatchesFilter : AutofisherFilterButton
+    {
+        internal CatchWhiteRarityCatchesFilter() : base(ItemID.Bass) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchWhiteRarityCatches;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchWhiteRarityCatches, 3).Send(runLocally: true);
+        }
+    }
+
+    internal class CatchNormalCatchesFilter : AutofisherFilterButton
+    {
+        internal CatchNormalCatchesFilter() : base(ItemID.GoldenCarp) { }
+
+        internal override bool IsActivated(TEAutofisher autofisher) => autofisher.CatchNormalCatches;
+
+        internal override void Clicked(TEAutofisher autofisher)
+        {
+            FishFiltersPacket.Get(autofisher.Position, !autofisher.CatchNormalCatches, 4).Send(runLocally: true);
+        }
+    }
+
+    internal abstract class AutofisherFilterButton : UIElement
+    {
+        internal int ItemType;
+        private AnimationTimer _timer; // 这是一个计时器哦~
+
+        internal virtual bool IsActivated(TEAutofisher autofisher) => true;
+
+        internal virtual void Clicked(TEAutofisher autofisher) { }
+
+        internal AutofisherFilterButton(int itemType)
+        {
+            ItemType = itemType;
+            _timer = new(TimerMax: 90f)
+            {
+                State = AnimationState.Close
+            };
+            Main.instance.LoadItem(itemType);
+            this.SetSize(TextureAssets.Item[itemType].Size());
+        }
+
+        public override void MouseDown(UIMouseEvent evt)
+        {
+            if (!AutofishPlayer.LocalPlayer.TryGetAutofisher(out var autofisher))
+                return;
+            Clicked(autofisher);
+            SoundEngine.PlaySound(SoundID.MenuTick);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            _timer.Update();
+        }
+
+        protected override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            CalculatedStyle dimensions = GetDimensions();
+            var tex = TextureAssets.Item[ItemType];
+            if (IsMouseHovering)
+            {
+                if (!_timer.AnyOpen)
+                {
+                    _timer.Open();
+                }
+
+                Main.LocalPlayer.mouseInterface = true;
+
+                Main.instance.MouseText(GetText($"Autofisher.{GetType().Name}"));
+
+            }
+            else if (!_timer.AnyClose)
+            {
+                _timer.Close();
+            }
+
+            if (_timer.Timer > 10)
+            {
+                Main.spriteBatch.End(); // End后Begin来使用shader绘制描边
+                Main.spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+
+                Main.pixelShader.CurrentTechnique.Passes["ColorOnly"].Apply(); // 全白Shader
+                for (int k = -1; k <= 1; k++)
+                {
+                    for (int l = -1; l <= 1; l++)
+                    {
+                        if (Math.Abs(k) + Math.Abs(l) == 1)
+                        {
+                            var offset = new Vector2(k * 2f, l * 2f) * _timer.Schedule;
+                            spriteBatch.Draw(tex.Value, dimensions.Position() + offset, Main.OurFavoriteColor);
+                        }
+                    }
+                }
+
+                Main.spriteBatch.End(); // End之后Begin恢复原状
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.SamplerStateForCursor, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
+            }
+
+            if (!AutofishPlayer.LocalPlayer.TryGetAutofisher(out var autofisher))
+                return;
+
+            var color = Color.White;
+            if (!IsActivated(autofisher))
+                color = color.MultiplyRGB(Color.White * 0.4f);
+            spriteBatch.Draw(tex.Value, dimensions.Position(), color);
         }
     }
 }

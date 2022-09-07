@@ -156,7 +156,7 @@
                 Tooltip: 
                     '''
                     只有堆叠数大于或等于此值的药剂才可无限获得增益
-                    调节范围为 30-999
+                    调节范围为 20-999
                     '''
             }
             NoConsume_Ammo:
@@ -225,9 +225,14 @@
                     若有空房子会直接入住，不需要寻找，一旦入住即视为已被找到状态
                     在图鉴中被解锁的城镇NPC将会无视入住条件，只要有房子即可入住
                     （注意：你需要与城镇NPC至少对话一次来解锁图鉴）
+                    城镇NPC可在夜晚入住
                     '''
             }
-            TownNPCSpawnInNight.Label: "[i:MusicBoxTownNight] 允许城镇NPC夜晚入住"
+            NPCLiveInEvil:
+            {
+                Label: "[i:MusicBoxTownNight] 城镇NPC可住在邪恶环境"
+                Tooltip: "城镇NPC可以住在腐化与血腥环境内"
+            }
             TownNPCSpawnSpeed:
             {
                 Label: "[i:4910] 城镇NPC刷新速度"
@@ -433,6 +438,16 @@
                     '''
             }
             ShowModName.Label: "[i:ImproveGame/SpaceWand] 显示物品所属模组"
+            EmptyAutofisher:
+            {
+                Label: "[i:ImproveGame/Autofisher] 钓鱼机鱼饵用光提示"
+                Tooltip:
+                    '''
+                    开启后，若存储于钓鱼机的鱼饵用光，会在聊天栏显示一行信息:
+                    “位于 [水平位置, 深度] 的自动钓鱼机已用光鱼饵”
+                    '''
+                Tip: "位于 [c/15d36a:{Compass}, {Depth}] 的自动钓鱼机已用光鱼饵"
+            }
 
             OtherFunctions:
             {
@@ -461,6 +476,7 @@
             BannerChest: 旗帜盒
             Autofisher: 自动钓鱼机
             PaintWand: 漆涂法杖
+            ConstructWand: 构造法杖
         }
         ItemTooltip:
         {
@@ -539,19 +555,19 @@
                 '''
             Autofisher:
                 '''
-                自动钓鱼
                 右键点击放置的自动钓鱼机，即可打开钓鱼面板
                 点击第一行右侧的 "+" 以选择钓鱼水域
-                放入鱼竿与诱饵即可自动钓鱼，钓鱼判定与手动钓鱼一致
+                放入钓竿与鱼饵即可自动钓鱼，钓鱼判定与手动钓鱼一致
                 你可以放入饰品，以提升其渔力，或获得熔岩钓鱼的能力
-                初始钓鱼速度为手动钓鱼的 10%，你可以通过以下方式提升钓鱼速度:
+                初始钓鱼速度为手动钓鱼的 20%，你可以通过以下方式提升钓鱼速度:
                 - 存储的 [i:Bass] 将以 20:1 的比例转化为钓鱼速度加成，最高可达 500% 加成 ([i/s100:Bass])
                 - 配饰为 [i:AnglerEarring] 可使钓鱼速度*200%
                 - 配饰为 [i:AnglerTackleBag] 可使钓鱼速度*300%
                 - 配饰为 [i:LavaproofTackleBag] 可使钓鱼速度*500%
                 [c/AAAAAA:由于钓鱼机不用鱼线，你不能在配饰槽中放入] [i:HighTestFishingLine]
-                [c/AAAAAA:饰品栏不支持放入非原版钓鱼饰品]
+                [c/AAAAAA:饰品栏不支持放入模组钓鱼饰品]
                 环境判定机制与玩家判定大致相同，需使钓鱼机处于相应环境内，支持模组环境
+                设置过滤器选项后，钓鱼机只会钓上满足相应调节的渔获。同时满足多个条件时优先级由上至下
                 '''
             PaintWand:
                 '''
@@ -559,6 +575,17 @@
                 选取一个范围给物块/墙上漆，或去除他们的漆
                 去漆功能对清除物块上的苔藓也有效，如同[i:PaintScraper]
                 堆叠超过999的漆不会消耗
+                '''
+            ConstructWand:
+                '''
+                [c/0099ff:<right>以打开结构面板]
+                具有自由放置结构的能力
+                记录模式 - 允许框选并将一定范围内的结构存为文件
+                放置模式 - 在材料充足的情况下一键放置结构
+                不会记录/放置液体
+                电线不会在预览中显示，但会被记录并放置
+                点击结构面板右上角按钮“功能介绍”以了解更多信息
+                [c/AAAAAA:尚处于测试阶段，发生问题请在Steam创意工坊页面评论]
                 '''
         }
 		MapObject:
@@ -587,7 +614,7 @@
             PrefixCount: "物品重铸次数："
             AnglerQuest: "已刷新钓鱼任务！"
             FromMod: "所属模组 {DisplayName}"
-            LootDisplay: "按下 [{KeybindName}] 以查看摸彩袋物品明细"
+            LootDisplay: "按下 {KeybindName} 以查看摸彩袋物品明细"
             LootDisplayBindless: "(您尚未绑定快捷键，请到控件处绑定以使用此功能)"
             Refreshing: "刷新中"
             Refresh: "刷新商店"
@@ -678,6 +705,86 @@
                 }
             }
         }
+        ConstructGUI:
+        {
+            Structure: "建筑结构" # 这个是存储后的文件名
+            SavedAs: "结构已存储为文件 "
+            SaveMode: "存储模式"
+            LoadMode: "放置模式"
+            ExplodeAndPlace: "爆破并放置"
+            PlaceOnly: "仅放置"
+            Path: "文件路径: "
+            RenameTip:
+            {
+                Exists: "已经存在一个相同名称的文件"
+                TooLong: "名称不能超过40个字符"
+                Illegal: "文件名不能包含以下字符: \\、/、:、*、?、\"、<、>、|"
+            }
+            FileInfo:
+            {
+                Title: "文件信息"
+                Name: "文件名: {Name}"
+                Time: "保存时间: {Time}"
+                Version: "版本号: {Version}"
+                Size: "结构尺寸: {Size}"
+            }
+            MaterialInfo:
+            {
+                Title: "材料明细"
+                Stored: "已有: {Stack}"
+                Requirement: "需求: {Stack}"
+            }
+            Preview:
+            {
+                Title: "结构预览"
+                CenterSet: "点击以将其设置为放置中心点"
+            }
+            Tutorial:
+            {
+                Button: "功能介绍"
+                Save.Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
+                Save.Text:
+                    '''
+                    面板上方左侧的第三个按钮可以切换模式为放置或存储
+
+                    在存储模式下，你可以左键使用构造法杖以框选结构，并将结构以文件形式存储到你的电脑上。以便在不同的世界以及服务器中放置结构。
+                    
+                    下图展示了如何框选并保存结构:
+                    '''
+                Place.Title: "{$Mods.ImproveGame.ConstructGUI.LoadMode}"
+                Place.Text:
+                    '''
+                    在放置模式下，你需要在主界面选择一个结构，如果结构名称显示为黄色，则表明当前选择了此结构。
+                    
+                    如果在你的物品栏与大背包内有足够的材料，左键使用即可将结构放置到世界上，否则结构可能会残缺一部分。
+                    某些物块的朝向可能会出现问题，属于正常现象
+                    
+                    此处是一个放置结构的例子:
+                    '''
+                Explode.Title: "爆破模式"
+                Explode.Text:
+                    '''
+                    如果你选择了“爆破并放置”，那么在放置结构前，相应区域的物块将会被爆破，以给结构腾出足够的空间。
+                    '''
+                Panel.Title: "结构列表"
+                Panel.Text:
+                    '''
+                    在UI主界面显示了当前存储于你的电脑上的结构列表，每个结构单元包含了文件名称、路径信息。
+                    
+                    点击右方的“{$tModLoader.ModsMoreInfo}”按钮即可查看材料明细与结构预览，同时可以在预览界面选择结构放置时的中心点。
+                    '''
+                Materials.Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
+                Materials.Text:
+                    '''
+                    在材料明细区域中可以查看各种材料的需求量以及当前存储于你的物品栏和大背包的数量，以便你准备相应的材料
+                    '''
+                Preview.Title: "{$Mods.ImproveGame.ConstructGUI.Preview.Title}"
+                Preview.Text:
+                    '''
+                    结构预览区域可供查看结构，并调节结构的放置中心点，即放置结构时鼠标指针所指向的物块。黄框标示的物块即为放置中心点
+                    '''
+            }
+        }
         SuperVault:
         {
             Name: 大背包
@@ -692,6 +799,11 @@
             SelectPool: "请选择鱼池"
             CarefulNextTime: "下次注意点！" # 这个是钓鱼机不小心把猪鲨钓上来了
             Unavailable: "暂无钓鱼信息"
+            CatchCratesFilter: "钓宝匣"
+            CatchAccessoriesFilter: "钓配饰"
+            CatchToolsFilter: "钓工具与武器"
+            CatchWhiteRarityCatchesFilter: "钓白色稀有度渔获"
+            CatchNormalCatchesFilter: "钓高于白色稀有度渔获"
         }
         BuffTracker:
         {
@@ -756,9 +868,10 @@
         }
         Common:
         {
+            Loading: "加载中..."
+            Refresh: "刷新"
             Switch: "切换"
             Unavailable: "不可用"
-            KeybindNone: "未绑定"
         }
         RecipeGroup:
         {

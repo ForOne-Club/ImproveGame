@@ -1,4 +1,6 @@
-﻿using Terraria.GameContent.UI.Chat;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.UIElements_Shader;
+using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.UIElements
@@ -8,6 +10,9 @@ namespace ImproveGame.Interface.UIElements
     /// </summary>
     public class ModItemSlot : UIElement
     {
+        private readonly Color BorderColor = new(18, 18, 38, 200);
+        private readonly Color Background = new(63, 65, 151, 200);
+
         /// <summary>
         /// 无物品时显示的贴图
         /// </summary>
@@ -19,6 +24,10 @@ namespace ImproveGame.Interface.UIElements
         public Item Item;
         public float Scale = 1f;
 
+        /// <summary>
+        /// 是否使用基于Shader的圆润边框
+        /// </summary>
+        public bool RoundBorder = true;
         /// <summary>
         /// 是否可交互，否则不能执行左右键操作
         /// </summary>
@@ -39,6 +48,7 @@ namespace ImproveGame.Interface.UIElements
         /// <param name="emptyTexturePath">当槽内无物品时，显示的贴图</param>
         /// <param name="emptyText">当槽内无物品时，悬停显示的文本</param>
         public ModItemSlot(float scale = 0.85f, string emptyTexturePath = null, Func<string> emptyText = null) {
+            this.SetSize(new(52f, 52f));
             Item = new Item();
             Item.SetDefaults();
             Scale = scale;
@@ -121,15 +131,24 @@ namespace ImproveGame.Interface.UIElements
             }
 
             Vector2 origin = GetDimensions().Position();
+
+            if (RoundBorder)
+            {
+                PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, BorderColor, Background);
+            }
+
             // 这里设置inventoryScale原版也是这么干的
             float oldScale = Main.inventoryScale;
             Main.inventoryScale = Scale;
 
             // 假装自己是一个物品栏物品拿去绘制
             var temp = new Item[11];
-            int context = ItemSlot.Context.InventoryItem;
+            // 如果用圆润边框，就假装为ChatItem，不会绘制原版边框
+            int context = RoundBorder ? ItemSlot.Context.ChatItem : ItemSlot.Context.InventoryItem;
             temp[10] = Item;
             ItemSlot.Draw(Main.spriteBatch, temp, context, 10, origin);
+
+            Main.inventoryScale = oldScale;
 
             // 空物品的话显示空贴图
             if (Item.IsAir) {
@@ -138,11 +157,9 @@ namespace ImproveGame.Interface.UIElements
                 }
                 if (_emptyTexture is not null) {
                     origin = _emptyTexture.Size() / 2f;
-                    Main.spriteBatch.Draw(_emptyTexture.Value, GetDimensions().Center(), null, Color.White * emptyTextureOpacity, 0f, origin, emptyTextureScale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(_emptyTexture.Value, GetDimensions().Center(), null, Color.White * emptyTextureOpacity, 0f, origin, emptyTextureScale, SpriteEffects.None, 0f);
                 }
             }
-
-            Main.inventoryScale = oldScale;
         }
 
         /// <summary>
@@ -194,7 +211,7 @@ namespace ImproveGame.Interface.UIElements
 
             // 常规单点
             if (placeItem is not null && CanPlaceItem(placeItem)) {
-                byte placeMode = MyUtils.CanPlaceInSlot(Item, placeItem);
+                byte placeMode = CanPlaceInSlot(Item, placeItem);
 
                 // type不同直接切换吧
                 if (placeMode == 1) {

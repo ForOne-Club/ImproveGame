@@ -2,7 +2,6 @@
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using System.Collections.Generic;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 
@@ -30,7 +29,7 @@ namespace ImproveGame.Content.Items
         public override Color ModifyColor(bool cancelled)
         {
             if (cancelled)
-                return base.ModifyColor(cancelled);
+                return base.ModifyColor(true);
             return WandSystem.LiquidMode switch
             {
                 LiquidID.Lava => new(253, 32, 3),
@@ -78,11 +77,11 @@ namespace ImproveGame.Content.Items
         }
 
         [CloneByReference]
-        internal float Water = 0f;
+        internal float Water;
         [CloneByReference]
-        internal float Lava = 0f;
+        internal float Lava;
         [CloneByReference]
-        internal float Honey = 0f;
+        internal float Honey;
 
         public override void SaveData(TagCompound tag)
         {
@@ -117,7 +116,7 @@ namespace ImproveGame.Content.Items
         public override void SetItemDefaults()
         {
             Item.rare = ItemRarityID.Lime;
-            Item.value = Item.sellPrice(0, 1, 0, 0);
+            Item.value = Item.sellPrice(0, 1);
             Item.mana = 20;
 
             SelectRange = new(15, 10);
@@ -125,13 +124,13 @@ namespace ImproveGame.Content.Items
 
         public override bool StartUseItem(Player player)
         {
-            if (player.altFunctionUse == 0)
+            switch (player.altFunctionUse)
             {
-                MyUtils.ItemRotation(player);
-            }
-            else if (player.altFunctionUse == 2)
-            {
-                return false;
+                case 0:
+                    ItemRotation(player);
+                    break;
+                case 2:
+                    return false;
             }
 
             return base.StartUseItem(player);
@@ -139,22 +138,24 @@ namespace ImproveGame.Content.Items
 
         public override void HoldItem(Player player)
         {
-            if (!Main.dedServ && Main.myPlayer == player.whoAmI)
+            if (Main.dedServ || Main.myPlayer != player.whoAmI)
             {
-                UISystem.Instance.LiquidWandGUI.CurrentSlot = player.selectedItem;
-                // 还在用物品的时候不能打开UI
-                if (player.mouseInterface || player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1)
-                {
-                    return;
-                }
-                if (!LiquidWandGUI.Visible)
-                {
-                    UISystem.Instance.LiquidWandGUI.Open();
-                }
-                else
-                {
-                    UISystem.Instance.LiquidWandGUI.Close();
-                }
+                return;
+            }
+
+            UISystem.Instance.LiquidWandGUI.CurrentSlot = player.selectedItem;
+            // 还在用物品的时候不能打开UI
+            if (player.mouseInterface || player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1)
+            {
+                return;
+            }
+            if (!LiquidWandGUI.Visible)
+            {
+                UISystem.Instance.LiquidWandGUI.Open();
+            }
+            else
+            {
+                UISystem.Instance.LiquidWandGUI.Close();
             }
         }
 
@@ -165,7 +166,7 @@ namespace ImproveGame.Content.Items
             if (context == ItemSlot.Context.InventoryItem)
             {
                 ItemInInventory = true;
-                if (Main.mouseMiddle && Main.mouseMiddleRelease)
+                if (PlayerInput.Triggers.JustPressed.MouseMiddle)
                 {
                     if (!LiquidWandGUI.Visible)
                     {
@@ -185,10 +186,10 @@ namespace ImproveGame.Content.Items
             // 决定文本显示的是“开启”还是“关闭”
             if (ItemInInventory)
             {
-                string tooltip = MyUtils.GetText("Tips.LiquidWandOn");
+                string tooltip = GetText("Tips.LiquidWandOn");
                 if (LiquidWandGUI.Visible)
                 {
-                    tooltip = MyUtils.GetText("Tips.LiquidWandOff");
+                    tooltip = GetText("Tips.LiquidWandOff");
                 }
 
                 tooltips.Add(new(Mod, "LiquidWand", tooltip) { OverrideColor = Color.LightGreen });

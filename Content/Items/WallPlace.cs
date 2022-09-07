@@ -75,7 +75,7 @@ namespace ImproveGame.Content.Items
                         proj.type == ModContent.ProjectileType<Projectiles.PlaceWall>())
                     {
                         proj.Kill();
-                        CombatText.NewText(proj.getRect(), new Color(225, 0, 0), MyUtils.GetText("CombatText_Item.WallPlace_Kill"));
+                        CombatText.NewText(proj.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.WallPlace_Kill"));
                         return true;
                     }
                 }
@@ -84,14 +84,14 @@ namespace ImproveGame.Content.Items
                 SearchWall(point, ref Walls, ref Walls2);
                 if (Walls.Count > 1000 || (Walls.Count == 0 && Walls2.Count > 2000))
                 {
-                    CombatText.NewText(player.getRect(), new Color(225, 0, 0), MyUtils.GetText("CombatText_Item.WallPlace_Limit"));
+                    CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.WallPlace_Limit"));
                     return true;
                 }
                 else if (Walls.Count > 0)
                 {
-                    if (MyUtils.GetFirstWall(player) is not null)
+                    if (GetFirstWall(player) is not null)
                     {
-                        CombatText.NewText(player.getRect(), new Color(0, 155, 255), MyUtils.GetText("CombatText_Item.WallPlace_Consume") + Walls.Count);
+                        CombatText.NewText(player.getRect(), new Color(0, 155, 255), GetText("CombatText_Item.WallPlace_Consume") + Walls.Count);
                         Projectile proj = Projectile.NewProjectileDirect(null, Main.MouseWorld, Vector2.Zero,
                             ModContent.ProjectileType<Projectiles.PlaceWall>(), 0, 0, player.whoAmI);
                         ((Projectiles.PlaceWall)proj.ModProjectile).Walls = Walls;

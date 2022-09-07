@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.Packets;
 using ImproveGame.Common.Players;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -79,9 +80,7 @@ namespace ImproveGame
             player.itemRotation = MathF.Atan2(rotaion.Y * player.direction, rotaion.X * player.direction);
             if (shouldSync && Main.netMode != NetmodeID.SinglePlayer && player.whoAmI == Main.myPlayer)
             {
-                //NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, player.whoAmI);
-                //NetMessage.SendData(MessageID.ItemAnimation, -1, -1, null, player.whoAmI);
-                NetGeneric.ClientSendPlrItemUsing(player);
+                ItemUsePacket.Get(player);
             }
         }
 
@@ -116,22 +115,24 @@ namespace ImproveGame
         {
             if (Main.dedServ || keybind == null)
             {
-                bindName = "";
+                bindName = "ERROR";
                 return false;
             }
             List<string> keys = keybind.GetAssignedKeys(InputMode.Keyboard);
             if (keys.Count == 0)
             {
-                bindName = GetText("Common.KeybindNone");
+                bindName = Language.GetTextValue("LegacyMenu.195"); // <未绑定>
                 return false;
             }
-            StringBuilder sb = new(16);
-            sb.Append(keys[0]);
-            for (int i = 1; i < keys.Count; i++)
-            {
-                sb.Append(" / ").Append(keys[i]);
-            }
-            bindName = sb.ToString();
+            var keybindListItem = new UIKeybindingListItem(keys[0], InputMode.Keyboard, Color.White);
+            bindName = keybindListItem.GetType().GetMethod("GenInput", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(keybindListItem, new object[] { keys }) as string;
+            //StringBuilder sb = new(16);
+            //sb.Append(keys[0]);
+            //for (int i = 1; i < keys.Count; i++)
+            //{
+            //    sb.Append(" / ").Append(keys[i]);
+            //}
+            //bindName = sb.ToString();
             return true;
         }
 
@@ -161,9 +162,15 @@ namespace ImproveGame
 
         public static void DrawBorderRect(Rectangle tileRectangle, Color backgroundColor, Color borderColor)
         {
+            var position = tileRectangle.TopLeft() * 16f - Main.screenPosition;
+            DrawBorder(position, tileRectangle.Width * 16, tileRectangle.Height * 16, backgroundColor, borderColor);
+        }
+
+        public static void DrawBorderRectangle(Rectangle tileRectangleInScreen, Color backgroundColor, Color borderColor)
+        {
             Texture2D texture = TextureAssets.MagicPixel.Value;
-            Vector2 position = tileRectangle.TopLeft() * 16f - Main.screenPosition;
-            Vector2 scale = new(tileRectangle.Width, tileRectangle.Height);
+            Vector2 position = tileRectangleInScreen.TopLeft() * 16f;
+            Vector2 scale = new(tileRectangleInScreen.Width, tileRectangleInScreen.Height);
             Main.spriteBatch.Draw(
                     texture,
                     position,
@@ -195,6 +202,43 @@ namespace ImproveGame
                 new(0, 0, 1, 1),
                 borderColor, 0f, Zero,
                 new Vector2(16f * scale.X, 2f), SpriteEffects.None, 0f);
+        }
+
+        public static void DrawBorder(Vector2 position, float width, float height, Color backgroundColor, Color borderColor)
+        {
+            Texture2D texture = TextureAssets.MagicPixel.Value;
+            Vector2 scale = new(width, height);
+            Main.spriteBatch.Draw(
+                    texture,
+                    position,
+                    new(0, 0, 1, 1),
+                    backgroundColor,
+                    0f,
+                    Zero,
+                    scale,
+                    SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(
+                texture,
+                position + UnitX * -2f + UnitY * -2f,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(2f, scale.Y + 4),
+                SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture,
+                position + UnitX * scale.X + UnitY * -2f,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(2f, scale.Y + 4), SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture,
+                position + UnitY * -2f,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(scale.X, 2f), SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture,
+                position + UnitY * scale.Y,
+                new(0, 0, 1, 1),
+                borderColor, 0f, Zero,
+                new Vector2(scale.X, 2f), SpriteEffects.None, 0f);
         }
 
         /// <summary>
@@ -425,22 +469,27 @@ namespace ImproveGame
         /// </summary>
         /// <param name="player">玩家实例</param>
         /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
+        /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
+        /// <param name="ignorePortable">是否不获取便携储存的物品</param>
+        /// <param name="ignoreBigBag">是否不获取大背包的物品</param>
         /// <returns>包含全部物品数组的List</returns>
-        public static List<Item[]> GetAllInventoryItems(Player player, bool ignoreInventory)
+        public static List<Item[]> GetAllInventoryItems(Player player, bool ignoreInventory, bool ignorePortable = false, bool ignoreBigBag = false)
         {
-            List<Item[]> items = new() {
-                player.bank.item,
-                player.bank2.item,
-                player.bank3.item,
-                player.bank4.item,
-            };
+            List<Item[]> items = new();
             if (!ignoreInventory)
             {
-                items.Insert(0, player.inventory);
-                if (Main.netMode != NetmodeID.Server)
-                    items.Insert(0, new Item[] { Main.mouseItem });
+                items.Add(player.inventory);
             }
-            if (Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer))
+            if (!ignorePortable)
+            {
+                items.AddRange(new List<Item[]>() {
+                    player.bank.item,
+                    player.bank2.item,
+                    player.bank3.item,
+                    player.bank4.item,
+                });
+            }
+            if (!ignoreBigBag && Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer))
             {
                 items.Add(modPlayer.SuperVault);
             }
@@ -452,11 +501,13 @@ namespace ImproveGame
         /// </summary>
         /// <param name="player">玩家实例</param>
         /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
+        /// <param name="ignorePortable">是否不获取便携储存的物品</param>
+        /// <param name="ignoreBigBag">是否不获取大背包的物品</param>
         /// <returns>包含全部物品的List</returns>
-        public static List<Item> GetAllInventoryItemsList(Player player, bool ignoreInventory)
+        public static List<Item> GetAllInventoryItemsList(Player player, bool ignoreInventory = false, bool ignorePortable = false, bool ignoreBigBag = false)
         {
             var item = new List<Item>();
-            var items = GetAllInventoryItems(player, ignoreInventory);
+            var items = GetAllInventoryItems(player, ignoreInventory, ignorePortable, ignoreBigBag);
             foreach (var itemArray in items)
             {
                 for (int i = 0; i < itemArray.Length; i++)
@@ -769,6 +820,27 @@ namespace ImproveGame
         }
 
         /// <summary>
+        /// 从物品数组里找到对应物品，返回值为在数组中的索引
+        /// </summary>
+        /// <returns>物品实例</returns>
+        public static Item PickItemFromArray(Player player, Item[] itemArray, Func<Item, bool> shouldPick, bool tryConsume)
+        {
+            for (int i = 0; i < itemArray.Length; i++)
+            {
+                ref Item item = ref itemArray[i];
+                if (!item.IsAir && shouldPick.Invoke(item))
+                {
+                    if (tryConsume)
+                    {
+                        TryConsumeItem(ref item, player);
+                    }
+                    return item;
+                }
+            }
+            return new();
+        }
+
+        /// <summary>
         /// 尝试消耗某个物品
         /// </summary>
         /// <param name="item">物品实例</param>
@@ -816,5 +888,19 @@ namespace ImproveGame
         /// <param name="mouseItem">手持物品</param>
         /// <returns>一般判断返回值</returns>
         public static bool SlotPlace(Item slotItem, Item mouseItem) => slotItem.type == mouseItem.type || mouseItem.IsAir;
+
+        /// <summary>
+        /// 将未缩放的屏幕坐标转换为缩放后的屏幕坐标
+        /// </summary>
+        /// <param name="originalPosition">原坐标</param>
+        /// <returns>缩放后坐标</returns>
+        public static Vector2 GetZoomedPosition(Vector2 originalPosition)
+        {
+            float oppositeX = (originalPosition.X - Main.screenWidth / 2) / Main.GameZoomTarget;
+            float oppositeY = (originalPosition.Y - Main.screenHeight / 2) / Main.GameZoomTarget;
+            originalPosition.X -= oppositeX * (Main.GameZoomTarget - 1f);
+            originalPosition.Y -= oppositeY * (Main.GameZoomTarget - 1f);
+            return originalPosition;
+        }
     }
 }

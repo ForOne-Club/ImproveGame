@@ -80,7 +80,7 @@
             }
             if (TimerMax - Timer < 1f)
             {
-                Timer = 100;
+                Timer = TimerMax;
                 State = AnimationState.OpenComplete;
                 OnOpenComplete?.Invoke();
             }

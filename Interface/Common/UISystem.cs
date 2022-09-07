@@ -43,6 +43,9 @@ namespace ImproveGame.Interface.Common
         public GrabBagInfoGUI GrabBagInfoGUI;
         public static UserInterface GrabBagInfoInterface;
 
+        public StructureGUI StructureGUI;
+        public static UserInterface StructureInterface;
+
         public PackageGUI PackageGUI;
         public static UserInterface PackageInterface { get; set; }
 
@@ -77,6 +80,9 @@ namespace ImproveGame.Interface.Common
             GrabBagInfoGUI = null;
             GrabBagInfoInterface = null;
 
+            StructureGUI = null;
+            StructureInterface = null;
+
             PackageGUI = null;
             PackageInterface = null;
         }
@@ -95,6 +101,7 @@ namespace ImproveGame.Interface.Common
                 BigBagGUI = new();
                 PaintWandGUI = new();
                 GrabBagInfoGUI = new();
+                StructureGUI = new();
                 BigBagInterface = new();
                 PackageInterface = new();
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
@@ -105,6 +112,7 @@ namespace ImproveGame.Interface.Common
                 LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
                 LoadGUI(ref PaintWandGUI, out PaintWandInterface);
                 LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
+                LoadGUI(ref StructureGUI, out StructureInterface);
             }
         }
 
@@ -158,6 +166,10 @@ namespace ImproveGame.Interface.Common
             {
                 GrabBagInfoInterface?.Update(gameTime);
             }
+            if (StructureGUI.Visible)
+            {
+                StructureInterface?.Update(gameTime);
+            }
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -184,8 +196,15 @@ namespace ImproveGame.Interface.Common
 
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Grab Bag Info GUI",
                     () => { if (GrabBagInfoGUI.Visible) GrabBagInfoGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Structure GUI", () =>
+                {
+                    if (StructureGUI.Visible)
+                    {
+                        StructureGUI.Draw(Main.spriteBatch);
+                    }
+                    return true;
+                }, InterfaceScaleType.UI));
             }
-
 
             int wireIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Wire Selection");
             if (wireIndex != -1)
@@ -197,8 +216,7 @@ namespace ImproveGame.Interface.Common
                             SpaceWandGUI.Draw(Main.spriteBatch);
                         }
                         return true;
-                    }, InterfaceScaleType.UI)
-                );
+                    }, InterfaceScaleType.UI));
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Brust GUI", DrawBrustGUI, InterfaceScaleType.UI));
                 layers.Insert(wireIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Paint GUI", DrawPaintGUI, InterfaceScaleType.UI));
             }

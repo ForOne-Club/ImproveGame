@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
 using System.Collections;
-using Terraria.GameContent.Creative;
 
 namespace ImproveGame.Content.Items
 {
@@ -10,18 +9,18 @@ namespace ImproveGame.Content.Items
     /// </summary>
     public abstract class SelectorItem : ModItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => MyUtils.Config.LoadModItems;
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
 
         public override void SetStaticDefaults()
         {
             Item.staff[Type] = true;
-            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+            SacrificeTotal = 1;
         }
 
-        private Point Start;
-        private Point End;
+        private Point start;
+        private Point end;
         protected Point SelectRange;
-        protected Rectangle TileRect => new((int)MathF.Min(Start.X, End.X), (int)MathF.Min(Start.Y, End.Y), (int)MathF.Abs(Start.X - End.X) + 1, (int)MathF.Abs(Start.Y - End.Y) + 1);
+        protected Rectangle TileRect => new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y), (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);
 
         /// <summary>
         /// 封装了原来的SetDefaults()，现在用这个，在里面应该设置SelectRange
@@ -54,19 +53,21 @@ namespace ImproveGame.Content.Items
         public override bool CanUseItem(Player player)
         {
             bool flag = StartUseItem(player);
-            if (flag && CanUseSelector(player))
+            if (!flag || !CanUseSelector(player))
             {
-                MyUtils.ItemRotation(player);
-                _unCancelled = true;
-                Start = Main.MouseWorld.ToTileCoordinates();
+                return flag;
             }
-            return flag;
+
+            ItemRotation(player);
+            unCancelled = true;
+            start = Main.MouseWorld.ToTileCoordinates();
+            return true;
         }
 
         /// <summary>
         /// 右键取消选区的实现
         /// </summary>
-        private bool _unCancelled;
+        private bool unCancelled;
 
         /// <summary>
         /// 在对框选物块执行操作后的方法，
@@ -85,32 +86,29 @@ namespace ImproveGame.Content.Items
         /// <returns>颜色</returns>
         public virtual Color ModifyColor(bool cancelled)
         {
-            if (!cancelled)
-                return new(255, 0, 0);
-            else
-                return Color.GreenYellow;
+            return !cancelled ? new(255, 0, 0) : Color.GreenYellow;
         }
 
         public override bool? UseItem(Player player)
         {
             if (CanUseSelector(player) && Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer)
             {
-                if (Main.mouseRight && _unCancelled)
+                if (Main.mouseRight && unCancelled)
                 {
-                    _unCancelled = false;
+                    unCancelled = false;
                 }
-                End = MyUtils.ModifySize(Start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
-                Color color = ModifyColor(!_unCancelled);
-                Box.NewBox(this, IsNeedKill, Start, End, color * 0.35f, color, TextDisplayMode.All);
+                end = ModifySize(start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
+                Color color = ModifyColor(!unCancelled);
+                Box.NewBox(this, IsNeedKill, start, end, color * 0.35f, color, TextDisplayMode.All);
                 if (Main.mouseLeft)
                 {
                     player.itemAnimation = 8;
-                    MyUtils.ItemRotation(player);
+                    ItemRotation(player);
                 }
                 else
                 {
                     player.itemAnimation = 0;
-                    if (_unCancelled)
+                    if (unCancelled)
                     {
                         CoroutineSystem.TileRunner.Run(ModifyTiles(player));
                     }
@@ -120,10 +118,7 @@ namespace ImproveGame.Content.Items
             return base.UseItem(player);
         }
 
-        public virtual bool IsNeedKill()
-        {
-            return true;
-        }
+        public virtual bool IsNeedKill() => true;
 
         IEnumerator ModifyTiles(Player player)
         {

@@ -1,5 +1,19 @@
 [Chinese version here | 中文版](ChangeLog.md)
 
+# v1.6.2
+## Subversions:
+- v1.6.2.0
+## BUG Fixes:
+- **[v1.6.2.0]** Fixed some issues with multiplayer mode
+- **[v1.6.2.0]** Fixed the pool cursor not showing in multiplayer mode
+- **[v1.6.2.0]** 修复了钓鱼机无法打开的BUG
+- **[v1.6.2.0]** 修复了钓鱼机的TileEntity实例无法正常消失的BUG
+## Additions:
+- **[v1.6.2.0]** Wand of Construction, can save structures as files and place them while having enough material
+- **[v1.6.2.0]** Improved hotkey tooltip texts
+- **[v1.6.2.0]** Five filter options for the Fishing Machine, you can choose what to fish
+- **[v1.6.2.0]** The Fishing Machine now supports Fargo's Mutant Mod's water fountain biomes
+
 # v1.6.1
 ## Subversions:
 - v1.6.1.0

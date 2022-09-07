@@ -4,9 +4,14 @@ namespace ImproveGame.Interface.UIElements
 {
     public class ModScrollbar : FixedUIScrollbar
     {
+        public bool Visible = true;
+
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            base.DrawSelf(spriteBatch);
+            if (Visible)
+            {
+                base.DrawSelf(spriteBatch);
+            }
         }
 
         public override void MouseDown(UIMouseEvent evt)

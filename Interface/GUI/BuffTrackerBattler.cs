@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Packets;
+using ImproveGame.Common.Players;
 using Terraria.GameContent.Creative;
 
 namespace ImproveGame.Interface.GUI
@@ -68,12 +69,7 @@ namespace ImproveGame.Interface.GUI
             _needsToCommitChange = false;
             _sliderCurrentValueCache = newSliderValue;
             _nextTimeWeCanPush = DateTime.UtcNow;
-            if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer)) {
-                modPlayer.SpawnRateSliderValue = _sliderCurrentValueCache;
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    NetBuffTracker.ClientSendSpawnRateSlider(_sliderCurrentValueCache);
-                }
-            }
+            SpawnRateSlider.Get(Main.myPlayer, _sliderCurrentValueCache).Send(runLocally: true);
         }
 
         internal void SetValueKeyboard(float value) {
@@ -102,7 +98,7 @@ namespace ImproveGame.Interface.GUI
                 Main.instance.MouseTextNoOverride(originalText, 0, 0);
             }
             else if (MainPanel.GetDimensions().ToRectangle().Intersects(new(Main.mouseX, Main.mouseY, 1, 1))) {
-                string text = MyUtils.GetText("BuffTracker.NPCSpawnRatePanel");
+                string text = GetText("BuffTracker.NPCSpawnRatePanel");
                 Main.instance.MouseTextNoOverride(text, 0, 0);
             }
 
@@ -117,15 +113,14 @@ namespace ImproveGame.Interface.GUI
                 if (playerIndex == Main.myPlayer) {
                     _currentTargetValue = BattlerPlayer.SliderDefaultValue;
                     _sliderCurrentValueCache = BattlerPlayer.SliderDefaultValue;
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NetBuffTracker.ClientSendSpawnRateSlider(_sliderCurrentValueCache);
+                    SpawnRateSlider.Get(Main.myPlayer, _sliderCurrentValueCache).Send(runLocally: false);
                 }
             }
         }
 
         public void Update() {
             if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer) && modPlayer.HasRequiredBuffs()) {
-                int rate = MyUtils.Config.SpawnRateMaxValue;
+                int rate = Config.SpawnRateMaxValue;
                 maxRateText.SetText($"x{rate}");
                 maxRateText.HAlign = rate < 100 ? rate < 10 ? 0.7f : 1f : 1.4f;
             }

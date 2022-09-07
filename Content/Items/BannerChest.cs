@@ -100,7 +100,7 @@ namespace ImproveGame.Content.Items
         {
             if (!Config.NoPlace_BUFFTile_Banner)
             {
-                tooltips.Add(new(Mod, "BannerChestUseless", MyUtils.GetText("Tips.BannerChestUseless"))
+                tooltips.Add(new(Mod, "BannerChestUseless", GetText("Tips.BannerChestUseless"))
                 {
                     OverrideColor = Color.SkyBlue
                 });
@@ -109,14 +109,14 @@ namespace ImproveGame.Content.Items
             {
                 if (storedBanners.Count >= 200)
                 {
-                    tooltips.Add(new(Mod, "BannerChestCurrent", MyUtils.GetText("Tips.BannerChestCurrentFull"))
+                    tooltips.Add(new(Mod, "BannerChestCurrent", GetText("Tips.BannerChestCurrentFull"))
                     {
                         OverrideColor = Color.LightGreen
                     });
                 }
                 else
                 {
-                    tooltips.Add(new(Mod, "BannerChestCurrent", MyUtils.GetTextWith("Tips.BannerChestCurrent", new { StoredCount = storedBanners.Count }))
+                    tooltips.Add(new(Mod, "BannerChestCurrent", GetTextWith("Tips.BannerChestCurrent", new { StoredCount = storedBanners.Count }))
                     {
                         OverrideColor = Color.LightGreen
                     });
@@ -140,7 +140,7 @@ namespace ImproveGame.Content.Items
             }
             else
             {
-                tooltips.Add(new(Mod, "BannerChestNone", MyUtils.GetText("Tips.BannerChestNone"))
+                tooltips.Add(new(Mod, "BannerChestNone", GetText("Tips.BannerChestNone"))
                 {
                     OverrideColor = Color.SkyBlue
                 });

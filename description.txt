@@ -16,38 +16,30 @@
 更新日志: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog.md
 开源链接: https://gitee.com/MyGoold/improve-game
 ---------------------------
-功能列表（详见设置）：
-    1、  物品最大堆叠
-    2、  武器自动使用
-    3、  提升部分工具速度
-    4、  提升放置速度和工作范围
-    5、  BOSS/事件召唤物不消耗
-    6、  渔夫任务无冷却
-    7、  装备/饰品重铸的前缀会越来越好
-    8、  无限药剂，数量达到三十个后无限使用
-    9、  无限弹药，数量达到三千九百九十六个后无限使用
-    10、 非时装饰品也可放置在时装栏（启用模组直接生效）
-    11、 控制墓碑掉落
-    12、 控制物品拾取距离
-    13、 敌人钱币掉落倍率（作弊功能）
-    14、 城镇npc夜晚入住
-    15、 城镇npc刷新速度
-    16、 模组物品
-    17、 随身增益站
-    18、 超级虚空保险库
-    19、 智能虚空保险库
-    20、 额外的背包
-    999、 所有功能都可以在设置查看，懒得写了 QAQ
+功能概要（详见设置）：
+  1、 物品最大堆叠、武器自动使用等辅助Mod普遍功能(对标老牌辅助Luiafk)
+  2、 非时装饰品也可放置在时装栏（启用模组直接生效）
+  3、 城镇NPC入住机制修改: 夜晚入住、图鉴解锁后无视条件入住
+  4、 空间魔杖、建筑魔杖、法爆魔杖和钓鱼机等大大优化游戏体验的模组物品
+  5、 渔夫任务无冷却、控制墓碑是否掉落等辅助模组功能的整合
+  6、 随身增益、随身制作站等节省时间的功能
+  7、 与同队好友共享无尽增益、制作站等专为联机设置的功能
+  8、 含100格的超大背包，再也不用担心旗帜和药水放在哪了
+  9、 药水袋与旗帜盒，更方便地将你的药水旗帜整合在一个物品，节省空间
+  10、几乎所有功能都是可以调节的，自行选择适合你的功能
 ---------------------------
 [c/990000:画师：枫林半叶, 逆风而行的信鸽]
 [c/9900ff:翻译：Lastprismer, Lacewing]
 [c/0099ff:代码：局长, Cyril]
-[c/00ff99:特别感谢: @ChevyRay 的协程类]
+[c/00ff99:特别感谢: @ChevyRay的协程类]
 ---------------------------
 版权声明:
 本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
-附: WMITF开源链接: https://github.com/gardenappl/WMITF
-    本模组开源链接: https://gitee.com/MyGoold/improve-game
+ChevyRay的协程类亦是在MIT许可协议下开源，不再赘述
+附:
+本模组开源链接: https://gitee.com/MyGoold/improve-game
+WMITF开源链接: https://github.com/gardenappl/WMITF
+ChevyRay的协程类: https://github.com/ChevyRay/Coroutines
 
 These features may bring you better gameplay experience
 ---------------------------
@@ -67,28 +59,17 @@ Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + 
 Change log: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog-en.md
 Source code: https://gitee.com/MyGoold/improve-game
 ---------------------------
-Function list:
-    1. Max stack
-    2. Weapons autoswing
-    3. Increased using speed for certain tools
-    4. Increased placement speed and range
-    5. Vanilla boss and event summon items not being consumed
-    6. Instant refresh Angler's quests
-    7. Prefixes get better as you keep reforging
-    8. Infinite potions when stack to at least 30
-    9. Infinite ammos when stack to at least 3996
-    10. Can put non-vanity accessories in social slots
-    11. Disable tombstone spawn
-    12. Adjust item pickup range
-    13. Enemy coin drop multiplier(cheating)
-    14. Town NPCs can spawn at night time
-    15. Town NPC spawn rate
-    16. Enable modded items
-    17. Portable buff stations
-    18. Super Void Vault
-    19. Void Vault Smart Pickup
-    20. A huge extra inventory
-    999. Go to the mod configurations please
+Feature highlights: 
+  1. General features like max stack, weapon auto reuse (benchmarking Luiafk the classic qol mod)
+  2. Non-vanity accessories can be worn in vanity slots
+  3. Town NPC spawn mechanic improvements: can respawn during nighttime, ignore respwaning limitations if bestiary is unlocked
+  4. Mod items such as Wand of Space, Wand of Architecture, Wand of Bursts and Fishing Machine which greatly improve gameplay experience
+  5. Integration of qol features like instantly refreash Angler's quests and disable tomb stone spawning
+  6. Time-saving features like Infinite Buffs and Portable Crafting Stations
+  7. Features specially made for multiplayer, for example sharing your infinite buffs, portable crafting stations and even more with your teammates
+  8. A Huge Inventory providing 100 item slots, no warries of storing your potions and banners
+  9. Potion Bag and Banner Box, integrate all your potions or banners as a single item (and you are free to take them out)
+  10. Most features are configurable, use on your own preference
 ---------------------------
 [c/990000:Spriter: 枫林半叶, 逆风而行的信鸽]
 [c/9900ff:Translators: Lastprismer, Lacewing]
@@ -96,10 +77,12 @@ Function list:
 [c/00ff99:Special thanks: @ChevyRay's coroutine class]
 ---------------------------
 Copyright Statement:
-A part of the source code of the 'showing which mod is an item or a NPC from' function is from mod 'WMITF', this mod and WMITF are open-source using the MIT licence, which means 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+A part of the source code of the 'showing which mod is an item from' function is from mod 'WMITF', this mod and WMITF are open-source using the MIT Licence, which means 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.'
 Hence there is no copyright voilation in this mod.
+ChevyRay's coroutine class is under MIT License as well, same as above.
 p.s
 Source code of:
-WMITF: https://github.com/gardenappl/WMITF
 This mod: https://gitee.com/MyGoold/improve-game
+WMITF: https://github.com/gardenappl/WMITF
+ChevyRay's coroutine class: https://github.com/ChevyRay/Coroutines

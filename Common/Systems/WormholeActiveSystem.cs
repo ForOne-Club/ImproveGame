@@ -11,7 +11,7 @@
 
         private bool Player_HasItem(On.Terraria.Player.orig_HasItem orig, Player player, int type)
         {
-            if (type == ItemID.WormholePotion && MyUtils.Config.NoConsume_Potion && MyUtils.HasItem(MyUtils.GetAllInventoryItemsList(player, true).ToArray(), -1, type))
+            if (type == ItemID.WormholePotion && Config.NoConsume_Potion && HasItem(GetAllInventoryItemsList(player, true).ToArray(), -1, type))
             {
                 return true;
             }
@@ -20,7 +20,7 @@
 
         private bool Player_HasUnityPotion(On.Terraria.Player.orig_HasUnityPotion orig, Player player)
         {
-            var items = MyUtils.GetAllInventoryItemsList(player, false);
+            var items = GetAllInventoryItemsList(player, false);
             foreach (var item in from i in items where i.type == ItemID.WormholePotion && i.stack > 0 select i)
             {
                 return true;
@@ -30,7 +30,7 @@
 
         private void Player_TakeUnityPotion(On.Terraria.Player.orig_TakeUnityPotion orig, Player player)
         {
-            var itemsArray = MyUtils.GetAllInventoryItems(player, false);
+            var itemsArray = GetAllInventoryItems(player, false);
             for (int a = 0; a < itemsArray.Count; a++)
             {
                 for (int i = 0; i < itemsArray[a].Length; i++)

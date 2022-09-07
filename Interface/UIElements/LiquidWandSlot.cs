@@ -40,14 +40,14 @@ namespace ImproveGame.Interface.UIElements
         /// <param name="amount">存液体的数量，这个值会根据可存数量的多少减少</param>
         public void StoreLiquid(ref byte amount) {
         // 液体添加量
-            float addAmount = MyUtils.LiquidAmountToFloat(amount);
+            float addAmount = LiquidAmountToFloat(amount);
             // 还可以存入的液体量
             float amountAvailable = 1f - _liquidAmount;
             // 取相对少的，毕竟如果我可以给你0.5%，你却只剩下0.25%，我只能填给你0.25%
             float amountAddition = Math.Min(addAmount, amountAvailable);
 
             // 应用上去
-            amount -= (byte)MyUtils.LiquidAmountToInt(amountAddition);
+            amount -= (byte)LiquidAmountToInt(amountAddition);
             _liquidAmount += amountAddition;
         }
 
@@ -57,11 +57,11 @@ namespace ImproveGame.Interface.UIElements
         /// <param name="amount">拿液体的数量，这个值会根据可存数量的多少增加</param>
         public void TakeLiquid(ref byte amount) {
             // 液体需求量，应是最大值即255减去当前值
-            float needAmount = MyUtils.LiquidAmountToFloat(255 - amount);
+            float needAmount = LiquidAmountToFloat(255 - amount);
             // 取相对少的，毕竟你要是太多我也拿不下，太少我也补不完
             float amountReduction = Math.Min(needAmount, _liquidAmount);
 
-            amount += (byte)MyUtils.LiquidAmountToInt(amountReduction);
+            amount += (byte)LiquidAmountToInt(amountReduction);
             _liquidAmount -= amountReduction;
         }
 

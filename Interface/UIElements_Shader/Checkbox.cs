@@ -23,7 +23,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             set
             {
                 text = value;
-                textSize = MyUtils.GetTextSize(value);
+                textSize = GetTextSize(value);
             }
         }
 
@@ -95,7 +95,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             PixelShader.DrawBox(Main.UIScaleMatrix, position + new Vector2(0, size.Y / 2 - boxSize.Y / 2),
                 boxSize, 4, 3, Color.White, color);
 
-            MyUtils.DrawString(position + new Vector2(boxSize.X + 5 * textScale, size.Y / 2 - textSize.Y * textScale / 2 + 5 * textScale), text, Color.White,
+            DrawString(position + new Vector2(boxSize.X + 5 * textScale, size.Y / 2 - textSize.Y * textScale / 2 + 5 * textScale), text, Color.White,
                 textBorderColor, textScale);
         }
     }

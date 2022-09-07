@@ -13,9 +13,9 @@
             if (!Main.dedServ)
             {
                 BoxShader = GetEffect("Box");
-                BorderRound = MyUtils.GetEffect("BorderRound");
-                ItemEffect = MyUtils.GetEffect("item");
-                LiquidSurface = MyUtils.GetEffect("LiquidSurface");
+                BorderRound = GetEffect("BorderRound");
+                ItemEffect = GetEffect("item");
+                LiquidSurface = GetEffect("LiquidSurface");
                 Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");
             }
         }

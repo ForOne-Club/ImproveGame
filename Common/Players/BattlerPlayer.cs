@@ -34,10 +34,10 @@ namespace ImproveGame.Common.Players
         }
 
         public static float RemapSliderValueToPowerValue(float sliderValue) {
-            float remappedValue = Terraria.Utils.Remap(sliderValue, 0.5f, 1f, 1f, MyUtils.Config.SpawnRateMaxValue);
+            float remappedValue = TrUtils.Remap(sliderValue, 0.5f, 1f, 1f, Config.SpawnRateMaxValue);
             remappedValue = (float)Math.Round(remappedValue); // 取整
             if (sliderValue < 0.5f) {
-                remappedValue = Terraria.Utils.Remap(sliderValue, 0f, 0.5f, 0.1f, 1f);
+                remappedValue = TrUtils.Remap(sliderValue, 0f, 0.5f, 0.1f, 1f);
                 remappedValue = (float)Math.Round(remappedValue * 20f) / 20f; // 0.5显示，不然强迫症了
             }
             return remappedValue;

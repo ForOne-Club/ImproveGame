@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ImproveGame.Common.Packets;
+using System.Collections.Generic;
 using System.Reflection;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
@@ -41,16 +42,7 @@ namespace ImproveGame.Common.Systems
                 }
                 if (focused && Main.mouseLeft && !OldMouseLeft)
                 {
-                    if (Main.netMode == NetmodeID.SinglePlayer)
-                    {
-                        Chest.SetupTravelShop();
-                        SoundEngine.PlaySound(SoundID.Chat);
-                    }
-                    else if (!Refreshing)
-                    {
-                        NetGeneric.ClientSendRefreshTravelShop();
-                        Refreshing = true;
-                    }
+                    RefreshShopPacket.Get().Send(-1, -1, true);
                 }
             }
             OldMouseLeft = Main.mouseLeft;

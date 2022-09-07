@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Packets;
 using ImproveGame.Interface.Common;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
@@ -72,7 +73,10 @@ namespace ImproveGame.Common.Players
                 tag.Add($"SuperVault_{i}", SuperVault[i]);
             }
 
-            tag["SuperVaultPos"] = UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position();
+            if (Main.netMode is NetmodeID.Server)
+                tag["SuperVaultPos"] = new Vector2(500f);
+            else
+                tag["SuperVaultPos"] = UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position();
 
             tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
             tag["InfBuffDisabledMod"] = InfBuffDisabledMod;
@@ -96,7 +100,8 @@ namespace ImproveGame.Common.Players
                     Recipe.FindRecipes(); // 刷新配方
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
-                        NetBigBag.SendSlot(i, SuperVault[i], Main.myPlayer, -1, -1);
+                        var packet = BigBagSlotPacket.Get(this, i);
+                        packet.Send(runLocally: false);
                     }
                 }
                 oldSuperVaultStack[i] = SuperVault[i].stack;
@@ -108,7 +113,8 @@ namespace ImproveGame.Common.Players
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             // 按照Example的写法 - 直接写就完了！
-            NetBigBag.SendAllSlot(this, toWho, fromWho);
+            var packet = BigBagAllSlotsPacket.Get(this);
+            packet.Send(toWho, fromWho, false);
         }
     }
 }

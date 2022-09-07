@@ -11,7 +11,7 @@ namespace ImproveGame.Content.Items
         public override bool ModifySelectedTiles(Player player, int i, int j)
         {
             SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-            MyUtils.BongBong(new Vector2(i, j) * 16f, 16, 16);
+            BongBong(new Vector2(i, j) * 16f, 16, 16);
             if (Main.tile[i, j].WallType > 0 && WandSystem.WallMode)
             {
                 WorldGen.KillWall(i, j);
@@ -31,7 +31,7 @@ namespace ImproveGame.Content.Items
                 player.QuickMana();
             if (player.statMana >= 2)
             {
-                if (WandSystem.TileMode && Main.tile[i, j].HasTile && MyUtils.TryKillTile(i, j, player))
+                if (WandSystem.TileMode && Main.tile[i, j].HasTile && TryKillTile(i, j, player))
                 {
                     player.statMana -= 2;
                 }
@@ -71,7 +71,7 @@ namespace ImproveGame.Content.Items
         {
             if (player.altFunctionUse == 0)
             {
-                MyUtils.ItemRotation(player);
+                ItemRotation(player);
                 if (WandSystem.FixedMode)
                 {
                     Item.useAnimation = (int)(18 * player.pickSpeed);
@@ -80,7 +80,7 @@ namespace ImproveGame.Content.Items
                     {
                         Rectangle Reactangle = GetRectangle(player);
                         SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-                        MyUtils.ForeachTile(Reactangle, (x, y) =>
+                        ForeachTile(Reactangle, (x, y) =>
                         {
                             if (Main.tile[x, y].WallType > 0 && WandSystem.WallMode)
                             {
@@ -98,12 +98,12 @@ namespace ImproveGame.Content.Items
                                 player.QuickMana();
                             if (player.statMana >= 2)
                             {
-                                if (WandSystem.TileMode && Main.tile[x, y].HasTile && MyUtils.TryKillTile(x, y, player))
+                                if (WandSystem.TileMode && Main.tile[x, y].HasTile && TryKillTile(x, y, player))
                                 {
                                     player.statMana -= 2;
                                 }
                             }
-                            MyUtils.BongBong(new Vector2(x, y) * 16f, 16, 16);
+                            BongBong(new Vector2(x, y) * 16f, 16, 16);
                         });
                     }
                 }
@@ -150,7 +150,7 @@ namespace ImproveGame.Content.Items
             Rectangle rect = new();
             Point playerCenter = player.Center.ToTileCoordinates();
             Point mousePosition = Main.MouseWorld.ToTileCoordinates();
-            mousePosition = MyUtils.ModifySize(playerCenter, mousePosition, Player.tileRangeX + ExtraRange.X, Player.tileRangeY + ExtraRange.Y);
+            mousePosition = ModifySize(playerCenter, mousePosition, Player.tileRangeX + ExtraRange.X, Player.tileRangeY + ExtraRange.Y);
             rect.X = mousePosition.X - KillSize.X / 2;
             rect.Y = mousePosition.Y - KillSize.Y / 2;
             rect.Width = KillSize.X;
