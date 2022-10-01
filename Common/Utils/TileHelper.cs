@@ -301,8 +301,25 @@ namespace ImproveGame
         /// </summary>
         public static bool TryPlaceTile(int i, int j, Item item, Player player, bool mute = false, bool forced = false)
         {
-            if (Main.tile[i, j].HasTile)
-                return false;
+            int targetTile = item.createTile;
+            var tileObjectData = TileObjectData.GetTileData(targetTile, 0);
+            if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 && tileObjectData.CoordinateFullHeight <= 22))
+            {
+                if (Main.tile[i, j].HasTile)
+                    return false;
+            }
+            else
+            {
+                var origin = new Point16(i, j) - tileObjectData.Origin;
+                for (int m = 0; m < tileObjectData.CoordinateFullWidth / 16; m++)
+                {
+                    for (int n = 0; n < tileObjectData.CoordinateFullHeight / 16; n++)
+                    {
+                        if (Main.tile[origin.ToPoint() + new Point(m, n)].HasTile)
+                            return false;
+                    }
+                }
+            }
             // 物块魔杖特判    
             if (item.tileWand > 0)
             {
@@ -310,10 +327,7 @@ namespace ImproveGame
                     TryConsumeItem(ref player.inventory[index], player, true);
                 else return false;
             }
-            int targetTile = item.createTile;
             bool placed = WorldGen.PlaceTile(i, j, targetTile, mute, forced, player.whoAmI, item.placeStyle);
-            // PlaceTile其实不管放没放下都是true，只有一部分情况为false，因此这里二次判断
-            placed &= Main.tile[i, j].TileType == targetTile;
             return placed;
         }
 

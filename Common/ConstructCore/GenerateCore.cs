@@ -210,8 +210,7 @@ namespace ImproveGame.Common.ConstructCore
                     if (tileType is -1)
                         continue;
                     var tileObjectData = TileObjectData.GetTileData(tileType, 0);
-                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 &&
-                                                   tileObjectData.CoordinateFullHeight <= 22))
+                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 && tileObjectData.CoordinateFullHeight <= 22))
                     {
                         continue;
                     }
