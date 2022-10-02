@@ -48,13 +48,6 @@ namespace ImproveGame.Common.ConstructCore
         public static bool LoadFile(string path)
         {
             TagCompound tag = TagIO.FromFile(path);
-
-            if (tag is null)
-            {
-                // 此处应有Logger.Warn
-                return false;
-            }
-
             CachedStructureDatas.Add(path, tag);
             return true;
         }
@@ -63,8 +56,15 @@ namespace ImproveGame.Common.ConstructCore
         {
             if (!CachedStructureDatas.TryGetValue(path, out TagCompound tag))
             {
-                if (!LoadFile(path))
+                try
+                {
+                    LoadFile(path);
+                } 
+                catch
+                {
+                    Main.NewText("文件不合法或不是结构文件!", Color.Red);
                     return null;
+                }
 
                 tag = CachedStructureDatas[path];
             }

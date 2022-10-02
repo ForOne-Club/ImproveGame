@@ -727,6 +727,9 @@
                 Time: "保存时间: {Time}"
                 Version: "版本号: {Version}"
                 Size: "结构尺寸: {Size}"
+                ModMissing.Count: "2"
+                ModMissing.1: "该结构包含未被加载的模组的物块或背景墙"
+                ModMissing.2: "放置有可能发生错误"
             }
             MaterialInfo:
             {
@@ -742,6 +745,10 @@
             Tutorial:
             {
                 Button: "功能介绍"
+                AlphaTest.Count: "3"
+                AlphaTest.1: "该法杖功能仍在测试中，可能存在许多Bug"
+                AlphaTest.2: "如果遇到Bug请报告给开发者"
+                AlphaTest.3: "对于模组物块与背景墙不保证支持，不应视作Bug"
                 Save.Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
                 Save.Text:
                     '''
@@ -771,6 +778,8 @@
                     '''
                     在UI主界面显示了当前存储于你的电脑上的结构列表，每个结构单元包含了文件名称、路径信息。
                     
+                    如果你在Windows系统上不小心删除了某个结构，你可以在回收站还原
+
                     点击右方的“{$tModLoader.ModsMoreInfo}”按钮即可查看材料明细与结构预览，同时可以在预览界面选择结构放置时的中心点。
                     '''
                 Materials.Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"

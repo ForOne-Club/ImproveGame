@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using Terraria.DataStructures;
-using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 
 namespace ImproveGame.Common.ConstructCore
@@ -23,6 +21,7 @@ namespace ImproveGame.Common.ConstructCore
             if (data is null || data.Count is 0)
             {
                 // 此处应有Logger.Warn
+                ImproveGame.Instance.Logger.Warn("Structure data is missing!");
                 return new();
             }
 
@@ -65,16 +64,18 @@ namespace ImproveGame.Common.ConstructCore
                 if (wallItemType != -1)
                     PlusMaterial(wallItemType);
 
-                PlusMaterial(ItemID.Wire, tileData.RedWire.ToInt() + tileData.GreenWire.ToInt() + tileData.BlueWire.ToInt() + tileData.YellowWire.ToInt());
+                int wires = tileData.RedWire.ToInt() + tileData.GreenWire.ToInt() + tileData.BlueWire.ToInt() + tileData.YellowWire.ToInt();
+                if (wires > 0 )
+                    PlusMaterial(ItemID.Wire, wires);
                 if (tileData.HasActuator)
                     PlusMaterial(ItemID.Actuator);
 
-                void PlusMaterial(int itemID, int amount = 1)
+                void PlusMaterial(int itemId, int amount = 1)
                 {
-                    if (!materialDictionary.ContainsKey(itemID))
-                        materialDictionary[itemID] = amount;
+                    if (!materialDictionary.ContainsKey(itemId))
+                        materialDictionary[itemId] = amount;
                     else
-                        materialDictionary[itemID] += amount;
+                        materialDictionary[itemId] += amount;
                 }
             }
 

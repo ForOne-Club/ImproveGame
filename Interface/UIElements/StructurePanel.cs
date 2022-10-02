@@ -3,7 +3,9 @@ using ImproveGame.Common.Systems;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements_Shader;
 using Microsoft.Xna.Framework.Input;
+using System.IO;
 using Terraria.GameInput;
+using Terraria.Utilities;
 
 namespace ImproveGame.Interface.UIElements
 {
@@ -178,7 +180,7 @@ namespace ImproveGame.Interface.UIElements
         {
             SoundEngine.PlaySound(SoundID.MenuTick);
             if (File.Exists(FilePath))
-                File.Delete(FilePath);
+                FileUtilities.Delete(FilePath, false);
             if (UISystem.Instance.StructureGUI is not null)
                 UISystem.Instance.StructureGUI.CacheSetupStructures = true;
         }
@@ -241,14 +243,16 @@ namespace ImproveGame.Interface.UIElements
 
             var tag = FileOperator.GetTagFromFile(FilePath);
 
-            if (tag is not null)
+            if (tag is null)
             {
-                WandSystem.ConstructFilePath = FilePath;
-                PreviewRenderer.ResetPreviewTarget = PreviewRenderer.ResetState.WaitReset;
-                int width = tag.GetShort("Width");
-                int height = tag.GetShort("Height");
-                PreviewRenderer.PreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width * 16 + 20, height * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
+                return;
             }
+
+            WandSystem.ConstructFilePath = FilePath;
+            PreviewRenderer.ResetPreviewTarget = PreviewRenderer.ResetState.WaitReset;
+            int width = tag.GetShort("Width");
+            int height = tag.GetShort("Height");
+            PreviewRenderer.PreviewTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width * 16 + 20, height * 16 + 20, false, default, default, default, RenderTargetUsage.PreserveContents);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

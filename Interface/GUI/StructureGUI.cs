@@ -2,7 +2,6 @@
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.UIElements_Shader;
-using System.Diagnostics;
 using System.Reflection;
 using Terraria.GameInput;
 
@@ -53,7 +52,7 @@ namespace ImproveGame.Interface.GUI
                 ListPadding = 4f,
             };
             UIList.SetPadding(2f);
-            UIList.ManualSortMethod = (list) => { }; // 阻止他自动排序
+            UIList.ManualSortMethod = _ => { }; // 阻止他自动排序
             BasePanel.Append(UIList);
 
             Scrollbar = new();
@@ -173,7 +172,7 @@ namespace ImproveGame.Interface.GUI
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            var innerList = UIList.GetType().GetField("_innerList", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(UIList) as UIElement;
+            var innerList = UIList.GetType().GetField("_innerList", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(UIList) as UIElement;
             if (Scrollbar is not null && innerList is not null)
             {
                 innerList.Top.Set(-Scrollbar.ViewPosition, 0);
@@ -246,6 +245,24 @@ namespace ImproveGame.Interface.GUI
             };
 
             UIList.Add(QuickTitleText(GetText("ConstructGUI.FileInfo.Title"), 0.5f));
+            // 检查模组是否被加载了
+            foreach ((string blockName, _) in structure.entries)
+            {
+                if (ModLoader.HasMod(blockName.Split('/')[0]))
+                {
+                    continue;
+                }
+                
+                char countChar = GetText("ConstructGUI.FileInfo.ModMissing.Count")[0];
+                int count = char.IsNumber(countChar) ? countChar - '0' : 2;
+                for (int i = 1; i <= count; i++)
+                {
+                    var text = QuickSmallUIText(GetText($"ConstructGUI.FileInfo.ModMissing.{i}"));
+                    text.TextColor = new(244, 208, 68);
+                    UIList.Add(text);
+                }
+                break;
+            }
             string name = CacheStructureInfoPath.Split('\\').Last();
             name = name[..^FileOperator.Extension.Length];
             UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Name", new { Name = name }))); // 文件名
@@ -258,7 +275,7 @@ namespace ImproveGame.Interface.GUI
             {
                 UIList.Add(QuickTitleText(GetText("ConstructGUI.MaterialInfo.Title"), 0.8f));
 
-                var sortedResult = from pair in materialsAndStacks orderby pair.Key ascending select pair; // 排序
+                var sortedResult = from pair in materialsAndStacks orderby pair.Key select pair; // 排序
                 foreach ((int itemType, int stack) in from mat in sortedResult where mat.Value > 0 select mat)
                 {
                     UIList.Add(new MaterialInfoElement(itemType, stack));
@@ -306,6 +323,19 @@ namespace ImproveGame.Interface.GUI
             UIList.Clear();
 
             UIList.Add(QuickTitleText(GetText("ConstructGUI.Tutorial.Button"), 0.5f));
+            char countChar = GetText("ConstructGUI.Tutorial.AlphaTest.Count")[0];
+            int count = char.IsNumber(countChar) ? countChar - '0' : 2;
+            for (int i = 1; i <= count; i++)
+            {
+                UIList.Add(new UIText(GetText($"ConstructGUI.Tutorial.AlphaTest.{i}"))
+                {
+                    TextOriginX = 0.5f,
+                    Width = StyleDimension.FromPercent(1f),
+                    Height = StyleDimension.FromPixels(24f),
+                    TextColor = new(244, 208, 68)
+                });
+            }
+            UIList.Add(QuickSeparator());
 
             static UIPanel QuickTransparentPanel() {
                 var panel = (UIPanel)new UIPanel()
@@ -339,6 +369,7 @@ namespace ImproveGame.Interface.GUI
 
             var buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(490f, -10f).SetAlign(verticalAlign: 0.5f);
             buttonExample.Append(new UIImage(GetTexture("UI/Construct/Save")).SetAlign(0.5f, 0.5f));
+            buttonExample.OnMouseDown += (_, _) => WandSystem.ConstructMode = WandSystem.Construct.Save;
             panel.Append(buttonExample);
 
             panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);
@@ -373,6 +404,7 @@ namespace ImproveGame.Interface.GUI
 
             buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(490f, -10f).SetAlign(verticalAlign: 0.5f);
             buttonExample.Append(new UIImage(GetTexture("UI/Construct/Load")).SetAlign(0.5f, 0.5f));
+            buttonExample.OnMouseDown += (_, _) => WandSystem.ConstructMode = WandSystem.Construct.Place;
             panel.Append(buttonExample);
 
             panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);
@@ -399,10 +431,12 @@ namespace ImproveGame.Interface.GUI
 
             buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(490f, -20f).SetAlign(verticalAlign: 0.5f);
             buttonExample.Append(new UIImage(GetTexture("UI/Construct/ExplodeAndPlace")).SetAlign(0.5f, 0.5f));
+            buttonExample.OnMouseDown += (_, _) => WandSystem.ExplodeMode = WandSystem.Construct.ExplodeAndPlace;
             panel.Append(buttonExample);
 
             buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(440f, -20f).SetAlign(verticalAlign: 0.5f);
             buttonExample.Append(new UIImage(GetTexture("UI/Construct/PlaceOnly")).SetAlign(0.5f, 0.5f));
+            buttonExample.OnMouseDown += (_, _) => WandSystem.ExplodeMode = WandSystem.Construct.Place;
             panel.Append(buttonExample);
 
             panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);

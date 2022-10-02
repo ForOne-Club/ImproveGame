@@ -729,6 +729,9 @@ Mods:
                 Time: "Time saved: {Time}"
                 Version: "Version: {Version}"
                 Size: "Structure size: {Size}"
+                ModMissing.Count: "2"
+                ModMissing.1: "This structure contains tiles or walls from the unloaded mods"
+                ModMissing.2: "Placement error may occur"
             }
             MaterialInfo:
             {
@@ -744,6 +747,11 @@ Mods:
             Tutorial:
             {
                 Button: "Introduction"
+                AlphaTest.Count: "4"
+                AlphaTest.1: "Beta test feature"
+                AlphaTest.2: "Kindly report bugs in this mod's Steam workshop page"
+                AlphaTest.3: "Support is not guaranteed for modded tiles and walls,"
+                AlphaTest.4: "and should not be considered a bug"
                 Save.Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
                 Save.Text:
                     '''
@@ -774,6 +782,8 @@ Mods:
                     '''
                     The main panel displays structure files on your PC, including file name and path
                     
+                    If you accidentally delete a structure on your Windows system, you can restore it in the Recycle Bin
+
                     Click '{$tModLoader.ModsMoreInfo}' button at the right side to check detailed info and preview, placement center can be adjusted in the preview
                     '''
                 Materials.Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
