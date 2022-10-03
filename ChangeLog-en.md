@@ -4,18 +4,21 @@
 ## Subversions
 - v1.6.2.0
 ## BUG Fixes
-- **[v1.6.2.0]** Fixed some issues with multiplayer mode
-- **[v1.6.2.0]** Fixed the pool cursor not showing in multiplayer mode
-- **[v1.6.2.0]** 修复了钓鱼机无法打开的BUG
-- **[v1.6.2.0]** 修复了钓鱼机的TileEntity实例无法正常消失的BUG
+- Fixed some issues with multiplayer mode
+- Fixed the pool cursor not showing in multiplayer mode
+- 修复了钓鱼机无法打开的BUG
+- 修复了钓鱼机的TileEntity实例无法正常消失的BUG
 ## Additions
-- **[v1.6.2.0]** Wand of Construction, can save structures as files and place them while having enough material
-- **[v1.6.2.0]** Improved hotkey tooltip texts
-- **[v1.6.2.0]** Five filter options for the Fishing Machine, you can choose what to fish
-- **[v1.6.2.0]** The Fishing Machine now supports Fargo's Mutant Mod's water fountain biomes
+- Wand of Construction, can save structures as files and place them while having enough material
+- Improved hotkey tooltip texts
+- Five filter options for the Fishing Machine, you can choose what to fish
+- The Fishing Machine now supports Fargo's Mutant Mod's water fountain biomes
+- 液体法杖调整
+  - 现在最大可框选30x30的范围
+  - 在有无底桶时，对应的液体可被无限放置，有吸收棉则可以无限吸收
 ## Misc
-- **[v1.6.2.0]** The server console can query the config verification password by typing /qolpassword
-- **[v1.6.2.0]** Password format changed to four letters (not case-sensitive)
+- The server console can query the config verification password by typing /qolpassword
+- Password format changed to four letters (not case-sensitive)
 
 # v1.6.1
 ## Subversions
