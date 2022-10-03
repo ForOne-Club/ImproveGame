@@ -406,6 +406,7 @@
                     开启后，仅密码验证通过的玩家可以调节模组设置
                     在服务器启动时，会在服务器控制台发送一串随机生成的八位数字密钥
                     玩家可以通过输入 /qolpassword <密码> 验证身份
+                    服务器控制台可以输入 /qolpassword 查询密码
                     若密码正确，将获得调节模组设置的权限
                     对于端口映射手段开服有用，因为此时IP无法验证身份(均为127.0.0.1)
                     '''
@@ -416,6 +417,8 @@
                 ServerPassword: "[更好的体验] 模组配置认证密码: {Password}"
                 ServerPasswordLog: "模组配置认证密码: {Password}"
                 CommandDescription: "用于验证客户端身份，请求获得配置修改权限"
+                NotOn: "没有开启密码验证选项"
+                Format: "密码格式为四位字母（不区分大小写）"
             }
             SpawnRateMaxValue:
             {

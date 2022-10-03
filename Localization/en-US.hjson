@@ -398,6 +398,7 @@ Mods:
                     After enabled, only the player(s) with verified password can change the mod configs
                     While starting the server, a random 8-digit password will be sent in the server console
                     Players can type /qolpassword <password> to verify
+                    The server console can query the password by typing /qolpassword
                     If the password is correct, the player will be able to change mod configs
                     Effective to servers with port forwarding, as the IP verification does not work
                     '''
@@ -405,9 +406,11 @@ Mods:
                 Registered: "You can change the mod configs already"
                 Correct: "Correct password, you can change the mod configs"
                 Incorrect: "Incorrect password!"
-                ServerPassword: "[Quality of Life] Password for ModConfig verification: {Password}"
-                ServerPasswordLog: "Password for ModConfig verification: {Password}"
+                ServerPassword: "[Quality of Life] Password for config verification: {Password}"
+                ServerPasswordLog: "Password for config verification: {Password}"
                 CommandDescription: "To verify the client, asking permission to change the mod configs"
+                NotOn: "Password verification option is not enabled"
+                Format: "The password should be 4 letters (not case-sensitive)"
             }
             SpawnRateMaxValue:
             {

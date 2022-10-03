@@ -1,31 +1,34 @@
 [Chinese version here | 中文版](ChangeLog.md)
 
 # v1.6.2
-## Subversions:
+## Subversions
 - v1.6.2.0
-## BUG Fixes:
+## BUG Fixes
 - **[v1.6.2.0]** Fixed some issues with multiplayer mode
 - **[v1.6.2.0]** Fixed the pool cursor not showing in multiplayer mode
 - **[v1.6.2.0]** 修复了钓鱼机无法打开的BUG
 - **[v1.6.2.0]** 修复了钓鱼机的TileEntity实例无法正常消失的BUG
-## Additions:
+## Additions
 - **[v1.6.2.0]** Wand of Construction, can save structures as files and place them while having enough material
 - **[v1.6.2.0]** Improved hotkey tooltip texts
 - **[v1.6.2.0]** Five filter options for the Fishing Machine, you can choose what to fish
 - **[v1.6.2.0]** The Fishing Machine now supports Fargo's Mutant Mod's water fountain biomes
+## Misc
+- **[v1.6.2.0]** The server console can query the config verification password by typing /qolpassword
+- **[v1.6.2.0]** Password format changed to four letters (not case-sensitive)
 
 # v1.6.1
-## Subversions:
+## Subversions
 - v1.6.1.0
 - v1.6.1.1
 - v1.6.1.2
-## BUG Fixes:
+## BUG Fixes
 - **[v1.6.1.0]** Fixed an issue with launching servers
 - **[v1.6.1.1]** Fixed the Super Void Vault feature not working
 - **[v1.6.1.1]** Fixed the Huge Inventory playing a sound without an item been taken out
 - **[v1.6.1.1]** Fixed certain treasure bags and crates being taken up when right click them in the Huge Inventory
 - **[v1.6.1.2]** Fixed an issue with infinite ingredients
-## Additions:
+## Additions
 - **[v1.6.1.0]** Reworked the Huge Inventory's UI, now looks nicer
 - **[v1.6.1.0]** The 'WMITF' feature now can be toggled off
 - **[v1.6.1.1]** Items in the Huge Inventory now can be used as crafting materials directly
@@ -33,11 +36,11 @@
 - **[v1.6.1.2]** Can stop the spread of the Corruption, the Crimson and the Hallow biomes
 
 # v1.6.0
-## Subversions:
+## Subversions
 - v1.6.0.1
 - v1.6.0.2
 - v1.6.0.3
-## BUG Fixes:
+## BUG Fixes
 - Fixed the fishing speed of the Fishing Machine being dramatically fast
 - Fixed the Encumbering Stone working in personal inventories
 - Fixed possible lagging while mining
@@ -46,7 +49,7 @@
 - **[v1.6.0.2]** Fixed issue where traveling merchants could benefit from Better Town NPC Spawn Mechanics
 - **[v1.6.0.2]** Fixed every town NPC can heal you if Emergency Treatment is on
 - **[v1.6.0.3]** Fixed mod can't load with mods that add any NPCs
-## Additions:
+## Additions
 - Reworked control panel of the Wand of Space, added new categories
 - Added a Wand of Painting, can paint/remove paint of a large area
 - Added a Refresh Shop button for the Travelling Merchant to refresh the shop immediately
