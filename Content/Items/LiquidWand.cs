@@ -119,7 +119,7 @@ namespace ImproveGame.Content.Items
             Item.value = Item.sellPrice(0, 1);
             Item.mana = 20;
 
-            SelectRange = new(15, 10);
+            SelectRange = new(40, 40);
         }
 
         public override bool StartUseItem(Player player)

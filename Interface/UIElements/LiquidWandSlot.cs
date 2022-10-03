@@ -1,21 +1,14 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.UI;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.UIElements
 {
     public class LiquidWandSlot : ModImageButton
     {
-        public readonly byte LiquidID;
+        public readonly byte LiquidId;
+        public readonly short BucketId;
+        public readonly short SpongeId;
         private readonly float _hoverColor;
         private readonly float _normalColor;
         private float _liquidAmount;
@@ -26,10 +19,14 @@ namespace ImproveGame.Interface.UIElements
         public bool IsAltHovering;
         public float AltHoverTimer;
 
-        public LiquidWandSlot(byte liquidID, float hoverColor, float normalColor) : base(TextureAssets.Liquid[0], Color.White, Color.White) {
-            LiquidID = liquidID;
+        public LiquidWandSlot(byte liquidId, short bucketId, short spongeId, float hoverColor, float normalColor) : base(TextureAssets.Liquid[0], Color.White, Color.White) {
+            LiquidId = liquidId;
+            BucketId = bucketId;
+            SpongeId = spongeId;
             _hoverColor = hoverColor;
             _normalColor = normalColor;
+            Width.Set(42f, 0f);
+            Height.Set(42f, 0f);
             SetHoverImage(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/LiquidSlot/Highlight"));
             SetBackgroundImage(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/LiquidSlot/Border"));
         }
@@ -39,7 +36,7 @@ namespace ImproveGame.Interface.UIElements
         /// </summary>
         /// <param name="amount">存液体的数量，这个值会根据可存数量的多少减少</param>
         public void StoreLiquid(ref byte amount) {
-        // 液体添加量
+            // 液体添加量
             float addAmount = LiquidAmountToFloat(amount);
             // 还可以存入的液体量
             float amountAvailable = 1f - _liquidAmount;
@@ -49,6 +46,10 @@ namespace ImproveGame.Interface.UIElements
             // 应用上去
             amount -= (byte)LiquidAmountToInt(amountAddition);
             _liquidAmount += amountAddition;
+
+            // 有海绵全吸走
+            if (SpongeExists)
+                amount = 0;
         }
 
         /// <summary>
@@ -63,7 +64,25 @@ namespace ImproveGame.Interface.UIElements
 
             amount += (byte)LiquidAmountToInt(amountReduction);
             _liquidAmount -= amountReduction;
+
+            // 有桶全放
+            if (BucketExists)
+                amount = 255;
         }
+
+        /// <summary>
+        /// 如果能无限，返回物品ID，否则返回-1
+        /// </summary>
+        public int Infinite => WandSystem.AbsorptionMode switch
+        {
+            true when SpongeExists => SpongeId,
+            false when BucketExists => BucketId,
+            _ => -1
+        };
+
+        public bool BucketExists => HasItem(GetAllInventoryItemsList(Main.LocalPlayer).ToArray(), itemTypes: BucketId);
+        
+        public bool SpongeExists => HasItem(GetAllInventoryItemsList(Main.LocalPlayer).ToArray(), itemTypes: SpongeId);
 
         public void SetLiquidAmount(float amount) => _liquidAmount = amount;
 
@@ -101,9 +120,9 @@ namespace ImproveGame.Interface.UIElements
             originalFrame.Width = 16;
             int waterStyle = Main.waterStyle; // 根据环境的水样式
             // 岩浆和蜂蜜是没有帧的
-            if (LiquidID != Terraria.ID.LiquidID.Water) {
+            if (LiquidId != Terraria.ID.LiquidID.Water) {
                 originalFrame = new(0, 0, 16, 16);
-                waterStyle = LiquidID == Terraria.ID.LiquidID.Lava ? 1 : 11;
+                waterStyle = LiquidId == Terraria.ID.LiquidID.Lava ? 1 : 11;
             }
 
             // 水面高度效果，Y坐标添加是向上取整
@@ -115,14 +134,14 @@ namespace ImproveGame.Interface.UIElements
                 mainColor = DrawColor.Invoke();
             }
 
-            int frame = LiquidID != Terraria.ID.LiquidID.Water ? 0 : (int)Main.wFrame;
+            int frame = LiquidId != Terraria.ID.LiquidID.Water ? 0 : (int)Main.wFrame;
             float bottomY = dimensions.Position().Y + dimensions.Height;
 
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
 
             float alpha = 1f;
-            if (LiquidID == Terraria.ID.LiquidID.Water) {
+            if (LiquidId == Terraria.ID.LiquidID.Water) {
                 for (int j = 0; j < 13; j++) {
                     if (Main.IsLiquidStyleWater(j) && Main.liquidAlpha[j] > 0f && j != waterStyle) {
                         DrawLiquid(drawPosition, originalFrame, mainColor * Main.liquidAlpha[j], frame, j, scale, bottomY);
@@ -143,13 +162,23 @@ namespace ImproveGame.Interface.UIElements
             }
 
             // 选中时的高光
-            if (WandSystem.LiquidMode == LiquidID && BorderTexture is not null) {
+            if (WandSystem.LiquidMode == LiquidId && BorderTexture is not null) {
                 spriteBatch.Draw(BorderTexture.Value, dimensions.Position(), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
 
             // 绘制一个文本，液体剩余多少
             // 转换为百分数，保留后一位，来自: https://www.jianshu.com/p/3f88338bde60
             string text = $"{_liquidAmount:p1}";
+
+            int itemId = Infinite;
+            if (itemId is not -1)
+            {
+                text = "∞"; // 无限使用
+                Main.instance.LoadItem(itemId);
+                var tex = TextureAssets.Item[itemId].Value;
+                spriteBatch.Draw(tex, dimensions.Center(), null, Color.White * 0.85f, 0f, tex.Size() / 2f, 1f, SpriteEffects.None, 0f);
+            }
+
             Vector2 origin = FontAssets.DeathText.Value.MeasureString(text) / 2f;
 
             Vector2 stringPosition = dimensions.Position();
@@ -169,14 +198,14 @@ namespace ImproveGame.Interface.UIElements
             var model = Matrix.CreateTranslation(new Vector3(-screenPos.X, -screenPos.Y, 0));
 
             // 把变换和所需信息丢给shader
-            float speed = LiquidID == Terraria.ID.LiquidID.Water ? 0.5f : 0.3f;
+            float speed = LiquidId == Terraria.ID.LiquidID.Water ? 0.5f : 0.3f;
             int milliSeconds = (int)Main.gameTimeCache.TotalGameTime.TotalMilliseconds;
             float uTime = milliSeconds % 10000f / 10000f * speed;
             if (milliSeconds % 20000f > 10000f) {
                 // 10-20s时反过来，这样就连续了（
                 uTime = (1 - milliSeconds % 10000f / 10000f) * speed;
             }
-            uTime += LiquidID * 0.3f; // 让每个槽看起来不一样
+            uTime += LiquidId * 0.3f; // 让每个槽看起来不一样
 
             float uWaveScale = _liquidAmount > 0.9f ? (1.0f - _liquidAmount) * 4f : 0.4f;
             ModAssets.LiquidSurface.Value.Parameters["uTransform"].SetValue(model * projection);

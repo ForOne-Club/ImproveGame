@@ -850,21 +850,7 @@ Mods:
             Water: "Water ({LiquidAmount})"
             Lava: "Lava ({LiquidAmount})"
             Honey: "Honey ({LiquidAmount})"
-            ClickIn: 
-                '''
-                <left> to store liquid
-                Hold to store quickly
-                '''
-            ClickOut: 
-                '''
-                <left> to extract liquid
-                Hold to extract quickly
-                '''
-            ClickAbsorbant: 
-                '''
-                <left> to absorb liquid
-                Hold to absorb quickly
-                '''
+            Shimmer: "Shimmer ({LiquidAmount})"
         }
         PaintWandGUI:
         {

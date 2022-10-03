@@ -590,7 +590,7 @@ namespace ImproveGame
         /// <summary>
         /// 判断指定 Item[] 中是否有 item
         /// </summary>
-        public static bool HasItem(Item[] inv, int indexMax, params int[] itemTypes)
+        public static bool HasItem(Item[] inv, int indexMax = -1, params int[] itemTypes)
         {
             for (int i = 0; i < (indexMax > 0 ? indexMax : inv.Length); i++)
             {
