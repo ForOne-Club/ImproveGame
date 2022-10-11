@@ -2,7 +2,7 @@
 
 namespace ImproveGame.Content.Items
 {
-    [Autoload(false)]
+    // 好像有 BUG：使用魔杖拿起箱子 -> 保存退出 -> 再放置 -> 再用法杖拿起刚放置的箱子 -> 卡死
     internal class MoveChest : ModItem
     {
         protected override bool CloneNewInstances => true;
@@ -20,7 +20,7 @@ namespace ImproveGame.Content.Items
         public bool hasChest = false;
         public ushort chestType = 0;
         public string modChestName = null;
-        public override string Texture => "Terraria/Images/MagicPixel";
+
         public override void SetDefaults()
         {
             Item.width = 1;

@@ -58,15 +58,11 @@ Mods:
                 Label: "[i:3813] Huge Inventory"
                 Tooltip:
                     '''
-                    An inventory with 100 slots, can interact with Super Void Vault and Void Vault Smart Pickup
-                    Has the highest priority
-                    (Need to set up hot keys in Controls)
+                    一个单独的背包面板，拥有一百格空间
+                    拥有“超级虚空保险库”、“虚空宝库 智能收取”相同的功能。
+                    并且可以参与合成，可以在背包面板中配置。
+                    (必须使用快捷键打开，快捷键位置：设置 → 控件 → 下滑找到 “更好的体验：大背包”)
                     '''
-            }
-            SuperVaultMaterial:
-            {
-                Label: "[i:3813] Craft using materials in Huge Inventory"
-                Tooltip:  "Materials in Huge Inventory can be used in crafting directly"
             }
             ItemMaxStack:
             {
@@ -805,6 +801,9 @@ Mods:
         {
             Name: Huge Inventory
             Sort: Sort
+            Synthesis: 参与合成
+            SmartPickup: 智能拾取
+            OverflowPickup: 背包溢出自动拾取
         }
         Autofisher:
         {

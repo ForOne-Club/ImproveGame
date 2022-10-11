@@ -1,10 +1,7 @@
-﻿using Terraria;
-using ImproveGame.Common.Packets;
-using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Packets;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.UIElements_Shader;
-using System.Net.Http.Headers;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
@@ -70,7 +67,7 @@ namespace ImproveGame.Interface.GUI
             {
                 Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng = state;
                 Recipe.FindRecipes();
-            }, "参与合成", 0.8f));
+            }, GetText("SuperVault.Synthesis"), 0.8f));
             checkbox[0].Top.Pixels = title.Bottom() + 10f;
 
             MainPanel.Append(checkbox[1] = new Checkbox(() =>
@@ -79,7 +76,7 @@ namespace ImproveGame.Interface.GUI
             }, (bool state) =>
             {
                 Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_SmartGrab = state;
-            }, "智能拾取", 0.8f));
+            }, GetText("SuperVault.SmartPickup"), 0.8f));
             checkbox[1].Left.Pixels = checkbox[0].Right() + 10;
             checkbox[1].Top.Pixels = checkbox[0].Top();
 
@@ -89,7 +86,7 @@ namespace ImproveGame.Interface.GUI
             }, (bool state) =>
             {
                 Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab = state;
-            }, "背包溢出自动拾取", 0.8f));
+            }, GetText("SuperVault.OverflowPickup"), 0.8f));
             checkbox[2].Left.Pixels = checkbox[1].Right() + 10;
             checkbox[2].Top.Pixels = checkbox[0].Top();
 
