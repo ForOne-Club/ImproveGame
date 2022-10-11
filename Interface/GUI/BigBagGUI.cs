@@ -1,8 +1,10 @@
-﻿using ImproveGame.Common.Packets;
+﻿using Terraria;
+using ImproveGame.Common.Packets;
 using ImproveGame.Common.Players;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.UIElements_Shader;
-using System.Collections.Generic;
+using System.Net.Http.Headers;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
@@ -30,25 +32,10 @@ namespace ImproveGame.Interface.GUI
         public ModItemGrid ItemGrid;
         public Checkbox[] checkbox = new Checkbox[3];
 
-        private BackgroundImage BackButton;
-        public void AddBackButton()
-        {
-            if (MainPanel.HasChild(BackButton))
-                MainPanel.RemoveChild(BackButton);
-            MainPanel.Append(BackButton = new(GetTexture("Bank").Value) { HAlign = 1f });
-            BackButton.OnMouseDown += (uie, evt) =>
-            {
-                ItemGrid.SetInventory(Main.LocalPlayer.GetModPlayer<DataPlayer>().SuperVault);
-                MainPanel.RemoveChild(BackButton);
-            };
-            BackButton.Height.Pixels = CloseButton.Height.Pixels;
-            BackButton.Left.Pixels = -BackButton.Width.Pixels - 10;
-        }
-
         private readonly Color background = new(44, 57, 105, 160);
         public override void OnInitialize()
         {
-            Append(MainPanel = new(Color.Black, background) { HAlign = 0.5f, VAlign = 0.5f });
+            Append(MainPanel = new(Color.Black, background));
             MainPanel.OnMouseDown += (evt, uie) =>
             {
                 if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering)
@@ -76,14 +63,33 @@ namespace ImproveGame.Interface.GUI
             CloseButton.Height.Pixels = title.Height();
             CloseButton.OnMouseDown += (evt, uie) => Visible = false;
 
-            MainPanel.Append(checkbox[0] = new Checkbox("参与合成", 0.8f));
+            MainPanel.Append(checkbox[0] = new Checkbox(() =>
+            {
+                return Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng;
+            }, (bool state) =>
+            {
+                Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng = state;
+                Recipe.FindRecipes();
+            }, "参与合成", 0.8f));
             checkbox[0].Top.Pixels = title.Bottom() + 10f;
 
-            MainPanel.Append(checkbox[1] = new Checkbox("智能拾取", 0.8f));
+            MainPanel.Append(checkbox[1] = new Checkbox(() =>
+            {
+                return Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_SmartGrab;
+            }, (bool state) =>
+            {
+                Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_SmartGrab = state;
+            }, "智能拾取", 0.8f));
             checkbox[1].Left.Pixels = checkbox[0].Right() + 10;
             checkbox[1].Top.Pixels = checkbox[0].Top();
 
-            MainPanel.Append(checkbox[2] = new Checkbox("背包溢出自动拾取", 0.8f));
+            MainPanel.Append(checkbox[2] = new Checkbox(() =>
+            {
+                return Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab;
+            }, (bool state) =>
+            {
+                Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab = state;
+            }, "背包溢出自动拾取", 0.8f));
             checkbox[2].Left.Pixels = checkbox[1].Right() + 10;
             checkbox[2].Top.Pixels = checkbox[0].Top();
 

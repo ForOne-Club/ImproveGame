@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Players;
+using ImproveGame.Interface.Common;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
@@ -119,7 +120,7 @@ namespace ImproveGame.Common.Systems
         private Item[] GetWholeInventory(Item[] inventory)
         {
             _loadedSuperVault = false;
-            if (Config.SuperVault && Config.SuperVaultMaterial && DataPlayer.TryGet(Main.LocalPlayer, out var modPlayer) && modPlayer.SuperVault is not null)
+            if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng && DataPlayer.TryGet(Main.LocalPlayer, out var modPlayer) && modPlayer.SuperVault is not null)
             {
                 _loadedSuperVault = true;
                 var superVault = modPlayer.SuperVault;

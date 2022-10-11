@@ -1,9 +1,12 @@
 ﻿using ImproveGame.Common.Animations;
+using Microsoft.Xna.Framework;
 
 namespace ImproveGame.Interface.UIElements_Shader
 {
     public class Checkbox : UIElement
     {
+        public Func<bool> GetState;
+        public Action<bool> SetState;
         private string text;
         public float textScale;
         private Vector2 textSize;
@@ -12,10 +15,6 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         public Color color1 = Color.Transparent;
         public Color color2 = Color.DarkGreen;
-
-        public AnimationTimer HoverTimer = new(3);
-        public AnimationTimer SelectTimer = new(3);
-        public bool check;
 
         public string Text
         {
@@ -27,10 +26,12 @@ namespace ImproveGame.Interface.UIElements_Shader
             }
         }
 
-        public Checkbox(string text, float textScale = 1f)
+        public Checkbox(Func<bool> GetState, Action<bool> SetState, string text, float textScale = 1f)
         {
             Text = text;
             this.textScale = textScale;
+            this.GetState = GetState;
+            this.SetState = SetState;
 
             PaddingLeft = 14 * textScale;
             PaddingRight = 14 * textScale;
@@ -41,55 +42,18 @@ namespace ImproveGame.Interface.UIElements_Shader
             Height.Pixels = MathF.Max(textSize.Y * textScale, 20) + this.VPadding();
         }
 
-        public override void Update(GameTime gameTime)
+        public override void MouseDown(UIMouseEvent evt)
         {
-            base.Update(gameTime);
-            HoverTimer.Update();
-            SelectTimer.Update();
-        }
-
-        public override void MouseOver(UIMouseEvent evt)
-        {
-            base.MouseOver(evt);
-            HoverTimer.Open();
-        }
-
-        public override void MouseOut(UIMouseEvent evt)
-        {
-            base.MouseOut(evt);
-            HoverTimer.Close();
-        }
-
-        public override void Click(UIMouseEvent evt)
-        {
-            base.Click(evt);
-            if (!SelectTimer.AnyClose)
-            {
-                SelectTimer.Close();
-            }
-            else if (!SelectTimer.AnyOpen)
-            {
-                SelectTimer.Open();
-            }
+            base.MouseDown(evt);
+            SetState(!GetState());
         }
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            CalculatedStyle rectangle = GetDimensions();
-            Vector2 position = rectangle.Position();
-            Vector2 size = rectangle.Size();
+            Color color = Color.Lerp(Color.Transparent, new(62, 240, 71), GetState() ? 1 : 0);
 
-            Color color = Color.Lerp(new(240, 62, 62), new(62, 240, 71), SelectTimer.Schedule);
-            Color background1 = Color.Lerp(Color.Transparent, color, HoverTimer.Schedule);
-            Color background2 = Color.Lerp(Color.Transparent, Color.White, HoverTimer.Schedule);
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 6, 3, background2 * 0.8f, background1 * 0.8f);
-
-
-            rectangle = GetInnerDimensions();
-            position = rectangle.Position();
-            size = rectangle.Size();
-
-
+            Vector2 position = GetInnerDimensions().Position();
+            Vector2 size = GetInnerDimensions().Size();
             Vector2 boxSize = new Vector2(21) * textScale;
 
             PixelShader.DrawBox(Main.UIScaleMatrix, position + new Vector2(0, size.Y / 2 - boxSize.Y / 2),

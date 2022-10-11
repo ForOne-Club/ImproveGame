@@ -2,6 +2,7 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Players;
 using ImproveGame.Content.Items;
+using ImproveGame.Interface.Common;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
@@ -109,17 +110,17 @@ namespace ImproveGame.Common.Systems
 
         // 只想要保存增益，不要减益，于是复杂了起来
         private void KeepBuffOnUpdateDead(ILContext il)
-            {
-                var c = new ILCursor(il);
+        {
+            var c = new ILCursor(il);
 
-                /* IL_01C0: ldsfld    bool[] Terraria.Main::persistentBuff
-                 * IL_01C5: ldarg.0
-                 * IL_01C6: ldfld     int32[] Terraria.Player::buffType
-                 * IL_01CB: ldloc.2
-                 * IL_01CC: ldelem.i4
-                 * IL_01CD: ldelem.u1
-                 * IL_01CE: brtrue.s  IL_01E2
-                 */
+            /* IL_01C0: ldsfld    bool[] Terraria.Main::persistentBuff
+             * IL_01C5: ldarg.0
+             * IL_01C6: ldfld     int32[] Terraria.Player::buffType
+             * IL_01CB: ldloc.2
+             * IL_01CC: ldelem.i4
+             * IL_01CD: ldelem.u1
+             * IL_01CE: brtrue.s  IL_01E2
+             */
             if (!c.TryGotoNext(
                 MoveType.After,
                 i => i.MatchLdsfld<Main>(nameof(Main.persistentBuff)),
@@ -317,14 +318,15 @@ namespace ImproveGame.Common.Systems
         private Item Player_PickupItem(On.Terraria.Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp)
         {
             ImprovePlayer improvePlayer = player.GetModPlayer<ImprovePlayer>();
+            UIPlayerSetting uIPlayerSetting = player.GetModPlayer<UIPlayerSetting>();
+            // 大背包
+            if (Config.SuperVault && uIPlayerSetting.SuperVault_SmartGrab && !itemToPickUp.IsAir && HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))
+            {
+                itemToPickUp = ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
+            }
             // 智能虚空保险库
             if (Config.SmartVoidVault && !itemToPickUp.IsACoin)
             {
-                // 大背包
-                if (Config.SuperVault && !itemToPickUp.IsAir && HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))
-                {
-                    itemToPickUp = ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
-                }
                 // 虚空保险库
                 if (player.IsVoidVaultEnabled && !itemToPickUp.IsAir && HasItem(player.bank4.item, -1, itemToPickUp.type))
                 {
@@ -354,7 +356,7 @@ namespace ImproveGame.Common.Systems
             if (!itemToPickUp.IsACoin)
             {
                 // 大背包
-                if (Config.SuperVault && !itemToPickUp.IsAir)
+                if (Config.SuperVault && uIPlayerSetting.SuperVault_OverflowGrab && !itemToPickUp.IsAir)
                 {
                     itemToPickUp = ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
                 }

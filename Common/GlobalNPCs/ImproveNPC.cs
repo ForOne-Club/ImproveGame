@@ -18,6 +18,13 @@ namespace ImproveGame.Common.GlobalNPCs
                 itemType = ModContent.ItemType<Content.Items.WallPlace>();
                 npcLoot.Add(new DropPerPlayerOnThePlayer(itemType, 1, 1, 1, new WandDrop(itemType)));
             }
+
+            // 钱币掉落倍率开到最大时（x25）有 0.5% 概率掉落幸运金币，它唯一的作用就是出售。
+            if (Config.NPCCoinDropRate == 25)
+            {
+                int itemType = ModContent.ItemType<Content.Items.Coin.CoinOne>();
+                npcLoot.Add(new DropPerPlayerOnThePlayer(itemType, 200, 1, 1, null));
+            }
         }
     }
 
