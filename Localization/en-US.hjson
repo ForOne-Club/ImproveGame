@@ -58,10 +58,11 @@ Mods:
                 Label: "[i:3813] Huge Inventory"
                 Tooltip:
                     '''
-                    一个单独的背包面板，拥有一百格空间
-                    拥有“超级虚空保险库”、“虚空宝库 智能收取”相同的功能。
-                    并且可以参与合成，可以在背包面板中配置。
-                    (必须使用快捷键打开，快捷键位置：设置 → 控件 → 下滑找到 “更好的体验：大背包”)
+                    A separate inventory with its own UI, has 100 item slots
+                    Also has the "Super Void Vault" and the "Void Vault Smart Pickup" features
+                    Items inside can be directly used in crafting
+                    (This inventory has to be opened by a hot key)
+                    (Bind a key in Settings -> Controls -> scroll down and find "QoL: Huge Inventory")
                     '''
             }
             ItemMaxStack:
