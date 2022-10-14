@@ -802,9 +802,9 @@ Mods:
         {
             Name: Huge Inventory
             Sort: Sort
-            Synthesis: 参与合成
-            SmartPickup: 智能拾取
-            OverflowPickup: 背包溢出自动拾取
+            Synthesis: Use in crafting
+            SmartPickup: Smart pickup
+            OverflowPickup: Auto pickup
         }
         Autofisher:
         {

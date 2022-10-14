@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Content.Items;
+using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;

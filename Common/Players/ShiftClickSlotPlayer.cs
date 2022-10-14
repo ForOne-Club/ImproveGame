@@ -1,5 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Packets.NetAutofisher;
+using ImproveGame.Content.Items;
+using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 
@@ -25,6 +27,11 @@ namespace ImproveGame.Common.Players
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }
+                if (PackageGUI.Visible && ItemToBanner(item) != -1)
+                {
+                    Main.cursorOverride = CursorOverrideID.InventoryToChest;
+                    return true;
+                }
                 if (BigBagGUI.Visible && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var dataPlayer) &&
                     dataPlayer.SuperVault.Any(s => CanPlaceInSlot(s, item) != 0))
                 {
@@ -43,17 +50,29 @@ namespace ImproveGame.Common.Players
         /// <summary>
         /// Shift左键单击物品栏
         /// </summary>
-        public override bool ShiftClickSlot(Item[] inventory, int context, int slot) {
+        public override bool ShiftClickSlot(Item[] inventory, int context, int slot)
+        {
             if (Player.chest == -1 & Player.talkNPC == -1 && context == ItemSlot.Context.InventoryItem &&
-                !inventory[slot].IsAir && !inventory[slot].favorited) {
-                if (BigBagGUI.Visible) {
+                !inventory[slot].IsAir && !inventory[slot].favorited)
+            {
+                if (PackageGUI.Visible && ItemToBanner(inventory[slot]) != -1)
+                {
+                    BannerChest.PutInBannerChest(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot]);
+                    Recipe.FindRecipes();
+                    SoundEngine.PlaySound(SoundID.Grab);
+                    return true; // 阻止原版代码运行
+                }
+
+                if (BigBagGUI.Visible)
+                {
                     inventory[slot] = ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
                     Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);
                     return true; // 阻止原版代码运行
                 }
 
-                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher)) {
+                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher))
+                {
                     inventory[slot] = ItemStackToInventory(fisher.fish, inventory[slot], false);
                     AutofisherGUI.RequireRefresh = true;
                     UISystem.Instance.AutofisherGUI.RefreshItems();
@@ -65,10 +84,12 @@ namespace ImproveGame.Common.Players
                     return true; // 阻止原版代码运行
                 }
 
-                if (!inventory[slot].IsAir && ArchitectureGUI.Visible) {
+                if (!inventory[slot].IsAir && ArchitectureGUI.Visible)
+                {
                     foreach (var itemSlot in from s in UISystem.Instance.ArchitectureGUI.ItemSlot
                                              where s.Value.CanPlaceItem(inventory[slot])
-                                             select s) {
+                                             select s)
+                    {
                         // 放到建筑GUI里面
                         ref Item slotItem = ref itemSlot.Value.Item;
                         ref Item placeItem = ref inventory[slot];
@@ -76,7 +97,8 @@ namespace ImproveGame.Common.Players
                         byte placeMode = CanPlaceInSlot(slotItem, placeItem);
 
                         // type不同直接切换吧
-                        if (placeMode == 1) {
+                        if (placeMode == 1)
+                        {
                             itemSlot.Value.SwapItem(ref placeItem);
                             SoundEngine.PlaySound(SoundID.Grab);
                             Recipe.FindRecipes();
@@ -85,7 +107,8 @@ namespace ImproveGame.Common.Players
                             return true; // 阻止原版代码运行
                         }
                         // type相同，里面的能堆叠，放进去
-                        if (placeMode == 2) {
+                        if (placeMode == 2)
+                        {
                             int stackAvailable = slotItem.maxStack - slotItem.stack;
                             int stackAddition = Math.Min(placeItem.stack, stackAvailable);
                             placeItem.stack -= stackAddition;

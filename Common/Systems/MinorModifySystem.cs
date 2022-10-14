@@ -319,6 +319,12 @@ namespace ImproveGame.Common.Systems
         {
             ImprovePlayer improvePlayer = player.GetModPlayer<ImprovePlayer>();
             UIPlayerSetting uIPlayerSetting = player.GetModPlayer<UIPlayerSetting>();
+            // 旗帜收纳箱
+            if (improvePlayer.bannerChest is not null && ItemToBanner(itemToPickUp) != -1)
+            {
+                PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, itemToPickUp, itemToPickUp.stack);
+                BannerChest.PutInBannerChest(improvePlayer.bannerChest.storedBanners, ref itemToPickUp);
+            }
             // 大背包
             if (Config.SuperVault && uIPlayerSetting.SuperVault_SmartGrab && !itemToPickUp.IsAir && HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))
             {

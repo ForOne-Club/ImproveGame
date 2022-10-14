@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameInput;
@@ -10,6 +11,7 @@ namespace ImproveGame.Common.Players
         public bool PiggyBank;
         public bool Safe;
         public bool DefendersForge;
+        public BannerChest bannerChest;
 
         public bool ShouldUpdateTeam;
 
@@ -28,6 +30,23 @@ namespace ImproveGame.Common.Players
                 PiggyBank = Player.HasItem(ItemID.PiggyBank);
                 Safe = Player.HasItem(ItemID.Safe);
                 DefendersForge = Player.HasItem(ItemID.DefendersForge);
+            }
+
+            if (Config.LoadModItems)
+            {
+                BannerChest bannerChest2 = null;
+                for (int i = 0; i < Player.inventory.Length; i++)
+                {
+                    if (!Player.inventory[i].IsAir)
+                    {
+                        Item item = Player.inventory[i];
+                        if (bannerChest2 is null && item.ModItem is BannerChest)
+                        {
+                            bannerChest2 = item.ModItem as BannerChest;
+                        }
+                    }
+                }
+                bannerChest = bannerChest2;
             }
 
             if (Player.whoAmI == Main.myPlayer)

@@ -19,7 +19,8 @@ namespace ImproveGame.Content.Items
             bag.storedBanners = new(storedBanners); // 创建一个新的集合，依旧会拷贝 list 内的引用，但是它本身是一个新的对象。
             return bag;
         }
-        public override bool CanRightClick() => storedBanners is not null && storedBanners.Count != 0;
+
+        public override bool CanRightClick() => storedBanners is not null;
 
         public override void RightClick(Player player)
         {
@@ -48,6 +49,16 @@ namespace ImproveGame.Content.Items
             {
                 return false;
             }
+            PutInBannerChest(storedBanners, ref Main.mouseItem);
+            if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
+            }
+            return true;
+        }
+
+        public static bool PutInBannerChest(List<Item> storedBanners, ref Item item)
+        {
             for (int i = 0; i < storedBanners.Count; i++)
             {
                 if (storedBanners[i].IsAir)
@@ -56,29 +67,25 @@ namespace ImproveGame.Content.Items
                     i--;
                     continue;
                 }
-                if (storedBanners[i].type == Main.mouseItem.type && storedBanners[i].stack < storedBanners[i].maxStack && ItemLoader.CanStack(storedBanners[i], Main.mouseItem))
+                if (storedBanners[i].type == item.type && storedBanners[i].stack < storedBanners[i].maxStack && ItemLoader.CanStack(storedBanners[i], item))
                 {
                     int stackAvailable = storedBanners[i].maxStack - storedBanners[i].stack;
-                    int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);
-                    Main.mouseItem.stack -= stackAddition;
+                    int stackAddition = Math.Min(item.stack, stackAvailable);
+                    item.stack -= stackAddition;
                     storedBanners[i].stack += stackAddition;
                     SoundEngine.PlaySound(SoundID.Grab);
                     Recipe.FindRecipes();
-                    if (Main.mouseItem.stack <= 0)
-                        Main.mouseItem.TurnToAir();
+                    if (item.stack <= 0)
+                        item.TurnToAir();
                 }
             }
-            if (!Main.mouseItem.IsAir && storedBanners.Count < 200)
+            if (!item.IsAir && storedBanners.Count < 200)
             {
-                storedBanners.Add(Main.mouseItem.Clone());
-                Main.mouseItem.TurnToAir();
+                storedBanners.Add(item.Clone());
+                item.TurnToAir();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
-            if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
-            }
-            return true;
+            return false;
         }
 
         public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)

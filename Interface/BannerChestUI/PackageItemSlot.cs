@@ -2,7 +2,7 @@
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Interface.UIElements_Shader
+namespace ImproveGame.Interface.BannerChestUI
 {
     public class PackageItemSlot : UIElement
     {
@@ -12,23 +12,12 @@ namespace ImproveGame.Interface.UIElements_Shader
         private int RightMouseTimer;
 
         public Func<Item, bool> CanPutItemSlot;
-        public List<Item> items;
-        public int index;
-        public Item Item
+        private List<Item> items;
+        private int index;
+        private Item Item
         {
             get => items[index];
-            set
-            {
-                if (value is null || value.IsAir)
-                {
-                    items.RemoveAt(index);
-                    Parent.RemoveChild(Parent.Children.Last());
-                }
-                else
-                {
-                    items[index] = value;
-                }
-            }
+            set => items[index] = value;
         }
 
         public PackageItemSlot(List<Item> items, int index)
@@ -41,7 +30,9 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         public override void MouseDown(UIMouseEvent evt)
         {
-            if (Main.mouseItem.IsAir)
+            bool MouseItemIsAir = Main.mouseItem.IsAir;
+            base.MouseDown(evt);
+            if (MouseItemIsAir)
             {
                 SetCursor();
                 MouseDown_ItemSlot();
@@ -50,7 +41,7 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         public override void RightMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.RightMouseDown(evt);
             RightMouseTimer = 0;
             TakeSlotItemToMouseItem();
         }
@@ -86,11 +77,11 @@ namespace ImproveGame.Interface.UIElements_Shader
 
             Vector2 textSize = GetTextSize(index.ToString()) * 0.75f;
             Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
-            Utils.DrawBorderString(sb, index.ToString(), textPos, Color.White, 0.75f);
+            TrUtils.DrawBorderString(sb, index.ToString(), textPos, Color.White, 0.75f);
 
             textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
             textPos = dimensions.Position() + new Vector2(52 * 0.2f, (52 - textSize.Y) * 0.9f);
-            Utils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
+            TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
 
             if (IsMouseHovering)
             {
@@ -152,7 +143,7 @@ namespace ImproveGame.Interface.UIElements_Shader
                 return;
             }
 
-            // 放回物品栏图标
+            // 放回物背包图标
             if (Main.cursorOverride == CursorOverrideID.ChestToInventory)
             {
                 Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item, GetItemSettings.InventoryEntityToPlayerInventorySettings);
