@@ -1,5 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Players;
+using ImproveGame.Interface.BannerChestUI;
+using ImproveGame.Interface.Common;
 using System.Collections.Generic;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
@@ -21,12 +23,13 @@ namespace ImproveGame.Content.Items
             return bag;
         }
 
-        public override bool CanRightClick() => storedPotions is not null && storedPotions.Count != 0;
+        public override bool CanRightClick() => storedPotions is not null;
 
         public override void RightClick(Player player)
         {
-            player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
-            storedPotions.RemoveAt(storedPotions.Count - 1);
+            UISystem.Instance.PackageGUI.Open(storedPotions, Item.Name, PackageGUI.StorageType.Potions);
+            // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
+            // storedPotions.RemoveAt(storedPotions.Count - 1);
         }
 
         public override bool ConsumeItem(Player player) => false;
@@ -48,6 +51,16 @@ namespace ImproveGame.Content.Items
             {
                 return false;
             }
+            PutInPotionBag(storedPotions, ref Main.mouseItem);
+            if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
+            }
+            return true;
+        }
+
+        public static bool PutInPotionBag(List<Item> storedPotions, ref Item item)
+        {
             for (int i = 0; i < storedPotions.Count; i++)
             {
                 if (storedPotions[i].IsAir)
@@ -56,36 +69,32 @@ namespace ImproveGame.Content.Items
                     i--;
                     continue;
                 }
-                if (storedPotions[i].type == Main.mouseItem.type && storedPotions[i].stack < storedPotions[i].maxStack && ItemLoader.CanStack(storedPotions[i], Main.mouseItem))
+                if (storedPotions[i].type == item.type && storedPotions[i].stack < storedPotions[i].maxStack && ItemLoader.CanStack(storedPotions[i], item))
                 {
                     int stackAvailable = storedPotions[i].maxStack - storedPotions[i].stack;
-                    int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);
-                    Main.mouseItem.stack -= stackAddition;
+                    int stackAddition = Math.Min(item.stack, stackAvailable);
+                    item.stack -= stackAddition;
                     storedPotions[i].stack += stackAddition;
                     SoundEngine.PlaySound(SoundID.Grab);
                     Recipe.FindRecipes();
-                    if (Main.mouseItem.stack <= 0)
-                        Main.mouseItem.TurnToAir();
+                    if (item.stack <= 0)
+                        item.TurnToAir();
                 }
             }
-            if (!Main.mouseItem.IsAir && storedPotions.Count < 20)
+            if (!item.IsAir && storedPotions.Count < 200)
             {
-                storedPotions.Add(Main.mouseItem.Clone());
-                Main.mouseItem.TurnToAir();
+                storedPotions.Add(item.Clone());
+                item.TurnToAir();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
-            if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
-            }
-            return true;
+            return false;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             if (storedPotions is not null && storedPotions.Count > 0)
             {
-                if (storedPotions.Count >= 20)
+                if (storedPotions.Count >= 200)
                 {
                     tooltips.Add(new(Mod, "PotionBagCurrent", GetText("Tips.PotionBagCurrentFull"))
                     {

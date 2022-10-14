@@ -325,6 +325,12 @@ namespace ImproveGame.Common.Systems
                 PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, itemToPickUp, itemToPickUp.stack);
                 BannerChest.PutInBannerChest(improvePlayer.bannerChest.storedBanners, ref itemToPickUp);
             }
+            // 药水带袋
+            if (improvePlayer.potionBag is not null && itemToPickUp.buffType > 0)
+            {
+                PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, itemToPickUp, itemToPickUp.stack);
+                PotionBag.PutInPotionBag(improvePlayer.potionBag.storedPotions, ref itemToPickUp);
+            }
             // 大背包
             if (Config.SuperVault && uIPlayerSetting.SuperVault_SmartGrab && !itemToPickUp.IsAir && HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))
             {

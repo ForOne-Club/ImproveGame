@@ -1,4 +1,5 @@
-﻿using ImproveGame.Interface.UIElements_Shader;
+﻿using ImproveGame.Content.Items;
+using ImproveGame.Interface.UIElements_Shader;
 using System.Collections.Generic;
 using Terraria.GameInput;
 
@@ -7,6 +8,8 @@ namespace ImproveGame.Interface.BannerChestUI
     public class PackageGUI : UIState
     {
         private static bool visible;
+        public static StorageType storageType;
+
         public static bool Visible
         {
             get
@@ -57,7 +60,7 @@ namespace ImproveGame.Interface.BannerChestUI
                 Visible = false;
             };
 
-            mainPanel.Append(gridPanel = new(title.background, title.background, 12, 0, false));
+            mainPanel.Append(gridPanel = new(Color.Black, new(35, 40, 83, 160), 12, 3, false));
             gridPanel.Append(grid = new());
             gridPanel.OnMouseDown += GridPanel_OnMouseDown;
             gridPanel.Top.Pixels = title.Bottom() + 10;
@@ -70,34 +73,20 @@ namespace ImproveGame.Interface.BannerChestUI
 
         private void GridPanel_OnMouseDown(UIMouseEvent evt, UIElement listeningElement)
         {
-            List<Item> items = grid.items;
-            int bannerID = ItemToBanner(Main.mouseItem);
-            if (bannerID == -1) return;
-            for (int i = 0; i < items.Count; i++)
+            if (Main.mouseItem.IsAir)
             {
-                if (items[i].IsAir)
-                {
-                    items.RemoveAt(i);
-                    i--;
-                    continue;
-                }
-                if (items[i].type == Main.mouseItem.type && items[i].stack < items[i].maxStack && ItemLoader.CanStack(items[i], Main.mouseItem))
-                {
-                    int stackAvailable = items[i].maxStack - items[i].stack;
-                    int stackAddition = Math.Min(Main.mouseItem.stack, stackAvailable);
-                    Main.mouseItem.stack -= stackAddition;
-                    items[i].stack += stackAddition;
-                    SoundEngine.PlaySound(SoundID.Grab);
-                    Recipe.FindRecipes();
-                    if (Main.mouseItem.stack <= 0)
-                        Main.mouseItem.TurnToAir();
-                }
+                return;
             }
-            if (!Main.mouseItem.IsAir && items.Count < 200)
+            List<Item> items = grid.items;
+            // 旗帜收纳箱
+            if (storageType is StorageType.Banners && ItemToBanner(Main.mouseItem) != -1)
             {
-                items.Add(Main.mouseItem.Clone());
-                Main.mouseItem.TurnToAir();
-                SoundEngine.PlaySound(SoundID.Grab);
+                BannerChest.PutInBannerChest(items, ref Main.mouseItem);
+            }
+            // 药水袋子
+            else if (storageType is StorageType.Potions && Main.mouseItem.buffType > 0)
+            {
+                PotionBag.PutInPotionBag(items, ref Main.mouseItem);
             }
         }
 
@@ -111,8 +100,9 @@ namespace ImproveGame.Interface.BannerChestUI
             }
         }
 
-        public void Open(List<Item> items, string title)
+        public void Open(List<Item> items, string title, StorageType STOType)
         {
+            storageType = STOType;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
             Visible = true;
@@ -120,6 +110,12 @@ namespace ImproveGame.Interface.BannerChestUI
             grid.scrollbar.ViewPosition = 0;
             this.title.Text = title;
             Recalculate();
+        }
+
+        public enum StorageType
+        {
+            Banners,
+            Potions
         }
     }
 }

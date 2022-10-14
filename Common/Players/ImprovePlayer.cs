@@ -12,6 +12,7 @@ namespace ImproveGame.Common.Players
         public bool Safe;
         public bool DefendersForge;
         public BannerChest bannerChest;
+        public PotionBag potionBag;
 
         public bool ShouldUpdateTeam;
 
@@ -32,21 +33,25 @@ namespace ImproveGame.Common.Players
                 DefendersForge = Player.HasItem(ItemID.DefendersForge);
             }
 
+            bannerChest = null;
+            potionBag = null;
             if (Config.LoadModItems)
             {
-                BannerChest bannerChest2 = null;
                 for (int i = 0; i < Player.inventory.Length; i++)
                 {
                     if (!Player.inventory[i].IsAir)
                     {
                         Item item = Player.inventory[i];
-                        if (bannerChest2 is null && item.ModItem is BannerChest)
+                        if (bannerChest is null && item.ModItem is BannerChest)
                         {
-                            bannerChest2 = item.ModItem as BannerChest;
+                            bannerChest = item.ModItem as BannerChest;
+                        }
+                        if (potionBag is null && item.ModItem is PotionBag)
+                        {
+                            potionBag = item.ModItem as PotionBag;
                         }
                     }
                 }
-                bannerChest = bannerChest2;
             }
 
             if (Player.whoAmI == Main.myPlayer)

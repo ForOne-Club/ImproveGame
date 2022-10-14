@@ -541,18 +541,19 @@
             PotionBag:
                 '''
                 存储你的增益药水
-                手持药水<left>该物品以将药水存入
-                在物品栏中<right>该物品以取出药水
-                最多可存入20组药水
+                物品栏中<right>该物品打开药水袋
+                手持药水<left>该物品以将旗帜存入
+                仅背包中位列第一的药水袋可以自动收纳
+                最多可存入200组药水
                 '''
             BannerChest:
                 '''
                 存储你的旗帜
-                物品栏中<right>该物品打开盒子
+                物品栏中<right>该物品打开旗帜盒
                 手持旗帜<left>该物品以将旗帜存入
                 自动收纳即将进入背包的旗帜
                 仅背包中位列第一的旗帜盒可以自动收纳
-                最多可存入200组旗帜
+                最多可存入500组旗帜
                 '''
             Autofisher:
                 '''
@@ -631,16 +632,16 @@
             LiquidWandOn: "中键单击以开启液体控制面板"
             LiquidWandOff: "中键单击以关闭液体控制面板"
 
-            PotionBagCurrent: "该药水袋内目前拥有下列药水 ({StoredCount}/20):"
+            PotionBagCurrent: "该药水袋内目前拥有下列药水 ({StoredCount}/200):"
             PotionBagCurrentFull: "该药水袋内目前拥有下列药水 (已满!):"
-            PotionBagNone: "该药水袋未装有药水 (0/20)"
+            PotionBagNone: "该药水袋未装有药水 (0/200)"
             PotionBagAvailable: "(生效中)"
             PotionBagUnavailable: "(未生效)"
             PotionBagDisabled: "(被禁用)"
 
-            BannerChestCurrent: "该旗帜箱内目前拥有下列旗帜 ({StoredCount}/200):"
+            BannerChestCurrent: "该旗帜箱内目前拥有下列旗帜 ({StoredCount}/500):"
             BannerChestCurrentFull: "该旗帜箱内目前拥有下列旗帜 (已满!):"
-            BannerChestNone: "该旗帜箱未装有旗帜 (0/200)"
+            BannerChestNone: "该旗帜箱未装有旗帜 (0/500)"
             BannerChestUseless: "便携旗帜功能未开启，放入其中的旗帜不会有任何用处"
             
             Tag:

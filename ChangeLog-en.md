@@ -10,6 +10,8 @@
 - 修复了钓鱼机的TileEntity实例无法正常消失的BUG
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
+- 宝箱移动魔杖，可以移动装有物品的宝箱
+- 旗帜盒与药水袋添加UI，增加容积，并且为其添加自动收纳功能。
 - Improved hotkey tooltip texts
 - Five filter options for the Fishing Machine, you can choose what to fish
 - The Fishing Machine now supports Fargo's Mutant Mod's water fountain biomes

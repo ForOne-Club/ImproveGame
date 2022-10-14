@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.Common;
 using System.Collections.Generic;
 using Terraria.ModLoader.IO;
@@ -26,7 +27,7 @@ namespace ImproveGame.Content.Items
         {
             //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
             //storedBanners.RemoveAt(storedBanners.Count - 1);
-            UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name);
+            UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name, PackageGUI.StorageType.Banners);
         }
 
         public override bool ConsumeItem(Player player) => false;
@@ -79,7 +80,7 @@ namespace ImproveGame.Content.Items
                         item.TurnToAir();
                 }
             }
-            if (!item.IsAir && storedBanners.Count < 200)
+            if (!item.IsAir && storedBanners.Count < 500)
             {
                 storedBanners.Add(item.Clone());
                 item.TurnToAir();
@@ -114,7 +115,7 @@ namespace ImproveGame.Content.Items
             }
             if (storedBanners is not null && storedBanners.Count > 0)
             {
-                if (storedBanners.Count >= 200)
+                if (storedBanners.Count >= 500)
                 {
                     tooltips.Add(new(Mod, "BannerChestCurrent", GetText("Tips.BannerChestCurrentFull"))
                     {

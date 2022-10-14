@@ -27,7 +27,10 @@ namespace ImproveGame.Common.Players
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }
-                if (PackageGUI.Visible && ItemToBanner(item) != -1)
+                // 旗帜收纳箱 + 药水袋
+                if (PackageGUI.Visible &&
+                    ((PackageGUI.storageType is PackageGUI.StorageType.Banners && ItemToBanner(item) != -1) ||
+                    (PackageGUI.storageType is PackageGUI.StorageType.Potions && item.buffType > 0)))
                 {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
@@ -55,11 +58,20 @@ namespace ImproveGame.Common.Players
             if (Player.chest == -1 & Player.talkNPC == -1 && context == ItemSlot.Context.InventoryItem &&
                 !inventory[slot].IsAir && !inventory[slot].favorited)
             {
-                if (PackageGUI.Visible && ItemToBanner(inventory[slot]) != -1)
+                if (PackageGUI.Visible)
                 {
-                    BannerChest.PutInBannerChest(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot]);
-                    Recipe.FindRecipes();
-                    SoundEngine.PlaySound(SoundID.Grab);
+                    if (PackageGUI.storageType is PackageGUI.StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
+                    {
+                        BannerChest.PutInBannerChest(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot]);
+                        Recipe.FindRecipes();
+                        SoundEngine.PlaySound(SoundID.Grab);
+                    }
+                    else if (PackageGUI.storageType is PackageGUI.StorageType.Potions && inventory[slot].buffType > 0)
+                    {
+                        PotionBag.PutInPotionBag(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot]);
+                        Recipe.FindRecipes();
+                        SoundEngine.PlaySound(SoundID.Grab);
+                    }
                     return true; // 阻止原版代码运行
                 }
 
