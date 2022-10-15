@@ -469,6 +469,7 @@ Mods:
             Autofisher: Fishing Machine
             PaintWand: Wand of Painting
             ConstructWand: Wand of Construction
+            MoveChest: Wand of Void
         }
         ItemTooltip:
         {
@@ -578,6 +579,11 @@ Mods:
                 Wires will not be shown in preview, but will be recorded and placed
                 Click the 'Introduction' at the right top for more information
                 [c/AAAAAA:Beta test feature, kindly report bugs in this mod's Steam workshop page]
+                '''
+            MoveChest:
+                '''
+                Use on a chest to store it in this wand
+                Use again to place the chest
                 '''
         }
 		MapObject:

@@ -6,18 +6,19 @@
 ## BUG Fixes
 - Fixed some issues with multiplayer mode
 - Fixed the pool cursor not showing in multiplayer mode
-- 修复了钓鱼机无法打开的BUG
-- 修复了钓鱼机的TileEntity实例无法正常消失的BUG
+- Fixed sometimes the Fishing Machine cannot be opened
+- Fixed the TileEntity instance of Fishing Machine could not despawn properly
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
-- 宝箱移动魔杖，可以移动装有物品的宝箱
-- 旗帜盒与药水袋添加UI，增加容积，并且为其添加自动收纳功能。
+- Wand of Void, can move non-empty chests
+- The Banner Box and the Potion Bag now have UIs, increased volumes and ability to collect items automatically
 - Improved hotkey tooltip texts
 - Five filter options for the Fishing Machine, you can choose what to fish
 - The Fishing Machine now supports Fargo's Mutant Mod's water fountain biomes
-- 液体法杖调整
-  - 现在最大可框选30x30的范围
-  - 在有无底桶时，对应的液体可被无限放置，有吸收棉则可以无限吸收
+- Wand of Liquid adjusted
+  - Now can select a maximum 30x30 area
+  - Can infinitely place liquids if have respective 'bottomless bucket' items
+  - The same way for the 'absorbant sponge' items
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
