@@ -62,7 +62,7 @@ namespace ImproveGame.Common.ConstructCore
                 } 
                 catch
                 {
-                    Main.NewText("文件不合法或不是结构文件!", Color.Red);
+                    Main.NewText(GetText("ConstructGUI.FileInfo.LoadError"), Color.Red);
                     return null;
                 }
 

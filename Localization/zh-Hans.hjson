@@ -732,6 +732,7 @@
                 ModMissing.Count: "2"
                 ModMissing.1: "该结构包含未被加载的模组的物块或背景墙"
                 ModMissing.2: "放置有可能发生错误"
+                LoadError: "文件不合法或不是结构文件!"
             }
             MaterialInfo:
             {
@@ -827,6 +828,11 @@
             NoInfBuff: "当前没有可用的无限增益"
             NoInfBuffAlt: "请在模组配置中打开无限续杯功能"
             NPCSpawnRatePanel: "敌人生成速度面板"
+        }
+        LifeAnalyzer:
+        {
+            "Priority": "优先级: "
+            "Tip": "<left>以控制检测情况"
         }
         Architecture:
         {

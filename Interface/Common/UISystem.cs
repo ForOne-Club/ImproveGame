@@ -44,6 +44,9 @@ namespace ImproveGame.Interface.Common
         public GrabBagInfoGUI GrabBagInfoGUI;
         public static UserInterface GrabBagInfoInterface;
 
+        public LifeformAnalyzerGUI LifeformAnalyzerGUI;
+        public static UserInterface LifeformAnalyzerInterface;
+
         public StructureGUI StructureGUI;
         public static UserInterface StructureInterface;
 
@@ -81,6 +84,9 @@ namespace ImproveGame.Interface.Common
             GrabBagInfoGUI = null;
             GrabBagInfoInterface = null;
 
+            LifeformAnalyzerGUI = null;
+            LifeformAnalyzerInterface = null;
+
             StructureGUI = null;
             StructureInterface = null;
 
@@ -102,6 +108,7 @@ namespace ImproveGame.Interface.Common
                 BigBagGUI = new();
                 PaintWandGUI = new();
                 GrabBagInfoGUI = new();
+                LifeformAnalyzerGUI = new();
                 StructureGUI = new();
                 BigBagInterface = new();
                 PackageInterface = new();
@@ -113,6 +120,7 @@ namespace ImproveGame.Interface.Common
                 LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
                 LoadGUI(ref PaintWandGUI, out PaintWandInterface);
                 LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
+                LoadGUI(ref LifeformAnalyzerGUI, out LifeformAnalyzerInterface);
                 LoadGUI(ref StructureGUI, out StructureInterface);
             }
         }
@@ -167,6 +175,10 @@ namespace ImproveGame.Interface.Common
             {
                 GrabBagInfoInterface?.Update(gameTime);
             }
+            if (LifeformAnalyzerGUI.Visible)
+            {
+                LifeformAnalyzerInterface?.Update(gameTime);
+            }
             if (StructureGUI.Visible)
             {
                 StructureInterface?.Update(gameTime);
@@ -197,6 +209,8 @@ namespace ImproveGame.Interface.Common
 
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Grab Bag Info GUI",
                     () => { if (GrabBagInfoGUI.Visible) GrabBagInfoGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Lifeform Analyzer GUI",
+                    () => { if (LifeformAnalyzerGUI.Visible) LifeformAnalyzerGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Structure GUI", () =>
                 {
                     if (StructureGUI.Visible)
