@@ -168,6 +168,7 @@ namespace ImproveGame.Common.GlobalItems
             // 更多信息
             if (Config.ShowItemMoreData)
             {
+                tooltips.Add(new(Mod, "Rare", "Rare: " + item.rare));
                 tooltips.Add(new(Mod, "Type", "Type: " + item.type));
                 tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
                 tooltips.Add(new(Mod, "UseAnimation", "UseAnimation: " + item.useAnimation));

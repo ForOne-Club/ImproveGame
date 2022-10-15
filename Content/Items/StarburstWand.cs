@@ -10,7 +10,7 @@ namespace ImproveGame.Content.Items
         {
             Item.width = 40;
             Item.height = 46;
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.Red;
             Item.value = Item.sellPrice(0, 5, 0, 0);
 
             SelectRange = new(40, 40);

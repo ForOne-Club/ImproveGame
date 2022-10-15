@@ -1,6 +1,7 @@
 ﻿using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items;
 /// <summary>
@@ -26,6 +27,7 @@ public record ItemPosition
 
 // 好像有 BUG：使用魔杖拿起箱子 -> 保存退出 -> 再放置 -> 再用法杖拿起刚放置的箱子 -> 卡死
 // 已修复，原因：打开箱子时移除了箱子，Review时删除该段注释
+// 阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴 :)
 // TODO Container2是什么？可能会对同步产生影响？
 // TODO 需要更好的说明，翻译和贴图
 public class MoveChest : ModItem
@@ -293,8 +295,9 @@ public class MoveChest : ModItem
         Item.width = 1;
         Item.height = 1;
         Item.useStyle = ItemUseStyleID.Swing;
-        Item.useTime = 10;
-        Item.useAnimation = 10;
+        Item.useTime = 15;
+        Item.useAnimation = 15;
+        Item.rare = ItemRarityID.Red;
         Item.autoReuse = true;
     }
 

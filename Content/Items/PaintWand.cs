@@ -95,7 +95,7 @@ namespace ImproveGame.Content.Items
 
         public override void SetItemDefaults()
         {
-            Item.rare = ItemRarityID.Lime;
+            Item.rare = ItemRarityID.Red;
             Item.value = Item.sellPrice(0, 1, 0, 0);
 
             SelectRange = new(1000, 1000);

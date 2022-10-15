@@ -36,7 +36,7 @@ namespace ImproveGame.Content.Items
         {
             Item.width = 30;
             Item.height = 30;
-            Item.rare = ItemRarityID.Lime;
+            Item.rare = ItemRarityID.Red;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.useAnimation = 15;
             Item.useTime = 15;

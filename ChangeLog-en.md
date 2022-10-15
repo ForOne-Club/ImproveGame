@@ -2,7 +2,7 @@
 
 # v1.6.2
 ## Subversions
-- v1.6.2.0
+- v1.6.2
 ## BUG Fixes
 - Fixed some issues with multiplayer mode
 - Fixed the pool cursor not showing in multiplayer mode

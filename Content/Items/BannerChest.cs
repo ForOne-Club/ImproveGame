@@ -160,7 +160,7 @@ namespace ImproveGame.Content.Items
             Item.CloneDefaults(ItemID.EyeOfCthulhuBossBag);
             Item.consumable = false;
             Item.maxStack = 1;
-            Item.rare = ItemRarityID.LightRed;
+            Item.rare = ItemRarityID.Red;
             Item.expert = false;
             Item.width = 48;
             Item.height = 42;

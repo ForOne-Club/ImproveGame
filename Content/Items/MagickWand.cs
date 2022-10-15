@@ -3,6 +3,7 @@ using ImproveGame.Entitys;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameInput;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items
 {
@@ -59,7 +60,7 @@ namespace ImproveGame.Content.Items
 
         public override void SetItemDefaults()
         {
-            Item.rare = ItemRarityID.Lime;
+            Item.rare = ItemRarityID.Cyan;
             Item.value = Item.sellPrice(0, 1, 0, 0);
 
             SelectRange = new(20, 20);

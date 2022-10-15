@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items.Placeable
 {
@@ -19,7 +20,7 @@ namespace ImproveGame.Content.Items.Placeable
             Item.useTime = 10;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Cyan;
             Item.value = Item.sellPrice(silver: 6);
             Item.createTile = ModContent.TileType<Tiles.Autofisher>();
         }

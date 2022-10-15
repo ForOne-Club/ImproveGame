@@ -13,7 +13,7 @@ namespace ImproveGame.Content.Items
             Item.useTime = 15;
             Item.useAnimation = 15;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.rare = ItemRarityID.Lime;
+            Item.rare = ItemRarityID.Red;
             Item.value = Item.sellPrice(0, 0, 50, 0);
             Item.mana = 20;
             Item.UseSound = SoundID.Item1;

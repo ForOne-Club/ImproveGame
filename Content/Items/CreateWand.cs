@@ -138,7 +138,7 @@ namespace ImproveGame.Content.Items
             Item.useTime = 16;
             Item.useAnimation = 16;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.Red;
             Item.value = Item.sellPrice(0, 1, 0, 0);
         }
 

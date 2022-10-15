@@ -476,6 +476,7 @@
             Autofisher: 自动钓鱼机
             PaintWand: 漆涂法杖
             ConstructWand: 构造法杖
+            MoveChest: 虚空魔杖
         }
         ItemTooltip:
         {
@@ -588,6 +589,11 @@
                 电线不会在预览中显示，但会被记录并放置
                 点击结构面板右上角按钮“功能介绍”以了解更多信息
                 [c/AAAAAA:尚处于测试阶段，发生问题请在Steam创意工坊页面评论]
+                '''
+            MoveChest:
+                '''
+                对宝箱使用会将其收入魔杖
+                对空地使用会重新放置宝箱
                 '''
         }
 		MapObject:
