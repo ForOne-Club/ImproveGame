@@ -732,6 +732,7 @@ Mods:
                 ModMissing.Count: "2"
                 ModMissing.1: "This structure contains tiles or walls from the unloaded mods"
                 ModMissing.2: "Placement error may occur"
+                LoadError: "File is not legal or not a structure file"
             }
             MaterialInfo:
             {
@@ -829,6 +830,11 @@ Mods:
             NoInfBuff: "Currently no infinite buff available"
             NoInfBuffAlt: "Enable the Infinite Potions in the mod config"
             NPCSpawnRatePanel: "Enemy Spawn Rate Panel"
+        }
+        LifeAnalyzer:
+        {
+            "Priority": "Priority: "
+            "Tip": "<left> to control the detection"
         }
         Architecture:
         {

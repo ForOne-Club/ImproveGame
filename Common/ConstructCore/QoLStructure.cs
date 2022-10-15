@@ -166,7 +166,7 @@ namespace ImproveGame.Common.ConstructCore
                 }
                 else
                 {
-                    Debug.Fail("Fail to find a modblock");
+                    Debug.Fail("Failed to find a modblock");
                 }
             }
         }

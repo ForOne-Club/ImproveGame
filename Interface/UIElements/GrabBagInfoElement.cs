@@ -59,11 +59,6 @@ namespace ImproveGame.Interface.UIElements
 
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-        }
-
         public static void GetDropInfo(DropRateInfo dropRateInfo, out string stackRange, out string droprate)
         {
             if (dropRateInfo.stackMin != dropRateInfo.stackMax)
@@ -77,10 +72,7 @@ namespace ImproveGame.Interface.UIElements
             if ((double)dropRateInfo.dropRate < 0.001)
                 originalFormat = "P4";
 
-            if (dropRateInfo.dropRate != 1f)
-                droprate = Utils.PrettifyPercentDisplay(dropRateInfo.dropRate, originalFormat);
-            else
-                droprate = "100%";
+            droprate = dropRateInfo.dropRate is not 1f ? Utils.PrettifyPercentDisplay(dropRateInfo.dropRate, originalFormat) : "100%";
         }
 
         public static void SetBestiaryNotesOnItemCache(DropRateInfo info, Item displayItem)
