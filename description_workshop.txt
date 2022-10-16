@@ -3,6 +3,8 @@
 这些功能会为你带来更好的游戏体验
 默认仅开启部分功能，详情请查看模组设置。
 
+[img]https://imgur.com/p7Fv1Z6.gif[/img]
+
 [h1]模组物品[/h1]
 旗帜盒: 铁锭(铅锭)x12
 药水袋: 丝绸x8
@@ -25,8 +27,9 @@ BiliBili@柠檬茶Zero 的介绍视频:
 https://www.bilibili.com/video/BV1EN4y1T7r6
 
 [h1]开源仓库 与 更新日志[/h1]
-更新日志: https://gitee.com/MyGoold/improve-game/blob/master/ChangeLog.md
-开源链接: https://gitee.com/MyGoold/improve-game
+更新日志: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
+开源链接 (Github): https://github.com/487666123/ImproveGame
+开源链接 (Gitee): https://gitee.com/MyGoold/improve-game
 
 [h1]功能概要[/h1]
 [b]详细列表请到模组配置或更新日志中查看[/b]
@@ -44,12 +47,13 @@ https://www.bilibili.com/video/BV1EN4y1T7r6
 [h1]作者 与 额外声明[/h1]
 画师：枫林半叶, 逆风而行的信鸽
 翻译：Lastprismer，Lacewing
-代码：局长, Cyril
+代码：局长，Cyril，夜谷紫幽
 特别感谢:
   @ChevyRay的协程类
 
 版权声明:
 本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
+ChevyRay的协程类亦是在MIT许可协议下开源，不再赘述
 附:
 本模组开源链接: https://gitee.com/MyGoold/improve-game
 WMITF开源链接: https://github.com/gardenappl/WMITF

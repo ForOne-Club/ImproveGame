@@ -294,6 +294,15 @@ Mods:
             }
             BanDamageVar.Label: "[i:6] Disable damage spread"
             ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
+            JourneyResearch:
+            {
+                Label: "[i:GoldBunny] 旅行模式自动研究"
+                Tooltip:
+                    '''
+                    在旅行模式下，达到数量需求的被标记为收藏的物品将被自动研究
+                    自动研究不会消耗物品
+                    '''
+            }
             
             TreeConfigs.Header: "[i:27] Tree Config"
             TreeGrowFaster:
@@ -453,6 +462,7 @@ Mods:
                     - Display detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
                     - A hotkey to swap the hotbar with the second row of inventory
                     - Display minion slot occupancy in tooltip
+                    - 点击生命体分析仪图标打开分析过滤界面
                     '''
             }
         }

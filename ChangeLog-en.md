@@ -3,6 +3,7 @@
 # v1.6.2
 ## Subversions
 - v1.6.2
+- v1.6.2.1
 ## BUG Fixes
 - Fixed some issues with multiplayer mode
 - Fixed the pool cursor not showing in multiplayer mode
@@ -14,11 +15,14 @@
 - The Banner Box and the Potion Bag now have UIs, increased volumes and ability to collect items automatically
 - Improved hotkey tooltip texts
 - Five filter options for the Fishing Machine, you can choose what to fish
+- 城镇NPC可住在邪恶环境功能
 - The Fishing Machine now supports Fargo's Mutant Mod's water fountain biomes
 - Wand of Liquid adjusted
   - Now can select a maximum 30x30 area
   - Can infinitely place liquids if have respective 'bottomless bucket' items
   - The same way for the 'absorbant sponge' items
+- **[v1.6.2.1]** 生命体分析仪现在可过滤你不想要检测到的生物
+- **[v1.6.2.1]** 旅途模式下自动研究被收藏的达到数量需求的物品
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)

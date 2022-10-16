@@ -301,6 +301,15 @@
             }
             BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
             ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
+            JourneyResearch:
+            {
+                Label: "[i:GoldBunny] 旅行模式自动研究"
+                Tooltip:
+                    '''
+                    在旅行模式下，达到数量需求的被标记为收藏的物品将被自动研究
+                    自动研究不会消耗物品
+                    '''
+            }
             
             TreeConfigs.Header: "[i:27] 树木设置"
             TreeGrowFaster:
@@ -459,6 +468,7 @@
                     - 快捷键展示摸彩袋物品明细（需绑定快捷键）
                     - 快捷键可切换第二行物品至快捷栏
                     - 物品简介显示召唤物槽位占用情况
+                    - 点击生命体分析仪图标打开分析过滤界面
                     - [中文特供] 汉化各大Mod的键位设置
                     '''
             }
