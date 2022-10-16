@@ -108,34 +108,59 @@ namespace ImproveGame.Content.Items
                         OverrideColor = Color.LightGreen
                     });
                 }
-                for (int i = 0; i < storedPotions.Count; i++)
+                // 20+类药水时不显示详细信息
+                if (storedPotions.Count > 20)
                 {
-                    var potion = storedPotions[i];
-                    var color = Color.SkyBlue;
-                    bool available = potion.stack >= Config.NoConsume_PotionRequirement;
-                    string text = $"[i/s{potion.stack}:{potion.type}] [{Lang.GetItemNameValue(potion.type)}]";
-                    // 有30个
-                    if (available)
+                    string cachedText = string.Empty;
+                    for (int i = 0; i < storedPotions.Count; i++)
                     {
-                        if (!Config.NoConsume_Potion || !InfBuffPlayer.CheckInfBuffEnable(potion.buffType))
-                        { // 被禁用了
-                            text += $"  {GetText("Tips.PotionBagDisabled")}";
+                        var potion = storedPotions[i];
+                        int stackDisplayed = potion.stack >= 99 ? 99 : potion.stack;
+                        string text = $"[i/s{stackDisplayed}:{potion.type}]";
+                        cachedText += text;
+                        if ((i + 1) % 20 == 0)
+                        {
+                            tooltips.Add(new(Mod, "PotionBagP", cachedText));
+                            cachedText = string.Empty;
                         }
+                    }
+                    if (!string.IsNullOrEmpty(cachedText))
+                    {
+                        tooltips.Add(new(Mod, "PotionBagP", cachedText));
+                    }
+                }
+                // 药水少于20类时显示详细信息
+                else
+                {
+                    for (int i = 0; i < storedPotions.Count; i++)
+                    {
+                        var potion = storedPotions[i];
+                        var color = Color.SkyBlue;
+                        bool available = potion.stack >= Config.NoConsume_PotionRequirement;
+                        string text = $"[i/s{potion.stack}:{potion.type}] [{Lang.GetItemNameValue(potion.type)}]";
+                        // 有30个
+                        if (available)
+                        {
+                            if (!Config.NoConsume_Potion || !InfBuffPlayer.CheckInfBuffEnable(potion.buffType))
+                            { // 被禁用了
+                                text += $"  {GetText("Tips.PotionBagDisabled")}";
+                            }
+                            else
+                            {
+                                text += $"  {GetText("Tips.PotionBagAvailable")}";
+                                color = Color.LightGreen;
+                            }
+                        }
+                        // 没有30个
                         else
                         {
-                            text += $"  {GetText("Tips.PotionBagAvailable")}";
-                            color = Color.LightGreen;
+                            text += $"  {GetText("Tips.PotionBagUnavailable")} ({potion.stack}/{Config.NoConsume_PotionRequirement})";
                         }
+                        tooltips.Add(new(Mod, $"PotionBagP{i}", text)
+                        {
+                            OverrideColor = color
+                        });
                     }
-                    // 没有30个
-                    else
-                    {
-                        text += $"  {GetText("Tips.PotionBagUnavailable")} ({potion.stack}/{Config.NoConsume_PotionRequirement})";
-                    }
-                    tooltips.Add(new(Mod, $"PotionBagP{i}", text)
-                    {
-                        OverrideColor = color
-                    });
                 }
             }
             else

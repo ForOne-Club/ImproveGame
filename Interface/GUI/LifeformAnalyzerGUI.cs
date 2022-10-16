@@ -16,24 +16,24 @@ namespace ImproveGame.Interface.GUI
         private const float PanelHeight = 330f;
         private const float PanelWidth = 340f;
 
-        private ModUIPanel _basePanel; // 背景板
+        private SUIPanel _basePanel; // 背景板
         public BackgroundImage CloseButton;
         public ZeroScrollbar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
         private UISearchBar _searchBar;
-        private UIPanel _searchBoxPanel;
+        private SUIPanel _searchBoxPanel;
         private string _searchString;
         private bool _didClickSomething;
         private bool _didClickSearchBar;
 
         public override void OnInitialize()
         {
-            _basePanel = new ModUIPanel();
+            _basePanel = new(new(29, 34, 70), new(44, 57, 105, 160));
             _basePanel.Left.Set(PanelLeft, 0f);
             _basePanel.Top.Set(PanelTop, 0f);
             _basePanel.Width.Set(PanelWidth, 0f);
             _basePanel.Height.Set(PanelHeight, 0f);
-            _basePanel.BorderColor = new(29, 34, 70);
+            _basePanel.Draggable = true;
             Append(_basePanel);
             
             _basePanel.Append(CloseButton = new(GetTexture("Close").Value)
@@ -60,14 +60,13 @@ namespace ImproveGame.Interface.GUI
 
             Scrollbar = new()
             {
-                HAlign = 1f,
-                VAlign = 0.5f
+                Top = _basePanel.Top,
+                Left = _basePanel.Left,
+                Height = StyleDimension.FromPixels(PanelHeight)
             };
-            Scrollbar.Left.Set(40f, 0f);
-            Scrollbar.Height.Set(0f, 1f);
             Scrollbar.SetView(100f, 1000f);
             SetupScrollBar();
-            _basePanel.Append(Scrollbar);
+            Append(Scrollbar);
             
             UIElement searchArea = new()
             {
@@ -79,7 +78,9 @@ namespace ImproveGame.Interface.GUI
             AddSearchBar(searchArea);
             _searchBar.SetContents(null, forced: true);
         }
-        
+
+        #region 搜索栏
+
 		private void AddSearchBar(UIElement searchArea) {
 			UIImageButton uIImageButton = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search")) {
 				VAlign = 0.5f,
@@ -90,15 +91,13 @@ namespace ImproveGame.Interface.GUI
 			uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
 			uIImageButton.SetVisibility(1f, 1f);
 			searchArea.Append(uIImageButton);
-			UIPanel uIPanel = _searchBoxPanel = new UIPanel {
+            SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(new Color(35, 40, 83), new Color(35, 40, 83), CalculateBorder: false) {
+                Left = new StyleDimension(4f, 0f),
 				Width = new StyleDimension(0f - uIImageButton.Width.Pixels - 3f, 1f),
 				Height = new StyleDimension(0f, 1f),
 				VAlign = 0.5f,
 				HAlign = 1f
 			};
-
-			uIPanel.BackgroundColor = new Color(35, 40, 83);
-			uIPanel.BorderColor = new Color(35, 40, 83);
 			uIPanel.SetPadding(0f);
 			searchArea.Append(uIPanel);
 			UISearchBar uISearchBar = _searchBar = new UISearchBar(Language.GetText("UI.PlayerNameSlot"), 0.8f) {
@@ -106,7 +105,6 @@ namespace ImproveGame.Interface.GUI
 				Height = new StyleDimension(0f, 1f),
 				HAlign = 0f,
 				VAlign = 0.5f,
-				Left = new StyleDimension(6f, 0f),
 				IgnoresMouseInteraction = true
 			};
 
@@ -158,11 +156,11 @@ namespace ImproveGame.Interface.GUI
         }
 
         private void OnStartTakingInput() {
-            _searchBoxPanel.BorderColor = Main.OurFavoriteColor;
+            _searchBoxPanel.borderColor = Main.OurFavoriteColor;
         }
 
         private void OnEndTakingInput() {
-            _searchBoxPanel.BorderColor = new Color(35, 40, 83);
+            _searchBoxPanel.borderColor = new Color(35, 40, 83);
         }
 
         private void SetupScrollBar(bool resetViewPosition = true) {
@@ -188,6 +186,8 @@ namespace ImproveGame.Interface.GUI
             _didClickSomething = true;
         }
 
+        #endregion
+
         public override void Update(GameTime gameTime) {
             base.Update(gameTime);
             if (_didClickSomething && !_didClickSearchBar && _searchBar.IsWritingText)
@@ -195,6 +195,10 @@ namespace ImproveGame.Interface.GUI
 
             _didClickSomething = false;
             _didClickSearchBar = false;
+            
+            Scrollbar.Top = _basePanel.Top;
+            Scrollbar.Left.Pixels = _basePanel.Left.Pixels + 10f + PanelWidth;
+            Recalculate();
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -206,7 +210,7 @@ namespace ImproveGame.Interface.GUI
             }
             UIList.Recalculate();
 
-            if (_basePanel.IsMouseHovering) {
+            if (_basePanel.IsMouseHovering || Scrollbar.IsMouseHovering) {
                 PlayerInput.LockVanillaMouseScroll("ImproveGame: Lifeform Analyzer GUI");
             }
 
