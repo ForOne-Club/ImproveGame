@@ -33,7 +33,26 @@ namespace ImproveGame.Content.Items
             {
                 ColorsLoaded = false;
                 // 把读取放到主线程上
-                On.Terraria.Main.Update += LoadBeautifulSatisfyNPCHouses;
+                Main.QueueMainThreadAction(() =>
+                    {
+                        if (ColorsLoaded)
+                        {
+                            return;
+                        }
+
+                        jianYu = new[]
+                        {
+                            GetTexture("JianYu").Value, GetTexture("JianYu2").Value, GetTexture("JianYu3").Value
+                        };
+                        jianYu_PreView = new[]
+                        {
+                            GetTexture("JianYu_PreView").Value, GetTexture("JianYu_PreView2").Value,
+                            GetTexture("JianYu_PreView3").Value
+                        };
+                        colors = new[] {GetColors(jianYu[0]), GetColors(jianYu[1]), GetColors(jianYu[2])};
+                        ColorsLoaded = true;
+                    }
+                );
             }
             else
             {
@@ -41,33 +60,14 @@ namespace ImproveGame.Content.Items
             }
         }
 
-        private void LoadBeautifulSatisfyNPCHouses(On.Terraria.Main.orig_Update orig, Main self, GameTime gameTime)
-        {
-            try
-            {
-                if (!ColorsLoaded)
-                {
-                    jianYu = new[] { GetTexture("JianYu").Value, GetTexture("JianYu2").Value, GetTexture("JianYu3").Value };
-                    jianYu_PreView = new[] { GetTexture("JianYu_PreView").Value, GetTexture("JianYu_PreView2").Value, GetTexture("JianYu_PreView3").Value };
-                    colors = new[] { GetColors(jianYu[0]), GetColors(jianYu[1]), GetColors(jianYu[2]) };
-                    ColorsLoaded = true;
-                }
-            } catch { }
-
-            orig(self, gameTime);
-        }
-
         public override void Unload()
         {
-            try
+            if (!Main.dedServ)
             {
-                if (!Main.dedServ)
-                {
-                    jianYu = null;
-                    jianYu_PreView = null;
-                    colors = null;
-                }
-            } catch { }
+                jianYu = null;
+                jianYu_PreView = null;
+                colors = null;
+            }
             ColorsLoaded = false;
         }
 

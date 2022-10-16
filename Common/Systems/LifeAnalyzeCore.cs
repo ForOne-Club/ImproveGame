@@ -1,27 +1,15 @@
-﻿using ImproveGame.Interface.Common;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using Newtonsoft.Json;
-using System.Linq;
 using System.Reflection;
-using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.Systems
 {
     public class LifeAnalyzeCore : ModSystem
     {
         private bool _mouseLeftPrev;
-        public const string FileName = "ImproveGame_LifeformAnalyzerBlacklist.json";
-        public static readonly string FullPath = Path.Combine(ConfigManager.ModConfigPath, FileName);
-
         internal static List<NPC> RaritiedNpcs;
         internal static Dictionary<int,bool> Blacklist = new();
-
-        public static void Save()
-        {
-            Directory.CreateDirectory(ConfigManager.ModConfigPath);
-            string json = JsonConvert.SerializeObject(new LifeAnalyzeSettingsDummy(true), ConfigManager.serializerSettings);
-            File.WriteAllText(FullPath, json);
-        }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
@@ -74,68 +62,9 @@ namespace ImproveGame.Common.Systems
                     RaritiedNpcs.Add(npc);
                 }
             }
-            
-            var settings = new LifeAnalyzeSettingsDummy(false);
-
-            bool jsonFileExists = File.Exists(FullPath);
-            string json = jsonFileExists ? File.ReadAllText(FullPath) : "{}";
-
-            try {
-                JsonConvert.PopulateObject(json, settings, ConfigManager.serializerSettings);
-            }
-            catch (Exception e) when (jsonFileExists && e is JsonReaderException or JsonSerializationException) {
-                ImproveGame.Instance.Logger.Warn($"Quality of Life life analyzer blacklist file located at {FullPath} failed to load. The file was likely corrupted somehow, so the defaults will be loaded and the file deleted.");
-                File.Delete(FullPath);
-                JsonConvert.PopulateObject("{}", settings, ConfigManager.serializerSettings);
-            }
-
-            settings.PopulateToBlacklistArray();
         }
 
-        public override void PreSaveAndQuit() => Save();
-    }
-
-    /// <summary>
-    /// 用于序列化json
-    /// </summary>
-    public class LifeAnalyzeSettingsDummy
-    {
-        public List<int> VanillaBlacklist = new();
-        public List<string> ModdedBlacklist = new();
-
-        public LifeAnalyzeSettingsDummy(bool serlizing)
-        {
-            if (!serlizing)
-                return;
-
-            foreach ((int id, bool blacklisted) in LifeAnalyzeCore.Blacklist)
-            {
-                if (!blacklisted)
-                    continue;
-                switch (id)
-                {
-                    case < NPCID.Count:
-                        VanillaBlacklist.Add(id);
-                        break;
-                    case >= NPCID.Count:
-                        ModdedBlacklist.Add(NPCLoader.GetNPC(id).FullName);
-                        break;
-                }
-            }
-
-            VanillaBlacklist.Sort();
-            ModdedBlacklist.Sort();
-        }
-
-        public void PopulateToBlacklistArray()
-        {
-            VanillaBlacklist?.ForEach(i => LifeAnalyzeCore.Blacklist[i] = true);
-            ModdedBlacklist?.ForEach(s =>
-            {
-                if (ModContent.TryFind<ModNPC>(s, out var modNpc))
-                    LifeAnalyzeCore.Blacklist[modNpc.Type] = true;
-            });
-        }
+        public override void PreSaveAndQuit() => AdditionalConfig.Save();
     }
 
     public class LifeformAnaliyzerModify : GlobalInfoDisplay

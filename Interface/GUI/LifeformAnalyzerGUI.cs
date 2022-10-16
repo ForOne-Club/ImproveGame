@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.Systems;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.UIElements_Shader;
 using System.Reflection;
@@ -239,7 +240,7 @@ namespace ImproveGame.Interface.GUI
             Visible = false;
             Main.blockInput = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
-            LifeAnalyzeCore.Save();
+            AdditionalConfig.Save();
         }
     }
 }

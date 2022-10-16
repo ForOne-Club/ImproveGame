@@ -823,6 +823,10 @@ Mods:
             SmartPickup: Smart pickup
             OverflowPickup: Auto pickup
         }
+        MoveChest:
+        {
+            Heavy: "箱子的重量使你行动有些受限"
+        }
         Autofisher:
         {
             Title: "Fishing Machine"

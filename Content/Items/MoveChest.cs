@@ -7,29 +7,21 @@ namespace ImproveGame.Content.Items;
 /// <summary>
 /// 用于寻找其他服务器中对于的物品
 /// </summary>
-public record ItemPosition
+public record ItemPosition(byte player, int slot)
 {
     /// <summary>
     /// 该物品所属的Player
     /// </summary>
-    public byte player;
+    public byte player = player;
     /// <summary>
     /// 该物品所在的栏位
     /// </summary>
-    public int slot;
-
-    public ItemPosition(byte player, int slot)
-    {
-        this.player = player;
-        this.slot = slot;
-    }
+    public int slot = slot;
 }
 
 // 好像有 BUG：使用魔杖拿起箱子 -> 保存退出 -> 再放置 -> 再用法杖拿起刚放置的箱子 -> 卡死
 // 已修复，原因：打开箱子时移除了箱子，Review时删除该段注释
 // 阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴阿巴 :)
-// TODO Container2是什么？可能会对同步产生影响？
-// TODO 需要更好的说明，翻译和贴图
 public class MoveChest : ModItem
 {
     /// <summary>
@@ -79,8 +71,14 @@ public class MoveChest : ModItem
         {
             return false;
         }
-
+        
         var coord = player.GetModPlayer<NetPlayer>().MouseWorld.ToTileCoordinates();
+
+        if (!player.IsInTileInteractionRange(coord.X, coord.Y)) // 必须在可操作范围内
+        {
+            return true;
+        }
+
         //放置箱子
         if (hasChest)
         {
@@ -99,7 +97,7 @@ public class MoveChest : ModItem
                     int index = WorldGen.PlaceChest(coord.X, coord.Y, chestType, false, style);
                     if (index == -1)
                     {
-                        Mod.Logger.Error("Unexpected Error : Unable to Place Chest");
+                        Mod.Logger.Error("Unexpected Error: Unable to Place Chest");
                         return false;
                     }
                     SoundEngine.PlaySound(SoundID.Dig, player.position);
@@ -169,7 +167,7 @@ public class MoveChest : ModItem
             }
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                Mod.Logger.Error("Unexpected error : Chest not found");
+                Mod.Logger.Error("Unexpected error: Chest not found");
             }
             return true;
         }
@@ -238,12 +236,7 @@ public class MoveChest : ModItem
     {
         if (hasChest)
         {
-            //TODO 使用GTV，优化说明
-            tooltips.AddRange(new TooltipLine[]
-            {
-                new(Mod, "Tooltip1", "The chest is heavy"),
-                new(Mod, "Tooltip2", "Speed Down"),
-            });
+            tooltips.Add(new(Mod, "TooltipHeavy", GetText("MoveChest.Heavy")));
         }
     }
 
@@ -299,6 +292,7 @@ public class MoveChest : ModItem
         Item.useAnimation = 15;
         Item.rare = ItemRarityID.Red;
         Item.autoReuse = true;
+        Item.tileBoost = 6;
     }
 
     public override void UpdateInventory(Player player)
@@ -435,7 +429,7 @@ public class PlaceChestPacket : NetModule
         int index = WorldGen.PlaceChest(chestCoord.X, chestCoord.Y, chestType, false, style);
         if (index == -1)
         {
-            Mod.Logger.Error("Unexpected Error : Unable to Place Chest - Server");
+            Mod.Logger.Error("Unexpected Error: Unable to Place Chest - Server");
             return;
         }
         var chest = Main.chest[index];

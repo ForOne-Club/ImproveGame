@@ -821,6 +821,10 @@
             SmartPickup: 智能拾取
             OverflowPickup: 背包溢出自动拾取
         }
+        MoveChest:
+        {
+            Heavy: "箱子的重量使你行动有些受限"
+        }
         Autofisher:
         {
             Title: "自动钓鱼机"

@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ImproveGame.Common.Configs;
 using System.Reflection;
-using Terraria.UI.Chat;
 using static On.Terraria.GameContent.UI.Elements.UIKeybindingListItem;
 using static On.Terraria.GameContent.UI.States.UIManageControls;
 
@@ -19,7 +18,7 @@ namespace ImproveGame.Common.Systems
         public static ModKeybind HotbarSwitchKeybind { get; private set; }
 
         // 为各种Mod控件特制的翻译
-        private readonly static Dictionary<string, string> zhTranslationSupports = new()
+        private static readonly Dictionary<string, string> ZhTranslationSupports = new()
         {
             {"CalamityMod: Normality Relocator", "Calamity Mod (灾厄): 常态定位仪" },
             {"CalamityMod: Rage Mode", "Calamity Mod (灾厄): 怒气模式" },
@@ -54,7 +53,7 @@ namespace ImproveGame.Common.Systems
             {"OreExcavator: Un-whitelist hovered", "Ore Excavator (连锁挖矿): 取消白名单" },
         };
 
-        private readonly static Dictionary<string, string> zhTranslationKeybind = new()
+        private static readonly Dictionary<string, string> ZhTranslationKeybind = new()
         {
             {"Mouse1", "鼠标左键" }, {"Mouse2", "鼠标右键" }, {"Mouse3", "鼠标中键" },
             {"Mouse4", "鼠标侧键1" }, {"Mouse5", "鼠标侧键2" }, {"Space", "空格" },
@@ -109,7 +108,7 @@ namespace ImproveGame.Common.Systems
                 for (int i = 0; i < list.Count; i++)
                 {
                     string text = list[i].Replace("NumPad", "小键盘 ");
-                    if (zhTranslationKeybind.TryGetValue(list[i], out string translatedString))
+                    if (ZhTranslationKeybind.TryGetValue(list[i], out string translatedString))
                     {
                         text = translatedString;
                     }
@@ -142,24 +141,17 @@ namespace ImproveGame.Common.Systems
                     Left = new(-100f, 1f),
                     Top = new(0f, 0f)
                 };
-                if (UseKeybindTranslation)
-                    str = "快换回去";
-                else
-                    str = "让我看看";
-                UIText buttonText = new(str, 0.8f)
+                UIText buttonText = new("Ima your father", 0.8f)
                 {
                     VAlign = 0.5f,
                     HAlign = 0.5f
                 };
                 button.OnMouseDown += (_, _) => {
                     UseKeybindTranslation = !UseKeybindTranslation;
-                    if (UseKeybindTranslation)
-                        str = "快换回去";
-                    else
-                        str = "让我看看";
-                    buttonText.SetText(str);
+                    AdditionalConfig.Save();
                     SoundEngine.PlaySound(SoundID.MenuTick);
                 };
+                button.OnUpdate += _ => buttonText.SetText(UseKeybindTranslation ? "快换回去" : "让我看看");
                 button.Append(buttonText);
                 uISortableElement.Append(button);
 
@@ -178,7 +170,7 @@ namespace ImproveGame.Common.Systems
                 keybindName = GetText("ModName") + ": " + keybindName;
                 return Language.GetTextValue(keybindName);
             }
-            if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans" && zhTranslationSupports.TryGetValue(keybindName, out string translatedString)) {
+            if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans" && ZhTranslationSupports.TryGetValue(keybindName, out string translatedString)) {
                 return translatedString;
             }
             return orig.Invoke(item);
