@@ -299,8 +299,6 @@
                 Label: "[i:FlaskofNanites] 死亡保存增益"
                 Tooltip: "使增益在死后依然会维持激活状态"
             }
-            BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
-            ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
             JourneyResearch:
             {
                 Label: "[i:GoldBunny] 旅行模式自动研究"
@@ -310,6 +308,8 @@
                     自动研究不会消耗物品
                     '''
             }
+            BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
+            ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
             
             TreeConfigs.Header: "[i:27] 树木设置"
             TreeGrowFaster:

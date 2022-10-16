@@ -2,6 +2,8 @@
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
+using System.Collections;
+using Terraria.GameContent.Creative;
 using Terraria.GameInput;
 
 namespace ImproveGame.Common.Players
@@ -24,6 +26,28 @@ namespace ImproveGame.Common.Players
             }
         }
 
+        public override void PostUpdate()
+        {
+            if (Main.gameMenu)
+                return;
+            foreach (var item in from i in Player.inventory where !i.IsAir select i)
+            {
+                // 旅行自动研究
+                if (Main.netMode is not NetmodeID.Server && item.favorited &&
+                    Main.LocalPlayer.difficulty is PlayerDifficultyID.Creative &&
+                    CreativeItemSacrificesCatalog.Instance.TryGetSacrificeCountCapToUnlockInfiniteItems(item.type, out int amountNeeded))
+                {
+                    int sacrificeCount = Main.LocalPlayerCreativeTracker.ItemSacrifices.GetSacrificeCount(item.type);
+                    if (amountNeeded - sacrificeCount > 0 && item.stack >= amountNeeded - sacrificeCount)
+                    {
+                        CreativeUI.SacrificeItem(item.Clone(), out _);
+                        SoundEngine.PlaySound(SoundID.Research);
+                        SoundEngine.PlaySound(SoundID.ResearchComplete);
+                    }
+                }
+            }
+        }
+
         public override void ResetEffects()
         {
             if (Config.SuperVoidVault)
@@ -35,21 +59,19 @@ namespace ImproveGame.Common.Players
 
             bannerChest = null;
             potionBag = null;
-            if (Config.LoadModItems)
+
+            foreach (var item in from i in Player.inventory where !i.IsAir select i)
             {
-                for (int i = 0; i < Player.inventory.Length; i++)
+                if (Config.LoadModItems)
                 {
-                    if (!Player.inventory[i].IsAir)
+                    if (bannerChest is null && item.ModItem is BannerChest chest)
                     {
-                        Item item = Player.inventory[i];
-                        if (bannerChest is null && item.ModItem is BannerChest)
-                        {
-                            bannerChest = item.ModItem as BannerChest;
-                        }
-                        if (potionBag is null && item.ModItem is PotionBag)
-                        {
-                            potionBag = item.ModItem as PotionBag;
-                        }
+                        bannerChest = chest;
+                    }
+
+                    if (potionBag is null && item.ModItem is PotionBag bag)
+                    {
+                        potionBag = bag;
                     }
                 }
             }
@@ -73,16 +95,14 @@ namespace ImproveGame.Common.Players
                     Main.NewText(Language.GetTextValue($"Mods.ImproveGame.Tips.AnglerQuest"), ItemRarityID.Pink);
                 }
             }
+
             if (Player.whoAmI == Main.myPlayer && !Player.HeldItem.IsAir && Config.ImproveTileSpeedAndTileRange)
             {
-                string internalName = ItemID.Search.GetName(Player.HeldItem.type).ToLower(); // 《英文名》因为没法获取英文名，只能用内部名了
+                string internalName = ItemID.Search.GetName(Player.HeldItem.type).ToLower(); // 《英文名》因为没法在非英语语言获取英文名，只能用内部名了
                 string currentLanguageName = Lang.GetItemNameValue(Player.HeldItem.type).ToLower();
-                foreach (string str in Config.TileSpeed_Blacklist)
+                if (Config.TileSpeed_Blacklist.Any(str => internalName.Contains(str) || currentLanguageName.Contains(str)))
                 {
-                    if (internalName.Contains(str) || currentLanguageName.Contains(str))
-                    {
-                        return;
-                    }
+                    return;
                 }
                 Player.tileSpeed = 3f;
                 Player.wallSpeed = 3f;
@@ -126,7 +146,7 @@ namespace ImproveGame.Common.Players
                 hasLoot &= CollectHelper.ItemCanRightClick[Main.HoverItem.type] || ItemLoader.CanRightClick(Main.HoverItem);
                 if (GrabBagInfoGUI.Visible && (GrabBagInfoGUI.ItemID == item.type || item.IsAir || !hasLoot))
                     UISystem.Instance.GrabBagInfoGUI.Close();
-                else if (item is not null && hasLoot)
+                else if (hasLoot)
                     UISystem.Instance.GrabBagInfoGUI.Open(Main.HoverItem.type);
             }
             if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)

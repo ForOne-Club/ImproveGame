@@ -292,8 +292,6 @@ Mods:
                 Label: "[i:FlaskofNanites] Keep buffs after death"
                 Tooltip: "Make all buffs stay active after death"
             }
-            BanDamageVar.Label: "[i:6] Disable damage spread"
-            ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
             JourneyResearch:
             {
                 Label: "[i:GoldBunny] 旅行模式自动研究"
@@ -303,6 +301,8 @@ Mods:
                     自动研究不会消耗物品
                     '''
             }
+            BanDamageVar.Label: "[i:6] Disable damage spread"
+            ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
             
             TreeConfigs.Header: "[i:27] Tree Config"
             TreeGrowFaster:

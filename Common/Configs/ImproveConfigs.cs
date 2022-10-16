@@ -234,6 +234,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool DontDeleteBuff;
 
+        [Label("$Mods.ImproveGame.Config.JourneyResearch.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.JourneyResearch.Tooltip")]
+        [DefaultValue(false)]
+        public bool JourneyResearch;
+
         [Label("$Mods.ImproveGame.Config.BanDamageVar.Label")]
         [DefaultValue(false)]
         public bool BanDamageVar;
