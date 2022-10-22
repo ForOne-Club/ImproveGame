@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Players;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Terraria.GameContent;
@@ -150,6 +151,7 @@ namespace ImproveGame.Common.GlobalItems
 
         /// <summary>
         /// 绘制生成好的Tag详细文本
+        /// <br/> 名称为 Empty 的行会生成一行空行
         /// </summary>
         /// <param name="tooltips">原物品Tooltip</param>
         /// <param name="tagTooltips">Tag Tooltip文本</param>
@@ -192,6 +194,53 @@ namespace ImproveGame.Common.GlobalItems
                 }
                 Color color = line.OverrideColor ?? new(0.7f, 0.7f, 0.7f);
                 ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, line.Text, new(drawX, y), color, 0f, Vector2.Zero, Vector2.One, spread: 1.6f);
+                y += (int)ChatManager.GetStringSize(font, line.Text, Vector2.One).Y;
+            }
+        }
+        
+        /// <summary>
+        /// 纯粹的绘制另一个tooltips，没有 DrawTagTooltips 那些特判
+        /// <br/> 名称为 Empty 的行会生成一行空行
+        /// </summary>
+        /// <param name="tooltips">原物品Tooltip</param>
+        /// <param name="tagTooltips">Tooltip文本</param>
+        /// <param name="x">原Tooltip文本绘制起始点 X 坐标</param>
+        /// <param name="y">原Tooltip文本绘制起始点 Y 坐标</param>
+        /// <param name="useBox">是否使用box, true为强制使用, false为强制不使用, null为随原版</param>
+        public static void DrawTooltips(ReadOnlyCollection<TooltipLine> tooltips, List<TooltipLine> tagTooltips, int x, int y, bool? useBox = null) {
+            var font = FontAssets.MouseText.Value;
+            int widthOffset = 9;
+            int heightOffset = 9;
+
+            float length = 0f;
+            foreach (TooltipLine line in tooltips) {
+                length = Math.Max(length, ChatManager.GetStringSize(font, line.Text, Vector2.One).X);
+            }
+            x += (int)length + 34;
+
+            float lengthY = 0f;
+            length = 0f;
+            foreach (TooltipLine line in tagTooltips) {
+                if (line.Name == "Empty") {
+                    lengthY += 24;
+                    continue;
+                }
+                var stringSize = ChatManager.GetStringSize(font, line.Text, Vector2.One);
+                length = Math.Max(length, stringSize.X);
+                lengthY += stringSize.Y;
+            }
+            if ((useBox is null && Main.SettingsEnabled_OpaqueBoxBehindTooltips) || useBox is true) {
+                PixelShader.DrawBox(Main.UIScaleMatrix, new Vector2(x - widthOffset, y - heightOffset), new Vector2(length + widthOffset * 2, lengthY + heightOffset + heightOffset / 2), 12, 3, Color.Black, new(44, 57, 105, 200));
+                //TrUtils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
+            }
+
+            foreach (TooltipLine line in tagTooltips) {
+                if (line.Name == "Empty") {
+                    y += 24;
+                    continue;
+                }
+                Color color = line.OverrideColor ?? new(0.7f, 0.7f, 0.7f);
+                ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, line.Text, new(x, y), color, 0f, Vector2.Zero, Vector2.One, spread: 1.6f);
                 y += (int)ChatManager.GetStringSize(font, line.Text, Vector2.One).Y;
             }
         }

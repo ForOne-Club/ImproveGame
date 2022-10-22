@@ -92,9 +92,9 @@ namespace ImproveGame.Content.Items
 
         public override void LoadData(TagCompound tag)
         {
-            tag.TryGet(nameof(Water), out Water);
-            tag.TryGet(nameof(Lava), out Lava);
-            tag.TryGet(nameof(Honey), out Honey);
+            Water = tag.Get<float>(nameof(Water));
+            Lava = tag.Get<float>(nameof(Lava));
+            Honey = tag.Get<float>(nameof(Honey));
         }
 
         public override void NetSend(BinaryWriter writer)

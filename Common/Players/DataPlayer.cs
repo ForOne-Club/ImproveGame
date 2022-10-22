@@ -14,7 +14,7 @@ namespace ImproveGame.Common.Players
         // 保存的物品前缀，哥布林重铸栏
         public int ReforgeItemPrefix = 0;
         private readonly int[] oldSuperVaultStack = new int[100]; // 上一帧的SuperVault的stack情况
-        public readonly Item[] SuperVault = new Item[100];
+        public Item[] SuperVault = new Item[100];
         public bool SuperVaultVisable;
         public Vector2 SuperVaultPos;
 
@@ -28,37 +28,31 @@ namespace ImproveGame.Common.Players
         /// </summary>
         public List<string> InfBuffDisabledMod;
 
-        public override void ResetEffects()
+        public override void Initialize()
         {
+            SuperVault = new Item[100];
             for (int i = 0; i < SuperVault.Length; i++)
             {
-                if (SuperVault[i] is null)
-                    SuperVault[i] = new Item();
+                SuperVault[i] ??= new Item();
             }
         }
 
         public override void LoadData(TagCompound tag)
         {
             // 哥布林重铸栏内属于 Mod 的数据无法保存，这个是专门用于保存这个无法保存到 Item 上的数据。
-            tag.TryGet("ReforgeItemPrefix", out ReforgeItemPrefix);
+            ReforgeItemPrefix = tag.Get<int>("ReforgeItemPrefix");
 
-            // 大背包 Item 数据，选择了错误的保存方式，但是现在没办法改了。。。
+            // 大背包 Item 数据以及旧版兼容
+            if (tag.ContainsKey("SuperVault"))
+                SuperVault = tag.Get<Item[]>("SuperVault");
             for (int i = 0; i < SuperVault.Length; i++)
-            {
-                if (!tag.TryGet($"SuperVault_{i}", out SuperVault[i]))
-                    SuperVault[i] = new Item();
-            }
-
-            // 大背包的位置
-            tag.TryGet("SuperVaultPos", out SuperVaultPos);
+                if (tag.ContainsKey($"SuperVault_{i}"))
+                    SuperVault[i] = tag.Get<Item>($"SuperVault_{i}");
 
             // 原版 Buff 禁用列表
-            if (!tag.TryGet("InfBuffDisabledVanilla", out InfBuffDisabledVanilla))
-                InfBuffDisabledVanilla = new();
-
+            InfBuffDisabledVanilla = tag.Get<List<int>>("InfBuffDisabledVanilla") ?? new();
             // MOD Buff 禁用列表
-            if (!tag.TryGet("InfBuffDisabledMod", out InfBuffDisabledMod))
-                InfBuffDisabledMod = new();
+            InfBuffDisabledMod = tag.Get<List<string>>("InfBuffDisabledMod") ?? new();
         }
 
         public override void SaveData(TagCompound tag)
@@ -68,16 +62,7 @@ namespace ImproveGame.Common.Players
                 tag.Add("ReforgeItemPrefix", Main.reforgeItem.GetGlobalItem<GlobalItemData>().recastCount);
             }
 
-            for (int i = 0; i < 100; i++)
-            {
-                tag.Add($"SuperVault_{i}", SuperVault[i]);
-            }
-            
-            if (UISystem.Instance.BigBagGUI.MainPanel is not null && Main.netMode is not NetmodeID.Server)
-                tag["SuperVaultPos"] = UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position();
-            else
-                tag["SuperVaultPos"] = new Vector2(500f);
-
+            tag["SuperVault"] = SuperVault;
             tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
             tag["InfBuffDisabledMod"] = InfBuffDisabledMod;
         }

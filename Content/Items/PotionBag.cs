@@ -2,6 +2,7 @@
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.Common;
+using NetSimplified;
 using System.Collections.Generic;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
@@ -25,12 +26,7 @@ namespace ImproveGame.Content.Items
 
         public override bool CanRightClick() => storedPotions is not null;
 
-        public override void RightClick(Player player)
-        {
-            UISystem.Instance.PackageGUI.Open(storedPotions, Item.Name, PackageGUI.StorageType.Potions);
-            // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
-            // storedPotions.RemoveAt(storedPotions.Count - 1);
-        }
+        public override void RightClick(Player player) => UISystem.Instance.PackageGUI.Open(storedPotions, Item.Name, PackageGUI.StorageType.Potions);
 
         public override bool ConsumeItem(Player player) => false;
 
@@ -94,20 +90,14 @@ namespace ImproveGame.Content.Items
         {
             if (storedPotions is not null && storedPotions.Count > 0)
             {
-                if (storedPotions.Count >= 200)
+                string storeText = storedPotions.Count >= 200
+                    ? GetText("Tips.PotionBagCurrentFull")
+                    : GetTextWith("Tips.PotionBagCurrent", new {StoredCount = storedPotions.Count});
+                tooltips.Add(new(Mod, "PotionBagCurrent", storeText)
                 {
-                    tooltips.Add(new(Mod, "PotionBagCurrent", GetText("Tips.PotionBagCurrentFull"))
-                    {
-                        OverrideColor = Color.LightGreen
-                    });
-                }
-                else
-                {
-                    tooltips.Add(new(Mod, "PotionBagCurrent", GetTextWith("Tips.PotionBagCurrent", new { StoredCount = storedPotions.Count }))
-                    {
-                        OverrideColor = Color.LightGreen
-                    });
-                }
+                    OverrideColor = Color.LightGreen
+                });
+
                 // 20+类药水时不显示详细信息
                 if (storedPotions.Count > 20)
                 {
@@ -199,26 +189,18 @@ namespace ImproveGame.Content.Items
         }
 
         public override void SetStaticDefaults() => CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
-
-
-        internal static Asset<Texture2D> FullTexture = null;
-
-        public override void Load()
-        {
-            if (Main.dedServ)
-                return;
-            FullTexture = ModContent.Request<Texture2D>(Texture + "_Full");
-        }
-
-        public override void Unload()
-        {
-            if (Main.dedServ)
-                return;
-            FullTexture = null;
-        }
-
+        
         public override void LoadData(TagCompound tag)
         {
+            storedPotions = tag.Get<List<Item>>("potions");
+            storedPotions ??= new();
+
+            // 旧版迁移
+            if (!tag.ContainsKey("storedPotions"))
+            {
+                return;
+            }
+
             List<Item> list = new();
             foreach (var entry in tag.GetList<TagCompound>("storedPotions"))
             {
@@ -233,29 +215,17 @@ namespace ImproveGame.Content.Items
 
         public override void SaveData(TagCompound tag)
         {
-            if (storedPotions is not null && storedPotions.Count != 0)
-            {
-                tag["storedPotions"] = storedPotions.Select(item => new TagCompound
-                {
-                    ["potion"] = item
-                }).ToList();
-            }
+            tag["potions"] = storedPotions;
         }
 
         public override void NetSend(BinaryWriter writer)
         {
-            writer.Write((byte)storedPotions.Count);
-            foreach (var p in storedPotions)
-                ItemIO.Send(p, writer, true);
+            writer.Write(storedPotions.ToArray());
         }
 
         public override void NetReceive(BinaryReader reader)
         {
-            byte count = reader.ReadByte();
-            for (int i = 0; i < count; i++)
-            {
-                storedPotions.Add(ItemIO.Receive(reader, true));
-            }
+            storedPotions = new(reader.ReadItemArray());
         }
 
         public override void AddRecipes()

@@ -694,9 +694,12 @@ namespace ImproveGame.Content.Tiles
             fishingPole = tag.Get<Item>("fishingPole");
             bait = tag.Get<Item>("bait");
             accessory = tag.Get<Item>("accessory");
+
+            if (tag.ContainsKey("fishes"))
+                fish = tag.Get<Item[]>("fishes");
             for (int i = 0; i < 15; i++)
-                if (tag.TryGet<Item>($"fish{i}", out var savedFish))
-                    fish[i] = savedFish;
+                if (tag.ContainsKey($"fish{i}"))
+                    fish[i] = tag.Get<Item>($"fish{i}");
 
             if (!tag.TryGet("CatchCrates", out CatchCrates))
                 CatchCrates = true;
@@ -716,9 +719,7 @@ namespace ImproveGame.Content.Tiles
             tag["fishingPole"] = fishingPole;
             tag["bait"] = bait;
             tag["accessory"] = accessory;
-            for (int i = 0; i < 15; i++)
-                tag[$"fish{i}"] = fish[i];
-
+            tag["fishes"] = fish;
             tag["CatchCrates"] = CatchCrates;
             tag["CatchAccessories"] = CatchAccessories;
             tag["CatchTools"] = CatchTools;
@@ -733,10 +734,7 @@ namespace ImproveGame.Content.Tiles
             ItemIO.Send(fishingPole, writer, true);
             ItemIO.Send(bait, writer, true);
             ItemIO.Send(accessory, writer, true);
-            for (int i = 0; i < 15; i++)
-            {
-                ItemIO.Send(fish[i] ?? new(), writer, true);
-            }
+            writer.Write(fish);
         }
 
         public override void NetReceive(BinaryReader reader)
@@ -745,8 +743,7 @@ namespace ImproveGame.Content.Tiles
             fishingPole = ItemIO.Receive(reader, true);
             bait = ItemIO.Receive(reader, true);
             accessory = ItemIO.Receive(reader, true);
-            for (int i = 0; i < 15; i++)
-                fish[i] = ItemIO.Receive(reader, true).Clone();
+            fish = reader.ReadItemArray();
         }
     }
 }

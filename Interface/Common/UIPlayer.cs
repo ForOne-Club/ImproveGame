@@ -5,6 +5,8 @@ namespace ImproveGame.Interface.Common
 {
     public class UIPlayer : ModPlayer
     {
+        internal static Vector2 HugeInventoryUIPosition = new();
+
         // 函数在玩家进入地图时候调用, 不会在服务器调用, 用来加载 UI, 可以避免一些 HJson 文字未加载导致的问题.
         public override void OnEnterWorld(Player player)
         {
@@ -16,7 +18,7 @@ namespace ImproveGame.Interface.Common
             // 大背包
             BigBagInterface.SetState(Instance.BigBagGUI = new());
             Instance.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
-            Instance.BigBagGUI.MainPanel.SetPos(dataPlayer.SuperVaultPos).Recalculate();
+            Instance.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
         }
     }
 }
