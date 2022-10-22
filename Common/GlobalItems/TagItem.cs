@@ -207,7 +207,8 @@ namespace ImproveGame.Common.GlobalItems
         /// <param name="x">原Tooltip文本绘制起始点 X 坐标</param>
         /// <param name="y">原Tooltip文本绘制起始点 Y 坐标</param>
         /// <param name="useBox">是否使用box, true为强制使用, false为强制不使用, null为随原版</param>
-        public static void DrawTooltips(ReadOnlyCollection<TooltipLine> tooltips, List<TooltipLine> tagTooltips, int x, int y, bool? useBox = null) {
+        /// <param name="shaderBorder">是否使用局长特制的丝滑Shader边框</param>
+        public static void DrawTooltips(ReadOnlyCollection<TooltipLine> tooltips, List<TooltipLine> tagTooltips, int x, int y, bool? useBox = null, bool shaderBorder = true) {
             var font = FontAssets.MouseText.Value;
             int widthOffset = 9;
             int heightOffset = 9;
@@ -230,8 +231,10 @@ namespace ImproveGame.Common.GlobalItems
                 lengthY += stringSize.Y;
             }
             if ((useBox is null && Main.SettingsEnabled_OpaqueBoxBehindTooltips) || useBox is true) {
-                PixelShader.DrawBox(Main.UIScaleMatrix, new Vector2(x - widthOffset, y - heightOffset), new Vector2(length + widthOffset * 2, lengthY + heightOffset + heightOffset / 2), 12, 3, Color.Black, new(44, 57, 105, 200));
-                //TrUtils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
+                if (shaderBorder)
+                    PixelShader.DrawBox(Main.UIScaleMatrix, new Vector2(x - widthOffset, y - heightOffset), new Vector2(length + widthOffset * 2, lengthY + heightOffset + heightOffset / 2), 12, 3, Color.Black, new(44, 57, 105, 200));
+                else
+                    TrUtils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
             }
 
             foreach (TooltipLine line in tagTooltips) {

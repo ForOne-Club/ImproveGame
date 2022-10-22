@@ -463,6 +463,7 @@ Mods:
                     - A hotkey to swap the hotbar with the second row of inventory
                     - Display minion slot occupancy in tooltip
                     - 点击生命体分析仪图标打开分析过滤界面
+                    - 对着箱子按住Alt键可直接查看其内部物品
                     '''
             }
         }

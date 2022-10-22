@@ -367,7 +367,9 @@ public class MoveChest : ModItem
     {
         if (!hasChest) 
             return base.PreDrawTooltip(lines, ref x, ref y);
+
         List<TooltipLine> list = new();
+
         for (int i = 0; i < 4; i++)
         {
             string line = "";
