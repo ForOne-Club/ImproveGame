@@ -9,3 +9,4 @@ v1.6.2.1
   ● 其他
 	优化了Item数组及列表使用TagCompound存储时的格式
 	引入AdditionalConfig记录本地非ModConfig配置数据
+	使在配置选项中的物品图标居中

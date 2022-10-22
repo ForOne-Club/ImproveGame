@@ -8,10 +8,10 @@
             ImproveConfigs.Label: 模组配置
             NoNeedReload: 无需重新加载
 
-            Presets.Header: "[i:ImproveGame/PaintWand] 预设"
+            Presets.Header: "[centeritem:ImproveGame/PaintWand] 预设"
             ILoveBalance:
             {
-                Label: "[i:ImproveGame/MagickWand] 平衡我爱死你啦"
+                Label: "[centeritem:ImproveGame/MagickWand] 平衡我爱死你啦"
                 Tooltip:
                     '''
                     如果你想要一个在原版的基础上更进一步的体验，这款预设会是首选
@@ -24,7 +24,7 @@
             }
             FukMeCalamity:
             {
-                Label: "[i:ImproveGame/StarburstWand] 泰拉无双启动"
+                Label: "[centeritem:ImproveGame/StarburstWand] 泰拉无双启动"
                 Tooltip:
                     '''
                     这款预设包括了大多数方便的功能，大幅度降低了游戏流程的重复与枯燥程度
@@ -34,10 +34,10 @@
                     '''
             }
 
-            ItemConfigs.Header: "[i:29] 物品设置"
+            ItemConfigs.Header: "[centeritem/h4:LifeCrystal] 物品设置"
             SuperVoidVault:
             {
-                Label: "[i:4131] 超级虚空保险库"
+                Label: "[centeritem:4131] 超级虚空保险库"
                 Tooltip: 
                     '''
                     使猪猪存钱罐，保险箱，护卫熔炉拥有和虚空袋相同的效果。
@@ -46,7 +46,7 @@
             }
             SmartVoidVault:
             {
-                Label: "[i:4131] 虚空保险库 智能收取"
+                Label: "[centeritem:4131] 虚空保险库 智能收取"
                 Tooltip: 
                     '''
                     拾取的物品如果在虚空保险库中存在，优先放入其中。
@@ -55,7 +55,7 @@
             }
             SuperVault:
             {
-                Label: "[i:3813] 超大背包"
+                Label: "[centeritem:3813] 超大背包"
                 Tooltip: 
                     '''
                     一个单独的背包面板，拥有一百格空间
@@ -66,7 +66,7 @@
             }
             ItemMaxStack:
             {
-                Label: "[i:9] 物品最大堆叠"
+                Label: "[centeritem:9] 物品最大堆叠"
                 Tooltip: 
                     '''
                     设置一组物品的最大可堆叠量
@@ -75,33 +75,33 @@
             }
             GrabDistance:
             {
-                Label: "[i:5010] 物品拾取范围提升 (单位：格子)"
+                Label: "[centeritem:5010] 物品拾取范围提升 (单位：格子)"
                 Tooltip: 在原有的基础上增加物品的吸附范围，并且会提升吸附速度。
             }
             NoConsume_SummonItem:
             {
-                Label: "[i:560] 召唤物不消耗"
+                Label: "[centeritem:560] 召唤物不消耗"
                 Tooltip: 包括BOSS召唤物和事件召唤物，仅支持原版。
             }
-            AutoReuseWeapon.Label: "[i:211] 自动挥舞武器"
+            AutoReuseWeapon.Label: "[centeritem:211] 自动挥舞武器"
             AutoReuseWeapon_ExclusionList:
             {
-                Label: "[i:3334] 自动挥舞排除列表"
+                Label: "[centeritem:3334] 自动挥舞排除列表"
                 Tooltip: 在启用自动挥舞武器的情况下，会排除此列表的物品。
             }
             ImproveToolSpeed:
             {
-                Label: "[i:4056] 工具使用速度提升"
+                Label: "[centeritem:4056] 工具使用速度提升"
                 Tooltip:
                 '''
                 设置为 0 不会提升速度，值越大速度越快
                 计算方式：itemTime × ( 1 - value )
                 '''
             }
-            TileSpeedAndTileRange.Label: "[i:2215] 提高物块放置速度和距离"
+            TileSpeedAndTileRange.Label: "[centeritem:2215] 提高物块放置速度和距离"
             TileSpeed_Blacklist:
             {
-                Label: "[i:1448] 物块放置速度和距离提升黑名单"
+                Label: "[centeritem:1448] 物块放置速度和距离提升黑名单"
                 Tooltip:
                     '''
                     物品名字中包含以下文本的物品的放置速度和距离不会提升
@@ -110,7 +110,7 @@
             }
             PortableCraftingStation:
             {
-                Label: "[i:WorkBench] 便携制作站"
+                Label: "[centeritem:WorkBench] 便携制作站"
                 Tooltip:
                     '''
                     物品栏以及便携存储中存有的制作站将直接生效
@@ -121,7 +121,7 @@
             }
             NoPlace_BUFFTile:
             {
-                Label: "[i:3198] 随身增益站"
+                Label: "[centeritem:3198] 随身增益站"
                 Tooltip: 
                     '''
                     玩家背包中或其他位置的增益站和旗帜会直接给予玩家增益（仅支持原版）
@@ -130,7 +130,7 @@
             }
             NoPlace_BUFFTile_Banner:
             {
-                Label: "[i:2901] 随身增益站：旗帜"
+                Label: "[centeritem:2901] 随身增益站：旗帜"
                 Tooltip: 
                     '''
                     针对怪物旗帜，同于随身增益站
@@ -138,7 +138,7 @@
             }
             NoConsume_Potion:
             {
-                Label: "[i:227] 药剂 无限续杯"
+                Label: "[centeritem:227] 药剂 无限续杯"
                 Tooltip: 
                     '''
                     有一定堆叠数的药水将不再消耗(需求数量见下一条配置选项)
@@ -148,7 +148,7 @@
             }
             NoConsume_PotionRequirement:
             {
-                Label: "[i:TeleportationPotion] 药剂 无限续杯 需求量"
+                Label: "[centeritem:TeleportationPotion] 药剂 无限续杯 需求量"
                 Tooltip: 
                     '''
                     只有堆叠数大于或等于此值的药剂才可无限获得增益
@@ -157,12 +157,12 @@
             }
             NoConsume_Ammo:
             {
-                Label: "[i:3104] 无限弹药"
+                Label: "[centeritem:3104] 无限弹药"
                 Tooltip: 所有堆叠数不小于 三千九百九十六 的弹药将不再消耗。
             }
             HideNoConsumeBuffs:
             {
-                Label: "[i:297] 隐藏无限续杯增益"
+                Label: "[centeritem:297] 隐藏无限续杯增益"
                 Tooltip:
                     '''
                     自动隐藏已无限续杯的增益效果
@@ -172,22 +172,22 @@
             }
             ImprovePrefix:
             {
-                Label: "[i:1551] 更好的重铸机制"
+                Label: "[centeritem:1551] 更好的重铸机制"
                 Tooltip: 会随着重铸次数的提升淘汰较差的前缀。
             }
             ShowPrefixCount:
             {
-                Label: "[i:455] 显示重铸次数"
+                Label: "[centeritem:455] 显示重铸次数"
                 Tooltip: 显示你重铸了多少次当前物品
             }
             ShowItemMoreData:
             {
-                Label: "[i:1344] 显示物品调试数据"
+                Label: "[centeritem:1344] 显示物品调试数据"
                 Tooltip: 在物品提示栏显示调试数据
             }
             MiddleEnableBank:
             {
-                Label: "[i:87] 中键打开便携收纳"
+                Label: "[centeritem:87] 中键打开便携收纳"
                 Tooltip: 
                     '''
                     当你用中键点击物品栏的某个便携收纳物品时，会打开相应储存
@@ -196,7 +196,7 @@
             }
             AutoSaveMoney:
             {
-                Label: "[i:73] 有钱币槽时自动存钱"
+                Label: "[centeritem:73] 有钱币槽时自动存钱"
                 Tooltip: 
                     '''
                     如果存钱罐，保险箱，护卫熔炉，虚空仓库中有任何猪猪存钱罐、钱币槽、眼骨
@@ -204,17 +204,17 @@
                     商人的生成条件会同时计算存钱罐内的钱币
                     '''
             }
-            BanTombstone.Label: "[i:3230] 禁止生成墓碑"
+            BanTombstone.Label: "[centeritem:3230] 禁止生成墓碑"
             FasterExtractinator:
             {
-                Label: "[i:Extractinator] 加速提炼机"
+                Label: "[centeritem:Extractinator] 加速提炼机"
                 Tooltip: "极大地加快使用提炼机的速度"
             }
 
-            NPCConfigs.Header: "[i:4382] NPC 设置"
+            NPCConfigs.Header: "[centeritem:4382] NPC 设置"
             TownNPCGetTFIntoHouse:
             {
-                Label: "[i:MusicBoxTownDay] 更好的城镇NPC入住机制"
+                Label: "[centeritem:MusicBoxTownDay] 更好的城镇NPC入住机制"
                 Tooltip:
                     '''
                     哥布林、酒保、法师、机械师、税收官在满足生成条件后，
@@ -226,34 +226,34 @@
             }
             NPCLiveInEvil:
             {
-                Label: "[i:MusicBoxTownNight] 城镇NPC可住在邪恶环境"
+                Label: "[centeritem:MusicBoxTownNight] 城镇NPC可住在邪恶环境"
                 Tooltip: "城镇NPC可以住在腐化与血腥环境内"
             }
             TownNPCSpawnSpeed:
             {
-                Label: "[i:4910] 城镇NPC刷新速度"
+                Label: "[centeritem:4910] 城镇NPC刷新速度"
                 Tooltip: "设为 -1 将禁用此项修改"
             }
-            NoCD_FishermanQuest.Label: "[i:4608] 渔夫任务取消冷却"
-            NPCCoinDropRate.Label: "[i:73] 敌人钱币掉落倍率"
+            NoCD_FishermanQuest.Label: "[centeritem:4608] 渔夫任务取消冷却"
+            NPCCoinDropRate.Label: "[centeritem:73] 敌人钱币掉落倍率"
             LavalessLavaSlime:
             {
-                Label: "[i:LavaSlimeBanner] 熔岩史莱姆不生成熔岩"
+                Label: "[centeritem:LavaSlimeBanner] 熔岩史莱姆不生成熔岩"
                 Tooltip: "专家或大师模式下的熔岩史莱姆被击杀时不再会生成熔岩"
             }
             TravellingMerchantStay:
             {
-                Label: "[i:2222] 旅商永远不离开"
+                Label: "[centeritem:2222] 旅商永远不离开"
                 Tooltip: "“旅商已死去!”\n开启后，除非死亡或退出游戏，否则旅商不会离开"
             }
             TravellingMerchantRefresh:
             {
-                Label: "[i:2222] 旅商商店可刷新"
+                Label: "[centeritem:2222] 旅商商店可刷新"
                 Tooltip: "在旅商的对话面板添加一个按钮，可手动刷新其商店商品"
             }
             QuickNurse:
             {
-                Label: "[i:AdhesiveBandage] 快捷护士"
+                Label: "[centeritem:AdhesiveBandage] 快捷护士"
                 Tooltip:
                     '''
                     右键点开护士对话则立即回血
@@ -262,12 +262,12 @@
             }
             BestiaryQuickUnlock:
             {
-                Label: "[i:DontHurtCrittersBook] 一次击杀即可完全解锁图鉴"
+                Label: "[centeritem:DontHurtCrittersBook] 一次击杀即可完全解锁图鉴"
                 Tooltip: "只要该生物的图鉴被解锁，无论击杀数，都会显示它的全部信息（如掉落、简介等）"
             }
             BannerRequirement:
             {
-                Label: "[i:2990] 获得旗帜所需杀敌数倍率"
+                Label: "[centeritem:2990] 获得旗帜所需杀敌数倍率"
                 Tooltip:
                     '''
                     调整获得敌怪旗帜所需的杀敌数，值越小所需杀敌数越少
@@ -276,45 +276,45 @@
                     '''
             }
 
-            GameMechanics.Header: "[i:1344] 游戏机制"
+            GameMechanics.Header: "[centeritem:1344] 游戏机制"
             AlchemyGrassGrowsFaster:
             {
-                Label: "[i:313] 草药迅速生长"
+                Label: "[centeritem:313] 草药迅速生长"
                 Tooltip: "使所有草药生长的更快"
             }
             AlchemyGrassAlwaysBlooms:
             {
-                Label: "[i:316] 草药允许在任何情况下开花"
+                Label: "[centeritem:316] 草药允许在任何情况下开花"
                 Tooltip: "使所有草药可以在任何时候开花，收获种子。"
             }
             StaffOfRegenerationAutomaticPlanting:
             {
-                Label: "[i:213] 再生法杖自动种植"
+                Label: "[centeritem:213] 再生法杖自动种植"
                 Tooltip: "根据收获时的草药种植"
             }
-            NoBiomeSpread.Label: "[i:TeleportationPylonVictory] 禁止邪恶生物群落蔓延"
-            RespawnWithFullHP.Label: "[i:LifeCrystal] 满血复活"
+            NoBiomeSpread.Label: "[centeritem:Sunflower] 禁止邪恶生物群落蔓延"
+            RespawnWithFullHP.Label: "[centeritem:LifeCrystal] 满血复活"
             DontDeleteBuff:
             {
-                Label: "[i:FlaskofNanites] 死亡保存增益"
+                Label: "[centeritem:FlaskofNanites] 死亡保存增益"
                 Tooltip: "使增益在死后依然会维持激活状态"
             }
             JourneyResearch:
             {
-                Label: "[i:GoldBunny] 旅行模式自动研究"
+                Label: "[centeritem:GoldBunny] 旅行模式自动研究"
                 Tooltip:
                     '''
                     在旅行模式下，达到数量需求的被标记为收藏的物品将被自动研究
                     自动研究不会消耗物品
                     '''
             }
-            BanDamageVar.Label: "[i:6] 禁用伤害波动机制"
-            ExtraPlayerBuffSlots.Label: "[i:3000] 额外BUFF栏"
+            BanDamageVar.Label: "[centeritem:6] 禁用伤害波动机制"
+            ExtraPlayerBuffSlots.Label: "[centeritem:3000] 额外BUFF栏"
             
-            TreeConfigs.Header: "[i:27] 树木设置"
+            TreeConfigs.Header: "[centeritem/h4:27] 树木设置"
             TreeGrowFaster:
             {
-                Label: "[i:1182] 树木迅速生长"
+                Label: "[centeritem:1182] 树木迅速生长"
                 Tooltip: 
                     '''
                     使树木生长速度变为原来的五倍
@@ -323,7 +323,7 @@
             }
             ShakeTreeFruit:
             {
-                Label: "[i:4009] 摇树总是掉落水果"
+                Label: "[centeritem:4009] 摇树总是掉落水果"
                 Tooltip:
                     '''
                     大大提升掉落水果的概率 (其他物品掉落概率不会因此受到影响)
@@ -332,29 +332,29 @@
             }
             GemTreeAlwaysDropGem:
             {
-                Label: "[i:3649] 宝石树总是掉落宝石"
+                Label: "[centeritem:3649] 宝石树总是掉落宝石"
                 Tooltip: "使宝石树每个部分都会掉落宝石或宝石果"
             }
             MostTree:
             {
-                LabelMin: "[i:9] 普遍树最小高度 (默认: 7)"
-                LabelMax: "[i:9] 普遍树最大高度 (默认: 12)"
+                LabelMin: "[centeritem:9] 普遍树最小高度 (默认: 7)"
+                LabelMax: "[centeritem:9] 普遍树最大高度 (默认: 12)"
             }
             PalmTree:
             {
-                LabelMin: "[i:2504] 棕榈树最小高度 (默认: 10)"
-                LabelMax: "[i:2504] 棕榈树最大高度 (默认: 20)"
+                LabelMin: "[centeritem:2504] 棕榈树最小高度 (默认: 10)"
+                LabelMax: "[centeritem:2504] 棕榈树最大高度 (默认: 20)"
             }
             GemTree:
             {
-                LabelMin: "[i:4856] 宝石树最小高度 (默认: 7)"
-                LabelMax: "[i:4856] 宝石树最大高度 (默认: 12)"
+                LabelMin: "[centeritem:4856] 宝石树最小高度 (默认: 7)"
+                LabelMax: "[centeritem:4856] 宝石树最大高度 (默认: 12)"
             }
             
-            TogetherConfigs.Header: "[i:GolfCupFlagRed] 独乐不如众乐"
+            TogetherConfigs.Header: "[centeritem/h2:GolfCupFlagRed] 独乐不如众乐"
             ShareCraftingStation:
             {
-                Label: "[i:WorkBench] 共享便携制作站"
+                Label: "[centeritem:WorkBench] 共享便携制作站"
                 Tooltip: 
                     '''
                     与你同队的玩家将共享便携制作站
@@ -365,7 +365,7 @@
             }
             ShareInfBuffs:
             {
-                Label: "[i:227] 共享无尽增益"
+                Label: "[centeritem:227] 共享无尽增益"
                 Tooltip: 
                     '''
                     与你同队的玩家将共享无尽增益，包括旗帜增益
@@ -376,7 +376,7 @@
             }
             ShareRange:
             {
-                Label: "[i:WorldGlobe] 共享范围(格)"
+                Label: "[centeritem:WorldGlobe] 共享范围(格)"
                 Tooltip: 
                     '''
                     在一定共享范围内的同队玩家才会享受效果共享
@@ -385,14 +385,14 @@
             }
             TeamAutoJoin:
             {
-                Label: "[i:TeamBlockRed] 自动加红队"
+                Label: "[centeritem:TeamBlockRed] 自动加红队"
                 Tooltip: "开启后，在多人模式下新加入的玩家会自动加入红队"
             }
             
-            ServerSettings.Header: "[i:ImproveGame/CreateWand] 模组设置"
+            ServerSettings.Header: "[centeritem:ImproveGame/CreateWand] 模组设置"
             OnlyHost:
             {
-                Label: "[i:2203] 仅主机可调节配置 (端口映射无效)"
+                Label: "[centeritem:2203] 仅主机可调节配置 (端口映射无效)"
                 Tooltip:
                     '''
                     单人模式下无用
@@ -404,7 +404,7 @@
             }
             OnlyHostByPassword:
             {
-                Label: "[i:2203] 仅密码验证通过的玩家可调节设置"
+                Label: "[centeritem:2203] 仅密码验证通过的玩家可调节设置"
                 Tooltip:
                     '''
                     单人模式下无用，需要重新加载模组
@@ -427,7 +427,7 @@
             }
             SpawnRateMaxValue:
             {
-                Label: "[i:2649] 敌人生成速度倍率最大值"
+                Label: "[centeritem:2649] 敌人生成速度倍率最大值"
                 Tooltip:
                     '''
                     玩家可通过敌人生成速度面板调节的最大生成倍率限制
@@ -438,17 +438,17 @@
             }
             LoadModItems:
             {
-                Label: "[i:ImproveGame/WallPlace] 启用模组物品"
+                Label: "[centeritem:ImproveGame/WallPlace] 启用模组物品"
                 Tooltip:
                     '''
                     关闭后，本模组添加的物品将会从游戏中消失
                     本配置页面包含的模组物品图标会变作一串字符
                     '''
             }
-            ShowModName.Label: "[i:ImproveGame/SpaceWand] 显示物品所属模组"
+            ShowModName.Label: "[centeritem:ImproveGame/SpaceWand] 显示物品所属模组"
             EmptyAutofisher:
             {
-                Label: "[i:ImproveGame/Autofisher] 钓鱼机鱼饵用光提示"
+                Label: "[centeritem:ImproveGame/Autofisher] 钓鱼机鱼饵用光提示"
                 Tooltip:
                     '''
                     开启后，若存储于钓鱼机的鱼饵用光，会在聊天栏显示一行信息:
@@ -459,7 +459,7 @@
 
             OtherFunctions:
             {
-                Label: "[i:ThePlan] 其他不可调节功能"
+                Label: "[centeritem:ThePlan] 其他不可调节功能"
                 Header:
                     '''
                     以下是本模组的其他不可调节功能:

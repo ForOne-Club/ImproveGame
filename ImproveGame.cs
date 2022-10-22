@@ -40,6 +40,7 @@ namespace ImproveGame
             Instance = this;
             
             ChatManager.Register<BgItemTagHandler>("bgitem");
+            ChatManager.Register<CenteredItemTagHandler>("centeritem");
         }
 
         public override void Unload()

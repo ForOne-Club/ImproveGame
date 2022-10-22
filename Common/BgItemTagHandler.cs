@@ -75,7 +75,7 @@ namespace ImproveGame.Common
                         continue;
                         
                     if (int.TryParse(arg[1..], out int stack))
-                        item.stack = TrUtils.Clamp(stack, 1, item.maxStack);
+                        item.stack = stack;
                 }
             }
 

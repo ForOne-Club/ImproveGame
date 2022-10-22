@@ -31,6 +31,7 @@
 - Password format changed to four letters (not case-sensitive)
 - **[v1.6.2.1]** 优化了Item数组及列表使用TagCompound存储时的格式
 - **[v1.6.2.1]** 引入AdditionalConfig记录本地非ModConfig配置数据
+- **[v1.6.2.1]** 使在配置选项中的物品图标居中
 
 # v1.6.1
 ## Subversions
