@@ -894,6 +894,11 @@ Mods:
             grassSeed: Grass Seeds
             plantPot: Planter Boxes
         }
+        PackageGUI:
+        {
+            AutoStorage: 自动收纳 Auto Storage
+            AutoSort: 自动排序 Auto Sort
+        }
         Common:
         {
             Loading: "Loading..."

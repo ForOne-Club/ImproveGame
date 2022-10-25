@@ -1,12 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Content.Items;
 using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.UI;
+using ReLogic.Graphics;
 
 namespace ImproveGame.Interface.Common
 {
@@ -200,10 +195,14 @@ namespace ImproveGame.Interface.Common
 
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Package GUI", () =>
                     {
-                        if (PackageGUI.Visible)
-                        {
-                            PackageGUI.Draw(Main.spriteBatch);
-                        }
+                        Vector2 size = new(250, 100);
+                        Vector2 pos = Main.MouseScreen - size / 2;
+                        PixelShader.DrawTest(Main.UIScaleMatrix, pos, size, 40, new(255, 255, 255), 3, new(0, 155, 255));
+                        PixelShader.DrawBox(Main.UIScaleMatrix, pos + new Vector2(0, 150), size, 40, 3, new(0, 155, 255), new(0, 155, 255), new(255, 255, 255), new(255, 255, 255));
+                        // size -= new Vector2(what * 2, what * 2);
+                        // PixelShader.DrawBox(Main.UIScaleMatrix, Main.MouseScreen - size / 2, size, 10, 2f, new(0, 0, 0, 50), new(243, 243, 243));
+
+                        if (PackageGUI.Visible) PackageGUI.Draw(Main.spriteBatch);
                         return true;
                     }, InterfaceScaleType.UI));
 

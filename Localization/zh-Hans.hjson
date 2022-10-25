@@ -892,6 +892,11 @@
             grassSeed: 草种
             plantPot: 种植盆
         }
+        PackageGUI:
+        {
+            AutoStorage: 自动收纳
+            AutoSort: 自动排序
+        }
         Common:
         {
             Loading: "加载中..."

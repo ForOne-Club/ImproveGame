@@ -1,17 +1,20 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.Common;
-using System.Collections.Generic;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
-    public class BannerChest : ModItem, IItemOverrideLeftClick
+    public class BannerChest : ModItem, IItemOverrideLeftClick, IPackage
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
 
         public List<Item> storedBanners = new();
+        private bool autoStorage;
+        private bool autoSort;
+        public bool AutoStorage { get => autoStorage; set => autoStorage = value; }
+        public bool AutoSort { get => autoSort; set => autoSort = value; }
 
         // 克隆内容不克隆引用
         public override ModItem Clone(Item newEntity)
@@ -27,7 +30,7 @@ namespace ImproveGame.Content.Items
         {
             //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
             //storedBanners.RemoveAt(storedBanners.Count - 1);
-            UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name, PackageGUI.StorageType.Banners);
+            UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name, PackageGUI.StorageType.Banners, this);
         }
 
         public override bool ConsumeItem(Player player) => false;
@@ -50,7 +53,7 @@ namespace ImproveGame.Content.Items
             {
                 return false;
             }
-            PutInBannerChest(storedBanners, ref Main.mouseItem);
+            PutInBannerChest(storedBanners, ref Main.mouseItem, autoSort);
             if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
@@ -58,7 +61,7 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
-        public static bool PutInBannerChest(List<Item> storedBanners, ref Item item)
+        public static bool PutInBannerChest(List<Item> storedBanners, ref Item item, bool AutoSort)
         {
             for (int i = 0; i < storedBanners.Count; i++)
             {
@@ -86,6 +89,9 @@ namespace ImproveGame.Content.Items
                 item.TurnToAir();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
+            // 依照type对物品进行排序
+            if (AutoSort)
+                storedBanners.Sort((a, b) => { return a.type.CompareTo(b.type); });
             return false;
         }
 
@@ -180,6 +186,8 @@ namespace ImproveGame.Content.Items
                 list.Add(banner);
             }
             storedBanners = list;
+            tag.TryGet(nameof(autoStorage), out autoStorage);
+            tag.TryGet(nameof(autoSort), out autoSort);
         }
 
         public override void SaveData(TagCompound tag)
@@ -191,6 +199,8 @@ namespace ImproveGame.Content.Items
                     ["banner"] = item
                 }).ToList();
             }
+            tag[nameof(autoStorage)] = autoStorage;
+            tag[nameof(autoSort)] = autoSort;
         }
 
         public override void NetSend(BinaryWriter writer)

@@ -2,6 +2,7 @@
 {
     public class ModAssets : ModSystem
     {
+        internal static Asset<Effect> RoundRectangle;
         internal static Asset<Effect> BoxShader;
         internal static Asset<Effect> BorderRound;
         internal static Asset<Effect> ItemEffect;
@@ -12,6 +13,7 @@
         {
             if (!Main.dedServ)
             {
+                RoundRectangle = GetEffect(nameof(RoundRectangle));
                 BoxShader = GetEffect("Box");
                 BorderRound = GetEffect("BorderRound");
                 ItemEffect = GetEffect("item");
@@ -24,6 +26,7 @@
         {
             if (!Main.dedServ)
             {
+                RoundRectangle = null;
                 BoxShader = null;
                 BorderRound = null;
                 ItemEffect = null;

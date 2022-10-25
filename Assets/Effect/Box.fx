@@ -16,13 +16,12 @@ float4 BoxFunc(float2 coords : TEXCOORD0) : COLOR0
     float4 borderColor = lerp(borderColor1, borderColor2, coords.x);
     float4 background = lerp(background1, background2, coords.x);
     
-    // 中心 - 圆角半径
+    // 这样就可以当作在第二象限在右上角绘制一个圆角了
+    // 圆角
     float2 origin = size / 2 - float2(radius, radius);
-    
-    // 中心 - 边框
+    // 边框
     float2 corner = size / 2 - float2(border, border);
-    
-    // 位置 - 中心
+    // 位置
     float2 dxy = abs(position - size / 2);
     
     int2 insxy = step(dxy, origin); // step x <= y 返回 1 否则 0

@@ -23,7 +23,7 @@ namespace ImproveGame.Interface.BannerChestUI
             scrollbar.Left.Pixels = liseSize.X + 7;
             scrollbar.Height.Pixels = liseSize.Y;
 
-            // 既然尺寸都已知了, 那就直接设置他们爹地的大小吧.
+            // 既然尺寸都已知了, 那就直接设置他们父元素的大小吧.
             Width.Pixels = scrollbar.Right() + 1;
             Height.Pixels = scrollbar.Height() + 1;
         }

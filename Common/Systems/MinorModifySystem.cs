@@ -322,14 +322,24 @@ namespace ImproveGame.Common.Systems
             // 旗帜收纳箱
             if (improvePlayer.bannerChest is not null && ItemToBanner(itemToPickUp) != -1)
             {
-                PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, itemToPickUp, itemToPickUp.stack);
-                BannerChest.PutInBannerChest(improvePlayer.bannerChest.storedBanners, ref itemToPickUp);
+                if (improvePlayer.bannerChest.AutoStorage)
+                {
+                    int count = itemToPickUp.stack;
+                    BannerChest.PutInBannerChest(improvePlayer.bannerChest.storedBanners, ref itemToPickUp, improvePlayer.bannerChest.AutoSort);
+                    if (itemToPickUp.stack < count)
+                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, itemToPickUp, count - itemToPickUp.stack);
+                }
             }
             // 药水带袋
-            if (improvePlayer.potionBag is not null && itemToPickUp.buffType > 0)
+            if (improvePlayer.potionBag is not null && itemToPickUp.buffType > 0 && itemToPickUp.consumable)
             {
-                PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, itemToPickUp, itemToPickUp.stack);
-                PotionBag.PutInPotionBag(improvePlayer.potionBag.storedPotions, ref itemToPickUp);
+                if (improvePlayer.potionBag.AutoStorage)
+                {
+                    int count = itemToPickUp.stack;
+                    PotionBag.PutInPotionBag(improvePlayer.potionBag.storedPotions, ref itemToPickUp, improvePlayer.potionBag.AutoSort);
+                    if (itemToPickUp.stack < count)
+                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, itemToPickUp, count - itemToPickUp.stack);
+                }
             }
             // 大背包
             if (Config.SuperVault && uIPlayerSetting.SuperVault_SmartGrab && !itemToPickUp.IsAir && HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))

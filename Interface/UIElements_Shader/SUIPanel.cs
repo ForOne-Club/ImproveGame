@@ -21,7 +21,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             this.radius = radius;
             this.border = border;
             this.CalculateBorder = CalculateBorder;
-            SetPadding(16);
+            SetPadding(12);
             OnMouseDown += DragStart;
             OnMouseUp += DragEnd;
         }

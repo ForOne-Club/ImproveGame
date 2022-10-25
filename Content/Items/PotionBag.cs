@@ -9,11 +9,15 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
-    public class PotionBag : ModItem, IItemOverrideLeftClick
+    public class PotionBag : ModItem, IItemOverrideLeftClick, IPackage
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
 
         public List<Item> storedPotions = new();
+        private bool autoStorage;
+        private bool autoSort;
+        public bool AutoStorage { get => autoStorage; set => autoStorage = value; }
+        public bool AutoSort { get => autoSort; set => autoSort = value; }
 
         // 克隆内容不克隆引用
         public override ModItem Clone(Item newEntity)
@@ -27,7 +31,7 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
-            UISystem.Instance.PackageGUI.Open(storedPotions, Item.Name, PackageGUI.StorageType.Potions);
+            UISystem.Instance.PackageGUI.Open(storedPotions, Item.Name, PackageGUI.StorageType.Potions, this);
             // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
             // storedPotions.RemoveAt(storedPotions.Count - 1);
         }
@@ -51,7 +55,7 @@ namespace ImproveGame.Content.Items
             {
                 return false;
             }
-            PutInPotionBag(storedPotions, ref Main.mouseItem);
+            PutInPotionBag(storedPotions, ref Main.mouseItem, autoSort);
             if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
@@ -59,7 +63,7 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
-        public static bool PutInPotionBag(List<Item> storedPotions, ref Item item)
+        public static bool PutInPotionBag(List<Item> storedPotions, ref Item item, bool AutoSort)
         {
             for (int i = 0; i < storedPotions.Count; i++)
             {
@@ -87,6 +91,9 @@ namespace ImproveGame.Content.Items
                 item.TurnToAir();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
+            // 依照type对物品进行排序
+            if (AutoSort)
+                storedPotions.Sort((a, b) => { return a.type.CompareTo(b.type); });
             return false;
         }
 
@@ -109,24 +116,25 @@ namespace ImproveGame.Content.Items
                     });
                 }
                 // 20+类药水时不显示详细信息
+                int cow = 0;
                 if (storedPotions.Count > 20)
                 {
                     string cachedText = string.Empty;
                     for (int i = 0; i < storedPotions.Count; i++)
                     {
-                        var potion = storedPotions[i];
+                        Item potion = storedPotions[i];
                         int stackDisplayed = potion.stack >= 99 ? 99 : potion.stack;
                         string text = $"[i/s{stackDisplayed}:{potion.type}]";
                         cachedText += text;
                         if ((i + 1) % 20 == 0)
                         {
-                            tooltips.Add(new(Mod, "PotionBagP", cachedText));
+                            tooltips.Add(new(Mod, $"PotionBagP{++cow}", cachedText));
                             cachedText = string.Empty;
                         }
                     }
                     if (!string.IsNullOrEmpty(cachedText))
                     {
-                        tooltips.Add(new(Mod, "PotionBagP", cachedText));
+                        tooltips.Add(new(Mod, "PotionBagPX", cachedText));
                     }
                 }
                 // 药水少于20类时显示详细信息
@@ -229,6 +237,8 @@ namespace ImproveGame.Content.Items
                 list.Add(potion);
             }
             storedPotions = list;
+            tag.TryGet(nameof(autoStorage), out autoStorage);
+            tag.TryGet(nameof(autoSort), out autoSort);
         }
 
         public override void SaveData(TagCompound tag)
@@ -240,6 +250,8 @@ namespace ImproveGame.Content.Items
                     ["potion"] = item
                 }).ToList();
             }
+            tag[nameof(autoStorage)] = autoStorage;
+            tag[nameof(autoSort)] = autoSort;
         }
 
         public override void NetSend(BinaryWriter writer)
