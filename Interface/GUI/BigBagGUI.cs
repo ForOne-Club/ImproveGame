@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Packets;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.Packets;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.UIElements_Shader;
@@ -159,6 +160,7 @@ namespace ImproveGame.Interface.GUI
         {
             SoundEngine.PlaySound(SoundID.MenuClose);
             visible = false;
+            AdditionalConfig.Save();
         }
 
         public void Sort()

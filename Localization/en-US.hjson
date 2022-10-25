@@ -8,10 +8,10 @@ Mods:
             ImproveConfigs.Label: Mod Configuration
             NoNeedReload: No need to reload this mod
 
-            Presets.Header: "[i:ImproveGame/PaintWand] Presets"
+            Presets.Header: "[centeritem:ImproveGame/PaintWand] Presets"
             ILoveBalance:
             {
-                Label: "[i:ImproveGame/MagickWand] I LOVE Balance"
+                Label: "[centeritem:ImproveGame/MagickWand] I LOVE Balance"
                 Tooltip:
                     '''
                     If you want a more vanilla-based gameplay experience, this preset will be your choice
@@ -24,7 +24,7 @@ Mods:
             }
             FukMeCalamity:
             {
-                Label: "[i:ImproveGame/StarburstWand] tIMBALoader"
+                Label: "[centeritem:ImproveGame/StarburstWand] tIMBALoader"
                 Tooltip:
                     '''
                     This preset includes most convenient features, significantly reduces repetitive works
@@ -34,10 +34,10 @@ Mods:
                     '''
             }
 
-            ItemConfigs.Header: "[i:29] Item Configs"
+            ItemConfigs.Header: "[centeritem/h4:LifeCrystal] Item Configs"
             SuperVoidVault:
             {
-                Label: "[i:4131] Super Void Vault"
+                Label: "[centeritem:4131] Super Void Vault"
                 Tooltip:
                     '''
                     Makes Piggy Bank, Safe and Defender's Furnace have the same effect as Void Bag
@@ -46,7 +46,7 @@ Mods:
             }
             SmartVoidVault:
             {
-                Label: "[i:4131] Void Vault Smart Pickup"
+                Label: "[centeritem:4131] Void Vault Smart Pickup"
                 Tooltip:
                     '''
                     If the picked item already exists in the Void Vault, priorly put the item in it
@@ -55,7 +55,7 @@ Mods:
             }
             SuperVault:
             {
-                Label: "[i:3813] Huge Inventory"
+                Label: "[centeritem:3813] Huge Inventory"
                 Tooltip:
                     '''
                     A separate inventory with its own UI, has 100 item slots
@@ -67,7 +67,7 @@ Mods:
             }
             ItemMaxStack:
             {
-                Label: "[i:9] Max stack"
+                Label: "[centeritem:9] Max stack"
                 Tooltip: 
                     '''
                     Set the max stack of items
@@ -76,29 +76,29 @@ Mods:
             }
             GrabDistance:
             {
-                Label: "[i:5010] Increase item pickup range (measured in blocks)"
+                Label: "[centeritem:5010] Increase item pickup range (measured in blocks)"
                 Tooltip: Increase pickup range of items. Drawing speed will also increase automatically
             }
             NoConsume_SummonItem:
             {
-                Label: "[i:560] No longer consume summon items"
+                Label: "[centeritem:560] No longer consume summon items"
                 Tooltip: Only for vanilla boss and event summon items
             }
-            AutoReuseWeapon.Label: "[i:211] Weapon autoswing"
+            AutoReuseWeapon.Label: "[centeritem:211] Weapon autoswing"
             AutoReuseWeapon_ExclusionList:
             {
-                Label: "[i:3334] Autoswing black list"
+                Label: "[centeritem:3334] Autoswing black list"
                 Tooltip: If Weapon autoswing is true, items in this list cannot take the effect
             }
             ImproveToolSpeed:
             {
-                Label: "[i:4056] Increase certain tools' using speed"
+                Label: "[centeritem:4056] Increase certain tools' using speed"
                 Tooltip: Tools with use times greater than 8 will have their use times set to 8
             }
-            TileSpeedAndTileRange.Label: "[i:2215] Increase placement speed and range"
+            TileSpeedAndTileRange.Label: "[centeritem:2215] Increase placement speed and range"
             TileSpeed_Blacklist:
             {
-                Label: "[i:1448] Blacklist of tile placing boost"
+                Label: "[centeritem:1448] Blacklist of tile placing boost"
                 Tooltip:
                     '''
                     Tile's placing speed and range won't be boosted if its name contains any of the following texts
@@ -107,7 +107,7 @@ Mods:
             }
             PortableCraftingStation:
             {
-                Label: "[i:WorkBench] Portable Crafting Stations"
+                Label: "[centeritem:WorkBench] Portable Crafting Stations"
                 Tooltip:
                     '''
                     Crafting stations in your inventory and personal inventories will function as they are placed
@@ -118,12 +118,12 @@ Mods:
             }
             NoPlace_BUFFTile:
             {
-                Label: "[i:3198] Portable buff stations"
+                Label: "[centeritem:3198] Portable buff stations"
                 Tooltip: Vanilla buff stations and banners in any of your inventories provide you with their buffs
             }
             NoPlace_BUFFTile_Banner:
             {
-                Label: "[i:2901] Portable Banners"
+                Label: "[centeritem:2901] Portable Banners"
                 Tooltip:
                     '''
                     The same as portable buff stations
@@ -131,7 +131,7 @@ Mods:
             }
             NoConsume_Potion:
             {
-                Label: "[i:227] Enable infinite potions"
+                Label: "[centeritem:227] Enable infinite potions"
                 Tooltip: 
                     '''
                     Potions in your inventory or personal inventories(Piggy bank, Safe, etc.)
@@ -141,7 +141,7 @@ Mods:
             }
             NoConsume_PotionRequirement:
             {
-                Label: "[i:TeleportationPotion] Infinite Potion requirement"
+                Label: "[centeritem:TeleportationPotion] Infinite Potion requirement"
                 Tooltip: 
                     '''
                     Only potions stack not less than this number grant you infinite buff
@@ -150,12 +150,12 @@ Mods:
             }
             NoConsume_Ammo:
             {
-                Label: "[i:3104] Enable infinite ammo"
+                Label: "[centeritem:3104] Enable infinite ammo"
                 Tooltip: Ammo which stack not less than 3996 will not be consumed
             }
             HideNoConsumeBuffs:
             {
-                Label: "[i:297] Hide buff icons of Infinite Potions"
+                Label: "[centeritem:297] Hide buff icons of Infinite Potions"
                 Tooltip: 
                     '''
                     Hide buff icons of Infinite Potions
@@ -164,22 +164,22 @@ Mods:
             }
             ImprovePrefix:
             {
-                Label: "[i:1551] Better reforging mechanics"
+                Label: "[centeritem:1551] Better reforging mechanics"
                 Tooltip: Filter off bad prefixes as you keep reforging
             }
             ShowPrefixCount:
             {
-                Label: "[i:455] Display reforging count"
+                Label: "[centeritem:455] Display reforging count"
                 Tooltip: Shows how many times you have reforged this item
             }
             ShowItemMoreData:
             {
-                Label: "[i:1344] Display item debug data"
+                Label: "[centeritem:1344] Display item debug data"
                 Tooltip: Display item debug data in tooltip
             }
             MiddleEnableBank:
             {
-                Label: "[i:87] Middle click to open personal inventories"
+                Label: "[centeritem:87] Middle click to open personal inventories"
                 Tooltip: 
                     '''
                     When you middle click a personal inventory item in your inventory
@@ -189,7 +189,7 @@ Mods:
             }
             AutoSaveMoney:
             {
-                Label: "[i:73] Automatically save money"
+                Label: "[centeritem:73] Automatically save money"
                 Tooltip: 
                     '''
                     If there is any Piggy Bank, Money Trough or Eye Bone inside one of your personal inventories
@@ -197,17 +197,17 @@ Mods:
                     The Merchant's spawning condition counts coins in the Piggy Bank
                     '''
             }
-            BanTombstone.Label: "[i:3230] Disable tombstone spawn"
+            BanTombstone.Label: "[centeritem:3230] Disable tombstone spawn"
             FasterExtractinator:
             {
-                Label: "[i:Extractinator] Fast Extractinator"
+                Label: "[centeritem:Extractinator] Fast Extractinator"
                 Tooltip: "Greatly increases the extracting speed of the Extractinator"
             }
 
-            NPCConfigs.Header: "[i:4382] NPC Configs"
+            NPCConfigs.Header: "[centeritem:4382] NPC Configs"
             TownNPCGetTFIntoHouse:
             {
-                Label: "[i:MusicBoxTownDay] Town NPC spawn mechanics improvement"
+                Label: "[centeritem:MusicBoxTownDay] Town NPC spawn mechanics improvement"
                 Tooltip:
                     '''
                     When the spawn conditions of unsaved Goblin Tinkerer, Tavernkeep, Wizard, Mechanic or Tax Collector are met
@@ -219,34 +219,34 @@ Mods:
             }
             NPCLiveInEvil:
             {
-                Label: "[i:MusicBoxTownNight] Town NPCs can live in evil biomes"
+                Label: "[centeritem:MusicBoxTownNight] Town NPCs can live in evil biomes"
                 Tooltip: "Town NPCs can live in the Corruption and the Crimson"
             }
             TownNPCSpawnSpeed:
             {
-                Label: "[i:4910] Town NPC spawn rate multiplier"
+                Label: "[centeritem:4910] Town NPC spawn rate multiplier"
                 Tooltip: "Disable this modification by setting the value to -1"
             }
-            NoCD_FishermanQuest.Label: "[i:4608] Instant refresh Angler's quests"
-            NPCCoinDropRate.Label: "[i:73] Enemy money drop multiplier"
+            NoCD_FishermanQuest.Label: "[centeritem:4608] Instant refresh Angler's quests"
+            NPCCoinDropRate.Label: "[centeritem:73] Enemy money drop multiplier"
             LavalessLavaSlime:
             {
-                Label: "[i:LavaSlimeBanner] Lavaless lava slime"
+                Label: "[centeritem:LavaSlimeBanner] Lavaless lava slime"
                 Tooltip: "Killing lava slime no longer spawns lava in expert or master mode"
             }
             TravellingMerchantStay:
             {
-                Label: "[i:2222] The Travelling Merchant doesn't depart"
+                Label: "[centeritem:2222] The Travelling Merchant doesn't depart"
                 Tooltip: "The Travelling Merchant will not depart unless been killed"
             }
             TravellingMerchantRefresh:
             {
-                Label: "[i:2222] Refreshable Travelling Merchant's Shop"
+                Label: "[centeritem:2222] Refreshable Travelling Merchant's Shop"
                 Tooltip: "Adds a Refresh button for the Travelling Merchant, you may manually refresh the goods"
             }
             QuickNurse:
             {
-                Label: "[i:AdhesiveBandage] Emergency treatment"
+                Label: "[centeritem:AdhesiveBandage] Emergency treatment"
                 Tooltip:
                     '''
                     The Nurse will heal you once you right click to talk to her
@@ -255,12 +255,12 @@ Mods:
             }
             BestiaryQuickUnlock:
             {
-                Label: "[i:DontHurtCrittersBook] Lesson Learned"
+                Label: "[centeritem:DontHurtCrittersBook] Lesson Learned"
                 Tooltip: "As long as a creature's bestiary is unlocked, its bestiary will be completely unlocked regardless the killing count"
             }
             BannerRequirement:
             {
-                Label: "[i:2990] Number of kills to obtain a banner"
+                Label: "[centeritem:2990] Number of kills to obtain a banner"
                 Tooltip:
                     '''
                     Adjusts number of kills to obtain a banner, smaller the multiplier the fewer kills you need to get a banner
@@ -269,45 +269,45 @@ Mods:
                     '''
             }
 
-            GameMechanics.Header: "[i:1344] Game Mechanics"
+            GameMechanics.Header: "[centeritem:1344] Game Mechanics"
             AlchemyGrassGrowsFaster:
             {
-                    Label: "[i:313] Accelerate herb growth"
+                    Label: "[centeritem:313] Accelerate herb growth"
                     Tooltip: "Makes all the herbs grow faster"
             }
             AlchemyGrassAlwaysBlooms:
             {
-                    Label: "[i:316] Herbs can bloom in any condition"
+                    Label: "[centeritem:316] Herbs can bloom in any condition"
                     Tooltip: "Makes all the herbs able to bloom and to drop seeds"
             }
             StaffOfRegenerationAutomaticPlanting:
             {
-                    Label: "[i:213] Staff of Regrowth auto-plant"
+                    Label: "[centeritem:213] Staff of Regrowth auto-plant"
                     Tooltip: "Automatically plant the gathered herb"
             }
-            NoBiomeSpread.Label: "[i:TeleportationPylonVictory] Stop the evil biomes and the Hallow biome from spreading"
-            RespawnWithFullHP.Label: "[i:LifeCrystal] Respawn with full HP"
+            NoBiomeSpread.Label: "[centeritem:Sunflower] Stop the evil biomes and the Hallow biome from spreading"
+            RespawnWithFullHP.Label: "[centeritem:LifeCrystal] Respawn with full HP"
             DontDeleteBuff:
             {
-                Label: "[i:FlaskofNanites] Keep buffs after death"
+                Label: "[centeritem:FlaskofNanites] Keep buffs after death"
                 Tooltip: "Make all buffs stay active after death"
             }
             JourneyResearch:
             {
-                Label: "[i:GoldBunny] 旅行模式自动研究"
+                Label: "[centeritem:GoldBunny] 旅行模式自动研究"
                 Tooltip:
                     '''
                     在旅行模式下，达到数量需求的被标记为收藏的物品将被自动研究
                     自动研究不会消耗物品
                     '''
             }
-            BanDamageVar.Label: "[i:6] Disable damage spread"
-            ExtraPlayerBuffSlots.Label: "[i:3000] Extra Buff Slots"
+            BanDamageVar.Label: "[centeritem:6] Disable damage spread"
+            ExtraPlayerBuffSlots.Label: "[centeritem:3000] Extra Buff Slots"
             
-            TreeConfigs.Header: "[i:27] Tree Config"
+            TreeConfigs.Header: "[centeritem/h4:27] Tree Config"
             TreeGrowFaster:
             {
-                Label: "[i:1182] Trees grow rapidly"
+                Label: "[centeritem:1182] Trees grow rapidly"
                 Tooltip: 
                     '''
                     Growing speed of trees * 500%
@@ -316,7 +316,7 @@ Mods:
             }
             ShakeTreeFruit:
             {
-                Label: "[i:4009] Shaking trees always drops fruit"
+                Label: "[centeritem:4009] Shaking trees always drops fruit"
                 Tooltip:
                     '''
                     Greatly increases drop rate of fruit (Drop rates of other items are not affected)
@@ -325,29 +325,29 @@ Mods:
             }
             GemTreeAlwaysDropGem:
             {
-                Label: "[i:3649] Gem trees always drop gem"
+                Label: "[centeritem:3649] Gem trees always drop gem"
                 Tooltip: "Every part of a gem tree will drop gem or gemcorn"
             }
             MostTree:
             {
-                LabelMin: "[i:9] Minimum Regular Tree Height (Default: 7)"
-                LabelMax: "[i:9] Maximum Regular Tree Height (Default: 12)"
+                LabelMin: "[centeritem:9] Minimum Regular Tree Height (Default: 7)"
+                LabelMax: "[centeritem:9] Maximum Regular Tree Height (Default: 12)"
             }
             PalmTree:
             {
-                LabelMin: "[i:2504] Minimum Palm Tree Height (Default: 10)"
-                LabelMax: "[i:2504] Maximum Palm Tree Height (Default: 20)"
+                LabelMin: "[centeritem:2504] Minimum Palm Tree Height (Default: 10)"
+                LabelMax: "[centeritem:2504] Maximum Palm Tree Height (Default: 20)"
             }
             GemTree:
             {
-                LabelMin: "[i:4856] Minimum Gem Tree Height (Default: 7)"
-                LabelMax: "[i:4856] Maximum Gem Tree Height (Default: 12)"
+                LabelMin: "[centeritem:4856] Minimum Gem Tree Height (Default: 7)"
+                LabelMax: "[centeritem:4856] Maximum Gem Tree Height (Default: 12)"
             }
             
-            TogetherConfigs.Header: "[i:GolfCupFlagRed] Together Happier"
+            TogetherConfigs.Header: "[centeritem/h2:GolfCupFlagRed] Together Happier"
             ShareCraftingStation:
             {
-                Label: "[i:WorkBench] Shared Portable Crafting Stations"
+                Label: "[centeritem:WorkBench] Shared Portable Crafting Stations"
                 Tooltip: 
                     '''
                     Players in the same team will share their portable crafting stations
@@ -358,7 +358,7 @@ Mods:
             }
             ShareInfBuffs:
             {
-                Label: "[i:227] Shared Infinite Buffs"
+                Label: "[centeritem:227] Shared Infinite Buffs"
                 Tooltip: 
                     '''
                     Players in the same team will share their infinite buffs, including banner buffs
@@ -369,7 +369,7 @@ Mods:
             }
             ShareRange:
             {
-                Label: "[i:WorldGlobe] Range of Shared Effects(in tiles)"
+                Label: "[centeritem:WorldGlobe] Range of Shared Effects(in tiles)"
                 Tooltip: 
                     '''
                     Only teammates within this range will share the shared effects
@@ -378,14 +378,14 @@ Mods:
             }
             TeamAutoJoin:
             {
-                Label: "[i:TeamBlockRed] Automatically Join Red Team"
+                Label: "[centeritem:TeamBlockRed] Automatically Join Red Team"
                 Tooltip: "Newly joined players will automatically join the red team in multiplayer mode"
             }
 
-            ServerSettings.Header: "[i:ImproveGame/CreateWand] Server Config"
+            ServerSettings.Header: "[centeritem:ImproveGame/CreateWand] Server Config"
             OnlyHost:
             {
-                    Label: "[i:2203] Only the host can change the mod configs(does not work with port forwarding)"
+                    Label: "[centeritem:2203] Only the host can change the mod configs(does not work with port forwarding)"
                     Tooltip:
                         '''
                         Does not work in single player mode
@@ -397,7 +397,7 @@ Mods:
             }
             OnlyHostByPassword:
             {
-                Label: "[i:2203] Only the player(s) with verified password can change the mod configs"
+                Label: "[centeritem:2203] Only the player(s) with verified password can change the mod configs"
                 Tooltip:
                     '''
                     Does not work in single player mode, reloading is required
@@ -420,7 +420,7 @@ Mods:
             }
             SpawnRateMaxValue:
             {
-                Label: "[i:2649] Max Enemy Spawn Rate Multiplier"
+                Label: "[centeritem:2649] Max Enemy Spawn Rate Multiplier"
                 Tooltip:
                     '''
                     Allows players to adjust the maximum spawn rate of enemies
@@ -432,17 +432,17 @@ Mods:
             }
             LoadModItems:
             {
-                Label: "[i:ImproveGame/WallPlace] Enable mod items"
+                Label: "[centeritem:ImproveGame/WallPlace] Enable mod items"
                 Tooltip:
                     '''
                     Modded items will not be loaded if it is off
                     The mod item icons contained in the config will become text
                     '''
             }
-            ShowModName.Label: "[i:ImproveGame/SpaceWand] Display which mod are the items from"
+            ShowModName.Label: "[centeritem:ImproveGame/SpaceWand] Display which mod are the items from"
             EmptyAutofisher:
             {
-                Label: "[i:ImproveGame/Autofisher] Bait Insufficient Warning"
+                Label: "[centeritem:ImproveGame/Autofisher] Bait Insufficient Warning"
                 Tooltip:
                     '''
                     If a Fishing Machine runs out of bait, a message will be displayed: 
@@ -453,7 +453,7 @@ Mods:
 
             OtherFunctions:
             {
-                Label: "[i:ThePlan] Other non-configurable functions"
+                Label: "[centeritem:ThePlan] Other non-configurable functions"
                 Header:
                     '''
                     Following are other non-configurable functions of this mod:
@@ -463,6 +463,7 @@ Mods:
                     - A hotkey to swap the hotbar with the second row of inventory
                     - Display minion slot occupancy in tooltip
                     - 点击生命体分析仪图标打开分析过滤界面
+                    - 对着箱子按住Alt键可直接查看其内部物品
                     '''
             }
         }

@@ -1,4 +1,8 @@
-﻿using Terraria.GameInput;
+﻿using ImproveGame.Common;
+using ImproveGame.Common.Animations;
+using ImproveGame.Common.GlobalItems;
+using System.Collections.ObjectModel;
+using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 using Terraria.ID;
@@ -103,7 +107,7 @@ public class MoveChest : ModItem
                     SoundEngine.PlaySound(SoundID.Dig, player.position);
                     var chest = Main.chest[index];
                     chest.item = items;
-                    chest.name = chestName;
+                    chest.name = chestName ?? "";
                     Reset();
                 }
                 else
@@ -225,11 +229,8 @@ public class MoveChest : ModItem
             modChestName = tag.GetString("mod");
             chestType = ModContent.TryFind<ModTile>(modChestName, out var tile) ? tile.Type : TileID.Containers;
         }
-        items = new Item[Chest.maxItems];
-        for (int i = 0; i < items.Length; i++)
-        {
-            items[i] = ItemIO.Load(tag.GetCompound(i.ToString()));
-        }
+        chestName = tag.GetString("name");
+        items = tag.Get<Item[]>("items");
     }
 
     public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -243,6 +244,16 @@ public class MoveChest : ModItem
     public override void NetReceive(BinaryReader reader)
     {
         hasChest = reader.ReadBoolean();
+        if (!hasChest)
+            return;
+        chestType = reader.ReadUInt16();
+        style = reader.ReadInt32();
+        if (chestType >= TileID.Count)
+        {
+            modChestName = reader.ReadString();
+        }
+        chestName = reader.ReadString();
+        items = reader.ReadItemArray();
     }
 
     /// <summary>
@@ -252,6 +263,16 @@ public class MoveChest : ModItem
     public override void NetSend(BinaryWriter writer)
     {
         writer.Write(hasChest);
+        if (!hasChest)
+            return;
+        writer.Write(chestType);
+        writer.Write(style);
+        if (chestType >= TileID.Count)
+        {
+            writer.Write(modChestName);
+        }
+        writer.Write(chestName);
+        writer.Write(items);
     }
 
     public void Reset()
@@ -270,17 +291,16 @@ public class MoveChest : ModItem
         {
             return;
         }
-
+        
         tag.Add("chest", (short)chestType);
         tag.Add("style", style);
         if (chestType >= TileID.Count)
         {
             tag.Add("mod", modChestName);
         }
-        for (int i = 0; i < items.Length; i++)
-        {
-            tag.Add(i.ToString(), ItemIO.Save(items[i]));
-        }
+        tag["name"] = chestName;
+        if (items is not null)
+            tag["items"] = items;
     }
 
     public override void SetDefaults()
@@ -341,6 +361,28 @@ public class MoveChest : ModItem
         player.jumpSpeedBoost *= 0.5f;
         player.maxFallSpeed += 0.5f;
         player.moveSpeed -= 0.1f;
+    }
+
+    public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
+    {
+        if (!hasChest) 
+            return base.PreDrawTooltip(lines, ref x, ref y);
+
+        List<TooltipLine> list = new();
+
+        for (int i = 0; i < 4; i++)
+        {
+            string line = "";
+            for (int j = 0; j <= 9; j++)
+            {
+                line += BgItemTagHandler.GenerateTag(items[i * 10 + j]);
+            }
+            list.Add(new(Mod, $"ChestItemLine_{i}", line));
+        }
+        
+        TagItem.DrawTooltips(lines, list, x, y);
+
+        return base.PreDrawTooltip(lines, ref x, ref y);
     }
 }
 

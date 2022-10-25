@@ -121,20 +121,14 @@ namespace ImproveGame.Content.Items
             }
             if (storedBanners is not null && storedBanners.Count > 0)
             {
-                if (storedBanners.Count >= 500)
+                string storeText = storedBanners.Count >= 500
+                    ? GetText("Tips.BannerChestCurrentFull")
+                    : GetTextWith("Tips.BannerChestCurrent", new { StoredCount = storedBanners.Count });
+                tooltips.Add(new(Mod, "BannerChestCurrent", storeText)
                 {
-                    tooltips.Add(new(Mod, "BannerChestCurrent", GetText("Tips.BannerChestCurrentFull"))
-                    {
-                        OverrideColor = Color.LightGreen
-                    });
-                }
-                else
-                {
-                    tooltips.Add(new(Mod, "BannerChestCurrent", GetTextWith("Tips.BannerChestCurrent", new { StoredCount = storedBanners.Count }))
-                    {
-                        OverrideColor = Color.LightGreen
-                    });
-                }
+                    OverrideColor = Color.LightGreen
+                });
+
                 string cachedText = string.Empty;
                 for (int i = 0; i < storedBanners.Count; i++)
                 {
@@ -176,6 +170,13 @@ namespace ImproveGame.Content.Items
 
         public override void LoadData(TagCompound tag)
         {
+            storedBanners = tag.Get<List<Item>>("banners");
+            storedBanners ??= new();
+            
+            // 旧版迁移
+            if (!tag.ContainsKey("storedBanners"))
+                return;
+
             List<Item> list = new();
             foreach (var entry in tag.GetList<TagCompound>("storedBanners"))
             {
@@ -192,31 +193,19 @@ namespace ImproveGame.Content.Items
 
         public override void SaveData(TagCompound tag)
         {
-            if (storedBanners is not null && storedBanners.Count != 0)
-            {
-                tag["storedBanners"] = storedBanners.Select(item => new TagCompound
-                {
-                    ["banner"] = item
-                }).ToList();
-            }
             tag[nameof(autoStorage)] = autoStorage;
             tag[nameof(autoSort)] = autoSort;
+            tag["banners"] = storedBanners;
         }
 
         public override void NetSend(BinaryWriter writer)
         {
-            writer.Write((byte)storedBanners.Count);
-            foreach (var p in storedBanners)
-                ItemIO.Send(p, writer, true);
+            writer.Write(storedBanners.ToArray());
         }
 
         public override void NetReceive(BinaryReader reader)
         {
-            byte count = reader.ReadByte();
-            for (int i = 0; i < count; i++)
-            {
-                storedBanners.Add(ItemIO.Receive(reader, true));
-            }
+            storedBanners = new(reader.ReadItemArray());
         }
 
         public override void AddRecipes()

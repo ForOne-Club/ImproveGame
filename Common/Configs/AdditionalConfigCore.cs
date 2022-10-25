@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
+using ImproveGame.Interface.Common;
 using Newtonsoft.Json;
 using Terraria.ModLoader.Config;
 
@@ -11,6 +12,8 @@ namespace ImproveGame.Common.Configs
     {
         public override void PostSetupContent()
         {
+            if (Main.dedServ)
+                return;
             AdditionalConfig.Load();
         }
     }
@@ -32,6 +35,7 @@ namespace ImproveGame.Common.Configs
             public List<string> ModdedBlacklist = new();
         }
         public bool UseKeybindTranslation;
+        public Vector2 HugeInventoryUIPosition;
 
         public AdditionalConfig(bool serlizing)
         {
@@ -57,17 +61,21 @@ namespace ImproveGame.Common.Configs
             LifeformAnalyzer.VanillaBlacklist.Sort();
             LifeformAnalyzer.ModdedBlacklist.Sort();
             UseKeybindTranslation = KeybindSystem.UseKeybindTranslation;
+            HugeInventoryUIPosition = UISystem.Instance.BigBagGUI.MainPanel is not null
+                ? UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position()
+                : new Vector2(500f);
         }
 
         public void Populate()
         {
-            LifeformAnalyzer.VanillaBlacklist?.ForEach(i => LifeAnalyzeCore.Blacklist[i] = true);
-            LifeformAnalyzer.ModdedBlacklist?.ForEach(s =>
+            LifeformAnalyzer?.VanillaBlacklist?.ForEach(i => LifeAnalyzeCore.Blacklist[i] = true);
+            LifeformAnalyzer?.ModdedBlacklist?.ForEach(s =>
             {
                 if (ModContent.TryFind<ModNPC>(s, out var modNpc))
                     LifeAnalyzeCore.Blacklist[modNpc.Type] = true;
             });
             KeybindSystem.UseKeybindTranslation = UseKeybindTranslation;
+            UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition == Vector2.Zero ? new(150, 340) : HugeInventoryUIPosition;
         }
 
         public static void Load()
@@ -92,6 +100,8 @@ namespace ImproveGame.Common.Configs
 
         public static void Save()
         {
+            if (Main.dedServ)
+                return;
             Directory.CreateDirectory(ConfigManager.ModConfigPath);
             string json = JsonConvert.SerializeObject(new AdditionalConfig(true), ConfigManager.serializerSettings);
             File.WriteAllText(FullPath, json);

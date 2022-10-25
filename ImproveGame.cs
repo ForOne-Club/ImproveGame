@@ -17,7 +17,9 @@ global using Terraria.ModLoader;
 global using Terraria.UI;
 global using static ImproveGame.MyUtils;
 global using TrUtils = Terraria.Utils;
+using ImproveGame.Common;
 using ImproveGame.Common.Systems;
+using Terraria.UI.Chat;
 
 namespace ImproveGame
 {
@@ -36,6 +38,9 @@ namespace ImproveGame
             // 加载前缀信息
             LoadPrefixInfo();
             Instance = this;
+            
+            ChatManager.Register<BgItemTagHandler>("bgitem");
+            ChatManager.Register<CenteredItemTagHandler>("centeritem");
         }
 
         public override void Unload()

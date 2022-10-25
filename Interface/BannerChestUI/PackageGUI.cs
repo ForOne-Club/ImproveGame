@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Content.Items;
 using ImproveGame.Interface.UIElements_Shader;
 using System.Data;
 using Terraria.GameInput;
