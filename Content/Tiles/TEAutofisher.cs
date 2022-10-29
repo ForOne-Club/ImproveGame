@@ -1,6 +1,9 @@
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Systems;
+using ImproveGame.Content.Items;
+using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Interface.Common;
+using System;
 using System.Reflection;
 using Terraria.Chat;
 using Terraria.DataStructures;
@@ -28,6 +31,8 @@ namespace ImproveGame.Content.Tiles
         public bool CatchTools = true;
         public bool CatchWhiteRarityCatches = true;
         public bool CatchNormalCatches = true;
+
+        public bool IsEmpty => accessory.IsAir && bait.IsAir && fishingPole.IsAir && (fish is null || fish.All(item => item.IsAir));
 
         public override bool IsTileValidForEntity(int x, int y)
         {
@@ -130,7 +135,11 @@ namespace ImproveGame.Content.Tiles
             }
             fishingSpeedBonus += Math.Min(bassCount / 20f, 5f);
 
+            # if DEBUG
+            const float fishingCooldown = 33f;
+            #else
             const float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版写的是660
+            #endif
             if (FishingTimer > fishingCooldown / fishingSpeedBonus)
             {
                 FishingTimer = 0;
@@ -623,7 +632,7 @@ namespace ImproveGame.Content.Tiles
             if (result.BaitItemType == ItemID.TruffleWorm)
                 return result;
 
-            if (result.BaitPower == 0 || result.PolePower == 0)
+            if (result.BaitPower == 0 || result.PolePower < 5)
                 return result;
 
             var player = GetClosestPlayer(Position);
@@ -679,6 +688,33 @@ namespace ImproveGame.Content.Tiles
         }
 
         #endregion
+
+        public override void OnKill()
+        {
+            if (!fishingPole.IsAir)
+                SpawnDropItem(ref fishingPole);
+            if (!bait.IsAir)
+                SpawnDropItem(ref bait);
+            if (!accessory.IsAir)
+                SpawnDropItem(ref accessory);
+            for (int k = 0; k < 15; k++)
+                if (!fish[k].IsAir)
+                    SpawnDropItem(ref fish[k]);
+        }
+
+        private void SpawnDropItem(ref Item item)
+        {
+            var position = Position.ToWorldCoordinates();
+            int i = Item.NewItem(new EntitySource_Misc("FishingMachine"), (int)position.X, (int)position.Y, 32, 32, item.type);
+            item.position = Main.item[i].position;
+            Main.item[i] = item;
+            var drop = Main.item[i];
+            item = new Item();
+            drop.velocity.Y = -2f;
+            drop.velocity.X = Main.rand.NextFloat(-4f, 4f);
+            drop.favorited = false;
+            drop.newAndShiny = false;
+        }
 
         public override void OnNetPlace()
         {

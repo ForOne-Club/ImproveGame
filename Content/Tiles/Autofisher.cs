@@ -46,32 +46,16 @@ namespace ImproveGame.Content.Tiles
             return true;
         }
 
-        public override bool CanKillTile(int i, int j, ref bool blockDamaged)
-        {
-            if (!TryGetTileEntityAs<TEAutofisher>(i, j, out var autofisher))
-                return true;
-            if (!autofisher.accessory.IsAir || !autofisher.bait.IsAir || !autofisher.fishingPole.IsAir)
-            {
-                return false;
-            }
-
-            if (autofisher.fish is null)
-                return true;
-            for (int k = 0; k < 15; k++)
-            {
-                if (autofisher.fish[k] is not null && !autofisher.fish[k].IsAir)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        public override bool CanKillTile(int i, int j, ref bool blockDamaged) =>
+            !TryGetTileEntityAs<TEAutofisher>(i, j, out var autofisher) || autofisher.IsEmpty;
 
         public override void ModifyObjectData()
         {
             TileObjectData.newTile.Direction = TileObjectDirection.PlaceRight;
             TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.newTile.StyleHorizontal = true;
+            TileID.Sets.PreventsTileReplaceIfOnTopOfIt[Type] = true;
+            TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
         }
 
         public override void ModifyObjectDataAlternate(ref int alternateStyle)

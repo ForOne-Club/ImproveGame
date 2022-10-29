@@ -11,6 +11,8 @@
 - Fixed the TileEntity instance of Fishing Machine could not despawn properly
 - **[v1.6.2.1]** 修复了虚空魔杖在多人模式下宝箱物品丢失的BUG
 - **[v1.6.2.1]** 修复了虚空魔杖无法记录宝箱名称并导致报错的BUG
+- **[v1.6.2.1]** 修复了调整到25倍钱币掉落后重新加载模组会导致怪物不掉落钱币的BUG
+- **[v1.6.2.1]** 修复了自动钓鱼机在含有物品时被破坏不会返还物品的BUG
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests

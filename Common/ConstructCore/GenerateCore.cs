@@ -87,7 +87,7 @@ namespace ImproveGame.Common.ConstructCore
             int height = structure.Height;
             for (int x = 0; x <= width; x++)
             {
-                for (int y = 0; y <= height; y++)
+                for (int y = height; y >= 0; y--)
                 {
                     int index = y + x * (height + 1);
                     var placePosition = position + new Point(x, y);

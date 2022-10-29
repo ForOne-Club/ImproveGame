@@ -23,7 +23,7 @@ namespace ImproveGame.Common.GlobalNPCs
             if (Config.NPCCoinDropRate == 25)
             {
                 int itemType = ModContent.ItemType<Content.Items.Coin.CoinOne>();
-                npcLoot.Add(new DropPerPlayerOnThePlayer(itemType, 200, 1, 1, null));
+                npcLoot.Add(new CommonDrop(itemType, 200));
             }
         }
     }
