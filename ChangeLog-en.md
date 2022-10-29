@@ -26,6 +26,10 @@
 - **[v1.6.2.1]** 生命体分析仪现在可过滤你不想要检测到的生物
 - **[v1.6.2.1]** 旅途模式下自动研究被收藏的达到数量需求的物品
 - **[v1.6.2.1]** 对着箱子按住Alt键可直接查看其内部物品
+- **[v1.6.2.1]** 增益追踪器界面调整
+  - 边框变得圆润
+  - 将分页式界面改为滚动式界面
+  - 现在可以根据增益名称搜索增益
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
