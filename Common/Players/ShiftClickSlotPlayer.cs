@@ -30,7 +30,7 @@ namespace ImproveGame.Common.Players
                 // 旗帜收纳箱 + 药水袋
                 if (PackageGUI.Visible &&
                     ((PackageGUI.storageType is PackageGUI.StorageType.Banners && ItemToBanner(item) != -1) ||
-                    (PackageGUI.storageType is PackageGUI.StorageType.Potions && item.buffType > 0)))
+                    (PackageGUI.storageType is PackageGUI.StorageType.Potions && item.buffType > 0 && item.consumable)))
                 {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
@@ -62,13 +62,13 @@ namespace ImproveGame.Common.Players
                 {
                     if (PackageGUI.storageType is PackageGUI.StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
                     {
-                        BannerChest.PutInBannerChest(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot]);
+                        BannerChest.PutInBannerChest(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot], UISystem.Instance.PackageGUI.package.AutoSort);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
-                    else if (PackageGUI.storageType is PackageGUI.StorageType.Potions && inventory[slot].buffType > 0)
+                    else if (PackageGUI.storageType is PackageGUI.StorageType.Potions && inventory[slot].buffType > 0 && inventory[slot].consumable)
                     {
-                        PotionBag.PutInPotionBag(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot]);
+                        PotionBag.PutInPotionBag(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot], UISystem.Instance.PackageGUI.package.AutoSort);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }

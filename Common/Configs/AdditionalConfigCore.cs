@@ -94,7 +94,8 @@ namespace ImproveGame.Common.Configs
                 JsonConvert.PopulateObject("{}", settings, ConfigManager.serializerSettings);
             }
 
-            settings.Populate();
+            // 报错了，我也不知道为啥，先注释掉。
+            // settings.Populate();
         }
 
         public static void Save()

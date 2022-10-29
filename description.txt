@@ -32,7 +32,7 @@
 ---------------------------
 [c/990000:画师：枫林半叶, 逆风而行的信鸽]
 [c/9900ff:翻译：Lastprismer, Lacewing]
-[c/0099ff:代码：局长, Cyril]
+[c/0099ff:代码：局长, Cyril, 夜谷紫幽]
 [c/00ff99:特别感谢: @ChevyRay的协程类]
 ---------------------------
 版权声明:
@@ -77,7 +77,7 @@ For a detailed list, check mod configurations or changelog above
 ---------------------------
 [c/990000:Spriter: 枫林半叶, 逆风而行的信鸽]
 [c/9900ff:Translators: Lastprismer, Lacewing]
-[c/0099ff:Coder: 局长, Cyril]
+[c/0099ff:Coder: 局长, Cyril, 夜谷紫幽]
 [c/00ff99:Special thanks: @ChevyRay's coroutine class]
 ---------------------------
 Copyright Statement:

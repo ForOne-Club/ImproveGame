@@ -111,10 +111,6 @@
 
         public static float Height(this UIElement uie) => uie.Height.Pixels;
 
-        public static float WidthInside(this UIElement uie) => uie.Width.Pixels - uie.PaddingLeft - uie.PaddingRight;
-
-        public static float HeightInside(this UIElement uie) => uie.Height.Pixels - uie.PaddingTop - uie.PaddingBottom;
-
         public static float HPadding(this UIElement uie) => uie.PaddingLeft + uie.PaddingRight;
 
         public static float VPadding(this UIElement uie) => uie.PaddingTop + uie.PaddingBottom;

@@ -77,7 +77,7 @@ namespace ImproveGame.Interface.BannerChestUI
 
             Vector2 textSize = GetTextSize(index.ToString()) * 0.75f;
             Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
-            TrUtils.DrawBorderString(sb, index.ToString(), textPos, Color.White, 0.75f);
+            TrUtils.DrawBorderString(sb, (index + 1).ToString(), textPos, Color.White, 0.75f);
 
             textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
             textPos = dimensions.Position() + new Vector2(52 * 0.2f, (52 - textSize.Y) * 0.9f);

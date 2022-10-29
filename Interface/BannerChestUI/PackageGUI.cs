@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.UIElements_Shader;
-using System.Collections.Generic;
+using System.Data;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.BannerChestUI
@@ -10,6 +10,7 @@ namespace ImproveGame.Interface.BannerChestUI
     {
         private static bool visible;
         public static StorageType storageType;
+        public IPackage package;
 
         public static bool Visible
         {
@@ -27,6 +28,8 @@ namespace ImproveGame.Interface.BannerChestUI
 
         public SUIPanel mainPanel;
         public UITitle title;
+        public Checkbox checkbox;
+        public Checkbox checkbox2;
         public BackgroundImage button;
         public SUIPanel gridPanel;
         public PackageGrid grid;
@@ -35,7 +38,8 @@ namespace ImproveGame.Interface.BannerChestUI
         public override void OnInitialize()
         {
             Append(mainPanel = new(Color.Black, background) { HAlign = 0.5f, VAlign = 0.5f });
-            mainPanel.Append(title = new("Title", 0.5f));
+            mainPanel.SetPadding(12f);
+            mainPanel.Append(title = new("中文|Chinese", 0.5f));
             mainPanel.OnMouseDown += (uie, evt) =>
             {
                 if (!(button.IsMouseHovering || grid.Parent.IsMouseHovering))
@@ -53,8 +57,15 @@ namespace ImproveGame.Interface.BannerChestUI
                 }
             };
 
+            mainPanel.Append(checkbox = new(() => package.AutoStorage, state => package.AutoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f));
+            checkbox.Top.Pixels = title.Bottom() + 8f;
+
+            mainPanel.Append(checkbox2 = new(() => package.AutoSort, state => package.AutoSort = state, GetText("PackageGUI.AutoSort"), 0.8f));
+            checkbox2.Top.Pixels = checkbox.Top();
+            checkbox2.Left.Pixels = checkbox.Right() + 8f;
+
             mainPanel.Append(button = new(GetTexture("Close").Value) { HAlign = 1f });
-            button.Height.Pixels = title.Height.Pixels;
+            button.Height.Pixels = title.Height();
             button.OnMouseDown += (_, _) =>
             {
                 SoundEngine.PlaySound(SoundID.MenuClose);
@@ -64,12 +75,12 @@ namespace ImproveGame.Interface.BannerChestUI
             mainPanel.Append(gridPanel = new(Color.Black, new(35, 40, 83, 160), 12, 3, false));
             gridPanel.Append(grid = new());
             gridPanel.OnMouseDown += GridPanel_OnMouseDown;
-            gridPanel.Top.Pixels = title.Bottom() + 10;
+            gridPanel.Top.Pixels = checkbox.Bottom() + 8f;
             gridPanel.Width.Pixels = grid.Width.Pixels + gridPanel.HPadding();
             gridPanel.Height.Pixels = grid.Height.Pixels + gridPanel.VPadding();
 
             mainPanel.Width.Pixels = gridPanel.Width.Pixels + mainPanel.HPadding();
-            mainPanel.Height.Pixels = gridPanel.Bottom() + mainPanel.VPadding() - 1;
+            mainPanel.Height.Pixels = gridPanel.Bottom() + mainPanel.VPadding();
         }
 
         private void GridPanel_OnMouseDown(UIMouseEvent evt, UIElement listeningElement)
@@ -82,12 +93,12 @@ namespace ImproveGame.Interface.BannerChestUI
             // 旗帜收纳箱
             if (storageType is StorageType.Banners && ItemToBanner(Main.mouseItem) != -1)
             {
-                BannerChest.PutInBannerChest(items, ref Main.mouseItem);
+                BannerChest.PutInBannerChest(items, ref Main.mouseItem, package.AutoSort);
             }
             // 药水袋子
-            else if (storageType is StorageType.Potions && Main.mouseItem.buffType > 0)
+            else if (storageType is StorageType.Potions && Main.mouseItem.buffType > 0 && Main.mouseItem.consumable)
             {
-                PotionBag.PutInPotionBag(items, ref Main.mouseItem);
+                PotionBag.PutInPotionBag(items, ref Main.mouseItem, package.AutoSort);
             }
         }
 
@@ -101,7 +112,7 @@ namespace ImproveGame.Interface.BannerChestUI
             }
         }
 
-        public void Open(List<Item> items, string title, StorageType STOType)
+        public void Open(List<Item> items, string title, StorageType STOType, IPackage package)
         {
             storageType = STOType;
             SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -110,6 +121,7 @@ namespace ImproveGame.Interface.BannerChestUI
             grid.SetInventory(items);
             grid.scrollbar.ViewPosition = 0;
             this.title.Text = title;
+            this.package = package;
             Recalculate();
         }
 
