@@ -1,11 +1,14 @@
 ﻿using ImproveGame.Common.Packets;
 using ImproveGame.Common.Players;
+using ImproveGame.Interface.UIElements_Shader;
 using Terraria.GameContent.Creative;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class BattlerPanel : UIPanel
+    public class BattlerPanel : SUIPanel
     {
+        public BattlerPanel() : base(Color.Black, new(35, 40, 83, 160), 12, 3, false) {}
+
         public override void Draw(SpriteBatch spriteBatch) {
             if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer) && modPlayer.HasRequiredBuffs())
                 base.Draw(spriteBatch);
@@ -29,9 +32,7 @@ namespace ImproveGame.Interface.GUI
         public void Initialize() {
             MainPanel = new() {
                 Width = new StyleDimension(77f, 0f),
-                Height = new StyleDimension(220f, 0f),
-                HAlign = 0f,
-                VAlign = 0.5f
+                Height = new StyleDimension(220f, 0f)
             };
             MainPanel.OnUpdate += UpdateUseMouseInterface;
 
@@ -42,19 +43,19 @@ namespace ImproveGame.Interface.GUI
             MainPanel.Append(uIVerticalSlider);
 
             maxRateText = new("x200") {
-                HAlign = 1.4f,
+                HAlign = 1.6f,
                 VAlign = 0f
             };
             MainPanel.Append(maxRateText);
 
             UIText element2 = new("x1") {
-                HAlign = 0.7f,
+                HAlign = 0.8f,
                 VAlign = 0.5f
             };
             MainPanel.Append(element2);
 
             UIText element3 = new("x0") {
-                HAlign = 0.8f,
+                HAlign = 0.9f,
                 VAlign = 1f
             };
             MainPanel.Append(element3);
