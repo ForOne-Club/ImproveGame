@@ -9,10 +9,10 @@
 - Fixed the pool cursor not showing in multiplayer mode
 - Fixed sometimes the Fishing Machine cannot be opened
 - Fixed the TileEntity instance of Fishing Machine could not despawn properly
-- **[v1.6.2.1]** 修复了虚空魔杖在多人模式下宝箱物品丢失的BUG
-- **[v1.6.2.1]** 修复了虚空魔杖无法记录宝箱名称并导致报错的BUG
-- **[v1.6.2.1]** 修复了调整到25倍钱币掉落后重新加载模组会导致怪物不掉落钱币的BUG
-- **[v1.6.2.1]** 修复了自动钓鱼机在含有物品时被破坏不会返还物品的BUG
+- **[v1.6.2.1]** Fixed Wand of Void losing items in multiplayer mode
+- **[v1.6.2.1]** Fixed Wand of Void failing to record chests' names and results in an error
+- **[v1.6.2.1]** Fixed NPCs drop no coin after coin drop rate is adjusted to 25x and mod is reloaded
+- **[v1.6.2.1]** Fixed Fishing Machine sometimes does not drop items inside when destroyed
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests
@@ -24,20 +24,24 @@
   - Can infinitely place liquids if have respective 'bottomless bucket' items
   - The same way for the 'absorbant sponge' items
 - Five filter options for the Fishing Machine, you can choose what to fish
-- 城镇NPC可住在邪恶环境功能
-- **[v1.6.2.1]** 生命体分析仪现在可过滤你不想要检测到的生物
-- **[v1.6.2.1]** 旅途模式下自动研究被收藏的达到数量需求的物品
-- **[v1.6.2.1]** 对着箱子按住Alt键可直接查看其内部物品
-- **[v1.6.2.1]** 增益追踪器界面调整
-  - 边框变得圆润
-  - 将分页式界面改为滚动式界面
-  - 现在可以根据增益名称搜索增益
+- A function allows town NPCs to live in evil biomes
+- **[v1.6.2.1]** Lifeform Analyzer now can filter unwanted creatures
+- **[v1.6.2.1]** Auto Research in Journey mode
+- **[v1.6.2.1]** Press Alt to inspect chest items
+- **[v1.6.2.1]** Reworked Buff Tracker's UI
+  - Smoothened UI borders
+  - Combined multiple buff pages to a single scrolling page
+  - Now you can search buffs
+- **[v1.6.2.1]** Reworked 'Better Reforging'
+  - Chance for prefixes to be rolled again is greatly reduced
+  - Prefixes which have been rolled can be applied manually
+  - Removed the 'Reforge Count' function
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
-- **[v1.6.2.1]** 优化了Item数组及列表使用TagCompound存储时的格式
-- **[v1.6.2.1]** 引入AdditionalConfig记录本地非ModConfig配置数据
-- **[v1.6.2.1]** 使在配置选项中的物品图标居中
+- **[v1.6.2.1]** Optimized format of Item Arrays and Lists stored using TagCompound
+- **[v1.6.2.1]** Introduced AdditionalConfig to record non-ModConfig local config data
+- **[v1.6.2.1]** Centered the item icons in configs
 
 # v1.6.1
 ## Subversions

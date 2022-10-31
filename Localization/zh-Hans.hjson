@@ -173,12 +173,12 @@
             ImprovePrefix:
             {
                 Label: "[centeritem:1551] 更好的重铸机制"
-                Tooltip: 会随着重铸次数的提升淘汰较差的前缀。
-            }
-            ShowPrefixCount:
-            {
-                Label: "[centeritem:455] 显示重铸次数"
-                Tooltip: 显示你重铸了多少次当前物品
+                Tooltip:
+                    '''
+                    大幅降低重复前缀出现的概率
+                    可以直接选择已获得过的前缀
+                    '''
+                Unknown: "未知词缀"
             }
             ShowItemMoreData:
             {
@@ -488,6 +488,8 @@
             PaintWand: 漆涂法杖
             ConstructWand: 构造法杖
             MoveChest: 虚空魔杖
+
+            CoinOne: 幸运金币
         }
         ItemTooltip:
         {

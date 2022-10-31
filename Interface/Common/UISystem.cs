@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.GUI;
-using Color = Microsoft.Xna.Framework.Color;
 
 namespace ImproveGame.Interface.Common
 {
@@ -12,6 +11,8 @@ namespace ImproveGame.Interface.Common
     {
         internal static UISystem Instance;
 
+        #region 定义
+        
         public AutofisherGUI AutofisherGUI;
         public static UserInterface AutofisherInterface;
 
@@ -45,9 +46,16 @@ namespace ImproveGame.Interface.Common
         public StructureGUI StructureGUI;
         public static UserInterface StructureInterface;
 
+        public PrefixRecallGUI PrefixRecallGUI;
+        public static UserInterface PrefixRecallInterface;
+
         public PackageGUI PackageGUI;
         public static UserInterface PackageInterface { get; set; }
 
+        #endregion
+
+        #region 卸载 & 加载
+        
         public override void Unload()
         {
             Instance = null;
@@ -84,6 +92,9 @@ namespace ImproveGame.Interface.Common
 
             StructureGUI = null;
             StructureInterface = null;
+            
+            PrefixRecallGUI = null;
+            PrefixRecallInterface = null;
 
             PackageGUI = null;
             PackageInterface = null;
@@ -99,13 +110,14 @@ namespace ImproveGame.Interface.Common
                 LiquidWandGUI = new();
                 ArchitectureGUI = new();
                 BrustGUI = new();
+                BigBagInterface = new();
                 SpaceWandGUI = new();
                 BigBagGUI = new();
                 PaintWandGUI = new();
                 GrabBagInfoGUI = new();
                 LifeformAnalyzerGUI = new();
                 StructureGUI = new();
-                BigBagInterface = new();
+                PrefixRecallGUI = new();
                 PackageInterface = new();
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
                 LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
@@ -117,6 +129,7 @@ namespace ImproveGame.Interface.Common
                 LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
                 LoadGUI(ref LifeformAnalyzerGUI, out LifeformAnalyzerInterface);
                 LoadGUI(ref StructureGUI, out StructureInterface);
+                LoadGUI(ref PrefixRecallGUI, out PrefixRecallInterface);
             }
         }
 
@@ -128,56 +141,38 @@ namespace ImproveGame.Interface.Common
             uiInterface.SetState(uiState);
         }
 
+        #endregion
+
+        #region 更新 & 绘制
+        
         public override void UpdateUI(GameTime gameTime)
         {
             if (AutofisherGUI.Visible)
-            {
                 AutofisherInterface?.Update(gameTime);
-            }
             if (BuffTrackerGUI.Visible)
-            {
                 BuffTrackerInterface?.Update(gameTime);
-            }
             if (LiquidWandGUI.Visible)
-            {
                 LiquidWandInterface?.Update(gameTime);
-            }
             if (PackageGUI.Visible)
-            {
                 PackageInterface?.Update(gameTime);
-            }
             if (BigBagGUI.Visible)
-            {
                 BigBagInterface?.Update(gameTime);
-            }
             if (ArchitectureGUI.Visible)
-            {
                 ArchitectureInterface?.Update(gameTime);
-            }
             if (BrustGUI.Visible)
-            {
                 BrustInterface?.Update(gameTime);
-            }
             if (SpaceWandGUI.Visible)
-            {
                 SpaceWandInterface?.Update(gameTime);
-            }
             if (PaintWandGUI.Visible)
-            {
                 PaintWandInterface?.Update(gameTime);
-            }
             if (GrabBagInfoGUI.Visible)
-            {
                 GrabBagInfoInterface?.Update(gameTime);
-            }
             if (LifeformAnalyzerGUI.Visible)
-            {
                 LifeformAnalyzerInterface?.Update(gameTime);
-            }
             if (StructureGUI.Visible)
-            {
                 StructureInterface?.Update(gameTime);
-            }
+            // if (PrefixRecallGUI.Visible) // 有特殊操作
+            PrefixRecallInterface?.Update(gameTime);
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -206,7 +201,14 @@ namespace ImproveGame.Interface.Common
                     () => { if (LifeformAnalyzerGUI.Visible) LifeformAnalyzerGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Structure GUI", () =>
                 {
-                    if (StructureGUI.Visible) StructureGUI.Draw(Main.spriteBatch);
+                    if (StructureGUI.Visible)
+                        StructureGUI.Draw(Main.spriteBatch);
+                    return true;
+                }, InterfaceScaleType.UI));
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Prefix Recall GUI", () =>
+                {
+                    if (PrefixRecallGUI.Visible)
+                        PrefixRecallGUI.Draw(Main.spriteBatch);
                     return true;
                 }, InterfaceScaleType.UI));
             }
@@ -275,5 +277,7 @@ namespace ImproveGame.Interface.Common
             }
             return true;
         }
+
+        #endregion
     }
 }
