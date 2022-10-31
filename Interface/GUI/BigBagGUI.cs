@@ -30,10 +30,9 @@ namespace ImproveGame.Interface.GUI
         public ModItemGrid ItemGrid;
         public Checkbox[] checkbox = new Checkbox[3];
 
-        private readonly Color background = new(44, 57, 105, 160);
         public override void OnInitialize()
         {
-            Append(MainPanel = new(Color.Black, background));
+            Append(MainPanel = new(UIColor.Default.PanelBorder, UIColor.Default.PanelBackground));
             MainPanel.OnMouseDown += (evt, uie) =>
             {
                 if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering)
@@ -182,7 +181,7 @@ namespace ImproveGame.Interface.GUI
             // 优先级排序
             testSort.Sort((a, b) =>
             {
-                return -a.rare.CompareTo(b.rare) * 100 - a.stack.CompareTo(b.stack) * 10 + a.type.CompareTo(b.type);
+                return -a.rare.CompareTo(b.rare) * 100 + a.type.CompareTo(b.type) * 10 - a.stack.CompareTo(b.stack);
             });
 
             // 放入背包

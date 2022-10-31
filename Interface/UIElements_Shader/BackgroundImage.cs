@@ -1,11 +1,10 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.UIElements_Shader
 {
     public class BackgroundImage : UIElement
     {
-        public Color background = new(35, 40, 83);
-
         private Texture2D texture;
         private Vector2 textureSize;
         public Texture2D Texture
@@ -41,7 +40,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             Vector2 position = rectangle.Position();
             Vector2 size = rectangle.Size();
 
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 10, 0, background, background);
+            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 10, 0, UIColor.Default.TitleBackground, UIColor.Default.TitleBackground);
 
             rectangle = GetInnerDimensions();
             position = rectangle.Position();

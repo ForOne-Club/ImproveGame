@@ -1,4 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.Common;
+using Terraria.GameContent.UI;
 
 namespace ImproveGame.Interface.UIElements_Shader
 {
@@ -43,8 +45,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             Vector2 position = rectangle.Position();
             Vector2 size = rectangle.Size();
 
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 10, 0, background, background);
-
+            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 10, 0, UIColor.Default.TitleBackground, UIColor.Default.TitleBackground);
             rectangle = GetInnerDimensions();
             position = rectangle.Position();
             size = rectangle.Size();

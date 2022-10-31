@@ -170,6 +170,9 @@ namespace ImproveGame.Content.Items
 
         public override void LoadData(TagCompound tag)
         {
+            tag.TryGet(nameof(autoStorage), out autoStorage);
+            tag.TryGet(nameof(autoSort), out autoSort);
+
             storedBanners = tag.Get<List<Item>>("banners");
             storedBanners ??= new();
             
@@ -187,8 +190,6 @@ namespace ImproveGame.Content.Items
                 list.Add(banner);
             }
             storedBanners = list;
-            tag.TryGet(nameof(autoStorage), out autoStorage);
-            tag.TryGet(nameof(autoSort), out autoSort);
         }
 
         public override void SaveData(TagCompound tag)

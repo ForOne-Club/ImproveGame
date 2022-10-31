@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
-using System.Collections.Generic;
+using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
@@ -12,9 +12,7 @@ namespace ImproveGame.Interface.UIElements
     /// </summary>
     public class ArrayItemSlot : UIElement
     {
-        private int mode;
-        private List<Item> items2;
-        private Item[] items;
+        private readonly Item[] items;
         public Item[] Items => items;
         public Texture2D Texture
         {
@@ -32,91 +30,27 @@ namespace ImproveGame.Interface.UIElements
         {
             get
             {
-                if (mode == 0)
-                    return items[index];
-                else
-                {
-                    return items2[index];
-                }
+                return items[index];
             }
             set
             {
-                if (mode == 0)
-                    items[index] = value;
-                else
-                    items2[index] = value;
+                items[index] = value;
             }
         }
         private int RightMouseTimer = -1;
 
         public ArrayItemSlot(Item[] items, int index)
         {
-            mode = 0;
+            Width.Pixels = 52;
+            Height.Pixels = 52;
             this.items = items;
             this.index = index;
-            Width.Set(TextureAssets.InventoryBack.Value.Width, 0f);
-            Height.Set(TextureAssets.InventoryBack.Value.Height, 0f);
-
-            UIText text = new(string.Empty, 0.75f)
-            {
-                VAlign = 0.8f
-            };
-            text.Left.Set(0, 0.2f);
-            text.OnUpdate += (uie) =>
-            {
-                text.SetText(Item.IsAir || Item.stack <= 1 ? string.Empty : Item.stack.ToString());
-                text.Recalculate();
-            };
-            Append(text);
-
-            UIText text2 = new((index + 1).ToString(), 0.75f)
-            {
-                VAlign = 0.15f
-            };
-            text2.Left.Set(0, 0.15f);
-            Append(text2);
-        }
-
-        public ArrayItemSlot(List<Item> items, int index)
-        {
-            mode = 1;
-            this.items2 = items;
-            this.index = index;
-            Width.Set(TextureAssets.InventoryBack.Value.Width, 0f);
-            Height.Set(TextureAssets.InventoryBack.Value.Height, 0f);
-
-            UIText text = new(string.Empty, 0.75f)
-            {
-                VAlign = 0.8f
-            };
-            text.Left.Set(0, 0.2f);
-            text.OnUpdate += (uie) =>
-            {
-                text.SetText(Item.IsAir || Item.stack <= 1 ? string.Empty : Item.stack.ToString());
-                text.Recalculate();
-            };
-            Append(text);
-
-            UIText text2 = new((index + 1).ToString(), 0.75f)
-            {
-                VAlign = 0.15f
-            };
-            text2.Left.Set(0, 0.15f);
-            Append(text2);
         }
 
         public override void MouseDown(UIMouseEvent evt)
         {
             SetCursorOverride();
             MouseClickSlot();
-            if (mode == 1)
-            {
-                if (Item.IsAir)
-                {
-                    items2.RemoveAt(index);
-                    Parent.RemoveChild(Parent.Children.ToList()[^1]);
-                }
-            }
             base.MouseDown(evt);
         }
 
@@ -155,14 +89,6 @@ namespace ImproveGame.Interface.UIElements
                 Main.mouseRightRelease = false;
                 return;
             }
-            if (mode == 1)
-            {
-                if (Item.IsAir)
-                {
-                    items2.RemoveAt(index);
-                    Parent.RemoveChild(Parent.Children.ToList()[^1]);
-                }
-            }
             base.MouseDown(evt);
         }
 
@@ -188,10 +114,6 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        private readonly Color FavoritedBorderColor = new(233, 176, 0, 200);
-        private readonly Color NotFavoritedBorderColor = new(18, 18, 38, 200);
-        private readonly Color FavoritedBackground = new(83, 88, 151, 200);
-        private readonly Color NotFavoritedBackground = new(63, 65, 151, 200);
         protected override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
@@ -204,8 +126,8 @@ namespace ImproveGame.Interface.UIElements
                 SetCursorOverride();
             }
 
-            Color borderColor = Item.favorited ? FavoritedBorderColor : NotFavoritedBorderColor;
-            Color background = Item.favorited ? FavoritedBackground : NotFavoritedBackground;
+            Color borderColor = Item.favorited ? UIColor.Default.SlotFavoritedBorder : UIColor.Default.SlotNoFavoritedBorder;
+            Color background = Item.favorited ? UIColor.Default.SlotFavoritedBackground : UIColor.Default.SlotNoFavoritedBackground;
             // 绘制背景框
             PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3,
                 borderColor, background);
@@ -214,6 +136,17 @@ namespace ImproveGame.Interface.UIElements
             // sb.Draw(Texture, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f, 0, 0f);
 
             DrawHasGlowItem(sb, Item, dimensions);
+
+            /*Vector2 textSize = GetTextSize(index.ToString()) * 0.75f;
+            Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
+            TrUtils.DrawBorderString(sb, (index + 1).ToString(), textPos, Color.White, 0.75f);*/
+
+            if (!Item.IsAir && Item.maxStack > 1)
+            {
+                Vector2 textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
+                Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
+                TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
+            }
         }
 
         /// <summary>
@@ -381,6 +314,10 @@ namespace ImproveGame.Interface.UIElements
                                 Item.stack -= Main.mouseItem.maxStack - Main.mouseItem.stack;
                                 Main.mouseItem.stack = Main.mouseItem.maxStack;
                             }
+                        }
+                        else
+                        {
+                            (Main.mouseItem, Item) = (Item, Main.mouseItem);
                         }
                     }
                     else

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.UIElements
 {
@@ -46,32 +47,20 @@ namespace ImproveGame.Interface.UIElements
             HoverTimer.Update();
         }
 
-        private readonly Color BorderColor1 = new(18, 18, 38);
-        private readonly Color BorderColor2 = new(233, 176, 0);
-        private readonly Color BackgroundColor1 = new(54, 56, 130);
         protected override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
             Vector2 position = dimensions.Position();
             Vector2 size = dimensions.Size();
 
-            Color borderColor = Color.Lerp(BorderColor1, BorderColor2, HoverTimer.Schedule);
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 10, 3, borderColor,
-                BackgroundColor1);
+            Color borderColor = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, HoverTimer.Schedule);
+            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 10, 3, borderColor, UIColor.Default.ButtonBackground);
 
             dimensions = GetInnerDimensions();
             position = dimensions.Position();
-            size = dimensions.Size();
 
             sb.Draw(image, position + imagePosition, Color.White);
             DrawString(position + TextPosition, text, Color.White, Color.Black);
-
-            // 原绘制
-            /*var rectangle = GetDimensions().ToRectangle();
-            Utils.DrawSplicedPanel(sb, Background, rectangle.X, rectangle.Y, rectangle.Width,
-                rectangle.Height, 10, 10, 10, 10, Colors.InventoryDefaultColor);
-            Utils.DrawSplicedPanel(sb, BackgroundBorder, rectangle.X, rectangle.Y, rectangle.Width,
-                rectangle.Height, 10, 10, 10, 10, Color.White * HoverTimer.Schedule);*/
         }
 
         public void SetText(string text)

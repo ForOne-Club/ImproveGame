@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.Common;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.UIElements_Shader
@@ -141,7 +142,6 @@ namespace ImproveGame.Interface.UIElements_Shader
             PlayerInput.LockVanillaMouseScroll("ModLoader/UIScrollbar");
         }
 
-        public readonly Color background = new(43, 56, 101);
         public readonly Color hoveredColor = new(220, 220, 220);
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
@@ -153,7 +153,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             Vector2 size = dimension.Size();
 
             // 滚动条背板
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, size.X / 2, 3, Color.Black, background);
+            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, size.X / 2, 3, UIColor.Default.PanelBorder, UIColor.Default.CheckBackground);
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();

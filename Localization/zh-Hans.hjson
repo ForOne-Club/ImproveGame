@@ -820,7 +820,7 @@
             Sort: 排序
             Synthesis: 参与合成
             SmartPickup: 智能拾取
-            OverflowPickup: 背包溢出自动拾取
+            OverflowPickup: 自动拾取
         }
         MoveChest:
         {
