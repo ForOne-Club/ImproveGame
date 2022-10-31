@@ -12,7 +12,7 @@ namespace ImproveGame.Interface.GUI;
 public class PrefixRecallGUI : UIState
 {
     public static bool Visible =>
-        !Main.reforgeItem.IsAir && Main.reforgeItem.TryGetGlobalItem<ImprovePrefixItem>(out var modItem) && modItem.Prefixs.Count > 0;
+        Config.ImprovePrefix && !Main.reforgeItem.IsAir && Main.reforgeItem.TryGetGlobalItem<ImprovePrefixItem>(out var modItem) && modItem.Prefixs.Count > 0;
     private static int _oldItemType; // 用于监测type以及时更新uiList
     private static int _oldPrefixCount; // 用于监测词缀数量以及时更新uiList
 

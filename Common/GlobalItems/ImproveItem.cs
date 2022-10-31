@@ -14,8 +14,6 @@ namespace ImproveGame.Common.GlobalItems
         public static readonly List<int> SummonsList1 = new() { 560, 43, 70, 1331, 1133, 5120, 4988, 556, 544, 557, 3601 };
         // 事件召唤物识别码
         public static readonly List<int> SummonsList2 = new() { 4271, 361, 1315, 2767, 602, 1844, 1958 };
-        // 前缀等级
-        public static readonly Dictionary<int, int> PrefixLevel = new();
 
         public override void SetDefaults(Item item)
         {
@@ -28,7 +26,7 @@ namespace ImproveGame.Common.GlobalItems
                 && !GoldList.Contains(item.type))
             {
                 item.maxStack = ModContent.GetInstance<Configs.ImproveConfigs>().ItemMaxStack;
-                if (item.type == ItemID.PlatinumCoin && item.maxStack > 2000)
+                if (item.type == ItemID.PlatinumCoin && ModContent.GetInstance<Configs.ImproveConfigs>().ItemMaxStack > 2000)
                 {
                     item.maxStack = 2000;
                 }
@@ -104,67 +102,9 @@ namespace ImproveGame.Common.GlobalItems
             return base.CanBeConsumedAsAmmo(ammo, weapon, player);
         }
 
-        // 前缀回滚
-        public override bool AllowPrefix(Item item, int pre)
-        {
-            GlobalItemData itemVar = item.GetGlobalItem<GlobalItemData>();
-            if (itemVar.recastCount == 0)
-            {
-                return true;
-            }
-            // 新的重铸机制
-            if (!Config.ImprovePrefix || !PrefixLevel.ContainsKey(pre))
-            {
-                return true;
-            }
-
-            // 饰品
-            if (item.accessory)
-            {
-                return itemVar.recastCount switch
-                {
-                    < 2 => PrefixLevel[pre] >= 1,
-                    < 4 => PrefixLevel[pre] >= 2,
-                    < 6 => PrefixLevel[pre] >= 3,
-                    _ => PrefixLevel[pre] >= 4
-                };
-            }
-
-            switch (pre)
-            {
-                // 工具
-                case 15 when item.axe > 0 || item.hammer > 0 || item.pick > 0:
-                // 召唤武器，但是不算入鞭子
-                case 57 when item.DamageType == DamageClass.Summon:
-                    return true;
-            }
-
-            return itemVar.recastCount switch
-            {
-                < 3 => PrefixLevel[pre] >= 0,
-                < 6 => PrefixLevel[pre] >= 1,
-                _ => PrefixLevel[pre] >= 2
-            };
-        }
-
-        // 重铸次数统计
-        public override void PostReforge(Item item)
-        {
-            GlobalItemData itemVar = item.GetGlobalItem<GlobalItemData>();
-            itemVar.recastCount++;
-        }
-
         // 额外提示
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            // 重铸次数
-            if (Config.ShowPrefixCount && (item.accessory ||
-                (item.damage > 0 && item.maxStack == 1 && item.ammo == AmmoID.None &&
-                item.DamageType != DamageClass.Generic)))
-            {
-                GlobalItemData itemVar = item.GetGlobalItem<GlobalItemData>();
-                tooltips.Add(new TooltipLine(Mod, "ReforgeCount", Language.GetTextValue($"Mods.ImproveGame.Tips.PrefixCount") + itemVar.recastCount));
-            }
             // 更多信息
             if (Config.ShowItemMoreData)
             {
