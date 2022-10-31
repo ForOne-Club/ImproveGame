@@ -10,7 +10,7 @@ namespace ImproveGame.Interface.UIElements
     /// <summary>
     /// 用于操作数组中的物品，初始化的时候必须给定数组 + 下标。
     /// </summary>
-    public class ArrayItemSlot : UIElement
+    public class ItemSlot_BigBag : UIElement
     {
         private readonly Item[] items;
         public Item[] Items => items;
@@ -39,7 +39,7 @@ namespace ImproveGame.Interface.UIElements
         }
         private int RightMouseTimer = -1;
 
-        public ArrayItemSlot(Item[] items, int index)
+        public ItemSlot_BigBag(Item[] items, int index)
         {
             Width.Pixels = 52;
             Height.Pixels = 52;
@@ -141,7 +141,7 @@ namespace ImproveGame.Interface.UIElements
             Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
             TrUtils.DrawBorderString(sb, (index + 1).ToString(), textPos, Color.White, 0.75f);*/
 
-            if (!Item.IsAir && Item.maxStack > 1)
+            if (!Item.IsAir && Item.stack > 1)
             {
                 Vector2 textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
                 Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);

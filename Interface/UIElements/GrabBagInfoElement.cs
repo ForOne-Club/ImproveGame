@@ -50,7 +50,7 @@ namespace ImproveGame.Interface.UIElements
 
             var dimensions = GetDimensions();
             dimensions.Width = 40f;
-            ArrayItemSlot.DrawItem(sb: spriteBatch,
+            ItemSlot_BigBag.DrawItem(sb: spriteBatch,
                                    Item: item,
                                    lightColor: Color.White,
                                    dimensions: dimensions,

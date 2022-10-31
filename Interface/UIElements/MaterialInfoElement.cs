@@ -73,7 +73,7 @@
             var dimensions = GetDimensions();
             dimensions.Width = 28f;
             dimensions.X += 16f;
-            ArrayItemSlot.DrawItem(sb: spriteBatch,
+            ItemSlot_BigBag.DrawItem(sb: spriteBatch,
                                    Item: iconItem,
                                    lightColor: Color.White,
                                    dimensions: dimensions,
@@ -171,7 +171,7 @@
             var dimensions = GetDimensions();
             dimensions.Width = 28f;
             dimensions.X += 16f;
-            ArrayItemSlot.DrawItem(sb: spriteBatch,
+            ItemSlot_BigBag.DrawItem(sb: spriteBatch,
                                    Item: iconItem,
                                    lightColor: Color.White,
                                    dimensions: dimensions,

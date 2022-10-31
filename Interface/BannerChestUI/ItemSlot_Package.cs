@@ -5,7 +5,7 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.BannerChestUI
 {
-    public class PackageItemSlot : UIElement
+    public class ItemSlot_Package : UIElement
     {
 
         private int RightMouseTimer;
@@ -19,7 +19,7 @@ namespace ImproveGame.Interface.BannerChestUI
             set => items[index] = value;
         }
 
-        public PackageItemSlot(List<Item> items, int index)
+        public ItemSlot_Package(List<Item> items, int index)
         {
             Width.Pixels = 52;
             Height.Pixels = 52;
@@ -77,7 +77,7 @@ namespace ImproveGame.Interface.BannerChestUI
             /*Vector2 textSize = GetTextSize(index.ToString()) * 0.75f;
             Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
             TrUtils.DrawBorderString(sb, (index + 1).ToString(), textPos, Color.White, 0.75f);*/
-            if (!Item.IsAir && Item.maxStack > 1)
+            if (!Item.IsAir && Item.stack > 1)
             {
                 Vector2 textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
                 Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);

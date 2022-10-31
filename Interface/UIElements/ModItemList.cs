@@ -17,7 +17,7 @@ namespace ImproveGame.Interface.UIElements
             {
                 float col = i % HCount;
                 float row = i / HCount;
-                ArrayItemSlot ItemSlot = new(items, i);
+                ItemSlot_BigBag ItemSlot = new(items, i);
                 ItemSlot.OnMouseDown += OnMouseDownSlot;
                 ItemSlot.SetPos(col * (ItemSlot.Width() + 10f), row * (ItemSlot.Height() + 10f));
                 Append(ItemSlot);

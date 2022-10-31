@@ -124,7 +124,7 @@ namespace ImproveGame.Interface.GUI
         // 点击操作，将物品发送给服务器（因为像药水袋和旗帜盒这俩左键是不改stack的，所以这来个同步）
         private void NetSyncItem(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (Main.netMode == NetmodeID.MultiplayerClient && listeningElement is ArrayItemSlot itemSlot)
+            if (Main.netMode == NetmodeID.MultiplayerClient && listeningElement is ItemSlot_BigBag itemSlot)
             {
                 var packet = BigBagSlotPacket.Get(itemSlot.Item, Main.myPlayer, itemSlot.index);
                 packet.Send(runLocally: false);
