@@ -46,7 +46,7 @@
             {
                 float col = i % DisplayCount.X;
                 float row = i / DisplayCount.X;
-                PackageItemSlot ItemSlot;
+                ItemSlot_Package ItemSlot;
                 Append(ItemSlot = new(items, i));
                 ItemSlot.SetPos(col * (ChildSize.X + Spaceing.X), row * (ChildSize.Y + Spaceing.Y));
             }

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.UIElements_Shader
 {
@@ -67,8 +68,8 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            Color color = Color.Lerp(new Color(0, 0, 0, 50), new(0, 0, 0, 25), AT.Schedule);
-            Color color2 = Color.Lerp(new(27, 30, 61), new(242, 188, 23), AT.Schedule);
+            Color color = Color.Lerp(new Color(0, 0, 0, 25), new(25, 25, 25, 25), AT.Schedule);
+            Color color2 = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, AT.Schedule);
 
             Vector2 position = GetInnerDimensions().Position();
             Vector2 size = GetInnerDimensions().Size();
@@ -79,8 +80,7 @@ namespace ImproveGame.Interface.UIElements_Shader
 
             Vector2 boxSize2 = new(boxSize.Y - 10 * textScale);
             Vector2 position2 = position + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2), new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), AT.Schedule);
-            PixelShader.DrawBox(Main.UIScaleMatrix, position2,
-                boxSize2, boxSize2.Y / 2, 0, color2, color2);
+            PixelShader.DrawBox(Main.UIScaleMatrix, position2, boxSize2, boxSize2.Y / 2, 0, color2, color2);
 
             DrawString(position + new Vector2(boxSize.X + Spacing * textScale, size.Y / 2 - textSize.Y * textScale / 2 + 5 * textScale), text, Color.White,
                 textBorderColor, textScale);

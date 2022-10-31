@@ -1,13 +1,12 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.BannerChestUI
 {
-    public class PackageItemSlot : UIElement
+    public class ItemSlot_Package : UIElement
     {
-        private readonly Color BorderColor = new(18, 18, 38, 200);
-        private readonly Color Background = new(63, 65, 151, 200);
 
         private int RightMouseTimer;
 
@@ -20,7 +19,7 @@ namespace ImproveGame.Interface.BannerChestUI
             set => items[index] = value;
         }
 
-        public PackageItemSlot(List<Item> items, int index)
+        public ItemSlot_Package(List<Item> items, int index)
         {
             Width.Pixels = 52;
             Height.Pixels = 52;
@@ -71,17 +70,19 @@ namespace ImproveGame.Interface.BannerChestUI
         protected override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
-            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, BorderColor, Background);
+            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, UIColor.Default.SlotNoFavoritedBorder, UIColor.Default.SlotNoFavoritedBackground);
 
             DrawItem(sb, Item, Color.White, dimensions, 30);
 
-            Vector2 textSize = GetTextSize(index.ToString()) * 0.75f;
+            /*Vector2 textSize = GetTextSize(index.ToString()) * 0.75f;
             Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
-            TrUtils.DrawBorderString(sb, (index + 1).ToString(), textPos, Color.White, 0.75f);
-
-            textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
-            textPos = dimensions.Position() + new Vector2(52 * 0.2f, (52 - textSize.Y) * 0.9f);
-            TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
+            TrUtils.DrawBorderString(sb, (index + 1).ToString(), textPos, Color.White, 0.75f);*/
+            if (!Item.IsAir && Item.stack > 1)
+            {
+                Vector2 textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
+                Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
+                TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
+            }
 
             if (IsMouseHovering)
             {

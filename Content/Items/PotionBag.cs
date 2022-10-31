@@ -205,6 +205,8 @@ namespace ImproveGame.Content.Items
         
         public override void LoadData(TagCompound tag)
         {
+            tag.TryGet(nameof(autoStorage), out autoStorage);
+            tag.TryGet(nameof(autoSort), out autoSort);
             storedPotions = tag.Get<List<Item>>("potions");
             storedPotions ??= new();
 
@@ -224,8 +226,6 @@ namespace ImproveGame.Content.Items
                 list.Add(potion);
             }
             storedPotions = list;
-            tag.TryGet(nameof(autoStorage), out autoStorage);
-            tag.TryGet(nameof(autoSort), out autoSort);
         }
 
         public override void SaveData(TagCompound tag)

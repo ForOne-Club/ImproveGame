@@ -1,4 +1,5 @@
-﻿using ImproveGame.Interface.BannerChestUI;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.GUI;
 
 namespace ImproveGame.Interface.Common
@@ -187,7 +188,8 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: BigBag GUI",
                     () => { if (BigBagGUI.Visible) BigBagGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
 
-                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Package GUI", () =>
+                layers.Insert(inventoryIndex + 1,
+                    new LegacyGameInterfaceLayer("ImproveGame: Package GUI", () =>
                     {
                         if (PackageGUI.Visible) PackageGUI.Draw(Main.spriteBatch);
                         return true;

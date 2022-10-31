@@ -2,9 +2,9 @@
 {
     public class ModAssets : ModSystem
     {
+        internal static Asset<Effect> Fork;
         internal static Asset<Effect> RoundRectangle;
         internal static Asset<Effect> BoxShader;
-        internal static Asset<Effect> BorderRound;
         internal static Asset<Effect> ItemEffect;
         internal static Asset<Effect> LiquidSurface;
         internal static Asset<Texture2D> Perlin;
@@ -13,9 +13,9 @@
         {
             if (!Main.dedServ)
             {
+                Fork = GetEffect(nameof(Fork));
                 RoundRectangle = GetEffect(nameof(RoundRectangle));
                 BoxShader = GetEffect("Box");
-                BorderRound = GetEffect("BorderRound");
                 ItemEffect = GetEffect("item");
                 LiquidSurface = GetEffect("LiquidSurface");
                 Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");
@@ -26,9 +26,9 @@
         {
             if (!Main.dedServ)
             {
+                Fork = null;
                 RoundRectangle = null;
                 BoxShader = null;
-                BorderRound = null;
                 ItemEffect = null;
                 LiquidSurface = null;
                 Perlin = null;

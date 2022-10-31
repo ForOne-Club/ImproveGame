@@ -98,7 +98,7 @@ namespace ImproveGame.Common.Configs
                 File.Delete(FullPath);
                 JsonConvert.PopulateObject("{}", settings, ConfigManager.serializerSettings);
             }
-            
+
             settings.Populate();
         }
 

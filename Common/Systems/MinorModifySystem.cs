@@ -320,25 +320,19 @@ namespace ImproveGame.Common.Systems
             ImprovePlayer improvePlayer = player.GetModPlayer<ImprovePlayer>();
             UIPlayerSetting uIPlayerSetting = player.GetModPlayer<UIPlayerSetting>();
             // 旗帜收纳箱
-            if (improvePlayer.bannerChest is not null && ItemToBanner(itemToPickUp) != -1)
+            if (!itemToPickUp.IsAir && improvePlayer.bannerChest is not null && ItemToBanner(itemToPickUp) != -1)
             {
                 if (improvePlayer.bannerChest.AutoStorage)
                 {
-                    int count = itemToPickUp.stack;
                     BannerChest.PutInBannerChest(improvePlayer.bannerChest.storedBanners, ref itemToPickUp, improvePlayer.bannerChest.AutoSort);
-                    if (itemToPickUp.stack < count)
-                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, itemToPickUp, count - itemToPickUp.stack);
                 }
             }
             // 药水带袋
-            if (improvePlayer.potionBag is not null && itemToPickUp.buffType > 0 && itemToPickUp.consumable)
+            if (!itemToPickUp.IsAir && improvePlayer.potionBag is not null && itemToPickUp.buffType > 0 && itemToPickUp.consumable)
             {
                 if (improvePlayer.potionBag.AutoStorage)
                 {
-                    int count = itemToPickUp.stack;
                     PotionBag.PutInPotionBag(improvePlayer.potionBag.storedPotions, ref itemToPickUp, improvePlayer.potionBag.AutoSort);
-                    if (itemToPickUp.stack < count)
-                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, itemToPickUp, count - itemToPickUp.stack);
                 }
             }
             // 大背包
