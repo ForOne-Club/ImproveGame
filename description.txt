@@ -58,8 +58,8 @@ Wand of Liquid: Any Gold Bar * 12 + Shadow Scale/Tissue Sample * 18 + Wood * 24
 Wand of Architecture: Wood * 24 + Fallen Star * 8 + Any Gold Bar * 12
 Wand of Bursts: Wood * 18 + Jungle Spores * 6 + Ruby * 1
 Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + Soul of Night * 6
-虚空魔杖: 铁/铅锭x12 骨头x20 木材x18 钻石x1
-构造魔杖: 秘银/山铜锭x1 琥珀x8 木材x80 石头x80
+Wand of Void: Iron Bar/Lead Bar * 12 + Bone * 20 + Wood * 18 + Diamond * 1
+Wand of Construction: Mythril Bar/Orichalcum Bar * 1 + Amber * 8 + Wood * 80 + Stone * 80
 (You may use the Bestiary of the Recipe Browser to check their sources!)
 ---------------------------
 Change log: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md

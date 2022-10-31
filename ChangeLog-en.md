@@ -36,7 +36,7 @@
   - Chance for prefixes to be rolled again is greatly reduced
   - Prefixes which have been rolled can be applied manually
   - Removed the 'Reforge Count' function
-- **[v1.6.2.1]** 虚空魔杖与构造魔杖添加合成表
+- **[v1.6.2.1]** Added recipes of Wand of Void and Wand of Construction
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
