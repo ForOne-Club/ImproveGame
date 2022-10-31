@@ -481,6 +481,8 @@ Mods:
             PaintWand: Wand of Painting
             ConstructWand: Wand of Construction
             MoveChest: Wand of Void
+
+            CoinOne: Lucky Coin
         }
         ItemTooltip:
         {

@@ -488,6 +488,8 @@
             PaintWand: 漆涂法杖
             ConstructWand: 构造法杖
             MoveChest: 虚空魔杖
+
+            CoinOne: 幸运金币
         }
         ItemTooltip:
         {
