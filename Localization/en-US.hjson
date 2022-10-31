@@ -164,13 +164,13 @@ Mods:
             }
             ImprovePrefix:
             {
-                Label: "[centeritem:1551] 更好的重铸机制"
+                Label: "[centeritem:1551] Better Reforging"
                 Tooltip:
                     '''
-                    大幅降低重复前缀出现的概率
-                    可以直接选择已获得过的前缀
+                    Chance for prefixes to be rolled again is greatly reduced
+                    Prefixes which have been rolled can be applied manually
                     '''
-                Unknown: "未知词缀"
+                Unknown: "Unknown prefix"
             }
             ShowItemMoreData:
             {
@@ -294,11 +294,11 @@ Mods:
             }
             JourneyResearch:
             {
-                Label: "[centeritem:GoldBunny] 旅行模式自动研究"
+                Label: "[centeritem:GoldBunny] Auto Research"
                 Tooltip:
                     '''
-                    在旅行模式下，达到数量需求的被标记为收藏的物品将被自动研究
-                    自动研究不会消耗物品
+                    In Journey mode, items in sufficient stack number and marked as favorite will be automatically researched
+                    This function will not comsume the items
                     '''
             }
             BanDamageVar.Label: "[centeritem:6] Disable damage spread"
@@ -826,7 +826,7 @@ Mods:
         }
         MoveChest:
         {
-            Heavy: "箱子的重量使你行动有些受限"
+            Heavy: "Weight of the chest limits your mobility"
         }
         Autofisher:
         {
@@ -897,8 +897,8 @@ Mods:
         }
         PackageGUI:
         {
-            AutoStorage: 自动收纳 Auto Storage
-            AutoSort: 自动排序 Auto Sort
+            AutoStorage: Auto Collection
+            AutoSort: Auto Sortation
         }
         Common:
         {
