@@ -915,12 +915,14 @@ Mods:
         }
         RecipeGroup:
         {
-            GoldGroup: Gold/Platinum Bar
-            SilverGroup: Silver/Tungsten Bar
-            IronGroup: Iron/Lead Bar
-            CopperGroup: Copper/Tin Bar
-            DemoniteGroup: Demonite/Crimson Bar
-            ShadowGroup: Shadow Scale/Tissue Sample
+            AnyCopperBar: Any Copper Bar
+            AnyGoldBar: Any Gold Bar
+            AnySilverBar: Any Silver Bar
+            AnyDemoniteBar: Any Demonite Bar
+            AnyShadowScale: Any Shadow Scale
+            AnyCobaltBar: Any Cobalt Bar
+            AnyMythrilBar: Any Mythril Bar
+            AnyAdamantiteBar: Any Adamantite Bar
         }
         Keybind:
         {

@@ -11,6 +11,8 @@
 建筑魔杖: 木材x24 落星x8 金锭(铂金锭)x12
 法爆魔杖: 木材x18 丛林孢子x6 红玉x1
 星爆魔杖: 法爆法杖x1 落星x8 光明之魂x6 暗影之魂x6
+虚空魔杖: 铁/铅锭x12 骨头x20 木材x18 钻石x1
+构造魔杖: 秘银/山铜x1 琥珀x8 木材x80 石头x80
 (你可以使用 Recipe Browser(合成表) 模组的物品图鉴功能以在游戏内查阅来源!)
 ---------------------------
 更新日志: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
@@ -56,6 +58,8 @@ Wand of Liquid: Any Gold Bar * 12 + Shadow Scale/Tissue Sample * 18 + Wood * 24
 Wand of Architecture: Wood * 24 + Fallen Star * 8 + Any Gold Bar * 12
 Wand of Bursts: Wood * 18 + Jungle Spores * 6 + Ruby * 1
 Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + Soul of Night * 6
+虚空魔杖: 铁/铅锭x12 骨头x20 木材x18 钻石x1
+构造魔杖: 秘银/山铜x1 琥珀x8 木材x80 石头x80
 (You may use the Bestiary of the Recipe Browser to check their sources!)
 ---------------------------
 Change log: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md

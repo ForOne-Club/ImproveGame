@@ -6,6 +6,7 @@ using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 using Terraria.ID;
+using ImproveGame.Interface.UIElements;
 
 namespace ImproveGame.Content.Items;
 /// <summary>
@@ -75,7 +76,7 @@ public class MoveChest : ModItem
         {
             return false;
         }
-        
+
         var coord = player.GetModPlayer<NetPlayer>().MouseWorld.ToTileCoordinates();
 
         if (!player.IsInTileInteractionRange(coord.X, coord.Y)) // 必须在可操作范围内
@@ -291,7 +292,7 @@ public class MoveChest : ModItem
         {
             return;
         }
-        
+
         tag.Add("chest", (short)chestType);
         tag.Add("style", style);
         if (chestType >= TileID.Count)
@@ -365,7 +366,7 @@ public class MoveChest : ModItem
 
     public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
     {
-        if (!hasChest) 
+        if (!hasChest)
             return base.PreDrawTooltip(lines, ref x, ref y);
 
         List<TooltipLine> list = new();
@@ -379,10 +380,20 @@ public class MoveChest : ModItem
             }
             list.Add(new(Mod, $"ChestItemLine_{i}", line));
         }
-        
+
         TagItem.DrawTooltips(lines, list, x, y);
 
         return base.PreDrawTooltip(lines, ref x, ref y);
+    }
+
+    public override void AddRecipes()
+    {
+        CreateRecipe()
+            .AddRecipeGroup(RecipeGroupID.IronBar, 12)
+            .AddIngredient(ItemID.Bone, 20)
+            .AddRecipeGroup(RecipeGroupID.Wood, 18)
+            .AddIngredient(ItemID.Diamond)
+            .AddTile(TileID.Anvils).Register();
     }
 }
 

@@ -8,38 +8,46 @@ namespace ImproveGame.Common.Systems
 {
     public class RecipeSystem : ModSystem
     {
-        public static RecipeGroup GoldGroup;
-        public static RecipeGroup SilverGroup;
-        public static RecipeGroup IronGroup;
-        public static RecipeGroup CopperGroup;
-        public static RecipeGroup DemoniteGroup;
-        public static RecipeGroup ShadowGroup;
+        internal static RecipeGroup AnyCopperBar;
+        internal static RecipeGroup AnySilverBar;
+        internal static RecipeGroup AnyGoldBar;
+        internal static RecipeGroup AnyDemoniteBar;
+        internal static RecipeGroup AnyShadowScale;
+        internal static RecipeGroup AnyCobaltBar;
+        internal static RecipeGroup AnyMythrilBar;
+        internal static RecipeGroup AnyAdamantiteBar;
 
         public override void Unload()
         {
-            GoldGroup = null;
-            SilverGroup = null;
-            IronGroup = null;
-            CopperGroup = null;
-            DemoniteGroup = null;
-            ShadowGroup = null;
+            AnyCopperBar = null;
+            AnySilverBar = null;
+            AnyGoldBar = null;
+            AnyDemoniteBar = null;
+            AnyShadowScale = null;
+            AnyCobaltBar = null;
+            AnyMythrilBar = null;
+            AnyAdamantiteBar = null;
         }
 
         public override void AddRecipeGroups()
         {
-            GoldGroup = new(() => GetText("RecipeGroup.GoldGroup"), 19, 706);
-            SilverGroup = new(() => GetText("RecipeGroup.SilverGroup"), 21, 705);
-            IronGroup = new(() => GetText("RecipeGroup.IronGroup"), 22, 704);
-            CopperGroup = new(() => GetText("RecipeGroup.CopperGroup"), 20, 703);
-            ShadowGroup = new(() => GetText("RecipeGroup.ShadowGroup"), 86, 1329);
-            DemoniteGroup = new(() => GetText("RecipeGroup.DemoniteGroup"), 57, 1257);
+            AnyCopperBar = new(() => GetText($"RecipeGroup.{nameof(AnyCopperBar)}"), 20, 703);
+            AnySilverBar = new(() => GetText($"RecipeGroup.{nameof(AnySilverBar)}"), 21, 705);
+            AnyGoldBar = new(() => GetText($"RecipeGroup.{nameof(AnyGoldBar)}"), 19, 706);
+            AnyDemoniteBar = new(() => GetText($"RecipeGroup.{nameof(AnyDemoniteBar)}"), 57, 1257);
+            AnyShadowScale = new(() => GetText($"RecipeGroup.{nameof(AnyShadowScale)}"), 86, 1329);
+            AnyCobaltBar = new(() => GetText($"RecipeGroup.{nameof(AnyCobaltBar)}"), 381, 1184);
+            AnyMythrilBar = new(() => GetText($"RecipeGroup.{nameof(AnyMythrilBar)}"), 382, 1191);
+            AnyAdamantiteBar = new(() => GetText($"RecipeGroup.{nameof(AnyAdamantiteBar)}"), 391, 1198);
 
-            RecipeGroup.RegisterGroup("ImproveGame:GoldGroup", GoldGroup);
-            RecipeGroup.RegisterGroup("ImproveGame:SilverGroup", SilverGroup);
-            RecipeGroup.RegisterGroup("ImproveGame:IronGroup", IronGroup);
-            RecipeGroup.RegisterGroup("ImproveGame:CopperGroup", CopperGroup);
-            RecipeGroup.RegisterGroup("ImproveGame:ShadowGroup", ShadowGroup);
-            RecipeGroup.RegisterGroup("ImproveGame:DemoniteGroup", DemoniteGroup);
+            RecipeGroup.RegisterGroup("ImproveGame:AnyGoldBar", AnyGoldBar);
+            RecipeGroup.RegisterGroup("ImproveGame:AnySilverBar", AnySilverBar);
+            RecipeGroup.RegisterGroup("ImproveGame:AnyCopperBar", AnyCopperBar);
+            RecipeGroup.RegisterGroup("ImproveGame:AnyShadowScale", AnyShadowScale);
+            RecipeGroup.RegisterGroup("ImproveGame:AnyDemoniteBar", AnyDemoniteBar);
+            RecipeGroup.RegisterGroup("ImproveGame:AnyCobaltBar", AnyCobaltBar);
+            RecipeGroup.RegisterGroup("ImproveGame:AnyMythrilBar", AnyMythrilBar);
+            RecipeGroup.RegisterGroup("ImproveGame:AnyAdamantiteBar", AnyAdamantiteBar);
         }
 
         private static bool _loadedSuperVault; // 本次运行是否加载了大背包，全局字段避免出问题

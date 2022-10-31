@@ -913,12 +913,14 @@
         }
         RecipeGroup:
         {
-            GoldGroup: 金(铂金)锭
-            SilverGroup: 银(钨)锭
-            IronGroup: 铁(铅)锭
-            CopperGroup: 铜(锡)锭
-            DemoniteGroup: 魔矿(猩红矿)锭
-            ShadowGroup: 暗影鳞片(组织样本)
+            AnyCopperBar: 任何 铜锭
+            AnyGoldBar: 任何 金锭
+            AnySilverBar: 任何 银锭
+            AnyDemoniteBar: 任何 魔矿锭
+            AnyShadowScale: 任何 暗影鳞片
+            AnyCobaltBar: 任何 钴锭
+            AnyMythrilBar: 任何 秘银
+            AnyAdamantiteBar: 任何 精金
         }
         Keybind:
         {

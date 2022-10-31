@@ -3,6 +3,7 @@ using ImproveGame.Common.Systems;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Threading;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items
 {
@@ -69,6 +70,16 @@ namespace ImproveGame.Content.Items
         public override bool CanUseSelector(Player player)
         {
             return WandSystem.ConstructMode is WandSystem.Construct.Save;
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddRecipeGroup(RecipeSystem.AnyMythrilBar, 18)
+                .AddIngredient(ItemID.Amber, 8)
+                .AddRecipeGroup(RecipeGroupID.Wood, 80)
+                .AddIngredient(ItemID.StoneBlock, 80)
+                .AddTile(TileID.MythrilAnvil).Register();
         }
     }
 }
