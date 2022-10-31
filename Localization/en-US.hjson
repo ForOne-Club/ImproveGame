@@ -481,7 +481,6 @@ Mods:
             PaintWand: Wand of Painting
             ConstructWand: Wand of Construction
             MoveChest: Wand of Void
-
             CoinOne: Lucky Coin
         }
         ItemTooltip:
@@ -597,6 +596,11 @@ Mods:
                 '''
                 Use on a chest to store it in this wand
                 Use again to place the chest
+                '''
+            CoinOne:
+                '''
+                You are a lucky person!
+                'This will probably sell well'
                 '''
         }
 		MapObject:

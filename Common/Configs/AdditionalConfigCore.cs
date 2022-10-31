@@ -16,6 +16,8 @@ namespace ImproveGame.Common.Configs
                 return;
             AdditionalConfig.Load();
         }
+
+        public override void PreSaveAndQuit() => AdditionalConfig.Save();
     }
 
     /// <summary>
@@ -63,7 +65,8 @@ namespace ImproveGame.Common.Configs
             UseKeybindTranslation = KeybindSystem.UseKeybindTranslation;
             HugeInventoryUIPosition = UISystem.Instance.BigBagGUI.MainPanel is not null
                 ? UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position()
-                : new Vector2(500f);
+                : new(150, 340);
+            UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition; // 在这里也保存一下
         }
 
         public void Populate()
@@ -75,7 +78,9 @@ namespace ImproveGame.Common.Configs
                     LifeAnalyzeCore.Blacklist[modNpc.Type] = true;
             });
             KeybindSystem.UseKeybindTranslation = UseKeybindTranslation;
-            UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition == Vector2.Zero ? new(150, 340) : HugeInventoryUIPosition;
+            UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition == Vector2.Zero
+                ? new(150, 340)
+                : HugeInventoryUIPosition;
         }
 
         public static void Load()
@@ -93,9 +98,8 @@ namespace ImproveGame.Common.Configs
                 File.Delete(FullPath);
                 JsonConvert.PopulateObject("{}", settings, ConfigManager.serializerSettings);
             }
-
-            // 报错了，我也不知道为啥，先注释掉。
-            // settings.Populate();
+            
+            settings.Populate();
         }
 
         public static void Save()

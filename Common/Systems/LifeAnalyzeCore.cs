@@ -63,8 +63,6 @@ namespace ImproveGame.Common.Systems
                 }
             }
         }
-
-        public override void PreSaveAndQuit() => AdditionalConfig.Save();
     }
 
     public class LifeformAnaliyzerModify : GlobalInfoDisplay

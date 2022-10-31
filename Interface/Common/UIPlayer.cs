@@ -18,6 +18,8 @@ namespace ImproveGame.Interface.Common
             // 大背包
             BigBagInterface.SetState(Instance.BigBagGUI = new());
             Instance.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
+            if (HugeInventoryUIPosition == Vector2.Zero)
+                HugeInventoryUIPosition = new(150, 340);
             Instance.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
         }
     }

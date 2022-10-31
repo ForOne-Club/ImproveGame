@@ -20,11 +20,9 @@ namespace ImproveGame.Common.GlobalNPCs
             }
 
             // 钱币掉落倍率开到最大时（x25）有 0.5% 概率掉落幸运金币，它唯一的作用就是出售。
-            if (Config.NPCCoinDropRate == 25)
-            {
-                int itemType = ModContent.ItemType<Content.Items.Coin.CoinOne>();
-                npcLoot.Add(new CommonDrop(itemType, 200));
-            }
+            var leadingRule = new LeadingConditionRule(new CoinOneDrop());
+            leadingRule.OnSuccess(new CommonDrop(ModContent.ItemType<Content.Items.Coin.CoinOne>(), 200));
+            npcLoot.Add(leadingRule);
         }
     }
 
@@ -48,5 +46,15 @@ namespace ImproveGame.Common.GlobalNPCs
         public bool CanShowItemDropInUI() => true;
 
         public string GetConditionDescription() => GetText("ItemDropRule.WandDrop");
+    }
+    
+    public class CoinOneDrop : IItemDropRuleCondition
+    {
+        public bool CanDrop(DropAttemptInfo info)
+            => Config.NPCCoinDropRate is 25;
+
+        public bool CanShowItemDropInUI() => Config.NPCCoinDropRate is 25;
+        
+        public string GetConditionDescription() => null;
     }
 }
