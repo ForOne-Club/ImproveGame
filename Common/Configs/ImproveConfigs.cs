@@ -112,11 +112,6 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool ImprovePrefix;
 
-        [Label("$Mods.ImproveGame.Config.ShowPrefixCount.Label")]
-        [Tooltip("$Mods.ImproveGame.Config.ShowPrefixCount.Tooltip")]
-        [DefaultValue(true)]
-        public bool ShowPrefixCount;
-
         [Label("$Mods.ImproveGame.Config.ShowItemMoreData.Label")]
         [Tooltip("$Mods.ImproveGame.Config.ShowItemMoreData.Tooltip")]
         [DefaultValue(false)]

@@ -164,13 +164,13 @@ Mods:
             }
             ImprovePrefix:
             {
-                Label: "[centeritem:1551] Better reforging mechanics"
-                Tooltip: Filter off bad prefixes as you keep reforging
-            }
-            ShowPrefixCount:
-            {
-                Label: "[centeritem:455] Display reforging count"
-                Tooltip: Shows how many times you have reforged this item
+                Label: "[centeritem:1551] 更好的重铸机制"
+                Tooltip:
+                    '''
+                    大幅降低重复前缀出现的概率
+                    可以直接选择已获得过的前缀
+                    '''
+                Unknown: "未知词缀"
             }
             ShowItemMoreData:
             {

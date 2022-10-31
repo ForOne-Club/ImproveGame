@@ -32,6 +32,10 @@
   - 边框变得圆润
   - 将分页式界面改为滚动式界面
   - 现在可以根据增益名称搜索增益
+- **[v1.6.2.1]** 重制“更好的重铸”功能
+  - 大幅降低重复前缀出现的概率
+  - 可以直接选择已获得过的前缀
+  - 移除了“记录重铸次数”功能
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)

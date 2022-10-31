@@ -35,8 +35,6 @@ namespace ImproveGame
 
         public override void Load()
         {
-            // 加载前缀信息
-            LoadPrefixInfo();
             Instance = this;
             
             ChatManager.Register<BgItemTagHandler>("bgitem");
