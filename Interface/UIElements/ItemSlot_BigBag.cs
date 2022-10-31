@@ -118,22 +118,21 @@ namespace ImproveGame.Interface.UIElements
         {
             CalculatedStyle dimensions = GetDimensions();
 
+            Color borderColor = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBorder : UIColor.Default.SlotNoFavoritedBorder;
+            Color background = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBackground : UIColor.Default.SlotNoFavoritedBackground;
+            // 绘制背景框
+            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3,
+                borderColor, background);
+            
+            if (Item.IsAir) return;
+
             // 按下 Ctrl 改变鼠标指针外观
-            if (IsMouseHovering && !Item.IsAir)
+            if (IsMouseHovering)
             {
                 Main.hoverItemName = Item.Name;
                 Main.HoverItem = Item.Clone();
                 SetCursorOverride();
             }
-
-            Color borderColor = Item.favorited ? UIColor.Default.SlotFavoritedBorder : UIColor.Default.SlotNoFavoritedBorder;
-            Color background = Item.favorited ? UIColor.Default.SlotFavoritedBackground : UIColor.Default.SlotNoFavoritedBackground;
-            // 绘制背景框
-            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3,
-                borderColor, background);
-
-            // 原来的边框
-            // sb.Draw(Texture, dimensions.Position(), null, Color.White * 0.8f, 0f, Vector2.Zero, 1f, 0, 0f);
 
             DrawHasGlowItem(sb, Item, dimensions);
 
@@ -141,7 +140,7 @@ namespace ImproveGame.Interface.UIElements
             Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
             TrUtils.DrawBorderString(sb, (index + 1).ToString(), textPos, Color.White, 0.75f);*/
 
-            if (!Item.IsAir && Item.stack > 1)
+            if (Item.stack > 1)
             {
                 Vector2 textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
                 Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
@@ -331,22 +330,18 @@ namespace ImproveGame.Interface.UIElements
 
         public static void DrawHasGlowItem(SpriteBatch sb, Item Item, CalculatedStyle dimensions, float ItemSize = 30f)
         {
-            // 绘制物品
-            if (!Item.IsAir)
+            ApplyBuffItem.UpdateInventoryGlow(Item);
+
+            if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow)
             {
-                ApplyBuffItem.UpdateInventoryGlow(Item);
+                OpenItemGlow(sb, Item);
+            }
 
-                if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow)
-                {
-                    OpenItemGlow(sb, Item);
-                }
+            DrawItem(sb, Item, Color.White, dimensions, ItemSize);
 
-                DrawItem(sb, Item, Color.White, dimensions, ItemSize);
-
-                if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow)
-                {
-                    CloseItemGlow(sb);
-                }
+            if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow)
+            {
+                CloseItemGlow(sb);
             }
         }
 
