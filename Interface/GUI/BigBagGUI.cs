@@ -24,7 +24,7 @@ namespace ImproveGame.Interface.GUI
 
         public UITitle title;
         public SUIPanel MainPanel;
-        public BackgroundImage CloseButton;
+        public UIFork CloseButton;
         public PictureButton[] buttons = new PictureButton[4];
         // 物品列表
         public ModItemGrid ItemGrid;
@@ -56,7 +56,7 @@ namespace ImproveGame.Interface.GUI
 
             MainPanel.Append(title = new(GetText("SuperVault.Name"), 0.5f) { HAlign = 0f });
 
-            MainPanel.Append(CloseButton = new(GetTexture("Close").Value) { HAlign = 1f });
+            MainPanel.Append(CloseButton = new(30) { HAlign = 1f });
             CloseButton.Height.Pixels = title.Height();
             CloseButton.OnMouseDown += (evt, uie) => Visible = false;
 

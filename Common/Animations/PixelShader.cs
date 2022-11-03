@@ -4,23 +4,25 @@
     {
         public static readonly Texture2D texture = GetTexture("255").Value; // √
 
-        public static void DrawCross(Matrix matrix, Vector2 position, Vector2 size, Color color, float round)
+        public static void DrawFork(Vector2 position, float size, float radius, Color backgroundColor, float border, Color borderColor)
         {
             SpriteBatch sb = Main.spriteBatch;
             sb.End();
             Effect effect = ModAssets.Fork.Value;
-            effect.Parameters[nameof(color)].SetValue(color.ToVector4());
             effect.Parameters[nameof(size)].SetValue(size);
-            effect.Parameters[nameof(round)].SetValue(round);
+            effect.Parameters[nameof(border)].SetValue(border);
+            effect.Parameters[nameof(radius)].SetValue(radius);
+            effect.Parameters[nameof(borderColor)].SetValue(borderColor.ToVector4());
+            effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             sb.Begin(0, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
-                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, matrix);
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, Main.UIScaleMatrix);
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
             sb.End();
             sb.Begin(0, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
-                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, matrix);
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
         }
 
-        public static void DrawTest(Matrix matrix, Vector2 position, Vector2 size, float round, Color backgroundColor, float border, Color borderColor)
+        public static void DrawRoundRectangle(Vector2 position, Vector2 size, float round, Color backgroundColor, float border, Color borderColor)
         {
             SpriteBatch sb = Main.spriteBatch;
             sb.End();
@@ -31,11 +33,11 @@
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             effect.Parameters[nameof(borderColor)].SetValue(borderColor.ToVector4());
             sb.Begin(0, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
-                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, matrix);
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, Main.UIScaleMatrix);
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
             sb.End();
             sb.Begin(0, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
-                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, matrix);
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
         }
 
         public static void DrawBox(Matrix matrix, Vector2 position, Vector2 size, float radius, float border, Color borderColor, Color background)

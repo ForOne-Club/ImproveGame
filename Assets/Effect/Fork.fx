@@ -1,15 +1,17 @@
 ﻿sampler image : register(s0);
-float4 color;
-float2 size;
-float round;
+
+float size;
+float border;
+float radius; // 半径
+float4 borderColor;
+float4 backgroundColor;
+
 float4 Fork(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 rt = size / 2;
     float2 pos = abs(coords * size - rt);
-    float2 posC = clamp(pos, 0, rt - round);
-    float2 posStep = step(pos, rt - round);
-    float distanceR = abs(pos.x - pos.y) / length(float2(1, 1)) * !(posStep.x && posStep.y);
-    return lerp(color, 0, smoothstep(round - 1, round, distanceR));
+    float d = length(pos - min(pos.x + pos.y, rt.x - radius) * 0.5) - radius;
+    return lerp(lerp(backgroundColor, borderColor, smoothstep(0 - border, 1 - border, d)), 0, smoothstep(0, 1, d));
 }
 technique Technique1
 {

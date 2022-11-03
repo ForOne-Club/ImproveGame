@@ -30,7 +30,7 @@ namespace ImproveGame.Interface.BannerChestUI
         public UITitle title;
         public Checkbox checkbox;
         public Checkbox checkbox2;
-        public BackgroundImage button;
+        public UIFork close;
         public SUIPanel gridPanel;
         public PackageGrid grid;
 
@@ -42,7 +42,7 @@ namespace ImproveGame.Interface.BannerChestUI
             mainPanel.Append(title = new("中文|Chinese", 0.5f));
             mainPanel.OnMouseDown += (uie, evt) =>
             {
-                if (!(button.IsMouseHovering || grid.Parent.IsMouseHovering))
+                if (!(close.IsMouseHovering || grid.Parent.IsMouseHovering))
                 {
                     dragging = true;
                     offset = Main.MouseScreen - mainPanel.GetPPos();
@@ -64,9 +64,9 @@ namespace ImproveGame.Interface.BannerChestUI
             checkbox2.Top.Pixels = checkbox.Top();
             checkbox2.Left.Pixels = checkbox.Right() + 8f;
 
-            mainPanel.Append(button = new(GetTexture("Close").Value) { HAlign = 1f });
-            button.Height.Pixels = title.Height();
-            button.OnMouseDown += (_, _) =>
+            mainPanel.Append(close = new(30) { HAlign = 1f });
+            close.Height.Pixels = title.Height();
+            close.OnMouseDown += (_, _) =>
             {
                 SoundEngine.PlaySound(SoundID.MenuClose);
                 Visible = false;
