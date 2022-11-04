@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.Packets;
+﻿using ImproveGame.Common.Players;
+
+namespace ImproveGame.Common.Packets;
 
 public class MouseWorldPacket : NetModule
 {
@@ -20,7 +22,7 @@ public class MouseWorldPacket : NetModule
 
     public override void Receive()
     {
-        Main.player[player].GetModPlayer<NetPlayer>().MouseWorld = mouseWorld;
+        Main.player[player].GetModPlayer<ImprovePlayer>().MouseWorld = mouseWorld;
         if (Main.netMode == NetmodeID.Server)
         {
             Send(-1, player, false);

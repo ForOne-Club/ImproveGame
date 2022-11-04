@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Content.Items;
 
-namespace ImproveGame.Common.Packets.Chest;
+namespace ImproveGame.Common.Packets.NetChest;
 
 /// <summary>
 /// 客户端向服务器发送Item信息

@@ -1,10 +1,8 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Packets;
-using ImproveGame.Common.Packets.Chest;
+using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Common.Players;
 using System.Collections.ObjectModel;
-using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 
