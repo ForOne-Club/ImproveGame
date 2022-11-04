@@ -485,8 +485,8 @@
             PotionBag: 药水袋
             BannerChest: 旗帜盒
             Autofisher: 自动钓鱼机
-            PaintWand: 漆涂法杖
-            ConstructWand: 构造法杖
+            PaintWand: 漆涂魔杖
+            ConstructWand: 构造魔杖
             MoveChest: 虚空魔杖
             CoinOne: 幸运金币
         }

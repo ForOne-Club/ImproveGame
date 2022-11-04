@@ -1,4 +1,5 @@
 ﻿[h1]更好的体验，一个让模组游玩体验大大提升的Mod[/h1]
+[h3]未知原因导致 Steam 描述界面无法显示链接，请在上方的“改动说明”处查看更新日志以及源码链接[/h3]
 [h2][url=https://discord.gg/rEmGMQv5z7] Discord [/url][/h2]
 这些功能会为你带来更好的游戏体验
 默认仅开启部分功能，详情请查看模组设置。
@@ -15,21 +16,13 @@
 建筑魔杖: 木材x24 落星x8 金锭(铂金锭)x12
 法爆魔杖: 木材x18 丛林孢子x6 红玉x1
 星爆魔杖: 法爆法杖x1 落星x8 光明之魂x6 暗影之魂x6
+虚空魔杖: 铁锭(铅锭)x12 骨头x20 木材x18 钻石x1
+构造魔杖: 秘银锭(山铜锭)x18 琥珀x8 木材x80 石块x80
 (你可以使用 Recipe Browser(合成表) 模组的物品图鉴功能以在游戏内查阅来源!)
-
-[h1]简要介绍[/h1]
-关于此模组的介绍视频或者专栏:
-BiliBili@承影_chengying 的介绍视频:
-https://www.bilibili.com/video/BV1V3411372X
-BiliBili@世界第一可爱9 的介绍专栏:
-https://www.bilibili.com/read/cv17018658
-BiliBili@柠檬茶Zero 的介绍视频:
-https://www.bilibili.com/video/BV1EN4y1T7r6
 
 [h1]开源仓库 与 更新日志[/h1]
 更新日志: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
-开源链接 (Github): https://github.com/487666123/ImproveGame
-开源链接 (Gitee): https://gitee.com/MyGoold/improve-game
+开源链接: https://github.com/487666123/ImproveGame
 
 [h1]功能概要[/h1]
 [b]详细列表请到模组配置或更新日志中查看[/b]
@@ -43,21 +36,6 @@ https://www.bilibili.com/video/BV1EN4y1T7r6
   8、 含100格的超大背包，再也不用担心旗帜和药水放在哪了
   9、 药水袋与旗帜盒，更方便地将你的药水旗帜整合在一个物品，节省空间
   10、几乎所有功能都是可以调节的，自行选择适合你的功能
-
-[h1]作者 与 额外声明[/h1]
-画师：枫林半叶, 逆风而行的信鸽
-翻译：Lastprismer，Lacewing
-代码：局长，Cyril，夜谷紫幽
-特别感谢:
-  @ChevyRay的协程类
-
-版权声明:
-本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
-ChevyRay的协程类亦是在MIT许可协议下开源，不再赘述
-附:
-本模组开源链接: https://gitee.com/MyGoold/improve-game
-WMITF开源链接: https://github.com/gardenappl/WMITF
-ChevyRay的协程类: https://github.com/ChevyRay/Coroutines
 
 [h1]QQ交流群[/h1]
 模组交流群: 971038831

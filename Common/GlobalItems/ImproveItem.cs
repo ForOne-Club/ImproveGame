@@ -25,8 +25,8 @@ namespace ImproveGame.Common.GlobalItems
                 && !(item.DamageType == DamageClass.Melee && item.damage > 0)
                 && !GoldList.Contains(item.type))
             {
-                item.maxStack = ModContent.GetInstance<Configs.ImproveConfigs>().ItemMaxStack;
-                if (item.type == ItemID.PlatinumCoin && ModContent.GetInstance<Configs.ImproveConfigs>().ItemMaxStack > 2000)
+                item.maxStack = Config.ItemMaxStack;
+                if (item.type == ItemID.PlatinumCoin && Config.ItemMaxStack > 2000)
                 {
                     item.maxStack = 2000;
                 }

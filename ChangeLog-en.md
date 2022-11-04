@@ -4,6 +4,7 @@
 ## Subversions
 - v1.6.2
 - v1.6.2.1
+- v1.6.2.2
 ## BUG Fixes
 - Fixed some issues with multiplayer mode
 - Fixed the pool cursor not showing in multiplayer mode
@@ -12,7 +13,8 @@
 - **[v1.6.2.1]** Fixed Wand of Void losing items in multiplayer mode
 - **[v1.6.2.1]** Fixed Wand of Void failing to record chests' names and results in an error
 - **[v1.6.2.1]** Fixed NPCs drop no coin after coin drop rate is adjusted to 25x and mod is reloaded
-- **[v1.6.2.1]** Fixed Fishing Machine sometimes does not drop items inside when destroyed
+- **[v1.6.2.1]** Fixed Fishing Machine does not drop items inside when destroyed
+- **[v1.6.2.2]** 修复了即使没开启旅途模式收藏自动研究也会自动研究的BUG
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests

@@ -1,7 +1,4 @@
-﻿using Terraria;
-using Terraria.ModLoader;
-
-namespace ImproveGame.Common.Players
+﻿namespace ImproveGame.Common.Players
 {
     public class RespawnTweakPlayer : ModPlayer
     {

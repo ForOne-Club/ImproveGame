@@ -1,8 +1,8 @@
-﻿using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.Packets;
+using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using System.Collections;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
 
@@ -10,6 +10,8 @@ namespace ImproveGame.Common.Players
 {
     public class ImprovePlayer : ModPlayer
     {
+        public Vector2 MouseWorld { get; set; }
+
         public bool PiggyBank;
         public bool Safe;
         public bool DefendersForge;
@@ -30,19 +32,28 @@ namespace ImproveGame.Common.Players
         {
             if (Main.gameMenu)
                 return;
-            foreach (var item in from i in Player.inventory where !i.IsAir select i)
+
+            if (Main.MouseWorld != MouseWorld)
+                MouseWorldPacket.Get((byte)Player.whoAmI, Main.MouseWorld).Send(runLocally: true);
+
+            if (Config.JourneyResearch)
             {
-                // 旅行自动研究
-                if (Main.netMode is not NetmodeID.Server && item.favorited &&
-                    Main.LocalPlayer.difficulty is PlayerDifficultyID.Creative &&
-                    CreativeItemSacrificesCatalog.Instance.TryGetSacrificeCountCapToUnlockInfiniteItems(item.type, out int amountNeeded))
+                foreach (var item in from i in Player.inventory where !i.IsAir select i)
                 {
-                    int sacrificeCount = Main.LocalPlayerCreativeTracker.ItemSacrifices.GetSacrificeCount(item.type);
-                    if (amountNeeded - sacrificeCount > 0 && item.stack >= amountNeeded - sacrificeCount)
+                    // 旅行自动研究
+                    if (Main.netMode is not NetmodeID.Server && item.favorited &&
+                        Main.LocalPlayer.difficulty is PlayerDifficultyID.Creative &&
+                        CreativeItemSacrificesCatalog.Instance.TryGetSacrificeCountCapToUnlockInfiniteItems(item.type,
+                            out int amountNeeded))
                     {
-                        CreativeUI.SacrificeItem(item.Clone(), out _);
-                        SoundEngine.PlaySound(SoundID.Research);
-                        SoundEngine.PlaySound(SoundID.ResearchComplete);
+                        int sacrificeCount =
+                            Main.LocalPlayerCreativeTracker.ItemSacrifices.GetSacrificeCount(item.type);
+                        if (amountNeeded - sacrificeCount > 0 && item.stack >= amountNeeded - sacrificeCount)
+                        {
+                            CreativeUI.SacrificeItem(item.Clone(), out _);
+                            SoundEngine.PlaySound(SoundID.Research);
+                            SoundEngine.PlaySound(SoundID.ResearchComplete);
+                        }
                     }
                 }
             }
