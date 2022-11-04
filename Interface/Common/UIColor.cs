@@ -17,6 +17,9 @@
             public static readonly Color TitleBackground = new(35, 40, 83);
 
             public static readonly Color CheckBackground = new(44, 57, 105);
+
+            public static readonly Color CloseBackground = new(200, 40, 40);
+            public static readonly Color CloseBorder = new(30, 0, 18);
         }
     }
 }

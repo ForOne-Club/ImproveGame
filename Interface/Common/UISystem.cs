@@ -12,7 +12,7 @@ namespace ImproveGame.Interface.Common
         internal static UISystem Instance;
 
         #region 定义
-        
+
         public AutofisherGUI AutofisherGUI;
         public static UserInterface AutofisherInterface;
 
@@ -55,7 +55,7 @@ namespace ImproveGame.Interface.Common
         #endregion
 
         #region 卸载 & 加载
-        
+
         public override void Unload()
         {
             Instance = null;
@@ -92,7 +92,7 @@ namespace ImproveGame.Interface.Common
 
             StructureGUI = null;
             StructureInterface = null;
-            
+
             PrefixRecallGUI = null;
             PrefixRecallInterface = null;
 
@@ -144,7 +144,7 @@ namespace ImproveGame.Interface.Common
         #endregion
 
         #region 更新 & 绘制
-        
+
         public override void UpdateUI(GameTime gameTime)
         {
             if (AutofisherGUI.Visible)
@@ -207,9 +207,7 @@ namespace ImproveGame.Interface.Common
                 }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Prefix Recall GUI", () =>
                 {
-                    if (PrefixRecallGUI.Visible)
-                        PrefixRecallGUI.Draw(Main.spriteBatch);
-                    return true;
+                    if (PrefixRecallGUI.Visible) PrefixRecallGUI.Draw(Main.spriteBatch); return true;
                 }, InterfaceScaleType.UI));
             }
 
