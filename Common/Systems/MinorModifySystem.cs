@@ -17,8 +17,6 @@ namespace ImproveGame.Common.Systems
     {
         public override void Load()
         {
-            // 还原哥布林重铸槽中物品的重铸次数
-            On.Terraria.Player.dropItemCheck += SaveReforgePrefix;
             // 死亡是否掉落墓碑
             On.Terraria.Player.DropTombstone += DisableDropTombstone;
             // 抓取距离修改
@@ -588,20 +586,6 @@ namespace ImproveGame.Common.Systems
             {
                 orig(self, coinsOwned, deathText, hitDirection);
             }
-        }
-
-        /// <summary>
-        /// 前缀保存
-        /// </summary>
-        private void SaveReforgePrefix(On.Terraria.Player.orig_dropItemCheck orig, Player self)
-        {
-            if (Main.reforgeItem.type > ItemID.None && self.GetModPlayer<DataPlayer>().ReforgeItemPrefix > 0)
-            {
-                Main.reforgeItem.GetGlobalItem<GlobalItemData>().recastCount =
-                    self.GetModPlayer<DataPlayer>().ReforgeItemPrefix;
-                self.GetModPlayer<DataPlayer>().ReforgeItemPrefix = 0;
-            }
-            orig(self);
         }
 
         /// <summary>

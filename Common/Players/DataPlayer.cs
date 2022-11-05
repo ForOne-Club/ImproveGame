@@ -39,9 +39,6 @@ namespace ImproveGame.Common.Players
 
         public override void LoadData(TagCompound tag)
         {
-            // 哥布林重铸栏内属于 Mod 的数据无法保存，这个是专门用于保存这个无法保存到 Item 上的数据。
-            ReforgeItemPrefix = tag.Get<int>("ReforgeItemPrefix");
-
             // 大背包 Item 数据以及旧版兼容
             if (tag.ContainsKey("SuperVault"))
                 SuperVault = tag.Get<Item[]>("SuperVault");
@@ -57,11 +54,6 @@ namespace ImproveGame.Common.Players
 
         public override void SaveData(TagCompound tag)
         {
-            if (Main.reforgeItem.type > ItemID.None)
-            {
-                tag.Add("ReforgeItemPrefix", Main.reforgeItem.GetGlobalItem<GlobalItemData>().recastCount);
-            }
-
             tag["SuperVault"] = SuperVault;
             tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
             tag["InfBuffDisabledMod"] = InfBuffDisabledMod;
