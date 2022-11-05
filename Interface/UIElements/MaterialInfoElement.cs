@@ -73,11 +73,11 @@
             var dimensions = GetDimensions();
             dimensions.Width = 28f;
             dimensions.X += 16f;
-            ItemSlot_BigBag.DrawItem(sb: spriteBatch,
+            ItemSlot_BigBag.DrawItemIcon(sb: spriteBatch,
                                    Item: iconItem,
                                    lightColor: Color.White,
                                    dimensions: dimensions,
-                                   ItemSize: 26);
+                                   maxSize: 26);
         }
     }
 
@@ -171,11 +171,11 @@
             var dimensions = GetDimensions();
             dimensions.Width = 28f;
             dimensions.X += 16f;
-            ItemSlot_BigBag.DrawItem(sb: spriteBatch,
+            ItemSlot_BigBag.DrawItemIcon(sb: spriteBatch,
                                    Item: iconItem,
                                    lightColor: Color.White,
                                    dimensions: dimensions,
-                                   ItemSize: 26);
+                                   maxSize: 26);
         }
     }
 }

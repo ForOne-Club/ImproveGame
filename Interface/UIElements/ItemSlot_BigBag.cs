@@ -2,8 +2,10 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.Common;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace ImproveGame.Interface.UIElements
 {
@@ -14,17 +16,6 @@ namespace ImproveGame.Interface.UIElements
     {
         private readonly Item[] items;
         public Item[] Items => items;
-        public Texture2D Texture
-        {
-            get
-            {
-                if (Item.favorited)
-                {
-                    return TextureAssets.InventoryBack10.Value;
-                }
-                return TextureAssets.InventoryBack.Value;
-            }
-        }
         public int index;
         public Item Item
         {
@@ -37,7 +28,7 @@ namespace ImproveGame.Interface.UIElements
                 items[index] = value;
             }
         }
-        private int RightMouseTimer = -1;
+        private int RightMouseDownTimer = -1;
 
         public ItemSlot_BigBag(Item[] items, int index)
         {
@@ -49,16 +40,14 @@ namespace ImproveGame.Interface.UIElements
 
         public override void MouseDown(UIMouseEvent evt)
         {
-            SetCursorOverride();
-            MouseClickSlot();
-            base.MouseDown(evt);
+            SetCursorOverride(); MouseClickSlot(); base.MouseDown(evt);
         }
 
         public override void RightMouseDown(UIMouseEvent evt)
         {
             if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
-                RightMouseTimer = 0;
+                RightMouseDownTimer = 0;
                 TakeSlotItemToMouseItem();
             }
 
@@ -98,53 +87,19 @@ namespace ImproveGame.Interface.UIElements
             // 右键长按物品持续拿出
             if (Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
-                if (RightMouseTimer >= 60)
+                if (RightMouseDownTimer >= 60)
                 {
                     TakeSlotItemToMouseItem();
                 }
-                else if (RightMouseTimer >= 30 && RightMouseTimer % 3 == 0)
+                else if (RightMouseDownTimer >= 30 && RightMouseDownTimer % 3 == 0)
                 {
                     TakeSlotItemToMouseItem();
                 }
-                else if (RightMouseTimer >= 15 && RightMouseTimer % 6 == 0)
+                else if (RightMouseDownTimer >= 15 && RightMouseDownTimer % 6 == 0)
                 {
                     TakeSlotItemToMouseItem();
                 }
-                RightMouseTimer++;
-            }
-        }
-
-        protected override void DrawSelf(SpriteBatch sb)
-        {
-            CalculatedStyle dimensions = GetDimensions();
-
-            Color borderColor = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBorder : UIColor.Default.SlotNoFavoritedBorder;
-            Color background = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBackground : UIColor.Default.SlotNoFavoritedBackground;
-            // 绘制背景框
-            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3,
-                borderColor, background);
-            
-            if (Item.IsAir) return;
-
-            // 按下 Ctrl 改变鼠标指针外观
-            if (IsMouseHovering)
-            {
-                Main.hoverItemName = Item.Name;
-                Main.HoverItem = Item.Clone();
-                SetCursorOverride();
-            }
-
-            DrawHasGlowItem(sb, Item, dimensions);
-
-            /*Vector2 textSize = GetTextSize(index.ToString()) * 0.75f;
-            Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
-            TrUtils.DrawBorderString(sb, (index + 1).ToString(), textPos, Color.White, 0.75f);*/
-
-            if (Item.stack > 1)
-            {
-                Vector2 textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
-                Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
-                TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
+                RightMouseDownTimer++;
             }
         }
 
@@ -328,51 +283,59 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        public static void DrawHasGlowItem(SpriteBatch sb, Item Item, CalculatedStyle dimensions, float ItemSize = 30f)
+        protected override void DrawSelf(SpriteBatch sb)
         {
-            ApplyBuffItem.UpdateInventoryGlow(Item);
-
-            if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow)
+            CalculatedStyle dimensions = GetDimensions();
+            Color borderColor = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBorder : UIColor.Default.SlotNoFavoritedBorder;
+            Color background = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBackground : UIColor.Default.SlotNoFavoritedBackground;
+            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, borderColor, background);
+            
+            if (Item.IsAir) return;
+            
+            if (IsMouseHovering)
             {
-                OpenItemGlow(sb, Item);
+                Main.hoverItemName = Item.Name;
+                Main.HoverItem = Item.Clone();
+                SetCursorOverride();
             }
 
-            DrawItem(sb, Item, Color.White, dimensions, ItemSize);
+            Main.instance.LoadItem(Item.type);
+            DrawHasGlowItem(sb, Item, dimensions);
 
-            if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow)
+            if (Item.stack > 1)
             {
-                CloseItemGlow(sb);
+                Vector2 textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
+                Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
+                TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
             }
         }
 
-        public static void DrawItem(SpriteBatch sb, Item Item, Color lightColor, CalculatedStyle dimensions, float ItemSize = 30f)
+        public static void DrawHasGlowItem(SpriteBatch sb, Item Item, CalculatedStyle dimensions, float ItemSize = 30f)
         {
-            Main.instance.LoadItem(Item.type);
-            var ItemTexture2D = TextureAssets.Item[Item.type];
+            ApplyBuffItem.UpdateInventoryGlow(Item);
+            if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) OpenItemGlow(sb, Item);
+            DrawItemIcon(sb, Item, Color.White, dimensions, ItemSize);
+            if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) CloseItemGlow(sb);
+        }
 
-            Rectangle rectangle;
-            if (Main.itemAnimations[Item.type] is null)
-                rectangle = ItemTexture2D.Frame(1, 1, 0, 0);
-            else
-                rectangle = Main.itemAnimations[Item.type].GetFrame(ItemTexture2D.Value);
-
-            float size = rectangle.Width > ItemSize || rectangle.Height > ItemSize ?
-                rectangle.Width > rectangle.Height ? ItemSize / rectangle.Width : ItemSize / rectangle.Height :
-                1f;
-
-            sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                new Rectangle?(rectangle), Item.GetAlpha(lightColor), 0f, Vector2.Zero, size,
-                SpriteEffects.None, 0f);
-            sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                new Rectangle?(rectangle), Item.GetColor(lightColor), 0f, Vector2.Zero, size,
-                SpriteEffects.None, 0f);
+        public static void DrawItemIcon(SpriteBatch sb, Item Item, Color lightColor, CalculatedStyle dimensions, float maxSize = 32f)
+        {
+            Texture2D texture2D = TextureAssets.Item[Item.type].Value;
+            Rectangle frame = Main.itemAnimations[Item.type] is null ? texture2D.Frame() : Main.itemAnimations[Item.type].GetFrame(texture2D);
+            float size = frame.Width > maxSize || frame.Height > maxSize ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height : 1f;
+            Vector2 position = dimensions.Center() - frame.Size() * size / 2f;
+            Vector2 origin = texture2D.Size() / 2f * size;
+            if (ItemLoader.PreDrawInInventory(Item, sb, position, frame, Item.GetAlpha(lightColor), Item.GetColor(lightColor), origin, size))
+            {
+                sb.Draw(texture2D, position, (Rectangle?)frame, Item.GetAlpha(lightColor), 0f, Vector2.Zero, size, SpriteEffects.None, 0f);
+                if (Item.color != Color.Transparent) sb.Draw(texture2D, position, (Rectangle?)frame, Item.GetColor(lightColor), 0f, Vector2.Zero, size, SpriteEffects.None, 0f);
+            }
+            ItemLoader.PostDrawInInventory(Item, sb, position, frame, Item.GetAlpha(lightColor), Item.GetColor(lightColor), origin, size);
         }
 
         public static void OpenItemGlow(SpriteBatch sb, Item item)
         {
-            Main.instance.LoadItem(item.type);
             Effect effect = ModAssets.ItemEffect.Value;
-
             Color lerpColor;
             int milliSeconds = (int)Main.gameTimeCache.TotalGameTime.TotalMilliseconds;
             float time = milliSeconds * 0.05f;

@@ -1,13 +1,10 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Packets.NetAutofisher;
+﻿using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Players;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using System.Collections.Generic;
 using Terraria.DataStructures;
-using Terraria.UI.Chat;
 
 namespace ImproveGame.Common.Systems
 {
