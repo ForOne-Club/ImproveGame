@@ -54,6 +54,26 @@ namespace ImproveGame.Common.Systems
             IL.Terraria.WorldGen.UpdateWorld_Inner += DisableBiomeSpread;
             // NPC住在腐化
             IL.Terraria.WorldGen.ScoreRoom += LiveInCorrupt;
+            // 大背包内弹药可直接被使用
+            On.Terraria.Player.ChooseAmmo += ChooseAmmo;
+        }
+
+        private Item ChooseAmmo(On.Terraria.Player.orig_ChooseAmmo orig, Player player, Item weapon)
+        {
+            Item item = orig.Invoke(player, weapon);
+            if (item is null)
+            {
+                Item[] inv = player.GetModPlayer<DataPlayer>().SuperVault;
+                for (int i = 0; i < inv.Length; i++)
+                {
+                    if (inv[i].stack > 0 && ItemLoader.CanChooseAmmo(weapon, inv[i], player))
+                    {
+                        item = inv[i];
+                        break;
+                    }
+                }
+            }
+            return item;
         }
 
         private void LiveInCorrupt(ILContext il)

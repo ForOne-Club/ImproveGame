@@ -2,10 +2,8 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.Common;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace ImproveGame.Interface.UIElements
 {
@@ -289,9 +287,9 @@ namespace ImproveGame.Interface.UIElements
             Color borderColor = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBorder : UIColor.Default.SlotNoFavoritedBorder;
             Color background = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBackground : UIColor.Default.SlotNoFavoritedBackground;
             PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, borderColor, background);
-            
+
             if (Item.IsAir) return;
-            
+
             if (IsMouseHovering)
             {
                 Main.hoverItemName = Item.Name;
@@ -300,7 +298,8 @@ namespace ImproveGame.Interface.UIElements
             }
 
             Main.instance.LoadItem(Item.type);
-            DrawHasGlowItem(sb, Item, dimensions);
+            ApplyBuffItem.UpdateInventoryGlow(Item);
+            DrawItemIcon(sb, Item, Color.White, dimensions);
 
             if (Item.stack > 1)
             {
@@ -308,14 +307,6 @@ namespace ImproveGame.Interface.UIElements
                 Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
                 TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
             }
-        }
-
-        public static void DrawHasGlowItem(SpriteBatch sb, Item Item, CalculatedStyle dimensions, float ItemSize = 30f)
-        {
-            ApplyBuffItem.UpdateInventoryGlow(Item);
-            if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) OpenItemGlow(sb, Item);
-            DrawItemIcon(sb, Item, Color.White, dimensions, ItemSize);
-            if (Item.GetGlobalItem<GlobalItemData>().InventoryGlow) CloseItemGlow(sb);
         }
 
         public static void DrawItemIcon(SpriteBatch sb, Item Item, Color lightColor, CalculatedStyle dimensions, float maxSize = 32f)
@@ -333,7 +324,7 @@ namespace ImproveGame.Interface.UIElements
             ItemLoader.PostDrawInInventory(Item, sb, position, frame, Item.GetAlpha(lightColor), Item.GetColor(lightColor), origin, size);
         }
 
-        public static void OpenItemGlow(SpriteBatch sb, Item item)
+        public static void OpenItemGlow(SpriteBatch sb)
         {
             Effect effect = ModAssets.ItemEffect.Value;
             Color lerpColor;
@@ -350,11 +341,6 @@ namespace ImproveGame.Interface.UIElements
             effect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
             effect.CurrentTechnique.Passes["ColorPut"].Apply();
             sb.Begin(effect, Main.UIScaleMatrix);
-        }
-
-        public static void CloseItemGlow(SpriteBatch sb)
-        {
-            sb.Begin(null, Main.UIScaleMatrix);
         }
     }
 }
