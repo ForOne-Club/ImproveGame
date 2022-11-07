@@ -1,6 +1,15 @@
-For a detailed list, see: https://github.com/487666123/ImproveGame/blob/master/ChangeLog-en.md 
-详细列表请见: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md 
+For a detailed changelog, see: https://github.com/487666123/ImproveGame/blob/master/ChangeLog-en.md
+Source code: https://github.com/487666123/ImproveGame
+Discord: https://discord.gg/rEmGMQv5z7
+
+源码: https://github.com/487666123/ImproveGame
+Discord: https://discord.gg/rEmGMQv5z7
+详细更新日志请见: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
 
 v1.6.2.2
   ● BUG修复
 	修复了即使没开启旅途模式收藏自动研究也会自动研究的BUG
+	修复了大背包物品的一些绘制问题
+  ● 新增内容
+	【新功能】大背包内的弹药可以直接被使用
+	【新功能】提示简化(去除收藏提示,时装栏物品显示详细信息)功能

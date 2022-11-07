@@ -41,6 +41,7 @@
   - Removed the 'Reforge Count' function
 - **[v1.6.2.1]** Added recipes of Wand of Void and Wand of Construction
 - **[v1.6.2.2]** 大背包内的弹药可以直接被使用
+- **[v1.6.2.2]** 提示简化(去除收藏提示,时装栏物品显示详细信息)功能
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
