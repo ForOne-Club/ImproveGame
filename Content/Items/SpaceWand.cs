@@ -139,13 +139,22 @@ namespace ImproveGame.Content.Items
                         }
                         else
                         {
-                            if (NeedKillTile(player, item, x, y))
+                            /*if (NeedKillTile(player, item, x, y))
                             {
                                 TryKillTile(x, y, player);
-                            }
+                            }*/
+                            if(player.TileReplacementEnabled&&!SameTile(x,y,item.createTile,item.placeStyle))
                             if (!Main.tile[x, y].HasTile)
                             {
                                 if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
+                                {
+                                    playSound = true;
+                                    PickItemInInventory(player, GetCondition(), true, out _);
+                                }
+                            }
+                            else
+                            {
+                                if (WorldGen.ReplaceTile(x, y, (ushort)item.createTile, item.placeStyle))
                                 {
                                     playSound = true;
                                     PickItemInInventory(player, GetCondition(), true, out _);

@@ -416,5 +416,113 @@ namespace ImproveGame
             }
             lastMethod?.Invoke(minI, minJ, maxI - minI + 1, maxJ - minJ + 1);
         }
+
+        // 这是原版的私有方法，正在看。。。
+        /*public static bool PlaceThing_ValidTileForReplacement(Item HeldItem, int tileTargetX, int tileTargetY)
+        {
+            int createTile = HeldItem.createTile;
+            Tile tile = Main.tile[tileTargetX, tileTargetY];
+            if (WorldGen.WouldTileReplacementBeBlockedByLiquid(tileTargetX, tileTargetY, 1))
+            {
+                return false;
+            }
+            if (ItemID.Sets.SortingPriorityRopes[HeldItem.type] != -1)
+            {
+                return false;
+            }
+            if (Main.tileMoss[createTile])
+            {
+                return false;
+            }
+            if (TileID.Sets.DoesntPlaceWithTileReplacement[createTile])
+            {
+                return false;
+            }
+            if (TileID.Sets.DoesntGetReplacedWithTileReplacement[tile.TileType])
+            {
+                return false;
+            }
+            if (!CheckSpecificValidtyCaseForBlockSwap(createTile, tile.TileType))
+            {
+                return false;
+            }
+            if (Main.tileCut[tile.TileType])
+            {
+                return false;
+            }
+            if (TileID.Sets.Platforms[tile.TileType] && tile.TileType == createTile)
+            {
+                return tile.TileFrameY != HeldItem.placeStyle * 18;
+            }
+            if (TileID.Sets.BasicChest[tile.TileType] && TileID.Sets.BasicChest[createTile])
+            {
+                if (tile.TileFrameX / 36 == HeldItem.placeStyle)
+                {
+                    return tile.TileType != createTile;
+                }
+                return true;
+            }
+            if (TileID.Sets.BasicDresser[tile.TileType] && TileID.Sets.BasicDresser[createTile])
+            {
+                if (tile.TileFrameX / 54 == HeldItem.placeStyle)
+                {
+                    return tile.TileType != createTile;
+                }
+                return true;
+            }
+            if (Main.tileFrameImportant[createTile] && !TileID.Sets.Platforms[createTile])
+            {
+                return false;
+            }
+            if (Main.tile[tileTargetX, tileTargetY].TileType == createTile)
+            {
+                return false;
+            }
+            if (!TileID.Sets.IgnoresTileReplacementDropCheckWhenBeingPlaced[createTile])
+            {
+                WorldGen.KillTile_GetItemDrops(tileTargetX, tileTargetY, tile, out var dropItem, out var _, out var _, out var _);
+                if (dropItem == HeldItem.type)
+                {
+                    return false;
+                }
+            }
+            if (!WorldGen.WouldTileReplacementWork((ushort)createTile, tileTargetX, tileTargetY))
+            {
+                return false;
+            }
+            return true;
+        }
+        private static bool CheckSpecificValidtyCaseForBlockSwap(int tileTypeBeingPlaced, int tileTypeCurrentlyPlaced)
+        {
+            bool flag = TileID.Sets.Falling[tileTypeBeingPlaced];
+            bool flag2 = TileID.Sets.Falling[tileTypeCurrentlyPlaced] && !flag;
+            if (flag2)
+            {
+                Item bestPickaxe = GetBestPickaxe();
+                if (bestPickaxe != null && bestPickaxe.pick >= 110)
+                {
+                    flag2 = false;
+                }
+            }
+            if (flag2 && tileTargetY > 0)
+            {
+                Tile tile = Main.tile[tileTargetX, tileTargetY - 1];
+                bool flag3 = false;
+                if (tile != null)
+                {
+                    flag3 |= !tile.active();
+                    flag3 |= tile.active() && !TileID.Sets.Falling[tile.type];
+                }
+                if (flag3)
+                {
+                    flag2 = false;
+                }
+            }
+            if (flag2)
+            {
+                return false;
+            }
+            return true;
+        }*/
     }
 }

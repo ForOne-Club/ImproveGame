@@ -73,6 +73,33 @@ namespace ImproveGame.Common.Systems
                     c.Emit(OpCodes.Ldc_I4_0);
                 }
             };
+            // 大背包内弹药可直接被使用
+            On.Terraria.Player.ChooseAmmo += (orig, player, weapon) =>
+                orig.Invoke(player, weapon) ??
+                GetAllInventoryItemsList(player, true, true, false)
+                    .FirstOrDefault(i => i.stack > 0 && ItemLoader.CanChooseAmmo(weapon, i, player), null);
+            // 大背包内弹药在UI的数值显示
+            IL.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += il =>
+            {
+                var c = new ILCursor(il);
+                if (!c.TryGotoNext(MoveType.After,
+                        i => i.Match(OpCodes.Ldloc_1),
+                        i => i.MatchLdfld<Item>(nameof(Item.useAmmo)),
+                        i => i.Match(OpCodes.Ldc_I4_0),
+                        i => i.Match(OpCodes.Ble_S),
+                        i => i.Match(OpCodes.Ldloc_1),
+                        i => i.MatchLdfld<Item>(nameof(Item.useAmmo)),
+                        i => i.Match(OpCodes.Pop),
+                        i => i.Match(OpCodes.Ldc_I4_0)))
+                    return;
+                c.Emit(OpCodes.Ldloc_1); // 将weapon读入
+                c.EmitDelegate<Func<int, Item, int>>((_, weapon) =>
+                {
+                    GetItemCount(GetAllInventoryItemsList(Main.LocalPlayer, true, true, false).ToArray(),
+                        i => i.stack > 0 && ItemLoader.CanChooseAmmo(weapon, i, Main.LocalPlayer), out int count);
+                    return count;
+                });
+            };
         }
 
         private void LiveInCorrupt(ILContext il)

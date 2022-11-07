@@ -15,6 +15,7 @@
 - **[v1.6.2.1]** Fixed NPCs drop no coin after coin drop rate is adjusted to 25x and mod is reloaded
 - **[v1.6.2.1]** Fixed Fishing Machine does not drop items inside when destroyed
 - **[v1.6.2.2]** 修复了即使没开启旅途模式收藏自动研究也会自动研究的BUG
+- **[v1.6.2.2]** 修复了大背包物品的一些绘制问题
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests
@@ -39,6 +40,7 @@
   - Prefixes which have been rolled can be applied manually
   - Removed the 'Reforge Count' function
 - **[v1.6.2.1]** Added recipes of Wand of Void and Wand of Construction
+- **[v1.6.2.2]** 大背包内的弹药可以直接被使用
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)

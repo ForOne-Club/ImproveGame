@@ -8,35 +8,24 @@ namespace ImproveGame.Common.GlobalItems
 {
     public class ImproveItem : GlobalItem
     {
-        // 金币识别码
-        public static readonly List<int> GoldList = new() { 71, 72, 73 };
-        // BOSS召唤物识别码
-        public static readonly List<int> SummonsList1 = new() { 560, 43, 70, 1331, 1133, 5120, 4988, 556, 544, 557, 3601 };
-        // 事件召唤物识别码
-        public static readonly List<int> SummonsList2 = new() { 4271, 361, 1315, 2767, 602, 1844, 1958 };
+        // 铜，银，金
+        public static readonly HashSet<int> Coins = new() { 71, 72, 73 };
+        // BOSS 召唤物
+        public static readonly HashSet<int> SummonItems_Boss = new() { 560, 43, 70, 1331, 1133, 5120, 4988, 556, 544, 557, 3601 };
+        // 特殊事件 召唤物
+        public static readonly HashSet<int> SummonItems_Events = new() { 4271, 361, 1315, 2767, 602, 1844, 1958 };
 
         public override void SetDefaults(Item item)
         {
-            // 最大堆叠，修改条件
-            // 物品最大值 == 1
-            // 不为有伤害的近战武器
-            // 不为铜币，银币，金币
-            if (item.maxStack > 1
-                && !(item.DamageType == DamageClass.Melee && item.damage > 0)
-                && !GoldList.Contains(item.type))
+            // 最大堆叠
+            if (item.maxStack > 1 && Config.ItemMaxStack > item.maxStack && item.DamageType != DamageClass.Melee && !Coins.Contains(item.type))
             {
                 item.maxStack = Config.ItemMaxStack;
-                if (item.type == ItemID.PlatinumCoin && Config.ItemMaxStack > 2000)
-                {
-                    item.maxStack = 2000;
-                }
+                if (item.type == ItemID.PlatinumCoin && item.stack > 2000) item.maxStack = 2000;
             }
 
-            // 所有饰品可放在时装槽
-            if (item.accessory)
-            {
-                item.canBePlacedInVanityRegardlessOfConditions = true;
-            }
+            // 允许任何饰品放入饰品时装栏
+            if (item.accessory) item.canBePlacedInVanityRegardlessOfConditions = true;
         }
 
         // 用这个和公式来加成工具速度，这样就不需要Reload了
@@ -56,6 +45,7 @@ namespace ImproveGame.Common.GlobalItems
                 player.SetItemTime((int)MathHelper.Max(1, MathF.Round(player.itemTime * (1f - Config.ExtraToolSpeed))));
             });
         }
+
         private void TryHittingWall(ILContext il)
         {
             var c = new ILCursor(il);
@@ -86,7 +76,7 @@ namespace ImproveGame.Common.GlobalItems
         public override bool ConsumeItem(Item item, Player player)
         {
             // 所有召唤物不会消耗
-            if (Config.NoConsume_SummonItem && (SummonsList1.Contains(item.type) || SummonsList2.Contains(item.type)))
+            if (Config.NoConsume_SummonItem && (SummonItems_Boss.Contains(item.type) || SummonItems_Events.Contains(item.type)))
             {
                 return false;
             }
@@ -149,7 +139,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
             {
-                ItemSlot_BigBag.OpenItemGlow(sb, item);
+                ItemSlot_BigBag.OpenItemGlow(sb);
                 return true;
             }
             return true;
@@ -159,7 +149,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
             {
-                ItemSlot_BigBag.CloseItemGlow(sb);
+                sb.Begin(null, Main.UIScaleMatrix);
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
             }
         }
