@@ -124,11 +124,12 @@ namespace ImproveGame.Content.Items
                 Rectangle platfromRect = GetRectangle(player);
                 ForeachTile(platfromRect, (x, y) =>
                 {
-                    Func<Item, bool> condition = GetCondition();
-                    int oneIndex = EnoughItem(player, condition);
+                    int oneIndex = EnoughItem(player, GetCondition());
                     if (oneIndex > -1)
                     {
                         Item item = player.inventory[oneIndex];
+                        // 是否允许放置瓷砖，TML 的一个判定
+                        if (!TileLoader.CanPlace(x, y, item.createTile)) return;
                         if (GrassSeed.Contains(item.createTile))
                         {
                             if (WorldGen.PlaceTile(x, y, item.createTile, true, false, player.whoAmI, item.placeStyle))
@@ -139,12 +140,36 @@ namespace ImproveGame.Content.Items
                         }
                         else
                         {
-                            /*if (NeedKillTile(player, item, x, y))
+                            if (Main.tile[x, y].HasTile)
                             {
-                                TryKillTile(x, y, player);
-                            }*/
-                            if(player.TileReplacementEnabled&&!SameTile(x,y,item.createTile,item.placeStyle))
-                            if (!Main.tile[x, y].HasTile)
+                                if (!ValidTileForReplacement(item, x, y)) return;
+                                if (player.TileReplacementEnabled)
+                                {
+                                    // 函数作用：判断瓷砖是否可以更换
+                                    if (!WorldGen.IsTileReplacable(x, y)) return;
+                                    if (WorldGen.ReplaceTile(x, y, (ushort)item.createTile, item.placeStyle))
+                                    {
+                                        playSound = true;
+                                        PickItemInInventory(player, GetCondition(), true, out _);
+                                    }
+                                    else
+                                    {
+                                        if (NeedKillTile(player, item, x, y))
+                                        {
+                                            TryKillTile(x, y, player);
+                                        }
+                                        if (!Main.tile[x, y].HasTile)
+                                        {
+                                            if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
+                                            {
+                                                playSound = true;
+                                                PickItemInInventory(player, GetCondition(), true, out _);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
                             {
                                 if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
                                 {
@@ -152,14 +177,8 @@ namespace ImproveGame.Content.Items
                                     PickItemInInventory(player, GetCondition(), true, out _);
                                 }
                             }
-                            else
-                            {
-                                if (WorldGen.ReplaceTile(x, y, (ushort)item.createTile, item.placeStyle))
-                                {
-                                    playSound = true;
-                                    PickItemInInventory(player, GetCondition(), true, out _);
-                                }
-                            }
+                            player.hitReplace.TryClearingAndPruning(x, y, 1);
+                            player.hitTile.TryClearingAndPruning(x, y, 1);
                         }
                     }
                 }, (x, y, width, height) =>

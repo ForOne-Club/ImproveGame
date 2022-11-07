@@ -417,112 +417,50 @@ namespace ImproveGame
             lastMethod?.Invoke(minI, minJ, maxI - minI + 1, maxJ - minJ + 1);
         }
 
-        // 这是原版的私有方法，正在看。。。
-        /*public static bool PlaceThing_ValidTileForReplacement(Item HeldItem, int tileTargetX, int tileTargetY)
+        // 原版的私有方法，为空间魔杖做了一些删减
+        // 怎么用：传入要替换的物块，方法作用是判断两种物块是否是相同的，相同返回 true，不同反之。
+        public static bool ValidTileForReplacement(Item tileItem, int x, int y)
         {
-            int createTile = HeldItem.createTile;
-            Tile tile = Main.tile[tileTargetX, tileTargetY];
-            if (WorldGen.WouldTileReplacementBeBlockedByLiquid(tileTargetX, tileTargetY, 1))
-            {
-                return false;
-            }
-            if (ItemID.Sets.SortingPriorityRopes[HeldItem.type] != -1)
-            {
-                return false;
-            }
-            if (Main.tileMoss[createTile])
-            {
-                return false;
-            }
-            if (TileID.Sets.DoesntPlaceWithTileReplacement[createTile])
-            {
-                return false;
-            }
-            if (TileID.Sets.DoesntGetReplacedWithTileReplacement[tile.TileType])
-            {
-                return false;
-            }
-            if (!CheckSpecificValidtyCaseForBlockSwap(createTile, tile.TileType))
-            {
-                return false;
-            }
-            if (Main.tileCut[tile.TileType])
-            {
-                return false;
-            }
+            int createTile = tileItem.createTile;
+            Tile tile = Main.tile[x, y];
+            // 平台
             if (TileID.Sets.Platforms[tile.TileType] && tile.TileType == createTile)
             {
-                return tile.TileFrameY != HeldItem.placeStyle * 18;
+                return tile.TileFrameY != tileItem.placeStyle * 18;
             }
+            // 箱子
             if (TileID.Sets.BasicChest[tile.TileType] && TileID.Sets.BasicChest[createTile])
             {
-                if (tile.TileFrameX / 36 == HeldItem.placeStyle)
+                if (tile.TileFrameX / 36 == tileItem.placeStyle)
                 {
                     return tile.TileType != createTile;
                 }
                 return true;
             }
+            // 梳妆台
             if (TileID.Sets.BasicDresser[tile.TileType] && TileID.Sets.BasicDresser[createTile])
             {
-                if (tile.TileFrameX / 54 == HeldItem.placeStyle)
+                if (tile.TileFrameX / 54 == tileItem.placeStyle)
                 {
                     return tile.TileType != createTile;
                 }
                 return true;
             }
-            if (Main.tileFrameImportant[createTile] && !TileID.Sets.Platforms[createTile])
+            // 是不是一样的物块
+            if (Main.tile[x, y].TileType == createTile)
             {
                 return false;
             }
-            if (Main.tile[tileTargetX, tileTargetY].TileType == createTile)
-            {
-                return false;
-            }
+            // 能否忽略掉落检查
             if (!TileID.Sets.IgnoresTileReplacementDropCheckWhenBeingPlaced[createTile])
             {
-                WorldGen.KillTile_GetItemDrops(tileTargetX, tileTargetY, tile, out var dropItem, out var _, out var _, out var _);
-                if (dropItem == HeldItem.type)
+                WorldGen.KillTile_GetItemDrops(x, y, tile, out var dropItem, out var _, out var _, out var _);
+                if (dropItem == tileItem.type)
                 {
                     return false;
                 }
             }
-            if (!WorldGen.WouldTileReplacementWork((ushort)createTile, tileTargetX, tileTargetY))
-            {
-                return false;
-            }
             return true;
         }
-        private static bool CheckSpecificValidtyCaseForBlockSwap(int tileTypeBeingPlaced, int tileTypeCurrentlyPlaced)
-        {
-            bool flag = TileID.Sets.Falling[tileTypeBeingPlaced];
-            bool flag2 = TileID.Sets.Falling[tileTypeCurrentlyPlaced] && !flag;
-            if (flag2)
-            {
-                Item bestPickaxe = GetBestPickaxe();
-                if (bestPickaxe != null && bestPickaxe.pick >= 110)
-                {
-                    flag2 = false;
-                }
-            }
-            if (flag2 && tileTargetY > 0)
-            {
-                Tile tile = Main.tile[tileTargetX, tileTargetY - 1];
-                bool flag3 = false;
-                if (tile != null)
-                {
-                    flag3 |= !tile.active();
-                    flag3 |= tile.active() && !TileID.Sets.Falling[tile.type];
-                }
-                if (flag3)
-                {
-                    flag2 = false;
-                }
-            }
-            if (flag2)
-            {
-                return false;
-            }
-            return true;
-        }*/
     }
 }

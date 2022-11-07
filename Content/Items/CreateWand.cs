@@ -3,8 +3,6 @@ using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using static ImproveGame.Entitys.TileData;
@@ -23,9 +21,9 @@ namespace ImproveGame.Content.Items
         private static bool ColorsLoaded = false;
         private static int Index = 0;
 
-        private Texture2D JianYu => jianYu[Index];
-        private Texture2D JianYu_PreView => jianYu_PreView[Index];
-        private Color[] Colors => colors[Index];
+        private static Texture2D JianYu => jianYu[Index];
+        private static Texture2D JianYu_PreView => jianYu_PreView[Index];
+        private static Color[] Colors => colors[Index];
 
         public override void Load()
         {
@@ -35,10 +33,7 @@ namespace ImproveGame.Content.Items
                 // 把读取放到主线程上
                 Main.QueueMainThreadAction(() =>
                     {
-                        if (ColorsLoaded)
-                        {
-                            return;
-                        }
+                        if (ColorsLoaded) return;
 
                         jianYu = new[]
                         {
@@ -49,7 +44,7 @@ namespace ImproveGame.Content.Items
                             GetTexture("JianYu_PreView").Value, GetTexture("JianYu_PreView2").Value,
                             GetTexture("JianYu_PreView3").Value
                         };
-                        colors = new[] {GetColors(jianYu[0]), GetColors(jianYu[1]), GetColors(jianYu[2])};
+                        colors = new[] { GetColors(jianYu[0]), GetColors(jianYu[1]), GetColors(jianYu[2]) };
                         ColorsLoaded = true;
                     }
                 );
