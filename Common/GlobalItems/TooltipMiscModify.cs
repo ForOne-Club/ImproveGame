@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Systems;
-using System.Collections.Generic;
 using Terraria.ModLoader.Default;
 
 namespace ImproveGame.Common.GlobalItems
@@ -15,7 +14,7 @@ namespace ImproveGame.Common.GlobalItems
                 if (item.ModItem is not null && !item.Name.Contains("[" + item.ModItem.Mod.Name + "]") && !item.Name.Contains("[" + item.ModItem.Mod.DisplayName + "]"))
                 {
                     string text = GetTextWith("Tips.FromMod", new { item.ModItem.Mod.DisplayName });
-                    TooltipLine line = new(Mod, Mod.Name, "- " + text + " -")
+                    TooltipLine line = new(Mod, Mod.Name, text)
                     {
                         OverrideColor = Colors.RarityBlue
                     };
@@ -30,7 +29,7 @@ namespace ImproveGame.Common.GlobalItems
                     key += "Full";
                 }
                 string text = GetTextWith(key, new {
-                    Current = Main.LocalPlayer.slotsMinions,
+                    Current = Math.Round(Main.LocalPlayer.slotsMinions, 2),
                     Total = Main.LocalPlayer.maxMinions
                 });
                 TooltipLine line = new(Mod, Mod.Name, text);

@@ -54,26 +54,52 @@ namespace ImproveGame.Common.Systems
             IL.Terraria.WorldGen.UpdateWorld_Inner += DisableBiomeSpread;
             // NPC住在腐化
             IL.Terraria.WorldGen.ScoreRoom += LiveInCorrupt;
-            // 大背包内弹药可直接被使用
-            On.Terraria.Player.ChooseAmmo += ChooseAmmo;
-        }
-
-        private Item ChooseAmmo(On.Terraria.Player.orig_ChooseAmmo orig, Player player, Item weapon)
-        {
-            Item item = orig.Invoke(player, weapon);
-            if (item is null)
+            // 移除Social和Favorite提示
+            IL.Terraria.Main.MouseText_DrawItemTooltip_GetLinesInfo += il =>
             {
-                Item[] inv = player.GetModPlayer<DataPlayer>().SuperVault;
-                for (int i = 0; i < inv.Length; i++)
+                var c = new ILCursor(il);
+
+                QuickModify(nameof(Item.favorited));
+                QuickModify(nameof(Item.social));
+
+                void QuickModify(string name)
                 {
-                    if (inv[i].stack > 0 && ItemLoader.CanChooseAmmo(weapon, inv[i], player))
-                    {
-                        item = inv[i];
-                        break;
-                    }
+                    if (!c.TryGotoNext(
+                            MoveType.After,
+                            i => i.Match(OpCodes.Ldarg_0),
+                            i => i.MatchLdfld<Item>(name)))
+                        return;
+                    c.Emit(OpCodes.Pop);
+                    c.Emit(OpCodes.Ldc_I4_0);
                 }
-            }
-            return item;
+            };
+            // 大背包内弹药可直接被使用
+            On.Terraria.Player.ChooseAmmo += (orig, player, weapon) =>
+                orig.Invoke(player, weapon) ??
+                GetAllInventoryItemsList(player, true, true, false)
+                    .FirstOrDefault(i => i.stack > 0 && ItemLoader.CanChooseAmmo(weapon, i, player), null);
+            // 大背包内弹药在UI的数值显示
+            IL.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += il =>
+            {
+                var c = new ILCursor(il);
+                if (!c.TryGotoNext(MoveType.After,
+                        i => i.Match(OpCodes.Ldloc_1),
+                        i => i.MatchLdfld<Item>(nameof(Item.useAmmo)),
+                        i => i.Match(OpCodes.Ldc_I4_0),
+                        i => i.Match(OpCodes.Ble_S),
+                        i => i.Match(OpCodes.Ldloc_1),
+                        i => i.MatchLdfld<Item>(nameof(Item.useAmmo)),
+                        i => i.Match(OpCodes.Pop),
+                        i => i.Match(OpCodes.Ldc_I4_0)))
+                    return;
+                c.Emit(OpCodes.Ldloc_1); // 将weapon读入
+                c.EmitDelegate<Func<int, Item, int>>((_, weapon) =>
+                {
+                    GetItemCount(GetAllInventoryItemsList(Main.LocalPlayer, true, true, false).ToArray(),
+                        i => i.stack > 0 && ItemLoader.CanChooseAmmo(weapon, i, Main.LocalPlayer), out int count);
+                    return count;
+                });
+            };
         }
 
         private void LiveInCorrupt(ILContext il)
