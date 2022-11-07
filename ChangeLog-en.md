@@ -14,8 +14,8 @@
 - **[v1.6.2.1]** Fixed Wand of Void failing to record chests' names and results in an error
 - **[v1.6.2.1]** Fixed NPCs drop no coin after coin drop rate is adjusted to 25x and mod is reloaded
 - **[v1.6.2.1]** Fixed Fishing Machine does not drop items inside when destroyed
-- **[v1.6.2.2]** 修复了即使没开启旅途模式收藏自动研究也会自动研究的BUG
-- **[v1.6.2.2]** 修复了大背包物品的一些绘制问题
+- **[v1.6.2.2]** Fixed Auto Research still functioning even not in Joureney mode
+- **[v1.6.2.2]** Fixed some Draw issue with the Huge Inventory
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests
@@ -40,8 +40,8 @@
   - Prefixes which have been rolled can be applied manually
   - Removed the 'Reforge Count' function
 - **[v1.6.2.1]** Added recipes of Wand of Void and Wand of Construction
-- **[v1.6.2.2]** 大背包内的弹药可以直接被使用
-- **[v1.6.2.2]** 提示简化(去除收藏提示,时装栏物品显示详细信息)功能
+- **[v1.6.2.2]** Ammo in the Huge Inventory now can be used directly
+- **[v1.6.2.2]** Added Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)

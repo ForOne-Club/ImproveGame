@@ -459,12 +459,12 @@ Mods:
                     Following are other non-configurable functions of this mod:
                     - Wormhole Potion works in personal inventories
                     - Any accessory can be worn in vanity slots
-                    - Display detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
+                    - Displaying detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
                     - A hotkey to swap the hotbar with the second row of inventory
-                    - Display minion slot occupancy in tooltip
-                    - 点击生命体分析仪图标打开分析过滤界面
-                    - 对着箱子按住Alt键可直接查看其内部物品
-                    - 提示简化(去除收藏提示,时装栏物品显示详细信息)
+                    - Displaying minion slot occupancy in tooltip
+                    - A filter panel which opens when the icon of Lifeform Analyzer is clicked
+                    - Chest item inspection when the cursor is hovered on it and Alt is pressed
+                    - Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
                     '''
             }
         }
