@@ -464,6 +464,7 @@ Mods:
                     - Display minion slot occupancy in tooltip
                     - 点击生命体分析仪图标打开分析过滤界面
                     - 对着箱子按住Alt键可直接查看其内部物品
+                    - 提示简化(去除收藏提示,时装栏物品显示详细信息)
                     '''
             }
         }

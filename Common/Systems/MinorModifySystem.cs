@@ -54,6 +54,25 @@ namespace ImproveGame.Common.Systems
             IL.Terraria.WorldGen.UpdateWorld_Inner += DisableBiomeSpread;
             // NPC住在腐化
             IL.Terraria.WorldGen.ScoreRoom += LiveInCorrupt;
+            // 移除Social和Favorite提示
+            IL.Terraria.Main.MouseText_DrawItemTooltip_GetLinesInfo += il =>
+            {
+                var c = new ILCursor(il);
+
+                QuickModify(nameof(Item.favorited));
+                QuickModify(nameof(Item.social));
+
+                void QuickModify(string name)
+                {
+                    if (!c.TryGotoNext(
+                            MoveType.After,
+                            i => i.Match(OpCodes.Ldarg_0),
+                            i => i.MatchLdfld<Item>(name)))
+                        return;
+                    c.Emit(OpCodes.Pop);
+                    c.Emit(OpCodes.Ldc_I4_0);
+                }
+            };
         }
 
         private void LiveInCorrupt(ILContext il)
