@@ -177,6 +177,11 @@ Mods:
                 Label: "[centeritem:1344] Display item debug data"
                 Tooltip: Display item debug data in tooltip
             }
+            ResurrectionTimeShortened:
+            {
+                Label: "[centeritem:3232] 重生时间缩减"
+                Tooltip: 例如：25，则缩短 25% 复活时间！
+            }
             MiddleEnableBank:
             {
                 Label: "[centeritem:87] Middle click to open personal inventories"
@@ -624,6 +629,10 @@ Mods:
         CombatText_Projectile:
         {
             PlaceWall_Lace: "Stopped placing due to lack of wall"
+        }
+        CombatText_Commonds:
+        {
+            ResurrectionTimeShortened: "重生加速 {Time} 秒 ！"
         }
         Tips:
         {

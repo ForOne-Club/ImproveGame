@@ -2,11 +2,12 @@
 {
     public class PixelShader
     {
-        public static readonly Texture2D texture = GetTexture("255").Value; // √
+        public static readonly Texture2D texture = new(Main.graphics.GraphicsDevice, 1, 1);
 
         public static void DrawFork(Vector2 position, float size, float radius, Color backgroundColor, float border, Color borderColor)
         {
             SpriteBatch sb = Main.spriteBatch;
+            // GraphicsDevice graphics = Main.graphics.GraphicsDevice;
             sb.End();
             Effect effect = ModAssets.Fork.Value;
             effect.Parameters[nameof(size)].SetValue(size);
@@ -14,8 +15,10 @@
             effect.Parameters[nameof(radius)].SetValue(radius);
             effect.Parameters[nameof(borderColor)].SetValue(borderColor.ToVector4());
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
-            sb.Begin(0, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
-                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, Main.UIScaleMatrix);
+            sb.Begin(SpriteSortMode.Immediate, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, Main.UIScaleMatrix);
+            effect.CurrentTechnique.Passes["Fork"].Apply();
+            // graphics.DrawPrimitives(PrimitiveType.TriangleList, 0, 2);
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
             sb.End();
             sb.Begin(0, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],

@@ -117,6 +117,13 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool ShowItemMoreData;
 
+        [Label("$Mods.ImproveGame.Config.ResurrectionTimeShortened.Label")]
+        [Tooltip("$Mods.ImproveGame.Config.ResurrectionTimeShortened.Tooltip")]
+        [DefaultValue(0)]
+        [Range(0, 100)]
+        [Slider]
+        public int ResurrectionTimeShortened;
+
         [Label("$Mods.ImproveGame.Config.BanTombstone.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoNeedReload")]
         [DefaultValue(false)]

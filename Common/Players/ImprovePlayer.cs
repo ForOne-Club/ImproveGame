@@ -3,7 +3,10 @@ using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
+using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.UI;
 using Terraria.GameInput;
 
 namespace ImproveGame.Common.Players
@@ -120,6 +123,25 @@ namespace ImproveGame.Common.Players
                 Player.tileRangeX += 5;
                 Player.tileRangeY += 4;
             }
+        }
+
+        // 重生加速
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            float TimeShortened = Player.respawnTimer * MathHelper.Clamp(Config.ResurrectionTimeShortened, 0, 100) / 100;
+            if (TimeShortened > 0)
+            {
+                int ct = CombatText.NewText(Player.getRect(), new(25, 255, 25), GetTextWith("CombatText_Commonds.ResurrectionTimeShortened", new
+                {
+                    Name = Player.name,
+                    Time = MathF.Round(TimeShortened / 60)
+                }));
+                if (Main.combatText.IndexInRange(ct))
+                {
+                    Main.combatText[ct].lifeTime *= 3;
+                }
+            }
+            Player.respawnTimer -= (int)TimeShortened;
         }
 
         private bool _cacheSwitchSlot;

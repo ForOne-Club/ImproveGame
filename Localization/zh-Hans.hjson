@@ -185,6 +185,11 @@
                 Label: "[centeritem:1344] 显示物品调试数据"
                 Tooltip: 在物品提示栏显示调试数据
             }
+            ResurrectionTimeShortened:
+            {
+                Label: "[centeritem:3232] 重生时间缩减"
+                Tooltip: 例如：25，则缩短 25% 复活时间！
+            }
             MiddleEnableBank:
             {
                 Label: "[centeritem:87] 中键打开便携收纳"
@@ -634,6 +639,10 @@
         CombatText_Projectile:
         {
             PlaceWall_Lack: "墙体不足，停止工作！"
+        }
+        CombatText_Commonds:
+        {
+            ResurrectionTimeShortened: "重生加速 {Time} 秒 ！"
         }
         Tips:
         {

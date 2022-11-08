@@ -1,12 +1,10 @@
-﻿sampler image : register(s0);
-
-float size;
+﻿float size;
 float border;
 float radius; // 半径
 float4 borderColor;
 float4 backgroundColor;
 
-float4 Fork(float2 coords : TEXCOORD0) : COLOR0
+float4 ps_main(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 rt = size / 2;
     float2 pos = abs(coords * size - rt);
@@ -17,6 +15,6 @@ technique Technique1
 {
     pass Fork
     {
-        PixelShader = compile ps_3_0 Fork();
+        PixelShader = compile ps_2_0 ps_main();
     }
 }
