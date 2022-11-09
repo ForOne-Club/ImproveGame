@@ -450,7 +450,7 @@ namespace ImproveGame
             // 后填充空位
             for (int i = begin; i < end; i++)
             {
-                if (inventory[i].IsAir)
+                if (inventory[i] is null && inventory[i].IsAir)
                 {
                     if (hint)
                     {

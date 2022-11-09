@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Interface.UIElements_Shader;
 
-namespace ImproveGame.Interface.BannerChestUI
+namespace ImproveGame.Interface.BannerChestUI.Elements
 {
     public class PackageGrid : UIElement
     {

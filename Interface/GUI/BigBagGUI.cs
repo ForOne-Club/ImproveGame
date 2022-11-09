@@ -58,7 +58,7 @@ namespace ImproveGame.Interface.GUI
 
             MainPanel.Append(CloseButton = new(30) { HAlign = 1f });
             CloseButton.Height.Pixels = title.Height();
-            CloseButton.OnMouseDown += (evt, uie) => Visible = false;
+            CloseButton.OnMouseDown += (evt, uie) => Close();
 
             MainPanel.Append(checkbox[0] = new Checkbox(() =>
             {

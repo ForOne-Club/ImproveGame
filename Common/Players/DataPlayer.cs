@@ -64,6 +64,7 @@ namespace ImproveGame.Common.Players
             if (Main.myPlayer != Player.whoAmI)
                 return;
 
+            bool RefreshRecipes = false;
             // 侦测stack，如果有变化就发包
             for (int i = 0; i < 100; i++)
             {
@@ -74,7 +75,7 @@ namespace ImproveGame.Common.Players
                 }
                 if (SuperVault[i].stack != oldSuperVaultStack[i])
                 {
-                    Recipe.FindRecipes(); // 刷新配方
+                    RefreshRecipes = true;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
                         var packet = BigBagSlotPacket.Get(this, i);
@@ -85,6 +86,7 @@ namespace ImproveGame.Common.Players
                 if (SuperVault[i].IsAir)
                     oldSuperVaultStack[i] = 0;
             }
+            if (RefreshRecipes) Recipe.FindRecipes();
         }
 
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)

@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.BannerChestUI;
+using ImproveGame.Interface.BannerChestUI.Elements;
 using ImproveGame.Interface.Common;
 using NetSimplified;
 using System.Collections.Generic;
