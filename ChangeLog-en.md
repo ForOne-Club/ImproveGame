@@ -16,6 +16,7 @@
 - **[v1.6.2.1]** Fixed Fishing Machine does not drop items inside when destroyed
 - **[v1.6.2.2]** Fixed Auto Research still functioning even not in Joureney mode
 - **[v1.6.2.2]** Fixed some Draw issue with the Huge Inventory
+- **[v1.6.2.2]** 修复了Fargo's Mutant Mod的喷泉环境功能开启时，钓鱼机在附近无喷泉的情况下会算作处于海洋环境的BUG
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests
