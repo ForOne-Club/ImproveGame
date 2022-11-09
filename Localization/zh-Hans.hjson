@@ -187,7 +187,7 @@
             }
             ResurrectionTimeShortened:
             {
-                Label: "[centeritem:3232] 重生时间缩减"
+                Label: "[centeritem:3232] 重生加速"
                 Tooltip: 例如：25，则缩短 25% 复活时间！
             }
             MiddleEnableBank:
@@ -561,7 +561,7 @@
                 '''
                 存储你的增益药水
                 物品栏中<right>该物品打开药水袋
-                手持药水<left>该物品以将旗帜存入
+                手持药水<left>该物品将药水存入
                 仅背包中位列第一的药水袋可以自动收纳
                 最多可存入200组药水
                 '''

@@ -179,7 +179,7 @@ Mods:
             }
             ResurrectionTimeShortened:
             {
-                Label: "[centeritem:3232] 重生时间缩减"
+                Label: "[centeritem:3232] 重生加速"
                 Tooltip: 例如：25，则缩短 25% 复活时间！
             }
             MiddleEnableBank:
