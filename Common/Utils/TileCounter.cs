@@ -249,6 +249,7 @@ namespace ImproveGame.Common.Utils
             MeteorTileCount = 0;
             JungleTileCount = 0;
             DungeonTileCount = 0;
+            ActiveFountainColor = -1;
             SystemLoader.TileCountsAvailable(_tileCounts);
         }
     }
