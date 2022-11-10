@@ -135,16 +135,9 @@ namespace ImproveGame.Interface.GUI
         {
             base.Update(gameTime);
             if (MainPanel.IsMouseHovering)
-                Main.LocalPlayer.mouseInterface = true;
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-            if (MainPanel.IsMouseHovering)
-            {
                 PlayerInput.LockVanillaMouseScroll("ImproveGame: BigBagGUI");
-            }
+            if (MainPanel.IsMouseHovering)
+                Main.LocalPlayer.mouseInterface = true;
         }
 
         public void Open()

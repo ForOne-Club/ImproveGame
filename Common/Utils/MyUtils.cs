@@ -444,13 +444,12 @@ namespace ImproveGame
             for (int i = begin; i < end; i++)
             {
                 item = ItemStackToInventoryItem(inventory, i, item, hint);
-                if (item.IsAir)
-                    return item;
+                if (item.IsAir) return item;
             }
             // 后填充空位
             for (int i = begin; i < end; i++)
             {
-                if (inventory[i] is null && inventory[i].IsAir)
+                if (inventory[i] is null || inventory[i].IsAir)
                 {
                     if (hint)
                     {
