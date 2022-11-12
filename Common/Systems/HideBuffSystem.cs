@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.GlobalBuffs;
 using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Players;
 using ImproveGame.Content.Items;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace ImproveGame.Common.Systems
 {
@@ -11,12 +11,6 @@ namespace ImproveGame.Common.Systems
 
         public override void PostSetupContent() {
             Array.Resize(ref BuffTypesShouldHide, BuffLoader.BuffCount);
-        }
-
-        public static void ClearHideBuffArray(){
-            for (int i = 0; i < BuffTypesShouldHide.Length; i++) {
-                BuffTypesShouldHide[i] = false;
-            }
         }
 
         public static int HideBuffCount() {
@@ -29,40 +23,21 @@ namespace ImproveGame.Common.Systems
         }
 
         public override void PostDrawInterface(SpriteBatch spriteBatch) {
-            // 专门用来清除ApplyBuffItem.BuffTypesShouldHide的
-            ClearHideBuffArray();
+            Array.Clear(BuffTypesShouldHide, 0, BuffTypesShouldHide.Length);
             HideGlobalBuff.HidedBuffCountThisFrame = 0;
-
-            UpdateVisualBuffs(Main.LocalPlayer, true);
-            if (Config.ShareInfBuffs)
-                CheckTeamPlayers(Main.myPlayer, (player) => UpdateVisualBuffs(player, false));
-        }
-
-        // 更新InventoryGlow和BuffTypesShouldHide
-        private static void UpdateVisualBuffs(Player inventorySource, bool useInventoryGlow)
-        {
-            var items = GetAllInventoryItemsList(inventorySource, false);
-            foreach (var item in items)
+            
+            // 更新InventoryGlow和BuffTypesShouldHide
+            foreach (var item in InfBuffPlayer.Get(Main.LocalPlayer).AvailableItems)
             {
-                if (useInventoryGlow)
-                {
-                    ApplyBuffItem.UpdateInventoryGlow(item);
-                }
-                else
-                {
-                    int buffType = ApplyBuffItem.GetItemBuffType(item);
-                    if (buffType is not -1)
-                    {
-                        BuffTypesShouldHide[buffType] = true;
-                    }
-                }
+                ApplyBuffItem.UpdateInventoryGlow(item);
+
+                int buffType = ApplyBuffItem.GetItemBuffType(item);
+                if (buffType is not -1)
+                    BuffTypesShouldHide[buffType] = true;
+
                 if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.storedPotions.Count > 0)
-                {
                     foreach (var potion in from p in potionBag.storedPotions where p.stack >= Config.NoConsume_PotionRequirement select p)
-                    {
                         BuffTypesShouldHide[potion.buffType] = true;
-                    }
-                }
             }
         }
 

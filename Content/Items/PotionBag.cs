@@ -65,7 +65,7 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
-        public static bool PutInPotionBag(List<Item> storedPotions, ref Item item, bool AutoSort)
+        public static bool PutInPotionBag(List<Item> storedPotions, ref Item item, bool autoSort)
         {
             for (int i = 0; i < storedPotions.Count; i++)
             {
@@ -94,8 +94,8 @@ namespace ImproveGame.Content.Items
                 SoundEngine.PlaySound(SoundID.Grab);
             }
             // 依照type对物品进行排序
-            if (AutoSort)
-                storedPotions.Sort((a, b) => { return a.type.CompareTo(b.type); });
+            if (autoSort)
+                storedPotions.Sort((a, b) => a.type.CompareTo(b.type));
             return false;
         }
 

@@ -21,12 +21,12 @@ namespace ImproveGame.Common.Players
         /// <summary>
         /// 记录ID
         /// </summary>
-        public List<int> InfBuffDisabledVanilla;
+        public HashSet<int> InfBuffDisabledVanilla;
 
         /// <summary>
         /// 格式：Mod内部名/Buff类名
         /// </summary>
-        public List<string> InfBuffDisabledMod;
+        public HashSet<string> InfBuffDisabledMod;
 
         public override void Initialize()
         {
@@ -47,16 +47,16 @@ namespace ImproveGame.Common.Players
                     SuperVault[i] = tag.Get<Item>($"SuperVault_{i}");
 
             // 原版 Buff 禁用列表
-            InfBuffDisabledVanilla = tag.Get<List<int>>("InfBuffDisabledVanilla") ?? new();
+            InfBuffDisabledVanilla = tag.Get<List<int>>("InfBuffDisabledVanilla").ToHashSet() ?? new();
             // MOD Buff 禁用列表
-            InfBuffDisabledMod = tag.Get<List<string>>("InfBuffDisabledMod") ?? new();
+            InfBuffDisabledMod = tag.Get<List<string>>("InfBuffDisabledMod").ToHashSet() ?? new();
         }
 
         public override void SaveData(TagCompound tag)
         {
             tag["SuperVault"] = SuperVault;
-            tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla;
-            tag["InfBuffDisabledMod"] = InfBuffDisabledMod;
+            tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla.ToList();
+            tag["InfBuffDisabledMod"] = InfBuffDisabledMod.ToList();
         }
 
         public override void PostUpdate()
