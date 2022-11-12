@@ -62,17 +62,6 @@ namespace ImproveGame.Interface.GUI
             MouseOnMenu = true;
         }
 
-        private Func<Color> GetColor(Func<bool> white)
-        {
-            var inactiveColor = new Color(120, 120, 120);
-            return () =>
-            {
-                Color color = white.Invoke() ? Color.White : inactiveColor;
-                color *= Timer.Schedule;
-                return color;
-            };
-        }
-
         public override void Update(GameTime gameTime)
         {
             // 与蓝图相同的UI关闭机制

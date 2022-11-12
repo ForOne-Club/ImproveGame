@@ -74,7 +74,26 @@ namespace ImproveGame.Common.Players
             bannerChest = null;
             potionBag = null;
 
+            // 玩家背包
             foreach (var item in from i in Player.inventory where !i.IsAir select i)
+            {
+                if (Config.LoadModItems)
+                {
+                    if (bannerChest is null && item.ModItem is BannerChest chest)
+                    {
+                        bannerChest = chest;
+                    }
+
+                    if (potionBag is null && item.ModItem is PotionBag bag)
+                    {
+                        potionBag = bag;
+                    }
+                }
+            }
+
+            // 大背包
+            Item[] SuperVault = Player.GetModPlayer<DataPlayer>().SuperVault;
+            foreach (var item in from i in SuperVault where !i.IsAir select i)
             {
                 if (Config.LoadModItems)
                 {

@@ -121,6 +121,7 @@ namespace ImproveGame.Common.Configs
         [Tooltip("$Mods.ImproveGame.Config.ResurrectionTimeShortened.Tooltip")]
         [DefaultValue(0)]
         [Range(0, 100)]
+        [Increment(5)]
         [Slider]
         public int ResurrectionTimeShortened;
 

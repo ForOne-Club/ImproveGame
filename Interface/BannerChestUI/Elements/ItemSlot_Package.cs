@@ -3,7 +3,7 @@ using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Interface.BannerChestUI
+namespace ImproveGame.Interface.BannerChestUI.Elements
 {
     public class ItemSlot_Package : UIElement
     {

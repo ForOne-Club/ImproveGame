@@ -95,6 +95,8 @@ namespace ImproveGame.Common.GlobalItems
         // 额外提示
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
+            if (item.buffType > 0 && item.consumable)
+                tooltips.Add(new(Mod, "HasItemBuff", $"{(Main.LocalPlayer.HasBuff(item.buffType) ? "[c/20ff20:已拥有此药水的效果]" : "[c/ff2020:未拥有药水效果]")}"));
             // 更多信息
             if (Config.ShowItemMoreData)
             {

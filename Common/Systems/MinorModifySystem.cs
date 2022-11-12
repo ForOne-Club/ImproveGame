@@ -17,6 +17,8 @@ namespace ImproveGame.Common.Systems
     {
         public override void Load()
         {
+            // 拾取物品处理方法
+            On.Terraria.Player.PickupItem += Player_PickupItem;
             // 死亡是否掉落墓碑
             On.Terraria.Player.DropTombstone += DisableDropTombstone;
             // 抓取距离修改
@@ -29,8 +31,6 @@ namespace ImproveGame.Common.Systems
             On.Terraria.Main.DamageVar += DisableDamageVar;
             // 使存钱罐中物品生效，如同放入背包一样
             On.Terraria.Player.VanillaPreUpdateInventory += TweakExtraUpdateInventory;
-            // 拾取物品处理方法
-            On.Terraria.Player.PickupItem += Player_PickupItem;
             // 摇树总是掉落水果
             IL.Terraria.WorldGen.ShakeTree += TweakShakeTree;
             // “草药” 生长速度
@@ -368,7 +368,13 @@ namespace ImproveGame.Common.Systems
             {
                 if (improvePlayer.bannerChest.AutoStorage)
                 {
+                    Item item = itemToPickUp.Clone();
                     BannerChest.PutInBannerChest(improvePlayer.bannerChest.storedBanners, ref itemToPickUp, improvePlayer.bannerChest.AutoSort);
+                    if (itemToPickUp.stack < item.stack)
+                    {
+                        item.stack -= itemToPickUp.stack;
+                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack);
+                    }
                 }
             }
             // 药水带袋
@@ -376,7 +382,13 @@ namespace ImproveGame.Common.Systems
             {
                 if (improvePlayer.potionBag.AutoStorage)
                 {
+                    Item item = itemToPickUp.Clone();
                     PotionBag.PutInPotionBag(improvePlayer.potionBag.storedPotions, ref itemToPickUp, improvePlayer.potionBag.AutoSort);
+                    if (itemToPickUp.stack < item.stack)
+                    {
+                        item.stack -= itemToPickUp.stack;
+                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack);
+                    }
                 }
             }
             // 大背包
