@@ -437,12 +437,8 @@ Mods:
             }
             LoadModItems:
             {
-                Label: "[centeritem:ImproveGame/WallPlace] Enable mod items"
-                Tooltip:
-                    '''
-                    Modded items will not be loaded if it is off
-                    The mod item icons contained in the config will become text
-                    '''
+                Label: "Mod Items Load Config"
+                Tooltip: "The item will not be added to the game if it is off"
             }
             ShowModName.Label: "[centeritem:ImproveGame/SpaceWand] Display which mod are the items from"
             EmptyAutofisher:

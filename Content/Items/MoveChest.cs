@@ -26,6 +26,8 @@ public record ItemPosition(byte player, int slot)
 
 public class MoveChest : ModItem
 {
+    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.MoveChest;
+
     /// <summary>
     /// 强制冷却，放置过快反复与服务器交换出bug
     /// </summary>

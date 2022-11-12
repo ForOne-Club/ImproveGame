@@ -11,7 +11,7 @@ namespace ImproveGame.Content.Items
 {
     public class CreateWand : ModItem, IItemOverrideHover
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.CreateWand;
         public override bool AltFunctionUse(Player player) => true;
 
         private static Texture2D[] jianYu;

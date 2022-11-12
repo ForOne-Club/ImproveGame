@@ -11,7 +11,8 @@ namespace ImproveGame.Common.Configs
 
         public override void OnLoaded() => Config = this;
 
-        // 物品设置
+        #region 物品设置
+
         [Header("$Mods.ImproveGame.Config.ItemConfigs.Header")]
 
         [Label("$Mods.ImproveGame.Config.SuperVoidVault.Label")]
@@ -94,7 +95,7 @@ namespace ImproveGame.Common.Configs
         [Label("$Mods.ImproveGame.Config.NoConsume_PotionRequirement.Label")]
         [Tooltip("$Mods.ImproveGame.Config.NoConsume_PotionRequirement.Tooltip")]
         [DefaultValue(30)]
-        [Range(20, 999)]
+        [Range(10, 999)]
         public int NoConsume_PotionRequirement;
 
         [Label("$Mods.ImproveGame.Config.NoConsume_Ammo.Label")]
@@ -144,6 +145,10 @@ namespace ImproveGame.Common.Configs
         [Tooltip("$Mods.ImproveGame.Config.FasterExtractinator.Tooltip")]
         [DefaultValue(true)]
         public bool FasterExtractinator;
+
+        #endregion
+
+        #region NPC设置
 
         [Header("$Mods.ImproveGame.Config.NPCConfigs.Header")]
 
@@ -207,6 +212,10 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(1f)]
         public float BannerRequirement;
 
+        #endregion
+
+        #region 游戏机制
+        
         [Header("$Mods.ImproveGame.Config.GameMechanics.Header")]
 
         [Label("$Mods.ImproveGame.Config.AlchemyGrassGrowsFaster.Label")]
@@ -253,6 +262,10 @@ namespace ImproveGame.Common.Configs
         [Increment(11)]
         [ReloadRequired]
         public int ExtraPlayerBuffSlots;
+
+        #endregion
+
+        #region 树木设置
 
         [Header("$Mods.ImproveGame.Config.TreeConfigs.Header")]
 
@@ -301,6 +314,10 @@ namespace ImproveGame.Common.Configs
         [Label("$Mods.ImproveGame.Config.GemTree.LabelMax")]
         public int GemTreeMax;
 
+        #endregion
+
+        #region 多人设置
+
         [Header("$Mods.ImproveGame.Config.TogetherConfigs.Header")]
 
         [Label("$Mods.ImproveGame.Config.ShareCraftingStation.Label")]
@@ -324,6 +341,10 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool TeamAutoJoin;
 
+        #endregion
+
+        #region 模组设置
+
         [Header("$Mods.ImproveGame.Config.ServerSettings.Header")]
 
         [Label("$Mods.ImproveGame.Config.OnlyHost.Label")]
@@ -343,12 +364,6 @@ namespace ImproveGame.Common.Configs
         [Range(1, 100)]
         public int SpawnRateMaxValue;
 
-        [Label("$Mods.ImproveGame.Config.LoadModItems.Label")]
-        [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
-        [DefaultValue(true)]
-        [ReloadRequired]
-        public bool LoadModItems;
-
         [Label("$Mods.ImproveGame.Config.ShowModName.Label")]
         [DefaultValue(true)]
         public bool ShowModName;
@@ -358,7 +373,101 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool EmptyAutofisher;
 
-        // 预设
+        [Label("$Mods.ImproveGame.Config.LoadModItems.Label")]
+        [ReloadRequired]
+        public ModItemLoadPage LoadModItems = new();
+        
+        [SeparatePage]
+        public class ModItemLoadPage
+        {
+            [Label("$Mods.ImproveGame.ItemName.MagickWand")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool MagickWand = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.SpaceWand")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool SpaceWand = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.StarburstWand")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool StarburstWand = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.WallPlace")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool WallPlace = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.CreateWand")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool CreateWand = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.LiquidWand")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool LiquidWand = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.PotionBag")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool PotionBag = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.BannerChest")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool BannerChest = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.Autofisher")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool Autofisher = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.PaintWand")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool PaintWand = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.ConstructWand")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool ConstructWand = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.MoveChest")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool MoveChest = true;
+            
+            [Label("$Mods.ImproveGame.ItemName.CoinOne")]
+            [Tooltip("$Mods.ImproveGame.Config.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool CoinOne = true;
+
+            public override bool Equals(object obj) {
+                if (obj is ModItemLoadPage other)
+                    return MagickWand == other.MagickWand && SpaceWand == other.SpaceWand && StarburstWand == other.StarburstWand && 
+                           WallPlace == other.WallPlace && CreateWand == other.CreateWand && LiquidWand == other.LiquidWand &&
+                           PotionBag == other.PotionBag && BannerChest == other.BannerChest && Autofisher == other.Autofisher &&
+                           PaintWand == other.PaintWand && ConstructWand == other.ConstructWand && MoveChest == other.MoveChest &&
+                           CoinOne == other.CoinOne;
+                return base.Equals(obj);
+            }
+
+            public override int GetHashCode() {
+                return new
+                {
+                    MagickWand, SpaceWand, StarburstWand, WallPlace, CreateWand, LiquidWand, PotionBag,
+                    BannerChest, Autofisher, PaintWand, ConstructWand, MoveChest, CoinOne
+                }.GetHashCode();
+            }
+        }
+
+        #endregion
+
+        #region 预设
+
         [Header("$Mods.ImproveGame.Config.Presets.Header")]
 
         [Label("$Mods.ImproveGame.Config.ILoveBalance.Label")]
@@ -558,6 +667,8 @@ namespace ImproveGame.Common.Configs
                 }
             }
         }
+
+        #endregion
 
         [Header("$Mods.ImproveGame.Config.OtherFunctions.Header")]
         [Label("$Mods.ImproveGame.Config.OtherFunctions.Label")]

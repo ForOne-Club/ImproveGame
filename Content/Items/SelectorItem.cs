@@ -9,8 +9,6 @@ namespace ImproveGame.Content.Items
     /// </summary>
     public abstract class SelectorItem : ModItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
-
         public override void SetStaticDefaults()
         {
             Item.staff[Type] = true;

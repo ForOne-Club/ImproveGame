@@ -43,6 +43,7 @@
 - **[v1.6.2.1]** Added recipes of Wand of Void and Wand of Construction
 - **[v1.6.2.2]** Ammo in the Huge Inventory now can be used directly
 - **[v1.6.2.2]** Added Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
+- **[v1.6.2.2]** 模组物品开关现在每个物品之间独立
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)

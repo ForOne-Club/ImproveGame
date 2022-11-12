@@ -7,7 +7,7 @@ namespace ImproveGame.Content.Items.Placeable
     {
         public override void SetStaticDefaults() => SacrificeTotal = 1;
 
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.Autofisher;
 
         public override void SetDefaults()
         {
