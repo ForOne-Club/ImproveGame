@@ -23,6 +23,13 @@ namespace ImproveGame.Common.Players
         public static int SetupBuffListCooldown;
         public const int SetupBuffListCooldownTime = 180;
 
+        /// <summary>
+        /// 幸运药水特判
+        /// </summary>
+        public float LuckPotionBoost;
+
+        #region 杂项
+
         public static InfBuffPlayer Get(Player player) => player.GetModPlayer<InfBuffPlayer>();
         public static bool TryGet(Player player, out InfBuffPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
 
@@ -34,6 +41,14 @@ namespace ImproveGame.Common.Players
         {
             SetupBuffList(player);
         }
+
+        public override void ModifyLuck(ref float luck)
+        {
+            luck += LuckPotionBoost;
+            LuckPotionBoost = 0;
+        }
+
+        #endregion
 
         public override void PostUpdateBuffs() {
             if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
@@ -47,7 +62,7 @@ namespace ImproveGame.Common.Players
                 if (item.createTile is TileID.GardenGnome)
                     HideBuffSystem.HasGardenGnome = true;
 
-                int buffType = item.buffType;
+                int buffType = ApplyBuffItem.GetItemBuffType(item);
 
                 // 饱食三级Buff不应该覆盖，而是取最高级
                 bool wellFed3Enabled = Main.LocalPlayer.FindBuffIndex(BuffID.WellFed3) != -1;
@@ -66,6 +81,14 @@ namespace ImproveGame.Common.Players
                         break;
                     default:
                         Main.LocalPlayer.AddBuff(buffType, 2);
+
+                        // 幸运药水
+                        LuckPotionBoost = item.type switch
+                        {
+                            ItemID.LuckPotion => Math.Max(LuckPotionBoost, 0.1f),
+                            ItemID.LuckPotionGreater => Math.Max(LuckPotionBoost, 0.2f),
+                            _ => LuckPotionBoost
+                        };
                         break;
                 }
 
