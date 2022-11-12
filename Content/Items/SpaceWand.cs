@@ -19,11 +19,12 @@ namespace ImproveGame.Content.Items
 
     public class SpaceWand : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.SpaceWand;
+
         public PlaceType placeType;
         public int[] GrassSeed = new int[] { 2, 23, 60, 70, 199, 109, 82 };
 
         // 准备加上一个纵向的
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
         public override bool AltFunctionUse(Player player) => true;
         public override void SetStaticDefaults()
         {

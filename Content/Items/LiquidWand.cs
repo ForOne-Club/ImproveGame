@@ -9,6 +9,8 @@ namespace ImproveGame.Content.Items
 {
     public class LiquidWand : SelectorItem, IItemOverrideHover
     {
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.LiquidWand;
+
         // 修改物块
         public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ)
         {

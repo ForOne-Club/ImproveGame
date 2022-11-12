@@ -6,6 +6,8 @@ namespace ImproveGame.Content.Items
 {
     public class PaintWand : SelectorItem
     {
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PaintWand;
+
         public override bool ModifySelectedTiles(Player player, int i, int j)
         {
             var tile = Main.tile[i, j];

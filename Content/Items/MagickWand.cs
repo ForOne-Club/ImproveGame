@@ -9,6 +9,8 @@ namespace ImproveGame.Content.Items
 {
     public class MagickWand : SelectorItem
     {
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.MagickWand;
+
         public override bool ModifySelectedTiles(Player player, int i, int j)
         {
             SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);

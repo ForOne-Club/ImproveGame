@@ -5,8 +5,8 @@ namespace ImproveGame.Content.Items
     public class WallPlace : ModItem
     {
         public override void SetStaticDefaults() => SacrificeTotal = 1;
-
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
+        
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.WallPlace;
 
         public override void SetDefaults()
         {

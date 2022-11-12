@@ -443,12 +443,8 @@
             }
             LoadModItems:
             {
-                Label: "[centeritem:ImproveGame/WallPlace] 启用模组物品"
-                Tooltip:
-                    '''
-                    关闭后，本模组添加的物品将会从游戏中消失
-                    本配置页面包含的模组物品图标会变作一串字符
-                    '''
+                Label: "模组物品加载"
+                Tooltip: "关闭后，该物品将会从游戏中消失"
             }
             ShowModName.Label: "[centeritem:ImproveGame/SpaceWand] 显示物品所属模组"
             EmptyAutofisher:

@@ -13,7 +13,7 @@ namespace ImproveGame.Content.Items
 {
     public class PotionBag : ModItem, IItemOverrideLeftClick, IPackage
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
 
         public List<Item> storedPotions = new();
         private bool autoStorage;

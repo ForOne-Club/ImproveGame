@@ -6,6 +6,8 @@ namespace ImproveGame.Content.Items
 {
     public class StarburstWand : MagickWand
     {
+        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.StarburstWand;
+
         public override void SetItemDefaults()
         {
             Item.width = 40;
