@@ -38,7 +38,7 @@ namespace ImproveGame.Interface.GUI
                 if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering)
                 {
                     dragging = true;
-                    offset = evt.MousePosition - uie.GetPos();
+                    offset = evt.MousePosition - uie.GetPPos();
                 }
             };
             MainPanel.OnMouseUp += (evt, uie) => dragging = false;

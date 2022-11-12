@@ -1,11 +1,8 @@
 ﻿using ImproveGame.Common.Players;
-using ImproveGame.Content.Items;
 using ImproveGame.Interface.UIElements;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.ModLoader.Config;
-using Terraria.ID;
-using ImproveGame.Content;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -83,11 +80,6 @@ namespace ImproveGame.Common.GlobalItems
             {
                 return false;
             }
-            // 魔杖不消耗材料
-            if ((((item.createTile >= TileID.Dirt || item.createWall >= WallID.None) && item.stack > 999) ||
-                ((item.createTile == TileID.WorkBenches || item.createTile == TileID.Chairs || item.createTile == TileID.Beds) && item.stack > 99))
-                && ModItemID.NoConsumptionItems.Contains(player.HeldItem.type))
-                return false;
             return base.ConsumeItem(item, player);
         }
 
@@ -103,6 +95,8 @@ namespace ImproveGame.Common.GlobalItems
         // 额外提示
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
+            if (item.buffType > 0 && item.consumable)
+                tooltips.Add(new(Mod, "HasItemBuff", $"{(Main.LocalPlayer.HasBuff(item.buffType) ? "[c/20ff20:已拥有此药水的效果]" : "[c/ff2020:未拥有药水效果]")}"));
             // 更多信息
             if (Config.ShowItemMoreData)
             {
@@ -138,7 +132,10 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         // 额外拾取距离
-        public override void GrabRange(Item item, Player player, ref int grabRange) => grabRange += Config.GrabDistance * 16;
+        public override void GrabRange(Item item, Player player, ref int grabRange)
+        {
+            grabRange += Config.GrabDistance * 16;
+        }
 
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
@@ -167,7 +164,8 @@ namespace ImproveGame.Common.GlobalItems
         /// <returns></returns>
         public override bool ItemSpace(Item item, Player player)
         {
-            if (!DataPlayer.TryGet(player, out var dataPlayer)) return false;
+            if (!DataPlayer.TryGet(player, out var dataPlayer))
+                return false;
 
             if (Config.SuperVault && dataPlayer.SuperVault is not null && HasItemSpace(dataPlayer.SuperVault, item))
             {

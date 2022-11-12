@@ -28,7 +28,21 @@
             }
         }
 
-        public static Vector2 GetPos(this UIElement uie)
+        public static UIElement SetHPadding(this UIElement uie, float padding)
+        {
+            uie.PaddingLeft = padding;
+            uie.PaddingRight = padding;
+            return uie;
+        }
+
+        public static UIElement SetVPadding(this UIElement uie, float padding)
+        {
+            uie.PaddingTop = padding;
+            uie.PaddingBottom = padding;
+            return uie;
+        }
+
+        public static Vector2 GetPPos(this UIElement uie)
         {
             return new(uie.Left.Pixels, uie.Top.Pixels);
         }

@@ -44,7 +44,7 @@ namespace ImproveGame.Interface.BannerChestUI
                 if (!(close.IsMouseHovering || grid.Parent.IsMouseHovering))
                 {
                     dragging = true;
-                    offset = Main.MouseScreen - mainPanel.GetPos();
+                    offset = Main.MouseScreen - mainPanel.GetPPos();
                 }
             };
             mainPanel.OnMouseUp += (_, _) => dragging = false;

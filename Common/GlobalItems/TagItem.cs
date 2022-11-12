@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Players;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Terraria.GameContent;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Common.GlobalItems

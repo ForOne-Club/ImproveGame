@@ -1,48 +1,34 @@
 ﻿using ImproveGame.Common.GlobalBuffs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Content.Items;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ImproveGame.Common.Systems
 {
     public class HideBuffSystem : ModSystem
     {
-        /// <summary>
-        /// 无限 Buff
-        /// </summary>
-        internal static HashSet<int> InfiniteBuff = new();
-        /// <summary>
-        /// 用来保存各种物品的数量
-        /// </summary>
-        internal static Dictionary<int, int> PotionCount = new();
-        // 被禁用的无限 Buff
         internal static bool[] BuffTypesShouldHide = new bool[BuffLoader.BuffCount];
 
-        public override void PostSetupContent()
-        {
+        public override void PostSetupContent() {
             Array.Resize(ref BuffTypesShouldHide, BuffLoader.BuffCount);
         }
 
-        public static void ClearHideBuffArray()
-        {
-            for (int i = 0; i < BuffTypesShouldHide.Length; i++)
-            {
+        public static void ClearHideBuffArray(){
+            for (int i = 0; i < BuffTypesShouldHide.Length; i++) {
                 BuffTypesShouldHide[i] = false;
             }
         }
 
-        public static int HideBuffCount()
-        {
+        public static int HideBuffCount() {
             int count = 0;
-            for (int i = 0; i < BuffTypesShouldHide.Length; i++)
-            {
+            for (int i = 0; i < BuffTypesShouldHide.Length; i++) {
                 if (BuffTypesShouldHide[i])
                     count++;
             }
             return count;
         }
 
-        public override void PostDrawInterface(SpriteBatch spriteBatch)
-        {
+        public override void PostDrawInterface(SpriteBatch spriteBatch) {
             // 专门用来清除ApplyBuffItem.BuffTypesShouldHide的
             ClearHideBuffArray();
             HideGlobalBuff.HidedBuffCountThisFrame = 0;
