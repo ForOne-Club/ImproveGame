@@ -19,9 +19,9 @@ namespace ImproveGame.Content.Items
 
     public class SpaceWand : ModItem
     {
-
         public PlaceType placeType;
-        public int[] GrassSeed = new int[] { 2, 23, 60, 70, 199, 109, 82 };
+        // 草种
+        public HashSet<int> GrassSeed = new() { 2, 23, 60, 70, 199, 109, 82 };
 
         // 准备加上一个纵向的
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems;
@@ -154,10 +154,7 @@ namespace ImproveGame.Content.Items
                                     }
                                     else
                                     {
-                                        if (NeedKillTile(player, item, x, y))
-                                        {
-                                            TryKillTile(x, y, player);
-                                        }
+                                        TryKillTile(x, y, player);
                                         if (!Main.tile[x, y].HasTile)
                                         {
                                             if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
@@ -196,11 +193,6 @@ namespace ImproveGame.Content.Items
         public TextDisplayMode GetTextDisplayMode(Rectangle rectangle)
         {
             return rectangle.Width >= rectangle.Height ? TextDisplayMode.Width : TextDisplayMode.Height;
-        }
-
-        public bool NeedKillTile(Player player, Item item, int x, int y)
-        {
-            return Main.tile[x, y].HasTile && player.TileReplacementEnabled && !SameTile(x, y, item.createTile, item.placeStyle, (placeType == PlaceType.soild || placeType == PlaceType.rope) ? CheckType.Type : default);
         }
 
         public Rectangle GetRectangle(Player player)

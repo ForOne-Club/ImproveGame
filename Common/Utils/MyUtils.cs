@@ -1,22 +1,8 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.Players;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.GameInput;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.UI;
-using static ImproveGame.Common.GlobalItems.ImproveItem;
 using static Microsoft.Xna.Framework.Vector2;
 
 namespace ImproveGame
@@ -26,6 +12,9 @@ namespace ImproveGame
     /// </summary>
     partial class MyUtils
     {
+        // 获取配置
+        public static ImproveConfigs Config;
+
         public static Vector2 GetTextSize(string text)
         {
             return FontAssets.MouseText.Value.MeasureString(text);
@@ -432,11 +421,11 @@ namespace ImproveGame
         }
 
         /// <summary>
-        /// 堆叠物品到仓库
+        /// 将物品堆叠到给定 Item[]
         /// </summary>
         /// <param name="inventory"></param>
         /// <param name="item"></param>
-        /// <returns>堆叠后剩余的物品</returns>
+        /// <returns>如果无法全部堆叠到 Item[] 会返回剩余的物品，全部堆叠将返回 new Item()</returns>
         public static Item ItemStackToInventory(Item[] inventory, Item item, bool hint = true, int end = -1, int begin = 0)
         {
             end = (end == -1 ? inventory.Length : end);
@@ -559,10 +548,10 @@ namespace ImproveGame
             return item;
         }
 
-        public static readonly List<int> Bank2Items = new() { ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem };
-        public static readonly List<int> Bank3Items = new() { ItemID.Safe };
-        public static readonly List<int> Bank4Items = new() { ItemID.DefendersForge };
-        public static readonly List<int> Bank5Items = new() { ItemID.VoidLens, ItemID.VoidVault };
+        public static readonly HashSet<int> Bank2Items = new() { ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem };
+        public static readonly HashSet<int> Bank3Items = new() { ItemID.Safe };
+        public static readonly HashSet<int> Bank4Items = new() { ItemID.DefendersForge };
+        public static readonly HashSet<int> Bank5Items = new() { ItemID.VoidLens, ItemID.VoidVault };
 
         public static bool IsBankItem(int type) => Bank2Items.Contains(type) || Bank3Items.Contains(type) || Bank4Items.Contains(type) || Bank5Items.Contains(type);
 
@@ -574,8 +563,7 @@ namespace ImproveGame
         /// <returns></returns>
         public static bool HasItemSpace(Item[] inv, Item item)
         {
-            if (inv is null)
-                return false;
+            if (inv is null) return false;
             for (int i = 0; i < inv.Length; i++)
             {
                 if (inv[i] is not null && (inv[i].IsAir || (inv[i].type == item.type && inv[i].stack < inv[i].maxStack)))
@@ -600,9 +588,6 @@ namespace ImproveGame
             }
             return false;
         }
-
-        // 获取配置
-        public static ImproveConfigs Config;
 
         public static bool GetItemCount(Item[] inv, Func<Item, bool> func, out int count)
         {

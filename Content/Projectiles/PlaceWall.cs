@@ -1,13 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ImproveGame.Content.Projectiles
+﻿namespace ImproveGame.Content.Projectiles
 {
     public class PlaceWall : ModProjectile
     {

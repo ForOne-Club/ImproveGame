@@ -683,6 +683,8 @@
             }
             TagDetailed:
             {
+                OwnedInfineBuff: "[已获得无限 Buff 效果 已拥有: {Count}瓶 无限阈值: {Threshold}瓶]"
+                NotOwnedInfineBuff: "[未获得无限 Buff 效果 已拥有: {Count}瓶 无限阈值: {Threshold}瓶]"
                 GardenGnome: "[花园侏儒]"
                 Enabled: "[已启用]"
                 Disabled: "[已禁用]"

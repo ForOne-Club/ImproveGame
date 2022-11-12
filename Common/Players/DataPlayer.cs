@@ -1,7 +1,4 @@
-﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Packets;
-using ImproveGame.Interface.Common;
-using System.Collections.Generic;
+﻿using ImproveGame.Common.Packets;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.Players
@@ -11,8 +8,6 @@ namespace ImproveGame.Common.Players
         public static bool TryGet(Player player, out DataPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
         public static DataPlayer Get(Player player) => player.GetModPlayer<DataPlayer>();
 
-        // 保存的物品前缀，哥布林重铸栏
-        public int ReforgeItemPrefix = 0;
         private readonly int[] oldSuperVaultStack = new int[100]; // 上一帧的SuperVault的stack情况
         public Item[] SuperVault = new Item[100];
         public bool SuperVaultVisable;
