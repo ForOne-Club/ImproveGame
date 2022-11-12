@@ -19,7 +19,6 @@ namespace ImproveGame.Content.Items
 
     public class SpaceWand : ModItem
     {
-
         public PlaceType placeType;
         public int[] GrassSeed = new int[] { 2, 23, 60, 70, 199, 109, 82 };
 
@@ -154,10 +153,7 @@ namespace ImproveGame.Content.Items
                                     }
                                     else
                                     {
-                                        if (NeedKillTile(player, item, x, y))
-                                        {
-                                            TryKillTile(x, y, player);
-                                        }
+                                        TryKillTile(x, y, player);
                                         if (!Main.tile[x, y].HasTile)
                                         {
                                             if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))

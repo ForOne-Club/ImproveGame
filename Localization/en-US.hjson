@@ -673,6 +673,8 @@ Mods:
             }
             TagDetailed:
             {
+                OwnedInfineBuff: "[已获得无限 Buff 效果 {Count}/{Threshold}]"
+                NotOwnedInfineBuff: "[未获得无限 Buff 效果 {Count}/{Threshold}]"
                 GardenGnome: "[Garden Gnome]"
                 Enabled: "[Enabled]"
                 Disabled: "[Disabled]"
