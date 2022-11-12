@@ -44,7 +44,7 @@
 - **[v1.6.2.2]** Ammo in the Huge Inventory now can be used directly
 - **[v1.6.2.2]** Added Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
 - **[v1.6.2.2]** 模组物品开关现在每个物品之间独立
-- **[v1.6.2.2]** 空间/建筑/科技魔杖不再消耗堆叠数量大于等于 999 的材料。椅子、工作台、床大于等于 99 不再消耗。
+- **[v1.6.2.2]** 空间/建筑/科技魔杖不再消耗数量 >= 999 的材料。椅子/工作台/床数量 >= 99 不再消耗。
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
