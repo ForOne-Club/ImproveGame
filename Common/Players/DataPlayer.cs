@@ -21,20 +21,20 @@ namespace ImproveGame.Common.Players
         /// <summary>
         /// 记录ID
         /// </summary>
-        public HashSet<int> InfBuffDisabledVanilla;
+        public HashSet<int> InfBuffDisabledVanilla = new();
 
         /// <summary>
         /// 格式：Mod内部名/Buff类名
         /// </summary>
-        public HashSet<string> InfBuffDisabledMod;
+        public HashSet<string> InfBuffDisabledMod = new();
 
         public override void Initialize()
         {
+            InfBuffDisabledVanilla = new();
+            InfBuffDisabledMod = new();
             SuperVault = new Item[100];
             for (int i = 0; i < SuperVault.Length; i++)
-            {
                 SuperVault[i] ??= new Item();
-            }
         }
 
         public override void LoadData(TagCompound tag)
@@ -64,7 +64,7 @@ namespace ImproveGame.Common.Players
             if (Main.myPlayer != Player.whoAmI)
                 return;
 
-            bool RefreshRecipes = false;
+            bool refreshRecipes = false;
             // 侦测stack，如果有变化就发包
             for (int i = 0; i < 100; i++)
             {
@@ -75,7 +75,7 @@ namespace ImproveGame.Common.Players
                 }
                 if (SuperVault[i].stack != oldSuperVaultStack[i])
                 {
-                    RefreshRecipes = true;
+                    refreshRecipes = true;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
                         var packet = BigBagSlotPacket.Get(this, i);
@@ -86,7 +86,7 @@ namespace ImproveGame.Common.Players
                 if (SuperVault[i].IsAir)
                     oldSuperVaultStack[i] = 0;
             }
-            if (RefreshRecipes) Recipe.FindRecipes();
+            if (refreshRecipes) Recipe.FindRecipes();
         }
 
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)

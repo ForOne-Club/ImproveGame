@@ -17,6 +17,7 @@
 - **[v1.6.2.2]** Fixed Auto Research still functioning even not in Joureney mode
 - **[v1.6.2.2]** Fixed some Draw issue with the Huge Inventory
 - **[v1.6.2.2]** 修复了Fargo's Mutant Mod的喷泉环境功能开启时，钓鱼机在附近无喷泉的情况下会算作处于海洋环境的BUG
+- **[v1.6.2.3]** 修复了无法创建人物的BUG
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests

@@ -6,12 +6,6 @@ Discord: https://discord.gg/rEmGMQv5z7
 Discord: https://discord.gg/rEmGMQv5z7
 详细更新日志请见: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
 
-v1.6.2.2
+v1.6.2.3
   ● BUG修复
-	修复了即使没开启旅途模式收藏自动研究也会自动研究的BUG
-	修复了大背包物品的一些绘制问题
-	修复了Fargo's Mutant Mod的喷泉环境功能开启时，钓鱼机在附近无喷泉的情况下会算作处于海洋环境的BUG
-  ● 新增内容
-	【新功能】大背包内的弹药可以直接被使用
-	【新功能】提示简化(去除收藏提示,时装栏物品显示详细信息)功能
-	【功能调整】模组物品开关现在每个物品之间独立
+	修复了无法创建人物的BUG
