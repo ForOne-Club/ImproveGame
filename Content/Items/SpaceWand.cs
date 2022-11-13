@@ -154,10 +154,7 @@ namespace ImproveGame.Content.Items
                                     }
                                     else
                                     {
-                                        if (NeedKillTile(player, item, x, y))
-                                        {
-                                            TryKillTile(x, y, player);
-                                        }
+                                        TryKillTile(x, y, player);
                                         if (!Main.tile[x, y].HasTile)
                                         {
                                             if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))

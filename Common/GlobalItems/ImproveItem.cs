@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Players;
+using ImproveGame.Content;
 using ImproveGame.Interface.UIElements;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
@@ -8,12 +9,13 @@ namespace ImproveGame.Common.GlobalItems
 {
     public class ImproveItem : GlobalItem
     {
+        // 不需要对大小进行变动的就用 int[]
         // 铜，银，金
-        public static readonly HashSet<int> Coins = new() { 71, 72, 73 };
+        public static readonly int[] Coins = new int[] { 71, 72, 73 };
         // BOSS 召唤物
-        public static readonly HashSet<int> SummonItems_Boss = new() { 560, 43, 70, 1331, 1133, 5120, 4988, 556, 544, 557, 3601 };
+        public static readonly int[] SummonItems_Boss = new int[] { 560, 43, 70, 1331, 1133, 5120, 4988, 556, 544, 557, 3601 };
         // 特殊事件 召唤物
-        public static readonly HashSet<int> SummonItems_Events = new() { 4271, 361, 1315, 2767, 602, 1844, 1958 };
+        public static readonly int[] SummonItems_Events = new int[] { 4271, 361, 1315, 2767, 602, 1844, 1958 };
 
         public override void SetDefaults(Item item)
         {
@@ -80,6 +82,11 @@ namespace ImproveGame.Common.GlobalItems
             {
                 return false;
             }
+            // 魔杖 材料 999 不消耗
+            if ((((item.createTile >= TileID.Dirt || item.createWall > WallID.None) && item.stack > 999) ||
+                ((item.createTile == TileID.WorkBenches || item.createTile == TileID.Chairs || item.createTile == TileID.Beds) && item.stack > 99))
+                && ModItemID.NoConsumptionItems.Contains(player.HeldItem.type))
+                return false;
             return base.ConsumeItem(item, player);
         }
 
@@ -95,8 +102,6 @@ namespace ImproveGame.Common.GlobalItems
         // 额外提示
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (item.buffType > 0 && item.consumable)
-                tooltips.Add(new(Mod, "HasItemBuff", $"{(Main.LocalPlayer.HasBuff(item.buffType) ? "[c/20ff20:已拥有此药水的效果]" : "[c/ff2020:未拥有药水效果]")}"));
             // 更多信息
             if (Config.ShowItemMoreData)
             {
@@ -132,10 +137,7 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         // 额外拾取距离
-        public override void GrabRange(Item item, Player player, ref int grabRange)
-        {
-            grabRange += Config.GrabDistance * 16;
-        }
+        public override void GrabRange(Item item, Player player, ref int grabRange) => grabRange += Config.GrabDistance * 16;
 
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {

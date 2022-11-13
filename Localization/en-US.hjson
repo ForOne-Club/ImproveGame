@@ -179,8 +179,8 @@ Mods:
             }
             ResurrectionTimeShortened:
             {
-                Label: "[centeritem:3232] 重生加速"
-                Tooltip: 例如：25，则缩短 25% 复活时间！
+                Label: "[centeritem:3232] Faster Respawn"
+                Tooltip: Example: 25 means reduces respawn time by 25%
             }
             MiddleEnableBank:
             {
@@ -628,7 +628,7 @@ Mods:
         }
         CombatText_Commonds:
         {
-            ResurrectionTimeShortened: "重生加速 {Time} 秒 ！"
+            ResurrectionTimeShortened: "{Time}s reduced respawn time！"
         }
         Tips:
         {
@@ -669,6 +669,8 @@ Mods:
             }
             TagDetailed:
             {
+                OwnedInfineBuff: "[Infinite buff obtained {Count}/{Threshold}]"
+                NotOwnedInfineBuff: "[Infinite buff not obtained {Count}/{Threshold}]"
                 GardenGnome: "[Garden Gnome]"
                 Enabled: "[Enabled]"
                 Disabled: "[Disabled]"
