@@ -16,7 +16,7 @@
 - **[v1.6.2.1]** Fixed Fishing Machine does not drop items inside when destroyed
 - **[v1.6.2.2]** Fixed Auto Research still functioning even not in Joureney mode
 - **[v1.6.2.2]** Fixed some Draw issue with the Huge Inventory
-- **[v1.6.2.2]** 修复了Fargo's Mutant Mod的喷泉环境功能开启时，钓鱼机在附近无喷泉的情况下会算作处于海洋环境的BUG
+- **[v1.6.2.2]** Fixed Fishing Machine is considered in Ocean biome when Fargo's Mutant Mod's fountains biome feature is enabled and has no fountain nearby
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests
@@ -43,8 +43,8 @@
 - **[v1.6.2.1]** Added recipes of Wand of Void and Wand of Construction
 - **[v1.6.2.2]** Ammo in the Huge Inventory now can be used directly
 - **[v1.6.2.2]** Added Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
-- **[v1.6.2.2]** 模组物品开关现在每个物品之间独立
-- **[v1.6.2.2]** 空间/建筑/科技魔杖不再消耗数量 >= 999 的材料。椅子/工作台/床数量 >= 99 不再消耗。
+- **[v1.6.2.2]** Mod Item toggles are now independent to each other
+- **[v1.6.2.2]** Wand of Space/Architecture/Technology no longer consume materials stack not less than 999, 99 for chairs/workbenches/beds
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
