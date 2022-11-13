@@ -26,10 +26,21 @@ namespace ImproveGame.Common.Systems
             Array.Clear(BuffTypesShouldHide, 0, BuffTypesShouldHide.Length);
             HideGlobalBuff.HidedBuffCountThisFrame = 0;
             
-            // 更新InventoryGlow和BuffTypesShouldHide
-            foreach (var item in InfBuffPlayer.Get(Main.LocalPlayer).AvailableItems)
+            SetupShouldHideArray(Main.LocalPlayer);
+            if (Config.ShareInfBuffs)
+                CheckTeamPlayers(Main.LocalPlayer.whoAmI, SetupShouldHideArray);
+        }
+        
+        /// <summary>
+        /// 更新InventoryGlow和BuffTypesShouldHide
+        /// </summary>
+        /// <param name="player"></param>
+        public static void SetupShouldHideArray(Player player)
+        {
+            foreach (var item in InfBuffPlayer.Get(player).AvailableItems)
             {
-                ApplyBuffItem.UpdateInventoryGlow(item);
+                if (player.whoAmI == Main.myPlayer)
+                    ApplyBuffItem.UpdateInventoryGlow(item);
 
                 int buffType = ApplyBuffItem.GetItemBuffType(item);
                 if (buffType is not -1)
