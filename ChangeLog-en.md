@@ -5,6 +5,7 @@
 - v1.6.2
 - v1.6.2.1
 - v1.6.2.2
+- v1.6.2.3
 ## BUG Fixes
 - Fixed some issues with multiplayer mode
 - Fixed the pool cursor not showing in multiplayer mode
@@ -18,6 +19,8 @@
 - **[v1.6.2.2]** Fixed some Draw issue with the Huge Inventory
 - **[v1.6.2.2]** Fixed Fishing Machine is considered in Ocean biome when Fargo's Mutant Mod's fountains biome feature is enabled and has no fountain nearby
 - **[v1.6.2.3]** 修复了无法创建人物的BUG
+- **[v1.6.2.3]** 修复了多人模式下无法共享便携储存内增益的BUG
+- **[v1.6.2.3]** 修复了多人模式下共享增益无法被开关的BUG
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests

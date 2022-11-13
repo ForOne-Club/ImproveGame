@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Packets;
 using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 
@@ -54,7 +55,7 @@ namespace ImproveGame.Common.Players
 
         public override void OnEnterWorld(Player player)
         {
-            SetupBuffList(player);
+            SetupItemsList();
         }
 
         public override void ModifyLuck(ref float luck)
@@ -68,10 +69,22 @@ namespace ImproveGame.Common.Players
         public override void PostUpdateBuffs() {
             if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
                 return;
+                
+            ApplyAvailableBuffs(Player);
+            if (Config.ShareInfBuffs)
+                CheckTeamPlayers(Player.whoAmI, ApplyAvailableBuffs);
 
-            #region 应用增益
+            SetupBuffListCooldown++;
+            if (SetupBuffListCooldown % SetupBuffListCooldownTime != 0)
+                return;
 
-            foreach (var item in AvailableItems)
+            SetupItemsList();
+        }
+
+        public void ApplyAvailableBuffs(Player player)
+        {
+            var items = Get(player).AvailableItems;
+            foreach (var item in items)
             {
                 // 侏儒特判
                 if (item.createTile is TileID.GardenGnome)
@@ -127,32 +140,15 @@ namespace ImproveGame.Common.Players
                         break;
                 }
             }
-
-            #endregion
-
-            SetupBuffListCooldown++;
-            if (SetupBuffListCooldown % SetupBuffListCooldownTime != 0)
-                return;
-
-            SetupBuffList(Player);
-            if (Config.ShareInfBuffs)
-                CheckTeamPlayers(Player.whoAmI, SetupBuffList);
         }
-
-        #region 设置增益列表
-
+        
         /// <summary>
-        /// 设立无尽Buff列表
+        /// 设置物品列表
         /// </summary>
-        /// <param name="player">从某个玩家身上获取物品列表</param>
-        public void SetupBuffList(Player player)
-        {
-            // Get(player) 的好像就是当前这个对象。
-            Get(player).AvailableItems.Clear();
-            // 药水的总数和对应增益
-            // PotionStackAndBuff.Clear();
+        public void SetupItemsList() {
+            AvailableItems.Clear();
 
-            var items = GetAllInventoryItemsList(player, false);
+            var items = GetAllInventoryItemsList(Main.LocalPlayer, false);
             foreach (var item in items)
             {
                 HandleBuffItem(item);
@@ -164,29 +160,20 @@ namespace ImproveGame.Common.Players
                     }
                 }
             }
+
+            // 发包
+            InfBuffItemPacket.Get(this).Send(-1, -1, runLocally: false);
         }
 
         public void HandleBuffItem(Item item)
         {
             // 增益物品
             int buffType = ApplyBuffItem.GetItemBuffType(item);
-            // StackAndBuff Code
-            /*if (buffType != -1)
-            {
-                if (PotionStackAndBuff.ContainsKey(item.type))
-                {
-                    PotionStackAndBuff[item.type].stack += item.stack;
-                }
-                else
-                    PotionStackAndBuff.Add(item.type, new() { stack = item.stack, buffType = buffType });
-            }*/
             if (buffType is not -1 || item.createTile is TileID.GardenGnome)
             {
                 AvailableItems.Add(item);
             }
         }
-
-        #endregion
 
         private void BanBuffs(On.Terraria.Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet, bool foodHack)
         {
