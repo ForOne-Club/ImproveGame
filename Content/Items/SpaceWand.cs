@@ -24,7 +24,6 @@ namespace ImproveGame.Content.Items
         public PlaceType placeType;
         public int[] GrassSeed = new int[] { 2, 23, 60, 70, 199, 109, 82 };
 
-        // 准备加上一个纵向的
         public override bool AltFunctionUse(Player player) => true;
         public override void SetStaticDefaults()
         {
@@ -146,7 +145,7 @@ namespace ImproveGame.Content.Items
                                 if (player.TileReplacementEnabled)
                                 {
                                     // 函数作用：判断瓷砖是否可以更换
-                                    if (!WorldGen.IsTileReplacable(x, y)) return;
+                                    if (!WorldGen.IsTileReplacable(x, y) || !CanDestroyTileAnyCases(x, y, player)) return;
                                     if (WorldGen.ReplaceTile(x, y, (ushort)item.createTile, item.placeStyle))
                                     {
                                         playSound = true;

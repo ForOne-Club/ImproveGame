@@ -1,13 +1,12 @@
-﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Packets;
-using ImproveGame.Interface.Common;
-using System.Collections.Generic;
+﻿using ImproveGame.Common.Packets;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.Players
 {
     public class DataPlayer : ModPlayer
     {
+        internal static int RefreshTimer;
+        internal static bool RefreshRecipes;
         public static bool TryGet(Player player, out DataPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
         public static DataPlayer Get(Player player) => player.GetModPlayer<DataPlayer>();
 
@@ -64,7 +63,6 @@ namespace ImproveGame.Common.Players
             if (Main.myPlayer != Player.whoAmI)
                 return;
 
-            bool refreshRecipes = false;
             // 侦测stack，如果有变化就发包
             for (int i = 0; i < 100; i++)
             {
@@ -75,7 +73,7 @@ namespace ImproveGame.Common.Players
                 }
                 if (SuperVault[i].stack != oldSuperVaultStack[i])
                 {
-                    refreshRecipes = true;
+                    RefreshRecipes = true;
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                     {
                         var packet = BigBagSlotPacket.Get(this, i);
@@ -86,7 +84,12 @@ namespace ImproveGame.Common.Players
                 if (SuperVault[i].IsAir)
                     oldSuperVaultStack[i] = 0;
             }
-            if (refreshRecipes) Recipe.FindRecipes();
+            if (RefreshRecipes && RefreshTimer % 15 == 0)
+            {
+                RefreshRecipes = false;
+                Recipe.FindRecipes();
+            }
+            RefreshTimer++;
         }
 
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)

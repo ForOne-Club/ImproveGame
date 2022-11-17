@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.UIElements_Shader
@@ -82,7 +83,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             Vector2 position2 = position + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2), new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), AT.Schedule);
             PixelShader.DrawBox(Main.UIScaleMatrix, position2, boxSize2, boxSize2.Y / 2, 0, color2, color2);
 
-            DrawString(position + new Vector2(boxSize.X + Spacing * textScale, size.Y / 2 - textSize.Y * textScale / 2 + 5 * textScale), text, Color.White,
+            DrawString(position + new Vector2(boxSize.X + Spacing * textScale, size.Y / 2 - textSize.Y * textScale / 2 + UIConfigs.Instance.UIYAxisOffset * textScale), text, Color.White,
                 textBorderColor, textScale);
         }
     }

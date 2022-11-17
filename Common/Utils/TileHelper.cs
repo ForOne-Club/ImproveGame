@@ -243,6 +243,18 @@ namespace ImproveGame
             return !Main.tile[x, y].HasTile;
         }
 
+        public static bool CanDestroyTileAnyCases(int x, int y, Player player)
+        {
+            Tile tile = Main.tile[x, y];
+            if (!tile.HasTile)
+                return true;
+            if (!Main.tileHammer[tile.TileType])
+            {
+                return player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.CanKillTile(x, y);
+            }
+            return false;
+        }
+
         /// <summary>
         /// 你猜干嘛用的，bongbong！！！
         /// </summary>
@@ -282,16 +294,32 @@ namespace ImproveGame
                     TryConsumeItem(ref player.inventory[index], player, true);
                 else return false;
             }
-
-            TryKillTile(i, j, player);
-            bool success = WorldGen.PlaceTile(i, j, item.createTile, mute, forced, player.whoAmI, item.placeStyle);
+            bool success;
+            if (Main.tile[i, j].HasTile)
+            {
+                if (!ValidTileForReplacement(item, i, j))
+                    return false;
+                if (!CanDestroyTileAnyCases(i, j, player))
+                    return false;
+                if (WorldGen.ReplaceTile(i, j, (ushort)item.createTile, item.placeStyle))
+                {
+                    success = true;
+                }
+                else
+                {
+                    TryKillTile(i, j, player);
+                    success = WorldGen.PlaceTile(i, j, item.createTile, mute, forced, player.whoAmI, item.placeStyle);
+                }
+            }
+            else
+            {
+                success = WorldGen.PlaceTile(i, j, item.createTile, mute, forced, player.whoAmI, item.placeStyle);
+            }
             if (success)
             {
                 BongBong(new Vector2(i, j) * 16f, 16, 16);
                 if (playSound)
-                {
                     SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-                }
             }
             return success;
         }

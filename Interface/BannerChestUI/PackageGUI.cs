@@ -120,6 +120,7 @@ namespace ImproveGame.Interface.BannerChestUI
             grid.SetInventory(items);
             grid.scrollbar.ViewPosition = 0;
             this.title.Text = title;
+            this.title.RefreshSize();
             this.package = package;
             Recalculate();
         }

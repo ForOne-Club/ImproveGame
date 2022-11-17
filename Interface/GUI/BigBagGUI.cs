@@ -54,7 +54,7 @@ namespace ImproveGame.Interface.GUI
                 }
             };
 
-            MainPanel.Append(title = new(GetText("SuperVault.Name"), 0.5f) { HAlign = 0f });
+            MainPanel.Append(title = new(GetText("SuperVault.Name"), 0.5f));
 
             MainPanel.Append(CloseButton = new(30) { HAlign = 1f });
             CloseButton.Height.Pixels = title.Height();

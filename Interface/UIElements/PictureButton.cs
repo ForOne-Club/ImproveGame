@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.UIElements
@@ -8,15 +9,12 @@ namespace ImproveGame.Interface.UIElements
     /// </summary>
     public class PictureButton : UIElement
     {
-        // private readonly Texture2D Background = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/PanelGrayscale").Value;
-        // private readonly Texture2D BackgroundBorder = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelBorder").Value;
-
         public int[] data = new int[5];
         public AnimationTimer HoverTimer = new(2);
 
         public string text;
         public Vector2 textSize;
-        public Vector2 TextPosition => new(imagePosition.X + imageSize.X + 10, 6 + this.Height() / 2 - textSize.Y / 2);
+        public Vector2 TextPosition => new(imagePosition.X + imageSize.X + 10, UIConfigs.Instance.UIYAxisOffset + this.Height() / 2 - textSize.Y / 2);
 
         public Texture2D image;
         public Vector2 imageSize;
