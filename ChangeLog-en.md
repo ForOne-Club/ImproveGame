@@ -21,6 +21,7 @@
 - **[v1.6.2.3]** Fixed unable to creat new players
 - **[v1.6.2.3]** Fixed unable to share buffs in portable inventories in multiplayer
 - **[v1.6.2.3]** Fixed unable to toggle shared buffs in multiplayer
+- **[v1.6.2.4]** 修复了关闭随身增益站其他无限BUFF只生效一个的BUG
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests
