@@ -121,6 +121,7 @@ namespace ImproveGame.Content.Items
             {
                 bool playSound = false;
                 Rectangle platfromRect = GetRectangle(player);
+                // 瓷砖处理
                 ForeachTile(platfromRect, (x, y) =>
                 {
                     int oneIndex = EnoughItem(player, GetCondition());
@@ -129,6 +130,7 @@ namespace ImproveGame.Content.Items
                         Item item = player.inventory[oneIndex];
                         // 是否允许放置瓷砖，TML 的一个判定
                         if (!TileLoader.CanPlace(x, y, item.createTile)) return;
+                        // 草种（环境）
                         if (GrassSeed.Contains(item.createTile))
                         {
                             if (WorldGen.PlaceTile(x, y, item.createTile, true, false, player.whoAmI, item.placeStyle))
@@ -141,11 +143,17 @@ namespace ImproveGame.Content.Items
                         {
                             if (Main.tile[x, y].HasTile)
                             {
-                                if (!ValidTileForReplacement(item, x, y)) return;
                                 if (player.TileReplacementEnabled)
                                 {
-                                    // 函数作用：判断瓷砖是否可以更换
-                                    if (!WorldGen.IsTileReplacable(x, y) || !CanDestroyTileAnyCases(x, y, player)) return;
+                                    // 物品放置的瓷砖就是位置对应的瓷砖则无需替换
+                                    if (!ValidTileForReplacement(item, x, y))
+                                        return;
+
+                                    // 有没有足够强大的镐子破坏瓷砖
+                                    if (!player.HasEnoughPickPowerToHurtTile(x, y))
+                                        return;
+
+                                    // 开始替换
                                     if (WorldGen.ReplaceTile(x, y, (ushort)item.createTile, item.placeStyle))
                                     {
                                         playSound = true;
@@ -153,14 +161,12 @@ namespace ImproveGame.Content.Items
                                     }
                                     else
                                     {
+                                        // 尝试破坏
                                         TryKillTile(x, y, player);
-                                        if (!Main.tile[x, y].HasTile)
+                                        if (!Main.tile[x, y].HasTile && WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
                                         {
-                                            if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
-                                            {
-                                                playSound = true;
-                                                PickItemInInventory(player, GetCondition(), true, out _);
-                                            }
+                                            playSound = true;
+                                            PickItemInInventory(player, GetCondition(), true, out _);
                                         }
                                     }
                                 }
@@ -173,18 +179,15 @@ namespace ImproveGame.Content.Items
                                     PickItemInInventory(player, GetCondition(), true, out _);
                                 }
                             }
-                            player.hitReplace.TryClearingAndPruning(x, y, 1);
-                            player.hitTile.TryClearingAndPruning(x, y, 1);
                         }
                     }
                 }, (x, y, width, height) =>
                 {
-                    if (playSound) SoundEngine.PlaySound(SoundID.Dig);
+                    if (playSound)
+                        SoundEngine.PlaySound(SoundID.Dig);
 
                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
                         NetMessage.SendData(MessageID.TileSquare, player.whoAmI, -1, null, x, y, width, height);
-                    }
                 });
             }
         }

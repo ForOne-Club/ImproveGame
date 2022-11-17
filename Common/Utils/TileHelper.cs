@@ -231,7 +231,7 @@ namespace ImproveGame
             Tile tile = Main.tile[x, y];
             if (tile.HasTile && !Main.tileHammer[Main.tile[x, y].TileType])
             {
-                if (player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.CanKillTile(x, y))
+                if (player.HasEnoughPickPowerToHurtTile(x, y))
                 {
                     if (tile.TileType is 2 or 477 or 492 or 23 or 60 or 70 or 109 or 199 || Main.tileMoss[tile.TileType] || TileID.Sets.tileMossBrick[tile.TileType])
                     {
@@ -445,17 +445,23 @@ namespace ImproveGame
             lastMethod?.Invoke(minI, minJ, maxI - minI + 1, maxJ - minJ + 1);
         }
 
-        // 原版的私有方法，为空间魔杖做了一些删减
-        // 怎么用：传入要替换的物块，方法作用是判断两种物块是否是相同的，相同返回 true，不同反之。
+        /// <summary>
+        /// 原版的私有方法,作用是判断物品对应的物块和坐标的物块是不是一样的，为空间魔杖做了一些删减。
+        /// <br>相同的物块返回 false</br>
+        /// </summary>
+        /// <param name="tileItem"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public static bool ValidTileForReplacement(Item tileItem, int x, int y)
         {
             int createTile = tileItem.createTile;
             Tile tile = Main.tile[x, y];
+
             // 平台
             if (TileID.Sets.Platforms[tile.TileType] && tile.TileType == createTile)
-            {
                 return tile.TileFrameY != tileItem.placeStyle * 18;
-            }
+
             // 箱子
             if (TileID.Sets.BasicChest[tile.TileType] && TileID.Sets.BasicChest[createTile])
             {
@@ -465,6 +471,7 @@ namespace ImproveGame
                 }
                 return true;
             }
+
             // 梳妆台
             if (TileID.Sets.BasicDresser[tile.TileType] && TileID.Sets.BasicDresser[createTile])
             {
@@ -474,19 +481,17 @@ namespace ImproveGame
                 }
                 return true;
             }
+
             // 是不是一样的物块
             if (Main.tile[x, y].TileType == createTile)
-            {
                 return false;
-            }
+
             // 能否忽略掉落检查
             if (!TileID.Sets.IgnoresTileReplacementDropCheckWhenBeingPlaced[createTile])
             {
                 WorldGen.KillTile_GetItemDrops(x, y, tile, out var dropItem, out var _, out var _, out var _);
                 if (dropItem == tileItem.type)
-                {
                     return false;
-                }
             }
             return true;
         }
