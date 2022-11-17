@@ -83,8 +83,8 @@ namespace ImproveGame.Common.Players
 
         public void ApplyAvailableBuffs(Player player)
         {
-            var items = Get(player).AvailableItems;
-            foreach (var item in items)
+            List<Item> items = AvailableItems;
+            foreach (Item item in items)
             {
                 // 侏儒特判
                 if (item.createTile is TileID.GardenGnome)
@@ -122,7 +122,7 @@ namespace ImproveGame.Common.Players
 
                 // Buff站效果设置
                 if (!Config.NoPlace_BUFFTile)
-                    return;
+                    continue;
 
                 switch (buffType)
                 {
@@ -254,7 +254,8 @@ namespace ImproveGame.Common.Players
             DataPlayer dataPlayer = DataPlayer.Get(Main.LocalPlayer);
             ModBuff modBuff = BuffLoader.GetBuff(buffType);
             if (modBuff is null)
-            { // 原版
+            {
+                // 原版
                 if (dataPlayer.InfBuffDisabledVanilla is null || !dataPlayer.InfBuffDisabledVanilla.Contains(buffType))
                 {
                     return true;
