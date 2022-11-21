@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.Systems;
 
 namespace ImproveGame.Entitys
 {
