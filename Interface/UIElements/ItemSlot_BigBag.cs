@@ -297,7 +297,6 @@ namespace ImproveGame.Interface.UIElements
                 SetCursorOverride();
             }
 
-            Main.instance.LoadItem(Item.type);
             ApplyBuffItem.UpdateInventoryGlow(Item);
             DrawItemIcon(sb, Item, Color.White, dimensions);
 
@@ -311,6 +310,7 @@ namespace ImproveGame.Interface.UIElements
 
         public static void DrawItemIcon(SpriteBatch sb, Item Item, Color lightColor, CalculatedStyle dimensions, float maxSize = 32f)
         {
+            Main.instance.LoadItem(Item.type);
             Texture2D texture2D = TextureAssets.Item[Item.type].Value;
             Rectangle frame = Main.itemAnimations[Item.type] is null ? texture2D.Frame() : Main.itemAnimations[Item.type].GetFrame(texture2D);
             float size = frame.Width > maxSize || frame.Height > maxSize ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height : 1f;

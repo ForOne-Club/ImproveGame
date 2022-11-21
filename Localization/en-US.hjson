@@ -542,9 +542,6 @@ Mods:
                 Absorbing Mode: Absorbs the selected liquid within the selected area
                 Placing Mode: Fills the selected area with the selected liquid
                 If there is too much/too little liquid, no excess liquid will be absorbed/placed
-                Hold Empty Bucket(s) and long-press a liquid slot to deposit the liquid in the slot to the bucket
-                Hold Bucket(s) with liquid inside and long-press a liquid slot to store the liquid into the slot
-                Hold an Absorbant Sponge and long-press the corresponding liquid slot to absorb the liquid inside
                 '''
             PotionBag:
                 '''

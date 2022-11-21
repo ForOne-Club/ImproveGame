@@ -55,7 +55,7 @@ public class PrefixRecallGUI : UIState
         };
         Scrollbar.SetView(100f, 1000f);
         SetupScrollBar();
-        Append(Scrollbar);
+        _basePanel.Append(Scrollbar);
     }
         
     private void SetupScrollBar(bool resetViewPosition = true) {

@@ -13,9 +13,6 @@ float4 BoxFunc(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 position = coords * size;
     
-    float4 borderColor = lerp(borderColor1, borderColor2, coords.x);
-    float4 background = lerp(background1, background2, coords.x);
-    
     // 这样就可以当作在第二象限在右上角绘制一个圆角了
     // 圆角
     float2 origin = size / 2 - float2(radius, radius);
@@ -27,8 +24,13 @@ float4 BoxFunc(float2 coords : TEXCOORD0) : COLOR0
     int2 insxy = step(dxy, origin); // step x <= y 返回 1 否则 0
     int2 outsxy = step(dxy, corner);
     int outside = (insxy.x + insxy.y) % 2;
-    float length = distance(dxy, origin) * (1 - insxy.x) * (1 - insxy.y) + (dxy.x - (size.x / 2 - radius)) * outside * insxy.y + (dxy.y - (size.y / 2 - radius)) * outside * insxy.x;
-    float4 color = lerp(lerp(background, borderColor, smoothstep(radius - border, radius - border + GLURRANGE, length)), float4(0, 0, 0, 0), clamp((length - radius + GLURRANGE) / GLURRANGE, 0, 1));
+    float length
+    = distance(dxy, origin) * (1 - insxy.x) * (1 - insxy.y)
+    + (dxy.x - (size.x / 2 - radius)) * outside * insxy.y
+    + (dxy.y - (size.y / 2 - radius)) * outside * insxy.x;
+    float4 color
+    = lerp(lerp(background1, borderColor1, smoothstep(radius - border, radius - border + GLURRANGE, length))
+    , float4(0, 0, 0, 0), clamp((length - radius + GLURRANGE) / GLURRANGE, 0, 1));
     return color;
 }
 

@@ -8,4 +8,6 @@ Discord: https://discord.gg/rEmGMQv5z7
 
 v1.6.2.4
   ● BUG修复
+	修复了部分ModUI物品图标不显示的BUG
 	修复了关闭随身增益站其他无限BUFF只生效一个的BUG
+	新增一个 UI 配置项，用于调整 Mod 文字在 Y 轴的绘制位置偏移，更换字体材质包的时调整此项获得更好的视觉效果
