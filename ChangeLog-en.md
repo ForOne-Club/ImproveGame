@@ -21,8 +21,8 @@
 - **[v1.6.2.3]** Fixed unable to creat new players
 - **[v1.6.2.3]** Fixed unable to share buffs in portable inventories in multiplayer
 - **[v1.6.2.3]** Fixed unable to toggle shared buffs in multiplayer
-- **[v1.6.2.4]** 修复了部分ModUI物品图标不显示的BUG
-- **[v1.6.2.4]** 修复了关闭随身增益站其他无限BUFF只生效一个的BUG
+- **[v1.6.2.4]** Fixed certain item icons in ModUI not displaying
+- **[v1.6.2.4]** Fixed only one infinite buff can be active when Protable Buff Station is off
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests
@@ -51,7 +51,7 @@
 - **[v1.6.2.2]** Added Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
 - **[v1.6.2.2]** Mod Item toggles are now independent to each other
 - **[v1.6.2.2]** Wand of Space/Architecture/Technology no longer consume materials stack not less than 999, 99 for chairs/workbenches/beds
-- **[v1.6.2.4]** 新增一个 UI 配置项，用于调整 Mod 文字在 Y 轴的绘制位置偏移，更换字体材质包的时调整此项获得更好的视觉效果
+- **[v1.6.2.4]** Added a UI config, to adjust the offset on Y axis of mod texts, modify this to get visual performance when using font packs
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
