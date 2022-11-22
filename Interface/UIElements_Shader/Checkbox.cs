@@ -76,12 +76,12 @@ namespace ImproveGame.Interface.UIElements_Shader
             Vector2 size = GetInnerDimensions().Size();
             Vector2 boxSize = new Vector2(48, 26) * textScale;
 
-            PixelShader.DrawBox(Main.UIScaleMatrix, position + new Vector2(0, size.Y / 2 - boxSize.Y / 2),
-                boxSize, boxSize.Y / 2, 3, color2, color);
+            Vector2 position1 = position + new Vector2(0, size.Y / 2 - boxSize.Y / 2);
+            PixelShader.DrawRoundRect(position1, boxSize, boxSize.Y / 2, color, 3, color2);
 
             Vector2 boxSize2 = new(boxSize.Y - 10 * textScale);
             Vector2 position2 = position + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2), new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), AT.Schedule);
-            PixelShader.DrawBox(Main.UIScaleMatrix, position2, boxSize2, boxSize2.Y / 2, 0, color2, color2);
+            PixelShader.DrawRoundRect(position2, boxSize2, boxSize2.Y / 2, color2);
 
             DrawString(position + new Vector2(boxSize.X + Spacing * textScale, size.Y / 2 - textSize.Y * textScale / 2 + UIConfigs.Instance.UIYAxisOffset * textScale), text, Color.White,
                 textBorderColor, textScale);

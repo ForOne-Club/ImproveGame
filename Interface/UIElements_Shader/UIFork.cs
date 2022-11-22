@@ -1,23 +1,24 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Interface.Common;
+using System.Threading;
 
 namespace ImproveGame.Interface.UIElements_Shader
 {
     public class UIFork : UIElement
     {
-        public float size;
+        public float forkSize;
         public float radius;
         public float border;
         public AnimationTimer hoverTimer;
 
-        public UIFork(float size)
+        public UIFork(float forkSize)
         {
             hoverTimer = new();
             radius = 3.7f;
             border = 2;
-            this.size = size;
-            Width.Pixels = size + 20;
-            Height.Pixels = size + 10;
+            this.forkSize = forkSize;
+            Width.Pixels = forkSize + 20;
+            Height.Pixels = forkSize + 10;
         }
 
         public override void Update(GameTime gameTime)
@@ -40,14 +41,14 @@ namespace ImproveGame.Interface.UIElements_Shader
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            Color background = Color.Lerp(UIColor.Default.TitleBackground * 0.5f, UIColor.Default.TitleBackground * 0.75f, hoverTimer.Schedule);
+            Color background = Color.Lerp(UIColor.Default.TitleBackground * 0.25f, UIColor.Default.TitleBackground * 0.75f, hoverTimer.Schedule);
             Color fork = Color.Lerp(Color.Transparent, UIColor.Default.CloseBackground, hoverTimer.Schedule);
 
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
-            PixelShader.DrawRoundRectangle(pos, size, 12f, UIColor.Default.PanelBackground, 3, UIColor.Default.PanelBorder);
-            PixelShader.DrawFork(pos + size / 2 - new Vector2(this.size / 2), this.size, radius,
-                fork, border, UIColor.Default.CloseBorder);
+            PixelShader.DrawRoundRect(pos, size, 10f, background, 3f, UIColor.Default.CloseBorder);
+            Vector2 forkPos = pos + size / 2 - new Vector2(forkSize / 2);
+            PixelShader.DrawFork(forkPos, forkSize, radius, fork, border, UIColor.Default.CloseBorder);
         }
     }
 }

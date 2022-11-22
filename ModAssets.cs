@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Interface.Common;
-using log4net.Util;
 using System.Reflection;
 
 namespace ImproveGame
@@ -8,7 +7,8 @@ namespace ImproveGame
     public class ModAssets : ModSystem
     {
         internal static Asset<Effect> Fork;
-        internal static Asset<Effect> RoundRectangle;
+        internal static Asset<Effect> RoundRect;
+        internal static Asset<Effect> RoundRectNoBorder;
         internal static Asset<Effect> BoxShader;
         internal static Asset<Effect> ItemEffect;
         internal static Asset<Effect> LiquidSurface;
@@ -18,12 +18,11 @@ namespace ImproveGame
         public override void Load()
         {
             if (Main.dedServ)
-            {
                 return;
-            }
 
-            Fork = GetEffect(nameof(Fork));
-            RoundRectangle = GetEffect(nameof(RoundRectangle));
+            Fork = GetEffect("Fork");
+            RoundRect = GetEffect("RoundRect");
+            RoundRectNoBorder = GetEffect("RoundRectNoBorder");
             BoxShader = GetEffect("Box");
             ItemEffect = GetEffect("item");
             LiquidSurface = GetEffect("LiquidSurface");
@@ -66,7 +65,8 @@ namespace ImproveGame
             }
 
             Fork = null;
-            RoundRectangle = null;
+            RoundRect = null;
+            RoundRectNoBorder = null;
             BoxShader = null;
             ItemEffect = null;
             LiquidSurface = null;
