@@ -5,7 +5,7 @@
         /// <summary>
         /// 不会改变原有的所有参数, 但是只能使用只有一个 PixelShader 的 Shader.
         /// </summary>
-        public static void Begin(this SpriteBatch sb, Effect effect, Matrix matrix)
+        public static void ReBegin(this SpriteBatch sb, Effect effect, Matrix matrix)
         {
             sb.End();
             // SpriteSortMode 精灵排序模式

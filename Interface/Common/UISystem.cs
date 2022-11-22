@@ -186,12 +186,18 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Autofisher GUI", DrawAutofishGUI, InterfaceScaleType.UI));
 
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: BigBag GUI",
-                    () => { if (BigBagGUI.Visible) BigBagGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
-
-                layers.Insert(inventoryIndex + 1,
-                    new LegacyGameInterfaceLayer("ImproveGame: Package GUI", () =>
+                    () =>
                     {
-                        if (PackageGUI.Visible) PackageGUI.Draw(Main.spriteBatch);
+                        if (BigBagGUI.Visible)
+                            BigBagGUI.Draw(Main.spriteBatch);
+                        return true;
+                    }, InterfaceScaleType.UI));
+
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Package GUI",
+                    () =>
+                    {
+                        if (PackageGUI.Visible)
+                            PackageGUI.Draw(Main.spriteBatch);
                         return true;
                     }, InterfaceScaleType.UI));
 

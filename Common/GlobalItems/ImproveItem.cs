@@ -150,7 +150,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
             {
-                sb.Begin(null, Main.UIScaleMatrix);
+                sb.ReBegin(null, Main.UIScaleMatrix);
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
             }
         }
