@@ -6,12 +6,17 @@ float border;
 float4 borderColor;
 float4 backgroundColor;
 
+float sdRoundedBox(float2 p, float2 b, float r)
+{
+    return length(max(abs(p) - b, 0.0)) - r;
+}
+
 float4 RoundRectangle(float2 coords : TEXCOORD0) : COLOR0
 {
-    float2 rt = size / 2;
-    float2 pos = abs(coords * size - rt);
-    float distanceR = distance(pos, clamp(pos, 0, rt - round));
-    return lerp(lerp(backgroundColor, borderColor, smoothstep(round - border, round - border + 1, distanceR)), 0, smoothstep(round - 1, round, distanceR));
+    float2 hsize = size / 2;
+    float2 pos = abs(coords * size - hsize);
+    float Length = sdRoundedBox(pos, hsize - round, round);
+    return lerp(lerp(backgroundColor, borderColor, smoothstep(-border - 1, -border, Length)), 0, smoothstep(0, 1, Length));
 }
 
 technique Technique1

@@ -19,7 +19,7 @@ public class PrefixRecallGUI : UIState
     private const float PanelLeft = 54f;
     private const float PanelTop = 340f;
     private const float PanelHeight = 330f;
-    private const float PanelWidth = 360f;
+    private const float PanelWidth = 388f;
 
     private SUIPanel _basePanel; // 背景板
     public ZeroScrollbar Scrollbar; // 拖动条
@@ -33,32 +33,28 @@ public class PrefixRecallGUI : UIState
         _basePanel.Width.Set(PanelWidth, 0f);
         _basePanel.Height.Set(PanelHeight, 0f);
         Append(_basePanel);
-        
+
         UIList = new UIList
         {
-            Width = StyleDimension.FromPercent(1f),
-            Height = StyleDimension.FromPercent(1f),
-            Top = StyleDimension.FromPixels(6f),
-            PaddingBottom = 4f,
-            PaddingTop = 4f,
+            Width = new(-28f, 1f),
+            Height = new(0, 1f),
             ListPadding = 4f,
+            ManualSortMethod = _ => { }
         };
-        UIList.SetPadding(2f);
-        UIList.ManualSortMethod = _ => { };
         _basePanel.Append(UIList);
 
-        Scrollbar = new()
+        Scrollbar = new ZeroScrollbar
         {
-            Top = _basePanel.Top,
-            Left = _basePanel.Left,
-            Height = StyleDimension.FromPixels(PanelHeight)
+            HAlign = 1f,
+            Height = new(0, 1f)
         };
         Scrollbar.SetView(100f, 1000f);
         SetupScrollBar();
         _basePanel.Append(Scrollbar);
     }
-        
-    private void SetupScrollBar(bool resetViewPosition = true) {
+
+    private void SetupScrollBar(bool resetViewPosition = true)
+    {
         float height = UIList.GetInnerDimensions().Height;
         Scrollbar.SetView(height, UIList.GetTotalHeight());
         if (resetViewPosition)
@@ -71,8 +67,9 @@ public class PrefixRecallGUI : UIState
         if (_basePanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
             Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
     }
-        
-    public override void Update(GameTime gameTime) {
+
+    public override void Update(GameTime gameTime)
+    {
         if (!Visible)
         {
             _oldItemType = ItemID.None;
@@ -83,10 +80,6 @@ public class PrefixRecallGUI : UIState
 
         if (Scrollbar.IsMouseHovering) // 不知道为啥默认没有
             Main.LocalPlayer.mouseInterface = true;
-
-        Scrollbar.Top = _basePanel.Top;
-        Scrollbar.Left.Pixels = _basePanel.Left.Pixels + 10f + PanelWidth;
-        Recalculate();
 
         if (_oldItemType != Main.reforgeItem.type || _oldPrefixCount != Main.reforgeItem.GetGlobalItem<ImprovePrefixItem>().Prefixs.Count)
         {
@@ -105,13 +98,14 @@ public class PrefixRecallGUI : UIState
         }
         UIList.Recalculate();
 
-        if (_basePanel.IsMouseHovering || Scrollbar.IsMouseHovering) {
+        if (_basePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
+        {
             PlayerInput.LockVanillaMouseScroll("ImproveGame: Prefix Recall GUI");
         }
 
         base.DrawSelf(spriteBatch);
     }
-        
+
     public void SetupList()
     {
         UIList.Clear();
@@ -177,7 +171,7 @@ public class PrefixTab : SUIPanel
             Color = Color.Lerp(Color.White, new Color(63, 65, 151, 255), 0.85f) * 0.7f
         };
         Append(separator);
-        
+
         var reforgeButton = new UIImage(TextureAssets.Reforge[0])
         {
             Top = new StyleDimension(separator.Height.Pixels + separator.Top.Pixels + 6f, 0f),
@@ -185,7 +179,8 @@ public class PrefixTab : SUIPanel
         };
         reforgeButton.SetSize(24f, 24f);
         reforgeButton.OnClick += (_, _) => Reforge(reforgeButton);
-        reforgeButton.OnUpdate += _ => {
+        reforgeButton.OnUpdate += _ =>
+        {
             string str = Lang.inter[19].Value;
             reforgeButton.Color = Color.White;
             if (PrefixId == Item.prefix)
@@ -198,11 +193,13 @@ public class PrefixTab : SUIPanel
                 Main.instance.MouseText(str);
             }
         };
-        reforgeButton.OnMouseOver += (_, _) => {
+        reforgeButton.OnMouseOver += (_, _) =>
+        {
             if (PrefixId != Item.prefix)
                 reforgeButton.SetImage(TextureAssets.Reforge[1]);
         };
-        reforgeButton.OnMouseOut += (_, _) => {
+        reforgeButton.OnMouseOut += (_, _) =>
+        {
             reforgeButton.SetImage(TextureAssets.Reforge[0]);
         };
         Append(reforgeButton);

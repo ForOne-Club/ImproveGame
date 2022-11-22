@@ -45,7 +45,7 @@ namespace ImproveGame.Interface.UIElements_Shader
 
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
-            PixelShader.DrawRoundRectangle(pos, size, 8f, background, 0, Color.Transparent);
+            PixelShader.DrawRoundRectangle(pos, size, 12f, UIColor.Default.PanelBackground, 3, UIColor.Default.PanelBorder);
             PixelShader.DrawFork(pos + size / 2 - new Vector2(this.size / 2), this.size, radius,
                 fork, border, UIColor.Default.CloseBorder);
         }

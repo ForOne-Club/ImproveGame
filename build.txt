@@ -1,6 +1,6 @@
 displayName = Quality of Life 更好的体验
 author = 局长, Cyril, 夜谷紫幽, delete, Lacewing, Lastprismer
-version = 1.6.2.4
+version = 1.6.2.5
 buildIgnore = *.gif
 includeSource = true
 dllReferences = NetSimplified
