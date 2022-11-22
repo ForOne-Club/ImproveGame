@@ -71,7 +71,8 @@ namespace ImproveGame.Interface.BannerChestUI
                 Visible = false;
             };
 
-            mainPanel.Append(gridPanel = new(Color.Black, new(35, 40, 83, 160), 12, 3, false));
+            mainPanel.Append(gridPanel = new(Color.Transparent, /*new(35, 40, 83, 160)*/ Color.Transparent, 12, 3, false));
+            gridPanel.SetPadding(0);
             gridPanel.Append(grid = new());
             gridPanel.OnMouseDown += GridPanel_OnMouseDown;
             gridPanel.Top.Pixels = checkbox.Bottom() + 8f;

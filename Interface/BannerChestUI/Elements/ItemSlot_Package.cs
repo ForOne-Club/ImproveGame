@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.UIElements;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
@@ -72,11 +73,8 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
             CalculatedStyle dimensions = GetDimensions();
             PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, UIColor.Default.SlotNoFavoritedBorder, UIColor.Default.SlotNoFavoritedBackground);
 
-            DrawItem(sb, Item, Color.White, dimensions, 30);
+            ItemSlot_BigBag.DrawItemIcon(sb, Item, Color.White, dimensions, 30);
 
-            /*Vector2 textSize = GetTextSize(index.ToString()) * 0.75f;
-            Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.15f, (52 - textSize.Y) * 0.15f);
-            TrUtils.DrawBorderString(sb, (index + 1).ToString(), textPos, Color.White, 0.75f);*/
             if (!Item.IsAir && Item.stack > 1)
             {
                 Vector2 textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
@@ -161,29 +159,6 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
                 Item = new Item();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
-        }
-
-        public static void DrawItem(SpriteBatch sb, Item Item, Color lightColor, CalculatedStyle dimensions, float ItemSize = 30f)
-        {
-            Main.instance.LoadItem(Item.type);
-            var ItemTexture2D = TextureAssets.Item[Item.type];
-
-            Rectangle rectangle;
-            if (Main.itemAnimations[Item.type] is null)
-                rectangle = ItemTexture2D.Frame(1, 1, 0, 0);
-            else
-                rectangle = Main.itemAnimations[Item.type].GetFrame(ItemTexture2D.Value);
-
-            float size = rectangle.Width > ItemSize || rectangle.Height > ItemSize ?
-                rectangle.Width > rectangle.Height ? ItemSize / rectangle.Width : ItemSize / rectangle.Height :
-                1f;
-
-            sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                new Rectangle?(rectangle), Item.GetAlpha(lightColor), 0f, Vector2.Zero, size,
-                SpriteEffects.None, 0f);
-            sb.Draw(ItemTexture2D.Value, dimensions.Center() - rectangle.Size() * size / 2f,
-                new Rectangle?(rectangle), Item.GetColor(lightColor), 0f, Vector2.Zero, size,
-                SpriteEffects.None, 0f);
         }
     }
 }

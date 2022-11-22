@@ -16,7 +16,8 @@ namespace ImproveGame.Interface.GUI
         {
             get
             {
-                if (!Main.playerInventory) visible = false;
+                if (!Main.playerInventory)
+                    visible = false;
                 return visible;
             }
             set => visible = value;

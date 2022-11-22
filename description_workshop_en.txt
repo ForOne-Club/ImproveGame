@@ -1,5 +1,4 @@
 ﻿[h1]Quality of Life, a mod to greatly improve your gameplay experience[/h1]
-[h3]For unknown reasons the Steam description screen does not display the link, please check the changelog and source code link in "Change Notes"[/h3]
 [h2][url=https://discord.gg/rEmGMQv5z7]Discord[/url][/h2]
 These features may bring you better gameplay experience
 Only some functions are enabled by default, please check mod configurations for details

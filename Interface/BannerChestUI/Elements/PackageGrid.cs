@@ -20,7 +20,7 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
             Vector2 liseSize = list.DisplaySize;
             // 滚动条, 一定要放到滚动主体后面, 问就是 UIElement 的锅.
             Append(scrollbar = new());
-            scrollbar.Left.Pixels = liseSize.X + 7;
+            scrollbar.Left.Pixels = liseSize.X + 8;
             scrollbar.Height.Pixels = liseSize.Y;
 
             // 既然尺寸都已知了, 那就直接设置他们父元素的大小吧.

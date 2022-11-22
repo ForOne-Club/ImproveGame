@@ -142,10 +142,7 @@ namespace ImproveGame.Common.GlobalItems
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
-            {
                 ItemSlot_BigBag.OpenItemGlow(sb);
-                return true;
-            }
             return true;
         }
 

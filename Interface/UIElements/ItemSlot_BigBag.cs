@@ -287,19 +287,15 @@ namespace ImproveGame.Interface.UIElements
             Color borderColor = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBorder : UIColor.Default.SlotNoFavoritedBorder;
             Color background = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBackground : UIColor.Default.SlotNoFavoritedBackground;
             PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, borderColor, background);
-
-            if (Item.IsAir) return;
-
+            if (Item.IsAir)
+                return;
             if (IsMouseHovering)
             {
                 Main.hoverItemName = Item.Name;
                 Main.HoverItem = Item.Clone();
                 SetCursorOverride();
             }
-
-            ApplyBuffItem.UpdateInventoryGlow(Item);
             DrawItemIcon(sb, Item, Color.White, dimensions);
-
             if (Item.stack > 1)
             {
                 Vector2 textSize = GetTextSize(Item.stack.ToString()) * 0.75f;
@@ -319,7 +315,8 @@ namespace ImproveGame.Interface.UIElements
             if (ItemLoader.PreDrawInInventory(Item, sb, position, frame, Item.GetAlpha(lightColor), Item.GetColor(lightColor), origin, size))
             {
                 sb.Draw(texture2D, position, (Rectangle?)frame, Item.GetAlpha(lightColor), 0f, Vector2.Zero, size, SpriteEffects.None, 0f);
-                if (Item.color != Color.Transparent) sb.Draw(texture2D, position, (Rectangle?)frame, Item.GetColor(lightColor), 0f, Vector2.Zero, size, SpriteEffects.None, 0f);
+                if (Item.color != Color.Transparent)
+                    sb.Draw(texture2D, position, (Rectangle?)frame, Item.GetColor(lightColor), 0f, Vector2.Zero, size, SpriteEffects.None, 0f);
             }
             ItemLoader.PostDrawInInventory(Item, sb, position, frame, Item.GetAlpha(lightColor), Item.GetColor(lightColor), origin, size);
         }
