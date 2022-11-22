@@ -1,0 +1,331 @@
+﻿Mods:
+{
+    ImproveGame:
+    {
+        ModName: "更好的体验"
+		MapObject:
+        {
+			Autofisher: 自动钓鱼机
+		}
+        ItemDropRule:
+        {
+            WandDrop: 玩家拥有当前物品时不会再次掉落
+        }
+        CombatText_Item:
+        {
+            CreateWand_NotEnough: "材料不足！"
+            SpaceWand_Cancel: "取消放置！"
+            SpaceWand_Lack: "平台不足！"
+            WallPlace_Limit: "此区域过大！"
+            WallPlace_Consume: "预计消耗："
+            WallPlace_Kill: "已停止工作！"
+        }
+        CombatText_Projectile:
+        {
+            PlaceWall_Lack: "墙体不足，停止工作！"
+        }
+        CombatText_Commonds:
+        {
+            ResurrectionTimeShortened: "重生加速 {Time} 秒 ！"
+        }
+        Tips:
+        {
+            PrefixCount: "物品重铸次数："
+            AnglerQuest: "已刷新钓鱼任务！"
+            FromMod: "所属模组 {DisplayName}"
+            LootDisplay: "按下 {KeybindName} 以查看摸彩袋物品明细"
+            LootDisplayBindless: "(您尚未绑定快捷键，请到控件处绑定以使用此功能)"
+            Refreshing: "刷新中"
+            Refresh: "刷新商店"
+            SummonSlot: "召唤栏位占用: [c/22CC22:{Current}/{Total}]"
+            SummonSlotFull: "召唤栏位占用: [c/CC2222:{Current}/{Total} (已满!)]"
+
+            BuffTrackerOn: "<left>以打开增益追踪器"
+            BuffTrackerOff: "<left>以关闭增益追踪器"
+            BankEnableOn: "中键单击以打开个人储存库"
+            BankEnableOff: "中键单击以关闭个人储存库"
+            CreateWandOn: "中键单击以开启房屋材料面板"
+            CreateWandOff: "中键单击以关闭房屋材料面板"
+            LiquidWandOn: "中键单击以开启液体控制面板"
+            LiquidWandOff: "中键单击以关闭液体控制面板"
+
+            PotionBagCurrent: "该药水袋内目前拥有下列药水 ({StoredCount}/200):"
+            PotionBagCurrentFull: "该药水袋内目前拥有下列药水 (已满!):"
+            PotionBagNone: "该药水袋未装有药水 (0/200)"
+            PotionBagAvailable: "(生效中)"
+            PotionBagUnavailable: "(未生效)"
+            PotionBagDisabled: "(被禁用)"
+
+            BannerChestCurrent: "该旗帜箱内目前拥有下列旗帜 ({StoredCount}/500):"
+            BannerChestCurrentFull: "该旗帜箱内目前拥有下列旗帜 (已满!):"
+            BannerChestNone: "该旗帜箱未装有旗帜 (0/500)"
+            BannerChestUseless: "便携旗帜功能未开启，放入其中的旗帜不会有任何用处"
+            
+            Tag:
+            {
+                ShiftEnable: "[按住 [c/88CCEE:Shift] 键以了解更多信息]"
+            }
+            TagDetailed:
+            {
+                OwnedInfineBuff: "[已获得无限 Buff 效果 {Count}/{Threshold}]"
+                NotOwnedInfineBuff: "[未获得无限 Buff 效果 {Count}/{Threshold}]"
+                GardenGnome: "[花园侏儒]"
+                Enabled: "[已启用]"
+                Disabled: "[已禁用]"
+                Hided: "[增益图标已隐藏]"
+                NonHided: "[增益图标未隐藏]"
+                CombinedBuff: "[存在可用的增益组合]"
+                AutoCollect: "[自动存钱]"
+            }
+            TagDetailedTip:
+            {
+                GardenGnome:
+                    '''
+                    花园侏儒的幸运加成已应用
+                    你无法开关此效果，因为这不是一个增益
+                    '''
+                Enabled:
+                    '''
+                    物品增益 [c/88CCEE:[{BuffName}][c/88CCEE:]] 已自动应用
+                    如果你想要单独禁用该物品的增益
+                    请中键点击该物品或左键点击增益图标
+                    开启增益追踪器，以控制增益是否启用
+                    '''
+                Disabled:
+                    '''
+                    物品增益 [c/88CCEE:[{BuffName}][c/88CCEE:]] 已因设置被禁用
+                    中键点击该物品或左键点击增益图标
+                    开启增益追踪器，以控制增益是否启用
+                    '''
+                Hided:
+                    '''
+                    增益图标已从Buff栏中隐藏
+                    如果想要显示请在模组配置中修改
+                    '''
+                NonHided: 
+                    '''
+                    如果想要隐藏无限续杯增益图标，请在模组配置中修改
+                    '''
+                AutoCollect:
+                    '''
+                    已开启自动存钱，在你的任意储存有该物品时，
+                    钱币会自动存入存钱罐
+                    如果想要关闭请在模组配置中修改
+                    商人的生成条件会同时计算存钱罐内的钱币
+                    '''
+                CombinedBuff:
+                {
+                    Battle:
+                        '''
+                        [c/88CCEE:增益组合: ][i:CalmingPotion][i:Sunflower][i:PeaceCandle][i:WaterCandle][i:BattlePotion]
+                        当你同时拥有以上无限增益物品时
+                        在增益追踪器右侧会显示一个生物生成
+                        速度滑块，允许你将生物生成速度调至
+                        x0-x{MaxSpawn}
+                        '''
+                }
+            }
+        }
+        ConstructGUI:
+        {
+            Structure: "建筑结构" # 这个是存储后的文件名
+            SavedAs: "结构已存储为文件 "
+            SaveMode: "存储模式"
+            LoadMode: "放置模式"
+            ExplodeAndPlace: "爆破并放置"
+            PlaceOnly: "仅放置"
+            Path: "文件路径: "
+            RenameTip:
+            {
+                Exists: "已经存在一个相同名称的文件"
+                TooLong: "名称不能超过40个字符"
+                Illegal: "文件名不能包含以下字符: \\、/、:、*、?、\"、<、>、|"
+            }
+            FileInfo:
+            {
+                Title: "文件信息"
+                Name: "文件名: {Name}"
+                Time: "保存时间: {Time}"
+                Version: "版本号: {Version}"
+                Size: "结构尺寸: {Size}"
+                ModMissing.Count: "2"
+                ModMissing.1: "该结构包含未被加载的模组的物块或背景墙"
+                ModMissing.2: "放置有可能发生错误"
+                LoadError: "文件不合法或不是结构文件!"
+            }
+            MaterialInfo:
+            {
+                Title: "材料明细"
+                Stored: "已有: {Stack}"
+                Requirement: "需求: {Stack}"
+            }
+            Preview:
+            {
+                Title: "结构预览"
+                CenterSet: "点击以将其设置为放置中心点"
+            }
+            Tutorial:
+            {
+                Button: "功能介绍"
+                AlphaTest.Count: "3"
+                AlphaTest.1: "该法杖功能仍在测试中，可能存在许多Bug"
+                AlphaTest.2: "如果遇到Bug请报告给开发者"
+                AlphaTest.3: "对于模组物块与背景墙不保证支持，不应视作Bug"
+                Save.Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
+                Save.Text:
+                    '''
+                    面板上方左侧的第三个按钮可以切换模式为放置或存储
+
+                    在存储模式下，你可以左键使用构造法杖以框选结构，并将结构以文件形式存储到你的电脑上。以便在不同的世界以及服务器中放置结构。
+                    
+                    下图展示了如何框选并保存结构:
+                    '''
+                Place.Title: "{$Mods.ImproveGame.ConstructGUI.LoadMode}"
+                Place.Text:
+                    '''
+                    在放置模式下，你需要在主界面选择一个结构，如果结构名称显示为黄色，则表明当前选择了此结构。
+                    
+                    如果在你的物品栏与大背包内有足够的材料，左键使用即可将结构放置到世界上，否则结构可能会残缺一部分。
+                    某些物块的朝向可能会出现问题，属于正常现象
+                    
+                    此处是一个放置结构的例子:
+                    '''
+                Explode.Title: "爆破模式"
+                Explode.Text:
+                    '''
+                    如果你选择了“爆破并放置”，那么在放置结构前，相应区域的物块将会被爆破，以给结构腾出足够的空间。
+                    '''
+                Panel.Title: "结构列表"
+                Panel.Text:
+                    '''
+                    在UI主界面显示了当前存储于你的电脑上的结构列表，每个结构单元包含了文件名称、路径信息。
+                    
+                    如果你在Windows系统上不小心删除了某个结构，你可以在回收站还原
+
+                    点击右方的“{$tModLoader.ModsMoreInfo}”按钮即可查看材料明细与结构预览，同时可以在预览界面选择结构放置时的中心点。
+                    '''
+                Materials.Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
+                Materials.Text:
+                    '''
+                    在材料明细区域中可以查看各种材料的需求量以及当前存储于你的物品栏和大背包的数量，以便你准备相应的材料
+                    '''
+                Preview.Title: "{$Mods.ImproveGame.ConstructGUI.Preview.Title}"
+                Preview.Text:
+                    '''
+                    结构预览区域可供查看结构，并调节结构的放置中心点，即放置结构时鼠标指针所指向的物块。黄框标示的物块即为放置中心点
+                    '''
+            }
+        }
+        SuperVault:
+        {
+            Name: 大背包
+            Sort: 排序
+            Synthesis: 参与合成
+            SmartPickup: 智能拾取
+            OverflowPickup: 自动拾取
+        }
+        MoveChest:
+        {
+            Heavy: "箱子的重量使你行动有些受限"
+        }
+        Autofisher:
+        {
+            Title: "自动钓鱼机"
+            Accessory: "钓鱼饰品"
+            FishingPole: "钓竿"
+            Bait: "鱼饵"
+            SelectPool: "请选择鱼池"
+            CarefulNextTime: "下次注意点！" # 这个是钓鱼机不小心把猪鲨钓上来了
+            Unavailable: "暂无钓鱼信息"
+            CatchCratesFilter: "钓宝匣"
+            CatchAccessoriesFilter: "钓配饰"
+            CatchToolsFilter: "钓工具与武器"
+            CatchWhiteRarityCatchesFilter: "钓白色稀有度渔获"
+            CatchNormalCatchesFilter: "钓高于白色稀有度渔获"
+        }
+        BuffTracker:
+        {
+            Title: "增益追踪器"
+            LeftClickDisable: "\n<left>以禁用该无限增益"
+            LeftClickEnable: "\n<left>以启用该无限增益"
+            NoInfBuff: "当前没有可用的无限增益"
+            NoInfBuffAlt: "请在模组配置中打开无限续杯功能"
+            NPCSpawnRatePanel: "敌人生成速度面板"
+        }
+        LifeAnalyzer:
+        {
+            "Priority": "优先级: "
+            "Tip": "<left>以控制检测情况"
+        }
+        Architecture:
+        {
+            Materials: "房屋材料"
+            StoredMaterials: "(存有: {MaterialCount})"
+            MaterialsRequired: "所需材料："
+            Block: 砖块
+            Platform: 平台
+            Torch: 火把
+            Chair: 椅子
+            Table: 桌子
+            Workbench: 工作台
+            Wall: 墙
+            Bed: 床
+        }
+        LiquidWand:
+        {
+            Title: "液体控制"
+            Water: "水 ({LiquidAmount})"
+            Lava: "熔岩 ({LiquidAmount})"
+            Honey: "蜂蜜 ({LiquidAmount})"
+            Shimmer: "微光 ({LiquidAmount})"
+        }
+        PaintWandGUI:
+        {
+            Paintbrush: 物块刷漆
+            PaintRoller: 墙刷漆
+            PaintScraper: 移除漆
+        }
+        SpaceWandGUI:
+        {
+            placeType: 放置类型
+            platform: 平台
+            soild: 方块
+            rope: 绳子
+            rail: 轨道
+            grassSeed: 草种
+            plantPot: 种植盆
+        }
+        PackageGUI:
+        {
+            AutoStorage: 自动收纳
+            AutoSort: 自动排序
+        }
+        Common:
+        {
+            Loading: "加载中..."
+            Refresh: "刷新"
+            Switch: "切换"
+            Unavailable: "不可用"
+        }
+        RecipeGroup:
+        {
+            AnyCopperBar: 任何 铜锭
+            AnyGoldBar: 任何 金锭
+            AnySilverBar: 任何 银锭
+            AnyDemoniteBar: 任何 魔矿锭
+            AnyShadowScale: 任何 暗影鳞片
+            AnyCobaltBar: 任何 钴锭
+            AnyMythrilBar: 任何 秘银
+            AnyAdamantiteBar: 任何 精金
+        }
+        Keybind:
+        {
+            HugeInventory: "大背包"
+            BuffTracker: "增益追踪器"
+            BuffTracker.Tip: "设置快捷键后，点击增益图标不再会打开增益追踪器"
+            GrabBagLoot: "显示摸彩袋物品明细"
+            HotbarSwitch: "切换快捷栏"
+            HotbarSwitch.Tip: "按下快捷键后，物品栏第一栏与第二栏的物品将会互换"
+        }
+    }
+}
