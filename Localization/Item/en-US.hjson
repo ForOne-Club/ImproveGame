@@ -1,139 +1,133 @@
-﻿Mods:
+﻿Mods.ImproveGame.ItemName:
 {
-    ImproveGame:
-    {
-        ItemName:
-        {
-            MagickWand: Wand of Brusts
-            SpaceWand: Wand of Space
-            StarburstWand: Wand of Starbursts
-            CreateWand: Wand of Architecture
-            WallPlace: Wand of Technology
-            LiquidWand: Wand of Liquids
-            PotionBag: Potion Bag
-            BannerChest: Banner Box
-            Autofisher: Fishing Machine
-            PaintWand: Wand of Painting
-            ConstructWand: Wand of Construction
-            MoveChest: Wand of Void
-            CoinOne: Lucky Coin
-        }
-        ItemTooltip:
-        {
-            MagickWand:
-                '''
-                Fixed Mode: Destroy tiles in an indicated fixed area
-                Free Mode: Destroy tiles selected
-                Can be affected by mining speed
-                The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
-                Mana cost depends on the number of tiles destroyed
-                <right> while holding to edit destruction settings
-                <right> while selecting area to cancel
-                Automatically uses mana potion if necessary
-                '''
-            SpaceWand:
-                '''
-                [c/0099ff:Right click to open the control panel]
-                Places selected type of tile in the indicated area
-                Consumes that type of tile in your inventory
-                Will try to swap tiles in different types if Block Swap is enabled
-                Can place 500(244 in servers) tiles once
-                <right> while selecting area to cancel placement
-                'I pity these tools'
-                '''
-            StarburstWand:
-                '''
-                Fixed Mode: Destroy tiles in an indicated fixed area
-                Free Mode: Destroy tiles selected
-                Can be affected by mining speed
-                The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
-                Mana cost depends on the number of tiles destroyed
-                <right> while holding to edit destruction settings
-                <right> while selecting area to cancel
-                Automatically uses mana potion if necessary
-                '''
-            WallPlace:
-                '''
-                Summons a wall placer at your cursor
-                Automatically recognizes possible rooms and places walls in your inventory
-                The recognized room can have at most 1000 tiles' space
-                Considers tangible blocks, platforms and doors as boundaries
-                Each player can only summon one, use again to recall it
-                '''
-            CreateWand:
-                '''
-                Builds a house using materials stored in it
-                If there are no materials stored, will use the materials in your inventory
-                <right> to open the material storage and house style switch panel
-                Please prepare enough materials, or the house will not be built completely!
-                [c/ff0000:If the item is discarded, the stored materials inside will not be returned!] 
-                '''
-            LiquidWand:
-                '''
-                Absorb/Place an amount of liquid
-                <right> while holding to open the liquid control panel
-                Absorbing Mode: Absorbs the selected liquid within the selected area
-                Placing Mode: Fills the selected area with the selected liquid
-                If there is too much/too little liquid, no excess liquid will be absorbed/placed
-                '''
-            PotionBag:
-                '''
-                Stores you buff potions
-                <left> the Potion Bag while holding a potion to deposit
-                <right> the Potion Bag while holding it to take out potions
-                Maximum stores 20 stacks of potions
-                '''
-            BannerChest:
-                '''
-                Stores your banners
-                Hold a banner and <left> to put it into a Banner Box
-                <right> a Banner Box to take out banners
-                Can store maximum 200 stacks of banners
-                '''
-            Autofisher:
-                '''
-                Right click on a placed Fishing Machine to open the fishing panel
-                Click the "+" in the first row to choose water type
-                Put in a fishing rod and baits to start, mechanics are the same as manual-fishing
-                You may also put in accessories to increase fishing power or grant ability to fish in lava
-                The initial fishing speed is 20% of the manual-fishing speed, you may speed up the fishing process by:
-                - Bass [i:Bass] stored will be converted to percentage fishing speed bonus by 20 : 1, caps at 500% ([i/s100:Bass])
-                - [i:AnglerEarring] increases fishing speed by * 200%
-                - [i:AnglerTackleBag] increases fishing speed by * 300%
-                - [i:LavaproofTackleBag] increases fishing speed by * 500%
-                [c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
-                [c/AAAAAA:Modded accessories are not supported]
-                Supports most modded biomes
-                Only filterd items will be caught, first match upper criteria
-                '''
-            PaintWand:
-                '''
-                [c/0099ff:<right> to open painting mode panel]
-                Select an area to paint/remove paint on tiles within the area
-                Also removes moss on the tiles while removing paints, like the [i:PaintScraper]
-                Paint which stacks above 999 will not be consumed
-                '''
-            ConstructWand:
-                '''
-                [c/0099ff:<right> to open Construction Panel]
-                Has ability to place structures freely
-                Recording Mode - Saves selected structures as files
-                Placing Mode - Places structures while material is sufficient
-                Will not record/place liquids
-                Wires will not be shown in preview, but will be recorded and placed
-                Click the 'Introduction' at the right top for more information
-                [c/AAAAAA:Beta test feature, kindly report bugs in this mod's Steam workshop page]
-                '''
-            MoveChest:
-                '''
-                Use on a chest to store it in this wand
-                Use again to place the chest
-                '''
-            CoinOne:
-                '''
-                You are a lucky person!
-                'This will probably sell well'
-                '''
-        }
-    }
+    MagickWand: Wand of Brusts
+    SpaceWand: Wand of Space
+    StarburstWand: Wand of Starbursts
+    CreateWand: Wand of Architecture
+    WallPlace: Wand of Technology
+    LiquidWand: Wand of Liquids
+    PotionBag: Potion Bag
+    BannerChest: Banner Box
+    Autofisher: Fishing Machine
+    PaintWand: Wand of Painting
+    ConstructWand: Wand of Construction
+    MoveChest: Wand of Void
+    CoinOne: Lucky Coin
+}
+Mods.ImproveGame.ItemTooltip:
+{
+    MagickWand:
+        '''
+        Fixed Mode: Destroy tiles in an indicated fixed area
+        Free Mode: Destroy tiles selected
+        Can be affected by mining speed
+        The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
+        Mana cost depends on the number of tiles destroyed
+        <right> while holding to edit destruction settings
+        <right> while selecting area to cancel
+        Automatically uses mana potion if necessary
+        '''
+    SpaceWand:
+        '''
+        [c/0099ff:Right click to open the control panel]
+        Places selected type of tile in the indicated area
+        Consumes that type of tile in your inventory
+        Will try to swap tiles in different types if Block Swap is enabled
+        Can place 500(244 in servers) tiles once
+        <right> while selecting area to cancel placement
+        'I pity these tools'
+        '''
+    StarburstWand:
+        '''
+        Fixed Mode: Destroy tiles in an indicated fixed area
+        Free Mode: Destroy tiles selected
+        Can be affected by mining speed
+        The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
+        Mana cost depends on the number of tiles destroyed
+        <right> while holding to edit destruction settings
+        <right> while selecting area to cancel
+        Automatically uses mana potion if necessary
+        '''
+    WallPlace:
+        '''
+        Summons a wall placer at your cursor
+        Automatically recognizes possible rooms and places walls in your inventory
+        The recognized room can have at most 1000 tiles' space
+        Considers tangible blocks, platforms and doors as boundaries
+        Each player can only summon one, use again to recall it
+        '''
+    CreateWand:
+        '''
+        Builds a house using materials stored in it
+        If there are no materials stored, will use the materials in your inventory
+        <right> to open the material storage and house style switch panel
+        Please prepare enough materials, or the house will not be built completely!
+        [c/ff0000:If the item is discarded, the stored materials inside will not be returned!] 
+        '''
+    LiquidWand:
+        '''
+        Absorb/Place an amount of liquid
+        <right> while holding to open the liquid control panel
+        Absorbing Mode: Absorbs the selected liquid within the selected area
+        Placing Mode: Fills the selected area with the selected liquid
+        If there is too much/too little liquid, no excess liquid will be absorbed/placed
+        '''
+    PotionBag:
+        '''
+        Stores you buff potions
+        <left> the Potion Bag while holding a potion to deposit
+        <right> the Potion Bag while holding it to take out potions
+        Maximum stores 20 stacks of potions
+        '''
+    BannerChest:
+        '''
+        Stores your banners
+        Hold a banner and <left> to put it into a Banner Box
+        <right> a Banner Box to take out banners
+        Can store maximum 200 stacks of banners
+        '''
+    Autofisher:
+        '''
+        Right click on a placed Fishing Machine to open the fishing panel
+        Click the "+" in the first row to choose water type
+        Put in a fishing rod and baits to start, mechanics are the same as manual-fishing
+        You may also put in accessories to increase fishing power or grant ability to fish in lava
+        The initial fishing speed is 20% of the manual-fishing speed, you may speed up the fishing process by:
+        - Bass [i:Bass] stored will be converted to percentage fishing speed bonus by 20 : 1, caps at 500% ([i/s100:Bass])
+        - [i:AnglerEarring] increases fishing speed by * 200%
+        - [i:AnglerTackleBag] increases fishing speed by * 300%
+        - [i:LavaproofTackleBag] increases fishing speed by * 500%
+        [c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
+        [c/AAAAAA:Modded accessories are not supported]
+        Supports most modded biomes
+        Only filterd items will be caught, first match upper criteria
+        '''
+    PaintWand:
+        '''
+        [c/0099ff:<right> to open painting mode panel]
+        Select an area to paint/remove paint on tiles within the area
+        Also removes moss on the tiles while removing paints, like the [i:PaintScraper]
+        Paint which stacks above 999 will not be consumed
+        '''
+    ConstructWand:
+        '''
+        [c/0099ff:<right> to open Construction Panel]
+        Has ability to place structures freely
+        Recording Mode - Saves selected structures as files
+        Placing Mode - Places structures while material is sufficient
+        Will not record/place liquids
+        Wires will not be shown in preview, but will be recorded and placed
+        Click the 'Introduction' at the right top for more information
+        [c/AAAAAA:Beta test feature, kindly report bugs in this mod's Steam workshop page]
+        '''
+    MoveChest:
+        '''
+        Use on a chest to store it in this wand
+        Use again to place the chest
+        '''
+    CoinOne:
+        '''
+        You are a lucky person!
+        'This will probably sell well'
+        '''
 }
