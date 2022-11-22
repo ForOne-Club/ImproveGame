@@ -326,20 +326,27 @@ namespace ImproveGame.Interface.UIElements
 
         public static void OpenItemGlow(SpriteBatch sb)
         {
-            Effect effect = ModAssets.ItemEffect.Value;
-            Color lerpColor;
-            int milliSeconds = (int)Main.gameTimeCache.TotalGameTime.TotalMilliseconds;
-            float time = milliSeconds * 0.05f;
-            if (time % 60f < 30)
-            {
-                lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
-            }
-            else
-            {
-                lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
-            }
-            effect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-            effect.CurrentTechnique.Passes["ColorPut"].Apply();
+            //Effect effect = ModAssets.ItemEffect.Value;
+            //Color lerpColor;
+            //int milliSeconds = (int)Main.gameTimeCache.TotalGameTime.TotalMilliseconds;
+            //float time = milliSeconds * 0.05f;
+            //if (time % 60f < 30)
+            //{
+            //    lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
+            //}
+            //else
+            //{
+            //    lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
+            //}
+
+            //effect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
+            //effect.CurrentTechnique.Passes["ColorPut"].Apply();
+            
+            var effect = ModAssets.Transform.Value;
+            effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.2f);
+            effect.CurrentTechnique.Passes["EnchantedPass"].Apply();
+            Main.instance.GraphicsDevice.Textures[1] = GetTexture("Enchanted").Value; // 传入调色板
+
             sb.Begin(effect, Main.UIScaleMatrix);
         }
     }

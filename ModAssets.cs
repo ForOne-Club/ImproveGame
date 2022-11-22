@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Interface.Common;
+using log4net.Util;
 using System.Reflection;
-using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace ImproveGame
 {
@@ -12,19 +12,23 @@ namespace ImproveGame
         internal static Asset<Effect> BoxShader;
         internal static Asset<Effect> ItemEffect;
         internal static Asset<Effect> LiquidSurface;
+        internal static Asset<Effect> Transform;
         internal static Asset<Texture2D> Perlin;
 
         public override void Load()
         {
-            if (!Main.dedServ)
+            if (Main.dedServ)
             {
-                Fork = GetEffect(nameof(Fork));
-                RoundRectangle = GetEffect(nameof(RoundRectangle));
-                BoxShader = GetEffect("Box");
-                ItemEffect = GetEffect("item");
-                LiquidSurface = GetEffect("LiquidSurface");
-                Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");
+                return;
             }
+
+            Fork = GetEffect(nameof(Fork));
+            RoundRectangle = GetEffect(nameof(RoundRectangle));
+            BoxShader = GetEffect("Box");
+            ItemEffect = GetEffect("item");
+            LiquidSurface = GetEffect("LiquidSurface");
+            Transform = GetEffect("Transform");
+            Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");
             // On.Terraria.GameContent.UI.Elements.UIPanel.DrawSelf += UIPanel_DrawSelf;
             // On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawBar += UIScrollbar_DrawBar;
             // On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawSelf += UIScrollbar_DrawSelf;
@@ -56,15 +60,18 @@ namespace ImproveGame
 
         public override void Unload()
         {
-            if (!Main.dedServ)
+            if (Main.dedServ)
             {
-                Fork = null;
-                RoundRectangle = null;
-                BoxShader = null;
-                ItemEffect = null;
-                LiquidSurface = null;
-                Perlin = null;
+                return;
             }
+
+            Fork = null;
+            RoundRectangle = null;
+            BoxShader = null;
+            ItemEffect = null;
+            LiquidSurface = null;
+            Transform = null;
+            Perlin = null;
         }
     }
 }
