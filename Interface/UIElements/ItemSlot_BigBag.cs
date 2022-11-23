@@ -311,7 +311,7 @@ namespace ImproveGame.Interface.UIElements
             Rectangle frame = Main.itemAnimations[Item.type] is null ? texture2D.Frame() : Main.itemAnimations[Item.type].GetFrame(texture2D);
             float size = frame.Width > maxSize || frame.Height > maxSize ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height : 1f;
             Vector2 position = dimensions.Center() - frame.Size() * size / 2f;
-            Vector2 origin = texture2D.Size() / 2f * size;
+            Vector2 origin = dimensions.Center();
             if (ItemLoader.PreDrawInInventory(Item, sb, position, frame, Item.GetAlpha(lightColor), Item.GetColor(lightColor), origin, size))
             {
                 sb.Draw(texture2D, position, (Rectangle?)frame, Item.GetAlpha(lightColor), 0f, Vector2.Zero, size, SpriteEffects.None, 0f);
@@ -338,7 +338,7 @@ namespace ImproveGame.Interface.UIElements
 
             //effect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
             //effect.CurrentTechnique.Passes["ColorPut"].Apply();
-            
+
             var effect = ModAssets.Transform.Value;
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.2f);
             effect.CurrentTechnique.Passes["EnchantedPass"].Apply();

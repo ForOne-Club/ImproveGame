@@ -83,8 +83,8 @@ namespace ImproveGame.Common.GlobalItems
                 return false;
             }
             // 魔杖 材料 999 不消耗
-            if ((((item.createTile >= TileID.Dirt || item.createWall > WallID.None) && item.stack > 999) ||
-                ((item.createTile == TileID.WorkBenches || item.createTile == TileID.Chairs || item.createTile == TileID.Beds) && item.stack > 99))
+            if ((((item.createTile >= TileID.Dirt || item.createWall > WallID.None) && item.stack >= 999) ||
+                ((item.createTile is TileID.WorkBenches or TileID.Chairs or TileID.Beds) && item.stack >= 99))
                 && ModItemID.NoConsumptionItems.Contains(player.HeldItem.type))
                 return false;
             return base.ConsumeItem(item, player);
