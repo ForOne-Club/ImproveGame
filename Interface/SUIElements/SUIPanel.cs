@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 
-namespace ImproveGame.Interface.UIElements_Shader
+namespace ImproveGame.Interface.SUIElements
 {
     public class SUIPanel : UIElement
     {

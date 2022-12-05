@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Content.Items;
 using ImproveGame.Interface.BannerChestUI.Elements;
-using ImproveGame.Interface.UIElements_Shader;
+using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.BannerChestUI

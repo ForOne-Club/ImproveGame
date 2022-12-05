@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Interface.Common;
 
-namespace ImproveGame.Interface.UIElements_Shader
+namespace ImproveGame.Interface.SUIElements
 {
     public class SUIBackgroundImage : UIElement
     {

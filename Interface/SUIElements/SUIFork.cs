@@ -2,7 +2,7 @@
 using ImproveGame.Interface.Common;
 using System.Threading;
 
-namespace ImproveGame.Interface.UIElements_Shader
+namespace ImproveGame.Interface.SUIElements
 {
     public class SUIFork : UIElement
     {

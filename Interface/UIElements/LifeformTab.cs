@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Systems;
-using ImproveGame.Interface.UIElements_Shader;
+using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.UIElements
 {

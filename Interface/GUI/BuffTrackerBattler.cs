@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Packets;
 using ImproveGame.Common.Players;
-using ImproveGame.Interface.UIElements_Shader;
+using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.Creative;
 
 namespace ImproveGame.Interface.GUI

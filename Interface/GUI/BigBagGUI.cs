@@ -2,7 +2,7 @@
 using ImproveGame.Common.Packets;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
-using ImproveGame.Interface.UIElements_Shader;
+using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI

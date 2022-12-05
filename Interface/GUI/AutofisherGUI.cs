@@ -4,7 +4,7 @@ using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.UIElements;
-using ImproveGame.Interface.UIElements_Shader;
+using ImproveGame.Interface.SUIElements;
 using Terraria.DataStructures;
 using Terraria.UI.Chat;
 

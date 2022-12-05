@@ -2,7 +2,7 @@
 using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
 
-namespace ImproveGame.Interface.UIElements_Shader
+namespace ImproveGame.Interface.SUIElements
 {
     public class SUITitle : UIElement
     {

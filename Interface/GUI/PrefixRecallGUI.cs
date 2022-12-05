@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Interface.UIElements;
-using ImproveGame.Interface.UIElements_Shader;
+using ImproveGame.Interface.SUIElements;
 using System.Reflection;
 using Terraria.GameInput;
 using Terraria.UI.Chat;

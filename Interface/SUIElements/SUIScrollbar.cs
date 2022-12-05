@@ -2,7 +2,7 @@
 using ImproveGame.Interface.Common;
 using Terraria.GameInput;
 
-namespace ImproveGame.Interface.UIElements_Shader
+namespace ImproveGame.Interface.SUIElements
 {
     /// <summary>
     /// 宽度默认 20

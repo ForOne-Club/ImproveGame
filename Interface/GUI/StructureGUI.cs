@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.ConstructCore;
 using ImproveGame.Common.Systems;
 using ImproveGame.Interface.UIElements;
-using ImproveGame.Interface.UIElements_Shader;
+using ImproveGame.Interface.SUIElements;
 using System.Reflection;
 using Terraria.GameInput;
 
