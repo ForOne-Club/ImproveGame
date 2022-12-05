@@ -17,8 +17,8 @@ namespace ImproveGame.Interface.GUI
         private const float PanelWidth = 340f;
 
         private SUIPanel _basePanel; // 背景板
-        public BackgroundImage CloseButton;
-        public ZeroScrollbar Scrollbar; // 拖动条
+        public SUIBackgroundImage CloseButton;
+        public SUIScrollbar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
         private UISearchBar _searchBar;
         private SUIPanel _searchBoxPanel;

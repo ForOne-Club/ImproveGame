@@ -1,6 +1,6 @@
 ﻿float2 size;
 float round;
-float4 backgroundColor;
+float4 background;
 
 float4 RoundRectangle(float2 coords : TEXCOORD0) : COLOR0
 {
@@ -12,7 +12,7 @@ float4 RoundRectangle(float2 coords : TEXCOORD0) : COLOR0
     float length = distance(dxy, origin) * (1 - insxy.x) * (1 - insxy.y)
         + (dxy.x - (size.x / 2 - round)) * outside * insxy.y
         + (dxy.y - (size.y / 2 - round)) * outside * insxy.x;
-    return lerp(backgroundColor, float4(0, 0, 0, 0), clamp((length - round + 1) / 1, 0, 1));
+    return lerp(background, float4(0, 0, 0, 0), clamp((length - round + 1) / 1, 0, 1));
 }
 
 technique Technique1

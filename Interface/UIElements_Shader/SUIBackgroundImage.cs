@@ -3,7 +3,7 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.UIElements_Shader
 {
-    public class BackgroundImage : UIElement
+    public class SUIBackgroundImage : UIElement
     {
         private Texture2D texture;
         private Vector2 textureSize;
@@ -17,7 +17,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             }
         }
 
-        public BackgroundImage(Texture2D texture)
+        public SUIBackgroundImage(Texture2D texture)
         {
             Texture = texture;
             PaddingLeft = 14;
@@ -40,7 +40,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             Vector2 position = rectangle.Position();
             Vector2 size = rectangle.Size();
 
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 10, 0, UIColor.Default.TitleBackground, UIColor.Default.TitleBackground);
+            PixelShader.DrawRoundRect(position, size, 10, UIColor.Default.TitleBackground, 0, UIColor.Default.TitleBackground);
 
             rectangle = GetInnerDimensions();
             position = rectangle.Position();

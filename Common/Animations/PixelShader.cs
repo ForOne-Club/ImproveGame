@@ -21,13 +21,13 @@ namespace ImproveGame.Common.Animations
         }
 
         // DrawRoundRect 现在有两个 .fx 文件，一个带边框的，一个不带的，也许能节省性能？
-        public static void DrawRoundRect(Vector2 position, Vector2 size, float round, Color backgroundColor)
+        public static void DrawRoundRect(Vector2 position, Vector2 size, float round, Color background)
         {
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRectNoBorder.Value;
             effect.Parameters[nameof(size)].SetValue(size);
             effect.Parameters[nameof(round)].SetValue(round);
-            effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
+            effect.Parameters[nameof(background)].SetValue(background.ToVector4());
             sb.ReBegin(effect, Main.UIScaleMatrix);
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
             sb.ReBegin(null, Main.UIScaleMatrix);
@@ -45,27 +45,6 @@ namespace ImproveGame.Common.Animations
             sb.ReBegin(effect, Main.UIScaleMatrix);
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
             sb.ReBegin(null, Main.UIScaleMatrix);
-        }
-
-        public static void DrawBox(Matrix matrix, Vector2 position, Vector2 size, float radius, float border, Color borderColor, Color background)
-        {
-            DrawBox(matrix, position, size, radius, border, borderColor, borderColor, background, background);
-        }
-
-        public static void DrawBox(Matrix matrix, Vector2 position, Vector2 size, float radius, float border, Color borderColor1, Color borderColor2, Color background1, Color background2)
-        {
-            SpriteBatch sb = Main.spriteBatch;
-            Effect effect = ModAssets.BoxShader.Value;
-            effect.Parameters["size"].SetValue(size);
-            effect.Parameters["radius"].SetValue(radius);
-            effect.Parameters["border"].SetValue(border);
-            effect.Parameters["borderColor1"].SetValue(borderColor1.ToVector4());
-            effect.Parameters["borderColor2"].SetValue(borderColor2.ToVector4());
-            effect.Parameters["background1"].SetValue(background1.ToVector4());
-            effect.Parameters["background2"].SetValue(background2.ToVector4());
-            sb.ReBegin(effect, matrix);
-            sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
-            sb.ReBegin(null, matrix);
         }
     }
 }

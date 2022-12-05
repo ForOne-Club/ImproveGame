@@ -26,10 +26,10 @@ namespace ImproveGame.Interface.BannerChestUI
         public bool dragging;
 
         public SUIPanel mainPanel;
-        public UITitle title;
-        public Checkbox checkbox;
-        public Checkbox checkbox2;
-        public UIFork close;
+        public SUITitle title;
+        public SUICheckbox checkbox;
+        public SUICheckbox checkbox2;
+        public SUIFork close;
         public SUIPanel gridPanel;
         public PackageGrid grid;
 

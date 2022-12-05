@@ -13,7 +13,7 @@ public class BuffTrackerGUI : UIState
     
     private SUIPanel basePanel;
     private BuffButtonList BuffList;
-    public ZeroScrollbar Scrollbar; // 拖动条
+    public SUIScrollbar Scrollbar; // 拖动条
     private UISearchBar _searchBar;
     private SUIPanel _searchBoxPanel;
     private string _searchString;

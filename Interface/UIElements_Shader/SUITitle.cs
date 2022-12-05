@@ -4,7 +4,7 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.UIElements_Shader
 {
-    public class UITitle : UIElement
+    public class SUITitle : UIElement
     {
         private string text;
         private Vector2 textSize;
@@ -23,7 +23,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             }
         }
 
-        public UITitle(string text, float scale)
+        public SUITitle(string text, float scale)
         {
             this.textScale = scale;
 

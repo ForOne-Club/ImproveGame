@@ -7,7 +7,7 @@ namespace ImproveGame.Interface.UIElements_Shader
     /// <summary>
     /// 宽度默认 20
     /// </summary>
-    public class ZeroScrollbar : UIElement
+    public class SUIScrollbar : UIElement
     {
         private float viewPosition; // 滚动条当前位置
         private float MaxViewPoisition => maxViewSize - viewSize;
@@ -41,7 +41,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             set => _bufferViewPosition = value;
         }
 
-        public ZeroScrollbar()
+        public SUIScrollbar()
         {
             Visible = true;
             Width.Pixels = 20;
@@ -153,7 +153,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             Vector2 size = dimension.Size();
 
             // 滚动条背板
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, size.X / 2, 3, UIColor.Default.PanelBorder, UIColor.Default.CheckBackground);
+            PixelShader.DrawRoundRect(position, size, size.X / 2, UIColor.Default.CheckBackground, 3, UIColor.Default.PanelBorder);
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();
@@ -165,7 +165,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             Color hoverColor = Color.Lerp(hoveredColor, Color.White, dragging ? 1 : HoverTimer.Schedule);
 
             // 滚动条拖动块
-            PixelShader.DrawBox(Main.UIScaleMatrix, innerPosition, innerSize, innerSize.X / 2, 0, hoverColor, hoverColor);
+            PixelShader.DrawRoundRect(innerPosition, innerSize, innerSize.X / 2, hoverColor, 0, hoverColor);
         }
 
         public void SetView(float viewSize, float maxViewSize)

@@ -4,7 +4,7 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.UIElements_Shader
 {
-    public class Checkbox : UIElement
+    public class SUICheckbox : UIElement
     {
         public Func<bool> GetState;
         public Action<bool> SetState;
@@ -30,7 +30,7 @@ namespace ImproveGame.Interface.UIElements_Shader
             }
         }
 
-        public Checkbox(Func<bool> GetState, Action<bool> SetState, string text, float textScale = 1f)
+        public SUICheckbox(Func<bool> GetState, Action<bool> SetState, string text, float textScale = 1f)
         {
             AT = new(3);
             Text = text;

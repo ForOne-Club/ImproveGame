@@ -23,13 +23,13 @@ namespace ImproveGame.Interface.GUI
             set => visible = value;
         }
 
-        public UITitle title;
+        public SUITitle title;
         public SUIPanel MainPanel;
-        public UIFork CloseButton;
+        public SUIFork CloseButton;
         public PictureButton[] buttons = new PictureButton[4];
         // 物品列表
         public ModItemGrid ItemGrid;
-        public Checkbox[] checkbox = new Checkbox[3];
+        public SUICheckbox[] checkbox = new SUICheckbox[3];
 
         public override void OnInitialize()
         {
@@ -61,7 +61,7 @@ namespace ImproveGame.Interface.GUI
             CloseButton.Height.Pixels = title.Height();
             CloseButton.OnMouseDown += (evt, uie) => Close();
 
-            MainPanel.Append(checkbox[0] = new Checkbox(() =>
+            MainPanel.Append(checkbox[0] = new SUICheckbox(() =>
             {
                 return Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng;
             }, (bool state) =>
@@ -71,7 +71,7 @@ namespace ImproveGame.Interface.GUI
             }, GetText("SuperVault.Synthesis"), 0.8f));
             checkbox[0].Top.Pixels = title.Bottom() + 10f;
 
-            MainPanel.Append(checkbox[1] = new Checkbox(() =>
+            MainPanel.Append(checkbox[1] = new SUICheckbox(() =>
             {
                 return Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_SmartGrab;
             }, (bool state) =>
@@ -81,7 +81,7 @@ namespace ImproveGame.Interface.GUI
             checkbox[1].Left.Pixels = checkbox[0].Right() + 10;
             checkbox[1].Top.Pixels = checkbox[0].Top();
 
-            MainPanel.Append(checkbox[2] = new Checkbox(() =>
+            MainPanel.Append(checkbox[2] = new SUICheckbox(() =>
             {
                 return Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab;
             }, (bool state) =>

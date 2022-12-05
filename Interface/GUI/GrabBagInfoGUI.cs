@@ -18,7 +18,7 @@ namespace ImproveGame.Interface.GUI
         public UserInterface UserInterface;
 
         private ModUIPanel BasePanel; // 背景板
-        public ZeroScrollbar Scrollbar; // 拖动条
+        public SUIScrollbar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
         public ModItemSlot ItemSlot; // 当前物品展示
 

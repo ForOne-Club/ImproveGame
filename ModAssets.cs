@@ -8,7 +8,9 @@ namespace ImproveGame
     {
         internal static Asset<Effect> Fork;
         internal static Asset<Effect> RoundRect;
+        internal static Asset<Effect> RoundRect2;
         internal static Asset<Effect> RoundRectNoBorder;
+        internal static Asset<Effect> RoundRectNoBorder2;
         internal static Asset<Effect> BoxShader;
         internal static Asset<Effect> ItemEffect;
         internal static Asset<Effect> LiquidSurface;
@@ -22,7 +24,9 @@ namespace ImproveGame
 
             Fork = GetEffect("Fork");
             RoundRect = GetEffect("RoundRect");
+            RoundRect2 = GetEffect("RoundRect2");
             RoundRectNoBorder = GetEffect("RoundRectNoBorder");
+            RoundRectNoBorder2 = GetEffect("RoundRectNoBorder2");
             BoxShader = GetEffect("Box");
             ItemEffect = GetEffect("item");
             LiquidSurface = GetEffect("LiquidSurface");
@@ -38,14 +42,14 @@ namespace ImproveGame
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
             orig.Invoke(self, spriteBatch);
-            PixelShader.DrawBox(Main.UIScaleMatrix, pos, size, MathF.Min(size.X, size.Y) / 2, 3, UIColor.Default.PanelBorder, UIColor.Default.CheckBackground);
+            PixelShader.DrawRoundRect(pos, size, MathF.Min(size.X, size.Y) / 2, UIColor.Default.CheckBackground, 3, UIColor.Default.PanelBorder);
             Type type = self.GetType();
             MethodInfo methodInfo = type.GetMethod("GetHandleRectangle", BindingFlags.NonPublic | BindingFlags.Instance);
             Rectangle rectangle = (Rectangle)methodInfo.Invoke(self, null);
             pos = rectangle.TopLeft();
             pos += new Vector2(5f, 5);
             size = rectangle.Size() - new Vector2(10);
-            PixelShader.DrawBox(Main.UIScaleMatrix, pos, size, MathF.Min(size.X, size.Y) / 2, 3, new(220, 220, 220), new(220, 220, 220));
+            PixelShader.DrawRoundRect(pos, size, MathF.Min(size.X, size.Y) / 2, new(220, 220, 220), 3, new(220, 220, 220));
         }
 
         private void UIScrollbar_DrawBar(On.Terraria.GameContent.UI.Elements.UIScrollbar.orig_DrawBar orig, UIScrollbar self, SpriteBatch spriteBatch, Texture2D texture, Rectangle dimensions, Color color) { return; }
@@ -54,7 +58,7 @@ namespace ImproveGame
         {
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
-            PixelShader.DrawBox(Main.UIScaleMatrix, pos, size, 12, 3, self.BorderColor, self.BackgroundColor);
+            PixelShader.DrawRoundRect(pos, size, 12, self.BackgroundColor, 3, self.BorderColor);
         }
 
         public override void Unload()
@@ -66,7 +70,9 @@ namespace ImproveGame
 
             Fork = null;
             RoundRect = null;
+            RoundRect2 = null;
             RoundRectNoBorder = null;
+            RoundRectNoBorder2 = null;
             BoxShader = null;
             ItemEffect = null;
             LiquidSurface = null;

@@ -286,7 +286,7 @@ namespace ImproveGame.Interface.UIElements
             CalculatedStyle dimensions = GetDimensions();
             Color borderColor = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBorder : UIColor.Default.SlotNoFavoritedBorder;
             Color background = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBackground : UIColor.Default.SlotNoFavoritedBackground;
-            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, borderColor, background);
+            PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, background, 3, borderColor);
             if (Item.IsAir)
                 return;
             if (IsMouseHovering)

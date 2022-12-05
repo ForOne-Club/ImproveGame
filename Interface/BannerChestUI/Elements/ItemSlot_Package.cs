@@ -71,7 +71,7 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
         protected override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
-            PixelShader.DrawBox(Main.UIScaleMatrix, dimensions.Position(), dimensions.Size(), 12, 3, UIColor.Default.SlotNoFavoritedBorder, UIColor.Default.SlotNoFavoritedBackground);
+            PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, UIColor.Default.SlotNoFavoritedBackground, 3, UIColor.Default.SlotNoFavoritedBorder);
 
             ItemSlot_BigBag.DrawItemIcon(sb, Item, Color.White, dimensions, 30);
 

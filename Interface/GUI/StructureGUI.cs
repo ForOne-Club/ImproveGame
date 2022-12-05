@@ -21,7 +21,7 @@ namespace ImproveGame.Interface.GUI
         public Asset<Texture2D> ButtonBackgroundTexture;
 
         private SUIPanel BasePanel; // 背景板
-        public ZeroScrollbar Scrollbar; // 拖动条
+        public SUIScrollbar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
         public ModImageButton RefreshButton; // 刷新/回退按钮
 

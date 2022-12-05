@@ -38,10 +38,9 @@ namespace ImproveGame.Interface.UIElements_Shader
                 size += new Vector2(border * 2);
             }
 
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, radius, border,
-                borderColor, backgroundColor);
+            PixelShader.DrawRoundRect(position, size, radius, backgroundColor, border, borderColor);
         }
-        
+
         // 可拖动界面
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
@@ -57,12 +56,13 @@ namespace ImproveGame.Interface.UIElements_Shader
         {
             Dragging = false;
         }
-        
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            if (IsMouseHovering) {
+            if (IsMouseHovering)
+            {
                 Main.LocalPlayer.mouseInterface = true;
             }
 
@@ -74,7 +74,7 @@ namespace ImproveGame.Interface.UIElements_Shader
                 OnDrag?.Invoke(this);
             }
         }
-        
+
         internal event ElementEvent OnDrag;
     }
 }

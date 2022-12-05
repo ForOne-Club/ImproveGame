@@ -5,7 +5,7 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
     public class PackageGrid : UIElement
     {
         public PackageList list;
-        public ZeroScrollbar scrollbar;
+        public SUIScrollbar scrollbar;
         public List<Item> items;
 
         public PackageGrid()

@@ -7,7 +7,7 @@ namespace ImproveGame.Interface.UIElements
     public class ModItemGrid : UIElement
     {
         public ModItemList ItemList;
-        public ZeroScrollbar Scrollbar;
+        public SUIScrollbar Scrollbar;
 
         // 可以在 new 的时候将其他元素也初始化, 或者在执行 Active() 的时候初始化.
         public ModItemGrid()

@@ -4,14 +4,14 @@ using System.Threading;
 
 namespace ImproveGame.Interface.UIElements_Shader
 {
-    public class UIFork : UIElement
+    public class SUIFork : UIElement
     {
         public float forkSize;
         public float radius;
         public float border;
         public AnimationTimer hoverTimer;
 
-        public UIFork(float forkSize)
+        public SUIFork(float forkSize)
         {
             hoverTimer = new();
             radius = 3.7f;

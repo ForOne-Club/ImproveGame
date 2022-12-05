@@ -52,7 +52,7 @@ namespace ImproveGame.Interface.UIElements
             Vector2 size = dimensions.Size();
 
             Color borderColor = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, HoverTimer.Schedule);
-            PixelShader.DrawBox(Main.UIScaleMatrix, position, size, 10, 3, borderColor, UIColor.Default.ButtonBackground);
+            PixelShader.DrawRoundRect(position, size, 10, UIColor.Default.ButtonBackground, 3, borderColor);
 
             dimensions = GetInnerDimensions();
             position = dimensions.Position();
