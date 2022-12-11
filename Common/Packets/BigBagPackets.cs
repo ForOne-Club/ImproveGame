@@ -3,11 +3,12 @@ using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.Packets
 {
+    [AutoSync]
     public class BigBagSlotPacket : NetModule
     {
         private byte whoAmI;
         private byte slot;
-        private Item item;
+        [ItemSync(syncFavorite: true)] private Item item;
 
         public static BigBagSlotPacket Get(Item item, int whoAmI, int slot)
         {
@@ -27,20 +28,6 @@ namespace ImproveGame.Common.Packets
             return module;
         }
 
-        public override void Send(ModPacket p)
-        {
-            p.Write(whoAmI);
-            p.Write(slot);
-            ItemIO.Send(item, p, true, true);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            whoAmI = r.ReadByte();
-            slot = r.ReadByte();
-            item = ItemIO.Receive(r, true, true);
-        }
-
         public override void Receive()
         {
             if (!DataPlayer.TryGet(Main.player[whoAmI], out var modPlayer))
@@ -58,51 +45,26 @@ namespace ImproveGame.Common.Packets
         }
     }
 
+    [AutoSync]
     public class BigBagAllSlotsPacket : NetModule
     {
-        private DataPlayer dataPlayer;
         private byte whoAmI;
-        private Item[] items = new Item[100];
+        [ItemSync(syncFavorite: true)] private Item[] items;
 
         public static BigBagAllSlotsPacket Get(DataPlayer dataPlayer)
         {
             var module = NetModuleLoader.Get<BigBagAllSlotsPacket>();
-            module.dataPlayer = dataPlayer;
             module.whoAmI = (byte)dataPlayer.Player.whoAmI;
+            module.items = dataPlayer.SuperVault;
             return module;
-        }
-
-        public override void Send(ModPacket p)
-        {
-            p.Write(whoAmI);
-            for (int i = 0; i < 100; i++)
-            {
-                if (dataPlayer.SuperVault[i] is null)
-                {
-                    dataPlayer.SuperVault[i] = new();
-                }
-                ItemIO.Send(dataPlayer.SuperVault[i], p, true, true);
-            }
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            whoAmI = r.ReadByte();
-            for (int i = 0; i < 100; i++)
-            {
-                items[i] = ItemIO.Receive(r, true, true);
-            }
         }
 
         public override void Receive()
         {
-            if (!DataPlayer.TryGet(Main.player[whoAmI], out var modPlayer))
+            if (items is null || items.Length != 100 || !DataPlayer.TryGet(Main.player[whoAmI], out var modPlayer))
                 return;
 
-            for (int i = 0; i < 100; i++)
-            {
-                modPlayer.SuperVault[i] = items[i];
-            }
+            modPlayer.SuperVault = items;
         }
     }
 }

@@ -7,6 +7,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     /// <summary>
     /// 客户端发送，问服务器可不可以开箱
     /// </summary>
+    [AutoSync]
     public class OpenRequestPacket : NetModule
     {
         private Point16 position;
@@ -16,16 +17,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             var module = NetModuleLoader.Get<OpenRequestPacket>();
             module.position = position;
             return module;
-        }
-
-        public override void Send(ModPacket p)
-        {
-            p.Write(position);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            position = r.ReadPoint16();
         }
 
         public override void Receive()
@@ -69,13 +60,14 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             );
             // 服务器设置好
             Main.player[Sender].GetModPlayer<AutofishPlayer>().SetAutofisher(position, false);
-            packets.Send(Mod, Sender, -1, false);
+            packets.Send(Sender, -1, false);
         }
     }
 
     /// <summary>
     /// 服务器发送，让其他玩家知道有个玩家开箱了
     /// </summary>
+    [AutoSync]
     public class SyncOpenPacket : NetModule
     {
         private Point16 position;
@@ -87,18 +79,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             module.position = position;
             module.whoAmI = (byte)whoAmI;
             return module;
-        }
-
-        public override void Send(ModPacket p)
-        {
-            p.Write(position);
-            p.Write(whoAmI);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            position = r.ReadPoint16();
-            whoAmI = r.ReadByte();
         }
 
         public override void Receive()

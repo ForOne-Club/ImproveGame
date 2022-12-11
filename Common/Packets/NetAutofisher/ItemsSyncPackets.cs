@@ -1,11 +1,13 @@
 ﻿using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
+using NetSimplified.Syncing;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.Packets.NetAutofisher
 {
+    [AutoSync]
     public class ItemsSyncAllPacket : NetModule
     {
         private Point16 position;
@@ -15,7 +17,8 @@ namespace ImproveGame.Common.Packets.NetAutofisher
         private Item accessory;
         private Item[] fish;
 
-        public static ItemsSyncAllPacket Get(Point16 position, bool isOpenFisher, Item fishingPole, Item bait, Item accessory, Item[] fishes)
+        public static ItemsSyncAllPacket Get(Point16 position, bool isOpenFisher, Item fishingPole, Item bait,
+            Item accessory, Item[] fishes)
         {
             var module = NetModuleLoader.Get<ItemsSyncAllPacket>();
             module.position = position;
@@ -27,29 +30,10 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             return module;
         }
 
-        public override void Send(ModPacket p)
-        {
-            p.Write(position);
-            p.Write(isOpenFisher);
-            ItemIO.Send(fishingPole, p, true);
-            ItemIO.Send(bait, p, true);
-            ItemIO.Send(accessory, p, true);
-            p.Write(fish);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            position = r.ReadPoint16();
-            isOpenFisher = r.ReadBoolean();
-            fishingPole = ItemIO.Receive(r, true);
-            bait = ItemIO.Receive(r, true);
-            accessory = ItemIO.Receive(r, true);
-            fish = r.ReadItemArray();
-        }
-
         public override void Receive()
         {
-            if (TileLoader.GetTile(Main.tile[position.ToPoint()].TileType) is not Autofisher fisherTile || !TryGetTileEntityAs<TEAutofisher>(position, out var autofisher))
+            if (TileLoader.GetTile(Main.tile[position.ToPoint()].TileType) is not Autofisher fisherTile ||
+                !TryGetTileEntityAs<TEAutofisher>(position, out var autofisher))
             {
                 return;
             }
@@ -68,6 +52,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
                     fisherTile.RightClick(position.X, position.Y);
                     return;
                 }
+
                 if (AutofisherGUI.Visible)
                     UISystem.Instance.AutofisherGUI.RefreshItems();
             }
@@ -78,6 +63,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
         }
     }
 
+    [AutoSync]
     public class ItemsStackChangePacket : NetModule
     {
         private Point16 position;
@@ -93,20 +79,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             return module;
         }
 
-        public override void Send(ModPacket p)
-        {
-            p.Write(position);
-            p.Write(type);
-            p.Write(stackChange);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            position = r.ReadPoint16();
-            type = r.ReadByte();
-            stackChange = r.ReadInt32();
-        }
-
         public override void Receive()
         {
             if (TryGetTileEntityAs<TEAutofisher>(position, out var autofisher))
@@ -116,11 +88,13 @@ namespace ImproveGame.Common.Packets.NetAutofisher
                 {
                     autofisher.fish[type].stack += stackChange;
                 }
+
                 // 发送鱼饵
                 if (type == 16)
                 {
                     autofisher.bait.stack += stackChange;
                 }
+
                 // 发送到其他的所有客户端
                 if (Main.netMode is NetmodeID.Server)
                 {
@@ -140,6 +114,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     /// <summary>
     /// 客户端调用: 向服务器发送获取 <seealso cref="TEAutofisher"/> 物品的请求
     /// </summary>
+    [AutoSync]
     public class RequestItemPacket : NetModule
     {
         private Point16 position;
@@ -151,18 +126,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             module.position = position;
             module.type = type;
             return module;
-        }
-
-        public override void Send(ModPacket p)
-        {
-            p.Write(position);
-            p.Write(type);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            position = r.ReadPoint16();
-            type = r.ReadByte();
         }
 
         /// <summary>
@@ -179,8 +142,8 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     /// </summary>
     public class ItemSyncPacket : NetModule
     {
-        private Point16 position;
-        private byte type;
+        [AutoSync] private Point16 position;
+        [AutoSync] private byte type;
         private Item fishingPole = null;
         private Item bait = null;
         private Item accessory = null;
@@ -201,9 +164,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
 
         public override void Send(ModPacket p)
         {
-            p.Write(position);
-            p.Write(type);
-
             // 发送鱼
             if (type <= 14)
             {
@@ -212,21 +172,25 @@ namespace ImproveGame.Common.Packets.NetAutofisher
                 else
                     ItemIO.Send(fish[type], p, true);
             }
+
             // 发送鱼竿
             if (type is 15)
             {
                 ItemIO.Send(fishingPole, p, true);
             }
+
             // 发送鱼饵
             if (type is 16)
             {
                 ItemIO.Send(bait, p, true);
             }
+
             // 发送饰品
             if (type is 17)
             {
                 ItemIO.Send(accessory, p, true);
             }
+
             // 全部发送
             if (type is 18)
             {
@@ -239,9 +203,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
 
         public override void Read(BinaryReader r)
         {
-            position = r.ReadPoint16();
-            type = r.ReadByte();
-
             fishingPole = null;
             bait = null;
             accessory = null;
@@ -252,21 +213,25 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             {
                 fish[type] = ItemIO.Receive(r, true);
             }
+
             // 发送鱼竿
             if (type is 15)
             {
                 fishingPole = ItemIO.Receive(r, true);
             }
+
             // 发送鱼饵
             if (type is 16)
             {
                 bait = ItemIO.Receive(r, true);
             }
+
             // 发送饰品
             if (type is 17)
             {
                 accessory = ItemIO.Receive(r, true);
             }
+
             // 全部发送
             if (type is 18)
             {

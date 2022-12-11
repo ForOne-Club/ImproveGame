@@ -2,6 +2,7 @@ global using ImproveGame.Common.Utils;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using NetSimplified;
+global using NetSimplified.Syncing;
 global using ReLogic.Content;
 global using System;
 global using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace ImproveGame
         public override void Load()
         {
             Instance = this;
-            
+            AddContent<NetModuleLoader>();
             ChatManager.Register<BgItemTagHandler>("bgitem");
             ChatManager.Register<CenteredItemTagHandler>("centeritem");
         }
@@ -46,11 +47,7 @@ namespace ImproveGame
             GC.Collect();
         }
 
-        public override void HandlePacket(BinaryReader reader, int whoAmI)
-        {
-            //NetHelper.HandlePacket(reader, whoAmI);
-            NetModule.ReceiveModule(reader, whoAmI);
-        }
+        public override void HandlePacket(BinaryReader reader, int whoAmI) => NetModule.ReceiveModule(reader, whoAmI);
 
         public override object Call(params object[] args) => ModIntegrationsSystem.Call(args);
     }

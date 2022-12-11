@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.Tiles;
+using NetSimplified.Syncing;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Packets.NetAutofisher
@@ -6,6 +7,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     /// <summary>
     /// 由服务器执行，向所有玩家同步钓鱼信息提示
     /// </summary>
+    [AutoSync]
     public class FishingTipPacket : NetModule
     {
         private Point16 position;
@@ -17,18 +19,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             module.position = position;
             module.text = text;
             return module;
-        }
-
-        public override void Send(ModPacket p)
-        {
-            p.Write(position);
-            p.Write(text);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            position = r.ReadPoint16();
-            text = r.ReadString();
         }
 
         public override void Receive()

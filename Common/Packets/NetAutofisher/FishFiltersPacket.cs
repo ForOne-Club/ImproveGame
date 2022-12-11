@@ -1,8 +1,10 @@
 ﻿using ImproveGame.Content.Tiles;
+using NetSimplified.Syncing;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Packets.NetAutofisher
 {
+    [AutoSync]
     public class FishFiltersPacket : NetModule
     {
         private Point16 position;
@@ -16,20 +18,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             module.filterType = filterType;
             module.toggle = toggle;
             return module;
-        }
-
-        public override void Send(ModPacket p)
-        {
-            p.Write(position);
-            p.Write(toggle);
-            p.Write(filterType);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            position = r.ReadPoint16();
-            toggle = r.ReadBoolean();
-            filterType = r.ReadByte();
         }
 
         public override void Receive()
@@ -51,6 +39,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     /// <summary>
     /// 全部过滤器包
     /// </summary>
+    [AutoSync]
     public class FisherAllFiltersPacket : NetModule
     {
         private Point16 position;
@@ -70,26 +59,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             module.catchWhiteRarityCatches = catchWhiteRarityCatches;
             module.catchNormalCatches = catchNormalCatches;
             return module;
-        }
-
-        public override void Send(ModPacket p)
-        {
-            p.Write(position);
-            p.Write(catchCrates);
-            p.Write(catchAccessories);
-            p.Write(catchTools);
-            p.Write(catchWhiteRarityCatches);
-            p.Write(catchNormalCatches);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            position = r.ReadPoint16();
-            catchCrates = r.ReadBoolean();
-            catchAccessories = r.ReadBoolean();
-            catchTools = r.ReadBoolean();
-            catchWhiteRarityCatches = r.ReadBoolean();
-            catchNormalCatches = r.ReadBoolean();
         }
 
         public override void Receive()

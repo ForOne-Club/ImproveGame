@@ -7,9 +7,10 @@ namespace ImproveGame.Common.Packets.NetChest;
 /// </summary>
 public class TakeChestPacket : NetModule
 {
-    private string chestName;
+    [AutoSync] private string chestName;
+    [AutoSync] private Item[] items;
     private ItemPosition itemID;
-    private Item[] items;
+    
     public static TakeChestPacket Get(ItemPosition itemID, Item[] items, string chestName)
     {
         var packet = ModContent.GetInstance<TakeChestPacket>();
@@ -22,8 +23,6 @@ public class TakeChestPacket : NetModule
     public override void Read(BinaryReader r)
     {
         itemID = new ItemPosition(r.ReadByte(), r.ReadInt32());
-        items = r.ReadItemArray();
-        chestName = r.ReadString();
     }
 
     public override void Receive()
@@ -43,7 +42,5 @@ public class TakeChestPacket : NetModule
     {
         p.Write(itemID.player);
         p.Write(itemID.slot);
-        p.Write(items);
-        p.Write(chestName);
     }
 }
