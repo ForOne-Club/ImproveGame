@@ -36,7 +36,7 @@ namespace ImproveGame.Common.Players
             if (Main.gameMenu)
                 return;
 
-            if (Main.MouseWorld != MouseWorld)
+            if (Main.myPlayer == Player.whoAmI && Main.MouseWorld != MouseWorld)
                 MouseWorldPacket.Get((byte)Player.whoAmI, Main.MouseWorld).Send(runLocally: true);
 
             if (Config.JourneyResearch)

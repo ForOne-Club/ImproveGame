@@ -123,7 +123,7 @@ public class MoveChest : ModItem
                 {
                     items ??= new Item[Chest.maxItems];
                     chestName ??= string.Empty;
-                    PlaceChestPacket.Get(coord, chestType, style, items, chestName, new((byte)player.whoAmI, Array.IndexOf(player.inventory, Item))).Send(-1, -1, false);
+                    PlaceChestPacket.Get(coord, chestType, style, items, chestName, new((byte)player.whoAmI, Array.IndexOf(player.inventory, Item))).Send();
                     Reset();
                 }
             }

@@ -2,6 +2,7 @@
 
 namespace ImproveGame.Common.Packets
 {
+    [AutoSync]
     public class SpawnRateSlider : NetModule
     {
         private byte whoAmI;
@@ -13,18 +14,6 @@ namespace ImproveGame.Common.Packets
             module.sliderValue = sliderValue;
             module.whoAmI = (byte)whoAmI;
             return module;
-        }
-
-        public override void Send(ModPacket p)
-        {
-            p.Write(whoAmI);
-            p.Write(sliderValue);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            whoAmI = r.ReadByte();
-            sliderValue = r.ReadSingle();
         }
 
         public override void Receive()

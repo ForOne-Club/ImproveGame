@@ -2,6 +2,7 @@
 
 namespace ImproveGame.Common.Packets;
 
+[AutoSync]
 public class MouseWorldPacket : NetModule
 {
     private Vector2 mouseWorld;
@@ -14,11 +15,6 @@ public class MouseWorldPacket : NetModule
         packet.mouseWorld = mouseWorld;
         return packet;
     }
-    public override void Read(BinaryReader r)
-    {
-        player = r.ReadByte();
-        mouseWorld = r.ReadVector2();
-    }
 
     public override void Receive()
     {
@@ -27,11 +23,5 @@ public class MouseWorldPacket : NetModule
         {
             Send(-1, player, false);
         }
-    }
-
-    public override void Send(ModPacket p)
-    {
-        p.Write(player);
-        p.WriteVector2(mouseWorld);
     }
 }

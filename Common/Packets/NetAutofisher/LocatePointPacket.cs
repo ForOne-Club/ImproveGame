@@ -3,6 +3,7 @@ using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Packets.NetAutofisher
 {
+    [AutoSync]
     public class LocatePointPacket : NetModule
     {
         private Point16 position;
@@ -14,18 +15,6 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             module.position = position;
             module.locatePoint = locatePoint;
             return module;
-        }
-
-        public override void Send(ModPacket p)
-        {
-            p.Write(position);
-            p.Write(locatePoint);
-        }
-
-        public override void Read(BinaryReader r)
-        {
-            position = r.ReadPoint16();
-            locatePoint = r.ReadPoint16();
         }
 
         public override void Receive()

@@ -6,13 +6,9 @@
     <members>
         <member name="T:NetSimplified.AggregateModule">
             <summary>
-            以一个 <see cref="T:Terraria.ModLoader.ModPacket"/> 包的形式发送多个 <see cref="T:NetSimplified.NetModule"/> 包, 能有效避免分散性地多次发包。
-            <br>与普通包一样, 发包时调用 <see cref="M:NetSimplified.AggregateModule.Send(Terraria.ModLoader.Mod,System.Int32,System.Int32,System.Boolean)"/> 即可</br>
-            <br>正常情况下, 其 <see cref="P:NetSimplified.NetModule.Type"/> 应为0, 获取时应调用 <see cref="M:NetSimplified.AggregateModule.Get(System.Collections.Generic.List{NetSimplified.NetModule})"/> 而不是 <see cref="M:NetSimplified.NetModuleLoader.Get``1"/>, 否则会获取到 <see langword="null"/> 值</br>
+            以一个 <see cref="T:Terraria.ModLoader.ModPacket"/> 包的形式发送多个 <see cref="T:NetSimplified.NetModule"/> 包, 能有效避免分散性地多次发包。<br/>
+            与普通包一样, 发包时调用 <see cref="M:NetSimplified.NetModule.Send(System.Int32,System.Int32,System.Boolean)"/> 即可
             </summary>
-        </member>
-        <member name="M:NetSimplified.AggregateModule.SetStaticDefaults">
-            <inheritdoc/>
         </member>
         <member name="P:NetSimplified.AggregateModule.Modules">
             <summary>所有要发的包</summary>
@@ -26,77 +22,75 @@
         <member name="M:NetSimplified.AggregateModule.Read(System.IO.BinaryReader)">
             <inheritdoc/>
         </member>
-        <member name="M:NetSimplified.AggregateModule.Receive">
-            <inheritdoc/>
-        </member>
         <member name="M:NetSimplified.AggregateModule.Send(Terraria.ModLoader.ModPacket)">
             <inheritdoc/>
         </member>
-        <member name="M:NetSimplified.AggregateModule.Send(System.Int32,System.Int32,System.Boolean)">
-            <summary>
-            请不要对 <see cref="T:NetSimplified.AggregateModule"/> 使用这个, 去用 <see cref="M:NetSimplified.AggregateModule.Send(Terraria.ModLoader.Mod,System.Int32,System.Int32,System.Boolean)"/>
-            </summary>
-        </member>
-        <member name="M:NetSimplified.AggregateModule.Send(Terraria.ModLoader.Mod,System.Int32,System.Int32,System.Boolean)">
-            <summary>
-            通过 <see cref="T:Terraria.ModLoader.ModPacket"/> 发包
-            </summary>
-            <param name="mod">该 <see cref="T:NetSimplified.AggregateModule"/> 包是由哪个 <see cref="T:Terraria.ModLoader.Mod"/> 发出的</param>
-            <param name="toClient">如果不是 -1, 则包<b>只会</b>发送给对应的客户端</param>
-            <param name="ignoreClient">如果不是 -1, 则包<b>不会</b>发送给对应的客户端</param>
-            <param name="runLocally">如果为 <see langword="true"/> 则在发包时会调用 <see cref="M:NetSimplified.AggregateModule.Receive"/> 方法</param>
+        <member name="M:NetSimplified.AggregateModule.Receive">
+            <inheritdoc/>
         </member>
         <member name="T:NetSimplified.Extensions">
             <summary>
             发包的一些实用方法
             </summary>
         </member>
+        <member name="M:NetSimplified.Extensions.WriteRGBA(System.IO.BinaryWriter,Microsoft.Xna.Framework.Color)">
+            <summary>
+            写入 <see cref="T:Microsoft.Xna.Framework.Color"/> RGBA值<br/>
+            对应: <see cref="M:NetSimplified.Extensions.ReadRGBA(System.IO.BinaryReader)"/>
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Extensions.ReadRGBA(System.IO.BinaryReader)">
+            <summary>
+            读取 <see cref="T:Microsoft.Xna.Framework.Color"/> RGBA值<br/>
+            对应: <see cref="M:NetSimplified.Extensions.WriteRGBA(System.IO.BinaryWriter,Microsoft.Xna.Framework.Color)"/>
+            </summary>
+        </member>
         <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Microsoft.Xna.Framework.Point)">
             <summary>
-            写入 <see cref="T:Microsoft.Xna.Framework.Point"/> 坐标
-            <br>对应: <see cref="M:NetSimplified.Extensions.ReadPoint(System.IO.BinaryReader)"/></br>
+            写入 <see cref="T:Microsoft.Xna.Framework.Point"/> 坐标<br/>
+            对应: <see cref="M:NetSimplified.Extensions.ReadPoint(System.IO.BinaryReader)"/>
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.ReadPoint(System.IO.BinaryReader)">
             <summary>
-            读取 <see cref="T:Microsoft.Xna.Framework.Point"/> 坐标
-            <br>对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Microsoft.Xna.Framework.Point)"/></br>
+            读取 <see cref="T:Microsoft.Xna.Framework.Point"/> 坐标<br/>
+            对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Microsoft.Xna.Framework.Point)"/>
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.DataStructures.Point16)">
             <summary>
-            写入 <see cref="T:Terraria.DataStructures.Point16"/> 坐标
-            <br>对应: <see cref="M:NetSimplified.Extensions.ReadPoint16(System.IO.BinaryReader)"/></br>
+            写入 <see cref="T:Terraria.DataStructures.Point16"/> 坐标<br/>
+            对应: <see cref="M:NetSimplified.Extensions.ReadPoint16(System.IO.BinaryReader)"/>
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.ReadPoint16(System.IO.BinaryReader)">
             <summary>
-            读取 <see cref="T:Terraria.DataStructures.Point16"/> 坐标
-            <br>对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.DataStructures.Point16)"/></br>
+            读取 <see cref="T:Terraria.DataStructures.Point16"/> 坐标<br/>
+            对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.DataStructures.Point16)"/>
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item,System.Boolean,System.Boolean)">
             <summary>
-            写入 <see cref="T:Terraria.Item"/> 若值为 <see langword="null"/> 则直接实例化一个空 <see cref="T:Terraria.Item"/>
-            <br>对应: <see cref="M:NetSimplified.Extensions.ReadItem(System.IO.BinaryReader,System.Boolean,System.Boolean)"/></br>
+            写入 <see cref="T:Terraria.Item"/> 若值为 <see langword="null"/> 则直接实例化一个空 <see cref="T:Terraria.Item"/><br/>
+            对应: <see cref="M:NetSimplified.Extensions.ReadItem(System.IO.BinaryReader,System.Boolean,System.Boolean)"/>
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.ReadItem(System.IO.BinaryReader,System.Boolean,System.Boolean)">
             <summary>
-            读取 <see cref="T:Terraria.Item"/>
-            <br>对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item,System.Boolean,System.Boolean)"/></br>
+            读取 <see cref="T:Terraria.Item"/><br/>
+            对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item,System.Boolean,System.Boolean)"/>
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item[],System.Boolean,System.Boolean)">
             <summary>
-            写入 <see cref="T:Terraria.Item"/> 数组, 若存在值为 <see langword="null"/> 的物品则直接实例化一个空 <see cref="T:Terraria.Item"/>
-            <br>对应: <see cref="M:NetSimplified.Extensions.ReadItemArray(System.IO.BinaryReader,System.Boolean,System.Boolean)"/></br>
+            写入 <see cref="T:Terraria.Item"/> 数组, 若存在值为 <see langword="null"/> 的物品则直接实例化一个空 <see cref="T:Terraria.Item"/><br/>
+            对应: <see cref="M:NetSimplified.Extensions.ReadItemArray(System.IO.BinaryReader,System.Boolean,System.Boolean)"/>
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.ReadItemArray(System.IO.BinaryReader,System.Boolean,System.Boolean)">
             <summary>
-            读取 <see cref="T:Terraria.Item"/> 数组
-            <br>对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item[],System.Boolean,System.Boolean)"/></br>
+            读取 <see cref="T:Terraria.Item"/> 数组<br/>
+            对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item[],System.Boolean,System.Boolean)"/>
             </summary>
         </member>
         <member name="T:NetSimplified.NetModule">
@@ -143,8 +137,15 @@
         </member>
         <member name="T:NetSimplified.NetModuleLoader">
             <summary>
-            用于加载 <see cref="T:NetSimplified.NetModule"/> 的类
+            用于加载 <see cref="T:NetSimplified.NetModule"/> 的类。
+            需要在 <see cref="M:Terraria.ModLoader.Mod.Load"/> 中对此类调用 <see cref="M:Terraria.ModLoader.Mod.AddContent(Terraria.ModLoader.ILoadable)"/> 以添加实质内容
             </summary>
+        </member>
+        <member name="M:NetSimplified.NetModuleLoader.Load">
+            <inheritdoc />
+        </member>
+        <member name="M:NetSimplified.NetModuleLoader.Unload">
+            <inheritdoc />
         </member>
         <member name="M:NetSimplified.NetModuleLoader.Get(System.Int32)">
             <summary>
@@ -157,6 +158,40 @@
             获取带有Mod与Type信息的 <see cref="T:NetSimplified.NetModule"/> 实例
             </summary>
             <returns><see cref="T:NetSimplified.NetModule"/> 实例</returns>
+        </member>
+        <member name="T:NetSimplified.Syncing.AutoSyncAttribute">
+            <summary>
+            此特性允许变量自动发包传输<br/>
+            支持的变量类型: <see cref="T:System.Byte"/>, <see cref="T:System.Boolean"/>, <see cref="T:System.Int16"/>, <see cref="T:System.Int32"/>, <see cref="T:System.Int64"/>, <see cref="T:System.UInt16"/>, <see cref="T:System.UInt32"/>, <see cref="T:System.UInt64"/>, <see cref="T:System.Single"/>, <see cref="T:System.Double"/>, <see cref="T:System.String"/>, <see cref="T:Microsoft.Xna.Framework.Vector2"/>, <see cref="T:Microsoft.Xna.Framework.Color"/>, <see cref="T:Microsoft.Xna.Framework.Point"/>, <see cref="T:Terraria.DataStructures.Point16"/>, <see cref="T:Terraria.Item"/> 及其数组类型
+            </summary>
+        </member>
+        <member name="F:NetSimplified.Syncing.AutoSyncHandler.SupportedTypes">
+            <summary>
+            自动传输支持的数据类型
+            </summary>
+        </member>
+        <member name="T:NetSimplified.Syncing.ItemSyncAttribute">
+            <summary>
+            用于决定是否传输 <see cref="T:Terraria.Item"/> 的 <see cref="F:Terraria.Item.stack"/> 与 <see cref="F:Terraria.Item.favorited"/> 信息的特性
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Syncing.ItemSyncAttribute.#ctor(System.Boolean,System.Boolean)">
+            <summary>
+            <inheritdoc cref="T:NetSimplified.Syncing.ItemSyncAttribute"/>
+            </summary>
+            <param name="syncStack">是否传输物品的 <see cref="F:Terraria.Item.stack"/> 信息</param>
+            <param name="syncFavorite">是否传输物品的 <see cref="F:Terraria.Item.favorited"/> 信息</param>
+        </member>
+        <member name="T:NetSimplified.Syncing.ColorSyncAttribute">
+            <summary>
+            用于决定是否传输 <see cref="T:Microsoft.Xna.Framework.Color"/> 的 <see cref="P:Microsoft.Xna.Framework.Color.A"/> 信息的特性
+            </summary>
+        </member>
+        <member name="M:NetSimplified.Syncing.ColorSyncAttribute.#ctor(System.Boolean)">
+            <summary>
+            <inheritdoc cref="T:NetSimplified.Syncing.ColorSyncAttribute"/>
+            </summary>
+            <param name="syncAlpha">是否传输 <see cref="T:Microsoft.Xna.Framework.Color"/> 的 <see cref="P:Microsoft.Xna.Framework.Color.A"/> 信息</param>
         </member>
     </members>
 </doc>
