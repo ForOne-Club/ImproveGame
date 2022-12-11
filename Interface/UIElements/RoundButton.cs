@@ -53,15 +53,9 @@ namespace ImproveGame.Interface.UIElements
         public Color GetColor()
         {
             if (Selected())
-            {
-                if (!SelectedTimer.AnyOpen)
-                    SelectedTimer.Open();
-            }
+                SelectedTimer.TryOpen();
             else
-            {
-                if (!SelectedTimer.AnyClose)
-                    SelectedTimer.Close();
-            }
+                SelectedTimer.TryClose();
             return Color.Lerp(Color.Gray, Color.White, SelectedTimer.Schedule);
         }
 

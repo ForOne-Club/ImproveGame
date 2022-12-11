@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Interface.Common;
-using System.Threading;
 
 namespace ImproveGame.Interface.SUIElements
 {
@@ -9,11 +8,10 @@ namespace ImproveGame.Interface.SUIElements
         public float forkSize;
         public float radius;
         public float border;
-        public AnimationTimer hoverTimer;
+        public AnimationTimer hoverTimer = new(3);
 
         public SUIFork(float forkSize)
         {
-            hoverTimer = new();
             radius = 3.7f;
             border = 2;
             this.forkSize = forkSize;
@@ -41,14 +39,14 @@ namespace ImproveGame.Interface.SUIElements
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            Color background = Color.Lerp(UIColor.Default.TitleBackground * 0.25f, UIColor.Default.TitleBackground * 0.75f, hoverTimer.Schedule);
+            Color background = Color.Lerp(UIColor.Default.TitleBackground * 0.5f, UIColor.Default.TitleBackground * 0.75f, hoverTimer.Schedule);
             Color fork = Color.Lerp(Color.Transparent, UIColor.Default.CloseBackground, hoverTimer.Schedule);
 
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
-            PixelShader.DrawRoundRect(pos, size, 10f, background, 3f, UIColor.Default.CloseBorder);
+            PixelShader.DrawRoundRect(pos, size, 10f, background, 3f, UIColor.Default.PanelBorder);
             Vector2 forkPos = pos + size / 2 - new Vector2(forkSize / 2);
-            PixelShader.DrawFork(forkPos, forkSize, radius, fork, border, UIColor.Default.CloseBorder);
+            PixelShader.DrawFork(forkPos, forkSize, radius, fork, border, UIColor.Default.PanelBorder);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace ImproveGame.Interface.BannerChestUI
 {
     public class PackageGUI : UIState
     {
+        public enum StorageType { Banners, Potions }
         private static bool visible;
         public static StorageType storageType;
         public IPackage package;
@@ -22,39 +23,20 @@ namespace ImproveGame.Interface.BannerChestUI
             set => visible = value;
         }
 
-        private Vector2 offset;
-        public bool dragging;
-
         public SUIPanel mainPanel;
         public SUITitle title;
         public SUICheckbox checkbox;
         public SUICheckbox checkbox2;
-        public SUIFork close;
+        public SUIFork fork;
         public SUIPanel gridPanel;
         public PackageGrid grid;
 
         private readonly Color background = new(44, 57, 105, 160);
         public override void OnInitialize()
         {
-            Append(mainPanel = new(Color.Black, background) { HAlign = 0.5f, VAlign = 0.5f });
+            Append(mainPanel = new(Color.Black, background) { HAlign = 0.5f, VAlign = 0.5f, Draggable = true });
             mainPanel.SetPadding(12f);
             mainPanel.Append(title = new("中文|Chinese", 0.5f));
-            mainPanel.OnMouseDown += (uie, evt) =>
-            {
-                if (!(close.IsMouseHovering || grid.Parent.IsMouseHovering))
-                {
-                    dragging = true;
-                    offset = Main.MouseScreen - mainPanel.GetPPos();
-                }
-            };
-            mainPanel.OnMouseUp += (_, _) => dragging = false;
-            mainPanel.OnUpdate += (_) =>
-            {
-                if (dragging)
-                {
-                    mainPanel.SetPos(Main.MouseScreen - offset).Recalculate();
-                }
-            };
 
             mainPanel.Append(checkbox = new(() => package.AutoStorage, state => package.AutoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f));
             checkbox.Top.Pixels = title.Bottom() + 8f;
@@ -63,9 +45,9 @@ namespace ImproveGame.Interface.BannerChestUI
             checkbox2.Top.Pixels = checkbox.Top();
             checkbox2.Left.Pixels = checkbox.Right() + 8f;
 
-            mainPanel.Append(close = new(30) { HAlign = 1f });
-            close.Height.Pixels = title.Height();
-            close.OnMouseDown += (_, _) =>
+            mainPanel.Append(fork = new(30) { HAlign = 1f });
+            fork.Height.Pixels = title.Height();
+            fork.OnMouseDown += (_, _) =>
             {
                 SoundEngine.PlaySound(SoundID.MenuClose);
                 Visible = false;
@@ -86,20 +68,17 @@ namespace ImproveGame.Interface.BannerChestUI
         private void GridPanel_OnMouseDown(UIMouseEvent evt, UIElement listeningElement)
         {
             if (Main.mouseItem.IsAir)
-            {
                 return;
-            }
+
             List<Item> items = grid.items;
+
             // 旗帜收纳箱
             if (storageType is StorageType.Banners && ItemToBanner(Main.mouseItem) != -1)
-            {
                 BannerChest.PutInBannerChest(items, ref Main.mouseItem, package.AutoSort);
-            }
+
             // 药水袋子
             else if (storageType is StorageType.Potions && Main.mouseItem.buffType > 0 && Main.mouseItem.consumable)
-            {
                 PotionBag.PutInPotionBag(items, ref Main.mouseItem, package.AutoSort);
-            }
         }
 
         public override void Update(GameTime gameTime)
@@ -124,12 +103,6 @@ namespace ImproveGame.Interface.BannerChestUI
             this.title.RefreshSize();
             this.package = package;
             Recalculate();
-        }
-
-        public enum StorageType
-        {
-            Banners,
-            Potions
         }
     }
 }

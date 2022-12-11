@@ -27,7 +27,7 @@ namespace ImproveGame.Interface.UIElements
             Scrollbar.Height.Pixels = ItemList.Height();
 
             // 既然尺寸都已知了, 那就直接设置他们爹地的大小吧.
-            Width.Pixels = ItemList.Width() + Scrollbar.Width() + 10;
+            Width.Pixels = ItemList.Width() + 30;
             Height.Pixels = ItemList.Height() + 1;
         }
 

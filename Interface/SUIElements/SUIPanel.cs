@@ -44,7 +44,8 @@ namespace ImproveGame.Interface.SUIElements
         // 可拖动界面
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (Draggable)
+            // 当点击的是子元素不进行移动
+            if (Draggable && evt.Target == this)
             {
                 Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
                 Dragging = true;

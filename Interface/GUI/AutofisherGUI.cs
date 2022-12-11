@@ -470,19 +470,16 @@ namespace ImproveGame.Interface.GUI
             var tex = TextureAssets.Item[ItemType];
             if (IsMouseHovering)
             {
-                if (!_timer.AnyOpen)
-                {
-                    _timer.Open();
-                }
+                _timer.TryOpen();
 
                 Main.LocalPlayer.mouseInterface = true;
 
                 Main.instance.MouseText(GetText($"Autofisher.{GetType().Name}"));
 
             }
-            else if (!_timer.AnyClose)
+            else
             {
-                _timer.Close();
+                _timer.TryClose();
             }
 
             if (_timer.Timer > 10)

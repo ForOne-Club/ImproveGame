@@ -2,15 +2,15 @@
 using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
 
-namespace ImproveGame.Interface.UIElements
+namespace ImproveGame.Interface.SUIElements
 {
     /// <summary>
     /// 图片按钮
     /// </summary>
-    public class PictureButton : UIElement
+    public class SUIPictureButton : UIElement
     {
         public int[] data = new int[5];
-        public AnimationTimer HoverTimer = new(2);
+        public AnimationTimer HoverTimer = new(3);
 
         public string text;
         public Vector2 textSize;
@@ -20,7 +20,7 @@ namespace ImproveGame.Interface.UIElements
         public Vector2 imageSize;
         public Vector2 imagePosition;
 
-        public PictureButton(Texture2D texture, string text)
+        public SUIPictureButton(Texture2D texture, string text)
         {
             Width.Pixels = GetTextSize(text).X + this.HPadding() + 75;
             Height.Pixels = 40f;
@@ -51,14 +51,17 @@ namespace ImproveGame.Interface.UIElements
             Vector2 position = dimensions.Position();
             Vector2 size = dimensions.Size();
 
+            Vector2 shadowSize = Vector2.Lerp(new(10), new(20), HoverTimer.Schedule);
+            Color shadowColor = Color.Lerp(new(0, 0, 0, 0.2f), new(0, 0, 0, 0.4f), HoverTimer.Schedule);
+            PixelShader.DrawShadow(position - shadowSize / 2 + new Vector2(0, 2), size + shadowSize, 10, shadowColor, shadowSize.X);
+
             Color borderColor = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, HoverTimer.Schedule);
             PixelShader.DrawRoundRect(position, size, 10, UIColor.Default.ButtonBackground, 3, borderColor);
 
             dimensions = GetInnerDimensions();
             position = dimensions.Position();
-
             sb.Draw(image, position + imagePosition, Color.White);
-            DrawString(position + TextPosition, text, Color.White, Color.Black);
+            TrUtils.DrawBorderString(sb, text, position + TextPosition, Color.White);
         }
 
         public void SetText(string text)

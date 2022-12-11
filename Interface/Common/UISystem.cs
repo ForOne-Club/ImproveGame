@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.BannerChestUI;
+﻿using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.GUI;
 
 namespace ImproveGame.Interface.Common
@@ -190,6 +189,14 @@ namespace ImproveGame.Interface.Common
                     {
                         if (BigBagGUI.Visible)
                             BigBagGUI.Draw(Main.spriteBatch);
+                        /*SpriteBatch sb = Main.spriteBatch;
+                        Vector2 size = new(100);
+                        Effect effect = ModAssets.BezierCurves.Value;
+                        effect.Parameters["size"].SetValue(size);
+                        effect.Parameters["Pn"].SetValue(new Vector2[] { new(10), new(90, 10), new(10, 90), new(90) });
+                        sb.ReBegin(effect, Main.UIScaleMatrix);
+                        sb.Draw(new Texture2D(Main.graphics.GraphicsDevice, 1, 1), Main.MouseScreen - size - new Vector2(10), null, Color.White, 0, new(0), size, 0, 1f);
+                        sb.ReBegin(null, Main.UIScaleMatrix);*/
                         return true;
                     }, InterfaceScaleType.UI));
 

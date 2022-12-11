@@ -2,12 +2,9 @@
 {
     public enum AnimationState // 动画当前的状态
     {
-        Initial,
-        Open,
-        Close,
-        OpenComplete,
-        CloseComplete
+        Initial, Open, Close, OpenComplete, CloseComplete
     }
+
     public enum AnimationMode
     {
         Linear, // 线性变化 (就一种类型, 还是一个大分类)
@@ -49,10 +46,22 @@
             State = AnimationState.Open;
         }
 
+        public void TryOpen()
+        {
+            if (!AnyOpen)
+                Open();
+        }
+
         public void Close()
         {
             Timer = TimerMax;
             State = AnimationState.Close;
+        }
+
+        public void TryClose()
+        {
+            if (!AnyClose)
+                Close();
         }
 
         public void Update()

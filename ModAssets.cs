@@ -7,6 +7,8 @@ namespace ImproveGame
     public class ModAssets : ModSystem
     {
         internal static Asset<Effect> Fork;
+        internal static Asset<Effect> Round;
+        internal static Asset<Effect> RoundRectShadow;
         internal static Asset<Effect> RoundRect;
         internal static Asset<Effect> RoundRect2;
         internal static Asset<Effect> RoundRectNoBorder;
@@ -15,6 +17,7 @@ namespace ImproveGame
         internal static Asset<Effect> ItemEffect;
         internal static Asset<Effect> LiquidSurface;
         internal static Asset<Effect> Transform;
+        internal static Asset<Effect> BezierCurves;
         internal static Asset<Texture2D> Perlin;
 
         public override void Load()
@@ -22,7 +25,10 @@ namespace ImproveGame
             if (Main.dedServ)
                 return;
 
+            BezierCurves = GetEffect("BezierCurves");
             Fork = GetEffect("Fork");
+            Round = GetEffect("Round");
+            RoundRectShadow = GetEffect("RoundRectShadow");
             RoundRect = GetEffect("RoundRect");
             RoundRect2 = GetEffect("RoundRect2");
             RoundRectNoBorder = GetEffect("RoundRectNoBorder");
@@ -32,12 +38,14 @@ namespace ImproveGame
             LiquidSurface = GetEffect("LiquidSurface");
             Transform = GetEffect("Transform");
             Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");
+
+            // 修改原版 UI 的绘制
             // On.Terraria.GameContent.UI.Elements.UIPanel.DrawSelf += UIPanel_DrawSelf;
-            // On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawBar += UIScrollbar_DrawBar;
+            // On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawBar += (_, _, _, _, _, _) => { };
             // On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawSelf += UIScrollbar_DrawSelf;
         }
 
-        private void UIScrollbar_DrawSelf(On.Terraria.GameContent.UI.Elements.UIScrollbar.orig_DrawSelf orig, UIScrollbar self, SpriteBatch spriteBatch)
+        /*private void UIScrollbar_DrawSelf(On.Terraria.GameContent.UI.Elements.UIScrollbar.orig_DrawSelf orig, UIScrollbar self, SpriteBatch spriteBatch)
         {
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
@@ -52,23 +60,21 @@ namespace ImproveGame
             PixelShader.DrawRoundRect(pos, size, MathF.Min(size.X, size.Y) / 2, new(220, 220, 220), 3, new(220, 220, 220));
         }
 
-        private void UIScrollbar_DrawBar(On.Terraria.GameContent.UI.Elements.UIScrollbar.orig_DrawBar orig, UIScrollbar self, SpriteBatch spriteBatch, Texture2D texture, Rectangle dimensions, Color color) { return; }
-
         private void UIPanel_DrawSelf(On.Terraria.GameContent.UI.Elements.UIPanel.orig_DrawSelf orig, UIPanel self, SpriteBatch spriteBatch)
         {
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
             PixelShader.DrawRoundRect(pos, size, 12, self.BackgroundColor, 3, self.BorderColor);
-        }
+        }*/
 
         public override void Unload()
         {
             if (Main.dedServ)
-            {
                 return;
-            }
 
             Fork = null;
+            Round = null;
+            RoundRectShadow = null;
             RoundRect = null;
             RoundRect2 = null;
             RoundRectNoBorder = null;

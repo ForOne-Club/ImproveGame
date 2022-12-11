@@ -165,7 +165,7 @@ namespace ImproveGame.Interface.SUIElements
             Color hoverColor = Color.Lerp(hoveredColor, Color.White, dragging ? 1 : HoverTimer.Schedule);
 
             // 滚动条拖动块
-            PixelShader.DrawRoundRect(innerPosition, innerSize, innerSize.X / 2, hoverColor, 0, hoverColor);
+            PixelShader.DrawRoundRect(innerPosition, innerSize, innerSize.X / 2, hoverColor);
         }
 
         public void SetView(float viewSize, float maxViewSize)

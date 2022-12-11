@@ -1,8 +1,9 @@
-﻿using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
 using ImproveGame.Interface.Common;
-using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.SUIElements;
+using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
@@ -10,8 +11,6 @@ namespace ImproveGame.Interface.GUI
     public class BigBagGUI : UIState
     {
         private static bool visible = true;
-        private Vector2 offset = Vector2.Zero;
-        public bool dragging;
         public static bool Visible
         {
             get
@@ -25,41 +24,21 @@ namespace ImproveGame.Interface.GUI
 
         public SUITitle title;
         public SUIPanel MainPanel;
-        public SUIFork CloseButton;
-        public PictureButton[] buttons = new PictureButton[4];
+        public SUIFork fork;
+        public SUIPictureButton[] buttons = new SUIPictureButton[4];
         // 物品列表
         public ModItemGrid ItemGrid;
         public SUICheckbox[] checkbox = new SUICheckbox[3];
 
         public override void OnInitialize()
         {
-            Append(MainPanel = new(UIColor.Default.PanelBorder, UIColor.Default.PanelBackground));
-            MainPanel.OnMouseDown += (evt, uie) =>
-            {
-                if (!ItemGrid.IsMouseHovering && !CloseButton.IsMouseHovering)
-                {
-                    dragging = true;
-                    offset = evt.MousePosition - uie.GetPPos();
-                }
-            };
-            MainPanel.OnMouseUp += (evt, uie) => dragging = false;
-            MainPanel.OnUpdate += (uie) =>
-            {
-                if (dragging)
-                {
-                    uie.SetPos(Main.MouseScreen - offset).Recalculate();
-                }
-                if (!GetDimensions().ToRectangle().Intersects(uie.GetDimensions().ToRectangle()))
-                {
-                    uie.SetPos(Vector2.Zero).Recalculate();
-                }
-            };
+            Append(MainPanel = new(UIColor.Default.PanelBorder, UIColor.Default.PanelBackground) { Draggable = true });
 
             MainPanel.Append(title = new(GetText("SuperVault.Name"), 0.5f));
 
-            MainPanel.Append(CloseButton = new(30) { HAlign = 1f });
-            CloseButton.Height.Pixels = title.Height();
-            CloseButton.OnMouseDown += (evt, uie) => Close();
+            MainPanel.Append(fork = new(30) { HAlign = 1f });
+            fork.Height.Pixels = title.Height();
+            fork.OnMouseDown += (evt, uie) => Close();
 
             MainPanel.Append(checkbox[0] = new SUICheckbox(() =>
             {
@@ -140,12 +119,18 @@ namespace ImproveGame.Interface.GUI
             if (MainPanel.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
         }
+        protected override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            Vector2 shadowSize = new(80);
+            Vector2 pos = MainPanel.GetDimensions().Position() - shadowSize / 2;
+            Vector2 size = MainPanel.GetDimensions().Size() + shadowSize;
+            PixelShader.DrawShadow(pos, size, 10, new(0, 0, 0, 0.4f), shadowSize.X);
+        }
 
         public void Open()
         {
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
-            dragging = false;
             visible = true;
         }
 

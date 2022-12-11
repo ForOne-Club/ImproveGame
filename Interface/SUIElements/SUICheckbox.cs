@@ -14,9 +14,7 @@ namespace ImproveGame.Interface.SUIElements
         public Color textColor = Color.White;
         public Color textBorderColor = Color.Black;
 
-        public Color color1 = Color.Transparent;
-        public Color color2 = Color.DarkGreen;
-        public AnimationTimer AT;
+        private readonly AnimationTimer timer = new(4);
 
         public float Spacing = 8;
 
@@ -32,7 +30,6 @@ namespace ImproveGame.Interface.SUIElements
 
         public SUICheckbox(Func<bool> GetState, Action<bool> SetState, string text, float textScale = 1f)
         {
-            AT = new(3);
             Text = text;
             this.textScale = textScale;
             this.GetState = GetState;
@@ -49,16 +46,12 @@ namespace ImproveGame.Interface.SUIElements
 
         public override void Update(GameTime gameTime)
         {
-            AT.Update();
+            timer.Update();
             base.Update(gameTime);
-            if (GetState() && !AT.AnyOpen)
-            {
-                AT.Open();
-            }
-            else if (!GetState() && !AT.AnyClose)
-            {
-                AT.Close();
-            }
+            if (GetState())
+                timer.TryOpen();
+            else if (!GetState())
+                timer.TryClose();
         }
 
         public override void MouseDown(UIMouseEvent evt)
@@ -69,8 +62,8 @@ namespace ImproveGame.Interface.SUIElements
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            Color color = Color.Lerp(new Color(0, 0, 0, 25), new(25, 25, 25, 25), AT.Schedule);
-            Color color2 = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, AT.Schedule);
+            Color color = Color.Lerp(new Color(0, 0, 0, 25), new(25, 25, 25, 25), timer.Schedule);
+            Color color2 = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, timer.Schedule);
 
             Vector2 position = GetInnerDimensions().Position();
             Vector2 size = GetInnerDimensions().Size();
@@ -80,8 +73,9 @@ namespace ImproveGame.Interface.SUIElements
             PixelShader.DrawRoundRect(position1, boxSize, boxSize.Y / 2, color, 3, color2);
 
             Vector2 boxSize2 = new(boxSize.Y - 10 * textScale);
-            Vector2 position2 = position + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2), new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), AT.Schedule);
-            PixelShader.DrawRoundRect(position2, boxSize2, boxSize2.Y / 2, color2);
+            Vector2 position2 = position + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2), new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), timer.Schedule);
+            PixelShader.DrawRound(position2, boxSize2.X, color2);
+            // PixelShader.DrawRoundRect(position2, boxSize2, boxSize2.Y / 2, color2);
 
             DrawString(position + new Vector2(boxSize.X + Spacing * textScale, size.Y / 2 - textSize.Y * textScale / 2 + UIConfigs.Instance.UIYAxisOffset * textScale), text, Color.White,
                 textBorderColor, textScale);
