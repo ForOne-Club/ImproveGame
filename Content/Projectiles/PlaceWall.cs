@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ImproveGame.Common.Animations;
+using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -13,9 +15,10 @@ namespace ImproveGame.Content.Projectiles
     {
         public override void SetDefaults()
         {
-            Projectile.width = 30;
+            Projectile.width = 24;
             Projectile.height = 24;
-            DrawOriginOffsetX = 3;
+            Projectile.timeLeft = 100000;
+            // DrawOriginOffsetX = 3;
         }
 
         public List<Point> Walls = new();
@@ -50,22 +53,24 @@ namespace ImproveGame.Content.Projectiles
                     GetText("CombatText_Projectile.PlaceWall_Lack"));
                 Projectile.Kill();
             }
-            Projectile.timeLeft++;
             if (Index < Walls.Count)
             {
+                Point wall = Walls[Index++];
+
+                BongBong(wall.ToVector2() * 16, 16, 16);
+
+                if (Main.tile[wall.X, wall.Y].WallType == item.createWall)
+                    return;
+
                 if (item.consumable || ItemLoader.ConsumeItem(item, Player))
-                {
                     item.stack--;
-                }
-                Projectile proj = Projectile.NewProjectileDirect(null,
-                    Projectile.position, (Walls[Index].ToVector2() * 16f - Projectile.Center) / 10f,
-                    ModContent.ProjectileType<PlaceWall2>(), 0, 0, Projectile.owner);
-                proj.ai[1] = item.createWall;
-                proj.Center = Projectile.Center + new Vector2(DrawOriginOffsetX, DrawOriginOffsetY);
-                proj.rotation = proj.velocity.ToRotation();
-                ((PlaceWall2)proj.ModProjectile).WallPosition = Walls[Index];
-                Projectile.rotation = proj.rotation + MathF.PI;
-                Index++;
+                WorldGen.PlaceWall(wall.X, wall.Y, item.createWall);
+
+                if (Main.tile[wall.X, wall.Y].WallType > 0)
+                    WorldGen.KillWall(wall.X, wall.Y);
+
+                NetMessage.SendTileSquare(Projectile.owner, wall.X, wall.Y);
+                Projectile.rotation = (wall.ToVector2() * 16f + new Vector2(8) - Projectile.Center).ToRotation() + MathF.PI;
             }
             else
             {
@@ -75,8 +80,13 @@ namespace ImproveGame.Content.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D t2d = TextureAssets.Projectile[ModContent.ProjectileType<PlaceWall2>()].Value;
-            return base.PreDraw(ref lightColor);
+            if (Index < Walls.Count)
+            {
+                Vector2 center = Projectile.Center - Main.screenPosition;
+                PixelShader.DrawLine(Main.GameViewMatrix.EffectMatrix, center, center,
+                    Walls[Index - 1].ToVector2() * 16f + new Vector2(8) - Main.screenPosition, 2, new Color(0, 155, 255));
+            }
+            return true;
         }
     }
 }

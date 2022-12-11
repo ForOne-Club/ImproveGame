@@ -1,4 +1,5 @@
-﻿using ImproveGame.Interface.BannerChestUI;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.GUI;
 
 namespace ImproveGame.Interface.Common

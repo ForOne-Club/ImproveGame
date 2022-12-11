@@ -29,6 +29,7 @@ namespace ImproveGame.Interface.SUIElements
         {
             base.MouseOver(evt);
             hoverTimer.Open();
+            SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         public override void MouseOut(UIMouseEvent evt)

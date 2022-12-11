@@ -7,6 +7,7 @@ namespace ImproveGame
     public class ModAssets : ModSystem
     {
         internal static Asset<Effect> Fork;
+        internal static Asset<Effect> Line;
         internal static Asset<Effect> Round;
         internal static Asset<Effect> RoundRectShadow;
         internal static Asset<Effect> RoundRect;
@@ -27,6 +28,7 @@ namespace ImproveGame
 
             BezierCurves = GetEffect("BezierCurves");
             Fork = GetEffect("Fork");
+            Line = GetEffect("Line");
             Round = GetEffect("Round");
             RoundRectShadow = GetEffect("RoundRectShadow");
             RoundRect = GetEffect("RoundRect");
@@ -73,6 +75,7 @@ namespace ImproveGame
                 return;
 
             Fork = null;
+            Line = null;
             Round = null;
             RoundRectShadow = null;
             RoundRect = null;

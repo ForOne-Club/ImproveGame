@@ -5,7 +5,7 @@ namespace ImproveGame.Content.Items
     public class WallPlace : ModItem
     {
         public override void SetStaticDefaults() => SacrificeTotal = 1;
-        
+
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.WallPlace;
 
         public override void SetDefaults()
@@ -39,8 +39,8 @@ namespace ImproveGame.Content.Items
         {
             // 不在世界内，在Wall内，大于500
             if (position.X >= Main.maxTilesX || position.Y >= Main.maxTilesY || position.X <= 0 ||
-                position.Y <= 0 || Walls.Contains(position) || Walls2.Contains(position) || Walls.Count > 1000 ||
-                Walls2.Count > 2000)
+                position.Y <= 0 || Walls.Contains(position) || Walls2.Contains(position) || Walls.Count > 5000 ||
+                Walls2.Count > 5000)
             {
                 return;
             }
@@ -82,7 +82,7 @@ namespace ImproveGame.Content.Items
                 List<Point> Walls = new();
                 List<Point> Walls2 = new();
                 SearchWall(point, ref Walls, ref Walls2);
-                if (Walls.Count > 1000 || (Walls.Count == 0 && Walls2.Count > 2000))
+                if (Walls.Count > 5000 || (Walls.Count == 0 && Walls2.Count > 5000))
                 {
                     CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.WallPlace_Limit"));
                     return true;
@@ -92,7 +92,7 @@ namespace ImproveGame.Content.Items
                     if (GetFirstWall(player) is not null)
                     {
                         CombatText.NewText(player.getRect(), new Color(0, 155, 255), GetText("CombatText_Item.WallPlace_Consume") + Walls.Count);
-                        Projectile proj = Projectile.NewProjectileDirect(null, Main.MouseWorld, Vector2.Zero,
+                        Projectile proj = Projectile.NewProjectileDirect(null, Main.MouseWorld.ToTileCoordinates().ToVector2() * 16 + new Vector2(8), Vector2.Zero,
                             ModContent.ProjectileType<Projectiles.PlaceWall>(), 0, 0, player.whoAmI);
                         ((Projectiles.PlaceWall)proj.ModProjectile).Walls = Walls;
                     }
