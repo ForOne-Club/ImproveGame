@@ -6,6 +6,7 @@ namespace ImproveGame
 {
     public class ModAssets : ModSystem
     {
+        internal static Asset<Effect> BetterFiltering;
         internal static Asset<Effect> Fork;
         internal static Asset<Effect> Line;
         internal static Asset<Effect> Round;
@@ -27,6 +28,7 @@ namespace ImproveGame
                 return;
 
             BezierCurves = GetEffect("BezierCurves");
+            BetterFiltering = GetEffect("BetterFiltering");
             Fork = GetEffect("Fork");
             Line = GetEffect("Line");
             Round = GetEffect("Round");
@@ -74,6 +76,7 @@ namespace ImproveGame
             if (Main.dedServ)
                 return;
 
+            BetterFiltering = null;
             Fork = null;
             Line = null;
             Round = null;

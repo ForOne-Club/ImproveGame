@@ -52,7 +52,7 @@ Mods.ImproveGame.ItemTooltip:
         '''
         Summons a wall placer at your cursor
         Automatically recognizes possible rooms and places walls in your inventory
-        The recognized room can have at most 1000 tiles' space
+        The recognized room can have at most 2500 tiles' space
         Considers tangible blocks, platforms and doors as boundaries
         Each player can only summon one, use again to recall it
         '''

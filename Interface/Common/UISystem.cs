@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.BannerChestUI;
+﻿using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.GUI;
 
 namespace ImproveGame.Interface.Common
@@ -143,10 +142,12 @@ namespace ImproveGame.Interface.Common
 
         #endregion
 
-        #region 更新 & 绘制
+        #region 更新
 
         public override void UpdateUI(GameTime gameTime)
         {
+            if (BigBagGUI.Visible)
+                BigBagInterface?.Update(gameTime);
             if (AutofisherGUI.Visible)
                 AutofisherInterface?.Update(gameTime);
             if (BuffTrackerGUI.Visible)
@@ -155,8 +156,6 @@ namespace ImproveGame.Interface.Common
                 LiquidWandInterface?.Update(gameTime);
             if (PackageGUI.Visible)
                 PackageInterface?.Update(gameTime);
-            if (BigBagGUI.Visible)
-                BigBagInterface?.Update(gameTime);
             if (ArchitectureGUI.Visible)
                 ArchitectureInterface?.Update(gameTime);
             if (BrustGUI.Visible)
@@ -175,6 +174,10 @@ namespace ImproveGame.Interface.Common
             PrefixRecallInterface?.Update(gameTime);
         }
 
+        #endregion
+
+        #region 绘制
+
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             int inventoryIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Inventory");
@@ -184,23 +187,6 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Autofisher GUI", DrawAutofishGUI, InterfaceScaleType.UI));
-
-                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: BigBag GUI",
-                    () =>
-                    {
-                        if (BigBagGUI.Visible)
-                            BigBagGUI.Draw(Main.spriteBatch);
-                        /*SpriteBatch sb = Main.spriteBatch;
-                        Vector2 size = new(100);
-                        Effect effect = ModAssets.BezierCurves.Value;
-                        effect.Parameters["size"].SetValue(size);
-                        effect.Parameters["Pn"].SetValue(new Vector2[] { new(10), new(90, 10), new(10, 90), new(90) });
-                        sb.ReBegin(effect, Main.UIScaleMatrix);
-                        sb.Draw(new Texture2D(Main.graphics.GraphicsDevice, 1, 1), Main.MouseScreen - size - new Vector2(10), null, Color.White, 0, new(0), size, 0, 1f);
-                        sb.ReBegin(null, Main.UIScaleMatrix);*/
-                        return true;
-                    }, InterfaceScaleType.UI));
-
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Package GUI",
                     () =>
                     {
@@ -208,11 +194,27 @@ namespace ImproveGame.Interface.Common
                             PackageGUI.Draw(Main.spriteBatch);
                         return true;
                     }, InterfaceScaleType.UI));
-
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: BigBag GUI",
+                    () =>
+                    {
+                        if (BigBagGUI.Visible)
+                            BigBagGUI.Draw(Main.spriteBatch);
+                        return true;
+                    }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Grab Bag Info GUI",
-                    () => { if (GrabBagInfoGUI.Visible) GrabBagInfoGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
+                    () =>
+                    {
+                        if (GrabBagInfoGUI.Visible)
+                            GrabBagInfoGUI.Draw(Main.spriteBatch);
+                        return true;
+                    }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Lifeform Analyzer GUI",
-                    () => { if (LifeformAnalyzerGUI.Visible) LifeformAnalyzerGUI.Draw(Main.spriteBatch); return true; }, InterfaceScaleType.UI));
+                    () =>
+                    {
+                        if (LifeformAnalyzerGUI.Visible)
+                            LifeformAnalyzerGUI.Draw(Main.spriteBatch);
+                        return true;
+                    }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Structure GUI", () =>
                 {
                     if (StructureGUI.Visible)
@@ -221,7 +223,9 @@ namespace ImproveGame.Interface.Common
                 }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Prefix Recall GUI", () =>
                 {
-                    if (PrefixRecallGUI.Visible) PrefixRecallGUI.Draw(Main.spriteBatch); return true;
+                    if (PrefixRecallGUI.Visible)
+                        PrefixRecallGUI.Draw(Main.spriteBatch);
+                    return true;
                 }, InterfaceScaleType.UI));
             }
 

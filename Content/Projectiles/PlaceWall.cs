@@ -1,13 +1,4 @@
 ﻿using ImproveGame.Common.Animations;
-using Microsoft.VisualBasic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.GameContent;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ImproveGame.Content.Projectiles
 {
@@ -59,15 +50,13 @@ namespace ImproveGame.Content.Projectiles
 
                 BongBong(wall.ToVector2() * 16, 16, 16);
 
-                if (Main.tile[wall.X, wall.Y].WallType == item.createWall)
-                    return;
-
                 if (item.consumable || ItemLoader.ConsumeItem(item, Player))
                     item.stack--;
-                WorldGen.PlaceWall(wall.X, wall.Y, item.createWall);
 
-                if (Main.tile[wall.X, wall.Y].WallType > 0)
+                if (Main.tile[wall.X, wall.Y].WallType > 0 && Main.tile[wall.X, wall.Y].WallType != item.createWall)
                     WorldGen.KillWall(wall.X, wall.Y);
+
+                WorldGen.PlaceWall(wall.X, wall.Y, item.createWall);
 
                 NetMessage.SendTileSquare(Projectile.owner, wall.X, wall.Y);
                 Projectile.rotation = (wall.ToVector2() * 16f + new Vector2(8) - Projectile.Center).ToRotation() + MathF.PI;

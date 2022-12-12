@@ -48,14 +48,14 @@ namespace ImproveGame.Common.Animations
             sb.ReBegin(null, Main.UIScaleMatrix);
         }
 
-        public static void DrawShadow(Vector2 position, Vector2 size, float round, Color background, float shadowSize)
+        public static void DrawShadow(Vector2 position, Vector2 size, float round, Color background, float shadowWidth)
         {
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRectShadow.Value;
             effect.Parameters[nameof(size)].SetValue(size);
-            effect.Parameters[nameof(round)].SetValue(round + shadowSize / 2);
+            effect.Parameters[nameof(round)].SetValue(round);
             effect.Parameters[nameof(background)].SetValue(background.ToVector4());
-            effect.Parameters[nameof(shadowSize)].SetValue(shadowSize);
+            effect.Parameters[nameof(shadowWidth)].SetValue(shadowWidth);
             sb.ReBegin(effect, Main.UIScaleMatrix);
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
             sb.ReBegin(null, Main.UIScaleMatrix);

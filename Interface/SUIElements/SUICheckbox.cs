@@ -35,8 +35,8 @@ namespace ImproveGame.Interface.SUIElements
             this.GetState = GetState;
             this.SetState = SetState;
 
-            PaddingLeft = 14 * textScale;
-            PaddingRight = 14 * textScale;
+            PaddingLeft = 12 * textScale;
+            PaddingRight = 12 * textScale;
             PaddingTop = 5 * textScale;
             PaddingBottom = 5 * textScale;
 
@@ -62,8 +62,9 @@ namespace ImproveGame.Interface.SUIElements
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            Color color = Color.Lerp(new Color(0, 0, 0, 25), new(25, 25, 25, 25), timer.Schedule);
-            Color color2 = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, timer.Schedule);
+            Color color = Color.Lerp(UIColor.Default.CheckBoxBackground, UIColor.Default.CheckBoxBackgroundHover, timer.Schedule);
+            Color color2 = Color.Lerp(UIColor.Default.CheckBoxBorder, UIColor.Default.CheckBoxBorderHover, timer.Schedule);
+            Color color3 = Color.Lerp(UIColor.Default.CheckBoxRound, UIColor.Default.CheckBoxRoundHover, timer.Schedule);
 
             Vector2 position = GetInnerDimensions().Position();
             Vector2 size = GetInnerDimensions().Size();
@@ -74,8 +75,7 @@ namespace ImproveGame.Interface.SUIElements
 
             Vector2 boxSize2 = new(boxSize.Y - 10 * textScale);
             Vector2 position2 = position + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2), new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), timer.Schedule);
-            PixelShader.DrawRound(position2, boxSize2.X, color2);
-            // PixelShader.DrawRoundRect(position2, boxSize2, boxSize2.Y / 2, color2);
+            PixelShader.DrawRound(position2, boxSize2.X, color3);
 
             DrawString(position + new Vector2(boxSize.X + Spacing * textScale, size.Y / 2 - textSize.Y * textScale / 2 + UIConfigs.Instance.UIYAxisOffset * textScale), text, Color.White,
                 textBorderColor, textScale);

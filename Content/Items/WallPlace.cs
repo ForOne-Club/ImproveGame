@@ -39,8 +39,8 @@ namespace ImproveGame.Content.Items
         {
             // 不在世界内，在Wall内，大于500
             if (position.X >= Main.maxTilesX || position.Y >= Main.maxTilesY || position.X <= 0 ||
-                position.Y <= 0 || Walls.Contains(position) || Walls2.Contains(position) || Walls.Count > 5000 ||
-                Walls2.Count > 5000)
+                position.Y <= 0 || Walls.Contains(position) || Walls2.Contains(position) || Walls.Count > 2500 ||
+                Walls2.Count > 2500)
             {
                 return;
             }
@@ -82,7 +82,7 @@ namespace ImproveGame.Content.Items
                 List<Point> Walls = new();
                 List<Point> Walls2 = new();
                 SearchWall(point, ref Walls, ref Walls2);
-                if (Walls.Count > 5000 || (Walls.Count == 0 && Walls2.Count > 5000))
+                if (Walls.Count > 2500 || (Walls.Count == 0 && Walls2.Count > 2500))
                 {
                     CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.WallPlace_Limit"));
                     return true;

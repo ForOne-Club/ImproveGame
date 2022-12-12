@@ -116,15 +116,16 @@ namespace ImproveGame.Interface.GUI
             base.Update(gameTime);
             if (MainPanel.IsMouseHovering)
                 PlayerInput.LockVanillaMouseScroll("ImproveGame: BigBagGUI");
+
             if (MainPanel.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
         }
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            Vector2 shadowSize = new(80);
-            Vector2 pos = MainPanel.GetDimensions().Position() - shadowSize / 2;
-            Vector2 size = MainPanel.GetDimensions().Size() + shadowSize;
-            PixelShader.DrawShadow(pos, size, 10, new(0, 0, 0, 0.4f), shadowSize.X);
+            Vector2 shadowWidth = new(40);
+            Vector2 pos = MainPanel.GetDimensions().Position() - shadowWidth;
+            Vector2 size = MainPanel.GetDimensions().Size() + shadowWidth * 2;
+            PixelShader.DrawShadow(pos, size, 10, new Color(0, 0, 0, 0.25f), shadowWidth.X);
         }
 
         public void Open()

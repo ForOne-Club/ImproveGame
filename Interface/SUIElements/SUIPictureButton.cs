@@ -51,9 +51,9 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 position = dimensions.Position();
             Vector2 size = dimensions.Size();
 
-            Vector2 shadowSize = Vector2.Lerp(new(10), new(20), HoverTimer.Schedule);
-            Color shadowColor = Color.Lerp(new(0, 0, 0, 0.2f), new(0, 0, 0, 0.4f), HoverTimer.Schedule);
-            PixelShader.DrawShadow(position - shadowSize / 2 + new Vector2(0, 2), size + shadowSize, 10, shadowColor, shadowSize.X);
+            Vector2 shadowWidth = Vector2.Lerp(new(0), new(5), HoverTimer.Schedule);
+            Color shadowColor = Color.Lerp(new(0, 0, 0, 0), new(0, 0, 0, 0.5f), HoverTimer.Schedule);
+            PixelShader.DrawRoundRect(position - shadowWidth, size + shadowWidth * 2, 10 + shadowWidth.X, shadowColor);
 
             Color borderColor = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, HoverTimer.Schedule);
             PixelShader.DrawRoundRect(position, size, 10, UIColor.Default.ButtonBackground, 3, borderColor);
