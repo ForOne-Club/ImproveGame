@@ -17,11 +17,14 @@ namespace ImproveGame.Common.Systems
         public static bool SelectPoolMode = false;
 
         // 画画魔杖
+        [Serializable]
         public enum PaintMode : byte { Tile, Wall, Remove };
+
         public static PaintMode PaintWandMode = PaintMode.Tile;
 
         // 构造法杖
         public enum Construct : byte { Save, Place, ExplodeAndPlace };
+
         public static Construct ConstructMode = Construct.Save;
         public static Construct ExplodeMode = Construct.ExplodeAndPlace;
         public static string ConstructFilePath;
