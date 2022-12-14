@@ -50,6 +50,9 @@ namespace ImproveGame.Content.Items
 
         public override bool CanUseItem(Player player)
         {
+            if (player.noBuilding)
+                return false;
+
             if (player.altFunctionUse == 2)
             {
                 if (SpaceWandGUI.Visible && UISystem.Instance.SpaceWandGUI.timer.AnyOpen)
@@ -102,7 +105,7 @@ namespace ImproveGame.Content.Items
                 if (Main.mouseRight && CanPlaceTile)
                 {
                     CanPlaceTile = false;
-                    CombatText.NewText(player.getRect(), new Color(250, 40, 80), GetText("CombatText_Item.SpaceWand_Cancel"));
+                    CombatText.NewText(player.getRect(), new Color(250, 40, 80), GetText("CombatText.Item.SpaceWand_Cancel"));
                 }
                 Color color;
                 if (CanPlaceTile)

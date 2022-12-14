@@ -70,9 +70,24 @@ namespace ImproveGame.Common.Animations
             Effect effect = ModAssets.Round.Value;
             effect.Parameters[nameof(size)].SetValue(size);
             effect.Parameters[nameof(background)].SetValue(background.ToVector4());
-            sb.ReBegin(effect, ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+            effect.CurrentTechnique.Passes["NoBorder"].Apply();
             sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
-            sb.ReBegin(null, ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+        }
+
+        public static void DrawRound(Vector2 position, float size, Color background, float border, Color borderColor, bool ui = true)
+        {
+            SpriteBatch sb = Main.spriteBatch;
+            Effect effect = ModAssets.Round.Value;
+            effect.Parameters[nameof(size)].SetValue(size);
+            effect.Parameters[nameof(background)].SetValue(background.ToVector4());
+            effect.Parameters[nameof(border)].SetValue(border);
+            effect.Parameters[nameof(borderColor)].SetValue(borderColor.ToVector4());
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+            effect.CurrentTechnique.Passes["HasBorder"].Apply();
+            sb.Draw(texture, position, null, Color.White, 0, new(0), size, 0, 1f);
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
         }
 
         public static void DrawLine(Matrix matrix, Vector2 start, Vector2 end, float width, Color background)

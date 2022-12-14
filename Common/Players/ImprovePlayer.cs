@@ -156,7 +156,7 @@ namespace ImproveGame.Common.Players
             float TimeShortened = Player.respawnTimer * MathHelper.Clamp(Config.ResurrectionTimeShortened, 0, 100) / 100;
             if (TimeShortened > 0)
             {
-                int ct = CombatText.NewText(Player.getRect(), new(25, 255, 25), GetTextWith("CombatText_Commonds.ResurrectionTimeShortened", new
+                int ct = CombatText.NewText(Player.getRect(), new(25, 255, 25), GetTextWith("CombatText.Commonds.ResurrectionTimeShortened", new
                 {
                     Name = Player.name,
                     Time = MathF.Round(TimeShortened / 60)

@@ -1,11 +1,11 @@
 ﻿using ImproveGame.Content.Projectiles;
-using System.Collections.Generic;
-using Terraria;
 
 namespace ImproveGame.Content.Items
 {
     public class WallPlace : ModItem
     {
+        public static readonly int RobotType = ModContent.ProjectileType<WallRobot>();
+
         public override void SetStaticDefaults() => SacrificeTotal = 1;
 
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.WallPlace;
@@ -75,10 +75,10 @@ namespace ImproveGame.Content.Items
             {
                 foreach (Projectile proj in Main.projectile)
                 {
-                    if (proj.owner == player.whoAmI && proj.active && proj.type == ModContent.ProjectileType<Projectiles.WallRobot>())
+                    if (proj.owner == player.whoAmI && proj.active && proj.type == RobotType)
                     {
                         proj.Kill();
-                        CombatText.NewText(proj.getRect(), Color.DarkRed, GetText("CombatText_Item.WallPlace_Kill"));
+                        CombatText.NewText(proj.getRect(), Color.Red, GetText("CombatText.Item.WallPlace_Kill"));
                         return true;
                     }
                 }
@@ -90,7 +90,7 @@ namespace ImproveGame.Content.Items
 
                 if (walls1.Count > 2500)
                 {
-                    CombatText.NewText(player.getRect(), Color.DarkRed, GetText("CombatText_Item.WallPlace_Limit"));
+                    CombatText.NewText(player.getRect(), Color.Red, GetText("CombatText.Item.WallPlace_Limit"));
                     return true;
                 }
                 else
@@ -120,7 +120,7 @@ namespace ImproveGame.Content.Items
                                 return -1;
                             return 0;
                         });*/
-                        CombatText.NewText(player.getRect(), new Color(0, 155, 255), GetText("CombatText_Item.WallPlace_Consume") + walls1.Count);
+                        CombatText.NewText(player.getRect(), new Color(0, 155, 255), GetText("CombatText.Item.WallPlace_Consume") + walls1.Count);
                         Projectile proj = Projectile.NewProjectileDirect(null, center, Vector2.Zero, RobotType, 0, 0, player.whoAmI);
                         proj.Center = center;
                         WallRobot robot = (WallRobot)proj.ModProjectile;
@@ -131,6 +131,11 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
-        public static readonly int RobotType = ModContent.ProjectileType<Projectiles.WallRobot>();
+        public override bool CanUseItem(Player player)
+        {
+            if (player.noBuilding)
+                return false;
+            return base.CanUseItem(player);
+        }
     }
 }

@@ -9,22 +9,25 @@ Mods.ImproveGame:
     {
         WandDrop: Won't drop if the player already has one in the inventory
     }
-    CombatText_Item:
+    CombatText:
     {
-        CreateWand_NotEnough: "Missing materials!"
-        SpaceWand_Cancel: "Canceled!"
-        SpaceWand_Lack: "Not enough platform!"
-        WallPlace_Limit: "This area is too big!"
-        WallPlace_Consume: "Excepted consumption: "
-        WallPlace_Kill: "Stopped placing!"
-    }
-    CombatText_Projectile:
-    {
-        PlaceWall_Lace: "Stopped placing due to lack of wall"
-    }
-    CombatText_Commonds:
-    {
-        ResurrectionTimeShortened: "{Time}s reduced respawn time！"
+        Item:
+        {
+            CreateWand_NotEnough: "Missing materials!"
+            SpaceWand_Cancel: "Canceled!"
+            SpaceWand_Lack: "Not enough platform!"
+            WallPlace_Limit: "This area is too big!"
+            WallPlace_Consume: "Excepted consumption: "
+            WallPlace_Kill: "Stopped placing!"
+        }
+        Projectile:
+        {
+            PlaceWall_Lace: "Stopped placing due to lack of wall"
+        }
+        Commonds:
+        {
+            ResurrectionTimeShortened: "{Time}s reduced respawn time！"
+        }
     }
     Tips:
     {

@@ -85,6 +85,13 @@ namespace ImproveGame.Content.Items
         [CloneByReference]
         internal float Honey;
 
+        public override bool CanUseItem(Player player)
+        {
+            if (player.noBuilding)
+                return false;
+            return base.CanUseItem(player);
+        }
+
         public override void SaveData(TagCompound tag)
         {
             tag[nameof(Water)] = Water;

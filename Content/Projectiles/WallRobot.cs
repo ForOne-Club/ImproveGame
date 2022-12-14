@@ -9,30 +9,17 @@ namespace ImproveGame.Content.Projectiles
             Projectile.width = 24;
             Projectile.height = 24;
             Projectile.timeLeft = 100000;
-            // DrawOriginOffsetX = 3;
         }
 
         public List<Point> Walls = new();
 
-        public int Index
+        public int index
         {
-            get
-            {
-                return (int)Projectile.ai[0];
-            }
-            set
-            {
-                Projectile.ai[0] = value;
-            }
+            get => (int)Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
-        public Player Player
-        {
-            get
-            {
-                return Main.player[Projectile.owner];
-            }
-        }
+        public Player Player => Main.player[Projectile.owner];
 
         public override void AI()
         {
@@ -41,14 +28,14 @@ namespace ImproveGame.Content.Projectiles
 
             if (item is null)
             {
-                CombatText.NewText(Projectile.getRect(), new Color(225, 0, 0), GetText("CombatText_Projectile.PlaceWall_Lack"));
+                CombatText.NewText(Projectile.getRect(), new Color(225, 0, 0), GetText("CombatText.Projectile.PlaceWall_Lack"));
                 Projectile.Kill();
                 return;
             }
 
-            if (Index < Walls.Count)
+            if (index < Walls.Count)
             {
-                Point wall = Walls[Index++];
+                Point wall = Walls[index++];
 
                 BongBong(wall.ToVector2() * 16, 16, 16);
 
@@ -74,10 +61,10 @@ namespace ImproveGame.Content.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (Index < Walls.Count)
+            if (index < Walls.Count)
             {
                 Vector2 center = Projectile.Center - Main.screenPosition;
-                Vector2 target = Walls[Index - 1].ToVector2() * 16f + new Vector2(8) - Main.screenPosition;
+                Vector2 target = Walls[index - 1].ToVector2() * 16f + new Vector2(8) - Main.screenPosition;
                 PixelShader.DrawLine(Main.GameViewMatrix.TransformationMatrix, center, target, 2f, background, 1f, border);
             }
             return true;

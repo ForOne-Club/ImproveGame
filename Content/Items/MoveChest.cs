@@ -80,6 +80,9 @@ public class MoveChest : ModItem
     /// <returns></returns>
     public override bool CanUseItem(Player player)
     {
+        if (player.noBuilding)
+            return false;
+
         if (forceCoolDown > 0)
         {
             return false;

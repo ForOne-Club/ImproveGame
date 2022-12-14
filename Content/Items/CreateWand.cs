@@ -163,6 +163,8 @@ namespace ImproveGame.Content.Items
 
         public override bool CanUseItem(Player player)
         {
+            if (player.noBuilding)
+                return false;
             if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer)
             {
                 if (!ArchitectureGUI.Visible)
@@ -351,7 +353,7 @@ namespace ImproveGame.Content.Items
             }
             if (!_playedSound && player.altFunctionUse == 0)
             {
-                CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.CreateWand_NotEnough"), true);
+                CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText.Item.CreateWand_NotEnough"), true);
             }
             _playedSound = false;
             return true;

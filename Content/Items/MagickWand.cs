@@ -121,6 +121,8 @@ namespace ImproveGame.Content.Items
 
         public override bool CanUseSelector(Player player)
         {
+            if (player.noBuilding)
+                return false;
             return !WandSystem.FixedMode;
         }
 

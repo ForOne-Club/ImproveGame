@@ -20,6 +20,13 @@ namespace ImproveGame.Content.Items
             ExtraRange = new(16, 10);
         }
 
+        public override bool CanUseItem(Player player)
+        {
+            if (player.noBuilding)
+                return false;
+            return base.CanUseItem(player);
+        }
+
         public override void AddRecipes()
         {
             CreateRecipe().AddIngredient(ModContent.ItemType<MagickWand>())
