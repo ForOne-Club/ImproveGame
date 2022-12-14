@@ -2,7 +2,7 @@
 {
     public class UIColor
     {
-        public static ModColors Default = new();
+        public static ModColors Default = new ModColors();
     }
 
     public class ModColors
@@ -32,5 +32,38 @@
         public Color CheckBoxBackgroundHover = new(52, 34, 143);
 
         public Color CloseBackground = new(200, 40, 40);
+    }
+
+    public class ModColors2 : ModColors
+    {
+        public ModColors2()
+        {
+            PanelBorder = new(27, 50, 57, 210);
+            PanelBackground = new(11, 14, 15, 127);
+
+            SlotFavoritedBorder = new(230, 230, 230, 200);
+            SlotNoFavoritedBorder = new(27, 50, 57, 210);
+            SlotFavoritedBackground = new(8, 25, 30, 100);
+            SlotNoFavoritedBackground = new(11, 14, 15, 127);
+
+            ButtonBackground = new(17, 40, 47);
+
+            TitleBackground = new(8, 25, 30);
+
+            // 滚动条
+            CheckBackground = new(11, 14, 15, 127);
+
+            // 边框
+            CheckBoxBorder = new(27, 50, 57, 210);
+            CheckBoxBorderHover = new(230, 230, 230, 200);
+            // 开关中的圆形
+            CheckBoxRound = new(27, 50, 57, 210);
+            CheckBoxRoundHover = new(230, 230, 230, 200);
+            // 背景色
+            CheckBoxBackground = new(11, 14, 15, 127);
+            CheckBoxBackgroundHover = new(11, 14, 15, 127);
+
+            CloseBackground = new(200, 40, 40);
+        }
     }
 }

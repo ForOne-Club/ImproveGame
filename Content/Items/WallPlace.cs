@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ImproveGame.Content.Projectiles;
+using System.Collections.Generic;
+using Terraria;
 
 namespace ImproveGame.Content.Items
 {
@@ -19,48 +21,51 @@ namespace ImproveGame.Content.Items
             Item.UseSound = SoundID.Item1;
         }
 
+        /// <summary>
+        /// 判断是不是实体块
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="Walls"></param>
+        /// <param name="Walls2"></param>
+        /// <returns>
+        /// 0 没有方块没有墙体<br/>
+        /// 1 有实体块(可以阻挡人物移动)<br/>
+        /// 2 有墙体没有方块
+        /// </returns>
         public static int HasBoundary(Point position, ref List<Point> Walls, ref List<Point> Walls2)
         {
             Tile tile = Main.tile[position.X, position.Y];
-            // 有墙体，是平台，门，实体块
-            if (tile.HasTile && (TileID.Sets.Platforms[tile.TileType] || Main.tileSolid[tile.TileType] ||
-                tile.TileType == 10 || tile.TileType == 11))
-            {
-                return 1; // 有方块或者墙体
-            }
+
+            if (tile.HasTile && (TileID.Sets.Platforms[tile.TileType] || Main.tileSolid[tile.TileType] || tile.TileType == 10 || tile.TileType == 11))
+                return 1;
+
             if (tile.WallType == 0)
-            {
-                return 0; // 没有方块没有墙体
-            }
-            return 2; // 有墙体没有方块
+                return 0;
+
+            return 2;
         }
 
-        public static void SearchWall(Point position, ref List<Point> Walls, ref List<Point> Walls2)
+        public static void SearchWalls(Point pos, ref List<Point> walls1, ref List<Point> walls2)
         {
             // 不在世界内，在Wall内，大于500
-            if (position.X >= Main.maxTilesX || position.Y >= Main.maxTilesY || position.X <= 0 ||
-                position.Y <= 0 || Walls.Contains(position) || Walls2.Contains(position) || Walls.Count > 2500 ||
-                Walls2.Count > 2500)
-            {
+            if (pos.X >= Main.maxTilesX || pos.Y >= Main.maxTilesY || pos.X <= 0 || pos.Y <= 0 || walls1.Contains(pos) || walls2.Contains(pos) || walls1.Count > 2500 || walls2.Count > 2500)
                 return;
-            }
-            int hasTile = HasBoundary(position, ref Walls, ref Walls2);
+
+            int hasTile = HasBoundary(pos, ref walls1, ref walls2);
+
             if (hasTile == 1)
-            {
                 return;
-            }
+
             if (hasTile == 0)
-            {
-                Walls.Add(position);
-            }
+                walls1.Add(pos);
+
             if (hasTile == 2)
-            {
-                Walls2.Add(position);
-            }
-            SearchWall(position + new Point(0, -1), ref Walls, ref Walls2);
-            SearchWall(position + new Point(1, 0), ref Walls, ref Walls2);
-            SearchWall(position + new Point(0, 1), ref Walls, ref Walls2);
-            SearchWall(position + new Point(-1, 0), ref Walls, ref Walls2);
+                walls2.Add(pos);
+
+            SearchWalls(pos + new Point(0, -1), ref walls1, ref walls2);
+            SearchWalls(pos + new Point(1, 0), ref walls1, ref walls2);
+            SearchWalls(pos + new Point(0, 1), ref walls1, ref walls2);
+            SearchWalls(pos + new Point(-1, 0), ref walls1, ref walls2);
         }
 
         public override bool? UseItem(Player player)
@@ -68,86 +73,64 @@ namespace ImproveGame.Content.Items
             Point point = Main.MouseWorld.ToTileCoordinates();
             if (Main.myPlayer == player.whoAmI)
             {
-                for (int i = 0; i < Main.projectile.Length; i++)
+                foreach (Projectile proj in Main.projectile)
                 {
-                    Projectile proj = Main.projectile[i];
-                    if (proj.owner == player.whoAmI && proj.active &&
-                        proj.type == ModContent.ProjectileType<Projectiles.PlaceWall>())
+                    if (proj.owner == player.whoAmI && proj.active && proj.type == ModContent.ProjectileType<Projectiles.WallRobot>())
                     {
                         proj.Kill();
-                        CombatText.NewText(proj.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.WallPlace_Kill"));
+                        CombatText.NewText(proj.getRect(), Color.DarkRed, GetText("CombatText_Item.WallPlace_Kill"));
                         return true;
                     }
                 }
-                List<Point> Walls = new();
-                List<Point> Walls2 = new();
-                SearchWall(point, ref Walls, ref Walls2);
-                if (Walls.Count > 2500 || (Walls.Count == 0 && Walls2.Count > 2500))
+                List<Point> walls1 = new(), walls2 = new();
+                SearchWalls(point, ref walls1, ref walls2);
+
+                if (walls1.Count == 0)
+                    return false;
+
+                if (walls1.Count > 2500)
                 {
-                    CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText_Item.WallPlace_Limit"));
+                    CombatText.NewText(player.getRect(), Color.DarkRed, GetText("CombatText_Item.WallPlace_Limit"));
                     return true;
                 }
-                else if (Walls.Count > 0)
+                else
                 {
-                    if (GetFirstWall(player) is not null)
+                    if (FirstWall(player) is not null)
                     {
-                        CombatText.NewText(player.getRect(), new Color(0, 155, 255), GetText("CombatText_Item.WallPlace_Consume") + Walls.Count);
-                        Projectile proj = Projectile.NewProjectileDirect(null, Main.MouseWorld.ToTileCoordinates().ToVector2() * 16 + new Vector2(8), Vector2.Zero,
-                            ModContent.ProjectileType<Projectiles.PlaceWall>(), 0, 0, player.whoAmI);
-                        ((Projectiles.PlaceWall)proj.ModProjectile).Walls = Walls;
+                        Vector2 center = Main.MouseWorld.ToTileCoordinates().ToVector2() * 16 + new Vector2(8);
+                        // 角度排序
+                        walls1.Sort((a, b) =>
+                        {
+                            float ap = (a.ToVector2() * 16f + new Vector2(8) - center).ToRotation();
+                            float bp = (b.ToVector2() * 16f + new Vector2(8) - center).ToRotation();
+                            if (ap > bp)
+                                return 1;
+                            if (ap < bp)
+                                return -1;
+                            return 0;
+                        });
+                        // 距离排序
+                        /*walls1.Sort((a, b) =>
+                        {
+                            float ap = center.Distance(a.ToVector2() * 16f + new Vector2(8));
+                            float bp = center.Distance(b.ToVector2() * 16f + new Vector2(8));
+                            if (ap > bp)
+                                return 1;
+                            if (ap < bp)
+                                return -1;
+                            return 0;
+                        });*/
+                        CombatText.NewText(player.getRect(), new Color(0, 155, 255), GetText("CombatText_Item.WallPlace_Consume") + walls1.Count);
+                        Projectile proj = Projectile.NewProjectileDirect(null, center, Vector2.Zero, RobotType, 0, 0, player.whoAmI);
+                        proj.Center = center;
+                        WallRobot robot = (WallRobot)proj.ModProjectile;
+                        robot.Walls = walls1;
                     }
                 }
             }
             return true;
         }
 
-        /*public static List<Point> Walls = new();
-        public static void PlaceWallXY(Point position, int range = 10)
-        {
-            Tile tile = Main.tile[position.X, position.Y];
-            if (tile.HasTile && (TileID.Sets.Platforms[tile.TileType] || Main.tileSolid[tile.TileType] ||
-                tile.TileType == 10 || tile.TileType == 11))
-            {
-                return;
-            }
-            // 向右算
-            for (int i = 0; i <= range; i++)
-            {
-                if (HasTile(position + new Point(i, 0)))
-                {
-                    break;
-                }
-                PlaceWallY(position, i, range);
-            }
-            // 向左算
-            for (int i = -1; i >= -range; i--)
-            {
-                if (HasTile(position + new Point(i, 0)))
-                {
-                    break;
-                }
-                PlaceWallY(position, i, range);
-            }
-        }
-
-        public static void PlaceWallY(Point position, int i, int range)
-        {
-            // 向下算
-            for (int j = 1; j <= range; j++)
-            {
-                if (HasTile(position + new Point(i, j)))
-                {
-                    break;
-                }
-            }
-            // 向上算
-            for (int j = -1; j >= -range; j--)
-            {
-                if (HasTile(position + new Point(i, j)))
-                {
-                    break;
-                }
-            }
-        }*/
+        public static readonly int RobotType = ModContent.ProjectileType<Projectiles.WallRobot>();
     }
 }

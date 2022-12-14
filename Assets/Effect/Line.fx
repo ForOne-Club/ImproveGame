@@ -3,24 +3,34 @@ float4 background;
 float2 start;
 float2 end;
 float width;
+float border;
+float4 borderColor;
 
-float4 DrawLine(float2 p1, float2 p2, float2 pos, float4 newColor, float4 oldColor)
+float4 NoBorder(float2 coords : TEXCOORD0) : COLOR0
 {
-    float2 ba = p2 - p1;
-    float2 pa = pos - p1;
+    float2 ba = end - start;
+    float2 pa = coords * size - start;
     float h = clamp(dot(pa, ba) / dot(ba, ba), 0, 1);
-    return lerp(newColor, oldColor, smoothstep(width - 0.5, width + 0.5, length(pa - h * ba)));
+    return lerp(background, 0, smoothstep(width - 0.5, width + 0.5, length(pa - h * ba)));
 }
 
-float4 Line(float2 coords : TEXCOORD0) : COLOR0
+float4 HasBorder(float2 coords : TEXCOORD0) : COLOR0
 {
-    return DrawLine(start, end, coords * size, background, 0);
+    float2 ba = end - start;
+    float2 pa = coords * size - start;
+    float h = clamp(dot(pa, ba) / dot(ba, ba), 0, 1);
+    return lerp(lerp(background, borderColor, smoothstep(width - border - 0.5, width - border + 0.5, length(pa - h * ba))), 0, smoothstep(width - 0.5, width + 0.5, length(pa - h * ba)));
 }
 
 technique Technique1
 {
-    pass Fork
+    pass NoBorder
     {
-        PixelShader = compile ps_3_0 Line();
+        PixelShader = compile ps_3_0 NoBorder();
+    }
+
+    pass HasBorder
+    {
+        PixelShader = compile ps_3_0 HasBorder();
     }
 }

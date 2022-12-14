@@ -1,7 +1,9 @@
-﻿using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Systems;
 
 namespace ImproveGame.Entitys
 {
+    public enum TextDisplayMode { None, Width, Height, All }
     public class Box
     {
         public int whoAmI;
@@ -91,16 +93,16 @@ namespace ImproveGame.Entitys
 
         public void Draw()
         {
-            // PixelShader.DrawBox(Rectangle.TopLeft() * 16 + new Vector2(-2) - Main.screenPosition, Rectangle.Size() * 16 + new Vector2(4), 4, 2, new(0, 0xff, 0xa9), new(0xd, 0x4d, 0xff), new(0, 0xff, 0xa9, 150), new(0xd, 0x4d, 0xff, 150));
-            DrawBorderRect(Rectangle, backgroundColor, borderColor);
+            Vector2 pos = Rectangle.TopLeft() * 16 + new Vector2(-2) - Main.screenPosition;
+            Vector2 size = Rectangle.Size() * 16 + new Vector2(4);
+            PixelShader.DrawRoundRect(pos, size, 4, backgroundColor, 2.5f, borderColor, false);
+            // DrawBorderRect(Rectangle, backgroundColor, borderColor);
         }
 
         public void DrawPreView()
         {
             if (PreView is not null)
-            {
                 Main.spriteBatch.Draw(PreView, new Vector2(Rectangle.X, Rectangle.Y) * 16f - Main.screenPosition, null, Color.White * 0.5f, 0, Vector2.Zero, 1f, 0, 0);
-            }
         }
 
         public void DrawString()
@@ -108,30 +110,20 @@ namespace ImproveGame.Entitys
             if (textDisplayMode is not TextDisplayMode.None)
             {
                 string text = string.Empty;
+
                 if (textDisplayMode == TextDisplayMode.All)
-                {
                     text = $"{Rectangle.Width}×{Rectangle.Height}";
-                }
+
                 else if (textDisplayMode == TextDisplayMode.Width)
-                {
                     text = Rectangle.Width.ToString();
-                }
+
                 else if (textDisplayMode == TextDisplayMode.Height)
-                {
                     text = Rectangle.Height.ToString();
-                }
+
                 Vector2 size = FontAssets.MouseText.Value.MeasureString(Rectangle.Width.ToString()) * 1.2f;
                 Vector2 position = Main.MouseScreen + new Vector2(16, -size.Y + 6);
                 Utils.DrawBorderString(Main.spriteBatch, text, position, borderColor, 1.2f);
             }
         }
-    }
-
-    public enum TextDisplayMode
-    {
-        None,
-        Width,
-        Height,
-        All
     }
 }

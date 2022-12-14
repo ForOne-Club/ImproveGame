@@ -51,7 +51,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 position = dimensions.Position();
             Vector2 size = dimensions.Size();
 
-            Vector2 shadowWidth = Vector2.Lerp(new(0), new(5), HoverTimer.Schedule);
+            Vector2 shadowWidth = Vector2.Lerp(new(0), new(4), HoverTimer.Schedule);
             Color shadowColor = Color.Lerp(new(0, 0, 0, 0), new(0, 0, 0, 0.5f), HoverTimer.Schedule);
             PixelShader.DrawRoundRect(position - shadowWidth, size + shadowWidth * 2, 10 + shadowWidth.X, shadowColor);
 

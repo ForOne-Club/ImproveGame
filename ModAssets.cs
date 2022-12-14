@@ -10,11 +10,8 @@ namespace ImproveGame
         internal static Asset<Effect> Fork;
         internal static Asset<Effect> Line;
         internal static Asset<Effect> Round;
-        internal static Asset<Effect> RoundRectShadow;
         internal static Asset<Effect> RoundRect;
         internal static Asset<Effect> RoundRect2;
-        internal static Asset<Effect> RoundRectNoBorder;
-        internal static Asset<Effect> RoundRectNoBorder2;
         internal static Asset<Effect> BoxShader;
         internal static Asset<Effect> ItemEffect;
         internal static Asset<Effect> LiquidSurface;
@@ -32,11 +29,8 @@ namespace ImproveGame
             Fork = GetEffect("Fork");
             Line = GetEffect("Line");
             Round = GetEffect("Round");
-            RoundRectShadow = GetEffect("RoundRectShadow");
             RoundRect = GetEffect("RoundRect");
             RoundRect2 = GetEffect("RoundRect2");
-            RoundRectNoBorder = GetEffect("RoundRectNoBorder");
-            RoundRectNoBorder2 = GetEffect("RoundRectNoBorder2");
             BoxShader = GetEffect("Box");
             ItemEffect = GetEffect("item");
             LiquidSurface = GetEffect("LiquidSurface");
@@ -80,11 +74,8 @@ namespace ImproveGame
             Fork = null;
             Line = null;
             Round = null;
-            RoundRectShadow = null;
             RoundRect = null;
             RoundRect2 = null;
-            RoundRectNoBorder = null;
-            RoundRectNoBorder2 = null;
             BoxShader = null;
             ItemEffect = null;
             LiquidSurface = null;

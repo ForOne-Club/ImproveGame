@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
@@ -38,7 +37,9 @@ namespace ImproveGame.Interface.UIElements
 
         public override void MouseDown(UIMouseEvent evt)
         {
-            SetCursorOverride(); MouseClickSlot(); base.MouseDown(evt);
+            SetCursorOverride();
+            MouseClickSlot();
+            base.MouseDown(evt);
         }
 
         public override void RightMouseDown(UIMouseEvent evt)
@@ -286,6 +287,7 @@ namespace ImproveGame.Interface.UIElements
             CalculatedStyle dimensions = GetDimensions();
             Color borderColor = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBorder : UIColor.Default.SlotNoFavoritedBorder;
             Color background = (Item.favorited && !Item.IsAir) ? UIColor.Default.SlotFavoritedBackground : UIColor.Default.SlotNoFavoritedBackground;
+
             PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, background, 3, borderColor);
             if (Item.IsAir)
                 return;

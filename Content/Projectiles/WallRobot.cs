@@ -2,7 +2,7 @@
 
 namespace ImproveGame.Content.Projectiles
 {
-    public class PlaceWall : ModProjectile
+    public class WallRobot : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -36,14 +36,16 @@ namespace ImproveGame.Content.Projectiles
 
         public override void AI()
         {
-            Item item = GetFirstWall(Player);
-            // 背包中没有墙结束弹幕
+            Item item = FirstWall(Player);
+            Lighting.AddLight(Projectile.Center, 45 / 510f, 206 / 510f, 255 / 510f);
+
             if (item is null)
             {
-                CombatText.NewText(Projectile.getRect(), new Color(225, 0, 0),
-                    GetText("CombatText_Projectile.PlaceWall_Lack"));
+                CombatText.NewText(Projectile.getRect(), new Color(225, 0, 0), GetText("CombatText_Projectile.PlaceWall_Lack"));
                 Projectile.Kill();
+                return;
             }
+
             if (Index < Walls.Count)
             {
                 Point wall = Walls[Index++];
@@ -67,15 +69,25 @@ namespace ImproveGame.Content.Projectiles
             }
         }
 
+        public Color background = new(45, 206, 255);
+        public Color border = new(66, 117, 186);
+
         public override bool PreDraw(ref Color lightColor)
         {
             if (Index < Walls.Count)
             {
                 Vector2 center = Projectile.Center - Main.screenPosition;
-                PixelShader.DrawLine(Main.GameViewMatrix.EffectMatrix, center, center,
-                    Walls[Index - 1].ToVector2() * 16f + new Vector2(8) - Main.screenPosition, 2, new Color(0, 155, 255));
+                Vector2 target = Walls[Index - 1].ToVector2() * 16f + new Vector2(8) - Main.screenPosition;
+                PixelShader.DrawLine(Main.GameViewMatrix.TransformationMatrix, center, target, 2f, background, 1f, border);
             }
             return true;
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+            for (int i = 0; i < 10; i++)
+                BongBong(Projectile.position, Projectile.width, Projectile.height);
         }
     }
 }
