@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Systems;
 using ImproveGame.Interface.Common;
 using Newtonsoft.Json;
+using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.Configs
@@ -26,24 +27,41 @@ namespace ImproveGame.Common.Configs
     [Serializable]
     public class AdditionalConfig
     {
-        public const string FileName = "ImproveGame_AdditionalConfig.json";
-        public static readonly string FullPath = Path.Combine(ConfigManager.ModConfigPath, FileName);
-        
-        public LifeformAnalyzerConfig LifeformAnalyzer;
         [Serializable]
         public class LifeformAnalyzerConfig
         {
             public List<int> VanillaBlacklist = new();
             public List<string> ModdedBlacklist = new();
         }
+
+        [Serializable]
+        public class WandModeConfig
+        {
+            [DefaultValue(true)] public bool BrustRangeFixed;
+            [DefaultValue(true)] public bool BrustDestroyTile;
+            [DefaultValue(true)] public bool BrustDestroyWall;
+            public bool LiquidAbsorption;
+            public byte LiquidSelectedType;
+
+            [DefaultValue(WandSystem.PaintMode.Tile)]
+            public WandSystem.PaintMode PaintMode;
+        }
+
+        public const string FileName = "ImproveGame_AdditionalConfig.json";
+        public static readonly string FullPath = Path.Combine(ConfigManager.ModConfigPath, FileName);
+
+        public LifeformAnalyzerConfig LifeformAnalyzer = new();
+        public WandModeConfig WandMode = new();
         public bool UseKeybindTranslation;
         public Vector2 HugeInventoryUIPosition;
 
-        public AdditionalConfig(bool serlizing)
+        /// <summary>
+        /// (根据模组内容)获取 Config
+        /// </summary>
+        /// <param name="serializing">是否正在序列化(保存状态)</param>
+        public AdditionalConfig(bool serializing)
         {
-            LifeformAnalyzer = new();
-
-            if (!serlizing)
+            if (!serializing)
                 return;
 
             foreach ((int id, bool blacklisted) in LifeAnalyzeCore.Blacklist)
@@ -60,8 +78,17 @@ namespace ImproveGame.Common.Configs
                         break;
                 }
             }
+
             LifeformAnalyzer.VanillaBlacklist.Sort();
             LifeformAnalyzer.ModdedBlacklist.Sort();
+
+            WandMode.BrustRangeFixed = WandSystem.FixedMode;
+            WandMode.BrustDestroyTile = WandSystem.TileMode;
+            WandMode.BrustDestroyWall = WandSystem.WallMode;
+            WandMode.LiquidAbsorption = WandSystem.AbsorptionMode;
+            WandMode.LiquidSelectedType = WandSystem.LiquidMode;
+            WandMode.PaintMode = WandSystem.PaintWandMode;
+
             UseKeybindTranslation = KeybindSystem.UseKeybindTranslation;
             HugeInventoryUIPosition = UISystem.Instance.BigBagGUI.MainPanel is not null
                 ? UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position()
@@ -69,6 +96,9 @@ namespace ImproveGame.Common.Configs
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition; // 在这里也保存一下
         }
 
+        /// <summary>
+        /// 应用 Config 内容
+        /// </summary>
         public void Populate()
         {
             LifeformAnalyzer?.VanillaBlacklist?.ForEach(i => LifeAnalyzeCore.Blacklist[i] = true);
@@ -77,6 +107,18 @@ namespace ImproveGame.Common.Configs
                 if (ModContent.TryFind<ModNPC>(s, out var modNpc))
                     LifeAnalyzeCore.Blacklist[modNpc.Type] = true;
             });
+
+            // 旧版兼容
+            if (WandMode is not null)
+            {
+                WandSystem.FixedMode = WandMode.BrustRangeFixed;
+                WandSystem.TileMode = WandMode.BrustDestroyTile;
+                WandSystem.WallMode = WandMode.BrustDestroyWall;
+                WandSystem.AbsorptionMode = WandMode.LiquidAbsorption;
+                WandSystem.LiquidMode = WandMode.LiquidSelectedType;
+                WandSystem.PaintWandMode = WandMode.PaintMode;
+            }
+
             KeybindSystem.UseKeybindTranslation = UseKeybindTranslation;
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition == Vector2.Zero
                 ? new(150, 340)
@@ -90,11 +132,14 @@ namespace ImproveGame.Common.Configs
             bool jsonFileExists = File.Exists(FullPath);
             string json = jsonFileExists ? File.ReadAllText(FullPath) : "{}";
 
-            try {
+            try
+            {
                 JsonConvert.PopulateObject(json, settings, ConfigManager.serializerSettings);
             }
-            catch (Exception e) when (jsonFileExists && e is JsonReaderException or JsonSerializationException) {
-                ImproveGame.Instance.Logger.Warn($"Quality of Life mod additional config file located at {FullPath} failed to load. The file was likely corrupted somehow, so the defaults will be loaded and the file deleted.");
+            catch (Exception e) when (jsonFileExists && e is JsonReaderException or JsonSerializationException)
+            {
+                ImproveGame.Instance.Logger.Warn(
+                    $"Quality of Life mod additional config file located at {FullPath} failed to load. The file was likely corrupted somehow, so the defaults will be loaded and the file deleted.");
                 File.Delete(FullPath);
                 JsonConvert.PopulateObject("{}", settings, ConfigManager.serializerSettings);
             }
