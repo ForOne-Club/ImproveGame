@@ -11,7 +11,7 @@ float4 NoBorder(float2 coords : TEXCOORD0) : COLOR0
     float2 ba = end - start;
     float2 pa = coords * size - start;
     float h = clamp(dot(pa, ba) / dot(ba, ba), 0, 1);
-    return lerp(background, 0, smoothstep(width - 0.5, width + 0.5, length(pa - h * ba)));
+    return lerp(background, 0, smoothstep(-0.5, +0.5, length(pa - h * ba) - width));
 }
 
 float4 HasBorder(float2 coords : TEXCOORD0) : COLOR0
@@ -19,7 +19,7 @@ float4 HasBorder(float2 coords : TEXCOORD0) : COLOR0
     float2 ba = end - start;
     float2 pa = coords * size - start;
     float h = clamp(dot(pa, ba) / dot(ba, ba), 0, 1);
-    return lerp(lerp(background, borderColor, smoothstep(width - border - 0.5, width - border + 0.5, length(pa - h * ba))), 0, smoothstep(width - 0.5, width + 0.5, length(pa - h * ba)));
+    return lerp(lerp(background, borderColor, smoothstep(-0.5, 0.5, length(pa - h * ba) - width + border)), 0, smoothstep(-0.5, 0.5, length(pa - h * ba) - width));
 }
 
 technique Technique1

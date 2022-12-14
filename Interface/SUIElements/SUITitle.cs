@@ -46,7 +46,7 @@ namespace ImproveGame.Interface.SUIElements
             rectangle = GetInnerDimensions();
             position = rectangle.Position();
             size = rectangle.Size();
-            Utils.DrawBorderStringBig(sb, text, position + new Vector2(0, size.Y / 2 - textSize.Y / 2 + UIConfigs.Instance.UIYAxisOffset * 3 * textScale), Color.White, textScale);
+            Utils.DrawBorderStringBig(sb, text, position + new Vector2(0, size.Y / 2 - textSize.Y / 2 + UIConfigs.Instance.TextDrawOffsetY * 3 * textScale), Color.White, textScale);
         }
 
         public void RefreshSize()

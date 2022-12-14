@@ -148,6 +148,11 @@
         Label: "[centeritem:3104] Enable infinite ammo"
         Tooltip: Ammo which stack not less than 3996 will not be consumed
     }
+    NoConsume_Projectile:
+    {
+        Label: "[centeritem:42] 无限投掷物"
+        Tooltip: 所有堆叠数  ≥ 3996 的投掷物将不再消耗。
+    }
     HideNoConsumeBuffs:
     {
         Label: "[centeritem:297] Hide buff icons of Infinite Potions"
@@ -462,4 +467,6 @@
             - Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
             '''
     }
+    UIConfigs.Label: "图形界面设置"
+    TextDrawOffsetY.Label: "MOD UI 文字Y轴绘制偏移"
 }

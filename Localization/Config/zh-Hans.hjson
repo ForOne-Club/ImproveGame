@@ -151,7 +151,12 @@
     NoConsume_Ammo:
     {
         Label: "[centeritem:3104] 无限弹药"
-        Tooltip: 所有堆叠数不小于 三千九百九十六 的弹药将不再消耗。
+        Tooltip: 所有堆叠数  ≥ 3996 的弹药将不再消耗。
+    }
+    NoConsume_Projectile:
+    {
+        Label: "[centeritem:42] 无限投掷物"
+        Tooltip: 所有堆叠数  ≥ 3996 的投掷物将不再消耗。
     }
     HideNoConsumeBuffs:
     {
@@ -467,4 +472,6 @@
             - [中文特供] 汉化各大Mod的键位设置
             '''
     }
+    UIConfigs.Label: "图形界面设置"
+    TextDrawOffsetY.Label: "MOD UI 文字Y轴绘制偏移"
 }

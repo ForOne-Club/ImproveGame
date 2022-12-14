@@ -4,6 +4,7 @@ using ImproveGame.Interface.UIElements;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.ModLoader.Config;
+using Terraria.ID;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -23,11 +24,13 @@ namespace ImproveGame.Common.GlobalItems
             if (item.maxStack > 1 && Config.ItemMaxStack > item.maxStack && item.DamageType != DamageClass.Melee && !Coins.Contains(item.type))
             {
                 item.maxStack = Config.ItemMaxStack;
-                if (item.type == ItemID.PlatinumCoin && item.stack > 2000) item.maxStack = 2000;
+                if (item.type == ItemID.PlatinumCoin && item.stack > 2000)
+                    item.maxStack = 2000;
             }
 
             // 允许任何饰品放入饰品时装栏
-            if (item.accessory) item.canBePlacedInVanityRegardlessOfConditions = true;
+            if (item.accessory)
+                item.canBePlacedInVanityRegardlessOfConditions = true;
         }
 
         // 用这个和公式来加成工具速度，这样就不需要Reload了
@@ -79,22 +82,30 @@ namespace ImproveGame.Common.GlobalItems
         {
             // 所有召唤物不会消耗
             if (Config.NoConsume_SummonItem && (SummonItems_Boss.Contains(item.type) || SummonItems_Events.Contains(item.type)))
-            {
                 return false;
-            }
+
             // 魔杖 材料 999 不消耗
             if ((((item.createTile >= TileID.Dirt || item.createWall > WallID.None) && item.stack >= 999) ||
                 ((item.createTile is TileID.WorkBenches or TileID.Chairs or TileID.Beds) && item.stack >= 99))
                 && ModItemID.NoConsumptionItems.Contains(player.HeldItem.type))
                 return false;
+
+            // 抛射物不消耗
+            if (Config.NoConsume_Projectile && item.stack >= 3996 && item.shoot > ProjectileID.None)
+                return false;
+
             return base.ConsumeItem(item, player);
         }
 
         public override bool CanBeConsumedAsAmmo(Item ammo, Item weapon, Player player)
         {
-            if (Config.NoConsume_Ammo && ammo.stack >= 3996 && ammo.ammo > 0)
+            if (Config.NoConsume_Ammo)
             {
-                return false;
+                // 坠落之星特判
+                if (ammo.stack >= 999 && ammo.type == ItemID.FallenStar)
+                    return false;
+                if (ammo.stack >= 3996 && ammo.ammo > 0)
+                    return false;
             }
             return base.CanBeConsumedAsAmmo(ammo, weapon, player);
         }

@@ -3,12 +3,11 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUIFork : UIElement
+    public class SUIFork : HoverSUIE
     {
         public float forkSize;
         public float radius;
         public float border;
-        public AnimationTimer hoverTimer = new(3);
 
         public SUIFork(float forkSize)
         {
@@ -19,28 +18,16 @@ namespace ImproveGame.Interface.SUIElements
             Height.Pixels = forkSize + 10;
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            hoverTimer.Update();
-            base.Update(gameTime);
-        }
-
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
-            hoverTimer.Open();
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
-        public override void MouseOut(UIMouseEvent evt)
+        protected override void DrawSelf(SpriteBatch sb)
         {
-            base.MouseOut(evt);
-            hoverTimer.Close();
-        }
-
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            Color background = Color.Lerp(UIColor.Default.TitleBackground * 0.5f, UIColor.Default.TitleBackground * 0.75f, hoverTimer.Schedule);
+            base.DrawSelf(sb);
+            Color background = Color.Lerp(UIColor.Default.TitleBackground * 0.5f, UIColor.Default.TitleBackground * 1f, hoverTimer.Schedule);
             Color fork = Color.Lerp(Color.Transparent, UIColor.Default.CloseBackground, hoverTimer.Schedule);
 
             Vector2 pos = GetDimensions().Position();

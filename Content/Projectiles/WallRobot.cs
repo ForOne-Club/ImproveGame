@@ -63,9 +63,9 @@ namespace ImproveGame.Content.Projectiles
         {
             if (index < Walls.Count)
             {
-                Vector2 center = Projectile.Center - Main.screenPosition;
-                Vector2 target = Walls[index - 1].ToVector2() * 16f + new Vector2(8) - Main.screenPosition;
-                PixelShader.DrawLine(Main.GameViewMatrix.TransformationMatrix, center, target, 2f, background, 1f, border);
+                Vector2 center = Projectile.Center - Main.screenPosition,
+                    target = Walls[index - 1].ToVector2() * 16f + new Vector2(8) - Main.screenPosition;
+                PixelShader.DrawLine(center, target, 2f, background, 1f, border, false);
             }
             return true;
         }

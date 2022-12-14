@@ -7,14 +7,13 @@ namespace ImproveGame.Interface.SUIElements
     /// <summary>
     /// 图片按钮
     /// </summary>
-    public class SUIPictureButton : UIElement
+    public class SUIPictureButton : HoverSUIE
     {
         public int[] data = new int[5];
-        public AnimationTimer HoverTimer = new(3);
 
         public string text;
         public Vector2 textSize;
-        public Vector2 TextPosition => new(imagePosition.X + imageSize.X + 10, UIConfigs.Instance.UIYAxisOffset + this.Height() / 2 - textSize.Y / 2);
+        public Vector2 TextPosition => new(imagePosition.X + imageSize.X + 10, UIConfigs.Instance.TextDrawOffsetY + this.Height() / 2 - textSize.Y / 2);
 
         public Texture2D image;
         public Vector2 imageSize;
@@ -39,23 +38,14 @@ namespace ImproveGame.Interface.SUIElements
             Width.Pixels = GetTextSize(text).X + this.HPadding() + 75;
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-            HoverTimer.Update();
-        }
-
         protected override void DrawSelf(SpriteBatch sb)
         {
+            base.DrawSelf(sb);
             CalculatedStyle dimensions = GetDimensions();
             Vector2 position = dimensions.Position();
             Vector2 size = dimensions.Size();
 
-            Vector2 shadowWidth = Vector2.Lerp(new(0), new(4), HoverTimer.Schedule);
-            Color shadowColor = Color.Lerp(new(0, 0, 0, 0), new(0, 0, 0, 0.5f), HoverTimer.Schedule);
-            PixelShader.DrawRoundRect(position - shadowWidth, size + shadowWidth * 2, 10 + shadowWidth.X, shadowColor);
-
-            Color borderColor = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, HoverTimer.Schedule);
+            Color borderColor = Color.Lerp(UIColor.Default.PanelBorder, UIColor.Default.SlotFavoritedBorder, hoverTimer.Schedule);
             PixelShader.DrawRoundRect(position, size, 10, UIColor.Default.ButtonBackground, 3, borderColor);
 
             dimensions = GetInnerDimensions();
@@ -79,14 +69,7 @@ namespace ImproveGame.Interface.SUIElements
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
-            HoverTimer.Open();
             SoundEngine.PlaySound(SoundID.MenuTick);
-        }
-
-        public override void MouseOut(UIMouseEvent evt)
-        {
-            base.MouseOut(evt);
-            HoverTimer.Close();
         }
     }
 }

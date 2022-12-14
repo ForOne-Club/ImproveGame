@@ -90,7 +90,7 @@ namespace ImproveGame.Common.Animations
             sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
         }
 
-        public static void DrawLine(Matrix matrix, Vector2 start, Vector2 end, float width, Color background)
+        public static void DrawLine(Vector2 start, Vector2 end, float width, Color background, bool ui = true)
         {
             Vector2 min = Vector2.Min(start, end);
             Vector2 max = Vector2.Max(start, end);
@@ -106,13 +106,13 @@ namespace ImproveGame.Common.Animations
             effect.Parameters["end"].SetValue(end);
             effect.Parameters["width"].SetValue(width);
             effect.Parameters[nameof(background)].SetValue(background.ToVector4());
-            sb.ReBegin(matrix);
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
             effect.CurrentTechnique.Passes["NoBorder"].Apply();
             sb.Draw(texture, min - new Vector2(width), null, Color.White, 0, new(0), size, 0, 1f);
-            sb.ReBegin(matrix);
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
         }
 
-        public static void DrawLine(Matrix matrix, Vector2 start, Vector2 end, float width, Color background, float border, Color borderColor)
+        public static void DrawLine(Vector2 start, Vector2 end, float width, Color background, float border, Color borderColor, bool ui = true)
         {
             Vector2 min = Vector2.Min(start, end);
             Vector2 max = Vector2.Max(start, end);
@@ -129,11 +129,11 @@ namespace ImproveGame.Common.Animations
             effect.Parameters["width"].SetValue(width);
             effect.Parameters["border"].SetValue(border);
             effect.Parameters["borderColor"].SetValue(borderColor.ToVector4());
-            effect.Parameters[nameof(background)].SetValue(background.ToVector4());
-            sb.ReBegin(matrix);
+            effect.Parameters["background"].SetValue(background.ToVector4());
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
             effect.CurrentTechnique.Passes["HasBorder"].Apply();
             sb.Draw(texture, min - new Vector2(width), null, Color.White, 0, new(0), size, 0, 1f);
-            sb.ReBegin(matrix);
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
         }
     }
 }
