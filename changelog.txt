@@ -7,4 +7,6 @@ Source code: https://github.com/487666123/ImproveGame
 详细更新日志请见: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
 
 v1.6.2.6
-  ● 
+	●【物品调整】科技魔杖铺设方式修改，特效优化，最大铺设数量增加到 2500。
+	●【物品调整】所有魔杖在创意震撼BUFF状态下禁止使用魔杖（漆涂魔杖除外）
+	●【新功能】新增一个设置项：无限投掷物，所有投掷物数量 ≥ 3996，不会消耗。(无限弹药中陨落之星添加特判 ≥ 999 不消耗)

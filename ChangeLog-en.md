@@ -52,6 +52,9 @@
 - **[v1.6.2.2]** Mod Item toggles are now independent to each other
 - **[v1.6.2.2]** Wand of Space/Architecture/Technology no longer consume materials stack not less than 999, 99 for chairs/workbenches/beds
 - **[v1.6.2.4]** Added a UI config, to adjust the offset on Y axis of mod texts, modify this to get visual performance when using font packs
+- 【物品调整】**[v1.6.2.6]** 科技魔杖铺设方式修改，特效优化，最大铺设数量增加到 2500。
+- 【物品调整】**[v1.6.2.6]** 所有魔杖在创意震撼BUFF状态下禁止使用魔杖（漆涂魔杖除外）
+- 【新功能】**[v1.6.2.6]** 新增一个设置项：无限投掷物，所有投掷物数量 ≥ 3996，不会消耗。(无限弹药中陨落之星添加特判 ≥ 999 不消耗)
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
