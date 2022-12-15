@@ -3,7 +3,7 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUIFork : HoverSUIE
+    public class SUIFork : HoverEffect
     {
         public float forkSize;
         public float radius;
@@ -28,7 +28,7 @@ namespace ImproveGame.Interface.SUIElements
         {
             base.DrawSelf(sb);
             Color background = Color.Lerp(UIColor.Default.TitleBackground * 0.5f, UIColor.Default.TitleBackground * 1f, hoverTimer.Schedule);
-            Color fork = Color.Lerp(Color.Transparent, UIColor.Default.CloseBackground, hoverTimer.Schedule);
+            Color fork = Color.Lerp(Color.Transparent, UIColor.Default.Fork, hoverTimer.Schedule);
 
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();

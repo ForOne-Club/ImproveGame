@@ -5,7 +5,7 @@ namespace ImproveGame.Interface.SUIElements
     /// <summary>
     /// 大背包按钮背景上的效果，需要直接继承此类即可。
     /// </summary>
-    public class HoverSUIE : UIElement
+    public class HoverEffect : UIElement
     {
         public AnimationTimer hoverTimer;
         public Color hoverColor1;
@@ -13,7 +13,7 @@ namespace ImproveGame.Interface.SUIElements
         public float hoverWidth1;
         public float hoverWidth2;
 
-        public HoverSUIE()
+        public HoverEffect()
         {
             hoverTimer = new(3);
             hoverColor1 = new Color(0, 0, 0, 0);

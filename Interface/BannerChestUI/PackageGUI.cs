@@ -10,7 +10,7 @@ namespace ImproveGame.Interface.BannerChestUI
         public enum StorageType { Banners, Potions }
         private static bool visible;
         public static StorageType storageType;
-        public IPackage package;
+        public PackageItem package;
 
         public static bool Visible
         {
@@ -38,20 +38,16 @@ namespace ImproveGame.Interface.BannerChestUI
             mainPanel.SetPadding(12f);
             mainPanel.Append(title = new("中文|Chinese", 0.5f));
 
-            mainPanel.Append(checkbox = new(() => package.AutoStorage, state => package.AutoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f));
+            mainPanel.Append(checkbox = new(() => package.autoStorage, state => package.autoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f));
             checkbox.Top.Pixels = title.Bottom() + 8f;
 
-            mainPanel.Append(checkbox2 = new(() => package.AutoSort, state => package.AutoSort = state, GetText("PackageGUI.AutoSort"), 0.8f));
+            mainPanel.Append(checkbox2 = new(() => package.autoSort, state => package.autoSort = state, GetText("PackageGUI.AutoSort"), 0.8f));
             checkbox2.Top.Pixels = checkbox.Top();
             checkbox2.Left.Pixels = checkbox.Right() + 8f;
 
             mainPanel.Append(fork = new(30) { HAlign = 1f });
             fork.Height.Pixels = title.Height();
-            fork.OnMouseDown += (_, _) =>
-            {
-                SoundEngine.PlaySound(SoundID.MenuClose);
-                Visible = false;
-            };
+            fork.OnMouseDown += (_, _) => Close();
 
             mainPanel.Append(gridPanel = new(Color.Transparent, /*new(35, 40, 83, 160)*/ Color.Transparent, 12, 3, false));
             gridPanel.SetPadding(0);
@@ -74,11 +70,11 @@ namespace ImproveGame.Interface.BannerChestUI
 
             // 旗帜收纳箱
             if (storageType is StorageType.Banners && ItemToBanner(Main.mouseItem) != -1)
-                BannerChest.PutInBannerChest(items, ref Main.mouseItem, package.AutoSort);
+                BannerChest.PutInBannerChest(items, ref Main.mouseItem, package.autoSort);
 
             // 药水袋子
             else if (storageType is StorageType.Potions && Main.mouseItem.buffType > 0 && Main.mouseItem.consumable)
-                PotionBag.PutInPotionBag(items, ref Main.mouseItem, package.AutoSort);
+                PotionBag.PutInPotionBag(items, ref Main.mouseItem, package.autoSort);
         }
 
         public override void Update(GameTime gameTime)
@@ -91,7 +87,7 @@ namespace ImproveGame.Interface.BannerChestUI
             }
         }
 
-        public void Open(List<Item> items, string title, StorageType STOType, IPackage package)
+        public void Open(List<Item> items, string title, StorageType STOType, PackageItem package)
         {
             storageType = STOType;
             SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -103,6 +99,12 @@ namespace ImproveGame.Interface.BannerChestUI
             this.title.RefreshSize();
             this.package = package;
             Recalculate();
+        }
+
+        public void Close()
+        {
+            SoundEngine.PlaySound(SoundID.MenuClose);
+            Visible = false;
         }
     }
 }

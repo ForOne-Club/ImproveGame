@@ -3,23 +3,18 @@ using ImproveGame.Common.Players;
 using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.BannerChestUI.Elements;
 using ImproveGame.Interface.Common;
-using NetSimplified;
-using System.Collections.Generic;
+using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
+using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
-    public class PotionBag : ModItem, IItemOverrideLeftClick, IPackage
+    public class PotionBag : PackageItem, IItemOverrideLeftClick, IItemOverrideHover
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
-
         public List<Item> storedPotions = new();
-        private bool autoStorage;
-        private bool autoSort;
-        public bool AutoStorage { get => autoStorage; set => autoStorage = value; }
-        public bool AutoSort { get => autoSort; set => autoSort = value; }
 
         // 克隆内容不克隆引用
         public override ModItem Clone(Item newEntity)
@@ -29,11 +24,15 @@ namespace ImproveGame.Content.Items
             return bag;
         }
 
-        public override bool CanRightClick() => storedPotions is not null;
+        public override bool CanRightClick() => storedPotions != null;
 
         public override void RightClick(Player player)
         {
-            UISystem.Instance.PackageGUI.Open(storedPotions, Item.Name, PackageGUI.StorageType.Potions, this);
+            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.grid.items == storedPotions)
+                UISystem.Instance.PackageGUI.Close();
+            else
+                UISystem.Instance.PackageGUI.Open(storedPotions, Item.Name, PackageGUI.StorageType.Potions, this);
+
             // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
             // storedPotions.RemoveAt(storedPotions.Count - 1);
         }
@@ -101,11 +100,19 @@ namespace ImproveGame.Content.Items
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            // 决定文本显示的是“开启”还是“关闭”
+            if (ItemInInventory)
+            {
+                string _switch = ArchitectureGUI.Visible ? "Off" : "On";
+                tooltips.Add(new(Mod, "CreateWand", GetText($"Tips.CreateWand{_switch}")) { OverrideColor = Color.LightGreen });
+            }
+            ItemInInventory = false;
+
             if (storedPotions is not null && storedPotions.Count > 0)
             {
                 string storeText = storedPotions.Count >= 200
                     ? GetText("Tips.PotionBagCurrentFull")
-                    : GetTextWith("Tips.PotionBagCurrent", new {StoredCount = storedPotions.Count});
+                    : GetTextWith("Tips.PotionBagCurrent", new { StoredCount = storedPotions.Count });
                 tooltips.Add(new(Mod, "PotionBagCurrent", storeText)
                 {
                     OverrideColor = Color.LightGreen
@@ -203,11 +210,9 @@ namespace ImproveGame.Content.Items
         }
 
         public override void SetStaticDefaults() => CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
-        
+
         public override void LoadData(TagCompound tag)
         {
-            tag.TryGet(nameof(autoStorage), out autoStorage);
-            tag.TryGet(nameof(autoSort), out autoSort);
             storedPotions = tag.Get<List<Item>>("potions");
             storedPotions ??= new();
 
@@ -231,8 +236,6 @@ namespace ImproveGame.Content.Items
 
         public override void SaveData(TagCompound tag)
         {
-            tag[nameof(autoStorage)] = autoStorage;
-            tag[nameof(autoSort)] = autoSort;
             tag["potions"] = storedPotions;
         }
 
@@ -251,6 +254,18 @@ namespace ImproveGame.Content.Items
             CreateRecipe()
                 .AddIngredient(ItemID.Silk, 8)
                 .AddTile(TileID.WorkBenches).Register();
+        }
+
+        private bool ItemInInventory;
+        public bool OverrideHover(Item[] inventory, int context, int slot)
+        {
+            if (context == ItemSlot.Context.InventoryItem)
+            {
+                ItemInInventory = true;
+                if (PlayerInput.Triggers.JustPressed.MouseMiddle)
+                    RightClick(Main.LocalPlayer);
+            }
+            return false;
         }
     }
 }

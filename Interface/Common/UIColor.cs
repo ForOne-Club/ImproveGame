@@ -19,19 +19,19 @@
 
         public Color TitleBackground = new(35, 40, 83);
 
-        public Color CheckBackground = new(44, 57, 105);
+        public Color ScrollBarBackground = new(44, 57, 105);
 
         // 边框
         public Color CheckBoxBorder = new(21, 15, 56);
         public Color CheckBoxBorderHover = new(233, 176, 0, 200);
-        // 开关中的圆形
+        // 圆
         public Color CheckBoxRound = new(21, 15, 56);
         public Color CheckBoxRoundHover = new(233, 176, 0, 200);
         // 背景色
-        public Color CheckBoxBackground = new(52, 34, 143);
-        public Color CheckBoxBackgroundHover = new(52, 34, 143);
+        public Color CheckBoxBackground = new(44, 57, 105, 160);
+        public Color CheckBoxBackgroundHover = new(34, 47, 95, 160);
 
-        public Color CloseBackground = new(200, 40, 40);
+        public Color Fork = new(200, 40, 40);
     }
 
     public class ModColors2 : ModColors
@@ -51,7 +51,7 @@
             TitleBackground = new(8, 25, 30);
 
             // 滚动条
-            CheckBackground = new(11, 14, 15, 127);
+            ScrollBarBackground = new(11, 14, 15, 127);
 
             // 边框
             CheckBoxBorder = new(27, 50, 57, 210);
@@ -63,7 +63,7 @@
             CheckBoxBackground = new(11, 14, 15, 127);
             CheckBoxBackgroundHover = new(11, 14, 15, 127);
 
-            CloseBackground = new(200, 40, 40);
+            Fork = new(200, 40, 40);
         }
     }
 }

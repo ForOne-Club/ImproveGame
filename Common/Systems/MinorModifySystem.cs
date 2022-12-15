@@ -366,10 +366,10 @@ namespace ImproveGame.Common.Systems
             // 旗帜收纳箱
             if (!itemToPickUp.IsAir && improvePlayer.bannerChest is not null && ItemToBanner(itemToPickUp) != -1)
             {
-                if (improvePlayer.bannerChest.AutoStorage)
+                if (improvePlayer.bannerChest.autoStorage)
                 {
                     Item item = itemToPickUp.Clone();
-                    BannerChest.PutInBannerChest(improvePlayer.bannerChest.storedBanners, ref itemToPickUp, improvePlayer.bannerChest.AutoSort);
+                    BannerChest.PutInBannerChest(improvePlayer.bannerChest.storedBanners, ref itemToPickUp, improvePlayer.bannerChest.autoSort);
                     if (itemToPickUp.stack < item.stack)
                     {
                         item.stack -= itemToPickUp.stack;
@@ -380,10 +380,10 @@ namespace ImproveGame.Common.Systems
             // 药水带袋
             if (!itemToPickUp.IsAir && improvePlayer.potionBag is not null && itemToPickUp.buffType > 0 && itemToPickUp.consumable)
             {
-                if (improvePlayer.potionBag.AutoStorage)
+                if (improvePlayer.potionBag.autoStorage)
                 {
                     Item item = itemToPickUp.Clone();
-                    PotionBag.PutInPotionBag(improvePlayer.potionBag.storedPotions, ref itemToPickUp, improvePlayer.potionBag.AutoSort);
+                    PotionBag.PutInPotionBag(improvePlayer.potionBag.storedPotions, ref itemToPickUp, improvePlayer.potionBag.autoSort);
                     if (itemToPickUp.stack < item.stack)
                     {
                         item.stack -= itemToPickUp.stack;

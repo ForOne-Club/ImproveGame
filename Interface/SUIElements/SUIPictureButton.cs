@@ -7,7 +7,7 @@ namespace ImproveGame.Interface.SUIElements
     /// <summary>
     /// 图片按钮
     /// </summary>
-    public class SUIPictureButton : HoverSUIE
+    public class SUIPictureButton : HoverEffect
     {
         public int[] data = new int[5];
 

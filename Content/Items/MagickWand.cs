@@ -51,13 +51,9 @@ namespace ImproveGame.Content.Items
         public override bool IsNeedKill()
         {
             if (WandSystem.FixedMode)
-            {
                 return false;
-            }
             else
-            {
                 return !Main.mouseLeft;
-            }
         }
 
         public override void SetItemDefaults()
@@ -121,8 +117,6 @@ namespace ImproveGame.Content.Items
 
         public override bool CanUseSelector(Player player)
         {
-            if (player.noBuilding)
-                return false;
             return !WandSystem.FixedMode;
         }
 
@@ -134,20 +128,30 @@ namespace ImproveGame.Content.Items
                 {
                     Box.NewBox(this, () => !WandSystem.FixedMode, GetRectangle(player), Color.Red * 0.35f, Color.Red);
                 }
+                // 我给他移动到 CanUseItem 中
                 // 还在用物品的时候不能打开UI (直接写在 CanUseItem 似乎就没有问题了)
                 if (player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1)
                 {
                     return;
                 }
-                if (!BrustGUI.Visible)
-                {
-                    UISystem.Instance.BrustGUI.Open();
-                }
-                else
-                {
-                    UISystem.Instance.BrustGUI.Close();
-                }
             }
+        }
+
+        public override bool CanUseItem(Player player)
+        {
+            if (player.noBuilding)
+                return false;
+
+            if (player.altFunctionUse == 2)
+            {
+                if (BrustGUI.Visible && UISystem.Instance.BrustGUI.Timer.AnyOpen)
+                    UISystem.Instance.BrustGUI.Close();
+                else
+                    UISystem.Instance.BrustGUI.Open();
+                return false;
+            }
+
+            return base.CanUseItem(player);
         }
 
         protected Rectangle GetRectangle(Player player)

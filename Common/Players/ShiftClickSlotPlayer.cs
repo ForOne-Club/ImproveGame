@@ -62,13 +62,13 @@ namespace ImproveGame.Common.Players
                 {
                     if (PackageGUI.storageType is PackageGUI.StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
                     {
-                        BannerChest.PutInBannerChest(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot], UISystem.Instance.PackageGUI.package.AutoSort);
+                        BannerChest.PutInBannerChest(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot], UISystem.Instance.PackageGUI.package.autoSort);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
                     else if (PackageGUI.storageType is PackageGUI.StorageType.Potions && inventory[slot].buffType > 0 && inventory[slot].consumable)
                     {
-                        PotionBag.PutInPotionBag(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot], UISystem.Instance.PackageGUI.package.AutoSort);
+                        PotionBag.PutInPotionBag(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot], UISystem.Instance.PackageGUI.package.autoSort);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }

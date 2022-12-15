@@ -24,13 +24,11 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame
 {
-    // 更新任务
-    // 自动采集: ×，自动挖矿: ×。
     public class ImproveGame : Mod
     {
         // 额外BUFF槽
         public override uint ExtraPlayerBuffSlots => (uint)Config.ExtraPlayerBuffSlots;
-        public static ImproveGame Instance;
+        public static ImproveGame Instance { get; set; }
 
         public override void Load()
         {

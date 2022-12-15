@@ -34,7 +34,7 @@ namespace ImproveGame.Common.Configs
         [Tooltip($"${path}.GrabDistance.Tooltip")]
         [DefaultValue(0)]
         [Slider]
-        [Range(0, 50)]
+        [Range(0, 75)]
         public int GrabDistance;
 
         [Label($"${path}.ItemMaxStack.Label")]

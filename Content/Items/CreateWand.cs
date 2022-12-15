@@ -14,15 +14,15 @@ namespace ImproveGame.Content.Items
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.CreateWand;
         public override bool AltFunctionUse(Player player) => true;
 
-        private static Texture2D[] jianYu;
-        private static Texture2D[] jianYu_PreView;
+        private static Texture2D[] prisons;
+        private static Texture2D[] prisonsPreView;
         private static Color[][] colors;
 
         private static bool ColorsLoaded = false;
         private static int Index = 0;
 
-        private static Texture2D JianYu => jianYu[Index];
-        private static Texture2D JianYu_PreView => jianYu_PreView[Index];
+        private static Texture2D Prison => prisons[Index];
+        private static Texture2D PrisonsPreView => prisonsPreView[Index];
         private static Color[] Colors => colors[Index];
 
         public override void Load()
@@ -33,18 +33,19 @@ namespace ImproveGame.Content.Items
                 // 把读取放到主线程上
                 Main.QueueMainThreadAction(() =>
                     {
-                        if (ColorsLoaded) return;
+                        if (ColorsLoaded)
+                            return;
 
-                        jianYu = new[]
+                        prisons = new[]
                         {
-                            GetTexture("JianYu").Value, GetTexture("JianYu2").Value, GetTexture("JianYu3").Value
+                            GetTexture("prison").Value, GetTexture("prison2").Value, GetTexture("prison3").Value
                         };
-                        jianYu_PreView = new[]
+                        prisonsPreView = new[]
                         {
-                            GetTexture("JianYu_PreView").Value, GetTexture("JianYu_PreView2").Value,
-                            GetTexture("JianYu_PreView3").Value
+                            GetTexture("prisonPreView").Value, GetTexture("prisonPreView2").Value,
+                            GetTexture("prisonPreView3").Value
                         };
-                        colors = new[] { GetColors(jianYu[0]), GetColors(jianYu[1]), GetColors(jianYu[2]) };
+                        colors = new[] { GetColors(prisons[0]), GetColors(prisons[1]), GetColors(prisons[2]) };
                         ColorsLoaded = true;
                     }
                 );
@@ -59,8 +60,8 @@ namespace ImproveGame.Content.Items
         {
             if (!Main.dedServ)
             {
-                jianYu = null;
-                jianYu_PreView = null;
+                prisons = null;
+                prisonsPreView = null;
                 colors = null;
             }
             ColorsLoaded = false;
@@ -70,10 +71,8 @@ namespace ImproveGame.Content.Items
         public static void ToggleStyle()
         {
             Index++;
-            if (Index >= jianYu.Length)
-            {
+            if (Index >= prisons.Length)
                 Index = 0;
-            }
         }
 
         [CloneByReference]
@@ -143,12 +142,12 @@ namespace ImproveGame.Content.Items
                 Item.mana = 40;
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
-                Point point = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint(); // 鼠标位置
-                int boxIndex = Box.NewBox(this, () => false, new Rectangle(point.X, point.Y, JianYu.Width, JianYu.Height), Color.Yellow * 0f, Color.Yellow * 0f);
+                Point point = Main.MouseWorld.ToTileCoordinates() - (Prison.Size() / 2f).ToPoint(); // 鼠标位置
+                int boxIndex = Box.NewBox(this, () => false, new Rectangle(point.X, point.Y, Prison.Width, Prison.Height), Color.Yellow * 0f, Color.Yellow * 0f);
                 if (BoxSystem.boxs.IndexInRange(boxIndex))
                 {
                     Box box = BoxSystem.boxs[boxIndex];
-                    box.PreView = JianYu_PreView;
+                    box.PreView = PrisonsPreView;
                 }
             }
         }
@@ -168,13 +167,9 @@ namespace ImproveGame.Content.Items
             if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer)
             {
                 if (!ArchitectureGUI.Visible)
-                {
                     UISystem.Instance.ArchitectureGUI.Open();
-                }
                 else
-                {
                     UISystem.Instance.ArchitectureGUI.Close();
-                }
                 return false;
             }
             return true;
@@ -246,9 +241,7 @@ namespace ImproveGame.Content.Items
                     break;
             }
             if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, inventoryIndex, Main.LocalPlayer.inventory[inventoryIndex].prefix);
-            }
         }
 
         /// <summary>
@@ -262,16 +255,17 @@ namespace ImproveGame.Content.Items
                 ImproveGame.Instance.Logger.Error("Create Wand Colors didn't load. Please report to mod developers.");
                 return base.UseItem(player);
             }
+
             if (!Main.dedServ && Main.myPlayer == player.whoAmI && player.altFunctionUse == 0)
             {
-                Point position = Main.MouseWorld.ToTileCoordinates() - (JianYu.Size() / 2f).ToPoint();
+                Point position = Main.MouseWorld.ToTileCoordinates() - (Prison.Size() / 2f).ToPoint();
 
                 List<TileData> tileDatas = new();
 
                 for (int i = 0; i < Colors.Length; i++) // 不会放置椅子和工作台
                 {
-                    int x = position.X + i % JianYu.Width; // 物块在图片中的 X 坐标
-                    int y = position.Y + i / JianYu.Width; // Y 坐标
+                    int x = position.X + i % Prison.Width; // 物块在图片中的 X 坐标
+                    int y = position.Y + i / Prison.Width; // Y 坐标
 
                     TileSort tileSort = Color2TileSort(Colors[i]);
 
@@ -342,19 +336,17 @@ namespace ImproveGame.Content.Items
                     }
                 }
                 if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, JianYu.Width, JianYu.Height);
-                }
+                    NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, Prison.Width, Prison.Height);
 
                 // 重新刷新合成配方，这样如果一个物品没了就可以把它的合成配方刷新掉
                 Recipe.FindRecipes();
                 // 同步UI物品
                 UISystem.Instance.ArchitectureGUI.RefreshSlots(this);
             }
+
             if (!_playedSound && player.altFunctionUse == 0)
-            {
                 CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText.Item.CreateWand_NotEnough"), true);
-            }
+
             _playedSound = false;
             return true;
         }
@@ -369,7 +361,7 @@ namespace ImproveGame.Content.Items
         /// <param name="tryMethod">进行放置尝试的方法，只有符合条件的才会放置</param>
         private static void TryPlace(ref Item storedItem, Player player, int x, int y, Func<Item, bool> tryMethod)
         {
-            // 没有存储物品，在物品栏里面找    
+            // 没有存储物品，在物品栏里面找
             if (storedItem.IsAir || storedItem.createTile < TileID.Dirt)
             {
                 PickItemInInventory(player, (item) =>
@@ -483,13 +475,9 @@ namespace ImproveGame.Content.Items
                 if (PlayerInput.Triggers.JustPressed.MouseMiddle)
                 {
                     if (!ArchitectureGUI.Visible)
-                    {
                         UISystem.Instance.ArchitectureGUI.Open(slot);
-                    }
                     else
-                    {
                         UISystem.Instance.ArchitectureGUI.Close();
-                    }
                 }
             }
             return false;
@@ -500,13 +488,8 @@ namespace ImproveGame.Content.Items
             // 决定文本显示的是“开启”还是“关闭”
             if (ItemInInventory)
             {
-                string tooltip = GetText("Tips.CreateWandOn");
-                if (ArchitectureGUI.Visible)
-                {
-                    tooltip = GetText("Tips.CreateWandOff");
-                }
-
-                tooltips.Add(new(Mod, "CreateWand", tooltip) { OverrideColor = Color.LightGreen });
+                string _switch = ArchitectureGUI.Visible ? "Off" : "On";
+                tooltips.Add(new(Mod, "CreateWand", GetText($"Tips.CreateWand{_switch}")) { OverrideColor = Color.LightGreen });
             }
             ItemInInventory = false;
 
@@ -539,46 +522,28 @@ namespace ImproveGame.Content.Items
         private static TileSort Color2TileSort(Color color)
         {
             if (color == Color.Red)
-            {
                 return TileSort.Block; // 实体块
-            }
             else if (color == Color.Black)
-            {
                 return TileSort.Platform; // 平台
-            }
             else if (color == Color.White)
-            {
                 return TileSort.Torch; // 火把
-            }
             else if (color == Color.Yellow)
-            {
                 return TileSort.Chair; // 椅子
-            }
-            else if (color == Pink)
-            {
+            else if (color == FenSe)
                 return TileSort.Table; // 桌子
-            }
             else if (color == Color.Blue)
-            {
                 return TileSort.Workbench; // 工作台
-            }
             else if (color == ZiSe)
-            {
                 return TileSort.Bed; // 床
-            }
             else if (color == QingSe)
-            {
                 return TileSort.NoWall; // 禁止放置墙体
-            }
             else
-            {
                 return TileSort.None; // 没有任何
-            }
         }
 
         private static readonly Color ZiSe = new(127, 0, 255);
         private static readonly Color QingSe = new(0, 255, 255);
-        private static readonly Color Pink = new(255, 0, 255);
+        private static readonly Color FenSe = new(255, 0, 255);
 
         public override void AddRecipes()
         {

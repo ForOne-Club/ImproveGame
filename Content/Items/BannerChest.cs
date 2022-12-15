@@ -2,20 +2,17 @@
 using ImproveGame.Interface.BannerChestUI;
 using ImproveGame.Interface.BannerChestUI.Elements;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.GUI;
+using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
-    public class BannerChest : ModItem, IItemOverrideLeftClick, IPackage
+    public class BannerChest : PackageItem, IItemOverrideLeftClick, IItemOverrideHover
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.BannerChest;
-
         public List<Item> storedBanners = new();
-        private bool autoStorage;
-        private bool autoSort;
-        public bool AutoStorage { get => autoStorage; set => autoStorage = value; }
-        public bool AutoSort { get => autoSort; set => autoSort = value; }
 
         // 克隆内容不克隆引用
         public override ModItem Clone(Item newEntity)
@@ -29,9 +26,13 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
+            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.grid.items == storedBanners)
+                UISystem.Instance.PackageGUI.Close();
+            else
+                UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name, PackageGUI.StorageType.Banners, this);
+            
             //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
             //storedBanners.RemoveAt(storedBanners.Count - 1);
-            UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name, PackageGUI.StorageType.Banners, this);
         }
 
         public override bool ConsumeItem(Player player) => false;
@@ -113,6 +114,14 @@ namespace ImproveGame.Content.Items
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            // 决定文本显示的是“开启”还是“关闭”
+            if (ItemInInventory)
+            {
+                string _switch = ArchitectureGUI.Visible ? "Off" : "On";
+                tooltips.Add(new(Mod, "CreateWand", GetText($"Tips.CreateWand{_switch}")) { OverrideColor = Color.LightGreen });
+            }
+            ItemInInventory = false;
+
             if (!Config.NoPlace_BUFFTile_Banner)
             {
                 tooltips.Add(new(Mod, "BannerChestUseless", GetText("Tips.BannerChestUseless"))
@@ -120,6 +129,7 @@ namespace ImproveGame.Content.Items
                     OverrideColor = Color.SkyBlue
                 });
             }
+
             if (storedBanners is not null && storedBanners.Count > 0)
             {
                 string storeText = storedBanners.Count >= 500
@@ -171,12 +181,9 @@ namespace ImproveGame.Content.Items
 
         public override void LoadData(TagCompound tag)
         {
-            tag.TryGet(nameof(autoStorage), out autoStorage);
-            tag.TryGet(nameof(autoSort), out autoSort);
-
             storedBanners = tag.Get<List<Item>>("banners");
             storedBanners ??= new();
-            
+
             // 旧版迁移
             if (!tag.ContainsKey("storedBanners"))
                 return;
@@ -195,8 +202,6 @@ namespace ImproveGame.Content.Items
 
         public override void SaveData(TagCompound tag)
         {
-            tag[nameof(autoStorage)] = autoStorage;
-            tag[nameof(autoSort)] = autoSort;
             tag["banners"] = storedBanners;
         }
 
@@ -215,6 +220,18 @@ namespace ImproveGame.Content.Items
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.IronBar, 12)
                 .AddTile(TileID.Anvils).Register();
+        }
+
+        private bool ItemInInventory;
+        public bool OverrideHover(Item[] inventory, int context, int slot)
+        {
+            if (context == ItemSlot.Context.InventoryItem)
+            {
+                ItemInInventory = true;
+                if (PlayerInput.Triggers.JustPressed.MouseMiddle)
+                    RightClick(Main.LocalPlayer);
+            }
+            return false;
         }
     }
 }
