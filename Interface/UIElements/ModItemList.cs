@@ -1,42 +1,54 @@
-﻿using ImproveGame.Interface.SUIElements;
-
-namespace ImproveGame.Interface.UIElements
+﻿namespace ImproveGame.Interface.UIElements
 {
     public class ModItemList : UIElement
     {
-        public int HCount = 10; // 横向格子的数量
-        public int VCount = 5; // 纵向格子的数量
-
         public Item[] items;
-
-        public void SetInventory(Item[] items)
+        public ModItemList()
         {
-            RemoveAllChildren();
-            this.items = items;
-            for (int i = 0; i < items.Length; i++)
-            {
-                float col = i % HCount;
-                float row = i / HCount;
-                ItemSlot_BigBag ItemSlot = new(items, i);
-                ItemSlot.OnMouseDown += OnMouseDownSlot;
-                ItemSlot.SetPos(col * (ItemSlot.Width() + 10f), row * (ItemSlot.Height() + 10f));
-                Append(ItemSlot);
-            }
-            int VCount = items.Length / HCount + (items.Length % HCount > 0 ? 1 : 0);
+            SetPadding(0);
+        }
+
+        public static Vector2 GetSize(int HCount, int VCount)
+        {
+            Vector2 size;
+            size.X = 52 * HCount + 10f * (HCount - 1);
+            size.Y = 52 * VCount + 10f * (VCount - 1);
+            return size;
+        }
+
+        public void ModifyHVCount(int HCount, int VCount)
+        {
+            Width.Pixels = 52 * HCount + 10f * (HCount - 1);
             Height.Pixels = 52 * VCount + 10f * (VCount - 1);
         }
 
         public event MouseEvent OnMouseDownSlot;
 
-        public ModItemList(int HCount = 10, int VCount = 5)
+        public void SetInventory(Item[] items)
         {
-            SetPadding(0);
-
-            this.HCount = HCount;
-            this.VCount = VCount;
-
-            Width.Pixels = 52 * HCount + 10f * (HCount - 1);
-            Height.Pixels = 52 * VCount + 10f * (VCount - 1);
+            if (Elements.Count != items.Length)
+            {
+                RemoveAllChildren();
+                this.items = items;
+                for (int i = 0; i < items.Length; i++)
+                {
+                    ItemSlot_BigBag itemSolot;
+                    Append(itemSolot = new ItemSlot_BigBag(items, i));
+                    itemSolot.OnMouseDown += OnMouseDownSlot;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < items.Length; i++)
+                {
+                    UIElement uie = Elements[i];
+                    if (uie is ItemSlot_BigBag)
+                    {
+                        ItemSlot_BigBag itemSlot = uie as ItemSlot_BigBag;
+                        itemSlot.Items = items;
+                    }
+                }
+            }
         }
 
         // 因为,

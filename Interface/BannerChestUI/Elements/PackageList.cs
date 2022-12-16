@@ -3,18 +3,12 @@
     public class PackageList : UIElement
     {
         public List<Item> items;
-        private Vector2 ChildSize;
-        private Vector2 Spaceing;
-        private Point DisplayCount;
 
         public override bool ContainsPoint(Vector2 point) => Parent.GetInnerDimensions().Contains(Main.MouseScreen);
-        public Vector2 DisplaySize => ChildSize * DisplayCount.ToVector2() + (DisplayCount - new Point(1, 1)).ToVector2() * Spaceing;
-        public PackageList(Vector2 childSize, Point displayCount, Vector2 spaceing)
+        public PackageList()
         {
             SetPadding(0);
-            ChildSize = childSize;
-            DisplayCount = displayCount;
-            Spaceing = spaceing;
+            ModifyHVCount(5, 5);
         }
 
         // 只绘制范围内的孩子.
@@ -42,17 +36,34 @@
         {
             RemoveAllChildren();
             this.items = items;
-            for (int i = 0; i < items.Count; i++)
+            int length = items.Count;
+            // 未达到 1 整行填满 1 整行
+            // 达到 1 整行再加 1 行
+            length += 5 - length % 5;
+            // 小于 5 行填满 5 行
+            if (length < 25)
+                length = 25;
+            for (int i = 0; i < length; i++)
             {
-                float col = i % DisplayCount.X;
-                float row = i / DisplayCount.X;
-                ItemSlot_Package ItemSlot;
-                Append(ItemSlot = new(items, i));
-                ItemSlot.SetPos(col * (ChildSize.X + Spaceing.X), row * (ChildSize.Y + Spaceing.Y));
+                Append(new ItemSlot_Package(items, i));
             }
-            int VCount = items.Count / DisplayCount.X + (items.Count % DisplayCount.X > 0 ? 1 : 0);
-            Height.Pixels = ChildSize.Y * VCount + Spaceing.Y * (VCount - 1);
-            Width.Pixels = DisplaySize.X;
+            int HCount = 5;
+            int VCount = length / 5;
+            ModifyHVCount(HCount, VCount);
+        }
+
+        public static Vector2 GetSize(int HCount, int VCount)
+        {
+            Vector2 size;
+            size.X = 52 * HCount + 10f * (HCount - 1);
+            size.Y = 52 * VCount + 10f * (VCount - 1);
+            return size;
+        }
+
+        public void ModifyHVCount(int HCount, int VCount)
+        {
+            Width.Pixels = 52 * HCount + 10f * (HCount - 1);
+            Height.Pixels = 52 * VCount + 10f * (VCount - 1);
         }
     }
 }

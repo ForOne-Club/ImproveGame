@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 using Terraria.GameContent.UI.Chat;
@@ -6,26 +7,32 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.BannerChestUI.Elements
 {
-    public class ItemSlot_Package : UIElement
+    public class ItemSlot_Package : RelativeUIE
     {
 
         private int RightMouseTimer;
-
+        public Item AirItem;
         public Func<Item, bool> CanPutItemSlot;
         private List<Item> items;
         private int index;
         private Item Item
         {
-            get => items[index];
+            get => items.IndexInRange(index) ? items[index] : AirItem;
             set => items[index] = value;
         }
 
         public ItemSlot_Package(List<Item> items, int index)
         {
+            AirItem = new Item();
             Width.Pixels = 52;
             Height.Pixels = 52;
             this.items = items;
             this.index = index;
+
+            AutoLineFeed = true;
+            Relative = true;
+            Interval = new(10, 10);
+            Mode = RelativeMode.Horizontal;
         }
 
         public override void MouseDown(UIMouseEvent evt)

@@ -23,82 +23,118 @@ namespace ImproveGame.Interface.GUI
         }
 
         public SUITitle title;
-        public SUIPanel MainPanel;
+        public SUIPanel mainPanel;
         public SUIFork fork;
         public SUIPictureButton[] buttons = new SUIPictureButton[4];
         // 物品列表
         public ModItemGrid ItemGrid;
-        public SUICheckbox[] checkbox = new SUICheckbox[3];
+        public SUISwitch[] suiSwitch = new SUISwitch[3];
 
         public override void OnInitialize()
         {
-            Append(MainPanel = new(UIColor.Default.PanelBorder, UIColor.Default.PanelBackground) { Draggable = true });
+            // 主面板
+            Append(mainPanel = new(UIColor.Default.PanelBorder, UIColor.Default.PanelBackground)
+            {
+                Shaded = true,
+                Draggable = true
+            });
 
-            MainPanel.Append(title = new(GetText("SuperVault.Name"), 0.5f));
+            // 标题
+            mainPanel.Append(title = new SUITitle(GetText("SuperVault.Name"), 0.5f));
 
-            MainPanel.Append(fork = new(30) { HAlign = 1f });
-            fork.Height.Pixels = title.Height();
+            // Fork
+            mainPanel.Append(fork = new SUIFork(30)
+            {
+                HAlign = 1f,
+                Height = new StyleDimension(title.Height.Pixels, 0)
+            });
             fork.OnMouseDown += (evt, uie) => Close();
 
-            MainPanel.Append(checkbox[0] = new SUICheckbox(() =>
+            UIPlayerSetting setting = Main.LocalPlayer.GetModPlayer<UIPlayerSetting>();
+
+            // 开关
+            Vector2 SwitchInterval = new(10, 10);
+            mainPanel.Append(suiSwitch[0] = new SUISwitch(() => setting.SuperVault_HeCheng, state =>
             {
-                return Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng;
-            }, (bool state) =>
-            {
-                Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng = state;
+                setting.SuperVault_HeCheng = state;
                 Recipe.FindRecipes();
-            }, GetText("SuperVault.Synthesis"), 0.8f));
-            checkbox[0].Top.Pixels = title.Bottom() + 10f;
+            }, GetText("SuperVault.Synthesis"), 0.8f)
+            {
+                First = true,
+                Relative = true,
+                Mode = BaseUIEs.RelativeUIE.RelativeMode.Vertical,
+                Interval = SwitchInterval
+            });
 
-            MainPanel.Append(checkbox[1] = new SUICheckbox(() =>
+            mainPanel.Append(suiSwitch[1] = new SUISwitch(() => setting.SuperVault_SmartGrab, state =>
             {
-                return Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_SmartGrab;
-            }, (bool state) =>
+                setting.SuperVault_SmartGrab = state;
+            }, GetText("SuperVault.SmartPickup"), 0.8f)
             {
-                Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_SmartGrab = state;
-            }, GetText("SuperVault.SmartPickup"), 0.8f));
-            checkbox[1].Left.Pixels = checkbox[0].Right() + 10;
-            checkbox[1].Top.Pixels = checkbox[0].Top();
+                Relative = true,
+                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Interval = SwitchInterval
+            });
 
-            MainPanel.Append(checkbox[2] = new SUICheckbox(() =>
+            mainPanel.Append(suiSwitch[2] = new SUISwitch(() => setting.SuperVault_OverflowGrab, (bool state) =>
             {
-                return Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab;
-            }, (bool state) =>
+                setting.SuperVault_OverflowGrab = state;
+            }, GetText("SuperVault.OverflowPickup"), 0.8f)
             {
-                Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab = state;
-            }, GetText("SuperVault.OverflowPickup"), 0.8f));
-            checkbox[2].Left.Pixels = checkbox[1].Right() + 10;
-            checkbox[2].Top.Pixels = checkbox[0].Top();
+                Relative = true,
+                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Interval = SwitchInterval
+            });
 
-            buttons[0] = new(GetTexture("UI/Quick").Value, Lang.inter[29].Value);
+            // 按钮
+            Vector2 ButtonInterval = new(10, 8);
+            mainPanel.Append(buttons[0] = new(GetTexture("UI/Quick").Value, Lang.inter[29].Value)
+            {
+                First = true,
+                Relative = true,
+                Mode = BaseUIEs.RelativeUIE.RelativeMode.Vertical,
+                Interval = ButtonInterval
+            });
             buttons[0].SetText(Lang.inter[29].Value);
-            buttons[0].SetPos(0f, checkbox[0].Bottom() + 10f);
             buttons[0].OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
-            MainPanel.Append(buttons[0]);
 
-            buttons[1] = new(GetTexture("UI/Put").Value, Lang.inter[30].Value);
+            mainPanel.Append(buttons[1] = new(GetTexture("UI/Put").Value, Lang.inter[30].Value)
+            {
+                Relative = true,
+                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Interval = ButtonInterval
+            });
             buttons[1].SetText(Lang.inter[30].Value);
-            buttons[1].SetPos(buttons[0].Right() + 10f, buttons[0].Top());
             buttons[1].OnMouseDown += (_, _) => PutAll();
-            MainPanel.Append(buttons[1]);
 
-            buttons[2] = new(GetTexture("UI/Put").Value, Lang.inter[31].Value);
+            mainPanel.Append(buttons[2] = new(GetTexture("UI/Put").Value, Lang.inter[31].Value)
+            {
+                Relative = true,
+                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Interval = ButtonInterval
+            });
             buttons[2].SetText(Lang.inter[31].Value);
-            buttons[2].SetPos(buttons[1].Right() + 10f, buttons[0].Top());
             buttons[2].OnMouseDown += (_, _) => Replenish();
-            MainPanel.Append(buttons[2]);
 
-            buttons[3] = new(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"));
+            mainPanel.Append(buttons[3] = new(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
+            {
+                Relative = true,
+                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Interval = ButtonInterval
+            });
             buttons[3].SetText(GetText("SuperVault.Sort"));
-            buttons[3].SetPos(buttons[2].Right() + 10f, buttons[0].Top());
             buttons[3].OnMouseDown += (_, _) => Sort();
-            MainPanel.Append(buttons[3]);
 
-            ItemGrid = new ModItemGrid();
-            ItemGrid.Top.Pixels = buttons[0].Top() + buttons[0].Height() + 10f;
+            // Inventory 滚动视图
+            mainPanel.Append(ItemGrid = new ModItemGrid()
+            {
+                First = true,
+                Relative = true,
+                Mode = BaseUIEs.RelativeUIE.RelativeMode.Vertical,
+                Interval = ButtonInterval
+            });
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
-            MainPanel.SetSizeInside(ItemGrid.Width(), ItemGrid.Height() + ItemGrid.Top()).Recalculate();
-            MainPanel.Append(ItemGrid);
+            mainPanel.SetSizeInside(ItemGrid.Width.Pixels, ItemGrid.Bottom());
         }
 
         // 点击操作，将物品发送给服务器（因为像药水袋和旗帜盒这俩左键是不改stack的，所以这来个同步）
@@ -114,18 +150,11 @@ namespace ImproveGame.Interface.GUI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (MainPanel.IsMouseHovering)
+            if (mainPanel.IsMouseHovering)
                 PlayerInput.LockVanillaMouseScroll("ImproveGame: BigBagGUI");
 
-            if (MainPanel.IsMouseHovering)
+            if (mainPanel.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
-        }
-        protected override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            Vector2 shadowWidth = new(40);
-            Vector2 pos = MainPanel.GetDimensions().Position() - shadowWidth;
-            Vector2 size = MainPanel.GetDimensions().Size() + shadowWidth * 2;
-            PixelShader.DrawShadow(pos, size, 10, new Color(0, 0, 0, 0.25f), shadowWidth.X);
         }
 
         public void Open()

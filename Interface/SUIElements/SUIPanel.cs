@@ -4,24 +4,29 @@ namespace ImproveGame.Interface.SUIElements
 {
     public class SUIPanel : UIElement
     {
+        internal bool Shaded;
+        internal float ShadowThickness;
+        internal Color ShadowColor;
         internal bool Draggable;
         internal bool Dragging;
         internal Vector2 Offset;
 
-        public float radius;
+        public float round;
         public float border;
         public Color borderColor;
         public Color backgroundColor;
         public bool CalculateBorder;
 
-        public SUIPanel(Color borderColor, Color backgroundColor, float radius = 12, float border = 3, bool CalculateBorder = true)
+        public SUIPanel(Color borderColor, Color backgroundColor, float round = 12, float border = 3, bool CalculateBorder = true)
         {
+            SetPadding(10f);
+            ShadowThickness = 50f;
+            ShadowColor = new Color(0, 0, 0, 0.25f);
             this.borderColor = borderColor;
             this.backgroundColor = backgroundColor;
-            this.radius = radius;
+            this.round = round;
             this.border = border;
             this.CalculateBorder = CalculateBorder;
-            SetPadding(12);
             OnMouseDown += DragStart;
             OnMouseUp += DragEnd;
         }
@@ -29,16 +34,23 @@ namespace ImproveGame.Interface.SUIElements
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimenstions = GetDimensions();
-            Vector2 position = dimenstions.Position();
-            Vector2 size = new(dimenstions.Width, dimenstions.Height);
+            Vector2 pos = dimenstions.Position();
+            Vector2 size = dimenstions.Size();
+            if (Shaded)
+            {
+                Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
+                Vector2 ShadowPos = pos - ShadowThickness;
+                Vector2 ShadowSize = size + ShadowThickness * 2;
+                PixelShader.DrawShadow(ShadowPos, ShadowSize, round, ShadowColor, this.ShadowThickness);
+            }
 
             if (CalculateBorder)
             {
-                position -= new Vector2(border);
+                pos -= new Vector2(border);
                 size += new Vector2(border * 2);
             }
 
-            PixelShader.DrawRoundRect(position, size, radius, backgroundColor, border, borderColor);
+            PixelShader.DrawRoundRect(pos, size, round, backgroundColor, border, borderColor);
         }
 
         // 可拖动界面

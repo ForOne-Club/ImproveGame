@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Interface.SUIElements;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ImproveGame.Interface.BannerChestUI.Elements
 {
@@ -15,44 +16,21 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
             // 隐藏子元素, 可显示的范围是计算 Padding 之后的.
             OverflowHidden = true;
 
-            Append(list = new(new(52), new(5, 5), new(8)));
+            Append(list = new PackageList());
+            Vector2 size = PackageList.GetSize(5, 5);
 
-            Vector2 liseSize = list.DisplaySize;
-            // 滚动条, 一定要放到滚动主体后面, 问就是 UIElement 的锅.
-            Append(scrollbar = new() { HAlign = 1f });
+            Append(scrollbar = new SUIScrollbar() { HAlign = 1f });
             scrollbar.Left.Pixels = -1;
-            scrollbar.Height.Pixels = liseSize.Y;
+            scrollbar.Height.Pixels = size.Y;
 
-            // 既然尺寸都已知了, 那就直接设置他们父元素的大小吧.
-            Width.Pixels = liseSize.X + 30;
-            Height.Pixels = liseSize.Y + 1;
+            Width.Pixels = size.X + 32;
+            Height.Pixels = size.Y + 1;
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
             scrollbar.BufferViewPosition += evt.ScrollWheelValue;
-        }
-
-        // 如果少于原来的数量就重新计算
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-            // 检测时候有空余的位置需要刷新
-            for (int i = 0; i < items.Count; i++)
-            {
-                if (items[i].IsAir)
-                {
-                    items.Remove(items[i]);
-                    i--;
-                    continue;
-                }
-            }
-            if (items is not null && list.Children.Count() != items.Count)
-            {
-                SetInventory(items);
-                Recalculate();
-            }
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -64,12 +42,34 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
             }
         }
 
-        // 咱就是说, 这名字挺好看的.
+        private int oldCount;
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            // 写在 Grid 中最主要的原因是是因为 ScrollBar 在里面
+            bool reload = false;
+            for (int i = 0; i < items.Count; i++)
+            {
+                Item item = items[i];
+                if (item.IsAir)
+                {
+                    reload = true;
+                    items.RemoveAt(i--);
+                }
+            }
+            if (oldCount != items.Count || reload)
+            {
+                oldCount = items.Count;
+                SetInventory(items);
+            }
+        }
+
         public void SetInventory(List<Item> items)
         {
             this.items = items;
             list.SetInventory(items);
-            scrollbar.SetView(MathF.Min(scrollbar.Height.Pixels, list.Height.Pixels), list.Height.Pixels);
+            Vector2 size = PackageList.GetSize(5, 5);
+            scrollbar.SetView(size.Y, list.Height.Pixels);
         }
     }
 }

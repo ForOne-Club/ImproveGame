@@ -20,7 +20,7 @@ namespace ImproveGame.Interface.Common
             Instance.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
             if (HugeInventoryUIPosition == Vector2.Zero)
                 HugeInventoryUIPosition = new(150, 340);
-            Instance.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
+            Instance.BigBagGUI.mainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
         }
     }
 }

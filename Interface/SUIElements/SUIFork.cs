@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements

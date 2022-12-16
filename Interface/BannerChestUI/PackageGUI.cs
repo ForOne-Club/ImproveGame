@@ -25,8 +25,8 @@ namespace ImproveGame.Interface.BannerChestUI
 
         public SUIPanel mainPanel;
         public SUITitle title;
-        public SUICheckbox checkbox;
-        public SUICheckbox checkbox2;
+        public SUISwitch checkbox;
+        public SUISwitch checkbox2;
         public SUIFork fork;
         public SUIPanel gridPanel;
         public PackageGrid grid;
@@ -34,22 +34,28 @@ namespace ImproveGame.Interface.BannerChestUI
         private readonly Color background = new(44, 57, 105, 160);
         public override void OnInitialize()
         {
-            Append(mainPanel = new(Color.Black, background) { HAlign = 0.5f, VAlign = 0.5f, Draggable = true });
-            mainPanel.SetPadding(12f);
-            mainPanel.Append(title = new("中文|Chinese", 0.5f));
+            Append(mainPanel = new SUIPanel(Color.Black, background)
+            {
+                HAlign = 0.5f,
+                VAlign = 0.5f,
+                Shaded = true,
+                Draggable = true
+            });
 
-            mainPanel.Append(checkbox = new(() => package.autoStorage, state => package.autoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f));
+            mainPanel.Append(title = new SUITitle("中文|Chinese", 0.5f) { PaddingLeft = 25, PaddingRight = 25 });
+
+            mainPanel.Append(checkbox = new SUISwitch(() => package.autoStorage, state => package.autoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f));
             checkbox.Top.Pixels = title.Bottom() + 8f;
 
-            mainPanel.Append(checkbox2 = new(() => package.autoSort, state => package.autoSort = state, GetText("PackageGUI.AutoSort"), 0.8f));
+            mainPanel.Append(checkbox2 = new SUISwitch(() => package.autoSort, state => package.autoSort = state, GetText("PackageGUI.AutoSort"), 0.8f));
             checkbox2.Top.Pixels = checkbox.Top();
             checkbox2.Left.Pixels = checkbox.Right() + 8f;
 
-            mainPanel.Append(fork = new(30) { HAlign = 1f });
+            mainPanel.Append(fork = new SUIFork(30) { HAlign = 1f });
             fork.Height.Pixels = title.Height();
             fork.OnMouseDown += (_, _) => Close();
 
-            mainPanel.Append(gridPanel = new(Color.Transparent, /*new(35, 40, 83, 160)*/ Color.Transparent, 12, 3, false));
+            mainPanel.Append(gridPanel = new SUIPanel(Color.Transparent, /*new(35, 40, 83, 160)*/ Color.Transparent, 12, 3, false));
             gridPanel.SetPadding(0);
             gridPanel.Append(grid = new());
             gridPanel.OnMouseDown += GridPanel_OnMouseDown;

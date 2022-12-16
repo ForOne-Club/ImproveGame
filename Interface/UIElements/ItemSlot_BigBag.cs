@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.ModHooks;
+using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
@@ -9,21 +10,19 @@ namespace ImproveGame.Interface.UIElements
     /// <summary>
     /// 用于操作数组中的物品，初始化的时候必须给定数组 + 下标。
     /// </summary>
-    public class ItemSlot_BigBag : UIElement
+    public class ItemSlot_BigBag : RelativeUIE
     {
-        private readonly Item[] items;
-        public Item[] Items => items;
+        private Item[] items;
+        public Item[] Items
+        {
+            get => items;
+            set => items = value;
+        }
         public int index;
         public Item Item
         {
-            get
-            {
-                return items[index];
-            }
-            set
-            {
-                items[index] = value;
-            }
+            get => items[index];
+            set => items[index] = value;
         }
         private int RightMouseDownTimer = -1;
 
@@ -33,6 +32,11 @@ namespace ImproveGame.Interface.UIElements
             Height.Pixels = 52;
             this.items = items;
             this.index = index;
+
+            Relative = true;
+            Mode = RelativeMode.Horizontal;
+            Interval = new(10, 10);
+            AutoLineFeed = true;
         }
 
         public override void MouseDown(UIMouseEvent evt)

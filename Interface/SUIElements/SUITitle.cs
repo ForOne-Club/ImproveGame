@@ -23,9 +23,9 @@ namespace ImproveGame.Interface.SUIElements
             }
         }
 
-        public SUITitle(string text, float scale)
+        public SUITitle(string text, float textScale)
         {
-            this.textScale = scale;
+            this.textScale = textScale;
 
             PaddingTop = 5;
             PaddingBottom = 5;

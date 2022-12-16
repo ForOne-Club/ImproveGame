@@ -63,6 +63,13 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
+        /// <summary>
+        /// 把东西放入旗帜盒，必须通过此方法。
+        /// </summary>
+        /// <param name="storedBanners"></param>
+        /// <param name="item"></param>
+        /// <param name="AutoSort"></param>
+        /// <returns></returns>
         public static bool PutInBannerChest(List<Item> storedBanners, ref Item item, bool AutoSort)
         {
             for (int i = 0; i < storedBanners.Count; i++)

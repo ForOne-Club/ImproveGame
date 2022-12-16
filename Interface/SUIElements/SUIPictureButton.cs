@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
+using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
@@ -13,10 +14,9 @@ namespace ImproveGame.Interface.SUIElements
 
         public string text;
         public Vector2 textSize;
-        public Vector2 TextPosition => new(imagePosition.X + imageSize.X + 10, UIConfigs.Instance.TextDrawOffsetY + this.Height() / 2 - textSize.Y / 2);
+        public Vector2 TextPosition => new(imagePosition.X + image.Size().X + 10, UIConfigs.Instance.TextDrawOffsetY + this.Height() / 2 - textSize.Y / 2);
 
         public Texture2D image;
-        public Vector2 imageSize;
         public Vector2 imagePosition;
 
         public SUIPictureButton(Texture2D texture, string text)
@@ -25,8 +25,7 @@ namespace ImproveGame.Interface.SUIElements
             Height.Pixels = 40f;
 
             image = texture;
-            imageSize = texture.Size();
-            imagePosition = new Vector2(30, this.Height() / 2) - imageSize / 2;
+            imagePosition = new Vector2(30, this.Height() / 2) - image.Size() / 2;
 
             this.text = text;
             textSize = GetTextSize(text);
@@ -34,8 +33,8 @@ namespace ImproveGame.Interface.SUIElements
 
         public override void Recalculate()
         {
-            base.Recalculate();
             Width.Pixels = GetTextSize(text).X + this.HPadding() + 75;
+            base.Recalculate();
         }
 
         protected override void DrawSelf(SpriteBatch sb)
@@ -58,12 +57,6 @@ namespace ImproveGame.Interface.SUIElements
         {
             this.text = text;
             textSize = GetTextSize(text);
-        }
-
-        public void SetImage(Texture2D texture)
-        {
-            image = texture;
-            imageSize = texture.Size();
         }
 
         public override void MouseOver(UIMouseEvent evt)

@@ -1,10 +1,11 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
+using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUICheckbox : UIElement
+    public class SUISwitch : RelativeUIE
     {
         public Func<bool> GetState;
         public Action<bool> SetState;
@@ -28,7 +29,7 @@ namespace ImproveGame.Interface.SUIElements
             }
         }
 
-        public SUICheckbox(Func<bool> GetState, Action<bool> SetState, string text, float textScale = 1f)
+        public SUISwitch(Func<bool> GetState, Action<bool> SetState, string text, float textScale = 1f)
         {
             Text = text;
             this.textScale = textScale;
@@ -58,6 +59,7 @@ namespace ImproveGame.Interface.SUIElements
         {
             base.MouseDown(evt);
             SetState(!GetState());
+            SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         protected override void DrawSelf(SpriteBatch sb)

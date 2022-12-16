@@ -116,7 +116,7 @@ namespace ImproveGame.Interface.UIElements
             };
             Append(RenameButton);
 
-            PathPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), radius: 10, CalculateBorder: false)
+            PathPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), round: 10, CalculateBorder: false)
             {
                 Top = detailButton.Top,
                 OverflowHidden = true,

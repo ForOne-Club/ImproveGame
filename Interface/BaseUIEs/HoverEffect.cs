@@ -1,11 +1,11 @@
 ﻿using ImproveGame.Common.Animations;
 
-namespace ImproveGame.Interface.SUIElements
+namespace ImproveGame.Interface.BaseUIEs
 {
     /// <summary>
-    /// 大背包按钮背景上的效果，需要直接继承此类即可。
+    /// 大背包按钮背景上的效果，需要直接继承此类即可。(继承自 RelativeUIE)
     /// </summary>
-    public class HoverEffect : UIElement
+    public class HoverEffect : RelativeUIE
     {
         public AnimationTimer hoverTimer;
         public Color hoverColor1;
