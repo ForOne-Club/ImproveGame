@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Interface.UIElements
+﻿using ImproveGame.Interface.SUIElements;
+
+namespace ImproveGame.Interface.UIElements
 {
     public class ModItemList : UIElement
     {
@@ -32,8 +34,8 @@
                 this.items = items;
                 for (int i = 0; i < items.Length; i++)
                 {
-                    ItemSlot_BigBag itemSolot;
-                    Append(itemSolot = new ItemSlot_BigBag(items, i));
+                    BigBagItemSlot itemSolot;
+                    Append(itemSolot = new BigBagItemSlot(items, i));
                     itemSolot.OnMouseDown += OnMouseDownSlot;
                 }
             }
@@ -42,9 +44,9 @@
                 for (int i = 0; i < items.Length; i++)
                 {
                     UIElement uie = Elements[i];
-                    if (uie is ItemSlot_BigBag)
+                    if (uie is BigBagItemSlot)
                     {
-                        ItemSlot_BigBag itemSlot = uie as ItemSlot_BigBag;
+                        BigBagItemSlot itemSlot = uie as BigBagItemSlot;
                         itemSlot.Items = items;
                     }
                 }

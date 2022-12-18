@@ -1,10 +1,10 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Content;
-using ImproveGame.Interface.UIElements;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.ModLoader.Config;
 using Terraria.ID;
+using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -153,7 +153,7 @@ namespace ImproveGame.Common.GlobalItems
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
-                ItemSlot_BigBag.OpenItemGlow(sb);
+                BigBagItemSlot.OpenItemGlow(sb);
             return true;
         }
 

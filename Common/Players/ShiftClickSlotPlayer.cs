@@ -60,15 +60,17 @@ namespace ImproveGame.Common.Players
             {
                 if (PackageGUI.Visible)
                 {
+                    // 旗帜
                     if (PackageGUI.storageType is PackageGUI.StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
                     {
-                        BannerChest.PutInBannerChest(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot], UISystem.Instance.PackageGUI.package.autoSort);
+                        UISystem.Instance.PackageGUI.package.PutInPackage(ref inventory[slot]);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
+                    // 药水
                     else if (PackageGUI.storageType is PackageGUI.StorageType.Potions && inventory[slot].buffType > 0 && inventory[slot].consumable)
                     {
-                        PotionBag.PutInPotionBag(UISystem.Instance.PackageGUI.grid.items, ref inventory[slot], UISystem.Instance.PackageGUI.package.autoSort);
+                        UISystem.Instance.PackageGUI.package.PutInPackage(ref inventory[slot]);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }

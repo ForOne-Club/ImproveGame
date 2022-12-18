@@ -2,16 +2,15 @@
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
-using ReLogic.Graphics;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Interface.UIElements
+namespace ImproveGame.Interface.SUIElements
 {
     /// <summary>
     /// 用于操作数组中的物品，初始化的时候必须给定数组 + 下标。
     /// </summary>
-    public class ItemSlot_BigBag : RelativeUIE
+    public class BigBagItemSlot : RelativeUIE
     {
         private Item[] items;
         public Item[] Items
@@ -27,7 +26,7 @@ namespace ImproveGame.Interface.UIElements
         }
         private int RightMouseDownTimer = -1;
 
-        public ItemSlot_BigBag(Item[] items, int index)
+        public BigBagItemSlot(Item[] items, int index)
         {
             Width.Pixels = 52;
             Height.Pixels = 52;
@@ -290,8 +289,8 @@ namespace ImproveGame.Interface.UIElements
         protected override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
-            Color borderColor = (Item.favorited && !Item.IsAir) ? UIColor.SlotFavoritedBorder : UIColor.SlotNoFavoritedBorder;
-            Color background = (Item.favorited && !Item.IsAir) ? UIColor.SlotFavoritedBackground : UIColor.SlotNoFavoritedBackground;
+            Color borderColor = Item.favorited && !Item.IsAir ? UIColor.SlotFavoritedBorder : UIColor.SlotNoFavoritedBorder;
+            Color background = Item.favorited && !Item.IsAir ? UIColor.SlotFavoritedBackground : UIColor.SlotNoFavoritedBackground;
 
             PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, background, 3, borderColor);
             if (Item.IsAir)

@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Content.Items;
+﻿using ImproveGame.Content.Items;
 using ImproveGame.Interface.BannerChestUI.Elements;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
@@ -11,7 +10,7 @@ namespace ImproveGame.Interface.BannerChestUI
         public enum StorageType { Banners, Potions }
         private static bool visible;
         public static StorageType storageType;
-        public PackageItem package;
+        public IPackageItem package;
 
         public static bool Visible
         {
@@ -45,10 +44,10 @@ namespace ImproveGame.Interface.BannerChestUI
 
             mainPanel.Append(title = new SUITitle("中文|Chinese", 0.5f) { PaddingLeft = 25, PaddingRight = 25 });
 
-            mainPanel.Append(checkbox = new SUISwitch(() => package.autoStorage, state => package.autoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f));
+            mainPanel.Append(checkbox = new SUISwitch(() => package.AutoStorage, state => package.AutoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f));
             checkbox.Top.Pixels = title.Bottom() + 8f;
 
-            mainPanel.Append(checkbox2 = new SUISwitch(() => package.autoSort, state => package.autoSort = state, GetText("PackageGUI.AutoSort"), 0.8f));
+            mainPanel.Append(checkbox2 = new SUISwitch(() => package.AutoSort, state => package.AutoSort = state, GetText("PackageGUI.AutoSort"), 0.8f));
             checkbox2.Top.Pixels = checkbox.Top();
             checkbox2.Left.Pixels = checkbox.Right() + 8f;
 
@@ -73,15 +72,12 @@ namespace ImproveGame.Interface.BannerChestUI
             if (Main.mouseItem.IsAir)
                 return;
 
-            List<Item> items = grid.items;
-
             // 旗帜收纳箱
             if (storageType is StorageType.Banners && ItemToBanner(Main.mouseItem) != -1)
-                BannerChest.PutInBannerChest(items, ref Main.mouseItem, package.autoSort);
-
+                package.PutInPackage(ref Main.mouseItem);
             // 药水袋子
             else if (storageType is StorageType.Potions && Main.mouseItem.buffType > 0 && Main.mouseItem.consumable)
-                PotionBag.PutInPotionBag(items, ref Main.mouseItem, package.autoSort);
+                package.PutInPackage(ref Main.mouseItem);
         }
 
         public override void Update(GameTime gameTime)
@@ -94,9 +90,9 @@ namespace ImproveGame.Interface.BannerChestUI
             }
         }
 
-        public void Open(List<Item> items, string title, StorageType STOType, PackageItem package)
+        public void Open(List<Item> items, string title, StorageType storageType, IPackageItem package)
         {
-            storageType = STOType;
+            PackageGUI.storageType = storageType;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
             Visible = true;

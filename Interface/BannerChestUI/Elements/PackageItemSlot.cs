@@ -1,13 +1,13 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
-using ImproveGame.Interface.UIElements;
+using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.BannerChestUI.Elements
 {
-    public class ItemSlot_Package : RelativeUIE
+    public class PackageItemSlot : RelativeUIE
     {
 
         private int RightMouseTimer;
@@ -21,7 +21,7 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
             set => items[index] = value;
         }
 
-        public ItemSlot_Package(List<Item> items, int index)
+        public PackageItemSlot(List<Item> items, int index)
         {
             AirItem = new Item();
             Width.Pixels = 52;
@@ -39,6 +39,8 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
         {
             bool MouseItemIsAir = Main.mouseItem.IsAir;
             base.MouseDown(evt);
+            if (Item.IsAir)
+                return;
             if (MouseItemIsAir)
             {
                 SetCursor();
@@ -49,6 +51,8 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
         public override void RightMouseDown(UIMouseEvent evt)
         {
             base.RightMouseDown(evt);
+            if (Item.IsAir)
+                return;
             RightMouseTimer = 0;
             TakeSlotItemToMouseItem();
         }
@@ -80,7 +84,7 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
             CalculatedStyle dimensions = GetDimensions();
             PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, UIColor.SlotNoFavoritedBackground, 3, UIColor.SlotNoFavoritedBorder);
 
-            ItemSlot_BigBag.DrawItemIcon(sb, Item, Color.White, dimensions, 30);
+            BigBagItemSlot.DrawItemIcon(sb, Item, Color.White, dimensions, 30);
 
             if (!Item.IsAir && Item.stack > 1)
             {

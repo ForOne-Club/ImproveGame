@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ImproveGame.Interface.SUIElements;
+using System.Collections.Generic;
 using Terraria.GameContent.ItemDropRules;
 
 namespace ImproveGame.Interface.UIElements
@@ -50,7 +51,7 @@ namespace ImproveGame.Interface.UIElements
 
             var dimensions = GetDimensions();
             dimensions.Width = 40f;
-            ItemSlot_BigBag.DrawItemIcon(sb: spriteBatch,
+            BigBagItemSlot.DrawItemIcon(sb: spriteBatch,
                                    Item: item,
                                    lightColor: Color.White,
                                    dimensions: dimensions,

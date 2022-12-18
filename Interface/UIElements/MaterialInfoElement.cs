@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Interface.UIElements
+﻿using ImproveGame.Interface.SUIElements;
+
+namespace ImproveGame.Interface.UIElements
 {
     /// <summary>
     /// 一个单元的掉率信息
@@ -73,7 +75,7 @@
             var dimensions = GetDimensions();
             dimensions.Width = 28f;
             dimensions.X += 16f;
-            ItemSlot_BigBag.DrawItemIcon(sb: spriteBatch,
+            BigBagItemSlot.DrawItemIcon(sb: spriteBatch,
                                    Item: iconItem,
                                    lightColor: Color.White,
                                    dimensions: dimensions,
@@ -171,7 +173,7 @@
             var dimensions = GetDimensions();
             dimensions.Width = 28f;
             dimensions.X += 16f;
-            ItemSlot_BigBag.DrawItemIcon(sb: spriteBatch,
+            BigBagItemSlot.DrawItemIcon(sb: spriteBatch,
                                    Item: iconItem,
                                    lightColor: Color.White,
                                    dimensions: dimensions,

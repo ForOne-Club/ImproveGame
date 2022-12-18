@@ -131,16 +131,20 @@ namespace ImproveGame.Interface.GUI
                 First = true,
                 Relative = true,
                 Mode = BaseUIEs.RelativeUIE.RelativeMode.Vertical,
-                Interval = ButtonInterval
+                Interval = new Vector2(10, 15)
             });
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
             mainPanel.SetSizeInside(ItemGrid.Width.Pixels, ItemGrid.Bottom());
         }
 
-        // 点击操作，将物品发送给服务器（因为像药水袋和旗帜盒这俩左键是不改stack的，所以这来个同步）
+        /// <summary>
+        /// 点击操作，将物品发送给服务器（因为像药水袋和旗帜盒这俩左键是不改stack的，所以这来个同步）
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="listeningElement"></param>
         private void NetSyncItem(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (Main.netMode == NetmodeID.MultiplayerClient && listeningElement is ItemSlot_BigBag itemSlot)
+            if (Main.netMode == NetmodeID.MultiplayerClient && listeningElement is BigBagItemSlot itemSlot)
             {
                 var packet = BigBagSlotPacket.Get(itemSlot.Item, Main.myPlayer, itemSlot.index);
                 packet.Send(runLocally: false);

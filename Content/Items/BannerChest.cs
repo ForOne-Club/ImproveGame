@@ -9,10 +9,12 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
-    public class BannerChest : PackageItem, IItemOverrideLeftClick, IItemOverrideHover
+    public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.BannerChest;
         public List<Item> storedBanners = new();
+        public bool AutoStorage { get; set; }
+        public bool AutoSort { get; set; }
 
         // 克隆内容不克隆引用
         public override ModItem Clone(Item newEntity)
@@ -30,7 +32,7 @@ namespace ImproveGame.Content.Items
                 UISystem.Instance.PackageGUI.Close();
             else
                 UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name, PackageGUI.StorageType.Banners, this);
-            
+
             //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
             //storedBanners.RemoveAt(storedBanners.Count - 1);
         }
@@ -55,7 +57,7 @@ namespace ImproveGame.Content.Items
             {
                 return false;
             }
-            PutInBannerChest(storedBanners, ref Main.mouseItem, autoSort);
+            PutInPackage(ref Main.mouseItem);
             if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
@@ -63,14 +65,7 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
-        /// <summary>
-        /// 把东西放入旗帜盒，必须通过此方法。
-        /// </summary>
-        /// <param name="storedBanners"></param>
-        /// <param name="item"></param>
-        /// <param name="AutoSort"></param>
-        /// <returns></returns>
-        public static bool PutInBannerChest(List<Item> storedBanners, ref Item item, bool AutoSort)
+        public void PutInPackage(ref Item item)
         {
             for (int i = 0; i < storedBanners.Count; i++)
             {
@@ -100,8 +95,17 @@ namespace ImproveGame.Content.Items
             }
             // 依照type对物品进行排序
             if (AutoSort)
-                storedBanners.Sort((a, b) => { return a.type.CompareTo(b.type); });
-            return false;
+            {
+                Sort();
+            }
+        }
+
+        public void Sort()
+        {
+            storedBanners.Sort((a, b) =>
+            {
+                return a.type.CompareTo(b.type) + (a.stack > b.stack ? 1 : (a.stack == b.stack ? 0 : -1)) * 10;
+            });
         }
 
         public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
@@ -188,6 +192,7 @@ namespace ImproveGame.Content.Items
 
         public override void LoadData(TagCompound tag)
         {
+            (this as IPackageItem).ILoadData(tag);
             storedBanners = tag.Get<List<Item>>("banners");
             storedBanners ??= new();
 
@@ -209,6 +214,7 @@ namespace ImproveGame.Content.Items
 
         public override void SaveData(TagCompound tag)
         {
+            (this as IPackageItem).ISaveData(tag);
             tag["banners"] = storedBanners;
         }
 

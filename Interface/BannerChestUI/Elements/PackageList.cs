@@ -45,7 +45,7 @@
                 length = 25;
             for (int i = 0; i < length; i++)
             {
-                Append(new ItemSlot_Package(items, i));
+                Append(new PackageItemSlot(items, i));
             }
             int HCount = 5;
             int VCount = length / 5;

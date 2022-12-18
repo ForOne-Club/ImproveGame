@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.BannerChestUI;
-using ImproveGame.Interface.BannerChestUI.Elements;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
@@ -11,10 +10,12 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
-    public class PotionBag : PackageItem, IItemOverrideLeftClick, IItemOverrideHover
+    public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
         public List<Item> storedPotions = new();
+        public bool AutoStorage { get; set; }
+        public bool AutoSort { get; set; }
 
         // 克隆内容不克隆引用
         public override ModItem Clone(Item newEntity)
@@ -56,7 +57,7 @@ namespace ImproveGame.Content.Items
             {
                 return false;
             }
-            PutInPotionBag(storedPotions, ref Main.mouseItem, autoSort);
+            PutInPackage(ref Main.mouseItem);
             if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
@@ -64,7 +65,7 @@ namespace ImproveGame.Content.Items
             return true;
         }
 
-        public static bool PutInPotionBag(List<Item> storedPotions, ref Item item, bool autoSort)
+        public void PutInPackage(ref Item item)
         {
             for (int i = 0; i < storedPotions.Count; i++)
             {
@@ -93,9 +94,18 @@ namespace ImproveGame.Content.Items
                 SoundEngine.PlaySound(SoundID.Grab);
             }
             // 依照type对物品进行排序
-            if (autoSort)
-                storedPotions.Sort((a, b) => a.type.CompareTo(b.type));
-            return false;
+            if (AutoSort)
+            {
+                Sort();
+            }
+        }
+
+        public void Sort()
+        {
+            storedPotions.Sort((a, b) =>
+            {
+                return a.type.CompareTo(b.type) + (a.stack > b.stack ? 1 : (a.stack == b.stack ? 0 : -1)) * 10;
+            });
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -213,6 +223,7 @@ namespace ImproveGame.Content.Items
 
         public override void LoadData(TagCompound tag)
         {
+            (this as IPackageItem).ILoadData(tag);
             storedPotions = tag.Get<List<Item>>("potions");
             storedPotions ??= new();
 
@@ -236,6 +247,7 @@ namespace ImproveGame.Content.Items
 
         public override void SaveData(TagCompound tag)
         {
+            (this as IPackageItem).ISaveData(tag);
             tag["potions"] = storedPotions;
         }
 
