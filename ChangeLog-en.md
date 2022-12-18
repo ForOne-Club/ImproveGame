@@ -23,7 +23,7 @@
 - **[v1.6.2.3]** Fixed unable to toggle shared buffs in multiplayer
 - **[v1.6.2.4]** Fixed certain item icons in ModUI not displaying
 - **[v1.6.2.4]** Fixed only one infinite buff can be active when Protable Buff Station is off
-- **[v1.6.2.6]** 修复了多人共享BUFF无法正常运作的BUG
+- **[v1.6.2.6]** Fixed the buff sharing
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests
@@ -53,11 +53,11 @@
 - **[v1.6.2.2]** Mod Item toggles are now independent to each other
 - **[v1.6.2.2]** Wand of Space/Architecture/Technology no longer consume materials stack not less than 999, 99 for chairs/workbenches/beds
 - **[v1.6.2.4]** Added a UI config, to adjust the offset on Y axis of mod texts, modify this to get visual performance when using font packs
-- **[v1.6.2.6]** 旗帜盒支持中键打开关闭，配色与物品槽间隔略微调增
-- **[v1.6.2.6]** 科技魔杖铺设方式修改，特效优化，最大铺设数量增加到 2500。
-- **[v1.6.2.6]** 所有魔杖在创意震撼BUFF状态下禁止使用魔杖（漆涂魔杖除外）
-- **[v1.6.2.6]** 无限投掷物功能，所有数量 ≥ 3996 的投掷物不会消耗。
-- **[v1.6.2.6]** 无限弹药中坠星改为 ≥ 999 即不消耗
+- **[v1.6.2.6]** Banner Box now can be toggled by middle click, slightly adjusted color and arrangement
+- **[v1.6.2.6]** Improved how Wand of Technology works, maximum tile increased to 2500
+- **[v1.6.2.6]** Besides Wand of Painting, all wands now cannot be used under debuff Creative Shock
+- **[v1.6.2.6]** Added function Infinite Throwings, all throwings which stack >= 3996 will not be consumed
+- **[v1.6.2.6]** Threshold for Fallen Stars to not be consumed is lowered to 999 instead of 3996
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
