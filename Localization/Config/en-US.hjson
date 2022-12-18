@@ -469,4 +469,5 @@
     }
     UIConfigs.Label: "图形界面设置"
     TextDrawOffsetY.Label: "MOD UI 文字Y轴绘制偏移"
+    ThemeStyle.Label: "主题色 (每次切换需要重新进入地图)"
 }

@@ -53,7 +53,7 @@
 - **[v1.6.2.2]** Mod Item toggles are now independent to each other
 - **[v1.6.2.2]** Wand of Space/Architecture/Technology no longer consume materials stack not less than 999, 99 for chairs/workbenches/beds
 - **[v1.6.2.4]** Added a UI config, to adjust the offset on Y axis of mod texts, modify this to get visual performance when using font packs
-- **[v1.6.2.6]** 旗帜盒支持中键打开关闭
+- **[v1.6.2.6]** 旗帜盒支持中键打开关闭，配色与物品槽间隔略微调增
 - **[v1.6.2.6]** 科技魔杖铺设方式修改，特效优化，最大铺设数量增加到 2500。
 - **[v1.6.2.6]** 所有魔杖在创意震撼BUFF状态下禁止使用魔杖（漆涂魔杖除外）
 - **[v1.6.2.6]** 无限投掷物功能，所有数量 ≥ 3996 的投掷物不会消耗。

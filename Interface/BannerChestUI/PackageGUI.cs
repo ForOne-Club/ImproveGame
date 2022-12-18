@@ -1,5 +1,5 @@
-﻿using ImproveGame.Content.Items;
-using ImproveGame.Interface.BannerChestUI.Elements;
+﻿using ImproveGame.Interface.BannerChestUI.Elements;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
@@ -31,10 +31,9 @@ namespace ImproveGame.Interface.BannerChestUI
         public SUIPanel gridPanel;
         public PackageGrid grid;
 
-        private readonly Color background = new(44, 57, 105, 160);
         public override void OnInitialize()
         {
-            Append(mainPanel = new SUIPanel(new Color(22, 25, 55), new Color(59, 67, 139, 160))
+            Append(mainPanel = new SUIPanel(UIColor.PackgePanelBorder, UIColor.PackgePanelBG)
             {
                 HAlign = 0.5f,
                 VAlign = 0.5f,
@@ -55,7 +54,7 @@ namespace ImproveGame.Interface.BannerChestUI
             fork.Height.Pixels = title.Height();
             fork.OnMouseDown += (_, _) => Close();
 
-            mainPanel.Append(gridPanel = new SUIPanel(new Color(22, 25, 55, 160), new Color(29, 33, 70, 160), 12, 3, false));
+            mainPanel.Append(gridPanel = new SUIPanel(UIColor.PackgeGridBorder, UIColor.PackgeGridBG, 12, 3, false));
             gridPanel.SetPadding(10);
             gridPanel.Append(grid = new());
             gridPanel.OnMouseDown += GridPanel_OnMouseDown;

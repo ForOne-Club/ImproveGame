@@ -17,5 +17,11 @@ namespace ImproveGame.Common.Configs
         [Slider]
         [Increment(0.5f)]
         public float TextDrawOffsetY;
+
+        [Label($"${path}.ThemeStyle.Label")]
+        [DefaultValue(0)]
+        [Range(0, 1)]
+        [Slider]
+        public int ThemeStyle;
     }
 }
