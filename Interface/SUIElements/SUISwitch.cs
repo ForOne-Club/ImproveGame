@@ -64,9 +64,9 @@ namespace ImproveGame.Interface.SUIElements
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            Color color = Color.Lerp(UIColor.Default.CheckBoxBackground, UIColor.Default.CheckBoxBackgroundHover, timer.Schedule);
-            Color color2 = Color.Lerp(UIColor.Default.CheckBoxBorder, UIColor.Default.CheckBoxBorderHover, timer.Schedule);
-            Color color3 = Color.Lerp(UIColor.Default.CheckBoxRound, UIColor.Default.CheckBoxRoundHover, timer.Schedule);
+            Color color = Color.Lerp(UIColor.SwitchBoxBackground, UIColor.SwitchBackgroundHover, timer.Schedule);
+            Color color2 = Color.Lerp(UIColor.SwitchBorder, UIColor.SwitchBorderHover, timer.Schedule);
+            Color color3 = Color.Lerp(UIColor.SwitchRound, UIColor.SwitchRoundHover, timer.Schedule);
 
             Vector2 position = GetInnerDimensions().Position();
             Vector2 size = GetInnerDimensions().Size();

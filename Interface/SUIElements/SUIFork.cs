@@ -28,14 +28,14 @@ namespace ImproveGame.Interface.SUIElements
         protected override void DrawSelf(SpriteBatch sb)
         {
             base.DrawSelf(sb);
-            Color background = Color.Lerp(UIColor.Default.TitleBackground * 0.5f, UIColor.Default.TitleBackground * 1f, hoverTimer.Schedule);
-            Color fork = Color.Lerp(Color.Transparent, UIColor.Default.Fork, hoverTimer.Schedule);
+            Color background = Color.Lerp(UIColor.TitleBackground * 0.5f, UIColor.TitleBackground * 1f, hoverTimer.Schedule);
+            Color fork = Color.Lerp(Color.Transparent, UIColor.Fork, hoverTimer.Schedule);
 
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
-            PixelShader.DrawRoundRect(pos, size, 10f, background, 3f, UIColor.Default.PanelBorder);
+            PixelShader.DrawRoundRect(pos, size, 10f, background, 3f, UIColor.PanelBorder);
             Vector2 forkPos = pos + size / 2 - new Vector2(forkSize / 2);
-            PixelShader.DrawFork(forkPos, forkSize, radius, fork, border, UIColor.Default.PanelBorder);
+            PixelShader.DrawFork(forkPos, forkSize, radius, fork, border, UIColor.PanelBorder);
         }
     }
 }

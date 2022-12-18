@@ -33,7 +33,7 @@ namespace ImproveGame.Interface.GUI
         public override void OnInitialize()
         {
             // 主面板
-            Append(mainPanel = new(UIColor.Default.PanelBorder, UIColor.Default.PanelBackground)
+            Append(mainPanel = new(UIColor.PanelBorder, UIColor.PanelBackground)
             {
                 Shaded = true,
                 Draggable = true

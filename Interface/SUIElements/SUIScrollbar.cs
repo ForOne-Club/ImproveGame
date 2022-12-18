@@ -153,7 +153,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 size = dimension.Size();
 
             // 滚动条背板
-            PixelShader.DrawRoundRect(position, size, size.X / 2, UIColor.Default.ScrollBarBackground, 3, UIColor.Default.PanelBorder);
+            PixelShader.DrawRoundRect(position, size, size.X / 2, UIColor.ScrollBarBackground, 3, UIColor.PanelBorder);
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();
