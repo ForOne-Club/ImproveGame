@@ -9,7 +9,8 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
 {
     public class PackageItemSlot : RelativeUIE
     {
-
+        public Texture2D Banner;
+        public Texture2D Potion;
         private int RightMouseTimer;
         public Item AirItem;
         public Func<Item, bool> CanPutItemSlot;
@@ -23,6 +24,8 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
 
         public PackageItemSlot(List<Item> items, int index)
         {
+            Banner = GetTexture("UI/Banner").Value;
+            Potion = GetTexture("UI/Potion").Value;
             AirItem = new Item();
             Width.Pixels = 52;
             Height.Pixels = 52;
@@ -84,7 +87,22 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
             CalculatedStyle dimensions = GetDimensions();
             PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, UIColor.SlotNoFavoritedBackground, 3, UIColor.SlotNoFavoritedBorder);
 
-            BigBagItemSlot.DrawItemIcon(sb, Item, Color.White, dimensions, 30);
+            if (Item.IsAir)
+            {
+                switch (PackageGUI.storageType)
+                {
+                    case PackageGUI.StorageType.Banners:
+                        BigBagItemSlot.DrawItemIcon(sb, Banner, Color.White, dimensions);
+                        break;
+                    case PackageGUI.StorageType.Potions:
+                        BigBagItemSlot.DrawItemIcon(sb, Potion, Color.White, dimensions);
+                        break;
+                }
+            }
+            else
+            {
+                BigBagItemSlot.DrawItemIcon(sb, Item, Color.White, dimensions);
+            }
 
             if (!Item.IsAir && Item.stack > 1)
             {

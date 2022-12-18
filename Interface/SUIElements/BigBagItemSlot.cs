@@ -336,6 +336,15 @@ namespace ImproveGame.Interface.SUIElements
             ItemLoader.PostDrawInInventory(Item, sb, position, frame, Item.GetAlpha(lightColor), Item.GetColor(lightColor), origin, size);
         }
 
+        public static void DrawItemIcon(SpriteBatch sb, Texture2D texture2D, Color color, CalculatedStyle dimensions, float maxSize = 32f)
+        {
+            Rectangle frame = texture2D.Frame();
+            float size = frame.Width > maxSize || frame.Height > maxSize ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height : 1f;
+            Vector2 position = dimensions.Center() - frame.Size() * size / 2f;
+            Vector2 origin = dimensions.Center();
+            sb.Draw(texture2D, position, (Rectangle?)frame, color, 0f, origin, size, SpriteEffects.None, 0f);
+        }
+
         public static void OpenItemGlow(SpriteBatch sb)
         {
             //Effect effect = ModAssets.ItemEffect.Value;
