@@ -9,6 +9,7 @@ namespace ImproveGame.Common.Players
     public class AutofishPlayer : ModPlayer
     {
         public static AutofishPlayer LocalPlayer => Main.LocalPlayer.GetModPlayer<AutofishPlayer>();
+        public bool IsAutofisherOpened => Autofisher is {X: > 0, Y: > 0};
         internal Point16 Autofisher { get; private set; } = Point16.NegativeOne;
         public static bool TryGet(Player player, out AutofishPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
 
@@ -120,7 +121,7 @@ namespace ImproveGame.Common.Players
 
         public TEAutofisher GetAutofisher()
         {
-            if (Autofisher.X < 0 || Autofisher.Y < 0)
+            if (!IsAutofisherOpened)
                 return null;
             Tile tile = Main.tile[Autofisher.ToPoint()];
             if (!tile.HasTile)

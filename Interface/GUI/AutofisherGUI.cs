@@ -293,11 +293,11 @@ namespace ImproveGame.Interface.GUI
             {
                 if (baitSlot.Item.type == ItemID.TruffleWorm)
                 {
-                    autofisher.SetFishingTip(Language.GetTextValue("GameUI.FishingWarning"));
+                    autofisher.SetFishingTip(Autofisher.TipType.FishingWarning);
                 }
                 if (baitSlot.Item.IsAir || fishingPoleSlot.Item.IsAir || autofisher.FishingTip == "Error")
                 {
-                    autofisher.SetFishingTip(GetText("Autofisher.Unavailable"));
+                    autofisher.SetFishingTip(Autofisher.TipType.Unavailable);
                 }
 
                 tipText.SetText(autofisher.FishingTip);

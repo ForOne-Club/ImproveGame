@@ -1,4 +1,5 @@
 using ImproveGame.Common.Packets.NetAutofisher;
+using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.Placeable;
@@ -40,13 +41,32 @@ namespace ImproveGame.Content.Tiles
             return tile.HasTile && tile.TileType == ModContent.TileType<Autofisher>();
         }
 
-        public void SetFishingTip(string text)
+        public void SetFishingTip(Autofisher.TipType tipType, int fishingLevel = 0, float waterQuality = 0f)
         {
-            FishingTip = text;
-            FishingTipTimer = 0;
-            if (Main.netMode == NetmodeID.Server)
+            FishingTip = tipType switch
             {
-                FishingTipPacket.Get(Position, FishingTip).Send(runLocally: false);
+                Autofisher.TipType.FishingWarning => Language.GetTextValue("GameUI.FishingWarning"),
+                Autofisher.TipType.NotEnoughWater => Language.GetTextValue("GameUI.NotEnoughWater"),
+                Autofisher.TipType.FishingPower => Language.GetTextValue("GameUI.FishingPower", fishingLevel),
+                Autofisher.TipType.FullFishingPower => Language.GetTextValue("GameUI.FullFishingPower", fishingLevel, 0.0 - Math.Round(waterQuality * 100f)),
+                Autofisher.TipType.Unavailable => GetText("Autofisher.Unavailable"),
+                _ => ""
+            };
+            FishingTipTimer = 0;
+
+            if (Main.netMode is not NetmodeID.Server)
+            {
+                return;
+            }
+
+            // 给距离钓鱼机 1000 像素内的玩家发包
+            const int distance = 1000 * 1000;
+            for (int i = 0; i < Main.maxPlayers; i++)
+            {
+                var player = Main.player[i];
+                // 距离用 DistanceSQ 判断，没有开方操作运行更快
+                if (player.active && !player.DeadOrGhost && player.Center.DistanceSQ(Position.ToWorldCoordinates()) <= distance)
+                    FishingTipPacket.Get(Position, tipType, fishingLevel, waterQuality).Send(i);
             }
         }
 
@@ -191,14 +211,14 @@ namespace ImproveGame.Content.Tiles
             GetFishingPondState(fisher.X, fisher.Y, out fisher.inLava, out fisher.inHoney, out fisher.waterTilesCount, out fisher.chumsInWater);
             if (fisher.waterTilesCount < 75)
             {
-                SetFishingTip(Language.GetTextValue("GameUI.NotEnoughWater"));
+                SetFishingTip(Autofisher.TipType.NotEnoughWater);
                 return;
             }
 
             fisher.playerFishingConditions = GetFishingConditions();
             if (fisher.playerFishingConditions.BaitItemType == ItemID.TruffleWorm)
             {
-                SetFishingTip(Language.GetTextValue("GameUI.FishingWarning"));
+                SetFishingTip(Autofisher.TipType.FishingWarning);
                 if (Main.rand.NextBool(5) && (fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000 && player.active && !player.dead && player.Distance(new(fisher.X * 16, fisher.Y * 16)) <= 2000 && NPC.CountNPCS(NPCID.DukeFishron) < 3)
                 {
                     // 召唤猪鲨 （？？？   上限是3个
@@ -248,7 +268,7 @@ namespace ImproveGame.Content.Tiles
             if (fisher.chumsInWater > 2)
                 fisher.fishingLevel += 3;
 
-            SetFishingTip(Language.GetTextValue("GameUI.FishingPower", fisher.fishingLevel));
+            SetFishingTip(Autofisher.TipType.FishingPower, fisher.fishingLevel);
             fisher.waterNeededToFish = 300;
             float num = Main.maxTilesX / 4200;
             num *= num;
@@ -266,7 +286,7 @@ namespace ImproveGame.Content.Tiles
 
             fisher.waterQuality = 1f - fisher.waterQuality;
             if (fisher.waterTilesCount < fisher.waterNeededToFish)
-                SetFishingTip(Language.GetTextValue("GameUI.FullFishingPower", fisher.fishingLevel, 0.0 - Math.Round(fisher.waterQuality * 100f)));
+                SetFishingTip(Autofisher.TipType.FullFishingPower, fisher.fishingLevel, fisher.waterQuality);
 
             if (player.active && !player.dead)
             {
@@ -416,7 +436,13 @@ namespace ImproveGame.Content.Tiles
                 item = ItemStackToInventoryItem(fish, i, item, false);
                 if (fish[i].stack != oldStackSlot && Main.netMode is NetmodeID.Server)
                 {
-                    ItemsStackChangePacket.Get(Position, (byte)i, fish[i].stack - oldStackSlot).Send(runLocally: false);
+                    // 这包是给开着钓鱼机的玩家用的，只给开着的发包就行了
+                    for (int p = 0; p < Main.maxPlayers; p++)
+                    {
+                        var client = Main.player[p];
+                        if (client.active && !client.DeadOrGhost && client.GetModPlayer<AutofishPlayer>().IsAutofisherOpened)
+                            ItemsStackChangePacket.Get(Position, (byte)i, fish[i].stack - oldStackSlot).Send(p);
+                    }
                 }
                 if (item.IsAir)
                     goto FilledEnd;

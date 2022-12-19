@@ -10,6 +10,15 @@ namespace ImproveGame.Content.Tiles
 {
     public class Autofisher : TETileBase, ITileContainer
     {
+        public enum TipType : byte
+        {
+            FishingWarning,
+            NotEnoughWater,
+            FishingPower,
+            FullFishingPower,
+            Unavailable
+        }
+        
         public override ModTileEntity GetTileEntity() => ModContent.GetInstance<TEAutofisher>();
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;

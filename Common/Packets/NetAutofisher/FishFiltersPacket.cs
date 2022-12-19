@@ -42,35 +42,38 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     [AutoSync]
     public class FisherAllFiltersPacket : NetModule
     {
-        private Point16 position;
-        private bool catchCrates;
-        private bool catchAccessories;
-        private bool catchTools;
-        private bool catchWhiteRarityCatches;
-        private bool catchNormalCatches;
+        private Point16 _position;
+        private byte _filterTypes; // 节省资源
 
         public static FisherAllFiltersPacket Get(Point16 position, bool catchCrates, bool catchAccessories, bool catchTools, bool catchWhiteRarityCatches, bool catchNormalCatches)
         {
             var module = NetModuleLoader.Get<FisherAllFiltersPacket>();
-            module.position = position;
-            module.catchCrates = catchCrates;
-            module.catchAccessories = catchAccessories;
-            module.catchTools = catchTools;
-            module.catchWhiteRarityCatches = catchWhiteRarityCatches;
-            module.catchNormalCatches = catchNormalCatches;
+            module._position = position;
+            var bitsByte = new BitsByte(catchCrates, catchAccessories, catchTools, catchWhiteRarityCatches, catchNormalCatches);
+            module._filterTypes = bitsByte;
             return module;
         }
 
         public override void Receive()
         {
-            if (TileLoader.GetTile(Main.tile[position.ToPoint()].TileType) is Autofisher && TryGetTileEntityAs<TEAutofisher>(position.X, position.Y, out var autofisher))
+            if (TileLoader.GetTile(Main.tile[_position.ToPoint()].TileType) is not Autofisher ||
+                !TryGetTileEntityAs<TEAutofisher>(_position.X, _position.Y, out var autofisher))
             {
-                autofisher.CatchCrates = catchCrates;
-                autofisher.CatchAccessories = catchAccessories;
-                autofisher.CatchTools = catchTools;
-                autofisher.CatchWhiteRarityCatches = catchWhiteRarityCatches;
-                autofisher.CatchNormalCatches = catchNormalCatches;
+                return;
             }
+
+            var bitsByte = (BitsByte) _filterTypes;
+            bool catchCrates = bitsByte[0];
+            bool catchAccessories = bitsByte[1];
+            bool catchTools = bitsByte[2];
+            bool catchWhiteRarityCatches = bitsByte[3];
+            bool catchNormalCatches = bitsByte[4];
+
+            autofisher.CatchCrates = catchCrates;
+            autofisher.CatchAccessories = catchAccessories;
+            autofisher.CatchTools = catchTools;
+            autofisher.CatchWhiteRarityCatches = catchWhiteRarityCatches;
+            autofisher.CatchNormalCatches = catchNormalCatches;
         }
     }
 }
