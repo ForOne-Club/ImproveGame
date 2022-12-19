@@ -117,11 +117,6 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool ImprovePrefix;
 
-        [Label($"${path}.ShowItemMoreData.Label")]
-        [Tooltip($"${path}.ShowItemMoreData.Tooltip")]
-        [DefaultValue(false)]
-        public bool ShowItemMoreData;
-
         [Label($"${path}.ResurrectionTimeShortened.Label")]
         [Tooltip($"${path}.ResurrectionTimeShortened.Tooltip")]
         [DefaultValue(0)]

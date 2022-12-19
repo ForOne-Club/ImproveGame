@@ -3,190 +3,136 @@ using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Common.Players;
 using System.Collections.ObjectModel;
+using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items;
 
-/// <summary>
-/// 用于寻找其他服务器中对应的物品
-/// </summary>
-public record ItemPosition(byte player, int slot)
-{
-    /// <summary>
-    /// 该物品所属的玩家的 <see cref="Player.whoAmI"/>
-    /// </summary>
-    public byte player = player;
-
-    /// <summary>
-    /// 该物品所在的栏位
-    /// </summary>
-    public int slot = slot;
-}
-
 public class MoveChest : ModItem
 {
-    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.MoveChest;
+    /// <summary> 强制冷却，放置过快反复与服务器交换出bug </summary>
+    public const ushort MaxForceCoolDown = 60;
 
-    /// <summary>
-    /// 强制冷却，放置过快反复与服务器交换出bug
-    /// </summary>
-    public const int MaxForceCoolDown = 10;
+    /// <summary> 箱子名称 </summary>
+    private string _chestName = null;
 
-    /// <summary>
-    /// 箱子名称，服务器暂时无法同步
-    /// </summary>
-    public string chestName = null;
+    /// <summary> 箱子的类型 </summary>
+    private ushort _chestType = 0;
 
-    /// <summary>
-    /// 箱子的类型
-    /// </summary>
-    public ushort chestType = 0;
+    /// <summary> 是否有箱子 </summary>
+    private bool _hasChest = false;
 
-    /// <summary>
-    /// 强制冷却倒计时
-    /// </summary>
-    public int forceCoolDown = 0;
+    /// <summary> 箱子中的物品 </summary>
+    private Item[] _items = null;
 
-    /// <summary>
-    /// 是否有箱子
-    /// </summary>
-    public bool hasChest = false;
+    /// <summary> 模组箱子的全名 </summary>
+    private string _modChestName = null;
 
-    /// <summary>
-    /// 箱子中的物品
-    /// </summary>
-    public Item[] items = null;
+    /// <summary> 箱子的样式 </summary>
+    private int _style = 0;
 
-    /// <summary>
-    /// 模组箱子的全名
-    /// </summary>
-    public string modChestName = null;
+    /// <summary> 强制冷却 </summary>
+    private ushort _forceCoolDown = 0;
 
-    /// <summary>
-    /// 箱子的样式
-    /// </summary>
-    public int style = 0;
-
-    /// <summary>
-    /// 重写了Clone
-    /// </summary>
+    /// <summary> 重写了Clone </summary>
     public override bool IsCloneable => true;
 
-    /// <summary>
-    /// 在所有端执行的函数，执行主要效果
-    /// </summary>
-    /// <param name="player"></param>
-    /// <returns></returns>
-    public override bool CanUseItem(Player player)
+    private void SetCooldown(bool clear)
     {
-        if (player.noBuilding)
-            return false;
+        _forceCoolDown = clear ? (ushort)0 : MaxForceCoolDown;
+    }
 
-        if (forceCoolDown > 0)
-        {
-            return false;
-        }
+    private bool CheckCanUse(Player player)
+    {
+        if (player.noBuilding) return false;
 
-        var coord = player.GetModPlayer<ImprovePlayer>().MouseWorld.ToTileCoordinates();
+        if (_forceCoolDown > 0) return false;
 
-        if (!player.IsInTileInteractionRange(coord.X, coord.Y)) // 必须在可操作范围内
-        {
-            return true;
-        }
+        var coord = Main.MouseWorld.ToTileCoordinates();
+
+        // 必须在可操作范围内
+        if (!player.IsInTileInteractionRange(coord.X, coord.Y)) return true;
 
         // 放置箱子
-        if (hasChest)
+        return !_hasChest || TileObject.CanPlace(coord.X, coord.Y, _chestType, _style, 1, out _, true);
+    }
+
+    private void TryPlaceChest(Player player)
+    {
+        var coord = Main.MouseWorld.ToTileCoordinates();
+
+        if (Main.netMode is NetmodeID.SinglePlayer)
         {
-            if (!TileObject.CanPlace(coord.X, coord.Y, chestType, style, 1, out _, true))
+            int index = WorldGen.PlaceChest(coord.X, coord.Y, _chestType, false, _style);
+            if (index == -1)
             {
-                return false;
+                Mod.Logger.Error("Unexpected Error: Unable to Place Chest");
+                return;
             }
-            hasChest = false;
-            forceCoolDown = MaxForceCoolDown;
-            Item.createTile = -1;
 
-            if (Main.myPlayer == player.whoAmI)
-            {
-                if (Main.netMode == NetmodeID.SinglePlayer)
-                {
-                    int index = WorldGen.PlaceChest(coord.X, coord.Y, chestType, false, style);
-                    if (index == -1)
-                    {
-                        Mod.Logger.Error("Unexpected Error: Unable to Place Chest");
-                        return false;
-                    }
-                    SoundEngine.PlaySound(SoundID.Dig, player.position);
-                    var chest = Main.chest[index];
-                    chest.item = items;
-                    chest.name = chestName ?? "";
-                    Reset();
-                }
-                else
-                {
-                    items ??= new Item[Chest.maxItems];
-                    chestName ??= string.Empty;
-                    PlaceChestPacket.Get(coord, chestType, style, items, chestName, new((byte)player.whoAmI, Array.IndexOf(player.inventory, Item))).Send();
-                    Reset();
-                }
-            }
-            return true;
-        }
-
-        var tile = Main.tile[coord.X, coord.Y];
-        // 拿走箱子
-        if (tile.HasTile && TileID.Sets.BasicChest[tile.TileType])
-        {
-            forceCoolDown = MaxForceCoolDown;
-            hasChest = true;
-            chestType = tile.TileType;
-            if (chestType >= TileID.Count)
-            {
-                modChestName = ModContent.GetModTile(chestType).FullName;
-            }
-            style = TileObjectData.GetTileStyle(tile);
-
-            // 坐标修正到箱子左上角
-            coord -= new Point((tile.TileFrameX / 18) - (style * 2), tile.TileFrameY / 18);
-            Main.tile[coord.X, coord.Y].ClearTile();
-            Main.tile[coord.X + 1, coord.Y].ClearTile();
-            Main.tile[coord.X, coord.Y + 1].ClearTile();
-            Main.tile[coord.X + 1, coord.Y + 1].ClearTile();
-            
             SoundEngine.PlaySound(SoundID.Dig, player.position);
+            var chest = Main.chest[index];
+            chest.item = _items;
+            chest.name = _chestName ?? "";
 
-            // 客户端可能没有缓存箱子的物品
-            for (int i = 0; i < Main.chest.Length; i++)
-            {
-                var chest = Main.chest[i];
-                if (chest == null)
-                {
-                    continue;
-                }
-
-                if (chest.x != coord.X || chest.y != coord.Y)
-                {
-                    continue;
-                }
-                //Copy Item and Destroy Chest
-                items = chest.item;
-                chestName = chest.name;
-                Chest.DestroyChestDirect(coord.X, coord.Y, i);
-
-                if (Main.netMode == NetmodeID.Server)
-                {
-                    TakeChestPacket.Get(new((byte)player.whoAmI, Array.IndexOf(player.inventory, Item)), items, chestName).Send(-1, -1, false);
-                }
-
-                return true;
-            }
-            if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
-                Mod.Logger.Error("Unexpected error: Chest not found");
-            }
-            return true;
+            Reset();
         }
-        return true;
+        else
+        {
+            _items ??= new Item[Chest.maxItems];
+            _chestName ??= string.Empty;
+            AskPlacementPacket.Get(coord, _chestType, _style, _items, _chestName,
+                new ItemPosition((byte)player.whoAmI, Array.IndexOf(player.inventory, Item))).Send();
+
+            SetCooldown(false);
+        }
+    }
+
+    private void TryTakeChest(Player player)
+    {
+        var coord = Main.MouseWorld.ToTileCoordinates();
+        AskTakePacket.Get(new ItemPosition((byte)player.whoAmI, Array.IndexOf(player.inventory, Item)), coord)
+            .Send(runLocally: true);
+
+        if (Main.netMode is NetmodeID.MultiplayerClient)
+        {
+            SetCooldown(false);
+        }
+    }
+
+    // 只在单个客户端运行的 Shoot，针对客户端写放箱子代码即可
+    // 放箱子工作流程：
+    // 1. 玩家按下鼠标左键
+    // 2. 在检查可以放置后向服务器传输放箱包，魔杖清除箱子基本信息，CD设为最大
+    // 3. 服务器收到放箱包，在服务器放下箱子
+    // 4. 服务器向所有客户端广播箱子同步包
+    // 5. 在服务器设置物品属性，向其他所有客户端广播物品同步包
+    // 拿箱子工作流程：
+    // 1. 玩家按下鼠标左键
+    // 2. 向服务器发送取箱包，CD设为最大
+    // 3. 服务器收到取箱包，在服务器清除箱子
+    // 4. 服务器广播箱子同步包
+    // 5. 在服务器设置物品属性，广播物品同步包
+    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity,
+        int type,
+        int damage, float knockback)
+    {
+        if (!CheckCanUse(player)) return false;
+
+        // 放箱子
+        if (_hasChest)
+        {
+            TryPlaceChest(player);
+        }
+        // 拿箱子
+        else
+        {
+            TryTakeChest(player);
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -198,27 +144,98 @@ public class MoveChest : ModItem
     public override ModItem Clone(Item newEntity)
     {
         var clone = base.Clone(newEntity) as MoveChest;
-        clone.items = items?.ToArray();
+        clone._items = _items?.ToArray();
         return clone;
     }
 
     public override void HoldItem(Player player)
     {
-        if (forceCoolDown > 0)
+        if (_forceCoolDown > 0)
         {
-            forceCoolDown--;
+            _forceCoolDown--;
         }
 
-        if (player.itemAnimation == 0)
+        if (!_hasChest)
         {
-            //为了显示放置预览
-            Item.createTile = hasChest ? chestType : -1;
-            Item.placeStyle = style;
+            return;
         }
-        if (hasChest)
+
+        ModifyPlayerSpeed(player);
+
+        if (player.itemAnimation != 0)
         {
-            ModifyPlayerSpeed(player);
+            return;
         }
+
+        //为了显示放置预览
+        Item.createTile = _hasChest ? _chestType : -1;
+        Item.placeStyle = _style;
+    }
+
+    #region 物品属性多人传输
+
+    public override void NetReceive(BinaryReader reader)
+    {
+        _forceCoolDown = reader.ReadUInt16();
+        _hasChest = reader.ReadBoolean();
+
+        if (!_hasChest)
+            return;
+
+        _chestType = reader.ReadUInt16();
+        _style = reader.ReadByte();
+        if (_chestType >= TileID.Count)
+        {
+            _modChestName = reader.ReadString();
+        }
+
+        _chestName = reader.ReadString();
+        _items = reader.ReadItemArray();
+    }
+
+    public override void NetSend(BinaryWriter writer)
+    {
+        writer.Write(_forceCoolDown);
+        writer.Write(_hasChest);
+
+        if (!_hasChest)
+            return;
+
+        writer.Write(_chestType);
+        writer.Write((byte)_style);
+        if (_chestType >= TileID.Count)
+        {
+            writer.Write(_modChestName);
+        }
+
+        writer.Write(_chestName);
+        writer.Write(_items);
+    }
+
+    #endregion
+
+    #region 数据存储和读取
+
+    public void Reset()
+    {
+        _hasChest = false;
+        _items = null;
+        _chestName = null;
+        _modChestName = null;
+        _chestType = 0;
+        _style = 0;
+        SetCooldown(true);
+    }
+
+    public void SetChest(Item[] items, ushort type, string name, int style, string modChestName)
+    {
+        _hasChest = true;
+        _items = items;
+        _chestName = name;
+        _modChestName = modChestName;
+        _chestType = type;
+        _style = style;
+        SetCooldown(true);
     }
 
     /// <summary>
@@ -233,83 +250,41 @@ public class MoveChest : ModItem
             return;
         }
 
-        hasChest = true;
-        chestType = (ushort)tag.GetAsShort("chest");
-        style = tag.GetAsInt("style");
-        if (chestType >= TileID.Count)
+        _hasChest = true;
+        _chestType = (ushort)tag.GetAsShort("chest");
+        _style = tag.GetAsInt("style");
+        if (_chestType >= TileID.Count)
         {
-            modChestName = tag.GetString("mod");
-            chestType = ModContent.TryFind<ModTile>(modChestName, out var tile) ? tile.Type : TileID.Containers;
+            _modChestName = tag.GetString("mod");
+            _chestType = ModContent.TryFind<ModTile>(_modChestName, out var tile) ? tile.Type : TileID.Containers;
         }
-        chestName = tag.GetString("name");
-        items = tag.Get<Item[]>("items");
-    }
 
-    public override void ModifyTooltips(List<TooltipLine> tooltips)
-    {
-        if (hasChest)
-        {
-            tooltips.Add(new(Mod, "TooltipHeavy", GetText("MoveChest.Heavy")));
-        }
-    }
-
-    public override void NetReceive(BinaryReader reader)
-    {
-        hasChest = reader.ReadBoolean();
-        if (!hasChest)
-            return;
-        chestType = reader.ReadUInt16();
-        style = reader.ReadInt32();
-        if (chestType >= TileID.Count)
-        {
-            modChestName = reader.ReadString();
-        }
-        chestName = reader.ReadString();
-        items = reader.ReadItemArray();
-    }
-    
-    public override void NetSend(BinaryWriter writer)
-    {
-        writer.Write(hasChest);
-        if (!hasChest)
-            return;
-        writer.Write(chestType);
-        writer.Write(style);
-        if (chestType >= TileID.Count)
-        {
-            writer.Write(modChestName);
-        }
-        writer.Write(chestName);
-        writer.Write(items);
-    }
-
-    public void Reset()
-    {
-        hasChest = false;
-        items = null;
-        modChestName = null;
-        chestType = 0;
-        style = 0;
-        Item.createTile = -1;
+        _chestName = tag.GetString("name");
+        _items = tag.Get<Item[]>("items");
     }
 
     public override void SaveData(TagCompound tag)
     {
-        if (!hasChest)
+        if (!_hasChest)
         {
             return;
         }
 
-        tag.Add("chest", (short)chestType);
-        tag.Add("style", style);
-        if (chestType >= TileID.Count)
+        tag.Add("chest", (short)_chestType);
+        tag.Add("style", _style);
+        if (_chestType >= TileID.Count)
         {
-            tag.Add("mod", modChestName);
+            tag.Add("mod", _modChestName);
         }
-        tag["name"] = chestName;
-        if (items is not null)
-            tag["items"] = items;
+
+        tag["name"] = _chestName;
+        if (_items is not null)
+            tag["items"] = _items;
     }
+
+    #endregion
+
+    #region 基础属性设置
 
     public override void SetDefaults()
     {
@@ -321,11 +296,12 @@ public class MoveChest : ModItem
         Item.rare = ItemRarityID.Red;
         Item.autoReuse = true;
         Item.tileBoost = 6;
+        Item.shoot = ProjectileID.PurificationPowder; // 占位符
     }
 
     public override void UpdateInventory(Player player)
     {
-        if (hasChest && player.HeldItem != Item)
+        if (_hasChest && player.HeldItem != Item)
         {
             ModifyPlayerSpeed(player);
         }
@@ -344,12 +320,20 @@ public class MoveChest : ModItem
         player.moveSpeed -= 0.1f;
     }
 
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        if (_hasChest)
+        {
+            tooltips.Add(new(Mod, "TooltipHeavy", GetText("MoveChest.Heavy")));
+        }
+    }
+
     /// <summary>
     /// 显示其内箱子的物品
     /// </summary>
     public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
     {
-        if (!hasChest)
+        if (!_hasChest)
             return base.PreDrawTooltip(lines, ref x, ref y);
 
         List<TooltipLine> list = new();
@@ -359,8 +343,9 @@ public class MoveChest : ModItem
             string line = "";
             for (int j = 0; j <= 9; j++)
             {
-                line += BgItemTagHandler.GenerateTag(items[i * 10 + j]);
+                line += BgItemTagHandler.GenerateTag(_items[i * 10 + j]);
             }
+
             list.Add(new(Mod, $"ChestItemLine_{i}", line));
         }
 
@@ -378,4 +363,8 @@ public class MoveChest : ModItem
             .AddIngredient(ItemID.Diamond)
             .AddTile(TileID.Anvils).Register();
     }
+
+    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.MoveChest;
+
+    #endregion
 }

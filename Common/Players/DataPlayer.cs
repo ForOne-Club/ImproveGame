@@ -71,6 +71,7 @@ namespace ImproveGame.Common.Players
                     SuperVault[i] = new();
                     continue;
                 }
+
                 if (SuperVault[i].stack != oldSuperVaultStack[i])
                 {
                     RefreshRecipes = true;
@@ -80,23 +81,32 @@ namespace ImproveGame.Common.Players
                         packet.Send(runLocally: false);
                     }
                 }
+
                 oldSuperVaultStack[i] = SuperVault[i].stack;
                 if (SuperVault[i].IsAir)
                     oldSuperVaultStack[i] = 0;
             }
+
             if (RefreshRecipes && RefreshTimer % 15 == 0)
             {
                 RefreshRecipes = false;
                 Recipe.FindRecipes();
             }
+
             RefreshTimer++;
         }
 
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
+            for (int i = 0; i < 100; i++)
+            {
+                oldSuperVaultStack[i] = SuperVault[i].stack;
+                if (SuperVault[i].IsAir)
+                    oldSuperVaultStack[i] = 0;
+            }
+
             // 按照Example的写法 - 直接写就完了！
-            var packet = BigBagAllSlotsPacket.Get(this);
-            packet.Send(toWho, fromWho, false);
+            BigBagAllSlotsPacket.Get(this).Send(toWho, fromWho, false);
         }
     }
 }

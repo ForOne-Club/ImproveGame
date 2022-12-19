@@ -64,6 +64,7 @@
 - **[v1.6.2.1]** Optimized format of Item Arrays and Lists stored using TagCompound
 - **[v1.6.2.1]** Introduced AdditionalConfig to record non-ModConfig local config data
 - **[v1.6.2.1]** Centered the item icons in configs
+- **[v1.6.2.7]** 优化了多人模式下的体验，降低可能的延迟
 
 # v1.6.1
 ## Subversions

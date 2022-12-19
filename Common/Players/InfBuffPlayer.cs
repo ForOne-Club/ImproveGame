@@ -22,7 +22,7 @@ public class InfBuffPlayer : ModPlayer
     /// 每隔多久统计一次Buff
     /// </summary>
     public static int SetupBuffListCooldown;
-    public const int SetupBuffListCooldownTime = 30;
+    public const int SetupBuffListCooldownTime = 120;
 
     /// <summary>
     /// 幸运药水特判
@@ -58,7 +58,7 @@ public class InfBuffPlayer : ModPlayer
                 
         ApplyAvailableBuffs(Player);
         if (Config.ShareInfBuffs)
-            CheckTeamPlayers(Player.whoAmI, ApplyAvailableBuffs);
+            CheckTeamPlayers(Player.whoAmI, ApplyAvailableBuffs, checkDead: false);
 
         SetupBuffListCooldown++;
         if (SetupBuffListCooldown % SetupBuffListCooldownTime != 0)
@@ -138,8 +138,11 @@ public class InfBuffPlayer : ModPlayer
     /// <summary>
     /// 设置物品列表
     /// </summary>
-    public void SetupItemsList() {
-        AvailableItems.Clear();
+    private void SetupItemsList()
+    {
+        var oldAvailableItems = new List<Item>(AvailableItems);
+        
+        AvailableItems = new List<Item>();
 
         var items = GetAllInventoryItemsList(Main.LocalPlayer, false);
         foreach (var item in items)
@@ -154,8 +157,11 @@ public class InfBuffPlayer : ModPlayer
             }
         }
 
-        // 发包
-        InfBuffItemPacket.Get(this).Send(-1, -1, runLocally: false);
+        // 只有不同才发包
+        if (!oldAvailableItems.SequenceEqual(AvailableItems))
+        {
+            InfBuffItemPacket.Get(this).Send();
+        }
     }
 
     public void HandleBuffItem(Item item)
@@ -166,6 +172,13 @@ public class InfBuffPlayer : ModPlayer
         {
             AvailableItems.Add(item);
         }
+    }
+
+    // 新加入时的同步
+    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+    {
+        // 按照Example的写法 - 直接写就完了！
+        InfBuffItemPacket.Get(this).Send(toWho, fromWho);
     }
 
     private void BanBuffs(On.Terraria.Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet, bool foodHack)

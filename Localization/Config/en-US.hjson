@@ -172,11 +172,6 @@
             '''
         Unknown: "Unknown prefix"
     }
-    ShowItemMoreData:
-    {
-        Label: "[centeritem:1344] Display item debug data"
-        Tooltip: Display item debug data in tooltip
-    }
     ResurrectionTimeShortened:
     {
         Label: "[centeritem:3232] Faster Respawn"
@@ -470,4 +465,5 @@
     UIConfigs.Label: "Graphic Interface Config"
     TextDrawOffsetY.Label: "MOD UI texts' Y offset"
     ThemeStyle.Label: "Theme color (requires re-entering worlds)"
+    ShowMoreData.Label: "[centeritem:1344] Display debug data"
 }

@@ -178,11 +178,6 @@
             '''
         Unknown: "未知词缀"
     }
-    ShowItemMoreData:
-    {
-        Label: "[centeritem:1344] 显示物品调试数据"
-        Tooltip: 在物品提示栏显示调试数据
-    }
     ResurrectionTimeShortened:
     {
         Label: "[centeritem:3232] 重生加速"
@@ -475,4 +470,5 @@
     UIConfigs.Label: "图形界面设置"
     TextDrawOffsetY.Label: "MOD UI 文字Y轴绘制偏移"
     ThemeStyle.Label: "主题色 (每次切换需要重新进入地图)"
+    ShowMoreData.Label: "[centeritem:1344] 显示调试数据"
 }

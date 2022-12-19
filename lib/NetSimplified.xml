@@ -135,11 +135,33 @@
         <member name="M:NetSimplified.NetModule.ReceiveModule(System.IO.BinaryReader,System.Int32)">
             <summary>接收来自你的Mod的发包, 请在 <see cref="M:Terraria.ModLoader.Mod.HandlePacket(System.IO.BinaryReader,System.Int32)"/> 调用</summary>
         </member>
+        <member name="T:NetSimplified.NetModuleDiagnostics">
+            <summary>
+            基本上是抄的 tModLoader 源码的 UIModNetDiagnostics<br/>
+            用于记录各 NetModule 的传输量
+            </summary>
+        </member>
+        <member name="M:NetSimplified.NetModuleDiagnostics.Reset">
+            <summary>
+            重置计数器
+            </summary>
+        </member>
         <member name="T:NetSimplified.NetModuleLoader">
             <summary>
             用于加载 <see cref="T:NetSimplified.NetModule"/> 的类。
             需要在 <see cref="M:Terraria.ModLoader.Mod.Load"/> 中对此类调用 <see cref="M:Terraria.ModLoader.Mod.AddContent(Terraria.ModLoader.ILoadable)"/> 以添加实质内容
             </summary>
+        </member>
+        <member name="P:NetSimplified.NetModuleLoader.NetModuleDiagnosticsUI">
+            <summary>
+            用于记录各 NetModule 的传输量
+            </summary>
+        </member>
+        <member name="M:NetSimplified.NetModuleLoader.PostSetupContent">
+            <inheritdoc />
+        </member>
+        <member name="M:NetSimplified.NetModuleLoader.PreSaveAndQuit">
+            <inheritdoc />
         </member>
         <member name="M:NetSimplified.NetModuleLoader.Load">
             <inheritdoc />

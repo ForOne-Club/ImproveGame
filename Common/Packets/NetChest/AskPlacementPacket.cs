@@ -3,9 +3,9 @@
 namespace ImproveGame.Common.Packets.NetChest;
 
 /// <summary>
-/// 客户端向服务器发送Item信息
+/// 客户端向服务器询问放置
 /// </summary>
-public class PlaceChestPacket : NetModule
+public class AskPlacementPacket : NetModule
 {
     [AutoSync] private Point chestCoord;
     [AutoSync] private string chestName;
@@ -14,10 +14,10 @@ public class PlaceChestPacket : NetModule
     [AutoSync] private int style;
     private ItemPosition itemID;
 
-    public static PlaceChestPacket Get(Point coord, ushort chestType, int style, Item[] items, string chestName,
+    public static AskPlacementPacket Get(Point coord, ushort chestType, int style, Item[] items, string chestName,
         ItemPosition itemID)
     {
-        var packet = ModContent.GetInstance<PlaceChestPacket>();
+        var packet = ModContent.GetInstance<AskPlacementPacket>();
         packet.chestCoord = coord;
         packet.chestType = chestType;
         packet.style = style;
@@ -27,11 +27,7 @@ public class PlaceChestPacket : NetModule
         return packet;
     }
 
-    public override void Read(BinaryReader r)
-    {
-        itemID = new ItemPosition(r.ReadByte(), r.ReadInt32());
-    }
-
+    /// <summary> 仅服务器运行的代码 </summary>
     public override void Receive()
     {
         int index = WorldGen.PlaceChest(chestCoord.X, chestCoord.Y, chestType, false, style);
@@ -70,16 +66,22 @@ public class PlaceChestPacket : NetModule
         ChestNamePacket.Get((ushort)chest.x, (ushort)chest.y, chestName).Send();
         // NetMessage.SendData(MessageID.ChestName, -1, -1, null, index, x, y);
 
-        var item = itemID.slot >= 0 ? Main.player[itemID.player].inventory[itemID.slot] : null;
+        var player = Main.player[itemID.player];
+        var item = itemID.slot >= 0 ? player.inventory[itemID.slot] : null;
         if (item?.ModItem is MoveChest move)
         {
-            move.hasChest = false;
-            move.forceCoolDown = MoveChest.MaxForceCoolDown;
+            move.Reset();
+            InventoryItemDataPacket.Get(itemID, true).Send();
         }
         else
         {
             Mod.Logger.Error("Unexpected Item Not Found Error");
         }
+    }
+
+    public override void Read(BinaryReader r)
+    {
+        itemID = new ItemPosition(r.ReadByte(), r.ReadInt32());
     }
 
     public override void Send(ModPacket p)

@@ -13,8 +13,6 @@ namespace ImproveGame.Common.Players
 {
     public class ImprovePlayer : ModPlayer
     {
-        public Vector2 MouseWorld { get; set; }
-
         public bool PiggyBank;
         public bool Safe;
         public bool DefendersForge;
@@ -35,9 +33,6 @@ namespace ImproveGame.Common.Players
         {
             if (Main.gameMenu)
                 return;
-
-            if (Main.myPlayer == Player.whoAmI && Main.MouseWorld != MouseWorld)
-                MouseWorldPacket.Get((byte)Player.whoAmI, Main.MouseWorld).Send(runLocally: true);
 
             if (Config.JourneyResearch)
             {

@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.Players;
 using ImproveGame.Content;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
@@ -114,37 +115,39 @@ namespace ImproveGame.Common.GlobalItems
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             // 更多信息
-            if (Config.ShowItemMoreData)
+            if (!UIConfigs.Instance.ShowMoreData)
             {
-                tooltips.Add(new(Mod, "Rare", "Rare: " + item.rare));
-                tooltips.Add(new(Mod, "Type", "Type: " + item.type));
-                tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
-                tooltips.Add(new(Mod, "UseAnimation", "UseAnimation: " + item.useAnimation));
-                if (item.shoot > ProjectileID.None)
-                {
-                    tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot));
-                    tooltips.Add(new(Mod, "ShootSpeed", "ShootSpeed: " + item.shootSpeed));
-                }
-                if (item.ammo > ItemID.None)
-                    tooltips.Add(new(Mod, "Ammo", "Ammo: " + item.ammo));
-                if (item.buffType > 0)
-                {
-                    tooltips.Add(new(Mod, "BuffType", "BuffType: " + item.buffType));
-                    tooltips.Add(new(Mod, "BuffTime", "BuffTime: " + item.buffTime));
-                }
-                if (item.tileWand > -1)
-                {
-                    tooltips.Add(new(Mod, "TileWand", "TileWand: " + item.tileWand));
-                }
-                if (item.createTile > -1)
-                {
-                    tooltips.Add(new(Mod, "CreateTile", "CreateTile: " + item.createTile));
-                    if (item.placeStyle > 0)
-                        tooltips.Add(new(Mod, "PlaceStyle", "PlaceStyle: " + item.placeStyle));
-                }
-                if (item.createWall > -1)
-                    tooltips.Add(new(Mod, "CreateWall", "CreateWall: " + item.createWall));
+                return;
             }
+
+            tooltips.Add(new(Mod, "Rare", "Rare: " + item.rare));
+            tooltips.Add(new(Mod, "Type", "Type: " + item.type));
+            tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
+            tooltips.Add(new(Mod, "UseAnimation", "UseAnimation: " + item.useAnimation));
+            if (item.shoot > ProjectileID.None)
+            {
+                tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot));
+                tooltips.Add(new(Mod, "ShootSpeed", "ShootSpeed: " + item.shootSpeed));
+            }
+            if (item.ammo > ItemID.None)
+                tooltips.Add(new(Mod, "Ammo", "Ammo: " + item.ammo));
+            if (item.buffType > 0)
+            {
+                tooltips.Add(new(Mod, "BuffType", "BuffType: " + item.buffType));
+                tooltips.Add(new(Mod, "BuffTime", "BuffTime: " + item.buffTime));
+            }
+            if (item.tileWand > -1)
+            {
+                tooltips.Add(new(Mod, "TileWand", "TileWand: " + item.tileWand));
+            }
+            if (item.createTile > -1)
+            {
+                tooltips.Add(new(Mod, "CreateTile", "CreateTile: " + item.createTile));
+                if (item.placeStyle > 0)
+                    tooltips.Add(new(Mod, "PlaceStyle", "PlaceStyle: " + item.placeStyle));
+            }
+            if (item.createWall > -1)
+                tooltips.Add(new(Mod, "CreateWall", "CreateWall: " + item.createWall));
         }
 
         // 额外拾取距离

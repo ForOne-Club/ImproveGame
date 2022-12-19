@@ -17,23 +17,23 @@ namespace ImproveGame.Common.Packets
 
         public override void Send(ModPacket p)
         {
-            p.Write(items.Count);
+            p.Write((ushort) items.Count);
             for (var i = 0; i < items.Count; i++)
             {
                 // 为了减少传输包大小，只传输这俩
-                p.Write(items[i].stack);
-                p.Write(items[i].type);
+                p.Write((ushort) items[i].stack);
+                p.Write((ushort) items[i].type);
             }
         }
 
         public override void Read(BinaryReader r)
         {
-            int listCount = r.ReadInt32();
+            int listCount = r.ReadUInt16();
             items = new List<Item>();
             for (var i = 0; i < listCount; i++)
             {
-                int stack = r.ReadInt32();
-                int type = r.ReadInt32();
+                int stack = r.ReadUInt16();
+                int type = r.ReadUInt16();
                 items.Add(new Item(type, stack));
             }
         }

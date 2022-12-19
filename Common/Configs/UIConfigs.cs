@@ -23,5 +23,9 @@ namespace ImproveGame.Common.Configs
         [Range(0, 1)]
         [Slider]
         public int ThemeStyle;
+
+        [Label($"${path}.ShowMoreData.Label")]
+        [DefaultValue(false)]
+        public bool ShowMoreData;
     }
 }
