@@ -108,9 +108,9 @@ namespace ImproveGame.Common.GlobalItems
 
         // 物品消耗
         public override bool ConsumeItem(Item item, Player player) {
-            //if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && (item.buffType > 0 || SpecialPotions.Contains(item.type))) {
-            //    return false;
-            //}
+            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && (item.buffType > 0 || SpecialPotions.Contains(item.type))) {
+                return false;
+            }
             return base.ConsumeItem(item, player);
         }
 
