@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Content.Items;
-using ImproveGame.Interface.BannerChestUI;
+using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 

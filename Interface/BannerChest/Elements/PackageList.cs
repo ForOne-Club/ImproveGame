@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.Interface.BannerChestUI.Elements
+﻿namespace ImproveGame.Interface.BannerChest.Elements
 {
     public class PackageList : UIElement
     {

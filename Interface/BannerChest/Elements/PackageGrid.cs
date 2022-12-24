@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Interface.SUIElements;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ImproveGame.Interface.BannerChestUI.Elements
+namespace ImproveGame.Interface.BannerChest.Elements
 {
     public class PackageGrid : UIElement
     {

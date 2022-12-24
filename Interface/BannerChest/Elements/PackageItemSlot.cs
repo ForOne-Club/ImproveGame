@@ -5,7 +5,7 @@ using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Interface.BannerChestUI.Elements
+namespace ImproveGame.Interface.BannerChest.Elements
 {
     public class PackageItemSlot : RelativeUIE
     {
@@ -92,10 +92,10 @@ namespace ImproveGame.Interface.BannerChestUI.Elements
                 switch (PackageGUI.storageType)
                 {
                     case PackageGUI.StorageType.Banners:
-                        BigBagItemSlot.DrawItemIcon(sb, Banner, Color.White, dimensions);
+                        BigBagItemSlot.DrawItemIcon(sb, Banner, Color.White * 0.5f, dimensions);
                         break;
                     case PackageGUI.StorageType.Potions:
-                        BigBagItemSlot.DrawItemIcon(sb, Potion, Color.White, dimensions);
+                        BigBagItemSlot.DrawItemIcon(sb, Potion, Color.White * 0.5f, dimensions);
                         break;
                 }
             }

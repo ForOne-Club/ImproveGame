@@ -23,10 +23,11 @@ namespace ImproveGame.Content.Projectiles
 
         public override void AI()
         {
-            Item item = FirstWall(Player);
+            Item firstWall = FirstWall(Player);
             Lighting.AddLight(Projectile.Center, 45 / 510f, 206 / 510f, 255 / 510f);
 
-            if (item is null)
+            // 没有墙体，结束放置。
+            if (firstWall is null)
             {
                 CombatText.NewText(Projectile.getRect(), new Color(225, 0, 0), GetText("CombatText.Projectile.PlaceWall_Lack"));
                 Projectile.Kill();
@@ -36,18 +37,29 @@ namespace ImproveGame.Content.Projectiles
             if (index < Walls.Count)
             {
                 Point wall = Walls[index++];
-
                 BongBong(wall.ToVector2() * 16, 16, 16);
-
-                if (item.consumable || ItemLoader.ConsumeItem(item, Player))
-                    item.stack--;
-
-                if (Main.tile[wall.X, wall.Y].WallType > 0 && Main.tile[wall.X, wall.Y].WallType != item.createWall)
-                    WorldGen.KillWall(wall.X, wall.Y);
-
-                WorldGen.PlaceWall(wall.X, wall.Y, item.createWall);
-
-                NetMessage.SendTileSquare(Projectile.owner, wall.X, wall.Y);
+                Tile tile = Main.tile[wall.X, wall.Y];
+                if (firstWall.createWall != tile.WallType)
+                {
+                    if (tile.WallType > 0)
+                    {
+                        WorldGen.KillWall(wall.X, wall.Y);
+                    }
+                    if (tile.WallType <= 0)
+                    {
+                        WorldGen.PlaceWall(wall.X, wall.Y, firstWall.createWall);
+                        NetMessage.SendTileSquare(Projectile.owner, wall.X, wall.Y);
+                        // 大于等于 999 不消耗墙
+                        // ItemLoader.ConsumeItem 判断手持物品，但是他是机器人放置墙体的。
+                        if (firstWall.consumable && firstWall.stack < 999 && ItemLoader.ConsumeItem(firstWall, Player))
+                        {
+                            if (--firstWall.stack <= 0)
+                            {
+                                firstWall.TurnToAir();
+                            }
+                        }
+                    }
+                }
                 Projectile.rotation = (wall.ToVector2() * 16f + new Vector2(8) - Projectile.Center).ToRotation() + MathF.PI;
             }
             else

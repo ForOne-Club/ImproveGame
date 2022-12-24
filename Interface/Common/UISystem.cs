@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Interface.BannerChestUI;
+using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.GUI;
+using ImproveGame.Interface.PlayerInfo;
 using System.Reflection;
 
 namespace ImproveGame.Interface.Common
@@ -13,6 +14,9 @@ namespace ImproveGame.Interface.Common
         internal static UISystem Instance;
 
         #region 定义
+
+        public PlayerInfoGUI PlayerInfoGUI;
+        public static UserInterface PlayerInfoInterface;
 
         public AutofisherGUI AutofisherGUI;
         public static UserInterface AutofisherInterface;
@@ -61,6 +65,9 @@ namespace ImproveGame.Interface.Common
         {
             Instance = null;
 
+            PlayerInfoGUI = null;
+            PlayerInfoInterface = null;
+
             AutofisherGUI = null;
             AutofisherInterface = null;
 
@@ -106,20 +113,20 @@ namespace ImproveGame.Interface.Common
             Instance = this;
             if (!Main.dedServ)
             {
+                PlayerInfoInterface = new();
                 AutofisherGUI = new();
                 BuffTrackerGUI = new();
                 LiquidWandGUI = new();
                 ArchitectureGUI = new();
                 BrustGUI = new();
+                PackageInterface = new();
                 BigBagInterface = new();
                 SpaceWandGUI = new();
-                BigBagGUI = new();
                 PaintWandGUI = new();
                 GrabBagInfoGUI = new();
                 LifeformAnalyzerGUI = new();
                 StructureGUI = new();
                 PrefixRecallGUI = new();
-                PackageInterface = new();
                 LoadGUI(ref AutofisherGUI, out AutofisherInterface);
                 LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
                 LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
@@ -148,6 +155,8 @@ namespace ImproveGame.Interface.Common
 
         public override void UpdateUI(GameTime gameTime)
         {
+            if (PlayerInfoGUI.Visible)
+                PlayerInfoInterface?.Update(gameTime);
             if (BigBagGUI.Visible)
                 BigBagInterface?.Update(gameTime);
             if (AutofisherGUI.Visible)
@@ -208,6 +217,13 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Autofisher GUI", DrawAutofishGUI, InterfaceScaleType.UI));
+                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: PlayerInfo GUI",
+                    () =>
+                    {
+                        if (PlayerInfoGUI.Visible)
+                            PlayerInfoGUI.Draw(Main.spriteBatch);
+                        return true;
+                    }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Package GUI",
                     () =>
                     {

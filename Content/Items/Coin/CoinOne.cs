@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Content.Items.Coin
+﻿using ImproveGame.Content.Projectiles;
+
+namespace ImproveGame.Content.Items.Coin
 {
     public class CoinOne : ModItem
     {
@@ -10,6 +12,10 @@
             Item.maxStack = 9999;
             Item.rare = ItemRarityID.Red;
             Item.value = Item.sellPrice(1);
+            Item.damage = 10000;
+            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.shoot = ModContent.ProjectileType<MagicBall>();
+            Item.shootSpeed = 25f;
         }
     }
 }

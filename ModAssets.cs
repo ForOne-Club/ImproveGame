@@ -59,6 +59,13 @@ namespace ImproveGame
             /*On.Terraria.GameContent.UI.Elements.UIPanel.DrawSelf += UIPanel_DrawSelf;
             On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawBar += (_, _, _, _, _, _) => { };
             On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawSelf += UIScrollbar_DrawSelf;*/
+            // 替换游戏内原来的 Utils.DrawInvBG
+            // On.Terraria.Utils.DrawInvBG_SpriteBatch_int_int_int_int_Color += Utils_DrawInvBG_SpriteBatch_int_int_int_int_Color;
+        }
+
+        private void Utils_DrawInvBG_SpriteBatch_int_int_int_int_Color(On.Terraria.Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y, int w, int h, Color c)
+        {
+            PixelShader.DrawRoundRect(new Vector2(x, y), new Vector2(w, h), 10, c, 3, UIColor.PackgePanelBorder);
         }
 
         // 原版滚动条绘制，在 DrawBar 返回空阻止原版滚动条绘制。然后通过反射获取滚动条位置进行绘制。

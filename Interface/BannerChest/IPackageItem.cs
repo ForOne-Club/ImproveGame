@@ -1,6 +1,6 @@
 ﻿using Terraria.ModLoader.IO;
 
-namespace ImproveGame.Interface.BannerChestUI
+namespace ImproveGame.Interface.BannerChest
 {
     public interface IPackageItem
     {

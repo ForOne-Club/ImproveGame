@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Players;
+using ImproveGame.Interface.PlayerInfo;
 using static ImproveGame.Interface.Common.UISystem;
 
 namespace ImproveGame.Interface.Common
@@ -11,6 +12,10 @@ namespace ImproveGame.Interface.Common
         public override void OnEnterWorld(Player player)
         {
             DataPlayer dataPlayer = player.GetModPlayer<DataPlayer>();
+
+            // 玩家信息
+            PlayerInfoInterface.SetState(Instance.PlayerInfoGUI = new());
+            PlayerInfoGUI.Visible = true;
 
             // 旗帜盒
             PackageInterface.SetState(Instance.PackageGUI = new());

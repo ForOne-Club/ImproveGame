@@ -1,9 +1,9 @@
-﻿using ImproveGame.Interface.BannerChestUI.Elements;
+﻿using ImproveGame.Interface.BannerChest.Elements;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
-namespace ImproveGame.Interface.BannerChestUI
+namespace ImproveGame.Interface.BannerChest
 {
     public class PackageGUI : UIState
     {

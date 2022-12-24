@@ -619,14 +619,19 @@ namespace ImproveGame.Common.Systems
         {
             if (Config.GrabDistance > 0)
             {
-                Vector2 velocity = (player.Center - item.Center).SafeNormalize(Vector2.Zero);
-                if (item.velocity.Length() + velocity.Length() > 15f)
+                float playerSpeed = player.velocity.Length() + 5f;
+                if (playerSpeed < 15f)
                 {
-                    item.velocity = velocity * 15f;
+                    playerSpeed = 15f;
+                }
+                Vector2 normalize = (player.Center - item.Center).SafeNormalize(Vector2.Zero);
+                if (item.velocity.Length() + normalize.Length() > playerSpeed)
+                {
+                    item.velocity = normalize * playerSpeed;
                 }
                 else
                 {
-                    item.velocity = velocity * (item.velocity.Length() + 1);
+                    item.velocity = normalize * (item.velocity.Length() + 1f);
                 }
             }
             else

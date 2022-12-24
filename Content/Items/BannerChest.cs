@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.ModHooks;
-using ImproveGame.Interface.BannerChestUI;
-using ImproveGame.Interface.BannerChestUI.Elements;
+using ImproveGame.Interface.BannerChest;
+using ImproveGame.Interface.BannerChest.Elements;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameInput;

@@ -338,11 +338,11 @@ namespace ImproveGame.Interface.SUIElements
 
         public static void DrawItemIcon(SpriteBatch sb, Texture2D texture2D, Color color, CalculatedStyle dimensions, float maxSize = 32f)
         {
-            Rectangle frame = texture2D.Frame();
-            float size = frame.Width > maxSize || frame.Height > maxSize ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height : 1f;
-            Vector2 position = dimensions.Center() - frame.Size() * size / 2f;
-            Vector2 origin = dimensions.Center();
-            sb.Draw(texture2D, position, (Rectangle?)frame, color, 0f, origin, size, SpriteEffects.None, 0f);
+            Vector2 size = texture2D.Size();
+            float scale = size.X > maxSize || size.Y > maxSize ? size.X > size.Y ? maxSize / size.X : maxSize / size.Y : 1f;
+            Vector2 position = dimensions.Center();
+            Vector2 origin = size / 2;
+            sb.Draw(texture2D, position, null, color, 0f, origin, scale, SpriteEffects.None, 0f);
         }
 
         public static void OpenItemGlow(SpriteBatch sb)

@@ -79,7 +79,7 @@ namespace ImproveGame.Common.Players
                         bannerChest = chest;
                     }
                 }
-                
+
                 if (Config.LoadModItems.PotionBag)
                 {
                     if (potionBag is null && item.ModItem is PotionBag bag)
@@ -100,7 +100,7 @@ namespace ImproveGame.Common.Players
                         bannerChest = chest;
                     }
                 }
-                
+
                 if (Config.LoadModItems.PotionBag)
                 {
                     if (potionBag is null && item.ModItem is PotionBag bag)

@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Players;
-using ImproveGame.Interface.BannerChestUI;
+using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
