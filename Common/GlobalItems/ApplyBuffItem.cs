@@ -108,6 +108,8 @@ namespace ImproveGame.Common.GlobalItems
 
         // 物品消耗
         public override bool ConsumeItem(Item item, Player player) {
+            if (item.ModItem?.Mod.Name is "Everglow") return base.ConsumeItem(item, player);
+            
             if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && (item.buffType > 0 || SpecialPotions.Contains(item.type))) {
                 return false;
             }

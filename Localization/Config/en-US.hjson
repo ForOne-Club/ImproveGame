@@ -140,7 +140,7 @@
         Tooltip: 
             '''
             Only potions stack not less than this number grant you infinite buff
-            Range: 20~999
+            Range: 10~999
             '''
     }
     NoConsume_Ammo:
