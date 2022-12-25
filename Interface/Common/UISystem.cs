@@ -191,6 +191,18 @@ namespace ImproveGame.Interface.Common
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {           
+            int infoIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
+            if (infoIndex != -1)
+            {
+                layers.Insert(infoIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: PlayerInfo GUI",
+                    () =>
+                    {
+                        if (PlayerInfoGUI.Visible)
+                            PlayerInfoGUI.Draw(Main.spriteBatch);
+                        return true;
+                    }, InterfaceScaleType.UI));
+            }
+
             int diagnoseNet = layers.FindIndex(layer => layer.Name == "Vanilla: Diagnose Net");
             if (diagnoseNet != -1) {
                 layers.Insert(diagnoseNet + 1, new LegacyGameInterfaceLayer("ImproveGame: Buff Tracker GUI", () =>
@@ -217,13 +229,6 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Liquid Wand GUI", DrawLiquidWandGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Architecture GUI", DrawArchitectureGUI, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Autofisher GUI", DrawAutofishGUI, InterfaceScaleType.UI));
-                layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: PlayerInfo GUI",
-                    () =>
-                    {
-                        if (PlayerInfoGUI.Visible)
-                            PlayerInfoGUI.Draw(Main.spriteBatch);
-                        return true;
-                    }, InterfaceScaleType.UI));
                 layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Package GUI",
                     () =>
                     {

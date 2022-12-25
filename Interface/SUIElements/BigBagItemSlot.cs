@@ -345,6 +345,13 @@ namespace ImproveGame.Interface.SUIElements
             sb.Draw(texture2D, position, null, color, 0f, origin, scale, SpriteEffects.None, 0f);
         }
 
+        public static void DrawItemIcon(SpriteBatch sb, Texture2D texture2D, Color color, Vector2 pos, Vector2 origin, float maxSize = 32f)
+        {
+            Vector2 size = texture2D.Size();
+            float scale = size.X > maxSize || size.Y > maxSize ? size.X > size.Y ? maxSize / size.X : maxSize / size.Y : 1f;
+            sb.Draw(texture2D, pos, null, color, 0f, origin, scale, SpriteEffects.None, 0f);
+        }
+
         public static void OpenItemGlow(SpriteBatch sb)
         {
             //Effect effect = ModAssets.ItemEffect.Value;

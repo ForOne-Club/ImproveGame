@@ -39,6 +39,7 @@
                 if (uies.IndexInRange(index - 1))
                 {
                     UIElement BeforeUIE = uies[index - 1];
+                    Vector2 beforeSize = new Vector2(BeforeUIE.Width.Pixels, BeforeUIE.Height.Pixels);
                     // 属性 HAlign, VAlign 与 Width, Height 的值有关系。
                     // 要是设置了值就不计算了，否则会出现偏差。
                     // 所以使用这个功能的时候一定要避免设置这两个属性。
@@ -50,7 +51,7 @@
                     {
                         // 横向
                         case RelativeMode.Horizontal:
-                            Left.Pixels = BeforeUIE.Left.Pixels + BeforeUIE.Width.Pixels + Interval.X;
+                            Left.Pixels = BeforeUIE.Left.Pixels + beforeSize.X + Interval.X;
 
                             if (First)
                                 Top.Pixels = 0;
@@ -60,12 +61,12 @@
                             if (AutoLineFeed && Left.Pixels + Width.Pixels > Parent.Width.Pixels)
                             {
                                 Left.Pixels = 0;
-                                Top.Pixels = BeforeUIE.Top.Pixels + BeforeUIE.Height.Pixels + Interval.Y;
+                                Top.Pixels = BeforeUIE.Top.Pixels + beforeSize.Y + Interval.Y;
                             }
                             break;
                         // 纵向
                         case RelativeMode.Vertical:
-                            Top.Pixels = BeforeUIE.Top.Pixels + BeforeUIE.Height.Pixels + Interval.Y;
+                            Top.Pixels = BeforeUIE.Top.Pixels + beforeSize.Y + Interval.Y;
 
                             if (First)
                                 Left.Pixels = 0;
@@ -75,7 +76,7 @@
                             if (AutoLineFeed && Top.Pixels + Height.Pixels > Parent.Height.Pixels)
                             {
                                 Top.Pixels = 0;
-                                Left.Pixels = BeforeUIE.Left.Pixels + BeforeUIE.Width.Pixels + Interval.X;
+                                Left.Pixels = BeforeUIE.Left.Pixels + beforeSize.X + Interval.X;
                             }
                             break;
                     }

@@ -1,4 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.BaseUIEs;
+using ImproveGame.Interface.PlayerInfo.UIElements;
 
 namespace ImproveGame.Interface.SUIElements
 {
@@ -36,6 +38,7 @@ namespace ImproveGame.Interface.SUIElements
             CalculatedStyle dimenstions = GetDimensions();
             Vector2 pos = dimenstions.Position();
             Vector2 size = dimenstions.Size();
+
             if (Shaded)
             {
                 Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
@@ -57,7 +60,7 @@ namespace ImproveGame.Interface.SUIElements
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
             // 当点击的是子元素不进行移动
-            if (Draggable && evt.Target == this)
+            if (Draggable && (evt.Target == this || evt.Target is SUITitle or PlyTip || evt.Target.GetType().IsAssignableFrom(typeof(RelativeUIE)) || evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
             {
                 Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
                 Dragging = true;

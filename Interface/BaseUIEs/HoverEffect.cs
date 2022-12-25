@@ -7,6 +7,7 @@ namespace ImproveGame.Interface.BaseUIEs
     /// </summary>
     public class HoverEffect : RelativeUIE
     {
+        public bool bordered;
         public AnimationTimer hoverTimer;
         public Color hoverColor1;
         public Color hoverColor2;
@@ -47,7 +48,15 @@ namespace ImproveGame.Interface.BaseUIEs
 
             Vector2 shadow = Vector2.Lerp(new(hoverWidth1), new(hoverWidth2), hoverTimer.Schedule);
             Color color = Color.Lerp(hoverColor1, hoverColor2, hoverTimer.Schedule);
-            PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, 10 + shadow.X, color);
+
+            if (bordered)
+            {
+                PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, 10 + shadow.X, Color.Transparent, 3.5f, color);
+            }
+            else
+            {
+                PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, 10 + shadow.X, color);
+            }
         }
     }
 }

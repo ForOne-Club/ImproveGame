@@ -134,7 +134,7 @@ namespace ImproveGame.Interface.GUI
                 Interval = new Vector2(10, 15)
             });
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
-            mainPanel.SetSizeInside(ItemGrid.Width.Pixels, ItemGrid.Bottom());
+            mainPanel.SetInnerSize(ItemGrid.Width.Pixels, ItemGrid.Bottom());
         }
 
         /// <summary>
@@ -159,6 +159,12 @@ namespace ImproveGame.Interface.GUI
 
             if (mainPanel.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
+
+            if(mainPanel.GetSizeInside().Y != ItemGrid.Height.Pixels)
+            {
+                mainPanel.SetInnerSize(ItemGrid.Width.Pixels, ItemGrid.Bottom());
+                mainPanel.Recalculate();
+            }
         }
 
         public void Open()
