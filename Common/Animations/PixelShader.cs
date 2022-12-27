@@ -24,10 +24,12 @@ namespace ImproveGame.Common.Animations
         // DrawRoundRect 现在有两个 .fx 文件，一个带边框的，一个不带的，也许能节省性能？
         public static void DrawRoundRect(Vector2 position, Vector2 size, float round, Color backgroundColor, bool ui = true)
         {
+            position -= new Vector2(2);
+            size += new Vector2(4);
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
-            effect.Parameters[nameof(round)].SetValue(round);
+            effect.Parameters[nameof(round)].SetValue(round + 2);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
             effect.CurrentTechnique.Passes["NoBorder"].Apply();
@@ -37,10 +39,12 @@ namespace ImproveGame.Common.Animations
 
         public static void DrawRoundRect(Vector2 position, Vector2 size, float round, Color backgroundColor, float border, Color borderColor, bool ui = true)
         {
+            position -= new Vector2(2);
+            size += new Vector2(4);
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
-            effect.Parameters[nameof(round)].SetValue(round);
+            effect.Parameters[nameof(round)].SetValue(round + 2);
             effect.Parameters[nameof(border)].SetValue(border - 1);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             effect.Parameters[nameof(borderColor)].SetValue(borderColor.ToVector4());

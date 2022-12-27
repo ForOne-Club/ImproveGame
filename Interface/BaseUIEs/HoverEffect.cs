@@ -51,7 +51,7 @@ namespace ImproveGame.Interface.BaseUIEs
 
             if (bordered)
             {
-                PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, 10 + shadow.X, Color.Transparent, 3.5f, color);
+                PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, 10 + shadow.X, Color.Transparent, 3f, color);
             }
             else
             {

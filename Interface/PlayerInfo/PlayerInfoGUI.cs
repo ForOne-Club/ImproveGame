@@ -19,13 +19,13 @@ namespace ImproveGame.Interface.PlayerInfo
         public SUIPanel mainPanel;
         public RelativeUIE list;
         public SUITitle title;
-        public AnimationTimer endTimer;
+        public AnimationTimer invTimer;
         public AnimationTimer openTimer;
         public PlyInfoSwitch Switch;
         public override void OnInitialize()
         {
-            endTimer = new AnimationTimer(4);
-            openTimer = new AnimationTimer(4);
+            invTimer = new AnimationTimer();
+            openTimer = new AnimationTimer();
 
             Append(mainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBackground)
             {
@@ -42,7 +42,8 @@ namespace ImproveGame.Interface.PlayerInfo
                 Height = new StyleDimension(PlyTip.h * h + 10f * (h - 1), 0),
                 Relative = true,
                 Interval = new Vector2(10),
-                Mode = RelativeUIE.RelativeMode.Vertical
+                Mode = RelativeUIE.RelativeMode.Vertical,
+                OverflowHidden = true
             });
 
             list.Append(new PlyTip("生命回复:", () => $"{player.lifeRegen / 2f} / s", "Life"));
@@ -117,31 +118,13 @@ namespace ImproveGame.Interface.PlayerInfo
 
         public override void Update(GameTime gameTime)
         {
-            endTimer.Update();
-            openTimer.Update();
-            base.Update(gameTime);
-
-            if (mainPanel.IsMouseHovering)
-            {
-                PlayerInput.LockVanillaMouseScroll("ImproveGame: PlayerInfo GUI");
-                Main.LocalPlayer.mouseInterface = true;
-            }
-
-            Vector2 mainSize = new Vector2(list.Width.Pixels, title.Height.Pixels + 10f + list.Height.Pixels + 10f + Switch.Height.Pixels);
-            if (mainPanel.GetSizeInside() != mainSize)
-            {
-                mainPanel.SetInnerSize(mainSize).Recalculate();
-                startPos1.Y = 60 - mainPanel.Height.Pixels;
-                startPos2.Y = 60 - mainPanel.Height.Pixels;
-            }
-
             if (Main.playerInventory)
             {
-                endTimer.TryOpen();
+                invTimer.TryOpen();
             }
             else
             {
-                endTimer.TryClose();
+                invTimer.TryClose();
             }
 
             if (Opened)
@@ -152,9 +135,27 @@ namespace ImproveGame.Interface.PlayerInfo
             {
                 openTimer.TryClose();
             }
+            invTimer.Update();
+            openTimer.Update();
+            base.Update(gameTime);
 
-            Vector2 endPos = Vector2.Lerp(endPos1, endPos2, endTimer.Schedule);
-            Vector2 startPos = Vector2.Lerp(startPos1, startPos2, endTimer.Schedule);
+            if (mainPanel.IsMouseHovering)
+            {
+                PlayerInput.LockVanillaMouseScroll("ImproveGame: PlayerInfo GUI");
+                Main.LocalPlayer.mouseInterface = true;
+            }
+
+            Vector2 mainSize = new Vector2(MathHelper.Lerp(50, list.Width.Pixels, openTimer.Schedule), title.Height.Pixels + 10f + list.Height.Pixels + 10f + Switch.Height.Pixels);
+
+            if (mainPanel.GetSizeInside() != mainSize)
+            {
+                mainPanel.SetInnerSize(mainSize).Recalculate();
+                startPos1.Y = 60 - mainPanel.Height.Pixels;
+                startPos2.Y = 60 - mainPanel.Height.Pixels;
+            }
+
+            Vector2 endPos = Vector2.Lerp(endPos1, endPos2, invTimer.Schedule);
+            Vector2 startPos = Vector2.Lerp(startPos1, startPos2, invTimer.Schedule);
             Vector2 Pos = Vector2.Lerp(startPos, endPos, openTimer.Schedule);
 
             if (Pos != mainPanel.GetPPos())

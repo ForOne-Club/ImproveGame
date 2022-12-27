@@ -20,7 +20,9 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             Interval = new Vector2(10f);
 
             bordered = true;
-            hoverColor2 = new Color(0, 0, 0);
+            hoverWidth1 = 6;
+            hoverWidth2 = 4;
+            hoverColor2 = Color.Black;
         }
 
         protected override void DrawSelf(SpriteBatch sb)
