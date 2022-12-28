@@ -22,19 +22,12 @@ float4 HasBorder(float2 coords : TEXCOORD0) : COLOR0
     float2 s = size / 2;
     float2 p = abs(coords * size - s);
     float2 a = float2(-0.75, 0.25);
-    // float2 a = smoothstep(s - round * 1.25, s - round, p);
-    // a = float2(-0.5, 0.5) - lerp(0, 0.1, min(a.x, a.y));
-    float Distance = sdRoundRect(p, s);
+    // float2 b = smoothstep(0, s, p);
+    // p += (1 - b) * round;
+    // float2 a = smoothstep(s - round * 2, s - round, p);
+    // a = float2(-0.5 - lerp(0, 0.25, min(a.x, a.y)), 0.5);
+    float Distance = distance(p, min(p, s - round));
     return lerp(lerp(backgroundColor, borderColor, smoothstep(a.x, a.y, Distance - round + border + 2)), 0, smoothstep(a.x, a.y, Distance - round + 2));
-}
-
-float4 HasBorderR4(float2 coords : TEXCOORD0) : COLOR0
-{
-    // 四个圆角单独设置大小
-    float4 r4;
-    r4.xy = step(coords.x, 0.5) * r4.xz + (1 - step(coords.x, 0.5)) * r4.yw;
-    r4.x = step(coords.y, 0.5) * r4.x + (1 - step(coords.y, 0.5)) * r4.y;
-    return 0;
 }
 
 float4 NoBorder(float2 coords : TEXCOORD0) : COLOR0
@@ -42,8 +35,9 @@ float4 NoBorder(float2 coords : TEXCOORD0) : COLOR0
     float2 s = size / 2;
     float2 p = abs(coords * size - s);
     float2 a = float2(-0.75, 0.25);
-    // float2 a = smoothstep(s - round * 1.25, s - round, p);
-    // a = float2(-0.5, 0.5) - lerp(0, 0.1, min(a.x, a.y));
+    // float2 a = smoothstep(s - round * 2, s - round, p);
+    // a = float2(-0.5 - lerp(0, 0.25, min(a.x, a.y)), 0.5);
+    float Distance = sdRoundRect(p, s);
     return lerp(backgroundColor, 0, smoothstep(a.x, a.y, sdRoundRect(p, s) - round + 2));
 }
 
@@ -55,6 +49,16 @@ float4 Shadow(float2 coords : TEXCOORD0) : COLOR0
     // float2 a = smoothstep(s - round * 1.25, s - round, p);
     // a = float2(-0.5, 0.5) - lerp(0, 0.25, min(a.x, a.y));
     return lerp(0, backgroundColor, pow(1 - smoothstep(a.x - shadow, a.y, sdShadow(p, s) - round - shadow), 2));
+}
+
+// 四个圆角单独设置大小
+// 还差一个四个边单独设置颜色，有待研究。
+float4 HasBorderR4(float2 coords : TEXCOORD0) : COLOR0
+{
+    float4 r4;
+    r4.xy = step(coords.x, 0.5) * r4.xz + (1 - step(coords.x, 0.5)) * r4.yw;
+    r4.x = step(coords.y, 0.5) * r4.x + (1 - step(coords.y, 0.5)) * r4.y;
+    return 0;
 }
 
 technique Technique1

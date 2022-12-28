@@ -10,7 +10,7 @@ namespace ImproveGame.Interface.SUIElements
     /// <summary>
     /// 用于操作数组中的物品，初始化的时候必须给定数组 + 下标。
     /// </summary>
-    public class BigBagItemSlot : RelativeUIE
+    public class BigBagItemSlot : RelativeElement
     {
         private Item[] items;
         public Item[] Items
@@ -34,9 +34,9 @@ namespace ImproveGame.Interface.SUIElements
             this.index = index;
 
             Relative = true;
-            Mode = RelativeMode.Horizontal;
+            Layout = RelativeMode.Horizontal;
             Interval = new(10, 10);
-            AutoLineFeed = true;
+            Wrap = true;
         }
 
         public override void MouseDown(UIMouseEvent evt)

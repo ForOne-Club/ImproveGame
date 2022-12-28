@@ -19,7 +19,7 @@ namespace ImproveGame.Interface.Common
             if (newThemeStyle != oldThemeStyle)
             {
                 oldThemeStyle = newThemeStyle;
-                switch(newThemeStyle)
+                switch (newThemeStyle)
                 {
                     case 0:
                         ModifyColor1();
@@ -64,7 +64,7 @@ namespace ImproveGame.Interface.Common
 
         public static void ModifyColor1()
         {
-            PanelBorder = new Color(18, 18, 38);
+            PanelBorder = new Color(20, 25, 50);
             PanelBackground = new Color(44, 57, 105, 160);
 
             SlotFavoritedBorder = new Color(233, 176, 0, 200);

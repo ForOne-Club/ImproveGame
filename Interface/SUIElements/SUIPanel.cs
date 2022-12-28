@@ -52,7 +52,6 @@ namespace ImproveGame.Interface.SUIElements
                 pos -= new Vector2(border);
                 size += new Vector2(border * 2);
             }
-
             PixelShader.DrawRoundRect(pos, size, round, backgroundColor, border, borderColor);
         }
 
@@ -60,7 +59,7 @@ namespace ImproveGame.Interface.SUIElements
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
             // 当点击的是子元素不进行移动
-            if (Draggable && (evt.Target == this || evt.Target is SUITitle or PlyTip || evt.Target.GetType().IsAssignableFrom(typeof(RelativeUIE)) || evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
+            if (Draggable && (evt.Target == this || evt.Target is SUITitle or PlyTip || evt.Target.GetType().IsAssignableFrom(typeof(RelativeElement)) || evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
             {
                 Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
                 Dragging = true;

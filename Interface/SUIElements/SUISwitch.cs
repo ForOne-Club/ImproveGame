@@ -5,7 +5,7 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUISwitch : RelativeUIE
+    public class SUISwitch : RelativeElement
     {
         public Func<bool> GetState;
         public Action<bool> SetState;

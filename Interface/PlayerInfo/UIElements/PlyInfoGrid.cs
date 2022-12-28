@@ -3,13 +3,13 @@ using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.PlayerInfo.UIElements
 {
-    public class PlyInfoGrid : RelativeUIE
+    public class PlyInfoGrid : RelativeElement
     {
-        public RelativeUIE uielist;
+        public RelativeElement uielist;
         public SUIScrollbar scrollbar;
         public PlyInfoGrid()
         {
-            uielist = new RelativeUIE
+            uielist = new RelativeElement
             {
                 OverflowHidden = true
             };

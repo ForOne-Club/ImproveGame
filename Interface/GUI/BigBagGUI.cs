@@ -62,7 +62,7 @@ namespace ImproveGame.Interface.GUI
             {
                 First = true,
                 Relative = true,
-                Mode = BaseUIEs.RelativeUIE.RelativeMode.Vertical,
+                Layout = BaseUIEs.RelativeElement.RelativeMode.Vertical,
                 Interval = SwitchInterval
             });
 
@@ -72,7 +72,7 @@ namespace ImproveGame.Interface.GUI
             }, GetText("SuperVault.SmartPickup"), 0.8f)
             {
                 Relative = true,
-                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
                 Interval = SwitchInterval
             });
 
@@ -82,7 +82,7 @@ namespace ImproveGame.Interface.GUI
             }, GetText("SuperVault.OverflowPickup"), 0.8f)
             {
                 Relative = true,
-                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
                 Interval = SwitchInterval
             });
 
@@ -92,7 +92,7 @@ namespace ImproveGame.Interface.GUI
             {
                 First = true,
                 Relative = true,
-                Mode = BaseUIEs.RelativeUIE.RelativeMode.Vertical,
+                Layout = BaseUIEs.RelativeElement.RelativeMode.Vertical,
                 Interval = ButtonInterval
             });
             buttons[0].SetText(Lang.inter[29].Value);
@@ -101,7 +101,7 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(buttons[1] = new(GetTexture("UI/Put").Value, Lang.inter[30].Value)
             {
                 Relative = true,
-                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
                 Interval = ButtonInterval
             });
             buttons[1].SetText(Lang.inter[30].Value);
@@ -110,7 +110,7 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(buttons[2] = new(GetTexture("UI/Put").Value, Lang.inter[31].Value)
             {
                 Relative = true,
-                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
                 Interval = ButtonInterval
             });
             buttons[2].SetText(Lang.inter[31].Value);
@@ -119,7 +119,7 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(buttons[3] = new(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
             {
                 Relative = true,
-                Mode = BaseUIEs.RelativeUIE.RelativeMode.Horizontal,
+                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
                 Interval = ButtonInterval
             });
             buttons[3].SetText(GetText("SuperVault.Sort"));
@@ -130,7 +130,7 @@ namespace ImproveGame.Interface.GUI
             {
                 First = true,
                 Relative = true,
-                Mode = BaseUIEs.RelativeUIE.RelativeMode.Vertical,
+                Layout = BaseUIEs.RelativeElement.RelativeMode.Vertical,
                 Interval = new Vector2(10, 15)
             });
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;

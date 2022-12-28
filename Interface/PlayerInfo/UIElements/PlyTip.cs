@@ -6,14 +6,15 @@ using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.PlayerInfo.UIElements
 {
-    public class PlyTip : RelativeUIE
+    public class PlyTip : RelativeElement
     {
         public const float w = 220f;
-        public const float h = 40f;
+        public const float h = 42f;
         private Texture2D icon;
         private Color background;
         private string text;
         private Vector2 textSize;
+        private AnimationTimer hoverTimer;
         public string Text
         {
             get => text;
@@ -27,9 +28,10 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
 
         public PlyTip(string text, Func<string> textFunc, string icon)
         {
+            hoverTimer = new();
             Relative = true;
-            AutoLineFeed = true;
-            Mode = RelativeMode.Vertical;
+            Wrap = true;
+            Layout = RelativeMode.Vertical;
             Interval = new Vector2(10, 10);
 
             background = UIColor.TitleBackground;
@@ -43,11 +45,33 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             this.icon = GetTexture($"UI/PlayerInfo/{icon}").Value;
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            hoverTimer.Update();
+            base.Update(gameTime);
+        }
+
+        public override void MouseOver(UIMouseEvent evt)
+        {
+            hoverTimer.Open();
+            base.MouseOver(evt);
+        }
+
+        public override void MouseOut(UIMouseEvent evt)
+        {
+            hoverTimer.Close();
+            base.MouseOut(evt);
+        }
+
         protected override void DrawSelf(SpriteBatch sb)
         {
-            Vector2 pos = GetDimensions().Position();
-            Vector2 size = GetDimensions().Size();
-            PixelShader.DrawRoundRect(pos, size, 8, background);
+            float hoverSize = hoverTimer.Schedule * 4;
+            Color borderColor = Color.Lerp(new Color(0, 0, 0, 0.25f), new Color(0, 0, 0, 0.5f), hoverTimer.Schedule);
+            Color backgroundColor = Color.Lerp(new Color(0, 0, 0, 0.25f), new Color(0, 0, 0, 0.5f), hoverTimer.Schedule);
+            Vector2 pos = GetDimensions().Position() - new Vector2(hoverSize);
+            Vector2 size = GetDimensions().Size() + new Vector2(hoverSize * 2);
+            PixelShader.DrawRoundRect(pos + new Vector2(4), size - new Vector2(8), 6 + hoverSize, backgroundColor);
+            PixelShader.DrawRoundRect(pos, size, 10 + hoverSize, Color.Transparent, 3, borderColor);
 
             Vector2 innerPos = GetInnerDimensions().Position();
             Vector2 innerSize = GetInnerDimensions().Size();

@@ -13,11 +13,11 @@ namespace ImproveGame.Interface.PlayerInfo
         public static Player player => Main.LocalPlayer;
         public bool Opened;
         public static Vector2 startPos1 = new Vector2(480, -100);
-        public static Vector2 startPos2 = new Vector2(620, -100);
+        public static Vector2 startPos2 = new Vector2(600, -100);
         public static Vector2 endPos1 = new Vector2(480, 20);
         public static Vector2 endPos2 = new Vector2(620, 20);
         public SUIPanel mainPanel;
-        public RelativeUIE list;
+        public RelativeElement list;
         public SUITitle title;
         public AnimationTimer invTimer;
         public AnimationTimer openTimer;
@@ -32,19 +32,25 @@ namespace ImproveGame.Interface.PlayerInfo
                 Shaded = true
             });
 
-            mainPanel.Append(title = new SUITitle("角色属性面板", 0.5f));
+            mainPanel.Append(title = new SUITitle("角色属性面板", 0.5f, 1)
+            {
+                background = new Color(0, 0, 0, 0.5f),
+                border = new Color(0, 0, 0, 0.5f)
+            });
 
             int w = 3;
             int h = 7;
-            mainPanel.Append(list = new RelativeUIE()
+            mainPanel.Append(list = new RelativeElement()
             {
                 Width = new StyleDimension(PlyTip.w * w + 10f * (w - 1), 0),
                 Height = new StyleDimension(PlyTip.h * h + 10f * (h - 1), 0),
                 Relative = true,
                 Interval = new Vector2(10),
-                Mode = RelativeUIE.RelativeMode.Vertical,
+                Layout = RelativeElement.RelativeMode.Vertical,
                 OverflowHidden = true
             });
+
+            title.Width.Pixels = list.Width.Pixels;
 
             list.Append(new PlyTip("生命回复:", () => $"{player.lifeRegen / 2f} / s", "Life"));
             list.Append(new PlyTip("全能破甲:", () => $"{player.GetTotalArmorPenetration(DamageClass.Generic)}", "ArmorPenetration"));
@@ -85,15 +91,22 @@ namespace ImproveGame.Interface.PlayerInfo
             list.Append(new PlyTip("飞行时间:", () => $"{MathF.Round((player.wingTime + player.rocketTime * 6) / 60f, 2)} s", "Flying"));
             list.Append(new PlyTip("飞行上限:", () => $"{MathF.Round((player.wingTimeMax + player.rocketTimeMax * 6) / 60f, 2)} s", "Flying"));
 
-            mainPanel.Append(Switch = new PlyInfoSwitch(UIColor.TitleBackground)
+            mainPanel.Append(Switch = new PlyInfoSwitch(new Color(0, 0, 0, 0.5f))
             {
                 Width = list.Width,
+                HAlign = 0.5f,
+                round = 10f,
                 Opened = () => Opened
             });
+
             Switch.OnMouseDown += (_, _) =>
             {
                 Opened = !Opened;
+                list.OverflowHidden = true;
             };
+
+            openTimer.OnOpenComplete += () => { list.OverflowHidden = false; };
+            openTimer.OnCloseComplete += () => { list.OverflowHidden = false; };
         }
 
         /// <summary>

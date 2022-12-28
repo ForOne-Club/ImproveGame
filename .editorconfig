@@ -114,7 +114,7 @@ csharp_style_prefer_method_group_conversion = true:silent
 # 表达式级首选项
 csharp_prefer_simple_default_expression = true
 csharp_style_deconstructed_variable_declaration = true
-csharp_style_implicit_object_creation_when_type_is_apparent = true
+csharp_style_implicit_object_creation_when_type_is_apparent = false
 csharp_style_inlined_variable_declaration = true
 csharp_style_prefer_index_operator = true
 csharp_style_prefer_local_over_anonymous_function = true

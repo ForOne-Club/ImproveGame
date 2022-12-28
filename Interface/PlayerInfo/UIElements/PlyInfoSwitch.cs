@@ -15,27 +15,25 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             open = GetTexture("UI/PlayerInfo/Open").Value;
 
             Relative = true;
-            Mode = RelativeMode.Horizontal;
-            AutoLineFeed = true;
+            Layout = RelativeMode.Horizontal;
+            Wrap = true;
             Interval = new Vector2(10f);
 
-            bordered = true;
-            hoverWidth1 = 6;
-            hoverWidth2 = 4;
-            hoverColor2 = Color.Black;
+            border = true;
+            startWidth = 6;
+            endWidth = 4;
+            endColor = new Color(0, 0, 0, 0.5f);
         }
 
         protected override void DrawSelf(SpriteBatch sb)
         {
             base.DrawSelf(sb);
-
-            PixelShader.DrawRoundRect(GetDimensions().Position(), GetDimensions().Size(), 10f, background);
+            Vector2 pos = GetDimensions().Position();
+            Vector2 size = GetDimensions().Size();
+            PixelShader.DrawRoundRect(pos, size, round, background);
 
             if (Opened is not null)
             {
-                Vector2 pos = GetDimensions().Position();
-                Vector2 size = GetDimensions().Size();
-
                 float rotation;
                 if (Opened())
                 {
