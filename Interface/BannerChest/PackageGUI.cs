@@ -27,13 +27,13 @@ namespace ImproveGame.Interface.BannerChest
         public SUITitle title;
         public SUISwitch checkbox;
         public SUISwitch checkbox2;
-        public SUIFork fork;
+        public SUICross fork;
         public SUIPanel gridPanel;
         public PackageGrid grid;
 
         public override void OnInitialize()
         {
-            Append(mainPanel = new SUIPanel(UIColor.PackgePanelBorder, UIColor.PackgePanelBG)
+            Append(mainPanel = new SUIPanel(UIColor.PackgeBorder, UIColor.PackgeBg)
             {
                 HAlign = 0.5f,
                 VAlign = 0.5f,
@@ -50,11 +50,11 @@ namespace ImproveGame.Interface.BannerChest
             checkbox2.Top.Pixels = checkbox.Top();
             checkbox2.Left.Pixels = checkbox.Right() + 8f;
 
-            mainPanel.Append(fork = new SUIFork(30) { HAlign = 1f });
+            mainPanel.Append(fork = new SUICross(30) { HAlign = 1f });
             fork.Height.Pixels = title.Height();
             fork.OnMouseDown += (_, _) => Close();
 
-            mainPanel.Append(gridPanel = new SUIPanel(UIColor.PackgeGridBorder, UIColor.PackgeGridBG, 12, 3, false));
+            mainPanel.Append(gridPanel = new SUIPanel(UIColor.PackgeGridBorder, UIColor.PackgeGridBg, 12, 3, false));
             gridPanel.SetPadding(10);
             gridPanel.Append(grid = new());
             gridPanel.OnMouseDown += GridPanel_OnMouseDown;

@@ -125,6 +125,13 @@ namespace ImproveGame.Common.Configs
         [Slider]
         public int ResurrectionTimeShortened;
 
+        [Label($"${path}.BOSSBattleResurrectionTimeShortened.Label")]
+        [DefaultValue(0)]
+        [Range(0, 100)]
+        [Increment(5)]
+        [Slider]
+        public int BOSSBattleResurrectionTimeShortened;
+
         [Label($"${path}.BanTombstone.Label")]
         [Tooltip($"${path}.NoNeedReload")]
         [DefaultValue(false)]

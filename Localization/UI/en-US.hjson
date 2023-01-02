@@ -1,0 +1,26 @@
+﻿Mods.ImproveGame.UI:
+{
+	PlayerInfo:{
+		CardWidth: 210
+		Name: "Player Stats"
+		LifeRegen: "Life Regen"
+		ArmorPenetration: "Armor Pen"
+		MeleeDamage: "Melee Dmg"
+		MeleeCrit: "Melee Crit"
+		MeleeSpeed: "Melee Speed"
+		RangedDamage: "Ranged Dmg"
+		RangedCrit: "Ranged Crit"
+		ManaRegen: "Mana Regen"
+		ManaDamage: "Mana Dmg"
+		ManaCrit: "Mana Crit"
+		ManaCost: "Mana Cost"
+		SummonDamage: "Summon Dmg"
+		MaxMinions: "Max Minions"
+		MaxTurrets: "Max Sentry"
+		Endurance: "Endurance"
+		FishingSkill: "Fishing Power"
+		Luck: "Luck"
+		Aggro: "Aggro"
+		WingTimeMax: "Wing Time"
+	}
+}

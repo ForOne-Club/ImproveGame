@@ -26,7 +26,7 @@ namespace ImproveGame
     /// </summary>
     partial class MyUtils
     {
-        public static Vector2 GetTextSize(string text)
+        public static Vector2 MouseTextSize(string text)
         {
             return FontAssets.MouseText.Value.MeasureString(text);
         }

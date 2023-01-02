@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.ModHooks;
+using ImproveGame.Common.Utils;
 using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
@@ -35,7 +36,7 @@ namespace ImproveGame.Interface.SUIElements
 
             Relative = true;
             Layout = RelativeMode.Horizontal;
-            Interval = new(10, 10);
+            Spacing = new(10, 10);
             Wrap = true;
         }
 
@@ -289,10 +290,13 @@ namespace ImproveGame.Interface.SUIElements
         protected override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
-            Color borderColor = Item.favorited && !Item.IsAir ? UIColor.SlotFavoritedBorder : UIColor.SlotNoFavoritedBorder;
-            Color background = Item.favorited && !Item.IsAir ? UIColor.SlotFavoritedBackground : UIColor.SlotNoFavoritedBackground;
+            Vector2 pos = dimensions.Position();
+            Vector2 size = dimensions.Size();
+            Color borderColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
+            Color background = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBG;
 
-            PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, background, 3, borderColor);
+            PixelShader.DrawRoundRect(pos, size, 12, background, 3, borderColor);
+
             if (Item.IsAir)
                 return;
             if (IsMouseHovering)
@@ -305,7 +309,7 @@ namespace ImproveGame.Interface.SUIElements
             if (Item.stack > 1)
             {
                 Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(Item.stack.ToString()) * 0.75f;
-                Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
+                Vector2 textPos = pos + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
                 TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
                 /*DynamicSpriteFontExtensionMethods.DrawString(
                     sb,

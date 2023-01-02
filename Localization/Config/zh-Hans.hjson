@@ -180,9 +180,10 @@
     }
     ResurrectionTimeShortened:
     {
-        Label: "[centeritem:3232] 重生加速"
+        Label: "[centeritem:3232] 重生加速 非BOSS战"
         Tooltip: 例如：25，则缩短 25% 复活时间！
     }
+    BOSSBattleResurrectionTimeShortened.Label: "[centeritem:3232] 重生加速 BOSS战"
     MiddleEnableBank:
     {
         Label: "[centeritem:87] 中键打开便携收纳"

@@ -1,6 +1,6 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
+using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
@@ -24,7 +24,7 @@ namespace ImproveGame.Interface.GUI
 
         public SUITitle title;
         public SUIPanel mainPanel;
-        public SUIFork fork;
+        public SUICross cross;
         public SUIPictureButton[] buttons = new SUIPictureButton[4];
         // 物品列表
         public ModItemGrid ItemGrid;
@@ -33,7 +33,7 @@ namespace ImproveGame.Interface.GUI
         public override void OnInitialize()
         {
             // 主面板
-            Append(mainPanel = new(UIColor.PanelBorder, UIColor.PanelBackground)
+            Append(mainPanel = new(UIColor.PanelBorder, UIColor.PanelBg)
             {
                 Shaded = true,
                 Draggable = true
@@ -42,58 +42,58 @@ namespace ImproveGame.Interface.GUI
             // 标题
             mainPanel.Append(title = new SUITitle(GetText("SuperVault.Name"), 0.5f));
 
-            // Fork
-            mainPanel.Append(fork = new SUIFork(30)
+            // Cross
+            mainPanel.Append(cross = new SUICross(30)
             {
                 HAlign = 1f,
                 Height = new StyleDimension(title.Height.Pixels, 0)
             });
-            fork.OnMouseDown += (evt, uie) => Close();
+            cross.OnMouseDown += (evt, uie) => Close();
 
-            UIPlayerSetting setting = Main.LocalPlayer.GetModPlayer<UIPlayerSetting>();
+            UIPlayerSetting Setting = Main.LocalPlayer.GetModPlayer<UIPlayerSetting>();
 
             // 开关
-            Vector2 SwitchInterval = new(10, 10);
-            mainPanel.Append(suiSwitch[0] = new SUISwitch(() => setting.SuperVault_HeCheng, state =>
+            Vector2 SwitchSpacing = new Vector2(10, 10);
+            mainPanel.Append(suiSwitch[0] = new SUISwitch(() => Setting.SuperVault_HeCheng, state =>
             {
-                setting.SuperVault_HeCheng = state;
+                Setting.SuperVault_HeCheng = state;
                 Recipe.FindRecipes();
             }, GetText("SuperVault.Synthesis"), 0.8f)
             {
                 First = true,
                 Relative = true,
-                Layout = BaseUIEs.RelativeElement.RelativeMode.Vertical,
-                Interval = SwitchInterval
+                Layout = RelativeMode.Vertical,
+                Spacing = SwitchSpacing
             });
 
-            mainPanel.Append(suiSwitch[1] = new SUISwitch(() => setting.SuperVault_SmartGrab, state =>
+            mainPanel.Append(suiSwitch[1] = new SUISwitch(() => Setting.SuperVault_SmartGrab, state =>
             {
-                setting.SuperVault_SmartGrab = state;
+                Setting.SuperVault_SmartGrab = state;
             }, GetText("SuperVault.SmartPickup"), 0.8f)
             {
                 Relative = true,
-                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
-                Interval = SwitchInterval
+                Layout = RelativeMode.Horizontal,
+                Spacing = SwitchSpacing
             });
 
-            mainPanel.Append(suiSwitch[2] = new SUISwitch(() => setting.SuperVault_OverflowGrab, (bool state) =>
+            mainPanel.Append(suiSwitch[2] = new SUISwitch(() => Setting.SuperVault_OverflowGrab, (bool state) =>
             {
-                setting.SuperVault_OverflowGrab = state;
+                Setting.SuperVault_OverflowGrab = state;
             }, GetText("SuperVault.OverflowPickup"), 0.8f)
             {
                 Relative = true,
-                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
-                Interval = SwitchInterval
+                Layout = RelativeMode.Horizontal,
+                Spacing = SwitchSpacing
             });
 
             // 按钮
-            Vector2 ButtonInterval = new(10, 8);
+            Vector2 ButtonSpacing = new(10, 8);
             mainPanel.Append(buttons[0] = new(GetTexture("UI/Quick").Value, Lang.inter[29].Value)
             {
                 First = true,
                 Relative = true,
-                Layout = BaseUIEs.RelativeElement.RelativeMode.Vertical,
-                Interval = ButtonInterval
+                Layout = RelativeMode.Vertical,
+                Spacing = ButtonSpacing
             });
             buttons[0].SetText(Lang.inter[29].Value);
             buttons[0].OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
@@ -101,8 +101,8 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(buttons[1] = new(GetTexture("UI/Put").Value, Lang.inter[30].Value)
             {
                 Relative = true,
-                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
-                Interval = ButtonInterval
+                Layout = RelativeMode.Horizontal,
+                Spacing = ButtonSpacing
             });
             buttons[1].SetText(Lang.inter[30].Value);
             buttons[1].OnMouseDown += (_, _) => PutAll();
@@ -110,8 +110,8 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(buttons[2] = new(GetTexture("UI/Put").Value, Lang.inter[31].Value)
             {
                 Relative = true,
-                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
-                Interval = ButtonInterval
+                Layout = RelativeMode.Horizontal,
+                Spacing = ButtonSpacing
             });
             buttons[2].SetText(Lang.inter[31].Value);
             buttons[2].OnMouseDown += (_, _) => Replenish();
@@ -119,8 +119,8 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(buttons[3] = new(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
             {
                 Relative = true,
-                Layout = BaseUIEs.RelativeElement.RelativeMode.Horizontal,
-                Interval = ButtonInterval
+                Layout = RelativeMode.Horizontal,
+                Spacing = ButtonSpacing
             });
             buttons[3].SetText(GetText("SuperVault.Sort"));
             buttons[3].OnMouseDown += (_, _) => Sort();
@@ -130,8 +130,8 @@ namespace ImproveGame.Interface.GUI
             {
                 First = true,
                 Relative = true,
-                Layout = BaseUIEs.RelativeElement.RelativeMode.Vertical,
-                Interval = new Vector2(10, 15)
+                Layout = BaseUIEs.RelativeMode.Vertical,
+                Spacing = new Vector2(10, 15)
             });
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
             mainPanel.SetInnerSize(ItemGrid.Width.Pixels, ItemGrid.Bottom());
@@ -160,7 +160,7 @@ namespace ImproveGame.Interface.GUI
             if (mainPanel.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
 
-            if(mainPanel.GetSizeInside().Y != ItemGrid.Height.Pixels)
+            if (mainPanel.GetSizeInside().Y != ItemGrid.Height.Pixels)
             {
                 mainPanel.SetInnerSize(ItemGrid.Width.Pixels, ItemGrid.Bottom());
                 mainPanel.Recalculate();

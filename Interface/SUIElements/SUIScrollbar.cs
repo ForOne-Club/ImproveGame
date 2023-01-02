@@ -142,7 +142,6 @@ namespace ImproveGame.Interface.SUIElements
             PlayerInput.LockVanillaMouseScroll("ModLoader/UIScrollbar");
         }
 
-        public readonly Color hoveredColor = new(220, 220, 220);
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             if (!Visible)
@@ -153,7 +152,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 size = dimension.Size();
 
             // 滚动条背板
-            PixelShader.DrawRoundRect(position, size, size.X / 2, UIColor.ScrollBarBackground, 3, UIColor.PanelBorder);
+            PixelShader.DrawRoundRect(position, size, size.X / 2, UIColor.ScrollBarBg, 3, UIColor.ScrollBarBorder);
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();
@@ -162,12 +161,17 @@ namespace ImproveGame.Interface.SUIElements
                 innerPosition.Y += innerDimensions.Height * (1 - ViewScale) * (ViewPosition / MaxViewPoisition);
             innerSize.Y *= ViewScale;
 
-            Color hoverColor = Color.Lerp(hoveredColor, Color.White, dragging ? 1 : HoverTimer.Schedule);
+            Color hoverColor = Color.Lerp(UIColor.ScrollBarInnerBgHover, UIColor.ScrollBarInnerBg, dragging ? 1 : HoverTimer.Schedule);
 
             // 滚动条拖动块
             PixelShader.DrawRoundRect(innerPosition, innerSize, innerSize.X / 2, hoverColor);
         }
 
+        /// <summary>
+        /// 设置范围
+        /// </summary>
+        /// <param name="viewSize">绑定 UI 的显示长度</param>
+        /// <param name="maxViewSize">绑定 UI 的最大长度</param>
         public void SetView(float viewSize, float maxViewSize)
         {
             viewSize = MathHelper.Clamp(viewSize, 0f, maxViewSize);

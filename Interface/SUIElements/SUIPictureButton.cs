@@ -21,19 +21,19 @@ namespace ImproveGame.Interface.SUIElements
 
         public SUIPictureButton(Texture2D texture, string text)
         {
-            Width.Pixels = GetTextSize(text).X + this.HPadding() + 75;
+            Width.Pixels = MouseTextSize(text).X + this.HPadding() + 75;
             Height.Pixels = 40f;
 
             image = texture;
             imagePosition = new Vector2(30, this.Height() / 2) - image.Size() / 2;
 
             this.text = text;
-            textSize = GetTextSize(text);
+            textSize = MouseTextSize(text);
         }
 
         public override void Recalculate()
         {
-            Width.Pixels = GetTextSize(text).X + this.HPadding() + 75;
+            Width.Pixels = MouseTextSize(text).X + this.HPadding() + 75;
             base.Recalculate();
         }
 
@@ -44,8 +44,8 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 position = dimensions.Position();
             Vector2 size = dimensions.Size();
 
-            Color borderColor = Color.Lerp(UIColor.PanelBorder, UIColor.SlotFavoritedBorder, hoverTimer.Schedule);
-            PixelShader.DrawRoundRect(position, size, 10, UIColor.ButtonBackground, 3, borderColor);
+            Color borderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, hoverTimer.Schedule);
+            PixelShader.DrawRoundRect(position, size, 10, UIColor.ButtonBg, 3, borderColor);
 
             dimensions = GetInnerDimensions();
             position = dimensions.Position();
@@ -56,7 +56,7 @@ namespace ImproveGame.Interface.SUIElements
         public void SetText(string text)
         {
             this.text = text;
-            textSize = GetTextSize(text);
+            textSize = MouseTextSize(text);
         }
 
         public override void MouseOver(UIMouseEvent evt)

@@ -9,3 +9,4 @@ Source code: https://github.com/487666123/ImproveGame
 v1.6.2.7
   ● 其他
     优化了多人模式下的体验，降低可能的延迟
+    新增玩家属性面板，可在模组 UI 设置调节显示开关。

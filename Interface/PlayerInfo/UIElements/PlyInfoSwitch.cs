@@ -3,26 +3,40 @@ using ImproveGame.Interface.BaseUIEs;
 
 namespace ImproveGame.Interface.PlayerInfo.UIElements
 {
-    public class PlyInfoSwitch : HoverEffect
+    public class PlyInfoSwitch : RelativeElement
     {
         public Func<bool> Opened;
         public Texture2D open;
-        private Color background;
-        public PlyInfoSwitch(Color background)
+        public float round;
+        public AnimationTimer hoverTimer;
+        public PlyInfoSwitch()
         {
-            this.background = background;
+            hoverTimer = new AnimationTimer(3);
             Height.Pixels = 40f;
             open = GetTexture("UI/PlayerInfo/Open").Value;
 
             Relative = true;
             Layout = RelativeMode.Horizontal;
             Wrap = true;
-            Interval = new Vector2(10f);
+            round = 10f;
+        }
 
-            border = true;
-            startWidth = 6;
-            endWidth = 4;
-            endColor = new Color(0, 0, 0, 0.5f);
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            hoverTimer.Update();
+        }
+
+        public override void MouseOver(UIMouseEvent evt)
+        {
+            base.MouseOver(evt);
+            hoverTimer.Open();
+        }
+
+        public override void MouseOut(UIMouseEvent evt)
+        {
+            base.MouseOut(evt);
+            hoverTimer.Close();
         }
 
         protected override void DrawSelf(SpriteBatch sb)
@@ -30,7 +44,9 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             base.DrawSelf(sb);
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
-            PixelShader.DrawRoundRect(pos, size, round, background);
+            Color background = new Color(0, 0, 25, (int)MathHelper.Lerp(64, 128, hoverTimer.Schedule));
+            Color border = new Color(0, 0, 25, (int)MathHelper.Lerp(192, 255, hoverTimer.Schedule));
+            PixelShader.DrawRoundRect(pos, size, round, new Color(0, 0, 0, 0.5f), new Color(0, 0, 0, 0.25f), 3, new Color(0, 0, 0, 0.75f), hoverTimer.Schedule, mode: 3);
 
             if (Opened is not null)
             {

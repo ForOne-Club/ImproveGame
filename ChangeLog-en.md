@@ -58,6 +58,7 @@
 - **[v1.6.2.6]** Besides Wand of Painting, all wands now cannot be used under debuff Creative Shock
 - **[v1.6.2.6]** Added function Infinite Throwings, all throwings which stack >= 3996 will not be consumed
 - **[v1.6.2.6]** Threshold for Fallen Stars to not be consumed is lowered to 999 instead of 3996
+- 【新功能】**[v1.6.2.7]** 新增玩家属性面板，可在 UI 设置调节显示开关。
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)

@@ -7,17 +7,20 @@ namespace ImproveGame.Interface.SUIElements
 {
     public class SUISwitch : RelativeElement
     {
+        private const float InnerRowSpacing = 8;
         public Func<bool> GetState;
         public Action<bool> SetState;
+        public bool State
+        {
+            get => GetState();
+            set => SetState(value);
+        }
         private string text;
         public float textScale;
         private Vector2 textSize;
         public Color textColor = Color.White;
         public Color textBorderColor = Color.Black;
-
         private readonly AnimationTimer timer = new(4);
-
-        public float Spacing = 8;
 
         public string Text
         {
@@ -25,7 +28,7 @@ namespace ImproveGame.Interface.SUIElements
             set
             {
                 text = value;
-                textSize = GetTextSize(value);
+                textSize = MouseTextSize(value);
             }
         }
 
@@ -41,7 +44,7 @@ namespace ImproveGame.Interface.SUIElements
             PaddingTop = 5 * textScale;
             PaddingBottom = 5 * textScale;
 
-            Width.Pixels = (textSize.X + Spacing + 48) * textScale + this.HPadding();
+            Width.Pixels = (textSize.X + InnerRowSpacing + 48) * textScale + this.HPadding();
             Height.Pixels = MathF.Max(textSize.Y * textScale, 26) + this.VPadding();
         }
 
@@ -49,22 +52,26 @@ namespace ImproveGame.Interface.SUIElements
         {
             timer.Update();
             base.Update(gameTime);
-            if (GetState())
+            if (State)
+            {
                 timer.TryOpen();
-            else if (!GetState())
+            }
+            else
+            {
                 timer.TryClose();
+            }
         }
 
         public override void MouseDown(UIMouseEvent evt)
         {
             base.MouseDown(evt);
-            SetState(!GetState());
+            State = !State;
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            Color color = Color.Lerp(UIColor.SwitchBoxBackground, UIColor.SwitchBackgroundHover, timer.Schedule);
+            Color color = Color.Lerp(UIColor.SwitchBg, UIColor.SwitchBgHover, timer.Schedule);
             Color color2 = Color.Lerp(UIColor.SwitchBorder, UIColor.SwitchBorderHover, timer.Schedule);
             Color color3 = Color.Lerp(UIColor.SwitchRound, UIColor.SwitchRoundHover, timer.Schedule);
 
@@ -79,7 +86,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 position2 = position + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2), new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), timer.Schedule);
             PixelShader.DrawRound(position2, boxSize2.X, color3);
 
-            DrawString(position + new Vector2(boxSize.X + Spacing * textScale, size.Y / 2 - textSize.Y * textScale / 2 + UIConfigs.Instance.TextDrawOffsetY * textScale), text, Color.White,
+            DrawString(position + new Vector2(boxSize.X + InnerRowSpacing * textScale, size.Y / 2 - textSize.Y * textScale / 2 + UIConfigs.Instance.TextDrawOffsetY * textScale), text, Color.White,
                 textBorderColor, textScale);
         }
     }

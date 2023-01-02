@@ -1,0 +1,27 @@
+﻿Mods.ImproveGame.UI:
+{
+	PlayerInfo:{
+		CardWidth: 180
+		Name: "角色属性面板"
+		LifeRegen: "生命回复"
+		ArmorPenetration: "全能破甲"
+		MeleeDamage: "近战伤害"
+		MeleeCrit: "近战暴击"
+		MeleeSpeed: "近战速度"
+		RangedDamage: "远程伤害"
+		RangedCrit: "远程暴击"
+		ManaRegen: "法力回复"
+		ManaDamage: "魔法伤害"
+		ManaCrit: "魔法暴击"
+		ManaCost: "魔力消耗"
+		SummonDamage: "召唤伤害"
+		MaxMinions: "召唤栏"
+		MaxTurrets: "哨兵栏"
+		Endurance: "伤害免疫"
+		FishingSkill: "渔力"
+		Luck: "幸运值"
+		Aggro: "仇恨值"
+		WingTime: "飞行时间"
+		WingTimeMax: "飞行上限"
+	}
+}

@@ -1,10 +1,11 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
+using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUITitle : UIElement
+    public class SUITitle : RelativeElement
     {
         private string text;
         private Vector2 textSize;
@@ -27,20 +28,11 @@ namespace ImproveGame.Interface.SUIElements
 
         public SUITitle(string text, float textScale, int mode = 0)
         {
-            background = UIColor.TitleBackground;
+            background = UIColor.TitleBg;
             this.textScale = textScale;
             this.mode = mode;
-            switch (mode)
-            {
-                case 0:
-                    PaddingTop = 5;
-                    PaddingBottom = 5;
-                    break;
-                case 1:
-                    PaddingTop = 8;
-                    PaddingBottom = 8;
-                    break;
-            }
+            PaddingTop = 5;
+            PaddingBottom = 5;
 
             PaddingLeft = 30;
             PaddingRight = 30;
@@ -61,8 +53,7 @@ namespace ImproveGame.Interface.SUIElements
             }
             else
             {
-                PixelShader.DrawRoundRect(position + new Vector2(4), size - new Vector2(8), 6f, background);
-                PixelShader.DrawRoundRect(position, size, 10f, Color.Transparent, 3, border);
+                PixelShader.DrawRoundRect(position + new Vector2(0, size.Y - 20f), new Vector2(size.X, 20f), 100f, background);
             }
             rectangle = GetInnerDimensions();
             position = rectangle.Position();

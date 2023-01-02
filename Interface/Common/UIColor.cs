@@ -4,6 +4,9 @@ namespace ImproveGame.Interface.Common
 {
     public class UIColor : ModSystem
     {
+        // 部分单词拼写较长，使用缩写
+        // Background Bg
+        // Favorite Fav
         public override void Load()
         {
             if (Main.dedServ)
@@ -32,51 +35,57 @@ namespace ImproveGame.Interface.Common
         }
 
         public static Color PanelBorder { get; private set; }
-        public static Color PanelBackground { get; private set; }
+        public static Color PanelBg { get; private set; }
 
-        public static Color SlotFavoritedBorder { get; private set; }
-        public static Color SlotNoFavoritedBorder { get; private set; }
-        public static Color SlotFavoritedBackground { get; private set; }
-        public static Color SlotNoFavoritedBackground { get; private set; }
+        public static Color ItemSlotBorderFav { get; private set; }
+        public static Color ItemSlotBorder { get; private set; }
+        public static Color ItemSlotBgFav { get; private set; }
+        public static Color ItemSlotBG { get; private set; }
 
-        public static Color ButtonBackground { get; private set; }
+        public static Color ButtonBg { get; private set; }
 
-        public static Color TitleBackground { get; private set; }
+        public static Color TitleBg { get; private set; }
 
-        public static Color ScrollBarBackground { get; private set; }
+        public static Color ScrollBarBorder { get; private set; }
+        public static Color ScrollBarBg { get; private set; }
+        public static Color ScrollBarInnerBg { get; private set; }
+        public static Color ScrollBarInnerBgHover { get; private set; }
 
-        // 边框
+        // 开关 UI 的边框
         public static Color SwitchBorder { get; private set; }
         public static Color SwitchBorderHover { get; private set; }
-        // 圆
+        // 开关 UI 的背景
+        public static Color SwitchBg { get; private set; }
+        public static Color SwitchBgHover { get; private set; }
+        // 开关 UI 中的圆
         public static Color SwitchRound { get; private set; }
         public static Color SwitchRoundHover { get; private set; }
-        // 背景色
-        public static Color SwitchBoxBackground { get; private set; }
-        public static Color SwitchBackgroundHover { get; private set; }
 
-        public static Color Fork { get; private set; }
+        public static Color Cross { get; private set; }
 
-        public static Color PackgePanelBG { get; private set; }
-        public static Color PackgePanelBorder { get; private set; }
-        public static Color PackgeGridBG { get; private set; }
+        public static Color PackgeBg { get; private set; }
+        public static Color PackgeBorder { get; private set; }
+        public static Color PackgeGridBg { get; private set; }
         public static Color PackgeGridBorder { get; private set; }
 
         public static void ModifyColor1()
         {
-            PanelBorder = new Color(20, 25, 50);
-            PanelBackground = new Color(44, 57, 105, 160);
+            PanelBorder = new Color(20, 25, 60);
+            PanelBg = new Color(44, 55, 105, 160);
 
-            SlotFavoritedBorder = new Color(233, 176, 0, 200);
-            SlotNoFavoritedBorder = new Color(18, 18, 38, 200);
-            SlotFavoritedBackground = new Color(83, 88, 151, 200);
-            SlotNoFavoritedBackground = new Color(63, 65, 151, 200);
+            ItemSlotBorderFav = new Color(233, 176, 0, 200);
+            ItemSlotBorder = new Color(18, 18, 38, 200);
+            ItemSlotBgFav = new Color(83, 88, 151, 200);
+            ItemSlotBG = new Color(63, 65, 151, 200);
 
-            ButtonBackground = new Color(54, 56, 130);
+            ButtonBg = new Color(54, 56, 130);
 
-            TitleBackground = new Color(35, 40, 83);
+            TitleBg = new Color(35, 40, 83);
 
-            ScrollBarBackground = new Color(44, 57, 105);
+            ScrollBarBorder = new Color(20, 25, 60);
+            ScrollBarBg = new Color(44, 57, 105);
+            ScrollBarInnerBg = Color.White;
+            ScrollBarInnerBgHover = new Color(220, 220, 220);
 
             // 边框
             SwitchBorder = new Color(22, 25, 55);
@@ -85,33 +94,33 @@ namespace ImproveGame.Interface.Common
             SwitchRound = new Color(22, 25, 55);
             SwitchRoundHover = new Color(233, 176, 0);
             // 背景色
-            SwitchBoxBackground = new Color(22, 25, 55, 127);
-            SwitchBackgroundHover = new Color(72, 63, 63, 127);
+            SwitchBg = new Color(22, 25, 55, 127);
+            SwitchBgHover = new Color(72, 63, 63, 127);
 
-            Fork = new Color(200, 40, 40);
+            Cross = new Color(200, 40, 40);
 
-            PackgePanelBG = new Color(59, 67, 139, 160);
-            PackgePanelBorder = new Color(22, 25, 55);
-            PackgeGridBG = new Color(29, 33, 70, 160);
+            PackgeBg = new Color(59, 67, 139, 160);
+            PackgeBorder = new Color(22, 25, 55);
+            PackgeGridBg = new Color(29, 33, 70, 160);
             PackgeGridBorder = new Color(22, 25, 55, 160);
         }
 
         public static void ModifyColor2()
         {
             PanelBorder = new Color(27, 50, 57, 210);
-            PanelBackground = new Color(11, 14, 15, 127);
+            PanelBg = new Color(11, 14, 15, 127);
 
-            SlotFavoritedBorder = new Color(230, 230, 230, 200);
-            SlotNoFavoritedBorder = new Color(27, 50, 57, 210);
-            SlotFavoritedBackground = new Color(8, 25, 30, 100);
-            SlotNoFavoritedBackground = new Color(11, 14, 15, 127);
+            ItemSlotBorderFav = new Color(230, 230, 230, 200);
+            ItemSlotBorder = new Color(27, 50, 57, 210);
+            ItemSlotBgFav = new Color(8, 25, 30, 100);
+            ItemSlotBG = new Color(11, 14, 15, 127);
 
-            ButtonBackground = new Color(17, 40, 47);
+            ButtonBg = new Color(17, 40, 47);
 
-            TitleBackground = new Color(8, 25, 30);
+            TitleBg = new Color(8, 25, 30);
 
             // 滚动条
-            ScrollBarBackground = new Color(11, 14, 15, 127);
+            ScrollBarBg = new Color(11, 14, 15, 127);
 
             // 边框
             SwitchBorder = new Color(27, 50, 57, 210);
@@ -120,14 +129,14 @@ namespace ImproveGame.Interface.Common
             SwitchRound = new Color(27, 50, 57, 210);
             SwitchRoundHover = new Color(230, 230, 230, 200);
             // 背景色
-            SwitchBoxBackground = new Color(11, 14, 15, 127);
-            SwitchBackgroundHover = new Color(11, 14, 15, 127);
+            SwitchBg = new Color(11, 14, 15, 127);
+            SwitchBgHover = new Color(11, 14, 15, 127);
 
-            Fork = new Color(200, 40, 40);
+            Cross = new Color(200, 40, 40);
 
-            PackgePanelBG = new Color(11, 14, 15, 127);
-            PackgePanelBorder = new Color(27, 50, 57, 210);
-            PackgeGridBG = new Color(11, 14, 15, 127);
+            PackgeBg = new Color(11, 14, 15, 127);
+            PackgeBorder = new Color(27, 50, 57, 210);
+            PackgeGridBg = new Color(11, 14, 15, 127);
             PackgeGridBorder = new Color(27, 50, 57, 210);
         }
     }

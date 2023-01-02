@@ -1,64 +1,94 @@
 ﻿float2 size; // 尺寸
 float round; // 圆角
+float4 round4;
 float border; // 边框
 float4 borderColor;
 float4 backgroundColor;
+float4 bgColor1;
+float4 bgColor2;
 float shadow;
+float progress;
 
-// step 第一个参数 < 第二个参数返回 1，≥ 返回 0
+// step x ≤ y => 1 , x ＞ y => 0
 
-float sdRoundRect(float2 p, float2 s)
-{
-    return distance(p, min(p, s - round));
-}
-
-float sdShadow(float2 p, float2 s)
-{
-    return distance(p, min(p, s - round - shadow));
-}
-
+// 有边框，圆角矩形
 float4 HasBorder(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 s = size / 2;
     float2 p = abs(coords * size - s);
-    float2 a = float2(-0.75, 0.25);
-    // float2 b = smoothstep(0, s, p);
-    // p += (1 - b) * round;
-    // float2 a = smoothstep(s - round * 2, s - round, p);
-    // a = float2(-0.5 - lerp(0, 0.25, min(a.x, a.y)), 0.5);
     float Distance = distance(p, min(p, s - round));
-    return lerp(lerp(backgroundColor, borderColor, smoothstep(a.x, a.y, Distance - round + border + 2)), 0, smoothstep(a.x, a.y, Distance - round + 2));
+    return lerp(lerp(backgroundColor, borderColor, smoothstep(-0.75, 0.25, Distance - round + border + 1)), 0, smoothstep(-0.75, 0.25, Distance - round + 1));
 }
 
+// 有边框，进度条，左右
+float4 HasBorderProgressBarLeftRight(float2 coords : TEXCOORD0) : COLOR0
+{
+    float2 s = size / 2;
+    float2 p = coords * size;
+    float4 bgColor = lerp(bgColor1, bgColor2, step(progress * size.x + border, p.x));
+    p = abs(p - s);
+    float Distance = distance(p, min(p, s - round));
+    return lerp(lerp(bgColor, borderColor, smoothstep(-0.75, 0.25, Distance - round + border + 1)), 0, smoothstep(-0.75, 0.25, Distance - round + 1));
+}
+
+// 有边框，进度条，左右，向内挤压
+float4 HasBorderProgressBarLeftRight2(float2 coords : TEXCOORD0) : COLOR0
+{
+    float2 s = size / 2;
+    float2 p = abs(coords * size - s);
+    float4 bgColor = lerp(bgColor1, bgColor2, step(progress * s.x + border, abs(p.x - s.x)));
+    float Distance = distance(p, min(p, s - round));
+    return lerp(lerp(bgColor, borderColor, smoothstep(-0.75, 0.25, Distance - round + border + 1)), 0, smoothstep(-0.75, 0.25, Distance - round + 1));
+}
+
+// 有边框，进度条，上下
+float4 HasBorderProgressBarTopBottom(float2 coords : TEXCOORD0) : COLOR0
+{
+    float2 s = size / 2;
+    float2 p = coords * size;
+    float4 bgColor = lerp(bgColor1, bgColor2, step(progress * size.y + border, p.y));
+    p = abs(p - s);
+    float Distance = distance(p, min(p, s - round));
+    return lerp(lerp(bgColor, borderColor, smoothstep(-0.75, 0.25, Distance - round + border + 1)), 0, smoothstep(-0.75, 0.25, Distance - round + 1));
+}
+
+// 有边框，进度条，上下，向内挤压
+float4 HasBorderProgressBarTopBottom2(float2 coords : TEXCOORD0) : COLOR0
+{
+    float2 s = size / 2;
+    float2 p = abs(coords * size - s);
+    float4 bgColor = lerp(bgColor1, bgColor2, step(progress * s.y + border, abs(p.y - s.y)));
+    float Distance = distance(p, min(p, s - round));
+    return lerp(lerp(bgColor, borderColor, smoothstep(-0.75, 0.25, Distance - round + border + 1)), 0, smoothstep(-0.75, 0.25, Distance - round + 1));
+}
+
+// 无边框圆角矩形
 float4 NoBorder(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 s = size / 2;
     float2 p = abs(coords * size - s);
-    float2 a = float2(-0.75, 0.25);
-    // float2 a = smoothstep(s - round * 2, s - round, p);
-    // a = float2(-0.5 - lerp(0, 0.25, min(a.x, a.y)), 0.5);
-    float Distance = sdRoundRect(p, s);
-    return lerp(backgroundColor, 0, smoothstep(a.x, a.y, sdRoundRect(p, s) - round + 2));
+    float Distance = distance(p, min(p, s - round));
+    return lerp(backgroundColor, 0, smoothstep(-0.75, 0.25, Distance - round + 1));
 }
 
+// 无边框圆角矩形，四个圆角单独设置大小
+float4 NoBorderR4(float2 coords : TEXCOORD0) : COLOR0
+{
+    float2 r4 = lerp(round4.yz, round4.xw, step(coords.x, 0.5));
+    r4.x = lerp(r4.x, r4.y, step(coords.y, 0.5));
+    float2 s = size / 2;
+    float2 p = abs(coords * size - s);
+    float Distance = distance(p, min(p, s - r4.x));
+    return lerp(backgroundColor, 0, smoothstep(-0.75, 0.25, Distance - r4.x + 1));
+}
+
+// 圆角矩形的阴影
 float4 Shadow(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 s = size / 2;
     float2 p = abs(coords * size - size / 2);
-    float2 a = float2(-0.75, 0.25);
-    // float2 a = smoothstep(s - round * 1.25, s - round, p);
-    // a = float2(-0.5, 0.5) - lerp(0, 0.25, min(a.x, a.y));
-    return lerp(0, backgroundColor, pow(1 - smoothstep(a.x - shadow, a.y, sdShadow(p, s) - round - shadow), 2));
-}
-
-// 四个圆角单独设置大小
-// 还差一个四个边单独设置颜色，有待研究。
-float4 HasBorderR4(float2 coords : TEXCOORD0) : COLOR0
-{
-    float4 r4;
-    r4.xy = step(coords.x, 0.5) * r4.xz + (1 - step(coords.x, 0.5)) * r4.yw;
-    r4.x = step(coords.y, 0.5) * r4.x + (1 - step(coords.y, 0.5)) * r4.y;
-    return 0;
+    float Distance = distance(p, min(p, s - round - shadow));
+    return lerp(0, backgroundColor, pow(1 - smoothstep(-0.75 - shadow, 0.25, Distance - round - shadow), 2));
 }
 
 technique Technique1
@@ -68,9 +98,34 @@ technique Technique1
         PixelShader = compile ps_3_0 HasBorder();
     }
 
+    pass HasBorderProgressBarLeftRight
+    {
+        PixelShader = compile ps_3_0 HasBorderProgressBarLeftRight();
+    }
+
+    pass HasBorderProgressBarLeftRight2
+    {
+        PixelShader = compile ps_3_0 HasBorderProgressBarLeftRight2();
+    }
+
+    pass HasBorderProgressBarTopBottom
+    {
+        PixelShader = compile ps_3_0 HasBorderProgressBarTopBottom();
+    }
+
+    pass HasBorderProgressBarTopBottom2
+    {
+        PixelShader = compile ps_3_0 HasBorderProgressBarTopBottom2();
+    }
+
     pass NoBorder
     {
         PixelShader = compile ps_3_0 NoBorder();
+    }
+
+    pass NoBorderR4
+    {
+        PixelShader = compile ps_3_0 NoBorderR4();
     }
 
     pass Shadow

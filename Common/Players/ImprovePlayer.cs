@@ -148,8 +148,19 @@ namespace ImproveGame.Common.Players
         // 重生加速
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
-            float TimeShortened = Player.respawnTimer * MathHelper.Clamp(Config.ResurrectionTimeShortened, 0, 100) / 100;
-            if (TimeShortened > 0)
+            // 判断有没有存活的 Boss
+            bool hasBoss = false;
+            for (int i = 0; i < Main.npc.Length; i++)
+            {
+                if (Main.npc[i].active && Main.npc[i].boss)
+                {
+                    hasBoss = true;
+                    break;
+                }
+            }
+            // 计算要缩短多少时间
+            float TimeShortened = Player.respawnTimer * MathHelper.Clamp(hasBoss ? Config.BOSSBattleResurrectionTimeShortened : Config.ResurrectionTimeShortened, 0f, 100f) / 100f;
+            if (TimeShortened > 0f)
             {
                 int ct = CombatText.NewText(Player.getRect(), new(25, 255, 25), GetTextWith("CombatText.Commonds.ResurrectionTimeShortened", new
                 {

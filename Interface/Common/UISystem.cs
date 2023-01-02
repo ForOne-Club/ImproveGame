@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Configs;
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.PlayerInfo;
@@ -190,7 +191,7 @@ namespace ImproveGame.Interface.Common
         #region 绘制
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {           
+        {
             int infoIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
             if (infoIndex != -1)
             {
@@ -204,12 +205,13 @@ namespace ImproveGame.Interface.Common
             }
 
             int diagnoseNet = layers.FindIndex(layer => layer.Name == "Vanilla: Diagnose Net");
-            if (diagnoseNet != -1) {
+            if (diagnoseNet != -1)
+            {
                 layers.Insert(diagnoseNet + 1, new LegacyGameInterfaceLayer("ImproveGame: Buff Tracker GUI", () =>
                 {
                     if (!UIConfigs.Instance.ShowMoreData)
                         return true;
-                    
+
                     bool modNetShouldDraw = (bool)typeof(ModNet).GetField("ShouldDrawModNetDiagnosticsUI",
                         BindingFlags.NonPublic | BindingFlags.Static)
                         ?.GetValue(null)!;

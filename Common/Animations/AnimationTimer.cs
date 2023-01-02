@@ -9,7 +9,7 @@
     {
         Linear, // 线性变化 (就一种类型, 还是一个大分类)
         Nonlinear, // 缓动动画 (最简单的非线性动画). 如果能学到其他的非线性动画, 我就都加进来.
-        BezierOne, // 贝塞尔回弹：一
+        Bezier, // 贝塞尔回弹：一
     }
 
     // 动画计时器
@@ -26,7 +26,7 @@
                 float s = Timer / TimerMax;
                 return Mode switch
                 {
-                    AnimationMode.BezierOne => Bezier(s).Y,
+                    AnimationMode.Bezier => Bezier(s),
                     _ => s,
                 };
             }
@@ -45,19 +45,18 @@
         public bool AnyOpen => State == AnimationState.Open || State == AnimationState.OpenComplete;
         public bool AnyClose => State == AnimationState.Close || State == AnimationState.CloseComplete;
 
-        public static readonly Vector2 a = new Vector2(0);
-        public static readonly Vector2 b = new Vector2(0f, 0.5f);
-        public static readonly Vector2 c = new Vector2(0.75f, 2f);
-        public static readonly Vector2 d = new Vector2(1);
-
-        public static Vector2 Bezier(float t)
+        public static float Bezier(float t)
         {
-            Vector2 aa = a + (b - a) * t;
-            Vector2 bb = b + (c - b) * t;
-            Vector2 cc = c + (d - c) * t;
+            float a = 0f;
+            float b = -0.5f;
+            float c = 1.5f;
+            float d = 1f;
+            float aa = a + (b - a) * t;
+            float bb = b + (c - b) * t;
+            float cc = c + (d - c) * t;
 
-            Vector2 aaa = aa + (bb - aa) * t;
-            Vector2 bbb = bb + (cc - bb) * t;
+            float aaa = aa + (bb - aa) * t;
+            float bbb = bb + (cc - bb) * t;
             return aaa + (bbb - aaa) * t;
         }
 
@@ -115,7 +114,7 @@
             {
                 Timer += Speed;
             }
-            if (TimerMax - Timer < 1f)
+            if (TimerMax - Timer < 0.1f)
             {
                 Timer = TimerMax;
                 State = AnimationState.OpenComplete;
@@ -133,7 +132,7 @@
             {
                 Timer -= Speed;
             }
-            if (Timer < 1f)
+            if (Timer < 0.1f)
             {
                 Timer = 0;
                 State = AnimationState.CloseComplete;
