@@ -5,7 +5,7 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUISwitch : RelativeElement
+    public class SUISwitch : View
     {
         private const float InnerRowSpacing = 8;
         public Func<bool> GetState;

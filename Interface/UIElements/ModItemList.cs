@@ -1,8 +1,9 @@
-﻿using ImproveGame.Interface.SUIElements;
+﻿using ImproveGame.Interface.BaseUIEs;
+using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.UIElements
 {
-    public class ModItemList : UIElement
+    public class ModItemList : View
     {
         public Item[] items;
         public ModItemList()

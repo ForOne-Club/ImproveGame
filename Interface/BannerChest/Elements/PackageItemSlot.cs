@@ -7,7 +7,7 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.BannerChest.Elements
 {
-    public class PackageItemSlot : RelativeElement
+    public class PackageItemSlot : View
     {
         public Texture2D Banner;
         public Texture2D Potion;
@@ -33,9 +33,8 @@ namespace ImproveGame.Interface.BannerChest.Elements
             this.index = index;
 
             Wrap = true;
-            Relative = true;
             Spacing = new(10, 10);
-            Layout = RelativeMode.Horizontal;
+            Relative = RelativeMode.Horizontal;
         }
 
         public override void MouseDown(UIMouseEvent evt)

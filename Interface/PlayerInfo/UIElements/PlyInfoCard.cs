@@ -6,7 +6,7 @@ using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.PlayerInfo.UIElements
 {
-    public class PlyInfoCard : RelativeElement
+    public class PlyInfoCard : View
     {
         public static float width = 210;
         public static float height = 40f;
@@ -32,9 +32,8 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
 
         public PlyInfoCard(string text, Func<string> textFunc, string icon)
         {
-            Relative = true;
             Wrap = true;
-            Layout = RelativeMode.Vertical;
+            Relative = RelativeMode.Vertical;
             Spacing = spacing;
 
             PaddingLeft = 10f;

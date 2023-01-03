@@ -463,7 +463,13 @@
             '''
     }
     UIConfigs.Label: "Graphic Interface Config"
-    TextDrawOffsetY.Label: "MOD UI texts' Y offset"
-    ThemeStyle.Label: "Theme color (requires re-entering worlds)"
+    TextDrawOffsetY.Label: "[centeritem:1543] MOD UI texts' Y offset"
+    ThemeStyle.Label: "[centeritem:1544] Theme color (requires re-entering worlds)"
     ShowMoreData.Label: "[centeritem:1344] Display debug data"
+    PlyInfo:{
+        Label: "[centeritem:3124] 角色属性面板"
+        AlwaysDisplayed: "始终显示"
+        WhenOpeningInventory: "开启背包时显示"
+        NotDisplayed: "不显示"
+    }
 }

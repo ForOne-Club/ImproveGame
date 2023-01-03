@@ -11,7 +11,7 @@ namespace ImproveGame.Interface.SUIElements
     /// <summary>
     /// 用于操作数组中的物品，初始化的时候必须给定数组 + 下标。
     /// </summary>
-    public class BigBagItemSlot : RelativeElement
+    public class BigBagItemSlot : View
     {
         private Item[] items;
         public Item[] Items
@@ -34,8 +34,7 @@ namespace ImproveGame.Interface.SUIElements
             this.items = items;
             this.index = index;
 
-            Relative = true;
-            Layout = RelativeMode.Horizontal;
+            Relative = RelativeMode.Horizontal;
             Spacing = new(10, 10);
             Wrap = true;
         }

@@ -1,22 +1,20 @@
-﻿namespace ImproveGame.Interface.BaseUIEs
+﻿using System.ComponentModel;
+
+namespace ImproveGame.Interface.BaseUIEs
 {
     /// <summary>
     /// 排列模式，横向排列或者纵向排列。
     /// </summary>
-    public enum RelativeMode { Horizontal, Vertical };
+    public enum RelativeMode { Disabled, Horizontal, Vertical };
     /// <summary>
     /// 相对定位，用于可变大小的 UI 更方便计算位置。
     /// </summary>
-    public class RelativeElement : UIElement
+    public class View : UIElement
     {
-        /// <summary>
-        /// 设置 true 启用相对定位，请不要设置同级元素 HAlign, VAlign 的值。
-        /// </summary>
-        public bool Relative;
         /// <summary>
         /// 相对的模式，横向填充或者纵向填充
         /// </summary>
-        public RelativeMode Layout;
+        public RelativeMode Relative;
         /// <summary>
         /// 间距
         /// </summary>
@@ -33,17 +31,18 @@
 
         public override void Recalculate()
         {
-            if (Relative && Parent.Children is List<UIElement>)
+            if (Relative != RelativeMode.Disabled && Parent is View)
             {
+                View Parent = this.Parent as View;
                 List<UIElement> uies = Parent.Children as List<UIElement>;
                 int index = uies.IndexOf(this);
                 // 判断前面有没有元素
-                if (index > 0 && uies[index - 1] is RelativeElement)
+                if (index > 0 && uies[index - 1] is View)
                 {
-                    RelativeElement Before = uies[index - 1] as RelativeElement;
-                    Vector2 BeforeSize = Before.GetDimensions().Size();
-                    Vector2 ParentSize = Parent.GetInnerDimensions().Size();
-                    switch (Layout)
+                    View Before = uies[index - 1] as View;
+                    Vector2 BeforeSize = Before.GetDimensionsSize();
+                    Vector2 ParentSize = Parent.GetInnerDimensionsSize();
+                    switch (Relative)
                     {
                         // 横向
                         case RelativeMode.Horizontal:
@@ -116,6 +115,18 @@
         public Vector2 GetPosPixel()
         {
             return new Vector2(Left.Pixels + Top.Pixels);
+        }
+
+        public Vector2 GetDimensionsSize()
+        {
+            CalculatedStyle dimensions = GetDimensions();
+            return new Vector2(dimensions.Width, dimensions.Height);
+        }
+
+        public Vector2 GetInnerDimensionsSize()
+        {
+            CalculatedStyle dimensions = GetInnerDimensions();
+            return new Vector2(dimensions.Width, dimensions.Height);
         }
     }
 }

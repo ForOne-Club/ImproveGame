@@ -469,7 +469,13 @@
             '''
     }
     UIConfigs.Label: "图形界面设置"
-    TextDrawOffsetY.Label: "MOD UI 文字Y轴绘制偏移"
-    ThemeStyle.Label: "主题色 (每次切换需要重新进入地图)"
+    TextDrawOffsetY.Label: "[centeritem:1543] MOD UI 文字Y轴绘制偏移"
+    ThemeStyle.Label: "[centeritem:1544] 主题色 (每次切换需要重新进入地图)"
     ShowMoreData.Label: "[centeritem:1344] 显示调试数据"
+    PlyInfo:{
+        Label: "[centeritem:3124] 角色属性面板"
+        AlwaysDisplayed: "始终显示"
+        WhenOpeningInventory: "开启背包时显示"
+        NotDisplayed: "不显示"
+    }
 }

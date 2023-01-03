@@ -61,8 +61,7 @@ namespace ImproveGame.Interface.GUI
             }, GetText("SuperVault.Synthesis"), 0.8f)
             {
                 First = true,
-                Relative = true,
-                Layout = RelativeMode.Vertical,
+                Relative = RelativeMode.Vertical,
                 Spacing = SwitchSpacing
             });
 
@@ -71,8 +70,7 @@ namespace ImproveGame.Interface.GUI
                 Setting.SuperVault_SmartGrab = state;
             }, GetText("SuperVault.SmartPickup"), 0.8f)
             {
-                Relative = true,
-                Layout = RelativeMode.Horizontal,
+                Relative = RelativeMode.Horizontal,
                 Spacing = SwitchSpacing
             });
 
@@ -81,8 +79,7 @@ namespace ImproveGame.Interface.GUI
                 Setting.SuperVault_OverflowGrab = state;
             }, GetText("SuperVault.OverflowPickup"), 0.8f)
             {
-                Relative = true,
-                Layout = RelativeMode.Horizontal,
+                Relative = RelativeMode.Horizontal,
                 Spacing = SwitchSpacing
             });
 
@@ -91,8 +88,7 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(buttons[0] = new(GetTexture("UI/Quick").Value, Lang.inter[29].Value)
             {
                 First = true,
-                Relative = true,
-                Layout = RelativeMode.Vertical,
+                Relative = RelativeMode.Vertical,
                 Spacing = ButtonSpacing
             });
             buttons[0].SetText(Lang.inter[29].Value);
@@ -100,8 +96,7 @@ namespace ImproveGame.Interface.GUI
 
             mainPanel.Append(buttons[1] = new(GetTexture("UI/Put").Value, Lang.inter[30].Value)
             {
-                Relative = true,
-                Layout = RelativeMode.Horizontal,
+                Relative = RelativeMode.Horizontal,
                 Spacing = ButtonSpacing
             });
             buttons[1].SetText(Lang.inter[30].Value);
@@ -109,8 +104,7 @@ namespace ImproveGame.Interface.GUI
 
             mainPanel.Append(buttons[2] = new(GetTexture("UI/Put").Value, Lang.inter[31].Value)
             {
-                Relative = true,
-                Layout = RelativeMode.Horizontal,
+                Relative = RelativeMode.Horizontal,
                 Spacing = ButtonSpacing
             });
             buttons[2].SetText(Lang.inter[31].Value);
@@ -118,8 +112,7 @@ namespace ImproveGame.Interface.GUI
 
             mainPanel.Append(buttons[3] = new(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
             {
-                Relative = true,
-                Layout = RelativeMode.Horizontal,
+                Relative = RelativeMode.Horizontal,
                 Spacing = ButtonSpacing
             });
             buttons[3].SetText(GetText("SuperVault.Sort"));
@@ -129,8 +122,7 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(ItemGrid = new ModItemGrid()
             {
                 First = true,
-                Relative = true,
-                Layout = BaseUIEs.RelativeMode.Vertical,
+                Relative = BaseUIEs.RelativeMode.Vertical,
                 Spacing = new Vector2(10, 15)
             });
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;

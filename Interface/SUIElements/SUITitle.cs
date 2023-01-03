@@ -5,7 +5,7 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUITitle : RelativeElement
+    public class SUITitle : View
     {
         private string text;
         private Vector2 textSize;

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 using Terraria.GameInput;
 
@@ -7,7 +8,7 @@ namespace ImproveGame.Interface.SUIElements
     /// <summary>
     /// 宽度默认 20
     /// </summary>
-    public class SUIScrollbar : UIElement
+    public class SUIScrollbar : View
     {
         private float viewPosition; // 滚动条当前位置
         private float MaxViewPoisition => maxViewSize - viewSize;

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.Configs
@@ -6,7 +7,7 @@ namespace ImproveGame.Common.Configs
     [Label($"${path}.UIConfigs.Label")]
     public class UIConfigs : ModConfig
     {
-        const string path = "Mods.ImproveGame.Config";
+        private const string path = "Mods.ImproveGame.Config";
         public static UIConfigs Instance { get; set; }
         public override ConfigScope Mode => ConfigScope.ClientSide;
         public override void OnLoaded() => Instance = this;
@@ -27,5 +28,21 @@ namespace ImproveGame.Common.Configs
         [Label($"${path}.ShowMoreData.Label")]
         [DefaultValue(false)]
         public bool ShowMoreData;
+
+        public enum PlyInfoDisplayMode
+        {
+            [Label($"${path}.PlyInfo.AlwaysDisplayed")]
+            AlwaysDisplayed,
+            [Label($"${path}.PlyInfo.WhenOpeningInventory")]
+            WhenOpeningBackpack,
+            [Label($"${path}.PlyInfo.NotDisplayed")]
+            NotDisplayed
+        }
+
+        [Label($"${path}.PlyInfo.Label")]
+        [DefaultValue(PlyInfoDisplayMode.AlwaysDisplayed)]
+        [Slider]
+        [DrawTicks]
+        public PlyInfoDisplayMode PlyInfo;
     }
 }

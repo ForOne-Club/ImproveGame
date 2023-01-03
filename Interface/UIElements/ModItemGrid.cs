@@ -5,7 +5,7 @@ namespace ImproveGame.Interface.UIElements
 {
     // 一个有滚动条的视图有三部分.
     // 一个最大的元素, 用来包裹显示内容部分和滚动条. 最大的元素负责隐藏超过范围的元素.
-    public class ModItemGrid : RelativeElement
+    public class ModItemGrid : View
     {
         public ModItemList ItemList;
         public SUIScrollbar Scrollbar;

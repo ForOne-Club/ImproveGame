@@ -3,7 +3,7 @@ using ImproveGame.Interface.BaseUIEs;
 
 namespace ImproveGame.Interface.PlayerInfo.UIElements
 {
-    public class PlyInfoSwitch : RelativeElement
+    public class PlyInfoSwitch : View
     {
         public Func<bool> Opened;
         public Texture2D open;
@@ -15,8 +15,7 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             Height.Pixels = 40f;
             open = GetTexture("UI/PlayerInfo/Open").Value;
 
-            Relative = true;
-            Layout = RelativeMode.Horizontal;
+            Relative = RelativeMode.Horizontal;
             Wrap = true;
             round = 10f;
         }

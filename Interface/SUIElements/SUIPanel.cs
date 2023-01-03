@@ -4,7 +4,7 @@ using ImproveGame.Interface.PlayerInfo.UIElements;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUIPanel : RelativeElement
+    public class SUIPanel : View
     {
         internal bool Shaded;
         internal float ShadowThickness;
@@ -59,7 +59,7 @@ namespace ImproveGame.Interface.SUIElements
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
             // 当点击的是子元素不进行移动
-            if (Draggable && (evt.Target == this || evt.Target is SUITitle or PlyInfoCard || evt.Target.GetType().IsAssignableFrom(typeof(RelativeElement)) || evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
+            if (Draggable && (evt.Target == this || evt.Target is SUITitle or PlyInfoCard || evt.Target.GetType().IsAssignableFrom(typeof(View)) || evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
             {
                 Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
                 Dragging = true;

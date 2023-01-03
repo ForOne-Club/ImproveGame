@@ -1,9 +1,9 @@
-﻿using ImproveGame.Interface.SUIElements;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using ImproveGame.Interface.BaseUIEs;
+using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.BannerChest.Elements
 {
-    public class PackageGrid : UIElement
+    public class PackageGrid : View
     {
         public PackageList list;
         public SUIScrollbar scrollbar;

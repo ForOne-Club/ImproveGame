@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Configs;
 using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.PlayerInfo.UIElements;
@@ -9,24 +10,35 @@ namespace ImproveGame.Interface.PlayerInfo
 {
     public class PlayerInfoGUI : UIState
     {
-        public static bool Visible { get; set; }
+        private static bool visible;
+        public static bool Visible
+        {
+            get => UIConfigs.Instance.PlyInfo switch
+            {
+                UIConfigs.PlyInfoDisplayMode.AlwaysDisplayed => visible,
+                UIConfigs.PlyInfoDisplayMode.WhenOpeningBackpack => Main.playerInventory && visible,
+                UIConfigs.PlyInfoDisplayMode.NotDisplayed => false,
+                _ => false
+            };
+            set => visible = true;
+        }
         public static bool Opened { get; set; }
 
         // readonly 单纯不想看 VS 一直给我报虚线，真**烦人（我也不想禁用显示）。
-        // new() 缩写，时间久了再看码太容易忘了使用的类型，还是不用缩写好（被迫禁用显示）。
+        // new() 缩写，时间久了再看码太容易忘了使用的类型，还是不用缩写好（被迫禁用显示虚线）。
         // var 也容易忘，为了保证下次阅读代码方便点我还是尽量不用了（我就不用了）。
         private Player player;
-        // 动画用到的位置，StartPos 是收起状态位置，EndPos 是开启状态位置
-        private static Vector2 StartPos = new Vector2(480, 0);
-        private static Vector2 StartPosInv = new Vector2(590, 0);
+        // 动画用到的位置，BeginPos 是收起状态位置，EndPos 是开启状态位置
+        private static Vector2 BeginPos = new Vector2(480, 0);
+        private static Vector2 BeginPosInv = new Vector2(590, 0);
         private static Vector2 EndPos = new Vector2(480, 20);
         private static Vector2 EndPosInv = new Vector2(590, 20);
 
-        public SUIPanel mainPanel;
-        public RelativeElement tipPanel;
-        public SUITitle title;
         public AnimationTimer invTimer;
         public AnimationTimer openTimer;
+        public SUIPanel mainPanel;
+        public View tipPanel;
+        public SUITitle title;
         public PlyInfoSwitch Switch;
 
         public override void OnInitialize()
@@ -37,7 +49,11 @@ namespace ImproveGame.Interface.PlayerInfo
             }
             player = Main.LocalPlayer;
             invTimer = new AnimationTimer();
-            openTimer = new AnimationTimer();
+            openTimer = new AnimationTimer
+            {
+                State = AnimationState.CloseComplete,
+                Timer = 0
+            };
 
             Append(mainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
             {
@@ -55,11 +71,10 @@ namespace ImproveGame.Interface.PlayerInfo
             // RelativeElement 这名字不好听，Android 组件都叫 xxxView，我也想这么叫。
             // 但是格式不统一，全改掉名字又要花时间适应，*****。
             // StyleDimension 这个 struct 真的有点莫名其妙，就俩属性整这么复杂。
-            mainPanel.Append(tipPanel = new RelativeElement()
+            mainPanel.Append(tipPanel = new View()
             {
-                Relative = true,
                 Spacing = new Vector2(6),
-                Layout = RelativeMode.Vertical,
+                Relative = RelativeMode.Vertical,
                 OverflowHidden = true
             });
             tipPanel.SetInnerPixels(PlyInfoCard.TotalSize(3, 7));
@@ -153,11 +168,11 @@ namespace ImproveGame.Interface.PlayerInfo
             if (mainPanel.GetSizeInside() != mainSize)
             {
                 mainPanel.SetInnerSize(mainSize).Recalculate();
-                StartPos.Y = StartPosInv.Y = 52 - mainPanel.Height.Pixels;
+                BeginPos.Y = BeginPosInv.Y = 52 - mainPanel.Height.Pixels;
             }
 
             Vector2 endPos = Vector2.Lerp(EndPos, EndPosInv, invTimer.Schedule);
-            Vector2 startPos = Vector2.Lerp(StartPos, StartPosInv, invTimer.Schedule);
+            Vector2 startPos = Vector2.Lerp(BeginPos, BeginPosInv, invTimer.Schedule);
             Vector2 Pos = Vector2.Lerp(startPos, endPos, openTimer.Schedule);
 
             if (Pos != mainPanel.GetPosPixel())

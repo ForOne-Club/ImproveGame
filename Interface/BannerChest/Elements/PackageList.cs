@@ -1,6 +1,8 @@
-﻿namespace ImproveGame.Interface.BannerChest.Elements
+﻿using ImproveGame.Interface.BaseUIEs;
+
+namespace ImproveGame.Interface.BannerChest.Elements
 {
-    public class PackageList : UIElement
+    public class PackageList : View
     {
         public List<Item> items;
 

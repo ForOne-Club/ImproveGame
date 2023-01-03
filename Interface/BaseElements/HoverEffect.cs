@@ -5,7 +5,7 @@ namespace ImproveGame.Interface.BaseUIEs
     /// <summary>
     /// 大背包按钮背景上的效果，需要直接继承此类即可。(继承自 RelativeUIE)
     /// </summary>
-    public class HoverEffect : RelativeElement
+    public class HoverEffect : View
     {
         public bool bordered;
         public AnimationTimer hoverTimer;
