@@ -91,7 +91,7 @@ namespace ImproveGame.Interface.GUI
 			uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
 			uIImageButton.SetVisibility(1f, 1f);
 			searchArea.Append(uIImageButton);
-            SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(new Color(35, 40, 83), new Color(35, 40, 83), CalculateBorder: false) {
+            SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(new Color(35, 40, 83), new Color(35, 40, 83)) {
                 Left = new StyleDimension(4f, 0f),
 				Width = new StyleDimension(0f - uIImageButton.Width.Pixels - 3f, 1f),
 				Height = new StyleDimension(0f, 1f),

@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.ConstructCore;
 using ImproveGame.Common.Systems;
-using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.SUIElements;
+using ImproveGame.Interface.UIElements;
 using System.Reflection;
 using Terraria.GameInput;
 
@@ -166,7 +166,7 @@ namespace ImproveGame.Interface.GUI
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
-            if (BasePanel.GetOuterDimensions().Contains(evt.MousePosition.ToPoint()) || Scrollbar.GetOuterDimensions().Contains(evt.MousePosition.ToPoint()))
+            if (BasePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
                 Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
 
@@ -252,7 +252,7 @@ namespace ImproveGame.Interface.GUI
                 {
                     continue;
                 }
-                
+
                 char countChar = GetText("ConstructGUI.FileInfo.ModMissing.Count")[0];
                 int count = char.IsNumber(countChar) ? countChar - '0' : 2;
                 for (int i = 1; i <= count; i++)
@@ -267,7 +267,7 @@ namespace ImproveGame.Interface.GUI
             name = name[..^FileOperator.Extension.Length];
             UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Name", new { Name = name }))); // 文件名
             UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Time", new { Time = DateTime.Parse(structure.BuildTime) }))); // 保存时间
-            UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Version", new { Version = $"v{structure.ModVersion}"}))); // 模组版本
+            UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Version", new { Version = $"v{structure.ModVersion}" }))); // 模组版本
             UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.FileInfo.Size", new { Size = $"{structure.Width + 1}x{structure.Height + 1}" }))); // 结构尺寸
 
             var materialsAndStacks = MaterialCore.CountMaterials(structure);
@@ -337,7 +337,8 @@ namespace ImproveGame.Interface.GUI
             }
             UIList.Add(QuickSeparator());
 
-            static UIPanel QuickTransparentPanel() {
+            static UIPanel QuickTransparentPanel()
+            {
                 var panel = (UIPanel)new UIPanel()
                 {
                     BackgroundColor = Color.Transparent,

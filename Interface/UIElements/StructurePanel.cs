@@ -30,7 +30,7 @@ namespace ImproveGame.Interface.UIElements
         public UIImageButton RenameButton;
         public SUIPanel PathPanel;
 
-        public StructurePanel(string filePath) : base(BorderUnselectedColor, UnselectedColor, CalculateBorder: false)
+        public StructurePanel(string filePath) : base(BorderUnselectedColor, UnselectedColor)
         {
             FilePath = filePath;
 
@@ -116,7 +116,7 @@ namespace ImproveGame.Interface.UIElements
             };
             Append(RenameButton);
 
-            PathPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), round: 10, CalculateBorder: false)
+            PathPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), round: 10)
             {
                 Top = detailButton.Top,
                 OverflowHidden = true,

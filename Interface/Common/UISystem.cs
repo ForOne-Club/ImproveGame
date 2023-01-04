@@ -198,6 +198,7 @@ namespace ImproveGame.Interface.Common
         {
             Player player = Main.LocalPlayer;
 
+            // 如果 Insert 是按照向前插入的逻辑，越早插入越晚绘制，也就是越靠近顶层。
             layers.FindVanilla("Mouse Text", index =>
             {
                 layers.Insert(index, "PlayerInfo GUI", PlayerInfoGUI, () => PlayerInfoGUI.Visible);

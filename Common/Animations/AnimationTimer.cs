@@ -108,13 +108,13 @@
         {
             if (Mode == AnimationMode.Nonlinear)
             {
-                Timer += (TimerMax - Timer) / Speed;
+                Timer += (TimerMax + 1 - Timer) / Speed;
             }
             else
             {
                 Timer += Speed;
             }
-            if (TimerMax - Timer < 0.1f)
+            if (TimerMax - Timer < 0f)
             {
                 Timer = TimerMax;
                 State = AnimationState.OpenComplete;
@@ -126,13 +126,13 @@
         {
             if (Mode == AnimationMode.Nonlinear)
             {
-                Timer -= Timer / Speed;
+                Timer -= (Timer + 1) / Speed;
             }
             else
             {
                 Timer -= Speed;
             }
-            if (Timer < 0.1f)
+            if (Timer < 0f)
             {
                 Timer = 0;
                 State = AnimationState.CloseComplete;

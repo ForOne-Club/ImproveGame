@@ -1,7 +1,8 @@
-﻿using System.ComponentModel;
+﻿global using ImproveGame.Interface.BaseViews;
 
-namespace ImproveGame.Interface.BaseUIEs
+namespace ImproveGame.Interface.BaseViews
 {
+    public enum RoundMode { Round, Round4 }
     /// <summary>
     /// 排列模式，横向排列或者纵向排列。
     /// </summary>
@@ -28,6 +29,11 @@ namespace ImproveGame.Interface.BaseUIEs
         /// 在大背包中用于一排 Button 的时候，第一个 Button 前面有一个 Switch
         /// </summary>
         public bool First;
+        public bool DragIgnore;
+        public RoundMode RoundMode;
+        public float round;
+        public Vector4 round4;
+        public Vector4 Extension;
 
         public override void Recalculate()
         {
@@ -74,31 +80,64 @@ namespace ImproveGame.Interface.BaseUIEs
             base.Recalculate();
         }
 
+        // 这该起什么名字？
+        public void Join(UIElement parent)
+        {
+            parent.Append(this);
+        }
+
         // 下面这些方法只是为了更方便的使用 UIElement 这个类。
         // 原来是写到了 UIElementHelper ，还是直接写一个基类舒服点。
         // 设置
-        public void SetPosPixels(float left, float top)
+        public View SetPosPixels(float left, float top)
         {
             Left.Pixels = left;
             Top.Pixels = top;
+            return this;
         }
 
-        public void SetPosPixels(Vector2 size)
+        public View SetPosPixels(Vector2 size)
         {
             Left.Pixels = size.X;
             Top.Pixels = size.Y;
+            return this;
         }
 
-        public void SetInnerPixels(float width, float height)
+        public View SetInnerPixels(float width, float height)
         {
             Width.Pixels = width + PaddingLeft + PaddingRight;
             Height.Pixels = height + PaddingTop + PaddingBottom;
+            return this;
         }
 
-        public void SetInnerPixels(Vector2 size)
+        public View SetInnerPixels(Vector2 size)
         {
             Width.Pixels = size.X + PaddingLeft + PaddingRight;
             Height.Pixels = size.Y + PaddingTop + PaddingBottom;
+            return this;
+        }
+
+        public View SetSizePixels(float width, float height)
+        {
+            Width.Pixels = width;
+            Height.Pixels = height;
+            return this;
+        }
+
+        public View SetSizePixels(Vector2 size)
+        {
+            Width.Pixels = size.X;
+            Height.Pixels = size.Y;
+            return this;
+        }
+
+        public View SetPadding(float left, float top, float right, float bottom)
+        {
+            PaddingLeft = left;
+            PaddingTop = top;
+            PaddingRight = right;
+            PaddingBottom = bottom;
+            return this;
         }
 
         // 获取

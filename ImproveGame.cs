@@ -1,4 +1,5 @@
 global using ImproveGame.Common.Utils;
+global using ImproveGame.Common.Utils.Extensions;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using NetSimplified;

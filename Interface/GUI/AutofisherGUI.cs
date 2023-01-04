@@ -105,7 +105,7 @@ namespace ImproveGame.Interface.GUI
             title.Height.Set(30, 0f);
             basePanel.Append(title);
 
-            textPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), round: 10, CalculateBorder: false)
+            textPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), round: 10)
             {
                 HAlign = 0.5f,
                 Top = StyleDimension.FromPixels(200f),

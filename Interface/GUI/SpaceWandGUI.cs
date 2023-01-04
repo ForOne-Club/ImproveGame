@@ -74,7 +74,7 @@ namespace ImproveGame.Interface.GUI
 
         public void UpdateButton()
         {
-            Vector2 center = MainPanel.GetSizeInside() / 2f;
+            Vector2 center = MainPanel.GetInnerSizePixels() / 2f;
             float includedAngle = MathF.PI * 2 / RoundButtons.Length; // 夹角
             float startAngle = -MathF.PI / 2 - includedAngle / 2; // 起始角度
             for (int i = 0; i < RoundButtons.Length; i++)
@@ -84,7 +84,7 @@ namespace ImproveGame.Interface.GUI
                 float angle = startAngle + includedAngle * i;
                 float length = 48 + (1 - timer.Schedule) * 25f;
                 RoundButtons[i].Opacity = timer.Schedule;
-                RoundButtons[i].SetCenter(center + angle.ToRotationVector2() * length).Recalculate();
+                RoundButtons[i].SetCenterPixels(center + angle.ToRotationVector2() * length).Recalculate();
             }
         }
 
@@ -94,7 +94,7 @@ namespace ImproveGame.Interface.GUI
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             timer.Open();
-            MainPanel.SetCenter(MouseScreenUI).Recalculate();
+            MainPanel.SetCenterPixels(MouseScreenUI).Recalculate();
             UpdateButton();
         }
 

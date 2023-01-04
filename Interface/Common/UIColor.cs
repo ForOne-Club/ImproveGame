@@ -45,6 +45,7 @@ namespace ImproveGame.Interface.Common
         public static Color ButtonBg { get; private set; }
 
         public static Color TitleBg { get; private set; }
+        public static Color TitleBg2 { get; private set; }
 
         public static Color ScrollBarBorder { get; private set; }
         public static Color ScrollBarBg { get; private set; }
@@ -81,6 +82,7 @@ namespace ImproveGame.Interface.Common
             ButtonBg = new Color(54, 56, 130);
 
             TitleBg = new Color(35, 40, 83);
+            TitleBg2 = new Color(43, 56, 101);
 
             ScrollBarBorder = new Color(20, 25, 60);
             ScrollBarBg = new Color(44, 57, 105);

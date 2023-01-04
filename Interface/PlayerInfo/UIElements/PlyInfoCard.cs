@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
-using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 
@@ -8,9 +7,8 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
 {
     public class PlyInfoCard : View
     {
-        public static float width = 210;
-        public static float height = 40f;
-        public static readonly Vector2 spacing = new Vector2(6);
+        internal static float width = 210, height = 40f;
+        internal static Vector2 spacing = new Vector2(6);
         /// <summary> 计算总大小 </summary>
         public static Vector2 TotalSize(int row, int column)
         {
@@ -40,6 +38,7 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             PaddingRight = 14f;
             Width.Pixels = width;
             Height.Pixels = height;
+            DragIgnore = true;
 
             Text = text;
             this.textFunc = textFunc;

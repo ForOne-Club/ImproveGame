@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.BaseUIEs;
+using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.Common;
 using Terraria.GameInput;
 
@@ -59,7 +59,7 @@ namespace ImproveGame.Interface.SUIElements
             CalculatedStyle InnerRectangle = InnerDimensions;
             InnerRectangle.Y += (ViewPosition / MaxViewPoisition) * (InnerDimensions.Height * (1 - ViewScale));
             InnerRectangle.Height = InnerDimensions.Height * ViewScale;
-            if (InnerRectangle.Contains(Main.MouseScreen))
+            if (IsMouseHovering)
             {
                 if (!innerHovered)
                 {
@@ -118,7 +118,7 @@ namespace ImproveGame.Interface.SUIElements
             {
                 CalculatedStyle InnerDimensions = GetInnerDimensions();
 
-                if (InnerDimensions.Contains(Main.MouseScreen))
+                if (IsMouseHovering)
                 {
                     dragging = true;
                     offsetY = evt.MousePosition.Y - InnerDimensions.Y - (InnerDimensions.Height * (1 - ViewScale) * (viewPosition / MaxViewPoisition));

@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.ModHooks;
-using ImproveGame.Common.Utils;
-using ImproveGame.Interface.BaseUIEs;
+using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;

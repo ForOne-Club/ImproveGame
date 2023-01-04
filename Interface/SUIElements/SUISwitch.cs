@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
-using ImproveGame.Interface.BaseUIEs;
+using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements

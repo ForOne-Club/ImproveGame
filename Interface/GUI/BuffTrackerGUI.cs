@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Common.Systems;
-using ImproveGame.Interface.UIElements;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using System.Reflection;
 using Terraria.GameInput;
@@ -10,7 +10,7 @@ namespace ImproveGame.Interface.GUI;
 public class BuffTrackerGUI : UIState
 {
     public static bool Visible { get; private set; }
-    
+
     private SUIPanel basePanel;
     private BuffButtonList BuffList;
     public SUIScrollbar Scrollbar; // 拖动条
@@ -22,13 +22,13 @@ public class BuffTrackerGUI : UIState
     internal BuffTrackerBattler BuffTrackerBattler;
     private static int _oldBuffCount; // 用于及时更新列表
 
-    public override void OnInitialize() {
-        basePanel = new(Color.Black, new(35, 40, 83, 160), 12, 3, false);
-        basePanel.Draggable = true;
-        basePanel.SetPos(630, 160).SetSize(440, 220);
-        Append(basePanel);
-        
-        UIImageButton closeButton = new(GetTexture("UI/Button_Close")) {
+    public override void OnInitialize()
+    {
+        basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, Draggable: true);
+        basePanel.SetPosPixels(630, 160).SetSizePixels(440, 220).Join(this);
+
+        UIImageButton closeButton = new UIImageButton(GetTexture("UI/Button_Close"))
+        {
             Left = new StyleDimension(-28f, 1f),
             Width = StyleDimension.FromPixels(28f),
             Height = StyleDimension.FromPixels(28f)
@@ -37,8 +37,9 @@ public class BuffTrackerGUI : UIState
         closeButton.SetVisibility(1f, 1f);
         closeButton.OnMouseDown += (_, _) => Close();
         basePanel.Append(closeButton);
-        
-        UIHorizontalSeparator separator = new() {
+
+        UIHorizontalSeparator separator = new UIHorizontalSeparator()
+        {
             Top = StyleDimension.FromPixels(closeButton.Width.Pixels + 5f),
             Width = StyleDimension.FromPercent(1f),
             Color = Color.Lerp(Color.White, new Color(63, 65, 151, 255), 0.85f) * 0.9f
@@ -58,7 +59,7 @@ public class BuffTrackerGUI : UIState
         BuffList.ManualSortMethod = _ => { };
         basePanel.Append(BuffList);
 
-        Scrollbar = new()
+        Scrollbar = new SUIScrollbar()
         {
             Top = basePanel.Top,
             Left = StyleDimension.FromPixels(basePanel.Left() + basePanel.Width() + 10),
@@ -68,12 +69,12 @@ public class BuffTrackerGUI : UIState
         SetupScrollBar();
         Append(Scrollbar);
 
-        BuffTrackerBattler = new();
+        BuffTrackerBattler = new BuffTrackerBattler();
         BuffTrackerBattler.Initialize();
         BuffTrackerBattler.MainPanel.SetPos(basePanel.Left() - 92f, basePanel.Top());
         Append(BuffTrackerBattler.MainPanel);
-            
-        UIElement searchArea = new()
+
+        UIElement searchArea = new UIElement()
         {
             Height = new StyleDimension(28f, 0f),
             Width = new StyleDimension(-42f, 1f)
@@ -83,8 +84,9 @@ public class BuffTrackerGUI : UIState
         AddSearchBar(searchArea);
         _searchBar.SetContents(null, forced: true);
     }
-    
-    private void SetupScrollBar(bool resetViewPosition = true) {
+
+    private void SetupScrollBar(bool resetViewPosition = true)
+    {
         float height = BuffList.GetInnerDimensions().Height;
         Scrollbar.SetView(height, BuffList.ListHeight);
         if (resetViewPosition)
@@ -94,8 +96,9 @@ public class BuffTrackerGUI : UIState
     public void SetupBuffButtons()
     {
         BuffList.Clear();
-    
-        for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++) {
+
+        for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
+        {
             if (!HideBuffSystem.BuffTypesShouldHide[i])
                 continue;
 
@@ -127,16 +130,18 @@ public class BuffTrackerGUI : UIState
         }
         BuffList.Recalculate();
 
-        if (basePanel.IsMouseHovering || Scrollbar.IsMouseHovering) {
+        if (basePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
+        {
             PlayerInput.LockVanillaMouseScroll("ImproveGame: Buff Tracker GUI");
         }
 
         base.DrawSelf(spriteBatch);
     }
 
-    public override void Update(GameTime gameTime) {
+    public override void Update(GameTime gameTime)
+    {
         base.Update(gameTime);
-        
+
         if (_didClickSomething && !_didClickSearchBar && _searchBar.IsWritingText)
             _searchBar.ToggleTakingText();
 
@@ -144,9 +149,12 @@ public class BuffTrackerGUI : UIState
         _didClickSearchBar = false;
 
         BuffTrackerBattler.Update();
-        Scrollbar.Left = StyleDimension.FromPixels(basePanel.Left() + basePanel.Width() + 10);
-        Scrollbar.Top = basePanel.Top;
-        BuffTrackerBattler.MainPanel.SetPos(basePanel.Left() - 92f, basePanel.Top());
+        // 刷新滚动条
+        Scrollbar.SetPosPixels(basePanel.RightPixels() + 10f, basePanel.Top.Pixels);
+        Scrollbar.Recalculate();
+        // 刷新刷怪条
+        BuffTrackerBattler.MainPanel.SetPosPixels(basePanel.Left.Pixels - 92f, basePanel.Top.Pixels);
+        BuffTrackerBattler.MainPanel.Recalculate();
 
         if (_oldBuffCount != HideBuffSystem.HideBuffCount())
         {
@@ -158,7 +166,8 @@ public class BuffTrackerGUI : UIState
     public override void Draw(SpriteBatch spriteBatch)
     {
         Player player = Main.LocalPlayer;
-        if (player.dead || !player.active) {
+        if (player.dead || !player.active)
+        {
             Close();
             return;
         }
@@ -178,7 +187,8 @@ public class BuffTrackerGUI : UIState
         const float scale = 0.5f;
         string text = GetText("BuffTracker.NoInfBuff");
         // 设置都没开，加个提示
-        if (!Config.NoConsume_Potion) {
+        if (!Config.NoConsume_Potion)
+        {
             string textAlt = $"{GetText("BuffTracker.NoInfBuffAlt")}";
             float height = FontAssets.DeathText.Value.MeasureString(textAlt).Y * 0.5f;
             drawCenter.Y += height * 0.5f;
@@ -191,11 +201,13 @@ public class BuffTrackerGUI : UIState
         Vector2 origin = new(textWidth, 0f);
         Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.DeathText.Value, text, drawCenter.X, drawCenter.Y, Color.White, Color.Black, origin, scale);
     }
-    
+
     #region 搜索栏
-    
-    private void AddSearchBar(UIElement searchArea) {
-        UIImageButton uIImageButton = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search")) {
+
+    private void AddSearchBar(UIElement searchArea)
+    {
+        UIImageButton uIImageButton = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search"))
+        {
             VAlign = 0.5f,
             HAlign = 0f
         };
@@ -204,7 +216,8 @@ public class BuffTrackerGUI : UIState
         uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
         uIImageButton.SetVisibility(1f, 1f);
         searchArea.Append(uIImageButton);
-        SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(new Color(35, 40, 83), new Color(35, 40, 83), CalculateBorder: false) {
+        SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(new Color(35, 40, 83), new Color(35, 40, 83))
+        {
             Left = new StyleDimension(4f, 0f),
             Width = new StyleDimension(0f - uIImageButton.Width.Pixels - 3f, 1f),
             Height = new StyleDimension(0f, 1f),
@@ -213,7 +226,8 @@ public class BuffTrackerGUI : UIState
         };
         uIPanel.SetPadding(0f);
         searchArea.Append(uIPanel);
-        UISearchBar uISearchBar = _searchBar = new UISearchBar(Language.GetText("UI.PlayerNameSlot"), 0.8f) {
+        UISearchBar uISearchBar = _searchBar = new UISearchBar(Language.GetText("UI.PlayerNameSlot"), 0.8f)
+        {
             Width = new StyleDimension(0f, 1f),
             Height = new StyleDimension(0f, 1f),
             HAlign = 0f,
@@ -227,7 +241,8 @@ public class BuffTrackerGUI : UIState
         uISearchBar.OnStartTakingInput += OnStartTakingInput;
         uISearchBar.OnEndTakingInput += OnEndTakingInput;
         uISearchBar.OnCancledTakingInput += OnCancledInput;
-        UIImageButton uIImageButton2 = new(Main.Assets.Request<Texture2D>("Images/UI/SearchCancel")) {
+        UIImageButton uIImageButton2 = new(Main.Assets.Request<Texture2D>("Images/UI/SearchCancel"))
+        {
             HAlign = 1f,
             VAlign = 0.5f,
             Left = new StyleDimension(-2f, 0f)
@@ -238,59 +253,72 @@ public class BuffTrackerGUI : UIState
         uIPanel.Append(uIImageButton2);
     }
 
-    private void SearchCancelButton_OnClick(UIMouseEvent evt, UIElement listeningElement) {
-        if (_searchBar.HasContents) {
+    private void SearchCancelButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
+    {
+        if (_searchBar.HasContents)
+        {
             _searchBar.SetContents(null, forced: true);
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
-        else {
+        else
+        {
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
     }
 
-    private void SearchCancelButton_OnMouseOver(UIMouseEvent evt, UIElement listeningElement) {
+    private void SearchCancelButton_OnMouseOver(UIMouseEvent evt, UIElement listeningElement)
+    {
         SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
-    private void OnCancledInput() {
+    private void OnCancledInput()
+    {
         Main.LocalPlayer.ToggleInv();
     }
 
-    private void Click_SearchArea(UIMouseEvent evt, UIElement listeningElement) {
-        if (evt.Target.Parent != _searchBoxPanel) {
+    private void Click_SearchArea(UIMouseEvent evt, UIElement listeningElement)
+    {
+        if (evt.Target.Parent != _searchBoxPanel)
+        {
             _searchBar.ToggleTakingText();
             _didClickSearchBar = true;
         }
     }
 
-    private void OnSearchContentsChanged(string contents) {
+    private void OnSearchContentsChanged(string contents)
+    {
         _searchString = contents;
         SetupBuffButtons();
     }
 
-    private void OnStartTakingInput() {
+    private void OnStartTakingInput()
+    {
         _searchBoxPanel.borderColor = Main.OurFavoriteColor;
     }
 
-    private void OnEndTakingInput() {
+    private void OnEndTakingInput()
+    {
         _searchBoxPanel.borderColor = new Color(35, 40, 83);
     }
 
-    public override void Click(UIMouseEvent evt) {
+    public override void Click(UIMouseEvent evt)
+    {
         base.Click(evt);
         AttemptStoppingUsingSearchbar(evt);
     }
 
-    private void AttemptStoppingUsingSearchbar(UIMouseEvent evt) {
+    private void AttemptStoppingUsingSearchbar(UIMouseEvent evt)
+    {
         _didClickSomething = true;
     }
-    
+
     #endregion
 
     /// <summary>
     /// 打开GUI界面
     /// </summary>
-    public void Open() {
+    public void Open()
+    {
         basePanel.Dragging = false;
         Visible = true;
         SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -300,7 +328,8 @@ public class BuffTrackerGUI : UIState
     /// <summary>
     /// 关闭GUI界面
     /// </summary>
-    public void Close() {
+    public void Close()
+    {
         Visible = false;
         Main.blockInput = false;
         SoundEngine.PlaySound(SoundID.MenuClose);
@@ -363,7 +392,7 @@ public class BuffButton : UIElement
         float grayScale = buffEnabled ? 1f : .4f;
 
         spriteBatch.Draw(texture, GetDimensions().Position(), new Color(grayScale, grayScale, grayScale));
-        
+
         if (!IsMouseHovering)
         {
             return;
@@ -375,10 +404,12 @@ public class BuffButton : UIElement
         spriteBatch.Draw(GetTexture("UI/Buff_HoverBorder").Value, drawPosition, Color.White);
 
         string mouseText = Lang.GetBuffName(BuffId);
-        if (buffEnabled) {
+        if (buffEnabled)
+        {
             mouseText += GetText("BuffTracker.LeftClickDisable");
         }
-        else {
+        else
+        {
             mouseText += GetText("BuffTracker.LeftClickEnable");
         }
         Main.instance.MouseText(mouseText);

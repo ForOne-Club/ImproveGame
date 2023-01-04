@@ -1,4 +1,4 @@
-﻿using ImproveGame.Interface.BaseUIEs;
+﻿using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.BannerChest.Elements
@@ -16,7 +16,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
             // 隐藏子元素, 可显示的范围是计算 Padding 之后的.
             OverflowHidden = true;
 
-            Append(list = new PackageList());
+            Append(list = new PackageList() { DragIgnore = true });
             Vector2 size = PackageList.GetSize(5, 5);
 
             Append(scrollbar = new SUIScrollbar() { HAlign = 1f });

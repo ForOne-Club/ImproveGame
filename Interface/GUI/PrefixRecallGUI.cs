@@ -147,7 +147,7 @@ public class PrefixTab : SUIPanel
     internal int PrefixId;
     internal int Price;
 
-    public PrefixTab(int prefixId, int value) : base(new(89, 116, 213), new(44, 57, 105, 160), CalculateBorder: false)
+    public PrefixTab(int prefixId, int value) : base(new(89, 116, 213), new(44, 57, 105, 160))
     {
         PrefixId = prefixId;
         CalculatePrice(value);

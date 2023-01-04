@@ -1,4 +1,4 @@
-﻿using ImproveGame.Interface.BaseUIEs;
+﻿using ImproveGame.Interface.BaseViews;
 
 namespace ImproveGame.Interface.BannerChest.Elements
 {
@@ -6,7 +6,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
     {
         public List<Item> items;
 
-        public override bool ContainsPoint(Vector2 point) => Parent.GetInnerDimensions().Contains(Main.MouseScreen);
+        public override bool ContainsPoint(Vector2 point) => Parent.IsMouseHovering;
         public PackageList()
         {
             SetPadding(0);

@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.SUIElements;
-using Terraria.GameContent.UI.Chat;
+﻿using ImproveGame.Common.Animations;using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.UIElements

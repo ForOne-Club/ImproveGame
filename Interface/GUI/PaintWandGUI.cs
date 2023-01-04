@@ -97,18 +97,18 @@ namespace ImproveGame.Interface.GUI
             float startAngle = -MathF.PI / 2 - includedAngle / 2; // 起始角度
             for (int i = 0; i < RoundButtons.Length; i++)
             {
-                Vector2 center = MainPanel.GetSizeInside() / 2f;
+                Vector2 center = MainPanel.GetInnerSizePixels() / 2f;
                 float angle = startAngle + includedAngle * i;
                 float length = 34f + (1 - Timer.Schedule) * 25f;
                 RoundButton button = RoundButtons[i];
                 button.Opacity = Timer.Schedule;
-                button.SetCenter(center + angle.ToRotationVector2() * length).Recalculate();
+                button.SetCenterPixels(center + angle.ToRotationVector2() * length).Recalculate();
             }
         }
 
         public void Open()
         {
-            MainPanel.SetCenter(TransformToUIPosition(Main.MouseScreen));
+            MainPanel.SetCenterPixels(TransformToUIPosition(Main.MouseScreen));
             MainPanel.Recalculate();
             Timer.Open();
 

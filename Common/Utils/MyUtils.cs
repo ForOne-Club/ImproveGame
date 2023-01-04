@@ -1,22 +1,8 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.Players;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using Terraria;
-using Terraria.Audio;
-using Terraria.GameContent;
 using Terraria.GameInput;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.UI;
-using static ImproveGame.Common.GlobalItems.ImproveItem;
 using static Microsoft.Xna.Framework.Vector2;
 
 namespace ImproveGame

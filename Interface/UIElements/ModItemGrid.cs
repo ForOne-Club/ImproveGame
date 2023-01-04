@@ -1,4 +1,4 @@
-﻿using ImproveGame.Interface.BaseUIEs;
+﻿using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.UIElements

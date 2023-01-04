@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.BaseUIEs;
+using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.UI.Chat;

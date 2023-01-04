@@ -1,52 +1,40 @@
-﻿using System.Drawing;
-
-namespace ImproveGame.Common.Utils
+﻿namespace ImproveGame.Common.Utils.Extensions
 {
-    public static class UIElementHelper
+    public static class Vector2Extensions
     {
-        public static UIElement SetCenter(this UIElement uie, Vector2 center)
+        public static StyleDimension ToStyleDim(this Vector2 dim)
+        {
+            return new StyleDimension(dim.X, dim.Y);
+        }
+
+        public static Vector2 Resize(this Vector2 size, Vector2 spacing, Vector2 count)
+        {
+            return (size + spacing) * count - spacing;
+        }
+    }
+
+    public static class CalculatedStyleExtensions
+    {
+        public static Vector2 Size(this CalculatedStyle calculatedStyle)
+        {
+            return new Vector2(calculatedStyle.Width, calculatedStyle.Height);
+        }
+    }
+
+    public static class UIElementExtensions
+    {
+        public static UIElement SetCenterPixels(this UIElement uie, Vector2 center)
         {
             uie.Left.Pixels = center.X - uie.Width.Pixels / 2f;
             uie.Top.Pixels = center.Y - uie.Height.Pixels / 2f;
             return uie;
         }
-        public static UIElement SetCenter(this UIElement uie, float x, float y)
+
+        public static UIElement SetCenterPixels(this UIElement uie, float x, float y)
         {
             uie.Left.Pixels = x - uie.Width.Pixels / 2f;
             uie.Top.Pixels = y - uie.Height.Pixels / 2f;
             return uie;
-        }
-
-        public static Vector2 GetCenter(this UIElement uie)
-        {
-            return new(uie.Left.Pixels + uie.Width.Pixels / 2f, uie.Height.Pixels + uie.Height.Pixels / 2f);
-        }
-
-        public static void AppendS(this UIElement parent, params UIElement[] uies)
-        {
-            foreach (var uie in uies)
-            {
-                parent.Append(uie);
-            }
-        }
-
-        public static UIElement SetHPadding(this UIElement uie, float padding)
-        {
-            uie.PaddingLeft = padding;
-            uie.PaddingRight = padding;
-            return uie;
-        }
-
-        public static UIElement SetVPadding(this UIElement uie, float padding)
-        {
-            uie.PaddingTop = padding;
-            uie.PaddingBottom = padding;
-            return uie;
-        }
-
-        public static Vector2 GetPPos(this UIElement uie)
-        {
-            return new(uie.Left.Pixels, uie.Top.Pixels);
         }
 
         public static Vector2 GetSize(this UIElement uie)
@@ -54,7 +42,7 @@ namespace ImproveGame.Common.Utils
             return new(uie.Width.Pixels, uie.Height.Pixels);
         }
 
-        public static Vector2 GetSizeInside(this UIElement uie)
+        public static Vector2 GetInnerSizePixels(this UIElement uie)
         {
             return new(uie.Width.Pixels - uie.HPadding(), uie.Height.Pixels - uie.VPadding());
         }
@@ -83,21 +71,8 @@ namespace ImproveGame.Common.Utils
 
         public static UIElement SetSize(this UIElement uie, Vector2 size, float precentWidth = 0, float precentHeight = 0)
         {
-            uie.SetSize(size.X, size.Y, precentWidth, precentHeight);
-            return uie;
-        }
-
-        public static UIElement SetInnerSize(this UIElement uie, float x, float y, float precentX = 0, float precentY = 0)
-        {
-            uie.Width.Set(x + uie.HPadding() + uie.MarginLeft + uie.MarginRight, precentX);
-            uie.Height.Set(y + uie.VPadding() + uie.MarginTop + uie.MarginBottom, precentY);
-            return uie;
-        }
-
-        public static UIElement SetInnerSize(this UIElement uie, Vector2 size, float precentX = 0, float precentY = 0)
-        {
-            uie.Width.Set(size.X + uie.HPadding() + uie.MarginLeft + uie.MarginRight, precentX);
-            uie.Height.Set(size.Y + uie.VPadding() + uie.MarginTop + uie.MarginBottom, precentY);
+            uie.Width.Set(size.X, precentWidth);
+            uie.Height.Set(size.Y, precentHeight);
             return uie;
         }
 

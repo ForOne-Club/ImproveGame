@@ -1,11 +1,9 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Players;
 using ImproveGame.Content;
-using Mono.Cecil.Cil;
+using ImproveGame.Interface.SUIElements;using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.ModLoader.Config;
-using Terraria.ID;
-using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Common.GlobalItems
 {

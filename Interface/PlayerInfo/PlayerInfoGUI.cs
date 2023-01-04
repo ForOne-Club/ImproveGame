@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
-using ImproveGame.Interface.BaseUIEs;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.PlayerInfo.UIElements;
 using ImproveGame.Interface.SUIElements;
@@ -23,19 +22,16 @@ namespace ImproveGame.Interface.PlayerInfo
             set => visible = true;
         }
         public static bool Opened { get; set; }
+        // new() 缩写，时间久了再看码太容易忘了使用的类型，还是不用缩写好（可以禁用显示虚线）
+        // var 也容易忘，为了保证下次阅读代码方便点我还是尽量不用了（我就不用了）
+        private static Player player;
+        private static Vector2
+            BeginPos = new Vector2(480, 0),
+            BeginPosInv = new Vector2(590, 0),
+            EndPos = new Vector2(480, 20),
+            EndPosInv = new Vector2(590, 20);
 
-        // readonly 单纯不想看 VS 一直给我报虚线，真**烦人（我也不想禁用显示）。
-        // new() 缩写，时间久了再看码太容易忘了使用的类型，还是不用缩写好（被迫禁用显示虚线）。
-        // var 也容易忘，为了保证下次阅读代码方便点我还是尽量不用了（我就不用了）。
-        private Player player;
-        // 动画用到的位置，BeginPos 是收起状态位置，EndPos 是开启状态位置
-        private static Vector2 BeginPos = new Vector2(480, 0);
-        private static Vector2 BeginPosInv = new Vector2(590, 0);
-        private static Vector2 EndPos = new Vector2(480, 20);
-        private static Vector2 EndPosInv = new Vector2(590, 20);
-
-        public AnimationTimer invTimer;
-        public AnimationTimer openTimer;
+        public AnimationTimer invTimer, openTimer;
         public SUIPanel mainPanel;
         public View tipPanel;
         public SUITitle title;
@@ -55,29 +51,28 @@ namespace ImproveGame.Interface.PlayerInfo
                 Timer = 0
             };
 
-            Append(mainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
-            {
-                Shaded = true
-            });
-            mainPanel.SetPadding(6);
+            mainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg) { Shaded = true };
+            mainPanel.SetPadding(0);
+            mainPanel.Join(this);
 
-            // 这种写法我也不确定好不好，本身 Append() 会执行一次 Recalculate()
-            // 然后 OnInitialize() 之后也会执行一次 Recalculate()，调用实在太频繁了。
-            mainPanel.Append(title = new SUITitle(PlyInfo("Name"), 0.5f)
+            title = new SUITitle(PlyInfo("Name"), 0.5f)
             {
-                background = UIColor.TitleBg, border = UIColor.TitleBg
-            });
+                background = UIColor.TitleBg2,
+                border = UIColor.PanelBorder,
+                RoundMode = RoundMode.Round4,
+                round4 = new Vector4(10f, 10f, 0, 0),
+            };
+            title.Height.Pixels = 50f;
+            title.Join(mainPanel);
 
-            // RelativeElement 这名字不好听，Android 组件都叫 xxxView，我也想这么叫。
-            // 但是格式不统一，全改掉名字又要花时间适应，*****。
-            // StyleDimension 这个 struct 真的有点莫名其妙，就俩属性整这么复杂。
-            mainPanel.Append(tipPanel = new View()
+            tipPanel = new View()
             {
-                Spacing = new Vector2(6),
                 Relative = RelativeMode.Vertical,
                 OverflowHidden = true
-            });
+            };
+            tipPanel.SetPadding(8, 6, 8, 6);
             tipPanel.SetInnerPixels(PlyInfoCard.TotalSize(3, 7));
+            tipPanel.Join(mainPanel);
 
             title.Width.Pixels = tipPanel.Width.Pixels;
 
@@ -99,18 +94,7 @@ namespace ImproveGame.Interface.PlayerInfo
 
             tipPanel.Append(new PlyInfoCard(PlyInfo("SummonDamage"), () => $"{GetDamage(DamageClass.Summon)}%", "Summon"));
             tipPanel.Append(new PlyInfoCard(PlyInfo("MaxMinions"), () => $"{player.slotsMinions}/{player.maxMinions}", "Summon"));
-            tipPanel.Append(new PlyInfoCard(PlyInfo("MaxTurrets"), () =>
-            {
-                int count = 0;
-                for (int i = 0; i < Main.projectile.Length; i++)
-                {
-                    if (Main.projectile[i].active && Main.projectile[i].owner == player.whoAmI && Main.projectile[i].WipableTurret)
-                    {
-                        count++;
-                    }
-                }
-                return $"{count}/{player.maxTurrets}";
-            }, "Summon"));
+            tipPanel.Append(new PlyInfoCard(PlyInfo("MaxTurrets"), MaxTurrets, "Summon"));
 
             tipPanel.Append(new PlyInfoCard(PlyInfo("Endurance"), () => $"{MathF.Round(player.endurance * 100f)}%", "Endurance3"));
 
@@ -122,13 +106,12 @@ namespace ImproveGame.Interface.PlayerInfo
             tipPanel.Append(new PlyInfoCard(PlyInfo("WingTimeMax"), () => $"{MathF.Round((player.wingTimeMax + player.rocketTimeMax * 6) / 60f, 2)}s", "Flying"));
 
             // 关闭按钮
-            mainPanel.Append(Switch = new PlyInfoSwitch()
+            Switch = new PlyInfoSwitch(UIColor.TitleBg2, UIColor.PanelBorder)
             {
-                Spacing = new Vector2(6),
                 Width = tipPanel.Width,
-                HAlign = 0.5f,
-                Opened = () => Opened
-            });
+                IsOpen = () => Opened,
+            };
+            Switch.Join(mainPanel);
 
             // 切换状态的时候保证绘制不越界 OverflowHidden 设置一下。动画结束之后再设置回来。
             Switch.OnMouseDown += (_, _) =>
@@ -139,8 +122,22 @@ namespace ImproveGame.Interface.PlayerInfo
             openTimer.OnOpenComplete += () => { tipPanel.OverflowHidden = false; };
         }
 
+        private string MaxTurrets()
+        {
+            int count = 0;
+            for (int i = 0; i < Main.projectile.Length; i++)
+            {
+                if (Main.projectile[i].active && Main.projectile[i].owner == player.whoAmI && Main.projectile[i].WipableTurret)
+                {
+                    count++;
+                }
+            }
+            return $"{count}/{player.maxTurrets}";
+        }
+
         public override void Update(GameTime gameTime)
         {
+            bool Recalculate = false;
             // 动画开/关
             if (Main.playerInventory)
                 invTimer.TryOpen();
@@ -160,30 +157,43 @@ namespace ImproveGame.Interface.PlayerInfo
                 Main.LocalPlayer.mouseInterface = true;
             }
 
+            float cardHeight = MathHelper.Lerp(0, PlyInfoCard.TotalSize(3, 7).Y + tipPanel.VPadding(), openTimer.Schedule);
+            if (tipPanel.Height.Pixels != cardHeight)
+            {
+                tipPanel.Height.Pixels = cardHeight;
+                Recalculate = true;
+            }
+
+            Switch.Extension.Y = MathHelper.Lerp(3, 0, openTimer.Schedule);
+
             Vector2 mainSize = new Vector2(
-                MathHelper.Lerp(80, tipPanel.Width.Pixels, openTimer.Schedule),
-                title.Height.Pixels + 6f + tipPanel.Height.Pixels + 6f + Switch.Height.Pixels
+                MathHelper.Lerp(150, tipPanel.Width.Pixels, openTimer.Schedule),
+                title.Height.Pixels + tipPanel.Height.Pixels + Switch.Height.Pixels
                 );
 
-            if (mainPanel.GetSizeInside() != mainSize)
+            if (mainPanel.GetInnerSizePixels() != mainSize)
             {
-                mainPanel.SetInnerSize(mainSize).Recalculate();
-                BeginPos.Y = BeginPosInv.Y = 52 - mainPanel.Height.Pixels;
+                mainPanel.SetInnerPixels(mainSize);
+                Recalculate = true;
+                BeginPos.Y = BeginPosInv.Y = 62 - mainPanel.Height.Pixels;
             }
 
+            Vector2 beginPos = Vector2.Lerp(BeginPos, BeginPosInv, invTimer.Schedule);
             Vector2 endPos = Vector2.Lerp(EndPos, EndPosInv, invTimer.Schedule);
-            Vector2 startPos = Vector2.Lerp(BeginPos, BeginPosInv, invTimer.Schedule);
-            Vector2 Pos = Vector2.Lerp(startPos, endPos, openTimer.Schedule);
+            Vector2 Pos = Vector2.Lerp(beginPos, endPos, openTimer.Schedule);
 
-            if (Pos != mainPanel.GetPosPixel())
+            if (mainPanel.GetPosPixel() != endPos)
             {
-                mainPanel.SetPosPixels(Pos);
-                mainPanel.Recalculate();
+                mainPanel.SetPosPixels(endPos);
+                Recalculate = true;
             }
+
+            if (Recalculate)
+                mainPanel.Recalculate();
         }
 
-        public float GetDamage(DamageClass damageClass) => MathF.Round((player.GetTotalDamage(damageClass).Additive - 1) * 100f);
-        public float GetCrit(DamageClass damageClass) => player.GetTotalCritChance(damageClass);
-        public static string PlyInfo(string str) => GetText($"UI.PlayerInfo.{str}");
+        private static float GetDamage(DamageClass damageClass) => MathF.Round((player.GetTotalDamage(damageClass).Additive - 1) * 100f);
+        private static float GetCrit(DamageClass damageClass) => player.GetTotalCritChance(damageClass);
+        private static string PlyInfo(string str) => GetText($"UI.PlayerInfo.{str}");
     }
 }

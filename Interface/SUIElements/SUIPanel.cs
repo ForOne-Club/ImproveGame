@@ -1,34 +1,53 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.BaseUIEs;
-using ImproveGame.Interface.PlayerInfo.UIElements;
+using ImproveGame.Interface.BaseViews;
+using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
     public class SUIPanel : View
     {
+        /// <summary>
+        /// 显示窗口阴影
+        /// </summary>
         internal bool Shaded;
         internal float ShadowThickness;
         internal Color ShadowColor;
+        /// <summary>
+        /// 可拖动
+        /// </summary>
         internal bool Draggable;
         internal bool Dragging;
         internal Vector2 Offset;
 
-        public float round;
         public float border;
         public Color borderColor;
         public Color backgroundColor;
-        public bool CalculateBorder;
 
-        public SUIPanel(Color borderColor, Color backgroundColor, float round = 12, float border = 3, bool CalculateBorder = true)
+        public SUIPanel(Color borderColor, Color backgroundColor, float round = 12, float border = 3, bool Draggable = false)
         {
             SetPadding(10f);
+            DragIgnore = true;
+            RoundMode = RoundMode.Round;
             ShadowThickness = 50f;
             ShadowColor = new Color(0, 0, 0, 0.25f);
             this.borderColor = borderColor;
             this.backgroundColor = backgroundColor;
             this.round = round;
             this.border = border;
-            this.CalculateBorder = CalculateBorder;
+            this.Draggable = Draggable;
+            OnMouseDown += DragStart;
+            OnMouseUp += DragEnd;
+        }
+
+        public SUIPanel(Color backgroundColor, Vector4 round4)
+        {
+            SetPadding(10f);
+            DragIgnore = true;
+            RoundMode = RoundMode.Round4;
+            ShadowThickness = 50f;
+            ShadowColor = new Color(0, 0, 0, 0.25f);
+            this.backgroundColor = backgroundColor;
+            this.round4 = round4;
             OnMouseDown += DragStart;
             OnMouseUp += DragEnd;
         }
@@ -38,28 +57,32 @@ namespace ImproveGame.Interface.SUIElements
             CalculatedStyle dimenstions = GetDimensions();
             Vector2 pos = dimenstions.Position();
             Vector2 size = dimenstions.Size();
-
-            if (Shaded)
+            pos -= new Vector2(Extension.X, Extension.Y);
+            size += new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);
+            switch (RoundMode)
             {
-                Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
-                Vector2 ShadowPos = pos - ShadowThickness;
-                Vector2 ShadowSize = size + ShadowThickness * 2;
-                PixelShader.DrawShadow(ShadowPos, ShadowSize, round, ShadowColor, this.ShadowThickness);
+                case RoundMode.Round:
+                    if (Shaded)
+                    {
+                        Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
+                        Vector2 ShadowPos = pos - ShadowThickness;
+                        Vector2 ShadowSize = size + ShadowThickness * 2;
+                        PixelShader.DrawShadow(ShadowPos, ShadowSize, round, ShadowColor, this.ShadowThickness);
+                    }
+                    PixelShader.DrawRoundRect(pos, size, round, backgroundColor, border, borderColor);
+                    break;
+                case RoundMode.Round4:
+                    PixelShader.DrawRoundRect(pos, size, round4, backgroundColor, 3, UIColor.PanelBorder);
+                    break;
             }
-
-            if (CalculateBorder)
-            {
-                pos -= new Vector2(border);
-                size += new Vector2(border * 2);
-            }
-            PixelShader.DrawRoundRect(pos, size, round, backgroundColor, border, borderColor);
         }
 
         // 可拖动界面
         private void DragStart(UIMouseEvent evt, UIElement listeningElement)
         {
+            View view = evt.Target is View ? evt.Target as View : null;
             // 当点击的是子元素不进行移动
-            if (Draggable && (evt.Target == this || evt.Target is SUITitle or PlyInfoCard || evt.Target.GetType().IsAssignableFrom(typeof(View)) || evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
+            if (Draggable && (evt.Target == this || (view is not null && view.DragIgnore) || evt.Target.GetType().IsAssignableFrom(typeof(View)) || evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
             {
                 Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
                 Dragging = true;

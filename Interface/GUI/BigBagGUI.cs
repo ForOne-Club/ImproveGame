@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
-using ImproveGame.Interface.BaseUIEs;
+using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
@@ -122,11 +122,11 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(ItemGrid = new ModItemGrid()
             {
                 First = true,
-                Relative = BaseUIEs.RelativeMode.Vertical,
+                Relative = BaseViews.RelativeMode.Vertical,
                 Spacing = new Vector2(10, 15)
             });
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
-            mainPanel.SetInnerSize(ItemGrid.Width.Pixels, ItemGrid.Bottom());
+            mainPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
         }
 
         /// <summary>
@@ -152,9 +152,9 @@ namespace ImproveGame.Interface.GUI
             if (mainPanel.IsMouseHovering)
                 Main.LocalPlayer.mouseInterface = true;
 
-            if (mainPanel.GetSizeInside().Y != ItemGrid.Height.Pixels)
+            if (mainPanel.GetInnerSizePixels().Y != ItemGrid.Height.Pixels)
             {
-                mainPanel.SetInnerSize(ItemGrid.Width.Pixels, ItemGrid.Bottom());
+                mainPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
                 mainPanel.Recalculate();
             }
         }

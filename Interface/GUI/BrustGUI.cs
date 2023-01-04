@@ -98,10 +98,11 @@ namespace ImproveGame.Interface.GUI
             Vector2 center = modeButton.GetDimensions().Center();
             float length = 44f + (1 - Timer.Schedule) * 25f;
             tileButton.Opacity = Timer.Schedule;
-            tileButton.SetCenter(center + new Vector2(-1, 0) * length).Recalculate();
+            tileButton.SetCenterPixels(center + new Vector2(-1, 0) * length).Recalculate();
             wallButton.Opacity = Timer.Schedule;
-            wallButton.SetCenter(center + new Vector2(1, 0) * length).Recalculate();
+            wallButton.SetCenterPixels(center + new Vector2(1, 0) * length).Recalculate();
             modeButton.Opacity = Timer.Schedule;
+            Recalculate();
         }
 
         private void SwitchMode(UIMouseEvent evt, UIElement listeningElement)
@@ -120,10 +121,11 @@ namespace ImproveGame.Interface.GUI
             int y = center ? Main.screenHeight / 2 - 60 : Main.mouseY;
             TransformToUIPosition(ref x, ref y);
             Timer.Open();
-            modeButton.SetCenter(x, y);
+            modeButton.SetCenterPixels(x, y);
             modeButton.mainImage = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
             Visible = true;
             _mouseRightPrev = true; // 防止一打开就关闭
+            Recalculate();
         }
 
         /// <summary>

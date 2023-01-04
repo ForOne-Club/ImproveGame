@@ -8,7 +8,7 @@ namespace ImproveGame.Interface.UIElements
         private UIImage tickUI;
         private int _npcId;
 
-        public LifeformTab(int npcId) : base(new(89, 116, 213), new(44, 57, 105, 160), CalculateBorder: false)
+        public LifeformTab(int npcId) : base(new(89, 116, 213), new(44, 57, 105, 160))
         {
             _npcId = npcId;
             this.SetSize(new Vector2(0f, 36f), 1f);

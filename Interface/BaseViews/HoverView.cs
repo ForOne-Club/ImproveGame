@@ -1,25 +1,20 @@
 ﻿using ImproveGame.Common.Animations;
 
-namespace ImproveGame.Interface.BaseUIEs
+namespace ImproveGame.Interface.BaseViews
 {
     /// <summary>
     /// 大背包按钮背景上的效果，需要直接继承此类即可。(继承自 RelativeUIE)
     /// </summary>
-    public class HoverEffect : View
+    public class HoverView : View
     {
-        public bool bordered;
         public AnimationTimer hoverTimer;
-        public Color startColor;
-        public Color endColor;
-        public float startWidth;
-        public float endWidth;
-        public float round;
-
-        public HoverEffect()
+        public Color beginColor, endColor;
+        public float startWidth, endWidth;
+        public HoverView()
         {
-            hoverTimer = new(3);
+            hoverTimer = new AnimationTimer(3);
             round = 10;
-            startColor = new Color(0, 0, 0, 0);
+            beginColor = new Color(0, 0, 0, 0);
             endColor = new Color(0, 0, 0, 0.5f);
             startWidth = 0f;
             endWidth = 4f;
@@ -45,19 +40,20 @@ namespace ImproveGame.Interface.BaseUIEs
 
         protected override void DrawSelf(SpriteBatch sb)
         {
-            Vector2 pos = GetDimensions().Position();
-            Vector2 size = GetDimensions().Size();
+            Vector2 pos = GetDimensions().Position() - new Vector2(Extension.X, Extension.Y);
+            Vector2 size = GetDimensions().Size() + new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);
 
             Vector2 shadow = Vector2.Lerp(new(startWidth), new(endWidth), hoverTimer.Schedule);
-            Color color = Color.Lerp(startColor, endColor, hoverTimer.Schedule);
+            Color color = Color.Lerp(beginColor, endColor, hoverTimer.Schedule);
 
-            if (bordered)
+            switch (RoundMode)
             {
-                PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, round + shadow.X, Color.Transparent, 3f, color);
-            }
-            else
-            {
-                PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, round + shadow.X, color);
+                case RoundMode.Round:
+                    PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, round + shadow.X, color);
+                    break;
+                case RoundMode.Round4:
+                    PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, round4 + new Vector4(shadow.X), color);
+                    break;
             }
         }
     }
