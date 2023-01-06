@@ -11,8 +11,8 @@ namespace ImproveGame.Interface.SUIElements
         private float textScale;
         public Color textColor;
         public Color textBorderColor;
-        public Color background = new Color(35, 40, 83);
-        public Color border = new Color();
+        public Color background;
+        public Color border;
 
         public string Text
         {
@@ -26,8 +26,9 @@ namespace ImproveGame.Interface.SUIElements
 
         public SUITitle(string text, float textScale)
         {
-            background = UIColor.TitleBg;
             this.textScale = textScale;
+            this.Text = text;
+            background = UIColor.TitleBg;
             PaddingTop = 5;
             PaddingBottom = 5;
             PaddingLeft = 30;
@@ -35,7 +36,6 @@ namespace ImproveGame.Interface.SUIElements
             DragIgnore = true;
             round = 10f;
 
-            Text = text;
             SetInnerPixels(textSize);
         }
 
@@ -51,7 +51,7 @@ namespace ImproveGame.Interface.SUIElements
                     PixelShader.DrawRoundRect(position, size, round, background);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(position, size, round4, background, 3, border);
+                    PixelShader.DrawRoundRect(position, size, round4, background, 2, border);
                     break;
             }
             rectangle = GetInnerDimensions();

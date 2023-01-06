@@ -6,18 +6,23 @@ namespace ImproveGame.Interface.SUIElements
     public class SUICross : HoverView
     {
         public float forkSize;
-        public float radius;
-        public float border;
-        public Color borderColor;
+        public float crossRound;
+        public float border, crossBorder;
+        public Color beginBg, endBg, borderColor, crossColor;
 
         public SUICross(float forkSize)
         {
-            radius = 3.7f;
-            border = 2;
+            crossRound = 4.5f;
+            this.border = 2;
+            this.crossBorder = 2;
             this.forkSize = forkSize;
-            Width.Pixels = forkSize + 20;
-            Height.Pixels = forkSize + 10;
+            Width.Pixels = 50;
+            Height.Pixels = 50;
             borderColor = UIColor.PanelBorder;
+            crossColor = UIColor.Cross;
+            beginBg = UIColor.TitleBg * 0.5f;
+            endBg = UIColor.TitleBg;
+            round = 10f;
         }
 
         public override void MouseOver(UIMouseEvent evt)
@@ -29,23 +34,23 @@ namespace ImproveGame.Interface.SUIElements
         protected override void DrawSelf(SpriteBatch sb)
         {
             base.DrawSelf(sb);
-            Color background = Color.Lerp(UIColor.TitleBg * 0.5f, UIColor.TitleBg * 1f, hoverTimer.Schedule);
-            Color fork = Color.Lerp(Color.Transparent, UIColor.Cross, hoverTimer.Schedule);
-
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
+
+            Color background = Color.Lerp(beginBg, endBg, hoverTimer.Schedule);
+            Color fork = Color.Lerp(Color.Transparent, crossColor, hoverTimer.Schedule);
 
             switch (RoundMode)
             {
                 case RoundMode.Round:
-                    PixelShader.DrawRoundRect(pos, size, 10f, background, 3f, borderColor);
+                    PixelShader.DrawRoundRect(pos, size, round, background, border, borderColor);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(pos, size, round4, background, 3f, borderColor);
+                    PixelShader.DrawRoundRect(pos, size, round4, background, border, borderColor);
                     break;
             }
             Vector2 forkPos = pos + size / 2 - new Vector2(forkSize / 2);
-            PixelShader.DrawCross(forkPos, forkSize, radius, fork, border, borderColor);
+            PixelShader.DrawCross(forkPos, forkSize, crossRound, fork, crossBorder, borderColor);
         }
     }
 }

@@ -140,6 +140,13 @@ namespace ImproveGame.Interface.BaseViews
             return this;
         }
 
+        public View SetPadding(float h, float v)
+        {
+            PaddingLeft = PaddingTop = h;
+            PaddingRight = PaddingBottom = v;
+            return this;
+        }
+
         // 获取
         public float RightPixels()
         {

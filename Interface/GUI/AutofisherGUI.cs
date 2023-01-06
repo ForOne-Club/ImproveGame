@@ -42,7 +42,7 @@ namespace ImproveGame.Interface.GUI
             panelHeight = 256f;
             panelWidth = 280f;
 
-            basePanel = new(new(29, 34, 70), new(44, 57, 105, 160));
+            basePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160));
             basePanel.SetPos(panelLeft, panelTop).SetSize(panelWidth, panelHeight);
             Append(basePanel);
 

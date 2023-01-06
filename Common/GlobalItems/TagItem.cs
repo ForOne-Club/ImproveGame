@@ -232,7 +232,7 @@ namespace ImproveGame.Common.GlobalItems
             }
             if ((useBox is null && Main.SettingsEnabled_OpaqueBoxBehindTooltips) || useBox is true) {
                 if (shaderBorder)
-                    PixelShader.DrawRoundRect(new Vector2(x - widthOffset, y - heightOffset), new Vector2(length + widthOffset * 2, lengthY + heightOffset + heightOffset / 2), 12, new(44, 57, 105, 200), 3, Color.Black);
+                    PixelShader.DrawRoundRect(new Vector2(x - widthOffset, y - heightOffset), new Vector2(length + widthOffset * 2, lengthY + heightOffset + heightOffset / 2), 12, new(44, 57, 105, 200), 2, Color.Black);
                 else
                     TrUtils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
             }

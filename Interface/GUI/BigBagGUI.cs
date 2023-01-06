@@ -43,7 +43,7 @@ namespace ImproveGame.Interface.GUI
             mainPanel.Append(title = new SUITitle(GetText("SuperVault.Name"), 0.5f));
 
             // Cross
-            mainPanel.Append(cross = new SUICross(30)
+            mainPanel.Append(cross = new SUICross(24)
             {
                 HAlign = 1f,
                 Height = new StyleDimension(title.Height.Pixels, 0)

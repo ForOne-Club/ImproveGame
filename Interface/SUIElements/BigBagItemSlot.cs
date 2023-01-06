@@ -293,7 +293,7 @@ namespace ImproveGame.Interface.SUIElements
             Color borderColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
             Color background = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBG;
 
-            PixelShader.DrawRoundRect(pos, size, 12, background, 3, borderColor);
+            PixelShader.DrawRoundRect(pos, size, 12, background, 2, borderColor);
 
             if (Item.IsAir)
                 return;

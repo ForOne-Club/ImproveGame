@@ -31,10 +31,10 @@ float sdTriangleIsosceles(float2 p, float2 q)
 
 float4 ps_main(float2 coords : TEXCOORD0) : COLOR0
 {
-    float2 rt = size / 2;
-    float2 pos = abs(coords * size - rt);
-    float d = length(pos - min(pos.x + pos.y, rt.x - round) * 0.5) - round;
-    return lerp(lerp(backgroundColor, borderColor, smoothstep(0 - border, 1 - border, d)), 0, smoothstep(0, 1, d));
+    float2 s = size / 2;
+    float2 p = abs(coords * size - s);
+    float d = length(p - min(p.x + p.y, s) * 0.5) - round;
+    return lerp(lerp(backgroundColor, borderColor, smoothstep(-1, 0.5, d + border)), 0, smoothstep(-1, 0.5, d));
 }
 technique Technique1
 {

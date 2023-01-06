@@ -16,15 +16,18 @@ namespace ImproveGame.Interface.BannerChest.Elements
             // 隐藏子元素, 可显示的范围是计算 Padding 之后的.
             OverflowHidden = true;
 
-            Append(list = new PackageList() { DragIgnore = true });
-            Vector2 size = PackageList.GetSize(5, 5);
+            list = new PackageList() { DragIgnore = true };
+            list.SetSizePixels(PackageList.GetSize(5, 5));
+            list.Join(this);
 
-            Append(scrollbar = new SUIScrollbar() { HAlign = 1f });
+            scrollbar = new SUIScrollbar() { HAlign = 1f };
             scrollbar.Left.Pixels = -1;
-            scrollbar.Height.Pixels = size.Y;
+            scrollbar.SetSizePixels(16, list.Height.Pixels);
+            scrollbar.SetPadding(4);
+            scrollbar.Join(this);
 
-            Width.Pixels = size.X + 32;
-            Height.Pixels = size.Y + 1;
+            Width.Pixels = list.Width.Pixels + scrollbar.Width.Pixels + 9;
+            Height.Pixels = list.Height.Pixels + 1;
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)

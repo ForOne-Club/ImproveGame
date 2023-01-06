@@ -45,8 +45,7 @@ namespace ImproveGame.Interface.SUIElements
         public SUIScrollbar()
         {
             Visible = true;
-            Width.Pixels = 20;
-            MaxWidth.Pixels = 20;
+            Width.Pixels = 20f;
             SetPadding(5);
         }
 
@@ -153,7 +152,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 size = dimension.Size();
 
             // 滚动条背板
-            PixelShader.DrawRoundRect(position, size, size.X / 2, UIColor.ScrollBarBg, 3, UIColor.ScrollBarBorder);
+            PixelShader.DrawRoundRect(position, size, size.X / 2, UIColor.ScrollBarBg, 2, UIColor.ScrollBarBorder);
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();

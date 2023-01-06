@@ -1,4 +1,5 @@
-﻿using ImproveGame.Interface.BannerChest.Elements;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.BannerChest.Elements;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
@@ -44,7 +45,7 @@ namespace ImproveGame.Interface.BannerChest
             mainPanel.SetPadding(0);
             mainPanel.Join(this);
 
-            SUIPanel titlePanel = new SUIPanel(UIColor.TitleBg2, new Vector4(10, 10, 0, 0));
+            SUIPanel titlePanel = new SUIPanel(UIColor.TitleBg2, UIColor.PanelBorder, new Vector4(10, 10, 0, 0), 2);
             titlePanel.SetPadding(0);
             titlePanel.Width.Precent = 1f;
             titlePanel.Height.Pixels = 50f;
@@ -59,13 +60,14 @@ namespace ImproveGame.Interface.BannerChest
             title.SetInnerPixels(title.textSize);
             title.Join(titlePanel);
 
-            cross = new SUICross(30)
+            cross = new SUICross(24)
             {
                 HAlign = 1f,
                 VAlign = 0.5f,
-                // borderColor = Color.White,
                 RoundMode = RoundMode.Round4,
-                round4 = new Vector4(0, 10, 0, 0)
+                round4 = new Vector4(0, 10, 0, 0),
+                beginBg = UIColor.TitleBg2 * 0.5f,
+                endBg = UIColor.TitleBg2,
             };
             cross.Height.Set(0f, 1f);
             cross.OnMouseDown += (_, _) => Close();
@@ -77,16 +79,23 @@ namespace ImproveGame.Interface.BannerChest
             switch2 = new SUISwitch(() => package.AutoSort, state => package.AutoSort = state, GetText("PackageGUI.AutoSort"), 0.8f);
             switch2.SetPosPixels(switch1.Right() + 8f, switch1.Top.Pixels).Join(mainPanel);
 
-            gridView = new View() { DragIgnore = true };
-            gridView.Top.Pixels = switch1.Bottom() + 8f;
-            gridView.SetPadding(14f, 0f, 14f, 14f);
-            gridView.OnMouseDown += DownGrid;
+            // gridView = new View() { DragIgnore = true };
             grid = new PackageGrid() { DragIgnore = true };
-            grid.Join(gridView);
-            gridView.SetInnerPixels(grid.Width.Pixels, grid.Height.Pixels).Join(mainPanel);
+            grid.Top.Pixels = switch1.Bottom() + 8f;
+            grid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(grid.Width.Pixels, grid.Height.Pixels);
+            grid.OnMouseDown += DownGrid;
+            grid.Join(mainPanel);
+            // gridView.SetInnerPixels(grid.Width.Pixels, grid.Height.Pixels).Join(mainPanel);
 
-            mainPanel.SetInnerPixels(gridView.Width.Pixels, gridView.Bottom());
+            mainPanel.SetInnerPixels(grid.Width.Pixels, grid.Bottom());
         }
+
+        /*public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+            PixelShader.DrawRoundRect(Main.MouseScreen, new Vector2(200, 100), new Vector4(10, 0, 10, 0),
+                UIColor.PanelBg, new Vector4(2, 3, 4, 5), UIColor.PanelBorder, 0f);
+        }*/
 
         private void DownGrid(UIMouseEvent evt, UIElement listeningElement)
         {

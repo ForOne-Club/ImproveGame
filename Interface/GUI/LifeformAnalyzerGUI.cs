@@ -28,7 +28,7 @@ namespace ImproveGame.Interface.GUI
 
         public override void OnInitialize()
         {
-            _basePanel = new(new(29, 34, 70), new(44, 57, 105, 160));
+            _basePanel = new(new Color(29, 34, 70), new Color(44, 57, 105, 160));
             _basePanel.Left.Set(PanelLeft, 0f);
             _basePanel.Top.Set(PanelTop, 0f);
             _basePanel.Width.Set(PanelWidth, 0f);

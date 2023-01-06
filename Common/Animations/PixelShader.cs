@@ -24,16 +24,17 @@
         /// <summary>
         /// 圆角矩形，无边框
         /// </summary>
-        public static void DrawRoundRect(Vector2 pos, Vector2 size, float round, Color backgroundColor, bool ui = true)
+        public static void DrawRoundRect(Vector2 pos, Vector2 size, float round, Color backgroundColor, float innerShrinkage = 1, bool ui = true)
         {
-            pos -= new Vector2(1);
-            size += new Vector2(2);
-            round = MathHelper.Clamp(round + 1, 0, MathF.Min(size.X, size.Y) / 2);
+            pos -= new Vector2(innerShrinkage);
+            size += new Vector2(innerShrinkage * 2);
+            round = MathHelper.Clamp(round + innerShrinkage, 0, MathF.Min(size.X, size.Y) / 2);
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
             effect.Parameters[nameof(round)].SetValue(round);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
+            effect.Parameters[nameof(innerShrinkage)].SetValue(innerShrinkage);
             sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
             effect.CurrentTechnique.Passes["NoBorder"].Apply();
             sb.Draw(texture, pos, null, Color.White, 0, new(0), size, 0, 1f);
@@ -43,16 +44,17 @@
         /// <summary>
         /// 圆角矩形，无边框，支持单独设置四个圆角
         /// </summary>
-        public static void DrawRoundRect(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, bool ui = true)
+        public static void DrawRoundRect(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, float innerShrinkage = 1, bool ui = true)
         {
-            pos -= new Vector2(1);
-            size += new Vector2(2);
-            round4 = Vector4.Max(Vector4.Zero, round4) + new Vector4(1);
+            pos -= new Vector2(innerShrinkage);
+            size += new Vector2(innerShrinkage * 2);
+            round4 = Vector4.Max(Vector4.Zero, round4) + new Vector4(innerShrinkage);
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
             effect.Parameters[nameof(round4)].SetValue(round4);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
+            effect.Parameters[nameof(innerShrinkage)].SetValue(innerShrinkage);
             sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
             effect.CurrentTechnique.Passes["NoBorderR4"].Apply();
             sb.Draw(texture, pos, null, Color.White, 0, new(0), size, 0, 1f);
@@ -62,18 +64,19 @@
         /// <summary>
         /// 圆角矩形，有边框
         /// </summary>
-        public static void DrawRoundRect(Vector2 pos, Vector2 size, float round, Color backgroundColor, float border, Color borderColor, bool ui = true)
+        public static void DrawRoundRect(Vector2 pos, Vector2 size, float round, Color backgroundColor, float border, Color borderColor, float innerShrinkage = 1, bool ui = true)
         {
-            pos -= new Vector2(1);
-            size += new Vector2(2);
-            round = MathHelper.Clamp(round + 1, 0, MathF.Min(size.X, size.Y) / 2);
+            pos -= new Vector2(innerShrinkage);
+            size += new Vector2(innerShrinkage * 2);
+            round = MathHelper.Clamp(round + innerShrinkage, 0, MathF.Min(size.X, size.Y) / 2);
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
             effect.Parameters[nameof(round)].SetValue(round);
-            effect.Parameters[nameof(border)].SetValue(border - 1);
+            effect.Parameters[nameof(border)].SetValue(border);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             effect.Parameters[nameof(borderColor)].SetValue(borderColor.ToVector4());
+            effect.Parameters[nameof(innerShrinkage)].SetValue(innerShrinkage);
             sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
             effect.CurrentTechnique.Passes["HasBorder"].Apply();
             sb.Draw(texture, pos, null, Color.White, 0, new(0), size, 0, 1f);
@@ -83,18 +86,19 @@
         /// <summary>
         /// 圆角矩形，有边框
         /// </summary>
-        public static void DrawRoundRect(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, float border, Color borderColor, bool ui = true)
+        public static void DrawRoundRect(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, float border, Color borderColor, float innerShrinkage = 1, bool ui = true)
         {
-            pos -= new Vector2(1);
-            size += new Vector2(2);
-            round4 = Vector4.Max(Vector4.Zero, round4) + new Vector4(1);
+            pos -= new Vector2(innerShrinkage);
+            size += new Vector2(innerShrinkage * 2);
+            round4 = Vector4.Max(Vector4.Zero, round4) + new Vector4(innerShrinkage);
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
             effect.Parameters[nameof(round4)].SetValue(round4);
-            effect.Parameters[nameof(border)].SetValue(border - 1);
+            effect.Parameters[nameof(border)].SetValue(border);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             effect.Parameters[nameof(borderColor)].SetValue(borderColor.ToVector4());
+            effect.Parameters[nameof(innerShrinkage)].SetValue(innerShrinkage);
             sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
             effect.CurrentTechnique.Passes["HasBorderR4"].Apply();
             sb.Draw(texture, pos, null, Color.White, 0, new(0), size, 0, 1f);
@@ -104,23 +108,24 @@
         /// <summary>
         /// 圆角矩形：有边框。单独设置：圆角、边框。
         /// </summary>
-        /*public static void DrawRoundRect(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, Vector4 border4, Color borderColor, bool ui = true)
+        public static void DrawRoundRect(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, Vector4 border4, Color borderColor, float innerShrinkage = 1, bool ui = true)
         {
-            pos -= new Vector2(1);
-            size += new Vector2(2);
-            round4 = Vector4.Max(Vector4.Zero, round4) + new Vector4(1);
+            pos -= new Vector2(innerShrinkage);
+            size += new Vector2(innerShrinkage * 2);
+            round4 = Vector4.Max(Vector4.Zero, round4) + new Vector4(innerShrinkage);
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
             effect.Parameters[nameof(round4)].SetValue(round4);
-            effect.Parameters[nameof(border4)].SetValue(border4 - new Vector4(1));
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
+            effect.Parameters[nameof(border4)].SetValue(border4);
             effect.Parameters[nameof(borderColor)].SetValue(borderColor.ToVector4());
+            effect.Parameters[nameof(innerShrinkage)].SetValue(innerShrinkage);
             sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
             effect.CurrentTechnique.Passes["HasBorderR4B4"].Apply();
             sb.Draw(texture, pos, null, Color.White, 0, new(0), size, 0, 1f);
             sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
-        }*/
+        }
 
         /// <summary>
         /// 进度条，有边框
@@ -132,20 +137,21 @@
         /// <param name="border"></param>
         /// <param name="borderColor">[0, 1]</param>
         /// <param name="ui"></param>
-        public static void DrawRoundRect(Vector2 pos, Vector2 size, float round, Color bgColor1, Color bgColor2, float border, Color borderColor, float progress, bool ui = true, int mode = 0)
+        public static void DrawRoundRect(Vector2 pos, Vector2 size, float round, Color bgColor1, Color bgColor2, float border, Color borderColor, float progress, float innerShrinkage = 1, bool ui = true, int mode = 0)
         {
-            pos -= new Vector2(1);
-            size += new Vector2(2);
-            round = MathHelper.Clamp(round + 1, 0, MathF.Min(size.X, size.Y) / 2);
+            pos -= new Vector2(innerShrinkage);
+            size += new Vector2(innerShrinkage * 2);
+            round = MathHelper.Clamp(round + innerShrinkage, 0, MathF.Min(size.X, size.Y) / 2);
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
             effect.Parameters[nameof(round)].SetValue(round);
-            effect.Parameters[nameof(border)].SetValue(border - 1);
+            effect.Parameters[nameof(border)].SetValue(border);
             effect.Parameters[nameof(bgColor1)].SetValue(bgColor1.ToVector4());
             effect.Parameters[nameof(bgColor2)].SetValue(bgColor2.ToVector4());
             effect.Parameters[nameof(borderColor)].SetValue(borderColor.ToVector4());
             effect.Parameters[nameof(progress)].SetValue(progress);
+            effect.Parameters[nameof(innerShrinkage)].SetValue(innerShrinkage);
             sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
             switch (mode)
             {

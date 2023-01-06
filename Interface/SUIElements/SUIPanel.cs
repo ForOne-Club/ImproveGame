@@ -23,7 +23,7 @@ namespace ImproveGame.Interface.SUIElements
         public Color borderColor;
         public Color backgroundColor;
 
-        public SUIPanel(Color borderColor, Color backgroundColor, float round = 12, float border = 3, bool Draggable = false)
+        public SUIPanel(Color borderColor, Color backgroundColor, float round = 12, float border = 2, bool Draggable = false)
         {
             SetPadding(10f);
             DragIgnore = true;
@@ -35,11 +35,9 @@ namespace ImproveGame.Interface.SUIElements
             this.round = round;
             this.border = border;
             this.Draggable = Draggable;
-            OnMouseDown += DragStart;
-            OnMouseUp += DragEnd;
         }
 
-        public SUIPanel(Color backgroundColor, Vector4 round4)
+        public SUIPanel(Color backgroundColor, Color borderColor, Vector4 round4, float border, bool Draggable = false)
         {
             SetPadding(10f);
             DragIgnore = true;
@@ -47,9 +45,10 @@ namespace ImproveGame.Interface.SUIElements
             ShadowThickness = 50f;
             ShadowColor = new Color(0, 0, 0, 0.25f);
             this.backgroundColor = backgroundColor;
+            this.borderColor = borderColor;
             this.round4 = round4;
-            OnMouseDown += DragStart;
-            OnMouseUp += DragEnd;
+            this.border = border;
+            this.Draggable = Draggable;
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
@@ -72,14 +71,15 @@ namespace ImproveGame.Interface.SUIElements
                     PixelShader.DrawRoundRect(pos, size, round, backgroundColor, border, borderColor);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(pos, size, round4, backgroundColor, 3, UIColor.PanelBorder);
+                    PixelShader.DrawRoundRect(pos, size, round4, backgroundColor, border, UIColor.PanelBorder);
                     break;
             }
         }
 
-        // 可拖动界面
-        private void DragStart(UIMouseEvent evt, UIElement listeningElement)
+        public override void MouseDown(UIMouseEvent evt)
         {
+            base.MouseDown(evt);
+            // 可拖动界面
             View view = evt.Target is View ? evt.Target as View : null;
             // 当点击的是子元素不进行移动
             if (Draggable && (evt.Target == this || (view is not null && view.DragIgnore) || evt.Target.GetType().IsAssignableFrom(typeof(View)) || evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
@@ -89,9 +89,9 @@ namespace ImproveGame.Interface.SUIElements
             }
         }
 
-        // 可拖动/调整大小界面
-        private void DragEnd(UIMouseEvent evt, UIElement listeningElement)
+        public override void MouseUp(UIMouseEvent evt)
         {
+            base.MouseUp(evt);
             Dragging = false;
         }
 

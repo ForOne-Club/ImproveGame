@@ -35,7 +35,7 @@ namespace ImproveGame.Interface.GUI
             BackTexture = GetTexture("UI/Construct/Back");
             ButtonBackgroundTexture = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel");
 
-            BasePanel = new(new(29, 34, 70), new(44, 57, 105, 160))
+            BasePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160))
             {
                 Top = StyleDimension.FromPixels(150f),
                 HAlign = 0.5f

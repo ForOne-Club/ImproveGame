@@ -27,7 +27,7 @@ public class PrefixRecallGUI : UIState
 
     public override void OnInitialize()
     {
-        _basePanel = new(new(29, 34, 70), new(44, 57, 105, 160));
+        _basePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160));
         _basePanel.Left.Set(PanelLeft, 0f);
         _basePanel.Top.Set(PanelTop, 0f);
         _basePanel.Width.Set(PanelWidth, 0f);
@@ -147,7 +147,7 @@ public class PrefixTab : SUIPanel
     internal int PrefixId;
     internal int Price;
 
-    public PrefixTab(int prefixId, int value) : base(new(89, 116, 213), new(44, 57, 105, 160))
+    public PrefixTab(int prefixId, int value) : base(new Color(89, 116, 213), new Color(44, 57, 105, 160))
     {
         PrefixId = prefixId;
         CalculatePrice(value);

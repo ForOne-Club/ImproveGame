@@ -65,7 +65,7 @@ namespace ImproveGame
 
         private void Utils_DrawInvBG_SpriteBatch_int_int_int_int_Color(On.Terraria.Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y, int w, int h, Color c)
         {
-            PixelShader.DrawRoundRect(new Vector2(x, y), new Vector2(w, h), 10, c, 3, UIColor.PackgeBorder);
+            PixelShader.DrawRoundRect(new Vector2(x, y), new Vector2(w, h), 10, c, 2, UIColor.PackgeBorder);
         }
 
         // 原版滚动条绘制，在 DrawBar 返回空阻止原版滚动条绘制。然后通过反射获取滚动条位置进行绘制。
@@ -74,7 +74,7 @@ namespace ImproveGame
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
             orig.Invoke(self, spriteBatch);
-            PixelShader.DrawRoundRect(pos, size, MathF.Min(size.X, size.Y) / 2, UIColor.ScrollBarBg, 3, UIColor.PanelBorder);
+            PixelShader.DrawRoundRect(pos, size, MathF.Min(size.X, size.Y) / 2, UIColor.ScrollBarBg, 2, UIColor.PanelBorder);
             MethodInfo methodInfo = self.GetType().GetMethod("GetHandleRectangle", BindingFlags.NonPublic | BindingFlags.Instance);
             Rectangle rectangle = (Rectangle)methodInfo.Invoke(self, null);
             pos = rectangle.TopLeft();
@@ -87,7 +87,7 @@ namespace ImproveGame
         {
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
-            PixelShader.DrawRoundRect(pos, size, 12, self.BackgroundColor, 3, self.BorderColor);
+            PixelShader.DrawRoundRect(pos, size, 12, self.BackgroundColor, 2, self.BorderColor);
         }
     }
 }

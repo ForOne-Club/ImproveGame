@@ -33,7 +33,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
             this.index = index;
 
             Wrap = true;
-            Spacing = new(10, 10);
+            Spacing = new Vector2(8);
             Relative = RelativeMode.Horizontal;
         }
 
@@ -84,7 +84,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
         protected override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
-            PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, UIColor.ItemSlotBG, 3, UIColor.ItemSlotBorder);
+            PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, UIColor.ItemSlotBG, 2, UIColor.ItemSlotBorder);
 
             if (Item.IsAir)
             {

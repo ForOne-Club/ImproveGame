@@ -18,6 +18,8 @@ namespace ImproveGame.Interface.Common
         private int oldThemeStyle;
         public override void UpdateUI(GameTime gameTime)
         {
+            if (Main.dedServ)
+                return;
             int newThemeStyle = UIConfigs.Instance.ThemeStyle;
             if (newThemeStyle != oldThemeStyle)
             {
@@ -34,40 +36,40 @@ namespace ImproveGame.Interface.Common
             }
         }
 
-        public static Color PanelBorder { get; private set; }
-        public static Color PanelBg { get; private set; }
+        internal static Color PanelBorder;
+        internal static Color PanelBg;
 
-        public static Color ItemSlotBorderFav { get; private set; }
-        public static Color ItemSlotBorder { get; private set; }
-        public static Color ItemSlotBgFav { get; private set; }
-        public static Color ItemSlotBG { get; private set; }
+        internal static Color ItemSlotBorderFav;
+        internal static Color ItemSlotBorder;
+        internal static Color ItemSlotBgFav;
+        internal static Color ItemSlotBG;
 
-        public static Color ButtonBg { get; private set; }
+        internal static Color ButtonBg;
 
-        public static Color TitleBg { get; private set; }
-        public static Color TitleBg2 { get; private set; }
+        internal static Color TitleBg;
+        internal static Color TitleBg2;
 
-        public static Color ScrollBarBorder { get; private set; }
-        public static Color ScrollBarBg { get; private set; }
-        public static Color ScrollBarInnerBg { get; private set; }
-        public static Color ScrollBarInnerBgHover { get; private set; }
+        internal static Color ScrollBarBorder;
+        internal static Color ScrollBarBg;
+        internal static Color ScrollBarInnerBg;
+        internal static Color ScrollBarInnerBgHover;
 
         // 开关 UI 的边框
-        public static Color SwitchBorder { get; private set; }
-        public static Color SwitchBorderHover { get; private set; }
+        internal static Color SwitchBorder;
+        internal static Color SwitchBorderHover;
         // 开关 UI 的背景
-        public static Color SwitchBg { get; private set; }
-        public static Color SwitchBgHover { get; private set; }
+        internal static Color SwitchBg;
+        internal static Color SwitchBgHover;
         // 开关 UI 中的圆
-        public static Color SwitchRound { get; private set; }
-        public static Color SwitchRoundHover { get; private set; }
+        internal static Color SwitchRound;
+        internal static Color SwitchRoundHover;
 
-        public static Color Cross { get; private set; }
+        internal static Color Cross;
 
-        public static Color PackgeBg { get; private set; }
-        public static Color PackgeBorder { get; private set; }
-        public static Color PackgeGridBg { get; private set; }
-        public static Color PackgeGridBorder { get; private set; }
+        internal static Color PackgeBg;
+        internal static Color PackgeBorder;
+        internal static Color PackgeGridBg;
+        internal static Color PackgeGridBorder;
 
         public static void ModifyColor1()
         {

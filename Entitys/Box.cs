@@ -95,7 +95,7 @@ namespace ImproveGame.Entitys
         {
             Vector2 pos = Rectangle.TopLeft() * 16 + new Vector2(-2) - Main.screenPosition;
             Vector2 size = Rectangle.Size() * 16 + new Vector2(4);
-            PixelShader.DrawRoundRect(pos, size, 4, backgroundColor, 3f, borderColor, false);
+            PixelShader.DrawRoundRect(pos, size, 4, backgroundColor, 2f, borderColor, ui: false);
             // DrawBorderRect(Rectangle, backgroundColor, borderColor);
         }
 

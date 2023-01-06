@@ -40,7 +40,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 position = rectangle.Position();
             Vector2 size = rectangle.Size();
 
-            PixelShader.DrawRoundRect(position, size, 10, UIColor.TitleBg, 0, UIColor.TitleBg);
+            PixelShader.DrawRoundRect(position, size, 10, UIColor.TitleBg);
 
             rectangle = GetInnerDimensions();
             position = rectangle.Position();

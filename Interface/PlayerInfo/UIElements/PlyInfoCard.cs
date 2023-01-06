@@ -53,7 +53,7 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             Vector2 innerPos = GetInnerDimensions().Position();
             Vector2 innerSize = GetInnerDimensions().Size();
 
-            PixelShader.DrawRoundRect(pos, size, 10, new Color(43, 56, 101), 3, UIColor.PanelBorder);
+            PixelShader.DrawRoundRect(pos, size, 10, new Color(43, 56, 101), 2, UIColor.PanelBorder);
 
             Vector2 iconPos = innerPos + new Vector2(30, innerSize.Y) / 2f;
             BigBagItemSlot.DrawItemIcon(sb, icon, Color.White, iconPos, icon.Size() / 2f, 30);

@@ -57,15 +57,15 @@ namespace ImproveGame.Interface.BannerChest.Elements
         public static Vector2 GetSize(int HCount, int VCount)
         {
             Vector2 size;
-            size.X = 52 * HCount + 10f * (HCount - 1);
-            size.Y = 52 * VCount + 10f * (VCount - 1);
+            size.X = 52 * HCount + 8f * (HCount - 1);
+            size.Y = 52 * VCount + 8f * (VCount - 1);
             return size;
         }
 
         public void ModifyHVCount(int HCount, int VCount)
         {
-            Width.Pixels = 52 * HCount + 10f * (HCount - 1);
-            Height.Pixels = 52 * VCount + 10f * (VCount - 1);
+            Width.Pixels = 52 * HCount + 8f * (HCount - 1);
+            Height.Pixels = 52 * VCount + 8f * (VCount - 1);
         }
     }
 }
