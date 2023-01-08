@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.Common;
 using Terraria.GameInput;
 
@@ -33,6 +32,7 @@ namespace ImproveGame.Interface.SUIElements
         }
 
         private float _bufferViewPosition;
+
         /// <summary>
         /// 缓冲距离, 不想使用动画就直接设置 <see cref="ViewPosition"/>
         /// </summary>
@@ -72,27 +72,34 @@ namespace ImproveGame.Interface.SUIElements
                 {
                     InnerMouseOut();
                 }
+
                 innerHovered = false;
             }
+
             HoverTimer.Update();
             base.Update(gameTime);
 
             if (dragging)
             {
-                if (ViewScale != 1)
-                    ViewPosition = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) / (InnerDimensions.Height * (1 - ViewScale)) * MaxViewPoisition;
+                if (Math.Abs(ViewScale - 1) > 0.000000001f)
+                    ViewPosition = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) /
+                        (InnerDimensions.Height * (1 - ViewScale)) * MaxViewPoisition;
             }
 
-            if (BufferViewPosition != 0)
+            if (BufferViewPosition == 0)
             {
-                ViewPosition -= BufferViewPosition * 0.2f;
-                BufferViewPosition *= 0.8f;
-                if (MathF.Abs(BufferViewPosition) < 0.1f)
-                {
-                    ViewPosition = MathF.Round(ViewPosition, 1);
-                    BufferViewPosition = 0;
-                }
+                return;
             }
+
+            ViewPosition -= BufferViewPosition * 0.2f;
+            BufferViewPosition *= 0.8f;
+            if (!(MathF.Abs(BufferViewPosition) < 0.1f))
+            {
+                return;
+            }
+
+            ViewPosition = MathF.Round(ViewPosition, 1);
+            BufferViewPosition = 0;
         }
 
         public virtual void InnerMouseOver()
@@ -113,17 +120,21 @@ namespace ImproveGame.Interface.SUIElements
             if (!Visible)
                 return;
 
-            if (evt.Target == this)
+            if (evt.Target != this)
             {
-                CalculatedStyle InnerDimensions = GetInnerDimensions();
-
-                if (IsMouseHovering)
-                {
-                    dragging = true;
-                    offsetY = evt.MousePosition.Y - InnerDimensions.Y - (InnerDimensions.Height * (1 - ViewScale) * (viewPosition / MaxViewPoisition));
-                }
-                BufferViewPosition = 0;
+                return;
             }
+
+            CalculatedStyle innerDimensions = GetInnerDimensions();
+
+            if (IsMouseHovering)
+            {
+                dragging = true;
+                offsetY = evt.MousePosition.Y - innerDimensions.Y -
+                          (innerDimensions.Height * (1 - ViewScale) * (viewPosition / MaxViewPoisition));
+            }
+
+            BufferViewPosition = 0;
         }
 
         public override void MouseUp(UIMouseEvent evt)
@@ -161,7 +172,8 @@ namespace ImproveGame.Interface.SUIElements
                 innerPosition.Y += innerDimensions.Height * (1 - ViewScale) * (ViewPosition / MaxViewPoisition);
             innerSize.Y *= ViewScale;
 
-            Color hoverColor = Color.Lerp(UIColor.ScrollBarInnerBgHover, UIColor.ScrollBarInnerBg, dragging ? 1 : HoverTimer.Schedule);
+            Color hoverColor = Color.Lerp(UIColor.ScrollBarInnerBgHover, UIColor.ScrollBarInnerBg,
+                dragging ? 1 : HoverTimer.Schedule);
 
             // 滚动条拖动块
             PixelShader.DrawRoundRect(innerPosition, innerSize, innerSize.X / 2, hoverColor);
@@ -170,8 +182,8 @@ namespace ImproveGame.Interface.SUIElements
         /// <summary>
         /// 设置范围
         /// </summary>
-        /// <param name="viewSize">绑定 UI 的显示长度</param>
-        /// <param name="maxViewSize">绑定 UI 的最大长度</param>
+        /// <param name="viewSize">绑定 UI 的显示大小</param>
+        /// <param name="maxViewSize">绑定 UI 的真实大小</param>
         public void SetView(float viewSize, float maxViewSize)
         {
             viewSize = MathHelper.Clamp(viewSize, 0f, maxViewSize);

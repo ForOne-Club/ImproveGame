@@ -29,7 +29,7 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
-            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.grid.items == storedPotions)
+            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == storedPotions)
                 UISystem.Instance.PackageGUI.Close();
             else
                 UISystem.Instance.PackageGUI.Open(storedPotions, Item.Name, PackageGUI.StorageType.Potions, this);

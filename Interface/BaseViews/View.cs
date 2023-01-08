@@ -117,6 +117,13 @@ namespace ImproveGame.Interface.BaseViews
             return this;
         }
 
+        public View SetInnerPixels(float size)
+        {
+            Width.Pixels = size + PaddingLeft + PaddingRight;
+            Height.Pixels = size + PaddingTop + PaddingBottom;
+            return this;
+        }
+
         public View SetSizePixels(float width, float height)
         {
             Width.Pixels = width;

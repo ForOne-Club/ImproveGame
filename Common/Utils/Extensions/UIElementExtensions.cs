@@ -6,11 +6,6 @@
         {
             return new StyleDimension(dim.X, dim.Y);
         }
-
-        public static Vector2 Resize(this Vector2 size, Vector2 spacing, Vector2 count)
-        {
-            return (size + spacing) * count - spacing;
-        }
     }
 
     public static class CalculatedStyleExtensions
@@ -69,14 +64,16 @@
             return uie;
         }
 
-        public static UIElement SetSize(this UIElement uie, Vector2 size, float precentWidth = 0, float precentHeight = 0)
+        public static UIElement SetSize(this UIElement uie, Vector2 size, float precentWidth = 0,
+            float precentHeight = 0)
         {
             uie.Width.Set(size.X, precentWidth);
             uie.Height.Set(size.Y, precentHeight);
             return uie;
         }
 
-        public static UIElement SetSize(this UIElement uie, float width, float height, float precentWidth = 0, float precentHeight = 0)
+        public static UIElement SetSize(this UIElement uie, float width, float height, float precentWidth = 0,
+            float precentHeight = 0)
         {
             uie.Width.Set(width, precentWidth);
             uie.Height.Set(height, precentHeight);

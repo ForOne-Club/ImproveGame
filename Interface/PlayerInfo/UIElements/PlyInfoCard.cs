@@ -8,25 +8,29 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
     public class PlyInfoCard : View
     {
         internal static float width = 210, height = 40f;
-        internal static Vector2 spacing = new Vector2(6);
+        private static readonly Vector2 spacing = new Vector2(6);
+
         /// <summary> 计算总大小 </summary>
         public static Vector2 TotalSize(int row, int column)
         {
             return new Vector2((width + spacing.X) * row - spacing.X, (height + spacing.Y) * column - spacing.Y);
         }
-        private readonly Texture2D icon;
-        private string text;
-        private Vector2 textSize;
-        public string Text
+
+        private readonly Texture2D _icon;
+        private string _text;
+        private Vector2 _textSize;
+
+        private string Text
         {
-            get => text;
+            get => _text;
             set
             {
-                text = value;
-                textSize = FontAssets.MouseText.Value.MeasureString(value);
+                _text = value;
+                _textSize = FontAssets.MouseText.Value.MeasureString(value);
             }
         }
-        private readonly Func<string> textFunc;
+
+        private readonly Func<string> _textFunc;
 
         public PlyInfoCard(string text, Func<string> textFunc, string icon)
         {
@@ -41,9 +45,9 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             DragIgnore = true;
 
             Text = text;
-            this.textFunc = textFunc;
-            this.textFunc ??= () => string.Empty;
-            this.icon = GetTexture($"UI/PlayerInfo/{icon}").Value;
+            this._textFunc = textFunc;
+            this._textFunc ??= () => string.Empty;
+            this._icon = GetTexture($"UI/PlayerInfo/{icon}").Value;
         }
 
         protected override void DrawSelf(SpriteBatch sb)
@@ -56,14 +60,16 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             PixelShader.DrawRoundRect(pos, size, 10, new Color(43, 56, 101), 2, UIColor.PanelBorder);
 
             Vector2 iconPos = innerPos + new Vector2(30, innerSize.Y) / 2f;
-            BigBagItemSlot.DrawItemIcon(sb, icon, Color.White, iconPos, icon.Size() / 2f, 30);
+            BigBagItemSlot.DrawItemIcon(sb, _icon, Color.White, iconPos, _icon.Size() / 2f, 30);
 
-            Vector2 textPos = innerPos + new Vector2(30 + 4, UIConfigs.Instance.TextDrawOffsetY + (innerSize.Y - textSize.Y) / 2);
+            Vector2 textPos = innerPos + new Vector2(30 + 4,
+                UIConfigs.Instance.TextDrawOffsetY + (innerSize.Y - _textSize.Y) / 2);
             DrawString(textPos, Text, Color.White, Color.Black);
 
-            string infoText = textFunc();
+            string infoText = _textFunc();
             Vector2 infoSize = MouseTextSize(infoText);
-            Vector2 infoPos = innerPos + new Vector2(innerSize.X - infoSize.X, UIConfigs.Instance.TextDrawOffsetY + (innerSize.Y - infoSize.Y) / 2);
+            Vector2 infoPos = innerPos + new Vector2(innerSize.X - infoSize.X,
+                UIConfigs.Instance.TextDrawOffsetY + (innerSize.Y - infoSize.Y) / 2);
             DrawString(infoPos, infoText, Color.White, Color.Black);
         }
     }

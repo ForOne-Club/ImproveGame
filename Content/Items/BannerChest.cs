@@ -28,7 +28,7 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
-            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.grid.items == storedBanners)
+            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == storedBanners)
                 UISystem.Instance.PackageGUI.Close();
             else
                 UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name, PackageGUI.StorageType.Banners, this);

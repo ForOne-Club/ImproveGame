@@ -29,7 +29,7 @@ namespace ImproveGame
     {
         // 额外BUFF槽
         public override uint ExtraPlayerBuffSlots => (uint)Config.ExtraPlayerBuffSlots;
-        public static ImproveGame Instance { get; set; }
+        public static ImproveGame Instance { get; private set; }
 
         public override void Load()
         {

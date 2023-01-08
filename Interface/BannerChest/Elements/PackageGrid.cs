@@ -1,78 +1,87 @@
-﻿using ImproveGame.Interface.BaseViews;
-using ImproveGame.Interface.SUIElements;
+﻿using ImproveGame.Interface.UIElements;
 
 namespace ImproveGame.Interface.BannerChest.Elements
 {
-    public class PackageGrid : View
+    public class PackageGrid : ScrollView
     {
-        public PackageList list;
-        public SUIScrollbar scrollbar;
-        public List<Item> items;
+        public List<Item> Items;
 
         public PackageGrid()
         {
-            SetPadding(0);
+            ListView.SetInnerPixels(GridSize(52f, 8f, 5));
 
-            // 隐藏子元素, 可显示的范围是计算 Padding 之后的.
-            OverflowHidden = true;
+            Scrollbar.HAlign = 1f;
+            Scrollbar.Left.Pixels = -1;
+            Scrollbar.SetSizePixels(16, ListView.Height.Pixels);
+            Scrollbar.SetPadding(4);
 
-            list = new PackageList() { DragIgnore = true };
-            list.SetSizePixels(PackageList.GetSize(5, 5));
-            list.Join(this);
-
-            scrollbar = new SUIScrollbar() { HAlign = 1f };
-            scrollbar.Left.Pixels = -1;
-            scrollbar.SetSizePixels(16, list.Height.Pixels);
-            scrollbar.SetPadding(4);
-            scrollbar.Join(this);
-
-            Width.Pixels = list.Width.Pixels + scrollbar.Width.Pixels + 9;
-            Height.Pixels = list.Height.Pixels + 1;
-        }
-
-        public override void ScrollWheel(UIScrollWheelEvent evt)
-        {
-            base.ScrollWheel(evt);
-            scrollbar.BufferViewPosition += evt.ScrollWheelValue;
+            SetInnerPixels(ListView.Width.Pixels + Scrollbar.Width.Pixels + 9, ListView.Height.Pixels + 1);
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            if (scrollbar.ViewPosition != list.Top.Pixels)
+            base.DrawSelf(spriteBatch);
+            if (!(Math.Abs(-Scrollbar.ViewPosition - ListView.Top.Pixels) > 0.000000001f))
             {
-                list.Top.Pixels = -scrollbar.ViewPosition;
-                list.Recalculate();
+                return;
             }
+
+            ListView.Top.Pixels = -Scrollbar.ViewPosition;
+            ListView.Recalculate();
         }
 
-        private int oldCount;
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-            // 写在 Grid 中最主要的原因是是因为 ScrollBar 在里面
-            bool reload = false;
-            for (int i = 0; i < items.Count; i++)
+            // 寻找 Items 中有没有 Item.IsAir
+            // 有的话删除掉
+            for (int i = 0; i < Items.Count; i++)
             {
-                Item item = items[i];
-                if (item.IsAir)
+                Item item = Items[i];
+                if (!item.IsAir)
                 {
-                    reload = true;
-                    items.RemoveAt(i--);
+                    continue;
                 }
+
+                Items.RemoveAt(i--);
             }
-            if (oldCount != items.Count || reload)
+
+            if (ListView.Children.Count() != RequiredChildrenCount(Items.Count))
             {
-                oldCount = items.Count;
-                SetInventory(items);
+                SetInventory(Items);
+                Main.NewText("SetInventory");
             }
+
+            // 因为 Update 是一层一层调用子元素的 Update()，所以不能放在前面。
+            base.Update(gameTime);
+        }
+
+        private static int RequiredChildrenCount(int length)
+        {
+            if (length < 25)
+            {
+                length = 25;
+            }
+            else
+            {
+                length += 5 - length % 5;
+            }
+
+            return length;
         }
 
         public void SetInventory(List<Item> items)
         {
-            this.items = items;
-            list.SetInventory(items);
-            Vector2 size = PackageList.GetSize(5, 5);
-            scrollbar.SetView(size.Y, list.Height.Pixels);
+            this.Items = items;
+            ListView.RemoveAllChildren();
+
+            int length = RequiredChildrenCount(items.Count);
+            for (int i = 0; i < length; i++)
+            {
+                new PackageItemSlot(items, i).Join(ListView);
+            }
+
+            ListView.SetInnerPixels(GridSize(52f, 8f, 5, length / 5));
+            Scrollbar.SetView(GetInnerDimensions().Height, ListView.Height.Pixels);
         }
     }
 }

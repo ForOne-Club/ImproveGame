@@ -4,16 +4,16 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
 {
     public class PlyInfoSwitch : HoverView
     {
-        public Func<bool> Expanded;
-        public Texture2D OpenIcon;
-        public Color background, border;
-        public PlyInfoSwitch(Color background, Color border, Func<bool> Expanded)
+        private readonly Func<bool> _expanded;
+        private readonly Texture2D _openIcon;
+        private readonly Color _background, _border;
+        public PlyInfoSwitch(Color background, Color border, Func<bool> expanded)
         {
-            this.background = background;
-            this.border = border;
-            this.Expanded = Expanded;
+            this._background = background;
+            this._border = border;
+            this._expanded = expanded;
             Height.Pixels = Width.Pixels = 50f;
-            OpenIcon = GetTexture("UI/PlayerInfo/Open").Value;
+            _openIcon = GetTexture("UI/PlayerInfo/Open").Value;
 
             Relative = RelativeMode.Horizontal;
             Wrap = true;
@@ -26,12 +26,12 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             base.DrawSelf(sb);
             Vector2 pos = GetDimensions().Position() - new Vector2(Extension.X, Extension.Y);
             Vector2 size = GetDimensions().Size() + new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);
-            PixelShader.DrawRoundRect(pos, size, round4, background, 2, border);
+            PixelShader.DrawRoundRect(pos, size, round4, _background, 2, _border);
 
-            if (Expanded is not null)
+            if (_expanded is not null)
             {
-                float rotation = Expanded() ? MathF.PI : 0;
-                sb.Draw(OpenIcon, pos + size / 2, null, Color.White, rotation, OpenIcon.Size() / 2f, 1f, 0, 0f);
+                float rotation = _expanded() ? MathF.PI : 0;
+                sb.Draw(_openIcon, pos + size / 2, null, Color.White, rotation, _openIcon.Size() / 2f, 1f, 0, 0f);
             }
         }
     }
