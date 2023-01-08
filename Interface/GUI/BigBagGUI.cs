@@ -10,123 +10,137 @@ namespace ImproveGame.Interface.GUI
 {
     public class BigBagGUI : UIState
     {
-        private static bool visible = true;
+        private static bool _visible = true;
         public static bool Visible
         {
             get
             {
                 if (!Main.playerInventory)
-                    visible = false;
-                return visible;
+                    _visible = false;
+                return _visible;
             }
-            set => visible = value;
+            set => _visible = value;
         }
 
-        public SUITitle title;
-        public SUIPanel mainPanel;
-        public SUICross cross;
-        public SUIPictureButton[] buttons = new SUIPictureButton[4];
+        public SUIPanel MainPanel;
+        // 标题
+        private SUIPanel TitlePanel;
+        private SUITitle Title;
+        private SUICross Cross;
+        // 控制开关
+        private SUISwitch RecipesSwitch, SmartGrabSwitch, AutoGrabSwitch;
+        // 按钮
+        private SUIPictureButton QuickButton, PutButton, ReplenishButton, SortButton;
         // 物品列表
         public ModItemGrid ItemGrid;
-        public SUISwitch[] suiSwitch = new SUISwitch[3];
 
         public override void OnInitialize()
         {
             // 主面板
-            Append(mainPanel = new(UIColor.PanelBorder, UIColor.PanelBg)
+            MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
             {
                 Shaded = true,
                 Draggable = true
-            });
+            };
+            MainPanel.Join(this);
 
             // 标题
-            mainPanel.Append(title = new SUITitle(GetText("SuperVault.Name"), 0.5f));
+            Title = new SUITitle(GetText("SuperVault.Name"), 0.5f);
+            Title.Join(MainPanel);
 
             // Cross
-            mainPanel.Append(cross = new SUICross(24)
+            Cross = new SUICross(24)
             {
                 HAlign = 1f,
-                Height = new StyleDimension(title.Height.Pixels, 0)
-            });
-            cross.OnMouseDown += (evt, uie) => Close();
+                Height = new StyleDimension(Title.Height.Pixels, 0)
+            };
+            Cross.OnMouseDown += (evt, uie) => Close();
+            Cross.Join(MainPanel);
 
             UIPlayerSetting Setting = Main.LocalPlayer.GetModPlayer<UIPlayerSetting>();
 
             // 开关
             Vector2 SwitchSpacing = new Vector2(10, 10);
-            mainPanel.Append(suiSwitch[0] = new SUISwitch(() => Setting.SuperVault_HeCheng, state =>
-            {
-                Setting.SuperVault_HeCheng = state;
-                Recipe.FindRecipes();
-            }, GetText("SuperVault.Synthesis"), 0.8f)
+            RecipesSwitch = new SUISwitch(() => Setting.SuperVault_HeCheng,
+                state =>
+                {
+                    Setting.SuperVault_HeCheng = state;
+                    Recipe.FindRecipes();
+                }, GetText("SuperVault.Synthesis"), 0.8f)
             {
                 First = true,
                 Relative = RelativeMode.Vertical,
                 Spacing = SwitchSpacing
-            });
+            };
+            RecipesSwitch.Join(MainPanel);
 
-            mainPanel.Append(suiSwitch[1] = new SUISwitch(() => Setting.SuperVault_SmartGrab, state =>
-            {
-                Setting.SuperVault_SmartGrab = state;
-            }, GetText("SuperVault.SmartPickup"), 0.8f)
+            SmartGrabSwitch = new SUISwitch(() => Setting.SuperVault_SmartGrab,
+                state => Setting.SuperVault_SmartGrab = state,
+                GetText("SuperVault.SmartPickup"), 0.8f)
             {
                 Relative = RelativeMode.Horizontal,
                 Spacing = SwitchSpacing
-            });
+            };
+            SmartGrabSwitch.Join(MainPanel);
 
-            mainPanel.Append(suiSwitch[2] = new SUISwitch(() => Setting.SuperVault_OverflowGrab, (bool state) =>
-            {
-                Setting.SuperVault_OverflowGrab = state;
-            }, GetText("SuperVault.OverflowPickup"), 0.8f)
+            AutoGrabSwitch = new SUISwitch(() => Setting.SuperVault_OverflowGrab,
+                state => Setting.SuperVault_OverflowGrab = state,
+                GetText("SuperVault.OverflowPickup"), 0.8f)
             {
                 Relative = RelativeMode.Horizontal,
                 Spacing = SwitchSpacing
-            });
+            };
+            AutoGrabSwitch.Join(MainPanel);
 
             // 按钮
             Vector2 ButtonSpacing = new(10, 8);
-            mainPanel.Append(buttons[0] = new(GetTexture("UI/Quick").Value, Lang.inter[29].Value)
+            QuickButton = new SUIPictureButton(GetTexture("UI/Quick").Value, Lang.inter[29].Value)
             {
                 First = true,
                 Relative = RelativeMode.Vertical,
                 Spacing = ButtonSpacing
-            });
-            buttons[0].SetText(Lang.inter[29].Value);
-            buttons[0].OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
+            };
+            QuickButton.SetText(Lang.inter[29].Value);
+            QuickButton.OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
+            QuickButton.Join(MainPanel);
 
-            mainPanel.Append(buttons[1] = new(GetTexture("UI/Put").Value, Lang.inter[30].Value)
+            PutButton = new SUIPictureButton(GetTexture("UI/Put").Value, Lang.inter[30].Value)
             {
                 Relative = RelativeMode.Horizontal,
                 Spacing = ButtonSpacing
-            });
-            buttons[1].SetText(Lang.inter[30].Value);
-            buttons[1].OnMouseDown += (_, _) => PutAll();
+            };
+            PutButton.SetText(Lang.inter[30].Value);
+            PutButton.OnMouseDown += (_, _) => PutAll();
+            PutButton.Join(MainPanel);
 
-            mainPanel.Append(buttons[2] = new(GetTexture("UI/Put").Value, Lang.inter[31].Value)
+            ReplenishButton = new SUIPictureButton(GetTexture("UI/Put").Value, Lang.inter[31].Value)
             {
                 Relative = RelativeMode.Horizontal,
                 Spacing = ButtonSpacing
-            });
-            buttons[2].SetText(Lang.inter[31].Value);
-            buttons[2].OnMouseDown += (_, _) => Replenish();
+            };
+            ReplenishButton.SetText(Lang.inter[31].Value);
+            ReplenishButton.OnMouseDown += (_, _) => Replenish();
+            ReplenishButton.Join(MainPanel);
 
-            mainPanel.Append(buttons[3] = new(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
+            SortButton = new SUIPictureButton(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
             {
                 Relative = RelativeMode.Horizontal,
                 Spacing = ButtonSpacing
-            });
-            buttons[3].SetText(GetText("SuperVault.Sort"));
-            buttons[3].OnMouseDown += (_, _) => Sort();
+            };
+            SortButton.SetText(GetText("SuperVault.Sort"));
+            SortButton.OnMouseDown += (_, _) => Sort();
+            SortButton.Join(MainPanel);
 
             // Inventory 滚动视图
-            mainPanel.Append(ItemGrid = new ModItemGrid()
+            ItemGrid = new ModItemGrid()
             {
                 First = true,
-                Relative = BaseViews.RelativeMode.Vertical,
+                Relative = RelativeMode.Vertical,
                 Spacing = new Vector2(10, 15)
-            });
+            };
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
-            mainPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
+            ItemGrid.Join(MainPanel);
+            MainPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
         }
 
         /// <summary>
@@ -146,16 +160,20 @@ namespace ImproveGame.Interface.GUI
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (mainPanel.IsMouseHovering)
-                PlayerInput.LockVanillaMouseScroll("ImproveGame: BigBagGUI");
-
-            if (mainPanel.IsMouseHovering)
-                Main.LocalPlayer.mouseInterface = true;
-
-            if (mainPanel.GetInnerSizePixels().Y != ItemGrid.Height.Pixels)
+            if (MainPanel.IsMouseHovering)
             {
-                mainPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
-                mainPanel.Recalculate();
+                PlayerInput.LockVanillaMouseScroll("ImproveGame: BigBagGUI");
+            }
+
+            if (MainPanel.IsMouseHovering)
+            {
+                Main.LocalPlayer.mouseInterface = true;
+            }
+
+            if (MainPanel.GetInnerSizePixels().Y != ItemGrid.Height.Pixels)
+            {
+                MainPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
+                MainPanel.Recalculate();
             }
         }
 
@@ -163,13 +181,13 @@ namespace ImproveGame.Interface.GUI
         {
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
-            visible = true;
+            _visible = true;
         }
 
         public void Close()
         {
             SoundEngine.PlaySound(SoundID.MenuClose);
-            visible = false;
+            _visible = false;
             AdditionalConfig.Save();
         }
 

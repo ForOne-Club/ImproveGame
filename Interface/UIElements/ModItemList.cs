@@ -45,9 +45,8 @@ namespace ImproveGame.Interface.UIElements
                 for (int i = 0; i < items.Length; i++)
                 {
                     UIElement uie = Elements[i];
-                    if (uie is BigBagItemSlot)
+                    if (uie is BigBagItemSlot itemSlot)
                     {
-                        BigBagItemSlot itemSlot = uie as BigBagItemSlot;
                         itemSlot.Items = items;
                     }
                 }

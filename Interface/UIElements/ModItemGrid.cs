@@ -22,7 +22,7 @@ namespace ImproveGame.Interface.UIElements
             Append(ItemList = new ModItemList());
             ItemList.ModifyHVCount(10, 10);
 
-            Append(Scrollbar = new()
+            Append(Scrollbar = new SUIScrollbar()
             {
                 HAlign = 1f
             });

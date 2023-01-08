@@ -594,15 +594,17 @@ namespace ImproveGame
         {
             bool infinite = false;
             count = 0;
-            for (int i = 0; i < inv.Length; i++)
+            foreach (var t in inv)
             {
-                if (!inv[i].IsAir && func(inv[i]))
+                if (t.IsAir || !func(t))
                 {
-                    count += inv[i].stack;
-                    if (!inv[i].consumable)
-                    {
-                        infinite = true;
-                    }
+                    continue;
+                }
+
+                count += t.stack;
+                if (!t.consumable)
+                {
+                    infinite = true;
                 }
             }
             return infinite;
