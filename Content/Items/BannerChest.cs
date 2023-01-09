@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.BannerChest;
-using ImproveGame.Interface.BannerChest.Elements;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameInput;
@@ -9,10 +8,11 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.BannerChest;
-        public List<Item> storedBanners = new();
+        public List<Item> StoredBanners = new List<Item>();
         public bool AutoStorage { get; set; }
         public bool AutoSort { get; set; }
 
@@ -20,18 +20,19 @@ namespace ImproveGame.Content.Items
         public override ModItem Clone(Item newEntity)
         {
             BannerChest bag = base.Clone(newEntity) as BannerChest;
-            bag.storedBanners = new(storedBanners); // 创建一个新的集合，依旧会拷贝 list 内的引用，但是它本身是一个新的对象。
+            bag.StoredBanners = new List<Item>(StoredBanners);
+            // 创建一个新的集合，依旧会拷贝 list 内的引用，但是它本身是一个新的对象。
             return bag;
         }
 
-        public override bool CanRightClick() => storedBanners is not null;
+        public override bool CanRightClick() => StoredBanners is not null;
 
         public override void RightClick(Player player)
         {
-            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == storedBanners)
+            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == StoredBanners)
                 UISystem.Instance.PackageGUI.Close();
             else
-                UISystem.Instance.PackageGUI.Open(storedBanners, Item.Name, PackageGUI.StorageType.Banners, this);
+                UISystem.Instance.PackageGUI.Open(StoredBanners, Item.Name, PackageGUI.StorageType.Banners, this);
 
             //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
             //storedBanners.RemoveAt(storedBanners.Count - 1);
@@ -42,7 +43,8 @@ namespace ImproveGame.Content.Items
         /// <summary>
         /// 只有在这些地方才可以放旗帜进去
         /// </summary>
-        private static readonly List<int> availableContexts = new() {
+        private static readonly List<int> AvailableContexts = new()
+        {
             ItemSlot.Context.InventoryItem,
             ItemSlot.Context.ChestItem,
             114514
@@ -52,47 +54,55 @@ namespace ImproveGame.Content.Items
         {
             // 很多的条件
             int bannerID = ItemToBanner(Main.mouseItem);
-            if (ItemSlot.ShiftInUse || ItemSlot.ControlInUse || !availableContexts.Contains(context) ||
+            if (ItemSlot.ShiftInUse || ItemSlot.ControlInUse || !AvailableContexts.Contains(context) ||
                 Main.mouseItem.IsAir || !Main.mouseItem.consumable || bannerID == -1)
             {
                 return false;
             }
+
             PutInPackage(ref Main.mouseItem);
             if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
             }
+
             return true;
         }
 
         public void PutInPackage(ref Item item)
         {
-            for (int i = 0; i < storedBanners.Count; i++)
+            for (int i = 0; i < StoredBanners.Count; i++)
             {
-                if (storedBanners[i].IsAir)
+                if (StoredBanners[i].IsAir)
                 {
-                    storedBanners.RemoveAt(i);
+                    StoredBanners.RemoveAt(i);
                     i--;
                     continue;
                 }
-                if (storedBanners[i].type == item.type && storedBanners[i].stack < storedBanners[i].maxStack && ItemLoader.CanStack(storedBanners[i], item))
+
+                if (StoredBanners[i].type != item.type || StoredBanners[i].stack >= StoredBanners[i].maxStack ||
+                    !ItemLoader.CanStack(StoredBanners[i], item))
                 {
-                    int stackAvailable = storedBanners[i].maxStack - storedBanners[i].stack;
-                    int stackAddition = Math.Min(item.stack, stackAvailable);
-                    item.stack -= stackAddition;
-                    storedBanners[i].stack += stackAddition;
-                    SoundEngine.PlaySound(SoundID.Grab);
-                    Recipe.FindRecipes();
-                    if (item.stack <= 0)
-                        item.TurnToAir();
+                    continue;
                 }
+
+                int stackAvailable = StoredBanners[i].maxStack - StoredBanners[i].stack;
+                int stackAddition = Math.Min(item.stack, stackAvailable);
+                item.stack -= stackAddition;
+                StoredBanners[i].stack += stackAddition;
+                SoundEngine.PlaySound(SoundID.Grab);
+                Recipe.FindRecipes();
+                if (item.stack <= 0)
+                    item.TurnToAir();
             }
-            if (!item.IsAir && storedBanners.Count < 500)
+
+            if (!item.IsAir && StoredBanners.Count < 500)
             {
-                storedBanners.Add(item.Clone());
+                StoredBanners.Add(item.Clone());
                 item.TurnToAir();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
+
             // 依照type对物品进行排序
             if (AutoSort)
             {
@@ -102,7 +112,7 @@ namespace ImproveGame.Content.Items
 
         public void Sort()
         {
-            storedBanners.Sort((a, b) =>
+            StoredBanners.Sort((a, b) =>
             {
                 return a.type.CompareTo(b.type) + (a.stack > b.stack ? 1 : (a.stack == b.stack ? 0 : -1)) * 10;
             });
@@ -117,60 +127,69 @@ namespace ImproveGame.Content.Items
                 var color = line.OverrideColor ?? line.Color;
                 TextSnippet[] snippets = ChatManager.ParseMessage(line.Text, color).ToArray();
                 ChatManager.ConvertNormalSnippets(snippets);
-                ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f, Vector2.Zero, Vector2.One, out _, -1);
+                ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f,
+                    Vector2.Zero, Vector2.One, out _, -1);
                 return false;
             }
+
             return base.PreDrawTooltipLine(line, ref yOffset);
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
             // 决定文本显示的是“开启”还是“关闭”
-            if (ItemInInventory)
+            if (_itemInInventory)
             {
-                string _switch = ArchitectureGUI.Visible ? "Off" : "On";
-                tooltips.Add(new(Mod, "CreateWand", GetText($"Tips.CreateWand{_switch}")) { OverrideColor = Color.LightGreen });
+                string @switch = PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == StoredBanners
+                    ? "Off"
+                    : "On";
+                tooltips.Add(new TooltipLine(Mod, "CreateWand", GetText($"Tips.CreateWand{@switch}"))
+                    { OverrideColor = Color.LightGreen });
             }
-            ItemInInventory = false;
+
+            _itemInInventory = false;
 
             if (!Config.NoPlace_BUFFTile_Banner)
             {
-                tooltips.Add(new(Mod, "BannerChestUseless", GetText("Tips.BannerChestUseless"))
+                tooltips.Add(new TooltipLine(Mod, "BannerChestUseless", GetText("Tips.BannerChestUseless"))
                 {
                     OverrideColor = Color.SkyBlue
                 });
             }
 
-            if (storedBanners is not null && storedBanners.Count > 0)
+            if (StoredBanners is not null && StoredBanners.Count > 0)
             {
-                string storeText = storedBanners.Count >= 500
+                string storeText = StoredBanners.Count >= 500
                     ? GetText("Tips.BannerChestCurrentFull")
-                    : GetTextWith("Tips.BannerChestCurrent", new { StoredCount = storedBanners.Count });
-                tooltips.Add(new(Mod, "BannerChestCurrent", storeText)
+                    : GetTextWith("Tips.BannerChestCurrent", new { StoredCount = StoredBanners.Count });
+                tooltips.Add(new TooltipLine(Mod, "BannerChestCurrent", storeText)
                 {
                     OverrideColor = Color.LightGreen
                 });
 
                 string cachedText = string.Empty;
-                for (int i = 0; i < storedBanners.Count; i++)
+                for (int i = 0; i < StoredBanners.Count; i++)
                 {
-                    var banner = storedBanners[i];
+                    var banner = StoredBanners[i];
                     string text = $"[i/s{banner.stack}:{banner.type}]";
                     cachedText += text;
-                    if ((i + 1) % 20 == 0)
+                    if ((i + 1) % 20 != 0)
                     {
-                        tooltips.Add(new(Mod, "BannerList", cachedText));
-                        cachedText = string.Empty;
+                        continue;
                     }
+
+                    tooltips.Add(new TooltipLine(Mod, "BannerList", cachedText));
+                    cachedText = string.Empty;
                 }
+
                 if (!string.IsNullOrEmpty(cachedText))
                 {
-                    tooltips.Add(new(Mod, "BannerList", cachedText));
+                    tooltips.Add(new TooltipLine(Mod, "BannerList", cachedText));
                 }
             }
             else
             {
-                tooltips.Add(new(Mod, "BannerChestNone", GetText("Tips.BannerChestNone"))
+                tooltips.Add(new TooltipLine(Mod, "BannerChestNone", GetText("Tips.BannerChestNone"))
                 {
                     OverrideColor = Color.SkyBlue
                 });
@@ -193,8 +212,8 @@ namespace ImproveGame.Content.Items
         public override void LoadData(TagCompound tag)
         {
             (this as IPackageItem).ILoadData(tag);
-            storedBanners = tag.Get<List<Item>>("banners");
-            storedBanners ??= new();
+            StoredBanners = tag.Get<List<Item>>("banners");
+            StoredBanners ??= new List<Item>();
 
             // 旧版迁移
             if (!tag.ContainsKey("storedBanners"))
@@ -207,25 +226,27 @@ namespace ImproveGame.Content.Items
                 {
                     continue;
                 }
+
                 list.Add(banner);
             }
-            storedBanners = list;
+
+            StoredBanners = list;
         }
 
         public override void SaveData(TagCompound tag)
         {
             (this as IPackageItem).ISaveData(tag);
-            tag["banners"] = storedBanners;
+            tag["banners"] = StoredBanners;
         }
 
         public override void NetSend(BinaryWriter writer)
         {
-            writer.Write(storedBanners.ToArray());
+            writer.Write(StoredBanners.ToArray());
         }
 
         public override void NetReceive(BinaryReader reader)
         {
-            storedBanners = new(reader.ReadItemArray());
+            StoredBanners = new List<Item>(reader.ReadItemArray());
         }
 
         public override void AddRecipes()
@@ -235,15 +256,18 @@ namespace ImproveGame.Content.Items
                 .AddTile(TileID.Anvils).Register();
         }
 
-        private bool ItemInInventory;
+        private bool _itemInInventory;
+
         public bool OverrideHover(Item[] inventory, int context, int slot)
         {
-            if (context == ItemSlot.Context.InventoryItem)
+            if (context != ItemSlot.Context.InventoryItem)
             {
-                ItemInInventory = true;
-                if (PlayerInput.Triggers.JustPressed.MouseMiddle)
-                    RightClick(Main.LocalPlayer);
+                return false;
             }
+
+            _itemInInventory = true;
+            if (PlayerInput.Triggers.JustPressed.MouseMiddle)
+                RightClick(Main.LocalPlayer);
             return false;
         }
     }

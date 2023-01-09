@@ -52,7 +52,7 @@ namespace ImproveGame.Interface.UIElements
             var dimensions = GetDimensions();
             dimensions.Width = 40f;
             BigBagItemSlot.DrawItemIcon(sb: spriteBatch,
-                                   Item: item,
+                                   item: item,
                                    lightColor: Color.White,
                                    dimensions: dimensions,
                                    maxSize: 28);

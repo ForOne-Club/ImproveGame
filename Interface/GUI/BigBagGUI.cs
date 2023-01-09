@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
-using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
@@ -11,6 +10,7 @@ namespace ImproveGame.Interface.GUI
     public class BigBagGUI : UIState
     {
         private static bool _visible = true;
+
         public static bool Visible
         {
             get
@@ -23,14 +23,19 @@ namespace ImproveGame.Interface.GUI
         }
 
         public SUIPanel MainPanel;
+
         // 标题
         private SUIPanel TitlePanel;
         private SUITitle Title;
+
         private SUICross Cross;
+
         // 控制开关
         private SUISwitch RecipesSwitch, SmartGrabSwitch, AutoGrabSwitch;
+
         // 按钮
         private SUIPictureButton QuickButton, PutButton, ReplenishButton, SortButton;
+
         // 物品列表
         public ModItemGrid ItemGrid;
 
@@ -148,13 +153,15 @@ namespace ImproveGame.Interface.GUI
         /// </summary>
         /// <param name="evt"></param>
         /// <param name="listeningElement"></param>
-        private void NetSyncItem(UIMouseEvent evt, UIElement listeningElement)
+        private static void NetSyncItem(UIMouseEvent evt, UIElement listeningElement)
         {
-            if (Main.netMode == NetmodeID.MultiplayerClient && listeningElement is BigBagItemSlot itemSlot)
+            if (Main.netMode != NetmodeID.MultiplayerClient || listeningElement is not BigBagItemSlot itemSlot)
             {
-                var packet = BigBagSlotPacket.Get(itemSlot.Item, Main.myPlayer, itemSlot.index);
-                packet.Send(runLocally: false);
+                return;
             }
+
+            var packet = BigBagSlotPacket.Get(itemSlot.Item, Main.myPlayer, itemSlot.Index);
+            packet.Send(runLocally: false);
         }
 
         public override void Update(GameTime gameTime)
@@ -170,11 +177,13 @@ namespace ImproveGame.Interface.GUI
                 Main.LocalPlayer.mouseInterface = true;
             }
 
-            if (MainPanel.GetInnerSizePixels().Y != ItemGrid.Height.Pixels)
+            if (Math.Abs(MainPanel.GetInnerSizePixels().Y - ItemGrid.Height.Pixels) < 0.000000001)
             {
-                MainPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
-                MainPanel.Recalculate();
+                return;
             }
+
+            MainPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
+            MainPanel.Recalculate();
         }
 
         public void Open()
@@ -191,7 +200,7 @@ namespace ImproveGame.Interface.GUI
             AdditionalConfig.Save();
         }
 
-        public void Sort()
+        private void Sort()
         {
             SoundEngine.PlaySound(SoundID.Grab);
             Item[] items = ItemGrid.ItemList.items;
@@ -200,70 +209,76 @@ namespace ImproveGame.Interface.GUI
             List<Item> testSort = new();
             for (int i = 0; i < items.Length; i++)
             {
-                if (!items[i].IsAir && !items[i].favorited)
+                if (items[i].IsAir || items[i].favorited)
                 {
-                    testSort.Add(items[i]);
-                    items[i] = new();
+                    continue;
                 }
+
+                testSort.Add(items[i]);
+                items[i] = new Item();
             }
 
             // 优先级排序
             testSort.Sort((a, b) =>
-            {
-                return -a.rare.CompareTo(b.rare) * 100 + a.type.CompareTo(b.type) * 10 - a.stack.CompareTo(b.stack);
-            });
+                -a.rare.CompareTo(b.rare) * 100 + a.type.CompareTo(b.type) * 10 - a.stack.CompareTo(b.stack));
 
             // 放入背包
-            for (int i = 0; i < testSort.Count; i++)
+            foreach (var item in testSort)
             {
-                ItemStackToInventory(items, testSort[i], false);
+                ItemStackToInventory(items, item, false);
             }
+
             Recipe.FindRecipes();
         }
 
-        public void Replenish()
+        private void Replenish()
         {
             SoundEngine.PlaySound(SoundID.Grab);
             Item[] inventory = Main.LocalPlayer.inventory;
-            Item[] BigBag = ItemGrid.ItemList.items;
+            Item[] bigBag = ItemGrid.ItemList.items;
             for (int i = 10; i < 58; i++)
             {
-                if (!inventory[i].IsAir && !inventory[i].favorited && !inventory[i].IsACoin)
+                if (inventory[i].IsAir || inventory[i].favorited || inventory[i].IsACoin)
                 {
-                    if (HasItem(BigBag, -1, inventory[i].type))
-                    {
-                        inventory[i] = ItemStackToInventory(BigBag, inventory[i], false);
-                    }
+                    continue;
+                }
+
+                if (HasItem(bigBag, -1, inventory[i].type))
+                {
+                    inventory[i] = ItemStackToInventory(bigBag, inventory[i], false);
                 }
             }
+
             Recipe.FindRecipes();
         }
 
-        public void PutAll()
+        private void PutAll()
         {
             SoundEngine.PlaySound(SoundID.Grab);
             Item[] inventory = Main.LocalPlayer.inventory;
-            Item[] BigBag = ItemGrid.ItemList.items;
+            Item[] bigBag = ItemGrid.ItemList.items;
             for (int i = 10; i < 50; i++)
             {
                 if (!inventory[i].IsAir && !inventory[i].favorited && !inventory[i].IsACoin)
-                    inventory[i] = ItemStackToInventory(BigBag, inventory[i], false);
+                    inventory[i] = ItemStackToInventory(bigBag, inventory[i], false);
             }
+
             Recipe.FindRecipes();
         }
 
-        public void QuickTakeOutToPlayerInventory()
+        private void QuickTakeOutToPlayerInventory()
         {
             SoundEngine.PlaySound(SoundID.Grab);
             Item[] inventory = Main.LocalPlayer.inventory;
-            Item[] BigBag = ItemGrid.ItemList.items;
-            for (int i = 0; i < BigBag.Length; i++)
+            Item[] bigBag = ItemGrid.ItemList.items;
+            for (int i = 0; i < bigBag.Length; i++)
             {
-                if (!BigBag[i].IsAir && !BigBag[i].favorited && !BigBag[i].IsACoin)
+                if (!bigBag[i].IsAir && !bigBag[i].favorited && !bigBag[i].IsACoin)
                 {
-                    BigBag[i] = ItemStackToInventory(inventory, BigBag[i], false, 50);
+                    bigBag[i] = ItemStackToInventory(inventory, bigBag[i], false, 50);
                 }
             }
+
             Recipe.FindRecipes();
         }
     }

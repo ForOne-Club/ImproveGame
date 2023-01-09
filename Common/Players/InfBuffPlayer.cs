@@ -148,9 +148,9 @@ public class InfBuffPlayer : ModPlayer
         foreach (var item in items)
         {
             HandleBuffItem(item);
-            if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.storedPotions.Count > 0)
+            if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.StoredPotions.Count > 0)
             {
-                foreach (var p in potionBag.storedPotions)
+                foreach (var p in potionBag.StoredPotions)
                 {
                     HandleBuffItem(p);
                 }

@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.ModHooks;
-using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
@@ -12,29 +11,27 @@ namespace ImproveGame.Interface.SUIElements
     /// </summary>
     public class BigBagItemSlot : View
     {
-        private Item[] items;
-        public Item[] Items
-        {
-            get => items;
-            set => items = value;
-        }
-        public int index;
+        public Item[] Items { get; set; }
+
+        public readonly int Index;
+
         public Item Item
         {
-            get => items[index];
-            set => items[index] = value;
+            get => Items[Index];
+            private set => Items[Index] = value;
         }
-        private int RightMouseDownTimer = -1;
+
+        private int _rightMouseDownTimer = -1;
 
         public BigBagItemSlot(Item[] items, int index)
         {
             Width.Pixels = 52;
             Height.Pixels = 52;
-            this.items = items;
-            this.index = index;
+            this.Items = items;
+            this.Index = index;
 
             Relative = RelativeMode.Horizontal;
-            Spacing = new(10, 10);
+            Spacing = new Vector2(10, 10);
             Wrap = true;
         }
 
@@ -49,7 +46,7 @@ namespace ImproveGame.Interface.SUIElements
         {
             if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
-                RightMouseDownTimer = 0;
+                _rightMouseDownTimer = 0;
                 TakeSlotItemToMouseItem();
             }
 
@@ -73,6 +70,7 @@ namespace ImproveGame.Interface.SUIElements
                 Recipe.FindRecipes();
                 return;
             }
+
             if (ItemLoader.CanRightClick(Item))
             {
                 Main.mouseRightRelease = true;
@@ -80,6 +78,7 @@ namespace ImproveGame.Interface.SUIElements
                 Main.mouseRightRelease = false;
                 return;
             }
+
             base.MouseDown(evt);
         }
 
@@ -87,47 +86,50 @@ namespace ImproveGame.Interface.SUIElements
         {
             base.Update(gameTime);
             // 右键长按物品持续拿出
-            if (Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
+            if (Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] &&
+                !ItemID.Sets.IsFishingCrate[Item.type])
             {
-                if (RightMouseDownTimer >= 60)
+                if (_rightMouseDownTimer >= 60)
                 {
                     TakeSlotItemToMouseItem();
                 }
-                else if (RightMouseDownTimer >= 30 && RightMouseDownTimer % 3 == 0)
+                else if (_rightMouseDownTimer >= 30 && _rightMouseDownTimer % 3 == 0)
                 {
                     TakeSlotItemToMouseItem();
                 }
-                else if (RightMouseDownTimer >= 15 && RightMouseDownTimer % 6 == 0)
+                else if (_rightMouseDownTimer >= 15 && _rightMouseDownTimer % 6 == 0)
                 {
                     TakeSlotItemToMouseItem();
                 }
-                RightMouseDownTimer++;
+
+                _rightMouseDownTimer++;
             }
         }
 
         /// <summary>
         /// 拿物品槽内物品到鼠标物品上
         /// </summary>
-        public void TakeSlotItemToMouseItem()
+        private void TakeSlotItemToMouseItem()
         {
-            bool CanPlaySound = false;
+            bool playSound = false;
             if (Main.mouseItem.type == Item.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
             {
                 Main.mouseItem.stack++;
                 Item.stack--;
                 if (Item.IsAir)
                     Item.SetDefaults();
-                CanPlaySound = true;
+                playSound = true;
             }
             else if (Main.mouseItem.IsAir && !Item.IsAir && Item.maxStack > 1)
             {
-                Main.mouseItem = new Item(Item.type, 1);
+                Main.mouseItem = new Item(Item.type);
                 Item.stack--;
                 if (Item.IsAir)
                     Item.SetDefaults();
-                CanPlaySound = true;
+                playSound = true;
             }
-            if (CanPlaySound)
+
+            if (playSound)
                 SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
@@ -136,39 +138,45 @@ namespace ImproveGame.Interface.SUIElements
         /// </summary>
         private void SetCursorOverride()
         {
-            if (!Item.IsAir)
+            if (Item.IsAir)
             {
-                if (!Item.favorited && ItemSlot.ShiftInUse)
-                {
-                    Main.cursorOverride = CursorOverrideID.ChestToInventory; // 快捷放回物品栏图标
-                }
-                if (Main.keyState.IsKeyDown(Main.FavoriteKey))
-                {
-                    Main.cursorOverride = CursorOverrideID.FavoriteStar; // 收藏图标
-                    if (Main.drawingPlayerChat)
-                    {
-                        Main.cursorOverride = CursorOverrideID.Magnifiers; // 放大镜图标 - 输入到聊天框
-                    }
-                }
-                void TryTrashCursorOverride()
-                {
-                    if (!Item.favorited)
-                    {
-                        if (Main.npcShop <= 0)
-                            Main.cursorOverride = CursorOverrideID.TrashCan; // 垃圾箱图标
-                        else
-                            Main.cursorOverride = CursorOverrideID.QuickSell;
-                    }
-                }
-                if (ItemSlot.ControlInUse && ItemSlot.Options.DisableLeftShiftTrashCan && !ItemSlot.ShiftForcedOn)
-                {
-                    TryTrashCursorOverride();
-                }
-                // 如果左Shift快速丢弃打开了，按原版物品栏的物品应该是丢弃，但是我们这应该算箱子物品，所以不丢弃
-                //if (!ItemSlot.Options.DisableLeftShiftTrashCan && ItemSlot.ShiftInUse) {
-                //    TryTrashCursorOverride();
-                //}
+                return;
             }
+
+            if (!Item.favorited && ItemSlot.ShiftInUse)
+            {
+                Main.cursorOverride = CursorOverrideID.ChestToInventory; // 快捷放回物品栏图标
+            }
+
+            if (Main.keyState.IsKeyDown(Main.FavoriteKey))
+            {
+                Main.cursorOverride = CursorOverrideID.FavoriteStar; // 收藏图标
+                if (Main.drawingPlayerChat)
+                {
+                    Main.cursorOverride = CursorOverrideID.Magnifiers; // 放大镜图标 - 输入到聊天框
+                }
+            }
+
+            void TryTrashCursorOverride()
+            {
+                if (Item.favorited)
+                {
+                    return;
+                }
+
+                Main.cursorOverride = Main.npcShop <= 0
+                    ? CursorOverrideID.TrashCan
+                    : CursorOverrideID.QuickSell; // 垃圾箱图标
+            }
+
+            if (ItemSlot.ControlInUse && ItemSlot.Options.DisableLeftShiftTrashCan && !ItemSlot.ShiftForcedOn)
+            {
+                TryTrashCursorOverride();
+            }
+            // 如果左Shift快速丢弃打开了，按原版物品栏的物品应该是丢弃，但是我们这应该算箱子物品，所以不丢弃
+            //if (!ItemSlot.Options.DisableLeftShiftTrashCan && ItemSlot.ShiftInUse) {
+            //    TryTrashCursorOverride();
+            //}
         }
 
         /// <summary>
@@ -180,43 +188,42 @@ namespace ImproveGame.Interface.SUIElements
                 return;
 
             bool result = false;
-            if (Item.ModItem is IItemOverrideLeftClick)
-                result |= (Item.ModItem as IItemOverrideLeftClick).OverrideLeftClick(items, 114514, index);
+
+            if (Item.ModItem is IItemOverrideLeftClick iItemOverrideLeftClick)
+                result |= iItemOverrideLeftClick.OverrideLeftClick(Items, 114514, Index);
+
             if (result)
                 return;
 
-            // 放大镜图标 - 输入到聊天框
-            if (Main.cursorOverride == CursorOverrideID.Magnifiers)
+            switch (Main.cursorOverride)
             {
-                if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item), Vector2.One))
+                // 放大镜图标 - 输入到聊天框
+                case CursorOverrideID.Magnifiers:
+                    {
+                        if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item),
+                                Vector2.One))
+                            SoundEngine.PlaySound(SoundID.MenuTick);
+                        return;
+                    }
+                // 收藏图标
+                case CursorOverrideID.FavoriteStar:
+                    Item.favorited = !Item.favorited;
                     SoundEngine.PlaySound(SoundID.MenuTick);
-                return;
-            }
-
-            // 收藏图标
-            if (Main.cursorOverride == CursorOverrideID.FavoriteStar)
-            {
-                Item.favorited = !Item.favorited;
-                SoundEngine.PlaySound(SoundID.MenuTick);
-                return;
-            }
-
-            // 垃圾箱图标
-            if (Main.cursorOverride == CursorOverrideID.TrashCan || Main.cursorOverride == CursorOverrideID.QuickSell)
-            {
-                // 假装自己是一个物品栏物品
-                var temp = new Item[1];
-                temp[0] = Item;
-                ItemSlot.SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
-                return;
-            }
-
-            // 放回物品栏图标
-            if (Main.cursorOverride == CursorOverrideID.ChestToInventory)
-            {
-                Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item, GetItemSettings.InventoryEntityToPlayerInventorySettings);
-                SoundEngine.PlaySound(SoundID.Grab);
-                return;
+                    return;
+                // 垃圾箱图标
+                case CursorOverrideID.TrashCan:
+                case CursorOverrideID.QuickSell:
+                    // 假装自己是一个物品栏物品
+                    var temp = new Item[1];
+                    temp[0] = Item;
+                    ItemSlot.SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
+                    return;
+                // 放回物品栏图标
+                case CursorOverrideID.ChestToInventory:
+                    Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item,
+                        GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                    SoundEngine.PlaySound(SoundID.Grab);
+                    return;
             }
 
             if (ItemSlot.ShiftInUse)
@@ -225,12 +232,14 @@ namespace ImproveGame.Interface.SUIElements
             // 常规单点
             if (Item.IsAir)
             {
-                if (!Main.mouseItem.IsAir)
+                if (Main.mouseItem.IsAir)
                 {
-                    Item = Main.mouseItem;
-                    Main.mouseItem = new Item();
-                    SoundEngine.PlaySound(SoundID.Grab);
+                    return;
                 }
+
+                Item = Main.mouseItem;
+                Main.mouseItem = new Item();
+                SoundEngine.PlaySound(SoundID.Grab);
             }
             else
             {
@@ -250,7 +259,7 @@ namespace ImproveGame.Interface.SUIElements
                             if (Item.stack + Main.mouseItem.stack <= Item.maxStack)
                             {
                                 Item.stack += Main.mouseItem.stack;
-                                Main.mouseItem.SetDefaults(0);
+                                Main.mouseItem.SetDefaults();
                             }
                             else
                             {
@@ -263,7 +272,7 @@ namespace ImproveGame.Interface.SUIElements
                             if (Main.mouseItem.stack + Item.stack <= Main.mouseItem.maxStack)
                             {
                                 Main.mouseItem.stack += Item.stack;
-                                Item.SetDefaults(0);
+                                Item.SetDefaults();
                             }
                             else
                             {
@@ -280,6 +289,7 @@ namespace ImproveGame.Interface.SUIElements
                     {
                         (Item, Main.mouseItem) = (Main.mouseItem, Item);
                     }
+
                     SoundEngine.PlaySound(SoundID.Grab);
                 }
             }
@@ -303,13 +313,18 @@ namespace ImproveGame.Interface.SUIElements
                 Main.HoverItem = Item.Clone();
                 SetCursorOverride();
             }
+
             DrawItemIcon(sb, Item, Color.White, dimensions);
-            if (Item.stack > 1)
+            if (Item.stack <= 1)
             {
-                Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(Item.stack.ToString()) * 0.75f;
-                Vector2 textPos = pos + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
-                TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
-                /*DynamicSpriteFontExtensionMethods.DrawString(
+                return;
+            }
+
+            Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(Item.stack.ToString()) * 0.75f;
+            Vector2 textPos = pos + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
+            TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
+            // 这段是直接绘制文字，不带边框的，留到这里防止忘了咋写。
+            /*DynamicSpriteFontExtensionMethods.DrawString(
                     sb,
                     FontAssets.ItemStack.Value,
                     Item.stack.ToString(),
@@ -318,61 +333,60 @@ namespace ImproveGame.Interface.SUIElements
                     0f,
                     new Vector2(0),
                     0.75f, 0, 0f);*/
-            }
         }
 
-        public static void DrawItemIcon(SpriteBatch sb, Item Item, Color lightColor, CalculatedStyle dimensions, float maxSize = 32f)
+        public static void DrawItemIcon(SpriteBatch sb, Item item, Color lightColor, CalculatedStyle dimensions,
+            float maxSize = 32f)
         {
-            Main.instance.LoadItem(Item.type);
-            Texture2D texture2D = TextureAssets.Item[Item.type].Value;
-            Rectangle frame = Main.itemAnimations[Item.type] is null ? texture2D.Frame() : Main.itemAnimations[Item.type].GetFrame(texture2D);
-            float size = frame.Width > maxSize || frame.Height > maxSize ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height : 1f;
+            Main.instance.LoadItem(item.type);
+            Texture2D texture2D = TextureAssets.Item[item.type].Value;
+            Rectangle frame = Main.itemAnimations[item.type] is null
+                ? texture2D.Frame()
+                : Main.itemAnimations[item.type].GetFrame(texture2D);
+            float size = frame.Width > maxSize || frame.Height > maxSize
+                ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height
+                : 1f;
             Vector2 position = dimensions.Center() - frame.Size() * size / 2f;
             Vector2 origin = dimensions.Center();
-            if (ItemLoader.PreDrawInInventory(Item, sb, position, frame, Item.GetAlpha(lightColor), Item.GetColor(lightColor), origin, size))
+            if (ItemLoader.PreDrawInInventory(item, sb, position, frame, item.GetAlpha(lightColor),
+                    item.GetColor(lightColor), origin, size))
             {
-                sb.Draw(texture2D, position, (Rectangle?)frame, Item.GetAlpha(lightColor), 0f, Vector2.Zero, size, SpriteEffects.None, 0f);
-                if (Item.color != Color.Transparent)
-                    sb.Draw(texture2D, position, (Rectangle?)frame, Item.GetColor(lightColor), 0f, Vector2.Zero, size, SpriteEffects.None, 0f);
+                sb.Draw(texture2D, position, frame, item.GetAlpha(lightColor), 0f, Vector2.Zero, size,
+                    SpriteEffects.None, 0f);
+                if (item.color != Color.Transparent)
+                    sb.Draw(texture2D, position, frame, item.GetColor(lightColor), 0f, Vector2.Zero, size,
+                        SpriteEffects.None, 0f);
             }
-            ItemLoader.PostDrawInInventory(Item, sb, position, frame, Item.GetAlpha(lightColor), Item.GetColor(lightColor), origin, size);
+
+            ItemLoader.PostDrawInInventory(item, sb, position, frame, item.GetAlpha(lightColor),
+                item.GetColor(lightColor), origin, size);
         }
 
-        public static void DrawItemIcon(SpriteBatch sb, Texture2D texture2D, Color color, CalculatedStyle dimensions, float maxSize = 32f)
+        public static void DrawItemIcon(SpriteBatch sb, Texture2D texture2D, Color color, CalculatedStyle dimensions,
+            float maxSize = 32f)
         {
             Vector2 size = texture2D.Size();
-            float scale = size.X > maxSize || size.Y > maxSize ? size.X > size.Y ? maxSize / size.X : maxSize / size.Y : 1f;
+            float scale = size.X > maxSize || size.Y > maxSize
+                ? size.X > size.Y ? maxSize / size.X : maxSize / size.Y
+                : 1f;
             Vector2 position = dimensions.Center();
             Vector2 origin = size / 2;
             sb.Draw(texture2D, position, null, color, 0f, origin, scale, SpriteEffects.None, 0f);
         }
 
-        public static void DrawItemIcon(SpriteBatch sb, Texture2D texture2D, Color color, Vector2 pos, Vector2 origin, float maxSize = 32f)
+        public static void DrawItemIcon(SpriteBatch sb, Texture2D texture2D, Color color, Vector2 pos, Vector2 origin,
+            float maxSize = 32f)
         {
             Vector2 size = texture2D.Size();
-            float scale = size.X > maxSize || size.Y > maxSize ? size.X > size.Y ? maxSize / size.X : maxSize / size.Y : 1f;
+            float scale = size.X > maxSize || size.Y > maxSize
+                ? size.X > size.Y ? maxSize / size.X : maxSize / size.Y
+                : 1f;
             sb.Draw(texture2D, pos, null, color, 0f, origin, scale, SpriteEffects.None, 0f);
         }
 
         public static void OpenItemGlow(SpriteBatch sb)
         {
-            //Effect effect = ModAssets.ItemEffect.Value;
-            //Color lerpColor;
-            //int milliSeconds = (int)Main.gameTimeCache.TotalGameTime.TotalMilliseconds;
-            //float time = milliSeconds * 0.05f;
-            //if (time % 60f < 30)
-            //{
-            //    lerpColor = Color.Lerp(Color.White * 0.25f, Color.Transparent, (float)(time % 60f % 30 / 29));
-            //}
-            //else
-            //{
-            //    lerpColor = Color.Lerp(Color.Transparent, Color.White * 0.25f, (float)(time % 60f % 30 / 29));
-            //}
-
-            //effect.Parameters["uColor"].SetValue(lerpColor.ToVector4());
-            //effect.CurrentTechnique.Passes["ColorPut"].Apply();
-
-            var effect = ModAssets.Transform.Value;
+            Effect effect = ModAssets.Transform.Value;
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.2f);
             effect.CurrentTechnique.Passes["EnchantedPass"].Apply();
             Main.instance.GraphicsDevice.Textures[1] = GetTexture("Enchanted").Value; // 传入调色板

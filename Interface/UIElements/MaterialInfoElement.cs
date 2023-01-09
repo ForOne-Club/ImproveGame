@@ -76,7 +76,7 @@ namespace ImproveGame.Interface.UIElements
             dimensions.Width = 28f;
             dimensions.X += 16f;
             BigBagItemSlot.DrawItemIcon(sb: spriteBatch,
-                                   Item: iconItem,
+                                   item: iconItem,
                                    lightColor: Color.White,
                                    dimensions: dimensions,
                                    maxSize: 26);
@@ -174,7 +174,7 @@ namespace ImproveGame.Interface.UIElements
             dimensions.Width = 28f;
             dimensions.X += 16f;
             BigBagItemSlot.DrawItemIcon(sb: spriteBatch,
-                                   Item: iconItem,
+                                   item: iconItem,
                                    lightColor: Color.White,
                                    dimensions: dimensions,
                                    maxSize: 26);

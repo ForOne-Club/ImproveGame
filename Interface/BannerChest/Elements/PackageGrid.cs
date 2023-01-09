@@ -81,7 +81,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
             }
 
             ListView.SetInnerPixels(GridSize(52f, 8f, 5, length / 5));
-            Scrollbar.SetView(GetInnerDimensions().Height, ListView.Height.Pixels);
+            Scrollbar.SetView(GetInnerDimensions().Height, ListView.Height.Pixels + 1);
         }
     }
 }

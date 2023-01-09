@@ -13,7 +13,7 @@ namespace ImproveGame.Content.Items
     public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
-        public List<Item> storedPotions = new();
+        public List<Item> StoredPotions = new();
         public bool AutoStorage { get; set; }
         public bool AutoSort { get; set; }
 
@@ -21,18 +21,18 @@ namespace ImproveGame.Content.Items
         public override ModItem Clone(Item newEntity)
         {
             PotionBag bag = base.Clone(newEntity) as PotionBag;
-            bag.storedPotions = new(storedPotions); // 创建一个新的集合，依旧会拷贝 list 内的引用，但是它本身是一个新的对象。
+            bag.StoredPotions = new(StoredPotions); // 创建一个新的集合，依旧会拷贝 list 内的引用，但是它本身是一个新的对象。
             return bag;
         }
 
-        public override bool CanRightClick() => storedPotions != null;
+        public override bool CanRightClick() => StoredPotions != null;
 
         public override void RightClick(Player player)
         {
-            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == storedPotions)
+            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == StoredPotions)
                 UISystem.Instance.PackageGUI.Close();
             else
-                UISystem.Instance.PackageGUI.Open(storedPotions, Item.Name, PackageGUI.StorageType.Potions, this);
+                UISystem.Instance.PackageGUI.Open(StoredPotions, Item.Name, PackageGUI.StorageType.Potions, this);
 
             // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
             // storedPotions.RemoveAt(storedPotions.Count - 1);
@@ -43,7 +43,8 @@ namespace ImproveGame.Content.Items
         /// <summary>
         /// 只有在这些地方才可以放药水进去
         /// </summary>
-        private static readonly List<int> availableContexts = new() {
+        private static readonly List<int> availableContexts = new()
+        {
             ItemSlot.Context.InventoryItem,
             ItemSlot.Context.ChestItem,
             114514
@@ -57,42 +58,48 @@ namespace ImproveGame.Content.Items
             {
                 return false;
             }
+
             PutInPackage(ref Main.mouseItem);
             if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
             }
+
             return true;
         }
 
         public void PutInPackage(ref Item item)
         {
-            for (int i = 0; i < storedPotions.Count; i++)
+            for (int i = 0; i < StoredPotions.Count; i++)
             {
-                if (storedPotions[i].IsAir)
+                if (StoredPotions[i].IsAir)
                 {
-                    storedPotions.RemoveAt(i);
+                    StoredPotions.RemoveAt(i);
                     i--;
                     continue;
                 }
-                if (storedPotions[i].type == item.type && storedPotions[i].stack < storedPotions[i].maxStack && ItemLoader.CanStack(storedPotions[i], item))
+
+                if (StoredPotions[i].type == item.type && StoredPotions[i].stack < StoredPotions[i].maxStack &&
+                    ItemLoader.CanStack(StoredPotions[i], item))
                 {
-                    int stackAvailable = storedPotions[i].maxStack - storedPotions[i].stack;
+                    int stackAvailable = StoredPotions[i].maxStack - StoredPotions[i].stack;
                     int stackAddition = Math.Min(item.stack, stackAvailable);
                     item.stack -= stackAddition;
-                    storedPotions[i].stack += stackAddition;
+                    StoredPotions[i].stack += stackAddition;
                     SoundEngine.PlaySound(SoundID.Grab);
                     Recipe.FindRecipes();
                     if (item.stack <= 0)
                         item.TurnToAir();
                 }
             }
-            if (!item.IsAir && storedPotions.Count < 200)
+
+            if (!item.IsAir && StoredPotions.Count < 200)
             {
-                storedPotions.Add(item.Clone());
+                StoredPotions.Add(item.Clone());
                 item.TurnToAir();
                 SoundEngine.PlaySound(SoundID.Grab);
             }
+
             // 依照type对物品进行排序
             if (AutoSort)
             {
@@ -102,7 +109,7 @@ namespace ImproveGame.Content.Items
 
         public void Sort()
         {
-            storedPotions.Sort((a, b) =>
+            StoredPotions.Sort((a, b) =>
             {
                 return a.type.CompareTo(b.type) + (a.stack > b.stack ? 1 : (a.stack == b.stack ? 0 : -1)) * 10;
             });
@@ -113,16 +120,20 @@ namespace ImproveGame.Content.Items
             // 决定文本显示的是“开启”还是“关闭”
             if (ItemInInventory)
             {
-                string _switch = ArchitectureGUI.Visible ? "Off" : "On";
-                tooltips.Add(new(Mod, "CreateWand", GetText($"Tips.CreateWand{_switch}")) { OverrideColor = Color.LightGreen });
+                string @switch = PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == StoredPotions
+                    ? "Off"
+                    : "On";
+                tooltips.Add(new TooltipLine(Mod, "CreateWand", GetText($"Tips.CreateWand{@switch}"))
+                    { OverrideColor = Color.LightGreen });
             }
+
             ItemInInventory = false;
 
-            if (storedPotions is not null && storedPotions.Count > 0)
+            if (StoredPotions is not null && StoredPotions.Count > 0)
             {
-                string storeText = storedPotions.Count >= 200
+                string storeText = StoredPotions.Count >= 200
                     ? GetText("Tips.PotionBagCurrentFull")
-                    : GetTextWith("Tips.PotionBagCurrent", new { StoredCount = storedPotions.Count });
+                    : GetTextWith("Tips.PotionBagCurrent", new { StoredCount = StoredPotions.Count });
                 tooltips.Add(new(Mod, "PotionBagCurrent", storeText)
                 {
                     OverrideColor = Color.LightGreen
@@ -130,12 +141,12 @@ namespace ImproveGame.Content.Items
 
                 // 20+类药水时不显示详细信息
                 int cow = 0;
-                if (storedPotions.Count > 20)
+                if (StoredPotions.Count > 20)
                 {
                     string cachedText = string.Empty;
-                    for (int i = 0; i < storedPotions.Count; i++)
+                    for (int i = 0; i < StoredPotions.Count; i++)
                     {
-                        Item potion = storedPotions[i];
+                        Item potion = StoredPotions[i];
                         int stackDisplayed = potion.stack >= 99 ? 99 : potion.stack;
                         string text = $"[i/s{stackDisplayed}:{potion.type}]";
                         cachedText += text;
@@ -145,6 +156,7 @@ namespace ImproveGame.Content.Items
                             cachedText = string.Empty;
                         }
                     }
+
                     if (!string.IsNullOrEmpty(cachedText))
                     {
                         tooltips.Add(new(Mod, "PotionBagPX", cachedText));
@@ -153,9 +165,9 @@ namespace ImproveGame.Content.Items
                 // 药水少于20类时显示详细信息
                 else
                 {
-                    for (int i = 0; i < storedPotions.Count; i++)
+                    for (int i = 0; i < StoredPotions.Count; i++)
                     {
-                        var potion = storedPotions[i];
+                        var potion = StoredPotions[i];
                         var color = Color.SkyBlue;
                         bool available = potion.stack >= Config.NoConsume_PotionRequirement;
                         string text = $"[i/s{potion.stack}:{potion.type}] [{Lang.GetItemNameValue(potion.type)}]";
@@ -163,7 +175,8 @@ namespace ImproveGame.Content.Items
                         if (available)
                         {
                             if (!Config.NoConsume_Potion || !InfBuffPlayer.CheckInfBuffEnable(potion.buffType))
-                            { // 被禁用了
+                            {
+                                // 被禁用了
                                 text += $"  {GetText("Tips.PotionBagDisabled")}";
                             }
                             else
@@ -175,8 +188,10 @@ namespace ImproveGame.Content.Items
                         // 没有30个
                         else
                         {
-                            text += $"  {GetText("Tips.PotionBagUnavailable")} ({potion.stack}/{Config.NoConsume_PotionRequirement})";
+                            text +=
+                                $"  {GetText("Tips.PotionBagUnavailable")} ({potion.stack}/{Config.NoConsume_PotionRequirement})";
                         }
+
                         tooltips.Add(new(Mod, $"PotionBagP{i}", text)
                         {
                             OverrideColor = color
@@ -195,16 +210,19 @@ namespace ImproveGame.Content.Items
 
         public override bool PreDrawTooltipLine(DrawableTooltipLine line, ref int yOffset)
         {
-            if (line.Mod == Mod.Name && line.Name.StartsWith("PotionBagP") && Main.SettingsEnabled_OpaqueBoxBehindTooltips)
+            if (line.Mod == Mod.Name && line.Name.StartsWith("PotionBagP") &&
+                Main.SettingsEnabled_OpaqueBoxBehindTooltips)
             {
                 var font = FontAssets.MouseText.Value;
                 var position = new Vector2(line.X, line.Y);
                 var color = line.OverrideColor ?? line.Color;
                 TextSnippet[] snippets = ChatManager.ParseMessage(line.Text, color).ToArray();
                 ChatManager.ConvertNormalSnippets(snippets);
-                ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f, Vector2.Zero, Vector2.One, out _, -1);
+                ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f,
+                    Vector2.Zero, Vector2.One, out _, -1);
                 return false;
             }
+
             return base.PreDrawTooltipLine(line, ref yOffset);
         }
 
@@ -219,13 +237,14 @@ namespace ImproveGame.Content.Items
             Item.height = 42;
         }
 
-        public override void SetStaticDefaults() => CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
+        public override void SetStaticDefaults() =>
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
 
         public override void LoadData(TagCompound tag)
         {
             (this as IPackageItem).ILoadData(tag);
-            storedPotions = tag.Get<List<Item>>("potions");
-            storedPotions ??= new();
+            StoredPotions = tag.Get<List<Item>>("potions");
+            StoredPotions ??= new();
 
             // 旧版迁移
             if (!tag.ContainsKey("storedPotions"))
@@ -240,25 +259,27 @@ namespace ImproveGame.Content.Items
                 {
                     continue;
                 }
+
                 list.Add(potion);
             }
-            storedPotions = list;
+
+            StoredPotions = list;
         }
 
         public override void SaveData(TagCompound tag)
         {
             (this as IPackageItem).ISaveData(tag);
-            tag["potions"] = storedPotions;
+            tag["potions"] = StoredPotions;
         }
 
         public override void NetSend(BinaryWriter writer)
         {
-            writer.Write(storedPotions.ToArray());
+            writer.Write(StoredPotions.ToArray());
         }
 
         public override void NetReceive(BinaryReader reader)
         {
-            storedPotions = new(reader.ReadItemArray());
+            StoredPotions = new(reader.ReadItemArray());
         }
 
         public override void AddRecipes()
@@ -269,6 +290,7 @@ namespace ImproveGame.Content.Items
         }
 
         private bool ItemInInventory;
+
         public bool OverrideHover(Item[] inventory, int context, int slot)
         {
             if (context == ItemSlot.Context.InventoryItem)
@@ -277,6 +299,7 @@ namespace ImproveGame.Content.Items
                 if (PlayerInput.Triggers.JustPressed.MouseMiddle)
                     RightClick(Main.LocalPlayer);
             }
+
             return false;
         }
     }

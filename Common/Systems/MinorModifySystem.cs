@@ -499,9 +499,9 @@ namespace ImproveGame.Common.Systems
             foreach (var item in items)
             {
                 AddBannerBuff(item);
-                if (item is not null && !item.IsAir && item.ModItem is not null && item.ModItem is BannerChest bannerChest && bannerChest.storedBanners.Count > 0)
+                if (item is not null && !item.IsAir && item.ModItem is not null && item.ModItem is BannerChest bannerChest && bannerChest.StoredBanners.Count > 0)
                 {
-                    foreach (var p in bannerChest.storedBanners)
+                    foreach (var p in bannerChest.StoredBanners)
                     {
                         AddBannerBuff(p);
                     }
