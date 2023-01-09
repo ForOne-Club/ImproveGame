@@ -9,8 +9,46 @@ namespace ImproveGame.Interface
     /// </summary>
     public class EventTrigger
     {
+        private static readonly List<EventTrigger> EventTriggers = new List<EventTrigger>();
+
+        private static void PrioritySort()
+        {
+            EventTriggers.Sort((a, b) => -a._priority.CompareTo(b._priority));
+        }
+
+        public static void UpdateUI(GameTime gameTime)
+        {
+            foreach (EventTrigger value in EventTriggers)
+            {
+                value.Update(gameTime);
+            }
+        }
+
+        /// <summary>
+        /// 用于判断此 UI 是否执行 Update() 与 Draw()
+        /// </summary>
+        public Func<bool> CanRunFunc;
+
+        private bool _canRun;
+
+        private readonly int _priority;
+
         private UIState _state;
         private Vector2 _mousePosition;
+
+        /// <summary>
+        /// 我在这里提醒一下需要为 CanRunFunc 赋值否则 UI 将永不生效<br/>
+        /// CanRunFunc 用于判断此 UI 是否执行 Update() 与 Draw() <br/>
+        /// priority 是 Update() 执行的优先级，值越大越先执行。 <br/>
+        /// 此类构建的方法不需要再与 UISystem.UpdateUI() 中添加代码 <br/>
+        /// </summary>
+        /// <param name="priority">Update() 优先级</param>
+        public EventTrigger(int priority)
+        {
+            _priority = priority;
+            EventTriggers.Add(this);
+            PrioritySort();
+        }
 
         public void SetState(UIState uiState)
         {
@@ -32,8 +70,14 @@ namespace ImproveGame.Interface
         private bool _wasElementRightDown;
         private bool _wasElementMiddleDown;
 
-        public void Update(GameTime gameTime)
+        private void Update(GameTime gameTime)
         {
+            if (CanRunFunc is null)
+            {
+                _canRun = false;
+                return ;
+            }
+
             if (_state is null)
                 return;
 
@@ -143,9 +187,14 @@ namespace ImproveGame.Interface
             _state.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
-            _state?.Draw(spriteBatch);
+            if (!_canRun)
+            {
+                return;
+            }
+
+            _state?.Draw(Main.spriteBatch);
         }
     }
 }
