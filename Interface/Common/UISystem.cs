@@ -56,7 +56,7 @@ namespace ImproveGame.Interface.Common
         internal static UserInterface PrefixRecallInterface;
 
         public PackageGUI PackageGUI;
-        internal static UserInterface PackageInterface;
+        internal static EventTrigger PackageTrigger;
 
         #endregion
 
@@ -106,40 +106,42 @@ namespace ImproveGame.Interface.Common
             PrefixRecallInterface = null;
 
             PackageGUI = null;
-            PackageInterface = null;
+            PackageTrigger = null;
         }
 
         public override void Load()
         {
             Instance = this;
-            if (!Main.dedServ)
+            if (Main.dedServ)
             {
-                PlayerInfoInterface = new();
-                AutofisherGUI = new();
-                BuffTrackerGUI = new();
-                LiquidWandGUI = new();
-                ArchitectureGUI = new();
-                BrustGUI = new();
-                PackageInterface = new();
-                BigBagInterface = new();
-                SpaceWandGUI = new();
-                PaintWandGUI = new();
-                GrabBagInfoGUI = new();
-                LifeformAnalyzerGUI = new();
-                StructureGUI = new();
-                PrefixRecallGUI = new();
-                LoadGUI(ref AutofisherGUI, out AutofisherInterface);
-                LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
-                LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
-                LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
-                LoadGUI(ref BrustGUI, out BrustInterface);
-                LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
-                LoadGUI(ref PaintWandGUI, out PaintWandInterface);
-                LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
-                LoadGUI(ref LifeformAnalyzerGUI, out LifeformAnalyzerInterface);
-                LoadGUI(ref StructureGUI, out StructureInterface);
-                LoadGUI(ref PrefixRecallGUI, out PrefixRecallInterface);
+                return;
             }
+            PackageTrigger = new EventTrigger();
+
+            PlayerInfoInterface = new();
+            AutofisherGUI = new();
+            BuffTrackerGUI = new();
+            LiquidWandGUI = new();
+            ArchitectureGUI = new();
+            BrustGUI = new();
+            BigBagInterface = new();
+            SpaceWandGUI = new();
+            PaintWandGUI = new();
+            GrabBagInfoGUI = new();
+            LifeformAnalyzerGUI = new();
+            StructureGUI = new();
+            PrefixRecallGUI = new();
+            LoadGUI(ref AutofisherGUI, out AutofisherInterface);
+            LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
+            LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
+            LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
+            LoadGUI(ref BrustGUI, out BrustInterface);
+            LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
+            LoadGUI(ref PaintWandGUI, out PaintWandInterface);
+            LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
+            LoadGUI(ref LifeformAnalyzerGUI, out LifeformAnalyzerInterface);
+            LoadGUI(ref StructureGUI, out StructureInterface);
+            LoadGUI(ref PrefixRecallGUI, out PrefixRecallInterface);
         }
 
         public static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface, Action PreActive = null) where T : UIState
@@ -168,7 +170,7 @@ namespace ImproveGame.Interface.Common
             if (LiquidWandGUI.Visible)
                 LiquidWandInterface?.Update(gameTime);
             if (PackageGUI.Visible)
-                PackageInterface?.Update(gameTime);
+                PackageTrigger?.Update(gameTime);
             if (ArchitectureGUI.Visible)
                 ArchitectureInterface?.Update(gameTime);
             if (BrustGUI.Visible)
