@@ -18,9 +18,9 @@ namespace ImproveGame.Interface
 
         public static void UpdateUI(GameTime gameTime)
         {
-            foreach (EventTrigger value in EventTriggers)
+            foreach (EventTrigger eventTrigger in EventTriggers)
             {
-                value.Update(gameTime);
+                eventTrigger.Update(gameTime);
             }
         }
 
@@ -45,6 +45,7 @@ namespace ImproveGame.Interface
         /// <param name="priority">Update() 优先级</param>
         public EventTrigger(int priority)
         {
+            new UserInterface();
             _priority = priority;
             EventTriggers.Add(this);
             PrioritySort();
@@ -72,119 +73,123 @@ namespace ImproveGame.Interface
 
         private void Update(GameTime gameTime)
         {
-            if (CanRunFunc is null)
+            if (!CanRunFunc?.Invoke() ?? true)
             {
                 _canRun = false;
-                return ;
+                return;
             }
+
+            _canRun = true;
 
             if (_state is null)
                 return;
 
-            _mousePosition = new Vector2(Main.mouseX, Main.mouseY);
-
-            if (Main.hasFocus)
+            if (!Main.hasFocus)
             {
-                try
-                {
-                    // 鼠标目标元素
-                    UIElement target = _state.GetElementAt(_mousePosition);
-                    var targetMouseEvent = new UIMouseEvent(target, _mousePosition);
-                    // 当前目标元素不是上一个目标元素
-                    if (_lastElementHover != target)
-                    {
-                        // 鼠标移出元素
-                        _lastElementHover?.MouseOut(new UIMouseEvent(_lastElementHover, _mousePosition));
-                        // 鼠标移入元素
-                        target?.MouseOver(targetMouseEvent);
-                        _lastElementHover = target;
-                    }
-
-                    switch (Main.mouseLeft)
-                    {
-                        case true when !_wasElementDown:
-                            // 按下事件
-                            target?.MouseDown(targetMouseEvent);
-                            _lastElementDown = target;
-                            break;
-                        case false when _wasElementDown && _lastElementDown != null:
-                            {
-                                UIElement lastElementDown = _lastElementDown;
-                                // 左键点击事件
-                                if (lastElementDown.ContainsPoint(_mousePosition))
-                                {
-                                    lastElementDown.Click(new UIMouseEvent(lastElementDown, _mousePosition));
-                                }
-
-                                // 鼠标离开事件
-                                lastElementDown.MouseUp(new UIMouseEvent(lastElementDown, _mousePosition));
-                                _lastElementDown = null;
-                                break;
-                            }
-                    }
-
-                    switch (Main.mouseRight)
-                    {
-                        case true when !_wasElementRightDown:
-                            target?.RightMouseDown(targetMouseEvent);
-                            _lastElementRightDown = target;
-                            break;
-                        case false when _wasElementRightDown && _lastElementRightDown != null:
-                            {
-                                UIElement lastElementRightDown = _lastElementRightDown;
-                                // 点击事件
-                                if (lastElementRightDown.ContainsPoint(_mousePosition))
-                                {
-                                    lastElementRightDown.RightClick(new UIMouseEvent(lastElementRightDown,
-                                        _mousePosition));
-                                }
-
-                                // 鼠标离开事件
-                                lastElementRightDown.RightMouseUp(
-                                    new UIMouseEvent(lastElementRightDown, _mousePosition));
-                                _lastElementRightDown = null;
-                                break;
-                            }
-                    }
-
-                    switch (Main.mouseMiddle)
-                    {
-                        case true when !_wasElementMiddleDown:
-                            target?.MiddleMouseDown(targetMouseEvent);
-                            _lastElementMiddleDown = target;
-                            break;
-                        case false when _wasElementMiddleDown && _lastElementMiddleDown != null:
-                            {
-                                UIElement lastElementMiddleDown = _lastElementMiddleDown;
-                                // 点击事件
-                                if (lastElementMiddleDown.ContainsPoint(_mousePosition))
-                                {
-                                    lastElementMiddleDown.MiddleClick(new UIMouseEvent(lastElementMiddleDown,
-                                        _mousePosition));
-                                }
-
-                                // 鼠标离开事件
-                                lastElementMiddleDown.MiddleMouseUp(new UIMouseEvent(lastElementMiddleDown,
-                                    _mousePosition));
-                                _lastElementRightDown = null;
-                                break;
-                            }
-                    }
-
-                    if (PlayerInput.ScrollWheelDeltaForUI != 0)
-                    {
-                        target?.ScrollWheel(new UIScrollWheelEvent(target, _mousePosition,
-                            PlayerInput.ScrollWheelDeltaForUI));
-                    }
-                } finally
-                {
-                    _wasElementDown = Main.mouseLeft;
-                    _wasElementRightDown = Main.mouseRight;
-                    _wasElementMiddleDown = Main.mouseMiddle;
-                }
+                return;
             }
 
-            _state.Update(gameTime);
+            _mousePosition = new Vector2(Main.mouseX, Main.mouseY);
+
+            try
+            {
+                // 鼠标目标元素
+                UIElement target = _state.GetElementAt(_mousePosition);
+                var targetMouseEvent = new UIMouseEvent(target, _mousePosition);
+                // 当前目标元素不是上一个目标元素
+                if (_lastElementHover != target)
+                {
+                    // 鼠标移出元素
+                    _lastElementHover?.MouseOut(new UIMouseEvent(_lastElementHover, _mousePosition));
+                    // 鼠标移入元素
+                    target?.MouseOver(targetMouseEvent);
+                    _lastElementHover = target;
+                }
+
+                switch (Main.mouseLeft)
+                {
+                    case true when !_wasElementDown:
+                        // 按下事件
+                        target?.MouseDown(targetMouseEvent);
+                        _lastElementDown = target;
+                        break;
+                    case false when _wasElementDown && _lastElementDown != null:
+                        {
+                            UIElement lastElementDown = _lastElementDown;
+                            // 左键点击事件
+                            if (lastElementDown.ContainsPoint(_mousePosition))
+                            {
+                                lastElementDown.Click(new UIMouseEvent(lastElementDown, _mousePosition));
+                            }
+
+                            // 鼠标离开事件
+                            lastElementDown.MouseUp(new UIMouseEvent(lastElementDown, _mousePosition));
+                            _lastElementDown = null;
+                            break;
+                        }
+                }
+
+                switch (Main.mouseRight)
+                {
+                    case true when !_wasElementRightDown:
+                        target?.RightMouseDown(targetMouseEvent);
+                        _lastElementRightDown = target;
+                        break;
+                    case false when _wasElementRightDown && _lastElementRightDown != null:
+                        {
+                            UIElement lastElementRightDown = _lastElementRightDown;
+                            // 点击事件
+                            if (lastElementRightDown.ContainsPoint(_mousePosition))
+                            {
+                                lastElementRightDown.RightClick(new UIMouseEvent(lastElementRightDown,
+                                    _mousePosition));
+                            }
+
+                            // 鼠标离开事件
+                            lastElementRightDown.RightMouseUp(
+                                new UIMouseEvent(lastElementRightDown, _mousePosition));
+                            _lastElementRightDown = null;
+                            break;
+                        }
+                }
+
+                switch (Main.mouseMiddle)
+                {
+                    case true when !_wasElementMiddleDown:
+                        target?.MiddleMouseDown(targetMouseEvent);
+                        _lastElementMiddleDown = target;
+                        break;
+                    case false when _wasElementMiddleDown && _lastElementMiddleDown != null:
+                        {
+                            UIElement lastElementMiddleDown = _lastElementMiddleDown;
+                            // 点击事件
+                            if (lastElementMiddleDown.ContainsPoint(_mousePosition))
+                            {
+                                lastElementMiddleDown.MiddleClick(new UIMouseEvent(lastElementMiddleDown,
+                                    _mousePosition));
+                            }
+
+                            // 鼠标离开事件
+                            lastElementMiddleDown.MiddleMouseUp(new UIMouseEvent(lastElementMiddleDown,
+                                _mousePosition));
+                            _lastElementRightDown = null;
+                            break;
+                        }
+                }
+
+                if (PlayerInput.ScrollWheelDeltaForUI != 0)
+                {
+                    target?.ScrollWheel(new UIScrollWheelEvent(target, _mousePosition,
+                        PlayerInput.ScrollWheelDeltaForUI));
+                }
+
+                _state.Update(gameTime);
+            } finally
+            {
+                _wasElementDown = Main.mouseLeft;
+                _wasElementRightDown = Main.mouseRight;
+                _wasElementMiddleDown = Main.mouseMiddle;
+            }
         }
 
         public void Draw()

@@ -122,11 +122,6 @@ namespace ImproveGame.Interface.Common
             {
                 CanRunFunc = () => PackageGUI.Visible
             };
-
-            PackageTrigger = new EventTrigger(0)
-            {
-                CanRunFunc = () => PackageGUI.Visible
-            };
             BigBagTrigger = new EventTrigger(0)
             {
                 CanRunFunc = () => BigBagGUI.Visible
@@ -246,7 +241,7 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible);
                 layers.Insert(index, "Autofisher GUI", AutofisherGUI, () => AutofisherGUI.Visible);
                 layers.Insert(index, "Package GUI", PackageTrigger);
-                layers.Insert(index, "BigBag GUI", BigBagGUI, () => BigBagGUI.Visible);
+                layers.Insert(index, "BigBag GUI", BigBagTrigger);
                 layers.Insert(index, "Grab Bag Info GUI", GrabBagInfoGUI, () => GrabBagInfoGUI.Visible);
                 layers.Insert(index, "Lifeform Analyzer GUI", LifeformAnalyzerGUI, () => LifeformAnalyzerGUI.Visible);
                 layers.Insert(index, "Structure GUI", StructureGUI, () => StructureGUI.Visible);
