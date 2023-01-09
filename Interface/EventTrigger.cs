@@ -4,8 +4,8 @@ namespace ImproveGame.Interface
 {
     /// <summary>
     /// 事件触发器，用于取代原版的 UserInterface
-    /// 仅支持 左 & 中 & 右键 MouseDown MouseUp MouseOut MouseOver 以及 Update
-    /// 手柄方法 & 双击方法都取消了，因为用不到。
+    /// 支持 Update MouseOut MouseOver 左 & 中 & 右键的 MouseDown MouseUp Click
+    /// 鼠标侧键方法 & 双击方法都取消了，因为用不到。
     /// </summary>
     public class EventTrigger
     {

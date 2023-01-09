@@ -7,7 +7,16 @@ namespace ImproveGame.Interface.GUI
 {
     public class ArchitectureGUI : UIState
     {
-        public static bool Visible { get; private set; }
+        private static bool _visible;
+
+        public static bool Visible
+        {
+            get
+            {
+                return _visible && Main.playerInventory && Main.LocalPlayer.HeldItem is not null;
+            }
+            private set => _visible = value;
+        }
         private static float panelLeft;
         private static float panelWidth;
         private static float panelTop;
