@@ -6,6 +6,7 @@ using static ImproveGame.Interface.Common.UISystem;
 
 namespace ImproveGame.Interface.Common
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class UIPlayer : ModPlayer
     {
         internal static Vector2 HugeInventoryUIPosition;
@@ -16,7 +17,7 @@ namespace ImproveGame.Interface.Common
             DataPlayer dataPlayer = player.GetModPlayer<DataPlayer>();
 
             // 玩家信息
-            PlayerInfoInterface.SetState(Instance.PlayerInfoGUI = new PlayerInfoGUI());
+            PlayerInfoTrigger.SetState(Instance.PlayerInfoGUI = new PlayerInfoGUI());
             PlayerInfoGUI.Visible = true;
 
             // 旗帜盒

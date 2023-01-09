@@ -11,9 +11,26 @@ namespace ImproveGame.Interface
     {
         private static readonly List<EventTrigger> EventTriggers = new List<EventTrigger>();
 
-        private static void PrioritySort()
+        private static readonly Dictionary<string, List<EventTrigger>> DrawDictionary =
+            new Dictionary<string, List<EventTrigger>>();
+
+        private static bool _lockCursor;
+
+        public static void LockCursor()
+        {
+            _lockCursor = true;
+        }
+
+        private static void PrioritySort(string name)
         {
             EventTriggers.Sort((a, b) => -a._priority.CompareTo(b._priority));
+
+            if (!DrawDictionary.ContainsKey(name))
+            {
+                return;
+            }
+
+            DrawDictionary[name].Sort((a, b) => a._priority.CompareTo(b._priority));
         }
 
         public static void UpdateUI(GameTime gameTime)
@@ -22,6 +39,24 @@ namespace ImproveGame.Interface
             {
                 eventTrigger.Update(gameTime);
             }
+
+            _lockCursor = false;
+        }
+
+        public static bool DrawUI(string layersName)
+        {
+            if (!DrawDictionary.ContainsKey(layersName))
+            {
+                return true;
+            }
+
+            List<EventTrigger> eventTriggers = DrawDictionary[layersName];
+            foreach (EventTrigger eventTrigger in eventTriggers)
+            {
+                eventTrigger.Draw();
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -39,16 +74,23 @@ namespace ImproveGame.Interface
         /// <summary>
         /// 我在这里提醒一下需要为 CanRunFunc 赋值否则 UI 将永不生效<br/>
         /// CanRunFunc 用于判断此 UI 是否执行 Update() 与 Draw() <br/>
-        /// priority 是 Update() 执行的优先级，值越大越先执行。 <br/>
+        /// priority 是 Update() 和 Draw() 执行的优先级，值越大越先执行，且越晚绘制。 <br/>
         /// 此类构建的方法不需要再与 UISystem.UpdateUI() 中添加代码 <br/>
         /// </summary>
+        /// <param name="layersName"></param>
         /// <param name="priority">Update() 优先级</param>
-        public EventTrigger(int priority)
+        public EventTrigger(string layersName, int priority)
         {
-            new UserInterface();
             _priority = priority;
             EventTriggers.Add(this);
-            PrioritySort();
+            if (!DrawDictionary.ContainsKey(layersName))
+            {
+                DrawDictionary.Add(layersName, new List<EventTrigger>());
+            }
+
+            DrawDictionary[layersName].Add(this);
+
+            PrioritySort(layersName);
         }
 
         public void SetState(UIState uiState)
@@ -90,23 +132,30 @@ namespace ImproveGame.Interface
             }
 
             _mousePosition = new Vector2(Main.mouseX, Main.mouseY);
+            // 鼠标目标元素
+            UIElement target = _state.GetElementAt(_mousePosition);
+            var targetMouseEvent = new UIMouseEvent(target, _mousePosition);
+            bool lockCursor = _lockCursor;
+            bool lockMouseLeft = Main.mouseLeft && !lockCursor;
+            bool lockMouseRight = Main.mouseRight && !lockCursor;
+            bool lockMouseMiddle = Main.mouseMiddle && !lockCursor;
 
             try
             {
-                // 鼠标目标元素
-                UIElement target = _state.GetElementAt(_mousePosition);
-                var targetMouseEvent = new UIMouseEvent(target, _mousePosition);
                 // 当前目标元素不是上一个目标元素
                 if (_lastElementHover != target)
                 {
                     // 鼠标移出元素
                     _lastElementHover?.MouseOut(new UIMouseEvent(_lastElementHover, _mousePosition));
                     // 鼠标移入元素
-                    target?.MouseOver(targetMouseEvent);
-                    _lastElementHover = target;
+                    if (!lockCursor)
+                    {
+                        target?.MouseOver(targetMouseEvent);
+                        _lastElementHover = target;
+                    }
                 }
 
-                switch (Main.mouseLeft)
+                switch (lockMouseLeft)
                 {
                     case true when !_wasElementDown:
                         // 按下事件
@@ -129,7 +178,7 @@ namespace ImproveGame.Interface
                         }
                 }
 
-                switch (Main.mouseRight)
+                switch (lockMouseRight)
                 {
                     case true when !_wasElementRightDown:
                         target?.RightMouseDown(targetMouseEvent);
@@ -146,14 +195,13 @@ namespace ImproveGame.Interface
                             }
 
                             // 鼠标离开事件
-                            lastElementRightDown.RightMouseUp(
-                                new UIMouseEvent(lastElementRightDown, _mousePosition));
+                            lastElementRightDown.RightMouseUp(new UIMouseEvent(lastElementRightDown, _mousePosition));
                             _lastElementRightDown = null;
                             break;
                         }
                 }
 
-                switch (Main.mouseMiddle)
+                switch (lockMouseMiddle)
                 {
                     case true when !_wasElementMiddleDown:
                         target?.MiddleMouseDown(targetMouseEvent);
@@ -177,7 +225,7 @@ namespace ImproveGame.Interface
                         }
                 }
 
-                if (PlayerInput.ScrollWheelDeltaForUI != 0)
+                if (!lockCursor && PlayerInput.ScrollWheelDeltaForUI != 0)
                 {
                     target?.ScrollWheel(new UIScrollWheelEvent(target, _mousePosition,
                         PlayerInput.ScrollWheelDeltaForUI));
@@ -186,9 +234,9 @@ namespace ImproveGame.Interface
                 _state.Update(gameTime);
             } finally
             {
-                _wasElementDown = Main.mouseLeft;
-                _wasElementRightDown = Main.mouseRight;
-                _wasElementMiddleDown = Main.mouseMiddle;
+                _wasElementDown = lockMouseLeft;
+                _wasElementRightDown = lockMouseRight;
+                _wasElementMiddleDown = lockMouseMiddle;
             }
         }
 

@@ -42,6 +42,13 @@ namespace ImproveGame.Interface.BannerChest
                 Shaded = true,
                 Draggable = true
             };
+            MainPanel.OnUpdate += _ =>
+            {
+                if (MainPanel.IsMouseHovering)
+                {
+                    EventTrigger.LockCursor();
+                }
+            };
             MainPanel.SetPadding(0);
             MainPanel.Join(this);
 
