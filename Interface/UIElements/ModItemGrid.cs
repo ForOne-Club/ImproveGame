@@ -14,18 +14,18 @@ namespace ImproveGame.Interface.UIElements
         // 可以在 new 的时候将其他元素也初始化, 或者在执行 Active() 的时候初始化.
         public ModItemGrid()
         {
-            SetPadding(0);
-
             // 隐藏子元素, 可显示的范围是计算 Padding 之后的.
             OverflowHidden = true;
 
-            Append(ItemList = new ModItemList());
+            ItemList = new ModItemList();
             ItemList.ModifyHVCount(10, 10);
+            ItemList.Join(this);
 
-            Append(Scrollbar = new SUIScrollbar()
+            Scrollbar = new SUIScrollbar
             {
                 HAlign = 1f
-            });
+            };
+            Scrollbar.Join(this);
 
             ShowSize = ModItemList.GetSize(10, 5);
 
@@ -54,11 +54,13 @@ namespace ImproveGame.Interface.UIElements
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            if (Scrollbar.ViewPosition != ItemList.Top.Pixels)
+            if (Math.Abs(-Scrollbar.ViewPosition - ItemList.Top.Pixels) < 0.000000001)
             {
-                ItemList.Top.Pixels = -Scrollbar.ViewPosition;
-                ItemList.Recalculate();
+                return;
             }
+
+            ItemList.Top.Pixels = -Scrollbar.ViewPosition;
+            ItemList.Recalculate();
         }
     }
 }
