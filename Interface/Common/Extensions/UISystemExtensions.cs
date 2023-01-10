@@ -4,15 +4,17 @@ namespace ImproveGame.Interface.Common.Extensions
 {
     public static class UISystemExtensions
     {
-        public static void Insert(this List<GameInterfaceLayer> layers, int index, string name, EventTrigger trigger)
+        public static void Insert(this List<GameInterfaceLayer> layers, int index, EventTrigger trigger)
         {
-            layers.Insert(index + 1, new LegacyGameInterfaceLayer($"ImproveGame: {name}", () =>
+            layers.Insert(index + 1, new LegacyGameInterfaceLayer($"ImproveGame: {trigger.Name}", () =>
             {
                 trigger.Draw();
                 return true;
             }, InterfaceScaleType.UI));
         }
-        public static void Insert(this List<GameInterfaceLayer> layers, int index, string name, UIState state, Func<bool> func)
+
+        public static void Insert(this List<GameInterfaceLayer> layers, int index, string name, UIState state,
+            Func<bool> func)
         {
             layers.Insert(index + 1, new LegacyGameInterfaceLayer($"ImproveGame: {name}", () =>
             {
@@ -20,11 +22,13 @@ namespace ImproveGame.Interface.Common.Extensions
                 {
                     state.Draw(Main.spriteBatch);
                 }
+
                 return true;
             }, InterfaceScaleType.UI));
         }
 
-        public static void Insert(this List<GameInterfaceLayer> layers, int index, string name, GameInterfaceDrawMethod func)
+        public static void Insert(this List<GameInterfaceLayer> layers, int index, string name,
+            GameInterfaceDrawMethod func)
         {
             layers.Insert(index + 1, new LegacyGameInterfaceLayer($"ImproveGame: {name}", func, InterfaceScaleType.UI));
         }

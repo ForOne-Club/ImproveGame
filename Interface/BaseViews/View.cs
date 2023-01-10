@@ -34,6 +34,7 @@ namespace ImproveGame.Interface.BaseViews
         public float round;
         public Vector4 round4;
         public Vector4 Extension;
+        public bool KeepPressed;
 
         public override void Recalculate()
         {
@@ -78,6 +79,18 @@ namespace ImproveGame.Interface.BaseViews
                 }
             }
             base.Recalculate();
+        }
+
+        public override void MouseDown(UIMouseEvent evt)
+        {
+            base.MouseDown(evt);
+            KeepPressed = true;
+        }
+
+        public override void MouseUp(UIMouseEvent evt)
+        {
+            base.MouseUp(evt);
+            KeepPressed = false;
         }
 
         // 这该起什么名字？

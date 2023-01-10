@@ -15,10 +15,6 @@ namespace ImproveGame.Interface.Common
 
         #region 定义
 
-        // CA2211
-        public PlayerInfoGUI PlayerInfoGUI;
-        internal static EventTrigger PlayerInfoTrigger;
-
         public AutofisherGUI AutofisherGUI;
         internal static UserInterface AutofisherInterface;
 
@@ -33,9 +29,6 @@ namespace ImproveGame.Interface.Common
 
         public BrustGUI BrustGUI;
         internal static UserInterface BrustInterface;
-
-        public BigBagGUI BigBagGUI;
-        internal static EventTrigger BigBagTrigger;
 
         public SpaceWandGUI SpaceWandGUI;
         internal static UserInterface SpaceWandInterface;
@@ -55,9 +48,17 @@ namespace ImproveGame.Interface.Common
         public PrefixRecallGUI PrefixRecallGUI;
         internal static UserInterface PrefixRecallInterface;
 
+        // 玩家信息表
+        public PlayerInfoGUI PlayerInfoGUI;
+        public EventTrigger PlayerInfoTrigger;
+
         // 药水袋 & 旗帜盒 UI
         public PackageGUI PackageGUI;
         public EventTrigger PackageTrigger;
+
+        // 大背包 UI
+        public BigBagGUI BigBagGUI;
+        public EventTrigger BigBagTrigger;
 
         #endregion
 
@@ -119,15 +120,15 @@ namespace ImproveGame.Interface.Common
             }
 
             // UserInterface 之 EventTrigger 版
-            PackageTrigger = new EventTrigger("Inventory", 10)
+            PackageTrigger = new EventTrigger("Inventory", "Package", 0)
             {
                 CanRunFunc = () => PackageGUI.Visible
             };
-            BigBagTrigger = new EventTrigger("Inventory", 0)
+            BigBagTrigger = new EventTrigger("Inventory", "BigBag", 0)
             {
                 CanRunFunc = () => BigBagGUI.Visible
             };
-            PlayerInfoTrigger = new EventTrigger("Mouse Text", 1000)
+            PlayerInfoTrigger = new EventTrigger("Mouse Text", "PlayerInfo", 1000)
             {
                 CanRunFunc = () => PlayerInfoGUI.Visible
             };
@@ -208,11 +209,7 @@ namespace ImproveGame.Interface.Common
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             // 如果 Insert 是按照向前插入的逻辑，越早插入越晚绘制，也就是越靠近顶层。
-            layers.FindVanilla("Mouse Text", index =>
-            {
-                layers.Insert(index + 1, new LegacyGameInterfaceLayer("ImproveGame: General Inventory",
-                    () => EventTrigger.DrawAllUI("Mouse Text"), InterfaceScaleType.UI));
-            });
+            EventTrigger.ModifyInterfaceLayers(layers);
 
             // 诊断网络？
             layers.FindVanilla("Diagnose Net", index =>
@@ -238,12 +235,6 @@ namespace ImproveGame.Interface.Common
             // 背包
             layers.FindVanilla("Inventory", index =>
             {
-                layers.Insert(index + 1, new LegacyGameInterfaceLayer("ImproveGame: General Inventory",
-                    () =>
-                    {
-                        EventTrigger.DrawAllUI("Inventory");
-                        return true;
-                    }, InterfaceScaleType.UI));
                 layers.Insert(index, "Buff Tracker GUI", BuffTrackerGUI, () => BuffTrackerGUI.Visible);
                 layers.Insert(index, "Liquid Wand GUI", LiquidWandGUI, () => LiquidWandGUI.Visible);
                 layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible);

@@ -319,7 +319,7 @@ public class BuffTrackerGUI : UIState
     /// </summary>
     public void Open()
     {
-        basePanel.Dragging = false;
+        basePanel.KeepPressed = false;
         Visible = true;
         SoundEngine.PlaySound(SoundID.MenuOpen);
         SetupBuffButtons();

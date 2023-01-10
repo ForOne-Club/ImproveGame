@@ -7,7 +7,7 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class BigBagGUI : UIState
+    public class BigBagGUI : UIState, IUseEventTrigger
     {
         private static bool _visible = true;
 
@@ -54,19 +54,6 @@ namespace ImproveGame.Interface.GUI
             {
                 Shaded = true,
                 Draggable = true
-            };
-            MainPanel.OnUpdate += _ =>
-            {
-                if (!MainPanel.IsMouseHovering && !MainPanel.Dragging)
-                {
-                    return;
-                }
-
-                EventTrigger.LockCursor();
-            };
-            MainPanel.OnMouseDown += (_, _) =>
-            {
-                EventTrigger.SetPrimaryElements();
             };
             MainPanel.SetPadding(0f);
             MainPanel.Join(this);
@@ -330,6 +317,13 @@ namespace ImproveGame.Interface.GUI
             }
 
             Recipe.FindRecipes();
+        }
+
+        public bool ToPrimary(UIElement target) => target != this;
+
+        public bool CanOccupyCursor(UIElement target)
+        {
+            return (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
         }
     }
 }
