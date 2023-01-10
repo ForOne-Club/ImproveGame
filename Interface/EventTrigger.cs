@@ -6,36 +6,41 @@ namespace ImproveGame.Interface
     /// 事件触发器，用于取代原版的 UserInterface
     /// 支持 Update MouseOut MouseOver 左 & 中 & 右键的 MouseDown MouseUp Click
     /// 鼠标侧键方法 & 双击方法都取消了，因为用不到。
+    /// （全凭感觉设计）
+    /// （越写越乱，不确定哪里写的有没有问题，使用遇到问题了随时告诉我）
     /// </summary>
     public class EventTrigger
     {
-        private static readonly List<EventTrigger> EventTriggers = new List<EventTrigger>();
+        private static readonly List<EventTrigger> UpdateList = new List<EventTrigger>();
 
         private static readonly Dictionary<string, List<EventTrigger>> DrawDictionary =
             new Dictionary<string, List<EventTrigger>>();
 
         private static bool _lockCursor;
+        private static EventTrigger _currentEventTrigger;
+        private static EventTrigger _primaryEventTrigger;
 
+        /// <summary>
+        /// 锁定接下来布局的 Update() 的非点按操作事件。
+        /// </summary>
         public static void LockCursor()
         {
             _lockCursor = true;
         }
 
-        private static void PrioritySort(string name)
+        // 将当前 UI 的 Update 与 Draw 设置到最顶层
+        public static void SetPrimaryElements()
         {
-            EventTriggers.Sort((a, b) => -a._priority.CompareTo(b._priority));
-
-            if (!DrawDictionary.ContainsKey(name))
-            {
-                return;
-            }
-
-            DrawDictionary[name].Sort((a, b) => a._priority.CompareTo(b._priority));
+            _primaryEventTrigger = _currentEventTrigger;
         }
 
         public static void UpdateUI(GameTime gameTime)
         {
-            foreach (EventTrigger eventTrigger in EventTriggers)
+            // 执行顶层 EventTrigger
+            _primaryEventTrigger?.Update(gameTime);
+
+            // 执行普通的 EventTrigger
+            foreach (var eventTrigger in UpdateList.Where(eventTrigger => eventTrigger != _primaryEventTrigger))
             {
                 eventTrigger.Update(gameTime);
             }
@@ -43,7 +48,12 @@ namespace ImproveGame.Interface
             _lockCursor = false;
         }
 
-        public static bool DrawUI(string layersName)
+        /// <summary>
+        /// 这个是根据 layersName 遍历 DrawDictionary
+        /// </summary>
+        /// <param name="layersName"></param>
+        /// <returns>没啥用~</returns>
+        public static bool DrawAllUI(string layersName)
         {
             if (!DrawDictionary.ContainsKey(layersName))
             {
@@ -51,9 +61,14 @@ namespace ImproveGame.Interface
             }
 
             List<EventTrigger> eventTriggers = DrawDictionary[layersName];
-            foreach (EventTrigger eventTrigger in eventTriggers)
+            foreach (var eventTrigger in eventTriggers.Where(eventTrigger => eventTrigger != _primaryEventTrigger))
             {
                 eventTrigger.Draw();
+            }
+
+            if (DrawDictionary[layersName].Contains(_primaryEventTrigger))
+            {
+                _primaryEventTrigger.Draw();
             }
 
             return true;
@@ -82,7 +97,7 @@ namespace ImproveGame.Interface
         public EventTrigger(string layersName, int priority)
         {
             _priority = priority;
-            EventTriggers.Add(this);
+            UpdateList.Add(this);
             if (!DrawDictionary.ContainsKey(layersName))
             {
                 DrawDictionary.Add(layersName, new List<EventTrigger>());
@@ -91,6 +106,19 @@ namespace ImproveGame.Interface
             DrawDictionary[layersName].Add(this);
 
             PrioritySort(layersName);
+        }
+
+        // 对 EventTriggers 和 name 指定的 DrawDictionary 进行排序
+        private static void PrioritySort(string name)
+        {
+            UpdateList.Sort((a, b) => -a._priority.CompareTo(b._priority));
+
+            if (!DrawDictionary.ContainsKey(name))
+            {
+                return;
+            }
+
+            DrawDictionary[name].Sort((a, b) => a._priority.CompareTo(b._priority));
         }
 
         public void SetState(UIState uiState)
@@ -109,12 +137,15 @@ namespace ImproveGame.Interface
         private UIElement _lastElementDown;
         private UIElement _lastElementRightDown;
         private UIElement _lastElementMiddleDown;
-        private bool _wasElementDown;
-        private bool _wasElementRightDown;
-        private bool _wasElementMiddleDown;
+        private bool _executedElementDown;
+        private bool _executedElementRightDown;
+        private bool _executedElementMiddleDown;
 
+        // CanRunFuc 用于此处，来判断 Update 是否继续向下执行
+        // 并且设置 _canRun 用于在 Draw 判定是否继续执行
         private void Update(GameTime gameTime)
         {
+            _currentEventTrigger = this;
             if (!CanRunFunc?.Invoke() ?? true)
             {
                 _canRun = false;
@@ -133,12 +164,11 @@ namespace ImproveGame.Interface
 
             _mousePosition = new Vector2(Main.mouseX, Main.mouseY);
             // 鼠标目标元素
-            UIElement target = _state.GetElementAt(_mousePosition);
+            UIElement target = _lockCursor ? null : _state.GetElementAt(_mousePosition);
             var targetMouseEvent = new UIMouseEvent(target, _mousePosition);
-            bool lockCursor = _lockCursor;
-            bool lockMouseLeft = Main.mouseLeft && !lockCursor;
-            bool lockMouseRight = Main.mouseRight && !lockCursor;
-            bool lockMouseMiddle = Main.mouseMiddle && !lockCursor;
+            bool lockMouseLeft = Main.mouseLeft && !_lockCursor;
+            bool lockMouseRight = Main.mouseRight && !_lockCursor;
+            bool lockMouseMiddle = Main.mouseMiddle && !_lockCursor;
 
             try
             {
@@ -148,21 +178,19 @@ namespace ImproveGame.Interface
                     // 鼠标移出元素
                     _lastElementHover?.MouseOut(new UIMouseEvent(_lastElementHover, _mousePosition));
                     // 鼠标移入元素
-                    if (!lockCursor)
-                    {
-                        target?.MouseOver(targetMouseEvent);
-                        _lastElementHover = target;
-                    }
+
+                    target?.MouseOver(targetMouseEvent);
+                    _lastElementHover = target;
                 }
 
-                switch (lockMouseLeft)
+                switch (Main.mouseLeft)
                 {
-                    case true when !_wasElementDown:
+                    case true when !_executedElementDown:
                         // 按下事件
                         target?.MouseDown(targetMouseEvent);
                         _lastElementDown = target;
                         break;
-                    case false when _wasElementDown && _lastElementDown != null:
+                    case false when _executedElementDown && _lastElementDown != null:
                         {
                             UIElement lastElementDown = _lastElementDown;
                             // 左键点击事件
@@ -178,13 +206,13 @@ namespace ImproveGame.Interface
                         }
                 }
 
-                switch (lockMouseRight)
+                switch (Main.mouseRight)
                 {
-                    case true when !_wasElementRightDown:
+                    case true when !_executedElementRightDown:
                         target?.RightMouseDown(targetMouseEvent);
                         _lastElementRightDown = target;
                         break;
-                    case false when _wasElementRightDown && _lastElementRightDown != null:
+                    case false when _executedElementRightDown && _lastElementRightDown != null:
                         {
                             UIElement lastElementRightDown = _lastElementRightDown;
                             // 点击事件
@@ -201,13 +229,13 @@ namespace ImproveGame.Interface
                         }
                 }
 
-                switch (lockMouseMiddle)
+                switch (Main.mouseMiddle)
                 {
-                    case true when !_wasElementMiddleDown:
+                    case true when !_executedElementMiddleDown:
                         target?.MiddleMouseDown(targetMouseEvent);
                         _lastElementMiddleDown = target;
                         break;
-                    case false when _wasElementMiddleDown && _lastElementMiddleDown != null:
+                    case false when _executedElementMiddleDown && _lastElementMiddleDown != null:
                         {
                             UIElement lastElementMiddleDown = _lastElementMiddleDown;
                             // 点击事件
@@ -225,7 +253,7 @@ namespace ImproveGame.Interface
                         }
                 }
 
-                if (!lockCursor && PlayerInput.ScrollWheelDeltaForUI != 0)
+                if (PlayerInput.ScrollWheelDeltaForUI != 0)
                 {
                     target?.ScrollWheel(new UIScrollWheelEvent(target, _mousePosition,
                         PlayerInput.ScrollWheelDeltaForUI));
@@ -234,9 +262,9 @@ namespace ImproveGame.Interface
                 _state.Update(gameTime);
             } finally
             {
-                _wasElementDown = lockMouseLeft;
-                _wasElementRightDown = lockMouseRight;
-                _wasElementMiddleDown = lockMouseMiddle;
+                _executedElementDown = lockMouseLeft;
+                _executedElementRightDown = lockMouseRight;
+                _executedElementMiddleDown = lockMouseMiddle;
             }
         }
 

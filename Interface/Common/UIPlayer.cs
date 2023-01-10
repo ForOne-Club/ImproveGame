@@ -2,7 +2,6 @@
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.PlayerInfo;
-using static ImproveGame.Interface.Common.UISystem;
 
 namespace ImproveGame.Interface.Common
 {
@@ -17,18 +16,25 @@ namespace ImproveGame.Interface.Common
             DataPlayer dataPlayer = player.GetModPlayer<DataPlayer>();
 
             // 玩家信息
-            PlayerInfoTrigger.SetState(Instance.PlayerInfoGUI = new PlayerInfoGUI());
+            UISystem.Instance.PlayerInfoGUI = new PlayerInfoGUI();
+            UISystem.PlayerInfoTrigger.SetState(UISystem.Instance.PlayerInfoGUI);
             PlayerInfoGUI.Visible = true;
 
             // 旗帜盒
-            PackageTrigger.SetState(Instance.PackageGUI = new PackageGUI());
+            UISystem.Instance.PackageGUI = new PackageGUI();
+            UISystem.Instance.PackageTrigger.SetState(UISystem.Instance.PackageGUI);
 
             // 大背包
-            BigBagTrigger.SetState(Instance.BigBagGUI = new BigBagGUI());
-            Instance.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
+            UISystem.Instance.BigBagGUI = new BigBagGUI();
+            UISystem.BigBagTrigger.SetState(UISystem.Instance.BigBagGUI);
+
+            UISystem.Instance.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
             if (HugeInventoryUIPosition == Vector2.Zero)
+            {
                 HugeInventoryUIPosition = new Vector2(150, 340);
-            Instance.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
+            }
+
+            UISystem.Instance.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
         }
     }
 }

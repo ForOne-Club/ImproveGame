@@ -44,10 +44,16 @@ namespace ImproveGame.Interface.BannerChest
             };
             MainPanel.OnUpdate += _ =>
             {
-                if (MainPanel.IsMouseHovering)
+                if (!MainPanel.IsMouseHovering && !MainPanel.Dragging)
                 {
-                    EventTrigger.LockCursor();
+                    return;
                 }
+
+                EventTrigger.LockCursor();
+            };
+            MainPanel.OnMouseDown += (_, _) =>
+            {
+                EventTrigger.SetPrimaryElements();
             };
             MainPanel.SetPadding(0);
             MainPanel.Join(this);

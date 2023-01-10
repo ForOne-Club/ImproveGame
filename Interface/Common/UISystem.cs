@@ -55,8 +55,9 @@ namespace ImproveGame.Interface.Common
         public PrefixRecallGUI PrefixRecallGUI;
         internal static UserInterface PrefixRecallInterface;
 
+        // 药水袋 & 旗帜盒 UI
         public PackageGUI PackageGUI;
-        internal static EventTrigger PackageTrigger;
+        public EventTrigger PackageTrigger;
 
         #endregion
 
@@ -210,11 +211,7 @@ namespace ImproveGame.Interface.Common
             layers.FindVanilla("Mouse Text", index =>
             {
                 layers.Insert(index + 1, new LegacyGameInterfaceLayer("ImproveGame: General Inventory",
-                    () =>
-                    {
-                        EventTrigger.DrawUI("Mouse Text");
-                        return true;
-                    }, InterfaceScaleType.UI));
+                    () => EventTrigger.DrawAllUI("Mouse Text"), InterfaceScaleType.UI));
             });
 
             // 诊断网络？
@@ -244,7 +241,7 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(index + 1, new LegacyGameInterfaceLayer("ImproveGame: General Inventory",
                     () =>
                     {
-                        EventTrigger.DrawUI("Inventory");
+                        EventTrigger.DrawAllUI("Inventory");
                         return true;
                     }, InterfaceScaleType.UI));
                 layers.Insert(index, "Buff Tracker GUI", BuffTrackerGUI, () => BuffTrackerGUI.Visible);

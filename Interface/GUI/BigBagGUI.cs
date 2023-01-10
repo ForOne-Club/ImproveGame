@@ -55,6 +55,19 @@ namespace ImproveGame.Interface.GUI
                 Shaded = true,
                 Draggable = true
             };
+            MainPanel.OnUpdate += _ =>
+            {
+                if (!MainPanel.IsMouseHovering && !MainPanel.Dragging)
+                {
+                    return;
+                }
+
+                EventTrigger.LockCursor();
+            };
+            MainPanel.OnMouseDown += (_, _) =>
+            {
+                EventTrigger.SetPrimaryElements();
+            };
             MainPanel.SetPadding(0f);
             MainPanel.Join(this);
 
