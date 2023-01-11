@@ -7,7 +7,7 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI;
 
-public class BuffTrackerGUI : UIState
+public class BuffTrackerGUI : ViewCarrier, IUseEventTrigger
 {
     public static bool Visible { get; private set; }
 
@@ -21,6 +21,13 @@ public class BuffTrackerGUI : UIState
     private bool _didClickSearchBar;
     internal BuffTrackerBattler BuffTrackerBattler;
     private static int _oldBuffCount; // 用于及时更新列表
+
+    public bool ToPrimary(UIElement target) => target != this;
+
+    public bool CanOccupyCursor(UIElement target)
+    {
+        return (target != this && basePanel.IsMouseHovering) || basePanel.KeepPressed;
+    }
 
     public override void OnInitialize()
     {
@@ -106,7 +113,8 @@ public class BuffTrackerGUI : UIState
             string currentLanguageName = Lang.GetBuffName(i).ToLower();
             string searchString = _searchString?.Trim().ToLower();
 
-            if (string.IsNullOrEmpty(_searchString) || internalName.Contains(searchString) || currentLanguageName.Contains(searchString))
+            if (string.IsNullOrEmpty(_searchString) || internalName.Contains(searchString) ||
+                currentLanguageName.Contains(searchString))
                 BuffList.Add(new BuffButton(i));
         }
 
@@ -123,11 +131,13 @@ public class BuffTrackerGUI : UIState
 
     protected override void DrawSelf(SpriteBatch spriteBatch)
     {
-        var innerList = BuffList.GetType().GetField("_innerList", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(BuffList) as UIElement;
+        var innerList = BuffList.GetType().GetField("_innerList", BindingFlags.Instance | BindingFlags.NonPublic)
+            ?.GetValue(BuffList) as UIElement;
         if (Scrollbar is not null && innerList is not null)
         {
             innerList.Top.Set(-Scrollbar.ViewPosition, 0);
         }
+
         BuffList.Recalculate();
 
         if (basePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
@@ -194,12 +204,15 @@ public class BuffTrackerGUI : UIState
             drawCenter.Y += height * 0.5f;
             float textAltWidth = FontAssets.DeathText.Value.MeasureString(textAlt).X * 0.5f;
             Vector2 originAlt = new(textAltWidth, 0f);
-            Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.DeathText.Value, textAlt, drawCenter.X, drawCenter.Y, Color.White, Color.Black, originAlt, scale);
+            Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.DeathText.Value, textAlt, drawCenter.X, drawCenter.Y,
+                Color.White, Color.Black, originAlt, scale);
             drawCenter.Y -= height;
         }
+
         float textWidth = FontAssets.DeathText.Value.MeasureString(text).X * 0.5f;
         Vector2 origin = new(textWidth, 0f);
-        Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.DeathText.Value, text, drawCenter.X, drawCenter.Y, Color.White, Color.Black, origin, scale);
+        Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.DeathText.Value, text, drawCenter.X, drawCenter.Y,
+            Color.White, Color.Black, origin, scale);
     }
 
     #region 搜索栏
@@ -340,6 +353,7 @@ public class BuffTrackerGUI : UIState
 public class BuffButtonList : UIList
 {
     public float ListHeight;
+
     public override void RecalculateChildren()
     {
         base.RecalculateChildren();
@@ -356,6 +370,7 @@ public class BuffButtonList : UIList
                 pixels += 36.8f;
             }
         }
+
         ListHeight = pixels + 36.8f;
     }
 }
@@ -412,6 +427,7 @@ public class BuffButton : UIElement
         {
             mouseText += GetText("BuffTracker.LeftClickEnable");
         }
+
         Main.instance.MouseText(mouseText);
     }
 }

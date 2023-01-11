@@ -67,13 +67,16 @@ namespace ImproveGame.Interface
         private static void ToPrimaryElements()
         {
             string layerName = CurrentEventTrigger._layerName;
-            if (!LayersDictionary.ContainsKey(layerName))
+            if (!LayersDictionary.ContainsKey(layerName) || _currentEventTriggerIndex == 0)
             {
                 return;
             }
 
-            (LayersDictionary[layerName][_currentEventTriggerIndex], LayersDictionary[layerName][0]) =
-                (LayersDictionary[layerName][0], LayersDictionary[layerName][_currentEventTriggerIndex]);
+            EventTrigger eventTrigger = LayersDictionary[layerName][_currentEventTriggerIndex];
+            LayersDictionary[layerName].RemoveAt(_currentEventTriggerIndex);
+            LayersDictionary[layerName].Insert(0, eventTrigger);
+            //(LayersDictionary[layerName][_currentEventTriggerIndex], LayersDictionary[layerName][0]) =
+            //    (LayersDictionary[layerName][0], LayersDictionary[layerName][_currentEventTriggerIndex]);
         }
 
         /// <summary>

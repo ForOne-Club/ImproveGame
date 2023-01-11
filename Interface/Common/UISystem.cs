@@ -18,9 +18,6 @@ namespace ImproveGame.Interface.Common
         public AutofisherGUI AutofisherGUI;
         internal static UserInterface AutofisherInterface;
 
-        public BuffTrackerGUI BuffTrackerGUI;
-        internal static UserInterface BuffTrackerInterface;
-
         public LiquidWandGUI LiquidWandGUI;
         internal static UserInterface LiquidWandInterface;
 
@@ -60,6 +57,10 @@ namespace ImproveGame.Interface.Common
         public BigBagGUI BigBagGUI;
         public EventTrigger BigBagTrigger;
 
+        // Buff 追踪站
+        public BuffTrackerGUI BuffTrackerGUI;
+        public EventTrigger BuffTrackerTrigger;
+
         #endregion
 
         #region 卸载 & 加载
@@ -75,7 +76,7 @@ namespace ImproveGame.Interface.Common
             AutofisherInterface = null;
 
             BuffTrackerGUI = null;
-            BuffTrackerInterface = null;
+            BuffTrackerTrigger = null;
 
             LiquidWandGUI = null;
             LiquidWandInterface = null;
@@ -128,12 +129,19 @@ namespace ImproveGame.Interface.Common
             {
                 CanRunFunc = () => BigBagGUI.Visible
             };
+            BuffTrackerTrigger = new EventTrigger("Inventory", "Buff Tracker GUI")
+            {
+                CanRunFunc = () => BuffTrackerGUI.Visible
+            };
+
+            BuffTrackerGUI = new BuffTrackerGUI();
             PlayerInfoTrigger = new EventTrigger("Mouse Text", "PlayerInfo")
             {
                 CanRunFunc = () => PlayerInfoGUI.Visible
             };
+            BuffTrackerTrigger.SetViewCarrier(BuffTrackerGUI);
+
             AutofisherGUI = new AutofisherGUI();
-            BuffTrackerGUI = new BuffTrackerGUI();
             LiquidWandGUI = new LiquidWandGUI();
             ArchitectureGUI = new ArchitectureGUI();
             BrustGUI = new BrustGUI();
@@ -144,7 +152,6 @@ namespace ImproveGame.Interface.Common
             StructureGUI = new StructureGUI();
             PrefixRecallGUI = new PrefixRecallGUI();
             LoadGUI(ref AutofisherGUI, out AutofisherInterface);
-            LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
             LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
             LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
             LoadGUI(ref BrustGUI, out BrustInterface);
@@ -177,8 +184,6 @@ namespace ImproveGame.Interface.Common
 
             if (AutofisherGUI.Visible)
                 AutofisherInterface?.Update(gameTime);
-            if (BuffTrackerGUI.Visible)
-                BuffTrackerInterface?.Update(gameTime);
             if (LiquidWandGUI.Visible)
                 LiquidWandInterface?.Update(gameTime);
             if (ArchitectureGUI.Visible)
@@ -235,7 +240,6 @@ namespace ImproveGame.Interface.Common
             // 背包
             layers.FindVanilla("Inventory", index =>
             {
-                layers.Insert(index, "Buff Tracker GUI", BuffTrackerGUI, () => BuffTrackerGUI.Visible);
                 layers.Insert(index, "Liquid Wand GUI", LiquidWandGUI, () => LiquidWandGUI.Visible);
                 layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible);
                 layers.Insert(index, "Autofisher GUI", AutofisherGUI, () => AutofisherGUI.Visible);
