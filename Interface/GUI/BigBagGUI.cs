@@ -60,6 +60,7 @@ namespace ImproveGame.Interface.GUI
 
             TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
             {
+                DragIgnore = true,
                 Width = new StyleDimension(0f, 1f),
                 Height = new StyleDimension(50f, 0f),
                 RoundMode = RoundMode.Round4,
@@ -93,7 +94,8 @@ namespace ImproveGame.Interface.GUI
 
             ContentPanel = new View
             {
-                Relative = RelativeMode.Vertical,
+                DragIgnore = true,
+                Relative = RelativeMode.Vertical
             };
             ContentPanel.SetPadding(12f, 10f, 11f, 12f);
             ContentPanel.Join(MainPanel);

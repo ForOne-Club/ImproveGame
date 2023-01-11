@@ -39,7 +39,7 @@ namespace ImproveGame.Interface
 
         private static bool _occupyCursor;
         private static EventTrigger _currentEventTrigger;
-        private static EventTrigger _primaryEventTrigger;
+        private static int _currentEventTriggerIndex;
 
         /// <summary>
         /// 写了跟没写似的
@@ -50,12 +50,11 @@ namespace ImproveGame.Interface
             LayersDictionary = new Dictionary<string, List<EventTrigger>>();
 
             _occupyCursor = false;
-            _currentEventTrigger = null;
-            _primaryEventTrigger = null;
         }
 
         /// <summary>
-        /// 锁定接下来布局的 Update() 的非点按操作事件。
+        /// 锁定接下来布局的的鼠标按键点击操作事件
+        /// 实际就是吧 _state.GetElementAt 获取到的值变为 null。
         /// </summary>
         private static void OccupyCursor()
         {
@@ -67,22 +66,30 @@ namespace ImproveGame.Interface
         /// </summary>
         private static void ToPrimaryElements()
         {
-            _primaryEventTrigger = _currentEventTrigger;
+            string layerName = _currentEventTrigger._layerName;
+            if (!LayersDictionary.ContainsKey(layerName))
+            {
+                return;
+            }
+
+            (LayersDictionary[layerName][_currentEventTriggerIndex], LayersDictionary[layerName][0]) =
+                (LayersDictionary[layerName][0], LayersDictionary[layerName][_currentEventTriggerIndex]);
         }
 
+        /// <summary>
+        /// 事件处理
+        /// </summary>
+        /// <param name="gameTime"></param>
         public static void UpdateUI(GameTime gameTime)
         {
             foreach (var layerName in LayersPriority.Where(layerName => LayersDictionary.ContainsKey(layerName)))
             {
-                // 执行顶层 EventTrigger
-                if (LayersDictionary[layerName].Contains(_primaryEventTrigger))
+                List<EventTrigger> eventTriggers = LayersDictionary[layerName];
+                for (int i = 0; i < eventTriggers.Count; i++)
                 {
-                    _primaryEventTrigger?.Update(gameTime);
-                }
-
-                foreach (EventTrigger eventTrigger in LayersDictionary[layerName]
-                             .Where((trigger => trigger != _primaryEventTrigger)))
-                {
+                    EventTrigger eventTrigger = eventTriggers[i];
+                    _currentEventTriggerIndex = i;
+                    _currentEventTrigger = eventTrigger;
                     eventTrigger?.Update(gameTime);
                 }
             }
@@ -96,25 +103,29 @@ namespace ImproveGame.Interface
         public static void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             Dictionary<string, int> indexDictionary = new Dictionary<string, int>();
-            foreach (KeyValuePair<string, List<EventTrigger>> valuePair in LayersDictionary)
+            
+            // 因为插入后顺序会变，所以不能在插入的位置获取进行排序
+            foreach (KeyValuePair<string, List<EventTrigger>> keyValuePair in LayersDictionary)
             {
-                layers.FindVanilla(valuePair.Key, index =>
+                layers.FindVanilla(keyValuePair.Key, index =>
                 {
-                    indexDictionary.Add(valuePair.Key, index);
-                    if (valuePair.Value.Contains(_primaryEventTrigger))
-                    {
-                        layers.Insert(index, _primaryEventTrigger);
-                    }
+                    indexDictionary.Add(keyValuePair.Key, index);
+                });
+            }
 
-                    foreach (EventTrigger eventTrigger in valuePair.Value.Where(eventTrigger =>
-                                 eventTrigger != _primaryEventTrigger))
+            LayersPriority.Sort(((a, b) => -indexDictionary[a].CompareTo(indexDictionary[b])));
+
+            // 插入到绘制层
+            foreach (KeyValuePair<string, List<EventTrigger>> keyValuePair in LayersDictionary)
+            {
+                layers.FindVanilla(keyValuePair.Key, index =>
+                {
+                    foreach (EventTrigger eventTrigger in keyValuePair.Value)
                     {
                         layers.Insert(index, eventTrigger);
                     }
                 });
             }
-
-            LayersPriority.Sort(((a, b) => -indexDictionary[a].CompareTo(indexDictionary[b])));
         }
 
         /// <summary>
@@ -123,7 +134,7 @@ namespace ImproveGame.Interface
         public Func<bool> CanRunFunc;
 
         public readonly string Name;
-        private readonly int _priority;
+        private readonly string _layerName;
 
         private UIState _state;
         private Vector2 _mousePosition;
@@ -134,39 +145,46 @@ namespace ImproveGame.Interface
         /// priority 是 Update() 和 Draw() 执行的优先级，值越大越先执行，且越晚绘制。 <br/>
         /// 此类构建的方法不需要再与 UISystem.UpdateUI() 中添加代码 <br/>
         /// </summary>
-        /// <param name="layersName">114514</param>
+        /// <param name="layerName">114514</param>
         /// <param name="name">114514</param>
-        /// <param name="priority">Update Draw 的优先级, 写到后面感觉没啥用了</param>
-        public EventTrigger(string layersName, string name, int priority)
+        public EventTrigger(string layerName, string name)
         {
+            // 它的名字
             Name = name;
-            _priority = priority;
+            // 层级名称
+            _layerName = layerName;
+            // 绘制优先级
+            // _priority = priority;
 
-            if (!LayersPriority.Contains(layersName))
+            // 判断集合内是否有这个图层，没有就就进去，那个不重复的 List 我忘了是啥了，先这么写
+            if (!LayersPriority.Contains(layerName))
             {
-                LayersPriority.Add(layersName);
+                LayersPriority.Add(layerName);
             }
 
-            if (!LayersDictionary.ContainsKey(layersName))
+            // 依旧是判断有没有这个 Key
+            if (!LayersDictionary.ContainsKey(layerName))
             {
-                LayersDictionary.Add(layersName, new List<EventTrigger>());
+                // 没有就加进去
+                LayersDictionary.Add(layerName, new List<EventTrigger>());
             }
 
-            LayersDictionary[layersName].Add(this);
+            LayersDictionary[layerName].Add(this);
 
-            PrioritySort(layersName);
+            // 排序
+            // PrioritySort(layerName);
         }
 
         // 对 EventTriggers 和 name 指定的 DrawDictionary 进行排序
-        private static void PrioritySort(string name)
+        /*private static void PrioritySort(string layersName)
         {
-            if (!LayersDictionary.ContainsKey(name))
+            if (!LayersDictionary.ContainsKey(layersName))
             {
                 return;
             }
 
-            LayersDictionary[name].Sort((a, b) => -a._priority.CompareTo(b._priority));
-        }
+            LayersDictionary[layersName].Sort((a, b) => -a._priority.CompareTo(b._priority));
+        }*/
 
         public void SetState<T>(T uiState) where T : UIState, IUseEventTrigger
         {
@@ -192,7 +210,6 @@ namespace ImproveGame.Interface
         // 并且设置 _canRun 用于在 Draw 判定是否继续执行
         private void Update(GameTime gameTime)
         {
-            _currentEventTrigger = this;
             if (!CanRunFunc?.Invoke() ?? true)
             {
                 return;

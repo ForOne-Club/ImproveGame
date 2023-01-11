@@ -120,15 +120,15 @@ namespace ImproveGame.Interface.Common
             }
 
             // UserInterface 之 EventTrigger 版
-            PackageTrigger = new EventTrigger("Inventory", "Package", 0)
+            PackageTrigger = new EventTrigger("Inventory", "Package")
             {
                 CanRunFunc = () => PackageGUI.Visible
             };
-            BigBagTrigger = new EventTrigger("Inventory", "BigBag", 0)
+            BigBagTrigger = new EventTrigger("Inventory", "BigBag")
             {
                 CanRunFunc = () => BigBagGUI.Visible
             };
-            PlayerInfoTrigger = new EventTrigger("Mouse Text", "PlayerInfo", 1000)
+            PlayerInfoTrigger = new EventTrigger("Mouse Text", "PlayerInfo")
             {
                 CanRunFunc = () => PlayerInfoGUI.Visible
             };
