@@ -38,7 +38,7 @@ namespace ImproveGame.Interface
         private static readonly Dictionary<string, List<EventTrigger>> LayersDictionary;
 
         private static bool _occupyCursor;
-        private static EventTrigger _currentEventTrigger;
+        private static EventTrigger CurrentEventTrigger { get; set; }
         private static int _currentEventTriggerIndex;
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ImproveGame.Interface
         /// </summary>
         private static void ToPrimaryElements()
         {
-            string layerName = _currentEventTrigger._layerName;
+            string layerName = CurrentEventTrigger._layerName;
             if (!LayersDictionary.ContainsKey(layerName))
             {
                 return;
@@ -89,7 +89,7 @@ namespace ImproveGame.Interface
                 {
                     EventTrigger eventTrigger = eventTriggers[i];
                     _currentEventTriggerIndex = i;
-                    _currentEventTrigger = eventTrigger;
+                    CurrentEventTrigger = eventTrigger;
                     eventTrigger?.Update(gameTime);
                 }
             }
@@ -103,7 +103,7 @@ namespace ImproveGame.Interface
         public static void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             Dictionary<string, int> indexDictionary = new Dictionary<string, int>();
-            
+
             // 因为插入后顺序会变，所以不能在插入的位置获取进行排序
             foreach (KeyValuePair<string, List<EventTrigger>> keyValuePair in LayersDictionary)
             {
@@ -136,13 +136,12 @@ namespace ImproveGame.Interface
         public readonly string Name;
         private readonly string _layerName;
 
-        private UIState _state;
+        private ViewCarrier _carrier;
         private Vector2 _mousePosition;
 
         /// <summary>
         /// 我在这里提醒一下需要为 CanRunFunc 赋值否则 UI 将永不生效<br/>
         /// CanRunFunc 用于判断此 UI 是否执行 Update() 与 Draw() <br/>
-        /// priority 是 Update() 和 Draw() 执行的优先级，值越大越先执行，且越晚绘制。 <br/>
         /// 此类构建的方法不需要再与 UISystem.UpdateUI() 中添加代码 <br/>
         /// </summary>
         /// <param name="layerName">114514</param>
@@ -153,8 +152,6 @@ namespace ImproveGame.Interface
             Name = name;
             // 层级名称
             _layerName = layerName;
-            // 绘制优先级
-            // _priority = priority;
 
             // 判断集合内是否有这个图层，没有就就进去，那个不重复的 List 我忘了是啥了，先这么写
             if (!LayersPriority.Contains(layerName))
@@ -170,32 +167,18 @@ namespace ImproveGame.Interface
             }
 
             LayersDictionary[layerName].Add(this);
-
-            // 排序
-            // PrioritySort(layerName);
         }
 
-        // 对 EventTriggers 和 name 指定的 DrawDictionary 进行排序
-        /*private static void PrioritySort(string layersName)
+        public void SetViewCarrier<T>(T viewCarrier) where T : ViewCarrier, IUseEventTrigger
         {
-            if (!LayersDictionary.ContainsKey(layersName))
+            if (viewCarrier is null || _carrier == viewCarrier)
             {
                 return;
             }
 
-            LayersDictionary[layersName].Sort((a, b) => -a._priority.CompareTo(b._priority));
-        }*/
-
-        public void SetState<T>(T uiState) where T : UIState, IUseEventTrigger
-        {
-            if (uiState is null || _state == uiState)
-            {
-                return;
-            }
-
-            _state = uiState;
-            _state.Activate();
-            _state.Recalculate();
+            _carrier = viewCarrier;
+            _carrier.Activate();
+            _carrier.Recalculate();
         }
 
         private UIElement _lastElementHover;
@@ -215,7 +198,7 @@ namespace ImproveGame.Interface
                 return;
             }
 
-            if (_state is null)
+            if (_carrier is null)
                 return;
 
             if (!Main.hasFocus)
@@ -225,8 +208,8 @@ namespace ImproveGame.Interface
 
             _mousePosition = new Vector2(Main.mouseX, Main.mouseY);
             // 鼠标目标元素
-            UIElement target = _occupyCursor ? null : _state.GetElementAt(_mousePosition);
-            IUseEventTrigger useEventTrigger = _state as IUseEventTrigger;
+            UIElement target = _occupyCursor ? null : _carrier.GetElementAt(_mousePosition);
+            IUseEventTrigger useEventTrigger = _carrier as IUseEventTrigger;
             var targetMouseEvent = new UIMouseEvent(target, _mousePosition);
             bool occupyCursor = _occupyCursor;
             bool lockMouseLeft = Main.mouseLeft && !occupyCursor;
@@ -332,7 +315,7 @@ namespace ImproveGame.Interface
                         PlayerInput.ScrollWheelDeltaForUI));
                 }
 
-                _state.Update(gameTime);
+                _carrier.Update(gameTime);
             } finally
             {
                 _executedElementDown = lockMouseLeft;
@@ -348,7 +331,7 @@ namespace ImproveGame.Interface
                 return;
             }
 
-            _state?.Draw(Main.spriteBatch);
+            _carrier?.Draw(Main.spriteBatch);
         }
     }
 }

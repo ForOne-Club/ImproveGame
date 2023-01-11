@@ -7,7 +7,7 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class BigBagGUI : UIState, IUseEventTrigger
+    public class BigBagGUI : ViewCarrier, IUseEventTrigger
     {
         private static bool _visible = true;
 
@@ -64,7 +64,7 @@ namespace ImproveGame.Interface.GUI
                 Width = new StyleDimension(0f, 1f),
                 Height = new StyleDimension(50f, 0f),
                 RoundMode = RoundMode.Round4,
-                round4 = new Vector4(10f, 10f, 0f, 0f),
+                Round4 = new Vector4(10f, 10f, 0f, 0f),
                 Relative = RelativeMode.Vertical
             };
             TitlePanel.SetPadding(0f);
@@ -87,7 +87,7 @@ namespace ImproveGame.Interface.GUI
                 beginBg = UIColor.TitleBg2,
                 endBg = UIColor.TitleBg2,
                 RoundMode = RoundMode.Round4,
-                round4 = new Vector4(0f, 10f, 0f, 0f)
+                Round4 = new Vector4(0f, 10f, 0f, 0f)
             };
             Cross.OnMouseDown += (_, _) => Close();
             Cross.Join(TitlePanel);

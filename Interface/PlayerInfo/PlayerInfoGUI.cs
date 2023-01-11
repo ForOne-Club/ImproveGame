@@ -7,7 +7,7 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.PlayerInfo
 {
-    public class PlayerInfoGUI : UIState, IUseEventTrigger
+    public class PlayerInfoGUI : ViewCarrier, IUseEventTrigger
     {
         private static bool _visible;
 
@@ -35,6 +35,7 @@ namespace ImproveGame.Interface.PlayerInfo
 
         private AnimationTimer _invTimer, _openTimer;
         private SUIPanel _mainPanel;
+        private SUIPanel _titlePanel;
         private View _cardPanel;
         private SUITitle _title;
         private PlyInfoSwitch _switch;
@@ -58,27 +59,36 @@ namespace ImproveGame.Interface.PlayerInfo
             _mainPanel.SetPadding(0);
             _mainPanel.Join(this);
 
-            _title = new SUITitle(PlyInfo("Name"), 0.5f)
+            _titlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
             {
-                background = UIColor.TitleBg2,
-                border = UIColor.PanelBorder,
+                DragIgnore = true,
                 RoundMode = RoundMode.Round4,
-                round4 = new Vector4(10f, 10f, 0, 0),
+                Round4 = new Vector4(10f, 10f, 0f, 0f),
             };
-            _title.SetPadding(0);
-            _title.Height.Pixels = 50f;
-            _title.Join(_mainPanel);
+            _titlePanel.Width.Precent = 1f;
+            _titlePanel.Height.Pixels = 50f;
+            _titlePanel.SetPadding(0);
+            _titlePanel.Join(_mainPanel);
 
             // 关闭按钮
             _switch = new PlyInfoSwitch(UIColor.TitleBg2, UIColor.PanelBorder, () => Expanded);
-            _switch.Join(_title);
-
             // 切换状态的时候保证绘制不越界 OverflowHidden 设置一下。动画结束之后再设置回来。
             _switch.OnMouseDown += (_, _) =>
             {
                 Expanded = !Expanded;
                 _cardPanel.OverflowHidden = true;
             };
+            _switch.Join(_titlePanel);
+
+            _title = new SUITitle(PlyInfo("Name"), 0.5f)
+            {
+                background = Color.Transparent,
+                VAlign = 0.5f,
+                Relative = RelativeMode.Horizontal
+            };
+            _title.SetPadding(10f, 0f);
+            _title.SetInnerPixels(_title.textSize.X, 50f);
+            _title.Join(_titlePanel);
 
             _cardPanel = new View()
             {
@@ -88,8 +98,6 @@ namespace ImproveGame.Interface.PlayerInfo
             _cardPanel.SetPadding(8);
             _cardPanel.SetInnerPixels(PlyInfoCard.TotalSize(3, 7));
             _cardPanel.Join(_mainPanel);
-
-            _title.Width.Pixels = _cardPanel.Width.Pixels;
 
             // 太多了，我在想用 List<T>() 收纳下，然后加一个选择显示哪些的功能？
             _cardPanel.Append(new PlyInfoCard(PlyInfo("LifeRegen"), () => $"{_player.lifeRegen / 2f}/s", "Life"));
@@ -169,10 +177,19 @@ namespace ImproveGame.Interface.PlayerInfo
             }
 
             float round = MathHelper.Lerp(10f, 0, _openTimer.Schedule);
-            _switch.round4.Z = _title.round4.Z = _title.round4.W = round;
+            _switch.Round4.Z = _titlePanel.Round4.Z = _titlePanel.Round4.W = round;
+
+            float spacingX = MathHelper.Lerp(0, -_switch.Width.Pixels, _openTimer.Schedule);
+            float hAlign = MathHelper.Lerp(0, 0.5f, _openTimer.Schedule);
+            if (Math.Abs(_title.Spacing.X - spacingX) > 0.000000001 || Math.Abs(_title.HAlign - hAlign) > 0.000000001)
+            {
+                _title.Spacing.X = spacingX;
+                _title.HAlign = hAlign;
+                recalculate = true;
+            }
 
             Vector2 mainSize = new Vector2(
-                MathHelper.Lerp(250, _cardPanel.Width.Pixels, _openTimer.Schedule),
+                MathHelper.Lerp(_title.Right() + 10f, _cardPanel.Width.Pixels, _openTimer.Schedule),
                 _title.Height.Pixels + _cardPanel.Height.Pixels);
 
             if (_mainPanel.GetInnerSizePixels() != mainSize)

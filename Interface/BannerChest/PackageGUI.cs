@@ -5,7 +5,7 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.BannerChest
 {
-    public class PackageGUI : UIState, IUseEventTrigger
+    public class PackageGUI : ViewCarrier, IUseEventTrigger
     {
         public enum StorageType { Banners, Potions }
 
@@ -64,7 +64,7 @@ namespace ImproveGame.Interface.BannerChest
                 HAlign = 1f,
                 VAlign = 0.5f,
                 RoundMode = RoundMode.Round4,
-                round4 = new Vector4(0, 10, 0, 0),
+                Round4 = new Vector4(0, 10, 0, 0),
                 beginBg = UIColor.TitleBg2 * 0.5f,
                 endBg = UIColor.TitleBg2,
             };

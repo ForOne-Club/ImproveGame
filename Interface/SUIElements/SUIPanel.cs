@@ -36,7 +36,7 @@ namespace ImproveGame.Interface.SUIElements
             ShadowColor = new Color(0, 0, 0, 0.25f);
             this.borderColor = borderColor;
             this.backgroundColor = backgroundColor;
-            this.round = round;
+            this.Round = round;
             this.border = border;
             this.Draggable = Draggable;
         }
@@ -50,7 +50,7 @@ namespace ImproveGame.Interface.SUIElements
             ShadowColor = new Color(0, 0, 0, 0.25f);
             this.backgroundColor = backgroundColor;
             this.borderColor = borderColor;
-            this.round4 = round4;
+            this.Round4 = round4;
             this.border = border;
             this.Draggable = Draggable;
         }
@@ -69,13 +69,13 @@ namespace ImproveGame.Interface.SUIElements
                         Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
                         Vector2 shadowPos = pos - ShadowThickness;
                         Vector2 shadowSize = size + ShadowThickness * 2;
-                        PixelShader.DrawShadow(shadowPos, shadowSize, round, ShadowColor, this.ShadowThickness);
+                        PixelShader.DrawShadow(shadowPos, shadowSize, Round, ShadowColor, this.ShadowThickness);
                     }
 
-                    PixelShader.DrawRoundRect(pos, size, round, backgroundColor, border, borderColor);
+                    PixelShader.DrawRoundRect(pos, size, Round, backgroundColor, border, borderColor);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(pos, size, round4, backgroundColor, border, UIColor.PanelBorder);
+                    PixelShader.DrawRoundRect(pos, size, Round4, backgroundColor, border, UIColor.PanelBorder);
                     break;
             }
         }
