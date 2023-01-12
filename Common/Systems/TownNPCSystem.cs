@@ -14,7 +14,8 @@ namespace ImproveGame.Common.Systems
 
         public override void PostSetupContent()
         {
-            SpawnTownNPCs = typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
+            SpawnTownNPCs =
+                typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
             SetupTownNPCList();
         }
 
@@ -37,15 +38,20 @@ namespace ImproveGame.Common.Systems
                 var npc = new NPC();
                 npc.SetDefaults(id);
                 int head = NPC.TypeToDefaultHeadIndex(id);
-                return !npc.townNPC || head < 0 || head >= NPCHeadLoader.NPCHeadCount || NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] || npc.ModNPC?.TownNPCStayingHomeless is true;
+                return !npc.townNPC || head < 0 || head >= NPCHeadLoader.NPCHeadCount ||
+                       NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] || npc.type is NPCID.SantaClaus ||
+                       npc.ModNPC?.TownNPCStayingHomeless is true;
             });
 
-            var modNPCs = typeof(NPCLoader).GetField("npcs", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) as IList<ModNPC>;
+            var modNPCs =
+                typeof(NPCLoader).GetField("npcs", BindingFlags.Static | BindingFlags.NonPublic)
+                    ?.GetValue(null) as IList<ModNPC>;
             foreach (ModNPC modNPC in modNPCs)
             {
                 var npc = modNPC.NPC;
                 int head = NPC.TypeToDefaultHeadIndex(npc.type);
-                if (npc.townNPC && head >= 0 && !NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] && !modNPC.TownNPCStayingHomeless)
+                if (npc.townNPC && head >= 0 && !NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] &&
+                    !modNPC.TownNPCStayingHomeless)
                 {
                     TownNPCIDs.Add(npc.type);
                 }
@@ -120,7 +126,8 @@ namespace ImproveGame.Common.Systems
                 return;
             }
 
-            foreach (var id in TownNPCIDs.Where(id => Main.BestiaryTracker.Chats.GetWasChatWith(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[id])))
+            foreach (var id in TownNPCIDs.Where(id =>
+                         Main.BestiaryTracker.Chats.GetWasChatWith(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[id])))
             {
                 SetNPCSpawn(id);
             }

@@ -24,6 +24,7 @@
 - **[v1.6.2.4]** Fixed certain item icons in ModUI not displaying
 - **[v1.6.2.4]** Fixed only one infinite buff can be active when Protable Buff Station is off
 - **[v1.6.2.6]** Fixed the buff sharing
+- **[v1.6.2.7]** 修复了圣诞老人在开启NPC生成优化的情况下会重复入住并死去的BUG
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests

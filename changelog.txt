@@ -7,6 +7,8 @@ Source code: https://github.com/487666123/ImproveGame
 详细更新日志请见: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
 
 v1.6.2.7
+  ● BUG 修复
+    修复了圣诞老人在开启NPC生成优化的情况下会重复入住并死去的BUG
   ● 新增内容
     新增玩家属性面板，可在模组 UI 设置调节显示开关。
   ● 其他
