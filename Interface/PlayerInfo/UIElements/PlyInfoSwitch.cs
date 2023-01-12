@@ -18,7 +18,7 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             Relative = RelativeMode.Horizontal;
             Wrap = true;
             RoundMode = RoundMode.Round4;
-            round4 = new Vector4(10f, 0, 0, 0);
+            Round4 = new Vector4(10f, 0, 0, 0);
         }
 
         protected override void DrawSelf(SpriteBatch sb)
@@ -26,7 +26,7 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             base.DrawSelf(sb);
             Vector2 pos = GetDimensions().Position() - new Vector2(Extension.X, Extension.Y);
             Vector2 size = GetDimensions().Size() + new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);
-            PixelShader.DrawRoundRect(pos, size, round4, _background, 2, _border);
+            PixelShader.DrawRoundRect(pos, size, Round4, _background, 2, _border);
 
             if (_expanded is not null)
             {

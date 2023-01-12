@@ -22,7 +22,7 @@ namespace ImproveGame.Interface.SUIElements
             crossColor = UIColor.Cross;
             beginBg = UIColor.TitleBg * 0.5f;
             endBg = UIColor.TitleBg;
-            round = 10f;
+            Round = 10f;
         }
 
         public override void MouseOver(UIMouseEvent evt)
@@ -43,10 +43,10 @@ namespace ImproveGame.Interface.SUIElements
             switch (RoundMode)
             {
                 case RoundMode.Round:
-                    PixelShader.DrawRoundRect(pos, size, round, background, border, borderColor);
+                    PixelShader.DrawRoundRect(pos, size, Round, background, border, borderColor);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(pos, size, round4, background, border, borderColor);
+                    PixelShader.DrawRoundRect(pos, size, Round4, background, border, borderColor);
                     break;
             }
             Vector2 forkPos = pos + size / 2 - new Vector2(forkSize / 2);

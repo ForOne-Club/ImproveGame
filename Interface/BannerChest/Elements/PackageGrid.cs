@@ -48,7 +48,6 @@ namespace ImproveGame.Interface.BannerChest.Elements
             if (ListView.Children.Count() != RequiredChildrenCount(Items.Count))
             {
                 SetInventory(Items);
-                Main.NewText("SetInventory");
             }
 
             // 因为 Update 是一层一层调用子元素的 Update()，所以不能放在前面。

@@ -34,7 +34,7 @@ namespace ImproveGame.Interface.SUIElements
             PaddingLeft = 30;
             PaddingRight = 30;
             DragIgnore = true;
-            round = 10f;
+            Round = 10f;
 
             SetInnerPixels(textSize);
         }
@@ -48,10 +48,10 @@ namespace ImproveGame.Interface.SUIElements
             switch (RoundMode)
             {
                 case RoundMode.Round:
-                    PixelShader.DrawRoundRect(position, size, round, background);
+                    PixelShader.DrawRoundRect(position, size, Round, background);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(position, size, round4, background, 2, border);
+                    PixelShader.DrawRoundRect(position, size, Round4, background, 2, border);
                     break;
             }
             rectangle = GetInnerDimensions();

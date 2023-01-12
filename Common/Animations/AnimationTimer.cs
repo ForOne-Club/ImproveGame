@@ -15,7 +15,7 @@
     // 动画计时器
     public class AnimationTimer
     {
-        // 缓动系数/增量
+        // 缓动系数 / 增量
         public float Speed; // √
         public float Timer;
         public float TimerMax; // √

@@ -15,15 +15,8 @@ namespace ImproveGame.Interface.Common
 
         #region 定义
 
-        // CA2211
-        public PlayerInfoGUI PlayerInfoGUI;
-        internal static UserInterface PlayerInfoInterface;
-
         public AutofisherGUI AutofisherGUI;
         internal static UserInterface AutofisherInterface;
-
-        public BuffTrackerGUI BuffTrackerGUI;
-        internal static UserInterface BuffTrackerInterface;
 
         public LiquidWandGUI LiquidWandGUI;
         internal static UserInterface LiquidWandInterface;
@@ -33,9 +26,6 @@ namespace ImproveGame.Interface.Common
 
         public BrustGUI BrustGUI;
         internal static UserInterface BrustInterface;
-
-        public BigBagGUI BigBagGUI;
-        internal static UserInterface BigBagInterface;
 
         public SpaceWandGUI SpaceWandGUI;
         internal static UserInterface SpaceWandInterface;
@@ -55,8 +45,21 @@ namespace ImproveGame.Interface.Common
         public PrefixRecallGUI PrefixRecallGUI;
         internal static UserInterface PrefixRecallInterface;
 
+        // 玩家信息表
+        public PlayerInfoGUI PlayerInfoGUI;
+        public EventTrigger PlayerInfoTrigger;
+
+        // 药水袋 & 旗帜盒 UI
         public PackageGUI PackageGUI;
-        internal static UserInterface PackageInterface;
+        public EventTrigger PackageTrigger;
+
+        // 大背包 UI
+        public BigBagGUI BigBagGUI;
+        public EventTrigger BigBagTrigger;
+
+        // Buff 追踪站
+        public BuffTrackerGUI BuffTrackerGUI;
+        public EventTrigger BuffTrackerTrigger;
 
         #endregion
 
@@ -67,13 +70,13 @@ namespace ImproveGame.Interface.Common
             Instance = null;
 
             PlayerInfoGUI = null;
-            PlayerInfoInterface = null;
+            PlayerInfoTrigger = null;
 
             AutofisherGUI = null;
             AutofisherInterface = null;
 
             BuffTrackerGUI = null;
-            BuffTrackerInterface = null;
+            BuffTrackerTrigger = null;
 
             LiquidWandGUI = null;
             LiquidWandInterface = null;
@@ -85,7 +88,7 @@ namespace ImproveGame.Interface.Common
             BrustInterface = null;
 
             BigBagGUI = null;
-            BigBagInterface = null;
+            BigBagTrigger = null;
 
             SpaceWandGUI = null;
             SpaceWandInterface = null;
@@ -106,45 +109,65 @@ namespace ImproveGame.Interface.Common
             PrefixRecallInterface = null;
 
             PackageGUI = null;
-            PackageInterface = null;
+            PackageTrigger = null;
         }
 
         public override void Load()
         {
             Instance = this;
-            if (!Main.dedServ)
+            if (Main.dedServ)
             {
-                PlayerInfoInterface = new();
-                AutofisherGUI = new();
-                BuffTrackerGUI = new();
-                LiquidWandGUI = new();
-                ArchitectureGUI = new();
-                BrustGUI = new();
-                PackageInterface = new();
-                BigBagInterface = new();
-                SpaceWandGUI = new();
-                PaintWandGUI = new();
-                GrabBagInfoGUI = new();
-                LifeformAnalyzerGUI = new();
-                StructureGUI = new();
-                PrefixRecallGUI = new();
-                LoadGUI(ref AutofisherGUI, out AutofisherInterface);
-                LoadGUI(ref BuffTrackerGUI, out BuffTrackerInterface);
-                LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
-                LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
-                LoadGUI(ref BrustGUI, out BrustInterface);
-                LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
-                LoadGUI(ref PaintWandGUI, out PaintWandInterface);
-                LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface, () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
-                LoadGUI(ref LifeformAnalyzerGUI, out LifeformAnalyzerInterface);
-                LoadGUI(ref StructureGUI, out StructureInterface);
-                LoadGUI(ref PrefixRecallGUI, out PrefixRecallInterface);
+                return;
             }
+
+            // UserInterface 之 EventTrigger 版
+            PackageTrigger = new EventTrigger("Inventory", "Package")
+            {
+                CanRunFunc = () => PackageGUI.Visible
+            };
+            BigBagTrigger = new EventTrigger("Inventory", "BigBag")
+            {
+                CanRunFunc = () => BigBagGUI.Visible
+            };
+            BuffTrackerTrigger = new EventTrigger("Inventory", "Buff Tracker GUI")
+            {
+                CanRunFunc = () => BuffTrackerGUI.Visible
+            };
+
+            BuffTrackerGUI = new BuffTrackerGUI();
+            PlayerInfoTrigger = new EventTrigger("Mouse Text", "PlayerInfo")
+            {
+                CanRunFunc = () => PlayerInfoGUI.Visible
+            };
+            BuffTrackerTrigger.SetViewCarrier(BuffTrackerGUI);
+
+            AutofisherGUI = new AutofisherGUI();
+            LiquidWandGUI = new LiquidWandGUI();
+            ArchitectureGUI = new ArchitectureGUI();
+            BrustGUI = new BrustGUI();
+            SpaceWandGUI = new SpaceWandGUI();
+            PaintWandGUI = new PaintWandGUI();
+            GrabBagInfoGUI = new GrabBagInfoGUI();
+            LifeformAnalyzerGUI = new LifeformAnalyzerGUI();
+            StructureGUI = new StructureGUI();
+            PrefixRecallGUI = new PrefixRecallGUI();
+            LoadGUI(ref AutofisherGUI, out AutofisherInterface);
+            LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
+            LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
+            LoadGUI(ref BrustGUI, out BrustInterface);
+            LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
+            LoadGUI(ref PaintWandGUI, out PaintWandInterface);
+            LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface,
+                () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
+            LoadGUI(ref LifeformAnalyzerGUI, out LifeformAnalyzerInterface);
+            LoadGUI(ref StructureGUI, out StructureInterface);
+            LoadGUI(ref PrefixRecallGUI, out PrefixRecallInterface);
         }
 
-        public static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface, Action PreActive = null) where T : UIState
+        private static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface, Action PreActive = null)
+            where T : UIState
         {
-            uiInterface = new();
+            uiInterface = new UserInterface();
             PreActive?.Invoke();
             // SetState() 会执行 Activate()
             // uiState.Activate();
@@ -157,18 +180,12 @@ namespace ImproveGame.Interface.Common
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (PlayerInfoGUI.Visible)
-                PlayerInfoInterface?.Update(gameTime);
-            if (BigBagGUI.Visible)
-                BigBagInterface?.Update(gameTime);
+            EventTrigger.UpdateUI(gameTime);
+
             if (AutofisherGUI.Visible)
                 AutofisherInterface?.Update(gameTime);
-            if (BuffTrackerGUI.Visible)
-                BuffTrackerInterface?.Update(gameTime);
             if (LiquidWandGUI.Visible)
                 LiquidWandInterface?.Update(gameTime);
-            if (PackageGUI.Visible)
-                PackageInterface?.Update(gameTime);
             if (ArchitectureGUI.Visible)
                 ArchitectureInterface?.Update(gameTime);
             if (BrustGUI.Visible)
@@ -196,14 +213,10 @@ namespace ImproveGame.Interface.Common
         // UserInterface.ActiveInstance 每次变更都会使 Recalculate() 执行一次。
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            Player player = Main.LocalPlayer;
-
             // 如果 Insert 是按照向前插入的逻辑，越早插入越晚绘制，也就是越靠近顶层。
-            layers.FindVanilla("Mouse Text", index =>
-            {
-                layers.Insert(index, "PlayerInfo GUI", PlayerInfoGUI, () => PlayerInfoGUI.Visible);
-            });
+            EventTrigger.ModifyInterfaceLayers(layers);
 
+            // 诊断网络？
             layers.FindVanilla("Diagnose Net", index =>
             {
                 layers.Insert(index, "Buff Tracker GUI", () =>
@@ -212,7 +225,7 @@ namespace ImproveGame.Interface.Common
                         return true;
 
                     bool modNetShouldDraw = (bool)typeof(ModNet).GetField("ShouldDrawModNetDiagnosticsUI",
-                        BindingFlags.NonPublic | BindingFlags.Static)
+                            BindingFlags.NonPublic | BindingFlags.Static)
                         ?.GetValue(null)!;
 
                     if (modNetShouldDraw)
@@ -224,21 +237,19 @@ namespace ImproveGame.Interface.Common
                 });
             });
 
+            // 背包
             layers.FindVanilla("Inventory", index =>
             {
-                // 格式比较统一，这么写好阅读点。
-                layers.Insert(index, "Buff Tracker GUI", BuffTrackerGUI, () => BuffTrackerGUI.Visible);
-                layers.Insert(index, "Liquid Wand GUI", LiquidWandGUI, () => LiquidWandGUI.Visible && Main.playerInventory && player.HeldItem is not null);
-                layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible && Main.playerInventory && player.HeldItem is not null);
+                layers.Insert(index, "Liquid Wand GUI", LiquidWandGUI, () => LiquidWandGUI.Visible);
+                layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible);
                 layers.Insert(index, "Autofisher GUI", AutofisherGUI, () => AutofisherGUI.Visible);
-                layers.Insert(index, "Package GUI", PackageGUI, () => PackageGUI.Visible);
-                layers.Insert(index, "BigBag GUI", BigBagGUI, () => BigBagGUI.Visible);
                 layers.Insert(index, "Grab Bag Info GUI", GrabBagInfoGUI, () => GrabBagInfoGUI.Visible);
                 layers.Insert(index, "Lifeform Analyzer GUI", LifeformAnalyzerGUI, () => LifeformAnalyzerGUI.Visible);
                 layers.Insert(index, "Structure GUI", StructureGUI, () => StructureGUI.Visible);
                 layers.Insert(index, "Prefix Recall GUI", PrefixRecallGUI, () => PrefixRecallGUI.Visible);
             });
 
+            // 精密线控仪
             layers.FindVanilla("Wire Selection", index =>
             {
                 layers.Insert(index, "SpaceWand GUI", SpaceWandGUI, () => SpaceWandGUI.Visible);

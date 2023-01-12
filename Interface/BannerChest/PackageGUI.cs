@@ -1,12 +1,11 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.BannerChest.Elements;
+﻿using ImproveGame.Interface.BannerChest.Elements;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.BannerChest
 {
-    public class PackageGUI : UIState
+    public class PackageGUI : ViewCarrier, IUseEventTrigger
     {
         public enum StorageType { Banners, Potions }
 
@@ -65,7 +64,7 @@ namespace ImproveGame.Interface.BannerChest
                 HAlign = 1f,
                 VAlign = 0.5f,
                 RoundMode = RoundMode.Round4,
-                round4 = new Vector4(0, 10, 0, 0),
+                Round4 = new Vector4(0, 10, 0, 0),
                 beginBg = UIColor.TitleBg2 * 0.5f,
                 endBg = UIColor.TitleBg2,
             };
@@ -141,6 +140,13 @@ namespace ImproveGame.Interface.BannerChest
         {
             SoundEngine.PlaySound(SoundID.MenuClose);
             Visible = false;
+        }
+
+        public bool ToPrimary(UIElement target) => target != this;
+
+        public bool CanOccupyCursor(UIElement target)
+        {
+            return (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
         }
     }
 }

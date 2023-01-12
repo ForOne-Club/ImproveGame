@@ -9,18 +9,30 @@ namespace ImproveGame.Interface.GUI
 {
     public class LiquidWandGUI : UIState
     {
-        public static bool Visible { get; private set; }
+        private static bool _visible;
+
+        public static bool Visible
+        {
+            get
+            {
+                return _visible && Main.playerInventory && Main.LocalPlayer.HeldItem is not null;
+            }
+            private set => _visible = value;
+        }
+
         private const float PanelLeft = 600f;
         private const float PanelTop = 80f;
         private const float PanelHeight = 148f;
         private const float PanelWidth = 190f;
 
         public int CurrentSlot;
+
         public Item CurrentItem
         {
             get => Main.LocalPlayer.inventory[CurrentSlot];
             set => Main.LocalPlayer.inventory[CurrentSlot] = value;
         }
+
         public LiquidWand CurrentWand => CurrentItem.ModItem as LiquidWand;
 
         private ModUIPanel basePanel;
@@ -50,7 +62,8 @@ namespace ImproveGame.Interface.GUI
             const float colorNormal = 1f;
             const float xOffst = 2f;
 
-            waterSlot = new(LiquidID.Water, ItemID.BottomlessBucket, ItemID.SuperAbsorbantSponge, colorHover, colorNormal);
+            waterSlot = new(LiquidID.Water, ItemID.BottomlessBucket, ItemID.SuperAbsorbantSponge, colorHover,
+                colorNormal);
             waterSlot.Left.Set(slotFirst + xOffst, 0f);
             waterSlot.Top.Set(slotSecond, 0f);
             waterSlot.OnMouseDown += (_, _) =>
@@ -64,7 +77,8 @@ namespace ImproveGame.Interface.GUI
             };
             basePanel.Append(waterSlot);
 
-            lavaSlot = new(LiquidID.Lava, ItemID.BottomlessLavaBucket, ItemID.LavaAbsorbantSponge, colorHover, colorNormal);
+            lavaSlot = new(LiquidID.Lava, ItemID.BottomlessLavaBucket, ItemID.LavaAbsorbantSponge, colorHover,
+                colorNormal);
             lavaSlot.Left.Set(slotSecond + xOffst, 0f);
             lavaSlot.Top.Set(slotSecond, 0f);
             lavaSlot.OnMouseDown += (_, _) =>
@@ -105,7 +119,8 @@ namespace ImproveGame.Interface.GUI
             basePanel.Append(title);
 
             // 使用模式修改按钮
-            modeButton = new(Language.GetText("Mods.ImproveGame.Common.Switch"), Color.White, $"Images/Item_{ItemID.WaterBucket}");
+            modeButton = new(Language.GetText("Mods.ImproveGame.Common.Switch"), Color.White,
+                $"Images/Item_{ItemID.WaterBucket}");
             modeButton.Left.Set(slotFirst, 0f);
             modeButton.Top.Set(slotFirst, 0f);
             modeButton.Width.Set(166f, 0f);
@@ -125,7 +140,8 @@ namespace ImproveGame.Interface.GUI
         /// <param name="addAmount">更改数量</param>
         /// <param name="store">true则使用存液体模式，false则使用放液体模式</param>
         /// <param name="ignoreLiquidMode">是否无视<see cref="WandSystem.LiquidMode"/>判断</param>
-        public void TryChangeLiquidAmount(byte liquidType, ref byte addAmount, bool store, bool ignoreLiquidMode = false)
+        public void TryChangeLiquidAmount(byte liquidType, ref byte addAmount, bool store,
+            bool ignoreLiquidMode = false)
         {
             //Main.NewText($"TryChangeLiquidAmount");
             if (liquidType != WandSystem.LiquidMode && !ignoreLiquidMode)
@@ -155,7 +171,8 @@ namespace ImproveGame.Interface.GUI
             }
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, CurrentSlot, Main.LocalPlayer.inventory[CurrentSlot].prefix);
+                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, CurrentSlot,
+                    Main.LocalPlayer.inventory[CurrentSlot].prefix);
         }
 
         // 主要是可拖动和一些判定吧
@@ -212,7 +229,8 @@ namespace ImproveGame.Interface.GUI
             foreach (var slot in from u in basePanel.Children where u is LiquidWandSlot select u as LiquidWandSlot)
             {
                 // 如果遮挡到百分比文本，就虚化百分比文本
-                var textLength = ChatManager.GetStringSize(FontAssets.MouseText.Value, hoverText, Vector2.One).ToPoint();
+                var textLength = ChatManager.GetStringSize(FontAssets.MouseText.Value, hoverText, Vector2.One)
+                    .ToPoint();
                 var slotRect = slot.GetDimensions().ToRectangle();
                 slotRect.Height = 24;
                 slotRect.Y += 50;
@@ -256,6 +274,7 @@ namespace ImproveGame.Interface.GUI
                 //    iconItemId = WandSystem.AbsorptionMode ? ItemID.ShimmerAbsorbantSponge : ItemID.BottomlessShimmerBucket;
                 //    break;
             }
+
             modeButton.SetIconTexture($"Images/Item_{iconItemId}", true);
         }
 

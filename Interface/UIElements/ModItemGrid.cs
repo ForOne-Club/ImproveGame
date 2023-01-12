@@ -7,34 +7,38 @@ namespace ImproveGame.Interface.UIElements
     // 一个最大的元素, 用来包裹显示内容部分和滚动条. 最大的元素负责隐藏超过范围的元素.
     public class ModItemGrid : View
     {
-        public ModItemList ItemList;
-        public SUIScrollbar Scrollbar;
-        public Vector2 ShowSize;
+        public readonly ModItemList ItemList;
+        private readonly SUIScrollbar _scrollbar;
+        private readonly Vector2 _showSize;
 
         // 可以在 new 的时候将其他元素也初始化, 或者在执行 Active() 的时候初始化.
         public ModItemGrid()
         {
-            SetPadding(0);
-
             // 隐藏子元素, 可显示的范围是计算 Padding 之后的.
             OverflowHidden = true;
+            DragIgnore = true;
 
-            Append(ItemList = new ModItemList());
+            ItemList = new ModItemList
+            {
+                DragIgnore = true
+            };
             ItemList.ModifyHVCount(10, 10);
+            ItemList.Join(this);
 
-            Append(Scrollbar = new SUIScrollbar()
+            _scrollbar = new SUIScrollbar
             {
                 HAlign = 1f
-            });
+            };
+            _scrollbar.Join(this);
 
-            ShowSize = ModItemList.GetSize(10, 5);
+            _showSize = ModItemList.GetSize(10, 5);
 
-            Scrollbar.Left.Pixels = -1;
-            Scrollbar.Height.Pixels = ItemList.Height();
-            Scrollbar.SetView(ShowSize.Y, ItemList.Height.Pixels);
+            _scrollbar.Left.Pixels = -1;
+            _scrollbar.Height.Pixels = ItemList.Height();
+            _scrollbar.SetView(_showSize.Y, ItemList.Height.Pixels);
 
-            Width.Pixels = ShowSize.X + Scrollbar.Width.Pixels + 11f;
-            Height.Pixels = ShowSize.Y + 1f;
+            Width.Pixels = _showSize.X + _scrollbar.Width.Pixels + 11f;
+            Height.Pixels = _showSize.Y + 1f;
         }
 
         public void SetInventory(Item[] items)
@@ -42,23 +46,25 @@ namespace ImproveGame.Interface.UIElements
             // 初始化 ItemList 的时候会计算高度, 但是计算的是显示的高度.
             // 在 SetInventory 之后还会再计算一次, 计算的是 添加 items 之后的实际高度.
             ItemList.SetInventory(items);
-            Scrollbar.SetView(ShowSize.Y, ItemList.Height.Pixels);
+            _scrollbar.SetView(_showSize.Y, ItemList.Height.Pixels);
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
             // 下滑: -, 上滑: +
-            Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
+            _scrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            if (Scrollbar.ViewPosition != ItemList.Top.Pixels)
+            if (Math.Abs(-_scrollbar.ViewPosition - ItemList.Top.Pixels) < 0.000000001)
             {
-                ItemList.Top.Pixels = -Scrollbar.ViewPosition;
-                ItemList.Recalculate();
+                return;
             }
+
+            ItemList.Top.Pixels = -_scrollbar.ViewPosition;
+            ItemList.Recalculate();
         }
     }
 }

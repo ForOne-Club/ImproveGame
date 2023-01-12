@@ -233,7 +233,7 @@ namespace ImproveGame.Interface.GUI
         
         public void Open()
         {
-            _basePanel.Dragging = false;
+            _basePanel.KeepPressed = false;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             SetupList();

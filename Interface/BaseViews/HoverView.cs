@@ -13,7 +13,7 @@ namespace ImproveGame.Interface.BaseViews
         public HoverView()
         {
             hoverTimer = new AnimationTimer(3);
-            round = 10;
+            Round = 10;
             beginColor = new Color(0, 0, 0, 0);
             endColor = new Color(0, 0, 0, 0.5f);
             startWidth = 0f;
@@ -49,10 +49,10 @@ namespace ImproveGame.Interface.BaseViews
             switch (RoundMode)
             {
                 case RoundMode.Round:
-                    PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, round + shadow.X, color);
+                    PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, Round + shadow.X, color);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, round4 + new Vector4(shadow.X), color);
+                    PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, Round4 + new Vector4(shadow.X), color);
                     break;
             }
         }

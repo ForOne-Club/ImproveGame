@@ -10,12 +10,15 @@ namespace ImproveGame.Interface.SUIElements
         /// 显示窗口阴影
         /// </summary>
         internal bool Shaded;
+
         internal float ShadowThickness;
         internal Color ShadowColor;
+
         /// <summary>
         /// 可拖动
         /// </summary>
         internal bool Draggable;
+
         internal bool Dragging;
         internal Vector2 Offset;
 
@@ -23,7 +26,8 @@ namespace ImproveGame.Interface.SUIElements
         public Color borderColor;
         public Color backgroundColor;
 
-        public SUIPanel(Color borderColor, Color backgroundColor, float round = 12, float border = 2, bool Draggable = false)
+        public SUIPanel(Color borderColor, Color backgroundColor, float round = 12, float border = 2,
+            bool Draggable = false)
         {
             SetPadding(10f);
             DragIgnore = true;
@@ -32,7 +36,7 @@ namespace ImproveGame.Interface.SUIElements
             ShadowColor = new Color(0, 0, 0, 0.25f);
             this.borderColor = borderColor;
             this.backgroundColor = backgroundColor;
-            this.round = round;
+            this.Round = round;
             this.border = border;
             this.Draggable = Draggable;
         }
@@ -46,16 +50,15 @@ namespace ImproveGame.Interface.SUIElements
             ShadowColor = new Color(0, 0, 0, 0.25f);
             this.backgroundColor = backgroundColor;
             this.borderColor = borderColor;
-            this.round4 = round4;
+            this.Round4 = round4;
             this.border = border;
             this.Draggable = Draggable;
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            CalculatedStyle dimenstions = GetDimensions();
-            Vector2 pos = dimenstions.Position();
-            Vector2 size = dimenstions.Size();
+            Vector2 pos = GetDimensions().Position();
+            Vector2 size = GetDimensions().Size();
             pos -= new Vector2(Extension.X, Extension.Y);
             size += new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);
             switch (RoundMode)
@@ -64,14 +67,15 @@ namespace ImproveGame.Interface.SUIElements
                     if (Shaded)
                     {
                         Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
-                        Vector2 ShadowPos = pos - ShadowThickness;
-                        Vector2 ShadowSize = size + ShadowThickness * 2;
-                        PixelShader.DrawShadow(ShadowPos, ShadowSize, round, ShadowColor, this.ShadowThickness);
+                        Vector2 shadowPos = pos - ShadowThickness;
+                        Vector2 shadowSize = size + ShadowThickness * 2;
+                        PixelShader.DrawShadow(shadowPos, shadowSize, Round, ShadowColor, this.ShadowThickness);
                     }
-                    PixelShader.DrawRoundRect(pos, size, round, backgroundColor, border, borderColor);
+
+                    PixelShader.DrawRoundRect(pos, size, Round, backgroundColor, border, borderColor);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(pos, size, round4, backgroundColor, border, UIColor.PanelBorder);
+                    PixelShader.DrawRoundRect(pos, size, Round4, backgroundColor, border, UIColor.PanelBorder);
                     break;
             }
         }
@@ -80,13 +84,17 @@ namespace ImproveGame.Interface.SUIElements
         {
             base.MouseDown(evt);
             // 可拖动界面
-            View view = evt.Target is View ? evt.Target as View : null;
+            View view = evt.Target as View;
             // 当点击的是子元素不进行移动
-            if (Draggable && (evt.Target == this || (view is not null && view.DragIgnore) || evt.Target.GetType().IsAssignableFrom(typeof(View)) || evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
+            if (!Draggable ||
+                (evt.Target != this && (view is null || !view.DragIgnore) &&
+                 !evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
             {
-                Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
-                Dragging = true;
+                return;
             }
+
+            Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
+            Dragging = true;
         }
 
         public override void MouseUp(UIMouseEvent evt)
@@ -104,13 +112,13 @@ namespace ImproveGame.Interface.SUIElements
                 Main.LocalPlayer.mouseInterface = true;
             }
 
-            if (Dragging)
+            if (!Dragging)
             {
-                Left.Set(Main.mouseX - Offset.X, 0f);
-                Top.Set(Main.mouseY - Offset.Y, 0f);
-                Recalculate();
-                OnDrag?.Invoke(this);
+                return;
             }
+
+            SetPosPixels(Main.mouseX - Offset.X, Main.mouseY - Offset.Y).Recalculate();
+            OnDrag?.Invoke(this);
         }
 
         internal event ElementEvent OnDrag;
