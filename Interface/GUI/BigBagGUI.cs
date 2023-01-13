@@ -7,8 +7,16 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class BigBagGUI : ViewCarrier, IUseEventTrigger
+    public class BigBagGUI : ViewBody
     {
+        public override bool Display { get => Visible; set => Visible = value; }
+
+        public override bool CanPriority(UIElement target) =>
+            target != this;
+
+        public override bool CanDisableMouse(UIElement target)
+            => (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
+
         private static bool _visible = true;
 
         public static bool Visible
@@ -319,13 +327,6 @@ namespace ImproveGame.Interface.GUI
             }
 
             Recipe.FindRecipes();
-        }
-
-        public bool ToPrimary(UIElement target) => target != this;
-
-        public bool CanOccupyCursor(UIElement target)
-        {
-            return (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
         }
     }
 }

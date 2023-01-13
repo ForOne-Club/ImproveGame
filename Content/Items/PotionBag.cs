@@ -29,10 +29,10 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
-            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == StoredPotions)
+            if (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Potions)
                 UISystem.Instance.PackageGUI.Close();
             else
-                UISystem.Instance.PackageGUI.Open(StoredPotions, Item.Name, PackageGUI.StorageType.Potions, this);
+                UISystem.Instance.PackageGUI.Open(StoredPotions, Item.Name, StorageType.Potions, this);
 
             // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
             // storedPotions.RemoveAt(storedPotions.Count - 1);
@@ -120,7 +120,7 @@ namespace ImproveGame.Content.Items
             // 决定文本显示的是“开启”还是“关闭”
             if (ItemInInventory)
             {
-                string @switch = PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == StoredPotions
+                string @switch = PackageGUI.Visible && PackageGUI.StorageType == StorageType.Potions
                     ? "Off"
                     : "On";
                 tooltips.Add(new TooltipLine(Mod, "CreateWand", GetText($"Tips.CreateWand{@switch}"))

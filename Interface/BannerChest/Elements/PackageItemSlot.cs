@@ -86,12 +86,12 @@ namespace ImproveGame.Interface.BannerChest.Elements
 
             if (Item.IsAir)
             {
-                switch (PackageGUI.storageType)
+                switch (PackageGUI.StorageType)
                 {
-                    case PackageGUI.StorageType.Banners:
+                    case StorageType.Banners:
                         BigBagItemSlot.DrawItemIcon(sb, Banner, Color.White * 0.5f, dimensions);
                         break;
-                    case PackageGUI.StorageType.Potions:
+                    case StorageType.Potions:
                         BigBagItemSlot.DrawItemIcon(sb, Potion, Color.White * 0.5f, dimensions);
                         break;
                 }

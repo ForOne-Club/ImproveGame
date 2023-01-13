@@ -7,9 +7,10 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.PlayerInfo
 {
-    public class PlayerInfoGUI : ViewCarrier, IUseEventTrigger
+    public class PlayerInfoGUI : ViewBody
     {
         private static bool _visible;
+        public override bool Display { get => Visible; set => Visible = value; }
 
         public static bool Visible
         {
@@ -216,9 +217,9 @@ namespace ImproveGame.Interface.PlayerInfo
         private static float GetCrit(DamageClass damageClass) => _player.GetTotalCritChance(damageClass);
         private static string PlyInfo(string str) => GetText($"UI.PlayerInfo.{str}");
 
-        public bool ToPrimary(UIElement target) => target != this;
+        public override bool CanPriority(UIElement target) => target != this;
 
-        public bool CanOccupyCursor(UIElement target)
+        public override bool CanDisableMouse(UIElement target)
         {
             return (target != this && _mainPanel.IsMouseHovering) || _mainPanel.KeepPressed;
         }

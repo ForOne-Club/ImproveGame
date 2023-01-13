@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.Common;
-using ImproveGame.Interface.GUI;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
@@ -29,10 +28,10 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
-            if (PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == StoredBanners)
+            if (PackageGUI.Visible && PackageGUI.StorageType == StorageType.Banners)
                 UISystem.Instance.PackageGUI.Close();
             else
-                UISystem.Instance.PackageGUI.Open(StoredBanners, Item.Name, PackageGUI.StorageType.Banners, this);
+                UISystem.Instance.PackageGUI.Open(StoredBanners, Item.Name, StorageType.Banners, this);
 
             //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
             //storedBanners.RemoveAt(storedBanners.Count - 1);
@@ -140,7 +139,7 @@ namespace ImproveGame.Content.Items
             // 决定文本显示的是“开启”还是“关闭”
             if (_itemInInventory)
             {
-                string @switch = PackageGUI.Visible && UISystem.Instance.PackageGUI.Grid.Items == StoredBanners
+                string @switch = PackageGUI.Visible && PackageGUI.StorageType == StorageType.Banners
                     ? "Off"
                     : "On";
                 tooltips.Add(new TooltipLine(Mod, "CreateWand", GetText($"Tips.CreateWand{@switch}"))

@@ -18,16 +18,16 @@ namespace ImproveGame.Interface.Common
 
             // 玩家信息
             uiSystem.PlayerInfoGUI = new PlayerInfoGUI();
-            uiSystem.PlayerInfoTrigger.SetViewCarrier(UISystem.Instance.PlayerInfoGUI);
+            uiSystem.PlayerInfoTrigger.SetCarrier(uiSystem.PlayerInfoGUI);
             PlayerInfoGUI.Visible = true;
 
             // 旗帜盒
             uiSystem.PackageGUI = new PackageGUI();
-            uiSystem.PackageTrigger.SetViewCarrier(UISystem.Instance.PackageGUI);
+            uiSystem.PackageTrigger.SetCarrier(uiSystem.PackageGUI);
 
             // 大背包
             uiSystem.BigBagGUI = new BigBagGUI();
-            uiSystem.BigBagTrigger.SetViewCarrier(UISystem.Instance.BigBagGUI);
+            uiSystem.BigBagTrigger.SetCarrier(uiSystem.BigBagGUI);
 
             uiSystem.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
             if (HugeInventoryUIPosition == Vector2.Zero)

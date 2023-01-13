@@ -121,25 +121,15 @@ namespace ImproveGame.Interface.Common
             }
 
             // UserInterface 之 EventTrigger 版
-            PackageTrigger = new EventTrigger("Inventory", "Package")
-            {
-                CanRunFunc = () => PackageGUI.Visible
-            };
-            BigBagTrigger = new EventTrigger("Inventory", "BigBag")
-            {
-                CanRunFunc = () => BigBagGUI.Visible
-            };
-            BuffTrackerTrigger = new EventTrigger("Inventory", "Buff Tracker GUI")
-            {
-                CanRunFunc = () => BuffTrackerGUI.Visible
-            };
+            PackageTrigger = new EventTrigger("Inventory", "Package");
+
+            BigBagTrigger = new EventTrigger("Inventory", "BigBag");
+
+            BuffTrackerTrigger = new EventTrigger("Inventory", "Buff Tracker GUI");
 
             BuffTrackerGUI = new BuffTrackerGUI();
-            PlayerInfoTrigger = new EventTrigger("Mouse Text", "PlayerInfo")
-            {
-                CanRunFunc = () => PlayerInfoGUI.Visible
-            };
-            BuffTrackerTrigger.SetViewCarrier(BuffTrackerGUI);
+            PlayerInfoTrigger = new EventTrigger("Mouse Text", "PlayerInfo");
+            BuffTrackerTrigger.SetCarrier(BuffTrackerGUI);
 
             AutofisherGUI = new AutofisherGUI();
             LiquidWandGUI = new LiquidWandGUI();
@@ -180,6 +170,7 @@ namespace ImproveGame.Interface.Common
 
         public override void UpdateUI(GameTime gameTime)
         {
+            // 可以看到，它执行的是最早的。
             EventTrigger.UpdateUI(gameTime);
 
             if (AutofisherGUI.Visible)

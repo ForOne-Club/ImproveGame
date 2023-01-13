@@ -4,15 +4,6 @@ namespace ImproveGame.Interface.Common.Extensions
 {
     public static class UISystemExtensions
     {
-        public static void Insert(this List<GameInterfaceLayer> layers, int index, EventTrigger trigger)
-        {
-            layers.Insert(index + 1, new LegacyGameInterfaceLayer($"ImproveGame: {trigger.Name}", () =>
-            {
-                trigger.Draw();
-                return true;
-            }, InterfaceScaleType.UI));
-        }
-
         public static void Insert(this List<GameInterfaceLayer> layers, int index, string name, UIState state,
             Func<bool> func)
         {

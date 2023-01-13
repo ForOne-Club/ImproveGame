@@ -7,8 +7,9 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI;
 
-public class BuffTrackerGUI : ViewCarrier, IUseEventTrigger
+public class BuffTrackerGUI : ViewBody
 {
+    public override bool Display { get => Visible; set => Visible = value; }
     public static bool Visible { get; private set; }
 
     private SUIPanel basePanel;
@@ -22,9 +23,9 @@ public class BuffTrackerGUI : ViewCarrier, IUseEventTrigger
     internal BuffTrackerBattler BuffTrackerBattler;
     private static int _oldBuffCount; // 用于及时更新列表
 
-    public bool ToPrimary(UIElement target) => target != this;
+    public override bool CanPriority(UIElement target) => target != this;
 
-    public bool CanOccupyCursor(UIElement target)
+    public override bool CanDisableMouse(UIElement target)
     {
         return (target != this && basePanel.IsMouseHovering) || basePanel.KeepPressed;
     }

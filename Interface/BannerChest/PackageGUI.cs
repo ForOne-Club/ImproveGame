@@ -5,61 +5,62 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.BannerChest
 {
-    public class PackageGUI : ViewCarrier, IUseEventTrigger
+    public enum StorageType { Banners, Potions }
+
+    public class PackageGUI : ViewBody
     {
-        public enum StorageType { Banners, Potions }
+        public static StorageType StorageType { get; private set; }
 
-        internal static StorageType storageType;
-
-        private static bool visible;
+        private static bool _visible;
+        public override bool Display { get => Visible; set => Visible = value; }
 
         public static bool Visible
         {
             get
             {
                 if (!Main.playerInventory)
-                    visible = false;
-                return visible;
+                    _visible = false;
+                return _visible;
             }
-            set => visible = value;
+            set => _visible = value;
         }
 
         public IPackageItem Package;
 
-        public SUIPanel MainPanel, TitlePanel;
-        public SUITitle Title;
-        public SUISwitch AutoStorageSwitch, AutoSortSwitch;
-        public SUICross Cross;
-        public PackageGrid Grid;
+        private SUIPanel _mainPanel, _titlePanel;
+        private SUITitle _title;
+        private SUISwitch _autoStorageSwitch, _autoSortSwitch;
+        private SUICross _cross;
+        private PackageGrid _grid;
 
         public override void OnInitialize()
         {
-            MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            _mainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
             {
                 HAlign = 0.5f,
                 VAlign = 0.5f,
                 Shaded = true,
                 Draggable = true
             };
-            MainPanel.SetPadding(0);
-            MainPanel.Join(this);
+            _mainPanel.SetPadding(0);
+            _mainPanel.Join(this);
 
-            TitlePanel = new SUIPanel(UIColor.TitleBg2, UIColor.PanelBorder, new Vector4(10, 10, 0, 0), 2);
-            TitlePanel.SetPadding(0);
-            TitlePanel.Width.Precent = 1f;
-            TitlePanel.Height.Pixels = 50f;
-            TitlePanel.Join(MainPanel);
+            _titlePanel = new SUIPanel(UIColor.TitleBg2, UIColor.PanelBorder, new Vector4(10, 10, 0, 0), 2);
+            _titlePanel.SetPadding(0);
+            _titlePanel.Width.Precent = 1f;
+            _titlePanel.Height.Pixels = 50f;
+            _titlePanel.Join(_mainPanel);
 
-            Title = new SUITitle("中文|Chinese", 0.5f)
+            _title = new SUITitle("中文|Chinese", 0.5f)
             {
                 VAlign = 0.5f,
                 background = Color.Transparent
             };
-            Title.SetPadding(20, 0, 10, 0);
-            Title.SetInnerPixels(Title.textSize);
-            Title.Join(TitlePanel);
+            _title.SetPadding(20, 0, 10, 0);
+            _title.SetInnerPixels(_title.textSize);
+            _title.Join(_titlePanel);
 
-            Cross = new SUICross(24)
+            _cross = new SUICross(24)
             {
                 HAlign = 1f,
                 VAlign = 0.5f,
@@ -68,26 +69,27 @@ namespace ImproveGame.Interface.BannerChest
                 beginBg = UIColor.TitleBg2 * 0.5f,
                 endBg = UIColor.TitleBg2,
             };
-            Cross.Height.Set(0f, 1f);
-            Cross.OnMouseDown += (_, _) => Close();
-            Cross.Join(TitlePanel);
+            _cross.Height.Set(0f, 1f);
+            _cross.OnMouseDown += (_, _) => Close();
+            _cross.Join(_titlePanel);
 
-            AutoStorageSwitch = new SUISwitch(() => Package.AutoStorage, state => Package.AutoStorage = state,
+            _autoStorageSwitch = new SUISwitch(() => Package.AutoStorage, state => Package.AutoStorage = state,
                 GetText("PackageGUI.AutoStorage"), 0.8f);
-            AutoStorageSwitch.SetPosPixels(10, TitlePanel.Bottom() + 8f).Join(MainPanel);
+            _autoStorageSwitch.SetPosPixels(10, _titlePanel.Bottom() + 8f).Join(_mainPanel);
 
-            AutoSortSwitch = new SUISwitch(() => Package.AutoSort, state => Package.AutoSort = state,
+            _autoSortSwitch = new SUISwitch(() => Package.AutoSort, state => Package.AutoSort = state,
                 GetText("PackageGUI.AutoSort"), 0.8f);
-            AutoSortSwitch.SetPosPixels(AutoStorageSwitch.Right() + 8f, AutoStorageSwitch.Top.Pixels).Join(MainPanel);
+            _autoSortSwitch.SetPosPixels(_autoStorageSwitch.Right() + 8f, _autoStorageSwitch.Top.Pixels)
+                .Join(_mainPanel);
 
-            Grid = new PackageGrid();
-            Grid.Top.Pixels = AutoStorageSwitch.Bottom() + 8f;
-            Grid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(Grid.Width.Pixels, Grid.Height.Pixels);
-            Grid.OnMouseDown += (_, _) =>
+            _grid = new PackageGrid();
+            _grid.Top.Pixels = _autoStorageSwitch.Bottom() + 8f;
+            _grid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(_grid.Width.Pixels, _grid.Height.Pixels);
+            _grid.OnMouseDown += (_, _) =>
             {
                 if (Main.mouseItem.IsAir)
                     return;
-                switch (storageType)
+                switch (StorageType)
                 {
                     // 旗帜收纳箱, 药水袋子.
                     case StorageType.Banners when ItemToBanner(Main.mouseItem) != -1:
@@ -98,9 +100,9 @@ namespace ImproveGame.Interface.BannerChest
                         throw new ArgumentOutOfRangeException();
                 }
             };
-            Grid.Join(MainPanel);
+            _grid.Join(_mainPanel);
 
-            MainPanel.SetInnerPixels(Grid.Width.Pixels, Grid.Bottom());
+            _mainPanel.SetInnerPixels(_grid.Width.Pixels, _grid.Bottom());
         }
 
         /*public override void Draw(SpriteBatch spriteBatch)
@@ -113,7 +115,7 @@ namespace ImproveGame.Interface.BannerChest
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (!MainPanel.IsMouseHovering)
+            if (!_mainPanel.IsMouseHovering)
             {
                 return;
             }
@@ -124,14 +126,14 @@ namespace ImproveGame.Interface.BannerChest
 
         public void Open(List<Item> items, string title, StorageType storageType, IPackageItem package)
         {
-            PackageGUI.storageType = storageType;
+            PackageGUI.StorageType = storageType;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
             Visible = true;
-            Grid.SetInventory(items);
-            Grid.Scrollbar.ViewPosition = 0;
-            this.Title.Text = title;
-            this.Title.SetInnerPixels(this.Title.textSize);
+            _grid.SetInventory(items);
+            _grid.Scrollbar.ViewPosition = 0;
+            this._title.Text = title;
+            this._title.SetInnerPixels(this._title.textSize);
             this.Package = package;
             Recalculate();
         }
@@ -142,11 +144,11 @@ namespace ImproveGame.Interface.BannerChest
             Visible = false;
         }
 
-        public bool ToPrimary(UIElement target) => target != this;
+        public override bool CanPriority(UIElement target) => target != this;
 
-        public bool CanOccupyCursor(UIElement target)
+        public override bool CanDisableMouse(UIElement target)
         {
-            return (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
+            return (target != this && _mainPanel.IsMouseHovering) || _mainPanel.KeepPressed;
         }
     }
 }

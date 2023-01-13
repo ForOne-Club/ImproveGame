@@ -29,8 +29,8 @@ namespace ImproveGame.Common.Players
                 }
                 // 旗帜收纳箱 + 药水袋
                 if (PackageGUI.Visible &&
-                    ((PackageGUI.storageType is PackageGUI.StorageType.Banners && ItemToBanner(item) != -1) ||
-                    (PackageGUI.storageType is PackageGUI.StorageType.Potions && item.buffType > 0 && item.consumable)))
+                    ((PackageGUI.StorageType is StorageType.Banners && ItemToBanner(item) != -1) ||
+                    (PackageGUI.StorageType is StorageType.Potions && item.buffType > 0 && item.consumable)))
                 {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
@@ -61,14 +61,14 @@ namespace ImproveGame.Common.Players
                 if (PackageGUI.Visible)
                 {
                     // 旗帜
-                    if (PackageGUI.storageType is PackageGUI.StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
+                    if (PackageGUI.StorageType is StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
                     {
                         UISystem.Instance.PackageGUI.Package.PutInPackage(ref inventory[slot]);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
                     // 药水
-                    else if (PackageGUI.storageType is PackageGUI.StorageType.Potions && inventory[slot].buffType > 0 && inventory[slot].consumable)
+                    else if (PackageGUI.StorageType is StorageType.Potions && inventory[slot].buffType > 0 && inventory[slot].consumable)
                     {
                         UISystem.Instance.PackageGUI.Package.PutInPackage(ref inventory[slot]);
                         Recipe.FindRecipes();
