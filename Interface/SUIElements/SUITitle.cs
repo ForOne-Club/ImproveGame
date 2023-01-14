@@ -29,10 +29,7 @@ namespace ImproveGame.Interface.SUIElements
             this.textScale = textScale;
             this.Text = text;
             background = UIColor.TitleBg;
-            PaddingTop = 5;
-            PaddingBottom = 5;
-            PaddingLeft = 30;
-            PaddingRight = 30;
+            SetPadding(20f, 5f);
             DragIgnore = true;
             Round = 10f;
 

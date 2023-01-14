@@ -21,18 +21,20 @@ namespace ImproveGame.Interface.Common
             if (Main.dedServ)
                 return;
             int newThemeStyle = UIConfigs.Instance.ThemeStyle;
-            if (newThemeStyle != oldThemeStyle)
+            if (newThemeStyle == oldThemeStyle)
             {
-                oldThemeStyle = newThemeStyle;
-                switch (newThemeStyle)
-                {
-                    case 0:
-                        ModifyColor1();
-                        break;
-                    case 1:
-                        ModifyColor2();
-                        break;
-                }
+                return;
+            }
+
+            oldThemeStyle = newThemeStyle;
+            switch (newThemeStyle)
+            {
+                case 0:
+                    ModifyColor1();
+                    break;
+                case 1:
+                    ModifyColor2();
+                    break;
             }
         }
 
@@ -74,17 +76,17 @@ namespace ImproveGame.Interface.Common
         public static void ModifyColor1()
         {
             PanelBorder = new Color(20, 25, 60);
-            PanelBg = new Color(44, 55, 105, 160);
+            PanelBg = new Color(44, 55, 105, 180);
 
-            ItemSlotBorderFav = new Color(233, 176, 0, 200);
-            ItemSlotBorder = new Color(18, 18, 38, 200);
-            ItemSlotBgFav = new Color(83, 88, 151, 200);
-            ItemSlotBG = new Color(63, 65, 151, 200);
+            ItemSlotBorderFav = new Color(233, 176, 0, 180);
+            ItemSlotBorder = new Color(18, 18, 38, 180);
+            ItemSlotBgFav = new Color(83, 88, 151, 180);
+            ItemSlotBG = new Color(63, 65, 151, 180);
 
             ButtonBg = new Color(54, 56, 130);
 
             TitleBg = new Color(35, 40, 83);
-            TitleBg2 = new Color(43, 56, 101);
+            TitleBg2 = new Color(37, 46, 92);
 
             ScrollBarBorder = new Color(20, 25, 60);
             ScrollBarBg = new Color(44, 57, 105);
@@ -114,7 +116,7 @@ namespace ImproveGame.Interface.Common
             PanelBorder = new Color(27, 50, 57, 210);
             PanelBg = new Color(11, 14, 15, 127);
 
-            ItemSlotBorderFav = new Color(230, 230, 230, 200);
+            ItemSlotBorderFav = new Color(230, 230, 230, 180);
             ItemSlotBorder = new Color(27, 50, 57, 210);
             ItemSlotBgFav = new Color(8, 25, 30, 100);
             ItemSlotBG = new Color(11, 14, 15, 127);
@@ -128,10 +130,10 @@ namespace ImproveGame.Interface.Common
 
             // 边框
             SwitchBorder = new Color(27, 50, 57, 210);
-            SwitchBorderHover = new Color(230, 230, 230, 200);
+            SwitchBorderHover = new Color(230, 230, 230, 180);
             // 开关中的圆形
             SwitchRound = new Color(27, 50, 57, 210);
-            SwitchRoundHover = new Color(230, 230, 230, 200);
+            SwitchRoundHover = new Color(230, 230, 230, 180);
             // 背景色
             SwitchBg = new Color(11, 14, 15, 127);
             SwitchBgHover = new Color(11, 14, 15, 127);

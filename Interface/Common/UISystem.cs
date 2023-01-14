@@ -121,14 +121,14 @@ namespace ImproveGame.Interface.Common
             }
 
             // UserInterface 之 EventTrigger 版
-            PackageTrigger = new EventTrigger("Inventory", "Package");
+            PackageTrigger = new EventTrigger("Death Text", "Package");
 
-            BigBagTrigger = new EventTrigger("Inventory", "BigBag");
+            BigBagTrigger = new EventTrigger("Death Text", "BigBag");
 
-            BuffTrackerTrigger = new EventTrigger("Inventory", "Buff Tracker GUI");
+            BuffTrackerTrigger = new EventTrigger("Death Text", "Buff Tracker GUI");
 
             BuffTrackerGUI = new BuffTrackerGUI();
-            PlayerInfoTrigger = new EventTrigger("Mouse Text", "PlayerInfo");
+            PlayerInfoTrigger = new EventTrigger("Death Text", "PlayerInfo");
             BuffTrackerTrigger.SetCarrier(BuffTrackerGUI);
 
             AutofisherGUI = new AutofisherGUI();

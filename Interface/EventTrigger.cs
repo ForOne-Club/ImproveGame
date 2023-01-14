@@ -36,6 +36,8 @@ namespace ImproveGame.Interface
                 return;
             }
 
+            Main.NewText($"置于顶层: {CurrentEventTrigger._name}");
+
             LayersDictionary[layerName].Remove(CurrentEventTrigger);
             LayersDictionary[layerName].Insert(0, CurrentEventTrigger);
         }
@@ -146,10 +148,10 @@ namespace ImproveGame.Interface
                 // 当前目标元素不是上一个目标元素
                 if (_last[^1] != target)
                 {
-                    // 鼠标移出元素
+                    // 鼠标离开元素
                     _last[^1]?.MouseOut(new UIMouseEvent(_last[^1], _mouse));
                     _last[^1] = target;
-                    // 鼠标移入元素
+                    // 鼠标进入元素
                     target?.MouseOver(targetMouseEvent);
                 }
 
@@ -159,15 +161,10 @@ namespace ImproveGame.Interface
                     DisableMouse = true;
                 }
 
+                bool[] down = { Main.mouseLeft, Main.mouseRight, Main.mouseMiddle };
                 for (int i = 0; i < 3; i++)
                 {
-                    bool mouseDown = i switch
-                    {
-                        0 => Main.mouseLeft,
-                        1 => Main.mouseRight,
-                        _ => Main.mouseMiddle
-                    };
-                    switch (mouseDown)
+                    switch (down[i])
                     {
                         case true when !_pressed[i]:
                             _last[i] = target;
