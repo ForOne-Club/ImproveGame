@@ -1,11 +1,25 @@
 [Chinese version here | 中文版](ChangeLog.md)
 
+# v1.6.3
+## Subversions
+- v1.6.3
+## BUG Fixes
+- 修复了圣诞老人在开启NPC生成优化的情况下会重复入住并死去的BUG
+- 修复了合成物品时可能的Mod冲突
+## Additions
+- 新增玩家属性面板，可在 UI 设置调节显示开关。
+## Misc
+- 优化了多人模式下的体验，降低可能的延迟
+- 虚空魔杖配方更改，现在是Boss前物品
+
 # v1.6.2
 ## Subversions
 - v1.6.2
 - v1.6.2.1
 - v1.6.2.2
 - v1.6.2.3
+- v1.6.2.4
+- v1.6.2.6
 ## BUG Fixes
 - Fixed some issues with multiplayer mode
 - Fixed the pool cursor not showing in multiplayer mode
@@ -24,7 +38,6 @@
 - **[v1.6.2.4]** Fixed certain item icons in ModUI not displaying
 - **[v1.6.2.4]** Fixed only one infinite buff can be active when Protable Buff Station is off
 - **[v1.6.2.6]** Fixed the buff sharing
-- **[v1.6.2.7]** 修复了圣诞老人在开启NPC生成优化的情况下会重复入住并死去的BUG
 ## Additions
 - Wand of Construction, can save structures as files and place them while having enough material
 - Wand of Void, can move non-empty chests
@@ -59,15 +72,12 @@
 - **[v1.6.2.6]** Besides Wand of Painting, all wands now cannot be used under debuff Creative Shock
 - **[v1.6.2.6]** Added function Infinite Throwings, all throwings which stack >= 3996 will not be consumed
 - **[v1.6.2.6]** Threshold for Fallen Stars to not be consumed is lowered to 999 instead of 3996
-- **[v1.6.2.7]** 新增玩家属性面板，可在 UI 设置调节显示开关。
 ## Misc
 - The server console can query the config verification password by typing /qolpassword
 - Password format changed to four letters (not case-sensitive)
 - **[v1.6.2.1]** Optimized format of Item Arrays and Lists stored using TagCompound
 - **[v1.6.2.1]** Introduced AdditionalConfig to record non-ModConfig local config data
 - **[v1.6.2.1]** Centered the item icons in configs
-- **[v1.6.2.7]** 优化了多人模式下的体验，降低可能的延迟
-- **[v1.6.2.7]** 虚空魔杖配方更改，现在是Boss前物品
 
 # v1.6.1
 ## Subversions
