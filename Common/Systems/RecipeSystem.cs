@@ -106,6 +106,24 @@ namespace ImproveGame.Common.Systems
             AllowBigBagAsMeterial(il);
 
             var c = new ILCursor(il);
+
+            // 将 item.Clone() 加入到 ConsumedItems 列表，而不是原来的直接加入 item
+            /* IL_01e9: ldsfld       class [System.Collections]System.Collections.Generic.List`1<class Terraria.Item> Terraria.ModLoader.RecipeLoader::ConsumedItems
+             * IL_01ee: ldloc.1      // item
+             * IL_01ef: callvirt     instance void class [System.Collections]System.Collections.Generic.List`1<class Terraria.Item>::Add(!0 class Terraria.Item)
+             */
+            if (!c.TryGotoNext(
+                MoveType.Before,
+                i => i.MatchLdsfld(typeof(RecipeLoader).GetField("ConsumedItems", BindingFlags.Static | BindingFlags.NonPublic)),
+                i => i.Match(OpCodes.Ldloc_1),
+                i => i.MatchCallvirt(typeof(List<Item>).GetMethod(nameof(List<Item>.Add), BindingFlags.Public | BindingFlags.Instance))
+            ))
+                return;
+
+            c.GotoNext(MoveType.After, i => i.Match(OpCodes.Ldloc_1));
+            c.Emit<Item>(OpCodes.Callvirt, "Clone");
+
+            // 使用 item.TurnToAir 代替原来的 item = new Item()
             /* IL_01A8: ldloc.0
              * IL_01A9: ldloc.s   k
              * IL_01AB: newobj    instance void Terraria.Item::.ctor()
