@@ -21,6 +21,27 @@
             sb.ReBegin(null, ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
         }
 
+        public static void DrawBezier(Vector2 pos, Vector2 size, float innerShrinkage = 1, bool ui = true)
+        {
+            // GlobalTimeWrappedHourly 秒计时
+            int time = (int)(Main.GlobalTimeWrappedHourly * 60);
+            float piOver5 = MathF.PI / 6;
+            float timeForOneRotation = 3;
+            SpriteBatch sb = Main.spriteBatch;
+            Effect effect = ModAssets.RoundRect2.Value;
+            effect.Parameters["size"].SetValue(size);
+            effect.Parameters["sizeOver2"].SetValue(size / 2);
+            effect.Parameters["roundRadius"].SetValue(Math.Min(size.X, size.Y) / 2);
+            effect.Parameters["interval"].SetValue(piOver5);
+            effect.Parameters["intervalOver2"].SetValue(piOver5 / 2);
+            effect.Parameters["extraCurve"].SetValue((float)(time % 10 * piOver5 / timeForOneRotation));
+            effect.Parameters["innerShrinkage"].SetValue(innerShrinkage);
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+            effect.CurrentTechnique.Passes["DashedRound"].Apply();
+            sb.Draw(texture, pos, null, Color.White, 0, new(0), size, 0, 1f);
+            sb.ReBegin(ui ? Main.UIScaleMatrix : Main.GameViewMatrix.TransformationMatrix);
+        }
+
         /// <summary>
         /// 圆角矩形，无边框
         /// </summary>
@@ -32,6 +53,7 @@
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
+            effect.Parameters["sizeOver2"].SetValue(size / 2);
             effect.Parameters[nameof(round)].SetValue(round);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             effect.Parameters[nameof(innerShrinkage)].SetValue(innerShrinkage);
@@ -52,6 +74,7 @@
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
+            effect.Parameters["sizeOver2"].SetValue(size / 2);
             effect.Parameters[nameof(round4)].SetValue(round4);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             effect.Parameters[nameof(innerShrinkage)].SetValue(innerShrinkage);
@@ -71,7 +94,9 @@
             round = MathHelper.Clamp(round + innerShrinkage, 0, MathF.Min(size.X, size.Y) / 2);
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
+            effect.Parameters["extraLength"].SetValue(Main.GlobalTimeWrappedHourly * 60 % 12);
             effect.Parameters[nameof(size)].SetValue(size);
+            effect.Parameters["sizeOver2"].SetValue(size / 2);
             effect.Parameters[nameof(round)].SetValue(round);
             effect.Parameters[nameof(border)].SetValue(border);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
@@ -94,6 +119,7 @@
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
+            effect.Parameters["sizeOver2"].SetValue(size / 2);
             effect.Parameters[nameof(round4)].SetValue(round4);
             effect.Parameters[nameof(border)].SetValue(border);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
@@ -116,6 +142,7 @@
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
+            effect.Parameters["sizeOver2"].SetValue(size / 2);
             effect.Parameters[nameof(round4)].SetValue(round4);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             effect.Parameters[nameof(border4)].SetValue(border4);
@@ -145,6 +172,7 @@
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
+            effect.Parameters["sizeOver2"].SetValue(size / 2);
             effect.Parameters[nameof(round)].SetValue(round);
             effect.Parameters[nameof(border)].SetValue(border);
             effect.Parameters[nameof(bgColor1)].SetValue(bgColor1.ToVector4());
@@ -177,6 +205,7 @@
             SpriteBatch sb = Main.spriteBatch;
             Effect effect = ModAssets.RoundRect2.Value;
             effect.Parameters[nameof(size)].SetValue(size);
+            effect.Parameters["sizeOver2"].SetValue(size / 2);
             effect.Parameters[nameof(round)].SetValue(round);
             effect.Parameters[nameof(backgroundColor)].SetValue(backgroundColor.ToVector4());
             effect.Parameters[nameof(shadow)].SetValue(shadow);
