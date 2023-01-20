@@ -23,8 +23,6 @@ namespace ImproveGame.Common.Systems
             On.Terraria.Player.DropTombstone += DisableDropTombstone;
             // 抓取距离修改
             On.Terraria.Player.PullItem_Common += Player_PullItem_Common;
-            // 城镇NPC入住速度修改
-            IL.Terraria.Main.UpdateTime_SpawnTownNPCs += SpeedUpNPCSpawn;
             // 修改空间法杖显示平台剩余数量
             IL.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += TweakDrawCountInventory;
             // 伤害波动
@@ -538,40 +536,6 @@ namespace ImproveGame.Common.Systems
                 return (int)Math.Round(dmg);
             else
                 return orig(dmg, luck);
-        }
-
-        /// <summary>
-        /// NPC 晚上刷新
-        /// </summary>
-        /*private void TweakNPCNightSpawn(ILContext il) {
-            var c = new ILCursor(il);
-            if (!c.TryGotoNext(MoveType.After,
-                i => i.MatchCall(typeof(Main), "UpdateTime_StartDay"),
-                i => i.MatchCall(typeof(Main), "HandleMeteorFall")))
-                return;
-            c.EmitDelegate(() => {
-                if (MyUtils.Config.TownNPCSpawnInNight) {
-                    SpawnTownNPCs.Invoke(null, null);
-                }
-            });
-        }*/
-
-        /// <summary>
-        /// NPC 刷新速度
-        /// </summary>
-        private void SpeedUpNPCSpawn(ILContext il)
-        {
-            var c = new ILCursor(il);
-            if (!c.TryGotoNext(MoveType.After,
-                i => i.MatchLdsfld(typeof(Main), nameof(Main.checkForSpawns)),
-                i => i.Match(OpCodes.Ldc_I4_1)))
-                return;
-            c.EmitDelegate<Func<int, int>>((defaultValue) =>
-            {
-                if (Config.TownNPCSpawnSpeed is -1)
-                    return defaultValue;
-                return (int)Math.Pow(2, Config.TownNPCSpawnSpeed);
-            });
         }
 
         /// <summary>

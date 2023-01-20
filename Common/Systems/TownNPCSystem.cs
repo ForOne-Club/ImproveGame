@@ -4,25 +4,46 @@ namespace ImproveGame.Common.Systems
 {
     public class TownNPCSystem : ModSystem
     {
-        public MethodInfo SpawnTownNPCs;
-        public List<int> TownNPCIDs = new();
+        private static bool _skipFindHome;
+        private static MethodInfo _spawnTownNPCs;
+        private static List<int> _townNPCIDs = new();
+        private static HashSet<int> _activeTownNPCs = new();
 
         public override void Load()
         {
-            On.Terraria.Main.UpdateTime_SpawnTownNPCs += TweakNPCSpawn;
+            // 更好的NPC生成机制 + NPC生成加速
+            On.Terraria.Main.UpdateTime_SpawnTownNPCs += orig =>
+            {
+                _skipFindHome = false;
+                orig.Invoke();
+                
+                int times = Config.TownNPCSpawnSpeed is 0 ? 0 : (int)Math.Pow(2, Config.TownNPCSpawnSpeed);
+                // 在跳过寻找家的步骤的情况下调用 orig
+                for (int i = 0; i < times; i++)
+                {
+                    TrySetNPCSpawn(orig);
+                }
+                Main.NewText(times);
+            };
+            // 在加速的NPC生成中，跳过寻找家的步骤
+            On.Terraria.WorldGen.QuickFindHome += (orig, npc) =>
+            {
+                if (!_skipFindHome)
+                    orig.Invoke(npc);
+            };
         }
 
         public override void PostSetupContent()
         {
-            SpawnTownNPCs =
+            _spawnTownNPCs =
                 typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
             SetupTownNPCList();
         }
 
         /// <summary>设立城镇NPC列表</summary>
-        private void SetupTownNPCList()
+        private static void SetupTownNPCList()
         {
-            TownNPCIDs.AddRange(NPCID.Sets.TownNPCBestiaryPriority);
+            _townNPCIDs.AddRange(NPCID.Sets.TownNPCBestiaryPriority);
             // 不用这个，我们要参考Priority对入住NPC优先进行排序
             //foreach ((int netID, NPC npc) in ContentSamples.NpcsByNetId)
             //{
@@ -33,7 +54,7 @@ namespace ImproveGame.Common.Systems
             //}
 
             // 你个浓眉大眼的到底是不是城镇NPC?
-            TownNPCIDs.RemoveAll(id =>
+            _townNPCIDs.RemoveAll(id =>
             {
                 var npc = new NPC();
                 npc.SetDefaults(id);
@@ -45,109 +66,137 @@ namespace ImproveGame.Common.Systems
 
             var modNPCs =
                 typeof(NPCLoader).GetField("npcs", BindingFlags.Static | BindingFlags.NonPublic)
-                    ?.GetValue(null) as IList<ModNPC>;
-            foreach (ModNPC modNPC in modNPCs)
+                    ?.GetValue(null) as IList<ModNPC> ?? new List<ModNPC>();
+
+            foreach (var modNPC in modNPCs)
             {
                 var npc = modNPC.NPC;
                 int head = NPC.TypeToDefaultHeadIndex(npc.type);
                 if (npc.townNPC && head >= 0 && !NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] &&
                     !modNPC.TownNPCStayingHomeless)
                 {
-                    TownNPCIDs.Add(npc.type);
+                    _townNPCIDs.Add(npc.type);
                 }
             }
         }
 
-        private void TweakNPCSpawn(On.Terraria.Main.orig_UpdateTime_SpawnTownNPCs orig)
+        private static void TrySetNPCSpawn(On.Terraria.Main.orig_UpdateTime_SpawnTownNPCs orig)
         {
+            // 在跳过寻找家的步骤的情况下调用 orig
+            _skipFindHome = true;
             orig.Invoke();
 
-            int moneyCount = 0;
-            for (int l = 0; l < Main.maxPlayers; l++)
-            {
-                if (!Main.player[l].active)
-                    continue;
+            // 确保原版在生成NPC的阶段
+            double worldUpdateRate = WorldGen.GetWorldUpdateRate();
+            if (Main.netMode is NetmodeID.MultiplayerClient || worldUpdateRate <= 0 || Main.checkForSpawns != 0)
+                return;
 
-                for (int m = 0; m < 40; m++)
-                {
-                    if (Main.player[l].bank.item[m] is null || Main.player[l].bank.item[m].stack <= 0)
-                        continue;
+            // 设立存活城镇NPC速查表
+            SetupActiveTownNPCList();
 
-                    if (moneyCount < 2000000000)
-                    {
-                        //Patch context: this is the amount of money.
-                        int itemType = Main.player[l].bank.item[m].type;
-                        switch (itemType)
-                        {
-                            case ItemID.CopperCoin:
-                                moneyCount += Main.player[l].bank.item[m].stack;
-                                break;
-                            case ItemID.SilverCoin:
-                                moneyCount += Main.player[l].bank.item[m].stack * 100;
-                                break;
-                            case ItemID.GoldCoin:
-                                moneyCount += Main.player[l].bank.item[m].stack * 10000;
-                                break;
-                            case ItemID.PlatinumCoin:
-                                moneyCount += Main.player[l].bank.item[m].stack * 1000000;
-                                break;
-                        }
-                    }
-                }
-            }
+            // 钱币包括猪猪存钱罐里面的
+            if (HasEnoughMoneyForMerchant())
+                TrySetNPCSpawn(NPCID.Merchant);
 
-            if (moneyCount > 5000)
-                SetNPCSpawn(NPCID.Merchant);
-
+            // 更好的生成机制
             if (!Config.TownNPCGetTFIntoHouse)
             {
                 return;
             }
 
             if (NPC.downedGoblins)
-                SetNPCSpawn(NPCID.GoblinTinkerer);
+                TrySetNPCSpawn(NPCID.GoblinTinkerer);
             if (NPC.downedBoss2)
-                SetNPCSpawn(NPCID.DD2Bartender);
+                TrySetNPCSpawn(NPCID.DD2Bartender);
             if (NPC.downedBoss3)
-                SetNPCSpawn(NPCID.Mechanic);
+                TrySetNPCSpawn(NPCID.Mechanic);
             if (Main.hardMode)
             {
-                SetNPCSpawn(NPCID.Wizard);
-                SetNPCSpawn(NPCID.TaxCollector);
+                TrySetNPCSpawn(NPCID.Wizard);
+                TrySetNPCSpawn(NPCID.TaxCollector);
             }
 
-            if (TownNPCIDs is null || TownNPCIDs.Count < 0)
+            if (_townNPCIDs is null || _townNPCIDs.Count < 0)
             {
                 SetupTownNPCList();
             }
 
-            if (TownNPCIDs == null)
+            if (_townNPCIDs == null)
             {
                 return;
             }
 
-            foreach (var id in TownNPCIDs.Where(id =>
+            foreach (var id in _townNPCIDs.Where(id =>
                          Main.BestiaryTracker.Chats.GetWasChatWith(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[id])))
             {
-                SetNPCSpawn(id);
+                TrySetNPCSpawn(id);
             }
+        }
+
+        private static bool HasEnoughMoneyForMerchant()
+        {
+            int moneyCount = 0;
+            for (int l = 0; l < Main.maxPlayers; l++)
+            {
+                var player = Main.player[l];
+                if (!player.active)
+                    continue;
+
+                for (int m = 0; m < 40; m++)
+                {
+                    if (player.bank.item[m] is null || player.bank.item[m].stack <= 0)
+                        continue;
+
+                    var item = player.bank.item[m];
+                    switch (item.type)
+                    {
+                        case ItemID.CopperCoin:
+                            moneyCount += item.stack;
+                            break;
+                        case ItemID.SilverCoin:
+                            moneyCount += item.stack * 100;
+                            break;
+                        case ItemID.GoldCoin:
+                            return true;
+                        case ItemID.PlatinumCoin:
+                            return true;
+                    }
+
+                    if (moneyCount >= 5000) return true;
+                }
+            }
+
+            return false;
         }
 
         public override void PostUpdateTime()
         {
             if (!Main.dayTime && Config.TownNPCGetTFIntoHouse)
-                SpawnTownNPCs.Invoke(null, null);
+                _spawnTownNPCs.Invoke(null, null);
         }
 
-        public static void SetNPCSpawn(int npcId)
+        private static void TrySetNPCSpawn(int npcId)
         {
-            if (NPC.AnyNPCs(npcId))
+            if (_activeTownNPCs.Contains(npcId))
                 return;
 
             Main.townNPCCanSpawn[npcId] = true;
             if (WorldGen.prioritizedTownNPCType == 0)
             {
                 WorldGen.prioritizedTownNPCType = npcId;
+            }
+        }
+
+        private static void SetupActiveTownNPCList()
+        {
+            _activeTownNPCs = new HashSet<int>();
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                var npc = Main.npc[i];
+                if (npc.active && npc.townNPC && npc.friendly)
+                {
+                    _activeTownNPCs.Add(npc.type);
+                }
             }
         }
     }

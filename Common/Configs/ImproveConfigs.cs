@@ -171,8 +171,8 @@ namespace ImproveGame.Common.Configs
         [Label($"${path}.TownNPCSpawnSpeed.Label")]
         [Tooltip($"${path}.TownNPCSpawnSpeed.Tooltip")]
         [Slider]
-        [Range(-1, 12)]
-        [DefaultValue(-1)]
+        [Range(0, 12)]
+        [DefaultValue(0)]
         public int TownNPCSpawnSpeed;
 
         [Label($"${path}.NoCD_FishermanQuest.Label")]

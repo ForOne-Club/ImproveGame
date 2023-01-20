@@ -230,8 +230,8 @@
     }
     TownNPCSpawnSpeed:
     {
-        Label: "[centeritem:4910] 城镇NPC刷新速度"
-        Tooltip: "设为 -1 将禁用此项修改"
+        Label: "[centeritem:4910] 城镇NPC刷新速度指数"
+        Tooltip: "设为 0 将禁用此项修改"
     }
     NoCD_FishermanQuest.Label: "[centeritem:4608] 渔夫任务取消冷却"
     NPCCoinDropRate.Label: "[centeritem:73] 敌人钱币掉落倍率"
