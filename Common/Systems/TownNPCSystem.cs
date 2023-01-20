@@ -1,35 +1,52 @@
 ﻿using System.Reflection;
+using Terraria.GameContent.Bestiary;
 
 namespace ImproveGame.Common.Systems
 {
     public class TownNPCSystem : ModSystem
     {
-        private static bool _skipFindHome;
+        private static bool _isExtraUpdate; // 是否处于源于模组的额外更新中
         private static MethodInfo _spawnTownNPCs;
         private static List<int> _townNPCIDs = new();
         private static HashSet<int> _activeTownNPCs = new();
+        private static BestiaryUnlockProgressReport _cachedReport = new();
 
         public override void Load()
         {
             // 更好的NPC生成机制 + NPC生成加速
             On.Terraria.Main.UpdateTime_SpawnTownNPCs += orig =>
             {
-                _skipFindHome = false;
+                _isExtraUpdate = false;
                 orig.Invoke();
-                
+
                 int times = Config.TownNPCSpawnSpeed is 0 ? 0 : (int)Math.Pow(2, Config.TownNPCSpawnSpeed);
-                // 在跳过寻找家的步骤的情况下调用 orig
+                // 仅获取一次，避免重复调用增加开销
+                double worldUpdateRate = WorldGen.GetWorldUpdateRate();
+                _cachedReport = Main.GetBestiaryProgressReport();
+                // 在标记为“额外更新”的情况下调用 orig
+                _isExtraUpdate = true;
                 for (int i = 0; i < times; i++)
                 {
-                    TrySetNPCSpawn(orig);
+                    TrySetNPCSpawn(orig, worldUpdateRate);
                 }
-                Main.NewText(times);
+
+                // 重置标记防止影响其他模组或原版代码
+                _isExtraUpdate = false;
             };
+
             // 在加速的NPC生成中，跳过寻找家的步骤
             On.Terraria.WorldGen.QuickFindHome += (orig, npc) =>
             {
-                if (!_skipFindHome)
+                if (!_isExtraUpdate)
                     orig.Invoke(npc);
+            };
+
+            // 在加速的NPC生成中，避免多次调用GetBestiaryProgressReport开销过大，这里缓存一个
+            On.Terraria.Main.GetBestiaryProgressReport += orig =>
+            {
+                if (!_isExtraUpdate)
+                    return orig.Invoke();
+                return _cachedReport;
             };
         }
 
@@ -80,14 +97,11 @@ namespace ImproveGame.Common.Systems
             }
         }
 
-        private static void TrySetNPCSpawn(On.Terraria.Main.orig_UpdateTime_SpawnTownNPCs orig)
+        private static void TrySetNPCSpawn(On.Terraria.Main.orig_UpdateTime_SpawnTownNPCs orig, double worldUpdateRate)
         {
-            // 在跳过寻找家的步骤的情况下调用 orig
-            _skipFindHome = true;
             orig.Invoke();
 
             // 确保原版在生成NPC的阶段
-            double worldUpdateRate = WorldGen.GetWorldUpdateRate();
             if (Main.netMode is NetmodeID.MultiplayerClient || worldUpdateRate <= 0 || Main.checkForSpawns != 0)
                 return;
 

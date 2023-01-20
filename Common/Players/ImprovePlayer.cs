@@ -183,55 +183,68 @@ namespace ImproveGame.Common.Players
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (KeybindSystem.SuperVaultKeybind.JustPressed)
-            {
-                if (Config.SuperVault)
-                {
-                    if (BigBagGUI.Visible)
-                    {
-                        UISystem.Instance.BigBagGUI.Close();
-                    }
-                    else
-                    {
-                        UISystem.Instance.BigBagGUI.Open();
-                    }
-                }
-            }
+                PressSuperVaultKeybind();
             if (KeybindSystem.BuffTrackerKeybind.JustPressed)
-            {
-                if (BuffTrackerGUI.Visible)
-                    UISystem.Instance.BuffTrackerGUI.Close();
-                else
-                    UISystem.Instance.BuffTrackerGUI.Open();
-            }
-            if (KeybindSystem.GrabBagKeybind.JustPressed && Main.HoverItem is not null)
-            {
-                var item = Main.HoverItem;
-                bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: true).Count > 0;
-                hasLoot &= CollectHelper.ItemCanRightClick[Main.HoverItem.type] || ItemLoader.CanRightClick(Main.HoverItem);
-                if (GrabBagInfoGUI.Visible && (GrabBagInfoGUI.ItemID == item.type || item.IsAir || !hasLoot))
-                    UISystem.Instance.GrabBagInfoGUI.Close();
-                else if (hasLoot)
-                    UISystem.Instance.GrabBagInfoGUI.Open(Main.HoverItem.type);
-            }
+                PressBuffTrackerKeybind();
+            if (KeybindSystem.GrabBagKeybind.JustPressed)
+                PressGrabBagKeybind();
             if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
+                PressHotbarSwitchKeybind();
+        }
+        
+        private static void PressSuperVaultKeybind()
+        {
+            if (!Config.SuperVault) return;
+
+            if (BigBagGUI.Visible)
+                UISystem.Instance.BigBagGUI.Close();
+            else
+                UISystem.Instance.BigBagGUI.Open();
+        }
+
+        private static void PressBuffTrackerKeybind()
+        {
+            if (BuffTrackerGUI.Visible)
+                UISystem.Instance.BuffTrackerGUI.Close();
+            else
+                UISystem.Instance.BuffTrackerGUI.Open();
+        }
+
+        private static void PressGrabBagKeybind()
+        {
+            if (Main.HoverItem is not { } item || item.IsAir) return;
+            
+            // ItemLoader.CanRightClick 里面只要 Main.mouseRight == false 就直接返回了，不知道为什么
+            // 所以这里必须伪装成右键点击
+            Main.mouseRight = true;
+            
+            bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: true).Count > 0;
+            hasLoot &= CollectHelper.ItemCanRightClick[Main.HoverItem.type] || ItemLoader.CanRightClick(Main.HoverItem);
+            
+            if (GrabBagInfoGUI.Visible && (GrabBagInfoGUI.ItemID == item.type || item.IsAir || !hasLoot))
+                UISystem.Instance.GrabBagInfoGUI.Close();
+            else if (hasLoot)
+                UISystem.Instance.GrabBagInfoGUI.Open(Main.HoverItem.type);
+        }
+
+        private void PressHotbarSwitchKeybind()
+        {
+            if (Main.LocalPlayer.ItemTimeIsZero && Main.LocalPlayer.itemAnimation is 0)
             {
-                if (Main.LocalPlayer.ItemTimeIsZero && Main.LocalPlayer.itemAnimation is 0)
+                for (int i = 0; i <= 9; i++)
                 {
-                    for (int i = 0; i <= 9; i++)
+                    (Player.inventory[i], Player.inventory[i + 10]) = (Player.inventory[i + 10], Player.inventory[i]);
+                    if (Main.netMode is NetmodeID.MultiplayerClient)
                     {
-                        (Player.inventory[i], Player.inventory[i + 10]) = (Player.inventory[i + 10], Player.inventory[i]);
-                        if (Main.netMode is NetmodeID.MultiplayerClient)
-                        {
-                            NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i, number3: Main.LocalPlayer.inventory[i].prefix);
-                            NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i + 10, number3: Main.LocalPlayer.inventory[i].prefix);
-                        }
+                        NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i, number3: Main.LocalPlayer.inventory[i].prefix);
+                        NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i + 10, number3: Main.LocalPlayer.inventory[i].prefix);
                     }
-                    _cacheSwitchSlot = false;
                 }
-                else
-                {
-                    _cacheSwitchSlot = true;
-                }
+                _cacheSwitchSlot = false;
+            }
+            else
+            {
+                _cacheSwitchSlot = true;
             }
         }
     }
