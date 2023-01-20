@@ -27,8 +27,8 @@ namespace ImproveGame.Interface.SUIElements
         {
             Width.Pixels = 52;
             Height.Pixels = 52;
-            this.Items = items;
-            this.Index = index;
+            Items = items;
+            Index = index;
 
             Relative = RelativeMode.Horizontal;
             Spacing = new Vector2(10, 10);

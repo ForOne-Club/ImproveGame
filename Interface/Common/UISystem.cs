@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Configs;
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.PlayerInfo;
@@ -121,14 +122,14 @@ namespace ImproveGame.Interface.Common
             }
 
             // UserInterface 之 EventTrigger 版
-            PackageTrigger = new EventTrigger("Death Text", "Package");
+            PackageTrigger = new EventTrigger("Radial Hotbars", "Package");
 
-            BigBagTrigger = new EventTrigger("Death Text", "BigBag");
+            BigBagTrigger = new EventTrigger("Radial Hotbars", "BigBag");
 
-            BuffTrackerTrigger = new EventTrigger("Death Text", "Buff Tracker GUI");
+            BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI");
 
             BuffTrackerGUI = new BuffTrackerGUI();
-            PlayerInfoTrigger = new EventTrigger("Death Text", "PlayerInfo");
+            PlayerInfoTrigger = new EventTrigger("Radial Hotbars", "PlayerInfo");
             BuffTrackerTrigger.SetCarrier(BuffTrackerGUI);
 
             AutofisherGUI = new AutofisherGUI();
@@ -231,6 +232,15 @@ namespace ImproveGame.Interface.Common
             // 背包
             layers.FindVanilla("Inventory", index =>
             {
+                /*layers.Insert(index + 1, new LegacyGameInterfaceLayer("", () =>
+                {
+                    Vector2 mouse = new Vector2(Main.mouseX, Main.mouseY);
+                    Vector2 size = new Vector2(200, 200);
+                    // PixelShader.DrawBezier(mouse - size / 2, size, 10f);
+
+                    PixelShader.DrawRoundRect(mouse - size / 2, size, 20, Color.Transparent, 2, Color.Red);
+                    return true;
+                }, InterfaceScaleType.UI));*/
                 layers.Insert(index, "Liquid Wand GUI", LiquidWandGUI, () => LiquidWandGUI.Visible);
                 layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible);
                 layers.Insert(index, "Autofisher GUI", AutofisherGUI, () => AutofisherGUI.Visible);
