@@ -49,10 +49,10 @@ namespace ImproveGame.Interface.BaseViews
             switch (RoundMode)
             {
                 case RoundMode.Round:
-                    PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, Round + shadow.X, color);
+                    PixelShader.RoundedRectangle(pos - shadow, size + shadow * 2, Round + shadow.X, color);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(pos - shadow, size + shadow * 2, Round4 + new Vector4(shadow.X), color);
+                    PixelShader.RoundedRectangle(pos - shadow, size + shadow * 2, Round4 + new Vector4(shadow.X), color);
                     break;
             }
         }

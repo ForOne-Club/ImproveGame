@@ -19,15 +19,5 @@
             sb.Begin(0, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
                 sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, matrix);
         }
-
-        /// <summary>
-        /// 不会改变原有的所有参数
-        /// </summary>
-        public static void ReBegin(this SpriteBatch sb, Matrix matrix)
-        {
-            sb.End();
-            sb.Begin(SpriteSortMode.Immediate, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
-                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, matrix);
-        }
     }
 }

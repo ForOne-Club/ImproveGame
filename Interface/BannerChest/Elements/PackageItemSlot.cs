@@ -81,7 +81,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
         protected override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
-            PixelShader.DrawRoundRect(dimensions.Position(), dimensions.Size(), 12, UIColor.ItemSlotBG, 2,
+            PixelShader.RoundedRectangle(dimensions.Position(), dimensions.Size(), 12, UIColor.ItemSlotBG, 2,
                 UIColor.ItemSlotBorder);
 
             if (Item.IsAir)

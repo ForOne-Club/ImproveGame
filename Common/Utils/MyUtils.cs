@@ -284,14 +284,14 @@ namespace ImproveGame
             return text;
         }
 
-        public static Asset<Texture2D> GetTexture(string path)
+        public static Asset<Texture2D> GetTexture(string fileName)
         {
-            return ModContent.Request<Texture2D>($"ImproveGame/Assets/Images/{path}", AssetRequestMode.ImmediateLoad);
+            return ModContent.Request<Texture2D>($"ImproveGame/Assets/Images/{fileName}", AssetRequestMode.ImmediateLoad);
         }
 
-        public static Asset<Effect> GetEffect(string path)
+        public static Asset<Effect> GetEffect(string fileName)
         {
-            return ModContent.Request<Effect>($"ImproveGame/Assets/Effect/{path}", AssetRequestMode.ImmediateLoad);
+            return ModContent.Request<Effect>($"ImproveGame/Assets/Effect/{fileName}", AssetRequestMode.ImmediateLoad);
         }
 
         public static bool TryConsumeMana(Player player, int cost)

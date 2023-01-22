@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Animations;
+﻿using ImproveGame.Assets;
+using ImproveGame.Common.Animations;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
@@ -303,7 +304,7 @@ namespace ImproveGame.Interface.SUIElements
             Color borderColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
             Color background = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBG;
 
-            PixelShader.DrawRoundRect(pos, size, 12, background, 2, borderColor);
+            PixelShader.RoundedRectangle(pos, size, 12, background, 2, borderColor);
 
             if (Item.IsAir)
                 return;
@@ -386,7 +387,7 @@ namespace ImproveGame.Interface.SUIElements
 
         public static void OpenItemGlow(SpriteBatch sb)
         {
-            Effect effect = ModAssets.Transform.Value;
+            Effect effect = EffectAssets.Transform.Value;
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.2f);
             effect.CurrentTechnique.Passes["EnchantedPass"].Apply();
             Main.instance.GraphicsDevice.Textures[1] = GetTexture("Enchanted").Value; // 传入调色板

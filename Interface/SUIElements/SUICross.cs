@@ -43,10 +43,10 @@ namespace ImproveGame.Interface.SUIElements
             switch (RoundMode)
             {
                 case RoundMode.Round:
-                    PixelShader.DrawRoundRect(pos, size, Round, background, border, borderColor);
+                    PixelShader.RoundedRectangle(pos, size, Round, background, border, borderColor);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(pos, size, Round4, background, border, borderColor);
+                    PixelShader.RoundedRectangle(pos, size, Round4, background, border, borderColor);
                     break;
             }
             Vector2 forkPos = pos + size / 2 - new Vector2(forkSize / 2);

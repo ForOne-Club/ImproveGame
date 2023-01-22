@@ -163,7 +163,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 size = dimension.Size();
 
             // 滚动条背板
-            PixelShader.DrawRoundRect(position, size, size.X / 2, UIColor.ScrollBarBg, 2, UIColor.ScrollBarBorder);
+            PixelShader.RoundedRectangle(position, size, size.X / 2, UIColor.ScrollBarBg, 2, UIColor.ScrollBarBorder);
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();
@@ -176,7 +176,7 @@ namespace ImproveGame.Interface.SUIElements
                 dragging ? 1 : HoverTimer.Schedule);
 
             // 滚动条拖动块
-            PixelShader.DrawRoundRect(innerPosition, innerSize, innerSize.X / 2, hoverColor);
+            PixelShader.RoundedRectangle(innerPosition, innerSize, innerSize.X / 2, hoverColor);
         }
 
         /// <summary>

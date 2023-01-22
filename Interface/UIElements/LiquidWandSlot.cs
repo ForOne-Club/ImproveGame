@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Systems;
+﻿using ImproveGame.Assets;
+using ImproveGame.Common.Systems;
 using ImproveGame.Entitys;
 using Terraria.UI.Chat;
 
@@ -208,16 +209,16 @@ namespace ImproveGame.Interface.UIElements
             uTime += LiquidId * 0.3f; // 让每个槽看起来不一样
 
             float uWaveScale = _liquidAmount > 0.9f ? (1.0f - _liquidAmount) * 4f : 0.4f;
-            ModAssets.LiquidSurface.Value.Parameters["uTransform"].SetValue(model * projection);
-            ModAssets.LiquidSurface.Value.Parameters["uXStart"].SetValue(xCoordStart);
-            ModAssets.LiquidSurface.Value.Parameters["uXEnd"].SetValue(xCoordEnd);
-            ModAssets.LiquidSurface.Value.Parameters["uTime"].SetValue(uTime);
-            ModAssets.LiquidSurface.Value.Parameters["uWaveScale"].SetValue(uWaveScale);
+            EffectAssets.LiquidSurface.Value.Parameters["uTransform"].SetValue(model * projection);
+            EffectAssets.LiquidSurface.Value.Parameters["uXStart"].SetValue(xCoordStart);
+            EffectAssets.LiquidSurface.Value.Parameters["uXEnd"].SetValue(xCoordEnd);
+            EffectAssets.LiquidSurface.Value.Parameters["uTime"].SetValue(uTime);
+            EffectAssets.LiquidSurface.Value.Parameters["uWaveScale"].SetValue(uWaveScale);
 
             Main.instance.GraphicsDevice.Textures[0] = liquidTexture;
             // 用柏林噪声实现水波纹，如果不是水面，就放张全白的MagicPixel给你
-            Main.instance.GraphicsDevice.Textures[1] = isSurface ? ModAssets.Perlin.Value : TextureAssets.MagicPixel.Value;
-            ModAssets.LiquidSurface.Value.CurrentTechnique.Passes[0].Apply();
+            Main.instance.GraphicsDevice.Textures[1] = isSurface ? EffectAssets.Perlin.Value : TextureAssets.MagicPixel.Value;
+            EffectAssets.LiquidSurface.Value.CurrentTechnique.Passes[0].Apply();
 
             Main.instance.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
         }

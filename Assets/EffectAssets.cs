@@ -1,18 +1,21 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.Common;
-using Microsoft.Xna.Framework.Graphics;
-using System.Reflection;
-
-namespace ImproveGame
+﻿namespace ImproveGame.Assets
 {
     public class EffectAssets : ModSystem
     {
         // internal static Asset<Effect> BetterFiltering;
-        internal static Asset<Effect> Cross;
-        internal static Asset<Effect> Line;
-        internal static Asset<Effect> Round;
+
+        // 线
+        public static Effect Line { get; private set; }
+
         // 圆角矩形
-        internal static Effect RoundedRectangle;
+        public static Effect RoundedRectangle { get; private set; }
+
+        // 圆形
+        public static Effect Round { get; private set; }
+
+        // 叉号
+        public static Effect Cross { get; private set; }
+
         internal static Asset<Effect> LiquidSurface;
         internal static Asset<Effect> Transform;
         internal static Asset<Texture2D> Perlin;
@@ -26,10 +29,9 @@ namespace ImproveGame
                 return;
 
             // BetterFiltering = null;
-            Cross = null;
-            Line = null;
-            Round = null;
-            RoundedRectangle = null;
+
+            // Shader UI
+            RoundedRectangle = Round = Cross = Line = null;
             LiquidSurface = null;
             Transform = null;
             Perlin = null;
@@ -47,12 +49,14 @@ namespace ImproveGame
             Shader2 = GetTexture("Shader_2").Value;
             Shader3 = GetTexture("Shader_3").Value;
             Effect1 = GetEffect("Trail").Value;
-            RoundedRectangle = GetEffect("RoundRect2").Value;
+
+            // Shader UI
+            RoundedRectangle = GetEffect("RoundRectangle").Value;
+            Round = GetEffect("Round").Value;
+            Cross = GetEffect("Cross").Value;
+            Line = GetEffect("Line").Value;
 
             // BetterFiltering = GetEffect("BetterFiltering");
-            Cross = GetEffect("Cross");
-            Line = GetEffect("Line");
-            Round = GetEffect("Round");
             LiquidSurface = GetEffect("LiquidSurface");
             Transform = GetEffect("Transform");
             Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");

@@ -149,7 +149,6 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Vertical,
                 Spacing = buttonSpacing
             };
-            QuickButton.SetText(Lang.inter[29].Value);
             QuickButton.OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
             QuickButton.Join(ContentPanel);
 
@@ -158,7 +157,6 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Horizontal,
                 Spacing = buttonSpacing
             };
-            PutButton.SetText(Lang.inter[30].Value);
             PutButton.OnMouseDown += (_, _) => PutAll();
             PutButton.Join(ContentPanel);
 
@@ -167,7 +165,6 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Horizontal,
                 Spacing = buttonSpacing
             };
-            ReplenishButton.SetText(Lang.inter[31].Value);
             ReplenishButton.OnMouseDown += (_, _) => Replenish();
             ReplenishButton.Join(ContentPanel);
 
@@ -176,7 +173,6 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Horizontal,
                 Spacing = buttonSpacing
             };
-            SortButton.SetText(GetText("SuperVault.Sort"));
             SortButton.OnMouseDown += (_, _) => Sort();
             SortButton.Join(ContentPanel);
 

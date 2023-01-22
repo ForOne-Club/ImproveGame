@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
-using ImproveGame.Interface.BaseViews;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
@@ -10,59 +9,40 @@ namespace ImproveGame.Interface.SUIElements
     /// </summary>
     public class SUIPictureButton : HoverView
     {
-        public int[] data = new int[5];
-
-        public string text;
-        public Vector2 textSize;
-        public Vector2 TextPosition => new(imagePosition.X + image.Size().X + 10, UIConfigs.Instance.TextDrawOffsetY + this.Height() / 2 - textSize.Y / 2);
-
-        public Texture2D image;
-        public Vector2 imagePosition;
+        private static readonly float IconAndTextSpacing = 6f;
+        private readonly Texture2D _texture;
+        private readonly string _text;
+        private Vector2 _textSize;
 
         public SUIPictureButton(Texture2D texture, string text)
         {
-            Width.Pixels = MouseTextSize(text).X + this.HPadding() + 75;
-            Height.Pixels = 40f;
-
-            image = texture;
-            imagePosition = new Vector2(30, this.Height() / 2) - image.Size() / 2;
-
-            this.text = text;
-            textSize = MouseTextSize(text);
+            _texture = texture;
+            _text = text;
+            _textSize = FontAssets.MouseText.Value.MeasureString(text);
+            SetPadding(18f, 0f);
+            SetInnerPixels(_texture.Size().X + _textSize.X + 4 + IconAndTextSpacing, 40f);
+            OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
-        public override void Recalculate()
+        protected override void DrawSelf(SpriteBatch spriteBatch)
         {
-            Width.Pixels = MouseTextSize(text).X + this.HPadding() + 75;
-            base.Recalculate();
-        }
-
-        protected override void DrawSelf(SpriteBatch sb)
-        {
-            base.DrawSelf(sb);
-            CalculatedStyle dimensions = GetDimensions();
-            Vector2 position = dimensions.Position();
-            Vector2 size = dimensions.Size();
+            base.DrawSelf(spriteBatch);
+            Vector2 pos = GetDimensions().Position();
+            Vector2 size = GetDimensions().Size();
 
             Color borderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, hoverTimer.Schedule);
-            PixelShader.DrawRoundRect(position, size, 10, UIColor.ButtonBg, 2, borderColor);
+            PixelShader.RoundedRectangle(pos, size, 10, UIColor.ButtonBg, 2, borderColor);
 
-            dimensions = GetInnerDimensions();
-            position = dimensions.Position();
-            sb.Draw(image, position + imagePosition, Color.White);
-            TrUtils.DrawBorderString(sb, text, position + TextPosition, Color.White);
-        }
+            Vector2 innerPos = GetInnerDimensions().Position();
+            Vector2 innerSize = GetInnerDimensionsSize();
 
-        public void SetText(string text)
-        {
-            this.text = text;
-            textSize = MouseTextSize(text);
-        }
+            Vector2 texturePos = innerPos + new Vector2(0, (innerSize.Y - _texture.Size().Y) / 2);
+            spriteBatch.Draw(_texture, texturePos, Color.White);
 
-        public override void MouseOver(UIMouseEvent evt)
-        {
-            base.MouseOver(evt);
-            SoundEngine.PlaySound(SoundID.MenuTick);
+            // Because border is 2, so: X + 2.
+            Vector2 textPos = innerPos + new Vector2(_texture.Size().X + 2 + IconAndTextSpacing, (innerSize.Y - _textSize.Y) / 2);
+            textPos.Y += UIConfigs.Instance.TextDrawOffsetY;
+            TrUtils.DrawBorderString(spriteBatch, _text, textPos, Color.White);
         }
     }
 }

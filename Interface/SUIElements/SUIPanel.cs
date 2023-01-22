@@ -72,10 +72,10 @@ namespace ImproveGame.Interface.SUIElements
                         PixelShader.DrawShadow(shadowPos, shadowSize, Round, ShadowColor, this.ShadowThickness);
                     }
 
-                    PixelShader.DrawRoundRect(pos, size, Round, backgroundColor, border, borderColor);
+                    PixelShader.RoundedRectangle(pos, size, Round, backgroundColor, border, borderColor);
                     break;
                 case RoundMode.Round4:
-                    PixelShader.DrawRoundRect(pos, size, Round4, backgroundColor, border, UIColor.PanelBorder);
+                    PixelShader.RoundedRectangle(pos, size, Round4, backgroundColor, border, borderColor);
                     break;
             }
         }
