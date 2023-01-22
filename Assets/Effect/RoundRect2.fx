@@ -37,6 +37,34 @@ float intervalOver2;
 float extraCurve;
 float extraLength;
 
+float4x4 uTransform;
+
+struct VSInput
+{
+    float2 Pos : POSITION0;
+    float4 Color : COLOR0;
+    float3 Texcoord : TEXCOORD0;
+};
+
+struct PSInput
+{
+    float4 Pos : SV_POSITION;
+    float4 Color : COLOR0;
+    float3 Texcoord : TEXCOORD0;
+};
+
+// -------------------------------
+// ---------- 顶点着色器 ----------
+// -------------------------------
+PSInput VertexShaderFunction(VSInput input)
+{
+    PSInput output;
+    output.Color = input.Color;
+    output.Texcoord = input.Texcoord;
+    output.Pos = mul(float4(input.Pos, 0, 1), uTransform);
+    return output;
+}
+
 // 三阶贝塞尔参数方程
 float2 Bezier3(float t, float2 A, float2 B, float2 C, float2 D)
 {
@@ -68,30 +96,8 @@ float4 DashedRound(float2 coords : TEXCOORD0) : COLOR0
 // 圆角矩形：有边框。
 float4 HasBorder(float2 coords : TEXCOORD0) : COLOR0
 {
-    // Rounded Rectangle 周长
-    //float perimeter = (size - round + pi * round) / 4;
-    //float roundPerOver4 = round / 2;
     float2 p = coords * size - sizeOver2;
-    /*float2 absPos = abs(p);
-    float absCurve = atan2(absPos.x, absPos.y);
-    float sizeOver2Curve = atan2(sizeOver2.x, sizeOver2.y);
-    float4 color = borderColor;
-    float2 inRoundedPos = absPos - sizeOver2 + round;
-    if (inRoundedPos.x < 0)
-    {
-        color = (absPos.x + perimeter / 16) % (perimeter / 4) < (perimeter / 8) ? color : white;
-    }
-    if (min(inRoundedPos.x, inRoundedPos.y) > 0)
-    {
-        float inRoundedCurve = atan2(inRoundedPos.x, inRoundedPos.y);
-        color = (sizeOver2.x - round + inRoundedCurve * roundPerOver4 + perimeter / 16) % (perimeter / 4) < (perimeter / 8) ? color : white;
-    }
-    if (inRoundedPos.y < 0)
-    {
-        color = (sizeOver2.x - round + roundPerOver4 + sizeOver2.y - absPos.y - round + perimeter / 16) % (perimeter / 4) < (perimeter / 8) ? color : white;
-    }*/
     float Distance = sdRoundSquare(p, sizeOver2, round);
-    // distance(p, min(p, s - round));
     return lerp(lerp(backgroundColor, borderColor, smoothstep(-1, 0.5, Distance + border + innerShrinkage)), 0, smoothstep(-1, 0.5, Distance + innerShrinkage));
 }
 
@@ -187,56 +193,67 @@ technique Technique1
 {
     pass DashedRound
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 DashedRound();
     }
 
     pass HasBorder
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 HasBorder();
     }
 
     pass HasBorderR4
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 HasBorderR4();
     }
 
     pass HasBorderR4B4
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 HasBorderR4B4();
     }
 
     pass HasBorderProgressBarLeftRight
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 HasBorderProgressBarLeftRight();
     }
 
     pass HasBorderProgressBarLeftRight2
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 HasBorderProgressBarLeftRight2();
     }
 
     pass HasBorderProgressBarTopBottom
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 HasBorderProgressBarTopBottom();
     }
 
     pass HasBorderProgressBarTopBottom2
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 HasBorderProgressBarTopBottom2();
     }
 
     pass NoBorder
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 NoBorder();
     }
 
     pass NoBorderR4
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 NoBorderR4();
     }
 
     pass Shadow
     {
+        VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_3_0 Shadow();
     }
 }
