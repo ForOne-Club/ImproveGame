@@ -50,6 +50,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
 
         public override void RightMouseDown(UIMouseEvent evt)
         {
+            Main.NewText(evt.Target.GetType().Name);
             base.RightMouseDown(evt);
             if (Item.IsAir)
                 return;

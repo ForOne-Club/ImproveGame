@@ -48,7 +48,7 @@ namespace ImproveGame.Interface
         /// <param name="gameTime"></param>
         public static void UpdateUI(GameTime gameTime)
         {
-            foreach (string layerName in LayersPriority.Where(layerName => LayersDictionary.ContainsKey(layerName)))
+            foreach (string layerName in LayersPriority.Where(LayersDictionary.ContainsKey))
             {
                 List<EventTrigger> triggers = LayersDictionary[layerName];
                 for (int i = 0; i < triggers.Count; i++)
@@ -136,9 +136,7 @@ namespace ImproveGame.Interface
 
             _mouse = new Vector2(Main.mouseX, Main.mouseY);
             bool mouse = DisableMouse;
-            bool lockMouseLeft = Main.mouseLeft && !mouse;
-            bool lockMouseRight = Main.mouseRight && !mouse;
-            bool lockMouseMiddle = Main.mouseMiddle && !mouse;
+            bool[] down = { Main.mouseLeft, Main.mouseRight, Main.mouseMiddle };
             // 鼠标目标元素
             UIElement target = mouse ? null : _body.GetElementAt(_mouse);
             var targetMouseEvent = new UIMouseEvent(target, _mouse);
@@ -161,7 +159,6 @@ namespace ImproveGame.Interface
                     DisableMouse = true;
                 }
 
-                bool[] down = { Main.mouseLeft, Main.mouseRight, Main.mouseMiddle };
                 for (int i = 0; i < 3; i++)
                 {
                     switch (down[i])
@@ -228,83 +225,6 @@ namespace ImproveGame.Interface
                     }
                 }
 
-                /*switch (Main.mouseLeft)
-                {
-                    case true when !_pressed[0]:
-                        _last[0] = target;
-                        // 按下事件
-                        target?.MouseDown(targetMouseEvent);
-                        // 置于顶层
-                        if (_carrier.ToPrimary(target))
-                            SetToPrimary();
-                        break;
-                    case false when _pressed[0] && _last[0] != null:
-                        {
-                            // 左键点击事件
-                            if (_last[0].ContainsPoint(_mousePosition))
-                            {
-                                _last[0].Click(new UIMouseEvent(_last[0], _mousePosition));
-                            }
-
-                            // 鼠标离开事件
-                            _last[0].MouseUp(new UIMouseEvent(_last[0], _mousePosition));
-                            _last[0] = null;
-                            break;
-                        }
-                }
-
-                switch (Main.mouseRight)
-                {
-                    case true when !_pressed[1]:
-                        _last[1] = target;
-                        target?.RightMouseDown(targetMouseEvent);
-                        // 置于顶层
-                        if (_carrier.ToPrimary(target))
-                            SetToPrimary();
-                        break;
-                    case false when _pressed[1] && _last[1] != null:
-                        {
-                            // 点击事件
-                            if (_last[1].ContainsPoint(_mousePosition))
-                            {
-                                _last[1].RightClick(new UIMouseEvent(_last[1],
-                                    _mousePosition));
-                            }
-
-                            // 鼠标离开事件
-                            _last[1].RightMouseUp(new UIMouseEvent(_last[1], _mousePosition));
-                            _last[1] = null;
-                            break;
-                        }
-                }
-
-                switch (Main.mouseMiddle)
-                {
-                    case true when !_pressed[2]:
-                        _last[2] = target;
-                        // 中键按下
-                        target?.MiddleMouseDown(targetMouseEvent);
-                        // 置于顶层
-                        if (_carrier.ToPrimary(target))
-                            SetToPrimary();
-                        break;
-                    case false when _pressed[2] && _last[2] != null:
-                        {
-                            // 点击事件
-                            if (_last[2].ContainsPoint(_mousePosition))
-                            {
-                                _last[2].MiddleClick(new UIMouseEvent(_last[2],
-                                    _mousePosition));
-                            }
-
-                            // 鼠标离开事件
-                            _last[2].MiddleMouseUp(new UIMouseEvent(_last[2],
-                                _mousePosition));
-                            _last[2] = null;
-                            break;
-                        }
-                }*/
-
                 if (PlayerInput.ScrollWheelDeltaForUI != 0)
                 {
                     target?.ScrollWheel(new UIScrollWheelEvent(target, _mouse,
@@ -314,9 +234,9 @@ namespace ImproveGame.Interface
                 _body.Update(gameTime);
             } finally
             {
-                _pressed[0] = lockMouseLeft;
-                _pressed[1] = lockMouseRight;
-                _pressed[2] = lockMouseMiddle;
+                _pressed[0] = down[0] && !mouse;
+                _pressed[1] = down[1] && !mouse;
+                _pressed[2] = down[2] && !mouse;
             }
         }
 

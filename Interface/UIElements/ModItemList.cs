@@ -35,9 +35,9 @@ namespace ImproveGame.Interface.UIElements
                 this.items = items;
                 for (int i = 0; i < items.Length; i++)
                 {
-                    BigBagItemSlot itemSolot;
-                    Append(itemSolot = new BigBagItemSlot(items, i));
-                    itemSolot.OnMouseDown += OnMouseDownSlot;
+                    BigBagItemSlot itemSlot = new BigBagItemSlot(items, i);
+                    itemSlot.OnMouseDown += OnMouseDownSlot;
+                    itemSlot.Join(this);
                 }
             }
             else

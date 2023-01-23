@@ -11,8 +11,7 @@ namespace ImproveGame.Interface.GUI
     {
         public override bool Display { get => Visible; set => Visible = value; }
 
-        public override bool CanPriority(UIElement target) =>
-            target != this;
+        public override bool CanPriority(UIElement target) => target != this;
 
         public override bool CanDisableMouse(UIElement target)
             => (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
