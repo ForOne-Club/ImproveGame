@@ -38,7 +38,6 @@ namespace ImproveGame.Interface.SUIElements
 
         public override void MouseDown(UIMouseEvent evt)
         {
-            Main.NewText("MouseDown");
             SetCursorOverride();
             MouseClickSlot();
             base.MouseDown(evt);
@@ -46,7 +45,6 @@ namespace ImproveGame.Interface.SUIElements
 
         public override void RightMouseDown(UIMouseEvent evt)
         {
-            Main.NewText("RightMouseDown");
             if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
                 _rightMouseDownTimer = 0;
@@ -91,7 +89,6 @@ namespace ImproveGame.Interface.SUIElements
             // 右键长按物品持续拿出
             if (Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
-                Main.NewText($"Update MouseRight {Main.mouseRight}");
                 if (_rightMouseDownTimer >= 60)
                 {
                     TakeSlotItemToMouseItem();

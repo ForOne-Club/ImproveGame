@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;

@@ -1,13 +1,5 @@
 ﻿namespace ImproveGame.Common.Utils.Extensions
 {
-    public static class Vector2Extensions
-    {
-        public static StyleDimension ToStyleDim(this Vector2 dim)
-        {
-            return new StyleDimension(dim.X, dim.Y);
-        }
-    }
-
     public static class CalculatedStyleExtensions
     {
         public static Vector2 Size(this CalculatedStyle calculatedStyle)

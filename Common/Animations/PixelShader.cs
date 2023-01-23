@@ -4,9 +4,6 @@ namespace ImproveGame.Common.Animations
 {
     public class PixelShader
     {
-        private static readonly SpriteBatch SB = Main.spriteBatch;
-        private static readonly Texture2D texture = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
-
         private struct VertexPos : IVertexType
         {
             private static readonly VertexDeclaration _vertexDeclaration = new(new VertexElement[2]
@@ -69,7 +66,7 @@ namespace ImproveGame.Common.Animations
         public static void DrawCross(Vector2 pos, float size, float round, Color backgroundColor, float border,
             Color borderColor, bool ui = true)
         {
-            BaseDraw(pos, new Vector2(size), ui, matrix =>
+            BaseDraw(pos, size.ToVector2(), ui, matrix =>
             {
                 Effect effect = EffectAssets.Cross;
                 effect.Parameters["uTransform"].SetValue(matrix);
@@ -156,7 +153,7 @@ namespace ImproveGame.Common.Animations
 
         public static void DrawRound(Vector2 pos, float size, Color background, bool ui = true)
         {
-            BaseDraw(pos, new Vector2(size), ui, matrix =>
+            BaseDraw(pos, size.ToVector2(), ui, matrix =>
             {
                 Effect effect = EffectAssets.Round;
                 effect.Parameters["uTransform"].SetValue(matrix);
@@ -169,7 +166,7 @@ namespace ImproveGame.Common.Animations
         public static void DrawRound(Vector2 pos, float size, Color background, float border, Color borderColor,
             bool ui = true)
         {
-            BaseDraw(pos, new Vector2(size), ui, matrix =>
+            BaseDraw(pos, size.ToVector2(), ui, matrix =>
             {
                 Effect effect = EffectAssets.Round;
                 effect.Parameters["uTransform"].SetValue(matrix);

@@ -32,8 +32,8 @@ namespace ImproveGame.Interface.SUIElements
             SetPadding(10f);
             DragIgnore = true;
             RoundMode = RoundMode.Round;
-            ShadowThickness = 50f;
-            ShadowColor = new Color(0, 0, 0, 0.25f);
+            ShadowThickness = 0f;
+            ShadowColor = borderColor * 0.5f;
             this.borderColor = borderColor;
             this.backgroundColor = backgroundColor;
             this.Round = round;
@@ -46,8 +46,8 @@ namespace ImproveGame.Interface.SUIElements
             SetPadding(10f);
             DragIgnore = true;
             RoundMode = RoundMode.Round4;
-            ShadowThickness = 50f;
-            ShadowColor = new Color(0, 0, 0, 0.25f);
+            ShadowThickness = 0f;
+            ShadowColor = borderColor * 0.5f;
             this.backgroundColor = backgroundColor;
             this.borderColor = borderColor;
             this.Round4 = round4;
@@ -61,20 +61,23 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 size = GetDimensions().Size();
             pos -= new Vector2(Extension.X, Extension.Y);
             size += new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);
+            Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
+            Vector2 shadowPos = pos - ShadowThickness;
+            Vector2 shadowSize = size + ShadowThickness * 2;
             switch (RoundMode)
             {
                 case RoundMode.Round:
                     if (Shaded)
                     {
-                        Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
-                        Vector2 shadowPos = pos - ShadowThickness;
-                        Vector2 shadowSize = size + ShadowThickness * 2;
-                        PixelShader.DrawShadow(shadowPos, shadowSize, Round, ShadowColor, this.ShadowThickness);
+                        PixelShader.DrawShadow(shadowPos + 8f.ToVector2(), shadowSize, Round, ShadowColor, 0);
                     }
-
                     PixelShader.RoundedRectangle(pos, size, Round, backgroundColor, border, borderColor);
                     break;
                 case RoundMode.Round4:
+                    if (Shaded)
+                    {
+                        PixelShader.DrawShadow(shadowPos + 8f.ToVector2(), shadowSize, Round4, ShadowColor, 0);
+                    }
                     PixelShader.RoundedRectangle(pos, size, Round4, backgroundColor, border, borderColor);
                     break;
             }

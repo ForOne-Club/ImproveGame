@@ -11,10 +11,11 @@ namespace ImproveGame.Interface
     /// </summary>
     public class EventTrigger
     {
-        private static readonly List<string> LayersPriority;
-        private static readonly Dictionary<string, List<EventTrigger>> LayersDictionary;
         private static bool DisableMouse { get; set; }
         private static EventTrigger CurrentEventTrigger { get; set; }
+
+        private static readonly List<string> LayersPriority;
+        private static readonly Dictionary<string, List<EventTrigger>> LayersDictionary;
 
         static EventTrigger()
         {
@@ -35,8 +36,6 @@ namespace ImproveGame.Interface
             {
                 return;
             }
-
-            Main.NewText($"置于顶层: {CurrentEventTrigger._name}");
 
             LayersDictionary[layerName].Remove(CurrentEventTrigger);
             LayersDictionary[layerName].Insert(0, CurrentEventTrigger);
@@ -91,6 +90,8 @@ namespace ImproveGame.Interface
         private Vector2 _mouse;
         private readonly UIElement[] _last;
         private readonly bool[] _pressed;
+
+        public ViewBody Body => _body;
 
         /// <summary>
         /// 我在这里提醒一下需要为 CanRunFunc 赋值否则 UI 将永不生效<br/>
