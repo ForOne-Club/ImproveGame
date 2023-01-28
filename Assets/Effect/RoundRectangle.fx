@@ -1,9 +1,9 @@
 ﻿float4x4 uTransform;
-float2 uSize; // 尺寸
-float2 uSizeOver2; // 一半的大小
+float2 uSize;
+float2 uSizeOver2;
 float4 uRounded;
 float4 uBackgroundColor;
-float uBorder; // 边框
+float uBorder;
 float4 uBorderColor;
 float uShadowSize;
 float uInnerShrinkage;
@@ -20,9 +20,6 @@ struct PSInput
     float2 Coord : TEXCOORD0;
 };
 
-// -------------------------------
-// ---------- 顶点着色器 ----------
-// -------------------------------
 PSInput VSFunction(VSInput input)
 {
     PSInput output;
@@ -37,7 +34,6 @@ float sdRoundSquare(float2 position, float2 sizeOver2, float roundedRadius)
     return min(max(q.x, q.y), 0) + length(max(q, 0)) - roundedRadius;
 }
 
-// 有边框 - 圆角矩形
 float4 HasBorder(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 Rounded = coords.x < 0.5 ? uRounded.xz : uRounded.yw;
@@ -47,7 +43,6 @@ float4 HasBorder(float2 coords : TEXCOORD0) : COLOR0
     return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-1, 0.5, Distance + uBorder + uInnerShrinkage)), 0, smoothstep(-1, 0.5, Distance + uInnerShrinkage));
 }
 
-// 无边框 - 圆角矩形
 float4 NoBorder(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 Rounded = coords.x < 0.5 ? uRounded.xz : uRounded.yw;
@@ -57,7 +52,6 @@ float4 NoBorder(float2 coords : TEXCOORD0) : COLOR0
     return lerp(uBackgroundColor, 0, smoothstep(-1, 0.5, Distance + uInnerShrinkage));
 }
 
-// 圆角矩形 - 阴影
 float4 Shadow(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 Rounded = coords.x < 0.5 ? uRounded.xz : uRounded.yw;
