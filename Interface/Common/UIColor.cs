@@ -2,7 +2,7 @@
 
 namespace ImproveGame.Interface.Common
 {
-    public class UIColor : ModSystem
+    internal class UIColor : ModSystem
     {
         // 部分单词拼写较长，使用缩写
         // Background Bg
@@ -38,40 +38,50 @@ namespace ImproveGame.Interface.Common
             }
         }
 
-        internal static Color PanelBorder;
-        internal static Color PanelBg;
+        public static Color
+            PanelBorder,
+            PanelBg;
 
-        internal static Color ItemSlotBorderFav;
-        internal static Color ItemSlotBorder;
-        internal static Color ItemSlotBgFav;
-        internal static Color ItemSlotBG;
+        public static Color
+            ItemSlotBorderFav,
+            ItemSlotBorder,
+            ItemSlotBgFav,
+            ItemSlotBg;
 
-        internal static Color ButtonBg;
+        public static Color ButtonBg;
 
-        internal static Color TitleBg;
-        internal static Color TitleBg2;
+        public static Color
+            TitleBg,
+            TitleBg2;
 
-        internal static Color ScrollBarBorder;
-        internal static Color ScrollBarBg;
-        internal static Color ScrollBarInnerBg;
-        internal static Color ScrollBarInnerBgHover;
+        public static Color
+            ScrollBarBorder,
+            ScrollBarBg,
+            ScrollBarInnerBg,
+            ScrollBarInnerBgHover;
 
         // 开关 UI 的边框
-        internal static Color SwitchBorder;
-        internal static Color SwitchBorderHover;
+        public static Color
+            SwitchBorder,
+            SwitchBorderHover;
+
         // 开关 UI 的背景
-        internal static Color SwitchBg;
-        internal static Color SwitchBgHover;
+        public static Color
+            SwitchBg,
+            SwitchBgHover;
+
         // 开关 UI 中的圆
-        internal static Color SwitchRound;
-        internal static Color SwitchRoundHover;
+        public static Color
+            SwitchRound,
+            SwitchRoundHover;
 
-        internal static Color Cross;
+        public static Color Cross;
 
-        internal static Color PackgeBg;
-        internal static Color PackgeBorder;
-        internal static Color PackgeGridBg;
-        internal static Color PackgeGridBorder;
+        public static Color
+            PackgeBg,
+            PackgeBorder,
+            PackgeGridBg,
+            PackgeGridBorder;
 
         public static void ModifyColor1()
         {
@@ -81,7 +91,7 @@ namespace ImproveGame.Interface.Common
             ItemSlotBorderFav = new Color(233, 176, 0, 180);
             ItemSlotBorder = new Color(18, 18, 38, 180);
             ItemSlotBgFav = new Color(83, 88, 151, 180);
-            ItemSlotBG = new Color(63, 65, 151, 180);
+            ItemSlotBg = new Color(63, 65, 151, 180);
 
             ButtonBg = new Color(54, 56, 130);
 
@@ -119,7 +129,7 @@ namespace ImproveGame.Interface.Common
             ItemSlotBorderFav = new Color(230, 230, 230, 180);
             ItemSlotBorder = new Color(27, 50, 57, 210);
             ItemSlotBgFav = new Color(8, 25, 30, 100);
-            ItemSlotBG = new Color(11, 14, 15, 127);
+            ItemSlotBg = new Color(11, 14, 15, 127);
 
             ButtonBg = new Color(17, 40, 47);
 

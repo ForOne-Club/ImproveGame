@@ -30,8 +30,14 @@ namespace ImproveGame.Interface.BaseViews
         /// </summary>
         public bool First;
         public bool DragIgnore;
-        public RoundMode RoundMode;
-        public float Round;
+        public float Round
+        {
+            get => Round4.X;
+            set
+            {
+                Round4.X = Round4.Y = Round4.Z = Round4.W = value;
+            }
+        }
         public Vector4 Round4;
         public Vector4 Extension;
         public bool KeepPressed;

@@ -40,15 +40,8 @@ namespace ImproveGame.Interface.SUIElements
             Color background = Color.Lerp(beginBg, endBg, hoverTimer.Schedule);
             Color fork = Color.Lerp(Color.Transparent, crossColor, hoverTimer.Schedule);
 
-            switch (RoundMode)
-            {
-                case RoundMode.Round:
-                    PixelShader.RoundedRectangle(pos, size, Round, background, border, borderColor);
-                    break;
-                case RoundMode.Round4:
-                    PixelShader.RoundedRectangle(pos, size, Round4, background, border, borderColor);
-                    break;
-            }
+            PixelShader.RoundedRectangle(pos, size, Round4, background, border, borderColor);
+
             Vector2 forkPos = pos + size / 2 - new Vector2(forkSize / 2);
             PixelShader.DrawCross(forkPos, forkSize, crossRound, fork, crossBorder, borderColor);
         }

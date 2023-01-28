@@ -1,7 +1,9 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Players;
 using ImproveGame.Content;
-using ImproveGame.Interface.SUIElements;using Mono.Cecil.Cil;
+using ImproveGame.Interface.Common;
+using ImproveGame.Interface.SUIElements;
+using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.ModLoader.Config;
 
@@ -12,15 +14,19 @@ namespace ImproveGame.Common.GlobalItems
         // 不需要对大小进行变动的就用 int[]
         // 铜，银，金
         public static readonly int[] Coins = new int[] { 71, 72, 73 };
+
         // BOSS 召唤物
-        public static readonly int[] SummonItems_Boss = new int[] { 560, 43, 70, 1331, 1133, 5120, 4988, 556, 544, 557, 3601 };
+        public static readonly int[] SummonItems_Boss = new int[]
+            { 560, 43, 70, 1331, 1133, 5120, 4988, 556, 544, 557, 3601 };
+
         // 特殊事件 召唤物
         public static readonly int[] SummonItems_Events = new int[] { 4271, 361, 1315, 2767, 602, 1844, 1958 };
 
         public override void SetDefaults(Item item)
         {
             // 最大堆叠
-            if (item.maxStack > 1 && Config.ItemMaxStack > item.maxStack && item.DamageType != DamageClass.Melee && !Coins.Contains(item.type))
+            if (item.maxStack > 1 && Config.ItemMaxStack > item.maxStack && item.DamageType != DamageClass.Melee &&
+                !Coins.Contains(item.type))
             {
                 item.maxStack = Config.ItemMaxStack;
                 if (item.type is ItemID.PlatinumCoin && item.maxStack > 2000)
@@ -39,9 +45,9 @@ namespace ImproveGame.Common.GlobalItems
         {
             var c = new ILCursor(il);
             if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Ldarg_0),
-                i => i.Match(OpCodes.Ldarg_1),
-                i => i.Match(OpCodes.Ldloc_0)))
+                    i => i.Match(OpCodes.Ldarg_0),
+                    i => i.Match(OpCodes.Ldarg_1),
+                    i => i.Match(OpCodes.Ldloc_0)))
                 return;
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Action<Player>>((player) =>
@@ -54,8 +60,8 @@ namespace ImproveGame.Common.GlobalItems
         {
             var c = new ILCursor(il);
             if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Div),
-                i => i.Match(OpCodes.Stfld)))
+                    i => i.Match(OpCodes.Div),
+                    i => i.Match(OpCodes.Stfld)))
                 return;
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Action<Player>>((player) =>
@@ -69,10 +75,11 @@ namespace ImproveGame.Common.GlobalItems
             // 自动挥舞
             ItemDefinition itemd = new(item.type);
             if (item.damage > 0 && Config.AutoReuseWeapon
-                && !Config.AutoReuseWeaponExclusionList.Contains(itemd))
+                                && !Config.AutoReuseWeaponExclusionList.Contains(itemd))
             {
                 return true;
             }
+
             return base.CanAutoReuseItem(item, player);
         }
 
@@ -80,12 +87,13 @@ namespace ImproveGame.Common.GlobalItems
         public override bool ConsumeItem(Item item, Player player)
         {
             // 所有召唤物不会消耗
-            if (Config.NoConsume_SummonItem && (SummonItems_Boss.Contains(item.type) || SummonItems_Events.Contains(item.type)))
+            if (Config.NoConsume_SummonItem &&
+                (SummonItems_Boss.Contains(item.type) || SummonItems_Events.Contains(item.type)))
                 return false;
 
             // 魔杖 材料 999 不消耗
             if ((((item.createTile >= TileID.Dirt || item.createWall > WallID.None) && item.stack >= 999) ||
-                ((item.createTile is TileID.WorkBenches or TileID.Chairs or TileID.Beds) && item.stack >= 99))
+                 ((item.createTile is TileID.WorkBenches or TileID.Chairs or TileID.Beds) && item.stack >= 99))
                 && ModItemID.NoConsumptionItems.Contains(player.HeldItem.type))
                 return false;
 
@@ -106,6 +114,7 @@ namespace ImproveGame.Common.GlobalItems
                 if (ammo.stack >= 3996 && ammo.ammo > 0)
                     return false;
             }
+
             return base.CanBeConsumedAsAmmo(ammo, weapon, player);
         }
 
@@ -127,6 +136,7 @@ namespace ImproveGame.Common.GlobalItems
                 tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot));
                 tooltips.Add(new(Mod, "ShootSpeed", "ShootSpeed: " + item.shootSpeed));
             }
+
             if (item.ammo > ItemID.None)
                 tooltips.Add(new(Mod, "Ammo", "Ammo: " + item.ammo));
             if (item.buffType > 0)
@@ -134,31 +144,37 @@ namespace ImproveGame.Common.GlobalItems
                 tooltips.Add(new(Mod, "BuffType", "BuffType: " + item.buffType));
                 tooltips.Add(new(Mod, "BuffTime", "BuffTime: " + item.buffTime));
             }
+
             if (item.tileWand > -1)
             {
                 tooltips.Add(new(Mod, "TileWand", "TileWand: " + item.tileWand));
             }
+
             if (item.createTile > -1)
             {
                 tooltips.Add(new(Mod, "CreateTile", "CreateTile: " + item.createTile));
                 if (item.placeStyle > 0)
                     tooltips.Add(new(Mod, "PlaceStyle", "PlaceStyle: " + item.placeStyle));
             }
+
             if (item.createWall > -1)
                 tooltips.Add(new(Mod, "CreateWall", "CreateWall: " + item.createWall));
         }
 
         // 额外拾取距离
-        public override void GrabRange(Item item, Player player, ref int grabRange) => grabRange += Config.GrabDistance * 16;
+        public override void GrabRange(Item item, Player player, ref int grabRange) =>
+            grabRange += Config.GrabDistance * 16;
 
-        public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame,
+            Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
                 BigBagItemSlot.OpenItemGlow(sb);
             return true;
         }
 
-        public override void PostDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        public override void PostDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame,
+            Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
             {
@@ -178,29 +194,47 @@ namespace ImproveGame.Common.GlobalItems
             if (!DataPlayer.TryGet(player, out var dataPlayer))
                 return false;
 
-            if (Config.SuperVault && dataPlayer.SuperVault is not null && HasItemSpace(dataPlayer.SuperVault, item))
+            bool hasItem = false;
+            bool airSlot = false;
+            bool canStack = false;
+            // 大背包中所有的物品
+            if (player.TryGetModPlayer(out UIPlayerSetting setting))
+            {
+                bool hasItemSpace = HasItemSpace(dataPlayer.SuperVault, item, ref hasItem, ref airSlot, ref canStack);
+                // 大背包所有的物品是否有空间（因为可堆叠）
+                bool itemsHasItemSpace = canStack || (airSlot && hasItem);
+                if (Config.SuperVault && dataPlayer.SuperVault != null &&
+                    ((setting.SuperVault_OverflowGrab && hasItemSpace) ||
+                     (setting.SuperVault_SmartGrab && itemsHasItemSpace)))
+                {
+                    return true;
+                }
+            }
+
+            if (!Config.SuperVoidVault || !player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+            {
+                return false;
+            }
+
+            // 猪猪钱罐
+            if (improvePlayer.PiggyBank && HasItemSpace(player.bank.item, item, ref hasItem, ref airSlot, ref canStack))
             {
                 return true;
             }
 
-            if (Config.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+            // 保险箱
+            if (improvePlayer.Safe && HasItemSpace(player.bank2.item, item, ref hasItem, ref airSlot, ref canStack))
             {
-                // 猪猪钱罐
-                if (improvePlayer.PiggyBank && HasItemSpace(player.bank.item, item))
-                {
-                    return true;
-                }
-                // 保险箱
-                if (improvePlayer.Safe && HasItemSpace(player.bank2.item, item))
-                {
-                    return true;
-                }
-                // 护卫熔炉
-                if (improvePlayer.DefendersForge && HasItemSpace(player.bank3.item, item))
-                {
-                    return true;
-                }
+                return true;
             }
+
+            // 护卫熔炉
+            if (improvePlayer.DefendersForge &&
+                HasItemSpace(player.bank3.item, item, ref hasItem, ref airSlot, ref canStack))
+            {
+                return true;
+            }
+
             return false;
         }
 

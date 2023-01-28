@@ -301,7 +301,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 pos = dimensions.Position();
             Vector2 size = dimensions.Size();
             Color borderColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
-            Color background = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBG;
+            Color background = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBg;
 
             PixelShader.RoundedRectangle(pos, size, 12, background, 2, borderColor);
 

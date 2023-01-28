@@ -46,15 +46,7 @@ namespace ImproveGame.Interface.BaseViews
             Vector2 shadow = Vector2.Lerp(new(startWidth), new(endWidth), hoverTimer.Schedule);
             Color color = Color.Lerp(beginColor, endColor, hoverTimer.Schedule);
 
-            switch (RoundMode)
-            {
-                case RoundMode.Round:
-                    PixelShader.RoundedRectangle(pos - shadow, size + shadow * 2, Round + shadow.X, color);
-                    break;
-                case RoundMode.Round4:
-                    PixelShader.RoundedRectangle(pos - shadow, size + shadow * 2, Round4 + new Vector4(shadow.X), color);
-                    break;
-            }
+            PixelShader.RoundedRectangle(pos - shadow, size + shadow * 2, Round4 + new Vector4(shadow.X), color);
         }
     }
 }

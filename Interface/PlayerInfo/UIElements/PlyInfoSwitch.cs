@@ -17,7 +17,6 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
 
             Relative = RelativeMode.Horizontal;
             Wrap = true;
-            RoundMode = RoundMode.Round4;
             Round4 = new Vector4(10f, 0, 0, 0);
         }
 

@@ -63,7 +63,7 @@ float4 Shadow(float2 coords : TEXCOORD0) : COLOR0
     float2 Rounded = coords.x < 0.5 ? uRounded.xz : uRounded.yw;
     Rounded.x = coords.y < 0.5 ? Rounded.x : Rounded.y;
     float2 p = coords * uSize - uSizeOver2;
-    float Distance = sdRoundSquare(p, uSizeOver2, Rounded.x + uShadowSize);
+    float Distance = sdRoundSquare(p, uSizeOver2, Rounded.x);
     return lerp(0, uBackgroundColor, pow(1 - smoothstep(-1 - uShadowSize, 0.5, Distance), 1.5));
 }
 

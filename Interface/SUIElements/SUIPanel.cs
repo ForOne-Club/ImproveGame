@@ -31,8 +31,7 @@ namespace ImproveGame.Interface.SUIElements
         {
             SetPadding(10f);
             DragIgnore = true;
-            RoundMode = RoundMode.Round;
-            ShadowThickness = 0f;
+            ShadowThickness = 40f;
             ShadowColor = borderColor * 0.5f;
             this.borderColor = borderColor;
             this.backgroundColor = backgroundColor;
@@ -45,8 +44,7 @@ namespace ImproveGame.Interface.SUIElements
         {
             SetPadding(10f);
             DragIgnore = true;
-            RoundMode = RoundMode.Round4;
-            ShadowThickness = 0f;
+            ShadowThickness = 40f;
             ShadowColor = borderColor * 0.5f;
             this.backgroundColor = backgroundColor;
             this.borderColor = borderColor;
@@ -64,23 +62,13 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
             Vector2 shadowPos = pos - ShadowThickness;
             Vector2 shadowSize = size + ShadowThickness * 2;
-            switch (RoundMode)
+
+            if (Shaded)
             {
-                case RoundMode.Round:
-                    if (Shaded)
-                    {
-                        PixelShader.DrawShadow(shadowPos + 8f.ToVector2(), shadowSize, Round, ShadowColor, 0);
-                    }
-                    PixelShader.RoundedRectangle(pos, size, Round, backgroundColor, border, borderColor);
-                    break;
-                case RoundMode.Round4:
-                    if (Shaded)
-                    {
-                        PixelShader.DrawShadow(shadowPos + 8f.ToVector2(), shadowSize, Round4, ShadowColor, 0);
-                    }
-                    PixelShader.RoundedRectangle(pos, size, Round4, backgroundColor, border, borderColor);
-                    break;
+                PixelShader.DrawShadow(shadowPos, shadowSize, Round4, ShadowColor, this.ShadowThickness);
             }
+            PixelShader.RoundedRectangle(pos, size, Round4, backgroundColor, border, borderColor);
+
         }
 
         public override void MouseDown(UIMouseEvent evt)
@@ -121,9 +109,6 @@ namespace ImproveGame.Interface.SUIElements
             }
 
             SetPosPixels(Main.mouseX - Offset.X, Main.mouseY - Offset.Y).Recalculate();
-            OnDrag?.Invoke(this);
         }
-
-        internal event ElementEvent OnDrag;
     }
 }

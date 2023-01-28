@@ -71,7 +71,6 @@ namespace ImproveGame.Interface.GUI
                 DragIgnore = true,
                 Width = new StyleDimension(0f, 1f),
                 Height = new StyleDimension(50f, 0f),
-                RoundMode = RoundMode.Round4,
                 Round4 = new Vector4(10f, 10f, 0f, 0f),
                 Relative = RelativeMode.Vertical
             };
@@ -94,7 +93,6 @@ namespace ImproveGame.Interface.GUI
                 Height = new StyleDimension(0f, 1f),
                 beginBg = UIColor.TitleBg2,
                 endBg = UIColor.TitleBg2,
-                RoundMode = RoundMode.Round4,
                 Round4 = new Vector4(0f, 10f, 0f, 0f)
             };
             Cross.OnMouseDown += (_, _) => Close();

@@ -63,7 +63,6 @@ namespace ImproveGame.Interface.PlayerInfo
             _titlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
             {
                 DragIgnore = true,
-                RoundMode = RoundMode.Round4,
                 Round4 = new Vector4(10f, 10f, 0f, 0f),
             };
             _titlePanel.Width.Precent = 1f;

@@ -558,13 +558,19 @@ namespace ImproveGame
         /// <param name="inv"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static bool HasItemSpace(Item[] inv, Item item)
+        public static bool HasItemSpace(Item[] inv, Item item,ref bool hasItem,ref bool airSlot,ref bool canStack)
         {
-            if (inv is null)
-                return false;
-            for (int i = 0; i < inv.Length; i++)
+            if (inv == null)
             {
-                if (inv[i] is not null && (inv[i].IsAir || (inv[i].type == item.type && inv[i].stack < inv[i].maxStack)))
+                return false;
+            }
+            
+            foreach (var invItem in inv)
+            {
+                airSlot = invItem == null || invItem.IsAir;
+                hasItem = invItem != null && invItem.type == item.type;
+                canStack = invItem != null && invItem.type == item.type && invItem.stack < invItem.maxStack;
+                if (invItem != null && (invItem.IsAir || (invItem.type == item.type && invItem.stack < invItem.maxStack)))
                 {
                     return true;
                 }

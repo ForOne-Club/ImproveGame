@@ -64,7 +64,6 @@ namespace ImproveGame.Interface.BannerChest
             {
                 HAlign = 1f,
                 VAlign = 0.5f,
-                RoundMode = RoundMode.Round4,
                 Round4 = new Vector4(0, 10, 0, 0),
                 beginBg = UIColor.TitleBg2 * 0.5f,
                 endBg = UIColor.TitleBg2,

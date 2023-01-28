@@ -41,15 +41,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
 
-            switch (RoundMode)
-            {
-                case RoundMode.Round:
-                    PixelShader.RoundedRectangle(pos, size, Round, background);
-                    break;
-                case RoundMode.Round4:
-                    PixelShader.RoundedRectangle(pos, size, Round4, background, 2, border);
-                    break;
-            }
+            PixelShader.RoundedRectangle(pos, size, Round4, background, 2, border);
 
             Vector2 innerPos = GetInnerDimensions().Position();
             Vector2 innerSize = GetInnerDimensions().Size();
