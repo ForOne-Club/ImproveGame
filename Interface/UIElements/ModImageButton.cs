@@ -79,7 +79,7 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch) {
+        public override void DrawSelf(SpriteBatch spriteBatch) {
             CalculatedStyle dimensions = GetDimensions();
 
             var mainColor = IsMouseHovering ? ColorActive : ColorInactive;

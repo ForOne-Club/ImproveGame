@@ -26,7 +26,7 @@ namespace ImproveGame.Interface.UIElements
             this.SetSize(580f, 10f);
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             if (string.IsNullOrEmpty(FilePath) || !File.Exists(FilePath) || PreviewRenderer.UIPreviewTarget is null)
                 return;

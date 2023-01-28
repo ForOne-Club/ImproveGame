@@ -60,8 +60,7 @@ namespace ImproveGame.Common.Systems
                         {
                             Vector2 scale = new(0.9f);
                             string text = DisplayText; // 要显示的文本
-                            var _textDisplayCache = typeof(Main).GetField("_textDisplayCache", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Main.instance);
-                            int numLines = (int)_textDisplayCache.GetType().GetProperty("AmountOfLines", BindingFlags.Instance | BindingFlags.Public).GetValue(_textDisplayCache);
+                            int numLines = Main.instance._textDisplayCache.AmountOfLines;
                             Vector2 stringSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, text, scale); // size of "Shop" with scale 0.9
 
                             Vector2 value2 = new(1f);

@@ -153,7 +153,7 @@ namespace ImproveGame.Interface.SUIElements
             PlayerInput.LockVanillaMouseScroll("ModLoader/UIScrollbar");
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             if (!Visible)
                 return;

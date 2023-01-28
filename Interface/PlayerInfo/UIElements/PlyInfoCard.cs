@@ -50,7 +50,7 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             this._icon = GetTexture($"UI/PlayerInfo/{icon}").Value;
         }
 
-        protected override void DrawSelf(SpriteBatch sb)
+        public override void DrawSelf(SpriteBatch sb)
         {
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();

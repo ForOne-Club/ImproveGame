@@ -11,6 +11,13 @@
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <Publicize Include="tModLoader" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="NetSimplified">
       <HintPath>lib\NetSimplified.dll</HintPath>
     </Reference>

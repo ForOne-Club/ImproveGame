@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Animations;using Terraria.GameContent.UI.Chat;
+﻿using ImproveGame.Common.Animations;
+using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.UIElements
@@ -107,7 +108,7 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             if (Item is null)
             {

@@ -79,7 +79,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
             RightMouseTimer++;
         }
 
-        protected override void DrawSelf(SpriteBatch sb)
+        public override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
             PixelShader.RoundedRectangle(dimensions.Position(), dimensions.Size(), 12, UIColor.ItemSlotBg, 2,

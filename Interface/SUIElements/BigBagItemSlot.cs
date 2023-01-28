@@ -295,7 +295,7 @@ namespace ImproveGame.Interface.SUIElements
             }
         }
 
-        protected override void DrawSelf(SpriteBatch sb)
+        public override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
             Vector2 pos = dimensions.Position();

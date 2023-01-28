@@ -53,7 +53,7 @@ namespace ImproveGame.Interface.SUIElements
             this.Draggable = Draggable;
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();

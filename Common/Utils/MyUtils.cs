@@ -111,14 +111,14 @@ namespace ImproveGame
                 return false;
             }
             var keybindListItem = new UIKeybindingListItem(keys[0], InputMode.Keyboard, Color.White);
-            bindName = keybindListItem.GetType().GetMethod("GenInput", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(keybindListItem, new object[] { keys }) as string;
-            //StringBuilder sb = new(16);
-            //sb.Append(keys[0]);
-            //for (int i = 1; i < keys.Count; i++)
-            //{
-            //    sb.Append(" / ").Append(keys[i]);
-            //}
-            //bindName = sb.ToString();
+            bindName = keybindListItem.GenInput(keys); 
+            // StringBuilder sb = new(16);
+            // sb.Append(keys[0]);
+            // for (int i = 1; i < keys.Count; i++)
+            // {
+            //     sb.Append(" / ").Append(keys[i]);
+            // }
+            // bindName = sb.ToString();
             return true;
         }
 
@@ -350,9 +350,8 @@ namespace ImproveGame
                 }
             }
 
-            // 反射获取NPCLoader.bannerToItem以支持模组旗帜
-            var bannerToItem = (IDictionary<int, int>)typeof(NPCLoader).GetField("bannerToItem",
-                BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+            // AssemblyPublicizer使其可以直接访问
+            var bannerToItem = NPCLoader.bannerToItem;
             // 应用
             foreach (var dict in bannerToItem)
             {

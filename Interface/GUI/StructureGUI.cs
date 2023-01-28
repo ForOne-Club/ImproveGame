@@ -170,12 +170,11 @@ namespace ImproveGame.Interface.GUI
                 Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
-            var innerList = UIList.GetType().GetField("_innerList", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(UIList) as UIElement;
-            if (Scrollbar is not null && innerList is not null)
+            if (Scrollbar is not null)
             {
-                innerList.Top.Set(-Scrollbar.ViewPosition, 0);
+                UIList._innerList.Top.Set(-Scrollbar.ViewPosition, 0);
             }
             UIList.Recalculate();
 

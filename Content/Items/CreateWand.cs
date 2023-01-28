@@ -6,6 +6,7 @@ using ImproveGame.Interface.GUI;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using static ImproveGame.Entitys.TileData;
+using TileData = ImproveGame.Entitys.TileData;
 
 namespace ImproveGame.Content.Items
 {

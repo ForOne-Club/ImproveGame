@@ -38,7 +38,7 @@ namespace ImproveGame.Interface.BaseViews
             base.Update(gameTime);
         }
 
-        protected override void DrawSelf(SpriteBatch sb)
+        public override void DrawSelf(SpriteBatch sb)
         {
             Vector2 pos = GetDimensions().Position() - new Vector2(Extension.X, Extension.Y);
             Vector2 size = GetDimensions().Size() + new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);

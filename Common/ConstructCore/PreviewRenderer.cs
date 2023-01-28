@@ -208,9 +208,7 @@ namespace ImproveGame.Common.ConstructCore
                             color = color.MultiplyRGB(Color.White * 0.4f);
                         else
                         {
-                            var targetMethod = typeof(TileDrawing).GetMethod("ShouldTileShine", BindingFlags.Static | BindingFlags.NonPublic);
-                            var resultObj = targetMethod.Invoke(null, new object[] { (ushort)tileType, (short)tileData.TileFrameX });
-                            if (resultObj is bool result && result)
+                            if (TileDrawing.ShouldTileShine((ushort)tileType, tileData.TileFrameX))
                                 color = Main.shine(color, tileType);
                         }
                         switch (tileType)

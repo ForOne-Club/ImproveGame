@@ -216,9 +216,7 @@ namespace ImproveGame.Interface.Common
                     if (!UIConfigs.Instance.ShowMoreData)
                         return true;
 
-                    bool modNetShouldDraw = (bool)typeof(ModNet).GetField("ShouldDrawModNetDiagnosticsUI",
-                            BindingFlags.NonPublic | BindingFlags.Static)
-                        ?.GetValue(null)!;
+                    bool modNetShouldDraw = ModNet.ShouldDrawModNetDiagnosticsUI;
 
                     if (modNetShouldDraw)
                     {

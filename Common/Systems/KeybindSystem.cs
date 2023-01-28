@@ -85,18 +85,19 @@ namespace ImproveGame.Common.Systems
         {
             orig.Invoke(self, spriteBatch);
 
-            string _keybind = self.GetType().GetField("_keybind", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(self) as string;
-            if (self.IsMouseHovering)
+            if (!self.IsMouseHovering)
             {
-                switch (_keybind)
-                {
-                    case "ImproveGame: $Mods.ImproveGame.Keybind.HotbarSwitch":
-                        Main.instance.MouseText(GetText("Keybind.HotbarSwitch.Tip"));
-                        break;
-                    case "ImproveGame: $Mods.ImproveGame.Keybind.BuffTracker":
-                        Main.instance.MouseText(GetText("Keybind.BuffTracker.Tip"));
-                        break;
-                }
+                return;
+            }
+
+            switch (self._keybind)
+            {
+                case "ImproveGame: $Mods.ImproveGame.Keybind.HotbarSwitch":
+                    Main.instance.MouseText(GetText("Keybind.HotbarSwitch.Tip"));
+                    break;
+                case "ImproveGame: $Mods.ImproveGame.Keybind.BuffTracker":
+                    Main.instance.MouseText(GetText("Keybind.BuffTracker.Tip"));
+                    break;
             }
         }
 
@@ -163,7 +164,7 @@ namespace ImproveGame.Common.Systems
         // 不让我用翻译是吧，我直接给你On掉
         private string TranslatedFriendlyName(orig_GetFriendlyName orig, UIKeybindingListItem item)
         {
-            string keybindName = item.GetType().GetField("_keybind", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(item) as string;
+            string keybindName = item._keybind;
             if (keybindName.StartsWith("ImproveGame: $Mods.ImproveGame.Keybind"))
             {
                 keybindName = Language.GetTextValue(keybindName["ImproveGame: $".Length..]);

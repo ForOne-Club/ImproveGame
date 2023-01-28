@@ -333,12 +333,8 @@ namespace ImproveGame.Content.Tiles
             tileCounter.Simulate(Main.player[255]);
             tileCounter.FargosFountainSupport(Main.player[255]);
 
-            // 反射调用 FishingCheck_RollItemDrop(ref fisher);
-            var targetMethod = fakeProj.GetType().GetMethod("FishingCheck_RollItemDrop",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            var args = new object[] { fisher };
-            targetMethod?.Invoke(fakeProj, args);
-            fisher = (FishingAttempt)args[0]; // ref之后用这个获取
+            // AssemblyPublicizer 使得 FishingCheck_RollItemDrop 可以直接访问
+            fakeProj.FishingCheck_RollItemDrop(ref fisher);
 
             AdvancedPopupRequest sonar = new();
             Vector2 sonarPosition = new(-1145141f, -919810f); // 直接fake到世界外面

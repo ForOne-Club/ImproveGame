@@ -46,7 +46,7 @@
             Texture.UpdateGIF();
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             var dimensions = GetDimensions();
             var origin = new Vector2(Texture.Width, Texture.Height) / 2f;

@@ -108,5 +108,16 @@ namespace ImproveGame.Common.Players
             // 按照Example的写法 - 直接写就完了！
             BigBagAllSlotsPacket.Get(this).Send(toWho, fromWho, false);
         }
+
+        public override void OnEnterWorld(Player player)
+        {
+            Main.NewText("该代码在DataPlayer.OnEnterWorld中执行");
+            Main.NewText("测试AssemblyPublicizer的私有字段访问功能:");
+            Main.NewText($"Player.meleeCrit: {player.meleeCrit}");
+            Main.NewText($"Player.rangedCrit: {player.rangedCrit}");
+            Main.NewText($"Player.magicCrit: {player.magicCrit}");
+            Main.NewText($"Player.allCrit: {player.allCrit}");
+            Main.NewText($"Player.itemGrabSpeed: {Player.itemGrabSpeed} (静态)");
+        }
     }
 }

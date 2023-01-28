@@ -130,13 +130,11 @@ public class BuffTrackerGUI : ViewBody
             Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
     }
 
-    protected override void DrawSelf(SpriteBatch spriteBatch)
+    public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        var innerList = BuffList.GetType().GetField("_innerList", BindingFlags.Instance | BindingFlags.NonPublic)
-            ?.GetValue(BuffList) as UIElement;
-        if (Scrollbar is not null && innerList is not null)
+        if (Scrollbar is not null)
         {
-            innerList.Top.Set(-Scrollbar.ViewPosition, 0);
+            BuffList._innerList.Top.Set(-Scrollbar.ViewPosition, 0);
         }
 
         BuffList.Recalculate();
@@ -398,7 +396,7 @@ public class BuffButton : UIElement
         InfBuffPlayer.Get(Main.LocalPlayer).ToggleInfBuff(BuffId);
     }
 
-    protected override void DrawSelf(SpriteBatch spriteBatch)
+    public override void DrawSelf(SpriteBatch spriteBatch)
     {
         bool buffEnabled = InfBuffPlayer.CheckInfBuffEnable(BuffId);
 

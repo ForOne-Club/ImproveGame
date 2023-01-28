@@ -61,7 +61,7 @@ namespace ImproveGame.Interface.SUIElements
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
-        protected override void DrawSelf(SpriteBatch sb)
+        public override void DrawSelf(SpriteBatch sb)
         {
             Color color = Color.Lerp(UIColor.SwitchBg, UIColor.SwitchBgHover, _timer.Schedule);
             Color color2 = Color.Lerp(UIColor.SwitchBorder, UIColor.SwitchBorderHover, _timer.Schedule);

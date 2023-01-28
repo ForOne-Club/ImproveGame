@@ -49,7 +49,7 @@ namespace ImproveGame.Interface.GUI
             MainPanel.Append(RoundButtons[2]);
         }
 
-        protected override void DrawChildren(SpriteBatch spriteBatch)
+        public override void DrawChildren(SpriteBatch spriteBatch)
         {
             base.DrawChildren(spriteBatch);
             var position = Main.MouseScreen + new Vector2(15);

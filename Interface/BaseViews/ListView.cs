@@ -9,7 +9,7 @@
         
         public override bool ContainsPoint(Vector2 point) => Parent.IsMouseHovering;
 
-        protected override void DrawChildren(SpriteBatch spriteBatch)
+        public override void DrawChildren(SpriteBatch spriteBatch)
         {
             Vector2 pos = Parent.GetDimensions().Position();
             Vector2 size = Parent.GetDimensions().Size();

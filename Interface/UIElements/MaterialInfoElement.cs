@@ -51,7 +51,7 @@ namespace ImproveGame.Interface.UIElements
             Append(itemNameInfo);
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
             GetItemCount(inventory, (item) => item.type == ItemType, out int stackCount);
@@ -144,7 +144,7 @@ namespace ImproveGame.Interface.UIElements
             Append(itemNameInfo);
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
             GetItemCount(inventory, (item) => item.type == ItemType, out int stackCount);

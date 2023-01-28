@@ -18,7 +18,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
             SetInnerPixels(ListView.Width.Pixels + Scrollbar.Width.Pixels + 9, ListView.Height.Pixels + 1);
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             base.DrawSelf(spriteBatch);
             if (!(Math.Abs(-Scrollbar.ViewPosition - ListView.Top.Pixels) > 0.000000001f))

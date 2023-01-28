@@ -56,7 +56,7 @@ namespace ImproveGame.Interface.UIElements
             _scrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             if (Math.Abs(-_scrollbar.ViewPosition - ItemList.Top.Pixels) < 0.000000001)
             {

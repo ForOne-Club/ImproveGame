@@ -24,7 +24,7 @@ namespace ImproveGame.Interface.SUIElements
             OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             base.DrawSelf(spriteBatch);
             Vector2 pos = GetDimensions().Position();

@@ -108,7 +108,7 @@ namespace ImproveGame.Interface.UIElements
             base.Update(gameTime);
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch) {
+        public override void DrawSelf(SpriteBatch spriteBatch) {
             CalculatedStyle dimensions = GetDimensions();
 
             #region 液体绘制 代码好乱我下次来写就看不懂了

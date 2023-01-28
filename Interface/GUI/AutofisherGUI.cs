@@ -464,7 +464,7 @@ namespace ImproveGame.Interface.GUI
             _timer.Update();
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimensions = GetDimensions();
             var tex = TextureAssets.Item[ItemType];

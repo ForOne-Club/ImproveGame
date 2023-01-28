@@ -6,7 +6,6 @@ namespace ImproveGame.Common.Systems
     public class TownNPCSystem : ModSystem
     {
         private static bool _isExtraUpdate; // 是否处于源于模组的额外更新中
-        private static MethodInfo _spawnTownNPCs;
         private static List<int> _townNPCIDs = new();
         private static HashSet<int> _activeTownNPCs = new();
         private static BestiaryUnlockProgressReport _cachedReport = new();
@@ -52,8 +51,6 @@ namespace ImproveGame.Common.Systems
 
         public override void PostSetupContent()
         {
-            _spawnTownNPCs =
-                typeof(Main).GetMethod("UpdateTime_SpawnTownNPCs", BindingFlags.Static | BindingFlags.NonPublic);
             SetupTownNPCList();
         }
 
@@ -81,11 +78,7 @@ namespace ImproveGame.Common.Systems
                        npc.ModNPC?.TownNPCStayingHomeless is true;
             });
 
-            var modNPCs =
-                typeof(NPCLoader).GetField("npcs", BindingFlags.Static | BindingFlags.NonPublic)
-                    ?.GetValue(null) as IList<ModNPC> ?? new List<ModNPC>();
-
-            foreach (var modNPC in modNPCs)
+            foreach (var modNPC in NPCLoader.npcs)
             {
                 var npc = modNPC.NPC;
                 int head = NPC.TypeToDefaultHeadIndex(npc.type);
@@ -186,7 +179,7 @@ namespace ImproveGame.Common.Systems
         public override void PostUpdateTime()
         {
             if (!Main.dayTime && Config.TownNPCGetTFIntoHouse)
-                _spawnTownNPCs.Invoke(null, null);
+                Main.UpdateTime_SpawnTownNPCs();
         }
 
         private static void TrySetNPCSpawn(int npcId)

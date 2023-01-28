@@ -47,7 +47,8 @@ namespace ImproveGame.Interface.GUI
         }
 
         private Color textColor = new(135, 0, 180);
-        protected override void DrawChildren(SpriteBatch spriteBatch)
+
+        public override void DrawChildren(SpriteBatch spriteBatch)
         {
             base.DrawChildren(spriteBatch);
             if (!timer.AnyClose)

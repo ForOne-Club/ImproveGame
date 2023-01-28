@@ -34,7 +34,7 @@ namespace ImproveGame.Interface.SUIElements
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
-        protected override void DrawSelf(SpriteBatch sb)
+        public override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle rectangle = GetDimensions();
             Vector2 position = rectangle.Position();

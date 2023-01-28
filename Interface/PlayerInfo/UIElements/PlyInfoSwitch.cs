@@ -20,7 +20,7 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             Round4 = new Vector4(10f, 0, 0, 0);
         }
 
-        protected override void DrawSelf(SpriteBatch sb)
+        public override void DrawSelf(SpriteBatch sb)
         {
             base.DrawSelf(sb);
             Vector2 pos = GetDimensions().Position() - new Vector2(Extension.X, Extension.Y);

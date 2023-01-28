@@ -19,17 +19,9 @@ namespace ImproveGame.Common.Systems
                 layers.Insert(index + 1, new LegacyGameInterfaceLayer("ImproveGame: Modify Info Acc Display",
                     () =>
                     {
-                        // private MouseTextCache _mouseTextCache
-                        var mouseTextCache = Main.instance.GetType().GetField("_mouseTextCache", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(Main.instance);
-                        if (mouseTextCache is null)
-                        {
-                            return true;
-                        }
-
-                        var cursorTextField = mouseTextCache.GetType().GetField("cursorText", BindingFlags.Public | BindingFlags.Instance);
-                        var cursorText = cursorTextField?.GetValue(mouseTextCache) as string;
+                        var cursorText = Main.instance._mouseTextCache.cursorText;
                 
-                        if (Main.mouseText && cursorTextField is not null && cursorText is not null && cursorText == Lang.inter[105].Value + "\n" + GetText("LifeAnalyzer.Tip"))
+                        if (Main.mouseText && !string.IsNullOrEmpty(cursorText) && cursorText == Lang.inter[105].Value + "\n" + GetText("LifeAnalyzer.Tip"))
                         {
                             if (Main.mouseLeft && !_mouseLeftPrev)
                             {
@@ -48,7 +40,6 @@ namespace ImproveGame.Common.Systems
                         }
                         return true;
                     }, InterfaceScaleType.UI));
-
             }
         }
 

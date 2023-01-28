@@ -5,6 +5,15 @@
 
 [更新日志](ChangeLog.md)
 
+# 如何编译&使用
+更好的体验由于使用了BepInEx.AssemblyPublicizer.MSBuild，因此无法使用tModLoader进行编译，需要使用IDE进行编译
+1. 使用IDE，如Visual Studio 2022、Rider等打开项目
+2. 如果先前在tModLoader中启用了此Mod，先禁用，然后重新加载
+3. 使用IDE编译项目
+4. 在tModLoader中打开此Mod，重新加载
+5. 成了
+BepInEx.AssemblyPublicizer.MSBuild是一个很强的NuGet包，它可以将私有的程序集公开化，使得Mod可以访问私有的程序集，而不需要通过反射等手段
+
 # Mod.Call
 ## IgnoreInfItem
 ```"IgnoreInfItem", int/List<int> ItemID(s)```

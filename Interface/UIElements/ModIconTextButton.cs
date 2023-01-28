@@ -64,7 +64,7 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch) {
+        public override void DrawSelf(SpriteBatch spriteBatch) {
             if (_hovered) {
                 if (!_soundedHover)
                     SoundEngine.PlaySound(SoundID.MenuTick);

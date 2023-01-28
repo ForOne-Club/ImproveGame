@@ -64,7 +64,7 @@ namespace ImproveGame.Interface.UIElements
         private readonly Color Background1 = new(83, 88, 151, 200);
         private readonly Color Background2 = new(63, 65, 151, 200);*/
 
-        protected override void DrawSelf(SpriteBatch sb)
+        public override void DrawSelf(SpriteBatch sb)
         {
             CalculatedStyle dimensions = GetDimensions();
             Vector2 position = dimensions.Position() + this.GetSize() / 2f;

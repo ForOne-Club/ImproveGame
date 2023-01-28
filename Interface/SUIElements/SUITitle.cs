@@ -36,7 +36,7 @@ namespace ImproveGame.Interface.SUIElements
             SetInnerPixels(textSize);
         }
 
-        protected override void DrawSelf(SpriteBatch sb)
+        public override void DrawSelf(SpriteBatch sb)
         {
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();

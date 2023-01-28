@@ -32,7 +32,7 @@ namespace ImproveGame.Interface.UIElements
             Append(dropInfo);
         }
 
-        protected override void DrawSelf(SpriteBatch spriteBatch)
+        public override void DrawSelf(SpriteBatch spriteBatch)
         {
             var item = new Item(DropRateInfo.itemId);
             if (IsMouseHovering)

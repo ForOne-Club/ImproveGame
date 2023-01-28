@@ -57,7 +57,7 @@ namespace ImproveGame.Interface.UIElements
         public override bool ContainsPoint(Vector2 point) => true;
 
         // 只绘制范围内的孩子.
-        protected override void DrawChildren(SpriteBatch spriteBatch)
+        public override void DrawChildren(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimensions1 = Parent.GetDimensions();
             var position1 = dimensions1.Position();
