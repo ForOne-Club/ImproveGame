@@ -123,6 +123,7 @@ namespace ImproveGame.Content.Items
         public override void SetStaticDefaults()
         {
             Item.staff[Type] = true;
+            SacrificeTotal = 1;
         }
 
         public override void SetDefaults()

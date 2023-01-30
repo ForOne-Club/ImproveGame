@@ -286,6 +286,8 @@ public class MoveChest : ModItem
 
     #region 基础属性设置
 
+    public override void SetStaticDefaults() => SacrificeTotal = 1;
+
     public override void SetDefaults()
     {
         Item.width = 1;
