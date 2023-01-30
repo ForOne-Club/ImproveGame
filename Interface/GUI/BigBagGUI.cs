@@ -37,7 +37,7 @@ namespace ImproveGame.Interface.GUI
         private SUIPanel TitlePanel;
 
         // 内容面板
-        private View ContentPanel;
+        private View ButtonPanel;
 
         // 标题
         private SUITitle Title;
@@ -69,9 +69,9 @@ namespace ImproveGame.Interface.GUI
             TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
             {
                 DragIgnore = true,
-                Width = new StyleDimension(0f, 1f),
-                Height = new StyleDimension(50f, 0f),
-                Round4 = new Vector4(10f, 10f, 0f, 0f),
+                Width = { Pixels = 0f, Precent = 1f },
+                Height = { Pixels = 50f, Precent = 0f },
+                Rounded = new Vector4(10f, 10f, 0f, 0f),
                 Relative = RelativeMode.Vertical
             };
             TitlePanel.SetPadding(0f);
@@ -80,8 +80,7 @@ namespace ImproveGame.Interface.GUI
             // 标题
             Title = new SUITitle(GetText("SuperVault.Name"), 0.5f)
             {
-                VAlign = 0.5f,
-                background = Color.Transparent
+                VAlign = 0.5f
             };
             Title.Join(TitlePanel);
 
@@ -90,21 +89,21 @@ namespace ImproveGame.Interface.GUI
             {
                 HAlign = 1f,
                 VAlign = 0.5f,
-                Height = new StyleDimension(0f, 1f),
+                Height = { Pixels = 0f, Precent = 1f },
                 beginBg = UIColor.TitleBg2,
                 endBg = UIColor.TitleBg2,
-                Round4 = new Vector4(0f, 10f, 0f, 0f)
+                Rounded = new Vector4(0f, 10f, 0f, 0f)
             };
             Cross.OnMouseDown += (_, _) => Close();
             Cross.Join(TitlePanel);
 
-            ContentPanel = new View
+            ButtonPanel = new View
             {
                 DragIgnore = true,
                 Relative = RelativeMode.Vertical
             };
-            ContentPanel.SetPadding(12f, 10f, 11f, 12f);
-            ContentPanel.Join(MainPanel);
+            ButtonPanel.SetPadding(12f, 10f, 11f, 12f);
+            ButtonPanel.Join(MainPanel);
 
             // 开关
             Vector2 switchSpacing = new Vector2(10, 10);
@@ -119,7 +118,7 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Vertical,
                 Spacing = switchSpacing
             };
-            RecipesSwitch.Join(ContentPanel);
+            RecipesSwitch.Join(ButtonPanel);
 
             SmartGrabSwitch = new SUISwitch(() => setting.SuperVault_SmartGrab,
                 state => setting.SuperVault_SmartGrab = state,
@@ -128,7 +127,7 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Horizontal,
                 Spacing = switchSpacing
             };
-            SmartGrabSwitch.Join(ContentPanel);
+            SmartGrabSwitch.Join(ButtonPanel);
 
             AutoGrabSwitch = new SUISwitch(() => setting.SuperVault_OverflowGrab,
                 state => setting.SuperVault_OverflowGrab = state,
@@ -137,18 +136,18 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Horizontal,
                 Spacing = switchSpacing
             };
-            AutoGrabSwitch.Join(ContentPanel);
+            AutoGrabSwitch.Join(ButtonPanel);
 
             // 按钮
             Vector2 buttonSpacing = new Vector2(10, 8);
             QuickButton = new SUIPictureButton(GetTexture("UI/Quick").Value, Lang.inter[29].Value)
             {
-                First = true,
                 Relative = RelativeMode.Vertical,
-                Spacing = buttonSpacing
+                Spacing = buttonSpacing,
+                First = true
             };
             QuickButton.OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
-            QuickButton.Join(ContentPanel);
+            QuickButton.Join(ButtonPanel);
 
             PutButton = new SUIPictureButton(GetTexture("UI/Put").Value, Lang.inter[30].Value)
             {
@@ -156,7 +155,7 @@ namespace ImproveGame.Interface.GUI
                 Spacing = buttonSpacing
             };
             PutButton.OnMouseDown += (_, _) => PutAll();
-            PutButton.Join(ContentPanel);
+            PutButton.Join(ButtonPanel);
 
             ReplenishButton = new SUIPictureButton(GetTexture("UI/Put").Value, Lang.inter[31].Value)
             {
@@ -164,7 +163,7 @@ namespace ImproveGame.Interface.GUI
                 Spacing = buttonSpacing
             };
             ReplenishButton.OnMouseDown += (_, _) => Replenish();
-            ReplenishButton.Join(ContentPanel);
+            ReplenishButton.Join(ButtonPanel);
 
             SortButton = new SUIPictureButton(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
             {
@@ -172,7 +171,7 @@ namespace ImproveGame.Interface.GUI
                 Spacing = buttonSpacing
             };
             SortButton.OnMouseDown += (_, _) => Sort();
-            SortButton.Join(ContentPanel);
+            SortButton.Join(ButtonPanel);
 
             // Inventory 滚动视图
             ItemGrid = new ModItemGrid
@@ -182,9 +181,9 @@ namespace ImproveGame.Interface.GUI
                 Spacing = new Vector2(10, 15)
             };
             ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
-            ItemGrid.Join(ContentPanel);
-            ContentPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
-            MainPanel.SetInnerPixels(ContentPanel.Width.Pixels, ContentPanel.Bottom());
+            ItemGrid.Join(ButtonPanel);
+            ButtonPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
+            MainPanel.SetInnerPixels(ButtonPanel.Width.Pixels, ButtonPanel.Bottom());
         }
 
         /// <summary>
@@ -212,18 +211,18 @@ namespace ImproveGame.Interface.GUI
                 Main.LocalPlayer.mouseInterface = true;
             }
 
-            if (Math.Abs(ContentPanel.GetInnerSizePixels().Y - ItemGrid.Bottom()) > 0.000000001)
+            if (Math.Abs(ButtonPanel.GetInnerSizePixels().Y - ItemGrid.Bottom()) > 0.000000001)
             {
-                ContentPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
-                ContentPanel.Recalculate();
+                ButtonPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
+                ButtonPanel.Recalculate();
             }
 
-            if ((Math.Abs(MainPanel.Height.Pixels - ContentPanel.Bottom()) < 0.000000001))
+            if ((Math.Abs(MainPanel.Height.Pixels - ButtonPanel.Bottom()) < 0.000000001))
             {
                 return;
             }
 
-            MainPanel.SetInnerPixels(ContentPanel.Width.Pixels, ContentPanel.Bottom());
+            MainPanel.SetInnerPixels(ButtonPanel.Width.Pixels, ButtonPanel.Bottom());
             MainPanel.Recalculate();
         }
 

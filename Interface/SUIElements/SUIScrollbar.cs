@@ -47,6 +47,10 @@ namespace ImproveGame.Interface.SUIElements
             Visible = true;
             Width.Pixels = 20f;
             SetPadding(5);
+
+            BgColor = UIColor.ScrollBarBg;
+            Border = 2f;
+            BorderColor = UIColor.ScrollBarBorder;
         }
 
         public override void Update(GameTime gameTime)
@@ -157,13 +161,9 @@ namespace ImproveGame.Interface.SUIElements
         {
             if (!Visible)
                 return;
-
-            CalculatedStyle dimension = GetDimensions();
-            Vector2 position = dimension.Position();
-            Vector2 size = dimension.Size();
-
-            // 滚动条背板
-            PixelShader.RoundedRectangle(position, size, size.X / 2, UIColor.ScrollBarBg, 2, UIColor.ScrollBarBorder);
+            Vector2 size = GetDimensions().Size();
+            Rounded = new Vector4(MathF.Min(size.X, size.Y) / 2f);
+            base.DrawSelf(spriteBatch);
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();
@@ -176,7 +176,7 @@ namespace ImproveGame.Interface.SUIElements
                 dragging ? 1 : HoverTimer.Schedule);
 
             // 滚动条拖动块
-            PixelShader.RoundedRectangle(innerPosition, innerSize, innerSize.X / 2, hoverColor);
+            PixelShader.RoundedRectangle(innerPosition, innerSize, new Vector4(MathF.Min(innerSize.X, innerSize.Y) / 2), hoverColor);
         }
 
         /// <summary>

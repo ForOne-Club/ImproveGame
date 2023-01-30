@@ -7,22 +7,23 @@ namespace ImproveGame.Interface.SUIElements
     {
         public float forkSize;
         public float crossRound;
-        public float border, crossBorder;
-        public Color beginBg, endBg, borderColor, crossColor;
+        public float crossBorder;
+        public Color beginBg, endBg, crossColor;
 
         public SUICross(float forkSize)
         {
             crossRound = 4.5f;
-            this.border = 2;
             this.crossBorder = 2;
             this.forkSize = forkSize;
             Width.Pixels = 50;
             Height.Pixels = 50;
-            borderColor = UIColor.PanelBorder;
             crossColor = UIColor.Cross;
             beginBg = UIColor.TitleBg * 0.5f;
             endBg = UIColor.TitleBg;
-            Round = 10f;
+
+            Rounded = new Vector4(10f);
+            Border = 2;
+            BorderColor = UIColor.PanelBorder;
         }
 
         public override void MouseOver(UIMouseEvent evt)
@@ -33,17 +34,13 @@ namespace ImproveGame.Interface.SUIElements
 
         public override void DrawSelf(SpriteBatch sb)
         {
+            BgColor = Color.Lerp(beginBg, endBg, hoverTimer.Schedule);
             base.DrawSelf(sb);
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
-
-            Color background = Color.Lerp(beginBg, endBg, hoverTimer.Schedule);
             Color fork = Color.Lerp(Color.Transparent, crossColor, hoverTimer.Schedule);
-
-            PixelShader.RoundedRectangle(pos, size, Round4, background, border, borderColor);
-
-            Vector2 forkPos = pos + size / 2 - new Vector2(forkSize / 2);
-            PixelShader.DrawCross(forkPos, forkSize, crossRound, fork, crossBorder, borderColor);
+            Vector2 forkPos = pos + (size - new Vector2(forkSize)) / 2f;
+            PixelShader.DrawCross(forkPos, forkSize, crossRound, fork, crossBorder, BorderColor);
         }
     }
 }

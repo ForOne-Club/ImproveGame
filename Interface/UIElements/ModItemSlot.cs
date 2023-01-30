@@ -148,7 +148,7 @@ namespace ImproveGame.Interface.UIElements
 
             if (RoundBorder)
             {
-                PixelShader.RoundedRectangle(dimensions.Position(), dimensions.Size(), 12, Background, 2, BorderColor);
+                PixelShader.RoundedRectangle(dimensions.Position(), dimensions.Size(), new Vector4(12f), Background, 2, BorderColor);
             }
 
             // 这里设置inventoryScale原版也是这么干的

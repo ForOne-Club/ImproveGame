@@ -32,7 +32,7 @@ public class BuffTrackerGUI : ViewBody
 
     public override void OnInitialize()
     {
-        basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, Draggable: true);
+        basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, draggable: true);
         basePanel.SetPosPixels(630, 160).SetSizePixels(440, 220).Join(this);
 
         UIImageButton closeButton = new UIImageButton(GetTexture("UI/Button_Close"))
@@ -305,12 +305,12 @@ public class BuffTrackerGUI : ViewBody
 
     private void OnStartTakingInput()
     {
-        _searchBoxPanel.borderColor = Main.OurFavoriteColor;
+        _searchBoxPanel.BorderColor = Main.OurFavoriteColor;
     }
 
     private void OnEndTakingInput()
     {
-        _searchBoxPanel.borderColor = new Color(35, 40, 83);
+        _searchBoxPanel.BorderColor = new Color(35, 40, 83);
     }
 
     public override void Click(UIMouseEvent evt)

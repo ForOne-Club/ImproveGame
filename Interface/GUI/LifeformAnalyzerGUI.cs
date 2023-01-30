@@ -156,11 +156,11 @@ namespace ImproveGame.Interface.GUI
         }
 
         private void OnStartTakingInput() {
-            _searchBoxPanel.borderColor = Main.OurFavoriteColor;
+            _searchBoxPanel.BorderColor = Main.OurFavoriteColor;
         }
 
         private void OnEndTakingInput() {
-            _searchBoxPanel.borderColor = new Color(35, 40, 83);
+            _searchBoxPanel.BorderColor = new Color(35, 40, 83);
         }
 
         private void SetupScrollBar(bool resetViewPosition = true) {

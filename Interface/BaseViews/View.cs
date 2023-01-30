@@ -1,8 +1,8 @@
 ﻿global using ImproveGame.Interface.BaseViews;
+using ImproveGame.Common.Animations;
 
 namespace ImproveGame.Interface.BaseViews
 {
-    public enum RoundMode { Round, Round4 }
     /// <summary>
     /// 排列模式，横向排列或者纵向排列。
     /// </summary>
@@ -29,18 +29,16 @@ namespace ImproveGame.Interface.BaseViews
         /// 在大背包中用于一排 Button 的时候，第一个 Button 前面有一个 Switch
         /// </summary>
         public bool First;
+
+        /// <summary>
+        /// 拖动忽略
+        /// </summary>
         public bool DragIgnore;
-        public float Round
-        {
-            get => Round4.X;
-            set
-            {
-                Round4.X = Round4.Y = Round4.Z = Round4.W = value;
-            }
-        }
-        public Vector4 Round4;
-        public Vector4 Extension;
+
         public bool KeepPressed;
+        public Vector4 Rounded;
+        public float Border;
+        public Color BgColor, BorderColor;
 
         public override void Recalculate()
         {
@@ -97,6 +95,23 @@ namespace ImproveGame.Interface.BaseViews
         {
             base.MouseUp(evt);
             KeepPressed = false;
+        }
+
+        public override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            Vector2 pos = GetDimensions().Position();
+            Vector2 size = GetDimensions().Size();
+
+            if (Border > 0 && (BgColor != Color.Transparent || BorderColor != Color.Transparent))
+            {
+                PixelShader.RoundedRectangle(pos, size, Rounded, BgColor, Border, BorderColor);
+            }
+            else if (BgColor != Color.Transparent)
+            {
+                PixelShader.RoundedRectangle(pos, size, Rounded, BgColor);
+            }
+
+            base.DrawSelf(spriteBatch);
         }
 
         // 这该起什么名字？
@@ -186,7 +201,7 @@ namespace ImproveGame.Interface.BaseViews
 
         public Vector2 GetPosPixel()
         {
-            return new Vector2(Left.Pixels + Top.Pixels);
+            return new Vector2(Left.Pixels, Top.Pixels);
         }
 
         public Vector2 GetDimensionsSize()

@@ -26,7 +26,7 @@ namespace ImproveGame.Interface.SUIElements
         public SUISwitch(Func<bool> getState, Action<bool> setState, string text, float textScale = 1f)
         {
             _text = text;
-            _textSize = MouseTextSize(text);
+            _textSize = GetFontSize(text);
             _textScale = textScale;
             _getState = getState;
             _setState = setState;
@@ -72,7 +72,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 boxSize = new Vector2(48, 26) * _textScale;
 
             Vector2 position1 = position + new Vector2(0, size.Y / 2 - boxSize.Y / 2);
-            PixelShader.RoundedRectangle(position1, boxSize, MathF.Min(boxSize.X, boxSize.Y) / 2, color, 2, color2);
+            PixelShader.RoundedRectangle(position1, boxSize, new Vector4(MathF.Min(boxSize.X, boxSize.Y) / 2), color, 2, color2);
 
             Vector2 boxSize2 = new(boxSize.Y - 10 * _textScale);
             Vector2 position2 = position + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),
@@ -81,7 +81,7 @@ namespace ImproveGame.Interface.SUIElements
 
             DrawString(
                 position + new Vector2(boxSize.X + InnerRowSpacing * _textScale,
-                    size.Y / 2 - _textSize.Y * _textScale / 2 + UIConfigs.Instance.TextDrawOffsetY * _textScale), _text,
+                    size.Y / 2 - _textSize.Y * _textScale / 2 + UIConfigs.Instance.GeneralFontOffsetY * _textScale), _text,
                 _textColor,
                 _textBorderColor, _textScale);
         }

@@ -1,43 +1,7 @@
-﻿using ImproveGame.Common.Configs;
-
-namespace ImproveGame.Interface.Common
+﻿namespace ImproveGame.Interface.Common
 {
-    internal class UIColor : ModSystem
+    internal static class UIColor
     {
-        // 部分单词拼写较长，使用缩写
-        // Background Bg
-        // Favorite Fav
-        public override void Load()
-        {
-            if (Main.dedServ)
-                return;
-            oldThemeStyle = 0;
-            ModifyColor1();
-        }
-
-        private int oldThemeStyle;
-        public override void UpdateUI(GameTime gameTime)
-        {
-            if (Main.dedServ)
-                return;
-            int newThemeStyle = UIConfigs.Instance.ThemeStyle;
-            if (newThemeStyle == oldThemeStyle)
-            {
-                return;
-            }
-
-            oldThemeStyle = newThemeStyle;
-            switch (newThemeStyle)
-            {
-                case 0:
-                    ModifyColor1();
-                    break;
-                case 1:
-                    ModifyColor2();
-                    break;
-            }
-        }
-
         public static Color
             PanelBorder,
             PanelBg;
@@ -83,7 +47,7 @@ namespace ImproveGame.Interface.Common
             PackgeGridBg,
             PackgeGridBorder;
 
-        public static void ModifyColor1()
+        static UIColor()
         {
             PanelBorder = new Color(20, 25, 60);
             PanelBg = new Color(44, 55, 105, 180);
@@ -119,41 +83,6 @@ namespace ImproveGame.Interface.Common
             PackgeBorder = new Color(22, 25, 55);
             PackgeGridBg = new Color(29, 33, 70, 160);
             PackgeGridBorder = new Color(22, 25, 55, 160);
-        }
-
-        public static void ModifyColor2()
-        {
-            PanelBorder = new Color(27, 50, 57, 210);
-            PanelBg = new Color(11, 14, 15, 127);
-
-            ItemSlotBorderFav = new Color(230, 230, 230, 180);
-            ItemSlotBorder = new Color(27, 50, 57, 210);
-            ItemSlotBgFav = new Color(8, 25, 30, 100);
-            ItemSlotBg = new Color(11, 14, 15, 127);
-
-            ButtonBg = new Color(17, 40, 47);
-
-            TitleBg = new Color(8, 25, 30);
-
-            // 滚动条
-            ScrollBarBg = new Color(11, 14, 15, 127);
-
-            // 边框
-            SwitchBorder = new Color(27, 50, 57, 210);
-            SwitchBorderHover = new Color(230, 230, 230, 180);
-            // 开关中的圆形
-            SwitchRound = new Color(27, 50, 57, 210);
-            SwitchRoundHover = new Color(230, 230, 230, 180);
-            // 背景色
-            SwitchBg = new Color(11, 14, 15, 127);
-            SwitchBgHover = new Color(11, 14, 15, 127);
-
-            Cross = new Color(200, 40, 40);
-
-            PackgeBg = new Color(11, 14, 15, 127);
-            PackgeBorder = new Color(27, 50, 57, 210);
-            PackgeGridBg = new Color(11, 14, 15, 127);
-            PackgeGridBorder = new Color(27, 50, 57, 210);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ImproveGame.Interface.BaseViews
         public HoverView()
         {
             hoverTimer = new AnimationTimer(3);
-            Round = 10;
+            Rounded = new Vector4(10f);
             beginColor = new Color(0, 0, 0, 0);
             endColor = new Color(0, 0, 0, 0.5f);
             startWidth = 0f;
@@ -40,13 +40,14 @@ namespace ImproveGame.Interface.BaseViews
 
         public override void DrawSelf(SpriteBatch sb)
         {
-            Vector2 pos = GetDimensions().Position() - new Vector2(Extension.X, Extension.Y);
-            Vector2 size = GetDimensions().Size() + new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);
+            Vector2 pos = GetDimensions().Position() ;
+            Vector2 size = GetDimensions().Size() ;
 
             Vector2 shadow = Vector2.Lerp(new(startWidth), new(endWidth), hoverTimer.Schedule);
             Color color = Color.Lerp(beginColor, endColor, hoverTimer.Schedule);
 
-            PixelShader.RoundedRectangle(pos - shadow, size + shadow * 2, Round4 + new Vector4(shadow.X), color);
+            PixelShader.RoundedRectangle(pos - shadow, size + shadow * 2, Rounded + new Vector4(shadow.X), color);
+            base.DrawSelf(sb);
         }
     }
 }

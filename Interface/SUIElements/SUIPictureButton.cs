@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
@@ -22,16 +21,16 @@ namespace ImproveGame.Interface.SUIElements
             SetPadding(18f, 0f);
             SetInnerPixels(_texture.Size().X + _textSize.X + 4 + IconAndTextSpacing, 40f);
             OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
+
+            Rounded = new Vector4(10f);
+            Border = 2f;
+            BgColor = UIColor.ButtonBg;
         }
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
+            BorderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, hoverTimer.Schedule);
             base.DrawSelf(spriteBatch);
-            Vector2 pos = GetDimensions().Position();
-            Vector2 size = GetDimensions().Size();
-
-            Color borderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, hoverTimer.Schedule);
-            PixelShader.RoundedRectangle(pos, size, 10, UIColor.ButtonBg, 2, borderColor);
 
             Vector2 innerPos = GetInnerDimensions().Position();
             Vector2 innerSize = GetInnerDimensionsSize();
@@ -41,7 +40,7 @@ namespace ImproveGame.Interface.SUIElements
 
             // Because border is 2, so: X + 2.
             Vector2 textPos = innerPos + new Vector2(_texture.Size().X + 2 + IconAndTextSpacing, (innerSize.Y - _textSize.Y) / 2);
-            textPos.Y += UIConfigs.Instance.TextDrawOffsetY;
+            textPos.Y += UIConfigs.Instance.GeneralFontOffsetY;
             TrUtils.DrawBorderString(spriteBatch, _text, textPos, Color.White);
         }
     }

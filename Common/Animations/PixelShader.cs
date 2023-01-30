@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Assets;
+using Mono.Cecil;
 
 namespace ImproveGame.Common.Animations
 {
@@ -58,6 +59,7 @@ namespace ImproveGame.Common.Animations
             VertexPos[] triangles = GetVertexPos(pos, size);
             action.Invoke(GetMatrix(ui));
             Main.graphics.GraphicsDevice.DrawUserPrimitives(0, triangles, 0, triangles.Length / 3);
+            EffectAssets.SpriteEffectPass.Apply();
         }
 
         /// <summary>
@@ -77,36 +79,6 @@ namespace ImproveGame.Common.Animations
                 effect.Parameters["backgroundColor"].SetValue(backgroundColor.ToVector4());
                 effect.CurrentTechnique.Passes[0].Apply();
             });
-        }
-
-        public static void RoundedRectangle(Vector2 pos, Vector2 size, float round, Color backgroundColor, bool ui = true)
-        {
-            RoundedRectangle(pos, size, new Vector4(round), backgroundColor, ui);
-        }
-
-        public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, bool ui = true)
-        {
-            float innerShrinkage = 1;
-            pos -= new Vector2(innerShrinkage);
-            size += new Vector2(innerShrinkage * 2);
-            round4 += new Vector4(innerShrinkage);
-            BaseDraw(pos, size, ui, matrix =>
-            {
-                Effect effect = EffectAssets.RoundedRectangle;
-                effect.Parameters["uTransform"].SetValue(matrix);
-                effect.Parameters["uSize"].SetValue(size);
-                effect.Parameters["uSizeOver2"].SetValue(size / 2);
-                effect.Parameters["uRounded"].SetValue(round4);
-                effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
-                effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
-                effect.CurrentTechnique.Passes["NoBorder"].Apply();
-            });
-        }
-
-        public static void RoundedRectangle(Vector2 pos, Vector2 size, float round, Color backgroundColor, float border,
-            Color borderColor, bool ui = true)
-        {
-            RoundedRectangle(pos, size, new Vector4(round), backgroundColor, border, borderColor, ui);
         }
 
         public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, float border,
@@ -132,9 +104,23 @@ namespace ImproveGame.Common.Animations
             });
         }
 
-        public static void DrawShadow(Vector2 pos, Vector2 size, float round, Color backgroundColor, float shadow, bool ui = true)
+        public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, bool ui = true)
         {
-            DrawShadow(pos, size, new Vector4(round), backgroundColor, shadow, ui);
+            float innerShrinkage = 1;
+            pos -= new Vector2(innerShrinkage);
+            size += new Vector2(innerShrinkage * 2);
+            round4 += new Vector4(innerShrinkage);
+            BaseDraw(pos, size, ui, matrix =>
+            {
+                Effect effect = EffectAssets.RoundedRectangle;
+                effect.Parameters["uTransform"].SetValue(matrix);
+                effect.Parameters["uSize"].SetValue(size);
+                effect.Parameters["uSizeOver2"].SetValue(size / 2);
+                effect.Parameters["uRounded"].SetValue(round4);
+                effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
+                effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
+                effect.CurrentTechnique.Passes["NoBorder"].Apply();
+            });
         }
 
         public static void DrawShadow(Vector2 pos, Vector2 size, Vector4 round, Color backgroundColor, float shadow, bool ui = true)
@@ -144,7 +130,7 @@ namespace ImproveGame.Common.Animations
                 Effect effect = EffectAssets.RoundedRectangle;
                 effect.Parameters["uSize"].SetValue(size);
                 effect.Parameters["uSizeOver2"].SetValue(size / 2);
-                effect.Parameters["uRounded"].SetValue(round);
+                effect.Parameters["uRounded"].SetValue(round + new Vector4(shadow));
                 effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
                 effect.Parameters["uShadowSize"].SetValue(shadow);
                 effect.CurrentTechnique.Passes["Shadow"].Apply();

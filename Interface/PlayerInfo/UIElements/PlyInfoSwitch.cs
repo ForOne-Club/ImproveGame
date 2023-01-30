@@ -17,15 +17,15 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
 
             Relative = RelativeMode.Horizontal;
             Wrap = true;
-            Round4 = new Vector4(10f, 0, 0, 0);
+            Rounded = new Vector4(10f, 0, 0, 0);
         }
 
         public override void DrawSelf(SpriteBatch sb)
         {
             base.DrawSelf(sb);
-            Vector2 pos = GetDimensions().Position() - new Vector2(Extension.X, Extension.Y);
-            Vector2 size = GetDimensions().Size() + new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);
-            PixelShader.RoundedRectangle(pos, size, Round4, _background, 2, _border);
+            Vector2 pos = GetDimensions().Position() ;
+            Vector2 size = GetDimensions().Size() ;
+            PixelShader.RoundedRectangle(pos, size, Rounded, _background, 2, _border);
 
             if (_expanded is not null)
             {

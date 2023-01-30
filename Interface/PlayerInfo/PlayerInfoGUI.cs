@@ -63,7 +63,7 @@ namespace ImproveGame.Interface.PlayerInfo
             _titlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
             {
                 DragIgnore = true,
-                Round4 = new Vector4(10f, 10f, 0f, 0f),
+                Rounded = new Vector4(10f, 10f, 0f, 0f),
             };
             _titlePanel.Width.Precent = 1f;
             _titlePanel.Height.Pixels = 50f;
@@ -82,7 +82,6 @@ namespace ImproveGame.Interface.PlayerInfo
 
             _title = new SUITitle(PlyInfo("Name"), 0.5f)
             {
-                background = Color.Transparent,
                 VAlign = 0.5f,
                 Relative = RelativeMode.Horizontal
             };
@@ -177,7 +176,7 @@ namespace ImproveGame.Interface.PlayerInfo
             }
 
             float round = MathHelper.Lerp(10f, 0, _openTimer.Schedule);
-            _switch.Round4.Z = _titlePanel.Round4.Z = _titlePanel.Round4.W = round;
+            _switch.Rounded.Z = _titlePanel.Rounded.Z = _titlePanel.Rounded.W = round;
 
             float spacingX = MathHelper.Lerp(0, -_switch.Width.Pixels, _openTimer.Schedule);
             float hAlign = MathHelper.Lerp(0, 0.5f, _openTimer.Schedule);

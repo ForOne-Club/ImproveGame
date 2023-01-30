@@ -12,18 +12,23 @@ namespace ImproveGame.Common.Configs
         public override ConfigScope Mode => ConfigScope.ClientSide;
         public override void OnLoaded() => Instance = this;
 
-        [Label($"${path}.TextDrawOffsetY.Label")]
-        [DefaultValue(5f)]
-        [Range(0, 5f)]
+        [Label($"${path}.ResetNativeUI.Label")]
+        [ReloadRequired]
+        public bool ResetNativeUI;
+
+        [Label($"${path}.GeneralFontOffsetY.Label")]
+        [DefaultValue(7f)]
+        [Range(0, 10f)]
         [Slider]
         [Increment(0.5f)]
-        public float TextDrawOffsetY;
+        public float GeneralFontOffsetY;
 
-        [Label($"${path}.ThemeStyle.Label")]
-        [DefaultValue(0)]
-        [Range(0, 1)]
+        [Label($"${path}.BigFontOffsetY.Label")]
+        [DefaultValue(16f)]
+        [Range(0, 20f)]
         [Slider]
-        public int ThemeStyle;
+        [Increment(0.5f)]
+        public float BigFontOffsetY;
 
         [Label($"${path}.ShowMoreData.Label")]
         [DefaultValue(false)]
