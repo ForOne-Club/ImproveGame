@@ -8,7 +8,7 @@ namespace ImproveGame.Interface.SUIElements
     {
         private string text;
         public Vector2 textSize;
-        private float textScale;
+        private float _textScale;
         public Color textColor;
         public Color textBorderColor;
 
@@ -18,20 +18,17 @@ namespace ImproveGame.Interface.SUIElements
             set
             {
                 text = value;
-                textSize = GetFontSize(text, true) * textScale;
+                textSize = GetFontSize(text, true) * _textScale;
             }
         }
 
         public SUITitle(string text, float textScale)
         {
-            this.textScale = textScale;
+            _textScale = textScale;
             Text = text;
-            SetPadding(20f, 5f);
             DragIgnore = true;
-
             Rounded = new Vector4(10f);
-            BgColor = UIColor.TitleBg;
-
+            SetPadding(20f, 5f);
             SetInnerPixels(textSize);
         }
 
@@ -40,7 +37,7 @@ namespace ImproveGame.Interface.SUIElements
             base.DrawSelf(sb);
             Vector2 innerPos = GetInnerDimensions().Position();
             Vector2 innerSize = GetInnerDimensions().Size();
-            Utils.DrawBorderStringBig(sb, text, innerPos + (innerSize - textSize) / 2f + new Vector2(0, UIConfigs.Instance.BigFontOffsetY * textScale), Color.White, textScale);
+            Utils.DrawBorderStringBig(sb, text, innerPos + (innerSize - textSize) / 2f + new Vector2(0, UIConfigs.Instance.BigFontOffsetY * _textScale), Color.White, _textScale);
         }
     }
 }

@@ -201,7 +201,7 @@ namespace ImproveGame.Interface.BaseViews
 
         public Vector2 GetPosPixel()
         {
-            return new Vector2(Left.Pixels + Top.Pixels);
+            return new Vector2(Left.Pixels, Top.Pixels);
         }
 
         public Vector2 GetDimensionsSize()

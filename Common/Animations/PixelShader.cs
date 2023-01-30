@@ -81,25 +81,6 @@ namespace ImproveGame.Common.Animations
             });
         }
 
-        public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, bool ui = true)
-        {
-            float innerShrinkage = 1;
-            pos -= new Vector2(innerShrinkage);
-            size += new Vector2(innerShrinkage * 2);
-            round4 += new Vector4(innerShrinkage);
-            BaseDraw(pos, size, ui, matrix =>
-            {
-                Effect effect = EffectAssets.RoundedRectangle;
-                effect.Parameters["uTransform"].SetValue(matrix);
-                effect.Parameters["uSize"].SetValue(size);
-                effect.Parameters["uSizeOver2"].SetValue(size / 2);
-                effect.Parameters["uRounded"].SetValue(round4);
-                effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
-                effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
-                effect.CurrentTechnique.Passes["NoBorder"].Apply();
-            });
-        }
-
         public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, float border,
             Color borderColor, bool ui = true)
         {
@@ -120,6 +101,25 @@ namespace ImproveGame.Common.Animations
                 effect.Parameters["uBorderColor"].SetValue(borderColor.ToVector4());
                 effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
                 effect.CurrentTechnique.Passes["HasBorder"].Apply();
+            });
+        }
+
+        public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, bool ui = true)
+        {
+            float innerShrinkage = 1;
+            pos -= new Vector2(innerShrinkage);
+            size += new Vector2(innerShrinkage * 2);
+            round4 += new Vector4(innerShrinkage);
+            BaseDraw(pos, size, ui, matrix =>
+            {
+                Effect effect = EffectAssets.RoundedRectangle;
+                effect.Parameters["uTransform"].SetValue(matrix);
+                effect.Parameters["uSize"].SetValue(size);
+                effect.Parameters["uSizeOver2"].SetValue(size / 2);
+                effect.Parameters["uRounded"].SetValue(round4);
+                effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
+                effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
+                effect.CurrentTechnique.Passes["NoBorder"].Apply();
             });
         }
 

@@ -82,7 +82,6 @@ namespace ImproveGame.Interface.PlayerInfo
 
             _title = new SUITitle(PlyInfo("Name"), 0.5f)
             {
-                BgColor = Color.Transparent,
                 VAlign = 0.5f,
                 Relative = RelativeMode.Horizontal
             };

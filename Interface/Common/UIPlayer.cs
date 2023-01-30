@@ -30,8 +30,10 @@ namespace ImproveGame.Interface.Common
             uiSystem.BigBagTrigger.SetCarrier(uiSystem.BigBagGUI);
 
             uiSystem.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
-            if (HugeInventoryUIPosition == Vector2.Zero)
-                HugeInventoryUIPosition = new Vector2(150, 340);
+            if (HugeInventoryUIPosition.X <= 0 && HugeInventoryUIPosition.X >= Main.screenWidth)
+                HugeInventoryUIPosition.X = 150;
+            if (HugeInventoryUIPosition.Y <= 0 && HugeInventoryUIPosition.Y >= Main.screenHeight)
+                HugeInventoryUIPosition.Y = 340;
             uiSystem.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
         }
     }

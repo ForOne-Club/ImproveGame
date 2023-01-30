@@ -36,33 +36,18 @@ namespace ImproveGame.Interface.SUIElements
             Rounded = new Vector4(rounded);
         }
 
-        public SUIPanel(Color backgroundColor, Color borderColor, Vector4 rounded, float border, bool Draggable = false)
+        public SUIPanel(Color backgroundColor, Color borderColor, Vector4 rounded, float border, bool draggable = false)
         {
             SetPadding(10f);
             DragIgnore = true;
             ShadowThickness = 40f;
             ShadowColor = borderColor * 0.5f;
-            this.Draggable = Draggable;
+            Draggable = draggable;
 
             Border = border;
             BorderColor = borderColor;
             BgColor = backgroundColor;
             Rounded = rounded;
-        }
-
-        public override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            Vector2 pos = GetDimensions().Position();
-            Vector2 size = GetDimensions().Size();
-            Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
-            Vector2 shadowPos = pos - ShadowThickness;
-            Vector2 shadowSize = size + ShadowThickness * 2;
-
-            if (Shaded)
-            {
-                PixelShader.DrawShadow(shadowPos, shadowSize, Rounded, ShadowColor, this.ShadowThickness);
-            }
-            base.DrawSelf(spriteBatch);
         }
 
         public override void MouseDown(UIMouseEvent evt)
@@ -78,7 +63,7 @@ namespace ImproveGame.Interface.SUIElements
                 return;
             }
 
-            Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
+            Offset = evt.MousePosition - GetPosPixel();
             Dragging = true;
         }
 
@@ -96,13 +81,31 @@ namespace ImproveGame.Interface.SUIElements
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
+        }
 
-            if (!Dragging)
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (Dragging)
             {
-                return;
+                SetPosPixels(Main.mouseX - Offset.X, Main.mouseY - Offset.Y).Recalculate();
             }
 
-            SetPosPixels(Main.mouseX - Offset.X, Main.mouseY - Offset.Y).Recalculate();
+            base.Draw(spriteBatch);
+        }
+
+        public override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            Vector2 pos = GetDimensions().Position();
+            Vector2 size = GetDimensions().Size();
+            Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
+            Vector2 shadowPos = pos - ShadowThickness;
+            Vector2 shadowSize = size + ShadowThickness * 2;
+
+            if (Shaded)
+            {
+                PixelShader.DrawShadow(shadowPos, shadowSize, Rounded, ShadowColor, this.ShadowThickness);
+            }
+            base.DrawSelf(spriteBatch);
         }
     }
 }

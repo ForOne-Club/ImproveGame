@@ -53,8 +53,7 @@ namespace ImproveGame.Interface.BannerChest
 
             _title = new SUITitle("中文|Chinese", 0.5f)
             {
-                VAlign = 0.5f,
-                BgColor = Color.Transparent
+                VAlign = 0.5f
             };
             _title.SetPadding(20, 0, 10, 0);
             _title.SetInnerPixels(_title.textSize);

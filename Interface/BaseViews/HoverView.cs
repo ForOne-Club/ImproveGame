@@ -47,6 +47,7 @@ namespace ImproveGame.Interface.BaseViews
             Color color = Color.Lerp(beginColor, endColor, hoverTimer.Schedule);
 
             PixelShader.RoundedRectangle(pos - shadow, size + shadow * 2, Rounded + new Vector4(shadow.X), color);
+            base.DrawSelf(sb);
         }
     }
 }
