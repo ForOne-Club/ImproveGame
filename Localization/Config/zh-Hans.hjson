@@ -469,8 +469,9 @@
             '''
     }
     UIConfigs.Label: "图形界面设置"
-    TextDrawOffsetY.Label: "[centeritem:1543] MOD UI 文字Y轴绘制偏移"
-    ThemeStyle.Label: "[centeritem:1544] 主题色 (每次切换需要重新进入地图)"
+    ResetNativeUI.Label: "[centeritem:1544] 重置原生用户界面"
+    GeneralFontOffsetY.Label: "[centeritem:1543] 用户界面普通字体 Y 轴偏移"
+    BigFontOffsetY.Label: "[centeritem:1543] 用户界面大型字体 Y 轴偏移"
     ShowMoreData.Label: "[centeritem:1344] 显示调试数据"
     PlyInfo:{
         Label: "[centeritem:3124] 角色属性面板"

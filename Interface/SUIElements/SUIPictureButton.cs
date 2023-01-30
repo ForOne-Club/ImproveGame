@@ -41,7 +41,7 @@ namespace ImproveGame.Interface.SUIElements
 
             // Because border is 2, so: X + 2.
             Vector2 textPos = innerPos + new Vector2(_texture.Size().X + 2 + IconAndTextSpacing, (innerSize.Y - _textSize.Y) / 2);
-            textPos.Y += UIConfigs.Instance.TextDrawOffsetY;
+            textPos.Y += UIConfigs.Instance.GeneralFontOffsetY;
             TrUtils.DrawBorderString(spriteBatch, _text, textPos, Color.White);
         }
     }

@@ -104,7 +104,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
 
             if (!Item.IsAir && Item.stack > 1)
             {
-                Vector2 textSize = MouseTextSize(Item.stack.ToString()) * 0.75f;
+                Vector2 textSize = GetFontSize(Item.stack) * 0.75f;
                 Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
                 TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
             }

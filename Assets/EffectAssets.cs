@@ -1,27 +1,22 @@
-﻿namespace ImproveGame.Assets
+﻿using System.Reflection;
+
+namespace ImproveGame.Assets
 {
-    public class EffectAssets : ModSystem
+    // 在这里加一个 internal 就不用再给字段设置了
+    internal class EffectAssets : ModSystem
     {
-        // internal static Asset<Effect> BetterFiltering;
-
-        // 线
+        public static EffectPass SpriteEffectPass { get; private set; }
         public static Effect Line { get; private set; }
-
-        // 圆角矩形
         public static Effect RoundedRectangle { get; private set; }
-
-        // 圆形
         public static Effect Round { get; private set; }
-
-        // 叉号
         public static Effect Cross { get; private set; }
 
-        internal static Asset<Effect> LiquidSurface;
-        internal static Asset<Effect> Transform;
-        internal static Asset<Texture2D> Perlin;
+        public static Asset<Effect> LiquidSurface;
+        public static Asset<Effect> Transform;
+        public static Asset<Texture2D> Perlin;
 
-        internal static Texture2D Shader1, Shader2, Shader3;
-        internal static Effect Effect1;
+        public static Texture2D Shader1, Shader2, Shader3;
+        public static Effect Effect1;
 
         public override void Unload()
         {
@@ -38,6 +33,8 @@
 
             Shader1 = Shader2 = Shader3 = null;
             Effect1 = null;
+
+            SpriteEffectPass = null;
         }
 
         public override void Load()
@@ -56,50 +53,14 @@
             Cross = GetEffect("Cross").Value;
             Line = GetEffect("Line").Value;
 
+            FieldInfo fieldInfo = typeof(SpriteBatch).GetField("spriteEffectPass",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            SpriteEffectPass = (EffectPass)fieldInfo.GetValue(Main.spriteBatch);
+
             // BetterFiltering = GetEffect("BetterFiltering");
             LiquidSurface = GetEffect("LiquidSurface");
             Transform = GetEffect("Transform");
             Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");
-
-            // 修改原版 UI 的绘制
-            /*On.Terraria.GameContent.UI.Elements.UIPanel.DrawSelf += UIPanel_DrawSelf;
-            On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawBar += (_, _, _, _, _, _) => { };
-            On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawSelf += UIScrollbar_DrawSelf;*/
-            // 替换游戏内原来的 Utils.DrawInvBG
-            // On.Terraria.Utils.DrawInvBG_SpriteBatch_int_int_int_int_Color += Utils_DrawInvBG_SpriteBatch_int_int_int_int_Color;
         }
-
-        /*private void Utils_DrawInvBG_SpriteBatch_int_int_int_int_Color(
-            On.Terraria.Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y,
-            int w, int h, Color c)
-        {
-            PixelShader.DrawRoundRect(new Vector2(x, y), new Vector2(w, h), 10, c, 2, UIColor.PackgeBorder);
-        }
-
-        // 原版滚动条绘制，在 DrawBar 返回空阻止原版滚动条绘制。然后通过反射获取滚动条位置进行绘制。
-        private void UIScrollbar_DrawSelf(On.Terraria.GameContent.UI.Elements.UIScrollbar.orig_DrawSelf orig,
-            UIScrollbar self, SpriteBatch spriteBatch)
-        {
-            Vector2 pos = self.GetDimensions().Position();
-            Vector2 size = self.GetDimensions().Size();
-            orig.Invoke(self, spriteBatch);
-            PixelShader.DrawRoundRect(pos, size, MathF.Min(size.X, size.Y) / 2, UIColor.ScrollBarBg, 2,
-                UIColor.PanelBorder);
-            MethodInfo methodInfo = self.GetType()
-                .GetMethod("GetHandleRectangle", BindingFlags.NonPublic | BindingFlags.Instance);
-            Rectangle rectangle = (Rectangle)methodInfo.Invoke(self, null);
-            pos = rectangle.TopLeft();
-            pos += new Vector2(5f);
-            size = rectangle.Size() - new Vector2(10f);
-            PixelShader.DrawRoundRect(pos, size, MathF.Min(size.X, size.Y) / 2, new(220, 220, 220));
-        }
-
-        private void UIPanel_DrawSelf(On.Terraria.GameContent.UI.Elements.UIPanel.orig_DrawSelf orig, UIPanel self,
-            SpriteBatch spriteBatch)
-        {
-            Vector2 pos = self.GetDimensions().Position();
-            Vector2 size = self.GetDimensions().Size();
-            PixelShader.DrawRoundRect(pos, size, 12, self.BackgroundColor, 2, self.BorderColor);
-        }*/
     }
 }

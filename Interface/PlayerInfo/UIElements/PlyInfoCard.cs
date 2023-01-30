@@ -63,13 +63,13 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             BigBagItemSlot.DrawItemIcon(sb, _icon, Color.White, iconPos, _icon.Size() / 2f, 30);
 
             Vector2 textPos = innerPos + new Vector2(30 + 4,
-                UIConfigs.Instance.TextDrawOffsetY + (innerSize.Y - _textSize.Y) / 2);
+                UIConfigs.Instance.GeneralFontOffsetY + (innerSize.Y - _textSize.Y) / 2);
             DrawString(textPos, Text, Color.White, Color.Black);
 
             string infoText = _textFunc();
-            Vector2 infoSize = MouseTextSize(infoText);
+            Vector2 infoSize = GetFontSize(infoText);
             Vector2 infoPos = innerPos + new Vector2(innerSize.X - infoSize.X,
-                UIConfigs.Instance.TextDrawOffsetY + (innerSize.Y - infoSize.Y) / 2);
+                UIConfigs.Instance.GeneralFontOffsetY + (innerSize.Y - infoSize.Y) / 2);
             DrawString(infoPos, infoText, Color.White, Color.Black);
         }
     }

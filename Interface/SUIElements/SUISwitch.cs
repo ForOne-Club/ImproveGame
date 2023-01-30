@@ -26,7 +26,7 @@ namespace ImproveGame.Interface.SUIElements
         public SUISwitch(Func<bool> getState, Action<bool> setState, string text, float textScale = 1f)
         {
             _text = text;
-            _textSize = MouseTextSize(text);
+            _textSize = GetFontSize(text);
             _textScale = textScale;
             _getState = getState;
             _setState = setState;
@@ -81,7 +81,7 @@ namespace ImproveGame.Interface.SUIElements
 
             DrawString(
                 position + new Vector2(boxSize.X + InnerRowSpacing * _textScale,
-                    size.Y / 2 - _textSize.Y * _textScale / 2 + UIConfigs.Instance.TextDrawOffsetY * _textScale), _text,
+                    size.Y / 2 - _textSize.Y * _textScale / 2 + UIConfigs.Instance.GeneralFontOffsetY * _textScale), _text,
                 _textColor,
                 _textBorderColor, _textScale);
         }

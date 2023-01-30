@@ -20,7 +20,7 @@ namespace ImproveGame.Interface.SUIElements
             set
             {
                 text = value;
-                textSize = GetBigTextSize(text) * textScale;
+                textSize = GetFontSize(text, true) * textScale;
             }
         }
 
@@ -45,7 +45,7 @@ namespace ImproveGame.Interface.SUIElements
 
             Vector2 innerPos = GetInnerDimensions().Position();
             Vector2 innerSize = GetInnerDimensions().Size();
-            Utils.DrawBorderStringBig(sb, text, innerPos + (innerSize - textSize) / 2f + new Vector2(0, UIConfigs.Instance.TextDrawOffsetY * 3 * textScale), Color.White, textScale);
+            Utils.DrawBorderStringBig(sb, text, innerPos + (innerSize - textSize) / 2f + new Vector2(0, UIConfigs.Instance.BigFontOffsetY * textScale), Color.White, textScale);
         }
     }
 }

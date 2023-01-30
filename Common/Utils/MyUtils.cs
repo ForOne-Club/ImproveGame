@@ -3,6 +3,7 @@ using ImproveGame.Common.Packets;
 using ImproveGame.Common.Players;
 using System.Reflection;
 using Terraria.GameInput;
+using Terraria.UI.Chat;
 using static Microsoft.Xna.Framework.Vector2;
 
 namespace ImproveGame
@@ -12,14 +13,27 @@ namespace ImproveGame
     /// </summary>
     partial class MyUtils
     {
-        public static Vector2 MouseTextSize(string text)
+        public static Vector2 GetFontSize(int text, bool large = false)
         {
+            return GetFontSize(text.ToString(), large);
+        }
+
+        public static Vector2 GetFontSize(string text, bool large = false)
+        {
+            if (large)
+            {
+                return FontAssets.DeathText.Value.MeasureString(text);
+            }
             return FontAssets.MouseText.Value.MeasureString(text);
         }
 
-        public static Vector2 GetBigTextSize(string text)
+        public static Vector2 GetChatFontSize(string text, float textScale, bool large = false)
         {
-            return FontAssets.DeathText.Value.MeasureString(text);
+            if (large)
+            {
+                return ChatManager.GetStringSize(FontAssets.DeathText.Value, text, new Vector2(1f)) * textScale;
+            }
+            return ChatManager.GetStringSize(FontAssets.MouseText.Value, text, new Vector2(1f)) * textScale;
         }
 
         public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f)
@@ -111,7 +125,7 @@ namespace ImproveGame
                 return false;
             }
             var keybindListItem = new UIKeybindingListItem(keys[0], InputMode.Keyboard, Color.White);
-            bindName = keybindListItem.GenInput(keys); 
+            bindName = keybindListItem.GenInput(keys);
             // StringBuilder sb = new(16);
             // sb.Append(keys[0]);
             // for (int i = 1; i < keys.Count; i++)
@@ -557,13 +571,13 @@ namespace ImproveGame
         /// <param name="inv"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static bool HasItemSpace(Item[] inv, Item item,ref bool hasItem,ref bool airSlot,ref bool canStack)
+        public static bool HasItemSpace(Item[] inv, Item item, ref bool hasItem, ref bool airSlot, ref bool canStack)
         {
             if (inv == null)
             {
                 return false;
             }
-            
+
             foreach (var invItem in inv)
             {
                 airSlot = invItem == null || invItem.IsAir;
