@@ -1,9 +1,8 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.Common;
+﻿using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUIBackgroundImage : UIElement
+    public class SUIBackgroundImage : View
     {
         private Texture2D texture;
         private Vector2 textureSize;
@@ -26,6 +25,9 @@ namespace ImproveGame.Interface.SUIElements
             PaddingBottom = 5;
             Width.Pixels = textureSize.X + this.HPadding();
             Height.Pixels = textureSize.Y + this.VPadding();
+
+            Rounded = new Vector4(10f);
+            BgColor = UIColor.TitleBg;
         }
 
         public override void MouseOver(UIMouseEvent evt)
@@ -36,15 +38,9 @@ namespace ImproveGame.Interface.SUIElements
 
         public override void DrawSelf(SpriteBatch sb)
         {
-            CalculatedStyle rectangle = GetDimensions();
-            Vector2 position = rectangle.Position();
-            Vector2 size = rectangle.Size();
-
-            PixelShader.RoundedRectangle(position, size, 10, UIColor.TitleBg);
-
-            rectangle = GetInnerDimensions();
-            position = rectangle.Position();
-            size = rectangle.Size();
+            base.DrawSelf(sb);
+            Vector2 position = GetInnerDimensions().Position();
+            Vector2 size = GetInnerDimensions().Size();
             sb.Draw(Texture, position + size / 2 - textureSize / 2f, IsMouseHovering ? Color.White : Color.White * 0.5f);
         }
 

@@ -71,7 +71,7 @@ namespace ImproveGame.Interface.GUI
                 DragIgnore = true,
                 Width = new StyleDimension(0f, 1f),
                 Height = new StyleDimension(50f, 0f),
-                Round4 = new Vector4(10f, 10f, 0f, 0f),
+                Rounded = new Vector4(10f, 10f, 0f, 0f),
                 Relative = RelativeMode.Vertical
             };
             TitlePanel.SetPadding(0f);
@@ -81,7 +81,7 @@ namespace ImproveGame.Interface.GUI
             Title = new SUITitle(GetText("SuperVault.Name"), 0.5f)
             {
                 VAlign = 0.5f,
-                background = Color.Transparent
+                BgColor = Color.Transparent
             };
             Title.Join(TitlePanel);
 
@@ -93,7 +93,7 @@ namespace ImproveGame.Interface.GUI
                 Height = new StyleDimension(0f, 1f),
                 beginBg = UIColor.TitleBg2,
                 endBg = UIColor.TitleBg2,
-                Round4 = new Vector4(0f, 10f, 0f, 0f)
+                Rounded = new Vector4(0f, 10f, 0f, 0f)
             };
             Cross.OnMouseDown += (_, _) => Close();
             Cross.Join(TitlePanel);

@@ -11,8 +11,6 @@ namespace ImproveGame.Interface.SUIElements
         private float textScale;
         public Color textColor;
         public Color textBorderColor;
-        public Color background;
-        public Color border;
 
         public string Text
         {
@@ -27,22 +25,19 @@ namespace ImproveGame.Interface.SUIElements
         public SUITitle(string text, float textScale)
         {
             this.textScale = textScale;
-            this.Text = text;
-            background = UIColor.TitleBg;
+            Text = text;
             SetPadding(20f, 5f);
             DragIgnore = true;
-            Round = 10f;
+
+            Rounded = new Vector4(10f);
+            BgColor = UIColor.TitleBg;
 
             SetInnerPixels(textSize);
         }
 
         public override void DrawSelf(SpriteBatch sb)
         {
-            Vector2 pos = GetDimensions().Position();
-            Vector2 size = GetDimensions().Size();
-
-            PixelShader.RoundedRectangle(pos, size, Round4, background, 2, border);
-
+            base.DrawSelf(sb);
             Vector2 innerPos = GetInnerDimensions().Position();
             Vector2 innerSize = GetInnerDimensions().Size();
             Utils.DrawBorderStringBig(sb, text, innerPos + (innerSize - textSize) / 2f + new Vector2(0, UIConfigs.Instance.BigFontOffsetY * textScale), Color.White, textScale);

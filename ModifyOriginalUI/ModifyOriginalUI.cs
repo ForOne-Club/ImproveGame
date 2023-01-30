@@ -4,6 +4,7 @@ using ImproveGame.Interface.Common;
 using MonoMod.RuntimeDetour.HookGen;
 using System.Reflection;
 using System.Text;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI.States;
 
 namespace ImproveGame.ModifyOriginalUI
@@ -88,7 +89,7 @@ namespace ImproveGame.ModifyOriginalUI
             On.Terraria.Utils.DrawInvBG_SpriteBatch_int_int_int_int_Color += Utils_DrawInvBG;
         }
 
-        private UIElement FlavorTextBestiaryInfoElement_ProvideUIElement(On.Terraria.GameContent.Bestiary.FlavorTextBestiaryInfoElement.orig_ProvideUIElement orig, Terraria.GameContent.Bestiary.FlavorTextBestiaryInfoElement self, Terraria.GameContent.Bestiary.BestiaryUICollectionInfo info)
+        private UIElement FlavorTextBestiaryInfoElement_ProvideUIElement(On.Terraria.GameContent.Bestiary.FlavorTextBestiaryInfoElement.orig_ProvideUIElement orig, FlavorTextBestiaryInfoElement self, BestiaryUICollectionInfo info)
         {
             UIElement uie = orig.Invoke(self, info);
             uie.PaddingTop = 0f;
@@ -228,7 +229,7 @@ namespace ImproveGame.ModifyOriginalUI
             On.Terraria.Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y,
             int w, int h, Color c)
         {
-            PixelShader.RoundedRectangle(new Vector2(x, y), new Vector2(w, h), 10, c, 2, UIColor.PackgeBorder);
+            PixelShader.RoundedRectangle(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), c, 2, UIColor.PackgeBorder);
         }
 
         private static CalculatedStyle GetHandleCalculatedStyle(UIScrollbar scrollbar)
@@ -266,12 +267,12 @@ namespace ImproveGame.ModifyOriginalUI
                 SoundEngine.PlaySound(SoundID.MenuTick);
             }
             float bgRounded = MathF.Min(size.X, size.Y) / 2;
-            PixelShader.RoundedRectangle(pos, size, bgRounded, UIColor.ScrollBarBg, 2, UIColor.PanelBorder);
+            PixelShader.RoundedRectangle(pos, size, new Vector4(bgRounded), UIColor.ScrollBarBg, 2, UIColor.PanelBorder);
             CalculatedStyle barDimensions = GetHandleCalculatedStyle(self);
             Vector2 barPos = barDimensions.Position() + new Vector2(5, 3);
             Vector2 barSize = barDimensions.Size() - new Vector2(10, 7);
             float barRounded = MathF.Min(barSize.X, barSize.Y) / 2;
-            PixelShader.RoundedRectangle(barPos, barSize, barRounded, new(220, 220, 220));
+            PixelShader.RoundedRectangle(barPos, barSize, new Vector4(barRounded), new(220, 220, 220));
         }
 
         private void UIPanel_DrawSelf(On.Terraria.GameContent.UI.Elements.UIPanel.orig_DrawSelf orig, UIPanel self,
@@ -279,7 +280,7 @@ namespace ImproveGame.ModifyOriginalUI
         {
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
-            PixelShader.RoundedRectangle(pos, size, 10, self.BackgroundColor, 2, self.BorderColor);
+            PixelShader.RoundedRectangle(pos, size, new Vector4(10f), self.BackgroundColor, 2, self.BorderColor);
         }
 
         private static void PrintParent(UIElement self, UIElement target)

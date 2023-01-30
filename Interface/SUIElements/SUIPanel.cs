@@ -1,6 +1,4 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.BaseViews;
-using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
@@ -22,53 +20,49 @@ namespace ImproveGame.Interface.SUIElements
         internal bool Dragging;
         internal Vector2 Offset;
 
-        public float border;
-        public Color borderColor;
-        public Color backgroundColor;
-
-        public SUIPanel(Color borderColor, Color backgroundColor, float round = 12, float border = 2,
-            bool Draggable = false)
+        public SUIPanel(Color borderColor, Color backgroundColor, float rounded = 12, float border = 2,
+            bool draggable = false)
         {
             SetPadding(10f);
+            Draggable = draggable;
             DragIgnore = true;
+
             ShadowThickness = 40f;
             ShadowColor = borderColor * 0.5f;
-            this.borderColor = borderColor;
-            this.backgroundColor = backgroundColor;
-            this.Round = round;
-            this.border = border;
-            this.Draggable = Draggable;
+
+            Border = border;
+            BorderColor = borderColor;
+            BgColor = backgroundColor;
+            Rounded = new Vector4(rounded);
         }
 
-        public SUIPanel(Color backgroundColor, Color borderColor, Vector4 round4, float border, bool Draggable = false)
+        public SUIPanel(Color backgroundColor, Color borderColor, Vector4 rounded, float border, bool Draggable = false)
         {
             SetPadding(10f);
             DragIgnore = true;
             ShadowThickness = 40f;
             ShadowColor = borderColor * 0.5f;
-            this.backgroundColor = backgroundColor;
-            this.borderColor = borderColor;
-            this.Round4 = round4;
-            this.border = border;
             this.Draggable = Draggable;
+
+            Border = border;
+            BorderColor = borderColor;
+            BgColor = backgroundColor;
+            Rounded = rounded;
         }
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
-            pos -= new Vector2(Extension.X, Extension.Y);
-            size += new Vector2(Extension.X + Extension.Z, Extension.Y + Extension.W);
             Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
             Vector2 shadowPos = pos - ShadowThickness;
             Vector2 shadowSize = size + ShadowThickness * 2;
 
             if (Shaded)
             {
-                PixelShader.DrawShadow(shadowPos, shadowSize, Round4, ShadowColor, this.ShadowThickness);
+                PixelShader.DrawShadow(shadowPos, shadowSize, Rounded, ShadowColor, this.ShadowThickness);
             }
-            PixelShader.RoundedRectangle(pos, size, Round4, backgroundColor, border, borderColor);
-
+            base.DrawSelf(spriteBatch);
         }
 
         public override void MouseDown(UIMouseEvent evt)

@@ -81,11 +81,6 @@ namespace ImproveGame.Common.Animations
             });
         }
 
-        public static void RoundedRectangle(Vector2 pos, Vector2 size, float round, Color backgroundColor, bool ui = true)
-        {
-            RoundedRectangle(pos, size, new Vector4(round), backgroundColor, ui);
-        }
-
         public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, bool ui = true)
         {
             float innerShrinkage = 1;
@@ -103,12 +98,6 @@ namespace ImproveGame.Common.Animations
                 effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
                 effect.CurrentTechnique.Passes["NoBorder"].Apply();
             });
-        }
-
-        public static void RoundedRectangle(Vector2 pos, Vector2 size, float round, Color backgroundColor, float border,
-            Color borderColor, bool ui = true)
-        {
-            RoundedRectangle(pos, size, new Vector4(round), backgroundColor, border, borderColor, ui);
         }
 
         public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, float border,

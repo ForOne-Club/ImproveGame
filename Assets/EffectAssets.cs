@@ -53,9 +53,7 @@ namespace ImproveGame.Assets
             Cross = GetEffect("Cross").Value;
             Line = GetEffect("Line").Value;
 
-            FieldInfo fieldInfo = typeof(SpriteBatch).GetField("spriteEffectPass",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            SpriteEffectPass = (EffectPass)fieldInfo.GetValue(Main.spriteBatch);
+            SpriteEffectPass = Main.spriteBatch.spriteEffectPass;
 
             // BetterFiltering = GetEffect("BetterFiltering");
             LiquidSurface = GetEffect("LiquidSurface");

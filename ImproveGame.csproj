@@ -16,6 +16,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <Publicize Include="tModLoader" />
+	  <Publicize Include="FNA" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="NetSimplified">

@@ -22,16 +22,16 @@ namespace ImproveGame.Interface.SUIElements
             SetPadding(18f, 0f);
             SetInnerPixels(_texture.Size().X + _textSize.X + 4 + IconAndTextSpacing, 40f);
             OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
+
+            Rounded = new Vector4(10f);
+            Border = 2f;
+            BgColor = UIColor.ButtonBg;
         }
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
+            BorderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, hoverTimer.Schedule);
             base.DrawSelf(spriteBatch);
-            Vector2 pos = GetDimensions().Position();
-            Vector2 size = GetDimensions().Size();
-
-            Color borderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, hoverTimer.Schedule);
-            PixelShader.RoundedRectangle(pos, size, 10, UIColor.ButtonBg, 2, borderColor);
 
             Vector2 innerPos = GetInnerDimensions().Position();
             Vector2 innerSize = GetInnerDimensionsSize();

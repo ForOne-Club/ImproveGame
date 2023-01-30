@@ -308,7 +308,7 @@ namespace ImproveGame.Interface.GUI
                 }
             }
 
-            BasePanel.backgroundColor = new(44, 57, 105, 160);
+            BasePanel.BgColor = new(44, 57, 105, 160);
             RefreshButton.SetImage(RefreshTexture);
             RefreshButton.HoverText = "{$Mods.ImproveGame.Common.Refresh}";
 
@@ -540,7 +540,7 @@ namespace ImproveGame.Interface.GUI
             UIList.Add(panel);
             #endregion
 
-            BasePanel.backgroundColor = new(49, 67, 125, 190);
+            BasePanel.BgColor = new(49, 67, 125, 190);
             RefreshButton.SetImage(BackTexture);
             RefreshButton.HoverText = "{$UI.Back}";
 

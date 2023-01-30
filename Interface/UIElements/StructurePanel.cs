@@ -116,7 +116,7 @@ namespace ImproveGame.Interface.UIElements
             };
             Append(RenameButton);
 
-            PathPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), round: 10)
+            PathPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), rounded: 10)
             {
                 Top = detailButton.Top,
                 OverflowHidden = true,
@@ -206,14 +206,14 @@ namespace ImproveGame.Interface.UIElements
 
             if (IsMouseHovering)
             {
-                borderColor = BorderSelectedColor;
-                backgroundColor = SelectedColor;
+                BorderColor = BorderSelectedColor;
+                BgColor = SelectedColor;
                 NameText.TextColor = Color.White;
             }
             else
             {
-                borderColor = BorderUnselectedColor;
-                backgroundColor = UnselectedColor;
+                BorderColor = BorderUnselectedColor;
+                BgColor = UnselectedColor;
                 NameText.TextColor = Color.LightGray;
             }
             if (WandSystem.ConstructFilePath == FilePath)

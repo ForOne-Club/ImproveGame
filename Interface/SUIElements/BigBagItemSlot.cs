@@ -34,6 +34,8 @@ namespace ImproveGame.Interface.SUIElements
             Relative = RelativeMode.Horizontal;
             Spacing = new Vector2(10, 10);
             Wrap = true;
+            Border = 2;
+            Rounded = new Vector4(12f);
         }
 
         public override void MouseDown(UIMouseEvent evt)
@@ -297,14 +299,10 @@ namespace ImproveGame.Interface.SUIElements
 
         public override void DrawSelf(SpriteBatch sb)
         {
-            CalculatedStyle dimensions = GetDimensions();
-            Vector2 pos = dimensions.Position();
-            Vector2 size = dimensions.Size();
-            Color borderColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
-            Color background = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBg;
-
-            PixelShader.RoundedRectangle(pos, size, 12, background, 2, borderColor);
-
+            BorderColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
+            BgColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBg;
+            base.DrawSelf(sb);
+            Vector2 pos = GetDimensions().Position();
             if (Item.IsAir)
                 return;
             if (IsMouseHovering)
@@ -314,7 +312,7 @@ namespace ImproveGame.Interface.SUIElements
                 SetCursorOverride();
             }
 
-            DrawItemIcon(sb, Item, Color.White, dimensions);
+            DrawItemIcon(sb, Item, Color.White, GetDimensions());
             if (Item.stack <= 1)
             {
                 return;
