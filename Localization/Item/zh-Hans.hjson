@@ -13,6 +13,7 @@
     ConstructWand: 构造魔杖
     MoveChest: 虚空魔杖
     CoinOne: 幸运金币
+    ExtremeStorage: 储存管理器
 }
 Mods.ImproveGame.ItemTooltip:
 {
@@ -132,5 +133,18 @@ Mods.ImproveGame.ItemTooltip:
         '''
         你是一个幸运的人!
         “看起来很畅销”
+        '''
+    ExtremeStorage:
+        '''
+        [c/cc2200:强烈建议看完以下介绍] 
+        用于更便捷地管理箱子中的物品
+        将其放置后，<right>以打开箱子管理面板
+        管理器内置了多个[c/0099ff:分类选项]，可用于更好地存取箱子内的物品
+        点击“{$Mods.ImproveGame.UI.ExtremeStorage.AddChest}”以将箱子添加到相应分类中
+        箱子分类依赖于箱子名称前的标识符，[c/0088dd:请勿随意更改箱子名称]
+        你还是要对物品手动分类，分类标签只是方便你进行分类
+        若开启了[c/0099ff:便携制作站]功能，则分类到“家具”内的物品会被视为便携制作站
+        若开启了[c/0099ff:药水无限续杯]功能，则玩家会获得分类到“炼药”内的物品相应的药水增益
+        [c/cc2200:多人模式下不建议放置多个管理器，可能会导致带宽需求增大] 
         '''
 }

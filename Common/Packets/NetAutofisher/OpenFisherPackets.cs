@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Content.Tiles;
-using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Packets.NetAutofisher
 {
@@ -10,12 +9,12 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     [AutoSync]
     public class OpenRequestPacket : NetModule
     {
-        private Point16 position;
+        private int tileEntityID;
 
-        public static OpenRequestPacket Get(Point16 position)
+        public static OpenRequestPacket Get(TEAutofisher fisher)
         {
             var module = NetModuleLoader.Get<OpenRequestPacket>();
-            module.position = position;
+            module.tileEntityID = fisher.ID;
             return module;
         }
 
@@ -24,20 +23,22 @@ namespace ImproveGame.Common.Packets.NetAutofisher
             for (int k = 0; k < Main.maxPlayers; k++)
             {
                 var player = Main.player[k];
-                if (player.active && !player.dead && player.TryGetModPlayer<AutofishPlayer>(out var modPlayer) && modPlayer.Autofisher == position)
+                if (player.active && !player.dead && player.TryGetModPlayer<AutofishPlayer>(out var modPlayer) &&
+                    modPlayer.Autofisher is not null && modPlayer.Autofisher.ID == tileEntityID)
                 {
                     return;
                 }
             }
 
-            if (!TryGetTileEntityAs<TEAutofisher>(position, out var autofisher))
+            if (!TryGetTileEntityAs<TEAutofisher>(tileEntityID, out var autofisher))
                 return;
 
             // 没玩家，发开箱包
             var packets = AggregateModule.Get(
-                new() {
+                new()
+                {
                     FisherAllFiltersPacket.Get(
-                        position,
+                        tileEntityID,
                         autofisher.CatchCrates,
                         autofisher.CatchAccessories,
                         autofisher.CatchTools,
@@ -45,11 +46,11 @@ namespace ImproveGame.Common.Packets.NetAutofisher
                         autofisher.CatchNormalCatches
                     ),
                     LocatePointPacket.Get(
-                        position,
+                        tileEntityID,
                         autofisher.locatePoint
                     ),
                     ItemsSyncAllPacket.Get(
-                        position,
+                        tileEntityID,
                         true,
                         autofisher.fishingPole,
                         autofisher.bait,
@@ -59,7 +60,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
                 }
             );
             // 服务器设置好
-            Main.player[Sender].GetModPlayer<AutofishPlayer>().SetAutofisher(position, false);
+            Main.player[Sender].GetModPlayer<AutofishPlayer>().SetAutofisher(autofisher, false);
             packets.Send(Sender, -1, false);
         }
     }
@@ -70,30 +71,32 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     [AutoSync]
     public class SyncOpenPacket : NetModule
     {
-        private Point16 position;
+        private int tileEntityID;
         private byte whoAmI;
 
-        public static SyncOpenPacket Get(Point16 position, int whoAmI)
+        public static SyncOpenPacket Get(int tileEntityID, int whoAmI)
         {
             var module = NetModuleLoader.Get<SyncOpenPacket>();
-            module.position = position;
+            module.tileEntityID = tileEntityID;
             module.whoAmI = (byte)whoAmI;
             return module;
         }
 
         public override void Receive()
         {
+            TryGetTileEntityAs<TEAutofisher>(tileEntityID, out var autofisher);
+
             if (Main.netMode is NetmodeID.MultiplayerClient)
             {
                 if (AutofishPlayer.TryGet(Main.player[whoAmI], out var modPlayer))
                 {
-                    modPlayer.SetAutofisher(new(position.X, position.Y), false);
+                    modPlayer.SetAutofisher(autofisher, false);
                 }
             }
             else
             {
                 // 服务端的设置好
-                Main.player[Sender].GetModPlayer<AutofishPlayer>().SetAutofisher(new(position.X, position.Y), false);
+                Main.player[Sender].GetModPlayer<AutofishPlayer>().SetAutofisher(autofisher, false);
                 // 给其他玩家发开关包
                 Send(-1, Sender, false);
             }

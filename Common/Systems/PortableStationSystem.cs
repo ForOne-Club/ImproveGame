@@ -1,10 +1,13 @@
-﻿using Mono.Cecil.Cil;
+﻿using ImproveGame.Content.Tiles;
+using ImproveGame.Interface.ExtremeStorage;
+using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Systems
 {
@@ -26,18 +29,34 @@ namespace ImproveGame.Common.Systems
             {
                 if (!Config.PortableCraftingStation)
                     return;
-                CheckStations(player);
+                
+                // 从玩家身上获取所有的无尽Buff物品
+                CheckStationsFromPlayer(player);
                 if (Config.ShareCraftingStation)
-                    CheckTeamPlayers(player.whoAmI, CheckStations);
+                    CheckTeamPlayers(player.whoAmI, CheckStationsFromPlayer);
+                
+                // 从TE中获取所有的无尽Buff物品
+                foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
+                {
+                    if (tileEntity is not TEExtremeStorage {UsePortableStations: true} storage)
+                    {
+                        continue;
+                    }
+
+                    var alchemyItems = storage.FindAllNearbyChestsWithGroup(ItemGroup.Furniture);
+                    alchemyItems.ForEach(i => CheckStations(Main.chest[i].item));
+                }
             });
         }
+
+        internal void CheckStationsFromPlayer(Player inventorySource) =>
+            CheckStations(GetAllInventoryItemsList(inventorySource, false));
 
         /// <summary>
         /// 从某个玩家的各种物品栏中拿效果
         /// </summary>
-        internal void CheckStations(Player inventorySource)
+        internal void CheckStations(IEnumerable<Item> items)
         {
-            var items = GetAllInventoryItemsList(inventorySource, false);
             foreach (var item in items)
             {
                 int tileType = item.createTile;
@@ -45,6 +64,7 @@ namespace ImproveGame.Common.Systems
                 {
                     CheckChainedStations(tileType, Main.LocalPlayer);
                 }
+
                 if (ModIntegrationsSystem.PortableStations.TryGetValue(item.type, out var tileIDs))
                 {
                     foreach (int tileID in tileIDs)
@@ -52,14 +72,17 @@ namespace ImproveGame.Common.Systems
                         CheckChainedStations(tileID, Main.LocalPlayer);
                     }
                 }
+
                 if (item.type is ItemID.WaterBucket or ItemID.BottomlessBucket)
                 {
                     Main.LocalPlayer.adjWater = true;
                 }
+
                 if (item.type is ItemID.LavaBucket or ItemID.BottomlessLavaBucket)
                 {
                     Main.LocalPlayer.adjLava = true;
                 }
+
                 if (item.type is ItemID.HoneyBucket /*or ItemID.BottomlessHoneyBucket*/)
                 {
                     Main.LocalPlayer.adjHoney = true;
@@ -75,14 +98,17 @@ namespace ImproveGame.Common.Systems
             {
                 player.adjWater = true;
             }
+
             if (TileID.Sets.CountsAsLavaSource[tileType])
             {
                 player.adjLava = true;
             }
+
             if (TileID.Sets.CountsAsHoneySource[tileType])
             {
                 player.adjHoney = true;
             }
+
             switch (tileType)
             {
                 case TileID.Hellforge:
@@ -107,6 +133,7 @@ namespace ImproveGame.Common.Systems
                     player.alchemyTable = true;
                     break;
             }
+
             TileLoader.AdjTiles(player, tileType);
         }
     }

@@ -1,8 +1,6 @@
 ﻿using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using NetSimplified.Syncing;
-using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.Packets.NetAutofisher
@@ -10,18 +8,18 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     [AutoSync]
     public class ItemsSyncAllPacket : NetModule
     {
-        private Point16 position;
+        private int tileEntityID;
         private bool isOpenFisher;
         private Item fishingPole;
         private Item bait;
         private Item accessory;
         private Item[] fish;
 
-        public static ItemsSyncAllPacket Get(Point16 position, bool isOpenFisher, Item fishingPole, Item bait,
+        public static ItemsSyncAllPacket Get(int tileEntityID, bool isOpenFisher, Item fishingPole, Item bait,
             Item accessory, Item[] fishes)
         {
             var module = NetModuleLoader.Get<ItemsSyncAllPacket>();
-            module.position = position;
+            module.tileEntityID = tileEntityID;
             module.isOpenFisher = isOpenFisher;
             module.fishingPole = fishingPole;
             module.bait = bait;
@@ -32,8 +30,8 @@ namespace ImproveGame.Common.Packets.NetAutofisher
 
         public override void Receive()
         {
-            if (TileLoader.GetTile(Main.tile[position.ToPoint()].TileType) is not Autofisher fisherTile ||
-                !TryGetTileEntityAs<TEAutofisher>(position, out var autofisher))
+            if (!TryGetTileEntityAs<TEAutofisher>(tileEntityID, out var autofisher) ||
+                TileLoader.GetTile(Main.tile[autofisher.Position.ToPoint()].TileType) is not Autofisher fisherTile)
             {
                 return;
             }
@@ -49,7 +47,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
                 if (isOpenFisher)
                 {
                     fisherTile.ServerOpenRequest = true;
-                    fisherTile.RightClick(position.X, position.Y);
+                    fisherTile.RightClick(autofisher.Position.X, autofisher.Position.Y);
                     return;
                 }
 
@@ -66,14 +64,14 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     [AutoSync]
     public class ItemsStackChangePacket : NetModule
     {
-        private Point16 position;
+        private int tileEntityID;
         private byte type;
         private int stackChange;
 
-        public static ItemsStackChangePacket Get(Point16 position, byte type, int stackChange)
+        public static ItemsStackChangePacket Get(int tileEntityID, byte type, int stackChange)
         {
             var module = NetModuleLoader.Get<ItemsStackChangePacket>();
-            module.position = position;
+            module.tileEntityID = tileEntityID;
             module.type = type;
             module.stackChange = stackChange;
             return module;
@@ -81,32 +79,34 @@ namespace ImproveGame.Common.Packets.NetAutofisher
 
         public override void Receive()
         {
-            if (TryGetTileEntityAs<TEAutofisher>(position, out var autofisher))
+            if (!TryGetTileEntityAs<TEAutofisher>(tileEntityID, out var autofisher))
             {
-                // 发送鱼
-                if (type <= 14)
-                {
-                    autofisher.fish[type].stack += stackChange;
-                }
+                return;
+            }
 
-                // 发送鱼饵
-                if (type == 16)
-                {
-                    autofisher.bait.stack += stackChange;
-                }
+            // 发送鱼
+            if (type <= 14)
+            {
+                autofisher.fish[type].stack += stackChange;
+            }
 
-                // 发送到其他的所有客户端
-                if (Main.netMode is NetmodeID.Server)
-                {
-                    ItemSyncPacket.Get(position, type).Send(ignoreClient: Sender, runLocally: false);
-                }
-                // 客户端刷新框
-                else
-                {
-                    AutofisherGUI.RequireRefresh = true;
-                    if (AutofisherGUI.Visible)
-                        UISystem.Instance.AutofisherGUI.RefreshItems();
-                }
+            // 发送鱼饵
+            if (type == 16)
+            {
+                autofisher.bait.stack += stackChange;
+            }
+
+            // 发送到其他的所有客户端
+            if (Main.netMode is NetmodeID.Server)
+            {
+                ItemSyncPacket.Get(tileEntityID, type).Send(ignoreClient: Sender, runLocally: false);
+            }
+            // 客户端刷新框
+            else
+            {
+                AutofisherGUI.RequireRefresh = true;
+                if (AutofisherGUI.Visible)
+                    UISystem.Instance.AutofisherGUI.RefreshItems();
             }
         }
     }
@@ -117,13 +117,13 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     [AutoSync]
     public class RequestItemPacket : NetModule
     {
-        private Point16 position;
+        private int tileEntityID;
         private byte type;
 
-        public static RequestItemPacket Get(Point16 position, byte type)
+        public static RequestItemPacket Get(int tileEntityID, byte type)
         {
             var module = NetModuleLoader.Get<RequestItemPacket>();
-            module.position = position;
+            module.tileEntityID = tileEntityID;
             module.type = type;
             return module;
         }
@@ -133,7 +133,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
         /// </summary>
         public override void Receive()
         {
-            ItemSyncPacket.Get(position, type).Send(Sender, -1, false);
+            ItemSyncPacket.Get(tileEntityID, type).Send(Sender, -1, false);
         }
     }
 
@@ -142,19 +142,19 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     /// </summary>
     public class ItemSyncPacket : NetModule
     {
-        [AutoSync] private Point16 position;
+        [AutoSync] private int tileEntityID;
         [AutoSync] private byte type;
         private Item fishingPole = null;
         private Item bait = null;
         private Item accessory = null;
         private Item[] fish = new Item[15];
 
-        public static ItemSyncPacket Get(Point16 position, byte type)
+        public static ItemSyncPacket Get(int tileEntityID, byte type)
         {
             var module = NetModuleLoader.Get<ItemSyncPacket>();
-            module.position = position;
+            module.tileEntityID = tileEntityID;
             module.type = type;
-            TryGetTileEntityAs<TEAutofisher>(position, out var autofisher);
+            TryGetTileEntityAs<TEAutofisher>(tileEntityID, out var autofisher);
             module.fishingPole = autofisher.fishingPole;
             module.bait = autofisher.bait;
             module.accessory = autofisher.accessory;
@@ -244,7 +244,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
 
         public override void Receive()
         {
-            if (TryGetTileEntityAs<TEAutofisher>(position, out var autofisher))
+            if (TryGetTileEntityAs<TEAutofisher>(tileEntityID, out var autofisher))
             {
                 if (type <= 14)
                     autofisher.fish[type] = fish[type];

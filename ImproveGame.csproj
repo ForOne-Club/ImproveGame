@@ -22,6 +22,9 @@
     <Reference Include="NetSimplified">
       <HintPath>lib\NetSimplified.dll</HintPath>
     </Reference>
+    <Reference Include="NPinyin">
+      <HintPath>lib\NPinyin.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib\" />

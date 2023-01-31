@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework.Input;
@@ -11,17 +12,19 @@ public class ChestPreviewUISystem : ModSystem
 {
     private static Item[] _previewItems;
     private static bool _hasChest;
+    private static int _syncCooldown;
 
     public override void Load()
     {
         On.Terraria.Player.TileInteractionsMouseOver += ChestDisplayMouseOver;
     }
 
-    private void ChestDisplayMouseOver(On.Terraria.Player.orig_TileInteractionsMouseOver orig, Player player, int myX, int myY)
+    private void ChestDisplayMouseOver(On.Terraria.Player.orig_TileInteractionsMouseOver orig, Player player, int myX,
+        int myY)
     {
         orig.Invoke(player, myX, myY);
 
-        if (myX != Player.tileTargetX || myY != Player.tileTargetY)
+        if (myX != Player.tileTargetX || myY != Player.tileTargetY || !Main.keyState.IsKeyDown(Keys.LeftAlt))
             return;
 
         var t = Main.tile[myX, myY];
@@ -46,10 +49,18 @@ public class ChestPreviewUISystem : ModSystem
             if (t.TileFrameY % 36 != 0)
                 originY--;
         }
+
         int chestIndex = Chest.FindChest(originX, originY);
-        if (chestIndex < 0 || !Main.keyState.IsKeyDown(Keys.LeftAlt))
+        if (chestIndex < 0 || Chest.IsLocked(originX, originY))
         {
             return;
+        }
+
+        _syncCooldown--;
+        if (_syncCooldown <= 0)
+        {
+            ChestItemOperation.RequestChestItem(chestIndex);
+            _syncCooldown = 60; // 防止发包太多
         }
 
         _previewItems = Main.chest[chestIndex].item;
@@ -63,7 +74,8 @@ public class ChestPreviewUISystem : ModSystem
         if (index != -1)
             layers.Insert(index + 1, new LegacyGameInterfaceLayer("ImproveGame: Chest Preview GUI", () =>
             {
-                if (Main.HoveringOverAnNPC || Main.LocalPlayer.mouseInterface || !_hasChest || _previewItems is null)
+                if (Main.HoveringOverAnNPC || Main.LocalPlayer.mouseInterface || !_hasChest || _previewItems is null ||
+                    _previewItems.Any(i => i is null))
                     return true;
 
                 _hasChest = false;
@@ -75,10 +87,12 @@ public class ChestPreviewUISystem : ModSystem
                     {
                         line += BgItemTagHandler.GenerateTag(_previewItems[i * 10 + j]);
                     }
+
                     list.Add(new(Mod, $"ChestItemLine_{i}", line));
                 }
-        
-                TagItem.DrawTooltips(new ReadOnlyCollection<TooltipLine>(new List<TooltipLine>()), list, Main.mouseX, Main.mouseY + 10);
+
+                TagItem.DrawTooltips(new ReadOnlyCollection<TooltipLine>(new List<TooltipLine>()), list, Main.mouseX,
+                    Main.mouseY + 10);
 
                 return true;
             }, InterfaceScaleType.UI));

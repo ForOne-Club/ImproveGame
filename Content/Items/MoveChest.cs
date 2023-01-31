@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Packets;
 using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Common.Players;
 using System.Collections.ObjectModel;

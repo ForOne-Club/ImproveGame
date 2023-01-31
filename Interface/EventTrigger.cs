@@ -86,6 +86,7 @@ namespace ImproveGame.Interface
 
         private readonly string _name, _layerName;
 
+        public ViewBody ViewBody { get => _body; protected set => _body = value; }
         private ViewBody _body;
         private Vector2 _mouse;
         private readonly UIElement[] _last;
@@ -118,17 +119,19 @@ namespace ImproveGame.Interface
 
         public void SetCarrier(ViewBody viewBody)
         {
-            if (viewBody is null || _body == viewBody)
+            if (_body == viewBody) return;
+
+            _body = viewBody;
+            if (viewBody is null)
             {
                 return;
             }
 
-            _body = viewBody;
             _body.Activate();
             _body.Recalculate();
         }
 
-        private void Update(GameTime gameTime)
+        protected virtual void Update(GameTime gameTime)
         {
             if (!_body?.Display ?? true)
             {
@@ -240,8 +243,8 @@ namespace ImproveGame.Interface
                 _pressed[2] = down[2] && !mouse;
             }
         }
-
-        private bool Draw()
+        
+        protected virtual bool Draw()
         {
             if (!_body?.Display ?? true)
             {

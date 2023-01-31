@@ -4,7 +4,9 @@
     {
         public static Color
             PanelBorder,
-            PanelBg;
+            PanelBg,
+            PanelBgLight,
+            PanelBgLightHover;
 
         public static Color
             ItemSlotBorderFav,
@@ -51,6 +53,8 @@
         {
             PanelBorder = new Color(20, 25, 60);
             PanelBg = new Color(44, 55, 105, 180);
+            PanelBgLight = new Color(55, 69, 126);
+            PanelBgLightHover = new Color(66, 85, 157);
 
             ItemSlotBorderFav = new Color(233, 176, 0, 180);
             ItemSlotBorder = new Color(18, 18, 38, 180);

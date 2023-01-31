@@ -15,14 +15,16 @@ namespace ImproveGame.Content.Tiles
             ModifyObjectData();
             ModTileEntity tileEntity = GetTileEntity();
             if (tileEntity is not null)
-                TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(tileEntity.Hook_AfterPlacement, -1, 0, false);
+                TileObjectData.newTile.HookPostPlaceMyPlayer =
+                    new PlacementHook(tileEntity.Hook_AfterPlacement, -1, 0, false);
             else
-                TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(TEAutofisher.Hook_AfterPlacement_NoEntity, -1, 0, false);
+                TileObjectData.newTile.HookPostPlaceMyPlayer =
+                    new PlacementHook(Hook_AfterPlacement_NoEntity, -1, 0, false);
 
             TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
             int alternateStyle = 0;
-            ModifyObjectDataAlternate(ref alternateStyle);
-            TileObjectData.addAlternate(alternateStyle);
+            if (ModifyObjectDataAlternate(ref alternateStyle))
+                TileObjectData.addAlternate(alternateStyle);
 
             TileObjectData.addTile(Type);
 
@@ -32,6 +34,16 @@ namespace ImproveGame.Content.Tiles
             DustType = 7;
             TileID.Sets.DisableSmartCursor[Type] = true;
             TileID.Sets.HasOutlines[Type] = true;
+        }
+
+        public virtual int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction, int alternate)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                NetMessage.SendTileSquare(Main.myPlayer, i - 1, j - 1, 2, 2);
+            }
+
+            return 0;
         }
 
         public virtual bool OnRightClick(int i, int j) => false;
@@ -52,23 +64,28 @@ namespace ImproveGame.Content.Tiles
                 Main.editSign = false;
                 Main.npcChatText = string.Empty;
             }
+
             if (Main.editChest)
             {
                 SoundEngine.PlaySound(SoundID.MenuOpen);
                 Main.editChest = false;
                 Main.npcChatText = string.Empty;
             }
+
             if (player.editedChestName)
             {
-                NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f, 0f, 0f, 0, 0, 0);
+                NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1,
+                    NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f, 0f, 0f, 0, 0, 0);
                 player.editedChestName = false;
             }
+
             if (player.talkNPC > -1)
             {
                 player.SetTalkNPC(-1);
                 Main.npcChatCornerItem = 0;
                 Main.npcChatText = string.Empty;
             }
+
             if (player.chest != -1)
             {
                 player.chest = -1;
@@ -80,15 +97,17 @@ namespace ImproveGame.Content.Tiles
 
         public virtual void ModifyObjectData() { }
 
-        public virtual void ModifyObjectDataAlternate(ref int alternateStyle) { }
+        public virtual bool ModifyObjectDataAlternate(ref int alternateStyle) => false;
 
         public abstract ModTileEntity GetTileEntity();
 
-        public abstract int ItemType(int frameX, int frameY);
+        public abstract int ItemType();
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 32, ItemType(frameX, frameY));
+            var tileObjectData = TileObjectData.GetTileData(Type, 0);
+            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, tileObjectData.CoordinateFullWidth,
+                tileObjectData.CoordinateFullHeight, ItemType());
 
             GetTileEntity()?.Kill(i, j);
         }

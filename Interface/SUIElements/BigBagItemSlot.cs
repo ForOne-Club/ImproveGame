@@ -2,6 +2,7 @@
 using ImproveGame.Common.Animations;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.Common;
+using ReLogic.Graphics;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
@@ -12,6 +13,7 @@ namespace ImproveGame.Interface.SUIElements
     /// </summary>
     public class BigBagItemSlot : View
     {
+        public bool FavoriteAllowed = true;
         public Item[] Items { get; set; }
 
         public readonly int Index;
@@ -22,7 +24,7 @@ namespace ImproveGame.Interface.SUIElements
             private set => Items[Index] = value;
         }
 
-        private int _rightMouseDownTimer = -1;
+        protected int RightMouseDownTimer = -1;
 
         public BigBagItemSlot(Item[] items, int index)
         {
@@ -38,18 +40,30 @@ namespace ImproveGame.Interface.SUIElements
             Rounded = new Vector4(12f);
         }
 
+        /// <summary> 为了使该类的子类可以越过该类的 RightMouseDown 而直接调用 UIElement 的 RightMouseDown </summary>
+        protected void CallBaseLeftMouseDown(UIMouseEvent evt) => base.MouseDown(evt);
+
         public override void MouseDown(UIMouseEvent evt)
         {
+            if (!Interactable)
+                return;
+
             SetCursorOverride();
             MouseClickSlot();
             base.MouseDown(evt);
         }
 
+        /// <summary> 为了使该类的子类可以越过该类的 RightMouseDown 而直接调用 UIElement 的 RightMouseDown </summary>
+        protected void CallBaseRightMouseDown(UIMouseEvent evt) => base.RightMouseDown(evt);
+
         public override void RightMouseDown(UIMouseEvent evt)
         {
+            if (!Interactable)
+                return;
+
             if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
-                _rightMouseDownTimer = 0;
+                RightMouseDownTimer = 0;
                 TakeSlotItemToMouseItem();
             }
 
@@ -85,33 +99,37 @@ namespace ImproveGame.Interface.SUIElements
             base.RightMouseDown(evt);
         }
 
+        /// <summary> 为了使该类的子类可以越过该类的 Update 而直接调用 UIElement 的 Update </summary>
+        protected void CallBaseUpdate(GameTime gameTime) => base.Update(gameTime);
+
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            CallBaseUpdate(gameTime);
+
             // 右键长按物品持续拿出
-            if (Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
+            if (Interactable && Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
-                if (_rightMouseDownTimer >= 60)
+                if (RightMouseDownTimer >= 60)
                 {
                     TakeSlotItemToMouseItem();
                 }
-                else if (_rightMouseDownTimer >= 30 && _rightMouseDownTimer % 3 == 0)
+                else if (RightMouseDownTimer >= 30 && RightMouseDownTimer % 3 == 0)
                 {
                     TakeSlotItemToMouseItem();
                 }
-                else if (_rightMouseDownTimer >= 15 && _rightMouseDownTimer % 6 == 0)
+                else if (RightMouseDownTimer >= 15 && RightMouseDownTimer % 6 == 0)
                 {
                     TakeSlotItemToMouseItem();
                 }
 
-                _rightMouseDownTimer++;
+                RightMouseDownTimer++;
             }
         }
 
         /// <summary>
         /// 拿物品槽内物品到鼠标物品上
         /// </summary>
-        private void TakeSlotItemToMouseItem()
+        protected void TakeSlotItemToMouseItem()
         {
             bool playSound = false;
             if (Main.mouseItem.type == Item.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
@@ -138,7 +156,7 @@ namespace ImproveGame.Interface.SUIElements
         /// <summary>
         /// 改原版的 <see cref="Main.cursorOverride"/>
         /// </summary>
-        private void SetCursorOverride()
+        protected void SetCursorOverride()
         {
             if (Item.IsAir)
             {
@@ -152,11 +170,10 @@ namespace ImproveGame.Interface.SUIElements
 
             if (Main.keyState.IsKeyDown(Main.FavoriteKey))
             {
-                Main.cursorOverride = CursorOverrideID.FavoriteStar; // 收藏图标
+                if (FavoriteAllowed)
+                    Main.cursorOverride = CursorOverrideID.FavoriteStar; // 收藏图标
                 if (Main.drawingPlayerChat)
-                {
                     Main.cursorOverride = CursorOverrideID.Magnifiers; // 放大镜图标 - 输入到聊天框
-                }
             }
 
             void TryTrashCursorOverride()
@@ -184,7 +201,7 @@ namespace ImproveGame.Interface.SUIElements
         /// <summary>
         /// 左键点击物品
         /// </summary>
-        private void MouseClickSlot()
+        protected void MouseClickSlot()
         {
             if (Main.LocalPlayer.ItemAnimationActive)
                 return;
@@ -296,13 +313,19 @@ namespace ImproveGame.Interface.SUIElements
                 }
             }
         }
+        
+        public virtual void ModifyDrawColor() {}
 
         public override void DrawSelf(SpriteBatch sb)
         {
             BorderColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
             BgColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBg;
+            if (!Interactable)
+                BgColor = Color.Gray * 0.3f;
+            ModifyDrawColor();
             base.DrawSelf(sb);
             Vector2 pos = GetDimensions().Position();
+            float size = GetDimensions().Size().X;
             if (Item.IsAir)
                 return;
             if (IsMouseHovering)
@@ -312,15 +335,15 @@ namespace ImproveGame.Interface.SUIElements
                 SetCursorOverride();
             }
 
-            DrawItemIcon(sb, Item, Color.White, GetDimensions());
+            DrawItemIcon(sb, Item, Color.White, GetDimensions(), size * 0.6154f);
             if (Item.stack <= 1)
             {
                 return;
             }
 
             Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(Item.stack.ToString()) * 0.75f;
-            Vector2 textPos = pos + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
-            TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
+            Vector2 textPos = pos + new Vector2(size * 0.18f, (size - textSize.Y) * 0.9f);
+            DrawItemStackStringInternal(sb, Item.stack.ToString(), textPos);
             // 这段是直接绘制文字，不带边框的，留到这里防止忘了咋写。
             /*DynamicSpriteFontExtensionMethods.DrawString(
                     sb,
@@ -331,6 +354,49 @@ namespace ImproveGame.Interface.SUIElements
                     0f,
                     new Vector2(0),
                     0.75f, 0, 0f);*/
+        }
+        
+        /// <summary>
+        /// 专门用于绘制物品栏物品的堆叠，直接调用字体的 InternalDraw 相比 TrUtils.DrawBorderString 性能消耗更小
+        /// 且这个的描边大小经过调节，看起来更舒服
+        /// </summary>
+        private void DrawItemStackStringInternal(SpriteBatch sb, string text, Vector2 position)
+        {
+            DynamicSpriteFont font = FontAssets.ItemStack.Value;
+            Color color = Color.Black * 0.8f;
+            Vector2 zero = Vector2.Zero;
+            float x = position.X;
+            float y = position.Y;
+            float scale = GetDimensions().Width * 0.018f;
+            float spread = 1.2f * scale;
+            for (int index = 0; index <= 4; ++index)
+            {
+                switch (index)
+                {
+                    case 0:
+                        zero.X = x - spread;
+                        zero.Y = y;
+                        break;
+                    case 1:
+                        zero.X = x + spread;
+                        zero.Y = y;
+                        break;
+                    case 2:
+                        zero.X = x;
+                        zero.Y = y - spread;
+                        break;
+                    case 3:
+                        zero.X = x;
+                        zero.Y = y + spread;
+                        break;
+                    default:
+                        zero.X = x;
+                        zero.Y = y;
+                        color = Color.White;
+                        break;
+                }
+                sb.DrawString(font, text, zero, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
+            }
         }
 
         public static void DrawItemIcon(SpriteBatch sb, Item item, Color lightColor, CalculatedStyle dimensions,
@@ -391,5 +457,10 @@ namespace ImproveGame.Interface.SUIElements
 
             sb.ReBegin(effect, Main.UIScaleMatrix);
         }
+
+        /// <summary>
+        /// 是否可交互，否则不能执行左右键操作
+        /// </summary>
+        public virtual bool Interactable => true;
     }
 }

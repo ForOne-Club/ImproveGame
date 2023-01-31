@@ -1,9 +1,11 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Packets.NetAutofisher;
-using ImproveGame.Content.Items;
+using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
+using ItemSlot = Terraria.UI.ItemSlot;
 
 namespace ImproveGame.Common.Players
 {
@@ -19,10 +21,18 @@ namespace ImproveGame.Common.Players
             if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 && context == ItemSlot.Context.InventoryItem
                 && ItemSlot.ShiftInUse && !item.IsAir && !item.favorited)
             {
+                // 至尊储存
+                if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.AllItemsCached
+                        .Any(s => CanPlaceInSlot(s, item) is 2 or 3))
+                {
+                    Main.cursorOverride = CursorOverrideID.InventoryToChest;
+                    return true;
+                }
+                // 建筑法杖
                 if (ArchitectureGUI.Visible &&
                     UISystem.Instance.ArchitectureGUI.ItemSlot.Any(s =>
                                                  s.Value.CanPlaceItem(item) &&
-                                                 CanPlaceInSlot(s.Value.Item, item) != 0))
+                                                 CanPlaceInSlot(s.Value.Item, item) is 2 or 3))
                 {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
@@ -36,12 +46,14 @@ namespace ImproveGame.Common.Players
                     return true;
                 }
                 if (BigBagGUI.Visible && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var dataPlayer) &&
-                    dataPlayer.SuperVault.Any(s => CanPlaceInSlot(s, item) != 0))
+                    dataPlayer.SuperVault.Any(s => CanPlaceInSlot(s, item) is 2 or 3))
                 {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
                 }
-                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher) && fisher.fish.Any(s => CanPlaceInSlot(s, item) != 0))
+
+                var fisher = AutofishPlayer.LocalPlayer.Autofisher;
+                if (AutofisherGUI.Visible && fisher is not null && fisher.fish.Any(s => CanPlaceInSlot(s, item) is 2 or 3))
                 {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
@@ -58,6 +70,23 @@ namespace ImproveGame.Common.Players
             if (Player.chest == -1 & Player.talkNPC == -1 && context == ItemSlot.Context.InventoryItem &&
                 !inventory[slot].IsAir && !inventory[slot].favorited)
             {
+                // 至尊储存
+                if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.AllItemsCached.Any(s => CanPlaceInSlot(s, inventory[slot]) is 2 or 3))
+                {
+                    switch (Main.netMode) {
+                        case NetmodeID.MultiplayerClient:
+                            InvToChestPacket.Send(ExtremeStorageGUI.Storage.ID, slot, ExtremeStorageGUI.CurrentGroup);
+                            break;
+                        default:
+                            inventory[slot] = ExtremeStorageGUI.Storage.StackToNearbyChests(inventory[slot], ExtremeStorageGUI.CurrentGroup);
+                            Recipe.FindRecipes();
+                            break;
+                    }
+
+                    SoundEngine.PlaySound(SoundID.Grab);
+                    return true; // 阻止原版代码运行
+                }
+                // 旗帜收纳箱 + 药水袋
                 if (PackageGUI.Visible)
                 {
                     // 旗帜
@@ -85,14 +114,15 @@ namespace ImproveGame.Common.Players
                     return true; // 阻止原版代码运行
                 }
 
-                if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.TryGetAutofisher(out var fisher))
+                var fisher = AutofishPlayer.LocalPlayer.Autofisher;
+                if (AutofisherGUI.Visible && fisher is not null && fisher.fish.Any(s => CanPlaceInSlot(s, inventory[slot]) is 2 or 3))
                 {
                     inventory[slot] = ItemStackToInventory(fisher.fish, inventory[slot], false);
                     AutofisherGUI.RequireRefresh = true;
                     UISystem.Instance.AutofisherGUI.RefreshItems();
                     if (Main.netMode == NetmodeID.MultiplayerClient)
                         for (int i = 0; i <= 14; i++)
-                            ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, (byte)i).Send(runLocally: false);
+                            ItemSyncPacket.Get(fisher.ID, (byte)i).Send(runLocally: false);
                     Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);
                     return true; // 阻止原版代码运行
@@ -111,7 +141,7 @@ namespace ImproveGame.Common.Players
                         byte placeMode = CanPlaceInSlot(slotItem, placeItem);
 
                         // type不同直接切换吧
-                        if (placeMode == 1)
+                        if (placeMode is 1 or 3)
                         {
                             itemSlot.Value.SwapItem(ref placeItem);
                             SoundEngine.PlaySound(SoundID.Grab);
@@ -121,7 +151,7 @@ namespace ImproveGame.Common.Players
                             return true; // 阻止原版代码运行
                         }
                         // type相同，里面的能堆叠，放进去
-                        if (placeMode == 2)
+                        if (placeMode is 2)
                         {
                             int stackAvailable = slotItem.maxStack - slotItem.stack;
                             int stackAddition = Math.Min(placeItem.stack, stackAvailable);

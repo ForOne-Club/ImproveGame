@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.Packets.NetChest;
+﻿using Terraria.DataStructures;
+
+namespace ImproveGame.Common.Packets;
 
 /// <summary>
 /// 用于寻找其他服务器中对应的物品
@@ -23,27 +25,41 @@ public record ItemPosition(byte player, int slot)
 public class InventoryItemDataPacket : NetModule
 {
     [ItemSync(syncFavorite: true)] private Item _item;
-    private bool _ensureExistence;
+    // 0: 检验存在，若true，则只有物品存在时才设置物品，否则不进行操作（可以避免复制物品）
+    // 1: 是否设置item.favorited
+    // 2: 是否在物品槽已存在物品时生成物品
+    private byte _options;
     private byte _playerIndex;
-    private int _slot;
-        
-    public static InventoryItemDataPacket Get(byte playerIndex, int slot, bool ensureExistence)
+    private sbyte _slot;
+
+    public static InventoryItemDataPacket Get(byte playerIndex, int slot, BitsByte options)
     {
         var packet = ModContent.GetInstance<InventoryItemDataPacket>();
         packet._item = Main.player[playerIndex].inventory[slot];
-        packet._ensureExistence = ensureExistence;
+        packet._options = options;
         packet._playerIndex = playerIndex;
-        packet._slot = slot;
+        packet._slot = (sbyte)slot;
         return packet;
     }
+
+    public static InventoryItemDataPacket Get(byte playerIndex, int slot, bool ensureExistence,
+        bool spawnItemIfWasFilled)
+    {
+        var packet = Get(playerIndex, slot, ensureExistence);
+        packet._options = new BitsByte(ensureExistence, false, spawnItemIfWasFilled);
+        return packet;
+    }
+    
+    public static InventoryItemDataPacket Get(byte playerIndex, int slot, bool ensureExistence) =>
+        Get(new ItemPosition(playerIndex, slot), ensureExistence);
     
     public static InventoryItemDataPacket Get(ItemPosition itemID, bool ensureExistence)
     {
         var packet = ModContent.GetInstance<InventoryItemDataPacket>();
         packet._item = Main.player[itemID.player].inventory[itemID.slot];
-        packet._ensureExistence = ensureExistence;
+        packet._options = new BitsByte(ensureExistence, false);
         packet._playerIndex = itemID.player;
-        packet._slot = itemID.slot;
+        packet._slot = (sbyte)itemID.slot;
         return packet;
     }
 
@@ -51,10 +67,35 @@ public class InventoryItemDataPacket : NetModule
     {
         if (!Main.player.IndexInRange(_playerIndex) || !Main.player[_playerIndex].inventory.IndexInRange(_slot))
             return;
-        
-        if (_ensureExistence && Main.player[_playerIndex].inventory[_slot].IsAir)
+
+        var player = Main.player[_playerIndex];
+        var options = (BitsByte)_options;
+        bool ensureExistence = options[0];
+        bool setFavorite = options[1];
+        bool spawnItemIfWasFilled = options[2];
+        if (ensureExistence && player.inventory[_slot].IsAir)
             return;
+
+        if (spawnItemIfWasFilled && !player.inventory[_slot].IsAir && !_item.IsAir)
+        {
+            player.QuickSpawnClonedItem(new EntitySource_Sync("SyncFromServer"), _item, _item.stack);
+        }
         
-        Main.player[_playerIndex].inventory[_slot] = _item;
+        if (setFavorite)
+        {
+            player.inventory[_slot] = _item;
+        }
+        else
+        {
+            bool oldFavorited = player.inventory[_slot].favorited;
+            player.inventory[_slot] = _item;
+            player.inventory[_slot].favorited = oldFavorited;
+        }
+
+        EndOfItemSet:
+        if (Main.netMode is NetmodeID.MultiplayerClient)
+        {
+            Recipe.FindRecipes();
+        }
     }
 }

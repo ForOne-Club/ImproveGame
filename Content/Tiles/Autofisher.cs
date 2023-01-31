@@ -1,5 +1,6 @@
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Players;
+using ImproveGame.Interface;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.Enums;
@@ -18,40 +19,67 @@ namespace ImproveGame.Content.Tiles
             FullFishingPower,
             Unavailable
         }
-        
+
         public override ModTileEntity GetTileEntity() => ModContent.GetInstance<TEAutofisher>();
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
-        public override int ItemType(int frameX, int frameY) => ModContent.ItemType<Items.Placeable.Autofisher>();
+        public override int ItemType() => ModContent.ItemType<Items.Placeable.Autofisher>();
 
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;
             Tile tile = Main.tile[i, j];
             player.cursorItemIconEnabled = true;
-            player.cursorItemIconID = ItemType(tile.TileFrameX, tile.TileFrameY);
+            player.cursorItemIconID = ItemType();
             player.noThrow = 2;
         }
 
         public bool ServerOpenRequest = false;
+
         public override bool OnRightClick(int i, int j)
         {
             var origin = GetTileOrigin(i, j);
-            if (AutofisherGUI.Visible && AutofishPlayer.LocalPlayer.Autofisher == origin)
-            {
-                UISystem.Instance.AutofisherGUI.Close();
-            }
-            else
+            if (!TryGetTileEntityAs<TEAutofisher>(origin, out var fisher)) return false;
+
+            if (AutofishPlayer.LocalPlayer.Autofisher != fisher)
             {
                 if (Main.netMode == NetmodeID.MultiplayerClient && !ServerOpenRequest)
                 {
-                    OpenRequestPacket.Get(origin).Send(runLocally: false);
+                    OpenRequestPacket.Get(fisher).Send(runLocally: false);
                     return false;
                 }
+
                 ServerOpenRequest = false;
-                UISystem.Instance.AutofisherGUI.Open(origin);
+
+                AutofishPlayer.LocalPlayer.SetAutofisher(fisher);
+                
+                // 多人客户端下此时已经同步好了物品，则将 Refresh 标记为 true
+                if (Main.netMode is NetmodeID.MultiplayerClient)
+                {
+                    AutofisherGUI.RequireRefresh = true;
+                }
+                
+                if (!AutofisherGUI.Visible)
+                {
+                    SidedEventTrigger.ToggleViewBody(UISystem.Instance.AutofisherGUI);
+                    SoundEngine.PlaySound(SoundID.MenuOpen);
+                }
+                else
+                {
+                    // 刷新物品列表
+                    UISystem.Instance.AutofisherGUI.RefreshItems();
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+                }
+
             }
+            else
+            {
+                AutofishPlayer.LocalPlayer.SetAutofisher(null);
+                if (AutofisherGUI.Visible)
+                    SidedEventTrigger.ToggleViewBody(UISystem.Instance.AutofisherGUI);
+            }
+
             return true;
         }
 
@@ -67,10 +95,11 @@ namespace ImproveGame.Content.Tiles
             TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
         }
 
-        public override void ModifyObjectDataAlternate(ref int alternateStyle)
+        public override bool ModifyObjectDataAlternate(ref int alternateStyle)
         {
             TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceLeft;
             alternateStyle = 1;
+            return true;
         }
 
         //public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {

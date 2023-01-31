@@ -11,6 +11,12 @@
       "executablePath": "dotnet",
       "commandLineArgs": "$(tMLServerPath)",
       "workingDirectory": "$(tMLSteamPath)"
+    },
+    "Cyril的配置": {
+      "commandName": "Executable",
+      "executablePath": "D:\\SteamLibrary\\steamapps\\common\\tModLoader\\dotnet\\6.0.0\\dotnet.exe",
+      "commandLineArgs": "$(tMLPath)",
+      "workingDirectory": "$(tMLSteamPath)"
     }
   }
 }

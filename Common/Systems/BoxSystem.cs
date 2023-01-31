@@ -61,8 +61,7 @@ namespace ImproveGame.Common.Systems
                 );
                 layers.Insert(rulerIndex, new LegacyGameInterfaceLayer("ImproveGame: Pools Select", delegate
                     {
-                        Point16 fisherPos = AutofishPlayer.LocalPlayer.Autofisher;
-                        if (fisherPos.X > 0 && fisherPos.Y > 0 && AutofisherGUI.Visible)
+                        if (AutofishPlayer.LocalPlayer.Autofisher is not null && AutofisherGUI.Visible)
                         {
                             DrawPoolsBorder();
                         }
@@ -76,7 +75,7 @@ namespace ImproveGame.Common.Systems
         private static void DrawPoolsBorder()
         {
             // 绘制现有定位点光标
-            var autofisher = AutofishPlayer.LocalPlayer.GetAutofisher();
+            var autofisher = AutofishPlayer.LocalPlayer.Autofisher;
             if (autofisher is not null && autofisher.locatePoint.X > 0 && autofisher.locatePoint.Y > 0)
             {
                 var position = autofisher.locatePoint.ToWorldCoordinates() - Main.screenPosition;
@@ -98,7 +97,7 @@ namespace ImproveGame.Common.Systems
             Main.cursorOverride = CursorOverrideID.GamepadDefaultCursor;
             Main.cursorColor = Color.SkyBlue;
 
-            Vector2 fisherPos = AutofishPlayer.LocalPlayer.Autofisher.ToVector2();
+            Vector2 fisherPos = AutofishPlayer.LocalPlayer.Autofisher.Position.ToVector2();
             fisherPos.X += 1f; // 修正到物块中心
             fisherPos.Y += 1f; // 修正到物块中心
 
@@ -205,7 +204,7 @@ namespace ImproveGame.Common.Systems
 
                         if (mouseHovering[i - drawRange.X, j - drawRange.Y] && Main.mouseLeft && Main.mouseLeftRelease)
                         {
-                            LocatePointPacket.Get(AutofishPlayer.LocalPlayer.Autofisher, mouseTilePosition).Send(runLocally: true);
+                            LocatePointPacket.Get(AutofishPlayer.LocalPlayer.Autofisher.ID, mouseTilePosition).Send(runLocally: true);
                             UISystem.Instance.AutofisherGUI.ToggleSelectPool();
                             return;
                         }

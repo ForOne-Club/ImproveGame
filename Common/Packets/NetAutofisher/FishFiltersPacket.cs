@@ -42,13 +42,13 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     [AutoSync]
     public class FisherAllFiltersPacket : NetModule
     {
-        private Point16 _position;
+        private int _tileEntityID;
         private byte _filterTypes; // 节省资源
 
-        public static FisherAllFiltersPacket Get(Point16 position, bool catchCrates, bool catchAccessories, bool catchTools, bool catchWhiteRarityCatches, bool catchNormalCatches)
+        public static FisherAllFiltersPacket Get(int tileEntityID, bool catchCrates, bool catchAccessories, bool catchTools, bool catchWhiteRarityCatches, bool catchNormalCatches)
         {
             var module = NetModuleLoader.Get<FisherAllFiltersPacket>();
-            module._position = position;
+            module._tileEntityID = tileEntityID;
             var bitsByte = new BitsByte(catchCrates, catchAccessories, catchTools, catchWhiteRarityCatches, catchNormalCatches);
             module._filterTypes = bitsByte;
             return module;
@@ -56,8 +56,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
 
         public override void Receive()
         {
-            if (TileLoader.GetTile(Main.tile[_position.ToPoint()].TileType) is not Autofisher ||
-                !TryGetTileEntityAs<TEAutofisher>(_position.X, _position.Y, out var autofisher))
+            if (!TryGetTileEntityAs<TEAutofisher>(_tileEntityID, out var autofisher))
             {
                 return;
             }
