@@ -155,21 +155,15 @@ public class MoveChest : ModItem
             _forceCoolDown--;
         }
 
-        if (!_hasChest)
+        if (player.itemAnimation is 0)
         {
-            return;
+            //为了显示放置预览
+            Item.createTile = _hasChest ? _chestType : -1;
+            Item.placeStyle = _style;
         }
 
-        ModifyPlayerSpeed(player);
-
-        if (player.itemAnimation != 0)
-        {
-            return;
-        }
-
-        //为了显示放置预览
-        Item.createTile = _hasChest ? _chestType : -1;
-        Item.placeStyle = _style;
+        if (_hasChest)
+            ModifyPlayerSpeed(player);
     }
 
     #region 物品属性多人传输
