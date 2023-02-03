@@ -229,7 +229,7 @@ namespace ImproveGame.ModifyOriginalUI
             On.Terraria.Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y,
             int w, int h, Color c)
         {
-            PixelShader.RoundedRectangle(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), c, 2, UIColor.PackgeBorder);
+            PixelShader.RoundedRectangle(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), c, 2, UIColor.PanelBorder);
         }
 
         private static CalculatedStyle GetHandleCalculatedStyle(UIScrollbar scrollbar)

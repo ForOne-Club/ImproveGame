@@ -1,35 +1,31 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Configs;
-using ImproveGame.Interface.Common;
+﻿using ImproveGame.Common.Configs;
+using ReLogic.Graphics;
+using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.SUIElements
 {
     public class SUITitle : View
     {
-        private string text;
-        public Vector2 textSize;
-        private float _textScale;
-        public Color textColor;
-        public Color textBorderColor;
+        private static DynamicSpriteFont LargeText => FontAssets.DeathText.Value;
 
-        public string Text
-        {
-            get => text;
-            set
-            {
-                text = value;
-                textSize = GetFontSize(text, true) * _textScale;
-            }
-        }
+        private readonly float _textScale;
+        private string _text;
+
+        public Vector2 TextOffset;
+        public Vector2 TextAlign = new Vector2(0.5f);
+        public Vector2 TextSize;
+        public Color textColor = Color.White;
+        public Color textBorderColor = Color.Black;
 
         public SUITitle(string text, float textScale)
         {
             _textScale = textScale;
-            Text = text;
             DragIgnore = true;
             Rounded = new Vector4(10f);
+
+            SetText(text);
             SetPadding(20f, 5f);
-            SetInnerPixels(textSize);
+            SetInnerPixels(TextSize);
         }
 
         public override void DrawSelf(SpriteBatch sb)
@@ -37,7 +33,16 @@ namespace ImproveGame.Interface.SUIElements
             base.DrawSelf(sb);
             Vector2 innerPos = GetInnerDimensions().Position();
             Vector2 innerSize = GetInnerDimensions().Size();
-            Utils.DrawBorderStringBig(sb, text, innerPos + (innerSize - textSize) / 2f + new Vector2(0, UIConfigs.Instance.BigFontOffsetY * _textScale), Color.White, _textScale);
+            Vector2 textOffset = (innerSize - TextSize) * TextAlign + TextOffset;
+            textOffset.Y += UIConfigs.Instance.BigFontOffsetY * _textScale;
+            Vector2 textPos = innerPos + textOffset;
+            ChatManager.DrawColorCodedStringWithShadow(sb, LargeText, _text, textPos, textColor, 0f, new Vector2(0f), new Vector2(_textScale));
+        }
+
+        public void SetText(string text)
+        {
+            _text = text;
+            TextSize = GetFontSize(_text, true) * _textScale;
         }
     }
 }

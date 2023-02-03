@@ -27,7 +27,8 @@ namespace ImproveGame.Interface.BannerChest
 
         public IPackageItem Package;
 
-        private SUIPanel _mainPanel, _titlePanel;
+        private SUIPanel _mainPanel;
+        private View _titlePanel;
         private SUITitle _title;
         private SUISwitch _autoStorageSwitch, _autoSortSwitch;
         private SUICross _cross;
@@ -45,7 +46,14 @@ namespace ImproveGame.Interface.BannerChest
             _mainPanel.SetPadding(0);
             _mainPanel.Join(this);
 
-            _titlePanel = new SUIPanel(UIColor.TitleBg2, UIColor.PanelBorder, new Vector4(10, 10, 0, 0), 2);
+            _titlePanel = new View
+            {
+                DragIgnore = true,
+                BgColor = UIColor.TitleBg2,
+                Border = 2f,
+                BorderColor = UIColor.PanelBorder,
+                Rounded = new Vector4(10f, 10f, 0f, 0f),
+            };
             _titlePanel.SetPadding(0);
             _titlePanel.Width.Precent = 1f;
             _titlePanel.Height.Pixels = 50f;
@@ -55,15 +63,15 @@ namespace ImproveGame.Interface.BannerChest
             {
                 VAlign = 0.5f
             };
-            _title.SetPadding(20, 0, 10, 0);
-            _title.SetInnerPixels(_title.textSize);
+            _title.SetPadding(20f, 0f, 10f, 0f);
+            _title.SetInnerPixels(_title.TextSize);
             _title.Join(_titlePanel);
 
             _cross = new SUICross(24)
             {
                 HAlign = 1f,
                 VAlign = 0.5f,
-                Rounded = new Vector4(0, 10, 0, 0),
+                Rounded = new Vector4(0f, 10f, 0f, 0f),
                 beginBg = UIColor.TitleBg2 * 0.5f,
                 endBg = UIColor.TitleBg2,
             };
@@ -130,9 +138,9 @@ namespace ImproveGame.Interface.BannerChest
             Visible = true;
             _grid.SetInventory(items);
             _grid.Scrollbar.ViewPosition = 0;
-            this._title.Text = title;
-            this._title.SetInnerPixels(this._title.textSize);
-            this.Package = package;
+            _title.SetText(title);
+            _title.SetInnerPixels(_title.TextSize);
+            Package = package;
             Recalculate();
         }
 

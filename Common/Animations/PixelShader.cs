@@ -1,45 +1,9 @@
 ﻿using ImproveGame.Assets;
-using Mono.Cecil;
 
 namespace ImproveGame.Common.Animations
 {
     public class PixelShader
     {
-        private struct VertexPos : IVertexType
-        {
-            private static readonly VertexDeclaration _vertexDeclaration = new(new VertexElement[2]
-            {
-                // Position
-                new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
-                // Coord
-                new VertexElement(8, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0)
-            });
-
-            public Vector2 Position;
-            public Vector2 Coord;
-
-            public VertexPos(Vector2 position, Vector2 coord)
-            {
-                Position = position;
-                Coord = coord;
-            }
-
-            public VertexDeclaration VertexDeclaration => _vertexDeclaration;
-        }
-
-        private static VertexPos[] GetVertexPos(Vector2 pos, Vector2 size)
-        {
-            return new VertexPos[6]
-            {
-                new VertexPos(pos, new Vector2(0, 0)),
-                new VertexPos(pos + new Vector2(size.X, 0),  new Vector2(1, 0)),
-                new VertexPos(pos + new Vector2(0, size.Y),  new Vector2(0, 1)),
-                new VertexPos(pos + new Vector2(0, size.Y),  new Vector2(0, 1)),
-                new VertexPos(pos + new Vector2(size.X, 0),  new Vector2(1, 0)),
-                new VertexPos(pos + size, new Vector2(1, 1))
-            };
-        }
-
         public static Matrix GetMatrix(bool ui)
         {
             if (ui)
@@ -54,10 +18,72 @@ namespace ImproveGame.Common.Animations
             }
         }
 
+        private struct VertexPos : IVertexType
+        {
+            private static readonly VertexDeclaration _vertexDeclaration = new(new VertexElement[2]
+            {
+                new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
+                new VertexElement(8, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 0)
+            });
+
+            public Vector2 Position;
+            public Vector3 Coord;
+
+            public VertexPos(Vector2 position, Vector3 coord)
+            {
+                Position = position;
+                Coord = coord;
+            }
+
+            public VertexDeclaration VertexDeclaration => _vertexDeclaration;
+        }
+
+        private static void GetVertexPos(List<VertexPos> vertexPos, Vector2 pos, Vector2 size, float rounded)
+        {
+            Vector2 absSize = size.Abs();
+            vertexPos.Add(new VertexPos(pos, new Vector3(0, 0, rounded)));
+            vertexPos.Add(new VertexPos(pos + new Vector2(size.X, 0), new Vector3(absSize.X, 0, rounded)));
+            vertexPos.Add(new VertexPos(pos + new Vector2(0, size.Y), new Vector3(0, absSize.Y, rounded)));
+            vertexPos.Add(new VertexPos(pos + new Vector2(0, size.Y), new Vector3(0, absSize.Y, rounded)));
+            vertexPos.Add(new VertexPos(pos + new Vector2(size.X, 0), new Vector3(absSize.X, 0, rounded)));
+            vertexPos.Add(new VertexPos(pos + size, new Vector3(absSize, rounded)));
+        }
+
         private static void BaseDraw(Vector2 pos, Vector2 size, bool ui, Action<Matrix> action)
         {
-            VertexPos[] triangles = GetVertexPos(pos, size);
             action.Invoke(GetMatrix(ui));
+            List<VertexPos> vertexPos = new List<VertexPos>();
+            GetVertexPos(vertexPos, pos, size, 0f);
+            VertexPos[] triangles = vertexPos.ToArray();
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(0, triangles, 0, triangles.Length / 3);
+            EffectAssets.SpriteEffectPass.Apply();
+        }
+
+        private static void GetRectangleVertexInfo(List<VertexPos> vertexPos, Vector2 pos, Vector2 size, float rounded)
+        {
+            Vector2 absSize = size.Abs();
+            Vector2 offset = rounded.ToXY() - absSize;
+            Vector2 end = absSize + offset;
+            vertexPos.Add(new VertexPos(pos, new Vector3(offset, rounded)));
+            vertexPos.Add(new VertexPos(pos + size.ToX(), new Vector3(new Vector2(end.X, offset.Y), rounded)));
+            vertexPos.Add(new VertexPos(pos + size.ToY(), new Vector3(new Vector2(offset.X, end.Y), rounded)));
+            vertexPos.Add(new VertexPos(pos + size.ToY(), new Vector3(new Vector2(offset.X, end.Y), rounded)));
+            vertexPos.Add(new VertexPos(pos + size.ToX(), new Vector3(new Vector2(end.X, offset.Y), rounded)));
+            vertexPos.Add(new VertexPos(pos + size, new Vector3(end, rounded)));
+        }
+
+        private static void BaseDrawRoundedRectangle(Vector2 pos, Vector2 size, Vector4 rounded, bool ui, Action<Matrix> action)
+        {
+            Main.graphics.GraphicsDevice.RasterizerState.CullMode = CullMode.None;
+            action.Invoke(GetMatrix(ui));
+            size /= 2f;
+            pos += size;
+            List<VertexPos> vertexPos = new List<VertexPos>();
+            GetRectangleVertexInfo(vertexPos, pos, -size, rounded.X);
+            GetRectangleVertexInfo(vertexPos, pos, new Vector2(-size.X, size.Y), rounded.Z);
+            GetRectangleVertexInfo(vertexPos, pos, new Vector2(size.X, -size.Y), rounded.Y);
+            GetRectangleVertexInfo(vertexPos, pos, size, rounded.W);
+            VertexPos[] triangles = vertexPos.ToArray();
             Main.graphics.GraphicsDevice.DrawUserPrimitives(0, triangles, 0, triangles.Length / 3);
             EffectAssets.SpriteEffectPass.Apply();
         }
@@ -68,34 +94,30 @@ namespace ImproveGame.Common.Animations
         public static void DrawCross(Vector2 pos, float size, float round, Color backgroundColor, float border,
             Color borderColor, bool ui = true)
         {
-            BaseDraw(pos, size.ToVector2(), ui, matrix =>
+            BaseDraw(pos, size.ToXY(), ui, matrix =>
             {
                 Effect effect = EffectAssets.Cross;
                 effect.Parameters["uTransform"].SetValue(matrix);
-                effect.Parameters["size"].SetValue(size);
-                effect.Parameters["border"].SetValue(border);
-                effect.Parameters["round"].SetValue(round);
-                effect.Parameters["borderColor"].SetValue(borderColor.ToVector4());
-                effect.Parameters["backgroundColor"].SetValue(backgroundColor.ToVector4());
+                effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
+                effect.Parameters["uBorder"].SetValue(border);
+                effect.Parameters["uRound"].SetValue(round);
+                effect.Parameters["uBorderColor"].SetValue(borderColor.ToVector4());
+                effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
                 effect.CurrentTechnique.Passes[0].Apply();
             });
         }
 
-        public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, float border,
+        public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 rounded, Color backgroundColor, float border,
             Color borderColor, bool ui = true)
         {
             float innerShrinkage = 1;
             pos -= new Vector2(innerShrinkage);
             size += new Vector2(innerShrinkage * 2);
-            round4 += new Vector4(innerShrinkage);
-            BaseDraw(pos, size, ui, matrix =>
+            rounded += new Vector4(innerShrinkage);
+            BaseDrawRoundedRectangle(pos, size, rounded, ui, matrix =>
             {
                 Effect effect = EffectAssets.RoundedRectangle;
-                GraphicsDevice GraphicsDevice = Main.graphics.GraphicsDevice;
                 effect.Parameters["uTransform"].SetValue(matrix);
-                effect.Parameters["uSize"].SetValue(size);
-                effect.Parameters["uSizeOver2"].SetValue(size / 2);
-                effect.Parameters["uRounded"].SetValue(round4);
                 effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
                 effect.Parameters["uBorder"].SetValue(border);
                 effect.Parameters["uBorderColor"].SetValue(borderColor.ToVector4());
@@ -104,33 +126,27 @@ namespace ImproveGame.Common.Animations
             });
         }
 
-        public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 round4, Color backgroundColor, bool ui = true)
+        public static void RoundedRectangle(Vector2 pos, Vector2 size, Vector4 rounded, Color backgroundColor, bool ui = true)
         {
             float innerShrinkage = 1;
             pos -= new Vector2(innerShrinkage);
             size += new Vector2(innerShrinkage * 2);
-            round4 += new Vector4(innerShrinkage);
-            BaseDraw(pos, size, ui, matrix =>
+            rounded += new Vector4(innerShrinkage);
+            BaseDrawRoundedRectangle(pos, size, rounded, ui, matrix =>
             {
                 Effect effect = EffectAssets.RoundedRectangle;
                 effect.Parameters["uTransform"].SetValue(matrix);
-                effect.Parameters["uSize"].SetValue(size);
-                effect.Parameters["uSizeOver2"].SetValue(size / 2);
-                effect.Parameters["uRounded"].SetValue(round4);
                 effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
                 effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
                 effect.CurrentTechnique.Passes["NoBorder"].Apply();
             });
         }
 
-        public static void DrawShadow(Vector2 pos, Vector2 size, Vector4 round, Color backgroundColor, float shadow, bool ui = true)
+        public static void DrawShadow(Vector2 pos, Vector2 size, Vector4 rounded, Color backgroundColor, float shadow, bool ui = true)
         {
-            BaseDraw(pos, size, ui, matrix =>
+            BaseDrawRoundedRectangle(pos, size, rounded + new Vector4(shadow), ui, matrix =>
             {
                 Effect effect = EffectAssets.RoundedRectangle;
-                effect.Parameters["uSize"].SetValue(size);
-                effect.Parameters["uSizeOver2"].SetValue(size / 2);
-                effect.Parameters["uRounded"].SetValue(round + new Vector4(shadow));
                 effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
                 effect.Parameters["uShadowSize"].SetValue(shadow);
                 effect.CurrentTechnique.Passes["Shadow"].Apply();
@@ -139,12 +155,12 @@ namespace ImproveGame.Common.Animations
 
         public static void DrawRound(Vector2 pos, float size, Color background, bool ui = true)
         {
-            BaseDraw(pos, size.ToVector2(), ui, matrix =>
+            BaseDraw(pos, size.ToXY(), ui, matrix =>
             {
                 Effect effect = EffectAssets.Round;
                 effect.Parameters["uTransform"].SetValue(matrix);
-                effect.Parameters["size"].SetValue(size);
-                effect.Parameters["background"].SetValue(background.ToVector4());
+                effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
+                effect.Parameters["uBackground"].SetValue(background.ToVector4());
                 effect.CurrentTechnique.Passes["NoBorder"].Apply();
             });
         }
@@ -152,7 +168,7 @@ namespace ImproveGame.Common.Animations
         public static void DrawRound(Vector2 pos, float size, Color background, float border, Color borderColor,
             bool ui = true)
         {
-            BaseDraw(pos, size.ToVector2(), ui, matrix =>
+            BaseDraw(pos, size.ToXY(), ui, matrix =>
             {
                 Effect effect = EffectAssets.Round;
                 effect.Parameters["uTransform"].SetValue(matrix);

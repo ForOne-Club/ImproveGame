@@ -86,7 +86,7 @@ namespace ImproveGame.Interface.PlayerInfo
                 Relative = RelativeMode.Horizontal
             };
             _title.SetPadding(10f, 0f);
-            _title.SetInnerPixels(_title.textSize.X, 50f);
+            _title.SetInnerPixels(_title.TextSize.X, 50f);
             _title.Join(_titlePanel);
 
             _cardPanel = new View()

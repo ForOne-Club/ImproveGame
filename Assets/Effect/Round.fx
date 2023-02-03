@@ -1,8 +1,8 @@
 ﻿float4x4 uTransform;
-float size; // 尺寸
-float4 background; // 背景颜色
-float border;
-float4 borderColor;
+float uSizeOver2; // 尺寸
+float4 uBackground; // 背景颜色
+float uBorder;
+float4 uBorderColor;
 
 struct VSInput
 {
@@ -16,9 +16,6 @@ struct PSInput
     float2 Coord : TEXCOORD0;
 };
 
-// -------------------------------
-// ---------- 顶点着色器 ----------
-// -------------------------------
 PSInput VSFunction(VSInput input)
 {
     PSInput output;
@@ -29,16 +26,14 @@ PSInput VSFunction(VSInput input)
 
 float4 NoBorder(float2 coords : TEXCOORD0) : COLOR0
 {
-    float2 s = size / 2;
-    float2 p = abs(coords * size - s);
-    return lerp(background, 0, smoothstep(-1, 0.5, distance(p, 0) - s.x));
+    float2 p = abs(coords - uSizeOver2);
+    return lerp(uBackground, 0, smoothstep(-1, 0.5, distance(p, 0) - uSizeOver2.x));
 }
 
 float4 HasBorder(float2 coords : TEXCOORD0) : COLOR0
 {
-    float2 s = size / 2;
-    float2 p = abs(coords * size - s);
-    return lerp(lerp(background, borderColor, smoothstep(-1, 0.5, distance(p, 0) - s.x + border)), 0, smoothstep(-1, 0.5, distance(p, 0) - s.x));
+    float2 p = abs(coords - uSizeOver2);
+    return lerp(lerp(uBackground, uBorderColor, smoothstep(-1, 0.5, distance(p, 0) - uSizeOver2.x + uBorder)), 0, smoothstep(-1, 0.5, distance(p, 0) - uSizeOver2.x));
 }
 
 technique Technique1

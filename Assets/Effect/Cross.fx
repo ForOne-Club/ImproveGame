@@ -1,9 +1,9 @@
 ﻿float4x4 uTransform;
-float size;
-float border;
-float round;
-float4 borderColor;
-float4 backgroundColor;
+float2 uSizeOver2;
+float uBorder;
+float uRound;
+float4 uBorderColor;
+float4 uBackgroundColor;
 
 struct VSInput
 {
@@ -17,9 +17,6 @@ struct PSInput
     float2 Coord : TEXCOORD0;
 };
 
-// -------------------------------
-// ---------- 顶点着色器 ----------
-// -------------------------------
 PSInput VSFunction(VSInput input)
 {
     PSInput output;
@@ -30,10 +27,9 @@ PSInput VSFunction(VSInput input)
 
 float4 ps_main(float2 coords : TEXCOORD0) : COLOR0
 {
-    float2 s = size / 2;
-    float2 p = abs(coords * size - s);
-    float d = length(p - min(p.x + p.y, s) * 0.5) - round;
-    return lerp(lerp(backgroundColor, borderColor, smoothstep(-1, 0.5, d + border)), 0, smoothstep(-1, 0.5, d));
+    float2 p = abs(coords - uSizeOver2);
+    float d = length(p - min(p.x + p.y, uSizeOver2) * 0.5) - uRound;
+    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-1, 0.5, d + uBorder)), 0, smoothstep(-1, 0.5, d));
 }
 technique Technique1
 {
