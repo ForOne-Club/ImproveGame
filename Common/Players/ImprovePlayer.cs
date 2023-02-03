@@ -135,9 +135,10 @@ namespace ImproveGame.Common.Players
                 string internalName = ItemID.Search.GetName(Player.HeldItem.type).ToLower(); // 《英文名》因为没法在非英语语言获取英文名，只能用内部名了
                 string currentLanguageName = Lang.GetItemNameValue(Player.HeldItem.type).ToLower();
                 if (Config.TileSpeed_Blacklist.Any(str => internalName.Contains(str) || currentLanguageName.Contains(str)))
-                {
                     return;
-                }
+                // 是特判捏嘿嘿
+                if (Player.HeldItem.ModItem is MoveChest)
+                    return;
                 Player.tileSpeed = 3f;
                 Player.wallSpeed = 3f;
                 Player.tileRangeX += 5;

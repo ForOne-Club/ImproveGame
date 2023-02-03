@@ -1,6 +1,4 @@
 ﻿using ImproveGame.Content.Tiles;
-using NetSimplified.Syncing;
-using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Packets.NetAutofisher
 {
@@ -9,16 +7,16 @@ namespace ImproveGame.Common.Packets.NetAutofisher
     /// </summary>
     public class FishingTipPacket : NetModule
     {
-        [AutoSync] private Point16 _position;
+        [AutoSync] private int _tileEntityID;
         [AutoSync] private byte _tipType;
         private ushort _fishingLevel;
         private float _waterQuality;
 
-        public static FishingTipPacket Get(Point16 position, Autofisher.TipType tipType, int fishingLevel,
+        public static FishingTipPacket Get(int tileEntityID, Autofisher.TipType tipType, int fishingLevel,
             float waterQuality)
         {
             var module = NetModuleLoader.Get<FishingTipPacket>();
-            module._position = position;
+            module._tileEntityID = tileEntityID;
             module._tipType = (byte)tipType;
             module._fishingLevel = (ushort)fishingLevel;
             module._waterQuality = waterQuality;
@@ -27,7 +25,7 @@ namespace ImproveGame.Common.Packets.NetAutofisher
 
         public override void Receive()
         {
-            if (TryGetTileEntityAs<TEAutofisher>(_position.X, _position.Y, out var autofisher))
+            if (TryGetTileEntityAs<TEAutofisher>(_tileEntityID, out var autofisher))
             {
                 autofisher.SetFishingTip((Autofisher.TipType)_tipType, _fishingLevel, _waterQuality);
             }

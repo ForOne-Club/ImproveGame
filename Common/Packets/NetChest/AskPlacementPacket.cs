@@ -63,7 +63,7 @@ public class AskPlacementPacket : NetModule
         }
 
         // 原版的不知道为啥用不了，自己写
-        ChestNamePacket.Get((ushort)chest.x, (ushort)chest.y, chestName).Send();
+        ChestNamePacketByPosition.Get((ushort)chest.x, (ushort)chest.y, chestName).Send();
         // NetMessage.SendData(MessageID.ChestName, -1, -1, null, index, x, y);
 
         var player = Main.player[itemID.player];

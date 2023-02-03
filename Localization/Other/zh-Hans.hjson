@@ -3,7 +3,8 @@
     ModName: "更好的体验"
 	MapObject:
     {
-		Autofisher: 自动钓鱼机
+		// Autofisher: "{$Mods.ImproveGame.ItemName.Autofisher}"
+		// ExtremeStorage: "{$Mods.ImproveGame.ItemName.ExtremeStorage}"
 	}
     ItemDropRule:
     {
@@ -307,6 +308,7 @@
         Refresh: "刷新"
         Switch: "切换"
         Unavailable: "不可用"
+        Cancel: "取消"
     }
     RecipeGroup:
     {

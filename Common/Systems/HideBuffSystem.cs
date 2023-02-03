@@ -2,6 +2,9 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Players;
 using ImproveGame.Content.Items;
+using ImproveGame.Content.Tiles;
+using ImproveGame.Interface.ExtremeStorage;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Systems
 {
@@ -9,38 +12,59 @@ namespace ImproveGame.Common.Systems
     {
         internal static bool[] BuffTypesShouldHide = new bool[BuffLoader.BuffCount];
 
-        public override void PostSetupContent() {
+        public override void PostSetupContent()
+        {
             Array.Resize(ref BuffTypesShouldHide, BuffLoader.BuffCount);
         }
 
-        public static int HideBuffCount() {
+        public static int HideBuffCount()
+        {
             int count = 0;
-            for (int i = 0; i < BuffTypesShouldHide.Length; i++) {
+            for (int i = 0; i < BuffTypesShouldHide.Length; i++)
+            {
                 if (BuffTypesShouldHide[i])
                     count++;
             }
+
             return count;
         }
 
-        public override void PostDrawInterface(SpriteBatch spriteBatch) {
+        /// <summary>
+        /// 与 <see cref="InfBuffPlayer.PostUpdateBuffs"/> 相关，要更改的时候记得改那边
+        /// </summary>
+        public override void PostDrawInterface(SpriteBatch spriteBatch)
+        {
             Array.Clear(BuffTypesShouldHide, 0, BuffTypesShouldHide.Length);
             HideGlobalBuff.HidedBuffCountThisFrame = 0;
-            
-            SetupShouldHideArray(Main.LocalPlayer);
+
+            SetupShouldHideArrayFromPlayer(Main.LocalPlayer);
             if (Config.ShareInfBuffs)
-                CheckTeamPlayers(Main.LocalPlayer.whoAmI, SetupShouldHideArray);
+                CheckTeamPlayers(Main.LocalPlayer.whoAmI, SetupShouldHideArrayFromPlayer);
+
+            // 从TE中获取所有的无尽Buff物品
+            foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
+            {
+                if (tileEntity is not TEExtremeStorage {UseUnlimitedBuffs: true} storage)
+                {
+                    continue;
+                }
+
+                var alchemyItems = storage.FindAllNearbyChestsWithGroup(ItemGroup.Alchemy);
+                alchemyItems.ForEach(i => SetupShouldHideArray(InfBuffPlayer.GetAvailableItemsFromItems(Main.chest[i].item)));
+            }
         }
+
+        private static void SetupShouldHideArrayFromPlayer(Player player) =>
+            SetupShouldHideArray(InfBuffPlayer.Get(player).AvailableItems);
         
         /// <summary>
         /// 更新InventoryGlow和BuffTypesShouldHide
         /// </summary>
-        /// <param name="player"></param>
-        public static void SetupShouldHideArray(Player player)
+        private static void SetupShouldHideArray(IEnumerable<Item> items)
         {
-            foreach (var item in InfBuffPlayer.Get(player).AvailableItems)
+            foreach (var item in items)
             {
-                if (player.whoAmI == Main.myPlayer)
-                    ApplyBuffItem.UpdateInventoryGlow(item);
+                ApplyBuffItem.UpdateInventoryGlow(item);
 
                 int buffType = ApplyBuffItem.GetItemBuffType(item);
                 if (buffType is not -1)

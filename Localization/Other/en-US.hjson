@@ -3,7 +3,8 @@ Mods.ImproveGame:
     ModName: "Quality of Life"
 	MapObject:
     {
-		Autofisher: Fishing Machine
+		Autofisher: "{$Mods.ImproveGame.ItemName.Autofisher}"
+		ExtremeStorage: "{$Mods.ImproveGame.ItemName.ExtremeStorage}"
 	}
     ItemDropRule:
     {
@@ -319,6 +320,7 @@ Mods.ImproveGame:
         Refresh: "Refresh"
         Switch: "Switch"
         Unavailable: "Not available"
+        Cancel: "Cancel"
     }
     RecipeGroup:
     {

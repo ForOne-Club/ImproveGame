@@ -1,5 +1,7 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.Players;
 using ImproveGame.Interface.BannerChest;
+using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.PlayerInfo;
 
@@ -35,6 +37,13 @@ namespace ImproveGame.Interface.Common
             if (HugeInventoryUIPosition.Y <= 0 && HugeInventoryUIPosition.Y >= Main.screenHeight)
                 HugeInventoryUIPosition.Y = 340;
             uiSystem.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
+            
+            // 左侧栏
+            uiSystem.ExtremeStorageGUI = new ExtremeStorageGUI();
+            uiSystem.AutofisherGUI = new AutofisherGUI();
+            SidedEventTrigger.Clear();
+            SidedEventTrigger.RegisterViewBody(uiSystem.ExtremeStorageGUI);
+            SidedEventTrigger.RegisterViewBody(uiSystem.AutofisherGUI);
         }
     }
 }

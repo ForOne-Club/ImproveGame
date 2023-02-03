@@ -11,23 +11,23 @@ namespace ImproveGame.Interface.UIElements
             SetPadding(0);
         }
 
-        public static Vector2 GetSize(int HCount, int VCount)
+        public static Vector2 GetSize(int HCount, int VCount, int slotSize = 52, float spacing = 10f)
         {
             Vector2 size;
-            size.X = 52 * HCount + 10f * (HCount - 1);
-            size.Y = 52 * VCount + 10f * (VCount - 1);
+            size.X = slotSize * HCount + spacing * (HCount - 1);
+            size.Y = slotSize * VCount + spacing * (VCount - 1);
             return size;
         }
 
-        public void ModifyHVCount(int HCount, int VCount)
+        public void ModifyHVCount(int HCount, int VCount, int slotSize = 52, float spacing = 10f)
         {
-            Width.Pixels = 52 * HCount + 10f * (HCount - 1);
-            Height.Pixels = 52 * VCount + 10f * (VCount - 1);
+            Width.Pixels = slotSize * HCount + spacing * (HCount - 1);
+            Height.Pixels = slotSize * VCount + spacing * (VCount - 1);
         }
 
         public event MouseEvent OnMouseDownSlot;
 
-        public void SetInventory(Item[] items)
+        public void SetInventory(Item[] items, int slotSize = 52, float spacing = 10f)
         {
             if (Elements.Count != items.Length)
             {

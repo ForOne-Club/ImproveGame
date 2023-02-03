@@ -144,6 +144,18 @@ namespace ImproveGame
 
             return coord - frame;
         }
+        
+        public static bool TryGetTileEntityAs<T>(int id, out T entity) where T : TileEntity
+        {
+            if (TileEntity.ByID.TryGetValue(id, out TileEntity existing) && existing is T existingAsT)
+            {
+                entity = existingAsT;
+                return true;
+            }
+
+            entity = null;
+            return false;
+        }
 
         /// <inheritdoc cref="TryGetTileEntityAs{T}(Point, out T)"/>
         public static bool TryGetTileEntityAs<T>(Point16 position, out T entity) where T : TileEntity

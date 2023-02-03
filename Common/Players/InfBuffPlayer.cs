@@ -2,6 +2,9 @@
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
+using ImproveGame.Content.Tiles;
+using ImproveGame.Interface.ExtremeStorage;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Players;
 
@@ -22,6 +25,7 @@ public class InfBuffPlayer : ModPlayer
     /// 每隔多久统计一次Buff
     /// </summary>
     public static int SetupBuffListCooldown;
+
     public const int SetupBuffListCooldownTime = 120;
 
     /// <summary>
@@ -52,14 +56,32 @@ public class InfBuffPlayer : ModPlayer
 
     #endregion
 
-    public override void PostUpdateBuffs() {
+    /// <summary>
+    /// 与 <see cref="HideBuffSystem.PostDrawInterface"/> 相关，要更改的时候记得改那边
+    /// </summary>
+    public override void PostUpdateBuffs()
+    {
         if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
             return;
-                
-        ApplyAvailableBuffs(Player);
-        if (Config.ShareInfBuffs)
-            CheckTeamPlayers(Player.whoAmI, ApplyAvailableBuffs, checkDead: false);
 
+        // 从玩家身上获取所有的无尽Buff物品
+        ApplyAvailableBuffsFromPlayer(Player);
+        if (Config.ShareInfBuffs)
+            CheckTeamPlayers(Player.whoAmI, ApplyAvailableBuffsFromPlayer, checkDead: false);
+
+        // 从TE中获取所有的无尽Buff物品
+        foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
+        {
+            if (tileEntity is not TEExtremeStorage {UseUnlimitedBuffs: true} storage)
+            {
+                continue;
+            }
+
+            var alchemyItems = storage.FindAllNearbyChestsWithGroup(ItemGroup.Alchemy);
+            alchemyItems.ForEach(i => ApplyAvailableBuffs(GetAvailableItemsFromItems(Main.chest[i].item)));
+        }
+
+        // 每隔一段时间更新一次Buff列表
         SetupBuffListCooldown++;
         if (SetupBuffListCooldown % SetupBuffListCooldownTime != 0)
             return;
@@ -68,13 +90,17 @@ public class InfBuffPlayer : ModPlayer
     }
 
     /// <summary>
-    /// 应用可用的Buff物品
+    /// 获取物品列表源玩家的Buff列表并应用
     /// </summary>
     /// <param name="storageSource">Buff物品列表源，用于获取物品列表，实际应用固定到LocalPlayer上</param>
-    private static void ApplyAvailableBuffs(Player storageSource)
+    private static void ApplyAvailableBuffsFromPlayer(Player storageSource) =>
+        ApplyAvailableBuffs(Get(storageSource).AvailableItems);
+
+    /// <summary>
+    /// 应用可用的Buff物品
+    /// </summary>
+    private static void ApplyAvailableBuffs(IEnumerable<Item> items)
     {
-        // 获取物品列表源玩家的Buff列表
-        List<Item> items = Get(storageSource).AvailableItems;
         foreach (Item item in items)
         {
             // 侏儒特判
@@ -134,28 +160,18 @@ public class InfBuffPlayer : ModPlayer
             }
         }
     }
-        
+
     /// <summary>
     /// 设置物品列表
     /// </summary>
     private void SetupItemsList()
     {
         var oldAvailableItems = new List<Item>(AvailableItems);
-        
+
         AvailableItems = new List<Item>();
 
         var items = GetAllInventoryItemsList(Main.LocalPlayer, false);
-        foreach (var item in items)
-        {
-            HandleBuffItem(item);
-            if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.StoredPotions.Count > 0)
-            {
-                foreach (var p in potionBag.StoredPotions)
-                {
-                    HandleBuffItem(p);
-                }
-            }
-        }
+        AvailableItems = GetAvailableItemsFromItems(items);
 
         // 只有不同才发包
         if (!oldAvailableItems.SequenceEqual(AvailableItems))
@@ -164,13 +180,35 @@ public class InfBuffPlayer : ModPlayer
         }
     }
 
-    public void HandleBuffItem(Item item)
+    public static List<Item> GetAvailableItemsFromItems(IEnumerable<Item> items)
+    {
+        var availableItems = new List<Item>();
+        if (items is null) return availableItems;
+
+        foreach (var item in items)
+        {
+            if (item is null) continue;
+
+            HandleBuffItem(item, availableItems);
+            if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.StoredPotions.Count > 0)
+            {
+                foreach (var p in potionBag.StoredPotions)
+                {
+                    HandleBuffItem(p, availableItems);
+                }
+            }
+        }
+
+        return availableItems;
+    }
+
+    public static void HandleBuffItem(Item item, List<Item> availableItems)
     {
         // 增益物品
         int buffType = ApplyBuffItem.GetItemBuffType(item);
         if (buffType is not -1 || item.createTile is TileID.GardenGnome)
         {
-            AvailableItems.Add(item);
+            availableItems.Add(item);
         }
     }
 
@@ -181,7 +219,8 @@ public class InfBuffPlayer : ModPlayer
         InfBuffItemPacket.Get(this).Send(toWho, fromWho);
     }
 
-    private void BanBuffs(On.Terraria.Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet, bool foodHack)
+    private void BanBuffs(On.Terraria.Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet,
+        bool foodHack)
     {
         if (Main.myPlayer == player.whoAmI && DataPlayer.TryGet(player, out var dataPlayer))
         {
@@ -195,6 +234,7 @@ public class InfBuffPlayer : ModPlayer
                     }
                 }
             }
+
             if (dataPlayer.InfBuffDisabledMod is not null)
             {
                 foreach (string buffFullName in dataPlayer.InfBuffDisabledMod)
@@ -209,6 +249,7 @@ public class InfBuffPlayer : ModPlayer
                 }
             }
         }
+
         orig.Invoke(player, type, timeToAdd, quiet, foodHack);
     }
 
@@ -236,6 +277,7 @@ public class InfBuffPlayer : ModPlayer
                         }
                     }
                 }
+
                 if (dataPlayer.InfBuffDisabledVanilla is not null)
                 {
                     foreach (string buffFullName in dataPlayer.InfBuffDisabledMod)
@@ -243,7 +285,8 @@ public class InfBuffPlayer : ModPlayer
                         string[] names = buffFullName.Split('/');
                         string modName = names[0];
                         string buffName = names[1];
-                        if (ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff) && Player.buffType[i] == modBuff.Type)
+                        if (ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff) &&
+                            Player.buffType[i] == modBuff.Type)
                         {
                             Player.DelBuff(i);
                             i--;
@@ -294,7 +337,8 @@ public class InfBuffPlayer : ModPlayer
         DataPlayer dataPlayer = DataPlayer.Get(Player);
         ModBuff modBuff = BuffLoader.GetBuff(buffType);
         if (modBuff is null)
-        { // 原版
+        {
+            // 原版
             if (!dataPlayer.InfBuffDisabledVanilla.Contains(buffType))
             {
                 dataPlayer.InfBuffDisabledVanilla.Add(buffType);

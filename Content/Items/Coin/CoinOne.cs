@@ -4,6 +4,8 @@ namespace ImproveGame.Content.Items.Coin
 {
     public class CoinOne : ModItem
     {
+        public override void SetStaticDefaults() => SacrificeTotal = 5;
+
         public override void SetDefaults()
         {
             Item.width = 24;

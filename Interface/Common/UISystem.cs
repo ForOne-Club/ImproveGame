@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
 using ImproveGame.Interface.BannerChest;
+using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.PlayerInfo;
 using System.Reflection;
@@ -15,9 +16,6 @@ namespace ImproveGame.Interface.Common
         internal static UISystem Instance;
 
         #region 定义
-
-        public AutofisherGUI AutofisherGUI;
-        internal static UserInterface AutofisherInterface;
 
         public LiquidWandGUI LiquidWandGUI;
         internal static UserInterface LiquidWandInterface;
@@ -61,6 +59,11 @@ namespace ImproveGame.Interface.Common
         // Buff 追踪站
         public BuffTrackerGUI BuffTrackerGUI;
         public EventTrigger BuffTrackerTrigger;
+        
+        // 侧栏箱子类 UI
+        public AutofisherGUI AutofisherGUI;
+        public ExtremeStorageGUI ExtremeStorageGUI;
+        public SidedEventTrigger SidedEventTrigger;
 
         #endregion
 
@@ -73,8 +76,9 @@ namespace ImproveGame.Interface.Common
             PlayerInfoGUI = null;
             PlayerInfoTrigger = null;
 
+            ExtremeStorageGUI = null;
             AutofisherGUI = null;
-            AutofisherInterface = null;
+            SidedEventTrigger = null;
 
             BuffTrackerGUI = null;
             BuffTrackerTrigger = null;
@@ -132,7 +136,8 @@ namespace ImproveGame.Interface.Common
             PlayerInfoTrigger = new EventTrigger("Radial Hotbars", "PlayerInfo");
             BuffTrackerTrigger.SetCarrier(BuffTrackerGUI);
 
-            AutofisherGUI = new AutofisherGUI();
+            SidedEventTrigger = new SidedEventTrigger();
+
             LiquidWandGUI = new LiquidWandGUI();
             ArchitectureGUI = new ArchitectureGUI();
             BrustGUI = new BrustGUI();
@@ -142,7 +147,6 @@ namespace ImproveGame.Interface.Common
             LifeformAnalyzerGUI = new LifeformAnalyzerGUI();
             StructureGUI = new StructureGUI();
             PrefixRecallGUI = new PrefixRecallGUI();
-            LoadGUI(ref AutofisherGUI, out AutofisherInterface);
             LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
             LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
             LoadGUI(ref BrustGUI, out BrustInterface);
@@ -174,8 +178,6 @@ namespace ImproveGame.Interface.Common
             // 可以看到，它执行的是最早的。
             EventTrigger.UpdateUI(gameTime);
 
-            if (AutofisherGUI.Visible)
-                AutofisherInterface?.Update(gameTime);
             if (LiquidWandGUI.Visible)
                 LiquidWandInterface?.Update(gameTime);
             if (ArchitectureGUI.Visible)
@@ -241,7 +243,6 @@ namespace ImproveGame.Interface.Common
                 }, InterfaceScaleType.UI));*/
                 layers.Insert(index, "Liquid Wand GUI", LiquidWandGUI, () => LiquidWandGUI.Visible);
                 layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible);
-                layers.Insert(index, "Autofisher GUI", AutofisherGUI, () => AutofisherGUI.Visible);
                 layers.Insert(index, "Grab Bag Info GUI", GrabBagInfoGUI, () => GrabBagInfoGUI.Visible);
                 layers.Insert(index, "Lifeform Analyzer GUI", LifeformAnalyzerGUI, () => LifeformAnalyzerGUI.Visible);
                 layers.Insert(index, "Structure GUI", StructureGUI, () => StructureGUI.Visible);

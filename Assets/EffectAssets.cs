@@ -13,7 +13,8 @@ namespace ImproveGame.Assets
 
         public static Asset<Effect> LiquidSurface;
         public static Asset<Effect> Transform;
-        public static Asset<Texture2D> Perlin;
+        internal static Asset<Effect> Bloom;
+        internal static Asset<Texture2D> Perlin;
 
         public static Texture2D Shader1, Shader2, Shader3;
         public static Effect Effect1;
@@ -29,6 +30,7 @@ namespace ImproveGame.Assets
             RoundedRectangle = Round = Cross = Line = null;
             LiquidSurface = null;
             Transform = null;
+            Bloom = null;
             Perlin = null;
 
             Shader1 = Shader2 = Shader3 = null;
@@ -58,6 +60,7 @@ namespace ImproveGame.Assets
             // BetterFiltering = GetEffect("BetterFiltering");
             LiquidSurface = GetEffect("LiquidSurface");
             Transform = GetEffect("Transform");
+            Bloom = GetEffect("Bloom");
             Perlin = Main.Assets.Request<Texture2D>("Images/Misc/Perlin");
         }
     }

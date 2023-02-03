@@ -1,5 +1,7 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
@@ -50,8 +52,6 @@ namespace ImproveGame.Common.Systems
             RecipeGroup.RegisterGroup("ImproveGame:AnyAdamantiteBar", AnyAdamantiteBar);
         }
 
-        private static bool _loadedSuperVault; // 本次运行是否加载了大背包，全局字段避免出问题
-
         public override void Load()
         {
             // 配方列表
@@ -71,12 +71,12 @@ namespace ImproveGame.Common.Systems
              * IL_0278: stloc.s   'array'
              */
             if (!c.TryGotoNext(
-                MoveType.After,
-                i => i.MatchLdsfld<Main>(nameof(Main.player)),
-                i => i.MatchLdsfld<Main>(nameof(Main.myPlayer)),
-                i => i.Match(OpCodes.Ldelem_Ref),
-                i => i.MatchLdfld<Player>(nameof(Player.inventory))
-            ))
+                    MoveType.After,
+                    i => i.MatchLdsfld<Main>(nameof(Main.player)),
+                    i => i.MatchLdsfld<Main>(nameof(Main.myPlayer)),
+                    i => i.Match(OpCodes.Ldelem_Ref),
+                    i => i.MatchLdfld<Player>(nameof(Player.inventory))
+                ))
                 return;
 
             c.EmitDelegate(GetWholeInventory);
@@ -86,19 +86,42 @@ namespace ImproveGame.Common.Systems
              * IL_02E8: blt.s     IL_027F
              */
             if (!c.TryGotoNext(
-                MoveType.After,
-                i => i.Match(OpCodes.Ldloc_S),
-                i => i.Match(OpCodes.Ldc_I4_S, (sbyte)58)
-                //i => i.Match(OpCodes.Blt_S) // FindRecipes是Blt_S, Create是Blt, 加上这句就不方便偷懒了
-            ))
+                    MoveType.After,
+                    i => i.Match(OpCodes.Ldloc_S),
+                    i => i.Match(OpCodes.Ldc_I4_S, (sbyte)58)
+                    //i => i.Match(OpCodes.Blt_S) // FindRecipes是Blt_S, Create是Blt, 加上这句就不方便偷懒了
+                ))
                 return;
 
-            var label = c.DefineLabel(); // 记录位置
-            c.Emit(OpCodes.Ldsfld, typeof(RecipeSystem).GetField(nameof(_loadedSuperVault), BindingFlags.Static | BindingFlags.NonPublic));
-            c.Emit(OpCodes.Brfalse, label); // 如果没加载，跳出
             c.Emit(OpCodes.Pop); // 直接丢弃，因为sbyte不支持127以上
-            c.Emit(OpCodes.Ldc_I4, 59 + 100); // 玩家背包 + 大背包
-            c.MarkLabel(label); // pop和ldc_i4之后，直接跳到这里就没那两句
+            c.Emit(OpCodes.Ldc_I4, 58); // 玩家背包 + 大背包
+            c.Emit(OpCodes.Call,
+                this.GetType().GetMethod(nameof(GetAllExtraStorageLength), BindingFlags.Static | BindingFlags.Public));
+            c.Emit(OpCodes.Add);
+        }
+
+        /// <summary>
+        /// 为了方便直接写了一个方法，在IL里直接调用就行了
+        /// 这里不使用 GetExtraItems().Count 是为了节省资源
+        /// </summary>
+        public static int GetAllExtraStorageLength()
+        {
+            int count = 0;
+
+            if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng &&
+                DataPlayer.TryGet(Main.LocalPlayer, out var modPlayer) && modPlayer.SuperVault is not null)
+            {
+                count += modPlayer.SuperVault.Length;
+            }
+
+            if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.Storage.UseForCrafting &&
+                Main.netMode is NetmodeID.SinglePlayer && ExtremeStorageGUI.CurrentGroup is not ItemGroup.Setting &&
+                ExtremeStorageGUI.AllItemsCached is not null)
+            {
+                count += ExtremeStorageGUI.AllItemsCached.Length;
+            }
+
+            return count;
         }
 
         private void ConsumeBigBagMaterial(ILContext il)
@@ -130,44 +153,46 @@ namespace ImproveGame.Common.Systems
              * IL_01B0: stelem.ref
              */
             if (!c.TryGotoNext(
-                MoveType.After,
-                i => i.Match(OpCodes.Ldloc_0),
-                i => i.Match(OpCodes.Ldloc_S),
-                i => i.Match(OpCodes.Newobj),
-                i => i.Match(OpCodes.Stelem_Ref)
-            ))
+                    MoveType.After,
+                    i => i.Match(OpCodes.Ldloc_0),
+                    i => i.Match(OpCodes.Ldloc_S),
+                    i => i.Match(OpCodes.Newobj),
+                    i => i.Match(OpCodes.Stelem_Ref)
+                ))
                 return;
 
             c.Emit(OpCodes.Ldloc_1);
-            c.Emit(OpCodes.Call, typeof(Item).GetMethod(nameof(Item.TurnToAir), BindingFlags.Instance | BindingFlags.Public));
+            c.Emit(OpCodes.Call,
+                typeof(Item).GetMethod(nameof(Item.TurnToAir), BindingFlags.Instance | BindingFlags.Public));
         }
 
         // 两边代码异常相似，所以我封装成一个方法了
         private Item[] GetWholeInventory(Item[] inventory)
         {
-            _loadedSuperVault = false;
-            if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng && DataPlayer.TryGet(Main.LocalPlayer, out var modPlayer) && modPlayer.SuperVault is not null)
+            var itemList = new List<Item>(inventory);
+            itemList[58] = new Item();
+            itemList.AddRange(GetExtraItems());
+            return itemList.ToArray();
+        }
+
+        private IEnumerable<Item> GetExtraItems()
+        {
+            var finalItems = new List<Item>();
+
+            if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng &&
+                DataPlayer.TryGet(Main.LocalPlayer, out var modPlayer) && modPlayer.SuperVault is not null)
             {
-                _loadedSuperVault = true;
-                var superVault = modPlayer.SuperVault;
-                var inv = new Item[inventory.Length + superVault.Length];
-                for (int i = 0; i < inventory.Length - 1; i++) // 原版没包括58，我们也不包括
-                {
-                    inv[i] = inventory[i];
-                }
-                inv[inventory.Length - 1] = new();
-                for (int i = 0; i < superVault.Length; i++)
-                {
-                    if (superVault[i] is null)
-                    {
-                        inv[i + inventory.Length] = new();
-                        continue;
-                    }
-                    inv[i + inventory.Length] = superVault[i];
-                }
-                return inv;
+                finalItems.AddRange(modPlayer.SuperVault);
             }
-            return inventory;
+
+            if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.Storage.UseForCrafting &&
+                Main.netMode is NetmodeID.SinglePlayer && ExtremeStorageGUI.CurrentGroup is not ItemGroup.Setting &&
+                ExtremeStorageGUI.AllItemsCached is not null)
+            {
+                finalItems.AddRange(ExtremeStorageGUI.AllItemsCached);
+            }
+
+            return finalItems;
         }
     }
 }

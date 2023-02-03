@@ -66,7 +66,7 @@ namespace ImproveGame.Content.Tiles
                 var player = Main.player[i];
                 // 距离用 DistanceSQ 判断，没有开方操作运行更快
                 if (player.active && !player.DeadOrGhost && player.Center.DistanceSQ(Position.ToWorldCoordinates()) <= distance)
-                    FishingTipPacket.Get(Position, tipType, fishingLevel, waterQuality).Send(i);
+                    FishingTipPacket.Get(ID, tipType, fishingLevel, waterQuality).Send(i);
             }
         }
 
@@ -89,15 +89,6 @@ namespace ImproveGame.Content.Tiles
 
             int placedEntity = Place(i - 1, j - 1);
             return placedEntity;
-        }
-
-        public static int Hook_AfterPlacement_NoEntity(int i, int j, int type, int style, int direction, int alternate)
-        {
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                NetMessage.SendTileSquare(Main.myPlayer, i - 1, j - 1, 2, 2);
-            }
-            return 0;
         }
 
         public static Player GetClosestPlayer(Point16 Position) => Main.player[Player.FindClosest(new Vector2(Position.X * 16, Position.Y * 16), 1, 1)];
@@ -155,11 +146,7 @@ namespace ImproveGame.Content.Tiles
             }
             fishingSpeedBonus += Math.Min(bassCount / 20f, 5f);
 
-            # if DEBUG
-            const float fishingCooldown = 33f;
-            #else
-            const float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版写的是660
-            #endif
+            const float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版钓鱼速度是660
             if (FishingTimer > fishingCooldown / fishingSpeedBonus)
             {
                 FishingTimer = 0;
@@ -437,7 +424,7 @@ namespace ImproveGame.Content.Tiles
                     {
                         var client = Main.player[p];
                         if (client.active && !client.DeadOrGhost && client.GetModPlayer<AutofishPlayer>().IsAutofisherOpened)
-                            ItemsStackChangePacket.Get(Position, (byte)i, fish[i].stack - oldStackSlot).Send(p);
+                            ItemsStackChangePacket.Get(ID, (byte)i, fish[i].stack - oldStackSlot).Send(p);
                     }
                 }
                 if (item.IsAir)
@@ -451,7 +438,7 @@ namespace ImproveGame.Content.Tiles
                     fish[i] = item.Clone();
                     if (Main.netMode is NetmodeID.Server)
                     {
-                        ItemSyncPacket.Get(Position, (byte)i).Send(runLocally: false);
+                        ItemSyncPacket.Get(ID, (byte)i).Send(runLocally: false);
                     }
                     item = new();
                     goto FilledEnd;
@@ -468,11 +455,11 @@ namespace ImproveGame.Content.Tiles
                     // 没了
                     if (bait.IsAir)
                     {
-                        ItemSyncPacket.Get(Position, 16).Send(runLocally: false);
+                        ItemSyncPacket.Get(ID, 16).Send(runLocally: false);
                     }
                     else // 还在，同步stack
                     {
-                        ItemsStackChangePacket.Get(Position, 16, -1).Send(runLocally: false);
+                        ItemsStackChangePacket.Get(ID, 16, -1).Send(runLocally: false);
                     }
                 }
             }

@@ -1,21 +1,21 @@
 ﻿using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Content.Tiles;
+using ImproveGame.Interface;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Players
 {
     public class AutofishPlayer : ModPlayer
     {
         public static AutofishPlayer LocalPlayer => Main.LocalPlayer.GetModPlayer<AutofishPlayer>();
-        public bool IsAutofisherOpened => Autofisher is {X: > 0, Y: > 0};
-        internal Point16 Autofisher { get; private set; } = Point16.NegativeOne;
+        public TEAutofisher Autofisher;
+        public bool IsAutofisherOpened => Autofisher is not null;
         public static bool TryGet(Player player, out AutofishPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
 
         public override void OnEnterWorld(Player player)
         {
-            Autofisher = Point16.NegativeOne;
+            Autofisher = null;
         }
 
         public override void PlayerDisconnect(Player player)
@@ -23,42 +23,41 @@ namespace ImproveGame.Common.Players
             // 这是其他客户端和服务器都执行的
             if (TryGet(player, out var modPlayer))
             {
-                modPlayer.SetAutofisher(Point16.NegativeOne, false);
+                modPlayer.SetAutofisher(null, false);
             }
         }
 
-        public void SetAutofisher(Point16 point, bool needSync = true)
+        public void SetAutofisher(TEAutofisher autofisher, bool needSync = true)
         {
             // 切换两边（如果有的话）Autofisher的状态
-            TryGetAutofisher(out var fisherOld);
-            fisherOld.Opened = false;
-            if (TryGetTileEntityAs<TEAutofisher>(point.X, point.Y, out var fisherNew))
-            {
-                fisherNew.Opened = true;
-            }
+            if (Autofisher is not null)
+                Autofisher.Opened = false;
+            if (autofisher is not null)
+                autofisher.Opened = true;
 
-            // 应用开关
-            Autofisher = point;
+            Autofisher = autofisher;
 
             // 设置传输
             if (needSync && Main.netMode != NetmodeID.SinglePlayer)
             {
-                SyncOpenPacket.Get(point, Main.myPlayer).Send(runLocally: false);
+                SyncOpenPacket.Get(Autofisher?.ID ?? -1, Main.myPlayer).Send(runLocally: false);
             }
         }
 
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             // 服务器给新玩家发开箱了的玩家的箱子状态包
-            if (Main.netMode == NetmodeID.Server)
+            if (Main.netMode != NetmodeID.Server)
             {
-                for (byte i = 0; i < Main.maxPlayers; i++)
+                return;
+            }
+
+            for (byte i = 0; i < Main.maxPlayers; i++)
+            {
+                var player = Main.player[i];
+                if (player.active && !player.dead && TryGet(player, out var modPlayer) && modPlayer.Autofisher is not null)
                 {
-                    var player = Main.player[i];
-                    if (player.active && !player.dead && TryGet(player, out var modPlayer) && modPlayer.Autofisher.X > 0 && modPlayer.Autofisher.Y > 0)
-                    {
-                        SyncOpenPacket.Get(modPlayer.Autofisher, Main.myPlayer).Send(toWho, fromWho, runLocally: false);
-                    }
+                    SyncOpenPacket.Get(modPlayer.Autofisher.ID, i).Send(toWho, fromWho, runLocally: false);
                 }
             }
         }
@@ -76,57 +75,33 @@ namespace ImproveGame.Common.Players
 
             switch (AutofisherGUI.Visible)
             {
-                case false when Autofisher.X > 0 && Autofisher.Y > 0:
-                    SetAutofisher(Point16.NegativeOne);
+                // 不显示 UI，Autofisher 不是 null
+                case false when Autofisher is not null:
+                    SetAutofisher(null);
                     break;
-                case true when GetAutofisher() is null:
-                    UISystem.Instance.AutofisherGUI.Close();
-                    return;
-                case true when Autofisher.X >= 0 && Autofisher.Y >= 0:
-                    if (Player.chest != -1 || !Main.playerInventory || Player.sign > -1 || Player.talkNPC > -1)
-                    {
-                        UISystem.Instance.AutofisherGUI.Close();
-                    }
-
+                // 显示 UI，Autofisher 是 null
+                case true when Autofisher is null:
+                    SidedEventTrigger.ToggleViewBody(UISystem.Instance.AutofisherGUI);
+                    break;
+                // 显示 UI，Autofisher 不是 null
+                case true:
                     int playerX = (int)(Player.Center.X / 16f);
                     int playerY = (int)(Player.Center.Y / 16f);
-                    if (playerX < Autofisher.X - Player.lastTileRangeX ||
-                        playerX > Autofisher.X + Player.lastTileRangeX + 1 ||
-                        playerY < Autofisher.Y - Player.lastTileRangeY ||
-                        playerY > Autofisher.Y + Player.lastTileRangeY + 1)
+                    if (playerX < Autofisher.Position.X - Player.lastTileRangeX ||
+                        playerX > Autofisher.Position.X + Player.lastTileRangeX + 1 ||
+                        playerY < Autofisher.Position.Y - Player.lastTileRangeY ||
+                        playerY > Autofisher.Position.Y + Player.lastTileRangeY + 1)
                     {
                         SoundEngine.PlaySound(SoundID.MenuClose);
-                        UISystem.Instance.AutofisherGUI.Close();
+                        SidedEventTrigger.ToggleViewBody(UISystem.Instance.AutofisherGUI);
                     }
-                    else if (TileLoader.GetTile(Main.tile[Autofisher.X, Autofisher.Y].TileType) is not Content.Tiles.Autofisher)
+                    else if (TileLoader.GetTile(Main.tile[Autofisher.Position.ToPoint()].TileType) is not Content.Tiles.Autofisher)
                     {
                         SoundEngine.PlaySound(SoundID.MenuClose);
-                        UISystem.Instance.AutofisherGUI.Close();
+                        SidedEventTrigger.ToggleViewBody(UISystem.Instance.AutofisherGUI);
                     }
                     break;
             }
-        }
-
-        public bool TryGetAutofisher(out TEAutofisher autofisher)
-        {
-            autofisher = GetAutofisher();
-            if (autofisher is not null)
-            {
-                return true;
-            }
-
-            autofisher = new();
-            return false;
-        }
-
-        public TEAutofisher GetAutofisher()
-        {
-            if (!IsAutofisherOpened)
-                return null;
-            Tile tile = Main.tile[Autofisher.ToPoint()];
-            if (!tile.HasTile)
-                return null;
-            return !TryGetTileEntityAs<TEAutofisher>(Autofisher.X, Autofisher.Y, out var fisher) ? null : fisher;
         }
     }
 }

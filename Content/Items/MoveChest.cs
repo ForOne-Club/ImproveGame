@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.Packets;
 using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Common.Players;
 using System.Collections.ObjectModel;
@@ -155,21 +156,15 @@ public class MoveChest : ModItem
             _forceCoolDown--;
         }
 
-        if (!_hasChest)
+        if (player.itemAnimation is 0)
         {
-            return;
+            //为了显示放置预览
+            Item.createTile = _hasChest ? _chestType : -1;
+            Item.placeStyle = _style;
         }
 
-        ModifyPlayerSpeed(player);
-
-        if (player.itemAnimation != 0)
-        {
-            return;
-        }
-
-        //为了显示放置预览
-        Item.createTile = _hasChest ? _chestType : -1;
-        Item.placeStyle = _style;
+        if (_hasChest)
+            ModifyPlayerSpeed(player);
     }
 
     #region 物品属性多人传输
@@ -285,6 +280,8 @@ public class MoveChest : ModItem
     #endregion
 
     #region 基础属性设置
+
+    public override void SetStaticDefaults() => SacrificeTotal = 1;
 
     public override void SetDefaults()
     {

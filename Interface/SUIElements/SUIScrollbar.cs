@@ -23,6 +23,15 @@ namespace ImproveGame.Interface.SUIElements
 
         public bool Visible;
 
+        /// <summary> 当拖动块填满了整个拖动条（即不能拖动也不需要拖动）时，是否不绘制拖动块 </summary>
+        public bool HideInnerIfFilled;
+
+        /// <summary> 当拖动块填满了整个拖动条（即不能拖动也不需要拖动）时，是否不绘制<b>整个拖动条</b> </summary>
+        public bool HideIfFilled;
+        
+        /// <summary> 拖动块是否填满了整个拖动条 </summary>
+        public bool InnerFilled => MaxViewPoisition == 0f;
+
         public AnimationTimer HoverTimer = new(3);
 
         public float ViewPosition
@@ -108,12 +117,18 @@ namespace ImproveGame.Interface.SUIElements
 
         public virtual void InnerMouseOver()
         {
+            if ((HideIfFilled || HideInnerIfFilled) && InnerFilled)
+                return;
+
             HoverTimer.Open();
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         public virtual void InnerMouseOut()
         {
+            if ((HideIfFilled || HideInnerIfFilled) && InnerFilled)
+                return;
+
             HoverTimer.Close();
         }
 
@@ -157,13 +172,16 @@ namespace ImproveGame.Interface.SUIElements
             PlayerInput.LockVanillaMouseScroll("ModLoader/UIScrollbar");
         }
 
-        public override void DrawSelf(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!Visible)
+            if (!Visible || (HideIfFilled && InnerFilled))
                 return;
             Vector2 size = GetDimensions().Size();
             Rounded = new Vector4(MathF.Min(size.X, size.Y) / 2f);
             base.DrawSelf(spriteBatch);
+
+            if (HideInnerIfFilled && InnerFilled)
+                return;
 
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();

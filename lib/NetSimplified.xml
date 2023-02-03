@@ -184,7 +184,7 @@
         <member name="T:NetSimplified.Syncing.AutoSyncAttribute">
             <summary>
             此特性允许变量自动发包传输<br/>
-            支持的变量类型: <see cref="T:System.Byte"/>, <see cref="T:System.Boolean"/>, <see cref="T:System.Int16"/>, <see cref="T:System.Int32"/>, <see cref="T:System.Int64"/>, <see cref="T:System.UInt16"/>, <see cref="T:System.UInt32"/>, <see cref="T:System.UInt64"/>, <see cref="T:System.Single"/>, <see cref="T:System.Double"/>, <see cref="T:System.String"/>, <see cref="T:Microsoft.Xna.Framework.Vector2"/>, <see cref="T:Microsoft.Xna.Framework.Color"/>, <see cref="T:Microsoft.Xna.Framework.Point"/>, <see cref="T:Terraria.DataStructures.Point16"/>, <see cref="T:Terraria.Item"/> 及其数组类型
+            支持的变量类型: <see cref="T:System.Byte"/>, <see cref="T:System.Boolean"/>, <see cref="T:System.Int16"/>, <see cref="T:System.Int32"/>, <see cref="T:System.Int64"/>, <see cref="T:System.SByte"/>, <see cref="T:System.UInt16"/>, <see cref="T:System.UInt32"/>, <see cref="T:System.UInt64"/>, <see cref="T:System.Single"/>, <see cref="T:System.Double"/>, <see cref="T:System.String"/>, <see cref="T:Microsoft.Xna.Framework.Vector2"/>, <see cref="T:Microsoft.Xna.Framework.Color"/>, <see cref="T:Microsoft.Xna.Framework.Point"/>, <see cref="T:Terraria.DataStructures.Point16"/>, <see cref="T:Terraria.Item"/> 及其数组类型
             </summary>
         </member>
         <member name="F:NetSimplified.Syncing.AutoSyncHandler.SupportedTypes">
