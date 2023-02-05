@@ -13,6 +13,20 @@ namespace ImproveGame
     /// </summary>
     partial class MyUtils
     {
+        public static Matrix GetMatrix(bool ui)
+        {
+            if (ui)
+            {
+                return Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+            }
+            else
+            {
+                Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
+                Vector2 offset = screenSize * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom) / 2;
+                return Matrix.CreateOrthographicOffCenter(offset.X, Main.screenWidth - offset.X, Main.screenHeight - offset.Y, offset.Y, 0, 1);
+            }
+        }
+
         public static Vector2 GetFontSize(int text, bool large = false)
         {
             return GetFontSize(text.ToString(), large);

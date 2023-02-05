@@ -45,7 +45,7 @@ namespace ImproveGame.Common
 				if (!justCheckingString && color != Color.Black) {
 					float inventoryScale = Main.inventoryScale;
 					Main.inventoryScale = scale * invScale;
-                    PixelShader.RoundedRectangle(position, size, new Vector4(12f), Background, 2, BorderColor);
+                    SDFRactangle.HasBorder(position, size, new Vector4(12f), Background, 2, BorderColor);
 					ItemSlot.Draw(spriteBatch, ref _item, ItemSlot.Context.ChatItem, position, Color.White);
                     Main.inventoryScale = inventoryScale;
                 }

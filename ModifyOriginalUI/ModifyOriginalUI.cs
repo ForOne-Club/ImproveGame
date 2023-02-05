@@ -12,8 +12,8 @@ namespace ImproveGame.ModifyOriginalUI
     internal class ModifyOriginalUI : ModSystem
     {
         private bool _loaded;
-        private MethodInfo UITextPaenl_DrawText;
-        private MethodInfo UIWorkshopHub_MakeFancyButtonInner;
+        private MethodInfo _uITextPaenl_DrawText;
+        private MethodInfo _uIWorkshopHub_MakeFancyButtonInner;
 
         public override void Unload()
         {
@@ -23,8 +23,8 @@ namespace ImproveGame.ModifyOriginalUI
             }
             _loaded = false;
 
-            HookEndpointManager.Remove(UITextPaenl_DrawText, UITextPanel_DrawSelf);
-            HookEndpointManager.Remove(UIWorkshopHub_MakeFancyButtonInner, MakeFancyButtonInner);
+            HookEndpointManager.Remove(_uITextPaenl_DrawText, UITextPanel_DrawSelf);
+            HookEndpointManager.Remove(_uIWorkshopHub_MakeFancyButtonInner, MakeFancyButtonInner);
         }
 
         public override void Load()
@@ -59,16 +59,16 @@ namespace ImproveGame.ModifyOriginalUI
             On.Terraria.GameContent.Bestiary.FlavorTextBestiaryInfoElement.ProvideUIElement += FlavorTextBestiaryInfoElement_ProvideUIElement;
 
             // 获取方法
-            UITextPaenl_DrawText = typeof(UITextPanel<string>).GetMethod("DrawText", BindingFlags.Instance | BindingFlags.NonPublic);
-            UIWorkshopHub_MakeFancyButtonInner = typeof(UIWorkshopHub).GetMethod("MakeFancyButtonInner", BindingFlags.Instance | BindingFlags.NonPublic);
+            _uITextPaenl_DrawText = typeof(UITextPanel<string>).GetMethod("DrawText", BindingFlags.Instance | BindingFlags.NonPublic);
+            _uIWorkshopHub_MakeFancyButtonInner = typeof(UIWorkshopHub).GetMethod("MakeFancyButtonInner", BindingFlags.Instance | BindingFlags.NonPublic);
 
             // 原版 WorkShop Hub 提示框
             On.Terraria.GameContent.UI.States.UIWorkshopHub.AddDescriptionPanel += UIWorkshopHub_AddDescriptionPanel;
 
             // 原版 WorkShop Hub 菜单按钮
-            if (UIWorkshopHub_MakeFancyButtonInner != null)
+            if (_uIWorkshopHub_MakeFancyButtonInner != null)
             {
-                HookEndpointManager.Add(UIWorkshopHub_MakeFancyButtonInner, MakeFancyButtonInner);
+                HookEndpointManager.Add(_uIWorkshopHub_MakeFancyButtonInner, MakeFancyButtonInner);
             }
 
             // 原版 UISlicedImage
@@ -77,9 +77,9 @@ namespace ImproveGame.ModifyOriginalUI
             // 原版 Text
             On.Terraria.GameContent.UI.Elements.UIText.DrawSelf += UIText_DrawSelf;
             // 原版 TextPanel
-            if (UITextPaenl_DrawText != null)
+            if (_uITextPaenl_DrawText != null)
             {
-                HookEndpointManager.Add(UITextPaenl_DrawText, UITextPanel_DrawSelf);
+                HookEndpointManager.Add(_uITextPaenl_DrawText, UITextPanel_DrawSelf);
             }
             // 原版 Panel
             On.Terraria.GameContent.UI.Elements.UIPanel.DrawSelf += UIPanel_DrawSelf;
@@ -138,7 +138,7 @@ namespace ImproveGame.ModifyOriginalUI
         {
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
-            PixelShader.RoundedRectangle(pos, size, new Vector4(6f), Color.Lerp(new Color(150, 150, 220), self._color, 0.6f) * 0.6f);
+            SDFRactangle.NoBorder(pos, size, new Vector4(6f), Color.Lerp(new Color(150, 150, 220), self._color, 0.6f) * 0.6f);
         }
 
         private void UIWorkshopHub_AddDescriptionPanel(On.Terraria.GameContent.UI.States.UIWorkshopHub.orig_AddDescriptionPanel orig, UIWorkshopHub self, UIElement container, float accumulatedHeight, float height, string tagGroup)
@@ -229,7 +229,7 @@ namespace ImproveGame.ModifyOriginalUI
             On.Terraria.Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y,
             int w, int h, Color c)
         {
-            PixelShader.RoundedRectangle(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), c, 2, UIColor.PanelBorder);
+            SDFRactangle.HasBorder(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), c, 2, UIColor.PanelBorder);
         }
 
         private static CalculatedStyle GetHandleCalculatedStyle(UIScrollbar scrollbar)
@@ -267,12 +267,12 @@ namespace ImproveGame.ModifyOriginalUI
                 SoundEngine.PlaySound(SoundID.MenuTick);
             }
             float bgRounded = MathF.Min(size.X, size.Y) / 2;
-            PixelShader.RoundedRectangle(pos, size, new Vector4(bgRounded), UIColor.ScrollBarBg, 2, UIColor.PanelBorder);
+            SDFRactangle.HasBorder(pos, size, new Vector4(bgRounded), UIColor.ScrollBarBg, 2, UIColor.PanelBorder);
             CalculatedStyle barDimensions = GetHandleCalculatedStyle(self);
             Vector2 barPos = barDimensions.Position() + new Vector2(5, 3);
             Vector2 barSize = barDimensions.Size() - new Vector2(10, 7);
             float barRounded = MathF.Min(barSize.X, barSize.Y) / 2;
-            PixelShader.RoundedRectangle(barPos, barSize, new Vector4(barRounded), new(220, 220, 220));
+            SDFRactangle.NoBorder(barPos, barSize, new Vector4(barRounded), new(220, 220, 220));
         }
 
         private void UIPanel_DrawSelf(On.Terraria.GameContent.UI.Elements.UIPanel.orig_DrawSelf orig, UIPanel self,
@@ -280,7 +280,7 @@ namespace ImproveGame.ModifyOriginalUI
         {
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
-            PixelShader.RoundedRectangle(pos, size, new Vector4(10f), self.BackgroundColor, 2, self.BorderColor);
+            SDFRactangle.HasBorder(pos, size, new Vector4(10f), self.BackgroundColor, 2, self.BorderColor);
         }
 
         private static void PrintParent(UIElement self, UIElement target)

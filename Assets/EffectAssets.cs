@@ -3,7 +3,7 @@
 namespace ImproveGame.Assets
 {
     // 在这里加一个 internal 就不用再给字段设置了
-    internal class EffectAssets : ModSystem
+    internal class ShaderAssets : ModSystem
     {
         public static EffectPass SpriteEffectPass { get; private set; }
         public static Effect Line { get; private set; }

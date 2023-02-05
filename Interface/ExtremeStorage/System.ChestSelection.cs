@@ -85,7 +85,7 @@ namespace ImproveGame.Interface.ExtremeStorage
                 }
 
                 var drawPosition = positionInWorld.ToVector2() - Main.screenPosition - new Vector2(2f);
-                PixelShader.RoundedRectangle(drawPosition, hitbox.Size() + new Vector2(4f), new Vector4(4), color * 0.2f, 2f, color, ui: false);
+                SDFRactangle.HasBorder(drawPosition, hitbox.Size() + new Vector2(4f), new Vector4(4), color * 0.2f, 2f, color, ui: false);
             }
         }
     }

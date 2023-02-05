@@ -194,7 +194,7 @@ namespace ImproveGame.Interface.SUIElements
                 dragging ? 1 : HoverTimer.Schedule);
 
             // 滚动条拖动块
-            PixelShader.RoundedRectangle(innerPosition, innerSize, new Vector4(MathF.Min(innerSize.X, innerSize.Y) / 2), hoverColor);
+            SDFRactangle.NoBorder(innerPosition, innerSize, new Vector4(MathF.Min(innerSize.X, innerSize.Y) / 2), hoverColor);
         }
 
         /// <summary>

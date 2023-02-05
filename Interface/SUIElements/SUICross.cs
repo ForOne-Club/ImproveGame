@@ -40,7 +40,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 size = GetDimensions().Size();
             Color fork = Color.Lerp(Color.Transparent, crossColor, hoverTimer.Schedule);
             Vector2 forkPos = pos + (size - new Vector2(forkSize)) / 2f;
-            PixelShader.DrawCross(forkPos, forkSize, crossRound, fork, crossBorder, BorderColor);
+            SDFGraphic.DrawCross(forkPos, forkSize, crossRound, fork, crossBorder, BorderColor);
         }
     }
 }

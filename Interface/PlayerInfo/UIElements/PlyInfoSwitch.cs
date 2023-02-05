@@ -25,7 +25,7 @@ namespace ImproveGame.Interface.PlayerInfo.UIElements
             base.DrawSelf(sb);
             Vector2 pos = GetDimensions().Position() ;
             Vector2 size = GetDimensions().Size() ;
-            PixelShader.RoundedRectangle(pos, size, Rounded, _background, 2, _border);
+            SDFRactangle.HasBorder(pos, size, Rounded, _background, 2, _border);
 
             if (_expanded is not null)
             {

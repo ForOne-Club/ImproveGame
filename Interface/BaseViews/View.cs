@@ -104,11 +104,11 @@ namespace ImproveGame.Interface.BaseViews
 
             if (Border > 0 && (BgColor != Color.Transparent || BorderColor != Color.Transparent))
             {
-                PixelShader.RoundedRectangle(pos, size, Rounded, BgColor, Border, BorderColor);
+                SDFRactangle.HasBorder(pos, size, Rounded, BgColor, Border, BorderColor);
             }
             else if (BgColor != Color.Transparent)
             {
-                PixelShader.RoundedRectangle(pos, size, Rounded, BgColor);
+                SDFRactangle.NoBorder(pos, size, Rounded, BgColor);
             }
 
             base.DrawSelf(spriteBatch);

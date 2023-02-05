@@ -72,12 +72,12 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 boxSize = new Vector2(48, 26) * _textScale;
 
             Vector2 position1 = position + new Vector2(0, size.Y / 2 - boxSize.Y / 2);
-            PixelShader.RoundedRectangle(position1, boxSize, new Vector4(MathF.Min(boxSize.X, boxSize.Y) / 2), color, 2, color2);
+            SDFRactangle.HasBorder(position1, boxSize, new Vector4(MathF.Min(boxSize.X, boxSize.Y) / 2), color, 2, color2);
 
             Vector2 boxSize2 = new(boxSize.Y - 10 * _textScale);
             Vector2 position2 = position + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),
                 new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), _timer.Schedule);
-            PixelShader.DrawRound(position2, boxSize2.X, color3);
+            SDFGraphic.DrawRound(position2, boxSize2.X, color3);
 
             DrawString(
                 position + new Vector2(boxSize.X + InnerRowSpacing * _textScale,

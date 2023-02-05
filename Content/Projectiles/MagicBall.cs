@@ -92,11 +92,11 @@ namespace ImproveGame.Content.Projectiles
                 Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
 
                 // 把变换和所需信息丢给shader
-                EffectAssets.Effect1.Parameters["uTransform"].SetValue(PixelShader.GetMatrix(false));
-                EffectAssets.Effect1.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
-                Main.graphics.GraphicsDevice.Textures[0] = EffectAssets.Shader3;
-                Main.graphics.GraphicsDevice.Textures[1] = EffectAssets.Shader1;
-                Main.graphics.GraphicsDevice.Textures[2] = EffectAssets.Shader2;
+                ShaderAssets.Effect1.Parameters["uTransform"].SetValue(GetMatrix(false));
+                ShaderAssets.Effect1.Parameters["uTime"].SetValue(-(float)Main.time * 0.03f);
+                Main.graphics.GraphicsDevice.Textures[0] = ShaderAssets.Shader3;
+                Main.graphics.GraphicsDevice.Textures[1] = ShaderAssets.Shader1;
+                Main.graphics.GraphicsDevice.Textures[2] = ShaderAssets.Shader2;
                 Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
                 Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.PointWrap;
@@ -104,7 +104,7 @@ namespace ImproveGame.Content.Projectiles
                 // Main.graphics.GraphicsDevice.Textures[1] = Main.magicPixel;
                 // Main.graphics.GraphicsDevice.Textures[2] = Main.magicPixel;
 
-                EffectAssets.Effect1.CurrentTechnique.Passes[0].Apply();
+                ShaderAssets.Effect1.CurrentTechnique.Passes[0].Apply();
 
                 Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
                 Main.graphics.GraphicsDevice.RasterizerState = originalState;

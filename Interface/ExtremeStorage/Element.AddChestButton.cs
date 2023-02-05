@@ -31,7 +31,7 @@ public class AddChestButton : HoverView
         var center = dimensions.Center() + new Vector2(0, UIConfigs.Instance.GeneralFontOffsetY);
 
         Color borderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, hoverTimer.Schedule);
-        PixelShader.RoundedRectangle(position, size, new Vector4(10f), UIColor.ButtonBg, 2, borderColor);
+        SDFRactangle.HasBorder(position, size, new Vector4(10f), UIColor.ButtonBg, 2, borderColor);
 
         string text = GetText("UI.ExtremeStorage.AddChest");
         if (ChestSelection.IsSelecting)
