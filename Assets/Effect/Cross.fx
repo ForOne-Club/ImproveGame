@@ -25,17 +25,42 @@ PSInput VSFunction(VSInput input)
     return output;
 }
 
-float4 ps_main(float2 coords : TEXCOORD0) : COLOR0
+float4 SDCross(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 p = abs(coords - uSizeOver2);
     float d = length(p - min(p.x + p.y, uSizeOver2) * 0.5) - uRound;
     return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-1, 0.5, d + uBorder)), 0, smoothstep(-1, 0.5, d));
 }
+
+float4 SDLine(float2 coords : TEXCOORD0) : COLOR0
+{
+    float2 p = abs(coords - uSizeOver2);
+    return lerp(uBackgroundColor, 0, smoothstep(-1, 0.5, distance(p, 0) - uSizeOver2.x));
+}
+
+float4 SDLineHasBorder(float2 coords : TEXCOORD0) : COLOR0
+{
+    float2 p = abs(coords - uSizeOver2);
+    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-1, 0.5, distance(p, 0) - uSizeOver2.x + uBorder)), 0, smoothstep(-1, 0.5, distance(p, 0) - uSizeOver2.x));
+}
+
 technique Technique1
 {
     pass Cross
     {
         VertexShader = compile vs_2_0 VSFunction();
-        PixelShader = compile ps_2_0 ps_main();
+        PixelShader = compile ps_2_0 SDCross();
+    }
+
+    pass Line
+    {
+        VertexShader = compile vs_2_0 VSFunction();
+        PixelShader = compile ps_2_0 Line();
+    }
+
+    pass LineHasBorder
+    {
+        VertexShader = compile vs_2_0 VSFunction();
+        PixelShader = compile ps_2_0 LineHasBorder();
     }
 }
