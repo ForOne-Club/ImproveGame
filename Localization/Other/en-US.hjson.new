@@ -1,0 +1,360 @@
+
+Mods: {
+	ImproveGame: {
+		ModName: Quality of Life
+
+		Tiles: {
+			Autofisher.MapEntry: "{$Mods.ImproveGame.ItemName.Autofisher}"
+			ExtremeStorage.MapEntry: "{$Mods.ImproveGame.ItemName.ExtremeStorage}"
+		}
+
+		ItemDropRule.WandDrop: Won't drop if the player already has one in the inventory
+
+		CombatText: {
+			Item: {
+				CreateWand_NotEnough: Missing materials!
+				SpaceWand_Cancel: Canceled!
+				SpaceWand_Lack: Not enough platform!
+				WallPlace_Limit: This area is too big!
+				WallPlace_Consume: "Excepted consumption: "
+				WallPlace_Kill: Stopped placing!
+			}
+
+			Projectile: {
+				PlaceWall_Lace: Stopped placing due to lack of wall
+				PlaceWall_Lack: Mods.ImproveGame.CombatText.Projectile.PlaceWall_Lack
+			}
+
+			Commonds.ResurrectionTimeShortened: "{Time}s reduced respawn time！"
+		}
+
+		Tips: {
+			PrefixCount: "Reforging count: "
+			AnglerQuest: Angler's quest refreshed!
+			FromMod: From mod {DisplayName}
+			LootDisplay: Press {KeybindName} to see detailed item drop
+			LootDisplayBindless: (You have not bind a hotkey for this function, please do so in Controls)
+			Refreshing: Refreshing
+			Refresh: Refresh Shop
+			SummonSlot: Minion slot occupancy: [c/22CC22:{Current}/{Total}]
+			SummonSlotFull: Minion slot occupancy: [c/CC2222:{Current}/{Total} (Full!)]
+			BuffTrackerOn: <left> to open buff tracker
+			BuffTrackerOff: <left> to close buff tracker
+			BankEnableOn: Middle click to open personal inventory
+			BankEnableOff: Middle click to close personal inventory
+			CreateWandOn: Middle click to open house material panel
+			CreateWandOff: Middle click to close house material panel
+			LiquidWandOn: Middle click to open liquid control panel
+			LiquidWandOff: Middle click to close liquid control panel
+			PotionBagCurrent: Contains the following potions ({StoredCount}/20):
+			PotionBagCurrentFull: Contains the following potions (Full!):
+			PotionBagNone: Empty (0/20)
+			PotionBagAvailable: (Active)
+			PotionBagUnavailable: (Inactive)
+			PotionBagDisabled: (Disabled)
+			BannerChestCurrent: Stored banners: ({StoredCount}/200):
+			BannerChestCurrentFull: Stored banners: (Full!):
+			BannerChestNone: No banners inside (0/200)
+			BannerChestUseless: Portable Banners is not on, banners inside will not function
+			Tag.ShiftEnable: "[Hold [c/88CCEE:Shift] for more information]"
+
+			TagDetailed: {
+				OwnedInfineBuff: "[Infinite buff obtained {Count}/{Threshold}]"
+				NotOwnedInfineBuff: "[Infinite buff not obtained {Count}/{Threshold}]"
+				GardenGnome: "[Garden Gnome]"
+				Enabled: "[Enabled]"
+				Disabled: "[Disabled]"
+				Hided: "[Buff icons hiden]"
+				NonHided: "[Buff icons shown]"
+				CombinedBuff: "[Has available buff combination]"
+				AutoCollect: "[Auto-deposit]"
+			}
+
+			TagDetailedTip: {
+				GardenGnome:
+					'''
+					Luck bonus of the Garden Gnome has been applied
+					You could not disable this effect as it is not a 'buff'
+					'''
+				Enabled:
+					'''
+					The buff [c/88CCEE:[{BuffName}][c/88CCEE:]] is already applied.
+					If you just want to disable buff of this item,
+					please middle click on this item or left click
+					on the buff icon to open buff tracker,
+					to enable/disable that buff.
+					'''
+				Disabled:
+					'''
+					Item buff [c/88CCEE:[{BuffName}][c/88CCEE:]] has been disabled
+					due to configuration.
+					Middle click on this item or left click on the
+					buff icon to open buff tracker, to
+					enable/disable that buff.
+					'''
+				Hided:
+					'''
+					Buff icons have been hiden.
+					To display them, disable "Hide buff icons of
+					infinite potions" in Mod Configuration.
+					'''
+				NonHided:
+					'''
+					Change the mod config to hide infinite buff
+					icons if you want.
+					'''
+				AutoCollect:
+					'''
+					Automatically save money is enabled.
+					If there is any Piggy Bank, Money Trough or
+					Eye Bone inside your Piggy Bank, Safe,
+					Defender's Forge or Void Vault, your coins
+					in coin slots will be automatically saved
+					into the Piggy Bank.
+					The Merchant's spawning condition counts coins
+					in the Piggy Bank.
+					You may disable this function in Mod Configuration.
+					'''
+				CombinedBuff.Battle:
+					'''
+					[c/88CCEE:Buff Combination: ][i:CalmingPotion][i:Sunflower][i:PeaceCandle][i:WaterCandle][i:BattlePotion]
+					When you have all the infinite buff items
+					above. A spawn rate slider will appear at the
+					right side of the Buff Tracker. Allows you
+					to multiply the spawn rate from x0-x{MaxSpawn}
+					'''
+			}
+		}
+
+		ConstructGUI: {
+			Structure: "QoL Structure"
+			# 这个是存储后的文件名
+			SavedAs: "Structure has been saved as "
+			# 后接文件全路径(所属文件夹路径+文件名)
+			SaveMode: Recording Mode
+			LoadMode: Placing Mode
+			ExplodeAndPlace: Destroy then Place
+			PlaceOnly: Place
+			Path: "File path: "
+
+			RenameTip: {
+				Exists: A file with the same name already exists
+				TooLong: File name must not exceed 40 characters
+				Illegal: File name must not include following characterts: \, /, :, *, ?, ", <, > or |
+			}
+
+			FileInfo: {
+				Title: File Info
+				Name: File name: {Name}
+				Time: Time saved: {Time}
+				Version: Version: {Version}
+				Size: Structure size: {Size}
+
+				ModMissing: {
+					Count: "2"
+					1: This structure contains tiles or walls from the unloaded mods
+					2: Placement error may occur
+				}
+
+				LoadError: File is not legal or not a structure file
+			}
+
+			MaterialInfo: {
+				Title: Material Info
+				Stored: Has: {Stack}
+				Requirement: Needed: {Stack}
+			}
+
+			Preview: {
+				Title: Structure Preview
+				CenterSet: Click to set it as the placement center
+			}
+
+			Tutorial: {
+				Button: Introduction
+
+				AlphaTest: {
+					Count: "4"
+					1: Beta test feature
+					2: Kindly report bugs in this mod's Steam workshop page
+					3: Support is not guaranteed for modded tiles and walls,
+					4: and should not be considered a bug
+				}
+
+				Save: {
+					Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
+					Text:
+						'''
+						The third button at the left top of the panel can switch mode to Recording Mode or Placing Mode
+
+						In recording mode, you can hold the left key and drag to select structures
+						Then save them on your PC as files to place them even in different worlds and servers
+						    
+						The picture below shows how to select and save structures:
+						'''
+				}
+
+				Place: {
+					Title: "{$Mods.ImproveGame.ConstructGUI.LoadMode}"
+					Text:
+						'''
+						In placing mode, you need to choose a structure in the main panel, a structure is selected if its name is in yellow
+						    
+						if material in your inventory or the Huge Inventory is sufficient, left click to place the structure
+						Directions of certain tiles may be incorrect
+						    
+						Here is an example of placing structures: 
+						'''
+				}
+
+				Explode: {
+					Title: Destroy Then Place
+					Text: If you choose 'Destroy Then Place', the area to place the structure will be cleared for enough placement space
+				}
+
+				Panel: {
+					Title: Structure List
+					Text:
+						'''
+						The main panel displays structure files on your PC, including file name and path
+						    
+						If you accidentally delete a structure on your Windows system, you can restore it in the Recycle Bin
+
+						Click '{$tModLoader.ModsMoreInfo}' button at the right side to check detailed info and preview, placement center can be adjusted in the preview
+						'''
+				}
+
+				Materials: {
+					Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
+					Text: You can check needed and stored materials in Material Info
+				}
+
+				Preview: {
+					Title: "{$Mods.ImproveGame.ConstructGUI.Preview.Title}"
+					Text: Structure preview also shows the placement center(the yellow box), which is the position of the cursor while placing.
+				}
+			}
+		}
+
+		SuperVault: {
+			Name: Huge Inventory
+			Sort: Sort
+			Synthesis: Use in crafting
+			SmartPickup: Smart pickup
+			OverflowPickup: Auto pickup
+		}
+
+		MoveChest.Heavy: Weight of the chest limits your mobility
+
+		Autofisher: {
+			Title: Fishing Machine
+			Accessory: Accessories for fishing
+			FishingPole: Fishing rod
+			Bait: Bait
+			SelectPool: Please select fishing pool
+			CarefulNextTime: Be careful next time!
+			Unavailable: Currently no fishing info
+			CatchCratesFilter: Crates
+			CatchAccessoriesFilter: Accessories
+			CatchToolsFilter: Tools and weapons
+			CatchWhiteRarityCatchesFilter: White rarity
+			CatchNormalCatchesFilter: Higher than white rarity
+		}
+
+		BuffTracker: {
+			Title: Buff Tracker
+			LeftClickDisable:
+				'''
+
+				<left> to disable this buff
+				'''
+			LeftClickEnable:
+				'''
+
+				<left> to enable this buff
+				'''
+			NoInfBuff: Currently no infinite buff available
+			NoInfBuffAlt: Enable the Infinite Potions in the mod config
+			NPCSpawnRatePanel: Enemy Spawn Rate Panel
+		}
+
+		LifeAnalyzer: {
+			Priority: "Priority: "
+			Tip: <left> to control the detection
+		}
+
+		Architecture: {
+			Materials: House Materials
+			StoredMaterials: (Stored: {MaterialCount})
+			MaterialsRequired: "Materials Needed: "
+			Block: Block
+			Platform: Platform
+			Torch: Torch
+			Chair: Chair
+			Table: Table
+			Workbench: Workbench
+			Wall: Wall
+			Bed: Bed
+		}
+
+		LiquidWand: {
+			Title: Liquid Control
+			Water: Water ({LiquidAmount})
+			Lava: Lava ({LiquidAmount})
+			Honey: Honey ({LiquidAmount})
+			Shimmer: Shimmer ({LiquidAmount})
+		}
+
+		PaintWandGUI: {
+			Paintbrush: Paint tiles
+			PaintRoller: Paint walls
+			PaintScraper: Remove paints
+		}
+
+		SpaceWandGUI: {
+			placeType: Tile type
+			platform: Platforms
+			soild: Solid blocks
+			rope: Ropes
+			rail: Minecart Tracks
+			grassSeed: Grass Seeds
+			plantPot: Planter Boxes
+		}
+
+		PackageGUI: {
+			AutoStorage: Auto Collection
+			AutoSort: Auto Sortation
+		}
+
+		Common: {
+			Loading: Loading...
+			Refresh: Refresh
+			Switch: Switch
+			Unavailable: Not available
+			Cancel: Cancel
+		}
+
+		RecipeGroup: {
+			AnyCopperBar: Any Copper Bar
+			AnyGoldBar: Any Gold Bar
+			AnySilverBar: Any Silver Bar
+			AnyDemoniteBar: Any Demonite Bar
+			AnyShadowScale: Any Shadow Scale
+			AnyCobaltBar: Any Cobalt Bar
+			AnyMythrilBar: Any Mythril Bar
+			AnyAdamantiteBar: Any Adamantite Bar
+		}
+
+		Keybind: {
+			BuffTracker.Tip: Clicking on a buff icon no longer opens the Buff Tracker if the keybind is set
+			HotbarSwitch.Tip: Swap items in the first row with the second row in inventory
+		}
+
+		Keybinds: {
+			HugeInventory.DisplayName: Huge Inventory
+			BuffTracker.DisplayName: Buff Tracker
+			GrabBagLoot.DisplayName: Display grab bag loot
+			HotbarSwitch.DisplayName: Swap hotbar
+		}
+	}
+}

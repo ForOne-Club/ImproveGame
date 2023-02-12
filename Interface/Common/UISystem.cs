@@ -59,7 +59,7 @@ namespace ImproveGame.Interface.Common
         // Buff 追踪站
         public BuffTrackerGUI BuffTrackerGUI;
         public EventTrigger BuffTrackerTrigger;
-        
+
         // 侧栏箱子类 UI
         public AutofisherGUI AutofisherGUI;
         public ExtremeStorageGUI ExtremeStorageGUI;
@@ -216,7 +216,9 @@ namespace ImproveGame.Interface.Common
                 layers.Insert(index, "Buff Tracker GUI", () =>
                 {
                     if (!UIConfigs.Instance.ShowMoreData)
+                    {
                         return true;
+                    }
 
                     bool modNetShouldDraw = ModNet.ShouldDrawModNetDiagnosticsUI;
 

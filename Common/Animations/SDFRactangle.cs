@@ -52,8 +52,7 @@ namespace ImproveGame.Common.Animations
             GetVertexInfo(vertexPos, pos, new Vector2(-size.X, size.Y), rounded.Z);
             GetVertexInfo(vertexPos, pos, new Vector2(size.X, -size.Y), rounded.Y);
             GetVertexInfo(vertexPos, pos, size, rounded.W);
-            VertexPositionTexture[] triangles = vertexPos.ToArray();
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(0, triangles, 0, triangles.Length / 3);
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(0, vertexPos.ToArray(), 0, vertexPos.Count / 3);
             ShaderAssets.SpriteEffectPass.Apply();
         }
 
@@ -64,7 +63,7 @@ namespace ImproveGame.Common.Animations
             pos -= new Vector2(innerShrinkage);
             size += new Vector2(innerShrinkage * 2);
             rounded += new Vector4(innerShrinkage);
-            Effect effect = ShaderAssets.RoundedRectangle;
+            Effect effect = ShaderAssets.SDFRectangle;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
             effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
             effect.Parameters["uBorder"].SetValue(border);
@@ -80,7 +79,7 @@ namespace ImproveGame.Common.Animations
             pos -= new Vector2(innerShrinkage);
             size += new Vector2(innerShrinkage * 2);
             rounded += new Vector4(innerShrinkage);
-            Effect effect = ShaderAssets.RoundedRectangle;
+            Effect effect = ShaderAssets.SDFRectangle;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
             effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
             effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
@@ -90,7 +89,7 @@ namespace ImproveGame.Common.Animations
 
         public static void Shadow(Vector2 pos, Vector2 size, Vector4 rounded, Color backgroundColor, float shadow, bool ui = true)
         {
-            Effect effect = ShaderAssets.RoundedRectangle;
+            Effect effect = ShaderAssets.SDFRectangle;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
             effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
             effect.Parameters["uShadowSize"].SetValue(shadow);

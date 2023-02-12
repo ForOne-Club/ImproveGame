@@ -46,47 +46,46 @@ namespace ImproveGame.Common.Animations
         /// <summary>
         /// 绘制叉号
         /// </summary>
-        public static void DrawCross(Vector2 pos, float size, float round, Color backgroundColor, float border,
+        public static void HasBorderCross(Vector2 pos, float size, float round, Color backgroundColor, float border,
             Color borderColor, bool ui = true)
         {
-            Effect effect = ShaderAssets.Cross;
+            Effect effect = ShaderAssets.SDFGraphic;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
             effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
             effect.Parameters["uBorder"].SetValue(border);
             effect.Parameters["uRound"].SetValue(round);
             effect.Parameters["uBorderColor"].SetValue(borderColor.ToVector4());
             effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
-            effect.CurrentTechnique.Passes[0].Apply();
+            effect.CurrentTechnique.Passes["HasBorderCross"].Apply();
             BaseDraw(pos, new Vector2(size));
         }
 
-        public static void DrawRound(Vector2 pos, float size, Color background, bool ui = true)
-        {
-            Effect effect = ShaderAssets.Round;
-            effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
-            effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
-            effect.Parameters["uBackground"].SetValue(background.ToVector4());
-            effect.CurrentTechnique.Passes["NoBorder"].Apply();
-            BaseDraw(pos, new Vector2(size));
-        }
-
-        public static void DrawRound(Vector2 pos, float size, Color background, float border, Color borderColor,
+        public static void HasBorderRound(Vector2 pos, float size, Color background, float border, Color borderColor,
             bool ui = true)
         {
-            Effect effect = ShaderAssets.Round;
+            Effect effect = ShaderAssets.SDFGraphic;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
-            effect.Parameters["size"].SetValue(size);
-            effect.Parameters["background"].SetValue(background.ToVector4());
-            effect.Parameters["border"].SetValue(border);
-            effect.Parameters["borderColor"].SetValue(borderColor.ToVector4());
-            effect.CurrentTechnique.Passes["NoBorder"].Apply();
+            effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
+            effect.Parameters["uBorder"].SetValue(border);
+            effect.Parameters["uBorderColor"].SetValue(borderColor.ToVector4());
+            effect.CurrentTechnique.Passes["HasBorderRound"].Apply();
+            BaseDraw(pos, new Vector2(size));
+        }
+
+        public static void NoBorderRound(Vector2 pos, float size, Color background, bool ui = true)
+        {
+            Effect effect = ShaderAssets.SDFGraphic;
+            effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
+            effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
+            effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
+            effect.CurrentTechnique.Passes["NoBorderRound"].Apply();
             BaseDraw(pos, new Vector2(size));
         }
 
         /// <summary>
         /// 绘制一条线，无边框
         /// </summary>
-        public static void DrawLine(Vector2 start, Vector2 end, float width, Color background, bool ui = true)
+        public static void NoBorderLine(Vector2 start, Vector2 end, float width, Color background, bool ui = true)
         {
             Vector2 min = Vector2.Min(start, end);
             Vector2 max = Vector2.Max(start, end);
@@ -94,21 +93,20 @@ namespace ImproveGame.Common.Animations
 
             start += new Vector2(width) - min;
             end += new Vector2(width) - min;
-            Effect effect = ShaderAssets.Line;
+            Effect effect = ShaderAssets.SDFGraphic;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
-            effect.Parameters["size"].SetValue(size);
-            effect.Parameters["start"].SetValue(start);
-            effect.Parameters["end"].SetValue(end);
-            effect.Parameters["width"].SetValue(width);
-            effect.Parameters["background"].SetValue(background.ToVector4());
-            effect.CurrentTechnique.Passes["NoBorder"].Apply();
+            effect.Parameters["uStart"].SetValue(start);
+            effect.Parameters["uEnd"].SetValue(end);
+            effect.Parameters["uLineWidth"].SetValue(width);
+            effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
+            effect.CurrentTechnique.Passes["NoBorderLine"].Apply();
             BaseDraw(min - new Vector2(width), size);
         }
 
         /// <summary>
         /// 绘制一条线，有边框
         /// </summary>
-        public static void DrawLine(Vector2 start, Vector2 end, float width, Color background, float border, Color borderColor, bool ui = true)
+        public static void HasBorderLine(Vector2 start, Vector2 end, float width, Color background, float border, Color borderColor, bool ui = true)
         {
             Vector2 min = Vector2.Min(start, end);
             Vector2 max = Vector2.Max(start, end);
@@ -116,16 +114,15 @@ namespace ImproveGame.Common.Animations
 
             start += new Vector2(width) - min;
             end += new Vector2(width) - min;
-            Effect effect = ShaderAssets.Line;
+            Effect effect = ShaderAssets.SDFGraphic;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
-            effect.Parameters["size"].SetValue(size);
-            effect.Parameters["start"].SetValue(start);
-            effect.Parameters["end"].SetValue(end);
-            effect.Parameters["width"].SetValue(width);
-            effect.Parameters["border"].SetValue(border);
-            effect.Parameters["borderColor"].SetValue(borderColor.ToVector4());
-            effect.Parameters["background"].SetValue(background.ToVector4());
-            effect.CurrentTechnique.Passes["HasBorder"].Apply();
+            effect.Parameters["uStart"].SetValue(start);
+            effect.Parameters["uEnd"].SetValue(end);
+            effect.Parameters["uLineWidth"].SetValue(width);
+            effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
+            effect.Parameters["uBorder"].SetValue(border);
+            effect.Parameters["uBorderColor"].SetValue(borderColor.ToVector4());
+            effect.CurrentTechnique.Passes["HasBorderLine"].Apply();
             BaseDraw(min - new Vector2(width), size);
         }
     }

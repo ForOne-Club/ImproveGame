@@ -28,11 +28,11 @@ PSInput VSFunction(VSInput input)
     return output;
 }
 
-float sdRoundedRectangle(float2 pos, float2 sizeOver2, float rounded)
+/*float sdRoundedRectangle(float2 pos, float2 sizeOver2, float rounded)
 {
     float2 q = pos - sizeOver2 + rounded;
     return min(max(q.x, q.y), 0) + length(max(q, 0)) - rounded;
-}
+}*/
 
 float4 HasBorder(float2 coords : TEXCOORD0, float rounded : COLOR0) : COLOR0
 {
