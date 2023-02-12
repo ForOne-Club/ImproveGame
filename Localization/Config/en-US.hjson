@@ -178,6 +178,7 @@
         Label: "[centeritem:3232] Faster Respawn"
         Tooltip: Example: 25 means reduces respawn time by 25%
     }
+    BOSSBattleResurrectionTimeShortened.Label: "[centeritem:3232] 重生加速 BOSS战"
     MiddleEnableBank:
     {
         Label: "[centeritem:87] Middle click to open personal inventories"
