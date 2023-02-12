@@ -3,23 +3,21 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUICross : HoverView
+    public class SUICross : TimerView
     {
-        public float forkSize;
-        public float crossRound;
-        public float crossBorder;
-        public Color beginBg, endBg, crossColor;
+        public float CrossSize, CrossRounded, CrossBorder;
+        public Color CrossBorderColor, CrossBeginColor, CrossEndColor;
 
-        public SUICross(float forkSize)
+        public SUICross()
         {
-            crossRound = 4.5f;
-            this.crossBorder = 2;
-            this.forkSize = forkSize;
-            Width.Pixels = 50;
-            Height.Pixels = 50;
-            crossColor = UIColor.Cross;
-            beginBg = UIColor.TitleBg * 0.5f;
-            endBg = UIColor.TitleBg;
+            SetSizePixels(50f, 50f);
+
+            CrossSize = 24f;
+            CrossRounded = 4.6f;
+            CrossBeginColor = UIColor.Cross * 0.5f;
+            CrossEndColor = UIColor.Cross;
+            CrossBorder = 2;
+            CrossBorderColor = UIColor.PanelBorder;
 
             Rounded = new Vector4(10f);
             Border = 2;
@@ -34,13 +32,13 @@ namespace ImproveGame.Interface.SUIElements
 
         public override void DrawSelf(SpriteBatch sb)
         {
-            BgColor = Color.Lerp(beginBg, endBg, hoverTimer.Schedule);
+            CrossBorderColor = HoverTimer.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav);
             base.DrawSelf(sb);
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
-            Color fork = Color.Lerp(Color.Transparent, crossColor, hoverTimer.Schedule);
-            Vector2 forkPos = pos + (size - new Vector2(forkSize)) / 2f;
-            SDFGraphic.DrawCross(forkPos, forkSize, crossRound, fork, crossBorder, BorderColor);
+            Color fork = HoverTimer.Lerp(CrossBeginColor, CrossEndColor);
+            Vector2 forkPos = pos + (size - new Vector2(CrossSize)) / 2f;
+            SDFGraphic.DrawCross(forkPos, CrossSize, CrossRounded, fork, CrossBorder, CrossBorderColor);
         }
     }
 }

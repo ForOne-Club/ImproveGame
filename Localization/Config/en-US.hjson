@@ -90,7 +90,8 @@
         Label: "[centeritem:4056] Increase certain tools' using speed"
         Tooltip: Tools with use times greater than 8 will have their use times set to 8
     }
-    TileSpeedAndTileRange.Label: "[centeritem:2215] Increase placement speed and range"
+    ModifyPlayerPlaceSpeed.Label: "[centeritem:2214] 提高物块放置速度"
+    ModifyPlayerTileRangle.Label: "[centeritem:2215] 提高物块放置距离"
     TileSpeed_Blacklist:
     {
         Label: "[centeritem:1448] Blacklist of tile placing boost"

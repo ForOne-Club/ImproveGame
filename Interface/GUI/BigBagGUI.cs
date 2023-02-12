@@ -49,7 +49,7 @@ namespace ImproveGame.Interface.GUI
         private SUISwitch RecipesSwitch, SmartGrabSwitch, AutoGrabSwitch;
 
         // 按钮
-        private SUIPictureButton QuickButton, PutButton, ReplenishButton, SortButton;
+        private SUIButton QuickButton, PutButton, ReplenishButton, SortButton;
 
         // 物品列表
         public ModItemGrid ItemGrid;
@@ -85,13 +85,11 @@ namespace ImproveGame.Interface.GUI
             Title.Join(TitlePanel);
 
             // Cross
-            Cross = new SUICross(24)
+            Cross = new SUICross
             {
                 HAlign = 1f,
                 VAlign = 0.5f,
                 Height = { Pixels = 0f, Precent = 1f },
-                beginBg = UIColor.TitleBg2,
-                endBg = UIColor.TitleBg2,
                 Rounded = new Vector4(0f, 10f, 0f, 0f)
             };
             Cross.OnMouseDown += (_, _) => Close();
@@ -140,7 +138,7 @@ namespace ImproveGame.Interface.GUI
 
             // 按钮
             Vector2 buttonSpacing = new Vector2(10, 8);
-            QuickButton = new SUIPictureButton(GetTexture("UI/Quick").Value, Lang.inter[29].Value)
+            QuickButton = new SUIButton(GetTexture("UI/Quick").Value, Lang.inter[29].Value)
             {
                 Relative = RelativeMode.Vertical,
                 Spacing = buttonSpacing,
@@ -149,7 +147,7 @@ namespace ImproveGame.Interface.GUI
             QuickButton.OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
             QuickButton.Join(ButtonPanel);
 
-            PutButton = new SUIPictureButton(GetTexture("UI/Put").Value, Lang.inter[30].Value)
+            PutButton = new SUIButton(GetTexture("UI/Put").Value, Lang.inter[30].Value)
             {
                 Relative = RelativeMode.Horizontal,
                 Spacing = buttonSpacing
@@ -157,7 +155,7 @@ namespace ImproveGame.Interface.GUI
             PutButton.OnMouseDown += (_, _) => PutAll();
             PutButton.Join(ButtonPanel);
 
-            ReplenishButton = new SUIPictureButton(GetTexture("UI/Put").Value, Lang.inter[31].Value)
+            ReplenishButton = new SUIButton(GetTexture("UI/Put").Value, Lang.inter[31].Value)
             {
                 Relative = RelativeMode.Horizontal,
                 Spacing = buttonSpacing
@@ -165,7 +163,7 @@ namespace ImproveGame.Interface.GUI
             ReplenishButton.OnMouseDown += (_, _) => Replenish();
             ReplenishButton.Join(ButtonPanel);
 
-            SortButton = new SUIPictureButton(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
+            SortButton = new SUIButton(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
             {
                 Relative = RelativeMode.Horizontal,
                 Spacing = buttonSpacing

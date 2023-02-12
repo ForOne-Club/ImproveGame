@@ -461,7 +461,7 @@ namespace ImproveGame.Interface.GUI
         {
             ItemType = itemType;
             _panel = panel;
-            _timer = new(TimerMax: 90f)
+            _timer = new(timerMax: 90f)
             {
                 State = AnimationState.Close
             };

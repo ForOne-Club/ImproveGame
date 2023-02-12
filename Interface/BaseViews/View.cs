@@ -35,13 +35,25 @@ namespace ImproveGame.Interface.BaseViews
         /// </summary>
         public bool DragIgnore;
 
+        /// <summary>
+        /// 不透明度 [0,1]
+        /// </summary>
+        public readonly Opacity Opacity;
+
         public bool KeepPressed;
         public Vector4 Rounded;
         public float Border;
         public Color BgColor, BorderColor;
 
+        public View()
+        {
+            Opacity = new Opacity(this);
+        }
+
         public override void Recalculate()
         {
+            Opacity.Recalculate();
+
             if (Relative != RelativeMode.Disabled && Parent is View)
             {
                 View Parent = this.Parent as View;
@@ -104,25 +116,24 @@ namespace ImproveGame.Interface.BaseViews
 
             if (Border > 0 && (BgColor != Color.Transparent || BorderColor != Color.Transparent))
             {
-                SDFRactangle.HasBorder(pos, size, Rounded, BgColor, Border, BorderColor);
+                SDFRactangle.HasBorder(pos, size, Rounded, BgColor * Opacity.Value, Border, BorderColor * Opacity.Value);
             }
             else if (BgColor != Color.Transparent)
             {
-                SDFRactangle.NoBorder(pos, size, Rounded, BgColor);
+                SDFRactangle.NoBorder(pos, size, Rounded, BgColor * Opacity.Value);
             }
 
             base.DrawSelf(spriteBatch);
         }
 
-        // 这该起什么名字？
+        // 加入
         public void Join(UIElement parent)
         {
             parent.Append(this);
         }
 
         // 下面这些方法只是为了更方便的使用 UIElement 这个类。
-        // 原来是写到了 UIElementHelper ，还是直接写一个基类舒服点。
-        // 设置
+        // 原来是写到了 UIElementHelper ，但是直接写这里比较舒服。
         public View SetPosPixels(float left, float top)
         {
             Left.Pixels = left;

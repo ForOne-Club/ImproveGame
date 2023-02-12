@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
-using ImproveGame.Interface.PlayerInfo.UIElements;
+using ImproveGame.Interface.PlayerInfo.Elements;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
@@ -24,70 +24,59 @@ namespace ImproveGame.Interface.PlayerInfo
             set => _visible = value;
         }
 
-        private static bool Expanded { get; set; }
-
-        // new() 缩写，时间久了再看码太容易忘了使用的类型，还是不用缩写好（可以禁用显示虚线）
-        // var 也容易忘，为了保证下次阅读代码方便点我还是尽量不用了
+        private static bool _expanded;
         private static Player _player;
 
         private static readonly Vector2
-            InvPosOff = new Vector2(480, 20),
-            InvPosOn = new Vector2(590, 20);
+            _inventoryOpenPos = new Vector2(480, 25),
+            _inventoryClosePos = new Vector2(590, 25);
 
         private AnimationTimer _invTimer, _openTimer;
         private SUIPanel _mainPanel;
-        private SUIPanel _titlePanel;
         private View _cardPanel;
-        private SUITitle _title;
-        private PlyInfoSwitch _switch;
+        private SUIButton _titleButton;
 
         public override void OnInitialize()
         {
-            if (float.TryParse(PlyInfo("CardWidth"), out float width))
+            if (float.TryParse(GetHJSON("CardWidth"), out float width))
             {
                 PlyInfoCard.width = width;
             }
 
             _player = Main.LocalPlayer;
             _invTimer = new AnimationTimer();
-            _openTimer = new AnimationTimer
+            _openTimer = new AnimationTimer()
             {
                 State = AnimationState.CloseComplete,
                 Timer = 0
             };
 
-            _mainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg) { Shaded = true };
+            _mainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            {
+                Shaded = true,
+                ShadowThickness = 20f,
+            };
+            _mainPanel.Opacity.Type = OpacityType.Self;
             _mainPanel.SetPadding(0);
             _mainPanel.Join(this);
 
-            _titlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
+            _titleButton = new SUIButton(GetHJSON("Name"))
             {
+                Opacity = { Type = OpacityType.Self },
                 DragIgnore = true,
+                TextAlign = { X = 0.5f, Y = 0.5f },
+                Width = new StyleDimension(0f, 1f),
+                Relative = RelativeMode.Horizontal,
                 Rounded = new Vector4(10f, 10f, 0f, 0f),
+                BeginBgColor = UIColor.TitleBg2 * 0.75f,
+                EndBgColor = UIColor.TitleBg2,
             };
-            _titlePanel.Width.Precent = 1f;
-            _titlePanel.Height.Pixels = 50f;
-            _titlePanel.SetPadding(0);
-            _titlePanel.Join(_mainPanel);
-
-            // 关闭按钮
-            _switch = new PlyInfoSwitch(UIColor.TitleBg2, UIColor.PanelBorder, () => Expanded);
-            // 切换状态的时候保证绘制不越界 OverflowHidden 设置一下。动画结束之后再设置回来。
-            _switch.OnMouseDown += (_, _) =>
+            _titleButton.OnMouseDown += (_, _) =>
             {
-                Expanded = !Expanded;
+                _expanded = !_expanded;
                 _cardPanel.OverflowHidden = true;
             };
-            _switch.Join(_titlePanel);
-
-            _title = new SUITitle(PlyInfo("Name"), 0.5f)
-            {
-                VAlign = 0.5f,
-                Relative = RelativeMode.Horizontal
-            };
-            _title.SetPadding(10f, 0f);
-            _title.SetInnerPixels(_title.TextSize.X, 50f);
-            _title.Join(_titlePanel);
+            _titleButton.Join(_mainPanel);
 
             _cardPanel = new View()
             {
@@ -98,67 +87,77 @@ namespace ImproveGame.Interface.PlayerInfo
             _cardPanel.SetInnerPixels(PlyInfoCard.TotalSize(3, 7));
             _cardPanel.Join(_mainPanel);
 
-            // 太多了，我在想用 List<T>() 收纳下，然后加一个选择显示哪些的功能？
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("LifeRegen"), () => $"{_player.lifeRegen / 2f}/s", "Life"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("ArmorPenetration"),
-                () => $"{_player.GetTotalArmorPenetration(DamageClass.Generic)}", "ArmorPenetration"));
+            new PlyInfoCard(GetHJSON("LifeRegen"),
+                () => $"{_player.lifeRegen / 2f}/s", "Life").Join(_cardPanel);
 
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("MeleeDamage"), () => $"{GetDamage(DamageClass.Melee)}%",
-                "Melee2"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("MeleeCrit"), () => $"{GetCrit(DamageClass.Melee)}%", "Melee2"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("MeleeSpeed"),
-                () => $"{MathF.Round(_player.GetAttackSpeed(DamageClass.Melee) * 100f - 100f)}%", "Melee2"));
+            new PlyInfoCard(GetHJSON("ArmorPenetration"),
+                () => $"{_player.GetTotalArmorPenetration(DamageClass.Generic)}", "ArmorPenetration").Join(_cardPanel);
 
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("RangedDamage"), () => $"{GetDamage(DamageClass.Ranged)}%",
-                "Ranged2"));
-            _cardPanel.Append(
-                new PlyInfoCard(PlyInfo("RangedCrit"), () => $"{GetCrit(DamageClass.Ranged)}%", "Ranged2"));
+            new PlyInfoCard(GetHJSON("MeleeDamage"),
+                () => $"{GetDamage(DamageClass.Melee)}%",
+                "Melee2").Join(_cardPanel);
 
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("ManaRegen"), () => $"{_player.manaRegen / 2f}/s", "ManaRegen"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("ManaDamage"), () => $"{GetDamage(DamageClass.Magic)}%",
-                "Magic"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("ManaCrit"), () => $"{GetCrit(DamageClass.Magic)}%", "Magic"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("ManaCost"), () => $"{MathF.Round(_player.manaCost * 100f)}%",
-                "Magic"));
+            new PlyInfoCard(GetHJSON("MeleeCrit"),
+                () => $"{GetCrit(DamageClass.Melee)}%", "Melee2").Join(_cardPanel);
 
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("SummonDamage"), () => $"{GetDamage(DamageClass.Summon)}%",
-                "Summon"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("MaxMinions"),
-                () => $"{_player.slotsMinions}/{_player.maxMinions}", "Summon"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("MaxTurrets"),
-                () =>
-                    $"{Main.projectile.Count(t => t.active && t.owner == _player.whoAmI && t.WipableTurret)}/{_player.maxTurrets}",
-                "Summon"));
+            new PlyInfoCard(GetHJSON("MeleeSpeed"),
+                () => $"{MathF.Round(_player.GetAttackSpeed(DamageClass.Melee) * 100f - 100f)}%", "Melee2").Join(_cardPanel);
 
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("Endurance"), () => $"{MathF.Round(_player.endurance * 100f)}%",
-                "Endurance3"));
+            new PlyInfoCard(GetHJSON("RangedDamage"),
+                () => $"{GetDamage(DamageClass.Ranged)}%",
+                "Ranged2").Join(_cardPanel);
 
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("FishingSkill"), () => $"{_player.fishingSkill}",
-                "FishingSkill"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("Luck"), () => $"{_player.luck}", "Luck"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("Aggro"), () => $"{_player.aggro}", "Aggro"));
+            new PlyInfoCard(GetHJSON("RangedCrit"),
+                () => $"{GetCrit(DamageClass.Ranged)}%", "Ranged2").Join(_cardPanel);
 
-            // tipPanel.Append(new PlyInfoCard(PlyInfo("WingTime")}:", () => $"{MathF.Round((player.wingTime + player.rocketTime * 6) / 60f, 2)}s", "Flying"));
-            _cardPanel.Append(new PlyInfoCard(PlyInfo("WingTimeMax"),
-                () => $"{MathF.Round((_player.wingTimeMax + _player.rocketTimeMax * 6) / 60f, 2)}s", "Flying"));
+            new PlyInfoCard(GetHJSON("ManaRegen"),
+                () => $"{_player.manaRegen / 2f}/s", "ManaRegen").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("ManaDamage"),
+                () => $"{GetDamage(DamageClass.Magic)}%",
+                "Magic").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("ManaCrit"),
+                () => $"{GetCrit(DamageClass.Magic)}%", "Magic").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("ManaCost"),
+                () => $"{MathF.Round(_player.manaCost * 100f)}%",
+                "Magic").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("SummonDamage"),
+                () => $"{GetDamage(DamageClass.Summon)}%",
+                "Summon").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("MaxMinions"),
+                () => $"{_player.slotsMinions}/{_player.maxMinions}", "Summon").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("MaxTurrets"),
+                () => $"{Main.projectile.Count(proj => proj.active && proj.owner == _player.whoAmI && proj.WipableTurret)}/{_player.maxTurrets}",
+                "Summon").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("Endurance"),
+                () => $"{MathF.Round(_player.endurance * 100f)}%",
+                "Endurance3").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("FishingSkill"),
+                () => $"{_player.fishingSkill}",
+                "FishingSkill").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("Luck"),
+                () => $"{_player.luck}", "Luck").Join(_cardPanel);
+
+            new PlyInfoCard(GetHJSON("Aggro"),
+                () => $"{_player.aggro}", "Aggro").Join(_cardPanel);
+
+            // tipPanel.Append(new PlyInfoCard(PlyInfo("WingTime")}:", () => $"{MathF.Round((player.wingTime + player.rocketTime * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
+            // new PlyInfoCard(GetHJSON("WingTimeMax"),
+            //     () => $"{MathF.Round((_player.wingTimeMax + _player.rocketTimeMax * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
 
             _openTimer.OnOpenComplete += () => { _cardPanel.OverflowHidden = false; };
         }
 
         public override void Update(GameTime gameTime)
         {
-            bool recalculate = false;
-            // 动画开/关
-            if (Main.playerInventory)
-                _invTimer.TryOpen();
-            else
-                _invTimer.TryClose();
-            if (Expanded)
-                _openTimer.TryOpen();
-            else
-                _openTimer.TryClose();
-            _invTimer.Update();
-            _openTimer.Update();
             base.Update(gameTime);
 
             if (_mainPanel.IsMouseHovering)
@@ -167,37 +166,51 @@ namespace ImproveGame.Interface.PlayerInfo
                 Main.LocalPlayer.mouseInterface = true;
             }
 
-            float cardHeight = MathHelper.Lerp(0, PlyInfoCard.TotalSize(3, 7).Y + _cardPanel.VPadding(),
-                _openTimer.Schedule);
+            // 动画开/关
+            if (Main.playerInventory)
+                _invTimer.TryOpen();
+            else
+                _invTimer.TryClose();
+            if (_expanded)
+                _openTimer.TryOpen();
+            else
+                _openTimer.TryClose();
+            _invTimer.Update();
+            _openTimer.Update();
+
+            UpdateAnimation();
+        }
+
+        private void UpdateAnimation()
+        {
+            bool recalculate = false;
+
+            if (Opacity.Value != _openTimer.Schedule &&
+                _mainPanel.Opacity.SetValue(_openTimer.Schedule))
+            {
+                recalculate = true;
+            }
+
+            _mainPanel.ShadowColor = _mainPanel.BorderColor * _openTimer.Lerp(0.25f, 0.5f);
+            _mainPanel.ShadowThickness = 20f; // = _openTimer.Lerp(20f, 40f);
+            float cardHeight = _openTimer.Lerp(0, PlyInfoCard.TotalSize(3, 7).Y + _cardPanel.VPadding());
             if (Math.Abs(_cardPanel.Height.Pixels - cardHeight) > 0)
             {
                 _cardPanel.Height.Pixels = cardHeight;
                 recalculate = true;
             }
 
-            float round = MathHelper.Lerp(10f, 0, _openTimer.Schedule);
-            _switch.Rounded.Z = _titlePanel.Rounded.Z = _titlePanel.Rounded.W = round;
+            float round = _openTimer.Lerp(10f, 0);
+            _titleButton.Rounded.Z = _titleButton.Rounded.W = round;
 
-            float spacingX = MathHelper.Lerp(0, -_switch.Width.Pixels, _openTimer.Schedule);
-            float hAlign = MathHelper.Lerp(0, 0.5f, _openTimer.Schedule);
-            if (Math.Abs(_title.Spacing.X - spacingX) > 0.000000001 || Math.Abs(_title.HAlign - hAlign) > 0.000000001)
+            Vector2 mainPanelSize = new Vector2(_openTimer.Lerp(_titleButton.HPadding() + _titleButton.TextSize.X, _cardPanel.Width.Pixels), _titleButton.Height.Pixels + _cardPanel.Height.Pixels);
+            if (_mainPanel.GetInnerSizePixels() != mainPanelSize)
             {
-                _title.Spacing.X = spacingX;
-                _title.HAlign = hAlign;
+                _mainPanel.SetInnerPixels(mainPanelSize);
                 recalculate = true;
             }
 
-            Vector2 mainSize = new Vector2(
-                MathHelper.Lerp(_title.Right() + 10f, _cardPanel.Width.Pixels, _openTimer.Schedule),
-                _title.Height.Pixels + _cardPanel.Height.Pixels);
-
-            if (_mainPanel.GetInnerSizePixels() != mainSize)
-            {
-                _mainPanel.SetInnerPixels(mainSize);
-                recalculate = true;
-            }
-
-            Vector2 endPos = Vector2.Lerp(InvPosOff, InvPosOn, _invTimer.Schedule);
+            Vector2 endPos = _invTimer.Lerp(_inventoryOpenPos, _inventoryClosePos);
 
             if (_mainPanel.GetPosPixel() != endPos)
             {
@@ -213,13 +226,13 @@ namespace ImproveGame.Interface.PlayerInfo
             MathF.Round((_player.GetTotalDamage(damageClass).Additive - 1) * 100f);
 
         private static float GetCrit(DamageClass damageClass) => _player.GetTotalCritChance(damageClass);
-        private static string PlyInfo(string str) => GetText($"UI.PlayerInfo.{str}");
+        private static string GetHJSON(string str) => GetText($"UI.PlayerInfo.{str}");
 
         public override bool CanPriority(UIElement target) => target != this;
 
         public override bool CanDisableMouse(UIElement target)
         {
-            return (target != this && _mainPanel.IsMouseHovering) || _mainPanel.KeepPressed;
+            return target != this && _mainPanel.IsMouseHovering || _mainPanel.KeepPressed;
         }
     }
 }

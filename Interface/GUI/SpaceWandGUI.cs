@@ -20,7 +20,7 @@ namespace ImproveGame.Interface.GUI
         // 这么写能剩下很多重复的代码, 但是你必须保证他们长度是相同的.
         public readonly RoundButton[] RoundButtons = new RoundButton[6];
         public readonly int[] itemTypes = new int[] { 94, 9, 2996, 2340, 62, 3215 };
-        public readonly PlaceType[] placeTypes = new PlaceType[] { PlaceType.platform, PlaceType.soild, PlaceType.rope, PlaceType.rail, PlaceType.grassSeed, PlaceType.plantPot };
+        public readonly PlaceType[] placeTypes = new PlaceType[] { PlaceType.Platform, PlaceType.Soild, PlaceType.Rope, PlaceType.Rail, PlaceType.GrassSeed, PlaceType.PlantPot };
         public override void OnInitialize()
         {
             timer = new() { OnCloseComplete = () => Visible = false };
@@ -36,12 +36,12 @@ namespace ImproveGame.Interface.GUI
                 MainPanel.Append(RoundButtons[i] = new(TextureAssets.Item[itemType])
                 {
                     text = () => GetText($"SpaceWandGUI.{placeType}"),
-                    Selected = () => SpaceWand.placeType == placeType
+                    Selected = () => SpaceWand.PlaceType == placeType
                 });
                 RoundButtons[i].OnMouseDown += (_, _) =>
                 {
                     SoundEngine.PlaySound(SoundID.MenuTick);
-                    SpaceWand.placeType = placeType;
+                    SpaceWand.PlaceType = placeType;
                 };
             }
         }

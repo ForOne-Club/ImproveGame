@@ -4,151 +4,157 @@ using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.Configs
 {
-    [Label($"${path}.ImproveConfigs.Label")]
+    [Label($"${_path}.ImproveConfigs.Label")]
     public class ImproveConfigs : ModConfig
     {
-        const string path = "Mods.ImproveGame.Config";
+        const string _path = "Mods.ImproveGame.Config";
         public override ConfigScope Mode => ConfigScope.ServerSide;
         public override void OnLoaded() => Config = this;
 
         #region 物品设置
 
-        [Header($"${path}.ItemConfigs.Header")]
+        [Header($"${_path}.ItemConfigs.Header")]
 
-        [Label($"${path}.SuperVoidVault.Label")]
-        [Tooltip($"${path}.SuperVoidVault.Tooltip")]
+        [Label($"${_path}.SuperVoidVault.Label")]
+        [Tooltip($"${_path}.SuperVoidVault.Tooltip")]
         [DefaultValue(false)]
         public bool SuperVoidVault;
 
-        [Label($"${path}.SmartVoidVault.Label")]
-        [Tooltip($"${path}.SmartVoidVault.Tooltip")]
+        [Label($"${_path}.SmartVoidVault.Label")]
+        [Tooltip($"${_path}.SmartVoidVault.Tooltip")]
         [DefaultValue(false)]
         public bool SmartVoidVault;
 
-        [Label($"${path}.SuperVault.Label")]
-        [Tooltip($"${path}.SuperVault.Tooltip")]
+        [Label($"${_path}.SuperVault.Label")]
+        [Tooltip($"${_path}.SuperVault.Tooltip")]
         [DefaultValue(false)]
         public bool SuperVault;
 
-        [Label($"${path}.GrabDistance.Label")]
-        [Tooltip($"${path}.GrabDistance.Tooltip")]
+        [Label($"${_path}.GrabDistance.Label")]
+        [Tooltip($"${_path}.GrabDistance.Tooltip")]
         [DefaultValue(0)]
         [Slider]
         [Range(0, 75)]
         public int GrabDistance;
 
-        [Label($"${path}.ItemMaxStack.Label")]
+        [Label($"${_path}.ItemMaxStack.Label")]
         [DefaultValue(9999)]
         [Range(1, int.MaxValue)]
         public int ItemMaxStack;
 
-        [Label($"${path}.AutoReuseWeapon.Label")]
+        [Label($"${_path}.AutoReuseWeapon.Label")]
         [DefaultValue(true)]
         public bool AutoReuseWeapon;
 
-        [Label($"${path}.AutoReuseWeapon_ExclusionList.Label")]
-        [Tooltip($"${path}.AutoReuseWeapon_ExclusionList.Tooltip")]
+        [Label($"${_path}.AutoReuseWeapon_ExclusionList.Label")]
+        [Tooltip($"${_path}.AutoReuseWeapon_ExclusionList.Tooltip")]
         public List<ItemDefinition> AutoReuseWeaponExclusionList = new() { new(218), new(113), new(495) };
 
-        [Label($"${path}.ImproveToolSpeed.Label")]
-        [Tooltip($"${path}.ImproveToolSpeed.Tooltip")]
+        [Label($"${_path}.ImproveToolSpeed.Label")]
+        [Tooltip($"${_path}.ImproveToolSpeed.Tooltip")]
         [DefaultValue(0d)]
         [Range(0, 1f)]
         [Slider]
         [Increment(0.125f)]
         public float ExtraToolSpeed;
 
-        [Label($"${path}.TileSpeedAndTileRange.Label")]
+        [Label($"${_path}.ModifyPlayerPlaceSpeed.Label")]
         [DefaultValue(false)]
-        public bool ImproveTileSpeedAndTileRange;
+        public bool ModifyPlayerPlaceSpeed;
 
-        [Label($"${path}.TileSpeed_Blacklist.Label")]
-        [Tooltip($"${path}.TileSpeed_Blacklist.Tooltip")]
+        [Label($"${_path}.ModifyPlayerTileRangle.Label")]
+        [Slider]
+        [Range(0, 20)]
+        [Increment(2)]
+        public int ModifyPlayerTileRangle;
+
+        [Label($"${_path}.TileSpeed_Blacklist.Label")]
+        [Tooltip($"${_path}.TileSpeed_Blacklist.Tooltip")]
         public List<string> TileSpeed_Blacklist = new() { new("torch") };
 
-        [Label($"${path}.PortableCraftingStation.Label")]
-        [Tooltip($"${path}.PortableCraftingStation.Tooltip")]
+        [Label($"${_path}.PortableCraftingStation.Label")]
+        [Tooltip($"${_path}.PortableCraftingStation.Tooltip")]
         [DefaultValue(true)]
         public bool PortableCraftingStation;
 
-        [Label($"${path}.NoPlace_BUFFTile.Label")]
-        [Tooltip($"${path}.NoPlace_BUFFTile.Tooltip")]
+        [Label($"${_path}.NoPlace_BUFFTile.Label")]
+        [Tooltip($"${_path}.NoPlace_BUFFTile.Tooltip")]
         [DefaultValue(true)]
         public bool NoPlace_BUFFTile;
 
-        [Label($"${path}.NoPlace_BUFFTile_Banner.Label")]
-        [Tooltip($"${path}.NoPlace_BUFFTile_Banner.Tooltip")]
+        [Label($"${_path}.NoPlace_BUFFTile_Banner.Label")]
+        [Tooltip($"${_path}.NoPlace_BUFFTile_Banner.Tooltip")]
         [DefaultValue(true)]
         public bool NoPlace_BUFFTile_Banner;
 
-        [Label($"${path}.NoConsume_SummonItem.Label")]
-        [Tooltip($"${path}.NoConsume_SummonItem.Tooltip")]
+        [Label($"${_path}.NoConsume_SummonItem.Label")]
+        [Tooltip($"${_path}.NoConsume_SummonItem.Tooltip")]
         [DefaultValue(false)]
         public bool NoConsume_SummonItem;
 
-        [Label($"${path}.NoConsume_Potion.Label")]
-        [Tooltip($"${path}.NoConsume_Potion.Tooltip")]
+        [Label($"${_path}.NoConsume_Potion.Label")]
+        [Tooltip($"${_path}.NoConsume_Potion.Tooltip")]
         [DefaultValue(true)]
         public bool NoConsume_Potion;
 
-        [Label($"${path}.NoConsume_PotionRequirement.Label")]
-        [Tooltip($"${path}.NoConsume_PotionRequirement.Tooltip")]
+        [Label($"${_path}.NoConsume_PotionRequirement.Label")]
+        [Tooltip($"${_path}.NoConsume_PotionRequirement.Tooltip")]
         [DefaultValue(30)]
         [Range(10, 999)]
         public int NoConsume_PotionRequirement;
 
-        [Label($"${path}.NoConsume_Ammo.Label")]
-        [Tooltip($"${path}.NoConsume_Ammo.Tooltip")]
+        [Label($"${_path}.NoConsume_Ammo.Label")]
+        [Tooltip($"${_path}.NoConsume_Ammo.Tooltip")]
         [DefaultValue(true)]
         public bool NoConsume_Ammo;
 
-        [Label($"${path}.NoConsume_Projectile.Label")]
-        [Tooltip($"${path}.NoConsume_Projectile.Tooltip")]
+        [Label($"${_path}.NoConsume_Projectile.Label")]
+        [Tooltip($"${_path}.NoConsume_Projectile.Tooltip")]
         [DefaultValue(true)]
         public bool NoConsume_Projectile;
 
-        [Label($"${path}.HideNoConsumeBuffs.Label")]
-        [Tooltip($"${path}.HideNoConsumeBuffs.Tooltip")]
+        [Label($"${_path}.HideNoConsumeBuffs.Label")]
+        [Tooltip($"${_path}.HideNoConsumeBuffs.Tooltip")]
         [DefaultValue(false)]
         public bool HideNoConsumeBuffs;
 
-        [Label($"${path}.ImprovePrefix.Label")]
-        [Tooltip($"${path}.ImprovePrefix.Tooltip")]
+        [Label($"${_path}.ImprovePrefix.Label")]
+        [Tooltip($"${_path}.ImprovePrefix.Tooltip")]
         [DefaultValue(false)]
         public bool ImprovePrefix;
 
-        [Label($"${path}.ResurrectionTimeShortened.Label")]
-        [Tooltip($"${path}.ResurrectionTimeShortened.Tooltip")]
+        [Label($"${_path}.ResurrectionTimeShortened.Label")]
+        [Tooltip($"${_path}.ResurrectionTimeShortened.Tooltip")]
         [DefaultValue(0)]
         [Range(0, 100)]
         [Increment(5)]
         [Slider]
         public int ResurrectionTimeShortened;
 
-        [Label($"${path}.BOSSBattleResurrectionTimeShortened.Label")]
+        [Label($"${_path}.BOSSBattleResurrectionTimeShortened.Label")]
         [DefaultValue(0)]
         [Range(0, 100)]
         [Increment(5)]
         [Slider]
         public int BOSSBattleResurrectionTimeShortened;
 
-        [Label($"${path}.BanTombstone.Label")]
-        [Tooltip($"${path}.NoNeedReload")]
+        [Label($"${_path}.BanTombstone.Label")]
+        [Tooltip($"${_path}.NoNeedReload")]
         [DefaultValue(false)]
         public bool BanTombstone;
 
-        [Label($"${path}.MiddleEnableBank.Label")]
-        [Tooltip($"${path}.MiddleEnableBank.Tooltip")]
+        [Label($"${_path}.MiddleEnableBank.Label")]
+        [Tooltip($"${_path}.MiddleEnableBank.Tooltip")]
         [DefaultValue(true)]
         public bool MiddleEnableBank;
 
-        [Label($"${path}.AutoSaveMoney.Label")]
-        [Tooltip($"${path}.AutoSaveMoney.Tooltip")]
+        [Label($"${_path}.AutoSaveMoney.Label")]
+        [Tooltip($"${_path}.AutoSaveMoney.Tooltip")]
         [DefaultValue(true)]
         public bool AutoSaveMoney;
 
-        [Label($"${path}.FasterExtractinator.Label")]
-        [Tooltip($"${path}.FasterExtractinator.Tooltip")]
+        [Label($"${_path}.FasterExtractinator.Label")]
+        [Tooltip($"${_path}.FasterExtractinator.Tooltip")]
         [DefaultValue(true)]
         public bool FasterExtractinator;
 
@@ -156,62 +162,62 @@ namespace ImproveGame.Common.Configs
 
         #region NPC设置
 
-        [Header($"${path}.NPCConfigs.Header")]
+        [Header($"${_path}.NPCConfigs.Header")]
 
-        [Label($"${path}.TownNPCGetTFIntoHouse.Label")]
-        [Tooltip($"${path}.TownNPCGetTFIntoHouse.Tooltip")]
+        [Label($"${_path}.TownNPCGetTFIntoHouse.Label")]
+        [Tooltip($"${_path}.TownNPCGetTFIntoHouse.Tooltip")]
         [DefaultValue(false)]
         public bool TownNPCGetTFIntoHouse;
 
-        [Label($"${path}.NPCLiveInEvil.Label")]
-        [Tooltip($"${path}.NPCLiveInEvil.Tooltip")]
+        [Label($"${_path}.NPCLiveInEvil.Label")]
+        [Tooltip($"${_path}.NPCLiveInEvil.Tooltip")]
         [DefaultValue(true)]
         public bool NPCLiveInEvil;
 
-        [Label($"${path}.TownNPCSpawnSpeed.Label")]
-        [Tooltip($"${path}.TownNPCSpawnSpeed.Tooltip")]
+        [Label($"${_path}.TownNPCSpawnSpeed.Label")]
+        [Tooltip($"${_path}.TownNPCSpawnSpeed.Tooltip")]
         [Slider]
         [Range(0, 12)]
         [DefaultValue(0)]
         public int TownNPCSpawnSpeed;
 
-        [Label($"${path}.NoCD_FishermanQuest.Label")]
+        [Label($"${_path}.NoCD_FishermanQuest.Label")]
         [DefaultValue(false)]
         public bool NoCD_FishermanQuest;
 
-        [Label($"${path}.NPCCoinDropRate.Label")]
+        [Label($"${_path}.NPCCoinDropRate.Label")]
         [Range(1, 25)]
         [DefaultValue(1)]
         [Slider]
         public int NPCCoinDropRate;
 
-        [Label($"${path}.LavalessLavaSlime.Label")]
-        [Tooltip($"${path}.LavalessLavaSlime.Tooltip")]
+        [Label($"${_path}.LavalessLavaSlime.Label")]
+        [Tooltip($"${_path}.LavalessLavaSlime.Tooltip")]
         [DefaultValue(false)]
         public bool LavalessLavaSlime;
 
-        [Label($"${path}.TravellingMerchantStay.Label")]
-        [Tooltip($"${path}.TravellingMerchantStay.Tooltip")]
+        [Label($"${_path}.TravellingMerchantStay.Label")]
+        [Tooltip($"${_path}.TravellingMerchantStay.Tooltip")]
         [DefaultValue(false)]
         public bool TravellingMerchantStay;
 
-        [Label($"${path}.TravellingMerchantRefresh.Label")]
-        [Tooltip($"${path}.TravellingMerchantRefresh.Tooltip")]
+        [Label($"${_path}.TravellingMerchantRefresh.Label")]
+        [Tooltip($"${_path}.TravellingMerchantRefresh.Tooltip")]
         [DefaultValue(true)]
         public bool TravellingMerchantRefresh;
 
-        [Label($"${path}.QuickNurse.Label")]
-        [Tooltip($"${path}.QuickNurse.Tooltip")]
+        [Label($"${_path}.QuickNurse.Label")]
+        [Tooltip($"${_path}.QuickNurse.Tooltip")]
         [DefaultValue(true)]
         public bool QuickNurse;
 
-        [Label($"${path}.BestiaryQuickUnlock.Label")]
-        [Tooltip($"${path}.BestiaryQuickUnlock.Tooltip")]
+        [Label($"${_path}.BestiaryQuickUnlock.Label")]
+        [Tooltip($"${_path}.BestiaryQuickUnlock.Tooltip")]
         [DefaultValue(true)]
         public bool BestiaryQuickUnlock;
 
-        [Label($"${path}.BannerRequirement.Label")]
-        [Tooltip($"${path}.BannerRequirement.Tooltip")]
+        [Label($"${_path}.BannerRequirement.Label")]
+        [Tooltip($"${_path}.BannerRequirement.Tooltip")]
         [Slider]
         [Range(0.1f, 10f)]
         [Increment(0.05f)]
@@ -222,46 +228,46 @@ namespace ImproveGame.Common.Configs
 
         #region 游戏机制
 
-        [Header($"${path}.GameMechanics.Header")]
+        [Header($"${_path}.GameMechanics.Header")]
 
-        [Label($"${path}.AlchemyGrassGrowsFaster.Label")]
-        [Tooltip($"${path}.AlchemyGrassGrowsFaster.Tooltip")]
+        [Label($"${_path}.AlchemyGrassGrowsFaster.Label")]
+        [Tooltip($"${_path}.AlchemyGrassGrowsFaster.Tooltip")]
         [DefaultValue(false)]
         public bool AlchemyGrassGrowsFaster;
 
-        [Label($"${path}.AlchemyGrassAlwaysBlooms.Label")]
-        [Tooltip($"${path}.AlchemyGrassAlwaysBlooms.Tooltip")]
+        [Label($"${_path}.AlchemyGrassAlwaysBlooms.Label")]
+        [Tooltip($"${_path}.AlchemyGrassAlwaysBlooms.Tooltip")]
         [DefaultValue(false)]
         public bool AlchemyGrassAlwaysBlooms;
 
-        [Label($"${path}.StaffOfRegenerationAutomaticPlanting.Label")]
-        [Tooltip($"${path}.StaffOfRegenerationAutomaticPlanting.Tooltip")]
+        [Label($"${_path}.StaffOfRegenerationAutomaticPlanting.Label")]
+        [Tooltip($"${_path}.StaffOfRegenerationAutomaticPlanting.Tooltip")]
         [DefaultValue(false)]
         public bool StaffOfRegenerationAutomaticPlanting;
 
-        [Label($"${path}.NoBiomeSpread.Label")]
+        [Label($"${_path}.NoBiomeSpread.Label")]
         [DefaultValue(true)]
         public bool NoBiomeSpread;
 
-        [Label($"${path}.RespawnWithFullHP.Label")]
+        [Label($"${_path}.RespawnWithFullHP.Label")]
         [DefaultValue(true)]
         public bool RespawnWithFullHP;
 
-        [Label($"${path}.DontDeleteBuff.Label")]
-        [Tooltip($"${path}.DontDeleteBuff.Tooltip")]
+        [Label($"${_path}.DontDeleteBuff.Label")]
+        [Tooltip($"${_path}.DontDeleteBuff.Tooltip")]
         [DefaultValue(true)]
         public bool DontDeleteBuff;
 
-        [Label($"${path}.JourneyResearch.Label")]
-        [Tooltip($"${path}.JourneyResearch.Tooltip")]
+        [Label($"${_path}.JourneyResearch.Label")]
+        [Tooltip($"${_path}.JourneyResearch.Tooltip")]
         [DefaultValue(false)]
         public bool JourneyResearch;
 
-        [Label($"${path}.BanDamageVar.Label")]
+        [Label($"${_path}.BanDamageVar.Label")]
         [DefaultValue(false)]
         public bool BanDamageVar;
 
-        [Label($"${path}.ExtraPlayerBuffSlots.Label")]
+        [Label($"${_path}.ExtraPlayerBuffSlots.Label")]
         [DefaultValue(99)]
         [Range(0, 99)]
         [Slider]
@@ -273,77 +279,77 @@ namespace ImproveGame.Common.Configs
 
         #region 树木设置
 
-        [Header($"${path}.TreeConfigs.Header")]
+        [Header($"${_path}.TreeConfigs.Header")]
 
-        [Label($"${path}.TreeGrowFaster.Label")]
-        [Tooltip($"${path}.TreeGrowFaster.Tooltip")]
+        [Label($"${_path}.TreeGrowFaster.Label")]
+        [Tooltip($"${_path}.TreeGrowFaster.Tooltip")]
         [DefaultValue(true)]
         public bool TreeGrowFaster;
 
-        [Label($"${path}.ShakeTreeFruit.Label")]
-        [Tooltip($"${path}.ShakeTreeFruit.Tooltip")]
+        [Label($"${_path}.ShakeTreeFruit.Label")]
+        [Tooltip($"${_path}.ShakeTreeFruit.Tooltip")]
         [DefaultValue(false)]
         public bool ShakeTreeFruit;
 
-        [Label($"${path}.GemTreeAlwaysDropGem.Label")]
-        [Tooltip($"${path}.GemTreeAlwaysDropGem.Tooltip")]
+        [Label($"${_path}.GemTreeAlwaysDropGem.Label")]
+        [Tooltip($"${_path}.GemTreeAlwaysDropGem.Tooltip")]
         [DefaultValue(false)]
         public bool GemTreeAlwaysDropGem;
 
         [Range(1, 100)]
         [DefaultValue(5)]
-        [Label($"${path}.MostTree.LabelMin")]
+        [Label($"${_path}.MostTree.LabelMin")]
         public int MostTreeMin;
 
         [Range(1, 100)]
         [DefaultValue(16)]
-        [Label($"${path}.MostTree.LabelMax")]
+        [Label($"${_path}.MostTree.LabelMax")]
         public int MostTreeMax;
 
         [Range(1, 100)]
         [DefaultValue(10)]
-        [Label($"${path}.PalmTree.LabelMin")]
+        [Label($"${_path}.PalmTree.LabelMin")]
         public int PalmTreeMin;
 
         [Range(1, 100)]
         [DefaultValue(20)]
-        [Label($"${path}.PalmTree.LabelMax")]
+        [Label($"${_path}.PalmTree.LabelMax")]
         public int PalmTreeMax;
 
         [Range(1, 100)]
         [DefaultValue(7)]
-        [Label($"${path}.GemTree.LabelMin")]
+        [Label($"${_path}.GemTree.LabelMin")]
         public int GemTreeMin;
 
         [Range(1, 100)]
         [DefaultValue(12)]
-        [Label($"${path}.GemTree.LabelMax")]
+        [Label($"${_path}.GemTree.LabelMax")]
         public int GemTreeMax;
 
         #endregion
 
         #region 多人设置
 
-        [Header($"${path}.TogetherConfigs.Header")]
+        [Header($"${_path}.TogetherConfigs.Header")]
 
-        [Label($"${path}.ShareCraftingStation.Label")]
-        [Tooltip($"${path}.ShareCraftingStation.Tooltip")]
+        [Label($"${_path}.ShareCraftingStation.Label")]
+        [Tooltip($"${_path}.ShareCraftingStation.Tooltip")]
         [DefaultValue(true)]
         public bool ShareCraftingStation;
 
-        [Label($"${path}.ShareInfBuffs.Label")]
-        [Tooltip($"${path}.ShareInfBuffs.Tooltip")]
+        [Label($"${_path}.ShareInfBuffs.Label")]
+        [Tooltip($"${_path}.ShareInfBuffs.Tooltip")]
         [DefaultValue(false)]
         public bool ShareInfBuffs;
 
-        [Label($"${path}.ShareRange.Label")]
-        [Tooltip($"${path}.ShareRange.Tooltip")]
+        [Label($"${_path}.ShareRange.Label")]
+        [Tooltip($"${_path}.ShareRange.Tooltip")]
         [DefaultValue(-1)]
         [Range(-1, 2000)]
         public int ShareRange;
 
-        [Label($"${path}.TeamAutoJoin.Label")]
-        [Tooltip($"${path}.TeamAutoJoin.Tooltip")]
+        [Label($"${_path}.TeamAutoJoin.Label")]
+        [Tooltip($"${_path}.TeamAutoJoin.Tooltip")]
         [DefaultValue(false)]
         public bool TeamAutoJoin;
 
@@ -351,35 +357,35 @@ namespace ImproveGame.Common.Configs
 
         #region 模组设置
 
-        [Header($"${path}.ServerSettings.Header")]
+        [Header($"${_path}.ServerSettings.Header")]
 
-        [Label($"${path}.OnlyHost.Label")]
-        [Tooltip($"${path}.OnlyHost.Tooltip")]
+        [Label($"${_path}.OnlyHost.Label")]
+        [Tooltip($"${_path}.OnlyHost.Tooltip")]
         [DefaultValue(false)]
         public bool OnlyHost;
 
-        [Label($"${path}.OnlyHostByPassword.Label")]
-        [Tooltip($"${path}.OnlyHostByPassword.Tooltip")]
+        [Label($"${_path}.OnlyHostByPassword.Label")]
+        [Tooltip($"${_path}.OnlyHostByPassword.Tooltip")]
         [DefaultValue(false)]
         [ReloadRequired]
         public bool OnlyHostByPassword;
 
-        [Label($"${path}.SpawnRateMaxValue.Label")]
-        [Tooltip($"${path}.SpawnRateMaxValue.Tooltip")]
+        [Label($"${_path}.SpawnRateMaxValue.Label")]
+        [Tooltip($"${_path}.SpawnRateMaxValue.Tooltip")]
         [DefaultValue(50)]
         [Range(1, 100)]
         public int SpawnRateMaxValue;
 
-        [Label($"${path}.ShowModName.Label")]
+        [Label($"${_path}.ShowModName.Label")]
         [DefaultValue(true)]
         public bool ShowModName;
 
-        [Label($"${path}.EmptyAutofisher.Label")]
-        [Tooltip($"${path}.EmptyAutofisher.Tooltip")]
+        [Label($"${_path}.EmptyAutofisher.Label")]
+        [Tooltip($"${_path}.EmptyAutofisher.Tooltip")]
         [DefaultValue(true)]
         public bool EmptyAutofisher;
 
-        [Label($"${path}.LoadModItems.Label")]
+        [Label($"${_path}.LoadModItems.Label")]
         [ReloadRequired]
         public ModItemLoadPage LoadModItems = new();
 
@@ -387,67 +393,67 @@ namespace ImproveGame.Common.Configs
         public class ModItemLoadPage
         {
             [Label("$Mods.ImproveGame.ItemName.MagickWand")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool MagickWand = true;
 
             [Label("$Mods.ImproveGame.ItemName.SpaceWand")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool SpaceWand = true;
 
             [Label("$Mods.ImproveGame.ItemName.StarburstWand")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool StarburstWand = true;
 
             [Label("$Mods.ImproveGame.ItemName.WallPlace")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool WallPlace = true;
 
             [Label("$Mods.ImproveGame.ItemName.CreateWand")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool CreateWand = true;
 
             [Label("$Mods.ImproveGame.ItemName.LiquidWand")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool LiquidWand = true;
 
             [Label("$Mods.ImproveGame.ItemName.PotionBag")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool PotionBag = true;
 
             [Label("$Mods.ImproveGame.ItemName.BannerChest")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool BannerChest = true;
 
             [Label("$Mods.ImproveGame.ItemName.Autofisher")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool Autofisher = true;
 
             [Label("$Mods.ImproveGame.ItemName.PaintWand")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool PaintWand = true;
 
             [Label("$Mods.ImproveGame.ItemName.ConstructWand")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool ConstructWand = true;
 
             [Label("$Mods.ImproveGame.ItemName.MoveChest")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool MoveChest = true;
 
             [Label("$Mods.ImproveGame.ItemName.CoinOne")]
-            [Tooltip($"${path}.LoadModItems.Tooltip")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
             [DefaultValue(true)]
             public bool CoinOne = true;
 
@@ -476,10 +482,10 @@ namespace ImproveGame.Common.Configs
 
         #region 预设
 
-        [Header($"${path}.Presets.Header")]
+        [Header($"${_path}.Presets.Header")]
 
-        [Label($"${path}.ILoveBalance.Label")]
-        [Tooltip($"${path}.ILoveBalance.Tooltip")]
+        [Label($"${_path}.ILoveBalance.Label")]
+        [Tooltip($"${_path}.ILoveBalance.Tooltip")]
         [DefaultValue(false)]
         public bool ILoveBalance
         {
@@ -492,7 +498,7 @@ namespace ImproveGame.Common.Configs
                 NoConsume_SummonItem is false &&
                 AutoReuseWeapon is false &&
                 ExtraToolSpeed is 0.125f &&
-                ImproveTileSpeedAndTileRange is true &&
+                ModifyPlayerPlaceSpeed is true &&
                 PortableCraftingStation is true &&
                 NoPlace_BUFFTile_Banner is false &&
                 NoConsume_Potion is false &&
@@ -539,7 +545,7 @@ namespace ImproveGame.Common.Configs
                     NoConsume_SummonItem = false;
                     AutoReuseWeapon = false;
                     ExtraToolSpeed = 0.125f;
-                    ImproveTileSpeedAndTileRange = true;
+                    ModifyPlayerPlaceSpeed = true;
                     PortableCraftingStation = true;
                     NoPlace_BUFFTile_Banner = false;
                     NoConsume_Potion = false;
@@ -577,8 +583,8 @@ namespace ImproveGame.Common.Configs
             }
         }
 
-        [Label($"${path}.FukMeCalamity.Label")]
-        [Tooltip($"${path}.FukMeCalamity.Tooltip")]
+        [Label($"${_path}.FukMeCalamity.Label")]
+        [Tooltip($"${_path}.FukMeCalamity.Tooltip")]
         [DefaultValue(false)]
         public bool FukMeCalamity
         {
@@ -591,7 +597,7 @@ namespace ImproveGame.Common.Configs
                 NoConsume_SummonItem is true &&
                 AutoReuseWeapon is true &&
                 ExtraToolSpeed is 0.5f &&
-                ImproveTileSpeedAndTileRange is true &&
+                ModifyPlayerPlaceSpeed is true &&
                 PortableCraftingStation is true &&
                 NoPlace_BUFFTile_Banner is true &&
                 NoConsume_Potion is true &&
@@ -638,7 +644,7 @@ namespace ImproveGame.Common.Configs
                     NoConsume_SummonItem = true;
                     AutoReuseWeapon = true;
                     ExtraToolSpeed = 0.5f;
-                    ImproveTileSpeedAndTileRange = true;
+                    ModifyPlayerPlaceSpeed = true;
                     PortableCraftingStation = true;
                     NoPlace_BUFFTile_Banner = true;
                     NoConsume_Potion = true;
@@ -678,8 +684,8 @@ namespace ImproveGame.Common.Configs
 
         #endregion
 
-        [Header($"${path}.OtherFunctions.Header")]
-        [Label($"${path}.OtherFunctions.Label")]
+        [Header($"${_path}.OtherFunctions.Header")]
+        [Label($"${_path}.OtherFunctions.Label")]
         public bool OtherFunctions => true;
 
         public override void OnChanged()

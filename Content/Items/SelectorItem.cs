@@ -97,7 +97,7 @@ namespace ImproveGame.Content.Items
                 }
                 end = ModifySize(start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
                 Color color = ModifyColor(!unCancelled);
-                Box.NewBox(this, IsNeedKill, start, end, color * 0.35f, color, TextDisplayMode.All);
+                GameRectangle.Create(this, IsNeedKill, start, end, color * 0.35f, color, TextDisplayType.All);
                 if (Main.mouseLeft)
                 {
                     player.itemAnimation = 8;

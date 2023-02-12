@@ -126,7 +126,7 @@ namespace ImproveGame.Content.Items
             {
                 if (WandSystem.FixedMode)
                 {
-                    Box.NewBox(this, () => !WandSystem.FixedMode, GetRectangle(player), Color.Red * 0.35f, Color.Red);
+                    GameRectangle.Create(this, () => !WandSystem.FixedMode, GetRectangle(player), Color.Red * 0.35f, Color.Red);
                 }
                 // 我给他移动到 CanUseItem 中
                 // 还在用物品的时候不能打开UI (直接写在 CanUseItem 似乎就没有问题了)

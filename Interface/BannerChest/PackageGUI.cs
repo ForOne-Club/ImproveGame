@@ -67,13 +67,11 @@ namespace ImproveGame.Interface.BannerChest
             _title.SetInnerPixels(_title.TextSize);
             _title.Join(_titlePanel);
 
-            _cross = new SUICross(24)
+            _cross = new SUICross
             {
                 HAlign = 1f,
                 VAlign = 0.5f,
-                Rounded = new Vector4(0f, 10f, 0f, 0f),
-                beginBg = UIColor.TitleBg2 * 0.5f,
-                endBg = UIColor.TitleBg2,
+                Rounded = new Vector4(0f, 10f, 0f, 0f)
             };
             _cross.Height.Set(0f, 1f);
             _cross.OnMouseDown += (_, _) => Close();

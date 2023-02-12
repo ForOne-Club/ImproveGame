@@ -6,11 +6,10 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.ExtremeStorage;
 
-public class AddChestButton : HoverView
+public class AddChestButton : TimerView
 {
     public AddChestButton()
     {
-        endWidth = 0;
         var showSize = ModItemList.GetSize(10, 4, 40, 4f);
         this.SetSize(showSize.X, 50f);
     }
@@ -30,7 +29,7 @@ public class AddChestButton : HoverView
         var size = dimensions.Size();
         var center = dimensions.Center() + new Vector2(0, UIConfigs.Instance.GeneralFontOffsetY);
 
-        Color borderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, hoverTimer.Schedule);
+        Color borderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, HoverTimer.Schedule);
         SDFRactangle.HasBorder(position, size, new Vector4(10f), UIColor.ButtonBg, 2, borderColor);
 
         string text = GetText("UI.ExtremeStorage.AddChest");

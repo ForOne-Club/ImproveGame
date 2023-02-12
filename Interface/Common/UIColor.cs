@@ -14,7 +14,9 @@
             ItemSlotBgFav,
             ItemSlotBg;
 
-        public static Color ButtonBg;
+        public static Color
+            ButtonBg,
+            ButtonBgHover;
 
         public static Color
             TitleBg,
@@ -61,7 +63,8 @@
             ItemSlotBgFav = new Color(83, 88, 151, 180);
             ItemSlotBg = new Color(63, 65, 151, 180);
 
-            ButtonBg = new Color(54, 56, 130);
+            ButtonBg = new Color(55, 55, 130);
+            ButtonBgHover = new Color(66, 66, 143);
 
             TitleBg = new Color(35, 40, 83);
             TitleBg2 = new Color(37, 46, 92);
@@ -72,13 +75,13 @@
             ScrollBarInnerBgHover = new Color(220, 220, 220);
 
             // 边框
-            SwitchBorder = new Color(22, 25, 55);
+            SwitchBorder = new Color(20, 25, 60);
             SwitchBorderHover = new Color(233, 176, 0);
             // 圆
-            SwitchRound = new Color(22, 25, 55);
+            SwitchRound = new Color(20, 25, 60);
             SwitchRoundHover = new Color(233, 176, 0);
             // 背景色
-            SwitchBg = new Color(22, 25, 55, 127);
+            SwitchBg = new Color(20, 25, 60, 127);
             SwitchBgHover = new Color(72, 63, 63, 127);
 
             Cross = new Color(200, 40, 40);

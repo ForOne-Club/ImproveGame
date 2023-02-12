@@ -1,7 +1,7 @@
 ﻿Mods.ImproveGame.UI:
 {
 	PlayerInfo: {
-		CardWidth: 210
+		CardWidth: 190
 		Name: "Player Stats"
 		LifeRegen: "Life Regen"
 		ArmorPenetration: "Armor Pen"

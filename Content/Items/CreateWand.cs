@@ -145,11 +145,11 @@ namespace ImproveGame.Content.Items
             if (!Main.dedServ && Main.myPlayer == player.whoAmI)
             {
                 Point point = Main.MouseWorld.ToTileCoordinates() - (Prison.Size() / 2f).ToPoint(); // 鼠标位置
-                int boxIndex = Box.NewBox(this, () => false, new Rectangle(point.X, point.Y, Prison.Width, Prison.Height), Color.Yellow * 0f, Color.Yellow * 0f);
-                if (BoxSystem.boxs.IndexInRange(boxIndex))
+                int boxIndex = GameRectangle.Create(this, () => false, new Rectangle(point.X, point.Y, Prison.Width, Prison.Height), Color.Yellow * 0f, Color.Yellow * 0f);
+                if (GameRectangleSystem.GameRectangles.IndexInRange(boxIndex))
                 {
-                    Box box = BoxSystem.boxs[boxIndex];
-                    box.PreView = PrisonsPreView;
+                    GameRectangle box = GameRectangleSystem.GameRectangles[boxIndex];
+                    box.Texture2D = PrisonsPreView;
                 }
             }
         }
