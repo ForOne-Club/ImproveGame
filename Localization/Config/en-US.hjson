@@ -90,8 +90,8 @@
         Label: "[centeritem:4056] Increase certain tools' using speed"
         Tooltip: Tools with use times greater than 8 will have their use times set to 8
     }
-    ModifyPlayerPlaceSpeed.Label: "[centeritem:2214] 提高物块放置速度"
-    ModifyPlayerTileRangle.Label: "[centeritem:2215] 提高物块放置距离"
+    ModifyPlayerPlaceSpeed.Label: "[centeritem:2214] Increase tile placement speed"
+    ModifyPlayerTileRangle.Label: "[centeritem:2215] Increase tile placement range"
     TileSpeed_Blacklist:
     {
         Label: "[centeritem:1448] Blacklist of tile placing boost"
@@ -151,8 +151,8 @@
     }
     NoConsume_Projectile:
     {
-        Label: "[centeritem:42] 无限投掷物"
-        Tooltip: 所有堆叠数  ≥ 3996 的投掷物将不再消耗。
+        Label: "[centeritem:42] Infinite thrown weapons"
+        Tooltip: Thrown weapons stack over 3996 will not be consumed
     }
     HideNoConsumeBuffs:
     {
@@ -178,7 +178,7 @@
         Label: "[centeritem:3232] Faster Respawn"
         Tooltip: Example: 25 means reduces respawn time by 25%
     }
-    BOSSBattleResurrectionTimeShortened.Label: "[centeritem:3232] 重生加速 BOSS战"
+    BOSSBattleResurrectionTimeShortened.Label: "[centeritem:3232] Faster Respawn in Boss Fights"
     MiddleEnableBank:
     {
         Label: "[centeritem:87] Middle click to open personal inventories"
@@ -465,14 +465,14 @@
             '''
     }
     UIConfigs.Label: "Graphic Interface Config"
-    ResetNativeUI.Label: "[centeritem:1544] 重置原生用户界面"
-    GeneralFontOffsetY.Label: "[centeritem:1543] 用户界面普通字体 Y 轴偏移"
-    BigFontOffsetY.Label: "[centeritem:1543] 用户界面大型字体 Y 轴偏移"
+    ResetNativeUI.Label: "[centeritem:1544] Reset to vanilla UI"
+    GeneralFontOffsetY.Label: "[centeritem:1543] UI normal font Y offset"
+    BigFontOffsetY.Label: "[centeritem:1543] UI large font Y offset"
     ShowMoreData.Label: "[centeritem:1344] Display debug data"
     PlyInfo:{
-        Label: "[centeritem:3124] 角色属性面板"
-        AlwaysDisplayed: "始终显示"
-        WhenOpeningInventory: "开启背包时显示"
-        NotDisplayed: "不显示"
+        Label: "[centeritem:3124] Player Stats"
+        AlwaysDisplayed: "Always shown"
+        WhenOpeningInventory: "Shown while in inventory"
+        NotDisplayed: "Hiden"
     }
 }

@@ -4,20 +4,20 @@
 ## Subversions
 - v1.6.3
 ## BUG Fixes
-- 修复了圣诞老人在开启NPC生成优化的情况下会重复入住并死去的BUG
-- 修复了合成物品时可能的Mod冲突
-- 修复了摸彩袋掉率显示无法检测模组摸彩袋的BUG
-- 修复了部分魔杖无法在旅行模式中被研究的BUG
-- 修复了空间魔杖会将门识别为实体物块的BUG
+- Fixed Santa Claus spawns and die when town NPC spawn mechanics improvement is enabled
+- Fixed potential mod conflicts when crafting
+- Fixed Grab Bag Item Drop Rate not detecting modded grab bags
+- Fixed some Wands cannot be researched in Journey mode
+- Fixed Wand of Space sees doors as solid tiles
 ## Additions
-- 新增玩家属性面板，可在 UI 设置调节显示开关。
-- 新增储存管理器，可轻松管理你的箱子。
-- 重置原版UI绘制（可能增加GPU负担），此功能还会影响文字的绘制位置，可在设置中调节。
-- 提高物块放置距离和速度（开关） -> 提高放置速度（开关） + 提高放置距离（调节条）
+- Added Player Stats Panel, can be configured in UI config
+- Added Storage Manager, go easy with your chests
+- Overhauled vanilla UI drawing (may increase GPU consumption), also affects font drawing position, can be configured
+- Splitted Increase Tile Placement Range and Speed into speed boost (toggle) and range boost (slider)
 ## Misc
-- 优化了多人模式下的体验，降低可能的延迟
-- 优化了修改城镇NPC入住速度功能
-- 虚空魔杖配方更改，现在是Boss前物品
+- Optimized multiplayer mode experience, lowered potential lag
+- Optimized Town NPC Spawn Rate Modifications
+- Wand of Void now can be obtained pre-boss
 
 # v1.6.2
 ## Subversions

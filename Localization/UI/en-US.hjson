@@ -25,40 +25,40 @@
 	}
 	ExtremeStorage: {
 	    AddChest: "Add Chest"
-	    CountForCrafting.Label: "物品参与合成"
+	    CountForCrafting.Label: "Count for crafting"
 	    CountForCrafting.Tooltip:
             '''
-            打开的类别中的箱内物品是否参与合成
-            该功能暂时无法在多人模式中使用
-            你仍可以直接打开箱子并使用箱子内物品合成
+            Controls wherther items under a category can be counted in crafting
+            Currently unusable in multiplayer mode
+            Vanilla crafting methods are unaffected
             '''
-	    UseUnlimitedPotion.Label: "药水无限续杯"
+	    UseUnlimitedPotion.Label: "Infinite Potion"
 	    UseUnlimitedPotion.Tooltip:
             '''
-            处于“炼药”类别中的药水与增益站是否可以用于无限续杯
-            你需要在模组配置中启用“无限续杯”功能
+            Controls whether potions and buff stations under '{$Mods.ImproveGame.UI.ItemGroup.Alchemy}' can be used for Infinite Potion
+            You need to enable 'Infinite Potions' in mod config
             '''
-	    UsePortableStation.Label: "便携制作站"
+	    UsePortableStation.Label: "Protable Crafting Station"
 	    UsePortableStation.Tooltip: 
             '''
-            处于“家具”类别中的制作站是否可以作为便携制作站
-            你需要在模组配置中启用“便携制作站”功能
+            Controls whether stations under '{$Mods.ImproveGame.UI.ItemGroup.Alchemy}' can be used for Portable Crafting Station
+            You need to enable 'Portable Crafting Stations' in mod config
             '''
         ChestBeingUsed:
             '''
-            该栏位所属箱子正在被另一名玩家使用
-            暂时无法进行任何操作
+            Chest for this slot is being used by another player
+            No action can be taken
             '''
         // 介绍使用了手动换行让排版看起来舒服点
         BasicIntroduction:
             '''
-            注意:
-              1. 分类依靠箱子名称前的标识符运作，
-                 请勿随意修改箱子名称
-              2. 你还是要对物品手动分类，
-                 分类标签只是方便你进行分类
-              3. 多人模式下，如果别人打开了某个箱子，
-                 你就不能对其内物品进行操作
+            Note:
+              1. Chest sorting depends on identifiers prefixed on the chests' names
+                 Please do NOT arbitrarily edit chest names
+              2. You still need to sort items manually
+                 The identifiers are just for convenience
+              3. In multiplayer mode, if a chest is being used by another player
+                 You are not able to take actions on items inside the chest
             '''
         ItemGroup: {
             Weapon: "{$CreativePowers.TabWeapons}"
@@ -69,7 +69,7 @@
             Furniture: "{$CreativePowers.TabFurniture}"
             Block: "{$CreativePowers.TabBlocks}"
             Material: "{$CreativePowers.TabMaterials}"
-            Alchemy: "炼药"
+            Alchemy: "Alchemy"
             Misc: "{$CreativePowers.TabMisc}"
             Setting: "{$LegacyMenu.14}"
         }
