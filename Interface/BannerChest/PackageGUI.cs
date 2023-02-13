@@ -136,7 +136,7 @@ namespace ImproveGame.Interface.BannerChest
             Visible = true;
             _grid.SetInventory(items);
             _grid.Scrollbar.ViewPosition = 0;
-            _title.SetText(title);
+            _title.Text = title;
             _title.SetInnerPixels(_title.TextSize);
             Package = package;
             Recalculate();

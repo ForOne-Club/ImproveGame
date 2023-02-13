@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.Players;
+using ReLogic.Graphics;
 using System.Reflection;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
@@ -50,16 +51,48 @@ namespace ImproveGame
             return ChatManager.GetStringSize(FontAssets.MouseText.Value, text, new Vector2(1f)) * textScale;
         }
 
-        public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f)
+        public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f, bool large = false)
         {
-            DrawString(position, text, textColor, borderColor, Zero, scale);
+            DrawString(position, text, textColor, borderColor, Zero, scale, large);
         }
 
-        public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, Vector2 origin, float scale)
+        public static void DrawString(Vector2 pos, string text, Color textColor, Color borderColor, Vector2 origin, float textScale, bool large)
         {
-            var sb = Main.spriteBatch;
-            var font = FontAssets.MouseText.Value;
-            Utils.DrawBorderStringFourWay(sb, font, text, position.X, position.Y, textColor, borderColor, origin, scale);
+            DynamicSpriteFont spriteFont = (large ? FontAssets.DeathText : FontAssets.MouseText).Value;
+
+            float x = pos.X;
+            float y = pos.Y;
+            Color color = borderColor;
+            float border = 2f * textScale;
+            for (int i = 0; i < 5; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        pos.X = x - border;
+                        pos.Y = y;
+                        break;
+                    case 1:
+                        pos.X = x + border;
+                        pos.Y = y;
+                        break;
+                    case 2:
+                        pos.X = x;
+                        pos.Y = y - border;
+                        break;
+                    case 3:
+                        pos.X = x;
+                        pos.Y = y + border;
+                        break;
+                    default:
+                        pos.X = x;
+                        pos.Y = y;
+                        color = textColor;
+                        break;
+                }
+
+                Main.spriteBatch.DrawString(spriteFont, text, pos, color, 0f, origin, textScale, 0, 0f);
+            }
         }
 
         public static Color[] GetColors(Texture2D texture)

@@ -48,13 +48,14 @@ float4 NoBorderLine(float2 coords : TEXCOORD0) : COLOR0
     float2 ba = uEnd - uStart;
     float2 pa = coords - uStart;
     float h = clamp(dot(pa, ba) / dot(ba, ba), 0, 1);
-    return lerp(uBackgroundColor, 0, smoothstep(-0.5, +0.5, length(pa - h * ba) - uLineWidth));
+    return lerp(uBackgroundColor, 0, smoothstep(-0.5, 0.5, length(pa - h * ba) - uLineWidth));
 }
 
 float4 HasBorderRound(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 p = abs(coords - uSizeOver2);
-    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-1, 0.5, distance(p, 0) - uSizeOver2.x + uBorder)), 0, smoothstep(-1, 0.5, distance(p, 0) - uSizeOver2.x));
+    float d = distance(p, 0);
+    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-1, 0.5, d - uSizeOver2.x + uBorder)), 0, smoothstep(-1, 0.5, d - uSizeOver2.x));
 }
 
 float4 NoBorderRound(float2 coords : TEXCOORD0) : COLOR0

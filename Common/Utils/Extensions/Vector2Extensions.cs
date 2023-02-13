@@ -9,6 +9,16 @@ namespace ImproveGame.Common.Utils.Extensions
             return new Vector2(MathF.Abs(_this.X), MathF.Abs(_this.Y));
         }
 
+        public static float Max(this Vector2 _this)
+        {
+            return Math.Max(_this.X, _this.Y);
+        }
+
+        public static float Min(this Vector2 _this)
+        {
+            return Math.Min(_this.X, _this.Y);
+        }
+
         public static Vector2 ToX(this Vector2 _this)
         {
             return new Vector2(_this.X, 0);

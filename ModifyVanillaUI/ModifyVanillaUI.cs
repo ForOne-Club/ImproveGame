@@ -9,7 +9,7 @@ using Terraria.GameContent.UI.States;
 
 namespace ImproveGame.ModifyOriginalUI
 {
-    internal class ModifyOriginalUI : ModSystem
+    internal class ModifyVanillaUI : ModSystem
     {
         private bool _loaded;
         private MethodInfo _uITextPaenl_DrawText;
