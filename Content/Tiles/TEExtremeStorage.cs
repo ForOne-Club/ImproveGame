@@ -21,7 +21,7 @@ namespace ImproveGame.Content.Tiles
             }
         }
 
-        #region »ù±¾TEÄÚÈİ
+        #region åŸºæœ¬TEå†…å®¹
 
         public override void NetSend(BinaryWriter writer)
         {
@@ -91,24 +91,24 @@ namespace ImproveGame.Content.Tiles
 
         #endregion
 
-        // ËÑË÷Ò»¸ö 17x17 µÄ·¶Î§ÄÚµÄËùÓĞÏä×Ó
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡ö¡ö¡ö¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡ö¡ö¡ö¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡ö¡ö¡ö¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
-        // ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ
+        // æœç´¢ä¸€ä¸ª 17x17 çš„èŒƒå›´å†…çš„æ‰€æœ‰ç®±å­
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â– â– â– â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â– â– â– â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â– â– â– â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
+        // â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡â–¡
         public List<int> FindAllNearbyChests()
         {
             var chestIndexes = new List<int>();
@@ -119,8 +119,8 @@ namespace ImproveGame.Content.Tiles
                 if (chest is null)
                     continue;
 
-                bool inRangeX = Math.Abs(chest.x - Position.X) <= 7 || Math.Abs(chest.x - (Position.X + 2)) <= 7;
-                bool inRangeY = Math.Abs(chest.y - Position.Y) <= 7 || Math.Abs(chest.y - (Position.Y + 2)) <= 7;
+                bool inRangeX = Math.Abs(chest.x - Position.X) <= 8 || Math.Abs(chest.x - (Position.X + 2)) <= 7;
+                bool inRangeY = Math.Abs(chest.y - Position.Y) <= 8 || Math.Abs(chest.y - (Position.Y + 2)) <= 7;
                 if (inRangeX && inRangeY)
                     chestIndexes.Add(i);
             }
@@ -130,10 +130,10 @@ namespace ImproveGame.Content.Tiles
 
         public Item[] GetAllItemsByGroup(ItemGroup group)
         {
-            // ²éÕÒÃû×ÖÏàÓ¦µÄÏä×Ó
+            // æŸ¥æ‰¾åå­—ç›¸åº”çš„ç®±å­
             var chestIndexes = FindAllNearbyChestsWithGroup(group);
 
-            // ½¨Á¢ÎïÆ·ÁĞ±í
+            // å»ºç«‹ç‰©å“åˆ—è¡¨
             var itemList = new List<Item>();
             chestIndexes.ForEach(i => itemList.AddRange(Main.chest[i].item));
 
@@ -144,18 +144,18 @@ namespace ImproveGame.Content.Tiles
             !string.IsNullOrEmpty(Main.chest[i].name) && Main.chest[i].name[0] == (char)group);
 
         /// <summary>
-        /// ½«ÎïÆ·¶Ñµşµ½¸½½üÏä×Ó£¬Ö¸¶¨×é±ğ£¬Õâ¸öÖ»ÓÃÓÚµ¥ÈËÄ£Ê½
-        /// ¶àÈËÄ£Ê½ÔÚ: <see cref="InvToChestPacket"/>
+        /// å°†ç‰©å“å †å åˆ°é™„è¿‘ç®±å­ï¼ŒæŒ‡å®šç»„åˆ«ï¼Œè¿™ä¸ªåªç”¨äºå•äººæ¨¡å¼
+        /// å¤šäººæ¨¡å¼åœ¨: <see cref="InvToChestPacket"/>
         /// </summary>
         public Item StackToNearbyChests(Item item, ItemGroup group)
         {
-            // ²éÕÒÃû×ÖÏàÓ¦µÄÏä×Ó
+            // æŸ¥æ‰¾åå­—ç›¸åº”çš„ç®±å­
             var chestIndexes = FindAllNearbyChestsWithGroup(group);
 
             var allChestItems = new List<Item[]>();
             chestIndexes.ForEach(i => allChestItems.Add(Main.chest[i].item));
 
-            // ÏÈÌî³äºÍÎïÆ·ÏàÍ¬µÄ
+            // å…ˆå¡«å……å’Œç‰©å“ç›¸åŒçš„
             foreach (var chestItems in allChestItems)
             {
                 for (int i = 0; i < chestItems.Length; i++)
@@ -165,7 +165,7 @@ namespace ImproveGame.Content.Tiles
                 }
             }
 
-            // ºóÌî³ä¿ÕÎ»
+            // åå¡«å……ç©ºä½
             foreach (var chestItems in allChestItems)
             {
                 for (int i = 0; i < chestItems.Length; i++)
