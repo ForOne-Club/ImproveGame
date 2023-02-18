@@ -79,6 +79,7 @@ namespace ImproveGame.Common.Players
                             break;
                         default:
                             inventory[slot] = ExtremeStorageGUI.Storage.StackToNearbyChests(inventory[slot], ExtremeStorageGUI.CurrentGroup);
+                            ExtremeStorageGUI.RefreshCachedAllItems();
                             Recipe.FindRecipes();
                             break;
                     }

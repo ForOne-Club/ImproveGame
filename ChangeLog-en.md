@@ -3,12 +3,15 @@
 # v1.6.3
 ## Subversions
 - v1.6.3
+- v1.6.3.1
 ## BUG Fixes
 - Fixed Santa Claus spawns and die when town NPC spawn mechanics improvement is enabled
 - Fixed potential mod conflicts when crafting
 - Fixed Grab Bag Item Drop Rate not detecting modded grab bags
 - Fixed some Wands cannot be researched in Journey mode
 - Fixed Wand of Space sees doors as solid tiles
+- **[v1.6.3.1]** 修复了部分文本显示错误的BUG
+- **[v1.6.3.1]** 修复了快捷存储到储存管理器时无法刷新合成配方的BUG
 ## Additions
 - Added Player Stats Panel, can be configured in UI config
 - Added Storage Manager, go easy with your chests
@@ -18,6 +21,7 @@
 - Optimized multiplayer mode experience, lowered potential lag
 - Optimized Town NPC Spawn Rate Modifications
 - Wand of Void now can be obtained pre-boss
+- **[v1.6.3.1]** 优化了储存管理器的UI按钮动画
 
 # v1.6.2
 ## Subversions
