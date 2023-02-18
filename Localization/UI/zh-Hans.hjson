@@ -36,13 +36,13 @@
 	    UseUnlimitedPotion.Label: "药水无限续杯"
 	    UseUnlimitedPotion.Tooltip:
             '''
-            处于“炼药”类别中的药水与增益站是否可以用于无限续杯
+            处于“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}”类别中的药水与增益站是否可以用于无限续杯
             你需要在模组配置中启用“无限续杯”功能
             '''
 	    UsePortableStation.Label: "便携制作站"
 	    UsePortableStation.Tooltip: 
             '''
-            处于“家具”类别中的制作站是否可以作为便携制作站
+            处于“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}”类别中的制作站是否可以作为便携制作站
             你需要在模组配置中启用“便携制作站”功能
             '''
         ChestBeingUsed:

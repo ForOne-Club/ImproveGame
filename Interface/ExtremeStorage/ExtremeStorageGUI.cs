@@ -42,11 +42,11 @@ namespace ImproveGame.Interface.ExtremeStorage
                 BackgroundColor = Color.Transparent,
                 BorderColor = Color.Transparent
             };
-            _totalPanel.SetPos(60f, Main.instance.invBottom + 40).SetSize(522f, 600f);
+            _totalPanel.SetPos(60f, Main.instance.invBottom + 40).SetSize(560f, 600f);
             Append(_totalPanel);
 
             _basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg);
-            _basePanel.SetPos(0, 34).SetSize(-40f, 0f, 1f, 1f);
+            _basePanel.SetPos(0, 34).SetSize(-78f, 0f, 1f, 1f);
             _totalPanel.Append(_basePanel);
 
             _basePanel.Append(_itemGrid = new StorageGrids
@@ -68,13 +68,14 @@ namespace ImproveGame.Interface.ExtremeStorage
             _totalPanel.Append(new GroupTab(ItemGroup.Misc));
             _totalPanel.Append(new GroupTab(ItemGroup.Setting));
 
-            int buttonCoordY = 38;
-            _totalPanel.Append(new RecipeToggleButton().SetPos(-34f, buttonCoordY, 1f));
-            _totalPanel.Append(new SortButton().SetPos(-34f, buttonCoordY * 2, 1f));
-            _totalPanel.Append(new StackToStorageButton().SetPos(-34f, buttonCoordY * 3, 1f));
-            _totalPanel.Append(new DepositAllButton().SetPos(-34f, buttonCoordY * 4, 1f));
-            _totalPanel.Append(new StackToInventoryButton().SetPos(-34f, buttonCoordY * 5, 1f));
-            _totalPanel.Append(new LootAllButton().SetPos(-34f, buttonCoordY * 6, 1f));
+            // 这里的位置设置实际无用，因为在 Update 里会被重置，但是如果不设置的话，会导致按钮在第一次打开动画时位置不正确
+            const int buttonCoordY = 38;
+            _totalPanel.Append(new RecipeToggleButton(_foldTimer).SetPos(-72f, buttonCoordY, 1f));
+            _totalPanel.Append(new SortButton(_foldTimer).SetPos(-72f, buttonCoordY * 2, 1f));
+            _totalPanel.Append(new StackToStorageButton(_foldTimer).SetPos(-72f, buttonCoordY * 3, 1f));
+            _totalPanel.Append(new DepositAllButton(_foldTimer).SetPos(-72f, buttonCoordY * 4, 1f));
+            _totalPanel.Append(new StackToInventoryButton(_foldTimer).SetPos(-72f, buttonCoordY * 5, 1f));
+            _totalPanel.Append(new LootAllButton(_foldTimer).SetPos(-72f, buttonCoordY * 6, 1f));
 
             _basePanel.Append(new SettingsPage());
 
@@ -141,7 +142,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             // 应用动画，改变面板大小
             float maxPanelHeight = screenHeightZoomed - Main.instance.invBottom - 80;
             float panelHeight = MathHelper.Lerp(200, maxPanelHeight, _foldTimer.Schedule);
-            float panelWidth = MathHelper.Lerp(522f, 550f, _scrollBarTimer.Schedule);
+            float panelWidth = MathHelper.Lerp(560f, 588f, _scrollBarTimer.Schedule);
             _totalPanel.SetSize(panelWidth, panelHeight);
             float panelLeft = MathHelper.Lerp(60, 20, _foldTimer.Schedule);
             _totalPanel.Left.Pixels = panelLeft;
@@ -180,14 +181,14 @@ namespace ImproveGame.Interface.ExtremeStorage
         {
             float widthNext = _totalPanel.GetDimensions().Width;
             float shownPositionNext = MathHelper.Lerp(60, 20, _foldTimer.Schedule);
-            float hiddenPositionNext = -widthNext - 40;
+            float hiddenPositionNext = -widthNext - 78;
 
             // 宽高
             var screenDimensions = GetDimensions();
             int screenHeightZoomed = (int)screenDimensions.Height;
             float maxPanelHeight = screenHeightZoomed - Main.instance.invBottom - 80;
             float panelHeight = MathHelper.Lerp(200, maxPanelHeight, _foldTimer.Schedule);
-            float panelWidth = MathHelper.Lerp(522f, 550f, _scrollBarTimer.Schedule);
+            float panelWidth = MathHelper.Lerp(560f, 588f, _scrollBarTimer.Schedule);
             _totalPanel.SetSize(panelWidth, panelHeight);
 
             _totalPanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, shownPositionNext, factor), 0f);

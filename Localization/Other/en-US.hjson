@@ -301,13 +301,13 @@ Mods.ImproveGame:
     }
     SpaceWandGUI:
     {
-        placeType: Tile type
-        platform: Platforms
-        soild: Solid blocks
-        rope: Ropes
-        rail: Minecart Tracks
-        grassSeed: Grass Seeds
-        plantPot: Planter Boxes
+        PlaceType: Tile type
+        Platform: Platforms
+        Soild: Solid blocks
+        Rope: Ropes
+        Rail: Minecart Tracks
+        GrassSeed: Grass Seeds
+        PlantPot: Planter Boxes
     }
     PackageGUI:
     {

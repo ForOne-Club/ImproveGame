@@ -21,27 +21,26 @@
 		FishingSkill: "Fishing Power"
 		Luck: "Luck"
 		Aggro: "Aggro"
-		WingTimeMax: "Wing Time"
+		WingTimeMax: "Flight Time"
 	}
 	ExtremeStorage: {
 	    AddChest: "Add Chest"
-	    CountForCrafting.Label: "Count for crafting"
+	    CountForCrafting.Label: "Count for Crafting"
 	    CountForCrafting.Tooltip:
             '''
-            Controls wherther items under a category can be counted in crafting
-            Currently unusable in multiplayer mode
-            Vanilla crafting methods are unaffected
+            Controls whether items under a category can be counted in crafting
+            Currently unusable in multiplayer mode, though you could still craft with items in the chest you open
             '''
 	    UseUnlimitedPotion.Label: "Infinite Potion"
 	    UseUnlimitedPotion.Tooltip:
             '''
-            Controls whether potions and buff stations under '{$Mods.ImproveGame.UI.ItemGroup.Alchemy}' can be used for Infinite Potion
+            Controls whether potions and buff stations under '{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}' can be used for Infinite Potion
             You need to enable 'Infinite Potions' in mod config
             '''
-	    UsePortableStation.Label: "Protable Crafting Station"
+	    UsePortableStation.Label: "Portable Crafting Station"
 	    UsePortableStation.Tooltip: 
             '''
-            Controls whether stations under '{$Mods.ImproveGame.UI.ItemGroup.Alchemy}' can be used for Portable Crafting Station
+            Controls whether stations under '{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}' can be used for Portable Crafting Station
             You need to enable 'Portable Crafting Stations' in mod config
             '''
         ChestBeingUsed:
@@ -53,12 +52,14 @@
         BasicIntroduction:
             '''
             Note:
-              1. Chest sorting depends on identifiers prefixed on the chests' names
-                 Please do NOT arbitrarily edit chest names
+              1. Chest sorting depends on identifiers prefixed
+                 on the chests' names. Please do NOT arbitrarily
+                 edit chest names
               2. You still need to sort items manually
                  The identifiers are just for convenience
-              3. In multiplayer mode, if a chest is being used by another player
-                 You are not able to take actions on items inside the chest
+              3. In multiplayer mode, if a chest is being used by
+                 another player, you are not able to take actions
+                 on items inside the chest
             '''
         ItemGroup: {
             Weapon: "{$CreativePowers.TabWeapons}"

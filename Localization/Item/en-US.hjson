@@ -136,7 +136,7 @@ Mods.ImproveGame.ItemTooltip:
         [c/cc2200:Read this manual if you don't know what to do:] 
         It is used for managing items in chests
         After placement, <right> to open chest panel
-        The manager has saveral built-in [c/0099ff:filter options] for you to access the items
+        The manager has several built-in [c/0099ff:filter options] for you to access the items
         Click '{$Mods.ImproveGame.UI.ExtremeStorage.AddChest}' to add a chest into a category
         Chest sorting depends on identifiers prefixed on the chests' names, [c/0088dd:Please do NOT arbitrarily edit chest names]
         You still need to sort items manually, the identifiers are just for convenience
