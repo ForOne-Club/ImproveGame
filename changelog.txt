@@ -13,6 +13,7 @@ v1.6.3.1
     修复了储存管理器没有合成配方和开关配置选项的BUG
     修复了SidedEventTrigger中可能的System.NullReferenceException报错
     修复了“提高物块放置距离”在不开启“提高物块放置速度”时无效的BUG
+    修复了小地图渲染出错的BUG
   ● 新增内容
     无
   ● 其他

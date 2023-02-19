@@ -44,6 +44,7 @@ namespace ImproveGame.Common.Animations
 
         private static void BaseDrawRectangle(Vector2 pos, Vector2 size, Vector4 rounded)
         {
+            var oldCullMode = Main.graphics.GraphicsDevice.RasterizerState.CullMode;
             Main.graphics.GraphicsDevice.RasterizerState.CullMode = CullMode.None;
             size /= 2f;
             pos += size;
@@ -54,6 +55,7 @@ namespace ImproveGame.Common.Animations
             GetVertexInfo(vertexPos, pos, size, rounded.W);
             Main.graphics.GraphicsDevice.DrawUserPrimitives(0, vertexPos.ToArray(), 0, vertexPos.Count / 3);
             ShaderAssets.SpriteEffectPass.Apply();
+            Main.graphics.GraphicsDevice.RasterizerState.CullMode = oldCullMode;
         }
 
         public static void HasBorder(Vector2 pos, Vector2 size, Vector4 rounded, Color backgroundColor, float border,
