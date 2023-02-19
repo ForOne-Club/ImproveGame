@@ -12,6 +12,9 @@
 - Fixed Wand of Space sees doors as solid tiles
 - **[v1.6.3.1]** 修复了部分文本显示错误的BUG
 - **[v1.6.3.1]** 修复了快捷存储到储存管理器时无法刷新合成配方的BUG
+- **[v1.6.3.1]** 修复了储存管理器没有合成配方和开关配置选项的BUG
+- **[v1.6.3.1]** 修复了SidedEventTrigger中可能的System.NullReferenceException报错
+- **[v1.6.3.1]** 修复了“提高物块放置距离”在不开启“提高物块放置速度”时无效的BUG
 ## Additions
 - Added Player Stats Panel, can be configured in UI config
 - Added Storage Manager, go easy with your chests
@@ -22,6 +25,10 @@
 - Optimized Town NPC Spawn Rate Modifications
 - Wand of Void now can be obtained pre-boss
 - **[v1.6.3.1]** 优化了储存管理器的UI按钮动画
+- **[v1.6.3.1]** 增加储存管理器的箱子识别范围
+- **[v1.6.3.1]** 将所有非法杖物品的最大堆叠上调至9999
+- **[v1.6.3.1]** 储存管理器售价上调至5金
+- **[v1.6.3.1]** 自动钓鱼机售价上调至2金
 
 # v1.6.2
 ## Subversions

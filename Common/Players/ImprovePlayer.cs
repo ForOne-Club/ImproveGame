@@ -130,12 +130,12 @@ public class ImprovePlayer : ModPlayer
             }
         }
 
-        if (Player.whoAmI == Main.myPlayer && Config.ModifyPlayerPlaceSpeed)
+        if (Player.whoAmI == Main.myPlayer)
         {
-            Player.tileRangeX += Config.ModifyPlayerTileRangle;
-            Player.tileRangeY += Config.ModifyPlayerTileRangle;
+            Player.tileRangeX += Config.ModifyPlayerTileRange;
+            Player.tileRangeY += Config.ModifyPlayerTileRange;
 
-            if (Player.HeldItem.IsAir)
+            if (Player.HeldItem.IsAir || !Config.ModifyPlayerPlaceSpeed)
             {
                 return;
             }

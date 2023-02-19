@@ -91,7 +91,7 @@
         Tooltip: Tools with use times greater than 8 will have their use times set to 8
     }
     ModifyPlayerPlaceSpeed.Label: "[centeritem:2214] Increase tile placement speed"
-    ModifyPlayerTileRangle.Label: "[centeritem:2215] Increase tile placement range"
+    ModifyPlayerTileRange.Label: "[centeritem:2215] Increase tile placement range"
     TileSpeed_Blacklist:
     {
         Label: "[centeritem:1448] Blacklist of tile placing boost"

@@ -54,6 +54,8 @@ namespace ImproveGame.Interface
         /// <summary> 指定 ViewBody 是否处于完全关闭状态或正在关闭 </summary>
         public static bool IsClosed(ViewBody viewBody)
         {
+            if (viewBody is null)
+                return true;
             var existingBody = UIPool.Find(d => d.ViewBody == viewBody);
             if (existingBody is null)
                 throw new Exception($"ViewBody {viewBody.GetType().Name} is not registered!");
@@ -63,6 +65,8 @@ namespace ImproveGame.Interface
         /// <summary> 指定 ViewBody 是否处于完全开启状态或正在开启 </summary>
         public static bool IsOpened(ViewBody viewBody)
         {
+            if (viewBody is null)
+                return false;
             var existingBody = UIPool.Find(d => d.ViewBody == viewBody);
             if (existingBody is null)
                 throw new Exception($"ViewBody {viewBody.GetType().Name} is not registered!");

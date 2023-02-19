@@ -91,39 +91,29 @@ namespace ImproveGame.Content.Tiles
 
         #endregion
 
-        // 搜索一个 17x17 的范围内的所有箱子
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□■■■□□□□□□□
-        // □□□□□□□■■■□□□□□□□
-        // □□□□□□□■■■□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
-        // □□□□□□□□□□□□□□□□□
+        // 上下左右 11 格内的所有箱子即视为在范围内
+        public bool ChestInRange(int x, int y)
+        {
+            bool inRangeX = Math.Abs(x - Position.X) <= 12 || Math.Abs(x - (Position.X + 2)) <= 11;
+            bool inRangeY = Math.Abs(y - Position.Y) <= 12 || Math.Abs(y - (Position.Y + 2)) <= 11;
+            return inRangeX && inRangeY;
+        }
+
+        public bool ChestInRange(Chest chest) => ChestInRange(chest.x, chest.y);
+
+        public bool ChestInRange(int chestIndex)
+        {
+            var chest = Main.chest[chestIndex];
+            return chest is not null && ChestInRange(chest);
+        }
+
         public List<int> FindAllNearbyChests()
         {
             var chestIndexes = new List<int>();
 
             for (int i = 0; i < Main.maxChests; i++)
-            {
-                var chest = Main.chest[i];
-                if (chest is null)
-                    continue;
-
-                bool inRangeX = Math.Abs(chest.x - Position.X) <= 8 || Math.Abs(chest.x - (Position.X + 2)) <= 7;
-                bool inRangeY = Math.Abs(chest.y - Position.Y) <= 8 || Math.Abs(chest.y - (Position.Y + 2)) <= 7;
-                if (inRangeX && inRangeY)
+                if (ChestInRange(i))
                     chestIndexes.Add(i);
-            }
 
             return chestIndexes;
         }

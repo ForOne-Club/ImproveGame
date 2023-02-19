@@ -20,24 +20,27 @@ namespace ImproveGame.Common.Systems
                     () =>
                     {
                         var cursorText = Main.instance._mouseTextCache.cursorText;
-                
-                        if (Main.mouseText && !string.IsNullOrEmpty(cursorText) && cursorText == Lang.inter[105].Value + "\n" + GetText("LifeAnalyzer.Tip"))
-                        {
-                            if (Main.mouseLeft && !_mouseLeftPrev)
-                            {
-                                switch (LifeformAnalyzerGUI.Visible)
-                                {
-                                    case false:
-                                        UISystem.Instance.LifeformAnalyzerGUI.Open();
-                                        break;
-                                    case true:
-                                        UISystem.Instance.LifeformAnalyzerGUI.Close();
-                                        break;
-                                }
-                            }
 
-                            _mouseLeftPrev = Main.mouseLeft;
+                        if (Main.LocalPlayer.ItemAnimationActive || !Main.mouseText || string.IsNullOrEmpty(cursorText) ||
+                            cursorText != Lang.inter[105].Value + "\n" + GetText("LifeAnalyzer.Tip"))
+                        {
+                            return true;
                         }
+
+                        if (Main.mouseLeft && !_mouseLeftPrev)
+                        {
+                            switch (LifeformAnalyzerGUI.Visible)
+                            {
+                                case false:
+                                    UISystem.Instance.LifeformAnalyzerGUI.Open();
+                                    break;
+                                case true:
+                                    UISystem.Instance.LifeformAnalyzerGUI.Close();
+                                    break;
+                            }
+                        }
+
+                        _mouseLeftPrev = Main.mouseLeft;
                         return true;
                     }, InterfaceScaleType.UI));
             }

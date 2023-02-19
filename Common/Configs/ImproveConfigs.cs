@@ -62,11 +62,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool ModifyPlayerPlaceSpeed;
 
-        [Label($"${_path}.ModifyPlayerTileRangle.Label")]
+        [Label($"${_path}.ModifyPlayerTileRange.Label")]
         [Slider]
         [Range(0, 20)]
         [Increment(2)]
-        public int ModifyPlayerTileRangle;
+        public int ModifyPlayerTileRange;
 
         [Label($"${_path}.TileSpeed_Blacklist.Label")]
         [Tooltip($"${_path}.TileSpeed_Blacklist.Tooltip")]
@@ -457,6 +457,11 @@ namespace ImproveGame.Common.Configs
             [DefaultValue(true)]
             public bool CoinOne = true;
 
+            [Label("$Mods.ImproveGame.ItemName.ExtremeStorage")]
+            [Tooltip($"${_path}.LoadModItems.Tooltip")]
+            [DefaultValue(true)]
+            public bool ExtremeStorage = true;
+
             public override bool Equals(object obj)
             {
                 if (obj is ModItemLoadPage other)
@@ -464,7 +469,7 @@ namespace ImproveGame.Common.Configs
                            WallPlace == other.WallPlace && CreateWand == other.CreateWand && LiquidWand == other.LiquidWand &&
                            PotionBag == other.PotionBag && BannerChest == other.BannerChest && Autofisher == other.Autofisher &&
                            PaintWand == other.PaintWand && ConstructWand == other.ConstructWand && MoveChest == other.MoveChest &&
-                           CoinOne == other.CoinOne;
+                           CoinOne == other.CoinOne && ExtremeStorage == other.ExtremeStorage;
                 return base.Equals(obj);
             }
 
@@ -473,7 +478,7 @@ namespace ImproveGame.Common.Configs
                 return new
                 {
                     MagickWand, SpaceWand, StarburstWand, WallPlace, CreateWand, LiquidWand, PotionBag,
-                    BannerChest, Autofisher, PaintWand, ConstructWand, MoveChest, CoinOne
+                    BannerChest, Autofisher, PaintWand, ConstructWand, MoveChest, CoinOne, ExtremeStorage
                 }.GetHashCode();
             }
         }

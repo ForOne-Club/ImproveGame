@@ -97,7 +97,7 @@ Mods: {
 			}
 
 			ModifyPlayerPlaceSpeed.Label: "[centeritem:2214] 提高物块放置速度"
-			ModifyPlayerTileRangle.Label: "[centeritem:2215] 提高物块放置距离"
+			ModifyPlayerTileRange.Label: "[centeritem:2215] 提高物块放置距离"
 
 			TileSpeed_Blacklist: {
 				Label: "[centeritem:1448] 物块放置速度和距离提升黑名单"

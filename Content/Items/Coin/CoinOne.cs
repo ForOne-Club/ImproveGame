@@ -13,6 +13,7 @@
             Item.height = 24;
             Item.rare = ItemRarityID.Red;
             Item.value = Item.sellPrice(1);
+            Item.maxStack = 9999;
         }
     }
 }

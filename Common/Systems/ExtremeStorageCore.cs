@@ -10,7 +10,7 @@ namespace ImproveGame.Common.Systems;
 
 public class ExtremeStorageCore : ModSystem
 {
-    private static bool _chestsSetUpdatedThisFrame = false;
+    private static bool _chestsSetUpdatedThisFrame;
     private static HashSet<int> _chestsThatShouldSync = new();
     private int _chestOld; // 这个是客户端变量，监测该玩家的 player.chest
 
@@ -22,6 +22,8 @@ public class ExtremeStorageCore : ModSystem
         IL.Terraria.Chest.PutItemInNearbyChest += il =>
         {
             var c = new ILCursor(il);
+            
+            // 开头更新 _chestsThatShouldSync 的值
             c.EmitDelegate(() =>
             {
                 if (Main.netMode is not NetmodeID.Server || _chestsSetUpdatedThisFrame) return;
@@ -36,20 +38,12 @@ public class ExtremeStorageCore : ModSystem
                 {
                     var chest = Main.chest[i];
                     if (chest is null) continue;
-                    foreach (var tileEntity in storages)
-                    {
-                        bool inRangeX = Math.Abs(chest.x - tileEntity.Position.X) <= 7 ||
-                                        Math.Abs(chest.x - (tileEntity.Position.X + 2)) <= 7;
-                        bool inRangeY = Math.Abs(chest.y - tileEntity.Position.Y) <= 7 ||
-                                        Math.Abs(chest.y - (tileEntity.Position.Y + 2)) <= 7;
-                        if (inRangeX && inRangeY)
-                        {
-                            _chestsThatShouldSync.Add(i);
-                        }
-                    }
+                    if (storages.Any(t => t.ChestInRange(chest)))
+                        _chestsThatShouldSync.Add(i);
                 }
 
-                Console.WriteLine(_chestsThatShouldSync.Count);
+                // 调试代码
+                // Console.WriteLine(_chestsThatShouldSync.Count);
             });
 
             // IL_018d: ldsfld       class Terraria.Chest[] Terraria.Main::chest
@@ -156,16 +150,7 @@ public class ExtremeStorageCore : ModSystem
             // (所以这就是你用遍历增加运算压力的理由!?)
             foreach ((_, TileEntity tileEntity) in TileEntity.ByID)
             {
-                if (tileEntity is not TEExtremeStorage storage)
-                {
-                    continue;
-                }
-
-                bool inRangeX = Math.Abs(chest.x - storage.Position.X) <= 7 ||
-                                Math.Abs(chest.x - (storage.Position.X + 2)) <= 7;
-                bool inRangeY = Math.Abs(chest.y - storage.Position.Y) <= 7 ||
-                                Math.Abs(chest.y - (storage.Position.Y + 2)) <= 7;
-                if (!inRangeX || !inRangeY)
+                if (tileEntity is not TEExtremeStorage storage || !storage.ChestInRange(_chestOld))
                 {
                     continue;
                 }
