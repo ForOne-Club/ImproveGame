@@ -183,56 +183,81 @@ namespace ImproveGame.Common.GlobalItems
             }
         }
 
-        /// <summary>
-        /// 物品是否可吸附处理
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="player"></param>
-        /// <returns></returns>
         public override bool ItemSpace(Item item, Player player)
         {
-            if (!DataPlayer.TryGet(player, out var dataPlayer))
-                return false;
-
-            bool hasItem = false;
-            bool airSlot = false;
-            bool canStack = false;
-            // 大背包中所有的物品
-            if (player.TryGetModPlayer(out UIPlayerSetting setting))
+            // 不要硬币
+            if (item.IsACoin)
             {
-                bool hasItemSpace = HasItemSpace(dataPlayer.SuperVault, item, ref hasItem, ref airSlot, ref canStack);
-                // 大背包所有的物品是否有空间（因为可堆叠）
-                bool itemsHasItemSpace = canStack || (airSlot && hasItem);
-                if (Config.SuperVault && dataPlayer.SuperVault != null &&
-                    ((setting.SuperVault_OverflowGrab && hasItemSpace) ||
-                     (setting.SuperVault_SmartGrab && itemsHasItemSpace)))
+                return false;
+            }
+
+            // 大背包
+            if (Config.SuperVault && DataPlayer.TryGet(player, out DataPlayer dataPlayer) && player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting))
+            {
+                // 大背包 智能收纳
+                if (uiPlayerSetting.SuperVault_SmartGrab && item.InArray(dataPlayer.SuperVault))
+                {
+                    return true;
+                }
+
+                // 大背包 自动拾取
+                if (uiPlayerSetting.SuperVault_OverflowGrab && item.CanStackToArray(dataPlayer.SuperVault))
                 {
                     return true;
                 }
             }
 
-            if (!Config.SuperVoidVault || !player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+            if (player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
             {
-                return false;
-            }
+                // 独立收纳 自动拾取
+                if (Config.SuperVoidVault)
+                {
+                    // 独立收纳 智能收纳
+                    if (Config.SmartVoidVault)
+                    {
+                        // 虚空袋
+                        if (player.IsVoidVaultEnabled && item.InArray(player.bank4.item))
+                        {
+                            return true;
+                        }
 
-            // 猪猪钱罐
-            if (improvePlayer.PiggyBank && HasItemSpace(player.bank.item, item, ref hasItem, ref airSlot, ref canStack))
-            {
-                return true;
-            }
+                        // 猪猪钱罐
+                        if (improvePlayer.PiggyBank && item.InArray(player.bank.item))
+                        {
+                            return true;
+                        }
 
-            // 保险箱
-            if (improvePlayer.Safe && HasItemSpace(player.bank2.item, item, ref hasItem, ref airSlot, ref canStack))
-            {
-                return true;
-            }
+                        // 保险箱
+                        if (improvePlayer.Safe && item.InArray(player.bank2.item))
+                        {
+                            return true;
+                        }
 
-            // 护卫熔炉
-            if (improvePlayer.DefendersForge &&
-                HasItemSpace(player.bank3.item, item, ref hasItem, ref airSlot, ref canStack))
-            {
-                return true;
+                        // 护卫熔炉
+                        if (improvePlayer.DefendersForge && item.InArray(player.bank3.item))
+                        {
+                            return true;
+                        }
+                    }
+
+                    // 猪猪钱罐
+                    if (improvePlayer.PiggyBank && item.CanStackToArray(player.bank.item))
+                    {
+                        return true;
+                    }
+
+                    // 保险箱
+                    if (improvePlayer.Safe && item.CanStackToArray(player.bank2.item))
+                    {
+                        return true;
+                    }
+
+                    // 护卫熔炉
+                    if (improvePlayer.DefendersForge && item.CanStackToArray(player.bank3.item))
+                    {
+                        return true;
+                    }
+                }
             }
 
             return false;

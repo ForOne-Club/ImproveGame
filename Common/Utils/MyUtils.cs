@@ -485,13 +485,21 @@ namespace ImproveGame
         /// <returns>堆叠后剩余的物品</returns>
         public static Item ItemStackToInventory(Item[] inventory, Item item, bool hint = true, int end = -1, int begin = 0)
         {
-            end = (end == -1 ? inventory.Length : end);
+            if (end < begin)
+            {
+                end = inventory.Length;
+            }
+
             // 先填充和物品相同的
             for (int i = begin; i < end; i++)
             {
                 item = ItemStackToInventoryItem(inventory, i, item, hint);
-                if (item.IsAir) return item;
+                if (item.IsAir)
+                {
+                    return item;
+                }
             }
+
             // 后填充空位
             for (int i = begin; i < end; i++)
             {
@@ -611,32 +619,6 @@ namespace ImproveGame
         public static readonly List<int> Bank5Items = new() { ItemID.VoidLens, ItemID.VoidVault };
 
         public static bool IsBankItem(int type) => Bank2Items.Contains(type) || Bank3Items.Contains(type) || Bank4Items.Contains(type) || Bank5Items.Contains(type);
-
-        /// <summary>
-        /// 判断指定 Item[] 中是否有 item 能用的空间
-        /// </summary>
-        /// <param name="inv"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public static bool HasItemSpace(Item[] inv, Item item, ref bool hasItem, ref bool airSlot, ref bool canStack)
-        {
-            if (inv == null)
-            {
-                return false;
-            }
-
-            foreach (var invItem in inv)
-            {
-                airSlot = invItem == null || invItem.IsAir;
-                hasItem = invItem != null && invItem.type == item.type;
-                canStack = invItem != null && invItem.type == item.type && invItem.stack < invItem.maxStack;
-                if (invItem != null && (invItem.IsAir || (invItem.type == item.type && invItem.stack < invItem.maxStack)))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         /// <summary>
         /// 判断指定 Item[] 中是否有 item

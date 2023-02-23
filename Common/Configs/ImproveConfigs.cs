@@ -15,6 +15,11 @@ namespace ImproveGame.Common.Configs
 
         [Header($"${_path}.ItemConfigs.Header")]
 
+        [Label($"${_path}.SuperVault.Label")]
+        [Tooltip($"${_path}.SuperVault.Tooltip")]
+        [DefaultValue(false)]
+        public bool SuperVault;
+
         [Label($"${_path}.SuperVoidVault.Label")]
         [Tooltip($"${_path}.SuperVoidVault.Tooltip")]
         [DefaultValue(false)]
@@ -24,11 +29,6 @@ namespace ImproveGame.Common.Configs
         [Tooltip($"${_path}.SmartVoidVault.Tooltip")]
         [DefaultValue(false)]
         public bool SmartVoidVault;
-
-        [Label($"${_path}.SuperVault.Label")]
-        [Tooltip($"${_path}.SuperVault.Tooltip")]
-        [DefaultValue(false)]
-        public bool SuperVault;
 
         [Label($"${_path}.GrabDistance.Label")]
         [Tooltip($"${_path}.GrabDistance.Tooltip")]

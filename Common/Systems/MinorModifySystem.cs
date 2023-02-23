@@ -359,9 +359,11 @@ namespace ImproveGame.Common.Systems
         /// </summary>
         private Item Player_PickupItem(On.Terraria.Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp)
         {
-            ImprovePlayer improvePlayer = player.GetModPlayer<ImprovePlayer>();
-            UIPlayerSetting uIPlayerSetting = player.GetModPlayer<UIPlayerSetting>();
-            // 旗帜收纳箱
+            var improvePlayer = player.GetModPlayer<ImprovePlayer>();
+            var uiPlayerSetting = player.GetModPlayer<UIPlayerSetting>();
+            ref Item[] superVault = ref player.GetModPlayer<DataPlayer>().SuperVault;
+
+            // 旗帜盒
             if (!itemToPickUp.IsAir && improvePlayer.bannerChest is not null && ItemToBanner(itemToPickUp) != -1)
             {
                 if (improvePlayer.bannerChest.AutoStorage)
@@ -375,7 +377,8 @@ namespace ImproveGame.Common.Systems
                     }
                 }
             }
-            // 药水带袋
+
+            // 药水袋
             if (!itemToPickUp.IsAir && improvePlayer.potionBag is not null && itemToPickUp.buffType > 0 && itemToPickUp.consumable)
             {
                 if (improvePlayer.potionBag.AutoStorage)
@@ -389,64 +392,76 @@ namespace ImproveGame.Common.Systems
                     }
                 }
             }
+
             // 大背包
-            if (Config.SuperVault && uIPlayerSetting.SuperVault_SmartGrab && !itemToPickUp.IsAir && HasItem(player.GetModPlayer<DataPlayer>().SuperVault, -1, itemToPickUp.type))
+            if (!itemToPickUp.IsAir && Config.SuperVault && uiPlayerSetting.SuperVault_SmartGrab && itemToPickUp.InArray(superVault))
             {
-                itemToPickUp = ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
+                itemToPickUp = ItemStackToInventory(superVault, itemToPickUp);
             }
-            // 智能虚空保险库
-            if (Config.SmartVoidVault && !itemToPickUp.IsACoin)
+
+            // 虚空保险库 之 智能收纳
+            if (Config.SmartVoidVault && !itemToPickUp.IsAir && !itemToPickUp.IsACoin)
             {
                 // 虚空保险库
-                if (player.IsVoidVaultEnabled && !itemToPickUp.IsAir && HasItem(player.bank4.item, -1, itemToPickUp.type))
+                if (player.IsVoidVaultEnabled && itemToPickUp.InArray(player.bank4.item))
                 {
                     itemToPickUp = ItemStackToInventory(player.bank4.item, itemToPickUp);
                 }
-                // 其他
-                if (Config.SuperVoidVault)
+
+                // 猪猪 保险箱 ...
+                if (Config.SuperVoidVault && !itemToPickUp.IsAir)
                 {
-                    if (improvePlayer.PiggyBank && !itemToPickUp.IsAir && HasItem(player.bank.item, -1, itemToPickUp.type))
+                    if (improvePlayer.PiggyBank && itemToPickUp.InArray(player.bank.item))
                     {
                         itemToPickUp = ItemStackToInventory(player.bank.item, itemToPickUp);
                     }
-                    if (improvePlayer.Safe && !itemToPickUp.IsAir && HasItem(player.bank2.item, -1, itemToPickUp.type))
+
+                    if (improvePlayer.Safe && !itemToPickUp.IsAir && itemToPickUp.InArray(player.bank2.item))
                     {
                         itemToPickUp = ItemStackToInventory(player.bank2.item, itemToPickUp);
                     }
-                    if (improvePlayer.DefendersForge && !itemToPickUp.IsAir && HasItem(player.bank3.item, -1, itemToPickUp.type))
+
+                    if (improvePlayer.DefendersForge && !itemToPickUp.IsAir && itemToPickUp.InArray(player.bank3.item))
                     {
                         itemToPickUp = ItemStackToInventory(player.bank3.item, itemToPickUp);
                     }
                 }
             }
+
             if (!itemToPickUp.IsAir)
             {
                 itemToPickUp = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
             }
-            if (!itemToPickUp.IsACoin)
+
+            // 背包溢出堆叠至其他容器
+            if (!itemToPickUp.IsACoin && !itemToPickUp.IsAir)
             {
                 // 大背包
-                if (Config.SuperVault && uIPlayerSetting.SuperVault_OverflowGrab && !itemToPickUp.IsAir)
+                if (Config.SuperVault && uiPlayerSetting.SuperVault_OverflowGrab)
                 {
-                    itemToPickUp = ItemStackToInventory(player.GetModPlayer<DataPlayer>().SuperVault, itemToPickUp);
+                    itemToPickUp = ItemStackToInventory(superVault, itemToPickUp);
                 }
-                // 超级虚空保险库
-                if (Config.SuperVoidVault)
+
+                // 猪猪 保险箱 ...
+                if (Config.SuperVoidVault && !itemToPickUp.IsAir)
                 {
-                    if (improvePlayer.PiggyBank && !itemToPickUp.IsAir)
+                    if (improvePlayer.PiggyBank)
                     {
                         itemToPickUp = ItemStackToInventory(player.bank.item, itemToPickUp);
                     }
+
                     if (improvePlayer.Safe && !itemToPickUp.IsAir)
                     {
                         itemToPickUp = ItemStackToInventory(player.bank2.item, itemToPickUp);
                     }
+
                     if (improvePlayer.DefendersForge && !itemToPickUp.IsAir)
                     {
                         itemToPickUp = ItemStackToInventory(player.bank3.item, itemToPickUp);
                     }
                 }
             }
+
             Main.item[worldItemArrayIndex] = itemToPickUp;
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {

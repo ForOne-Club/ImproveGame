@@ -16,6 +16,7 @@
 - **[v1.6.3.1]** 修复了SidedEventTrigger中可能的System.NullReferenceException报错
 - **[v1.6.3.1]** 修复了“提高物块放置距离”在不开启“提高物块放置速度”时无效的BUG
 - **[v1.6.3.1]** 修复了小地图渲染出错的BUG
+- **[v1.6.3.1]** 修复大背包拾取 BUG
 ## Additions
 - Added Player Stats Panel, can be configured in UI config
 - Added Storage Manager, go easy with your chests
