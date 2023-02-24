@@ -411,17 +411,17 @@ namespace ImproveGame.Common.Systems
                 // 猪猪 保险箱 ...
                 if (Config.SuperVoidVault && !itemToPickUp.IsAir)
                 {
-                    if (improvePlayer.PiggyBank && itemToPickUp.InArray(player.bank.item))
+                    if (improvePlayer.HasPiggyBank && itemToPickUp.InArray(player.bank.item))
                     {
                         itemToPickUp = ItemStackToInventory(player.bank.item, itemToPickUp);
                     }
 
-                    if (improvePlayer.Safe && !itemToPickUp.IsAir && itemToPickUp.InArray(player.bank2.item))
+                    if (improvePlayer.HasSafe && !itemToPickUp.IsAir && itemToPickUp.InArray(player.bank2.item))
                     {
                         itemToPickUp = ItemStackToInventory(player.bank2.item, itemToPickUp);
                     }
 
-                    if (improvePlayer.DefendersForge && !itemToPickUp.IsAir && itemToPickUp.InArray(player.bank3.item))
+                    if (improvePlayer.HasDefendersForge && !itemToPickUp.IsAir && itemToPickUp.InArray(player.bank3.item))
                     {
                         itemToPickUp = ItemStackToInventory(player.bank3.item, itemToPickUp);
                     }
@@ -445,17 +445,17 @@ namespace ImproveGame.Common.Systems
                 // 猪猪 保险箱 ...
                 if (Config.SuperVoidVault && !itemToPickUp.IsAir)
                 {
-                    if (improvePlayer.PiggyBank)
+                    if (improvePlayer.HasPiggyBank)
                     {
                         itemToPickUp = ItemStackToInventory(player.bank.item, itemToPickUp);
                     }
 
-                    if (improvePlayer.Safe && !itemToPickUp.IsAir)
+                    if (improvePlayer.HasSafe && !itemToPickUp.IsAir)
                     {
                         itemToPickUp = ItemStackToInventory(player.bank2.item, itemToPickUp);
                     }
 
-                    if (improvePlayer.DefendersForge && !itemToPickUp.IsAir)
+                    if (improvePlayer.HasDefendersForge && !itemToPickUp.IsAir)
                     {
                         itemToPickUp = ItemStackToInventory(player.bank3.item, itemToPickUp);
                     }

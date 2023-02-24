@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Players;
+using ImproveGame.Common.Utils.Extensions;
 using ImproveGame.Content;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
@@ -183,6 +184,8 @@ namespace ImproveGame.Common.GlobalItems
             }
         }
 
+        // 物品可吸取至大背包功能
+        // 不需要考虑是否开启智能拾取，包括所有玩家独立收纳空间。
         public override bool ItemSpace(Item item, Player player)
         {
             // 不要硬币
@@ -192,71 +195,32 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             // 大背包
-            if (Config.SuperVault && DataPlayer.TryGet(player, out DataPlayer dataPlayer) && player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting))
+            if (Config.SuperVault && DataPlayer.TryGet(player, out DataPlayer dataPlayer))
             {
-                // 大背包 智能收纳
-                if (uiPlayerSetting.SuperVault_SmartGrab && item.InArray(dataPlayer.SuperVault))
-                {
-                    return true;
-                }
-
-                // 大背包 自动拾取
-                if (uiPlayerSetting.SuperVault_OverflowGrab && item.CanStackToArray(dataPlayer.SuperVault))
+                if (item.CanStackToArray(dataPlayer.SuperVault))
                 {
                     return true;
                 }
             }
 
-            if (player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+            if (Config.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
             {
-                // 独立收纳 自动拾取
-                if (Config.SuperVoidVault)
+                // 猪猪钱罐
+                if (improvePlayer.HasPiggyBank && item.CanStackToArray(player.bank.item))
                 {
-                    // 独立收纳 智能收纳
-                    if (Config.SmartVoidVault)
-                    {
-                        // 虚空袋
-                        if (player.IsVoidVaultEnabled && item.InArray(player.bank4.item))
-                        {
-                            return true;
-                        }
+                    return true;
+                }
 
-                        // 猪猪钱罐
-                        if (improvePlayer.PiggyBank && item.InArray(player.bank.item))
-                        {
-                            return true;
-                        }
+                // 保险箱
+                if (improvePlayer.HasSafe && item.CanStackToArray(player.bank2.item))
+                {
+                    return true;
+                }
 
-                        // 保险箱
-                        if (improvePlayer.Safe && item.InArray(player.bank2.item))
-                        {
-                            return true;
-                        }
-
-                        // 护卫熔炉
-                        if (improvePlayer.DefendersForge && item.InArray(player.bank3.item))
-                        {
-                            return true;
-                        }
-                    }
-
-                    // 猪猪钱罐
-                    if (improvePlayer.PiggyBank && item.CanStackToArray(player.bank.item))
-                    {
-                        return true;
-                    }
-
-                    // 保险箱
-                    if (improvePlayer.Safe && item.CanStackToArray(player.bank2.item))
-                    {
-                        return true;
-                    }
-
-                    // 护卫熔炉
-                    if (improvePlayer.DefendersForge && item.CanStackToArray(player.bank3.item))
-                    {
-                        return true;
-                    }
+                // 护卫熔炉
+                if (improvePlayer.HasDefendersForge && item.CanStackToArray(player.bank3.item))
+                {
+                    return true;
                 }
             }
 

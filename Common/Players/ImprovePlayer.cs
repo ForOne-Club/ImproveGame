@@ -13,9 +13,9 @@ namespace ImproveGame.Common.Players;
 
 public class ImprovePlayer : ModPlayer
 {
-    public bool PiggyBank;
-    public bool Safe;
-    public bool DefendersForge;
+    public bool HasPiggyBank;
+    public bool HasSafe;
+    public bool HasDefendersForge;
     public BannerChest bannerChest;
     public PotionBag potionBag;
 
@@ -61,9 +61,14 @@ public class ImprovePlayer : ModPlayer
     {
         if (Config.SuperVoidVault)
         {
-            PiggyBank = Player.HasItem(ItemID.PiggyBank);
-            Safe = Player.HasItem(ItemID.Safe);
-            DefendersForge = Player.HasItem(ItemID.DefendersForge);
+            if (!Player.IsVoidVaultEnabled)
+            {
+                Player.IsVoidVaultEnabled = Player.HasItem(ItemID.VoidVault);
+            }
+
+            HasPiggyBank = Player.inventory.HasAnyOneItem(ItemID.PiggyBank, ItemID.MoneyTrough);
+            HasSafe = Player.HasItem(ItemID.Safe);
+            HasDefendersForge = Player.HasItem(ItemID.DefendersForge);
         }
 
         bannerChest = null;
