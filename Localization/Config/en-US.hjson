@@ -32,29 +32,29 @@
     ItemConfigs.Header: "[centeritem/h4:LifeCrystal] Item Configs"
     SuperVault:
     {
-        Label: "[centeritem:3813] 大背包"
+        Label: "[centeritem:3813] Big Backpack"
         Tooltip:
             '''
-            独立的背包面板，容量 100 格，允许参与合成
-            拥有 "自动拾取" 以及 "智能拾取" 功能
-            请设置快捷键：设置 → 控件 → 下滑找到 “更好的体验：大背包”
+            A separate UI pannel, 100 slots and can be used in crafting
+            Has 'auto pickup' and 'smart pickup' features
+            please assign a hotkey in Settings → Controls → scroll down and find 'Quality of Life: Big Backpack'
             '''
     }
     SuperVoidVault:
     {
-        Label: "[centeritem:4131] 独立收纳 自动拾取"
+        Label: "[centeritem:4131] Auto pickup for personal storage"
         Tooltip:
             '''
-            使玩家的独立收纳空间拥有和虚空袋相同的效果，包括 "智能拾取"
-            优先级：猪猪钱罐 → 保险箱 → 护卫熔炉 → 虚空保险库
+            Other personal storages can act as Void Vault, including 'smart pickup'
+            Priority: Piggy Bank → Safe → Defender's Forge → Void Vault
             '''
     }
     SmartVoidVault:
     {
-        Label: "[centeritem:4076] 独立收纳 智能收纳"
+        Label: "[centeritem:4076] Smart pickup for personal storage"
         Tooltip: 
             '''
-            如果拾取的物品已存在于虚空保险库，则会直接被吸入
+            If an item is present in Void Vault, the same item will be picked into Void Vault
             '''
     }
     ItemMaxStack:

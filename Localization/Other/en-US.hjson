@@ -199,7 +199,7 @@ Mods.ImproveGame:
                 '''
                 In placing mode, you need to choose a structure in the main panel, a structure is selected if its name is in yellow
                     
-                if material in your inventory or the Huge Inventory is sufficient, left click to place the structure
+                if material in your inventory or the Big Backpack is sufficient, left click to place the structure
                 Directions of certain tiles may be incorrect
                     
                 Here is an example of placing structures: 
@@ -232,7 +232,7 @@ Mods.ImproveGame:
     }
     SuperVault:
     {
-        Name: Huge Inventory
+        Name: Big Backpack
         Sort: Sort
         Synthesis: Use in crafting
         SmartPickup: Smart pickup
@@ -335,7 +335,7 @@ Mods.ImproveGame:
     }
     Keybind:
     {
-        HugeInventory: "Huge Inventory"
+        HugeInventory: "Big Backpack"
         BuffTracker: "Buff Tracker"
         BuffTracker.Tip: "Clicking on a buff icon no longer opens the Buff Tracker if the keybind is set"
         GrabBagLoot: "Display grab bag loot"
