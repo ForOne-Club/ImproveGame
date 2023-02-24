@@ -195,9 +195,16 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             // 大背包
-            if (Config.SuperVault && DataPlayer.TryGet(player, out DataPlayer dataPlayer))
+            if (Config.SuperVault && player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting) && DataPlayer.TryGet(player, out DataPlayer dataPlayer))
             {
-                if (item.CanStackToArray(dataPlayer.SuperVault))
+                bool canStackToArray = (uiPlayerSetting.SuperVault_OverflowGrab || uiPlayerSetting.SuperVault_SmartGrab) && item.CanStackToArray(dataPlayer.SuperVault);
+
+                if (uiPlayerSetting.SuperVault_OverflowGrab && canStackToArray)
+                {
+                    return true;
+                }
+
+                if (uiPlayerSetting.SuperVault_SmartGrab && canStackToArray && item.InArray(dataPlayer.SuperVault))
                 {
                     return true;
                 }
