@@ -217,17 +217,29 @@ namespace ImproveGame.Common.GlobalItems
                 {
                     return true;
                 }
+                else
+                {
+                    improvePlayer.HasPiggyBank = false;
+                }
 
                 // 保险箱
                 if (improvePlayer.HasSafe && item.CanStackToArray(player.bank2.item))
                 {
                     return true;
                 }
+                else
+                {
+                    improvePlayer.HasSafe = false;
+                }
 
                 // 护卫熔炉
                 if (improvePlayer.HasDefendersForge && item.CanStackToArray(player.bank3.item))
                 {
                     return true;
+                }
+                else
+                {
+                    improvePlayer.HasDefendersForge = false;
                 }
             }
 

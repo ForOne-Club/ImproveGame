@@ -59,6 +59,9 @@ public class ImprovePlayer : ModPlayer
 
     public override void ResetEffects()
     {
+        HasPiggyBank = false;
+        HasSafe = false;
+        HasDefendersForge = false;
         if (Config.SuperVoidVault)
         {
             if (!Player.IsVoidVaultEnabled)
