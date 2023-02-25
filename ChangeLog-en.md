@@ -4,6 +4,7 @@
 ## Subversions
 - v1.6.3
 - v1.6.3.1
+- v1.6.3.2
 ## BUG Fixes
 - Fixed Santa Claus spawns and die when town NPC spawn mechanics improvement is enabled
 - Fixed potential mod conflicts when crafting
@@ -17,6 +18,7 @@
 - **[v1.6.3.1]** Fixed 'tile placement range boost' not working when 'tile placement speed boost' is disabled
 - **[v1.6.3.1]** Fixed a minimap rendering issue
 - **[v1.6.3.1]** Fixed Big Backpack auto pickup issues
+- **[v1.6.3.2]** 修复了部分模组物品无法在圆角物品框中正常显示的BUG
 ## Additions
 - Added Player Stats Panel, can be configured in UI config
 - Added Storage Manager, go easy with your chests

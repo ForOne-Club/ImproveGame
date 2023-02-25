@@ -8,7 +8,7 @@ Source code: https://github.com/487666123/ImproveGame
 
 v1.6.3.2
   ● BUG 修复
-    无
+    修复了部分模组物品无法在圆角物品框中正常显示的BUG
   ● 新增内容
     无
   ● 其他

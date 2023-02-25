@@ -37,10 +37,19 @@ namespace ImproveGame.Common.Systems
         {
             DoCalamityModIntegration();
             DoFargowiltasIntegration();
+            DoRecipeBrowserIntegration();
             DoDialogueTweakIntegration();
             DoModLoaderIntegration();
             NoLakeSizePenaltyLoaded = ModLoader.HasMod("NoLakeSizePenalty");
             WMITFLoaded = ModLoader.HasMod("WMITF");
+        }
+
+        private static void DoRecipeBrowserIntegration()
+        {
+            if (!ModLoader.TryGetMod("RecipeBrowser", out Mod recipeBrowser))
+            {
+                return;
+            }
         }
 
         private static void DoCalamityModIntegration()

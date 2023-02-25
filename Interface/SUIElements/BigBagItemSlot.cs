@@ -410,15 +410,15 @@ namespace ImproveGame.Interface.SUIElements
             float size = frame.Width > maxSize || frame.Height > maxSize
                 ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height
                 : 1f;
-            Vector2 position = dimensions.Center() - frame.Size() * size / 2f;
-            Vector2 origin = dimensions.Center();
+            Vector2 position = dimensions.Center();
+            Vector2 origin = frame.Size() / 2f;
             if (ItemLoader.PreDrawInInventory(item, sb, position, frame, item.GetAlpha(lightColor),
                     item.GetColor(lightColor), origin, size))
             {
-                sb.Draw(texture2D, position, frame, item.GetAlpha(lightColor), 0f, Vector2.Zero, size,
+                sb.Draw(texture2D, position, frame, item.GetAlpha(lightColor), 0f, origin, size,
                     SpriteEffects.None, 0f);
                 if (item.color != Color.Transparent)
-                    sb.Draw(texture2D, position, frame, item.GetColor(lightColor), 0f, Vector2.Zero, size,
+                    sb.Draw(texture2D, position, frame, item.GetColor(lightColor), 0f, origin, size,
                         SpriteEffects.None, 0f);
             }
 
