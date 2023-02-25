@@ -5,18 +5,7 @@ namespace ImproveGame.Common.Systems
 {
     public class BestiaryUnlockSystem : ModSystem
     {
-        public static IOrderedEnumerable<Type> Providers;
-        public delegate BestiaryUICollectionInfo GetEntryUICollectionInfoDelegate(IBestiaryUICollectionInfoProvider provider);
-
-        public BestiaryUICollectionInfo GetEntryUICollectionInfoHook(GetEntryUICollectionInfoDelegate orig, IBestiaryUICollectionInfoProvider provider)
-        {
-            var info = orig.Invoke(provider);
-            if (Config.BestiaryQuickUnlock && info.UnlockState != BestiaryEntryUnlockState.NotKnownAtAll_0)
-            {
-                info.UnlockState = BestiaryEntryUnlockState.CanShowDropsWithDropRates_4;
-            }
-            return info;
-        }
+        private delegate BestiaryUICollectionInfo GetEntryUICollectionInfoDelegate(IBestiaryUICollectionInfoProvider provider);
 
         public override void PostSetupContent()
         {
@@ -24,25 +13,24 @@ namespace ImproveGame.Common.Systems
                 return;
 
             // 获取所有继承IBestiaryUICollectionInfoProvider的类
-            Providers = typeof(Main).Assembly.GetTypes()
+            var providers = typeof(Main).Assembly.GetTypes()
                 .Where(t => !t.IsAbstract && !t.ContainsGenericParameters)
                 .Where(t => t.IsAssignableTo(typeof(IBestiaryUICollectionInfoProvider)))
                 .OrderBy(type => type.FullName, StringComparer.InvariantCulture);
-                
+
             // 实时挂On
-            foreach (var t in Providers)
-                HookEndpointManager.Add(t.GetMethod("GetEntryUICollectionInfo"), GetEntryUICollectionInfoHook);
-        }
+            foreach (var t in providers)
+                HookEndpointManager.Add(t.GetMethod("GetEntryUICollectionInfo"),
+                    (GetEntryUICollectionInfoDelegate orig, IBestiaryUICollectionInfoProvider provider) =>
+                    {
+                        var info = orig.Invoke(provider);
+                        if (Config.BestiaryQuickUnlock && info.UnlockState != BestiaryEntryUnlockState.NotKnownAtAll_0)
+                        {
+                            info.UnlockState = BestiaryEntryUnlockState.CanShowDropsWithDropRates_4;
+                        }
 
-        public override void Unload()
-        {
-            if (Providers is null)
-                return;
-
-            foreach (var t in Providers)
-                HookEndpointManager.Remove(t.GetMethod("GetEntryUICollectionInfo"), GetEntryUICollectionInfoHook);
-
-            Providers = null;
+                        return info;
+                    });
         }
     }
 }

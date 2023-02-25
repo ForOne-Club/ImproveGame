@@ -175,7 +175,7 @@ namespace ImproveGame.Common.Systems
             return itemList.ToArray();
         }
 
-        private IEnumerable<Item> GetExtraItems()
+        public static IEnumerable<Item> GetExtraItems()
         {
             var finalItems = new List<Item>();
 

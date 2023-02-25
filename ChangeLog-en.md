@@ -34,6 +34,7 @@
 - **[v1.6.3.1]** Raised sell price of the Storage Manager to 5 gold
 - **[v1.6.3.1]** Raised sell price of Fishing Machine to 2 gold
 - **[v1.6.3.2]** Optimized Town NPC Spawn Rate Modifications (again)
+- **[v1.6.3.2]** 模组储存空间内可参与合成的物品现在会计入 Recipe Browser 模组的合成材料数量统计了
 
 # v1.6.2
 ## Subversions
