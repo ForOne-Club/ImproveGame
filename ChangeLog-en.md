@@ -31,6 +31,7 @@
 - **[v1.6.3.1]** Increased max stack of all non-wand items in this mod to 9999
 - **[v1.6.3.1]** Raised sell price of the Storage Manager to 5 gold
 - **[v1.6.3.1]** Raised sell price of Fishing Machine to 2 gold
+- **[v1.6.3.2]** Optimized Town NPC Spawn Rate Modifications (again)
 
 # v1.6.2
 ## Subversions
