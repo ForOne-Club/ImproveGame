@@ -1,5 +1,7 @@
 ﻿using ImproveGame.Common.Packets;
+using MonoMod.RuntimeDetour.HookGen;
 using System.Collections.Generic;
+using System.Reflection;
 using Terraria.ModLoader;
 
 namespace ImproveGame.Common.Systems
@@ -11,15 +13,18 @@ namespace ImproveGame.Common.Systems
         /// <br>Key为物品ID，Value为BuffID</br>
         /// </summary>
         internal static Dictionary<int, int> ModdedPlaceableItemBuffs = new();
+
         /// <summary>
         /// 储存独立添加支持的模组药水类Buff（也就是需要30堆叠生效），由于这个是加载后执行的，直接存ID即可
         /// <br>Key为物品ID，Value为BuffID</br>
         /// </summary>
         internal static Dictionary<int, int> ModdedPotionBuffs = new();
+
         /// <summary>
         /// A list of the items that don't apply infinite buffs
         /// </summary>
         internal static List<int> ModdedInfBuffsIgnore = new();
+
         /// <summary>
         /// 添加物品ID对应的一系列Tile
         /// <br>Key为物品ID，Value为一个TileID的列表</br>
@@ -37,10 +42,61 @@ namespace ImproveGame.Common.Systems
         {
             DoCalamityModIntegration();
             DoFargowiltasIntegration();
+            DoRecipeBrowserIntegration();
             DoDialogueTweakIntegration();
             DoModLoaderIntegration();
             NoLakeSizePenaltyLoaded = ModLoader.HasMod("NoLakeSizePenalty");
             WMITFLoaded = ModLoader.HasMod("WMITF");
+        }
+
+        private static void DoRecipeBrowserIntegration()
+        {
+            if (!ModLoader.TryGetMod("RecipeBrowser", out Mod recipeBrowser))
+            {
+                return;
+            }
+
+            // 给合成表的计量材料数量功能添加储存管理器和大背包支持
+            var providers = recipeBrowser.Code.GetTypes()
+                .Where(t => !t.IsAbstract && !t.ContainsGenericParameters)
+                .Where(t => t.IsAssignableTo(typeof(UIElement)));
+
+            var detourMethod = providers.First(i => i.Name is "UITrackIngredientSlot")
+                .GetMethod("CountItemGroups", BindingFlags.Public | BindingFlags.Instance);
+            var itemField = providers.First(i => i.Name is "UIItemSlot")
+                .GetField("item", BindingFlags.Public | BindingFlags.Instance);
+
+            if (detourMethod is null || itemField is null)
+            {
+                return;
+            }
+
+            HookEndpointManager.Add(detourMethod, (Func<object, Player, Recipe, int, int, int> orig,
+                object ingredientSlot, Player player, Recipe recipe, int type, int stopCountingAt) =>
+            {
+                int count = orig(ingredientSlot, player, recipe, type, stopCountingAt);
+                var item = itemField.GetValue(ingredientSlot) as Item;
+
+                if (type == 0 || item is null)
+                {
+                    return count;
+                }
+
+                var items = RecipeSystem.GetExtraItems();
+                foreach (var currentItem in from i in items where !i.IsAir select i)
+                {
+                    if (recipe.AcceptedByItemGroups(currentItem.type, item.type))
+                    {
+                        count += currentItem.stack;
+                    }
+                    else if (currentItem.type == type)
+                    {
+                        count += currentItem.stack;
+                    }
+                }
+
+                return count >= stopCountingAt ? stopCountingAt : count;
+            });
         }
 
         private static void DoCalamityModIntegration()
@@ -49,6 +105,7 @@ namespace ImproveGame.Common.Systems
             {
                 return;
             }
+
             AddBuffIntegration(calamityMod, "WeightlessCandle", "CirrusBlueCandleBuff", true);
             AddBuffIntegration(calamityMod, "VigorousCandle", "CirrusPinkCandleBuff", true);
             AddBuffIntegration(calamityMod, "SpitefulCandle", "CirrusYellowCandleBuff", true);
@@ -66,6 +123,7 @@ namespace ImproveGame.Common.Systems
             {
                 return;
             }
+
             AddBuffIntegration(fargowiltas, "Omnistation", "Omnistation", true);
             AddBuffIntegration(fargowiltas, "Omnistation2", "Omnistation", true);
         }
@@ -76,6 +134,7 @@ namespace ImproveGame.Common.Systems
             {
                 return;
             }
+
             DialogueTweakLoaded = true;
             dialogueTweak.Call("AddButton",
                 NPCID.TravellingMerchant, // NPC ID
@@ -92,11 +151,13 @@ namespace ImproveGame.Common.Systems
             );
         }
 
-        private static void DoModLoaderIntegration() {
+        private static void DoModLoaderIntegration()
+        {
             if (!ModLoader.TryGetMod("ModLoader", out Mod modloader))
             {
                 return;
             }
+
             UnloadedItemType = modloader.Find<ModItem>("UnloadedItem").Type;
             AprilFoolsItemType = modloader.Find<ModItem>("AprilFools").Type;
         }
@@ -171,12 +232,14 @@ namespace ImproveGame.Common.Systems
                             return false;
                     }
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 ImproveGame.Instance.Logger.Error($"{e.StackTrace} {e.Message}");
             }
 
-            static List<int> AsListOfInt(object data) => data is List<int> ? data as List<int> : new List<int>() { Convert.ToInt32(data) };
+            static List<int> AsListOfInt(object data) =>
+                data is List<int> ? data as List<int> : new List<int>() {Convert.ToInt32(data)};
 
             return false;
         }

@@ -6,19 +6,11 @@ Source code: https://github.com/487666123/ImproveGame
 源码: https://github.com/487666123/ImproveGame
 详细更新日志请见: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
 
-v1.6.3.1
+v1.6.3.2
   ● BUG 修复
-    修复了部分文本显示错误的BUG
-    修复了快捷存储到储存管理器时无法刷新合成配方的BUG
-    修复了储存管理器没有合成配方和开关配置选项的BUG
-    修复了SidedEventTrigger中可能的System.NullReferenceException报错
-    修复了“提高物块放置距离”在不开启“提高物块放置速度”时无效的BUG
-    修复了小地图渲染出错的BUG
+    修复了部分模组物品无法在圆角物品框中正常显示的BUG
   ● 新增内容
     无
   ● 其他
-    优化了储存管理器的UI按钮动画
-    增加储存管理器的箱子识别范围
-    将所有非法杖物品的最大堆叠上调至9999
-    储存管理器售价上调至5金
-    自动钓鱼机售价上调至2金
+    再次优化了修改城镇NPC入住速度功能
+    模组储存空间内可参与合成的物品现在会计入 Recipe Browser 模组的合成材料数量统计了

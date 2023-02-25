@@ -93,6 +93,15 @@ namespace ImproveGame.Interface.ExtremeStorage
             }
         }
 
+        public override void RightMouseUp(UIMouseEvent evt)
+        {
+            base.RightMouseUp(evt);
+
+            if (Main.netMode is not NetmodeID.SinglePlayer) return;
+            ExtremeStorageGUI.RefreshCachedAllItems();
+            Recipe.FindRecipes();
+        }
+
         // 覆写父类的方法，让宝藏袋右键不开启而是拿取
         public override void RightMouseDown(UIMouseEvent evt)
         {
@@ -134,8 +143,9 @@ namespace ImproveGame.Interface.ExtremeStorage
                     {
                         case NetmodeID.SinglePlayer:
                             TakeSlotItemToMouseItem();
-                            ExtremeStorageGUI.RefreshCachedAllItems();
-                            Recipe.FindRecipes();
+                            // 移动到RightMouseUp中，防止卡顿
+                            // ExtremeStorageGUI.RefreshCachedAllItems();
+                            // Recipe.FindRecipes();
                             break;
                         // 本地先保证可以拿出物品，然后再发送给服务器
                         case NetmodeID.MultiplayerClient when Main.mouseItem.IsAir ||

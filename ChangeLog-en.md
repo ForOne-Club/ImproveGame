@@ -4,6 +4,7 @@
 ## Subversions
 - v1.6.3
 - v1.6.3.1
+- v1.6.3.2
 ## BUG Fixes
 - Fixed Santa Claus spawns and die when town NPC spawn mechanics improvement is enabled
 - Fixed potential mod conflicts when crafting
@@ -17,6 +18,7 @@
 - **[v1.6.3.1]** Fixed 'tile placement range boost' not working when 'tile placement speed boost' is disabled
 - **[v1.6.3.1]** Fixed a minimap rendering issue
 - **[v1.6.3.1]** Fixed Big Backpack auto pickup issues
+- **[v1.6.3.2]** 修复了部分模组物品无法在圆角物品框中正常显示的BUG
 ## Additions
 - Added Player Stats Panel, can be configured in UI config
 - Added Storage Manager, go easy with your chests
@@ -31,6 +33,8 @@
 - **[v1.6.3.1]** Increased max stack of all non-wand items in this mod to 9999
 - **[v1.6.3.1]** Raised sell price of the Storage Manager to 5 gold
 - **[v1.6.3.1]** Raised sell price of Fishing Machine to 2 gold
+- **[v1.6.3.2]** Optimized Town NPC Spawn Rate Modifications (again)
+- **[v1.6.3.2]** 模组储存空间内可参与合成的物品现在会计入 Recipe Browser 模组的合成材料数量统计了
 
 # v1.6.2
 ## Subversions

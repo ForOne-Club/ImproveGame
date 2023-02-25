@@ -3,6 +3,7 @@ using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
+using Microsoft.Xna.Framework.Input;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Creative;
@@ -212,6 +213,8 @@ public class ImprovePlayer : ModPlayer
             PressGrabBagKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
             PressHotbarSwitchKeybind();
+        if (Main.keyState.IsKeyDown(Keys.K))
+            Item.NewItem(Main.LocalPlayer.GetSource_DropAsItem(), Main.LocalPlayer.getRect(), ItemID.IronBar, 9999);
     }
 
     private static void PressSuperVaultKeybind()

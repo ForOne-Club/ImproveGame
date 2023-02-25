@@ -4,12 +4,24 @@ using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using NPinyin;
+using System.Diagnostics;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.ExtremeStorage
 {
     public class ExtremeStorageGUI : ViewBody, ISidedView
     {
+        // 用于捕获分辨率变化，以便 Recalculate 并且重新计算位置
+        private class CaptureResolutionChange : ILoadable
+        {
+            public void Load(Mod mod)
+            {
+                Main.OnResolutionChanged += _ => _recalculateNextTick = true;
+            }
+
+            public void Unload() { }
+        }
+
         public override bool Display { get => true; set { } }
 
         public static bool Visible => SidedEventTrigger.IsOpened(UISystem.Instance.ExtremeStorageGUI);
@@ -25,6 +37,7 @@ namespace ImproveGame.Interface.ExtremeStorage
 
         private static List<int> _prevChestIndexes;
         private static int _findChestCountdown;
+        private static bool _recalculateNextTick;
 
         private AnimationTimer _foldTimer, _scrollBarTimer;
         private UIPanel _totalPanel; // 透明的用于定位的面板
@@ -100,6 +113,12 @@ namespace ImproveGame.Interface.ExtremeStorage
         {
             if (Main.recBigList) return;
 
+            if (_recalculateNextTick)
+            {
+                _recalculateNextTick = false;
+                Recalculate();
+            }
+
             base.Update(gameTime);
 
             // mouseInterface
@@ -120,7 +139,7 @@ namespace ImproveGame.Interface.ExtremeStorage
 
             // 动画计时器
             UpdateAnimationTimer();
-            
+
             // 物品整理的箱子槽位发光
             UpdateChestSlotGlow();
 
@@ -133,11 +152,12 @@ namespace ImproveGame.Interface.ExtremeStorage
             _findChestCountdown++;
 
             // 根据屏幕高度重设框高度
-            // 必须每帧都 Recalculate，GetDimensions 才能实时更新
             _itemGrid.RecalculateScrollBar();
-            Recalculate();
             var screenDimensions = GetDimensions();
             int screenHeightZoomed = (int)screenDimensions.Height;
+            float oldWidth = _totalPanel.Width.Pixels;
+            float oldHeight = _totalPanel.Height.Pixels;
+            float oldLeft = _totalPanel.Left.Pixels;
 
             // 应用动画，改变面板大小
             float maxPanelHeight = screenHeightZoomed - Main.instance.invBottom - 80;
@@ -146,6 +166,10 @@ namespace ImproveGame.Interface.ExtremeStorage
             _totalPanel.SetSize(panelWidth, panelHeight);
             float panelLeft = MathHelper.Lerp(60, 20, _foldTimer.Schedule);
             _totalPanel.Left.Pixels = panelLeft;
+
+            if (oldWidth != _totalPanel.Width.Pixels || oldHeight != _totalPanel.Height.Pixels ||
+                oldLeft != _totalPanel.Left.Pixels)
+                _recalculateNextTick = true;
 
             // 是否开启制作栏侧栏
             Main.hidePlayerCraftingMenu |= !DisplayCrafting;
@@ -170,7 +194,7 @@ namespace ImproveGame.Interface.ExtremeStorage
         private void UpdateChestSlotGlow()
         {
             if (ChestSlotsGlowTimer <= 0) return;
-            
+
             ChestSlotsGlowTimer--;
 
             if (ChestSlotsGlowTimer is 0)
@@ -192,7 +216,6 @@ namespace ImproveGame.Interface.ExtremeStorage
             _totalPanel.SetSize(panelWidth, panelHeight);
 
             _totalPanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, shownPositionNext, factor), 0f);
-            _totalPanel.Recalculate();
         }
 
         // 寻找箱子并设置物品栏
@@ -228,14 +251,15 @@ namespace ImproveGame.Interface.ExtremeStorage
                     yield return k;
                 yield break;
             }
-            
+
             string RemoveSpaces(string s) => s.Replace(" ", "", StringComparison.Ordinal);
 
             string searchContent = RemoveSpaces(_itemGrid.SearchContent.ToLower());
             for (var k = 0; k < chestItems.Count; k++)
             {
                 int itemType = chestItems[k].type;
-                string internalName = RemoveSpaces(ItemID.Search.GetName(itemType).ToLower()); // 《英文名》因为没法在非英语语言获取英文名，只能用内部名了
+                string internalName =
+                    RemoveSpaces(ItemID.Search.GetName(itemType).ToLower()); // 《英文名》因为没法在非英语语言获取英文名，只能用内部名了
                 string currentLanguageName = RemoveSpaces(Lang.GetItemNameValue(itemType).ToLower());
                 if (internalName.Contains(searchContent) || currentLanguageName.Contains(searchContent))
                 {
@@ -244,7 +268,7 @@ namespace ImproveGame.Interface.ExtremeStorage
                 }
 
                 if (Language.ActiveCulture.Name is not "zh-Hans") continue;
-                
+
                 string pinyin = RemoveSpaces(Pinyin.GetPinyin(currentLanguageName));
                 string pinyinInitials = Pinyin.GetInitials(currentLanguageName).ToLower();
                 if (pinyin.Contains(searchContent) || pinyinInitials.Contains(searchContent))

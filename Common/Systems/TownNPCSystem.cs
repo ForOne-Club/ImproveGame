@@ -18,7 +18,8 @@ namespace ImproveGame.Common.Systems
                 _isExtraUpdate = false;
                 orig.Invoke();
 
-                int times = Config.TownNPCSpawnSpeed is 0 ? 0 : (int)Math.Pow(2, Config.TownNPCSpawnSpeed);
+                // 2023.3.25: 调用次数从指数级改为乘数，发现实际速度并无差异，减少开销的操作也可有可无了，不过还是保留吧
+                int times = Config.TownNPCSpawnSpeed - 1;
                 // 仅获取一次，避免重复调用增加开销
                 double worldUpdateRate = WorldGen.GetWorldUpdateRate();
                 _cachedReport = Main.GetBestiaryProgressReport();

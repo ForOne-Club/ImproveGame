@@ -30,6 +30,7 @@
             '''
             Controls whether items under a category can be counted in crafting
             Currently unusable in multiplayer mode, though you could still craft with items in the chest you open
+            若某个分类下的物品过多，会造成一定的性能损耗，建议低端电脑用户在需要时再开启
             '''
 	    UseUnlimitedPotion.Label: "Infinite Potion"
 	    UseUnlimitedPotion.Tooltip:

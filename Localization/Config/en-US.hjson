@@ -224,7 +224,7 @@
     TownNPCSpawnSpeed:
     {
         Label: "[centeritem:4910] Town NPC spawn rate multiplier"
-        Tooltip: "Disable this modification by setting the value to 0"
+        Tooltip: "Disable this modification by setting the value to 1"
     }
     NoCD_FishermanQuest.Label: "[centeritem:4608] Instant refresh Angler's quests"
     NPCCoinDropRate.Label: "[centeritem:73] Enemy money drop multiplier"
