@@ -35,18 +35,14 @@ internal static class ItemExtensions
             return false;
         }
 
-        foreach (var target in items)
+        foreach (var target in from i in items where i is not null && i.stack > 0 select i)
         {
-            if (target is null)
-            {
-                continue;
-            }
-
-            if (!target.IsAir && target.type == self.type)
+            if (target.type == self.type)
             {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -63,59 +59,73 @@ internal static class ItemExtensions
 
         foreach (Item target in items)
         {
-            if (target is null || target.IsAir)
+            if (target is { IsAir: true } || (target.type == self.type && target.stack < target.maxStack))
             {
-                return true;
-            }
-
-            if (target.type == self.type && target.stack < target.maxStack && ItemLoader.CanStack(self, target))
-            {
-                return true;
+                if (ItemLoader.CanStack(self, target))
+                {
+                    return true;
+                }
             }
         }
         return false;
     }
 
     /// <summary>
-    /// 集合内拥有此物品，并且此物品可以堆叠进去
+    /// 堆叠到一个物品集合中 <br/>
+    /// 注：self 不能直接赋值 items 使用下标可以直接赋值
     /// </summary>
-    /// <returns>返回 <see langword="true"/> 同时代表通过 <see cref="ItemLoader.CanStack(Item, Item)"/></returns>
-    /*public static bool HasAndCanStackToArray(this Item self, Item[] items)
+    public static void StackToArray(this Item self, Item[] items)
     {
-        bool inArray = false;
-
         if (items is null)
         {
-            return false;
+            return;
         }
 
-        foreach (Item target in items)
+        foreach (var item in items)
         {
-            if (target is null)
+            if (item is { IsAir: true } || item.type != self.type)
             {
                 continue;
             }
 
-            if (!inArray && !target.IsAir && target.type == self.type)
+            self.StackToSameItem(item);
+            if (self.IsAir)
             {
-                inArray = true;
+                return;
             }
-
-            if (inArray)
-            {
-                if (target.IsAir)
-                {
-                    return true;
-                }
-
-                if (target.type == self.type && target.stack < target.maxStack && ItemLoader.CanStack(self, target))
-                {
-                    return true;
-                }
-            }
-
-
         }
-        return false;
-    }*/
+
+        for (int i = 0; i < items.Length; i++)
+        {
+            Item item = items[i];
+
+            if (item is null || item.IsAir)
+            {
+                items[i] = self.Clone();
+                self.TurnToAir();
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 堆叠到另一个物品 <br/>
+    /// 注：self item 均不能直接赋值
+    /// </summary>
+    public static void StackToSameItem(this Item self, Item item)
+    {
+        if (item.stack >= item.maxStack && !ItemLoader.CanStack(self, item))
+        {
+            return;
+        }
+
+        int itemStack = item.stack;
+        item.stack = Math.Min(item.stack + self.stack, item.maxStack);
+        self.stack = Math.Max(self.stack - (item.stack - itemStack), 0);
+
+        if (self.stack == 0)
+        {
+            self.TurnToAir();
+        }
+    }
 }

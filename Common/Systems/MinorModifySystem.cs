@@ -17,12 +17,8 @@ namespace ImproveGame.Common.Systems
     {
         public override void Load()
         {
-            // 拾取物品处理方法
-            On.Terraria.Player.PickupItem += Player_PickupItem;
             // 死亡是否掉落墓碑
             On.Terraria.Player.DropTombstone += DisableDropTombstone;
-            // 抓取距离修改
-            On.Terraria.Player.PullItem_Common += Player_PullItem_Common;
             // 修改空间法杖显示平台剩余数量
             IL.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += TweakDrawCountInventory;
             // 伤害波动
@@ -355,122 +351,6 @@ namespace ImproveGame.Common.Systems
         }
 
         /// <summary>
-        /// 拾取物品的时候
-        /// </summary>
-        private Item Player_PickupItem(On.Terraria.Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp)
-        {
-            var improvePlayer = player.GetModPlayer<ImprovePlayer>();
-            var uiPlayerSetting = player.GetModPlayer<UIPlayerSetting>();
-            ref Item[] superVault = ref player.GetModPlayer<DataPlayer>().SuperVault;
-
-            // 旗帜盒
-            if (!itemToPickUp.IsAir && improvePlayer.bannerChest is not null && ItemToBanner(itemToPickUp) != -1)
-            {
-                if (improvePlayer.bannerChest.AutoStorage)
-                {
-                    Item item = itemToPickUp.Clone();
-                    improvePlayer.bannerChest.PutInPackage(ref itemToPickUp);
-                    if (itemToPickUp.stack < item.stack)
-                    {
-                        item.stack -= itemToPickUp.stack;
-                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack);
-                    }
-                }
-            }
-
-            // 药水袋
-            if (!itemToPickUp.IsAir && improvePlayer.potionBag is not null && itemToPickUp.buffType > 0 && itemToPickUp.consumable)
-            {
-                if (improvePlayer.potionBag.AutoStorage)
-                {
-                    Item item = itemToPickUp.Clone();
-                    improvePlayer.potionBag.PutInPackage(ref itemToPickUp);
-                    if (itemToPickUp.stack < item.stack)
-                    {
-                        item.stack -= itemToPickUp.stack;
-                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack);
-                    }
-                }
-            }
-
-            // 大背包
-            if (!itemToPickUp.IsAir && Config.SuperVault && uiPlayerSetting.SuperVault_SmartGrab && itemToPickUp.InArray(superVault))
-            {
-                itemToPickUp = ItemStackToInventory(superVault, itemToPickUp);
-            }
-
-            // 虚空保险库 之 智能收纳
-            if (Config.SmartVoidVault && !itemToPickUp.IsAir && !itemToPickUp.IsACoin)
-            {
-                // 虚空保险库
-                if (player.IsVoidVaultEnabled && itemToPickUp.InArray(player.bank4.item))
-                {
-                    itemToPickUp = ItemStackToInventory(player.bank4.item, itemToPickUp);
-                }
-
-                // 猪猪 保险箱 ...
-                if (Config.SuperVoidVault && !itemToPickUp.IsAir)
-                {
-                    if (improvePlayer.HasPiggyBank && itemToPickUp.InArray(player.bank.item))
-                    {
-                        itemToPickUp = ItemStackToInventory(player.bank.item, itemToPickUp);
-                    }
-
-                    if (improvePlayer.HasSafe && !itemToPickUp.IsAir && itemToPickUp.InArray(player.bank2.item))
-                    {
-                        itemToPickUp = ItemStackToInventory(player.bank2.item, itemToPickUp);
-                    }
-
-                    if (improvePlayer.HasDefendersForge && !itemToPickUp.IsAir && itemToPickUp.InArray(player.bank3.item))
-                    {
-                        itemToPickUp = ItemStackToInventory(player.bank3.item, itemToPickUp);
-                    }
-                }
-            }
-
-            if (!itemToPickUp.IsAir)
-            {
-                itemToPickUp = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
-            }
-
-            // 背包溢出堆叠至其他容器
-            if (!itemToPickUp.IsACoin && !itemToPickUp.IsAir)
-            {
-                // 大背包
-                if (Config.SuperVault && uiPlayerSetting.SuperVault_OverflowGrab)
-                {
-                    itemToPickUp = ItemStackToInventory(superVault, itemToPickUp);
-                }
-
-                // 猪猪 保险箱 ...
-                if (Config.SuperVoidVault && !itemToPickUp.IsAir)
-                {
-                    if (improvePlayer.HasPiggyBank)
-                    {
-                        itemToPickUp = ItemStackToInventory(player.bank.item, itemToPickUp);
-                    }
-
-                    if (improvePlayer.HasSafe && !itemToPickUp.IsAir)
-                    {
-                        itemToPickUp = ItemStackToInventory(player.bank2.item, itemToPickUp);
-                    }
-
-                    if (improvePlayer.HasDefendersForge && !itemToPickUp.IsAir)
-                    {
-                        itemToPickUp = ItemStackToInventory(player.bank3.item, itemToPickUp);
-                    }
-                }
-            }
-
-            Main.item[worldItemArrayIndex] = itemToPickUp;
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, worldItemArrayIndex);
-            }
-            return itemToPickUp;
-        }
-
-        /// <summary>
         /// 旗帜BUFF在背包生效
         /// </summary>
         private static void AddBannerBuff(Item item)
@@ -589,34 +469,6 @@ namespace ImproveGame.Common.Systems
                     return -1;
                 }
             });
-        }
-
-        /// <summary>
-        /// 物品吸取速度
-        /// </summary>
-        private void Player_PullItem_Common(On.Terraria.Player.orig_PullItem_Common orig, Player player, Item item, float xPullSpeed)
-        {
-            if (Config.GrabDistance > 0)
-            {
-                float playerSpeed = player.velocity.Length() + 5f;
-                if (playerSpeed < 15f)
-                {
-                    playerSpeed = 15f;
-                }
-                Vector2 normalize = (player.Center - item.Center).SafeNormalize(Vector2.Zero);
-                if (item.velocity.Length() + normalize.Length() > playerSpeed)
-                {
-                    item.velocity = normalize * playerSpeed;
-                }
-                else
-                {
-                    item.velocity = normalize * (item.velocity.Length() + 1f);
-                }
-            }
-            else
-            {
-                orig(player, item, xPullSpeed);
-            }
         }
 
         /// <summary>

@@ -1,13 +1,10 @@
-﻿using ImproveGame.Common.Packets;
-using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.Systems;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework.Input;
 using Terraria.DataStructures;
-using Terraria.Enums;
 using Terraria.GameContent.Creative;
-using Terraria.GameContent.UI;
 using Terraria.GameInput;
 
 namespace ImproveGame.Common.Players;
@@ -17,8 +14,8 @@ public class ImprovePlayer : ModPlayer
     public bool HasPiggyBank;
     public bool HasSafe;
     public bool HasDefendersForge;
-    public BannerChest bannerChest;
-    public PotionBag potionBag;
+    public BannerChest BannerChest;
+    public PotionBag PotionBag;
 
     public bool ShouldUpdateTeam;
 
@@ -75,25 +72,24 @@ public class ImprovePlayer : ModPlayer
             HasDefendersForge = Player.HasItem(ItemID.DefendersForge);
         }
 
-        bannerChest = null;
-        potionBag = null;
-
+        BannerChest = null;
+        PotionBag = null;
         // 玩家背包
         foreach (var item in from i in Player.inventory where !i.IsAir select i)
         {
             if (Config.LoadModItems.BannerChest)
             {
-                if (bannerChest is null && item.ModItem is BannerChest chest)
+                if (BannerChest is null && item.ModItem is BannerChest chest)
                 {
-                    bannerChest = chest;
+                    BannerChest = chest;
                 }
             }
 
             if (Config.LoadModItems.PotionBag)
             {
-                if (potionBag is null && item.ModItem is PotionBag bag)
+                if (PotionBag is null && item.ModItem is PotionBag bag)
                 {
-                    potionBag = bag;
+                    PotionBag = bag;
                 }
             }
         }
@@ -104,17 +100,17 @@ public class ImprovePlayer : ModPlayer
         {
             if (Config.LoadModItems.BannerChest)
             {
-                if (bannerChest is null && item.ModItem is BannerChest chest)
+                if (BannerChest is null && item.ModItem is BannerChest chest)
                 {
-                    bannerChest = chest;
+                    BannerChest = chest;
                 }
             }
 
             if (Config.LoadModItems.PotionBag)
             {
-                if (potionBag is null && item.ModItem is PotionBag bag)
+                if (PotionBag is null && item.ModItem is PotionBag bag)
                 {
-                    potionBag = bag;
+                    PotionBag = bag;
                 }
             }
         }

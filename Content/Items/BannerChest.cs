@@ -90,9 +90,10 @@ namespace ImproveGame.Content.Items
                 item.stack -= stackAddition;
                 StoredBanners[i].stack += stackAddition;
                 SoundEngine.PlaySound(SoundID.Grab);
-                Recipe.FindRecipes();
                 if (item.stack <= 0)
+                {
                     item.TurnToAir();
+                }
             }
 
             if (!item.IsAir && StoredBanners.Count < 500)

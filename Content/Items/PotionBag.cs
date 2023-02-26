@@ -87,7 +87,6 @@ namespace ImproveGame.Content.Items
                     item.stack -= stackAddition;
                     StoredPotions[i].stack += stackAddition;
                     SoundEngine.PlaySound(SoundID.Grab);
-                    Recipe.FindRecipes();
                     if (item.stack <= 0)
                         item.TurnToAir();
                 }

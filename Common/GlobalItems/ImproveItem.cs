@@ -162,15 +162,14 @@ namespace ImproveGame.Common.GlobalItems
                 tooltips.Add(new(Mod, "CreateWall", "CreateWall: " + item.createWall));
         }
 
-        // 额外拾取距离
-        public override void GrabRange(Item item, Player player, ref int grabRange) =>
-            grabRange += Config.GrabDistance * 16;
-
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame,
             Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
             if (item.GetGlobalItem<GlobalItemData>().InventoryGlow)
+            {
                 BigBagItemSlot.OpenItemGlow(sb);
+            }
+
             return true;
         }
 
@@ -182,68 +181,6 @@ namespace ImproveGame.Common.GlobalItems
                 sb.ReBegin(null, Main.UIScaleMatrix);
                 item.GetGlobalItem<GlobalItemData>().InventoryGlow = false;
             }
-        }
-
-        // 物品可吸取至大背包功能
-        // 不需要考虑是否开启智能拾取，包括所有玩家独立收纳空间。
-        public override bool ItemSpace(Item item, Player player)
-        {
-            // 不要硬币
-            if (item.IsACoin)
-            {
-                return false;
-            }
-
-            // 大背包
-            if (Config.SuperVault && player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting) && DataPlayer.TryGet(player, out DataPlayer dataPlayer))
-            {
-                bool canStackToArray = (uiPlayerSetting.SuperVault_OverflowGrab || uiPlayerSetting.SuperVault_SmartGrab) && item.CanStackToArray(dataPlayer.SuperVault);
-
-                if (uiPlayerSetting.SuperVault_OverflowGrab && canStackToArray)
-                {
-                    return true;
-                }
-
-                if (uiPlayerSetting.SuperVault_SmartGrab && canStackToArray && item.InArray(dataPlayer.SuperVault))
-                {
-                    return true;
-                }
-            }
-
-            if (Config.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
-            {
-                // 猪猪钱罐
-                if (improvePlayer.HasPiggyBank && item.CanStackToArray(player.bank.item))
-                {
-                    return true;
-                }
-                else
-                {
-                    improvePlayer.HasPiggyBank = false;
-                }
-
-                // 保险箱
-                if (improvePlayer.HasSafe && item.CanStackToArray(player.bank2.item))
-                {
-                    return true;
-                }
-                else
-                {
-                    improvePlayer.HasSafe = false;
-                }
-
-                // 护卫熔炉
-                if (improvePlayer.HasDefendersForge && item.CanStackToArray(player.bank3.item))
-                {
-                    return true;
-                }
-                else
-                {
-                    improvePlayer.HasDefendersForge = false;
-                }
-            }
-
-            return false;
         }
 
         public override void Load()

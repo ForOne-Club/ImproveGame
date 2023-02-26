@@ -87,7 +87,7 @@ namespace ImproveGame.Common.Players
                     oldSuperVaultStack[i] = 0;
             }
 
-            if (RefreshRecipes && RefreshTimer % 15 == 0)
+            if (RefreshRecipes && RefreshTimer % 30 == 0)
             {
                 RefreshRecipes = false;
                 Recipe.FindRecipes();
