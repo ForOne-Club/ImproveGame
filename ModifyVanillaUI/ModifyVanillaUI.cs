@@ -138,7 +138,7 @@ namespace ImproveGame.ModifyOriginalUI
         {
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
-            SDFRactangle.NoBorder(pos, size, new Vector4(6f), Color.Lerp(new Color(150, 150, 220), self._color, 0.6f) * 0.6f);
+            SDFRectangle.NoBorder(pos, size, new Vector4(6f), Color.Lerp(new Color(150, 150, 220), self._color, 0.6f) * 0.6f);
         }
 
         private void UIWorkshopHub_AddDescriptionPanel(On.Terraria.GameContent.UI.States.UIWorkshopHub.orig_AddDescriptionPanel orig, UIWorkshopHub self, UIElement container, float accumulatedHeight, float height, string tagGroup)
@@ -229,7 +229,7 @@ namespace ImproveGame.ModifyOriginalUI
             On.Terraria.Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y,
             int w, int h, Color c)
         {
-            SDFRactangle.HasBorder(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), c, 2, UIColor.PanelBorder);
+            SDFRectangle.HasBorder(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), c, 2, UIColor.PanelBorder);
         }
 
         private static CalculatedStyle GetHandleCalculatedStyle(UIScrollbar scrollbar)
@@ -267,12 +267,12 @@ namespace ImproveGame.ModifyOriginalUI
                 SoundEngine.PlaySound(SoundID.MenuTick);
             }
             float bgRounded = MathF.Min(size.X, size.Y) / 2;
-            SDFRactangle.HasBorder(pos, size, new Vector4(bgRounded), UIColor.ScrollBarBg, 2, UIColor.PanelBorder);
+            SDFRectangle.HasBorder(pos, size, new Vector4(bgRounded), UIColor.ScrollBarBg, 2, UIColor.PanelBorder);
             CalculatedStyle barDimensions = GetHandleCalculatedStyle(self);
             Vector2 barPos = barDimensions.Position() + new Vector2(5, 3);
             Vector2 barSize = barDimensions.Size() - new Vector2(10, 7);
             float barRounded = MathF.Min(barSize.X, barSize.Y) / 2;
-            SDFRactangle.NoBorder(barPos, barSize, new Vector4(barRounded), new(220, 220, 220));
+            SDFRectangle.NoBorder(barPos, barSize, new Vector4(barRounded), new(220, 220, 220));
         }
 
         private void UIPanel_DrawSelf(On.Terraria.GameContent.UI.Elements.UIPanel.orig_DrawSelf orig, UIPanel self,
@@ -280,7 +280,7 @@ namespace ImproveGame.ModifyOriginalUI
         {
             Vector2 pos = self.GetDimensions().Position();
             Vector2 size = self.GetDimensions().Size();
-            SDFRactangle.HasBorder(pos, size, new Vector4(10f), self.BackgroundColor, 2, self.BorderColor);
+            SDFRectangle.HasBorder(pos, size, new Vector4(10f), self.BackgroundColor, 2, self.BorderColor);
         }
 
         private static void PrintParent(UIElement self, UIElement target)

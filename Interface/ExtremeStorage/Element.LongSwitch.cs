@@ -69,14 +69,14 @@ namespace ImproveGame.Interface.ExtremeStorage
 
             // 背景板
             var panelColor = IsMouseHovering ? UIColor.PanelBgLightHover : UIColor.PanelBgLight;
-            SDFRactangle.NoBorder(position, size, new Vector4(8f), panelColor);
+            SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor);
 
             // 开关
             var boxSize = new Vector2(48, 26);
             var boxPosition = new Vector2(position.X + size.X - boxSize.X - 6f, position.Y);
             
             Vector2 position1 = boxPosition + new Vector2(0, size.Y / 2 - boxSize.Y / 2);
-            SDFRactangle.HasBorder(position1, boxSize, new Vector4(MathF.Min(boxSize.X, boxSize.Y) / 2), color, 2, color2);
+            SDFRectangle.HasBorder(position1, boxSize, new Vector4(MathF.Min(boxSize.X, boxSize.Y) / 2), color, 2, color2);
 
             Vector2 boxSize2 = new(boxSize.Y - 10);
             Vector2 position2 = boxPosition + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),

@@ -103,7 +103,7 @@ namespace ImproveGame.Interface.SUIElements
 
             if (Shaded)
             {
-                SDFRactangle.Shadow(shadowPos, shadowSize, Rounded, ShadowColor, this.ShadowThickness);
+                SDFRectangle.Shadow(shadowPos, shadowSize, Rounded, ShadowColor, this.ShadowThickness);
             }
             base.DrawSelf(spriteBatch);
         }

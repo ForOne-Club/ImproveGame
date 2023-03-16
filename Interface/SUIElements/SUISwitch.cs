@@ -72,7 +72,7 @@ public class SUISwitch : View
 
         Vector2 switchSize = new Vector2(48, 26) * _scale;
         Vector2 switchPos = innerPos + new Vector2(0, (innerSize.Y - switchSize.Y) / 2);
-        SDFRactangle.HasBorder(switchPos, switchSize, new Vector4(switchSize.Min() / 2), switchBgColor, 2, switchBorderColor);
+        SDFRectangle.HasBorder(switchPos, switchSize, new Vector4(switchSize.Min() / 2), switchBgColor, 2, switchBorderColor);
 
         Vector2 roundSize = new(switchSize.Y - 10 * _scale);
         Vector2 roundPos = innerPos + _timer.Lerp(new Vector2(3 + 2, innerSize.Y / 2 - roundSize.Y / 2),

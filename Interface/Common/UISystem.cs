@@ -4,7 +4,6 @@ using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.PlayerInfo;
-using System.Reflection;
 
 namespace ImproveGame.Interface.Common
 {
@@ -234,15 +233,11 @@ namespace ImproveGame.Interface.Common
             // 背包
             layers.FindVanilla("Inventory", index =>
             {
-                /*layers.Insert(index + 1, new LegacyGameInterfaceLayer("", () =>
+                layers.Insert(index + 1, new LegacyGameInterfaceLayer("", () =>
                 {
-                    Vector2 mouse = new Vector2(Main.mouseX, Main.mouseY);
-                    Vector2 size = new Vector2(200, 200);
-                    // PixelShader.DrawBezier(mouse - size / 2, size, 10f);
-
-                    PixelShader.DrawRoundRect(mouse - size / 2, size, 20, Color.Transparent, 2, Color.Red);
+                    SDFRectangle.TestDraw();
                     return true;
-                }, InterfaceScaleType.UI));*/
+                }, InterfaceScaleType.UI));
                 layers.Insert(index, "Liquid Wand GUI", LiquidWandGUI, () => LiquidWandGUI.Visible);
                 layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible);
                 layers.Insert(index, "Grab Bag Info GUI", GrabBagInfoGUI, () => GrabBagInfoGUI.Visible);
@@ -261,5 +256,6 @@ namespace ImproveGame.Interface.Common
         }
 
         #endregion
+
     }
 }

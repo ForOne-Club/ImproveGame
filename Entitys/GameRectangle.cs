@@ -99,7 +99,7 @@ public class GameRectangle
     {
         Vector2 pos = Rectangle.TopLeft() * 16 + new Vector2(-2) - Main.screenPosition;
         Vector2 size = Rectangle.Size() * 16 + new Vector2(4);
-        SDFRactangle.HasBorder(pos, size, new Vector4(4f), BackgroundColor, 2f, BorderColor, ui: false);
+        SDFRectangle.HasBorder(pos, size, new Vector4(4f), BackgroundColor, 2f, BorderColor, ui: false);
         // DrawBorderRect(Rectangle, backgroundColor, borderColor);
     }
 
