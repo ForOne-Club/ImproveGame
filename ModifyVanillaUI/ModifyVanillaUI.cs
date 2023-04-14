@@ -122,11 +122,28 @@ namespace ImproveGame.ModifyOriginalUI
             return uIPanel;
         }
 
+        private static Texture2D uiSlicedImage = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelHighlight").Value;
+
         private void UISlicedImage_DrawSelf(On.Terraria.GameContent.UI.Elements.UISlicedImage.orig_DrawSelf orig, UISlicedImage self, SpriteBatch spriteBatch)
         {
-            Vector2 pos = self.GetDimensions().Position();
-            Vector2 size = self.GetDimensions().Size();
-            SDFRectangle.NoBorder(pos, size, new Vector4(6f), Color.Lerp(new Color(150, 150, 220), self._color, 0.6f) * 0.6f);
+            if (self._texture.Value == uiSlicedImage)
+            {
+                Vector2 pos = self.GetDimensions().Position();
+                Vector2 size = self.GetDimensions().Size();
+
+                Vector3 colorX = new Vector3(156, 164, 229);
+                Color color = new Color();
+
+                color.R = (byte)Math.Round(self._color.R * colorX.X / 255f);
+                color.G = (byte)Math.Round(self._color.G * colorX.Y / 255f);
+                color.B = (byte)Math.Round(self._color.B * colorX.Z / 255f);
+                color.A = self._color.A;
+
+                SDFRectangle.NoBorder(pos, size, new Vector4(6f), color);
+                return;
+            }
+
+            orig.Invoke(self, spriteBatch);
         }
 
         private void UIWorkshopHub_AddDescriptionPanel(On.Terraria.GameContent.UI.States.UIWorkshopHub.orig_AddDescriptionPanel orig, UIWorkshopHub self, UIElement container, float accumulatedHeight, float height, string tagGroup)
