@@ -474,7 +474,7 @@ namespace ImproveGame.Content.Items
             if (context == ItemSlot.Context.InventoryItem)
             {
                 ItemInInventory = true;
-                if (PlayerInput.Triggers.JustPressed.MouseMiddle)
+                if (Main.mouseMiddle && Main.mouseMiddleRelease)
                 {
                     if (!ArchitectureGUI.Visible)
                         UISystem.Instance.ArchitectureGUI.Open(slot);

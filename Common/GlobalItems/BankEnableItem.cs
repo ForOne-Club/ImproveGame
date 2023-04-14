@@ -7,21 +7,24 @@ namespace ImproveGame.Common.GlobalItems
 {
     public class BankEnableItem : GlobalItem
     {
-        public override void Load() {
-            On.Terraria.Player.HandleBeingInChestRange += DisableBankRange;
+        public override void Load()
+        {
+            On.Terraria.Player.HandleBeingInChestRange += (orig, player) =>
+            {
+                if (player.chest >= -1 || !Config.MiddleEnableBank)
+                {
+                    orig.Invoke(player);
+                }
+            };
         }
 
-        private void DisableBankRange(On.Terraria.Player.orig_HandleBeingInChestRange orig, Player player) {
-            if (player.chest >= -1 || !Config.MiddleEnableBank) {
-                orig.Invoke(player);
-            }
-        }
-
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
             if (!Config.MiddleEnableBank)
                 return;
 
-            if (Bank2Items.Contains(item.type) && Config.AutoSaveMoney) {
+            if (Bank2Items.Contains(item.type) && Config.AutoSaveMoney)
+            {
                 tooltips.Add(new(Mod, "TagDetailed.AutoCollect", GetText("Tips.TagDetailed.AutoCollect")) { OverrideColor = Color.SkyBlue });
                 TagItem.AddShiftForMoreTooltip(tooltips);
             }
@@ -31,7 +34,8 @@ namespace ImproveGame.Common.GlobalItems
                 // 没有的话再判断一下大背包
                 (Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var modPlayer) && HasItem(modPlayer.SuperVault, -1, item.type));
 
-            if (hasItemInInventory && IsBankItem(item.type)) {
+            if (hasItemInInventory && IsBankItem(item.type))
+            {
                 var player = Main.LocalPlayer;
 
                 // 决定文本显示的是“开启”还是“关闭”
@@ -39,34 +43,43 @@ namespace ImproveGame.Common.GlobalItems
                 if ((player.chest == -2 && Bank2Items.Contains(item.type)) ||
                     (player.chest == -3 && Bank3Items.Contains(item.type)) ||
                     (player.chest == -4 && Bank4Items.Contains(item.type)) ||
-                    (player.chest == -5 && Bank5Items.Contains(item.type))) {
+                    (player.chest == -5 && Bank5Items.Contains(item.type)))
+                {
                     tooltip = GetText("Tips.BankEnableOff");
                 }
 
                 tooltips.Add(new(Mod, "BankEnable", tooltip) { OverrideColor = Color.LightGreen });
 
                 SoundStyle? sound = null;
-                if (PlayerInput.Triggers.JustPressed.MouseMiddle) {
-                    if (Bank2Items.Contains(item.type)) {
-                        if (item.type == ItemID.ChesterPetItem) {
+                if (Main.mouseMiddle && Main.mouseMiddleRelease)
+                {
+                    if (Bank2Items.Contains(item.type))
+                    {
+                        if (item.type == ItemID.ChesterPetItem)
+                        {
                             sound = player.chest == -2 ? SoundID.ChesterClose : SoundID.ChesterOpen;
                         }
-                        if (item.type == ItemID.MoneyTrough) {
+                        if (item.type == ItemID.MoneyTrough)
+                        {
                             sound = SoundID.Item59;
                         }
                         ToggleChest(ref player, -2, sound: sound);
                         return;
                     }
-                    if (Bank3Items.Contains(item.type)) {
+                    if (Bank3Items.Contains(item.type))
+                    {
                         ToggleChest(ref player, -3);
                         return;
                     }
-                    if (Bank4Items.Contains(item.type)) {
+                    if (Bank4Items.Contains(item.type))
+                    {
                         ToggleChest(ref player, -4);
                         return;
                     }
-                    if (Bank5Items.Contains(item.type)) {
-                        if (item.type == ItemID.VoidLens) {
+                    if (Bank5Items.Contains(item.type))
+                    {
+                        if (item.type == ItemID.VoidLens)
+                        {
                             sound = SoundID.Item130;
                         }
                         ToggleChest(ref player, -5, sound: sound);
@@ -76,7 +89,8 @@ namespace ImproveGame.Common.GlobalItems
             }
         }
 
-        public override bool PreDrawTooltip(Item item, ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y) {
+        public override bool PreDrawTooltip(Item item, ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
+        {
             if (ItemSlot.ShiftInUse && Bank2Items.Contains(item.type) && Config.AutoSaveMoney)
                 TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines), x, y);
             return base.PreDrawTooltip(item, lines, ref x, ref y);

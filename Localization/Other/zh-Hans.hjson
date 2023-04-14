@@ -46,6 +46,8 @@
         BuffTrackerOff: "<left>以关闭增益追踪器"
         BankEnableOn: "中键单击以打开个人储存库"
         BankEnableOff: "中键单击以关闭个人储存库"
+        MouseMiddleOpen: "中键单击以打开{ItemName}"
+        MouseMiddleClose: "中键单击以关闭{ItemName}"
         CreateWandOn: "中键单击以开启房屋材料面板"
         CreateWandOff: "中键单击以关闭房屋材料面板"
         LiquidWandOn: "中键单击以开启液体控制面板"

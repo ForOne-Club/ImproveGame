@@ -46,6 +46,8 @@ Mods.ImproveGame:
         BuffTrackerOff: "<left> to close buff tracker"
         BankEnableOn: "Middle click to open personal inventory"
         BankEnableOff: "Middle click to close personal inventory"
+        MouseMiddleOpen: "Middle click to open {ItemName}"
+        MouseMiddleClose: "Middle click to close {ItemName}"
         CreateWandOn: "Middle click to open house material panel"
         CreateWandOff: "Middle click to close house material panel"
         LiquidWandOn: "Middle click to open liquid control panel"

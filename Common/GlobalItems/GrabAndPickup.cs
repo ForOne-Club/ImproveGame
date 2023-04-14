@@ -25,7 +25,7 @@ internal class GrabAndPickup : GlobalItem
             }
         };
 
-        // 拾取的物品进入背包前
+        // 拾取的物品溢出背包后
         On.Terraria.Player.PickupItem += (orig, player, playerIndex, worldItemArrayIndex, itemToPickUp) =>
         {
             itemToPickUp = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
@@ -34,6 +34,8 @@ internal class GrabAndPickup : GlobalItem
             {
                 return itemToPickUp;
             }
+
+            Item cloneItem = itemToPickUp.Clone();
 
             // 背包溢出堆叠至其他容器
             if (!itemToPickUp.IsACoin)
@@ -71,6 +73,12 @@ internal class GrabAndPickup : GlobalItem
             }
 
             Finish:
+
+            if (itemToPickUp.stack < cloneItem.stack)
+            {
+                SoundEngine.PlaySound(SoundID.Grab);
+            }
+
             Main.item[worldItemArrayIndex] = itemToPickUp;
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
@@ -84,6 +92,7 @@ internal class GrabAndPickup : GlobalItem
     {
         if (self.stack < cloneItem.stack)
         {
+            SoundEngine.PlaySound(SoundID.Grab);
             PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cloneItem, cloneItem.stack - self.stack);
         }
     }

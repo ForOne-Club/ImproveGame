@@ -126,7 +126,7 @@ namespace ImproveGame.Common.GlobalItems
 
                 if (buffType is -1 && item.type != ItemID.GardenGnome) return;
 
-                if (PlayerInput.Triggers.JustPressed.MouseMiddle) {
+                if (Main.mouseMiddle && Main.mouseMiddleRelease) {
                     if (BuffTrackerGUI.Visible)
                         UISystem.Instance.BuffTrackerGUI.Close();
                     else

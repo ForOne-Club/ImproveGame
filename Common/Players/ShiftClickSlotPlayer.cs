@@ -18,7 +18,7 @@ namespace ImproveGame.Common.Players
             if (item.ModItem is IItemOverrideHover overrideHover && overrideHover.OverrideHover(inventory, context, slot))
                 return true;
 
-            if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 && context == ItemSlot.Context.InventoryItem
+            if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 && (context is ItemSlot.Context.InventoryItem or 114514)
                 && ItemSlot.ShiftInUse && !item.IsAir && !item.favorited)
             {
                 // 至尊储存
@@ -73,7 +73,8 @@ namespace ImproveGame.Common.Players
                 // 至尊储存
                 if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.AllItemsCached.Any(s => CanPlaceInSlot(s, inventory[slot]) is 2 or 3))
                 {
-                    switch (Main.netMode) {
+                    switch (Main.netMode)
+                    {
                         case NetmodeID.MultiplayerClient:
                             InvToChestPacket.Send(ExtremeStorageGUI.Storage.ID, slot, ExtremeStorageGUI.CurrentGroup);
                             break;

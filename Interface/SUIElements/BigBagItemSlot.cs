@@ -13,6 +13,16 @@ namespace ImproveGame.Interface.SUIElements
     /// </summary>
     public class BigBagItemSlot : View
     {
+        /// <summary>
+        /// 新物品计时器
+        /// </summary>
+        public AnimationTimer NewAndShinyTimer = new AnimationTimer(5);
+
+        /// <summary>
+        /// 收藏物品计时器
+        /// </summary>
+        public AnimationTimer FavoritedTimer = new AnimationTimer(5);
+
         public bool FavoriteAllowed = true;
         public Item[] Items { get; set; }
 
@@ -313,23 +323,62 @@ namespace ImproveGame.Interface.SUIElements
                 }
             }
         }
-        
-        public virtual void ModifyDrawColor() {}
+
+        public virtual void ModifyDrawColor() { }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (IsMouseHovering)
+            {
+                Item.newAndShiny = false;
+            }
+
+            if (Item.newAndShiny)
+            {
+                NewAndShinyTimer.TryOpen();
+            }
+            else
+            {
+                NewAndShinyTimer.TryClose();
+            }
+
+            if (Item.favorited && !Item.IsAir)
+            {
+                FavoritedTimer.TryOpen();
+            }
+            else
+            {
+                FavoritedTimer.TryClose();
+            }
+
+            NewAndShinyTimer.Update();
+            FavoritedTimer.Update();
+
+            base.Draw(spriteBatch);
+        }
 
         public override void DrawSelf(SpriteBatch sb)
         {
-            BorderColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
-            BgColor = Item.favorited && !Item.IsAir ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBg;
+            BorderColor = FavoritedTimer.Lerp(UIColor.ItemSlotBorder, UIColor.ItemSlotBorderFav);
+            BgColor = FavoritedTimer.Lerp(UIColor.ItemSlotBg, UIColor.ItemSlotBgFav);
+
+            BorderColor = NewAndShinyTimer.Lerp(BorderColor, new Color(99, 161, 157, 180));
+            BgColor = NewAndShinyTimer.Lerp(BgColor, new Color(55, 93, 131, 180));
             if (!Interactable)
+            {
                 BgColor = Color.Gray * 0.3f;
+            }
+
             ModifyDrawColor();
             base.DrawSelf(sb);
             Vector2 pos = GetDimensions().Position();
             float size = GetDimensions().Size().X;
             if (Item.IsAir)
                 return;
+
             if (IsMouseHovering)
             {
+                PlayerLoader.HoverSlot(Main.player[Main.myPlayer], Items, ItemSlot.Context.InventoryItem, Index);
                 Main.hoverItemName = Item.Name;
                 Main.HoverItem = Item.Clone();
                 SetCursorOverride();
@@ -355,7 +404,7 @@ namespace ImproveGame.Interface.SUIElements
                     new Vector2(0),
                     0.75f, 0, 0f);*/
         }
-        
+
         /// <summary>
         /// 专门用于绘制物品栏物品的堆叠，直接调用字体的 InternalDraw 相比 TrUtils.DrawBorderString 性能消耗更小
         /// 且这个的描边大小经过调节，看起来更舒服

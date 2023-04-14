@@ -2,9 +2,7 @@
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.Common;
-using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
-using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
@@ -119,11 +117,10 @@ namespace ImproveGame.Content.Items
             // 决定文本显示的是“开启”还是“关闭”
             if (ItemInInventory)
             {
-                string @switch = PackageGUI.Visible && PackageGUI.StorageType == StorageType.Potions
-                    ? "Off"
-                    : "On";
-                tooltips.Add(new TooltipLine(Mod, "CreateWand", GetText($"Tips.CreateWand{@switch}"))
-                    { OverrideColor = Color.LightGreen });
+                string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Potions) ?
+                    GetTextWith($"Tips.MouseMiddleClose", new { ItemName = Item.Name }) :
+                    GetTextWith($"Tips.MouseMiddleOpen", new { ItemName = Item.Name });
+                tooltips.Add(new TooltipLine(Mod, "CreateWand", text) { OverrideColor = Color.LightGreen });
             }
 
             ItemInInventory = false;
@@ -295,7 +292,7 @@ namespace ImproveGame.Content.Items
             if (context == ItemSlot.Context.InventoryItem)
             {
                 ItemInInventory = true;
-                if (PlayerInput.Triggers.JustPressed.MouseMiddle)
+                if (Main.mouseMiddle && Main.mouseMiddleRelease)
                     RightClick(Main.LocalPlayer);
             }
 

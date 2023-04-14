@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.Common;
-using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
@@ -140,11 +139,10 @@ namespace ImproveGame.Content.Items
             // 决定文本显示的是“开启”还是“关闭”
             if (_itemInInventory)
             {
-                string @switch = PackageGUI.Visible && PackageGUI.StorageType == StorageType.Banners
-                    ? "Off"
-                    : "On";
-                tooltips.Add(new TooltipLine(Mod, "CreateWand", GetText($"Tips.CreateWand{@switch}"))
-                { OverrideColor = Color.LightGreen });
+                string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Banners) ?
+                    GetTextWith($"Tips.MouseMiddleClose", new { ItemName = Item.Name }) :
+                    GetTextWith($"Tips.MouseMiddleOpen", new { ItemName = Item.Name });
+                tooltips.Add(new TooltipLine(Mod, "CreateWand", text) { OverrideColor = Color.LightGreen });
             }
 
             _itemInInventory = false;
@@ -266,8 +264,14 @@ namespace ImproveGame.Content.Items
             }
 
             _itemInInventory = true;
-            if (PlayerInput.Triggers.JustPressed.MouseMiddle)
+
+            // MouseMiddleRelease 鼠标按键松开, 但是会比 MouseMiddle 晚一帧才变 <br/>
+            // 也就是说如果这一帧按下了中键 MouseMiddle 和 MouseMiddleRelease 都是 true
+            if (Main.mouseMiddle && Main.mouseMiddleRelease)
+            {
                 RightClick(Main.LocalPlayer);
+            }
+
             return false;
         }
     }
