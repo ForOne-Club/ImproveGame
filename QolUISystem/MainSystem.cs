@@ -9,6 +9,7 @@ internal class MainSystem : ModSystem
 
     public override void Load()
     {
+        if (Main.dedServ) return;
         Trigger.TwoUIManager = new MainManager();
         Trigger.TwoUIManager.Initialize();
     }

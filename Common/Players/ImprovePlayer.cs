@@ -209,8 +209,6 @@ public class ImprovePlayer : ModPlayer
             PressGrabBagKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
             PressHotbarSwitchKeybind();
-        if (Main.keyState.IsKeyDown(Keys.K))
-            Item.NewItem(Main.LocalPlayer.GetSource_DropAsItem(), Main.LocalPlayer.getRect(), ItemID.IronBar, 9999);
     }
 
     private static void PressSuperVaultKeybind()

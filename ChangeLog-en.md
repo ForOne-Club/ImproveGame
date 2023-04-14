@@ -21,6 +21,8 @@
 - **[v1.6.3.2]** 修复了部分模组物品无法在圆角物品框中正常显示的BUG
 - **[v1.6.3.2]** 修复了药水袋旗帜盒无法在大背包打开的问题
 - **[v1.6.3.2]** 修复了部分在关闭跳帧模式下产生的 BUG
+- **[v1.6.3.3]** 修复了按下K键会无限生成铁锭的BUG
+- **[v1.6.3.3]** 修复了开启服务器时该模组会自动关闭的BUG
 ## Additions
 - Added Player Stats Panel, can be configured in UI config
 - Added Storage Manager, go easy with your chests
