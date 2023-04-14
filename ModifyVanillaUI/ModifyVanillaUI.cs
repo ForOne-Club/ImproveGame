@@ -15,18 +15,6 @@ namespace ImproveGame.ModifyOriginalUI
         private MethodInfo _uITextPaenl_DrawText;
         private MethodInfo _uIWorkshopHub_MakeFancyButtonInner;
 
-        public override void Unload()
-        {
-            if (Main.dedServ || !_loaded)
-            {
-                return;
-            }
-            _loaded = false;
-
-            HookEndpointManager.Remove(_uITextPaenl_DrawText, UITextPanel_DrawSelf);
-            HookEndpointManager.Remove(_uIWorkshopHub_MakeFancyButtonInner, MakeFancyButtonInner);
-        }
-
         public override void Load()
         {
             // UIElement
@@ -227,9 +215,22 @@ namespace ImproveGame.ModifyOriginalUI
 
         private void Utils_DrawInvBG(
             On.Terraria.Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y,
-            int w, int h, Color c)
+            int w, int h, Color color)
         {
-            SDFRectangle.HasBorder(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), c, 2, UIColor.PanelBorder);
+            if (color == default)
+                color = new Color(63, 65, 151, 255) * 0.785f;
+
+            if (w < 20)
+                w = 20;
+
+            if (h < 20)
+                h = 20;
+
+            Color borderColor = color;
+            borderColor.R = (byte)Math.Round(borderColor.R * 19d / 255);
+            borderColor.G = (byte)Math.Round(borderColor.G * 30d / 255);
+            borderColor.B = (byte)Math.Round(borderColor.B * 39d / 255);
+            SDFRectangle.HasBorder(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), color, 2, borderColor);
         }
 
         private static CalculatedStyle GetHandleCalculatedStyle(UIScrollbar scrollbar)

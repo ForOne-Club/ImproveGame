@@ -40,7 +40,7 @@ namespace ImproveGame.Common.Animations
             GetSDFVertexInfo(ref vertices, pos, size);
             VertexPosCoord[] triangles = vertices.ToArray();
             Main.graphics.GraphicsDevice.DrawUserPrimitives(0, triangles, 0, triangles.Length / 3);
-            ShaderAssets.SpriteEffectPass.Apply();
+            Main.spriteBatch.spriteEffectPass.Apply();
         }
 
         /// <summary>

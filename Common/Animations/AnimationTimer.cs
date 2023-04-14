@@ -87,7 +87,6 @@ public class AnimationTimer
     public void Open()
     {
         State = AnimationState.Open;
-        Timer = 0;
     }
 
     public void TryOpen()
@@ -101,7 +100,6 @@ public class AnimationTimer
     public void Close()
     {
         State = AnimationState.Close;
-        Timer = TimerMax;
     }
 
     public void TryClose()

@@ -233,11 +233,6 @@ namespace ImproveGame.Interface.Common
             // 背包
             layers.FindVanilla("Inventory", index =>
             {
-                layers.Insert(index + 1, new LegacyGameInterfaceLayer("", () =>
-                {
-                    SDFRectangle.TestDraw();
-                    return true;
-                }, InterfaceScaleType.UI));
                 layers.Insert(index, "Liquid Wand GUI", LiquidWandGUI, () => LiquidWandGUI.Visible);
                 layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible);
                 layers.Insert(index, "Grab Bag Info GUI", GrabBagInfoGUI, () => GrabBagInfoGUI.Visible);

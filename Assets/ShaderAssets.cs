@@ -1,10 +1,10 @@
-﻿namespace ImproveGame.Assets;
+﻿using ImproveGame.Common.Animations;
+
+namespace ImproveGame.Assets;
 
 internal class ShaderAssets : ModSystem
 {
-    public static EffectPass SpriteEffectPass { get; private set; }
     public static Effect SDFGraphic { get; private set; }
-    public static Effect SDFRectangle { get; private set; }
 
     public static Asset<Effect> LiquidSurface;
     public static Asset<Effect> Transform;
@@ -15,10 +15,9 @@ internal class ShaderAssets : ModSystem
     {
         if (Main.dedServ) return;
 
-        SDFGraphic = GetEffect("SDFGraphic").Value;
-        SDFRectangle = GetEffect("RoundRectangle").Value;
+        SDFRectangle.Laod();
 
-        SpriteEffectPass = Main.spriteBatch.spriteEffectPass;
+        SDFGraphic = GetEffect("SDFGraphic").Value;
 
         LiquidSurface = GetEffect("LiquidSurface");
         Transform = GetEffect("Transform");
@@ -30,10 +29,8 @@ internal class ShaderAssets : ModSystem
     {
         if (Main.dedServ) return;
 
-        SDFGraphic = SDFRectangle = null;
+        SDFRectangle.Unload();
         LiquidSurface = Transform = Bloom = null;
         Perlin = null;
-
-        SpriteEffectPass = null;
     }
 }
