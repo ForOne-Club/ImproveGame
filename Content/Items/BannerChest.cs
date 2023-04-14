@@ -74,12 +74,12 @@ namespace ImproveGame.Content.Items
             {
                 if (StoredBanners[i].IsAir)
                 {
-                    StoredBanners.RemoveAt(i);
-                    i--;
+                    StoredBanners.RemoveAt(i--);
                     continue;
                 }
 
-                if (StoredBanners[i].type != item.type || StoredBanners[i].stack >= StoredBanners[i].maxStack ||
+                if (StoredBanners[i].type != item.type ||
+                    StoredBanners[i].stack >= StoredBanners[i].maxStack ||
                     !ItemLoader.CanStack(StoredBanners[i], item))
                 {
                     continue;
@@ -144,7 +144,7 @@ namespace ImproveGame.Content.Items
                     ? "Off"
                     : "On";
                 tooltips.Add(new TooltipLine(Mod, "CreateWand", GetText($"Tips.CreateWand{@switch}"))
-                    { OverrideColor = Color.LightGreen });
+                { OverrideColor = Color.LightGreen });
             }
 
             _itemInInventory = false;

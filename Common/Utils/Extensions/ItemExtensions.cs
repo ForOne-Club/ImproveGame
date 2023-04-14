@@ -72,7 +72,8 @@ internal static class ItemExtensions
 
     /// <summary>
     /// 堆叠到一个物品集合中 <br/>
-    /// 注：self 不能直接赋值 items 使用下标可以直接赋值
+    /// 注：self 不能直接赋值 items 使用下标可以直接赋值 <br/>
+    /// 如果全部使用完，会调用 Item.ToAir() 而不是重新赋值
     /// </summary>
     public static void StackToArray(this Item self, Item[] items)
     {
