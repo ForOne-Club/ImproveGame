@@ -71,7 +71,7 @@ public class SUISearchBar : View
         });
         _searchBar.OnStartTakingInput += OnStartTakingInput;
         _searchBar.OnEndTakingInput += OnEndTakingInput;
-        _searchBar.OnCancledTakingInput += OnCancledInput;
+        _searchBar.OnCanceledTakingInput += OnCanceledInput;
         _searchBoxPanel.Append(_searchBar);
         
         UIImageButton cancelBtn = new(Main.Assets.Request<Texture2D>("Images/UI/SearchCancel"))
@@ -103,7 +103,7 @@ public class SUISearchBar : View
         SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
-    private void OnCancledInput()
+    private void OnCanceledInput()
     {
         Main.LocalPlayer.ToggleInv();
     }

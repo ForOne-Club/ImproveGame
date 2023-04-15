@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Systems;
-using Terraria.ModLoader.Default;
 
 namespace ImproveGame.Common.GlobalItems
 {

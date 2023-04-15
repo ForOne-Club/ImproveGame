@@ -62,7 +62,7 @@ namespace ImproveGame.Interface.GUI
             const float colorNormal = 1f;
             const float xOffst = 2f;
 
-            waterSlot = new(LiquidID.Water, ItemID.BottomlessBucket, ItemID.SuperAbsorbantSponge, colorHover,
+            waterSlot = new LiquidWandSlot(LiquidID.Water, ItemID.BottomlessBucket, ItemID.SuperAbsorbantSponge, colorHover,
                 colorNormal);
             waterSlot.Left.Set(slotFirst + xOffst, 0f);
             waterSlot.Top.Set(slotSecond, 0f);
@@ -159,10 +159,10 @@ namespace ImproveGame.Interface.GUI
                 ref float wandLiquid = ref wand.Water;
                 switch (liquidType)
                 {
-                    case LiquidID.Lava:
+                    case 1:
                         wandLiquid = ref wand.Lava;
                         break;
-                    case LiquidID.Honey:
+                    case 2:
                         wandLiquid = ref wand.Honey;
                         break;
                 }

@@ -228,11 +228,13 @@ public class PrefixTab : SUIPanel
         Main.LocalPlayer.BuyItem(Price);
         bool favorited = Item.favorited;
         int stack = Item.stack;  //#StackablePrefixWeapons: keep the stack, (i.e. light discs)
-        Item r = new();
+        /*Item r = new();
         r.netDefaults(Item.netID);
-        r = r.CloneWithModdedDataFrom(Item)/* tModPorter Note: Removed. Use Clone, ResetPrefix or Refresh */;
+        r = r.CloneWithModdedDataFrom(Item)*//* tModPorter Note: Removed. Use Clone, ResetPrefix or Refresh *//*;
         r.Prefix(PrefixId);
-        Item = r.Clone();
+        Item = r.Clone();*/
+        Item.ResetPrefix();
+        Item.Prefix(PrefixId);
         Item.position = Main.LocalPlayer.Center;
         Item.favorited = favorited;
         Item.stack = stack;

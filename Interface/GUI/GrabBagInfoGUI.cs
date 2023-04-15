@@ -124,7 +124,7 @@ namespace ImproveGame.Interface.GUI
         {
             UIList.Clear();
 
-            var itemDropRules = Main.ItemDropsDB.GetRulesForItemID(ItemID, includeGlobalDrops: false);
+            var itemDropRules = Main.ItemDropsDB.GetRulesForItemID(ItemID);
             var list = new List<DropRateInfo>();
             var ratesInfo = new DropRateInfoChainFeed(1f);
             foreach (IItemDropRule item in itemDropRules)

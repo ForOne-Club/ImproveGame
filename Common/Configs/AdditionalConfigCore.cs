@@ -41,7 +41,7 @@ namespace ImproveGame.Common.Configs
             [DefaultValue(true)] public bool BrustDestroyTile;
             [DefaultValue(true)] public bool BrustDestroyWall;
             public bool LiquidAbsorption;
-            public byte LiquidSelectedType;
+            public short LiquidSelectedType;
 
             [DefaultValue(WandSystem.PaintMode.Tile)]
             public WandSystem.PaintMode PaintMode;

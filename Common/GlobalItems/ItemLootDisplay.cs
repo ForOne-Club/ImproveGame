@@ -18,7 +18,7 @@ namespace ImproveGame.Common.GlobalItems
             }
             Main.mouseRight = oldRight;
 
-            if (Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: false).Count <= 0) return;
+            if (Main.ItemDropsDB.GetRulesForItemID(item.type).Count <= 0) return;
 
             bool hasKeybind = TryGetKeybindString(KeybindSystem.GrabBagKeybind, out var keybind);
             tooltips.Add(new(Mod, "LootDisplay", GetTextWith("Tips.LootDisplay", new { KeybindName = keybind }))

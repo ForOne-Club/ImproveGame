@@ -32,10 +32,10 @@ namespace ImproveGame.Content.Items
         {
             if (cancelled)
                 return base.ModifyColor(true);
-            return WandSystem.LiquidMode switch
+            return (short)WandSystem.LiquidMode switch
             {
-                LiquidID.Lava => new(253, 32, 3),
-                LiquidID.Honey => new(255, 156, 12),
+                LiquidID.Lava => new Color(253, 32, 3),
+                LiquidID.Honey => new Color(255, 156, 12),
                 _ => new(9, 61, 191),
             };
         }

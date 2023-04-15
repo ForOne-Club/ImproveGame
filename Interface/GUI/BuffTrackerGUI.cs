@@ -252,7 +252,7 @@ public class BuffTrackerGUI : ViewBody
         uIPanel.Append(uISearchBar);
         uISearchBar.OnStartTakingInput += OnStartTakingInput;
         uISearchBar.OnEndTakingInput += OnEndTakingInput;
-        uISearchBar.OnCancledTakingInput += OnCancledInput;
+        uISearchBar.OnCanceledTakingInput += OnCanceledInput;
         UIImageButton uIImageButton2 = new(Main.Assets.Request<Texture2D>("Images/UI/SearchCancel"))
         {
             HAlign = 1f,
@@ -283,7 +283,7 @@ public class BuffTrackerGUI : ViewBody
         SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
-    private void OnCancledInput()
+    private void OnCanceledInput()
     {
         Main.LocalPlayer.ToggleInv();
     }

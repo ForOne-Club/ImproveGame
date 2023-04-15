@@ -7,7 +7,7 @@ namespace ImproveGame.Interface.UIElements
 {
     public class LiquidWandSlot : ModImageButton
     {
-        public readonly byte LiquidId;
+        public readonly short LiquidId;
         public readonly short BucketId;
         public readonly short SpongeId;
         private readonly float _hoverColor;
@@ -20,7 +20,7 @@ namespace ImproveGame.Interface.UIElements
         public bool IsAltHovering;
         public float AltHoverTimer;
 
-        public LiquidWandSlot(byte liquidId, short bucketId, short spongeId, float hoverColor, float normalColor) : base(TextureAssets.Liquid[0], Color.White, Color.White) {
+        public LiquidWandSlot(short liquidId, short bucketId, short spongeId, float hoverColor, float normalColor) : base(TextureAssets.Liquid[0], Color.White, Color.White) {
             LiquidId = liquidId;
             BucketId = bucketId;
             SpongeId = spongeId;

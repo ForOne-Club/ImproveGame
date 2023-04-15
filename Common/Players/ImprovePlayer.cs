@@ -238,7 +238,7 @@ public class ImprovePlayer : ModPlayer
         bool oldRight = Main.mouseRight;
         Main.mouseRight = true;
 
-        bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type, includeGlobalDrops: true).Count > 0;
+        bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type).Count > 0;
         hasLoot &= CollectHelper.ItemCanRightClick[Main.HoverItem.type] || ItemLoader.CanRightClick(Main.HoverItem);
         Main.mouseRight = oldRight;
 

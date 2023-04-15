@@ -26,7 +26,7 @@ namespace ImproveGame
             }
             if (MaterialCore.FinishSetup && MaterialCore.TileToItem.TryGetValue(getItemTileType, out List<int> itemTypes))
             {
-                return itemTypes.FirstOrDefault(i => (MaterialCore.ItemToPlaceStyle[i] == TileFrameToPlaceStyle(tileType, tileFrameX, tileFrameY) || i >= Main.maxItemTypes), -1);
+                return itemTypes.FirstOrDefault(i => (MaterialCore.ItemToPlaceStyle[i] == TileFrameToPlaceStyle(tileType, tileFrameX, tileFrameY) || i >= Main.maxItems), -1);
             }
             return -1;
         }
@@ -144,7 +144,7 @@ namespace ImproveGame
 
             return coord - frame;
         }
-        
+
         public static bool TryGetTileEntityAs<T>(int id, out T entity) where T : TileEntity
         {
             if (TileEntity.ByID.TryGetValue(id, out TileEntity existing) && existing is T existingAsT)

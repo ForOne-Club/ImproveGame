@@ -54,7 +54,7 @@ public class MoveChest : ModItem
         var coord = Main.MouseWorld.ToTileCoordinates();
 
         // 必须在可操作范围内
-        if (!player.IsInTileInteractionRange(coord.X, coord.Y)) return true;
+        if (!player.IsInTileInteractionRange(coord.X, coord.Y, TileReachCheckSettings.Simple)) return true;
 
         // 放置箱子
         return !_hasChest || TileObject.CanPlace(coord.X, coord.Y, _chestType, _style, 1, out _, true);
