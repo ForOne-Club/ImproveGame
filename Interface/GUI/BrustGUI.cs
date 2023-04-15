@@ -31,7 +31,7 @@ namespace ImproveGame.Interface.GUI
             freeModeButton = ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/FreeMode");
 
             modeButton = new(fixedModeButton);
-            modeButton.OnMouseDown += SwitchMode;
+            modeButton.OnLeftMouseDown += SwitchMode;
             modeButton.OnMouseOver += MouseOver;
             modeButton.OnMouseOut += MouseOut;
             modeButton.Selected += () => true;
@@ -41,14 +41,14 @@ namespace ImproveGame.Interface.GUI
             tileButton.OnMouseOver += MouseOver;
             tileButton.OnMouseOut += MouseOut;
             tileButton.Selected += () => WandSystem.TileMode;
-            tileButton.OnMouseDown += (_, _) => WandSystem.TileMode = !WandSystem.TileMode;
+            tileButton.OnLeftMouseDown += (_, _) => WandSystem.TileMode = !WandSystem.TileMode;
             Append(tileButton);
 
             wallButton = new(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/WallMode"));
             wallButton.OnMouseOver += MouseOver;
             wallButton.OnMouseOut += MouseOut;
             wallButton.Selected += () => WandSystem.WallMode;
-            wallButton.OnMouseDown += (_, _) => WandSystem.WallMode = !WandSystem.WallMode;
+            wallButton.OnLeftMouseDown += (_, _) => WandSystem.WallMode = !WandSystem.WallMode;
             Append(wallButton);
         }
 

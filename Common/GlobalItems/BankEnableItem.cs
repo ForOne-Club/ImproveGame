@@ -9,7 +9,7 @@ namespace ImproveGame.Common.GlobalItems
     {
         public override void Load()
         {
-            On.Terraria.Player.HandleBeingInChestRange += (orig, player) =>
+            Terraria.On_Player.HandleBeingInChestRange += (orig, player) =>
             {
                 if (player.chest >= -1 || !Config.MiddleEnableBank)
                 {

@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
-using System.Reflection;
-using static On.Terraria.GameContent.UI.Elements.UIKeybindingListItem;
-using static On.Terraria.GameContent.UI.States.UIManageControls;
+using static Terraria.GameContent.UI.Elements.On_UIKeybindingListItem;
+using static Terraria.GameContent.UI.States.On_UIManageControls;
 
 namespace ImproveGame.Common.Systems
 {
@@ -57,7 +56,7 @@ namespace ImproveGame.Common.Systems
         {
             {"Mouse1", "鼠标左键" }, {"Mouse2", "鼠标右键" }, {"Mouse3", "鼠标中键" },
             {"Mouse4", "鼠标侧键1" }, {"Mouse5", "鼠标侧键2" }, {"Space", "空格" },
-            {"Escape", "Esc键" }, { "Back", "退格" }, {"Enter", "回车" }, 
+            {"Escape", "Esc键" }, { "Back", "退格" }, {"Enter", "回车" },
             {"LeftShift", "左Shift" }, {"LeftControl", "左Ctrl" }, {"LeftAlt", "左Alt" },
             {"RightShift", "右Shift" }, {"RightControl", "右Ctrl" }, {"RightAlt", "右Alt" },
             {"VolumeUp", "提高音量"},{"VolumeDown", "减少音量"},
@@ -147,7 +146,8 @@ namespace ImproveGame.Common.Systems
                     VAlign = 0.5f,
                     HAlign = 0.5f
                 };
-                button.OnMouseDown += (_, _) => {
+                button.OnLeftMouseDown += (_, _) =>
+                {
                     UseKeybindTranslation = !UseKeybindTranslation;
                     AdditionalConfig.Save();
                     SoundEngine.PlaySound(SoundID.MenuTick);
@@ -171,7 +171,8 @@ namespace ImproveGame.Common.Systems
                 keybindName = GetText("ModName") + ": " + keybindName;
                 return Language.GetTextValue(keybindName);
             }
-            if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans" && ZhTranslationSupports.TryGetValue(keybindName, out string translatedString)) {
+            if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans" && ZhTranslationSupports.TryGetValue(keybindName, out string translatedString))
+            {
                 return translatedString;
             }
             return orig.Invoke(item);

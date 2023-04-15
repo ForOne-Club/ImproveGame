@@ -51,16 +51,16 @@ namespace ImproveGame.Interface.SUIElements
         }
 
         /// <summary> 为了使该类的子类可以越过该类的 RightMouseDown 而直接调用 UIElement 的 RightMouseDown </summary>
-        protected void CallBaseLeftMouseDown(UIMouseEvent evt) => base.MouseDown(evt);
+        protected void CallBaseLeftMouseDown(UIMouseEvent evt) => base.LeftMouseDown(evt);
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
             if (!Interactable)
                 return;
 
             SetCursorOverride();
             MouseClickSlot();
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
         }
 
         /// <summary> 为了使该类的子类可以越过该类的 RightMouseDown 而直接调用 UIElement 的 RightMouseDown </summary>

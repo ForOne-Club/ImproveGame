@@ -190,9 +190,9 @@ public abstract class ToolButtonBase : View
 
     public abstract void OnTakeEffect();
 
-    public override void MouseDown(UIMouseEvent evt)
+    public override void LeftMouseDown(UIMouseEvent evt)
     {
-        base.MouseDown(evt);
+        base.LeftMouseDown(evt);
         if (ExtremeStorageGUI.CurrentGroup is ItemGroup.Setting)
             return;
         OnTakeEffect();

@@ -12,7 +12,7 @@ internal class GrabAndPickup : GlobalItem
     public override void Load()
     {
         // 抓取速度
-        On.Terraria.Player.PullItem_Common += (orig, player, item, xPullSpeed) =>
+        Terraria.On_Player.PullItem_Common += (orig, player, item, xPullSpeed) =>
         {
             if (Config.GrabDistance == 0)
             {
@@ -26,7 +26,7 @@ internal class GrabAndPickup : GlobalItem
         };
 
         // 拾取的物品溢出背包后
-        On.Terraria.Player.PickupItem += (orig, player, playerIndex, worldItemArrayIndex, itemToPickUp) =>
+        Terraria.On_Player.PickupItem += (orig, player, playerIndex, worldItemArrayIndex, itemToPickUp) =>
         {
             itemToPickUp = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
 

@@ -13,15 +13,15 @@ namespace ImproveGame.Common.Players
         public bool IsAutofisherOpened => Autofisher is not null;
         public static bool TryGet(Player player, out AutofishPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
 
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld()
         {
             Autofisher = null;
         }
 
-        public override void PlayerDisconnect(Player player)
+        public override void PlayerDisconnect()
         {
             // 这是其他客户端和服务器都执行的
-            if (TryGet(player, out var modPlayer))
+            if (TryGet(Player, out var modPlayer))
             {
                 modPlayer.SetAutofisher(null, false);
             }

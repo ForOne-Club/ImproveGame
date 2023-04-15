@@ -55,9 +55,9 @@ namespace ImproveGame.Common.Systems
         public override void Load()
         {
             // 配方列表
-            IL.Terraria.Recipe.FindRecipes += AllowBigBagAsMeterial;
+            Terraria.IL_Recipe.FindRecipes += AllowBigBagAsMeterial;
             // 物品消耗
-            IL.Terraria.Recipe.Create += ConsumeBigBagMaterial;
+            Terraria.IL_Recipe.Create += ConsumeBigBagMaterial;
         }
 
         private void AllowBigBagAsMeterial(ILContext il)

@@ -41,7 +41,7 @@ namespace ImproveGame.Common.Utils.Extensions
                 return;
             }
 
-            player.QuickSpawnClonedItem(source, item, item.stack);
+            player.QuickSpawnItem(source, item, item.stack);
         }
     }
 }

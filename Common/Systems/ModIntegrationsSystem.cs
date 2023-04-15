@@ -71,7 +71,7 @@ namespace ImproveGame.Common.Systems
                 return;
             }
 
-            HookEndpointManager.Add(detourMethod, (Func<object, Player, Recipe, int, int, int> orig,
+            MonoModHooks.Add(detourMethod, (Func<object, Player, Recipe, int, int, int> orig,
                 object ingredientSlot, Player player, Recipe recipe, int type, int stopCountingAt) =>
             {
                 int count = orig(ingredientSlot, player, recipe, type, stopCountingAt);

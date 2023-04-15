@@ -19,7 +19,7 @@ public class ExtremeStorageCore : ModSystem
         ToolButtonBase.ToolIcons = GetTexture("UI/ExtremeStorage/ToolIcons");
 
         // TODO: 实际的多人测试
-        IL.Terraria.Chest.PutItemInNearbyChest += il =>
+        Terraria.IL_Chest.PutItemInNearbyChest += il =>
         {
             var c = new ILCursor(il);
             

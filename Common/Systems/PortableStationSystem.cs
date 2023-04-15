@@ -16,7 +16,7 @@ namespace ImproveGame.Common.Systems
         public override void Load()
         {
             // 便携制作站
-            IL.Terraria.Player.AdjTiles += AddPortableStations;
+            Terraria.IL_Player.AdjTiles += AddPortableStations;
         }
 
         private void AddPortableStations(ILContext il)

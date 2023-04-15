@@ -92,7 +92,7 @@ namespace ImproveGame.Interface.GUI
                 Height = { Pixels = 0f, Precent = 1f },
                 Rounded = new Vector4(0f, 10f, 0f, 0f)
             };
-            Cross.OnMouseDown += (_, _) => Close();
+            Cross.OnLeftMouseDown += (_, _) => Close();
             Cross.Join(TitlePanel);
 
             ButtonPanel = new View
@@ -144,7 +144,7 @@ namespace ImproveGame.Interface.GUI
                 Spacing = buttonSpacing,
                 First = true
             };
-            QuickButton.OnMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
+            QuickButton.OnLeftMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
             QuickButton.Join(ButtonPanel);
 
             PutButton = new SUIButton(GetTexture("UI/Put").Value, Lang.inter[30].Value)
@@ -152,7 +152,7 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Horizontal,
                 Spacing = buttonSpacing
             };
-            PutButton.OnMouseDown += (_, _) => PutAll();
+            PutButton.OnLeftMouseDown += (_, _) => PutAll();
             PutButton.Join(ButtonPanel);
 
             ReplenishButton = new SUIButton(GetTexture("UI/Put").Value, Lang.inter[31].Value)
@@ -160,7 +160,7 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Horizontal,
                 Spacing = buttonSpacing
             };
-            ReplenishButton.OnMouseDown += (_, _) => Replenish();
+            ReplenishButton.OnLeftMouseDown += (_, _) => Replenish();
             ReplenishButton.Join(ButtonPanel);
 
             SortButton = new SUIButton(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
@@ -168,7 +168,7 @@ namespace ImproveGame.Interface.GUI
                 Relative = RelativeMode.Horizontal,
                 Spacing = buttonSpacing
             };
-            SortButton.OnMouseDown += (_, _) => Sort();
+            SortButton.OnLeftMouseDown += (_, _) => Sort();
             SortButton.Join(ButtonPanel);
 
             // Inventory 滚动视图

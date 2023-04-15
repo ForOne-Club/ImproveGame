@@ -14,9 +14,9 @@ public class AddChestButton : TimerView
         this.SetSize(showSize.X, 50f);
     }
 
-    public override void Click(UIMouseEvent evt)
+    public override void LeftClick(UIMouseEvent evt)
     {
-        base.Click(evt);
+        base.LeftClick(evt);
         ChestSelection.IsSelecting = !ChestSelection.IsSelecting;
     }
 

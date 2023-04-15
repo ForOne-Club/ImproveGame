@@ -177,7 +177,7 @@ public class PrefixTab : SUIPanel
             Left = new StyleDimension(-30f, 1f)
         };
         reforgeButton.SetSize(24f, 24f);
-        reforgeButton.OnClick += (_, _) => Reforge(reforgeButton);
+        reforgeButton.OnLeftClick += (_, _) => Reforge(reforgeButton);
         reforgeButton.OnUpdate += _ =>
         {
             string str = Lang.inter[19].Value;
@@ -211,7 +211,7 @@ public class PrefixTab : SUIPanel
         if (!ItemLoader.ReforgePrice(Item, ref Price, ref canApplyDiscount))
             return;
 
-        if (canApplyDiscount && Main.LocalPlayer.discount)
+        if (canApplyDiscount && Main.LocalPlayer.discountAvailable)
             Price = (int)(Price * 0.8);
 
         Price = (int)(Price * Main.LocalPlayer.currentShoppingSettings.PriceAdjustment);
@@ -230,7 +230,7 @@ public class PrefixTab : SUIPanel
         int stack = Item.stack;  //#StackablePrefixWeapons: keep the stack, (i.e. light discs)
         Item r = new();
         r.netDefaults(Item.netID);
-        r = r.CloneWithModdedDataFrom(Item);
+        r = r.CloneWithModdedDataFrom(Item)/* tModPorter Note: Removed. Use Clone, ResetPrefix or Refresh */;
         r.Prefix(PrefixId);
         Item = r.Clone();
         Item.position = Main.LocalPlayer.Center;

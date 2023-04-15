@@ -49,9 +49,9 @@ namespace ImproveGame.Interface.ExtremeStorage
             }
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
             State = !State;
             SoundEngine.PlaySound(SoundID.MenuTick);
         }

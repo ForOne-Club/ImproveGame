@@ -9,7 +9,7 @@
         internal static bool[] Registered = new bool[Main.maxPlayers];
 
         public override void Load() {
-            On.Terraria.Netplay.StartServer += SendPassword;
+            Terraria.On_Netplay.StartServer += SendPassword;
         }
 
         // 关掉掉线玩家的认证
@@ -22,7 +22,7 @@
             }
         }
         
-        private void SendPassword(On.Terraria.Netplay.orig_StartServer orig) {
+        private void SendPassword(Terraria.On_Netplay.orig_StartServer orig) {
             orig.Invoke();
 
             if (!Config.OnlyHostByPassword)

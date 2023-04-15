@@ -1,5 +1,6 @@
 ﻿using MonoMod.RuntimeDetour.HookGen;
 using Terraria.GameContent.Bestiary;
+using Terraria.ModLoader;
 
 namespace ImproveGame.Common.Systems
 {
@@ -20,7 +21,7 @@ namespace ImproveGame.Common.Systems
 
             // 实时挂On
             foreach (var t in providers)
-                HookEndpointManager.Add(t.GetMethod("GetEntryUICollectionInfo"),
+                MonoModHooks.Add(t.GetMethod("GetEntryUICollectionInfo"),
                     (GetEntryUICollectionInfoDelegate orig, IBestiaryUICollectionInfoProvider provider) =>
                     {
                         var info = orig.Invoke(provider);

@@ -19,7 +19,7 @@ public class ImprovePlayer : ModPlayer
 
     public bool ShouldUpdateTeam;
 
-    public override void OnEnterWorld(Player player)
+    public override void OnEnterWorld()
     {
         if (Config.TeamAutoJoin && Main.netMode is NetmodeID.MultiplayerClient)
         {

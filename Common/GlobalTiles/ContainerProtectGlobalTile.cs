@@ -12,12 +12,12 @@ namespace ImproveGame.Common.GlobalTiles
 
         public override void Load()
         {
-            On.Terraria.WorldGen.CanPoundTile += ModifyCanPoundTile;
-            On.Terraria.WorldGen.IsAContainer += ModifyIsAContainer;
-            On.Terraria.Projectile.CanExplodeTile += ModifyCanExplode;
+            Terraria.On_WorldGen.CanPoundTile += ModifyCanPoundTile;
+            Terraria.On_WorldGen.IsAContainer += ModifyIsAContainer;
+            Terraria.On_Projectile.CanExplodeTile += ModifyCanExplode;
         }
 
-        private bool ModifyCanExplode(On.Terraria.Projectile.orig_CanExplodeTile orig, Projectile self, int x, int y)
+        private bool ModifyCanExplode(Terraria.On_Projectile.orig_CanExplodeTile orig, Projectile self, int x, int y)
         {
             int tileType = Main.tile[x, y].TileType;
             var modTile = ModContent.GetModTile(tileType);
@@ -31,7 +31,7 @@ namespace ImproveGame.Common.GlobalTiles
             return orig.Invoke(self, x, y);
         }
 
-        private bool ModifyCanPoundTile(On.Terraria.WorldGen.orig_CanPoundTile orig, int x, int y)
+        private bool ModifyCanPoundTile(Terraria.On_WorldGen.orig_CanPoundTile orig, int x, int y)
         {
             int tileType = Main.tile[x, y - 1].TileType;
             var modTile = ModContent.GetModTile(tileType);
@@ -45,7 +45,7 @@ namespace ImproveGame.Common.GlobalTiles
             return orig.Invoke(x, y);
         }
 
-        private bool ModifyIsAContainer(On.Terraria.WorldGen.orig_IsAContainer orig, Tile t)
+        private bool ModifyIsAContainer(Terraria.On_WorldGen.orig_IsAContainer orig, Tile t)
         {
             var modTile = ModContent.GetModTile(t.TileType);
             if (modTile is not null && modTile is ITileContainer)

@@ -173,7 +173,7 @@ namespace ImproveGame.Interface
                             switch (i)
                             {
                                 case 0:
-                                    target?.MouseDown(new UIMouseEvent(target, _mouse));
+                                    target?.LeftMouseDown(new UIMouseEvent(target, _mouse));
                                     break;
                                 case 1:
                                     target?.RightMouseDown(new UIMouseEvent(target, _mouse));
@@ -198,7 +198,7 @@ namespace ImproveGame.Interface
                                     switch (i)
                                     {
                                         case 0:
-                                            _last[i]?.Click(new UIMouseEvent(target, _mouse));
+                                            _last[i]?.LeftClick(new UIMouseEvent(target, _mouse));
                                             break;
                                         case 1:
                                             _last[i]?.RightClick(new UIMouseEvent(target, _mouse));
@@ -213,7 +213,7 @@ namespace ImproveGame.Interface
                                 switch (i)
                                 {
                                     case 0:
-                                        _last[i]?.MouseUp(new UIMouseEvent(target, _mouse));
+                                        _last[i]?.LeftMouseUp(new UIMouseEvent(target, _mouse));
                                         break;
                                     case 1:
                                         _last[i]?.RightMouseUp(new UIMouseEvent(target, _mouse));

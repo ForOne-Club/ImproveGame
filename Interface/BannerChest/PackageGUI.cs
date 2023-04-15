@@ -74,7 +74,7 @@ namespace ImproveGame.Interface.BannerChest
                 Rounded = new Vector4(0f, 10f, 0f, 0f)
             };
             _cross.Height.Set(0f, 1f);
-            _cross.OnMouseDown += (_, _) => Close();
+            _cross.OnLeftMouseDown += (_, _) => Close();
             _cross.Join(_titlePanel);
 
             _autoStorageSwitch = new SUISwitch(() => Package.AutoStorage, state => Package.AutoStorage = state,
@@ -89,7 +89,7 @@ namespace ImproveGame.Interface.BannerChest
             _grid = new PackageGrid();
             _grid.Top.Pixels = _autoStorageSwitch.Bottom() + 8f;
             _grid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(_grid.Width.Pixels, _grid.Height.Pixels);
-            _grid.OnMouseDown += (_, _) =>
+            _grid.OnLeftMouseDown += (_, _) =>
             {
                 if (Main.mouseItem.IsAir)
                     return;

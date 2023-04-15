@@ -6,7 +6,7 @@ namespace ImproveGame.Content.Items
     {
         public static readonly int RobotType = ModContent.ProjectileType<WallRobot>();
 
-        public override void SetStaticDefaults() => SacrificeTotal = 1;
+        public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.WallPlace;
 

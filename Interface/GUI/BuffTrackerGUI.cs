@@ -43,7 +43,7 @@ public class BuffTrackerGUI : ViewBody
         };
         closeButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Border"));
         closeButton.SetVisibility(1f, 1f);
-        closeButton.OnMouseDown += (_, _) => Close();
+        closeButton.OnLeftMouseDown += (_, _) => Close();
         basePanel.Append(closeButton);
 
         UIHorizontalSeparator separator = new UIHorizontalSeparator()
@@ -224,7 +224,7 @@ public class BuffTrackerGUI : ViewBody
             HAlign = 0f
         };
 
-        uIImageButton.OnClick += Click_SearchArea;
+        uIImageButton.OnLeftClick += Click_SearchArea;
         uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
         uIImageButton.SetVisibility(1f, 1f);
         searchArea.Append(uIImageButton);
@@ -247,7 +247,7 @@ public class BuffTrackerGUI : ViewBody
             IgnoresMouseInteraction = true
         };
 
-        uIPanel.OnClick += Click_SearchArea;
+        uIPanel.OnLeftClick += Click_SearchArea;
         uISearchBar.OnContentsChanged += OnSearchContentsChanged;
         uIPanel.Append(uISearchBar);
         uISearchBar.OnStartTakingInput += OnStartTakingInput;
@@ -261,7 +261,7 @@ public class BuffTrackerGUI : ViewBody
         };
 
         uIImageButton2.OnMouseOver += SearchCancelButton_OnMouseOver;
-        uIImageButton2.OnClick += SearchCancelButton_OnClick;
+        uIImageButton2.OnLeftClick += SearchCancelButton_OnClick;
         uIPanel.Append(uIImageButton2);
     }
 
@@ -313,9 +313,9 @@ public class BuffTrackerGUI : ViewBody
         _searchBoxPanel.BorderColor = new Color(35, 40, 83);
     }
 
-    public override void Click(UIMouseEvent evt)
+    public override void LeftClick(UIMouseEvent evt)
     {
-        base.Click(evt);
+        base.LeftClick(evt);
         AttemptStoppingUsingSearchbar(evt);
     }
 
@@ -390,7 +390,7 @@ public class BuffButton : UIElement
         base.MouseOver(evt);
     }
 
-    public override void MouseDown(UIMouseEvent evt)
+    public override void LeftMouseDown(UIMouseEvent evt)
     {
         SoundEngine.PlaySound(SoundID.MenuTick);
         InfBuffPlayer.Get(Main.LocalPlayer).ToggleInfBuff(BuffId);

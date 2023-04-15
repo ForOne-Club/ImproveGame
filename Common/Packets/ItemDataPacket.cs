@@ -78,7 +78,7 @@ public class InventoryItemDataPacket : NetModule
 
         if (spawnItemIfWasFilled && !player.inventory[_slot].IsAir && !_item.IsAir)
         {
-            player.QuickSpawnClonedItem(new EntitySource_Sync("SyncFromServer"), _item, _item.stack);
+            player.QuickSpawnItem(new EntitySource_Sync("SyncFromServer"), _item, _item.stack);
         }
         
         if (setFavorite)

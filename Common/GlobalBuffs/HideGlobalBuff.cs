@@ -23,8 +23,8 @@ namespace ImproveGame.Common.GlobalBuffs
         public override void Load() {
             UseRegularMethod_NoInventory = false;
             UseRegularMethod_Inventory = false;
-            IL.Terraria.Main.DrawInventory += TweakDrawInventoryBuffs;
-            IL.Terraria.Main.DrawInterface_Resources_Buffs += TweakDrawInterfaceBuffs;
+            Terraria.IL_Main.DrawInventory += TweakDrawInventoryBuffs;
+            Terraria.IL_Main.DrawInterface_Resources_Buffs += TweakDrawInterfaceBuffs;
         }
 
 
@@ -244,7 +244,7 @@ namespace ImproveGame.Common.GlobalBuffs
         /// </summary>
         internal static int HidedBuffCountThisFrame;
 
-        public override void ModifyBuffTip(int type, ref string tip, ref int rare) {
+        public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare) {
             if (TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _))
                 return;
 

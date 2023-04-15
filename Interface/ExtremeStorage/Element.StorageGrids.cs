@@ -47,7 +47,7 @@ public class StorageGrids : ModItemGrid
         Width.Pixels = ShowSize.X + Scrollbar.Width.Pixels + 11f;
         Height = new StyleDimension(0f, 1f);
 
-        OnMouseDown += (_, _) => AttemptStoppingUsingSearchbar();
+        OnLeftMouseDown += (_, _) => AttemptStoppingUsingSearchbar();
     }
 
     public override void Update(GameTime gameTime)

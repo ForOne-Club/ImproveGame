@@ -205,7 +205,7 @@ namespace ImproveGame.Content.Items
             Item.height = 42;
         }
 
-        public override void SetStaticDefaults() => SacrificeTotal = 3;
+        public override void SetStaticDefaults() => Item.ResearchUnlockCount = 3;
 
         public override void LoadData(TagCompound tag)
         {

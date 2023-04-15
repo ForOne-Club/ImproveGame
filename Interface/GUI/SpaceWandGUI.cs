@@ -38,7 +38,7 @@ namespace ImproveGame.Interface.GUI
                     text = () => GetText($"SpaceWandGUI.{placeType}"),
                     Selected = () => SpaceWand.PlaceType == placeType
                 });
-                RoundButtons[i].OnMouseDown += (_, _) =>
+                RoundButtons[i].OnLeftMouseDown += (_, _) =>
                 {
                     SoundEngine.PlaySound(SoundID.MenuTick);
                     SpaceWand.PlaceType = placeType;

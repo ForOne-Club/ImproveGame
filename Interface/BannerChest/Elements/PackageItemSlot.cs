@@ -41,10 +41,10 @@ namespace ImproveGame.Interface.BannerChest.Elements
             BorderColor = UIColor.ItemSlotBorder;
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
             bool mouseItemIsAir = Main.mouseItem.IsAir;
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
             if (Item.IsAir || !mouseItemIsAir)
                 return;
 

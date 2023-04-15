@@ -71,7 +71,7 @@ namespace ImproveGame.Interface.PlayerInfo
                 BeginBgColor = UIColor.TitleBg2 * 0.75f,
                 EndBgColor = UIColor.TitleBg2,
             };
-            _titleButton.OnMouseDown += (_, _) =>
+            _titleButton.OnLeftMouseDown += (_, _) =>
             {
                 _expanded = !_expanded;
                 _cardPanel.OverflowHidden = true;

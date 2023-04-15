@@ -54,11 +54,11 @@ public class SUISwitch : View
         base.Update(gameTime);
     }
 
-    public override void MouseDown(UIMouseEvent evt)
+    public override void LeftMouseDown(UIMouseEvent evt)
     {
         State = !State;
         SoundEngine.PlaySound(SoundID.MenuTick);
-        base.MouseDown(evt);
+        base.LeftMouseDown(evt);
     }
 
     public override void DrawSelf(SpriteBatch sb)

@@ -383,7 +383,7 @@ public class ToolOperation : NetModule
     public override void Load()
     {
         // 排序设置物品栏颜色
-        On.Terraria.UI.ItemSlot.SetGlow += (orig, index, hue, isChest) =>
+        Terraria.UI.On_ItemSlot.SetGlow += (orig, index, hue, isChest) =>
         {
             if (!_customRunning)
             {

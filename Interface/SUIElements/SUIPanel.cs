@@ -50,9 +50,9 @@ namespace ImproveGame.Interface.SUIElements
             Rounded = rounded;
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
             // 可拖动界面
             View view = evt.Target as View;
             // 当点击的是子元素不进行移动
@@ -67,9 +67,9 @@ namespace ImproveGame.Interface.SUIElements
             Dragging = true;
         }
 
-        public override void MouseUp(UIMouseEvent evt)
+        public override void LeftMouseUp(UIMouseEvent evt)
         {
-            base.MouseUp(evt);
+            base.LeftMouseUp(evt);
             Dragging = false;
         }
 

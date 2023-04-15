@@ -43,7 +43,7 @@ namespace ImproveGame.Interface.GUI
                 Width = StyleDimension.FromPixels(32f),
                 Left = new StyleDimension(-2f, 0f)
             });
-            CloseButton.OnMouseDown += (_, _) => Close();
+            CloseButton.OnLeftMouseDown += (_, _) => Close();
             
             UIList = new UIList
             {
@@ -87,7 +87,7 @@ namespace ImproveGame.Interface.GUI
 				HAlign = 0f
 			};
 
-			uIImageButton.OnClick += Click_SearchArea;
+			uIImageButton.OnLeftClick += Click_SearchArea;
 			uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
 			uIImageButton.SetVisibility(1f, 1f);
 			searchArea.Append(uIImageButton);
@@ -108,7 +108,7 @@ namespace ImproveGame.Interface.GUI
 				IgnoresMouseInteraction = true
 			};
 
-			uIPanel.OnClick += Click_SearchArea;
+			uIPanel.OnLeftClick += Click_SearchArea;
 			uISearchBar.OnContentsChanged += OnSearchContentsChanged;
 			uIPanel.Append(uISearchBar);
 			uISearchBar.OnStartTakingInput += OnStartTakingInput;
@@ -121,7 +121,7 @@ namespace ImproveGame.Interface.GUI
 			};
 
 			uIImageButton2.OnMouseOver += SearchCancelButton_OnMouseOver;
-			uIImageButton2.OnClick += SearchCancelButton_OnClick;
+			uIImageButton2.OnLeftClick += SearchCancelButton_OnClick;
 			uIPanel.Append(uIImageButton2);
 		}
 
@@ -177,8 +177,8 @@ namespace ImproveGame.Interface.GUI
                 Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
         
-        public override void Click(UIMouseEvent evt) {
-            base.Click(evt);
+        public override void LeftClick(UIMouseEvent evt) {
+            base.LeftClick(evt);
             AttemptStoppingUsingSearchbar(evt);
         }
 

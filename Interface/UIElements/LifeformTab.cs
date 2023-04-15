@@ -39,9 +39,9 @@ namespace ImproveGame.Interface.UIElements
                 Main.instance.MouseText(Language.GetTextValue($"LegacyInterface.{(hide ? "60" : "59")}"));
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
             SoundEngine.PlaySound(SoundID.MenuTick);
             LifeAnalyzeCore.Blacklist[_npcId] = !LifeAnalyzeCore.Blacklist.GetValueOrDefault(_npcId);
         }

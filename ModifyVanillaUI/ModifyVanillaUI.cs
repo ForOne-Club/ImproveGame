@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI.States;
+using Terraria.ModLoader;
 
 namespace ImproveGame.ModifyOriginalUI
 {
@@ -27,7 +28,7 @@ namespace ImproveGame.ModifyOriginalUI
             _loaded = true;
 
             // 让所有 UI 都立刻绘制
-            On.Terraria.UI.UIElement.OnInitialize += (orig, self) =>
+            Terraria.UI.On_UIElement.OnInitialize += (orig, self) =>
             {
                 orig.Invoke(self);
                 self.UseImmediateMode = true;
@@ -44,40 +45,40 @@ namespace ImproveGame.ModifyOriginalUI
             };*/
 
             // 生物图鉴，生物介绍。设置 PaddingTop = 0
-            On.Terraria.GameContent.Bestiary.FlavorTextBestiaryInfoElement.ProvideUIElement += FlavorTextBestiaryInfoElement_ProvideUIElement;
+            Terraria.GameContent.Bestiary.On_FlavorTextBestiaryInfoElement.ProvideUIElement += FlavorTextBestiaryInfoElement_ProvideUIElement;
 
             // 获取方法
             _uITextPaenl_DrawText = typeof(UITextPanel<string>).GetMethod("DrawText", BindingFlags.Instance | BindingFlags.NonPublic);
             _uIWorkshopHub_MakeFancyButtonInner = typeof(UIWorkshopHub).GetMethod("MakeFancyButtonInner", BindingFlags.Instance | BindingFlags.NonPublic);
 
             // 原版 WorkShop Hub 提示框
-            On.Terraria.GameContent.UI.States.UIWorkshopHub.AddDescriptionPanel += UIWorkshopHub_AddDescriptionPanel;
+            Terraria.GameContent.UI.States.On_UIWorkshopHub.AddDescriptionPanel += UIWorkshopHub_AddDescriptionPanel;
 
             // 原版 WorkShop Hub 菜单按钮
             if (_uIWorkshopHub_MakeFancyButtonInner != null)
             {
-                HookEndpointManager.Add(_uIWorkshopHub_MakeFancyButtonInner, MakeFancyButtonInner);
+                MonoModHooks.Add(_uIWorkshopHub_MakeFancyButtonInner, MakeFancyButtonInner);
             }
 
             // 原版 UISlicedImage
-            On.Terraria.GameContent.UI.Elements.UISlicedImage.DrawSelf += UISlicedImage_DrawSelf;
+            Terraria.GameContent.UI.Elements.On_UISlicedImage.DrawSelf += UISlicedImage_DrawSelf;
 
             // 原版 Text
-            On.Terraria.GameContent.UI.Elements.UIText.DrawSelf += UIText_DrawSelf;
+            Terraria.GameContent.UI.Elements.On_UIText.DrawSelf += UIText_DrawSelf;
             // 原版 TextPanel
             if (_uITextPaenl_DrawText != null)
             {
-                HookEndpointManager.Add(_uITextPaenl_DrawText, UITextPanel_DrawSelf);
+                MonoModHooks.Add(_uITextPaenl_DrawText, UITextPanel_DrawSelf);
             }
             // 原版 Panel
-            On.Terraria.GameContent.UI.Elements.UIPanel.DrawSelf += UIPanel_DrawSelf;
+            Terraria.GameContent.UI.Elements.On_UIPanel.DrawSelf += UIPanel_DrawSelf;
             // 原版 ScrollBar
-            On.Terraria.GameContent.UI.Elements.UIScrollbar.DrawSelf += UIScrollbar_DrawSelf;
+            Terraria.GameContent.UI.Elements.On_UIScrollbar.DrawSelf += UIScrollbar_DrawSelf;
             // 替换游戏内原来的 Utils.DrawInvBG
-            On.Terraria.Utils.DrawInvBG_SpriteBatch_int_int_int_int_Color += Utils_DrawInvBG;
+            Terraria.On_Utils.DrawInvBG_SpriteBatch_int_int_int_int_Color += Utils_DrawInvBG;
         }
 
-        private UIElement FlavorTextBestiaryInfoElement_ProvideUIElement(On.Terraria.GameContent.Bestiary.FlavorTextBestiaryInfoElement.orig_ProvideUIElement orig, FlavorTextBestiaryInfoElement self, BestiaryUICollectionInfo info)
+        private UIElement FlavorTextBestiaryInfoElement_ProvideUIElement(Terraria.GameContent.Bestiary.On_FlavorTextBestiaryInfoElement.orig_ProvideUIElement orig, FlavorTextBestiaryInfoElement self, BestiaryUICollectionInfo info)
         {
             UIElement uie = orig.Invoke(self, info);
             uie.PaddingTop = 0f;
@@ -124,7 +125,7 @@ namespace ImproveGame.ModifyOriginalUI
 
         private static Texture2D uiSlicedImage = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelHighlight").Value;
 
-        private void UISlicedImage_DrawSelf(On.Terraria.GameContent.UI.Elements.UISlicedImage.orig_DrawSelf orig, UISlicedImage self, SpriteBatch spriteBatch)
+        private void UISlicedImage_DrawSelf(Terraria.GameContent.UI.Elements.On_UISlicedImage.orig_DrawSelf orig, UISlicedImage self, SpriteBatch spriteBatch)
         {
             if (self._texture.Value == uiSlicedImage)
             {
@@ -146,7 +147,7 @@ namespace ImproveGame.ModifyOriginalUI
             orig.Invoke(self, spriteBatch);
         }
 
-        private void UIWorkshopHub_AddDescriptionPanel(On.Terraria.GameContent.UI.States.UIWorkshopHub.orig_AddDescriptionPanel orig, UIWorkshopHub self, UIElement container, float accumulatedHeight, float height, string tagGroup)
+        private void UIWorkshopHub_AddDescriptionPanel(Terraria.GameContent.UI.States.On_UIWorkshopHub.orig_AddDescriptionPanel orig, UIWorkshopHub self, UIElement container, float accumulatedHeight, float height, string tagGroup)
         {
             var uISlicedImage = new UISlicedImage(Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanelHighlight"))
             {
@@ -206,7 +207,7 @@ namespace ImproveGame.ModifyOriginalUI
             }
         }
 
-        private void UIText_DrawSelf(On.Terraria.GameContent.UI.Elements.UIText.orig_DrawSelf orig, UIText self, SpriteBatch sb)
+        private void UIText_DrawSelf(Terraria.GameContent.UI.Elements.On_UIText.orig_DrawSelf orig, UIText self, SpriteBatch sb)
         {
             self.VerifyTextState();
             Vector2 innerPos = self.GetInnerDimensions().Position();
@@ -231,7 +232,7 @@ namespace ImproveGame.ModifyOriginalUI
         }
 
         private void Utils_DrawInvBG(
-            On.Terraria.Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y,
+            Terraria.On_Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y,
             int w, int h, Color color)
         {
             if (color == default)
@@ -264,7 +265,7 @@ namespace ImproveGame.ModifyOriginalUI
         }
 
         // 原版滚动条绘制，在 DrawBar 返回空阻止原版滚动条绘制。然后通过反射获取滚动条位置进行绘制。
-        private void UIScrollbar_DrawSelf(On.Terraria.GameContent.UI.Elements.UIScrollbar.orig_DrawSelf orig,
+        private void UIScrollbar_DrawSelf(Terraria.GameContent.UI.Elements.On_UIScrollbar.orig_DrawSelf orig,
             UIScrollbar self, SpriteBatch spriteBatch)
         {
             CalculatedStyle dimensions = self.GetDimensions();
@@ -293,7 +294,7 @@ namespace ImproveGame.ModifyOriginalUI
             SDFRectangle.NoBorder(barPos, barSize, new Vector4(barRounded), new(220, 220, 220));
         }
 
-        private void UIPanel_DrawSelf(On.Terraria.GameContent.UI.Elements.UIPanel.orig_DrawSelf orig, UIPanel self,
+        private void UIPanel_DrawSelf(Terraria.GameContent.UI.Elements.On_UIPanel.orig_DrawSelf orig, UIPanel self,
             SpriteBatch spriteBatch)
         {
             Vector2 pos = self.GetDimensions().Position();

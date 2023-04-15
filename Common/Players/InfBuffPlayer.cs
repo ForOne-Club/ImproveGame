@@ -40,10 +40,10 @@ public class InfBuffPlayer : ModPlayer
 
     public override void Load()
     {
-        On.Terraria.Player.AddBuff += BanBuffs;
+        Terraria.On_Player.AddBuff += BanBuffs;
     }
 
-    public override void OnEnterWorld(Player player)
+    public override void OnEnterWorld()
     {
         SetupItemsList();
     }
@@ -219,7 +219,7 @@ public class InfBuffPlayer : ModPlayer
         InfBuffItemPacket.Get(this).Send(toWho, fromWho);
     }
 
-    private void BanBuffs(On.Terraria.Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet,
+    private void BanBuffs(Terraria.On_Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet,
         bool foodHack)
     {
         if (Main.myPlayer == player.whoAmI && DataPlayer.TryGet(player, out var dataPlayer))

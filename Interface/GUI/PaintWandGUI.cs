@@ -41,9 +41,9 @@ namespace ImproveGame.Interface.GUI
                 }
             };
 
-            RoundButtons[0].OnClick += (_, _) => WandSystem.PaintWandMode = WandSystem.PaintMode.Tile;
-            RoundButtons[1].OnClick += (_, _) => WandSystem.PaintWandMode = WandSystem.PaintMode.Wall;
-            RoundButtons[2].OnClick += (_, _) => WandSystem.PaintWandMode = WandSystem.PaintMode.Remove;
+            RoundButtons[0].OnLeftClick += (_, _) => WandSystem.PaintWandMode = WandSystem.PaintMode.Tile;
+            RoundButtons[1].OnLeftClick += (_, _) => WandSystem.PaintWandMode = WandSystem.PaintMode.Wall;
+            RoundButtons[2].OnLeftClick += (_, _) => WandSystem.PaintWandMode = WandSystem.PaintMode.Remove;
             MainPanel.Append(RoundButtons[0]);
             MainPanel.Append(RoundButtons[1]);
             MainPanel.Append(RoundButtons[2]);

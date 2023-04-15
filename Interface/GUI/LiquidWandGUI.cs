@@ -66,7 +66,7 @@ namespace ImproveGame.Interface.GUI
                 colorNormal);
             waterSlot.Left.Set(slotFirst + xOffst, 0f);
             waterSlot.Top.Set(slotSecond, 0f);
-            waterSlot.OnMouseDown += (_, _) =>
+            waterSlot.OnLeftMouseDown += (_, _) =>
             {
                 if (WandSystem.LiquidMode != LiquidID.Water)
                 {
@@ -81,7 +81,7 @@ namespace ImproveGame.Interface.GUI
                 colorNormal);
             lavaSlot.Left.Set(slotSecond + xOffst, 0f);
             lavaSlot.Top.Set(slotSecond, 0f);
-            lavaSlot.OnMouseDown += (_, _) =>
+            lavaSlot.OnLeftMouseDown += (_, _) =>
             {
                 if (WandSystem.LiquidMode != LiquidID.Lava)
                 {
@@ -95,7 +95,7 @@ namespace ImproveGame.Interface.GUI
             honeySlot = new(LiquidID.Honey, -1, -1, colorHover, colorNormal);
             honeySlot.Left.Set(slotThird + xOffst, 0f);
             honeySlot.Top.Set(slotSecond, 0f);
-            honeySlot.OnMouseDown += (_, _) =>
+            honeySlot.OnLeftMouseDown += (_, _) =>
             {
                 if (WandSystem.LiquidMode != LiquidID.Honey)
                 {
@@ -125,7 +125,7 @@ namespace ImproveGame.Interface.GUI
             modeButton.Top.Set(slotFirst, 0f);
             modeButton.Width.Set(166f, 0f);
             modeButton.Height.Set(42f, 0f);
-            modeButton.OnMouseDown += (_, _) =>
+            modeButton.OnLeftMouseDown += (_, _) =>
             {
                 WandSystem.ChangeAbsorptionMode();
                 SetIconTexture();

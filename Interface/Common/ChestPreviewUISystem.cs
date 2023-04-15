@@ -16,10 +16,10 @@ public class ChestPreviewUISystem : ModSystem
 
     public override void Load()
     {
-        On.Terraria.Player.TileInteractionsMouseOver += ChestDisplayMouseOver;
+        Terraria.On_Player.TileInteractionsMouseOver += ChestDisplayMouseOver;
     }
 
-    private void ChestDisplayMouseOver(On.Terraria.Player.orig_TileInteractionsMouseOver orig, Player player, int myX,
+    private void ChestDisplayMouseOver(Terraria.On_Player.orig_TileInteractionsMouseOver orig, Player player, int myX,
         int myY)
     {
         orig.Invoke(player, myX, myY);

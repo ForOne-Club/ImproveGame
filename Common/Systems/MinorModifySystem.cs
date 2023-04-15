@@ -1,8 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Players;
 using ImproveGame.Content.Items;
-using ImproveGame.Interface.Common;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
@@ -18,38 +16,38 @@ namespace ImproveGame.Common.Systems
         public override void Load()
         {
             // 死亡是否掉落墓碑
-            On.Terraria.Player.DropTombstone += DisableDropTombstone;
+            On_Player.DropTombstone += DisableDropTombstone;
             // 修改空间法杖显示平台剩余数量
-            IL.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += TweakDrawCountInventory;
+            IL_ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += TweakDrawCountInventory;
             // 伤害波动
-            On.Terraria.Main.DamageVar += DisableDamageVar;
+            On_Main.DamageVar_float_int_float += DisableDamageVar;
             // 使存钱罐中物品生效，如同放入背包一样
-            On.Terraria.Player.VanillaPreUpdateInventory += TweakExtraUpdateInventory;
+            On_Player.UpdateEquips += TweakExtraUpdateInventory;
             // 摇树总是掉落水果
-            IL.Terraria.WorldGen.ShakeTree += TweakShakeTree;
+            IL_WorldGen.ShakeTree += TweakShakeTree;
             // “草药” 生长速度
-            IL.Terraria.WorldGen.GrowAlch += WorldGen_GrowAlch;
+            IL_WorldGen.GrowAlch += WorldGen_GrowAlch;
             // “草药” 绘制的是否是开花图案
-            On.Terraria.GameContent.Drawing.TileDrawing.IsAlchemyPlantHarvestable += TileDrawing_IsAlchemyPlantHarvestable;
+            Terraria.GameContent.Drawing.On_TileDrawing.IsAlchemyPlantHarvestable += TileDrawing_IsAlchemyPlantHarvestable;
             // “草药” 是否可以被 “再生法杖” 收割
-            IL.Terraria.Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
+            IL_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
             // “草药” 是否掉落成熟时候物品
-            // IL.Terraria.WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
-            On.Terraria.WorldGen.IsHarvestableHerbWithSeed += WorldGen_IsHarvestableHerbWithSeed;
+            // IL.WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
+            On_WorldGen.IsHarvestableHerbWithSeed += WorldGen_IsHarvestableHerbWithSeed;
             // 旅商永远不离开
-            On.Terraria.WorldGen.UnspawnTravelNPC += TravelNPCStay;
+            On_WorldGen.UnspawnTravelNPC += TravelNPCStay;
             // 修改旗帜需求
-            On.Terraria.NPC.CountKillForBannersAndDropThem += NPC_CountKillForBannersAndDropThem;
+            On_NPC.CountKillForBannersAndDropThem += NPC_CountKillForBannersAndDropThem;
             // 熔岩史莱姆不生成熔岩
-            IL.Terraria.NPC.VanillaHitEffect_Inner += LavalessLavaSlime;
+            IL_NPC.VanillaHitEffect += LavalessLavaSlime;
             // 死后保存Buff
-            IL.Terraria.Player.UpdateDead += KeepBuffOnUpdateDead;
+            IL_Player.UpdateDead += KeepBuffOnUpdateDead;
             // 禁止腐化蔓延
-            IL.Terraria.WorldGen.UpdateWorld_Inner += DisableBiomeSpread;
+            IL_WorldGen.UpdateWorld_Inner += DisableBiomeSpread;
             // NPC住在腐化
-            IL.Terraria.WorldGen.ScoreRoom += LiveInCorrupt;
+            IL_WorldGen.ScoreRoom += LiveInCorrupt;
             // 移除Social和Favorite提示
-            IL.Terraria.Main.MouseText_DrawItemTooltip_GetLinesInfo += il =>
+            IL_Main.MouseText_DrawItemTooltip_GetLinesInfo += il =>
             {
                 var c = new ILCursor(il);
 
@@ -68,12 +66,12 @@ namespace ImproveGame.Common.Systems
                 }
             };
             // 大背包内弹药可直接被使用
-            On.Terraria.Player.ChooseAmmo += (orig, player, weapon) =>
+            On_Player.ChooseAmmo += (orig, player, weapon) =>
                 orig.Invoke(player, weapon) ??
                 GetAllInventoryItemsList(player, true, true, false)
                     .FirstOrDefault(i => i.stack > 0 && ItemLoader.CanChooseAmmo(weapon, i, player), null);
             // 大背包内弹药在UI的数值显示
-            IL.Terraria.UI.ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += il =>
+            IL_ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += il =>
             {
                 var c = new ILCursor(il);
                 if (!c.TryGotoNext(MoveType.After,
@@ -206,7 +204,7 @@ namespace ImproveGame.Common.Systems
             });
         }
 
-        private void NPC_CountKillForBannersAndDropThem(On.Terraria.NPC.orig_CountKillForBannersAndDropThem orig, NPC npc)
+        private void NPC_CountKillForBannersAndDropThem(Terraria.On_NPC.orig_CountKillForBannersAndDropThem orig, NPC npc)
         {
             int bannerID = Item.NPCtoBanner(npc.BannerID());
             int itemID = Item.BannerToItem(bannerID);
@@ -216,18 +214,18 @@ namespace ImproveGame.Common.Systems
             ItemID.Sets.KillsToBanner[itemID] = originalRequirement;
         }
 
-        private void TravelNPCStay(On.Terraria.WorldGen.orig_UnspawnTravelNPC orig)
+        private void TravelNPCStay(Terraria.On_WorldGen.orig_UnspawnTravelNPC orig)
         {
             if (!Config.TravellingMerchantStay)
                 orig.Invoke();
         }
 
-        private bool TileDrawing_IsAlchemyPlantHarvestable(On.Terraria.GameContent.Drawing.TileDrawing.orig_IsAlchemyPlantHarvestable orig, Terraria.GameContent.Drawing.TileDrawing self, int style)
+        private bool TileDrawing_IsAlchemyPlantHarvestable(Terraria.GameContent.Drawing.On_TileDrawing.orig_IsAlchemyPlantHarvestable orig, Terraria.GameContent.Drawing.TileDrawing self, int style)
         {
             return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(self, style);
         }
 
-        private bool WorldGen_IsHarvestableHerbWithSeed(On.Terraria.WorldGen.orig_IsHarvestableHerbWithSeed orig, int type, int style)
+        private bool WorldGen_IsHarvestableHerbWithSeed(Terraria.On_WorldGen.orig_IsHarvestableHerbWithSeed orig, int type, int style)
         {
             return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style);
         }
@@ -405,9 +403,9 @@ namespace ImproveGame.Common.Systems
         /// <summary>
         /// 使存钱罐中物品如同放在背包
         /// </summary>
-        private void TweakExtraUpdateInventory(On.Terraria.Player.orig_VanillaPreUpdateInventory orig, Player self)
+        private void TweakExtraUpdateInventory(On_Player.orig_UpdateEquips orig, Player self, int i)
         {
-            orig(self);
+            orig(self, i);
 
             if (Main.myPlayer != self.whoAmI)
                 return;
@@ -417,7 +415,10 @@ namespace ImproveGame.Common.Systems
             {
                 if (item.type != ItemID.EncumberingStone)
                 {
-                    self.VanillaUpdateInventory(item);
+                    ItemLoader.UpdateInventory(item, self);
+
+                    self.RefreshInfoAccsFromItemType(item.type);
+                    self.RefreshMechanicalAccsFromItemType(item.type);
                 }
             }
         }
@@ -425,12 +426,12 @@ namespace ImproveGame.Common.Systems
         /// <summary>
         /// 伤害波动
         /// </summary>
-        private int DisableDamageVar(On.Terraria.Main.orig_DamageVar orig, float dmg, float luck)
+        private int DisableDamageVar(On_Main.orig_DamageVar_float_int_float orig, float dmg, int percent, float luck)
         {
             if (Config.BanDamageVar)
                 return (int)Math.Round(dmg);
             else
-                return orig(dmg, luck);
+                return orig(dmg, percent, luck);
         }
 
         /// <summary>
@@ -474,7 +475,8 @@ namespace ImproveGame.Common.Systems
         /// <summary>
         /// 墓碑掉落
         /// </summary>
-        private void DisableDropTombstone(On.Terraria.Player.orig_DropTombstone orig, Player self, int coinsOwned, NetworkText deathText, int hitDirection)
+
+        private void DisableDropTombstone(On_Player.orig_DropTombstone orig, Player self, long coinsOwned, NetworkText deathText, int hitDirection)
         {
             if (!Config.BanTombstone)
             {

@@ -5,7 +5,7 @@ namespace ImproveGame.Content.Items.Placeable
 {
     public class ExtremeStorage : ModItem
     {
-        public override void SetStaticDefaults() => SacrificeTotal = 1;
+        public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.ExtremeStorage;
 

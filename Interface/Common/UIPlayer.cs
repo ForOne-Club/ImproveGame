@@ -13,10 +13,10 @@ namespace ImproveGame.Interface.Common
         internal static Vector2 HugeInventoryUIPosition;
 
         // 函数在玩家进入地图时候调用, 不会在服务器调用, 用来加载 UI, 可以避免一些因 HJson 未加载产生的问题.
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld()
         {
             UISystem uiSystem = UISystem.Instance;
-            DataPlayer dataPlayer = player.GetModPlayer<DataPlayer>();
+            DataPlayer dataPlayer = Player.GetModPlayer<DataPlayer>();
 
             // 玩家信息
             uiSystem.PlayerInfoGUI = new PlayerInfoGUI();

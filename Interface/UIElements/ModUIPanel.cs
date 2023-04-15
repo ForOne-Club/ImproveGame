@@ -22,8 +22,8 @@
         {
             Draggable = draggable;
             Resizeable = resizeable;
-            OnMouseDown += DragStart;
-            OnMouseUp += DragEnd;
+            OnLeftMouseDown += DragStart;
+            OnLeftMouseUp += DragEnd;
             _minResizeWidth = minResizeWidth;
             _minResizeHeight = minResizeHeight;
             ResizeIndicator = GetTexture("UI/Resize");

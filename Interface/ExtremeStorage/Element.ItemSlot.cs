@@ -23,7 +23,7 @@ namespace ImproveGame.Interface.ExtremeStorage
         }
 
         // 覆写父类的方法，以添加多人相关操作
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
             if (!Interactable)
                 return;

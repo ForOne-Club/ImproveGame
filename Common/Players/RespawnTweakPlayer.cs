@@ -4,7 +4,7 @@
     {
         public int respawnFullHPTimer = 0;
 
-        public override void OnRespawn(Player player) {
+        public override void OnRespawn() {
             if (Config.RespawnWithFullHP) {
                 respawnFullHPTimer = 1;
             }

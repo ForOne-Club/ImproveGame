@@ -10,9 +10,9 @@ namespace ImproveGame.Common.Players
         internal float SpawnRateSliderValue = SliderDefaultValue;
         public bool GetShouldDisableSpawns => SpawnRateSliderValue == 0f;
 
-        public override void OnEnterWorld(Player player) {
+        public override void OnEnterWorld() {
             SpawnRateSliderValue = SliderDefaultValue;
-            UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(player.whoAmI);
+            UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Player.whoAmI);
         }
 
         private readonly List<int> BattlerRequiredBuffs = new() {
@@ -44,10 +44,10 @@ namespace ImproveGame.Common.Players
         }
 
         public override void Load() {
-            On.Terraria.NPC.SlimeRainSpawns += TweakSlimeRain;
+            Terraria.On_NPC.SlimeRainSpawns += TweakSlimeRain;
         }
 
-        private void TweakSlimeRain(On.Terraria.NPC.orig_SlimeRainSpawns orig, int plr) {
+        private void TweakSlimeRain(Terraria.On_NPC.orig_SlimeRainSpawns orig, int plr) {
             if (!Main.player[plr].TryGetModPlayer<BattlerPlayer>(out var battlerPlayer) || battlerPlayer.GetShouldDisableSpawns) {
                 orig.Invoke(plr);
                 return;

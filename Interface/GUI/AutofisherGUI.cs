@@ -141,7 +141,7 @@ namespace ImproveGame.Interface.GUI
             relocateButton.Top.Set(0f, 0f);
             relocateButton.Width.Set(46f, 0f);
             relocateButton.Height.Set(46f, 0f);
-            relocateButton.OnMouseDown += (_, _) => ToggleSelectPool();
+            relocateButton.OnLeftMouseDown += (_, _) => ToggleSelectPool();
             basePanel.Append(relocateButton);
 
             float filtersX = panelLeft + panelWidth + 10f;
@@ -469,7 +469,7 @@ namespace ImproveGame.Interface.GUI
             this.SetSize(TextureAssets.Item[itemType].Size());
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
             if (AutofishPlayer.LocalPlayer.Autofisher is null)
                 return;

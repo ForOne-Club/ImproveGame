@@ -66,7 +66,7 @@ namespace ImproveGame.Interface.GUI
 
             RefreshButton = QuickButton(RefreshTexture, "{$Mods.ImproveGame.Common.Refresh}");
             RefreshButton.SetPos(new(-296f, 100f), 0.5f, 0f);
-            RefreshButton.OnMouseDown += (_, _) =>
+            RefreshButton.OnLeftMouseDown += (_, _) =>
             {
                 FileOperator.CachedStructureDatas.Clear();
                 SetupStructuresList();
@@ -75,12 +75,12 @@ namespace ImproveGame.Interface.GUI
 
             var folderButton = QuickButton(GetTexture("UI/Construct/Folder"), "{$LegacyInterface.110}");
             folderButton.SetPos(new(-246f, 100f), 0.5f, 0f);
-            folderButton.OnMouseDown += (_, _) => TrUtils.OpenFolder(FileOperator.SavePath);
+            folderButton.OnLeftMouseDown += (_, _) => TrUtils.OpenFolder(FileOperator.SavePath);
             Append(folderButton);
 
             var modeButton = QuickButton(saveTexture, "");
             modeButton.SetPos(new(-196f, 100f), 0.5f, 0f);
-            modeButton.OnMouseDown += (_, _) =>
+            modeButton.OnLeftMouseDown += (_, _) =>
             {
                 if (WandSystem.ConstructMode == WandSystem.Construct.Place)
                     WandSystem.ConstructMode = WandSystem.Construct.Save;
@@ -104,7 +104,7 @@ namespace ImproveGame.Interface.GUI
 
             var explodeButton = QuickButton(saveTexture, "");
             explodeButton.SetPos(new(-146f, 100f), 0.5f, 0f);
-            explodeButton.OnMouseDown += (_, _) =>
+            explodeButton.OnLeftMouseDown += (_, _) =>
             {
                 if (WandSystem.ExplodeMode == WandSystem.Construct.Place)
                     WandSystem.ExplodeMode = WandSystem.Construct.ExplodeAndPlace;
@@ -128,12 +128,12 @@ namespace ImproveGame.Interface.GUI
 
             var closeButton = QuickButton(GetTexture("UI/Construct/Close"), "{$LegacyInterface.71}");
             closeButton.SetPos(new(246f, 100f), 0.5f, 0f);
-            closeButton.OnMouseDown += (_, _) => Close();
+            closeButton.OnLeftMouseDown += (_, _) => Close();
             Append(closeButton);
 
             var tutorialButton = QuickButton(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Icon_Locked"), "{$Mods.ImproveGame.ConstructGUI.Tutorial.Button}");
             tutorialButton.SetPos(new(196f, 100f), 0.5f, 0f);
-            tutorialButton.OnMouseDown += (_, _) => SetupTutorialPage();
+            tutorialButton.OnLeftMouseDown += (_, _) => SetupTutorialPage();
             Append(tutorialButton);
         }
 
@@ -369,7 +369,7 @@ namespace ImproveGame.Interface.GUI
 
             var buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(490f, -10f).SetAlign(verticalAlign: 0.5f);
             buttonExample.Append(new UIImage(GetTexture("UI/Construct/Save")).SetAlign(0.5f, 0.5f));
-            buttonExample.OnMouseDown += (_, _) => WandSystem.ConstructMode = WandSystem.Construct.Save;
+            buttonExample.OnLeftMouseDown += (_, _) => WandSystem.ConstructMode = WandSystem.Construct.Save;
             panel.Append(buttonExample);
 
             panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);
@@ -404,7 +404,7 @@ namespace ImproveGame.Interface.GUI
 
             buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(490f, -10f).SetAlign(verticalAlign: 0.5f);
             buttonExample.Append(new UIImage(GetTexture("UI/Construct/Load")).SetAlign(0.5f, 0.5f));
-            buttonExample.OnMouseDown += (_, _) => WandSystem.ConstructMode = WandSystem.Construct.Place;
+            buttonExample.OnLeftMouseDown += (_, _) => WandSystem.ConstructMode = WandSystem.Construct.Place;
             panel.Append(buttonExample);
 
             panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);
@@ -431,12 +431,12 @@ namespace ImproveGame.Interface.GUI
 
             buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(490f, -20f).SetAlign(verticalAlign: 0.5f);
             buttonExample.Append(new UIImage(GetTexture("UI/Construct/ExplodeAndPlace")).SetAlign(0.5f, 0.5f));
-            buttonExample.OnMouseDown += (_, _) => WandSystem.ExplodeMode = WandSystem.Construct.ExplodeAndPlace;
+            buttonExample.OnLeftMouseDown += (_, _) => WandSystem.ExplodeMode = WandSystem.Construct.ExplodeAndPlace;
             panel.Append(buttonExample);
 
             buttonExample = new UIImage(ButtonBackgroundTexture).SetPos(440f, -20f).SetAlign(verticalAlign: 0.5f);
             buttonExample.Append(new UIImage(GetTexture("UI/Construct/PlaceOnly")).SetAlign(0.5f, 0.5f));
-            buttonExample.OnMouseDown += (_, _) => WandSystem.ExplodeMode = WandSystem.Construct.Place;
+            buttonExample.OnLeftMouseDown += (_, _) => WandSystem.ExplodeMode = WandSystem.Construct.Place;
             panel.Append(buttonExample);
 
             panel.Height = StyleDimension.FromPixels(uiText.MinHeight.Pixels - 4f);

@@ -85,9 +85,9 @@ namespace ImproveGame.Interface.UIElements
             }
         }
 
-        public override void MouseDown(UIMouseEvent evt) {
+        public override void LeftMouseDown(UIMouseEvent evt) {
             SoundEngine.PlaySound(SoundID.MenuTick);
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
         }
 
         public override void MouseOver(UIMouseEvent evt) {

@@ -33,7 +33,7 @@ public class SUISearchBar : View
             VAlign = 0.5f,
             HAlign = 0f
         };
-        searchBtn.OnMouseDown += Click_SearchArea;
+        searchBtn.OnLeftMouseDown += Click_SearchArea;
         searchBtn.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
         searchBtn.SetVisibility(1f, 1f);
         Append(searchBtn);
@@ -46,7 +46,7 @@ public class SUISearchBar : View
             VAlign = 0.5f,
             HAlign = 1f
         };
-        _searchBoxPanel.OnMouseDown += Click_SearchArea;
+        _searchBoxPanel.OnLeftMouseDown += Click_SearchArea;
         _searchBoxPanel.SetPadding(0f);
         Append(_searchBoxPanel);
 
@@ -81,7 +81,7 @@ public class SUISearchBar : View
             Left = new StyleDimension(-2f, 0f)
         };
         cancelBtn.OnMouseOver += SearchCancelButton_OnMouseOver;
-        cancelBtn.OnClick += SearchCancelButton_OnClick;
+        cancelBtn.OnLeftClick += SearchCancelButton_OnClick;
         _searchBoxPanel.Append(cancelBtn);
     }
 

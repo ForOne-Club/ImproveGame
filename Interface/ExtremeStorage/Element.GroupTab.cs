@@ -67,9 +67,9 @@
                 Main.instance.MouseText(GetText($"UI.ExtremeStorage.ItemGroup.{_group}"));
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
             ExtremeStorageGUI.SetGroup(_group);
         }
 

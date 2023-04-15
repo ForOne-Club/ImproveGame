@@ -98,7 +98,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             _totalPanel.Left.Pixels = 20;
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
             foreach (var element in _totalPanel.Children)
             {

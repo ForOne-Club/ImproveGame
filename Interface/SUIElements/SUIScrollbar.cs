@@ -132,9 +132,9 @@ namespace ImproveGame.Interface.SUIElements
             HoverTimer.Close();
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
 
             if (!Visible)
                 return;
@@ -156,9 +156,9 @@ namespace ImproveGame.Interface.SUIElements
             BufferViewPosition = 0;
         }
 
-        public override void MouseUp(UIMouseEvent evt)
+        public override void LeftMouseUp(UIMouseEvent evt)
         {
-            base.MouseUp(evt);
+            base.LeftMouseUp(evt);
             if (!Visible)
                 return;
             dragging = false;

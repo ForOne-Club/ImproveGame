@@ -10,10 +10,10 @@ namespace ImproveGame.Common.ModHooks
     public class ModHookSystem : ModSystem
     {
         public override void Load() {
-            On.Terraria.UI.ItemSlot.OverrideLeftClick += ApplyLeftClick;
+            Terraria.UI.On_ItemSlot.OverrideLeftClick += ApplyLeftClick;
         }
 
-        private bool ApplyLeftClick(On.Terraria.UI.ItemSlot.orig_OverrideLeftClick orig, Item[] inv, int context, int slot) {
+        private bool ApplyLeftClick(Terraria.UI.On_ItemSlot.orig_OverrideLeftClick orig, Item[] inv, int context, int slot) {
             if (Main.mouseLeft && Main.mouseLeftRelease) {
                 bool result = false;
                 if (inv[slot].ModItem is IItemOverrideLeftClick)

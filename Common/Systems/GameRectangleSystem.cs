@@ -15,10 +15,10 @@ public class GameRectangleSystem : ModSystem
 {
     public override void Load()
     {
-        On.Terraria.Main.DrawInterface_36_Cursor += Main_DrawInterface_36_Cursor;
+        Terraria.On_Main.DrawInterface_36_Cursor += Main_DrawInterface_36_Cursor;
     }
 
-    private void Main_DrawInterface_36_Cursor(On.Terraria.Main.orig_DrawInterface_36_Cursor orig)
+    private void Main_DrawInterface_36_Cursor(Terraria.On_Main.orig_DrawInterface_36_Cursor orig)
     {
         if (Main.cursorOverride == CursorOverrideID.GamepadDefaultCursor)
         {

@@ -78,7 +78,7 @@ namespace ImproveGame.Interface.UIElements
                 Left = new StyleDimension(-20f, 1f)
             };
             detailButton.SetSize(24f, 24f);
-            detailButton.OnClick += DetailButtonClick;
+            detailButton.OnLeftClick += DetailButtonClick;
             detailButton.OnUpdate += (_) => {
                 if (detailButton.IsMouseHovering)
                 {
@@ -93,7 +93,7 @@ namespace ImproveGame.Interface.UIElements
                 Left = new StyleDimension(detailButton.Left.Pixels - 24f, 1f)
             };
             deleteButton.SetSize(24f, 24f);
-            deleteButton.OnClick += DeleteButtonClick;
+            deleteButton.OnLeftClick += DeleteButtonClick;
             deleteButton.OnUpdate += (_) => {
                 if (deleteButton.IsMouseHovering)
                 {
@@ -224,9 +224,9 @@ namespace ImproveGame.Interface.UIElements
             _oldMouseLeft = Main.mouseLeft;
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
 
             if (Children.Any(i => i is UIImageButton && i.IsMouseHovering))
                 return;

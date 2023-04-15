@@ -36,7 +36,7 @@ namespace ImproveGame.Common.GlobalItems
 
             // 允许任何饰品放入饰品时装栏
             if (item.accessory)
-                item.canBePlacedInVanityRegardlessOfConditions = true;
+                item.hasVanityEffects = true;
         }
 
         // 用这个和公式来加成工具速度，这样就不需要Reload了
@@ -186,9 +186,9 @@ namespace ImproveGame.Common.GlobalItems
         public override void Load()
         {
             // 对 Tile 操作的工具
-            IL.Terraria.Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += ActuallyUseMiningTool;
+            Terraria.IL_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += ActuallyUseMiningTool;
             // 对 Wall 操作的工具
-            IL.Terraria.Player.ItemCheck_UseMiningTools_TryHittingWall += TryHittingWall;
+            Terraria.IL_Player.ItemCheck_UseMiningTools_TryHittingWall += TryHittingWall;
         }
     }
 }

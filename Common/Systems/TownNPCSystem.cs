@@ -13,7 +13,7 @@ namespace ImproveGame.Common.Systems
         public override void Load()
         {
             // 更好的NPC生成机制 + NPC生成加速
-            On.Terraria.Main.UpdateTime_SpawnTownNPCs += orig =>
+            Terraria.On_Main.UpdateTime_SpawnTownNPCs += orig =>
             {
                 _isExtraUpdate = false;
                 orig.Invoke();
@@ -35,14 +35,14 @@ namespace ImproveGame.Common.Systems
             };
 
             // 在加速的NPC生成中，跳过寻找家的步骤
-            On.Terraria.WorldGen.QuickFindHome += (orig, npc) =>
+            Terraria.On_WorldGen.QuickFindHome += (orig, npc) =>
             {
                 if (!_isExtraUpdate)
                     orig.Invoke(npc);
             };
 
             // 在加速的NPC生成中，避免多次调用GetBestiaryProgressReport开销过大，这里缓存一个
-            On.Terraria.Main.GetBestiaryProgressReport += orig =>
+            Terraria.On_Main.GetBestiaryProgressReport += orig =>
             {
                 if (!_isExtraUpdate)
                     return orig.Invoke();
@@ -91,7 +91,7 @@ namespace ImproveGame.Common.Systems
             }
         }
 
-        private static void TrySetNPCSpawn(On.Terraria.Main.orig_UpdateTime_SpawnTownNPCs orig, double worldUpdateRate)
+        private static void TrySetNPCSpawn(Terraria.On_Main.orig_UpdateTime_SpawnTownNPCs orig, double worldUpdateRate)
         {
             orig.Invoke();
 

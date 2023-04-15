@@ -96,9 +96,9 @@ namespace ImproveGame.Interface.GUI
                 Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
         }
 
-        public override void MouseDown(UIMouseEvent evt)
+        public override void LeftMouseDown(UIMouseEvent evt)
         {
-            base.MouseDown(evt);
+            base.LeftMouseDown(evt);
             if (Scrollbar.IsMouseHovering)
             {
                 BasePanel.Dragging = false;

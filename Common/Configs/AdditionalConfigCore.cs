@@ -70,10 +70,10 @@ namespace ImproveGame.Common.Configs
                     continue;
                 switch (id)
                 {
-                    case < NPCID.Count:
+                    case < 688:
                         LifeformAnalyzer.VanillaBlacklist.Add(id);
                         break;
-                    case >= NPCID.Count:
+                    case >= 688:
                         LifeformAnalyzer.ModdedBlacklist.Add(NPCLoader.GetNPC(id).FullName);
                         break;
                 }
