@@ -21,6 +21,7 @@ namespace ImproveGame.Common.Configs
         [Range(0, 10f)]
         [Slider]
         [Increment(0.5f)]
+        [CustomModConfigItem(typeof(FontOffsetPreview))]
         public float GeneralFontOffsetY;
 
         [Label($"${_path}.BigFontOffsetY.Label")]
@@ -28,6 +29,7 @@ namespace ImproveGame.Common.Configs
         [Range(0, 20f)]
         [Slider]
         [Increment(0.5f)]
+        [CustomModConfigItem(typeof(BigFontOffsetPreview))]
         public float BigFontOffsetY;
 
         [Label($"${_path}.ShowMoreData.Label")]

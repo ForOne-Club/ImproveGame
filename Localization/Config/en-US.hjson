@@ -2,6 +2,8 @@
 {
     ImproveConfigs.Label: Mod Configuration
     NoNeedReload: No need to reload this mod
+    FontOffsetPreviewText: Adjust the offset value to make the text fits the line.
+    BigFontOffsetPreviewText: The quick brown fox...
 
     Presets.Header: "[centeritem:ImproveGame/PaintWand] Presets"
     ILoveBalance:

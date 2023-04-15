@@ -2,6 +2,9 @@
 {
     ImproveConfigs.Label: 模组配置
     NoNeedReload: 无需重新加载
+    FontOffsetPreviewText: 调整偏移值，使文本贴住白线。
+    BigFontOffsetPreviewText: 非常好字体。
+
     Presets.Header: "[centeritem:ImproveGame/PaintWand] 预设"
     ILoveBalance:
     {
