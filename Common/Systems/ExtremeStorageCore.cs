@@ -90,13 +90,13 @@ public class ExtremeStorageCore : ModSystem
              * IL_0260: callvirt     instance class Terraria.Item Terraria.Item::Clone()
              * IL_0265: stelem.ref
              */
-            if (!c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdsfld<Main>(nameof(Main.chest)),
-                    i => i.Match(OpCodes.Ldloc_0),
-                    i => i.MatchLdelemRef(),
-                    i => i.MatchLdfld<Chest>(nameof(Chest.item)),
-                    i => i.Match(OpCodes.Ldloc_S)))
+            if (!c.TryGotoNext(MoveType.Before,
+                    i => i.MatchCall<Chest>("VisualizeChestTransfer"),
+                    i => i.Match(OpCodes.Ldarg_0)))
+            {
                 throw new Exception("IL code changed");
+            }
+
             EmitIndexGettingCodes();
 
             if (!c.TryGotoNext(MoveType.After,

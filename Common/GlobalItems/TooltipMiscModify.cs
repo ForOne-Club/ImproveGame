@@ -7,8 +7,8 @@ namespace ImproveGame.Common.GlobalItems
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             if (!ModIntegrationsSystem.WMITFLoaded && Config.ShowModName &&
-                item.type != ModIntegrationsSystem.UnloadedItemType &&
-                (item.type != ModIntegrationsSystem.AprilFoolsItemType /*|| !AprilFools.CheckAprilFools()*/))
+                item.type != ModIntegrationsSystem.UnloadedItemType /*&&
+                (item.type != ModIntegrationsSystem.AprilFoolsItemType || !AprilFools.CheckAprilFools())*/)
             {
                 if (item.ModItem is not null && !item.Name.Contains("[" + item.ModItem.Mod.Name + "]") && !item.Name.Contains("[" + item.ModItem.Mod.DisplayName + "]"))
                 {
