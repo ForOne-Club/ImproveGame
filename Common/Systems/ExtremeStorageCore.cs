@@ -62,11 +62,14 @@ public class ExtremeStorageCore : ModSystem
             int index = -1;
             if (!c.TryGotoNext(MoveType.After,
                     i => i.MatchLdsfld<Main>(nameof(Main.chest)),
-                    i => i.Match(OpCodes.Ldloc_0),
+                    i => i.Match(OpCodes.Ldloc_1),
                     i => i.MatchLdelemRef(),
                     i => i.MatchLdfld<Chest>(nameof(Chest.item)),
                     i => i.Match(OpCodes.Ldloc_S)))
+            {
                 throw new Exception("IL code changed");
+            }
+
             EmitIndexGettingCodes();
 
             if (!c.TryGotoNext(MoveType.After,
