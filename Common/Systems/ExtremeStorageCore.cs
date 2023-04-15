@@ -72,14 +72,13 @@ public class ExtremeStorageCore : ModSystem
 
             EmitIndexGettingCodes();
 
-            if (!c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdelemRef(),
-                    i => i.MatchDup(),
-                    i => i.MatchLdfld<Item>("stack"),
-                    i => i.Match(OpCodes.Ldloc_S),
-                    i => i.MatchAdd(),
-                    i => i.MatchStfld<Item>("stack")))
+            if (!c.TryGotoNext(MoveType.Before,
+                    i => i.MatchCall<Chest>("VisualizeChestTransfer"),
+                    i => i.Match(OpCodes.Ldarg_0)))
+            {
                 throw new Exception("IL code changed");
+            }
+
             EmitSyncCodes();
 
             /* IL_0251: ldsfld       class Terraria.Chest[] Terraria.Main::chest
