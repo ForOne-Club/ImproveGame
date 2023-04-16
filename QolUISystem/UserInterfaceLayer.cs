@@ -2,11 +2,11 @@
 
 namespace ImproveGame.QolUISystem;
 
-public class ModLayer : GameInterfaceLayer
+public class UserInterfaceLayer : GameInterfaceLayer
 {
     public readonly XUIManager Manager;
 
-    public ModLayer(string name, XUIManager manager) : base("ImrpoveGame: " + name, InterfaceScaleType.UI)
+    public UserInterfaceLayer(string name, XUIManager manager) : base("ImrpoveGame: " + name, InterfaceScaleType.UI)
     {
         Manager = manager;
     }

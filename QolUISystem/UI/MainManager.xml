@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<XUIPanel
+	Padding = "20f"
+	Rounded = "20f"
+	Border = "2f"
+	BorderColor = "Color.White"
+	BgColor = "Color.White * 0f"
+	Draggable = "true"
+	Overflow = "UIOverflow.Hidden">
+</XUIPanel>

@@ -31,8 +31,7 @@ public class MainManager : XUIManager
             Draggable = true,
             Overflow = UIOverflow.Hidden,
         };
-        panel_1.Position.Align = new Vector2(0.5f);
-        panel_1.Size.Parent = new Vector2(0.8f);
+        panel_1.Size.Parent = new Vector2(1.1f);
         panel_1.Join(mainPanel);
 
         XUIPanel panel_2 = new XUIPanel()
@@ -42,10 +41,10 @@ public class MainManager : XUIManager
             Border = 2f,
             BorderColor = Color.White,
             Draggable = true,
-            Overflow = UIOverflow.Hidden
+            Overflow = UIOverflow.Hidden,
+            IgnoresMouseInteraction = true
         };
-        panel_2.Position.Align = new Vector2(0.5f);
-        panel_2.Size.Parent = new Vector2(0.8f);
+        panel_2.Size.Parent = new Vector2(1.1f);
         panel_2.Join(panel_1);
 
         XUIPanel panel_3 = new XUIPanel()
@@ -54,9 +53,9 @@ public class MainManager : XUIManager
             Border = 2f,
             BorderColor = Color.White,
             Draggable = true,
+            IgnoresMouseInteraction = true
         };
-        panel_3.Position.Align = new Vector2(0.5f);
-        panel_3.Size.Parent = new Vector2(0.8f);
+        panel_3.Size.Parent = new Vector2(1.1f);
         panel_3.Join(panel_2);
     }
 }

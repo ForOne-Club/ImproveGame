@@ -357,9 +357,13 @@ public class XUIElement
         }
     }
 
+    /// <summary>
+    /// 我用来更新动画或者拖拽位置的
+    /// </summary>
     public virtual void PreDraw()
     {
         HoverTimer.Update();
+        PreDrawChildren();
     }
 
     public virtual void PreDrawChildren()
@@ -403,17 +407,23 @@ public class XUIElement
                 Vector2 position = ContentRectangle.Position + drawArgs.DrawOffset;
                 Vector2 size = ContentRectangle.Size;
 
-                int rt2dWidth = (int)Math.Ceiling(size.X * Main.UIScale);
-                int rt2dHeight = (int)Math.Ceiling(size.Y * Main.UIScale);
+                int left = (int)MathF.Round(position.X * Main.UIScale);
+                int top = (int)MathF.Round(position.Y * Main.UIScale);
+                int right = (int)MathF.Round((position.X + size.X) * Main.UIScale);
+                int bottom = (int)MathF.Round((position.Y + size.Y) * Main.UIScale);
+
+                int rt2dWidth = right - left;
+                int rt2dHeight = bottom - top;
+
                 // 借走 RT2D（记得还哦~）
-                if (ImproveGame.Instance.RenderTarget2DPool.Borrow(rt2dWidth, rt2dHeight, out RenderTarget2D childRT2D))
+                if (ImproveGame.Instance.RenderTarget2DPool.TryBorrow(rt2dWidth, rt2dHeight, out RenderTarget2D childRT2D))
                 {
+                    // 记录原来的 RenderTarget2D
+                    RenderTargetBinding[] renderTargetBindings = GraphicsDevice.GetRenderTargets();
                     // 记录原来的 Usage
                     RenderTargetUsage origUsage = GraphicsDevice.PresentationParameters.RenderTargetUsage;
                     // 设置为 PreserveContents
                     GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
-                    // 记录原来的 RenderTarget2D
-                    RenderTargetBinding[] targets = GraphicsDevice.GetRenderTargets();
 
                     SpriteBatch.End();
 
@@ -421,10 +431,12 @@ public class XUIElement
                     GraphicsDevice.Clear(Color.Transparent);
                     Begin_Immediate(SamplerState.LinearClamp);
 
+                    string text = $"width: {rt2dWidth} height: {rt2dHeight}";
+                    DrawString(new Vector2(), text, Color.White, Color.Black);
                     DrawChildren(ownDrawArgs);
 
                     SpriteBatch.End();
-                    GraphicsDevice.SetRenderTargets(targets);
+                    GraphicsDevice.SetRenderTargets(renderTargetBindings);
                     Begin_Immediate(SamplerState.LinearClamp);
 
                     Color childColor = HoverTimer.Lerp(ChildColor.Item1, ChildColor.Item2);
@@ -436,7 +448,7 @@ public class XUIElement
 
                     GraphicsDevice.PresentationParameters.RenderTargetUsage = origUsage;
                     // 归还 RT2D（记住了！）
-                    ImproveGame.Instance.RenderTarget2DPool.Return(childRT2D);
+                    ImproveGame.Instance.RenderTarget2DPool.TryReturn(childRT2D);
                 }
                 break;
         }

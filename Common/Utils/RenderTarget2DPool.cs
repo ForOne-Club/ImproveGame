@@ -5,20 +5,20 @@ public class RenderTarget2DPool
     /// <summary>
     /// 可使用池
     /// </summary>
-    private readonly Dictionary<(int, int), List<RenderTarget2D>> AvailablePool;
+    private readonly Dictionary<(int, int), Stack<RenderTarget2D>> AvailablePool;
 
     /// <summary>
     /// 被借走池
     /// </summary>
-    private readonly Dictionary<(int, int), List<RenderTarget2D>> BorrowPool;
+    private readonly Dictionary<(int, int), Stack<RenderTarget2D>> BorrowPool;
 
     /// <summary>
     /// 构造
     /// </summary>
     public RenderTarget2DPool()
     {
-        AvailablePool = new Dictionary<(int, int), List<RenderTarget2D>>();
-        BorrowPool = new Dictionary<(int, int), List<RenderTarget2D>>();
+        AvailablePool = new Dictionary<(int, int), Stack<RenderTarget2D>>();
+        BorrowPool = new Dictionary<(int, int), Stack<RenderTarget2D>>();
     }
 
     /// <summary>
@@ -27,9 +27,9 @@ public class RenderTarget2DPool
     /// <param name="size">大小</param>
     /// <param name="rt2d">返回值</param>
     /// <returns> （记得还）</returns>
-    public bool Borrow(Vector2 size, out RenderTarget2D rt2d)
+    public bool TryBorrow(Vector2 size, out RenderTarget2D rt2d)
     {
-        return Borrow((int)Math.Ceiling(size.X), (int)Math.Ceiling(size.Y), out rt2d);
+        return TryBorrow((int)Math.Ceiling(size.X), (int)Math.Ceiling(size.Y), out rt2d);
     }
 
     /// <summary>
@@ -39,9 +39,9 @@ public class RenderTarget2DPool
     /// <param name="height">高度</param>
     /// <param name="rt2d">返回值</param>
     /// <returns> （记得还）</returns>
-    public bool Borrow(float width, float height, out RenderTarget2D rt2d)
+    public bool TryBorrow(float width, float height, out RenderTarget2D rt2d)
     {
-        return Borrow((int)Math.Ceiling(width), (int)Math.Ceiling(height), out rt2d);
+        return TryBorrow((int)Math.Ceiling(width), (int)Math.Ceiling(height), out rt2d);
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public class RenderTarget2DPool
     /// <param name="height">高度</param>
     /// <param name="rt2d">返回值</param>
     /// <returns> （记得还）</returns>
-    public bool Borrow(int width, int height, out RenderTarget2D rt2d)
+    public bool TryBorrow(int width, int height, out RenderTarget2D rt2d)
     {
         if (width <= 0 || height <= 0)
         {
@@ -63,25 +63,24 @@ public class RenderTarget2DPool
 
         if (!AvailablePool.ContainsKey(size))
         {
-            AvailablePool[size] = new List<RenderTarget2D>();
+            AvailablePool[size] = new Stack<RenderTarget2D>();
         }
 
         if (!BorrowPool.ContainsKey(size))
         {
-            BorrowPool[size] = new List<RenderTarget2D>();
+            BorrowPool[size] = new Stack<RenderTarget2D>();
         }
 
         if (AvailablePool[size].Count > 0)
         {
-            rt2d = AvailablePool[size][0];
-            AvailablePool[size].Remove(rt2d);
-            BorrowPool[size].Add(rt2d);
+            AvailablePool[size].TryPop(out rt2d);
+            BorrowPool[size].Push(rt2d);
             return true;
         }
         else
         {
             rt2d = Create(width, height);
-            BorrowPool[size].Add(rt2d);
+            BorrowPool[size].Push(rt2d);
             return true;
         }
     }
@@ -91,7 +90,7 @@ public class RenderTarget2DPool
     /// </summary>
     /// <param name="rt2d">要归还的 RenderTarget2D</param>
     /// <returns>归还是否成功 flase 意味着并不记录在案</returns>
-    public bool Return(RenderTarget2D rt2d)
+    public bool TryReturn(RenderTarget2D rt2d)
     {
         (int width, int height) size = (rt2d.Width, rt2d.Height);
 
@@ -100,8 +99,8 @@ public class RenderTarget2DPool
             return false;
         }
 
-        BorrowPool[size].Remove(rt2d);
-        AvailablePool[size].Add(rt2d);
+        BorrowPool[size].TryPop(out var _);
+        AvailablePool[size].Push(rt2d);
 
         return true;
     }
