@@ -190,14 +190,14 @@ namespace ImproveGame.Common.Systems
             if (!c.TryGotoNext(
                 MoveType.After,
                 i => i.MatchCall(typeof(Main), "get_expertMode"),
-                i => i.Match(OpCodes.Brfalse_S),
+                i => i.Match(OpCodes.Brfalse),
                 i => i.Match(OpCodes.Ldarg_0),
                 i => i.MatchLdfld(typeof(NPC), nameof(NPC.type)),
                 i => i.MatchLdcI4(NPCID.LavaSlime)
             ))
                 return;
 
-            c.EmitDelegate<Func<int, int>>((returnValue) =>
+            c.EmitDelegate<Func<int, int>>(returnValue =>
             {
                 // 把if (type == 59) 的59换掉，NPC.type不可能为NPCLoader.NPCCount
                 return Config.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue;
