@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Systems;
-using System.Collections.Generic;
 
 namespace ImproveGame.Common.GlobalItems
 {

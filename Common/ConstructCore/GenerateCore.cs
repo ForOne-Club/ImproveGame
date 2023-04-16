@@ -111,7 +111,7 @@ namespace ImproveGame.Common.ConstructCore
                         continue;
                     }
 
-                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                     PickItemFromArray(Main.LocalPlayer, inventory, (item) =>
                             item.type == tileItemType &&
                             TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
@@ -167,7 +167,7 @@ namespace ImproveGame.Common.ConstructCore
                         continue;
                     }
 
-                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                     PickItemFromArray(Main.LocalPlayer, inventory, (item) =>
                             item.type == wallItemType &&
                             TryPlaceWall(item, placePosition.X, placePosition.Y),
@@ -238,7 +238,7 @@ namespace ImproveGame.Common.ConstructCore
                         continue;
                     }
 
-                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                     PickItemFromArray(Main.LocalPlayer, inventory, item =>
                             item is not null && item.type == tileItemType &&
                             TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
@@ -312,7 +312,7 @@ namespace ImproveGame.Common.ConstructCore
                             }
                             return false;
                         }
-                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                         var item = PickItemFromArray(Main.LocalPlayer, inventory, TryConsume, false);
                         TryConsumeItem(ref item, Main.LocalPlayer, true); // 要手动consume (即无视consumable)
                     }
@@ -333,7 +333,7 @@ namespace ImproveGame.Common.ConstructCore
                             hasWire = true;
                             return true;
                         }
-                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, ignorePortable: true).ToArray();
+                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                         var item = PickItemFromArray(Main.LocalPlayer, inventory, TryConsume, false);
                         TryConsumeItem(ref item, Main.LocalPlayer, true); // 要手动consume (即无视consumable)
                         return hasWire;

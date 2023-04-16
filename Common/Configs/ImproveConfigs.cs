@@ -1,6 +1,11 @@
 ﻿using ImproveGame.Common.Systems;
 using System.ComponentModel;
+using System.Drawing;
+using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
+using Terraria.UI.Chat;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace ImproveGame.Common.Configs
 {
@@ -41,14 +46,6 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(9999)]
         [Range(1, int.MaxValue)]
         public int ItemMaxStack;
-
-        [Label($"${_path}.AutoReuseWeapon.Label")]
-        [DefaultValue(true)]
-        public bool AutoReuseWeapon;
-
-        [Label($"${_path}.AutoReuseWeapon_ExclusionList.Label")]
-        [Tooltip($"${_path}.AutoReuseWeapon_ExclusionList.Tooltip")]
-        public List<ItemDefinition> AutoReuseWeaponExclusionList = new() { new(218), new(113), new(495) };
 
         [Label($"${_path}.ImproveToolSpeed.Label")]
         [Tooltip($"${_path}.ImproveToolSpeed.Tooltip")]
@@ -501,7 +498,6 @@ namespace ImproveGame.Common.Configs
                 ItemMaxStack is 9999 &&
                 GrabDistance is 5 &&
                 NoConsume_SummonItem is false &&
-                AutoReuseWeapon is false &&
                 ExtraToolSpeed is 0.125f &&
                 ModifyPlayerPlaceSpeed is true &&
                 PortableCraftingStation is true &&
@@ -548,7 +544,6 @@ namespace ImproveGame.Common.Configs
                     ItemMaxStack = 9999;
                     GrabDistance = 5;
                     NoConsume_SummonItem = false;
-                    AutoReuseWeapon = false;
                     ExtraToolSpeed = 0.125f;
                     ModifyPlayerPlaceSpeed = true;
                     PortableCraftingStation = true;
@@ -600,7 +595,6 @@ namespace ImproveGame.Common.Configs
                 ItemMaxStack is 9999 &&
                 GrabDistance is 5 &&
                 NoConsume_SummonItem is true &&
-                AutoReuseWeapon is true &&
                 ExtraToolSpeed is 0.5f &&
                 ModifyPlayerPlaceSpeed is true &&
                 PortableCraftingStation is true &&
@@ -647,7 +641,6 @@ namespace ImproveGame.Common.Configs
                     ItemMaxStack = 9999;
                     GrabDistance = 5;
                     NoConsume_SummonItem = true;
-                    AutoReuseWeapon = true;
                     ExtraToolSpeed = 0.5f;
                     ModifyPlayerPlaceSpeed = true;
                     PortableCraftingStation = true;
@@ -689,9 +682,32 @@ namespace ImproveGame.Common.Configs
 
         #endregion
 
-        [Header($"${_path}.OtherFunctions.Header")]
+        // [Header($"${_path}.OtherFunctions.Header")]
         [Label($"${_path}.OtherFunctions.Label")]
+        [CustomModConfigItem(typeof(NonConfigurableFunctionsElement))]
         public bool OtherFunctions => true;
+
+        class NonConfigurableFunctionsElement : ConfigElement
+        {
+            public override void OnBind()
+            {
+                base.OnBind();
+
+                UIText uiText = new(Language.GetText($"{_path}.OtherFunctions.Header"), 0.8f) {
+                    HAlign = 0f,
+                    VAlign = 0f,
+                    Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
+                    Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
+                    Top = StyleDimension.FromPixels(32f),
+                    Left = StyleDimension.FromPixels(6f),
+                    TextOriginX = 0f,
+                    IsWrapped = true
+                };
+
+                uiText.OnInternalTextChange += (() => Height = new StyleDimension(uiText.MinHeight.Pixels + 14, 0.0f));
+                Append(uiText);
+            }
+        }
 
         public override void OnChanged()
         {

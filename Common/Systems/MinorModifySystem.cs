@@ -68,7 +68,7 @@ namespace ImproveGame.Common.Systems
             // 大背包内弹药可直接被使用
             On_Player.ChooseAmmo += (orig, player, weapon) =>
                 orig.Invoke(player, weapon) ??
-                GetAllInventoryItemsList(player, true, true, false)
+                GetAllInventoryItemsList(player, "inv portable")
                     .FirstOrDefault(i => i.stack > 0 && ItemLoader.CanChooseAmmo(weapon, i, player), null);
             // 大背包内弹药在UI的数值显示
             IL_ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += il =>
@@ -87,7 +87,7 @@ namespace ImproveGame.Common.Systems
                 c.Emit(OpCodes.Ldloc_1); // 将weapon读入
                 c.EmitDelegate<Func<int, Item, int>>((_, weapon) =>
                 {
-                    GetItemCount(GetAllInventoryItemsList(Main.LocalPlayer, true, true, false).ToArray(),
+                    GetItemCount(GetAllInventoryItemsList(Main.LocalPlayer, "inv portable").ToArray(),
                         i => i.stack > 0 && ItemLoader.CanChooseAmmo(weapon, i, Main.LocalPlayer), out int count);
                     return count;
                 });
@@ -190,14 +190,14 @@ namespace ImproveGame.Common.Systems
             if (!c.TryGotoNext(
                 MoveType.After,
                 i => i.MatchCall(typeof(Main), "get_expertMode"),
-                i => i.Match(OpCodes.Brfalse_S),
+                i => i.Match(OpCodes.Brfalse),
                 i => i.Match(OpCodes.Ldarg_0),
                 i => i.MatchLdfld(typeof(NPC), nameof(NPC.type)),
                 i => i.MatchLdcI4(NPCID.LavaSlime)
             ))
                 return;
 
-            c.EmitDelegate<Func<int, int>>((returnValue) =>
+            c.EmitDelegate<Func<int, int>>(returnValue =>
             {
                 // 把if (type == 59) 的59换掉，NPC.type不可能为NPCLoader.NPCCount
                 return Config.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue;
@@ -386,7 +386,7 @@ namespace ImproveGame.Common.Systems
 
         private static void TryAddBuff(Player player)
         {
-            var items = GetAllInventoryItemsList(player, false);
+            var items = GetAllInventoryItemsList(player);
             foreach (var item in items)
             {
                 AddBannerBuff(item);
@@ -410,7 +410,7 @@ namespace ImproveGame.Common.Systems
             if (Main.myPlayer != self.whoAmI)
                 return;
 
-            var items = GetAllInventoryItemsList(self, true);
+            var items = GetAllInventoryItemsList(self, "inv");
             foreach (var item in items)
             {
                 if (item.type != ItemID.EncumberingStone)

@@ -170,12 +170,8 @@ Mods: {
 			}
 
 			ImprovePrefix: {
-				Label: "[centeritem:1551] 更好的重铸机制"
-				Tooltip:
-					'''
-					大幅降低重复前缀出现的概率
-					可以直接选择已获得过的前缀
-					'''
+				Label: "[centeritem:1551] 记忆重铸"
+				Tooltip: 允许你直接选择已获得过的前缀
 				Unknown: 未知词缀
 			}
 
@@ -196,7 +192,7 @@ Mods: {
 			}
 
 			AutoSaveMoney: {
-				Label: "[centeritem:73] 有钱币槽时自动存钱"
+				Label: "[centeritem:MoneyTrough] 有钱币槽时自动存钱"
 				Tooltip:
 					'''
 					如果存钱罐，保险箱，护卫熔炉，虚空仓库中有任何猪猪存钱罐、钱币槽、眼骨
@@ -208,7 +204,7 @@ Mods: {
 			BanTombstone.Label: "[centeritem:3230] 禁止生成墓碑"
 
 			FasterExtractinator: {
-				Label: "[centeritem:Extractinator] 加速提炼机"
+				Label: "[centeritem:ChlorophyteExtractinator] 加速提炼机"
 				Tooltip: 极大地加快使用提炼机的速度
 			}
 
@@ -465,9 +461,6 @@ Mods: {
 				Label: "[centeritem:ThePlan] 其他不可调节功能"
 				Header:
 					'''
-					以下是本模组的其他不可调节功能:
-					- 便携存储内的虫洞药水生效
-					- 时装配饰栏可放入任何配饰
 					- 快捷键展示摸彩袋物品明细（需绑定快捷键）
 					- 快捷键可切换第二行物品至快捷栏
 					- 物品简介显示召唤物槽位占用情况

@@ -1,7 +1,5 @@
 ﻿using ImproveGame.Common.Players;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Terraria.GameInput;
 
 namespace ImproveGame.Common.GlobalItems
 {

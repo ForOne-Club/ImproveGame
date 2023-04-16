@@ -1,10 +1,9 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Packets.NetChest;
-using ImproveGame.Interface.BannerChest;
-using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Interface.Common;
 
@@ -16,15 +15,18 @@ public class ChestPreviewUISystem : ModSystem
 
     public override void Load()
     {
-        Terraria.On_Player.TileInteractionsMouseOver += ChestDisplayMouseOver;
+        On_Player.TileInteractionsMouseOver += ChestDisplayMouseOver;
     }
 
-    private void ChestDisplayMouseOver(Terraria.On_Player.orig_TileInteractionsMouseOver orig, Player player, int myX,
+    private void ChestDisplayMouseOver(On_Player.orig_TileInteractionsMouseOver orig, Player player, int myX,
         int myY)
     {
         orig.Invoke(player, myX, myY);
 
-        if (myX != Player.tileTargetX || myY != Player.tileTargetY || !Main.keyState.IsKeyDown(Keys.LeftAlt))
+        if (!player.IsInTileInteractionRange(myX, myY, TileReachCheckSettings.QuickStackToNearbyChests))
+            return;
+
+        if (!Main.keyState.IsKeyDown(Keys.LeftAlt))
             return;
 
         var t = Main.tile[myX, myY];

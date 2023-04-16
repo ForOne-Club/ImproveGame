@@ -24,7 +24,7 @@ namespace ImproveGame.Content.Tiles
 
         public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
-        public override int ItemType() => ModContent.ItemType<Items.Placeable.Autofisher>();
+        public virtual int ItemType() => ModContent.ItemType<Items.Placeable.Autofisher>();
 
         public override void MouseOver(int i, int j)
         {

@@ -50,7 +50,7 @@ namespace ImproveGame.Common.Systems
         }
 
         internal void CheckStationsFromPlayer(Player inventorySource) =>
-            CheckStations(GetAllInventoryItemsList(inventorySource, false));
+            CheckStations(GetAllInventoryItemsList(inventorySource));
 
         /// <summary>
         /// 从某个玩家的各种物品栏中拿效果

@@ -1,20 +1,16 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.Players;
-using ImproveGame.Common.Utils.Extensions;
 using ImproveGame.Content;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.GlobalItems
 {
     public class ImproveItem : GlobalItem
     {
         // 不需要对大小进行变动的就用 int[]
-        // 铜，银，金
-        public static readonly int[] Coins = new int[] { 71, 72, 73 };
+        // 铜，银，金，铂
+        public static readonly int[] Coins = new int[] { 71, 72, 73, 74 };
 
         // BOSS 召唤物
         public static readonly int[] SummonItems_Boss = new int[]
@@ -30,13 +26,7 @@ namespace ImproveGame.Common.GlobalItems
                 !Coins.Contains(item.type))
             {
                 item.maxStack = Config.ItemMaxStack;
-                if (item.type is ItemID.PlatinumCoin && item.maxStack > 2000)
-                    item.maxStack = 2000;
             }
-
-            // 允许任何饰品放入饰品时装栏
-            if (item.accessory)
-                item.hasVanityEffects = true;
         }
 
         // 用这个和公式来加成工具速度，这样就不需要Reload了
@@ -69,19 +59,6 @@ namespace ImproveGame.Common.GlobalItems
             {
                 player.SetItemTime((int)MathHelper.Max(1, MathF.Round(player.itemTime * (1f - Config.ExtraToolSpeed))));
             });
-        }
-
-        public override bool? CanAutoReuseItem(Item item, Player player)
-        {
-            // 自动挥舞
-            ItemDefinition itemd = new(item.type);
-            if (item.damage > 0 && Config.AutoReuseWeapon
-                                && !Config.AutoReuseWeaponExclusionList.Contains(itemd))
-            {
-                return true;
-            }
-
-            return base.CanAutoReuseItem(item, player);
         }
 
         // 物品消耗
@@ -186,9 +163,9 @@ namespace ImproveGame.Common.GlobalItems
         public override void Load()
         {
             // 对 Tile 操作的工具
-            Terraria.IL_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += ActuallyUseMiningTool;
+            IL_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += ActuallyUseMiningTool;
             // 对 Wall 操作的工具
-            Terraria.IL_Player.ItemCheck_UseMiningTools_TryHittingWall += TryHittingWall;
+            IL_Player.ItemCheck_UseMiningTools_TryHittingWall += TryHittingWall;
         }
     }
 }

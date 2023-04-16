@@ -37,7 +37,7 @@ public class ExtremeStorage : TETileBase
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 
-    public override int ItemType() => ModContent.ItemType<Items.Placeable.ExtremeStorage>();
+    public virtual int ItemType() => ModContent.ItemType<Items.Placeable.ExtremeStorage>();
 
     #region 基本物块信息
 

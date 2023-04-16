@@ -20,11 +20,7 @@ Mods: {
 				WallPlace_Kill: Stopped placing!
 			}
 
-			Projectile: {
-				PlaceWall_Lace: Stopped placing due to lack of wall
-				PlaceWall_Lack: Mods.ImproveGame.CombatText.Projectile.PlaceWall_Lack
-			}
-
+			Projectile.PlaceWall_Lack: Stopped placing due to lack of wall
 			Commonds.ResurrectionTimeShortened: "{Time}s reduced respawn time！"
 		}
 
@@ -355,19 +351,8 @@ Mods: {
 		Keybinds: {
 			HugeInventory.DisplayName: Big Backpack
 			BuffTracker.DisplayName: Buff Tracker
-			GrabBagLoot.DisplayName: Display grab bag loot
-			HotbarSwitch.DisplayName: Swap hotbar
-
-			$Mods: {
-				ImproveGame: {
-					Keybind: {
-						HugeInventory.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.HugeInventory.DisplayName
-						BuffTracker.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.BuffTracker.DisplayName
-						GrabBagLoot.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.GrabBagLoot.DisplayName
-						HotbarSwitch.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.HotbarSwitch.DisplayName
-					}
-				}
-			}
+			GrabBagLoot.DisplayName: Display Grab Bag Loot
+			HotbarSwitch.DisplayName: Swap Hotbar
 		}
 
 		Projectiles: {

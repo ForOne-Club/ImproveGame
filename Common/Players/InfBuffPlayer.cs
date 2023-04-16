@@ -170,7 +170,7 @@ public class InfBuffPlayer : ModPlayer
 
         AvailableItems = new List<Item>();
 
-        var items = GetAllInventoryItemsList(Main.LocalPlayer, false);
+        var items = GetAllInventoryItemsList(Main.LocalPlayer);
         AvailableItems = GetAvailableItemsFromItems(items);
 
         // 只有不同才发包

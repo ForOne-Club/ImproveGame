@@ -161,12 +161,8 @@ Mods: {
 			}
 
 			ImprovePrefix: {
-				Label: "[centeritem:1551] Better Reforging"
-				Tooltip:
-					'''
-					Chance for prefixes to be rolled again is greatly reduced
-					Prefixes which have been rolled can be applied manually
-					'''
+				Label: "[centeritem:1551] Memory Reforging"
+				Tooltip: Prefixes which have been rolled can be applied manually
 				Unknown: Unknown prefix
 			}
 
@@ -188,7 +184,7 @@ Mods: {
 			}
 
 			AutoSaveMoney: {
-				Label: "[centeritem:73] Automatically save money"
+				Label: "[centeritem:MoneyTrough] Automatically save money"
 				Tooltip:
 					'''
 					If there is any Piggy Bank, Money Trough or Eye Bone inside one of your personal inventories
@@ -200,7 +196,7 @@ Mods: {
 			BanTombstone.Label: "[centeritem:3230] Disable tombstone spawn"
 
 			FasterExtractinator: {
-				Label: "[centeritem:Extractinator] Fast Extractinator"
+				Label: "[centeritem:ChlorophyteExtractinator] Fast Extractinator"
 				Tooltip: Greatly increases the extracting speed of the Extractinator
 			}
 
@@ -454,9 +450,6 @@ Mods: {
 				Label: "[centeritem:ThePlan] Other non-configurable functions"
 				Header:
 					'''
-					Following are other non-configurable functions of this mod:
-					- Wormhole Potion works in personal inventories
-					- Any accessory can be worn in vanity slots
 					- Displaying detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
 					- A hotkey to swap the hotbar with the second row of inventory
 					- Displaying minion slot occupancy in tooltip

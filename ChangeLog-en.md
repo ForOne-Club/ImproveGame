@@ -1,10 +1,30 @@
 [Chinese version here | 中文版](ChangeLog.md)
 
+# v1.6.4
+自v1.6.4.0开始，此Mod已更新到 tModLoader 1.4.4 版本
+## 子版本
+- v1.6.4.0
+- v1.6.4.1
+## BUG 修复
+- **[v1.6.4.1]** 部分地修复了构造法杖材料识别错误的BUG
+- **[v1.6.4.1]** 修复了更好的重铸功能只能显示一个词条的BUG
+- **[v1.6.4.1]** 修复了自动钓鱼机和储存管理器挖掉时掉落两个的BUG
+- **[v1.6.4.1]** 修复了“熔岩史莱姆不生成熔岩”不生效的BUG
+## 调整内容
+- **[v1.6.4.1]** 除物品栏、虚空存储以外的便携存储空间内的虫洞药水不再生效
+- **[v1.6.4.1]** 移除了武器自动挥舞选项
+- **[v1.6.4.1]** “Better Reforging”改名为“Memory Reforging”，且不再降低已出现过的词条的出现概率
+## 其他
+- **[v1.6.4.1]** 小幅降低了记忆重铸的费用
+- **[v1.6.4.1]** 为铺墙机器射弹添加了中文名
+- **[v1.6.4.1]** 优化了“不可调节功能”的显示方式
+
 # v1.6.3
 ## Subversions
 - v1.6.3
 - v1.6.3.1
 - v1.6.3.2
+- v1.6.3.3
 ## BUG Fixes
 - Fixed Santa Claus spawns and die when town NPC spawn mechanics improvement is enabled
 - Fixed potential mod conflicts when crafting
