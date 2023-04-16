@@ -479,5 +479,100 @@ Mods: {
 				NotDisplayed: Hiden
 			}
 		}
+
+		Keybinds: {
+			$Mods: {
+				ImproveGame: {
+					Keybind: {
+						HugeInventory.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.HugeInventory.DisplayName
+						BuffTracker.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.BuffTracker.DisplayName
+						GrabBagLoot.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.GrabBagLoot.DisplayName
+						HotbarSwitch.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.HotbarSwitch.DisplayName
+					}
+				}
+			}
+		}
+
+		Tiles: {
+			Autofisher.MapEntry: Autofisher
+			ExtremeStorage.MapEntry: Extreme Storage
+		}
+
+		Items: {
+			BannerChest: {
+				DisplayName: Banner Chest
+				Tooltip: ""
+			}
+
+			CoinOne: {
+				DisplayName: Coin One
+				Tooltip: ""
+			}
+
+			ConstructWand: {
+				DisplayName: Construct Wand
+				Tooltip: ""
+			}
+
+			CreateWand: {
+				DisplayName: Create Wand
+				Tooltip: ""
+			}
+
+			LiquidWand: {
+				DisplayName: Liquid Wand
+				Tooltip: ""
+			}
+
+			MagickWand: {
+				DisplayName: Magick Wand
+				Tooltip: ""
+			}
+
+			MoveChest: {
+				DisplayName: Move Chest
+				Tooltip: ""
+			}
+
+			PaintWand: {
+				DisplayName: Paint Wand
+				Tooltip: ""
+			}
+
+			Autofisher: {
+				DisplayName: Autofisher
+				Tooltip: ""
+			}
+
+			ExtremeStorage: {
+				DisplayName: Extreme Storage
+				Tooltip: ""
+			}
+
+			PotionBag: {
+				DisplayName: Potion Bag
+				Tooltip: ""
+			}
+
+			SpaceWand: {
+				DisplayName: Space Wand
+				Tooltip: ""
+			}
+
+			StarburstWand: {
+				DisplayName: Starburst Wand
+				Tooltip: ""
+			}
+
+			WallPlace: {
+				DisplayName: Wall Place
+				Tooltip: ""
+			}
+		}
+
+		Projectiles: {
+			KillProj.DisplayName: Kill Proj
+			WallRobot.DisplayName: Wall Robot
+		}
 	}
 }
