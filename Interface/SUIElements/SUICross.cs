@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Interface.Common;
+using Terraria.GameInput;
 
 namespace ImproveGame.Interface.SUIElements
 {
@@ -19,6 +20,7 @@ namespace ImproveGame.Interface.SUIElements
             CrossBorder = 2;
             CrossBorderColor = UIColor.PanelBorder;
 
+            // MarginRight = 2f;
             Rounded = new Vector4(10f);
             Border = 2;
             BorderColor = UIColor.PanelBorder;

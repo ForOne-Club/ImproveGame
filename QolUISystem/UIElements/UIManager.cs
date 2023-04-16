@@ -2,7 +2,7 @@
 
 namespace ImproveGame.QolUISystem.UIElements;
 
-public class XUIManager : XView
+public class UIManager : XView
 {
     public override void Update()
     {

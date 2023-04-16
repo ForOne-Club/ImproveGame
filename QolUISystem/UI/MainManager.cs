@@ -4,13 +4,13 @@ using ImproveGame.QolUISystem.UIStruct;
 
 namespace ImproveGame.QolUISystem.UI;
 
-public class MainManager : XUIManager
+public class MainManager : UIManager
 {
     public override void OnInitialize()
     {
         XUIPanel mainPanel = new XUIPanel()
         {
-            Padding = new UISpacing(20f),
+            Padding = new Spacing(20f),
             Rounded = new Vector4(20f),
             Border = 2f,
             BorderColor = Color.White,
@@ -24,7 +24,7 @@ public class MainManager : XUIManager
 
         XUIPanel panel_1 = new XUIPanel()
         {
-            Padding = new UISpacing(20f),
+            Padding = new Spacing(20f),
             Rounded = new Vector4(20f),
             Border = 2f,
             BorderColor = Color.White,
@@ -36,7 +36,7 @@ public class MainManager : XUIManager
 
         XUIPanel panel_2 = new XUIPanel()
         {
-            Padding = new UISpacing(20f),
+            Padding = new Spacing(20f),
             Rounded = new Vector4(20f),
             Border = 2f,
             BorderColor = Color.White,

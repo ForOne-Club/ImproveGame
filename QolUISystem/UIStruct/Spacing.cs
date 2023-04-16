@@ -1,13 +1,13 @@
 ﻿namespace ImproveGame.QolUISystem.UIStruct;
 
-public struct UISpacing
+public struct Spacing
 {
     public float Top;
     public float Right;
     public float Bottom;
     public float Left;
 
-    public UISpacing(float all)
+    public Spacing(float all)
     {
         Top = all;
         Right = all;
@@ -15,7 +15,7 @@ public struct UISpacing
         Left = all;
     }
 
-    public UISpacing(float top, float right, float bottom, float left)
+    public Spacing(float top, float right, float bottom, float left)
     {
         Top = top;
         Right = right;

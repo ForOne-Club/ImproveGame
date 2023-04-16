@@ -3,9 +3,9 @@ using ImproveGame.QolUISystem.UIStruct;
 
 namespace ImproveGame.QolUISystem;
 
-public class XEventTrigger
+public class UIController
 {
-    public XUIManager TwoUIManager;
+    public UIManager UIManager;
 
     public Vector2 MousePosition;
 
@@ -32,7 +32,7 @@ public class XEventTrigger
         bool mouseMiddle = Main.mouseMiddle;
 
         // 获取鼠标光标的目标，仅获取最顶成的元素以及他的父元素们
-        List<XUIElement> cursorTargets = TwoUIManager.GetCursorTargets(MousePosition);
+        List<XUIElement> cursorTargets = UIManager.GetCursorTargets(MousePosition);
         List<XUIElement> mouseLeftTargets = PastMouseKey.Left ? new List<XUIElement>() : new List<XUIElement>(cursorTargets);
         List<XUIElement> mouseRightTargets = PastMouseKey.Right ? new List<XUIElement>() : new List<XUIElement>(cursorTargets);
         List<XUIElement> mouseMiddleTargets = PastMouseKey.Middle ? new List<XUIElement>() : new List<XUIElement>(cursorTargets);
@@ -168,6 +168,6 @@ public class XEventTrigger
     {
         MousePosition = new Vector2(Main.mouseX, Main.mouseY);
         MouseEventHandler(gameTime);
-        TwoUIManager.Update();
+        UIManager.Update();
     }
 }

@@ -1,17 +1,16 @@
 ﻿using ImproveGame.QolUISystem.UI;
-using ImproveGame.QolUISystem.UIElements;
 
 namespace ImproveGame.QolUISystem;
 
 internal class MainSystem : ModSystem
 {
-    public readonly XEventTrigger Trigger = new XEventTrigger();
+    public readonly UIController Trigger = new UIController();
 
     public override void Load()
     {
         if (Main.dedServ) return;
-        Trigger.TwoUIManager = new MainManager();
-        Trigger.TwoUIManager.Initialize();
+        Trigger.UIManager = new MainManager();
+        Trigger.UIManager.Initialize();
     }
 
     public override void UpdateUI(GameTime gameTime)

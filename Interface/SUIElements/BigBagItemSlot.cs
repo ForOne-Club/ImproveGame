@@ -16,17 +16,17 @@ namespace ImproveGame.Interface.SUIElements
         /// <summary>
         /// 新物品计时器
         /// </summary>
-        public AnimationTimer NewAndShinyTimer = new AnimationTimer(5);
+        public AnimationTimer NewAndShinyTimer = new AnimationTimer(3);
 
         /// <summary>
         /// 收藏物品计时器
         /// </summary>
-        public AnimationTimer FavoritedTimer = new AnimationTimer(5);
+        public AnimationTimer FavoritedTimer = new AnimationTimer(3);
 
         public bool FavoriteAllowed = true;
-        public Item[] Items { get; set; }
 
         public readonly int Index;
+        public Item[] Items { get; set; }
 
         public Item Item
         {

@@ -33,12 +33,12 @@ public class XUIElement
     /// <summary>
     /// 内边距
     /// </summary>
-    public UISpacing Padding;
+    public Spacing Padding;
 
     /// <summary>
     /// 外边距
     /// </summary>
-    public UISpacing Margin;
+    public Spacing Margin;
 
     /// <summary>
     /// 鼠标按下的状态
