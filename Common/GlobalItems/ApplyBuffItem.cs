@@ -2,7 +2,6 @@
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Collections.ObjectModel;
-using Terraria.GameInput;
 
 namespace ImproveGame.Common.GlobalItems
 {

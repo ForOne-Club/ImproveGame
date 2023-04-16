@@ -20,11 +20,7 @@ Mods: {
 				WallPlace_Kill: 已停止工作！
 			}
 
-			Projectile: {
-				// PlaceWall_Lace: Stopped placing due to lack of wall
-				PlaceWall_Lack: 墙体不足，停止工作！
-			}
-
+			Projectile.PlaceWall_Lack: 墙体不足，停止工作！
 			Commonds.ResurrectionTimeShortened: 重生加速 {Time} 秒 ！
 		}
 
@@ -343,22 +339,11 @@ Mods: {
 			BuffTracker.DisplayName: 增益追踪器
 			GrabBagLoot.DisplayName: 显示摸彩袋物品明细
 			HotbarSwitch.DisplayName: 切换快捷栏
-
-			$Mods: {
-				ImproveGame: {
-					Keybind: {
-						// HugeInventory.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.HugeInventory.DisplayName
-						// BuffTracker.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.BuffTracker.DisplayName
-						// GrabBagLoot.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.GrabBagLoot.DisplayName
-						// HotbarSwitch.DisplayName: Mods.ImproveGame.Keybinds.$Mods.ImproveGame.Keybind.HotbarSwitch.DisplayName
-					}
-				}
-			}
 		}
 
 		Projectiles: {
 			// KillProj.DisplayName: Kill Proj
-			// WallRobot.DisplayName: Wall Robot
+			WallRobot.DisplayName: 铺墙机器
 		}
 	}
 }

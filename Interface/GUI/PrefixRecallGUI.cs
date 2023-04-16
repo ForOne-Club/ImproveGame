@@ -215,7 +215,7 @@ public class PrefixTab : SUIPanel
             Price = (int)(Price * 0.8);
 
         Price = (int)(Price * Main.LocalPlayer.currentShoppingSettings.PriceAdjustment);
-        Price = (int)(Price * 0.6f);
+        Price = (int)(Price * 0.5f);
     }
 
     private void Reforge(UIImage ui)
@@ -226,18 +226,9 @@ public class PrefixTab : SUIPanel
         }
 
         Main.LocalPlayer.BuyItem(Price);
-        bool favorited = Item.favorited;
-        int stack = Item.stack;  //#StackablePrefixWeapons: keep the stack, (i.e. light discs)
-        /*Item r = new();
-        r.netDefaults(Item.netID);
-        r = r.CloneWithModdedDataFrom(Item)*//* tModPorter Note: Removed. Use Clone, ResetPrefix or Refresh *//*;
-        r.Prefix(PrefixId);
-        Item = r.Clone();*/
         Item.ResetPrefix();
         Item.Prefix(PrefixId);
         Item.position = Main.LocalPlayer.Center;
-        Item.favorited = favorited;
-        Item.stack = stack;
         ItemLoader.PostReforge(Item);
         PopupText.NewText(PopupTextContext.ItemReforge, Item, Item.stack, noStack: true);
         SoundEngine.PlaySound(SoundID.Item37);

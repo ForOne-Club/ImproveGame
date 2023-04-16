@@ -8,7 +8,6 @@ public class ImprovePrefixItem : GlobalItem
     public override bool InstancePerEntity => true;
 
     public HashSet<PrefixInfo> Prefixs = new();
-    internal static int RerollCounter; // 在一个方法内用完即弃，因此static
 
     public override void LoadData(Item item, TagCompound tag)
     {
@@ -21,25 +20,30 @@ public class ImprovePrefixItem : GlobalItem
             tag["prefixInfos"] = Prefixs.ToList();
     }
 
-    // 这个在重铸Roll循环开始前调用，因此可以在这里重设重铸Reroll计数器
-    public override bool? PrefixChance(Item item, int pre, UnifiedRandom rand)
+    public override void NetSend(Item item, BinaryWriter writer)
     {
-        RerollCounter = 0;
-        return base.PrefixChance(item, pre, rand);
+        writer.Write((ushort)Prefixs.Count);
+        foreach (var prefixInfo in Prefixs) {
+            writer.Write((ushort)prefixInfo.PrefixId);
+            writer.Write(prefixInfo.Cost);
+        }
     }
 
-    public override bool AllowPrefix(Item item, int pre)
+    public override void NetReceive(Item item, BinaryReader reader)
     {
-        RerollCounter++;
-        if (RerollCounter <= 10 && Prefixs.Any(i => i.PrefixId == pre))
-            return false;
-
-        return base.AllowPrefix(item, pre);
+        Prefixs.Clear();
+        ushort prefixCount = reader.ReadUInt16();
+        for (int i = 0; i < prefixCount; i++) {
+            var prefixId = reader.ReadUInt16();
+            var cost = reader.ReadInt32();
+            Prefixs.Add(new PrefixInfo(prefixId, cost));
+        }
     }
 
     public override void PostReforge(Item item)
     {
-        Prefixs.Add(new(item.prefix, item.value));
+        if (Prefixs.Count >= ushort.MaxValue) return;
+        Prefixs.Add(new PrefixInfo(item.prefix, item.value));
     }
 }
 

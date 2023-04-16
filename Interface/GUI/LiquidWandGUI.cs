@@ -157,12 +157,12 @@ namespace ImproveGame.Interface.GUI
                 var wand = (CurrentSlot == 58 && Main.mouseItem.ModItem is LiquidWand wand2) ? wand2 : CurrentWand;
 
                 ref float wandLiquid = ref wand.Water;
-                switch (liquidType)
+                switch ((short)liquidType)
                 {
-                    case 1:
+                    case LiquidID.Lava:
                         wandLiquid = ref wand.Lava;
                         break;
-                    case 2:
+                    case LiquidID.Honey:
                         wandLiquid = ref wand.Honey;
                         break;
                 }

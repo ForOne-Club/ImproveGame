@@ -8,29 +8,6 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="MySkill\**" />
-	  <EmbeddedResource Remove="MySkill\**" />
-	  <None Remove="MySkill\**" />
-	</ItemGroup>
-	<ItemGroup>
-	  <AdditionalFiles Remove="Localization\Config\en-US.hjson" />
-	  <AdditionalFiles Remove="Localization\Config\zh-Hans.hjson" />
-	  <AdditionalFiles Remove="Localization\Item\en-US.hjson" />
-	  <AdditionalFiles Remove="Localization\Item\zh-Hans.hjson" />
-	  <AdditionalFiles Remove="Localization\Other\en-US.hjson" />
-	  <AdditionalFiles Remove="Localization\Other\zh-Hans.hjson" />
-	  <AdditionalFiles Remove="Localization\UI\en-US.hjson" />
-	  <AdditionalFiles Remove="Localization\UI\zh-Hans.hjson" />
-	</ItemGroup>
-	<ItemGroup>
-	  <AdditionalFiles Include="Localization\Item\en-US.hjson.old" />
-	  <AdditionalFiles Include="Localization\Item\zh-Hans.hjson.old" />
-	  <AdditionalFiles Include="Localization\Other\en-US.hjson.old" />
-	  <AdditionalFiles Include="Localization\Other\zh-Hans.hjson.old" />
-	  <AdditionalFiles Include="Localization\UI\en-US.hjson.old" />
-	  <AdditionalFiles Include="Localization\UI\zh-Hans.hjson.old" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
 	</ItemGroup>
 	<ItemGroup>

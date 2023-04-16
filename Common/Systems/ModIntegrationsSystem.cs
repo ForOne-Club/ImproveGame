@@ -36,7 +36,6 @@ namespace ImproveGame.Common.Systems
         internal static bool DialogueTweakLoaded = false;
 
         internal static int UnloadedItemType;
-        // internal static int AprilFoolsItemType;
 
         public override void PostSetupContent()
         {
@@ -159,7 +158,6 @@ namespace ImproveGame.Common.Systems
             }
 
             UnloadedItemType = modloader.Find<ModItem>("UnloadedItem").Type;
-            // AprilFoolsItemType = modloader.Find<ModItem>("AprilFools").Type;
         }
 
         public static void AddCraftStationIntegration(Mod mod, string itemName, List<int> tileIDs)

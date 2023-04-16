@@ -180,7 +180,7 @@ partial class MyUtils
             bindName = "ERROR";
             return false;
         }
-        List<string> keys = keybind.GetAssignedKeys(InputMode.Keyboard);
+        List<string> keys = keybind.GetAssignedKeys();
         if (keys.Count == 0)
         {
             bindName = Language.GetTextValue("LegacyMenu.195"); // <未绑定>
@@ -536,31 +536,21 @@ partial class MyUtils
     /// 获取所有物品栏的物品
     /// </summary>
     /// <param name="player">玩家实例</param>
-    /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
-    /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
-    /// <param name="ignorePortable">是否不获取便携储存的物品</param>
-    /// <param name="ignoreBigBag">是否不获取大背包的物品</param>
-    /// <returns>包含全部物品数组的List</returns>
-    public static List<Item[]> GetAllInventoryItems(Player player, bool ignoreInventory, bool ignorePortable = false, bool ignoreBigBag = false)
+    /// <returns>包含全部物品数组的Dictionary，Key为物品所属的物品空间</returns>
+    public static Dictionary<string, Item[]> GetAllInventoryItems(Player player)
     {
-        List<Item[]> items = new();
-        if (!ignoreInventory)
+        var items = new Dictionary<string, Item[]>() {
+            { "inv", player.inventory },
+            { "piggy", player.bank.item },
+            { "safe", player.bank2.item },
+            { "forge", player.bank3.item },
+            { "void", player.bank4.item }
+        };
+        if (Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer))
         {
-            items.Add(player.inventory);
+            items["mod"] = modPlayer.SuperVault;
         }
-        if (!ignorePortable)
-        {
-            items.AddRange(new List<Item[]>() {
-                player.bank.item,
-                player.bank2.item,
-                player.bank3.item,
-                player.bank4.item,
-            });
-        }
-        if (!ignoreBigBag && Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer))
-        {
-            items.Add(modPlayer.SuperVault);
-        }
+
         return items;
     }
 
@@ -568,22 +558,25 @@ partial class MyUtils
     /// 获取所有物品栏的物品
     /// </summary>
     /// <param name="player">玩家实例</param>
-    /// <param name="ignoreInventory">是否不获取原物品栏的物品</param>
-    /// <param name="ignorePortable">是否不获取便携储存的物品</param>
-    /// <param name="ignoreBigBag">是否不获取大背包的物品</param>
+    /// <param name="ignores">
+    /// 不获取哪些物品空间的物品，可同时包含多个<br/>
+    /// 可用字串有 inv, piggy, safe, forge, void, mod, portable(即piggy+safe+forge+void)</param>
     /// <returns>包含全部物品的List</returns>
-    public static List<Item> GetAllInventoryItemsList(Player player, bool ignoreInventory = false, bool ignorePortable = false, bool ignoreBigBag = false)
+    public static List<Item> GetAllInventoryItemsList(Player player, string ignores = "")
     {
-        var item = new List<Item>();
-        var items = GetAllInventoryItems(player, ignoreInventory, ignorePortable, ignoreBigBag);
-        foreach (var itemArray in items)
+        ignores = ignores.Replace("portable", "piggy safe forge void", StringComparison.Ordinal);
+        var itemList = new List<Item>();
+        var items = GetAllInventoryItems(player);
+        foreach ((string name, Item[] itemArray) in items)
         {
-            for (int i = 0; i < itemArray.Length; i++)
+            if (ignores.Contains(name, StringComparison.Ordinal))
+                continue;
+            foreach (var item in itemArray)
             {
-                item.Add(itemArray[i]);
+                itemList.Add(item);
             }
         }
-        return item;
+        return itemList;
     }
 
     /// <summary>

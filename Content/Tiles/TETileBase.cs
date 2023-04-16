@@ -101,14 +101,8 @@ namespace ImproveGame.Content.Tiles
 
         public abstract ModTileEntity GetTileEntity();
 
-        public abstract int ItemType();
-
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            var tileObjectData = TileObjectData.GetTileData(Type, 0);
-            Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, tileObjectData.CoordinateFullWidth,
-                tileObjectData.CoordinateFullHeight, ItemType());
-
             GetTileEntity()?.Kill(i, j);
         }
     }

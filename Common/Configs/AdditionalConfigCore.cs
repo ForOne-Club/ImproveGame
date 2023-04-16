@@ -90,9 +90,9 @@ namespace ImproveGame.Common.Configs
             WandMode.PaintMode = WandSystem.PaintWandMode;
 
             UseKeybindTranslation = KeybindSystem.UseKeybindTranslation;
-            HugeInventoryUIPosition = UISystem.Instance.BigBagGUI.MainPanel is not null
+            HugeInventoryUIPosition = UISystem.Instance.BigBagGUI is not null && UISystem.Instance.BigBagGUI.MainPanel is not null
                 ? UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position()
-                : new(150, 340);
+                : new Vector2(150, 340);
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition; // 在这里也保存一下
         }
 

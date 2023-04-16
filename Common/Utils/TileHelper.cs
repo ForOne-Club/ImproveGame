@@ -26,7 +26,7 @@ namespace ImproveGame
             }
             if (MaterialCore.FinishSetup && MaterialCore.TileToItem.TryGetValue(getItemTileType, out List<int> itemTypes))
             {
-                return itemTypes.FirstOrDefault(i => (MaterialCore.ItemToPlaceStyle[i] == TileFrameToPlaceStyle(tileType, tileFrameX, tileFrameY) || i >= Main.maxItems), -1);
+                return itemTypes.FirstOrDefault(i => (MaterialCore.ItemToPlaceStyle[i] == TileFrameToPlaceStyle(tileType, tileFrameX, tileFrameY) || ItemLoader.IsModItem(i)), -1);
             }
             return -1;
         }

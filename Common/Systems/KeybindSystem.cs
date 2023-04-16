@@ -74,10 +74,10 @@ namespace ImproveGame.Common.Systems
             GenInput += TranslatedInput;
             GetFriendlyName += TranslatedFriendlyName;
             CreateBindingGroup += AddModifyTip;
-            SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.HugeInventory", "I");
-            BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.BuffTracker", "NumPad3");
-            GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.GrabBagLoot", "OemQuotes");
-            HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "$Mods.ImproveGame.Keybind.HotbarSwitch", "OemQuestion");
+            SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "HugeInventory", "I");
+            BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "BuffTracker", "NumPad3");
+            GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "GrabBagLoot", "OemQuotes");
+            HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "HotbarSwitch", "OemQuestion");
         }
 
         private void DrawHoverText(orig_DrawSelf orig, UIKeybindingListItem self, SpriteBatch spriteBatch)
