@@ -6,7 +6,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     public class RecipeSystem : ModSystem
     {

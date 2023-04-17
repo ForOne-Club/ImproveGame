@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Terraria.GameContent.Bestiary;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     public class TownNPCSystem : ModSystem
     {

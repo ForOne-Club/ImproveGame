@@ -3,7 +3,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Reflection;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     public class LifeAnalyzeCore : ModSystem
     {

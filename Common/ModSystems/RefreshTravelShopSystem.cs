@@ -4,7 +4,7 @@ using System.Reflection;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     public class RefreshTravelShopSystem : ModSystem
     {

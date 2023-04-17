@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.DataStructures;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     internal class PortableStationSystem : ModSystem
     {

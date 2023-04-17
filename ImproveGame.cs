@@ -1,5 +1,5 @@
 using ImproveGame.Common;
-using ImproveGame.Common.Systems;
+using ImproveGame.Common.ModSystems;
 using Terraria.UI.Chat;
 
 namespace ImproveGame;

@@ -1,4 +1,4 @@
-﻿using ImproveGame.Common.Systems;
+﻿using ImproveGame.Common.ModSystems;
 using System.ComponentModel;
 using System.Drawing;
 using Terraria.GameContent.Bestiary;

@@ -6,7 +6,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.DataStructures;
 
-namespace ImproveGame.Common.Systems;
+namespace ImproveGame.Common.ModSystems;
 
 public class ExtremeStorageCore : ModSystem
 {

@@ -2,7 +2,7 @@
 using static Terraria.GameContent.UI.Elements.On_UIKeybindingListItem;
 using static Terraria.GameContent.UI.States.On_UIManageControls;
 
-namespace ImproveGame.Common.Systems;
+namespace ImproveGame.Common.ModSystems;
 
 /// <summary>
 /// 快捷键

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Terraria.ModLoader;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     public class ModIntegrationsSystem : ModSystem
     {

@@ -6,7 +6,7 @@ using MonoMod.Cil;
 using System.Reflection;
 using Terraria.Enums;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     /// <summary>
     /// 为了方便管理，这里主要放一些不成体系的小修改，比如一些单独的On, IL

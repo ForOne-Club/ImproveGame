@@ -6,7 +6,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.DataStructures;
 
-namespace ImproveGame.Common.Systems;
+namespace ImproveGame.Common.ModSystems;
 
 /// <summary>
 /// 魔杖指示器绘制系统

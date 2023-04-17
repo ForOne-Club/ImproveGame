@@ -2,7 +2,7 @@
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     public class BestiaryUnlockSystem : ModSystem
     {

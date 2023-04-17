@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
-using ImproveGame.Common.Systems;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameInput;

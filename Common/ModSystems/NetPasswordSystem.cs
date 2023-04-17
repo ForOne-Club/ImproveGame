@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.Common.Systems
+﻿namespace ImproveGame.Common.ModSystems
 {
     public class NetPasswordSystem : ModSystem
     {

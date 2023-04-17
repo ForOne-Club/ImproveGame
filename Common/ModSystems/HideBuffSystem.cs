@@ -6,7 +6,7 @@ using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;
 using Terraria.DataStructures;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     public class HideBuffSystem : ModSystem
     {

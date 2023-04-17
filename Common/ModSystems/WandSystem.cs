@@ -1,6 +1,6 @@
 ﻿using Terraria.ModLoader;
 
-namespace ImproveGame.Common.Systems
+namespace ImproveGame.Common.ModSystems
 {
     public class WandSystem : ModPlayer
     {

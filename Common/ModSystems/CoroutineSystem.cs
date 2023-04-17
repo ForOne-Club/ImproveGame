@@ -1,6 +1,4 @@
-﻿using Terraria.ObjectData;
-
-namespace ImproveGame.Common.Systems
+﻿namespace ImproveGame.Common.ModSystems
 {
     public class CoroutineSystem : ModSystem
     {
