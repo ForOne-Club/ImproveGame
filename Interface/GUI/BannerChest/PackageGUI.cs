@@ -1,9 +1,9 @@
-﻿using ImproveGame.Interface.BannerChest.Elements;
-using ImproveGame.Interface.Common;
+﻿using ImproveGame.Interface.Common;
+using ImproveGame.Interface.GUI.BannerChest.Elements;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
-namespace ImproveGame.Interface.BannerChest
+namespace ImproveGame.Interface.GUI.BannerChest
 {
     public enum StorageType { Banners, Potions }
 
@@ -130,7 +130,7 @@ namespace ImproveGame.Interface.BannerChest
 
         public void Open(List<Item> items, string title, StorageType storageType, IPackageItem package)
         {
-            PackageGUI.StorageType = storageType;
+            StorageType = storageType;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.playerInventory = true;
             Visible = true;
@@ -152,7 +152,7 @@ namespace ImproveGame.Interface.BannerChest
 
         public override bool CanDisableMouse(UIElement target)
         {
-            return (target != this && _mainPanel.IsMouseHovering) || _mainPanel.KeepPressed;
+            return target != this && _mainPanel.IsMouseHovering || _mainPanel.KeepPressed;
         }
     }
 }

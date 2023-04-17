@@ -44,11 +44,11 @@ public class SUISwitch : View
     {
         if (State)
         {
-            _timer.TryOpen();
+            _timer.Open();
         }
         else
         {
-            _timer.TryClose();
+            _timer.Close();
         }
         _timer.Update();
         base.Update(gameTime);

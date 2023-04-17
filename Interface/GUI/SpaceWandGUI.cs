@@ -94,7 +94,7 @@ namespace ImproveGame.Interface.GUI
             this.SpaceWand = SpaceWand;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
-            timer.Open();
+            timer.OpenAndReset();
             MainPanel.SetCenterPixels(MouseScreenUI).Recalculate();
             UpdateButton();
         }
@@ -102,7 +102,7 @@ namespace ImproveGame.Interface.GUI
         public void Close()
         {
             SoundEngine.PlaySound(SoundID.MenuClose);
-            timer.Close();
+            timer.CloseAndReset();
         }
     }
 }

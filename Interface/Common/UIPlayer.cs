@@ -3,7 +3,7 @@ using ImproveGame.Common.Players;
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.PlayerInfo;
+using ImproveGame.Interface.GUI.PlayerInfo;
 
 namespace ImproveGame.Interface.Common
 {

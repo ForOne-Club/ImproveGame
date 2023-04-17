@@ -141,7 +141,7 @@ public class XUIElement
     /// <param name="gameTime"></param>
     public virtual void CursorEnter(List<XUIElement> targets)
     {
-        HoverTimer.Open();
+        HoverTimer.OpenAndReset();
         OnCursorEnter?.Invoke(targets);
     }
 
@@ -151,7 +151,7 @@ public class XUIElement
     /// <param name="gameTime"></param>
     public virtual void CursorLeave(List<XUIElement> targets)
     {
-        HoverTimer.Close();
+        HoverTimer.CloseAndReset();
         OnCursorLeave?.Invoke(targets);
     }
 

@@ -1,131 +1,130 @@
 ﻿namespace ImproveGame.Common.Animations;
 
-public enum AnimationState // 动画当前的状态
+public enum AnimationState : byte // 动画当前的状态
 {
-    Initial, Open, Close, OpenComplete, CloseComplete
+    Default, Opening, Closing, CompleteOpen, CompleteClose
 }
 
-public enum AnimationType
+public enum AnimationType : byte
 {
-    Linear, // 线性变化 (就一种类型, 还是一个大分类)
-    Nonlinear, // 缓动动画 (最简单的非线性动画). 如果能学到其他的非线性动画, 我就都加进来.
-    Bezier, // 贝塞尔回弹：一
+    Linear, // 线性动画 (就一种类型, 还是一个大分类)
+    Easing, // 缓动动画 (最简单的非线性动画). 如果能学到其他的非线性动画, 我就都加进来.
+    Bezier, // 贝塞尔动画
 }
 
 // 动画计时器
 public class AnimationTimer
 {
-    // 缓动系数 / 增量
-    public float Speed; // √
+    /// <summary>
+    /// 缓动系数 / 增量 / 速度
+    /// </summary>
+    public float Speed;
+
+    /// <summary>
+    /// 当前位置
+    /// </summary>
     public float Timer;
-    public float TimerMax; // √
+
+    /// <summary>
+    /// 最大位置
+    /// </summary>
+    public float TimerMax;
+
+    public float[] BezierPoint = new float[] { 0f, 1f / 3f, 2f / 3f, 1f };
+
+    /// <summary>
+    /// 进度
+    /// </summary>
     public float Schedule
     {
         get
         {
             float schedule = Timer / TimerMax;
-            return AnimationType switch
+            return Type switch
             {
-                AnimationType.Bezier => Bezier(schedule),
-                _ => schedule,
+                AnimationType.Bezier => BezierHelper.Calculate(Timer / TimerMax, BezierPoint),
+                AnimationType.Linear or AnimationType.Easing or _ => schedule
             };
         }
     }
 
-    public AnimationType AnimationType;
+    public AnimationType Type;
     public AnimationState State;
-    public Func<Vector2> Center;
     public Action OnOpenComplete;
     public Action OnCloseComplete;
 
-    public bool InOpen => State == AnimationState.Open;
-    public bool InClose => State == AnimationState.Close;
-    public bool InOpenComplete => State == AnimationState.OpenComplete;
-    public bool InCloseComplete => State == AnimationState.CloseComplete;
-    public bool InInitial => State == AnimationState.Initial;
-    public bool AnyOpen => State == AnimationState.Open || State == AnimationState.OpenComplete;
-    public bool AnyClose => State == AnimationState.Close || State == AnimationState.CloseComplete;
+    public bool Opening => State == AnimationState.Opening;
+    public bool Closing => State == AnimationState.Closing;
+    public bool CompleteOpen => State == AnimationState.CompleteOpen;
+    public bool CompleteClose => State == AnimationState.CompleteClose;
+    public bool Default => State == AnimationState.Default;
+    public bool AnyOpen => State is AnimationState.Opening or AnimationState.CompleteOpen;
+    public bool AnyClose => State is AnimationState.Closing or AnimationState.CompleteClose;
 
-    public static float Bezier(float t)
-    {
-        float a = 0f;
-        float b = -0.5f;
-        float c = 1.5f;
-        float d = 1f;
-        float aa = a + (b - a) * t;
-        float bb = b + (c - b) * t;
-        float cc = c + (d - c) * t;
-
-        float aaa = aa + (bb - aa) * t;
-        float bbb = bb + (cc - bb) * t;
-        return aaa + (bbb - aaa) * t;
-    }
-
-    public AnimationTimer(float speed = 5f, AnimationType animationType = AnimationType.Nonlinear, float timerMax = 100f)
+    /// <summary>
+    /// 它的 <see cref="TimerMax"/> = 100f <br/>
+    /// 它的 <see cref="Type"/> = AnimationType.Nonlinear <br/>
+    /// </summary>
+    public AnimationTimer(float speed = 5f, float timerMax = 100f)
     {
         Speed = speed;
         TimerMax = timerMax;
-        AnimationType = animationType;
+        Type = AnimationType.Easing;
     }
 
-    public Color Lerp(Color color1, Color color2)
+    /// <summary>
+    /// 开启
+    /// </summary>
+    public virtual void Open()
     {
-        return Color.Lerp(color1, color2, Schedule);
+        State = AnimationState.Opening;
     }
 
-    public Vector2 Lerp(Vector2 vector21, Vector2 vector22)
+    /// <summary>
+    /// 开启并重置
+    /// </summary>
+    public virtual void OpenAndReset()
     {
-        return new Vector2(Lerp(vector21.X, vector22.X),
-            Lerp(vector21.Y, vector22.Y));
+        State = AnimationState.Opening;
+        Timer = 0f;
     }
 
-    public float Lerp(float value1, float value2)
+    /// <summary>
+    /// 关闭
+    /// </summary>
+    public virtual void Close()
     {
-        return value1 + (value2 - value1) * Schedule;
+        State = AnimationState.Closing;
     }
 
-    public void Open()
+    /// <summary>
+    /// 关闭并重置
+    /// </summary>
+    public virtual void CloseAndReset()
     {
-        State = AnimationState.Open;
+        State = AnimationState.Closing;
+        Timer = TimerMax;
     }
 
-    public void TryOpen()
-    {
-        if (!AnyOpen)
-        {
-            State = AnimationState.Open;
-        }
-    }
-
-    public void Close()
-    {
-        State = AnimationState.Close;
-    }
-
-    public void TryClose()
-    {
-        if (!AnyClose)
-        {
-            State = AnimationState.Close;
-        }
-    }
-
-    public void Update()
+    /// <summary>
+    /// 更新计时器
+    /// </summary>
+    public virtual void Update()
     {
         switch (State)
         {
-            case AnimationState.Open:
+            case AnimationState.Opening:
                 Update_Open();
                 break;
-            case AnimationState.Close:
+            case AnimationState.Closing:
                 Update_Close();
                 break;
         }
     }
 
-    private void Update_Open()
+    protected virtual void Update_Open()
     {
-        if (AnimationType == AnimationType.Nonlinear)
+        if (Type == AnimationType.Easing)
         {
             Timer += (TimerMax + 1 - Timer) / Speed;
         }
@@ -136,14 +135,14 @@ public class AnimationTimer
         if (TimerMax - Timer < 0f)
         {
             Timer = TimerMax;
-            State = AnimationState.OpenComplete;
+            State = AnimationState.CompleteOpen;
             OnOpenComplete?.Invoke();
         }
     }
 
-    private void Update_Close()
+    protected virtual void Update_Close()
     {
-        if (AnimationType == AnimationType.Nonlinear)
+        if (Type == AnimationType.Easing)
         {
             Timer -= (Timer + 1) / Speed;
         }
@@ -154,8 +153,23 @@ public class AnimationTimer
         if (Timer < 0f)
         {
             Timer = 0;
-            State = AnimationState.CloseComplete;
+            State = AnimationState.CompleteClose;
             OnCloseComplete?.Invoke();
         }
+    }
+
+    public Color Lerp(Color color1, Color color2)
+    {
+        return Color.Lerp(color1, color2, Schedule);
+    }
+
+    public Vector2 Lerp(Vector2 vector21, Vector2 vector22)
+    {
+        return new Vector2(Lerp(vector21.X, vector22.X), Lerp(vector21.Y, vector22.Y));
+    }
+
+    public float Lerp(float value1, float value2)
+    {
+        return value1 + (value2 - value1) * Schedule;
     }
 }

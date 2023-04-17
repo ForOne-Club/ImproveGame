@@ -463,7 +463,7 @@ namespace ImproveGame.Interface.GUI
             _panel = panel;
             _timer = new(timerMax: 90f)
             {
-                State = AnimationState.Close
+                State = AnimationState.Closing
             };
             Main.instance.LoadItem(itemType);
             this.SetSize(TextureAssets.Item[itemType].Size());
@@ -494,7 +494,7 @@ namespace ImproveGame.Interface.GUI
             var tex = TextureAssets.Item[ItemType];
             if (IsMouseHovering)
             {
-                _timer.TryOpen();
+                _timer.Open();
 
                 Main.LocalPlayer.mouseInterface = true;
 
@@ -503,7 +503,7 @@ namespace ImproveGame.Interface.GUI
             }
             else
             {
-                _timer.TryClose();
+                _timer.Close();
             }
 
             if (_timer.Timer > 10)

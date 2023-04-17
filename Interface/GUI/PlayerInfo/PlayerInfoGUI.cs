@@ -47,7 +47,7 @@ namespace ImproveGame.Interface.PlayerInfo
             _invTimer = new AnimationTimer();
             _openTimer = new AnimationTimer()
             {
-                State = AnimationState.CloseComplete,
+                State = AnimationState.CompleteClose,
                 Timer = 0
             };
 
@@ -168,13 +168,13 @@ namespace ImproveGame.Interface.PlayerInfo
 
             // 动画开/关
             if (Main.playerInventory)
-                _invTimer.TryOpen();
+                _invTimer.Open();
             else
-                _invTimer.TryClose();
+                _invTimer.Close();
             if (_expanded)
-                _openTimer.TryOpen();
+                _openTimer.Open();
             else
-                _openTimer.TryClose();
+                _openTimer.Close();
             _invTimer.Update();
             _openTimer.Update();
 

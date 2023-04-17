@@ -120,7 +120,7 @@ namespace ImproveGame.Interface.GUI
             int x = center ? Main.screenWidth / 2 : Main.mouseX;
             int y = center ? Main.screenHeight / 2 - 60 : Main.mouseY;
             TransformToUIPosition(ref x, ref y);
-            Timer.Open();
+            Timer.OpenAndReset();
             modeButton.SetCenterPixels(x, y);
             modeButton.mainImage = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
             Visible = true;
@@ -135,7 +135,7 @@ namespace ImproveGame.Interface.GUI
         {
             if (Timer.AnyClose)
                 return;
-            Timer.Close();
+            Timer.CloseAndReset();
             //Visible = false;
             Main.blockInput = false;
         }

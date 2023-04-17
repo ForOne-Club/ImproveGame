@@ -1,6 +1,7 @@
-﻿using ImproveGame.Interface.UIElements;
+﻿using ImproveGame.Interface.BannerChest.Elements;
+using ImproveGame.Interface.UIElements;
 
-namespace ImproveGame.Interface.BannerChest.Elements
+namespace ImproveGame.Interface.GUI.BannerChest.Elements
 {
     public class PackageGrid : ScrollView
     {
@@ -70,7 +71,7 @@ namespace ImproveGame.Interface.BannerChest.Elements
 
         public void SetInventory(List<Item> items)
         {
-            this.Items = items;
+            Items = items;
             ListView.RemoveAllChildren();
 
             int length = RequiredChildrenCount(items.Count);

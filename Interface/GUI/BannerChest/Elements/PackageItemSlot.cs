@@ -4,7 +4,7 @@ using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Interface.BannerChest.Elements
+namespace ImproveGame.Interface.GUI.BannerChest.Elements
 {
     public class PackageItemSlot : View
     {

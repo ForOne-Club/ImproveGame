@@ -40,7 +40,7 @@ namespace ImproveGame.Interface
                 AnimationTimer = new AnimationTimer
                 {
                     Timer = 0,
-                    State = AnimationState.CloseComplete
+                    State = AnimationState.CompleteClose
                 }
             };
             
@@ -89,12 +89,12 @@ namespace ImproveGame.Interface
 
             // 切换状态
             if (existingBody.AnimationTimer.AnyClose)
-                existingBody.AnimationTimer.State = AnimationState.Open;
+                existingBody.AnimationTimer.State = AnimationState.Opening;
             else if (existingBody.AnimationTimer.AnyOpen)
-                existingBody.AnimationTimer.State = AnimationState.Close;
+                existingBody.AnimationTimer.State = AnimationState.Closing;
 
             // 是否要进行开启操作
-            bool isOperationOpen = existingBody.AnimationTimer.State is AnimationState.Open;
+            bool isOperationOpen = existingBody.AnimationTimer.State is AnimationState.Opening;
 
             // 对进行操作的 ViewBody 运行开关代码
             if (isOperationOpen)
@@ -110,7 +110,7 @@ namespace ImproveGame.Interface
 
             foreach (var uiData in UIPool.Where(uiData => uiData != existingBody && uiData.AnimationTimer.AnyOpen))
             {
-                uiData.AnimationTimer.State = AnimationState.Close;
+                uiData.AnimationTimer.State = AnimationState.Closing;
             }
         }
 
@@ -122,19 +122,19 @@ namespace ImproveGame.Interface
             {
                 foreach (var uiData in UIPool.Where(uiData => uiData.AnimationTimer.AnyOpen))
                 {
-                    uiData.AnimationTimer.State = AnimationState.Close;
+                    uiData.AnimationTimer.State = AnimationState.Closing;
                     uiData.AsSidedView.Close();
                 }
             }
 
             foreach (var uiData in UIPool) {
                 uiData.AnimationTimer.Update();
-                if (uiData.AnimationTimer.State is AnimationState.Open or AnimationState.Close)
+                if (uiData.AnimationTimer.State is AnimationState.Opening or AnimationState.Closing)
                 {
                     uiData.AsSidedView.OnSwapSlide(uiData.AnimationTimer.Schedule);
                     uiData.ViewBody.Recalculate();
                 }
-                if (uiData.AnimationTimer.InOpenComplete)
+                if (uiData.AnimationTimer.CompleteOpen)
                 {
                     ViewBody = uiData.ViewBody;
                 }
@@ -145,7 +145,7 @@ namespace ImproveGame.Interface
 
         protected override bool Draw()
         {
-            foreach (var uiData in UIPool.Where(uiData => !uiData.AnimationTimer.InCloseComplete && !ViewBodyIs(uiData.ViewBody))) {
+            foreach (var uiData in UIPool.Where(uiData => !uiData.AnimationTimer.CompleteClose && !ViewBodyIs(uiData.ViewBody))) {
                 uiData.ViewBody?.Draw(Main.spriteBatch);
             }
 

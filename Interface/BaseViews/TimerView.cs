@@ -16,13 +16,13 @@ namespace ImproveGame.Interface.BaseViews
 
         public override void MouseOver(UIMouseEvent evt)
         {
-            HoverTimer.Open();
+            HoverTimer.OpenAndReset();
             base.MouseOver(evt);
         }
 
         public override void MouseOut(UIMouseEvent evt)
         {
-            HoverTimer.Close();
+            HoverTimer.CloseAndReset();
             base.MouseOut(evt);
         }
 

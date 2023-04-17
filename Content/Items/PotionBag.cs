@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Players;
-using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.GUI.BannerChest;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;

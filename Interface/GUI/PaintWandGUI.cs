@@ -110,7 +110,7 @@ namespace ImproveGame.Interface.GUI
         {
             MainPanel.SetCenterPixels(TransformToUIPosition(Main.MouseScreen));
             MainPanel.Recalculate();
-            Timer.Open();
+            Timer.OpenAndReset();
 
             UpdateButton();
             Visible = true;
@@ -118,7 +118,7 @@ namespace ImproveGame.Interface.GUI
 
         public void Close()
         {
-            Timer.Close();
+            Timer.CloseAndReset();
         }
 
         public void ToggleMode()

@@ -335,20 +335,20 @@ namespace ImproveGame.Interface.SUIElements
 
             if (Item.newAndShiny)
             {
-                NewAndShinyTimer.TryOpen();
+                NewAndShinyTimer.Open();
             }
             else
             {
-                NewAndShinyTimer.TryClose();
+                NewAndShinyTimer.Close();
             }
 
             if (Item.favorited && !Item.IsAir)
             {
-                FavoritedTimer.TryOpen();
+                FavoritedTimer.Open();
             }
             else
             {
-                FavoritedTimer.TryClose();
+                FavoritedTimer.Close();
             }
 
             NewAndShinyTimer.Update();

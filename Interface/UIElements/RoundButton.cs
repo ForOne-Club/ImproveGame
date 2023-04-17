@@ -41,21 +41,21 @@ namespace ImproveGame.Interface.UIElements
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
-            HoverTimer.Open();
+            HoverTimer.OpenAndReset();
         }
 
         public override void MouseOut(UIMouseEvent evt)
         {
             base.MouseOut(evt);
-            HoverTimer.Close();
+            HoverTimer.CloseAndReset();
         }
 
         public Color GetColor()
         {
             if (Selected())
-                SelectedTimer.TryOpen();
+                SelectedTimer.Open();
             else
-                SelectedTimer.TryClose();
+                SelectedTimer.Close();
             return Color.Lerp(Color.Gray, Color.White, SelectedTimer.Schedule);
         }
 

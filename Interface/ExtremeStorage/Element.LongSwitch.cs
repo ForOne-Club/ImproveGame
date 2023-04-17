@@ -41,11 +41,11 @@ namespace ImproveGame.Interface.ExtremeStorage
             base.Update(gameTime);
             if (State)
             {
-                _timer.TryOpen();
+                _timer.Open();
             }
             else
             {
-                _timer.TryClose();
+                _timer.Close();
             }
         }
 

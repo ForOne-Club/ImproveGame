@@ -94,7 +94,7 @@ namespace ImproveGame.Interface.ExtremeStorage
 
             // 初始数据设置
             _foldTimer.Timer = _foldTimer.TimerMax;
-            _foldTimer.State = AnimationState.OpenComplete;
+            _foldTimer.State = AnimationState.CompleteOpen;
             _totalPanel.Left.Pixels = 20;
         }
 
@@ -178,14 +178,14 @@ namespace ImproveGame.Interface.ExtremeStorage
         private void UpdateAnimationTimer()
         {
             if (_itemGrid.ScrollBarFilled || CurrentGroup is ItemGroup.Setting)
-                _scrollBarTimer.TryClose();
+                _scrollBarTimer.Close();
             else
-                _scrollBarTimer.TryOpen();
+                _scrollBarTimer.Open();
 
             if (!DisplayCrafting)
-                _foldTimer.TryOpen();
+                _foldTimer.Open();
             else
-                _foldTimer.TryClose();
+                _foldTimer.Close();
 
             _scrollBarTimer.Update();
             _foldTimer.Update();
@@ -305,12 +305,12 @@ namespace ImproveGame.Interface.ExtremeStorage
             if (_itemGrid.ScrollBarFilled)
             {
                 _scrollBarTimer.Timer = 0f;
-                _scrollBarTimer.State = AnimationState.CloseComplete;
+                _scrollBarTimer.State = AnimationState.CompleteClose;
             }
             else
             {
                 _scrollBarTimer.Timer = _scrollBarTimer.TimerMax;
-                _scrollBarTimer.State = AnimationState.OpenComplete;
+                _scrollBarTimer.State = AnimationState.CompleteOpen;
             }
         }
 
