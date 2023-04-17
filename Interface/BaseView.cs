@@ -1,4 +1,4 @@
-﻿using ImproveGame.Interface.BannerChest;
+﻿using ImproveGame.Interface.GUI.BannerChest;
 
 namespace ImproveGame.Interface
 {

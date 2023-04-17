@@ -1,9 +1,9 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Players;
-using ImproveGame.Interface.BannerChest;
+using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.PlayerInfo;
+using ImproveGame.Interface.PlayerInfo;
 
 namespace ImproveGame.Interface.Common
 {
