@@ -3,91 +3,162 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Common.GlobalItems;
 
-internal class GrabAndPickup : GlobalItem
-{
-    // 两个单词
-    // Grab 抓住（游戏内指代使物品飞向玩家的操作）
-    // Pickup 捡起
+// 两个单词
+// Grab 抓住（游戏内指代使物品飞向玩家的操作）
+// Pickup 捡起
 
+public class GrabAndPickup : GlobalItem
+{
     public override void Load()
     {
-        // 抓取速度
-        Terraria.On_Player.PullItem_Common += (orig, player, item, xPullSpeed) =>
+        // 已废弃
+        // On_Player.PickupItem += PickupItem;
+        On_Player.GetItem += On_Player_GetItem;
+    }
+
+    /// <summary>
+    /// 修改抓取速度 <br/>
+    /// 禁用原版吸附速度返回: <see langword="true"/> <br/>
+    /// 允许原版吸附速度返回 <see langword="false"/>
+    /// </summary>
+    public override bool GrabStyle(Item item, Player player)
+    {
+        if (Config.GrabDistance > 0)
         {
-            if (Config.GrabDistance == 0)
-            {
-                orig(player, item, xPullSpeed);
-            }
-            else
-            {
-                // 浓缩的都是精华
-                item.velocity = Vector2.Normalize(player.Center - item.Center) * Math.Clamp(item.velocity.Length() + 1f, 0f, Math.Max(player.velocity.Length() + 5f, 15f));
-            }
-        };
+            item.velocity = Vector2.Normalize(player.Center - item.Center) * Math.Clamp(item.velocity.Length() + 1f, 0f, Math.Max(player.velocity.Length() + 5f, 15f));
+            return true;
+        }
 
-        // 拾取的物品溢出背包后
-        Terraria.On_Player.PickupItem += (orig, player, playerIndex, worldItemArrayIndex, itemToPickUp) =>
+        return false;
+    }
+
+    private Item On_Player_GetItem(On_Player.orig_GetItem orig, Player self, int plr, Item newItem, GetItemSettings settings)
+    {
+        if (settings.LongText == false && settings.NoText == false && settings.CanGoIntoVoidVault == true)
         {
-            itemToPickUp = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
-
-            if (itemToPickUp.IsAir)
+            if (newItem.IsAir)
             {
-                return itemToPickUp;
+                return newItem;
             }
 
-            Item cloneItem = itemToPickUp.Clone();
+            Item cloneItem = newItem.Clone();
 
             // 背包溢出堆叠至其他容器
-            if (!itemToPickUp.IsACoin)
+            if (!newItem.IsACoin)
             {
                 // 大背包
-                if (Config.SuperVault && player.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab)
+                if (Config.SuperVault && self.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab)
                 {
-                    itemToPickUp.StackToArray(player.GetModPlayer<DataPlayer>().SuperVault);
+                    newItem.StackToArray(self.GetModPlayer<DataPlayer>().SuperVault);
                 }
 
-                if (itemToPickUp.IsAir) goto Finish;
+                if (newItem.IsAir) goto Finish;
 
                 // 猪猪 保险箱 ...
-                if (Config.SuperVoidVault && player.TryGetModPlayer(out ImprovePlayer improvePlayer))
+                if (Config.SuperVoidVault && self.TryGetModPlayer(out ImprovePlayer improvePlayer))
                 {
                     if (improvePlayer.HasPiggyBank)
                     {
-                        itemToPickUp.StackToArray(player.bank.item);
+                        newItem.StackToArray(self.bank.item);
                     }
 
-                    if (itemToPickUp.IsAir) goto Finish;
+                    if (newItem.IsAir) goto Finish;
 
                     if (improvePlayer.HasSafe)
                     {
-                        itemToPickUp.StackToArray(player.bank2.item);
+                        newItem.StackToArray(self.bank2.item);
                     }
 
-                    if (itemToPickUp.IsAir) goto Finish;
+                    if (newItem.IsAir) goto Finish;
 
                     if (improvePlayer.HasDefendersForge)
                     {
-                        itemToPickUp.StackToArray(player.bank3.item);
+                        newItem.StackToArray(self.bank3.item);
                     }
                 }
             }
 
             Finish:
 
-            if (itemToPickUp.stack < cloneItem.stack)
+            if (newItem.stack < cloneItem.stack)
             {
                 SoundEngine.PlaySound(SoundID.Grab);
             }
 
-            Main.item[worldItemArrayIndex] = itemToPickUp;
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, worldItemArrayIndex);
-            }
-            return itemToPickUp;
-        };
+            return newItem;
+        }
+
+        return orig.Invoke(self, plr, newItem, settings);
     }
 
+    /// <summary>
+    /// 拾取的物品溢出背包后, 已废弃
+    /// </summary>
+    /*private static Item PickupItem(On_Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp)
+    {
+        itemToPickUp = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
+
+        if (itemToPickUp.IsAir)
+        {
+            return itemToPickUp;
+        }
+
+        Item cloneItem = itemToPickUp.Clone();
+
+        // 背包溢出堆叠至其他容器
+        if (!itemToPickUp.IsACoin)
+        {
+            // 大背包
+            if (Config.SuperVault && player.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab)
+            {
+                itemToPickUp.StackToArray(player.GetModPlayer<DataPlayer>().SuperVault);
+            }
+
+            if (itemToPickUp.IsAir) goto Finish;
+
+            // 猪猪 保险箱 ...
+            if (Config.SuperVoidVault && player.TryGetModPlayer(out ImprovePlayer improvePlayer))
+            {
+                if (improvePlayer.HasPiggyBank)
+                {
+                    itemToPickUp.StackToArray(player.bank.item);
+                }
+
+                if (itemToPickUp.IsAir) goto Finish;
+
+                if (improvePlayer.HasSafe)
+                {
+                    itemToPickUp.StackToArray(player.bank2.item);
+                }
+
+                if (itemToPickUp.IsAir) goto Finish;
+
+                if (improvePlayer.HasDefendersForge)
+                {
+                    itemToPickUp.StackToArray(player.bank3.item);
+                }
+            }
+        }
+
+        Finish:
+
+        if (itemToPickUp.stack < cloneItem.stack)
+        {
+            SoundEngine.PlaySound(SoundID.Grab);
+        }
+
+        Main.item[worldItemArrayIndex] = itemToPickUp;
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+        {
+            NetMessage.SendData(MessageID.SyncItem, -1, -1, null, worldItemArrayIndex);
+        }
+        return itemToPickUp;
+    }
+*/
+
+    /// <summary>
+    /// 物品拾取后提示
+    /// </summary>
     private static void PickupPopupText(Item cloneItem, Item self)
     {
         if (self.stack < cloneItem.stack)
@@ -99,11 +170,8 @@ internal class GrabAndPickup : GlobalItem
 
     /// <summary>
     /// 允许你在玩家捡到一项物品时做一些特殊的事情 <br/>
-    /// 返回 <see langword="false"/> 以阻止该项目进入玩家的 inventoy，默认情况下返回 true。
+    /// 返回 <see langword="false"/> 会阻止物品进入玩家的 inventoy，默认情况下返回 true。
     /// </summary>
-    /// <param name="self"></param>
-    /// <param name="player"></param>
-    /// <returns></returns>
     public override bool OnPickup(Item self, Player player)
     {
         if (!player.TryGetModPlayer(out ImprovePlayer improvePlayer))
