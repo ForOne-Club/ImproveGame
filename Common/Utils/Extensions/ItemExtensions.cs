@@ -1,34 +1,62 @@
 ﻿namespace ImproveGame.Common.Utils.Extensions;
 
-internal static class ItemExtensions
+/// <summary>
+/// <see cref="Item"/> 拓展
+/// </summary>
+public static class ItemExtensions
 {
-    public static bool HasAnyOneItem(this Item[] self, params int[] types)
+    /// <summary>
+    /// 有其中一个
+    /// </summary>
+    public static bool HasOne(this Item[] array, params int[] types)
     {
-        if (self is null)
+        if (array is null)
         {
             return false;
         }
 
-        foreach (Item item in self)
+        foreach (Item item in array)
         {
-            if (item is null || item.IsAir)
+            if (item is not null && !item.IsAir && types.Contains(item.type))
             {
-                continue;
-            }
-
-            foreach (int type in types)
-            {
-                if (item.type == type)
-                {
-                    return true;
-                }
+                return true;
             }
         }
 
         return false;
     }
 
-    public static bool InArray(this Item self, Item[] items)
+    /// <summary>
+    /// 有全部
+    /// </summary>
+    public static bool HasAll(this Item[] array, params int[] types)
+    {
+        if (array is null)
+        {
+            return false;
+        }
+
+        int count = 0;
+
+        foreach (var type in types)
+        {
+            foreach (Item item in array)
+            {
+                if (item is not null && !item.IsAir && item.type == type)
+                {
+                    count++;
+                    break;
+                }
+            }
+        }
+
+        return count == types.Length;
+    }
+
+    /// <summary>
+    /// 数组里面有这个物品
+    /// </summary>
+    public static bool TheArrayHas(this Item self, Item[] items)
     {
         if (items is null)
         {
@@ -50,7 +78,7 @@ internal static class ItemExtensions
     /// 无需考虑集合内有没有此物品，能堆叠进去即可
     /// </summary>
     /// <returns></returns>
-    public static bool CanStackToArray(this Item self, Item[] items)
+    public static bool CanStackToArray(this Item source, Item[] items)
     {
         if (items is null)
         {
@@ -59,74 +87,52 @@ internal static class ItemExtensions
 
         foreach (Item target in items)
         {
-            if (target is { IsAir: true } || (target.type == self.type && target.stack < target.maxStack))
+            if ((target.IsAir || (target.type == source.type && target.stack < target.maxStack)) &&
+                ItemLoader.CanStack(source, target))
             {
-                if (ItemLoader.CanStack(self, target))
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
     }
 
     /// <summary>
-    /// 堆叠到一个物品集合中 <br/>
-    /// 注：self 不能直接赋值 items 使用下标可以直接赋值 <br/>
-    /// 如果全部使用完，会调用 Item.ToAir() 而不是重新赋值
+    /// 堆叠到一个物品集合中
     /// </summary>
-    public static void StackToArray(this Item self, Item[] items)
+    public static void StackToArray(this Item source, Item[] items)
     {
         if (items is null)
         {
             return;
         }
 
-        foreach (var item in items)
+        // source 来源
+        // destination 目的地
+        // 填补
+        foreach (var destination in items)
         {
-            if (item is { IsAir: true } || item.type != self.type)
+            if (destination is not null && !destination.IsAir && destination.type == source.type)
             {
-                continue;
-            }
+                ItemLoader.TryStackItems(destination, source, out var _);
 
-            self.StackToSameItem(item);
-            if (self.IsAir)
-            {
-                return;
+                if (source.IsAir)
+                {
+                    return;
+                }
             }
         }
 
+        // 创建
         for (int i = 0; i < items.Length; i++)
         {
-            Item item = items[i];
+            ref Item destination = ref items[i];
 
-            if (item is null || item.IsAir)
+            if (destination is null || destination.IsAir)
             {
-                items[i] = self.Clone();
-                self.TurnToAir();
+                destination = source.Clone();
+                source.TurnToAir();
                 return;
             }
-        }
-    }
-
-    /// <summary>
-    /// 堆叠到另一个物品 <br/>
-    /// 注：self item 均不能直接赋值
-    /// </summary>
-    public static void StackToSameItem(this Item self, Item item)
-    {
-        if (item.stack >= item.maxStack && !ItemLoader.CanStack(self, item))
-        {
-            return;
-        }
-
-        int itemStack = item.stack;
-        item.stack = Math.Min(item.stack + self.stack, item.maxStack);
-        self.stack = Math.Max(self.stack - (item.stack - itemStack), 0);
-
-        if (self.stack == 0)
-        {
-            self.TurnToAir();
         }
     }
 }

@@ -25,11 +25,17 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool SuperVault;
 
+        /// <summary>
+        /// 超级虚空保险库
+        /// </summary>
         [Label($"${_path}.SuperVoidVault.Label")]
         [Tooltip($"${_path}.SuperVoidVault.Tooltip")]
         [DefaultValue(false)]
         public bool SuperVoidVault;
 
+        /// <summary>
+        /// 智能虚空保险库
+        /// </summary>
         [Label($"${_path}.SmartVoidVault.Label")]
         [Tooltip($"${_path}.SmartVoidVault.Tooltip")]
         [DefaultValue(false)]

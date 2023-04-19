@@ -11,9 +11,21 @@ namespace ImproveGame.Common.Players;
 
 public class ImprovePlayer : ModPlayer
 {
+    /// <summary>
+    /// 有猪猪钱罐
+    /// </summary>
     public bool HasPiggyBank;
+
+    /// <summary>
+    /// 有保险库
+    /// </summary>
     public bool HasSafe;
+
+    /// <summary>
+    /// 有护卫熔炉
+    /// </summary>
     public bool HasDefendersForge;
+
     public BannerChest BannerChest;
     public PotionBag PotionBag;
 
@@ -67,7 +79,8 @@ public class ImprovePlayer : ModPlayer
                 Player.IsVoidVaultEnabled = Player.HasItem(ItemID.VoidVault);
             }
 
-            HasPiggyBank = Player.inventory.HasAnyOneItem(ItemID.PiggyBank, ItemID.MoneyTrough);
+            // 激活猪猪钱罐的条件：猪猪钱罐，铅笔槽，眼骨
+            HasPiggyBank = Player.inventory.HasOne(ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem);
             HasSafe = Player.HasItem(ItemID.Safe);
             HasDefendersForge = Player.HasItem(ItemID.DefendersForge);
         }

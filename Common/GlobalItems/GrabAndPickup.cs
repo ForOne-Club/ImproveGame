@@ -34,6 +34,8 @@ public class GrabAndPickup : GlobalItem
 
     private Item On_Player_GetItem(On_Player.orig_GetItem orig, Player self, int plr, Item newItem, GetItemSettings settings)
     {
+        newItem = orig.Invoke(self, plr, newItem, settings);
+
         if (settings.LongText == false && settings.NoText == false && settings.CanGoIntoVoidVault == true)
         {
             if (newItem.IsAir)
@@ -88,7 +90,7 @@ public class GrabAndPickup : GlobalItem
             return newItem;
         }
 
-        return orig.Invoke(self, plr, newItem, settings);
+        return newItem;
     }
 
     /// <summary>
@@ -172,7 +174,7 @@ public class GrabAndPickup : GlobalItem
     /// 允许你在玩家捡到一项物品时做一些特殊的事情 <br/>
     /// 返回 <see langword="false"/> 会阻止物品进入玩家的 inventoy，默认情况下返回 true。
     /// </summary>
-    public override bool OnPickup(Item self, Player player)
+    public override bool OnPickup(Item source, Player player)
     {
         if (!player.TryGetModPlayer(out ImprovePlayer improvePlayer))
         {
@@ -180,80 +182,79 @@ public class GrabAndPickup : GlobalItem
         }
 
         // 旗帜盒
-        if (improvePlayer.BannerChest is not null && improvePlayer.BannerChest.AutoStorage && ItemToBanner(self) != -1)
+        if (improvePlayer.BannerChest is not null && improvePlayer.BannerChest.AutoStorage && ItemToBanner(source) != -1)
         {
-            Item oldItem = self.Clone();
-            improvePlayer.BannerChest.PutInPackage(ref self);
-            PickupPopupText(oldItem, self);
+            Item cloneItem = source.Clone();
+            improvePlayer.BannerChest.PutInPackage(ref source);
+            PickupPopupText(cloneItem, source);
         }
 
-        if (self.IsAir) return false;
+        if (source.IsAir) return false;
 
         // 药水袋
-        if (improvePlayer.PotionBag is not null && improvePlayer.PotionBag.AutoStorage && self.buffType > 0 && self.consumable)
+        if (improvePlayer.PotionBag is not null && improvePlayer.PotionBag.AutoStorage && source.buffType > 0 && source.consumable)
         {
-            Item item = self.Clone();
-            improvePlayer.PotionBag.PutInPackage(ref self);
-            PickupPopupText(item, self);
+            Item item = source.Clone();
+            improvePlayer.PotionBag.PutInPackage(ref source);
+            PickupPopupText(item, source);
         }
 
-        if (self.IsAir) return false;
+        if (source.IsAir) return false;
 
         // 大背包
-        if (!self.IsAir && Config.SuperVault &&
-            player.GetModPlayer<UIPlayerSetting>().SuperVault_SmartGrab &&
-            player.TryGetModPlayer(out DataPlayer dataPlayer) &&
-            self.InArray(dataPlayer.SuperVault))
+        if (Config.SuperVault && !source.IsAir &&
+            player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting) && uiPlayerSetting.SuperVault_SmartGrab &&
+            player.TryGetModPlayer(out DataPlayer dataPlayer) && source.TheArrayHas(dataPlayer.SuperVault))
         {
-            Item oldItem = self.Clone();
-            self.StackToArray(dataPlayer.SuperVault);
-            PickupPopupText(oldItem, self);
+            Item cloneItem = source.Clone();
+            source.StackToArray(dataPlayer.SuperVault);
+            PickupPopupText(cloneItem, source);
         }
 
-        if (self.IsAir) return false;
+        if (source.IsAir) return false;
 
         // 虚空保险库 之 智能收纳
-        if (Config.SmartVoidVault && !self.IsAir && !self.IsACoin)
+        if (Config.SmartVoidVault && !source.IsAir && !source.IsACoin)
         {
             // 虚空保险库
-            if (player.IsVoidVaultEnabled && self.InArray(player.bank4.item))
+            if (player.IsVoidVaultEnabled && source.TheArrayHas(player.bank4.item))
             {
-                Item oldItem = self.Clone();
-                self.StackToArray(player.bank4.item);
-                PickupPopupText(oldItem, self);
+                Item cloneItem = source.Clone();
+                source.StackToArray(player.bank4.item);
+                PickupPopupText(cloneItem, source);
             }
 
-            if (self.IsAir) return false;
+            if (source.IsAir) return false;
 
             // 猪猪 保险箱 ...
-            if (Config.SuperVoidVault && !self.IsAir)
+            if (Config.SuperVoidVault && !source.IsAir)
             {
-                if (improvePlayer.HasPiggyBank && self.InArray(player.bank.item))
+                if (improvePlayer.HasPiggyBank && source.TheArrayHas(player.bank.item))
                 {
-                    Item oldItem = self.Clone();
-                    self.StackToArray(player.bank.item);
-                    PickupPopupText(oldItem, self);
+                    Item cloneItem = source.Clone();
+                    source.StackToArray(player.bank.item);
+                    PickupPopupText(cloneItem, source);
                 }
 
-                if (self.IsAir) return false;
+                if (source.IsAir) return false;
 
-                if (improvePlayer.HasSafe && !self.IsAir && self.InArray(player.bank2.item))
+                if (improvePlayer.HasSafe && !source.IsAir && source.TheArrayHas(player.bank2.item))
                 {
-                    Item oldItem = self.Clone();
-                    self.StackToArray(player.bank2.item);
-                    PickupPopupText(oldItem, self);
+                    Item cloneItem = source.Clone();
+                    source.StackToArray(player.bank2.item);
+                    PickupPopupText(cloneItem, source);
                 }
 
-                if (self.IsAir) return false;
+                if (source.IsAir) return false;
 
-                if (improvePlayer.HasDefendersForge && !self.IsAir && self.InArray(player.bank3.item))
+                if (improvePlayer.HasDefendersForge && !source.IsAir && source.TheArrayHas(player.bank3.item))
                 {
-                    Item oldItem = self.Clone();
-                    self.StackToArray(player.bank3.item);
-                    PickupPopupText(oldItem, self);
+                    Item cloneItem = source.Clone();
+                    source.StackToArray(player.bank3.item);
+                    PickupPopupText(cloneItem, source);
                 }
 
-                if (self.IsAir) return false;
+                if (source.IsAir) return false;
             }
         }
 
@@ -285,7 +286,7 @@ public class GrabAndPickup : GlobalItem
             }
             else if (uiPlayerSetting.SuperVault_SmartGrab)
             {
-                if (item.CanStackToArray(dataPlayer.SuperVault) && item.InArray(dataPlayer.SuperVault))
+                if (item.CanStackToArray(dataPlayer.SuperVault) && item.TheArrayHas(dataPlayer.SuperVault))
                 {
                     return true;
                 }
