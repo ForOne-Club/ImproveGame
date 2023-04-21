@@ -4,7 +4,7 @@ using ImproveGame.Interface;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 
-namespace ImproveGame.Common.Players
+namespace ImproveGame.Common.ModPlayers
 {
     public class AutofishPlayer : ModPlayer
     {

@@ -1,4 +1,4 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Common.GlobalItems;

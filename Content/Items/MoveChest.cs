@@ -2,7 +2,7 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.Packets.NetChest;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using System.Collections.ObjectModel;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;

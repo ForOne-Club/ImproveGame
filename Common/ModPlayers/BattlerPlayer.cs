@@ -2,7 +2,7 @@
 using ImproveGame.Interface.Common;
 using System.Collections.Generic;
 
-namespace ImproveGame.Common.Players
+namespace ImproveGame.Common.ModPlayers
 {
     public class BattlerPlayer : ModPlayer
     {

@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.GlobalBuffs;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;

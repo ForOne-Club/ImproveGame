@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.ExtremeStorage;
 using Mono.Cecil.Cil;

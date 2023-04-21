@@ -1,4 +1,4 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;

@@ -6,7 +6,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.ExtremeStorage;
 using Terraria.DataStructures;
 
-namespace ImproveGame.Common.Players;
+namespace ImproveGame.Common.ModPlayers;
 
 public class ExtremeStoragePlayer : ModPlayer
 {

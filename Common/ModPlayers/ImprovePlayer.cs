@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
 
-namespace ImproveGame.Common.Players;
+namespace ImproveGame.Common.ModPlayers;
 
 public class ImprovePlayer : ModPlayer
 {

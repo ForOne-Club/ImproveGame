@@ -1,4 +1,4 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.ModPlayers;
 
 namespace ImproveGame.Common.GlobalNPCs
 {

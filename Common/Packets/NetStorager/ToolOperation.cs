@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Packets.NetChest;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;
 using System.Diagnostics;

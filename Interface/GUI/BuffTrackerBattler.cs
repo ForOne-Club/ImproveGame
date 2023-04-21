@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Packets;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.Creative;
 

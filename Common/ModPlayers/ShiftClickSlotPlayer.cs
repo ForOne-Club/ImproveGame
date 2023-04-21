@@ -7,7 +7,7 @@ using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.BannerChest;
 using ItemSlot = Terraria.UI.ItemSlot;
 
-namespace ImproveGame.Common.Players
+namespace ImproveGame.Common.ModPlayers
 {
     public class ShiftClickSlotPlayer : ModPlayer
     {

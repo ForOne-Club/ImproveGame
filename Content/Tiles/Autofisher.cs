@@ -1,5 +1,5 @@
 using ImproveGame.Common.Packets.NetAutofisher;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Interface;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;

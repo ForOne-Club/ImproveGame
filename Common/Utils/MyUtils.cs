@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using ReLogic.Graphics;
 using Terraria.GameInput;
 using Terraria.UI.Chat;

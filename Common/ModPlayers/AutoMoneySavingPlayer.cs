@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.Common.Players
+﻿namespace ImproveGame.Common.ModPlayers
 {
     // 自动省钱玩家（（
     public class AutoMoneySavingPlayer : ModPlayer

@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;

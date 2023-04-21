@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using System.Collections.ObjectModel;
 using Terraria.UI.Chat;
 

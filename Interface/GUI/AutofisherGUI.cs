@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Packets.NetAutofisher;
-using ImproveGame.Common.Players;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.Common;

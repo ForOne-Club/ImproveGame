@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Packets;
 using Terraria.ModLoader.IO;
 
-namespace ImproveGame.Common.Players
+namespace ImproveGame.Common.ModPlayers
 {
     public class DataPlayer : ModPlayer
     {

@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.Common.Players
+﻿namespace ImproveGame.Common.ModPlayers
 {
     public class RespawnTweakPlayer : ModPlayer
     {

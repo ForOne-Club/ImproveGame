@@ -6,7 +6,7 @@ using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;
 using Terraria.DataStructures;
 
-namespace ImproveGame.Common.Players;
+namespace ImproveGame.Common.ModPlayers;
 
 /// <summary>
 /// 22/11/9 无尽Buff流程<br/>
