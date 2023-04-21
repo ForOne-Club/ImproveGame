@@ -87,7 +87,7 @@ namespace ImproveGame.Common.ModSystems
                 c.Emit(OpCodes.Ldloc_1); // 将weapon读入
                 c.EmitDelegate<Func<int, Item, int>>((_, weapon) =>
                 {
-                    GetItemCount(GetAllInventoryItemsList(Main.LocalPlayer, "inv portable").ToArray(),
+                    ItemCount(GetAllInventoryItemsList(Main.LocalPlayer, "inv portable").ToArray(),
                         i => i.stack > 0 && ItemLoader.CanChooseAmmo(weapon, i, Main.LocalPlayer), out int count);
                     return count;
                 });
@@ -455,12 +455,12 @@ namespace ImproveGame.Common.ModSystems
                     if (inv[slot].ModItem is SpaceWand)
                     {
                         SpaceWand spaceWand = inv[slot].ModItem as SpaceWand;
-                        spaceWand.CountTheNumberOfTiles(inv, out int count);
+                        spaceWand.TileCount(inv, out int count);
                         return count;
                     }
                     else if (inv[slot].ModItem is WallPlace)
                     {
-                        GetItemCount(inv, (item) => item.createWall > -1, out int count);
+                        ItemCount(inv, (item) => item.createWall > -1, out int count);
                         return count;
                     }
                     return -1;

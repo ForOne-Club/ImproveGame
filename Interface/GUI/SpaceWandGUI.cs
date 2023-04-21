@@ -23,7 +23,7 @@ namespace ImproveGame.Interface.GUI
         public readonly PlaceType[] placeTypes = new PlaceType[] { PlaceType.Platform, PlaceType.Soild, PlaceType.Rope, PlaceType.Rail, PlaceType.GrassSeed, PlaceType.PlantPot };
         public override void OnInitialize()
         {
-            timer = new() { OnCloseComplete = () => Visible = false };
+            timer = new() { OnClosed = () => Visible = false };
 
             Append(MainPanel = new());
             MainPanel.SetSize(200f, 200f).SetPadding(0);

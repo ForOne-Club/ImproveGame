@@ -35,6 +35,16 @@ public struct RectangleF
         get => new Vector2(Width, Height);
     }
 
+    public Rectangle ToRectangle()
+    {
+        return new Rectangle((int)Math.Round(X), (int)Math.Round(Y), (int)Math.Round(Width), (int)Math.Round(Height));
+    }
+
+    public Rectangle ToTileRectangle()
+    {
+        return new Rectangle((int)Math.Round(X) >> 4, (int)Math.Round(Y) >> 4, (int)Math.Round(Width) >> 4, (int)Math.Round(Height) >> 4);
+    }
+
     public RectangleF(float x, float y, float width, float height)
     {
         X = x;

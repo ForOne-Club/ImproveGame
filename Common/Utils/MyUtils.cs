@@ -646,7 +646,11 @@ partial class MyUtils
     // 获取配置
     public static ImproveConfigs Config;
 
-    public static bool GetItemCount(Item[] inv, Func<Item, bool> func, out int count)
+    /// <summary>
+    /// 获取瓷砖数量
+    /// </summary>
+    /// <returns>是否存在无限瓷砖</returns>
+    public static bool ItemCount(Item[] inv, Func<Item, bool> func, out int count)
     {
         bool infinite = false;
         count = 0;

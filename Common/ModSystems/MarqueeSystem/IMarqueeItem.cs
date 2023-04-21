@@ -4,9 +4,15 @@ namespace ImproveGame.Common.ModSystems.MarqueeSystem;
 
 public interface IMarqueeItem
 {
-    public event Action<Vector2, Vector2> OnPreDraw;
-    public event Action<Vector2, Vector2> OnPostDraw;
+    public bool CanDraw();
 
     public RectangleF GetMarquee();
-    public bool CanDrawMarquee();
+
+    public Color GetBorderColor();
+
+    public Color GetBackgroundColor();
+
+    public void PreDraw(ref bool drawVanilla, RectangleF rectangle, Color backgroundColor, Color borderColor) { }
+
+    public void PostDraw(RectangleF rectangle, Color backgroundColor, Color borderColor) { }
 }

@@ -50,8 +50,8 @@ public class AnimationTimer
 
     public AnimationType Type;
     public AnimationState State;
-    public Action OnOpenComplete;
-    public Action OnCloseComplete;
+    public Action OnOpened;
+    public Action OnClosed;
 
     public bool Opening => State == AnimationState.Opening;
     public bool Closing => State == AnimationState.Closing;
@@ -132,11 +132,12 @@ public class AnimationTimer
         {
             Timer += Speed;
         }
+
         if (TimerMax - Timer < 0f)
         {
             Timer = TimerMax;
             State = AnimationState.CompleteOpen;
-            OnOpenComplete?.Invoke();
+            OnOpened?.Invoke();
         }
     }
 
@@ -150,11 +151,12 @@ public class AnimationTimer
         {
             Timer -= Speed;
         }
+
         if (Timer < 0f)
         {
             Timer = 0;
             State = AnimationState.CompleteClose;
-            OnCloseComplete?.Invoke();
+            OnClosed?.Invoke();
         }
     }
 

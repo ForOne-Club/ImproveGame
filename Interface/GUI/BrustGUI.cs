@@ -25,7 +25,7 @@ namespace ImproveGame.Interface.GUI
         {
             base.OnInitialize();
 
-            Timer = new() { OnCloseComplete = () => Visible = false };
+            Timer = new() { OnClosed = () => Visible = false };
 
             fixedModeButton = ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/FixedMode");
             freeModeButton = ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/FreeMode");

@@ -153,7 +153,7 @@ namespace ImproveGame.Interface.PlayerInfo
             // new PlyInfoCard(GetHJSON("WingTimeMax"),
             //     () => $"{MathF.Round((_player.wingTimeMax + _player.rocketTimeMax * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
 
-            _openTimer.OnOpenComplete += () => { _cardPanel.OverflowHidden = false; };
+            _openTimer.OnOpened += () => { _cardPanel.OverflowHidden = false; };
         }
 
         public override void Update(GameTime gameTime)

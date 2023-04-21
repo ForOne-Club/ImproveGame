@@ -14,7 +14,7 @@ namespace ImproveGame.Interface.GUI
 
         public override void OnInitialize()
         {
-            Timer = new() { OnCloseComplete = () => Visible = false };
+            Timer = new() { OnClosed = () => Visible = false };
 
             MainPanel = new();
             MainPanel.SetPadding(0);
