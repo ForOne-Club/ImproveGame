@@ -105,10 +105,11 @@ namespace ImproveGame.Common.GlobalItems
                 return;
             }
 
-            tooltips.Add(new(Mod, "Rare", "Rare: " + item.rare));
+            tooltips.Add(new(Mod, "Rare", $"Rare: {item.rare}"));
             tooltips.Add(new(Mod, "Type", "Type: " + item.type));
             tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
             tooltips.Add(new(Mod, "UseAnimation", "UseAnimation: " + item.useAnimation));
+            
             if (item.shoot > ProjectileID.None)
             {
                 tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot));
@@ -116,7 +117,10 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             if (item.ammo > ItemID.None)
+            {
                 tooltips.Add(new(Mod, "Ammo", "Ammo: " + item.ammo));
+            }
+
             if (item.buffType > 0)
             {
                 tooltips.Add(new(Mod, "BuffType", "BuffType: " + item.buffType));
@@ -136,7 +140,9 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             if (item.createWall > -1)
+            {
                 tooltips.Add(new(Mod, "CreateWall", "CreateWall: " + item.createWall));
+            }
         }
 
         public override bool PreDrawInInventory(Item item, SpriteBatch sb, Vector2 position, Rectangle frame,

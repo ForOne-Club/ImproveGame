@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.Projectiles;
+using Terraria;
 
 namespace ImproveGame.Content.Items
 {
@@ -12,13 +13,8 @@ namespace ImproveGame.Content.Items
 
         public override void SetDefaults()
         {
-            Item.useTime = 15;
-            Item.useAnimation = 15;
-            Item.useStyle = ItemUseStyleID.Swing;
-            Item.rare = ItemRarityID.Red;
-            Item.value = Item.sellPrice(0, 0, 50, 0);
-            Item.mana = 20;
-            Item.UseSound = SoundID.Item1;
+            Item.SetBaseValue(46, 42, ItemRarityID.Red, Item.sellPrice(0, 0, 50));
+            Item.SetUseValue(ItemUseStyleID.Swing, SoundID.Item1, 15, 15, mana: 20);
         }
 
         /// <summary>

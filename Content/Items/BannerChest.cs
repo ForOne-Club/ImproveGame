@@ -196,13 +196,8 @@ namespace ImproveGame.Content.Items
 
         public override void SetDefaults()
         {
-            Item.CloneDefaults(ItemID.EyeOfCthulhuBossBag);
-            Item.consumable = false;
-            Item.maxStack = 1;
-            Item.rare = ItemRarityID.Red;
+            Item.SetBaseValue(48, 42, ItemRarityID.Red, Item.sellPrice(0, 0, 50));
             Item.expert = false;
-            Item.width = 48;
-            Item.height = 42;
         }
 
         public override void SetStaticDefaults() => Item.ResearchUnlockCount = 3;

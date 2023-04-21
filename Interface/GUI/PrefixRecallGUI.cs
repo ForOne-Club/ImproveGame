@@ -220,7 +220,7 @@ public class PrefixTab : SUIPanel
 
     private void Reforge(UIImage ui)
     {
-        if (PrefixId == Item.prefix || !Main.LocalPlayer.CanBuyItem(Price) || !ItemLoader.PreReforge(Item))
+        if (PrefixId == Item.prefix || !ItemLoader.CanReforge(Item) || !Main.LocalPlayer.CanAfford(Price))
         {
             return;
         }

@@ -28,16 +28,9 @@ public class SpaceWand : ModItem
 
     public override void SetDefaults()
     {
-        Item.width = 30;
-        Item.height = 30;
-        Item.rare = ItemRarityID.Red;
-        Item.useStyle = ItemUseStyleID.Shoot;
-        Item.useAnimation = 15;
-        Item.useTime = 15;
-        Item.value = Item.sellPrice(0, 0, 50, 0);
+        Item.SetBaseValue(30, 30, ItemRarityID.Red, Item.sellPrice(0, 0, 50));
+        Item.SetUseValue(ItemUseStyleID.Shoot, SoundID.Item1, 15, 15, mana: 20);
         Item.channel = true;
-
-        Item.mana = 20;
     }
 
     private Point _beginMousePos;

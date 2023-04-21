@@ -113,7 +113,7 @@ namespace ImproveGame.Interface.GUI
             styleButton.Top.Set(slotThird, 0f);
             styleButton.Width.Set(104f, 0f);
             styleButton.Height.Set(42f, 0f);
-            styleButton.OnLeftClick += (_, _) => CreateWand.ToggleStyle();
+            styleButton.OnLeftClick += (_, _) => CreateWand.NextStyle();
             basePanel.Append(styleButton);
         }
 
