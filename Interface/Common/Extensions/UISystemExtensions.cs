@@ -1,6 +1,4 @@
-﻿global using ImproveGame.Interface.Common.Extensions;
-
-namespace ImproveGame.Interface.Common.Extensions
+﻿namespace ImproveGame.Interface.Common.Extensions
 {
     public static class UISystemExtensions
     {

@@ -1,5 +1,7 @@
 ﻿global using ImproveGame.Common.Utils;
 global using ImproveGame.Common.Utils.Extensions;
+global using ImproveGame.Interface.BaseViews;
+global using ImproveGame.Interface.Common.Extensions;
 global using ImproveGame.VertexTypes;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
@@ -20,3 +22,5 @@ global using Terraria.ModLoader;
 global using Terraria.UI;
 global using static ImproveGame.MyUtils;
 global using TrUtils = Terraria.Utils;
+
+// 全局引用列表

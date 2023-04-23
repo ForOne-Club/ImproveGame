@@ -1,5 +1,4 @@
-﻿global using ImproveGame.Interface.BaseViews;
-using ImproveGame.Common.Animations;
+﻿using ImproveGame.Common.Animations;
 
 namespace ImproveGame.Interface.BaseViews
 {
