@@ -3,6 +3,7 @@ using ImproveGame.Common.Configs;
 using ImproveGame.Interface.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
+using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.PlayerInfo;
 
 namespace ImproveGame.Interface.Common
@@ -46,6 +47,10 @@ namespace ImproveGame.Interface.Common
         // 玩家信息表
         public PlayerInfoGUI PlayerInfoGUI;
         public EventTrigger PlayerInfoTrigger;
+
+        // 自动垃圾桶
+        public AutoTrashGUI AutoTrashGUI;
+        public EventTrigger AutoTrashTrigger;
 
         // 药水袋 & 旗帜盒 UI
         public PackageGUI PackageGUI;
@@ -91,6 +96,9 @@ namespace ImproveGame.Interface.Common
             BrustGUI = null;
             BrustInterface = null;
 
+            AutoTrashGUI = null;
+            AutoTrashTrigger = null;
+
             BigBagGUI = null;
             BigBagTrigger = null;
 
@@ -125,6 +133,8 @@ namespace ImproveGame.Interface.Common
             }
 
             // UserInterface 之 EventTrigger 版
+            AutoTrashTrigger = new EventTrigger("Radial Hotbars", "AutoTrash");
+
             PackageTrigger = new EventTrigger("Radial Hotbars", "Package");
 
             BigBagTrigger = new EventTrigger("Radial Hotbars", "BigBag");

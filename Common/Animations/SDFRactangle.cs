@@ -33,8 +33,12 @@ public class SDFRectangle
         coordQ2 = new Vector2(rounded.W);
         vertices.AddRectangle(pos + size, size, coordQ1, coordQ2, rounded.W);
 
+        BlendState blendState = GraphicsDevice.BlendState;
+        GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
         GraphicsDevice.DrawUserPrimitives(0, vertices.ToArray(), 0, vertices.Count / 3);
 
+        GraphicsDevice.BlendState = blendState;
         Main.spriteBatch.spriteEffectPass.Apply();
     }
 

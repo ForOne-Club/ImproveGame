@@ -20,7 +20,7 @@ namespace ImproveGame.Interface.SUIElements
         internal bool Dragging;
         internal Vector2 Offset;
 
-        public SUIPanel(Color borderColor, Color backgroundColor, float rounded = 12, float border = 2,
+        public SUIPanel(Color borderColor, Color backgroundColor, float rounded = 10f, float border = 2,
             bool draggable = false)
         {
             SetPadding(10f);
