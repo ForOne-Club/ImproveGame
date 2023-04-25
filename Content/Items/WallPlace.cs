@@ -13,8 +13,8 @@ namespace ImproveGame.Content.Items
 
         public override void SetDefaults()
         {
-            Item.SetBaseValue(46, 42, ItemRarityID.Red, Item.sellPrice(0, 0, 50));
-            Item.SetUseValue(ItemUseStyleID.Swing, SoundID.Item1, 15, 15, mana: 20);
+            Item.SetBaseValues(46, 42, ItemRarityID.Red, Item.sellPrice(0, 0, 50));
+            Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 15, 15, mana: 20);
         }
 
         /// <summary>

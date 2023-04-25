@@ -196,7 +196,7 @@ namespace ImproveGame.Content.Items
 
         public override void SetDefaults()
         {
-            Item.SetBaseValue(48, 42, ItemRarityID.Red, Item.sellPrice(0, 0, 50));
+            Item.SetBaseValues(48, 42, ItemRarityID.Red, Item.sellPrice(0, 0, 50));
             Item.expert = false;
         }
 

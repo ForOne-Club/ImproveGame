@@ -124,8 +124,8 @@ public class CreateWand : ModItem, IItemOverrideHover
 
     public override void SetDefaults()
     {
-        Item.SetBaseValue(42, 42, ItemRarityID.Red, Item.sellPrice(0, 1));
-        Item.SetUseValue(ItemUseStyleID.Swing, SoundID.Item1, 16, 16, mana: 20);
+        Item.SetBaseValues(42, 42, ItemRarityID.Red, Item.sellPrice(0, 1));
+        Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 16, 16, mana: 20);
     }
 
     public override void HoldItem(Player player)

@@ -27,8 +27,8 @@ public abstract class SelectorItem : ModItem
     public sealed override void SetDefaults()
     {
         // 基本属性
-        Item.SetBaseValue(28, 28, 0, 0);
-        Item.SetUseValue(ItemUseStyleID.Shoot, SoundID.Item1, 18, 18, true);
+        Item.SetBaseValues(28, 28, 0, 0);
+        Item.SetUseValues(ItemUseStyleID.Shoot, SoundID.Item1, 18, 18, true);
         SetItemDefaults();
     }
 
