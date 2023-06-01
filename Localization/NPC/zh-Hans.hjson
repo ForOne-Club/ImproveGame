@@ -1,0 +1,17 @@
+﻿Mods: {
+	ImproveGame: {
+		NPC: {
+			LockHP: 锁定生命值
+			LifeMax: 最大生命值
+			Defense: 防御
+			Damage: 触碰伤害
+			ShowBox: 显示碰撞范围
+			ShowDamageData: 显示伤害数据
+			ShowNameOnHover: 鼠标悬浮时显示 NPC 名称
+			Immortal: 原版只有假人为 true, 绿叶弹会忽略追踪
+			NoGravity: 不受重力影响
+			NoTileCollide: 关闭物块碰撞检测
+			KnockBackResist: 击退抗性, 0 免疫击退
+		}
+	}
+}

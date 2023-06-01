@@ -1,11 +1,18 @@
-﻿using Terraria.ModLoader.IO;
+﻿using Microsoft.Xna.Framework.Input;
+using System.Linq;
+using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.Players;
 
+/// <summary>
+/// 方法需求
+///     4. 添加 近期列表
+///     5. 删除 近期列表
+/// </summary>
 public class AutoTrashPlayer : ModPlayer
 {
     #region 设置 Instance
-    public static AutoTrashPlayer Instance;
+    public static AutoTrashPlayer Instance { get; private set; }
 
     public override void OnEnterWorld(Player player)
     {
@@ -18,75 +25,42 @@ public class AutoTrashPlayer : ModPlayer
     }
     #endregion
 
+    #region 基本属性
     /// <summary>
     /// 自动被丢弃的物品的 type
     /// </summary>
-    private readonly List<int> ItemTypes = new List<int>();
+    public readonly List<Item> AutoDiscardItems = new List<Item>();
 
     /// <summary>
     /// 近期被丢弃的 <see cref="MaxCapacity"/> 件物品
     /// </summary>
-    public readonly List<Item> LastItems = new List<Item>();
-
-    /// <summary>
-    /// 启用自动垃圾桶功能
-    /// </summary>
-    public bool Enabled = false;
+    public readonly List<Item> TrashItems = new List<Item>();
 
     /// <summary>
     /// 垃圾桶最大容量，当然我现在还不会写设置调这个
     /// </summary>
-    public int MaxCapacity = 5;
+    public int MaxCapacity = 6;
 
     public AutoTrashPlayer()
     {
-        LastItems = new List<Item>(MaxCapacity);
+        TrashItems = new List<Item>(MaxCapacity);
     }
+    #endregion
 
-    public bool ContainsAutoTrash(int type)
+    public override bool ShiftClickSlot(Item[] inventory, int context, int slot)
     {
-        return ItemTypes.Contains(type);
-    }
-
-    /// <summary>
-    /// 加入到自动垃圾桶的行列中
-    /// </summary>
-    /// <param name="type"></param>
-    public void AddToAutoTrash(int type)
-    {
-        if (!ItemTypes.Contains(type))
+        if (!inventory[slot].IsAir && context is ItemSlot.Context.InventoryItem or ItemSlot.Context.InventoryCoin or ItemSlot.Context.InventoryAmmo)
         {
-            ItemTypes.Add(type);
-        }
-    }
-
-    /// <summary>
-    /// 从自动回收站删除项目
-    /// </summary>
-    /// <param name="type"></param>
-    public void RemoveItemFromAutoTrash(int type)
-    {
-        ItemTypes.Remove(type);
-    }
-
-    /// <summary>
-    /// 判断 <see cref="LastItems"/> 有没有这个 type 的物品，只判断前 <see cref="MaxCapacity"/> 位
-    /// </summary>
-    /// <param name="itemType"></param>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    private bool LastItemHasItem(int itemType, out int index)
-    {
-        index = -1;
-
-        float cycleCount = Math.Min(MaxCapacity, LastItems.Count);
-
-        for (int i = 0; i < cycleCount; i++)
-        {
-            if (LastItems[i].type == itemType)
+            if (Main.keyState.IsKeyDown(Keys.LeftControl) || Main.keyState.IsKeyDown(Keys.RightControl))
             {
-                index = i;
-                return true;
+                if (!AutoDiscardItems.Any(item => item.type == inventory[slot].type))
+                {
+                    AutoDiscardItems.Add(new Item(inventory[slot].type));
+                }
+
+                StackToLastItemsWithCleanUp(inventory[slot]);
+                inventory[slot] = new Item();
+                SoundEngine.PlaySound(SoundID.Grab);
             }
         }
 
@@ -94,89 +68,76 @@ public class AutoTrashPlayer : ModPlayer
     }
 
     /// <summary>
-    /// 添加物品到垃圾桶
+    /// 添加物品到垃圾桶，并清理多余的
     /// </summary>
     /// <param name="item"></param>
-    public void RmoveItemFromLastItem(Item item)
+    public void StackToLastItemsWithCleanUp(Item item)
     {
-        if (LastItemHasItem(item.type, out int index))
+        int itemIndex = TrashItems.FindIndex(0, Math.Min(MaxCapacity, TrashItems.Count), trashItem =>
         {
-            LastItems[index] = new Item();
-            RemoveExcessItems();
-        }
-    }
+            return trashItem.type == item.type;
+        });
 
-    /// <summary>
-    /// 添加物品到垃圾桶
-    /// </summary>
-    /// <param name="item"></param>
-    public void AddToLastItem(Item item)
-    {
-        if (LastItemHasItem(item.type, out int index))
+        if (itemIndex > -1)
         {
-            Item lastItem = LastItems[index];
-            lastItem.stack = Math.Min(lastItem.maxStack, lastItem.stack + item.stack);
-            if (index != 0)
+            Item trashItem = TrashItems[itemIndex];
+            trashItem.stack = Math.Min(trashItem.maxStack, trashItem.stack + item.stack);
+
+            if (itemIndex != 0)
             {
-                LastItems.RemoveAt(index);
-                LastItems.Insert(0, lastItem);
+                TrashItems.RemoveAt(itemIndex);
+                TrashItems.Insert(0, trashItem);
             }
         }
         else
         {
-            LastItems.Insert(0, item);
+            TrashItems.Insert(0, item);
         }
 
-        RemoveExcessItems();
+        CleanUpTrashItems();
     }
 
     /// <summary>
-    /// 清除多余物品
+    /// 清理、整理垃圾物品
     /// </summary>
-    public void RemoveExcessItems()
+    public void CleanUpTrashItems()
     {
-        for (int i = 0; i < LastItems.Count; i++)
+        for (int i = 0; i < TrashItems.Count; i++)
         {
-            if (LastItems is null || LastItems[i].IsAir)
+            if (TrashItems is null || TrashItems[i].IsAir)
             {
-                LastItems.RemoveAt(i--);
+                TrashItems.RemoveAt(i--);
             }
         }
 
-        if (LastItems.Count > MaxCapacity)
+        if (TrashItems.Count > MaxCapacity)
         {
-            LastItems.RemoveRange(MaxCapacity, LastItems.Count - MaxCapacity);
+            TrashItems.RemoveRange(MaxCapacity, TrashItems.Count - MaxCapacity);
         }
     }
 
     public override void SaveData(TagCompound tag)
     {
-        tag["ItemTypes"] = ItemTypes;
-        tag["LastItems"] = LastItems;
-        tag["Enabled"] = Enabled;
-        tag["MaxCapacity"] = 8; // MaxCapacity;
+        tag["AutoDiscardItems"] = AutoDiscardItems;
+        tag["TrashItems"] = TrashItems;
     }
 
     public override void LoadData(TagCompound tag)
     {
-        if (tag.TryGet("ItemTypes", out List<int> itemTypes))
+        if (tag.TryGet("AutoDiscardItems", out List<Item> autoDiscardItems))
         {
-            foreach (var itemType in itemTypes)
+            foreach (Item item in autoDiscardItems)
             {
-                ItemTypes.Add(itemType);
+                AutoDiscardItems.Add(item);
             }
         }
 
-        if (tag.TryGet("LastItems", out List<Item> lastItems))
+        if (tag.TryGet("TrashItems", out List<Item> lastItems))
         {
             for (int i = 0; i < lastItems.Count; i++)
             {
-                LastItems.Add(lastItems[i]);
+                TrashItems.Add(lastItems[i]);
             }
         }
-
-        tag.TryGet("Enabled", out Enabled);
-        tag.TryGet("MaxCapacity", out MaxCapacity);
-        MaxCapacity = 8;
     }
 }

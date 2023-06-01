@@ -88,12 +88,12 @@ internal class GrabAndPickup : GlobalItem
         };
     }
 
-    private static void PickupPopupText(Item cloneItem, Item self)
+    private static void PickupPopupText(Item origItem, Item newItem)
     {
-        if (self.stack < cloneItem.stack)
+        if (newItem.stack < origItem.stack)
         {
             SoundEngine.PlaySound(SoundID.Grab);
-            PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cloneItem, cloneItem.stack - self.stack);
+            PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, origItem, origItem.stack - newItem.stack);
         }
     }
 
@@ -101,91 +101,98 @@ internal class GrabAndPickup : GlobalItem
     /// 允许你在玩家捡到一项物品时做一些特殊的事情 <br/>
     /// 返回 <see langword="false"/> 以阻止该项目进入玩家的 inventoy，默认情况下返回 true。
     /// </summary>
-    /// <param name="self"></param>
+    /// <param name="item"></param>
     /// <param name="player"></param>
     /// <returns></returns>
-    public override bool OnPickup(Item self, Player player)
+    public override bool OnPickup(Item item, Player player)
     {
+        if (player.TryGetModPlayer(out AutoTrashPlayer autoTrashPlayer) && true && autoTrashPlayer.AutoDiscardItems.Any(adItem => adItem.type == item.type))
+        {
+            autoTrashPlayer.StackToLastItemsWithCleanUp(item);
+            SoundEngine.PlaySound(SoundID.Grab);
+            return false;
+        }
+
         if (!player.TryGetModPlayer(out ImprovePlayer improvePlayer))
         {
             return true;
         }
 
         // 旗帜盒
-        if (improvePlayer.BannerChest is not null && improvePlayer.BannerChest.AutoStorage && ItemToBanner(self) != -1)
+        if (improvePlayer.BannerChest is not null && improvePlayer.BannerChest.AutoStorage && ItemToBanner(item) != -1)
         {
-            Item oldItem = self.Clone();
-            improvePlayer.BannerChest.PutInPackage(ref self);
-            PickupPopupText(oldItem, self);
+            Item origItem = item.Clone();
+            improvePlayer.BannerChest.PutInPackage(ref item);
+            PickupPopupText(origItem, item);
         }
 
-        if (self.IsAir) return false;
+        if (item.IsAir) return false;
 
         // 药水袋
-        if (improvePlayer.PotionBag is not null && improvePlayer.PotionBag.AutoStorage && self.buffType > 0 && self.consumable)
+        if (improvePlayer.PotionBag is not null && improvePlayer.PotionBag.AutoStorage && item.buffType > 0 && item.consumable)
         {
-            Item item = self.Clone();
-            improvePlayer.PotionBag.PutInPackage(ref self);
-            PickupPopupText(item, self);
+            Item origItem = item.Clone();
+            improvePlayer.PotionBag.PutInPackage(ref origItem);
+            PickupPopupText(origItem, origItem);
         }
 
-        if (self.IsAir) return false;
+        if (item.IsAir) return false;
 
         // 大背包
-        if (!self.IsAir && Config.SuperVault &&
+        if (!item.IsAir && Config.SuperVault &&
             player.GetModPlayer<UIPlayerSetting>().SuperVault_SmartGrab &&
             player.TryGetModPlayer(out DataPlayer dataPlayer) &&
-            self.InArray(dataPlayer.SuperVault))
+            item.InArray(dataPlayer.SuperVault))
         {
-            Item oldItem = self.Clone();
-            self.StackToArray(dataPlayer.SuperVault);
-            PickupPopupText(oldItem, self);
+            Item origItem = item.Clone();
+            item.StackToArray(dataPlayer.SuperVault);
+            PickupPopupText(origItem, item);
         }
 
-        if (self.IsAir) return false;
+        if (item.IsAir) return false;
 
         // 虚空保险库 之 智能收纳
-        if (Config.SmartVoidVault && !self.IsAir && !self.IsACoin)
+        if (Config.SmartVoidVault && !item.IsAir && !item.IsACoin)
         {
             // 虚空保险库
-            if (player.IsVoidVaultEnabled && self.InArray(player.bank4.item))
+            if (player.IsVoidVaultEnabled && item.InArray(player.bank4.item))
             {
-                Item oldItem = self.Clone();
-                self.StackToArray(player.bank4.item);
-                PickupPopupText(oldItem, self);
+                Item origItem = item.Clone();
+                item.StackToArray(player.bank4.item);
+                PickupPopupText(origItem, item);
             }
 
-            if (self.IsAir) return false;
+            if (item.IsAir) return false;
 
             // 猪猪 保险箱 ...
-            if (Config.SuperVoidVault && !self.IsAir)
+            if (Config.SuperVoidVault && !item.IsAir)
             {
-                if (improvePlayer.HasPiggyBank && self.InArray(player.bank.item))
+                if (improvePlayer.HasPiggyBank && item.InArray(player.bank.item))
                 {
-                    Item oldItem = self.Clone();
-                    self.StackToArray(player.bank.item);
-                    PickupPopupText(oldItem, self);
+                    Item origItem = item.Clone();
+                    item.StackToArray(player.bank.item);
+                    PickupPopupText(origItem, item);
                 }
 
-                if (self.IsAir) return false;
+                if (item.IsAir) return false;
 
-                if (improvePlayer.HasSafe && !self.IsAir && self.InArray(player.bank2.item))
+                if (improvePlayer.HasSafe && !item.IsAir && item.InArray(player.bank2.item))
                 {
-                    Item oldItem = self.Clone();
-                    self.StackToArray(player.bank2.item);
-                    PickupPopupText(oldItem, self);
+                    Item origItem = item.Clone();
+                    item.StackToArray(player.bank2.item);
+                    PickupPopupText(origItem, item);
                 }
 
-                if (self.IsAir) return false;
+                if (item.IsAir) return false;
 
-                if (improvePlayer.HasDefendersForge && !self.IsAir && self.InArray(player.bank3.item))
+                if (improvePlayer.HasDefendersForge && !item.IsAir && item.InArray(player.bank3.item))
                 {
-                    Item oldItem = self.Clone();
-                    self.StackToArray(player.bank3.item);
-                    PickupPopupText(oldItem, self);
+                    Item origItem = item.Clone();
+                    item.StackToArray(player.bank3.item);
+                    PickupPopupText(origItem, item);
                 }
 
-                if (self.IsAir) return false;
+                if (item.IsAir) return false;
             }
         }
 

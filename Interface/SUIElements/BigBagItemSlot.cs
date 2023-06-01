@@ -385,14 +385,13 @@ namespace ImproveGame.Interface.SUIElements
             }
 
             DrawItemIcon(sb, Item, Color.White, GetDimensions(), size * 0.6154f);
-            if (Item.stack <= 1)
+            
+            if (Item.stack > 1)
             {
-                return;
+                Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(Item.stack.ToString()) * 0.75f;
+                Vector2 textPos = pos + new Vector2(size * 0.18f, (size - textSize.Y) * 0.9f);
+                DrawItemStackStringInternal(sb, Item.stack.ToString(), textPos);
             }
-
-            Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(Item.stack.ToString()) * 0.75f;
-            Vector2 textPos = pos + new Vector2(size * 0.18f, (size - textSize.Y) * 0.9f);
-            DrawItemStackStringInternal(sb, Item.stack.ToString(), textPos);
             // 这段是直接绘制文字，不带边框的，留到这里防止忘了咋写。
             /*DynamicSpriteFontExtensionMethods.DrawString(
                     sb,

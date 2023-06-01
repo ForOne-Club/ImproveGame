@@ -216,7 +216,6 @@ namespace ImproveGame.Interface.Common
         // UserInterface.ActiveInstance 每次变更都会使 Recalculate() 执行一次。
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            // 如果 Insert 是按照向前插入的逻辑，越早插入越晚绘制，也就是越靠近顶层。
             EventTrigger.ModifyInterfaceLayers(layers);
 
             // 诊断网络？

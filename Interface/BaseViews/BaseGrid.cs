@@ -2,62 +2,100 @@
 
 public class BaseGrid : View
 {
+    #region 基本属性
     /// <summary>
-    /// 当前方向上的格子数量
+    /// 行数，-1 代表不限，根据实际子元素数量计算本身大小 <br/>
+    /// 不可与 <see cref="ColumnCount"/> 同时为 -1
     /// </summary>
-    public int MonomerNumber;
+    public int RowCount;
 
     /// <summary>
-    /// 格子之间的间距
+    /// 列数，-1 代表不限，根据实际子元素数量计算本身大小 <br/>
+    /// 不可与 <see cref="RowCount"/> 同时为 -1
     /// </summary>
-    public Vector2 MonomerSpacing;
+    public int ColumnCount;
 
     /// <summary>
-    /// 单体大小
+    /// 单元格之间的水平和垂直间距
     /// </summary>
-    public Vector2 MonomerSize;
+    public Vector2 CellSpacing;
 
     /// <summary>
-    /// 初始设置
+    /// 单元格大小
     /// </summary>
-    /// <param name="monomerNumber"></param>
-    /// <param name="monomerSpacing"></param>
-    /// <param name="monomerSize"></param>
-    public void SetGridValues(int monomerNumber, Vector2 monomerSpacing, Vector2 monomerSize)
+    public Vector2 CellSize;
+    #endregion
+
+    /// <summary>
+    /// 初始必须的设置
+    /// </summary>
+    /// <param name="rowCount"></param>
+    /// <param name="columnCount"></param>
+    /// <param name="cellSpacing"></param>
+    /// <param name="cellSize"></param>
+    public void SetBaseValues(int rowCount, int columnCount, Vector2 cellSpacing, Vector2 cellSize)
     {
-        MonomerNumber = monomerNumber;
-        MonomerSpacing = monomerSpacing;
-        MonomerSize = monomerSize;
+        RowCount = rowCount;
+        ColumnCount = columnCount;
+        CellSpacing = cellSpacing;
+        CellSize = cellSize;
     }
 
     /// <summary>
-    /// 在每次添加后新元素后调用
+    /// 计算并设置自己身的大小，不调用 <see cref="Recalculate"/>
     /// </summary>
-    public void CalculateAndSetGridSizePixels()
+    public void CalculateWithSetGridSize()
     {
-        List<UIElement> uies = (List<UIElement>)Children;
-        float widthNumber = Math.Min(uies.Count, MonomerNumber);
-        float heightNumber = MathF.Ceiling((float)uies.Count / MonomerNumber);
-        Width.Pixels = widthNumber * MonomerSize.X + (widthNumber - 1) * MonomerSpacing.X;
-        Height.Pixels = heightNumber * MonomerSize.Y + (heightNumber - 1) * MonomerSpacing.Y;
-        Recalculate();
-    }
-
-    public void CalculateChildrenPositionPixels()
-    {
-        List<UIElement> uies = (List<UIElement>)Children;
-
-        for (int i = 0; i < uies.Count; i++)
+        if (RowCount <= 0)
         {
-            uies[i].Left.Pixels = i % MonomerNumber * (MonomerSize.X + MonomerSpacing.X);
-            uies[i].Top.Pixels = i / MonomerNumber * (MonomerSize.Y + MonomerSpacing.Y);
+            if (ColumnCount > 0)
+            {
+                Width.Pixels = ColumnCount * (CellSize.X + CellSpacing.X);
+                Height.Pixels = MathF.Ceiling(Children.Count() / (float)ColumnCount) * (CellSize.Y + CellSpacing.Y);
+            }
+            else
+            {
+                throw new Exception("RowCount 和 ColumnCount 不可同时小于 1");
+            }
+        }
+        else
+        {
+            if (ColumnCount > 0)
+            {
+                Width.Pixels = ColumnCount * (CellSize.X + CellSpacing.X);
+                Height.Pixels = RowCount * (CellSize.Y + CellSpacing.Y);
+            }
+            else
+            {
+                Width.Pixels = MathF.Ceiling(Children.Count() / (float)RowCount) * (CellSize.X + CellSpacing.X);
+                Height.Pixels = RowCount * (CellSize.Y + CellSpacing.Y);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 计算并设置子元素的位置，不调用 <see cref="Recalculate"/>
+    /// </summary>
+    public virtual void CalculateWithSetChildrenPosition()
+    {
+        if (Children is List<UIElement> uies)
+        {
+            int uiesCount = uies.Count;
+
+            for (int i = 0; i < uiesCount; i++)
+            {
+                UIElement uie = uies[i];
+
+                uie.Left.Pixels = i % ColumnCount * (CellSize.X + CellSpacing.X);
+                uie.Top.Pixels = i / ColumnCount * (CellSize.Y + CellSpacing.Y);
+            }
         }
     }
 
     public override void Recalculate()
     {
         Opacity.Recalculate();
-        CalculateChildrenPositionPixels();
+        CalculateWithSetChildrenPosition();
         base.Recalculate();
     }
 }

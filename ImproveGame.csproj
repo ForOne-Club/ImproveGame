@@ -13,10 +13,14 @@
 	  <None Remove="MySkill\**" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="QuickAssetReference.TModLoader" Version="1.0.2">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0">
+		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -33,5 +37,20 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="lib\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ModFile Remove="Attributes\AnnotateAttribute.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ModFile Remove="Content\NPCs\DummyDPS.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ModFile Remove="Content\NPCs\DummyConfig.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ModFile Remove="Localization\NPC\en-US.hjson" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ModFile Remove="Localization\NPC\zh-Hans.hjson" />
 	</ItemGroup>
 </Project>
