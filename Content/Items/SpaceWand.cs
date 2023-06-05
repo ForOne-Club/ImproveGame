@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.ModSystems.MarqueeSystem;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
