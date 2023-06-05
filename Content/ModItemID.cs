@@ -4,9 +4,9 @@ namespace ImproveGame.Content
 {
     internal class ModItemID : ModSystem
     {
-        public static int SpaceWand = ModContent.ItemType<SpaceWand>();
-        public static int CreateWand = ModContent.ItemType<CreateWand>();
-        public static int WallPlace = ModContent.ItemType<WallPlace>();
-        public static HashSet<int> NoConsumptionItems = new() { SpaceWand, CreateWand, WallPlace };
+        public static readonly int SpaceWand = ModContent.ItemType<SpaceWand>();
+        public static readonly int CreateWand = ModContent.ItemType<CreateWand>();
+        public static readonly int WallPlace = ModContent.ItemType<WallPlace>();
+        public static readonly HashSet<int> NoConsumptionItems = new() { SpaceWand, CreateWand, WallPlace };
     }
 }

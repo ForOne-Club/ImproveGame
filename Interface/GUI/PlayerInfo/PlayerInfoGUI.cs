@@ -16,9 +16,9 @@ namespace ImproveGame.Interface.PlayerInfo
         {
             get => UIConfigs.Instance.PlyInfo switch
             {
-                UIConfigs.PlyInfoDisplayMode.AlwaysDisplayed => _visible,
-                UIConfigs.PlyInfoDisplayMode.WhenOpeningBackpack => Main.playerInventory && _visible,
-                UIConfigs.PlyInfoDisplayMode.NotDisplayed => false,
+                UIConfigs.PAPDisplayMode.AlwaysDisplayed => _visible,
+                UIConfigs.PAPDisplayMode.WhenOpeningBackpack => Main.playerInventory && _visible,
+                UIConfigs.PAPDisplayMode.NotDisplayed => false,
                 _ => false
             };
             set => _visible = value;

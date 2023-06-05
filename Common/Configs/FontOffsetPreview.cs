@@ -17,7 +17,7 @@ public class FontOffsetPreview : FloatElement
         Height.Set(70f, 0f);
         BaseOffset = -12f;
         Font = FontAssets.MouseText;
-        TextKey = "Config.FontOffsetPreviewText";
+        TextKey = "UIOther.OffsetPreviewText";
         _texture = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/Separator1");
     }
 
@@ -43,6 +43,6 @@ public class BigFontOffsetPreview : FontOffsetPreview
         Height.Set(94f, 0f);
         Font = FontAssets.DeathText;
         BaseOffset = -24f;
-        TextKey = "Config.BigFontOffsetPreviewText";
+        TextKey = "UIOther.OffsetPreviewText";
     }
 }

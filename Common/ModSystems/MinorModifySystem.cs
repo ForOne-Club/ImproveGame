@@ -46,8 +46,10 @@ namespace ImproveGame.Common.ModSystems
             IL_WorldGen.UpdateWorld_Inner += DisableBiomeSpread;
             // NPC住在腐化
             IL_WorldGen.ScoreRoom += LiveInCorrupt;
+
             // 移除Social和Favorite提示
-            IL_Main.MouseText_DrawItemTooltip_GetLinesInfo += il =>
+            // 现在没空修，先保证能运行。
+            /*IL_Main.MouseText_DrawItemTooltip_GetLinesInfo += il =>
             {
                 var c = new ILCursor(il);
 
@@ -64,7 +66,8 @@ namespace ImproveGame.Common.ModSystems
                     c.Emit(OpCodes.Pop);
                     c.Emit(OpCodes.Ldc_I4_0);
                 }
-            };
+            };*/
+
             // 大背包内弹药可直接被使用
             On_Player.ChooseAmmo += (orig, player, weapon) =>
                 orig.Invoke(player, weapon) ??
