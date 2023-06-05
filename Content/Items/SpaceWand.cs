@@ -1,9 +1,8 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using Humanizer;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.ModSystems.MarqueeSystem;
-using ImproveGame.Entitys;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using ImproveGame.QolUISystem.UIStruct;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 
@@ -18,22 +17,19 @@ public class SpaceWand : ModItem, IMarqueeItem
 {
     #region IMarqueeItem 实现
 
-    private bool _canDraw;
-    private RectangleF _marquee;
+    private bool _shouldDrawing;
+    private Rectangle _marquee;
     private Color _backgroundColor;
     private Color _borderColor;
 
-    bool IMarqueeItem.CanDraw() => _canDraw;
+    bool IMarqueeItem.ShouldDrawing => _shouldDrawing;
+    Rectangle IMarqueeItem.Marquee => _marquee;
+    Color IMarqueeItem.BorderColor => _borderColor;
+    Color IMarqueeItem.BackgroundColor => _backgroundColor;
 
-    RectangleF IMarqueeItem.GetMarquee() => _marquee;
-
-    Color IMarqueeItem.GetBorderColor() => _borderColor;
-
-    Color IMarqueeItem.GetBackgroundColor() => _backgroundColor;
-
-    void IMarqueeItem.PostDraw(RectangleF rectangle, Color backgroundColor, Color borderColor)
+    void IMarqueeItem.PostDraw(Rectangle marquee, Color backgroundColor, Color borderColor)
     {
-        Vector2 size = new Vector2((int)rectangle.Width >> 4, (int)rectangle.Height >> 4);
+        Vector2 size = new Vector2(marquee.Width >> 4, marquee.Height >> 4);
         DrawString(Main.MouseScreen + new Vector2(18f), $"{size.MaxXY()}", Color.White, borderColor);
     }
 
@@ -62,12 +58,12 @@ public class SpaceWand : ModItem, IMarqueeItem
     public PlaceType PlaceType;
     public int[] GrassSeeds = new int[] { 2, 23, 60, 70, 199, 109, 82 };
 
-    public Vector2 BeginMousePos;
-    public Vector2 EndMousePos;
+    public Vector2 StartingPoint;
+    public static Vector2 MousePosition => Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
 
     public override void UpdateInventory(Player player)
     {
-        _canDraw = false;
+        _shouldDrawing = false;
     }
 
     public override bool CanUseItem(Player player)
@@ -88,13 +84,13 @@ public class SpaceWand : ModItem, IMarqueeItem
             }
             else
             {
-                TileCount(player.inventory, out int count);
+                ItemCount(player.inventory, GetConditions(), out int count);
 
                 if (count > 0)
                 {
                     CanPlaceTiles = true;
                     ItemRotation(player);
-                    BeginMousePos = Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
+                    StartingPoint = Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
                     RefreshMarquee(player);
                     return true;
                 }
@@ -125,9 +121,8 @@ public class SpaceWand : ModItem, IMarqueeItem
 
     public void UseItem_PreUpdate(Player player)
     {
-        _canDraw = true;
+        _shouldDrawing = true;
 
-        EndMousePos = Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
         RefreshMarquee(player);
 
         player.itemAnimation = player.itemAnimationMax;
@@ -165,7 +160,11 @@ public class SpaceWand : ModItem, IMarqueeItem
             return;
         }
         bool playSound = false;
-        Rectangle platfromRect = _marquee.ToTileRectangle();
+        Rectangle platfromRect = _marquee;
+        platfromRect.X >>= 4;
+        platfromRect.Y >>= 4;
+        platfromRect.Width >>= 4;
+        platfromRect.Height >>= 4;
 
         ForeachTile(platfromRect, (int x, int y) =>
         {
@@ -219,13 +218,10 @@ public class SpaceWand : ModItem, IMarqueeItem
                             }
                         }
                     }
-                    else
+                    else if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
                     {
-                        if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
-                        {
-                            playSound = true;
-                            PickItemInInventory(player, GetConditions(), true, out _);
-                        }
+                        playSound = true;
+                        PickItemInInventory(player, GetConditions(), true, out _);
                     }
                 }
             }
@@ -245,39 +241,33 @@ public class SpaceWand : ModItem, IMarqueeItem
     public void RefreshMarquee(Player player)
     {
         int layingQuantity = Main.netMode == NetmodeID.MultiplayerClient ? 244 : 500;
-        const float tileWidth = 16f;
-        float layingLength = layingQuantity * tileWidth;
 
-        // 平台数量
-        if (!TileCount(player.inventory, out int tileNumber))
+        int layingLength = 16 * (
+            ItemCount(player.inventory, GetConditions(), out int tileCount) ?
+            layingQuantity : Math.Min(layingQuantity, tileCount));
+
+        Vector2 startingPoint = StartingPoint;
+        Vector2 nowPoint = Vector2.Clamp(MousePosition,
+            startingPoint - new Vector2(layingLength - 16f),
+            startingPoint + new Vector2(layingLength - 16f));
+
+        Point position;
+        Point size = (startingPoint - nowPoint).Abs().ToPoint();
+
+        if (size.X > size.Y)
         {
-            layingLength = Math.Min(layingQuantity, tileNumber) * tileWidth;
-        }
-
-        _marquee.Size = (BeginMousePos - EndMousePos).Abs();
-
-        if (_marquee.Width >= _marquee.Height)
-        {
-            _marquee.X = Math.Clamp(Math.Min(BeginMousePos.X, EndMousePos.X), BeginMousePos.X - layingLength, BeginMousePos.X + layingLength);
-            _marquee.Y = BeginMousePos.Y;
-            _marquee.Width = Math.Min(layingLength, _marquee.Size.X + tileWidth);
-            _marquee.Height = tileWidth;
+            position = new Vector2(Math.Min(startingPoint.X, nowPoint.X), startingPoint.Y).ToPoint();
+            size.X = Math.Clamp(size.X + 16, 16, layingLength);
+            size.Y = 16;
         }
         else
         {
-            _marquee.X = BeginMousePos.X;
-            _marquee.Y = Math.Clamp(Math.Min(BeginMousePos.Y, EndMousePos.Y), BeginMousePos.Y - layingLength, BeginMousePos.Y + layingLength);
-            _marquee.Width = tileWidth;
-            _marquee.Height = Math.Min(layingLength, _marquee.Size.Y + tileWidth);
+            position = new Vector2(startingPoint.X, Math.Min(startingPoint.Y, nowPoint.Y)).ToPoint();
+            size.X = 16;
+            size.Y = Math.Clamp(size.Y + 16, 16, layingLength);
         }
-    }
 
-    /// <summary>
-    /// 瓷砖计数
-    /// </summary>
-    public bool TileCount(Item[] inventory, out int count)
-    {
-        return ItemCount(inventory, GetConditions(), out count);
+        _marquee = new Rectangle(position.X, position.Y, size.X, size.Y);
     }
 
     /// <summary>

@@ -458,7 +458,7 @@ namespace ImproveGame.Common.ModSystems
                     if (inv[slot].ModItem is SpaceWand)
                     {
                         SpaceWand spaceWand = inv[slot].ModItem as SpaceWand;
-                        spaceWand.TileCount(inv, out int count);
+                        ItemCount(inv, spaceWand.GetConditions(), out int count);
                         return count;
                     }
                     else if (inv[slot].ModItem is WallPlace)
