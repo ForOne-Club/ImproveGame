@@ -27,6 +27,14 @@ namespace ImproveGame.Common.GlobalItems
             {
                 item.maxStack = Config.ItemMaxStack;
             }
+
+            // 使用速度 → 15
+            // 生命水晶、魔力水晶、生命果
+            if (item.type is 29 or 109 or 1291)
+            {
+                item.autoReuse = true;
+                item.useTime = item.useAnimation = 15;
+            }
         }
 
         // 用这个和公式来加成工具速度，这样就不需要Reload了
@@ -109,7 +117,7 @@ namespace ImproveGame.Common.GlobalItems
             tooltips.Add(new(Mod, "Type", "Type: " + item.type));
             tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));
             tooltips.Add(new(Mod, "UseAnimation", "UseAnimation: " + item.useAnimation));
-            
+
             if (item.shoot > ProjectileID.None)
             {
                 tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot));
