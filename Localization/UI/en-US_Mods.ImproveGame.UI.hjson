@@ -1,0 +1,89 @@
+PlayerInfo: {
+	Name: Player Stats
+	LifeRegen: Life Regen
+	ArmorPenetration: Armor Pen
+	MeleeDamage: Melee Dmg
+	MeleeCrit: Melee Crit
+	MeleeSpeed: Melee Speed
+	RangedDamage: Ranged Dmg
+	RangedCrit: Ranged Crit
+	ManaRegen: Mana Regen
+	ManaDamage: Mana Dmg
+	ManaCrit: Mana Crit
+	ManaCost: Mana Cost
+	SummonDamage: Summon Dmg
+	MaxMinions: Max Minions
+	MaxTurrets: Max Sentry
+	Endurance: Endurance
+	FishingSkill: Fishing Power
+	Luck: Luck
+	Aggro: Aggro
+	WingTimeMax: Flight Time
+	CardWidth: "190"
+	WingTime: Mods.ImproveGame.UI.PlayerInfo.WingTime
+}
+
+ExtremeStorage: {
+	AddChest: Add Chest
+
+	CountForCrafting: {
+		Label: Count for Crafting
+		Tooltip:
+			'''
+			Controls whether items under a category can be counted in crafting
+			Currently unusable in multiplayer mode, though you could still craft with items in the chest you open
+			若某个分类下的物品过多，会造成一定的性能损耗，建议低端电脑用户在需要时再开启
+			'''
+	}
+
+	UseUnlimitedPotion: {
+		Label: Infinite Potion
+		Tooltip:
+			'''
+			Controls whether potions and buff stations under '{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}' can be used for Infinite Potion
+			You need to enable 'Infinite Potions' in mod config
+			'''
+	}
+
+	UsePortableStation: {
+		Label: Portable Crafting Station
+		Tooltip:
+			'''
+			Controls whether stations under '{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}' can be used for Portable Crafting Station
+			You need to enable 'Portable Crafting Stations' in mod config
+			'''
+	}
+
+	ChestBeingUsed:
+		'''
+		Chest for this slot is being used by another player
+		No action can be taken
+		'''
+	// 介绍使用了手动换行让排版看起来舒服点
+	BasicIntroduction:
+		'''
+		Note:
+		  1. Chest sorting depends on identifiers prefixed
+		     on the chests' names. Please do NOT arbitrarily
+		     edit chest names
+		  2. You still need to sort items manually
+		     The identifiers are just for convenience
+		  3. In multiplayer mode, if a chest is being used by
+		     another player, you are not able to take actions
+		     on items inside the chest
+		'''
+
+	ItemGroup: {
+		Weapon: "{$CreativePowers.TabWeapons}"
+		Tool: "{$CreativePowers.TabTools}"
+		Ammo: "{$LegacyInterface.27}"
+		Armor: "{$CreativePowers.TabArmor}"
+		Accessory: "{$CreativePowers.TabAccessories}"
+		Furniture: "{$CreativePowers.TabFurniture}"
+		Block: "{$CreativePowers.TabBlocks}"
+		Material: "{$CreativePowers.TabMaterials}"
+		Alchemy: Alchemy
+		Misc: "{$CreativePowers.TabMisc}"
+		Setting: "{$LegacyMenu.14}"
+	}
+}
