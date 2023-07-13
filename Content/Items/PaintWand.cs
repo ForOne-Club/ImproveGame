@@ -11,18 +11,25 @@ namespace ImproveGame.Content.Items
         public override bool ModifySelectedTiles(Player player, int i, int j)
         {
             var tile = Main.tile[i, j];
-            bool tileMode = WandSystem.PaintWandMode == WandSystem.PaintMode.Tile;
-            bool wallMode = WandSystem.PaintWandMode == WandSystem.PaintMode.Wall;
-            bool removeMode = WandSystem.PaintWandMode == WandSystem.PaintMode.Remove;
+            bool tileMode = WandSystem.PaintWandMode is WandSystem.PaintMode.Tile;
+            bool wallMode = WandSystem.PaintWandMode is WandSystem.PaintMode.Wall;
+            bool removeMode = WandSystem.PaintWandMode is WandSystem.PaintMode.Remove;
             if (removeMode)
             {
-                if (tile.TileColor > 0 && tile.HasTile)
+                if (tile.HasTile)
                 {
-                    WorldGen.paintTile(i, j, 0, broadCast: true);
+                    if (tile.TileColor > 0)
+                        WorldGen.paintTile(i, j, 0, broadCast: true);
+                    if (tile.IsTileInvisible || tile.IsTileFullbright)
+                        WorldGen.paintCoatTile(i, j, 0, broadcast: true);
                 }
-                if (tile.WallColor > 0 && tile.WallType > 0)
+
+                if (tile.WallType > 0)
                 {
-                    WorldGen.paintWall(i, j, 0, broadCast: true);
+                    if (tile.WallColor > 0)
+                        WorldGen.paintWall(i, j, 0, broadCast: true);
+                    if (tile.IsWallInvisible || tile.IsWallFullbright)
+                        WorldGen.paintCoatWall(i, j, 0, broadcast: true);
                 }
 
                 // 漆铲可用于清除图格上的苔藓
@@ -53,39 +60,64 @@ namespace ImproveGame.Content.Items
                             break;
                     }
 
-                    int number = Item.NewItem(new EntitySource_ItemUse(player, player.HeldItem), player.Center, 16, 16, type);
+                    int number = Item.NewItem(new EntitySource_ItemUse(player, player.HeldItem), player.Center, 16, 16,
+                        type);
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
                 }
             }
             else
             {
+                bool ConsumeCurrentItem(Item item)
+                {
+                    if (item.stack >= 999)
+                        return true;
+                    if (ItemLoader.ConsumeItem(item, player))
+                        item.stack--;
+                    if (item.stack <= 0)
+                        item.SetDefaults();
+                    return true;
+                }
+
                 PickItemInInventory(
                     player,
-                    (Item item) =>
-                        item.paint > 0 &&
-                        ((tileMode && tile.TileColor != item.paint) ||
-                        (wallMode && tile.WallColor != item.paint)),
+                    item => item.PaintOrCoating,
                     false,
                     out int index
                 );
+
                 if (index == -1)
                     return true;
+
                 var item = player.inventory[index];
-                if (index != -1)
-                {
-                    // 原版逻辑
-                    if ((tileMode && WorldGen.paintTile(i, j, item.paint, broadCast: true)) || WorldGen.paintWall(i, j, item.paint, broadCast: true))
-                    {
-                        if (item.stack >= 999)
-                            return true;
-                        if (ItemLoader.ConsumeItem(item, player))
-                            item.stack--;
-                        if (item.stack <= 0)
-                            item.SetDefaults();
-                    }
-                }
+
+                // 原版逻辑
+                if (item.paint > 0 && ((tileMode && WorldGen.paintTile(i, j, item.paint, broadCast: true)) ||
+                                       WorldGen.paintWall(i, j, item.paint, broadCast: true)))
+                    return ConsumeCurrentItem(item);
+
+                if (item.paintCoating > 0 && ((tileMode && WorldGen.paintCoatTile(i, j, item.paintCoating, broadcast: true)) ||
+                                              WorldGen.paintCoatWall(i, j, item.paintCoating, broadcast: true)))
+                    return ConsumeCurrentItem(item);
             }
+
             return true;
+        }
+
+        public override void HoldItem(Player player)
+        {
+            PickItemInInventory(
+                player,
+                item => item.PaintOrCoating,
+                false,
+                out int index
+            );
+
+            if (index == -1)
+                return;
+
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = player.inventory[index].type;
+            player.cursorItemIconPush = 6;
         }
 
         public override bool IsNeedKill()

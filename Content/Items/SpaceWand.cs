@@ -144,6 +144,16 @@ public class SpaceWand : ModItem, IMarqueeItem
         _backgroundColor = color * 0.35f;
     }
 
+    public override void HoldItem(Player player)
+    {
+        int oneIndex = EnoughItem(player, GetConditions());
+        if (oneIndex == -1) return;
+        
+        player.cursorItemIconEnabled = true;
+        player.cursorItemIconID = player.inventory[oneIndex].type;
+        player.cursorItemIconPush = 6;
+    }
+
     // 学单词
     // Judge v: 法官、判断、判定。n: 法官、裁判、裁判员
 

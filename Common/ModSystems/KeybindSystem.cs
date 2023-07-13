@@ -16,42 +16,6 @@ public class KeybindSystem : ModSystem
     public static ModKeybind GrabBagKeybind { get; private set; }
     public static ModKeybind HotbarSwitchKeybind { get; private set; }
 
-    // 为各种Mod控件特制的翻译
-    private static readonly Dictionary<string, string> ZhTranslationSupports = new()
-    {
-        {"CalamityMod: Normality Relocator", "Calamity Mod (灾厄): 常态定位仪" },
-        {"CalamityMod: Rage Mode", "Calamity Mod (灾厄): 怒气模式" },
-        {"CalamityMod: Adrenaline Mode", "Calamity Mod (灾厄): 肾上腺素" },
-        {"CalamityMod: Elysian Guard", "Calamity Mod (灾厄): 极乐守护" },
-        {"CalamityMod: Armor Set Bonus", "Calamity Mod (灾厄): 套装奖励" },
-        {"CalamityMod: Astral Teleport", "Calamity Mod (灾厄): 天魔星石传送" },
-        {"CalamityMod: Astral Arcanum UI Toggle", "Calamity Mod (灾厄): 开关星辉秘术UI" },
-        {"CalamityMod: Momentum Capacitor Effect", "Calamity Mod (灾厄): 动量变压器" },
-        {"CalamityMod: Sand Cloak Effect", "Calamity Mod (灾厄): 沙尘披风" },
-        {"CalamityMod: Spectral Veil Teleport", "Calamity Mod (灾厄): 幽灵披风传送" },
-        {"CalamityMod: Booster Dash", "Calamity Mod (灾厄): 瘟疫燃料背包冲刺" },
-        {"CalamityMod: Angelic Alliance Blessing", "Calamity Mod (灾厄): 圣天誓盟祝福" },
-        {"CalamityMod: God Slayer Dash", "Calamity Mod (灾厄): 弑神者冲刺" },
-        {"CalamityMod: Exo Chair Speed Up", "Calamity Mod (灾厄): 星流飞椅加速" },
-        {"CalamityMod: Exo Chair Slow Down", "Calamity Mod (灾厄): 星流飞椅减速" },
-        {"AlchemistNPCLite: Discord Buff Teleportation", "Alchemist NPC Lite: 混沌传送增益一键传送" },
-        {"RecipeBrowser: Toggle Recipe Browser", "Recipe Browser (合成表): 开关合成表查询UI" },
-        {"RecipeBrowser: Query Hovered Item", "Recipe Browser (合成表): 一键查询指定物品" },
-        {"RecipeBrowser: Toggle Favorited Recipes Window", "Recipe Browser (合成表): 开关收藏配方展示界面" },
-        {"Fargowiltas: Quick Recall/Mirror", "Fargo之突变: 快捷回忆药水/魔镜" },
-        {"Fargowiltas: Quick Use Custom (Bottom Left Inventory Slot)", "Fargo之突变: 快捷使用物品栏左下角物品" },
-        {"Fargowiltas: Open Stat Sheet", "Fargo之突变: 开关玩家数据UI" },
-        {"BossChecklist: Toggle Boss Checklist", "Boss Checklist (Boss清单): 开关Boss清单" },
-        {"BossChecklist: Toggle Boss Log", "Boss Checklist (Boss清单): 开关Boss日志" },
-        {"HEROsMod: Quick Stack", "HERO's Mod: 快速堆叠至附近的箱子" },
-        {"HEROsMod: Sort Inventory", "HERO's Mod: 快捷整理物品栏" },
-        {"HEROsMod: Swap Hotbar", "HERO's Mod: 切换快捷栏物品" },
-        {"CheatSheet: Toggle Cheat Sheet Hotbar", "Cheat Sheet (作弊小抄): 切换快捷栏物品" },
-        {"OreExcavator: Excavate (while mining)", "Ore Excavator (连锁挖矿): 开启连锁" },
-        {"OreExcavator: Whitelist hovered", "Ore Excavator (连锁挖矿): 加入白名单" },
-        {"OreExcavator: Un-whitelist hovered", "Ore Excavator (连锁挖矿): 取消白名单" },
-    };
-
     private static readonly Dictionary<string, string> ZhTranslationKeybind = new()
     {
         {"Mouse1", "鼠标左键" }, {"Mouse2", "鼠标右键" }, {"Mouse3", "鼠标中键" },
@@ -72,7 +36,6 @@ public class KeybindSystem : ModSystem
     {
         DrawSelf += DrawHoverText;
         GenInput += TranslatedInput;
-        GetFriendlyName += TranslatedFriendlyName;
         CreateBindingGroup += AddModifyTip;
         SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "HugeInventory", "F");
         BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "BuffTracker", "NumPad3");
@@ -122,11 +85,9 @@ public class KeybindSystem : ModSystem
     private Terraria.GameContent.UI.States.UISortableElement AddModifyTip(orig_CreateBindingGroup orig, Terraria.GameContent.UI.States.UIManageControls self, int elementIndex, List<string> bindings, Terraria.GameInput.InputMode currentInputMode)
     {
         var uISortableElement = orig.Invoke(self, elementIndex, bindings, currentInputMode);
-        if (Language.ActiveCulture.Name == "zh-Hans" && (elementIndex == 5 || elementIndex == 0))
+        if (Language.ActiveCulture.Name == "zh-Hans" && elementIndex == 0)
         {
-            string str = "部分控件汉化由“更好的体验”提供";
-            if (elementIndex == 0)
-                str = "“更好的体验”提供了键位汉化";
+            string str = "“更好的体验”提供了键位汉化";
             UIText text = new(str, 0.8f)
             {
                 VAlign = 0f,
@@ -159,23 +120,6 @@ public class KeybindSystem : ModSystem
             uISortableElement.Recalculate();
         }
         return uISortableElement;
-    }
-
-    // 不让我用翻译是吧，我直接给你On掉
-    private string TranslatedFriendlyName(orig_GetFriendlyName orig, UIKeybindingListItem item)
-    {
-        string keybindName = item._keybind;
-        if (keybindName.StartsWith("ImproveGame: $Mods.ImproveGame.Keybind"))
-        {
-            keybindName = Language.GetTextValue(keybindName["ImproveGame: $".Length..]);
-            keybindName = GetText("ModName") + ": " + keybindName;
-            return Language.GetTextValue(keybindName);
-        }
-        if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans" && ZhTranslationSupports.TryGetValue(keybindName, out string translatedString))
-        {
-            return translatedString;
-        }
-        return orig.Invoke(item);
     }
 
     public override void Unload()

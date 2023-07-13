@@ -17,6 +17,16 @@ namespace ImproveGame.Content.Items
             Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 15, 15, mana: 20);
         }
 
+        public override void HoldItem(Player player)
+        {
+            Item firstWall = FirstWall(player);
+            if (firstWall is null) return;
+
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = firstWall.type;
+            player.cursorItemIconPush = 6;
+        }
+
         /// <summary>
         /// 判断是不是实体块
         /// </summary>
@@ -32,7 +42,8 @@ namespace ImproveGame.Content.Items
         {
             Tile tile = Main.tile[position.X, position.Y];
 
-            if (tile.HasTile && (TileID.Sets.Platforms[tile.TileType] || Main.tileSolid[tile.TileType] || tile.TileType == 10 || tile.TileType == 11))
+            if (tile.HasTile && (TileID.Sets.Platforms[tile.TileType] || Main.tileSolid[tile.TileType] ||
+                                 tile.TileType == 10 || tile.TileType == 11))
                 return 1;
 
             if (tile.WallType == 0)
@@ -44,7 +55,8 @@ namespace ImproveGame.Content.Items
         public static void SearchWalls(Point pos, ref List<Point> walls1, ref List<Point> walls2)
         {
             // 不在世界内，在Wall内，大于500
-            if (pos.X >= Main.maxTilesX || pos.Y >= Main.maxTilesY || pos.X <= 0 || pos.Y <= 0 || walls1.Contains(pos) || walls2.Contains(pos) || walls1.Count > 2500 || walls2.Count > 2500)
+            if (pos.X >= Main.maxTilesX || pos.Y >= Main.maxTilesY || pos.X <= 0 || pos.Y <= 0 ||
+                walls1.Contains(pos) || walls2.Contains(pos) || walls1.Count > 2500 || walls2.Count > 2500)
                 return;
 
             int hasTile = HasBoundary(pos, ref walls1, ref walls2);
@@ -78,6 +90,7 @@ namespace ImproveGame.Content.Items
                         return true;
                     }
                 }
+
                 List<Point> walls1 = new(), walls2 = new();
                 SearchWalls(point, ref walls1, ref walls2);
 
@@ -116,14 +129,17 @@ namespace ImproveGame.Content.Items
                                 return -1;
                             return 0;
                         });*/
-                        CombatText.NewText(player.getRect(), new Color(0, 155, 255), GetText("CombatText.Item.WallPlace_Consume") + walls1.Count);
-                        Projectile proj = Projectile.NewProjectileDirect(null, center, Vector2.Zero, RobotType, 0, 0, player.whoAmI);
+                        CombatText.NewText(player.getRect(), new Color(0, 155, 255),
+                            GetText("CombatText.Item.WallPlace_Consume") + walls1.Count);
+                        Projectile proj = Projectile.NewProjectileDirect(null, center, Vector2.Zero, RobotType, 0, 0,
+                            player.whoAmI);
                         proj.Center = center;
                         WallRobot robot = (WallRobot)proj.ModProjectile;
                         robot.Walls = walls1;
                     }
                 }
             }
+
             return true;
         }
 

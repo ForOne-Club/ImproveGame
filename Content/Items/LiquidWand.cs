@@ -62,7 +62,8 @@ namespace ImproveGame.Content.Items
                 {
                     int oldType = t.LiquidType;
                     t.LiquidType = WandSystem.LiquidMode; // 设置成相应的液体
-                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
+                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount,
+                        false);
                     // 还是没有液体，设置回来（虽然我不知道有啥用）
                     if (t.LiquidAmount == 0)
                     {
@@ -72,18 +73,17 @@ namespace ImproveGame.Content.Items
                 }
                 else
                 {
-                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, false);
+                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount,
+                        false);
                 }
             }
+
             return true;
         }
 
-        [CloneByReference]
-        internal float Water;
-        [CloneByReference]
-        internal float Lava;
-        [CloneByReference]
-        internal float Honey;
+        [CloneByReference] internal float Water;
+        [CloneByReference] internal float Lava;
+        [CloneByReference] internal float Honey;
 
         public override bool CanUseItem(Player player)
         {
@@ -148,16 +148,31 @@ namespace ImproveGame.Content.Items
         public override void HoldItem(Player player)
         {
             if (Main.dedServ || Main.myPlayer != player.whoAmI)
+                return;
+
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconPush = 6;
+            player.cursorItemIconID = WandSystem.LiquidMode switch
+            {
+                LiquidID.Water => ItemID.BottomlessBucket,
+                LiquidID.Lava => ItemID.BottomlessLavaBucket,
+                LiquidID.Honey => ItemID.BottomlessHoneyBucket,
+                LiquidID.Shimmer => ItemID.BottomlessShimmerBucket,
+                _ => 0
+            };
+
+            if (WandSystem.AbsorptionMode)
+                player.cursorItemIconID = ItemID.UltraAbsorbantSponge;
+
+            UISystem.Instance.LiquidWandGUI.CurrentSlot = player.selectedItem;
+            // 还在用物品的时候不能打开UI
+            if (player.mouseInterface || player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease ||
+                Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 ||
+                Main.HoveringOverAnNPC || player.talkNPC != -1)
             {
                 return;
             }
 
-            UISystem.Instance.LiquidWandGUI.CurrentSlot = player.selectedItem;
-            // 还在用物品的时候不能打开UI
-            if (player.mouseInterface || player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1)
-            {
-                return;
-            }
             if (!LiquidWandGUI.Visible)
             {
                 UISystem.Instance.LiquidWandGUI.Open();
@@ -187,6 +202,7 @@ namespace ImproveGame.Content.Items
                     }
                 }
             }
+
             return false;
         }
 
@@ -201,8 +217,9 @@ namespace ImproveGame.Content.Items
                     tooltip = GetText("Tips.LiquidWandOff");
                 }
 
-                tooltips.Add(new(Mod, "LiquidWand", tooltip) { OverrideColor = Color.LightGreen });
+                tooltips.Add(new(Mod, "LiquidWand", tooltip) {OverrideColor = Color.LightGreen});
             }
+
             ItemInInventory = false;
         }
 

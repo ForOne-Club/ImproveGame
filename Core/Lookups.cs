@@ -5,6 +5,12 @@
 /// </summary>
 public static class Lookups
 {
+    // 便捷储存
+    public static readonly List<int> Bank2Items = new() { ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem };
+    public static readonly List<int> Bank3Items = new() { ItemID.Safe };
+    public static readonly List<int> Bank4Items = new() { ItemID.DefendersForge };
+    public static readonly List<int> Bank5Items = new() { ItemID.VoidLens, ItemID.VoidVault, ItemID.ClosedVoidBag };
+    
     // 特殊药水
     public static readonly List<int> SpecialPotions = new()
     {

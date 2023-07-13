@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Core;
 using System.Collections.ObjectModel;
 
 namespace ImproveGame.Common.GlobalItems
@@ -21,7 +22,7 @@ namespace ImproveGame.Common.GlobalItems
             if (!Config.MiddleEnableBank)
                 return;
 
-            if (Bank2Items.Contains(item.type) && Config.AutoSaveMoney)
+            if (Lookups.Bank2Items.Contains(item.type) && Config.AutoSaveMoney)
             {
                 tooltips.Add(new(Mod, "TagDetailed.AutoCollect", GetText("Tips.TagDetailed.AutoCollect")) { OverrideColor = Color.SkyBlue });
                 TagItem.AddShiftForMoreTooltip(tooltips);
@@ -38,10 +39,10 @@ namespace ImproveGame.Common.GlobalItems
 
                 // 决定文本显示的是“开启”还是“关闭”
                 string tooltip = GetText("Tips.BankEnableOn");
-                if ((player.chest == -2 && Bank2Items.Contains(item.type)) ||
-                    (player.chest == -3 && Bank3Items.Contains(item.type)) ||
-                    (player.chest == -4 && Bank4Items.Contains(item.type)) ||
-                    (player.chest == -5 && Bank5Items.Contains(item.type)))
+                if ((player.chest == -2 && Lookups.Bank2Items.Contains(item.type)) ||
+                    (player.chest == -3 && Lookups.Bank3Items.Contains(item.type)) ||
+                    (player.chest == -4 && Lookups.Bank4Items.Contains(item.type)) ||
+                    (player.chest == -5 && Lookups.Bank5Items.Contains(item.type)))
                 {
                     tooltip = GetText("Tips.BankEnableOff");
                 }
@@ -51,7 +52,7 @@ namespace ImproveGame.Common.GlobalItems
                 SoundStyle? sound = null;
                 if (Main.mouseMiddle && Main.mouseMiddleRelease)
                 {
-                    if (Bank2Items.Contains(item.type))
+                    if (Lookups.Bank2Items.Contains(item.type))
                     {
                         if (item.type == ItemID.ChesterPetItem)
                         {
@@ -64,17 +65,17 @@ namespace ImproveGame.Common.GlobalItems
                         ToggleChest(ref player, -2, sound: sound);
                         return;
                     }
-                    if (Bank3Items.Contains(item.type))
+                    if (Lookups.Bank3Items.Contains(item.type))
                     {
                         ToggleChest(ref player, -3);
                         return;
                     }
-                    if (Bank4Items.Contains(item.type))
+                    if (Lookups.Bank4Items.Contains(item.type))
                     {
                         ToggleChest(ref player, -4);
                         return;
                     }
-                    if (Bank5Items.Contains(item.type))
+                    if (Lookups.Bank5Items.Contains(item.type))
                     {
                         if (item.type == ItemID.VoidLens)
                         {
@@ -89,7 +90,7 @@ namespace ImproveGame.Common.GlobalItems
 
         public override bool PreDrawTooltip(Item item, ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
         {
-            if (ItemSlot.ShiftInUse && Bank2Items.Contains(item.type) && Config.AutoSaveMoney)
+            if (ItemSlot.ShiftInUse && Lookups.Bank2Items.Contains(item.type) && Config.AutoSaveMoney)
                 TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines), x, y);
             return base.PreDrawTooltip(item, lines, ref x, ref y);
         }

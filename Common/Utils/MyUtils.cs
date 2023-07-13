@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.ModPlayers;
+using ImproveGame.Core;
 using ReLogic.Graphics;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
@@ -616,12 +617,7 @@ partial class MyUtils
         return item;
     }
 
-    public static readonly List<int> Bank2Items = new() { ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem };
-    public static readonly List<int> Bank3Items = new() { ItemID.Safe };
-    public static readonly List<int> Bank4Items = new() { ItemID.DefendersForge };
-    public static readonly List<int> Bank5Items = new() { ItemID.VoidLens, ItemID.VoidVault };
-
-    public static bool IsBankItem(int type) => Bank2Items.Contains(type) || Bank3Items.Contains(type) || Bank4Items.Contains(type) || Bank5Items.Contains(type);
+    public static bool IsBankItem(int type) => Lookups.Bank2Items.Contains(type) || Lookups.Bank3Items.Contains(type) || Lookups.Bank4Items.Contains(type) || Lookups.Bank5Items.Contains(type);
 
     /// <summary>
     /// 判断指定 Item[] 中是否有 item

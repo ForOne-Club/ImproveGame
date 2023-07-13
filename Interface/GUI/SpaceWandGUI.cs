@@ -57,7 +57,10 @@ namespace ImproveGame.Interface.GUI
                 {
                     // 悬浮文本
                     if (button.IsMouseHovering)
+                    {
                         DrawString(MouseScreenOffset(20), button.Text, Color.White, textColor);
+                        Main.LocalPlayer.cursorItemIconEnabled = false;
+                    }
                 }
             }
         }

@@ -4,6 +4,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.ExtremeStorage;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ObjectData;
 
@@ -113,13 +114,13 @@ public class ExtremeStorage : TETileBase
     {
         Tile tile = Main.tile[i, j];
         Color lightColor = Lighting.GetColor(i, j);
-        Texture2D texture = ModContent.Request<Texture2D>("ImproveGame/Content/Tiles/ExtremeStorage").Value;
-        Texture2D glowTexture =
-            ModContent.Request<Texture2D>("ImproveGame/Content/Tiles/ExtremeStorage_Glow").Value;
-        Texture2D highlightTexture =
-            ModContent.Request<Texture2D>("ImproveGame/Content/Tiles/ExtremeStorage_Highlight").Value;
+        if (tile.IsTileFullbright) lightColor = Color.White;
+        Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
+        Texture2D glowTexture = ModAsset.ExtremeStorage_Glow.Value;
+        Texture2D highlightTexture = ModAsset.ExtremeStorage_Highlight.Value;
 
-
+        if (!Main.ShouldShowInvisibleWalls() && tile.IsTileInvisible) return false;
+        
         if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
         {
             Main.instance.TilesRenderer.AddSpecialLegacyPoint(i, j);
