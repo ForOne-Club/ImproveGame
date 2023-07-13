@@ -28,6 +28,8 @@
 - **[v1.6.4.2]** 移除了武器自动挥舞选项
 - **[v1.6.4.2]** “更好的重铸”改名为“记忆重铸”，且不再降低已出现过的词条的出现概率
 - **[v1.6.4.4]** 微调了UI
+- **[v1.6.4.5]** 优化了拼音搜索，现在支持多音字了
+- **[v1.6.4.5]** 微调了模组配置界面
 ## 其他
 - **[v1.6.4.2]** 小幅降低了记忆重铸的费用
 - **[v1.6.4.2]** 为铺墙机器射弹添加了中文名
@@ -227,8 +229,8 @@
 - **[v1.5.9.1]** Fixed newly crafted Potion Bags share the same inventory
 - **[v1.5.9.2]** Fixed the Fishing Machine not fishing from correct biomes
 ## Additions
-- Added enemy spawn rate slider, only available while having the infinite [Battle Potion][Water Candle][Peace Cadnle][Sunflower] and [Calm Potion]
-- Added Potion Bag, can cotain 20 buff potions at most, potions inside also take effects
+- Added enemy spawn rate slider, only available while having the infinite [Battle Potion][Water Candle][Peace Candle][Sunflower] and [Calm Potion]
+- Added Potion Bag, can contain 20 buff potions at most, potions inside also take effects
 - Merged features of the mod Taller Trees(by Cyril), also supported adjusting height of palm trees
 - Added gem trees always drop gem feature(disabled by default)
 - Added The Travelling Merchant does not depart feature(disabled by default)

@@ -3,8 +3,7 @@ using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
-using NPinyin;
-using System.Diagnostics;
+using PinyinNet;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.ExtremeStorage
@@ -269,10 +268,8 @@ namespace ImproveGame.Interface.ExtremeStorage
 
                 if (Language.ActiveCulture.Name is not "zh-Hans") continue;
 
-                string pinyin = RemoveSpaces(Pinyin.GetPinyin(currentLanguageName));
-                string pinyinInitials = Pinyin.GetInitials(currentLanguageName).ToLower();
-                if (pinyin.Contains(searchContent) || pinyinInitials.Contains(searchContent))
-                {
+                string pinyin = RemoveSpaces(PinyinConvert.GetPinyinForAutoComplete(currentLanguageName));
+                if (pinyin.Contains(searchContent)) {
                     yield return k;
                 }
             }

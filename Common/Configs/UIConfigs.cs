@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using ImproveGame.Common.Configs.Elements;
+using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.Configs;
@@ -8,6 +9,9 @@ public class UIConfigs : ModConfig
     public static UIConfigs Instance { get; set; }
     public override ConfigScope Mode => ConfigScope.ClientSide;
     public override void OnLoaded() => Instance = this;
+
+    [CustomModConfigItem(typeof(OpenUIConfigElement))]
+    public object OpenConfig;
 
     [ReloadRequired]
     public bool ResetNativeUI;

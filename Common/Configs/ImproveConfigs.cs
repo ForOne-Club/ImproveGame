@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs.Elements;
+using ImproveGame.Common.ModSystems;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
@@ -7,9 +8,30 @@ namespace ImproveGame.Common.Configs
 {
     public class ImproveConfigs : ModConfig
     {
-        public const string QolConfigsPath = "Mods.ImproveGame.Configs.ImproveConfigs";
         public override ConfigScope Mode => ConfigScope.ServerSide;
         public override void OnLoaded() => Config = this;
+
+        #region 其他
+
+        [Header("Others")]
+
+        [CustomModConfigItem(typeof(LargerPanelElement))]
+        public object OtherFunctions;
+
+        [CustomModConfigItem(typeof(OpenConfigElement))]
+        public object OpenConfig;
+
+        #endregion
+
+        #region 预设
+
+        [Header("Presets")] [CustomModConfigItem(typeof(ILoveBalanceElement))]
+        public object ILoveBalance;
+
+        [CustomModConfigItem(typeof(FukMeCalamityElement))]
+        public object FukMeCalamity;
+
+        #endregion
 
         #region 物品设置
 
@@ -339,230 +361,6 @@ namespace ImproveGame.Common.Configs
         }
 
         #endregion
-
-        #region 预设
-
-        [Header("Presets")]
-        [DefaultValue(false)]
-        public bool ILoveBalance
-        {
-            get =>
-                SuperVoidVault is false &&
-                SmartVoidVault is false &&
-                SuperVault is false &&
-                ItemMaxStack is 9999 &&
-                GrabDistance is 5 &&
-                NoConsume_SummonItem is false &&
-                ExtraToolSpeed is 0.125f &&
-                ModifyPlayerPlaceSpeed is true &&
-                PortableCraftingStation is true &&
-                NoPlace_BUFFTile_Banner is false &&
-                NoConsume_Potion is false &&
-                NoConsume_Ammo is true &&
-                ImprovePrefix is false &&
-                MiddleEnableBank is true &&
-                AutoSaveMoney is true &&
-                FasterExtractinator is true &&
-                TownNPCGetTFIntoHouse is false &&
-                NPCLiveInEvil is true &&
-                TownNPCSpawnSpeed is -1 &&
-                NoCD_FishermanQuest is true &&
-                NPCCoinDropRate is 1 &&
-                LavalessLavaSlime is true &&
-                TravellingMerchantStay is false &&
-                TravellingMerchantRefresh is true &&
-                BestiaryQuickUnlock is false &&
-                AlchemyGrassGrowsFaster is false &&
-                AlchemyGrassAlwaysBlooms is false &&
-                StaffOfRegenerationAutomaticPlanting is true &&
-                NoBiomeSpread is false &&
-                RespawnWithFullHP is true &&
-                DontDeleteBuff is true &&
-                ExtraPlayerBuffSlots is 99 &&
-                TreeGrowFaster is false &&
-                ShakeTreeFruit is false &&
-                GemTreeAlwaysDropGem is false &&
-                MostTreeMin is 10 &&
-                MostTreeMax is 20 &&
-                PalmTreeMin is 10 &&
-                PalmTreeMax is 20 &&
-                GemTreeMin is 7 &&
-                GemTreeMax is 12
-            ;
-            set
-            {
-                if (value)
-                {
-                    SuperVoidVault = false;
-                    SmartVoidVault = false;
-                    SuperVault = false;
-                    ItemMaxStack = 9999;
-                    GrabDistance = 5;
-                    NoConsume_SummonItem = false;
-                    ExtraToolSpeed = 0.125f;
-                    ModifyPlayerPlaceSpeed = true;
-                    PortableCraftingStation = true;
-                    NoPlace_BUFFTile_Banner = false;
-                    NoConsume_Potion = false;
-                    NoConsume_Ammo = true;
-                    ImprovePrefix = false;
-                    MiddleEnableBank = true;
-                    AutoSaveMoney = true;
-                    FasterExtractinator = true;
-                    TownNPCGetTFIntoHouse = false;
-                    NPCLiveInEvil = true;
-                    TownNPCSpawnSpeed = -1;
-                    NoCD_FishermanQuest = true;
-                    NPCCoinDropRate = 1;
-                    LavalessLavaSlime = true;
-                    TravellingMerchantStay = false;
-                    TravellingMerchantRefresh = true;
-                    BestiaryQuickUnlock = false;
-                    AlchemyGrassGrowsFaster = false;
-                    AlchemyGrassAlwaysBlooms = false;
-                    StaffOfRegenerationAutomaticPlanting = true;
-                    NoBiomeSpread = false;
-                    RespawnWithFullHP = true;
-                    DontDeleteBuff = true;
-                    ExtraPlayerBuffSlots = 99;
-                    TreeGrowFaster = false;
-                    ShakeTreeFruit = false;
-                    GemTreeAlwaysDropGem = false;
-                    MostTreeMin = 10;
-                    MostTreeMax = 20;
-                    PalmTreeMin = 10;
-                    PalmTreeMax = 20;
-                    GemTreeMin = 7;
-                    GemTreeMax = 12;
-                }
-            }
-        }
-
-        [DefaultValue(false)]
-        public bool FukMeCalamity
-        {
-            get =>
-                SuperVoidVault is true &&
-                SmartVoidVault is true &&
-                SuperVault is true &&
-                ItemMaxStack is 9999 &&
-                GrabDistance is 5 &&
-                NoConsume_SummonItem is true &&
-                ExtraToolSpeed is 0.5f &&
-                ModifyPlayerPlaceSpeed is true &&
-                PortableCraftingStation is true &&
-                NoPlace_BUFFTile_Banner is true &&
-                NoConsume_Potion is true &&
-                NoConsume_Ammo is true &&
-                ImprovePrefix is true &&
-                MiddleEnableBank is true &&
-                AutoSaveMoney is true &&
-                FasterExtractinator is true &&
-                TownNPCGetTFIntoHouse is true &&
-                NPCLiveInEvil is true &&
-                TownNPCSpawnSpeed is 12 &&
-                NoCD_FishermanQuest is true &&
-                NPCCoinDropRate is 8 &&
-                LavalessLavaSlime is true &&
-                TravellingMerchantStay is true &&
-                TravellingMerchantRefresh is true &&
-                BestiaryQuickUnlock is true &&
-                AlchemyGrassGrowsFaster is true &&
-                AlchemyGrassAlwaysBlooms is true &&
-                StaffOfRegenerationAutomaticPlanting is true &&
-                NoBiomeSpread is true &&
-                RespawnWithFullHP is true &&
-                DontDeleteBuff is true &&
-                ExtraPlayerBuffSlots is 99 &&
-                TreeGrowFaster is true &&
-                ShakeTreeFruit is true &&
-                GemTreeAlwaysDropGem is true &&
-                MostTreeMin is 22 &&
-                MostTreeMax is 36 &&
-                PalmTreeMin is 22 &&
-                PalmTreeMax is 36 &&
-                GemTreeMin is 20 &&
-                GemTreeMax is 30
-            ;
-            set
-            {
-                if (value)
-                {
-                    SuperVoidVault = true;
-                    SmartVoidVault = true;
-                    SuperVault = true;
-                    ItemMaxStack = 9999;
-                    GrabDistance = 5;
-                    NoConsume_SummonItem = true;
-                    ExtraToolSpeed = 0.5f;
-                    ModifyPlayerPlaceSpeed = true;
-                    PortableCraftingStation = true;
-                    NoPlace_BUFFTile_Banner = true;
-                    NoConsume_Potion = true;
-                    NoConsume_Ammo = true;
-                    ImprovePrefix = true;
-                    MiddleEnableBank = true;
-                    AutoSaveMoney = true;
-                    FasterExtractinator = true;
-                    TownNPCGetTFIntoHouse = true;
-                    NPCLiveInEvil = true;
-                    TownNPCSpawnSpeed = 12;
-                    NoCD_FishermanQuest = true;
-                    NPCCoinDropRate = 8;
-                    LavalessLavaSlime = true;
-                    TravellingMerchantStay = true;
-                    TravellingMerchantRefresh = true;
-                    BestiaryQuickUnlock = true;
-                    AlchemyGrassGrowsFaster = true;
-                    AlchemyGrassAlwaysBlooms = true;
-                    StaffOfRegenerationAutomaticPlanting = true;
-                    NoBiomeSpread = true;
-                    RespawnWithFullHP = true;
-                    DontDeleteBuff = true;
-                    ExtraPlayerBuffSlots = 99;
-                    TreeGrowFaster = true;
-                    ShakeTreeFruit = true;
-                    GemTreeAlwaysDropGem = true;
-                    MostTreeMin = 22;
-                    MostTreeMax = 36;
-                    PalmTreeMin = 22;
-                    PalmTreeMax = 36;
-                    GemTreeMin = 20;
-                    GemTreeMax = 30;
-                }
-            }
-        }
-
-        [CustomModConfigItem(typeof(NonConfigurableFunctionsElement))]
-        public bool OtherFunctions => true;
-
-        #endregion
-
-        class NonConfigurableFunctionsElement : ConfigElement
-        {
-            public override void OnBind()
-            {
-                base.OnBind();
-
-                UIText uiText = new(Language.GetText($"{QolConfigsPath}.OtherFunctions.Header"), 0.8f)
-                {
-                    HAlign = 0f,
-                    VAlign = 0f,
-                    TextOriginX = 0f,
-                    IsWrapped = true
-                };
-
-                uiText.SetSize(0f, 0f, 1f, 1f);
-                uiText.SetPos(6f, 32f);
-
-                uiText.OnInternalTextChange += () =>
-                {
-                    Height = new(uiText.MinHeight.Pixels + 14, 0f);
-                };
-
-                Append(uiText);
-            }
-        }
 
         public override void OnChanged()
         {

@@ -2,7 +2,7 @@ ImproveConfigs: {
 	DisplayName: Improve Configs
 
 	ILoveBalance: {
-		Label: "[centeritem:ImproveGame/MagickWand] I LOVE Balance"
+		Label: I LOVE Balance
 		Tooltip:
 			'''
 			If you want a more vanilla-based gameplay experience, this preset will be your choice
@@ -15,7 +15,7 @@ ImproveConfigs: {
 	}
 
 	FukMeCalamity: {
-		Label: "[centeritem:ImproveGame/StarburstWand] tIMBALoader"
+		Label: tIMBALoader
 		Tooltip:
 			'''
 			This preset includes most convenient features, significantly reduces repetitive works
@@ -446,9 +446,10 @@ ImproveConfigs: {
 	}
 
 	OtherFunctions: {
-		Label: "[centeritem:ThePlan] Other non-configurable functions"
-		Header:
+		Label: Other non-configurable functions
+		Tooltip:
 			'''
+			The following are non-configurable features of this mod
 			- Displaying detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
 			- A hotkey to swap the hotbar with the second row of inventory
 			- Displaying minion slot occupancy in tooltip
@@ -457,7 +458,6 @@ ImproveConfigs: {
 			- Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
 			- 提升了生命水晶、魔力水晶、生命果的使用速度，并允许它们自动挥舞
 			'''
-		Tooltip: ""
 	}
 
 	ExtraToolSpeed: {
@@ -507,77 +507,83 @@ ImproveConfigs: {
 		Together: "[centeritem/h2:GolfCupFlagRed] Better Together"
 		Server: "[centeritem:ImproveGame/CreateWand] Mod Config"
 		Presets: "[centeritem:ImproveGame/PaintWand] Presets"
+		Others: "[centeritem/h4:HandOfCreation] Others"
+	}
+
+	OpenConfig: {
+		Label: 打开配置文件
+		Tooltip: 配置选项只有被修改过一次后才会在文件中出现相应项
 	}
 }
 
 ModItemLoadPage: {
 	MagickWand: {
-		Label: Wand of Brusts
+		Label: "{$Mods.ImproveGame.Items.MagickWand.DisplayName}"
 		Tooltip: ""
 	}
 
 	SpaceWand: {
-		Label: Wand of Space
+		Label: "{$Mods.ImproveGame.Items.SpaceWand.DisplayName}"
 		Tooltip: ""
 	}
 
 	StarburstWand: {
-		Label: Wand of Starbursts
+		Label: "{$Mods.ImproveGame.Items.StarburstWand.DisplayName}"
 		Tooltip: ""
 	}
 
 	WallPlace: {
-		Label: Wand of Technology
+		Label: "{$Mods.ImproveGame.Items.WallPlace.DisplayName}"
 		Tooltip: ""
 	}
 
 	CreateWand: {
-		Label: Wand of Architecture
+		Label: "{$Mods.ImproveGame.Items.CreateWand.DisplayName}"
 		Tooltip: ""
 	}
 
 	LiquidWand: {
-		Label: Wand of Liquids
+		Label: "{$Mods.ImproveGame.Items.LiquidWand.DisplayName}"
 		Tooltip: ""
 	}
 
 	PotionBag: {
-		Label: Potion Bag
+		Label: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}"
 		Tooltip: ""
 	}
 
 	BannerChest: {
-		Label: Banner Box
+		Label: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
 		Tooltip: ""
 	}
 
 	Autofisher: {
-		Label: Fishing Machine
+		Label: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
 		Tooltip: ""
 	}
 
 	PaintWand: {
-		Label: Wand of Painting
+		Label: "{$Mods.ImproveGame.Items.PaintWand.DisplayName}"
 		Tooltip: ""
 	}
 
 	ConstructWand: {
-		Label: Wand of Construction
+		Label: "{$Mods.ImproveGame.Items.ConstructWand.DisplayName}"
 		Tooltip: ""
 	}
 
 	MoveChest: {
-		Label: Wand of Void
+		Label: "{$Mods.ImproveGame.Items.MoveChest.DisplayName}"
 		Tooltip: ""
 	}
 
 	CoinOne: {
-		Label: Lucky Coin
+		Label: "{$Mods.ImproveGame.Items.CoinOne.DisplayName}"
 		Tooltip: ""
 	}
 
 	ExtremeStorage: {
-		Label: Storage Manager
+		Label: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
 		Tooltip: ""
 	}
 
@@ -614,6 +620,11 @@ UIConfigs: {
 
 	FontOffsetPreviewText: Adjust the offset value to make the text fits the line.
 	BigFontOffsetPreviewText: The quick brown fox...
+
+	OpenConfig: {
+		Label: "{$Mods.ImproveGame.Configs.ImproveConfigs.OpenConfig.Label}"
+		Tooltip: "{$Mods.ImproveGame.Configs.ImproveConfigs.OpenConfig.Tooltip}"
+	}
 }
 
 PAPDisplayMode: {

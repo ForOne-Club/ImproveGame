@@ -2,7 +2,7 @@ ImproveConfigs: {
 	DisplayName: 模组配置
 
 	ILoveBalance: {
-		Label: "[centeritem:ImproveGame/MagickWand] 平衡我爱死你啦"
+		Label: 平衡我爱死你啦
 		Tooltip:
 			'''
 			如果你想要一个在原版的基础上更进一步的体验，这款预设会是首选
@@ -15,7 +15,7 @@ ImproveConfigs: {
 	}
 
 	FukMeCalamity: {
-		Label: "[centeritem:ImproveGame/StarburstWand] 泰拉无双启动"
+		Label: 泰拉无双启动
 		Tooltip:
 			'''
 			这款预设包括了大多数方便的功能，大幅度降低了游戏流程的重复与枯燥程度
@@ -453,9 +453,10 @@ ImproveConfigs: {
 	}
 
 	OtherFunctions: {
-		Label: "[centeritem:ThePlan] 其他不可调节功能"
-		Header:
+		Label: 其他不可调节功能
+		Tooltip:
 			'''
+			以下是本模组的不可调节功能
 			- 快捷键展示摸彩袋物品明细（需绑定快捷键）
 			- 快捷键可切换第二行物品至快捷栏
 			- 物品简介显示召唤物槽位占用情况
@@ -464,7 +465,6 @@ ImproveConfigs: {
 			- 提示简化(去除收藏提示,时装栏物品显示详细信息)
 			- 提升了生命水晶、魔力水晶、生命果的使用速度，并允许它们自动挥舞
 			'''
-		Tooltip: ""
 	}
 
 	ExtraToolSpeed: {
@@ -514,77 +514,83 @@ ImproveConfigs: {
 		Together: "[centeritem/h2:GolfCupFlagRed] 独乐不如众乐"
 		Server: "[centeritem:ImproveGame/CreateWand] 模组设置"
 		Presets: "[centeritem:ImproveGame/PaintWand] 预设"
+		Others: "[centeritem/h4:HandOfCreation] 其他"
+	}
+
+	OpenConfig: {
+		Label: 打开配置文件
+		Tooltip: 配置选项只有被修改过一次后才会在文件中出现相应项
 	}
 }
 
 ModItemLoadPage: {
 	MagickWand: {
-		Label: 法爆魔杖
+		// Label: "{$Mods.ImproveGame.Items.MagickWand.DisplayName}"
 		// Tooltip: ""
 	}
 
 	SpaceWand: {
-		Label: 空间魔杖
+		// Label: "{$Mods.ImproveGame.Items.SpaceWand.DisplayName}"
 		// Tooltip: ""
 	}
 
 	StarburstWand: {
-		Label: 液体魔杖
+		// Label: "{$Mods.ImproveGame.Items.StarburstWand.DisplayName}"
 		// Tooltip: ""
 	}
 
 	WallPlace: {
-		Label: 科技魔杖
+		// Label: "{$Mods.ImproveGame.Items.WallPlace.DisplayName}"
 		// Tooltip: ""
 	}
 
 	CreateWand: {
-		Label: 建造魔杖
+		// Label: "{$Mods.ImproveGame.Items.CreateWand.DisplayName}"
 		// Tooltip: ""
 	}
 
 	LiquidWand: {
-		Label: 液体魔杖
+		// Label: "{$Mods.ImproveGame.Items.LiquidWand.DisplayName}"
 		// Tooltip: ""
 	}
 
 	PotionBag: {
-		Label: 药水带
+		// Label: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}"
 		// Tooltip: ""
 	}
 
 	BannerChest: {
-		Label: 旗帜盒
+		// Label: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
 		// Tooltip: ""
 	}
 
 	Autofisher: {
-		Label: 自动钓鱼机
+		// Label: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
 		// Tooltip: ""
 	}
 
 	PaintWand: {
-		Label: 漆涂魔杖
+		// Label: "{$Mods.ImproveGame.Items.PaintWand.DisplayName}"
 		// Tooltip: ""
 	}
 
 	ConstructWand: {
-		Label: 构建魔杖
+		// Label: "{$Mods.ImproveGame.Items.ConstructWand.DisplayName}"
 		// Tooltip: ""
 	}
 
 	MoveChest: {
-		Label: 虚空魔杖
+		// Label: "{$Mods.ImproveGame.Items.MoveChest.DisplayName}"
 		// Tooltip: ""
 	}
 
 	CoinOne: {
-		Label: 幸运金币
+		// Label: "{$Mods.ImproveGame.Items.CoinOne.DisplayName}"
 		// Tooltip: ""
 	}
 
 	ExtremeStorage: {
-		Label: 储存管理器
+		// Label: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
 		// Tooltip: ""
 	}
 
@@ -621,6 +627,11 @@ UIConfigs: {
 
 	FontOffsetPreviewText: 调整偏移值，使文本贴住白线。
 	BigFontOffsetPreviewText: 非常好字体。
+
+	OpenConfig: {
+		// Label: "{$Mods.ImproveGame.Configs.ImproveConfigs.OpenConfig.Label}"
+		// Tooltip: "{$Mods.ImproveGame.Configs.ImproveConfigs.OpenConfig.Tooltip}"
+	}
 }
 
 PAPDisplayMode: {

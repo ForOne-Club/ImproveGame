@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.ExtremeStorage
 {
@@ -91,7 +92,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             // 提示
             if (IsMouseHovering)
             {
-                Main.instance.MouseText(GetText($"{_text}.Tooltip"));
+                UICommon.TooltipMouseText(GetText($"{_text}.Tooltip"));
             }
         }
     }
