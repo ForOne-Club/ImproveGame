@@ -365,11 +365,6 @@ partial class MyUtils
         return ModContent.Request<Texture2D>($"ImproveGame/Assets/Images/{fileName}", AssetRequestMode.ImmediateLoad);
     }
 
-    public static Asset<Effect> GetEffect(string fileName)
-    {
-        return ModContent.Request<Effect>($"ImproveGame/Assets/Effect/{fileName}", AssetRequestMode.ImmediateLoad);
-    }
-
     public static bool TryConsumeMana(Player player, int cost)
     {
         player.statMana -= cost;

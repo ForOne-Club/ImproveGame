@@ -489,7 +489,7 @@ namespace ImproveGame.Interface.SUIElements
 
         public static void OpenItemGlow(SpriteBatch sb)
         {
-            Effect effect = ShaderAssets.Transform.Value;
+            Effect effect = ModAsset.Transform.Value;
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.2f);
             effect.CurrentTechnique.Passes["EnchantedPass"].Apply();
             Main.instance.GraphicsDevice.Textures[1] = GetTexture("Enchanted").Value; // 传入调色板

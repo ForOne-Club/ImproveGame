@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Content;
+using ImproveGame.Core;
 using ImproveGame.Interface.SUIElements;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
@@ -8,29 +9,18 @@ namespace ImproveGame.Common.GlobalItems
 {
     public class ImproveItem : GlobalItem
     {
-        // 不需要对大小进行变动的就用 int[]
-        // 铜，银，金，铂
-        public static readonly int[] Coins = new int[] { 71, 72, 73, 74 };
-
-        // BOSS 召唤物
-        public static readonly int[] SummonItems_Boss = new int[]
-            { 560, 43, 70, 1331, 1133, 5120, 4988, 556, 544, 557, 3601 };
-
-        // 特殊事件 召唤物
-        public static readonly int[] SummonItems_Events = new int[] { 4271, 361, 1315, 2767, 602, 1844, 1958 };
-
         public override void SetDefaults(Item item)
         {
             // 最大堆叠
             if (item.maxStack > 1 && Config.ItemMaxStack > item.maxStack && item.DamageType != DamageClass.Melee &&
-                !Coins.Contains(item.type))
+                !ItemID.Sets.CommonCoin[item.type])
             {
                 item.maxStack = Config.ItemMaxStack;
             }
 
             // 使用速度 → 15
             // 生命水晶、魔力水晶、生命果
-            if (item.type is 29 or 109 or 1291)
+            if (item.type is ItemID.LifeCrystal or ItemID.ManaCrystal or ItemID.LifeFruit)
             {
                 item.autoReuse = true;
                 item.useTime = item.useAnimation = 15;
@@ -74,7 +64,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             // 所有召唤物不会消耗
             if (Config.NoConsume_SummonItem &&
-                (SummonItems_Boss.Contains(item.type) || SummonItems_Events.Contains(item.type)))
+                (Lookups.BossSummonItems.Contains(item.type) || Lookups.EventSummonItems.Contains(item.type)))
                 return false;
 
             // 魔杖 材料 999 不消耗

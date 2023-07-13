@@ -6,7 +6,7 @@ public class SDFRectangle
 
     private static Effect _effect;
 
-    public static void Laod() => _effect = GetEffect("RoundRectangle").Value;
+    public static void Load() => _effect = ModAsset.RoundRectangle.Value;
 
     public static void Unload() => _effect = null;
 

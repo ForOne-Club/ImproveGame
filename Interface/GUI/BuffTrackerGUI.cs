@@ -1,9 +1,11 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.GlobalBuffs;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using System.Reflection;
 using Terraria.GameInput;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI;
 
@@ -417,16 +419,23 @@ public class BuffButton : UIElement
         drawPosition.Y -= 2;
         spriteBatch.Draw(GetTexture("UI/Buff_HoverBorder").Value, drawPosition, Color.White);
 
-        string mouseText = Lang.GetBuffName(BuffId);
-        if (buffEnabled)
-        {
-            mouseText += GetText("BuffTracker.LeftClickDisable");
-        }
-        else
-        {
-            mouseText += GetText("BuffTracker.LeftClickEnable");
-        }
+        string buffName = Lang.GetBuffName(BuffId);
+        string buffTooltip = Main.GetBuffTooltip(Main.LocalPlayer, BuffId);
+        int rare = 0;
+        if (Main.meleeBuff[BuffId])
+            rare = -10;
 
-        Main.instance.MouseText(mouseText);
+        HideGlobalBuff.IsDrawingBuffTracker = true;
+        BuffLoader.ModifyBuffText(BuffId, ref buffName, ref buffTooltip, ref rare);
+        HideGlobalBuff.IsDrawingBuffTracker = false;
+        
+        string mouseText = $"{buffName}\n{buffTooltip}";
+
+        if (buffEnabled)
+            mouseText += $"\n{GetText("BuffTracker.LeftClickDisable")}";
+        else
+            mouseText += $"\n{GetText("BuffTracker.LeftClickEnable")}";
+
+        UICommon.TooltipMouseText(mouseText);
     }
 }

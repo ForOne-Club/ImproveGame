@@ -20,7 +20,7 @@ float4 GlurH(float2 coords : TEXCOORD0) : COLOR0 //水平方向模糊
     float4 color = float4(0, 0, 0, 1);
     float dx = uRange / uScreenResolution.x;
     color = float4(0, 0, 0, 1);
-    for (int c = 0; c < 12; c++)
+    for (int c = 0; c < 9; c++)
     {
         for (int i = -3; i <= 3; i++)
         {

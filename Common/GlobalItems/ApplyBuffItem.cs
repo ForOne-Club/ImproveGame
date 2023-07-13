@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Core;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using System.Collections.ObjectModel;
@@ -7,30 +8,6 @@ namespace ImproveGame.Common.GlobalItems
 {
     public class ApplyBuffItem : GlobalItem
     {
-        // 特殊药水
-        public static readonly List<int> SpecialPotions = new() {
-            ItemID.RecallPotion,
-            ItemID.TeleportationPotion,
-            ItemID.WormholePotion,
-            ItemID.PotionOfReturn
-        };
-
-        public static readonly List<List<int>> BuffTiles = new() {
-            new() { TileID.CatBast, -1, BuffID.CatBast }, // 巴斯特雕像
-            new() { TileID.Campfire, -1, BuffID.Campfire }, // 篝火
-            new() { TileID.Fireplace, -1, BuffID.Campfire }, // 壁炉
-            new() { TileID.HangingLanterns, 9, BuffID.HeartLamp }, // 红心灯笼
-            new() { TileID.HangingLanterns, 7, BuffID.StarInBottle }, // 星星瓶
-            new() { TileID.Sunflower, -1, BuffID.Sunflower }, // 向日葵
-            new() { TileID.AmmoBox, -1, BuffID.AmmoBox }, // 弹药箱
-            new() { TileID.BewitchingTable, -1, BuffID.Bewitched }, // 施法桌
-            new() { TileID.CrystalBall, -1, BuffID.Clairvoyance }, // 水晶球
-            new() { TileID.SliceOfCake, -1, BuffID.SugarRush }, // 蛋糕块
-            new() { TileID.SharpeningStation, -1, BuffID.Sharpened }, // 利器站
-            new() { TileID.WaterCandle, -1, BuffID.WaterCandle }, // 水蜡烛
-            new() { TileID.PeaceCandle, -1, BuffID.PeaceCandle } // 和平蜡烛
-        };
-
         public static void UpdateInventoryGlow(Item item) {
             bool globalItemNotNull = item.TryGetGlobalItem<GlobalItemData>(out var globalItem);
             if (globalItemNotNull)
@@ -44,7 +21,7 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             // 非增益药剂
-            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && SpecialPotions.Contains(item.type) && globalItemNotNull)
+            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && Lookups.SpecialPotions.Contains(item.type) && globalItemNotNull)
                 globalItem.InventoryGlow = true;
 
             // 随身增益站：旗帜
@@ -88,9 +65,9 @@ namespace ImproveGame.Common.GlobalItems
 
         public static bool IsBuffTileItem(Item item, out int buffType) {
             // 会给玩家buff的雕像
-            for (int i = 0; i < BuffTiles.Count; i++) {
-                if (item.createTile == BuffTiles[i][0] && (item.placeStyle == BuffTiles[i][1] || BuffTiles[i][1] == -1)) {
-                    buffType = BuffTiles[i][2];
+            for (int i = 0; i < Lookups.BuffTiles.Count; i++) {
+                if (item.createTile == Lookups.BuffTiles[i].TileID && (item.placeStyle == Lookups.BuffTiles[i].Style || Lookups.BuffTiles[i].Style == -1)) {
+                    buffType = Lookups.BuffTiles[i].BuffID;
                     return true;
                 }
             }
@@ -109,7 +86,7 @@ namespace ImproveGame.Common.GlobalItems
         public override bool ConsumeItem(Item item, Player player) {
             if (item.ModItem?.Mod.Name is "Everglow") return base.ConsumeItem(item, player);
             
-            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && (item.buffType > 0 || SpecialPotions.Contains(item.type))) {
+            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && (item.buffType > 0 || Lookups.SpecialPotions.Contains(item.type))) {
                 return false;
             }
             return base.ConsumeItem(item, player);

@@ -13,7 +13,7 @@ namespace ImproveGame.Common.Configs
 
         #region 物品设置
 
-        [Header($"${QolConfigsPath}.ItemConfigs.Header")]
+        [Header("Item")]
         [DefaultValue(false)]
         public bool SuperVault;
 
@@ -113,7 +113,7 @@ namespace ImproveGame.Common.Configs
 
         #region NPC设置
 
-        [Header($"${QolConfigsPath}.NPCConfigs.Header")]
+        [Header("NPC")]
         [DefaultValue(false)]
         public bool TownNPCGetTFIntoHouse;
 
@@ -158,7 +158,7 @@ namespace ImproveGame.Common.Configs
 
         #region 游戏机制
 
-        [Header($"${QolConfigsPath}.GameMechanics.Header")]
+        [Header("GameMechanics")]
         [DefaultValue(false)]
         public bool AlchemyGrassGrowsFaster;
 
@@ -194,7 +194,7 @@ namespace ImproveGame.Common.Configs
 
         #region 树木设置
 
-        [Header($"${QolConfigsPath}.TreeConfigs.Header")]
+        [Header("Tree")]
         [DefaultValue(true)]
         public bool TreeGrowFaster;
 
@@ -232,7 +232,7 @@ namespace ImproveGame.Common.Configs
 
         #region 多人设置
 
-        [Header($"${QolConfigsPath}.TogetherConfigs.Header")]
+        [Header("Together")]
         [DefaultValue(true)]
         public bool ShareCraftingStation;
 
@@ -250,7 +250,7 @@ namespace ImproveGame.Common.Configs
 
         #region 模组设置
 
-        [Header($"${QolConfigsPath}.ServerSettings.Header")]
+        [Header("Server")]
         [DefaultValue(false)]
         public bool OnlyHost;
 
@@ -342,7 +342,7 @@ namespace ImproveGame.Common.Configs
 
         #region 预设
 
-        [Header($"${QolConfigsPath}.Presets.Header")]
+        [Header("Presets")]
         [DefaultValue(false)]
         public bool ILoveBalance
         {

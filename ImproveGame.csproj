@@ -8,14 +8,8 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.0.3.1" />
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<Publicize Include="tModLoader" />
 		<Publicize Include="FNA" />
 	</ItemGroup>
 	<ItemGroup>

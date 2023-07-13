@@ -102,6 +102,8 @@ namespace ImproveGame.Content.Tiles
             return true;
         }
 
+        public override IEnumerable<Item> GetItemDrops(int i, int j) => new[] {new Item(ItemType())};
+
         //public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         //    if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(i, j, out var fisher))
         //        return;

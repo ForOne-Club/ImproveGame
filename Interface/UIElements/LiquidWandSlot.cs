@@ -209,16 +209,16 @@ namespace ImproveGame.Interface.UIElements
             uTime += LiquidId * 0.3f; // 让每个槽看起来不一样
 
             float uWaveScale = _liquidAmount > 0.9f ? (1.0f - _liquidAmount) * 4f : 0.4f;
-            ShaderAssets.LiquidSurface.Value.Parameters["uTransform"].SetValue(model * projection);
-            ShaderAssets.LiquidSurface.Value.Parameters["uXStart"].SetValue(xCoordStart);
-            ShaderAssets.LiquidSurface.Value.Parameters["uXEnd"].SetValue(xCoordEnd);
-            ShaderAssets.LiquidSurface.Value.Parameters["uTime"].SetValue(uTime);
-            ShaderAssets.LiquidSurface.Value.Parameters["uWaveScale"].SetValue(uWaveScale);
+            ModAsset.LiquidSurface.Value.Parameters["uTransform"].SetValue(model * projection);
+            ModAsset.LiquidSurface.Value.Parameters["uXStart"].SetValue(xCoordStart);
+            ModAsset.LiquidSurface.Value.Parameters["uXEnd"].SetValue(xCoordEnd);
+            ModAsset.LiquidSurface.Value.Parameters["uTime"].SetValue(uTime);
+            ModAsset.LiquidSurface.Value.Parameters["uWaveScale"].SetValue(uWaveScale);
 
             Main.instance.GraphicsDevice.Textures[0] = liquidTexture;
             // 用柏林噪声实现水波纹，如果不是水面，就放张全白的MagicPixel给你
             Main.instance.GraphicsDevice.Textures[1] = isSurface ? ShaderAssets.Perlin.Value : TextureAssets.MagicPixel.Value;
-            ShaderAssets.LiquidSurface.Value.CurrentTechnique.Passes[0].Apply();
+            ModAsset.LiquidSurface.Value.CurrentTechnique.Passes[0].Apply();
 
             Main.instance.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0, triangleList.Count / 3);
         }

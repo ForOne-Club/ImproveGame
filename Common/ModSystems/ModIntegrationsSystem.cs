@@ -81,7 +81,7 @@ namespace ImproveGame.Common.ModSystems
                     return count;
                 }
 
-                var items = RecipeSystem.GetExtraItems();
+                var items = MaterialConsumer.ExtendedCraftingMaterials;
                 foreach (var currentItem in from i in items where !i.IsAir select i)
                 {
                     if (recipe.AcceptedByItemGroups(currentItem.type, item.type))

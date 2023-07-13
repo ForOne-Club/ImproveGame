@@ -49,7 +49,7 @@ namespace ImproveGame.Common.Animations
         public static void HasBorderCross(Vector2 pos, float size, float round, Color backgroundColor, float border,
             Color borderColor, bool ui = true)
         {
-            Effect effect = ShaderAssets.SDFGraphic;
+            Effect effect = ModAsset.SDFGraphic.Value;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
             effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
             effect.Parameters["uBorder"].SetValue(border);
@@ -63,7 +63,7 @@ namespace ImproveGame.Common.Animations
         public static void HasBorderRound(Vector2 pos, float size, Color background, float border, Color borderColor,
             bool ui = true)
         {
-            Effect effect = ShaderAssets.SDFGraphic;
+            Effect effect = ModAsset.SDFGraphic.Value;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
             effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
             effect.Parameters["uBorder"].SetValue(border);
@@ -74,7 +74,7 @@ namespace ImproveGame.Common.Animations
 
         public static void NoBorderRound(Vector2 pos, float size, Color background, bool ui = true)
         {
-            Effect effect = ShaderAssets.SDFGraphic;
+            Effect effect = ModAsset.SDFGraphic.Value;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
             effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
             effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
@@ -93,7 +93,7 @@ namespace ImproveGame.Common.Animations
 
             start += new Vector2(width) - min;
             end += new Vector2(width) - min;
-            Effect effect = ShaderAssets.SDFGraphic;
+            Effect effect = ModAsset.SDFGraphic.Value;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
             effect.Parameters["uStart"].SetValue(start);
             effect.Parameters["uEnd"].SetValue(end);
@@ -114,7 +114,7 @@ namespace ImproveGame.Common.Animations
 
             start += new Vector2(width) - min;
             end += new Vector2(width) - min;
-            Effect effect = ShaderAssets.SDFGraphic;
+            Effect effect = ModAsset.SDFGraphic.Value;
             effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
             effect.Parameters["uStart"].SetValue(start);
             effect.Parameters["uEnd"].SetValue(end);

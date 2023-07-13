@@ -260,16 +260,8 @@ Mods: {
 
 		BuffTracker: {
 			Title: Buff Tracker
-			LeftClickDisable:
-				'''
-
-				<left> to disable this buff
-				'''
-			LeftClickEnable:
-				'''
-
-				<left> to enable this buff
-				'''
+			LeftClickDisable: "[c/CC88AA:<left>] to disable this buff"
+			LeftClickEnable: "[c/CC88AA:<left>] to enable this buff"
 			NoInfBuff: Currently no infinite buff available
 			NoInfBuffAlt: Enable the Infinite Potions in the mod config
 			NPCSpawnRatePanel: Enemy Spawn Rate Panel

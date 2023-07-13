@@ -16,6 +16,7 @@ namespace ImproveGame.Common.GlobalBuffs
 {
     public class HideGlobalBuff : GlobalBuff
     {
+        internal static bool IsDrawingBuffTracker;
         internal static bool UseRegularMethod_NoInventory = false;
         internal static bool UseRegularMethod_Inventory = false;
 
@@ -245,7 +246,7 @@ namespace ImproveGame.Common.GlobalBuffs
         internal static int HidedBuffCountThisFrame;
 
         public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare) {
-            if (TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _))
+            if (TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _) || IsDrawingBuffTracker)
                 return;
 
             tip += $"\n{GetText($"Tips.BuffTracker{(BuffTrackerGUI.Visible ? "Off" : "On")}")}";
