@@ -159,9 +159,9 @@ ImproveConfigs: {
 	}
 
 	ImprovePrefix: {
-		Label: "[centeritem:1551] 记忆重铸"
+		Label: "[centeritem:1551] 可追溯重铸"
 		Tooltip: 允许你直接选择已获得过的前缀
-		Unknown: 未知词缀
+		Unknown: 未知前缀
 	}
 
 	ResurrectionTimeShortened: {

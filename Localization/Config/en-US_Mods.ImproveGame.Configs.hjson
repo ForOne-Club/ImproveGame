@@ -154,7 +154,7 @@ ImproveConfigs: {
 	}
 
 	ImprovePrefix: {
-		Label: "[centeritem:1551] Memory Reforging"
+		Label: "[centeritem:1551] Retrospective Reforging"
 		Tooltip: Prefixes which have been rolled can be applied manually
 		Unknown: Unknown prefix
 	}
@@ -511,8 +511,8 @@ ImproveConfigs: {
 	}
 
 	OpenConfig: {
-		Label: 打开配置文件
-		Tooltip: 配置选项只有被修改过一次后才会在文件中出现相应项
+		Label: Open configuration file
+		Tooltip: Any config will only appear in the file after being modified.
 	}
 }
 

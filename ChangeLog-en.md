@@ -1,4 +1,4 @@
-<h1 align="center">更新日志</h1>
+<h1 align="center">Changelog</h1>
 
 <div align="center">
 
@@ -7,38 +7,38 @@
 </div>
 
 # v1.6.4
-自v1.6.4.0开始，此Mod已更新到 tModLoader 1.4.4 版本
-## 子版本
+This mod has been updated to tModLoader 1.4.4 since v1.6.4.0
+## Subversions
 - v1.6.4.0
 - v1.6.4.2
 - v1.6.4.4
 - v1.6.4.5
-## 新增内容
-- **[v1.6.4.5]** 提升了生命水晶、魔力水晶、生命果的使用速度，并允许它们自动挥舞
-## BUG 修复
-- **[v1.6.4.2]** 部分地修复了构造法杖材料识别错误的BUG
-- **[v1.6.4.2]** 修复了更好的重铸功能只能显示一个词条的BUG
-- **[v1.6.4.2]** 修复了自动钓鱼机和储存管理器挖掉时掉落两个的BUG
-- **[v1.6.4.2]** 修复了“熔岩史莱姆不生成熔岩”不生效的BUG
-- **[v1.6.4.5]** 现在暗影蜡烛和战争桌也算作无限增益站了
-- **[v1.6.4.5]** 修复了朝向左的自动钓鱼机挖下时不掉落物品的BUG
-- **[v1.6.4.5]** 修复了“物品算作合成材料”功能不生效的BUG
-- **[v1.6.4.5]** 修复了关闭的虚空袋无法中键打开的BUG
-- **[v1.6.4.5]** 修复了漆涂法杖无法使用反色和回声涂料的BUG
-- **[v1.6.4.5]** 修复了无法对储存管理器应用反色和回声涂料的BUG
-## 调整内容
-- **[v1.6.4.2]** 除物品栏、虚空存储以外的便携存储空间内的虫洞药水不再生效
-- **[v1.6.4.2]** 移除了武器自动挥舞选项
-- **[v1.6.4.2]** “更好的重铸”改名为“记忆重铸”，且不再降低已出现过的词条的出现概率
-- **[v1.6.4.4]** 微调了UI
-- **[v1.6.4.5]** 优化了拼音搜索，现在支持多音字了
-- **[v1.6.4.5]** 微调了模组配置界面
-- **[v1.6.4.5]** 除构造法杖和建筑法杖以外的其他法杖现在会显示待放置的物块了
-## 其他
-- **[v1.6.4.2]** 小幅降低了记忆重铸的费用
-- **[v1.6.4.2]** 为铺墙机器射弹添加了中文名
-- **[v1.6.4.2]** 优化了“不可调节功能”的显示方式
-- **[v1.6.4.2]** 如遇到不可用功能请 “留言” 或者 “QQ群” 反馈！
+## Additions
+- **[v1.6.4.5]** Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
+## BUG Fixes
+- **[v1.6.4.2]** Fixed a part of the Wand of Construction material detection bug
+- **[v1.6.4.2]** Fixed Better Reforging showing only one prefix
+- **[v1.6.4.2]** Fixed double item drop of Fishing Machine and Storage Manager
+- **[v1.6.4.2]** "Lava Slime No Lava" now works
+- **[v1.6.4.5]** Shadow Candle and War Table are now considered as buff stations
+- **[v1.6.4.5]** Fixed no tile drop of left-facing Fishing Machine
+- **[v1.6.4.5]** "Items Count For Crafting" now works
+- **[v1.6.4.5]** Fixed Void Bag couldn't be opened by middle click
+- **[v1.6.4.5]** Fixed Wand of Painting not taking certain paints
+- **[v1.6.4.5]** Fixed Storage Manager couldn't be applied with certain paints
+## Adjustments
+- **[v1.6.4.2]** Wormhole Potions no longer work outside of inventory and Void Vault
+- **[v1.6.4.2]** Removed "Weapons Auto-reuse" as 1.4.4 added "Autofire" already
+- **[v1.6.4.2]** Renamed "Better Reforging" to "Retrospective Reforging", and no longer reduce probability of rolled prefixes
+- **[v1.6.4.4]** Adjusted UI
+- **[v1.6.4.5]** Optimized Pinying searching, now supports polyphones
+- **[v1.6.4.5]** Adjusted mod config UI
+- **[v1.6.4.5]** Wands besides Wand of Contruction and Wand of Architecture now display tile to be placed
+## Misc
+- **[v1.6.4.2]** Slitghly reduced cost of Retrospective Reforging
+- **[v1.6.4.2]** Added Chinese name for the Wand of Technology projectile
+- **[v1.6.4.2]** Improved display of "Non-configurable Features"
+- **[v1.6.4.2]** Report issues in comments or our Discord server!
 
 # v1.6.3
 ## Subversions
