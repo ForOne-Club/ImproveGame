@@ -94,8 +94,9 @@ namespace ImproveGame.Content.Tiles
         // 上下左右 11 格内的所有箱子即视为在范围内
         public bool ChestInRange(int x, int y)
         {
-            bool inRangeX = Math.Abs(x - Position.X) <= 12 || Math.Abs(x - (Position.X + 2)) <= 11;
-            bool inRangeY = Math.Abs(y - Position.Y) <= 12 || Math.Abs(y - (Position.Y + 2)) <= 11;
+            int distance = Config.ExStorageSearchDistance;
+            bool inRangeX = Math.Abs(x - Position.X) <= distance + 1 || Math.Abs(x - (Position.X + 2)) <= distance;
+            bool inRangeY = Math.Abs(y - Position.Y) <= distance + 1 || Math.Abs(y - (Position.Y + 2)) <= distance;
             return inRangeX && inRangeY;
         }
 

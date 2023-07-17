@@ -290,6 +290,11 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool EmptyAutofisher;
 
+        [DefaultValue(11)]
+        [Range(5, 100)]
+        [Slider]
+        public int ExStorageSearchDistance;
+
         // 
         [ReloadRequired]
         public ModItemLoadPage LoadModItems = new();

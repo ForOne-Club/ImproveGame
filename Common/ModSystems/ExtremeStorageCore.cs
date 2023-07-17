@@ -19,122 +19,28 @@ public class ExtremeStorageCore : ModSystem
         ToolButtonBase.ToolIcons = GetTexture("UI/ExtremeStorage/ToolIcons");
 
         // TODO: 实际的多人测试
-        Terraria.IL_Chest.PutItemInNearbyChest += il =>
+        // 以前用的IL，1.4.4之后炸了，我也没心思再写一个了，直接禁用吧
+        On_Chest.PutItemInNearbyChest += (orig, item, position) =>
         {
-            var c = new ILCursor(il);
-            
-            // 开头更新 _chestsThatShouldSync 的值
-            c.EmitDelegate(() =>
+            if (Main.netMode is NetmodeID.SinglePlayer)
+                return orig.Invoke(item, position);
+
+            var storagesUsing = ExtremeStoragePlayer.StoragesBeingUsed();
+            foreach ((int id, TileEntity tileEntity) in TileEntity.ByID)
             {
-                if (Main.netMode is not NetmodeID.Server || _chestsSetUpdatedThisFrame) return;
+                if (!storagesUsing.Contains(id) || tileEntity is not TEExtremeStorage storage)
+                    continue;
+                // 判断距离，超出1.5个屏幕(1920*1.5)的不管，用DistanceSQ没有开根号的开销
+                if (storage.Position.ToWorldCoordinates().DistanceSQ(position) > Math.Pow(2880, 2))
+                    continue;
 
-                var storages = TileEntity.ByID.Where(i => i.Value is TEExtremeStorage)
-                    .Select(i => (TEExtremeStorage)i.Value).ToList();
-
-                _chestsThatShouldSync = new HashSet<int>();
-                _chestsSetUpdatedThisFrame = true;
-
-                for (int i = 0; i < Main.maxChests; i++)
-                {
-                    var chest = Main.chest[i];
-                    if (chest is null) continue;
-                    if (storages.Any(t => t.ChestInRange(chest)))
-                        _chestsThatShouldSync.Add(i);
-                }
-
-                // 调试代码
-                // Console.WriteLine(_chestsThatShouldSync.Count);
-            });
-
-            // IL_018d: ldsfld       class Terraria.Chest[] Terraria.Main::chest
-            // IL_0192: ldloc.0      // i
-            // IL_0193: ldelem.ref
-            // IL_0194: ldfld        class Terraria.Item[] Terraria.Chest::item
-            // IL_0199: ldloc.s      j
-            // IL_019b: ldelem.ref
-            // IL_019c: dup
-            // IL_019d: ldfld        int32 Terraria.Item::stack
-            // IL_01a2: ldloc.s      num
-            // IL_01a4: add
-            // IL_01a5: stfld        int32 Terraria.Item::stack
-
-            // 先获取到索引
-            int index = -1;
-            if (!c.TryGotoNext(MoveType.After,
-                    i => i.MatchLdsfld<Main>(nameof(Main.chest)),
-                    i => i.Match(OpCodes.Ldloc_1),
-                    i => i.MatchLdelemRef(),
-                    i => i.MatchLdfld<Chest>(nameof(Chest.item)),
-                    i => i.Match(OpCodes.Ldloc_S)))
-            {
-                throw new Exception("IL code changed");
+                // 有储存，不堆叠
+                Main.NewText(GetText("UI.ExtremeStorage.RejectNearbyStack"));
+                return item;
             }
 
-            EmitIndexGettingCodes();
-
-            if (!c.TryGotoNext(MoveType.Before,
-                    i => i.MatchCall<Chest>("VisualizeChestTransfer"),
-                    i => i.Match(OpCodes.Ldarg_0)))
-            {
-                throw new Exception("IL code changed");
-            }
-
-            EmitSyncCodes();
-
-            /* IL_0251: ldsfld       class Terraria.Chest[] Terraria.Main::chest
-             * IL_0256: ldloc.0      // i
-             * IL_0257: ldelem.ref
-             * IL_0258: ldfld        class Terraria.Item[] Terraria.Chest::item
-             * IL_025d: ldloc.s      k
-             * IL_025f: ldarg.0      // item
-             * IL_0260: callvirt     instance class Terraria.Item Terraria.Item::Clone()
-             * IL_0265: stelem.ref
-             */
-            if (!c.TryGotoNext(MoveType.Before,
-                    i => i.MatchCall<Chest>("VisualizeChestTransfer"),
-                    i => i.Match(OpCodes.Ldarg_0)))
-            {
-                throw new Exception("IL code changed");
-            }
-
-            EmitIndexGettingCodes();
-
-            if (!c.TryGotoNext(MoveType.After,
-                    i => i.Match(OpCodes.Ldarg_0),
-                    i => i.MatchCallvirt<Item>("Clone"),
-                    i => i.MatchStelemRef()))
-                throw new Exception("IL code changed");
-            EmitSyncCodes();
-
-            void EmitIndexGettingCodes()
-            {
-                c.EmitDelegate<Func<sbyte, sbyte>>(slotIndex =>
-                {
-                    index = slotIndex;
-                    return slotIndex;
-                });
-            }
-
-            void EmitSyncCodes()
-            {
-                // 推入i, j/k
-                c.Emit(OpCodes.Ldloc_0);
-                c.EmitDelegate<Action<int>>(chestIndex =>
-                {
-                    if (Main.netMode is not NetmodeID.Server) return;
-                    if (_chestsThatShouldSync is null || !_chestsThatShouldSync.Contains(chestIndex)) return;
-                    // 发送数据
-                    for (int i = 0; i < Main.maxPlayers; i++)
-                    {
-                        if (Main.player[i].active && !Main.player[i].dead &&
-                            Main.player[i].TryGetModPlayer<ExtremeStoragePlayer>(out var modPlayer) &&
-                            modPlayer.UsingStorage != -1) // 只要在使用 ExtremeStorage 就发送，不管箱子在不在附近，不再判断了
-                        {
-                            ChestItemOperation.SendItem(chestIndex, index, i);
-                        }
-                    }
-                });
-            }
+            // 全部检查通过
+            return orig.Invoke(item, position);
         };
     }
 

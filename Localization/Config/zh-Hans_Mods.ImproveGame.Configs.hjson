@@ -289,8 +289,8 @@ ImproveConfigs: {
 	}
 
 	StaffOfRegenerationAutomaticPlanting: {
-		Label: "[centeritem:213] 再生法杖自动种植"
-		Tooltip: 根据收获时的草药种植
+		Label: "[centeritem:213] 再生法杖/再生之斧自动种植"
+		Tooltip: 使用再生法杖或再生之斧收获时，会自动种植草药
 	}
 
 	NoBiomeSpread: {
@@ -467,13 +467,14 @@ ImproveConfigs: {
 			'''
 	}
 
+	ExStorageSearchDistance: {
+		Label: "[centeritem:ExtremeStorage] 储存管理器搜索范围"
+		Tooltip: "更改储存管理器检测箱子的距离，可能会造成极小的性能损失"
+	}
+
 	ExtraToolSpeed: {
-		Label: "[centeritem:4056] 工具使用速度提升"
-		Tooltip:
-			'''
-			设置为 0 不会提升速度，值越大速度越快
-			计算方式：itemTime × ( 1 - value )
-			'''
+		Label: "[centeritem:4056] 工具使用速度提升倍率"
+		Tooltip: 设置为 0 不会提升速度，值越大速度越快
 	}
 
 	MostTreeMin: {

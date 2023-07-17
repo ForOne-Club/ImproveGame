@@ -5,6 +5,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 
 namespace ImproveGame.Common.ModSystems
 {
@@ -28,11 +29,10 @@ namespace ImproveGame.Common.ModSystems
             // “草药” 生长速度
             IL_WorldGen.GrowAlch += WorldGen_GrowAlch;
             // “草药” 绘制的是否是开花图案
-            Terraria.GameContent.Drawing.On_TileDrawing.IsAlchemyPlantHarvestable += TileDrawing_IsAlchemyPlantHarvestable;
+            On_TileDrawing.IsAlchemyPlantHarvestable += TileDrawing_IsAlchemyPlantHarvestable;
             // “草药” 是否可以被 “再生法杖” 收割
             IL_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
             // “草药” 是否掉落成熟时候物品
-            // IL.WorldGen.KillTile_GetItemDrops += WorldGen_KillTile_GetItemDrops;
             On_WorldGen.IsHarvestableHerbWithSeed += WorldGen_IsHarvestableHerbWithSeed;
             // 旅商永远不离开
             On_WorldGen.UnspawnTravelNPC += TravelNPCStay;
@@ -217,35 +217,26 @@ namespace ImproveGame.Common.ModSystems
             ItemID.Sets.KillsToBanner[itemID] = originalRequirement;
         }
 
-        private void TravelNPCStay(Terraria.On_WorldGen.orig_UnspawnTravelNPC orig)
+        private void TravelNPCStay(On_WorldGen.orig_UnspawnTravelNPC orig)
         {
             if (!Config.TravellingMerchantStay)
                 orig.Invoke();
         }
 
-        private bool TileDrawing_IsAlchemyPlantHarvestable(Terraria.GameContent.Drawing.On_TileDrawing.orig_IsAlchemyPlantHarvestable orig, Terraria.GameContent.Drawing.TileDrawing self, int style)
+        private bool TileDrawing_IsAlchemyPlantHarvestable(On_TileDrawing.orig_IsAlchemyPlantHarvestable orig, TileDrawing self, int style)
         {
             return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(self, style);
         }
 
-        private bool WorldGen_IsHarvestableHerbWithSeed(Terraria.On_WorldGen.orig_IsHarvestableHerbWithSeed orig, int type, int style)
+        private bool WorldGen_IsHarvestableHerbWithSeed(On_WorldGen.orig_IsHarvestableHerbWithSeed orig, int type, int style)
         {
             return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style);
         }
 
-        // “草药” 是否掉落成熟时候物品
-        /*private void WorldGen_KillTile_GetItemDrops(ILContext il) {
-            var c = new ILCursor(il);
-            if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Ret),
-                i => i.Match(OpCodes.Ldloc_S)))
-                return;
-            c.EmitDelegate<Func<bool, bool>>(flag => MyUtils.Config.AlchemyGrassAlwaysBlooms || flag);
-        }*/
-
         // “草药” 是否可以被 “再生法杖” 收割
-        private static int style = 0;
-        private void Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(ILContext il)
+        private static int _herbStyle;
+        private static int _herbType;
+        private static void Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(ILContext il)
         {
             var c = new ILCursor(il);
             if (!c.TryGotoNext(MoveType.After,
@@ -256,7 +247,9 @@ namespace ImproveGame.Common.ModSystems
             {
                 if (Config.StaffOfRegenerationAutomaticPlanting)
                 {
-                    style = Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18;
+                    var tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+                    _herbStyle = tile.TileFrameX / 18;
+                    _herbType = tile.TileType;
                 }
             });
 
@@ -268,11 +261,11 @@ namespace ImproveGame.Common.ModSystems
                 return;
             c.EmitDelegate(() =>
             {
-                if (Config.StaffOfRegenerationAutomaticPlanting)
-                {
-                    WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, 82, false, false, -1, style);
-                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, 82, style);
-                }
+                if (!Config.StaffOfRegenerationAutomaticPlanting || _herbType is not TileID.BloomingHerbs and not TileID.MatureHerbs)
+                    return;
+
+                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, true, false, -1, _herbStyle);
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, _herbStyle);
             });
 
             if (!c.TryGotoNext(MoveType.After,
@@ -286,7 +279,9 @@ namespace ImproveGame.Common.ModSystems
             {
                 if (Config.StaffOfRegenerationAutomaticPlanting)
                 {
-                    style = Main.tile[Player.tileTargetX, Player.tileTargetY].TileFrameX / 18;
+                    var tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+                    _herbStyle = tile.TileFrameX / 18;
+                    _herbType = tile.TileType;
                 }
                 return Config.AlchemyGrassAlwaysBlooms || flag;
             });
@@ -300,11 +295,11 @@ namespace ImproveGame.Common.ModSystems
                 return;
             c.EmitDelegate(() =>
             {
-                if (Config.StaffOfRegenerationAutomaticPlanting)
-                {
-                    WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, 82, false, false, -1, style);
-                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, 82, style);
-                }
+                if (!Config.StaffOfRegenerationAutomaticPlanting || _herbType is not TileID.BloomingHerbs and not TileID.MatureHerbs)
+                    return;
+
+                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, true, false, -1, _herbStyle);
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, _herbStyle);
             });
         }
 

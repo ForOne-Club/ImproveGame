@@ -6,35 +6,44 @@
 
 </div>
 
+# v1.6.5 (未发布)
+v1.6.5.0是此Mod在tModLoader 1.4.4发布的第一个正式版本 (v1.6.4属于测试版)
+## Subversions
+- v1.6.5.0
+## Additions
+Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
+现在可以调整储存管理器的箱子检测范围了
+## BUG Fixes
+Shadow Candle and War Table are now considered as buff stations
+Fixed no tile drop of left-facing Fishing Machine
+"Items Count For Crafting" now works
+Fixed Void Bag couldn't be opened by middle click
+Fixed Wand of Painting not taking certain paints
+Fixed Storage Manager couldn't be applied with certain paints
+修复了再生之斧无法收获炼金植物的BUG
+## Adjustments
+Optimized Pinying searching, now supports polyphones
+Adjusted mod config UI
+Wands besides Wand of Contruction and Wand of Architecture now display tile to be placed
+
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0
 ## Subversions
 - v1.6.4.0
 - v1.6.4.2
 - v1.6.4.4
-- v1.6.4.5
-## Additions
-- **[v1.6.4.5]** Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 ## BUG Fixes
 - **[v1.6.4.2]** Fixed a part of the Wand of Construction material detection bug
 - **[v1.6.4.2]** Fixed Better Reforging showing only one prefix
 - **[v1.6.4.2]** Fixed double item drop of Fishing Machine and Storage Manager
 - **[v1.6.4.2]** "Lava Slime No Lava" now works
-- **[v1.6.4.5]** Shadow Candle and War Table are now considered as buff stations
-- **[v1.6.4.5]** Fixed no tile drop of left-facing Fishing Machine
-- **[v1.6.4.5]** "Items Count For Crafting" now works
-- **[v1.6.4.5]** Fixed Void Bag couldn't be opened by middle click
-- **[v1.6.4.5]** Fixed Wand of Painting not taking certain paints
-- **[v1.6.4.5]** Fixed Storage Manager couldn't be applied with certain paints
 ## Adjustments
 - **[v1.6.4.2]** Wormhole Potions no longer work outside of inventory and Void Vault
 - **[v1.6.4.2]** Removed "Weapons Auto-reuse" as 1.4.4 added "Autofire" already
 - **[v1.6.4.2]** Renamed "Better Reforging" to "Retrospective Reforging", and no longer reduce probability of rolled prefixes
 - **[v1.6.4.4]** Adjusted UI
-- **[v1.6.4.5]** Optimized Pinying searching, now supports polyphones
-- **[v1.6.4.5]** Adjusted mod config UI
-- **[v1.6.4.5]** Wands besides Wand of Contruction and Wand of Architecture now display tile to be placed
 ## Misc
+- Updated to tModLoader v1.4.4
 - **[v1.6.4.2]** Slitghly reduced cost of Retrospective Reforging
 - **[v1.6.4.2]** Added Chinese name for the Wand of Technology projectile
 - **[v1.6.4.2]** Improved display of "Non-configurable Features"

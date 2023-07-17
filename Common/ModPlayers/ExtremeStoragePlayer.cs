@@ -13,6 +13,27 @@ public class ExtremeStoragePlayer : ModPlayer
     /// <summary> 用于服务器确定该玩家是否打开了某个储存，客户端无需设置，值为 tileEntityID </summary>
     public int UsingStorage = -1;
     
+    /// <summary>
+    /// 获取所有正在被使用的储存
+    /// </summary>
+    public static HashSet<int> StoragesBeingUsed()
+    {
+        // 确保不出现重复元素
+        var seenStorages = new HashSet<int>();
+
+        for (int i = 0; i < Main.maxPlayers; i++)
+        {
+            var player = Main.player[i];
+            if (player.active && !player.dead && player.TryGetModPlayer<ExtremeStoragePlayer>(out var modPlayer) &&
+                modPlayer.UsingStorage != -1)
+            {
+                seenStorages.Add(modPlayer.UsingStorage);
+            }
+        }
+
+        return seenStorages;
+    }
+    
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
         if (Main.netMode is not NetmodeID.Server) return;

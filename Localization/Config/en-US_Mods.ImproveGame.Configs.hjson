@@ -281,8 +281,8 @@ ImproveConfigs: {
 	}
 
 	StaffOfRegenerationAutomaticPlanting: {
-		Label: "[centeritem:213] Staff of Regrowth auto-plant"
-		Tooltip: Automatically plant the gathered herb
+		Label: "[centeritem:213] Staff/Axe of Regrowth auto-plant"
+		Tooltip: Automatically plant the gathered herb when using the Axe/Staff of Regrowth
 	}
 
 	NoBiomeSpread: {
@@ -425,6 +425,11 @@ ImproveConfigs: {
 			'''
 	}
 
+	ExStorageSearchDistance: {
+		Label: "[centeritem:ExtremeStorage] 储存管理器搜索范围"
+		Tooltip: "更改储存管理器检测箱子的距离，可能会造成极小的性能损失"
+	}
+
 	LoadModItems: {
 		Label: Mod Items Load Config
 		Tooltip: The item will not be added to the game if it is off
@@ -461,12 +466,8 @@ ImproveConfigs: {
 	}
 
 	ExtraToolSpeed: {
-		Label: "[centeritem:4056] Increase certain tools' using speed"
-		Tooltip:
-			'''
-			Setting it to 0 won’t increase speed, and the higher the value, the faster the speed.
-			Calculation method: itemTime × (1 - value)
-			'''
+		Label: "[centeritem:4056] Tool speed multiplier"
+		Tooltip: Setting it to 0 won’t increase speed, and the higher the value, the faster the speed
 	}
 
 	MostTreeMin: {

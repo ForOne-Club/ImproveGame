@@ -25,6 +25,7 @@ PlayerInfo: {
 
 ExtremeStorage: {
 	AddChest: 添加箱子
+	RejectNearbyStack: 附近有玩家在使用储存管理器，无法快速堆叠到附近箱子
 
 	CountForCrafting: {
 		Label: 物品参与合成
