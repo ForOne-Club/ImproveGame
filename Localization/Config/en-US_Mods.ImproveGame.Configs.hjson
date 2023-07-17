@@ -39,7 +39,7 @@ ImproveConfigs: {
 		Label: "[centeritem:4131] Auto pickup for personal storage"
 		Tooltip:
 			'''
-			Other personal storages can act as Void Vault, including 'smart pickup'
+			Allow other portable storages automatically store items collected after the player's inventory is full
 			Priority: Piggy Bank → Safe → Defender's Forge → Void Vault
 			'''
 	}
