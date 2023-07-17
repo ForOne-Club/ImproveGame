@@ -25,6 +25,7 @@ Fixed Storage Manager couldn't be applied with certain paints
 Optimized Pinying searching, now supports polyphones
 Adjusted mod config UI
 Wands besides Wand of Contruction and Wand of Architecture now display tile to be placed
+空间法杖替换物块时会重置物块的斜坡状态了
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0

@@ -180,3 +180,8 @@ ExtremeStorage: {
 		[c/cc2200:Placing multiple Storage Managers in multiplayer mode may increase bandwidth consumption] 
 		'''
 }
+
+DevMark: {
+	DisplayName: Developer's Mark
+	Tooltip: "[c/ff0000:Developer's item, do not use]"
+}

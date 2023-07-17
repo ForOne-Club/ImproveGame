@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.ModPlayers;
+using ImproveGame.Content.Items.Coin;
 using ImproveGame.Core;
 using ReLogic.Graphics;
 using Terraria.GameInput;
@@ -14,6 +15,8 @@ namespace ImproveGame;
 /// </summary>
 partial class MyUtils
 {
+    public static bool HasDevMark => Main.LocalPlayer.inventory.Any(i => i.type == ModContent.ItemType<DevMark>());
+    
     public static Matrix GetMatrix(bool ui)
     {
         if (ui)

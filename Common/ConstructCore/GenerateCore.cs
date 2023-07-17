@@ -111,11 +111,20 @@ namespace ImproveGame.Common.ConstructCore
                         continue;
                     }
 
-                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
-                    PickItemFromArray(Main.LocalPlayer, inventory, (item) =>
-                            item.type == tileItemType &&
-                            TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
-                        true);
+                    if (!HasDevMark)
+                    {
+                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
+                        PickItemFromArray(Main.LocalPlayer, inventory, item =>
+                                item.type == tileItemType &&
+                                TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
+                            true);
+                    }
+                    else
+                    {
+                        var item = new Item(tileItemType);
+                        TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true);
+                    }
+                    
                     // 挖掉重来！
                     if (TileID.Sets.Grass[tileType])
                     {
@@ -167,11 +176,19 @@ namespace ImproveGame.Common.ConstructCore
                         continue;
                     }
 
-                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
-                    PickItemFromArray(Main.LocalPlayer, inventory, (item) =>
-                            item.type == wallItemType &&
-                            TryPlaceWall(item, placePosition.X, placePosition.Y),
-                        true);
+                    if (!HasDevMark) {
+                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
+                        PickItemFromArray(Main.LocalPlayer, inventory, item =>
+                                item.type == wallItemType &&
+                                TryPlaceWall(item, placePosition.X, placePosition.Y),
+                            true);
+                    }
+                    else
+                    {
+                        var item = new Item(wallItemType);
+                        TryPlaceWall(item, placePosition.X, placePosition.Y);
+                    }
+                    
                     var tile = Main.tile[placePosition];
                     tile.WallColor = tileData.WallColor;
                     _taskProcessed++;
@@ -238,11 +255,19 @@ namespace ImproveGame.Common.ConstructCore
                         continue;
                     }
 
-                    var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
-                    PickItemFromArray(Main.LocalPlayer, inventory, item =>
-                            item is not null && item.type == tileItemType &&
-                            TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
-                        true);
+                    if (!HasDevMark) {
+                        var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
+                        PickItemFromArray(Main.LocalPlayer, inventory, item =>
+                                item is not null && item.type == tileItemType &&
+                                TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
+                            true);
+                    }
+                    else
+                    {
+                        var item = new Item(tileItemType);
+                        TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true);
+                    }
+
                     // 什么怪玩意，还要我特判
                     if (tileType is TileID.Banners)
                     {
@@ -314,6 +339,8 @@ namespace ImproveGame.Common.ConstructCore
                         }
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                         var item = PickItemFromArray(Main.LocalPlayer, inventory, TryConsume, false);
+                        if (HasDevMark)
+                            item = new Item(ItemID.Actuator);
                         TryConsumeItem(ref item, Main.LocalPlayer, true); // 要手动consume (即无视consumable)
                     }
 

@@ -151,7 +151,7 @@ public class SpaceWand : ModItem, IMarqueeItem
         
         player.cursorItemIconEnabled = true;
         player.cursorItemIconID = player.inventory[oneIndex].type;
-        player.cursorItemIconPush = 6;
+        player.cursorItemIconPush = 26;
     }
 
     // 学单词
@@ -199,6 +199,7 @@ public class SpaceWand : ModItem, IMarqueeItem
                 {
                     if (Main.tile[x, y].HasTile)
                     {
+                        WorldGen.SlopeTile(x, y, noEffects: true);
                         if (player.TileReplacementEnabled)
                         {
                             // 物品放置的瓷砖就是位置对应的瓷砖则无需替换
@@ -223,6 +224,8 @@ public class SpaceWand : ModItem, IMarqueeItem
                                 {
                                     playSound = true;
                                     PickItemInInventory(player, GetConditions(), true, out _);
+                                    if (PlaceType is PlaceType.Soild)
+                                        WorldGen.SlopeTile(x, y + 1);
                                 }
                             }
                         }
@@ -231,6 +234,8 @@ public class SpaceWand : ModItem, IMarqueeItem
                     {
                         playSound = true;
                         PickItemInInventory(player, GetConditions(), true, out _);
+                        if (PlaceType is PlaceType.Soild)
+                            WorldGen.SlopeTile(x, y + 1);
                     }
                 }
             }

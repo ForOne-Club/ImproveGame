@@ -426,8 +426,8 @@ ImproveConfigs: {
 	}
 
 	ExStorageSearchDistance: {
-		Label: "[centeritem:ExtremeStorage] 储存管理器搜索范围"
-		Tooltip: "更改储存管理器检测箱子的距离，可能会造成极小的性能损失"
+		Label: "[centeritem:ImproveGame/ExtremeStorage] 储存管理器搜索范围"
+		Tooltip: 更改储存管理器检测箱子的距离，可能会造成极小的性能损失
 	}
 
 	LoadModItems: {

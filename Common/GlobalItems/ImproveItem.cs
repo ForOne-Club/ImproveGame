@@ -30,7 +30,7 @@ namespace ImproveGame.Common.GlobalItems
         public override float UseTimeMultiplier(Item item, Player player)
         {
             if (item.pick > 0 || item.hammer > 0 || item.axe > 0)
-                return Config.ExtraToolSpeed;
+                return 1f - Config.ExtraToolSpeed;
             return 1f;
         }
 

@@ -183,3 +183,8 @@ ExtremeStorage: {
 		[c/cc2200:多人模式下不建议放置多个管理器，可能会导致带宽需求增大] 
 		'''
 }
+
+DevMark: {
+	DisplayName: 开发者之证
+	Tooltip: "[c/ff0000:开发者物品，请勿使用]"
+}

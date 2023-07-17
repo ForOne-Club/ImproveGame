@@ -432,6 +432,11 @@ ImproveConfigs: {
 			'''
 	}
 
+	ExStorageSearchDistance: {
+		Label: "[centeritem:ImproveGame/ExtremeStorage] 储存管理器搜索范围"
+		Tooltip: 更改储存管理器检测箱子的距离，可能会造成极小的性能损失
+	}
+
 	LoadModItems: {
 		Label: 模组物品加载配置
 		Tooltip: 物品状态为关闭，它将不会被添加到游戏中。
@@ -465,11 +470,6 @@ ImproveConfigs: {
 			- 提示简化(去除收藏提示,时装栏物品显示详细信息)
 			- 提升了生命水晶、魔力水晶、生命果的使用速度，并允许它们自动挥舞
 			'''
-	}
-
-	ExStorageSearchDistance: {
-		Label: "[centeritem:ExtremeStorage] 储存管理器搜索范围"
-		Tooltip: "更改储存管理器检测箱子的距离，可能会造成极小的性能损失"
 	}
 
 	ExtraToolSpeed: {

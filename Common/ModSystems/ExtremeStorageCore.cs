@@ -4,6 +4,7 @@ using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Terraria.Chat;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.ModSystems;
@@ -20,10 +21,15 @@ public class ExtremeStorageCore : ModSystem
 
         // TODO: 实际的多人测试
         // 以前用的IL，1.4.4之后炸了，我也没心思再写一个了，直接禁用吧
-        On_Chest.PutItemInNearbyChest += (orig, item, position) =>
+        On_Chest.ServerPlaceItem += (orig, plr, slot) =>
         {
+            var player = Main.player[plr];
+            // 理论上不可能，但谁知道呢
             if (Main.netMode is NetmodeID.SinglePlayer)
-                return orig.Invoke(item, position);
+            {
+                orig.Invoke(plr, slot);
+                return;
+            }
 
             var storagesUsing = ExtremeStoragePlayer.StoragesBeingUsed();
             foreach ((int id, TileEntity tileEntity) in TileEntity.ByID)
@@ -31,16 +37,17 @@ public class ExtremeStorageCore : ModSystem
                 if (!storagesUsing.Contains(id) || tileEntity is not TEExtremeStorage storage)
                     continue;
                 // 判断距离，超出1.5个屏幕(1920*1.5)的不管，用DistanceSQ没有开根号的开销
-                if (storage.Position.ToWorldCoordinates().DistanceSQ(position) > Math.Pow(2880, 2))
+                if (storage.Position.ToWorldCoordinates().DistanceSQ(player.Center) > Math.Pow(2880, 2))
                     continue;
 
                 // 有储存，不堆叠
-                Main.NewText(GetText("UI.ExtremeStorage.RejectNearbyStack"));
-                return item;
+                ChatHelper.DisplayMessageOnClient(
+                    NetworkText.FromKey("Mods.ImproveGame.UI.ExtremeStorage.RejectNearbyStack"), Color.Pink, plr);
+                return;
             }
 
             // 全部检查通过
-            return orig.Invoke(item, position);
+            orig.Invoke(plr, slot);
         };
     }
 
