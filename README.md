@@ -14,6 +14,21 @@
 5. 成了
 BepInEx.AssemblyPublicizer.MSBuild是一个很强的NuGet包，它可以将私有的程序集公开化，使得Mod可以访问私有的程序集，而不需要通过反射等手段
 
+# 版权声明
+本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本，并允许软件提供者这样做，但须满足以下条件：
+
+上述版权声明和本许可声明应包含在本软件的所有副本或主要部分中。
+
+因此，该模组不存在版权侵犯问题。
+ChevyRay 的协程类也受 MIT 许可，与上面相同。
+TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也获得MIT许可，与上面相同。
+
+附:
+本模组开源链接: https://gitee.com/MyGoold/improve-game (此为原仓库，Github仓库是由原仓库镜像而来)
+WMITF开源链接: https://github.com/gardenappl/WMITF
+ChevyRay的协程类: https://github.com/ChevyRay/Coroutines
+ProjectStarlight.Interchange: https://github.com/ProjectStarlight/ProjectStarlight.Interchange
+
 # Mod.Call
 ## IgnoreInfItem
 ```"IgnoreInfItem", int/List<int> ItemID(s)```

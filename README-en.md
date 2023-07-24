@@ -14,6 +14,15 @@ This mod aims to raise quality of gameplay to the next level, to benefit the com
 5. 成了
 BepInEx.AssemblyPublicizer.MSBuild是一个很强的NuGet包，它可以将私有的程序集公开化，使得Mod可以访问私有的程序集，而不需要通过反射等手段
 
+# Copyright Statement
+A part of the source code of the 'showing which mod is an item from' function is from mod 'WMITF', this mod and WMITF are open-source using the MIT Licence, which means 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.'
+
+Hence there is no copyright voilation in this mod.
+ChevyRay's coroutine class is under MIT License as well, same as above.
+The code of TextureGIF.cs is partly from ProjectStarlight.Interchange which is under MIT License as well, same as above.
+
 # Mod.Call
 ## IgnoreInfItem
 ```"IgnoreInfItem", int/List<int> ItemID(s)```
