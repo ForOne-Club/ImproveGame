@@ -34,6 +34,22 @@ This mod contains Nuget package, which means you should not use the compilation 
 4. Enable this mod in tModLoader and reload
 5. Done
 
+## 📗 Copyright Statement
+A part of the source code of the 'showing which mod is an item from' function is from mod 'WMITF', this mod and WMITF are open-source using the MIT Licence, which means 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.'
+
+Hence there is no copyright voilation in this mod.
+ChevyRay's coroutine class is under MIT License as well, same as above. 
+The code of TextureGIF.cs is partly from ProjectStarlight.Interchange which is under MIT License as well, same as above.
+
+p.s.
+Source code of:
+This mod: https://gitee.com/MyGoold/improve-game (The original repo, the github repo is a mirror)
+WMITF: https://github.com/gardenappl/WMITF
+ChevyRay's coroutine class: https://github.com/ChevyRay/Coroutines
+ProjectStarlight.Interchange: https://github.com/ProjectStarlight/ProjectStarlight.Interchange
+
 ## 🤝 Cross-mod Support (Mod.Call)
 ### IgnoreInfItem
 ```"IgnoreInfItem", int/List<int> ItemID(s)```

@@ -34,6 +34,21 @@
 4. 在tModLoader中打开此Mod，重新加载
 5. 成了
 
+## 📗 版权声明
+本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本，并允许软件提供者这样做，但须满足以下条件：
+
+上述版权声明和本许可声明应包含在本软件的所有副本或主要部分中。
+
+因此，该模组不存在版权侵犯问题。
+ChevyRay 的协程类也受 MIT 许可，与上面相同。
+TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也获得MIT许可，与上面相同。
+
+附:
+本模组开源链接: https://gitee.com/MyGoold/improve-game (此为原仓库，Github仓库是由原仓库镜像而来)
+WMITF开源链接: https://github.com/gardenappl/WMITF
+ChevyRay的协程类: https://github.com/ChevyRay/Coroutines
+ProjectStarlight.Interchange: https://github.com/ProjectStarlight/ProjectStarlight.Interchange
+
 ## 🤝 跨Mod支持 (Mod.Call)
 
 如果你是一名玩家，并想要让其他模组修复与更好的体验不兼容的问题，你可以向其他模组作者提出请求，让他们阅读此文档并添加跨Mod支持。
