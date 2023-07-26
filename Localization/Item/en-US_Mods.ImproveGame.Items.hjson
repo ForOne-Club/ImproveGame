@@ -85,7 +85,7 @@ PotionBag: {
 		Stores you buff potions
 		<left> the Potion Bag while holding a potion to deposit
 		<right> the Potion Bag while holding it to take out potions
-		Maximum stores 20 stacks of potions
+		Can store 200 stacks of potions
 		'''
 }
 
@@ -96,7 +96,7 @@ BannerChest: {
 		Stores your banners
 		Hold a banner and <left> to put it into a Banner Box
 		<right> a Banner Box to take out banners
-		Can store maximum 200 stacks of banners
+		Can store 200 stacks of banners
 		'''
 }
 

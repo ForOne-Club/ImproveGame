@@ -426,8 +426,8 @@ ImproveConfigs: {
 	}
 
 	ExStorageSearchDistance: {
-		Label: "[centeritem:ImproveGame/ExtremeStorage] 储存管理器搜索范围"
-		Tooltip: 更改储存管理器检测箱子的距离，可能会造成极小的性能损失
+		Label: "[centeritem:ImproveGame/ExtremeStorage] Storage Manager Chest Detection Range"
+		Tooltip: Changes how far the Storage Manager searches for chests.
 	}
 
 	LoadModItems: {
@@ -461,13 +461,13 @@ ImproveConfigs: {
 			- A filter panel which opens when the icon of Lifeform Analyzer is clicked
 			- Chest item inspection when the cursor is hovered on it and Alt is pressed
 			- Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
-			- 提升了生命水晶、魔力水晶、生命果的使用速度，并允许它们自动挥舞
+			- Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life
 			'''
 	}
 
 	ExtraToolSpeed: {
 		Label: "[centeritem:4056] Tool speed multiplier"
-		Tooltip: Setting it to 0 won’t increase speed, and the higher the value, the faster the speed
+		Tooltip: Setting it to 0 won't increase speed, and the higher the value, the faster the speed
 	}
 
 	MostTreeMin: {

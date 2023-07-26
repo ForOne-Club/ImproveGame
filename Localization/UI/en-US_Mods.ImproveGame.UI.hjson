@@ -25,7 +25,7 @@ PlayerInfo: {
 
 ExtremeStorage: {
 	AddChest: Add Chest
-	RejectNearbyStack: 附近有玩家在使用储存管理器，无法快速堆叠到附近箱子
+	RejectNearbyStack: Failed to stack to nearby chests, because another player is using a nearby Storage Manager
 
 	CountForCrafting: {
 		Label: Count for Crafting

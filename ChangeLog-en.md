@@ -6,13 +6,13 @@
 
 </div>
 
-# v1.6.5 (未发布)
-v1.6.5.0是此Mod在tModLoader 1.4.4发布的第一个正式版本 (v1.6.4属于测试版)
+# v1.6.5 (Not yet)
+v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 ## Subversions
 - v1.6.5.0
 ## Additions
 Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
-现在可以调整储存管理器的箱子检测范围了
+Enabled configuring chest detection range of Storage Manager
 ## BUG Fixes
 Shadow Candle and War Table are now considered as buff stations
 Fixed no tile drop of left-facing Fishing Machine
@@ -20,12 +20,12 @@ Fixed no tile drop of left-facing Fishing Machine
 Fixed Void Bag couldn't be opened by middle click
 Fixed Wand of Painting not taking certain paints
 Fixed Storage Manager couldn't be applied with certain paints
-修复了再生之斧无法收获炼金植物的BUG
+Fixed Axe of Regrowth unable to harvest herbs
 ## Adjustments
 Optimized Pinying searching, now supports polyphones
 Adjusted mod config UI
 Wands besides Wand of Contruction and Wand of Architecture now display tile to be placed
-空间法杖替换物块时会重置物块的斜坡状态了
+Wand of Space now resets tiles' sloping while replacing tiles
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0
