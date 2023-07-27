@@ -462,7 +462,7 @@ ImproveConfigs: {
 			Chest item inspection when the cursor is hovered on it and Alt is pressed
 			Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
 			Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
-			中键点击坐骑物品可以直接使用
+			Middle click mount items will toggle the mounts
 			'''
 	}
 

@@ -13,7 +13,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 ## Additions
 Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 Enabled configuring chest detection range of Storage Manager
-现在中键点击坐骑可以直接使用它了
+Middle-clicking an mount item now uses it
 ## BUG Fixes
 Shadow Candle and War Table are now considered as buff stations
 Fixed no tile drop of left-facing Fishing Machine
@@ -22,7 +22,7 @@ Fixed Void Bag couldn't be opened by middle click
 Fixed Wand of Painting not taking certain paints
 Fixed Storage Manager couldn't be applied with certain paints
 Fixed Axe of Regrowth unable to harvest herbs
-修复了高刷屏无法正常使用中键打开GUI的BUG
+Fixed middle click not opening GUI under high FPS
 ## Adjustments
 Optimized Pinying searching, now supports polyphones
 Adjusted mod config UI
