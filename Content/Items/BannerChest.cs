@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI.BannerChest;
+using Microsoft.Xna.Framework.Input;
+using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
@@ -250,6 +252,7 @@ namespace ImproveGame.Content.Items
         }
 
         private bool _itemInInventory;
+        private static bool _oldMiddlePressed;
 
         public bool OverrideHover(Item[] inventory, int context, int slot)
         {
@@ -260,10 +263,15 @@ namespace ImproveGame.Content.Items
 
             _itemInInventory = true;
 
-            // MouseMiddleRelease 鼠标按键松开, 但是会比 MouseMiddle 晚一帧才变 <br/>
-            // 也就是说如果这一帧按下了中键 MouseMiddle 和 MouseMiddleRelease 都是 true
-            if (Main.mouseMiddle && Main.mouseMiddleRelease)
+            MouseState mouseState = Mouse.GetState();
+            if (_oldMiddlePressed)
             {
+                _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
+            }
+
+            if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
+            {
+                _oldMiddlePressed = true;
                 RightClick(Main.LocalPlayer);
             }
 

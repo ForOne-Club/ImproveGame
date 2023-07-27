@@ -15,7 +15,7 @@ namespace ImproveGame.Common.Configs
 
         [Header("Others")]
 
-        [CustomModConfigItem(typeof(LargerPanelElement))]
+        [CustomModConfigItem(typeof(UncontrollablesElement))]
         public object OtherFunctions;
 
         [CustomModConfigItem(typeof(OpenConfigElement))]

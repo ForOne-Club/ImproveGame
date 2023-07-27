@@ -37,6 +37,7 @@ Tips: {
 	BankEnableOff: 中键单击以关闭个人储存库
 	MouseMiddleOpen: 中键单击以打开{ItemName}
 	MouseMiddleClose: 中键单击以关闭{ItemName}
+	MouseMiddleUse: 中键单击以使用{ItemName}
 	CreateWandOn: 中键单击以开启房屋材料面板
 	CreateWandOff: 中键单击以关闭房屋材料面板
 	LiquidWandOn: 中键单击以开启液体控制面板

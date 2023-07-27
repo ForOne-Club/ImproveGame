@@ -3,6 +3,8 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
+using Microsoft.Xna.Framework.Input;
+using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using static ImproveGame.Entitys.TileData;
 using TileData = ImproveGame.Entitys.TileData;
@@ -458,14 +460,22 @@ public class CreateWand : ModItem, IItemOverrideHover
 
 
     public bool ItemInInventory;
+    private static bool _oldMiddlePressed;
 
     public bool OverrideHover(Item[] inventory, int context, int slot)
     {
         if (context == ItemSlot.Context.InventoryItem)
         {
             ItemInInventory = true;
-            if (Main.mouseMiddle && Main.mouseMiddleRelease)
+            MouseState mouseState = Mouse.GetState();
+            if (_oldMiddlePressed)
             {
+                _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
+            }
+
+            if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
+            {
+                _oldMiddlePressed = true;
                 if (!ArchitectureGUI.Visible)
                     UISystem.Instance.ArchitectureGUI.Open(slot);
                 else

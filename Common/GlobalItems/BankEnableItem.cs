@@ -1,11 +1,15 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Core;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
+using Terraria.GameInput;
 
 namespace ImproveGame.Common.GlobalItems
 {
     public class BankEnableItem : GlobalItem
     {
+        private static bool _oldMiddlePressed;
+        
         public override void Load()
         {
             Terraria.On_Player.HandleBeingInChestRange += (orig, player) =>
@@ -50,8 +54,16 @@ namespace ImproveGame.Common.GlobalItems
                 tooltips.Add(new(Mod, "BankEnable", tooltip) { OverrideColor = Color.LightGreen });
 
                 SoundStyle? sound = null;
-                if (Main.mouseMiddle && Main.mouseMiddleRelease)
+                MouseState mouseState = Mouse.GetState();
+                if (_oldMiddlePressed)
                 {
+                    _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
+                }
+
+                if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
+                {
+                    _oldMiddlePressed = true;
+
                     if (Lookups.Bank2Items.Contains(item.type))
                     {
                         if (item.type == ItemID.ChesterPetItem)

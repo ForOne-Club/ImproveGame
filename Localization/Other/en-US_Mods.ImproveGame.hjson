@@ -37,6 +37,7 @@ Tips: {
 	BankEnableOff: Middle click to close personal inventory
 	MouseMiddleOpen: Middle click to open {ItemName}
 	MouseMiddleClose: Middle click to close {ItemName}
+	MouseMiddleUse: Middle click to use {ItemName}
 	CreateWandOn: Middle click to open house material panel
 	CreateWandOff: Middle click to close house material panel
 	LiquidWandOn: Middle click to open liquid control panel

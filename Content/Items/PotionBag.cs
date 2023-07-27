@@ -2,7 +2,9 @@
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI.BannerChest;
+using Microsoft.Xna.Framework.Input;
 using Terraria.GameContent.Creative;
+using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
@@ -286,14 +288,24 @@ namespace ImproveGame.Content.Items
         }
 
         private bool ItemInInventory;
+        private static bool _oldMiddlePressed;
 
         public bool OverrideHover(Item[] inventory, int context, int slot)
         {
             if (context == ItemSlot.Context.InventoryItem)
             {
                 ItemInInventory = true;
-                if (Main.mouseMiddle && Main.mouseMiddleRelease)
+                MouseState mouseState = Mouse.GetState();
+                if (_oldMiddlePressed)
+                {
+                    _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
+                }
+
+                if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
+                {
+                    _oldMiddlePressed = true;
                     RightClick(Main.LocalPlayer);
+                }
             }
 
             return false;

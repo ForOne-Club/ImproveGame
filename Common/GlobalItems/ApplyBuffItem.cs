@@ -2,7 +2,9 @@
 using ImproveGame.Core;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
+using Terraria.GameInput;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -92,6 +94,8 @@ namespace ImproveGame.Common.GlobalItems
             return base.ConsumeItem(item, player);
         }
 
+        private static bool _oldMiddlePressed;
+
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
             if (!item.TryGetGlobalItem<GlobalItemData>(out var global) || !global.InventoryGlow)
                 return;
@@ -102,7 +106,15 @@ namespace ImproveGame.Common.GlobalItems
 
                 if (buffType is -1 && item.type != ItemID.GardenGnome) return;
 
-                if (Main.mouseMiddle && Main.mouseMiddleRelease) {
+                MouseState mouseState = Mouse.GetState();
+                if (_oldMiddlePressed)
+                {
+                    _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
+                }
+
+                if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
+                {
+                    _oldMiddlePressed = true;
                     if (BuffTrackerGUI.Visible)
                         UISystem.Instance.BuffTrackerGUI.Close();
                     else
