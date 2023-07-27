@@ -452,16 +452,17 @@ ImproveConfigs: {
 
 	OtherFunctions: {
 		Label: Other non-configurable functions
+		Subtitle: The following are non-configurable features of this mod
 		Tooltip:
 			'''
-			The following are non-configurable features of this mod
-			- Displaying detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
-			- A hotkey to swap the hotbar with the second row of inventory
-			- Displaying minion slot occupancy in tooltip
-			- A filter panel which opens when the icon of Lifeform Analyzer is clicked
-			- Chest item inspection when the cursor is hovered on it and Alt is pressed
-			- Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
-			- Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
+			Displaying detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
+			A hotkey to swap the hotbar with the second row of inventory
+			Displaying minion slot occupancy in tooltip
+			A filter panel which opens when the icon of Lifeform Analyzer is clicked
+			Chest item inspection when the cursor is hovered on it and Alt is pressed
+			Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
+			Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
+			中键点击坐骑物品可以直接使用
 			'''
 	}
 
