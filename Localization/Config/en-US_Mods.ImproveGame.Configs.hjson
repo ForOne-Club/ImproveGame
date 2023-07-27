@@ -461,7 +461,7 @@ ImproveConfigs: {
 			- A filter panel which opens when the icon of Lifeform Analyzer is clicked
 			- Chest item inspection when the cursor is hovered on it and Alt is pressed
 			- Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
-			- Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life
+			- Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 			'''
 	}
 
