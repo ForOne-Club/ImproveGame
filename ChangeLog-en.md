@@ -14,6 +14,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 Enabled configuring chest detection range of Storage Manager
 Middle-clicking an mount item now uses it
+You can customize the slope type when using Space Wand to place blocks now
 ## BUG Fixes
 Shadow Candle and War Table are now considered as buff stations
 Fixed no tile drop of left-facing Fishing Machine

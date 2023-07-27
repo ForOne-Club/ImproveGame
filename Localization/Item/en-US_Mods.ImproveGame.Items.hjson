@@ -21,7 +21,8 @@ SpaceWand: {
 		Places selected type of tile in the indicated area
 		Consumes that type of tile in your inventory
 		Will try to swap tiles in different types if Block Swap is enabled
-		Can place 500(244 in servers) tiles once
+		Can place up to 500 (244 in servers) tiles once
+		You can customize the block slope type
 		<right> while selecting area to cancel placement
 		'I pity these tools'
 		'''

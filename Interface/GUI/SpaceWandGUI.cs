@@ -1,12 +1,15 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Content.Items;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 
 namespace ImproveGame.Interface.GUI
 {
     public class SpaceWandGUI : UIState
     {
+        private static bool _secondPage;
         private static bool visible;
+
         public static bool Visible
         {
             get => visible;
@@ -19,30 +22,36 @@ namespace ImproveGame.Interface.GUI
 
         // 这么写能剩下很多重复的代码, 但是你必须保证他们长度是相同的.
         public readonly RoundButton[] RoundButtons = new RoundButton[6];
-        public readonly int[] itemTypes = new int[] { 94, 9, 2996, 2340, 62, 3215 };
-        public readonly PlaceType[] placeTypes = new PlaceType[] { PlaceType.Platform, PlaceType.Soild, PlaceType.Rope, PlaceType.Rail, PlaceType.GrassSeed, PlaceType.PlantPot };
+        public readonly int[] ItemTypes = {94, 9, 2996, 2340, 62, 3215};
+
+        public readonly PlaceType[] PlaceTypes =
+        {
+            PlaceType.Platform, PlaceType.Soild, PlaceType.Rope, PlaceType.Rail, PlaceType.GrassSeed, PlaceType.PlantPot
+        };
+
+        public readonly BlockType[] BlockTypes =
+        {
+            BlockType.SlopeDownRight, BlockType.SlopeDownLeft, BlockType.HalfBlock, BlockType.SlopeUpLeft,
+            BlockType.SlopeUpRight, BlockType.Solid
+        };
+
         public override void OnInitialize()
         {
-            timer = new() { OnClosed = () => Visible = false };
+            timer = new() {OnClosed = () => Visible = false};
 
             Append(MainPanel = new());
             MainPanel.SetSize(200f, 200f).SetPadding(0);
 
             for (int i = 0; i < RoundButtons.Length; i++)
             {
-                int itemType = itemTypes[i];
-                PlaceType placeType = placeTypes[i];
+                int itemType = ItemTypes[i];
+                PlaceType placeType = PlaceTypes[i];
                 Main.instance.LoadItem(itemType);
                 MainPanel.Append(RoundButtons[i] = new(TextureAssets.Item[itemType])
                 {
                     text = () => GetText($"SpaceWandGUI.{placeType}"),
                     Selected = () => SpaceWand.PlaceType == placeType
                 });
-                RoundButtons[i].OnLeftMouseDown += (_, _) =>
-                {
-                    SoundEngine.PlaySound(SoundID.MenuTick);
-                    SpaceWand.PlaceType = placeType;
-                };
             }
         }
 
@@ -73,6 +82,7 @@ namespace ImproveGame.Interface.GUI
             {
                 Close();
             }
+
             UpdateButton();
         }
 
@@ -92,8 +102,80 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
+        /// <summary>
+        /// 我执行右键了，你看着办吧！
+        /// </summary>
+        public void ProcessRightClick(SpaceWand SpaceWand)
+        {
+            if (Visible && timer.AnyOpen)
+            {
+                if (_secondPage)
+                {
+                    Close();
+                }
+                else
+                {
+                    SetupSecondPage();
+                }
+            }
+            else
+            {
+                Open(SpaceWand);
+            }
+        }
+
+        private void SetupSecondPage()
+        {
+            _secondPage = true;
+
+            MainPanel.RemoveAllChildren();
+
+            for (int i = 0; i < RoundButtons.Length; i++)
+            {
+                BlockType blockType = BlockTypes[i];
+                string path = $"UI/SpaceWand/{blockType}";
+                MainPanel.Append(RoundButtons[i] = new RoundButton(GetTexture(path))
+                {
+                    text = () => "",
+                    Selected = () => SpaceWand.BlockType == blockType
+                });
+                RoundButtons[i].OnLeftMouseDown += (_, _) =>
+                {
+                    SpaceWand.BlockType = blockType;
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+                };
+            }
+
+            Recalculate();
+            UpdateButton();
+        }
+
+        private void SetupFirstPage()
+        {
+            _secondPage = false;
+            MainPanel.RemoveAllChildren();
+
+            for (int i = 0; i < RoundButtons.Length; i++)
+            {
+                int itemType = ItemTypes[i];
+                PlaceType placeType = PlaceTypes[i];
+                Main.instance.LoadItem(itemType);
+                MainPanel.Append(RoundButtons[i] = new(TextureAssets.Item[itemType])
+                {
+                    text = () => GetText($"SpaceWandGUI.{placeType}"),
+                    Selected = () => SpaceWand.PlaceType == placeType
+                });
+                RoundButtons[i].OnLeftMouseDown += (_, _) =>
+                {
+                    SpaceWand.PlaceType = placeType;
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+                };
+            }
+        }
+
         public void Open(SpaceWand SpaceWand)
         {
+            SetupFirstPage();
             this.SpaceWand = SpaceWand;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);

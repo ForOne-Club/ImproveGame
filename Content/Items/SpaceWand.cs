@@ -55,6 +55,7 @@ public class SpaceWand : ModItem, IMarqueeItem
     #endregion
 
     public PlaceType PlaceType;
+    public BlockType BlockType;
     public int[] GrassSeeds = new int[] { 2, 23, 60, 70, 199, 109, 82 };
 
     public Vector2 StartingPoint;
@@ -72,14 +73,7 @@ public class SpaceWand : ModItem, IMarqueeItem
             // 右键
             if (player.altFunctionUse == 2)
             {
-                if (SpaceWandGUI.Visible && UISystem.Instance.SpaceWandGUI.timer.AnyOpen)
-                {
-                    UISystem.Instance.SpaceWandGUI.Close();
-                }
-                else
-                {
-                    UISystem.Instance.SpaceWandGUI.Open(this);
-                }
+                UISystem.Instance.SpaceWandGUI.ProcessRightClick(this);
             }
             else
             {
@@ -224,6 +218,12 @@ public class SpaceWand : ModItem, IMarqueeItem
                                 {
                                     playSound = true;
                                     PickItemInInventory(player, GetConditions(), true, out _);
+                                    var tile = Main.tile[x, y];
+                                    if (PlaceType is PlaceType.Soild or PlaceType.Platform)
+                                    {
+                                        tile.BlockType = BlockType;
+                                        WorldGen.SquareTileFrame(x, y, false);
+                                    }
                                     if (PlaceType is PlaceType.Soild)
                                         WorldGen.SlopeTile(x, y + 1);
                                 }
@@ -234,6 +234,12 @@ public class SpaceWand : ModItem, IMarqueeItem
                     {
                         playSound = true;
                         PickItemInInventory(player, GetConditions(), true, out _);
+                        var tile = Main.tile[x, y];
+                        if (PlaceType is PlaceType.Soild or PlaceType.Platform)
+                        {
+                            tile.BlockType = BlockType;
+                            WorldGen.SquareTileFrame(x, y, false);
+                        }
                         if (PlaceType is PlaceType.Soild)
                             WorldGen.SlopeTile(x, y + 1);
                     }
