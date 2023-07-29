@@ -11,24 +11,24 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 ## Subversions
 - v1.6.5.0
 ## Additions
-Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
-Enabled configuring chest detection range of Storage Manager
-Middle-clicking an mount item now uses it
-You can customize the slope type when using Space Wand to place blocks now
+- Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
+- Enabled configuring chest detection range of Storage Manager
+- Middle-clicking an mount item now uses it
+- You can customize the slope type when using Space Wand to place blocks now
 ## BUG Fixes
-Shadow Candle and War Table are now considered as buff stations
-Fixed no tile drop of left-facing Fishing Machine
-"Items Count For Crafting" now works
-Fixed Void Bag couldn't be opened by middle click
-Fixed Wand of Painting not taking certain paints
-Fixed Storage Manager couldn't be applied with certain paints
-Fixed Axe of Regrowth unable to harvest herbs
-Fixed middle click not opening GUI under high FPS
+- Shadow Candle and War Table are now considered as buff stations
+- Fixed no tile drop of left-facing Fishing Machine
+- "Items Count For Crafting" now works
+- Fixed Void Bag couldn't be opened by middle click
+- Fixed Wand of Painting not taking certain paints
+- Fixed Storage Manager couldn't be applied with certain paints
+- Fixed Axe of Regrowth unable to harvest herbs
+- Fixed middle click not opening GUI under high FPS
 ## Adjustments
-Optimized Pinying searching, now supports polyphones
-Adjusted mod config UI
-Wands besides Wand of Contruction and Wand of Architecture now display tile to be placed
-Wand of Space now resets tiles' sloping while replacing tiles
+- Optimized Pinying searching, now supports polyphones
+- Adjusted mod config UI
+- Wands besides Wand of Contruction and Wand of Architecture now display tile to be placed
+- Wand of Space now resets tiles' sloping while replacing tiles
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0
