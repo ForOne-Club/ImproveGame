@@ -6,7 +6,7 @@
 
 </div>
 
-# v1.6.5 (Not yet)
+# v1.6.5
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 ## Subversions
 - v1.6.5.0
