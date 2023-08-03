@@ -84,9 +84,9 @@ namespace ImproveGame.Common.ModSystems
 
                 var items = new List<Item>();
                 if (player.TryGetModPlayer<DataPlayer>(out var dataPlayer))
-                    items.AddRange(dataPlayer.AddMaterialsForCrafting(out _));
+                    items.AddRange(dataPlayer.AddMaterialsForCrafting(out _) ?? new List<Item>());
                 if (player.TryGetModPlayer<StorageMaterialConsumer>(out var storagePlayer))
-                    items.AddRange(storagePlayer.AddMaterialsForCrafting(out _));
+                    items.AddRange(storagePlayer.AddMaterialsForCrafting(out _) ?? new List<Item>());
 
                 foreach (var currentItem in from i in items where !i.IsAir select i)
                 {
