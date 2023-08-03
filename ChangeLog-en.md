@@ -15,6 +15,8 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Enabled configuring chest detection range of Storage Manager
 - Middle-clicking an mount item now uses it
 - You can customize the slope type when using Space Wand to place blocks now
+- **[v1.6.5.1]** 储存管理器物品参与合成功能在多人模式下可用了
+- **[v1.6.5.1]** 现在在有玩家使用储存管理器时也可以快速堆叠到箱子了
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine
@@ -24,6 +26,8 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Fixed Storage Manager couldn't be applied with certain paints
 - Fixed Axe of Regrowth unable to harvest herbs
 - Fixed middle click not opening GUI under high FPS
+- **[v1.6.5.1]** 修复了展开合成列表时仍然会与储存管理器GUI交互的BUG
+- **[v1.6.5.1]** 修复了“摇树必掉水果”功能失效的BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI

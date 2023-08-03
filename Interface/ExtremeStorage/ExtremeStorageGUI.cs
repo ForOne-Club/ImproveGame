@@ -21,11 +21,10 @@ namespace ImproveGame.Interface.ExtremeStorage
             public void Unload() { }
         }
 
-        public override bool Display { get => true; set { } }
+        public override bool Display { get => !Main.recBigList; set { } }
 
         public static bool Visible => SidedEventTrigger.IsOpened(UISystem.Instance.ExtremeStorageGUI);
 
-        // public static bool Visible => _visibleInternal && !Main.recBigList;
         public static ItemGroup CurrentGroup { get; private set; } = ItemGroup.Misc;
         public static TEExtremeStorage Storage { get; set; }
         public static Item[] AllItemsCached { get; private set; } // 缓存的所有附近物品，用于减少获取全物品时的卡顿
@@ -110,8 +109,6 @@ namespace ImproveGame.Interface.ExtremeStorage
 
         public override void Update(GameTime gameTime)
         {
-            if (Main.recBigList) return;
-
             if (_recalculateNextTick)
             {
                 _recalculateNextTick = false;
@@ -275,13 +272,6 @@ namespace ImproveGame.Interface.ExtremeStorage
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (Main.recBigList) return;
-
-            base.Draw(spriteBatch);
-        }
-
         /// <summary>
         /// 打开GUI界面
         /// </summary>
@@ -332,6 +322,12 @@ namespace ImproveGame.Interface.ExtremeStorage
         }
 
         public static void RefreshCachedAllItems() => AllItemsCached = GetAllItems();
+
+        /// <summary>
+        /// 根据当前group寻找附近所有箱子
+        /// </summary>
+        /// <returns></returns>
+        public static List<int> FindChestsWithCurrentGroup() => Storage.FindAllNearbyChestsWithGroup(CurrentGroup);
 
         public static Item[] GetAllItems() => Storage.GetAllItemsByGroup(CurrentGroup);
 

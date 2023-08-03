@@ -6,6 +6,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.Chat;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -19,36 +20,103 @@ public class ExtremeStorageCore : ModSystem
     {
         ToolButtonBase.ToolIcons = GetTexture("UI/ExtremeStorage/ToolIcons");
 
-        // TODO: 实际的多人测试
-        // 以前用的IL，1.4.4之后炸了，我也没心思再写一个了，直接禁用吧
-        On_Chest.ServerPlaceItem += (orig, plr, slot) =>
+        IL_Chest.PutItemInNearbyChest += il =>
         {
-            var player = Main.player[plr];
-            // 理论上不可能，但谁知道呢
-            if (Main.netMode is NetmodeID.SinglePlayer)
-            {
-                orig.Invoke(plr, slot);
+            // 根据上面的IL代码，写出对应的查找代码
+            var c = new ILCursor(il);
+            
+            /* 第一部分: 把物品堆叠到同类物品内
+             * IL_00d0: ldsfld       class Terraria.Chest[] Terraria.Main::chest
+             * IL_00d5: ldloc.1      // i
+             * IL_00d6: ldelem.ref
+             * IL_00d7: ldfld        class Terraria.Item[] Terraria.Chest::item
+             * IL_00dc: ldloc.s      index
+             * IL_00de: ldelem.ref
+             * IL_00df: ldarg.0      // item
+             * IL_00e0: ldloca.s     numTransferred
+             * IL_00e2: ldc.i4.0
+             * IL_00e3: call         bool Terraria.ModLoader.ItemLoader::TryStackItems(class Terraria.Item, class Terraria.Item, int32&, bool)
+             * IL_00e8: brfalse.s    IL_010e
+             */
+            if (!c.TryGotoNext(
+                    MoveType.After,
+                    i => i.MatchLdsfld(typeof(Main), nameof(Main.chest)),
+                    i => i.Match(OpCodes.Ldloc_1),
+                    i => i.MatchLdelemRef(),
+                    i => i.MatchLdfld(typeof(Chest), nameof(Chest.item)),
+                    i => i.Match(OpCodes.Ldloc_S)))
                 return;
-            }
 
-            var storagesUsing = ExtremeStoragePlayer.StoragesBeingUsed();
-            foreach ((int id, TileEntity tileEntity) in TileEntity.ByID)
+            // 获取物品处在的格子
+            int itemSlot = -1;
+            c.EmitDelegate<Func<int, int>>(returnValue =>
             {
-                if (!storagesUsing.Contains(id) || tileEntity is not TEExtremeStorage storage)
-                    continue;
-                // 判断距离，超出1.5个屏幕(1920*1.5)的不管，用DistanceSQ没有开根号的开销
-                if (storage.Position.ToWorldCoordinates().DistanceSQ(player.Center) > Math.Pow(2880, 2))
-                    continue;
+                itemSlot = returnValue;
+                return returnValue;
+            });
 
-                // 有储存，不堆叠
-                ChatHelper.DisplayMessageOnClient(
-                    NetworkText.FromKey("Mods.ImproveGame.UI.ExtremeStorage.RejectNearbyStack"), Color.Pink, plr);
+            if (!c.TryGotoNext(
+                    MoveType.After,
+                    i => i.MatchLdelemRef(),
+                    i => i.MatchLdarg(0),
+                    i => i.Match(OpCodes.Ldloca_S),
+                    i => i.Match(OpCodes.Ldc_I4_0),
+                    i => i.MatchCall(typeof(ItemLoader), nameof(ItemLoader.TryStackItems)),
+                    i => i.Match(OpCodes.Brfalse_S)))
                 return;
-            }
 
-            // 全部检查通过
-            orig.Invoke(plr, slot);
+            c.Emit(OpCodes.Ldloc_1); // 箱子 index
+            c.EmitDelegate<Action<int>>(chestIndex => TrySend(chestIndex, itemSlot));
+            
+            /* 第二部分: 箱子里有空位，把物品放到空位里面
+             * IL_017a: ldloc.0      // flag1
+             * IL_017b: brfalse.s    IL_0199
+             * IL_017d: ldsfld       class Terraria.Chest[] Terraria.Main::chest
+             * IL_0182: ldloc.1      // i
+             * IL_0183: ldelem.ref
+             * IL_0184: ldfld        class Terraria.Item[] Terraria.Chest::item
+             * IL_0189: ldloc.s      index_V_8
+             * IL_018b: ldarg.0      // item
+             * IL_018c: callvirt     instance class Terraria.Item Terraria.Item::Clone()
+             * IL_0191: stelem.ref
+             */
+            if (!c.TryGotoNext(
+                    MoveType.After,
+                    i => i.Match(OpCodes.Ldloc_0),
+                    i => i.Match(OpCodes.Brfalse_S),
+                    i => i.MatchLdsfld(typeof(Main), nameof(Main.chest)),
+                    i => i.Match(OpCodes.Ldloc_1),
+                    i => i.MatchLdelemRef(),
+                    i => i.MatchLdfld(typeof(Chest), nameof(Chest.item)),
+                    i => i.Match(OpCodes.Ldloc_S)))
+                return;
+
+            // 获取物品处在的格子
+            itemSlot = -1;
+            c.EmitDelegate<Func<int, int>>(returnValue =>
+            {
+                itemSlot = returnValue;
+                return returnValue;
+            });
+
+            if (!c.TryGotoNext(
+                    MoveType.After,
+                    i => i.MatchLdarg(0),
+                    i => i.MatchCallvirt(typeof(Item), nameof(Item.Clone)),
+                    i => i.MatchStelemRef()))
+                return;
+
+            c.Emit(OpCodes.Ldloc_1); // 箱子 index
+            c.EmitDelegate<Action<int>>(chestIndex => TrySend(chestIndex, itemSlot));
         };
+    }
+
+    private void TrySend(int chestIndex, int itemSlot)
+    {
+        if (Main.netMode is not NetmodeID.Server || itemSlot is < 0 or >= Chest.maxItems ||
+            !Main.chest.IndexInRange(chestIndex))
+            return;
+        ChestItemOperation.SendItem(chestIndex, itemSlot);
     }
 
     public override void PostUpdateEverything()
@@ -77,5 +145,43 @@ public class ExtremeStorageCore : ModSystem
         }
 
         _chestOld = Main.LocalPlayer.chest;
+    }
+}
+
+public class StorageMaterialConsumer : ModPlayer
+{
+    public override IEnumerable<Item> AddMaterialsForCrafting(out ItemConsumedCallback itemConsumedCallback)
+    {
+        if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.Storage.UseForCrafting &&
+            ExtremeStorageGUI.CurrentGroup is not ItemGroup.Setting)
+        {
+            var chests = ExtremeStorageGUI.FindChestsWithCurrentGroup();
+
+            // 建立物品列表
+            var itemList = new List<Item>();
+            chests.ForEach(i => itemList.AddRange(Main.chest[i].item));
+
+            itemConsumedCallback = (item, index) =>
+            {
+                int chestIndexInList = index / Chest.maxItems;
+                int itemIndex = index % Chest.maxItems;
+                if (chestIndexInList >= chests.Count)
+                    return;
+
+                int chestIndex = chests[chestIndexInList];
+                if (!Main.chest.IndexInRange(chestIndex))
+                    return;
+
+                if (Main.netMode is NetmodeID.MultiplayerClient)
+                {
+                    // 同步箱子信息
+                    ChestItemOperation.SendItemWithSync(chestIndex, itemIndex);
+                }
+            };
+
+            return itemList;
+        }
+
+        return base.AddMaterialsForCrafting(out itemConsumedCallback);
     }
 }

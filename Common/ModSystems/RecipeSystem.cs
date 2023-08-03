@@ -51,35 +51,3 @@ public class RecipeSystem : ModSystem
         RecipeGroup.RegisterGroup("ImproveGame:AnyAdamantiteBar", AnyAdamantiteBar);
     }
 }
-
-public class MaterialConsumer : ModPlayer
-{
-    public static IEnumerable<Item> ExtendedCraftingMaterials
-    {
-        get
-        {
-            var finalItems = new List<Item>();
-
-            if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng &&
-                DataPlayer.TryGet(Main.LocalPlayer, out var modPlayer) && modPlayer.SuperVault is not null)
-            {
-                finalItems.AddRange(modPlayer.SuperVault);
-            }
-
-            if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.Storage.UseForCrafting &&
-                Main.netMode is NetmodeID.SinglePlayer && ExtremeStorageGUI.CurrentGroup is not ItemGroup.Setting &&
-                ExtremeStorageGUI.AllItemsCached is not null)
-            {
-                finalItems.AddRange(ExtremeStorageGUI.AllItemsCached);
-            }
-
-            return finalItems;
-        }
-    }
-    
-    public override IEnumerable<Item> AddMaterialsForCrafting(out ItemConsumedCallback itemConsumedCallback)
-    {
-        itemConsumedCallback = null;
-        return ExtendedCraftingMaterials;
-    }
-}

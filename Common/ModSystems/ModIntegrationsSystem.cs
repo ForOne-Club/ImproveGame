@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Packets;
+﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.Packets;
 using MonoMod.RuntimeDetour.HookGen;
 using System.Collections.Generic;
 using System.Reflection;
@@ -81,7 +82,12 @@ namespace ImproveGame.Common.ModSystems
                     return count;
                 }
 
-                var items = MaterialConsumer.ExtendedCraftingMaterials;
+                var items = new List<Item>();
+                if (player.TryGetModPlayer<DataPlayer>(out var dataPlayer))
+                    items.AddRange(dataPlayer.AddMaterialsForCrafting(out _));
+                if (player.TryGetModPlayer<StorageMaterialConsumer>(out var storagePlayer))
+                    items.AddRange(storagePlayer.AddMaterialsForCrafting(out _));
+
                 foreach (var currentItem in from i in items where !i.IsAir select i)
                 {
                     if (recipe.AcceptedByItemGroups(currentItem.type, item.type))

@@ -2,20 +2,15 @@
   "profiles": {
     "Terraria": {
       "commandName": "Executable",
-      "executablePath": "dotnet",
+      "executablePath": "$(DotNetPath)",
       "commandLineArgs": "$(tMLPath)",
-      "workingDirectory": "$(tMLSteamPath)"
+      "workingDirectory": "$(tMLSteamPath)",
+      "nativeDebugging": true
     },
     "TerrariaServer": {
       "commandName": "Executable",
-      "executablePath": "dotnet",
+      "executablePath": "$(DotNetPath)",
       "commandLineArgs": "$(tMLServerPath)",
-      "workingDirectory": "$(tMLSteamPath)"
-    },
-    "Cyril的配置": {
-      "commandName": "Executable",
-      "executablePath": "D:\\SteamLibrary\\steamapps\\common\\tModLoader\\dotnet\\6.0.0\\dotnet.exe",
-      "commandLineArgs": "$(tMLPath)",
       "workingDirectory": "$(tMLSteamPath)"
     }
   }

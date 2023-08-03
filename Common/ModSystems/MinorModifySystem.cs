@@ -4,6 +4,7 @@ using ImproveGame.Content.Items;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
+using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 
@@ -25,13 +26,14 @@ namespace ImproveGame.Common.ModSystems
             // 使存钱罐中物品生效，如同放入背包一样
             On_Player.UpdateEquips += TweakExtraUpdateInventory;
             // 摇树总是掉落水果
-            IL_WorldGen.ShakeTree += TweakShakeTree;
+            ShakeTreeTweak.Load();
             // “草药” 生长速度
             IL_WorldGen.GrowAlch += WorldGen_GrowAlch;
             // “草药” 绘制的是否是开花图案
             On_TileDrawing.IsAlchemyPlantHarvestable += TileDrawing_IsAlchemyPlantHarvestable;
             // “草药” 是否可以被 “再生法杖” 收割
-            IL_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings += Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
+            IL_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings +=
+                Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
             // “草药” 是否掉落成熟时候物品
             On_WorldGen.IsHarvestableHerbWithSeed += WorldGen_IsHarvestableHerbWithSeed;
             // 旅商永远不离开
@@ -109,12 +111,12 @@ namespace ImproveGame.Common.ModSystems
             // IL_006B: bge.s     IL_0070
             var c = new ILCursor(il);
             if (!c.TryGotoNext(
-                MoveType.After,
-                i => i.MatchCall(typeof(WorldGen).GetMethod("GetTileTypeCountByCategory")),
-                i => i.Match(OpCodes.Neg),
-                i => i.Match(OpCodes.Stloc_S),
-                i => i.Match(OpCodes.Ldloc_S),
-                i => i.Match(OpCodes.Ldc_I4_S)))
+                    MoveType.After,
+                    i => i.MatchCall(typeof(WorldGen).GetMethod("GetTileTypeCountByCategory")),
+                    i => i.Match(OpCodes.Neg),
+                    i => i.Match(OpCodes.Stloc_S),
+                    i => i.Match(OpCodes.Ldloc_S),
+                    i => i.Match(OpCodes.Ldc_I4_S)))
                 return;
             // < 50则会设置为0，开选项的时候把这个设置成114514就行了
             c.EmitDelegate<Func<int, int>>((returnValue) => Config.NPCLiveInEvil ? 114514 : returnValue);
@@ -131,11 +133,11 @@ namespace ImproveGame.Common.ModSystems
              * IL_002B: stloc.1
              */
             if (!c.TryGotoNext(
-                MoveType.After,
-                i => i.Match(OpCodes.Ldc_I4_0),
-                i => i.Match(OpCodes.Ceq),
-                i => i.MatchStsfld<WorldGen>(nameof(WorldGen.AllowedToSpreadInfections))
-            ))
+                    MoveType.After,
+                    i => i.Match(OpCodes.Ldc_I4_0),
+                    i => i.Match(OpCodes.Ceq),
+                    i => i.MatchStsfld<WorldGen>(nameof(WorldGen.AllowedToSpreadInfections))
+                ))
                 return;
 
             var label = c.DefineLabel();
@@ -161,18 +163,20 @@ namespace ImproveGame.Common.ModSystems
              * IL_01CE: brtrue.s  IL_01E2
              */
             if (!c.TryGotoNext(
-                MoveType.After,
-                i => i.MatchLdsfld<Main>(nameof(Main.persistentBuff)),
-                i => i.Match(OpCodes.Ldarg_0),
-                i => i.MatchLdfld<Player>(nameof(Player.buffType)),
-                i => i.Match(OpCodes.Ldloc_2),
-                i => i.Match(OpCodes.Ldelem_I4),
-                i => i.Match(OpCodes.Ldelem_U1)
-            ))
+                    MoveType.After,
+                    i => i.MatchLdsfld<Main>(nameof(Main.persistentBuff)),
+                    i => i.Match(OpCodes.Ldarg_0),
+                    i => i.MatchLdfld<Player>(nameof(Player.buffType)),
+                    i => i.Match(OpCodes.Ldloc_2),
+                    i => i.Match(OpCodes.Ldelem_I4),
+                    i => i.Match(OpCodes.Ldelem_U1)
+                ))
                 return;
 
             c.Emit(OpCodes.Ldarg_0); // Player实例
-            c.Emit(OpCodes.Ldfld, typeof(Player).GetField(nameof(Player.buffType), BindingFlags.Instance | BindingFlags.Public)); // buffType数组
+            c.Emit(OpCodes.Ldfld,
+                typeof(Player).GetField(nameof(Player.buffType),
+                    BindingFlags.Instance | BindingFlags.Public)); // buffType数组
             c.Emit(OpCodes.Ldloc_2); // 索引 i
             c.Emit(OpCodes.Ldelem_I4); // 结合出int32
             c.EmitDelegate<Func<bool, int, bool>>((returnValue, buffType) =>
@@ -180,8 +184,10 @@ namespace ImproveGame.Common.ModSystems
                 if (Config.DontDeleteBuff)
                 {
                     // 返回false就会进入删除
-                    return !Main.debuff[buffType] && !Main.buffNoSave[buffType] && !Main.lightPet[buffType] && !Main.vanityPet[buffType];
+                    return !Main.debuff[buffType] && !Main.buffNoSave[buffType] && !Main.lightPet[buffType] &&
+                           !Main.vanityPet[buffType];
                 }
+
                 return returnValue;
             });
         }
@@ -191,23 +197,20 @@ namespace ImproveGame.Common.ModSystems
             var c = new ILCursor(il);
 
             if (!c.TryGotoNext(
-                MoveType.After,
-                i => i.MatchCall(typeof(Main), "get_expertMode"),
-                i => i.Match(OpCodes.Brfalse),
-                i => i.Match(OpCodes.Ldarg_0),
-                i => i.MatchLdfld(typeof(NPC), nameof(NPC.type)),
-                i => i.MatchLdcI4(NPCID.LavaSlime)
-            ))
+                    MoveType.After,
+                    i => i.MatchCall(typeof(Main), "get_expertMode"),
+                    i => i.Match(OpCodes.Brfalse),
+                    i => i.Match(OpCodes.Ldarg_0),
+                    i => i.MatchLdfld(typeof(NPC), nameof(NPC.type)),
+                    i => i.Match(OpCodes.Ldc_I4_S, (sbyte)NPCID.LavaSlime)
+                ))
                 return;
 
-            c.EmitDelegate<Func<int, int>>(returnValue =>
-            {
-                // 把if (type == 59) 的59换掉，NPC.type不可能为NPCLoader.NPCCount
-                return Config.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue;
-            });
+            c.EmitDelegate<Func<int, int>>(returnValue => Config.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue);
         }
 
-        private void NPC_CountKillForBannersAndDropThem(Terraria.On_NPC.orig_CountKillForBannersAndDropThem orig, NPC npc)
+        private void NPC_CountKillForBannersAndDropThem(Terraria.On_NPC.orig_CountKillForBannersAndDropThem orig,
+            NPC npc)
         {
             int bannerID = Item.NPCtoBanner(npc.BannerID());
             int itemID = Item.BannerToItem(bannerID);
@@ -223,12 +226,14 @@ namespace ImproveGame.Common.ModSystems
                 orig.Invoke();
         }
 
-        private bool TileDrawing_IsAlchemyPlantHarvestable(On_TileDrawing.orig_IsAlchemyPlantHarvestable orig, TileDrawing self, int style)
+        private bool TileDrawing_IsAlchemyPlantHarvestable(On_TileDrawing.orig_IsAlchemyPlantHarvestable orig,
+            TileDrawing self, int style)
         {
             return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(self, style);
         }
 
-        private bool WorldGen_IsHarvestableHerbWithSeed(On_WorldGen.orig_IsHarvestableHerbWithSeed orig, int type, int style)
+        private bool WorldGen_IsHarvestableHerbWithSeed(On_WorldGen.orig_IsHarvestableHerbWithSeed orig, int type,
+            int style)
         {
             return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style);
         }
@@ -236,12 +241,13 @@ namespace ImproveGame.Common.ModSystems
         // “草药” 是否可以被 “再生法杖” 收割
         private static int _herbStyle;
         private static int _herbType;
+
         private static void Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(ILContext il)
         {
             var c = new ILCursor(il);
             if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Ldc_I4_S, (sbyte)84),
-                i => i.Match(OpCodes.Bne_Un_S)))
+                    i => i.Match(OpCodes.Ldc_I4_S, (sbyte)84),
+                    i => i.Match(OpCodes.Bne_Un_S)))
                 return;
             c.EmitDelegate(() =>
             {
@@ -254,26 +260,29 @@ namespace ImproveGame.Common.ModSystems
             });
 
             if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Ldc_I4_0),
-                i => i.Match(OpCodes.Ldc_I4_0),
-                i => i.Match(OpCodes.Ldc_I4_0),
-                i => i.Match(OpCodes.Call)))
+                    i => i.Match(OpCodes.Ldc_I4_0),
+                    i => i.Match(OpCodes.Ldc_I4_0),
+                    i => i.Match(OpCodes.Ldc_I4_0),
+                    i => i.Match(OpCodes.Call)))
                 return;
             c.EmitDelegate(() =>
             {
-                if (!Config.StaffOfRegenerationAutomaticPlanting || _herbType is not TileID.BloomingHerbs and not TileID.MatureHerbs)
+                if (!Config.StaffOfRegenerationAutomaticPlanting ||
+                    _herbType is not TileID.BloomingHerbs and not TileID.MatureHerbs)
                     return;
 
-                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, true, false, -1, _herbStyle);
-                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, _herbStyle);
+                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, true, false, -1,
+                    _herbStyle);
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY,
+                    TileID.ImmatureHerbs, _herbStyle);
             });
 
             if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Ldc_R8, 40500d),
-                i => i.Match(OpCodes.Ble_Un_S),
-                i => i.Match(OpCodes.Ldc_I4_1),
-                i => i.Match(OpCodes.Stloc_S),
-                i => i.Match(OpCodes.Ldloc_S)))
+                    i => i.Match(OpCodes.Ldc_R8, 40500d),
+                    i => i.Match(OpCodes.Ble_Un_S),
+                    i => i.Match(OpCodes.Ldc_I4_1),
+                    i => i.Match(OpCodes.Stloc_S),
+                    i => i.Match(OpCodes.Ldloc_S)))
                 return;
             c.EmitDelegate<Func<bool, bool>>(flag =>
             {
@@ -283,23 +292,27 @@ namespace ImproveGame.Common.ModSystems
                     _herbStyle = tile.TileFrameX / 18;
                     _herbType = tile.TileType;
                 }
+
                 return Config.AlchemyGrassAlwaysBlooms || flag;
             });
 
             if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Ldc_R4),
-                i => i.Match(OpCodes.Ldc_I4_0),
-                i => i.Match(OpCodes.Ldc_I4_0),
-                i => i.Match(OpCodes.Ldc_I4_0),
-                i => i.Match(OpCodes.Call)))
+                    i => i.Match(OpCodes.Ldc_R4),
+                    i => i.Match(OpCodes.Ldc_I4_0),
+                    i => i.Match(OpCodes.Ldc_I4_0),
+                    i => i.Match(OpCodes.Ldc_I4_0),
+                    i => i.Match(OpCodes.Call)))
                 return;
             c.EmitDelegate(() =>
             {
-                if (!Config.StaffOfRegenerationAutomaticPlanting || _herbType is not TileID.BloomingHerbs and not TileID.MatureHerbs)
+                if (!Config.StaffOfRegenerationAutomaticPlanting ||
+                    _herbType is not TileID.BloomingHerbs and not TileID.MatureHerbs)
                     return;
 
-                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, true, false, -1, _herbStyle);
-                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, _herbStyle);
+                WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, TileID.ImmatureHerbs, true, false, -1,
+                    _herbStyle);
+                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY,
+                    TileID.ImmatureHerbs, _herbStyle);
             });
         }
 
@@ -309,8 +322,8 @@ namespace ImproveGame.Common.ModSystems
             var c = new ILCursor(il);
 
             if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Call),
-                i => i.Match(OpCodes.Ldc_I4_S)))
+                    i => i.Match(OpCodes.Call),
+                    i => i.Match(OpCodes.Ldc_I4_S)))
                 return;
             c.EmitDelegate<Func<int, int>>(num => Config.AlchemyGrassGrowsFaster ? 1 : num);
 
@@ -388,7 +401,8 @@ namespace ImproveGame.Common.ModSystems
             foreach (var item in items)
             {
                 AddBannerBuff(item);
-                if (item is not null && !item.IsAir && item.ModItem is not null && item.ModItem is BannerChest bannerChest && bannerChest.StoredBanners.Count > 0)
+                if (item is not null && !item.IsAir && item.ModItem is not null &&
+                    item.ModItem is BannerChest bannerChest && bannerChest.StoredBanners.Count > 0)
                 {
                     foreach (var p in bannerChest.StoredBanners)
                     {
@@ -440,8 +454,8 @@ namespace ImproveGame.Common.ModSystems
             // 计算剩余平台
             var c = new ILCursor(il);
             if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Pop),
-                i => i.Match(OpCodes.Ldc_I4_M1)))
+                    i => i.Match(OpCodes.Pop),
+                    i => i.Match(OpCodes.Ldc_I4_M1)))
                 return;
             c.Emit(OpCodes.Ldarg_1); // 玩家物品槽
             c.Emit(OpCodes.Ldarg_2); // content
@@ -461,6 +475,7 @@ namespace ImproveGame.Common.ModSystems
                         ItemCount(inv, (item) => item.createWall > -1, out int count);
                         return count;
                     }
+
                     return -1;
                 }
                 else
@@ -473,88 +488,75 @@ namespace ImproveGame.Common.ModSystems
         /// <summary>
         /// 墓碑掉落
         /// </summary>
-
-        private void DisableDropTombstone(On_Player.orig_DropTombstone orig, Player self, long coinsOwned, NetworkText deathText, int hitDirection)
+        private void DisableDropTombstone(On_Player.orig_DropTombstone orig, Player self, long coinsOwned,
+            NetworkText deathText, int hitDirection)
         {
             if (!Config.BanTombstone)
             {
                 orig(self, coinsOwned, deathText, hitDirection);
             }
         }
+    }
+}
 
-        /// <summary>
-        /// 摇树总掉水果
-        /// </summary>
-        private void TweakShakeTree(ILContext il)
+public class ShakeTreeTweak
+{
+    private class ShakeTreeItem : GlobalItem
+    {
+        public override void OnSpawn(Item item, IEntitySource source)
         {
-            try
+            if (_isShakingTree && source is EntitySource_ShakeTree)
+                _hasItemDropped = true;
+        }
+    }
+
+    private static bool _isShakingTree;
+    private static bool _hasItemDropped; // 检测是否在摇树过程中有物品掉落
+
+    public static void Load()
+    {
+        On_WorldGen.ShakeTree += (orig, i, j) =>
+        {
+            _isShakingTree = true;
+            _hasItemDropped = false;
+
+            // 在orig前获取树是否被摇过，因为orig会修改WorldGen.treeShakeX,Y的值，标记为被摇过
+            bool treeShaken = false;
+
+            WorldGen.GetTreeBottom(i, j, out var x, out var y);
+            for (int k = 0; k < WorldGen.numTreeShakes; k++)
             {
-                // 源码，在最后：
-                // if (flag) {
-                //     [摇树有物品出现，执行一些特效]
-                // }
-                // 搞到这个flag, 如果为false(没东西)就加水果, 然后让他读到true
-                // IL_0DAF: ldloc.s   flag
-                // IL_0DB1: brfalse.s IL_0E12
-                // 这两行就可以精确找到, 因为其他地方没有相同的
-                // 值得注意的是，代码开始之前有这个：
-                // treeShakeX[numTreeShakes] = x;
-                // treeShakeY[numTreeShakes] = y;
-                // numTreeShakes++;
-                // 所以我们可以直接用了，都不需要委托获得x, y
-
-                ILCursor c = new(il);
-
-                if (!c.TryGotoNext(MoveType.Before,
-                                   i => i.Match(OpCodes.Ldloc_S),
-                                   i => i.Match(OpCodes.Brfalse_S)))
+                if (WorldGen.treeShakeX[k] == x && WorldGen.treeShakeY[k] == y)
                 {
-                    ErrorTweak();
-                    return;
+                    treeShaken = true;
+                    break;
                 }
-
-                c.Index++;
-                c.EmitDelegate<Func<bool, bool>>((shackSucceed) =>
-                {
-                    if (!shackSucceed && Config.ShakeTreeFruit)
-                    {
-                        int x = WorldGen.treeShakeX[WorldGen.numTreeShakes - 1];
-                        int y = WorldGen.treeShakeY[WorldGen.numTreeShakes - 1];
-                        int tileType = Main.tile[x, y].TileType;
-                        TreeTypes treeType = WorldGen.GetTreeType(tileType);
-
-                        // 获取到顶部
-                        y--;
-                        while (y > 10 && Main.tile[x, y].HasTile && TileID.Sets.IsShakeable[Main.tile[x, y].TileType])
-                        {
-                            y--;
-                        }
-                        y++;
-
-                        int fruit = CollectHelper.GetShakeTreeFruit(treeType);
-                        if (fruit > -1)
-                        {
-                            Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), x * 16, y * 16, 16, 16, fruit);
-                            shackSucceed = true;
-                        }
-                    }
-                    return shackSucceed;
-                });
-
             }
-            catch
-            {
-                ErrorTweak();
+
+            orig(i, j);
+
+            _isShakingTree = false;
+
+            if (WorldGen.numTreeShakes == WorldGen.maxTreeShakes || _hasItemDropped || treeShaken)
                 return;
-            }
-        }
 
-        private static void ErrorTweak()
-        {
-            string exception = "Something went wrong in TweakShakeTree(), please contact with the mod developers.\nYou can still use the mod, but the \"Always drop fruit when shaking the tree\" option will not work";
-            if (GameCulture.FromCultureName(GameCulture.CultureName.Chinese).IsActive)
-                exception = "TweakShakeTree()发生错误，请联系Mod制作者\n你仍然可以使用Mod，但是“摇树总掉水果”选项不会起作用";
-            ImproveGame.Instance.Logger.Warn(exception);
-        }
+            TreeTypes treeType = WorldGen.GetTreeType(Main.tile[x, y].type);
+            if (treeType == TreeTypes.None)
+                return;
+
+            y--;
+            while (y > 10 && Main.tile[x, y].active() && TileID.Sets.IsShakeable[Main.tile[x, y].type])
+            {
+                y--;
+            }
+
+            y++;
+            if (!WorldGen.IsTileALeafyTreeTop(x, y) || Collision.SolidTiles(x - 2, x + 2, y - 2, y + 2))
+                return;
+
+            int fruit = CollectHelper.GetShakeTreeFruit(treeType);
+            if (fruit > -1)
+                Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), x * 16, y * 16, 16, 16, fruit);
+        };
     }
 }

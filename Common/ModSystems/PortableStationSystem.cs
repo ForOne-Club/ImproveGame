@@ -11,7 +11,7 @@ internal class PortableStationSystem : ModSystem
     public override void Load()
     {
         // 便携制作站
-        Terraria.IL_Player.AdjTiles += AddPortableStations;
+        IL_Player.AdjTiles += AddPortableStations;
     }
 
     private void AddPortableStations(ILContext il)
@@ -20,7 +20,7 @@ internal class PortableStationSystem : ModSystem
         if (!c.TryGotoNext(MoveType.Before, i => i.MatchLdsfld<Main>(nameof(Main.playerInventory))))
             return;
         c.Emit(OpCodes.Ldarg_0);
-        c.EmitDelegate<Action<Player>>((player) =>
+        c.EmitDelegate<Action<Player>>(player =>
         {
             if (!Config.PortableCraftingStation)
                 return;

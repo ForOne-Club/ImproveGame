@@ -12,15 +12,6 @@ namespace ImproveGame.Content.Tiles
         public bool UsePortableStations { get => _flags[1]; set => _flags[1] = value; }
         public bool UseForCrafting { get => _flags[2]; set => _flags[2] = value; }
 
-        public override void Update()
-        {
-            if (Main.netMode is NetmodeID.Server && UseForCrafting)
-            {
-                UseForCrafting = false;
-                SyncDataPacket.Get(ID).Send();
-            }
-        }
-
         #region 基本TE内容
 
         public override void NetSend(BinaryWriter writer)
