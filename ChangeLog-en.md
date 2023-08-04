@@ -18,6 +18,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - You can customize the slope type when using Space Wand to place blocks now
 - **[v1.6.5.1]** 储存管理器物品参与合成功能在多人模式下可用了
 - **[v1.6.5.1]** 现在在有玩家使用储存管理器时也可以快速堆叠到箱子了
+- **[v1.6.5.1]** 储存管理器新增“随身旗帜”功能，可使“家具”类别中的物品算作随身旗帜
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine
@@ -37,6 +38,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Adjusted mod config UI
 - Wands besides Wand of Contruction and Wand of Architecture now display tile to be placed
 - Wand of Space now resets tiles' sloping while replacing tiles
+- **[v1.6.5.1]** 现在快速堆叠/全部放置到储存管理器的物品有动画了
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0

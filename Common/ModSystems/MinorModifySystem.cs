@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Content.Items;
+using ImproveGame.Content.Tiles;
+using ImproveGame.Interface.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
@@ -392,12 +394,29 @@ namespace ImproveGame.Common.ModSystems
                 TryAddBuff(Main.LocalPlayer);
                 if (Config.ShareInfBuffs)
                     CheckTeamPlayers(Main.myPlayer, TryAddBuff);
+
+                // 从TE中获取所有的无尽Buff物品
+                foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
+                {
+                    if (tileEntity is not TEExtremeStorage {UsePortableBanner: true} storage)
+                    {
+                        continue;
+                    }
+
+                    var banners = storage.FindAllNearbyChestsWithGroup(ItemGroup.Furniture);
+                    banners.ForEach(i => CheckBanners(Main.chest[i].item));
+                }
             }
         }
 
-        private static void TryAddBuff(Player player)
+        private static void TryAddBuff(Player player) =>
+            CheckBanners(GetAllInventoryItemsList(player));
+
+        /// <summary>
+        /// 从某个玩家的各种物品栏中拿效果
+        /// </summary>
+        private static void CheckBanners(IEnumerable<Item> items)
         {
-            var items = GetAllInventoryItemsList(player);
             foreach (var item in items)
             {
                 AddBannerBuff(item);

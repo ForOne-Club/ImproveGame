@@ -1,7 +1,9 @@
 ﻿using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;
+using System.Collections;
 using System.Diagnostics;
 using ItemSlot = Terraria.UI.ItemSlot;
 
@@ -73,6 +75,9 @@ public class ToolOperation : NetModule
         // 保存操作前的物品信息
         var oldItems = GetItemInfosWithChestIndex(itemsWithChestIndex);
 
+        // 获取TE坐标，用于快速堆叠时的可见物品传输
+        var storagePosition = tileEntity.Position.ToWorldCoordinates() + new Vector2(16f);
+
         switch ((OperationType)_operationType)
         {
             // 排列物品
@@ -87,11 +92,11 @@ public class ToolOperation : NetModule
                 break;
             // 向储存堆叠 - 快速堆叠
             case OperationType.StackToStorage:
-                StackToStorage(items, out _);
+                StackToStorage(items, storagePosition, out _);
                 break;
             // 向储存存入所有物品
             case OperationType.DepositAll:
-                DepositAll(items);
+                DepositAll(items, storagePosition);
                 break;
             // 从储存中取出所有物品
             case OperationType.LootAll:
@@ -213,15 +218,16 @@ public class ToolOperation : NetModule
             PlaySoundPacket.Get(LegacySoundIDs.Grab).Send(toClient: Sender, runLocally: true);
     }
 
-    private void StackToStorage(Item[] items, out bool playedSound)
+    private void StackToStorage(Item[] items, Vector2 storagePosition, out bool playedSound)
     {
         playedSound = false;
 
         // 这个是服务器执行，客户端不执行
         if (Main.netMode is NetmodeID.MultiplayerClient) return;
 
+        var player = Main.player[Sender];
         bool shouldPlaySound = false;
-        Item[] inventory = Main.player[Sender].inventory;
+        Item[] inventory = player.inventory;
         // 速查表，用于快速判断某个物品ID是否在物品栏中拥有，且可能可以堆叠
         var storageItemIds = new HashSet<int>();
         // 通过物品ID对应空位
@@ -255,16 +261,16 @@ public class ToolOperation : NetModule
                 var storageItem = items[i];
                 if (storageItem.stack >= storageItem.maxStack) return;
 
-                if (!ItemLoader.CanStack(storageItem, item)) return;
+                if (!ItemLoader.TryStackItems(storageItem, item, out int numTransferred)) return;
 
-                int stack = Math.Min(storageItem.maxStack - storageItem.stack, item.stack);
-                storageItem.stack += stack;
-                item.stack -= stack;
+                if (numTransferred > 0)
+                    Chest.VisualizeChestTransfer(player.Center, storagePosition, item, numTransferred);
+
                 if (item.stack <= 0)
                     item.TurnToAir();
 
                 changed = true;
-                shouldPlaySound = true;
+                // shouldPlaySound = true;
             });
             if (changed && Main.netMode is NetmodeID.Server)
             {
@@ -273,28 +279,30 @@ public class ToolOperation : NetModule
             }
         }
 
-        playedSound = shouldPlaySound;
-
-        if (shouldPlaySound)
-            PlaySoundPacket.Get(LegacySoundIDs.Grab).Send(toClient: Sender, runLocally: true);
+        // playedSound = shouldPlaySound;
+        
+        // 现在使用可见物品传输动画
+        // if (shouldPlaySound)
+        //     PlaySoundPacket.Get(LegacySoundIDs.Grab).Send(toClient: Sender, runLocally: true);
     }
 
     /// <summary>
     /// 物品栏 -> 储存
     /// </summary>
-    private void DepositAll(Item[] items)
+    private void DepositAll(Item[] items, Vector2 storagePosition)
     {
         // 这个是服务器执行，客户端不执行
         if (Main.netMode is NetmodeID.MultiplayerClient) return;
 
         var player = Main.player[Sender];
 
-        StackToStorage(items, out bool playedSound);
+        StackToStorage(items, storagePosition, out bool playedSound);
         DepositAllInner();
+        return;
 
         void DepositAllInner()
         {
-            bool shouldPlaySound = false;
+            // bool shouldPlaySound = false;
             var emptySlots = new List<int>();
             for (int i = 0; i < items.Length; i++)
             {
@@ -308,12 +316,14 @@ public class ToolOperation : NetModule
                 if (item.IsAir || item.favorited) continue;
                 if (emptySlots.Count <= 0) break;
 
+                Chest.VisualizeChestTransfer(player.Center, storagePosition, item, item.stack);
+
                 int slot = emptySlots[0];
                 emptySlots.RemoveAt(0);
                 items[slot] = item.Clone();
                 item.TurnToAir();
 
-                shouldPlaySound = true;
+                // shouldPlaySound = true;
 
                 if (Main.netMode is NetmodeID.Server)
                 {
@@ -321,9 +331,10 @@ public class ToolOperation : NetModule
                     NetMessage.SendData(MessageID.SyncEquipment, -1, Sender, null, Sender, i, item.prefix);
                 }
             }
-            
-            if (shouldPlaySound && !playedSound)
-                PlaySoundPacket.Get(LegacySoundIDs.Grab).Send(toClient: Sender, runLocally: true);
+
+            // 现在使用可见物品传输动画
+            // if (shouldPlaySound && !playedSound)
+            //     PlaySoundPacket.Get(LegacySoundIDs.Grab).Send(toClient: Sender, runLocally: true);
         }
     }
 
@@ -344,12 +355,12 @@ public class ToolOperation : NetModule
         {
             bool shouldPlaySound = false;
             var emptySlots = new List<int>();
-            
+
             // 先从快捷栏开始
             for (int i = 0; i < 10; i++)
                 if (player.inventory[i].IsAir)
                     emptySlots.Add(i);
-            
+
             // 再从其他物品栏倒序
             for (int i = 49; i >= 10; i--)
                 if (player.inventory[i].IsAir)
@@ -374,7 +385,7 @@ public class ToolOperation : NetModule
                         player.inventory[slot].prefix);
                 }
             }
-            
+
             if (shouldPlaySound && !playedSound)
                 PlaySoundPacket.Get(LegacySoundIDs.Grab).Send(toClient: Sender, runLocally: true);
         }
@@ -382,8 +393,26 @@ public class ToolOperation : NetModule
 
     public override void Load()
     {
+        // 让可见物品传输播放声音
+        On_Chest.AskForChestToEatItem += (orig, worldPosition, duration) =>
+        {
+            orig.Invoke(worldPosition, duration);
+
+            var tilePosition = (worldPosition - new Vector2(16f)).ToTileCoordinates();
+            if (!TryGetTileEntityAs<TEExtremeStorage>(tilePosition, out _)) return;
+            
+            CoroutineSystem.MiscRunner.Run(duration - 10, DoRandomGrabSoundInner());
+            return;
+
+            IEnumerator DoRandomGrabSoundInner()
+            {
+                SoundEngine.PlaySound(SoundID.Grab, worldPosition);
+                yield break;
+            }
+        };
+        
         // 排序设置物品栏颜色
-        Terraria.UI.On_ItemSlot.SetGlow += (orig, index, hue, isChest) =>
+        On_ItemSlot.SetGlow += (orig, index, hue, isChest) =>
         {
             if (!_customRunning)
             {

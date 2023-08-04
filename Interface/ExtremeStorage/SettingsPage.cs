@@ -10,6 +10,7 @@ namespace ImproveGame.Interface.ExtremeStorage
         private readonly LongSwitch _recipesSwitch;
         private readonly LongSwitch _buffsSwitch;
         private readonly LongSwitch _stationsSwitch;
+        private readonly LongSwitch _bannersSwitch;
 
         public SettingsPage()
         {
@@ -57,11 +58,25 @@ namespace ImproveGame.Interface.ExtremeStorage
             };
             _stationsSwitch.Join(this);
             
+            _bannersSwitch = new LongSwitch(
+                () => Storage.UsePortableBanner,
+                state =>
+                {
+                    Storage.UsePortableBanner = state;
+                    SyncDataPacket.Get(Storage.ID).Send();
+                    Recipe.FindRecipes();
+                },
+                "UI.ExtremeStorage.UsePortableBanner")
+            {
+                Relative = RelativeMode.Vertical
+            };
+            _bannersSwitch.Join(this);
+            
             var uiText = new UIText(GetText("UI.ExtremeStorage.BasicIntroduction"))
             {
                 // IsWrapped = true, // 为了看着舒服，使用手动换行
                 TextOriginX = 0f,
-                Top = StyleDimension.FromPixels(150f),
+                Top = StyleDimension.FromPixels(190f),
                 Width = StyleDimension.FromPixels(430f),
                 Left = StyleDimension.FromPixels(8f)
             };

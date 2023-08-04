@@ -42,7 +42,7 @@ ExtremeStorage: {
 		Tooltip:
 			'''
 			处于[c/CC88AA:“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}”]类别中的药水与增益站是否[c/CC88AA:可以用于无限续杯]
-			你需要在模组配置中[c/CC88AA:启用“无限续杯”功能]
+			你需要在模组配置中启用“无限续杯”功能
 			'''
 	}
 
@@ -51,7 +51,16 @@ ExtremeStorage: {
 		Tooltip:
 			'''
 			处于[c/CC88AA:“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}”]类别中的制作站是否[c/CC88AA:可以作为便携制作站]
-			你需要在模组配置中[c/CC88AA:启用“便携制作站”功能]
+			你需要在模组配置中启用“便携制作站”功能
+			'''
+	}
+
+	UsePortableBanner: {
+		Label: 随身旗帜
+		Tooltip:
+			'''
+			处于[c/CC88AA:“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}”]类别中的旗帜是否[c/CC88AA:可以作为随身旗帜]
+			你需要在模组配置中启用“随身增益站：旗帜”功能
 			'''
 	}
 
