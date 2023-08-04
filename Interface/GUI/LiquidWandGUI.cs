@@ -25,13 +25,7 @@ namespace ImproveGame.Interface.GUI
         private const float PanelHeight = 148f;
         private const float PanelWidth = 190f;
 
-        public int CurrentSlot;
-
-        public Item CurrentItem
-        {
-            get => Main.LocalPlayer.inventory[CurrentSlot];
-            set => Main.LocalPlayer.inventory[CurrentSlot] = value;
-        }
+        public Item CurrentItem;
 
         public LiquidWand CurrentWand => CurrentItem.ModItem as LiquidWand;
 
@@ -154,7 +148,7 @@ namespace ImproveGame.Interface.GUI
                 if (store) slot.StoreLiquid(ref addAmount);
                 else slot.TakeLiquid(ref addAmount);
 
-                var wand = (CurrentSlot == 58 && Main.mouseItem.ModItem is LiquidWand wand2) ? wand2 : CurrentWand;
+                var wand = CurrentWand;
 
                 ref float wandLiquid = ref wand.Water;
                 switch ((short)liquidType)
@@ -169,16 +163,12 @@ namespace ImproveGame.Interface.GUI
 
                 wandLiquid = slot.GetLiquidAmount();
             }
-
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, CurrentSlot,
-                    Main.LocalPlayer.inventory[CurrentSlot].prefix);
         }
 
         // 主要是可拖动和一些判定吧
         public override void Update(GameTime gameTime)
         {
-            if (!Main.LocalPlayer.inventory.IndexInRange(CurrentSlot) || CurrentItem?.ModItem is not LiquidWand)
+            if (CurrentItem?.ModItem is not LiquidWand)
             {
                 Close();
                 return;
@@ -281,7 +271,7 @@ namespace ImproveGame.Interface.GUI
         /// <summary>
         /// 打开GUI界面
         /// </summary>
-        public void Open(int setSlotIndex = -1)
+        public void Open(LiquidWand wand)
         {
             Main.playerInventory = true;
             _prevMouseRight = true; // 防止一打开就关闭
@@ -289,11 +279,7 @@ namespace ImproveGame.Interface.GUI
             basePanel.Dragging = false;
             SoundEngine.PlaySound(SoundID.MenuOpen);
 
-            CurrentSlot = Main.LocalPlayer.selectedItem;
-            if (setSlotIndex is not -1)
-            {
-                CurrentSlot = setSlotIndex;
-            }
+            CurrentItem = wand.Item;
 
             // 设置
             waterSlot.SetLiquidAmount(CurrentWand.Water);
@@ -315,7 +301,7 @@ namespace ImproveGame.Interface.GUI
         /// </summary>
         public void Close()
         {
-            CurrentSlot = -1;
+            CurrentItem = null;
             Visible = false;
             _prevMouseRight = false;
             Main.blockInput = false;

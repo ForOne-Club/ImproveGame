@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.Packets.NetStorager;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.ExtremeStorage;
 
@@ -185,7 +186,7 @@ public abstract class ToolButtonBase : View
         spriteBatch.Draw(position: pos, texture: Texture, sourceRectangle: SourceRectangle, color: Color.White);
 
         if (IsMouseHovering)
-            Main.instance.MouseText(HoverText);
+            UICommon.TooltipMouseText(HoverText);
     }
 
     public abstract void OnTakeEffect();

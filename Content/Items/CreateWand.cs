@@ -11,7 +11,7 @@ using TileData = ImproveGame.Entitys.TileData;
 
 namespace ImproveGame.Content.Items;
 
-public class CreateWand : ModItem, IItemOverrideHover
+public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
 {
     public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.CreateWand;
     public override bool AltFunctionUse(Player player) => true;
@@ -161,7 +161,7 @@ public class CreateWand : ModItem, IItemOverrideHover
         if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer)
         {
             if (!ArchitectureGUI.Visible)
-                UISystem.Instance.ArchitectureGUI.Open();
+                UISystem.Instance.ArchitectureGUI.Open(this);
             else
                 UISystem.Instance.ArchitectureGUI.Close();
             return false;
@@ -208,7 +208,7 @@ public class CreateWand : ModItem, IItemOverrideHover
     /// </summary>
     /// <param name="itemType">物品存储类型</param>
     /// <param name="item">物品实例</param>
-    internal void SetItem(string itemType, Item item, int inventoryIndex)
+    internal void SetItem(string itemType, Item item)
     {
         switch (itemType)
         {
@@ -234,8 +234,6 @@ public class CreateWand : ModItem, IItemOverrideHover
                 Bed = item;
                 break;
         }
-        if (Main.netMode == NetmodeID.MultiplayerClient)
-            NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, inventoryIndex, Main.LocalPlayer.inventory[inventoryIndex].prefix);
     }
 
     /// <summary>
@@ -458,42 +456,31 @@ public class CreateWand : ModItem, IItemOverrideHover
         Bed = ItemIO.Receive(reader, true, true);
     }
 
-
-    public bool ItemInInventory;
-    private static bool _oldMiddlePressed;
-
     public bool OverrideHover(Item[] inventory, int context, int slot)
     {
-        if (context == ItemSlot.Context.InventoryItem)
-        {
-            ItemInInventory = true;
-            MouseState mouseState = Mouse.GetState();
-            if (_oldMiddlePressed)
-            {
-                _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
-            }
+        ((IItemMiddleClickable)this).HandleHover(inventory, context, slot);
 
-            if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
-            {
-                _oldMiddlePressed = true;
-                if (!ArchitectureGUI.Visible)
-                    UISystem.Instance.ArchitectureGUI.Open(slot);
-                else
-                    UISystem.Instance.ArchitectureGUI.Close();
-            }
-        }
         return false;
+    }
+
+    public void OnMiddleClicked(Item item)
+    {
+        if (!ArchitectureGUI.Visible)
+            UISystem.Instance.ArchitectureGUI.Open(this);
+        else
+            UISystem.Instance.ArchitectureGUI.Close();
+    }
+
+    public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
+    {
+        // 决定文本显示的是“开启”还是“关闭”
+        string text = ArchitectureGUI.Visible ? "Off" : "On";
+        tooltips.Add(new TooltipLine(Mod, "CreateWand", GetText($"Tips.CreateWand{text}")) { OverrideColor = Color.LightGreen });
     }
 
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
-        // 决定文本显示的是“开启”还是“关闭”
-        if (ItemInInventory)
-        {
-            string _switch = ArchitectureGUI.Visible ? "Off" : "On";
-            tooltips.Add(new(Mod, "CreateWand", GetText($"Tips.CreateWand{_switch}")) { OverrideColor = Color.LightGreen });
-        }
-        ItemInInventory = false;
+        ((IItemMiddleClickable)this).HandleTooltips(Item, tooltips);
 
         CalculateConsume();
         tooltips.Add(new(Mod, "MaterialConsume", $"[c/ffff00:{GetText("Architecture.MaterialsRequired")}]"));
@@ -525,22 +512,21 @@ public class CreateWand : ModItem, IItemOverrideHover
     {
         if (color == Color.Red)
             return TileSort.Block; // 实体块
-        else if (color == Color.Black)
+        if (color == Color.Black)
             return TileSort.Platform; // 平台
-        else if (color == Color.White)
+        if (color == Color.White)
             return TileSort.Torch; // 火把
-        else if (color == Color.Yellow)
+        if (color == Color.Yellow)
             return TileSort.Chair; // 椅子
-        else if (color == FenSe)
+        if (color == FenSe)
             return TileSort.Table; // 桌子
-        else if (color == Color.Blue)
+        if (color == Color.Blue)
             return TileSort.Workbench; // 工作台
-        else if (color == ZiSe)
+        if (color == ZiSe)
             return TileSort.Bed; // 床
-        else if (color == QingSe)
+        if (color == QingSe)
             return TileSort.NoWall; // 禁止放置墙体
-        else
-            return TileSort.None; // 没有任何
+        return TileSort.None; // 没有任何
     }
 
     private static readonly Color ZiSe = new(127, 0, 255);

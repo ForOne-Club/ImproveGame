@@ -49,6 +49,26 @@ public static class ChestItemOperation
         }
     }
     
+    /// <inheritdoc cref="TellServerToForwardItem"/>
+    public static void TellServerToForwardAllItems(int chestIndex)
+    {
+        if (chestIndex is -1 || Main.chest[chestIndex] is null) return;
+        for (var k = 0; k < Chest.maxItems; k++)
+        {
+            TellServerToForwardItem(chestIndex, k);
+        }
+    }
+    
+    /// <summary>
+    /// 发包告诉服务器某个箱子的物品要同步，只应在客户端使用
+    /// </summary>
+    /// <exception cref="UsageException">不能在服务器端调用</exception>
+    public static void TellServerToForwardItem(int chestIndex, int slot)
+    {
+        if (Main.netMode is NetmodeID.Server) throw new UsageException("This method can only be called on the client.");
+        ChestOperationWithResend.Get(chestIndex, slot).Send();
+    }
+    
     [AutoSync]
     private class ChestOperationWithResend : NetModule
     {

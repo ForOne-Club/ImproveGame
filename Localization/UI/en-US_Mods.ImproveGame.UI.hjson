@@ -31,8 +31,8 @@ ExtremeStorage: {
 		Label: Count for Crafting
 		Tooltip:
 			'''
-			Controls whether items under a category can be counted in crafting
-			Currently unusable in multiplayer mode, though you could still craft with items in the chest you open
+			Controls whether items under the selected category [c/CC88AA:can be counted in crafting]
+			You could still craft with items in the chest you open
 			To many items under a category may cause performance issues, use with caution on low-end PCs
 			'''
 	}
@@ -41,7 +41,7 @@ ExtremeStorage: {
 		Label: Infinite Potion
 		Tooltip:
 			'''
-			Controls whether potions and buff stations under '{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}' can be used for Infinite Potion
+			Controls whether potions and buff stations under [c/CC88AA:'{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}'] can be used for [c/CC88AA:Infinite Potion]
 			You need to enable 'Infinite Potions' in mod config
 			'''
 	}
@@ -50,8 +50,17 @@ ExtremeStorage: {
 		Label: Portable Crafting Station
 		Tooltip:
 			'''
-			Controls whether stations under '{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}' can be used for Portable Crafting Station
+			Controls whether stations under [c/CC88AA:'{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}'] can be used for [c/CC88AA:Portable Crafting Station]
 			You need to enable 'Portable Crafting Stations' in mod config
+			'''
+	}
+
+	UsePortableBanner: {
+		Label: Portable Banners
+		Tooltip:
+			'''
+			Controls whether banners under [c/CC88AA:'{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}'] can be used for [c/CC88AA:Portable Banners]
+			You need to enable 'Portable Banners' in mod config
 			'''
 	}
 

@@ -9,7 +9,7 @@ using Terraria.UI.Chat;
 namespace ImproveGame.Content.Items
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem
+    public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem, IItemMiddleClickable
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.BannerChest;
         public List<Item> StoredBanners = new List<Item>();
@@ -138,16 +138,7 @@ namespace ImproveGame.Content.Items
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            // 决定文本显示的是“开启”还是“关闭”
-            if (_itemInInventory)
-            {
-                string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Banners) ?
-                    GetTextWith($"Tips.MouseMiddleClose", new { ItemName = Item.Name }) :
-                    GetTextWith($"Tips.MouseMiddleOpen", new { ItemName = Item.Name });
-                tooltips.Add(new TooltipLine(Mod, "CreateWand", text) { OverrideColor = Color.LightGreen });
-            }
-
-            _itemInInventory = false;
+            ((IItemMiddleClickable)this).HandleTooltips(Item, tooltips);
 
             if (!Config.NoPlace_BUFFTile_Banner)
             {
@@ -161,7 +152,7 @@ namespace ImproveGame.Content.Items
             {
                 string storeText = StoredBanners.Count >= 500
                     ? GetText("Tips.BannerChestCurrentFull")
-                    : GetTextWith("Tips.BannerChestCurrent", new { StoredCount = StoredBanners.Count });
+                    : GetTextWith("Tips.BannerChestCurrent", new {StoredCount = StoredBanners.Count});
                 tooltips.Add(new TooltipLine(Mod, "BannerChestCurrent", storeText)
                 {
                     OverrideColor = Color.LightGreen
@@ -251,31 +242,25 @@ namespace ImproveGame.Content.Items
                 .AddTile(TileID.Anvils).Register();
         }
 
-        private bool _itemInInventory;
-        private static bool _oldMiddlePressed;
-
         public bool OverrideHover(Item[] inventory, int context, int slot)
         {
-            if (context != ItemSlot.Context.InventoryItem)
-            {
-                return false;
-            }
-
-            _itemInInventory = true;
-
-            MouseState mouseState = Mouse.GetState();
-            if (_oldMiddlePressed)
-            {
-                _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
-            }
-
-            if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
-            {
-                _oldMiddlePressed = true;
-                RightClick(Main.LocalPlayer);
-            }
+            ((IItemMiddleClickable)this).HandleHover(inventory, context, slot);
 
             return false;
+        }
+
+        public void OnMiddleClicked(Item item)
+        {
+            RightClick(Main.LocalPlayer);
+        }
+
+        public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            // 决定文本显示的是“开启”还是“关闭”
+            string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Banners)
+                ? GetTextWith("Tips.MouseMiddleClose", new {ItemName = Item.Name})
+                : GetTextWith("Tips.MouseMiddleOpen", new {ItemName = Item.Name});
+            tooltips.Add(new TooltipLine(Mod, "BannerChest", text) {OverrideColor = Color.LightGreen});
         }
     }
 }

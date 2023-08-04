@@ -31,8 +31,7 @@ ExtremeStorage: {
 		Label: 物品参与合成
 		Tooltip:
 			'''
-			打开的类别中的箱内物品是否参与合成
-			该功能暂时无法在多人模式中使用
+			打开的类别中的箱内物品是否[c/CC88AA:参与合成]
 			你仍可以直接打开箱子并使用箱子内物品合成
 			若某个分类下的物品过多，会造成一定的性能损耗，建议低端电脑用户在需要时再开启
 			'''
@@ -42,7 +41,7 @@ ExtremeStorage: {
 		Label: 药水无限续杯
 		Tooltip:
 			'''
-			处于“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}”类别中的药水与增益站是否可以用于无限续杯
+			处于[c/CC88AA:“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}”]类别中的药水与增益站是否[c/CC88AA:可以用于无限续杯]
 			你需要在模组配置中启用“无限续杯”功能
 			'''
 	}
@@ -51,8 +50,17 @@ ExtremeStorage: {
 		Label: 便携制作站
 		Tooltip:
 			'''
-			处于“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}”类别中的制作站是否可以作为便携制作站
+			处于[c/CC88AA:“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}”]类别中的制作站是否[c/CC88AA:可以作为便携制作站]
 			你需要在模组配置中启用“便携制作站”功能
+			'''
+	}
+
+	UsePortableBanner: {
+		Label: 随身旗帜
+		Tooltip:
+			'''
+			处于[c/CC88AA:“{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}”]类别中的旗帜是否[c/CC88AA:可以作为随身旗帜]
+			你需要在模组配置中启用“随身增益站：旗帜”功能
 			'''
 	}
 

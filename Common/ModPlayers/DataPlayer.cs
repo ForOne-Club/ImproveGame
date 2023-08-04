@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Packets;
+using ImproveGame.Interface.Common;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.ModPlayers
@@ -107,6 +108,18 @@ namespace ImproveGame.Common.ModPlayers
 
             // 按照Example的写法 - 直接写就完了！
             BigBagAllSlotsPacket.Get(this).Send(toWho, fromWho, false);
+        }
+
+        public override IEnumerable<Item> AddMaterialsForCrafting(out ItemConsumedCallback itemConsumedCallback)
+        {
+            if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng &&
+                SuperVault is not null)
+            {
+                itemConsumedCallback = null;
+                return SuperVault;
+            }
+
+            return base.AddMaterialsForCrafting(out itemConsumedCallback);
         }
     }
 }
