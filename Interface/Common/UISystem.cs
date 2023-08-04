@@ -132,6 +132,8 @@ namespace ImproveGame.Interface.Common
             }
 
             // UserInterface 之 EventTrigger 版
+            AutoTrashTrigger = new EventTrigger("Radial Hotbars", "AutoTrash");
+
             PackageTrigger = new EventTrigger("Radial Hotbars", "Package");
 
             BigBagTrigger = new EventTrigger("Radial Hotbars", "BigBag");
