@@ -95,6 +95,9 @@ namespace ImproveGame.Interface.Common
             BrustGUI = null;
             BrustInterface = null;
 
+            AutoTrashGUI = null;
+            AutoTrashTrigger = null;
+
             BigBagGUI = null;
             BigBagTrigger = null;
 
