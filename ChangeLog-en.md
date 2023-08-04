@@ -37,6 +37,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Fixed Wand of Space randomly placing platforms in multiplayer.
 - **[v1.6.5.1]** Fixed some Wand issues in multiplayer.
 - **[v1.6.5.1]** Fixed Wand of Liquid not detecting certain liquid items.
+- **[v1.6.5.1]** 修复了大背包在玩家背包满的情况下无法吸附物品的BUG，修复后置收纳空间收纳物品物体时无提示BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI

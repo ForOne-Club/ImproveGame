@@ -84,10 +84,7 @@ public class GrabAndPickup : GlobalItem
 
             Finish:
 
-            if (newItem.stack < cloneItem.stack)
-            {
-                SoundEngine.PlaySound(SoundID.Grab);
-            }
+            PickupPopupText(cloneItem, newItem);
 
             return newItem;
         }
@@ -213,7 +210,7 @@ public class GrabAndPickup : GlobalItem
         if (source.IsAir) return false;
 
         // 大背包
-        if (Config.SuperVault && !source.IsAir &&
+        if (Config.SuperVault &&
             player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting) && uiPlayerSetting.SuperVault_SmartGrab &&
             player.TryGetModPlayer(out DataPlayer dataPlayer) && source.TheArrayHas(dataPlayer.SuperVault))
         {
@@ -225,7 +222,7 @@ public class GrabAndPickup : GlobalItem
         if (source.IsAir) return false;
 
         // 虚空保险库 之 智能收纳
-        if (Config.SmartVoidVault && !source.IsAir && !source.IsACoin)
+        if (Config.SmartVoidVault && !source.IsACoin)
         {
             // 虚空保险库
             if (player.IsVoidVaultEnabled && source.TheArrayHas(player.bank4.item))
@@ -238,7 +235,7 @@ public class GrabAndPickup : GlobalItem
             if (source.IsAir) return false;
 
             // 猪猪 保险箱 ...
-            if (Config.SuperVoidVault && !source.IsAir)
+            if (Config.SuperVoidVault)
             {
                 if (improvePlayer.HasPiggyBank && source.TheArrayHas(player.bank.item))
                 {
@@ -249,7 +246,7 @@ public class GrabAndPickup : GlobalItem
 
                 if (source.IsAir) return false;
 
-                if (improvePlayer.HasSafe && !source.IsAir && source.TheArrayHas(player.bank2.item))
+                if (improvePlayer.HasSafe && source.TheArrayHas(player.bank2.item))
                 {
                     Item cloneItem = source.Clone();
                     source.StackToArray(player.bank2.item);
@@ -258,7 +255,7 @@ public class GrabAndPickup : GlobalItem
 
                 if (source.IsAir) return false;
 
-                if (improvePlayer.HasDefendersForge && !source.IsAir && source.TheArrayHas(player.bank3.item))
+                if (improvePlayer.HasDefendersForge && source.TheArrayHas(player.bank3.item))
                 {
                     Item cloneItem = source.Clone();
                     source.StackToArray(player.bank3.item);
@@ -286,21 +283,20 @@ public class GrabAndPickup : GlobalItem
         }
 
         // 大背包
-        if (Config.SuperVault && player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting) && player.TryGetModPlayer(out DataPlayer dataPlayer))
+        if (Config.SuperVault &&
+            player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting) &&
+            player.TryGetModPlayer(out DataPlayer dataPlayer))
         {
-            if (uiPlayerSetting.SuperVault_OverflowGrab)
+            if (uiPlayerSetting.SuperVault_OverflowGrab &&
+                item.CanStackToArray(dataPlayer.SuperVault))
             {
-                if (item.CanStackToArray(dataPlayer.SuperVault))
-                {
-                    return true;
-                }
+                return true;
             }
-            else if (uiPlayerSetting.SuperVault_SmartGrab)
+            else if (uiPlayerSetting.SuperVault_SmartGrab &&
+                item.CanStackToArray(dataPlayer.SuperVault) &&
+                item.TheArrayHas(dataPlayer.SuperVault))
             {
-                if (item.CanStackToArray(dataPlayer.SuperVault) && item.TheArrayHas(dataPlayer.SuperVault))
-                {
-                    return true;
-                }
+                return true;
             }
         }
 
