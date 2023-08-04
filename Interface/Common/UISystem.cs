@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
+using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.PlayerInfo;
 
@@ -45,6 +46,10 @@ namespace ImproveGame.Interface.Common
         // 玩家信息表
         public PlayerInfoGUI PlayerInfoGUI;
         public EventTrigger PlayerInfoTrigger;
+
+        // 自动垃圾桶
+        public AutoTrashGUI AutoTrashGUI;
+        public EventTrigger AutoTrashTrigger;
 
         // 药水袋 & 旗帜盒 UI
         public PackageGUI PackageGUI;
