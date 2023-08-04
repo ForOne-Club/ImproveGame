@@ -1,4 +1,5 @@
-﻿using Terraria.ObjectData;
+﻿using ImproveGame.Common.Packets.Items;
+using Terraria.ObjectData;
 using ImproveGame.Content.Items;
 
 namespace ImproveGame.Common.Packets.NetChest;

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using ImproveGame.Common.Configs;
+using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using Terraria.ModLoader.IO;
 
@@ -49,7 +50,7 @@ public class AutoTrashPlayer : ModPlayer
 
     public override bool ShiftClickSlot(Item[] inventory, int context, int slot)
     {
-        if (Config.QoLAutoTrash && !inventory[slot].IsAir &&
+        if (UIConfigs.Instance.QoLAutoTrash && !inventory[slot].IsAir &&
             context is ItemSlot.Context.InventoryItem or ItemSlot.Context.InventoryCoin or ItemSlot.Context.InventoryAmmo)
         {
             if (Main.keyState.IsKeyDown(Keys.LeftControl) || Main.keyState.IsKeyDown(Keys.RightControl))

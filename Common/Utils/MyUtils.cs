@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.Packets.Items;
 using ImproveGame.Content.Items.Coin;
 using ImproveGame.Core;
 using ReLogic.Graphics;
@@ -141,12 +142,12 @@ partial class MyUtils
     public static void ItemRotation(Player player, bool shouldSync = true)
     {
         // 旋转物品
-        Vector2 rotaion = (Main.MouseWorld - player.Center).SafeNormalize(Zero);
+        Vector2 rotation = (Main.MouseWorld - player.Center).SafeNormalize(Zero);
         player.direction = Main.MouseWorld.X < player.Center.X ? -1 : 1;
-        player.itemRotation = MathF.Atan2(rotaion.Y * player.direction, rotaion.X * player.direction);
+        player.itemRotation = MathF.Atan2(rotation.Y * player.direction, rotation.X * player.direction);
         if (shouldSync && Main.netMode != NetmodeID.SinglePlayer && player.whoAmI == Main.myPlayer)
         {
-            ItemUsePacket.Get(player);
+            ItemUsePacket.Get(player).Send();
         }
     }
 

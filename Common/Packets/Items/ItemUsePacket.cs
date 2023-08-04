@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ImproveGame.Common.Packets
+﻿namespace ImproveGame.Common.Packets.Items
 {
     [AutoSync]
     public class ItemUsePacket : NetModule

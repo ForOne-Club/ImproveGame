@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Common.Packets.Items;
 using ImproveGame.Entitys;
 using System.Collections;
 
@@ -45,12 +46,12 @@ public abstract class SelectorItem : ModItem
     public override bool CanUseItem(Player player)
     {
         bool flag = StartUseItem(player);
+
         if (!flag || !CanUseSelector(player))
         {
             return flag;
         }
 
-        ItemRotation(player);
         unCancelled = true;
         start = Main.MouseWorld.ToTileCoordinates();
         return true;
@@ -83,7 +84,7 @@ public abstract class SelectorItem : ModItem
 
     public override bool? UseItem(Player player)
     {
-        if (CanUseSelector(player) && Main.netMode != NetmodeID.Server && player.whoAmI == Main.myPlayer)
+        if (CanUseSelector(player) && Main.netMode is not NetmodeID.Server && player.whoAmI == Main.myPlayer)
         {
             if (Main.mouseRight && unCancelled)
             {
@@ -106,6 +107,11 @@ public abstract class SelectorItem : ModItem
                 }
             }
         }
+        else if (Main.myPlayer == player.whoAmI && player.ItemAnimationJustStarted)
+        {
+            ItemRotation(player);
+        }
+
         player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
         return base.UseItem(player);
     }

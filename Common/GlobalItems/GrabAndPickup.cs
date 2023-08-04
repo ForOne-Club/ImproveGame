@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
 
@@ -177,7 +178,7 @@ public class GrabAndPickup : GlobalItem
     /// </summary>
     public override bool OnPickup(Item source, Player player)
     {
-        if (Config.QoLAutoTrash &&
+        if (UIConfigs.Instance.QoLAutoTrash &&
             player.TryGetModPlayer(out AutoTrashPlayer autoTrashPlayer) && true &&
             autoTrashPlayer.AutoDiscardItems.Any(adItem => adItem.type == source.type))
         {

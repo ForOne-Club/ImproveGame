@@ -42,4 +42,7 @@ public class UIConfigs : ModConfig
     [DrawTicks]
     [Slider]
     public PAPDisplayMode PlyInfo;
+
+    [DefaultValue(true)]
+    public bool QoLAutoTrash;
 }

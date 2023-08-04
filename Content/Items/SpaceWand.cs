@@ -1,5 +1,7 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.ModSystems.MarqueeSystem;
+using ImproveGame.Common.Packets;
+using ImproveGame.Common.Packets.Items;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.GameContent.Creative;
@@ -81,8 +83,9 @@ public class SpaceWand : ModItem, IMarqueeItem
 
                 if (count > 0)
                 {
+                    if (Main.myPlayer == player.whoAmI)
+                        ItemRotation(player);
                     CanPlaceTiles = true;
-                    ItemRotation(player);
                     StartingPoint = Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
                     RefreshMarquee(player);
                     return true;
@@ -99,15 +102,20 @@ public class SpaceWand : ModItem, IMarqueeItem
     private bool CanPlaceTiles;
     public override bool? UseItem(Player player)
     {
+        player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
+
+        player.itemAnimation = player.itemAnimationMax;
+
+        if (Main.dedServ || Main.myPlayer != player.whoAmI)
+            return true;
+  
         UseItem_PreUpdate(player);
 
         if (!Main.mouseLeft)
         {
-            player.itemAnimation = 0;
             TryPlaceTiles(player);
             return true;
         }
-        player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
 
         return false;
     }
@@ -118,14 +126,7 @@ public class SpaceWand : ModItem, IMarqueeItem
 
         RefreshMarquee(player);
 
-        player.itemAnimation = player.itemAnimationMax;
-
         ItemRotation(player);
-
-        if (Main.dedServ || Main.myPlayer != player.whoAmI)
-        {
-            return;
-        }
 
         if (Main.mouseRight && CanPlaceTiles)
         {
@@ -158,7 +159,7 @@ public class SpaceWand : ModItem, IMarqueeItem
     public void TryPlaceTiles(Player player)
     {
         // 放置平台
-        if (!CanPlaceTiles || player.whoAmI != Main.myPlayer && Main.dedServ)
+        if (!CanPlaceTiles)
         {
             return;
         }
@@ -248,7 +249,7 @@ public class SpaceWand : ModItem, IMarqueeItem
         }, (x, y, width, height) =>
         {
             if (playSound)
-                SoundEngine.PlaySound(SoundID.Dig);
+                PlaySoundPacket.PlaySound(LegacySoundIDs.Dig, new Point(x + width / 2, y + height / 2).ToWorldCoordinates());
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendData(MessageID.TileSquare, player.whoAmI, -1, null, x, y, width, height);

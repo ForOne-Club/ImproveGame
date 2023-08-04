@@ -203,23 +203,12 @@ ImproveConfigs: {
 		Tooltip: 极大地加快使用提炼机的速度
 	}
 
-	QoLAutoTrash: {
-		Label: "[centeritem:348] 自动垃圾桶"
-		Tooltip:
-			'''
-			打开一个能自动丢弃垃圾的垃圾桶，它会自动丢弃曾被丢入其中的垃圾。
-			并且会保留最近丢入的六种物品，以备不时之需。
-			'''
-	}
-
 	TownNPCGetTFIntoHouse: {
 		Label: "[centeritem:MusicBoxTownDay] 更好的城镇NPC入住机制"
 		Tooltip:
 			'''
 			哥布林、酒保、法师、机械师、税收官在满足生成条件后，
 			若有空房子会直接入住，不需要寻找，一旦入住即视为已被找到状态
-			在图鉴中被解锁的城镇NPC将会无视入住条件，只要有房子即可入住
-			（注意：你需要与城镇NPC至少对话一次来解锁图鉴）
 			城镇NPC可在夜晚入住
 			'''
 	}
@@ -634,6 +623,15 @@ UIConfigs: {
 	PlyInfo: {
 		Label: "[centeritem:3124] 角色属性面板"
 		// Tooltip: ""
+	}
+
+	QoLAutoTrash: {
+		Label: "[centeritem:348] 自动丢弃面板"
+		Tooltip:
+			'''
+			在左下角显示一个自动丢弃面板，曾被手动放入其中的物品将被自动丢弃。
+			会保留最近丢入的六种物品，以备不时之需。
+			'''
 	}
 
 	FontOffsetPreviewText: 调整偏移值，使文本贴住白线。

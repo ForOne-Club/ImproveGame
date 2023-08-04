@@ -199,23 +199,12 @@ ImproveConfigs: {
 		Tooltip: Greatly increases the extracting speed of the Extractinator
 	}
 
-	QoLAutoTrash: {
-		Label: "[centeritem:348] AutoTrash"
-		Tooltip:
-			'''
-			Open a rubbish bin that can automatically dispose of garbage, it will automatically discard the garbage that has been thrown into it.
-			It will also retain the six most recently discarded items for future use.
-			'''
-	}
-
 	TownNPCGetTFIntoHouse: {
 		Label: "[centeritem:MusicBoxTownDay] Town NPC spawn mechanics improvement"
 		Tooltip:
 			'''
 			When the spawn conditions of unsaved Goblin Tinkerer, Tavernkeep, Wizard, Mechanic or Tax Collector are met
 			They don't need to be saved, but will be able to spawn if there are valid houses. They will be considered as saved once they spawn
-			Once an NPC's bestiary entry is unlocked, they will spawn as soon as there is a valid house, regardless of their spawn conditions
-			(You have to talk to any town NPCs at least once to unlock their bestiary entry)
 			Town NPCs will spawn at nighttime
 			'''
 	}
@@ -627,6 +616,15 @@ UIConfigs: {
 	PlyInfo: {
 		Label: "[centeritem:3124] Player Stats"
 		Tooltip: ""
+	}
+
+	QoLAutoTrash: {
+		Label: "[centeritem:348] AutoTrash"
+		Tooltip:
+			'''
+			An auto-trash panel. Items that have been manually placed in it will be automatically disposed.
+			The six most recently disposed items were kept just in case.
+			'''
 	}
 
 	FontOffsetPreviewText: Adjust the offset value to make the text fits the line.

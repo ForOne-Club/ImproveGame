@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Packets.NetChest;
+﻿using ImproveGame.Common.Packets.Items;
+using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;
 

@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Common.Packets.Items;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;
 using System.Collections;

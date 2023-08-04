@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Common.Packets;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
@@ -30,6 +31,7 @@ namespace ImproveGame.Content.Items
                     }
                 }
             }
+
             if (player.statMana < 2)
                 player.QuickMana();
             if (player.statMana >= 2)
@@ -38,9 +40,17 @@ namespace ImproveGame.Content.Items
                 {
                     player.statMana -= 2;
                 }
+
                 return true;
             }
+
             return false;
+        }
+
+        public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ)
+        {
+            DoBoomPacket.Send(TileRect);
+            PlaySoundPacket.PlaySound(LegacySoundIDs.Item, Main.MouseWorld, style: 14);
         }
 
         public override bool AltFunctionUse(Player player) => true;
@@ -52,8 +62,7 @@ namespace ImproveGame.Content.Items
         {
             if (WandSystem.FixedMode)
                 return false;
-            else
-                return !Main.mouseLeft;
+            return !Main.mouseLeft;
         }
 
         public override void SetItemDefaults()
@@ -70,42 +79,7 @@ namespace ImproveGame.Content.Items
         {
             if (player.altFunctionUse == 0)
             {
-                ItemRotation(player);
-                if (WandSystem.FixedMode)
-                {
-                    Item.useAnimation = (int)(18 * player.pickSpeed);
-                    Item.useTime = (int)(18 * player.pickSpeed);
-                    if (player.whoAmI == Main.myPlayer)
-                    {
-                        Rectangle Reactangle = GetRectangle(player);
-                        SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-                        ForeachTile(Reactangle, (x, y) =>
-                        {
-                            if (Main.tile[x, y].WallType > 0 && WandSystem.WallMode)
-                            {
-                                if (player.statMana < 1)
-                                    player.QuickMana();
-                                if (player.statMana >= 1)
-                                {
-                                    WorldGen.KillWall(x, y);
-                                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                                        NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, x, y);
-                                    player.statMana -= 1;
-                                }
-                            }
-                            if (player.statMana < 2)
-                                player.QuickMana();
-                            if (player.statMana >= 2)
-                            {
-                                if (WandSystem.TileMode && Main.tile[x, y].HasTile && TryKillTile(x, y, player))
-                                {
-                                    player.statMana -= 2;
-                                }
-                            }
-                            BongBong(new Vector2(x, y) * 16f, 16, 16);
-                        });
-                    }
-                }
+                DoFixedMode(player);
             }
             else if (player.altFunctionUse == 2)
             {
@@ -113,6 +87,45 @@ namespace ImproveGame.Content.Items
             }
 
             return base.StartUseItem(player);
+        }
+
+        private void DoFixedMode(Player player)
+        {
+            Item.useAnimation = (int)(18 * player.pickSpeed);
+            Item.useTime = (int)(18 * player.pickSpeed);
+            if (player.whoAmI == Main.myPlayer && WandSystem.FixedMode)
+            {
+                Rectangle rectangle = GetRectangle(player);
+                // 带同步的音效
+                PlaySoundPacket.PlaySound(LegacySoundIDs.Item, Main.MouseWorld, style: 14);
+                ForeachTile(rectangle, (x, y) =>
+                {
+                    if (Main.tile[x, y].WallType > 0 && WandSystem.WallMode)
+                    {
+                        if (player.statMana < 1)
+                            player.QuickMana();
+                        if (player.statMana >= 1)
+                        {
+                            WorldGen.KillWall(x, y);
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, x, y);
+                            player.statMana -= 1;
+                        }
+                    }
+
+                    if (player.statMana < 2)
+                        player.QuickMana();
+                    if (player.statMana >= 2)
+                    {
+                        if (WandSystem.TileMode && Main.tile[x, y].HasTile && TryKillTile(x, y, player))
+                        {
+                            player.statMana -= 2;
+                        }
+                    }
+
+                    BongBong(new Vector2(x, y) * 16f, 16, 16);
+                }, (x, y, wid, hei) => DoBoomPacket.Send(x, y, wid, hei)); // 同步爆炸特效
+            }
         }
 
         public override bool CanUseSelector(Player player)
@@ -126,11 +139,15 @@ namespace ImproveGame.Content.Items
             {
                 if (WandSystem.FixedMode)
                 {
-                    GameRectangle.Create(this, () => !WandSystem.FixedMode, GetRectangle(player), Color.Red * 0.35f, Color.Red);
+                    GameRectangle.Create(this, () => !WandSystem.FixedMode, GetRectangle(player), Color.Red * 0.35f,
+                        Color.Red);
                 }
+
                 // 我给他移动到 CanUseItem 中
                 // 还在用物品的时候不能打开UI (直接写在 CanUseItem 似乎就没有问题了)
-                if (player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease || Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 || Main.HoveringOverAnNPC || player.talkNPC != -1)
+                if (player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease ||
+                    Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 ||
+                    Main.HoveringOverAnNPC || player.talkNPC != -1)
                 {
                     return;
                 }
@@ -159,7 +176,8 @@ namespace ImproveGame.Content.Items
             Rectangle rect = new();
             Point playerCenter = player.Center.ToTileCoordinates();
             Point mousePosition = Main.MouseWorld.ToTileCoordinates();
-            mousePosition = ModifySize(playerCenter, mousePosition, Player.tileRangeX + ExtraRange.X, Player.tileRangeY + ExtraRange.Y);
+            mousePosition = ModifySize(playerCenter, mousePosition, Player.tileRangeX + ExtraRange.X,
+                Player.tileRangeY + ExtraRange.Y);
             rect.X = mousePosition.X - KillSize.X / 2;
             rect.Y = mousePosition.Y - KillSize.Y / 2;
             rect.Width = KillSize.X;

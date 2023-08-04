@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items;
+﻿using ImproveGame.Common.Packets.Items;
+using ImproveGame.Content.Items;
 
 namespace ImproveGame.Common.Packets.NetChest;
 

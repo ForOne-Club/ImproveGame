@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Diagnostics;
 
-namespace ImproveGame.Common.Packets;
+namespace ImproveGame.Common.Packets.Items;
 
 /// <summary>
 /// 直接传输玩家整个物品栏的favorited情况，只应从客户端发送给服务器
@@ -10,7 +9,7 @@ public class InventoryFavoritedPacket : NetModule
 {
     private BitArray _favoritedStates;
     
-    public static void Send(Item[] inventory = null)
+    public static void Send(Terraria.Item[] inventory = null)
     {
         inventory ??= Main.LocalPlayer.inventory;
 

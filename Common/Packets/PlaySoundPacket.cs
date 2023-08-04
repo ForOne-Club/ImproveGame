@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.Packets;
+﻿using Terraria.DataStructures;
+
+namespace ImproveGame.Common.Packets;
 
 /// <summary>
 /// 没错，专门搞一个包，就只为了飘洋过海播放一个声音。用的是数字ID，多亏了AssemblyPublicizer。
@@ -6,18 +8,30 @@
 [AutoSync]
 public class PlaySoundPacket : NetModule
 {
-    private sbyte _soundID;
+    private byte _soundID;
+    private Point16? _position; // 存short物块坐标，减少包大小
+    private byte _style;
+    
+    public static void PlaySound(int soundID, Vector2? position = null, int style = 1) =>
+        Get(soundID, position, style).Send(runLocally: true);
         
-    public static PlaySoundPacket Get(int soundID)
+    public static PlaySoundPacket Get(int soundID, Vector2? position = null, int style = 1)
     {
         var packet = ModContent.GetInstance<PlaySoundPacket>();
-        packet._soundID = (sbyte)soundID;
+        packet._soundID = (byte)soundID;
+        packet._position = (position ?? Vector2.Zero).ToTileCoordinates16();
+        packet._style = (byte)style;
         return packet;
     }
 
     public override void Receive()
     {
-        if (Main.netMode is NetmodeID.Server) return;
-        SoundEngine.PlaySound(_soundID);
+        if (Main.netMode is NetmodeID.Server)
+            Send(-1, Sender);
+
+        if (_position is not null)
+            SoundEngine.PlaySound(_soundID, _position.Value.ToWorldCoordinates(), _style);
+        else
+            SoundEngine.PlaySound(_soundID, Style: _style);
     }
 }

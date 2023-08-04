@@ -12,8 +12,6 @@ namespace ImproveGame.Common.ModSystems;
 
 public class ExtremeStorageCore : ModSystem
 {
-    private static bool _chestsSetUpdatedThisFrame;
-    private static HashSet<int> _chestsThatShouldSync = new();
     private int _chestOld; // 这个是客户端变量，监测该玩家的 player.chest
 
     public override void Load()
@@ -122,8 +120,6 @@ public class ExtremeStorageCore : ModSystem
 
     public override void PostUpdateEverything()
     {
-        _chestsSetUpdatedThisFrame = false;
-
         if (Main.netMode is NetmodeID.Server || Main.LocalPlayer.chest == _chestOld)
             return;
 

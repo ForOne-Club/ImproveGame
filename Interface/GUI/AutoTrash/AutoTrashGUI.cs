@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
@@ -10,7 +11,7 @@ public class AutoTrashGUI : ViewBody
     #region 抽象实现
     public override bool Display
     {
-        get => Config.QoLAutoTrash && (Main.playerInventory || !ExpanTimer.CompleteClose);
+        get => UIConfigs.Instance.QoLAutoTrash && (Main.playerInventory || !ExpanTimer.CompleteClose);
         set { }
     }
 

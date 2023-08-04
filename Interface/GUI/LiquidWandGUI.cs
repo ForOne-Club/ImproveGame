@@ -86,7 +86,7 @@ namespace ImproveGame.Interface.GUI
             };
             basePanel.Append(lavaSlot);
 
-            honeySlot = new(LiquidID.Honey, -1, -1, colorHover, colorNormal);
+            honeySlot = new(LiquidID.Honey, ItemID.BottomlessHoneyBucket, ItemID.HoneyAbsorbantSponge, colorHover, colorNormal);
             honeySlot.Left.Set(slotThird + xOffst, 0f);
             honeySlot.Top.Set(slotSecond, 0f);
             honeySlot.OnLeftMouseDown += (_, _) =>

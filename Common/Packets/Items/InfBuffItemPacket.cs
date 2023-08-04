@@ -1,11 +1,11 @@
 ﻿using ImproveGame.Common.ModPlayers;
 
-namespace ImproveGame.Common.Packets
+namespace ImproveGame.Common.Packets.Items
 {
     public class InfBuffItemPacket : NetModule
     {
         [AutoSync] private byte whoAmI;
-        private List<Item> items = new();
+        private List<Terraria.Item> items = new();
 
         public static InfBuffItemPacket Get(InfBuffPlayer modPlayer)
         {
@@ -29,12 +29,12 @@ namespace ImproveGame.Common.Packets
         public override void Read(BinaryReader r)
         {
             int listCount = r.ReadUInt16();
-            items = new List<Item>();
+            items = new List<Terraria.Item>();
             for (var i = 0; i < listCount; i++)
             {
                 int stack = r.ReadUInt16();
                 int type = r.ReadUInt16();
-                items.Add(new Item(type, stack));
+                items.Add(new Terraria.Item(type, stack));
             }
         }
 

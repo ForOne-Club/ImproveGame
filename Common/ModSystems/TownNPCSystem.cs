@@ -6,14 +6,13 @@ namespace ImproveGame.Common.ModSystems
     public class TownNPCSystem : ModSystem
     {
         private static bool _isExtraUpdate; // 是否处于源于模组的额外更新中
-        private static List<int> _townNPCIDs = new();
         private static HashSet<int> _activeTownNPCs = new();
         private static BestiaryUnlockProgressReport _cachedReport = new();
 
         public override void Load()
         {
             // 更好的NPC生成机制 + NPC生成加速
-            Terraria.On_Main.UpdateTime_SpawnTownNPCs += orig =>
+            On_Main.UpdateTime_SpawnTownNPCs += orig =>
             {
                 _isExtraUpdate = false;
                 orig.Invoke();
@@ -35,14 +34,14 @@ namespace ImproveGame.Common.ModSystems
             };
 
             // 在加速的NPC生成中，跳过寻找家的步骤
-            Terraria.On_WorldGen.QuickFindHome += (orig, npc) =>
+            On_WorldGen.QuickFindHome += (orig, npc) =>
             {
                 if (!_isExtraUpdate)
                     orig.Invoke(npc);
             };
 
             // 在加速的NPC生成中，避免多次调用GetBestiaryProgressReport开销过大，这里缓存一个
-            Terraria.On_Main.GetBestiaryProgressReport += orig =>
+            On_Main.GetBestiaryProgressReport += orig =>
             {
                 if (!_isExtraUpdate)
                     return orig.Invoke();
@@ -50,48 +49,7 @@ namespace ImproveGame.Common.ModSystems
             };
         }
 
-        public override void PostSetupContent()
-        {
-            SetupTownNPCList();
-        }
-
-        /// <summary>设立城镇NPC列表</summary>
-        private static void SetupTownNPCList()
-        {
-            _townNPCIDs.AddRange(NPCID.Sets.TownNPCBestiaryPriority);
-            // 不用这个，我们要参考Priority对入住NPC优先进行排序
-            //foreach ((int netID, NPC npc) in ContentSamples.NpcsByNetId)
-            //{
-            //    if (npc.townNPC && NPC.TypeToDefaultHeadIndex(netID) >= 0)
-            //    {
-            //        TownNPCIDs.Add(netID);
-            //    }
-            //}
-
-            // 你个浓眉大眼的到底是不是城镇NPC?
-            _townNPCIDs.RemoveAll(id =>
-            {
-                var npc = new NPC();
-                npc.SetDefaults(id);
-                int head = NPC.TypeToDefaultHeadIndex(id);
-                return !npc.townNPC || head < 0 || head >= NPCHeadLoader.NPCHeadCount ||
-                       NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] || npc.type is NPCID.SantaClaus ||
-                       npc.ModNPC?.TownNPCStayingHomeless is true;
-            });
-
-            foreach (var modNPC in NPCLoader.npcs)
-            {
-                var npc = modNPC.NPC;
-                int head = NPC.TypeToDefaultHeadIndex(npc.type);
-                if (npc.townNPC && head >= 0 && !NPCHeadID.Sets.CannotBeDrawnInHousingUI[head] &&
-                    !modNPC.TownNPCStayingHomeless)
-                {
-                    _townNPCIDs.Add(npc.type);
-                }
-            }
-        }
-
-        private static void TrySetNPCSpawn(Terraria.On_Main.orig_UpdateTime_SpawnTownNPCs orig, double worldUpdateRate)
+        private static void TrySetNPCSpawn(On_Main.orig_UpdateTime_SpawnTownNPCs orig, double worldUpdateRate)
         {
             orig.Invoke();
 
@@ -122,22 +80,6 @@ namespace ImproveGame.Common.ModSystems
             {
                 TrySetNPCSpawn(NPCID.Wizard);
                 TrySetNPCSpawn(NPCID.TaxCollector);
-            }
-
-            if (_townNPCIDs is null || _townNPCIDs.Count < 0)
-            {
-                SetupTownNPCList();
-            }
-
-            if (_townNPCIDs == null)
-            {
-                return;
-            }
-
-            foreach (var id in _townNPCIDs.Where(id =>
-                         Main.BestiaryTracker.Chats.GetWasChatWith(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[id])))
-            {
-                TrySetNPCSpawn(id);
             }
         }
 

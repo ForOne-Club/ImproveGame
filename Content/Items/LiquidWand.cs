@@ -155,15 +155,20 @@ namespace ImproveGame.Content.Items
             player.cursorItemIconPush = 6;
             player.cursorItemIconID = WandSystem.LiquidMode switch
             {
-                LiquidID.Water => ItemID.BottomlessBucket,
-                LiquidID.Lava => ItemID.BottomlessLavaBucket,
-                LiquidID.Honey => ItemID.BottomlessHoneyBucket,
-                LiquidID.Shimmer => ItemID.BottomlessShimmerBucket,
+                LiquidID.Water => WandSystem.AbsorptionMode
+                    ? ItemID.SuperAbsorbantSponge
+                    : ItemID.BottomlessBucket,
+                LiquidID.Lava => WandSystem.AbsorptionMode
+                    ? ItemID.LavaAbsorbantSponge
+                    : ItemID.BottomlessLavaBucket,
+                LiquidID.Honey => WandSystem.AbsorptionMode
+                    ? ItemID.HoneyAbsorbantSponge
+                    : ItemID.BottomlessHoneyBucket,
+                LiquidID.Shimmer => WandSystem.AbsorptionMode
+                    ? ItemID.UltraAbsorbantSponge
+                    : ItemID.BottomlessShimmerBucket,
                 _ => 0
             };
-
-            if (WandSystem.AbsorptionMode)
-                player.cursorItemIconID = ItemID.UltraAbsorbantSponge;
 
             // 还在用物品的时候不能打开UI
             if (player.mouseInterface || player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease ||

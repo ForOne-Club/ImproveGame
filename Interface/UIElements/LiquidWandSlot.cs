@@ -83,7 +83,7 @@ namespace ImproveGame.Interface.UIElements
 
         public bool BucketExists => HasItem(GetAllInventoryItemsList(Main.LocalPlayer).ToArray(), itemTypes: BucketId);
         
-        public bool SpongeExists => HasItem(GetAllInventoryItemsList(Main.LocalPlayer).ToArray(), itemTypes: SpongeId);
+        public bool SpongeExists => HasItem(GetAllInventoryItemsList(Main.LocalPlayer).ToArray(), -1, SpongeId, ItemID.UltraAbsorbantSponge);
 
         public void SetLiquidAmount(float amount) => _liquidAmount = amount;
 
