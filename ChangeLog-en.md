@@ -10,6 +10,7 @@
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 ## Subversions
 - v1.6.5.0
+- v1.6.5.1 (Not yet)
 ## Additions
 - Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 - Enabled configuring chest detection range of Storage Manager
@@ -28,6 +29,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Fixed middle click not opening GUI under high FPS
 - **[v1.6.5.1]** 修复了展开合成列表时仍然会与储存管理器GUI交互的BUG
 - **[v1.6.5.1]** 修复了“摇树必掉水果”功能失效的BUG
+- **[v1.6.5.1]** 修复了某些情况下无法正常隐藏Buff的BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI

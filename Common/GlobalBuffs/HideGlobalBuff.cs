@@ -24,8 +24,8 @@ namespace ImproveGame.Common.GlobalBuffs
         public override void Load() {
             UseRegularMethod_NoInventory = false;
             UseRegularMethod_Inventory = false;
-            Terraria.IL_Main.DrawInventory += TweakDrawInventoryBuffs;
-            Terraria.IL_Main.DrawInterface_Resources_Buffs += TweakDrawInterfaceBuffs;
+            IL_Main.DrawInventory += TweakDrawInventoryBuffs;
+            IL_Main.DrawInterface_Resources_Buffs += TweakDrawInterfaceBuffs;
         }
 
 
@@ -66,7 +66,7 @@ namespace ImproveGame.Common.GlobalBuffs
                 }
 
                 // 开一个EmitDelegate来获取索引
-                c.EmitDelegate<Func<int, int>>((returnValue) => {
+                c.EmitDelegate<Func<int, int>>(returnValue => {
                     index = returnValue;
                     return returnValue;
                 });
@@ -82,7 +82,7 @@ namespace ImproveGame.Common.GlobalBuffs
                     return;
                 }
                 c.Index++;
-                c.EmitDelegate<Func<int, int>>((x) => {
+                c.EmitDelegate<Func<int, int>>(x => {
                     if (!UseRegularMethod_Inventory && Config.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]]) {
                         // x设置成-100000
                         return -100000;
@@ -99,7 +99,7 @@ namespace ImproveGame.Common.GlobalBuffs
                     return;
                 }
                 c.Index++;
-                c.EmitDelegate<Func<int, int>>((y) => {
+                c.EmitDelegate<Func<int, int>>(y => {
                     if (!UseRegularMethod_Inventory && Config.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]]) {
                         // y设置成-100000
                         return -100000;
@@ -129,7 +129,7 @@ namespace ImproveGame.Common.GlobalBuffs
                     return;
                 }
 
-                c.EmitDelegate<Func<int, int>>((add) => {
+                c.EmitDelegate<Func<int, int>>(add => {
                     if (!UseRegularMethod_Inventory && Config.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]]) {
                         // 不让他+1，让他+0
                         return 0;
@@ -153,23 +153,25 @@ namespace ImproveGame.Common.GlobalBuffs
 
 
         // 源码片段
-        /*for (int i = 0; i < Player.MaxBuffs; i++) {
-	        if (player[myPlayer].buffType[i] > 0) {
-		        int num5 = player[myPlayer].buffType[i];
-		        int x = 32 + i * 38;
-		        int num3 = 76;
-		        if (i >= num2) {
-			        x = 32 + Math.Abs(i % 11) * 38;
-			        num3 += 50 * (i / 11);
-		        }
-
-		        num = DrawBuffIcon(num, i, x, num3);
-	        }
-	        else {
-		        buffAlpha[i] = 0.4f;
-	        }
-        }
-        */
+        /*
+         * for (int i = 0; i < Player.maxBuffs; i++) {
+         * 	if (player[myPlayer].buffType[i] > 0) {
+         * 		_ = player[myPlayer].buffType[i];
+         * 		int x = 32 + i * 38;
+         * 		int num3 = 76;
+         * 		int num4 = i;
+         * 		while (num4 >= num2) {
+         * 			num4 -= num2;
+         * 			x = 32 + num4 * 38;
+         * 			num3 += 50;
+         * 		}
+         * 		num = DrawBuffIcon(num, i, x, num3);
+         * 	}
+         * 	else {
+         * 		buffAlpha[i] = 0.4f;
+         *  }
+         * }
+         */
         // 在原版代码中，"i"以"ldloc.3"读取，处于一个for循环中，既作为buffType的索引，也用于定位
         // 此处应只修改作为定位的部分，作为索引的部分不修改，不然就乱套了
         private void TweakDrawInterfaceBuffs(ILContext il) {
@@ -196,7 +198,7 @@ namespace ImproveGame.Common.GlobalBuffs
                     ErrorHappenedInterface();
                     return;
                 }
-                c.EmitDelegate<Func<int, int>>((i) => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i], true));
+                c.EmitDelegate<Func<int, int>>(i => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i], true));
 
                 // 修改第二个
                 if (!c.TryGotoNext(MoveType.After,
@@ -206,32 +208,11 @@ namespace ImproveGame.Common.GlobalBuffs
                     ErrorHappenedInterface();
                     return;
                 }
-                c.EmitDelegate<Func<int, int>>((i) => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i]));
-
-                // 修改第三个
-                if (!c.TryGotoNext(MoveType.After,
-                                   i => i.Match(OpCodes.Blt_S),
-                                   i => i.Match(OpCodes.Ldc_I4_S, (sbyte)32),
-                                   i => i.Match(OpCodes.Ldloc_3))) {
-                    ErrorHappenedInterface();
-                    return;
-                }
-                c.EmitDelegate<Func<int, int>>((i) => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i]));
-
-                // 修改第四个
-                if (!c.TryGotoNext(MoveType.After,
-                                   i => i.Match(OpCodes.Ldloc_S),
-                                   i => i.Match(OpCodes.Ldc_I4_S, (sbyte)50),
-                                   i => i.Match(OpCodes.Ldloc_3))) {
-                    ErrorHappenedInterface();
-                    return;
-                }
-                c.EmitDelegate<Func<int, int>>((i) => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i]));
+                c.EmitDelegate<Func<int, int>>(i => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i]));
             }
             catch (Exception e) {
                 ImproveGame.Instance.Logger.Error(e.Message);
                 ErrorHappenedInterface();
-                return;
             }
         }
 
@@ -263,7 +244,7 @@ namespace ImproveGame.Common.GlobalBuffs
         public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams) {
             if (HideBuffSystem.BuffTypesShouldHide[type]) {
                 // 不管咋样都不显示文本
-                drawParams.TextPosition = new(-114514f);
+                drawParams.TextPosition = new Vector2(-114514f);
                 if (Config.HideNoConsumeBuffs)
                 {
                     // 干掉指针显示

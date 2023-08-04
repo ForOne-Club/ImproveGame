@@ -20,6 +20,7 @@ public class ExtremeStorageCore : ModSystem
     {
         ToolButtonBase.ToolIcons = GetTexture("UI/ExtremeStorage/ToolIcons");
 
+        // 同步快速堆叠
         IL_Chest.PutItemInNearbyChest += il =>
         {
             // 根据上面的IL代码，写出对应的查找代码
@@ -128,7 +129,6 @@ public class ExtremeStorageCore : ModSystem
 
         if (_chestOld is not -1 && Main.chest.IndexInRange(_chestOld) && Main.chest[_chestOld] is not null)
         {
-            var chest = Main.chest[_chestOld];
             // 为了降低传输压力，只传输在 ExtremeStorage 附近的箱子
             // (所以这就是你用遍历增加运算压力的理由!?)
             foreach ((_, TileEntity tileEntity) in TileEntity.ByID)
