@@ -16,10 +16,10 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Enabled configuring chest detection range of Storage Manager
 - Middle-clicking an mount item now uses it
 - You can customize the slope type when using Space Wand to place blocks now
-- **[v1.6.5.1]** 储存管理器物品参与合成功能在多人模式下可用了
-- **[v1.6.5.1]** 现在在有玩家使用储存管理器时也可以快速堆叠到箱子了
-- **[v1.6.5.1]** 储存管理器新增“随身旗帜”功能，可使“家具”类别中的物品算作随身旗帜
-- **[v1.6.5.1]** 新增一个自动垃圾桶，可收集玩家丢入的垃圾，并且会保留近期六次的物品（可堆叠）。可在物品栏使用 Shift+Ctrl+鼠标左键点击 快速将物品丢入自动垃圾桶。
+- **[v1.6.5.1]** Items in Storage Manager can now be counted for crafting in multiplayer.
+- **[v1.6.5.1]** Items can be quickly stacked to chests while using Storage Manager.
+- **[v1.6.5.1]** Protable Banner is now supported by Storage Manager, items in "Furniture" chests can be counted.
+- **[v1.6.5.1]** Added an Automatic Trash Bin, similar to Auto Trash.
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine
@@ -29,21 +29,21 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Fixed Storage Manager couldn't be applied with certain paints
 - Fixed Axe of Regrowth unable to harvest herbs
 - Fixed middle click not opening GUI under high FPS
-- **[v1.6.5.1]** 修复了展开合成列表时仍然会与储存管理器GUI交互的BUG
-- **[v1.6.5.1]** 修复了“摇树必掉水果”功能失效的BUG
-- **[v1.6.5.1]** 修复了某些情况下无法正常隐藏Buff的BUG
-- **[v1.6.5.1]** 修复了通过中键使用功能可以白嫖商店内的宠物与便携储存的BUG
-- **[v1.6.5.1]** 修复了中键无法使用处于大背包的建造魔杖与液体魔杖的BUG
-- **[v1.6.5.1]** 修复了空间法杖在多人模式下会随机放置平台的BUG
-- **[v1.6.5.1]** 修复了部分法杖在多人模式下使用效果错误/不显示的BUG
-- **[v1.6.5.1]** 修复了液体法杖不识别部分吸收棉/无底桶的BUG
+- **[v1.6.5.1]** Disabled unintentional interaction with Storage Manager GUI when recipes are listed.
+- **[v1.6.5.1]** Fixed "Guarenteed Fruit Drop From Tree Shake".
+- **[v1.6.5.1]** Fixed infinite buffs cannot be hiden in certain conditions.
+- **[v1.6.5.1]** Fixed middle click cheat on unpurchased items.
+- **[v1.6.5.1]** Fixed middle click not using Wand of Construction and Wand of Liquid in Big Backpack.
+- **[v1.6.5.1]** Fixed Wand of Space randomly placing platforms in multiplayer.
+- **[v1.6.5.1]** Fixed some Wand issues in multiplayer.
+- **[v1.6.5.1]** Fixed Wand of Liquid not detecting certain liquid items.
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI
 - Wands besides Wand of Contruction and Wand of Architecture now display tile to be placed
 - Wand of Space now resets tiles' sloping while replacing tiles
-- **[v1.6.5.1]** 现在快速堆叠/全部放置到储存管理器的物品有动画了
-- **[v1.6.5.1]** 删除了“更好的城镇NPC入住机制”中与原版1.4.4重合的功能
+- **[v1.6.5.1]** Quick Stack & Deposit All for Storage Manager are now animated.
+- **[v1.6.5.1]** Removed "Better Town NPC Mechanism" because 1.4.4 already did it.
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0

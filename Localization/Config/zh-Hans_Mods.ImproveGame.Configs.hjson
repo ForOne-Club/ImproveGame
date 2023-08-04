@@ -626,12 +626,13 @@ UIConfigs: {
 	}
 
 	QoLAutoTrash: {
-		Label: "[centeritem:348] 自动丢弃面板"
+		Label: "[centeritem:348] 自动垃圾桶"
 		Tooltip:
 			'''
-			在屏幕左下角显示自动丢弃面板。
+			在屏幕左下角显示自动垃圾桶。
 			其中的物品将被自动丢弃。
 			可取回最近丢弃的六种物品。
+			Shift+Ctrl+<left>物品将其丢进此垃圾桶。
 			'''
 	}
 
