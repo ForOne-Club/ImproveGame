@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModHooks;
 using ImproveGame.Content;
 using ImproveGame.Core;
 using ImproveGame.Interface.SUIElements;
@@ -8,10 +9,8 @@ using MonoMod.Cil;
 
 namespace ImproveGame.Common.GlobalItems
 {
-    public class ImproveItem : GlobalItem
+    public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
     {
-        private static bool _oldMiddlePressed;
-
         public override void SetDefaults(Item item)
         {
             // 最大堆叠
@@ -105,45 +104,50 @@ namespace ImproveGame.Common.GlobalItems
             return base.CanBeConsumedAsAmmo(ammo, weapon, player);
         }
 
+        public void OnMiddleClicked(Item item)
+        {
+            var player = Main.LocalPlayer;
+            if (player.mount.Active && player.mount._type == item.mountType)
+            {
+                player.mount.Dismount(player);
+                return;
+            }
+
+            player.mount.SetMount(item.mountType, player);
+
+            ItemLoader.UseItem(item, player);
+
+            if (item.UseSound != null)
+                SoundEngine.PlaySound(item.UseSound, player.Center);
+        }
+
+        public bool MiddleClickable(Item item)
+        {
+            var player = Main.LocalPlayer;
+            if (player.frozen || player.tongued || player.webbed || player.stoned || player.gravDir is -1f ||
+                player.dead || player.noItems)
+                return false;
+            return item.mountType != -1 && player.mount.CanMount(item.mountType, player) &&
+                   player.ItemCheck_CheckCanUse(item) && !MountID.Sets.Cart[item.mountType];
+        }
+
+        public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            string text = (GetTextWith("Tips.MouseMiddleUse", new {ItemName = item.Name}));
+            tooltips.Add(new TooltipLine(Mod, "MountQuickUse", text) {OverrideColor = Color.LightGreen});
+        }
+
+        // 中键功能
+        public bool OverrideHover(Item[] inventory, int context, int slot)
+        {
+            ((IItemMiddleClickable)this).HandleHover(inventory, context, slot);
+            return false;
+        }
+
         // 额外提示
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            var player = Main.LocalPlayer;
-            if (item.mountType != -1 && player.mount.CanMount(item.mountType, player) &&
-                player.ItemCheck_CheckCanUse(item) && !MountID.Sets.Cart[item.mountType])
-            {
-                if (player.frozen || player.tongued || player.webbed || player.stoned || player.gravDir == -1f ||
-                    player.dead || player.noItems)
-                    goto MoreInfoSection;
-
-                MouseState mouseState = Mouse.GetState();
-                if (_oldMiddlePressed)
-                {
-                    _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
-                }
-
-                if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
-                {
-                    _oldMiddlePressed = true;
-
-                    if (player.mount.Active && player.mount._type == item.mountType) {
-                        player.mount.Dismount(player);
-                        goto MoreInfoSection;
-                    }
-
-                    player.mount.SetMount(item.mountType, player);
-
-                    ItemLoader.UseItem(item, player);
-
-                    if (item.UseSound != null)
-                        SoundEngine.PlaySound(item.UseSound, player.Center);
-                }
-
-                string text = (GetTextWith("Tips.MouseMiddleUse", new {ItemName = item.Name}));
-                tooltips.Add(new TooltipLine(Mod, "MountQuickUse", text) {OverrideColor = Color.LightGreen});
-            }
-
-            MoreInfoSection:
+            ((IItemMiddleClickable)this).HandleTooltips(item, tooltips);
 
             // 更多信息
             if (!UIConfigs.Instance.ShowMoreData)

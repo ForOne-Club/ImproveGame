@@ -10,7 +10,7 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
-    public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem
+    public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem, IItemMiddleClickable
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
         public List<Item> StoredPotions = new();
@@ -116,16 +116,7 @@ namespace ImproveGame.Content.Items
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            // 决定文本显示的是“开启”还是“关闭”
-            if (ItemInInventory)
-            {
-                string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Potions) ?
-                    GetTextWith($"Tips.MouseMiddleClose", new { ItemName = Item.Name }) :
-                    GetTextWith($"Tips.MouseMiddleOpen", new { ItemName = Item.Name });
-                tooltips.Add(new TooltipLine(Mod, "CreateWand", text) { OverrideColor = Color.LightGreen });
-            }
-
-            ItemInInventory = false;
+            ((IItemMiddleClickable)this).HandleTooltips(Item, tooltips);
 
             if (StoredPotions is not null && StoredPotions.Count > 0)
             {
@@ -287,28 +278,24 @@ namespace ImproveGame.Content.Items
                 .AddTile(TileID.WorkBenches).Register();
         }
 
-        private bool ItemInInventory;
-        private static bool _oldMiddlePressed;
-
         public bool OverrideHover(Item[] inventory, int context, int slot)
         {
-            if (context == ItemSlot.Context.InventoryItem)
-            {
-                ItemInInventory = true;
-                MouseState mouseState = Mouse.GetState();
-                if (_oldMiddlePressed)
-                {
-                    _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
-                }
-
-                if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
-                {
-                    _oldMiddlePressed = true;
-                    RightClick(Main.LocalPlayer);
-                }
-            }
+            ((IItemMiddleClickable)this).HandleHover(inventory, context, slot);
 
             return false;
+        }
+        public void OnMiddleClicked(Item item)
+        {
+            RightClick(Main.LocalPlayer);
+        }
+
+        public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            // 决定文本显示的是“开启”还是“关闭”
+            string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Banners)
+                ? GetTextWith("Tips.MouseMiddleClose", new {ItemName = Item.Name})
+                : GetTextWith("Tips.MouseMiddleOpen", new {ItemName = Item.Name});
+            tooltips.Add(new TooltipLine(Mod, "PotionBag", text) {OverrideColor = Color.LightGreen});
         }
     }
 }

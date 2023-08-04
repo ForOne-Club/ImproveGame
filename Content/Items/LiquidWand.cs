@@ -8,7 +8,7 @@ using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items
 {
-    public class LiquidWand : SelectorItem, IItemOverrideHover
+    public class LiquidWand : SelectorItem, IItemOverrideHover, IItemMiddleClickable
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.LiquidWand;
 
@@ -165,7 +165,6 @@ namespace ImproveGame.Content.Items
             if (WandSystem.AbsorptionMode)
                 player.cursorItemIconID = ItemID.UltraAbsorbantSponge;
 
-            UISystem.Instance.LiquidWandGUI.CurrentSlot = player.selectedItem;
             // 还在用物品的时候不能打开UI
             if (player.mouseInterface || player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease ||
                 Main.SmartInteractShowingGenuine || PlayerInput.LockGamepadTileUseButton || player.noThrow != 0 ||
@@ -176,7 +175,7 @@ namespace ImproveGame.Content.Items
 
             if (!LiquidWandGUI.Visible)
             {
-                UISystem.Instance.LiquidWandGUI.Open();
+                UISystem.Instance.LiquidWandGUI.Open(this);
             }
             else
             {
@@ -184,52 +183,34 @@ namespace ImproveGame.Content.Items
             }
         }
 
-        public bool ItemInInventory;
-        private static bool _oldMiddlePressed;
-
         public bool OverrideHover(Item[] inventory, int context, int slot)
         {
-            if (context == ItemSlot.Context.InventoryItem)
-            {
-                ItemInInventory = true;
-                MouseState mouseState = Mouse.GetState();
-                if (_oldMiddlePressed)
-                {
-                    _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
-                }
-
-                if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
-                {
-                    _oldMiddlePressed = true;
-                    if (!LiquidWandGUI.Visible)
-                    {
-                        UISystem.Instance.LiquidWandGUI.Open(slot);
-                    }
-                    else
-                    {
-                        UISystem.Instance.LiquidWandGUI.Close();
-                    }
-                }
-            }
+            ((IItemMiddleClickable)this).HandleHover(inventory, context, slot);
 
             return false;
         }
 
+        public void OnMiddleClicked(Item item)
+        {
+            if (!LiquidWandGUI.Visible)
+                UISystem.Instance.LiquidWandGUI.Open(this);
+            else
+                UISystem.Instance.LiquidWandGUI.Close();
+        }
+
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            ((IItemMiddleClickable)this).HandleTooltips(Item, tooltips);
+        }
+
+        public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
+        {
             // 决定文本显示的是“开启”还是“关闭”
-            if (ItemInInventory)
-            {
-                string tooltip = GetText("Tips.LiquidWandOn");
-                if (LiquidWandGUI.Visible)
-                {
-                    tooltip = GetText("Tips.LiquidWandOff");
-                }
+            string tooltip = GetText("Tips.LiquidWandOn");
+            if (LiquidWandGUI.Visible)
+                tooltip = GetText("Tips.LiquidWandOff");
 
-                tooltips.Add(new(Mod, "LiquidWand", tooltip) {OverrideColor = Color.LightGreen});
-            }
-
-            ItemInInventory = false;
+            tooltips.Add(new TooltipLine(Mod, "LiquidWand", tooltip) {OverrideColor = Color.LightGreen});
         }
 
         public override void AddRecipes()

@@ -30,6 +30,8 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** 修复了展开合成列表时仍然会与储存管理器GUI交互的BUG
 - **[v1.6.5.1]** 修复了“摇树必掉水果”功能失效的BUG
 - **[v1.6.5.1]** 修复了某些情况下无法正常隐藏Buff的BUG
+- **[v1.6.5.1]** 修复了通过中键使用功能可以白嫖商店内的宠物与便携储存的BUG
+- **[v1.6.5.1]** 修复了中键无法使用处于大背包的建造魔杖与液体魔杖的BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI

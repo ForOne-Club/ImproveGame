@@ -14,6 +14,10 @@ namespace ImproveGame.Common.ModPlayers
         public override bool HoverSlot(Item[] inventory, int context, int slot)
         {
             var item = inventory[slot];
+            
+            foreach (var globalItem in from i in GlobalList<GlobalItem>.Globals where i is IItemOverrideHover select i) {
+                ((IItemOverrideHover)globalItem).OverrideHover(inventory, context, slot);
+            }
 
             if (item.ModItem is IItemOverrideHover overrideHover && overrideHover.OverrideHover(inventory, context, slot))
                 return true;
