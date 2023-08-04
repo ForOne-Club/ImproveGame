@@ -49,6 +49,21 @@ namespace ImproveGame.Interface.BaseViews
             Opacity = new Opacity(this);
         }
 
+        /// <summary>
+        /// 设置圆角矩形的基本属性
+        /// </summary>
+        /// <param name="bgColor"></param>
+        /// <param name="border"></param>
+        /// <param name="borderColor"></param>
+        /// <param name="rounded"></param>
+        public void SetRoundedRectangleValues(Color bgColor, float border, Color borderColor, Vector4 rounded)
+        {
+            BgColor = bgColor;
+            Border = border;
+            BorderColor = borderColor;
+            Rounded = rounded;
+        }
+
         public override void Recalculate()
         {
             Opacity.Recalculate();

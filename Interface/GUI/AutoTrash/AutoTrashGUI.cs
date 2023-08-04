@@ -10,7 +10,7 @@ public class AutoTrashGUI : ViewBody
     #region 抽象实现
     public override bool Display
     {
-        get => Main.playerInventory || !WhatTimer.InCloseComplete;
+        get => Main.playerInventory || !WhatTimer.CompleteClose;
         set { }
     }
 
@@ -65,7 +65,7 @@ public class AutoTrashGUI : ViewBody
 
             Image.OnMouseOver += (_, _) => Image.Texture = settingHover;
             Image.OnMouseOut += (_, _) => Image.Texture = setting;
-            Image.OnMouseDown += (_, _) =>
+            Image.OnLeftMouseDown += (_, _) =>
             {
                 if (!OpenTiemr.AnyOpen) OpenTiemr.Open(); else OpenTiemr.Close();
             };

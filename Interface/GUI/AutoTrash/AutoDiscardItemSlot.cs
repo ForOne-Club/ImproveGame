@@ -28,7 +28,7 @@ public class AutoDiscardItemSlot : BaseItemSlot
         textureTrash = GetTexture("UI/AutoTrash/Trash").Value;
     }
 
-    public override void MouseDown(UIMouseEvent evt)
+    public override void LeftMouseDown(UIMouseEvent evt)
     {
         List<Item> trashItems = AutoTrashPlayer.Instance.TrashItems;
         if (!(Main.mouseItem?.IsAir ?? true)) // 当鼠标上有物品
