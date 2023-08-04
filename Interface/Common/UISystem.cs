@@ -4,6 +4,7 @@ using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.PlayerInfo;
+using ImproveGame.Interface.UIStructs;
 
 namespace ImproveGame.Interface.Common
 {
@@ -166,6 +167,7 @@ namespace ImproveGame.Interface.Common
             LoadGUI(ref StructureGUI, out StructureInterface);
             LoadGUI(ref PrefixRecallGUI, out PrefixRecallInterface);
         }
+
 
         private static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface, Action PreActive = null)
             where T : UIState

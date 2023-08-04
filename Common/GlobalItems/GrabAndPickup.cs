@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Common.GlobalItems;
@@ -176,6 +177,15 @@ public class GrabAndPickup : GlobalItem
     /// </summary>
     public override bool OnPickup(Item source, Player player)
     {
+        if (Config.QoLAutoTrash &&
+            player.TryGetModPlayer(out AutoTrashPlayer autoTrashPlayer) && true &&
+            autoTrashPlayer.AutoDiscardItems.Any(adItem => adItem.type == source.type))
+        {
+            autoTrashPlayer.StackToLastItemsWithCleanUp(source);
+            SoundEngine.PlaySound(SoundID.Grab);
+            return false;
+        }
+
         if (!player.TryGetModPlayer(out ImprovePlayer improvePlayer))
         {
             return true;

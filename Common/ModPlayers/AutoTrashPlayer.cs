@@ -49,7 +49,8 @@ public class AutoTrashPlayer : ModPlayer
 
     public override bool ShiftClickSlot(Item[] inventory, int context, int slot)
     {
-        if (!inventory[slot].IsAir && context is ItemSlot.Context.InventoryItem or ItemSlot.Context.InventoryCoin or ItemSlot.Context.InventoryAmmo)
+        if (Config.QoLAutoTrash && !inventory[slot].IsAir &&
+            context is ItemSlot.Context.InventoryItem or ItemSlot.Context.InventoryCoin or ItemSlot.Context.InventoryAmmo)
         {
             if (Main.keyState.IsKeyDown(Keys.LeftControl) || Main.keyState.IsKeyDown(Keys.RightControl))
             {

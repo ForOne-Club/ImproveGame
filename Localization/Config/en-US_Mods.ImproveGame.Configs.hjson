@@ -199,6 +199,15 @@ ImproveConfigs: {
 		Tooltip: Greatly increases the extracting speed of the Extractinator
 	}
 
+	QoLAutoTrash: {
+		Label: "[centeritem:348] AutoTrash"
+		Tooltip:
+			'''
+			Open a rubbish bin that can automatically dispose of garbage, it will automatically discard the garbage that has been thrown into it.
+			It will also retain the six most recently discarded items for future use.
+			'''
+	}
+
 	TownNPCGetTFIntoHouse: {
 		Label: "[centeritem:MusicBoxTownDay] Town NPC spawn mechanics improvement"
 		Tooltip:

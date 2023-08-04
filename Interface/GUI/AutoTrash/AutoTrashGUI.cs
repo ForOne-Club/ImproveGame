@@ -10,7 +10,7 @@ public class AutoTrashGUI : ViewBody
     #region 抽象实现
     public override bool Display
     {
-        get => Main.playerInventory || !WhatTimer.CompleteClose;
+        get => Config.QoLAutoTrash && (Main.playerInventory || !ExpanTimer.CompleteClose);
         set { }
     }
 
@@ -37,8 +37,10 @@ public class AutoTrashGUI : ViewBody
             int hNumber = atPlayer.MaxCapacity;
             int vNumber = 1;
 
-            MainPanel = new SUIPanel(UIColor.ItemSlotBorder, UIColor.PanelBg, 12f);
-            MainPanel.OverflowHidden = true;
+            MainPanel = new SUIPanel(UIColor.ItemSlotBorder, UIColor.PanelBg, 12f)
+            {
+                OverflowHidden = true
+            };
 
             ItemSlotGrid = new BaseGrid();
             ItemSlotGrid.SetBaseValues(vNumber, hNumber, new Vector2(8f), new Vector2(52f));
@@ -107,9 +109,9 @@ public class AutoTrashGUI : ViewBody
     }
 
     /// <summary>
-    /// 开启背包页面时候的动画
+    /// 开启背包页面时候的动画 
     /// </summary>
-    public AnimationTimer WhatTimer = new AnimationTimer(3);
+    public AnimationTimer ExpanTimer = new AnimationTimer(3);
     public AnimationTimer OpenTiemr = new AnimationTimer(3);
 
     public override void Update(GameTime gameTime)
@@ -130,7 +132,7 @@ public class AutoTrashGUI : ViewBody
             recalculate = true;
         }
 
-        float panelTop = WhatTimer.Lerp(20, -MainPanel.Height.Pixels - 20f);
+        float panelTop = ExpanTimer.Lerp(20, -MainPanel.Height.Pixels - 20f);
 
         if (MainPanel.Top.Pixels != panelTop)
         {
@@ -145,15 +147,15 @@ public class AutoTrashGUI : ViewBody
 
         if (Main.playerInventory)
         {
-            WhatTimer.Open();
+            ExpanTimer.Open();
         }
         else
         {
-            WhatTimer.Close();
+            ExpanTimer.Close();
         }
 
         OpenTiemr.Update();
-        WhatTimer.Update();
+        ExpanTimer.Update();
 
         if (GetDimensions().X != Main.screenWidth || GetDimensions().Y != Main.screenHeight)
         {

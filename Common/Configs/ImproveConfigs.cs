@@ -131,6 +131,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool FasterExtractinator;
 
+        [DefaultValue(true)]
+        public bool QoLAutoTrash;
+
         #endregion
 
         #region NPC设置

@@ -10,11 +10,13 @@
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 ## Subversions
 - v1.6.5.0
+- v1.6.5.1
 ## Additions
 Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 Enabled configuring chest detection range of Storage Manager
 Middle-clicking an mount item now uses it
 You can customize the slope type when using Space Wand to place blocks now
+- **[v1.6.5.1]** 新增一个自动垃圾桶，可收集玩家丢入的垃圾，并且会保留近期六次的物品（可堆叠）。可在物品栏使用 Shift+Ctrl+鼠标左键点击 快速将物品丢入自动垃圾桶。
 ## BUG Fixes
 Shadow Candle and War Table are now considered as buff stations
 Fixed no tile drop of left-facing Fishing Machine

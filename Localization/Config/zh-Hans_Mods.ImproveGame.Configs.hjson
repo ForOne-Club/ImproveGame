@@ -203,6 +203,15 @@ ImproveConfigs: {
 		Tooltip: 极大地加快使用提炼机的速度
 	}
 
+	QoLAutoTrash: {
+		Label: "[centeritem:348] 自动垃圾桶"
+		Tooltip:
+			'''
+			打开一个能自动丢弃垃圾的垃圾桶，它会自动丢弃曾被丢入其中的垃圾。
+			并且会保留最近丢入的六种物品，以备不时之需。
+			'''
+	}
+
 	TownNPCGetTFIntoHouse: {
 		Label: "[centeritem:MusicBoxTownDay] 更好的城镇NPC入住机制"
 		Tooltip:
