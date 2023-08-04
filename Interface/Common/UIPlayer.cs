@@ -4,6 +4,7 @@ using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.PlayerInfo;
+using ImproveGame.Interface.GUI.AutoTrash;
 
 namespace ImproveGame.Interface.Common
 {
@@ -22,6 +23,10 @@ namespace ImproveGame.Interface.Common
             uiSystem.PlayerInfoGUI = new PlayerInfoGUI();
             uiSystem.PlayerInfoTrigger.SetCarrier(uiSystem.PlayerInfoGUI);
             PlayerInfoGUI.Visible = true;
+
+            // 自动垃圾桶
+            uiSystem.AutoTrashGUI = new AutoTrashGUI();
+            uiSystem.AutoTrashTrigger.SetCarrier(uiSystem.AutoTrashGUI);
 
             // 旗帜盒
             uiSystem.PackageGUI = new PackageGUI();
