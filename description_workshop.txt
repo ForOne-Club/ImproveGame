@@ -3,7 +3,7 @@
 这些功能会为你带来更好的游戏体验
 默认仅开启部分功能，详情请查看模组设置。
 
-[img]https://i.imgur.com/ObHiixA.jpeg[/img]
+[img]https://i.imgur.com/ki1CPZe.gif[/img]
 
 [h2]模组物品[/h2]
 [b]你可以使用 Recipe Browser(合成表) 模组的物品图鉴功能以在游戏内查阅来源![/b]

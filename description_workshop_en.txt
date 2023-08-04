@@ -3,7 +3,7 @@
 These features may bring you better gameplay experience
 Only some functions are enabled by default, please check mod configurations for details
 
-[img]https://imgur.com/p7Fv1Z6.gif[/img]
+[img]https://i.imgur.com/ki1CPZe.gif[/img]
 
 [h2]Mod Items[/h2]
 [b]You can use Recipe Browser Mod to check their sources![/b]
@@ -44,3 +44,6 @@ Source code: https://github.com/487666123/ImproveGame
 Spriter: 枫林半叶, 逆风而行的信鸽
 Translators: Lastprismer, Lacewing
 Coder: 局长, Cyril, 夜谷紫幽
+Special Thanks: gardenapple - WMITF
+           ChevyRay - Coroutines class
+           Tomat - Part of GIF-rendering code
