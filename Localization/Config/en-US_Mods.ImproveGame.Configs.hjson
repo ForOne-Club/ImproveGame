@@ -619,11 +619,12 @@ UIConfigs: {
 	}
 
 	QoLAutoTrash: {
-		Label: "[centeritem:348] AutoTrash"
+		Label: "[centeritem:348] Auto Trash"
 		Tooltip:
 			'''
-			An auto-trash panel. Items that have been manually placed in it will be automatically disposed.
-			The six most recently disposed items were kept just in case.
+			An automatic trash bin.
+			Items will be moved to this bin if their type is inside.
+			Reserves the last 6 trashed items.
 			'''
 	}
 
