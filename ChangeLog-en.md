@@ -11,6 +11,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 ## Subversions
 - v1.6.5.0
 - v1.6.5.1
+- v1.6.5.2
 ## Additions
 - Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 - Enabled configuring chest detection range of Storage Manager
@@ -37,7 +38,9 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Fixed Wand of Space randomly placing platforms in multiplayer.
 - **[v1.6.5.1]** Fixed some Wand issues in multiplayer.
 - **[v1.6.5.1]** Fixed Wand of Liquid not detecting certain liquid items.
-- **[v1.6.5.1]** 修复了大背包在玩家背包满的情况下无法吸附物品的BUG，修复后置收纳空间收纳物品物体时无提示BUG
+- **[v1.6.5.1]** 修复了大背包在玩家背包满的情况下无法吸附物品的BUG
+- **[v1.6.5.1]** 修复了额外收纳空间收纳物品时无提示的BUG
+- **[v1.6.5.2]** 修复了“摇树必掉水果”功能无法关闭的BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI

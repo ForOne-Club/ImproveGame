@@ -536,6 +536,12 @@ public class ShakeTreeTweak
     {
         On_WorldGen.ShakeTree += (orig, i, j) =>
         {
+            if (!Config.ShakeTreeFruit)
+            {
+                orig(i, j);
+                return;
+            }
+            
             _isShakingTree = true;
             _hasItemDropped = false;
 
