@@ -19,7 +19,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - You can customize the slope type when using Space Wand to place blocks now
 - **[v1.6.5.1]** Items in Storage Manager can now be counted for crafting in multiplayer.
 - **[v1.6.5.1]** Items can be quickly stacked to chests while using Storage Manager.
-- **[v1.6.5.1]** Protable Banner is now supported by Storage Manager, items in "Furniture" chests can be counted.
+- **[v1.6.5.1]** Portable Banner is now supported by Storage Manager, items in "Furniture" chests can be counted.
 - **[v1.6.5.1]** Added an Automatic Trash Bin, similar to Auto Trash.
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
@@ -31,7 +31,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Fixed Axe of Regrowth unable to harvest herbs
 - Fixed middle click not opening GUI under high FPS
 - **[v1.6.5.1]** Disabled unintentional interaction with Storage Manager GUI when recipes are listed.
-- **[v1.6.5.1]** Fixed "Guarenteed Fruit Drop From Tree Shake".
+- **[v1.6.5.1]** Fixed "Guaranteed Fruit Drop From Tree Shake".
 - **[v1.6.5.1]** Fixed infinite buffs cannot be hiden in certain conditions.
 - **[v1.6.5.1]** Fixed middle click cheat on unpurchased items.
 - **[v1.6.5.1]** Fixed middle click not using Wand of Construction and Wand of Liquid in Big Backpack.
@@ -48,6 +48,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Wand of Space now resets tiles' sloping while replacing tiles
 - **[v1.6.5.1]** Quick Stack & Deposit All for Storage Manager are now animated.
 - **[v1.6.5.1]** Removed "Better Town NPC Mechanism" because 1.4.4 already did it.
+- **[v1.6.5.2]** 优化了自动垃圾桶UI
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0

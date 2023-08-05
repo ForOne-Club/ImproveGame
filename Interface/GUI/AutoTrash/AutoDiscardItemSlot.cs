@@ -25,7 +25,8 @@ public class AutoDiscardItemSlot : BaseItemSlot
         AutoDiscardItems = items;
         Index = index;
         SetBaseItemSlotValues(true, false);
-        textureTrash = GetTexture("UI/AutoTrash/Trash").Value;
+        SetSizePixels(42, 42);
+        textureTrash = ModAsset.Trash.Value; // GetTexture("UI/AutoTrash/Trash").Value;
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)

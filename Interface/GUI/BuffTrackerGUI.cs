@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.GlobalBuffs;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.Patches;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using System.Reflection;

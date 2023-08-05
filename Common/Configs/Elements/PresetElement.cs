@@ -26,6 +26,7 @@ public class FukMeCalamityElement : PresetElement
         config.MiddleEnableBank = true;
         config.AutoSaveMoney = true;
         config.FasterExtractinator = true;
+        config.TownNPCHome = true;
         config.TownNPCGetTFIntoHouse = true;
         config.NPCLiveInEvil = true;
         config.TownNPCSpawnSpeed = 12;
@@ -45,6 +46,7 @@ public class FukMeCalamityElement : PresetElement
         config.TreeGrowFaster = true;
         config.ShakeTreeFruit = true;
         config.GemTreeAlwaysDropGem = true;
+        config.NoLakeSizePenalty = true;
         config.MostTreeMin = 22;
         config.MostTreeMax = 36;
         config.PalmTreeMin = 22;
@@ -74,6 +76,7 @@ public class ILoveBalanceElement : PresetElement
         config.MiddleEnableBank = true;
         config.AutoSaveMoney = true;
         config.FasterExtractinator = true;
+        config.TownNPCHome = true;
         config.TownNPCGetTFIntoHouse = false;
         config.NPCLiveInEvil = true;
         config.TownNPCSpawnSpeed = -1;
@@ -93,6 +96,7 @@ public class ILoveBalanceElement : PresetElement
         config.TreeGrowFaster = false;
         config.ShakeTreeFruit = false;
         config.GemTreeAlwaysDropGem = false;
+        config.NoLakeSizePenalty = true;
         config.MostTreeMin = 10;
         config.MostTreeMax = 20;
         config.PalmTreeMin = 10;

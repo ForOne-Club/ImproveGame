@@ -53,9 +53,9 @@ public class AutoTrashPlayer : ModPlayer
         if (UIConfigs.Instance.QoLAutoTrash && !inventory[slot].IsAir &&
             context is ItemSlot.Context.InventoryItem or ItemSlot.Context.InventoryCoin or ItemSlot.Context.InventoryAmmo)
         {
-            if (Main.keyState.IsKeyDown(Keys.LeftControl) || Main.keyState.IsKeyDown(Keys.RightControl))
+            if (Main.keyState.PressingControl())
             {
-                if (!AutoDiscardItems.Any(item => item.type == inventory[slot].type))
+                if (AutoDiscardItems.All(item => item.type != inventory[slot].type))
                 {
                     AutoDiscardItems.Add(new Item(inventory[slot].type));
                 }

@@ -135,7 +135,7 @@ namespace ImproveGame.Content.Tiles
                 _ => 1f
             };
 
-            // 存储的 Bass 将以 20:1 的比例转化为钓鱼速度加成，最高可达 500% 加成
+            // 钓鱼机内每条 Bass 将提供 10% 的钓鱼速度加成，最高可达 500% 加成
             int bassCount = 0;
             for (int i = 0; i < 15; i++)
             {
@@ -144,7 +144,7 @@ namespace ImproveGame.Content.Tiles
                     bassCount += fish[i].stack;
                 }
             }
-            fishingSpeedBonus += Math.Min(bassCount / 20f, 5f);
+            fishingSpeedBonus += Math.Min(bassCount * 0.1f, 5f);
 
             const float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版钓鱼速度是660
             if (FishingTimer > fishingCooldown / fishingSpeedBonus)

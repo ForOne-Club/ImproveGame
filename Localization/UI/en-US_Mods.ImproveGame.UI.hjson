@@ -97,3 +97,11 @@ ExtremeStorage: {
 		Setting: "{$LegacyMenu.14}"
 	}
 }
+
+AutoTrash.Introduction:
+	'''
+	这是一个自动垃圾桶，其中的物品将被[c/CC88AA:自动丢弃]
+	可取回最近丢弃的六种物品
+	Shift+Ctrl+<left>物品将其丢进此垃圾桶
+	可以在用户界面配置中[c/CC88AA:关闭]此功能
+	'''

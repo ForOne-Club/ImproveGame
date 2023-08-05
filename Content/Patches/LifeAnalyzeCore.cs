@@ -1,9 +1,7 @@
-﻿using ImproveGame.Common.Configs;
-using ImproveGame.Interface.Common;
+﻿using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using System.Reflection;
 
-namespace ImproveGame.Common.ModSystems
+namespace ImproveGame.Content.Patches
 {
     public class LifeAnalyzeCore : ModSystem
     {

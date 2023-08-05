@@ -28,7 +28,7 @@ public class TrashItemSlot : BaseItemSlot
         this.TrashItems = items;
         Index = index;
         SetBaseItemSlotValues(true, true);
-        SetSizePixels(52f, 52f);
+        SetSizePixels(48, 48);
         SetRoundedRectangleValues(UIColor.ItemSlotBg * 0.85f, 2f, UIColor.ItemSlotBorder * 0.85f, new Vector4(10f));
     }
 
@@ -38,7 +38,7 @@ public class TrashItemSlot : BaseItemSlot
 
         if (!(Main.mouseItem?.IsAir ?? true))
         {
-            if (!AutoTrashPlayer.Instance.AutoDiscardItems.Any(item => item.type == Main.mouseItem.type))
+            if (AutoTrashPlayer.Instance.AutoDiscardItems.All(item => item.type != Main.mouseItem.type))
             {
                 AutoTrashPlayer.Instance.AutoDiscardItems.Add(new Item(Main.mouseItem.type));
             }
@@ -55,5 +55,19 @@ public class TrashItemSlot : BaseItemSlot
             AutoTrashPlayer.Instance.AutoDiscardItems.RemoveAll(item => item.type == Main.mouseItem.type);
             SoundEngine.PlaySound(SoundID.Grab);
         }
+    }
+
+    public override void DrawSelf(SpriteBatch spriteBatch)
+    {
+        base.DrawSelf(spriteBatch);
+        
+        if (!Item.IsAir)
+            return;
+
+        var dimensions = GetDimensions();
+        Vector2 pos = dimensions.Position();
+        Vector2 size = dimensions.Size();
+        var textureTrash = ModAsset.Trash.Value;
+        spriteBatch.Draw(textureTrash, pos + size / 2f, null, Color.White * 0.2f, 0f, textureTrash.Size() / 2f, 1f, 0, 0);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Core;
 using System.Collections;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;

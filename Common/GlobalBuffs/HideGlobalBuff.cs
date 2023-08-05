@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.Patches;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;

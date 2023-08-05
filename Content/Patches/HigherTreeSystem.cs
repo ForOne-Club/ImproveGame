@@ -1,7 +1,7 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
-namespace ImproveGame.Common.ModSystems
+namespace ImproveGame.Content.Patches
 {
     public class HigherTreeSystem : ModSystem
     {

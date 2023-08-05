@@ -110,7 +110,7 @@ Autofisher: {
 		Put in a fishing rod and baits to start, mechanics are the same as manual-fishing
 		You may also put in accessories to increase fishing power or grant ability to fish in lava
 		The initial fishing speed is 20% of the manual-fishing speed, you may speed up the fishing process by:
-		- Bass [i:Bass] stored will be converted to percentage fishing speed bonus by 20 : 1, caps at 500% ([i/s100:Bass])
+		- Each [i:Bass] stored will provide a 10% fishing speed bonus, caps at 500% ([i/s50:Bass])
 		- [i:AnglerEarring] increases fishing speed by * 200%
 		- [i:AnglerTackleBag] increases fishing speed by * 300%
 		- [i:LavaproofTackleBag] increases fishing speed by * 500%

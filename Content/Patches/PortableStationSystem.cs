@@ -1,10 +1,11 @@
-﻿using ImproveGame.Content.Tiles;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.DataStructures;
 
-namespace ImproveGame.Common.ModSystems;
+namespace ImproveGame.Content.Patches;
 
 internal class PortableStationSystem : ModSystem
 {

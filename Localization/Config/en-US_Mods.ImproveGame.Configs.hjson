@@ -240,7 +240,7 @@ ImproveConfigs: {
 	}
 
 	TravellingMerchantRefresh: {
-		Label: "[centeritem:2222] Refreshable Travelling Merchant's Shop"
+		Label: "[centeritem:PeddlersSatchel] Refreshable Travelling Merchant's Shop"
 		Tooltip: Adds a Refresh button for the Travelling Merchant, you may manually refresh the goods
 	}
 
@@ -425,7 +425,11 @@ ImproveConfigs: {
 
 	ExStorageSearchDistance: {
 		Label: "[centeritem:ImproveGame/ExtremeStorage] Storage Manager Chest Detection Range"
-		Tooltip: Changes how far the Storage Manager searches for chests.
+		Tooltip:
+			'''
+			Changes how far the Storage Manager searches for chests.
+			箱子越多，多人模式同步压力越大，会一定程度上增加延迟
+			'''
 	}
 
 	LoadModItems: {
@@ -461,6 +465,7 @@ ImproveConfigs: {
 			Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
 			Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 			Middle click mount items will toggle the mounts
+			创建玩家时可以选择所有发型
 			'''
 	}
 
@@ -513,6 +518,25 @@ ImproveConfigs: {
 	OpenConfig: {
 		Label: Open configuration file
 		Tooltip: Any config will only appear in the file after being modified.
+	}
+
+	TownNPCHome: {
+		Label: "[centeritem:MusicBoxTownDay] 城镇NPC快捷回家"
+		Tooltip:
+			'''
+			右键单击“房屋”按钮会将所有NPC立刻传送回家
+			如果玩家改变了某个NPC的家，那么这个NPC会立刻传送到它的新家
+			'''
+		HoverText: （<right>以将所有城镇NPC传送回家）
+	}
+
+	NoLakeSizePenalty: {
+		Label: "[centeritem:FishingPotion] 池子无渔力大小惩罚"
+		Tooltip:
+			'''
+			将所有池子的大小判定为满，即你可以在所有大小的水域钓鱼且不会受到因尺寸过小而减少渔力的惩罚
+			你甚至可以在两格水中钓鱼
+			'''
 	}
 }
 

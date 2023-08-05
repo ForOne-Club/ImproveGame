@@ -1,6 +1,4 @@
-﻿using ImproveGame.Core;
-
-namespace ImproveGame.Common.ModSystems;
+﻿namespace ImproveGame.Core;
 
 public class CoroutineSystem : ModSystem
 {

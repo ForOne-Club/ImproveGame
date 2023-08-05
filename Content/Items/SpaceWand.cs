@@ -2,8 +2,10 @@
 using ImproveGame.Common.ModSystems.MarqueeSystem;
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.Packets.Items;
+using ImproveGame.Core;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
+using System.Collections;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 
@@ -37,28 +39,30 @@ public class SpaceWand : ModItem, IMarqueeItem
     #endregion
 
     #region Item 基础设置
+
     public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.SpaceWand;
 
     public override bool AltFunctionUse(Player player) => true;
 
     public override void SetStaticDefaults()
     {
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         Item.staff[Type] = true;
     }
 
     public override void SetDefaults()
     {
         Item.SetBaseValues(30, 30, ItemRarityID.Red, Item.sellPrice(0, 0, 50));
-        Item.SetUseValues(ItemUseStyleID.Shoot, SoundID.Item1, 15, 15, mana: 20);
+        Item.SetUseValues(ItemUseStyleID.Shoot, SoundID.Item1, 12, 12, mana: 20);
         Item.channel = true;
     }
 
     #endregion
 
+    private readonly CoroutineRunner _syncRunner = new();
+    private CoroutineHandle _handle;
     public PlaceType PlaceType;
     public BlockType BlockType;
-    public int[] GrassSeeds = new int[] { 2, 23, 60, 70, 199, 109, 82 };
+    public int[] GrassSeeds = {2, 23, 60, 70, 199, 109, 82};
 
     public Vector2 StartingPoint;
     public static Vector2 MousePosition => Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
@@ -85,6 +89,7 @@ public class SpaceWand : ModItem, IMarqueeItem
                 {
                     if (Main.myPlayer == player.whoAmI)
                         ItemRotation(player);
+                    _syncRunner.StopAll();
                     CanPlaceTiles = true;
                     StartingPoint = Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
                     RefreshMarquee(player);
@@ -100,15 +105,17 @@ public class SpaceWand : ModItem, IMarqueeItem
     /// 能否放置
     /// </summary>
     private bool CanPlaceTiles;
+
     public override bool? UseItem(Player player)
     {
-        player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
+        player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full,
+            player.itemRotation - player.direction * MathHelper.ToRadians(90f));
 
         player.itemAnimation = player.itemAnimationMax;
 
         if (Main.dedServ || Main.myPlayer != player.whoAmI)
             return true;
-  
+
         UseItem_PreUpdate(player);
 
         if (!Main.mouseLeft)
@@ -126,7 +133,9 @@ public class SpaceWand : ModItem, IMarqueeItem
 
         RefreshMarquee(player);
 
-        ItemRotation(player);
+        ItemRotation(player, false);
+
+        UseItem_HandleCoroutines(player);
 
         if (Main.mouseRight && CanPlaceTiles)
         {
@@ -139,11 +148,23 @@ public class SpaceWand : ModItem, IMarqueeItem
         _backgroundColor = color * 0.35f;
     }
 
+    private void UseItem_HandleCoroutines(Player player)
+    {
+        if (Main.netMode is not NetmodeID.MultiplayerClient)
+            return;
+        
+        _syncRunner.Update(1);
+
+        // Runner用来实现间隔为8帧的rotation同步
+        if (!_handle.IsRunning)
+            _handle = _syncRunner.Run(8, ItemRotationCoroutines(player));
+    }
+
     public override void HoldItem(Player player)
     {
         int oneIndex = EnoughItem(player, GetConditions());
         if (oneIndex == -1) return;
-        
+
         player.cursorItemIconEnabled = true;
         player.cursorItemIconID = player.inventory[oneIndex].type;
         player.cursorItemIconPush = 26;
@@ -163,6 +184,7 @@ public class SpaceWand : ModItem, IMarqueeItem
         {
             return;
         }
+
         bool playSound = false;
         Rectangle platfromRect = _marquee;
         platfromRect.X >>= 4;
@@ -215,7 +237,8 @@ public class SpaceWand : ModItem, IMarqueeItem
                             {
                                 // 尝试破坏
                                 TryKillTile(x, y, player);
-                                if (!Main.tile[x, y].HasTile && WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
+                                if (!Main.tile[x, y].HasTile && WorldGen.PlaceTile(x, y, item.createTile, true, true,
+                                        player.whoAmI, item.placeStyle))
                                 {
                                     playSound = true;
                                     PickItemInInventory(player, GetConditions(), true, out _);
@@ -225,6 +248,7 @@ public class SpaceWand : ModItem, IMarqueeItem
                                         tile.BlockType = BlockType;
                                         WorldGen.SquareTileFrame(x, y, false);
                                     }
+
                                     if (PlaceType is PlaceType.Soild)
                                         WorldGen.SlopeTile(x, y + 1);
                                 }
@@ -241,6 +265,7 @@ public class SpaceWand : ModItem, IMarqueeItem
                             tile.BlockType = BlockType;
                             WorldGen.SquareTileFrame(x, y, false);
                         }
+
                         if (PlaceType is PlaceType.Soild)
                             WorldGen.SlopeTile(x, y + 1);
                     }
@@ -249,7 +274,8 @@ public class SpaceWand : ModItem, IMarqueeItem
         }, (x, y, width, height) =>
         {
             if (playSound)
-                PlaySoundPacket.PlaySound(LegacySoundIDs.Dig, new Point(x + width / 2, y + height / 2).ToWorldCoordinates());
+                PlaySoundPacket.PlaySound(LegacySoundIDs.Dig,
+                    new Point(x + width / 2, y + height / 2).ToWorldCoordinates());
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendData(MessageID.TileSquare, player.whoAmI, -1, null, x, y, width, height);
@@ -264,8 +290,9 @@ public class SpaceWand : ModItem, IMarqueeItem
         int layingQuantity = Main.netMode == NetmodeID.MultiplayerClient ? 244 : 500;
 
         int layingLength = 16 * (
-            ItemCount(player.inventory, GetConditions(), out int tileCount) ?
-            layingQuantity : Math.Min(layingQuantity, tileCount));
+            ItemCount(player.inventory, GetConditions(), out int tileCount)
+                ? layingQuantity
+                : Math.Min(layingQuantity, tileCount));
 
         Vector2 startingPoint = StartingPoint;
         Vector2 nowPoint = Vector2.Clamp(MousePosition,
@@ -299,7 +326,10 @@ public class SpaceWand : ModItem, IMarqueeItem
         return PlaceType switch
         {
             PlaceType.Platform => item => item.createTile > -1 && TileID.Sets.Platforms[item.createTile],
-            PlaceType.Soild => item => item.tileWand < 0 && item.createTile > -1 && !Main.tileSolidTop[item.createTile] && Main.tileSolid[item.createTile] && !GrassSeeds.Contains(item.createTile) && TileID.ClosedDoor != item.createTile,
+            PlaceType.Soild => item =>
+                item.tileWand < 0 && item.createTile > -1 && !Main.tileSolidTop[item.createTile] &&
+                Main.tileSolid[item.createTile] && !GrassSeeds.Contains(item.createTile) &&
+                TileID.ClosedDoor != item.createTile,
             PlaceType.Rope => item => item.createTile > -1 && Main.tileRope[item.createTile],
             PlaceType.Rail => item => item.createTile == TileID.MinecartTrack,
             PlaceType.GrassSeed => item => GrassSeeds.Contains(item.createTile),

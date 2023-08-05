@@ -25,6 +25,8 @@ namespace ImproveGame.Interface.ExtremeStorage
 
         public static bool Visible => SidedEventTrigger.IsOpened(UISystem.Instance.ExtremeStorageGUI);
 
+        public static bool VisibleAndExpanded => Visible && !UISystem.Instance.ExtremeStorageGUI._foldTimer.CompleteClose;
+
         public static ItemGroup CurrentGroup { get; private set; } = ItemGroup.Misc;
         public static TEExtremeStorage Storage { get; set; }
         public static Item[] AllItemsCached { get; private set; } // 缓存的所有附近物品，用于减少获取全物品时的卡顿

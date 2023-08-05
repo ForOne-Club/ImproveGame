@@ -1,10 +1,9 @@
-﻿using ImproveGame.Common.Packets;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Common.Packets;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Common.ModSystems
+namespace ImproveGame.Content.Patches
 {
     public class RefreshTravelShopSystem : ModSystem
     {

@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.Packets.Items;
+using ImproveGame.Core;
 using ImproveGame.Entitys;
 using System.Collections;
 
@@ -13,9 +14,10 @@ public abstract class SelectorItem : ModItem
     public override void SetStaticDefaults()
     {
         Item.staff[Type] = true;
-        Item.ResearchUnlockCount = 1;
     }
 
+    private readonly CoroutineRunner _syncRunner = new();
+    private CoroutineHandle _handle;
     private Point start;
     private Point end;
     protected Point SelectRange;
@@ -46,6 +48,7 @@ public abstract class SelectorItem : ModItem
     public override bool CanUseItem(Player player)
     {
         bool flag = StartUseItem(player);
+        _syncRunner.StopAll();
 
         if (!flag || !CanUseSelector(player))
         {
@@ -84,28 +87,11 @@ public abstract class SelectorItem : ModItem
 
     public override bool? UseItem(Player player)
     {
-        if (CanUseSelector(player) && Main.netMode is not NetmodeID.Server && player.whoAmI == Main.myPlayer)
+        if (CanUseSelector(player))
         {
-            if (Main.mouseRight && unCancelled)
-            {
-                unCancelled = false;
-            }
-            end = ModifySize(start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
-            Color color = ModifyColor(!unCancelled);
-            GameRectangle.Create(this, IsNeedKill, start, end, color * 0.35f, color, TextDisplayType.All);
-            if (Main.mouseLeft)
-            {
-                player.itemAnimation = 8;
-                ItemRotation(player);
-            }
-            else
-            {
-                player.itemAnimation = 0;
-                if (unCancelled)
-                {
-                    CoroutineSystem.TileRunner.Run(ModifyTiles(player));
-                }
-            }
+            player.itemAnimation = 8;
+            if (Main.netMode is not NetmodeID.Server && player.whoAmI == Main.myPlayer)
+                DoSelector(player);
         }
         else if (Main.myPlayer == player.whoAmI && player.ItemAnimationJustStarted)
         {
@@ -113,7 +99,40 @@ public abstract class SelectorItem : ModItem
         }
 
         player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
+
         return base.UseItem(player);
+    }
+
+    private void DoSelector(Player player)
+    {
+        if (Main.netMode is NetmodeID.MultiplayerClient)
+            _syncRunner.Update(1);
+
+        if (Main.mouseRight && unCancelled)
+        {
+            unCancelled = false;
+        }
+        end = ModifySize(start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
+        Color color = ModifyColor(!unCancelled);
+        GameRectangle.Create(this, IsNeedKill, start, end, color * 0.35f, color, TextDisplayType.All);
+        if (Main.mouseLeft)
+        {
+            player.itemAnimation = 8;
+            ItemRotation(player, false);
+
+            // Runner用来实现间隔为(player.itemAnimationMax - 6f)帧的rotation同步
+            if (!_handle.IsRunning && Main.netMode is NetmodeID.MultiplayerClient)
+                _handle = _syncRunner.Run(player.itemAnimationMax - 6f, ItemRotationCoroutines(player));
+        }
+        else
+        {
+            player.itemAnimation = 0;
+            ItemRotation(player);
+            if (unCancelled)
+            {
+                CoroutineSystem.TileRunner.Run(ModifyTiles(player));
+            }
+        }
     }
 
     public virtual bool IsNeedKill() => true;

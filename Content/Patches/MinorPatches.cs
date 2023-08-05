@@ -10,13 +10,112 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 
-namespace ImproveGame.Common.ModSystems
+namespace ImproveGame.Content.Patches
 {
     /// <summary>
     /// 为了方便管理，这里主要放一些不成体系的小修改，比如一些单独的On, IL
     /// </summary>
-    public class MinorModifySystem : ModSystem
+    public class MinorPatches : ModSystem
     {
+        private class ShakeTreeTweak
+        {
+            private class ShakeTreeItem : GlobalItem
+            {
+                public override void OnSpawn(Item item, IEntitySource source)
+                {
+                    if (_isShakingTree && source is EntitySource_ShakeTree)
+                        _hasItemDropped = true;
+                }
+            }
+
+            private static bool _isShakingTree;
+            private static bool _hasItemDropped; // 检测是否在摇树过程中有物品掉落
+
+            public static void Load()
+            {
+                On_WorldGen.ShakeTree += (orig, i, j) =>
+                {
+                    if (!Config.ShakeTreeFruit)
+                    {
+                        orig(i, j);
+                        return;
+                    }
+
+                    _isShakingTree = true;
+                    _hasItemDropped = false;
+
+                    // 在orig前获取树是否被摇过，因为orig会修改WorldGen.treeShakeX,Y的值，标记为被摇过
+                    bool treeShaken = false;
+
+                    WorldGen.GetTreeBottom(i, j, out var x, out var y);
+                    for (int k = 0; k < WorldGen.numTreeShakes; k++)
+                    {
+                        if (WorldGen.treeShakeX[k] == x && WorldGen.treeShakeY[k] == y)
+                        {
+                            treeShaken = true;
+                            break;
+                        }
+                    }
+
+                    orig(i, j);
+
+                    _isShakingTree = false;
+
+                    if (WorldGen.numTreeShakes == WorldGen.maxTreeShakes || _hasItemDropped || treeShaken)
+                        return;
+
+                    TreeTypes treeType = WorldGen.GetTreeType(Main.tile[x, y].type);
+                    if (treeType == TreeTypes.None)
+                        return;
+
+                    y--;
+                    while (y > 10 && Main.tile[x, y].active() && TileID.Sets.IsShakeable[Main.tile[x, y].type])
+                    {
+                        y--;
+                    }
+
+                    y++;
+                    if (!WorldGen.IsTileALeafyTreeTop(x, y) || Collision.SolidTiles(x - 2, x + 2, y - 2, y + 2))
+                        return;
+
+                    int fruit = CollectHelper.GetShakeTreeFruit(treeType);
+                    if (fruit > -1)
+                        Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), x * 16, y * 16, 16, 16, fruit);
+                };
+            }
+        }
+
+        private class HairstylesUnlock
+        {
+            private static bool _rebuilt;
+
+            public static void Load()
+            {
+                On_HairstyleUnlocksHelper.ListWarrantsRemake += RebuildPatch;
+                On_HairstyleUnlocksHelper.RebuildList += UnlockPatch;
+            }
+
+            private static bool RebuildPatch(On_HairstyleUnlocksHelper.orig_ListWarrantsRemake orig,HairstyleUnlocksHelper self)
+            {
+                if (!_rebuilt)
+                {
+                    _rebuilt = true;
+                    return true;
+                }
+
+                return false;
+            }
+
+            private static void UnlockPatch(On_HairstyleUnlocksHelper.orig_RebuildList orig, HairstyleUnlocksHelper self)
+            {
+                self.AvailableHairstyles.Clear();
+                for (int i = 0; i < TextureAssets.PlayerHair.Length; i++)
+                {
+                    self.AvailableHairstyles.Add(i);
+                }
+            }
+        }
+
         public override void Load()
         {
             // 死亡是否掉落墓碑
@@ -50,15 +149,16 @@ namespace ImproveGame.Common.ModSystems
             IL_WorldGen.UpdateWorld_Inner += DisableBiomeSpread;
             // NPC住在腐化
             IL_WorldGen.ScoreRoom += LiveInCorrupt;
-
+            // 发型解锁
+            HairstylesUnlock.Load();
             // 移除Social和Favorite提示
-            // 现在没空修，先保证能运行。
-            /*IL_Main.MouseText_DrawItemTooltip_GetLinesInfo += il =>
+            IL_Main.MouseText_DrawItemTooltip_GetLinesInfo += il =>
             {
                 var c = new ILCursor(il);
 
                 QuickModify(nameof(Item.favorited));
                 QuickModify(nameof(Item.social));
+                return;
 
                 void QuickModify(string name)
                 {
@@ -70,8 +170,7 @@ namespace ImproveGame.Common.ModSystems
                     c.Emit(OpCodes.Pop);
                     c.Emit(OpCodes.Ldc_I4_0);
                 }
-            };*/
-
+            };
             // 大背包内弹药可直接被使用
             On_Player.ChooseAmmo += (orig, player, weapon) =>
                 orig.Invoke(player, weapon) ??
@@ -98,6 +197,14 @@ namespace ImproveGame.Common.ModSystems
                         i => i.stack > 0 && ItemLoader.CanChooseAmmo(weapon, i, Main.LocalPlayer), out int count);
                     return count;
                 });
+            };
+            // 池子无渔力大小惩罚
+            On_Projectile.GetFishingPondState += (On_Projectile.orig_GetFishingPondState orig, int x, int y,
+                out bool lava, out bool honey, out int numWaters, out int chumCount) =>
+            {
+                orig.Invoke(x, y, out lava, out honey, out numWaters, out chumCount);
+                if (Config.NoLakeSizePenalty)
+                    numWaters = 114514;
             };
         }
 
@@ -515,73 +622,5 @@ namespace ImproveGame.Common.ModSystems
                 orig(self, coinsOwned, deathText, hitDirection);
             }
         }
-    }
-}
-
-public class ShakeTreeTweak
-{
-    private class ShakeTreeItem : GlobalItem
-    {
-        public override void OnSpawn(Item item, IEntitySource source)
-        {
-            if (_isShakingTree && source is EntitySource_ShakeTree)
-                _hasItemDropped = true;
-        }
-    }
-
-    private static bool _isShakingTree;
-    private static bool _hasItemDropped; // 检测是否在摇树过程中有物品掉落
-
-    public static void Load()
-    {
-        On_WorldGen.ShakeTree += (orig, i, j) =>
-        {
-            if (!Config.ShakeTreeFruit)
-            {
-                orig(i, j);
-                return;
-            }
-            
-            _isShakingTree = true;
-            _hasItemDropped = false;
-
-            // 在orig前获取树是否被摇过，因为orig会修改WorldGen.treeShakeX,Y的值，标记为被摇过
-            bool treeShaken = false;
-
-            WorldGen.GetTreeBottom(i, j, out var x, out var y);
-            for (int k = 0; k < WorldGen.numTreeShakes; k++)
-            {
-                if (WorldGen.treeShakeX[k] == x && WorldGen.treeShakeY[k] == y)
-                {
-                    treeShaken = true;
-                    break;
-                }
-            }
-
-            orig(i, j);
-
-            _isShakingTree = false;
-
-            if (WorldGen.numTreeShakes == WorldGen.maxTreeShakes || _hasItemDropped || treeShaken)
-                return;
-
-            TreeTypes treeType = WorldGen.GetTreeType(Main.tile[x, y].type);
-            if (treeType == TreeTypes.None)
-                return;
-
-            y--;
-            while (y > 10 && Main.tile[x, y].active() && TileID.Sets.IsShakeable[Main.tile[x, y].type])
-            {
-                y--;
-            }
-
-            y++;
-            if (!WorldGen.IsTileALeafyTreeTop(x, y) || Collision.SolidTiles(x - 2, x + 2, y - 2, y + 2))
-                return;
-
-            int fruit = CollectHelper.GetShakeTreeFruit(treeType);
-            if (fruit > -1)
-                Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), x * 16, y * 16, 16, 16, fruit);
-        };
     }
 }

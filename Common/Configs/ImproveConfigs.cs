@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.Patches;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
@@ -136,6 +137,9 @@ namespace ImproveGame.Common.Configs
         #region NPC设置
 
         [Header("NPC")]
+        [DefaultValue(true)]
+        public bool TownNPCHome;
+
         [DefaultValue(false)]
         public bool TownNPCGetTFIntoHouse;
 
@@ -204,6 +208,9 @@ namespace ImproveGame.Common.Configs
 
         [DefaultValue(false)]
         public bool BanDamageVar;
+
+        [DefaultValue(true)]
+        public bool NoLakeSizePenalty;
 
         [DefaultValue(99)]
         [Range(0, 99)]
@@ -291,7 +298,7 @@ namespace ImproveGame.Common.Configs
         public bool EmptyAutofisher;
 
         [DefaultValue(11)]
-        [Range(5, 100)]
+        [Range(5, 60)]
         [Slider]
         public int ExStorageSearchDistance;
 

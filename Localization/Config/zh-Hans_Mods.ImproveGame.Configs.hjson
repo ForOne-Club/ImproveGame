@@ -248,7 +248,7 @@ ImproveConfigs: {
 	}
 
 	TravellingMerchantRefresh: {
-		Label: "[centeritem:2222] 旅商商店可刷新"
+		Label: "[centeritem:PeddlersSatchel] 旅商商店可刷新"
 		Tooltip: 在旅商的对话面板添加一个按钮，可手动刷新其商店商品
 	}
 
@@ -432,7 +432,11 @@ ImproveConfigs: {
 
 	ExStorageSearchDistance: {
 		Label: "[centeritem:ImproveGame/ExtremeStorage] 储存管理器搜索范围"
-		Tooltip: 更改储存管理器检测箱子的距离，可能会造成极小的性能损失
+		Tooltip:
+			'''
+			更改储存管理器检测箱子的距离，可能会造成极小的性能损失
+			箱子越多，多人模式同步压力越大，会一定程度上增加延迟
+			'''
 	}
 
 	LoadModItems: {
@@ -468,6 +472,7 @@ ImproveConfigs: {
 			提示简化(去除收藏提示,时装栏物品显示详细信息)
 			提升了生命水晶、魔力水晶、生命果的使用速度，并允许它们自动挥舞
 			中键点击坐骑物品可以直接使用
+			创建玩家时可以选择所有发型
 			'''
 	}
 
@@ -520,6 +525,25 @@ ImproveConfigs: {
 	OpenConfig: {
 		Label: 打开配置文件
 		Tooltip: 配置选项只有被修改过一次后才会在文件中出现相应项
+	}
+
+	TownNPCHome: {
+		Label: "[centeritem:MusicBoxTownDay] 城镇NPC快捷回家"
+		Tooltip:
+			'''
+			右键单击“房屋”按钮会将所有NPC立刻传送回家
+			如果玩家改变了某个NPC的家，那么这个NPC会立刻传送到它的新家
+			'''
+		HoverText: （<right>以将所有城镇NPC传送回家）
+	}
+
+	NoLakeSizePenalty: {
+		Label: "[centeritem:FishingPotion] 池子无渔力大小惩罚"
+		Tooltip:
+			'''
+			将所有池子的大小判定为满，即你可以在所有大小的水域钓鱼且不会受到因尺寸过小而减少渔力的惩罚
+			你甚至可以在两格水中钓鱼
+			'''
 	}
 }
 

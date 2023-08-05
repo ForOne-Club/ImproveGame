@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.Packets;
+using ImproveGame.Content.Patches;
 using MonoMod.RuntimeDetour.HookGen;
 using System.Collections.Generic;
 using System.Reflection;

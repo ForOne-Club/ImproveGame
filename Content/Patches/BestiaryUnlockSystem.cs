@@ -1,8 +1,6 @@
-﻿using MonoMod.RuntimeDetour.HookGen;
-using Terraria.GameContent.Bestiary;
-using Terraria.ModLoader;
+﻿using Terraria.GameContent.Bestiary;
 
-namespace ImproveGame.Common.ModSystems
+namespace ImproveGame.Content.Patches
 {
     public class BestiaryUnlockSystem : ModSystem
     {

@@ -79,7 +79,7 @@ namespace ImproveGame.Content.Items
         {
             if (player.altFunctionUse == 0)
             {
-                DoFixedMode(player);
+                FixedModeAction(player);
             }
             else if (player.altFunctionUse == 2)
             {
@@ -89,10 +89,23 @@ namespace ImproveGame.Content.Items
             return base.StartUseItem(player);
         }
 
-        private void DoFixedMode(Player player)
+        public override float UseSpeedMultiplier(Player player)
         {
-            Item.useAnimation = (int)(18 * player.pickSpeed);
-            Item.useTime = (int)(18 * player.pickSpeed);
+            return 1f + (1f - player.pickSpeed);
+        }
+
+        public override bool? UseItem(Player player)
+        {
+            if (player.ItemAnimationJustStarted)
+            {
+                FixedModeAction(player);
+            }
+
+            return base.UseItem(player);
+        }
+
+        private void FixedModeAction(Player player)
+        {
             if (player.whoAmI == Main.myPlayer && WandSystem.FixedMode)
             {
                 Rectangle rectangle = GetRectangle(player);

@@ -1,20 +1,35 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModPlayers;
+using ImproveGame.Core;
 using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.PlayerInfo;
 using ImproveGame.Interface.GUI.AutoTrash;
+using System.Collections;
 
 namespace ImproveGame.Interface.Common
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class UIPlayer : ModPlayer
     {
+        private static CoroutineRunner _uiSetupDelayRunner = new();
         internal static Vector2 HugeInventoryUIPosition;
 
         // 函数在玩家进入地图时候调用, 不会在服务器调用, 用来加载 UI, 可以避免一些因 HJson 未加载产生的问题.
         public override void OnEnterWorld()
+        {
+            // 协程延时执行可以防止进入世界时UI闪一下
+            _uiSetupDelayRunner.StopAll();
+            _uiSetupDelayRunner.Run(2f, SetupUI());
+        }
+
+        public override void Unload()
+        {
+            _uiSetupDelayRunner = null;
+        }
+
+        IEnumerator SetupUI()
         {
             UISystem uiSystem = UISystem.Instance;
             DataPlayer dataPlayer = Player.GetModPlayer<DataPlayer>();
@@ -49,6 +64,16 @@ namespace ImproveGame.Interface.Common
             SidedEventTrigger.Clear();
             SidedEventTrigger.RegisterViewBody(uiSystem.ExtremeStorageGUI);
             SidedEventTrigger.RegisterViewBody(uiSystem.AutofisherGUI);
+            yield return null;
+        }
+
+        public override void PreUpdate()
+        {
+            // 这里的判断其实是不需要的，因为SetupUI只会在进入世界的玩家的客户端运行
+            // 但是为了防止其他情况下的报错，还是加上了
+            if (Main.myPlayer != Player.whoAmI || Main.netMode is NetmodeID.Server)
+                return;
+            _uiSetupDelayRunner.Update(1);
         }
     }
 }

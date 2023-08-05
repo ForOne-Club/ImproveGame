@@ -5,6 +5,7 @@ using ImproveGame.Common.Packets.Items;
 using ImproveGame.Content.Items.Coin;
 using ImproveGame.Core;
 using ReLogic.Graphics;
+using System.Collections;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
 using static Microsoft.Xna.Framework.Vector2;
@@ -149,6 +150,16 @@ partial class MyUtils
         {
             ItemUsePacket.Get(player).Send();
         }
+    }
+    
+    
+    /// <summary>
+    /// 可以用来实现间隔为10帧的rotation同步
+    /// </summary>
+    public static IEnumerator ItemRotationCoroutines(Player player, bool shouldSync = true)
+    {
+        ItemRotation(player, shouldSync);
+        yield return null;
     }
 
     /// <summary>

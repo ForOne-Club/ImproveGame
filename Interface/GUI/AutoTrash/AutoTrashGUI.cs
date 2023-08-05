@@ -2,16 +2,21 @@
 using ImproveGame.Common.Configs;
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.SUIElements;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI.AutoTrash;
 
 public class AutoTrashGUI : ViewBody
 {
     #region 抽象实现
+
+    private bool InventoryOpen =>Main.playerInventory;
+    
     public override bool Display
     {
-        get => UIConfigs.Instance.QoLAutoTrash && (Main.playerInventory || !ExpanTimer.CompleteClose);
+        get => UIConfigs.Instance.QoLAutoTrash && (InventoryOpen || !ExpanTimer.CompleteClose);
         set { }
     }
 
@@ -44,7 +49,7 @@ public class AutoTrashGUI : ViewBody
             };
 
             ItemSlotGrid = new BaseGrid();
-            ItemSlotGrid.SetBaseValues(vNumber, hNumber, new Vector2(8f), new Vector2(52f));
+            ItemSlotGrid.SetBaseValues(vNumber, hNumber, new Vector2(6f), new Vector2(48f));
             ItemSlotGrid.Join(MainPanel);
 
             for (int i = 0; i < hNumber; i++)
@@ -57,11 +62,11 @@ public class AutoTrashGUI : ViewBody
             ItemSlotGrid.CalculateWithSetChildrenPosition();
             ItemSlotGrid.Recalculate();
 
-            Texture2D setting = GetTexture("UI/AutoTrash/Setting").Value;
-            Texture2D settingHover = GetTexture("UI/AutoTrash/SettingHover").Value;
+            Texture2D setting = ModAsset.Setting.Value;
+            Texture2D settingHover = ModAsset.SettingHover.Value;
 
             Image = new SUIBackgroundImage(setting);
-            Image.SetPadding(10f);
+            Image.SetPadding(6f);
             Image.SetInnerPixels(setting.Width, setting.Height);
             Image.SetRoundedRectangleValues(default, default, default, default);
             Image.Left.Pixels = ItemSlotGrid.Right();
@@ -83,8 +88,8 @@ public class AutoTrashGUI : ViewBody
             view.Join(MainPanel);
 
             AutoDiscardItemsGrid = new BaseGrid();
-            AutoDiscardItemsGrid.SetBaseValues(3, hNumber + 1, new Vector2(8f), new Vector2(52f));
-            AutoDiscardItemsGrid.Top.Pixels = view.Bottom() + 8f;
+            AutoDiscardItemsGrid.SetBaseValues(3, hNumber + 2, new Vector2(4f), new Vector2(42f));
+            AutoDiscardItemsGrid.Top.Pixels = view.Bottom() + 6f;
             AutoDiscardItemsGrid.Join(MainPanel);
             RefreshAutoDiscardItemsGrid();
 
@@ -146,7 +151,7 @@ public class AutoTrashGUI : ViewBody
             MainPanel.Recalculate();
         }
 
-        if (Main.playerInventory)
+        if (Main.playerInventory && !ExtremeStorageGUI.VisibleAndExpanded)
         {
             ExpanTimer.Open();
         }
@@ -173,5 +178,8 @@ public class AutoTrashGUI : ViewBody
 
         SDFRectangle.HasBorder(pos - new Vector2(2f), size + new Vector2(4f), new Vector4(14f), Color.White * 0.25f, 2f, Color.White);
         SDFRectangle.HasBorder(pos + new Vector2(2f), size - new Vector2(4f), new Vector4(10f), Color.Transparent, 2f, Color.White);
+
+        if (Image.IsMouseHovering)
+            UICommon.TooltipMouseText(GetText("UI.AutoTrash.Introduction"));
     }
 }
