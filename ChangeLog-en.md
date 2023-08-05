@@ -38,9 +38,9 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Fixed Wand of Space randomly placing platforms in multiplayer.
 - **[v1.6.5.1]** Fixed some Wand issues in multiplayer.
 - **[v1.6.5.1]** Fixed Wand of Liquid not detecting certain liquid items.
-- **[v1.6.5.1]** 修复了大背包在玩家背包满的情况下无法吸附物品的BUG
-- **[v1.6.5.1]** 修复了额外收纳空间收纳物品时无提示的BUG
-- **[v1.6.5.2]** 修复了“摇树必掉水果”功能无法关闭的BUG
+- **[v1.6.5.1]** Fixed Big Backpack unable to receive items when inventory is full.
+- **[v1.6.5.1]** Fixed no popup text when items are received by extra inventories.
+- **[v1.6.5.2]** Fixed config option "Guaranteed Fruit Drop From Tree Shake" being always on.
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI
@@ -48,7 +48,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Wand of Space now resets tiles' sloping while replacing tiles
 - **[v1.6.5.1]** Quick Stack & Deposit All for Storage Manager are now animated.
 - **[v1.6.5.1]** Removed "Better Town NPC Mechanism" because 1.4.4 already did it.
-- **[v1.6.5.2]** 优化了自动垃圾桶UI
+- **[v1.6.5.2]** Improved Auto Trash UI.
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0
