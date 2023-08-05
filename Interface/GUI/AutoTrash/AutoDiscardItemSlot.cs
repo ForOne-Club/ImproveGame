@@ -25,7 +25,8 @@ public class AutoDiscardItemSlot : BaseItemSlot
         AutoDiscardItems = items;
         Index = index;
         SetBaseItemSlotValues(true, false);
-        SetSizePixels(42, 42);
+        SetSizePixels(43, 43);
+        ItemIconMaxWidthAndHeight = 27;
         textureTrash = ModAsset.Trash.Value; // GetTexture("UI/AutoTrash/Trash").Value;
     }
 
@@ -83,7 +84,8 @@ public class AutoDiscardItemSlot : BaseItemSlot
             Vector2 size = GetDimensionsSize();
 
             SDFRectangle.NoBorder(pos + new Vector2(4f), size - new Vector2(8f), new Vector4(8f), HoverTimer.Lerp(Color.Transparent, UIColor.TitleBg2));
-            spriteBatch.Draw(textureTrash, pos + size / 2f, null, HoverTimer.Lerp(Color.Transparent, Color.White), 0f, textureTrash.Size() / 2f, 1f, 0, 0);
+            spriteBatch.Draw(textureTrash, pos + size / 2f, null,
+                HoverTimer.Lerp(Color.Transparent, Color.White), 0f, textureTrash.Size() / 2f, 1f, 0, 0);
         }
     }
 }

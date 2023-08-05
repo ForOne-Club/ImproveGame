@@ -66,7 +66,7 @@ public class AutoTrashGUI : ViewBody
             Texture2D settingHover = ModAsset.SettingHover.Value;
 
             Image = new SUIBackgroundImage(setting);
-            Image.SetPadding(6f);
+            Image.SetPadding(8f);
             Image.SetInnerPixels(setting.Width, setting.Height);
             Image.SetRoundedRectangleValues(default, default, default, default);
             Image.Left.Pixels = ItemSlotGrid.Right();
@@ -88,7 +88,7 @@ public class AutoTrashGUI : ViewBody
             view.Join(MainPanel);
 
             AutoDiscardItemsGrid = new BaseGrid();
-            AutoDiscardItemsGrid.SetBaseValues(3, hNumber + 2, new Vector2(4f), new Vector2(42f));
+            AutoDiscardItemsGrid.SetBaseValues(3, hNumber + 2, new Vector2(4f), new Vector2(43));
             AutoDiscardItemsGrid.Top.Pixels = view.Bottom() + 6f;
             AutoDiscardItemsGrid.Join(MainPanel);
             RefreshAutoDiscardItemsGrid();
