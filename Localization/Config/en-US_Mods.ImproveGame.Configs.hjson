@@ -1,5 +1,5 @@
 ImproveConfigs: {
-	DisplayName: Improve Configs
+	DisplayName: Main Config
 
 	ILoveBalance: {
 		Label: I LOVE Balance
@@ -616,7 +616,7 @@ ModItemLoadPage: {
 }
 
 UIConfigs: {
-	DisplayName: UI Config
+	DisplayName: GUI Config
 
 	ResetNativeUI: {
 		Label: "[centeritem:1544] Reset to vanilla UI"
