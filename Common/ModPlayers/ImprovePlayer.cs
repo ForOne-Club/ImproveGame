@@ -2,10 +2,12 @@
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
+using ImproveGame.Interface.GUI.AutoTrash;
 using Microsoft.Xna.Framework.Input;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
+using Terraria.ID;
 
 namespace ImproveGame.Common.ModPlayers;
 
@@ -43,6 +45,12 @@ public class ImprovePlayer : ModPlayer
     {
         if (Main.gameMenu)
             return;
+
+        if (Main.myPlayer == Player.whoAmI && _oldItemSelected is not -1 && !Player.ItemAnimationActive)
+        {
+            Player.selectedItem = _oldItemSelected;
+            _oldItemSelected = -1;
+        }
 
         if (Config.JourneyResearch)
         {
@@ -190,24 +198,30 @@ public class ImprovePlayer : ModPlayer
                 break;
             }
         }
+
         // 计算要缩短多少时间
-        float TimeShortened = Player.respawnTimer * MathHelper.Clamp(hasBoss ? Config.BOSSBattleResurrectionTimeShortened : Config.ResurrectionTimeShortened, 0f, 100f) / 100f;
+        float TimeShortened = Player.respawnTimer *
+            MathHelper.Clamp(hasBoss ? Config.BOSSBattleResurrectionTimeShortened : Config.ResurrectionTimeShortened,
+                0f, 100f) / 100f;
         if (TimeShortened > 0f)
         {
-            int ct = CombatText.NewText(Player.getRect(), new(25, 255, 25), GetTextWith("CombatText.Commonds.ResurrectionTimeShortened", new
-            {
-                Name = Player.name,
-                Time = MathF.Round(TimeShortened / 60)
-            }));
+            int ct = CombatText.NewText(Player.getRect(), new(25, 255, 25), GetTextWith(
+                "CombatText.Commonds.ResurrectionTimeShortened", new
+                {
+                    Name = Player.name,
+                    Time = MathF.Round(TimeShortened / 60)
+                }));
             if (Main.combatText.IndexInRange(ct))
             {
                 Main.combatText[ct].lifeTime *= 3;
             }
         }
+
         Player.respawnTimer -= (int)TimeShortened;
     }
 
     private bool _cacheSwitchSlot;
+    private int _oldItemSelected;
 
     /// <summary>
     /// 快捷键
@@ -222,6 +236,12 @@ public class ImprovePlayer : ModPlayer
             PressGrabBagKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
             PressHotbarSwitchKeybind();
+        if (KeybindSystem.AutoTrashKeybind.JustPressed)
+            PressAutoTrashKeybind();
+        if (KeybindSystem.DiscordRodKeybind.JustPressed)
+            PressDiscordKeybind();
+        if (KeybindSystem.HomeKeybind.JustPressed)
+            PressHomeKeybind();
     }
 
     private static void PressSuperVaultKeybind()
@@ -270,15 +290,100 @@ public class ImprovePlayer : ModPlayer
                 (Player.inventory[i], Player.inventory[i + 10]) = (Player.inventory[i + 10], Player.inventory[i]);
                 if (Main.netMode is NetmodeID.MultiplayerClient)
                 {
-                    NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i, number3: Main.LocalPlayer.inventory[i].prefix);
-                    NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i + 10, number3: Main.LocalPlayer.inventory[i].prefix);
+                    NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i,
+                        number3: Main.LocalPlayer.inventory[i].prefix);
+                    NetMessage.SendData(MessageID.SyncEquipment, number: Main.myPlayer, number2: i + 10,
+                        number3: Main.LocalPlayer.inventory[i].prefix);
                 }
             }
+
             _cacheSwitchSlot = false;
         }
         else
         {
             _cacheSwitchSlot = true;
+        }
+    }
+
+    private void PressAutoTrashKeybind()
+    {
+        if (Main.playerInventory)
+            AutoTrashGUI.Hidden = !AutoTrashGUI.Hidden;
+    }
+
+    private void PressDiscordKeybind()
+    {
+        if (Player.ItemAnimationActive) return;
+
+        int itemType = ItemID.None;
+        var items = GetAllInventoryItemsList(Player);
+        foreach (var item in items)
+        {
+            if (item.type == ItemID.RodOfHarmony)
+            {
+                itemType = ItemID.RodOfHarmony;
+                break; // 最高优先级
+            }
+
+            if (item.type == ItemID.RodofDiscord)
+                itemType = ItemID.RodofDiscord;
+        }
+
+        if (itemType is ItemID.None)
+            return;
+
+        _oldItemSelected = Player.selectedItem;
+        UseItemByType(Player, itemType);
+    }
+
+    private void PressHomeKeybind()
+    {
+        if (Player.ItemAnimationActive) return;
+
+        var items = GetAllInventoryItemsList(Player);
+
+        // 返回药水优先级最高
+        int itemType = (from item in items where item.type is ItemID.PotionOfReturn && item.stack >= Config.NoConsume_PotionRequirement select item.type).FirstOrDefault();
+
+        // 然后是回忆
+        if (itemType is ItemID.None)
+        {
+            itemType = (from item in items where item.type is ItemID.RecallPotion && item.stack >= Config.NoConsume_PotionRequirement select item.type).FirstOrDefault();
+        }
+
+        // 最后是魔镜
+        if (itemType is ItemID.None)
+        {
+            itemType = (from item in items where item.type is ItemID.MagicMirror or ItemID.CellPhone or ItemID.IceMirror or ItemID.Shellphone or ItemID.ShellphoneOcean or ItemID.ShellphoneHell or ItemID.ShellphoneSpawn select item.type).FirstOrDefault();
+        }
+
+        if (itemType is ItemID.None)
+            return;
+
+        // 假的，拿来看的
+        UseItemByType(Player, itemType);
+        SoundEngine.PlaySound(SoundID.Item6, Player.position);
+
+        for (int l = 0; l < 70; l++) {
+            Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror, Player.velocity.X * 0.5f, Player.velocity.Y * 0.5f, 150, default, 1.5f);
+        }
+
+        if (itemType is ItemID.PotionOfReturn)
+        {
+            Player.DoPotionOfReturnTeleportationAndSetTheComebackPoint();
+        }
+        else
+        {
+            Player.RemoveAllGrapplingHooks();
+            bool immune = Player.immune;
+            int immuneTime = Player.immuneTime;
+            Player.Spawn(PlayerSpawnContext.RecallFromItem);
+            Player.immune = immune;
+            Player.immuneTime = immuneTime;
+        }
+
+        for (int m = 0; m < 70; m++) {
+            Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror, 0f, 0f, 150, default, 1.5f);
         }
     }
 }

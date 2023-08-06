@@ -2,6 +2,7 @@
 using System.Text;
 using Terraria.GameContent.UI.States;
 using Terraria.ModLoader.Config.UI;
+using Terraria.UI.Chat;
 
 namespace ImproveGame.Common.Configs.Elements;
 
@@ -69,15 +70,15 @@ public class UncontrollablesElement : ConfigElement
             string entry = entries[i];
             string visibleText = font.CreateWrappedText(entry, width / textScale);
             float x = 40f + dimensions.X;
-            TrUtils.DrawBorderStringFourWay(spriteBatch, font, visibleText, x, currentY, Color.White, Color.Black,
-                Vector2.Zero, textScale);
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, visibleText, new Vector2(x, currentY),
+                Color.White, 0f, Vector2.Zero, new Vector2(textScale), spread: 1.2f);
 
             int entryNumber = i + 1;
             string entryIdentifier = entryNumber + ". ";
             float numberWidth = font.MeasureString(entryIdentifier).X * textScale;
             x -= numberWidth;
-            TrUtils.DrawBorderStringFourWay(spriteBatch, font, entryIdentifier, x, currentY, Color.White, Color.Black,
-                Vector2.Zero, textScale);
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, entryIdentifier, new Vector2(x, currentY),
+                Color.White, 0f, Vector2.Zero, new Vector2(textScale), spread: 1.2f);
 
             currentY += font.LineSpacing * (visibleText.Count(c => c == '\n') + 1) * textScale;
         }

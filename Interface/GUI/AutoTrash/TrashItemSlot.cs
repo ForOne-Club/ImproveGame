@@ -34,6 +34,8 @@ public class TrashItemSlot : BaseItemSlot
 
     public override void LeftMouseDown(UIMouseEvent evt)
     {
+        if (Main.LocalPlayer.ItemAnimationActive) return;
+        
         Main.playerInventory = true;
 
         if (!(Main.mouseItem?.IsAir ?? true))

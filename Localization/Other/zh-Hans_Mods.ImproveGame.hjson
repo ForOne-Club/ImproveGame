@@ -329,6 +329,9 @@ Keybinds: {
 	BuffTracker.DisplayName: 增益追踪器
 	GrabBagLoot.DisplayName: 显示摸彩袋物品明细
 	HotbarSwitch.DisplayName: 切换快捷栏
+	AutoTrashKeybind.DisplayName: 隐藏/显示自动垃圾桶
+	DiscordRodKeybind.DisplayName: 传送法杖快捷键
+	HomeKeybind.DisplayName: 回程快捷键
 }
 
 Projectiles: {

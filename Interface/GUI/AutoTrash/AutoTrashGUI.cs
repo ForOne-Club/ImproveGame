@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.ExtremeStorage;
@@ -11,12 +12,10 @@ namespace ImproveGame.Interface.GUI.AutoTrash;
 public class AutoTrashGUI : ViewBody
 {
     #region 抽象实现
-
-    private bool InventoryOpen =>Main.playerInventory;
     
     public override bool Display
     {
-        get => UIConfigs.Instance.QoLAutoTrash && (InventoryOpen || !ExpanTimer.CompleteClose);
+        get => UIConfigs.Instance.QoLAutoTrash && (Main.playerInventory || !ExpanTimer.CompleteClose);
         set { }
     }
 
@@ -31,6 +30,7 @@ public class AutoTrashGUI : ViewBody
     }
     #endregion
 
+    public static bool Hidden;
     public SUIPanel MainPanel;
     public BaseGrid ItemSlotGrid;
     public SUIBackgroundImage Image;
@@ -45,7 +45,9 @@ public class AutoTrashGUI : ViewBody
 
             MainPanel = new SUIPanel(UIColor.ItemSlotBorder, UIColor.PanelBg, 12f)
             {
-                OverflowHidden = true
+                OverflowHidden = true,
+                Shaded = true,
+                ShadowThickness = 20
             };
 
             ItemSlotGrid = new BaseGrid();
@@ -151,7 +153,7 @@ public class AutoTrashGUI : ViewBody
             MainPanel.Recalculate();
         }
 
-        if (Main.playerInventory && !ExtremeStorageGUI.VisibleAndExpanded)
+        if (Main.playerInventory && !ExtremeStorageGUI.VisibleAndExpanded && !Hidden && !Main.recBigList)
         {
             ExpanTimer.Open();
         }
@@ -179,7 +181,10 @@ public class AutoTrashGUI : ViewBody
         SDFRectangle.HasBorder(pos - new Vector2(2f), size + new Vector2(4f), new Vector4(14f), Color.White * 0.25f, 2f, Color.White);
         SDFRectangle.HasBorder(pos + new Vector2(2f), size - new Vector2(4f), new Vector4(10f), Color.Transparent, 2f, Color.White);
 
-        if (Image.IsMouseHovering)
-            UICommon.TooltipMouseText(GetText("UI.AutoTrash.Introduction"));
+        if (!Image.IsMouseHovering)
+            return;
+
+        TryGetKeybindString(KeybindSystem.AutoTrashKeybind, out var keybind);
+        UICommon.TooltipMouseText(GetText("UI.AutoTrash.Introduction", keybind));
     }
 }

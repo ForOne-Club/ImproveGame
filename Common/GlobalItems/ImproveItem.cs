@@ -6,6 +6,7 @@ using ImproveGame.Interface.SUIElements;
 using Microsoft.Xna.Framework.Input;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Terraria.ID;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -34,6 +35,17 @@ namespace ImproveGame.Common.GlobalItems
             if (item.pick > 0 || item.hammer > 0 || item.axe > 0)
                 return 1f - Config.ExtraToolSpeed;
             return 1f;
+        }
+
+        public override void UseAnimation(Item item, Player player)
+        {
+            if (item.type is ItemID.MagicMirror or ItemID.CellPhone or ItemID.IceMirror or ItemID.Shellphone
+                or ItemID.ShellphoneOcean or ItemID.ShellphoneHell or ItemID.ShellphoneSpawn or ItemID.MagicConch
+                or ItemID.DemonConch)
+            {
+                player.SetItemTime(CombinedHooks.TotalUseTime(item.useTime, player, item));
+                player.itemTime = player.itemTimeMax / 2 + 4;
+            }
         }
 
         // Ju 2022.6.27: 去掉 ImprovePlayer 的额外速度，工具速度提升方式：减少工具使用间隔。（并非为提升工具速度）

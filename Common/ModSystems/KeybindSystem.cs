@@ -15,6 +15,9 @@ public class KeybindSystem : ModSystem
     public static ModKeybind BuffTrackerKeybind { get; private set; }
     public static ModKeybind GrabBagKeybind { get; private set; }
     public static ModKeybind HotbarSwitchKeybind { get; private set; }
+    public static ModKeybind AutoTrashKeybind { get; private set; }
+    public static ModKeybind DiscordRodKeybind { get; private set; }
+    public static ModKeybind HomeKeybind { get; private set; }
 
     private static readonly Dictionary<string, string> ZhTranslationKeybind = new()
     {
@@ -41,6 +44,9 @@ public class KeybindSystem : ModSystem
         BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "BuffTracker", "NumPad3");
         GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "GrabBagLoot", "OemQuotes");
         HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "HotbarSwitch", "OemQuestion");
+        AutoTrashKeybind = KeybindLoader.RegisterKeybind(Mod, "AutoTrashKeybind", "NumPad2");
+        DiscordRodKeybind = KeybindLoader.RegisterKeybind(Mod, "DiscordRodKeybind", "U");
+        HomeKeybind = KeybindLoader.RegisterKeybind(Mod, "HomeKeybind", "Home");
     }
 
     private void DrawHoverText(orig_DrawSelf orig, UIKeybindingListItem self, SpriteBatch spriteBatch)

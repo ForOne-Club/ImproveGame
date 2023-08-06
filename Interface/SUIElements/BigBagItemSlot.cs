@@ -213,9 +213,6 @@ namespace ImproveGame.Interface.SUIElements
         /// </summary>
         protected void MouseClickSlot()
         {
-            if (Main.LocalPlayer.ItemAnimationActive)
-                return;
-
             bool result = false;
 
             if (Item.ModItem is IItemOverrideLeftClick iItemOverrideLeftClick)
@@ -500,6 +497,6 @@ namespace ImproveGame.Interface.SUIElements
         /// <summary>
         /// 是否可交互，否则不能执行左右键操作
         /// </summary>
-        public virtual bool Interactable => true;
+        public virtual bool Interactable => !Main.LocalPlayer.ItemAnimationActive;
     }
 }

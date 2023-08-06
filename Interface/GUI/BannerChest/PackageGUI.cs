@@ -91,7 +91,7 @@ namespace ImproveGame.Interface.GUI.BannerChest
             _grid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(_grid.Width.Pixels, _grid.Height.Pixels);
             _grid.OnLeftMouseDown += (_, _) =>
             {
-                if (Main.mouseItem.IsAir)
+                if (Main.mouseItem.IsAir || Main.LocalPlayer.ItemAnimationActive)
                     return;
                 switch (StorageType)
                 {

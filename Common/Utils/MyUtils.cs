@@ -49,6 +49,27 @@ partial class MyUtils
         }
     }
 
+    public static void UseItemByType(Player player, int itemType)
+    {
+        if (player.ItemAnimationActive) return;
+
+        const int fakeSlot = 58;
+        var originalItem = player.inventory[fakeSlot];
+        player.inventory[fakeSlot] = new Item(itemType);
+        QuickUseItem(player, fakeSlot);
+        player.inventory[fakeSlot] = originalItem;
+    }
+
+    public static void QuickUseItem(Player player, int index)
+    {
+        player.selectedItem = index;
+        player.controlUseItem = true;
+        if (CombinedHooks.CanUseItem(player, player.inventory[player.selectedItem]))
+        {
+            player.ItemCheck();
+        }
+    }
+
     public static Vector2 GetFontSize(int text, bool large = false)
     {
         return GetFontSize(text.ToString(), large);

@@ -233,6 +233,8 @@ namespace ImproveGame.Interface.UIElements
                 return;
             }
 
+            if (Main.mouseItem.IsAir && Item.IsAir) return;
+
             // 常规单点
             if (placeItem is not null && CanPlaceItem(placeItem))
             {

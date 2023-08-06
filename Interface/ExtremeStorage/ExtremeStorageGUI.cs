@@ -58,7 +58,10 @@ namespace ImproveGame.Interface.ExtremeStorage
             _totalPanel.SetPos(60f, Main.instance.invBottom + 40).SetSize(560f, 600f);
             Append(_totalPanel);
 
-            _basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg);
+            _basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            {
+                Shaded = true
+            };
             _basePanel.SetPos(0, 34).SetSize(-78f, 0f, 1f, 1f);
             _totalPanel.Append(_basePanel);
 

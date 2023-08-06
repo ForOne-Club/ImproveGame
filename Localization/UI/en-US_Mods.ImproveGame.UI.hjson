@@ -105,4 +105,5 @@ AutoTrash.Introduction:
 	Reserves 6 trashed items.
 	Shift+Ctrl+<left> an item to move it to this bin.
 	Can be [c/CC88AA:disabled] in UI configuration.
+	Press [c/CC88AA:{0}] to hide the UI.
 	'''

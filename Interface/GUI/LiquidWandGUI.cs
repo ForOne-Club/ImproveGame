@@ -94,8 +94,7 @@ namespace ImproveGame.Interface.GUI
                 if (WandSystem.LiquidMode != LiquidID.Honey)
                 {
                     WandSystem.LiquidMode = LiquidID.Honey;
-                    // 1.4.4出来之后把这块换成蜂蜜吸水棉
-                    int iconItemId = WandSystem.AbsorptionMode ? ItemID.SuperAbsorbantSponge : ItemID.HoneyBucket;
+                    int iconItemId = WandSystem.AbsorptionMode ? ItemID.HoneyAbsorbantSponge : ItemID.HoneyBucket;
                     modeButton.SetIconTexture($"Images/Item_{iconItemId}", true);
                 }
             };

@@ -466,6 +466,9 @@ ImproveConfigs: {
 			Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 			Middle click mount items will toggle the mounts
 			All hair styles can be chosen upon character creation
+			魔镜类物品改为瞬间传送，去除传送前的等待时间
+			传送法杖快捷键，若任何物品栏及便携储存中有混沌传送杖或和谐杖，按下快捷键将自动使用，优先使用和谐杖
+			回程快捷键，快捷使用任何物品栏及便携储存内可无限使用的回程物品，优先使用返回药水
 			'''
 	}
 

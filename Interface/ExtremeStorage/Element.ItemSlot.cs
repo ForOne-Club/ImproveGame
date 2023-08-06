@@ -30,9 +30,6 @@ namespace ImproveGame.Interface.ExtremeStorage
 
             CallBaseLeftMouseDown(evt);
 
-            if (Main.LocalPlayer.ItemAnimationActive)
-                return;
-
             SetCursorOverride();
             switch (Main.netMode)
             {
@@ -187,6 +184,6 @@ namespace ImproveGame.Interface.ExtremeStorage
             }
         }
 
-        public override bool Interactable => !ChestBeingUsed;
+        public override bool Interactable => !ChestBeingUsed && !Main.LocalPlayer.ItemAnimationActive;
     }
 }
