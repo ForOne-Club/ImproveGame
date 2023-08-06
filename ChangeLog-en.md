@@ -21,6 +21,9 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Items can be quickly stacked to chests while using Storage Manager.
 - **[v1.6.5.1]** Portable Banner is now supported by Storage Manager, items in "Furniture" chests can be counted.
 - **[v1.6.5.1]** Added an Automatic Trash Bin, similar to Auto Trash.
+- **[v1.6.5.2]** All hairstyles are now selectable when creating a player.
+- **[v1.6.5.2]** Added a Teleport NPCs Home function.
+- **[v1.6.5.2]** Added a No Pool Size Penalty function. You can even fish with 2 blocks of water.
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine
@@ -41,6 +44,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Fixed Big Backpack unable to receive items when inventory is full.
 - **[v1.6.5.1]** Fixed no popup text when items are received by extra inventories.
 - **[v1.6.5.2]** Fixed config option "Guaranteed Fruit Drop From Tree Shake" being always on.
+- **[v1.6.5.2]** "Tooltip Simplification" now works
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI
@@ -48,6 +52,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - Wand of Space now resets tiles' sloping while replacing tiles
 - **[v1.6.5.1]** Quick Stack & Deposit All for Storage Manager are now animated.
 - **[v1.6.5.1]** Removed "Better Town NPC Mechanism" because 1.4.4 already did it.
+- **[v1.6.5.2]** Slightly reduced the amount of data transferred in multiplayer.
 - **[v1.6.5.2]** Improved Auto Trash UI.
 
 # v1.6.4

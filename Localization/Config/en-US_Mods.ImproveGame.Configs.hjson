@@ -616,7 +616,7 @@ ModItemLoadPage: {
 }
 
 UIConfigs: {
-	DisplayName: Graphic Interface Config
+	DisplayName: UI Config
 
 	ResetNativeUI: {
 		Label: "[centeritem:1544] Reset to vanilla UI"
