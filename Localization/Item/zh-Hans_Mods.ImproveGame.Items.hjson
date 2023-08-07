@@ -189,3 +189,13 @@ DevMark: {
 	DisplayName: 开发者之证
 	Tooltip: "[c/ff0000:开发者物品，请勿使用]"
 }
+
+Expelliarmus: {
+	DisplayName: 给我爆金币！
+	Tooltip:
+		'''
+		[c/ff0000:调试物品]
+		让NPC爆金币
+		可以用来测试你写的NPC掉落
+		'''
+}

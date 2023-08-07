@@ -206,6 +206,42 @@ namespace ImproveGame.Content.Patches
                 if (Config.NoLakeSizePenalty)
                     numWaters = 114514;
             };
+            // 失焦运行
+            IL_Main.DoUpdate += il =>
+            {
+                try
+                {
+                    // // hasFocus = ((Game)this).IsActive;
+                    // IL_07db: ldarg.0
+                    // IL_07dc: call instance bool [FNA]Microsoft.Xna.Framework.Game::get_IsActive()
+                    // IL_07e1: stsfld bool Terraria.Main::hasFocus
+                    // // if (!hasFocus && netMode == 0)
+                    // IL_07e6: ldsfld bool Terraria.Main::hasFocus
+                    // IL_07eb: brtrue.s IL_0854
+                    // IL_07ed: ldsfld int32 Terraria.Main::netMode
+                    // IL_07f2: brtrue.s IL_0854
+                    var c = new ILCursor(il);
+                    if (!c.TryGotoNext(MoveType.After,
+                            i => i.Match(OpCodes.Ldarg_0),
+                            i => i.MatchCall(typeof(Game), $"get_{nameof(Game.IsActive)}"),
+                            i => i.MatchStsfld(typeof(Main), nameof(Main.hasFocus)),
+                            i => i.MatchLdsfld(typeof(Main), nameof(Main.hasFocus)),
+                            i => i.Match(OpCodes.Brtrue_S),
+                            i => i.MatchLdsfld(typeof(Main), nameof(Main.netMode))))
+                        return;
+
+                    c.EmitDelegate<Func<int, int>>(returnValue =>
+                    {
+                        if (UIConfigs.Instance.KeepFocus && returnValue is NetmodeID.SinglePlayer)
+                            return 3;
+                        return returnValue;
+                    });
+                }
+                catch
+                {
+                    MonoModHooks.DumpIL(Mod, il);
+                }
+            };
         }
 
         private void LiveInCorrupt(ILContext il)

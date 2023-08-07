@@ -412,10 +412,14 @@ namespace ImproveGame.Content.Tiles
             item.newAndShiny = true;
             int oldStack = item.stack;
 
-            // 奇怪的文本
-            // var pos = Position.ToWorldCoordinates(16, 16).ToPoint();
-            // var rect = new Rectangle(pos.X, pos.Y, 16, 16);
-            // CombatText.NewText(rect, Color.Pink, "要装不下了...");
+            // 奇怪的文本，作为彩蛋
+            if (ModIntegrationsSystem.MultipleLuresAmount >= 100 && HasDevMark && Main.rand.NextBool(10) && Language.ActiveCulture.Name is "zh-Hans")
+            {
+                var pos = Position.ToWorldCoordinates(16, 16).ToPoint();
+                var rect = new Rectangle(pos.X, pos.Y, 16, 16);
+                CombatText.NewText(rect, Color.Pink, "要装不下了...");
+            }
+
             Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16), item, item.stack);
 
             // 先填充和物品相同的

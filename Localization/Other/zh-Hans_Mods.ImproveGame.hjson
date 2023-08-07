@@ -338,4 +338,5 @@ Keybinds: {
 Projectiles: {
 	// KillProj.DisplayName: Kill Proj
 	WallRobot.DisplayName: 铺墙机器
+	ExpelliarmusProj.DisplayName: 给我爆金币！
 }

@@ -352,4 +352,5 @@ Keybinds: {
 Projectiles: {
 	KillProj.DisplayName: Kill Proj
 	WallRobot.DisplayName: Wall Robot
+	ExpelliarmusProj.DisplayName: Expelliarmus!
 }

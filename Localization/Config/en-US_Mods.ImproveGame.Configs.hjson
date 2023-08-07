@@ -664,6 +664,15 @@ UIConfigs: {
 		Label: "{$Mods.ImproveGame.Configs.ImproveConfigs.OpenConfig.Label}"
 		Tooltip: "{$Mods.ImproveGame.Configs.ImproveConfigs.OpenConfig.Tooltip}"
 	}
+
+	KeepFocus: {
+		Label: "[centeritem:TVHeadMask] 失焦时保持游戏运行"
+		Tooltip:
+            '''
+            使单人游戏失焦（即处于后台）时仍然保持游戏运行
+            而不是暂停游戏
+            '''
+	}
 }
 
 PAPDisplayMode: {

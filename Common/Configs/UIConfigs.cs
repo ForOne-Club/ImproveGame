@@ -45,4 +45,7 @@ public class UIConfigs : ModConfig
 
     [DefaultValue(true)]
     public bool QoLAutoTrash;
+
+    [DefaultValue(false)]
+    public bool KeepFocus;
 }

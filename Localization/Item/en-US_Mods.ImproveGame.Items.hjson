@@ -186,3 +186,13 @@ DevMark: {
 	DisplayName: Developer's Mark
 	Tooltip: "[c/ff0000:Developer's item, do not use]"
 }
+
+Expelliarmus: {
+	DisplayName: Expelliarmus!
+	Tooltip:
+		'''
+		[c/ff0000:Debug item]
+		Loot NPCs
+		Can be used to test the NPC loot
+		'''
+}

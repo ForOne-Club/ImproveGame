@@ -17,7 +17,7 @@ namespace ImproveGame;
 /// </summary>
 partial class MyUtils
 {
-    public static bool HasDevMark => Main.LocalPlayer.inventory.Any(i => i.type == ModContent.ItemType<DevMark>());
+    public static bool HasDevMark => Main.LocalPlayer.inventory.Any(i => i.type == ModContent.ItemType<DevMark>()) && Main.netMode is NetmodeID.SinglePlayer;
     
     public static Matrix GetMatrix(bool ui)
     {
