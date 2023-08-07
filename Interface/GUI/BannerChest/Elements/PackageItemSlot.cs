@@ -2,6 +2,7 @@
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.UI.Chat;
+using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.GUI.BannerChest.Elements
@@ -119,6 +120,17 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
             Main.hoverItemName = Item.Name;
             Main.HoverItem = Item.Clone();
             SetCursor();
+            
+            if (Main.mouseItem.IsAir) return;
+
+            switch (PackageGUI.StorageType)
+            {
+                // 旗帜收纳箱, 药水袋子.
+                case StorageType.Banners when ItemToBanner(Main.mouseItem) == -1:
+                case StorageType.Potions when Main.mouseItem.buffType <= 0 || !Main.mouseItem.consumable:
+                    UICommon.TooltipMouseText(GetText("PackageGUI.Incompatible"));
+                    break;
+            }
         }
 
         /// <summary>

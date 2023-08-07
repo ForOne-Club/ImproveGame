@@ -23,7 +23,7 @@
 [/list]
 
 [h2]开源仓库 与 更新日志[/h2]
-更新日志: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
+更新日志: https://github.com/487666123/ImproveGame/blob/1.4.4/ChangeLog.md
 开源链接: https://github.com/487666123/ImproveGame
 
 [h2]功能概要[/h2]
@@ -44,5 +44,3 @@
     [*]BUG & 内容反馈群: 971038831
     [*]联机群：772807227
 [/list]
-
-[quote=tModLoader]Developed By 局长, Cyril, 夜谷紫幽, delete, Lacewing, Lastprismer[/quote]

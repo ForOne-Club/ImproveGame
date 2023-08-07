@@ -312,6 +312,7 @@ SpaceWandGUI: {
 PackageGUI: {
 	AutoStorage: Auto Collection
 	AutoSort: Auto Sortation
+	Incompatible: 此物品不能放入该容器
 }
 
 Common: {

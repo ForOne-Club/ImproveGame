@@ -100,8 +100,6 @@ namespace ImproveGame.Interface.GUI.BannerChest
                     case StorageType.Potions when Main.mouseItem.buffType > 0 && Main.mouseItem.consumable:
                         Package.PutInPackage(ref Main.mouseItem);
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
             };
             _grid.Join(_mainPanel);

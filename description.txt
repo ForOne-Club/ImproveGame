@@ -16,7 +16,7 @@
 构造魔杖: 秘银锭(山铜锭)x18 琥珀x8 木材x80 石头x80
 (你可以使用 Recipe Browser(合成表) 模组的物品图鉴功能以在游戏内查阅来源!)
 ---------------------------
-更新日志: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
+更新日志: https://github.com/487666123/ImproveGame/blob/1.4.4/ChangeLog.md
 开源链接 (Github): https://github.com/487666123/ImproveGame
 开源链接 (Gitee): https://gitee.com/MyGoold/improve-game
 ---------------------------
@@ -65,7 +65,7 @@ Wand of Void: Iron Bar/Lead Bar * 12 + Bone * 20 + Wood * 18 + Diamond * 1
 Wand of Construction: Mythril Bar/Orichalcum Bar * 18 + Amber * 8 + Wood * 80 + Stone * 80
 (You may use the Bestiary of the Recipe Browser to check their sources!)
 ---------------------------
-Change log: https://github.com/487666123/ImproveGame/blob/master/ChangeLog.md
+Change log: https://github.com/487666123/ImproveGame/blob/1.4.4/ChangeLog.md
 Source code (Github): https://github.com/487666123/ImproveGame
 Source code (Gitee): https://gitee.com/MyGoold/improve-game
 ---------------------------

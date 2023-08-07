@@ -50,6 +50,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.3]** 修复了模组部分物品框的物品复制BUG
 - **[v1.6.5.3]** 修复了液体法杖显示错误的图标的BUG
 - **[v1.6.5.3]** 修复了“摇树必掉水果”功能不支持部分树的BUG
+- **[v1.6.5.3]** 修复了尝试向药水袋/旗帜盒放入不相容的物品时会报错的BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI

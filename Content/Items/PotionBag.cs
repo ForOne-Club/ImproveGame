@@ -292,7 +292,7 @@ namespace ImproveGame.Content.Items
         public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
         {
             // 决定文本显示的是“开启”还是“关闭”
-            string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Banners)
+            string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Potions)
                 ? GetTextWith("Tips.MouseMiddleClose", new {ItemName = Item.Name})
                 : GetTextWith("Tips.MouseMiddleOpen", new {ItemName = Item.Name});
             tooltips.Add(new TooltipLine(Mod, "PotionBag", text) {OverrideColor = Color.LightGreen});
