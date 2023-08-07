@@ -26,6 +26,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.2]** Added a No Pool Size Penalty function. You can even fish with 2 blocks of water.
 - **[v1.6.5.3]** 传送法杖快捷键，若任何物品栏及便携储存中有混沌传送杖或和谐杖，按下快捷键将自动使用，优先使用和谐杖
 - **[v1.6.5.3]** 回程快捷键，快捷使用任何物品栏及便携储存内可无限使用的回程物品，优先使用返回药水
+- **[v1.6.5.3]** 钓鱼机现已兼容多线钓鱼Mod，200x钓鱼速度不是梦
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine
@@ -63,6 +64,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.3]** 优化了部分UI的视觉效果
 - **[v1.6.5.3]** 魔镜类物品改为瞬间传送，去除传送前的等待时间!
 - **[v1.6.5.3]** 自动垃圾桶可以使用快捷键隐藏了
+- **[v1.6.5.3]** 为钓鱼机钓鱼添加了视觉效果
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0

@@ -24,7 +24,6 @@ namespace ImproveGame.Content.Tiles
 
         internal string FishingTip { get; private set; } = "Error";
         internal double FishingTipTimer { get; private set; } = 0;
-        internal bool Opened = false;
         internal int OpenAnimationTimer = 0;
 
         public bool CatchCrates = true;
@@ -147,7 +146,8 @@ namespace ImproveGame.Content.Tiles
             fishingSpeedBonus += Math.Min(bassCount * 0.1f, 5f);
 
             const float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版钓鱼速度是660
-            if (FishingTimer > fishingCooldown / fishingSpeedBonus)
+            int multipleLures = Math.Max(1, ModIntegrationsSystem.MultipleLuresAmount); // 多线钓鱼Mod兼容
+            if (FishingTimer > fishingCooldown / fishingSpeedBonus / multipleLures)
             {
                 FishingTimer = 0;
                 ApplyAccessories();
@@ -412,6 +412,12 @@ namespace ImproveGame.Content.Tiles
             item.newAndShiny = true;
             int oldStack = item.stack;
 
+            // 奇怪的文本
+            // var pos = Position.ToWorldCoordinates(16, 16).ToPoint();
+            // var rect = new Rectangle(pos.X, pos.Y, 16, 16);
+            // CombatText.NewText(rect, Color.Pink, "要装不下了...");
+            Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16), item, item.stack);
+
             // 先填充和物品相同的
             for (int i = 0; i < 15; i++)
             {
@@ -466,7 +472,7 @@ namespace ImproveGame.Content.Tiles
 
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                UISystem.Instance.AutofisherGUI.RefreshItems();
+                UISystem.Instance.AutofisherGUI?.RefreshItems();
             }
         }
 
@@ -591,7 +597,7 @@ namespace ImproveGame.Content.Tiles
             }
 
             numWaters = GetFishingPondSize(x, y, ref lava, ref honey, ref chumCount);
-            if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded) // 不用if else是为了判定是否在熔岩/蜂蜜
+            if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded || Config.NoLakeSizePenalty) // 不用if else是为了判定是否在熔岩/蜂蜜
                 numWaters = 10000;
 
             if (honey)

@@ -31,9 +31,12 @@ namespace ImproveGame.Common.ModPlayers
         {
             // 切换两边（如果有的话）Autofisher的状态
             if (Autofisher is not null)
-                Autofisher.Opened = false;
+            {
+            }
+
             if (autofisher is not null)
-                autofisher.Opened = true;
+            {
+            }
 
             Autofisher = autofisher;
 
