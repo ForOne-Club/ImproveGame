@@ -52,14 +52,16 @@ namespace ImproveGame.Common.Utils
                     return (!WorldGen.genRand.NextBool(2)) ? ItemID.Plum : ItemID.Cherry;
                 case TreeTypes.Jungle:
                     return (!WorldGen.genRand.NextBool(2)) ? ItemID.Mango : ItemID.Pineapple;
-                case TreeTypes.Palm:
+                case TreeTypes.Palm or TreeTypes.PalmCorrupt or TreeTypes.PalmCrimson or TreeTypes.PalmHallowed:
                     return (!WorldGen.genRand.NextBool(2)) ? ItemID.Coconut : ItemID.Banana;
-                case TreeTypes.Corrupt:
+                case TreeTypes.Corrupt or TreeTypes.PalmCorrupt:
                     return (!WorldGen.genRand.NextBool(2)) ? ItemID.Elderberry : ItemID.BlackCurrant;
-                case TreeTypes.Crimson:
+                case TreeTypes.Crimson or TreeTypes.PalmCrimson:
                     return (!WorldGen.genRand.NextBool(2)) ? ItemID.BloodOrange : ItemID.Rambutan;
-                case TreeTypes.Hallowed:
+                case TreeTypes.Hallowed or TreeTypes.PalmHallowed:
                     return (!WorldGen.genRand.NextBool(2)) ? ItemID.Dragonfruit : ItemID.Starfruit;
+                case TreeTypes.Ash:
+                    return (!WorldGen.genRand.NextBool(2)) ? ItemID.SpicyPepper : ItemID.Pomegranate;
                 default:
                     return -1;
             }

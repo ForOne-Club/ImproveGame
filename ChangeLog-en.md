@@ -24,6 +24,8 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.2]** All hairstyles are now selectable when creating a player.
 - **[v1.6.5.2]** Added a Teleport NPCs Home function.
 - **[v1.6.5.2]** Added a No Pool Size Penalty function. You can even fish with 2 blocks of water.
+- **[v1.6.5.3]** 传送法杖快捷键，若任何物品栏及便携储存中有混沌传送杖或和谐杖，按下快捷键将自动使用，优先使用和谐杖
+- **[v1.6.5.3]** 回程快捷键，快捷使用任何物品栏及便携储存内可无限使用的回程物品，优先使用返回药水
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine
@@ -45,6 +47,9 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Fixed no popup text when items are received by extra inventories.
 - **[v1.6.5.2]** Fixed config option "Guaranteed Fruit Drop From Tree Shake" being always on.
 - **[v1.6.5.2]** "Tooltip Simplification" now works
+- **[v1.6.5.3]** 修复了模组部分物品框的物品复制BUG
+- **[v1.6.5.3]** 修复了液体法杖显示错误的图标的BUG
+- **[v1.6.5.3]** 修复了“摇树必掉水果”功能不支持部分树的BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI
@@ -54,6 +59,9 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Removed "Better Town NPC Mechanism" because 1.4.4 already did it.
 - **[v1.6.5.2]** Slightly reduced the amount of data transferred in multiplayer.
 - **[v1.6.5.2]** Improved Auto Trash UI.
+- **[v1.6.5.3]** 优化了部分UI的视觉效果
+- **[v1.6.5.3]** 魔镜类物品改为瞬间传送，去除传送前的等待时间!
+- **[v1.6.5.3]** 自动垃圾桶可以使用快捷键隐藏了
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0
