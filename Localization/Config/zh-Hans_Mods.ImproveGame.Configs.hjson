@@ -523,6 +523,7 @@ ImproveConfigs: {
 		Server: "[centeritem:ImproveGame/CreateWand] 模组设置"
 		Presets: "[centeritem:ImproveGame/PaintWand] 预设"
 		Others: "[centeritem/h4:HandOfCreation] 其他"
+		ItemEffect: "[centeritem/h4:RedPotion] 物品效果设置"
 	}
 
 	OpenConfig: {
@@ -546,6 +547,38 @@ ImproveConfigs: {
 			'''
 			将所有池子的大小判定为满，即你可以在所有大小的水域钓鱼且不会受到因尺寸过小而减少渔力的惩罚
 			你甚至可以在两格水中钓鱼
+			'''
+	}
+
+	InfiniteRedPotion: {
+		Label: "[centeritem:RedPotion] 红药水扩展"
+		Tooltip:
+			'''
+			处于Get fixed boi或For the worthy世界时
+			你可以用所有药水所需的材料合成红药水
+			无尽红药水将提供一切在饮用时可能给予的增益(正面)
+			然而，你仍不能将红药水放入药水袋
+			'''
+		Condition: 开启红药水扩展
+	}
+
+	RedPotionEverywhere: {
+		Label: "[centeritem:RedPotion] 红药水扩展不受限"
+		Tooltip:
+			'''
+			你必须先开启红药水扩展功能
+			开启后，红药水扩展功能将在所有世界可用
+			而非仅限Get fixed boi或For the worthy世界
+			'''
+		Condition: 开启红药水扩展不受限/{$Conditions.WorldForTheWorthy}
+	}
+
+	RedPotionRequirement: {
+		Label: "[centeritem:RedPotion] 红药水无限续杯数量"
+		Tooltip:
+			'''
+			你必须先开启红药水扩展功能
+			为红药水设置单独的无限续杯所需数量
 			'''
 	}
 }
@@ -625,7 +658,7 @@ ModItemLoadPage: {
 }
 
 UIConfigs: {
-	DisplayName: 用户界面配置
+	DisplayName: 个人配置
 
 	ResetNativeUI: {
 		Label: "[centeritem:1544] 重置原生用户界面"
@@ -674,10 +707,15 @@ UIConfigs: {
 	KeepFocus: {
 		Label: "[centeritem:TVHeadMask] 失焦时保持游戏运行"
 		Tooltip:
-            '''
-            使单人游戏失焦（即处于后台）时仍然保持游戏运行
-            而不是暂停游戏
-            '''
+			'''
+			使单人游戏失焦（即处于后台）时仍然保持游戏运行
+			而不是暂停游戏
+			'''
+	}
+
+	ExplosionEffect: {
+		Label: "[centeritem:TNTBarrel] 爆炸效果"
+		Tooltip: 关闭后，使用本模组魔杖时不再有爆炸效果
 	}
 }
 

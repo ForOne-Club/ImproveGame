@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModHooks;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.Common;
@@ -356,7 +357,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
         // 没有存储物品，在物品栏里面找
         if (storedItem.IsAir || storedItem.createTile < TileID.Dirt)
         {
-            PickItemInInventory(player, (item) =>
+            PickItemInInventory(player, item =>
                 item is not null && tryMethod(item) &&
                 BongBongPlace(x, y, item, player, true, true, !_playedSound),
                 true, out int index);
@@ -384,7 +385,11 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
         if (item.createWall > -1)
         {
             TryKillTile(x, y, player);
-            BongBong(new Vector2(x, y) * 16f, 16, 16);
+            if (UIConfigs.Instance.ExplosionEffect)
+            {
+                BongBong(new Vector2(x, y) * 16f, 16, 16);
+            }
+
             WorldGen.KillWall(x, y);
             if (Main.tile[x, y].WallType == 0)
             {

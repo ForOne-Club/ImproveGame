@@ -34,7 +34,7 @@ namespace ImproveGame.Common.GlobalItems
         public static void ModifyBuffTooltips(Mod Mod, int itemType, int buffType, List<TooltipLine> tooltips) {
             bool buffEnabled = InfBuffPlayer.CheckInfBuffEnable(buffType);
 
-            if (itemType == ItemID.GardenGnome)
+            if (itemType is ItemID.GardenGnome)
             {
                 tooltips.Add(new(Mod, "TagDetailed.GardenGnome", GetText("Tips.TagDetailed.GardenGnome"))
                 {

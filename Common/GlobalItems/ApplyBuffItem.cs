@@ -27,6 +27,10 @@ namespace ImproveGame.Common.GlobalItems
             if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && Lookups.SpecialPotions.Contains(item.type) && globalItemNotNull)
                 globalItem.InventoryGlow = true;
 
+            // 红药水扩展
+            if (item.IsAvailableRedPotionExtension() && globalItemNotNull)
+                globalItem.InventoryGlow = true;
+
             // 随身增益站：旗帜
             if (Config.NoPlace_BUFFTile_Banner && globalItemNotNull && globalItem.ShouldHaveInvGlowForBanner)
                 globalItem.InventoryGlow = true;
@@ -124,13 +128,23 @@ namespace ImproveGame.Common.GlobalItems
 
                 TagItem.ModifyBuffTooltips(Mod, item.type, buffType, tooltips);
             }
+
+            // 红药水扩展
+            if (item.IsAvailableRedPotionExtension())
+            {
+                tooltips.Add(new TooltipLine(Mod, "TagDetailed.RedPotion", GetText("Tips.TagDetailed.RedPotion"))
+                {
+                    OverrideColor = Color.SkyBlue
+                });
+                TagItem.AddShiftForMoreTooltip(tooltips);
+            }
         }
 
         public override bool PreDrawTooltip(Item item, ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y) {
             if (!item.TryGetGlobalItem<GlobalItemData>(out var global) || !global.InventoryGlow)
                 return base.PreDrawTooltip(item, lines, ref x, ref y);
 
-            if (item.type == ItemID.GardenGnome && ItemSlot.ShiftInUse)
+            if ((item.IsAvailableRedPotionExtension() || item.type is ItemID.GardenGnome) && ItemSlot.ShiftInUse)
             {
                 TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines), x, y);
                 return base.PreDrawTooltip(item, lines, ref x, ref y);

@@ -48,4 +48,7 @@ public class UIConfigs : ModConfig
 
     [DefaultValue(false)]
     public bool KeepFocus;
+
+    [DefaultValue(true)]
+    public bool ExplosionEffect;
 }

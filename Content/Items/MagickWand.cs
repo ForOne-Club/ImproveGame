@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.Packets;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.Common;
@@ -14,8 +15,12 @@ namespace ImproveGame.Content.Items
 
         public override bool ModifySelectedTiles(Player player, int i, int j)
         {
-            SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
-            BongBong(new Vector2(i, j) * 16f, 16, 16);
+            if (UIConfigs.Instance.ExplosionEffect)
+            {
+                SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
+                BongBong(new Vector2(i, j) * 16f, 16, 16);
+            }
+
             if (Main.tile[i, j].WallType > 0 && WandSystem.WallMode)
             {
                 WorldGen.KillWall(i, j);
@@ -50,7 +55,7 @@ namespace ImproveGame.Content.Items
         public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ)
         {
             DoBoomPacket.Send(TileRect);
-            PlaySoundPacket.PlaySound(LegacySoundIDs.Item, Main.MouseWorld, style: 14);
+            PlaySoundPacket.PlaySound(LegacySoundIDs.Item, Main.MouseWorld, style: 14, false);
         }
 
         public override bool AltFunctionUse(Player player) => true;

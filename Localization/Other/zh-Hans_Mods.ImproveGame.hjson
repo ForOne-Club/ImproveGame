@@ -57,6 +57,7 @@ Tips: {
 	TagDetailed: {
 		OwnedInfineBuff: "[已获得无限 Buff 效果 {Count}/{Threshold}]"
 		NotOwnedInfineBuff: "[未获得无限 Buff 效果 {Count}/{Threshold}]"
+		RedPotion: "[红药水]"
 		GardenGnome: "[花园侏儒]"
 		Enabled: "[已启用]"
 		Disabled: "[已禁用]"
@@ -67,6 +68,12 @@ Tips: {
 	}
 
 	TagDetailedTip: {
+		RedPotion:
+			'''
+			红药水扩展效果已应用，你将获得以下无尽增益:
+			{$BuffName.ObsidianSkin}, {$BuffName.Regeneration}, {$BuffName.Swiftness}, {$BuffName.Ironskin}, {$BuffName.ManaRegeneration}, {$BuffName.MagicPower}, {$BuffName.Featherfall}, {$BuffName.Spelunker}, {$BuffName.Archery}, {$BuffName.Heartreach}
+			{$BuffName.Hunter}, {$BuffName.Endurance}, {$BuffName.Lifeforce}, {$BuffName.Inferno}, {$BuffName.Mining}, {$BuffName.Rage}, {$BuffName.Wrath}, {$BuffName.Dangersense}
+			'''
 		GardenGnome:
 			'''
 			花园侏儒的幸运加成已应用

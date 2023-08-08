@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ConstructCore;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ConstructCore;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ObjectData;
@@ -327,7 +328,7 @@ namespace ImproveGame
             {
                 success = WorldGen.PlaceTile(i, j, item.createTile, mute, forced, player.whoAmI, item.placeStyle);
             }
-            if (success)
+            if (success && UIConfigs.Instance.ExplosionEffect)
             {
                 BongBong(new Vector2(i, j) * 16f, 16, 16);
                 if (playSound)

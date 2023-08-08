@@ -73,4 +73,11 @@ public static class ItemHelper
         item.useAmmo = useAmmo;
         item.ammo = ammo;
     }
+
+    public static bool IsAvailableRedPotionExtension(this Item item)
+    {
+        bool isFtw = Config.RedPotionEverywhere || Main.getGoodWorld;
+        return item.type is ItemID.RedPotion && Config.InfiniteRedPotion && isFtw &&
+               item.stack >= Config.RedPotionRequirement && Config.NoConsume_Potion;
+    }
 }

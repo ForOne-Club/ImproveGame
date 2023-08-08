@@ -6,16 +6,47 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Common.Configs.Elements;
 
-public class UncontrollablesElement : ConfigElement
+public class OtherFunctionsElement : ConfigElement
 {
     private string _content;
+    private bool _expanded;
+    private UIPanel _expandedPanel;
+    private UIPanel _unexpandedPanel;
+    private const float RegularHeight = 36f;
 
     public override void OnBind()
     {
         base.OnBind();
         DrawLabel = false;
+        
+        _unexpandedPanel = new UIPanel
+        {
+            BorderColor = Color.Transparent,
+            BackgroundColor = Color.Transparent,
+            Width = {Percent = 1f},
+            Height = {Pixels = RegularHeight}
+        };
+        _unexpandedPanel.SetPadding(0f);
+        
+        _unexpandedPanel.Append(new UIText(Label, 0.4f, true) {
+            TextOriginX = 0.5f,
+            TextOriginY = 0.5f,
+            Width = StyleDimension.Fill,
+            Height = StyleDimension.Fill
+        });
 
-        Append(new UIText(Label, 0.6f, true)
+        Append(_unexpandedPanel);
+        
+        _expandedPanel = new UIPanel
+        {
+            BorderColor = Color.Transparent,
+            BackgroundColor = Color.Transparent,
+            Width = {Percent = 1f},
+            Height = {Pixels = RegularHeight}
+        };
+        _expandedPanel.SetPadding(0f);
+
+        _expandedPanel.Append(new UIText(Label, 0.6f, true)
         {
             Top = {Pixels = 8f},
             Width = {Percent = 1f},
@@ -24,7 +55,7 @@ public class UncontrollablesElement : ConfigElement
             TextOriginY = 0.5f
         });
 
-        Append(new UIText(Language.GetTextValue("Mods.ImproveGame.Configs.ImproveConfigs.OtherFunctions.Subtitle"),
+        _expandedPanel.Append(new UIText(Language.GetTextValue("Mods.ImproveGame.Configs.ImproveConfigs.OtherFunctions.Subtitle"),
             0.7f)
         {
             Top = {Pixels = 40f},
@@ -52,11 +83,36 @@ public class UncontrollablesElement : ConfigElement
 
         _content = TooltipFunction();
         TooltipFunction = null;
+
+        OnLeftClick += (_, _) => _expanded = !_expanded;
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+        if (!_expanded) {
+            _expandedPanel.Remove();
+            Append(_unexpandedPanel);
+        }
+        else {
+            _unexpandedPanel.Remove();
+            Append(_expandedPanel);
+        }
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
+
+        if (!_expanded)
+        {
+            Height.Set(RegularHeight, 0f);
+            if (Parent is UISortableElement) {
+                Parent.Height.Pixels = RegularHeight;
+            }
+            return;
+        }
 
         var dimensions = GetInnerDimensions();
         var font = FontAssets.MouseText.Value;

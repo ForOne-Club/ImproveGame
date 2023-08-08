@@ -57,6 +57,7 @@ Tips: {
 	TagDetailed: {
 		OwnedInfineBuff: "[Infinite buff obtained {Count}/{Threshold}]"
 		NotOwnedInfineBuff: "[Infinite buff not obtained {Count}/{Threshold}]"
+		RedPotion: "[Red Potion]"
 		GardenGnome: "[Garden Gnome]"
 		Enabled: "[Enabled]"
 		Disabled: "[Disabled]"
@@ -67,6 +68,14 @@ Tips: {
 	}
 
 	TagDetailedTip: {
+		RedPotion:
+			'''
+			红药水扩展效果已应用，你将获得以下无尽增益:
+			{$BuffName.ObsidianSkin}, {$BuffName.Regeneration}, {$BuffName.Swiftness}, {$BuffName.Ironskin},
+			{$BuffName.ManaRegeneration}, {$BuffName.MagicPower}, {$BuffName.Featherfall}, {$BuffName.Spelunker},
+			{$BuffName.Archery}, {$BuffName.Heartreach}, {$BuffName.Hunter}, {$BuffName.Endurance}, {$BuffName.Lifeforce}, {$BuffName.Inferno},
+			{$BuffName.Mining}, {$BuffName.Rage}, {$BuffName.Wrath}, {$BuffName.Dangersense}
+			'''
 		GardenGnome:
 			'''
 			Luck bonus of the Garden Gnome has been applied

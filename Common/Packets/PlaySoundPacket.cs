@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+﻿using ImproveGame.Common.Configs;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Packets;
 
@@ -12,8 +13,8 @@ public class PlaySoundPacket : NetModule
     private Point16? _position; // 存short物块坐标，减少包大小
     private byte _style;
     
-    public static void PlaySound(int soundID, Vector2? position = null, int style = 1) =>
-        Get(soundID, position, style).Send(runLocally: true);
+    public static void PlaySound(int soundID, Vector2? position = null, int style = 1, bool playForSelf = true) =>
+        Get(soundID, position, style).Send(runLocally: playForSelf);
         
     public static PlaySoundPacket Get(int soundID, Vector2? position = null, int style = 1)
     {
@@ -27,7 +28,13 @@ public class PlaySoundPacket : NetModule
     public override void Receive()
     {
         if (Main.netMode is NetmodeID.Server)
+        {
             Send(-1, Sender);
+            return;
+        }
+        
+        if (!UIConfigs.Instance.ExplosionEffect && _soundID is LegacySoundIDs.Item && _style is 14)
+            return;
 
         if (_position is not null)
             SoundEngine.PlaySound(_soundID, _position.Value.ToWorldCoordinates(), _style);

@@ -50,4 +50,55 @@ public class RecipeSystem : ModSystem
         RecipeGroup.RegisterGroup("ImproveGame:AnyMythrilBar", AnyMythrilBar);
         RecipeGroup.RegisterGroup("ImproveGame:AnyAdamantiteBar", AnyAdamantiteBar);
     }
+
+    public override void AddRecipes()
+    {
+        /* Materials
+         * 18 Bottled Water, 1 Obsidian, 1 Mushroom, 1 Cactus, 1Iron/Lead Ore, 2 Fallen Star, 1 Feather, 1 Gold/Platinum, 1 Lens, 1 Shark Fin, 1 Antlion Mandible, 10 Cobweb
+         *
+         * Flowers
+         * 2 Fireblossom, 2 Waterleaf, 7 Daybloom, 6 Blinkroot, 4 Moonglow, 3 Deathweed 2 Shiverthorn
+         *
+         * Fish
+         * 1 Crimson Tigerfish, 1 Armored Cavefish, 1 Prismite, 1 Flarefin Koi, 2 Obsidifish, 1 Hemopiranha, 1 Ebonkoi
+         */
+        var redPotionCondition = new Condition("Mods.ImproveGame.Configs.ImproveConfigs.InfiniteRedPotion.Condition",
+            () => Config.InfiniteRedPotion);
+        var ftwCondition = new Condition("Mods.ImproveGame.Configs.ImproveConfigs.RedPotionEverywhere.Condition",
+            () => Config.RedPotionEverywhere || Condition.ForTheWorthyWorld.IsMet());
+        
+        Recipe.Create(ItemID.RedPotion)
+            .AddTile(TileID.Bottles)
+            .AddCondition(ftwCondition)
+            .AddCondition(redPotionCondition)
+            // Materials
+            .AddIngredient(ItemID.BottledWater, 18)
+            .AddIngredient(ItemID.Obsidian)
+            .AddIngredient(ItemID.Mushroom)
+            .AddIngredient(ItemID.Cactus)
+            .AddIngredient(ItemID.Lens)
+            .AddIngredient(ItemID.SharkFin)
+            .AddIngredient(ItemID.AntlionMandible)
+            .AddIngredient(ItemID.Feather)
+            .AddIngredient(ItemID.Cobweb, 10)
+            .AddIngredient(ItemID.FallenStar, 2)
+            .AddIngredient(ItemID.IronBar)
+            // Flowers
+            .AddIngredient(ItemID.Fireblossom, 2)
+            .AddIngredient(ItemID.Waterleaf, 2)
+            .AddIngredient(ItemID.Daybloom, 7)
+            .AddIngredient(ItemID.Blinkroot, 6)
+            .AddIngredient(ItemID.Moonglow, 4)
+            .AddIngredient(ItemID.Deathweed, 3)
+            .AddIngredient(ItemID.Shiverthorn, 2)
+            // Fish
+            .AddIngredient(ItemID.CrimsonTigerfish)
+            .AddIngredient(ItemID.ArmoredCavefish)
+            .AddIngredient(ItemID.Prismite)
+            .AddIngredient(ItemID.FlarefinKoi)
+            .AddIngredient(ItemID.Obsidifish, 2)
+            .AddIngredient(ItemID.Hemopiranha)
+            .AddIngredient(ItemID.Ebonkoi)
+            .Register();
+    }
 }

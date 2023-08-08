@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.Packets;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Common.Packets;
 
 [AutoSync]
 public class DoBoomPacket : NetModule
@@ -27,7 +29,13 @@ public class DoBoomPacket : NetModule
     public override void Receive()
     {
         if (Main.netMode is NetmodeID.Server)
+        {
             Send(-1, Sender);
+            return;
+        }
+
+        if (!UIConfigs.Instance.ExplosionEffect)
+            return;
 
         var rectangle = new Rectangle(_x, _y, _width, _height);
         ForeachTile(rectangle, (x, y) =>

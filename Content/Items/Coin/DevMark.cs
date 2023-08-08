@@ -67,7 +67,7 @@ public class Expelliarmus : ModItem
                 CombatText.NewText(rect, Color.Pink, text, true);
             }
 
-            var plrCenter = player.Center;
+            var plrCenter = player.MountedCenter;
             var directionVector = plrCenter.DirectionTo(Projectile.Center);
             var dustPosition = plrCenter + directionVector * 56;
             int triedTimes = 0;

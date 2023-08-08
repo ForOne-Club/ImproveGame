@@ -212,6 +212,30 @@ public class InfBuffPlayer : ModPlayer
         {
             availableItems.Add(item);
         }
+
+        if (item.IsAvailableRedPotionExtension())
+        {
+            void AddPotion(int type) => availableItems.Add(new Item(type, 9999));
+            AddPotion(ItemID.ObsidianSkinPotion);
+            AddPotion(ItemID.RegenerationPotion);
+            AddPotion(ItemID.SwiftnessPotion);
+            AddPotion(ItemID.IronskinPotion);
+            AddPotion(ItemID.ManaRegenerationPotion);
+            AddPotion(ItemID.MagicPowerPotion);
+            AddPotion(ItemID.FeatherfallPotion);
+            AddPotion(ItemID.SpelunkerPotion);
+            AddPotion(ItemID.ArcheryPotion);
+            AddPotion(ItemID.HeartreachPotion);
+            AddPotion(ItemID.HunterPotion);
+            AddPotion(ItemID.EndurancePotion);
+            AddPotion(ItemID.LifeforcePotion);
+            AddPotion(ItemID.InfernoPotion);
+            AddPotion(ItemID.MiningPotion);
+            AddPotion(ItemID.RagePotion);
+            AddPotion(ItemID.WrathPotion);
+            AddPotion(ItemID.TrapsightPotion);
+            availableItems.Add(item);
+        }
     }
 
     // 新加入时的同步

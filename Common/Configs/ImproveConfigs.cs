@@ -16,7 +16,7 @@ namespace ImproveGame.Common.Configs
 
         [Header("Others")]
 
-        [CustomModConfigItem(typeof(UncontrollablesElement))]
+        [CustomModConfigItem(typeof(OtherFunctionsElement))]
         public object OtherFunctions;
 
         [CustomModConfigItem(typeof(OpenConfigElement))]
@@ -77,24 +77,8 @@ namespace ImproveGame.Common.Configs
 
         public List<string> TileSpeed_Blacklist = new() { new("torch") };
 
-        [DefaultValue(true)]
-        public bool PortableCraftingStation;
-
-        [DefaultValue(true)]
-        public bool NoPlace_BUFFTile;
-
-        [DefaultValue(true)]
-        public bool NoPlace_BUFFTile_Banner;
-
         [DefaultValue(false)]
         public bool NoConsume_SummonItem;
-
-        [DefaultValue(true)]
-        public bool NoConsume_Potion;
-
-        [DefaultValue(30)]
-        [Range(10, 999)]
-        public int NoConsume_PotionRequirement;
 
         [DefaultValue(true)]
         public bool NoConsume_Ammo;
@@ -103,25 +87,7 @@ namespace ImproveGame.Common.Configs
         public bool NoConsume_Projectile;
 
         [DefaultValue(false)]
-        public bool HideNoConsumeBuffs;
-
-        [DefaultValue(false)]
         public bool ImprovePrefix;
-
-        [DefaultValue(0)]
-        [Range(0, 100)]
-        [Increment(5)]
-        [Slider]
-        public int ResurrectionTimeShortened;
-
-        [DefaultValue(0)]
-        [Range(0, 100)]
-        [Increment(5)]
-        [Slider]
-        public int BOSSBattleResurrectionTimeShortened;
-
-        [DefaultValue(false)]
-        public bool BanTombstone;
 
         [DefaultValue(true)]
         public bool MiddleEnableBank;
@@ -131,6 +97,40 @@ namespace ImproveGame.Common.Configs
 
         [DefaultValue(true)]
         public bool FasterExtractinator;
+
+        #endregion
+
+        #region 物品效果设置
+
+        [Header("ItemEffect")]
+        [DefaultValue(true)]
+        public bool PortableCraftingStation;
+
+        [DefaultValue(true)]
+        public bool NoPlace_BUFFTile;
+
+        [DefaultValue(true)]
+        public bool NoPlace_BUFFTile_Banner;
+
+        [DefaultValue(true)]
+        public bool NoConsume_Potion;
+
+        [DefaultValue(30)]
+        [Range(10, 999)]
+        public int NoConsume_PotionRequirement;
+
+        [DefaultValue(false)]
+        public bool HideNoConsumeBuffs;
+
+        [DefaultValue(false)]
+        public bool InfiniteRedPotion;
+
+        [DefaultValue(false)]
+        public bool RedPotionEverywhere;
+
+        [DefaultValue(30)]
+        [Range(10, 999)]
+        public int RedPotionRequirement;
 
         #endregion
 
@@ -211,6 +211,21 @@ namespace ImproveGame.Common.Configs
 
         [DefaultValue(true)]
         public bool NoLakeSizePenalty;
+
+        [DefaultValue(0)]
+        [Range(0, 100)]
+        [Increment(5)]
+        [Slider]
+        public int ResurrectionTimeShortened;
+
+        [DefaultValue(0)]
+        [Range(0, 100)]
+        [Increment(5)]
+        [Slider]
+        public int BOSSBattleResurrectionTimeShortened;
+
+        [DefaultValue(false)]
+        public bool BanTombstone;
 
         [DefaultValue(99)]
         [Range(0, 99)]
