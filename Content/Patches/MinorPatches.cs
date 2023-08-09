@@ -242,6 +242,9 @@ namespace ImproveGame.Content.Patches
                     MonoModHooks.DumpIL(Mod, il);
                 }
             };
+            // 专家/大师延长Debuff
+            On_Player.AddBuff_DetermineBuffTimeToAdd += (orig, self, type, time1) =>
+                Config.LongerExpertDebuff ? orig.Invoke(self, type, time1) : time1;
         }
 
         private void LiveInCorrupt(ILContext il)

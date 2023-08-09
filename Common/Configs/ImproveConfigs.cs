@@ -185,6 +185,13 @@ namespace ImproveGame.Common.Configs
         #region 游戏机制
 
         [Header("GameMechanics")]
+        [DefaultValue(99)]
+        [Range(0, 99)]
+        [Slider]
+        [Increment(11)]
+        [ReloadRequired]
+        public int ExtraPlayerBuffSlots;
+
         [DefaultValue(false)]
         public bool AlchemyGrassGrowsFaster;
 
@@ -227,12 +234,8 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool BanTombstone;
 
-        [DefaultValue(99)]
-        [Range(0, 99)]
-        [Slider]
-        [Increment(11)]
-        [ReloadRequired]
-        public int ExtraPlayerBuffSlots;
+        [DefaultValue(true)]
+        public bool LongerExpertDebuff;
 
         #endregion
 

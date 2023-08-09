@@ -581,6 +581,15 @@ ImproveConfigs: {
 			为红药水设置单独的无限续杯所需数量
 			'''
 	}
+
+	LongerExpertDebuff: {
+		Label: "[centeritem:DemonHeart] 专家Debuff时长延长"
+		Tooltip:
+			'''
+			在专家/大师模式下是否延长Debuff时间
+			关闭后Debuff时间将与经典模式一致
+			'''
+	}
 }
 
 ModItemLoadPage: {
