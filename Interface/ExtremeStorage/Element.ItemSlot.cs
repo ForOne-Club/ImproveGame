@@ -111,6 +111,7 @@ namespace ImproveGame.Interface.ExtremeStorage
                 return;
 
             RightMouseDownTimer = 0;
+            SuperFastStackTimer = 0;
         }
 
         // 覆写父类的方法，让宝藏袋右键不开启而是拿取，以及添加多人相关操作
@@ -130,45 +131,40 @@ namespace ImproveGame.Interface.ExtremeStorage
             if (!Main.mouseRight || !IsMouseHovering || Item.IsAir || !Interactable)
                 return;
 
-            switch (RightMouseDownTimer)
+            DoFastStackLogic(stack =>
             {
-                case >= 60:
-                case >= 30 when RightMouseDownTimer % 3 == 0:
-                case >= 15 when RightMouseDownTimer % 6 == 0:
-                case 0:
-                    switch (Main.netMode)
-                    {
-                        case NetmodeID.SinglePlayer:
-                            TakeSlotItemToMouseItem();
-                            // 移动到RightMouseUp中，防止卡顿
-                            // ExtremeStorageGUI.RefreshCachedAllItems();
-                            // Recipe.FindRecipes();
-                            break;
-                        // 本地先保证可以拿出物品，然后再发送给服务器
-                        case NetmodeID.MultiplayerClient when Main.mouseItem.IsAir ||
-                                                              (Main.mouseItem.type == Item.type &&
-                                                               Main.mouseItem.stack < Main.mouseItem.maxStack):
+                switch (Main.netMode)
+                {
+                    case NetmodeID.SinglePlayer:
+                        TakeSlotItemToMouseItem(stack);
+                        // 移动到RightMouseUp中，防止卡顿
+                        // ExtremeStorageGUI.RefreshCachedAllItems();
+                        // Recipe.FindRecipes();
+                        break;
+                    // 本地先保证可以拿出物品，然后再发送给服务器
+                    case NetmodeID.MultiplayerClient
+                        when ((Main.mouseItem.IsTheSameAs(Item) && ItemLoader.CanStack(Main.mouseItem, Item)) ||
+                              Main.mouseItem.type is ItemID.None) && (Main.mouseItem.stack < Main.mouseItem.maxStack ||
+                                                                      Main.mouseItem.type is ItemID.None):
+                        {
                             RemoveItemOperationPacket.Send(_chestIndex, Index,
-                                RemoveItemOperationPacket.RemovedItemDestination.Mouse, 1);
+                                RemoveItemOperationPacket.RemovedItemDestination.Mouse, stack);
                             SoundEngine.PlaySound(SoundID.MenuTick);
                             break;
-                    }
-
-                    break;
-            }
-
-            RightMouseDownTimer++;
+                        }
+                }
+            });
         }
 
         public override void ModifyDrawColor()
         {
             if (!Interactable || Item.IsAir || !ExtremeStorageGUI.ChestSlotsGlowHue.ContainsKey(_chestIndex)) return;
-            
+
             var hueArray = ExtremeStorageGUI.ChestSlotsGlowHue[_chestIndex];
             float hue = hueArray[Index];
-            
+
             if (hue is -1f) return;
-            
+
             Color color = Main.hslToRgb(hue, 1f, 0.5f);
             float opacity = ExtremeStorageGUI.ChestSlotsGlowTimer / 300f;
             opacity *= opacity;

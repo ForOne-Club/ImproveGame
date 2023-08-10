@@ -12,6 +12,7 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
         private Texture2D Banner;
         private Texture2D Potion;
         private int RightMouseTimer;
+        protected int SuperFastStackTimer;
         private Item AirItem;
         private Func<Item, bool> _canPutItemSlot;
         private List<Item> items;
@@ -59,7 +60,7 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
             if (Item.IsAir)
                 return;
             RightMouseTimer = 0;
-            TakeSlotItemToMouseItem();
+            SuperFastStackTimer = 0;
         }
 
         public override void Update(GameTime gameTime)
@@ -76,9 +77,15 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
                 case >= 60:
                 case >= 30 when RightMouseTimer % 3 == 0:
                 case >= 15 when RightMouseTimer % 6 == 0:
-                    TakeSlotItemToMouseItem();
+                case 1:
+                    int stack = SuperFastStackTimer + 1;
+                    stack = Math.Min(stack, Item.stack);
+                    TakeSlotItemToMouseItem(stack);
                     break;
             }
+
+            if (RightMouseTimer >= 60 && RightMouseTimer % 2 == 0 && SuperFastStackTimer < 40)
+                SuperFastStackTimer++;
 
             RightMouseTimer++;
         }
@@ -120,7 +127,7 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
             Main.hoverItemName = Item.Name;
             Main.HoverItem = Item.Clone();
             SetCursor();
-            
+
             if (Main.mouseItem.IsAir) return;
 
             switch (PackageGUI.StorageType)
@@ -136,24 +143,28 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
         /// <summary>
         /// 拿物品槽内物品到鼠标物品上
         /// </summary>
-        private void TakeSlotItemToMouseItem()
+        protected void TakeSlotItemToMouseItem(int stack)
         {
-            bool playSound = false;
-            if (Main.mouseItem.type == Item.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
+            if (((!Main.mouseItem.IsTheSameAs(Item) || !ItemLoader.CanStack(Main.mouseItem, Item)) &&
+                 Main.mouseItem.type is not ItemID.None) || (Main.mouseItem.stack >= Main.mouseItem.maxStack &&
+                                                             Main.mouseItem.type is not ItemID.None))
             {
-                Main.mouseItem.stack++;
-                Item.stack--;
-                playSound = true;
-            }
-            else if (Main.mouseItem.IsAir)
-            {
-                Main.mouseItem = new Item(Item.type, 1);
-                Item.stack--;
-                playSound = true;
+                return;
             }
 
-            if (playSound)
+            if (Main.mouseItem.type is ItemID.None)
+            {
+                Main.mouseItem = ItemLoader.TransferWithLimit(Item, stack);
+                ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(Item, ItemSlot.Context.InventoryItem, ItemSlot.Context.MouseItem));
                 SoundEngine.PlaySound(SoundID.MenuTick);
+            }
+            else
+            {
+                ItemLoader.StackItems(Main.mouseItem, Item, out _, numToTransfer: stack);
+                if (Item.stack <= 0)
+                    Item.SetDefaults();
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            }
         }
 
         private static void SetCursor()

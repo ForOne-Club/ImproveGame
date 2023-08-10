@@ -71,6 +71,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.3]** 为钓鱼机钓鱼添加了视觉效果
 - **[v1.6.5.3]** 现在可以选择关闭魔杖的爆破效果了
 - **[v1.6.5.3]** 调整了“不可调节功能”的显示方式
+- **[v1.6.5.3]** 你可以更快地从本Mod的各种存储中右键取出物品了
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0

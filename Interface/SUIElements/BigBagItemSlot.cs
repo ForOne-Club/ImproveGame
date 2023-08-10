@@ -35,6 +35,7 @@ namespace ImproveGame.Interface.SUIElements
         }
 
         protected int RightMouseDownTimer = -1;
+        protected int SuperFastStackTimer;
 
         public BigBagItemSlot(Item[] items, int index)
         {
@@ -74,7 +75,7 @@ namespace ImproveGame.Interface.SUIElements
             if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
                 RightMouseDownTimer = 0;
-                TakeSlotItemToMouseItem();
+                SuperFastStackTimer = 0;
             }
 
             if (ItemID.Sets.BossBag[Item.type] || ItemID.Sets.IsFishingCrate[Item.type])
@@ -119,48 +120,54 @@ namespace ImproveGame.Interface.SUIElements
             // 右键长按物品持续拿出
             if (Interactable && Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
             {
-                if (RightMouseDownTimer >= 60)
-                {
-                    TakeSlotItemToMouseItem();
-                }
-                else if (RightMouseDownTimer >= 30 && RightMouseDownTimer % 3 == 0)
-                {
-                    TakeSlotItemToMouseItem();
-                }
-                else if (RightMouseDownTimer >= 15 && RightMouseDownTimer % 6 == 0)
-                {
-                    TakeSlotItemToMouseItem();
-                }
-
-                RightMouseDownTimer++;
+                DoFastStackLogic(TakeSlotItemToMouseItem);
             }
+        }
+
+        protected void DoFastStackLogic(Action<int> stackCallback)
+        {
+            switch (RightMouseDownTimer) {
+                case >= 60:
+                case >= 30 when RightMouseDownTimer % 3 == 0:
+                case >= 15 when RightMouseDownTimer % 6 == 0:
+                case 1:
+                    int stack = SuperFastStackTimer + 1;
+                    stack = Math.Min(stack, Item.stack);
+                    stackCallback(stack);
+                    break;
+            }
+
+            if (RightMouseDownTimer >= 60 && RightMouseDownTimer % 2 == 0 && SuperFastStackTimer < 40)
+                SuperFastStackTimer++;
+
+            RightMouseDownTimer++;
         }
 
         /// <summary>
         /// 拿物品槽内物品到鼠标物品上
         /// </summary>
-        protected void TakeSlotItemToMouseItem()
+        protected void TakeSlotItemToMouseItem(int stack)
         {
-            bool playSound = false;
-            if (Main.mouseItem.type == Item.type && Main.mouseItem.stack < Main.mouseItem.maxStack)
+            if (((!Main.mouseItem.IsTheSameAs(Item) || !ItemLoader.CanStack(Main.mouseItem, Item)) &&
+                 Main.mouseItem.type is not ItemID.None) || (Main.mouseItem.stack >= Main.mouseItem.maxStack &&
+                                                             Main.mouseItem.type is not ItemID.None))
             {
-                Main.mouseItem.stack++;
-                Item.stack--;
-                if (Item.IsAir)
-                    Item.SetDefaults();
-                playSound = true;
-            }
-            else if (Main.mouseItem.IsAir && !Item.IsAir && Item.maxStack > 1)
-            {
-                Main.mouseItem = new Item(Item.type);
-                Item.stack--;
-                if (Item.IsAir)
-                    Item.SetDefaults();
-                playSound = true;
+                return;
             }
 
-            if (playSound)
+            if (Main.mouseItem.type is ItemID.None)
+            {
+                Main.mouseItem = ItemLoader.TransferWithLimit(Item, stack);
+                ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(Item, ItemSlot.Context.InventoryItem, ItemSlot.Context.MouseItem));
                 SoundEngine.PlaySound(SoundID.MenuTick);
+            }
+            else
+            {
+                ItemLoader.StackItems(Main.mouseItem, Item, out _, numToTransfer: stack);
+                if (Item.stack <= 0)
+                    Item.SetDefaults();
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            }
         }
 
         /// <summary>
