@@ -42,15 +42,15 @@ Tips: {
 	CreateWandOff: Middle click to close house material panel
 	LiquidWandOn: Middle click to open liquid control panel
 	LiquidWandOff: Middle click to close liquid control panel
-	PotionBagCurrent: Contains the following potions ({StoredCount}/20):
+	PotionBagCurrent: Contains the following potions ({StoredCount}/200):
 	PotionBagCurrentFull: Contains the following potions (Full!):
-	PotionBagNone: Empty (0/20)
+	PotionBagNone: Empty (0/200)
 	PotionBagAvailable: (Active)
 	PotionBagUnavailable: (Inactive)
 	PotionBagDisabled: (Disabled)
-	BannerChestCurrent: Stored banners: ({StoredCount}/200):
+	BannerChestCurrent: Stored banners: ({StoredCount}/500):
 	BannerChestCurrentFull: Stored banners: (Full!):
-	BannerChestNone: No banners inside (0/200)
+	BannerChestNone: No banners inside (0/500)
 	BannerChestUseless: Portable Banners is not on, banners inside will not function
 	Tag.ShiftEnable: "[Hold [c/88CCEE:Shift] for more information]"
 

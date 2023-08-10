@@ -65,7 +65,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Removed "Better Town NPC Mechanism" because 1.4.4 already did it.
 - **[v1.6.5.2]** Slightly reduced the amount of data transferred in multiplayer.
 - **[v1.6.5.2]** Improved Auto Trash UI.
-- **[v1.6.5.3]** 优化了部分UI的视觉效果
+- **[v1.6.5.3]** 优化了本Mod的大部分UI
 - **[v1.6.5.3]** 魔镜类物品改为瞬间传送，去除传送前的等待时间!
 - **[v1.6.5.3]** 自动垃圾桶可以使用快捷键隐藏了
 - **[v1.6.5.3]** 为钓鱼机钓鱼添加了视觉效果

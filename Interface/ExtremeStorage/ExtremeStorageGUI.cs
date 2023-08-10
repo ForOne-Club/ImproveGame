@@ -131,13 +131,6 @@ namespace ImproveGame.Interface.ExtremeStorage
             if (_basePanel.IsMouseHovering)
                 PlayerInput.LockVanillaMouseScroll("ImproveGame: Extreme Storage GUI");
 
-            // 物品栏开启判断
-            if (!Main.playerInventory)
-            {
-                Close();
-                return;
-            }
-
             // 动画计时器
             UpdateAnimationTimer();
 

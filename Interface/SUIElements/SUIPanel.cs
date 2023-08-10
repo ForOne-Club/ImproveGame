@@ -27,8 +27,8 @@ namespace ImproveGame.Interface.SUIElements
             Draggable = draggable;
             DragIgnore = true;
 
-            ShadowThickness = 40f;
-            ShadowColor = borderColor * 0.5f;
+            ShadowThickness = 26f;
+            ShadowColor = borderColor * 0.35f;
 
             Border = border;
             BorderColor = borderColor;
@@ -40,8 +40,8 @@ namespace ImproveGame.Interface.SUIElements
         {
             SetPadding(10f);
             DragIgnore = true;
-            ShadowThickness = 40f;
-            ShadowColor = borderColor * 0.5f;
+            ShadowThickness = 26f;
+            ShadowColor = borderColor * 0.35f;
             Draggable = draggable;
 
             Border = border;

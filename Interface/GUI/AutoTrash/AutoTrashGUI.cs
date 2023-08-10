@@ -47,7 +47,7 @@ public class AutoTrashGUI : ViewBody
             {
                 OverflowHidden = true,
                 Shaded = true,
-                ShadowThickness = 20
+                ShadowThickness = 16
             };
 
             ItemSlotGrid = new BaseGrid();

@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.GlobalItems;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.SUIElements;
 using System.Reflection;
@@ -9,12 +10,22 @@ using UIImage = Terraria.GameContent.UI.Elements.UIImage;
 
 namespace ImproveGame.Interface.GUI;
 
-public class PrefixRecallGUI : UIState
+public class PrefixRecallGUI : ViewBody, ISidedView
 {
     public static bool Visible =>
-        Config.ImprovePrefix && !Main.reforgeItem.IsAir && Main.reforgeItem.TryGetGlobalItem<ImprovePrefixItem>(out var modItem) && modItem.Prefixs.Count > 0;
+        Config.ImprovePrefix && !Main.reforgeItem.IsAir &&
+        Main.reforgeItem.TryGetGlobalItem<ImprovePrefixItem>(out var modItem) && modItem.Prefixs.Count > 0;
+
+    public override bool Display { get => true; set { } }
+
+    public override bool CanPriority(UIElement target) => target != this;
+
+    public override bool CanDisableMouse(UIElement target)
+        => (target != this && _basePanel.IsMouseHovering) || _basePanel.KeepPressed;
+
     private static int _oldItemType; // 用于监测type以及时更新uiList
     private static int _oldPrefixCount; // 用于监测词缀数量以及时更新uiList
+    private static bool _oldVisible; // 用于监测显示条件是否满足以开启/关闭UI
 
     private const float PanelLeft = 54f;
     private const float PanelTop = 340f;
@@ -25,14 +36,44 @@ public class PrefixRecallGUI : UIState
     public SUIScrollbar Scrollbar; // 拖动条
     public UIList UIList; // 明细列表
 
+    public void OnSwapSlide(float factor)
+    {
+        float widthNext = _basePanel.GetDimensions().Width;
+        float hiddenPositionNext = -widthNext - 78;
+        _basePanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, PanelLeft, factor), 0f);
+        _basePanel.Recalculate();
+    }
+
+    public bool ForceCloseCondition() => Main.LocalPlayer.chest != -1 || !Main.playerInventory ||
+                                         Main.LocalPlayer.sign > -1 || Main.LocalPlayer.talkNPC <= -1 ||
+                                         Main.npc[Main.LocalPlayer.talkNPC] is not {type: NPCID.GoblinTinkerer};
+
+    // 检测是否满足显示条件并执行显示/隐藏命令
+    public void TrackDisplayment()
+    {
+        bool opened = SidedEventTrigger.IsOpened(this);
+
+        switch (Visible)
+        {
+            case false when _oldVisible && opened:
+            case true when !_oldVisible && !opened:
+                SidedEventTrigger.ToggleViewBody(this);
+                break;
+        }
+
+        _oldVisible = Visible;
+    }
+
     public override void OnInitialize()
     {
-        _basePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160));
-        _basePanel.Left.Set(PanelLeft, 0f);
-        _basePanel.Top.Set(PanelTop, 0f);
-        _basePanel.Width.Set(PanelWidth, 0f);
-        _basePanel.Height.Set(PanelHeight, 0f);
-        Append(_basePanel);
+        Append(_basePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160))
+        {
+            Shaded = true,
+            Left = {Pixels = PanelLeft},
+            Top = {Pixels = PanelTop},
+            Width = {Pixels = PanelWidth},
+            Height = {Pixels = PanelHeight}
+        });
 
         UIList = new UIList
         {
@@ -70,23 +111,33 @@ public class PrefixRecallGUI : UIState
 
     public override void Update(GameTime gameTime)
     {
-        if (!Visible)
-        {
-            _oldItemType = ItemID.None;
-            return;
-        }
-
         base.Update(gameTime);
 
         if (Scrollbar.IsMouseHovering) // 不知道为啥默认没有
             Main.LocalPlayer.mouseInterface = true;
 
-        if (_oldItemType != Main.reforgeItem.type || _oldPrefixCount != Main.reforgeItem.GetGlobalItem<ImprovePrefixItem>().Prefixs.Count)
-        {
-            SetupList();
-            _oldItemType = Main.reforgeItem.type;
-            _oldPrefixCount = Main.reforgeItem.GetGlobalItem<ImprovePrefixItem>().Prefixs.Count;
-        }
+        UpdateList();
+    }
+    
+    private void UpdateList()
+    {
+        if (_oldItemType == Main.reforgeItem.type &&
+            _oldPrefixCount == Main.reforgeItem.GetGlobalItem<ImprovePrefixItem>().Prefixs.Count)
+            return;
+
+        SetupList();
+        _oldItemType = Main.reforgeItem.type;
+        _oldPrefixCount = Main.reforgeItem.GetGlobalItem<ImprovePrefixItem>().Prefixs.Count;
+    }
+
+    public void Open()
+    {
+        UpdateList();
+    }
+
+    public void Close()
+    {
+        _oldItemType = ItemID.None;
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
@@ -95,6 +146,7 @@ public class PrefixRecallGUI : UIState
         {
             UIList._innerList.Top.Set(-Scrollbar.ViewPosition, 0);
         }
+
         UIList.Recalculate();
 
         if (_basePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
@@ -187,6 +239,7 @@ public class PrefixTab : SUIPanel
                 reforgeButton.Color = Color.Gray;
                 return;
             }
+
             if (reforgeButton.IsMouseHovering)
             {
                 Main.instance.MouseText(str);
@@ -215,7 +268,7 @@ public class PrefixTab : SUIPanel
             Price = (int)(Price * 0.8);
 
         Price = (int)(Price * Main.LocalPlayer.currentShoppingSettings.PriceAdjustment);
-        Price = (int)(Price * 0.5f);
+        Price = (int)(Price * 0.05f);
     }
 
     private void Reforge(UIImage ui)

@@ -29,15 +29,6 @@ namespace ImproveGame.Common.ModPlayers
 
         public void SetAutofisher(TEAutofisher autofisher, bool needSync = true)
         {
-            // 切换两边（如果有的话）Autofisher的状态
-            if (Autofisher is not null)
-            {
-            }
-
-            if (autofisher is not null)
-            {
-            }
-
             Autofisher = autofisher;
 
             // 设置传输
@@ -63,12 +54,6 @@ namespace ImproveGame.Common.ModPlayers
                     SyncOpenPacket.Get(modPlayer.Autofisher.ID, i).Send(toWho, fromWho, runLocally: false);
                 }
             }
-        }
-
-        public override void UpdateDead()
-        {
-            if (Player.whoAmI == Main.myPlayer && AutofisherGUI.Visible)
-                UISystem.Instance.AutofisherGUI.Close();
         }
 
         public override void PreUpdate()

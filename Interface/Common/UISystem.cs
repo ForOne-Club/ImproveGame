@@ -17,12 +17,6 @@ namespace ImproveGame.Interface.Common
 
         #region 定义
 
-        public LiquidWandGUI LiquidWandGUI;
-        internal static UserInterface LiquidWandInterface;
-
-        public ArchitectureGUI ArchitectureGUI;
-        internal static UserInterface ArchitectureInterface;
-
         public BrustGUI BrustGUI;
         internal static UserInterface BrustInterface;
 
@@ -35,14 +29,9 @@ namespace ImproveGame.Interface.Common
         public GrabBagInfoGUI GrabBagInfoGUI;
         internal static UserInterface GrabBagInfoInterface;
 
+        // 生命体检测仪筛选
         public LifeformAnalyzerGUI LifeformAnalyzerGUI;
-        internal static UserInterface LifeformAnalyzerInterface;
-
-        public StructureGUI StructureGUI;
-        internal static UserInterface StructureInterface;
-
-        public PrefixRecallGUI PrefixRecallGUI;
-        internal static UserInterface PrefixRecallInterface;
+        public EventTrigger LifeformAnalyzerTrigger;
 
         // 玩家信息表
         public PlayerInfoGUI PlayerInfoGUI;
@@ -63,10 +52,23 @@ namespace ImproveGame.Interface.Common
         // Buff 追踪站
         public BuffTrackerGUI BuffTrackerGUI;
         public EventTrigger BuffTrackerTrigger;
+        
+        // 液体法杖
+        public LiquidWandGUI LiquidWandGUI;
+        public EventTrigger LiquidWandTrigger;
 
-        // 侧栏箱子类 UI
+        // 建筑法杖
+        public ArchitectureGUI ArchitectureGUI;
+        public EventTrigger ArchitectureTrigger;
+
+        // 构造法杖
+        public StructureGUI StructureGUI;
+        public EventTrigger StructureTrigger;
+
+        // 侧栏 UI
         public AutofisherGUI AutofisherGUI;
         public ExtremeStorageGUI ExtremeStorageGUI;
+        public PrefixRecallGUI PrefixRecallGUI;
         public SidedEventTrigger SidedEventTrigger;
 
         #endregion
@@ -80,18 +82,20 @@ namespace ImproveGame.Interface.Common
             PlayerInfoGUI = null;
             PlayerInfoTrigger = null;
 
+            // 侧栏GUI
             ExtremeStorageGUI = null;
             AutofisherGUI = null;
+            PrefixRecallGUI = null;
             SidedEventTrigger = null;
 
             BuffTrackerGUI = null;
             BuffTrackerTrigger = null;
 
             LiquidWandGUI = null;
-            LiquidWandInterface = null;
+            LiquidWandTrigger = null;
 
             ArchitectureGUI = null;
-            ArchitectureInterface = null;
+            ArchitectureTrigger = null;
 
             BrustGUI = null;
             BrustInterface = null;
@@ -112,13 +116,10 @@ namespace ImproveGame.Interface.Common
             GrabBagInfoInterface = null;
 
             LifeformAnalyzerGUI = null;
-            LifeformAnalyzerInterface = null;
+            LifeformAnalyzerTrigger = null;
 
             StructureGUI = null;
-            StructureInterface = null;
-
-            PrefixRecallGUI = null;
-            PrefixRecallInterface = null;
+            StructureTrigger = null;
 
             PackageGUI = null;
             PackageTrigger = null;
@@ -133,39 +134,29 @@ namespace ImproveGame.Interface.Common
             }
 
             // UserInterface 之 EventTrigger 版
-            AutoTrashTrigger = new EventTrigger("Radial Hotbars", "AutoTrash");
-
+            AutoTrashTrigger = new EventTrigger("Radial Hotbars", "Auto Trash");
             PackageTrigger = new EventTrigger("Radial Hotbars", "Package");
-
-            BigBagTrigger = new EventTrigger("Radial Hotbars", "BigBag");
+            BigBagTrigger = new EventTrigger("Radial Hotbars", "Big Bag");
+            PlayerInfoTrigger = new EventTrigger("Radial Hotbars", "Player Info");
+            LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand");
+            ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture");
+            StructureTrigger = new EventTrigger("Radial Hotbars", "Structure");
+            LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer");
 
             BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI");
-
             BuffTrackerGUI = new BuffTrackerGUI();
-            PlayerInfoTrigger = new EventTrigger("Radial Hotbars", "PlayerInfo");
             BuffTrackerTrigger.SetCarrier(BuffTrackerGUI);
 
             SidedEventTrigger = new SidedEventTrigger();
 
-            LiquidWandGUI = new LiquidWandGUI();
-            ArchitectureGUI = new ArchitectureGUI();
             BrustGUI = new BrustGUI();
             SpaceWandGUI = new SpaceWandGUI();
             PaintWandGUI = new PaintWandGUI();
             GrabBagInfoGUI = new GrabBagInfoGUI();
-            LifeformAnalyzerGUI = new LifeformAnalyzerGUI();
-            StructureGUI = new StructureGUI();
-            PrefixRecallGUI = new PrefixRecallGUI();
-            LoadGUI(ref LiquidWandGUI, out LiquidWandInterface);
-            LoadGUI(ref ArchitectureGUI, out ArchitectureInterface);
             LoadGUI(ref BrustGUI, out BrustInterface);
             LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
             LoadGUI(ref PaintWandGUI, out PaintWandInterface);
-            LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface,
-                () => GrabBagInfoGUI.UserInterface = GrabBagInfoInterface);
-            LoadGUI(ref LifeformAnalyzerGUI, out LifeformAnalyzerInterface);
-            LoadGUI(ref StructureGUI, out StructureInterface);
-            LoadGUI(ref PrefixRecallGUI, out PrefixRecallInterface);
+            LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface);
         }
 
 
@@ -185,13 +176,12 @@ namespace ImproveGame.Interface.Common
 
         public override void UpdateUI(GameTime gameTime)
         {
+            // 特殊处理
+            PrefixRecallGUI?.TrackDisplayment();
+
             // 可以看到，它执行的是最早的。
             EventTrigger.UpdateUI(gameTime);
 
-            if (LiquidWandGUI.Visible)
-                LiquidWandInterface?.Update(gameTime);
-            if (ArchitectureGUI.Visible)
-                ArchitectureInterface?.Update(gameTime);
             if (BrustGUI.Visible)
                 BrustInterface?.Update(gameTime);
             if (SpaceWandGUI.Visible)
@@ -200,12 +190,6 @@ namespace ImproveGame.Interface.Common
                 PaintWandInterface?.Update(gameTime);
             if (GrabBagInfoGUI.Visible)
                 GrabBagInfoInterface?.Update(gameTime);
-            if (LifeformAnalyzerGUI.Visible)
-                LifeformAnalyzerInterface?.Update(gameTime);
-            if (StructureGUI.Visible)
-                StructureInterface?.Update(gameTime);
-            // if (PrefixRecallGUI.Visible) // 有特殊操作
-            PrefixRecallInterface?.Update(gameTime);
         }
 
         #endregion
@@ -244,12 +228,7 @@ namespace ImproveGame.Interface.Common
             // 背包
             layers.FindVanilla("Inventory", index =>
             {
-                layers.Insert(index, "Liquid Wand GUI", LiquidWandGUI, () => LiquidWandGUI.Visible);
-                layers.Insert(index, "Architecture GUI", ArchitectureGUI, () => ArchitectureGUI.Visible);
                 layers.Insert(index, "Grab Bag Info GUI", GrabBagInfoGUI, () => GrabBagInfoGUI.Visible);
-                layers.Insert(index, "Lifeform Analyzer GUI", LifeformAnalyzerGUI, () => LifeformAnalyzerGUI.Visible);
-                layers.Insert(index, "Structure GUI", StructureGUI, () => StructureGUI.Visible);
-                layers.Insert(index, "Prefix Recall GUI", PrefixRecallGUI, () => PrefixRecallGUI.Visible);
             });
 
             // 精密线控仪

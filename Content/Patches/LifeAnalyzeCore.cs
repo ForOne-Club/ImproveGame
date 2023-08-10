@@ -25,6 +25,8 @@ namespace ImproveGame.Content.Patches
                             return true;
                         }
 
+                        Main.LocalPlayer.mouseInterface = true;
+
                         if (Main.mouseLeft && !_mouseLeftPrev)
                         {
                             switch (LifeformAnalyzerGUI.Visible)

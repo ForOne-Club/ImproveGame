@@ -1,11 +1,12 @@
 ﻿using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using System.Collections.Generic;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class ArchitectureGUI : UIState
+    public class ArchitectureGUI : ViewBody
     {
         private static bool _visible;
 
@@ -17,6 +18,14 @@ namespace ImproveGame.Interface.GUI
             }
             private set => _visible = value;
         }
+
+        public override bool Display { get => Visible; set => Visible = value; }
+
+        public override bool CanPriority(UIElement target) => target != this;
+
+        public override bool CanDisableMouse(UIElement target)
+            => (target != this && basePanel.IsMouseHovering) || basePanel.KeepPressed;
+
         private static float panelLeft;
         private static float panelWidth;
         private static float panelTop;
@@ -30,23 +39,27 @@ namespace ImproveGame.Interface.GUI
         private static bool PrevMouseRight;
         private static bool HoveringOnSlots;
 
-        private ModUIPanel basePanel;
+        private SUIPanel basePanel;
         private Dictionary<string, ModItemSlot> itemSlot = new();
         private UIText materialTitle;
         private ModIconTextButton styleButton;
 
         public override void OnInitialize() {
-            panelLeft = 600f;
-            panelTop = 80f;
+            panelLeft = 590f;
+            panelTop = 120f;
             panelHeight = 190f;
             panelWidth = 190f;
 
-            basePanel = new();
-            basePanel.Left.Set(panelLeft, 0f);
-            basePanel.Top.Set(panelTop, 0f);
-            basePanel.Width.Set(panelWidth, 0f);
-            basePanel.Height.Set(panelHeight, 0f);
-            Append(basePanel);
+            Append(basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            {
+                Shaded = true,
+                ShadowThickness = 12,
+                Draggable = true,
+                Left = {Pixels = panelLeft},
+                Top = {Pixels = panelTop},
+                Width = {Pixels = panelWidth},
+                Height = {Pixels = panelHeight},
+            });
 
             // 排布
             // O O O
@@ -180,9 +193,6 @@ namespace ImproveGame.Interface.GUI
 
             CurrentItem = wand.Item;
             RefreshSlots(CurrentWand);
-
-            // 关掉本Mod其他的同类UI
-            if (LiquidWandGUI.Visible) UISystem.Instance.LiquidWandGUI.Close();
 
             // UI刚加载（即OnInit）时还未加载翻译，因此我们要在这里设置一遍文本
             materialTitle.SetText(Language.GetText("Mods.ImproveGame.Architecture.Materials"));

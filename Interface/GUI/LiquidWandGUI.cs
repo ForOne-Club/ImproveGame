@@ -1,13 +1,14 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using System.Runtime.InteropServices.ComTypes;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class LiquidWandGUI : UIState
+    public class LiquidWandGUI : ViewBody
     {
         private static bool _visible;
 
@@ -20,8 +21,15 @@ namespace ImproveGame.Interface.GUI
             private set => _visible = value;
         }
 
-        private const float PanelLeft = 600f;
-        private const float PanelTop = 80f;
+        public override bool Display { get => Visible; set => Visible = value; }
+
+        public override bool CanPriority(UIElement target) => target != this;
+
+        public override bool CanDisableMouse(UIElement target)
+            => (target != this && basePanel.IsMouseHovering) || basePanel.KeepPressed;
+
+        private const float PanelLeft = 590f;
+        private const float PanelTop = 120f;
         private const float PanelHeight = 148f;
         private const float PanelWidth = 190f;
 
@@ -29,7 +37,7 @@ namespace ImproveGame.Interface.GUI
 
         public LiquidWand CurrentWand => CurrentItem.ModItem as LiquidWand;
 
-        private ModUIPanel basePanel;
+        private SUIPanel basePanel;
         private LiquidWandSlot waterSlot;
         private LiquidWandSlot lavaSlot;
         private LiquidWandSlot honeySlot;
@@ -41,12 +49,16 @@ namespace ImproveGame.Interface.GUI
 
         public override void OnInitialize()
         {
-            basePanel = new ModUIPanel();
-            basePanel.Left.Set(PanelLeft, 0f);
-            basePanel.Top.Set(PanelTop, 0f);
-            basePanel.Width.Set(PanelWidth, 0f);
-            basePanel.Height.Set(PanelHeight, 0f);
-            Append(basePanel);
+            Append(basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            {
+                Shaded = true,
+                ShadowThickness = 12,
+                Draggable = true,
+                Left = {Pixels = PanelLeft},
+                Top = {Pixels = PanelTop},
+                Width = {Pixels = PanelWidth},
+                Height = {Pixels = PanelHeight}
+            });
 
             const float slotFirst = 0f;
             const float slotSecond = 60f;
@@ -286,9 +298,6 @@ namespace ImproveGame.Interface.GUI
             honeySlot.SetLiquidAmount(CurrentWand.Honey);
             // 设置图标
             SetIconTexture();
-
-            // 关掉本Mod其他的同类UI
-            if (ArchitectureGUI.Visible) UISystem.Instance.ArchitectureGUI.Close();
 
             // UI刚加载（即OnInit）时还未加载翻译，因此我们要在这里设置一遍文本
             title.SetText(Language.GetText("Mods.ImproveGame.LiquidWand.Title"));

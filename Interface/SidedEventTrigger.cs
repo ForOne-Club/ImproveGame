@@ -118,13 +118,12 @@ namespace ImproveGame.Interface
         {
             ViewBody = null;
 
-            if (Main.LocalPlayer.chest != -1 || !Main.playerInventory || Main.LocalPlayer.sign > -1 || Main.LocalPlayer.talkNPC > -1)
+            foreach (var uiData in UIPool.Where(uiData => uiData.AnimationTimer.AnyOpen))
             {
-                foreach (var uiData in UIPool.Where(uiData => uiData.AnimationTimer.AnyOpen))
-                {
-                    uiData.AnimationTimer.State = AnimationState.Closing;
-                    uiData.AsSidedView.Close();
-                }
+                if (!uiData.AsSidedView.ForceCloseCondition())
+                    continue;
+                uiData.AnimationTimer.State = AnimationState.Closing;
+                uiData.AsSidedView.Close();
             }
 
             foreach (var uiData in UIPool) {

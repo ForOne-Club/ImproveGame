@@ -290,17 +290,6 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-
-            if (!Main.playerInventory)
-            {
-                Close();
-                return;
-            }
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);

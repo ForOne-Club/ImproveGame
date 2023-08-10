@@ -380,7 +380,7 @@ namespace ImproveGame.Interface.SUIElements
             if (Item.IsAir)
                 return;
 
-            if (IsMouseHovering)
+            if (IsMouseHovering && Interactable)
             {
                 PlayerLoader.HoverSlot(Main.player[Main.myPlayer], Items, ItemSlot.Context.InventoryItem, Index);
                 Main.hoverItemName = Item.Name;

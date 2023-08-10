@@ -15,7 +15,6 @@ namespace ImproveGame.Interface.GUI
         private static float panelTop;
         private static float panelHeight;
         public static int ItemID { get; private set; }
-        public UserInterface UserInterface;
 
         private ModUIPanel BasePanel; // 背景板
         public SUIScrollbar Scrollbar; // 拖动条

@@ -35,21 +35,25 @@ public class BuffTrackerGUI : ViewBody
 
     public override void OnInitialize()
     {
-        basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, draggable: true);
-        basePanel.SetPosPixels(630, 160).SetSizePixels(440, 220).Join(this);
+        basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, draggable: true)
+        {
+            Shaded = true,
+            ShadowThickness = 12
+        };
+        basePanel.SetPosPixels(630, 160).SetSizePixels(450, 220).Join(this);
 
-        UIImageButton closeButton = new UIImageButton(GetTexture("UI/Button_Close"))
+        SUICross closeButton = new()
         {
             Left = new StyleDimension(-28f, 1f),
             Width = StyleDimension.FromPixels(28f),
-            Height = StyleDimension.FromPixels(28f)
+            Height = StyleDimension.FromPixels(28f),
+            BorderColor = Color.Transparent,
+            BgColor = Color.Transparent
         };
-        closeButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Border"));
-        closeButton.SetVisibility(1f, 1f);
         closeButton.OnLeftMouseDown += (_, _) => Close();
         basePanel.Append(closeButton);
 
-        UIHorizontalSeparator separator = new UIHorizontalSeparator()
+        UIHorizontalSeparator separator = new()
         {
             Top = StyleDimension.FromPixels(closeButton.Width.Pixels + 5f),
             Width = StyleDimension.FromPercent(1f),
@@ -59,7 +63,7 @@ public class BuffTrackerGUI : ViewBody
 
         BuffList = new BuffButtonList
         {
-            Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Width = StyleDimension.FromPixelsAndPercent(-22f, 1f),
             Height = StyleDimension.FromPixelsAndPercent(-40f, 1f),
             Top = StyleDimension.FromPixels(40f),
             PaddingBottom = 4f,
@@ -70,22 +74,23 @@ public class BuffTrackerGUI : ViewBody
         BuffList.ManualSortMethod = _ => { };
         basePanel.Append(BuffList);
 
-        Scrollbar = new SUIScrollbar()
+        Scrollbar = new SUIScrollbar
         {
-            Top = basePanel.Top,
-            Left = StyleDimension.FromPixels(basePanel.Left() + basePanel.Width() + 10),
-            Height = StyleDimension.FromPixels(basePanel.Height())
+            Left = {Pixels = -20f, Percent = 1f},
+            Width = {Pixels = 18f},
+            Top = {Pixels = 44f},
+            Height = {Pixels = -48f, Percent = 1f}
         };
         Scrollbar.SetView(100f, 1000f);
         SetupScrollBar();
-        Append(Scrollbar);
+        basePanel.Append(Scrollbar);
 
         BuffTrackerBattler = new BuffTrackerBattler();
         BuffTrackerBattler.Initialize();
         BuffTrackerBattler.MainPanel.SetPos(basePanel.Left() - 92f, basePanel.Top());
         Append(BuffTrackerBattler.MainPanel);
 
-        UIElement searchArea = new UIElement()
+        UIElement searchArea = new()
         {
             Height = new StyleDimension(28f, 0f),
             Width = new StyleDimension(-42f, 1f)
@@ -161,9 +166,6 @@ public class BuffTrackerGUI : ViewBody
         _didClickSearchBar = false;
 
         BuffTrackerBattler.Update();
-        // 刷新滚动条
-        Scrollbar.SetPosPixels(basePanel.RightPixels() + 10f, basePanel.Top.Pixels);
-        Scrollbar.Recalculate();
         // 刷新刷怪条
         BuffTrackerBattler.MainPanel.SetPosPixels(basePanel.Left.Pixels - 92f, basePanel.Top.Pixels);
         BuffTrackerBattler.MainPanel.Recalculate();

@@ -7,9 +7,17 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class StructureGUI : UIState
+    public class StructureGUI : ViewBody
     {
         public static bool Visible { get; private set; }
+
+        public override bool Display { get => Visible; set => Visible = value; }
+
+        public override bool CanPriority(UIElement target) => target != this;
+
+        public override bool CanDisableMouse(UIElement target)
+            => (target != this && BasePanel.IsMouseHovering) || BasePanel.KeepPressed;
+
         public bool CacheSetupStructures; // 缓存，在下一帧Setup
         public bool CacheSetupStructureInfos; // 缓存，在下一帧Setup
         public string CacheStructureInfoPath;
@@ -37,6 +45,7 @@ namespace ImproveGame.Interface.GUI
 
             BasePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160))
             {
+                Shaded = true,
                 Top = StyleDimension.FromPixels(150f),
                 HAlign = 0.5f
             };

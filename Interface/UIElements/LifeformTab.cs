@@ -12,7 +12,7 @@ namespace ImproveGame.Interface.UIElements
         public LifeformTab(int npcId) : base(new Color(89, 116, 213), new Color(44, 57, 105, 160))
         {
             _npcId = npcId;
-            this.SetSize(new Vector2(0f, 36f), 1f);
+            this.SetSize(new Vector2(-20f, 36f), 1f);
             //IgnoresMouseInteraction = true;
             
             Append(new UITextPanel<string>($"{Lang.GetNPCNameValue(npcId)}")
@@ -25,7 +25,6 @@ namespace ImproveGame.Interface.UIElements
 
             tickUI = new UIImage(TextureAssets.InventoryTickOn)
             {
-                Top = StyleDimension.FromPixels(-4f),
                 HAlign = 1f,
                 VAlign = 0.5f
             };
