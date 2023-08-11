@@ -528,8 +528,8 @@ ImproveConfigs: {
 		Label: "[centeritem:MusicBoxTownDay] Teleport NPCs Home"
 		Tooltip:
 			'''
-			<right> the "Housing" button will teleport all town NPCs home.
-			A town NPC will teleport home once its home is changed.
+			Right-clicking the "Housing" button will teleport all town NPCs home.
+			Once a town NPC's home changes, it will be teleported to its home.
 			'''
 		HoverText: （<right> to teleport town NPCs home）
 	}
