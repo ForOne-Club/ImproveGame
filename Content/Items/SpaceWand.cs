@@ -25,7 +25,11 @@ public class SpaceWand : ModItem, IMarqueeItem
     private Color _backgroundColor;
     private Color _borderColor;
 
-    bool IMarqueeItem.ShouldDrawing => _shouldDrawing;
+    bool IMarqueeItem.ShouldDrawing
+    {
+        get => _shouldDrawing;
+        set => _shouldDrawing = value;
+    }
     Rectangle IMarqueeItem.Marquee => _marquee;
     Color IMarqueeItem.BorderColor => _borderColor;
     Color IMarqueeItem.BackgroundColor => _backgroundColor;
@@ -62,15 +66,10 @@ public class SpaceWand : ModItem, IMarqueeItem
     private CoroutineHandle _handle;
     public PlaceType PlaceType;
     public BlockType BlockType;
-    public int[] GrassSeeds = {2, 23, 60, 70, 199, 109, 82};
+    public int[] GrassSeeds = { 2, 23, 60, 70, 199, 109, 82 };
 
     public Vector2 StartingPoint;
     public static Vector2 MousePosition => Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
-
-    public override void UpdateInventory(Player player)
-    {
-        _shouldDrawing = false;
-    }
 
     public override bool CanUseItem(Player player)
     {
@@ -152,7 +151,7 @@ public class SpaceWand : ModItem, IMarqueeItem
     {
         if (Main.netMode is not NetmodeID.MultiplayerClient)
             return;
-        
+
         _syncRunner.Update(1);
 
         // Runner用来实现间隔为8帧的rotation同步

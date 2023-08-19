@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using Terraria;
 
 namespace ImproveGame.Common.ModSystems.MarqueeSystem;
 
@@ -25,6 +26,17 @@ public class MarqueeSystem : ModSystem
     public MarqueeSystem()
     {
         _marqueeLayer = new MarqueeLayer(this);
+    }
+
+    public override void PreUpdatePlayers()
+    {
+        Player player = Main.LocalPlayer;
+        Item item = player.HeldItem;
+
+        if (item.ModItem is IMarqueeItem marqueeItem && marqueeItem.ShouldDrawing)
+        {
+            marqueeItem.ShouldDrawing = false;
+        }
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

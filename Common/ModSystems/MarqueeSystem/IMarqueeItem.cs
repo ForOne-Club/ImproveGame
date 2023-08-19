@@ -2,7 +2,7 @@
 
 public interface IMarqueeItem
 {
-    public bool ShouldDrawing { get; }
+    public bool ShouldDrawing { get; set; }
     public Rectangle Marquee { get; }
     public Color BorderColor { get; }
     public Color BackgroundColor { get; }
