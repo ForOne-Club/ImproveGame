@@ -13,6 +13,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - v1.6.5.1
 - v1.6.5.2
 - v1.6.5.3
+- v1.6.5.4
 ## Additions
 - Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 - Enabled configuring chest detection range of Storage Manager
@@ -31,6 +32,8 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.3]** 新增“失焦时保持游戏运行”功能，即使玩单人也可以把游戏挂后台去干别的事了！
 - **[v1.6.5.3]** 新增“红药水扩展”功能，无尽红药水可给予你多种增益
 - **[v1.6.5.3]** 新增“专家Debuff时长延长”选项，可将Debuff时长设置为与经典模式一致了
+- **[v1.6.5.4]** 新增世界特性调节面板，可调节秘密种子与特殊节日特性
+- **[v1.6.5.4]** 新增“移除设置重生点限制”选项，使得床在任何情况下均可设置重生点
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine
@@ -56,6 +59,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.3]** 修复了液体法杖显示错误的图标的BUG
 - **[v1.6.5.3]** 修复了“摇树必掉水果”功能不支持部分树的BUG
 - **[v1.6.5.3]** 修复了尝试向药水袋/旗帜盒放入不相容的物品时会报错的BUG
+- **[v1.6.5.4]** 修复了部分文本错误
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI

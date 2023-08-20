@@ -408,7 +408,7 @@ ImproveConfigs: {
 			若密码正确，将获得调节模组设置的权限
 			对于端口映射手段开服有用，因为此时IP无法验证身份(均为127.0.0.1)
 			'''
-		Unaccepted: 无法更改: 你没有通过密码验证！
+		Unaccepted: 你没有通过密码验证！
 		Registered: 你已获得修改配置权限，无需认证
 		Correct: 密码正确，你已获得修改配置权限
 		Incorrect: 密码错误！
@@ -461,6 +461,7 @@ ImproveConfigs: {
 
 	OtherFunctions: {
 		Label: 其他不可调节功能
+		ExpandTip: 点击以查看
 		Subtitle: 以下是本模组的不可调节功能
 		Tooltip:
 			'''
@@ -589,6 +590,21 @@ ImproveConfigs: {
 			在专家/大师模式下是否延长Debuff时间
 			关闭后Debuff时间将与经典模式一致
 			'''
+	}
+
+	WorldFeaturePanel: {
+		Label: "[centeritem:WorldGlobe] 世界特性调节面板"
+		Tooltip:
+			'''
+			开启并在“控件”中绑定快捷键后
+			按下快捷键可打开世界特性调节面板
+			可调节秘密种子效果、特殊节日
+			'''
+	}
+
+	BedEverywhere: {
+		Label: "[centeritem:Bed] 移除设置重生点限制"
+		Tooltip: 使得床在任何情况下均可设置重生点，不需要房间
 	}
 }
 

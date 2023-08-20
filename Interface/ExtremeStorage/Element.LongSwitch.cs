@@ -22,13 +22,15 @@ namespace ImproveGame.Interface.ExtremeStorage
         private readonly Color _textColor = Color.White;
         private readonly Color _textBorderColor = Color.Black;
         private readonly AnimationTimer _timer = new (4);
+        private readonly bool _hasTooltip;
 
-        public LongSwitch(Func<bool> getState, Action<bool> setState, string text)
+        public LongSwitch(Func<bool> getState, Action<bool> setState, string text, bool hasTooltip = true)
         {
             _text = text;
             _textSize = GetFontSize(text);
             this._getState = getState;
             this._setState = setState;
+            _hasTooltip = hasTooltip;
             
             Spacing = new Vector2(0f, 4f);
 
@@ -85,12 +87,13 @@ namespace ImproveGame.Interface.ExtremeStorage
             SDFGraphic.NoBorderRound(position2, boxSize2.X, color3);
 
             // 文字
-            var text = GetText($"{_text}.Label");
+            string text = GetText(!_hasTooltip ? _text : $"{_text}.Label");
             var textCenter = new Vector2(position.X + 12, center.Y - _textSize.Y / 2f + UIConfigs.Instance.GeneralFontOffsetY);
+            textCenter.Y -= 4f;
             DrawString(textCenter, text, _textColor, _textBorderColor);
 
             // 提示
-            if (IsMouseHovering)
+            if (IsMouseHovering && _hasTooltip)
             {
                 UICommon.TooltipMouseText(GetText($"{_text}.Tooltip"));
             }

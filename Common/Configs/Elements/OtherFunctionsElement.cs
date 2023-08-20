@@ -2,6 +2,7 @@
 using System.Text;
 using Terraria.GameContent.UI.States;
 using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Common.Configs.Elements;
@@ -18,7 +19,7 @@ public class OtherFunctionsElement : ConfigElement
     {
         base.OnBind();
         DrawLabel = false;
-        
+
         _unexpandedPanel = new UIPanel
         {
             BorderColor = Color.Transparent,
@@ -27,8 +28,9 @@ public class OtherFunctionsElement : ConfigElement
             Height = {Pixels = RegularHeight}
         };
         _unexpandedPanel.SetPadding(0f);
-        
-        _unexpandedPanel.Append(new UIText(Label, 0.4f, true) {
+
+        _unexpandedPanel.Append(new UIText(Label, 0.4f, true)
+        {
             TextOriginX = 0.5f,
             TextOriginY = 0.5f,
             Width = StyleDimension.Fill,
@@ -36,7 +38,7 @@ public class OtherFunctionsElement : ConfigElement
         });
 
         Append(_unexpandedPanel);
-        
+
         _expandedPanel = new UIPanel
         {
             BorderColor = Color.Transparent,
@@ -55,7 +57,8 @@ public class OtherFunctionsElement : ConfigElement
             TextOriginY = 0.5f
         });
 
-        _expandedPanel.Append(new UIText(Language.GetTextValue("Mods.ImproveGame.Configs.ImproveConfigs.OtherFunctions.Subtitle"),
+        _expandedPanel.Append(new UIText(
+            GetText("Configs.ImproveConfigs.OtherFunctions.Subtitle"),
             0.7f)
         {
             Top = {Pixels = 40f},
@@ -91,11 +94,13 @@ public class OtherFunctionsElement : ConfigElement
     {
         base.Update(gameTime);
 
-        if (!_expanded) {
+        if (!_expanded)
+        {
             _expandedPanel.Remove();
             Append(_unexpandedPanel);
         }
-        else {
+        else
+        {
             _unexpandedPanel.Remove();
             Append(_expandedPanel);
         }
@@ -108,9 +113,12 @@ public class OtherFunctionsElement : ConfigElement
         if (!_expanded)
         {
             Height.Set(RegularHeight, 0f);
-            if (Parent is UISortableElement) {
+            if (Parent is UISortableElement)
                 Parent.Height.Pixels = RegularHeight;
-            }
+
+            if (IsMouseHovering)
+                UICommon.TooltipMouseText(GetText("Configs.ImproveConfigs.OtherFunctions.ExpandTip"));
+
             return;
         }
 
@@ -141,7 +149,8 @@ public class OtherFunctionsElement : ConfigElement
 
         float height = currentY - dimensions.Y + 10f;
         Height.Set(height, 0f);
-        if (Parent is UISortableElement) {
+        if (Parent is UISortableElement)
+        {
             Parent.Height.Pixels = height;
         }
     }

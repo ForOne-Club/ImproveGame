@@ -3,6 +3,7 @@ using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.BannerChest;
+using ImproveGame.Interface.GUI.WorldFeature;
 using ImproveGame.Interface.PlayerInfo;
 using ImproveGame.Interface.UIStructs;
 
@@ -52,7 +53,7 @@ namespace ImproveGame.Interface.Common
         // Buff 追踪站
         public BuffTrackerGUI BuffTrackerGUI;
         public EventTrigger BuffTrackerTrigger;
-        
+
         // 液体法杖
         public LiquidWandGUI LiquidWandGUI;
         public EventTrigger LiquidWandTrigger;
@@ -64,6 +65,10 @@ namespace ImproveGame.Interface.Common
         // 构造法杖
         public StructureGUI StructureGUI;
         public EventTrigger StructureTrigger;
+
+        // 世界特性
+        public WorldFeatureGUI WorldFeatureGUI;
+        public EventTrigger WorldFeatureTrigger;
 
         // 侧栏 UI
         public AutofisherGUI AutofisherGUI;
@@ -121,6 +126,9 @@ namespace ImproveGame.Interface.Common
             StructureGUI = null;
             StructureTrigger = null;
 
+            WorldFeatureGUI = null;
+            WorldFeatureTrigger = null;
+
             PackageGUI = null;
             PackageTrigger = null;
         }
@@ -142,6 +150,7 @@ namespace ImproveGame.Interface.Common
             ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture");
             StructureTrigger = new EventTrigger("Radial Hotbars", "Structure");
             LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer");
+            WorldFeatureTrigger = new EventTrigger("Radial Hotbars", "World Feature");
 
             BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI");
             BuffTrackerGUI = new BuffTrackerGUI();
@@ -176,6 +185,9 @@ namespace ImproveGame.Interface.Common
 
         public override void UpdateUI(GameTime gameTime)
         {
+            if (Main.ingameOptionsWindow || Main.InGameUI.IsVisible)
+                return;
+
             // 特殊处理
             PrefixRecallGUI?.TrackDisplayment();
 
@@ -241,6 +253,5 @@ namespace ImproveGame.Interface.Common
         }
 
         #endregion
-
     }
 }

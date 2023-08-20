@@ -98,6 +98,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool FasterExtractinator;
 
+        [DefaultValue(true)]
+        public bool BedEverywhere;
+
         #endregion
 
         #region 物品效果设置
@@ -320,6 +323,9 @@ namespace ImproveGame.Common.Configs
         [Slider]
         public int ExStorageSearchDistance;
 
+        [DefaultValue(true)]
+        public bool WorldFeaturePanel;
+
         // 
         [ReloadRequired]
         public ModItemLoadPage LoadModItems = new();
@@ -415,7 +421,7 @@ namespace ImproveGame.Common.Configs
             {
                 if (!NetPasswordSystem.Registered[whoAmI])
                 {
-                    message = GetText("Config.OnlyHostByPassword.Unaccepted");
+                    message = GetText("Configs.ImproveConfigs.OnlyHostByPassword.Unaccepted");
                 }
                 return NetPasswordSystem.Registered[whoAmI];
             }
@@ -441,7 +447,7 @@ namespace ImproveGame.Common.Configs
             }
             else
             {
-                message = GetText("Config.OnlyHost.Unaccepted");
+                message = GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted");
                 return false;
             }
         }

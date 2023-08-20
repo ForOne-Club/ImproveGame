@@ -4,6 +4,7 @@ using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.Packets.Items;
 using ImproveGame.Content.Items.Coin;
 using ImproveGame.Core;
+using ImproveGame.Interface.GUI.WorldFeature;
 using ReLogic.Graphics;
 using System.Collections;
 using Terraria.GameInput;
@@ -17,8 +18,9 @@ namespace ImproveGame;
 /// </summary>
 partial class MyUtils
 {
-    public static bool HasDevMark => Main.LocalPlayer.inventory.Any(i => i.type == ModContent.ItemType<DevMark>()) && Main.netMode is NetmodeID.SinglePlayer;
-    
+    public static bool HasDevMark => Main.LocalPlayer.inventory.Any(i => i.type == ModContent.ItemType<DevMark>()) &&
+                                     Main.netMode is NetmodeID.SinglePlayer;
+
     public static Matrix GetMatrix(bool ui)
     {
         if (ui)
@@ -39,13 +41,15 @@ partial class MyUtils
                 width = graphicsDevice.PresentationParameters.BackBufferWidth;
                 height = graphicsDevice.PresentationParameters.BackBufferHeight;
             }
+
             return Matrix.CreateOrthographicOffCenter(0, width / Main.UIScale, height / Main.UIScale, 0, 0, 1);
         }
         else
         {
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
             Vector2 offset = screenSize * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom) / 2;
-            return Matrix.CreateOrthographicOffCenter(offset.X, Main.screenWidth - offset.X, Main.screenHeight - offset.Y, offset.Y, 0, 1);
+            return Matrix.CreateOrthographicOffCenter(offset.X, Main.screenWidth - offset.X,
+                Main.screenHeight - offset.Y, offset.Y, 0, 1);
         }
     }
 
@@ -81,6 +85,7 @@ partial class MyUtils
         {
             return FontAssets.DeathText.Value.MeasureString(text);
         }
+
         return FontAssets.MouseText.Value.MeasureString(text);
     }
 
@@ -90,15 +95,18 @@ partial class MyUtils
         {
             return ChatManager.GetStringSize(FontAssets.DeathText.Value, text, new Vector2(1f)) * textScale;
         }
+
         return ChatManager.GetStringSize(FontAssets.MouseText.Value, text, new Vector2(1f)) * textScale;
     }
 
-    public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f, bool large = false)
+    public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f,
+        bool large = false)
     {
         DrawString(position, text, textColor, borderColor, Zero, scale, large);
     }
 
-    public static void DrawString(Vector2 pos, string text, Color textColor, Color borderColor, Vector2 origin, float textScale, bool large)
+    public static void DrawString(Vector2 pos, string text, Color textColor, Color borderColor, Vector2 origin,
+        float textScale, bool large)
     {
         DynamicSpriteFont spriteFont = (large ? FontAssets.DeathText : FontAssets.MouseText).Value;
 
@@ -153,6 +161,7 @@ partial class MyUtils
             if (array[i] == value)
                 return true;
         }
+
         return false;
     }
 
@@ -172,8 +181,8 @@ partial class MyUtils
             ItemUsePacket.Get(player).Send();
         }
     }
-    
-    
+
+
     /// <summary>
     /// 可以用来实现间隔为10帧的rotation同步
     /// </summary>
@@ -192,16 +201,20 @@ partial class MyUtils
         {
             return;
         }
+
         for (int i = 0; i < 255; i++)
         {
             var player = Main.player[i];
-            if (i != myselfIndex && player.active && (!player.DeadOrGhost || !checkDead) && player.team is not 0 && player.team == Main.player[myselfIndex].team)
+            if (i != myselfIndex && player.active && (!player.DeadOrGhost || !checkDead) && player.team is not 0 &&
+                player.team == Main.player[myselfIndex].team)
             {
                 // 范围检测
-                if (Config.ShareRange != -1 && player.Distance(Main.player[myselfIndex].Center) / 16f > Config.ShareRange)
+                if (Config.ShareRange != -1 &&
+                    player.Distance(Main.player[myselfIndex].Center) / 16f > Config.ShareRange)
                 {
                     continue;
                 }
+
                 whatToDo(player);
             }
         }
@@ -217,12 +230,14 @@ partial class MyUtils
             bindName = "ERROR";
             return false;
         }
+
         List<string> keys = keybind.GetAssignedKeys();
         if (keys.Count == 0)
         {
             bindName = Language.GetTextValue("LegacyMenu.195"); // <未绑定>
             return false;
         }
+
         var keybindListItem = new UIKeybindingListItem(keys[0], InputMode.Keyboard, Color.White);
         bindName = keybindListItem.GenInput(keys);
         // StringBuilder sb = new(16);
@@ -271,14 +286,14 @@ partial class MyUtils
         Vector2 position = tileRectangleInScreen.TopLeft() * 16f;
         Vector2 scale = new(tileRectangleInScreen.Width, tileRectangleInScreen.Height);
         Main.spriteBatch.Draw(
-                texture,
-                position,
-                new(0, 0, 1, 1),
-                backgroundColor,
-                0f,
-                Zero,
-                16f * scale,
-                SpriteEffects.None, 0f);
+            texture,
+            position,
+            new(0, 0, 1, 1),
+            backgroundColor,
+            0f,
+            Zero,
+            16f * scale,
+            SpriteEffects.None, 0f);
         Main.spriteBatch.Draw(
             texture,
             position + UnitX * -2f + UnitY * -2f,
@@ -308,14 +323,14 @@ partial class MyUtils
         Texture2D texture = TextureAssets.MagicPixel.Value;
         Vector2 scale = new(width, height);
         Main.spriteBatch.Draw(
-                texture,
-                position,
-                new(0, 0, 1, 1),
-                backgroundColor,
-                0f,
-                Zero,
-                scale,
-                SpriteEffects.None, 0f);
+            texture,
+            position,
+            new(0, 0, 1, 1),
+            backgroundColor,
+            0f,
+            Zero,
+            scale,
+            SpriteEffects.None, 0f);
         Main.spriteBatch.Draw(
             texture,
             position + UnitX * -2f + UnitY * -2f,
@@ -376,6 +391,7 @@ partial class MyUtils
                 text = text.Replace("<right>", Language.GetTextValue("Controls.RightClick"));
             }
         }
+
         if (text.Contains("<left>"))
         {
             InputMode inputMode2 = InputMode.XBoxGamepad;
@@ -394,6 +410,7 @@ partial class MyUtils
                 text = text.Replace("<left>", Language.GetTextValue("Controls.LeftClick"));
             }
         }
+
         return text;
     }
 
@@ -413,6 +430,7 @@ partial class MyUtils
                 return false;
             }
         }
+
         return true;
     }
 
@@ -447,6 +465,7 @@ partial class MyUtils
                 frameX -= 1620;
                 frameY += 54;
             }
+
             if (frameX >= 396 || frameY >= 54)
             {
                 int styleX = frameX / 18 - 21;
@@ -454,6 +473,7 @@ partial class MyUtils
                 {
                     styleX += 90;
                 }
+
                 return styleX;
             }
         }
@@ -557,10 +577,12 @@ partial class MyUtils
                     PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack);
                     SoundEngine.PlaySound(SoundID.Grab);
                 }
+
                 inventory[i] = item;
                 return new Item();
             }
         }
+
         return item;
     }
 
@@ -571,12 +593,13 @@ partial class MyUtils
     /// <returns>包含全部物品数组的Dictionary，Key为物品所属的物品空间</returns>
     public static Dictionary<string, Item[]> GetAllInventoryItems(Player player)
     {
-        var items = new Dictionary<string, Item[]>() {
-            { "inv", player.inventory },
-            { "piggy", player.bank.item },
-            { "safe", player.bank2.item },
-            { "forge", player.bank3.item },
-            { "void", player.bank4.item }
+        var items = new Dictionary<string, Item[]>()
+        {
+            {"inv", player.inventory},
+            {"piggy", player.bank.item},
+            {"safe", player.bank2.item},
+            {"forge", player.bank3.item},
+            {"void", player.bank4.item}
         };
         if (Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer))
         {
@@ -608,6 +631,7 @@ partial class MyUtils
                 itemList.Add(item);
             }
         }
+
         return itemList;
     }
 
@@ -630,12 +654,15 @@ partial class MyUtils
                 {
                     if (hint)
                     {
-                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, inventory[slot].maxStack - inventory[slot].stack);
+                        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item,
+                            inventory[slot].maxStack - inventory[slot].stack);
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
+
                     item.stack -= reduce;
                     inventory[slot].stack = inventory[slot].maxStack;
                 }
+
                 return item;
             }
             // 全部堆叠
@@ -646,14 +673,17 @@ partial class MyUtils
                     PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack, noStack: false);
                     SoundEngine.PlaySound(SoundID.Grab);
                 }
+
                 inventory[slot].stack += item.stack;
                 return new Item();
             }
         }
+
         return item;
     }
 
-    public static bool IsBankItem(int type) => Lookups.Bank2Items.Contains(type) || Lookups.Bank3Items.Contains(type) || Lookups.Bank4Items.Contains(type) || Lookups.Bank5Items.Contains(type);
+    public static bool IsBankItem(int type) => Lookups.Bank2Items.Contains(type) || Lookups.Bank3Items.Contains(type) ||
+                                               Lookups.Bank4Items.Contains(type) || Lookups.Bank5Items.Contains(type);
 
     /// <summary>
     /// 判断指定 Item[] 中是否有 item
@@ -667,6 +697,7 @@ partial class MyUtils
                 return true;
             }
         }
+
         return false;
     }
 
@@ -694,6 +725,7 @@ partial class MyUtils
                 infinite = true;
             }
         }
+
         return infinite;
     }
 
@@ -708,6 +740,7 @@ partial class MyUtils
                 return item;
             }
         }
+
         return new Item();
     }
 
@@ -722,6 +755,7 @@ partial class MyUtils
                 return item;
             }
         }
+
         return null;
     }
 
@@ -744,10 +778,12 @@ partial class MyUtils
                 num += item.stack;
             }
         }
+
         if (num >= amount)
         {
             return oneIndex;
         }
+
         return -1;
     }
 
@@ -770,10 +806,12 @@ partial class MyUtils
                 {
                     TryConsumeItem(ref item, player);
                 }
+
                 index = i;
                 return returnItem; // 要是consume完了就没了，所以clone一下
             }
         }
+
         for (int i = 0; i < 50; i++)
         {
             ref Item item = ref player.inventory[i];
@@ -784,10 +822,12 @@ partial class MyUtils
                 {
                     TryConsumeItem(ref item, player);
                 }
+
                 index = i;
                 return returnItem; // 要是consume完了就没了，所以clone一下
             }
         }
+
         index = -1;
         return new();
     }
@@ -807,9 +847,11 @@ partial class MyUtils
                 {
                     TryConsumeItem(ref item, player);
                 }
+
                 return item;
             }
         }
+
         return new();
     }
 
@@ -829,8 +871,10 @@ partial class MyUtils
             {
                 item.TurnToAir();
             }
+
             return true;
         }
+
         return false;
     }
 
@@ -877,5 +921,32 @@ partial class MyUtils
         originalPosition.X -= oppositeX * (Main.GameZoomTarget - 1f);
         originalPosition.Y -= oppositeY * (Main.GameZoomTarget - 1f);
         return originalPosition;
+    }
+
+    public static ref bool GetSeedFeatureFlag(byte seedType) => ref GetSeedFeatureFlag((SeedType)seedType);
+
+    public static ref bool GetSeedFeatureFlag(SeedType seedType)
+    {
+        switch (seedType)
+        {
+            case SeedType.Drunk:
+                return ref Main.drunkWorld;
+            case SeedType.Bees:
+                return ref Main.notTheBeesWorld;
+            case SeedType.Ftw:
+                return ref Main.getGoodWorld;
+            case SeedType.Anniversary:
+                return ref Main.tenthAnniversaryWorld;
+            case SeedType.DontStarve:
+                return ref Main.dontStarveWorld;
+            case SeedType.Traps:
+                return ref Main.noTrapsWorld;
+            case SeedType.Remix:
+                return ref Main.remixWorld;
+            case SeedType.Zenith:
+                return ref Main.zenithWorld;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }

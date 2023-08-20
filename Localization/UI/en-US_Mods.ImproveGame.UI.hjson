@@ -107,3 +107,62 @@ AutoTrash.Introduction:
 	Can be [c/CC88AA:disabled] in UI configuration.
 	Press [c/CC88AA:{0}] to hide the UI.
 	'''
+
+WorldFeature: {
+	Title: 世界特性
+
+	Halloween: {
+		Label: 万圣节
+		Tooltip: 控制世界是否处于万圣节期间
+	}
+
+	XMas: {
+		Label: 圣诞节
+		Tooltip: 控制世界是否处于圣诞节期间
+	}
+
+	Drunk:
+		'''
+		Drunk world（醉酒世界）
+		种子：05162020 | 5162020
+		'''
+	Bees:
+		'''
+		Not the bees（蜜蜂世界）
+		种子：not the bees | not the bees! | notthebees
+		'''
+	Ftw:
+		'''
+		For the worthy
+		种子：for the worthy | fortheworthy
+		'''
+	Anniversary:
+		'''
+		Celebrationmk10（十周年世界）
+		种子：celebrationmk10 | 05162011 | 5162011 | 05162021 | 5162021
+		'''
+	DontStarve:
+		'''
+		The Constant（饥荒世界）
+		种子：constant | theconstant | the constant | eye4aneye | eyeforaneye
+		'''
+	Traps:
+		'''
+		No traps（陷阱世界）
+		种子：no traps | notraps
+		注：在游戏内启用该世界特性没有任何实际效果
+		'''
+	Remix:
+		'''
+		Don't dig up（颠倒世界）
+		种子：don't dig up | dont dig up | dontdigup
+		'''
+	Zenith:
+		'''
+		Get fixed boi（天顶世界）
+		种子：get fixed boi | getfixedboi
+		注：只有将其他所有特殊种子特性开启，才能体验天顶世界完整效果
+		'''
+	OpenWiki: <right>以打开Wiki页面
+	NotPermitted: 您没有权限修改世界特性
+}

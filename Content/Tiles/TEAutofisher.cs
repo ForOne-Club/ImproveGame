@@ -523,7 +523,7 @@ namespace ImproveGame.Content.Tiles
                         string depth = ((depthToSurface != 0) ? Language.GetTextValue("GameUI.Depth", depthToSurface) : Language.GetTextValue("GameUI.DepthLevel"));
                         string depthText = depth + " " + layer;
 
-                        string finalText = GetTextWith("Config.EmptyAutofisher.Tip", new
+                        string finalText = GetTextWith("Configs.ImproveConfigs.EmptyAutofisher.Tip", new
                         {
                             Compass = compassText,
                             Depth = depthText

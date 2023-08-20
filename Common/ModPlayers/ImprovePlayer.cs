@@ -3,6 +3,7 @@ using ImproveGame.Content.Items;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
+using ImproveGame.Interface.GUI.WorldFeature;
 using Microsoft.Xna.Framework.Input;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
@@ -232,6 +233,8 @@ public class ImprovePlayer : ModPlayer
             PressSuperVaultKeybind();
         if (KeybindSystem.BuffTrackerKeybind.JustPressed)
             PressBuffTrackerKeybind();
+        if (KeybindSystem.WorldFeatureKeybind.JustPressed)
+            PressWorldFeatureKeybind();
         if (KeybindSystem.GrabBagKeybind.JustPressed)
             PressGrabBagKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
@@ -260,6 +263,24 @@ public class ImprovePlayer : ModPlayer
             UISystem.Instance.BuffTrackerGUI.Close();
         else
             UISystem.Instance.BuffTrackerGUI.Open();
+    }
+
+    private static void PressWorldFeatureKeybind()
+    {
+        if (!Config.WorldFeaturePanel)
+        {
+            if (WorldFeatureGUI.Visible)
+                UISystem.Instance.WorldFeatureGUI?.Close();
+            return;
+        }
+
+        var ui = UISystem.Instance.WorldFeatureGUI;
+        if (ui is null) return;
+
+        if (WorldFeatureGUI.Visible)
+            ui.Close();
+        else
+            ui.Open();
     }
 
     private static void PressGrabBagKeybind()
@@ -343,18 +364,25 @@ public class ImprovePlayer : ModPlayer
         var items = GetAllInventoryItemsList(Player);
 
         // 返回药水优先级最高
-        int itemType = (from item in items where item.type is ItemID.PotionOfReturn && item.stack >= Config.NoConsume_PotionRequirement select item.type).FirstOrDefault();
+        int itemType =
+            (from item in items
+                where item.type is ItemID.PotionOfReturn && item.stack >= Config.NoConsume_PotionRequirement
+                select item.type).FirstOrDefault();
 
         // 然后是回忆
         if (itemType is ItemID.None)
         {
-            itemType = (from item in items where item.type is ItemID.RecallPotion && item.stack >= Config.NoConsume_PotionRequirement select item.type).FirstOrDefault();
+            itemType = (from item in items
+                where item.type is ItemID.RecallPotion && item.stack >= Config.NoConsume_PotionRequirement
+                select item.type).FirstOrDefault();
         }
 
         // 最后是魔镜
         if (itemType is ItemID.None)
         {
-            itemType = (from item in items where item.type is ItemID.MagicMirror or ItemID.CellPhone or ItemID.IceMirror or ItemID.Shellphone or ItemID.ShellphoneOcean or ItemID.ShellphoneHell or ItemID.ShellphoneSpawn select item.type).FirstOrDefault();
+            itemType = (from item in items where item.type is ItemID.MagicMirror or ItemID.CellPhone or ItemID.IceMirror
+                    or ItemID.Shellphone or ItemID.ShellphoneOcean or ItemID.ShellphoneHell or ItemID.ShellphoneSpawn
+                select item.type).FirstOrDefault();
         }
 
         if (itemType is ItemID.None)
@@ -364,8 +392,10 @@ public class ImprovePlayer : ModPlayer
         UseItemByType(Player, itemType);
         SoundEngine.PlaySound(SoundID.Item6, Player.position);
 
-        for (int l = 0; l < 70; l++) {
-            Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror, Player.velocity.X * 0.5f, Player.velocity.Y * 0.5f, 150, default, 1.5f);
+        for (int l = 0; l < 70; l++)
+        {
+            Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror, Player.velocity.X * 0.5f,
+                Player.velocity.Y * 0.5f, 150, default, 1.5f);
         }
 
         if (itemType is ItemID.PotionOfReturn)
@@ -382,7 +412,8 @@ public class ImprovePlayer : ModPlayer
             Player.immuneTime = immuneTime;
         }
 
-        for (int m = 0; m < 70; m++) {
+        for (int m = 0; m < 70; m++)
+        {
             Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror, 0f, 0f, 150, default, 1.5f);
         }
     }

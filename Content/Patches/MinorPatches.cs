@@ -245,6 +245,9 @@ namespace ImproveGame.Content.Patches
             // 专家/大师延长Debuff
             On_Player.AddBuff_DetermineBuffTimeToAdd += (orig, self, type, time1) =>
                 Config.LongerExpertDebuff ? orig.Invoke(self, type, time1) : time1;
+            // 床随地设置重生点
+            On_Player.CheckSpawn += (orig, i, j) =>
+                Config.BedEverywhere || orig.Invoke(i, j);
         }
 
         private void LiveInCorrupt(ILContext il)

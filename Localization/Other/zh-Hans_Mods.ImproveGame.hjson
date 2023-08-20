@@ -340,6 +340,7 @@ Keybinds: {
 	AutoTrashKeybind.DisplayName: 隐藏/显示自动垃圾桶
 	DiscordRodKeybind.DisplayName: 传送法杖快捷键
 	HomeKeybind.DisplayName: 回程快捷键
+	WorldFeature.DisplayName: 世界特性
 }
 
 Projectiles: {

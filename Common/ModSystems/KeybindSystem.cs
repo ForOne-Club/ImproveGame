@@ -13,6 +13,7 @@ public class KeybindSystem : ModSystem
 
     public static ModKeybind SuperVaultKeybind { get; private set; }
     public static ModKeybind BuffTrackerKeybind { get; private set; }
+    public static ModKeybind WorldFeatureKeybind { get; private set; }
     public static ModKeybind GrabBagKeybind { get; private set; }
     public static ModKeybind HotbarSwitchKeybind { get; private set; }
     public static ModKeybind AutoTrashKeybind { get; private set; }
@@ -42,6 +43,7 @@ public class KeybindSystem : ModSystem
         CreateBindingGroup += AddModifyTip;
         SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "HugeInventory", "F");
         BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "BuffTracker", "NumPad3");
+        WorldFeatureKeybind = KeybindLoader.RegisterKeybind(Mod, "WorldFeature", "NumPad1");
         GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "GrabBagLoot", "OemQuotes");
         HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "HotbarSwitch", "OemQuestion");
         AutoTrashKeybind = KeybindLoader.RegisterKeybind(Mod, "AutoTrashKeybind", "NumPad2");
