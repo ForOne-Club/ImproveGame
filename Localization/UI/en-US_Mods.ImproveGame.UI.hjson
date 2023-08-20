@@ -112,8 +112,8 @@ WorldFeature: {
 	Title: World Features
 
 	Halloween: {
-		Label: Hallowing
-		Tooltip: Toggles Hallowing status.
+		Label: Halloween
+		Tooltip: Toggles Halloween status.
 	}
 
 	XMas: {

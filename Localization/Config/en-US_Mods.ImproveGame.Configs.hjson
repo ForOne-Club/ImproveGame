@@ -710,7 +710,7 @@ UIConfigs: {
 			An automatic trash bin.
 			Items will be moved to this bin if their type is inside.
 			Reserves the last 6 trashed items.
-			Shift+Ctrl+<left> an item to move it to bin.
+			Shift+Ctrl+Left-click an item to move it to bin.
 			'''
 	}
 
