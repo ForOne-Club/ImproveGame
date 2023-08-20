@@ -185,13 +185,13 @@ public class SpaceWand : ModItem, IMarqueeItem
         }
 
         bool playSound = false;
-        Rectangle platfromRect = _marquee;
-        platfromRect.X >>= 4;
-        platfromRect.Y >>= 4;
-        platfromRect.Width >>= 4;
-        platfromRect.Height >>= 4;
+        Rectangle platformRect = _marquee;
+        platformRect.X >>= 4;
+        platformRect.Y >>= 4;
+        platformRect.Width >>= 4;
+        platformRect.Height >>= 4;
 
-        ForeachTile(platfromRect, (int x, int y) =>
+        ForeachTile(platformRect, (int x, int y) =>
         {
             int oneIndex = EnoughItem(player, GetConditions());
             if (oneIndex > -1)
@@ -199,9 +199,7 @@ public class SpaceWand : ModItem, IMarqueeItem
                 Item item = player.inventory[oneIndex];
 
                 if (!TileLoader.CanPlace(x, y, item.createTile))
-                {
                     return;
-                }
 
                 if (GrassSeeds.Contains(item.createTile))
                 {
@@ -216,6 +214,11 @@ public class SpaceWand : ModItem, IMarqueeItem
                     if (Main.tile[x, y].HasTile)
                     {
                         WorldGen.SlopeTile(x, y, noEffects: true);
+                        // 同种类，设置个斜坡就走
+                        if (Main.tile[x, y].type == item.createTile)
+                        {
+                            SetSlopeFor(x, y, platformRect);
+                        }
                         if (player.TileReplacementEnabled)
                         {
                             // 物品放置的瓷砖就是位置对应的瓷砖则无需替换
@@ -231,6 +234,7 @@ public class SpaceWand : ModItem, IMarqueeItem
                             {
                                 playSound = true;
                                 PickItemInInventory(player, GetConditions(), true, out _);
+                                SetSlopeFor(x, y, platformRect);
                             }
                             else
                             {
@@ -241,15 +245,7 @@ public class SpaceWand : ModItem, IMarqueeItem
                                 {
                                     playSound = true;
                                     PickItemInInventory(player, GetConditions(), true, out _);
-                                    var tile = Main.tile[x, y];
-                                    if (PlaceType is PlaceType.Soild or PlaceType.Platform)
-                                    {
-                                        tile.BlockType = BlockType;
-                                        WorldGen.SquareTileFrame(x, y, false);
-                                    }
-
-                                    if (PlaceType is PlaceType.Soild)
-                                        WorldGen.SlopeTile(x, y + 1);
+                                    SetSlopeFor(x, y, platformRect);
                                 }
                             }
                         }
@@ -258,15 +254,7 @@ public class SpaceWand : ModItem, IMarqueeItem
                     {
                         playSound = true;
                         PickItemInInventory(player, GetConditions(), true, out _);
-                        var tile = Main.tile[x, y];
-                        if (PlaceType is PlaceType.Soild or PlaceType.Platform)
-                        {
-                            tile.BlockType = BlockType;
-                            WorldGen.SquareTileFrame(x, y, false);
-                        }
-
-                        if (PlaceType is PlaceType.Soild)
-                            WorldGen.SlopeTile(x, y + 1);
+                        SetSlopeFor(x, y, platformRect);
                     }
                 }
             }
@@ -279,6 +267,19 @@ public class SpaceWand : ModItem, IMarqueeItem
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendData(MessageID.TileSquare, player.whoAmI, -1, null, x, y, width, height);
         });
+    }
+
+    private void SetSlopeFor(int x, int y, Rectangle platformRect)
+    {
+        var tile = Main.tile[x, y];
+        if (PlaceType is PlaceType.Soild or PlaceType.Platform)
+        {
+            tile.BlockType = BlockType;
+            WorldGen.SquareTileFrame(x, y, false);
+        }
+
+        if (PlaceType is PlaceType.Soild && !platformRect.Contains(x, y + 1))
+            WorldGen.SlopeTile(x, y + 1);
     }
 
     /// <summary>
