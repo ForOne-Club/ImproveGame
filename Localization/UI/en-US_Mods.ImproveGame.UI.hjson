@@ -109,60 +109,60 @@ AutoTrash.Introduction:
 	'''
 
 WorldFeature: {
-	Title: 世界特性
+	Title: World Features
 
 	Halloween: {
-		Label: 万圣节
-		Tooltip: 控制世界是否处于万圣节期间
+		Label: Hallowing
+		Tooltip: Toggles Hallowing status.
 	}
 
 	XMas: {
-		Label: 圣诞节
-		Tooltip: 控制世界是否处于圣诞节期间
+		Label: Christmas
+		Tooltip: Toggles Christmas status.
 	}
 
 	Drunk:
 		'''
-		Drunk world（醉酒世界）
-		种子：05162020 | 5162020
+		Drunk world
+		Seeds: 05162020 | 5162020
 		'''
 	Bees:
 		'''
-		Not the bees（蜜蜂世界）
-		种子：not the bees | not the bees! | notthebees
+		Not the bees
+		Seeds: not the bees | not the bees! | notthebees
 		'''
 	Ftw:
 		'''
 		For the worthy
-		种子：for the worthy | fortheworthy
+		Seeds: for the worthy | fortheworthy
 		'''
 	Anniversary:
 		'''
-		Celebrationmk10（十周年世界）
-		种子：celebrationmk10 | 05162011 | 5162011 | 05162021 | 5162021
+		Celebrationmk10
+		Seeds: celebrationmk10 | 05162011 | 5162011 | 05162021 | 5162021
 		'''
 	DontStarve:
 		'''
-		The Constant（饥荒世界）
-		种子：constant | theconstant | the constant | eye4aneye | eyeforaneye
+		The Constant
+		Seeds: constant | theconstant | the constant | eye4aneye | eyeforaneye
 		'''
 	Traps:
 		'''
-		No traps（陷阱世界）
-		种子：no traps | notraps
-		注：在游戏内启用该世界特性没有任何实际效果
+		No traps
+		Seeds: no traps | notraps
+		P.S. No effect if toggled inside a world.
 		'''
 	Remix:
 		'''
-		Don't dig up（颠倒世界）
-		种子：don't dig up | dont dig up | dontdigup
+		Don't dig up
+		Seeds: don't dig up | dont dig up | dontdigup
 		'''
 	Zenith:
 		'''
-		Get fixed boi（天顶世界）
-		种子：get fixed boi | getfixedboi
-		注：只有将其他所有特殊种子特性开启，才能体验天顶世界完整效果
+		Get fixed boi
+		Seeds: get fixed boi | getfixedboi
+		P.S. Get fixed boi is only complete with all other secrete seeds enabled.
 		'''
-	OpenWiki: <right>以打开Wiki页面
-	NotPermitted: 您没有权限修改世界特性
+	OpenWiki: <right> to open its wiki page
+	NotPermitted: You have no permission to modify this world's features.
 }
