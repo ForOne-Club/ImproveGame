@@ -70,7 +70,7 @@ Tips: {
 	TagDetailedTip: {
 		RedPotion:
 			'''
-			红药水扩展效果已应用，你将获得以下无尽增益:
+			The Red Potion Extension is enabled, the following infinite buffs are granted:
 			{$BuffName.ObsidianSkin}, {$BuffName.Regeneration}, {$BuffName.Swiftness}, {$BuffName.Ironskin},
 			{$BuffName.ManaRegeneration}, {$BuffName.MagicPower}, {$BuffName.Featherfall}, {$BuffName.Spelunker},
 			{$BuffName.Archery}, {$BuffName.Heartreach}, {$BuffName.Hunter}, {$BuffName.Endurance}, {$BuffName.Lifeforce}, {$BuffName.Inferno},
@@ -321,7 +321,7 @@ SpaceWandGUI: {
 PackageGUI: {
 	AutoStorage: Auto Collection
 	AutoSort: Auto Sortation
-	Incompatible: 此物品不能放入该容器
+	Incompatible: The item cannot be contained in this inventory.
 }
 
 Common: {
@@ -353,10 +353,10 @@ Keybinds: {
 	BuffTracker.DisplayName: Buff Tracker
 	GrabBagLoot.DisplayName: Display Grab Bag Loot
 	HotbarSwitch.DisplayName: Swap Hotbar
-	AutoTrashKeybind.DisplayName: 隐藏/显示自动垃圾桶
-	DiscordRodKeybind.DisplayName: 传送法杖快捷键
-	HomeKeybind.DisplayName: 回程快捷键
-	WorldFeature.DisplayName: 世界特性
+	AutoTrashKeybind.DisplayName: Hide/Show the Auto-Trash Bin
+	DiscordRodKeybind.DisplayName: Use Teleportation Rods
+	HomeKeybind.DisplayName: Use Homing Items
+	WorldFeature.DisplayName: Hide/Show the World Feature Panel
 }
 
 Projectiles: {

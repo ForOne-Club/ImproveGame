@@ -26,14 +26,14 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.2]** All hairstyles are now selectable when creating a player.
 - **[v1.6.5.2]** Added a Teleport NPCs Home function.
 - **[v1.6.5.2]** Added a No Pool Size Penalty function. You can even fish with 2 blocks of water.
-- **[v1.6.5.3]** 传送法杖快捷键，若任何物品栏及便携储存中有混沌传送杖或和谐杖，按下快捷键将自动使用，优先使用和谐杖
-- **[v1.6.5.3]** 回程快捷键，快捷使用任何物品栏及便携储存内可无限使用的回程物品，优先使用返回药水
-- **[v1.6.5.3]** 钓鱼机现已兼容多线钓鱼Mod，200x钓鱼速度不是梦
-- **[v1.6.5.3]** 新增“失焦时保持游戏运行”功能，即使玩单人也可以把游戏挂后台去干别的事了！
-- **[v1.6.5.3]** 新增“红药水扩展”功能，无尽红药水可给予你多种增益
-- **[v1.6.5.3]** 新增“专家Debuff时长延长”选项，可将Debuff时长设置为与经典模式一致了
-- **[v1.6.5.4]** 新增世界特性调节面板，可调节秘密种子与特殊节日特性
-- **[v1.6.5.4]** 新增“移除设置重生点限制”选项，使得床在任何情况下均可设置重生点
+- **[v1.6.5.3]** Added a Teleportation Rods hotkey.
+- **[v1.6.5.3]** Added a Homing Items hotkey.
+- **[v1.6.5.3]** The Fishing Machine now supports the Multiple Lures mod. Yes now you can fish in insanely fast speeds!
+- **[v1.6.5.3]** Added "Keep Game Running When Focus Is Lost".
+- **[v1.6.5.3]** Added "Red Potion Extension".
+- **[v1.6.5.3]** Added "Expert Debuff Duration".
+- **[v1.6.5.4]** Added "World Feature Panel".
+- **[v1.6.5.4]** Added "Unlimited Bed Respawn".
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine
@@ -55,12 +55,12 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Fixed no popup text when items are received by extra inventories.
 - **[v1.6.5.2]** Fixed config option "Guaranteed Fruit Drop From Tree Shake" being always on.
 - **[v1.6.5.2]** "Tooltip Simplification" now works
-- **[v1.6.5.3]** 修复了模组部分物品框的物品复制BUG
-- **[v1.6.5.3]** 修复了液体法杖显示错误的图标的BUG
-- **[v1.6.5.3]** 修复了“摇树必掉水果”功能不支持部分树的BUG
-- **[v1.6.5.3]** 修复了尝试向药水袋/旗帜盒放入不相容的物品时会报错的BUG
-- **[v1.6.5.4]** 修复了部分文本错误
-- **[v1.6.5.4]** 修复了空间法杖有时无法正确设置斜坡状态的BUG
+- **[v1.6.5.3]** Fixed this mod's item duplication bug.
+- **[v1.6.5.3]** Corrected icons of the Wand of Liquids.
+- **[v1.6.5.3]** Fixed "Guaranteed Fruit Drop From Tree Shakes" not supporting some trees.
+- **[v1.6.5.3]** Handled exceptions when trying to put incompatible items into the Potion Bag and the Banner Box.
+- **[v1.6.5.4]** Corrected some descriptions.
+- **[v1.6.5.4]** Fixed the Wand of Space not slopping correctly in some cases.
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI
@@ -70,13 +70,13 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.1]** Removed "Better Town NPC Mechanism" because 1.4.4 already did it.
 - **[v1.6.5.2]** Slightly reduced the amount of data transferred in multiplayer.
 - **[v1.6.5.2]** Improved Auto Trash UI.
-- **[v1.6.5.3]** 优化了本Mod的大部分UI
-- **[v1.6.5.3]** 魔镜类物品改为瞬间传送，去除传送前的等待时间!
-- **[v1.6.5.3]** 自动垃圾桶可以使用快捷键隐藏了
-- **[v1.6.5.3]** 为钓鱼机钓鱼添加了视觉效果
-- **[v1.6.5.3]** 现在可以选择关闭魔杖的爆破效果了
-- **[v1.6.5.3]** 调整了“不可调节功能”的显示方式
-- **[v1.6.5.3]** 你可以更快地从本Mod的各种存储中右键取出物品了
+- **[v1.6.5.3]** Optimized most of this mod's UIs.
+- **[v1.6.5.3]** Removed foreswing of the Magic-Mirror-like items.
+- **[v1.6.5.3]** Added a hotkey to hide/show the Auto-Trash Bin.
+- **[v1.6.5.3]** Added vfx to the Fishing Machine.
+- **[v1.6.5.3]** Added a config for toggling explosion effects of this mod's wands.
+- **[v1.6.5.3]** Improved how "Other Features" is displayed.
+- **[v1.6.5.3]** Improved speed of taking items from this mod's storages via right clicking.
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0

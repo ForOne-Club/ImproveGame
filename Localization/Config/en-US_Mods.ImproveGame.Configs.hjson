@@ -453,23 +453,23 @@ ImproveConfigs: {
 	}
 
 	OtherFunctions: {
-		Label: Other non-configurable functions
-		ExpandTip: 点击以查看
-		Subtitle: The following are non-configurable features of this mod
+		Label: Non-configurable Functions
+		ExpandTip: Click to expand
+		Subtitle: The following are non-configurable features of this mod.
 		Tooltip:
 			'''
-			Displaying detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind
-			A hotkey to swap the hotbar with the second row of inventory
-			Displaying minion slot occupancy in tooltip
-			A filter panel which opens when the icon of Lifeform Analyzer is clicked
-			Chest item inspection when the cursor is hovered on it and Alt is pressed
-			Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots)
-			Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
-			Middle click mount items will toggle the mounts
-			All hair styles can be chosen upon character creation
-			魔镜类物品改为瞬间传送，去除传送前的等待时间
-			传送法杖快捷键，若任何物品栏及便携储存中有混沌传送杖或和谐杖，按下快捷键将自动使用，优先使用和谐杖
-			回程快捷键，快捷使用任何物品栏及便携储存内可无限使用的回程物品，优先使用返回药水
+			Displaying detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind.
+			A hotkey to swap the hotbar with the second row of inventory.
+			Displaying minion slot occupancy in tooltip.
+			A filter panel which opens when the icon of Lifeform Analyzer is clicked.
+			Chest item inspection when the cursor is hovered on it and Alt is pressed.
+			Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots).
+			Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit.
+			Middle click mount items will toggle the mounts.
+			All hair styles can be chosen upon character creation.
+			Foreswing removal of Magic-Mirror-like items.
+			Teleportation rod hotkey. Uses Rod of Discord or Rod of Harmony in any inventory, prioritize RoH.
+			Homing hotkey. Uses any infinite homing item in any inventory, prioritize Potion of Return.
 			'''
 	}
 
@@ -517,7 +517,7 @@ ImproveConfigs: {
 		Server: "[centeritem:ImproveGame/CreateWand] Mod Config"
 		Presets: "[centeritem:ImproveGame/PaintWand] Presets"
 		Others: "[centeritem/h4:HandOfCreation] Others"
-		ItemEffect: "[centeritem/h4:RedPotion] 物品效果设置"
+		ItemEffect: "[centeritem/h4:RedPotion] Item Effects"
 	}
 
 	OpenConfig: {
@@ -546,58 +546,58 @@ ImproveConfigs: {
 	}
 
 	InfiniteRedPotion: {
-		Label: "[centeritem:RedPotion] 红药水扩展"
+		Label: "[centeritem:RedPotion] Red Potion Extension"
 		Tooltip:
 			'''
-			处于Get fixed boi或For the worthy世界时
-			你可以用所有药水所需的材料合成红药水
-			无尽红药水将提供一切在饮用时可能给予的增益(正面)
-			然而，你仍不能将红药水放入药水袋
+			If in a "Get fixed boi" or "For the worthy" world,
+			you may use all potion ingredients to craft the Red Potion.
+			Inifite Red Potion will provide all its buffs.
+			However, it cannot be put into the Potion Bag.
 			'''
-		Condition: 开启红药水扩展
+		Condition: Red Potion Extension enabled
 	}
 
 	RedPotionEverywhere: {
-		Label: "[centeritem:RedPotion] 红药水扩展不受限"
+		Label: "[centeritem:RedPotion] Unlimited Red Potion Exntension"
 		Tooltip:
 			'''
-			开启后，红药水扩展功能将在所有世界可用
-			而非仅限Get fixed boi或For the worthy世界
+			Unlock the Red Potion Extension for all kinds of worlds,
+			Instead of "Get fixed boi" and "For the worthy" only.
 			'''
-		Condition: 开启红药水扩展不受限/{$Conditions.WorldForTheWorthy}
+		Condition: Unlimited Red Potion Extension enabled/{$Conditions.WorldForTheWorthy}
 	}
 
 	RedPotionRequirement: {
-		Label: "[centeritem:RedPotion] 红药水无限续杯数量"
+		Label: "[centeritem:RedPotion] Infinite Red Potion Requirment"
 		Tooltip:
 			'''
-			你必须先开启红药水扩展功能
-			为红药水设置单独的无限续杯所需数量
+			Requires the Red Potion Extension to be enabled.
+			Sets the stack requirement of Infinite Potion specifically for the Red Potion.
 			'''
 	}
 
 	LongerExpertDebuff: {
-		Label: "[centeritem:DemonHeart] 专家Debuff时长延长"
+		Label: "[centeritem:DemonHeart] Expert Debuff Duration"
 		Tooltip:
 			'''
-			在专家/大师模式下是否延长Debuff时间
-			关闭后Debuff时间将与经典模式一致
+			Toggles longer debuff duration under expert/master mode.
+			Classic mode duration will be used if this is off.
 			'''
 	}
 
 	WorldFeaturePanel: {
-		Label: "[centeritem:WorldGlobe] 世界特性调节面板"
+		Label: "[centeritem:WorldGlobe] World Feature Panel"
 		Tooltip:
 			'''
-			开启并在“控件”中绑定快捷键后
-			按下快捷键可打开世界特性调节面板
-			可调节秘密种子效果、特殊节日
+			Turn this on and bind a hotkey in "Controls"
+			to use the World Feature Panel.
+			It can toggle holidays and secret seeds.
 			'''
 	}
 
 	BedEverywhere: {
-		Label: "[centeritem:Bed] 移除设置重生点限制"
-		Tooltip: 使得床在任何情况下均可设置重生点，不需要房间
+		Label: "[centeritem:Bed] Unlimited Bed Respawn"
+		Tooltip: Beds can set respawn points in any condition, regardless of housing requirements.
 	}
 }
 
@@ -723,17 +723,17 @@ UIConfigs: {
 	}
 
 	KeepFocus: {
-		Label: "[centeritem:TVHeadMask] 失焦时保持游戏运行"
+		Label: "[centeritem:TVHeadMask] Keep Game Running When Focus Is Lost"
 		Tooltip:
 			'''
-			使单人游戏失焦（即处于后台）时仍然保持游戏运行
-			而不是暂停游戏
+			The game will continue to run even if focus is lost (aka. in background),
+			instead of being paused in single player.
 			'''
 	}
 
 	ExplosionEffect: {
-		Label: "[centeritem:TNTBarrel] 爆炸效果"
-		Tooltip: 关闭后，使用本模组魔杖时不再有爆炸效果
+		Label: "[centeritem:TNTBarrel] Wand Explosion Effects"
+		Tooltip: Toggles the explosion effects of this mod's wands.
 	}
 }
 
