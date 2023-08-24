@@ -14,6 +14,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - v1.6.5.2
 - v1.6.5.3
 - v1.6.5.4
+- v1.6.5.5
 ## Additions
 - Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 - Enabled configuring chest detection range of Storage Manager
@@ -61,6 +62,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.3]** Handled exceptions when trying to put incompatible items into the Potion Bag and the Banner Box.
 - **[v1.6.5.4]** Corrected some descriptions.
 - **[v1.6.5.4]** Fixed the Wand of Space not slopping correctly in some cases.
+- **[v1.6.5.5]** 修复了放置在桌子上的钓鱼机在桌子被破坏时导致游戏闪退的BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI
@@ -77,6 +79,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.3]** Added a config for toggling explosion effects of this mod's wands.
 - **[v1.6.5.3]** Improved how "Other Features" is displayed.
 - **[v1.6.5.3]** Improved speed of taking items from this mod's storages via right clicking.
+- **[v1.6.5.5]** 现在可以挖掘钓鱼机下的物块了
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0

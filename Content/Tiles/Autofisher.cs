@@ -9,7 +9,7 @@ using Terraria.ObjectData;
 
 namespace ImproveGame.Content.Tiles
 {
-    public class Autofisher : TETileBase, ITileContainer
+    public class Autofisher : TETileBase
     {
         public enum TipType : byte
         {
@@ -91,8 +91,6 @@ namespace ImproveGame.Content.Tiles
             TileObjectData.newTile.Direction = TileObjectDirection.PlaceRight;
             TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.newTile.StyleHorizontal = true;
-            TileID.Sets.PreventsTileReplaceIfOnTopOfIt[Type] = true;
-            TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
         }
 
         public override bool ModifyObjectDataAlternate(ref int alternateStyle)
