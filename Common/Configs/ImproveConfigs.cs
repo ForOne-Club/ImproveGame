@@ -326,7 +326,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool WorldFeaturePanel;
 
-        // 
+        [DefaultValue(true)]
+        public bool MinimapMark;
+
         [ReloadRequired]
         public ModItemLoadPage LoadModItems = new();
 

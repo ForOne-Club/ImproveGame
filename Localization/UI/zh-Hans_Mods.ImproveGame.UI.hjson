@@ -163,3 +163,10 @@ WorldFeature: {
 	OpenWiki: <right>以打开Wiki页面
 	NotPermitted: 您没有权限修改世界特性
 }
+
+MapLayer: {
+	TheAether: 以太
+	Pyramid: 金字塔
+	FloatingIsland: 空岛
+	FloatingLake: 天湖
+}

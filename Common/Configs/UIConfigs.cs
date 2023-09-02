@@ -51,4 +51,23 @@ public class UIConfigs : ModConfig
 
     [DefaultValue(true)]
     public bool ExplosionEffect;
+
+    [Header("MinimapHeader")]
+    [DefaultValue(true)]
+    public bool MarkDungeon;
+    
+    [DefaultValue(true)]
+    public bool MarkTemple;
+    
+    [DefaultValue(true)]
+    public bool MarkAether;
+    
+    [DefaultValue(true)]
+    public bool MarkFloatingIsland;
+    
+    [DefaultValue(true)]
+    public bool MarkPyramid;
+    
+    [DefaultValue(true)]
+    public bool MarkPlantera;
 }

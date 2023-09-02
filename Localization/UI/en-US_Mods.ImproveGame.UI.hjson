@@ -166,3 +166,10 @@ WorldFeature: {
 	OpenWiki: <right> to open its wiki page
 	NotPermitted: You have no permission to modify this world's features.
 }
+
+MapLayer: {
+	TheAether: The Aether
+	Pyramid: Pyramid
+	FloatingIsland: Floating Island
+	FloatingLake: Floating Lake
+}

@@ -7,6 +7,7 @@ using ImproveGame.Core;
 using ImproveGame.Interface.GUI.WorldFeature;
 using ReLogic.Graphics;
 using System.Collections;
+using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
 using static Microsoft.Xna.Framework.Vector2;
