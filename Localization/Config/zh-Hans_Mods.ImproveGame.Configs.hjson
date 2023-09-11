@@ -615,6 +615,16 @@ ImproveConfigs: {
 			''' */
 		// Label: "[centeritem:WorldGlobe] 结构标记"
 	}
+
+	ModifyNPCHappiness: {
+		Label: "[centeritem:LifeCrystal] 固定 NPC 快乐度"
+		// Tooltip: ""
+	}
+
+	NPCHappiness: {
+		Label: "[centeritem:LifeCrystal] NPC 快乐度"
+		Tooltip: 设置的值越小从 NPC 购买物品价格越便宜，卖给 NPC 物品价格越高
+	}
 }
 
 ModItemLoadPage: {

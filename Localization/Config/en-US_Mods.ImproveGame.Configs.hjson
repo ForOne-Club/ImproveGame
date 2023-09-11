@@ -608,6 +608,20 @@ ImproveConfigs: {
 			'''
 		Label: "[centeritem:WorldGlobe] 结构标记"
 	}
+
+	ModifyNPCHappiness: {
+		Label: "[centeritem:LifeCrystal] Fixed NPC Happiness"
+		// Tooltip: ""
+	}
+
+	NPCHappiness: {
+		Label: "[centeritem:LifeCrystal] NPC Happiness"
+		Tooltip:
+			'''
+			The smaller the value set, the cheaper it is to buy items from NPCs,
+			and the higher the price of items sold to NPCs.
+			'''
+	}
 }
 
 ModItemLoadPage: {

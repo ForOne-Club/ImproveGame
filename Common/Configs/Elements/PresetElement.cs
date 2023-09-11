@@ -32,6 +32,8 @@ public class FukMeCalamityElement : PresetElement
         config.TownNPCSpawnSpeed = 12;
         config.NoCD_FishermanQuest = true;
         config.NPCCoinDropRate = 8;
+        config.ModifyNPCHappiness = true;
+        config.NPCHappiness = 75;
         config.LavalessLavaSlime = true;
         config.TravellingMerchantStay = true;
         config.TravellingMerchantRefresh = true;
@@ -82,6 +84,8 @@ public class ILoveBalanceElement : PresetElement
         config.TownNPCSpawnSpeed = -1;
         config.NoCD_FishermanQuest = true;
         config.NPCCoinDropRate = 1;
+        config.ModifyNPCHappiness = false;
+        config.NPCHappiness = 75;
         config.LavalessLavaSlime = true;
         config.TravellingMerchantStay = false;
         config.TravellingMerchantRefresh = true;

@@ -163,6 +163,14 @@ namespace ImproveGame.Common.Configs
         public int NPCCoinDropRate;
 
         [DefaultValue(false)]
+        public bool ModifyNPCHappiness;
+
+        [DefaultValue(75)]
+        [Range(75, 150)]
+        [Slider]
+        public int NPCHappiness;
+
+        [DefaultValue(false)]
         public bool LavalessLavaSlime;
 
         [DefaultValue(false)]
