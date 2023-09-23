@@ -611,7 +611,7 @@ ImproveConfigs: {
 
 	ModifyNPCHappiness: {
 		Label: "[centeritem:LifeCrystal] Fixed NPC Happiness"
-		// Tooltip: ""
+		Tooltip: ""
 	}
 
 	NPCHappiness: {

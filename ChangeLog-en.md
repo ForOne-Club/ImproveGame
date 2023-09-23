@@ -14,7 +14,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - v1.6.5.2
 - v1.6.5.3
 - v1.6.5.4
-- v1.6.5.5
+- v1.6.5.5 (Not yet)
 ## Additions
 - Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 - Enabled configuring chest detection range of Storage Manager
@@ -35,6 +35,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.3]** Added "Expert Debuff Duration".
 - **[v1.6.5.4]** Added "World Feature Panel".
 - **[v1.6.5.4]** Added "Unlimited Bed Respawn".
+- **[v1.6.5.5]** 新增定位球，用于在小地图上显示生态/结构位置
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine
@@ -63,6 +64,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.4]** Corrected some descriptions.
 - **[v1.6.5.4]** Fixed the Wand of Space not slopping correctly in some cases.
 - **[v1.6.5.5]** 修复了放置在桌子上的钓鱼机在桌子被破坏时导致游戏闪退的BUG
+- **[v1.6.5.5]** 修复了无法正常禁用幸运金币的BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI
