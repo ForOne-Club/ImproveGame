@@ -215,3 +215,8 @@ Expelliarmus: {
 		Can be used to test the NPC loot
 		'''
 }
+
+DetectorDrone: {
+	Tooltip: ""
+	DisplayName: Detector Drone
+}
