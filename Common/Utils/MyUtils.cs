@@ -56,7 +56,7 @@ partial class MyUtils
 
     public static void UseItemByType(Player player, int itemType)
     {
-        if (player.ItemAnimationActive) return;
+        if (!player.ItemAnimationEndingOrEnded) return;
 
         const int fakeSlot = 58;
         var originalItem = player.inventory[fakeSlot];

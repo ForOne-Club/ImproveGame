@@ -24,6 +24,15 @@ public class PlanteraGlobe : ModItem
         Item.rare = ItemRarityID.Pink;
     }
 
+    public override void AddRecipes() =>
+        CreateRecipe()
+            .AddIngredient(ItemID.Glass, 5)
+            .AddIngredient(ItemID.MudBlock, 100)
+            .AddIngredient(ItemID.RichMahogany, 30)
+            .AddIngredient(ItemID.JungleSpores, 1)
+            .AddTile(TileID.MythrilAnvil)
+            .Register();
+    
     public override bool CanUseItem(Player player)
     {
         return RevealPlanteraPacket.Reveal(player);

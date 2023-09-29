@@ -13,6 +13,9 @@ public class UIConfigs : ModConfig
     [CustomModConfigItem(typeof(OpenUIConfigElement))]
     public object OpenConfig;
 
+    [CustomModConfigItem(typeof(SuicideButtonElement))]
+    public object SuicideButton;
+
     [ReloadRequired]
     public bool ResetNativeUI;
 

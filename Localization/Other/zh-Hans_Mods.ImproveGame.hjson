@@ -341,6 +341,7 @@ Keybinds: {
 	DiscordRodKeybind.DisplayName: 传送法杖快捷键
 	HomeKeybind.DisplayName: 回程快捷键
 	WorldFeature.DisplayName: 世界特性
+	ConfigMenu.DisplayName: 打开模组配置
 }
 
 Projectiles: {

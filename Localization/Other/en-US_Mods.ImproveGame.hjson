@@ -355,8 +355,9 @@ Keybinds: {
 	HotbarSwitch.DisplayName: Swap Hotbar
 	AutoTrashKeybind.DisplayName: Hide/Show the Auto-Trash Bin
 	DiscordRodKeybind.DisplayName: Use Teleportation Rods
-	HomeKeybind.DisplayName: Use Homing Items
+	HomeKeybind.DisplayName: Use Recall Items
 	WorldFeature.DisplayName: Hide/Show the World Feature Panel
+	ConfigMenu.DisplayName: Open Mod Config
 }
 
 Projectiles: {

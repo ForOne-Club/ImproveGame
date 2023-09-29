@@ -59,6 +59,7 @@ namespace ImproveGame.Common.Configs
 
         [DefaultValue(9999)]
         [Range(1, int.MaxValue)]
+        [ReloadRequired]
         public int ItemMaxStack;
 
         [DefaultValue(0d)]
@@ -336,6 +337,9 @@ namespace ImproveGame.Common.Configs
 
         [DefaultValue(true)]
         public bool MinimapMark;
+
+        // [DefaultValue(true)]
+        // public bool WandManaConsumption;
 
         [ReloadRequired]
         public ModItemLoadPage LoadModItems = new();

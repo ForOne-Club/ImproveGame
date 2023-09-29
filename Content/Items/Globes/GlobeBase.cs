@@ -65,4 +65,13 @@ public abstract class GlobeBase : ModItem
         Main.NewText(text.Value, Color.Pink);
         return true;
     }
+
+    protected abstract Recipe AddCraftingMaterials(Recipe recipe);
+
+    public override void AddRecipes()
+    {
+        var r = CreateRecipe();
+        AddCraftingMaterials(r);
+        r.Register();
+    }
 }

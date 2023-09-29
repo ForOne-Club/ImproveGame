@@ -793,6 +793,11 @@ UIConfigs: {
 		Label: "[centeritem:ImproveGame/PlanteraGlobe] 标记世纪之花"
 		Tooltip: 开启后，将会在小地图上显示已标记的{$MapObject.PlanterasBulb}位置
 	}
+
+	SuicideButton: {
+		Label: 自杀
+		Tooltip: 按下此按钮将使你的人物当场暴毙，[c/FF4444:点击前请三思]
+	}
 }
 
 PAPDisplayMode: {

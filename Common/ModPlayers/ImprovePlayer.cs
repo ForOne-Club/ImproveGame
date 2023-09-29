@@ -229,6 +229,8 @@ public class ImprovePlayer : ModPlayer
     /// </summary>
     public override void ProcessTriggers(TriggersSet triggersSet)
     {
+        if (KeybindSystem.ConfigKeybind.JustPressed)
+            PressConfigKeybind();
         if (KeybindSystem.SuperVaultKeybind.JustPressed)
             PressSuperVaultKeybind();
         if (KeybindSystem.BuffTrackerKeybind.JustPressed)
@@ -241,10 +243,23 @@ public class ImprovePlayer : ModPlayer
             PressHotbarSwitchKeybind();
         if (KeybindSystem.AutoTrashKeybind.JustPressed)
             PressAutoTrashKeybind();
+
+        // 下面是操作类快捷键
+        if (Player.DeadOrGhost) return;
         if (KeybindSystem.DiscordRodKeybind.JustPressed)
             PressDiscordKeybind();
         if (KeybindSystem.HomeKeybind.JustPressed)
             PressHomeKeybind();
+    }
+
+    private void PressConfigKeybind()
+    {
+        if (Main.inFancyUI) return;
+
+        SoundEngine.PlaySound(SoundID.MenuOpen);
+        Main.inFancyUI = true;
+        Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, Config);
+        Main.InGameUI.SetState(Terraria.ModLoader.UI.Interface.modConfig);
     }
 
     private static void PressSuperVaultKeybind()
@@ -359,8 +374,6 @@ public class ImprovePlayer : ModPlayer
 
     private void PressHomeKeybind()
     {
-        if (Player.ItemAnimationActive) return;
-
         var items = GetAllInventoryItemsList(Player);
 
         // 返回药水优先级最高
@@ -388,8 +401,6 @@ public class ImprovePlayer : ModPlayer
         if (itemType is ItemID.None)
             return;
 
-        // 假的，拿来看的
-        UseItemByType(Player, itemType);
         SoundEngine.PlaySound(SoundID.Item6, Player.position);
 
         for (int l = 0; l < 70; l++)

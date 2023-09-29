@@ -65,6 +65,9 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.4]** Fixed the Wand of Space not slopping correctly in some cases.
 - **[v1.6.5.5]** 修复了放置在桌子上的钓鱼机在桌子被破坏时导致游戏闪退的BUG
 - **[v1.6.5.5]** 修复了无法正常禁用幸运金币的BUG
+- **[v1.6.5.5]** 修复了爆破类魔杖无法直接破坏部分带草皮物块的BUG
+- **[v1.6.5.5]** 修复了死亡后可以通过快捷回程快捷键瞬间复活的BUG
+- **[v1.6.5.5]** 修复了关闭液体控制面板时无法使用液体魔杖的BUG
 ## Adjustments
 - Optimized Pinying searching, now supports polyphones
 - Adjusted mod config UI
@@ -82,6 +85,9 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.3]** Improved how "Other Features" is displayed.
 - **[v1.6.5.3]** Improved speed of taking items from this mod's storages via right clicking.
 - **[v1.6.5.5]** 现在可以挖掘钓鱼机下的物块了
+- **[v1.6.5.5]** 添加了快捷打开模组配置的快捷键
+- **[v1.6.5.5]** 爆破类法杖现在不耗蓝了
+- **[v1.6.5.5]** 建造魔杖的重生点结构更改为无墙版本
 
 # v1.6.4
 This mod has been updated to tModLoader 1.4.4 since v1.6.4.0
