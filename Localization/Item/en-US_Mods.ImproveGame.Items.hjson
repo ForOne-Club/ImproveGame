@@ -9,7 +9,6 @@ MagickWand: {
 		Mana cost depends on the number of tiles destroyed
 		<right> while holding to edit destruction settings
 		<right> while selecting area to cancel
-		Automatically uses mana potion if necessary
 		'''
 }
 
@@ -39,7 +38,6 @@ StarburstWand: {
 		Mana cost depends on the number of tiles destroyed
 		<right> while holding to edit destruction settings
 		<right> while selecting area to cancel
-		Automatically uses mana potion if necessary
 		'''
 }
 
