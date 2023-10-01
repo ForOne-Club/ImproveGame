@@ -358,6 +358,7 @@ Keybinds: {
 	HomeKeybind.DisplayName: Use Recall Items
 	WorldFeature.DisplayName: Hide/Show the World Feature Panel
 	ConfigMenu.DisplayName: Open Mod Config
+	ItemSearcher.DisplayName: Item Searcher
 }
 
 Projectiles: {

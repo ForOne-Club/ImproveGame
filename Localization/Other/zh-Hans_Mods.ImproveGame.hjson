@@ -342,6 +342,7 @@ Keybinds: {
 	HomeKeybind.DisplayName: 回程快捷键
 	WorldFeature.DisplayName: 世界特性
 	ConfigMenu.DisplayName: 打开模组配置
+	// ItemSearcher.DisplayName: Item Searcher
 }
 
 Projectiles: {

@@ -36,6 +36,7 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - **[v1.6.5.4]** Added "World Feature Panel".
 - **[v1.6.5.4]** Added "Unlimited Bed Respawn".
 - **[v1.6.5.5]** 新增定位球，用于在小地图上显示生态/结构位置
+- **[v1.6.5.5]** 新增物品搜索功能，以在箱子和便携储存中快捷搜索物品
 ## BUG Fixes
 - Shadow Candle and War Table are now considered as buff stations
 - Fixed no tile drop of left-facing Fishing Machine

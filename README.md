@@ -41,7 +41,7 @@
 
 因此，该模组不存在版权侵犯问题。
 ChevyRay 的协程类也受 MIT 许可，与上面相同。
-TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也获得MIT许可，与上面相同。
+TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也受 MIT 许可，与上面相同。
 
 附:
 本模组开源链接: https://gitee.com/MyGoold/improve-game (此为原仓库，Github仓库是由原仓库镜像而来)

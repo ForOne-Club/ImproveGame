@@ -167,6 +167,12 @@ WorldFeature: {
 	NotPermitted: You have no permission to modify this world's features.
 }
 
+ItemSearcher: {
+	Title: 查找物品
+	TipText: 查找到的物品将显示在此处
+	NotFoundText: 没有找到任何物品
+}
+
 MapLayer: {
 	TheAether: The Aether
 	Pyramid: Pyramid

@@ -164,6 +164,12 @@ WorldFeature: {
 	NotPermitted: 您没有权限修改世界特性
 }
 
+ItemSearcher: {
+	Title: 查找物品
+	TipText: 查找到的物品将显示在此处
+	NotFoundText: 没有找到任何物品
+}
+
 MapLayer: {
 	TheAether: 以太
 	Pyramid: 金字塔
