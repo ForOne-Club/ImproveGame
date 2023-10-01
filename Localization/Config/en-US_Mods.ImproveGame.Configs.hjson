@@ -184,7 +184,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			If there is any Piggy Bank, Money Trough or Eye Bone inside one of your personal inventories
-			Your coins in coin slots will be automatically saved into the Piggy Bank
+			Your coins and defender medals picked up will be automatically saved into the Piggy Bank
 			The Merchant's spawning condition counts coins in the Piggy Bank
 			'''
 	}
