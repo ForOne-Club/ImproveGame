@@ -40,6 +40,7 @@ public class DetectorDroneProj : ModProjectile
 
         if (Projectile.owner == Main.myPlayer)
         {
+            // 高处爆炸
             if (Projectile.position.Y - Projectile.height <= 16 * Main.offScreenRange / 2)
             {
                 Projectile.Kill();
@@ -76,6 +77,10 @@ public class DetectorDroneProj : ModProjectile
             Main.DroneCameraTracker.Track(Projectile);
         }
 
+        // 八百格开外自动爆炸
+        if (player.DistanceSQ(Projectile.Center) > Math.Pow(16 * 800, 2))
+            shouldBeKilled = true;
+
         if (shouldBeKilled)
         {
             Projectile.Kill();
@@ -90,14 +95,14 @@ public class DetectorDroneProj : ModProjectile
         // float gravity = 0.05f; // 重力系数
         // Projectile.velocity.Y += gravity;
 
-        if (Projectile.velocity.Length() > 11f)
-            Projectile.velocity *= 11f / Projectile.velocity.Length();
+        if (Projectile.velocity.Length() > 14f)
+            Projectile.velocity *= 14f / Projectile.velocity.Length();
 
         Projectile.velocity *= 0.98f;
 
         UpdateSound(onLand, speedDirection);
 
-        Lighting.AddLight(Projectile.Center, Vector3.One * 0.3f);
+        Lighting.AddLight(Projectile.Center, new Vector3(59, 217, 180) / 255f * 1.2f);
         Projectile.timeLeft = 2;
 
         Projectile.rotation = Projectile.velocity.X * 0.1f;
@@ -109,10 +114,10 @@ public class DetectorDroneProj : ModProjectile
     public override bool OnTileCollide(Vector2 lastVelocity)
     {
         if (Projectile.velocity.X != lastVelocity.X && Math.Abs(lastVelocity.X) > 1f)
-            Projectile.velocity.X = -lastVelocity.X * 0.1f;
+            Projectile.velocity.X = -lastVelocity.X * 0.3f;
 
         if (Projectile.velocity.Y != lastVelocity.Y && Math.Abs(lastVelocity.Y) > 1f)
-            Projectile.velocity.Y = -lastVelocity.Y * 0.1f;
+            Projectile.velocity.Y = -lastVelocity.Y * 0.3f;
 
         return false;
     }
@@ -137,7 +142,7 @@ public class DetectorDroneProj : ModProjectile
         float num3 = Utils.Remap(Projectile.localAI[0], 0f, 5f, 0f, 1f) *
                      Utils.Remap(Projectile.localAI[0], 5f, 15f, 1f, 0f);
         float volume = Utils.Clamp(MathHelper.Max(Utils.Remap(Projectile.localAI[1], 0f, 100f, 0f, 25f), num3 * 12f),
-            0f, 100f);
+            0f, 100f) * 2f;
         ActiveSound activeSound = SoundEngine.GetActiveSound(SlotId.FromFloat(Projectile.localAI[2]));
         if (activeSound == null && volume != 0f)
         {
@@ -156,19 +161,44 @@ public class DetectorDroneProj : ModProjectile
 
     public override bool PreDraw(ref Color lightColor)
     {
-        Main.DrawTrail(Projectile, new Vector2(10f, 2f), new Color(177, 255, 32, 127));
-        Main.DrawTrail(Projectile, new Vector2(-10f, 2f), new Color(177, 255, 32, 127));
+        Main.DrawTrail(Projectile, new Vector2(10f, 2f), new Color(59, 217, 180, 100));
+        Main.DrawTrail(Projectile, new Vector2(-10f, 2f), new Color(59, 217, 180, 100));
         return base.PreDraw(ref lightColor);
     }
 
-    public override void Kill(int timeLeft)
+    // 改了DrawOffset和DrawOriginOffset就是这么麻烦
+    public override void PostDraw(Color lightColor)
+    {
+        var tex = ModAsset.DetectorDrone_Glow.Value;
+
+        int offsetX = 0;
+        int offsetY = 0;
+        float originX = (tex.Width - Projectile.width) * 0.5f + Projectile.width * 0.5f;
+        ProjectileLoader.DrawOffset(Projectile, ref offsetX, ref offsetY, ref originX);
+
+        SpriteEffects effects = SpriteEffects.None;
+        if (Projectile.spriteDirection < 0) effects = SpriteEffects.FlipHorizontally;
+
+        var origin = new Vector2(originX, Projectile.height / 2 + offsetY);
+        var pos = new Vector2(Projectile.position.X - Main.screenPosition.X + originX + offsetX,
+            Projectile.position.Y - Main.screenPosition.Y + Projectile.height / 2 + Projectile.gfxOffY);
+        pos.X -= 4f;
+
+        var color = Color.White;
+        color.A = 0;
+
+        Main.EntitySpriteDraw(tex, pos, null, color, Projectile.rotation, origin, Projectile.scale, effects);
+    }
+
+    public override void OnKill(int timeLeft)
     {
         SoundEngine.GetActiveSound(SlotId.FromFloat(Projectile.localAI[2]))?.Stop();
         SoundEngine.PlaySound(SoundID.Item62, Projectile.position);
         Color transparent = Color.Transparent;
         for (int i = 0; i < 15; i++)
         {
-            Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100,
+            Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f,
+                100,
                 transparent, 0.8f);
             d.fadeIn = 0f;
             d.velocity *= 0.5f;
@@ -176,11 +206,13 @@ public class DetectorDroneProj : ModProjectile
 
         for (int j = 0; j < 5; j++)
         {
-            Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.GoldFlame, 0f, 0f, 100,
+            Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.GoldFlame, 0f,
+                0f, 100,
                 transparent, 2.5f);
             d.noGravity = true;
             d.velocity *= 2.5f;
-            d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.GoldFlame, 0f, 0f, 100,
+            d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.GoldFlame, 0f, 0f,
+                100,
                 transparent, 1.1f);
             d.velocity *= 2f;
             d.noGravity = true;
@@ -188,7 +220,8 @@ public class DetectorDroneProj : ModProjectile
 
         for (int k = 0; k < 3; k++)
         {
-            Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Electric, 0f, 0f, 100,
+            Dust d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Electric, 0f,
+                0f, 100,
                 transparent, 1.1f);
             d.velocity *= 2f;
             d.noGravity = true;

@@ -19,6 +19,7 @@ public class UIPlayer : ModPlayer
 {
     private static CoroutineRunner _uiSetupDelayRunner = new();
     internal static Vector2 HugeInventoryUIPosition;
+    internal static Vector2 BuffTrackerPosition;
 
     // 函数在玩家进入地图时候调用, 不会在服务器调用, 用来加载 UI, 可以避免一些因 HJson 未加载产生的问题.
     public override void OnEnterWorld()
@@ -61,6 +62,16 @@ public class UIPlayer : ModPlayer
         if (HugeInventoryUIPosition.Y <= 0 && HugeInventoryUIPosition.Y >= Main.screenHeight)
             HugeInventoryUIPosition.Y = 340;
         uiSystem.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
+        
+        // 增益追踪器
+        uiSystem.BuffTrackerGUI = new BuffTrackerGUI();
+        uiSystem.BuffTrackerTrigger.SetCarrier(uiSystem.BuffTrackerGUI);
+        if (BuffTrackerPosition.X <= 0 && BuffTrackerPosition.X >= Main.screenWidth)
+            BuffTrackerPosition.X = 630;
+        if (BuffTrackerPosition.Y <= 0 && BuffTrackerPosition.Y >= Main.screenHeight)
+            BuffTrackerPosition.Y = 160;
+        uiSystem.BuffTrackerGUI.MainPanel.SetPos(BuffTrackerPosition).Recalculate();
+        UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Player.whoAmI);
 
         // 液体法杖
         uiSystem.LiquidWandGUI = new LiquidWandGUI();

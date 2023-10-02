@@ -15,7 +15,7 @@ public class BuffTrackerGUI : ViewBody
     public override bool Display { get => Visible; set => Visible = value; }
     public static bool Visible { get; private set; }
 
-    private SUIPanel basePanel;
+    internal SUIPanel MainPanel;
     private BuffButtonList BuffList;
     public SUIScrollbar Scrollbar; // 拖动条
     private UISearchBar _searchBar;
@@ -30,17 +30,17 @@ public class BuffTrackerGUI : ViewBody
 
     public override bool CanDisableMouse(UIElement target)
     {
-        return (target != this && basePanel.IsMouseHovering) || basePanel.KeepPressed;
+        return (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
     }
 
     public override void OnInitialize()
     {
-        basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, draggable: true)
+        MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, draggable: true)
         {
             Shaded = true,
             ShadowThickness = 12
         };
-        basePanel.SetPosPixels(630, 160).SetSizePixels(450, 220).Join(this);
+        MainPanel.SetPosPixels(630, 160).SetSizePixels(450, 220).Join(this);
 
         SUICross closeButton = new()
         {
@@ -51,7 +51,7 @@ public class BuffTrackerGUI : ViewBody
             BgColor = Color.Transparent
         };
         closeButton.OnLeftMouseDown += (_, _) => Close();
-        basePanel.Append(closeButton);
+        MainPanel.Append(closeButton);
 
         UIHorizontalSeparator separator = new()
         {
@@ -59,7 +59,7 @@ public class BuffTrackerGUI : ViewBody
             Width = StyleDimension.FromPercent(1f),
             Color = Color.Lerp(Color.White, new Color(63, 65, 151, 255), 0.85f) * 0.9f
         };
-        basePanel.Append(separator);
+        MainPanel.Append(separator);
 
         BuffList = new BuffButtonList
         {
@@ -72,7 +72,7 @@ public class BuffTrackerGUI : ViewBody
         };
         BuffList.SetPadding(2f);
         BuffList.ManualSortMethod = _ => { };
-        basePanel.Append(BuffList);
+        MainPanel.Append(BuffList);
 
         Scrollbar = new SUIScrollbar
         {
@@ -83,11 +83,11 @@ public class BuffTrackerGUI : ViewBody
         };
         Scrollbar.SetView(100f, 1000f);
         SetupScrollBar();
-        basePanel.Append(Scrollbar);
+        MainPanel.Append(Scrollbar);
 
         BuffTrackerBattler = new BuffTrackerBattler();
         BuffTrackerBattler.Initialize();
-        BuffTrackerBattler.MainPanel.SetPos(basePanel.Left() - 92f, basePanel.Top());
+        BuffTrackerBattler.MainPanel.SetPos(MainPanel.Left() - 92f, MainPanel.Top());
         Append(BuffTrackerBattler.MainPanel);
 
         UIElement searchArea = new()
@@ -96,7 +96,7 @@ public class BuffTrackerGUI : ViewBody
             Width = new StyleDimension(-42f, 1f)
         };
         searchArea.SetPadding(0f);
-        basePanel.Append(searchArea);
+        MainPanel.Append(searchArea);
         AddSearchBar(searchArea);
         _searchBar.SetContents(null, forced: true);
     }
@@ -134,7 +134,7 @@ public class BuffTrackerGUI : ViewBody
     public override void ScrollWheel(UIScrollWheelEvent evt)
     {
         base.ScrollWheel(evt);
-        if (basePanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
+        if (MainPanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
             Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
     }
 
@@ -147,7 +147,7 @@ public class BuffTrackerGUI : ViewBody
 
         BuffList.Recalculate();
 
-        if (basePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
+        if (MainPanel.IsMouseHovering || Scrollbar.IsMouseHovering)
         {
             PlayerInput.LockVanillaMouseScroll("ImproveGame: Buff Tracker GUI");
         }
@@ -167,7 +167,7 @@ public class BuffTrackerGUI : ViewBody
 
         BuffTrackerBattler.Update();
         // 刷新刷怪条
-        BuffTrackerBattler.MainPanel.SetPosPixels(basePanel.Left.Pixels - 92f, basePanel.Top.Pixels);
+        BuffTrackerBattler.MainPanel.SetPosPixels(MainPanel.Left.Pixels - 92f, MainPanel.Top.Pixels);
         BuffTrackerBattler.MainPanel.Recalculate();
 
         if (_oldBuffCount != HideBuffSystem.HideBuffCount())
@@ -188,7 +188,7 @@ public class BuffTrackerGUI : ViewBody
 
         base.Draw(spriteBatch);
 
-        var panelDimensions = basePanel.GetDimensions();
+        var panelDimensions = MainPanel.GetDimensions();
 
         if (HideBuffSystem.HideBuffCount() > 0)
         {
@@ -336,7 +336,7 @@ public class BuffTrackerGUI : ViewBody
     /// </summary>
     public void Open()
     {
-        basePanel.KeepPressed = false;
+        MainPanel.KeepPressed = false;
         Visible = true;
         SoundEngine.PlaySound(SoundID.MenuOpen);
         SetupBuffButtons();

@@ -82,6 +82,11 @@ namespace ImproveGame.Content.Projectiles
             return true;
         }
 
+        public override void PostDraw(Color lightColor)
+        {
+            Main.EntitySpriteDraw(ModAsset.WallRobot_Glow.Value, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, Projectile.Size / 2f, Projectile.scale, SpriteEffects.None);
+        }
+
         public override void Kill(int timeLeft)
         {
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);

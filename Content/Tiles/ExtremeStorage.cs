@@ -189,8 +189,7 @@ public class ExtremeStorage : TETileBase
 
     public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
     {
-        Texture2D bloomTexture = ModContent.Request<Texture2D>("ImproveGame/Content/Tiles/ExtremeStorage_Bloom",
-            AssetRequestMode.ImmediateLoad).Value;
+        Texture2D bloomTexture = ModAsset.ExtremeStorage_Bloom.Value;
         var offscreenVector = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
         var offset = new Vector2(18f, 14f);
 

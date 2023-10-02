@@ -9,6 +9,9 @@ using System.Reflection;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
+using Terraria.Graphics;
+using Terraria.Graphics.Renderers;
+using Terraria.Graphics.Shaders;
 
 namespace ImproveGame.Content.Patches
 {
@@ -17,6 +20,8 @@ namespace ImproveGame.Content.Patches
     /// </summary>
     public class MinorPatches : ModSystem
     {
+        #region 类
+
         private class ShakeTreeTweak
         {
             private class ShakeTreeItem : GlobalItem
@@ -95,7 +100,8 @@ namespace ImproveGame.Content.Patches
                 On_HairstyleUnlocksHelper.RebuildList += UnlockPatch;
             }
 
-            private static bool RebuildPatch(On_HairstyleUnlocksHelper.orig_ListWarrantsRemake orig,HairstyleUnlocksHelper self)
+            private static bool RebuildPatch(On_HairstyleUnlocksHelper.orig_ListWarrantsRemake orig,
+                HairstyleUnlocksHelper self)
             {
                 if (!_rebuilt)
                 {
@@ -106,13 +112,76 @@ namespace ImproveGame.Content.Patches
                 return false;
             }
 
-            private static void UnlockPatch(On_HairstyleUnlocksHelper.orig_RebuildList orig, HairstyleUnlocksHelper self)
+            private static void UnlockPatch(On_HairstyleUnlocksHelper.orig_RebuildList orig,
+                HairstyleUnlocksHelper self)
             {
                 self.AvailableHairstyles.Clear();
                 for (int i = 0; i < TextureAssets.PlayerHair.Length; i++)
                 {
                     self.AvailableHairstyles.Add(i);
                 }
+            }
+        }
+
+        private class TranslucentInvisPotion : ModPlayer
+        {
+            private bool _actuallyInvis = false;
+
+            public override void Load()
+            {
+                // 隐身药水半透明
+                On_LegacyPlayerRenderer.DrawPlayerFull += PatchDrawPlayerFull;
+            }
+
+            private void PatchDrawPlayerFull(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig,
+                LegacyPlayerRenderer self, Camera camera, Player drawPlayer)
+            {
+                if (drawPlayer.whoAmI != Main.myPlayer || !drawPlayer.invis ||
+                    UIConfigs.Instance.InvisibleTransparency is 0f ||
+                    !drawPlayer.TryGetModPlayer<TranslucentInvisPotion>(out var modPlayer))
+                {
+                    orig.Invoke(self, camera, drawPlayer);
+                    return;
+                }
+
+                drawPlayer.invis = false;
+                modPlayer._actuallyInvis = true;
+
+                orig.Invoke(self, camera, drawPlayer);
+
+                drawPlayer.invis = true;
+                modPlayer._actuallyInvis = false;
+            }
+
+            public override void DrawEffects(PlayerDrawSet drawPlayer, ref float r, ref float g, ref float b,
+                ref float a, ref bool fullBright)
+            {
+                if (Player.invis || !_actuallyInvis) return;
+
+                var opacity = UIConfigs.Instance.InvisibleTransparency;
+                r *= opacity;
+                g *= opacity;
+                b *= opacity;
+                a *= opacity;
+            }
+        }
+
+        #endregion
+
+        public override void ModifyTimeRate(ref double timeRate, ref double tileUpdateRate, ref double eventUpdateRate)
+        {
+            if (Main.IsFastForwardingTime()) return;
+
+            bool allPlayersSleeping =
+                Main.CurrentFrameFlags.SleepingPlayersCount == Main.CurrentFrameFlags.ActivePlayersCount &&
+                Main.CurrentFrameFlags.SleepingPlayersCount > 0;
+            allPlayersSleeping |= Config.BedOnlyOne && Main.CurrentFrameFlags.SleepingPlayersCount > 0;
+
+            if (!Main.gameMenu && allPlayersSleeping)
+            {
+                timeRate *= Config.BedTimeRate / 5f;
+                tileUpdateRate *= Config.BedTimeRate / 5f;
+                eventUpdateRate *= Config.BedTimeRate / 5f;
             }
         }
 
@@ -250,6 +319,59 @@ namespace ImproveGame.Content.Patches
                 Config.BedEverywhere || orig.Invoke(i, j);
             // 固定 NPC 快乐度为指定数值
             IL_ShopHelper.GetShoppingSettings += ModifyNPCHappiness;
+            // 狱火圈半透明
+            On_Main.DrawInfernoRings += TranslucentInfernoRings;
+        }
+
+        private void TranslucentInfernoRings(On_Main.orig_DrawInfernoRings orig, Main self)
+        {
+            // orig.Invoke(self);
+
+            for (int i = 0; i < Main.maxPlayers; i++)
+            {
+                var player = Main.player[i];
+                if (!player.active || player.outOfRange || !player.inferno || player.dead)
+                    continue;
+
+                self.LoadFlameRing();
+                float num = 1f;
+                float num2 = 0.1f;
+                float num3 = 0.9f;
+                if (!Main.gamePaused && self.IsActive)
+                    player.flameRingScale += 0.004f;
+
+                if (player.flameRingScale < 1f)
+                {
+                    num = player.flameRingScale;
+                }
+                else
+                {
+                    player.flameRingScale = 0.8f;
+                    num = player.flameRingScale;
+                }
+
+                if (!Main.gamePaused && self.IsActive)
+                    player.flameRingRot += 0.05f;
+
+                if (player.flameRingRot > (float)Math.PI * 2f)
+                    player.flameRingRot -= (float)Math.PI * 2f;
+
+                if (player.flameRingRot < (float)Math.PI * -2f)
+                    player.flameRingRot += (float)Math.PI * 2f;
+
+                for (int j = 0; j < 3; j++)
+                {
+                    float num4 = num + num2 * j;
+                    if (num4 > 1f)
+                        num4 -= num2 * 2f;
+
+                    float num5 = MathHelper.Lerp(0.8f, 0f, Math.Abs(num4 - num3) * 10f);
+                    var color = new Color(num5, num5, num5, num5 / 2f) * UIConfigs.Instance.InfernoTransparency;
+                    Main.spriteBatch.Draw(TextureAssets.FlameRing.Value, player.Center - Main.screenPosition,
+                        new Rectangle(0, 400 * j, 400, 400), color, player.flameRingRot + (float)Math.PI / 3f * j,
+                        new Vector2(200f, 200f), num4, SpriteEffects.None, 0f);
+                }
+            }
         }
 
         private void LiveInCorrupt(ILContext il)
@@ -672,10 +794,16 @@ namespace ImproveGame.Content.Patches
         /// </summary>
         private void ModifyNPCHappiness(ILContext il)
         {
-            FieldInfo fShoppingSettingsPriceAdjustment = typeof(ShoppingSettings).GetField(nameof(ShoppingSettings.PriceAdjustment), BindingFlags.Instance | BindingFlags.Public);
-            FieldInfo fMyUtilsConfig = typeof(MyUtils).GetField(nameof(Config), BindingFlags.Static | BindingFlags.Public);
-            FieldInfo fImproveConfigsModifyNPCHappiness = typeof(ImproveConfigs).GetField(nameof(ImproveConfigs.ModifyNPCHappiness), BindingFlags.Instance | BindingFlags.Public);
-            FieldInfo fImproveConfigsNPCHappiness = typeof(ImproveConfigs).GetField(nameof(ImproveConfigs.NPCHappiness), BindingFlags.Instance | BindingFlags.Public);
+            FieldInfo fShoppingSettingsPriceAdjustment =
+                typeof(ShoppingSettings).GetField(nameof(ShoppingSettings.PriceAdjustment),
+                    BindingFlags.Instance | BindingFlags.Public);
+            FieldInfo fMyUtilsConfig =
+                typeof(MyUtils).GetField(nameof(Config), BindingFlags.Static | BindingFlags.Public);
+            FieldInfo fImproveConfigsModifyNPCHappiness =
+                typeof(ImproveConfigs).GetField(nameof(ImproveConfigs.ModifyNPCHappiness),
+                    BindingFlags.Instance | BindingFlags.Public);
+            FieldInfo fImproveConfigsNPCHappiness = typeof(ImproveConfigs).GetField(nameof(ImproveConfigs.NPCHappiness),
+                BindingFlags.Instance | BindingFlags.Public);
 
             ILCursor c = new(il);
             if (c.TryGotoNext(MoveType.Before, x => x.MatchLdloc1(), x => x.MatchRet()))

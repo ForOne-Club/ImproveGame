@@ -99,6 +99,12 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool BedEverywhere;
 
+        [DefaultValue(5)]
+        [Increment(5)]
+        [Range(5, 100)]
+        [Slider]
+        public int BedTimeRate;
+
         #endregion
 
         #region 物品效果设置
@@ -302,6 +308,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool TeamAutoJoin;
 
+        [DefaultValue(false)]
+        public bool BedOnlyOne;
+
         #endregion
 
         #region 模组设置
@@ -386,6 +395,9 @@ namespace ImproveGame.Common.Configs
             [DefaultValue(true)]
             public bool ExtremeStorage = true;
 
+            [DefaultValue(true)]
+            public bool DetectorDrone = true;
+
             public override bool Equals(object obj)
             {
                 if (obj is ModItemLoadPage other)
@@ -393,7 +405,7 @@ namespace ImproveGame.Common.Configs
                            WallPlace == other.WallPlace && CreateWand == other.CreateWand && LiquidWand == other.LiquidWand &&
                            PotionBag == other.PotionBag && BannerChest == other.BannerChest && Autofisher == other.Autofisher &&
                            PaintWand == other.PaintWand && ConstructWand == other.ConstructWand && MoveChest == other.MoveChest &&
-                           CoinOne == other.CoinOne && ExtremeStorage == other.ExtremeStorage;
+                           CoinOne == other.CoinOne && ExtremeStorage == other.ExtremeStorage && DetectorDrone == other.DetectorDrone;
                 return base.Equals(obj);
             }
 
@@ -402,7 +414,8 @@ namespace ImproveGame.Common.Configs
                 return new
                 {
                     MagickWand, SpaceWand, StarburstWand, WallPlace, CreateWand, LiquidWand, PotionBag,
-                    BannerChest, Autofisher, PaintWand, ConstructWand, MoveChest, CoinOne, ExtremeStorage
+                    BannerChest, Autofisher, PaintWand, ConstructWand, MoveChest, CoinOne, ExtremeStorage,
+                    DetectorDrone
                 }.GetHashCode();
             }
         }

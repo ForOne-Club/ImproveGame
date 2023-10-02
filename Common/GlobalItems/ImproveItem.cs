@@ -41,7 +41,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             if (item.type is ItemID.MagicMirror or ItemID.CellPhone or ItemID.IceMirror or ItemID.Shellphone
                 or ItemID.ShellphoneOcean or ItemID.ShellphoneHell or ItemID.ShellphoneSpawn or ItemID.MagicConch
-                or ItemID.DemonConch)
+                or ItemID.DemonConch && UIConfigs.Instance.MagicMirrorInstantTp)
             {
                 player.SetItemTime(CombinedHooks.TotalUseTime(item.useTime, player, item));
                 player.itemTime = player.itemTimeMax / 2 + 4;

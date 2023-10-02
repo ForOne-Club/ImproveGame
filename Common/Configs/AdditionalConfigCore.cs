@@ -55,6 +55,7 @@ namespace ImproveGame.Common.Configs
         public WandModeConfig WandMode = new();
         public bool UseKeybindTranslation;
         public Vector2 HugeInventoryUIPosition;
+        public Vector2 BuffTrackerPosition;
 
         /// <summary>
         /// (根据模组内容)获取 Config
@@ -95,6 +96,11 @@ namespace ImproveGame.Common.Configs
                 ? UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position()
                 : new Vector2(150, 340);
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition; // 在这里也保存一下
+
+            BuffTrackerPosition = UISystem.Instance.BuffTrackerGUI is not null && UISystem.Instance.BuffTrackerGUI.MainPanel is not null
+                ? UISystem.Instance.BuffTrackerGUI.MainPanel.GetDimensions().Position()
+                : new Vector2(630, 160);
+            UIPlayer.BuffTrackerPosition = BuffTrackerPosition; // 在这里也保存一下
         }
 
         /// <summary>
@@ -124,6 +130,9 @@ namespace ImproveGame.Common.Configs
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition == Vector2.Zero
                 ? new(150, 340)
                 : HugeInventoryUIPosition;
+            UIPlayer.BuffTrackerPosition = BuffTrackerPosition == Vector2.Zero
+                ? new(630, 160)
+                : BuffTrackerPosition;
         }
 
         public static void Load()

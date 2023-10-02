@@ -424,7 +424,7 @@ ImproveConfigs: {
 
 	LoadModItems: {
 		Label: Mod Items Load Config
-		Tooltip: The item will not be added to the game if it is off
+		Tooltip: Remove some modded items so they do not appear in the game
 	}
 
 	ShowModName: {
@@ -457,7 +457,6 @@ ImproveConfigs: {
 			Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit.
 			Middle click mount items will toggle the mounts.
 			All hair styles can be chosen upon character creation.
-			Foreswing removal of Magic-Mirror-like items.
 			Teleportation rod hotkey. Uses Rod of Discord or Rod of Harmony in any inventory, prioritize RoH.
 			Homing hotkey. Uses any infinite homing item in any inventory, prioritize Potion of Return.
 			'''
@@ -612,6 +611,16 @@ ImproveConfigs: {
 			and the higher the price of items sold to NPCs.
 			'''
 	}
+
+	BedTimeRate: {
+		Label: "[centeritem:Bed] 睡觉时间速率"
+		Tooltip: 允许你更改睡觉时的时间流速乘数，默认为5
+	}
+
+	BedOnlyOne: {
+		Label: "[centeritem:Bed] 单人睡觉即可加速时间"
+		Tooltip: 在多人模式下，只需一个玩家睡觉就可以加速时间
+	}
 }
 
 ModItemLoadPage: {
@@ -682,6 +691,11 @@ ModItemLoadPage: {
 
 	ExtremeStorage: {
 		Label: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
+		Tooltip: ""
+	}
+
+	DetectorDrone: {
+		Label: "{$Mods.ImproveGame.Items.DetectorDrone.DisplayName}"
 		Tooltip: ""
 	}
 
@@ -784,6 +798,21 @@ UIConfigs: {
 	SuicideButton: {
 		Label: 自杀
 		Tooltip: 按下此按钮将使你的人物当场暴毙，[c/FF4444:点击前请三思]
+	}
+
+	MagicMirrorInstantTp: {
+		Label: "[centeritem:MagicMirror] 魔镜瞬传"
+		Tooltip: 魔镜类物品改为瞬间传送，去除传送前的等待时间
+	}
+
+	InfernoTransparency: {
+		Label: "[centeritem:InfernoPotion] 狱火圈不透明度"
+		Tooltip: 影响你看所有玩家的狱火圈的不透明度，1为不透明，0为完全透明·
+	}
+
+	InvisibleTransparency: {
+		Label: "[centeritem:InvisibilityPotion] 隐身不透明度"
+		Tooltip: 只会影响自己看自己的不透明度，看别人或别人看你不会受到影响，1为不透明，0为完全透明·
 	}
 }
 

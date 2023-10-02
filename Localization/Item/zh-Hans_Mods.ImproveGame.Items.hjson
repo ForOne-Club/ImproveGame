@@ -204,6 +204,15 @@ TempleGlobe.BiomeName: 丛林神庙
 # 在世界上没有花苞或花苞全部标记完了的情况下显示
 PlanteraGlobe.NotFound: 未能找到更多的{$MapObject.PlanterasBulb}
 
+DetectorDrone: {
+	Tooltip:
+		'''
+		自带光照，上天入地，用于勘探地形
+		别飞太远，会炸的
+		'''
+	DisplayName: 勘探无人机
+}
+
 DevMark: {
 	DisplayName: 开发者之证
 	Tooltip: "[c/ff0000:开发者物品，请勿使用]"
@@ -217,9 +226,4 @@ Expelliarmus: {
 		让NPC爆金币
 		可以用来测试你写的NPC掉落
 		'''
-}
-
-DetectorDrone: {
-	// Tooltip: ""
-	// DisplayName: Detector Drone
 }

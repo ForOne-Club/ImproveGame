@@ -169,10 +169,7 @@ namespace ImproveGame.Interface.Common
             WorldFeatureTrigger = new EventTrigger("Radial Hotbars", "World Feature");
             ItemSearcherTrigger = new EventTrigger("Radial Hotbars", "Item Searcher");
             OpenBagTrigger = new EventTrigger("Radial Hotbars", "Open Bag");
-
             BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI");
-            BuffTrackerGUI = new BuffTrackerGUI();
-            BuffTrackerTrigger.SetCarrier(BuffTrackerGUI);
 
             SidedEventTrigger = new SidedEventTrigger();
 

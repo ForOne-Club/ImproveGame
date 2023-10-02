@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Projectiles;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.Projectiles;
 using Terraria.DataStructures;
 using Terraria.ID;
 
@@ -37,6 +38,8 @@ public class DetectorDrone : ModItem
         }
     }
 
+    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.DetectorDrone;
+
     public override void SetDefaults()
     {
         Item.CloneDefaults(ItemID.JimsDrone);
@@ -62,5 +65,15 @@ public class DetectorDrone : ModItem
         }
 
         return false;
+    }
+
+    public override void AddRecipes()
+    {
+        CreateRecipe()
+            .AddRecipeGroup(RecipeGroupID.IronBar, 12)
+            .AddRecipeGroup(RecipeSystem.AnyGoldBar, 6)
+            .AddRecipeGroup(RecipeSystem.AnyGem, 3)
+            .AddTile(TileID.Anvils)
+            .Register();
     }
 }

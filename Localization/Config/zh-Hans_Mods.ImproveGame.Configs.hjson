@@ -431,7 +431,7 @@ ImproveConfigs: {
 
 	LoadModItems: {
 		Label: 模组物品加载配置
-		Tooltip: 物品状态为关闭，它将不会被添加到游戏中。
+		Tooltip: 可选择移除模组内的物品，使其不出现在游戏中
 	}
 
 	ShowModName: {
@@ -464,7 +464,6 @@ ImproveConfigs: {
 			提升了生命水晶、魔力水晶、生命果的使用速度，并允许它们自动挥舞
 			中键点击坐骑物品可以直接使用
 			创建玩家时可以选择所有发型
-			魔镜类物品改为瞬间传送，去除传送前的等待时间
 			传送法杖快捷键，若任何物品栏及便携储存中有混沌传送杖或和谐杖，按下快捷键将自动使用，优先使用和谐杖
 			回程快捷键，快捷使用任何物品栏及便携储存内可无限使用的回程物品，优先使用返回药水
 			'''
@@ -615,6 +614,16 @@ ImproveConfigs: {
 		Label: "[centeritem:LifeCrystal] NPC 快乐度"
 		Tooltip: 设置的值越小从 NPC 购买物品价格越便宜，卖给 NPC 物品价格越高
 	}
+
+	BedTimeRate: {
+		Label: "[centeritem:Bed] 睡觉时间速率"
+		Tooltip: 允许你更改睡觉时的时间流速乘数，默认为5
+	}
+
+	BedOnlyOne: {
+		Label: "[centeritem:Bed] 单人睡觉即可加速时间"
+		Tooltip: 在多人模式下，只需一个玩家睡觉就可以加速时间
+	}
 }
 
 ModItemLoadPage: {
@@ -685,6 +694,11 @@ ModItemLoadPage: {
 
 	ExtremeStorage: {
 		// Label: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
+		// Tooltip: ""
+	}
+
+	DetectorDrone: {
+		// Label: "{$Mods.ImproveGame.Items.DetectorDrone.DisplayName}"
 		// Tooltip: ""
 	}
 
@@ -787,6 +801,21 @@ UIConfigs: {
 	SuicideButton: {
 		Label: 自杀
 		Tooltip: 按下此按钮将使你的人物当场暴毙，[c/FF4444:点击前请三思]
+	}
+
+	MagicMirrorInstantTp: {
+		Label: "[centeritem:MagicMirror] 魔镜瞬传"
+		Tooltip: 魔镜类物品改为瞬间传送，去除传送前的等待时间
+	}
+
+	InfernoTransparency: {
+		Label: "[centeritem:InfernoPotion] 狱火圈不透明度"
+		Tooltip: 影响你看所有玩家的狱火圈的不透明度，1为不透明，0为完全透明·
+	}
+
+	InvisibleTransparency: {
+		Label: "[centeritem:InvisibilityPotion] 隐身不透明度"
+		Tooltip: 只会影响自己看自己的不透明度，看别人或别人看你不会受到影响，1为不透明，0为完全透明·
 	}
 }
 

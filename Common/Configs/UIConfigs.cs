@@ -55,6 +55,21 @@ public class UIConfigs : ModConfig
     [DefaultValue(true)]
     public bool ExplosionEffect;
 
+    [DefaultValue(0.3f)]
+    [Range(0f, 1f)]
+    [Increment(0.05f)]
+    [Slider]
+    public float InfernoTransparency;
+
+    [DefaultValue(0.3f)]
+    [Range(0f, 1f)]
+    [Increment(0.05f)]
+    [Slider]
+    public float InvisibleTransparency;
+
+    [DefaultValue(true)]
+    public bool MagicMirrorInstantTp;
+
     [Header("MinimapHeader")]
     [DefaultValue(true)]
     public bool MarkDungeon;

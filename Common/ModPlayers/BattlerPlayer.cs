@@ -13,7 +13,8 @@ namespace ImproveGame.Common.ModPlayers
 
         public override void OnEnterWorld() {
             SpawnRateSliderValue = SliderDefaultValue;
-            UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Player.whoAmI);
+            // UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Player.whoAmI);
+            // 被移到UIPlayer了
         }
 
         private readonly List<int> BattlerRequiredBuffs = new() {
