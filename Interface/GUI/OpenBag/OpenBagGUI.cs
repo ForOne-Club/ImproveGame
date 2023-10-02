@@ -336,8 +336,12 @@ public class OpenBagGUI : ViewBody
 
         if (Main.LocalPlayer is null) return;
 
-        if (Main.LocalPlayer.TryGetModPlayer(out LootKeeper keeper) && keeper.Loots.RemoveAll(i => i.IsAir) > 0)
-            RefreshGrid();
+        if (Main.LocalPlayer.TryGetModPlayer(out LootKeeper keeper))
+        {
+            keeper.Loots ??= new List<Item>();
+            if (keeper.Loots.RemoveAll(i => i.IsAir) > 0)
+                RefreshGrid();
+        }
 
         if (!MainPanel.IsMouseHovering)
             return;
