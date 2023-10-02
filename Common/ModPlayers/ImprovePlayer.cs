@@ -4,6 +4,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.ItemSearcher;
+using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.WorldFeature;
 using Microsoft.Xna.Framework.Input;
 using Terraria.DataStructures;
@@ -232,6 +233,8 @@ public class ImprovePlayer : ModPlayer
     {
         if (KeybindSystem.ConfigKeybind.JustPressed)
             PressConfigKeybind();
+        if (KeybindSystem.OpenBagGUIKeybind.JustPressed)
+            PressOpenBagGUIKeybind();
         if (KeybindSystem.ItemSearcherKeybind.JustPressed)
             PressItemSearcherKeybind();
         if (KeybindSystem.SuperVaultKeybind.JustPressed)
@@ -263,6 +266,17 @@ public class ImprovePlayer : ModPlayer
         Main.inFancyUI = true;
         Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, Config);
         Main.InGameUI.SetState(Terraria.ModLoader.UI.Interface.modConfig);
+    }
+
+    private static void PressOpenBagGUIKeybind()
+    {
+        var ui = UISystem.Instance.OpenBagGUI;
+        if (ui is null) return;
+
+        if (OpenBagGUI.Visible)
+            ui.Close();
+        else
+            ui.Open();
     }
 
     private static void PressItemSearcherKeybind()

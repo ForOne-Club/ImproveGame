@@ -4,6 +4,7 @@ using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.GUI.ItemSearcher;
+using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.WorldFeature;
 using ImproveGame.Interface.PlayerInfo;
 using ImproveGame.Interface.UIStructs;
@@ -75,6 +76,10 @@ namespace ImproveGame.Interface.Common
         public ItemSearcherGUI ItemSearcherGUI;
         public EventTrigger ItemSearcherTrigger;
 
+        // 快速开袋
+        public OpenBagGUI OpenBagGUI;
+        public EventTrigger OpenBagTrigger;
+
         // 侧栏 UI
         public AutofisherGUI AutofisherGUI;
         public ExtremeStorageGUI ExtremeStorageGUI;
@@ -137,6 +142,9 @@ namespace ImproveGame.Interface.Common
             ItemSearcherGUI = null;
             ItemSearcherTrigger = null;
 
+            OpenBagGUI = null;
+            OpenBagTrigger = null;
+
             PackageGUI = null;
             PackageTrigger = null;
         }
@@ -160,6 +168,7 @@ namespace ImproveGame.Interface.Common
             LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer");
             WorldFeatureTrigger = new EventTrigger("Radial Hotbars", "World Feature");
             ItemSearcherTrigger = new EventTrigger("Radial Hotbars", "Item Searcher");
+            OpenBagTrigger = new EventTrigger("Radial Hotbars", "Open Bag");
 
             BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI");
             BuffTrackerGUI = new BuffTrackerGUI();

@@ -1,7 +1,8 @@
 ﻿namespace ImproveGame.Content.Patches.AutoPiggyBank;
 
-public static class Utils
+public static class CoinUtils
 {
+    public static int PlatinumMaxStack = 9999;
     private const ulong CopperValue = 1;
     private const ulong SilverValue = 100;
     private const ulong GoldValue = 100 * 100;
@@ -51,13 +52,12 @@ public static class Utils
         (ulong gold, ulong gold_rem) = Math.DivRem(plat_rem, GoldValue);
         (ulong silver, ulong copper) = Math.DivRem(gold_rem, SilverValue);
 
-
         var toReturn = new List<Item>();
 
         while (plat > 0)
         {
-            toReturn.Add(new Item(ItemID.PlatinumCoin, Math.Min((int)plat, 999)));
-            plat -= Math.Min(plat, 999);
+            toReturn.Add(new Item(ItemID.PlatinumCoin, Math.Min((int)plat, PlatinumMaxStack)));
+            plat -= Math.Min(plat, (ulong)PlatinumMaxStack);
         }
 
         toReturn.Add(new Item(ItemID.GoldCoin, (int)gold));
@@ -84,7 +84,8 @@ public static class Utils
 
                 if (chest.item[i].type == item.type)
                 {
-                    chest.item[i] = item;
+                    chest.item[i] = item.Clone();
+                    item.TurnToAir();
                     toIgnore.Add(i);
                     goto outer_end;
                 }
@@ -96,7 +97,8 @@ public static class Utils
                  
                 if (chest.item[i].stack == 0)
                 {
-                    chest.item[i] = item;
+                    chest.item[i] = item.Clone();
+                    item.TurnToAir();
                     toIgnore.Add(i);
                     goto outer_end;
                 }
@@ -104,16 +106,5 @@ public static class Utils
 
             outer_end:;
         }
-    }
-
-    /// <summary>
-    /// Checks if a list of Items contains a specific type
-    /// </summary>
-    /// <param name="items">The list of items</param>
-    /// <param name="type">The type to check for</param>
-    /// <returns>True if yes, false if no</returns>
-    public static bool HasItem(IEnumerable<Item> items, params int[] types)
-    {
-        return items.Any(item => types.Contains(item.type));
     }
 }

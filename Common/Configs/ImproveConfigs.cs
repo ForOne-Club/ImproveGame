@@ -94,9 +94,6 @@ namespace ImproveGame.Common.Configs
         public bool MiddleEnableBank;
 
         [DefaultValue(true)]
-        public bool AutoSaveMoney;
-
-        [DefaultValue(true)]
         public bool FasterExtractinator;
 
         [DefaultValue(true)]

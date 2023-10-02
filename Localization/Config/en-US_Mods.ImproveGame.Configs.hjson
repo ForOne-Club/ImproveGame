@@ -179,16 +179,6 @@ ImproveConfigs: {
 			'''
 	}
 
-	AutoSaveMoney: {
-		Label: "[centeritem:MoneyTrough] Automatically save money"
-		Tooltip:
-			'''
-			If there is any Piggy Bank, Money Trough or Eye Bone inside one of your personal inventories
-			Your coins and defender medals picked up will be automatically saved into the Piggy Bank
-			The Merchant's spawning condition counts coins in the Piggy Bank
-			'''
-	}
-
 	BanTombstone: {
 		Label: "[centeritem:3230] Disable tombstone spawn"
 		Tooltip: ""

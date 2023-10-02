@@ -7,6 +7,7 @@ using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.PlayerInfo;
 using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.ItemSearcher;
+using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.WorldFeature;
 using System.Collections;
 
@@ -80,6 +81,10 @@ public class UIPlayer : ModPlayer
         // 物品搜索
         uiSystem.ItemSearcherGUI = new ItemSearcherGUI();
         uiSystem.ItemSearcherTrigger.SetCarrier(uiSystem.ItemSearcherGUI);
+
+        // 快速开袋
+        uiSystem.OpenBagGUI = new OpenBagGUI();
+        uiSystem.OpenBagTrigger.SetCarrier(uiSystem.OpenBagGUI);
 
         // 生命体检测仪筛选
         uiSystem.LifeformAnalyzerGUI = new LifeformAnalyzerGUI();

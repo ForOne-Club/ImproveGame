@@ -677,6 +677,17 @@ partial class MyUtils
         return false;
     }
 
+    /// <summary>
+    /// 判断指定 IEnumerable.Item 中是否有 item
+    /// </summary>
+    /// <param name="items">The list of items</param>
+    /// <param name="types">The types to check for</param>
+    /// <returns>True if yes, false if no</returns>
+    public static bool HasItem(IEnumerable<Item> items, params int[] types)
+    {
+        return items.Any(item => types.Contains(item.type));
+    }
+
     // 获取配置
     public static ImproveConfigs Config;
 

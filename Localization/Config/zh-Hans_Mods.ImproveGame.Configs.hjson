@@ -183,16 +183,6 @@ ImproveConfigs: {
 			'''
 	}
 
-	AutoSaveMoney: {
-		Label: "[centeritem:MoneyTrough] 有钱币槽时自动存钱"
-		Tooltip:
-			'''
-			如果存钱罐，保险箱，护卫熔炉，虚空仓库中有任何猪猪存钱罐、钱币槽、眼骨
-			则会自动将你捡起的钱币和护卫奖章存储到猪猪存钱罐中
-			商人的生成条件会同时计算存钱罐内的钱币
-			'''
-	}
-
 	BanTombstone: {
 		Label: "[centeritem:3230] 禁止生成墓碑"
 		// Tooltip: ""

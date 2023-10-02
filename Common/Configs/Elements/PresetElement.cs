@@ -24,7 +24,6 @@ public class FukMeCalamityElement : PresetElement
         config.NoConsume_Ammo = true;
         config.ImprovePrefix = true;
         config.MiddleEnableBank = true;
-        config.AutoSaveMoney = true;
         config.FasterExtractinator = true;
         config.TownNPCHome = true;
         config.TownNPCGetTFIntoHouse = true;
@@ -76,7 +75,6 @@ public class ILoveBalanceElement : PresetElement
         config.NoConsume_Ammo = true;
         config.ImprovePrefix = false;
         config.MiddleEnableBank = true;
-        config.AutoSaveMoney = true;
         config.FasterExtractinator = true;
         config.TownNPCHome = true;
         config.TownNPCGetTFIntoHouse = false;
