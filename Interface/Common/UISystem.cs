@@ -20,6 +20,9 @@ namespace ImproveGame.Interface.Common
 
         #region 定义
 
+        // 检测主题是否变化，变化了就重设UI，Config的OnChanged无法确定是哪个变量发生了变化，所以放这里了
+        private ThemeType _themeLastTick;
+
         public BrustGUI BrustGUI;
         internal static UserInterface BrustInterface;
 
@@ -217,6 +220,14 @@ namespace ImproveGame.Interface.Common
                 PaintWandInterface?.Update(gameTime);
             if (GrabBagInfoGUI.Visible)
                 GrabBagInfoInterface?.Update(gameTime);
+
+            if (_themeLastTick != UIConfigs.Instance.ThemeType)
+            {
+                UIColor.SetUIColors(UIConfigs.Instance.ThemeType);
+                UIPlayer.InitUI();
+            }
+
+            _themeLastTick = UIConfigs.Instance.ThemeType;
         }
 
         #endregion
@@ -268,5 +279,10 @@ namespace ImproveGame.Interface.Common
         }
 
         #endregion
+
+        public override void PreSaveAndQuit()
+        {
+            UIPlayer.ShouldShowUI = false;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.UIElements
@@ -9,7 +10,7 @@ namespace ImproveGame.Interface.UIElements
         private UIImage tickUI;
         private int _npcId;
 
-        public LifeformTab(int npcId) : base(new Color(89, 116, 213), new Color(44, 57, 105, 160))
+        public LifeformTab(int npcId) : base(UIColor.PanelBorderLight, UIColor.PanelBg)
         {
             _npcId = npcId;
             this.SetSize(new Vector2(-20f, 36f), 1f);

@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.GlobalItems;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.SUIElements;
 using System.Reflection;
@@ -66,7 +67,7 @@ public class PrefixRecallGUI : ViewBody, ISidedView
 
     public override void OnInitialize()
     {
-        Append(_basePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160))
+        Append(_basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
         {
             Shaded = true,
             Left = {Pixels = PanelLeft},
@@ -198,7 +199,7 @@ public class PrefixTab : SUIPanel
     internal int PrefixId;
     internal int Price;
 
-    public PrefixTab(int prefixId, int value) : base(new Color(89, 116, 213), new Color(44, 57, 105, 160))
+    public PrefixTab(int prefixId, int value) : base(UIColor.PanelBorderLight, UIColor.PanelBg)
     {
         PrefixId = prefixId;
         CalculatePrice(value);

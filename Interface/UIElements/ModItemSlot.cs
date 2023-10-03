@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.Common;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
@@ -9,9 +10,6 @@ namespace ImproveGame.Interface.UIElements
     /// </summary>
     public class ModItemSlot : UIElement
     {
-        private readonly Color BorderColor = new(18, 18, 38, 200);
-        private readonly Color Background = new(63, 65, 151, 200);
-
         /// <summary>
         /// 无物品时显示的贴图
         /// </summary>
@@ -149,7 +147,10 @@ namespace ImproveGame.Interface.UIElements
 
             if (RoundBorder)
             {
-                SDFRectangle.HasBorder(dimensions.Position(), dimensions.Size(), new Vector4(12f), Background, 2, BorderColor);
+                var borderColor = Item.favorited ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
+                var background = Item.favorited ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBg;
+                SDFRectangle.HasBorder(dimensions.Position(), dimensions.Size(),
+                    new Vector4(UIColor.ItemSlotBorderRound), background, UIColor.ItemSlotBorderSize, borderColor);
             }
 
             // 这里设置inventoryScale原版也是这么干的

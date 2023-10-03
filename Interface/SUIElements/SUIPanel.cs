@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements
 {
@@ -27,7 +28,7 @@ namespace ImproveGame.Interface.SUIElements
             Draggable = draggable;
             DragIgnore = true;
 
-            ShadowThickness = 26f;
+            ShadowThickness = UIColor.ShadowThickness;
             ShadowColor = borderColor * 0.35f;
 
             Border = border;
@@ -40,7 +41,7 @@ namespace ImproveGame.Interface.SUIElements
         {
             SetPadding(10f);
             DragIgnore = true;
-            ShadowThickness = 26f;
+            ShadowThickness = UIColor.ShadowThickness;
             ShadowColor = borderColor * 0.35f;
             Draggable = draggable;
 

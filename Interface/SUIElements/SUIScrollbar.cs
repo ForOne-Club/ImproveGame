@@ -34,6 +34,9 @@ namespace ImproveGame.Interface.SUIElements
 
         public AnimationTimer HoverTimer = new(3);
 
+        public Color InnerBg, InnerBgHover;
+        public float RoundMultiplier;
+
         public float ViewPosition
         {
             get => viewPosition;
@@ -58,8 +61,11 @@ namespace ImproveGame.Interface.SUIElements
             SetPadding(5);
 
             BgColor = UIColor.ScrollBarBg;
-            Border = 2f;
+            Border = UIColor.ItemSlotBorderSize;
             BorderColor = UIColor.ScrollBarBorder;
+            InnerBg = UIColor.ScrollBarInnerBg;
+            InnerBgHover = UIColor.ScrollBarInnerBgHover;
+            RoundMultiplier = UIColor.ScrollBarRoundMultiplier;
         }
 
         public override void Update(GameTime gameTime)
@@ -177,7 +183,7 @@ namespace ImproveGame.Interface.SUIElements
             if (!Visible || (HideIfFilled && InnerFilled))
                 return;
             Vector2 size = GetDimensions().Size();
-            Rounded = new Vector4(MathF.Min(size.X, size.Y) / 2f);
+            Rounded = new Vector4(MathF.Min(size.X, size.Y) * RoundMultiplier);
             base.DrawSelf(spriteBatch);
 
             if (HideInnerIfFilled && InnerFilled)
@@ -190,11 +196,11 @@ namespace ImproveGame.Interface.SUIElements
                 innerPosition.Y += innerDimensions.Height * (1 - ViewScale) * (ViewPosition / MaxViewPoisition);
             innerSize.Y *= ViewScale;
 
-            Color hoverColor = Color.Lerp(UIColor.ScrollBarInnerBgHover, UIColor.ScrollBarInnerBg,
-                dragging ? 1 : HoverTimer.Schedule);
+            Color hoverColor = Color.Lerp(InnerBg, InnerBgHover, dragging ? 1 : HoverTimer.Schedule);
+            var round = new Vector4(MathF.Min(innerSize.X, innerSize.Y) * RoundMultiplier);
 
             // 滚动条拖动块
-            SDFRectangle.NoBorder(innerPosition, innerSize, new Vector4(MathF.Min(innerSize.X, innerSize.Y) / 2), hoverColor);
+            SDFRectangle.NoBorder(innerPosition, innerSize, round, hoverColor);
         }
 
         /// <summary>

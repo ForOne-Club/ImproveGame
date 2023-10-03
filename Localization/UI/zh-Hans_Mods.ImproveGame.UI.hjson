@@ -203,3 +203,5 @@ MapLayer: {
 	FloatingIsland: 空岛
 	FloatingLake: 天湖
 }
+
+ThemePreview.Title: 主题预览

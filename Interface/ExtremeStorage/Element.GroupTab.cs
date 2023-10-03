@@ -32,7 +32,7 @@
 
             _group = group;
             _tabTexture = Main.Assets.Request<Texture2D>("Images/UI/Creative/Infinite_Tabs_B");
-            _groupTexture = GetTexture("UI/ExtremeStorage/Icons");
+            _groupTexture = ModAsset.Icons_Stormdark;
             _tabFrame = new Rectangle(0, 0, 42, 48);
             _groupFrame = new Rectangle(x * 30, 0, 28, 28);
         }

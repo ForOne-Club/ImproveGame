@@ -55,7 +55,7 @@ namespace ImproveGame.Interface.GUI
             panelHeight = 256f;
             panelWidth = 280f;
 
-            basePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160))
+            basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
             {
                 Shaded = true
             };
@@ -121,7 +121,7 @@ namespace ImproveGame.Interface.GUI
             title.Height.Set(30, 0f);
             basePanel.Append(title);
 
-            textPanel = new(new Color(35, 40, 83), new Color(35, 40, 83), rounded: 10)
+            textPanel = new(UIColor.TitleBg, UIColor.TitleBg, rounded: 10)
             {
                 HAlign = 0.5f,
                 Top = StyleDimension.FromPixels(200f),

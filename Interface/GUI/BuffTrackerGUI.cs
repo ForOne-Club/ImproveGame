@@ -38,7 +38,7 @@ public class BuffTrackerGUI : ViewBody
         MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, draggable: true)
         {
             Shaded = true,
-            ShadowThickness = 12
+            ShadowThickness = UIColor.ShadowThicknessThinnerer
         };
         MainPanel.SetPosPixels(630, 160).SetSizePixels(450, 220).Join(this);
 
@@ -233,7 +233,7 @@ public class BuffTrackerGUI : ViewBody
         uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
         uIImageButton.SetVisibility(1f, 1f);
         searchArea.Append(uIImageButton);
-        SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(new Color(35, 40, 83), new Color(35, 40, 83))
+        SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(UIColor.SearchBarBorder, UIColor.SearchBarBg)
         {
             Left = new StyleDimension(4f, 0f),
             Width = new StyleDimension(0f - uIImageButton.Width.Pixels - 3f, 1f),
@@ -310,12 +310,12 @@ public class BuffTrackerGUI : ViewBody
 
     private void OnStartTakingInput()
     {
-        _searchBoxPanel.BorderColor = Main.OurFavoriteColor;
+        _searchBoxPanel.BorderColor = UIColor.SearchBarBorderSelected;
     }
 
     private void OnEndTakingInput()
     {
-        _searchBoxPanel.BorderColor = new Color(35, 40, 83);
+        _searchBoxPanel.BorderColor = UIColor.SearchBarBorder;
     }
 
     public override void LeftClick(UIMouseEvent evt)

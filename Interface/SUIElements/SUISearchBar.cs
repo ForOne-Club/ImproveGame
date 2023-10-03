@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Interface.SUIElements;
+﻿using ImproveGame.Interface.Common;
+
+namespace ImproveGame.Interface.SUIElements;
 
 public class SUISearchBar : View
 {
@@ -38,7 +40,7 @@ public class SUISearchBar : View
         searchBtn.SetVisibility(1f, 1f);
         Append(searchBtn);
         
-        _searchBoxPanel = new SUIPanel(new Color(35, 40, 83), new Color(35, 40, 83))
+        _searchBoxPanel = new SUIPanel(UIColor.SearchBarBorder, UIColor.SearchBarBg)
         {
             Left = new StyleDimension(4f, 0f),
             Width = new StyleDimension(-searchBtn.Width.Pixels - 3f, 1f),
@@ -119,12 +121,12 @@ public class SUISearchBar : View
 
     private void OnStartTakingInput()
     {
-        _searchBoxPanel.BorderColor = Main.OurFavoriteColor;
+        _searchBoxPanel.BorderColor = UIColor.SearchBarBorderSelected;
     }
 
     private void OnEndTakingInput()
     {
-        _searchBoxPanel.BorderColor = new Color(35, 40, 83);
+        _searchBoxPanel.BorderColor = UIColor.SearchBarBorder;
     }
 
     public void AttemptStoppingUsingSearchbar()

@@ -56,6 +56,9 @@ namespace ImproveGame.Common.Configs
         public bool UseKeybindTranslation;
         public Vector2 HugeInventoryUIPosition;
         public Vector2 BuffTrackerPosition;
+        public Vector2 WorldFeaturePosition;
+        public Vector2 ItemSearcherPosition;
+        public Vector2 OpenBagPosition;
 
         /// <summary>
         /// (根据模组内容)获取 Config
@@ -92,15 +95,26 @@ namespace ImproveGame.Common.Configs
             WandMode.PaintMode = WandSystem.PaintWandMode;
 
             UseKeybindTranslation = KeybindSystem.UseKeybindTranslation;
-            HugeInventoryUIPosition = UISystem.Instance.BigBagGUI is not null && UISystem.Instance.BigBagGUI.MainPanel is not null
-                ? UISystem.Instance.BigBagGUI.MainPanel.GetDimensions().Position()
-                : new Vector2(150, 340);
+
+            HugeInventoryUIPosition = UISystem.Instance.BigBagGUI?.MainPanel?.GetDimensions().Position() ??
+                                      new Vector2(150, 340);
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition; // 在这里也保存一下
 
-            BuffTrackerPosition = UISystem.Instance.BuffTrackerGUI is not null && UISystem.Instance.BuffTrackerGUI.MainPanel is not null
-                ? UISystem.Instance.BuffTrackerGUI.MainPanel.GetDimensions().Position()
-                : new Vector2(630, 160);
+            BuffTrackerPosition = UISystem.Instance.BuffTrackerGUI?.MainPanel?.GetDimensions().Position() ??
+                                  new Vector2(630, 160);
             UIPlayer.BuffTrackerPosition = BuffTrackerPosition; // 在这里也保存一下
+
+            WorldFeaturePosition = UISystem.Instance.WorldFeatureGUI?.MainPanel?.GetDimensions().Position() ??
+                                   new Vector2(250, 280);
+            UIPlayer.WorldFeaturePosition = WorldFeaturePosition; // 在这里也保存一下
+
+            ItemSearcherPosition = UISystem.Instance.ItemSearcherGUI?.MainPanel?.GetDimensions().Position() ??
+                                   new Vector2(620, 400);
+            UIPlayer.ItemSearcherPosition = ItemSearcherPosition; // 在这里也保存一下
+
+            OpenBagPosition = UISystem.Instance.OpenBagGUI?.MainPanel?.GetDimensions().Position() ??
+                              new Vector2(410, 360);
+            UIPlayer.OpenBagPosition = OpenBagPosition; // 在这里也保存一下
         }
 
         /// <summary>
@@ -128,11 +142,20 @@ namespace ImproveGame.Common.Configs
 
             KeybindSystem.UseKeybindTranslation = UseKeybindTranslation;
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition == Vector2.Zero
-                ? new(150, 340)
+                ? new Vector2(150, 340)
                 : HugeInventoryUIPosition;
             UIPlayer.BuffTrackerPosition = BuffTrackerPosition == Vector2.Zero
-                ? new(630, 160)
+                ? new Vector2(630, 160)
                 : BuffTrackerPosition;
+            UIPlayer.WorldFeaturePosition = WorldFeaturePosition == Vector2.Zero
+                ? new Vector2(250, 280)
+                : WorldFeaturePosition;
+            UIPlayer.ItemSearcherPosition = ItemSearcherPosition == Vector2.Zero
+                ? new Vector2(620, 400)
+                : ItemSearcherPosition;
+            UIPlayer.OpenBagPosition = OpenBagPosition == Vector2.Zero
+                ? new Vector2(410, 360)
+                : OpenBagPosition;
         }
 
         public static void Load()

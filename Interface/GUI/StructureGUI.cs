@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ConstructCore;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using System.Reflection;
@@ -43,7 +44,7 @@ namespace ImproveGame.Interface.GUI
             BackTexture = GetTexture("UI/Construct/Back");
             ButtonBackgroundTexture = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel");
 
-            BasePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160))
+            BasePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
             {
                 Shaded = true,
                 Top = StyleDimension.FromPixels(150f),
@@ -317,7 +318,6 @@ namespace ImproveGame.Interface.GUI
                 }
             }
 
-            BasePanel.BgColor = new(44, 57, 105, 160);
             RefreshButton.SetImage(RefreshTexture);
             RefreshButton.HoverText = "{$Mods.ImproveGame.Common.Refresh}";
 
@@ -549,7 +549,6 @@ namespace ImproveGame.Interface.GUI
             UIList.Add(panel);
             #endregion
 
-            BasePanel.BgColor = new(49, 67, 125, 190);
             RefreshButton.SetImage(BackTexture);
             RefreshButton.HoverText = "{$UI.Back}";
 

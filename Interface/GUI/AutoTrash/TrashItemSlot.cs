@@ -29,7 +29,6 @@ public class TrashItemSlot : BaseItemSlot
         Index = index;
         SetBaseItemSlotValues(true, true);
         SetSizePixels(48, 48);
-        SetRoundedRectangleValues(UIColor.ItemSlotBg * 0.85f, 2f, UIColor.ItemSlotBorder * 0.85f, new Vector4(10f));
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)

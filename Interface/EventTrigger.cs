@@ -1,4 +1,5 @@
-﻿using Terraria.GameInput;
+﻿using ImproveGame.Interface.Common;
+using Terraria.GameInput;
 
 namespace ImproveGame.Interface
 {
@@ -65,6 +66,10 @@ namespace ImproveGame.Interface
         /// </summary>
         public static void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
+            // 防止进入世界时UI闪一下
+            if (!UIPlayer.ShouldShowUI)
+                return;
+            
             var layerIndex = new Dictionary<string, int>();
 
             // 插入到绘制层

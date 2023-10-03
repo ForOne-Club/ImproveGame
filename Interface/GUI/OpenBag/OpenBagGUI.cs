@@ -63,7 +63,7 @@ public class OpenBagGUI : ViewBody
         };
         MainPanel.SetPadding(0f);
         MainPanel.SetPosPixels(410, 360)
-            .SetSizePixels(400, 366)
+            .SetSizePixels(404, 366)
             .Join(this);
 
         TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)

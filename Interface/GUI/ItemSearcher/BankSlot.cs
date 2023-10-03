@@ -31,14 +31,20 @@ public class BankSlot : View
     {
         base.DrawSelf(spriteBatch);
 
+        var slotBack = Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Slot_Back");
+        var slotFront = Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Slot_Front");
+        var slotSelection = Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Slot_Selection");
+
         var dimensions = GetDimensions();
         var position = dimensions.Position();
 
+        spriteBatch.Draw(slotBack.Value, position, Color.White);
         spriteBatch.Draw(_icon.Value, position, Color.White);
+        spriteBatch.Draw(slotFront.Value, position, Color.White);
 
         var items = GetBank().item;
         if (items.AnyMatchWithString(_parent.SearchContent))
-            spriteBatch.Draw(ModAsset.Slot_Selection.Value, position, Color.White);
+            spriteBatch.Draw(slotSelection.Value, position, Color.White);
     }
 
     public void DrawItems()

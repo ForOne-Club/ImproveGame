@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.SUIElements;
 using System.Reflection;
@@ -37,10 +38,10 @@ namespace ImproveGame.Interface.GUI
 
         public override void OnInitialize()
         {
-            Append(_basePanel = new SUIPanel(new Color(29, 34, 70), new Color(44, 57, 105, 160))
+            Append(_basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
             {
                 Shaded = true,
-                ShadowThickness = 12,
+                ShadowThickness = UIColor.ShadowThicknessThinnerer,
                 Draggable = true,
                 Left = {Pixels = PanelLeft},
                 Top = {Pixels = PanelTop},
@@ -105,7 +106,7 @@ namespace ImproveGame.Interface.GUI
 			uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
 			uIImageButton.SetVisibility(1f, 1f);
 			searchArea.Append(uIImageButton);
-            SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(new Color(35, 40, 83), new Color(35, 40, 83)) {
+            SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(UIColor.SearchBarBorder, UIColor.SearchBarBg) {
                 Left = new StyleDimension(4f, 0f),
 				Width = new StyleDimension(0f - uIImageButton.Width.Pixels - 3f, 1f),
 				Height = new StyleDimension(0f, 1f),
@@ -169,12 +170,14 @@ namespace ImproveGame.Interface.GUI
             SetupList();
         }
 
-        private void OnStartTakingInput() {
-            _searchBoxPanel.BorderColor = Main.OurFavoriteColor;
+        private void OnStartTakingInput()
+        {
+            _searchBoxPanel.BorderColor = UIColor.SearchBarBorderSelected;
         }
 
-        private void OnEndTakingInput() {
-            _searchBoxPanel.BorderColor = new Color(35, 40, 83);
+        private void OnEndTakingInput()
+        {
+            _searchBoxPanel.BorderColor = UIColor.SearchBarBorder;
         }
 
         private void SetupScrollBar(bool resetViewPosition = true) {

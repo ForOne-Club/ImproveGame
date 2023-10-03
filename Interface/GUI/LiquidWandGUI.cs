@@ -52,7 +52,7 @@ namespace ImproveGame.Interface.GUI
             Append(basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
             {
                 Shaded = true,
-                ShadowThickness = 12,
+                ShadowThickness = UIColor.ShadowThicknessThinnerer,
                 Draggable = true,
                 Left = {Pixels = PanelLeft},
                 Top = {Pixels = PanelTop},

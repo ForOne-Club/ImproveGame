@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs.Elements;
+using ImproveGame.Interface.Common;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
@@ -15,6 +16,9 @@ public class UIConfigs : ModConfig
 
     [CustomModConfigItem(typeof(SuicideButtonElement))]
     public object SuicideButton;
+
+    [CustomModConfigItem(typeof(ThemeColorElement))]
+    public ThemeType ThemeType;
 
     [ReloadRequired]
     public bool ResetNativeUI;

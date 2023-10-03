@@ -47,8 +47,8 @@ namespace ImproveGame.Interface.SUIElements
             Relative = RelativeMode.Horizontal;
             Spacing = new Vector2(10, 10);
             Wrap = true;
-            Border = 2;
-            Rounded = new Vector4(12f);
+            Border = UIColor.ItemSlotBorderSize;
+            Rounded = new Vector4(UIColor.ItemSlotBorderRound);
         }
 
         /// <summary> 为了使该类的子类可以越过该类的 RightMouseDown 而直接调用 UIElement 的 RightMouseDown </summary>

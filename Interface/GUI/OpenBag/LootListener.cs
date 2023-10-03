@@ -17,7 +17,9 @@ public class LootListener : GlobalItem
         if (source is not EntitySource_ItemOpen openSource || openSource.ItemType != _listening)
             return;
 
-        // Main.NewText($"[i:{item.type}] {Lang.GetItemName(item.type)}");
+        // 钱币直接过掉，进玩家口袋
+        if (item.IsACoin)
+            return;
 
         if (Main.LocalPlayer is null || !Main.LocalPlayer.TryGetModPlayer(out LootKeeper keeper))
             return;

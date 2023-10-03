@@ -47,7 +47,7 @@ public class AutoTrashGUI : ViewBody
             {
                 OverflowHidden = true,
                 Shaded = true,
-                ShadowThickness = 16
+                ShadowThickness = UIColor.ShadowThicknessThinner
             };
 
             ItemSlotGrid = new BaseGrid();

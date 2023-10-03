@@ -39,7 +39,7 @@ public class WorldFeatureGUI : ViewBody
             Draggable = true
         };
         MainPanel.SetPadding(0f);
-        MainPanel.SetPosPixels(410, 360)
+        MainPanel.SetPosPixels(250, 280)
             .SetSizePixels(300, 306)
             .Join(this);
 

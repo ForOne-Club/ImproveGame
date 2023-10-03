@@ -22,7 +22,6 @@ public class LootItemSlot : BaseItemSlot
         SetBaseItemSlotValues(true, true);
         SetSizePixels(43, 43);
         ItemIconMaxWidthAndHeight = 27;
-        SetRoundedRectangleValues(UIColor.ItemSlotBg * 0.85f, 2f, UIColor.ItemSlotBorder * 0.85f, new Vector4(10f));
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)

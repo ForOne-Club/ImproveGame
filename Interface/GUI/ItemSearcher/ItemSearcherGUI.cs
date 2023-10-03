@@ -102,7 +102,7 @@ public class ItemSearcherGUI : ViewBody
             Draggable = true
         };
         MainPanel.SetPadding(0f);
-        MainPanel.SetPosPixels(410, 360)
+        MainPanel.SetPosPixels(620, 400)
             .SetSizePixels(356, 330)
             .Join(this);
 

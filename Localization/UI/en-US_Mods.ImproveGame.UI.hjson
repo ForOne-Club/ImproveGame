@@ -206,3 +206,5 @@ MapLayer: {
 	FloatingIsland: Floating Island
 	FloatingLake: Floating Lake
 }
+
+ThemePreview.Title: Theme Preview

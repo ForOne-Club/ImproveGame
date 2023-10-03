@@ -814,6 +814,11 @@ UIConfigs: {
 		Label: "[centeritem:InvisibilityPotion] 隐身不透明度"
 		Tooltip: 只会影响自己看自己的不透明度，看别人或别人看你不会受到影响，1为不透明，0为完全透明·
 	}
+
+	ThemeType: {
+		Tooltip: 控制更好的体验UI的整体配色方案
+		Label: "[g:12] UI主题"
+	}
 }
 
 PAPDisplayMode: {
@@ -821,4 +826,10 @@ PAPDisplayMode: {
 	AlwaysDisplayed.Label: Always
 	NotDisplayed.Label: Hidden
 	WhenOpeningBackpack.Label: Inventory-only
+}
+
+ThemeType: {
+	Stormdark.Label: Stormdark
+	Blue.Label: Classic
+	Tooltip: ""
 }

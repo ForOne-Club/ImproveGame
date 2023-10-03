@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Packets;
 using ImproveGame.Common.ModPlayers;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.Creative;
 
@@ -7,7 +8,7 @@ namespace ImproveGame.Interface.GUI
 {
     public class BattlerPanel : SUIPanel
     {
-        public BattlerPanel() : base(Color.Black, new(35, 40, 83, 160)) { }
+        public BattlerPanel() : base(Color.Black, UIColor.TitleBg) { }
 
         public override void Draw(SpriteBatch spriteBatch)
         {

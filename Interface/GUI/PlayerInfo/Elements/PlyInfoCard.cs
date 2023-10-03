@@ -23,8 +23,8 @@ public class PlyInfoCard : TimerView
 
     public Color BeginBorderColor = UIColor.PanelBorder * 0.75f;
     public Color EndBorderColor = UIColor.PanelBorder;
-    public Color BeginBgColor = new Color(43, 56, 101) * 0.75f;
-    public Color EndBgColor = new Color(43, 56, 101);
+    public Color BeginBgColor = UIColor.PanelBg * 0.75f;
+    public Color EndBgColor = UIColor.PanelBg;
 
     public PlyInfoCard(string text, Func<string> textFunc, string icon)
     {

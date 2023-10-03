@@ -20,13 +20,16 @@ public class UIPlayer : ModPlayer
     private static CoroutineRunner _uiSetupDelayRunner = new();
     internal static Vector2 HugeInventoryUIPosition;
     internal static Vector2 BuffTrackerPosition;
+    internal static Vector2 WorldFeaturePosition;
+    internal static Vector2 ItemSearcherPosition;
+    internal static Vector2 OpenBagPosition;
+    internal static bool ShouldShowUI; // 防止进入世界时UI闪一下
 
     // 函数在玩家进入地图时候调用, 不会在服务器调用, 用来加载 UI, 可以避免一些因 HJson 未加载产生的问题.
     public override void OnEnterWorld()
     {
         // 协程延时执行可以防止进入世界时UI闪一下
-        _uiSetupDelayRunner.StopAll();
-        _uiSetupDelayRunner.Run(2f, SetupUI());
+        InitUI();
     }
 
     public override void Unload()
@@ -34,10 +37,17 @@ public class UIPlayer : ModPlayer
         _uiSetupDelayRunner = null;
     }
 
-    IEnumerator SetupUI()
+    public static void InitUI()
     {
+        _uiSetupDelayRunner.StopAll();
+        _uiSetupDelayRunner.Run(2f, SetupUI());
+    }
+
+    static IEnumerator SetupUI()
+    {
+        ShouldShowUI = true;
         UISystem uiSystem = UISystem.Instance;
-        DataPlayer dataPlayer = Player.GetModPlayer<DataPlayer>();
+        DataPlayer dataPlayer = Main.LocalPlayer.GetModPlayer<DataPlayer>();
 
         // 玩家信息
         uiSystem.PlayerInfoGUI = new PlayerInfoGUI();
@@ -57,21 +67,15 @@ public class UIPlayer : ModPlayer
         uiSystem.BigBagTrigger.SetCarrier(uiSystem.BigBagGUI);
 
         uiSystem.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
-        if (HugeInventoryUIPosition.X <= 0 && HugeInventoryUIPosition.X >= Main.screenWidth)
-            HugeInventoryUIPosition.X = 150;
-        if (HugeInventoryUIPosition.Y <= 0 && HugeInventoryUIPosition.Y >= Main.screenHeight)
-            HugeInventoryUIPosition.Y = 340;
+        CheckPositionValid(ref HugeInventoryUIPosition, 150, 340);
         uiSystem.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
         
         // 增益追踪器
         uiSystem.BuffTrackerGUI = new BuffTrackerGUI();
         uiSystem.BuffTrackerTrigger.SetCarrier(uiSystem.BuffTrackerGUI);
-        if (BuffTrackerPosition.X <= 0 && BuffTrackerPosition.X >= Main.screenWidth)
-            BuffTrackerPosition.X = 630;
-        if (BuffTrackerPosition.Y <= 0 && BuffTrackerPosition.Y >= Main.screenHeight)
-            BuffTrackerPosition.Y = 160;
+        CheckPositionValid(ref BuffTrackerPosition, 630, 160);
         uiSystem.BuffTrackerGUI.MainPanel.SetPos(BuffTrackerPosition).Recalculate();
-        UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Player.whoAmI);
+        UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Main.LocalPlayer.whoAmI);
 
         // 液体法杖
         uiSystem.LiquidWandGUI = new LiquidWandGUI();
@@ -88,14 +92,20 @@ public class UIPlayer : ModPlayer
         // 世界特性
         uiSystem.WorldFeatureGUI = new WorldFeatureGUI();
         uiSystem.WorldFeatureTrigger.SetCarrier(uiSystem.WorldFeatureGUI);
+        CheckPositionValid(ref WorldFeaturePosition, 250, 280);
+        uiSystem.WorldFeatureGUI.MainPanel.SetPos(WorldFeaturePosition).Recalculate();
 
         // 物品搜索
         uiSystem.ItemSearcherGUI = new ItemSearcherGUI();
         uiSystem.ItemSearcherTrigger.SetCarrier(uiSystem.ItemSearcherGUI);
+        CheckPositionValid(ref ItemSearcherPosition, 620, 400);
+        uiSystem.ItemSearcherGUI.MainPanel.SetPos(ItemSearcherPosition).Recalculate();
 
         // 快速开袋
         uiSystem.OpenBagGUI = new OpenBagGUI();
         uiSystem.OpenBagTrigger.SetCarrier(uiSystem.OpenBagGUI);
+        CheckPositionValid(ref OpenBagPosition, 410, 360);
+        uiSystem.OpenBagGUI.MainPanel.SetPos(OpenBagPosition).Recalculate();
 
         // 生命体检测仪筛选
         uiSystem.LifeformAnalyzerGUI = new LifeformAnalyzerGUI();
@@ -110,6 +120,14 @@ public class UIPlayer : ModPlayer
         SidedEventTrigger.RegisterViewBody(uiSystem.AutofisherGUI);
         SidedEventTrigger.RegisterViewBody(uiSystem.PrefixRecallGUI);
         yield return null;
+    }
+
+    private static void CheckPositionValid(ref Vector2 position, int defaultX, int defaultY)
+    {
+        if (position.X <= 0 && position.X >= Main.screenWidth)
+            position.X = defaultX;
+        if (position.Y <= 0 && position.Y >= Main.screenHeight)
+            position.Y = defaultY;
     }
 
     public override void PreUpdate()

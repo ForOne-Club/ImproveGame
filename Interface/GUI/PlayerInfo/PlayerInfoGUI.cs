@@ -54,7 +54,7 @@ namespace ImproveGame.Interface.PlayerInfo
             _mainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
             {
                 Shaded = true,
-                ShadowThickness = 16
+                ShadowThickness = UIColor.ShadowThicknessThinner
             };
             _mainPanel.Opacity.Type = OpacityType.Self;
             _mainPanel.SetPadding(0);
@@ -70,6 +70,7 @@ namespace ImproveGame.Interface.PlayerInfo
                 Rounded = new Vector4(10f, 10f, 0f, 0f),
                 BeginBgColor = UIColor.TitleBg2 * 0.75f,
                 EndBgColor = UIColor.TitleBg2,
+                TextHasBorder = false
             };
             _titleButton.OnLeftMouseDown += (_, _) =>
             {
@@ -192,7 +193,6 @@ namespace ImproveGame.Interface.PlayerInfo
             }
 
             _mainPanel.ShadowColor = _mainPanel.BorderColor * _openTimer.Lerp(0.25f, 0.5f);
-            _mainPanel.ShadowThickness = 16f; // = _openTimer.Lerp(20f, 40f);
             float cardHeight = _openTimer.Lerp(0, PlyInfoCard.TotalSize(3, 7).Y + _cardPanel.VPadding());
             if (Math.Abs(_cardPanel.Height.Pixels - cardHeight) > 0)
             {
