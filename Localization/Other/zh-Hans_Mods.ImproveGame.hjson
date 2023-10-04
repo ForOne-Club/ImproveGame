@@ -358,3 +358,5 @@ BuilderToggles: {
 		OnText: 自动存钱：开
 	}
 }
+
+// NPCs.DummyNPC.DisplayName: Dummy N P C
