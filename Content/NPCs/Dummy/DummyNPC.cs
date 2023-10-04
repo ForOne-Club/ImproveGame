@@ -80,17 +80,17 @@ public class DummyNPC : ModNPC
         NPC.frameCounter = Math.Max(0, NPC.frameCounter);
     }
 
-    public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
+    public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
     {
-        DummyDPS.Hurt(damage * (crit ? 2 : 1));
+        DummyDPS.Hurt(damageDone);
 
         HitScale = 0.1f;
         NPC.frameCounter = 60f;
     }
 
-    public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
+    public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
     {
-        DummyDPS.Hurt(damage);
+        DummyDPS.Hurt(damageDone);
 
         HitScale = 0.1f;
         NPC.frameCounter = 60f;
