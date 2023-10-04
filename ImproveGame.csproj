@@ -41,4 +41,7 @@
 	    <HintPath>lib\PinyinNet.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
+	<ItemGroup>
+	  <ModFile Remove="Common\Commands\DummyCommand.cs" />
+	</ItemGroup>
 </Project>
