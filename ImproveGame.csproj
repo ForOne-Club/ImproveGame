@@ -23,6 +23,12 @@
 		<DotNetPath Condition=" '$(DotNetPath)' == '' ">dotnet</DotNetPath>
 	</PropertyGroup>
 	<ItemGroup>
+	  <AdditionalFiles Remove="Content\Items\Dummy.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Solaestas-ImageFile Remove="Content\Items\Dummy.png" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.1.2" />
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.5" />
 		<Publicize Include="FNA" />
