@@ -54,7 +54,7 @@ public class DetectorDrone : ModItem
 
     public override bool CanUseItem(Player player)
     {
-        if (player.ownedProjectileCounts[Item.shoot] <= 0)
+        if (Main.myPlayer != player.whoAmI || player.ownedProjectileCounts[Item.shoot] <= 0)
             return true;
 
         for (int i = 0; i < Main.maxProjectiles; i++)

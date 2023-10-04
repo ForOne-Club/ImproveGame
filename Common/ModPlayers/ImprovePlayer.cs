@@ -155,7 +155,8 @@ public class ImprovePlayer : ModPlayer
             {
                 Main.anglerQuestFinished = false;
                 Main.anglerWhoFinishedToday.Clear();
-                Main.NewText(Language.GetTextValue($"Mods.ImproveGame.Tips.AnglerQuest"), ItemRarityID.Pink);
+                
+                AddNotification(GetText("Tips.AnglerQuest"), Color.Cyan);
             }
         }
 

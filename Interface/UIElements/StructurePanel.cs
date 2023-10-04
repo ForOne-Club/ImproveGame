@@ -165,7 +165,7 @@ namespace ImproveGame.Interface.UIElements
             string newPath = FilePath.Replace(Name, _inputName);
             if (File.Exists(newPath) && Name != _inputName)
             {
-                Main.NewText(GetText("ConstructGUI.RenameTip.Exists"));
+                AddNotification(GetText("ConstructGUI.RenameTip.Exists"));
                 NameText.SetText(Name);
                 return;
             }
@@ -267,11 +267,11 @@ namespace ImproveGame.Interface.UIElements
                 if (inputText.Length > 40)
                 {
                     inputText = inputText[..40];
-                    Main.NewText(GetText("ConstructGUI.RenameTip.TooLong"));
+                    AddNotification(GetText("ConstructGUI.RenameTip.TooLong"));
                 }
                 if (inputText.Contains('\\') || inputText.Contains('/') || inputText.Contains(':') || inputText.Contains('*') || inputText.Contains('?') || inputText.Contains('\"') || inputText.Contains('\'') || inputText.Contains('<') || inputText.Contains('>') || inputText.Contains('|'))
                 {
-                    Main.NewText(GetText("ConstructGUI.RenameTip.Illegal"));
+                    AddNotification(GetText("ConstructGUI.RenameTip.Illegal"));
                     return;
                 }
                 else

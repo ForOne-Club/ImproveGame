@@ -23,7 +23,7 @@ CombatText: {
 
 Tips: {
 	PrefixCount: "Reforging count: "
-	AnglerQuest: Angler's quest refreshed!
+	AnglerQuest: Angler's quest refreshed
 	FromMod: From mod {DisplayName}
 	LootDisplay: Press {KeybindName} to see detailed item drop
 	LootDisplayBindless: (You have not bind a hotkey for this function, please do so in Controls)
@@ -363,7 +363,11 @@ Projectiles: {
 	KillProj.DisplayName: Kill Proj
 	WallRobot.DisplayName: Wall Robot
 	ExpelliarmusProj.DisplayName: Expelliarmus!
-	DetectorDroneProj.DisplayName: 勘测无人机
+
+	DetectorDroneProj: {
+		DisplayName: 勘测无人机
+		TooFarAway: 无人机离你太远了
+	}
 }
 
 BuilderToggles: {

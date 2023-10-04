@@ -2,6 +2,7 @@
 using ImproveGame.Common.Packets;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.Packets.Items;
+using ImproveGame.Content;
 using ImproveGame.Content.Items.Coin;
 using ImproveGame.Core;
 using ImproveGame.Interface.GUI.WorldFeature;
@@ -11,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
 using static Microsoft.Xna.Framework.Vector2;
+using Terraria.ID;
 
 namespace ImproveGame;
 
@@ -935,5 +937,18 @@ partial class MyUtils
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+    
+    /// <summary>
+    /// 生成一个弹出提示，文字颜色默认为黄色
+    /// </summary>
+    /// <param name="displayText">文本</param>
+    /// <param name="textColor">文本颜色，一般提示建议用黄色（默认即黄色）</param>
+    public static void AddNotification(string displayText, Color textColor = default)
+    {
+        if (textColor == default)
+            textColor = Color.Yellow;
+        if (Main.netMode != NetmodeID.Server)
+            InGameNotificationsTracker._notifications.Add(new ModNotificationPopup(displayText, textColor));
     }
 }
