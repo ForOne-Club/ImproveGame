@@ -355,8 +355,8 @@ Keybinds: {
 	HomeKeybind.DisplayName: Use Recall Items
 	WorldFeature.DisplayName: Hide/Show the World Feature Panel
 	ConfigMenu.DisplayName: Open Mod Config
-	ItemSearcher.DisplayName: 查找物品
-	OpenBagGUI.DisplayName: 快速开袋
+	ItemSearcher.DisplayName: Search Item
+	OpenBagGUI.DisplayName: Bag Opener
 }
 
 Projectiles: {
@@ -365,14 +365,14 @@ Projectiles: {
 	ExpelliarmusProj.DisplayName: Expelliarmus!
 
 	DetectorDroneProj: {
-		DisplayName: 勘测无人机
-		TooFarAway: 无人机离你太远了
+		DisplayName: Explorer Drone
+		TooFarAway: Explorer Drone is too far away from you.
 	}
 }
 
 BuilderToggles: {
 	PiggyToggle: {
-		OffText: 自动存钱：关
-		OnText: 自动存钱：开
+		OffText: Auto Money Deposition: Off
+		OnText: Auto Money Deposition: On
 	}
 }

@@ -458,7 +458,7 @@ ImproveConfigs: {
 			Middle click mount items will toggle the mounts.
 			All hair styles can be chosen upon character creation.
 			Teleportation rod hotkey. Uses Rod of Discord or Rod of Harmony in any inventory, prioritize RoH.
-			Homing hotkey. Uses any infinite homing item in any inventory, prioritize Potion of Return.
+			Home-returning hotkey. Uses any infinite home-returning item in any inventory, prioritize Potion of Return.
 			'''
 	}
 
@@ -592,10 +592,10 @@ ImproveConfigs: {
 	MinimapMark: {
 		Tooltip:
 			'''
-			开启后，使用“定位球”系列物品可在小地图上标记以下结构：
-			以太、地牢、神庙、空岛、金字塔、世纪之花球茎
+			Allows use of 'Locators' to mark following structures on map:
+			The Aether, Dungeon, Jungle Temple, Floating Islands, Pyramid and Plantera's Bulb.
 			'''
-		Label: "[centeritem:WorldGlobe] 结构标记"
+		Label: "[centeritem:WorldGlobe] Structure Markers"
 	}
 
 	ModifyNPCHappiness: {
@@ -613,13 +613,13 @@ ImproveConfigs: {
 	}
 
 	BedTimeRate: {
-		Label: "[centeritem:Bed] 睡觉时间速率"
-		Tooltip: 允许你更改睡觉时的时间流速乘数，默认为5
+		Label: "[centeritem:Bed] Sleeping Time Rate"
+		Tooltip: Allows you to change how fast time goes while sleeping, 5 times by default.
 	}
 
 	BedOnlyOne: {
-		Label: "[centeritem:Bed] 单人睡觉即可加速时间"
-		Tooltip: 在多人模式下，只需一个玩家睡觉就可以加速时间
+		Label: "[centeritem:Bed] One Sleeps For All"
+		Tooltip: One sleeping player is enough to accelerate time in multiplayer.
 	}
 }
 
@@ -763,61 +763,61 @@ UIConfigs: {
 		Tooltip: Toggles the explosion effects of this mod's wands.
 	}
 
-	Headers.MinimapHeader: "[centeritem:WorldGlobe] 小地图标记设置"
+	Headers.MinimapHeader: "[centeritem:WorldGlobe] Map Marker Settings"
 
 	MarkFloatingIsland: {
-		Tooltip: 开启后，将会在小地图上显示已标记的空岛位置
-		Label: "[centeritem:ImproveGame/FloatingIslandGlobe] 标记空岛"
+		Tooltip: Displays marked floating islands on map.
+		Label: "[centeritem:ImproveGame/FloatingIslandGlobe] Floating Islands"
 	}
 
 	MarkAether: {
-		Tooltip: 开启后，将会在小地图上显示已标记的以太位置
-		Label: "[centeritem:ImproveGame/AetherGlobe] 标记以太"
+		Tooltip: Displays marked Aether on map.
+		Label: "[centeritem:ImproveGame/AetherGlobe] The Aether"
 	}
 
 	MarkTemple: {
-		Tooltip: 开启后，将会在小地图上显示已标记的神庙位置
-		Label: "[centeritem:ImproveGame/TempleGlobe] 标记神庙"
+		Tooltip: Displays marked Jungle Temple on map.
+		Label: "[centeritem:ImproveGame/TempleGlobe] Jungle Temple"
 	}
 
 	MarkDungeon: {
-		Tooltip: 开启后，将会在小地图上显示已标记的地牢位置
-		Label: "[centeritem:ImproveGame/DungeonGlobe] 标记地牢"
+		Tooltip: Displays marked Dungeon on map.
+		Label: "[centeritem:ImproveGame/DungeonGlobe] Dungeon"
 	}
 
 	MarkPyramid: {
-		Label: "[centeritem:ImproveGame/PyramidGlobe] 标记金字塔"
-		Tooltip: 开启后，将会在小地图上显示已标记的金字塔位置
+		Label: "[centeritem:ImproveGame/PyramidGlobe] Pyramids"
+		Tooltip: Displays marked Pyramids on map.
 	}
 
 	MarkPlantera: {
-		Label: "[centeritem:ImproveGame/PlanteraGlobe] 标记世纪之花"
-		Tooltip: 开启后，将会在小地图上显示已标记的{$MapObject.PlanterasBulb}位置
+		Label: "[centeritem:ImproveGame/PlanteraGlobe] Plantera's Bulbs"
+		Tooltip: Displays marked {$MapObject.PlanterasBulb} on map.
 	}
 
 	SuicideButton: {
-		Label: 自杀
-		Tooltip: 按下此按钮将使你的人物当场暴毙，[c/FF4444:点击前请三思]
+		Label: K.Y.S.
+		Tooltip: Your character will die after hitting this button, [c/FF4444:think twice before pressing it].
 	}
 
 	MagicMirrorInstantTp: {
-		Label: "[centeritem:MagicMirror] 魔镜瞬传"
-		Tooltip: 魔镜类物品改为瞬间传送，去除传送前的等待时间
+		Label: "[centeritem:MagicMirror] Instant Home-returning Items"
+		Tooltip: Home-returning items such as Magic Mirror are instant, delay before teleportation is removed.
 	}
 
 	InfernoTransparency: {
-		Label: "[centeritem:InfernoPotion] 狱火圈不透明度"
-		Tooltip: 影响你看所有玩家的狱火圈的不透明度，1为不透明，0为完全透明·
+		Label: "[centeritem:InfernoPotion] Inferno Ring Alpha"
+		Tooltip: Alpha of Inferno rings in your perspective, 1 is solid and 0 is transparent.
 	}
 
 	InvisibleTransparency: {
-		Label: "[centeritem:InvisibilityPotion] 隐身不透明度"
-		Tooltip: 只会影响自己看自己的不透明度，看别人或别人看你不会受到影响，1为不透明，0为完全透明·
+		Label: "[centeritem:InvisibilityPotion] Invisibility Alpha"
+		Tooltip: Alpha of invisible players in your perspective, 1 is solid and 0 is transparent.
 	}
 
 	ThemeType: {
-		Tooltip: 控制更好的体验UI的整体配色方案
-		Label: "[g:12] UI主题"
+		Tooltip: Quality of Life's UI color scheme.
+		Label: "[g:12] UI Color Scheme"
 	}
 }
 
