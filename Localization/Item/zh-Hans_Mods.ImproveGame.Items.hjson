@@ -188,7 +188,7 @@ GlobeBase: {
 	Tooltip: 在地图上标记{0}
 	AlreadyRevealed: 这个世界已经标记过{0}了
 	Reveal: "{1}在地图上标记了{0}"
-	NotFound: 本世界没有{0}的数据，原因可能是生成世界时没有添加更好的体验或未更新到v1.6.6+版本
+	NotFound: 本世界没有{0}的数据，原因可能是创建地图时未启用更好的体验 v1.6.6 或更高的版本
 }
 
 AetherGlobe.BiomeName: 以太
