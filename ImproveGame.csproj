@@ -23,10 +23,7 @@
 		<DotNetPath Condition=" '$(DotNetPath)' == '' ">dotnet</DotNetPath>
 	</PropertyGroup>
 	<ItemGroup>
-	  <AdditionalFiles Remove="Content\Items\Dummy.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Solaestas-ImageFile Remove="Content\Items\Dummy.png" />
+	  <AdditionalFiles Remove="Content\Dummy.png" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.1.2" />
@@ -43,5 +40,12 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ModFile Remove="Common\Commands\DummyCommand.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Solaestas-HjsonFile Remove="Localization\NPC\en-US_Mods.ImproveGame.hjson" />
+	  <Solaestas-HjsonFile Remove="Localization\NPC\zh-Hans_Mods.ImproveGame.hjson" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Solaestas-ImageFile Remove="Content\Dummy.png" />
 	</ItemGroup>
 </Project>

@@ -227,3 +227,8 @@ Expelliarmus: {
 		可以用来测试你写的NPC掉落
 		'''
 }
+
+Dummy: {
+	// DisplayName: Dummy
+	// Tooltip: ""
+}

@@ -18,7 +18,7 @@ public struct DummyConfig
     public bool ShowDamageData = true;
     [Annotate]
     public bool ShowNameOnHover = false;
-    [Annotate   ]
+    [Annotate]
     public bool Immortal = false;
     [Annotate]
     public bool NoGravity = true;

@@ -224,3 +224,8 @@ Expelliarmus: {
 		Can be used to test the NPC loot
 		'''
 }
+
+Dummy: {
+	DisplayName: Dummy
+	Tooltip: ""
+}

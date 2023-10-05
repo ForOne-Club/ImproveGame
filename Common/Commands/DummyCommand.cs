@@ -75,5 +75,5 @@ public class DummyCommand : ModCommand
     }
 
     public record CommandColor(Color Normal, Color Success, Color Fail);
-    public CommandColor MyColor = new(new(0, 150, 255), new(0, 200, 0), new(200, 0, 0));
+    public CommandColor MyColor = new(new(0, 255, 127), new(0, 200, 0), new(200, 0, 0));
 }
