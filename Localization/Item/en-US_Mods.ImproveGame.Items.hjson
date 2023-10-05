@@ -200,7 +200,7 @@ PyramidGlobe: {
 
 TempleGlobe.BiomeName: Jungle Temple
 # 在世界上没有花苞或花苞全部标记完了的情况下显示
-PlanteraGlobe.NotFound: "Couldn't find more {$MapObject.PlanterasBulb}."
+PlanteraGlobe.NotFound: Couldn't find more {$MapObject.PlanterasBulb}.
 
 DetectorDrone: {
 	Tooltip:

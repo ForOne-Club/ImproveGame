@@ -10,5 +10,10 @@ NPC: {
 	NoGravity: 不受重力影响
 	NoTileCollide: 关闭物块碰撞检测
 	KnockBackResist: 击退抗性, 0 免疫击退
-	ImmuneDeath: 免疫死亡
+	Dummy_Damage: 伤害: {S}/秒 {F}/帧
+	Dummy_Time: 时长: {S}秒 {F}帧
+	Dummy_FinalBlow: 最后一击: {FinalBlow}
+	DummyCommand_DummyAttributes: 假人属性
+	DummyCommand_Usage: 用法: /dummy <attribute> <value> (不区分大小写)
+	DummyCpmmand_Description: attribute: 属性名, value: 值. 可以输入指令 /dummy info 查看可用属性与对应类型以及当前值
 }

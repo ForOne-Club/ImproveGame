@@ -599,10 +599,10 @@ ImproveConfigs: {
 	MinimapMark: {
 		/* Tooltip:
 			'''
-			开启后，使用“定位球”系列物品可在小地图上标记以下结构：
-			以太、地牢、神庙、空岛、金字塔、世纪之花球茎
+			Allows use of 'Locators' to mark following structures on map:
+			The Aether, Dungeon, Jungle Temple, Floating Islands, Pyramid and Plantera's Bulb.
 			''' */
-		// Label: "[centeritem:WorldGlobe] 结构标记"
+		// Label: "[centeritem:WorldGlobe] Structure Markers"
 	}
 
 	ModifyNPCHappiness: {

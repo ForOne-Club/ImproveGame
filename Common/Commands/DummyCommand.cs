@@ -8,9 +8,8 @@ public class DummyCommand : ModCommand
 {
     public override CommandType Type => CommandType.Chat;
     public override string Command => "dummy";
-    public override string Usage => "用法: /dummy <attribute> <value> (不区分大小写)";
-    public override string Description =>
-        $"attribute: 属性名, value: 值. 可以输入指令 /dummy info 查看可用属性与对应类型以及当前值.";
+    public override string Usage => GetText("NPC.DummyCommand_Usage");
+    public override string Description => GetText("NPC.DummyCommand_Description");
 
     public override void Action(CommandCaller caller, string input, string[] args)
     {
@@ -22,7 +21,7 @@ public class DummyCommand : ModCommand
             {
                 FieldInfo[] fields = type.GetFields();
 
-                caller.Reply("假人属性信息：", MyColor.Normal);
+                caller.Reply(GetText("NPC.DummyCommand_DummyAttributes"), MyColor.Normal);
 
                 foreach (var field in fields)
                 {

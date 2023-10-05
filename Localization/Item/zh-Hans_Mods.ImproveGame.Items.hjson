@@ -230,6 +230,6 @@ Expelliarmus: {
 }
 
 Dummy: {
-	// DisplayName: Dummy
-	// Tooltip: ""
+	DisplayName: 假人
+	Tooltip: "我是一个假人"
 }
