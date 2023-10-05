@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.Packets;
 using ImproveGame.Content.Patches;
+using ImproveGame.Interface.GUI;
 using MonoMod.RuntimeDetour.HookGen;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -249,6 +250,19 @@ public class ModIntegrationsSystem : ModSystem
                             var itemType = Convert.ToInt32(args[1]); // Item ID
                             var tileIDs = AsListOfInt(args[2]); // Tile IDs
                             PortableStations[itemType] = tileIDs;
+                            return true;
+                        }
+                        case "AddAutofisherAccessory":
+                        {
+                            var itemType = Convert.ToInt32(args[1]); // Item ID
+                            var fishingAddition = Convert.ToSingle(args[2]); // Fishing Addition
+                            var fishingPower = Convert.ToInt32(args[3]); // Fishing Power
+                            var tackleBox = Convert.ToBoolean(args[4]); // Tackle Box
+                            var lavaFishing = Convert.ToBoolean(args[5]); // Lava Fishing
+                            AccessoryAttribute.FishingAddition[itemType] = fishingAddition;
+                            AccessoryAttribute.FishingPower[itemType] = fishingPower;
+                            AccessoryAttribute.TackleBox[itemType] = tackleBox;
+                            AccessoryAttribute.LavaFishing[itemType] = lavaFishing;
                             return true;
                         }
                     default:

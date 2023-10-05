@@ -9,6 +9,7 @@ using System.Reflection;
 using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
+using ImproveGame.Interface.GUI;
 
 namespace ImproveGame.Content.Tiles
 {
@@ -126,13 +127,7 @@ namespace ImproveGame.Content.Tiles
             //配饰为AnglerEarring可使钓鱼速度*200%
             //配饰为AnglerTackleBag可使钓鱼速度*300%
             //配饰为LavaproofTackleBag可使钓鱼速度*500%
-            float fishingSpeedBonus = accessory.type switch
-            {
-                ItemID.AnglerEarring => 2f,
-                ItemID.AnglerTackleBag => 3f,
-                ItemID.LavaproofTackleBag => 5f,
-                _ => 1f
-            };
+            float fishingSpeedBonus = AccessoryAttribute.FishingAddition[accessory.type];
 
             // 钓鱼机内每条 Bass 将提供 10% 的钓鱼速度加成，最高可达 500% 加成
             int bassCount = 0;
@@ -161,30 +156,9 @@ namespace ImproveGame.Content.Tiles
 
         private void ApplyAccessories()
         {
-            lavaFishing = false;
-            tackleBox = false;
-            fishingSkill = 0;
-            switch (accessory.type)
-            {
-                case ItemID.TackleBox:
-                    tackleBox = true;
-                    break;
-                case ItemID.AnglerEarring:
-                    fishingSkill += 10;
-                    break;
-                case ItemID.AnglerTackleBag:
-                    tackleBox = true;
-                    fishingSkill += 10;
-                    break;
-                case ItemID.LavaFishingHook:
-                    lavaFishing = true;
-                    break;
-                case ItemID.LavaproofTackleBag:
-                    tackleBox = true;
-                    fishingSkill += 10;
-                    lavaFishing = true;
-                    break;
-            }
+            lavaFishing = AccessoryAttribute.LavaFishing[accessory.type];
+            tackleBox = AccessoryAttribute.TackleBox[accessory.type];
+            fishingSkill += AccessoryAttribute.FishingPower[accessory.type];
         }
 
         public void FishingCheck()
