@@ -109,57 +109,60 @@ public class InfBuffPlayer : ModPlayer
             if (item.createTile is TileID.GardenGnome)
                 HideBuffSystem.HasGardenGnome = true;
 
-            int buffType = ApplyBuffItem.GetItemBuffType(item);
+            var buffTypes = ApplyBuffItem.GetItemBuffType(item);
 
-            // 饱食三级Buff不应该覆盖，而是取最高级
-            bool wellFed3Enabled = Main.LocalPlayer.FindBuffIndex(BuffID.WellFed3) != -1;
-            bool wellFed2Enabled = Main.LocalPlayer.FindBuffIndex(BuffID.WellFed2) != -1;
-
-            if (!CheckInfBuffEnable(buffType))
-                continue;
-
-            // Buff
-            switch (buffType)
+            buffTypes.ForEach(buffType =>
             {
-                case BuffID.WellFed when wellFed2Enabled || wellFed3Enabled:
-                case BuffID.WellFed2 when wellFed3Enabled:
-                    continue;
-                case -1:
-                    break;
-                default:
-                    Main.LocalPlayer.AddBuff(buffType, 2);
+                // 饱食三级Buff不应该覆盖，而是取最高级
+                bool wellFed3Enabled = Main.LocalPlayer.FindBuffIndex(BuffID.WellFed3) != -1;
+                bool wellFed2Enabled = Main.LocalPlayer.FindBuffIndex(BuffID.WellFed2) != -1;
 
-                    // 本地玩家的对应ModPlayer
-                    var modPlayer = Get(Main.LocalPlayer);
-                    // 幸运药水
-                    modPlayer.LuckPotionBoost = item.type switch
-                    {
-                        ItemID.LuckPotion => Math.Max(modPlayer.LuckPotionBoost, 0.1f),
-                        ItemID.LuckPotionGreater => Math.Max(modPlayer.LuckPotionBoost, 0.2f),
-                        _ => modPlayer.LuckPotionBoost
-                    };
-                    break;
-            }
+                if (!CheckInfBuffEnable(buffType))
+                    return;
 
-            // Buff站效果设置
-            if (!Config.NoPlace_BUFFTile)
-                continue;
+                // Buff
+                switch (buffType)
+                {
+                    case BuffID.WellFed when wellFed2Enabled || wellFed3Enabled:
+                    case BuffID.WellFed2 when wellFed3Enabled:
+                        return;
+                    case -1:
+                        break;
+                    default:
+                        Main.LocalPlayer.AddBuff(buffType, 2);
 
-            switch (buffType)
-            {
-                case BuffID.Campfire:
-                    HideBuffSystem.HasCampfire = true;
-                    break;
-                case BuffID.HeartLamp:
-                    HideBuffSystem.HasHeartLantern = true;
-                    break;
-                case BuffID.StarInBottle:
-                    HideBuffSystem.HasStarInBottle = true;
-                    break;
-                case BuffID.Sunflower:
-                    HideBuffSystem.HasSunflower = true;
-                    break;
-            }
+                        // 本地玩家的对应ModPlayer
+                        var modPlayer = Get(Main.LocalPlayer);
+                        // 幸运药水
+                        modPlayer.LuckPotionBoost = item.type switch
+                        {
+                            ItemID.LuckPotion => Math.Max(modPlayer.LuckPotionBoost, 0.1f),
+                            ItemID.LuckPotionGreater => Math.Max(modPlayer.LuckPotionBoost, 0.2f),
+                            _ => modPlayer.LuckPotionBoost
+                        };
+                        break;
+                }
+
+                // Buff站效果设置
+                if (!Config.NoPlace_BUFFTile)
+                    return;
+
+                switch (buffType)
+                {
+                    case BuffID.Campfire:
+                        HideBuffSystem.HasCampfire = true;
+                        break;
+                    case BuffID.HeartLamp:
+                        HideBuffSystem.HasHeartLantern = true;
+                        break;
+                    case BuffID.StarInBottle:
+                        HideBuffSystem.HasStarInBottle = true;
+                        break;
+                    case BuffID.Sunflower:
+                        HideBuffSystem.HasSunflower = true;
+                        break;
+                }
+            });
         }
     }
 
@@ -207,8 +210,8 @@ public class InfBuffPlayer : ModPlayer
     public static void HandleBuffItem(Item item, List<Item> availableItems)
     {
         // 增益物品
-        int buffType = ApplyBuffItem.GetItemBuffType(item);
-        if (buffType is not -1 || item.createTile is TileID.GardenGnome)
+        var buffTypes = ApplyBuffItem.GetItemBuffType(item);
+        if (buffTypes.Count > 0 || item.createTile is TileID.GardenGnome)
         {
             availableItems.Add(item);
         }

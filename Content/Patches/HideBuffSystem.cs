@@ -66,13 +66,16 @@ namespace ImproveGame.Content.Patches
             {
                 ApplyBuffItem.UpdateInventoryGlow(item);
 
-                int buffType = ApplyBuffItem.GetItemBuffType(item);
-                if (buffType is not -1)
-                    BuffTypesShouldHide[buffType] = true;
+                var buffTypes = ApplyBuffItem.GetItemBuffType(item);
+                buffTypes.ForEach(buffType =>
+                {
+                    if (buffType is not -1)
+                        BuffTypesShouldHide[buffType] = true;
 
-                if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.StoredPotions.Count > 0)
-                    foreach (var potion in from p in potionBag.StoredPotions where p.stack >= Config.NoConsume_PotionRequirement select p)
-                        BuffTypesShouldHide[potion.buffType] = true;
+                    if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.StoredPotions.Count > 0)
+                        foreach (var potion in from p in potionBag.StoredPotions where p.stack >= Config.NoConsume_PotionRequirement select p)
+                            BuffTypesShouldHide[potion.buffType] = true;
+                });
             }
         }
 

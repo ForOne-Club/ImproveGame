@@ -17,13 +17,13 @@ public class ModIntegrationsSystem : ModSystem
     /// 储存独立添加支持的模组放置类Buff（也就是只需要1堆叠即可生效），由于这个是加载后执行的，直接存ID即可
     /// <br>Key为物品ID，Value为BuffID</br>
     /// </summary>
-    internal static Dictionary<int, int> ModdedPlaceableItemBuffs = new();
+    internal static Dictionary<int, List<int>> ModdedPlaceableItemBuffs = new();
 
     /// <summary>
     /// 储存独立添加支持的模组药水类Buff（也就是需要30堆叠生效），由于这个是加载后执行的，直接存ID即可
     /// <br>Key为物品ID，Value为BuffID</br>
     /// </summary>
-    internal static Dictionary<int, int> ModdedPotionBuffs = new();
+    internal static Dictionary<int, List<int>> ModdedPotionBuffs = new();
 
     /// <summary>
     /// A list of the items that don't apply infinite buffs
@@ -194,9 +194,9 @@ public class ModIntegrationsSystem : ModSystem
     private static void AddBuffIntegration(Mod mod, string itemName, string buffName, bool isPlaceable)
     {
         if (isPlaceable)
-            ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = mod.Find<ModBuff>(buffName).Type;
+            ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = new List<int>(mod.Find<ModBuff>(buffName).Type);
         else
-            ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = mod.Find<ModBuff>(buffName).Type;
+            ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = new List<int>(mod.Find<ModBuff>(buffName).Type);
     }
 
     public override void Unload()
@@ -233,15 +233,15 @@ public class ModIntegrationsSystem : ModSystem
                     case "AddPotion":
                         {
                             var itemType = Convert.ToInt32(args[1]); // Item ID
-                            var buffType = Convert.ToInt32(args[2]); // Buff ID
-                            ModdedPotionBuffs[itemType] = buffType;
+                            var buffTypes = AsListOfInt(args[2]); // Buff IDs
+                            ModdedPotionBuffs[itemType] = buffTypes;
                             return true;
                         }
                     case "AddStation":
                         {
                             var itemType = Convert.ToInt32(args[1]); // Item ID
-                            var buffType = Convert.ToInt32(args[2]); // Buff ID
-                            ModdedPlaceableItemBuffs[itemType] = buffType;
+                            var buffTypes = AsListOfInt(args[2]); // Buff IDs
+                            ModdedPlaceableItemBuffs[itemType] = buffTypes;
                             return true;
                         }
                     case "AddPortableCraftingStation":

@@ -239,5 +239,5 @@ Dummy: {
 		/help dummy 查看属性修改格式
 		(联机暂不可用)
 		'''
-	CannotUse: 联机暂不可用
+	CannotUse: 暂不支持多人模式
 }

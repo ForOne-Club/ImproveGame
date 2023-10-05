@@ -58,11 +58,11 @@ Auto Piggy Bank: https://github.com/diniamo/auto-piggy-bank
 
 Ignore infinite buff(s) provided by certain item(s), hence it/they no longer provide(s) infinite buff(s)
 ### AddPotion
-```"AddPotion", int ItemID, int BuffID```
+```"AddPotion", int ItemID, int/List<int> BuffIDs```
 
 Add infinite buff(s) for a potion, especially effective to items which do not have Item.buffType or have multiple buffs. 30 potions are needed to activate the effect
 ### AddStation
-```"AddStation", int ItemID, int BuffID```
+```"AddStation", int ItemID, int/List<int> BuffIDs```
 
 Add infinite buff(s) for a buff station, usually you have to call manually for mod buff station. Only 1 item is needed to activate its effect
 ### AddPortableCraftingStation

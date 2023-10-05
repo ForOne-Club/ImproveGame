@@ -344,6 +344,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool MinimapMark;
 
+        [DefaultValue(true)]
+        public bool WandMaterialNoConsume;
+
         // [DefaultValue(true)]
         // public bool WandManaConsumption;
 

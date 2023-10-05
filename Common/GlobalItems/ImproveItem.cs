@@ -93,7 +93,7 @@ namespace ImproveGame.Common.GlobalItems
             if ((((item.createTile >= TileID.Dirt || item.createWall > WallID.None) && item.stack >= 999) ||
                  ((item.createTile is TileID.WorkBenches or TileID.Chairs or TileID.Beds) && item.stack >= 99))
                 && ModItemID.NoConsumptionItems.Contains(player.HeldItem.type))
-                return false;
+                return !Config.WandMaterialNoConsume;
 
             // 抛射物不消耗
             if (Config.NoConsume_Projectile && item.stack >= 3996 && item.shoot > ProjectileID.None)

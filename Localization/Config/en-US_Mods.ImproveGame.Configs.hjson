@@ -54,7 +54,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			Set the max stack of items
-			Platinum Coins cannot stack over 2000
+			The max stack of coins cannot be changed
 			'''
 	}
 
@@ -428,7 +428,7 @@ ImproveConfigs: {
 	}
 
 	ShowModName: {
-		Label: "[centeritem:ImproveGame/SpaceWand] Display which mod are the items from"
+		Label: "[centeritem:ImproveGame/LiquidWand] Display which mod are the items from"
 		Tooltip: ""
 	}
 
@@ -620,6 +620,15 @@ ImproveConfigs: {
 	BedOnlyOne: {
 		Label: "[centeritem:Bed] One Sleeps For All"
 		Tooltip: One sleeping player is enough to accelerate time in multiplayer.
+	}
+
+	WandMaterialNoConsume: {
+		Tooltip:
+			'''
+			使用空间、科技、建造魔杖放置物块和背景墙时，堆叠超过999的材料不会消耗
+			放置工作台、桌子、床时，堆叠超过99的材料不会消耗
+			'''
+		Label: "[centeritem:ImproveGame/SpaceWand] 使用魔杖放置时无限材料"
 	}
 }
 

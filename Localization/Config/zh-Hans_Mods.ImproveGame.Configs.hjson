@@ -54,7 +54,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			设置一组物品的最大可堆叠量
-			铂金币最大堆叠不可超过2000
+			钱币的最大可堆叠量不可更改
 			'''
 	}
 
@@ -435,7 +435,7 @@ ImproveConfigs: {
 	}
 
 	ShowModName: {
-		Label: "[centeritem:ImproveGame/SpaceWand] 显示物品所属模组"
+		Label: "[centeritem:ImproveGame/LiquidWand] 显示物品所属模组"
 		// Tooltip: ""
 	}
 
@@ -623,6 +623,15 @@ ImproveConfigs: {
 	BedOnlyOne: {
 		Label: "[centeritem:Bed] 一人睡觉即可加速时间"
 		Tooltip: 在多人模式下，只需一个玩家睡觉就可以加速时间
+	}
+
+	WandMaterialNoConsume: {
+		Tooltip:
+			'''
+			使用空间、科技、建造魔杖放置物块和背景墙时，堆叠超过999的材料不会消耗
+			放置工作台、桌子、床时，堆叠超过99的材料不会消耗
+			'''
+		Label: "[centeritem:ImproveGame/SpaceWand] 使用魔杖放置时无限材料"
 	}
 }
 
