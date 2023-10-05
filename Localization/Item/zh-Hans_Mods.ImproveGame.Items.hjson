@@ -230,6 +230,14 @@ Expelliarmus: {
 }
 
 Dummy: {
-	DisplayName: 假人
-	Tooltip: "我是一个假人"
+	DisplayName: 稻草人
+	Tooltip:
+		'''
+		"不要伤害我 :)"
+		聊天框指令:
+		/dummy info 查看假人当前属性
+		/help dummy 查看属性修改格式
+		(联机暂不可用)
+		'''
+	CannotUse: 联机暂不可用
 }

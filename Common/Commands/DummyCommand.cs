@@ -58,19 +58,19 @@ public class DummyCommand : ModCommand
                     try
                     {
                         field.SetValueDirect(__makeref(DummyNPC.Config), Convert.ChangeType(args[1], field.FieldType));
-                        caller.Reply($"修改成功: {name} {args[1]} !!!", MyColor.Success);
+                        caller.Reply(GetTextWith("NPC.DummyCommand_Success", new { name = name, args = args[1] }), MyColor.Success);
                         return;
                     }
                     catch
                     {
-                        caller.Reply($"修改失败 ( {input} ) !!!", MyColor.Fail);
+                        caller.Reply(GetTextWith("NPC.DummyCommand_Fail", new { input = input }), MyColor.Fail);
                         return;
                     }
                 }
             }
         }
 
-        caller.Reply($"无效指令 ( {input} ) !!!", MyColor.Fail);
+        caller.Reply(GetTextWith("NPC.DummyCommand_Invalid", new { input = input }), MyColor.Fail);
     }
 
     public record CommandColor(Color Normal, Color Success, Color Fail);

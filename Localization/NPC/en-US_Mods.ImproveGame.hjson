@@ -15,5 +15,8 @@ NPC: {
 	Dummy_FinalBlow: 最后一击: {FinalBlow}
 	DummyCommand_DummyAttributes: 假人属性
 	DummyCommand_Usage: 用法: /dummy <attribute> <value> (不区分大小写)
-	DummyCpmmand_Description: attribute: 属性名, value: 值. 可以输入指令 /dummy info 查看可用属性与对应类型以及当前值
+	DummyCommand_Description: attribute: 属性名, value: 值. 可以输入指令 /dummy info 查看可用属性与对应类型以及当前值
+	DummyCommand_Success: 修改成功: {name} {args} !!!
+	DummyCommand_Fail: 修改失败 ( {input} ) !!!
+	DummyCommand_Invalid: 无效指令 ( {input} ) !!!
 }

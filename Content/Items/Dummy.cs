@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.NPCs.Dummy;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items;
 
@@ -6,8 +7,8 @@ public class Dummy : ModItem
 {
     public override void SetDefaults()
     {
-        Item.SetBaseValues(34, 36, ItemRarityID.Red, Item.sellPrice(0, 1), 1);
-        Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 15, 15, true);
+        Item.SetBaseValues(34, 36, ItemRarityID.Red, Item.sellPrice(0), 1);
+        Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 15, 15);
     }
 
     public override bool? UseItem(Player player)
@@ -17,6 +18,12 @@ public class Dummy : ModItem
 
     public override bool CanUseItem(Player player)
     {
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+        {
+            AddNotification(GetText("Items.Dummy.CannotUse"), Color.PaleVioletRed * 1.4f);
+            return false;
+        }
+
         bool hasDummy = false;
 
         foreach (var npc in Main.npc)
@@ -55,6 +62,9 @@ public class Dummy : ModItem
 
     public override void AddRecipes()
     {
-        CreateRecipe().Register();
+        CreateRecipe()
+            .AddRecipeGroup(RecipeGroupID.Wood, 100)
+            .AddIngredient(ItemID.Hay, 50)
+            .AddTile(TileID.WorkBenches).Register();
     }
 }
