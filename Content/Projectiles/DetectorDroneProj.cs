@@ -78,8 +78,11 @@ public class DetectorDroneProj : ModProjectile
         }
 
         // 八百格开外自动爆炸
-        if (player.DistanceSQ(Projectile.Center) > Math.Pow(16 * 800, 2))
+        if (player.DistanceSQ(Projectile.Center) > Math.Pow(16 * 600, 2))
+        {
             shouldBeKilled = true;
+            AddNotification(this.GetLocalizedValue("TooFarAway"));
+        }
 
         if (shouldBeKilled)
         {

@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content;
+﻿using ImproveGame.Common.Packets.Notifications;
+using ImproveGame.Content;
 using ImproveGame.Content.Items.Globes;
 using Terraria.Chat;
 using Terraria.DataStructures;
@@ -16,7 +17,7 @@ public class RevealPlanteraPacket : NetModule
             return true;
 
         var playerPosition = player.position.ToTileCoordinates().ToVector2();
-        Point16 position = default;
+        Point16 position = Point16.Zero;
         float currentDistance = float.MaxValue;
         for (int i = 10; i < Main.maxTilesX - 10; i++)
         {
@@ -40,11 +41,10 @@ public class RevealPlanteraPacket : NetModule
             }
         }
 
-        if (position == default)
+        if (position == Point16.Zero)
         {
-            ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral(GetText("Items.PlanteraGlobe.NotFound")),
-                Color.PaleVioletRed, player.whoAmI);
-            
+            SyncNotificationKey.Send("Items.PlanteraGlobe.NotFound", Color.PaleVioletRed * 1.4f, player.whoAmI);
+
             // 服务器给玩家生成物品，补回消耗
             if (Main.netMode is NetmodeID.Server)
             {
@@ -59,9 +59,9 @@ public class RevealPlanteraPacket : NetModule
         module._position = position;
         module.Send(runLocally: true);
 
-        var text = GetText("Items.GlobeBase.Reveal",
-            Language.GetTextValue("NPCName.Plantera"), player.name);
-        ChatHelper.BroadcastChatMessage(NetworkText.FromLiteral(text), Color.Pink);
+        // 由于服务器和客户端使用的语言可能不一样，所以用FromKey并专门设了个RevealPlantera
+        var text = NetworkText.FromKey("Mods.ImproveGame.Items.GlobeBase.RevealPlantera", player.name);
+        ChatHelper.BroadcastChatMessage(text, Color.Pink);
         return true;
     }
 

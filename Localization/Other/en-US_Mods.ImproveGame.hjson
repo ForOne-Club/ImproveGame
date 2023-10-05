@@ -23,7 +23,7 @@ CombatText: {
 
 Tips: {
 	PrefixCount: "Reforging count: "
-	AnglerQuest: Angler's quest refreshed!
+	AnglerQuest: Angler's quest refreshed
 	FromMod: From mod {DisplayName}
 	LootDisplay: Press {KeybindName} to see detailed item drop
 	LootDisplayBindless: (You have not bind a hotkey for this function, please do so in Controls)
@@ -355,21 +355,25 @@ Keybinds: {
 	HomeKeybind.DisplayName: Use Recall Items
 	WorldFeature.DisplayName: Hide/Show the World Feature Panel
 	ConfigMenu.DisplayName: Open Mod Config
-	ItemSearcher.DisplayName: 查找物品
-	OpenBagGUI.DisplayName: 快速开袋
+	ItemSearcher.DisplayName: Search Item
+	OpenBagGUI.DisplayName: Bag Opener
 }
 
 Projectiles: {
 	KillProj.DisplayName: Kill Proj
 	WallRobot.DisplayName: Wall Robot
 	ExpelliarmusProj.DisplayName: Expelliarmus!
-	DetectorDroneProj.DisplayName: 勘测无人机
+
+	DetectorDroneProj: {
+		DisplayName: Explorer Drone
+		TooFarAway: Explorer Drone is too far away from you.
+	}
 }
 
 BuilderToggles: {
 	PiggyToggle: {
-		OffText: 自动存钱：关
-		OnText: 自动存钱：开
+		OffText: Auto Money Deposition: Off
+		OnText: Auto Money Deposition: On
 	}
 }
 

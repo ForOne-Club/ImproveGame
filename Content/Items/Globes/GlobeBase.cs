@@ -32,14 +32,14 @@ public abstract class GlobeBase : ModItem
         if (StructureType is StructureDatas.UnlockID.Pyramids && StructureDatas.PyramidPositions.Count is 0)
         {
             if (player.whoAmI == Main.myPlayer)
-                Main.NewText(this.GetLocalizedValue("NotFound"), Color.PaleVioletRed);
+                AddNotification(this.GetLocalizedValue("NotFound"), Color.PaleVioletRed * 1.4f);
             return false;
         }
 
         if (NotFoundCheck())
         {
             if (player.whoAmI == Main.myPlayer)
-                Main.NewText(GetLocalizedText("NotFound").Value, Color.PaleVioletRed);
+                AddNotification(GetLocalizedText("NotFound").Value, Color.PaleVioletRed * 1.4f);
             return false;
         }
 
@@ -47,7 +47,7 @@ public abstract class GlobeBase : ModItem
             return true;
 
         if (player.whoAmI == Main.myPlayer)
-            Main.NewText(GetLocalizedText("AlreadyRevealed").Value, Color.PaleVioletRed);
+            AddNotification(GetLocalizedText("AlreadyRevealed").Value, Color.PaleVioletRed * 1.4f);
 
         return false;
     }
@@ -62,7 +62,7 @@ public abstract class GlobeBase : ModItem
         StructureDatas.StructuresUnlocked[(byte)StructureType] = true;
         var text = Language.GetText("Mods.ImproveGame.Items.GlobeBase.Reveal")
             .WithFormatArgs(this.GetLocalizedValue("BiomeName"), player.name);
-        Main.NewText(text.Value, Color.Pink);
+        AddNotification(text.Value, Color.Pink);
         return true;
     }
 

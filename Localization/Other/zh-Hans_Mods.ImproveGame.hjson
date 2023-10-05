@@ -23,7 +23,7 @@ CombatText: {
 
 Tips: {
 	PrefixCount: 物品重铸次数：
-	AnglerQuest: 已刷新钓鱼任务！
+	AnglerQuest: 已刷新钓鱼任务
 	FromMod: 所属模组 {DisplayName}
 	LootDisplay: 按下 {KeybindName} 以查看摸彩袋物品明细
 	LootDisplayBindless: (您尚未绑定快捷键，请到控件处绑定以使用此功能)
@@ -145,7 +145,7 @@ ConstructGUI: {
 			2: 放置有可能发生错误
 		}
 
-		LoadError: 文件不合法或不是结构文件!
+		LoadError: 文件不合法或不是结构文件
 	}
 
 	MaterialInfo: {
@@ -349,7 +349,11 @@ Projectiles: {
 	// KillProj.DisplayName: Kill Proj
 	WallRobot.DisplayName: 铺墙机器
 	ExpelliarmusProj.DisplayName: 给我爆金币！
-	DetectorDroneProj.DisplayName: 勘测无人机
+
+	DetectorDroneProj: {
+		DisplayName: 勘测无人机
+		TooFarAway: 无人机离你太远了
+	}
 }
 
 BuilderToggles: {

@@ -32,7 +32,7 @@ namespace ImproveGame.Common.ConstructCore
                 }
             }
 
-            Main.NewText(GetText("ConstructGUI.SavedAs") + thisPath, Color.Yellow);
+            AddNotification(GetText("ConstructGUI.SavedAs") + thisPath, Color.Yellow);
 
             TagIO.ToFile(new QoLStructure(rectInWorld).Tag, thisPath);
             
@@ -62,7 +62,7 @@ namespace ImproveGame.Common.ConstructCore
                 } 
                 catch
                 {
-                    Main.NewText(GetText("ConstructGUI.FileInfo.LoadError"), Color.Red);
+                    AddNotification(GetText("ConstructGUI.FileInfo.LoadError"), Color.Red);
                     return null;
                 }
 

@@ -181,33 +181,35 @@ ExtremeStorage: {
 }
 
 GlobeBase: {
-	DisplayName: "{0}定位球"
-	Tooltip: 在地图上标记{0}
-	AlreadyRevealed: 这个世界已经标记过{0}了
-	Reveal: "{1}在地图上标记了{0}"
-	NotFound: 本世界没有{0}的数据，原因可能是生成世界时没有添加更好的体验或未更新到v1.6.6+版本
+	DisplayName: "{0} Locator"
+	Tooltip: Marks {0} on the map.
+	AlreadyRevealed: "{0} has already been marked."
+	Reveal: "{1} marked up {0} on the map."
+	RevealPlantera: "{0} marked up {NPCName.Plantera} on the map."
+	NotFound: Data of {0} is not present in this world, it's likely that Quality of Life v1.6.6+ was not enabled when the world was created.
 }
 
-AetherGlobe.BiomeName: 以太
-DungeonGlobe.BiomeName: 地牢
-FloatingIslandGlobe.BiomeName: 空岛
+AetherGlobe.BiomeName: The Aether
+DungeonGlobe.BiomeName: Dungeon
+FloatingIslandGlobe.BiomeName: Floating Island
 
 PyramidGlobe: {
-	BiomeName: 金字塔
-	NotFound: 本世界没有金字塔
+	BiomeName: Pyramid
+	NotFound: There is no Pyramid in this world.
 }
 
-TempleGlobe.BiomeName: 丛林神庙
+TempleGlobe.BiomeName: Jungle Temple
 # 在世界上没有花苞或花苞全部标记完了的情况下显示
-PlanteraGlobe.NotFound: 未能找到更多的{$MapObject.PlanterasBulb}
+PlanteraGlobe.NotFound: "Couldn't find more {$MapObject.PlanterasBulb}."
 
 DetectorDrone: {
 	Tooltip:
 		'''
-		自带光照，上天入地，用于勘探地形
-		别飞太远，会炸的
+		Flies high and low to explore terrains.
+		Lighting is included.
+		CAUTION: don't go too far, else it'll explode.
 		'''
-	DisplayName: 勘探无人机
+	DisplayName: Explorer Drone
 }
 
 DevMark: {
