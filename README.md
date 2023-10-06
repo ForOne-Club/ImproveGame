@@ -74,6 +74,10 @@ Auto Piggy Bank开源链接: https://github.com/diniamo/auto-piggy-bank
 
 如果你想要使其充当水源，应将TileID设置为水槽 (TileID.Sink)
 
+为某个指定的物品添加自动钓鱼机的钓鱼饰品支持，可设置钓鱼速度加成、渔力加成、是否应被视为钓具箱和是否可在岩浆钓鱼。一般需要手动提供饰品支持
+### AddAutofisherAccessory
+```"AddAutofisherAccessory", int ItemID, float FishingSpeedBonus, int FishingPower, bool TackleBox, bool LavaFishing```
+
 ### 使用例
 以下是一个为自己的放置站添加支持的例子
 ```CSharp

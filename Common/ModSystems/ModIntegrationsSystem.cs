@@ -255,7 +255,7 @@ public class ModIntegrationsSystem : ModSystem
                         case "AddAutofisherAccessory":
                         {
                             var itemType = Convert.ToInt32(args[1]); // Item ID
-                            var fishingAddition = Convert.ToSingle(args[2]); // Fishing Addition
+                            var fishingAddition = Convert.ToSingle(args[2]); // Fishing Speed Bonus
                             var fishingPower = Convert.ToInt32(args[3]); // Fishing Power
                             var tackleBox = Convert.ToBoolean(args[4]); // Tackle Box
                             var lavaFishing = Convert.ToBoolean(args[5]); // Lava Fishing
