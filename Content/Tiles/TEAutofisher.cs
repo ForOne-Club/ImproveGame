@@ -124,10 +124,12 @@ namespace ImproveGame.Content.Tiles
             if (Main.rand.NextBool(60))
                 FishingTimer += 60;
 
-            //配饰为AnglerEarring可使钓鱼速度*200%
-            //配饰为AnglerTackleBag可使钓鱼速度*300%
-            //配饰为LavaproofTackleBag可使钓鱼速度*500%
-            float fishingSpeedBonus = AccessoryAttribute.FishingAddition[accessory.type];
+            bool accAvailable = ModIntegrationsSystem.FishingStatLookup.TryGetValue(accessory.type, out FishingStat stat);
+            
+            // 配饰为AnglerEarring可使钓鱼速度*200%
+            // 配饰为AnglerTackleBag可使钓鱼速度*300%
+            // 配饰为LavaproofTackleBag可使钓鱼速度*500%
+            float fishingSpeedBonus = accAvailable ? stat.SpeedMultiplier : 1f;
 
             // 钓鱼机内每条 Bass 将提供 10% 的钓鱼速度加成，最高可达 500% 加成
             int bassCount = 0;
@@ -145,20 +147,24 @@ namespace ImproveGame.Content.Tiles
             if (FishingTimer > fishingCooldown / fishingSpeedBonus / multipleLures)
             {
                 FishingTimer = 0;
-                ApplyAccessories();
+                _lavaFishing = false;
+                _tackleBox = false;
+                _fishingSkill = 0;
+                if (accAvailable)
+                    ApplyAccessories(stat);
                 FishingCheck();
             }
         }
 
-        private bool lavaFishing;
-        private bool tackleBox;
-        private int fishingSkill;
+        private bool _lavaFishing;
+        private bool _tackleBox;
+        private int _fishingSkill;
 
-        private void ApplyAccessories()
+        private void ApplyAccessories(FishingStat stat)
         {
-            lavaFishing = AccessoryAttribute.LavaFishing[accessory.type];
-            tackleBox = AccessoryAttribute.TackleBox[accessory.type];
-            fishingSkill += AccessoryAttribute.FishingPower[accessory.type];
+            _lavaFishing = stat.LavaFishing;
+            _tackleBox = stat.TackleBox;
+            _fishingSkill += stat.Power;
         }
 
         public void FishingCheck()
@@ -219,7 +225,7 @@ namespace ImproveGame.Content.Tiles
             if (fisher.fishingLevel == 0)
                 return;
 
-            fisher.CanFishInLava = ItemID.Sets.CanFishInLava[fisher.playerFishingConditions.PoleItemType] || ItemID.Sets.IsLavaBait[fisher.playerFishingConditions.BaitItemType] || lavaFishing;
+            fisher.CanFishInLava = ItemID.Sets.CanFishInLava[fisher.playerFishingConditions.PoleItemType] || ItemID.Sets.IsLavaBait[fisher.playerFishingConditions.BaitItemType] || _lavaFishing;
             if (fisher.chumsInWater > 0)
                 fisher.fishingLevel += 11;
 
@@ -461,7 +467,7 @@ namespace ImproveGame.Content.Tiles
             if (chanceDenominator < 1f)
                 chanceDenominator = 1f;
 
-            if (tackleBox)
+            if (_tackleBox)
                 chanceDenominator += 1f;
 
             if (Main.rand.NextFloat() * chanceDenominator < 1f)
@@ -586,8 +592,8 @@ namespace ImproveGame.Content.Tiles
 
         public TEAutofisher()
         {
-            tackleBox = false;
-            fishingSkill = 0;
+            _tackleBox = false;
+            _fishingSkill = 0;
         }
 
         private int GetFishingPondSize(int x, int y, ref bool lava, ref bool honey, ref int chumCount)
@@ -629,7 +635,7 @@ namespace ImproveGame.Content.Tiles
                 return result;
 
             var player = GetClosestPlayer(Position);
-            int num = result.BaitPower + result.PolePower + fishingSkill;
+            int num = result.BaitPower + result.PolePower + _fishingSkill;
             result.LevelMultipliers = Fishing_GetPowerMultiplier(result.Pole, result.Bait, player);
             result.FinalFishingLevel = (int)(num * result.LevelMultipliers);
             return result;
