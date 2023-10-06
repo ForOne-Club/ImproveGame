@@ -321,6 +321,27 @@ namespace ImproveGame.Content.Patches
             IL_ShopHelper.GetShoppingSettings += ModifyNPCHappiness;
             // 狱火圈半透明
             On_Main.DrawInfernoRings += TranslucentInfernoRings;
+            // 任务鱼可堆叠
+            On_Projectile.FishingCheck_ProbeForQuestFish += PatchQuestFishCheck;
+        }
+
+        private void PatchQuestFishCheck(On_Projectile.orig_FishingCheck_ProbeForQuestFish orig, Projectile self, ref FishingAttempt fisher)
+        {
+            if (!Config.QuestFishStack)
+            {
+                orig.Invoke(self, ref fisher);
+                return;
+            }
+
+            fisher.questFish = Main.anglerQuestItemNetIDs[Main.anglerQuest];
+            // if (Main.player[owner].HasItem(fisher.questFish))
+            //     fisher.questFish = -1;
+
+            if (!NPC.AnyNPCs(369))
+                fisher.questFish = -1;
+
+            if (Main.anglerQuestFinished)
+                fisher.questFish = -1;
         }
 
         private void TranslucentInfernoRings(On_Main.orig_DrawInfernoRings orig, Main self)

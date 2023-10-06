@@ -174,7 +174,7 @@ ItemSearcher: {
 }
 
 OpenBag: {
-	Title: 快速开袋
+	Title: Bag Opener
 	TipText: 获取到的物品将暂存在此处
 	Open: Open All
 	Stop: Stop

@@ -630,6 +630,11 @@ ImproveConfigs: {
 			'''
 		Label: "[centeritem:ImproveGame/SpaceWand] 使用魔杖放置时无限材料"
 	}
+
+	QuestFishStack: {
+		Label: "[centeritem:Clownfish] 任务鱼可堆叠"
+		Tooltip: 使任务鱼可堆叠，在背包有相同鱼时仍可钓出并捡起
+	}
 }
 
 ModItemLoadPage: {

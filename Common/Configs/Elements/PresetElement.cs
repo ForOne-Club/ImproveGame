@@ -54,6 +54,12 @@ public class FukMeCalamityElement : PresetElement
         config.PalmTreeMax = 36;
         config.GemTreeMin = 20;
         config.GemTreeMax = 30;
+        config.BedTimeRate = 80;
+        config.BedEverywhere = true;
+        config.WandMaterialNoConsume = true;
+        config.MinimapMark = true;
+        config.BedOnlyOne = true;
+        config.QuestFishStack = true;
     }
 }
 
@@ -105,6 +111,12 @@ public class ILoveBalanceElement : PresetElement
         config.PalmTreeMax = 20;
         config.GemTreeMin = 7;
         config.GemTreeMax = 12;
+        config.BedTimeRate = 10;
+        config.BedEverywhere = true;
+        config.WandMaterialNoConsume = false;
+        config.MinimapMark = true;
+        config.BedOnlyOne = false;
+        config.QuestFishStack = true;
     }
 }
 

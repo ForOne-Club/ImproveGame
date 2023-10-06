@@ -37,6 +37,15 @@ namespace ImproveGame.Common.Configs
         #region 物品设置
 
         [Header("Item")]
+        [DefaultValue(9999)]
+        [Range(1, int.MaxValue)]
+        [ReloadRequired]
+        public int ItemMaxStack;
+
+        [DefaultValue(true)]
+        [ReloadRequired]
+        public bool QuestFishStack;
+
         [DefaultValue(false)]
         public bool SuperVault;
 
@@ -56,11 +65,6 @@ namespace ImproveGame.Common.Configs
         [Slider]
         [Range(0, 75)]
         public int GrabDistance;
-
-        [DefaultValue(9999)]
-        [Range(1, int.MaxValue)]
-        [ReloadRequired]
-        public int ItemMaxStack;
 
         [DefaultValue(0d)]
         [Range(0, 1f)]

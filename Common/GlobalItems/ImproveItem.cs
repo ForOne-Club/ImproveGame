@@ -28,6 +28,13 @@ namespace ImproveGame.Common.GlobalItems
                 item.autoReuse = true;
                 item.useTime = item.useAnimation = 15;
             }
+
+            // 任务鱼可堆叠
+            if (Config.QuestFishStack && Main.anglerQuestItemNetIDs.Contains(item.netID))
+            {
+                item.uniqueStack = false;
+                item.maxStack = Config.ItemMaxStack;
+            }
         }
 
         public override float UseTimeMultiplier(Item item, Player player)

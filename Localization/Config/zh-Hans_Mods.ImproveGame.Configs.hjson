@@ -597,12 +597,12 @@ ImproveConfigs: {
 	}
 
 	MinimapMark: {
-		/* Tooltip:
+		Tooltip:
 			'''
-			Allows use of 'Locators' to mark following structures on map:
-			The Aether, Dungeon, Jungle Temple, Floating Islands, Pyramid and Plantera's Bulb.
-			''' */
-		// Label: "[centeritem:WorldGlobe] Structure Markers"
+			开启后，使用“定位球”系列物品可在小地图上标记以下结构：
+			以太、地牢、神庙、空岛、金字塔、世纪之花球茎
+			'''
+		Label: "[centeritem:WorldGlobe] 结构标记"
 	}
 
 	ModifyNPCHappiness: {
@@ -632,6 +632,11 @@ ImproveConfigs: {
 			放置工作台、桌子、床时，堆叠超过99的材料不会消耗
 			'''
 		Label: "[centeritem:ImproveGame/SpaceWand] 使用魔杖放置时无限材料"
+	}
+
+	QuestFishStack: {
+		Label: "[centeritem:Clownfish] 任务鱼可堆叠"
+		Tooltip: 使任务鱼可堆叠，在背包有相同鱼时仍可钓出并捡起
 	}
 }
 
