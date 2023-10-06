@@ -36,7 +36,7 @@
 [c/990000:画师：枫林半叶, 逆风而行的信鸽]
 [c/9900ff:翻译：Lastprismer, Lacewing]
 [c/0099ff:代码：局长, Cyril, 夜谷紫幽]
-[c/00ff99:特别感谢: @ChevyRay的协程类]
+[c/00ff99:贡献者: 炜尔, han.liu, 合作一号]
 ---------------------------
 版权声明:
 本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
@@ -85,7 +85,7 @@ For a detailed list, check mod configurations or changelog above
 [c/990000:Spriter: 枫林半叶, 逆风而行的信鸽]
 [c/9900ff:Translators: Lastprismer, Lacewing]
 [c/0099ff:Coder: 局长, Cyril, 夜谷紫幽]
-[c/00ff99:Special thanks: @ChevyRay's coroutine class]
+[c/00ff99:Contributor: WeiAL, han.liu, hezuo1hao]
 ---------------------------
 Copyright Statement:
 A part of the source code of the 'showing which mod is an item from' function is from mod 'WMITF', this mod and WMITF are open-source using the MIT Licence, which means 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
