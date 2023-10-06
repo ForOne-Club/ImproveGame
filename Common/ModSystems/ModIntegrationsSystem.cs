@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.Packets;
 using ImproveGame.Content.Patches;
+using ImproveGame.Interface.GUI;
 using MonoMod.RuntimeDetour.HookGen;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,6 +11,8 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.ModSystems;
+
+public record FishingStat(int Power = 0, float SpeedMultiplier = 1f, bool TackleBox = false, bool LavaFishing = false);
 
 public class ModIntegrationsSystem : ModSystem
 {
@@ -35,6 +38,20 @@ public class ModIntegrationsSystem : ModSystem
     /// <br>Key为物品ID，Value为一个TileID的列表</br>
     /// </summary>
     internal static Dictionary<int, List<int>> PortableStations = new();
+
+    /// <summary>
+    /// 添加物品ID对应的自动钓鱼属性
+    /// <br>Key代表物品ID，Value是物品属性</br>
+    /// </summary>
+    internal static Dictionary<int, FishingStat> FishingStatLookup = new()
+    {
+        { ItemID.TackleBox, new FishingStat(TackleBox: true) }, // 钓具箱
+        { ItemID.AnglerEarring, new FishingStat(10, 2f) }, // 渔夫耳环
+        { ItemID.AnglerTackleBag, new FishingStat(10, 3f, TackleBox: true) }, // 渔夫渔具袋
+        { ItemID.LavaFishingHook, new FishingStat(LavaFishing: true) }, // 防熔岩钓钩
+        { ItemID.LavaproofTackleBag, new FishingStat(10, 5f, true, true) }, // 防熔岩渔具袋
+        { ItemID.None, new FishingStat()}
+    };
 
     internal static bool NoLakeSizePenaltyLoaded = false;
     internal static bool WMITFLoaded = false;
@@ -226,29 +243,39 @@ public class ModIntegrationsSystem : ModSystem
                 {
                     case "IgnoreInfItem":
                         {
-                            var potions = AsListOfInt(args[1]); // Potion IDs
+                            List<int> potions = AsListOfInt(args[1]); // Potion IDs
                             ModdedInfBuffsIgnore.AddRange(potions);
                             return true;
                         }
                     case "AddPotion":
                         {
-                            var itemType = Convert.ToInt32(args[1]); // Item ID
-                            var buffTypes = AsListOfInt(args[2]); // Buff IDs
+                            int itemType = Convert.ToInt32(args[1]); // Item ID
+                            List<int> buffTypes = AsListOfInt(args[2]); // Buff IDs
                             ModdedPotionBuffs[itemType] = buffTypes;
                             return true;
                         }
                     case "AddStation":
                         {
-                            var itemType = Convert.ToInt32(args[1]); // Item ID
-                            var buffTypes = AsListOfInt(args[2]); // Buff IDs
+                            int itemType = Convert.ToInt32(args[1]); // Item ID
+                            List<int> buffTypes = AsListOfInt(args[2]); // Buff IDs
                             ModdedPlaceableItemBuffs[itemType] = buffTypes;
                             return true;
                         }
                     case "AddPortableCraftingStation":
                         {
-                            var itemType = Convert.ToInt32(args[1]); // Item ID
-                            var tileIDs = AsListOfInt(args[2]); // Tile IDs
+                            int itemType = Convert.ToInt32(args[1]); // Item ID
+                            List<int> tileIDs = AsListOfInt(args[2]); // Tile IDs
                             PortableStations[itemType] = tileIDs;
+                            return true;
+                        }
+                    case "AddFishingAccessory":
+                        {
+                            int itemType = Convert.ToInt32(args[1]); // Item ID
+                            float speed = Convert.ToSingle(args[2]); // Fishing Speed Bonus
+                            int power = Convert.ToInt32(args[3]); // Fishing Power
+                            bool tackleBox = Convert.ToBoolean(args[4]); // Tackle Box
+                            bool lavaFishing = Convert.ToBoolean(args[5]); // Lava Fishing
+                            FishingStatLookup[itemType] = new FishingStat(power, speed, tackleBox, lavaFishing);
                             return true;
                         }
                     default:

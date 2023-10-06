@@ -71,6 +71,10 @@ Add infinite buff(s) for a buff station, usually you have to call manually for m
 Add portable crafting station support for a specified item. This is useful for items that do not have Item.createTile set but should act as some sort of crafting station. Multiple crafting stations can be specified.
 
 If you want it to act as a water source, you should set the TileID to TileID.Sink
+### AddFishingAccessory
+```"AddFishingAccessory", int ItemID, float FishingSpeedMultiplier, int FishingPower, bool TackleBox, bool LavaFishing```
+
+Add fishing accessory support for a specific item with fishing machine. This support should include options to set fishing speed multiplier, fishing power bonus, whether it should be considered as a tackle box, and whether it enables lava fishing. Generally, accessory support needs to be manually provided
 
 ### Example
 Here is an example of adding infinite buffs for 2 mod buff stations

@@ -7,6 +7,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.SUIElements;
 using Terraria.UI.Chat;
+using System.Reflection;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -35,8 +36,6 @@ namespace ImproveGame.Interface.GUI
         private SUIPanel textPanel;
 
         internal static bool RequireRefresh = false;
-
-        internal static List<int> FishingAccessories = new() { ItemID.TackleBox/*, ItemID.HighTestFishingLine*/, ItemID.AnglerEarring, ItemID.AnglerTackleBag, ItemID.LavaFishingHook, ItemID.LavaproofTackleBag };
         
         public void OnSwapSlide(float factor)
         {
@@ -64,7 +63,7 @@ namespace ImproveGame.Interface.GUI
 
             accessorySlot = CreateItemSlot(
                 25f, 0f,
-                canPlace: (Item i, Item item) => SlotPlace(i, item) || FishingAccessories.Contains(item.type),
+                canPlace: (Item i, Item item) => SlotPlace(i, item) || ModIntegrationsSystem.FishingStatLookup.ContainsKey(item.type),
                 onItemChanged: ChangeAccessorySlot,
                 emptyText: () => GetText($"Autofisher.Accessory"),
                 parent: basePanel,
