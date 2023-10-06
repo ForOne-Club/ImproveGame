@@ -33,6 +33,7 @@
 - Buff追踪器的UI位置会被记录了
 - 将原有的部分聊天框提示改为弹出提示
 - 改进了AddPotion和AddStation的Mod.Call
+- 为自动钓鱼机添加了Mod.Call支持
 
 # v1.6.5
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
