@@ -8,32 +8,32 @@
 
 # v1.6.6
 ## Subversions
-- v1.6.6.0 (Not yet)
+- v1.6.6.0
 ## Additions
-- 新增定位球，用于在小地图上显示生态/结构位置
-- 新增物品搜索功能，以在箱子和便携储存中快捷搜索物品
-- 新增快速开袋功能，可一次打开一堆宝藏袋并将所得直接全部出售
-- 新增勘探无人机，下矿的好帮手
-- 新增Stormdark配色主题
-- 新增一个用于测试伤害的稻草人，可自行调整诸多属性 (暂不可联机)
-- 新增“使用魔杖放置时无限材料”选项，现在可以选择关闭这个特性了
+- Locators, to indicate structures on map
+- Item Finder, to quickly find items in chests and personal inventories
+- Bag Opener, to batch open treasure bags and sell what obtained
+- Explorer Drone, your good friend in deep rocks
+- "Stormdark" color scheme
+- Scarecrow Dummy, a configurable damage-testing dummy (not in multiplayer yet)
+- "Infinite Wand Placables" config option, you can turn it off now
+- a hotkey to open mod configs
 ## BUG Fixes
-- 修复了放置在桌子上的钓鱼机在桌子被破坏时导致游戏闪退的BUG
-- 修复了无法正常禁用幸运金币的BUG
-- 修复了爆破类魔杖无法直接破坏部分带草皮物块的BUG
-- 修复了死亡后可以通过快捷回程快捷键瞬间复活的BUG
-- 修复了关闭液体控制面板时无法使用液体魔杖的BUG
+- breaking Fishing Machine on tables crashes the game
+- unable to disable Lucky Coin
+- destructive wands could not destroy certain grass blocks in one go
+- Instant Home Teleportation respawns players when they should be waiting for respawn
+- Wand of Liquid not functioning when its panel is closed
 ## Adjustments
-- 现在可以挖掘钓鱼机下的物块了
-- 添加了快捷打开模组配置的快捷键
-- 爆破类法杖现在不耗蓝了
-- 建造魔杖的重生点结构更改为无墙版本
-- 更改自动存钱功能的运作方式，且现在会自动存护卫奖章了
-- 取消魔镜前摇功能可以关闭了
-- Buff追踪器的UI位置会被记录了
-- 将原有的部分聊天框提示改为弹出提示
-- 改进了AddPotion和AddStation的Mod.Call
-- 为自动钓鱼机添加了Mod.Call支持
+- tiles under Fishing Machine are now breakable
+- destructive wands now consumes no mana
+- Wand of Contruction's respawn room now uses no wall
+- optimized Auto Money Deposition, and it works on Defender Medals
+- Instant Home Teleportation can be disbaled
+- UI position of Buff Tracker is now saved
+- some chat notifications are now pop-up notifications
+- improved `Mod.Call` for `AddPotion` and `AddStation`
+- added `Mod.Call` support for Fishing Machine
 
 # v1.6.5
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)

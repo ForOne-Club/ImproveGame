@@ -625,15 +625,15 @@ ImproveConfigs: {
 	WandMaterialNoConsume: {
 		Tooltip:
 			'''
-			使用空间、科技、建造魔杖放置物块和背景墙时，堆叠超过999的材料不会消耗
-			放置工作台、桌子、床时，堆叠超过99的材料不会消耗
+			Tiles and walls with stack over 999 will not be consumed if placed by Wand of Space/Technology/Construction,
+			working benches, tables, beds, etc. with stack over 99 instead will not be consumed.
 			'''
-		Label: "[centeritem:ImproveGame/SpaceWand] 使用魔杖放置时无限材料"
+		Label: "[centeritem:ImproveGame/SpaceWand] Infinite Wand Placables"
 	}
 
 	QuestFishStack: {
-		Label: "[centeritem:Clownfish] 任务鱼可堆叠"
-		Tooltip: 使任务鱼可堆叠，在背包有相同鱼时仍可钓出并捡起
+		Label: "[centeritem:Clownfish] Stackable Quest Fishes"
+		Tooltip: Quest fishes will be stackable, and can be fished or picked up even if their same types exist in inventory.
 	}
 }
 
@@ -826,7 +826,7 @@ UIConfigs: {
 
 	InvisibleTransparency: {
 		Label: "[centeritem:InvisibilityPotion] Invisibility Alpha"
-		Tooltip: Alpha of invisible players in your perspective, 1 is solid and 0 is transparent.
+		Tooltip: Alpha of your charactor in your perspective while invisible, 1 is solid and 0 is transparent.
 	}
 
 	ThemeType: {

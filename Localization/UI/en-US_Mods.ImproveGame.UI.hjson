@@ -168,25 +168,25 @@ WorldFeature: {
 }
 
 ItemSearcher: {
-	Title: 查找物品
-	TipText: 查找到的物品将显示在此处
-	NotFoundText: 没有找到任何物品
+	Title: Find Items
+	TipText: Items found are shown here.
+	NotFoundText: No item found.
 }
 
 OpenBag: {
 	Title: Bag Opener
-	TipText: 获取到的物品将暂存在此处
+	TipText: Items obtained are staged here.
 	Open: Open All
 	Stop: Stop
 	EmptyText: Grab Bag
-	NotFullyDisplayed: 此外，还有{0}个物品被隐藏
+	NotFullyDisplayed: Besides, {0} items are hidden.
 
 	SellAll: {
 		Name: Sell All
 		Tooltip:
 			'''
-			以基础售价的110%出售全部物品
-			出售所得将直接放置到你的钱币槽中
+			Sell all items at 110% of their base price.
+			Coins will go to your coin slots.
 			'''
 	}
 
@@ -194,8 +194,8 @@ OpenBag: {
 		Name: Are you sure?
 		Tooltip:
 			'''
-			左键点击以出售
-			右键点击以取消
+			<left> to sell,
+			<right> to cancel.
 			'''
 	}
 }
