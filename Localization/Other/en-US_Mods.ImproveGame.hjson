@@ -13,7 +13,7 @@ CombatText: {
 		SpaceWand_Cancel: Canceled!
 		SpaceWand_Lack: Not enough platform!
 		WallPlace_Limit: This area is too big!
-		WallPlace_Consume: "Excepted consumption: "
+		WallPlace_Consume: "Expected consumption: "
 		WallPlace_Kill: Stopped placing!
 	}
 
