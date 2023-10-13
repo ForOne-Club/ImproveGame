@@ -155,7 +155,7 @@ public class ItemSearcherGUI : ViewBody
             DragIgnore = true,
             Relative = RelativeMode.Vertical
         };
-        banksPanel.SetPadding(20, 6, 16, 14);
+        banksPanel.SetPadding(20, 6, 16, 4);
         banksPanel.SetSize(0f, 80f, 1f, 0f);
         banksPanel.Join(MainPanel);
         SetupBanks(banksPanel);

@@ -169,17 +169,17 @@ WorldFeature: {
 
 ItemSearcher: {
 	Title: Find Items
-	TipText: Items found are shown here.
-	NotFoundText: No item found.
+	TipText: Items found are shown here
+	NotFoundText: No item found
 }
 
 OpenBag: {
 	Title: Bag Opener
-	TipText: Items obtained are staged here.
+	TipText: Items obtained are staged here
 	Open: Open All
 	Stop: Stop
 	EmptyText: Grab Bag
-	NotFullyDisplayed: Besides, {0} items are hidden.
+	NotFullyDisplayed: Besides, {0} items are hidden
 
 	SellAll: {
 		Name: Sell All

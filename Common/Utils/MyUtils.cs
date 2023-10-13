@@ -49,8 +49,11 @@ partial class MyUtils
         }
         else
         {
-            Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-            Vector2 offset = screenSize * (Vector2.One - Vector2.One / Main.GameViewMatrix.Zoom) / 2;
+            Vector2 screenSize = new(Main.screenWidth, Main.screenHeight);
+            Vector2 offset = screenSize * (One - One / Main.GameViewMatrix.Zoom) / 2;
+            // 重力检测
+            if (Main.LocalPlayer.gravDir is -1)
+                offset = screenSize - offset;
             return Matrix.CreateOrthographicOffCenter(offset.X, Main.screenWidth - offset.X,
                 Main.screenHeight - offset.Y, offset.Y, 0, 1);
         }

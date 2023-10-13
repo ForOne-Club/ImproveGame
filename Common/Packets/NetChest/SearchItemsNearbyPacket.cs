@@ -4,9 +4,9 @@ namespace ImproveGame.Common.Packets.NetChest;
 
 public class SearchItemsNearbyPacket : NetModule
 {
+    private record ChestInfo(ushort ChestId, HashSet<int> ItemTypes);
     private string _searchString;
-    private HashSet<short> _matchedChests;
-    private HashSet<int> _itemTypes;
+    private List<ChestInfo> _chestInfos;
 
     public static void Request(string searchString)
     {
@@ -25,8 +25,12 @@ public class SearchItemsNearbyPacket : NetModule
                 p.Write(_searchString);
                 break;
             case NetmodeID.Server:
-                p.Write(_matchedChests);
-                p.Write(_itemTypes);
+                p.Write(_chestInfos.Count);
+                foreach (var chestInfo in _chestInfos)
+                {
+                    p.Write(chestInfo.ChestId);
+                    p.Write(chestInfo.ItemTypes);
+                }
                 break;
         }
     }
@@ -36,8 +40,14 @@ public class SearchItemsNearbyPacket : NetModule
         switch (Main.netMode)
         {
             case NetmodeID.MultiplayerClient:
-                _matchedChests = r.ReadShortEnumerable().ToHashSet();
-                _itemTypes = r.ReadIntEnumerable().ToHashSet();
+                int count = r.ReadInt32();
+                _chestInfos = new List<ChestInfo>(count);
+                for (int i = 0; i < count; i++)
+                {
+                    ushort chestId = r.ReadUInt16();
+                    var itemTypes = r.ReadIntEnumerable().ToHashSet();
+                    _chestInfos.Add(new ChestInfo(chestId, itemTypes));
+                }
                 break;
             case NetmodeID.Server:
                 _searchString = r.ReadString();
@@ -57,17 +67,24 @@ public class SearchItemsNearbyPacket : NetModule
         // 服务器收包，必定是客户端请求
         if (Main.netMode is NetmodeID.Server or NetmodeID.SinglePlayer)
         {
+            _chestInfos = new List<ChestInfo>();
             const int itemSearchRange = 400; // 25格
-            _matchedChests = new HashSet<short>();
-            _itemTypes = new HashSet<int>();
             for (int chestIndex = 0; chestIndex < Main.maxChests; chestIndex++)
             {
                 Chest chest = Main.chest[chestIndex];
                 if (chest == null || Chest.IsLocked(chest.x, chest.y) || !ChestWithinRange(chest, itemSearchRange))
                     continue;
+                
+                var chestInfo = new ChestInfo((ushort)chestIndex, new HashSet<int>());
 
-                if (DealWithItems(_itemTypes, chest.item))
-                    _matchedChests.Add((short)chestIndex);
+                foreach (Item item in chest.item)
+                    chestInfo.ItemTypes.Add(item.type);
+                
+                _chestInfos.Add(chestInfo);
+                
+                // 本来的思路是服务器匹配名字相应物品，但是服务器语言可能和客户端不一样，所以还是要把全部type发去
+                // if (DealWithItems(_itemTypes, chest.item))
+                //     _matchedChests.Add((short)chestIndex);
             }
 
             if (Main.netMode is not NetmodeID.SinglePlayer)
@@ -77,24 +94,28 @@ public class SearchItemsNearbyPacket : NetModule
         // 本地收包，必定是服务器那边做好了传来的
         if (Main.netMode is NetmodeID.MultiplayerClient or NetmodeID.SinglePlayer)
         {
-            _matchedChests ??= new HashSet<short>();
-            _itemTypes ??= new HashSet<int>();
+            var matchedChests = new HashSet<short>();
+            var itemTypes = new HashSet<int>();
+            
+            foreach ((ushort chestId, HashSet<int> types) in _chestInfos)
+            {
+                if (DealWithItems(itemTypes, types))
+                    matchedChests.Add((short)chestId);
+            }
 
             // 加上本地私货
             var items = Main.LocalPlayer.bank.item
                 .Concat(Main.LocalPlayer.bank2.item)
                 .Concat(Main.LocalPlayer.bank3.item)
                 .Concat(Main.LocalPlayer.bank4.item);
-            DealWithItems(_itemTypes, items);
-            ItemSearcherGUI.TryUpdateItems(_matchedChests, _itemTypes);
+            DealWithItems(itemTypes, items);
+            ItemSearcherGUI.TryUpdateItems(matchedChests, itemTypes);
         }
     }
 
     /// <summary>
     /// 将匹配到的物品存到 typesCollected 内，如果有匹配到任何物品返回 true，否则返回 false
     /// </summary>
-    /// <param name="typesCollected"></param>
-    /// <param name="items"></param>
     /// <returns>如果有匹配到任何物品返回 true，否则返回 false</returns>
     private bool DealWithItems(ISet<int> typesCollected, IEnumerable<Item> items)
     {
@@ -108,6 +129,29 @@ public class SearchItemsNearbyPacket : NetModule
                 typesCollected.Add(item.type);
                 matched = true;
             }
+
+        return matched;
+    }
+
+    /// <summary>
+    /// 将匹配到的物品存到 typesCollected 内，如果有匹配到任何物品返回 true，否则返回 false
+    /// </summary>
+    /// <returns>如果有匹配到任何物品返回 true，否则返回 false</returns>
+    private bool DealWithItems(ISet<int> typesCollected, IEnumerable<int> itemTypes)
+    {
+        if (itemTypes is null) return false;
+
+        bool matched = false;
+        string searchContent = _searchString;
+        foreach (var type in itemTypes)
+        {
+            var item = new Item(type);
+            if (item.MatchWithString(searchContent))
+            {
+                typesCollected.Add(item.type);
+                matched = true;
+            }
+        }
 
         return matched;
     }

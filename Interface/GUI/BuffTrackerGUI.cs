@@ -375,7 +375,9 @@ public class BuffButtonList : UIList
             }
         }
 
-        ListHeight = pixels + 36.8f;
+        ListHeight = pixels;
+        if (buffCount != 0)
+            ListHeight += 36.8f;
     }
 }
 

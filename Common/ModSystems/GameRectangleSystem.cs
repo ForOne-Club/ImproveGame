@@ -70,7 +70,8 @@ public class GameRectangleSystem : ModSystem
                     var background = border * 0.4f;
 
                     Vector2 size = new(36, 36);
-                    
+
+                    ItemSearcherGUI.MatchedChests.RemoveWhere(i => Main.chest[i] == null);
                     foreach (var chest in ItemSearcherGUI.MatchedChests.Select(matchedChest => Main.chest[matchedChest]))
                     {
                         var position = new Vector2(chest.x, chest.y) * 16f - Main.screenPosition;

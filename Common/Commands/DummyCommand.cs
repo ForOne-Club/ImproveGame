@@ -15,59 +15,58 @@ public class DummyCommand : ModCommand
     {
         Type type = typeof(DummyConfig);
 
-        if (args.Length == 1)
-        {
-            if (args[0].Equals("info", StringComparison.OrdinalIgnoreCase))
-            {
-                FieldInfo[] fields = type.GetFields();
+        switch (args.Length) {
+            // args[0] equals "info" or "help" ignoring case
+            case 1 when args[0].Equals("info", StringComparison.OrdinalIgnoreCase) || args[0].Equals("help", StringComparison.OrdinalIgnoreCase): {
+                    FieldInfo[] fields = type.GetFields();
 
-                caller.Reply(GetText("NPC.DummyCommand_DummyAttributes"), MyColor.Normal);
+                    caller.Reply(GetText("NPC.DummyCommand_DummyAttributes"), MyColor.Normal);
 
-                foreach (var field in fields)
-                {
-                    if (field.GetCustomAttribute<AnnotateAttribute>() is AnnotateAttribute annotateAttribute)
+                    foreach (var field in fields)
                     {
-                        ref string annotate = ref annotateAttribute.Annotate;
-
-                        if (annotate.Equals(string.Empty))
+                        if (field.GetCustomAttribute<AnnotateAttribute>() is AnnotateAttribute annotateAttribute)
                         {
-                            annotate = GetText($"NPC.{field.Name}");
+                            ref string annotate = ref annotateAttribute.Annotate;
+
+                            if (annotate.Equals(string.Empty))
+                            {
+                                annotate = GetText($"NPC.{field.Name}");
+                            }
+                            else if (annotate.Length > 1 && annotate.StartsWith('$'))
+                            {
+                                annotate = GetText($"NPC.{annotate.TrimStart('$')}");
+                            }
+
+                            caller.Reply($"[{field.FieldType.Name}] {field.Name}: {field.GetValue(DummyNPC.Config)} ({annotate})", MyColor.Normal);
                         }
-                        else if (annotate.Length > 1 && annotate.StartsWith('$'))
+                    }
+
+                    return;
+                }
+            case 2: {
+                    string name = args[0];
+                    FieldInfo[] fields = type.GetFields();
+
+                    foreach (var field in fields)
+                    {
+                        if (field.FieldType.IsPrimitive && field.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                         {
-                            annotate = GetText($"NPC.{annotate.TrimStart('$')}");
+                            try
+                            {
+                                field.SetValueDirect(__makeref(DummyNPC.Config), Convert.ChangeType(args[1], field.FieldType));
+                                caller.Reply(GetTextWith("NPC.DummyCommand_Success", new { name = name, args = args[1] }), MyColor.Success);
+                                return;
+                            }
+                            catch
+                            {
+                                caller.Reply(GetTextWith("NPC.DummyCommand_Fail", new { input = input }), MyColor.Fail);
+                                return;
+                            }
                         }
-
-                        caller.Reply($"[{field.FieldType.Name}] {field.Name}: {field.GetValue(DummyNPC.Config)} ({annotate})", MyColor.Normal);
                     }
+
+                    break;
                 }
-
-                return;
-            }
-        }
-
-        if (args.Length == 2)
-        {
-            string name = args[0];
-            FieldInfo[] fields = type.GetFields();
-
-            foreach (var field in fields)
-            {
-                if (field.FieldType.IsPrimitive && field.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                {
-                    try
-                    {
-                        field.SetValueDirect(__makeref(DummyNPC.Config), Convert.ChangeType(args[1], field.FieldType));
-                        caller.Reply(GetTextWith("NPC.DummyCommand_Success", new { name = name, args = args[1] }), MyColor.Success);
-                        return;
-                    }
-                    catch
-                    {
-                        caller.Reply(GetTextWith("NPC.DummyCommand_Fail", new { input = input }), MyColor.Fail);
-                        return;
-                    }
-                }
-            }
         }
 
         caller.Reply(GetTextWith("NPC.DummyCommand_Invalid", new { input = input }), MyColor.Fail);

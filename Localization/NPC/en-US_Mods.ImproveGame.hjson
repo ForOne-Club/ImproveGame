@@ -11,7 +11,7 @@ NPC: {
 	NoTileCollide: Disable Tile Collision
 	KnockBackResist: Knock back resistance, 0 means immune to knock back.
 	Dummy_Damage: Damage: {S}/second, {F}/tick
-	Dummy_Time: Duration: {S} {^0:second;seconds}, {F} {^1:tick;ticks}
+	Dummy_Time: Duration: {S} seconds, {F} ticks
 	Dummy_FinalBlow: Last Hit: {FinalBlow}
 	DummyCommand_DummyAttributes: Dummy Stats
 	DummyCommand_Usage: Usage: /dummy <attribute> <value> (case-insensitive)

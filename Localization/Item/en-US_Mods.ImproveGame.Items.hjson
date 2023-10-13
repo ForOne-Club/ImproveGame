@@ -228,13 +228,13 @@ Expelliarmus: {
 }
 
 Dummy: {
-DisplayName: Scarecrow Dummy
+	DisplayName: Scarecrow Dummy
 	Tooltip:
 		'''
 		"Don't hurt me :)"
 		Chat commands:
-		/dummy info → view dummy stats
-		/help dummy → get dummy usage
+		 /dummy info → view dummy stats
+		 /help dummy → get dummy usage
 		(Can't work in multiplayer yet.)
 		'''
 	CannotUse: Does not support multiplayer yet.

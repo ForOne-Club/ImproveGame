@@ -17,23 +17,24 @@
 - "Stormdark" color scheme
 - Scarecrow Dummy, a configurable damage-testing dummy (not in multiplayer yet)
 - "Infinite Wand Placables" config option, you can turn it off now
-- a hotkey to open mod configs
+- "Stackable Quest Fishes" config option
 ## BUG Fixes
-- breaking Fishing Machine on tables crashes the game
-- unable to disable Lucky Coin
-- destructive wands could not destroy certain grass blocks in one go
+- Breaking Fishing Machine on tables crashes the game
+- Unable to disable Lucky Coin
+- Destructive wands could not destroy certain grass blocks in one go
 - Instant Home Teleportation respawns players when they should be waiting for respawn
 - Wand of Liquid not functioning when its panel is closed
 ## Adjustments
-- tiles under Fishing Machine are now breakable
-- destructive wands now consumes no mana
-- Wand of Contruction's respawn room now uses no wall
-- optimized Auto Money Deposition, and it works on Defender Medals
-- Instant Home Teleportation can be disbaled
+- Tiles under Fishing Machine are now breakable
+- Added a hotkey to open mod configs
+- Destructive wands now consumes no mana
+- Wand of Construction's respawn room now uses no wall
+- Optimized Auto Money Deposition, and it works on Defender Medals
+- Instant Home Teleportation can be disabled now
 - UI position of Buff Tracker is now saved
-- some chat notifications are now pop-up notifications
-- improved `Mod.Call` for `AddPotion` and `AddStation`
-- added `Mod.Call` support for Fishing Machine
+- Some chat notifications are now pop-up notifications
+- Improved `Mod.Call` for `AddPotion` and `AddStation`
+- Added `Mod.Call` support for Fishing Machine
 
 # v1.6.5
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)

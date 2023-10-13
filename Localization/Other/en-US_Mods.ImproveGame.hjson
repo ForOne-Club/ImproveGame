@@ -372,8 +372,8 @@ Projectiles: {
 
 BuilderToggles: {
 	PiggyToggle: {
-		OffText: Auto Money Deposition: Off
-		OnText: Auto Money Deposition: On
+		OffText: Auto-deposit: Off
+		OnText: Auto-deposit: On
 	}
 }
 
