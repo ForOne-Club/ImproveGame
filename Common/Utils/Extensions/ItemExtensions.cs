@@ -1,4 +1,7 @@
-﻿using PinyinNet;
+﻿using FuzzySearchNet;
+using PinyinNet;
+using System.Text.RegularExpressions;
+using Terraria.GameContent.UI;
 
 namespace ImproveGame.Common.Utils.Extensions;
 
@@ -18,7 +21,7 @@ public static class ItemExtensions
         string searchContent = RemoveSpaces(searchString.ToLower());
         return items.Any(item => MatchWithString(item, searchContent));
     }
-    
+
     /// <summary>
     /// 搜索匹配，支持拼音
     /// </summary>
@@ -28,18 +31,40 @@ public static class ItemExtensions
             return false;
 
         string searchContent = stringLowered ? searchString : RemoveSpaces(searchString.ToLower());
-        string currentLanguageName = RemoveSpaces(Lang.GetItemNameValue(item.type).ToLower());
+
+        bool fuzzySearch = searchContent.Contains("-f", StringComparison.OrdinalIgnoreCase);
+        bool tooltipSearch = searchContent.Contains("-t", StringComparison.OrdinalIgnoreCase);
+
+        // 使用正则表达式将前面带有连字符的小写字母替换
+        searchContent = Regex.Replace(searchContent, "-[a-z]", "").Trim();
+
+        // 二次检测，因为以上操作可能使字符串为空
+        if (string.IsNullOrEmpty(searchContent))
+            return false;
+
+        string currentLanguageName = RemoveSpaces(
+                tooltipSearch
+                    ? string.Concat(GetItemTooltipLines(item))
+                    : Lang.GetItemNameValue(item.type))
+            .ToLower();
+
+        if (fuzzySearch)
+        {
+            if (FuzzySearch.Find(searchContent, currentLanguageName, 1).Any())
+                return true;
+        }
+
         if (currentLanguageName.Contains(searchContent))
             return true;
 
         if (Language.ActiveCulture.Name is not "zh-Hans") return false;
 
         string pinyin = RemoveSpaces(PinyinConvert.GetPinyinForAutoComplete(currentLanguageName));
-        return pinyin.Contains(searchContent);
+        return fuzzySearch ? FuzzySearch.Find(searchContent, pinyin, 1).Any() : pinyin.Contains(searchContent);
     }
-    
+
     private static string RemoveSpaces(string s) => s.Replace(" ", "", StringComparison.Ordinal);
-    
+
     /// <summary>
     /// 有其中一个
     /// </summary>
@@ -128,6 +153,7 @@ public static class ItemExtensions
                 return true;
             }
         }
+
         return false;
     }
 
@@ -169,5 +195,134 @@ public static class ItemExtensions
                 return;
             }
         }
+    }
+
+    private static IEnumerable<string> GetItemTooltipLines(Item item)
+    {
+        Item hoverItem = item;
+        int yoyoLogo = -1;
+        int researchLine = -1;
+        int rare = hoverItem.rare;
+        float knockBack = hoverItem.knockBack;
+        float num = 1f;
+        if (hoverItem.CountsAsClass(DamageClass.Melee) && Main.LocalPlayer.kbGlove)
+            num += 1f;
+
+        if (Main.LocalPlayer.kbBuff)
+            num += 0.5f;
+
+        if (num != 1f)
+            hoverItem.knockBack *= num;
+
+        if (hoverItem.CountsAsClass(DamageClass.Ranged) && Main.LocalPlayer.shroomiteStealth)
+            hoverItem.knockBack *= 1f + (1f - Main.LocalPlayer.stealth) * 0.5f;
+
+        long num2 = 30;
+        int numLines = 1;
+        string[] array = new string[num2];
+        bool[] array2 = new bool[num2];
+        bool[] array3 = new bool[num2];
+        for (int i = 0; i < num2; i++)
+        {
+            array2[i] = false;
+            array3[i] = false;
+        }
+
+        string[] tooltipNames = new string[num2];
+
+        Main.MouseText_DrawItemTooltip_GetLinesInfo(item, ref yoyoLogo, ref researchLine, knockBack, ref numLines,
+            array, array2, array3, tooltipNames, out _);
+
+        // Fix a bug where item knockback grows to infinity
+        hoverItem.knockBack = knockBack;
+
+        if (Main.npcShop > 0 && hoverItem.value >= 0 &&
+            (hoverItem.type < ItemID.CopperCoin || hoverItem.type > ItemID.PlatinumCoin))
+        {
+            Main.LocalPlayer.GetItemExpectedPrice(hoverItem, out long calcForSelling, out long calcForBuying);
+
+            long num5 = (hoverItem.isAShopItem || hoverItem.buyOnce) ? calcForBuying : calcForSelling;
+            if (hoverItem.shopSpecialCurrency != -1)
+            {
+                tooltipNames[numLines] = "SpecialPrice";
+                CustomCurrencyManager.GetPriceText(hoverItem.shopSpecialCurrency, array, ref numLines, num5);
+            }
+            else if (num5 > 0)
+            {
+                string text = "";
+                long num6 = 0;
+                long num7 = 0;
+                long num8 = 0;
+                long num9 = 0;
+                long num10 = num5 * hoverItem.stack;
+                if (!hoverItem.buy)
+                {
+                    num10 = num5 / 5;
+                    if (num10 < 1)
+                        num10 = 1;
+
+                    long num11 = num10;
+                    num10 *= hoverItem.stack;
+                    int amount = Main.shopSellbackHelper.GetAmount(hoverItem);
+                    if (amount > 0)
+                        num10 += (-num11 + calcForBuying) * Math.Min(amount, hoverItem.stack);
+                }
+
+                if (num10 < 1)
+                    num10 = 1;
+
+                if (num10 >= 1000000)
+                {
+                    num6 = num10 / 1000000;
+                    num10 -= num6 * 1000000;
+                }
+
+                if (num10 >= 10000)
+                {
+                    num7 = num10 / 10000;
+                    num10 -= num7 * 10000;
+                }
+
+                if (num10 >= 100)
+                {
+                    num8 = num10 / 100;
+                    num10 -= num8 * 100;
+                }
+
+                if (num10 >= 1)
+                    num9 = num10;
+
+                if (num6 > 0)
+                    text = text + num6 + " " + Lang.inter[15].Value + " ";
+
+                if (num7 > 0)
+                    text = text + num7 + " " + Lang.inter[16].Value + " ";
+
+                if (num8 > 0)
+                    text = text + num8 + " " + Lang.inter[17].Value + " ";
+
+                if (num9 > 0)
+                    text = text + num9 + " " + Lang.inter[18].Value + " ";
+
+                if (!hoverItem.buy)
+                    array[numLines] = Lang.tip[49].Value + " " + text;
+                else
+                    array[numLines] = Lang.tip[50].Value + " " + text;
+
+                tooltipNames[numLines] = "Price";
+                numLines++;
+            }
+            else if (hoverItem.type != ItemID.DefenderMedal)
+            {
+                array[numLines] = Lang.tip[51].Value;
+                tooltipNames[numLines] = "Price";
+                numLines++;
+            }
+        }
+
+        List<TooltipLine> lines = ItemLoader.ModifyTooltips(item, ref numLines, tooltipNames, ref array, ref array2,
+            ref array3, ref yoyoLogo, out _, 0);
+
+        return lines.Select(line => line.Text);
     }
 }

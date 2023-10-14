@@ -7,6 +7,7 @@ using ImproveGame.Interface.GUI.WorldFeature;
 using ImproveGame.Interface.SUIElements;
 using Terraria.DataStructures;
 using Terraria.GameInput;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI.ItemSearcher;
 
@@ -135,7 +136,7 @@ public class ItemSearcherGUI : ViewBody
         Cross.OnLeftMouseDown += (_, _) => Close();
         Cross.Join(TitlePanel);
 
-        _searchBar = new SUISearchBar(true)
+        _searchBar = new SUISearchBar(false, false)
         {
             Height = new StyleDimension(28f, 0f),
             Width = new StyleDimension(-26f, 1f),
@@ -144,6 +145,7 @@ public class ItemSearcherGUI : ViewBody
             Relative = RelativeMode.Vertical,
             Spacing = new Vector2(0, 6)
         };
+        _searchBar.OnDraw += SearchBarOnDraw;
         _searchBar.OnSearchContentsChanged += _ => SetupSearchResults();
         _searchBar.Join(MainPanel);
 
@@ -193,6 +195,14 @@ public class ItemSearcherGUI : ViewBody
         Scrollbar.SetView(itemsPanel.GetInnerSizePixels().Y, ItemsFoundGrid.Height.Pixels);
         Scrollbar.Join(this);
         RefreshItemsFoundGrid(new HashSet<int>());
+    }
+
+    private void SearchBarOnDraw()
+    {
+        if (_searchBar.IsMouseHovering && string.IsNullOrEmpty(SearchContent))
+        {
+            UICommon.TooltipMouseText(GetText("UI.ItemSearcher.SearchTips"));
+        }
     }
 
     private void SetupBanks(UIElement parent)

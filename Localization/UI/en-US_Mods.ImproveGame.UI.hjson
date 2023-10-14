@@ -171,6 +171,13 @@ ItemSearcher: {
 	Title: Find Items
 	TipText: Items found are shown here
 	NotFoundText: No item found
+	SearchTips:
+		'''
+		在搜索文本中加入:
+		 -f 以启用模糊匹配 [例: 输入“-f 黑石”可搜索到“黑曜石”]
+		 -t 以搜索物品简介 [例: 输入“-t 易燃”可搜索到“凝胶”]
+		两者可合用 [例: 输入“-t-f yran”可搜索到“凝胶”]
+		'''
 }
 
 OpenBag: {

@@ -26,6 +26,7 @@
 	  <AdditionalFiles Remove="Content\Dummy.png" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="FuzzySearch.Net" Version="0.3.2" />
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.1.2" />
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.5" />
 		<Publicize Include="FNA" />
