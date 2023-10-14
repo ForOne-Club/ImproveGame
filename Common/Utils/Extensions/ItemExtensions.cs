@@ -1,4 +1,5 @@
 ﻿using FuzzySearchNet;
+using ImproveGame.Interface.Common;
 using PinyinNet;
 using System.Text.RegularExpressions;
 using Terraria.GameContent.UI;
@@ -32,15 +33,9 @@ public static class ItemExtensions
 
         string searchContent = stringLowered ? searchString : RemoveSpaces(searchString.ToLower());
 
-        bool fuzzySearch = searchContent.Contains("-f", StringComparison.OrdinalIgnoreCase);
-        bool tooltipSearch = searchContent.Contains("-t", StringComparison.OrdinalIgnoreCase);
-
-        // 使用正则表达式将前面带有连字符的小写字母替换
-        searchContent = Regex.Replace(searchContent, "-[a-z]", "").Trim();
-
-        // 二次检测，因为以上操作可能使字符串为空
-        if (string.IsNullOrEmpty(searchContent))
-            return false;
+        UIPlayerSetting setting = Main.LocalPlayer.GetModPlayer<UIPlayerSetting>();
+        bool fuzzySearch = setting.FuzzySearch;
+        bool tooltipSearch = setting.SearchTooltip;
 
         string currentLanguageName = RemoveSpaces(
                 tooltipSearch

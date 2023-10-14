@@ -177,6 +177,8 @@ public class SUISearchBar : View
 
     public event Action<string> OnSearchContentsChanged;
     public event Action OnDraw;
+    
+    public bool IsWritingText => _searchBar.IsWritingText;
 
     /// <summary> 在搜索栏加一段 (支持拼音及拼音首字母搜索) 的文本 </summary>
     private readonly bool _allowPinyinSearch;

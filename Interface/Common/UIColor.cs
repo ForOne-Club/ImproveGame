@@ -181,7 +181,7 @@ namespace ImproveGame.Interface.Common
 
             SearchBarBorder = new Color(25, 29, 60);
             SearchBarBg = new Color(8, 11, 26);
-            SearchBarBorderSelected = new Color(163, 149, 51);
+            SearchBarBorderSelected = new Color(255, 213, 0);
 
             // 边框
             SwitchBorder = new Color(41, 73, 84, 170);

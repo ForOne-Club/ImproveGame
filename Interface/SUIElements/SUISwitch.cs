@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.SUIElements;
 
@@ -22,11 +23,13 @@ public class SUISwitch : View
     private readonly Color _textColor = Color.White;
     private readonly Color _textBorderColor = Color.Black;
     private readonly AnimationTimer _timer = new AnimationTimer(4);
+    private readonly string _hoverText;
 
-    public SUISwitch(Func<bool> getState, Action<bool> setState, string text, float textScale = 1f)
+    public SUISwitch(Func<bool> getState, Action<bool> setState, string text, float textScale = 1f, string hoverText = null)
     {
         _scale = textScale;
         _text = text;
+        _hoverText = hoverText;
         _textSize = GetFontSize(text) * _scale;
         _getState = getState;
         _setState = setState;
@@ -82,5 +85,8 @@ public class SUISwitch : View
         Vector2 textPos = innerPos + new Vector2(switchSize.X + InnerRowSpacing * _scale, (innerSize.Y - _textSize.Y) / 2);
         textPos.Y += UIConfigs.Instance.GeneralFontOffsetY * _scale;
         DrawString(textPos, _text, _textColor, _textBorderColor, _scale);
+        
+        if (_hoverText is not null && IsMouseHovering)
+            UICommon.TooltipMouseText(_hoverText);
     }
 }

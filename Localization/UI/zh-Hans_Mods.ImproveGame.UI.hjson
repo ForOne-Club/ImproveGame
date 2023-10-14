@@ -168,14 +168,20 @@ ItemSearcher: {
 	Title: 查找物品
 	TipText: 查找到的物品将显示在此处
 	NotFoundText: 没有找到任何物品
-	SearchTips:
-		'''
-		支持拼音搜索
-		在搜索文本中加入:
-		 -f 以启用模糊匹配 [例: 输入“-f 黑石”可搜索到“黑曜石”]
-		 -t 以搜索物品简介 [例: 输入“-t 易燃”可搜索到“凝胶”]
-		两者可合用 [例: 输入“-t-f yran”可搜索到“凝胶”]
-		'''
+
+	FuzzySearch: {
+		Label: 模糊匹配
+		Tooltip:
+			'''
+			会搜到与搜索内容相差一个字符的结果
+			如输入“黑石”可搜索到“黑曜石”
+			'''
+	}
+
+	SearchTooltip: {
+		Label: 搜索简介
+		Tooltip: 搜索物品简介而非物品名称
+	}
 }
 
 OpenBag: {

@@ -106,20 +106,27 @@ partial class MyUtils
     }
 
     public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f,
-        bool large = false)
+        bool large = false, float spread = 2f)
     {
-        DrawString(position, text, textColor, borderColor, Zero, scale, large);
+        DrawString(position, text, textColor, borderColor, Zero, scale, large, spread);
     }
 
     public static void DrawString(Vector2 pos, string text, Color textColor, Color borderColor, Vector2 origin,
-        float textScale, bool large)
+        float textScale, bool large, float spread = 2f)
     {
         DynamicSpriteFont spriteFont = (large ? FontAssets.DeathText : FontAssets.MouseText).Value;
 
         float x = pos.X;
         float y = pos.Y;
         Color color = borderColor;
-        float border = 2f * textScale;
+        float border = spread * textScale;
+
+        if (borderColor == Color.Transparent)
+        {
+            Main.spriteBatch.DrawString(spriteFont, text, pos, textColor, 0f, origin, textScale, 0, 0f);
+            return;
+        }
+
         for (int i = 0; i < 5; i++)
         {
             switch (i)

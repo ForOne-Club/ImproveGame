@@ -69,6 +69,10 @@ public class ItemSearcherGUI : ViewBody
     public string SearchContent => _searchBar.SearchContent;
     private SUISearchBar _searchBar;
 
+    // 搜索选项开关
+    private View ButtonsBox;
+    private LongSwitch FuzzySwitch, TooltipSwitch;
+
     public override void OnInitialize()
     {
         void MakeSeparator()
@@ -104,7 +108,7 @@ public class ItemSearcherGUI : ViewBody
         };
         MainPanel.SetPadding(0f);
         MainPanel.SetPosPixels(620, 400)
-            .SetSizePixels(356, 330)
+            .SetSizePixels(356, 416)
             .Join(this);
 
         TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
@@ -145,9 +149,10 @@ public class ItemSearcherGUI : ViewBody
             Relative = RelativeMode.Vertical,
             Spacing = new Vector2(0, 6)
         };
-        _searchBar.OnDraw += SearchBarOnDraw;
+        // _searchBar.OnDraw += SearchBarOnDraw;
         _searchBar.OnSearchContentsChanged += _ => SetupSearchResults();
         _searchBar.Join(MainPanel);
+        SetupButtonsBox();
 
         // 分割
         MakeSeparator();
@@ -197,12 +202,45 @@ public class ItemSearcherGUI : ViewBody
         RefreshItemsFoundGrid(new HashSet<int>());
     }
 
-    private void SearchBarOnDraw()
+    private void SetupButtonsBox()
     {
-        if (_searchBar.IsMouseHovering && string.IsNullOrEmpty(SearchContent))
+        ButtonsBox = new View
         {
-            UICommon.TooltipMouseText(GetText("UI.ItemSearcher.SearchTips"));
-        }
+            Height = new StyleDimension(76f, 0f),
+            Width = new StyleDimension(-26f, 1f),
+            HAlign = 0.5f,
+            DragIgnore = true,
+            Relative = RelativeMode.Vertical,
+            Spacing = new Vector2(0, 8)
+        };
+        ButtonsBox.SetPadding(0f);
+        ButtonsBox.Join(MainPanel);
+
+        // 开关
+        UIPlayerSetting setting = Main.LocalPlayer.GetModPlayer<UIPlayerSetting>();
+        Vector2 switchSpacing = new(0, 6);
+        FuzzySwitch = new LongSwitch(
+            () => setting.FuzzySearch,
+            state => setting.FuzzySearch = state,
+            "UI.ItemSearcher.FuzzySearch")
+        {
+            First = true,
+            Relative = RelativeMode.Vertical,
+            Spacing = switchSpacing,
+            Height = {Pixels = 34f}
+        };
+        FuzzySwitch.Join(ButtonsBox);
+
+        TooltipSwitch = new LongSwitch(
+            () => setting.SearchTooltip,
+            state => setting.SearchTooltip = state,
+            "UI.ItemSearcher.SearchTooltip")
+        {
+            Relative = RelativeMode.Vertical,
+            Spacing = switchSpacing,
+            Height = {Pixels = 34f}
+        };
+        TooltipSwitch.Join(ButtonsBox);
     }
 
     private void SetupBanks(UIElement parent)

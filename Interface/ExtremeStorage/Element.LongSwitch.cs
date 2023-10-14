@@ -111,7 +111,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             string text = GetText(!_hasTooltip ? _text : $"{_text}.Label");
             var textCenter = new Vector2(position.X + 10 + textOffsetX, center.Y - _textSize.Y / 2f + UIConfigs.Instance.GeneralFontOffsetY);
             textCenter.Y -= 4f;
-            DrawString(textCenter, text, _textColor, _textBorderColor);
+            DrawString(textCenter, text, _textColor, _textBorderColor, spread: 1.5f);
 
             // 提示
             if (IsMouseHovering && _hasTooltip)
