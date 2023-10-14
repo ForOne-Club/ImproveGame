@@ -1,4 +1,4 @@
-<h1 align="center">Quality of Life</h1>
+<h1 align="center">Quality of Terraria</h1>
 
 <div align="center">
 

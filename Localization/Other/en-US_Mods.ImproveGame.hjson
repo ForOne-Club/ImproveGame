@@ -1,4 +1,4 @@
-ModName: Quality of Life
+ModName: Quality of Terraria
 
 Tiles: {
 	Autofisher.MapEntry: "{$Mods.ImproveGame.ItemName.Autofisher}"

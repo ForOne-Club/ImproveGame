@@ -172,7 +172,7 @@ namespace ImproveGame.Common.Configs
             catch (Exception e) when (jsonFileExists && e is JsonReaderException or JsonSerializationException)
             {
                 ImproveGame.Instance.Logger.Warn(
-                    $"Quality of Life mod additional config file located at {FullPath} failed to load. The file was likely corrupted somehow, so the defaults will be loaded and the file deleted.");
+                    $"Quality of Terraria mod additional config file located at {FullPath} failed to load. The file was likely corrupted somehow, so the defaults will be loaded and the file deleted.");
                 File.Delete(FullPath);
                 JsonConvert.PopulateObject("{}", settings, ConfigManager.serializerSettings);
             }

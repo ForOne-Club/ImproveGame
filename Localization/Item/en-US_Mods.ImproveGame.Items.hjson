@@ -113,7 +113,7 @@ Autofisher: {
 		- [i:AnglerTackleBag] increases fishing speed by * 300%
 		- [i:LavaproofTackleBag] increases fishing speed by * 500%
 		[c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
-		[c/AAAAAA:Only mod accessories that have added Quality of Life support is supported]
+		[c/AAAAAA:Only mod accessories that have added Quality of Terraria support is supported]
 		Supports most modded biomes
 		Only filterd items will be caught, first match upper criteria
 		'''

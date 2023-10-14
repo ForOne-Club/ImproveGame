@@ -7,6 +7,7 @@
 </div>
 
 # v1.6.6
+The mod name have changed to Quality of Terraria since v1.6.6.0
 ## Subversions
 - v1.6.6.0
 ## Additions
