@@ -24,13 +24,13 @@ namespace ImproveGame.Content.Patches
         }
 
         public override void Load() {
-            Terraria.IL_WorldGen.GrowTree += ModifyMostTrees;
-            Terraria.IL_WorldGen.GrowPalmTree += ModifyPalmTrees;
-            Terraria.On_WorldGen.SetGemTreeDrops += GemAlwaysTweak;
+            IL_WorldGen.GrowTree += ModifyMostTrees;
+            IL_WorldGen.GrowPalmTree += ModifyPalmTrees;
+            On_WorldGen.SetGemTreeDrops += GemAlwaysTweak;
             SetTreeHeights(Config.GemTreeMin, Config.GemTreeMax, Config.MostTreeMin, Config.MostTreeMax);
         }
 
-        private void GemAlwaysTweak(Terraria.On_WorldGen.orig_SetGemTreeDrops orig, int gemType, int seedType, Tile tileCache, ref int dropItem, ref int secondaryItem) {
+        private void GemAlwaysTweak(On_WorldGen.orig_SetGemTreeDrops orig, int gemType, int seedType, Tile tileCache, ref int dropItem, ref int secondaryItem) {
             if (Config.GemTreeAlwaysDropGem) {
                 dropItem = gemType;
                 secondaryItem = seedType;

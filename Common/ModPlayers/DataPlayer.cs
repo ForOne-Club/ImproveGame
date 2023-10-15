@@ -47,9 +47,9 @@ namespace ImproveGame.Common.ModPlayers
                     SuperVault[i] = tag.Get<Item>($"SuperVault_{i}");
 
             // 原版 Buff 禁用列表
-            InfBuffDisabledVanilla = tag.Get<List<int>>("InfBuffDisabledVanilla").ToHashSet() ?? new();
+            InfBuffDisabledVanilla = tag.Get<List<int>>("InfBuffDisabledVanilla").ToHashSet();
             // MOD Buff 禁用列表
-            InfBuffDisabledMod = tag.Get<List<string>>("InfBuffDisabledMod").ToHashSet() ?? new();
+            InfBuffDisabledMod = tag.Get<List<string>>("InfBuffDisabledMod").ToHashSet();
         }
 
         public override void SaveData(TagCompound tag)

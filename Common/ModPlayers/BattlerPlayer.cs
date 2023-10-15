@@ -46,10 +46,10 @@ namespace ImproveGame.Common.ModPlayers
         }
 
         public override void Load() {
-            Terraria.On_NPC.SlimeRainSpawns += TweakSlimeRain;
+            On_NPC.SlimeRainSpawns += TweakSlimeRain;
         }
 
-        private void TweakSlimeRain(Terraria.On_NPC.orig_SlimeRainSpawns orig, int plr) {
+        private void TweakSlimeRain(On_NPC.orig_SlimeRainSpawns orig, int plr) {
             if (!Main.player[plr].TryGetModPlayer<BattlerPlayer>(out var battlerPlayer) || battlerPlayer.GetShouldDisableSpawns) {
                 orig.Invoke(plr);
                 return;

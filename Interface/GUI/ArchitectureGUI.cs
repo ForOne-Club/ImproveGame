@@ -71,38 +71,38 @@ namespace ImproveGame.Interface.GUI
             const float slotThird = 120f;
             itemSlot = new() {
                 [nameof(CreateWand.Block)] = CreateItemSlot(slotFirst, slotFirst, nameof(CreateWand.Block),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile]), 
-                    (Item item, bool _) => CurrentWand.SetItem(nameof(CreateWand.Block), item.Clone()),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile]), 
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Block), item.Clone()),
                     () => GetText($"Architecture.{nameof(CreateWand.Block)}")),
 
                 [nameof(CreateWand.Wall)] = CreateItemSlot(slotSecond, slotFirst, nameof(CreateWand.Wall),
-                    (Item i, Item item) => SlotPlace(i, item) || item.createWall > -1,
-                    (Item item, bool _) => CurrentWand.SetItem(nameof(CreateWand.Wall), item.Clone()),
+                    (i, item) => SlotPlace(i, item) || item.createWall > -1,
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Wall), item.Clone()),
                     () => GetText($"Architecture.{nameof(CreateWand.Wall)}")),
 
                 [nameof(CreateWand.Platform)] = CreateItemSlot(slotThird, slotFirst, nameof(CreateWand.Platform),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Platforms[item.createTile]),
-                    (Item item, bool _) => CurrentWand.SetItem(nameof(CreateWand.Platform), item.Clone()),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Platforms[item.createTile]),
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Platform), item.Clone()),
                     () => GetText($"Architecture.{nameof(CreateWand.Platform)}")),
 
                 [nameof(CreateWand.Torch)] = CreateItemSlot(slotFirst, slotSecond, nameof(CreateWand.Torch),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Torch[item.createTile]),
-                    (Item item, bool _) => CurrentWand.SetItem(nameof(CreateWand.Torch), item.Clone()),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && TileID.Sets.Torch[item.createTile]),
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Torch), item.Clone()),
                     () => Lang.GetItemNameValue(ItemID.Torch)),
 
                 [nameof(CreateWand.Chair)] = CreateItemSlot(slotSecond, slotSecond, nameof(CreateWand.Chair),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Chairs),
-                    (Item item, bool _) => CurrentWand.SetItem(nameof(CreateWand.Chair), item.Clone()),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Chairs),
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Chair), item.Clone()),
                     () => GetText($"Architecture.{nameof(CreateWand.Chair)}")),
 
                 [nameof(CreateWand.Workbench)] = CreateItemSlot(slotThird, slotSecond, nameof(CreateWand.Workbench),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.WorkBenches),
-                    (Item item, bool _) => CurrentWand.SetItem(nameof(CreateWand.Workbench), item.Clone()),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.WorkBenches),
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Workbench), item.Clone()),
                     () => Lang.GetItemNameValue(ItemID.WorkBench)),
 
                 [nameof(CreateWand.Bed)] = CreateItemSlot(slotFirst, slotThird, nameof(CreateWand.Bed),
-                    (Item i, Item item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Beds),
-                    (Item item, bool _) => CurrentWand.SetItem(nameof(CreateWand.Bed), item.Clone()),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Beds),
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Bed), item.Clone()),
                     () => Lang.GetItemNameValue(ItemID.Bed)),
             };
 
@@ -128,7 +128,7 @@ namespace ImproveGame.Interface.GUI
 
         public ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item, bool> onItemChanged = null, Func<string> emptyText = null) {
             ModItemSlot slot = MyUtils.CreateItemSlot(x, y, iconTextureName, 0.85f, canPlace, onItemChanged, emptyText, basePanel, "Architecture");
-            slot.OnUpdate += (UIElement _) => HoveringOnSlots |= slot.IsMouseHovering;
+            slot.OnUpdate += _ => HoveringOnSlots |= slot.IsMouseHovering;
             return slot;
         }
 

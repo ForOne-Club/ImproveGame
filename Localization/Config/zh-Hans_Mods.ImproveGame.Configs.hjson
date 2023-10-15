@@ -68,13 +68,6 @@ ImproveConfigs: {
 		Tooltip: 包括BOSS召唤物和事件召唤物，仅支持原版。
 	}
 
-	AutoReuseWeapon.Label: "[centeritem:211] 自动挥舞武器"
-
-	AutoReuseWeapon_ExclusionList: {
-		Label: "[centeritem:3334] 自动挥舞排除列表"
-		Tooltip: 在启用自动挥舞武器的情况下，会排除此列表的物品。
-	}
-
 	ModifyPlayerPlaceSpeed: {
 		Label: "[centeritem:2214] 提高物块放置速度"
 		// Tooltip: ""

@@ -68,13 +68,6 @@ ImproveConfigs: {
 		Tooltip: Only for vanilla boss and event summon items
 	}
 
-	AutoReuseWeapon.Label: "[centeritem:211] Weapon autoswing"
-
-	AutoReuseWeapon_ExclusionList: {
-		Label: "[centeritem:3334] Autoswing black list"
-		Tooltip: If Weapon autoswing is true, items in this list cannot take the effect
-	}
-
 	ModifyPlayerPlaceSpeed: {
 		Label: "[centeritem:2214] Increase tile placement speed"
 		Tooltip: ""

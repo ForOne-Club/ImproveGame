@@ -35,7 +35,7 @@ namespace ImproveGame.Common.GlobalNPCs
             if (Main.expertMode)
                 price *= 2;
 
-            price = (int)((double)price * Main.LocalPlayer.currentShoppingSettings.PriceAdjustment);
+            price = (int)(price * Main.LocalPlayer.currentShoppingSettings.PriceAdjustment);
 
             int platinum = 0;
             int gold = 0;
@@ -89,7 +89,7 @@ namespace ImproveGame.Common.GlobalNPCs
                     if (copper > 0)
                         displayText = displayText + copper + " " + Language.GetTextValue("LegacyInterface.18") + " ";
 
-                    float mouseTextColor = (int)Main.mouseTextColor / 255f;
+                    float mouseTextColor = Main.mouseTextColor / 255f;
                     if (platinum > 0)
                         textColor = new Color((byte)(220f * mouseTextColor), (byte)(220f * mouseTextColor), (byte)(198f * mouseTextColor), Main.mouseTextColor);
                     else if (gold > 0)

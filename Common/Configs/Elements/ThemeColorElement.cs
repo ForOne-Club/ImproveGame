@@ -17,7 +17,6 @@ public class ThemeColorElement : EnumElement
     public SUIScrollbar Scrollbar;
 
     private ThemeType _valueLastTick; // 检测Value有没有变，变了就重设UI
-    private ThemeType _configValueLastTick; // 检测Config里面的值有没有变，变了就重设UI
 
     public ThemeType Value
     {

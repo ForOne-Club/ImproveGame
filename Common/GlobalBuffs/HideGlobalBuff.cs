@@ -143,7 +143,6 @@ namespace ImproveGame.Common.GlobalBuffs
             catch (Exception e) {
                 ImproveGame.Instance.Logger.Error(e.Message);
                 ErrorHappenedInventory();
-                return;
             }
         }
 

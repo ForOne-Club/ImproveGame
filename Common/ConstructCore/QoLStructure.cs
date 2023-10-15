@@ -21,9 +21,9 @@ namespace ImproveGame.Common.ConstructCore
 
         public int GetOrAddEntry(string fullName)
         {
-            if (entries.ContainsKey(fullName))
+            if (entries.TryGetValue(fullName, out ushort entry))
             {
-                return entries[fullName];
+                return entry;
             }
             entries.Add(fullName, (ushort)entries.Count);
             return entries.Count - 1;

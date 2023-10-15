@@ -26,8 +26,8 @@ namespace ImproveGame.Common.ConstructCore
             if (Main.dedServ)
                 return;
 
-            Terraria.On_Main.SetDisplayMode += RefreshTarget;
-            Terraria.On_Main.CheckMonoliths += DrawTarget;
+            On_Main.SetDisplayMode += RefreshTarget;
+            On_Main.CheckMonoliths += DrawTarget;
         }
 
         public override void Unload()
@@ -36,7 +36,7 @@ namespace ImproveGame.Common.ConstructCore
             UIPreviewTarget = null;
         }
 
-        private void RefreshTarget(Terraria.On_Main.orig_SetDisplayMode orig, int width, int height, bool fullscreen)
+        private void RefreshTarget(On_Main.orig_SetDisplayMode orig, int width, int height, bool fullscreen)
         {
             orig(width, height, fullscreen);
         }
@@ -81,7 +81,7 @@ namespace ImproveGame.Common.ConstructCore
             }
         }
 
-        private void DrawTarget(Terraria.On_Main.orig_CheckMonoliths orig)
+        private void DrawTarget(On_Main.orig_CheckMonoliths orig)
         {
             bool canDraw = Main.LocalPlayer.HeldItem?.type == ModContent.ItemType<ConstructWand>() &&
                 WandSystem.ConstructMode == WandSystem.Construct.Place;

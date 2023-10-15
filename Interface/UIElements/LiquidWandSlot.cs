@@ -121,9 +121,9 @@ namespace ImproveGame.Interface.UIElements
             originalFrame.Width = 16;
             int waterStyle = Main.waterStyle; // 根据环境的水样式
             // 岩浆和蜂蜜是没有帧的
-            if (LiquidId != Terraria.ID.LiquidID.Water) {
+            if (LiquidId != LiquidID.Water) {
                 originalFrame = new(0, 0, 16, 16);
-                waterStyle = LiquidId == Terraria.ID.LiquidID.Lava ? 1 : 11;
+                waterStyle = LiquidId == LiquidID.Lava ? 1 : 11;
             }
 
             // 水面高度效果，Y坐标添加是向上取整
@@ -135,14 +135,14 @@ namespace ImproveGame.Interface.UIElements
                 mainColor = DrawColor.Invoke();
             }
 
-            int frame = LiquidId != Terraria.ID.LiquidID.Water ? 0 : (int)Main.wFrame;
+            int frame = LiquidId != LiquidID.Water ? 0 : (int)Main.wFrame;
             float bottomY = dimensions.Position().Y + dimensions.Height;
 
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
 
             float alpha = 1f;
-            if (LiquidId == Terraria.ID.LiquidID.Water) {
+            if (LiquidId == LiquidID.Water) {
                 for (int j = 0; j < 13; j++) {
                     if (Main.IsLiquidStyleWater(j) && Main.liquidAlpha[j] > 0f && j != waterStyle) {
                         DrawLiquid(drawPosition, originalFrame, mainColor * Main.liquidAlpha[j], frame, j, scale, bottomY);
@@ -199,7 +199,7 @@ namespace ImproveGame.Interface.UIElements
             var model = Matrix.CreateTranslation(new Vector3(-screenPos.X, -screenPos.Y, 0));
 
             // 把变换和所需信息丢给shader
-            float speed = LiquidId == Terraria.ID.LiquidID.Water ? 0.5f : 0.3f;
+            float speed = LiquidId == LiquidID.Water ? 0.5f : 0.3f;
             int milliSeconds = (int)Main.gameTimeCache.TotalGameTime.TotalMilliseconds;
             float uTime = milliSeconds % 10000f / 10000f * speed;
             if (milliSeconds % 20000f > 10000f) {

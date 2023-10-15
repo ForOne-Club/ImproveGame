@@ -17,10 +17,10 @@ public class GameRectangleSystem : ModSystem
 {
     public override void Load()
     {
-        Terraria.On_Main.DrawInterface_36_Cursor += Main_DrawInterface_36_Cursor;
+        On_Main.DrawInterface_36_Cursor += Main_DrawInterface_36_Cursor;
     }
 
-    private void Main_DrawInterface_36_Cursor(Terraria.On_Main.orig_DrawInterface_36_Cursor orig)
+    private void Main_DrawInterface_36_Cursor(On_Main.orig_DrawInterface_36_Cursor orig)
     {
         if (Main.cursorOverride == CursorOverrideID.GamepadDefaultCursor)
         {
@@ -158,9 +158,7 @@ public class GameRectangleSystem : ModSystem
                 RecursionSetHovered(i + 1, j);
                 RecursionSetHovered(i, j - 1);
                 RecursionSetHovered(i, j + 1);
-                return;
             }
-            return; // 虽然不是必要的，但是写上感觉规范点
         }
 
         for (int i = drawRange.Left; i < drawRange.Right; i++)

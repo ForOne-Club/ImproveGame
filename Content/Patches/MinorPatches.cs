@@ -355,7 +355,7 @@ namespace ImproveGame.Content.Patches
                     continue;
 
                 self.LoadFlameRing();
-                float num = 1f;
+                float num;
                 float num2 = 0.1f;
                 float num3 = 0.9f;
                 if (!Main.gamePaused && self.IsActive)
@@ -505,7 +505,7 @@ namespace ImproveGame.Content.Patches
             c.EmitDelegate<Func<int, int>>(returnValue => Config.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue);
         }
 
-        private void NPC_CountKillForBannersAndDropThem(Terraria.On_NPC.orig_CountKillForBannersAndDropThem orig,
+        private void NPC_CountKillForBannersAndDropThem(On_NPC.orig_CountKillForBannersAndDropThem orig,
             NPC npc)
         {
             int bannerID = Item.NPCtoBanner(npc.BannerID());

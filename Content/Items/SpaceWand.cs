@@ -191,7 +191,7 @@ public class SpaceWand : ModItem, IMarqueeItem
         platformRect.Width >>= 4;
         platformRect.Height >>= 4;
 
-        ForeachTile(platformRect, (int x, int y) =>
+        ForeachTile(platformRect, (x, y) =>
         {
             int oneIndex = EnoughItem(player, GetConditions());
             if (oneIndex > -1)

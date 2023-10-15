@@ -1,13 +1,12 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.Common;
-using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.SUIElements;
+using ImproveGame.Interface.UIElements;
 using Terraria.UI.Chat;
-using System.Reflection;
 
 namespace ImproveGame.Interface.GUI
 {
@@ -35,7 +34,7 @@ namespace ImproveGame.Interface.GUI
         private UIImage relocateButton;
         private SUIPanel textPanel;
 
-        internal static bool RequireRefresh = false;
+        internal static bool RequireRefresh;
         
         public void OnSwapSlide(float factor)
         {
@@ -63,9 +62,9 @@ namespace ImproveGame.Interface.GUI
 
             accessorySlot = CreateItemSlot(
                 25f, 0f,
-                canPlace: (Item i, Item item) => SlotPlace(i, item) || ModIntegrationsSystem.FishingStatLookup.ContainsKey(item.type),
+                canPlace: (i, item) => SlotPlace(i, item) || ModIntegrationsSystem.FishingStatLookup.ContainsKey(item.type),
                 onItemChanged: ChangeAccessorySlot,
-                emptyText: () => GetText($"Autofisher.Accessory"),
+                emptyText: () => GetText("Autofisher.Accessory"),
                 parent: basePanel,
                 folderName: "Autofisher",
                 iconTextureName: "Slot_Accessory"
@@ -74,9 +73,9 @@ namespace ImproveGame.Interface.GUI
 
             fishingPoleSlot = CreateItemSlot(
                 75f, 0f,
-                canPlace: (Item i, Item item) => SlotPlace(i, item) || item.fishingPole > 0,
+                canPlace: (i, item) => SlotPlace(i, item) || item.fishingPole > 0,
                 onItemChanged: ChangeFishingPoleSlot,
-                emptyText: () => GetText($"Autofisher.FishingPole"),
+                emptyText: () => GetText("Autofisher.FishingPole"),
                 parent: basePanel,
                 folderName: "Autofisher",
                 iconTextureName: "Slot_FishingPole"
@@ -85,9 +84,9 @@ namespace ImproveGame.Interface.GUI
 
             baitSlot = CreateItemSlot(
                 125f, 0f,
-                canPlace: (Item i, Item item) => SlotPlace(i, item) || item.bait > 0,
+                canPlace: (i, item) => SlotPlace(i, item) || item.bait > 0,
                 onItemChanged: ChangeBaitSlot,
-                emptyText: () => GetText($"Autofisher.Bait"),
+                emptyText: () => GetText("Autofisher.Bait"),
                 parent: basePanel,
                 folderName: "Autofisher",
                 iconTextureName: "Slot_Bait"

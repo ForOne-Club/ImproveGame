@@ -4,8 +4,6 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Entitys;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
-using Microsoft.Xna.Framework.Input;
-using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using static ImproveGame.Entitys.TileData;
 using TileData = ImproveGame.Entitys.TileData;
@@ -21,8 +19,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
     private static Texture2D[] _prisonsPreView;
     private static Color[][] _colors;
 
-    private static bool _colorsLoaded = false;
-    private static int _styleIndex = 0;
+    private static bool _colorsLoaded;
+    private static int _styleIndex;
 
     public static Texture2D Prison => _prisons[_styleIndex];
     public static Texture2D PrisonsPreView => _prisonsPreView[_styleIndex];
@@ -233,7 +231,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
     /// <summary>
     /// 就为了实现一个“如果不放东西就没爆炸声音”的功能
     /// </summary>
-    private static bool _playedSound = false;
+    private static bool _playedSound;
 
     public override bool? UseItem(Player player)
     {
@@ -261,7 +259,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
                 {
                     if (Wall.IsAir || Wall.createWall <= WallID.None)
                     {
-                        PickItemInInventory(player, (item) => TryPlaceWall(item, player, x, y), true, out _);
+                        PickItemInInventory(player, item => TryPlaceWall(item, player, x, y), true, out _);
                     }
                     else if (TryPlaceWall(Wall, player, x, y))
                     {
@@ -304,13 +302,13 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
                 {
                     case TileSort.Torch:
                         TryPlace(ref Torch, player, x, y,
-                            (Item item) => item.createTile >= TileID.Dirt && TileID.Sets.Torch[item.createTile]);
+                            item => item.createTile >= TileID.Dirt && TileID.Sets.Torch[item.createTile]);
                         break;
                     case TileSort.Workbench:
-                        TryPlace(ref Workbench, player, x, y, (Item item) => item.createTile == TileID.WorkBenches);
+                        TryPlace(ref Workbench, player, x, y, item => item.createTile == TileID.WorkBenches);
                         break;
                     case TileSort.Chair:
-                        TryPlace(ref Chair, player, x, y, (Item item) => item.createTile == TileID.Chairs);
+                        TryPlace(ref Chair, player, x, y, item => item.createTile == TileID.Chairs);
                         Main.tile[tileDatas[i].x, tileDatas[i].y].TileFrameX += 18;
                         Main.tile[tileDatas[i].x, tileDatas[i].y - 1].TileFrameX += 18;
                         break;
@@ -319,7 +317,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
                     //    TryPlace(ref Table, player, x, y, (Item item) => item.createTile == TileID.Tables);
                     //    break;
                     case TileSort.Bed:
-                        TryPlace(ref Bed, player, x, y, (Item item) => item.createTile == TileID.Beds);
+                        TryPlace(ref Bed, player, x, y, item => item.createTile == TileID.Beds);
                         break;
                 }
             }
@@ -503,7 +501,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
 
                 string neededText = $"[c/ffff00:{GetText($"Architecture.{item.Key}")}: {MaterialConsume[item.Key]}]";
                 string hasText =
-                    $"[c/00a7df:{GetTextWith($"Architecture.StoredMaterials", new {MaterialCount = stack})}]";
+                    $"[c/00a7df:{GetTextWith("Architecture.StoredMaterials", new {MaterialCount = stack})}]";
 
                 tooltips.Add(new(Mod, $"MaterialConsume.{item.Key}", $"{neededText}   {hasText}"));
             }

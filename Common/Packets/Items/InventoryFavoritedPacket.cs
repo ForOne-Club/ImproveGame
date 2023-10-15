@@ -9,7 +9,7 @@ public class InventoryFavoritedPacket : NetModule
 {
     private BitArray _favoritedStates;
     
-    public static void Send(Terraria.Item[] inventory = null)
+    public static void Send(Item[] inventory = null)
     {
         inventory ??= Main.LocalPlayer.inventory;
 

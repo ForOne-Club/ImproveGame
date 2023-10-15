@@ -354,14 +354,14 @@ namespace ImproveGame.Interface.GUI
                 }.SetSize(new Vector2(600f, 6f));
                 panel.SetPadding(6f);
                 return panel;
-            };
+            }
 
             static void Seperate(UIList list)
             {
                 list.Add(QuickTransparentPanel()); // 创建大的空域
                 list.Add(QuickSeparator());
                 list.Add(QuickTransparentPanel()); // 创建大的空域
-            };
+            }
 
             #region 保存
             var panel = QuickTransparentPanel();

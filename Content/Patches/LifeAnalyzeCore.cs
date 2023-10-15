@@ -64,18 +64,13 @@ namespace ImproveGame.Content.Patches
         public static int counter;
         public static int number;
 
-        public override void ModifyDisplayName(InfoDisplay currentDisplay, ref string displayName)
-        {
-            if (currentDisplay == InfoDisplay.LifeformAnalyzer)
-            {
-                displayName += "\n" + GetText("LifeAnalyzer.Tip");
-            }
-        }
-
-        public override void ModifyDisplayValue(InfoDisplay currentDisplay, ref string displayValue)
+        public override void ModifyDisplayParameters(InfoDisplay currentDisplay, ref string displayValue, ref string displayName,
+            ref Color displayColor, ref Color displayShadowColor)
         {
             if (currentDisplay != InfoDisplay.LifeformAnalyzer)
                 return;
+
+            displayName += "\n" + GetText("LifeAnalyzer.Tip");
                 
             const int maxDistance = 1300;
             int maxRarity = 0;
@@ -99,6 +94,14 @@ namespace ImproveGame.Content.Patches
             }
 
             displayValue = (npcIndex is < 0 or >= 200 || !Main.npc[npcIndex].active || Main.npc[npcIndex].rarity <= 0) ? Language.GetTextValue("GameUI.NoRareCreatures") : Main.npc[npcIndex].GivenOrTypeName;
+            if (npcIndex >= 0 && npcIndex < 200 && Main.npc[npcIndex].active && Main.npc[npcIndex].rarity > 0) {
+                displayValue = Main.npc[npcIndex].GivenOrTypeName;
+                Main.instance.DrawInfoAccs_AdjustInfoTextColorsForNPC(Main.npc[npcIndex], ref displayColor, ref displayShadowColor);
+            }
+            else {
+                displayValue = Language.GetTextValue("GameUI.NoRareCreatures");
+                displayColor = new Color(100, 100, 100, Main.mouseTextColor);
+            }
         }
     }
 }

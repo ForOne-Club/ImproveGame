@@ -15,9 +15,12 @@ public class DummyCommand : ModCommand
     {
         Type type = typeof(DummyConfig);
 
-        switch (args.Length) {
+        switch (args.Length)
+        {
             // args[0] equals "info" or "help" ignoring case
-            case 1 when args[0].Equals("info", StringComparison.OrdinalIgnoreCase) || args[0].Equals("help", StringComparison.OrdinalIgnoreCase): {
+            case 1 when args[0].Equals("info", StringComparison.OrdinalIgnoreCase) ||
+                        args[0].Equals("help", StringComparison.OrdinalIgnoreCase):
+                {
                     FieldInfo[] fields = type.GetFields();
 
                     caller.Reply(GetText("NPC.DummyCommand_DummyAttributes"), MyColor.Normal);
@@ -37,13 +40,16 @@ public class DummyCommand : ModCommand
                                 annotate = GetText($"NPC.{annotate.TrimStart('$')}");
                             }
 
-                            caller.Reply($"[{field.FieldType.Name}] {field.Name}: {field.GetValue(DummyNPC.Config)} ({annotate})", MyColor.Normal);
+                            caller.Reply(
+                                $"[{field.FieldType.Name}] {field.Name}: {field.GetValue(DummyNPC.Config)} ({annotate})",
+                                MyColor.Normal);
                         }
                     }
 
                     return;
                 }
-            case 2: {
+            case 2:
+                {
                     string name = args[0];
                     FieldInfo[] fields = type.GetFields();
 
@@ -53,13 +59,15 @@ public class DummyCommand : ModCommand
                         {
                             try
                             {
-                                field.SetValueDirect(__makeref(DummyNPC.Config), Convert.ChangeType(args[1], field.FieldType));
-                                caller.Reply(GetTextWith("NPC.DummyCommand_Success", new { name = name, args = args[1] }), MyColor.Success);
+                                field.SetValueDirect(__makeref(DummyNPC.Config),
+                                    Convert.ChangeType(args[1], field.FieldType));
+                                caller.Reply(GetTextWith("NPC.DummyCommand_Success", new {name, args = args[1]}),
+                                    MyColor.Success);
                                 return;
                             }
                             catch
                             {
-                                caller.Reply(GetTextWith("NPC.DummyCommand_Fail", new { input = input }), MyColor.Fail);
+                                caller.Reply(GetTextWith("NPC.DummyCommand_Fail", new {input}), MyColor.Fail);
                                 return;
                             }
                         }
@@ -69,9 +77,10 @@ public class DummyCommand : ModCommand
                 }
         }
 
-        caller.Reply(GetTextWith("NPC.DummyCommand_Invalid", new { input = input }), MyColor.Fail);
+        caller.Reply(GetTextWith("NPC.DummyCommand_Invalid", new {input}), MyColor.Fail);
     }
 
     public record CommandColor(Color Normal, Color Success, Color Fail);
+
     public CommandColor MyColor = new(new(0, 255, 127), new(0, 200, 0), new(200, 0, 0));
 }

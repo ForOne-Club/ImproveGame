@@ -70,7 +70,7 @@ public class TownNPCHome : ModSystem
                     int accessorySlots = 8 + Main.LocalPlayer.GetAmountOfExtraAccessorySlotsToShow();
                     if (Main.screenHeight < 950 && accessorySlots >= 10)
                     {
-                        yPos -= (int)(56f * 0.85f /*Main.inventoryScale*/ * (float)(accessorySlots - 9));
+                        yPos -= (int)(56f * 0.85f /*Main.inventoryScale*/ * (accessorySlots - 9));
                     }
 
                     // the position of the "housing" icon

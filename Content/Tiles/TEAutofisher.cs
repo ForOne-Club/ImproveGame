@@ -24,8 +24,7 @@ namespace ImproveGame.Content.Tiles
         internal const int checkHeight = 30;
 
         internal string FishingTip { get; private set; } = "Error";
-        internal double FishingTipTimer { get; private set; } = 0;
-        internal int OpenAnimationTimer = 0;
+        internal double FishingTipTimer { get; private set; }
 
         public bool CatchCrates = true;
         public bool CatchAccessories = true;

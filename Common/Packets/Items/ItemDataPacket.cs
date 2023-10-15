@@ -24,7 +24,7 @@ public record ItemPosition(byte player, int slot)
 [AutoSync]
 public class InventoryItemDataPacket : NetModule
 {
-    [ItemSync(syncFavorite: true)] private Terraria.Item _item;
+    [ItemSync(syncFavorite: true)] private Item _item;
     // 0: 检验存在，若true，则只有物品存在时才设置物品，否则不进行操作（可以避免复制物品）
     // 1: 是否设置item.favorited
     // 2: 是否在物品槽已存在物品时生成物品

@@ -7,10 +7,6 @@ namespace ImproveGame.Interface.ExtremeStorage
     public class SettingsPage : View
     {
         private TEExtremeStorage Storage => ExtremeStorageGUI.Storage;
-        private readonly LongSwitch _recipesSwitch;
-        private readonly LongSwitch _buffsSwitch;
-        private readonly LongSwitch _stationsSwitch;
-        private readonly LongSwitch _bannersSwitch;
 
         public SettingsPage()
         {
@@ -18,7 +14,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             Width.Set(0f, 1f);
             Height.Set(0f, 1f);
             
-            _recipesSwitch = new LongSwitch(() => Storage.UseForCrafting,
+            LongSwitch recipesSwitch = new(() => Storage.UseForCrafting,
                 state =>
                 {
                     Storage.UseForCrafting = state;
@@ -29,9 +25,9 @@ namespace ImproveGame.Interface.ExtremeStorage
                 First = true,
                 Relative = RelativeMode.Vertical
             };
-            _recipesSwitch.Join(this);
+            recipesSwitch.Join(this);
             
-            _buffsSwitch = new LongSwitch(
+            LongSwitch buffsSwitch = new(
                 () => Storage.UseUnlimitedBuffs,
                 state =>
                 {
@@ -42,9 +38,9 @@ namespace ImproveGame.Interface.ExtremeStorage
             {
                 Relative = RelativeMode.Vertical
             };
-            _buffsSwitch.Join(this);
+            buffsSwitch.Join(this);
             
-            _stationsSwitch = new LongSwitch(
+            LongSwitch stationsSwitch = new(
                 () => Storage.UsePortableStations,
                 state =>
                 {
@@ -56,9 +52,9 @@ namespace ImproveGame.Interface.ExtremeStorage
             {
                 Relative = RelativeMode.Vertical
             };
-            _stationsSwitch.Join(this);
+            stationsSwitch.Join(this);
             
-            _bannersSwitch = new LongSwitch(
+            LongSwitch bannersSwitch = new(
                 () => Storage.UsePortableBanner,
                 state =>
                 {
@@ -70,7 +66,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             {
                 Relative = RelativeMode.Vertical
             };
-            _bannersSwitch.Join(this);
+            bannersSwitch.Join(this);
             
             var uiText = new UIText(GetText("UI.ExtremeStorage.BasicIntroduction"))
             {

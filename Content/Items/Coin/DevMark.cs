@@ -40,7 +40,7 @@ public class Expelliarmus : ModItem
             Projectile.Kill();
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             if (!Main.player.IndexInRange(Projectile.owner))
                 return;

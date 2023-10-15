@@ -112,7 +112,7 @@ public class DummyNPC : ModNPC
 
         sb.Draw(texture2D, position + fSize / 2f,
             npc.frame, drawColor, npc.rotation, fSize / 2f, npc.scale,
-            npc.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f); ;
+            npc.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
 
         if (Config.ShowDamageData)
         {

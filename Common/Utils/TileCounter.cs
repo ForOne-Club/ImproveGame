@@ -58,7 +58,7 @@ namespace ImproveGame.Common.Utils
         }
 
         public void Load(Mod mod) {
-            Terraria.IL_Player.UpdateBiomes += SimulateUpdateBiomes;
+            IL_Player.UpdateBiomes += SimulateUpdateBiomes;
         }
 
         private void SimulateUpdateBiomes(ILContext il)

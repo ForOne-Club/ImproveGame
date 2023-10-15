@@ -304,8 +304,8 @@ public class PrefixTab : SUIPanel
             textColor = new Color(255, (int)(Main.masterColor * 200f), 0);
         else if (item.expert || item.rare == ItemRarityID.Expert)
             textColor = Main.DiscoColor;
-        else if (RarityColors.ContainsKey(item.rare))
-            textColor = RarityColors[item.rare];
+        else if (RarityColors.TryGetValue(item.rare, out Color color))
+            textColor = color;
         if (item.rare >= ItemRarityID.Count)
             textColor = RarityLoader.GetRarity(item.rare).RarityColor;
         position.Y += 6f;

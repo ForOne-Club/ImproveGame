@@ -228,7 +228,6 @@ public class ToolOperation : NetModule
         if (Main.netMode is NetmodeID.MultiplayerClient) return;
 
         var player = Main.player[Sender];
-        bool shouldPlaySound = false;
         Item[] inventory = player.inventory;
         // 速查表，用于快速判断某个物品ID是否在物品栏中拥有，且可能可以堆叠
         var storageItemIds = new HashSet<int>();
