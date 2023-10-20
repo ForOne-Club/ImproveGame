@@ -25,6 +25,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - Destructive wands could not destroy certain grass blocks in one go
 - Instant Home Teleportation respawns players when they should be waiting for respawn
 - Wand of Liquid not functioning when its panel is closed
+- **[v1.6.6.1]** 修复了模组增益站失效的BUG
 ## Adjustments
 - Tiles under Fishing Machine are now breakable
 - Added a hotkey to open mod configs

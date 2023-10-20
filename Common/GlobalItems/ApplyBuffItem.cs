@@ -90,11 +90,8 @@ namespace ImproveGame.Common.GlobalItems
                 }
             }
             // 其他Mod的，自行添加了引用
-            foreach (var moddedBuff in ModIntegrationsSystem.ModdedPlaceableItemBuffs) {
-                if (item.type == moddedBuff.Key) {
-                    buffTypes.AddRange(moddedBuff.Value);
-                }
-            }
+            if (ModIntegrationsSystem.ModdedPlaceableItemBuffs.TryGetValue(item.type, out var moddedBuffs))
+                buffTypes.AddRange(moddedBuffs);
             return buffTypes.Count > 0;
         }
 

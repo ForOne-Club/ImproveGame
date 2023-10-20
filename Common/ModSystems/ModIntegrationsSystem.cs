@@ -211,9 +211,9 @@ public class ModIntegrationsSystem : ModSystem
     private static void AddBuffIntegration(Mod mod, string itemName, string buffName, bool isPlaceable)
     {
         if (isPlaceable)
-            ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = new List<int>(mod.Find<ModBuff>(buffName).Type);
+            ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> {mod.Find<ModBuff>(buffName).Type};
         else
-            ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = new List<int>(mod.Find<ModBuff>(buffName).Type);
+            ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> {mod.Find<ModBuff>(buffName).Type};
     }
 
     public override void Unload()
@@ -290,7 +290,7 @@ public class ModIntegrationsSystem : ModSystem
         }
 
         static List<int> AsListOfInt(object data) =>
-            data is List<int> ? data as List<int> : new List<int>() {Convert.ToInt32(data)};
+            data as List<int> ?? new List<int> {Convert.ToInt32(data)};
 
         return false;
     }
