@@ -11,7 +11,8 @@ namespace ImproveGame.Common.GlobalItems
 {
     public class ApplyBuffItem : GlobalItem
     {
-        public static void UpdateInventoryGlow(Item item) {
+        public static void UpdateInventoryGlow(Item item)
+        {
             bool globalItemNotNull = item.TryGetGlobalItem<GlobalItemData>(out var globalItem);
             if (globalItemNotNull)
                 globalItem.InventoryGlow = false;
@@ -28,7 +29,8 @@ namespace ImproveGame.Common.GlobalItems
             });
 
             // 非增益药剂
-            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && Lookups.SpecialPotions.Contains(item.type) && globalItemNotNull)
+            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement &&
+                Lookups.SpecialPotions.Contains(item.type) && globalItemNotNull)
                 globalItem.InventoryGlow = true;
 
             // 红药水扩展
@@ -48,7 +50,8 @@ namespace ImproveGame.Common.GlobalItems
                 globalItem.InventoryGlow = true;
         }
 
-        public static List<int> GetItemBuffType(Item item) {
+        public static List<int> GetItemBuffType(Item item)
+        {
             if (ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type))
                 return new List<int>();
             if (Config.NoConsume_Potion)
@@ -74,21 +77,25 @@ namespace ImproveGame.Common.GlobalItems
                     return buffTypes;
 
                 if (item.type == ItemID.HoneyBucket)
-                {
-                    return new List<int>(BuffID.Honey);
-                }
+                    return new List<int> {BuffID.Honey};
             }
+
             return new List<int>();
         }
 
-        public static bool IsBuffTileItem(Item item, out List<int> buffTypes) {
+        public static bool IsBuffTileItem(Item item, out List<int> buffTypes)
+        {
             // 会给玩家buff的雕像
             buffTypes = new List<int>();
-            for (int i = 0; i < Lookups.BuffTiles.Count; i++) {
-                if (item.createTile == Lookups.BuffTiles[i].TileID && (item.placeStyle == Lookups.BuffTiles[i].Style || Lookups.BuffTiles[i].Style == -1)) {
+            for (int i = 0; i < Lookups.BuffTiles.Count; i++)
+            {
+                if (item.createTile == Lookups.BuffTiles[i].TileID && (item.placeStyle == Lookups.BuffTiles[i].Style ||
+                                                                       Lookups.BuffTiles[i].Style == -1))
+                {
                     buffTypes.Add(Lookups.BuffTiles[i].BuffID);
                 }
             }
+
             // 其他Mod的，自行添加了引用
             if (ModIntegrationsSystem.ModdedPlaceableItemBuffs.TryGetValue(item.type, out var moddedBuffs))
                 buffTypes.AddRange(moddedBuffs);
@@ -96,23 +103,29 @@ namespace ImproveGame.Common.GlobalItems
         }
 
         // 物品消耗
-        public override bool ConsumeItem(Item item, Player player) {
+        public override bool ConsumeItem(Item item, Player player)
+        {
             if (item.ModItem?.Mod.Name is "Everglow") return base.ConsumeItem(item, player);
-            
-            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement && (item.buffType > 0 || Lookups.SpecialPotions.Contains(item.type))) {
+
+            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement &&
+                (item.buffType > 0 || Lookups.SpecialPotions.Contains(item.type)))
+            {
                 return false;
             }
+
             return base.ConsumeItem(item, player);
         }
 
         private static bool _oldMiddlePressed;
 
-        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
             if (!item.TryGetGlobalItem<GlobalItemData>(out var global) || !global.InventoryGlow)
                 return;
 
             if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket || item.type == ItemID.GardenGnome ||
-                (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
+                (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
+            {
                 var buffTypes = GetItemBuffType(item);
                 buffTypes.ForEach(buffType =>
                 {
@@ -148,7 +161,8 @@ namespace ImproveGame.Common.GlobalItems
             }
         }
 
-        public override bool PreDrawTooltip(Item item, ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y) {
+        public override bool PreDrawTooltip(Item item, ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
+        {
             if (!item.TryGetGlobalItem<GlobalItemData>(out var global) || !global.InventoryGlow)
                 return base.PreDrawTooltip(item, lines, ref x, ref y);
 
@@ -159,7 +173,8 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket ||
-                (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active)) {
+                (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
+            {
                 var buffTypes = GetItemBuffType(item);
 
                 foreach (int buffType in buffTypes)
