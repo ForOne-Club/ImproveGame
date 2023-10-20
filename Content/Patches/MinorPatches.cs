@@ -320,7 +320,7 @@ namespace ImproveGame.Content.Patches
             // 固定 NPC 快乐度为指定数值
             IL_ShopHelper.GetShoppingSettings += ModifyNPCHappiness;
             // 狱火圈半透明
-            On_Main.DrawInfernoRings += TranslucentInfernoRings;
+            IL_Main.DrawInfernoRings += TranslucentInfernoRings;
             // 任务鱼可堆叠
             On_Projectile.FishingCheck_ProbeForQuestFish += PatchQuestFishCheck;
         }
@@ -344,55 +344,35 @@ namespace ImproveGame.Content.Patches
                 fisher.questFish = -1;
         }
 
-        private void TranslucentInfernoRings(On_Main.orig_DrawInfernoRings orig, Main self)
+        private void TranslucentInfernoRings(ILContext il)
         {
-            // orig.Invoke(self);
+            // IL_016d: ldc.r4       0.8
+            // IL_0172: ldc.r4       0.0
+            // IL_0177: ldloc.s      scale
+            // IL_0179: ldloc.3      // num2
+            // IL_017a: sub
+            // IL_017b: call         float32 [System.Runtime]System.Math::Abs(float32)
+            // IL_0180: ldc.r4       10
+            // IL_0185: mul
+            // IL_0186: call         float32 [FNA]Microsoft.Xna.Framework.MathHelper::Lerp(float32, float32, float32)
+            // IL_018b: stloc.s      num3
+            var c = new ILCursor(il);
+            if (!c.TryGotoNext(
+                    MoveType.After,
+                    i => i.MatchLdcR4(0.8f),
+                    i => i.MatchLdcR4(0.0f),
+                    i => i.Match(OpCodes.Ldloc_S),
+                    i => i.Match(OpCodes.Ldloc_3),
+                    i => i.Match(OpCodes.Sub),
+                    i => i.Match(OpCodes.Call),
+                    i => i.Match(OpCodes.Ldc_R4),
+                    i => i.Match(OpCodes.Mul),
+                    i => i.Match(OpCodes.Call)))
+                return;
 
-            for (int i = 0; i < Main.maxPlayers; i++)
-            {
-                var player = Main.player[i];
-                if (!player.active || player.outOfRange || !player.inferno || player.dead)
-                    continue;
-
-                self.LoadFlameRing();
-                float num;
-                float num2 = 0.1f;
-                float num3 = 0.9f;
-                if (!Main.gamePaused && self.IsActive)
-                    player.flameRingScale += 0.004f;
-
-                if (player.flameRingScale < 1f)
-                {
-                    num = player.flameRingScale;
-                }
-                else
-                {
-                    player.flameRingScale = 0.8f;
-                    num = player.flameRingScale;
-                }
-
-                if (!Main.gamePaused && self.IsActive)
-                    player.flameRingRot += 0.05f;
-
-                if (player.flameRingRot > (float)Math.PI * 2f)
-                    player.flameRingRot -= (float)Math.PI * 2f;
-
-                if (player.flameRingRot < (float)Math.PI * -2f)
-                    player.flameRingRot += (float)Math.PI * 2f;
-
-                for (int j = 0; j < 3; j++)
-                {
-                    float num4 = num + num2 * j;
-                    if (num4 > 1f)
-                        num4 -= num2 * 2f;
-
-                    float num5 = MathHelper.Lerp(0.8f, 0f, Math.Abs(num4 - num3) * 10f);
-                    var color = new Color(num5, num5, num5, num5 / 2f) * UIConfigs.Instance.InfernoTransparency;
-                    Main.spriteBatch.Draw(TextureAssets.FlameRing.Value, player.Center - Main.screenPosition,
-                        new Rectangle(0, 400 * j, 400, 400), color, player.flameRingRot + (float)Math.PI / 3f * j,
-                        new Vector2(200f, 200f), num4, SpriteEffects.None, 0f);
-                }
-            }
+            c.EmitCall(typeof(UIConfigs).GetProperty(nameof(UIConfigs.Instance))!.GetGetMethod()!);
+            c.EmitLdfld(typeof(UIConfigs).GetField("InfernoTransparency")!);
+            c.EmitMul();
         }
 
         private void LiveInCorrupt(ILContext il)

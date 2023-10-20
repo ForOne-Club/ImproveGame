@@ -10,6 +10,7 @@
 The mod name have changed to Quality of Terraria since v1.6.6.0
 ## Subversions
 - v1.6.6.0
+- v1.6.6.1
 ## Additions
 - Locators, to indicate structures on map
 - Item Finder, to quickly find items in chests and personal inventories
@@ -25,7 +26,8 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - Destructive wands could not destroy certain grass blocks in one go
 - Instant Home Teleportation respawns players when they should be waiting for respawn
 - Wand of Liquid not functioning when its panel is closed
-- **[v1.6.6.1]** 修复了模组增益站失效的BUG
+- **[v1.6.6.1]** Modded buff stations don't apply buffs
+- **[v1.6.6.1]** Some modded vfx is invisible
 ## Adjustments
 - Tiles under Fishing Machine are now breakable
 - Added a hotkey to open mod configs
