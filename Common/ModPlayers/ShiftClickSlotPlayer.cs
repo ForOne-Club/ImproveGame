@@ -127,7 +127,7 @@ namespace ImproveGame.Common.ModPlayers
                     AutofisherGUI.RequireRefresh = true;
                     UISystem.Instance.AutofisherGUI.RefreshItems();
                     if (Main.netMode == NetmodeID.MultiplayerClient)
-                        for (int i = 0; i <= 14; i++)
+                        for (int i = 0; i < fisher.fish.Length; i++)
                             ItemSyncPacket.Get(fisher.ID, (byte)i).Send(runLocally: false);
                     Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);

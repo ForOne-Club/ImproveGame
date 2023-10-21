@@ -19,7 +19,7 @@ namespace ImproveGame.Content.Tiles
         internal Item fishingPole = new();
         internal Item bait = new();
         internal Item accessory = new();
-        internal Item[] fish = new Item[15];
+        internal Item[] fish = new Item[40];
         internal const int checkWidth = 50;
         internal const int checkHeight = 30;
 
@@ -71,7 +71,7 @@ namespace ImproveGame.Content.Tiles
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
         {
-            for (int k = 0; k < 15; k++)
+            for (int k = 0; k < fish.Length; k++)
             {
                 fish[k] = new();
             }
@@ -132,7 +132,7 @@ namespace ImproveGame.Content.Tiles
 
             // 钓鱼机内每条 Bass 将提供 10% 的钓鱼速度加成，最高可达 500% 加成
             int bassCount = 0;
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < fish.Length; i++)
             {
                 if (fish[i].type == ItemID.Bass)
                 {
@@ -140,6 +140,10 @@ namespace ImproveGame.Content.Tiles
                 }
             }
             fishingSpeedBonus += Math.Min(bassCount * 0.1f, 5f);
+            
+            // 肉后提升300%钓鱼速度
+            if (Main.hardMode)
+                fishingSpeedBonus += 3f;
 
             const float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版钓鱼速度是660
             int multipleLures = Math.Max(1, ModIntegrationsSystem.MultipleLuresAmount); // 多线钓鱼Mod兼容
@@ -215,7 +219,7 @@ namespace ImproveGame.Content.Tiles
                     if (bait.stack <= 0)
                         bait = new();
 
-                    UISystem.Instance.AutofisherGUI.RefreshItems(16);
+                    UISystem.Instance.AutofisherGUI.RefreshItems(ItemSyncPacket.Bait);
                 }
                 return;
             }
@@ -402,7 +406,7 @@ namespace ImproveGame.Content.Tiles
             Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16), item, item.stack);
 
             // 先填充和物品相同的
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < fish.Length; i++)
             {
                 int oldStackSlot = fish[i].stack;
                 item = ItemStackToInventoryItem(fish, i, item, false);
@@ -420,7 +424,7 @@ namespace ImproveGame.Content.Tiles
                     goto FilledEnd;
             }
             // 后填充空位
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < fish.Length; i++)
             {
                 if (fish[i].IsAir)
                 {
@@ -444,11 +448,11 @@ namespace ImproveGame.Content.Tiles
                     // 没了
                     if (bait.IsAir)
                     {
-                        ItemSyncPacket.Get(ID, 16).Send(runLocally: false);
+                        ItemSyncPacket.Get(ID, ItemSyncPacket.Bait).Send(runLocally: false);
                     }
                     else // 还在，同步stack
                     {
-                        ItemsStackChangePacket.Get(ID, 16, -1).Send(runLocally: false);
+                        ItemsStackChangePacket.Get(ID, ItemSyncPacket.Bait, -1).Send(runLocally: false);
                     }
                 }
             }
@@ -695,7 +699,7 @@ namespace ImproveGame.Content.Tiles
                 SpawnDropItem(ref bait);
             if (!accessory.IsAir)
                 SpawnDropItem(ref accessory);
-            for (int k = 0; k < 15; k++)
+            for (int k = 0; k < fish.Length; k++)
                 if (!fish[k].IsAir)
                     SpawnDropItem(ref fish[k]);
         }
@@ -731,7 +735,8 @@ namespace ImproveGame.Content.Tiles
 
             if (tag.ContainsKey("fishes"))
                 fish = tag.Get<Item[]>("fishes");
-            for (int i = 0; i < 15; i++)
+            Array.Resize(ref fish, 40); // 旧版兼容
+            for (int i = 0; i < fish.Length; i++)
                 if (tag.ContainsKey($"fish{i}"))
                     fish[i] = tag.Get<Item>($"fish{i}");
 

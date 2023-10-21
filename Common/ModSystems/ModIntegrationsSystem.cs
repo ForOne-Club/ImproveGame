@@ -192,6 +192,9 @@ public class ModIntegrationsSystem : ModSystem
         if (!ModLoader.HasMod("MultipleLures"))
             return;
 
+        // Config是客户端的，服务器就给10个意思意思
+        if (Main.dedServ) MultipleLuresAmount = 10;
+
         string luresConfigPath = Path.Combine(ConfigManager.ModConfigPath, "MultipleLures_Configuration.json");
         if (!File.Exists(luresConfigPath))
             return;

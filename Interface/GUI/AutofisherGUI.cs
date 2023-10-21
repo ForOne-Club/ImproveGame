@@ -28,7 +28,7 @@ namespace ImproveGame.Interface.GUI
         private ModItemSlot accessorySlot = new();
         private ModItemSlot fishingPoleSlot = new();
         private ModItemSlot baitSlot = new();
-        private FishItemSlot[] fishSlot = new FishItemSlot[15];
+        private FishItemSlot[] fishSlot = new FishItemSlot[40];
         private UIText tipText;
         private UIText title;
         private UIImage relocateButton;
@@ -41,6 +41,7 @@ namespace ImproveGame.Interface.GUI
             float widthNext = basePanel.GetDimensions().Width;
             float shownPositionNext = panelLeft;
             float hiddenPositionNext = -widthNext - 40;
+            Main.hidePlayerCraftingMenu = true;
                 
             basePanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, shownPositionNext, factor), 0f);
             basePanel.Recalculate();
@@ -50,8 +51,8 @@ namespace ImproveGame.Interface.GUI
         {
             panelTop = Main.instance.invBottom + 60;
             panelLeft = 100f;
-            panelHeight = 256f;
-            panelWidth = 280f;
+            panelHeight = 356f;
+            panelWidth = 420f;
 
             basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
             {
@@ -61,7 +62,7 @@ namespace ImproveGame.Interface.GUI
             Append(basePanel);
 
             accessorySlot = CreateItemSlot(
-                25f, 0f,
+                100f, 0f,
                 canPlace: (i, item) => SlotPlace(i, item) || ModIntegrationsSystem.FishingStatLookup.ContainsKey(item.type),
                 onItemChanged: ChangeAccessorySlot,
                 emptyText: () => GetText("Autofisher.Accessory"),
@@ -72,7 +73,7 @@ namespace ImproveGame.Interface.GUI
             accessorySlot.AllowFavorite = false;
 
             fishingPoleSlot = CreateItemSlot(
-                75f, 0f,
+                150, 0f,
                 canPlace: (i, item) => SlotPlace(i, item) || item.fishingPole > 0,
                 onItemChanged: ChangeFishingPoleSlot,
                 emptyText: () => GetText("Autofisher.FishingPole"),
@@ -83,7 +84,7 @@ namespace ImproveGame.Interface.GUI
             fishingPoleSlot.AllowFavorite = false;
 
             baitSlot = CreateItemSlot(
-                125f, 0f,
+                200f, 0f,
                 canPlace: (i, item) => SlotPlace(i, item) || item.bait > 0,
                 onItemChanged: ChangeBaitSlot,
                 emptyText: () => GetText("Autofisher.Bait"),
@@ -97,8 +98,8 @@ namespace ImproveGame.Interface.GUI
             const int slotFirst = 50;
             for (int i = 0; i < fishSlot.Length; i++)
             {
-                int x = i % 5 * slotFirst;
-                int y = i / 5 * slotFirst + slotFirst;
+                int x = i % 8 * slotFirst;
+                int y = i / 8 * slotFirst + slotFirst;
                 fishSlot[i] = new(i);
                 fishSlot[i].SetPos(x, y);
                 fishSlot[i].SetSize(46f, 46f);
@@ -122,7 +123,7 @@ namespace ImproveGame.Interface.GUI
             textPanel = new(UIColor.TitleBg, UIColor.TitleBg, rounded: 10)
             {
                 HAlign = 0.5f,
-                Top = StyleDimension.FromPixels(200f),
+                Top = {Pixels = -34f, Percent = 1f},
                 Width = StyleDimension.FromPercent(1f),
                 Height = StyleDimension.FromPixels(30f)
             };
@@ -138,7 +139,7 @@ namespace ImproveGame.Interface.GUI
             selectPoolOff = GetTexture("UI/Autofisher/SelectPoolOff");
             selectPoolOn = GetTexture("UI/Autofisher/SelectPoolOn");
             relocateButton = new(selectPoolOff);
-            relocateButton.Left.Set(175f, 0f);
+            relocateButton.Left.Set(250f, 0f);
             relocateButton.Top.Set(0f, 0f);
             relocateButton.Width.Set(46f, 0f);
             relocateButton.Height.Set(46f, 0f);
@@ -188,7 +189,7 @@ namespace ImproveGame.Interface.GUI
             autofisher.accessory = item;
             if (Main.netMode is NetmodeID.MultiplayerClient)
             {
-                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher.ID, 17).Send(runLocally: false);
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher.ID, ItemSyncPacket.Accessory).Send(runLocally: false);
             }
         }
 
@@ -201,7 +202,7 @@ namespace ImproveGame.Interface.GUI
             autofisher.fishingPole = item;
             if (Main.netMode is NetmodeID.MultiplayerClient)
             {
-                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher.ID, 15).Send(runLocally: false);
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher.ID, ItemSyncPacket.FishingPole).Send(runLocally: false);
             }
         }
 
@@ -214,7 +215,7 @@ namespace ImproveGame.Interface.GUI
             autofisher.bait = item;
             if (Main.netMode is NetmodeID.MultiplayerClient && !rightClick)
             {
-                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher.ID, 16).Send(runLocally: false);
+                ItemSyncPacket.Get(AutofishPlayer.LocalPlayer.Autofisher.ID, ItemSyncPacket.Bait).Send(runLocally: false);
             }
         }
 
@@ -225,7 +226,7 @@ namespace ImproveGame.Interface.GUI
                 return;
             if (!typeChange && stackChange != 0)
             {
-                ItemsStackChangePacket.Get(AutofishPlayer.LocalPlayer.Autofisher.ID, 16, stackChange).Send(runLocally: false);
+                ItemsStackChangePacket.Get(AutofishPlayer.LocalPlayer.Autofisher.ID, ItemSyncPacket.Bait, stackChange).Send(runLocally: false);
             }
         }
 
@@ -253,7 +254,7 @@ namespace ImproveGame.Interface.GUI
             }
         }
 
-        public void RefreshItems(byte slotType = 18)
+        public void RefreshItems(byte slotType = ItemSyncPacket.All)
         {
             if (Main.netMode is NetmodeID.MultiplayerClient)
             {
@@ -281,7 +282,7 @@ namespace ImproveGame.Interface.GUI
                 fishingPoleSlot.Item = autofisher.fishingPole;
                 baitSlot.Item = autofisher.bait;
                 accessorySlot.Item = autofisher.accessory;
-                for (int i = 0; i < 15; i++)
+                for (int i = 0; i < fishSlot.Length; i++)
                 {
                     fishSlot[i].Item = autofisher.fish[i];
                 }
@@ -470,6 +471,9 @@ namespace ImproveGame.Interface.GUI
         public override void Update(GameTime gameTime)
         {
             _timer.Update();
+
+            // 是否开启制作栏侧栏
+            Main.hidePlayerCraftingMenu = true;
         }
 
         public override void DrawSelf(SpriteBatch spriteBatch)

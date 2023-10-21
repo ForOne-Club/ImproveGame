@@ -197,6 +197,9 @@ namespace ImproveGame.Interface.ExtremeStorage
 
         public void OnSwapSlide(float factor)
         {
+            // 是否开启制作栏侧栏
+            Main.hidePlayerCraftingMenu |= !DisplayCrafting;
+
             float widthNext = _totalPanel.GetDimensions().Width;
             float shownPositionNext = MathHelper.Lerp(60, 20, _foldTimer.Schedule);
             float hiddenPositionNext = -widthNext - 78;

@@ -40,6 +40,8 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - Some chat notifications are now pop-up notifications
 - Improved `Mod.Call` for `AddPotion` and `AddStation`
 - Added `Mod.Call` support for Fishing Machine
+- **[v1.6.6.1]** Expanded the Fishing Machine to 40 slots
+- **[v1.6.6.1]** The fishing speed of Fishing Machine is increased by 300% in Hardmode now
 
 # v1.6.5
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
