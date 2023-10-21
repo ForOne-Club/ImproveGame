@@ -20,6 +20,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - Scarecrow Dummy, a configurable damage-testing dummy (not in multiplayer yet)
 - "Infinite Wand Placables" config option, you can turn it off now
 - "Stackable Quest Fishes" config option
+- Ability to see what items an item can be shimmered into
 ## BUG Fixes
 - Breaking Fishing Machine on tables crashes the game
 - Unable to disable Lucky Coin

@@ -40,6 +40,9 @@ public class UIConfigs : ModConfig
     [DefaultValue(false)]
     public bool ShowMoreData;
 
+    [DefaultValue(true)]
+    public bool ShowShimmerInfo;
+
     public enum PAPDisplayMode
     {
         AlwaysDisplayed, WhenOpeningBackpack, NotDisplayed

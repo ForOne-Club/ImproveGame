@@ -6,6 +6,7 @@ using ImproveGame.Interface.SUIElements;
 using Microsoft.Xna.Framework.Input;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Terraria.GameContent.UI.Chat;
 using Terraria.ID;
 
 namespace ImproveGame.Common.GlobalItems
@@ -47,8 +48,8 @@ namespace ImproveGame.Common.GlobalItems
         public override void UseAnimation(Item item, Player player)
         {
             if (item.type is ItemID.MagicMirror or ItemID.CellPhone or ItemID.IceMirror or ItemID.Shellphone
-                or ItemID.ShellphoneOcean or ItemID.ShellphoneHell or ItemID.ShellphoneSpawn or ItemID.MagicConch
-                or ItemID.DemonConch && UIConfigs.Instance.MagicMirrorInstantTp)
+                    or ItemID.ShellphoneOcean or ItemID.ShellphoneHell or ItemID.ShellphoneSpawn or ItemID.MagicConch
+                    or ItemID.DemonConch && UIConfigs.Instance.MagicMirrorInstantTp)
             {
                 player.SetItemTime(CombinedHooks.TotalUseTime(item.useTime, player, item));
                 player.itemTime = player.itemTimeMax / 2 + 4;
@@ -168,11 +169,29 @@ namespace ImproveGame.Common.GlobalItems
         {
             ((IItemMiddleClickable)this).HandleTooltips(item, tooltips);
 
+            TooltipShimmer(item, tooltips);
+            TooltipMoreData(item, tooltips);
+        }
+
+        private void TooltipShimmer(Item item, List<TooltipLine> tooltips)
+        {
+            if (!UIConfigs.Instance.ShowShimmerInfo) return;
+
+            var items = CollectHelper.GetShimmerResult(item, out int stackRequired);
+            if (items is null) return;
+
+            string text = stackRequired is not 1
+                ? GetText("Tips.ShimmerIntoWithStack", stackRequired)
+                : GetText("Tips.ShimmerInto");
+            items.ForEach(i => text += ItemTagHandler.GenerateTag(i));
+            tooltips.Add(new TooltipLine(Mod, "ShimmerResult", text) {OverrideColor = new Color(241, 175, 233)});
+        }
+
+        private void TooltipMoreData(Item item, List<TooltipLine> tooltips)
+        {
             // 更多信息
             if (!UIConfigs.Instance.ShowMoreData)
-            {
                 return;
-            }
 
             tooltips.Add(new(Mod, "Rare", $"Rare: {item.rare}"));
             tooltips.Add(new(Mod, "Type", "Type: " + item.type));

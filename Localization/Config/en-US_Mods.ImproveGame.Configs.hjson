@@ -826,6 +826,11 @@ UIConfigs: {
 		Tooltip: Quality of Terraria's UI color scheme.
 		Label: "[g:12] UI Color Scheme"
 	}
+
+	ShowShimmerInfo: {
+		Label: "[centeritem:BottomlessShimmerBucket] Show Shimmer Info"
+		Tooltip: Show what items an item can be shimmered into in the tooltip.
+	}
 }
 
 PAPDisplayMode: {

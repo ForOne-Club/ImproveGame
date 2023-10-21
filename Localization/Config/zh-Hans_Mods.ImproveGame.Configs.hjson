@@ -829,6 +829,11 @@ UIConfigs: {
 		Tooltip: 控制更好的体验UI的整体配色方案
 		Label: "[g:12] UI主题"
 	}
+
+	ShowShimmerInfo: {
+		Label: "[centeritem:BottomlessShimmerBucket] 显示微光转化信息"
+		Tooltip: 显示某个物品的微光转化结果
+	}
 }
 
 PAPDisplayMode: {
