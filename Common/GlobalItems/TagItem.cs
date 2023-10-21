@@ -32,12 +32,12 @@ namespace ImproveGame.Common.GlobalItems
         /// <summary>
         /// 为药水物品简介添加Tag标题文本
         /// </summary>
-        public static void ModifyBuffTooltips(Mod Mod, int itemType, int buffType, List<TooltipLine> tooltips) {
+        public static void ModifyBuffTooltips(Mod mod, int itemType, int buffType, List<TooltipLine> tooltips) {
             bool buffEnabled = InfBuffPlayer.CheckInfBuffEnable(buffType);
 
             if (itemType is ItemID.GardenGnome)
             {
-                tooltips.Add(new(Mod, "TagDetailed.GardenGnome", GetText("Tips.TagDetailed.GardenGnome"))
+                tooltips.Add(new(mod, "TagDetailed.GardenGnome", GetText("Tips.TagDetailed.GardenGnome"))
                 {
                     OverrideColor = Color.SkyBlue
                 });
@@ -48,32 +48,19 @@ namespace ImproveGame.Common.GlobalItems
             // 是否被增益追踪器禁用
             if (!buffEnabled)
             {
-                tooltips.Add(new(Mod, "TagDetailed.Disabled", GetText("Tips.TagDetailed.Disabled"))
+                tooltips.Add(new(mod, "TagDetailed.Disabled", GetText("Tips.TagDetailed.Disabled"))
                 {
                     OverrideColor = Color.SkyBlue
                 });
             }
             else
             {
-                tooltips.Add(new(Mod, "TagDetailed.Enabled", GetText("Tips.TagDetailed.Enabled"))
+                tooltips.Add(new(mod, "TagDetailed.Enabled", GetText("Tips.TagDetailed.Enabled"))
                 {
                     OverrideColor = Color.SkyBlue
                 });
-                // 图标是否被隐藏
-                if (Config.HideNoConsumeBuffs)
-                {
-                    tooltips.Add(new(Mod, "TagDetailed.Hided", GetText("Tips.TagDetailed.Hided"))
-                    {
-                        OverrideColor = Color.LightGreen
-                    });
-                }
-                else
-                {
-                    tooltips.Add(new(Mod, "TagDetailed.NonHided", GetText("Tips.TagDetailed.NonHided"))
-                    {
-                        OverrideColor = Color.LightGreen
-                    });
-                }
+
+                AddIconHiddenTooltips(mod, tooltips);
             }
 
             // 可能的组合增益
@@ -81,7 +68,7 @@ namespace ImproveGame.Common.GlobalItems
             {
                 if (dict.Value.Contains(itemType))
                 {
-                    tooltips.Add(new(Mod, $"CombinedBuff.{dict.Key}", GetText("Tips.TagDetailed.CombinedBuff"))
+                    tooltips.Add(new(mod, $"CombinedBuff.{dict.Key}", GetText("Tips.TagDetailed.CombinedBuff"))
                     {
                         OverrideColor = Color.Turquoise
                     });
@@ -89,6 +76,25 @@ namespace ImproveGame.Common.GlobalItems
             }
 
             AddShiftForMoreTooltip(tooltips);
+        }
+
+        public static void AddIconHiddenTooltips(Mod mod, List<TooltipLine> tooltips)
+        {
+            // 图标是否被隐藏
+            if (Config.HideNoConsumeBuffs)
+            {
+                tooltips.Add(new TooltipLine(mod, "TagDetailed.Hided", GetText("Tips.TagDetailed.Hided"))
+                {
+                    OverrideColor = Color.LightGreen
+                });
+            }
+            else
+            {
+                tooltips.Add(new TooltipLine(mod, "TagDetailed.NonHided", GetText("Tips.TagDetailed.NonHided"))
+                {
+                    OverrideColor = Color.LightGreen
+                });
+            }
         }
         
         public static void AddShiftForMoreTooltip(List<TooltipLine> tooltips)

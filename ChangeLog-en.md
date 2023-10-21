@@ -30,6 +30,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - **[v1.6.6.1]** Some modded vfx is invisible
 - **[v1.6.6.1]** Storage Manager category icon displays Stormdark theme icon under Classic theme
 - **[v1.6.6.1]** The festival feature (Christmas & Halloween) ignores the system time
+- **[v1.6.6.1]** "Any Gem" is shown as a localization key
 ## Adjustments
 - Tiles under Fishing Machine are now breakable
 - Added a hotkey to open mod configs

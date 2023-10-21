@@ -18,7 +18,8 @@ namespace ImproveGame.Common.GlobalItems
 
         public static bool IsItemAvailable(Item item)
         {
-            if (InfBuffPlayer.TryGet(Main.LocalPlayer, out var infBuffPlayer) && infBuffPlayer.AvailableItemsHash.Contains(item))
+            if (InfBuffPlayer.TryGet(Main.LocalPlayer, out var infBuffPlayer) &&
+                infBuffPlayer.AvailableItemsHash.Contains(item))
                 return true;
 
             // 非增益药剂
@@ -41,7 +42,7 @@ namespace ImproveGame.Common.GlobalItems
             // 花园侏儒
             if (item.type is ItemID.GardenGnome)
                 return true;
- 
+
             return false;
         }
 
@@ -90,7 +91,9 @@ namespace ImproveGame.Common.GlobalItems
         public static bool IsBuffTileItem(Item item, out List<int> buffTypes)
         {
             // 会给玩家buff的雕像
-            buffTypes = (from t in Lookups.BuffTiles where item.createTile == t.TileID && (item.placeStyle == t.Style || t.Style == -1) select t.BuffID).ToList();
+            buffTypes = (from t in Lookups.BuffTiles
+                    where item.createTile == t.TileID && (item.placeStyle == t.Style || t.Style == -1) select t.BuffID)
+                .ToList();
 
             // 其他Mod的，自行添加了引用
             if (ModIntegrationsSystem.ModdedPlaceableItemBuffs.TryGetValue(item.type, out var moddedBuffs))
@@ -123,27 +126,42 @@ namespace ImproveGame.Common.GlobalItems
                 (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
             {
                 var buffTypes = GetItemBuffType(item);
-                buffTypes.ForEach(buffType =>
+                if (buffTypes.Count != 1)
                 {
-                    if (buffType is -1 && item.type != ItemID.GardenGnome) return;
+                    if (buffTypes.Count is 0) return;
 
-                    MouseState mouseState = Mouse.GetState();
-                    if (_oldMiddlePressed)
+                    var buffs = Lang.GetBuffName(buffTypes[0]);
+                    buffs = buffTypes.ToArray()[1..].Aggregate(buffs, (current, i) => current + $", {Lang.GetBuffName(i)}");
+                    buffs = $"[{buffs}]";
+
+                    tooltips.Add(new TooltipLine(Mod, "AppliedBuffs", buffs)
                     {
-                        _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
-                    }
+                        OverrideColor = Color.SkyBlue
+                    });
 
-                    if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
-                    {
-                        _oldMiddlePressed = true;
-                        if (BuffTrackerGUI.Visible)
-                            UISystem.Instance.BuffTrackerGUI.Close();
-                        else
-                            UISystem.Instance.BuffTrackerGUI.Open();
-                    }
+                    TagItem.AddIconHiddenTooltips(Mod, tooltips);
+                    return;
+                }
 
-                    TagItem.ModifyBuffTooltips(Mod, item.type, buffType, tooltips);
-                });
+                var buffType = buffTypes[0];
+                if (buffType is -1 && item.type != ItemID.GardenGnome) return;
+
+                MouseState mouseState = Mouse.GetState();
+                if (_oldMiddlePressed)
+                {
+                    _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
+                }
+
+                if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
+                {
+                    _oldMiddlePressed = true;
+                    if (BuffTrackerGUI.Visible)
+                        UISystem.Instance.BuffTrackerGUI.Close();
+                    else
+                        UISystem.Instance.BuffTrackerGUI.Open();
+                }
+
+                TagItem.ModifyBuffTooltips(Mod, item.type, buffType, tooltips);
             }
 
             // 红药水扩展
@@ -168,24 +186,25 @@ namespace ImproveGame.Common.GlobalItems
                 return base.PreDrawTooltip(item, lines, ref x, ref y);
             }
 
-            if (IsBuffTileItem(item, out _) || item.type == ItemID.HoneyBucket ||
+            if (IsBuffTileItem(item, out _) || item.type is ItemID.HoneyBucket ||
                 (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
             {
                 var buffTypes = GetItemBuffType(item);
 
-                foreach (int buffType in buffTypes)
-                {
-                    if (buffType is -1)
-                        return base.PreDrawTooltip(item, lines, ref x, ref y);
+                if (buffTypes.Count != 1)
+                    return base.PreDrawTooltip(item, lines, ref x, ref y);
 
-                    object arg = new
-                    {
-                        BuffName = Lang.GetBuffName(buffType),
-                        MaxSpawn = Config.SpawnRateMaxValue
-                    };
-                    if (ItemSlot.ShiftInUse)
-                        TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines, arg), x, y);
-                }
+                var buffType = buffTypes[0];
+                if (buffType is -1)
+                    return base.PreDrawTooltip(item, lines, ref x, ref y);
+
+                object arg = new
+                {
+                    BuffName = Lang.GetBuffName(buffType),
+                    MaxSpawn = Config.SpawnRateMaxValue
+                };
+                if (ItemSlot.ShiftInUse)
+                    TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines, arg), x, y);
             }
 
             return base.PreDrawTooltip(item, lines, ref x, ref y);

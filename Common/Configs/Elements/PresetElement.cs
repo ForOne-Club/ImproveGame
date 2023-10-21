@@ -13,7 +13,7 @@ public class FukMeCalamityElement : PresetElement
         config.SuperVoidVault = true;
         config.SmartVoidVault = true;
         config.SuperVault = true;
-        config.ItemMaxStack = 9999;
+        config.ItemMaxStack = 99999;
         config.GrabDistance = 5;
         config.NoConsume_SummonItem = true;
         config.ExtraToolSpeed = 0.5f;

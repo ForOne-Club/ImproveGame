@@ -338,6 +338,7 @@ RecipeGroup: {
 	AnyCobaltBar: Any Cobalt Bar
 	AnyMythrilBar: Any Mythril Bar
 	AnyAdamantiteBar: Any Adamantite Bar
+	AnyGem: Any Gem
 }
 
 Keybind: {

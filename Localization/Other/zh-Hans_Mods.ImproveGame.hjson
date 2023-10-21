@@ -324,6 +324,7 @@ RecipeGroup: {
 	AnyCobaltBar: 任何 钴锭
 	AnyMythrilBar: 任何 秘银
 	AnyAdamantiteBar: 任何 精金
+	AnyGem: 任何 宝石
 }
 
 Keybind: {
