@@ -28,7 +28,7 @@ public class ForceFestivalSystem : ModSystem
 
     public override void PostUpdateTime()
     {
-        Main.halloween = ForceHalloween;
-        Main.xMas = ForceXMas;
+        Main.halloween |= ForceHalloween;
+        Main.xMas |= ForceXMas;
     }
 }
