@@ -4,6 +4,7 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
+using PinyinNet;
 using System.Reflection;
 using Terraria.GameInput;
 using Terraria.ModLoader.UI;
@@ -18,11 +19,8 @@ public class BuffTrackerGUI : ViewBody
     internal SUIPanel MainPanel;
     private BuffButtonList BuffList;
     public SUIScrollbar Scrollbar; // 拖动条
-    private UISearchBar _searchBar;
-    private SUIPanel _searchBoxPanel;
-    private string _searchString;
-    private bool _didClickSomething;
-    private bool _didClickSearchBar;
+    private SUISearchBar _searchBar;
+    private string SearchContent => _searchBar.SearchContent;
     internal BuffTrackerBattler BuffTrackerBattler;
     private static int _oldBuffCount; // 用于及时更新列表
 
@@ -90,15 +88,29 @@ public class BuffTrackerGUI : ViewBody
         BuffTrackerBattler.MainPanel.SetPos(MainPanel.Left() - 92f, MainPanel.Top());
         Append(BuffTrackerBattler.MainPanel);
 
-        UIElement searchArea = new()
+        _searchBar = new SUISearchBar(true, false)
         {
             Height = new StyleDimension(28f, 0f),
-            Width = new StyleDimension(-42f, 1f)
+            Width = new StyleDimension(-42f, 1f),
+            DragIgnore = true
         };
-        searchArea.SetPadding(0f);
-        MainPanel.Append(searchArea);
-        AddSearchBar(searchArea);
-        _searchBar.SetContents(null, forced: true);
+        // _searchBar.OnDraw += SearchBarOnDraw;
+        _searchBar.OnSearchContentsChanged += _ => SetupBuffButtons();
+        _searchBar.Join(MainPanel);
+
+        OnLeftMouseDown += (_, _) => TryCancelInput();
+        OnRightMouseDown += (_, _) => TryCancelInput();
+        OnMiddleMouseDown += (_, _) => TryCancelInput();
+        OnXButton1MouseDown += (_, _) => TryCancelInput();
+        OnXButton2MouseDown += (_, _) => TryCancelInput();
+    }
+
+    private void TryCancelInput() {
+        if (!MainPanel.IsMouseHovering)
+            _searchBar.AttemptStoppingUsingSearchbar();
+        foreach (var element in MainPanel.Children)
+            if (element is not SUISearchBar && element.IsMouseHovering)
+                _searchBar.AttemptStoppingUsingSearchbar();
     }
 
     private void SetupScrollBar(bool resetViewPosition = true)
@@ -113,17 +125,13 @@ public class BuffTrackerGUI : ViewBody
     {
         BuffList.Clear();
 
+        string searchString = SearchContent?.Trim().ToLower();
         for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
         {
             if (!HideBuffSystem.BuffTypesShouldHide[i])
                 continue;
 
-            string internalName = BuffID.Search.GetName(i).ToLower(); // 《英文名》因为没法在非英语语言获取英文名，只能用内部名了
-            string currentLanguageName = Lang.GetBuffName(i).ToLower();
-            string searchString = _searchString?.Trim().ToLower();
-
-            if (string.IsNullOrEmpty(_searchString) || internalName.Contains(searchString) ||
-                currentLanguageName.Contains(searchString))
+            if (string.IsNullOrEmpty(SearchContent) || Match(searchString, i))
                 BuffList.Add(new BuffButton(i));
         }
 
@@ -131,11 +139,34 @@ public class BuffTrackerGUI : ViewBody
         SetupScrollBar(false);
     }
 
+    private bool Match(string searchString, int buffId)
+    {
+        string currentLanguageName = RemoveSpaces(Lang.GetBuffName(buffId)).ToLower();
+
+        if (currentLanguageName.Contains(searchString))
+            return true;
+
+        if (Language.ActiveCulture.Name is not "zh-Hans") return false;
+
+        string pinyin = RemoveSpaces(PinyinConvert.GetPinyinForAutoComplete(currentLanguageName));
+        return pinyin.Contains(searchString);
+    }
+
     public override void ScrollWheel(UIScrollWheelEvent evt)
     {
         base.ScrollWheel(evt);
         if (MainPanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
             Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
+    }
+
+    public override void DrawChildren(SpriteBatch spriteBatch)
+    {
+        base.DrawChildren(spriteBatch);
+
+        // 不被遮挡
+        Vector2 position = _searchBar.GetDimensions().Position();
+        position.Y += 60f;
+        Main.instance.DrawWindowsIMEPanel(position, 0f);
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
@@ -158,12 +189,6 @@ public class BuffTrackerGUI : ViewBody
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-
-        if (_didClickSomething && !_didClickSearchBar && _searchBar.IsWritingText)
-            _searchBar.ToggleTakingText();
-
-        _didClickSomething = false;
-        _didClickSearchBar = false;
 
         BuffTrackerBattler.Update();
         // 刷新刷怪条
@@ -218,118 +243,6 @@ public class BuffTrackerGUI : ViewBody
         Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.DeathText.Value, text, drawCenter.X, drawCenter.Y,
             Color.White, Color.Black, origin, scale);
     }
-
-    #region 搜索栏
-
-    private void AddSearchBar(UIElement searchArea)
-    {
-        UIImageButton uIImageButton = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search"))
-        {
-            VAlign = 0.5f,
-            HAlign = 0f
-        };
-
-        uIImageButton.OnLeftClick += Click_SearchArea;
-        uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
-        uIImageButton.SetVisibility(1f, 1f);
-        searchArea.Append(uIImageButton);
-        SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(UIColor.SearchBarBorder, UIColor.SearchBarBg)
-        {
-            Left = new StyleDimension(4f, 0f),
-            Width = new StyleDimension(0f - uIImageButton.Width.Pixels - 3f, 1f),
-            Height = new StyleDimension(0f, 1f),
-            VAlign = 0.5f,
-            HAlign = 1f
-        };
-        uIPanel.SetPadding(0f);
-        searchArea.Append(uIPanel);
-        UISearchBar uISearchBar = _searchBar = new UISearchBar(Language.GetText("UI.PlayerNameSlot"), 0.8f)
-        {
-            Width = new StyleDimension(0f, 1f),
-            Height = new StyleDimension(0f, 1f),
-            HAlign = 0f,
-            VAlign = 0.5f,
-            IgnoresMouseInteraction = true
-        };
-
-        uIPanel.OnLeftClick += Click_SearchArea;
-        uISearchBar.OnContentsChanged += OnSearchContentsChanged;
-        uIPanel.Append(uISearchBar);
-        uISearchBar.OnStartTakingInput += OnStartTakingInput;
-        uISearchBar.OnEndTakingInput += OnEndTakingInput;
-        uISearchBar.OnCanceledTakingInput += OnCanceledInput;
-        UIImageButton uIImageButton2 = new(Main.Assets.Request<Texture2D>("Images/UI/SearchCancel"))
-        {
-            HAlign = 1f,
-            VAlign = 0.5f,
-            Left = new StyleDimension(-2f, 0f)
-        };
-
-        uIImageButton2.OnMouseOver += SearchCancelButton_OnMouseOver;
-        uIImageButton2.OnLeftClick += SearchCancelButton_OnClick;
-        uIPanel.Append(uIImageButton2);
-    }
-
-    private void SearchCancelButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
-    {
-        if (_searchBar.HasContents)
-        {
-            _searchBar.SetContents(null, forced: true);
-            SoundEngine.PlaySound(SoundID.MenuClose);
-        }
-        else
-        {
-            SoundEngine.PlaySound(SoundID.MenuTick);
-        }
-    }
-
-    private void SearchCancelButton_OnMouseOver(UIMouseEvent evt, UIElement listeningElement)
-    {
-        SoundEngine.PlaySound(SoundID.MenuTick);
-    }
-
-    private void OnCanceledInput()
-    {
-        Main.LocalPlayer.ToggleInv();
-    }
-
-    private void Click_SearchArea(UIMouseEvent evt, UIElement listeningElement)
-    {
-        if (evt.Target.Parent != _searchBoxPanel)
-        {
-            _searchBar.ToggleTakingText();
-            _didClickSearchBar = true;
-        }
-    }
-
-    private void OnSearchContentsChanged(string contents)
-    {
-        _searchString = contents;
-        SetupBuffButtons();
-    }
-
-    private void OnStartTakingInput()
-    {
-        _searchBoxPanel.BorderColor = UIColor.SearchBarBorderSelected;
-    }
-
-    private void OnEndTakingInput()
-    {
-        _searchBoxPanel.BorderColor = UIColor.SearchBarBorder;
-    }
-
-    public override void LeftClick(UIMouseEvent evt)
-    {
-        base.LeftClick(evt);
-        AttemptStoppingUsingSearchbar(evt);
-    }
-
-    private void AttemptStoppingUsingSearchbar(UIMouseEvent evt)
-    {
-        _didClickSomething = true;
-    }
-
-    #endregion
 
     /// <summary>
     /// 打开GUI界面
@@ -433,7 +346,7 @@ public class BuffButton : UIElement
         HideGlobalBuff.IsDrawingBuffTracker = true;
         BuffLoader.ModifyBuffText(BuffId, ref buffName, ref buffTooltip, ref rare);
         HideGlobalBuff.IsDrawingBuffTracker = false;
-        
+
         string mouseText = $"{buffName}\n{buffTooltip}";
 
         if (buffEnabled)

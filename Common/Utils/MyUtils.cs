@@ -24,6 +24,8 @@ partial class MyUtils
     public static bool HasDevMark => Main.LocalPlayer.inventory.Any(i => i.type == ModContent.ItemType<DevMark>()) &&
                                      Main.netMode is NetmodeID.SinglePlayer;
 
+    public static string RemoveSpaces(string s) => s.Replace(" ", "", StringComparison.Ordinal);
+
     public static Matrix GetMatrix(bool ui)
     {
         if (ui)

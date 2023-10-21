@@ -58,8 +58,6 @@ public static class ItemExtensions
         return fuzzySearch ? FuzzySearch.Find(searchContent, pinyin, 1).Any() : pinyin.Contains(searchContent);
     }
 
-    private static string RemoveSpaces(string s) => s.Replace(" ", "", StringComparison.Ordinal);
-
     /// <summary>
     /// 有其中一个
     /// </summary>
