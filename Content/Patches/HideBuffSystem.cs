@@ -40,18 +40,9 @@ namespace ImproveGame.Content.Patches
             SetupShouldHideArrayFromPlayer(Main.LocalPlayer);
             if (Config.ShareInfBuffs)
                 CheckTeamPlayers(Main.LocalPlayer.whoAmI, SetupShouldHideArrayFromPlayer);
-
+            
             // 从TE中获取所有的无尽Buff物品
-            foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
-            {
-                if (tileEntity is not TEExtremeStorage {UseUnlimitedBuffs: true} storage)
-                {
-                    continue;
-                }
-
-                var alchemyItems = storage.FindAllNearbyChestsWithGroup(ItemGroup.Alchemy);
-                alchemyItems.ForEach(i => SetupShouldHideArray(InfBuffPlayer.GetAvailableItemsFromItems(Main.chest[i].item)));
-            }
+            SetupShouldHideArray(InfBuffPlayer.Get(Main.LocalPlayer).ExStorageAvailableItems);
         }
 
         private static void SetupShouldHideArrayFromPlayer(Player player) =>
@@ -64,8 +55,6 @@ namespace ImproveGame.Content.Patches
         {
             foreach (var item in items)
             {
-                ApplyBuffItem.UpdateBuffTypesShouldHide(item);
-
                 var buffTypes = ApplyBuffItem.GetItemBuffType(item);
                 buffTypes.ForEach(buffType =>
                 {

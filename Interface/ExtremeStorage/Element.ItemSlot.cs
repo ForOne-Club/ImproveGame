@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.ExtremeStorage
 {
@@ -176,7 +177,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             base.DrawSelf(sb);
             if (!Interactable && IsMouseHovering)
             {
-                Main.instance.MouseText(GetText("UI.ExtremeStorage.ChestBeingUsed"));
+                UICommon.TooltipMouseText(GetText("UI.ExtremeStorage.ChestBeingUsed"));
             }
         }
 

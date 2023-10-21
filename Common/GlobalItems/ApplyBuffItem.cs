@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
 using ImproveGame.Core;
 using ImproveGame.Interface.Common;
@@ -15,23 +16,9 @@ namespace ImproveGame.Common.GlobalItems
         private static Dictionary<int, List<int>> _potionToBuffs = new();
         private static Dictionary<int, List<int>> _stationToBuffs = new();
 
-        public static void UpdateBuffTypesShouldHide(Item item)
-        {
-
-            var buffTypes = GetItemBuffType(item);
-            buffTypes.ForEach(buffType =>
-            {
-                if (buffType is -1)
-                    return;
-
-                HideBuffSystem.BuffTypesShouldHide[buffType] = true;
-            });
-        }
-        
         public static bool IsItemAvailable(Item item)
         {
-            var buffTypes = GetItemBuffType(item);
-            if (buffTypes.Count > 0)
+            if (InfBuffPlayer.TryGet(Main.LocalPlayer, out var infBuffPlayer) && infBuffPlayer.AvailableItemsHash.Contains(item))
                 return true;
 
             // 非增益药剂
@@ -44,7 +31,7 @@ namespace ImproveGame.Common.GlobalItems
                 return true;
 
             // 随身增益站：旗帜
-            if (Config.NoPlace_BUFFTile_Banner && ItemToBanner(item) != -1)
+            if (Config.NoPlace_BUFFTile_Banner && BannerPatches.AvailableBanners.Contains(item))
                 return true;
 
             // 弹药
@@ -52,7 +39,7 @@ namespace ImproveGame.Common.GlobalItems
                 return true;
 
             // 花园侏儒
-            if (item.type == ItemID.GardenGnome)
+            if (item.type is ItemID.GardenGnome)
                 return true;
  
             return false;

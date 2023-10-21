@@ -19,9 +19,20 @@ namespace ImproveGame.Common.ModPlayers;
 public class InfBuffPlayer : ModPlayer
 {
     /// <summary>
-    /// 用于记录玩家总获取的的无尽Buff物品
+    /// 用于记录玩家总获取的无尽Buff物品
     /// </summary>
     internal List<Item> AvailableItems = new();
+
+    /// <summary>
+    /// 储存管理器里面的无尽Buff物品
+    /// </summary>
+    internal HashSet<Item> ExStorageAvailableItems = new();
+
+    /// <summary>
+    /// 储存管理器+玩家储存里面的无尽Buff物品 <br/>
+    /// 另见 <see cref="HandleClonedItem"/>
+    /// </summary>
+    internal HashSet<Item> AvailableItemsHash = new();
 
     /// <summary>
     /// 每隔多久统计一次Buff
@@ -72,16 +83,7 @@ public class InfBuffPlayer : ModPlayer
             CheckTeamPlayers(Player.whoAmI, ApplyAvailableBuffsFromPlayer, checkDead: false);
 
         // 从TE中获取所有的无尽Buff物品
-        foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
-        {
-            if (tileEntity is not TEExtremeStorage {UseUnlimitedBuffs: true} storage)
-            {
-                continue;
-            }
-
-            var alchemyItems = storage.FindAllNearbyChestsWithGroup(ItemGroup.Alchemy);
-            alchemyItems.ForEach(i => ApplyAvailableBuffs(GetAvailableItemsFromItems(Main.chest[i].item)));
-        }
+        ApplyAvailableBuffs(Get(Player).ExStorageAvailableItems);
 
         // 每隔一段时间更新一次Buff列表
         SetupBuffListCooldown++;
@@ -174,7 +176,9 @@ public class InfBuffPlayer : ModPlayer
         var oldAvailableItems = new List<Item>(AvailableItems);
 
         AvailableItems = new List<Item>();
+        ExStorageAvailableItems = new HashSet<Item>();
 
+        // 玩家身上的无尽Buff
         var items = GetAllInventoryItemsList(Main.LocalPlayer);
         AvailableItems = GetAvailableItemsFromItems(items);
 
@@ -183,6 +187,20 @@ public class InfBuffPlayer : ModPlayer
         {
             InfBuffItemPacket.Get(this).Send();
         }
+
+        // 从TE中获取所有的无尽Buff物品
+        foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
+        {
+            if (tileEntity is not TEExtremeStorage {UseUnlimitedBuffs: true} storage)
+            {
+                continue;
+            }
+
+            var alchemyItems = storage.FindAllNearbyChestsWithGroup(ItemGroup.Alchemy);
+            alchemyItems.ForEach(i => GetAvailableItemsFromItems(Main.chest[i].item).ForEach(j => ExStorageAvailableItems.Add(j)) );
+        }
+
+        AvailableItemsHash = AvailableItems.Concat(ExStorageAvailableItems).ToHashSet();
     }
 
     public static List<Item> GetAvailableItemsFromItems(IEnumerable<Item> items)
