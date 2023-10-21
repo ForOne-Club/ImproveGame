@@ -55,7 +55,6 @@ v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
 - v1.6.5.2
 - v1.6.5.3
 - v1.6.5.4
-- v1.6.5.5 (Not yet)
 ## Additions
 - Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit
 - Enabled configuring chest detection range of Storage Manager
