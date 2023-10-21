@@ -64,7 +64,7 @@ namespace ImproveGame.Content.Patches
         {
             foreach (var item in items)
             {
-                ApplyBuffItem.UpdateInventoryGlow(item);
+                ApplyBuffItem.UpdateBuffTypesShouldHide(item);
 
                 var buffTypes = ApplyBuffItem.GetItemBuffType(item);
                 buffTypes.ForEach(buffType =>

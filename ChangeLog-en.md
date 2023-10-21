@@ -28,6 +28,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - Wand of Liquid not functioning when its panel is closed
 - **[v1.6.6.1]** Modded buff stations don't apply buffs
 - **[v1.6.6.1]** Some modded vfx is invisible
+- **[v1.6.6.1]** Storage Manager category icon displays Stormdark theme icon under Classic theme
 ## Adjustments
 - Tiles under Fishing Machine are now breakable
 - Added a hotkey to open mod configs

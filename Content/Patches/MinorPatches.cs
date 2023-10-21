@@ -643,17 +643,11 @@ namespace ImproveGame.Content.Patches
             if (item is null)
                 return;
 
-            bool globalItemNotNull = item.TryGetGlobalItem<GlobalItemData>(out var itemData);
-            if (globalItemNotNull)
-                itemData.ShouldHaveInvGlowForBanner = false;
-
             int bannerID = ItemToBanner(item);
             if (bannerID != -1)
             {
                 Main.SceneMetrics.NPCBannerBuff[bannerID] = true;
                 Main.SceneMetrics.hasBanner = true;
-                if (globalItemNotNull)
-                    itemData.ShouldHaveInvGlowForBanner = true;
             }
         }
 

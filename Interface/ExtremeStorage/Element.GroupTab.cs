@@ -1,9 +1,11 @@
-﻿namespace ImproveGame.Interface.ExtremeStorage
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Interface.Common;
+
+namespace ImproveGame.Interface.ExtremeStorage
 {
     public class GroupTab : View
     {
         private readonly Asset<Texture2D> _tabTexture;
-        private readonly Asset<Texture2D> _groupTexture;
         private readonly ItemGroup _group;
         private readonly Rectangle _groupFrame;
         private Rectangle _tabFrame;
@@ -32,7 +34,6 @@
 
             _group = group;
             _tabTexture = Main.Assets.Request<Texture2D>("Images/UI/Creative/Infinite_Tabs_B");
-            _groupTexture = ModAsset.Icons_Stormdark;
             _tabFrame = new Rectangle(0, 0, 42, 48);
             _groupFrame = new Rectangle(x * 30, 0, 28, 28);
         }
@@ -42,8 +43,9 @@
             var dimensions = GetDimensions();
             var pos = dimensions.Position();
             var center = dimensions.Center() - new Vector2(0f, 4f);
+            var groupTexture = UIConfigs.Instance.ThemeType is ThemeType.Stormdark ? ModAsset.Icons_Stormdark : ModAsset.Icons_Regular;
             spriteBatch.Draw(position: pos, texture: _tabTexture.Value, sourceRectangle: _tabFrame, color: Color.White);
-            spriteBatch.Draw(_groupTexture.Value, center, _groupFrame, Color.White, 0f, _groupFrame.Size() / 2f, 1f,
+            spriteBatch.Draw(groupTexture.Value, center, _groupFrame, Color.White, 0f, _groupFrame.Size() / 2f, 1f,
                 SpriteEffects.None, 0f);
         }
 
