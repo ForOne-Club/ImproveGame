@@ -33,6 +33,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - **[v1.6.6.1]** The festival feature (Christmas & Halloween) ignores the system time
 - **[v1.6.6.1]** "Any Gem" is shown as a localization key
 - **[v1.6.6.2]** 即使钓鱼机无法存入将要钓上的物品，也会播放动画
+- **[v1.6.6.2]** 水蜡烛、和平蜡烛、影烛作为随身增益站无实际效果
 ## Adjustments
 - Tiles under Fishing Machine are now breakable
 - Added a hotkey to open mod configs
@@ -48,6 +49,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - **[v1.6.6.1]** The fishing speed of Fishing Machine is increased by 300% in Hardmode now
 - **[v1.6.6.1]** Buff Tracker now supports pinyin search (Chinese related)
 - **[v1.6.6.2]** 自动钓鱼机现在仅有原来的20%的概率消耗诱饵
+- **[v1.6.6.2]** “隐藏无限续杯增益”功能移动到了个人设置中
 
 # v1.6.5
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)

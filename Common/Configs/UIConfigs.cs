@@ -62,6 +62,9 @@ public class UIConfigs : ModConfig
     [DefaultValue(true)]
     public bool ExplosionEffect;
 
+    [DefaultValue(false)]
+    public bool HideNoConsumeBuffs;
+
     [DefaultValue(0.3f)]
     [Range(0f, 1f)]
     [Increment(0.05f)]

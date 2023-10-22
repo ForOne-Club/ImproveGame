@@ -141,16 +141,6 @@ ImproveConfigs: {
 		Tooltip: 所有堆叠数  ≥ 3996 的投掷物将不再消耗。
 	}
 
-	HideNoConsumeBuffs: {
-		Label: "[centeritem:297] 隐藏无限续杯增益"
-		Tooltip:
-			'''
-			自动隐藏已无限续杯的增益效果
-			增益仍然以Buff形式存在，但不会在Buff栏中显示
-			（不同于luiafk，只是纯粹的隐藏）
-			'''
-	}
-
 	ImprovePrefix: {
 		Label: "[centeritem:1551] 可追溯重铸"
 		Tooltip: 允许你直接选择已获得过的前缀
@@ -813,6 +803,15 @@ UIConfigs: {
 	MagicMirrorInstantTp: {
 		Label: "[centeritem:MagicMirror] 魔镜瞬传"
 		Tooltip: 魔镜类物品改为瞬间传送，去除传送前的等待时间
+	}
+
+	HideNoConsumeBuffs: {
+		Label: "[centeritem:297] 隐藏无限续杯增益"
+		Tooltip:
+			'''
+			自动隐藏已无限续杯的增益效果
+			增益仍然以Buff形式存在，但不会在Buff栏中显示
+			'''
 	}
 
 	InfernoTransparency: {

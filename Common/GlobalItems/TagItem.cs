@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Interface.Common;
 using System.Collections.ObjectModel;
@@ -81,7 +82,7 @@ namespace ImproveGame.Common.GlobalItems
         public static void AddIconHiddenTooltips(Mod mod, List<TooltipLine> tooltips)
         {
             // 图标是否被隐藏
-            if (Config.HideNoConsumeBuffs)
+            if (UIConfigs.Instance.HideNoConsumeBuffs)
             {
                 tooltips.Add(new TooltipLine(mod, "TagDetailed.Hided", GetText("Tips.TagDetailed.Hided"))
                 {

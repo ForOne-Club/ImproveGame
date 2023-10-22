@@ -131,9 +131,6 @@ namespace ImproveGame.Common.Configs
         public int NoConsume_PotionRequirement;
 
         [DefaultValue(false)]
-        public bool HideNoConsumeBuffs;
-
-        [DefaultValue(false)]
         public bool InfiniteRedPotion;
 
         [DefaultValue(false)]

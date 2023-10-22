@@ -103,12 +103,12 @@ Tips: {
 			'''
 			Buff icons have been hiden.
 			To display them, disable "Hide buff icons of
-			infinite potions" in Mod Configuration.
+			infinite potions" in [c/CC88AA:Personal Config].
 			'''
 		NonHided:
 			'''
-			Change the mod config to hide infinite buff
-			icons if you want.
+			Change the mod's [c/CC88AA:Personal Config] to hide infinite
+			buff icons if you want.
 			'''
 		AutoCollect:
 			'''

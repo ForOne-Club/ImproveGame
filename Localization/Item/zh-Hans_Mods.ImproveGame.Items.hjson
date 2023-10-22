@@ -182,7 +182,11 @@ ExtremeStorage: {
 
 GlobeBase: {
 	DisplayName: "{0}定位球"
-	Tooltip: 在地图上标记{0}
+	Tooltip:
+		'''
+		在地图上标记{0}
+		可在[c/CC88AA:个人配置]中隐藏标记
+		'''
 	AlreadyRevealed: 这个世界已经标记过{0}了
 	Reveal: "{1}在地图上标记了{0}"
 	RevealPlantera: "{0}在地图上标记了{$NPCName.Plantera}"
