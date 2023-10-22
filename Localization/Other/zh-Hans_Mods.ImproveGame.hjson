@@ -240,7 +240,7 @@ Autofisher: {
 	Title: 自动钓鱼机
 	Accessory: 钓鱼饰品
 	FishingPole: 钓竿
-	Bait: 鱼饵
+	Bait: 诱饵
 	SelectPool: 请选择鱼池
 	CarefulNextTime: 下次注意点！
 	Unavailable: 暂无钓鱼信息
