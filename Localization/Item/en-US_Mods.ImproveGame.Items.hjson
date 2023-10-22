@@ -103,17 +103,13 @@ Autofisher: {
 	DisplayName: Fishing Machine
 	Tooltip:
 		'''
-		Right click on a placed Fishing Machine to open the fishing panel
-		Click the "+" in the first row to choose water type
-		Put in a fishing rod and baits to start, mechanics are the same as manual-fishing
+		Click the "+" in the panel to choose a pool. Put in a fishing rod and baits to start fishing
 		You may also put in accessories to increase fishing power or grant ability to fish in lava
-		The initial fishing speed is 20% of the manual-fishing speed, you may speed up the fishing process by:
+		Bait consumption is only 20% of that in manual-fishing
+		The initial fishing speed is 50% of the manual-fishing speed, you may speed up the fishing process by:
 		- Each [i:Bass] stored will provide a 10% fishing speed bonus, caps at 500% ([i/s50:Bass])
-		- [i:AnglerEarring] increases fishing speed by * 200%
-		- [i:AnglerTackleBag] increases fishing speed by * 300%
-		- [i:LavaproofTackleBag] increases fishing speed by * 500%
+		- [i:AnglerEarring], [i:AnglerTackleBag], [i:LavaproofTackleBag] can increase fishing speed by 200%, 300%, and 500%
 		- Fishing speed is increased by 300% in Hardmode
-		[c/AAAAAA:You cannot put] [i:HighTestFishingLine] [c/AAAAAA:into accessory slot because Fishing Machine does not use fishing lines]
 		[c/AAAAAA:Only mod accessories that have added Quality of Terraria support is supported]
 		Supports most modded biomes
 		Only filterd items will be caught, first match upper criteria
@@ -183,7 +179,11 @@ ExtremeStorage: {
 
 GlobeBase: {
 	DisplayName: "{0} Locator"
-	Tooltip: Marks {0} on the map.
+	Tooltip:
+		'''
+		Marks {0} on the map.
+		You can hide the marker in [c/CC88AA:Personal Config]
+		'''
 	AlreadyRevealed: "{0} has already been marked"
 	Reveal: "{1} marked up {0} on the map."
 	RevealPlantera: "{0} marked up {NPCName.Plantera} on the map."

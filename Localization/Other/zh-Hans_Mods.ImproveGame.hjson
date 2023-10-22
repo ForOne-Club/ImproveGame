@@ -97,9 +97,13 @@ Tips: {
 		Hided:
 			'''
 			增益图标已从Buff栏中隐藏
-			如果想要显示请在模组配置中修改
+			如果想要显示请在模组[c/CC88AA:个人配置]中修改
 			'''
-		NonHided: 如果想要隐藏无限续杯增益图标，请在模组配置中修改
+		NonHided:
+			'''
+			如果想要隐藏无限续杯增益图标
+			请在模组[c/CC88AA:个人配置]中修改
+			'''
 		AutoCollect:
 			'''
 			钱币会自动存入存钱罐
@@ -240,7 +244,7 @@ Autofisher: {
 	Title: 自动钓鱼机
 	Accessory: 钓鱼饰品
 	FishingPole: 钓竿
-	Bait: 鱼饵
+	Bait: 诱饵
 	SelectPool: 请选择鱼池
 	CarefulNextTime: 下次注意点！
 	Unavailable: 暂无钓鱼信息

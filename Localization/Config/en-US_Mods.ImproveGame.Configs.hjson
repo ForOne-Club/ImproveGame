@@ -137,15 +137,6 @@ ImproveConfigs: {
 		Tooltip: Thrown weapons stack over 3996 will not be consumed
 	}
 
-	HideNoConsumeBuffs: {
-		Label: "[centeritem:297] Hide buff icons of Infinite Potions"
-		Tooltip:
-			'''
-			Hide buff icons of Infinite Potions
-			The effects are still provided by their original buffs, but are not displayed
-			'''
-	}
-
 	ImprovePrefix: {
 		Label: "[centeritem:1551] Retrospective Reforging"
 		Tooltip: Prefixes which have been rolled can be applied manually
@@ -810,6 +801,15 @@ UIConfigs: {
 	MagicMirrorInstantTp: {
 		Label: "[centeritem:MagicMirror] Instant Home-returning Items"
 		Tooltip: Home-returning items such as Magic Mirror are instant, delay before teleportation is removed.
+	}
+
+	HideNoConsumeBuffs: {
+		Label: "[centeritem:297] Hide buff icons of Infinite Potions"
+		Tooltip:
+			'''
+			Hide buff icons of Infinite Potions
+			The effects are still provided by their original buffs, but are not displayed
+			'''
 	}
 
 	InfernoTransparency: {

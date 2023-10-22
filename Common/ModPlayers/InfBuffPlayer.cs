@@ -4,6 +4,7 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.Packets.Items;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Patches;
+using ImproveGame.Content.Patches.PortableBuff;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.ExtremeStorage;
 using Terraria.DataStructures;
@@ -109,7 +110,7 @@ public class InfBuffPlayer : ModPlayer
         {
             // 侏儒特判
             if (item.createTile is TileID.GardenGnome)
-                HideBuffSystem.HasGardenGnome = true;
+                ApplyBuffStation.HasGardenGnome = true;
 
             var buffTypes = ApplyBuffItem.GetItemBuffType(item);
 
@@ -152,16 +153,25 @@ public class InfBuffPlayer : ModPlayer
                 switch (buffType)
                 {
                     case BuffID.Campfire:
-                        HideBuffSystem.HasCampfire = true;
+                        ApplyBuffStation.HasCampfire = true;
                         break;
                     case BuffID.HeartLamp:
-                        HideBuffSystem.HasHeartLantern = true;
+                        ApplyBuffStation.HasHeartLantern = true;
                         break;
                     case BuffID.StarInBottle:
-                        HideBuffSystem.HasStarInBottle = true;
+                        ApplyBuffStation.HasStarInBottle = true;
                         break;
                     case BuffID.Sunflower:
-                        HideBuffSystem.HasSunflower = true;
+                        ApplyBuffStation.HasSunflower = true;
+                        break;
+                    case BuffID.WaterCandle:
+                        ApplyBuffStation.HasWaterCandle = true;
+                        break;
+                    case BuffID.PeaceCandle:
+                        ApplyBuffStation.HasPeaceCandle = true;
+                        break;
+                    case BuffID.ShadowCandle:
+                        ApplyBuffStation.HasShadowCandle = true;
                         break;
                 }
             });

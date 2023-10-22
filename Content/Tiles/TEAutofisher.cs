@@ -145,7 +145,7 @@ namespace ImproveGame.Content.Tiles
             if (Main.hardMode)
                 fishingSpeedBonus += 3f;
 
-            const float fishingCooldown = 3300f; // 钓鱼机基础冷却在这里改，原版钓鱼速度是660
+            const float fishingCooldown = 1320f; // 钓鱼机基础冷却在这里改，原版钓鱼速度是660
             int multipleLures = Math.Max(1, ModIntegrationsSystem.MultipleLuresAmount); // 多线钓鱼Mod兼容
             if (FishingTimer > fishingCooldown / fishingSpeedBonus / multipleLures)
             {
@@ -393,6 +393,7 @@ namespace ImproveGame.Content.Tiles
             PlayerLoader.ModifyCaughtFish(player, item);
             ItemLoader.CaughtFishStack(item);
             item.newAndShiny = true;
+            var dummyItem = item.Clone();
             int oldStack = item.stack;
 
             // 奇怪的文本，作为彩蛋
@@ -402,8 +403,6 @@ namespace ImproveGame.Content.Tiles
                 var rect = new Rectangle(pos.X, pos.Y, 16, 16);
                 CombatText.NewText(rect, Color.Pink, "要装不下了...");
             }
-
-            Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16), item, item.stack);
 
             // 先填充和物品相同的
             for (int i = 0; i < fish.Length; i++)
@@ -440,20 +439,19 @@ namespace ImproveGame.Content.Tiles
 
             FilledEnd:;
 
-            // 必须是消耗了，也就是真的能存 | TryConsumeBait返回true表示真的消耗了
-            if (item.stack != oldStack && TryConsumeBait(player))
+            // 必须是消耗了，也就是真的能存 | TryConsumeBait返回true表示鱼饵消耗了
+            if (item.stack != oldStack)
             {
-                if (Main.netMode is NetmodeID.Server)
+                // 用dummyItem，因为填充后item可能是Air
+                Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16), dummyItem, dummyItem.stack);
+
+                if (TryConsumeBait(player) && Main.netMode is NetmodeID.Server)
                 {
                     // 没了
                     if (bait.IsAir)
-                    {
                         ItemSyncPacket.Get(ID, ItemSyncPacket.Bait).Send(runLocally: false);
-                    }
                     else // 还在，同步stack
-                    {
                         ItemsStackChangePacket.Get(ID, ItemSyncPacket.Bait, -1).Send(runLocally: false);
-                    }
                 }
             }
 
@@ -472,6 +470,8 @@ namespace ImproveGame.Content.Tiles
 
             if (_tackleBox)
                 chanceDenominator += 1f;
+
+            chanceDenominator *= 5f;
 
             if (Main.rand.NextFloat() * chanceDenominator < 1f)
                 canCunsume = true;
