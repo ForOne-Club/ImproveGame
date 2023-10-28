@@ -369,8 +369,8 @@ ImproveConfigs: {
 			Does not work in single player mode, reloading is required
 			After enabled, only the player(s) with verified password can change the mod configs
 			While starting the server, a random 8-digit password will be sent in the server console
-			Players can type /qolpassword <password> to verify
-			The server console can query the password by typing /qolpassword
+			Players can type /qotpassword <password> to verify
+			The server console can query the password by typing /qotpassword
 			If the password is correct, the player will be able to change mod configs
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''

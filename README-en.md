@@ -12,7 +12,7 @@ A mod that aims to raise quality of gameplay to the next level, to benefit the c
 
 ## ✨ Features
 For a detailed list, check mod configurations or changelog above
-1. General features like max stack, weapon auto reuse (benchmarking Luiafk the classic qol mod)
+1. General features like max stack
 2. Non-vanity accessories can be worn in vanity slots
 3. Town NPC spawn mechanic improvements: can respawn during nighttime, ignore respwaning limitations if bestiary is unlocked
 4. Mod items such as Wand of Space, Wand of Architecture, Wand of Bursts and Fishing Machine which greatly improve gameplay experience

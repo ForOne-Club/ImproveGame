@@ -131,7 +131,7 @@ Tips: {
 }
 
 ConstructGUI: {
-	Structure: QoL Structure
+	Structure: QoT Structure
 	# 这个是存储后的文件名
 	SavedAs: "Structure has been saved as "
 	# 后接文件全路径(所属文件夹路径+文件名)

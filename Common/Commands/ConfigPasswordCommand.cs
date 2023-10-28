@@ -5,8 +5,8 @@ namespace ImproveGame.Common.Commands
     public class ConfigPasswordCommand : ModCommand
     {
         public override CommandType Type => CommandType.Server | CommandType.Console;
-        public override string Usage => "/qolpassword <password>";
-        public override string Command => "qolpassword";
+        public override string Usage => "/qotpassword <password>";
+        public override string Command => "qotpassword";
         public override string Description => GetText("Configs.ImproveConfigs.OnlyHostByPassword.CommandDescription");
 
         public override void Action(CommandCaller caller, string input, string[] args) {
@@ -23,7 +23,7 @@ namespace ImproveGame.Common.Commands
             }
 
             if (args.Length != 1 || args[0].Length != 4) {
-                caller.Reply("Usage: /qolpassword <password>", new(240, 40, 40));
+                caller.Reply("Usage: /qotpassword <password>", new(240, 40, 40));
                 return;
             }
 

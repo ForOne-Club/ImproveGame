@@ -187,7 +187,7 @@ GlobeBase: {
 	AlreadyRevealed: "{0} has already been marked"
 	Reveal: "{1} marked up {0} on the map."
 	RevealPlantera: "{0} marked up {NPCName.Plantera} on the map."
-	NotFound: Data of {0} is not present, it's likely that QoL v1.6.6+ was not enabled during world creation
+	NotFound: Data of {0} is not present, it's likely that QoT v1.6.6+ was not enabled during world creation
 }
 
 AetherGlobe.BiomeName: The Aether
