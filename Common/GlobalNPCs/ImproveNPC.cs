@@ -1,4 +1,5 @@
 ﻿using Terraria.GameContent.ItemDropRules;
+using Terraria.ID;
 
 namespace ImproveGame.Common.GlobalNPCs
 {
@@ -24,6 +25,31 @@ namespace ImproveGame.Common.GlobalNPCs
             var leadingRule = new LeadingConditionRule(new CoinOneDrop());
             leadingRule.OnSuccess(new CommonDrop(ModContent.ItemType<Content.Items.Coin.CoinOne>(), 200));
             npcLoot.Add(leadingRule);
+        }
+
+        public override bool PreAI(NPC npc)
+        {
+            // 实现史莱姆百分百额外掉落
+            if (Config.SlimeExDrop)
+            {
+                // 我复制的原版判定，然后把概率改成了100%
+                if (npc.type == NPCID.BlueSlime && npc.ai[1] == 0f && Main.netMode != NetmodeID.MultiplayerClient && npc.value > 0f)
+                {
+                    npc.ai[1] = -1f;
+                    if (Main.remixWorld && npc.ai[0] != -999f && Main.rand.NextBool(3))
+                    {
+                        npc.ai[1] = ItemID.FallenStar;
+                        npc.netUpdate = true;
+                    }
+                    else
+                    {
+                        int itemType = NPC.AI_001_Slimes_GenerateItemInsideBody(npc.ai[0] == -999f);
+                        npc.ai[1] = itemType;
+                        npc.netUpdate = true;
+                    }
+                }
+            }
+            return true;
         }
     }
 

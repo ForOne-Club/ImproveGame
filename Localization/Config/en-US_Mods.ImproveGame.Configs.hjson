@@ -203,6 +203,15 @@ ImproveConfigs: {
 		Tooltip: ""
 	}
 
+	SlimeExDrop: {
+		Label: "[centeritem:11] 史莱姆必定内含物品"
+		Tooltip:
+			'''
+			使史莱姆体内必定包含随机物品
+			如果关闭该选项，则会遵循原版概率
+			'''
+	}
+
 	LavalessLavaSlime: {
 		Label: "[centeritem:LavaSlimeBanner] Lavaless lava slime"
 		Tooltip: Killing lava slime no longer spawns lava in expert or master mode
