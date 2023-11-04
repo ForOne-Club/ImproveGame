@@ -50,6 +50,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - **[v1.6.6.1]** Buff Tracker now supports pinyin search (Chinese related)
 - **[v1.6.6.2]** 自动钓鱼机现在仅有原来的20%的概率消耗诱饵
 - **[v1.6.6.2]** “隐藏无限续杯增益”功能移动到了个人设置中
+- **[v1.6.6.2]** 个人设置中新增“重设UI位置”按钮
 
 # v1.6.5
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)

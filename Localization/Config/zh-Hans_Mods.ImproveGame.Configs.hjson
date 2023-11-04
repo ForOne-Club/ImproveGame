@@ -833,6 +833,11 @@ UIConfigs: {
 		Label: "[centeritem:BottomlessShimmerBucket] 显示微光转化信息"
 		Tooltip: 显示某个物品的微光转化结果
 	}
+
+	ResetUIPositionsButton: {
+		Label: 重设UI位置
+		Tooltip: 重设所有UI的位置，在你找不到大背包UI时尤其有用
+	}
 }
 
 PAPDisplayMode: {
