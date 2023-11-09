@@ -17,9 +17,6 @@ namespace ImproveGame.Interface.SUIElements
             Texture = texture;
             Width.Pixels = Texture.Width + this.HPadding();
             Height.Pixels = Texture.Height + this.VPadding();
-
-            Rounded = new Vector4(10f);
-            BgColor = UIColor.TitleBg;
         }
 
         public override void MouseOver(UIMouseEvent evt)
@@ -38,7 +35,7 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 imagePosition = position + ImagePosition + size * ImagePercent;
             imagePosition += (size - Texture.Size()) * ImageAlign;
             sb.Draw(Texture, imagePosition, null,
-                ImageColor, 0f, Texture.Size() * ImageOrigin, ImageScale, 0f, 0f);
+                ImageColor * Opacity.Value, 0f, Texture.Size() * ImageOrigin, ImageScale, 0f, 0f);
         }
 
     }

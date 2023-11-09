@@ -1,17 +1,9 @@
 PlayerInfo: {
 	Name: Player Stats
 	LifeRegen: Life Regen
-	ArmorPenetration: Armor Pen
-	MeleeDamage: Melee Dmg
-	MeleeCrit: Melee Crit
-	MeleeSpeed: Melee Speed
-	RangedDamage: Ranged Dmg
-	RangedCrit: Ranged Crit
-	ManaRegen: Mana Regen
-	ManaDamage: Mana Dmg
-	ManaCrit: Mana Crit
-	ManaCost: Mana Cost
-	SummonDamage: Summon Dmg
+	ArmorPenetration: 穿甲
+	Regen: Regen
+	Cost: Cost
 	MaxMinions: Max Minions
 	MaxTurrets: Max Sentry
 	Endurance: Endurance
@@ -21,6 +13,9 @@ PlayerInfo: {
 	WingTimeMax: Flight Time
 	CardWidth: "190"
 	WingTime: Mods.ImproveGame.UI.PlayerInfo.WingTime
+	Damage: 伤害
+	Crit: 暴击
+	Speed: 速度
 }
 
 ExtremeStorage: {

@@ -4,7 +4,7 @@ using ImproveGame.Core;
 using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.PlayerInfo;
+using ImproveGame.Interface.PlayerProperty;
 using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
@@ -55,9 +55,9 @@ public class UIPlayer : ModPlayer
         DataPlayer dataPlayer = Main.LocalPlayer.GetModPlayer<DataPlayer>();
 
         // 玩家信息
-        uiSystem.PlayerInfoGUI = new PlayerInfoGUI();
+        uiSystem.PlayerInfoGUI = new PlayerPropertyGUI();
         uiSystem.PlayerInfoTrigger.SetCarrier(uiSystem.PlayerInfoGUI);
-        PlayerInfoGUI.Visible = true;
+        PlayerPropertyGUI.Visible = true;
 
         // 自动垃圾桶
         uiSystem.AutoTrashGUI = new GarbageListGUI();
