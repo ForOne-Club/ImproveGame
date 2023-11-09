@@ -18,10 +18,15 @@ namespace ImproveGame.Interface.Common;
 public class UIPlayer : ModPlayer
 {
     private static CoroutineRunner _uiSetupDelayRunner = new();
+    internal static readonly Vector2 HugeInventoryDefPosition = new(150, 340);
     internal static Vector2 HugeInventoryUIPosition;
+    internal static readonly Vector2 BuffTrackerDefPosition = new(630, 160);
     internal static Vector2 BuffTrackerPosition;
+    internal static readonly Vector2 WorldFeatureDefPosition = new(250, 280);
     internal static Vector2 WorldFeaturePosition;
+    internal static readonly Vector2 ItemSearcherDefPosition = new(620, 400);
     internal static Vector2 ItemSearcherPosition;
+    internal static readonly Vector2 OpenBagDefPosition = new(410, 360);
     internal static Vector2 OpenBagPosition;
     internal static bool ShouldShowUI; // 防止进入世界时UI闪一下
 
@@ -70,13 +75,13 @@ public class UIPlayer : ModPlayer
         uiSystem.BigBagTrigger.SetCarrier(uiSystem.BigBagGUI);
 
         uiSystem.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
-        CheckPositionValid(ref HugeInventoryUIPosition, 150, 340);
+        CheckPositionValid(ref HugeInventoryUIPosition, HugeInventoryDefPosition);
         uiSystem.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
         
         // 增益追踪器
         uiSystem.BuffTrackerGUI = new BuffTrackerGUI();
         uiSystem.BuffTrackerTrigger.SetCarrier(uiSystem.BuffTrackerGUI);
-        CheckPositionValid(ref BuffTrackerPosition, 630, 160);
+        CheckPositionValid(ref BuffTrackerPosition, BuffTrackerDefPosition);
         uiSystem.BuffTrackerGUI.MainPanel.SetPos(BuffTrackerPosition).Recalculate();
         UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Main.LocalPlayer.whoAmI);
 
@@ -95,19 +100,19 @@ public class UIPlayer : ModPlayer
         // 世界特性
         uiSystem.WorldFeatureGUI = new WorldFeatureGUI();
         uiSystem.WorldFeatureTrigger.SetCarrier(uiSystem.WorldFeatureGUI);
-        CheckPositionValid(ref WorldFeaturePosition, 250, 280);
+        CheckPositionValid(ref WorldFeaturePosition, WorldFeatureDefPosition);
         uiSystem.WorldFeatureGUI.MainPanel.SetPos(WorldFeaturePosition).Recalculate();
 
         // 物品搜索
         uiSystem.ItemSearcherGUI = new ItemSearcherGUI();
         uiSystem.ItemSearcherTrigger.SetCarrier(uiSystem.ItemSearcherGUI);
-        CheckPositionValid(ref ItemSearcherPosition, 620, 400);
+        CheckPositionValid(ref ItemSearcherPosition, ItemSearcherDefPosition);
         uiSystem.ItemSearcherGUI.MainPanel.SetPos(ItemSearcherPosition).Recalculate();
 
         // 快速开袋
         uiSystem.OpenBagGUI = new OpenBagGUI();
         uiSystem.OpenBagTrigger.SetCarrier(uiSystem.OpenBagGUI);
-        CheckPositionValid(ref OpenBagPosition, 410, 360);
+        CheckPositionValid(ref OpenBagPosition, OpenBagDefPosition);
         uiSystem.OpenBagGUI.MainPanel.SetPos(OpenBagPosition).Recalculate();
 
         // 生命体检测仪筛选
@@ -125,12 +130,12 @@ public class UIPlayer : ModPlayer
         yield return null;
     }
 
-    private static void CheckPositionValid(ref Vector2 position, int defaultX, int defaultY)
+    public static void CheckPositionValid(ref Vector2 position, Vector2 defaultPosition)
     {
         if (position.X <= 0 && position.X >= Main.screenWidth)
-            position.X = defaultX;
+            position.X = defaultPosition.X;
         if (position.Y <= 0 && position.Y >= Main.screenHeight)
-            position.Y = defaultY;
+            position.Y = defaultPosition.Y;
     }
 
     public override void PreUpdate()

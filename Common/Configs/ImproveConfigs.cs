@@ -176,6 +176,9 @@ namespace ImproveGame.Common.Configs
         public int NPCHappiness;
 
         [DefaultValue(false)]
+        public bool SlimeExDrop;
+
+        [DefaultValue(false)]
         public bool LavalessLavaSlime;
 
         [DefaultValue(false)]

@@ -206,6 +206,15 @@ ImproveConfigs: {
 		// Tooltip: ""
 	}
 
+	SlimeExDrop: {
+		Label: "[centeritem:11] 史莱姆必定内含物品"
+		Tooltip:
+			'''
+			使史莱姆体内必定包含随机物品
+			如果关闭该选项，则会遵循原版概率
+			'''
+	}
+
 	LavalessLavaSlime: {
 		Label: "[centeritem:LavaSlimeBanner] 熔岩史莱姆不生成熔岩"
 		Tooltip: 专家或大师模式下的熔岩史莱姆被击杀时不再会生成熔岩
@@ -832,6 +841,11 @@ UIConfigs: {
 	ShowShimmerInfo: {
 		Label: "[centeritem:BottomlessShimmerBucket] 显示微光转化信息"
 		Tooltip: 显示某个物品的微光转化结果
+	}
+
+	ResetUIPositionsButton: {
+		Label: 重设UI位置
+		Tooltip: 重设所有UI的位置，在你找不到大背包UI时尤其有用
 	}
 }
 

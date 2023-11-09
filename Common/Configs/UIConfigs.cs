@@ -14,6 +14,9 @@ public class UIConfigs : ModConfig
     [CustomModConfigItem(typeof(OpenUIConfigElement))]
     public object OpenConfig;
 
+    [CustomModConfigItem(typeof(ResetUIPositionsButton))]
+    public object ResetUIPositionsButton;
+
     [CustomModConfigItem(typeof(SuicideButtonElement))]
     public object SuicideButton;
 
