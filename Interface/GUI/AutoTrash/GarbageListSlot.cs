@@ -38,31 +38,20 @@ public class GarbageListSlot : BaseItemSlot
     public override void LeftMouseDown(UIMouseEvent evt)
     {
         List<Item> trashItems = AutoTrashPlayer.Instance.TrashItems;
-        if (!(Main.mouseItem?.IsAir ?? true)) // 当鼠标上有物品
-        {
-            int trashIndex = trashItems.FindIndex(item => item.type == Item.type);
-            if (trashIndex > -1)
-            {
-                int worldIndex = Item.NewItem(null, Main.LocalPlayer.getRect(), trashItems[trashIndex].type, trashItems[trashIndex].stack, true);
-                if (worldIndex > -1)
-                {
-                    trashItems[trashIndex].active = true;
-                    trashItems[trashIndex].position = Main.item[worldIndex].position;
-                    Main.item[worldIndex] = trashItems[trashIndex];
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, worldIndex, 0);
-                }
 
-                trashItems.RemoveAt(trashIndex);
-            }
-        }
-        else if (!Item.IsAir) // 当鼠标上没物品
+        int trashIndex = trashItems.FindIndex(item => item.type == Item.type);
+        if (trashIndex > -1)
         {
-            int trashIndex = trashItems.FindIndex(item => item.type == Item.type);
-            if (trashIndex > -1)
+            int worldIndex = Item.NewItem(null, Main.LocalPlayer.getRect(), trashItems[trashIndex].type, trashItems[trashIndex].stack, true);
+            if (worldIndex > -1)
             {
-                Main.mouseItem = trashItems[trashIndex];
-                trashItems.RemoveAt(trashIndex);
+                trashItems[trashIndex].active = true;
+                trashItems[trashIndex].position = Main.item[worldIndex].position;
+                Main.item[worldIndex] = trashItems[trashIndex];
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, worldIndex, 0);
             }
+
+            trashItems.RemoveAt(trashIndex);
         }
 
         Garbages.RemoveAt(Index);
