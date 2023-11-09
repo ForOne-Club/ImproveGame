@@ -1,15 +1,8 @@
 ﻿using ImproveGame.Common.Configs;
-using Microsoft.Xna.Framework.Input;
-using System.Linq;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.Players;
 
-/// <summary>
-/// 方法需求
-///     4. 添加 近期列表
-///     5. 删除 近期列表
-/// </summary>
 public class AutoTrashPlayer : ModPlayer
 {
     #region 设置 Instance
@@ -96,13 +89,13 @@ public class AutoTrashPlayer : ModPlayer
             TrashItems.Insert(0, item);
         }
 
-        CleanUpTrashItems();
+        CleanUpTrash();
     }
 
     /// <summary>
     /// 清理、整理垃圾物品
     /// </summary>
-    public void CleanUpTrashItems()
+    public void CleanUpTrash()
     {
         for (int i = 0; i < TrashItems.Count; i++)
         {

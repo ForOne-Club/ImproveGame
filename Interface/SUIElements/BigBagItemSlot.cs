@@ -126,7 +126,8 @@ namespace ImproveGame.Interface.SUIElements
 
         protected void DoFastStackLogic(Action<int> stackCallback)
         {
-            switch (RightMouseDownTimer) {
+            switch (RightMouseDownTimer)
+            {
                 case >= 60:
                 case >= 30 when RightMouseDownTimer % 3 == 0:
                 case >= 15 when RightMouseDownTimer % 6 == 0:
@@ -453,30 +454,30 @@ namespace ImproveGame.Interface.SUIElements
         }
 
         public static void DrawItemIcon(SpriteBatch sb, Item item, Color lightColor, CalculatedStyle dimensions,
-            float maxSize = 32f)
+            float maxSize = 32f, float itemScale = 1f)
         {
             Main.instance.LoadItem(item.type);
             Texture2D texture2D = TextureAssets.Item[item.type].Value;
             Rectangle frame = Main.itemAnimations[item.type] is null
                 ? texture2D.Frame()
                 : Main.itemAnimations[item.type].GetFrame(texture2D);
-            float size = frame.Width > maxSize || frame.Height > maxSize
+            itemScale *= frame.Width > maxSize || frame.Height > maxSize
                 ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height
                 : 1f;
             Vector2 position = dimensions.Center();
             Vector2 origin = frame.Size() / 2f;
             if (ItemLoader.PreDrawInInventory(item, sb, position, frame, item.GetAlpha(lightColor),
-                    item.GetColor(lightColor), origin, size))
+                    item.GetColor(lightColor), origin, itemScale))
             {
-                sb.Draw(texture2D, position, frame, item.GetAlpha(lightColor), 0f, origin, size,
+                sb.Draw(texture2D, position, frame, item.GetAlpha(lightColor), 0f, origin, itemScale,
                     SpriteEffects.None, 0f);
                 if (item.color != Color.Transparent)
-                    sb.Draw(texture2D, position, frame, item.GetColor(lightColor), 0f, origin, size,
+                    sb.Draw(texture2D, position, frame, item.GetColor(lightColor), 0f, origin, itemScale,
                         SpriteEffects.None, 0f);
             }
 
             ItemLoader.PostDrawInInventory(item, sb, position, frame, item.GetAlpha(lightColor),
-                item.GetColor(lightColor), origin, size);
+                item.GetColor(lightColor), origin, itemScale);
         }
 
         public static void DrawItemIcon(SpriteBatch sb, Texture2D texture2D, Color color, CalculatedStyle dimensions,

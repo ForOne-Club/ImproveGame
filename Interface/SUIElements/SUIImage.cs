@@ -1,0 +1,45 @@
+﻿using ImproveGame.Interface.Common;
+
+namespace ImproveGame.Interface.SUIElements
+{
+    public class SUIImage : View
+    {
+        public Texture2D Texture { get; set; }
+        public Vector2 ImagePosition = new Vector2();
+        public Vector2 ImagePercent = new Vector2();
+        public Vector2 ImageAlign = new Vector2();
+        public Vector2 ImageOrigin = new Vector2();
+        public float ImageScale = 1f;
+        public Color ImageColor = Color.White;
+
+        public SUIImage(Texture2D texture)
+        {
+            Texture = texture;
+            Width.Pixels = Texture.Width + this.HPadding();
+            Height.Pixels = Texture.Height + this.VPadding();
+
+            Rounded = new Vector4(10f);
+            BgColor = UIColor.TitleBg;
+        }
+
+        public override void MouseOver(UIMouseEvent evt)
+        {
+            base.MouseOver(evt);
+            SoundEngine.PlaySound(SoundID.MenuTick);
+        }
+
+        public override void DrawSelf(SpriteBatch sb)
+        {
+            base.DrawSelf(sb);
+
+            Vector2 position = GetDimensions().Position();
+            Vector2 size = GetDimensions().Size();
+
+            Vector2 imagePosition = position + ImagePosition + size * ImagePercent;
+            imagePosition += (size - Texture.Size()) * ImageAlign;
+            sb.Draw(Texture, imagePosition, null,
+                ImageColor, 0f, Texture.Size() * ImageOrigin, ImageScale, 0f, 0f);
+        }
+
+    }
+}

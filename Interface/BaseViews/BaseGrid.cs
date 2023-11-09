@@ -51,21 +51,9 @@ public class BaseGrid : View
     /// <summary>
     /// 计算并设置自己身的大小，不调用 <see cref="Recalculate"/>
     /// </summary>
-    public void CalculateWithSetGridSize()
+    public void CalculateAndSetSize()
     {
-        if (RowCount <= 0)
-        {
-            if (ColumnCount > 0)
-            {
-                Width.Pixels = ColumnCount * (CellSize.X + CellSpacing.X);
-                Height.Pixels = MathF.Ceiling(Children.Count() / (float)ColumnCount) * (CellSize.Y + CellSpacing.Y);
-            }
-            else
-            {
-                throw new Exception("RowCount 和 ColumnCount 不可同时小于 1");
-            }
-        }
-        else
+        if (RowCount > 0)
         {
             if (ColumnCount > 0)
             {
@@ -78,12 +66,24 @@ public class BaseGrid : View
                 Height.Pixels = RowCount * (CellSize.Y + CellSpacing.Y);
             }
         }
+        else
+        {
+            if (ColumnCount > 0)
+            {
+                Width.Pixels = ColumnCount * (CellSize.X + CellSpacing.X);
+                Height.Pixels = MathF.Ceiling(Children.Count() / (float)ColumnCount) * (CellSize.Y + CellSpacing.Y);
+            }
+            else
+            {
+                throw new Exception($"{nameof(RowCount)} 和 {nameof(ColumnCount)} 必须有一个大于 0");
+            }
+        }
     }
 
     /// <summary>
     /// 计算并设置子元素的位置，不调用 <see cref="Recalculate"/>
     /// </summary>
-    public virtual void CalculateWithSetChildrenPosition()
+    public virtual void CalculateAndSetChildrenPosition()
     {
         var uies = Children.ToList();
         int uiesCount = uies.Count;
@@ -100,7 +100,7 @@ public class BaseGrid : View
     public override void Recalculate()
     {
         Opacity.Recalculate();
-        CalculateWithSetChildrenPosition();
+        CalculateAndSetChildrenPosition();
         base.Recalculate();
     }
 }

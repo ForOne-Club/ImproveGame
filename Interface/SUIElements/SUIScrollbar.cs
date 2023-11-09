@@ -126,7 +126,7 @@ namespace ImproveGame.Interface.SUIElements
             if ((HideIfFilled || HideInnerIfFilled) && InnerFilled)
                 return;
 
-            HoverTimer.OpenAndReset();
+            HoverTimer.OpenAndResetTimer();
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
@@ -135,7 +135,7 @@ namespace ImproveGame.Interface.SUIElements
             if ((HideIfFilled || HideInnerIfFilled) && InnerFilled)
                 return;
 
-            HoverTimer.CloseAndReset();
+            HoverTimer.CloseAndResetTimer();
         }
 
         public override void LeftMouseDown(UIMouseEvent evt)

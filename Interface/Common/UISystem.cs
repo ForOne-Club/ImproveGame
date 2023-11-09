@@ -44,8 +44,12 @@ namespace ImproveGame.Interface.Common
         public EventTrigger PlayerInfoTrigger;
 
         // 自动垃圾桶
-        public AutoTrashGUI AutoTrashGUI;
+        public GarbageListGUI AutoTrashGUI;
         public EventTrigger AutoTrashTrigger;
+
+        // 物品栏下方多个垃圾桶
+        public InventoryTrashGUI InventoryTrashGUI;
+        public EventTrigger InventoryTrashTrigger;
 
         // 药水袋 & 旗帜盒 UI
         public PackageGUI PackageGUI;
@@ -121,6 +125,9 @@ namespace ImproveGame.Interface.Common
             AutoTrashGUI = null;
             AutoTrashTrigger = null;
 
+            InventoryTrashGUI = null;
+            InventoryTrashTrigger = null;
+
             BigBagGUI = null;
             BigBagTrigger = null;
 
@@ -162,6 +169,7 @@ namespace ImproveGame.Interface.Common
 
             // UserInterface 之 EventTrigger 版
             AutoTrashTrigger = new EventTrigger("Radial Hotbars", "Auto Trash");
+            InventoryTrashTrigger = new EventTrigger("Radial Hotbars", "Inventory Trash");
             PackageTrigger = new EventTrigger("Radial Hotbars", "Package");
             BigBagTrigger = new EventTrigger("Radial Hotbars", "Big Bag");
             PlayerInfoTrigger = new EventTrigger("Radial Hotbars", "Player Info");

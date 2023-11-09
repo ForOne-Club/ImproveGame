@@ -305,8 +305,8 @@ public class OpenBagGUI : ViewBody
         }
 
         TipText.Recalculate();
-        LootsGrid.CalculateWithSetGridSize();
-        LootsGrid.CalculateWithSetChildrenPosition();
+        LootsGrid.CalculateAndSetSize();
+        LootsGrid.CalculateAndSetChildrenPosition();
         LootsGrid.Recalculate();
         Scrollbar.SetView(LootsGrid.Parent.GetInnerSizePixels().Y, LootsGrid.Height.Pixels);
     }

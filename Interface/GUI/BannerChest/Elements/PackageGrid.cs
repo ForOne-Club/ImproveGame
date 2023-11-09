@@ -18,18 +18,6 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
             SetInnerPixels(ListView.Width.Pixels + Scrollbar.Width.Pixels + 9, ListView.Height.Pixels + 1);
         }
 
-        public override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            base.DrawSelf(spriteBatch);
-            if (!(Math.Abs(-Scrollbar.ViewPosition - ListView.Top.Pixels) > 0.000000001f))
-            {
-                return;
-            }
-
-            ListView.Top.Pixels = -Scrollbar.ViewPosition;
-            ListView.Recalculate();
-        }
-
         public override void Update(GameTime gameTime)
         {
             // 寻找 Items 中有没有 Item.IsAir
@@ -52,6 +40,18 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
 
             // 因为 Update 是一层一层调用子元素的 Update()，所以不能放在前面。
             base.Update(gameTime);
+        }
+
+        public override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            base.DrawSelf(spriteBatch);
+            if (!(Math.Abs(-Scrollbar.ViewPosition - ListView.Top.Pixels) > 0.000000001f))
+            {
+                return;
+            }
+
+            ListView.Top.Pixels = -Scrollbar.ViewPosition;
+            ListView.Recalculate();
         }
 
         private static int RequiredChildrenCount(int length)

@@ -6,11 +6,9 @@ using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.WorldFeature;
-using Microsoft.Xna.Framework.Input;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
-using Terraria.ID;
 
 namespace ImproveGame.Common.ModPlayers;
 
@@ -155,7 +153,7 @@ public class ImprovePlayer : ModPlayer
             {
                 Main.anglerQuestFinished = false;
                 Main.anglerWhoFinishedToday.Clear();
-                
+
                 AddNotification(GetText("Tips.AnglerQuest"), Color.Cyan);
             }
         }
@@ -222,6 +220,7 @@ public class ImprovePlayer : ModPlayer
         }
 
         Player.respawnTimer -= (int)TimeShortened;
+        Player.respawnTimer = Math.Max(Player.respawnTimer, 90);
     }
 
     private bool _cacheSwitchSlot;
@@ -372,8 +371,19 @@ public class ImprovePlayer : ModPlayer
 
     private void PressAutoTrashKeybind()
     {
-        if (Main.playerInventory)
-            AutoTrashGUI.Hidden = !AutoTrashGUI.Hidden;
+        // 如果已经隐藏，强制打开背包并开启
+        // 如果开启直接隐藏
+        if (GarbageListGUI.ShowWindow)
+        {
+            Main.playerInventory = true;
+            GarbageListGUI.ShowWindow = false;
+            SoundEngine.PlaySound(SoundID.MenuClose);
+        }
+        else
+        {
+            GarbageListGUI.ShowWindow = true;
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+        }
     }
 
     private void PressDiscordKeybind()
@@ -408,15 +418,15 @@ public class ImprovePlayer : ModPlayer
         // 返回药水优先级最高
         int itemType =
             (from item in items
-                where item.type is ItemID.PotionOfReturn && item.stack >= Config.NoConsume_PotionRequirement
-                select item.type).FirstOrDefault();
+             where item.type is ItemID.PotionOfReturn && item.stack >= Config.NoConsume_PotionRequirement
+             select item.type).FirstOrDefault();
 
         // 然后是回忆
         if (itemType is ItemID.None)
         {
             itemType = (from item in items
-                where item.type is ItemID.RecallPotion && item.stack >= Config.NoConsume_PotionRequirement
-                select item.type).FirstOrDefault();
+                        where item.type is ItemID.RecallPotion && item.stack >= Config.NoConsume_PotionRequirement
+                        select item.type).FirstOrDefault();
         }
 
         // 最后是魔镜
@@ -424,7 +434,7 @@ public class ImprovePlayer : ModPlayer
         {
             itemType = (from item in items where item.type is ItemID.MagicMirror or ItemID.CellPhone or ItemID.IceMirror
                     or ItemID.Shellphone or ItemID.ShellphoneOcean or ItemID.ShellphoneHell or ItemID.ShellphoneSpawn
-                select item.type).FirstOrDefault();
+                        select item.type).FirstOrDefault();
         }
 
         if (itemType is ItemID.None)

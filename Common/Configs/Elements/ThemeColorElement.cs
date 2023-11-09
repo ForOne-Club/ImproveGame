@@ -102,8 +102,8 @@ public class ThemeColorElement : EnumElement
             itemSlot.Join(ItemGrid);
         }
 
-        ItemGrid.CalculateWithSetGridSize();
-        ItemGrid.CalculateWithSetChildrenPosition();
+        ItemGrid.CalculateAndSetSize();
+        ItemGrid.CalculateAndSetChildrenPosition();
         ItemGrid.Recalculate();
         Scrollbar.SetView(itemsPanel.GetInnerSizePixels().Y, ItemGrid.Height.Pixels);
     }

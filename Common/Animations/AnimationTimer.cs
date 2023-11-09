@@ -9,7 +9,6 @@ public enum AnimationType : byte
 {
     Linear, // 线性动画 (就一种类型, 还是一个大分类)
     Easing, // 缓动动画 (最简单的非线性动画). 如果能学到其他的非线性动画, 我就都加进来.
-    Bezier, // 贝塞尔动画
 }
 
 // 动画计时器
@@ -30,8 +29,6 @@ public class AnimationTimer
     /// </summary>
     public float TimerMax;
 
-    public float[] BezierPoint = new float[] { 0f, 1f / 3f, 2f / 3f, 1f };
-
     /// <summary>
     /// 进度
     /// </summary>
@@ -42,7 +39,6 @@ public class AnimationTimer
             float schedule = Timer / TimerMax;
             return Type switch
             {
-                AnimationType.Bezier => BezierHelper.Calculate(Timer / TimerMax, BezierPoint),
                 AnimationType.Linear or AnimationType.Easing or _ => schedule
             };
         }
@@ -83,7 +79,7 @@ public class AnimationTimer
     /// <summary>
     /// 开启并重置
     /// </summary>
-    public virtual void OpenAndReset()
+    public virtual void OpenAndResetTimer()
     {
         State = AnimationState.Opening;
         Timer = 0f;
@@ -100,7 +96,7 @@ public class AnimationTimer
     /// <summary>
     /// 关闭并重置
     /// </summary>
-    public virtual void CloseAndReset()
+    public virtual void CloseAndResetTimer()
     {
         State = AnimationState.Closing;
         Timer = TimerMax;
@@ -114,49 +110,43 @@ public class AnimationTimer
         switch (State)
         {
             case AnimationState.Opening:
-                Update_Open();
+                {
+                    if (Type == AnimationType.Easing)
+                    {
+                        Timer += (TimerMax + 1 - Timer) / Speed;
+                    }
+                    else
+                    {
+                        Timer += Speed;
+                    }
+
+                    if (TimerMax - Timer < 0f)
+                    {
+                        Timer = TimerMax;
+                        State = AnimationState.CompleteOpen;
+                        OnOpened?.Invoke();
+                    }
+                }
                 break;
             case AnimationState.Closing:
-                Update_Close();
+                {
+                    if (Type == AnimationType.Easing)
+                    {
+                        Timer -= (Timer + 1) / Speed;
+                    }
+                    else
+                    {
+                        Timer -= Speed;
+                    }
+
+                    if (Timer < 0f)
+                    {
+                        Timer = 0;
+                        State = AnimationState.CompleteClose;
+                        OnClosed?.Invoke();
+                    }
+                }
                 break;
-        }
-    }
-
-    protected virtual void Update_Open()
-    {
-        if (Type == AnimationType.Easing)
-        {
-            Timer += (TimerMax + 1 - Timer) / Speed;
-        }
-        else
-        {
-            Timer += Speed;
-        }
-
-        if (TimerMax - Timer < 0f)
-        {
-            Timer = TimerMax;
-            State = AnimationState.CompleteOpen;
-            OnOpened?.Invoke();
-        }
-    }
-
-    protected virtual void Update_Close()
-    {
-        if (Type == AnimationType.Easing)
-        {
-            Timer -= (Timer + 1) / Speed;
-        }
-        else
-        {
-            Timer -= Speed;
-        }
-
-        if (Timer < 0f)
-        {
-            Timer = 0;
-            State = AnimationState.CompleteClose;
-            OnClosed?.Invoke();
         }
     }
 

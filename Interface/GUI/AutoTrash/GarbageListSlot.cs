@@ -1,32 +1,37 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
-using System;
-using Terraria.ID;
 
 namespace ImproveGame.Interface.GUI.AutoTrash;
 
-public class AutoDiscardItemSlot : BaseItemSlot
+/// <summary>
+/// 垃圾列表槽
+/// </summary>
+public class GarbageListSlot : BaseItemSlot
 {
-    public readonly List<Item> AutoDiscardItems;
+    /// <summary>
+    /// 垃圾列表
+    /// </summary>
+    public readonly List<Item> Garbages;
     public readonly int Index;
     public override Item Item
     {
         get
         {
-            return AutoDiscardItems.IndexInRange(Index) ? AutoDiscardItems[Index] : AirItem;
+            return Garbages.IndexInRange(Index) ? Garbages[Index] : AirItem;
         }
     }
 
     public readonly Texture2D textureTrash;
 
-    public AutoDiscardItemSlot(List<Item> items, int index)
+    public GarbageListSlot(List<Item> items, int index)
     {
-        AutoDiscardItems = items;
+        Garbages = items;
         Index = index;
         SetBaseItemSlotValues(true, false);
-        SetSizePixels(43, 43);
-        ItemIconMaxWidthAndHeight = 27;
+        SetSizePixels(44, 44);
+        ItemIconMaxWidthAndHeight = 32f;
+        ItemIconScale = 0.85f;
         textureTrash = ModAsset.Trash.Value; // GetTexture("UI/AutoTrash/Trash").Value;
     }
 
@@ -60,7 +65,7 @@ public class AutoDiscardItemSlot : BaseItemSlot
             }
         }
 
-        AutoDiscardItems.RemoveAt(Index);
+        Garbages.RemoveAt(Index);
         SoundEngine.PlaySound(SoundID.Grab);
     }
 
@@ -85,7 +90,7 @@ public class AutoDiscardItemSlot : BaseItemSlot
 
             SDFRectangle.NoBorder(pos + new Vector2(4f), size - new Vector2(8f), new Vector4(8f), HoverTimer.Lerp(Color.Transparent, UIColor.TitleBg2));
             spriteBatch.Draw(textureTrash, pos + size / 2f, null,
-                HoverTimer.Lerp(Color.Transparent, Color.White), 0f, textureTrash.Size() / 2f, 1f, 0, 0);
+                HoverTimer.Lerp(Color.Transparent, Color.White), 0f, textureTrash.Size() / 2f, ItemIconScale, 0, 0);
         }
     }
 }

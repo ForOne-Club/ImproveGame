@@ -55,8 +55,11 @@ public class UIPlayer : ModPlayer
         PlayerInfoGUI.Visible = true;
 
         // 自动垃圾桶
-        uiSystem.AutoTrashGUI = new AutoTrashGUI();
+        uiSystem.AutoTrashGUI = new GarbageListGUI();
         uiSystem.AutoTrashTrigger.SetCarrier(uiSystem.AutoTrashGUI);
+
+        uiSystem.InventoryTrashGUI = new InventoryTrashGUI();
+        uiSystem.InventoryTrashTrigger.SetCarrier(uiSystem.InventoryTrashGUI);
 
         // 旗帜盒
         uiSystem.PackageGUI = new PackageGUI();

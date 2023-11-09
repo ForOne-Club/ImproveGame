@@ -98,11 +98,12 @@ ExtremeStorage: {
 
 AutoTrash.Introduction:
 	'''
-	这是一个自动垃圾桶，其中的物品将被[c/CC88AA:自动丢弃]
-	可取回最近丢弃的六种物品
-	Shift+Ctrl+<left>物品将其丢进此垃圾桶
+	这是一个自动垃圾桶，可取回最近丢弃的六种物品
+	[c/CC88AA:Shift+Ctrl+<left>]背包中的物品会将其丢入其中
+	（并加入自动丢弃列表）
+	已被加入此列表的物品从地图获取时总会[c/CC88AA:丢入其中]
 	可以在用户界面配置中[c/CC88AA:关闭]此功能
-	按下 [c/CC88AA:{0}] 以隐藏该UI
+	按下此按钮或 [c/CC88AA:{0}] 查看自动丢弃列表
 	'''
 
 WorldFeature: {

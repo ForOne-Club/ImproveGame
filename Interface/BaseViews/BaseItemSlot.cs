@@ -19,7 +19,8 @@ public class BaseItemSlot : TimerView
     /// </summary>
     public bool DisplayItemStack;
 
-    public int ItemIconMaxWidthAndHeight = 32;
+    public float ItemIconMaxWidthAndHeight = 32f;
+    public float ItemIconScale = 1f;
 
     public BaseItemSlot()
     {
@@ -52,7 +53,7 @@ public class BaseItemSlot : TimerView
             Main.HoverItem = Item.Clone();
         }
 
-        BigBagItemSlot.DrawItemIcon(Main.spriteBatch, Item, Color.White, GetInnerDimensions(), ItemIconMaxWidthAndHeight);
+        BigBagItemSlot.DrawItemIcon(Main.spriteBatch, Item, Color.White, GetInnerDimensions(), ItemIconMaxWidthAndHeight, ItemIconScale);
 
         if (DisplayItemStack && Item.stack > 1)
         {

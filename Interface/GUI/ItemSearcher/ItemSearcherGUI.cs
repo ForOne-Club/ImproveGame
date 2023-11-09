@@ -334,8 +334,8 @@ public class ItemSearcherGUI : ViewBody
         }
 
         TipText.Recalculate();
-        ItemsFoundGrid.CalculateWithSetGridSize();
-        ItemsFoundGrid.CalculateWithSetChildrenPosition();
+        ItemsFoundGrid.CalculateAndSetSize();
+        ItemsFoundGrid.CalculateAndSetChildrenPosition();
         ItemsFoundGrid.Recalculate();
         if (oldHeight != ItemsFoundGrid.Height.Pixels)
             Scrollbar.SetView(ItemsFoundGrid.Parent.GetInnerSizePixels().Y, ItemsFoundGrid.Height.Pixels);
