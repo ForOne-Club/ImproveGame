@@ -49,4 +49,8 @@
 	<ItemGroup>
 	  <Solaestas-ImageFile Remove="Content\Dummy.png" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Interface\GUI\PlayerProperty\Elements\" />
+	  <Folder Include="Interface\GUI\PlayerProperty\PlayerPropertys\" />
+	</ItemGroup>
 </Project>

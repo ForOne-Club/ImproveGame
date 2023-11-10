@@ -171,7 +171,7 @@ public class OpenBagGUI : ViewBody
                 itemSlot.Item = keeper.Bag;
         };
 
-        var openButton = new SUIButton(ModAsset.UI_Open.Value, GetText("UI.OpenBag.Open"))
+        var openButton = new SUIButton(ModAsset.Open.Value, GetText("UI.OpenBag.Open"))
         {
             Left = {Pixels = 80f},
             Top = {Pixels = 8f}

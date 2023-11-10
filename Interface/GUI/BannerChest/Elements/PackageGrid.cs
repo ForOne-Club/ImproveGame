@@ -44,14 +44,13 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
-            base.DrawSelf(spriteBatch);
-            if (!(Math.Abs(-Scrollbar.ViewPosition - ListView.Top.Pixels) > 0.000000001f))
+            if (Math.Abs(-Scrollbar.ViewPosition - ListView.Top.Pixels) > 0.000000001f)
             {
-                return;
+                ListView.Top.Pixels = -Scrollbar.ViewPosition;
+                ListView.Recalculate();
             }
 
-            ListView.Top.Pixels = -Scrollbar.ViewPosition;
-            ListView.Recalculate();
+            base.DrawSelf(spriteBatch);
         }
 
         private static int RequiredChildrenCount(int length)

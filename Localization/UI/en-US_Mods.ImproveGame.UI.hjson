@@ -1,5 +1,10 @@
-PlayerInfo: {
+PlayerProperty: {
 	Name: Player Stats
+	Melee: 近战
+	Ranged: 远程
+	Magic: 魔法
+	Summon: 召唤
+	Other: 其他
 	LifeRegen: Life Regen
 	ArmorPenetration: 穿甲
 	Regen: Regen
@@ -10,9 +15,6 @@ PlayerInfo: {
 	FishingSkill: Fishing Power
 	Luck: Luck
 	Aggro: Aggro
-	WingTimeMax: Flight Time
-	CardWidth: "190"
-	WingTime: Mods.ImproveGame.UI.PlayerInfo.WingTime
 	Damage: 伤害
 	Crit: 暴击
 	Speed: 速度

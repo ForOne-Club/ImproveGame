@@ -2,7 +2,7 @@
 
 namespace ImproveGame.Interface.SUIElements
 {
-    public class SUIImage : View
+    public class SUIImage : TimerView
     {
         public Texture2D Texture { get; set; }
         public Vector2 ImagePosition = new Vector2();
