@@ -630,6 +630,11 @@ ImproveConfigs: {
 		Label: "[centeritem:Clownfish] 任务鱼可堆叠"
 		Tooltip: 使任务鱼可堆叠，在背包有相同鱼时仍可钓出并捡起
 	}
+
+	QuickRespawn: {
+		Label: "[centeritem:3232] 无BOSS存活时快速复活"
+		Tooltip: 当场上无任何BOSS或BOSS被击败/脱战时，将复活时间缩短为1.5s
+	}
 }
 
 ModItemLoadPage: {

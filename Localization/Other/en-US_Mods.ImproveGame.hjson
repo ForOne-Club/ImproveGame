@@ -22,8 +22,8 @@ CombatText: {
 }
 
 Tips: {
-	ShimmerInto: "Can be shimmered into: "
-	ShimmerIntoWithStack: "Every {0} can be shimmered into: "
+	ShimmerInto: "Can be shimmered into "
+	ShimmerIntoWithStack: "Every {0} can be shimmered into "
 	PrefixCount: "Reforging count: "
 	AnglerQuest: Angler's quest refreshed
 	FromMod: From mod {DisplayName}

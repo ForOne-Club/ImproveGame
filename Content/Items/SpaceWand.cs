@@ -278,7 +278,8 @@ public class SpaceWand : ModItem, IMarqueeItem
             WorldGen.SquareTileFrame(x, y, false);
         }
 
-        if (PlaceType is PlaceType.Soild && !platformRect.Contains(x, y + 1))
+        // 仅当现在在放置实心块，且斜坡类型也为实心时，才重置下方物块的斜坡状态
+        if (PlaceType is PlaceType.Soild && BlockType is BlockType.Solid && !platformRect.Contains(x, y + 1))
             WorldGen.SlopeTile(x, y + 1);
     }
 
