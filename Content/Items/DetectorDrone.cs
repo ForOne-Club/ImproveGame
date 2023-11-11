@@ -70,9 +70,8 @@ public class DetectorDrone : ModItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.IronBar, 12)
-            .AddRecipeGroup(RecipeSystem.AnyGoldBar, 6)
-            .AddRecipeGroup(RecipeSystem.AnyGem, 3)
+            .AddRecipeGroup(RecipeGroupID.IronBar, 6)
+            .AddRecipeGroup(RecipeSystem.AnyGoldBar, 2)
             .AddTile(TileID.Anvils)
             .Register();
     }

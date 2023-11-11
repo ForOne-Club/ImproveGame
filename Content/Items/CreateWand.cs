@@ -543,7 +543,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
         CreateRecipe()
             .AddRecipeGroup(RecipeGroupID.Wood, 24)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 12)
-            .AddIngredient(ItemID.FallenStar, 8)
+            .AddIngredient(ItemID.FallenStar, 2)
             .Register();
     }
 }
