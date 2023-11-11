@@ -3,18 +3,20 @@ using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.GUI.PlayerProperty;
 
-public class PlayerPropertyCard : TimerView
+public class PropertyBar : TimerView
 {
+    public Balabala Balabala { get; set; }
+
     public float Scale = 0.85f;
     public string PropertyName;
     public Vector2 TextSize;
-    private Func<string> PropertyValue;
+    private Func<string> PropertyValue { get; set; }
 
-    public PlayerPropertyCard(string propertyName, Func<string> propertyValue)
+    public PropertyBar(string propertyName, Func<string> propertyValue, Balabala balabala)
     {
         Wrap = false;
         Relative = RelativeMode.Vertical;
-        Spacing = new Vector2(4f);
+        Spacing = new Vector2(2f);
 
         Width.Pixels = 0f;
         Width.Percent = 1f;
@@ -30,7 +32,9 @@ public class PlayerPropertyCard : TimerView
         PropertyValue ??= () => string.Empty;
 
         BgColor = UIColor.TitleBg2 * 0.75f;
-        Rounded = new Vector4(8f);
+        Rounded = new Vector4(6f);
+
+        Balabala = balabala;
     }
 
     public override void DrawSelf(SpriteBatch sb)

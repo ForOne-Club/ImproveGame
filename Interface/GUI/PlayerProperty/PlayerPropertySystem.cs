@@ -1,7 +1,7 @@
 ﻿namespace ImproveGame.Interface.GUI.PlayerProperty;
 
 /// <summary>
-/// 抽象是对这个世界的鞭策
+/// 抽象就是对世界的鞭挞
 /// </summary>
 public class PlayerPropertySystem : ModSystem
 {
@@ -9,22 +9,13 @@ public class PlayerPropertySystem : ModSystem
 
     public Dictionary<string, Miximixi> Miximixis = new();
 
-    public static float PlayerDamage(DamageClass damageClass)
-    {
-        return (Main.LocalPlayer.GetTotalDamage(damageClass).Additive - 1) * 100f;
-    }
-
-    public static float PlayerCrit(DamageClass damageClass)
-    {
-        return Main.LocalPlayer.GetTotalCritChance(damageClass);
-    }
-
     public override void PostSetupContent()
     {
         Instance = this;
 
         #region 近战属性
         Miximixi melee = new Miximixi(GetTexture("UI/PlayerInfo/Melee").Value, "UI.PlayerProperty.Melee");
+        melee.UIPosition = new Vector2(620f, 20f);
 
         // 伤害
         melee.Balabalas.Add(new Balabala(melee, "UI.PlayerProperty.Damage",
@@ -127,11 +118,30 @@ public class PlayerPropertySystem : ModSystem
             () => $"{Main.LocalPlayer.fishingSkill}"));
         #endregion
 
-
         Miximixis.Add("Melee", melee);
         Miximixis.Add("Ranged", ranged);
         Miximixis.Add("Magic", magic);
         Miximixis.Add("Summon", summon);
         Miximixis.Add("Other", other);
+
+        // tipPanel.Append(new PlyInfoCard(PlyInfo("WingTime")}:", () => $"{MathF.Round((player.wingTime + player.rocketTime * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
+        // new PlyInfoCard(GetHJSON("WingTimeMax"),
+        //     () => $"{MathF.Round((_player.wingTimeMax + _player.rocketTimeMax * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
+    }
+
+    /// <summary>
+    /// 获取 LocalPlayer 的伤害
+    /// </summary>
+    public static float PlayerDamage(DamageClass damageClass)
+    {
+        return (Main.LocalPlayer.GetTotalDamage(damageClass).Additive - 1) * 100f;
+    }
+
+    /// <summary>
+    /// 获取 LocalPlayer 的暴击
+    /// </summary>
+    public static float PlayerCrit(DamageClass damageClass)
+    {
+        return Main.LocalPlayer.GetTotalCritChance(damageClass);
     }
 }

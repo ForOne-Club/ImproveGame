@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
+using Terraria;
 
 namespace ImproveGame.Interface.GUI.PlayerProperty;
 
@@ -8,6 +9,8 @@ namespace ImproveGame.Interface.GUI.PlayerProperty;
 /// </summary>
 public class Miximixi
 {
+    public Vector2? UIPosition;
+
     /// <summary>
     /// 收藏
     /// </summary>
@@ -30,12 +33,11 @@ public class Miximixi
     /// <summary>
     /// 创建卡片
     /// </summary>
-    public SUIPanel CreateCard(out TimerView titleView, out SUIImage image, out SUITitle title)
+    public PropertyCard CreateCard(out TimerView titleView, out SUIImage image, out SUITitle title)
     {
         // 卡片主体
-        SUIPanel card = new(UIColor.PanelBorder * 0.85f, UIColor.PanelBg * 0.85f, 10f, 2);
-        card.SetPadding(5);
-        card.SetInnerPixels(160, (30 + 4) * (Balabalas.Count + 1) - 4);
+        PropertyCard card = new(this, UIColor.PanelBorder * 0f, UIColor.PanelBg * 0f, 10f, 2);
+        card.UseImmediateMode = true;
 
         // 标题容器
         titleView = new()
@@ -73,13 +75,22 @@ public class Miximixi
         return card;
     }
 
-    public void AppendPropertys(UIElement uie)
+    public void AppendPropertys(PropertyCard card, Func<Balabala, PropertyBar, bool> isConsole)
     {
         for (int i = 0; i < Balabalas.Count; i++)
         {
             Balabala balabala = Balabalas[i];
-            var ppi = new PlayerPropertyCard(balabala.Name, balabala.Value);
-            uie.Append(ppi);
+            PropertyBar propertyBar = new(balabala.Name, balabala.Value, balabala);
+
+            if (isConsole?.Invoke(balabala, propertyBar) ?? false)
+            {
+                card.Console = true;
+                card.Append(propertyBar);
+            }
+            else if (balabala.Favorite)
+            {
+                card.Append(propertyBar);
+            }
         }
     }
 }

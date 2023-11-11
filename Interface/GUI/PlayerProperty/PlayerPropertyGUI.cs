@@ -11,13 +11,21 @@ public class PlayerPropertyGUI : ViewBody
     #region ViewBody
     public override bool Display { get => Visible; set => Visible = value; }
 
-    public override bool CanPriority(UIElement target) => target != this;
+    public override bool CanPriority(UIElement target) => this != target && this != Body;
 
     public override bool CanDisableMouse(UIElement target)
     {
         if (target != this)
         {
             foreach (var item in Children)
+            {
+                if (item != Body && (item.IsMouseHovering || (item is View view && view.KeepPressed)))
+                {
+                    return true;
+                }
+            }
+
+            foreach (var item in Body.Children)
             {
                 if (item.IsMouseHovering || (item is View view && view.KeepPressed))
                 {
@@ -44,12 +52,22 @@ public class PlayerPropertyGUI : ViewBody
         set => _visible = value;
     }
 
-    public PropertyGrid PropertyGrid { get; set; }
+    public View Body { get; set; }
     public SUIPanel Window { get; set; }
+    public PropertyGrid PropertyGrid { get; set; }
 
     public override void OnInitialize()
     {
-        SUIImage button = new SUIImage(ModAsset.Flying.Value);
+        Body = new()
+        {
+            Width = new StyleDimension(0, 1f),
+            Height = new StyleDimension(0, 1f),
+        };
+        Body.OnUpdate += Body_OnUpdate;
+        Body.Join(this);
+
+        // 开关控制器的按钮
+        SUIImage button = new SUIImage(ModAsset.Luck.Value);
         button.SetPosPixels(572, 20);
         button.SetSizePixels(button.Texture.Size());
         button.OnUpdate +=
@@ -68,18 +86,33 @@ public class PlayerPropertyGUI : ViewBody
             };
         button.Join(this);
 
-        // 所有的
+        // 所有的属性面板
         foreach (var item in PlayerPropertySystem.Instance.Miximixis)
         {
-            var card = item.Value.CreateCard(out _, out _, out _);
-            item.Value.AppendPropertys(card);
-            card.Draggable = true;
-            card.Join(this);
+            if (item.Value.Favorite)
+            {
+                PropertyCard card = item.Value.CreateCard(out _, out _, out _);
+                item.Value.AppendPropertys(card, null);
+
+                if (item.Value.UIPosition is Vector2 pos)
+                {
+                    card.SetPosPixels(pos);
+                }
+                else if (Body.Children.Last() != null)
+                {
+                    card.SetPosPixels(Body.Children.Last().Right() + 4f, Body.Children.Last().Top.Pixels);
+                }
+
+                card.Draggable = true;
+                card.SetInnerPixels(160, (30 + 2) * card.Children.Count() - 2);
+                card.Join(Body);
+            }
         }
 
         // 控制窗口
         Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, 10, 2, true);
 
+        #region 标题栏
         // 标题
         var TitleView = new View
         {
@@ -119,24 +152,95 @@ public class PlayerPropertyGUI : ViewBody
             RemoveChild(Window);
             SoundEngine.PlaySound(SoundID.MenuClose);
         };
+        #endregion
 
-        // 列表
+        // 一整个列表
         PropertyGrid = new PropertyGrid();
 
         foreach (var item in PlayerPropertySystem.Instance.Miximixis)
         {
-            var card = item.Value.CreateCard(out TimerView titleView, out _, out _);
-            item.Value.AppendPropertys(card);
+            PropertyCard card = item.Value.CreateCard(out TimerView titleView, out _, out _);
+            item.Value.AppendPropertys(card, (bala, bar) =>
+                {
+                    bar.OnUpdate += (_) =>
+                    {
+                        bar.BorderColor = bala.Favorite ? Color.Transparent : (Color.Red * 0.85f);
+                        bar.Border = bala.Favorite ? 0 : 2;
+                    };
+
+                    bar.OnLeftMouseDown += (_, _) =>
+                    {
+                        bala.Favorite = !bala.Favorite;
+
+                        foreach (var item in Body.Children)
+                        {
+                            if (item is PropertyCard innerCard && innerCard.Miximixi == card.Miximixi)
+                            {
+                                var first = innerCard.Children.First();
+                                innerCard.RemoveAllChildren();
+                                innerCard.Append(first);
+                                innerCard.Miximixi.AppendPropertys(innerCard, null);
+                            }
+                        }
+                    };
+
+                    return true;
+                });
+
+            card.OnUpdate += (_) =>
+            {
+                if (card.Miximixi.Favorite)
+                    card.BorderColor = UIColor.ItemSlotBorderFav;
+                else
+                    card.BorderColor = UIColor.PanelBorder;
+            };
+
+            titleView.OnUpdate += (_) =>
+            {
+                titleView.Border = titleView.HoverTimer.Lerp(0, 2);
+                titleView.BorderColor = titleView.HoverTimer.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav);
+            };
+
+            titleView.OnLeftMouseDown += (_, _) =>
+            {
+                item.Value.Favorite = !item.Value.Favorite;
+
+                if (item.Value.Favorite)
+                {
+                    // 正常版的创建
+                    PropertyCard innerCard = item.Value.CreateCard(out _, out _, out _);
+                    item.Value.AppendPropertys(innerCard, null);
+
+                    if (item.Value.UIPosition is Vector2 pos)
+                    {
+                        innerCard.SetPosPixels(pos);
+                    }
+                    else if (Body.Children.Count() > 0)
+                    {
+                        innerCard.SetPosPixels(Body.Children.Last().Right() + 4f, Body.Children.Last().Top.Pixels);
+                    }
+
+                    innerCard.Draggable = true;
+                    innerCard.SetInnerPixels(160, (30 + 2) * innerCard.Children.Count() - 2);
+                    innerCard.Join(Body);
+                }
+            };
+
             card.Relative = RelativeMode.Vertical;
             card.Spacing.Y = 4f;
-            card.Join(PropertyGrid.ListView);
+            card.SetInnerPixels(160, (30 + 2) * card.Children.Count() - 2);
+
+            float height1 = PropertyGrid.ListView.Children.Count() > 0 ? PropertyGrid.ListView.Children.Last().Bottom() : 0f;
+            float height2 = PropertyGrid.ListView2.Children.Count() > 0 ? PropertyGrid.ListView2.Children.Last().Bottom() : 0f;
+
+            card.Join(height1 > height2 ? PropertyGrid.ListView : PropertyGrid.ListView2);
         }
 
         PropertyGrid.Top.Pixels = TitleView.BottomPixels();
         PropertyGrid.SetPadding(7f);
         PropertyGrid.PaddingTop -= 3;
         PropertyGrid.PaddingRight -= 1;
-        PropertyGrid.SetInnerPixels(160f + 21f, 250f);
+        PropertyGrid.SetInnerPixels(160f * 2f + 4 + 21f, 250f);
         PropertyGrid.Join(Window);
 
         Window.SetPadding(0);
@@ -144,21 +248,64 @@ public class PlayerPropertyGUI : ViewBody
 
         Window.HAlign = 0.5f;
         Window.Join(this);
+    }
 
-        // tipPanel.Append(new PlyInfoCard(PlyInfo("WingTime")}:", () => $"{MathF.Round((player.wingTime + player.rocketTime * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
-        // new PlyInfoCard(GetHJSON("WingTimeMax"),
-        //     () => $"{MathF.Round((_player.wingTimeMax + _player.rocketTimeMax * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
+    /// <summary>
+    /// 去除重复的和未收藏的
+    /// </summary>
+    private void Body_OnUpdate(UIElement body)
+    {
+        List<UIElement> list = body.Children.ToList();
+        HashSet<Miximixi> appeared = new HashSet<Miximixi>();
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            var uie = list[i];
+
+            if (uie is PropertyCard card)
+            {
+                if (appeared.Contains(card.Miximixi))
+                {
+                    appeared.Remove(card.Miximixi);
+                    break;
+                }
+
+                appeared.Add(card.Miximixi);
+
+                if (!card.Miximixi.Favorite)
+                {
+                    uie.Remove();
+                }
+            }
+        }
     }
 
     public override void Update(GameTime gameTime)
     {
-        foreach (var card in Children)
+        bool b = false;
+
+        foreach (var item in Children)
         {
-            if (card.IsMouseHovering)
+            if (item != Body && (item.IsMouseHovering || (item is View view && view.KeepPressed)))
             {
-                PlayerInput.LockVanillaMouseScroll("ImproveGame: PlayerProperty GUI");
-                Main.LocalPlayer.mouseInterface = true;
+                b = true;
+                break;
             }
+        }
+
+        foreach (var item in Body.Children)
+        {
+            if (item.IsMouseHovering || (item is View view && view.KeepPressed))
+            {
+                b = true;
+                break;
+            }
+        }
+
+        if (b)
+        {
+            PlayerInput.LockVanillaMouseScroll("ImproveGame: PlayerProperty GUI");
+            Main.LocalPlayer.mouseInterface = true;
         }
 
         base.Update(gameTime);

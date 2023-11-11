@@ -852,6 +852,8 @@ PAPDisplayMode: {
 	AlwaysDisplayed.Label: Always
 	NotDisplayed.Label: Hidden
 	WhenOpeningBackpack.Label: Inventory-only
+	AlwaysDisplayedNoBorder.Label: Always Displayed No Border
+	WhenOpeningBackpackNoBorder.Label: When Opening Backpack No Border
 }
 
 ThemeType: {

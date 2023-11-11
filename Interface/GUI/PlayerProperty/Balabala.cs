@@ -5,6 +5,7 @@
 /// </summary>
 public class Balabala
 {
+    public bool Favorite { get; set; } = true;
     public Miximixi Parent { get; set; }
 
     public string NameKey { get; set; }
