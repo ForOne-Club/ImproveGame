@@ -191,15 +191,7 @@ public class ImprovePlayer : ModPlayer
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
     {
         // 判断有没有存活的 Boss
-        bool hasBoss = false;
-        for (int i = 0; i < Main.npc.Length; i++)
-        {
-            if (Main.npc[i].active && Main.npc[i].boss)
-            {
-                hasBoss = true;
-                break;
-            }
-        }
+        bool hasBoss = Main.npc.Any(t => t.active && t.boss);
 
         // 计算要缩短多少时间
         float TimeShortened = Player.respawnTimer *
@@ -221,6 +213,17 @@ public class ImprovePlayer : ModPlayer
 
         Player.respawnTimer -= (int)TimeShortened;
         Player.respawnTimer = Math.Max(Player.respawnTimer, 90);
+    }
+
+    public override void UpdateDead()
+    {
+        // 非Boss战时快速复活
+        if (Config.QuickRespawn && Player.respawnTimer <= 90) return;
+        
+        // 判断有没有存活的 Boss
+        bool hasBoss = Main.npc.Any(t => t.active && t.boss);
+        if (!hasBoss)
+            Player.respawnTimer = 90;
     }
 
     private bool _cacheSwitchSlot;
@@ -371,19 +374,7 @@ public class ImprovePlayer : ModPlayer
 
     private void PressAutoTrashKeybind()
     {
-        // 如果已经隐藏，强制打开背包并开启
-        // 如果开启直接隐藏
-        if (GarbageListGUI.ShowWindow)
-        {
-            Main.playerInventory = true;
-            GarbageListGUI.ShowWindow = false;
-            SoundEngine.PlaySound(SoundID.MenuClose);
-        }
-        else
-        {
-            GarbageListGUI.ShowWindow = true;
-            SoundEngine.PlaySound(SoundID.MenuOpen);
-        }
+        InventoryTrashGUI.Hidden = !InventoryTrashGUI.Hidden;
     }
 
     private void PressDiscordKeybind()

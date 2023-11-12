@@ -628,6 +628,11 @@ ImproveConfigs: {
 		Label: "[centeritem:Clownfish] Stackable Quest Fishes"
 		Tooltip: Quest fishes will be stackable, and can be fished or picked up even if their same types exist in inventory.
 	}
+
+	QuickRespawn: {
+		Label: "[centeritem:3232] 无BOSS存活时快速复活"
+		Tooltip: 当场上无任何BOSS或BOSS被击败/脱战时，将复活时间缩短为1.5s
+	}
 }
 
 ModItemLoadPage: {

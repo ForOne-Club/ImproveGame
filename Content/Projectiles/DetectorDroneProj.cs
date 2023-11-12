@@ -98,8 +98,8 @@ public class DetectorDroneProj : ModProjectile
         // float gravity = 0.05f; // 重力系数
         // Projectile.velocity.Y += gravity;
 
-        if (Projectile.velocity.Length() > 14f)
-            Projectile.velocity *= 14f / Projectile.velocity.Length();
+        if (Projectile.velocity.Length() > 20f)
+            Projectile.velocity *= 20f / Projectile.velocity.Length();
 
         Projectile.velocity *= 0.98f;
 

@@ -225,8 +225,8 @@ namespace ImproveGame.Content.Items
         {
             CreateRecipe()
                 .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                .AddRecipeGroup(RecipeSystem.AnyShadowScale, 18)
-                .AddRecipeGroup(RecipeSystem.AnyGoldBar, 12)
+                .AddRecipeGroup(RecipeSystem.AnyShadowScale, 8)
+                .AddRecipeGroup(RecipeSystem.AnyGoldBar, 6)
                 .AddTile(TileID.Anvils)
                 .Register();
         }
