@@ -48,7 +48,7 @@ public class UIConfigs : ModConfig
 
     public enum PAPDisplayMode
     {
-        AlwaysDisplayed, AlwaysDisplayedNoBorder, WhenOpeningBackpack, WhenOpeningBackpackNoBorder, NotDisplayed
+        AlwaysDisplayed, WhenOpeningBackpack, NotDisplayed
     }
 
     [DefaultValue(PAPDisplayMode.AlwaysDisplayed)]

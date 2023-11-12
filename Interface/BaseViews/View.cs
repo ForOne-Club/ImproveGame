@@ -108,7 +108,25 @@ namespace ImproveGame.Interface.BaseViews
                     }
                 }
             }
-            base.Recalculate();
+
+            CalculatedStyle parentDimensions = ((Parent == null) ? UserInterface.ActiveInstance.GetDimensions() : Parent.GetInnerDimensions());
+            if (Parent != null && (Parent is UIList || Parent is ListView))
+            {
+                parentDimensions.Height = float.MaxValue;
+            }
+
+            CalculatedStyle calculatedStyle = (_outerDimensions = GetDimensionsBasedOnParentDimensions(parentDimensions));
+            calculatedStyle.X += MarginLeft;
+            calculatedStyle.Y += MarginTop;
+            calculatedStyle.Width -= MarginLeft + MarginRight;
+            calculatedStyle.Height -= MarginTop + MarginBottom;
+            _dimensions = calculatedStyle;
+            calculatedStyle.X += PaddingLeft;
+            calculatedStyle.Y += PaddingTop;
+            calculatedStyle.Width -= PaddingLeft + PaddingRight;
+            calculatedStyle.Height -= PaddingTop + PaddingBottom;
+            _innerDimensions = calculatedStyle;
+            RecalculateChildren();
         }
 
         public override void LeftMouseDown(UIMouseEvent evt)

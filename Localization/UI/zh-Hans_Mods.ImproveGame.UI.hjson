@@ -15,9 +15,13 @@ PlayerProperty: {
 	FishingSkill: 渔力
 	Luck: 幸运
 	Aggro: 仇恨
+	BulletDamage: 弹药伤害
+	ArrowDamage: 弓箭伤害
+	SpecialistDamage: 其他伤害
 	Damage: 伤害
 	Crit: 暴击
 	Speed: 速度
+	SummonMeleeSpeed: 鞭子速度
 }
 
 ExtremeStorage: {

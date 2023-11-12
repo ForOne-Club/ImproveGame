@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
-using Terraria;
 
 namespace ImproveGame.Interface.GUI.PlayerProperty;
 
@@ -42,7 +41,7 @@ public class Miximixi
         // 标题容器
         titleView = new()
         {
-            Rounded = new Vector4(8f),
+            Rounded = new Vector4(6f),
             BgColor = UIColor.TitleBg2,
             DragIgnore = true,
         };
@@ -75,22 +74,51 @@ public class Miximixi
         return card;
     }
 
-    public void AppendPropertys(PropertyCard card, Func<Balabala, PropertyBar, bool> isConsole)
+    public void AppendPropertys(PropertyCard card)
     {
         for (int i = 0; i < Balabalas.Count; i++)
         {
             Balabala balabala = Balabalas[i];
             PropertyBar propertyBar = new(balabala.Name, balabala.Value, balabala);
 
-            if (isConsole?.Invoke(balabala, propertyBar) ?? false)
-            {
-                card.Console = true;
-                card.Append(propertyBar);
-            }
-            else if (balabala.Favorite)
+            if (balabala.Favorite)
             {
                 card.Append(propertyBar);
             }
+        }
+    }
+
+    public void AppendPropertysForControl(View view, PropertyCard card)
+    {
+        for (int i = 0; i < Balabalas.Count; i++)
+        {
+            Balabala bala = Balabalas[i];
+            PropertyBar bar = new(bala.Name, bala.Value, bala);
+
+            bar.OnUpdate += (_) =>
+            {
+                bar.BorderColor = bala.Favorite ? Color.Transparent : (Color.Red * 0.85f);
+                bar.Border = bala.Favorite ? 0 : 2;
+            };
+
+            bar.OnLeftMouseDown += (_, _) =>
+            {
+                bala.Favorite = !bala.Favorite;
+
+                foreach (var item in view.Children)
+                {
+                    if (item is PropertyCard innerCard && innerCard.Miximixi == card.Miximixi)
+                    {
+                        var first = innerCard.Children.First();
+                        innerCard.RemoveAllChildren();
+                        innerCard.Append(first);
+                        innerCard.Miximixi.AppendPropertys(innerCard);
+                    }
+                }
+            };
+
+            card.Console = true;
+            card.Append(bar);
         }
     }
 }

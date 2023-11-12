@@ -41,6 +41,30 @@ public class PlayerPropertySystem : ModSystem
         ranged.Balabalas.Add(new Balabala(ranged, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Ranged), 2)}%"));
 
+        // 弹药伤害
+        ranged.Balabalas.Add(new Balabala(ranged, "UI.PlayerProperty.BulletDamage",
+            () =>
+            {
+                var sm = Main.LocalPlayer.bulletDamage;
+                return $"{Math.Round((sm.Additive * sm.Multiplicative - 1f) * 100, 2)}%";
+            }));
+
+        // 弓箭伤害
+        ranged.Balabalas.Add(new Balabala(ranged, "UI.PlayerProperty.ArrowDamage",
+            () =>
+            {
+                var sm = Main.LocalPlayer.arrowDamage;
+                return $"{Math.Round((sm.Additive * sm.Multiplicative - 1f) * 100, 2)}%";
+            }));
+
+        // 其他伤害
+        ranged.Balabalas.Add(new Balabala(ranged, "UI.PlayerProperty.SpecialistDamage",
+            () =>
+            {
+                var sm = Main.LocalPlayer.specialistDamage;
+                return $"{Math.Round((sm.Additive * sm.Multiplicative - 1f) * 100, 2)}%";
+            }));
+
         // 暴击
         ranged.Balabalas.Add(new Balabala(ranged, "UI.PlayerProperty.Crit",
             () => $"{Math.Round(PlayerCrit(DamageClass.Ranged), 2)}%"));
@@ -81,6 +105,14 @@ public class PlayerPropertySystem : ModSystem
         summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Summon), 2)}%"));
 
+        // 鞭子速度
+        summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.SummonMeleeSpeed",
+            () => $"{MathF.Round(Main.LocalPlayer.GetAttackSpeed(DamageClass.SummonMeleeSpeed) * 100f - 100f, 2)}%"));
+
+        // 召唤穿甲
+        summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.ArmorPenetration",
+            () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Summon), 2)}"));
+
         // 召唤栏
         summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.MaxMinions",
             () => $"{Main.LocalPlayer.slotsMinions}/{Main.LocalPlayer.maxMinions}"));
@@ -88,10 +120,6 @@ public class PlayerPropertySystem : ModSystem
         // 哨兵栏
         summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.MaxTurrets",
             () => $"{Main.projectile.Count(proj => proj.active && proj.owner == Main.LocalPlayer.whoAmI && proj.WipableTurret)}/{Main.LocalPlayer.maxTurrets}"));
-
-        // 召唤穿甲
-        summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.ArmorPenetration",
-            () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Summon), 2)}"));
         #endregion
 
         #region 其他
@@ -134,7 +162,8 @@ public class PlayerPropertySystem : ModSystem
     /// </summary>
     public static float PlayerDamage(DamageClass damageClass)
     {
-        return (Main.LocalPlayer.GetTotalDamage(damageClass).Additive - 1) * 100f;
+        var sm = Main.LocalPlayer.GetTotalDamage(damageClass);
+        return (sm.Additive * sm.Multiplicative - 1) * 100f;
     }
 
     /// <summary>
