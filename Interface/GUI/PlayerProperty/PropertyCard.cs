@@ -6,12 +6,12 @@ namespace ImproveGame.Interface.GUI.PlayerProperty;
 public class PropertyCard : SUIPanel
 {
     public bool Console { get; set; }
-    public Miximixi Miximixi { get; set; }
+    public BasePropertyCategory PropertyCategory { get; set; }
     public TimerView TitleView;
 
-    public PropertyCard(Miximixi miximixi, Color borderColor, Color backgroundColor, float rounded = 12, float border = 2, bool draggable = false) : base(borderColor, backgroundColor, rounded, border, draggable)
+    public PropertyCard(BasePropertyCategory proCat, Color borderColor, Color backgroundColor, float rounded = 12, float border = 2, bool draggable = false) : base(borderColor, backgroundColor, rounded, border, draggable)
     {
-        Miximixi = miximixi;
+        PropertyCategory = proCat;
         SetPadding(5);
 
         TitleView = new TimerView()
@@ -26,9 +26,9 @@ public class PropertyCard : SUIPanel
         TitleView.Join(this);
     }
 
-    public PropertyCard(Miximixi miximixi, Color backgroundColor, Color borderColor, Vector4 rounded, float border, bool draggable = false) : base(backgroundColor, borderColor, rounded, border, draggable)
+    public PropertyCard(BasePropertyCategory proCat, Color backgroundColor, Color borderColor, Vector4 rounded, float border, bool draggable = false) : base(backgroundColor, borderColor, rounded, border, draggable)
     {
-        Miximixi = miximixi;
+        PropertyCategory = proCat;
         SetPadding(5);
 
         TitleView = new TimerView()
@@ -47,8 +47,10 @@ public class PropertyCard : SUIPanel
     {
         if (!Console)
         {
+            PropertyCategory.UIPosition = GetPosPixel();
+
             List<UIElement> list = Children.ToList();
-            HashSet<Balabala> appeared = new HashSet<Balabala>();
+            HashSet<BaseProperty> appeared = new HashSet<BaseProperty>();
 
             bool recalculate = false;
 
@@ -59,16 +61,16 @@ public class PropertyCard : SUIPanel
 
                 if (uie is PropertyBar bar)
                 {
-                    if (appeared.Contains(bar.Balabala))
+                    if (appeared.Contains(bar.BaseProperty))
                     {
                         recalculate = true;
                         uie.Remove();
                         break;
                     }
 
-                    appeared.Add(bar.Balabala);
+                    appeared.Add(bar.BaseProperty);
 
-                    if (!bar.Balabala.Favorite)
+                    if (!bar.BaseProperty.Favorite)
                     {
                         recalculate = true;
                         uie.Remove();

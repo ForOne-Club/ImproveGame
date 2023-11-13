@@ -4,10 +4,15 @@ using ImproveGame.Interface.SUIElements;
 namespace ImproveGame.Interface.GUI.PlayerProperty;
 
 /// <summary>
-/// 米西米西
+/// 属性类别
 /// </summary>
-public class Miximixi
+public class BasePropertyCategory
 {
+    /// <summary>
+    /// 判断是否来自其他 Mod
+    /// </summary>
+    public bool IsOtherMod { get; set; }
+
     public Vector2? UIPosition;
 
     /// <summary>
@@ -15,19 +20,20 @@ public class Miximixi
     /// </summary>
     public bool Favorite { get; set; }
 
-    public readonly List<Balabala> Balabalas = new();
+    public List<BaseProperty> BasePropertys { get; private set; } = new();
 
-    public Miximixi(Texture2D texture, string nameKey)
+    public BasePropertyCategory(Texture2D texture, string nameKey, bool isOtherMod = false)
     {
         Texture = texture;
         NameKey = nameKey;
+        IsOtherMod = isOtherMod;
     }
 
     public Texture2D Texture { get; set; }
 
     public string NameKey { get; set; }
 
-    public string Name => GetText(NameKey);
+    public string Name => IsOtherMod ? Language.GetTextValue(NameKey) : GetText(NameKey);
 
     /// <summary>
     /// 创建卡片
@@ -64,12 +70,12 @@ public class Miximixi
 
     public void AppendPropertys(PropertyCard card)
     {
-        for (int i = 0; i < Balabalas.Count; i++)
+        for (int i = 0; i < BasePropertys.Count; i++)
         {
-            Balabala balabala = Balabalas[i];
-            PropertyBar propertyBar = new(balabala.Name, balabala.Value, balabala);
+            BaseProperty property = BasePropertys[i];
+            PropertyBar propertyBar = new(property.Name, property.Value, property);
 
-            if (balabala.Favorite)
+            if (property.Favorite)
             {
                 card.Append(propertyBar);
             }
@@ -78,30 +84,29 @@ public class Miximixi
 
     public void AppendPropertysForControl(View view, PropertyCard card)
     {
-        for (int i = 0; i < Balabalas.Count; i++)
+        for (int i = 0; i < BasePropertys.Count; i++)
         {
-            Balabala bala = Balabalas[i];
-            PropertyBar bar = new(bala.Name, bala.Value, bala);
+            BaseProperty property = BasePropertys[i];
+            PropertyBar bar = new(property.Name, property.Value, property);
 
             bar.OnUpdate += (_) =>
             {
                 Color red = new Color(1f, 0f, 0f);
-                bar.BorderColor = bala.Favorite ? Color.Transparent : (red * 0.85f);
-                bar.Border = bala.Favorite ? 0 : 2;
-                bar.BgColor = bala.Favorite ? UIColor.TitleBg2 * 0.75f : Color.Lerp(UIColor.TitleBg2, red, 0.25f) * 0.75f;
+                bar.BorderColor = (property.Parent.Favorite && property.Favorite) ? UIColor.ItemSlotBorderFav : Color.Transparent;
+                bar.Border = (property.Parent.Favorite && property.Favorite) ? 2 : 0;
             };
 
             bar.OnLeftMouseDown += (_, _) =>
             {
-                bala.Favorite = !bala.Favorite;
+                property.Favorite = !property.Favorite;
 
                 foreach (var item in view.Children)
                 {
-                    if (item is PropertyCard innerCard && innerCard.Miximixi == card.Miximixi)
+                    if (item is PropertyCard innerCard && innerCard.PropertyCategory == card.PropertyCategory)
                     {
                         innerCard.RemoveAllChildren();
                         innerCard.Append(innerCard.TitleView);
-                        innerCard.Miximixi.AppendPropertys(innerCard);
+                        innerCard.PropertyCategory.AppendPropertys(innerCard);
                     }
                 }
             };

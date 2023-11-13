@@ -5,14 +5,14 @@ namespace ImproveGame.Interface.GUI.PlayerProperty;
 
 public class PropertyBar : TimerView
 {
-    public Balabala Balabala { get; set; }
+    public BaseProperty BaseProperty { get; set; }
 
     public float Scale = 0.85f;
     public string PropertyName;
     public Vector2 TextSize;
     private Func<string> PropertyValue { get; set; }
 
-    public PropertyBar(string propertyName, Func<string> propertyValue, Balabala balabala)
+    public PropertyBar(string propertyName, Func<string> propertyValue, BaseProperty baseProperty)
     {
         Wrap = false;
         Relative = RelativeMode.Vertical;
@@ -34,7 +34,7 @@ public class PropertyBar : TimerView
         BgColor = UIColor.TitleBg2 * 0.75f;
         Rounded = new Vector4(6f);
 
-        Balabala = balabala;
+        BaseProperty = baseProperty;
     }
 
     public override void DrawSelf(SpriteBatch sb)

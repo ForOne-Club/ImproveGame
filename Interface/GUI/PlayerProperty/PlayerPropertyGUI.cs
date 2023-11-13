@@ -72,7 +72,7 @@ public class PlayerPropertyGUI : ViewBody
         Body.OnUpdate += Body_OnUpdate;
         Body.Join(this);
 
-        foreach (var item in PlayerPropertySystem.Instance.Miximixis)
+        foreach (var item in PlayerPropertySystem.Instance.PropertyCategorys)
         {
             if (item.Value.Favorite)
             {
@@ -130,7 +130,7 @@ public class PlayerPropertyGUI : ViewBody
         // 一整个列表
         PropertyGrid = new PropertyGrid();
 
-        foreach (var item in PlayerPropertySystem.Instance.Miximixis)
+        foreach (var item in PlayerPropertySystem.Instance.PropertyCategorys)
         {
             PropertyCard card = CreateCardForControl(Body, item.Value);
 
@@ -207,7 +207,7 @@ public class PlayerPropertyGUI : ViewBody
     private void Body_OnUpdate(UIElement body)
     {
         List<UIElement> list = body.Children.ToList();
-        HashSet<Miximixi> appeared = new HashSet<Miximixi>();
+        HashSet<BasePropertyCategory> appeared = new HashSet<BasePropertyCategory>();
 
         for (int i = 0; i < list.Count; i++)
         {
@@ -215,17 +215,17 @@ public class PlayerPropertyGUI : ViewBody
 
             if (uie is PropertyCard card)
             {
-                // 去重 mixi
-                if (appeared.Contains(card.Miximixi))
+                // 去重 proCat
+                if (appeared.Contains(card.PropertyCategory))
                 {
                     uie.Remove();
                     break;
                 }
 
-                appeared.Add(card.Miximixi);
+                appeared.Add(card.PropertyCategory);
 
                 // 去掉未收藏
-                if (!card.Miximixi.Favorite)
+                if (!card.PropertyCategory.Favorite)
                 {
                     uie.Remove();
                 }
@@ -277,12 +277,12 @@ public class PlayerPropertyGUI : ViewBody
     /// <summary>
     /// 创建展示用的属性卡片
     /// </summary>
-    public static PropertyCard CreatePropertyCardForDisplay(View view, Miximixi miximixi)
+    public static PropertyCard CreatePropertyCardForDisplay(View view, BasePropertyCategory proCat)
     {
-        PropertyCard card = miximixi.CreateCard(out _, out _);
-        miximixi.AppendPropertys(card);
+        PropertyCard card = proCat.CreateCard(out _, out _);
+        proCat.AppendPropertys(card);
 
-        if (miximixi.UIPosition is Vector2 pos)
+        if (proCat.UIPosition is Vector2 pos)
         {
             card.SetPosPixels(pos);
         }
@@ -308,14 +308,14 @@ public class PlayerPropertyGUI : ViewBody
     /// <summary>
     /// 创建控制用的卡片
     /// </summary>
-    public static PropertyCard CreateCardForControl(View view, Miximixi miximixi)
+    public static PropertyCard CreateCardForControl(View view, BasePropertyCategory proCat)
     {
-        PropertyCard card = miximixi.CreateCard(out _, out _);
-        miximixi.AppendPropertysForControl(view, card);
+        PropertyCard card = proCat.CreateCard(out _, out _);
+        proCat.AppendPropertysForControl(view, card);
 
         card.OnUpdate += (_) =>
         {
-            if (card.Miximixi.Favorite)
+            if (card.PropertyCategory.Favorite)
             {
                 card.BorderColor = UIColor.ItemSlotBorderFav;
             }
@@ -333,12 +333,12 @@ public class PlayerPropertyGUI : ViewBody
 
         card.TitleView.OnLeftMouseDown += (_, _) =>
         {
-            miximixi.Favorite = !miximixi.Favorite;
+            proCat.Favorite = !proCat.Favorite;
 
-            if (miximixi.Favorite)
+            if (proCat.Favorite)
             {
                 // 正常版的创建
-                PropertyCard innerCard = CreatePropertyCardForDisplay(view, miximixi);
+                PropertyCard innerCard = CreatePropertyCardForDisplay(view, proCat);
                 innerCard.Join(view);
             }
         };

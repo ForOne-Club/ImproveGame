@@ -10,6 +10,8 @@ using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.WorldFeature;
 using System.Collections;
+using ImproveGame.Interface.GUI.PlayerProperty;
+using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Interface.Common;
 
@@ -59,10 +61,40 @@ public class UIPlayer : ModPlayer
         uiSystem.PlayerInfoTrigger.SetCarrier(uiSystem.PlayerInfoGUI);
         PlayerPropertyGUI.Visible = true;
 
+        if (Main.LocalPlayer.TryGetModPlayer(out UIPlayerSetting playerSetting))
+        {
+            var proCats = PlayerPropertySystem.Instance.PropertyCategorys;
+
+            foreach (var item in proCats)
+            {
+                if (playerSetting.ProCatsPos.TryGet(item.Key, out Vector2 pos))
+                {
+                    item.Value.UIPosition = pos;
+                }
+
+                if (playerSetting.ProCatsPos.TryGet(item.Key, out bool fav))
+                {
+                    item.Value.Favorite = fav;
+                }
+
+                if (playerSetting.ProCatsPos.TryGet(item.Key, out TagCompound tags))
+                {
+                    foreach (var pro in item.Value.BasePropertys)
+                    {
+                        if (tags.TryGet(pro.Name, out bool proFav))
+                        {
+                            pro.Favorite = proFav;
+                        }
+                    }
+                }
+            }
+        }
+
         // 自动垃圾桶
         uiSystem.AutoTrashGUI = new GarbageListGUI();
         uiSystem.AutoTrashTrigger.SetCarrier(uiSystem.AutoTrashGUI);
 
+        // 自动垃圾桶
         uiSystem.InventoryTrashGUI = new InventoryTrashGUI();
         uiSystem.InventoryTrashTrigger.SetCarrier(uiSystem.InventoryTrashGUI);
 
@@ -77,7 +109,7 @@ public class UIPlayer : ModPlayer
         uiSystem.BigBagGUI.ItemGrid.SetInventory(dataPlayer.SuperVault);
         CheckPositionValid(ref HugeInventoryUIPosition, HugeInventoryDefPosition);
         uiSystem.BigBagGUI.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
-        
+
         // 增益追踪器
         uiSystem.BuffTrackerGUI = new BuffTrackerGUI();
         uiSystem.BuffTrackerTrigger.SetCarrier(uiSystem.BuffTrackerGUI);
