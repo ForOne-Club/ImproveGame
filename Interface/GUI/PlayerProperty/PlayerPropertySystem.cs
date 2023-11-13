@@ -15,7 +15,6 @@ public class PlayerPropertySystem : ModSystem
 
         #region 近战属性
         Miximixi melee = new Miximixi(GetTexture("UI/PlayerInfo/Melee").Value, "UI.PlayerProperty.Melee");
-        melee.UIPosition = new Vector2(620f, 20f);
 
         // 伤害
         melee.Balabalas.Add(new Balabala(melee, "UI.PlayerProperty.Damage",

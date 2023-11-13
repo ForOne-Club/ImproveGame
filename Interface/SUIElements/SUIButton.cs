@@ -84,7 +84,6 @@ public class SUIButton : TimerView
             textPos += (innerSize - TextSize) * TextAlign;
         }
 
-        textPos.Y -= 2f;
         textPos.Y += UIConfigs.Instance.GeneralFontOffsetY;
         DynamicSpriteFont font = FontAssets.MouseText.Value;
         TextSnippet[] array = ChatManager.ParseMessage(_text, TextColor).ToArray();

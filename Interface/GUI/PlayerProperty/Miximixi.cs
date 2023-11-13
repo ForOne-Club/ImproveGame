@@ -32,23 +32,11 @@ public class Miximixi
     /// <summary>
     /// 创建卡片
     /// </summary>
-    public PropertyCard CreateCard(out TimerView titleView, out SUIImage image, out SUITitle title)
+    public PropertyCard CreateCard(out SUIImage image, out SUITitle title)
     {
         // 卡片主体
         PropertyCard card = new(this, UIColor.PanelBorder * 0f, UIColor.PanelBg * 0f, 10f, 2);
-        card.UseImmediateMode = true;
-
-        // 标题容器
-        titleView = new()
-        {
-            Rounded = new Vector4(6f),
-            BgColor = UIColor.TitleBg2,
-            DragIgnore = true,
-        };
-        titleView.Width.Percent = 1f;
-        titleView.Height.Pixels = 30f;
-        titleView.SetPadding(8f, 0f);
-        titleView.Join(card);
+        card.OverflowHidden = true;
 
         // 标题图标
         image = new SUIImage(Texture)
@@ -60,7 +48,7 @@ public class Miximixi
         };
         image.Width.Pixels = 20f;
         image.Height.Percent = 1f;
-        image.Join(titleView);
+        image.Join(card.TitleView);
 
         // 标题文字
         title = new(Name, 0.36f)
@@ -69,7 +57,7 @@ public class Miximixi
         };
         title.Height.Percent = 1f;
         title.Width.Pixels = title.TextSize.X;
-        title.Join(titleView);
+        title.Join(card.TitleView);
 
         return card;
     }
@@ -97,8 +85,10 @@ public class Miximixi
 
             bar.OnUpdate += (_) =>
             {
-                bar.BorderColor = bala.Favorite ? Color.Transparent : (Color.Red * 0.85f);
+                Color red = new Color(1f, 0f, 0f);
+                bar.BorderColor = bala.Favorite ? Color.Transparent : (red * 0.85f);
                 bar.Border = bala.Favorite ? 0 : 2;
+                bar.BgColor = bala.Favorite ? UIColor.TitleBg2 * 0.75f : Color.Lerp(UIColor.TitleBg2, red, 0.25f) * 0.75f;
             };
 
             bar.OnLeftMouseDown += (_, _) =>
@@ -109,9 +99,8 @@ public class Miximixi
                 {
                     if (item is PropertyCard innerCard && innerCard.Miximixi == card.Miximixi)
                     {
-                        var first = innerCard.Children.First();
                         innerCard.RemoveAllChildren();
-                        innerCard.Append(first);
+                        innerCard.Append(innerCard.TitleView);
                         innerCard.Miximixi.AppendPropertys(innerCard);
                     }
                 }

@@ -8,6 +8,7 @@ namespace ImproveGame.Interface.GUI.AutoTrash;
 
 public class InventoryTrashGUI : ViewBody
 {
+    #region ViewBody
     public override bool Display
     {
         get => UIConfigs.Instance.QoLAutoTrash && Main.playerInventory && !Hidden
@@ -24,6 +25,7 @@ public class InventoryTrashGUI : ViewBody
     {
         return Window.IsMouseHovering;
     }
+    #endregion
 
     private static bool ChestIsOpen => Main.LocalPlayer.chest != -1 || Main.npcShop > 0;
     internal static bool Hidden = false;

@@ -3,6 +3,7 @@ using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI.PlayerProperty;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.PlayerProperty;
 
@@ -99,7 +100,7 @@ public class PlayerPropertyGUI : ViewBody
         TitleView.Height.Pixels = 42f;
         TitleView.Join(Window);
 
-        var Title = new SUITitle("属性控制", 0.42f)
+        var Title = new SUITitle(GetText("UI.PlayerProperty.Control"), 0.42f)
         {
             VAlign = 0.5f
         };
@@ -160,7 +161,6 @@ public class PlayerPropertyGUI : ViewBody
         Window.SetInnerPixels(PropertyGrid.Width.Pixels, PropertyGrid.BottomPixels());
 
         Window.HAlign = Window.VAlign = 0.5f;
-        Window.Join(this);
         #endregion
 
         #region 控制器的开关按钮
@@ -264,21 +264,39 @@ public class PlayerPropertyGUI : ViewBody
         base.Update(gameTime);
     }
 
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        base.Draw(spriteBatch);
+
+        if (ControllerSwitch.IsMouseHovering)
+        {
+            UICommon.TooltipMouseText(GetText("UI.PlayerProperty.Introduction"));
+        }
+    }
+
     /// <summary>
     /// 创建展示用的属性卡片
     /// </summary>
     public static PropertyCard CreatePropertyCardForDisplay(View view, Miximixi miximixi)
     {
-        PropertyCard card = miximixi.CreateCard(out _, out _, out _);
+        PropertyCard card = miximixi.CreateCard(out _, out _);
         miximixi.AppendPropertys(card);
 
         if (miximixi.UIPosition is Vector2 pos)
         {
             card.SetPosPixels(pos);
         }
-        else if (view.Children.Last() is UIElement uie)
+        else
         {
-            card.SetPosPixels(uie.Right() + 4f, uie.Top.Pixels);
+            if (view.Children.Any())
+            {
+                var uie = view.Children.Last();
+                card.SetPosPixels(uie.Right() + 4f, uie.Top.Pixels);
+            }
+            else
+            {
+                card.SetPosPixels(620f, 20f);
+            }
         }
 
         card.Draggable = true;
@@ -292,24 +310,28 @@ public class PlayerPropertyGUI : ViewBody
     /// </summary>
     public static PropertyCard CreateCardForControl(View view, Miximixi miximixi)
     {
-        PropertyCard card = miximixi.CreateCard(out TimerView titleView, out _, out _);
+        PropertyCard card = miximixi.CreateCard(out _, out _);
         miximixi.AppendPropertysForControl(view, card);
 
         card.OnUpdate += (_) =>
         {
             if (card.Miximixi.Favorite)
+            {
                 card.BorderColor = UIColor.ItemSlotBorderFav;
+            }
             else
+            {
                 card.BorderColor = UIColor.PanelBorder;
+            }
         };
 
-        titleView.OnUpdate += (_) =>
+        card.TitleView.OnUpdate += (_) =>
         {
-            titleView.Border = titleView.HoverTimer.Lerp(0, 2);
-            titleView.BorderColor = titleView.HoverTimer.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav);
+            card.TitleView.Border = card.TitleView.HoverTimer.Lerp(0, 2);
+            card.TitleView.BorderColor = card.TitleView.HoverTimer.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav);
         };
 
-        titleView.OnLeftMouseDown += (_, _) =>
+        card.TitleView.OnLeftMouseDown += (_, _) =>
         {
             miximixi.Favorite = !miximixi.Favorite;
 

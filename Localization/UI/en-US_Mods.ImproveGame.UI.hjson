@@ -1,4 +1,13 @@
 PlayerProperty: {
+	Introduction:
+		'''
+		[c/CC88AA:属性面板]
+		可以展示玩家的一些属性
+		(或其他一些实时更新的数据)
+		点击可调出控制器以添加常驻属性
+		(支持 Modder 自定义属性与分类)
+		'''
+	Control: 属性面板控制器
 	Name: Player Stats
 	Melee: 近战
 	Ranged: 远程
