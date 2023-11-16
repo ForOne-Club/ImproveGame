@@ -72,12 +72,12 @@ public class UIPlayer : ModPlayer
                     item.Value.UIPosition = pos;
                 }
 
-                if (playerSetting.ProCatsPos.TryGet(item.Key, out bool fav))
+                if (playerSetting.ProCatsFav.TryGet(item.Key, out bool fav))
                 {
                     item.Value.Favorite = fav;
                 }
 
-                if (playerSetting.ProCatsPos.TryGet(item.Key, out TagCompound tags))
+                if (playerSetting.ProFavs.TryGet(item.Key, out TagCompound tags))
                 {
                     foreach (var pro in item.Value.BasePropertys)
                     {

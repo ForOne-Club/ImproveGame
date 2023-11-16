@@ -49,10 +49,12 @@ public class InventoryTrashGUI : ViewBody
 
             for (int i = 0; i < atPlayer.MaxCapacity; i++)
             {
-                InventoryTrashSlot itemSlot = new InventoryTrashSlot(atPlayer.TrashItems, i);
-                itemSlot.Border = 2f * 0.85f;
-                itemSlot.TrashScale = 0.85f;
-                itemSlot.ItemIconScale = 0.85f;
+                var itemSlot = new InventoryTrashSlot(atPlayer.TrashItems, i)
+                {
+                    Border = 2f * 0.85f,
+                    TrashScale = 0.85f,
+                    ItemIconScale = 0.85f
+                };
                 itemSlot.Join(TrashGrid);
             }
 

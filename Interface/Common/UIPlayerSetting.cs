@@ -24,7 +24,7 @@ namespace ImproveGame.Interface.Common
             tag.TryGet(nameof(SearchTooltip), out SearchTooltip);
 
             tag.TryGet("ProCatsPos", out ProCatsPos);
-            tag.TryGet("ProCatsPos", out ProCatsFav);
+            tag.TryGet("ProCatsFav", out ProCatsFav);
             tag.TryGet("ProFavs", out ProFavs);
         }
 
