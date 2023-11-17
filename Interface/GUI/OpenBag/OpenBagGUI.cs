@@ -227,7 +227,6 @@ public class OpenBagGUI : ViewBody
             LootListener._listening = keeper.Bag.type;
             ItemSlot.TryOpenContainer(keeper.Bag, Main.LocalPlayer);
             LootListener._listening = -1;
-            keeper.Bag.stack--;
 
             RefreshGrid();
             yield return 1;
@@ -248,10 +247,12 @@ public class OpenBagGUI : ViewBody
             
             if (coin > 0) return; // 只有是钱币，这个值才会大于0
 
-            if (item.value <= 0) return;
+            Main.LocalPlayer.GetItemExpectedPrice(item, out var calcForSelling, out _);
+            if (calcForSelling <= 0)
+                return;
 
-            const float sellPercent = 1.1f / 100f;
-            totalValue += (ulong)Math.Floor(item.value * item.stack * sellPercent);
+            const float sellPercent = 1.1f * 0.2f; // 110%额外加成 & 售价是calcForSelling的20%
+            totalValue += (ulong)Math.Floor(calcForSelling * item.stack * sellPercent);
         });
 
         var coins = CoinUtils.ConvertCopperValueToCoins(totalValue);
