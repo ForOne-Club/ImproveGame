@@ -11,8 +11,8 @@ public class PropertyGrid : ScrollView
         ListView.Width.Pixels = 160f;
 
         ListView2 = new ListView();
-        ListView2.Left.Pixels = 164f;
         ListView2.Width.Pixels = 160f;
+        ListView2.Left.Pixels = 164f;
         ListView2.Join(this);
 
         Scrollbar.HAlign = 1f;
@@ -36,18 +36,17 @@ public class PropertyGrid : ScrollView
     /// </summary>
     public void ResetGrid()
     {
-        float maxBottom = Math.Max(
-            ListView.Children.Count() > 0 ? ListView.Children.Last().Bottom() : 0f,
-            ListView2.Children.Count() > 0 ? ListView2.Children.Last().Bottom() : 0f);
+        float maxBottom1 = ListView.Children.Any() ? ListView.Children.Last().Bottom() : 0f;
+        float maxBottom2 = ListView2.Children.Any() ? ListView2.Children.Last().Bottom() : 0f;
 
-        if (ListView.Height.Pixels != maxBottom || ListView2.Height.Pixels != maxBottom)
+        if (ListView.Height.Pixels != maxBottom1 || ListView2.Height.Pixels != maxBottom2)
         {
-            ListView.Height.Pixels = maxBottom;
-            ListView2.Height.Pixels = maxBottom;
+            ListView.Height.Pixels = maxBottom1;
+            ListView2.Height.Pixels = maxBottom2;
             Recalculate();
         }
 
-        Scrollbar.SetView(GetInnerDimensions().Height, maxBottom);
+        Scrollbar.SetView(GetInnerDimensions().Height, Math.Max(maxBottom1, maxBottom2));
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)

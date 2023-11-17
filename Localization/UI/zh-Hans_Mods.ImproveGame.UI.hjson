@@ -1,4 +1,14 @@
 PlayerProperty: {
+	Introduction:
+		'''
+		[c/CC88AA:属性面板]
+		可以展示玩家的一些属性
+		(或其他一些实时更新的数据)
+		(支持 Modder 自定义属性与分类)
+		点击可调出控制器以添加常驻属性
+		点击对应分类的标题和点击属性可开关常驻
+		'''
+	Control: 属性面板控制器
 	Name: 属性面板
 	Melee: 近战
 	Ranged: 远程
@@ -15,9 +25,13 @@ PlayerProperty: {
 	FishingSkill: 渔力
 	Luck: 幸运
 	Aggro: 仇恨
+	BulletDamage: 弹药伤害
+	ArrowDamage: 弓箭伤害
+	SpecialistDamage: 其他伤害
 	Damage: 伤害
 	Crit: 暴击
 	Speed: 速度
+	SummonMeleeSpeed: 鞭子速度
 }
 
 ExtremeStorage: {

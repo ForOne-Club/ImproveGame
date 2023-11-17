@@ -12,6 +12,16 @@ namespace ImproveGame.Interface.BaseViews
     public class View : UIElement
     {
         /// <summary>
+        /// 用于记录先前的子元素数量
+        /// </summary>
+        public int PrevChildCount { get; protected set; }
+
+        /// <summary>
+        /// 子元素相较于先前是否有变化
+        /// </summary>
+        public bool HasChildCountChanges => ((List<UIElement>)Children).Count != PrevChildCount;
+
+        /// <summary>
         /// 相对的模式，横向填充或者纵向填充
         /// </summary>
         public RelativeMode Relative;
@@ -47,6 +57,14 @@ namespace ImproveGame.Interface.BaseViews
         public View()
         {
             Opacity = new Opacity(this);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            // 记录先前的子元素数量
+            PrevChildCount = Children.Count();
         }
 
         /// <summary>
@@ -108,7 +126,25 @@ namespace ImproveGame.Interface.BaseViews
                     }
                 }
             }
-            base.Recalculate();
+
+            CalculatedStyle parentDimensions = ((Parent == null) ? UserInterface.ActiveInstance.GetDimensions() : Parent.GetInnerDimensions());
+            if (Parent != null && (Parent is UIList || Parent is ListView))
+            {
+                parentDimensions.Height = float.MaxValue;
+            }
+
+            CalculatedStyle calculatedStyle = (_outerDimensions = GetDimensionsBasedOnParentDimensions(parentDimensions));
+            calculatedStyle.X += MarginLeft;
+            calculatedStyle.Y += MarginTop;
+            calculatedStyle.Width -= MarginLeft + MarginRight;
+            calculatedStyle.Height -= MarginTop + MarginBottom;
+            _dimensions = calculatedStyle;
+            calculatedStyle.X += PaddingLeft;
+            calculatedStyle.Y += PaddingTop;
+            calculatedStyle.Width -= PaddingLeft + PaddingRight;
+            calculatedStyle.Height -= PaddingTop + PaddingBottom;
+            _innerDimensions = calculatedStyle;
+            RecalculateChildren();
         }
 
         public override void LeftMouseDown(UIMouseEvent evt)

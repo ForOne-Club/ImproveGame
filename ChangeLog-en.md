@@ -60,6 +60,8 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
   - 建筑魔杖：落星需求量从8个改为2个
   - 液体魔杖：暗影鳞片/组织样本需求量从18个改为8个，任意金锭需求量从12个改为6个
   - 自动钓鱼机：任意铁锭x8 + 任意铜锭x4 + 玻璃x20 -> 任意铁锭x4 + 任意铜锭x2
+- **[v1.6.6.2]** 属性面板重置，支持其他 Mod 添加分类与属性
+- **[v1.6.6.2]** 自动垃圾桶重置
 
 # v1.6.5
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)

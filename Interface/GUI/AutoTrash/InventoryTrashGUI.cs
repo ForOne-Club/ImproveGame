@@ -8,6 +8,7 @@ namespace ImproveGame.Interface.GUI.AutoTrash;
 
 public class InventoryTrashGUI : ViewBody
 {
+    #region ViewBody
     public override bool Display
     {
         get => UIConfigs.Instance.QoLAutoTrash && Main.playerInventory && !Hidden
@@ -24,6 +25,7 @@ public class InventoryTrashGUI : ViewBody
     {
         return Window.IsMouseHovering;
     }
+    #endregion
 
     private static bool ChestIsOpen => Main.LocalPlayer.chest != -1 || Main.npcShop > 0;
     internal static bool Hidden = false;
@@ -47,10 +49,12 @@ public class InventoryTrashGUI : ViewBody
 
             for (int i = 0; i < atPlayer.MaxCapacity; i++)
             {
-                InventoryTrashSlot itemSlot = new InventoryTrashSlot(atPlayer.TrashItems, i);
-                itemSlot.Border = 2f * 0.85f;
-                itemSlot.TrashScale = 0.85f;
-                itemSlot.ItemIconScale = 0.85f;
+                var itemSlot = new InventoryTrashSlot(atPlayer.TrashItems, i)
+                {
+                    Border = 2f * 0.85f,
+                    TrashScale = 0.85f,
+                    ItemIconScale = 0.85f
+                };
                 itemSlot.Join(TrashGrid);
             }
 

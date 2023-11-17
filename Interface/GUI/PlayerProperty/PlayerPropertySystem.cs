@@ -1,128 +1,157 @@
-﻿namespace ImproveGame.Interface.GUI.PlayerProperty;
+﻿using CalamityMod;
+
+namespace ImproveGame.Interface.GUI.PlayerProperty;
 
 /// <summary>
 /// 抽象就是对世界的鞭挞
 /// </summary>
 public class PlayerPropertySystem : ModSystem
 {
-    public static PlayerPropertySystem Instance;
+    public static PlayerPropertySystem Instance { get; private set; }
 
-    public Dictionary<string, Miximixi> Miximixis = new();
+    public Dictionary<string, BasePropertyCategory> PropertyCategorys { get; private set; } = new();
 
-    public override void PostSetupContent()
+    public override void Load()
     {
         Instance = this;
 
         #region 近战属性
-        Miximixi melee = new Miximixi(GetTexture("UI/PlayerInfo/Melee").Value, "UI.PlayerProperty.Melee");
-        melee.UIPosition = new Vector2(620f, 20f);
+        BasePropertyCategory melee = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Melee").Value, "UI.PlayerProperty.Melee");
 
         // 伤害
-        melee.Balabalas.Add(new Balabala(melee, "UI.PlayerProperty.Damage",
+        melee.BasePropertys.Add(new BaseProperty(melee, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Melee), 2)}%"));
 
         // 暴击
-        melee.Balabalas.Add(new Balabala(melee, "UI.PlayerProperty.Crit",
+        melee.BasePropertys.Add(new BaseProperty(melee, "UI.PlayerProperty.Crit",
             () => $"{Math.Round(PlayerCrit(DamageClass.Melee), 2)}%"));
 
         // 速度
-        melee.Balabalas.Add(new Balabala(melee, "UI.PlayerProperty.Speed",
+        melee.BasePropertys.Add(new BaseProperty(melee, "UI.PlayerProperty.Speed",
             () => $"{MathF.Round(Main.LocalPlayer.GetAttackSpeed(DamageClass.Melee) * 100f - 100f, 2)}%"));
 
         // 穿甲
-        melee.Balabalas.Add(new Balabala(melee, "UI.PlayerProperty.ArmorPenetration",
+        melee.BasePropertys.Add(new BaseProperty(melee, "UI.PlayerProperty.ArmorPenetration",
             () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Melee), 2)}"));
         #endregion
 
         #region 远程
-        Miximixi ranged = new Miximixi(GetTexture("UI/PlayerInfo/Ranged").Value, "UI.PlayerProperty.Ranged");
+        BasePropertyCategory ranged = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Ranged").Value, "UI.PlayerProperty.Ranged");
 
         // 伤害
-        ranged.Balabalas.Add(new Balabala(ranged, "UI.PlayerProperty.Damage",
+        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Ranged), 2)}%"));
 
+        // 弹药伤害
+        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.BulletDamage",
+            () =>
+            {
+                var sm = Main.LocalPlayer.bulletDamage;
+                return $"{Math.Round((sm.Additive * sm.Multiplicative - 1f) * 100, 2)}%";
+            }));
+
+        // 弓箭伤害
+        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.ArrowDamage",
+            () =>
+            {
+                var sm = Main.LocalPlayer.arrowDamage;
+                return $"{Math.Round((sm.Additive * sm.Multiplicative - 1f) * 100, 2)}%";
+            }));
+
+        // 其他伤害
+        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.SpecialistDamage",
+            () =>
+            {
+                var sm = Main.LocalPlayer.specialistDamage;
+                return $"{Math.Round((sm.Additive * sm.Multiplicative - 1f) * 100, 2)}%";
+            }));
+
         // 暴击
-        ranged.Balabalas.Add(new Balabala(ranged, "UI.PlayerProperty.Crit",
+        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.Crit",
             () => $"{Math.Round(PlayerCrit(DamageClass.Ranged), 2)}%"));
 
         // 穿甲
-        ranged.Balabalas.Add(new Balabala(ranged, "UI.PlayerProperty.ArmorPenetration",
+        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.ArmorPenetration",
             () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Ranged), 2)}"));
         #endregion
 
         #region 魔法
-        Miximixi magic = new Miximixi(GetTexture("UI/PlayerInfo/Magic").Value, "UI.PlayerProperty.Magic");
+        BasePropertyCategory magic = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Magic").Value, "UI.PlayerProperty.Magic");
 
         // 伤害
-        magic.Balabalas.Add(new Balabala(magic, "UI.PlayerProperty.Damage",
+        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Magic), 2)}%"));
 
         // 法术暴击
-        magic.Balabalas.Add(new Balabala(magic, "UI.PlayerProperty.Crit",
+        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.Crit",
             () => $"{Math.Round(PlayerCrit(DamageClass.Magic), 2)}%"));
 
         // 法术回复
-        magic.Balabalas.Add(new Balabala(magic, "UI.PlayerProperty.Regen",
+        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.Regen",
             () => $"{Main.LocalPlayer.manaRegen / 2f}/s"));
 
         // 法术消耗减免
-        magic.Balabalas.Add(new Balabala(magic, "UI.PlayerProperty.Cost",
+        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.Cost",
             () => $"{MathF.Round(Main.LocalPlayer.manaCost * 100f, 2)}%"));
 
         // 法术穿甲
-        magic.Balabalas.Add(new Balabala(magic, "UI.PlayerProperty.ArmorPenetration",
+        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.ArmorPenetration",
             () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Magic), 2)}"));
         #endregion
 
         #region 召唤
-        Miximixi summon = new Miximixi(GetTexture("UI/PlayerInfo/Summon").Value, "UI.PlayerProperty.Summon");
+        BasePropertyCategory summon = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Summon").Value, "UI.PlayerProperty.Summon");
 
         // 伤害
-        summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.Damage",
+        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Summon), 2)}%"));
 
+        // 鞭子速度
+        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.SummonMeleeSpeed",
+            () => $"{MathF.Round(Main.LocalPlayer.GetAttackSpeed(DamageClass.SummonMeleeSpeed) * 100f - 100f, 2)}%"));
+
+        // 召唤穿甲
+        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.ArmorPenetration",
+            () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Summon), 2)}"));
+
         // 召唤栏
-        summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.MaxMinions",
+        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxMinions",
             () => $"{Main.LocalPlayer.slotsMinions}/{Main.LocalPlayer.maxMinions}"));
 
         // 哨兵栏
-        summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.MaxTurrets",
+        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxTurrets",
             () => $"{Main.projectile.Count(proj => proj.active && proj.owner == Main.LocalPlayer.whoAmI && proj.WipableTurret)}/{Main.LocalPlayer.maxTurrets}"));
-
-        // 召唤穿甲
-        summon.Balabalas.Add(new Balabala(summon, "UI.PlayerProperty.ArmorPenetration",
-            () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Summon), 2)}"));
         #endregion
 
         #region 其他
-        Miximixi other = new Miximixi(GetTexture("UI/PlayerInfo/Luck").Value, "UI.PlayerProperty.Other");
+        BasePropertyCategory other = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Luck").Value, "UI.PlayerProperty.Other");
 
         // 生命回复
-        other.Balabalas.Add(new Balabala(other, "UI.PlayerProperty.LifeRegen",
+        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.LifeRegen",
             () => $"{Main.LocalPlayer.lifeRegen / 2f}/s"));
 
         // 免伤
-        other.Balabalas.Add(new Balabala(other, "UI.PlayerProperty.Endurance",
+        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.Endurance",
             () => $"{MathF.Round(Main.LocalPlayer.endurance * 100f, 2)}%"));
 
         // 仇恨
-        other.Balabalas.Add(new Balabala(other, "UI.PlayerProperty.Aggro",
+        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.Aggro",
             () => $"{Main.LocalPlayer.aggro}"));
 
         // 幸运
-        other.Balabalas.Add(new Balabala(other, "UI.PlayerProperty.Luck",
+        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.Luck",
             () => $"{Math.Round(Main.LocalPlayer.luck, 2)}"));
 
         // 渔力
-        other.Balabalas.Add(new Balabala(other, "UI.PlayerProperty.FishingSkill",
+        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.FishingSkill",
             () => $"{Main.LocalPlayer.fishingSkill}"));
         #endregion
 
-        Miximixis.Add("Melee", melee);
-        Miximixis.Add("Ranged", ranged);
-        Miximixis.Add("Magic", magic);
-        Miximixis.Add("Summon", summon);
-        Miximixis.Add("Other", other);
+        PropertyCategorys.Add("Melee", melee);
+        PropertyCategorys.Add("Ranged", ranged);
+        PropertyCategorys.Add("Magic", magic);
+        PropertyCategorys.Add("Summon", summon);
+        PropertyCategorys.Add("Other", other);
 
         // tipPanel.Append(new PlyInfoCard(PlyInfo("WingTime")}:", () => $"{MathF.Round((player.wingTime + player.rocketTime * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
         // new PlyInfoCard(GetHJSON("WingTimeMax"),
@@ -134,7 +163,8 @@ public class PlayerPropertySystem : ModSystem
     /// </summary>
     public static float PlayerDamage(DamageClass damageClass)
     {
-        return (Main.LocalPlayer.GetTotalDamage(damageClass).Additive - 1) * 100f;
+        var sm = Main.LocalPlayer.GetTotalDamage(damageClass);
+        return (sm.Additive * sm.Multiplicative - 1) * 100f;
     }
 
     /// <summary>

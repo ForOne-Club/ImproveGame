@@ -14,21 +14,25 @@ namespace ImproveGame.Interface.BaseViews
             HoverTimer = new AnimationTimer(3);
         }
 
-        public override void MouseOver(UIMouseEvent evt)
-        {
-            HoverTimer.OpenAndResetTimer();
-            base.MouseOver(evt);
-        }
-
-        public override void MouseOut(UIMouseEvent evt)
-        {
-            HoverTimer.CloseAndResetTimer();
-            base.MouseOut(evt);
-        }
-
         public override void Update(GameTime gameTime)
         {
+            if (IsMouseHovering)
+            {
+                if (!HoverTimer.AnyOpen)
+                {
+                    HoverTimer.OpenAndResetTimer();
+                }
+            }
+            else
+            {
+                if (!HoverTimer.AnyClose)
+                {
+                    HoverTimer.CloseAndResetTimer();
+                }
+            }
+
             HoverTimer.Update();
+
             base.Update(gameTime);
         }
     }

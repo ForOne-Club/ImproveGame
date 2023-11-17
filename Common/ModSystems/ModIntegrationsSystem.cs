@@ -2,6 +2,7 @@
 using ImproveGame.Common.Packets;
 using ImproveGame.Content.Patches;
 using ImproveGame.Interface.GUI;
+using ImproveGame.Interface.GUI.PlayerProperty;
 using MonoMod.RuntimeDetour.HookGen;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
+using static Terraria.GameContent.UI.EmoteID;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -214,9 +216,9 @@ public class ModIntegrationsSystem : ModSystem
     private static void AddBuffIntegration(Mod mod, string itemName, string buffName, bool isPlaceable)
     {
         if (isPlaceable)
-            ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> {mod.Find<ModBuff>(buffName).Type};
+            ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> { mod.Find<ModBuff>(buffName).Type };
         else
-            ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> {mod.Find<ModBuff>(buffName).Type};
+            ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> { mod.Find<ModBuff>(buffName).Type };
     }
 
     public override void Unload()
@@ -281,6 +283,37 @@ public class ModIntegrationsSystem : ModSystem
                             FishingStatLookup[itemType] = new FishingStat(power, speed, tackleBox, lavaFishing);
                             return true;
                         }
+                    // 添加属性类别
+                    case "AddPropertyCategory":
+                        {
+                            string category = Convert.ToString(args[1]);
+                            Texture2D texture = (Texture2D)args[2];
+                            string nameKey = Convert.ToString(args[3]);
+
+                            if (PlayerPropertySystem.Instance.PropertyCategorys.ContainsKey(category))
+                            {
+                                return false;
+                            }
+
+                            PlayerPropertySystem.Instance.PropertyCategorys.Add(category, new BasePropertyCategory(texture, nameKey, true));
+
+                            return true;
+                        }
+                    // 添加属性到指定类别
+                    case "AddProperty":
+                        {
+                            string category = Convert.ToString(args[1]);
+                            string nameKey = Convert.ToString(args[2]);
+                            Func<string> value = (Func<string>)args[3];
+
+                            if (PlayerPropertySystem.Instance.PropertyCategorys.TryGetValue(category, out BasePropertyCategory proCat))
+                            {
+                                proCat.BasePropertys.Add(new BaseProperty(proCat, nameKey, value, true));
+                                return true;
+                            }
+
+                            return false;
+                        }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");
                         return false;
@@ -293,7 +326,7 @@ public class ModIntegrationsSystem : ModSystem
         }
 
         static List<int> AsListOfInt(object data) =>
-            data as List<int> ?? new List<int> {Convert.ToInt32(data)};
+            data as List<int> ?? new List<int> { Convert.ToInt32(data) };
 
         return false;
     }

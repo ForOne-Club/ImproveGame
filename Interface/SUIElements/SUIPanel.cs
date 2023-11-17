@@ -57,15 +57,13 @@ namespace ImproveGame.Interface.SUIElements
             // 可拖动界面
             View view = evt.Target as View;
             // 当点击的是子元素不进行移动
-            if (!Draggable ||
-                (evt.Target != this && (view is null || !view.DragIgnore) &&
-                 !evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
+            if (Draggable &&
+                (evt.Target == this || view is not null && view.DragIgnore ||
+                 evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
             {
-                return;
+                Offset = evt.MousePosition - GetPosPixel();
+                Dragging = true;
             }
-
-            Offset = evt.MousePosition - GetPosPixel();
-            Dragging = true;
         }
 
         public override void LeftMouseUp(UIMouseEvent evt)

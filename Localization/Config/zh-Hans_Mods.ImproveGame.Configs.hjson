@@ -741,7 +741,7 @@ UIConfigs: {
 
 	PlyInfo: {
 		Label: "[centeritem:3124] 角色属性面板"
-		// Tooltip: ""
+		Tooltip: 开启后会在成就右侧出现一个四叶草标志
 	}
 
 	QoLAutoTrash: {
