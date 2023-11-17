@@ -859,8 +859,6 @@ PAPDisplayMode: {
 	AlwaysDisplayed.Label: 始终显示
 	NotDisplayed.Label: 不显示
 	WhenOpeningBackpack.Label: 开启背包时显示
-	// AlwaysDisplayedNoBorder.Label: Always Displayed No Border
-	// WhenOpeningBackpackNoBorder.Label: When Opening Backpack No Border
 }
 
 ThemeType: {

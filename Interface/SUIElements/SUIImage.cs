@@ -11,6 +11,7 @@ namespace ImproveGame.Interface.SUIElements
         public Vector2 ImageOrigin = new Vector2();
         public float ImageScale = 1f;
         public Color ImageColor = Color.White;
+        public bool TickSound = true;
 
         public SUIImage(Texture2D texture)
         {
@@ -22,7 +23,8 @@ namespace ImproveGame.Interface.SUIElements
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
-            SoundEngine.PlaySound(SoundID.MenuTick);
+            if (TickSound)
+                SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         public override void DrawSelf(SpriteBatch sb)

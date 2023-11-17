@@ -1,12 +1,13 @@
 PlayerProperty: {
+	// 翻译提示: 尽量简短，因为UI的空间有限，不要超过10个字符
 	Introduction:
 		'''
 		[c/CC88AA:属性面板]
 		可以展示玩家的一些属性
-		(或其他一些实时更新的数据)
-		(支持 Modder 自定义属性与分类)
-		点击可调出控制器以添加常驻属性
-		点击对应分类的标题和点击属性可开关常驻
+		支持部分Mod属性
+		左键点击可调出控制器以添加常驻属性
+		左键点击对应分类的标题和点击属性可开关常驻
+		按住右键可拖动此开关
 		'''
 	Control: 属性面板控制器
 	Name: 属性面板
@@ -15,14 +16,16 @@ PlayerProperty: {
 	Magic: 魔法
 	Summon: 召唤
 	Other: 其他
+	// 其他玩家属性
 	LifeRegen: 生命回复
 	ArmorPenetration: 穿甲
 	Regen: 回复
+	// 魔力恢复，因为归在大类“魔法”下所以用Regen代替
 	Cost: 消耗
+	// 魔力消耗，因为归在大类“魔法”下所以用Cost代替
 	MaxMinions: 召唤栏
 	MaxTurrets: 哨兵栏
 	Endurance: 免伤
-	FishingSkill: 渔力
 	Luck: 幸运
 	Aggro: 仇恨
 	BulletDamage: 弹药伤害
@@ -30,8 +33,8 @@ PlayerProperty: {
 	SpecialistDamage: 其他伤害
 	Damage: 伤害
 	Crit: 暴击
-	Speed: 速度
-	SummonMeleeSpeed: 鞭子速度
+	Speed: 攻速
+	SummonMeleeSpeed: 鞭子攻速
 }
 
 ExtremeStorage: {

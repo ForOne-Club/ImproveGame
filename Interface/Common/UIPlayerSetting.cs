@@ -40,14 +40,14 @@ namespace ImproveGame.Interface.Common
             TagCompound proCatsFav = new TagCompound();
             TagCompound proFavs = new TagCompound();
 
-            foreach (var proCat in PlayerPropertySystem.Instance.PropertyCategorys)
+            foreach (var proCat in PlayerPropertySystem.Instance.PropertyCategories)
             {
                 proCatsPos.Set(proCat.Key, proCat.Value.UIPosition);
                 proCatsFav.Set(proCat.Key, proCat.Value.Favorite);
 
                 TagCompound proFav = new TagCompound();
 
-                foreach (var property in proCat.Value.BasePropertys)
+                foreach (var property in proCat.Value.BaseProperties)
                 {
                     proFav.Set(property.Name, property.Favorite);
                 }

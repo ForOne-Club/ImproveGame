@@ -59,6 +59,7 @@ namespace ImproveGame.Common.Configs
         public Vector2 WorldFeaturePosition;
         public Vector2 ItemSearcherPosition;
         public Vector2 OpenBagPosition;
+        public Vector2 PlayerInfoTogglePosition;
 
         /// <summary>
         /// (根据模组内容)获取 Config
@@ -96,25 +97,31 @@ namespace ImproveGame.Common.Configs
 
             UseKeybindTranslation = KeybindSystem.UseKeybindTranslation;
 
-            HugeInventoryUIPosition = UISystem.Instance.BigBagGUI?.MainPanel?.GetDimensions().Position() ??
+            var uiSystem = UISystem.Instance;
+
+            HugeInventoryUIPosition = uiSystem.BigBagGUI?.MainPanel?.GetDimensions().Position() ??
                                       new Vector2(150, 340);
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition; // 在这里也保存一下
 
-            BuffTrackerPosition = UISystem.Instance.BuffTrackerGUI?.MainPanel?.GetDimensions().Position() ??
+            BuffTrackerPosition = uiSystem.BuffTrackerGUI?.MainPanel?.GetDimensions().Position() ??
                                   new Vector2(630, 160);
             UIPlayer.BuffTrackerPosition = BuffTrackerPosition; // 在这里也保存一下
 
-            WorldFeaturePosition = UISystem.Instance.WorldFeatureGUI?.MainPanel?.GetDimensions().Position() ??
+            WorldFeaturePosition = uiSystem.WorldFeatureGUI?.MainPanel?.GetDimensions().Position() ??
                                    new Vector2(250, 280);
             UIPlayer.WorldFeaturePosition = WorldFeaturePosition; // 在这里也保存一下
 
-            ItemSearcherPosition = UISystem.Instance.ItemSearcherGUI?.MainPanel?.GetDimensions().Position() ??
+            ItemSearcherPosition = uiSystem.ItemSearcherGUI?.MainPanel?.GetDimensions().Position() ??
                                    new Vector2(620, 400);
             UIPlayer.ItemSearcherPosition = ItemSearcherPosition; // 在这里也保存一下
 
-            OpenBagPosition = UISystem.Instance.OpenBagGUI?.MainPanel?.GetDimensions().Position() ??
+            OpenBagPosition = uiSystem.OpenBagGUI?.MainPanel?.GetDimensions().Position() ??
                               new Vector2(410, 360);
             UIPlayer.OpenBagPosition = OpenBagPosition; // 在这里也保存一下
+
+            PlayerInfoTogglePosition = uiSystem.PlayerInfoGUI?.ControllerSwitch?.GetDimensions().Position() ??
+                                       UIPlayer.PlayerInfoToggleDefPosition;
+            UIPlayer.PlayerInfoTogglePosition = PlayerInfoTogglePosition; // 在这里也保存一下
         }
 
         /// <summary>
@@ -156,6 +163,9 @@ namespace ImproveGame.Common.Configs
             UIPlayer.OpenBagPosition = OpenBagPosition == Vector2.Zero
                 ? new Vector2(410, 360)
                 : OpenBagPosition;
+            UIPlayer.PlayerInfoTogglePosition = PlayerInfoTogglePosition == Vector2.Zero
+                ? UIPlayer.PlayerInfoToggleDefPosition
+                : PlayerInfoTogglePosition;
         }
 
         public static void Load()

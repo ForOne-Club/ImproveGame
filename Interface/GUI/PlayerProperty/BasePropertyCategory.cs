@@ -20,7 +20,7 @@ public class BasePropertyCategory
     /// </summary>
     public bool Favorite { get; set; }
 
-    public List<BaseProperty> BasePropertys { get; private set; } = new();
+    public List<BaseProperty> BaseProperties { get; private set; } = new();
 
     public BasePropertyCategory(Texture2D texture, string nameKey, bool isOtherMod = false)
     {
@@ -50,7 +50,8 @@ public class BasePropertyCategory
             ImagePercent = new Vector2(0.5f),
             ImageOrigin = new Vector2(0.5f),
             ImageScale = 0.8f,
-            DragIgnore = true
+            DragIgnore = true,
+            TickSound = false
         };
         image.Width.Pixels = 20f;
         image.Height.Percent = 1f;
@@ -68,11 +69,11 @@ public class BasePropertyCategory
         return card;
     }
 
-    public void AppendPropertys(PropertyCard card)
+    public void AppendProperties(PropertyCard card)
     {
-        for (int i = 0; i < BasePropertys.Count; i++)
+        for (int i = 0; i < BaseProperties.Count; i++)
         {
-            BaseProperty property = BasePropertys[i];
+            BaseProperty property = BaseProperties[i];
             PropertyBar propertyBar = new(property.Name, property.Value, property);
 
             if (property.Favorite)
@@ -82,11 +83,11 @@ public class BasePropertyCategory
         }
     }
 
-    public void AppendPropertysForControl(View view, PropertyCard card)
+    public void AppendPropertiesForControl(View view, PropertyCard card)
     {
-        for (int i = 0; i < BasePropertys.Count; i++)
+        for (int i = 0; i < BaseProperties.Count; i++)
         {
-            BaseProperty property = BasePropertys[i];
+            BaseProperty property = BaseProperties[i];
             PropertyBar bar = new(property.Name, property.Value, property);
 
             bar.OnUpdate += (_) =>
@@ -106,7 +107,7 @@ public class BasePropertyCategory
                     {
                         innerCard.RemoveAllChildren();
                         innerCard.Append(innerCard.TitleView);
-                        innerCard.PropertyCategory.AppendPropertys(innerCard);
+                        innerCard.PropertyCategory.AppendProperties(innerCard);
                     }
                 }
             };

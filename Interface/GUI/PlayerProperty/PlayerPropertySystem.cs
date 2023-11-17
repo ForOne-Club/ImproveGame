@@ -1,6 +1,4 @@
-﻿using CalamityMod;
-
-namespace ImproveGame.Interface.GUI.PlayerProperty;
+﻿namespace ImproveGame.Interface.GUI.PlayerProperty;
 
 /// <summary>
 /// 抽象就是对世界的鞭挞
@@ -9,7 +7,7 @@ public class PlayerPropertySystem : ModSystem
 {
     public static PlayerPropertySystem Instance { get; private set; }
 
-    public Dictionary<string, BasePropertyCategory> PropertyCategorys { get; private set; } = new();
+    public Dictionary<string, BasePropertyCategory> PropertyCategories { get; private set; } = new();
 
     public override void Load()
     {
@@ -19,19 +17,19 @@ public class PlayerPropertySystem : ModSystem
         BasePropertyCategory melee = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Melee").Value, "UI.PlayerProperty.Melee");
 
         // 伤害
-        melee.BasePropertys.Add(new BaseProperty(melee, "UI.PlayerProperty.Damage",
+        melee.BaseProperties.Add(new BaseProperty(melee, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Melee), 2)}%"));
 
         // 暴击
-        melee.BasePropertys.Add(new BaseProperty(melee, "UI.PlayerProperty.Crit",
+        melee.BaseProperties.Add(new BaseProperty(melee, "UI.PlayerProperty.Crit",
             () => $"{Math.Round(PlayerCrit(DamageClass.Melee), 2)}%"));
 
         // 速度
-        melee.BasePropertys.Add(new BaseProperty(melee, "UI.PlayerProperty.Speed",
+        melee.BaseProperties.Add(new BaseProperty(melee, "UI.PlayerProperty.Speed",
             () => $"{MathF.Round(Main.LocalPlayer.GetAttackSpeed(DamageClass.Melee) * 100f - 100f, 2)}%"));
 
         // 穿甲
-        melee.BasePropertys.Add(new BaseProperty(melee, "UI.PlayerProperty.ArmorPenetration",
+        melee.BaseProperties.Add(new BaseProperty(melee, "UI.PlayerProperty.ArmorPenetration",
             () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Melee), 2)}"));
         #endregion
 
@@ -39,11 +37,11 @@ public class PlayerPropertySystem : ModSystem
         BasePropertyCategory ranged = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Ranged").Value, "UI.PlayerProperty.Ranged");
 
         // 伤害
-        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.Damage",
+        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Ranged), 2)}%"));
 
         // 弹药伤害
-        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.BulletDamage",
+        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.BulletDamage",
             () =>
             {
                 var sm = Main.LocalPlayer.bulletDamage;
@@ -51,7 +49,7 @@ public class PlayerPropertySystem : ModSystem
             }));
 
         // 弓箭伤害
-        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.ArrowDamage",
+        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.ArrowDamage",
             () =>
             {
                 var sm = Main.LocalPlayer.arrowDamage;
@@ -59,7 +57,7 @@ public class PlayerPropertySystem : ModSystem
             }));
 
         // 其他伤害
-        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.SpecialistDamage",
+        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.SpecialistDamage",
             () =>
             {
                 var sm = Main.LocalPlayer.specialistDamage;
@@ -67,11 +65,11 @@ public class PlayerPropertySystem : ModSystem
             }));
 
         // 暴击
-        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.Crit",
+        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.Crit",
             () => $"{Math.Round(PlayerCrit(DamageClass.Ranged), 2)}%"));
 
         // 穿甲
-        ranged.BasePropertys.Add(new BaseProperty(ranged, "UI.PlayerProperty.ArmorPenetration",
+        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.ArmorPenetration",
             () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Ranged), 2)}"));
         #endregion
 
@@ -79,23 +77,23 @@ public class PlayerPropertySystem : ModSystem
         BasePropertyCategory magic = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Magic").Value, "UI.PlayerProperty.Magic");
 
         // 伤害
-        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.Damage",
+        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Magic), 2)}%"));
 
         // 法术暴击
-        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.Crit",
+        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Crit",
             () => $"{Math.Round(PlayerCrit(DamageClass.Magic), 2)}%"));
 
         // 法术回复
-        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.Regen",
+        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Regen",
             () => $"{Main.LocalPlayer.manaRegen / 2f}/s"));
 
         // 法术消耗减免
-        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.Cost",
+        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Cost",
             () => $"{MathF.Round(Main.LocalPlayer.manaCost * 100f, 2)}%"));
 
         // 法术穿甲
-        magic.BasePropertys.Add(new BaseProperty(magic, "UI.PlayerProperty.ArmorPenetration",
+        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.ArmorPenetration",
             () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Magic), 2)}"));
         #endregion
 
@@ -103,23 +101,23 @@ public class PlayerPropertySystem : ModSystem
         BasePropertyCategory summon = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Summon").Value, "UI.PlayerProperty.Summon");
 
         // 伤害
-        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.Damage",
+        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.Damage",
             () => $"{Math.Round(PlayerDamage(DamageClass.Summon), 2)}%"));
 
         // 鞭子速度
-        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.SummonMeleeSpeed",
+        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.SummonMeleeSpeed",
             () => $"{MathF.Round(Main.LocalPlayer.GetAttackSpeed(DamageClass.SummonMeleeSpeed) * 100f - 100f, 2)}%"));
 
         // 召唤穿甲
-        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.ArmorPenetration",
+        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.ArmorPenetration",
             () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Summon), 2)}"));
 
         // 召唤栏
-        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxMinions",
+        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxMinions",
             () => $"{Main.LocalPlayer.slotsMinions}/{Main.LocalPlayer.maxMinions}"));
 
         // 哨兵栏
-        summon.BasePropertys.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxTurrets",
+        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxTurrets",
             () => $"{Main.projectile.Count(proj => proj.active && proj.owner == Main.LocalPlayer.whoAmI && proj.WipableTurret)}/{Main.LocalPlayer.maxTurrets}"));
         #endregion
 
@@ -127,31 +125,27 @@ public class PlayerPropertySystem : ModSystem
         BasePropertyCategory other = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Luck").Value, "UI.PlayerProperty.Other");
 
         // 生命回复
-        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.LifeRegen",
+        other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.LifeRegen",
             () => $"{Main.LocalPlayer.lifeRegen / 2f}/s"));
 
         // 免伤
-        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.Endurance",
+        other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.Endurance",
             () => $"{MathF.Round(Main.LocalPlayer.endurance * 100f, 2)}%"));
 
         // 仇恨
-        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.Aggro",
+        other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.Aggro",
             () => $"{Main.LocalPlayer.aggro}"));
 
         // 幸运
-        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.Luck",
+        other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.Luck",
             () => $"{Math.Round(Main.LocalPlayer.luck, 2)}"));
-
-        // 渔力
-        other.BasePropertys.Add(new BaseProperty(other, "UI.PlayerProperty.FishingSkill",
-            () => $"{Main.LocalPlayer.fishingSkill}"));
         #endregion
 
-        PropertyCategorys.Add("Melee", melee);
-        PropertyCategorys.Add("Ranged", ranged);
-        PropertyCategorys.Add("Magic", magic);
-        PropertyCategorys.Add("Summon", summon);
-        PropertyCategorys.Add("Other", other);
+        PropertyCategories.Add("Melee", melee);
+        PropertyCategories.Add("Ranged", ranged);
+        PropertyCategories.Add("Magic", magic);
+        PropertyCategories.Add("Summon", summon);
+        PropertyCategories.Add("Other", other);
 
         // tipPanel.Append(new PlyInfoCard(PlyInfo("WingTime")}:", () => $"{MathF.Round((player.wingTime + player.rocketTime * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
         // new PlyInfoCard(GetHJSON("WingTimeMax"),

@@ -4,7 +4,6 @@ using ImproveGame.Core;
 using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.PlayerProperty;
 using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
@@ -30,6 +29,8 @@ public class UIPlayer : ModPlayer
     internal static Vector2 ItemSearcherPosition;
     internal static readonly Vector2 OpenBagDefPosition = new(410, 360);
     internal static Vector2 OpenBagPosition;
+    internal static readonly Vector2 PlayerInfoToggleDefPosition = new(572, 20);
+    internal static Vector2 PlayerInfoTogglePosition;
     internal static bool ShouldShowUI; // 防止进入世界时UI闪一下
 
     // 函数在玩家进入地图时候调用, 不会在服务器调用, 用来加载 UI, 可以避免一些因 HJson 未加载产生的问题.
@@ -59,36 +60,10 @@ public class UIPlayer : ModPlayer
         // 玩家信息
         uiSystem.PlayerInfoGUI = new PlayerPropertyGUI();
         uiSystem.PlayerInfoTrigger.SetCarrier(uiSystem.PlayerInfoGUI);
+        CheckPositionValid(ref PlayerInfoTogglePosition, PlayerInfoToggleDefPosition);
+        uiSystem.PlayerInfoGUI.ControllerSwitch.SetPos(PlayerInfoTogglePosition).Recalculate();
         PlayerPropertyGUI.Visible = true;
-
-        if (Main.LocalPlayer.TryGetModPlayer(out UIPlayerSetting playerSetting))
-        {
-            var proCats = PlayerPropertySystem.Instance.PropertyCategorys;
-
-            foreach (var item in proCats)
-            {
-                if (playerSetting.ProCatsPos.TryGet(item.Key, out Vector2 pos))
-                {
-                    item.Value.UIPosition = pos;
-                }
-
-                if (playerSetting.ProCatsFav.TryGet(item.Key, out bool fav))
-                {
-                    item.Value.Favorite = fav;
-                }
-
-                if (playerSetting.ProFavs.TryGet(item.Key, out TagCompound tags))
-                {
-                    foreach (var pro in item.Value.BasePropertys)
-                    {
-                        if (tags.TryGet(pro.Name, out bool proFav))
-                        {
-                            pro.Favorite = proFav;
-                        }
-                    }
-                }
-            }
-        }
+        uiSystem.PlayerInfoGUI.LoadAndSetupFavorites();
 
         // 自动垃圾桶
         uiSystem.AutoTrashGUI = new GarbageListGUI();

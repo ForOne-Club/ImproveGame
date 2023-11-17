@@ -290,12 +290,12 @@ public class ModIntegrationsSystem : ModSystem
                             Texture2D texture = (Texture2D)args[2];
                             string nameKey = Convert.ToString(args[3]);
 
-                            if (PlayerPropertySystem.Instance.PropertyCategorys.ContainsKey(category))
+                            if (PlayerPropertySystem.Instance.PropertyCategories.ContainsKey(category))
                             {
                                 return false;
                             }
 
-                            PlayerPropertySystem.Instance.PropertyCategorys.Add(category, new BasePropertyCategory(texture, nameKey, true));
+                            PlayerPropertySystem.Instance.PropertyCategories.Add(category, new BasePropertyCategory(texture, nameKey, true));
 
                             return true;
                         }
@@ -306,9 +306,9 @@ public class ModIntegrationsSystem : ModSystem
                             string nameKey = Convert.ToString(args[2]);
                             Func<string> value = (Func<string>)args[3];
 
-                            if (PlayerPropertySystem.Instance.PropertyCategorys.TryGetValue(category, out BasePropertyCategory proCat))
+                            if (PlayerPropertySystem.Instance.PropertyCategories.TryGetValue(category, out BasePropertyCategory proCat))
                             {
-                                proCat.BasePropertys.Add(new BaseProperty(proCat, nameKey, value, true));
+                                proCat.BaseProperties.Add(new BaseProperty(proCat, nameKey, value, true));
                                 return true;
                             }
 

@@ -1,11 +1,11 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
-using ImproveGame.Interface.GUI.PlayerProperty;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
+using Terraria.ModLoader.IO;
 using Terraria.ModLoader.UI;
 
-namespace ImproveGame.Interface.PlayerProperty;
+namespace ImproveGame.Interface.GUI.PlayerProperty;
 
 public class PlayerPropertyGUI : ViewBody
 {
@@ -58,8 +58,6 @@ public class PlayerPropertyGUI : ViewBody
     public PropertyGrid PropertyGrid { get; set; }
 
     public SUIImage ControllerSwitch { get; set; }
-    public static Vector2 SwitchPosition =>
-        Main.playerInventory ? new Vector2(572, 20) : new Vector2(470, 25);
 
     public override void OnInitialize()
     {
@@ -72,7 +70,7 @@ public class PlayerPropertyGUI : ViewBody
         Body.OnUpdate += Body_OnUpdate;
         Body.Join(this);
 
-        foreach (var item in PlayerPropertySystem.Instance.PropertyCategorys)
+        foreach (var item in PlayerPropertySystem.Instance.PropertyCategories)
         {
             if (item.Value.Favorite)
             {
@@ -130,7 +128,7 @@ public class PlayerPropertyGUI : ViewBody
         // 一整个列表
         PropertyGrid = new PropertyGrid();
 
-        foreach (var item in PlayerPropertySystem.Instance.PropertyCategorys)
+        foreach (var item in PlayerPropertySystem.Instance.PropertyCategories)
         {
             PropertyCard card = CreateCardForControl(Body, item.Value);
 
@@ -164,27 +162,7 @@ public class PlayerPropertyGUI : ViewBody
         #endregion
 
         #region 控制器的开关按钮
-        ControllerSwitch = new SUIImage(ModAsset.Luck2.Value);
-        ControllerSwitch.SetPosPixels(SwitchPosition);
-        ControllerSwitch.SetSizePixels(ControllerSwitch.Texture.Size());
-        ControllerSwitch.OnUpdate +=
-            (_) =>
-            {
-                if (ControllerSwitch.GetPosPixel() != SwitchPosition)
-                {
-                    ControllerSwitch.SetPosPixels(SwitchPosition);
-                    Recalculate();
-                }
-
-                if (ControllerSwitch.IsMouseHovering)
-                {
-                    ControllerSwitch.Texture = ModAsset.Luck3.Value;
-                }
-                else
-                {
-                    ControllerSwitch.Texture = ModAsset.Luck2.Value;
-                }
-            };
+        ControllerSwitch = new PropertyToggle();
         ControllerSwitch.OnLeftMouseDown +=
             (_, _) =>
             {
@@ -199,6 +177,51 @@ public class PlayerPropertyGUI : ViewBody
             };
         ControllerSwitch.Join(this);
         #endregion
+    }
+
+    /// <summary>
+    /// 进入游戏时调用，加载收藏列表
+    /// </summary>
+    public void LoadAndSetupFavorites()
+    {
+        if (!Main.LocalPlayer.TryGetModPlayer(out UIPlayerSetting playerSetting))
+            return;
+
+        var proCats = PlayerPropertySystem.Instance.PropertyCategories;
+
+        foreach (var item in proCats)
+        {
+            if (playerSetting.ProCatsPos.TryGet(item.Key, out Vector2 pos))
+            {
+                item.Value.UIPosition = pos;
+            }
+
+            if (playerSetting.ProCatsFav.TryGet(item.Key, out bool fav))
+            {
+                item.Value.Favorite = fav;
+            }
+
+            if (playerSetting.ProFavs.TryGet(item.Key, out TagCompound tags))
+            {
+                foreach (var pro in item.Value.BaseProperties)
+                {
+                    if (tags.TryGet(pro.Name, out bool proFav))
+                    {
+                        pro.Favorite = proFav;
+                    }
+                }
+            }
+        }
+
+        // 添加到展示列表
+        foreach (var item in PlayerPropertySystem.Instance.PropertyCategories)
+        {
+            if (item.Value.Favorite)
+            {
+                PropertyCard card = CreatePropertyCardForDisplay(Body, item.Value);
+                card.Join(Body);
+            }
+        }
     }
 
     /// <summary>
@@ -280,7 +303,7 @@ public class PlayerPropertyGUI : ViewBody
     public static PropertyCard CreatePropertyCardForDisplay(View view, BasePropertyCategory proCat)
     {
         PropertyCard card = proCat.CreateCard(out _, out _);
-        proCat.AppendPropertys(card);
+        proCat.AppendProperties(card);
 
         if (proCat.UIPosition is Vector2 pos)
         {
@@ -311,7 +334,7 @@ public class PlayerPropertyGUI : ViewBody
     public static PropertyCard CreateCardForControl(View view, BasePropertyCategory proCat)
     {
         PropertyCard card = proCat.CreateCard(out _, out _);
-        proCat.AppendPropertysForControl(view, card);
+        proCat.AppendPropertiesForControl(view, card);
 
         card.OnUpdate += (_) =>
         {
