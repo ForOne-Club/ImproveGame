@@ -48,8 +48,6 @@ PlayerProperty: {
 		Healer: Healer
 		// 牧师治疗工具（法术）的攻击速度，英文原文即“Healing Speed”，由于UI空间有限去掉了"ing"
 		HealingSpeed: Heal Speed
-		// 牧师光辉武器的攻击速度，英文原文“Radiant Casting Speed”，由于UI空间有限去掉了"Radiant"和"ing"
-		RadiantSpeed: Cast Speed
 		// 瑟银的一些牧师装备增加法术回血量
 		HealBonus: Heal Bonus
 		Bard: Bard

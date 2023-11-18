@@ -193,8 +193,7 @@ public class PlayerPropertySystem : ModSystem
             AddDamageProperty(healer, healerDamageClass);
             AddCritProperty(healer, healerDamageClass);
             // 光辉施法速度
-            healer.BaseProperties.Add(new BaseProperty(healer, "UI.PlayerProperty.ThoriumMod.RadiantSpeed",
-                () => BonusSyntax(PlayerAttackSpeed(healerDamageClass), true)));
+            AddAttackSpeedProperty(healer, healerDamageClass);
             // 治疗速度（法术施法速度）
             healer.BaseProperties.Add(new BaseProperty(healer, "UI.PlayerProperty.ThoriumMod.HealingSpeed",
                 () => BonusSyntax(PlayerAttackSpeed(healerToolClass), true)));
