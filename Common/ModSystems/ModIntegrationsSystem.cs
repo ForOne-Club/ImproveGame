@@ -298,7 +298,7 @@ public class ModIntegrationsSystem : ModSystem
                             return true;
                         }
                     // 添加属性类别
-                    case "AddPropertyCategory":
+                    case "AddStatCategory":
                         {
                             string category = Convert.ToString(args[1]);
                             Texture2D texture = (Texture2D)args[2];
@@ -316,7 +316,7 @@ public class ModIntegrationsSystem : ModSystem
                             return true;
                         }
                     // 添加属性到指定类别
-                    case "AddProperty":
+                    case "AddStat":
                         {
                             string category = Convert.ToString(args[1]);
                             string nameKey = Convert.ToString(args[2]);

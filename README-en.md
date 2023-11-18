@@ -53,28 +53,57 @@ ProjectStarlight.Interchange: https://github.com/ProjectStarlight/ProjectStarlig
 Auto Piggy Bank: https://github.com/diniamo/auto-piggy-bank
 
 ## 🤝 Cross-mod Support (Mod.Call)
+
+If you are a player who want to have other mods fix incompatibilities with Quality of Terraria, you can make a request to other modders to have them read this document and add cross-mod support
+The return value of Mod.Call is a `bool`, indicating whether the operation was successfully executed
+
 ### IgnoreInfItem
-```"IgnoreInfItem", int/List<int> ItemID(s)```
-
 Ignore infinite buff(s) provided by certain item(s), hence it/they no longer provide(s) infinite buff(s)
+#### Parameters
+- `int/List<int>` The item(s) being ignored
+
 ### AddPotion
-```"AddPotion", int ItemID, int/List<int> BuffIDs```
-
 Add infinite buff(s) for a potion, especially effective to items which do not have Item.buffType or have multiple buffs. 30 potions are needed to activate the effect
+#### Parameters
+- `int` The potion's item type
+- `int/List<int>` Type(s) of buff(s) provided by the potion
+
 ### AddStation
-```"AddStation", int ItemID, int/List<int> BuffIDs```
-
 Add infinite buff(s) for a buff station, usually you have to call manually for mod buff station. Only 1 item is needed to activate its effect
+#### Parameters
+- `int` The buff station's item type
+- `int/List<int>` Type(s) of buff(s) provided by the buff station
+
 ### AddPortableCraftingStation
-```"AddPortableCraftingStation", int ItemID, int/List<int> TileID(s)```
+Add portable crafting station support for a specified item. This is useful for items that do not have `Item.createTile` set but should act as some sort of crafting station. Multiple crafting stations can be specified.
+If you want it to act as a water source, you should set the crafting station type (the 2nd parameter) to `TileID.Sink`
+#### Parameters
+- `int` The portable crafting station's item type
+- `int/List<int>` Type(s) of crafting station(s) that the item can act as
 
-Add portable crafting station support for a specified item. This is useful for items that do not have Item.createTile set but should act as some sort of crafting station. Multiple crafting stations can be specified.
-
-If you want it to act as a water source, you should set the TileID to TileID.Sink
 ### AddFishingAccessory
-```"AddFishingAccessory", int ItemID, float FishingSpeedMultiplier, int FishingPower, bool TackleBox, bool LavaFishing```
-
 Add fishing accessory support for a specific item with fishing machine. This support should include options to set fishing speed multiplier, fishing power bonus, whether it should be considered as a tackle box, and whether it enables lava fishing. Generally, accessory support needs to be manually provided
+#### Parameters
+- `int` The accessory's item type
+- `float` The fishing speed bonus provided by the accessory
+- `float` The fishing power bonus provided by the accessory
+- `bool` Whether it should be considered as a tackle box
+- `bool` Whether it enables lava fishing
+
+### AddStatCategory
+Add a stat category to the stats panel. Hence you can add displayed stats via `AddStat` afterwards
+#### Parameters
+- `string` String identifier of the stat category added
+- `Texture2D` The category's icon
+- `string` The localization key of the category's display name
+- `Texture2D` Icon indicating the mod this category belongs to. It is recommended to use the icon_small sprite of your mod
+
+### AddStat
+Add a stat to an existing stat category
+#### Parameters
+- `string` String identifier of the stat category to add to
+- `string` The localization key of the stat's display name
+- `Func<string>` Getter function of the stat's display value
 
 ### Example
 Here is an example of adding infinite buffs for 2 mod buff stations

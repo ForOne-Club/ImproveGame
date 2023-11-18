@@ -201,6 +201,7 @@ public class PlayerPropertySystem : ModSystem
             // 法术回血量加成
             healer.BaseProperties.Add(new BaseProperty(healer, "UI.PlayerProperty.ThoriumMod.HealBonus",
                 () => $"+{(int)thoriumMod.Call("GetHealBonus", Main.LocalPlayer)}"));
+            AddArmorPenetrationProperty(healer, healerDamageClass);
 
             Instance.PropertyCategories.Add("ThoriumMod.Healer", healer);
         }

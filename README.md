@@ -54,29 +54,55 @@ Auto Piggy Bank开源链接: https://github.com/diniamo/auto-piggy-bank
 ## 🤝 跨Mod支持 (Mod.Call)
 
 如果你是一名玩家，并想要让其他模组修复与更好的体验不兼容的问题，你可以向其他模组作者提出请求，让他们阅读此文档并添加跨Mod支持。
+Mod.Call的返回值是一个 `bool`，指示这个操作是否成功执行
 
 ### IgnoreInfItem
-```"IgnoreInfItem", int/List<int> ItemID(s)```
-
 为某个/些指定的物品添加无尽增益忽略，以防止在拥有30个时无限提供增益
+#### 参数
+- `int/List<int>` 不提供无限增益的某个物品/一些物品的ID
+
 ### AddPotion
-```"AddPotion", int ItemID, int/List<int> BuffIDs```
-
 为某个指定的物品添加无尽增益支持(药水类)，对于没有设置Item.buffType或拥有多个增益的物品十分有用，药水类指需要达到30堆叠才能提供增益
+#### 参数
+- `int` 添加药水类无尽增益支持的物品的ID
+- `int/List<int>` 该物品提供的一个/一些增益的ID
+
 ### AddStation
-```"AddStation", int ItemID, int/List<int> BuffIDs```
-
 为某个指定的物品添加无尽增益支持(放置站类)，放置站类指有一个即可提供增益。放置站一般需要手动提供支持
+#### 参数
+- `int` 添加放置站类无尽增益支持的物品的ID
+- `int/List<int>` 该物品提供的一个/一些增益的ID
+
 ### AddPortableCraftingStation
-```"AddPortableCraftingStation", int ItemID, int/List<int> TileID(s)```
-
 为某个指定的物品添加便携制作站支持，对于没有设置Item.createTile但是应该充当某种制作站的物品十分有用，你可以指定多个制作站。
+如果你想要使其充当水源，应将“该物品充当的制作站的物块ID”(即第二个参数)设置为水槽 (TileID.Sink)
+#### 参数
+- `int` 添加便携制作站支持的物品的ID
+- `int/List<int>` 该物品可充当的一个/一些制作站的物块ID
 
-如果你想要使其充当水源，应将TileID设置为水槽 (TileID.Sink)
 ### AddFishingAccessory
-```"AddFishingAccessory", int ItemID, float FishingSpeedMultiplier, int FishingPower, bool TackleBox, bool LavaFishing```
-
 为某个指定的物品添加自动钓鱼机的钓鱼饰品支持，可设置钓鱼速度加成、渔力加成、是否应被视为钓具箱和是否可在岩浆钓鱼。一般需要手动提供饰品支持
+#### 参数
+- `int` 添加自动钓鱼机的钓鱼饰品支持的物品的ID
+- `float` 该物品提供的钓鱼速度加成
+- `float` 该物品提供的渔力加成
+- `bool` 该物品是否应被视为钓具箱
+- `bool` 该物品是否给予在熔岩中钓鱼的能力
+
+### AddStatCategory
+向属性面板添加一个属性类别，后续可以使用 `AddStat` 添加属性
+#### 参数
+- `string` 添加的属性类别的字符串标识符
+- `Texture2D` 指示属性类别的图标
+- `string` 该属性类别的名称的本地化键
+- `Texture2D` 指示该属性类别所属模组的图标，建议使用模组的icon_small贴图
+
+### AddStat
+向某个属性类别添加一个属性
+#### 参数
+- `string` 该属性要被添加到的属性类别的字符串标识符
+- `string` 该属性的名称的本地化键
+- `Func<string>` 该属性的值的获取函数
 
 ### 使用例
 以下是一个为自己的放置站添加支持的例子
