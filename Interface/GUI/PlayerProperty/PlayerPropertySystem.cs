@@ -254,7 +254,7 @@ public class PlayerPropertySystem : ModSystem
     public static void AddArmorPenetrationProperty(BasePropertyCategory category, DamageClass damageClass)
     {
         category.BaseProperties.Add(new BaseProperty(category, "UI.PlayerProperty.ArmorPenetration",
-            () => BonusSyntax(Main.LocalPlayer.GetTotalArmorPenetration(damageClass))));
+            () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(damageClass), 2)}"));
     }
 
     #endregion
