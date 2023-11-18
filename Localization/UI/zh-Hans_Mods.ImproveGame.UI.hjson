@@ -15,6 +15,7 @@ PlayerProperty: {
 	Ranged: 远程
 	Magic: 魔法
 	Summon: 召唤
+	Throwing: 投掷
 	// 其他玩家属性
 	Other: 其他
 	LifeRegen: 生命回复
@@ -33,8 +34,26 @@ PlayerProperty: {
 	SpecialistDamage: 其他伤害
 	Damage: 伤害
 	Crit: 暴击
+	// 攻击速度
 	Speed: 攻速
 	SummonMeleeSpeed: 鞭子攻速
+
+	CalamityMod: {
+		Rogue: 盗贼
+		// 盗贼弹幕速度，英文原文“Rogue Velocity”，这里归在大类“Rogue”下所以用Velocity代替
+		RogueVelocity: 弹幕速度
+	}
+
+	ThoriumMod: {
+		Healer: 牧师
+		// 牧师治疗工具（法术）的攻击速度，英文原文即“Healing Speed”，由于UI空间有限去掉了"ing"
+		HealingSpeed: 治疗速度
+		// 牧师光辉武器的攻击速度，英文原文“Radiant Casting Speed”，由于UI空间有限去掉了"Radiant"和"ing"
+		RadiantSpeed: 施法速度
+		// 瑟银的一些牧师装备增加法术回血量
+		HealBonus: 法术治疗加成
+		Bard: 乐师
+	}
 }
 
 ExtremeStorage: {

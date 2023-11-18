@@ -16,14 +16,7 @@ public class PropertyToggle : SUIImage
         OnUpdate +=
             _ =>
             {
-                if (IsMouseHovering)
-                {
-                    Texture = ModAsset.Luck3.Value;
-                }
-                else
-                {
-                    Texture = ModAsset.Luck2.Value;
-                }
+                Texture = IsMouseHovering ? ModAsset.Luck3.Value : ModAsset.Luck2.Value;
             };
     }
 

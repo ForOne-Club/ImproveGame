@@ -50,6 +50,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             if (ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type))
                 return new List<int>();
+
             if (Config.NoConsume_Potion)
             {
                 // 普通药水
@@ -64,8 +65,11 @@ namespace ImproveGame.Common.GlobalItems
                     // 其他Mod的，自行添加了引用
                     if (ModIntegrationsSystem.ModdedPotionBuffs.TryGetValue(item.type, out List<int> buffTypes))
                         buffs.AddRange(buffTypes);
-                    _potionToBuffs[item.type] = buffs;
-                    return buffs;
+                    if (buffs.Count > 0)
+                    {
+                        _potionToBuffs[item.type] = buffs;
+                        return buffs;
+                    }
                 }
             }
 

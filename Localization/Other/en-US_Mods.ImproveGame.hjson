@@ -63,7 +63,7 @@ Tips: {
 		GardenGnome: "[Garden Gnome]"
 		Enabled: "[Enabled]"
 		Disabled: "[Disabled]"
-		Hided: "[Buff icons hiden]"
+		Hided: "[Buff icons hidden]"
 		NonHided: "[Buff icons shown]"
 		CombinedBuff: "[Has available buff combination]"
 		AutoCollect: "[Auto-deposit]"
@@ -101,7 +101,7 @@ Tips: {
 			'''
 		Hided:
 			'''
-			Buff icons have been hiden.
+			Buff icons have been hidden.
 			To display them, disable "Hide buff icons of
 			infinite potions" in [c/CC88AA:Personal Config].
 			'''

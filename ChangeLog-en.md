@@ -22,6 +22,8 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - "Stackable Quest Fishes" config option
 - **[v1.6.6.1]** Ability to see what items an item can be shimmered into
 - **[v1.6.6.2]** 新增无BOSS存活时快速复活功能
+- **[v1.6.6.2]** 为瑟银添加了便携增益支持
+- **[v1.6.6.2]** 为属性面板添加了灾厄和瑟银职业支持
 ## BUG Fixes
 - Breaking Fishing Machine on tables crashes the game
 - Unable to disable Lucky Coin
@@ -39,6 +41,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - **[v1.6.6.2]** 自动开袋贩卖物品所得钱币只有应得的5%
 - **[v1.6.6.2]** 空间法杖可以无视条件设置方块的半砖类型
 - **[v1.6.6.2]** 漆涂法杖清除苔藓时永远只会掉落绿苔藓
+- **[v1.6.6.2]** 堆叠达到“药水无限增益需求量”的便携增益站不会应用Buff
 ## Adjustments
 - Tiles under Fishing Machine are now breakable
 - Added a hotkey to open mod configs

@@ -49,12 +49,12 @@ public class PropertyBar : TimerView
 
         Vector2 textPos = innerPos +
             new Vector2(0, UIConfigs.Instance.GeneralFontOffsetY * Scale + (innerSize.Y - TextSize.Y) / 2);
-        DrawString(textPos, PropertyName, Color.White * Opacity.Value, Color.Black * Opacity.Value, Scale);
+        DrawString(textPos, PropertyName, Color.White * Opacity.Value, Color.Black * Opacity.Value, Scale, spread: 1f);
 
         string infoText = PropertyValue();
         Vector2 infoSize = GetFontSize(infoText) * Scale;
         Vector2 infoPos = innerPos + new Vector2(innerSize.X - infoSize.X,
             UIConfigs.Instance.GeneralFontOffsetY * Scale + (innerSize.Y - infoSize.Y) / 2);
-        DrawString(infoPos, infoText, Color.White * Opacity.Value, Color.Black * Opacity.Value, Scale);
+        DrawString(infoPos, infoText, Color.White * Opacity.Value, Color.Black * Opacity.Value, Scale, spread: 1f);
     }
 }

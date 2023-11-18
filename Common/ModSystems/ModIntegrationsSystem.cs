@@ -65,6 +65,7 @@ public class ModIntegrationsSystem : ModSystem
     public override void PostSetupContent()
     {
         DoCalamityModIntegration();
+        DoThoriumModIntegration();
         DoFargowiltasIntegration();
         DoRecipeBrowserIntegration();
         DoDialogueTweakIntegration();
@@ -149,6 +150,19 @@ public class ModIntegrationsSystem : ModSystem
         AddBuffIntegration(calamityMod, "EffigyOfDecay", "EffigyOfDecayBuff", true);
         AddBuffIntegration(calamityMod, "CrimsonEffigy", "CrimsonEffigyBuff", true);
         AddBuffIntegration(calamityMod, "CorruptionEffigy", "CorruptionEffigyBuff", true);
+        PlayerPropertySystem.CalamityIntegration(calamityMod);
+    }
+
+    private static void DoThoriumModIntegration()
+    {
+        if (!ModLoader.TryGetMod("ThoriumMod", out Mod thoriumMod))
+            return;
+
+        AddBuffIntegration(thoriumMod, "Altar", "AltarBuff", true);
+        AddBuffIntegration(thoriumMod, "ConductorsStand", "ConductorsStandBuff", true);
+        AddBuffIntegration(thoriumMod, "Mistletoe", "MistletoeBuff", true);
+        AddBuffIntegration(thoriumMod, "NinjaRack", "NinjaBuff", true);
+        PlayerPropertySystem.ThoriumIntegration(thoriumMod);
     }
 
     private static void DoFargowiltasIntegration()
@@ -289,13 +303,15 @@ public class ModIntegrationsSystem : ModSystem
                             string category = Convert.ToString(args[1]);
                             Texture2D texture = (Texture2D)args[2];
                             string nameKey = Convert.ToString(args[3]);
+                            Texture2D modIcon = (Texture2D)args[3];
 
                             if (PlayerPropertySystem.Instance.PropertyCategories.ContainsKey(category))
                             {
                                 return false;
                             }
 
-                            PlayerPropertySystem.Instance.PropertyCategories.Add(category, new BasePropertyCategory(texture, nameKey, true));
+                            PlayerPropertySystem.Instance.PropertyCategories.Add(category,
+                                new BasePropertyCategory(texture, nameKey, true, modIcon));
 
                             return true;
                         }

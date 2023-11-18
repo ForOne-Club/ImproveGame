@@ -107,6 +107,18 @@ partial class MyUtils
         return ChatManager.GetStringSize(FontAssets.MouseText.Value, text, new Vector2(1f)) * textScale;
     }
 
+    /// <summary>
+    /// 绘制带阴影的文字，在某些地方用阴影代替黑描边会有更好的效果
+    /// </summary>
+    public static void DrawShadedString(Vector2 position, string text, Color textColor, Color shadowColor,
+        float scale = 1f, bool large = false)
+    {
+        position += new Vector2(2f);
+        DrawString(position, text, shadowColor, Color.Transparent, scale, large);
+        position -= new Vector2(2f);
+        DrawString(position, text, textColor, Color.Transparent, scale, large);
+    }
+
     public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f,
         bool large = false, float spread = 2f)
     {

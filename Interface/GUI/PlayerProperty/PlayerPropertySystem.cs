@@ -14,38 +14,32 @@ public class PlayerPropertySystem : ModSystem
         Instance = this;
 
         #region 近战属性
-        BasePropertyCategory melee = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Melee").Value, "UI.PlayerProperty.Melee");
 
-        // 伤害
-        melee.BaseProperties.Add(new BaseProperty(melee, "UI.PlayerProperty.Damage",
-            () => $"{Math.Round(PlayerDamage(DamageClass.Melee), 2)}%"));
+        BasePropertyCategory melee =
+            new BasePropertyCategory(ModAsset.Melee.Value, "UI.PlayerProperty.Melee");
 
-        // 暴击
-        melee.BaseProperties.Add(new BaseProperty(melee, "UI.PlayerProperty.Crit",
-            () => $"{Math.Round(PlayerCrit(DamageClass.Melee), 2)}%"));
+        // 近战伤害、暴击、攻速与穿甲
+        AddDamageProperty(melee, DamageClass.Melee);
+        AddCritProperty(melee, DamageClass.Melee);
+        AddAttackSpeedProperty(melee, DamageClass.Melee);
+        AddArmorPenetrationProperty(melee, DamageClass.Melee);
 
-        // 速度
-        melee.BaseProperties.Add(new BaseProperty(melee, "UI.PlayerProperty.Speed",
-            () => $"{MathF.Round(Main.LocalPlayer.GetAttackSpeed(DamageClass.Melee) * 100f - 100f, 2)}%"));
-
-        // 穿甲
-        melee.BaseProperties.Add(new BaseProperty(melee, "UI.PlayerProperty.ArmorPenetration",
-            () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Melee), 2)}"));
         #endregion
 
         #region 远程
-        BasePropertyCategory ranged = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Ranged").Value, "UI.PlayerProperty.Ranged");
 
-        // 伤害
-        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.Damage",
-            () => $"{Math.Round(PlayerDamage(DamageClass.Ranged), 2)}%"));
+        BasePropertyCategory ranged =
+            new BasePropertyCategory(ModAsset.Ranged.Value, "UI.PlayerProperty.Ranged");
+
+        // 远程伤害
+        AddDamageProperty(ranged, DamageClass.Ranged);
 
         // 弹药伤害
         ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.BulletDamage",
             () =>
             {
                 var sm = Main.LocalPlayer.bulletDamage;
-                return $"{Math.Round((sm.Additive * sm.Multiplicative - 1f) * 100, 2)}%";
+                return BonusSyntax((sm.Additive * sm.Multiplicative - 1f) * 100, true);
             }));
 
         // 弓箭伤害
@@ -53,7 +47,7 @@ public class PlayerPropertySystem : ModSystem
             () =>
             {
                 var sm = Main.LocalPlayer.arrowDamage;
-                return $"{Math.Round((sm.Additive * sm.Multiplicative - 1f) * 100, 2)}%";
+                return BonusSyntax((sm.Additive * sm.Multiplicative - 1f) * 100, true);
             }));
 
         // 其他伤害
@@ -61,28 +55,23 @@ public class PlayerPropertySystem : ModSystem
             () =>
             {
                 var sm = Main.LocalPlayer.specialistDamage;
-                return $"{Math.Round((sm.Additive * sm.Multiplicative - 1f) * 100, 2)}%";
+                return BonusSyntax((sm.Additive * sm.Multiplicative - 1f) * 100, true);
             }));
 
-        // 暴击
-        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.Crit",
-            () => $"{Math.Round(PlayerCrit(DamageClass.Ranged), 2)}%"));
+        // 远程暴击与穿甲
+        AddCritProperty(ranged, DamageClass.Ranged);
+        AddArmorPenetrationProperty(ranged, DamageClass.Ranged);
 
-        // 穿甲
-        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.ArmorPenetration",
-            () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Ranged), 2)}"));
         #endregion
 
         #region 魔法
-        BasePropertyCategory magic = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Magic").Value, "UI.PlayerProperty.Magic");
 
-        // 伤害
-        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Damage",
-            () => $"{Math.Round(PlayerDamage(DamageClass.Magic), 2)}%"));
+        BasePropertyCategory magic =
+            new BasePropertyCategory(ModAsset.Magic.Value, "UI.PlayerProperty.Magic");
 
-        // 法术暴击
-        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Crit",
-            () => $"{Math.Round(PlayerCrit(DamageClass.Magic), 2)}%"));
+        // 法术伤害与暴击
+        AddDamageProperty(magic, DamageClass.Magic);
+        AddCritProperty(magic, DamageClass.Magic);
 
         // 法术回复
         magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Regen",
@@ -90,27 +79,27 @@ public class PlayerPropertySystem : ModSystem
 
         // 法术消耗减免
         magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Cost",
-            () => $"{MathF.Round(Main.LocalPlayer.manaCost * 100f, 2)}%"));
+            () => BonusSyntax((Main.LocalPlayer.manaCost - 1f) * 100f, true)));
 
         // 法术穿甲
-        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.ArmorPenetration",
-            () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Magic), 2)}"));
+        AddArmorPenetrationProperty(magic, DamageClass.Magic);
+
         #endregion
 
         #region 召唤
-        BasePropertyCategory summon = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Summon").Value, "UI.PlayerProperty.Summon");
 
-        // 伤害
-        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.Damage",
-            () => $"{Math.Round(PlayerDamage(DamageClass.Summon), 2)}%"));
+        BasePropertyCategory summon =
+            new BasePropertyCategory(ModAsset.Summon.Value, "UI.PlayerProperty.Summon");
+
+        // 召唤伤害
+        AddDamageProperty(summon, DamageClass.Summon);
 
         // 鞭子速度
         summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.SummonMeleeSpeed",
-            () => $"{MathF.Round(Main.LocalPlayer.GetAttackSpeed(DamageClass.SummonMeleeSpeed) * 100f - 100f, 2)}%"));
+            () => BonusSyntax(Main.LocalPlayer.GetAttackSpeed(DamageClass.SummonMeleeSpeed) * 100f - 100f, true)));
 
         // 召唤穿甲
-        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.ArmorPenetration",
-            () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(DamageClass.Summon), 2)}"));
+        AddArmorPenetrationProperty(summon, DamageClass.Summon);
 
         // 召唤栏
         summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxMinions",
@@ -118,11 +107,28 @@ public class PlayerPropertySystem : ModSystem
 
         // 哨兵栏
         summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxTurrets",
-            () => $"{Main.projectile.Count(proj => proj.active && proj.owner == Main.LocalPlayer.whoAmI && proj.WipableTurret)}/{Main.LocalPlayer.maxTurrets}"));
+            () =>
+                $"{Main.projectile.Count(proj => proj.active && proj.owner == Main.LocalPlayer.whoAmI && proj.WipableTurret)}/{Main.LocalPlayer.maxTurrets}"));
+
+        #endregion
+
+        #region 投掷属性 (出于跨模组考虑)
+
+        BasePropertyCategory throwing =
+            new BasePropertyCategory(ModAsset.Throwing.Value, "UI.PlayerProperty.Throwing");
+
+        // 投掷伤害、暴击、攻速与穿甲
+        AddDamageProperty(throwing, DamageClass.Throwing);
+        AddCritProperty(throwing, DamageClass.Throwing);
+        AddAttackSpeedProperty(throwing, DamageClass.Throwing);
+        AddArmorPenetrationProperty(throwing, DamageClass.Throwing);
+
         #endregion
 
         #region 其他
-        BasePropertyCategory other = new BasePropertyCategory(GetTexture("UI/PlayerInfo/Luck").Value, "UI.PlayerProperty.Other");
+
+        BasePropertyCategory other =
+            new BasePropertyCategory(GetTexture("UI/PlayerInfo/Luck").Value, "UI.PlayerProperty.Other");
 
         // 生命回复
         other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.LifeRegen",
@@ -130,7 +136,7 @@ public class PlayerPropertySystem : ModSystem
 
         // 免伤
         other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.Endurance",
-            () => $"{MathF.Round(Main.LocalPlayer.endurance * 100f, 2)}%"));
+            () => BonusSyntax(Main.LocalPlayer.endurance * 100f)));
 
         // 仇恨
         other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.Aggro",
@@ -139,18 +145,121 @@ public class PlayerPropertySystem : ModSystem
         // 幸运
         other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.Luck",
             () => $"{Math.Round(Main.LocalPlayer.luck, 2)}"));
+
         #endregion
 
         PropertyCategories.Add("Melee", melee);
         PropertyCategories.Add("Ranged", ranged);
         PropertyCategories.Add("Magic", magic);
         PropertyCategories.Add("Summon", summon);
+        PropertyCategories.Add("Throwing", throwing);
         PropertyCategories.Add("Other", other);
 
         // tipPanel.Append(new PlyInfoCard(PlyInfo("WingTime")}:", () => $"{MathF.Round((player.wingTime + player.rocketTime * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
         // new PlyInfoCard(GetHJSON("WingTimeMax"),
         //     () => $"{MathF.Round((_player.wingTimeMax + _player.rocketTimeMax * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
     }
+
+    public static void CalamityIntegration(Mod calamityMod)
+    {
+        if (!calamityMod.TryFind<DamageClass>("RogueDamageClass", out var damageClass))
+            return;
+
+        BasePropertyCategory rogue = new(ModAsset.Rogue.Value, "UI.PlayerProperty.CalamityMod.Rogue", false,
+            ModContent.Request<Texture2D>("CalamityMod/icon_small", AssetRequestMode.ImmediateLoad).Value);
+
+        AddDamageProperty(rogue, damageClass);
+        AddCritProperty(rogue, damageClass);
+
+        // 灾厄特有，盗贼弹幕速度
+        rogue.BaseProperties.Add(new BaseProperty(rogue, "UI.PlayerProperty.CalamityMod.RogueVelocity",
+            () => BonusSyntax((float)calamityMod.Call("GetRogueVelocity", Main.LocalPlayer) * 100f - 100f, true)));
+
+        AddAttackSpeedProperty(rogue, damageClass);
+        AddArmorPenetrationProperty(rogue, damageClass);
+
+        Instance.PropertyCategories.Add("CalamityMod.Rogue", rogue);
+    }
+
+    public static void ThoriumIntegration(Mod thoriumMod)
+    {
+        var thoriumIcon = ModContent.Request<Texture2D>("ThoriumMod/icon_small", AssetRequestMode.ImmediateLoad).Value;
+        
+        if (thoriumMod.TryFind<DamageClass>("HealerDamage", out var healerDamageClass) &&
+            thoriumMod.TryFind<DamageClass>("HealerTool", out var healerToolClass))
+        {
+            BasePropertyCategory healer = new(ModAsset.Healer.Value, "UI.PlayerProperty.ThoriumMod.Healer", false, thoriumIcon);
+
+            AddDamageProperty(healer, healerDamageClass);
+            AddCritProperty(healer, healerDamageClass);
+            // 光辉施法速度
+            healer.BaseProperties.Add(new BaseProperty(healer, "UI.PlayerProperty.ThoriumMod.RadiantSpeed",
+                () => BonusSyntax(PlayerAttackSpeed(healerDamageClass), true)));
+            // 治疗速度（法术施法速度）
+            healer.BaseProperties.Add(new BaseProperty(healer, "UI.PlayerProperty.ThoriumMod.HealingSpeed",
+                () => BonusSyntax(PlayerAttackSpeed(healerToolClass), true)));
+            // 法术回血量加成
+            healer.BaseProperties.Add(new BaseProperty(healer, "UI.PlayerProperty.ThoriumMod.HealBonus",
+                () => $"+{(int)thoriumMod.Call("GetHealBonus", Main.LocalPlayer)}"));
+
+            Instance.PropertyCategories.Add("ThoriumMod.Healer", healer);
+        }
+
+        if (thoriumMod.TryFind<DamageClass>("BardDamage", out var bardDamageClass))
+        {
+            BasePropertyCategory bard = new(ModAsset.Bard.Value, "UI.PlayerProperty.ThoriumMod.Bard", false, thoriumIcon);
+            
+            // 乐师伤害、暴击、攻速与穿甲
+            AddDamageProperty(bard, bardDamageClass);
+            AddCritProperty(bard, bardDamageClass);
+            AddAttackSpeedProperty(bard, bardDamageClass);
+            AddArmorPenetrationProperty(bard, bardDamageClass);
+
+            Instance.PropertyCategories.Add("ThoriumMod.Bard", bard);
+        }
+    }
+
+    #region 快捷添加伤害类型基础属性
+
+    /// <summary>
+    /// 伤害
+    /// </summary>
+    public static void AddDamageProperty(BasePropertyCategory category, DamageClass damageClass)
+    {
+        category.BaseProperties.Add(new BaseProperty(category, "UI.PlayerProperty.Damage",
+            () => BonusSyntax(PlayerDamage(damageClass), true)));
+    }
+
+    /// <summary>
+    /// 暴击
+    /// </summary>
+    public static void AddCritProperty(BasePropertyCategory category, DamageClass damageClass)
+    {
+        category.BaseProperties.Add(new BaseProperty(category, "UI.PlayerProperty.Crit",
+            () => BonusSyntax(PlayerCrit(damageClass), true)));
+    }
+
+    /// <summary>
+    /// 攻速
+    /// </summary>
+    public static void AddAttackSpeedProperty(BasePropertyCategory category, DamageClass damageClass)
+    {
+        category.BaseProperties.Add(new BaseProperty(category, "UI.PlayerProperty.Speed",
+            () => BonusSyntax(PlayerAttackSpeed(damageClass), true)));
+    }
+
+    /// <summary>
+    /// 穿甲
+    /// </summary>
+    public static void AddArmorPenetrationProperty(BasePropertyCategory category, DamageClass damageClass)
+    {
+        category.BaseProperties.Add(new BaseProperty(category, "UI.PlayerProperty.ArmorPenetration",
+            () => BonusSyntax(Main.LocalPlayer.GetTotalArmorPenetration(damageClass))));
+    }
+
+    #endregion
+
+    #region 各种获取属性的方法
 
     /// <summary>
     /// 获取 LocalPlayer 的伤害
@@ -167,5 +276,28 @@ public class PlayerPropertySystem : ModSystem
     public static float PlayerCrit(DamageClass damageClass)
     {
         return Main.LocalPlayer.GetTotalCritChance(damageClass);
+    }
+
+    /// <summary>
+    /// 获取 LocalPlayer 的攻速
+    /// </summary>
+    public static float PlayerAttackSpeed(DamageClass damageClass)
+    {
+        return Main.LocalPlayer.GetTotalAttackSpeed(damageClass) * 100f - 100f;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// 对于传入的value，以加成格式显示 (四舍五入并保留两位小数) <br/>
+    /// 不带符号：value% <br/>
+    /// 带符号：+value%(正值) 或 -value%(负值) 或 -0%(0) <br/>
+    /// </summary>
+    public static string BonusSyntax(float value, bool sign = false)
+    {
+        float roundedValue = MathF.Round(value, 2);
+        if (!sign)
+            return $"{roundedValue}%";
+        return roundedValue > 0 ? $"+{roundedValue}%" : $"{roundedValue}%";
     }
 }

@@ -9,9 +9,9 @@ namespace ImproveGame.Interface.GUI.PlayerProperty;
 public class BasePropertyCategory
 {
     /// <summary>
-    /// 判断是否来自其他 Mod
+    /// Whether this property category is added via Mod.Call
     /// </summary>
-    public bool IsOtherMod { get; set; }
+    public bool IsAddedFromCall { get; set; }
 
     public Vector2? UIPosition;
 
@@ -22,18 +22,21 @@ public class BasePropertyCategory
 
     public List<BaseProperty> BaseProperties { get; private set; } = new();
 
-    public BasePropertyCategory(Texture2D texture, string nameKey, bool isOtherMod = false)
+    public BasePropertyCategory(Texture2D texture, string nameKey, bool isAddedFromCall = false, Texture2D modSmallIcon = null)
     {
         Texture = texture;
         NameKey = nameKey;
-        IsOtherMod = isOtherMod;
+        IsAddedFromCall = isAddedFromCall;
+        ModSmallIcon = modSmallIcon;
     }
+
+    public Texture2D ModSmallIcon { get; set; }
 
     public Texture2D Texture { get; set; }
 
     public string NameKey { get; set; }
 
-    public string Name => IsOtherMod ? Language.GetTextValue(NameKey) : GetText(NameKey);
+    public string Name => IsAddedFromCall ? Language.GetTextValue(NameKey) : GetText(NameKey);
 
     /// <summary>
     /// 创建卡片
@@ -65,6 +68,22 @@ public class BasePropertyCategory
         title.Height.Percent = 1f;
         title.Width.Pixels = title.TextSize.X;
         title.Join(card.TitleView);
+
+        // 模组图标
+        if (ModSmallIcon is null) return card;
+        
+        var modIcon = new SUIImage(ModSmallIcon)
+        {
+            ImagePercent = new Vector2(0.5f),
+            ImageOrigin = new Vector2(0.5f),
+            ImageScale = 0.8f,
+            DragIgnore = true,
+            TickSound = false,
+            Width = {Pixels = 20f},
+            Height = {Percent = 1f},
+            Left = {Pixels = -20f, Percent = 1f}
+        };
+        modIcon.Join(card.TitleView);
 
         return card;
     }
