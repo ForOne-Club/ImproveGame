@@ -310,7 +310,7 @@ PaintWandGUI: {
 SpaceWandGUI: {
 	PlaceType: Tile type
 	Platform: Platforms
-	Soild: Solid blocks
+	Soild: Solid Blocks
 	Rope: Ropes
 	Rail: Minecart Tracks
 	GrassSeed: Grass Seeds

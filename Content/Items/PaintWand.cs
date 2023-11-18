@@ -36,6 +36,7 @@ namespace ImproveGame.Content.Items
                 if (tile.TileType != TileID.LongMoss)
                     return true;
 
+                int frameX = tile.TileFrameX;
                 WorldGen.KillTile(i, j);
                 if (tile.HasTile)
                     return true;
@@ -43,22 +44,17 @@ namespace ImproveGame.Content.Items
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
 
-                if (Main.rand.NextBool(9))
+                if (Main.rand.NextBool(4))
                 {
-                    int frameX = tile.TileFrameX;
-                    int type = 4349 + frameX / 22;
-                    switch (frameX / 22)
+                    int type = (frameX / 22) switch
                     {
-                        case 6:
-                            type = 4377;
-                            break;
-                        case 7:
-                            type = 4378;
-                            break;
-                        case 8:
-                            type = 4389;
-                            break;
-                    }
+                        6 => 4377,
+                        7 => 4378,
+                        8 => 4389,
+                        9 => 5127,
+                        10 => 5128,
+                        _ => 4349 + frameX / 22
+                    };
 
                     int number = Item.NewItem(new EntitySource_ItemUse(player, player.HeldItem), player.Center, 16, 16,
                         type);

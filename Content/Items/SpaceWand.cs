@@ -272,7 +272,7 @@ public class SpaceWand : ModItem, IMarqueeItem
     private void SetSlopeFor(int x, int y, Rectangle platformRect)
     {
         var tile = Main.tile[x, y];
-        if (PlaceType is PlaceType.Soild or PlaceType.Platform)
+        if (WorldGen.CanPoundTile(x, y) && PlaceType is PlaceType.Soild or PlaceType.Platform)
         {
             tile.BlockType = BlockType;
             WorldGen.SquareTileFrame(x, y, false);
