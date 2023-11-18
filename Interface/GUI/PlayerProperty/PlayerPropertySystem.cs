@@ -200,7 +200,11 @@ public class PlayerPropertySystem : ModSystem
                 () => BonusSyntax(PlayerAttackSpeed(healerToolClass), true)));
             // 法术回血量加成
             healer.BaseProperties.Add(new BaseProperty(healer, "UI.PlayerProperty.ThoriumMod.HealBonus",
-                () => $"+{(int)thoriumMod.Call("GetHealBonus", Main.LocalPlayer)}"));
+                () =>
+                {
+                    int healBonus = (int)thoriumMod.Call("GetHealBonus", Main.LocalPlayer);
+                    return healBonus > 0 ? $"+{healBonus}" : healBonus.ToString();
+                }));
             AddArmorPenetrationProperty(healer, healerDamageClass);
 
             Instance.PropertyCategories.Add("ThoriumMod.Healer", healer);

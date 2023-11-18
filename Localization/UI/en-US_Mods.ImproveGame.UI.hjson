@@ -11,15 +11,15 @@ PlayerProperty: {
 		'''
 	Control: 属性面板控制器
 	Name: Player Stats
-	Melee: 近战
-	Ranged: 远程
-	Magic: 魔法
-	Summon: 召唤
-	Throwing: 投掷
+	Melee: Melee
+	Ranged: Ranged
+	Magic: Magic
+	Summon: Summon
+	Throwing: Throwing
 	// 其他玩家属性
-	Other: 其他
+	Other: Other
 	LifeRegen: Life Regen
-	ArmorPenetration: 穿甲
+	ArmorPenetration: Armor Pen
 	// 魔力恢复，因为归在大类“魔法”下所以用Regen代替
 	Regen: Regen
 	// 魔力消耗，因为归在大类“魔法”下所以用Cost代替
@@ -32,11 +32,11 @@ PlayerProperty: {
 	BulletDamage: 弹药伤害
 	ArrowDamage: 弓箭伤害
 	SpecialistDamage: 其他伤害
-	Damage: 伤害
-	Crit: 暴击
+	Damage: Damage
+	Crit: Crit
 	// 攻击速度
-	Speed: 攻速
-	SummonMeleeSpeed: 鞭子攻速
+	Speed: Atk Speed
+	SummonMeleeSpeed: Whip Speed
 
 	CalamityMod: {
 		Rogue: Rogue
