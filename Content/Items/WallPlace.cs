@@ -1,11 +1,12 @@
 ﻿using ImproveGame.Content.Projectiles;
 using Terraria;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items
 {
     public class WallPlace : ModItem
     {
-        public static readonly int RobotType = ModContent.ProjectileType<WallRobot>();
+        private static readonly int RobotType = ModContent.ProjectileType<WallRobot>();
 
         public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
@@ -54,9 +55,9 @@ namespace ImproveGame.Content.Items
 
         public static void SearchWalls(Point pos, ref List<Point> walls1, ref List<Point> walls2)
         {
-            // 不在世界内，在Wall内，大于500
+            // 不在世界内，在Wall内，大于10000格
             if (pos.X >= Main.maxTilesX || pos.Y >= Main.maxTilesY || pos.X <= 0 || pos.Y <= 0 ||
-                walls1.Contains(pos) || walls2.Contains(pos) || walls1.Count > 2500 || walls2.Count > 2500)
+                walls1.Contains(pos) || walls2.Contains(pos) || walls1.Count > 10000 || walls2.Count > 10000)
                 return;
 
             int hasTile = HasBoundary(pos, ref walls1, ref walls2);
@@ -97,7 +98,7 @@ namespace ImproveGame.Content.Items
                 if (walls1.Count == 0)
                     return false;
 
-                if (walls1.Count > 2500)
+                if (walls1.Count > 10000)
                 {
                     CombatText.NewText(player.getRect(), Color.Red, GetText("CombatText.Item.WallPlace_Limit"));
                     return true;
@@ -131,8 +132,9 @@ namespace ImproveGame.Content.Items
                         });*/
                         CombatText.NewText(player.getRect(), new Color(0, 155, 255),
                             GetText("CombatText.Item.WallPlace_Consume") + walls1.Count);
-                        Projectile proj = Projectile.NewProjectileDirect(null, center, Vector2.Zero, RobotType, 0, 0,
-                            player.whoAmI);
+                        Projectile proj = Projectile.NewProjectileDirect(
+                            new EntitySource_ItemUse(player, Item, "WandOfTechnology"), center, Vector2.Zero, RobotType,
+                            0, 0, player.whoAmI);
                         proj.Center = center;
                         WallRobot robot = (WallRobot)proj.ModProjectile;
                         robot.Walls = walls1;

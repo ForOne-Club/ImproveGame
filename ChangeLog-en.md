@@ -42,6 +42,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - **[v1.6.6.2]** 空间法杖可以无视条件设置方块的半砖类型
 - **[v1.6.6.2]** 漆涂法杖清除苔藓时永远只会掉落绿苔藓
 - **[v1.6.6.2]** 堆叠达到“药水无限增益需求量”的便携增益站不会应用Buff
+- **[v1.6.6.2]** 关闭“使用魔杖放置时无限材料”功能后放置堆叠超过999的背景墙仍不会消耗
 ## Adjustments
 - Tiles under Fishing Machine are now breakable
 - Added a hotkey to open mod configs
