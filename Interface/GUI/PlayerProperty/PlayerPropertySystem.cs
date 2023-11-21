@@ -67,7 +67,7 @@ public class PlayerPropertySystem : ModSystem
         #region 魔法
 
         BasePropertyCategory magic =
-            new BasePropertyCategory(ModAsset.Magic.Value, "UI.PlayerProperty.Magic");
+            new BasePropertyCategory(ModAsset.Magick.Value, "UI.PlayerProperty.Magic");
 
         // 法术伤害与暴击
         AddDamageProperty(magic, DamageClass.Magic);
@@ -128,7 +128,7 @@ public class PlayerPropertySystem : ModSystem
         #region 其他
 
         BasePropertyCategory other =
-            new BasePropertyCategory(GetTexture("UI/PlayerInfo/Luck").Value, "UI.PlayerProperty.Other");
+            new BasePropertyCategory(GetTexture("UI/PlayerProperty/Luck").Value, "UI.PlayerProperty.Other");
 
         // 生命回复
         other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.LifeRegen",
@@ -184,7 +184,7 @@ public class PlayerPropertySystem : ModSystem
     public static void ThoriumIntegration(Mod thoriumMod)
     {
         var thoriumIcon = ModContent.Request<Texture2D>("ThoriumMod/icon_small", AssetRequestMode.ImmediateLoad).Value;
-        
+
         if (thoriumMod.TryFind<DamageClass>("HealerDamage", out var healerDamageClass) &&
             thoriumMod.TryFind<DamageClass>("HealerTool", out var healerToolClass))
         {
@@ -212,7 +212,7 @@ public class PlayerPropertySystem : ModSystem
         if (thoriumMod.TryFind<DamageClass>("BardDamage", out var bardDamageClass))
         {
             BasePropertyCategory bard = new(ModAsset.Bard.Value, "UI.PlayerProperty.ThoriumMod.Bard", false, thoriumIcon);
-            
+
             // 乐师伤害、暴击、攻速与穿甲
             AddDamageProperty(bard, bardDamageClass);
             AddCritProperty(bard, bardDamageClass);
