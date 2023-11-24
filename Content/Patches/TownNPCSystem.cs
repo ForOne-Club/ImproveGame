@@ -69,6 +69,9 @@ namespace ImproveGame.Content.Patches
                 return;
             }
 
+            if (NPC.downedSlimeKing || NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3 || NPC.downedQueenBee ||
+                Main.hardMode || NPC.downedDeerclops)
+                TrySetNPCSpawn(NPCID.Stylist);
             if (NPC.downedGoblins)
                 TrySetNPCSpawn(NPCID.GoblinTinkerer);
             if (NPC.downedBoss2)

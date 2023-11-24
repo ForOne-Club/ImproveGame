@@ -57,6 +57,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - **[v1.6.6.1]** Expanded the Fishing Machine to 40 slots
 - **[v1.6.6.1]** The fishing speed of Fishing Machine is increased by 300% in Hardmode now
 - **[v1.6.6.1]** Buff Tracker now supports pinyin search (Chinese related)
+- **[v1.6.6.2]** Town NPC spawn mechanics improvement 功能可使理发师在击杀任意原版肉前Boss后入住，无需寻找
 - **[v1.6.6.2]** 自动钓鱼机现在仅有原来的20%的概率消耗诱饵
 - **[v1.6.6.2]** “隐藏无限续杯增益”功能移动到了个人设置中
 - **[v1.6.6.2]** 个人设置中新增“重设UI位置”按钮

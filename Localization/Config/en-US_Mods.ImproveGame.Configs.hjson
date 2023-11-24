@@ -179,6 +179,7 @@ ImproveConfigs: {
 			'''
 			When the spawn conditions of unsaved Goblin Tinkerer, Tavernkeep, Wizard, Mechanic or Tax Collector are met
 			They don't need to be saved, but will be able to spawn if there are valid houses. They will be considered as saved once they spawn
+			Stylist will be able to spawn if any vanilla pre-hardmode boss is downed
 			Town NPCs will spawn at nighttime
 			'''
 	}

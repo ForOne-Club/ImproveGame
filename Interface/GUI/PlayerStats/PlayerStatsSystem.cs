@@ -114,8 +114,11 @@ public class PlayerStatsSystem : ModSystem
 
         #region 投掷属性 (出于跨模组考虑)
 
+        var throwingIcon = ModLoader.IsEnabled("ThoriumMod") 
+            ? ModAsset.ThrowingThorium.Value 
+            : ModAsset.Throwing.Value;
         BaseStatsCategory throwing =
-            new BaseStatsCategory(ModAsset.Throwing.Value, "UI.PlayerStats.Throwing");
+            new BaseStatsCategory(throwingIcon, "UI.PlayerStats.Throwing");
 
         // 投掷伤害、暴击、攻速与穿甲
         AddDamageStat(throwing, DamageClass.Throwing);
@@ -188,7 +191,8 @@ public class PlayerStatsSystem : ModSystem
         if (thoriumMod.TryFind<DamageClass>("HealerDamage", out var healerDamageClass) &&
             thoriumMod.TryFind<DamageClass>("HealerTool", out var healerToolClass))
         {
-            BaseStatsCategory healer = new(ModAsset.Healer.Value, "UI.PlayerStats.ThoriumMod.Healer", false, thoriumIcon);
+            BaseStatsCategory healer = new(ModAsset.Healer.Value, "UI.PlayerStats.ThoriumMod.Healer", false,
+                thoriumIcon);
 
             AddDamageStat(healer, healerDamageClass);
             AddCritStat(healer, healerDamageClass);
