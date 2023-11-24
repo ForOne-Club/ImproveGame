@@ -1,4 +1,4 @@
-﻿using ImproveGame.Interface.GUI.PlayerProperty;
+﻿using ImproveGame.Interface.GUI.PlayerStats;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Interface.Common
@@ -40,16 +40,16 @@ namespace ImproveGame.Interface.Common
             TagCompound proCatsFav = new TagCompound();
             TagCompound proFavs = new TagCompound();
 
-            foreach (var proCat in PlayerPropertySystem.Instance.PropertyCategories)
+            foreach (var proCat in PlayerStatsSystem.Instance.StatsCategories)
             {
                 proCatsPos.Set(proCat.Key, proCat.Value.UIPosition);
                 proCatsFav.Set(proCat.Key, proCat.Value.Favorite);
 
                 TagCompound proFav = new TagCompound();
 
-                foreach (var property in proCat.Value.BaseProperties)
+                foreach (var stat in proCat.Value.BaseProperties)
                 {
-                    proFav.Set(property.Name, property.Favorite);
+                    proFav.Set(stat.Name, stat.Favorite);
                 }
 
                 proFavs.Set(proCat.Key, proFav);

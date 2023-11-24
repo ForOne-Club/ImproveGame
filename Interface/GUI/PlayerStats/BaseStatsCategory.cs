@@ -1,15 +1,15 @@
 ﻿using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 
-namespace ImproveGame.Interface.GUI.PlayerProperty;
+namespace ImproveGame.Interface.GUI.PlayerStats;
 
 /// <summary>
 /// 属性类别
 /// </summary>
-public class BasePropertyCategory
+public class BaseStatsCategory
 {
     /// <summary>
-    /// Whether this property category is added via Mod.Call
+    /// Whether this stats category is added via Mod.Call
     /// </summary>
     public bool IsAddedFromCall { get; set; }
 
@@ -20,9 +20,9 @@ public class BasePropertyCategory
     /// </summary>
     public bool Favorite { get; set; }
 
-    public List<BaseProperty> BaseProperties { get; private set; } = new();
+    public List<BaseStat> BaseProperties { get; private set; } = new();
 
-    public BasePropertyCategory(Texture2D texture, string nameKey, bool isAddedFromCall = false, Texture2D modSmallIcon = null)
+    public BaseStatsCategory(Texture2D texture, string nameKey, bool isAddedFromCall = false, Texture2D modSmallIcon = null)
     {
         Texture = texture;
         NameKey = nameKey;
@@ -41,10 +41,10 @@ public class BasePropertyCategory
     /// <summary>
     /// 创建卡片
     /// </summary>
-    public PropertyCard CreateCard(out SUIImage image, out SUITitle title)
+    public StatsCard CreateCard(out SUIImage image, out SUITitle title)
     {
         // 卡片主体
-        PropertyCard card = new(this, UIColor.PanelBorder * 0f, UIColor.PanelBg * 0f, 10f, 2);
+        StatsCard card = new(this, UIColor.PanelBorder * 0f, UIColor.PanelBg * 0f, 10f, 2);
         card.OverflowHidden = true;
 
         // 标题图标
@@ -88,45 +88,45 @@ public class BasePropertyCategory
         return card;
     }
 
-    public void AppendProperties(PropertyCard card)
+    public void AppendProperties(StatsCard card)
     {
         for (int i = 0; i < BaseProperties.Count; i++)
         {
-            BaseProperty property = BaseProperties[i];
-            PropertyBar propertyBar = new(property.Name, property.Value, property);
+            BaseStat stat = BaseProperties[i];
+            StatBar statBar = new(stat.Name, stat.Value, stat);
 
-            if (property.Favorite)
+            if (stat.Favorite)
             {
-                card.Append(propertyBar);
+                card.Append(statBar);
             }
         }
     }
 
-    public void AppendPropertiesForControl(View view, PropertyCard card)
+    public void AppendPropertiesForControl(View view, StatsCard card)
     {
         for (int i = 0; i < BaseProperties.Count; i++)
         {
-            BaseProperty property = BaseProperties[i];
-            PropertyBar bar = new(property.Name, property.Value, property);
+            BaseStat stat = BaseProperties[i];
+            StatBar bar = new(stat.Name, stat.Value, stat);
 
             bar.OnUpdate += (_) =>
             {
                 Color red = new Color(1f, 0f, 0f);
-                bar.BorderColor = (property.Parent.Favorite && property.Favorite) ? UIColor.ItemSlotBorderFav : Color.Transparent;
-                bar.Border = (property.Parent.Favorite && property.Favorite) ? 2 : 0;
+                bar.BorderColor = (stat.Parent.Favorite && stat.Favorite) ? UIColor.ItemSlotBorderFav : Color.Transparent;
+                bar.Border = (stat.Parent.Favorite && stat.Favorite) ? 2 : 0;
             };
 
             bar.OnLeftMouseDown += (_, _) =>
             {
-                property.Favorite = !property.Favorite;
+                stat.Favorite = !stat.Favorite;
 
                 foreach (var item in view.Children)
                 {
-                    if (item is PropertyCard innerCard && innerCard.PropertyCategory == card.PropertyCategory)
+                    if (item is StatsCard innerCard && innerCard.StatsCategory == card.StatsCategory)
                     {
                         innerCard.RemoveAllChildren();
                         innerCard.Append(innerCard.TitleView);
-                        innerCard.PropertyCategory.AppendProperties(innerCard);
+                        innerCard.StatsCategory.AppendProperties(innerCard);
                     }
                 }
             };

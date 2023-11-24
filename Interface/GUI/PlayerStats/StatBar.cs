@@ -1,18 +1,18 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
 
-namespace ImproveGame.Interface.GUI.PlayerProperty;
+namespace ImproveGame.Interface.GUI.PlayerStats;
 
-public class PropertyBar : TimerView
+public class StatBar : TimerView
 {
-    public BaseProperty BaseProperty { get; set; }
+    public BaseStat BaseStat { get; set; }
 
     public float Scale = 0.85f;
-    public string PropertyName;
+    public string StatName;
     public Vector2 TextSize;
-    private Func<string> PropertyValue { get; set; }
+    private Func<string> StatValue { get; set; }
 
-    public PropertyBar(string propertyName, Func<string> propertyValue, BaseProperty baseProperty)
+    public StatBar(string statName, Func<string> statValue, BaseStat baseStat)
     {
         Wrap = false;
         Relative = RelativeMode.Vertical;
@@ -26,15 +26,15 @@ public class PropertyBar : TimerView
         PaddingRight = 14f;
         DragIgnore = true;
 
-        PropertyName = propertyName;
-        TextSize = FontAssets.MouseText.Value.MeasureString(propertyName) * Scale;
-        PropertyValue = propertyValue;
-        PropertyValue ??= () => string.Empty;
+        StatName = statName;
+        TextSize = FontAssets.MouseText.Value.MeasureString(statName) * Scale;
+        StatValue = statValue;
+        StatValue ??= () => string.Empty;
 
         BgColor = UIColor.TitleBg2 * 0.75f;
         Rounded = new Vector4(6f);
 
-        BaseProperty = baseProperty;
+        BaseStat = baseStat;
     }
 
     public override void DrawSelf(SpriteBatch sb)
@@ -49,9 +49,9 @@ public class PropertyBar : TimerView
 
         Vector2 textPos = innerPos +
             new Vector2(0, UIConfigs.Instance.GeneralFontOffsetY * Scale + (innerSize.Y - TextSize.Y) / 2);
-        DrawString(textPos, PropertyName, Color.White * Opacity.Value, Color.Black * Opacity.Value, Scale, spread: 1f);
+        DrawString(textPos, StatName, Color.White * Opacity.Value, Color.Black * Opacity.Value, Scale, spread: 1f);
 
-        string infoText = PropertyValue();
+        string infoText = StatValue();
         Vector2 infoSize = GetFontSize(infoText) * Scale;
         Vector2 infoPos = innerPos + new Vector2(innerSize.X - infoSize.X,
             UIConfigs.Instance.GeneralFontOffsetY * Scale + (innerSize.Y - infoSize.Y) / 2);

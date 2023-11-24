@@ -5,9 +5,9 @@ using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.ModLoader.UI;
 
-namespace ImproveGame.Interface.GUI.PlayerProperty;
+namespace ImproveGame.Interface.GUI.PlayerStats;
 
-public class PlayerPropertyGUI : ViewBody
+public class PlayerStatsGUI : ViewBody
 {
     #region ViewBody
     public override bool Display { get => Visible; set => Visible = value; }
@@ -55,7 +55,7 @@ public class PlayerPropertyGUI : ViewBody
 
     public View Body { get; set; }
     public SUIPanel Window { get; set; }
-    public PropertyGrid PropertyGrid { get; set; }
+    public StatsGrid StatsGrid { get; set; }
 
     public SUIImage ControllerSwitch { get; set; }
 
@@ -70,11 +70,11 @@ public class PlayerPropertyGUI : ViewBody
         Body.OnUpdate += Body_OnUpdate;
         Body.Join(this);
 
-        foreach (var item in PlayerPropertySystem.Instance.PropertyCategories)
+        foreach (var item in PlayerStatsSystem.Instance.StatsCategories)
         {
             if (item.Value.Favorite)
             {
-                PropertyCard card = CreatePropertyCardForDisplay(Body, item.Value);
+                StatsCard card = CreateStatsCardForDisplay(Body, item.Value);
                 card.Join(Body);
             }
         }
@@ -98,7 +98,7 @@ public class PlayerPropertyGUI : ViewBody
         TitleView.Height.Pixels = 42f;
         TitleView.Join(Window);
 
-        var Title = new SUITitle(GetText("UI.PlayerProperty.Control"), 0.42f)
+        var Title = new SUITitle(GetText("UI.PlayerStats.Control"), 0.42f)
         {
             VAlign = 0.5f
         };
@@ -126,43 +126,43 @@ public class PlayerPropertyGUI : ViewBody
         #endregion
 
         // 一整个列表
-        PropertyGrid = new PropertyGrid();
+        StatsGrid = new StatsGrid();
 
-        foreach (var item in PlayerPropertySystem.Instance.PropertyCategories)
+        foreach (var item in PlayerStatsSystem.Instance.StatsCategories)
         {
-            PropertyCard card = CreateCardForControl(Body, item.Value);
+            StatsCard card = CreateCardForControl(Body, item.Value);
 
-            var list1 = PropertyGrid.ListView.Children;
-            var list2 = PropertyGrid.ListView2.Children;
+            var list1 = StatsGrid.ListView.Children;
+            var list2 = StatsGrid.ListView2.Children;
 
             var b1 = list1.LastOrDefault()?.Bottom() ?? 0f;
             var b2 = list2.LastOrDefault()?.Bottom() ?? 0f;
 
             if (b1 <= b2)
             {
-                card.Join(PropertyGrid.ListView);
+                card.Join(StatsGrid.ListView);
             }
             else
             {
-                card.Join(PropertyGrid.ListView2);
+                card.Join(StatsGrid.ListView2);
             }
         }
 
-        PropertyGrid.Top.Pixels = TitleView.BottomPixels();
-        PropertyGrid.SetPadding(7f);
-        PropertyGrid.PaddingTop -= 3;
-        PropertyGrid.PaddingRight -= 1;
-        PropertyGrid.SetInnerPixels(160f * 2f + 4 + 21f, 250f);
-        PropertyGrid.Join(Window);
+        StatsGrid.Top.Pixels = TitleView.BottomPixels();
+        StatsGrid.SetPadding(7f);
+        StatsGrid.PaddingTop -= 3;
+        StatsGrid.PaddingRight -= 1;
+        StatsGrid.SetInnerPixels(160f * 2f + 4 + 21f, 250f);
+        StatsGrid.Join(Window);
 
         Window.SetPadding(0);
-        Window.SetInnerPixels(PropertyGrid.Width.Pixels, PropertyGrid.BottomPixels());
+        Window.SetInnerPixels(StatsGrid.Width.Pixels, StatsGrid.BottomPixels());
 
         Window.HAlign = Window.VAlign = 0.5f;
         #endregion
 
         #region 控制器的开关按钮
-        ControllerSwitch = new PropertyToggle();
+        ControllerSwitch = new StatsToggle();
         ControllerSwitch.OnLeftMouseDown +=
             (_, _) =>
             {
@@ -187,7 +187,7 @@ public class PlayerPropertyGUI : ViewBody
         if (!Main.LocalPlayer.TryGetModPlayer(out UIPlayerSetting playerSetting))
             return;
 
-        var proCats = PlayerPropertySystem.Instance.PropertyCategories;
+        var proCats = PlayerStatsSystem.Instance.StatsCategories;
 
         foreach (var item in proCats)
         {
@@ -214,11 +214,11 @@ public class PlayerPropertyGUI : ViewBody
         }
 
         // 添加到展示列表
-        foreach (var item in PlayerPropertySystem.Instance.PropertyCategories)
+        foreach (var item in PlayerStatsSystem.Instance.StatsCategories)
         {
             if (item.Value.Favorite)
             {
-                PropertyCard card = CreatePropertyCardForDisplay(Body, item.Value);
+                StatsCard card = CreateStatsCardForDisplay(Body, item.Value);
                 card.Join(Body);
             }
         }
@@ -230,25 +230,25 @@ public class PlayerPropertyGUI : ViewBody
     private void Body_OnUpdate(UIElement body)
     {
         List<UIElement> list = body.Children.ToList();
-        HashSet<BasePropertyCategory> appeared = new HashSet<BasePropertyCategory>();
+        HashSet<BaseStatsCategory> appeared = new HashSet<BaseStatsCategory>();
 
         for (int i = 0; i < list.Count; i++)
         {
             var uie = list[i];
 
-            if (uie is PropertyCard card)
+            if (uie is StatsCard card)
             {
                 // 去重 proCat
-                if (appeared.Contains(card.PropertyCategory))
+                if (appeared.Contains(card.StatsCategory))
                 {
                     uie.Remove();
                     break;
                 }
 
-                appeared.Add(card.PropertyCategory);
+                appeared.Add(card.StatsCategory);
 
                 // 去掉未收藏
-                if (!card.PropertyCategory.Favorite)
+                if (!card.StatsCategory.Favorite)
                 {
                     uie.Remove();
                 }
@@ -280,7 +280,7 @@ public class PlayerPropertyGUI : ViewBody
 
         if (b)
         {
-            PlayerInput.LockVanillaMouseScroll("ImproveGame: PlayerProperty GUI");
+            PlayerInput.LockVanillaMouseScroll("ImproveGame: PlayerStats GUI");
             Main.LocalPlayer.mouseInterface = true;
         }
 
@@ -293,16 +293,16 @@ public class PlayerPropertyGUI : ViewBody
 
         if (ControllerSwitch.IsMouseHovering)
         {
-            UICommon.TooltipMouseText(GetText("UI.PlayerProperty.Introduction"));
+            UICommon.TooltipMouseText(GetText("UI.PlayerStats.Introduction"));
         }
     }
 
     /// <summary>
     /// 创建展示用的属性卡片
     /// </summary>
-    public static PropertyCard CreatePropertyCardForDisplay(View view, BasePropertyCategory proCat)
+    public static StatsCard CreateStatsCardForDisplay(View view, BaseStatsCategory proCat)
     {
-        PropertyCard card = proCat.CreateCard(out _, out _);
+        StatsCard card = proCat.CreateCard(out _, out _);
         proCat.AppendProperties(card);
 
         if (proCat.UIPosition is Vector2 pos)
@@ -331,14 +331,14 @@ public class PlayerPropertyGUI : ViewBody
     /// <summary>
     /// 创建控制用的卡片
     /// </summary>
-    public static PropertyCard CreateCardForControl(View view, BasePropertyCategory proCat)
+    public static StatsCard CreateCardForControl(View view, BaseStatsCategory proCat)
     {
-        PropertyCard card = proCat.CreateCard(out _, out _);
+        StatsCard card = proCat.CreateCard(out _, out _);
         proCat.AppendPropertiesForControl(view, card);
 
         card.OnUpdate += (_) =>
         {
-            if (card.PropertyCategory.Favorite)
+            if (card.StatsCategory.Favorite)
             {
                 card.BorderColor = UIColor.ItemSlotBorderFav;
             }
@@ -361,7 +361,7 @@ public class PlayerPropertyGUI : ViewBody
             if (proCat.Favorite)
             {
                 // 正常版的创建
-                PropertyCard innerCard = CreatePropertyCardForDisplay(view, proCat);
+                StatsCard innerCard = CreateStatsCardForDisplay(view, proCat);
                 innerCard.Join(view);
             }
         };

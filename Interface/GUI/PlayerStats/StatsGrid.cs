@@ -1,12 +1,12 @@
 ﻿using ImproveGame.Interface.UIElements;
 
-namespace ImproveGame.Interface.GUI.PlayerProperty;
+namespace ImproveGame.Interface.GUI.PlayerStats;
 
-public class PropertyGrid : ScrollView
+public class StatsGrid : ScrollView
 {
     public ListView ListView2;
 
-    public PropertyGrid()
+    public StatsGrid()
     {
         ListView.Width.Pixels = 160f;
 

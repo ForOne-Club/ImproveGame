@@ -1,13 +1,13 @@
-﻿namespace ImproveGame.Interface.GUI.PlayerProperty;
+﻿namespace ImproveGame.Interface.GUI.PlayerStats;
 
 /// <summary>
 /// 抽象就是对世界的鞭挞
 /// </summary>
-public class PlayerPropertySystem : ModSystem
+public class PlayerStatsSystem : ModSystem
 {
-    public static PlayerPropertySystem Instance { get; private set; }
+    public static PlayerStatsSystem Instance { get; private set; }
 
-    public Dictionary<string, BasePropertyCategory> PropertyCategories { get; private set; } = new();
+    public Dictionary<string, BaseStatsCategory> StatsCategories { get; private set; } = new();
 
     public override void Load()
     {
@@ -15,27 +15,27 @@ public class PlayerPropertySystem : ModSystem
 
         #region 近战属性
 
-        BasePropertyCategory melee =
-            new BasePropertyCategory(ModAsset.Melee.Value, "UI.PlayerProperty.Melee");
+        BaseStatsCategory melee =
+            new BaseStatsCategory(ModAsset.Melee.Value, "UI.PlayerStats.Melee");
 
         // 近战伤害、暴击、攻速与穿甲
-        AddDamageProperty(melee, DamageClass.Melee);
-        AddCritProperty(melee, DamageClass.Melee);
-        AddAttackSpeedProperty(melee, DamageClass.Melee);
-        AddArmorPenetrationProperty(melee, DamageClass.Melee);
+        AddDamageStat(melee, DamageClass.Melee);
+        AddCritStat(melee, DamageClass.Melee);
+        AddAttackSpeedStat(melee, DamageClass.Melee);
+        AddArmorPenetrationStat(melee, DamageClass.Melee);
 
         #endregion
 
         #region 远程
 
-        BasePropertyCategory ranged =
-            new BasePropertyCategory(ModAsset.Ranged.Value, "UI.PlayerProperty.Ranged");
+        BaseStatsCategory ranged =
+            new BaseStatsCategory(ModAsset.Ranged.Value, "UI.PlayerStats.Ranged");
 
         // 远程伤害
-        AddDamageProperty(ranged, DamageClass.Ranged);
+        AddDamageStat(ranged, DamageClass.Ranged);
 
         // 弹药伤害
-        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.BulletDamage",
+        ranged.BaseProperties.Add(new BaseStat(ranged, "UI.PlayerStats.BulletDamage",
             () =>
             {
                 var sm = Main.LocalPlayer.bulletDamage;
@@ -43,7 +43,7 @@ public class PlayerPropertySystem : ModSystem
             }));
 
         // 弓箭伤害
-        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.ArrowDamage",
+        ranged.BaseProperties.Add(new BaseStat(ranged, "UI.PlayerStats.ArrowDamage",
             () =>
             {
                 var sm = Main.LocalPlayer.arrowDamage;
@@ -51,7 +51,7 @@ public class PlayerPropertySystem : ModSystem
             }));
 
         // 其他伤害
-        ranged.BaseProperties.Add(new BaseProperty(ranged, "UI.PlayerProperty.SpecialistDamage",
+        ranged.BaseProperties.Add(new BaseStat(ranged, "UI.PlayerStats.SpecialistDamage",
             () =>
             {
                 var sm = Main.LocalPlayer.specialistDamage;
@@ -59,54 +59,54 @@ public class PlayerPropertySystem : ModSystem
             }));
 
         // 远程暴击与穿甲
-        AddCritProperty(ranged, DamageClass.Ranged);
-        AddArmorPenetrationProperty(ranged, DamageClass.Ranged);
+        AddCritStat(ranged, DamageClass.Ranged);
+        AddArmorPenetrationStat(ranged, DamageClass.Ranged);
 
         #endregion
 
         #region 魔法
 
-        BasePropertyCategory magic =
-            new BasePropertyCategory(ModAsset.Magick.Value, "UI.PlayerProperty.Magic");
+        BaseStatsCategory magic =
+            new BaseStatsCategory(ModAsset.Magic.Value, "UI.PlayerStats.Magic");
 
         // 法术伤害与暴击
-        AddDamageProperty(magic, DamageClass.Magic);
-        AddCritProperty(magic, DamageClass.Magic);
+        AddDamageStat(magic, DamageClass.Magic);
+        AddCritStat(magic, DamageClass.Magic);
 
         // 法术回复
-        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Regen",
+        magic.BaseProperties.Add(new BaseStat(magic, "UI.PlayerStats.Regen",
             () => $"{Main.LocalPlayer.manaRegen / 2f}/s"));
 
         // 法术消耗减免
-        magic.BaseProperties.Add(new BaseProperty(magic, "UI.PlayerProperty.Cost",
+        magic.BaseProperties.Add(new BaseStat(magic, "UI.PlayerStats.Cost",
             () => BonusSyntax((Main.LocalPlayer.manaCost - 1f) * 100f, true)));
 
         // 法术穿甲
-        AddArmorPenetrationProperty(magic, DamageClass.Magic);
+        AddArmorPenetrationStat(magic, DamageClass.Magic);
 
         #endregion
 
         #region 召唤
 
-        BasePropertyCategory summon =
-            new BasePropertyCategory(ModAsset.Summon.Value, "UI.PlayerProperty.Summon");
+        BaseStatsCategory summon =
+            new BaseStatsCategory(ModAsset.Summon.Value, "UI.PlayerStats.Summon");
 
         // 召唤伤害
-        AddDamageProperty(summon, DamageClass.Summon);
+        AddDamageStat(summon, DamageClass.Summon);
 
         // 鞭子速度
-        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.SummonMeleeSpeed",
+        summon.BaseProperties.Add(new BaseStat(summon, "UI.PlayerStats.SummonMeleeSpeed",
             () => BonusSyntax(Main.LocalPlayer.GetAttackSpeed(DamageClass.SummonMeleeSpeed) * 100f - 100f, true)));
 
         // 召唤穿甲
-        AddArmorPenetrationProperty(summon, DamageClass.Summon);
+        AddArmorPenetrationStat(summon, DamageClass.Summon);
 
         // 召唤栏
-        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxMinions",
+        summon.BaseProperties.Add(new BaseStat(summon, "UI.PlayerStats.MaxMinions",
             () => $"{Main.LocalPlayer.slotsMinions}/{Main.LocalPlayer.maxMinions}"));
 
         // 哨兵栏
-        summon.BaseProperties.Add(new BaseProperty(summon, "UI.PlayerProperty.MaxTurrets",
+        summon.BaseProperties.Add(new BaseStat(summon, "UI.PlayerStats.MaxTurrets",
             () =>
                 $"{Main.projectile.Count(proj => proj.active && proj.owner == Main.LocalPlayer.whoAmI && proj.WipableTurret)}/{Main.LocalPlayer.maxTurrets}"));
 
@@ -114,46 +114,46 @@ public class PlayerPropertySystem : ModSystem
 
         #region 投掷属性 (出于跨模组考虑)
 
-        BasePropertyCategory throwing =
-            new BasePropertyCategory(ModAsset.Throwing.Value, "UI.PlayerProperty.Throwing");
+        BaseStatsCategory throwing =
+            new BaseStatsCategory(ModAsset.Throwing.Value, "UI.PlayerStats.Throwing");
 
         // 投掷伤害、暴击、攻速与穿甲
-        AddDamageProperty(throwing, DamageClass.Throwing);
-        AddCritProperty(throwing, DamageClass.Throwing);
-        AddAttackSpeedProperty(throwing, DamageClass.Throwing);
-        AddArmorPenetrationProperty(throwing, DamageClass.Throwing);
+        AddDamageStat(throwing, DamageClass.Throwing);
+        AddCritStat(throwing, DamageClass.Throwing);
+        AddAttackSpeedStat(throwing, DamageClass.Throwing);
+        AddArmorPenetrationStat(throwing, DamageClass.Throwing);
 
         #endregion
 
         #region 其他
 
-        BasePropertyCategory other =
-            new BasePropertyCategory(GetTexture("UI/PlayerProperty/Luck").Value, "UI.PlayerProperty.Other");
+        BaseStatsCategory other =
+            new BaseStatsCategory(GetTexture("UI/PlayerStats/Luck").Value, "UI.PlayerStats.Other");
 
         // 生命回复
-        other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.LifeRegen",
+        other.BaseProperties.Add(new BaseStat(other, "UI.PlayerStats.LifeRegen",
             () => $"{Main.LocalPlayer.lifeRegen / 2f}/s"));
 
         // 免伤
-        other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.Endurance",
+        other.BaseProperties.Add(new BaseStat(other, "UI.PlayerStats.Endurance",
             () => BonusSyntax(Main.LocalPlayer.endurance * 100f)));
 
         // 仇恨
-        other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.Aggro",
+        other.BaseProperties.Add(new BaseStat(other, "UI.PlayerStats.Aggro",
             () => $"{Main.LocalPlayer.aggro}"));
 
         // 幸运
-        other.BaseProperties.Add(new BaseProperty(other, "UI.PlayerProperty.Luck",
+        other.BaseProperties.Add(new BaseStat(other, "UI.PlayerStats.Luck",
             () => $"{Math.Round(Main.LocalPlayer.luck, 2)}"));
 
         #endregion
 
-        PropertyCategories.Add("Melee", melee);
-        PropertyCategories.Add("Ranged", ranged);
-        PropertyCategories.Add("Magic", magic);
-        PropertyCategories.Add("Summon", summon);
-        PropertyCategories.Add("Throwing", throwing);
-        PropertyCategories.Add("Other", other);
+        StatsCategories.Add("Melee", melee);
+        StatsCategories.Add("Ranged", ranged);
+        StatsCategories.Add("Magic", magic);
+        StatsCategories.Add("Summon", summon);
+        StatsCategories.Add("Throwing", throwing);
+        StatsCategories.Add("Other", other);
 
         // tipPanel.Append(new PlyInfoCard(PlyInfo("WingTime")}:", () => $"{MathF.Round((player.wingTime + player.rocketTime * 6) / 60f, 2)}s", "Flying").Join(_cardPanel);
         // new PlyInfoCard(GetHJSON("WingTimeMax"),
@@ -165,20 +165,20 @@ public class PlayerPropertySystem : ModSystem
         if (!calamityMod.TryFind<DamageClass>("RogueDamageClass", out var damageClass))
             return;
 
-        BasePropertyCategory rogue = new(ModAsset.Rogue.Value, "UI.PlayerProperty.CalamityMod.Rogue", false,
+        BaseStatsCategory rogue = new(ModAsset.Rogue.Value, "UI.PlayerStats.CalamityMod.Rogue", false,
             ModContent.Request<Texture2D>("CalamityMod/icon_small", AssetRequestMode.ImmediateLoad).Value);
 
-        AddDamageProperty(rogue, damageClass);
-        AddCritProperty(rogue, damageClass);
+        AddDamageStat(rogue, damageClass);
+        AddCritStat(rogue, damageClass);
 
         // 灾厄特有，盗贼弹幕速度
-        rogue.BaseProperties.Add(new BaseProperty(rogue, "UI.PlayerProperty.CalamityMod.RogueVelocity",
+        rogue.BaseProperties.Add(new BaseStat(rogue, "UI.PlayerStats.CalamityMod.RogueVelocity",
             () => BonusSyntax((float)calamityMod.Call("GetRogueVelocity", Main.LocalPlayer) * 100f - 100f, true)));
 
-        AddAttackSpeedProperty(rogue, damageClass);
-        AddArmorPenetrationProperty(rogue, damageClass);
+        AddAttackSpeedStat(rogue, damageClass);
+        AddArmorPenetrationStat(rogue, damageClass);
 
-        Instance.PropertyCategories.Add("CalamityMod.Rogue", rogue);
+        Instance.StatsCategories.Add("CalamityMod.Rogue", rogue);
     }
 
     public static void ThoriumIntegration(Mod thoriumMod)
@@ -188,38 +188,38 @@ public class PlayerPropertySystem : ModSystem
         if (thoriumMod.TryFind<DamageClass>("HealerDamage", out var healerDamageClass) &&
             thoriumMod.TryFind<DamageClass>("HealerTool", out var healerToolClass))
         {
-            BasePropertyCategory healer = new(ModAsset.Healer.Value, "UI.PlayerProperty.ThoriumMod.Healer", false, thoriumIcon);
+            BaseStatsCategory healer = new(ModAsset.Healer.Value, "UI.PlayerStats.ThoriumMod.Healer", false, thoriumIcon);
 
-            AddDamageProperty(healer, healerDamageClass);
-            AddCritProperty(healer, healerDamageClass);
+            AddDamageStat(healer, healerDamageClass);
+            AddCritStat(healer, healerDamageClass);
             // 光辉施法速度
-            AddAttackSpeedProperty(healer, healerDamageClass);
+            AddAttackSpeedStat(healer, healerDamageClass);
             // 治疗速度（法术施法速度）
-            healer.BaseProperties.Add(new BaseProperty(healer, "UI.PlayerProperty.ThoriumMod.HealingSpeed",
+            healer.BaseProperties.Add(new BaseStat(healer, "UI.PlayerStats.ThoriumMod.HealingSpeed",
                 () => BonusSyntax(PlayerAttackSpeed(healerToolClass), true)));
             // 法术回血量加成
-            healer.BaseProperties.Add(new BaseProperty(healer, "UI.PlayerProperty.ThoriumMod.HealBonus",
+            healer.BaseProperties.Add(new BaseStat(healer, "UI.PlayerStats.ThoriumMod.HealBonus",
                 () =>
                 {
                     int healBonus = (int)thoriumMod.Call("GetHealBonus", Main.LocalPlayer);
                     return healBonus > 0 ? $"+{healBonus}" : healBonus.ToString();
                 }));
-            AddArmorPenetrationProperty(healer, healerDamageClass);
+            AddArmorPenetrationStat(healer, healerDamageClass);
 
-            Instance.PropertyCategories.Add("ThoriumMod.Healer", healer);
+            Instance.StatsCategories.Add("ThoriumMod.Healer", healer);
         }
 
         if (thoriumMod.TryFind<DamageClass>("BardDamage", out var bardDamageClass))
         {
-            BasePropertyCategory bard = new(ModAsset.Bard.Value, "UI.PlayerProperty.ThoriumMod.Bard", false, thoriumIcon);
+            BaseStatsCategory bard = new(ModAsset.Bard.Value, "UI.PlayerStats.ThoriumMod.Bard", false, thoriumIcon);
 
             // 乐师伤害、暴击、攻速与穿甲
-            AddDamageProperty(bard, bardDamageClass);
-            AddCritProperty(bard, bardDamageClass);
-            AddAttackSpeedProperty(bard, bardDamageClass);
-            AddArmorPenetrationProperty(bard, bardDamageClass);
+            AddDamageStat(bard, bardDamageClass);
+            AddCritStat(bard, bardDamageClass);
+            AddAttackSpeedStat(bard, bardDamageClass);
+            AddArmorPenetrationStat(bard, bardDamageClass);
 
-            Instance.PropertyCategories.Add("ThoriumMod.Bard", bard);
+            Instance.StatsCategories.Add("ThoriumMod.Bard", bard);
         }
     }
 
@@ -228,36 +228,36 @@ public class PlayerPropertySystem : ModSystem
     /// <summary>
     /// 伤害
     /// </summary>
-    public static void AddDamageProperty(BasePropertyCategory category, DamageClass damageClass)
+    public static void AddDamageStat(BaseStatsCategory category, DamageClass damageClass)
     {
-        category.BaseProperties.Add(new BaseProperty(category, "UI.PlayerProperty.Damage",
+        category.BaseProperties.Add(new BaseStat(category, "UI.PlayerStats.Damage",
             () => BonusSyntax(PlayerDamage(damageClass), true)));
     }
 
     /// <summary>
     /// 暴击
     /// </summary>
-    public static void AddCritProperty(BasePropertyCategory category, DamageClass damageClass)
+    public static void AddCritStat(BaseStatsCategory category, DamageClass damageClass)
     {
-        category.BaseProperties.Add(new BaseProperty(category, "UI.PlayerProperty.Crit",
+        category.BaseProperties.Add(new BaseStat(category, "UI.PlayerStats.Crit",
             () => BonusSyntax(PlayerCrit(damageClass), true)));
     }
 
     /// <summary>
     /// 攻速
     /// </summary>
-    public static void AddAttackSpeedProperty(BasePropertyCategory category, DamageClass damageClass)
+    public static void AddAttackSpeedStat(BaseStatsCategory category, DamageClass damageClass)
     {
-        category.BaseProperties.Add(new BaseProperty(category, "UI.PlayerProperty.Speed",
+        category.BaseProperties.Add(new BaseStat(category, "UI.PlayerStats.Speed",
             () => BonusSyntax(PlayerAttackSpeed(damageClass), true)));
     }
 
     /// <summary>
     /// 穿甲
     /// </summary>
-    public static void AddArmorPenetrationProperty(BasePropertyCategory category, DamageClass damageClass)
+    public static void AddArmorPenetrationStat(BaseStatsCategory category, DamageClass damageClass)
     {
-        category.BaseProperties.Add(new BaseProperty(category, "UI.PlayerProperty.ArmorPenetration",
+        category.BaseProperties.Add(new BaseStat(category, "UI.PlayerStats.ArmorPenetration",
             () => $"{MathF.Round(Main.LocalPlayer.GetTotalArmorPenetration(damageClass), 2)}"));
     }
 

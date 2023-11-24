@@ -1,16 +1,11 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.Packets;
 using ImproveGame.Content.Patches;
-using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.PlayerProperty;
-using MonoMod.RuntimeDetour.HookGen;
+using ImproveGame.Interface.GUI.PlayerStats;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 using System.Reflection;
-using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
-using static Terraria.GameContent.UI.EmoteID;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -150,7 +145,7 @@ public class ModIntegrationsSystem : ModSystem
         AddBuffIntegration(calamityMod, "EffigyOfDecay", "EffigyOfDecayBuff", true);
         AddBuffIntegration(calamityMod, "CrimsonEffigy", "CrimsonEffigyBuff", true);
         AddBuffIntegration(calamityMod, "CorruptionEffigy", "CorruptionEffigyBuff", true);
-        PlayerPropertySystem.CalamityIntegration(calamityMod);
+        PlayerStatsSystem.CalamityIntegration(calamityMod);
     }
 
     private static void DoThoriumModIntegration()
@@ -162,7 +157,7 @@ public class ModIntegrationsSystem : ModSystem
         AddBuffIntegration(thoriumMod, "ConductorsStand", "ConductorsStandBuff", true);
         AddBuffIntegration(thoriumMod, "Mistletoe", "MistletoeBuff", true);
         AddBuffIntegration(thoriumMod, "NinjaRack", "NinjaBuff", true);
-        PlayerPropertySystem.ThoriumIntegration(thoriumMod);
+        PlayerStatsSystem.ThoriumIntegration(thoriumMod);
     }
 
     private static void DoFargowiltasIntegration()
@@ -305,13 +300,13 @@ public class ModIntegrationsSystem : ModSystem
                             string nameKey = Convert.ToString(args[3]);
                             Texture2D modIcon = (Texture2D)args[3];
 
-                            if (PlayerPropertySystem.Instance.PropertyCategories.ContainsKey(category))
+                            if (PlayerStatsSystem.Instance.StatsCategories.ContainsKey(category))
                             {
                                 return false;
                             }
 
-                            PlayerPropertySystem.Instance.PropertyCategories.Add(category,
-                                new BasePropertyCategory(texture, nameKey, true, modIcon));
+                            PlayerStatsSystem.Instance.StatsCategories.Add(category,
+                                new BaseStatsCategory(texture, nameKey, true, modIcon));
 
                             return true;
                         }
@@ -322,9 +317,9 @@ public class ModIntegrationsSystem : ModSystem
                             string nameKey = Convert.ToString(args[2]);
                             Func<string> value = (Func<string>)args[3];
 
-                            if (PlayerPropertySystem.Instance.PropertyCategories.TryGetValue(category, out BasePropertyCategory proCat))
+                            if (PlayerStatsSystem.Instance.StatsCategories.TryGetValue(category, out BaseStatsCategory proCat))
                             {
-                                proCat.BaseProperties.Add(new BaseProperty(proCat, nameKey, value, true));
+                                proCat.BaseProperties.Add(new BaseStat(proCat, nameKey, value, true));
                                 return true;
                             }
 

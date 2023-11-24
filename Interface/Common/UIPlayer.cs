@@ -9,7 +9,7 @@ using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.WorldFeature;
 using System.Collections;
-using ImproveGame.Interface.GUI.PlayerProperty;
+using ImproveGame.Interface.GUI.PlayerStats;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Interface.Common;
@@ -58,11 +58,11 @@ public class UIPlayer : ModPlayer
         DataPlayer dataPlayer = Main.LocalPlayer.GetModPlayer<DataPlayer>();
 
         // 玩家信息
-        uiSystem.PlayerInfoGUI = new PlayerPropertyGUI();
+        uiSystem.PlayerInfoGUI = new PlayerStatsGUI();
         uiSystem.PlayerInfoTrigger.SetCarrier(uiSystem.PlayerInfoGUI);
         CheckPositionValid(ref PlayerInfoTogglePosition, PlayerInfoToggleDefPosition);
         uiSystem.PlayerInfoGUI.ControllerSwitch.SetPos(PlayerInfoTogglePosition).Recalculate();
-        PlayerPropertyGUI.Visible = true;
+        PlayerStatsGUI.Visible = true;
         uiSystem.PlayerInfoGUI.LoadAndSetupFavorites();
 
         // 自动垃圾桶

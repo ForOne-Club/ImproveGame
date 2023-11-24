@@ -5,7 +5,7 @@ using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
-using ImproveGame.Interface.GUI.PlayerProperty;
+using ImproveGame.Interface.GUI.PlayerStats;
 using ImproveGame.Interface.GUI.WorldFeature;
 using ImproveGame.Interface.UIStructs;
 
@@ -40,7 +40,7 @@ namespace ImproveGame.Interface.Common
         public EventTrigger LifeformAnalyzerTrigger;
 
         // 玩家信息表
-        public PlayerPropertyGUI PlayerInfoGUI;
+        public PlayerStatsGUI PlayerInfoGUI;
         public EventTrigger PlayerInfoTrigger;
 
         // 自动垃圾桶

@@ -1,4 +1,4 @@
-PlayerProperty: {
+PlayerStats: {
 	// 翻译提示: 尽量简短，因为UI的空间有限，不要超过10个字符
 	Introduction:
 		'''

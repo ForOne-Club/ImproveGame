@@ -1,16 +1,16 @@
 ﻿using ImproveGame.Interface.SUIElements;
 
-namespace ImproveGame.Interface.GUI.PlayerProperty;
+namespace ImproveGame.Interface.GUI.PlayerStats;
 
 /// <summary>
 /// 控制器的开关按钮
 /// </summary>
-public class PropertyToggle : SUIImage
+public class StatsToggle : SUIImage
 {
     internal bool Dragging;
     internal Vector2 Offset;
 
-    public PropertyToggle() : base(ModAsset.Luck2.Value)
+    public StatsToggle() : base(ModAsset.Luck2.Value)
     {
         SetSizePixels(Texture.Size());
         OnUpdate +=

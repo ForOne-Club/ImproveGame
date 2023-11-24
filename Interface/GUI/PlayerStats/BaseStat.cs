@@ -1,17 +1,17 @@
-﻿namespace ImproveGame.Interface.GUI.PlayerProperty;
+﻿namespace ImproveGame.Interface.GUI.PlayerStats;
 
 /// <summary>
 /// 基本属性
 /// </summary>
-public class BaseProperty
+public class BaseStat
 {
     /// <summary>
-    /// Whether this property category is added via Mod.Call
+    /// Whether this stat category is added via Mod.Call
     /// </summary>
     public bool IsAddedFromCall { get; set; }
 
     public bool Favorite { get; set; } = true;
-    public BasePropertyCategory Parent { get; set; }
+    public BaseStatsCategory Parent { get; set; }
 
     public string NameKey { get; set; }
 
@@ -19,7 +19,7 @@ public class BaseProperty
 
     public Func<string> Value { get; set; }
 
-    public BaseProperty(BasePropertyCategory parent, string nameKey, Func<string> value, bool isAddedFromCall = false)
+    public BaseStat(BaseStatsCategory parent, string nameKey, Func<string> value, bool isAddedFromCall = false)
     {
         Parent = parent;
         NameKey = nameKey;

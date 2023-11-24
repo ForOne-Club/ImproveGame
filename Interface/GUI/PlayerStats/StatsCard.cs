@@ -1,17 +1,17 @@
 ﻿using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 
-namespace ImproveGame.Interface.GUI.PlayerProperty;
+namespace ImproveGame.Interface.GUI.PlayerStats;
 
-public class PropertyCard : SUIPanel
+public class StatsCard : SUIPanel
 {
     public bool Console { get; set; }
-    public BasePropertyCategory PropertyCategory { get; set; }
+    public BaseStatsCategory StatsCategory { get; set; }
     public TimerView TitleView;
 
-    public PropertyCard(BasePropertyCategory proCat, Color borderColor, Color backgroundColor, float rounded = 12, float border = 2, bool draggable = false) : base(borderColor, backgroundColor, rounded, border, draggable)
+    public StatsCard(BaseStatsCategory proCat, Color borderColor, Color backgroundColor, float rounded = 12, float border = 2, bool draggable = false) : base(borderColor, backgroundColor, rounded, border, draggable)
     {
-        PropertyCategory = proCat;
+        StatsCategory = proCat;
         SetPadding(5);
 
         TitleView = new TimerView()
@@ -26,9 +26,9 @@ public class PropertyCard : SUIPanel
         TitleView.Join(this);
     }
 
-    public PropertyCard(BasePropertyCategory proCat, Color backgroundColor, Color borderColor, Vector4 rounded, float border, bool draggable = false) : base(backgroundColor, borderColor, rounded, border, draggable)
+    public StatsCard(BaseStatsCategory proCat, Color backgroundColor, Color borderColor, Vector4 rounded, float border, bool draggable = false) : base(backgroundColor, borderColor, rounded, border, draggable)
     {
-        PropertyCategory = proCat;
+        StatsCategory = proCat;
         SetPadding(5);
 
         TitleView = new TimerView()
@@ -47,10 +47,10 @@ public class PropertyCard : SUIPanel
     {
         if (!Console)
         {
-            PropertyCategory.UIPosition = GetPosPixel();
+            StatsCategory.UIPosition = GetPosPixel();
 
             List<UIElement> list = Children.ToList();
-            HashSet<BaseProperty> appeared = new HashSet<BaseProperty>();
+            HashSet<BaseStat> appeared = new HashSet<BaseStat>();
 
             bool recalculate = false;
 
@@ -59,18 +59,18 @@ public class PropertyCard : SUIPanel
             {
                 var uie = list[i];
 
-                if (uie is PropertyBar bar)
+                if (uie is StatBar bar)
                 {
-                    if (appeared.Contains(bar.BaseProperty))
+                    if (appeared.Contains(bar.BaseStat))
                     {
                         recalculate = true;
                         uie.Remove();
                         break;
                     }
 
-                    appeared.Add(bar.BaseProperty);
+                    appeared.Add(bar.BaseStat);
 
-                    if (!bar.BaseProperty.Favorite)
+                    if (!bar.BaseStat.Favorite)
                     {
                         recalculate = true;
                         uie.Remove();
