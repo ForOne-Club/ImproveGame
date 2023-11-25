@@ -30,7 +30,7 @@ public class GarbageListGUI : ViewBody
     /// <summary>
     /// 显示窗口
     /// </summary>
-    public static bool ShowWindow;
+    public static bool ShowWindow { get; set; }
 
     public SUIPanel Window;
     public View TitleView;
