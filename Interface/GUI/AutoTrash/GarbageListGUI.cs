@@ -52,9 +52,9 @@ public class GarbageListGUI : ViewBody
                 Shaded = true,
                 Draggable = true
             };
-            Window.SetPosPixels(20f, 306f);
             Window.SetPadding(0);
             Window.SetSizePixels(gridSize.X + 14f, 42f + gridSize.Y + 11f);
+            Window.SetPosPixels(492f - Window.Width.Pixels, 306f);
             Window.Join(this);
 
             // 标题
