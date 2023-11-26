@@ -142,13 +142,28 @@ namespace ImproveGame.Interface
             base.Update(gameTime);
         }
 
-        protected override bool Draw()
+        protected override bool Draw(bool drawToGame = true)
         {
+            // 由于这里除了绘制 _body 还会处理没关完的UI，所以要单独处理云母
+            if (drawToGame && GlassVfxType is GlassType.MicaLike)
+            {
+                var layers = LayersDictionary["Radial Hotbars"];
+                int index = layers.IndexOf(this);
+                if (index is -1)
+                    goto RealDraw;
+
+                Main.spriteBatch.ReBegin(null, Matrix.Identity);
+                Main.spriteBatch.Draw(GlassmorphismVfx.GlassCovers[index], Vector2.Zero, Color.White);
+                Main.spriteBatch.ReBegin(null, Main.UIScaleMatrix);
+            }
+
+            RealDraw:
             foreach (var uiData in UIPool.Where(uiData => !uiData.AnimationTimer.CompleteClose && !ViewBodyIs(uiData.ViewBody))) {
                 uiData.ViewBody?.Draw(Main.spriteBatch);
             }
 
-            return base.Draw();
+            // 上面处理了云母，原来的方法就不用处理了
+            return base.Draw(drawToGame: false);
         }
     }
 }

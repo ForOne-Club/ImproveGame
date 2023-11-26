@@ -2,6 +2,7 @@
 {
     internal class ModUIPanel : UIPanel
     {
+        public bool KeepPressed;
         internal bool Resizeable;
         internal bool Resizing;
         private readonly int _minResizeWidth;
@@ -118,6 +119,18 @@
                 OnResize?.Invoke(this);
                 Recalculate();
             }
+        }
+
+        public override void LeftMouseDown(UIMouseEvent evt)
+        {
+            base.LeftMouseDown(evt);
+            KeepPressed = true;
+        }
+
+        public override void LeftMouseUp(UIMouseEvent evt)
+        {
+            base.LeftMouseUp(evt);
+            KeepPressed = false;
         }
     }
 }

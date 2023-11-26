@@ -1,5 +1,6 @@
 using ImproveGame.Common;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Core;
 using ImproveGame.Interface.GUI;
 using Terraria.UI.Chat;
 
@@ -12,7 +13,7 @@ public class ImproveGame : Mod
     public static ImproveGame Instance { get; private set; }
 
     // 成员变量不需要自己设 null
-    public readonly RenderTarget2DPool RenderTarget2DPool = new RenderTarget2DPool();
+    public readonly RenderTargetPool RenderTargetPool = new RenderTargetPool();
 
     public override void Load()
     {

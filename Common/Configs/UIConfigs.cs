@@ -20,6 +20,11 @@ public class UIConfigs : ModConfig
     [CustomModConfigItem(typeof(SuicideButtonElement))]
     public object SuicideButton;
 
+    [Header("UIHeader")]
+    [DefaultValue(GlassType.Disabled)]
+    [DrawTicks]
+    public GlassType GlassVfx;
+
     [CustomModConfigItem(typeof(ThemeColorElement))]
     public ThemeType ThemeType;
 
@@ -40,6 +45,7 @@ public class UIConfigs : ModConfig
     [Slider]
     public float BigFontOffsetY;
 
+    [Header("GameHeader")]
     [DefaultValue(false)]
     public bool ShowMoreData;
 

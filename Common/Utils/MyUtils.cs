@@ -5,6 +5,7 @@ using ImproveGame.Common.Packets.Items;
 using ImproveGame.Content;
 using ImproveGame.Content.Items.Coin;
 using ImproveGame.Core;
+using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI.WorldFeature;
 using ReLogic.Graphics;
 using System.Collections;
@@ -23,6 +24,10 @@ partial class MyUtils
 {
     public static bool HasDevMark => Main.LocalPlayer.inventory.Any(i => i.type == ModContent.ItemType<DevMark>()) &&
                                      Main.netMode is NetmodeID.SinglePlayer;
+
+    public static GlassType GlassVfxType => UIConfigs.Instance.GlassVfx;
+
+    public static bool GlassVfxEnabled => !Main.drawToScreen && !Main.gameMenu && !Main.mapFullscreen && Lighting.NotRetro && Terraria.Graphics.Effects.Filters.Scene.CanCapture() && UIConfigs.Instance.GlassVfx is not GlassType.Disabled;
 
     public static string RemoveSpaces(string s) => s.Replace(" ", "", StringComparison.Ordinal);
 

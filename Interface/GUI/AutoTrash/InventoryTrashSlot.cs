@@ -1,4 +1,6 @@
-﻿using ImproveGame.Common.Players;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.Players;
+using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.GUI.AutoTrash;
 
@@ -27,8 +29,11 @@ public class InventoryTrashSlot : BaseItemSlot
         Index = index;
         SetBaseItemSlotValues(true, true);
         SetSizePixels(44, 44);
-        SetRoundedRectangleValues(new Color(84, 115, 130) * 0.8f, 2f, new Color(28, 28, 28) * 0.8f, new Vector4(12f * 0.8f));
-        Rounded = new Vector4(10f);
+        SetRoundedRectangleValues(
+            UIColor.TrashSlotBg,
+            UIColor.ItemSlotBorderSize,
+            UIColor.TrashSlotBorder,
+            new Vector4(UIColor.ItemSlotBorderRound * 0.8f));
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)
@@ -77,6 +82,7 @@ public class InventoryTrashSlot : BaseItemSlot
         Vector2 pos = dimensions.Position();
         Vector2 size = dimensions.Size();
         var textureTrash = ModAsset.Trash.Value;
-        spriteBatch.Draw(textureTrash, pos + size / 2f, null, Color.White * 0.5f, 0f, textureTrash.Size() / 2f, TrashScale, 0, 0);
+        var opacity = GlassVfxEnabled ? 0.25f : 0.5f;
+        spriteBatch.Draw(textureTrash, pos + size / 2f, null, Color.White * opacity, 0f, textureTrash.Size() / 2f, TrashScale, 0, 0);
     }
 }

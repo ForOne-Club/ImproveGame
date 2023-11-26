@@ -4,6 +4,9 @@ namespace ImproveGame.Interface.Common
 {
     internal static class UIColor
     {
+        public static float
+            AcrylicIntensity;
+
         public static Color
             PanelBorder,
             PanelBorderLight,
@@ -25,6 +28,10 @@ namespace ImproveGame.Interface.Common
         public static float
             ItemSlotBorderSize,
             ItemSlotBorderRound;
+
+        public static Color
+            TrashSlotBg,
+            TrashSlotBorder;
 
         public static Color
             ButtonBg,
@@ -69,15 +76,16 @@ namespace ImproveGame.Interface.Common
             CrossBorderSize,
             CrossThickness;
 
+        // 玩家属性卡片的背景色
         public static Color
-            PackgeBg,
-            PackgeBorder,
-            PackgeGridBg,
-            PackgeGridBorder;
+            StatCardBg,
+            StatCategoryBg;
 
         static UIColor()
         {
             SetUIColors(UIConfigs.Instance.ThemeType);
+            if (GlassVfxEnabled)
+                AcrylicRedesign();
         }
 
         public static void SetUIColors(ThemeType theme)
@@ -113,6 +121,9 @@ namespace ImproveGame.Interface.Common
             ItemSlotBorderSize = 2f;
             ItemSlotBorderRound = 12f;
 
+            TrashSlotBg = new Color(84, 115, 130) * 0.8f;
+            TrashSlotBorder = new Color(28, 28, 28) * 0.8f;
+
             ButtonBg = new Color(55, 55, 130);
             ButtonBgHover = new Color(66, 66, 143);
 
@@ -143,10 +154,8 @@ namespace ImproveGame.Interface.Common
             CrossBorderSize = 2f;
             CrossThickness = 4.6f;
 
-            PackgeBg = new Color(59, 67, 139, 160);
-            PackgeBorder = new Color(22, 25, 55);
-            PackgeGridBg = new Color(29, 33, 70, 160);
-            PackgeGridBorder = new Color(22, 25, 55, 160);
+            StatCategoryBg = new Color(37, 46, 92, 230);
+            StatCardBg = new Color(28, 35, 69, 172);
         }
 
         private static void Stormdark()
@@ -166,6 +175,9 @@ namespace ImproveGame.Interface.Common
             ItemSlotBg = new Color(13, 16, 17, 180);
             ItemSlotBorderSize = 1f;
             ItemSlotBorderRound = 6f;
+
+            TrashSlotBg = new Color(16, 18, 20) * 0.8f;
+            TrashSlotBorder = new Color(6, 8, 11) * 0.8f;
 
             ButtonBg = new Color(13, 16, 17);
             ButtonBgHover = new Color(23, 29, 28);
@@ -196,6 +208,56 @@ namespace ImproveGame.Interface.Common
             Cross = new Color(200, 40, 40);
             CrossBorderSize = 1f;
             CrossThickness = 3.6f;
+
+            StatCategoryBg = new Color(7, 22, 26, 200);
+            StatCardBg = new Color(5, 17, 20, 150);
+        }
+
+        public static void AcrylicRedesign()
+        {
+            var theme = UIConfigs.Instance.ThemeType;
+
+            switch (theme)
+            {
+                case ThemeType.Blue:
+                    AcrylicIntensity = GlassVfxType is GlassType.MicaLike ? 0.113f : 0.11f;
+
+                    PanelBg.A = (byte)(PanelBg.A * 0.5f);
+                    PanelBg *= 0.8f;
+                    PanelBgLight.A = (byte)(PanelBgLight.A * 0.5f);
+                    PanelBgLight *= 0.8f;
+                    PanelBgLightHover.A = (byte)(PanelBgLightHover.A * 0.5f);
+                    PanelBgLightHover *= 0.8f;
+                    ItemSlotBgFav.A = (byte)(ItemSlotBgFav.A * 0.6f);
+                    ItemSlotBg *= 0.6f;
+                    TrashSlotBg *= 0.6f;
+                    TitleBg.A = (byte)(TitleBg.A * 0.9f);
+                    TitleBg2.A = (byte)(TitleBg2.A * 0.9f);
+                    SwitchBg.A = (byte)(SwitchBg.A * 0.5f);
+                    SwitchBgHover.A = (byte)(SwitchBgHover.A * 0.5f);
+                    StatCardBg *= 0.8f;
+                    break;
+                case ThemeType.Stormdark:
+                    AcrylicIntensity = GlassVfxType is GlassType.MicaLike ? 0.117f : 0.12f;
+
+                    PanelBg.A = (byte)(PanelBg.A * 0.9f);
+                    PanelBgLight.A = (byte)(PanelBgLight.A * 0.9f);
+                    PanelBgLightHover.A = (byte)(PanelBgLightHover.A * 0.9f);
+                    ItemSlotBgFav.A = (byte)(ItemSlotBgFav.A * 0.8f);
+                    ItemSlotBg.A = (byte)(ItemSlotBg.A * 0.8f);
+                    TrashSlotBg *= 0.8f;
+                    TitleBg.A = (byte)(TitleBg.A * 0.8f);
+                    TitleBg2.A = (byte)(TitleBg2.A * 0.8f);
+                    SwitchBg.A = (byte)(SwitchBg.A * 0.6f);
+                    SwitchBgHover.A = (byte)(SwitchBgHover.A * 0.6f);
+                    StatCardBg *= 1.1f;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(theme), theme, null);
+            }
+
+            ButtonBg.A = (byte)(ButtonBg.A * 0.7f);
+            ButtonBgHover.A = (byte)(ButtonBgHover.A * 0.7f);
         }
     }
 }

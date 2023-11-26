@@ -1,4 +1,5 @@
-﻿using ImproveGame.Interface.UIElements;
+﻿using ImproveGame.Interface.Common;
+using ImproveGame.Interface.UIElements;
 using ImproveGame.Interface.SUIElements;
 using System.Collections.Generic;
 using System.Reflection;
@@ -7,8 +8,14 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class GrabBagInfoGUI : UIState
+    public class GrabBagInfoGUI : ViewBody
     {
+        public override bool Display { get => Visible; set => Visible = value; }
+
+        public override bool CanPriority(UIElement target) => target != this;
+
+        public override bool CanDisableMouse(UIElement target)
+            => (target != this && BasePanel.IsMouseHovering) || BasePanel.KeepPressed;
         public static bool Visible { get; private set; }
         private static float panelLeft;
         private static float panelWidth;
@@ -20,6 +27,7 @@ namespace ImproveGame.Interface.GUI
         public SUIScrollbar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
         public ModItemSlot ItemSlot; // 当前物品展示
+        public SUICross CloseButton; // 关闭按钮
 
         public override void OnInitialize()
         {
@@ -66,6 +74,32 @@ namespace ImproveGame.Interface.GUI
             };
             ItemSlot.SetPos(-72f, -12f);
             BasePanel.Append(ItemSlot);
+
+            // Cross
+            CloseButton = new SUICross
+            {
+                BgColor = UIColor.PanelBg
+            };
+            CloseButton.OnLeftMouseDown += (_, _) => Close();
+            Append(CloseButton);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (ItemSlot.Item.type is Terraria.ID.ItemID.None)
+            {
+                Close();
+                return;
+            }
+
+            base.Update(gameTime);
+
+            var basePanelDimensions = BasePanel.GetInnerDimensions();
+            CloseButton.SetPos(basePanelDimensions.X - 72f, basePanelDimensions.Y + 44f);
+            CloseButton.Recalculate();
+
+            if (CloseButton.IsMouseHovering)
+                Main.LocalPlayer.mouseInterface = true;
         }
 
         private void ResetUI(UIElement affectedElement)
@@ -149,7 +183,7 @@ namespace ImproveGame.Interface.GUI
             SoundEngine.PlaySound(SoundID.MenuOpen);
             ItemID = itemID;
 
-            ItemSlot.Item = new(ItemID);
+            ItemSlot.Item = new Item(ItemID);
             SetupDropRateInfoList();
         }
 
