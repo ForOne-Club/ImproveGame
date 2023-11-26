@@ -2,6 +2,11 @@
 
 public class SDFRectangle
 {
+    /// <summary>
+    /// 强制不绘制阴影，用来实现一些“有趣”的效果
+    /// </summary>
+    public static bool DontDrawShadow = false;
+
     private static readonly GraphicsDevice GraphicsDevice = Main.graphics.GraphicsDevice;
 
     private static Effect _effect;
@@ -22,11 +27,13 @@ public class SDFRectangle
 
         coordQ1 = new Vector2(rounded.Y) - size;
         coordQ2 = new Vector2(rounded.Y);
-        vertices.AddRectangle(pos + new Vector2(size.X, 0f), size, new Vector2(coordQ1.X, coordQ2.Y), new Vector2(coordQ2.X, coordQ1.Y), rounded.Y);
+        vertices.AddRectangle(pos + new Vector2(size.X, 0f), size, new Vector2(coordQ1.X, coordQ2.Y),
+            new Vector2(coordQ2.X, coordQ1.Y), rounded.Y);
 
         coordQ1 = new Vector2(rounded.Z) - size;
         coordQ2 = new Vector2(rounded.Z);
-        vertices.AddRectangle(pos + new Vector2(0f, size.Y), size, new Vector2(coordQ2.X, coordQ1.Y), new Vector2(coordQ1.X, coordQ2.Y), rounded.Z);
+        vertices.AddRectangle(pos + new Vector2(0f, size.Y), size, new Vector2(coordQ2.X, coordQ1.Y),
+            new Vector2(coordQ1.X, coordQ2.Y), rounded.Z);
 
 
         coordQ1 = new Vector2(rounded.W) - size;
@@ -68,8 +75,12 @@ public class SDFRectangle
         BaseDrawRectangle(pos, size, rounded);
     }
 
-    public static void Shadow(Vector2 pos, Vector2 size, Vector4 rounded, Color backgroundColor, float shadow, bool ui = true)
+    public static void Shadow(Vector2 pos, Vector2 size, Vector4 rounded, Color backgroundColor, float shadow,
+        bool ui = true)
     {
+        if (DontDrawShadow)
+            return;
+
         _effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         _effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
         _effect.Parameters["uShadowSize"].SetValue(shadow);

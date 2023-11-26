@@ -22,6 +22,7 @@ namespace ImproveGame.Interface.Common
 
         // 检测主题是否变化，变化了就重设UI，Config的OnChanged无法确定是哪个变量发生了变化，所以放这里了
         private ThemeType _themeLastTick;
+        private bool _acrylicVfxLastTick;
 
         public BrustGUI BrustGUI;
         internal static UserInterface BrustInterface;
@@ -33,7 +34,7 @@ namespace ImproveGame.Interface.Common
         internal static UserInterface PaintWandInterface;
 
         public GrabBagInfoGUI GrabBagInfoGUI;
-        internal static UserInterface GrabBagInfoInterface;
+        public EventTrigger GrabBagInfoTrigger;
 
         // 生命体检测仪筛选
         public LifeformAnalyzerGUI LifeformAnalyzerGUI;
@@ -138,7 +139,7 @@ namespace ImproveGame.Interface.Common
             PaintWandInterface = null;
 
             GrabBagInfoGUI = null;
-            GrabBagInfoInterface = null;
+            GrabBagInfoTrigger = null;
 
             LifeformAnalyzerGUI = null;
             LifeformAnalyzerTrigger = null;
@@ -181,17 +182,16 @@ namespace ImproveGame.Interface.Common
             ItemSearcherTrigger = new EventTrigger("Radial Hotbars", "Item Searcher");
             OpenBagTrigger = new EventTrigger("Radial Hotbars", "Open Bag");
             BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI");
+            GrabBagInfoTrigger = new EventTrigger("Radial Hotbars", "Grab Bag Info GUI");
 
             SidedEventTrigger = new SidedEventTrigger();
 
             BrustGUI = new BrustGUI();
             SpaceWandGUI = new SpaceWandGUI();
             PaintWandGUI = new PaintWandGUI();
-            GrabBagInfoGUI = new GrabBagInfoGUI();
             LoadGUI(ref BrustGUI, out BrustInterface);
             LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
             LoadGUI(ref PaintWandGUI, out PaintWandInterface);
-            LoadGUI(ref GrabBagInfoGUI, out GrabBagInfoInterface);
         }
 
 
@@ -226,16 +226,17 @@ namespace ImproveGame.Interface.Common
                 SpaceWandInterface?.Update(gameTime);
             if (PaintWandGUI.Visible)
                 PaintWandInterface?.Update(gameTime);
-            if (GrabBagInfoGUI.Visible)
-                GrabBagInfoInterface?.Update(gameTime);
 
-            if (_themeLastTick != UIConfigs.Instance.ThemeType)
+            if (_themeLastTick != UIConfigs.Instance.ThemeType || _acrylicVfxLastTick != GlassVfxEnabled)
             {
                 UIColor.SetUIColors(UIConfigs.Instance.ThemeType);
+                if (GlassVfxEnabled)
+                    UIColor.AcrylicRedesign();
                 UIPlayer.InitUI();
             }
 
             _themeLastTick = UIConfigs.Instance.ThemeType;
+            _acrylicVfxLastTick = GlassVfxEnabled;
         }
 
         #endregion
@@ -269,12 +270,6 @@ namespace ImproveGame.Interface.Common
 
                     return true;
                 });
-            });
-
-            // 背包
-            layers.FindVanilla("Inventory", index =>
-            {
-                layers.Insert(index, "Grab Bag Info GUI", GrabBagInfoGUI, () => GrabBagInfoGUI.Visible);
             });
 
             // 精密线控仪

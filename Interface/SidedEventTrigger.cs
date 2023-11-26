@@ -142,7 +142,7 @@ namespace ImproveGame.Interface
             base.Update(gameTime);
         }
 
-        protected override bool Draw()
+        protected override bool Draw(bool drawToGame = true)
         {
             foreach (var uiData in UIPool.Where(uiData => !uiData.AnimationTimer.CompleteClose && !ViewBodyIs(uiData.ViewBody))) {
                 uiData.ViewBody?.Draw(Main.spriteBatch);

@@ -17,7 +17,7 @@ public class StatsCard : SUIPanel
         TitleView = new TimerView()
         {
             Rounded = new Vector4(6f),
-            BgColor = UIColor.TitleBg2,
+            BgColor = UIColor.StatCategoryBg,
             DragIgnore = true,
         };
         TitleView.SetPadding(8f, 0f);
@@ -34,7 +34,7 @@ public class StatsCard : SUIPanel
         TitleView = new TimerView()
         {
             Rounded = new Vector4(6f),
-            BgColor = UIColor.TitleBg2,
+            BgColor = UIColor.StatCategoryBg,
             DragIgnore = true,
         };
         TitleView.SetPadding(8f, 0f);

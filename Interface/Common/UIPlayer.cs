@@ -126,6 +126,10 @@ public class UIPlayer : ModPlayer
         uiSystem.LifeformAnalyzerGUI = new LifeformAnalyzerGUI();
         uiSystem.LifeformAnalyzerTrigger.SetCarrier(uiSystem.LifeformAnalyzerGUI);
 
+        // 摸彩袋
+        uiSystem.GrabBagInfoGUI = new GrabBagInfoGUI();
+        uiSystem.GrabBagInfoTrigger.SetCarrier(uiSystem.GrabBagInfoGUI);
+
         // 左侧栏
         uiSystem.ExtremeStorageGUI = new ExtremeStorageGUI();
         uiSystem.AutofisherGUI = new AutofisherGUI();

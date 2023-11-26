@@ -776,7 +776,11 @@ UIConfigs: {
 		Tooltip: Toggles the explosion effects of this mod's wands.
 	}
 
-	Headers.MinimapHeader: "[centeritem:WorldGlobe] Map Marker Settings"
+	Headers: {
+		MinimapHeader: "[centeritem:WorldGlobe] Map Marker Settings"
+		UIHeader: "[centeritem:EchoMonolith] UI Settings"
+		GameHeader: "[centeritem:JimsDrone] Game Settings"
+	}
 
 	MarkFloatingIsland: {
 		Tooltip: Displays marked floating islands on map.
@@ -851,6 +855,24 @@ UIConfigs: {
 		Label: 重设UI位置
 		Tooltip: 重设所有UI的位置，在你找不到大背包UI时尤其有用
 	}
+
+	GlassVfx: {
+		Label: "[centeritem:MulticoloredStainedGlass] Glassmorphism Effect"
+		Tooltip:
+			'''
+			为本模组的UI应用毛玻璃效果，使其更加美观
+			仅当照明模式设为“颜色”或“白”时可用
+			这个功能可能会影响性能
+
+			有两种可选的毛玻璃效果：
+			1. 简单模糊
+			  - 仅对UI覆盖的游戏画面进行模糊处理，UI本身半透明
+			  - UI之间不会互相遮罩
+			2. 类云母
+			  - UI本身不透明，以其所覆盖的模糊处理后的游戏画面为背景
+			  - UI之间会互相遮罩
+			'''
+	}
 }
 
 PAPDisplayMode: {
@@ -864,4 +886,11 @@ ThemeType: {
 	Stormdark.Label: Stormdark
 	Blue.Label: Classic
 	Tooltip: ""
+}
+
+GlassType: {
+	Tooltip: ""
+	Disabled.Label: 关闭
+	SimpleBlur.Label: 简单模糊
+	MicaLike.Label: 类云母
 }

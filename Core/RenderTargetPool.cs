@@ -1,6 +1,6 @@
-﻿namespace ImproveGame.Common.Utils;
+﻿namespace ImproveGame.Core;
 
-public class RenderTarget2DPool
+public class RenderTargetPool
 {
     /// <summary>
     /// 可使用池
@@ -15,7 +15,7 @@ public class RenderTarget2DPool
     /// <summary>
     /// 构造
     /// </summary>
-    public RenderTarget2DPool()
+    public RenderTargetPool()
     {
         AvailablePool = new Dictionary<(int, int), Stack<RenderTarget2D>>();
         BorrowPool = new Dictionary<(int, int), Stack<RenderTarget2D>>();
@@ -89,7 +89,7 @@ public class RenderTarget2DPool
     /// 归还 RenderTarget2D
     /// </summary>
     /// <param name="rt2d">要归还的 RenderTarget2D</param>
-    /// <returns>归还是否成功 flase 意味着并不记录在案</returns>
+    /// <returns>归还是否成功 false 意味着并不记录在案</returns>
     public bool TryReturn(RenderTarget2D rt2d)
     {
         (int width, int height) size = (rt2d.Width, rt2d.Height);
@@ -103,6 +103,27 @@ public class RenderTarget2DPool
         AvailablePool[size].Push(rt2d);
 
         return true;
+    }
+
+    public void Dispose()
+    {
+        foreach ((_, Stack<RenderTarget2D> value) in BorrowPool)
+        {
+            if (value is null)
+                continue;
+            foreach (var renderTarget2D in value) {
+                renderTarget2D?.Dispose();
+            }
+        }
+
+        foreach ((_, Stack<RenderTarget2D> value) in AvailablePool)
+        {
+            if (value is null)
+                continue;
+            foreach (var renderTarget2D in value) {
+                renderTarget2D?.Dispose();
+            }
+        }
     }
 
     /// <summary>
