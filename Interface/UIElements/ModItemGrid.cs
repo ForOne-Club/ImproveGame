@@ -9,7 +9,7 @@ namespace ImproveGame.Interface.UIElements
     {
         public ModItemList ItemList;
         // protected 保证只有子类可以访问与修改
-        protected SUIScrollbar Scrollbar;
+        protected SUIScrollBar Scrollbar;
         protected Vector2 ShowSize;
 
         // 可以在 new 的时候将其他元素也初始化, 或者在执行 Active() 的时候初始化.
@@ -26,7 +26,7 @@ namespace ImproveGame.Interface.UIElements
             ItemList.ModifyHVCount(10, 10);
             ItemList.Join(this);
 
-            Scrollbar = new SUIScrollbar
+            Scrollbar = new SUIScrollBar
             {
                 HAlign = 1f
             };

@@ -6,7 +6,7 @@ namespace ImproveGame.Interface.UIElements
     public class ScrollView : View
     {
         // ReSharper disable once MemberCanBePrivate.Global
-        public readonly SUIScrollbar Scrollbar;
+        public readonly SUIScrollBar Scrollbar;
 
         // ReSharper disable once MemberCanBePrivate.Global
         public readonly ListView ListView;
@@ -19,7 +19,7 @@ namespace ImproveGame.Interface.UIElements
             ListView = new ListView();
             ListView.Join(this);
 
-            Scrollbar = new SUIScrollbar();
+            Scrollbar = new SUIScrollBar();
             Scrollbar.Join(this);
         }
 

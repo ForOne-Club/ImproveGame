@@ -26,7 +26,7 @@ public class StorageGrids : ModItemGrid
         ItemList = new ItemSlotList {DragIgnore = true};
         ItemList.Join(this);
 
-        Scrollbar = new SUIScrollbar
+        Scrollbar = new SUIScrollBar
         {
             HAlign = 1f,
             Height = new StyleDimension(0f, 1f),

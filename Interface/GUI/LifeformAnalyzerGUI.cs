@@ -28,7 +28,7 @@ namespace ImproveGame.Interface.GUI
 
         private SUIPanel _basePanel; // 背景板
         public SUICross CloseButton;
-        public SUIScrollbar Scrollbar; // 拖动条
+        public SUIScrollBar Scrollbar; // 拖动条
         public UIList UIList; // 明细列表
         private UISearchBar _searchBar;
         private SUIPanel _searchBoxPanel;

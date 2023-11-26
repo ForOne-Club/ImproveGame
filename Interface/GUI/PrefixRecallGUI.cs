@@ -34,7 +34,7 @@ public class PrefixRecallGUI : ViewBody, ISidedView
     private const float PanelWidth = 388f;
 
     private SUIPanel _basePanel; // 背景板
-    public SUIScrollbar Scrollbar; // 拖动条
+    public SUIScrollBar Scrollbar; // 拖动条
     public UIList UIList; // 明细列表
 
     public void OnSwapSlide(float factor)
@@ -85,7 +85,7 @@ public class PrefixRecallGUI : ViewBody, ISidedView
         };
         _basePanel.Append(UIList);
 
-        Scrollbar = new SUIScrollbar
+        Scrollbar = new SUIScrollBar
         {
             HAlign = 1f,
             Height = new(0, 1f)

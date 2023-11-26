@@ -7,7 +7,7 @@ namespace ImproveGame.Interface.SUIElements
     /// <summary>
     /// 宽度默认 20
     /// </summary>
-    public class SUIScrollbar : TimerView
+    public class SUIScrollBar : TimerView
     {
         private float viewPosition; // 滚动条当前位置
         private float MaxViewPoisition => exposedSize - internalSize;
@@ -64,7 +64,7 @@ namespace ImproveGame.Interface.SUIElements
             set => _bufferViewPosition = value;
         }
 
-        public SUIScrollbar()
+        public SUIScrollBar()
         {
             Visible = true;
             Width.Pixels = 20f;

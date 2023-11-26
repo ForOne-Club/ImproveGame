@@ -19,7 +19,7 @@ public class BuffTrackerGUI : ViewBody
 
     internal SUIPanel MainPanel;
     private BuffButtonList BuffList;
-    public SUIScrollbar Scrollbar; // 拖动条
+    public SUIScrollBar Scrollbar; // 拖动条
     private SUISearchBar _searchBar;
     private string SearchContent => _searchBar.SearchContent;
     internal BuffTrackerBattler BuffTrackerBattler;
@@ -73,7 +73,7 @@ public class BuffTrackerGUI : ViewBody
         BuffList.ManualSortMethod = _ => { };
         MainPanel.Append(BuffList);
 
-        Scrollbar = new SUIScrollbar
+        Scrollbar = new SUIScrollBar
         {
             Left = {Pixels = -20f, Percent = 1f},
             Width = {Pixels = 18f},

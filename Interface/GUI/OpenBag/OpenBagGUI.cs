@@ -31,7 +31,7 @@ public class OpenBagGUI : ViewBody
 
     // 搜索到的物品和滚动条(隐藏)
     public BaseGrid LootsGrid;
-    public SUIScrollbar Scrollbar;
+    public SUIScrollBar Scrollbar;
     public UIText TipText;
 
     public override void OnInitialize()
@@ -124,7 +124,7 @@ public class OpenBagGUI : ViewBody
         LootsGrid.SetBaseValues(-1, 8, new Vector2(4f), new Vector2(43));
         LootsGrid.Join(itemsPanel);
 
-        Scrollbar = new SUIScrollbar {HAlign = 1f};
+        Scrollbar = new SUIScrollBar {HAlign = 1f};
         Scrollbar.Left.Pixels = -1;
         Scrollbar.Height.Pixels = LootsGrid.Height();
         Scrollbar.SetView(itemsPanel.GetInnerSizePixels().Y, LootsGrid.Height.Pixels);

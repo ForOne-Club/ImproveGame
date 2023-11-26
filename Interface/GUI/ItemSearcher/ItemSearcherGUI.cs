@@ -62,7 +62,7 @@ public class ItemSearcherGUI : ViewBody
 
     // 搜索到的物品和滚动条(隐藏)
     public BaseGrid ItemsFoundGrid;
-    public SUIScrollbar Scrollbar;
+    public SUIScrollBar Scrollbar;
     public UIText TipText;
 
     // 搜索栏
@@ -194,7 +194,7 @@ public class ItemSearcherGUI : ViewBody
         ItemsFoundGrid.SetBaseValues(-1, 7, new Vector2(4f), new Vector2(43));
         ItemsFoundGrid.Join(itemsPanel);
 
-        Scrollbar = new SUIScrollbar {HAlign = 1f};
+        Scrollbar = new SUIScrollBar {HAlign = 1f};
         Scrollbar.Left.Pixels = -1;
         Scrollbar.Height.Pixels = ItemsFoundGrid.Height();
         Scrollbar.SetView(itemsPanel.GetInnerSizePixels().Y, ItemsFoundGrid.Height.Pixels);

@@ -14,7 +14,7 @@ public class ThemeColorElement : EnumElement
     private SUITitle Title;
     private SUICross Cross;
     public BaseGrid ItemGrid;
-    public SUIScrollbar Scrollbar;
+    public SUIScrollBar Scrollbar;
 
     private ThemeType _valueLastTick; // 检测Value有没有变，变了就重设UI
 
@@ -87,7 +87,7 @@ public class ThemeColorElement : EnumElement
         ItemGrid.SetBaseValues(-1, 8, new Vector2(4f), new Vector2(48f));
         ItemGrid.Join(itemsPanel);
 
-        Scrollbar = new SUIScrollbar
+        Scrollbar = new SUIScrollBar
         {
             Left = {Pixels = -24f, Precent = 1f},
             Height = {Precent = 1f},
