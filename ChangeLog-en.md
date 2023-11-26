@@ -6,11 +6,50 @@
 
 </div>
 
+# v1.6.7
+
+## Subversions
+
+- v1.6.7.0 (Not yet)
+
+## Additions
+- 新增无BOSS存活时快速复活功能
+- 为瑟银添加了便携增益支持
+- 为属性面板添加了灾厄和瑟银职业支持
+
+## BUG Fixes
+
+- 即使钓鱼机无法存入将要钓上的物品，也会播放动画
+- 水蜡烛、和平蜡烛、影烛作为随身增益站无实际效果
+- 自动开袋开启一个袋子实际会消耗两个袋子
+- 自动开袋贩卖物品所得钱币只有应得的5%
+- 空间法杖可以无视条件设置方块的半砖类型
+- 漆涂法杖清除苔藓时永远只会掉落绿苔藓
+- 堆叠达到“药水无限增益需求量”的便携增益站不会应用Buff
+- 关闭“使用魔杖放置时无限材料”功能后放置堆叠超过999的背景墙仍不会消耗
+- 本Mod的RecipeGroup无法正确处理跨Mod问题（例如，在某些情况下需要“任何金锭”的配方无法使用铂金锭作为材料）
+
+## Adjustments
+
+- “Town NPC spawn mechanics improvement”功能可使理发师在击杀任意原版肉前Boss后入住，无需寻找
+- 自动钓鱼机现在仅有原来的20%的概率消耗诱饵
+- “隐藏无限续杯增益”功能移动到了个人设置中
+- 个人设置中新增“重设UI位置”按钮
+- 提升了勘探无人机的速度
+- 合成配方调整：
+  - 勘探无人机：任意铁锭x12 + 任意金锭x6 + 任意宝石x3 -> 任意铁锭x6 + 任意金锭x2
+  - 建筑魔杖：落星需求量从8个改为2个
+  - 液体魔杖：暗影鳞片/组织样本需求量从18个改为8个，任意金锭需求量从12个改为6个
+  - 自动钓鱼机：任意铁锭x8 + 任意铜锭x4 + 玻璃x20 -> 任意铁锭x4 + 任意铜锭x2
+- 属性面板重置，支持其他 Mod 添加分类与属性
+- 自动垃圾桶重置
+
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0
 ## Subversions
 - v1.6.6.0
 - v1.6.6.1
+- v1.6.6.2 (Not yet)
 ## Additions
 - Locators, to indicate structures on map
 - Item Finder, to quickly find items in chests and personal inventories
@@ -21,9 +60,6 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - "Infinite Wand Placables" config option, you can turn it off now
 - "Stackable Quest Fishes" config option
 - **[v1.6.6.1]** Ability to see what items an item can be shimmered into
-- **[v1.6.6.2]** 新增无BOSS存活时快速复活功能
-- **[v1.6.6.2]** 为瑟银添加了便携增益支持
-- **[v1.6.6.2]** 为属性面板添加了灾厄和瑟银职业支持
 ## BUG Fixes
 - Breaking Fishing Machine on tables crashes the game
 - Unable to disable Lucky Coin
@@ -35,14 +71,6 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - **[v1.6.6.1]** Storage Manager category icon displays Stormdark theme icon under Classic theme
 - **[v1.6.6.1]** The festival feature (Christmas & Halloween) ignores the system time
 - **[v1.6.6.1]** "Any Gem" is shown as a localization key
-- **[v1.6.6.2]** 即使钓鱼机无法存入将要钓上的物品，也会播放动画
-- **[v1.6.6.2]** 水蜡烛、和平蜡烛、影烛作为随身增益站无实际效果
-- **[v1.6.6.2]** 自动开袋开启一个袋子实际会消耗两个袋子
-- **[v1.6.6.2]** 自动开袋贩卖物品所得钱币只有应得的5%
-- **[v1.6.6.2]** 空间法杖可以无视条件设置方块的半砖类型
-- **[v1.6.6.2]** 漆涂法杖清除苔藓时永远只会掉落绿苔藓
-- **[v1.6.6.2]** 堆叠达到“药水无限增益需求量”的便携增益站不会应用Buff
-- **[v1.6.6.2]** 关闭“使用魔杖放置时无限材料”功能后放置堆叠超过999的背景墙仍不会消耗
 ## Adjustments
 - Tiles under Fishing Machine are now breakable
 - Added a hotkey to open mod configs
@@ -57,18 +85,6 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - **[v1.6.6.1]** Expanded the Fishing Machine to 40 slots
 - **[v1.6.6.1]** The fishing speed of Fishing Machine is increased by 300% in Hardmode now
 - **[v1.6.6.1]** Buff Tracker now supports pinyin search (Chinese related)
-- **[v1.6.6.2]** Town NPC spawn mechanics improvement 功能可使理发师在击杀任意原版肉前Boss后入住，无需寻找
-- **[v1.6.6.2]** 自动钓鱼机现在仅有原来的20%的概率消耗诱饵
-- **[v1.6.6.2]** “隐藏无限续杯增益”功能移动到了个人设置中
-- **[v1.6.6.2]** 个人设置中新增“重设UI位置”按钮
-- **[v1.6.6.2]** 提升了勘探无人机的速度
-- **[v1.6.6.2]** 合成配方调整：
-  - 勘探无人机：任意铁锭x12 + 任意金锭x6 + 任意宝石x3 -> 任意铁锭x6 + 任意金锭x2
-  - 建筑魔杖：落星需求量从8个改为2个
-  - 液体魔杖：暗影鳞片/组织样本需求量从18个改为8个，任意金锭需求量从12个改为6个
-  - 自动钓鱼机：任意铁锭x8 + 任意铜锭x4 + 玻璃x20 -> 任意铁锭x4 + 任意铜锭x2
-- **[v1.6.6.2]** 属性面板重置，支持其他 Mod 添加分类与属性
-- **[v1.6.6.2]** 自动垃圾桶重置
 
 # v1.6.5
 v1.6.5.0 is the mod's first release on 1.4.4 (v1.6.4 is a beta)
