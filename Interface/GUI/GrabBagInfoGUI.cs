@@ -7,8 +7,20 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class GrabBagInfoGUI : UIState
+    public class GrabBagInfoGUI : ViewBody
     {
+        public override bool Display { get => Visible; set => Visible = value; }
+
+        public override bool CanPriority(UIElement target)
+        {
+            return BasePanel.IsMouseHovering;
+        }
+
+        public override bool CanDisableMouse(UIElement target)
+        {
+            return BasePanel.IsMouseHovering;
+        }
+
         public static bool Visible { get; private set; }
         private static float panelLeft;
         private static float panelWidth;
@@ -74,14 +86,16 @@ namespace ImproveGame.Interface.GUI
             panelTop = affectedElement.Top.Pixels;
             panelWidth = affectedElement.Width.Pixels;
             panelHeight = affectedElement.Height.Pixels;
-            foreach (var uie in UIList) {
+            foreach (var uie in UIList)
+            {
                 uie.Width.Pixels = panelWidth - 60f;
             }
             Recalculate();
             SetupScrollBar(false);
         }
 
-        private void SetupScrollBar(bool resetViewPosition = true) {
+        private void SetupScrollBar(bool resetViewPosition = true)
+        {
             float height = UIList.GetInnerDimensions().Height;
             Scrollbar.SetView(height, UIList.GetTotalHeight());
             if (resetViewPosition)
@@ -112,7 +126,8 @@ namespace ImproveGame.Interface.GUI
             }
             UIList.Recalculate();
 
-            if (BasePanel.IsMouseHovering) {
+            if (BasePanel.IsMouseHovering)
+            {
                 PlayerInput.LockVanillaMouseScroll("ImproveGame: Grab Bag Info GUI");
             }
 
