@@ -17,7 +17,7 @@ namespace ImproveGame.Interface
         private static EventTrigger CurrentEventTrigger { get; set; }
 
         private static readonly List<string> LayersPriority;
-        private static readonly Dictionary<string, List<EventTrigger>> LayersDictionary;
+        protected static readonly Dictionary<string, List<EventTrigger>> LayersDictionary;
 
         public static int LayerCount => LayersDictionary["Radial Hotbars"].Count;
 
@@ -271,11 +271,9 @@ namespace ImproveGame.Interface
                     return true;
                 }
 
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                Main.spriteBatch.ReBegin(null, Matrix.Identity);
                 Main.spriteBatch.Draw(GlassmorphismVfx.GlassCovers[index], Vector2.Zero, Color.White);
-                Main.spriteBatch.End();
-                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.UIScaleMatrix);
+                Main.spriteBatch.ReBegin(null, Main.UIScaleMatrix);
                 _body?.Draw(Main.spriteBatch);
                 return true;
             }
