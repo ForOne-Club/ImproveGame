@@ -135,7 +135,7 @@ public class PackageGUI : ViewBody
         Main.playerInventory = true;
         Visible = true;
         _grid.SetInventory(items);
-        _grid.Scrollbar.ViewPosition = 0;
+        _grid.Scrollbar.BarPosition = 0;
         _title.Text = title;
         _title.SetInnerPixels(_title.TextSize);
         Package = package;

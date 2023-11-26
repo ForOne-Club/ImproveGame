@@ -85,15 +85,15 @@ public class StorageGrids : ModItemGrid
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        if (-Scrollbar.ViewPosition + SearchBarHeight != ItemList.Top.Pixels)
+        if (-Scrollbar.BarPosition + SearchBarHeight != ItemList.Top.Pixels)
         {
-            ItemList.Top.Pixels = -Scrollbar.ViewPosition + SearchBarHeight;
+            ItemList.Top.Pixels = -Scrollbar.BarPosition + SearchBarHeight;
             ItemList.Recalculate();
         }
 
-        if (-Scrollbar.ViewPosition + 2 != _searchBar.Top.Pixels)
+        if (-Scrollbar.BarPosition + 2 != _searchBar.Top.Pixels)
         {
-            _searchBar.Top.Pixels = -Scrollbar.ViewPosition + 2;
+            _searchBar.Top.Pixels = -Scrollbar.BarPosition + 2;
             _searchBar.Recalculate();
         }
 

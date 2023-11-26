@@ -26,7 +26,7 @@ namespace ImproveGame.Interface.UIElements
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
-            Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
+            Scrollbar.BarPositionBuffer += evt.ScrollWheelValue;
         }
 
         public static Vector2 GridSize(Vector2 size, Vector2 spacing, int h, int v)

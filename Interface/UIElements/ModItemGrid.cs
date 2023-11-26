@@ -54,17 +54,17 @@ namespace ImproveGame.Interface.UIElements
         {
             base.ScrollWheel(evt);
             // 下滑: -, 上滑: +
-            Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
+            Scrollbar.BarPositionBuffer += evt.ScrollWheelValue;
         }
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
-            if (-Scrollbar.ViewPosition == ItemList.Top.Pixels)
+            if (-Scrollbar.BarPosition == ItemList.Top.Pixels)
             {
                 return;
             }
 
-            ItemList.Top.Pixels = -Scrollbar.ViewPosition;
+            ItemList.Top.Pixels = -Scrollbar.BarPosition;
             ItemList.Recalculate();
         }
     }

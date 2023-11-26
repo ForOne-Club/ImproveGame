@@ -164,7 +164,7 @@ namespace ImproveGame.Interface.GUI
             float totalHeight = UIList.GetTotalHeight();
             Scrollbar.SetView(height, totalHeight);
             if (resetViewPosition)
-                Scrollbar.ViewPosition = 0f;
+                Scrollbar.BarPosition = 0f;
 
             Scrollbar.Visible = true;
             if (height >= totalHeight)
@@ -177,14 +177,14 @@ namespace ImproveGame.Interface.GUI
         {
             base.ScrollWheel(evt);
             if (BasePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
-                Scrollbar.BufferViewPosition += evt.ScrollWheelValue;
+                Scrollbar.BarPositionBuffer += evt.ScrollWheelValue;
         }
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
             if (Scrollbar is not null)
             {
-                UIList._innerList.Top.Set(-Scrollbar.ViewPosition, 0);
+                UIList._innerList.Top.Set(-Scrollbar.BarPosition, 0);
             }
             UIList.Recalculate();
 

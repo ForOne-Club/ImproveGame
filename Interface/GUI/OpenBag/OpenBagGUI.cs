@@ -319,15 +319,15 @@ public class OpenBagGUI : ViewBody
         if (!MainPanel.IsMouseHovering)
             return;
         // 下滑: -, 上滑: +
-        Scrollbar.BufferViewPosition += evt.ScrollWheelValue * 0.4f;
+        Scrollbar.BarPositionBuffer += evt.ScrollWheelValue * 0.4f;
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        if (-Scrollbar.ViewPosition == LootsGrid.DatumPoint.Y)
+        if (-Scrollbar.BarPosition == LootsGrid.DatumPoint.Y)
             return;
 
-        LootsGrid.DatumPoint.Y = -Scrollbar.ViewPosition;
+        LootsGrid.DatumPoint.Y = -Scrollbar.BarPosition;
         LootsGrid.Recalculate();
     }
 
