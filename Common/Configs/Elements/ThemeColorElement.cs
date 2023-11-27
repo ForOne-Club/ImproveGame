@@ -137,17 +137,17 @@ public class ThemeColorElement : EnumElement
         if (!MainPanel.IsMouseHovering)
             return;
         // 下滑: -, 上滑: +
-        Scrollbar.BarPositionBuffer += evt.ScrollWheelValue * 0.4f;
+        Scrollbar.BarTopBuffer += evt.ScrollWheelValue * 0.4f;
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
 
-        if (-Scrollbar.BarPosition == ItemGrid.DatumPoint.Y)
+        if (-Scrollbar.BarTop == ItemGrid.DatumPoint.Y)
             return;
 
-        ItemGrid.DatumPoint.Y = -Scrollbar.BarPosition;
+        ItemGrid.DatumPoint.Y = -Scrollbar.BarTop;
         ItemGrid.Recalculate();
     }
 

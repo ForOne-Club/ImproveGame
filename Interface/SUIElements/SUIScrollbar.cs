@@ -10,16 +10,6 @@ namespace ImproveGame.Interface.SUIElements
     public class SUIScrollBar : TimerView
     {
         /// <summary>
-        /// 滚动条位置
-        /// </summary>
-        private float barPosition;
-
-        /// <summary>
-        /// 滚动条活动范围
-        /// </summary>
-        private float barMaxPoisition => actualHeight - displayHeight;
-
-        /// <summary>
         /// 展示高度
         /// </summary>
         private float displayHeight = 1f;
@@ -30,9 +20,27 @@ namespace ImproveGame.Interface.SUIElements
         private float actualHeight = 20f;
 
         /// <summary>
+        /// 滚动条位置
+        /// </summary>
+        private float barTop;
+
+        /// <summary>
+        /// 滚动条活动范围
+        /// </summary>
+        private float BarMaxTop => actualHeight - displayHeight;
+
+        /// <summary>
         /// 滚动条高度
         /// </summary>
-        public float BarHeight => displayHeight / actualHeight;
+        public float BarHeightPercent
+        {
+            get
+            {
+                float innerWidth = GetInnerDimensions().Width;
+                float innerHeight = GetInnerDimensions().Height;
+                return Math.Max(Math.Min(innerWidth, innerHeight) * 2f / innerHeight, displayHeight / actualHeight);
+            }
+        }
 
         private bool innerHovered;
 
@@ -61,21 +69,24 @@ namespace ImproveGame.Interface.SUIElements
         /// <summary> 
         /// 拖动块是否填满了整个拖动条
         /// </summary>
-        public bool InnerFilled => barMaxPoisition == 0f;
+        public bool InnerFilled => BarMaxTop == 0f;
 
         public Color InnerBg, InnerBgHover;
         public float RoundMultiplier;
 
-        public float BarPosition
+        /// <summary>
+        /// 滚动条位置
+        /// </summary>
+        public float BarTop
         {
-            get => barPosition;
-            set => barPosition = MathHelper.Clamp(value, 0f, barMaxPoisition);
+            get => barTop;
+            set => barTop = MathHelper.Clamp(value, 0f, BarMaxTop);
         }
 
         /// <summary>
-        /// 缓冲距离, 不想使用动画就直接设置 <see cref="BarPosition"/>
+        /// 缓冲距离, 不想使用动画就直接设置 <see cref="BarTop"/>
         /// </summary>
-        public float BarPositionBuffer { get; set; }
+        public float BarTopBuffer { get; set; }
 
         public SUIScrollBar()
         {
@@ -98,8 +109,8 @@ namespace ImproveGame.Interface.SUIElements
 
             CalculatedStyle InnerDimensions = GetInnerDimensions();
             CalculatedStyle InnerRectangle = InnerDimensions;
-            InnerRectangle.Y += (BarPosition / barMaxPoisition) * (InnerDimensions.Height * (1 - BarHeight));
-            InnerRectangle.Height = InnerDimensions.Height * BarHeight;
+            InnerRectangle.Y += (BarTop / BarMaxTop) * (InnerDimensions.Height * (1 - BarHeightPercent));
+            InnerRectangle.Height = InnerDimensions.Height * BarHeightPercent;
             if (IsMouseHovering)
             {
                 if (!innerHovered)
@@ -122,27 +133,30 @@ namespace ImproveGame.Interface.SUIElements
 
             if (BarDragging)
             {
-                if (Math.Abs(BarHeight - 1) > 0.000000001f)
-                    BarPosition = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) /
-                        (InnerDimensions.Height * (1 - BarHeight)) * barMaxPoisition;
+                if (Math.Abs(BarHeightPercent - 1) > 0.000000001f)
+                    BarTop = (Main.MouseScreen.Y - InnerDimensions.Y - offsetY) /
+                        (InnerDimensions.Height * (1 - BarHeightPercent)) * BarMaxTop;
             }
 
-            if (BarPositionBuffer == 0)
+            if (BarTopBuffer == 0)
             {
                 return;
             }
 
-            BarPosition -= BarPositionBuffer * 0.2f;
-            BarPositionBuffer *= 0.8f;
-            if (!(MathF.Abs(BarPositionBuffer) < 0.1f))
+            BarTop -= BarTopBuffer * 0.2f;
+            BarTopBuffer *= 0.8f;
+            if (!(MathF.Abs(BarTopBuffer) < 0.1f))
             {
                 return;
             }
 
-            BarPosition = MathF.Round(BarPosition, 1);
-            BarPositionBuffer = 0;
+            BarTop = MathF.Round(BarTop, 1);
+            BarTopBuffer = 0;
         }
 
+        /// <summary>
+        /// 鼠标进入内部
+        /// </summary>
         public virtual void InnerMouseOver()
         {
             if ((!HideIfFilled && !HideInnerIfFilled) || !InnerFilled)
@@ -151,6 +165,9 @@ namespace ImproveGame.Interface.SUIElements
             }
         }
 
+        /// <summary>
+        /// 鼠标出去内部
+        /// </summary>
         public virtual void InnerMouseOut()
         {
             if ((HideIfFilled || HideInnerIfFilled) && InnerFilled)
@@ -176,10 +193,10 @@ namespace ImproveGame.Interface.SUIElements
             {
                 BarDragging = true;
                 offsetY = evt.MousePosition.Y - innerDimensions.Y -
-                          (innerDimensions.Height * (1 - BarHeight) * (barPosition / barMaxPoisition));
+                          (innerDimensions.Height * (1 - BarHeightPercent) * (barTop / BarMaxTop));
             }
 
-            BarPositionBuffer = 0;
+            BarTopBuffer = 0;
         }
 
         public override void LeftMouseUp(UIMouseEvent evt)
@@ -216,9 +233,9 @@ namespace ImproveGame.Interface.SUIElements
             CalculatedStyle innerDimensions = GetInnerDimensions();
             Vector2 innerPosition = innerDimensions.Position();
             Vector2 innerSize = innerDimensions.Size();
-            if (barMaxPoisition != 0)
-                innerPosition.Y += innerDimensions.Height * (1 - BarHeight) * (BarPosition / barMaxPoisition);
-            innerSize.Y *= BarHeight;
+            if (BarMaxTop != 0)
+                innerPosition.Y += innerDimensions.Height * (1 - BarHeightPercent) * (BarTop / BarMaxTop);
+            innerSize.Y *= BarHeightPercent;
 
             Color hoverColor = Color.Lerp(InnerBg, InnerBgHover, BarDragging ? 1 : HoverTimer.Schedule);
             var round = new Vector4(MathF.Min(innerSize.X, innerSize.Y) * RoundMultiplier);
@@ -228,14 +245,14 @@ namespace ImproveGame.Interface.SUIElements
         }
 
         /// <summary>
-        /// 设置要控制的 UI 的外露大小和内部实际大小
+        /// 设置要控制的 UI 的父元素显示区域高度和内部元素实际高度
         /// </summary>
-        /// <param name="displayHeight">父元素显示高度</param>
+        /// <param name="displayHeight">父元素展示高度</param>
         /// <param name="actualHeight">内部元素实际高度</param>
         public void SetView(float displayHeight, float actualHeight)
         {
             displayHeight = MathHelper.Clamp(displayHeight, 0f, actualHeight);
-            barPosition = MathHelper.Clamp(barPosition, 0f, actualHeight - displayHeight);
+            barTop = MathHelper.Clamp(barTop, 0f, actualHeight - displayHeight);
 
             this.displayHeight = displayHeight;
             this.actualHeight = actualHeight;

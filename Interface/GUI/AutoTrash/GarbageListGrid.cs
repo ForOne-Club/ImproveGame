@@ -51,9 +51,9 @@ public class GarbageListGrid : ScrollView
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        if (Math.Abs(-Scrollbar.BarPosition - ListView.Top.Pixels) > 0.000000001f)
+        if (Math.Abs(-Scrollbar.BarTop - ListView.Top.Pixels) > 0.000000001f)
         {
-            ListView.Top.Pixels = -Scrollbar.BarPosition;
+            ListView.Top.Pixels = -Scrollbar.BarTop;
             ListView.Recalculate();
         }
 

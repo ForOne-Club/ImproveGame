@@ -348,15 +348,15 @@ public class ItemSearcherGUI : ViewBody
         if (!MainPanel.IsMouseHovering)
             return;
         // 下滑: -, 上滑: +
-        Scrollbar.BarPositionBuffer += evt.ScrollWheelValue * 0.4f;
+        Scrollbar.BarTopBuffer += evt.ScrollWheelValue * 0.4f;
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        if (-Scrollbar.BarPosition == ItemsFoundGrid.DatumPoint.Y)
+        if (-Scrollbar.BarTop == ItemsFoundGrid.DatumPoint.Y)
             return;
 
-        ItemsFoundGrid.DatumPoint.Y = -Scrollbar.BarPosition;
+        ItemsFoundGrid.DatumPoint.Y = -Scrollbar.BarTop;
         ItemsFoundGrid.Recalculate();
     }
 

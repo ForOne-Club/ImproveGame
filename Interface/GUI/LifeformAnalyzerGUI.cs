@@ -184,14 +184,14 @@ namespace ImproveGame.Interface.GUI
             float height = UIList.GetInnerDimensions().Height;
             Scrollbar.SetView(height, UIList.GetTotalHeight());
             if (resetViewPosition)
-                Scrollbar.BarPosition = 0f;
+                Scrollbar.BarTop = 0f;
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)
         {
             base.ScrollWheel(evt);
             if (_basePanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
-                Scrollbar.BarPositionBuffer += evt.ScrollWheelValue;
+                Scrollbar.BarTopBuffer += evt.ScrollWheelValue;
         }
         
         public override void LeftClick(UIMouseEvent evt) {
@@ -218,7 +218,7 @@ namespace ImproveGame.Interface.GUI
         {
             if (Scrollbar is not null)
             {
-                UIList._innerList.Top.Set(-Scrollbar.BarPosition, 0);
+                UIList._innerList.Top.Set(-Scrollbar.BarTop, 0);
             }
             UIList.Recalculate();
             

@@ -119,7 +119,7 @@ public class BuffTrackerGUI : ViewBody
         float height = BuffList.GetInnerDimensions().Height;
         Scrollbar.SetView(height, BuffList.ListHeight);
         if (resetViewPosition)
-            Scrollbar.BarPosition = 0f;
+            Scrollbar.BarTop = 0f;
     }
 
     public void SetupBuffButtons()
@@ -157,7 +157,7 @@ public class BuffTrackerGUI : ViewBody
     {
         base.ScrollWheel(evt);
         if (MainPanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
-            Scrollbar.BarPositionBuffer += evt.ScrollWheelValue;
+            Scrollbar.BarTopBuffer += evt.ScrollWheelValue;
     }
 
     public override void DrawChildren(SpriteBatch spriteBatch)
@@ -174,7 +174,7 @@ public class BuffTrackerGUI : ViewBody
     {
         if (Scrollbar is not null)
         {
-            BuffList._innerList.Top.Set(-Scrollbar.BarPosition, 0);
+            BuffList._innerList.Top.Set(-Scrollbar.BarTop, 0);
         }
 
         BuffList.Recalculate();
