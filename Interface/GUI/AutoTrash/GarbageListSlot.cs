@@ -22,7 +22,7 @@ public class GarbageListSlot : BaseItemSlot
         }
     }
 
-    public readonly Texture2D textureTrash;
+    public Texture2D TrashTexture { get; protected set; }
 
     public GarbageListSlot(List<Item> items, int index)
     {
@@ -32,7 +32,9 @@ public class GarbageListSlot : BaseItemSlot
         SetSizePixels(44, 44);
         ItemIconMaxWidthAndHeight = 32f;
         ItemIconScale = 0.85f;
-        textureTrash = ModAsset.Trash.Value; // GetTexture("UI/AutoTrash/Trash").Value;
+        TrashTexture = ModAsset.TakeOutFromTrash.Value;
+
+        HoverTimer.Close();
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)
@@ -60,16 +62,24 @@ public class GarbageListSlot : BaseItemSlot
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
+        ItemIconMaxWidthAndHeight = 32f * HoverTimer.Lerp(1f, 0.9f);
+        ItemIconOffset = HoverTimer.Lerp(new Vector2(), GetInnerDimensions().Size() * 0.15f);
+        ItemIconOffset.X *= 0;
+        ItemIconResize = HoverTimer.Lerp(new Vector2(), -GetInnerDimensions().Size() * 0.15f);
+
         base.DrawSelf(spriteBatch);
 
-        if (IsMouseHovering)
+        if (HoverTimer.Opening || HoverTimer.Closing || IsMouseHovering)
         {
             Rectangle scissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
             RasterizerState rasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
+
             Main.spriteBatch.End();
+
             spriteBatch.GraphicsDevice.ScissorRectangle = scissorRectangle;
             // 此处设置是为了确实中间在不使用 SpriteBatch 的合批绘制模式的时候 RasterizerState 失效
             spriteBatch.GraphicsDevice.RasterizerState = rasterizerState;
+
             Main.spriteBatch.Begin(0, BlendState.AlphaBlend,
                 SamplerState.LinearClamp, DepthStencilState.Default,
                 rasterizerState, null, Main.UIScaleMatrix);
@@ -77,9 +87,12 @@ public class GarbageListSlot : BaseItemSlot
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensionsSize();
 
-            SDFRectangle.NoBorder(pos + new Vector2(4f), size - new Vector2(8f), new Vector4(8f), HoverTimer.Lerp(Color.Transparent, UIColor.TitleBg2));
-            spriteBatch.Draw(textureTrash, pos + size / 2f, null,
-                HoverTimer.Lerp(Color.Transparent, Color.White), 0f, textureTrash.Size() / 2f, ItemIconScale, 0, 0);
+            Vector2 boxSize = (size - new Vector2(8f)) * HoverTimer.Lerp(0.5f, 1f);
+
+            // SDFRectangle.NoBorder(pos + (size - boxSize) / 2f, boxSize, new Vector4(8f), HoverTimer.Lerp(Color.Transparent, UIColor.TitleBg2 * 0.75f));
+            spriteBatch.Draw(TrashTexture, pos + size / 3f * new Vector2(2, 1), null,
+                HoverTimer.Lerp(Color.Transparent, Color.White), 0f,
+                TrashTexture.Size() / 2f, HoverTimer.Lerp(0.5f, 0.65f), 0, 0);
         }
     }
 }

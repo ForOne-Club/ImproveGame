@@ -22,6 +22,9 @@ public class BaseItemSlot : TimerView
     public float ItemIconMaxWidthAndHeight = 32f;
     public float ItemIconScale = 1f;
 
+    public Vector2 ItemIconOffset;
+    public Vector2 ItemIconResize;
+
     public BaseItemSlot()
     {
         SetSizePixels(52f, 52f);
@@ -53,7 +56,13 @@ public class BaseItemSlot : TimerView
             Main.HoverItem = Item.Clone();
         }
 
-        BigBagItemSlot.DrawItemIcon(Main.spriteBatch, Item, Color.White, GetInnerDimensions(), ItemIconMaxWidthAndHeight, ItemIconScale);
+        var innerDimensions = GetInnerDimensions();
+        innerDimensions.X += ItemIconOffset.X;
+        innerDimensions.Y += ItemIconOffset.Y;
+        innerDimensions.Width += ItemIconResize.X;
+        innerDimensions.Height += ItemIconResize.Y;
+
+        BigBagItemSlot.DrawItemIcon(Main.spriteBatch, Item, Color.White, innerDimensions, ItemIconMaxWidthAndHeight, ItemIconScale);
 
         if (DisplayItemStack && Item.stack > 1)
         {
