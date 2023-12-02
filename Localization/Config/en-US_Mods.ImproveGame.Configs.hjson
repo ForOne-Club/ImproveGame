@@ -606,6 +606,11 @@ ImproveConfigs: {
 			'''
 	}
 
+	IgnoringSleepRestrictions: {
+		Label: "[centeritem:Bed] 无视睡觉限制"
+		Tooltip: 任何情况下，睡觉时间加速的效果都不会被阻断.
+	}
+
 	BedTimeRate: {
 		Label: "[centeritem:Bed] Sleeping Time Rate"
 		Tooltip: Allows you to change how fast time goes while sleeping, 5 times by default.
