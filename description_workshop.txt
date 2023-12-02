@@ -22,10 +22,6 @@
     [*]构造魔杖: 秘银锭(山铜锭)x18 琥珀x8 木材x80 石块x80
 [/list]
 
-[h2]开源仓库 与 更新日志[/h2]
-更新日志: https://github.com/487666123/ImproveGame/blob/1.4.4/ChangeLog.md
-开源链接: https://github.com/487666123/ImproveGame
-
 [h2]功能概要[/h2]
 [b]详细列表请到模组配置或更新日志中查看[/b]
 [olist]
@@ -44,3 +40,15 @@
     [*]BUG & 内容反馈群: 971038831
     [*]联机群：772807227
 [/list]
+
+[h2]开源仓库 与 更新日志[/h2]
+更新日志: https://github.com/487666123/ImproveGame/blob/1.4.4/ChangeLog.md
+开源链接: https://github.com/487666123/ImproveGame
+
+[h2]作者 与 特别鸣谢[/h2]
+贴图: 枫林半叶, 逆风而行的信鸽
+翻译: Lastprismer, Lacewing
+代码: 局长, Cyril, 夜谷紫幽, 合作一号
+特别鸣谢: gardenapple - WMITF
+           ChevyRay - 协程类
+           Tomat - 部分GIF渲染代码
