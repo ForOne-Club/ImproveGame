@@ -43,6 +43,7 @@
 ChevyRay 的协程类也受 MIT 许可，与上面相同。
 TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也受 MIT 许可，与上面相同。
 本模组的自动存钱功能大部分代码来自模组“Auto Piggy Bank”，该模组也受 MIT 许可，与上面相同。
+本模组的StorageCommunicator部分代码来自模组“Magic Storage”，该模组也受 MIT 许可，与上面相同。
 
 附:
 本模组开源链接: https://gitee.com/MyGoold/improve-game (此为原仓库，Github仓库是由原仓库镜像而来)
@@ -50,6 +51,7 @@ WMITF开源链接: https://github.com/gardenappl/WMITF
 ChevyRay的协程类: https://github.com/ChevyRay/Coroutines
 ProjectStarlight.Interchange: https://github.com/ProjectStarlight/ProjectStarlight.Interchange
 Auto Piggy Bank开源链接: https://github.com/diniamo/auto-piggy-bank
+Magic Storage开源链接: https://github.com/blushiemagic/MagicStorage
 
 ## 🤝 跨Mod支持 (Mod.Call)
 

@@ -244,3 +244,17 @@ Dummy: {
 		'''
 	CannotUse: 暂不支持多人模式
 }
+
+StorageCommunicator: {
+	DisplayName: 储存通讯器
+	Tooltip:
+		'''
+		<right>任何储存管理器以连接
+		<left>以打开该通讯器连接到的储存管理器
+		'''
+	NotSet: 未连接至任何储存管理器
+	CurrentlySetTo: 当前连接至 [{0}, {1}] 的储存管理器
+	SetTo: 已连接至 [{0}, {1}] 的储存管理器
+	MissingStorage: 未找到储存管理器
+	Unlocated: 未连接至任何储存管理器，手持该物品右键任何储存管理器以连接
+}

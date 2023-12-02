@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Common.Packets.NetStorager;
+using ImproveGame.Content.Items;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface;
 using ImproveGame.Interface.Common;
@@ -51,7 +52,8 @@ public class ExtremeStoragePlayer : ModPlayer
     public override void PreUpdate()
     {
         if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server || !ExtremeStorageGUI.Visible ||
-            ExtremeStorageGUI.Storage is null)
+            ExtremeStorageGUI.Storage is null ||
+            Main.LocalPlayer.HeldItem.type == ModContent.ItemType<StorageCommunicator>())
             return;
 
         var tileEntity = ExtremeStorageGUI.Storage;

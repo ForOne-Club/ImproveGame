@@ -967,6 +967,23 @@ partial class MyUtils
                 throw new ArgumentOutOfRangeException();
         }
     }
+
+    public static void GetMeterCoords(Point point, out string compassText, out string depthText)
+    {
+        // 原版代码，不多评价
+        int compass = point.X * 2 - Main.maxTilesX;
+        compassText = (compass > 0) ? Language.GetTextValue("GameUI.CompassEast", compass) : ((compass >= 0) ? Language.GetTextValue("GameUI.CompassCenter") : Language.GetTextValue("GameUI.CompassWest", -compass));
+
+        int depthToSurface = (int)(point.Y - Main.worldSurface) * 2;
+        float num23 = Main.maxTilesX / 4200;
+        num23 *= num23;
+        int num24 = 1200;
+        float num25 = (float)((point.Y - (65f + 10f * num23)) / (Main.worldSurface / 5.0));
+        var layer = ((point.Y > (float)((Main.maxTilesY - 204))) ? Language.GetTextValue("GameUI.LayerUnderworld") : ((point.Y > Main.rockLayer + num24 / 2 + 16.0) ? Language.GetTextValue("GameUI.LayerCaverns") : ((depthToSurface > 0) ? Language.GetTextValue("GameUI.LayerUnderground") : ((!(num25 >= 1f)) ? Language.GetTextValue("GameUI.LayerSpace") : Language.GetTextValue("GameUI.LayerSurface")))));
+        depthToSurface = Math.Abs(depthToSurface);
+        string depth = ((depthToSurface != 0) ? Language.GetTextValue("GameUI.Depth", depthToSurface) : Language.GetTextValue("GameUI.DepthLevel"));
+        depthText = depth + " " + layer;
+    }
     
     /// <summary>
     /// 生成一个弹出提示，文字颜色默认为黄色

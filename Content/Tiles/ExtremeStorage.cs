@@ -1,4 +1,5 @@
 using ImproveGame.Common.Packets.NetStorager;
+using ImproveGame.Content.Items;
 using ImproveGame.Interface;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.ExtremeStorage;
@@ -68,6 +69,20 @@ public class ExtremeStorage : TETileBase
         if (!TEExtremeStorage.TryGet(out var storage, origin))
         {
             Mod.Logger.Error("Failed to get TEExtremeStorage");
+            return true;
+        }
+        
+        Player player = Main.LocalPlayer;
+        Item item = player.HeldItem;
+        if (!ServerOpenRequest && !item.IsAir && item.ModItem is StorageCommunicator locator)
+        {
+            locator.Location = origin;
+            if (player.selectedItem == 58)
+                Main.mouseItem = item.Clone();
+
+            GetMeterCoords(origin.ToPoint(), out string compassText, out string depthText);
+
+            Main.NewText(GetText("Items.StorageCommunicator.SetTo", compassText, depthText));
             return true;
         }
 
