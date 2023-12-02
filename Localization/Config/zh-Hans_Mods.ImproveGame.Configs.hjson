@@ -608,7 +608,7 @@ ImproveConfigs: {
 		Tooltip: 设置的值越小从 NPC 购买物品价格越便宜，卖给 NPC 物品价格越高
 	}
 
-	IgnoringSleepRestrictions: {
+	NoSleepRestrictions: {
 		Label: "[centeritem:Bed] 无视睡觉限制"
 		Tooltip: 任何情况下，睡觉时间加速的效果都不会被阻断.
 	}
@@ -640,6 +640,11 @@ ImproveConfigs: {
 	QuickRespawn: {
 		Label: "[centeritem:3232] 无BOSS存活时快速复活"
 		Tooltip: 当场上无任何BOSS或BOSS被击败/脱战时，将复活时间缩短为1.5s
+	}
+
+	NoPylonRestrictions: {
+		Label: "[centeritem:TeleportationPylonPurity] 晶塔传送无视条件"
+		Tooltip: 可无视条件使用晶塔传送，但你仍需站在一个晶塔附近才能传送
 	}
 }
 

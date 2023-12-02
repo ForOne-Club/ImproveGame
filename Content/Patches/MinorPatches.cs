@@ -165,6 +165,17 @@ namespace ImproveGame.Content.Patches
                 a *= opacity;
             }
         }
+        
+        private class NoPylonRestrictions : GlobalPylon
+        {
+            public override void PostValidTeleportCheck(TeleportPylonInfo destinationPylonInfo, TeleportPylonInfo nearbyPylonInfo,
+                ref bool destinationPylonValid, ref bool validNearbyPylonFound, ref string errorKey)
+            {
+                destinationPylonValid |= Config.NoPylonRestrictions;
+                // 下面这条会允许任意地点传送到任意地点，暂不考虑加入
+                // validNearbyPylonFound |= Config.NoPylonRestrictions;
+            }
+        }
 
         #endregion
 
@@ -324,13 +335,13 @@ namespace ImproveGame.Content.Patches
             // 任务鱼可堆叠
             On_Projectile.FishingCheck_ProbeForQuestFish += PatchQuestFishCheck;
             // 是否无视睡觉限制
-            On_PlayerSleepingHelper.DoesPlayerHaveReasonToActUpInBed += IgnoringSleepRestrictions;
+            On_PlayerSleepingHelper.DoesPlayerHaveReasonToActUpInBed += NoSleepRestrictions;
         }
 
-        private bool IgnoringSleepRestrictions(On_PlayerSleepingHelper.orig_DoesPlayerHaveReasonToActUpInBed orig, ref PlayerSleepingHelper self, Player player)
+        private bool NoSleepRestrictions(On_PlayerSleepingHelper.orig_DoesPlayerHaveReasonToActUpInBed orig, ref PlayerSleepingHelper self, Player player)
         {
             // 谁也无法阻止我睡觉！不管是Boss还是事件！
-            if (Config.IgnoringSleepRestrictions) return false;
+            if (Config.NoSleepRestrictions) return false;
             else return orig(ref self, player);
         }
 
