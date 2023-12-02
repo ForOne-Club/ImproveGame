@@ -812,6 +812,11 @@ UIConfigs: {
 		Tooltip: 在地图上显示的已标记的{$MapObject.PlanterasBulb}的图标的大小，设为0以隐藏图标
 	}
 
+	MarkEnchantedSword: {
+		Label: "[centeritem:ImproveGame/EnchantedSwordGlobe] 附魔剑图标大小"
+		Tooltip: 在地图上显示的已标记的{$ItemName.EnchantedSword}的图标的大小，设为0以隐藏图标
+	}
+
 	MarkEmptyAutofisher: {
 		Label: "[centeritem:ImproveGame/Autofisher] 缺少鱼饵的钓鱼机图标大小"
 		Tooltip: 在地图上显示的所有缺少鱼饵的钓鱼机的图标的大小，设为0以隐藏图标

@@ -186,7 +186,8 @@ GlobeBase: {
 		'''
 	AlreadyRevealed: "{0} has already been marked"
 	Reveal: "{1} marked up {0} on the map."
-	RevealPlantera: "{0} marked up {NPCName.Plantera} on the map."
+	RevealPlantera: "{0} marked up {$NPCName.Plantera} on the map."
+	RevealEnchantedSword: "{0} marked up {$ItemName.EnchantedSword} on the map."
 	NotFound: Data of {0} is not present, it's likely that QoT v1.6.6+ was not enabled during world creation
 }
 
@@ -200,8 +201,9 @@ PyramidGlobe: {
 }
 
 TempleGlobe.BiomeName: Jungle Temple
-# 在世界上没有花苞或花苞全部标记完了的情况下显示
-PlanteraGlobe.NotFound: Couldn't find more {$MapObject.PlanterasBulb}.
+# 在世界上没有花苞或花苞全部标记完了的情况下显示，附魔剑的文本亦是如此
+PlanteraGlobe.NotFound: Couldn't find more {$MapObject.PlanterasBulb}
+EnchantedSwordGlobe.NotFound: Couldn't find more Enchanted Sword in Stone
 
 DetectorDrone: {
 	Tooltip:

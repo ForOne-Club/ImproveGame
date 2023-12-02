@@ -130,5 +130,11 @@ public class UIConfigs : ModConfig
     [Increment(0.1f)]
     [Range(0f, 1.5f)]
     [Slider]
+    public float MarkEnchantedSword;
+
+    [DefaultValue(0.8f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
     public float MarkEmptyAutofisher;
 }

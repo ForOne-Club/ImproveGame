@@ -13,73 +13,75 @@ public class IndicatorMapLayer : ModMapLayer
 {
     public override void Draw(ref MapOverlayDrawContext context, ref string text)
     {
-        if (!Config.MinimapMark) return;
-
-        // 地牢
-        ProcessStructure(ref context, ref text, StructureDatas.DungeonUnlocked, StructureDatas.DungeonPosition,
-            UIConfigs.Instance.MarkDungeon, "Bestiary_Biomes.TheDungeon", new SpriteFrame(8, 1, 6, 0));
-
-        // 微光
-        ProcessStructure(ref context, ref text, StructureDatas.ShimmerUnlocked, StructureDatas.ShimmerPosition,
-            UIConfigs.Instance.MarkAether, "Mods.ImproveGame.UI.MapLayer.TheAether", new SpriteFrame(8, 1, 2, 0));
-
-        // 神庙
-        ProcessStructure(ref context, ref text, StructureDatas.TempleUnlocked, StructureDatas.TemplePosition,
-            UIConfigs.Instance.MarkTemple, "Bestiary_Biomes.TheTemple", new SpriteFrame(8, 1, 4, 0));
-
-        // 金字塔
-        ProcessStructureWithMultiplePositions(ref context, ref text, StructureDatas.PyramidsUnlocked,
-            StructureDatas.PyramidPositions, UIConfigs.Instance.MarkPyramid, "Mods.ImproveGame.UI.MapLayer.Pyramid",
-            new SpriteFrame(8, 1, 1, 0));
-
-        // 空岛
-        ProcessStructureWithMultiplePositions(ref context, ref text, StructureDatas.FloatingIslandsUnlocked,
-            StructureDatas.SkyHousePositions, UIConfigs.Instance.MarkFloatingIsland,
-            "Mods.ImproveGame.UI.MapLayer.FloatingIsland", new SpriteFrame(8, 1, 5, 0));
-        ProcessStructureWithMultiplePositions(ref context, ref text, StructureDatas.FloatingIslandsUnlocked,
-            StructureDatas.SkyLakePositions, UIConfigs.Instance.MarkFloatingIsland,
-            "Mods.ImproveGame.UI.MapLayer.FloatingLake", new SpriteFrame(8, 1, 0, 0));
-
-        // 世纪之花
-        ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.PlanteraPositions,
-            UIConfigs.Instance.MarkPlantera, "MapObject.PlanterasBulb", new SpriteFrame(8, 1, 3, 0));
+        byte columns = 8; // 列数
+        byte rows = 2; // 行数
 
         // 空钓鱼机
         ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.BaitlessAutofisherPositions,
             UIConfigs.Instance.MarkEmptyAutofisher, "Mods.ImproveGame.UI.MapLayer.EmptyAutofisher",
-            new SpriteFrame(8, 1, 7, 0), new Point16(1, 1));
+            new SpriteFrame(columns, rows, 0, 1), new Vector2(1f, 1f));
+
+        // 定位球系列图标
+        if (!Config.MinimapMark) return;
+
+        // 地牢
+        ProcessStructure(ref context, ref text, StructureDatas.DungeonUnlocked, StructureDatas.DungeonPosition,
+            UIConfigs.Instance.MarkDungeon, "Bestiary_Biomes.TheDungeon", new SpriteFrame(columns, rows, 6, 0));
+
+        // 微光
+        ProcessStructure(ref context, ref text, StructureDatas.ShimmerUnlocked, StructureDatas.ShimmerPosition,
+            UIConfigs.Instance.MarkAether, "Mods.ImproveGame.UI.MapLayer.TheAether",
+            new SpriteFrame(columns, rows, 2, 0));
+
+        // 神庙
+        ProcessStructure(ref context, ref text, StructureDatas.TempleUnlocked, StructureDatas.TemplePosition,
+            UIConfigs.Instance.MarkTemple, "Bestiary_Biomes.TheTemple", new SpriteFrame(columns, rows, 4, 0));
+
+        // 金字塔
+        ProcessStructureWithMultiplePositions(ref context, ref text, StructureDatas.PyramidsUnlocked,
+            StructureDatas.PyramidPositions, UIConfigs.Instance.MarkPyramid, "Mods.ImproveGame.UI.MapLayer.Pyramid",
+            new SpriteFrame(columns, rows, 1, 0));
+
+        // 空岛
+        ProcessStructureWithMultiplePositions(ref context, ref text, StructureDatas.FloatingIslandsUnlocked,
+            StructureDatas.SkyHousePositions, UIConfigs.Instance.MarkFloatingIsland,
+            "Mods.ImproveGame.UI.MapLayer.FloatingIsland", new SpriteFrame(columns, rows, 5, 0));
+        ProcessStructureWithMultiplePositions(ref context, ref text, StructureDatas.FloatingIslandsUnlocked,
+            StructureDatas.SkyLakePositions, UIConfigs.Instance.MarkFloatingIsland,
+            "Mods.ImproveGame.UI.MapLayer.FloatingLake", new SpriteFrame(columns, rows, 0, 0));
+
+        // 世纪之花
+        ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.PlanteraPositions,
+            UIConfigs.Instance.MarkPlantera, "MapObject.PlanterasBulb", new SpriteFrame(columns, rows, 3, 0));
+
+        // 附魔剑
+        ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.EnchantedSwordPositions,
+            UIConfigs.Instance.MarkEnchantedSword, "ItemName.EnchantedSword", new SpriteFrame(columns, rows, 7, 0),
+            new Vector2(1.5f, 1f));
     }
 
     private void ProcessStructure(ref MapOverlayDrawContext context, ref string text, bool isUnlocked, Point16 position,
         float mark, string overlayName, SpriteFrame frame)
     {
         if (!isUnlocked || mark <= 0f) return;
-        DrawIcon(ref context, ref text, position, frame, overlayName, mark);
+        DrawIcon(ref context, ref text, position.ToVector2(), frame, overlayName, mark);
     }
 
     private void ProcessStructureWithMultiplePositions(ref MapOverlayDrawContext context, ref string text,
         bool isUnlocked, IEnumerable<Point16> positions, float mark, string overlayName, SpriteFrame frame,
-        Point16 positionOffset = default)
+        Vector2 positionOffset = default)
     {
         if (!isUnlocked || mark <= 0f) return;
         foreach (Point16 position in positions)
         {
-            DrawIcon(ref context, ref text, position + positionOffset, frame, overlayName, mark);
+            DrawIcon(ref context, ref text, position.ToVector2() + positionOffset, frame, overlayName, mark);
         }
     }
 
-    private MapOverlayDrawContext.DrawResult DrawIcon(ref MapOverlayDrawContext context, ref string text,
-        Point16 position, SpriteFrame frame, string hoverTextKey, float scale) =>
-        DrawIcon(ref context, ref text, position.ToVector2(), frame, hoverTextKey, scale);
-
-    private MapOverlayDrawContext.DrawResult DrawIcon(ref MapOverlayDrawContext context, ref string text,
-        float x, float y, SpriteFrame frame, string hoverTextKey, float scale) =>
-        DrawIcon(ref context, ref text, new Vector2(x, y), frame, hoverTextKey, scale);
-
-    private MapOverlayDrawContext.DrawResult DrawIcon(ref MapOverlayDrawContext context, ref string text,
-        Vector2 position, SpriteFrame frame, string hoverTextKey, float scale)
+    private void DrawIcon(ref MapOverlayDrawContext context, ref string text, Vector2 position, SpriteFrame frame,
+        string hoverTextKey, float scale)
     {
-        if (position == Vector2.Zero) return default;
+        if (position == Vector2.Zero) return;
 
         var tex = ModAsset.MinimapIcons.Value;
         var drawResult = context.Draw(tex, position, Color.White, frame, scale, scale, Alignment.Center);
@@ -87,8 +89,6 @@ public class IndicatorMapLayer : ModMapLayer
         {
             text = Language.GetTextValue(hoverTextKey);
         }
-
-        return drawResult;
     }
 }
 
@@ -118,6 +118,7 @@ public class StructureDatas : ModSystem
     public static List<Point16> SkyHousePositions { get; set; }
     public static List<Point16> SkyLakePositions { get; set; }
     public static List<Point16> PlanteraPositions { get; set; }
+    public static List<Point16> EnchantedSwordPositions { get; set; }
     public static List<Point16> BaitlessAutofisherPositions { get; set; }
 
     public override void PostUpdateWorld()
@@ -127,6 +128,21 @@ public class StructureDatas : ModSystem
 
         DungeonPosition = new Point16(Main.dungeonX, Main.dungeonY - 6);
 
+        ValidatePlanteraPositions();
+        ValidateEnchantedSwordPositions();
+
+        BaitlessAutofisherPositions ??= new List<Point16>();
+        var existingBaitlessAutofishers = TileEntity.ByID
+            .Where(pair => pair.Value is TEAutofisher {HasBait: false})
+            .Select(pair => pair.Value.Position)
+            .ToList();
+        // 内置单人支持
+        if (!existingBaitlessAutofishers.SequenceEqual(BaitlessAutofisherPositions))
+            BaitlessAutofisherSyncPacket.Sync(existingBaitlessAutofishers);
+    }
+
+    private void ValidatePlanteraPositions()
+    {
         int elementsRemoved = PlanteraPositions.RemoveAll(coords =>
         {
             if (!WorldGen.InWorld(coords.X, coords.Y, 10))
@@ -139,15 +155,22 @@ public class StructureDatas : ModSystem
 
         if (Main.netMode is NetmodeID.Server && elementsRemoved > 0)
             PlanteraPositionsPacket.Sync();
+    }
 
-        BaitlessAutofisherPositions ??= new List<Point16>();
-        var existingBaitlessAutofishers = TileEntity.ByID
-            .Where(pair => pair.Value is TEAutofisher {HasBait: false})
-            .Select(pair => pair.Value.Position)
-            .ToList();
-        // 内置单人支持
-        if (!existingBaitlessAutofishers.SequenceEqual(BaitlessAutofisherPositions))
-            BaitlessAutofisherSyncPacket.Sync(existingBaitlessAutofishers);
+    private void ValidateEnchantedSwordPositions()
+    {
+        int elementsRemoved = EnchantedSwordPositions.RemoveAll(coords =>
+        {
+            if (!WorldGen.InWorld(coords.X, coords.Y, 10))
+                return true;
+
+            var tile = Main.tile[coords.ToPoint()];
+            return !tile.HasTile || tile.TileType is not TileID.LargePiles2 ||
+                   tile.TileFrameX is not 918 || tile.TileFrameY is not 0;
+        });
+
+        if (Main.netMode is NetmodeID.Server && elementsRemoved > 0)
+            EnchantedSwordPositionsPacket.Sync();
     }
 
     public override void Load()
@@ -200,6 +223,7 @@ public class StructureDatas : ModSystem
         SkyHousePositions = new List<Point16>();
         SkyLakePositions = new List<Point16>();
         PlanteraPositions = new List<Point16>();
+        EnchantedSwordPositions = new List<Point16>();
         BaitlessAutofisherPositions = new List<Point16>();
     }
 
@@ -212,6 +236,7 @@ public class StructureDatas : ModSystem
         tag["skyHouses"] = SkyHousePositions;
         tag["skyLakes"] = SkyLakePositions;
         tag["planteras"] = PlanteraPositions;
+        tag["swords"] = EnchantedSwordPositions;
     }
 
     public override void LoadWorldData(TagCompound tag)
@@ -223,6 +248,7 @@ public class StructureDatas : ModSystem
         SkyHousePositions = tag.Get<List<Point16>>("skyHouses");
         SkyLakePositions = tag.Get<List<Point16>>("skyLakes");
         PlanteraPositions = tag.Get<List<Point16>>("planteras");
+        EnchantedSwordPositions = tag.Get<List<Point16>>("swords");
     }
 
     public override void NetSend(BinaryWriter writer)
@@ -236,6 +262,7 @@ public class StructureDatas : ModSystem
         writer.Write(SkyHousePositions);
         writer.Write(SkyLakePositions);
         writer.Write(PlanteraPositions);
+        writer.Write(EnchantedSwordPositions);
         writer.Write(BaitlessAutofisherPositions);
     }
 
@@ -249,6 +276,7 @@ public class StructureDatas : ModSystem
         SkyHousePositions = reader.ReadPoint16List().ToList();
         SkyLakePositions = reader.ReadPoint16List().ToList();
         PlanteraPositions = reader.ReadPoint16List().ToList();
+        EnchantedSwordPositions = reader.ReadPoint16List().ToList();
         BaitlessAutofisherPositions = reader.ReadPoint16List().ToList();
     }
 }
