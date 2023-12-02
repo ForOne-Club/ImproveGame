@@ -19,6 +19,7 @@ public class FukMeCalamityElement : PresetElement
         config.ExtraToolSpeed = 0.5f;
         config.ModifyPlayerPlaceSpeed = true;
         config.PortableCraftingStation = true;
+        config.NoPlace_BUFFTile = true;
         config.NoPlace_BUFFTile_Banner = true;
         config.NoConsume_Potion = true;
         config.NoConsume_Ammo = true;
@@ -79,16 +80,17 @@ public class ILoveBalanceElement : PresetElement
         config.ExtraToolSpeed = 0.125f;
         config.ModifyPlayerPlaceSpeed = true;
         config.PortableCraftingStation = true;
+        config.NoPlace_BUFFTile = true;
         config.NoPlace_BUFFTile_Banner = false;
         config.NoConsume_Potion = false;
         config.NoConsume_Ammo = true;
-        config.ImprovePrefix = false;
+        config.ImprovePrefix = true;
         config.MiddleEnableBank = true;
         config.FasterExtractinator = true;
         config.TownNPCHome = true;
         config.TownNPCGetTFIntoHouse = false;
         config.NPCLiveInEvil = true;
-        config.TownNPCSpawnSpeed = -1;
+        config.TownNPCSpawnSpeed = 1;
         config.NoCD_FishermanQuest = true;
         config.NPCCoinDropRate = 1;
         config.ModifyNPCHappiness = false;
@@ -123,6 +125,78 @@ public class ILoveBalanceElement : PresetElement
         config.MinimapMark = true;
         config.BedOnlyOne = false;
         config.QuestFishStack = true;
+    }
+}
+
+public class AllOffElement : PresetElement
+{
+    protected override void SetPreset(ImproveConfigs config)
+    {
+        config.SuperVoidVault = false;
+        config.SmartVoidVault = false;
+        config.SuperVault = false;
+        config.ItemMaxStack = 9999;
+        config.GrabDistance = 0;
+        config.NoConsume_SummonItem = false;
+        config.ExtraToolSpeed = 0f;
+        config.ModifyPlayerPlaceSpeed = false;
+        config.ModifyPlayerTileRange = 0;
+        config.PortableCraftingStation = false;
+        config.NoPlace_BUFFTile = false;
+        config.NoPlace_BUFFTile_Banner = false;
+        config.NoConsume_Potion = false;
+        config.NoConsume_Ammo = false;
+        config.ImprovePrefix = false;
+        config.MiddleEnableBank = false;
+        config.FasterExtractinator = false;
+        config.TownNPCHome = false;
+        config.TownNPCGetTFIntoHouse = false;
+        config.NPCLiveInEvil = false;
+        config.TownNPCSpawnSpeed = 1;
+        config.NoCD_FishermanQuest = false;
+        config.NPCCoinDropRate = 1;
+        config.ModifyNPCHappiness = false;
+        config.NPCHappiness = 100;
+        config.SlimeExDrop = false;
+        config.LavalessLavaSlime = false;
+        config.TravellingMerchantStay = false;
+        config.TravellingMerchantRefresh = false;
+        config.BestiaryQuickUnlock = false;
+        config.AlchemyGrassGrowsFaster = false;
+        config.AlchemyGrassAlwaysBlooms = false;
+        config.StaffOfRegenerationAutomaticPlanting = false;
+        config.NoBiomeSpread = false;
+        config.RespawnWithFullHP = false;
+        config.DontDeleteBuff = false;
+        config.ExtraPlayerBuffSlots = 0;
+        config.TreeGrowFaster = false;
+        config.ShakeTreeFruit = false;
+        config.GemTreeAlwaysDropGem = false;
+        config.NoLakeSizePenalty = false;
+        config.MostTreeMin = 10;
+        config.MostTreeMax = 20;
+        config.PalmTreeMin = 10;
+        config.PalmTreeMax = 20;
+        config.GemTreeMin = 7;
+        config.GemTreeMax = 12;
+        config.BedTimeRate = 10;
+        config.BedEverywhere = false;
+        config.NoSleepRestrictions = false;
+        config.NoPylonRestrictions = false;
+        config.BedTimeRate = 5;
+        config.WandMaterialNoConsume = false;
+        config.MinimapMark = false;
+        config.BedOnlyOne = false;
+        config.QuestFishStack = false;
+        config.RedPotionEverywhere = false;
+        config.InfiniteRedPotion = false;
+        config.QuickNurse = false;
+        config.QuickRespawn = false;
+        config.ResurrectionTimeShortened = 0;
+        config.BOSSBattleResurrectionTimeShortened = 0;
+        config.BanTombstone = false;
+        config.LongerExpertDebuff = true;
+        config.TeamAutoJoin = false;
     }
 }
 

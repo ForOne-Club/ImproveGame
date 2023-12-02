@@ -646,6 +646,11 @@ ImproveConfigs: {
 		Label: "[centeritem:TeleportationPylonPurity] 晶塔传送无视条件"
 		Tooltip: 可无视条件使用晶塔传送，但你仍需站在一个晶塔附近才能传送
 	}
+
+	AllOff: {
+		Label: 全给我关掉
+		Tooltip: 将（几乎）所有配置还原到原版状态，还你一个原汁原味的泰拉瑞亚体验
+	}
 }
 
 ModItemLoadPage: {

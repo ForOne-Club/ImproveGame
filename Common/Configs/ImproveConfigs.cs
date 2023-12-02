@@ -38,6 +38,9 @@ namespace ImproveGame.Common.Configs
         [CustomModConfigItem(typeof(FukMeCalamityElement))]
         public object FukMeCalamity;
 
+        [CustomModConfigItem(typeof(AllOffElement))]
+        public object AllOff;
+
         #endregion
 
         #region 物品设置
