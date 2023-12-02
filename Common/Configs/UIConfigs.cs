@@ -90,24 +90,45 @@ public class UIConfigs : ModConfig
     public bool MagicMirrorInstantTp;
 
     [Header("MinimapHeader")]
-    [DefaultValue(true)]
-    public bool MarkDungeon;
+    [DefaultValue(1f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    public float MarkDungeon;
 
-    [DefaultValue(true)]
-    public bool MarkTemple;
+    [DefaultValue(1f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    public float MarkTemple;
 
-    [DefaultValue(true)]
-    public bool MarkAether;
+    [DefaultValue(1f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    public float MarkAether;
 
-    [DefaultValue(true)]
-    public bool MarkFloatingIsland;
+    [DefaultValue(0.9f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    public float MarkFloatingIsland;
 
-    [DefaultValue(true)]
-    public bool MarkPyramid;
+    [DefaultValue(1f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    public float MarkPyramid;
 
-    [DefaultValue(true)]
-    public bool MarkPlantera;
+    [DefaultValue(0.8f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    public float MarkPlantera;
 
-    [DefaultValue(true)]
-    public bool MarkEmptyAutofisher;
+    [DefaultValue(0.8f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    public float MarkEmptyAutofisher;
 }

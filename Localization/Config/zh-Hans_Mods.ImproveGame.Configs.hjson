@@ -785,38 +785,38 @@ UIConfigs: {
 	}
 
 	MarkFloatingIsland: {
-		Tooltip: 在地图上显示已标记的空岛
-		Label: "[centeritem:ImproveGame/FloatingIslandGlobe] 空岛"
+		Tooltip: 在地图上显示的已标记的空岛的图标的大小，设为0以隐藏图标
+		Label: "[centeritem:ImproveGame/FloatingIslandGlobe] 空岛图标大小"
 	}
 
 	MarkAether: {
-		Tooltip: 在地图上显示已标记的以太
-		Label: "[centeritem:ImproveGame/AetherGlobe] 以太"
+		Tooltip: 在地图上显示的已标记的以太的图标的大小，设为0以隐藏图标
+		Label: "[centeritem:ImproveGame/AetherGlobe] 以太图标大小"
 	}
 
 	MarkTemple: {
-		Tooltip: 在地图上显示已标记的神庙
-		Label: "[centeritem:ImproveGame/TempleGlobe] 神庙"
+		Tooltip: 在地图上显示的已标记的神庙的图标的大小，设为0以隐藏图标
+		Label: "[centeritem:ImproveGame/TempleGlobe] 神庙图标大小"
 	}
 
 	MarkDungeon: {
-		Tooltip: 在地图上显示已标记的地牢
-		Label: "[centeritem:ImproveGame/DungeonGlobe] 地牢"
+		Tooltip: 在地图上显示的已标记的地牢的图标的大小，设为0以隐藏图标
+		Label: "[centeritem:ImproveGame/DungeonGlobe] 地牢图标大小"
 	}
 
 	MarkPyramid: {
-		Label: "[centeritem:ImproveGame/PyramidGlobe] 金字塔"
-		Tooltip: 在地图上显示已标记的金字塔
+		Label: "[centeritem:ImproveGame/PyramidGlobe] 金字塔图标大小"
+		Tooltip: 在地图上显示的已标记的金字塔的图标的大小，设为0以隐藏图标
 	}
 
 	MarkPlantera: {
-		Label: "[centeritem:ImproveGame/PlanteraGlobe] 世纪之花"
-		Tooltip: 在地图上显示已标记的{$MapObject.PlanterasBulb}
+		Label: "[centeritem:ImproveGame/PlanteraGlobe] 世纪之花图标大小"
+		Tooltip: 在地图上显示的已标记的{$MapObject.PlanterasBulb}的图标的大小，设为0以隐藏图标
 	}
 
 	MarkEmptyAutofisher: {
-		Label: "[centeritem:ImproveGame/Autofisher] 缺少鱼饵的钓鱼机"
-		Tooltip: 在地图上显示所有缺少鱼饵的钓鱼机
+		Label: "[centeritem:ImproveGame/Autofisher] 缺少鱼饵的钓鱼机图标大小"
+		Tooltip: 在地图上显示的所有缺少鱼饵的钓鱼机的图标的大小，设为0以隐藏图标
 	}
 
 	SuicideButton: {
