@@ -1,8 +1,8 @@
 ModName: Quality of Terraria
 
 Tiles: {
-	Autofisher.MapEntry: "{$Mods.ImproveGame.ItemName.Autofisher}"
-	ExtremeStorage.MapEntry: "{$Mods.ImproveGame.ItemName.ExtremeStorage}"
+	Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
+	ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
 }
 
 ItemDropRule.WandDrop: Won't drop if the player already has one in the inventory

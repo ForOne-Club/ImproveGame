@@ -107,4 +107,7 @@ public class UIConfigs : ModConfig
 
     [DefaultValue(true)]
     public bool MarkPlantera;
+
+    [DefaultValue(true)]
+    public bool MarkEmptyAutofisher;
 }

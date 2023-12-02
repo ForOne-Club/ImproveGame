@@ -785,33 +785,38 @@ UIConfigs: {
 	}
 
 	MarkFloatingIsland: {
-		Tooltip: 开启后，将会在地图上显示已标记的空岛位置
-		Label: "[centeritem:ImproveGame/FloatingIslandGlobe] 标记空岛"
+		Tooltip: 在地图上显示已标记的空岛
+		Label: "[centeritem:ImproveGame/FloatingIslandGlobe] 空岛"
 	}
 
 	MarkAether: {
-		Tooltip: 开启后，将会在地图上显示已标记的以太位置
-		Label: "[centeritem:ImproveGame/AetherGlobe] 标记以太"
+		Tooltip: 在地图上显示已标记的以太
+		Label: "[centeritem:ImproveGame/AetherGlobe] 以太"
 	}
 
 	MarkTemple: {
-		Tooltip: 开启后，将会在地图上显示已标记的神庙位置
-		Label: "[centeritem:ImproveGame/TempleGlobe] 标记神庙"
+		Tooltip: 在地图上显示已标记的神庙
+		Label: "[centeritem:ImproveGame/TempleGlobe] 神庙"
 	}
 
 	MarkDungeon: {
-		Tooltip: 开启后，将会在地图上显示已标记的地牢位置
-		Label: "[centeritem:ImproveGame/DungeonGlobe] 标记地牢"
+		Tooltip: 在地图上显示已标记的地牢
+		Label: "[centeritem:ImproveGame/DungeonGlobe] 地牢"
 	}
 
 	MarkPyramid: {
-		Label: "[centeritem:ImproveGame/PyramidGlobe] 标记金字塔"
-		Tooltip: 开启后，将会在地图上显示已标记的金字塔位置
+		Label: "[centeritem:ImproveGame/PyramidGlobe] 金字塔"
+		Tooltip: 在地图上显示已标记的金字塔
 	}
 
 	MarkPlantera: {
-		Label: "[centeritem:ImproveGame/PlanteraGlobe] 标记世纪之花"
-		Tooltip: 开启后，将会在地图上显示已标记的{$MapObject.PlanterasBulb}位置
+		Label: "[centeritem:ImproveGame/PlanteraGlobe] 世纪之花"
+		Tooltip: 在地图上显示已标记的{$MapObject.PlanterasBulb}
+	}
+
+	MarkEmptyAutofisher: {
+		Label: "[centeritem:ImproveGame/Autofisher] 缺少鱼饵的钓鱼机"
+		Tooltip: 在地图上显示所有缺少鱼饵的钓鱼机
 	}
 
 	SuicideButton: {

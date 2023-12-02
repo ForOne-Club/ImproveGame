@@ -258,6 +258,7 @@ MapLayer: {
 	Pyramid: Pyramid
 	FloatingIsland: Floating Island
 	FloatingLake: Floating Lake
+	EmptyAutofisher: 自动钓鱼机（无鱼饵）
 }
 
 ThemePreview.Title: Theme Preview

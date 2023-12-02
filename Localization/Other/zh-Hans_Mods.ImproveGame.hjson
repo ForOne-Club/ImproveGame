@@ -1,8 +1,8 @@
 ModName: 更好的体验
 
 Tiles: {
-	// Autofisher.MapEntry: "{$Mods.ImproveGame.ItemName.Autofisher}"
-	// ExtremeStorage.MapEntry: "{$Mods.ImproveGame.ItemName.ExtremeStorage}"
+	// Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
+	// ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
 }
 
 ItemDropRule.WandDrop: 玩家拥有当前物品时不会再次掉落

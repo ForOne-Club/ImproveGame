@@ -249,6 +249,7 @@ MapLayer: {
 	Pyramid: 金字塔
 	FloatingIsland: 空岛
 	FloatingLake: 天湖
+	EmptyAutofisher: 自动钓鱼机（无鱼饵）
 }
 
 ThemePreview.Title: 主题预览

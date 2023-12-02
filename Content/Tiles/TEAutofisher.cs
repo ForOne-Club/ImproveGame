@@ -33,6 +33,8 @@ namespace ImproveGame.Content.Tiles
         public bool CatchNormalCatches = true;
 
         public bool IsEmpty => accessory.IsAir && bait.IsAir && fishingPole.IsAir && (fish is null || fish.All(item => item.IsAir));
+        
+        public bool HasBait => !bait.IsAir;
 
         public override bool IsTileValidForEntity(int x, int y)
         {
@@ -463,7 +465,7 @@ namespace ImproveGame.Content.Tiles
 
         private bool TryConsumeBait(Player player)
         {
-            bool canCunsume = false;
+            bool canConsume = false;
             float chanceDenominator = 1f + bait.bait / 6f;
             if (chanceDenominator < 1f)
                 chanceDenominator = 1f;
@@ -474,12 +476,12 @@ namespace ImproveGame.Content.Tiles
             chanceDenominator *= 5f;
 
             if (Main.rand.NextFloat() * chanceDenominator < 1f)
-                canCunsume = true;
+                canConsume = true;
 
             if (bait.type == ItemID.TruffleWorm)
-                canCunsume = true;
+                canConsume = true;
 
-            if (CombinedHooks.CanConsumeBait(player, bait) ?? canCunsume)
+            if (CombinedHooks.CanConsumeBait(player, bait) ?? canConsume)
             {
                 if (bait.type == ItemID.LadyBug || bait.type == ItemID.GoldLadyBug)
                     NPC.LadyBugKilled(Position.ToWorldCoordinates(), bait.type == ItemID.GoldLadyBug);

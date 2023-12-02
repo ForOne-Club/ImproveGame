@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets.WorldFeatures;
+using ImproveGame.Content.Tiles;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.Map;
@@ -15,35 +16,40 @@ public class IndicatorMapLayer : ModMapLayer
         if (!Config.MinimapMark) return;
 
         if (StructureDatas.DungeonUnlocked && UIConfigs.Instance.MarkDungeon)
-            DrawIcon(ref context, ref text, StructureDatas.DungeonPosition, new SpriteFrame(7, 1, 6, 0),
+            DrawIcon(ref context, ref text, StructureDatas.DungeonPosition, new SpriteFrame(8, 1, 6, 0),
                 "Bestiary_Biomes.TheDungeon");
         if (StructureDatas.ShimmerUnlocked && UIConfigs.Instance.MarkAether)
-            DrawIcon(ref context, ref text, StructureDatas.ShimmerPosition, new SpriteFrame(7, 1, 2, 0),
+            DrawIcon(ref context, ref text, StructureDatas.ShimmerPosition, new SpriteFrame(8, 1, 2, 0),
                 "Mods.ImproveGame.UI.MapLayer.TheAether");
         if (StructureDatas.TempleUnlocked && UIConfigs.Instance.MarkTemple)
-            DrawIcon(ref context, ref text, StructureDatas.TemplePosition, new SpriteFrame(7, 1, 4, 0),
+            DrawIcon(ref context, ref text, StructureDatas.TemplePosition, new SpriteFrame(8, 1, 4, 0),
                 "Bestiary_Biomes.TheTemple");
 
         if (StructureDatas.PyramidsUnlocked && UIConfigs.Instance.MarkPyramid)
             foreach (Point16 pyramidPosition in StructureDatas.PyramidPositions)
-                DrawIcon(ref context, ref text, pyramidPosition, new SpriteFrame(7, 1, 1, 0),
+                DrawIcon(ref context, ref text, pyramidPosition, new SpriteFrame(8, 1, 1, 0),
                     "Mods.ImproveGame.UI.MapLayer.Pyramid");
 
         if (StructureDatas.FloatingIslandsUnlocked && UIConfigs.Instance.MarkFloatingIsland)
         {
             foreach (Point16 skylandPosition in StructureDatas.SkyHousePositions)
-                DrawIcon(ref context, ref text, skylandPosition, new SpriteFrame(7, 1, 5, 0),
+                DrawIcon(ref context, ref text, skylandPosition, new SpriteFrame(8, 1, 5, 0),
                     "Mods.ImproveGame.UI.MapLayer.FloatingIsland");
 
             foreach (Point16 skylandPosition in StructureDatas.SkyLakePositions)
-                DrawIcon(ref context, ref text, skylandPosition, new SpriteFrame(7, 1, 0, 0),
+                DrawIcon(ref context, ref text, skylandPosition, new SpriteFrame(8, 1, 0, 0),
                     "Mods.ImproveGame.UI.MapLayer.FloatingLake");
         }
 
         if (UIConfigs.Instance.MarkPlantera)
             foreach (Point16 planteraPosition in StructureDatas.PlanteraPositions)
-                DrawIcon(ref context, ref text, planteraPosition.X, planteraPosition.Y, new SpriteFrame(7, 1, 3, 0),
+                DrawIcon(ref context, ref text, planteraPosition.X, planteraPosition.Y, new SpriteFrame(8, 1, 3, 0),
                     "MapObject.PlanterasBulb");
+
+        if (UIConfigs.Instance.MarkEmptyAutofisher)
+            foreach (Point16 autofisherPosition in StructureDatas.BaitlessAutofisherPositions)
+                DrawIcon(ref context, ref text, autofisherPosition + new Point16(1, 1), new SpriteFrame(8, 1, 7, 0),
+                    "Mods.ImproveGame.UI.MapLayer.EmptyAutofisher");
     }
 
     private MapOverlayDrawContext.DrawResult DrawIcon(ref MapOverlayDrawContext context, ref string text,
@@ -97,6 +103,7 @@ public class StructureDatas : ModSystem
     public static List<Point16> SkyHousePositions;
     public static List<Point16> SkyLakePositions;
     public static List<Point16> PlanteraPositions;
+    public static List<Point16> BaitlessAutofisherPositions;
 
     public override void PostUpdateWorld()
     {
@@ -117,6 +124,15 @@ public class StructureDatas : ModSystem
 
         if (Main.netMode is NetmodeID.Server && elementsRemoved > 0)
             PlanteraPositionsPacket.Sync();
+
+        BaitlessAutofisherPositions ??= new List<Point16>();
+        var existingBaitlessAutofishers = TileEntity.ByID
+                .Where(pair => pair.Value is TEAutofisher {HasBait: false})
+                .Select(pair => pair.Value.Position)
+                .ToList();
+        // 内置单人支持
+        if (!existingBaitlessAutofishers.SequenceEqual(BaitlessAutofisherPositions))
+            BaitlessAutofisherSyncPacket.Sync(existingBaitlessAutofishers);
     }
 
     public override void Load()
@@ -136,6 +152,7 @@ public class StructureDatas : ModSystem
     public override void PreWorldGen()
     {
         PyramidPositions = new List<Point16>();
+        BaitlessAutofisherPositions = new List<Point16>();
     }
 
     public override void PostWorldGen()
@@ -168,6 +185,7 @@ public class StructureDatas : ModSystem
         SkyHousePositions = new List<Point16>();
         SkyLakePositions = new List<Point16>();
         PlanteraPositions = new List<Point16>();
+        BaitlessAutofisherPositions = new List<Point16>();
     }
 
     public override void SaveWorldData(TagCompound tag)
@@ -203,6 +221,7 @@ public class StructureDatas : ModSystem
         writer.Write(SkyHousePositions);
         writer.Write(SkyLakePositions);
         writer.Write(PlanteraPositions);
+        writer.Write(BaitlessAutofisherPositions);
     }
 
     public override void NetReceive(BinaryReader reader)
@@ -215,5 +234,6 @@ public class StructureDatas : ModSystem
         SkyHousePositions = reader.ReadPoint16List().ToList();
         SkyLakePositions = reader.ReadPoint16List().ToList();
         PlanteraPositions = reader.ReadPoint16List().ToList();
+        BaitlessAutofisherPositions = reader.ReadPoint16List().ToList();
     }
 }
