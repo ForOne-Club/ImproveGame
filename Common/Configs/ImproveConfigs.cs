@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
@@ -11,6 +12,11 @@ namespace ImproveGame.Common.Configs
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
         public override void OnLoaded() => Config = this;
+
+        [JsonIgnore]
+        // 用于Config选项收藏功能，判别这个Config实例是不是真正的ImproveConfigs
+        // 以决定要不要显示“已收藏”文本
+        public bool IsRealImproveConfigs = true;
 
         #region 其他
 

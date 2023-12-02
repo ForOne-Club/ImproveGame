@@ -1,5 +1,6 @@
 using ImproveGame.Common;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Content;
 using ImproveGame.Core;
 using ImproveGame.Interface.GUI;
 using Terraria.UI.Chat;

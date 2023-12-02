@@ -916,3 +916,22 @@ GlassType: {
 	SimpleBlur.Label: 简单模糊
 	MicaLike.Label: 类云母
 }
+
+FavoritedConfigs: {
+	DisplayName: 配置选项收藏夹
+
+	Header: {
+		Favorited: "[centeritem:FallenStar] 已收藏选项"
+		News: "[centeritem:RainbowCursor] 新版新增选项"
+	}
+
+	FavoriteIntroduction: {
+		Label: 这是一个用于管理和设置常用配置项的页面
+		Tooltip:
+			'''
+			右键单击更好的体验模组配置中的任何选项，即可将选项加入收藏
+			被收藏的选项会显示在此页面中，以便快速访问
+			此外，此页面也会显示每次模组更新后新增的配置选项
+			'''
+	}
+}

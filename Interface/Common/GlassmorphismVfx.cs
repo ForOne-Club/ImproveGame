@@ -57,8 +57,9 @@ public class GlassmorphismVfx : ModSystem
             _blurredTarget?.Dispose();
             _uiTarget?.Dispose();
             _helperTarget?.Dispose();
-            foreach (var t in GlassCovers)
-                t?.Dispose();
+            if (GlassCovers is not null)
+                foreach (var t in GlassCovers)
+                    t?.Dispose();
 
             _blurredTarget = null;
             _uiTarget = null;

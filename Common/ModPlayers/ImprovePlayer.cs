@@ -9,6 +9,7 @@ using ImproveGame.Interface.GUI.WorldFeature;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
+using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.ModPlayers;
 
@@ -267,7 +268,11 @@ public class ImprovePlayer : ModPlayer
 
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Main.inFancyUI = true;
-        Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, Config);
+        // 不可能找不到
+        var favoritedConfigs = ConfigManager.Configs[Mod].Find(i => i.Name == "FavoritedConfigs");
+        Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, favoritedConfigs);
+        // 打开模组配置
+        // Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, Config);
         Main.InGameUI.SetState(Terraria.ModLoader.UI.Interface.modConfig);
     }
 
