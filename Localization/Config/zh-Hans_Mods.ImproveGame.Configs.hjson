@@ -608,6 +608,11 @@ ImproveConfigs: {
 		Tooltip: 设置的值越小从 NPC 购买物品价格越便宜，卖给 NPC 物品价格越高
 	}
 
+	IgnoringSleepRestrictions: {
+		Label: "[centeritem:Bed] 无视睡觉限制"
+		Tooltip: 任何情况下，睡觉时间加速的效果都不会被阻断.
+	}
+
 	BedTimeRate: {
 		Label: "[centeritem:Bed] 睡觉时间速率"
 		Tooltip: 允许你更改睡觉时的时间流速乘数，默认为5

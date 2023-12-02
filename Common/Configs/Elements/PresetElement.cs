@@ -57,6 +57,7 @@ public class FukMeCalamityElement : PresetElement
         config.GemTreeMax = 30;
         config.BedTimeRate = 80;
         config.BedEverywhere = true;
+        config.IgnoringSleepRestrictions = true;
         config.WandMaterialNoConsume = true;
         config.MinimapMark = true;
         config.BedOnlyOne = true;
@@ -115,6 +116,7 @@ public class ILoveBalanceElement : PresetElement
         config.GemTreeMax = 12;
         config.BedTimeRate = 10;
         config.BedEverywhere = true;
+        config.IgnoringSleepRestrictions = true;
         config.WandMaterialNoConsume = false;
         config.MinimapMark = true;
         config.BedOnlyOne = false;

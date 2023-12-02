@@ -103,6 +103,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool BedEverywhere;
 
+        [DefaultValue(true)]
+        public bool IgnoringSleepRestrictions;
+
         [DefaultValue(5)]
         [Increment(5)]
         [Range(5, 100)]

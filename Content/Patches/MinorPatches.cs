@@ -323,6 +323,15 @@ namespace ImproveGame.Content.Patches
             IL_Main.DrawInfernoRings += TranslucentInfernoRings;
             // 任务鱼可堆叠
             On_Projectile.FishingCheck_ProbeForQuestFish += PatchQuestFishCheck;
+            // 是否无视睡觉限制
+            On_PlayerSleepingHelper.DoesPlayerHaveReasonToActUpInBed += IgnoringSleepRestrictions;
+        }
+
+        private bool IgnoringSleepRestrictions(On_PlayerSleepingHelper.orig_DoesPlayerHaveReasonToActUpInBed orig, ref PlayerSleepingHelper self, Player player)
+        {
+            // 谁也无法阻止我睡觉！不管是Boss还是事件！
+            if (Config.IgnoringSleepRestrictions) return false;
+            else return orig(ref self, player);
         }
 
         private void PatchQuestFishCheck(On_Projectile.orig_FishingCheck_ProbeForQuestFish orig, Projectile self, ref FishingAttempt fisher)
