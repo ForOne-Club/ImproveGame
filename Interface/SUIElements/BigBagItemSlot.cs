@@ -72,7 +72,8 @@ namespace ImproveGame.Interface.SUIElements
             if (!Interactable)
                 return;
 
-            if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
+            if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type] &&
+                !ItemLoader.CanRightClick(Item))
             {
                 RightMouseDownTimer = 0;
                 SuperFastStackTimer = 0;
@@ -118,7 +119,8 @@ namespace ImproveGame.Interface.SUIElements
             CallBaseUpdate(gameTime);
 
             // 右键长按物品持续拿出
-            if (Interactable && Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type])
+            if (Interactable && Main.mouseRight && IsMouseHovering && !Item.IsAir && !ItemID.Sets.BossBag[Item.type] &&
+                !ItemID.Sets.IsFishingCrate[Item.type] && !ItemLoader.CanRightClick(Item))
             {
                 DoFastStackLogic(TakeSlotItemToMouseItem);
             }
@@ -159,7 +161,8 @@ namespace ImproveGame.Interface.SUIElements
             if (Main.mouseItem.type is ItemID.None)
             {
                 Main.mouseItem = ItemLoader.TransferWithLimit(Item, stack);
-                ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(Item, ItemSlot.Context.InventoryItem, ItemSlot.Context.MouseItem));
+                ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(Item, ItemSlot.Context.InventoryItem,
+                    ItemSlot.Context.MouseItem));
                 SoundEngine.PlaySound(SoundID.MenuTick);
             }
             else
@@ -449,6 +452,7 @@ namespace ImproveGame.Interface.SUIElements
                         color = Color.White;
                         break;
                 }
+
                 sb.DrawString(font, text, zero, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
             }
         }
