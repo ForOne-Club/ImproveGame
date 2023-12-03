@@ -120,25 +120,35 @@ public class AutoMoneyPlayerListener : ModPlayer
 
     private void DetectCoins()
     {
+        bool isDepositSucceed = false;
         for (var i = 50; i <= 53; i++)
         {
             var item = Player.inventory[i];
             if (!item.IsAir && item.IsACoin && AutoMoneyItemListener.TryDepositACoin(item, Player))
             {
+                isDepositSucceed = true;
                 item.TurnToAir();
             }
         }
+
+        if (isDepositSucceed)
+            Recipe.FindRecipes();
     }
 
     private void DetectDefenderMedal()
     {
+        bool isDepositSucceed = false;
         for (var i = 0; i <= 49; i++)
         {
             var item = Player.inventory[i];
             if (!item.IsAir && item.type is ItemID.DefenderMedal && AutoMoneyItemListener.TryDepositACoin(item, Player))
             {
+                isDepositSucceed = true;
                 item.TurnToAir();
             }
         }
+
+        if (isDepositSucceed)
+            Recipe.FindRecipes();
     }
 }
