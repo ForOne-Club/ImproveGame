@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Players;
-using ImproveGame.Interface.Common;
+﻿using ImproveGame.Common.Players;
 
 namespace ImproveGame.Interface.GUI.AutoTrash;
 

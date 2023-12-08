@@ -1,16 +1,15 @@
-﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Core;
-using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
+using ImproveGame.Interface.GUI.BannerChest;
+using ImproveGame.Interface.GUI.DummyControl;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
+using ImproveGame.Interface.GUI.PlayerStats;
 using ImproveGame.Interface.GUI.WorldFeature;
 using System.Collections;
-using ImproveGame.Interface.GUI.PlayerStats;
-using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Interface.Common;
 
@@ -58,12 +57,16 @@ public class UIPlayer : ModPlayer
         DataPlayer dataPlayer = Main.LocalPlayer.GetModPlayer<DataPlayer>();
 
         // 玩家信息
-        uiSystem.PlayerInfoGUI = new PlayerStatsGUI();
-        uiSystem.PlayerInfoTrigger.SetCarrier(uiSystem.PlayerInfoGUI);
+        uiSystem.PlayerStatsGUI = new PlayerStatsGUI();
+        uiSystem.PlayerStatsTrigger.SetCarrier(uiSystem.PlayerStatsGUI);
         CheckPositionValid(ref PlayerInfoTogglePosition, PlayerInfoToggleDefPosition);
-        uiSystem.PlayerInfoGUI.ControllerSwitch.SetPos(PlayerInfoTogglePosition).Recalculate();
+        uiSystem.PlayerStatsGUI.ControllerSwitch.SetPos(PlayerInfoTogglePosition).Recalculate();
         PlayerStatsGUI.Visible = true;
-        uiSystem.PlayerInfoGUI.LoadAndSetupFavorites();
+        uiSystem.PlayerStatsGUI.LoadAndSetupFavorites();
+
+        // 假人控制器
+        uiSystem.DummyControlGUI = new DummyControlGUI();
+        uiSystem.DummyControlTrigger.SetCarrier(uiSystem.DummyControlGUI);
 
         // 自动垃圾桶
         uiSystem.AutoTrashGUI = new GarbageListGUI();

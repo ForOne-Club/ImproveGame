@@ -23,6 +23,6 @@ internal class ResetUIPositionsButton : LargerPanelElement
         uiSystem.WorldFeatureGUI.MainPanel.SetPos(UIPlayer.WorldFeaturePosition).Recalculate();
         uiSystem.ItemSearcherGUI.MainPanel.SetPos(UIPlayer.ItemSearcherPosition).Recalculate();
         uiSystem.OpenBagGUI.MainPanel.SetPos(UIPlayer.OpenBagPosition).Recalculate();
-        uiSystem.PlayerInfoGUI.ControllerSwitch.SetPosPixels(UIPlayer.PlayerInfoTogglePosition).Recalculate();
+        uiSystem.PlayerStatsGUI.ControllerSwitch.SetPosPixels(UIPlayer.PlayerInfoTogglePosition).Recalculate();
     }
 }

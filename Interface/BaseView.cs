@@ -1,6 +1,4 @@
-﻿using ImproveGame.Interface.GUI.BannerChest;
-
-namespace ImproveGame.Interface
+﻿namespace ImproveGame.Interface
 {
     public enum MouseType : byte { Left, Right, Middle }
 

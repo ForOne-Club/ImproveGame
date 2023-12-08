@@ -3,6 +3,7 @@ using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.BannerChest;
+using ImproveGame.Interface.GUI.DummyControl;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.PlayerStats;
@@ -41,8 +42,12 @@ namespace ImproveGame.Interface.Common
         public EventTrigger LifeformAnalyzerTrigger;
 
         // 玩家信息表
-        public PlayerStatsGUI PlayerInfoGUI;
-        public EventTrigger PlayerInfoTrigger;
+        public PlayerStatsGUI PlayerStatsGUI;
+        public EventTrigger PlayerStatsTrigger;
+
+        // 假人控制器
+        public DummyControlGUI DummyControlGUI;
+        public EventTrigger DummyControlTrigger;
 
         // 自动垃圾桶
         public GarbageListGUI AutoTrashGUI;
@@ -102,8 +107,12 @@ namespace ImproveGame.Interface.Common
         {
             Instance = null;
 
-            PlayerInfoGUI = null;
-            PlayerInfoTrigger = null;
+            PlayerStatsGUI = null;
+            PlayerStatsTrigger = null;
+
+            // 假人控制器
+            DummyControlGUI = null;
+            DummyControlTrigger = null;
 
             // 侧栏GUI
             ExtremeStorageGUI = null;
@@ -173,7 +182,8 @@ namespace ImproveGame.Interface.Common
             InventoryTrashTrigger = new EventTrigger("Radial Hotbars", "Inventory Trash");
             PackageTrigger = new EventTrigger("Radial Hotbars", "Package");
             BigBagTrigger = new EventTrigger("Radial Hotbars", "Big Bag");
-            PlayerInfoTrigger = new EventTrigger("Radial Hotbars", "Player Info");
+            PlayerStatsTrigger = new EventTrigger("Radial Hotbars", "Player Info");
+            DummyControlTrigger = new EventTrigger("Radial Hotbars", "Dummy Control");
             LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand");
             ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture");
             StructureTrigger = new EventTrigger("Radial Hotbars", "Structure");

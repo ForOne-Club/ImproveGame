@@ -124,7 +124,7 @@ namespace ImproveGame.Common.Configs
                               new Vector2(410, 360);
             UIPlayer.OpenBagPosition = OpenBagPosition; // 在这里也保存一下
 
-            PlayerInfoTogglePosition = uiSystem.PlayerInfoGUI?.ControllerSwitch?.GetDimensions().Position() ??
+            PlayerInfoTogglePosition = uiSystem.PlayerStatsGUI?.ControllerSwitch?.GetDimensions().Position() ??
                                        UIPlayer.PlayerInfoToggleDefPosition;
             UIPlayer.PlayerInfoTogglePosition = PlayerInfoTogglePosition; // 在这里也保存一下
         }
