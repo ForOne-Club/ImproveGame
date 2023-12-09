@@ -156,6 +156,7 @@ ConstructGUI: {
 
 	MaterialInfo: {
 		Title: 材料明细
+		Tip: 放置在大背包中的材料也可以使用
 		Stored: 已有: {Stack}
 		Requirement: 需求: {Stack}
 	}

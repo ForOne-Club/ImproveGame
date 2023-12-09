@@ -217,7 +217,12 @@ DetectorDrone: {
 
 DevMark: {
 	DisplayName: Developer's Mark
-	Tooltip: "[c/ff0000:Developer's item, do not use]"
+	Tooltip:
+		'''
+		When in inventory, wand of construction will not consume materials
+		Only works in single player
+		[c/ff0000:Developer's item]
+		'''
 }
 
 Expelliarmus: {
