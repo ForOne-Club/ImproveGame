@@ -12,6 +12,7 @@ namespace ImproveGame.Common.ConstructCore
         public short WallFrameX;
         public short WallFrameY;
         public byte WallColor;
+        public TileWallBrightnessInvisibilityData CoatingData;
 
         /// <summary>
         /// ExtraDatas:
@@ -80,6 +81,7 @@ namespace ImproveGame.Common.ConstructCore
             WallFrameX = (short)tile.WallFrameX;
             WallFrameY = (short)tile.WallFrameY;
             WallColor = tile.WallColor;
+            CoatingData = tile.Get<TileWallBrightnessInvisibilityData>();
             ExtraDatas = extraDatas;
             ExtraDatas2 = extraDatas2;
         }
@@ -177,6 +179,13 @@ namespace ImproveGame.Common.ConstructCore
                 output.WallFrameY = tag.GetShort("WallFrameY");
                 tag.TryGet("WallColor", out output.WallColor);
             }
+            if (tag.TryGet("CoatingData", out byte coatingData))
+            {
+                output.CoatingData = new TileWallBrightnessInvisibilityData
+                {
+                    bitpack = coatingData
+                };
+            }
             if (output.TileIndex is not -1 || output.WallIndex is not -1)
             {
                 output.ExtraDatas = tag.GetByte("ExtraDatas");
@@ -204,6 +213,7 @@ namespace ImproveGame.Common.ConstructCore
                 if (WallColor is not 0)
                     tag["WallColor"] = WallColor;
             }
+            tag["CoatingData"] = CoatingData.Data;
             if (TileIndex is not -1 || WallIndex is not -1)
             {
                 tag["ExtraDatas"] = (byte)ExtraDatas;

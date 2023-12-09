@@ -219,7 +219,12 @@ DetectorDrone: {
 
 DevMark: {
 	DisplayName: 开发者之证
-	Tooltip: "[c/ff0000:开发者物品，请勿使用]"
+	Tooltip:
+		'''
+		放置在物品栏时，构造法杖放置结构不消耗材料
+		仅在单人模式下有效
+		[c/ff0000:开发者物品]
+		'''
 }
 
 Expelliarmus: {

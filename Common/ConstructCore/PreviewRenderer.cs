@@ -2,6 +2,7 @@
 using ImproveGame.Content.Items;
 using System.Collections.Generic;
 using System.Reflection;
+using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
@@ -305,6 +306,29 @@ namespace ImproveGame.Common.ConstructCore
                             }
                         }
                         EndSlopeDraw:;
+                        
+                        // 旗帜和战争桌旗处于平台下的offsetY调节
+                        if (multiTile && tileType is TileID.Banners or TileID.WarTableBanner)
+                        {
+                            int subX = tileData.TileFrameX % tileObjectData.CoordinateFullWidth;
+                            int subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
+
+                            Point coord = new(x, y);
+                            Point frame = new(subX / 18, subY / 18);
+                            var leftTop = coord - frame;
+                            leftTop.Y -= 1; // 坐标为左上角物块的上方物块
+                            
+                            if (leftTop is {X: >= 0, Y: >= 0})
+                            {
+                                TileDefinition tileDataUp = data[leftTop.Y + leftTop.X * (height + 1)];
+                                int tileTypeUp = structure.ParseTileType(tileDataUp);
+                                if (tileTypeUp is not -1 && TileID.Sets.Platforms[tileTypeUp] &&
+                                    tileDataUp.BlockType is BlockType.Solid)
+                                {
+                                    position.Y -= 8f;
+                                }
+                            }
+                        }
 
                         if (!multiTile)
                         {
