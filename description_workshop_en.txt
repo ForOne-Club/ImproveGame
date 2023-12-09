@@ -10,12 +10,12 @@ Only some functions are enabled by default, please check mod configurations for 
 [list]
 	[*]Banner Box: Any Iron Bar * 12
 	[*]Potion Bag: Silk * 8
-	[*]Fishing Machine: Any Iron Bar * 8 + Any Copper Bar * 4 + Glass * 20
+	[*]Fishing Machine: Any Iron Bar * 4 + Any Copper Bar * 2
 	[*]Storage Manager: Sapphire * 5 + Fallen Star * 8 + Any Gold Bar * 12
 	[*]Wand of Technology: Dropped by the King Slime
 	[*]Wand of Space: Dropped by the King Slime
-	[*]Wand of Liquid: Any Gold Bar * 12 + Shadow Scale/Tissue Sample * 18 + Wood * 24
-	[*]Wand of Architecture: Wood * 24 + Fallen Star * 8 + Any Gold Bar * 12
+	[*]Wand of Liquid: Any Gold Bar * 6 + Shadow Scale/Tissue Sample * 8 + Wood * 24
+	[*]Wand of Architecture: Wood * 24 + Fallen Star * 2 + Any Gold Bar * 12
 	[*]Wand of Bursts: Wood * 18 + Jungle Spores * 6 + Ruby * 1
 	[*]Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + Soul of Night * 6
 	[*]Wand of Void: Iron Bar/Lead Bar * 6 + Wood * 18 + Diamond * 1
