@@ -338,13 +338,37 @@ namespace ImproveGame
         }
 
         /// <summary>
+        /// 尝试放置多物块方块，调用TileObject.Place而不是WorldGen.PlaceTile，支持TE
+        /// </summary>
+        public static bool TryPlaceMultiTileDirect(Point pos, int type, int style, int dir, out TileObject objectData)
+            => TryPlaceMultiTileDirect(pos.X, pos.Y, type, style, dir, out objectData);
+
+        /// <summary>
+        /// 尝试放置多物块方块，调用TileObject.Place而不是WorldGen.PlaceTile，支持TE
+        /// </summary>
+        public static bool TryPlaceMultiTileDirect(int x, int y, int type, int style, int dir, out TileObject objectData)
+        {
+            objectData = TileObject.Empty;
+            if (!Main.tileFrameImportant[type])
+                return false;
+            if (!TileObject.CanPlace(x, y, type, style, dir, out objectData))
+                return false;
+
+            // 放置物块
+            TileObject.Place(objectData);
+            // 调用放置后钩子，晶塔的话就是放置TE
+            TileObjectData.CallPostPlacementPlayerHook(x, y, type, style, dir, objectData.alternate, objectData);
+            return true;
+        }
+
+        /// <summary>
         /// 放物块，但是有魔杖特判
         /// </summary>
         public static bool TryPlaceTile(int i, int j, Item item, Player player, bool mute = false, bool forced = false)
         {
             int targetTile = item.createTile;
             var tileObjectData = TileObjectData.GetTileData(targetTile, 0);
-            if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 && tileObjectData.CoordinateFullHeight <= 22))
+            if (tileObjectData is null || (tileObjectData.CoordinateFullWidth < 22 && tileObjectData.CoordinateFullHeight < 22))
             {
                 if (Main.tile[i, j].HasTile)
                     return false;
@@ -507,6 +531,61 @@ namespace ImproveGame
                     return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// 基于原版方法
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="frameX"></param>
+        /// <param name="frameY"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static TileObjectData GetTileData(int type, int frameX, int frameY)
+        {
+            if (type < 0 || type >= TileObjectData._data.Count)
+                throw new ArgumentOutOfRangeException("Function called with a bad tile type");
+
+            TileObjectData tileObjectData = TileObjectData._data[type];
+            if (tileObjectData == null)
+                return null;
+
+            int num = frameX / tileObjectData.CoordinateFullWidth;
+            int num2 = frameY / tileObjectData.CoordinateFullHeight;
+            int num3 = tileObjectData.StyleWrapLimit;
+            if (num3 == 0)
+                num3 = 1;
+
+            int num4 = ((!tileObjectData.StyleHorizontal) ? (num * num3 + num2) : (num2 * num3 + num));
+            int num5 = num4 / tileObjectData.StyleMultiplier;
+            int num6 = num4 % tileObjectData.StyleMultiplier;
+            int styleLineSkip = tileObjectData.StyleLineSkip;
+            if (styleLineSkip > 1) {
+                if (tileObjectData.StyleHorizontal) {
+                    num5 = num2 / styleLineSkip * num3 + num;
+                    num6 = num2 % styleLineSkip;
+                }
+                else {
+                    num5 = num / styleLineSkip * num3 + num2;
+                    num6 = num % styleLineSkip;
+                }
+            }
+
+            if (tileObjectData.SubTiles != null && num5 >= 0 && num5 < tileObjectData.SubTiles.Count) {
+                TileObjectData tileObjectData2 = tileObjectData.SubTiles[num5];
+                if (tileObjectData2 != null)
+                    tileObjectData = tileObjectData2;
+            }
+
+            if (tileObjectData._alternates != null) {
+                for (int i = 0; i < tileObjectData.Alternates.Count; i++) {
+                    TileObjectData tileObjectData3 = tileObjectData.Alternates[i];
+                    if (tileObjectData3 != null && num6 >= tileObjectData3.Style && num6 <= tileObjectData3.Style + tileObjectData3.RandomStyleRange)
+                        return tileObjectData3;
+                }
+            }
+
+            return tileObjectData;
         }
     }
 }

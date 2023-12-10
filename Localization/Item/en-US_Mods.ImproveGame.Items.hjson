@@ -217,7 +217,12 @@ DetectorDrone: {
 
 DevMark: {
 	DisplayName: Developer's Mark
-	Tooltip: "[c/ff0000:Developer's item, do not use]"
+	Tooltip:
+		'''
+		When in inventory, wand of construction will not consume materials
+		Only works in single player
+		[c/ff0000:Developer's item]
+		'''
 }
 
 Expelliarmus: {
@@ -248,7 +253,7 @@ StorageCommunicator: {
 	Tooltip:
 		'''
 		<right>任何储存管理器以连接
-		<left>以打开该通讯器连接到的储存管理器
+		使用以打开该通讯器连接到的储存管理器
 		'''
 	NotSet: 未连接至任何储存管理器
 	CurrentlySetTo: 当前连接至 [{0}, {1}] 的储存管理器

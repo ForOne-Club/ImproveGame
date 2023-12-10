@@ -165,6 +165,7 @@ ConstructGUI: {
 
 	MaterialInfo: {
 		Title: Material Info
+		Tip: Materials stored in Large Backpack also count
 		Stored: Has: {Stack}
 		Requirement: Needed: {Stack}
 	}

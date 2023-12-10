@@ -219,7 +219,12 @@ DetectorDrone: {
 
 DevMark: {
 	DisplayName: 开发者之证
-	Tooltip: "[c/ff0000:开发者物品，请勿使用]"
+	Tooltip:
+		'''
+		放置在物品栏时，构造法杖放置结构不消耗材料
+		仅在单人模式下有效
+		[c/ff0000:开发者物品]
+		'''
 }
 
 Expelliarmus: {
@@ -250,7 +255,7 @@ StorageCommunicator: {
 	Tooltip:
 		'''
 		<right>任何储存管理器以连接
-		<left>以打开该通讯器连接到的储存管理器
+		使用以打开该通讯器连接到的储存管理器
 		'''
 	NotSet: 未连接至任何储存管理器
 	CurrentlySetTo: 当前连接至 [{0}, {1}] 的储存管理器

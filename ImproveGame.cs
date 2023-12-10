@@ -26,7 +26,6 @@ public class ImproveGame : Mod
     {
         Instance = null;
         Config = null;
-        GC.Collect();
     }
 
     public override void HandlePacket(BinaryReader reader, int whoAmI) => NetModule.ReceiveModule(reader, whoAmI);

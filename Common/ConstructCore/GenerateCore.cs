@@ -2,6 +2,7 @@
 using ImproveGame.Core;
 using System.Collections;
 using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 
@@ -46,7 +47,10 @@ namespace ImproveGame.Common.ConstructCore
             currentTask = CoroutineSystem.GenerateRunner.Run(GenerateOutSet(structure, position));
             while (currentTask.IsRunning)
                 yield return null;
-            CoroutineSystem.GenerateRunner.Run(SquareTiles(structure, position));
+            currentTask = CoroutineSystem.GenerateRunner.Run(SquareTiles(structure, position));
+            while (currentTask.IsRunning)
+                yield return null;
+            CoroutineSystem.GenerateRunner.Run(TextSigns(structure, position));
         }
 
         public static IEnumerator KillTiles(QoLStructure structure, Point position)
@@ -106,8 +110,8 @@ namespace ImproveGame.Common.ConstructCore
                     }
 
                     var tileObjectData = TileObjectData.GetTileData(tileType, 0);
-                    if (tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 22 ||
-                                                       tileObjectData.CoordinateFullHeight > 22))
+                    if (tileObjectData is not null && (tileObjectData.CoordinateFullWidth >= 22 ||
+                                                       tileObjectData.CoordinateFullHeight >= 22))
                     {
                         continue;
                     }
@@ -219,7 +223,7 @@ namespace ImproveGame.Common.ConstructCore
             int height = structure.Height;
             for (int x = 0; x <= width; x++)
             {
-                for (int y = 0; y <= height; y++)
+                for (int y = height; y >= 0; y--)
                 {
                     var placePosition = position + new Point(x, y);
                     int index = y + x * (height + 1);
@@ -227,8 +231,8 @@ namespace ImproveGame.Common.ConstructCore
                     int tileType = structure.ParseTileType(tileData);
                     if (tileType is -1)
                         continue;
-                    var tileObjectData = TileObjectData.GetTileData(tileType, 0);
-                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 && tileObjectData.CoordinateFullHeight <= 22))
+                    var tileObjectData = GetTileData(tileType, tileData.TileFrameX, tileData.TileFrameY);
+                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth < 22 && tileObjectData.CoordinateFullHeight < 22))
                     {
                         continue;
                     }
@@ -256,41 +260,29 @@ namespace ImproveGame.Common.ConstructCore
                         continue;
                     }
 
+                    // 朝向
+                    int direction = tileObjectData.Direction switch
+                    {
+                        TileObjectDirection.PlaceLeft => -1,
+                        TileObjectDirection.PlaceRight => 1,
+                        _ => 0
+                    };
+
                     if (!HasDevMark) {
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                         PickItemFromArray(Main.LocalPlayer, inventory, item =>
                                 item is not null && item.type == tileItemType &&
-                                TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true),
+                                TryPlaceMultiTileDirect(placePosition, item.createTile, item.placeStyle, direction, out _),
                             true);
                     }
                     else
                     {
                         var item = new Item(tileItemType);
-                        TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true);
+                        TryPlaceMultiTileDirect(placePosition, item.createTile, item.placeStyle, direction, out _);
                     }
-
-                    // 什么怪玩意，还要我特判
-                    if (tileType is TileID.Banners)
-                    {
-                        int placeStyle = MaterialCore.ItemToPlaceStyle[tileItemType];
-                        short frameX = (short)(placeStyle % 111 * 18);
-                        short frameY = (short)(placeStyle / 111 * 54);
-                        for (int j = 0; j <= 2; j++)
-                        {
-                            var tilePosition = placePosition;
-                            tilePosition.Y += j;
-
-                            var tile = Main.tile[tilePosition];
-                            var stateData = tile.Get<TileWallWireStateData>(); // 只想替换掉TileType，其他数据先存一存
-                            tile.ResetToType((ushort)tileType);
-                            tile.Get<TileWallWireStateData>() = stateData; // 还原其他数据
-                            tile.HasTile = true;
-                            tile.TileFrameX = frameX;
-                            tile.TileFrameY = (short)(frameY + j * 18);
-                        }
-                    }
-                    yield return null;
                 }
+
+                yield return null;
             }
         }
 
@@ -347,6 +339,7 @@ namespace ImproveGame.Common.ConstructCore
 
                     tile.WallColor = tileData.WallColor;
                     tile.TileColor = tileData.TileColor;
+                    tile.Get<TileWallBrightnessInvisibilityData>() = tileData.CoatingData;
 
                     bool TryConsumeWire()
                     {
@@ -405,6 +398,40 @@ namespace ImproveGame.Common.ConstructCore
             if (Main.netMode is NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendTileSquare(Main.myPlayer, position.X - 1, position.Y - 1, width + 2, height + 2);
+            }
+        }
+
+        public static IEnumerator TextSigns(QoLStructure structure, Point position)
+        {
+            if (structure.SignTexts is not { Count: > 0})
+                yield break;
+
+            int index = 0;
+            int width = structure.Width;
+            int height = structure.Height;
+            for (int x = 0; x <= width; x++)
+            {
+                for (int y = 0; y <= height; y++)
+                {
+                    var placePosition = position + new Point(x, y);
+                    var tile = Main.tile[placePosition];
+                    if (!tile.HasTile || !Main.tileSign[tile.type])
+                        continue;
+                    if ((tile.TileFrameX / 18) % 2 is not 0 || tile.TileFrameY / 18 is not 0)
+                        continue;
+
+                    int sign = Sign.ReadSign(placePosition.X, placePosition.Y);
+
+                    if (sign >= 0)
+                    {
+                        Sign.TextSign(sign, structure.SignTexts[index]);
+                        NetMessage.SendData(MessageID.ReadSign, -1, -1, null, sign, 0f, (byte)new BitsByte(b1: true));
+                        index++;
+                    }
+
+                    if (index >= structure.SignTexts.Count)
+                        yield break;
+                }
             }
         }
     }

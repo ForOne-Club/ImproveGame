@@ -4,12 +4,12 @@
 模组物品获得方式：
 旗帜盒: 铁锭(铅锭)x12
 药水袋: 丝绸x8
-自动钓鱼机: 铁锭(铅锭)x8 铜锭(锡锭)x4 玻璃x20
+自动钓鱼机: 铁锭(铅锭)x4 铜锭(锡锭)x2
 储存管理器: 蓝玉x5 落星x8 金锭(铂金锭)x12
 科技魔杖: 史莱姆王掉落
 空间魔杖: 史莱姆王掉落
-液体魔杖: 金锭(铂金锭)x12 暗影鳞片(组织样本)x18 木材x24
-建筑魔杖: 木材x24 落星x8 金锭(铂金锭)x12
+液体魔杖: 金锭(铂金锭)x6 暗影鳞片(组织样本)x8 木材x24
+建筑魔杖: 木材x24 落星x2 金锭(铂金锭)x12
 法爆魔杖: 木材x18 丛林孢子x6 红玉x1
 星爆魔杖: 法爆法杖x1 落星x8 光明之魂x6 暗影之魂x6
 虚空魔杖: 铁/铅锭x12 骨头x20 木材x18 钻石x1
@@ -53,12 +53,12 @@ Only some functions are enabled by default, please check mod configurations for 
 How to obtain mod items: 
 Potion Bag: Any Iron Bar * 12
 Potion Bag: Silk * 8
-Fishing Machine: Any Iron Bar * 8 + Any Copper Bar * 4 + Glass * 20
+Fishing Machine: Any Iron Bar * 4 + Any Copper Bar * 2
 Storage Manager: Sapphire * 5 + Fallen Star * 8 + Any Gold Bar * 12
 Wand of Technology: Dropped by the King Slime
 Wand of Space: Dropped by the King Slime
-Wand of Liquid: Any Gold Bar * 12 + Shadow Scale/Tissue Sample * 18 + Wood * 24
-Wand of Architecture: Wood * 24 + Fallen Star * 8 + Any Gold Bar * 12
+Wand of Liquid: Any Gold Bar * 6 + Shadow Scale/Tissue Sample * 8 + Wood * 24
+Wand of Architecture: Wood * 24 + Fallen Star * 2 + Any Gold Bar * 12
 Wand of Bursts: Wood * 18 + Jungle Spores * 6 + Ruby * 1
 Wand of Star Bursts: Wand of Bursts * 1 + Fallen Star * 8 + Soul of Light * 6 + Soul of Night * 6
 Wand of Void: Iron Bar/Lead Bar * 12 + Bone * 20 + Wood * 18 + Diamond * 1

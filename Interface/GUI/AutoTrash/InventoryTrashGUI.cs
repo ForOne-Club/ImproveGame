@@ -12,7 +12,7 @@ public class InventoryTrashGUI : ViewBody
     public override bool Display
     {
         get => UIConfigs.Instance.QoLAutoTrash && Main.playerInventory && !Hidden
-        && (ChestIsOpen || Main.LocalPlayer.talkNPC is -1);
+        && (ChestIsOpen || Main.LocalPlayer.talkNPC is -1) && !Main.LocalPlayer.tileEntityAnchor.InUse;
         set { }
     }
 

@@ -18,6 +18,7 @@ namespace ImproveGame.Common.ConstructCore
         public short OriginX;
         public short OriginY;
         public List<TileDefinition> StructureDatas;
+        public List<string> SignTexts;
 
         public int GetOrAddEntry(string fullName)
         {
@@ -54,6 +55,7 @@ namespace ImproveGame.Common.ConstructCore
             Tag.Add(nameof(OriginY), (short)0);
 
             List<TileDefinition> data = new();
+            List<string> signTexts = new();
             for (int x = rectInWorld.X; x <= rectInWorld.X + rectInWorld.Width; x++)
             {
                 for (int y = rectInWorld.Y; y <= rectInWorld.Y + rectInWorld.Height; y++)
@@ -79,6 +81,13 @@ namespace ImproveGame.Common.ConstructCore
                     if (tile.WallType is 0)
                     {
                         wallIndex = -1; // 统一一点
+                    }
+
+                    if (Main.tileSign[tile.type] && (tile.TileFrameX / 18) % 2 is 0 && tile.TileFrameY / 18 is 0)
+                    {
+                        int sign = Sign.ReadSign(x, y);
+                        if (sign != -1)
+                            signTexts.Add(Main.sign[sign].text);
                     }
 
                     byte platformDrawSlopeType = 4;
@@ -115,6 +124,7 @@ namespace ImproveGame.Common.ConstructCore
                 }
             }
 
+            Tag.Add("SignTexts", signTexts);
             Tag.Add("StructureData", data);
 
             var stringList = new List<string>();
@@ -136,6 +146,7 @@ namespace ImproveGame.Common.ConstructCore
             Height = Tag.GetShort(nameof(Height));
             OriginX = Tag.GetShort(nameof(OriginX));
             OriginY = Tag.GetShort(nameof(OriginY));
+            SignTexts = (List<string>)Tag.GetList<string>("SignTexts") ?? new List<string>();
             StructureDatas = (List<TileDefinition>)Tag.GetList<TileDefinition>("StructureData");
             SetupEntry();
         }

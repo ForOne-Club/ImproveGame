@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Configs;
+using Terraria.GameInput;
 using Terraria.Graphics.Effects;
 
 namespace ImproveGame.Interface.Common;
@@ -136,7 +137,10 @@ public class GlassmorphismVfx : ModSystem
 
         if (GlassVfxType is GlassType.MicaLike)
         {
+            PlayerInput.SetZoom_UI();
             EventTrigger.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
+            PlayerInput.SetZoom_World();
+
             device.SetRenderTarget(null);
             batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             batch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
@@ -149,7 +153,11 @@ public class GlassmorphismVfx : ModSystem
         device.Clear(Color.Transparent);
         batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.UIScaleMatrix);
         SDFRectangle.DontDrawShadow = true;
+
+        PlayerInput.SetZoom_UI();
         EventTrigger.DrawAll();
+        PlayerInput.SetZoom_World();
+
         SDFRectangle.DontDrawShadow = false;
         batch.End();
 

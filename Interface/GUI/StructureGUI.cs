@@ -282,7 +282,9 @@ namespace ImproveGame.Interface.GUI
             var materialsAndStacks = MaterialCore.CountMaterials(structure);
             if (materialsAndStacks.Count > 0)
             {
-                UIList.Add(QuickTitleText(GetText("ConstructGUI.MaterialInfo.Title"), 0.8f));
+                UIList.Add(QuickTitleText(GetText("ConstructGUI.MaterialInfo.Title"), 0.6f));
+                if (Config.SuperVault)
+                    UIList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.MaterialInfo.Tip", new { Name = name }))); // 文件名
 
                 var sortedResult = from pair in materialsAndStacks orderby pair.Key select pair; // 排序
                 foreach ((int itemType, int stack) in from mat in sortedResult where mat.Value > 0 select mat)
