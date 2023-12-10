@@ -96,35 +96,29 @@ namespace ImproveGame.Content.Items
             {
                 Rectangle rectangle = GetRectangle(player);
                 // 带同步的音效
-                PlaySoundPacket.PlaySound(LegacySoundIDs.Item, Main.MouseWorld, style: 14);
+                if (UIConfigs.Instance.ExplosionEffect)
+                    PlaySoundPacket.PlaySound(LegacySoundIDs.Item, Main.MouseWorld, style: 14);
                 ForeachTile(rectangle, (x, y) =>
                 {
+                    
                     if (Main.tile[x, y].WallType > 0 && WandSystem.WallMode)
                     {
-                        if (player.statMana < 1)
-                            player.QuickMana();
-                        if (player.statMana >= 1)
-                        {
-                            WorldGen.KillWall(x, y);
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                                NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, x, y);
-                            player.statMana -= 1;
-                        }
+                        WorldGen.KillWall(x, y);
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                            NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, x, y);
                     }
 
-                    if (player.statMana < 2)
-                        player.QuickMana();
-                    if (player.statMana >= 2)
-                    {
-                        if (WandSystem.TileMode && Main.tile[x, y].HasTile && TryKillTile(x, y, player))
-                        {
-                            player.statMana -= 2;
-                        }
-                    }
+                    if (WandSystem.TileMode && Main.tile[x, y].HasTile)
+                        TryKillTile(x, y, player);
 
-                    BongBong(new Vector2(x, y) * 16f, 16, 16);
+                    if (UIConfigs.Instance.ExplosionEffect)
+                        BongBong(new Vector2(x, y) * 16f, 16, 16);
                 }, (x, y, wid, hei) => DoBoomPacket.Send(x, y, wid, hei)); // 同步爆炸特效
             }
+        }
+
+        private void FixedModeTileManipulation(Player player, int x, int y)
+        {
         }
 
         public override bool CanUseSelector(Player player)
