@@ -983,6 +983,8 @@ partial class MyUtils
         depthToSurface = Math.Abs(depthToSurface);
         string depth = ((depthToSurface != 0) ? Language.GetTextValue("GameUI.Depth", depthToSurface) : Language.GetTextValue("GameUI.DepthLevel"));
         depthText = depth + " " + layer;
+        if (Language.ActiveCulture.CultureInfo.Name is "zh-Hans")
+            depthText = depth + layer; // 不要空格
     }
     
     /// <summary>

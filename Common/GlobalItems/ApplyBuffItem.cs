@@ -60,7 +60,8 @@ namespace ImproveGame.Common.GlobalItems
                         return buffsInTable;
 
                     var buffs = new List<int>();
-                    if (item.buffType > 0)
+                    // 自带buffType的物品，小于60s持续时间的不算
+                    if (item.buffType > 0 && item.buffTime >= 60 * 60)
                         buffs.Add(item.buffType);
                     // 其他Mod的，自行添加了引用
                     if (ModIntegrationsSystem.ModdedPotionBuffs.TryGetValue(item.type, out List<int> buffTypes))

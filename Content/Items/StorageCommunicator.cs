@@ -156,19 +156,20 @@ public class StorageCommunicator : ModItem
         Item.autoReuse = true;
         Item.useAnimation = 20;
         Item.useTime = 20;
-        Item.useStyle = ItemUseStyleID.Swing;
+        Item.useStyle = ItemUseStyleID.Shoot;
         Item.rare = ItemRarityID.Cyan;
         Item.value = Item.sellPrice(gold: 5);
     }
+
+    public override Vector2? HoldoutOffset() => new Vector2(-8f, -10f);
 
     public override void AddRecipes()
     {
         CreateRecipe()
             .AddIngredient(ItemID.Sapphire, 3)
-            .AddIngredient(ItemID.Bone, 20)
             .AddRecipeGroup(RecipeGroupID.IronBar, 8)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 4)
-            .AddTile(TileID.Anvils)
+            .AddTile(TileID.MythrilAnvil)
             .Register();
     }
 }

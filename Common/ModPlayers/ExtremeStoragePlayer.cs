@@ -51,9 +51,10 @@ public class ExtremeStoragePlayer : ModPlayer
 
     public override void PreUpdate()
     {
+        int communicator = ModContent.ItemType<StorageCommunicator>();
         if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server || !ExtremeStorageGUI.Visible ||
-            ExtremeStorageGUI.Storage is null ||
-            Main.LocalPlayer.HeldItem.type == ModContent.ItemType<StorageCommunicator>())
+            ExtremeStorageGUI.Storage is null || Main.LocalPlayer.HeldItem?.type == communicator ||
+            Main.LocalPlayer.HasItem(communicator))
             return;
 
         var tileEntity = ExtremeStorageGUI.Storage;

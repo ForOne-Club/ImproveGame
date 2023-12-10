@@ -63,6 +63,7 @@
 - 地图图标的大小可以调节了
 - 钢丝钳也会受到“工具使用速度提升倍率”影响了
 - 构造法杖结构现可处理标牌内容
+- 增益持续时间小于60s的物品不再算作无限增益药水，这会解决一些Mod的兼容性问题（如灾厄Astral Injection可持续提供增益，免除副作用）
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0
