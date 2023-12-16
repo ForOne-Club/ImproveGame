@@ -277,6 +277,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool LightNotBlocked;
 
+        [DefaultValue(true)]
+        public bool BombsNotHurtPlayer;
+
         #endregion
 
         #region 树木设置

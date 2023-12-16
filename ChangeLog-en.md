@@ -22,6 +22,7 @@
 - map icon for bait-lacking Fishing Machines
 - Locator and map icon for Enchanted Swords
 - Unconditional Sleeping
+- 新增“禁止爆炸物自伤”设置
 - Unconditional Pylon Teleportation (off by default)
 - 新增“物块不再阻挡照明”设置，默认关闭，需自行开启
 - config favorites for managing config options

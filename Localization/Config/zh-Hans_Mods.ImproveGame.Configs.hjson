@@ -583,6 +583,11 @@ ImproveConfigs: {
 			'''
 	}
 
+	BombsNotHurtPlayer: {
+		Label: "[centeritem:Bomb] 禁止爆炸物自伤"
+		Tooltip: 你所投掷的爆炸物将不会对你造成伤害
+	}
+
 	WorldFeaturePanel: {
 		Label: "[centeritem:WorldGlobe] 世界特性调节面板"
 		Tooltip:
@@ -878,6 +883,8 @@ UIConfigs: {
 	}
 
 	ThemeType: {
+		// Stormdark.Label: Stormdark
+		// Blue.Label: Classic
 		Tooltip: 控制更好的体验UI的整体配色方案
 		Label: "[g:12] UI主题"
 	}
@@ -909,26 +916,20 @@ UIConfigs: {
 			  - UI之间会互相遮罩
 			'''
 	}
-}
 
-PAPDisplayMode: {
-	// Tooltip: ""
-	AlwaysDisplayed.Label: 始终显示
-	NotDisplayed.Label: 不显示
-	WhenOpeningBackpack.Label: 开启背包时显示
-}
+	PAPDisplayMode: {
+		// Tooltip: ""
+		// AlwaysDisplayed.Label: Always
+		// NotDisplayed.Label: Hidden
+		// WhenOpeningBackpack.Label: Inventory-only
+	}
 
-ThemeType: {
-	// Stormdark.Label: Stormdark
-	Blue.Label: 经典
-	// Tooltip: ""
-}
-
-GlassType: {
-	// Tooltip: ""
-	Disabled.Label: 关闭
-	SimpleBlur.Label: 简单模糊
-	MicaLike.Label: 类云母
+	GlassType: {
+		// Tooltip: ""
+		// Disabled.Label: Off
+		// SimpleBlur.Label: Simple
+		// MicaLike.Label: Mica
+	}
 }
 
 FavoritedConfigs: {
@@ -948,4 +949,24 @@ FavoritedConfigs: {
 			此外，此页面也会显示每次模组更新后新增的配置选项
 			'''
 	}
+}
+
+GlassType: {
+	// Tooltip: ""
+	Disabled.Label: 关闭
+	SimpleBlur.Label: 简单模糊
+	MicaLike.Label: 类云母
+}
+
+ThemeType: {
+	// Tooltip: ""
+	Blue.Label: 经典
+	// Stormdark.Label: Stormdark
+}
+
+PAPDisplayMode: {
+	// Tooltip: ""
+	AlwaysDisplayed.Label: 始终显示
+	WhenOpeningBackpack.Label: 开启背包时显示
+	NotDisplayed.Label: 不显示
 }
