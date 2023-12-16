@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs.Elements;
+using ImproveGame.Common.GlobalProjectiles;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
 using Newtonsoft.Json;
@@ -277,8 +278,8 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool LightNotBlocked;
 
-        [DefaultValue(true)]
-        public bool BombsNotDamage;
+        [DefaultValue(BombsNotDamageType.Disabled)]
+        public BombsNotDamageType BombsNotDamage;
 
         #endregion
 
