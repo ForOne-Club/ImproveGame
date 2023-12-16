@@ -904,6 +904,8 @@ UIConfigs: {
 			  - UIs do not mask on each other
 			2. Mica
 			  - UIs are opaque, taking blurred game graphics where they cover as background
+			'''
+	}
 }
 
 PAPDisplayMode: {
