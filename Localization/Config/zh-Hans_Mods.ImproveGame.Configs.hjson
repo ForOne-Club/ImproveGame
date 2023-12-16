@@ -574,6 +574,15 @@ ImproveConfigs: {
 			'''
 	}
 
+	LightNotBlocked: {
+		Label: "[centeritem:UltrabrightTorch] 光照无视物块"
+		Tooltip:
+			'''
+			是否让光照无视物块传播
+			关闭则遵循原本的情况
+			'''
+	}
+
 	WorldFeaturePanel: {
 		Label: "[centeritem:WorldGlobe] 世界特性调节面板"
 		Tooltip:

@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
 using Terraria.Graphics;
+using Terraria.Graphics.Light;
 using Terraria.Graphics.Renderers;
 using Terraria.Graphics.Shaders;
 
@@ -336,6 +337,14 @@ namespace ImproveGame.Content.Patches
             On_Projectile.FishingCheck_ProbeForQuestFish += PatchQuestFishCheck;
             // 是否无视睡觉限制
             On_PlayerSleepingHelper.DoesPlayerHaveReasonToActUpInBed += NoSleepRestrictions;
+            // 光照是否无视物块传播
+            On_TileLightScanner.LightIsBlocked += LightNotBlocked;
+        }
+
+        private bool LightNotBlocked(On_TileLightScanner.orig_LightIsBlocked orig, TileLightScanner self, Tile tile)
+        {
+            if (Config.LightNotBlocked) return false;
+            else return orig(self, tile);
         }
 
         private bool NoSleepRestrictions(On_PlayerSleepingHelper.orig_DoesPlayerHaveReasonToActUpInBed orig, ref PlayerSleepingHelper self, Player player)
