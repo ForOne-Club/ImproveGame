@@ -279,6 +279,7 @@ namespace ImproveGame.Common.Configs
         public bool LightNotBlocked;
 
         [DefaultValue(BombsNotDamageType.Disabled)]
+        [DrawTicks]
         public BombsNotDamageType BombsNotDamage;
 
         #endregion
