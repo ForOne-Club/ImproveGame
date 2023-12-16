@@ -574,6 +574,15 @@ ImproveConfigs: {
 			'''
 	}
 
+	LightNotBlocked: {
+		Label: "[centeritem:UltrabrightTorch] 光照无视物块"
+		Tooltip:
+			'''
+			是否让光照无视物块传播
+			关闭则遵循原本的情况
+			'''
+	}
+
 	WorldFeaturePanel: {
 		Label: "[centeritem:WorldGlobe] 世界特性调节面板"
 		Tooltip:
@@ -610,7 +619,7 @@ ImproveConfigs: {
 
 	NoSleepRestrictions: {
 		Label: "[centeritem:Bed] 无视睡觉限制"
-		Tooltip: 任何情况下，睡觉时间加速的效果都不会被阻断.
+		Tooltip: 任何情况下，睡觉时间加速的效果都不会被阻断
 	}
 
 	BedTimeRate: {

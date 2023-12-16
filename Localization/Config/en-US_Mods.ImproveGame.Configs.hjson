@@ -205,11 +205,11 @@ ImproveConfigs: {
 	}
 
 	SlimeExDrop: {
-		Label: "[centeritem:11] 史莱姆必定内含物品"
+		Label: "[centeritem:11] Guarenteed Slime Item Drop"
 		Tooltip:
 			'''
-			使史莱姆体内必定包含随机物品
-			如果关闭该选项，则会遵循原版概率
+			Slimes are guarenteed to contain a random item
+			Follows vanilla drop rate if off
 			'''
 	}
 
@@ -568,6 +568,15 @@ ImproveConfigs: {
 			'''
 	}
 
+	LightNotBlocked: {
+		Label: "[centeritem:UltrabrightTorch] 光照无视物块"
+		Tooltip:
+			'''
+			是否让光照无视物块传播
+			关闭则遵循原本的情况
+			'''
+	}
+
 	WorldFeaturePanel: {
 		Label: "[centeritem:WorldGlobe] World Feature Panel"
 		Tooltip:
@@ -607,8 +616,8 @@ ImproveConfigs: {
 	}
 
 	NoSleepRestrictions: {
-		Label: "[centeritem:Bed] 无视睡觉限制"
-		Tooltip: 任何情况下，睡觉时间加速的效果都不会被阻断.
+		Label: "[centeritem:Bed] Unconditional Sleeping"
+		Tooltip: Sleeping accelerates time in any condition
 	}
 
 	BedTimeRate: {
@@ -636,18 +645,18 @@ ImproveConfigs: {
 	}
 
 	QuickRespawn: {
-		Label: "[centeritem:3232] 无BOSS存活时快速复活"
-		Tooltip: 当场上无任何BOSS或BOSS被击败/脱战时，将复活时间缩短为1.5s
+		Label: "[centeritem:3232] Fast Respawn When No Boss"
+		Tooltip: Respawn time is reduced to 1.5s when no boss is present
 	}
 
 	NoPylonRestrictions: {
-		Label: "[centeritem:TeleportationPylonPurity] 晶塔传送无视条件"
-		Tooltip: 可无视条件使用晶塔传送，但你仍需站在一个晶塔附近才能传送
+		Label: "[centeritem:TeleportationPylonPurity] Unconditional Pylon Teleportation"
+		Tooltip: Pylons may be used for teleportation unconditionally, but you still need to stand nearby a pylon
 	}
 
 	AllOff: {
-		Label: 全给我关掉
-		Tooltip: 将（几乎）所有配置还原到原版状态，还你一个原汁原味的泰拉瑞亚体验
+		Label: Turn Them OFF
+		Tooltip: Restores (almost) all configurations to vanilla state, play vanilla Terraria
 	}
 }
 
@@ -755,7 +764,7 @@ UIConfigs: {
 
 	PlyInfo: {
 		Label: "[centeritem:3124] Player Stats"
-		Tooltip: 开启后会在成就右侧出现一个四叶草标志
+		Tooltip: A four-leaf clover appears next to the achievement icon
 	}
 
 	QoLAutoTrash: {
@@ -798,43 +807,43 @@ UIConfigs: {
 	}
 
 	MarkFloatingIsland: {
-		Tooltip: 在地图上显示的已标记的空岛的图标的大小，设为0以隐藏图标
-		Label: "[centeritem:ImproveGame/FloatingIslandGlobe] 空岛图标大小"
+		Tooltip: Size of map icons of marked Floating Islands, set to 0 to hide
+		Label: "[centeritem:ImproveGame/FloatingIslandGlobe] Floating Islands Icon Size"
 	}
 
 	MarkAether: {
-		Tooltip: 在地图上显示的已标记的以太的图标的大小，设为0以隐藏图标
-		Label: "[centeritem:ImproveGame/AetherGlobe] 以太图标大小"
+		Tooltip: Size of map icons of marked Aether, set to 0 to hide
+		Label: "[centeritem:ImproveGame/AetherGlobe] Aether Icon Size"
 	}
 
 	MarkTemple: {
-		Tooltip: 在地图上显示的已标记的神庙的图标的大小，设为0以隐藏图标
-		Label: "[centeritem:ImproveGame/TempleGlobe] 神庙图标大小"
+		Tooltip: Size of map icons of marked Jungle Temple, set to 0 to hide
+		Label: "[centeritem:ImproveGame/TempleGlobe] Jungle Temple Icon Size"
 	}
 
 	MarkDungeon: {
-		Tooltip: 在地图上显示的已标记的地牢的图标的大小，设为0以隐藏图标
-		Label: "[centeritem:ImproveGame/DungeonGlobe] 地牢图标大小"
+		Tooltip: Size of map icons of marked Dungeon, set to 0 to hide
+		Label: "[centeritem:ImproveGame/DungeonGlobe] Dungeon Icon Size"
 	}
 
 	MarkPyramid: {
-		Label: "[centeritem:ImproveGame/PyramidGlobe] 金字塔图标大小"
-		Tooltip: 在地图上显示的已标记的金字塔的图标的大小，设为0以隐藏图标
+		Label: "[centeritem:ImproveGame/PyramidGlobe] Pyramid Icon Size"
+		Tooltip: Size of map icons of marked Pyramids, set to 0 to hide
 	}
 
 	MarkPlantera: {
-		Label: "[centeritem:ImproveGame/PlanteraGlobe] 世纪之花图标大小"
-		Tooltip: 在地图上显示的已标记的{$MapObject.PlanterasBulb}的图标的大小，设为0以隐藏图标
+		Label: "[centeritem:ImproveGame/PlanteraGlobe] PLantera's Bulb Icon Size"
+		Tooltip: Size of map icons of marked {$MapObject.PlanterasBulb}, set to 0 to hide
 	}
 
 	MarkEnchantedSword: {
-		Label: "[centeritem:ImproveGame/EnchantedSwordGlobe] 附魔剑图标大小"
-		Tooltip: 在地图上显示的已标记的{$ItemName.EnchantedSword}的图标的大小，设为0以隐藏图标
+		Label: "[centeritem:ImproveGame/EnchantedSwordGlobe] Enchanted Sword Icon Size"
+		Tooltip: Size of map icons of marked {$ItemName.EnchantedSword}, set to 0 to hide
 	}
 
 	MarkEmptyAutofisher: {
-		Label: "[centeritem:ImproveGame/Autofisher] 缺少鱼饵的钓鱼机图标大小"
-		Tooltip: 在地图上显示的所有缺少鱼饵的钓鱼机的图标的大小，设为0以隐藏图标
+		Label: "[centeritem:ImproveGame/Autofisher] Bait-Lacking Fishing Machine Icon Size"
+		Tooltip: Size of map icons of bait-lacking Fishing Machines, set to 0 to hide
 	}
 
 	SuicideButton: {
@@ -877,27 +886,24 @@ UIConfigs: {
 	}
 
 	ResetUIPositionsButton: {
-		Label: 重设UI位置
-		Tooltip: 重设所有UI的位置，在你找不到大背包UI时尤其有用
+		Label: Reset UI Position
+		Tooltip: Restore all UI positions to default, especially useful when you can't find your Big Backpack UI
 	}
 
 	GlassVfx: {
 		Label: "[centeritem:MulticoloredStainedGlass] Glassmorphism Effect"
 		Tooltip:
 			'''
-			为本模组的UI应用毛玻璃效果，使其更加美观
-			仅当照明模式设为“颜色”或“白”时可用
-			这个功能可能会影响性能
+			Applies glassmorphism effect to this mod's UI, making them prettier
+			Only takes effect when lighting mode is "Color" or "White"
+			May affect performance
 
-			有两种可选的毛玻璃效果：
-			1. 简单模糊
-			  - 仅对UI覆盖的游戏画面进行模糊处理，UI本身半透明
-			  - UI之间不会互相遮罩
-			2. 类云母
-			  - UI本身不透明，以其所覆盖的模糊处理后的游戏画面为背景
-			  - UI之间会互相遮罩
-			'''
-	}
+			2 applicable glassmorphisms:
+			1. Simple
+			  - only blurs game graphics covered by UIs, the UIs themselves is semitransparent
+			  - UIs do not mask on each other
+			2. Mica
+			  - UIs are opaque, taking blurred game graphics where they cover as background
 }
 
 PAPDisplayMode: {
@@ -915,26 +921,26 @@ ThemeType: {
 
 GlassType: {
 	Tooltip: ""
-	Disabled.Label: 关闭
-	SimpleBlur.Label: 简单模糊
-	MicaLike.Label: 类云母
+	Disabled.Label: Off
+	SimpleBlur.Label: Simple
+	MicaLike.Label: Mica
 }
 
 FavoritedConfigs: {
-	DisplayName: 配置选项收藏夹
+	DisplayName: Favorite Configs
 
 	Header: {
 		Favorited: "[centeritem:FallenStar] Favorited Options"
-		News: "[centeritem:RainbowCursor] 新版新增选项"
+		News: "[centeritem:RainbowCursor] New Configs"
 	}
 
 	FavoriteIntroduction: {
-		Label: 这是一个用于管理和设置常用配置项的页面
+		Label: A page for managing frequently used configs
 		Tooltip:
 			'''
-			右键单击更好的体验模组配置中的任何选项，即可将选项加入收藏
-			被收藏的选项会显示在此页面中，以便快速访问
-			此外，此页面也会显示每次模组更新后新增的配置选项
+			Right click any Quality of Terraria config to favorite it
+			Favorited configs will be shown in this page for quick access
+			Besides, the page shows newly added configs after updates
 			'''
 	}
 }

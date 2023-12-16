@@ -196,6 +196,7 @@ public class AllOffElement : PresetElement
         config.BOSSBattleResurrectionTimeShortened = 0;
         config.BanTombstone = false;
         config.LongerExpertDebuff = true;
+        config.LightNotBlocked = false;
         config.TeamAutoJoin = false;
     }
 }

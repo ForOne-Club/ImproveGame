@@ -4,14 +4,14 @@ PlayerStats: {
 	// 翻译提示: 尽量简短，因为UI的空间有限，不要超过10个字符
 	Introduction:
 		'''
-		[c/CC88AA:属性面板]
-		可以展示玩家的一些属性
-		支持部分Mod属性
-		左键点击可调出控制器以添加常驻属性
-		左键点击对应分类的标题和点击属性可开关常驻
-		按住右键可拖动此开关
+		[c/CC88AA:Stat Panel]
+		Displays some player stats
+		Supports some mod stats
+		<left> to open controller for adding stats to display
+		<left> a category or a stat to toggle its display
+		Hold right click to drag this button
 		'''
-	Control: 属性面板控制器
+	Control: Stat Panel Controller
 	Name: Player Stats
 	Melee: Melee
 	Ranged: Ranged
@@ -19,7 +19,7 @@ PlayerStats: {
 	Summon: Summon
 	Throwing: Throwing
 	// 其他玩家属性
-	Other: Other
+	Other: Others
 	LifeRegen: Life Regen
 	ArmorPenetration: Armor Pen
 	// 魔力恢复，因为归在大类“魔法”下所以用Regen代替
@@ -31,9 +31,9 @@ PlayerStats: {
 	Endurance: Endurance
 	Luck: Luck
 	Aggro: Aggro
-	BulletDamage: 弹药伤害
-	ArrowDamage: 弓箭伤害
-	SpecialistDamage: 其他伤害
+	BulletDamage: Bullet Dmg
+	ArrowDamage: Arrow Dmg
+	SpecialistDamage: Spec Dmg
 	Damage: Damage
 	Crit: Crit
 	// 攻击速度
@@ -133,20 +133,13 @@ ExtremeStorage: {
 
 AutoTrash.Introduction:
 	'''
-	This is an automatic trash bin.
-	Items will be trashed if their type is already inside.
-	Reserves 6 trashed items.
-	Shift+Ctrl+<left> an item to move it to this bin.
-	Can be [c/CC88AA:disabled] in UI configuration.
-	Press [c/CC88AA:{0}] to hide the UI.
-
-	这是一个自动垃圾桶，可取回最近丢弃的六种物品
-	[c/CC88AA:Shift+Ctrl+<left>]背包中的物品会将其丢入其中
-	（并加入自动丢弃列表）
-	已被加入此列表的物品从地图获取时总会[c/CC88AA:丢入其中]
-	可以在用户界面配置中[c/CC88AA:关闭]此功能
-	按下 [c/CC88AA:{0}] 以隐藏该界面
-	按下此按钮查看自动丢弃列表
+	This is an automatic trash bin which reserves 6 items
+	[c/CC88AA:Shift+Ctrl+<left>] an item to move it to this bin,
+	and add it to an auto-trash list
+	Items in this list will be [c/CC88AA:trashed] when picked up
+	This can be [c/CC88AA:disabled] in UI config
+	Press [c/CC88AA:{0}] to hide this UI
+	Hit this button to view the auto-trash list
 	'''
 
 WorldFeature: {
@@ -260,7 +253,7 @@ MapLayer: {
 	Pyramid: Pyramid
 	FloatingIsland: Floating Island
 	FloatingLake: Floating Lake
-	EmptyAutofisher: 自动钓鱼机（无鱼饵）
+	EmptyAutofisher: Fishing Machine (Bait-Lacking)
 }
 
 ThemePreview.Title: Theme Preview

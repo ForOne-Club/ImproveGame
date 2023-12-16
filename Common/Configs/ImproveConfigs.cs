@@ -274,6 +274,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool LongerExpertDebuff;
 
+        [DefaultValue(false)]
+        public bool LightNotBlocked;
+
         #endregion
 
         #region 树木设置
