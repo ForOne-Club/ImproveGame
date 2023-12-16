@@ -23,6 +23,7 @@
 - Locator and map icon for Enchanted Swords
 - Unconditional Sleeping
 - Unconditional Pylon Teleportation (off by default)
+- 新增“物块不再阻挡照明”设置，默认关闭，需自行开启
 - config favorites for managing config options
 - Storage Telecom to remotely open Storage Managers
 
