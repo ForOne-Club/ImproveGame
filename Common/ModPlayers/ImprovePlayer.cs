@@ -188,15 +188,6 @@ public class ImprovePlayer : ModPlayer
             Player.wallSpeed = 3f;
         }
     }
-    // 禁止爆炸物自伤
-    public override bool FreeDodge(Player.HurtInfo info)
-    {
-        // 如果开启了禁止爆炸物自伤，则视条件决定是否阻止造成伤害
-        if (Config.BombsNotHurtPlayer && ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[info.DamageSource.SourceProjectileType] && Main.projectile[info.DamageSource.SourceProjectileLocalIndex]?.owner == Player.whoAmI)
-            return true;
-            // 默认返回
-            return false;
-    }
     // 重生加速
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
     {

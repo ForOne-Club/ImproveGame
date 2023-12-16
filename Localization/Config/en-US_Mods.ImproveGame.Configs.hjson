@@ -577,9 +577,9 @@ ImproveConfigs: {
 			'''
 	}
 
-	BombsNotHurtPlayer: {
-		Label: "[centeritem:Bomb] 禁止爆炸物自伤"
-		Tooltip: 你所投掷的爆炸物将不会对你造成伤害
+	BombsNotDamage: {
+		Label: "[centeritem:Bomb] 禁止爆炸物伤害"
+		Tooltip: 你所投掷的爆炸物将不会造成伤害
 	}
 
 	WorldFeaturePanel: {

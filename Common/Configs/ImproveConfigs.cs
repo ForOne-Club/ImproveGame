@@ -278,7 +278,7 @@ namespace ImproveGame.Common.Configs
         public bool LightNotBlocked;
 
         [DefaultValue(true)]
-        public bool BombsNotHurtPlayer;
+        public bool BombsNotDamage;
 
         #endregion
 
