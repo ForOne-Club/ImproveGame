@@ -13,57 +13,57 @@
 - v1.6.7.0 (Not yet)
 
 ## Additions
-- 新增无BOSS存活时快速复活功能
-- 为瑟银添加了便携增益支持
-- 为属性面板添加了灾厄和瑟银职业支持
-- 属性面板完全重制，支持其他 Mod 添加分类与属性
-- 自动垃圾桶完全重制
-- 模组UI毛玻璃效果(Glassmorphism Effect)（默认关闭，可自行开启）
-- 缺少鱼饵的钓鱼机会在地图上用图标标记
-- 附魔剑定位球，在地图上显示附魔剑的位置
-- 新增“无视睡觉限制”设置
-- 新增“晶塔传送无视条件”设置，默认关闭，需自行开启
-- 新增配置选项收藏夹系统，以便更好地管理配置选项
-- 储存通讯器，可以远程打开储存管理器
+- Fast Respawn When No Boss
+- Portable Buff support for Thorium Mod
+- Stat Panel support for Calamity Mod and Thorium Mod classes
+- complete rework of the Stat Panel, ModCall for other mods to add their own categories and stats
+- complete rework of the Automatic Trash Bin
+- glassmorphism effect for this mod's UIs (off by default)
+- map icon for bait-lacking Fishing Machines
+- Locator and map icon for Enchanted Swords
+- Unconditional Sleeping
+- Unconditional Pylon Teleportation (off by default)
+- config favorites for managing config options
+- Storage Telecom to remotely open Storage Managers
 
 ## BUG Fixes
 
-- 即使钓鱼机无法存入将要钓上的物品，也会播放动画
-- 水蜡烛、和平蜡烛、影烛作为随身增益站无实际效果
-- 自动开袋开启一个袋子实际会消耗两个袋子
-- 自动开袋贩卖物品所得钱币只有应得的5%
-- 空间法杖可以无视条件设置方块的半砖类型
-- 漆涂法杖清除苔藓时永远只会掉落绿苔藓
-- 堆叠达到“药水无限增益需求量”的便携增益站不会应用Buff
-- 关闭“使用魔杖放置时无限材料”功能后放置堆叠超过999的背景墙仍不会消耗
-- 本Mod的RecipeGroup无法正确处理跨Mod问题（例如，在某些情况下需要“任何金锭”的配方无法使用铂金锭作为材料）
-- 大背包物品格中，可右键拿取有特殊右键操作的物品
-- 自动存钱后不正常刷新合成表，可被利用于刷钱
-- 构造法杖修复：
-  - 对椅子类物块普遍识别错误（如木椅被识别为马桶）
-  - 因放置顺序问题无法放置墙上的火把和插在物块左侧的火把
-  - 部分功能性物块放置后丧失功能（如假人无法被攻击）
-  - 部分物块的朝向错误
-  - 无法处理夜明和回声涂料
-  - 放置在平台下的旗帜在预览中显示错位
+- Fishing Machine playing animation even if storage is full
+- Water Candle, Peace Candle and Shadow Candle not taking effects as Portable Buff Stations
+- one auto-bag-opening attempt consuming 2 bags
+- auto bag opening with auto selling only rewards 5% of expected coins
+- Wand of Space can set tile slopping regardless
+- Wand of Paint always produce Green Moss while cleaning mosses
+- Portable Buff Stations not taking effects when stacking over Infinite Potion Requirement
+- walls stack over 999 are not consumed even if Infinite Wand Placables is off
+- this mod's RecipeGroup failing to handle cross-mods (e.g. sometimes "any gold bar" doesn't recognize Platinum Bars)
+- right click an item in Big Backpack takes the item instead of triggering its right click effect
+- recipes are not refreshed after auto money deposition, can be a coin farm hack
+- Wand of Construction fixes:
+  - incorrect chair types
+  - can't place torches on walls or at left side of tiles due to placement order
+  - some tiles losing functionality after being placed (e.g. Target Dummy can't be attakced)
+  - incorrect tile direction
+  - unable to handle Luminite or Echo Coatings
+  - incorrect preview for banners under platforms
 
 ## Adjustments
 
-- “Town NPC spawn mechanics improvement”功能可使理发师在击杀任意原版肉前Boss后入住，无需寻找
-- 自动钓鱼机现在仅有原来的20%的概率消耗诱饵
-- “隐藏无限续杯增益”功能移动到了个人设置中
-- 个人设置中新增“重设UI位置”按钮
-- 提升了勘探无人机的速度
-- 合成配方调整：
-  - 勘探无人机：任意铁锭x12 + 任意金锭x6 + 任意宝石x3 -> 任意铁锭x6 + 任意金锭x2
-  - 建筑魔杖：落星需求量从8个改为2个
-  - 液体魔杖：暗影鳞片/组织样本需求量从18个改为8个，任意金锭需求量从12个改为6个
-  - 自动钓鱼机：任意铁锭x8 + 任意铜锭x4 + 玻璃x20 -> 任意铁锭x4 + 任意铜锭x2
-- 轻微改进了摸彩袋掉率显示UI
-- 地图图标的大小可以调节了
-- 钢丝钳也会受到“工具使用速度提升倍率”影响了
-- 构造法杖结构现可处理标牌内容
-- 增益持续时间小于60s的物品不再算作无限增益药水，这会解决一些Mod的兼容性问题（如灾厄Astral Injection可持续提供增益，免除副作用）
+- Town NPC Spawn Mechanics Improvement unlocks the Stylist after any pre-hard mode boss is defeated, no need of searching
+- Fishing Machine only has 20% of the previous chance to consume baits
+- Hide Buff Icons of Infinite Potions is moved to Personal Configs
+- added Reset UI Positions button in Personal Configs
+- increased Explorer Drone speed
+- recipe adjustments:
+  - Explorer Drone: any iron bar *12 + any gold bar *6 + any gem *3 -> any iron bar *6 + any gold bar *2
+  - Wand of Architecture: 2 instead of 8 Fallen Stars are needed
+  - Wand of Liquid: 8 instead of 18 Shadow Scale / Tissue Sample and 6 instead of 12 any gold bar are needed
+  - Fishing Machine: any iron bar *8 + any copper bar *4 + glass *20 -> any iron bar *4 + any copper bar *2
+- slight improvements to Loot Bag Item Drop Rate UI
+- map icons are now resizable
+- Wire Cutter is now affected by Tool Speed
+- Wand of Construction can now handle content of Signs
+- items which have a buff duration below 60s are no longer considered as infinite potions, which solves some mod compatibility issues (e.g. Astral Injection from Calamity Mod)
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0
