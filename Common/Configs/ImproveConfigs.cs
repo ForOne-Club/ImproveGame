@@ -333,6 +333,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(false)]
         public bool BedOnlyOne;
 
+        [DefaultValue(true)]
+        public bool NoConditionTP;
+
         #endregion
 
         #region 模组设置
