@@ -64,6 +64,7 @@ public class FukMeCalamityElement : PresetElement
         config.MinimapMark = true;
         config.BedOnlyOne = true;
         config.QuestFishStack = true;
+        config.NoConditionTP = true;
     }
 }
 
@@ -125,6 +126,7 @@ public class ILoveBalanceElement : PresetElement
         config.MinimapMark = true;
         config.BedOnlyOne = false;
         config.QuestFishStack = true;
+        config.NoConditionTP = false;
     }
 }
 
@@ -197,6 +199,7 @@ public class AllOffElement : PresetElement
         config.BanTombstone = false;
         config.LongerExpertDebuff = true;
         config.TeamAutoJoin = false;
+        config.NoConditionTP = false;
     }
 }
 
