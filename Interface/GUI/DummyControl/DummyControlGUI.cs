@@ -1,22 +1,20 @@
-﻿using ImproveGame.Interface.Common;
-using ImproveGame.Interface.SUIElements;
-using Terraria.UI.Chat;
+﻿using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.GUI.DummyControl;
 
 public class DummyControlGUI : ViewBody
 {
     #region ViewBody
-    public override bool Display { get => IsVisible; set => IsVisible = value; }
+    public override bool Display { get => false; set => IsVisible = value; }
 
     public override bool CanDisableMouse(UIElement target)
     {
-        return Window.IsMouseHovering;
+        return Window?.IsMouseHovering ?? false;
     }
 
     public override bool CanPriority(UIElement target)
     {
-        return Window.IsMouseHovering;
+        return Window?.IsMouseHovering ?? false;
     }
     #endregion
 
@@ -27,6 +25,7 @@ public class DummyControlGUI : ViewBody
 
     public override void OnInitialize()
     {
+#if DEBUG
         Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
         {
             Draggable = true
@@ -89,10 +88,11 @@ public class DummyControlGUI : ViewBody
         uiText.Height.Pixels = 100f;
         uiText.SetPadding(8f);
         uiText.SetRoundedRectangleValues(default, 2f, UIColor.PanelBorder, new Vector4(8f));
-        uiText.TextOrKey = "[c/0099ff:你好123]提示 123, 提示 123, 提示 123, 提示 123, 提示 123, 提示 123, 提示 123";
+        uiText.TextOrKey = "[c/0099ff:你好 123] [centeritem/88:3] 提示 123, 提示 123, 提示 123, 提示 123, 提示 123, 提示 123, 提示 123";
         uiText.IsWrapped = true;
         uiText.TextOrigin = new Vector2(0.5f);
         uiText.TextPercentOffset = new Vector2(0.5f);
         uiText.Join(ContentView);
+#endif
     }
 }
