@@ -1,4 +1,5 @@
-﻿using ReLogic.Graphics;
+﻿using ImproveGame.Common.GlobalProjectiles;
+using ReLogic.Graphics;
 using System.Diagnostics;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
@@ -64,6 +65,7 @@ public class FukMeCalamityElement : PresetElement
         config.MinimapMark = true;
         config.BedOnlyOne = true;
         config.QuestFishStack = true;
+        config.BombsNotDamage = BombsNotDamageType.Item;
     }
 }
 
@@ -125,6 +127,7 @@ public class ILoveBalanceElement : PresetElement
         config.MinimapMark = true;
         config.BedOnlyOne = false;
         config.QuestFishStack = true;
+        config.BombsNotDamage = BombsNotDamageType.Item;
     }
 }
 
@@ -198,6 +201,7 @@ public class AllOffElement : PresetElement
         config.LongerExpertDebuff = true;
         config.LightNotBlocked = false;
         config.TeamAutoJoin = false;
+        config.BombsNotDamage = BombsNotDamageType.Disabled;
     }
 }
 

@@ -6,6 +6,7 @@ using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.WorldFeature;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
@@ -187,7 +188,6 @@ public class ImprovePlayer : ModPlayer
             Player.wallSpeed = 3f;
         }
     }
-
     // 重生加速
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
     {
