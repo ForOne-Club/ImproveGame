@@ -579,7 +579,7 @@ ImproveConfigs: {
 
 	BombsNotDamage: {
 		Label: "[centeritem:TNTBarrel] 禁止爆炸物伤害"
-		Tooltip: 
+		Tooltip:
 			'''
 			禁止可破坏物块相关物的伤害
 

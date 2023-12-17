@@ -7,6 +7,7 @@
             // 禁止爆炸物伤害（我是超激打表大师）
             if (Config.BombsNotDamage == BombsNotDamageType.Item && projectile.type is 28 or 29 or 37 or 108 or 470 or 
                 516 or 519 or 637 or 773 or 903 or 904 or 905 or 906 or 910 or 911)
+                return false;
             // 禁止爆炸物+火箭伤害（进行一个表的打！）
             if (Config.BombsNotDamage == BombsNotDamageType.ItemAndRocket && projectile.type is 28 or 29 or 37 or 108 or
                 136 or 137 or 138 or 142 or 143 or 144 or 470 or 516 or 519 or 637 or 773 or 780 or 781 or 782 or 783 or
@@ -14,7 +15,7 @@
                 903 or 904 or 905 or 906 or 910 or 911)
                 return false;
             // 默认返回
-            return true;
+            return null;
         }
     }
 }
