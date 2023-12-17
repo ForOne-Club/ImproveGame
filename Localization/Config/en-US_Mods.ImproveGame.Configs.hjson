@@ -969,10 +969,3 @@ FavoritedConfigs: {
 			'''
 	}
 }
-
-BombsNotDamageType: {
-	Tooltip: ""
-	Disabled.Label: Disabled
-	Item.Label: Item
-	ItemAndRocket.Label: Item And Rocket
-}
