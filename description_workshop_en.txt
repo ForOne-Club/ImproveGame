@@ -26,7 +26,7 @@ Only some functions are enabled by default, please check mod configurations for 
 [b]For a detailed list, check mod configurations or changelog above[/b]
 [olist]
 	[*]General features like max stack
-	[*]Non-vanity accessories can be worn in vanity slots
+	[*]A Storage Manager that integrates storage, crafting, infinite buffs, and more
 	[*]Town NPC spawn mechanic improvements: can respawn during nighttime, ignore respwaning limitations if bestiary is unlocked
 	[*]Mod items such as Wand of Space, Wand of Architecture, Wand of Bursts and Fishing Machine which greatly improve gameplay experience
 	[*]Integration of qol features like instantly refresh Angler's quests and disable tomb stone spawning

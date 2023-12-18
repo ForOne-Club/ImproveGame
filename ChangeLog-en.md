@@ -16,56 +16,56 @@
 - Fast Respawn When No Boss
 - Portable Buff support for Thorium Mod
 - Stat Panel support for Calamity Mod and Thorium Mod classes
-- complete rework of the Stat Panel, ModCall for other mods to add their own categories and stats
-- complete rework of the Automatic Trash Bin
-- glassmorphism effect for this mod's UIs (off by default)
-- map icon for bait-lacking Fishing Machines
+- Complete rework of the Stat Panel, ModCall for other mods to add their own categories and stats
+- Complete rework of the Automatic Trash Bin
+- Glassmorphism effect for this mod's UIs (off by default)
+- Map icon for bait-lacking Fishing Machines
 - Locator and map icon for Enchanted Swords
 - Unconditional Sleeping
-- 新增“禁止爆炸物伤害”设置
+- 新增“爆炸物无伤害”设置
 - Unconditional Pylon Teleportation (off by default)
-- 新增“物块不再阻挡照明”设置，默认关闭，需自行开启
-- config favorites for managing config options
+- 新增“物块不遮挡光照”设置，默认关闭，需自行开启
+- Config favorites for managing config options
 - Storage Telecom to remotely open Storage Managers
 
 ## BUG Fixes
 
 - Fishing Machine playing animation even if storage is full
 - Water Candle, Peace Candle and Shadow Candle not taking effects as Portable Buff Stations
-- one auto-bag-opening attempt consuming 2 bags
-- auto bag opening with auto selling only rewards 5% of expected coins
+- One auto-bag-opening attempt consuming 2 bags
+- Auto bag opening with auto selling only rewards 5% of expected coins
 - Wand of Space can set tile slopping regardless
 - Wand of Paint always produce Green Moss while cleaning mosses
 - Portable Buff Stations not taking effects when stacking over Infinite Potion Requirement
-- walls stack over 999 are not consumed even if Infinite Wand Placables is off
-- this mod's RecipeGroup failing to handle cross-mods (e.g. sometimes "any gold bar" doesn't recognize Platinum Bars)
-- right click an item in Big Backpack takes the item instead of triggering its right click effect
-- recipes are not refreshed after auto money deposition, can be a coin farm hack
+- Walls stack over 999 are not consumed even if Infinite Wand Placeables is off
+- This mod's RecipeGroup failing to handle cross-mods (e.g. sometimes "any gold bar" doesn't recognize Platinum Bars)
+- Right click an item in Big Backpack takes the item instead of triggering its right click effect
+- Recipes are not refreshed after auto money deposition, can be a coin farm hack
 - Wand of Construction fixes:
-  - incorrect chair types
-  - can't place torches on walls or at left side of tiles due to placement order
-  - some tiles losing functionality after being placed (e.g. Target Dummy can't be attakced)
-  - incorrect tile direction
-  - unable to handle Luminite or Echo Coatings
-  - incorrect preview for banners under platforms
+  - Incorrect chair types
+  - Can't place torches on walls or at left side of tiles due to placement order
+  - Some tiles losing functionality after being placed (e.g. Target Dummy can't be attacked)
+  - Incorrect tile direction
+  - Unable to handle Luminite or Echo Coatings
+  - Incorrect preview for banners under platforms
 
 ## Adjustments
 
 - Town NPC Spawn Mechanics Improvement unlocks the Stylist after any pre-hard mode boss is defeated, no need of searching
 - Fishing Machine only has 20% of the previous chance to consume baits
 - Hide Buff Icons of Infinite Potions is moved to Personal Configs
-- added Reset UI Positions button in Personal Configs
-- increased Explorer Drone speed
-- recipe adjustments:
+- Added Reset UI Positions button in Personal Configs
+- Increased Explorer Drone speed
+- Recipe adjustments:
   - Explorer Drone: any iron bar *12 + any gold bar *6 + any gem *3 -> any iron bar *6 + any gold bar *2
   - Wand of Architecture: 2 instead of 8 Fallen Stars are needed
   - Wand of Liquid: 8 instead of 18 Shadow Scale / Tissue Sample and 6 instead of 12 any gold bar are needed
   - Fishing Machine: any iron bar *8 + any copper bar *4 + glass *20 -> any iron bar *4 + any copper bar *2
-- slight improvements to Loot Bag Item Drop Rate UI
-- map icons are now resizable
+- Slight improvements to Loot Bag Item Drop Rate UI
+- Map icons are now resizable
 - Wire Cutter is now affected by Tool Speed
 - Wand of Construction can now handle content of Signs
-- items which have a buff duration below 60s are no longer considered as infinite potions, which solves some mod compatibility issues (e.g. Astral Injection from Calamity Mod)
+- Items which have a buff duration below 60s are no longer considered as infinite potions, which solves some mod compatibility issues (e.g. Astral Injection from Calamity Mod)
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0
@@ -80,7 +80,7 @@ The mod name have changed to Quality of Terraria since v1.6.6.0
 - Explorer Drone, your good friend in deep rocks
 - "Stormdark" color scheme
 - Scarecrow Dummy, a configurable damage-testing dummy (not in multiplayer yet)
-- "Infinite Wand Placables" config option, you can turn it off now
+- "Infinite Wand Placeables" config option, you can turn it off now
 - "Stackable Quest Fishes" config option
 - **[v1.6.6.1]** Ability to see what items an item can be shimmered into
 ## BUG Fixes

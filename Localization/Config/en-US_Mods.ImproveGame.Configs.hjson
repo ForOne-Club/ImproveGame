@@ -205,10 +205,10 @@ ImproveConfigs: {
 	}
 
 	SlimeExDrop: {
-		Label: "[centeritem:11] Guarenteed Slime Item Drop"
+		Label: "[centeritem:11] Guaranteed Slime Item Drop"
 		Tooltip:
 			'''
-			Slimes are guarenteed to contain a random item
+			Slimes are guaranteed to contain a random item
 			Follows vanilla drop rate if off
 			'''
 	}
@@ -287,7 +287,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			In Journey mode, items in sufficient stack number and marked as favorite will be automatically researched
-			This function will not comsume the items
+			This function will not consume the items
 			'''
 	}
 
@@ -541,7 +541,7 @@ ImproveConfigs: {
 	}
 
 	RedPotionEverywhere: {
-		Label: "[centeritem:RedPotion] Unlimited Red Potion Exntension"
+		Label: "[centeritem:RedPotion] Unlimited Red Potion Extension"
 		Tooltip:
 			'''
 			Unlock the Red Potion Extension for all kinds of worlds,
@@ -551,7 +551,7 @@ ImproveConfigs: {
 	}
 
 	RedPotionRequirement: {
-		Label: "[centeritem:RedPotion] Infinite Red Potion Requirment"
+		Label: "[centeritem:RedPotion] Infinite Red Potion Requirement"
 		Tooltip:
 			'''
 			Requires the Red Potion Extension to be enabled.
@@ -569,7 +569,7 @@ ImproveConfigs: {
 	}
 
 	LightNotBlocked: {
-		Label: "[centeritem:UltrabrightTorch] 光照无视物块"
+		Label: "[centeritem:UltrabrightTorch] 物块不遮挡光照"
 		Tooltip:
 			'''
 			是否让光照无视物块传播
@@ -578,7 +578,7 @@ ImproveConfigs: {
 	}
 
 	BombsNotDamage: {
-		Label: "[centeritem:TNTBarrel] 禁止爆炸物伤害"
+		Label: "[centeritem:TNTBarrel] 爆炸物无伤害"
 		Tooltip:
 			'''
 			禁止可破坏物块相关物的伤害
@@ -652,7 +652,7 @@ ImproveConfigs: {
 			Tiles and walls with stack over 999 will not be consumed if placed by Wand of Space/Technology/Construction,
 			working benches, tables, beds, etc. with stack over 99 instead will not be consumed.
 			'''
-		Label: "[centeritem:ImproveGame/SpaceWand] Infinite Wand Placables"
+		Label: "[centeritem:ImproveGame/SpaceWand] Infinite Wand Placeables"
 	}
 
 	QuestFishStack: {
@@ -848,7 +848,7 @@ UIConfigs: {
 	}
 
 	MarkPlantera: {
-		Label: "[centeritem:ImproveGame/PlanteraGlobe] PLantera's Bulb Icon Size"
+		Label: "[centeritem:ImproveGame/PlanteraGlobe] Plantera's Bulb Icon Size"
 		Tooltip: Size of map icons of marked {$MapObject.PlanterasBulb}, set to 0 to hide
 	}
 
@@ -888,7 +888,7 @@ UIConfigs: {
 
 	InvisibleTransparency: {
 		Label: "[centeritem:InvisibilityPotion] Invisibility Alpha"
-		Tooltip: Alpha of your charactor in your perspective while invisible, 1 is solid and 0 is transparent.
+		Tooltip: Alpha of your character in your perspective while invisible, 1 is solid and 0 is transparent.
 	}
 
 	ThemeType: {
