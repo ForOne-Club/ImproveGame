@@ -8,8 +8,8 @@ namespace ImproveGame.Interface.Common;
 public static class TextUtils
 {
     /// <summary>
-    /// ChatManager.XXX() 解析消息 <br/>
-    /// 根据设置的固定格式拆分消息: [tag/options:text]
+    /// 将文本转换为文本片段 <br/>
+    /// 根据格式: [tag/options:text] 拆分消息
     /// </summary>
     public static List<TextSnippet> ParseMessage(string input, Color baseColor)
     {
@@ -193,6 +193,7 @@ public static class TextUtils
                             }
                         }
 
+                        #region 根据可显示的文本长度进行切分
                         // 根据空格拆分
                         string[] snippetArray = snippet.Text.Split(' ');
 
@@ -220,7 +221,9 @@ public static class TextUtils
                                 finalIndex = availableIndex;
                             }
                         }
+                        #endregion
 
+                        #region 将切分后的文本片段加入到列表中
                         string newText = snippet.Text[..finalIndex];
                         string newText2 = snippet.Text[finalIndex..];
                         snippets = [snippet.CopyMorph(newText2)];
@@ -233,6 +236,7 @@ public static class TextUtils
                         snippetsRow[j] = snippet.CopyMorph(newText);
                         snippetsMain[i] = snippetsMain[i].Take(j + 1).ToList();
                         snippetsMain.Insert(i + 1, snippets);
+                        #endregion
                         break;
                     }
 
