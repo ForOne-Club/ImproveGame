@@ -11,7 +11,9 @@ public class FavoritedOptionDatabase
     {
         "QuickRespawn",
         "NoPylonRestrictions",
-        "NoSleepRestrictions"
+        "NoSleepRestrictions",
+        "BombsNotDamage",
+        "LightNotBlocked"
     };
 
     public static void SetDefaultFavoritedOptions()
