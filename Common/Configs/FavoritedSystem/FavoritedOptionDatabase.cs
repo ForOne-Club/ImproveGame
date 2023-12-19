@@ -2,24 +2,24 @@
 
 public class FavoritedOptionDatabase
 {
-    internal static HashSet<string> FavoritedOptions = new();
+    internal static HashSet<string> FavoritedOptions = [];
 
     /// <summary>
     /// 新增选项，用于在更新时提示玩家
     /// </summary>
-    internal static HashSet<string> NewOptions => new()
-    {
-        "QuickRespawn",
-        "NoPylonRestrictions",
-        "NoSleepRestrictions",
-        "BombsNotDamage",
-        "LightNotBlocked"
-    };
+    internal static HashSet<string> NewOptions =>
+    [
+        nameof(ImproveConfigs.QuickRespawn),
+        nameof(ImproveConfigs.NoPylonRestrictions),
+        nameof(ImproveConfigs.NoSleepRestrictions),
+        nameof(ImproveConfigs.BombsNotDamage),
+        nameof(ImproveConfigs.LightNotBlocked)
+    ];
 
     public static void SetDefaultFavoritedOptions()
     {
-        FavoritedOptions = new HashSet<string>
-        {
+        FavoritedOptions =
+        [
             "SuperVault",
             "GrabDistance",
             "ExtraToolSpeed",
@@ -29,7 +29,7 @@ public class FavoritedOptionDatabase
             "BannerRequirement",
             "ModifyNPCHappiness",
             "WandMaterialNoConsume"
-        };
+        ];
     }
 
     public static void ToggleFavoriteForOption(string name)
