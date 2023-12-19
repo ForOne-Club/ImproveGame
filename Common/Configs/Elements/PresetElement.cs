@@ -66,6 +66,7 @@ public class FukMeCalamityElement : PresetElement
         config.BedOnlyOne = true;
         config.QuestFishStack = true;
         config.BombsNotDamage = BombsNotDamageType.Item;
+        config.NoConditionTP = true;
     }
 }
 
@@ -128,6 +129,7 @@ public class ILoveBalanceElement : PresetElement
         config.BedOnlyOne = false;
         config.QuestFishStack = true;
         config.BombsNotDamage = BombsNotDamageType.Item;
+        config.NoConditionTP = false;
     }
 }
 
@@ -202,6 +204,7 @@ public class AllOffElement : PresetElement
         config.LightNotBlocked = false;
         config.TeamAutoJoin = false;
         config.BombsNotDamage = BombsNotDamageType.Disabled;
+        config.NoConditionTP = false;
     }
 }
 

@@ -27,6 +27,7 @@
 - 新增“物块不遮挡光照”设置，默认关闭，需自行开启
 - Config favorites for managing config options
 - Storage Telecom to remotely open Storage Managers
+- 新增无条件队内传送功能
 
 ## BUG Fixes
 

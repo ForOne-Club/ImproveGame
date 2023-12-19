@@ -674,6 +674,11 @@ ImproveConfigs: {
 		Label: Turn Them OFF
 		Tooltip: Restores (almost) all configurations to vanilla state, play vanilla Terraria
 	}
+
+	NoConditionTP: {
+		Label: "[centeritem:WormholePotion] 无条件队内传送"
+		Tooltip: 可无视条件使用队内传送，不需要携带虫洞药水，带了也不会消耗
+	}
 }
 
 ModItemLoadPage: {

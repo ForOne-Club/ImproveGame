@@ -676,6 +676,11 @@ ImproveConfigs: {
 		Label: 全给我关掉
 		Tooltip: 将（几乎）所有配置还原到原版状态，还你一个原汁原味的泰拉瑞亚体验
 	}
+
+	NoConditionTP: {
+		Label: "[centeritem:WormholePotion] 无条件队内传送"
+		Tooltip: 可无视条件使用队内传送，不需要携带虫洞药水，带了也不会消耗
+	}
 }
 
 ModItemLoadPage: {

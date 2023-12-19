@@ -1,8 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.GlobalItems;
 using ImproveGame.Content.Items;
-using ImproveGame.Content.Tiles;
-using ImproveGame.Interface.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
@@ -12,7 +9,6 @@ using Terraria.GameContent.Drawing;
 using Terraria.Graphics;
 using Terraria.Graphics.Light;
 using Terraria.Graphics.Renderers;
-using Terraria.Graphics.Shaders;
 
 namespace ImproveGame.Content.Patches
 {
@@ -166,7 +162,7 @@ namespace ImproveGame.Content.Patches
                 a *= opacity;
             }
         }
-        
+
         private class NoPylonRestrictions : GlobalPylon
         {
             public override void PostValidTeleportCheck(TeleportPylonInfo destinationPylonInfo, TeleportPylonInfo nearbyPylonInfo,
@@ -345,6 +341,7 @@ namespace ImproveGame.Content.Patches
         {
             if (Config.LightNotBlocked) return false;
             else return orig(self, tile);
+            On_Player.HasUnityPotion += (orig, self) => Config.NoConditionTP || orig(self);
         }
 
         private bool NoSleepRestrictions(On_PlayerSleepingHelper.orig_DoesPlayerHaveReasonToActUpInBed orig, ref PlayerSleepingHelper self, Player player)

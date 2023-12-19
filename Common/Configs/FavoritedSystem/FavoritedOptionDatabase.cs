@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.Common.Configs.FavoritedSystem;
+namespace ImproveGame.Common.Configs.FavoritedSystem;
 
 public class FavoritedOptionDatabase
 {
@@ -13,7 +13,8 @@ public class FavoritedOptionDatabase
         nameof(ImproveConfigs.NoPylonRestrictions),
         nameof(ImproveConfigs.NoSleepRestrictions),
         nameof(ImproveConfigs.BombsNotDamage),
-        nameof(ImproveConfigs.LightNotBlocked)
+        nameof(ImproveConfigs.LightNotBlocked),
+        nameof(ImproveConfigs.NoConditionTP)
     ];
 
     public static void SetDefaultFavoritedOptions()
