@@ -23,6 +23,7 @@
 - Locator and map icon for Enchanted Swords
 - Unconditional Sleeping
 - 新增“爆炸物无伤害”设置
+- 新增“更好、更大、更强的环境改造枪”设置
 - Unconditional Pylon Teleportation (off by default)
 - 新增“物块不遮挡光照”设置，默认关闭，需自行开启
 - Config favorites for managing config options

@@ -24,6 +24,7 @@ public class FukMeCalamityElement : PresetElement
         config.NoPlace_BUFFTile_Banner = true;
         config.NoConsume_Potion = true;
         config.NoConsume_Ammo = true;
+        config.ClentaminatorPlus = true;
         config.ImprovePrefix = true;
         config.MiddleEnableBank = true;
         config.FasterExtractinator = true;
@@ -87,6 +88,7 @@ public class ILoveBalanceElement : PresetElement
         config.NoPlace_BUFFTile_Banner = false;
         config.NoConsume_Potion = false;
         config.NoConsume_Ammo = true;
+        config.ClentaminatorPlus = true;
         config.ImprovePrefix = true;
         config.MiddleEnableBank = true;
         config.FasterExtractinator = true;
@@ -151,6 +153,7 @@ public class AllOffElement : PresetElement
         config.NoPlace_BUFFTile_Banner = false;
         config.NoConsume_Potion = false;
         config.NoConsume_Ammo = false;
+        config.ClentaminatorPlus = false;
         config.ImprovePrefix = false;
         config.MiddleEnableBank = false;
         config.FasterExtractinator = false;
