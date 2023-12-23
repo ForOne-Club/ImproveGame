@@ -40,8 +40,6 @@ namespace ImproveGame.Common.GlobalItems
 
         public override float UseTimeMultiplier(Item item, Player player)
         {
-            if (item.type is ItemID.Clentaminator && Config.ClentaminatorPlus)
-                return 0.66f; // 更快的环境改造枪
             if (item.pick > 0 || item.hammer > 0 || item.axe > 0 || item.type is ItemID.WireCutter)
                 return 1f - Config.ExtraToolSpeed;
             return 1f;
@@ -94,10 +92,6 @@ namespace ImproveGame.Common.GlobalItems
         // 物品消耗
         public override bool ConsumeItem(Item item, Player player)
         {
-            // 更好的环境改造枪
-            if (Config.ClentaminatorPlus && item.type is ItemID.Clentaminator && Main.rand.NextBool(5))
-                return false;
-
             // 所有召唤物不会消耗
             if (Config.NoConsume_SummonItem &&
                 (Lookups.BossSummonItems.Contains(item.type) || Lookups.EventSummonItems.Contains(item.type)))
