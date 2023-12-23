@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ReLogic.Graphics;
 using ReLogic.Text;
+using System.Collections.Generic;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
@@ -111,7 +112,7 @@ public class SUIText : TimerView
     /// <summary>
     /// 展示文本
     /// </summary>
-    public string VisibleText { get; protected set; }
+    public TextSnippet[] VisibleTextSnippets { get; protected set; }
 
     /// <summary>
     /// 最后一次的 inner 宽度
@@ -146,14 +147,28 @@ public class SUIText : TimerView
 
         if (_isWrapped)
         {
-            VisibleText = Font.CreateWrappedText(LastText, GetInnerDimensions().Width / TextScale);
+            List<TextSnippet> finalSnippets = [];
+            List<List<TextSnippet>> firstSnippets = TextSnippetHelper.WordwrapString(LastText, TextColor, Font, GetInnerDimensions().Width / TextScale);
+
+            foreach (List<TextSnippet> snippets in firstSnippets)
+            {
+                finalSnippets.AddRange(snippets);
+                finalSnippets.Add(new TextSnippet("\n"));
+            }
+
+            if (finalSnippets.Count > 0 && finalSnippets[^1].Text == "\n")
+            {
+                finalSnippets.RemoveAt(finalSnippets.Count - 1);
+            }
+
+            VisibleTextSnippets = [.. finalSnippets];
         }
         else
         {
-            VisibleText = LastText;
+            VisibleTextSnippets = [.. TextSnippetHelper.ConvertNormalSnippets(TextSnippetHelper.ParseMessage(LastText, TextColor))];
         }
 
-        TextSize = ChatManager.GetStringSize(Font, VisibleText, new Vector2(1f));
+        TextSize = ChatManager.GetStringSize(Font, VisibleTextSnippets, new Vector2(1f));
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
@@ -172,13 +187,15 @@ public class SUIText : TimerView
         Vector2 innerPos = inner.Position();
 
         Vector2 textSize = TextSize;
-        Vector2 textPos = innerPos + TextOffset + TextPercentOffset * innerSize + (innerSize - textSize) * TextAlign;
+        Vector2 textPos = innerPos + TextOffset + TextPercentOffset * innerSize + (innerSize - textSize * TextScale) * TextAlign;
         textPos.Y += TextScale * (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
+        textPos -= TextOrigin * TextSize * TextScale;
 
-        var snippets = ChatManager.ParseMessage(VisibleText, TextColor).ToArray();
-        ChatManager.ConvertNormalSnippets(snippets);
-        ChatManager.DrawColorCodedStringShadow(spriteBatch, Font, snippets, textPos, TextBorderColor, 0f, TextOrigin * TextSize, new(TextScale), -1f, 1.5f);
-        ChatManager.DrawColorCodedString(spriteBatch, Font, snippets, textPos, Color.White, 0f, TextOrigin * TextSize, new(TextScale), out var _, -1f);
+        ChatManager.DrawColorCodedStringShadow(spriteBatch, Font, VisibleTextSnippets,
+            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, 1.5f);
+
+        ChatManager.DrawColorCodedString(spriteBatch, Font, VisibleTextSnippets,
+            textPos, Color.White, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
 
         /*DrawBorderString(spriteBatch, Font, textPos, VisibleText,
             TextColor, TextBorderColor, TextOrigin * TextSize, TextScale, 2f);*/

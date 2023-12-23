@@ -5,7 +5,7 @@ namespace ImproveGame.Interface.GUI.DummyControl;
 public class DummyControlGUI : ViewBody
 {
     #region ViewBody
-    public override bool Display { get => false; set => IsVisible = value; }
+    public override bool Display { get => IsVisible; set => IsVisible = value; }
 
     public override bool CanDisableMouse(UIElement target)
     {
@@ -25,7 +25,6 @@ public class DummyControlGUI : ViewBody
 
     public override void OnInitialize()
     {
-#if DEBUG
         Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
         {
             Draggable = true
@@ -83,16 +82,17 @@ public class DummyControlGUI : ViewBody
         ContentView.SetPadding(6f, 4f);
         ContentView.Join(Window);
 
-        var uiText = new SUIText();
+        SUIText uiText = new SUIText();
         uiText.Width.Percent = 1f;
         uiText.Height.Pixels = 100f;
         uiText.SetPadding(8f);
         uiText.SetRoundedRectangleValues(default, 2f, UIColor.PanelBorder, new Vector4(8f));
-        uiText.TextOrKey = "[c/0099ff:你好 123] [centeritem/88:3] 提示 123, 提示 123, 提示 123, 提示 123, 提示 123, 提示 123, 提示 123";
+        uiText.TextOrKey =
+            "[c/0099ff:石块: ][centeritem/s10:3]\n" +
+            "土块: [centeritem/s10:2]";
         uiText.IsWrapped = true;
         uiText.TextOrigin = new Vector2(0.5f);
         uiText.TextPercentOffset = new Vector2(0.5f);
         uiText.Join(ContentView);
-#endif
     }
 }
