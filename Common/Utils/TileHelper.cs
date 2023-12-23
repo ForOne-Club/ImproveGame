@@ -483,6 +483,16 @@ namespace ImproveGame
         }
 
         /// <summary>
+        /// 遍历 Tile
+        /// </summary>
+        public static void ForeachTile(IEnumerable<Point> positions, Action<int, int> action)
+        {
+            foreach (var position in positions) {
+                action(position.X, position.Y);
+            }
+        }
+
+        /// <summary>
         /// 原版的私有方法,作用是判断物品对应的物块和坐标的物块是不是一样的，为空间魔杖做了一些删减。
         /// <br>相同的物块返回 false</br>
         /// </summary>

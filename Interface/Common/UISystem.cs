@@ -7,6 +7,7 @@ using ImproveGame.Interface.GUI.DummyControl;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.PlayerStats;
+using ImproveGame.Interface.GUI.SpaceWand;
 using ImproveGame.Interface.GUI.WorldFeature;
 using ImproveGame.Interface.UIStructs;
 

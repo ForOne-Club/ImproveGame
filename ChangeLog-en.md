@@ -28,6 +28,10 @@
 - Config favorites for managing config options
 - Storage Telecom to remotely open Storage Managers
 - 新增无条件队内传送功能
+- 空间法杖更新：
+  - 新增多种放置形状，现可放置斜线、L型线、实心/空心矩形、实心/空心圆
+  - 直线放置去除了放置方块数量的限制
+  - 优化了轮盘UI
 
 ## BUG Fixes
 

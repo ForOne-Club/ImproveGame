@@ -299,13 +299,15 @@ PaintWandGUI: {
 }
 
 SpaceWandGUI: {
-	PlaceType: 放置类型
+	PlaceType: 物件
 	Platform: 平台
 	Soild: 方块
 	Rope: 绳子
 	Rail: 轨道
 	GrassSeed: 草种
 	PlantPot: 种植盆
+	BlockType: 斜坡
+	ShapeType: 形状
 }
 
 PackageGUI: {
