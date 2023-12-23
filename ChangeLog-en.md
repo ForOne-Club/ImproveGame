@@ -53,6 +53,8 @@
   - Incorrect tile direction
   - Unable to handle Luminite or Echo Coatings
   - Incorrect preview for banners under platforms
+  - 部分背景墙对应的物品出错
+- 部分物品的特殊右下角标识在某些UI无法正确绘制（如大背包中的危险墙无骷髅头标识）
 
 ## Adjustments
 

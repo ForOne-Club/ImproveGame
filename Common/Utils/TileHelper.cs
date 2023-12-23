@@ -65,8 +65,6 @@ namespace ImproveGame
                 wallType = WallID.Mushroom;
             if (wallType is WallID.HiveUnsafe)
                 wallType = WallID.Hive;
-            if (wallType is WallID.LihzahrdBrickUnsafe)
-                wallType = WallID.LihzahrdBrick;
             // 大理石与花岗岩
             if (wallType is WallID.MarbleUnsafe)
                 wallType = WallID.Marble;
@@ -91,11 +89,6 @@ namespace ImproveGame
             // https://terraria.wiki.gg/zh/wiki/%E5%AE%9D%E7%9F%B3%E5%A2%99 宝石墙
             if (wallType is >= 48 and <= 53)
                 wallType = wallType - 48 + 250;
-            // https://terraria.wiki.gg/zh/wiki/%E5%9C%B0%E7%89%A2%E7%A0%96%E5%A2%99 地牢砖墙
-            if (wallType is >= 7 and <= 9)
-                wallType = wallType - 7 + 17;
-            if (wallType is >= 94 and <= 99)
-                wallType = wallType - 94 + 100;
             // https://terraria.wiki.gg/zh/wiki/%E6%B2%99%E5%B2%A9%E5%A2%99 沙岩墙
             // https://terraria.wiki.gg/zh/wiki/%E8%85%90%E5%8C%96%E5%A2%99 腐化墙
             // https://terraria.wiki.gg/zh/wiki/%E7%8C%A9%E7%BA%A2%E5%A2%99 猩红墙
@@ -106,8 +99,13 @@ namespace ImproveGame
             // https://terraria.wiki.gg/zh/wiki/%E6%B4%9E%E5%A3%81 洞壁 (一部分)
             // https://terraria.wiki.gg/zh/wiki/%E7%A1%AC%E5%8C%96%E6%B2%99%E5%A2%99 硬化沙墙
             // https://terraria.wiki.gg/zh/wiki/%E6%B2%99%E6%BC%A0%E5%8C%96%E7%9F%B3%E5%A2%99 沙漠化石墙
-            if (wallType is >= 187 and <= 223)
-                wallType = wallType - 188 + 275;
+            // 1.4.4添加了危险沙岩墙和危险硬化沙墙物品，不要转化他俩
+            if (wallType is WallID.CorruptSandstone)
+                wallType = WallID.CorruptSandstoneEcho;
+            if (wallType is WallID.CrimsonSandstone)
+                wallType = WallID.CrimsonSandstoneEcho;
+            if (wallType is >= 187 and <= 223 and not WallID.Sandstone and not WallID.HardenedSand)
+                wallType = wallType - 187 + 275;
             // https://terraria.wiki.gg/zh/wiki/%E6%B4%9E%E5%A3%81 洞壁
             if (wallType is >= 54 and <= 59)
                 wallType = wallType - 54 + 256;
@@ -119,6 +117,14 @@ namespace ImproveGame
                 wallType = wallType - 170 + 270;
             if (MaterialCore.WallToItem.TryGetValue(wallType, out var itemType))
                 return itemType[0]; // 可以多对一，但我懒得写了
+            // 1.4.4添加了危险墙物品，这些转化就注释掉了
+            // if (wallType is WallID.LihzahrdBrickUnsafe)
+            //     wallType = WallID.LihzahrdBrick;
+            // https://terraria.wiki.gg/zh/wiki/%E5%9C%B0%E7%89%A2%E7%A0%96%E5%A2%99 地牢砖墙
+            // if (wallType is >= 7 and <= 9)
+            //     wallType = wallType - 7 + 17;
+            // if (wallType is >= 94 and <= 99)
+            //     wallType = wallType - 94 + 100;
             return -1;
         }
 
