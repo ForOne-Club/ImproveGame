@@ -165,12 +165,25 @@ namespace ImproveGame.Content.Patches
 
         private class NoPylonRestrictions : GlobalPylon
         {
-            public override void PostValidTeleportCheck(TeleportPylonInfo destinationPylonInfo, TeleportPylonInfo nearbyPylonInfo,
+            // 这个无视的条件有点多，所以不用这个重写函数
+            /*public override void PostValidTeleportCheck(TeleportPylonInfo destinationPylonInfo, TeleportPylonInfo nearbyPylonInfo,
                 ref bool destinationPylonValid, ref bool validNearbyPylonFound, ref string errorKey)
             {
                 destinationPylonValid |= Config.NoPylonRestrictions;
                 // 下面这条会允许任意地点传送到任意地点，暂不考虑加入
                 // validNearbyPylonFound |= Config.NoPylonRestrictions;
+            }*/
+            public override bool? ValidTeleportCheck_PreAnyDanger(TeleportPylonInfo pylonInfo)
+            {
+                if (Config.NoPylonRestrictions)
+                    return true; // 无视原版的威胁检测
+                return null;
+            }
+            public override bool? ValidTeleportCheck_PreNPCCount(TeleportPylonInfo pylonInfo, ref int defaultNecessaryNPCCount)
+            {
+                if (Config.NoPylonRestrictions)
+                    return true; // 无视原版的npc数量检测
+                return null;
             }
         }
 

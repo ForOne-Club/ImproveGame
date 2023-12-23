@@ -101,6 +101,9 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool NoConsume_Projectile;
 
+        [DefaultValue(true)]
+        public bool ClentaminatorPlus;
+
         [DefaultValue(false)]
         public bool ImprovePrefix;
 
