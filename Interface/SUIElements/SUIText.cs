@@ -2,6 +2,7 @@
 using ReLogic.Graphics;
 using ReLogic.Text;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
@@ -191,14 +192,130 @@ public class SUIText : TimerView
         textPos.Y += TextScale * (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
         textPos -= TextOrigin * TextSize * TextScale;
 
-        ChatManager.DrawColorCodedStringShadow(spriteBatch, Font, VisibleTextSnippets,
+        DrawColorCodedStringShadow(spriteBatch, Font, VisibleTextSnippets,
             textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, 1.5f);
 
-        ChatManager.DrawColorCodedString(spriteBatch, Font, VisibleTextSnippets,
+        DrawColorCodedString(spriteBatch, Font, VisibleTextSnippets,
             textPos, Color.White, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
+    }
 
-        /*DrawBorderString(spriteBatch, Font, textPos, VisibleText,
-            TextColor, TextBorderColor, TextOrigin * TextSize, TextScale, 2f);*/
+    public static readonly Vector2[] ShadowDirections =
+    [
+        -Vector2.UnitX,
+        Vector2.UnitX,
+        -Vector2.UnitY,
+        Vector2.UnitY
+    ];
+
+    public static void DrawColorCodedStringShadow(SpriteBatch spriteBatch, DynamicSpriteFont font, TextSnippet[] snippets, Vector2 position, Color baseColor, float rotation, Vector2 origin, Vector2 baseScale, float maxWidth = -1f, float spread = 2f)
+    {
+        for (int i = 0; i < ShadowDirections.Length; i++)
+        {
+            DrawColorCodedString(spriteBatch, font, snippets, position + ShadowDirections[i] * spread, baseColor, rotation, origin, baseScale, out var _, maxWidth, ignoreColors: true);
+        }
+    }
+
+    public static Vector2 DrawColorCodedString(SpriteBatch spriteBatch, DynamicSpriteFont font, TextSnippet[] snippets, Vector2 position, Color baseColor, float rotation, Vector2 origin, Vector2 baseScale, out int hoveredSnippet, float maxWidth, bool ignoreColors = false)
+    {
+        int num = -1;
+
+        Vector2 mousePosition = Main.MouseScreen;
+        Vector2 vector = position;
+        Vector2 result = vector;
+
+        float x = font.MeasureString(" ").X;
+        Color color = baseColor;
+        float num3 = 0f;
+
+        for (int i = 0; i < snippets.Length; i++)
+        {
+            TextSnippet textSnippet = snippets[i];
+            textSnippet.Update();
+            if (!ignoreColors)
+            {
+                color = textSnippet.GetVisibleColor();
+            }
+
+            float num2 = textSnippet.Scale;
+            if (textSnippet.UniqueDraw(justCheckingString: false, out var size, spriteBatch, vector, color, baseScale.X * num2))
+            {
+                if (mousePosition.Between(vector, vector + size))
+                {
+                    num = i;
+                }
+
+                vector.X += size.X;
+                result.X = Math.Max(result.X, vector.X);
+                continue;
+            }
+
+            string[] array = textSnippet.Text.Split('\n');
+            array = Regex.Split(textSnippet.Text, "(\n)");
+            bool flag = true;
+            string[] array2 = array;
+            foreach (string obj in array2)
+            {
+                string[] array3 = Regex.Split(obj, "( )");
+                array3 = obj.Split(' ');
+                if (obj == "\n")
+                {
+                    vector.Y += (float)font.LineSpacing * num3 * baseScale.Y;
+                    vector.X = position.X;
+                    result.Y = Math.Max(result.Y, vector.Y);
+                    num3 = 0f;
+                    flag = false;
+                    continue;
+                }
+
+                for (int k = 0; k < array3.Length; k++)
+                {
+                    if (k != 0)
+                    {
+                        vector.X += x * baseScale.X * num2;
+                    }
+
+                    if (maxWidth > 0f)
+                    {
+                        float num4 = font.MeasureString(array3[k]).X * baseScale.X * num2;
+                        if (vector.X - position.X + num4 > maxWidth)
+                        {
+                            vector.X = position.X;
+                            vector.Y += (float)font.LineSpacing * num3 * baseScale.Y;
+                            result.Y = Math.Max(result.Y, vector.Y);
+                            num3 = 0f;
+                        }
+                    }
+
+                    if (num3 < num2)
+                    {
+                        num3 = num2;
+                    }
+
+                    spriteBatch.DrawString(font, array3[k], vector, color, rotation, origin, baseScale * textSnippet.Scale * num2, SpriteEffects.None, 0f);
+                    Vector2 vector2 = font.MeasureString(array3[k]);
+                    if (mousePosition.Between(vector, vector + vector2))
+                    {
+                        num = i;
+                    }
+
+                    vector.X += vector2.X * baseScale.X * num2;
+                    result.X = Math.Max(result.X, vector.X);
+                }
+
+                if (array.Length > 1 && flag)
+                {
+                    vector.Y += (float)font.LineSpacing * num3 * baseScale.Y;
+                    vector.X = position.X;
+                    result.Y = Math.Max(result.Y, vector.Y);
+                    num3 = 0f;
+                }
+
+                flag = true;
+            }
+        }
+
+        hoveredSnippet = num;
+        return result;
     }
 
     /// <summary>
