@@ -156,7 +156,6 @@ public static class TextSnippetHelper
                                 // cacheWidth 等于 kernedWidth
                                 if (cacheWidth + font.CharacterSpacing + kernedWidth > maxWidth)
                                 {
-                                    Main.NewText($"越界: {cacheChar}");
                                     if (!string.IsNullOrEmpty(cacheString))
                                     {
                                         cacheSnippets.Add(snippet.CopyMorph(cacheString));
@@ -171,7 +170,6 @@ public static class TextSnippetHelper
                                 // 不越界, cacheWidth 加上 字间距和字符宽度
                                 else
                                 {
-                                    Main.NewText($"width: {cacheWidth}, char: {cacheChar}");
                                     cacheString += cacheChar;
                                     cacheWidth += font.CharacterSpacing + kernedWidth;
                                 }

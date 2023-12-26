@@ -1,9 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ReLogic.Graphics;
-using ReLogic.Text;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.SUIElements;
@@ -14,13 +11,16 @@ public class SUIText : TimerView
     /// 使用的字体
     /// </summary>
     public DynamicSpriteFont Font => _isLarge ? FontAssets.DeathText.Value : FontAssets.MouseText.Value;
-    public string Text => _keyMode ? _textOrKey : Language.GetTextValue(_textOrKey);
+
+    /// <summary>
+    /// 原字符串
+    /// </summary>
+    public string OriginalString => _keyMode ? Language.GetTextValue(_textOrKey) : _textOrKey;
 
     #region 常规可控属性
 
     /// <summary>
-    /// 可以作为 HJson 的 Key，也可直接作为文本。
-    /// <br/>
+    /// 可以作为 HJson 的 Key，也可直接作为文本。<br/>
     /// 如果要作为 Key 请设置 KeyMode = true。
     /// </summary>
     public string TextOrKey
@@ -40,7 +40,7 @@ public class SUIText : TimerView
     /// <summary>
     /// 使 TextOrKey 作为 HJson 的 Key 使用
     /// </summary>
-    public bool KeyMode
+    public bool UseKey
     {
         get => _keyMode;
         set
@@ -98,6 +98,8 @@ public class SUIText : TimerView
     /// </summary>
     public Color TextColor = Color.White;
 
+    public float TextBorder = 1.5f;
+
     /// <summary>
     /// 文字边框颜色
     /// </summary>
@@ -111,9 +113,9 @@ public class SUIText : TimerView
 
     #region 非常规可控属性
     /// <summary>
-    /// 展示文本
+    /// 最终展示文本
     /// </summary>
-    public TextSnippet[] VisibleTextSnippets { get; protected set; }
+    public TextSnippet[] FinalTextSnippets { get; protected set; }
 
     /// <summary>
     /// 最后一次的 inner 宽度
@@ -123,7 +125,7 @@ public class SUIText : TimerView
     /// <summary>
     /// 最后一次的文本
     /// </summary>
-    public string LastText { get; protected set; }
+    public string LastString { get; protected set; }
 
     /// <summary>
     /// 文字大小
@@ -144,12 +146,12 @@ public class SUIText : TimerView
     /// </summary>
     public void RecalculateText()
     {
-        LastText = Text;
+        LastString = OriginalString;
 
         if (_isWrapped)
         {
             List<TextSnippet> finalSnippets = [];
-            List<List<TextSnippet>> firstSnippets = TextSnippetHelper.WordwrapString(LastText, TextColor, Font, GetInnerDimensions().Width / TextScale);
+            List<List<TextSnippet>> firstSnippets = TextSnippetHelper.WordwrapString(LastString, TextColor, Font, GetInnerDimensions().Width / TextScale);
 
             foreach (List<TextSnippet> snippets in firstSnippets)
             {
@@ -162,14 +164,14 @@ public class SUIText : TimerView
                 finalSnippets.RemoveAt(finalSnippets.Count - 1);
             }
 
-            VisibleTextSnippets = [.. finalSnippets];
+            FinalTextSnippets = [.. finalSnippets];
         }
         else
         {
-            VisibleTextSnippets = [.. TextSnippetHelper.ConvertNormalSnippets(TextSnippetHelper.ParseMessage(LastText, TextColor))];
+            FinalTextSnippets = [.. TextSnippetHelper.ConvertNormalSnippets(TextSnippetHelper.ParseMessage(LastString, TextColor))];
         }
 
-        TextSize = ChatManager.GetStringSize(Font, VisibleTextSnippets, new Vector2(1f));
+        TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
@@ -178,7 +180,7 @@ public class SUIText : TimerView
 
         var inner = GetInnerDimensions();
 
-        if (LastText != Text || (_isWrapped && LastInnerWidth != inner.Width))
+        if (LastString != OriginalString || (_isWrapped && LastInnerWidth != inner.Width))
         {
             LastInnerWidth = inner.Width;
             RecalculateText();
@@ -188,14 +190,16 @@ public class SUIText : TimerView
         Vector2 innerPos = inner.Position();
 
         Vector2 textSize = TextSize;
-        Vector2 textPos = innerPos + TextOffset + TextPercentOffset * innerSize + (innerSize - textSize * TextScale) * TextAlign;
-        textPos.Y += TextScale * (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
+        Vector2 textPos = innerPos + TextOffset;
+        textPos += TextPercentOffset * innerSize;
+        textPos += TextAlign * (innerSize - textSize * TextScale);
         textPos -= TextOrigin * TextSize * TextScale;
+        textPos.Y += TextScale * (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
 
-        DrawColorCodedStringShadow(spriteBatch, Font, VisibleTextSnippets,
-            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, 1.5f);
+        DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets,
+            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder);
 
-        DrawColorCodedString(spriteBatch, Font, VisibleTextSnippets,
+        DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
             textPos, Color.White, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
     }
 
@@ -249,8 +253,7 @@ public class SUIText : TimerView
                 continue;
             }
 
-            string[] array = textSnippet.Text.Split('\n');
-            array = Regex.Split(textSnippet.Text, "(\n)");
+            string[] array = Regex.Split(textSnippet.Text, "(\n)");
             bool flag = true;
             string[] array2 = array;
             foreach (string obj in array2)
@@ -259,7 +262,7 @@ public class SUIText : TimerView
                 array3 = obj.Split(' ');
                 if (obj == "\n")
                 {
-                    vector.Y += (float)font.LineSpacing * num3 * baseScale.Y;
+                    vector.Y += font.LineSpacing * num3 * baseScale.Y;
                     vector.X = position.X;
                     result.Y = Math.Max(result.Y, vector.Y);
                     num3 = 0f;
@@ -280,7 +283,7 @@ public class SUIText : TimerView
                         if (vector.X - position.X + num4 > maxWidth)
                         {
                             vector.X = position.X;
-                            vector.Y += (float)font.LineSpacing * num3 * baseScale.Y;
+                            vector.Y += font.LineSpacing * num3 * baseScale.Y;
                             result.Y = Math.Max(result.Y, vector.Y);
                             num3 = 0f;
                         }
@@ -304,7 +307,7 @@ public class SUIText : TimerView
 
                 if (array.Length > 1 && flag)
                 {
-                    vector.Y += (float)font.LineSpacing * num3 * baseScale.Y;
+                    vector.Y += font.LineSpacing * num3 * baseScale.Y;
                     vector.X = position.X;
                     result.Y = Math.Max(result.Y, vector.Y);
                     num3 = 0f;
@@ -319,51 +322,46 @@ public class SUIText : TimerView
     }
 
     /// <summary>
+    /// 绘制偏移
+    /// </summary>
+    public readonly static Vector2[] StringOffsets =
+        [
+            new Vector2(-1, 0),
+            new Vector2(0, -1),
+            new Vector2(1, 0),
+            new Vector2(0, 1),
+            new Vector2(0, 0)
+        ];
+
+    /// <summary>
     /// 绘制带有边框的文字
     /// </summary>
-    public static void DrawBorderString(SpriteBatch spriteBatch, DynamicSpriteFont font, Vector2 position,
+    public static void DrawBorderString(SpriteBatch spriteBatch, DynamicSpriteFont font, Vector2 originalPosition,
         string text, Color textColor, Color borderColor, Vector2 origin, float textScale, float border = 2f)
     {
         border *= textScale;
 
-        float x = position.X;
-        float y = position.Y;
+        Vector2 position;
         Color color = borderColor;
 
-        if (borderColor == Color.Transparent)
+        if (borderColor.Equals(Color.Transparent))
         {
-            spriteBatch.DrawString(font, text, position, textColor, 0f, origin, textScale, 0, 0f);
-            return;
+            spriteBatch.DrawString(font, text, originalPosition, textColor, 0f, origin, textScale, 0, 0f);
         }
-
-        for (int i = 0; i < 5; i++)
+        else
         {
-            switch (i)
+            for (int i = 0; i < 5; i++)
             {
-                case 0:
-                    position.X = x - border;
-                    position.Y = y;
-                    break;
-                case 1:
-                    position.X = x + border;
-                    position.Y = y;
-                    break;
-                case 2:
-                    position.X = x;
-                    position.Y = y - border;
-                    break;
-                case 3:
-                    position.X = x;
-                    position.Y = y + border;
-                    break;
-                default:
-                    position.X = x;
-                    position.Y = y;
-                    color = textColor;
-                    break;
-            }
+                position = originalPosition + StringOffsets[i] * border;
 
-            spriteBatch.DrawString(font, text, position, color, 0f, origin, textScale, 0, 0f);
+                // 最上层
+                if (i is 4)
+                {
+                    color = textColor;
+                }
+
+                spriteBatch.DrawString(font, text, position, color, 0f, origin, textScale, 0, 0f);
+            }
         }
     }
 }
