@@ -1,12 +1,9 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Animations;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.ModSystems.MarqueeSystem;
 using ImproveGame.Common.Packets;
-using ImproveGame.Common.Packets.Items;
+using ImproveGame.Content.Packets;
 using ImproveGame.Core;
-using ImproveGame.Interface.Common;
-using ImproveGame.Interface.GUI;
-using System.Collections;
-using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items;
@@ -16,29 +13,34 @@ public enum PlaceType : byte
     Platform, Soild, Rope, Rail, GrassSeed, PlantPot
 }
 
-public class SpaceWand : ModItem, IMarqueeItem
+public enum ShapeType : byte
 {
-    #region IMarqueeItem 实现
+    Line, Corner, SquareEmpty, SquareFilled, CircleEmpty, CircleFilled
+}
+
+public partial class SpaceWand : ModItem, IMarqueeItem
+{
+    public enum Direction
+    {
+        Right, Down, Left, Up, RightDown, LeftDown, LeftUp, RightUp
+    }
+
+    #region IMarqueeItem 一些基础参数
 
     private bool _shouldDrawing;
-    private Rectangle _marquee;
+    private Rectangle _marquee = new();
     private Color _backgroundColor;
     private Color _borderColor;
 
-    bool IMarqueeItem.ShouldDrawing
+    bool IMarqueeItem.ShouldDraw
     {
         get => _shouldDrawing;
         set => _shouldDrawing = value;
     }
+
     Rectangle IMarqueeItem.Marquee => _marquee;
     Color IMarqueeItem.BorderColor => _borderColor;
     Color IMarqueeItem.BackgroundColor => _backgroundColor;
-
-    void IMarqueeItem.PostDraw(Rectangle marquee, Color backgroundColor, Color borderColor)
-    {
-        Vector2 size = new Vector2(marquee.Width >> 4, marquee.Height >> 4);
-        DrawString(Main.MouseScreen + new Vector2(18f), $"{size.MaxXY()}", Color.White, borderColor);
-    }
 
     #endregion
 
@@ -64,9 +66,11 @@ public class SpaceWand : ModItem, IMarqueeItem
 
     private readonly CoroutineRunner _syncRunner = new();
     private CoroutineHandle _handle;
+    private bool _lastControlLeft; // 上一次按的是向左还是向右
+    private static string _dataText; // 要显示在鼠标旁边的文本
     public PlaceType PlaceType;
     public BlockType BlockType;
-    public int[] GrassSeeds = { 2, 23, 60, 70, 199, 109, 82 };
+    public ShapeType ShapeType;
 
     public Vector2 StartingPoint;
     public static Vector2 MousePosition => Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
@@ -91,7 +95,6 @@ public class SpaceWand : ModItem, IMarqueeItem
                     _syncRunner.StopAll();
                     CanPlaceTiles = true;
                     StartingPoint = Main.MouseWorld.ToTileCoordinates().ToVector2() * 16f;
-                    RefreshMarquee(player);
                     return true;
                 }
             }
@@ -130,11 +133,13 @@ public class SpaceWand : ModItem, IMarqueeItem
     {
         _shouldDrawing = true;
 
-        RefreshMarquee(player);
-
         ItemRotation(player, false);
 
         UseItem_HandleCoroutines(player);
+
+        // 用于Corner模式的形状判定
+        if (player.controlLeft || player.controlRight)
+            _lastControlLeft = player.controlLeft;
 
         if (Main.mouseRight && CanPlaceTiles)
         {
@@ -178,153 +183,50 @@ public class SpaceWand : ModItem, IMarqueeItem
 
     public void TryPlaceTiles(Player player)
     {
-        // 放置平台
         if (!CanPlaceTiles)
+            return;
+
+        if (Main.netMode is NetmodeID.MultiplayerClient)
         {
+            SpaceWandOperation.Proceed(StartingPoint, MousePosition, ShapeType, BlockType, PlaceType, _lastControlLeft);
             return;
         }
 
         bool playSound = false;
-        Rectangle platformRect = _marquee;
-        platformRect.X >>= 4;
-        platformRect.Y >>= 4;
-        platformRect.Width >>= 4;
-        platformRect.Height >>= 4;
-
-        ForeachTile(platformRect, (x, y) =>
+        var tiles = GetSelectedTiles(ShapeType, StartingPoint, MousePosition, _lastControlLeft);
+        var tilesHashSet = tiles.ToHashSet();
+        ForeachTile(tiles, (x, y) =>
         {
-            int oneIndex = EnoughItem(player, GetConditions());
-            if (oneIndex > -1)
-            {
-                Item item = player.inventory[oneIndex];
-
-                if (!TileLoader.CanPlace(x, y, item.createTile))
-                    return;
-
-                if (GrassSeeds.Contains(item.createTile))
-                {
-                    if (WorldGen.PlaceTile(x, y, item.createTile, true, false, player.whoAmI, item.placeStyle))
-                    {
-                        playSound = true;
-                        PickItemInInventory(player, GetConditions(), true, out _);
-                    }
-                }
-                else
-                {
-                    if (Main.tile[x, y].HasTile)
-                    {
-                        WorldGen.SlopeTile(x, y, noEffects: true);
-                        // 同种类，设置个斜坡就走
-                        if (Main.tile[x, y].type == item.createTile)
-                        {
-                            SetSlopeFor(x, y, platformRect);
-                        }
-                        if (player.TileReplacementEnabled)
-                        {
-                            // 物品放置的瓷砖就是位置对应的瓷砖则无需替换
-                            if (!ValidTileForReplacement(item, x, y))
-                                return;
-
-                            // 有没有足够强大的镐子破坏瓷砖
-                            if (!player.HasEnoughPickPowerToHurtTile(x, y))
-                                return;
-
-                            // 开始替换
-                            if (WorldGen.ReplaceTile(x, y, (ushort)item.createTile, item.placeStyle))
-                            {
-                                playSound = true;
-                                PickItemInInventory(player, GetConditions(), true, out _);
-                                SetSlopeFor(x, y, platformRect);
-                            }
-                            else
-                            {
-                                // 尝试破坏
-                                TryKillTile(x, y, player);
-                                if (!Main.tile[x, y].HasTile && WorldGen.PlaceTile(x, y, item.createTile, true, true,
-                                        player.whoAmI, item.placeStyle))
-                                {
-                                    playSound = true;
-                                    PickItemInInventory(player, GetConditions(), true, out _);
-                                    SetSlopeFor(x, y, platformRect);
-                                }
-                            }
-                        }
-                    }
-                    else if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
-                    {
-                        playSound = true;
-                        PickItemInInventory(player, GetConditions(), true, out _);
-                        SetSlopeFor(x, y, platformRect);
-                    }
-                }
-            }
-        }, (x, y, width, height) =>
-        {
-            if (playSound)
-                PlaySoundPacket.PlaySound(LegacySoundIDs.Dig,
-                    new Point(x + width / 2, y + height / 2).ToWorldCoordinates());
-
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendData(MessageID.TileSquare, player.whoAmI, -1, null, x, y, width, height);
+            OperateTile(player, x, y, tilesHashSet, PlaceType, BlockType, ref playSound, []);
         });
+
+        if (playSound)
+            PlaySoundPacket.PlaySound(LegacySoundIDs.Dig, StartingPoint);
     }
 
-    private void SetSlopeFor(int x, int y, Rectangle platformRect)
+    void IMarqueeItem.PostDrawMarquee(Rectangle marquee, Color backgroundColor, Color borderColor)
     {
-        var tile = Main.tile[x, y];
-        if (WorldGen.CanPoundTile(x, y) && PlaceType is PlaceType.Soild or PlaceType.Platform)
-        {
-            tile.BlockType = BlockType;
-            WorldGen.SquareTileFrame(x, y, false);
-        }
-
-        // 仅当现在在放置实心块，且斜坡类型也为实心时，才重置下方物块的斜坡状态
-        if (PlaceType is PlaceType.Soild && BlockType is BlockType.Solid && !platformRect.Contains(x, y + 1))
-            WorldGen.SlopeTile(x, y + 1);
+        DrawString(Main.MouseScreen + new Vector2(18f), _dataText, Color.White, _borderColor);
     }
 
-    /// <summary>
-    /// 刷新选框
-    /// </summary>
-    public void RefreshMarquee(Player player)
+    public void PreDrawMarquee(ref bool shouldDraw, Rectangle marquee, Color backgroundColor, Color borderColor)
     {
-        int layingQuantity = Main.netMode == NetmodeID.MultiplayerClient ? 244 : 500;
-
-        int layingLength = 16 * (
-            ItemCount(player.inventory, GetConditions(), out int tileCount)
-                ? layingQuantity
-                : Math.Min(layingQuantity, tileCount));
-
-        Vector2 startingPoint = StartingPoint;
-        Vector2 nowPoint = Vector2.Clamp(MousePosition,
-            startingPoint - new Vector2(layingLength - 16f),
-            startingPoint + new Vector2(layingLength - 16f));
-
-        Point position;
-        Point size = (startingPoint - nowPoint).Abs().ToPoint();
-
-        if (size.X > size.Y)
-        {
-            position = new Vector2(Math.Min(startingPoint.X, nowPoint.X), startingPoint.Y).ToPoint();
-            size.X = Math.Clamp(size.X + 16, 16, layingLength);
-            size.Y = 16;
-        }
-        else
-        {
-            position = new Vector2(startingPoint.X, Math.Min(startingPoint.Y, nowPoint.Y)).ToPoint();
-            size.X = 16;
-            size.Y = Math.Clamp(size.Y + 16, 16, layingLength);
-        }
-
-        _marquee = new Rectangle(position.X, position.Y, size.X, size.Y);
+        MarqueeSystem.DrawSelectedTiles(GetSelectedTiles(ShapeType, StartingPoint, MousePosition, _lastControlLeft),
+            borderColor, backgroundColor);
+        shouldDraw = false;
     }
 
     /// <summary>
     /// 获取使用的条件
     /// </summary>
-    public Func<Item, bool> GetConditions()
+    public Func<Item, bool> GetConditions() => GetConditions(PlaceType);
+
+    /// <summary>
+    /// 获取使用的条件
+    /// </summary>
+    public static Func<Item, bool> GetConditions(PlaceType placeType)
     {
-        return PlaceType switch
+        return placeType switch
         {
             PlaceType.Platform => item => item.createTile > -1 && TileID.Sets.Platforms[item.createTile],
             PlaceType.Soild => item =>
@@ -341,15 +243,14 @@ public class SpaceWand : ModItem, IMarqueeItem
 
     public override void LoadData(TagCompound tag)
     {
-        if (tag.TryGet("PlaceType", out byte placeType))
-        {
-            PlaceType = (PlaceType)placeType;
-        }
+        PlaceType = (PlaceType)tag.GetByte("PlaceType");
+        ShapeType = (ShapeType)tag.GetByte("ShapeType");
     }
 
     public override void SaveData(TagCompound tag)
     {
         tag.Add("PlaceType", (byte)PlaceType);
+        tag.Add("ShapeType", (byte)ShapeType);
     }
 
     public override void AddRecipes()

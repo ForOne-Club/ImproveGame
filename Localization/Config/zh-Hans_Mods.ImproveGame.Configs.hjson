@@ -141,11 +141,6 @@ ImproveConfigs: {
 		Tooltip: 所有堆叠数  ≥ 3996 的投掷物将不再消耗。
 	}
 
-	ClentaminatorPlus: {
-		Label: "[centeritem:Clentaminator] 更好、更大、更强的环境改造枪"
-		Tooltip: 环境改造枪将会全面升级，但消耗的弹药也将更多
-	}
-
 	ImprovePrefix: {
 		Label: "[centeritem:1551] 可追溯重铸"
 		Tooltip: 允许你直接选择已获得过的前缀

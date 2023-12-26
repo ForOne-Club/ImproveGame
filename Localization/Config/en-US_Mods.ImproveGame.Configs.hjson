@@ -137,11 +137,6 @@ ImproveConfigs: {
 		Tooltip: Thrown weapons stack over 3996 will not be consumed
 	}
 
-	ClentaminatorPlus: {
-		Label: "[centeritem:Clentaminator] 更好、更大、更强的环境改造枪"
-		Tooltip: 环境改造枪将会全面升级，但消耗的弹药也将更多
-	}
-
 	ImprovePrefix: {
 		Label: "[centeritem:1551] Retrospective Reforging"
 		Tooltip: Prefixes which have been rolled can be applied manually
