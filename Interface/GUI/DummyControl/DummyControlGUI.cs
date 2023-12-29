@@ -5,7 +5,7 @@ namespace ImproveGame.Interface.GUI.DummyControl;
 public class DummyControlGUI : ViewBody
 {
     #region ViewBody
-    public override bool Display { get => false; set => IsVisible = value; }
+    public override bool Display { get => IsVisible; set => IsVisible = value; }
 
     public override bool CanDisableMouse(UIElement target)
     {
@@ -18,14 +18,13 @@ public class DummyControlGUI : ViewBody
     }
     #endregion
 
-    public static bool IsVisible { get; set; } = true;
+    public static bool IsVisible { get; set; } = false;
 
     public SUIPanel Window;
     public View ContentView;
 
     public override void OnInitialize()
     {
-#if DEBUG
         Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
         {
             Draggable = true
@@ -49,9 +48,11 @@ public class DummyControlGUI : ViewBody
         titleBar.Height.Pixels = 42f;
         titleBar.Join(Window);
 
-        var title = new SUITitle(GetText("UI.DummyControl.Name"), 0.42f)
+        SUIText title = new SUIText
         {
-            VAlign = 0.5f
+            VAlign = 0.5f,
+            UseKey = true,
+            TextOrKey = "Mods.ImproveGame.UI.DummyControl.Name"
         };
         title.SetPadding(15f, 0f, 10f, 0f);
         title.SetInnerPixels(title.TextSize);
@@ -71,7 +72,7 @@ public class DummyControlGUI : ViewBody
 
         cross.OnLeftMouseDown += (_, _) =>
         {
-            RemoveChild(Window);
+            // RemoveChild(Window);
             SoundEngine.PlaySound(SoundID.MenuClose);
         };
         #endregion
@@ -83,16 +84,53 @@ public class DummyControlGUI : ViewBody
         ContentView.SetPadding(6f, 4f);
         ContentView.Join(Window);
 
-        var uiText = new SUIText();
-        uiText.Width.Percent = 1f;
-        uiText.Height.Pixels = 100f;
-        uiText.SetPadding(8f);
-        uiText.SetRoundedRectangleValues(default, 2f, UIColor.PanelBorder, new Vector4(8f));
-        uiText.TextOrKey = "[c/0099ff:你好 123] [centeritem/88:3] 提示 123, 提示 123, 提示 123, 提示 123, 提示 123, 提示 123, 提示 123";
-        uiText.IsWrapped = true;
-        uiText.TextOrigin = new Vector2(0.5f);
-        uiText.TextPercentOffset = new Vector2(0.5f);
-        uiText.Join(ContentView);
-#endif
+        ST = new SUIText()
+        {
+            TextOrKey = "Hello tML. Hello tML. Hello tML. Hello tML. Hello tML. Hello tML.",
+            TextBorderColor = Color.Transparent,
+            Relative = RelativeMode.Horizontal,
+            IsWrapped = true,
+            Wrap = true
+        };
+        ST.SetRoundedRectangleValues(new Color(0, 155, 255) * 0.5f, 2f, Color.Transparent, new Vector4(UIColor.ItemSlotBorderRound));
+        ST.SetPadding(15f, 5f);
+        ST.TextAlign = new Vector2(0.5f);
+        ST.Width.Precent = 1f;
+        ST.Height.Pixels = 100f;
+        ST.Join(ContentView);
+
+        ST = new SUIText()
+        {
+            TextOrKey = "Hello tML.",
+            TextBorderColor = Color.Transparent,
+            Relative = RelativeMode.Horizontal,
+            Wrap = true
+        };
+        ST.SetRoundedRectangleValues(new Color(255, 155, 0) * 0.5f, 2f, Color.Transparent, new Vector4(UIColor.ItemSlotBorderRound));
+        ST.SetPadding(15f, 5f);
+        ST.SetInnerPixels(ST.TextSize);
+        ST.Join(ContentView);
+
+        ST = new SUIText()
+        {
+            TextOrKey = "Hello tML.",
+            TextBorderColor = Color.Transparent,
+            Relative = RelativeMode.Horizontal,
+            Wrap = true
+        };
+        ST.SetRoundedRectangleValues(new Color(255, 0, 155) * 0.5f, 2f, Color.Transparent, new Vector4(UIColor.ItemSlotBorderRound));
+        ST.SetPadding(15f, 5f);
+        ST.SetInnerPixels(ST.TextSize);
+        ST.Join(ContentView);
+    }
+
+    /// <summary>
+    /// 第一个文本
+    /// </summary>
+    public SUIText ST;
+
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
     }
 }

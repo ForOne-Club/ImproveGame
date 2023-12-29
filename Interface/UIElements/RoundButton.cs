@@ -9,6 +9,7 @@ namespace ImproveGame.Interface.UIElements
         public Asset<Texture2D> mainImage;
 
         public float Opacity;
+        public float IconScale = 0.8f;
 
         public Func<bool> Selected;
         public Func<string> text;
@@ -80,7 +81,7 @@ namespace ImproveGame.Interface.UIElements
             PixelShader.DrawBox(Main.UIScaleMatrix, GetDimensions().Position(),
                 this.GetSize(), Width.Pixels / 2, 3, borderColor * Opacity, background * Opacity);*/
 
-            sb.Draw(mainImage.Value, position, null, color, 0, mainImage.Size() / 2f, 0.8f, 0, 0f);
+            sb.Draw(mainImage.Value, position, null, color, 0, mainImage.Size() / 2f, IconScale, 0, 0f);
         }
     }
 }

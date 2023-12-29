@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ReLogic.Graphics;
-using ReLogic.Text;
-using Terraria.GameContent.UI.Chat;
+using System.Text.RegularExpressions;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.SUIElements;
@@ -12,13 +11,16 @@ public class SUIText : TimerView
     /// 使用的字体
     /// </summary>
     public DynamicSpriteFont Font => _isLarge ? FontAssets.DeathText.Value : FontAssets.MouseText.Value;
-    public string Text => _keyMode ? _textOrKey : Language.GetTextValue(_textOrKey);
+
+    /// <summary>
+    /// 原字符串
+    /// </summary>
+    public string OriginalString => _keyMode ? Language.GetTextValue(_textOrKey) : _textOrKey;
 
     #region 常规可控属性
 
     /// <summary>
-    /// 可以作为 HJson 的 Key，也可直接作为文本。
-    /// <br/>
+    /// 可以作为 HJson 的 Key，也可直接作为文本。<br/>
     /// 如果要作为 Key 请设置 KeyMode = true。
     /// </summary>
     public string TextOrKey
@@ -38,7 +40,7 @@ public class SUIText : TimerView
     /// <summary>
     /// 使 TextOrKey 作为 HJson 的 Key 使用
     /// </summary>
-    public bool KeyMode
+    public bool UseKey
     {
         get => _keyMode;
         set
@@ -96,6 +98,8 @@ public class SUIText : TimerView
     /// </summary>
     public Color TextColor = Color.White;
 
+    public float TextBorder = 1.5f;
+
     /// <summary>
     /// 文字边框颜色
     /// </summary>
@@ -109,9 +113,9 @@ public class SUIText : TimerView
 
     #region 非常规可控属性
     /// <summary>
-    /// 展示文本
+    /// 最终展示文本
     /// </summary>
-    public string VisibleText { get; protected set; }
+    public TextSnippet[] FinalTextSnippets { get; protected set; }
 
     /// <summary>
     /// 最后一次的 inner 宽度
@@ -121,7 +125,7 @@ public class SUIText : TimerView
     /// <summary>
     /// 最后一次的文本
     /// </summary>
-    public string LastText { get; protected set; }
+    public string LastString { get; protected set; }
 
     /// <summary>
     /// 文字大小
@@ -142,18 +146,32 @@ public class SUIText : TimerView
     /// </summary>
     public void RecalculateText()
     {
-        LastText = Text;
+        LastString = OriginalString;
 
         if (_isWrapped)
         {
-            VisibleText = Font.CreateWrappedText(LastText, GetInnerDimensions().Width / TextScale);
+            List<TextSnippet> finalSnippets = [];
+            List<List<TextSnippet>> firstSnippets = TextSnippetHelper.WordwrapString(LastString, TextColor, Font, GetInnerDimensions().Width / TextScale);
+
+            foreach (List<TextSnippet> snippets in firstSnippets)
+            {
+                finalSnippets.AddRange(snippets);
+                finalSnippets.Add(new TextSnippet("\n"));
+            }
+
+            if (finalSnippets.Count > 0 && finalSnippets[^1].Text == "\n")
+            {
+                finalSnippets.RemoveAt(finalSnippets.Count - 1);
+            }
+
+            FinalTextSnippets = [.. finalSnippets];
         }
         else
         {
-            VisibleText = LastText;
+            FinalTextSnippets = [.. TextSnippetHelper.ConvertNormalSnippets(TextSnippetHelper.ParseMessage(LastString, TextColor))];
         }
 
-        TextSize = ChatManager.GetStringSize(Font, VisibleText, new Vector2(1f));
+        TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
@@ -162,7 +180,7 @@ public class SUIText : TimerView
 
         var inner = GetInnerDimensions();
 
-        if (LastText != Text || (_isWrapped && LastInnerWidth != inner.Width))
+        if (LastString != OriginalString || (_isWrapped && LastInnerWidth != inner.Width))
         {
             LastInnerWidth = inner.Width;
             RecalculateText();
@@ -172,64 +190,178 @@ public class SUIText : TimerView
         Vector2 innerPos = inner.Position();
 
         Vector2 textSize = TextSize;
-        Vector2 textPos = innerPos + TextOffset + TextPercentOffset * innerSize + (innerSize - textSize) * TextAlign;
+        Vector2 textPos = innerPos + TextOffset;
+        textPos += TextPercentOffset * innerSize;
+        textPos += TextAlign * (innerSize - textSize * TextScale);
+        textPos -= TextOrigin * TextSize * TextScale;
         textPos.Y += TextScale * (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
 
-        var snippets = ChatManager.ParseMessage(VisibleText, TextColor).ToArray();
-        ChatManager.ConvertNormalSnippets(snippets);
-        ChatManager.DrawColorCodedStringShadow(spriteBatch, Font, snippets, textPos, TextBorderColor, 0f, TextOrigin * TextSize, new(TextScale), -1f, 1.5f);
-        ChatManager.DrawColorCodedString(spriteBatch, Font, snippets, textPos, Color.White, 0f, TextOrigin * TextSize, new(TextScale), out var _, -1f);
+        DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets,
+            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder);
 
-        /*DrawBorderString(spriteBatch, Font, textPos, VisibleText,
-            TextColor, TextBorderColor, TextOrigin * TextSize, TextScale, 2f);*/
+        DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
+            textPos, Color.White, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
     }
+
+    public static readonly Vector2[] ShadowDirections =
+    [
+        -Vector2.UnitX,
+        Vector2.UnitX,
+        -Vector2.UnitY,
+        Vector2.UnitY
+    ];
+
+    public static void DrawColorCodedStringShadow(SpriteBatch spriteBatch, DynamicSpriteFont font, TextSnippet[] snippets, Vector2 position, Color baseColor, float rotation, Vector2 origin, Vector2 baseScale, float maxWidth = -1f, float spread = 2f)
+    {
+        for (int i = 0; i < ShadowDirections.Length; i++)
+        {
+            DrawColorCodedString(spriteBatch, font, snippets, position + ShadowDirections[i] * spread, baseColor, rotation, origin, baseScale, out var _, maxWidth, ignoreColors: true);
+        }
+    }
+
+    public static Vector2 DrawColorCodedString(SpriteBatch spriteBatch, DynamicSpriteFont font, TextSnippet[] snippets, Vector2 position, Color baseColor, float rotation, Vector2 origin, Vector2 baseScale, out int hoveredSnippet, float maxWidth, bool ignoreColors = false)
+    {
+        int num = -1;
+
+        Vector2 mousePosition = Main.MouseScreen;
+        Vector2 vector = position;
+        Vector2 result = vector;
+
+        float x = font.MeasureString(" ").X;
+        Color color = baseColor;
+        float num3 = 0f;
+
+        for (int i = 0; i < snippets.Length; i++)
+        {
+            TextSnippet textSnippet = snippets[i];
+            textSnippet.Update();
+            if (!ignoreColors)
+            {
+                color = textSnippet.GetVisibleColor();
+            }
+
+            float num2 = textSnippet.Scale;
+            if (textSnippet.UniqueDraw(justCheckingString: false, out var size, spriteBatch, vector, color, baseScale.X * num2))
+            {
+                if (mousePosition.Between(vector, vector + size))
+                {
+                    num = i;
+                }
+
+                vector.X += size.X;
+                result.X = Math.Max(result.X, vector.X);
+                continue;
+            }
+
+            string[] array = Regex.Split(textSnippet.Text, "(\n)");
+            bool flag = true;
+            string[] array2 = array;
+            foreach (string obj in array2)
+            {
+                string[] array3 = Regex.Split(obj, "( )");
+                array3 = obj.Split(' ');
+                if (obj == "\n")
+                {
+                    vector.Y += font.LineSpacing * num3 * baseScale.Y;
+                    vector.X = position.X;
+                    result.Y = Math.Max(result.Y, vector.Y);
+                    num3 = 0f;
+                    flag = false;
+                    continue;
+                }
+
+                for (int k = 0; k < array3.Length; k++)
+                {
+                    if (k != 0)
+                    {
+                        vector.X += x * baseScale.X * num2;
+                    }
+
+                    if (maxWidth > 0f)
+                    {
+                        float num4 = font.MeasureString(array3[k]).X * baseScale.X * num2;
+                        if (vector.X - position.X + num4 > maxWidth)
+                        {
+                            vector.X = position.X;
+                            vector.Y += font.LineSpacing * num3 * baseScale.Y;
+                            result.Y = Math.Max(result.Y, vector.Y);
+                            num3 = 0f;
+                        }
+                    }
+
+                    if (num3 < num2)
+                    {
+                        num3 = num2;
+                    }
+
+                    spriteBatch.DrawString(font, array3[k], vector, color, rotation, origin, baseScale * textSnippet.Scale * num2, SpriteEffects.None, 0f);
+                    Vector2 vector2 = font.MeasureString(array3[k]);
+                    if (mousePosition.Between(vector, vector + vector2))
+                    {
+                        num = i;
+                    }
+
+                    vector.X += vector2.X * baseScale.X * num2;
+                    result.X = Math.Max(result.X, vector.X);
+                }
+
+                if (array.Length > 1 && flag)
+                {
+                    vector.Y += font.LineSpacing * num3 * baseScale.Y;
+                    vector.X = position.X;
+                    result.Y = Math.Max(result.Y, vector.Y);
+                    num3 = 0f;
+                }
+
+                flag = true;
+            }
+        }
+
+        hoveredSnippet = num;
+        return result;
+    }
+
+    /// <summary>
+    /// 绘制偏移
+    /// </summary>
+    public readonly static Vector2[] StringOffsets =
+        [
+            new Vector2(-1, 0),
+            new Vector2(0, -1),
+            new Vector2(1, 0),
+            new Vector2(0, 1),
+            new Vector2(0, 0)
+        ];
 
     /// <summary>
     /// 绘制带有边框的文字
     /// </summary>
-    public static void DrawBorderString(SpriteBatch spriteBatch, DynamicSpriteFont font, Vector2 position,
+    public static void DrawBorderString(SpriteBatch spriteBatch, DynamicSpriteFont font, Vector2 originalPosition,
         string text, Color textColor, Color borderColor, Vector2 origin, float textScale, float border = 2f)
     {
         border *= textScale;
 
-        float x = position.X;
-        float y = position.Y;
+        Vector2 position;
         Color color = borderColor;
 
-        if (borderColor == Color.Transparent)
+        if (borderColor.Equals(Color.Transparent))
         {
-            spriteBatch.DrawString(font, text, position, textColor, 0f, origin, textScale, 0, 0f);
-            return;
+            spriteBatch.DrawString(font, text, originalPosition, textColor, 0f, origin, textScale, 0, 0f);
         }
-
-        for (int i = 0; i < 5; i++)
+        else
         {
-            switch (i)
+            for (int i = 0; i < 5; i++)
             {
-                case 0:
-                    position.X = x - border;
-                    position.Y = y;
-                    break;
-                case 1:
-                    position.X = x + border;
-                    position.Y = y;
-                    break;
-                case 2:
-                    position.X = x;
-                    position.Y = y - border;
-                    break;
-                case 3:
-                    position.X = x;
-                    position.Y = y + border;
-                    break;
-                default:
-                    position.X = x;
-                    position.Y = y;
-                    color = textColor;
-                    break;
-            }
+                position = originalPosition + StringOffsets[i] * border;
 
-            spriteBatch.DrawString(font, text, position, color, 0f, origin, textScale, 0, 0f);
+                // 最上层
+                if (i is 4)
+                {
+                    color = textColor;
+                }
+
+                spriteBatch.DrawString(font, text, position, color, 0f, origin, textScale, 0, 0f);
+            }
         }
     }
 }

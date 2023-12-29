@@ -23,12 +23,15 @@
 - Locator and map icon for Enchanted Swords
 - Unconditional Sleeping
 - 新增“爆炸物无伤害”设置
-- 新增“更好、更大、更强的环境改造枪”设置
 - Unconditional Pylon Teleportation (off by default)
 - 新增“物块不遮挡光照”设置，默认关闭，需自行开启
 - Config favorites for managing config options
 - Storage Telecom to remotely open Storage Managers
 - 新增无条件队内传送功能
+- 空间法杖更新：
+  - 新增多种放置形状，现可放置斜线、L型线、实心/空心矩形、实心/空心圆
+  - 直线放置去除了放置方块数量的限制
+  - 优化了轮盘UI
 
 ## BUG Fixes
 
@@ -50,6 +53,8 @@
   - Incorrect tile direction
   - Unable to handle Luminite or Echo Coatings
   - Incorrect preview for banners under platforms
+  - 部分背景墙对应的物品出错
+- 部分物品的特殊右下角标识在某些UI无法正确绘制（如大背包中的危险墙无骷髅头标识）
 
 ## Adjustments
 

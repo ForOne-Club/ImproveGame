@@ -60,12 +60,12 @@ namespace ImproveGame.Content.Tiles
                 return;
             }
 
-            // ¸ø¾àÀëµöÓã»ú 1000 ÏñËØÄÚµÄÍæ¼Ò·¢°ü
+            // ç»™è·ç¦»é’“é±¼æœº 1000 åƒç´ å†…çš„ç©å®¶å‘åŒ…
             const int distance = 1000 * 1000;
             for (int i = 0; i < Main.maxPlayers; i++)
             {
                 var player = Main.player[i];
-                // ¾àÀëÓÃ DistanceSQ ÅĞ¶Ï£¬Ã»ÓĞ¿ª·½²Ù×÷ÔËĞĞ¸ü¿ì
+                // è·ç¦»ç”¨ DistanceSQ åˆ¤æ–­ï¼Œæ²¡æœ‰å¼€æ–¹æ“ä½œè¿è¡Œæ›´å¿«
                 if (player.active && !player.DeadOrGhost && player.Center.DistanceSQ(Position.ToWorldCoordinates()) <= distance)
                     FishingTipPacket.Get(ID, tipType, fishingLevel, waterQuality).Send(i);
             }
@@ -94,7 +94,7 @@ namespace ImproveGame.Content.Tiles
 
         public static Player GetClosestPlayer(Point16 Position) => Main.player[Player.FindClosest(new Vector2(Position.X * 16, Position.Y * 16), 1, 1)];
 
-        #region µöÓã
+        #region é’“é±¼
 
         public int FishingTimer;
         public override void Update()
@@ -127,12 +127,12 @@ namespace ImproveGame.Content.Tiles
 
             bool accAvailable = ModIntegrationsSystem.FishingStatLookup.TryGetValue(accessory.type, out FishingStat stat);
             
-            // ÅäÊÎÎªAnglerEarring¿ÉÊ¹µöÓãËÙ¶È*200%
-            // ÅäÊÎÎªAnglerTackleBag¿ÉÊ¹µöÓãËÙ¶È*300%
-            // ÅäÊÎÎªLavaproofTackleBag¿ÉÊ¹µöÓãËÙ¶È*500%
+            // é…é¥°ä¸ºAnglerEarringå¯ä½¿é’“é±¼é€Ÿåº¦*200%
+            // é…é¥°ä¸ºAnglerTackleBagå¯ä½¿é’“é±¼é€Ÿåº¦*300%
+            // é…é¥°ä¸ºLavaproofTackleBagå¯ä½¿é’“é±¼é€Ÿåº¦*500%
             float fishingSpeedBonus = accAvailable ? stat.SpeedMultiplier : 1f;
 
-            // µöÓã»úÄÚÃ¿Ìõ Bass ½«Ìá¹© 10% µÄµöÓãËÙ¶È¼Ó³É£¬×î¸ß¿É´ï 500% ¼Ó³É
+            // é’“é±¼æœºå†…æ¯æ¡ Bass å°†æä¾› 10% çš„é’“é±¼é€Ÿåº¦åŠ æˆï¼Œæœ€é«˜å¯è¾¾ 500% åŠ æˆ
             int bassCount = 0;
             for (int i = 0; i < fish.Length; i++)
             {
@@ -143,12 +143,12 @@ namespace ImproveGame.Content.Tiles
             }
             fishingSpeedBonus += Math.Min(bassCount * 0.1f, 5f);
             
-            // ÈâºóÌáÉı300%µöÓãËÙ¶È
+            // è‚‰åæå‡300%é’“é±¼é€Ÿåº¦
             if (Main.hardMode)
                 fishingSpeedBonus += 3f;
 
-            const float fishingCooldown = 1320f; // µöÓã»ú»ù´¡ÀäÈ´ÔÚÕâÀï¸Ä£¬Ô­°æµöÓãËÙ¶ÈÊÇ660
-            int multipleLures = Math.Max(1, ModIntegrationsSystem.MultipleLuresAmount); // ¶àÏßµöÓãMod¼æÈİ
+            const float fishingCooldown = 1320f; // é’“é±¼æœºåŸºç¡€å†·å´åœ¨è¿™é‡Œæ”¹ï¼ŒåŸç‰ˆé’“é±¼é€Ÿåº¦æ˜¯660
+            int multipleLures = Math.Max(1, ModIntegrationsSystem.MultipleLuresAmount); // å¤šçº¿é’“é±¼Modå…¼å®¹
             if (FishingTimer > fishingCooldown / fishingSpeedBonus / multipleLures)
             {
                 FishingTimer = 0;
@@ -193,7 +193,7 @@ namespace ImproveGame.Content.Tiles
                 SetFishingTip(Autofisher.TipType.FishingWarning);
                 if (Main.rand.NextBool(5) && (fisher.X < 380 || fisher.X > Main.maxTilesX - 380) && fisher.waterTilesCount > 1000 && player.active && !player.dead && player.Distance(new(fisher.X * 16, fisher.Y * 16)) <= 2000 && NPC.CountNPCS(NPCID.DukeFishron) < 3)
                 {
-                    // ÕÙ»½Öíöè £¨£¿£¿£¿   ÉÏÏŞÊÇ3¸ö
+                    // å¬å”¤çŒªé²¨ ï¼ˆï¼Ÿï¼Ÿï¼Ÿ   ä¸Šé™æ˜¯3ä¸ª
                     int npc = NPC.NewNPC(NPC.GetBossSpawnSource(player.whoAmI), fisher.X * 16, fisher.Y * 16, NPCID.DukeFishron, 1);
                     if (npc == 200)
                         return;
@@ -293,7 +293,7 @@ namespace ImproveGame.Content.Tiles
             //FishingCheck_ProbeForQuestFish(ref fisher);
             //FishingCheck_RollEnemySpawns(ref fisher);
 
-            // Î±×°Ò»¸öproj£¬ÓÃ·´Éäµ÷ÓÃProjectile.FishingCheck_RollItemDrop
+            // ä¼ªè£…ä¸€ä¸ªprojï¼Œç”¨åå°„è°ƒç”¨Projectile.FishingCheck_RollItemDrop
             var fakeProj = new Projectile
             {
                 owner = 255
@@ -305,11 +305,11 @@ namespace ImproveGame.Content.Tiles
             tileCounter.Simulate(Main.player[255]);
             tileCounter.FargosFountainSupport(Main.player[255]);
 
-            // AssemblyPublicizer Ê¹µÃ FishingCheck_RollItemDrop ¿ÉÒÔÖ±½Ó·ÃÎÊ
+            // AssemblyPublicizer ä½¿å¾— FishingCheck_RollItemDrop å¯ä»¥ç›´æ¥è®¿é—®
             fakeProj.FishingCheck_RollItemDrop(ref fisher);
 
             AdvancedPopupRequest sonar = new();
-            Vector2 sonarPosition = new(-1145141f, -919810f); // Ö±½Ófakeµ½ÊÀ½çÍâÃæ
+            Vector2 sonarPosition = new(-1145141f, -919810f); // ç›´æ¥fakeåˆ°ä¸–ç•Œå¤–é¢
             PlayerLoader.CatchFish(Main.player[255], fisher, ref fisher.rolledItemDrop, ref fisher.rolledEnemySpawn, ref sonar, ref sonarPosition);
 
             if (fisher.rolledItemDrop != 0)
@@ -318,7 +318,7 @@ namespace ImproveGame.Content.Tiles
                 //Main.NewText($"[i:{fisher.rolledItemDrop}]");
             }
 
-            // µ¥ÈËÄ£Ê½ÀïÕâ»¹×÷ÎªÊÓĞ§µÄÅĞ¶¨£¬Òò´ËµÃÇ¿ÖÆ¸üĞÂ
+            // å•äººæ¨¡å¼é‡Œè¿™è¿˜ä½œä¸ºè§†æ•ˆçš„åˆ¤å®šï¼Œå› æ­¤å¾—å¼ºåˆ¶æ›´æ–°
             if (Main.netMode == NetmodeID.SinglePlayer)
                 Main.LocalPlayer.ForceUpdateBiomes();
         }
@@ -327,11 +327,11 @@ namespace ImproveGame.Content.Tiles
         {
             Item item = new(itemType);
 
-            int fishType = 0; // 0 ÆÕÍ¨Óã (Ï¡ÓĞ¶È´óÓÚ°×)
-            if (ItemID.Sets.IsFishingCrate[itemType]) fishType = 1; // 1 ±¦Ï»
-            else if (item.accessory) fishType = 2; // 2 ÊÎÆ·
-            else if (item.damage > 0) fishType = 3; // 3 ¹¤¾ßÎäÆ÷
-            else if (item.OriginalRarity <= ItemRarityID.White) fishType = 4; // 4 °×É«Ï¡ÓĞ¶È
+            int fishType = 0; // 0 æ™®é€šé±¼ (ç¨€æœ‰åº¦å¤§äºç™½)
+            if (ItemID.Sets.IsFishingCrate[itemType]) fishType = 1; // 1 å®åŒ£
+            else if (item.accessory) fishType = 2; // 2 é¥°å“
+            else if (item.damage > 0) fishType = 3; // 3 å·¥å…·æ­¦å™¨
+            else if (item.OriginalRarity <= ItemRarityID.White) fishType = 4; // 4 ç™½è‰²ç¨€æœ‰åº¦
 
             switch (fishType)
             {
@@ -398,22 +398,22 @@ namespace ImproveGame.Content.Tiles
             var dummyItem = item.Clone();
             int oldStack = item.stack;
 
-            // Ææ¹ÖµÄÎÄ±¾£¬×÷Îª²Êµ°
+            // å¥‡æ€ªçš„æ–‡æœ¬ï¼Œä½œä¸ºå½©è›‹
             if (ModIntegrationsSystem.MultipleLuresAmount >= 100 && HasDevMark && Main.rand.NextBool(10) && Language.ActiveCulture.Name is "zh-Hans")
             {
                 var pos = Position.ToWorldCoordinates(16, 16).ToPoint();
                 var rect = new Rectangle(pos.X, pos.Y, 16, 16);
-                CombatText.NewText(rect, Color.Pink, "Òª×°²»ÏÂÁË...");
+                CombatText.NewText(rect, Color.Pink, "è¦è£…ä¸ä¸‹äº†...");
             }
 
-            // ÏÈÌî³äºÍÎïÆ·ÏàÍ¬µÄ
+            // å…ˆå¡«å……å’Œç‰©å“ç›¸åŒçš„
             for (int i = 0; i < fish.Length; i++)
             {
                 int oldStackSlot = fish[i].stack;
                 item = ItemStackToInventoryItem(fish, i, item, false);
                 if (fish[i].stack != oldStackSlot && Main.netMode is NetmodeID.Server)
                 {
-                    // Õâ°üÊÇ¸ø¿ª×ÅµöÓã»úµÄÍæ¼ÒÓÃµÄ£¬Ö»¸ø¿ª×ÅµÄ·¢°ü¾ÍĞĞÁË
+                    // è¿™åŒ…æ˜¯ç»™å¼€ç€é’“é±¼æœºçš„ç©å®¶ç”¨çš„ï¼Œåªç»™å¼€ç€çš„å‘åŒ…å°±è¡Œäº†
                     for (int p = 0; p < Main.maxPlayers; p++)
                     {
                         var client = Main.player[p];
@@ -424,7 +424,7 @@ namespace ImproveGame.Content.Tiles
                 if (item.IsAir)
                     goto FilledEnd;
             }
-            // ºóÌî³ä¿ÕÎ»
+            // åå¡«å……ç©ºä½
             for (int i = 0; i < fish.Length; i++)
             {
                 if (fish[i].IsAir)
@@ -441,18 +441,18 @@ namespace ImproveGame.Content.Tiles
 
             FilledEnd:;
 
-            // ±ØĞëÊÇÏûºÄÁË£¬Ò²¾ÍÊÇÕæµÄÄÜ´æ | TryConsumeBait·µ»Øtrue±íÊ¾Óã¶üÏûºÄÁË
+            // å¿…é¡»æ˜¯æ¶ˆè€—äº†ï¼Œä¹Ÿå°±æ˜¯çœŸçš„èƒ½å­˜ | TryConsumeBaitè¿”å›trueè¡¨ç¤ºé±¼é¥µæ¶ˆè€—äº†
             if (item.stack != oldStack)
             {
-                // ÓÃdummyItem£¬ÒòÎªÌî³äºóitem¿ÉÄÜÊÇAir
+                // ç”¨dummyItemï¼Œå› ä¸ºå¡«å……åitemå¯èƒ½æ˜¯Air
                 Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16), dummyItem, dummyItem.stack);
 
                 if (TryConsumeBait(player) && Main.netMode is NetmodeID.Server)
                 {
-                    // Ã»ÁË
+                    // æ²¡äº†
                     if (bait.IsAir)
                         ItemSyncPacket.Get(ID, ItemSyncPacket.Bait).Send(runLocally: false);
-                    else // »¹ÔÚ£¬Í¬²½stack
+                    else // è¿˜åœ¨ï¼ŒåŒæ­¥stack
                         ItemsStackChangePacket.Get(ID, ItemSyncPacket.Bait, -1).Send(runLocally: false);
                 }
             }
@@ -573,7 +573,7 @@ namespace ImproveGame.Content.Tiles
             }
 
             numWaters = GetFishingPondSize(x, y, ref lava, ref honey, ref chumCount);
-            if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded || Config.NoLakeSizePenalty) // ²»ÓÃif elseÊÇÎªÁËÅĞ¶¨ÊÇ·ñÔÚÈÛÑÒ/·äÃÛ
+            if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded || Config.NoLakeSizePenalty) // ä¸ç”¨if elseæ˜¯ä¸ºäº†åˆ¤å®šæ˜¯å¦åœ¨ç†”å²©/èœ‚èœœ
                 numWaters = 10000;
 
             if (honey)
@@ -605,7 +605,7 @@ namespace ImproveGame.Content.Tiles
                 if (tile.LiquidType == LiquidID.Honey)
                     honey = true;
                 chumCount += Main.instance.ChumBucketProjectileHelper.GetChumsInLocation(new Point(x, y));
-                // µİ¹éÁÙ½üµÄËÄ¸öÎï¿é
+                // é€’å½’ä¸´è¿‘çš„å››ä¸ªç‰©å—
                 int left = GetFishingPondSize(x - 1, y, ref lava, ref honey, ref chumCount);
                 int right = GetFishingPondSize(x + 1, y, ref lava, ref honey, ref chumCount);
                 int up = GetFishingPondSize(x, y - 1, ref lava, ref honey, ref chumCount);
@@ -644,11 +644,11 @@ namespace ImproveGame.Content.Tiles
 
             switch (Main.dayTime)
             {
-                case true when Main.time is < 5400.0 or > 48600.0: // ÔçÉÏ
+                case true when Main.time is < 5400.0 or > 48600.0: // æ—©ä¸Š
                     num *= 1.3f;
                     break;
-                case true when Main.time is > 16200.0 and < 37800.0: // ÔçÉÏ
-                case false when Main.time is > 6480.0 and < 25920.0: // ÍíÉÏ
+                case true when Main.time is > 16200.0 and < 37800.0: // æ—©ä¸Š
+                case false when Main.time is > 6480.0 and < 25920.0: // æ™šä¸Š
                     num *= 0.8f;
                     break;
             }
@@ -724,7 +724,7 @@ namespace ImproveGame.Content.Tiles
 
             if (tag.ContainsKey("fishes"))
                 fish = tag.Get<Item[]>("fishes");
-            Array.Resize(ref fish, 40); // ¾É°æ¼æÈİ
+            Array.Resize(ref fish, 40); // æ—§ç‰ˆå…¼å®¹
             for (int i = 0; i < fish.Length; i++)
                 if (tag.ContainsKey($"fish{i}"))
                     fish[i] = tag.Get<Item>($"fish{i}");

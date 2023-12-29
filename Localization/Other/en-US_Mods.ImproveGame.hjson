@@ -310,13 +310,15 @@ PaintWandGUI: {
 }
 
 SpaceWandGUI: {
-	PlaceType: Tile type
+	PlaceType: Object
 	Platform: Platforms
 	Soild: Solid Blocks
 	Rope: Ropes
 	Rail: Minecart Tracks
 	GrassSeed: Grass Seeds
 	PlantPot: Planter Boxes
+	BlockType: Slope
+	ShapeType: Shape
 }
 
 PackageGUI: {
