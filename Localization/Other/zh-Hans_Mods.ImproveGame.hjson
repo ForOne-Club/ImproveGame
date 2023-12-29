@@ -24,6 +24,7 @@ CombatText: {
 Tips: {
 	ShimmerInto: "可在微光中转化为 "
 	ShimmerIntoWithStack: "每{0}个可在微光中转化为 "
+	ShimmerIntoWithCoinLuck: 可在微光中转换为{0}点钱币幸运
 	PrefixCount: 物品重铸次数：
 	AnglerQuest: 已刷新钓鱼任务
 	FromMod: 所属模组 {DisplayName}

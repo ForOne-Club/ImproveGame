@@ -7,6 +7,7 @@
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 5;
+            ItemID.Sets.CoinLuckValue[Type] = 1000000;
         }
 
         public override void SetDefaults()

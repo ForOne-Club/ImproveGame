@@ -24,6 +24,7 @@ CombatText: {
 Tips: {
 	ShimmerInto: "Can be shimmered into "
 	ShimmerIntoWithStack: "Every {0} can be shimmered into "
+	ShimmerIntoWithCoinLuck: 可在微光中转换为{0}点钱币幸运
 	PrefixCount: "Reforging count: "
 	AnglerQuest: Angler's quest refreshed
 	FromMod: From mod {DisplayName}

@@ -183,6 +183,12 @@ namespace ImproveGame.Common.GlobalItems
         {
             if (!UIConfigs.Instance.ShowShimmerInfo) return;
 
+            if (ItemID.Sets.CoinLuckValue[item.type] > 0)
+            {
+                tooltips.Add(new TooltipLine(Mod, "ShimmerResult", GetText("Tips.ShimmerIntoWithCoinLuck", ItemID.Sets.CoinLuckValue[item.type])) { OverrideColor = new Color(241, 175, 233) });
+                return;
+            }
+
             var items = CollectHelper.GetShimmerResult(item, out int stackRequired);
             if (items is null) return;
 
