@@ -350,6 +350,15 @@ namespace ImproveGame.Content.Patches
             On_TileLightScanner.LightIsBlocked += LightNotBlocked;
             // 无条件队内传送
             On_Player.HasUnityPotion += (orig, self) => Config.NoConditionTP || orig(self);
+            // 无条件队内传送-虫洞药水无消耗
+            On_Player.TakeUnityPotion += NotTakeUnityPotion;
+        }
+
+        private void NotTakeUnityPotion(On_Player.orig_TakeUnityPotion orig, Player self)
+        {
+            if (Config.NoConditionTP) return;
+
+            orig(self);
         }
 
         private bool LightNotBlocked(On_TileLightScanner.orig_LightIsBlocked orig, TileLightScanner self, Tile tile)
