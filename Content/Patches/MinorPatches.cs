@@ -348,13 +348,14 @@ namespace ImproveGame.Content.Patches
             On_PlayerSleepingHelper.DoesPlayerHaveReasonToActUpInBed += NoSleepRestrictions;
             // 光照是否无视物块传播
             On_TileLightScanner.LightIsBlocked += LightNotBlocked;
+            // 无条件队内传送
+            On_Player.HasUnityPotion += (orig, self) => Config.NoConditionTP || orig(self);
         }
 
         private bool LightNotBlocked(On_TileLightScanner.orig_LightIsBlocked orig, TileLightScanner self, Tile tile)
         {
             if (Config.LightNotBlocked) return false;
             else return orig(self, tile);
-            On_Player.HasUnityPotion += (orig, self) => Config.NoConditionTP || orig(self);
         }
 
         private bool NoSleepRestrictions(On_PlayerSleepingHelper.orig_DoesPlayerHaveReasonToActUpInBed orig, ref PlayerSleepingHelper self, Player player)
