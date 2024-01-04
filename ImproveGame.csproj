@@ -23,33 +23,11 @@
 		<DotNetPath Condition=" '$(DotNetPath)' == '' ">dotnet</DotNetPath>
 	</PropertyGroup>
 	<ItemGroup>
-	  <AdditionalFiles Remove="Content\Dummy.png" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="FuzzySearch.Net" Version="0.3.3" />
-		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.1.2" />
+		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.4.1" />
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.5" />
-		<Publicize Include="FNA" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Reference Include="NetSimplified">
-	    <HintPath>lib\NetSimplified.dll</HintPath>
-	  </Reference>
-	  <Reference Include="PinyinNet">
-	    <HintPath>lib\PinyinNet.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
-	<ItemGroup>
-	  <ModFile Remove="Common\Commands\DummyCommand.cs" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Solaestas-HjsonFile Remove="Localization\NPC\en-US_Mods.ImproveGame.hjson" />
-	  <Solaestas-HjsonFile Remove="Localization\NPC\zh-Hans_Mods.ImproveGame.hjson" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Solaestas-ImageFile Remove="Content\Dummy.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Update="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0" />
+		<Reference Include="lib\*.dll"/>
 	</ItemGroup>
 </Project>
