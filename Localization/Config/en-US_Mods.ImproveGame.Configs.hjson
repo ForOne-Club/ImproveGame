@@ -612,7 +612,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			Allows use of 'Locators' to mark following structures on map:
-			The Aether, Dungeon, Jungle Temple, Floating Islands, Pyramid and Plantera's Bulb.
+			The Aether, Dungeon, Jungle Temple, Floating Islands, Pyramid, Plantera's Bulb and Enchanted Sword in Stone.
 			'''
 		Label: "[centeritem:WorldGlobe] Structure Markers"
 	}
