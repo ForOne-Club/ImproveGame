@@ -10,7 +10,7 @@
 
 ## Subversions
 
-- v1.6.7.0 (Not yet)
+- v1.6.7.0
 
 ## Additions
 - Fast Respawn When No Boss
