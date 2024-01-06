@@ -569,27 +569,27 @@ ImproveConfigs: {
 	}
 
 	LightNotBlocked: {
-		Label: "[centeritem:UltrabrightTorch] 物块不遮挡光照"
+		Label: "[centeritem:UltrabrightTorch] Tiles Not Blocking Lights"
 		Tooltip:
 			'''
-			是否让光照无视物块传播
-			关闭则遵循原本的情况
+			Whether lights ignore tiles
+			Follows vanilla behavior when off
 			'''
 	}
 
 	BombsNotDamage: {
-		Label: "[centeritem:TNTBarrel] 爆炸物无伤害"
+		Label: "[centeritem:TNTBarrel] Nondamaging Explosives"
 		Tooltip:
 			'''
-			禁止可破坏物块相关物的伤害
+			Disable tile-breaking items' damage
 
-			有两种可选的范围：
-			1. 爆炸物
-			  - 仅针对物品类爆炸物
-			  - 炸药也算在内
-			2. 爆炸物和火箭
-			  - 同时针对物品和火箭
-			  - 炸药也算在内
+			Two ranges availible:
+			1. Explosives Only
+			  - item explosives only
+			  - also includes the "Explosives" tile
+			2. Explosives and Rockets
+			  - item and rocket explosives
+			  - also includes the "Explosives" tile
 			'''
 	}
 
@@ -676,8 +676,8 @@ ImproveConfigs: {
 	}
 
 	NoConditionTP: {
-		Label: "[centeritem:WormholePotion] 无条件队内传送"
-		Tooltip: 可无视条件使用队内传送，不需要携带虫洞药水，带了也不会消耗
+		Label: "[centeritem:WormholePotion] Unconditional Team Teleportation"
+		Tooltip: Players can teleport to teammates without comsuming Wormhole Potion, even if it's in inventory
 	}
 }
 
@@ -951,9 +951,9 @@ GlassType: {
 
 BombsNotDamageType: {
 	Tooltip: ""
-	Disabled.Label: 关闭
-	Item.Label: 爆炸物
-	ItemAndRocket.Label: 爆炸物和火箭
+	Disabled.Label: Off
+	Item.Label: Explosives Only
+	ItemAndRocket.Label: Explosives and Rockets
 }
 
 FavoritedConfigs: {
