@@ -336,8 +336,7 @@ namespace ImproveGame.Content.Patches
             On_Player.AddBuff_DetermineBuffTimeToAdd += (orig, self, type, time1) =>
                 Config.LongerExpertDebuff ? orig.Invoke(self, type, time1) : time1;
             // 床随地设置重生点
-            On_Player.CheckSpawn += (orig, i, j) =>
-                Config.BedEverywhere || orig.Invoke(i, j);
+            On_Player.CheckSpawn += BetterCheckSpawn;
             // 固定 NPC 快乐度为指定数值
             IL_ShopHelper.GetShoppingSettings += ModifyNPCHappiness;
             // 狱火圈半透明
@@ -352,6 +351,26 @@ namespace ImproveGame.Content.Patches
             On_Player.HasUnityPotion += (orig, self) => Config.NoConditionTP || orig(self);
             // 无条件队内传送-虫洞药水无消耗
             On_Player.TakeUnityPotion += NotTakeUnityPotion;
+        }
+
+        private bool BetterCheckSpawn(On_Player.orig_CheckSpawn orig, int x, int y)
+        {
+            if (Config.BedEverywhere)
+            {
+                // 相比于原版判定，把床被阻挡和房间判定给删了
+                if (x < 10 || x > Main.maxTilesX - 10 || y < 10 || y > Main.maxTilesX - 10)
+                    return false;
+
+                if (Main.tile[x, y - 1] == null)
+                    return false;
+
+                if (!Main.tile[x, y - 1].active() || !TileID.Sets.IsValidSpawnPoint[Main.tile[x, y - 1].type])
+                    return false;
+
+                return true;
+            }
+
+            return orig(x, y);
         }
 
         private void NotTakeUnityPotion(On_Player.orig_TakeUnityPotion orig, Player self)

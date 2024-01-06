@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
+using ImproveGame.Content.Projectiles;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
@@ -436,13 +437,7 @@ public class ImprovePlayer : ModPlayer
         if (itemType is ItemID.None)
             return;
 
-        SoundEngine.PlaySound(SoundID.Item6, Player.position);
-
-        for (int l = 0; l < 70; l++)
-        {
-            Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror, Player.velocity.X * 0.5f,
-                Player.velocity.Y * 0.5f, 150, default, 1.5f);
-        }
+        Projectile.NewProjectile(new EntitySource_Sync(), Player.position, Vector2.Zero, ModContent.ProjectileType<HomeEffect>(), 0, 0, Player.whoAmI);
 
         if (itemType is ItemID.PotionOfReturn)
         {
@@ -456,11 +451,6 @@ public class ImprovePlayer : ModPlayer
             Player.Spawn(PlayerSpawnContext.RecallFromItem);
             Player.immune = immune;
             Player.immuneTime = immuneTime;
-        }
-
-        for (int m = 0; m < 70; m++)
-        {
-            Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror, 0f, 0f, 150, default, 1.5f);
         }
     }
 }

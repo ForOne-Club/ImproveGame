@@ -24,7 +24,7 @@ CombatText: {
 Tips: {
 	ShimmerInto: "Can be shimmered into "
 	ShimmerIntoWithStack: "Every {0} can be shimmered into "
-	ShimmerIntoWithCoinLuck: "Can be shimmered into {0} 'coin luck'"
+	ShimmerIntoWithCoinLuck: Can be shimmered into {0} 'coin luck'
 	PrefixCount: "Reforge count: "
 	AnglerQuest: Angler's quest refreshed
 	FromMod: From mod {DisplayName}
@@ -375,6 +375,8 @@ Projectiles: {
 		DisplayName: Explorer Drone
 		TooFarAway: Explorer Drone is too far away from you.
 	}
+
+	HomeEffect.DisplayName: Home Effect
 }
 
 BuilderToggles: {

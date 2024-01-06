@@ -365,6 +365,8 @@ Projectiles: {
 		DisplayName: 勘测无人机
 		TooFarAway: 无人机离你太远了
 	}
+
+	// HomeEffect.DisplayName: Home Effect
 }
 
 BuilderToggles: {
