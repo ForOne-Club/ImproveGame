@@ -84,7 +84,7 @@ namespace ImproveGame.Interface.Common
         static UIColor()
         {
             SetUIColors(UIConfigs.Instance.ThemeType);
-            if (GlassVfxEnabled)
+            if (GlassVfxAvailable)
                 AcrylicRedesign();
         }
 

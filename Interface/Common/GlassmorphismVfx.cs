@@ -99,7 +99,7 @@ public class GlassmorphismVfx : ModSystem
 
     private void RenderGlassmorphismVfx()
     {
-        if (Main.gameMenu || !GlassVfxEnabled || Main.InGameUI.IsVisible || Main.ingameOptionsWindow)
+        if (Main.gameMenu || !GlassVfxAvailable || Main.InGameUI.IsVisible || Main.ingameOptionsWindow)
             return;
 
         // // 对原版游戏画面高斯模糊处理的 target

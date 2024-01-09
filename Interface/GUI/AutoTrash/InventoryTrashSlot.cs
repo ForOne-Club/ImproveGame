@@ -82,7 +82,7 @@ public class InventoryTrashSlot : BaseItemSlot
         Vector2 pos = dimensions.Position();
         Vector2 size = dimensions.Size();
         var textureTrash = ModAsset.Trash.Value;
-        var opacity = GlassVfxEnabled ? 0.25f : 0.5f;
+        var opacity = GlassVfxAvailable ? 0.25f : 0.5f;
         spriteBatch.Draw(textureTrash, pos + size / 2f, null, Color.White * opacity, 0f, textureTrash.Size() / 2f, TrashScale, 0, 0);
     }
 }

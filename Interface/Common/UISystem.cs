@@ -241,7 +241,7 @@ namespace ImproveGame.Interface.Common
             if (_themeLastTick != UIConfigs.Instance.ThemeType || _acrylicVfxLastTick != GlassVfxEnabled)
             {
                 UIColor.SetUIColors(UIConfigs.Instance.ThemeType);
-                if (GlassVfxEnabled)
+                if (GlassVfxAvailable)
                     UIColor.AcrylicRedesign();
                 UIPlayer.InitUI();
             }
