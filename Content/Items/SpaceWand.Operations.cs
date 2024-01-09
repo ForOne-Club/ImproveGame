@@ -40,7 +40,11 @@ public partial class SpaceWand
                 {
                     // 物品放置的瓷砖就是位置对应的瓷砖则无需替换
                     if (!ValidTileForReplacement(item, x, y))
+                    {
+                        // 至少还可以设置个斜坡
+                        SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
                         return;
+                    }
 
                     // 有没有足够强大的镐子破坏瓷砖
                     if (!player.HasEnoughPickPowerToHurtTile(x, y))

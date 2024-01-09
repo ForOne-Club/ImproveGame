@@ -65,6 +65,7 @@
 - **[v1.6.7.1]** Tree Settings are not applied to ash trees
 - **[v1.6.7.1]** Tool speed boost is not applied to hammers used to destroy walls
 - **[v1.6.7.1]** Opening the full-screen map resets the UI state
+- **[v1.6.7.1]** Space wand doesn't set slope for tiles properly sometimes
 
 ## Adjustments
 
