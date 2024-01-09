@@ -36,6 +36,7 @@ Tips: {
 	SummonSlotFull: Minion slot occupancy: [c/CC2222:{Current}/{Total} (Full!)]
 	BuffTrackerOn: <left> to open buff tracker
 	BuffTrackerOff: <left> to close buff tracker
+	HideMyBuffs: To hide infinite buffs, enable it in 'Personal Config'
 	BankEnableOn: Middle click to open personal inventory
 	BankEnableOff: Middle click to close personal inventory
 	MouseMiddleOpen: Middle click to open {ItemName}

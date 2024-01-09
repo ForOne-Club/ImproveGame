@@ -36,6 +36,7 @@ Tips: {
 	SummonSlotFull: 召唤栏位占用: [c/CC2222:{Current}/{Total} (已满!)]
 	BuffTrackerOn: <left>以打开增益追踪器
 	BuffTrackerOff: <left>以关闭增益追踪器
+	HideMyBuffs: 如果你想隐藏无限增益，请到“个人配置”处打开相应选项
 	BankEnableOn: 中键单击以打开个人储存库
 	BankEnableOff: 中键单击以关闭个人储存库
 	MouseMiddleOpen: 中键单击以打开{ItemName}

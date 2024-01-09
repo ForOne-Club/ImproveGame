@@ -241,6 +241,9 @@ namespace ImproveGame.Common.GlobalBuffs
                     UISystem.Instance.BuffTrackerGUI.Open();
                 }
             }
+
+            if (!UIConfigs.Instance.HideNoConsumeBuffs)
+                tip += $"\n{GetText("Tips.HideMyBuffs")}";
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams) {

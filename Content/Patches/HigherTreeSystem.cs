@@ -9,9 +9,9 @@ namespace ImproveGame.Content.Patches
             ILCursor c = new(il);
             c.GotoNext(MoveType.After, i => i.MatchCall<WorldGen>("get_genRand"),
                                        i => i.Match(OpCodes.Ldc_I4_S, (sbyte)10));
-            c.EmitDelegate((int min) => Config.PalmTreeMin);
+            c.EmitDelegate((int _) => Config.PalmTreeMin);
             c.GotoNext(MoveType.After, i => i.Match(OpCodes.Ldc_I4_S, (sbyte)21));
-            c.EmitDelegate((int max) => Config.PalmTreeMax + 1);
+            c.EmitDelegate((int _) => Config.PalmTreeMax + 1);
         }
 
         // 通过简单的IL修改一般树木高度
@@ -64,6 +64,8 @@ namespace ImproveGame.Content.Patches
             WorldGen.GrowTreeSettings.Profiles.VanityTree_Sakura.TreeHeightMax = mostMax;
             WorldGen.GrowTreeSettings.Profiles.VanityTree_Willow.TreeHeightMin = mostMin;
             WorldGen.GrowTreeSettings.Profiles.VanityTree_Willow.TreeHeightMax = mostMax;
+            WorldGen.GrowTreeSettings.Profiles.Tree_Ash.TreeHeightMin = mostMin;
+            WorldGen.GrowTreeSettings.Profiles.Tree_Ash.TreeHeightMax = mostMax;
         }
     }
 }

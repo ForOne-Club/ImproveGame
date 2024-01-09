@@ -254,9 +254,6 @@ namespace ImproveGame.Common.Configs
         [DefaultValue(true)]
         public bool NoLakeSizePenalty;
 
-        [DefaultValue(true)]
-        public bool QuickRespawn;
-
         [DefaultValue(0)]
         [Range(0, 100)]
         [Increment(5)]

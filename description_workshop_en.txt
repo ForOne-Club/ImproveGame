@@ -1,5 +1,5 @@
 ﻿[h2]Quality of Terraria, a mod to greatly improve your gameplay experience[/h2]
-[h2][url=https://discord.gg/rEmGMQv5z7]Discord[/url][/h2]
+[h2][url=https://discord.gg/rEmGMQv5z7]Join our Discord to report bugs and get replied quickly![/url][/h2]
 These features may bring you better gameplay experience
 Only some functions are enabled by default, please check mod configurations for details
 

@@ -193,19 +193,19 @@ public class ImprovePlayer : ModPlayer
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
     {
         // 判断有没有存活的 Boss
-        bool hasBoss = Main.npc.Any(t => t.active && t.boss);
+        bool hasBoss = Main.CurrentFrameFlags.AnyActiveBossNPC;
 
         // 计算要缩短多少时间
-        float TimeShortened = Player.respawnTimer *
+        float timeShortened = Player.respawnTimer *
             MathHelper.Clamp(hasBoss ? Config.BOSSBattleResurrectionTimeShortened : Config.ResurrectionTimeShortened,
                 0f, 100f) / 100f;
-        if (TimeShortened > 0f)
+        if (timeShortened > 0f)
         {
             int ct = CombatText.NewText(Player.getRect(), new(25, 255, 25), GetTextWith(
                 "CombatText.Commonds.ResurrectionTimeShortened", new
                 {
                     Name = Player.name,
-                    Time = MathF.Round(TimeShortened / 60)
+                    Time = MathF.Round(timeShortened / 60)
                 }));
             if (Main.combatText.IndexInRange(ct))
             {
@@ -213,19 +213,18 @@ public class ImprovePlayer : ModPlayer
             }
         }
 
-        Player.respawnTimer -= (int)TimeShortened;
+        Player.respawnTimer -= (int)timeShortened;
         Player.respawnTimer = Math.Max(Player.respawnTimer, 90);
     }
 
     public override void UpdateDead()
     {
         // 非Boss战时快速复活
-        if (Config.QuickRespawn && Player.respawnTimer <= 90) return;
-        
-        // 判断有没有存活的 Boss
-        bool hasBoss = Main.npc.Any(t => t.active && t.boss);
-        if (!hasBoss)
-            Player.respawnTimer = 90;
+        // 计算要缩短多少时间 15*60=900
+        int minRemainingTime = (int)(900 * MathHelper.Clamp(100f - Config.ResurrectionTimeShortened, 0f, 100f) / 100f);
+        if (Config.ResurrectionTimeShortened is 0 || Player.respawnTimer <= minRemainingTime || Main.CurrentFrameFlags.AnyActiveBossNPC)
+            return;
+        Player.respawnTimer = minRemainingTime;
     }
 
     private bool _cacheSwitchSlot;

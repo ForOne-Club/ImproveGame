@@ -196,8 +196,6 @@ public class AllOffElement : PresetElement
         config.RedPotionEverywhere = false;
         config.InfiniteRedPotion = false;
         config.QuickNurse = false;
-        config.QuickRespawn = false;
-        config.ResurrectionTimeShortened = 0;
         config.BOSSBattleResurrectionTimeShortened = 0;
         config.BanTombstone = false;
         config.LongerExpertDebuff = true;

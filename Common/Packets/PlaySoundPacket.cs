@@ -10,7 +10,7 @@ namespace ImproveGame.Common.Packets;
 public class PlaySoundPacket : NetModule
 {
     private byte _soundID;
-    private Point16? _position; // 存short物块坐标，减少包大小
+    private Point16 _position; // 存short物块坐标，减少包大小
     private byte _style;
     
     public static void PlaySound(int soundID, Vector2? position = null, int style = 1, bool playForSelf = true) =>
@@ -36,8 +36,8 @@ public class PlaySoundPacket : NetModule
         if (!UIConfigs.Instance.ExplosionEffect && _soundID is LegacySoundIDs.Item && _style is 14)
             return;
 
-        if (_position is not null)
-            SoundEngine.PlaySound(_soundID, _position.Value.ToWorldCoordinates(), _style);
+        if (_position != Point16.Zero)
+            SoundEngine.PlaySound(_soundID, _position.ToWorldCoordinates(), _style);
         else
             SoundEngine.PlaySound(_soundID, Style: _style);
     }

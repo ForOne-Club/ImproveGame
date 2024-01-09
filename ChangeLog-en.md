@@ -11,6 +11,7 @@
 ## Subversions
 
 - v1.6.7.0
+- v1.6.7.1
 
 ## Additions
 - Fast Respawn When No Boss
@@ -55,6 +56,13 @@
   - Incorrect preview for banners under platforms
   - Incorrect mapping between some walls and items
 - Some items' right-bottom icons not drawing correctly in some UIs (e.g. dangerous walls' skull icon not drawing in Big Backpack)
+- **[v1.6.7.1]** Can't respawn when "Fast Respawn When No Boss" is off
+- **[v1.6.7.1]** Tooltip of "Structure Markers" option doesn't mention Enchanted Sword in Stone
+- **[v1.6.7.1]** Vfx of quick home is not synced in multiplayer
+- **[v1.6.7.1]** Destroying beds won't reset spawn point when "Unlimited Bed Respawn" is on
+- **[v1.6.7.1]** Legacy structure files aren't recognized
+- **[v1.6.7.1]** Sfx of burst wands can be heard by everyone in multiplayer regardless of distance
+- **[v1.6.7.1]** Tree Settings are not applied to ash trees
 
 ## Adjustments
 
@@ -73,6 +81,8 @@
 - Wire Cutter is now affected by Tool Speed
 - Wand of Construction can now handle content of Signs
 - Items which have a buff duration below 60s are no longer considered as infinite potions, which solves some mod compatibility issues (e.g. Astral Injection from Calamity Mod)
+- **[v1.6.7.1]** "Faster Respawn" and "Fast Respawn When No Boss" is combined into one option
+- **[v1.6.7.1]** Added a tip to hide the infinite buff icon in the buff icon's tooltip
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0

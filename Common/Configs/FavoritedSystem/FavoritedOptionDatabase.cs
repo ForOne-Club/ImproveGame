@@ -9,7 +9,6 @@ public class FavoritedOptionDatabase
     /// </summary>
     internal static HashSet<string> NewOptions =>
     [
-        nameof(ImproveConfigs.QuickRespawn),
         nameof(ImproveConfigs.NoPylonRestrictions),
         nameof(ImproveConfigs.NoSleepRestrictions),
         nameof(ImproveConfigs.BombsNotDamage),

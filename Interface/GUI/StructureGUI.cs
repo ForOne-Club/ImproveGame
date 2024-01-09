@@ -314,7 +314,9 @@ namespace ImproveGame.Interface.GUI
             var filePaths = Directory.GetFiles(FileOperator.SavePath);
             foreach (string path in filePaths)
             {
-                if (Path.GetExtension(path) == FileOperator.Extension)
+                string extension = Path.GetExtension(path);
+                // 添加识别 .qolstruct，旧版支持
+                if (extension == FileOperator.Extension || extension == ".qolstruct")
                 {
                     UIList.Add(new StructurePanel(path));
                 }
