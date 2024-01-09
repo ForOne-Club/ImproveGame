@@ -45,6 +45,19 @@ namespace ImproveGame.Common.GlobalItems
             return 1f;
         }
 
+        public override void Load()
+        {
+            // 锤子敲背景墙有特殊处理，要用On才能应用工具速度提升
+            On_Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) =>
+            {
+                orig.Invoke(player, item, x, y);
+                
+                // 检测那一堆if判断成没成
+                if (player.itemTime == item.useTime / 2)
+                    player.itemTime = (int)Math.Max(1, (1f - Config.ExtraToolSpeed) * (item.useTime / 2f));
+            };
+        }
+
         public override void UseAnimation(Item item, Player player)
         {
             if (item.type is ItemID.MagicMirror or ItemID.CellPhone or ItemID.IceMirror or ItemID.Shellphone

@@ -63,6 +63,7 @@
 - **[v1.6.7.1]** Legacy structure files aren't recognized
 - **[v1.6.7.1]** Sfx of burst wands can be heard by everyone in multiplayer regardless of distance
 - **[v1.6.7.1]** Tree Settings are not applied to ash trees
+- **[v1.6.7.1]** Tool speed boost is not applied to hammers used to destroy walls
 
 ## Adjustments
 
