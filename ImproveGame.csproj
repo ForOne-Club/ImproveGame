@@ -28,6 +28,20 @@
 		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.5" />
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="lib\*.dll"/>
+		<Reference Include="lib\*.dll" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="./README.md;./README-en.md">
+			<Visible>false</Visible>
+		</None>
+		<None Include="./icon.png;./icon_workshop.png">
+			<Visible>false</Visible>
+		</None>
+		<None Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt">
+			<Visible>false</Visible>
+		</None>
+		<None Include=".gitignore;.gitattributes;./.editorconfig;./LICENSE">
+			<Visible>false</Visible>
+		</None>
 	</ItemGroup>
 </Project>
