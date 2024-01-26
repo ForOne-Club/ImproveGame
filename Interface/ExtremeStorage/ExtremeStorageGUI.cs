@@ -112,6 +112,14 @@ namespace ImproveGame.Interface.ExtremeStorage
             }
         }
 
+        public override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            base.DrawSelf(spriteBatch);
+
+            // 是否开启制作栏侧栏，在这里而不是Update里写，支持High FPS Support Mod
+            Main.hidePlayerCraftingMenu |= !DisplayCrafting;
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (_recalculateNextTick)
@@ -164,9 +172,6 @@ namespace ImproveGame.Interface.ExtremeStorage
             if (oldWidth != _totalPanel.Width.Pixels || oldHeight != _totalPanel.Height.Pixels ||
                 oldLeft != _totalPanel.Left.Pixels)
                 _recalculateNextTick = true;
-
-            // 是否开启制作栏侧栏
-            Main.hidePlayerCraftingMenu |= !DisplayCrafting;
         }
 
         private void UpdateAnimationTimer()

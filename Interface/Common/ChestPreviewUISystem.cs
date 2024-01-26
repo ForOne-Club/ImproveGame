@@ -9,70 +9,63 @@ namespace ImproveGame.Interface.Common;
 
 public class ChestPreviewUISystem : ModSystem
 {
+    private class PreviewGlobalTile : GlobalTile
+    {
+        public override void MouseOverFar(int i, int j, int type)
+        {
+            if (!Main.keyState.IsKeyDown(Keys.LeftAlt))
+                return;
+
+            var t = Main.tile[i, j];
+            if (!t.HasTile || !TileID.Sets.IsAContainer[type])
+                return;
+
+            int originX = i;
+            int originY = j;
+            if (TileID.Sets.BasicDresser[type])
+            {
+                originY = j;
+                originX = i - t.TileFrameX % 54 / 18;
+                if (t.TileFrameY % 36 != 0)
+                    originY--;
+            }
+            else
+            {
+                if (t.TileFrameX % 36 != 0)
+                    originX--;
+                if (t.TileFrameY % 36 != 0)
+                    originY--;
+            }
+
+            int chestIndex = Chest.FindChest(originX, originY);
+            if (chestIndex < 0 || Chest.IsLocked(originX, originY))
+                return;
+
+            _syncCooldown--;
+            if (_syncCooldown <= 0)
+            {
+                ChestItemOperation.RequestChestItem(chestIndex);
+                _syncCooldown = 60; // 防止发包太多
+            }
+
+            _previewItems = Main.chest[chestIndex].item;
+            _hasChest = true;
+            // Main.cursorOverride = CursorOverrideID.Magnifiers;
+        }
+    }
+    
     private static Item[] _previewItems;
     private static bool _hasChest;
     private static int _syncCooldown;
 
-    public override void Load()
+    public override void UpdateUI(GameTime gameTime)
     {
-        On_Player.TileInteractionsMouseOver += ChestDisplayMouseOver;
-    }
-
-    private void ChestDisplayMouseOver(On_Player.orig_TileInteractionsMouseOver orig, Player player, int myX,
-        int myY)
-    {
-        orig.Invoke(player, myX, myY);
-
-        if (!player.IsInTileInteractionRange(myX, myY, TileReachCheckSettings.QuickStackToNearbyChests))
-            return;
-
-        if (!Main.keyState.IsKeyDown(Keys.LeftAlt))
-            return;
-
-        var t = Main.tile[myX, myY];
-        if (!TileID.Sets.IsAContainer[t.TileType])
-        {
-            return;
-        }
-
-        int originX = myX;
-        int originY = myY;
-        if (TileID.Sets.BasicDresser[t.TileType])
-        {
-            originY = myY;
-            originX = myX - t.TileFrameX % 54 / 18;
-            if (t.TileFrameY % 36 != 0)
-                originY--;
-        }
-        else
-        {
-            if (t.TileFrameX % 36 != 0)
-                originX--;
-            if (t.TileFrameY % 36 != 0)
-                originY--;
-        }
-
-        int chestIndex = Chest.FindChest(originX, originY);
-        if (chestIndex < 0 || Chest.IsLocked(originX, originY))
-        {
-            return;
-        }
-
-        _syncCooldown--;
-        if (_syncCooldown <= 0)
-        {
-            ChestItemOperation.RequestChestItem(chestIndex);
-            _syncCooldown = 60; // 防止发包太多
-        }
-
-        _previewItems = Main.chest[chestIndex].item;
-        _hasChest = true;
-        Main.cursorOverride = CursorOverrideID.Magnifiers;
+        _hasChest = false;
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
     {
-        int index = layers.FindIndex(layer => layer.Name == "Vanilla: Interact Item Icon");
+        int index = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
         if (index != -1)
             layers.Insert(index + 1, new LegacyGameInterfaceLayer("ImproveGame: Chest Preview GUI", () =>
             {
@@ -80,7 +73,10 @@ public class ChestPreviewUISystem : ModSystem
                     _previewItems.Any(i => i is null))
                     return true;
 
-                _hasChest = false;
+                // High FPS Support支持
+                Main.cursorOverride = CursorOverrideID.Magnifiers;
+                Main.LocalPlayer.cursorItemIconEnabled = false;
+
                 List<TooltipLine> list = new();
                 for (int i = 0; i < 4; i++)
                 {

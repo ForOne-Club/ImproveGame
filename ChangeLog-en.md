@@ -90,6 +90,7 @@
 - Items which have a buff duration below 60s are no longer considered as infinite potions, which solves some mod compatibility issues (e.g. Astral Injection from Calamity Mod)
 - **[v1.6.7.1]** "Faster Respawn" and "Fast Respawn When No Boss" is combined into one option
 - **[v1.6.7.1]** Added a tip to hide the infinite buff icon in the buff icon's tooltip
+- **[v1.6.7.2]** 修改部分UI绘制逻辑以适配High FPS Support Mod
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0

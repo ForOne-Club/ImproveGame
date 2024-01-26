@@ -30,7 +30,6 @@ namespace ImproveGame.Interface.GUI
         private ModItemSlot baitSlot = new();
         private FishItemSlot[] fishSlot = new FishItemSlot[40];
         private UIText tipText;
-        private UIText title;
         private UIImage relocateButton;
         private SUIPanel textPanel;
 
@@ -109,17 +108,6 @@ namespace ImproveGame.Interface.GUI
                 basePanel.Append(fishSlot[i]);
             }
 
-            // 头顶大字
-            title = new("Autofisher", 0.5f, large: true)
-            {
-                HAlign = 0.5f
-            };
-            title.Left.Set(0, 0f);
-            title.Top.Set(-40, 0f);
-            title.Width.Set(panelWidth, 0f);
-            title.Height.Set(30, 0f);
-            basePanel.Append(title);
-
             textPanel = new(UIColor.TitleBg, UIColor.TitleBg, rounded: 10)
             {
                 HAlign = 0.5f,
@@ -168,16 +156,6 @@ namespace ImproveGame.Interface.GUI
         public void ToggleSelectPool()
         {
             WandSystem.SelectPoolMode = !WandSystem.SelectPoolMode;
-            if (WandSystem.SelectPoolMode)
-            {
-                title.SetText(GetText("Autofisher.SelectPool"));
-                relocateButton.SetImage(selectPoolOn);
-            }
-            else
-            {
-                title.SetText(GetText("Autofisher.Title"));
-                relocateButton.SetImage(selectPoolOff);
-            }
         }
 
         private void ChangeAccessorySlot(Item item, bool rightClick)
@@ -318,7 +296,7 @@ namespace ImproveGame.Interface.GUI
             }
 
             // 用 title.IsMouseHovering 出框之后就会没
-            if (title.GetDimensions().ToRectangle().Intersects(new(Main.mouseX, Main.mouseY, 1, 1)) || textPanel.IsMouseHovering)
+            if (textPanel.IsMouseHovering)
             {
                 var dimension = basePanel.GetDimensions();
                 var position = dimension.Position() + new Vector2(dimension.Width + 20f, 0f);
@@ -357,7 +335,6 @@ namespace ImproveGame.Interface.GUI
         {
             WandSystem.SelectPoolMode = false;
             Main.playerInventory = true;
-            title.SetText(GetText("Autofisher.Title"));
             // AutofishPlayer.LocalPlayer.SetAutofisher(point);
             RefreshItems();
         }
@@ -471,13 +448,13 @@ namespace ImproveGame.Interface.GUI
         public override void Update(GameTime gameTime)
         {
             _timer.Update();
-
-            // 是否开启制作栏侧栏
-            Main.hidePlayerCraftingMenu = true;
         }
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
+            // 是否开启制作栏侧栏
+            Main.hidePlayerCraftingMenu = true;
+
             float filtersX = _panel.Left() + _panel.Width() + 10f;
             if (Left.Pixels != filtersX) {
                 Left.Set(filtersX, 0f);

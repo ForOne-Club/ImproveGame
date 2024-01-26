@@ -244,7 +244,6 @@ SuperVault: {
 MoveChest.Heavy: 箱子的重量使你行动有些受限
 
 Autofisher: {
-	Title: 自动钓鱼机
 	Accessory: 钓鱼饰品
 	FishingPole: 钓竿
 	Bait: 诱饵
