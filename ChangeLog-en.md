@@ -69,6 +69,7 @@
 - **[v1.6.7.1]** Space wand doesn't set slope for tiles properly sometimes
 - **[v1.6.7.2]** 空间法杖放置沙子会使部分沙子以物品形式掉落
 - **[v1.6.7.2]** 在某些情况下影烛的随身增益站不会正常作用
+- **[v1.6.7.2]** 在某些情况下自动垃圾桶UI错位
 
 ## Adjustments
 

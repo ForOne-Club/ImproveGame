@@ -9,10 +9,12 @@ namespace ImproveGame.Interface.GUI.AutoTrash;
 public class InventoryTrashGUI : ViewBody
 {
     #region ViewBody
+
     public override bool Display
     {
-        get => UIConfigs.Instance.QoLAutoTrash && Main.playerInventory && !Hidden
-        && (ChestIsOpen || Main.LocalPlayer.talkNPC is -1) && !Main.LocalPlayer.tileEntityAnchor.InUse;
+        get => UIConfigs.Instance.QoLAutoTrash && Main.playerInventory && !Hidden &&
+               (Main.LocalPlayer.chest != -1 || Main.npcShop > 0 || Main.LocalPlayer.talkNPC is -1) &&
+               !Main.LocalPlayer.tileEntityAnchor.InUse;
         set { }
     }
 
@@ -27,7 +29,7 @@ public class InventoryTrashGUI : ViewBody
     }
     #endregion
 
-    private static bool ChestIsOpen => Main.LocalPlayer.chest != -1 || Main.npcShop > 0;
+    private static bool ChestMenuExists => (Main.LocalPlayer.chest != -1 || Main.npcShop > 0) && !Main.recBigList;
     internal static bool Hidden = false;
     public SUIPanel Window;
     public BaseGrid TrashGrid;
@@ -156,9 +158,9 @@ public class InventoryTrashGUI : ViewBody
     {
         bool recalculate = false;
 
-        float windowLeft = ChestIsOpen ? 73f : Main.GameMode is GameModeID.Creative ? 70f : 20f;
-        float windowTop = ChestIsOpen ? OpenedChestTrashTop : ClosedChestTrashTop;
-        Vector2 trashCellSpacing = ChestIsOpen ? OpenedChestTrashSpacing : ClosedChestTrashSpacing;
+        float windowLeft = ChestMenuExists ? 73f : Main.GameMode is GameModeID.Creative ? 70f : 20f;
+        float windowTop = ChestMenuExists ? OpenedChestTrashTop : ClosedChestTrashTop;
+        Vector2 trashCellSpacing = ChestMenuExists ? OpenedChestTrashSpacing : ClosedChestTrashSpacing;
 
         /* Window Left */
         bool a = Different(ref Window.Left.Pixels, windowLeft);
@@ -173,7 +175,7 @@ public class InventoryTrashGUI : ViewBody
         }
 
         // ItemSlot 大小
-        Vector2 trashSize = ChestIsOpen ? OpenedChestTrashSize : ClosedChestTrashSize;
+        Vector2 trashSize = ChestMenuExists ? OpenedChestTrashSize : ClosedChestTrashSize;
         if (Different(ref TrashGrid.CellSize, trashSize))
         {
             recalculate = true;
@@ -181,7 +183,7 @@ public class InventoryTrashGUI : ViewBody
             SettingsButton.SetSize(trashSize);
 
             // 开关 chest 时修改垃圾大小
-            if (ChestIsOpen)
+            if (ChestMenuExists)
             {
                 foreach (var item in TrashGrid.Children)
                 {
