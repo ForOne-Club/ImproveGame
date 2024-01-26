@@ -12,6 +12,7 @@
 
 - v1.6.7.0
 - v1.6.7.1
+- v1.6.7.2 (Not yet)
 
 ## Additions
 - Fast Respawn When No Boss
@@ -66,6 +67,8 @@
 - **[v1.6.7.1]** Tool speed boost is not applied to hammers used to destroy walls
 - **[v1.6.7.1]** Opening the full-screen map resets the UI state
 - **[v1.6.7.1]** Space wand doesn't set slope for tiles properly sometimes
+- **[v1.6.7.2]** 空间法杖放置沙子会使部分沙子以物品形式掉落
+- **[v1.6.7.2]** 在某些情况下影烛的随身增益站不会正常作用
 
 ## Adjustments
 
