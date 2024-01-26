@@ -9,14 +9,13 @@ public class ImproveGame : Mod
 {
     // 额外BUFF槽
     public override uint ExtraPlayerBuffSlots => (uint)Config.ExtraPlayerBuffSlots;
-    public static ImproveGame Instance { get; private set; }
+    public static ImproveGame Instance => ModContent.GetInstance<ImproveGame>();
 
     // 成员变量不需要自己设 null
     public readonly RenderTargetPool RenderTargetPool = new RenderTargetPool();
 
     public override void Load()
     {
-        Instance = this;
         AddContent<NetModuleLoader>();
         ChatManager.Register<BgItemTagHandler>("bgitem");
         ChatManager.Register<CenteredItemTagHandler>("centeritem");
@@ -24,7 +23,6 @@ public class ImproveGame : Mod
 
     public override void Unload()
     {
-        Instance = null;
         Config = null;
     }
 
