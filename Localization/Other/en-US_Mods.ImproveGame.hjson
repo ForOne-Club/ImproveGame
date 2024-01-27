@@ -181,11 +181,10 @@ ConstructGUI: {
 		Button: Introduction
 
 		AlphaTest: {
-			Count: "4"
-			1: Beta test feature
-			2: Kindly report bugs in this mod's Steam workshop page
-			3: Support is not guaranteed for modded tiles and walls,
-			4: and should not be considered a bug
+			Count: "3"
+			1: Kindly report bugs in this mod's Steam workshop page
+			2: Support is not guaranteed for modded tiles and walls,
+			3: and should not be considered a bug
 		}
 
 		Save: {

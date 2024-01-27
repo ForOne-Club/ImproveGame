@@ -172,10 +172,9 @@ ConstructGUI: {
 		Button: 功能介绍
 
 		AlphaTest: {
-			Count: "3"
-			1: 该法杖功能仍在测试中，可能存在许多Bug
-			2: 如果遇到Bug请报告给开发者
-			3: 对于模组物块与背景墙不保证支持，不应视作Bug
+			Count: "2"
+			1: 如果遇到Bug请报告给开发者
+			2: 对于模组物块与背景墙不保证支持，不应视作Bug
 			// 4: and should not be considered a bug
 		}
 

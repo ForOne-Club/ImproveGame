@@ -5,8 +5,6 @@ PlayerStats: {
 	Introduction:
 		'''
 		[c/CC88AA:Stat Panel]
-		Displays some player stats
-		Supports some mod stats
 		<left> to open controller for adding stats to display
 		<left> a category or a stat to toggle its display
 		Hold right click to drag this button
@@ -133,6 +131,7 @@ ExtremeStorage: {
 
 AutoTrash.Introduction:
 	'''
+	[c/CC88AA:Auto Trash] (Quality of Terraria)
 	[c/CC88AA:Shift+Ctrl+<left>] an item to add it to an auto-trash list
 	Press [c/CC88AA:{0}] to hide this UI (Make sure you have set a keybind for this)
 	Hit this button to view the auto-trash list

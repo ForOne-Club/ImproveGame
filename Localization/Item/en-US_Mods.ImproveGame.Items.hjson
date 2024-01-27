@@ -2,11 +2,8 @@ MagickWand: {
 	DisplayName: Wand of Brusts
 	Tooltip:
 		'''
-		Fixed Mode: Destroy tiles in an indicated fixed area
-		Free Mode: Destroy tiles selected
-		Can be affected by mining speed
+		Destroy tiles in both fixed area and free selection
 		The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
-		Mana cost depends on the number of tiles destroyed
 		<right> while holding to edit destruction settings
 		<right> while selecting area to cancel
 		'''
@@ -18,10 +15,6 @@ SpaceWand: {
 		'''
 		[c/0099ff:Right click to open the control panel]
 		Places selected type of tile in the indicated area
-		Consumes that type of tile in your inventory
-		Will try to swap tiles in different types if Block Swap is enabled
-		Can place up to 500 (244 in servers) tiles once
-		You can customize the block slope type
 		<right> while selecting area to cancel placement
 		'I pity these tools'
 		'''
@@ -31,11 +24,8 @@ StarburstWand: {
 	DisplayName: Wand of Starbursts
 	Tooltip:
 		'''
-		Fixed Mode: Destroy tiles in an indicated fixed area
-		Free Mode: Destroy tiles selected
-		Can be affected by mining speed
+		Destroy tiles in both fixed area and free selection
 		The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
-		Mana cost depends on the number of tiles destroyed
 		<right> while holding to edit destruction settings
 		<right> while selecting area to cancel
 		'''
@@ -59,7 +49,7 @@ WallPlace: {
 		'''
 		Summons a wall placer at your cursor
 		Automatically recognizes possible rooms and places walls in your inventory
-		The recognized room can have at most 2500 tiles' space
+		The recognized room can have at most 10000 tiles' space
 		Considers tangible blocks, platforms and doors as boundaries
 		Each player can only summon one, use again to recall it
 		'''
@@ -111,8 +101,6 @@ Autofisher: {
 		- [i:AnglerEarring], [i:AnglerTackleBag], [i:LavaproofTackleBag] can increase fishing speed by 200%, 300%, and 500%
 		- Fishing speed is increased by 300% in Hardmode
 		[c/AAAAAA:Only mod accessories that have added Quality of Terraria support is supported]
-		Supports most modded biomes
-		Only filterd items will be caught, first match upper criteria
 		'''
 }
 
@@ -132,13 +120,10 @@ ConstructWand: {
 	Tooltip:
 		'''
 		[c/0099ff:<right> to open Construction Panel]
-		Has ability to place structures freely
-		Recording Mode - Saves selected structures as files
-		Placing Mode - Places structures while material is sufficient
-		Will not record/place liquids
-		Wires will not be shown in preview, but will be recorded and placed
+		Has ability to place structures freely, structures can be saved and placed while material is sufficient
+		Will not record/place liquids. Wires will not be shown in preview, but will be recorded and placed
 		Click the 'Introduction' at the right top for more information
-		[c/AAAAAA:Beta test feature, kindly report bugs in this mod's Steam workshop page]
+		[c/AAAAAA:Kindly report bugs in this mod's Steam workshop page]
 		'''
 }
 
