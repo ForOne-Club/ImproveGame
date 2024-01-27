@@ -6,11 +6,11 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI.AutoTrash;
 
-public class InventoryTrashGUI : ViewBody
+public class InventoryTrashGUI : BaseBody
 {
     #region ViewBody
 
-    public override bool Display
+    public override bool Enabled
     {
         get => UIConfigs.Instance.QoLAutoTrash && Main.playerInventory && !Hidden &&
                (Main.LocalPlayer.chest != -1 || Main.npcShop > 0 || Main.LocalPlayer.talkNPC is -1) &&

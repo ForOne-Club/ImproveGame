@@ -175,7 +175,7 @@ ConstructGUI: {
 			Count: "2"
 			1: 如果遇到Bug请报告给开发者
 			2: 对于模组物块与背景墙不保证支持，不应视作Bug
-			// 4: and should not be considered a bug
+			// 3: and should not be considered a bug
 		}
 
 		Save: {

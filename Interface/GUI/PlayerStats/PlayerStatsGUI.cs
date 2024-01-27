@@ -7,10 +7,10 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI.PlayerStats;
 
-public class PlayerStatsGUI : ViewBody
+public class PlayerStatsGUI : BaseBody
 {
     #region ViewBody
-    public override bool Display { get => Visible; set => Visible = value; }
+    public override bool Enabled { get => Visible; set => Visible = value; }
 
     public override bool CanPriority(UIElement target) => this != target && this != Body;
 

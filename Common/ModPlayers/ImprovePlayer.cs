@@ -1,13 +1,11 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Projectiles;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.WorldFeature;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
@@ -303,9 +301,9 @@ public class ImprovePlayer : ModPlayer
         if (!Config.SuperVault) return;
 
         if (BigBagGUI.Visible)
-            UISystem.Instance.BigBagGUI.Close();
+            BigBagGUI.Instance.Close();
         else
-            UISystem.Instance.BigBagGUI.Open();
+            BigBagGUI.Instance.Open();
     }
 
     private static void PressBuffTrackerKeybind()

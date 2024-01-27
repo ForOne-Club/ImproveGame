@@ -8,7 +8,7 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class LiquidWandGUI : ViewBody
+    public class LiquidWandGUI : BaseBody
     {
         private static bool _visible;
 
@@ -21,7 +21,7 @@ namespace ImproveGame.Interface.GUI
             private set => _visible = value;
         }
 
-        public override bool Display { get => Visible; set => Visible = value; }
+        public override bool Enabled { get => Visible; set => Visible = value; }
 
         public override bool CanPriority(UIElement target) => target != this;
 

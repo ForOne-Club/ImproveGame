@@ -1,14 +1,20 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
+using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI;
 
-public class BigBagGUI : ViewBody
+[AutoCreateGUI("Radial Hotbars", "Big Bag")]
+public class BigBagGUI : BaseBody
 {
-    public override bool Display { get => Visible; set => Visible = value; }
+    public static BigBagGUI Instance { get; private set; }
+
+    public BigBagGUI() => Instance = this;
+
+    public override bool Enabled { get => Visible; set => Visible = value; }
 
     public override bool CanPriority(UIElement target) => target != this;
 

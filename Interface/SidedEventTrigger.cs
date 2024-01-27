@@ -12,12 +12,12 @@ namespace ImproveGame.Interface
     {
         private record SideUIData
         {
-            internal ViewBody ViewBody;
+            internal BaseBody ViewBody;
             internal AnimationTimer AnimationTimer;
             internal ISidedView AsSidedView => ViewBody as ISidedView;
         }
 
-        public static bool ViewBodyIs(ViewBody body) => UISystem.Instance.SidedEventTrigger.ViewBody == body;
+        public static bool ViewBodyIs(BaseBody body) => UISystem.Instance.SidedEventTrigger.ViewBody == body;
 
         private static readonly List<SideUIData> UIPool = new();
 
@@ -27,7 +27,7 @@ namespace ImproveGame.Interface
 
         public static void Clear() => UIPool.Clear();
 
-        public static void RegisterViewBody(ViewBody viewBody)
+        public static void RegisterViewBody(BaseBody viewBody)
         {
             if (viewBody is not ISidedView)
                 throw new Exception($"ViewBody {viewBody.GetType().Name} is not ILeftSideView!");
@@ -52,7 +52,7 @@ namespace ImproveGame.Interface
         }
 
         /// <summary> 指定 ViewBody 是否处于完全关闭状态或正在关闭 </summary>
-        public static bool IsClosed(ViewBody viewBody)
+        public static bool IsClosed(BaseBody viewBody)
         {
             if (viewBody is null)
                 return true;
@@ -63,7 +63,7 @@ namespace ImproveGame.Interface
         }
 
         /// <summary> 指定 ViewBody 是否处于完全开启状态或正在开启 </summary>
-        public static bool IsOpened(ViewBody viewBody)
+        public static bool IsOpened(BaseBody viewBody)
         {
             if (viewBody is null)
                 return false;
@@ -79,9 +79,9 @@ namespace ImproveGame.Interface
         /// <param name="viewBody">执行操作的 ViewBody</param>
         /// <returns>是否进行开启操作</returns>
         /// <exception cref="Exception">此 ViewBody 没有被注册</exception>
-        public static void ToggleViewBody(ViewBody viewBody)
+        public static void ToggleViewBody(BaseBody viewBody)
         {
-            UISystem.Instance.SidedEventTrigger.SetCarrier(null);
+            UISystem.Instance.SidedEventTrigger.SetBaseBody(null);
 
             var existingBody = UIPool.Find(d => d.ViewBody == viewBody);
             if (existingBody is null)

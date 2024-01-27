@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Animations;
+using ImproveGame.Interface.BaseViews;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface;
@@ -93,13 +94,13 @@ public class EventTrigger
 
     private readonly string _name, _layerName;
 
-    public ViewBody ViewBody { get => _body; protected set => _body = value; }
-    private ViewBody _body;
+    public BaseBody ViewBody { get => BaseBody; protected set => BaseBody = value; }
+    public BaseBody BaseBody { get; protected set; }
     private Vector2 _mouse;
     private readonly UIElement[] _last;
     private readonly bool[] _pressed;
 
-    public ViewBody Body => _body;
+    public BaseBody Body => BaseBody;
 
     /// <summary>
     /// 我在这里提醒一下需要为 CanRunFunc 赋值否则 UI 将永不生效<br/>
@@ -124,23 +125,25 @@ public class EventTrigger
         LayersDictionary[layerName].Add(this);
     }
 
-    public void SetCarrier(ViewBody viewBody)
+    public void SetBaseBody(BaseBody baseBody)
     {
-        if (_body == viewBody) return;
-
-        _body = viewBody;
-        if (viewBody is null)
+        if (BaseBody == baseBody)
         {
             return;
         }
 
-        _body.Activate();
-        _body.Recalculate();
+        BaseBody = baseBody;
+
+        if (BaseBody != null)
+        {
+            BaseBody.Activate();
+            BaseBody.Recalculate();
+        }
     }
 
     protected virtual void Update(GameTime gameTime)
     {
-        if (!_body?.Display ?? true)
+        if (!BaseBody?.Enabled ?? true)
         {
             return;
         }
@@ -149,7 +152,7 @@ public class EventTrigger
         bool mouse = DisableMouse;
         bool[] down = [Main.mouseLeft, Main.mouseRight, Main.mouseMiddle];
         // 鼠标目标元素
-        UIElement target = mouse ? null : _body.GetElementAt(_mouse);
+        UIElement target = mouse ? null : BaseBody.GetElementAt(_mouse);
         var targetMouseEvent = new UIMouseEvent(target, _mouse);
 
         try
@@ -165,7 +168,7 @@ public class EventTrigger
             }
 
             // 禁用鼠标
-            if (_body.CanDisableMouse(target))
+            if (BaseBody.CanDisableMouse(target))
             {
                 DisableMouse = true;
             }
@@ -191,7 +194,7 @@ public class EventTrigger
                         }
 
                         // 视图置于顶层
-                        if (target != null && _body.CanPriority(target))
+                        if (target != null && BaseBody.CanPriority(target))
                         {
                             MakePriority();
                         }
@@ -242,7 +245,7 @@ public class EventTrigger
                     PlayerInput.ScrollWheelDeltaForUI));
             }
 
-            _body.Update(gameTime);
+            BaseBody.Update(gameTime);
         } finally
         {
             _pressed[0] = down[0] && !mouse;
@@ -253,7 +256,7 @@ public class EventTrigger
 
     protected virtual bool Draw(bool drawToGame = true)
     {
-        if (!_body?.Display ?? true)
+        if (!BaseBody?.Enabled ?? true)
         {
             return true;
         }
@@ -266,18 +269,18 @@ public class EventTrigger
             int index = layers.IndexOf(this);
             if (index is -1)
             {
-                _body?.Draw(Main.spriteBatch);
+                BaseBody?.Draw(Main.spriteBatch);
                 return true;
             }
 
             Main.spriteBatch.ReBegin(null, Matrix.Identity);
             Main.spriteBatch.Draw(GlassmorphismVfx.GlassCovers[index], Vector2.Zero, Color.White);
             Main.spriteBatch.ReBegin(null, Main.UIScaleMatrix);
-            _body?.Draw(Main.spriteBatch);
+            BaseBody?.Draw(Main.spriteBatch);
             return true;
         }
         
-        _body?.Draw(Main.spriteBatch);
+        BaseBody?.Draw(Main.spriteBatch);
 
         return true;
     }

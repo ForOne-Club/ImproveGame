@@ -7,9 +7,9 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class GrabBagInfoGUI : ViewBody
+    public class GrabBagInfoGUI : BaseBody
     {
-        public override bool Display { get => Visible; set => Visible = value; }
+        public override bool Enabled { get => Visible; set => Visible = value; }
 
         public override bool CanPriority(UIElement target)
         {

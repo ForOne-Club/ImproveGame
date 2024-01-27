@@ -8,9 +8,9 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI.WorldFeature;
 
-public class WorldFeatureGUI : ViewBody
+public class WorldFeatureGUI : BaseBody
 {
-    public override bool Display { get => Visible; set => Visible = value; }
+    public override bool Enabled { get => Visible; set => Visible = value; }
     public static bool Visible { get; private set; }
 
     public override bool CanPriority(UIElement target) => target != this;

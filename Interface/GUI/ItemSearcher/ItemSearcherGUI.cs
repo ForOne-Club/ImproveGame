@@ -11,9 +11,9 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI.ItemSearcher;
 
-public class ItemSearcherGUI : ViewBody
+public class ItemSearcherGUI : BaseBody
 {
-    public override bool Display { get => Visible; set => Visible = value; }
+    public override bool Enabled { get => Visible; set => Visible = value; }
     public static bool Visible { get; private set; }
 
     public override bool CanPriority(UIElement target) => target != this;

@@ -7,10 +7,10 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI.AutoTrash;
 
-public class GarbageListGUI : ViewBody
+public class GarbageListGUI : BaseBody
 {
     #region 抽象实现
-    public override bool Display
+    public override bool Enabled
     {
         get => UIConfigs.Instance.QoLAutoTrash && Main.playerInventory && ShowWindow;
         set { }

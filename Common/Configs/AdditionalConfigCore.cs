@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Configs.FavoritedSystem;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface.GUI;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
@@ -48,7 +48,7 @@ namespace ImproveGame.Common.Configs
             [DefaultValue(WandSystem.PaintMode.Tile)]
             public WandSystem.PaintMode PaintMode;
         }
-        
+
         public HashSet<string> FavoritedConfigOptions;
 
         public const string FileName = "ImproveGame_AdditionalConfig.json";
@@ -104,7 +104,7 @@ namespace ImproveGame.Common.Configs
 
             var uiSystem = UISystem.Instance;
 
-            HugeInventoryUIPosition = uiSystem.BigBagGUI?.MainPanel?.GetDimensions().Position() ??
+            HugeInventoryUIPosition = BigBagGUI.Instance?.MainPanel?.GetDimensions().Position() ??
                                       new Vector2(150, 340);
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition; // 在这里也保存一下
 

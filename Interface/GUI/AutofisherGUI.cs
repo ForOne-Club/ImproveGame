@@ -10,9 +10,9 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class AutofisherGUI : ViewBody, ISidedView
+    public class AutofisherGUI : BaseBody, ISidedView
     {
-        public override bool Display { get => true; set { } }
+        public override bool Enabled { get => true; set { } }
 
         public static bool Visible => SidedEventTrigger.IsOpened(UISystem.Instance.AutofisherGUI);
 

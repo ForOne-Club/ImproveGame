@@ -2,10 +2,10 @@
 
 namespace ImproveGame.Interface.GUI.DummyControl;
 
-public class DummyControlGUI : ViewBody
+public class DummyControlGUI : BaseBody
 {
     #region ViewBody
-    public override bool Display { get => IsVisible; set => IsVisible = value; }
+    public override bool Enabled { get => IsVisible; set => IsVisible = value; }
 
     public override bool CanDisableMouse(UIElement target)
     {

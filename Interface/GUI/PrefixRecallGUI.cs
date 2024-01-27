@@ -11,13 +11,13 @@ using UIImage = Terraria.GameContent.UI.Elements.UIImage;
 
 namespace ImproveGame.Interface.GUI;
 
-public class PrefixRecallGUI : ViewBody, ISidedView
+public class PrefixRecallGUI : BaseBody, ISidedView
 {
     public static bool Visible =>
         Config.ImprovePrefix && !Main.reforgeItem.IsAir &&
         Main.reforgeItem.TryGetGlobalItem<ImprovePrefixItem>(out var modItem) && modItem.Prefixs.Count > 0;
 
-    public override bool Display { get => true; set { } }
+    public override bool Enabled { get => true; set { } }
 
     public override bool CanPriority(UIElement target) => target != this;
 

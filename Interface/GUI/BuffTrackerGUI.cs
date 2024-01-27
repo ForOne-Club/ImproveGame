@@ -12,9 +12,9 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI;
 
-public class BuffTrackerGUI : ViewBody
+public class BuffTrackerGUI : BaseBody
 {
-    public override bool Display { get => Visible; set => Visible = value; }
+    public override bool Enabled { get => Visible; set => Visible = value; }
     public static bool Visible { get; private set; }
 
     internal SUIPanel MainPanel;

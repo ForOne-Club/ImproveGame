@@ -8,7 +8,7 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.ExtremeStorage
 {
-    public class ExtremeStorageGUI : ViewBody, ISidedView
+    public class ExtremeStorageGUI : BaseBody, ISidedView
     {
         // 用于捕获分辨率变化，以便 Recalculate 并且重新计算位置
         private class CaptureResolutionChange : ILoadable
@@ -21,7 +21,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             public void Unload() { }
         }
 
-        public override bool Display { get => !Main.recBigList; set { } }
+        public override bool Enabled { get => !Main.recBigList; set { } }
 
         public static bool Visible => SidedEventTrigger.IsOpened(UISystem.Instance.ExtremeStorageGUI);
 

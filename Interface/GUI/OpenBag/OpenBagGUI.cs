@@ -7,9 +7,9 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI.OpenBag;
 
-public class OpenBagGUI : ViewBody
+public class OpenBagGUI : BaseBody
 {
-    public override bool Display { get => Visible; set => Visible = value; }
+    public override bool Enabled { get => Visible; set => Visible = value; }
     public static bool Visible { get; private set; }
 
     public override bool CanPriority(UIElement target) => target != this;

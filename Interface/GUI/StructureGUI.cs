@@ -8,11 +8,11 @@ using Terraria.GameInput;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class StructureGUI : ViewBody
+    public class StructureGUI : BaseBody
     {
         public static bool Visible { get; private set; }
 
-        public override bool Display { get => Visible; set => Visible = value; }
+        public override bool Enabled { get => Visible; set => Visible = value; }
 
         public override bool CanPriority(UIElement target) => target != this;
 

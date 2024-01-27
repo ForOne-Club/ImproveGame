@@ -7,12 +7,12 @@ namespace ImproveGame.Interface.GUI.BannerChest;
 
 public enum StorageType { Banners, Potions }
 
-public class PackageGUI : ViewBody
+public class PackageGUI : BaseBody
 {
     public static StorageType StorageType { get; private set; }
 
     private static bool _visible;
-    public override bool Display { get => Visible; set => Visible = value; }
+    public override bool Enabled { get => Visible; set => Visible = value; }
 
     public static bool Visible
     {

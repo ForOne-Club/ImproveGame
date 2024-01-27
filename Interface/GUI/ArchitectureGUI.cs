@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ImproveGame.Interface.GUI
 {
-    public class ArchitectureGUI : ViewBody
+    public class ArchitectureGUI : BaseBody
     {
         private static bool _visible;
 
@@ -19,7 +19,7 @@ namespace ImproveGame.Interface.GUI
             private set => _visible = value;
         }
 
-        public override bool Display { get => Visible; set => Visible = value; }
+        public override bool Enabled { get => Visible; set => Visible = value; }
 
         public override bool CanPriority(UIElement target) => target != this;
 
