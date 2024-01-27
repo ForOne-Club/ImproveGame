@@ -399,7 +399,7 @@ namespace ImproveGame.Interface.SUIElements
             }
 
             Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(Item.stack.ToString()) * 0.75f;
-            Vector2 textPos = pos + new Vector2(size * 0.18f, (size - textSize.Y) * 0.9f);
+            Vector2 textPos = pos + new Vector2(size * 0.16f, (size - textSize.Y) * 0.92f);
             DrawItemStackStringInternal(sb, Item.stack.ToString(), textPos);
             // 这段是直接绘制文字，不带边框的，留到这里防止忘了咋写。
             /*DynamicSpriteFontExtensionMethods.DrawString(
@@ -424,8 +424,8 @@ namespace ImproveGame.Interface.SUIElements
             Vector2 zero = Vector2.Zero;
             float x = position.X;
             float y = position.Y;
-            float scale = GetDimensions().Width * 0.018f;
-            float spread = 1.2f * scale;
+            float scale = GetDimensions().Width * 0.016f;
+            float spread = 1.5f * scale;
             for (int index = 0; index <= 4; ++index)
             {
                 switch (index)

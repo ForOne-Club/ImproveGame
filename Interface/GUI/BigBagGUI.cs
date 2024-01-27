@@ -44,7 +44,7 @@ public class BigBagGUI : BaseBody
     private View ButtonPanel;
 
     // 标题
-    private SUITitle Title;
+    private SUIText Title;
 
     // 关闭按钮
     private SUICross Cross;
@@ -84,10 +84,17 @@ public class BigBagGUI : BaseBody
         TitlePanel.Join(MainPanel);
 
         // 标题
-        Title = new SUITitle(GetText("SuperVault.Name"), 0.5f)
+        Title = new SUIText()
         {
-            VAlign = 0.5f
+            TextOrKey = "Mods.ImproveGame.SuperVault.Name",
+            UseKey = true,
+            IsLarge = true,
+            TextScale = 0.55f,
+            VAlign = 0.5f,
         };
+        Title.TextBorder = 2f / Title.TextScale;
+        Title.PaddingLeft = 20f;
+        Title.SetInnerPixels(Title.TextSize * Title.TextScale);
         Title.Join(TitlePanel);
 
         // Cross

@@ -98,7 +98,7 @@ public class SUIText : TimerView
     /// </summary>
     public Color TextColor = Color.White;
 
-    public float TextBorder = 1.5f;
+    public float TextBorder = 2f;
 
     /// <summary>
     /// 文字边框颜色
@@ -197,19 +197,13 @@ public class SUIText : TimerView
         textPos.Y += TextScale * (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
 
         DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets,
-            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder);
+            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder * TextScale);
 
         DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
-            textPos, Color.White, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
+            textPos, TextColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f, true);
     }
 
-    public static readonly Vector2[] ShadowDirections =
-    [
-        -Vector2.UnitX,
-        Vector2.UnitX,
-        -Vector2.UnitY,
-        Vector2.UnitY
-    ];
+    public static readonly Vector2[] ShadowDirections = [-Vector2.UnitX, Vector2.UnitX, -Vector2.UnitY, Vector2.UnitY];
 
     public static void DrawColorCodedStringShadow(SpriteBatch spriteBatch, DynamicSpriteFont font, TextSnippet[] snippets, Vector2 position, Color baseColor, float rotation, Vector2 origin, Vector2 baseScale, float maxWidth = -1f, float spread = 2f)
     {
@@ -321,17 +315,10 @@ public class SUIText : TimerView
         return result;
     }
 
-    /// <summary>
+    /*/// <summary>
     /// 绘制偏移
     /// </summary>
-    public readonly static Vector2[] StringOffsets =
-        [
-            new Vector2(-1, 0),
-            new Vector2(0, -1),
-            new Vector2(1, 0),
-            new Vector2(0, 1),
-            new Vector2(0, 0)
-        ];
+    public readonly static Vector2[] StringOffsets = [new Vector2(-1, 0), new Vector2(0, -1), new Vector2(1, 0), new Vector2(0, 1), new Vector2(0, 0)];
 
     /// <summary>
     /// 绘制带有边框的文字
@@ -363,5 +350,5 @@ public class SUIText : TimerView
                 spriteBatch.DrawString(font, text, position, color, 0f, origin, textScale, 0, 0f);
             }
         }
-    }
+    }*/
 }

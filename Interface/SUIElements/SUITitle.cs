@@ -32,7 +32,7 @@ public class SUITitle : View
     public Vector2 TextOffset;
     public Vector2 TextAlign = new Vector2(0.5f);
     public Color TextColor = Color.White;
-    public Color TextBorderColor = Color.Transparent;
+    public Color TextBorderColor = Color.Black;
 
     public SUITitle(string text, float textScale)
     {
