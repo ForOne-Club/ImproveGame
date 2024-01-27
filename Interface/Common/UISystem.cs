@@ -131,11 +131,6 @@ public class UISystem : ModSystem
         EventTriggerInstances.Clear();
         BaseBodyInstances.Clear();
 
-        AllBaseBodyTypes = null;
-        AutoCreateGUIAttributes = null;
-        EventTriggers = null;
-        BodyViews = null;
-
         PlayerStatsGUI = null;
         PlayerStatsTrigger = null;
 
