@@ -309,11 +309,12 @@ ImproveConfigs: {
 	}
 
 	TreeGrowFaster: {
-		Label: "[centeritem:1182] 树木迅速生长"
+		Label: "[centeritem:1182] 树木迅速生长 & 无视地层条件"
 		Tooltip:
 			'''
 			使树木生长速度变为原来的五倍
-			不会影响自然生成的丛林树和发光蘑菇树
+			宝石树可在地表生长，普通树可在地下生长
+			不会影响丛林树和发光蘑菇树的自然生成
 			'''
 	}
 

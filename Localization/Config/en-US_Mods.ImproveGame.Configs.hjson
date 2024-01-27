@@ -302,11 +302,12 @@ ImproveConfigs: {
 	}
 
 	TreeGrowFaster: {
-		Label: "[centeritem:1182] Trees grow rapidly"
+		Label: "[centeritem:1182] Trees grow rapidly & ignore layer conditions"
 		Tooltip:
 			'''
 			Growing speed of trees * 500%
-			Will not affect naturally generated Jungle Trees or Giant Glowing Mushrooms
+			Gem trees can grow on the surface, and regular trees can grow underground
+			Will not affect the natural generation speed of Jungle Trees or Giant Glowing Mushrooms
 			'''
 	}
 

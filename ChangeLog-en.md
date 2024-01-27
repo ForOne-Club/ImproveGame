@@ -93,6 +93,7 @@
 - **[v1.6.7.1]** Added a tip to hide the infinite buff icon in the buff icon's tooltip
 - **[v1.6.7.2]** 修改部分UI绘制逻辑以适配High FPS Support Mod
 - **[v1.6.7.2]** 空间法杖现已支持物块放置魔棒（如生命木魔棒、树叶魔棒）
+- **[v1.6.7.2]** 树木迅速生长功能调整为“树木迅速生长 & 无视地层条件”
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0
