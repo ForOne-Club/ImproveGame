@@ -194,8 +194,9 @@ public partial class SpaceWand : ModItem, IMarqueeItem
 
         bool playSound = false;
         var tiles = GetSelectedTiles(ShapeType, StartingPoint, MousePosition, _lastControlLeft);
+        var sortedPoints = tiles.OrderByDescending(p => p.Y); // Y轴降序排序，从下放到上，保证沙子不出问题
         var tilesHashSet = tiles.ToHashSet();
-        ForeachTile(tiles, (x, y) =>
+        ForeachTile(sortedPoints, (x, y) =>
         {
             OperateTile(player, x, y, tilesHashSet, PlaceType, BlockType, ref playSound, []);
         });

@@ -133,12 +133,8 @@ ExtremeStorage: {
 
 AutoTrash.Introduction:
 	'''
-	This is an automatic trash bin which reserves 6 items
-	[c/CC88AA:Shift+Ctrl+<left>] an item to move it to this bin,
-	and add it to an auto-trash list
-	Items in this list will be [c/CC88AA:trashed] when picked up
-	This can be [c/CC88AA:disabled] in UI config
-	Press [c/CC88AA:{0}] to hide this UI
+	[c/CC88AA:Shift+Ctrl+<left>] an item to add it to an auto-trash list
+	Press [c/CC88AA:{0}] to hide this UI (Make sure you have set a keybind for this)
 	Hit this button to view the auto-trash list
 	'''
 

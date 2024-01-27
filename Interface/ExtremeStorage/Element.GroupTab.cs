@@ -47,6 +47,9 @@ namespace ImproveGame.Interface.ExtremeStorage
             spriteBatch.Draw(position: pos, texture: _tabTexture.Value, sourceRectangle: _tabFrame, color: Color.White);
             spriteBatch.Draw(groupTexture.Value, center, _groupFrame, Color.White, 0f, _groupFrame.Size() / 2f, 1f,
                 SpriteEffects.None, 0f);
+
+            if (IsMouseHovering)
+                Main.instance.MouseText(GetText($"UI.ExtremeStorage.ItemGroup.{_group}"));
         }
 
         public override void Update(GameTime gameTime)
@@ -64,9 +67,6 @@ namespace ImproveGame.Interface.ExtremeStorage
                 _tabFrame = _tabTexture.Frame(2, 4, 1, 2).OffsetSize(-2, -2);
             if (mouseHover && groupSelected)
                 _tabFrame = _tabTexture.Frame(2, 4, 1, 3).OffsetSize(-2, -2);
-
-            if (IsMouseHovering)
-                Main.instance.MouseText(GetText($"UI.ExtremeStorage.ItemGroup.{_group}"));
         }
 
         public override void LeftMouseDown(UIMouseEvent evt)

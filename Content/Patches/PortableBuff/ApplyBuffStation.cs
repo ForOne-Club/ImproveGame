@@ -11,6 +11,19 @@ public class ApplyBuffStation : ModSystem
     public static bool HasPeaceCandle { get; set; }
     public static bool HasShadowCandle { get; set; }
 
+    // 在这里再重设各种bool，因为下面的方法可能一帧更新多次
+    public static void Reset()
+    {
+        HasWaterCandle = false;
+        HasPeaceCandle = false;
+        HasShadowCandle = false;
+        HasCampfire = false;
+        HasHeartLantern = false;
+        HasSunflower = false;
+        HasGardenGnome = false;
+        HasStarInBottle = false;
+    }
+
     public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
     {
         // 蜡烛
@@ -20,10 +33,6 @@ public class ApplyBuffStation : ModSystem
             Main.SceneMetrics.PeaceCandleCount++;
         if (HasShadowCandle)
             Main.SceneMetrics.ShadowCandleCount++;
-
-        HasWaterCandle = false;
-        HasPeaceCandle = false;
-        HasShadowCandle = false;
     }
 
     // 这个一般来说只会在客户端执行
@@ -44,11 +53,5 @@ public class ApplyBuffStation : ModSystem
             Main.SceneMetrics.HasGardenGnome = true;
         if (HasStarInBottle)
             Main.SceneMetrics.HasStarInBottle = true;
-
-        HasCampfire = false;
-        HasHeartLantern = false;
-        HasSunflower = false;
-        HasGardenGnome = false;
-        HasStarInBottle = false;
     }
 }

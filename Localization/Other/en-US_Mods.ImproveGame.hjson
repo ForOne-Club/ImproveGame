@@ -254,7 +254,6 @@ SuperVault: {
 MoveChest.Heavy: Weight of the chest limits your mobility
 
 Autofisher: {
-	Title: Fishing Machine
 	Accessory: Accessories for fishing
 	FishingPole: Fishing rod
 	Bait: Bait

@@ -15,7 +15,7 @@ namespace ImproveGame.Interface.UIElements
             _npcId = npcId;
             this.SetSize(new Vector2(-20f, 36f), 1f);
             //IgnoresMouseInteraction = true;
-            
+
             Append(new UITextPanel<string>($"{Lang.GetNPCNameValue(npcId)}")
             {
                 IgnoresMouseInteraction = true,
@@ -32,12 +32,21 @@ namespace ImproveGame.Interface.UIElements
             Append(tickUI);
         }
 
+        public override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            base.DrawSelf(spriteBatch);
+
+            if (tickUI.IsMouseHovering)
+            {
+                bool hide = LifeAnalyzeCore.Blacklist.GetValueOrDefault(_npcId);
+                Main.instance.MouseText(Language.GetTextValue($"LegacyInterface.{(hide ? "60" : "59")}"));
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             bool hide = LifeAnalyzeCore.Blacklist.GetValueOrDefault(_npcId);
             tickUI.SetImage(hide ? TextureAssets.InventoryTickOff : TextureAssets.InventoryTickOn);
-            if (tickUI.IsMouseHovering)
-                Main.instance.MouseText(Language.GetTextValue($"LegacyInterface.{(hide ? "60" : "59")}"));
         }
 
         public override void LeftMouseDown(UIMouseEvent evt)

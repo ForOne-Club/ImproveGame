@@ -258,6 +258,28 @@ namespace ImproveGame.Interface.GUI
             {
                 player.mouseInterface = true;
             }
+
+            string hoverText = "";
+
+            foreach (var slot in from u in basePanel.Children where u is LiquidWandSlot select u as LiquidWandSlot)
+            {
+                if (!slot.IsMouseHovering)
+                    continue;
+
+                string liquid = slot.LiquidId switch
+                {
+                    LiquidID.Water => "Water",
+                    LiquidID.Lava => "Lava",
+                    LiquidID.Honey => "Honey",
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                string amount = slot.Infinite == -1 ? $"{slot.GetLiquidAmount():p1}" : "∞";
+                hoverText = GetTextWith($"LiquidWand.{liquid}", new { LiquidAmount = amount });
+                break;
+            }
+
+            if (hoverText is not "")
+                Main.instance.MouseText(hoverText);
         }
 
         public void SetIconTexture()

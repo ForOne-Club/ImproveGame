@@ -77,6 +77,9 @@ public class InfBuffPlayer : ModPlayer
     {
         if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
             return;
+        
+        // 重设部分Buff站效果
+        ApplyBuffStation.Reset();
 
         // 从玩家身上获取所有的无尽Buff物品
         ApplyAvailableBuffsFromPlayer(Player);

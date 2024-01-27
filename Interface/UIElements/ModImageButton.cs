@@ -67,15 +67,6 @@ namespace ImproveGame.Interface.UIElements
             base.Update(gameTime);
             if (IsMouseHovering) {
                 Main.LocalPlayer.mouseInterface = true;
-                if (!string.IsNullOrEmpty(HoverText))
-                {
-                    string text = HoverText;
-                    if (HoverText.StartsWith("{$") && HoverText.EndsWith("}"))
-                    {
-                        text = Language.GetTextValue(HoverText.Substring("{$".Length, HoverText.Length - "{$}".Length));
-                    }
-                    Main.instance.MouseText(text);
-                }
             }
         }
 
@@ -93,6 +84,15 @@ namespace ImproveGame.Interface.UIElements
             spriteBatch.Draw(Texture.Value, dimensions.Center(), null, mainColor, 0f, Texture.Size() / 2f, 1f, SpriteEffects.None, 0f);
             if (BorderTexture is not null && IsMouseHovering) {
                 spriteBatch.Draw(BorderTexture.Value, dimensions.Center(), null, mainColor * 1.4f, 0f, BorderTexture.Size() / 2f, 1f, SpriteEffects.None, 0f);
+            }
+
+            if (IsMouseHovering && !string.IsNullOrEmpty(HoverText)) {
+                string text = HoverText;
+                if (HoverText.StartsWith("{$") && HoverText.EndsWith("}"))
+                {
+                    text = Language.GetTextValue(HoverText.Substring("{$".Length, HoverText.Length - "{$}".Length));
+                }
+                Main.instance.MouseText(text);
             }
         }
 
