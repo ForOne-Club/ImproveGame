@@ -12,6 +12,7 @@
 
 - v1.6.7.0
 - v1.6.7.1
+- v1.6.7.2
 
 ## Additions
 - Fast Respawn When No Boss
@@ -66,6 +67,7 @@
 - **[v1.6.7.1]** Tool speed boost is not applied to hammers used to destroy walls
 - **[v1.6.7.1]** Opening the full-screen map resets the UI state
 - **[v1.6.7.1]** Space wand doesn't set slope for tiles properly sometimes
+- **[v1.6.7.2]** 大背包设置项 “智能拾取” “自动拾取” 在服务器中无效
 
 ## Adjustments
 

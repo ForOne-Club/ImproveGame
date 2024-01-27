@@ -3,25 +3,16 @@
 public class RenderTargetPool
 {
     /// <summary>
-    /// 可使用池
+    /// 缓存
     /// </summary>
-    private readonly Dictionary<(int, int), Stack<RenderTarget2D>> AvailablePool;
+    private readonly Dictionary<(int, int), Stack<RenderTarget2D>> _cached = [];
 
     /// <summary>
-    /// 被借走池
+    /// 被占用
     /// </summary>
-    private readonly Dictionary<(int, int), Stack<RenderTarget2D>> BorrowPool;
+    private readonly Dictionary<(int, int), Stack<RenderTarget2D>> _occupied = [];
 
-    /// <summary>
-    /// 构造
-    /// </summary>
-    public RenderTargetPool()
-    {
-        AvailablePool = new Dictionary<(int, int), Stack<RenderTarget2D>>();
-        BorrowPool = new Dictionary<(int, int), Stack<RenderTarget2D>>();
-    }
-
-    /// <summary>
+    /*/// <summary>
     /// 借走 RenderTarget2D （记得还）
     /// </summary>
     /// <param name="size">大小</param>
@@ -42,7 +33,7 @@ public class RenderTargetPool
     public bool TryBorrow(float width, float height, out RenderTarget2D rt2d)
     {
         return TryBorrow((int)Math.Ceiling(width), (int)Math.Ceiling(height), out rt2d);
-    }
+    }*/
 
     /// <summary>
     /// 借走 RenderTarget2D （记得还）
@@ -61,26 +52,26 @@ public class RenderTargetPool
 
         (int width, int height) size = (width, height);
 
-        if (!AvailablePool.ContainsKey(size))
+        if (!_cached.ContainsKey(size))
         {
-            AvailablePool[size] = new Stack<RenderTarget2D>();
+            _cached[size] = new Stack<RenderTarget2D>();
         }
 
-        if (!BorrowPool.ContainsKey(size))
+        if (!_occupied.ContainsKey(size))
         {
-            BorrowPool[size] = new Stack<RenderTarget2D>();
+            _occupied[size] = new Stack<RenderTarget2D>();
         }
 
-        if (AvailablePool[size].Count > 0)
+        if (_cached[size].Count > 0)
         {
-            AvailablePool[size].TryPop(out rt2d);
-            BorrowPool[size].Push(rt2d);
+            _cached[size].TryPop(out rt2d);
+            _occupied[size].Push(rt2d);
             return true;
         }
         else
         {
             rt2d = Create(width, height);
-            BorrowPool[size].Push(rt2d);
+            _occupied[size].Push(rt2d);
             return true;
         }
     }
@@ -94,33 +85,35 @@ public class RenderTargetPool
     {
         (int width, int height) size = (rt2d.Width, rt2d.Height);
 
-        if (!AvailablePool.ContainsKey(size) || !BorrowPool.ContainsKey(size) || !BorrowPool[size].Contains(rt2d))
+        if (!_cached.ContainsKey(size) || !_occupied.ContainsKey(size) || !_occupied[size].Contains(rt2d))
         {
             return false;
         }
 
-        BorrowPool[size].TryPop(out var _);
-        AvailablePool[size].Push(rt2d);
+        _occupied[size].TryPop(out var _);
+        _cached[size].Push(rt2d);
 
         return true;
     }
 
     public void Dispose()
     {
-        foreach ((_, Stack<RenderTarget2D> value) in BorrowPool)
+        foreach ((_, Stack<RenderTarget2D> value) in _occupied)
         {
             if (value is null)
                 continue;
-            foreach (var renderTarget2D in value) {
+            foreach (var renderTarget2D in value)
+            {
                 renderTarget2D?.Dispose();
             }
         }
 
-        foreach ((_, Stack<RenderTarget2D> value) in AvailablePool)
+        foreach ((_, Stack<RenderTarget2D> value) in _cached)
         {
             if (value is null)
                 continue;
-            foreach (var renderTarget2D in value) {
+            foreach (var renderTarget2D in value)
+            {
                 renderTarget2D?.Dispose();
             }
         }

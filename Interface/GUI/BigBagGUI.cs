@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
@@ -55,6 +54,8 @@ public class BigBagGUI : ViewBody
 
     public override void OnInitialize()
     {
+        PlayerBigBagSettingPacket.SendMyPlayer();
+
         UIPlayerSetting setting = Main.LocalPlayer.GetModPlayer<UIPlayerSetting>();
         // 主面板
         MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
@@ -102,12 +103,12 @@ public class BigBagGUI : ViewBody
         ButtonPanel.SetPadding(12f, 10f, 11f, 12f);
         ButtonPanel.Join(MainPanel);
 
-        // 开关
+        #region 开关按钮
         Vector2 switchSpacing = new Vector2(10, 10);
-        RecipesSwitch = new SUISwitch(() => setting.SuperVault_HeCheng,
+        RecipesSwitch = new SUISwitch(() => setting.SuperVault_ParticipateSynthesis,
             state =>
             {
-                setting.SuperVault_HeCheng = state;
+                setting.SuperVault_ParticipateSynthesis = state;
                 Recipe.FindRecipes();
             }, GetText("SuperVault.Synthesis"), 0.8f)
         {
@@ -117,8 +118,12 @@ public class BigBagGUI : ViewBody
         };
         RecipesSwitch.Join(ButtonPanel);
 
-        SmartGrabSwitch = new SUISwitch(() => setting.SuperVault_SmartGrab,
-            state => setting.SuperVault_SmartGrab = state,
+        SmartGrabSwitch = new SUISwitch(() => setting.SuperVault_PrioritizeGrabbing,
+            state =>
+            {
+                setting.SuperVault_PrioritizeGrabbing = state;
+                PlayerBigBagSettingPacket.SendMyPlayer();
+            },
             GetText("SuperVault.SmartPickup"), 0.8f)
         {
             Relative = RelativeMode.Horizontal,
@@ -126,14 +131,19 @@ public class BigBagGUI : ViewBody
         };
         SmartGrabSwitch.Join(ButtonPanel);
 
-        AutoGrabSwitch = new SUISwitch(() => setting.SuperVault_OverflowGrab,
-            state => setting.SuperVault_OverflowGrab = state,
+        AutoGrabSwitch = new SUISwitch(() => setting.SuperVault_GrabItemsWhenOverflowing,
+            state =>
+            {
+                setting.SuperVault_GrabItemsWhenOverflowing = state;
+                PlayerBigBagSettingPacket.SendMyPlayer();
+            },
             GetText("SuperVault.OverflowPickup"), 0.8f)
         {
             Relative = RelativeMode.Horizontal,
             Spacing = switchSpacing
         };
         AutoGrabSwitch.Join(ButtonPanel);
+        #endregion
 
         // 按钮
         Vector2 buttonSpacing = new Vector2(10, 8);

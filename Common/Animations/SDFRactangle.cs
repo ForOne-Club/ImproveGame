@@ -19,7 +19,7 @@ public class SDFRectangle
     {
         size /= 2f;
 
-        List<VertexPositionCoordRounded> vertices = new List<VertexPositionCoordRounded>();
+        List<SDFGraphicsVertexType> vertices = new List<SDFGraphicsVertexType>();
 
         Vector2 coordQ1 = new Vector2(rounded.X) - size;
         Vector2 coordQ2 = new Vector2(rounded.X);

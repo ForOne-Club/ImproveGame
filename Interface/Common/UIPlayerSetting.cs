@@ -1,63 +1,112 @@
 ﻿using ImproveGame.Interface.GUI.PlayerStats;
 using Terraria.ModLoader.IO;
 
-namespace ImproveGame.Interface.Common
+namespace ImproveGame.Interface.Common;
+
+[AutoSync]
+public class PlayerBigBagSettingPacket : NetModule
 {
-    public class UIPlayerSetting : ModPlayer
+    public int WhoAmI;
+    public bool SuperVault_PrioritizeGrabbing;
+    public bool SuperVault_GrabItemsWhenOverflowing;
+
+    public static void SendMyPlayer()
     {
-        public bool SuperVault_HeCheng;
-        public bool SuperVault_SmartGrab;
-        public bool SuperVault_OverflowGrab;
-        public bool FuzzySearch;
-        public bool SearchTooltip;
-
-        public TagCompound ProCatsPos = new TagCompound();
-        public TagCompound ProCatsFav = new TagCompound();
-        public TagCompound ProFavs = new TagCompound();
-
-        public override void LoadData(TagCompound tag)
+        if (Main.LocalPlayer.TryGetModPlayer<UIPlayerSetting>(out var setting))
         {
-            tag.TryGet(nameof(SuperVault_HeCheng), out SuperVault_HeCheng);
-            tag.TryGet(nameof(SuperVault_SmartGrab), out SuperVault_SmartGrab);
-            tag.TryGet(nameof(SuperVault_OverflowGrab), out SuperVault_OverflowGrab);
-            tag.TryGet(nameof(FuzzySearch), out FuzzySearch);
-            tag.TryGet(nameof(SearchTooltip), out SearchTooltip);
+            PlayerBigBagSettingPacket settingPacket = ModContent.GetInstance<PlayerBigBagSettingPacket>();
+            settingPacket.WhoAmI = Main.myPlayer;
+            settingPacket.SuperVault_PrioritizeGrabbing = setting.SuperVault_PrioritizeGrabbing;
+            settingPacket.SuperVault_GrabItemsWhenOverflowing = setting.SuperVault_GrabItemsWhenOverflowing;
+            settingPacket.Send();
+        }
+    }
 
-            tag.TryGet("ProCatsPos", out ProCatsPos);
-            tag.TryGet("ProCatsFav", out ProCatsFav);
-            tag.TryGet("ProFavs", out ProFavs);
+    public override void Receive()
+    {
+        if (Main.player[WhoAmI].TryGetModPlayer<UIPlayerSetting>(out var setting))
+        {
+            setting.SuperVault_PrioritizeGrabbing = SuperVault_PrioritizeGrabbing;
+            setting.SuperVault_GrabItemsWhenOverflowing = SuperVault_GrabItemsWhenOverflowing;
+        }
+    }
+}
+
+public class UIPlayerSetting : ModPlayer
+{
+    /// <summary>
+    /// 大背包 参与合成
+    /// </summary>
+    public bool SuperVault_ParticipateSynthesis;
+    /// <summary>
+    /// 大背包 如果即将进入背包的物品在大背包中已存在，优先存入大背包 (优先抓取)
+    /// </summary>
+    public bool SuperVault_PrioritizeGrabbing;
+    /// <summary>
+    /// 大背包 背包溢出时将物品抓取至大背包 (溢出抓取)
+    /// </summary>
+    public bool SuperVault_GrabItemsWhenOverflowing;
+
+    public bool FuzzySearch;
+    public bool SearchTooltip;
+
+    public TagCompound ProCatsPos = [];
+    public TagCompound ProCatsFav = [];
+    public TagCompound ProFavs = [];
+
+    public override void LoadData(TagCompound tag)
+    {
+        tag.TryGet(nameof(SuperVault_ParticipateSynthesis), out SuperVault_ParticipateSynthesis);
+        tag.TryGet(nameof(SuperVault_PrioritizeGrabbing), out SuperVault_PrioritizeGrabbing);
+        tag.TryGet(nameof(SuperVault_GrabItemsWhenOverflowing), out SuperVault_GrabItemsWhenOverflowing);
+        tag.TryGet(nameof(FuzzySearch), out FuzzySearch);
+        tag.TryGet(nameof(SearchTooltip), out SearchTooltip);
+
+        if (tag.TryGet("ProCatsPos", out TagCompound proCatsPos))
+        {
+            ProCatsPos = proCatsPos;
         }
 
-        public override void SaveData(TagCompound tag)
+        if (tag.TryGet("ProCatsFav", out TagCompound proCatsFav))
         {
-            tag.Set(nameof(SuperVault_HeCheng), SuperVault_HeCheng);
-            tag.Set(nameof(SuperVault_SmartGrab), SuperVault_SmartGrab);
-            tag.Set(nameof(SuperVault_OverflowGrab), SuperVault_OverflowGrab);
-            tag.Set(nameof(FuzzySearch), FuzzySearch);
-            tag.Set(nameof(SearchTooltip), SearchTooltip);
+            ProCatsFav = proCatsFav;
+        }
 
-            TagCompound proCatsPos = new TagCompound();
-            TagCompound proCatsFav = new TagCompound();
-            TagCompound proFavs = new TagCompound();
+        if (tag.TryGet("ProFavs", out TagCompound proFavs))
+        {
+            ProFavs = proFavs;
+        }
+    }
 
-            foreach (var proCat in PlayerStatsSystem.Instance.StatsCategories)
+    public override void SaveData(TagCompound tag)
+    {
+        tag.Set(nameof(SuperVault_ParticipateSynthesis), SuperVault_ParticipateSynthesis);
+        tag.Set(nameof(SuperVault_PrioritizeGrabbing), SuperVault_PrioritizeGrabbing);
+        tag.Set(nameof(SuperVault_GrabItemsWhenOverflowing), SuperVault_GrabItemsWhenOverflowing);
+        tag.Set(nameof(FuzzySearch), FuzzySearch);
+        tag.Set(nameof(SearchTooltip), SearchTooltip);
+
+        TagCompound proCatsPos = [];
+        TagCompound proCatsFav = [];
+        TagCompound proFavs = [];
+
+        foreach (var proCat in PlayerStatsSystem.Instance.StatsCategories)
+        {
+            proCatsPos.Set(proCat.Key, proCat.Value.UIPosition);
+            proCatsFav.Set(proCat.Key, proCat.Value.Favorite);
+
+            TagCompound proFav = [];
+
+            foreach (var stat in proCat.Value.BaseProperties)
             {
-                proCatsPos.Set(proCat.Key, proCat.Value.UIPosition);
-                proCatsFav.Set(proCat.Key, proCat.Value.Favorite);
-
-                TagCompound proFav = new TagCompound();
-
-                foreach (var stat in proCat.Value.BaseProperties)
-                {
-                    proFav.Set(stat.Name, stat.Favorite);
-                }
-
-                proFavs.Set(proCat.Key, proFav);
+                proFav.Set(stat.Name, stat.Favorite);
             }
 
-            tag.Set("ProCatsPos", proCatsPos);
-            tag.Set("ProCatsFav", proCatsFav);
-            tag.Set("ProFavs", proFavs);
+            proFavs.Set(proCat.Key, proFav);
         }
+
+        tag.Set("ProCatsPos", proCatsPos);
+        tag.Set("ProCatsFav", proCatsFav);
+        tag.Set("ProFavs", proFavs);
     }
 }

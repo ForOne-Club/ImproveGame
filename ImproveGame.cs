@@ -11,9 +11,6 @@ public class ImproveGame : Mod
     public override uint ExtraPlayerBuffSlots => (uint)Config.ExtraPlayerBuffSlots;
     public static ImproveGame Instance { get; private set; }
 
-    // 成员变量不需要自己设 null
-    public readonly RenderTargetPool RenderTargetPool = new RenderTargetPool();
-
     public override void Load()
     {
         Instance = this;

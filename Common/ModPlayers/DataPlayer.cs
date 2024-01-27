@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Packets;
-using ImproveGame.Interface.Common;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.ModPlayers
@@ -14,7 +13,7 @@ namespace ImproveGame.Common.ModPlayers
         // 保存的物品前缀，哥布林重铸栏
         public int ReforgeItemPrefix = 0;
         private readonly int[] oldSuperVaultStack = new int[100]; // 上一帧的SuperVault的stack情况
-        public Item[] SuperVault = new Item[100];
+        public readonly Item[] SuperVault = new Item[100];
         public bool SuperVaultVisable;
         public Vector2 SuperVaultPos;
 
@@ -30,18 +29,26 @@ namespace ImproveGame.Common.ModPlayers
 
         public override void Initialize()
         {
-            InfBuffDisabledVanilla = new();
-            InfBuffDisabledMod = new();
-            SuperVault = new Item[100];
+            InfBuffDisabledVanilla = [];
+            InfBuffDisabledMod = [];
+
             for (int i = 0; i < SuperVault.Length; i++)
+            {
                 SuperVault[i] ??= new Item();
+            }
         }
 
         public override void LoadData(TagCompound tag)
         {
             // 大背包 Item 数据以及旧版兼容
-            if (tag.ContainsKey("SuperVault"))
-                SuperVault = tag.Get<Item[]>("SuperVault");
+            if (tag.TryGet<Item[]>("SuperVault", out var superVault))
+            {
+                for (int i = 0; i < SuperVault.Length && i < superVault.Length; i++)
+                {
+                    SuperVault[i] = superVault[i];
+                }
+            }
+
             for (int i = 0; i < SuperVault.Length; i++)
                 if (tag.ContainsKey($"SuperVault_{i}"))
                     SuperVault[i] = tag.Get<Item>($"SuperVault_{i}");
@@ -112,7 +119,7 @@ namespace ImproveGame.Common.ModPlayers
 
         public override IEnumerable<Item> AddMaterialsForCrafting(out ItemConsumedCallback itemConsumedCallback)
         {
-            if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_HeCheng &&
+            if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_ParticipateSynthesis &&
                 SuperVault is not null)
             {
                 itemConsumedCallback = null;

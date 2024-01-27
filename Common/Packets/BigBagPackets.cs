@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.ModPlayers;
-using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.Packets
 {
@@ -64,7 +63,10 @@ namespace ImproveGame.Common.Packets
             if (items is null || items.Length != 100 || !DataPlayer.TryGet(Main.player[whoAmI], out var modPlayer))
                 return;
 
-            modPlayer.SuperVault = items;
+            for (int i = 0; i < modPlayer.SuperVault.Length && i < items.Length; i++)
+            {
+                modPlayer.SuperVault[i] = items[i];
+            }
         }
     }
 }

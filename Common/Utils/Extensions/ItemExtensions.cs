@@ -1,7 +1,5 @@
 ﻿using FuzzySearchNet;
-using ImproveGame.Interface.Common;
 using PinyinNet;
-using System.Text.RegularExpressions;
 using Terraria.GameContent.UI;
 
 namespace ImproveGame.Common.Utils.Extensions;
@@ -140,8 +138,10 @@ public static class ItemExtensions
 
         foreach (Item target in items)
         {
-            if ((target.IsAir || (target.type == source.type && target.stack < target.maxStack)) &&
-                ItemLoader.CanStack(source, target))
+            if (target.IsAir)
+                return true;
+
+            if (ItemLoader.CanStack(source, target) && target.type == source.type && target.stack < target.maxStack)
             {
                 return true;
             }

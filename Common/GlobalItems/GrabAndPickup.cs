@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.Players;
-using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Common.GlobalItems;
 
@@ -11,6 +10,9 @@ namespace ImproveGame.Common.GlobalItems;
 
 public class GrabAndPickup : GlobalItem
 {
+    // 抓取距离
+    public override void GrabRange(Item item, Player player, ref int grabRange) => grabRange += Config.GrabDistance * 16;
+
     public override void Load()
     {
         // 已废弃
@@ -21,7 +23,7 @@ public class GrabAndPickup : GlobalItem
     /// <summary>
     /// 修改抓取速度 <br/>
     /// 禁用原版吸附速度返回: <see langword="true"/> <br/>
-    /// 允许原版吸附速度返回 <see langword="false"/>
+    /// 允许原版吸附速度返回: <see langword="false"/>
     /// </summary>
     public override bool GrabStyle(Item item, Player player)
     {
@@ -34,68 +36,69 @@ public class GrabAndPickup : GlobalItem
         return false;
     }
 
-    private Item On_Player_GetItem(On_Player.orig_GetItem orig, Player self, int plr, Item newItem, GetItemSettings settings)
+    private Item On_Player_GetItem(On_Player.orig_GetItem orig, Player self, int plr, Item source, GetItemSettings settings)
     {
-        newItem = orig.Invoke(self, plr, newItem, settings);
+        source = orig.Invoke(self, plr, source, settings);
+
+        if (source.IsAir)
+        {
+            return source;
+        }
+
+        Console.WriteLine($"netMode: {Main.netMode} 后执行 type: {source.type} stack: {source.stack}");
 
         if (settings.LongText == false && settings.NoText == false && settings.CanGoIntoVoidVault == true)
         {
-            if (newItem.IsAir)
-            {
-                return newItem;
-            }
-
-            Item cloneItem = newItem.Clone();
+            Item cloneItem = source.Clone();
 
             // 背包溢出堆叠至其他容器
-            if (!newItem.IsACoin)
+            if (!source.IsACoin)
             {
                 // 大背包
-                if (Config.SuperVault && self.GetModPlayer<UIPlayerSetting>().SuperVault_OverflowGrab)
+                if (Config.SuperVault && self.GetModPlayer<UIPlayerSetting>().SuperVault_GrabItemsWhenOverflowing)
                 {
-                    newItem.StackToArray(self.GetModPlayer<DataPlayer>().SuperVault);
+                    source.StackToArray(self.GetModPlayer<DataPlayer>().SuperVault);
                 }
 
-                if (newItem.IsAir) goto Finish;
+                if (source.IsAir) goto Finish;
 
                 // 猪猪 保险箱 ...
                 if (Config.SuperVoidVault && self.TryGetModPlayer(out ImprovePlayer improvePlayer))
                 {
                     if (improvePlayer.HasPiggyBank)
                     {
-                        newItem.StackToArray(self.bank.item);
+                        source.StackToArray(self.bank.item);
                     }
 
-                    if (newItem.IsAir) goto Finish;
+                    if (source.IsAir) goto Finish;
 
                     if (improvePlayer.HasSafe)
                     {
-                        newItem.StackToArray(self.bank2.item);
+                        source.StackToArray(self.bank2.item);
                     }
 
-                    if (newItem.IsAir) goto Finish;
+                    if (source.IsAir) goto Finish;
 
                     if (improvePlayer.HasDefendersForge)
                     {
-                        newItem.StackToArray(self.bank3.item);
+                        source.StackToArray(self.bank3.item);
                     }
                 }
             }
 
-            Finish:
+            // 标签
+            Finish: PickupPopupText(cloneItem, source);
 
-            PickupPopupText(cloneItem, newItem);
-
-            return newItem;
+            return source;
         }
 
-        return newItem;
+        return source;
     }
 
-    /// <summary>
+    /*/// <summary>
     /// 拾取的物品溢出背包后, 已废弃
     /// </summary>
-    /*private static Item PickupItem(On_Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp)
+    private static Item PickupItem(On_Player.orig_PickupItem orig, Player player, int playerIndex, int worldItemArrayIndex, Item itemToPickUp)
     {
         itemToPickUp = orig(player, playerIndex, worldItemArrayIndex, itemToPickUp);
 
@@ -157,16 +160,48 @@ public class GrabAndPickup : GlobalItem
     }
 */
 
-    /// <summary>
-    /// 物品拾取后提示
-    /// </summary>
-    private static void PickupPopupText(Item cloneItem, Item self)
+    public override bool ItemSpace(Item item, Player player)
     {
-        if (self.stack < cloneItem.stack)
+        Console.WriteLine($"ItemSpace netMode: {Main.netMode}");
+
+        if (item.IsACoin)
         {
-            SoundEngine.PlaySound(SoundID.Grab);
-            PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cloneItem, cloneItem.stack - self.stack);
+            return false;
         }
+
+        // 大背包
+        if (Config.SuperVault &&
+            player.TryGetModPlayer(out UIPlayerSetting setting) &&
+            player.TryGetModPlayer(out DataPlayer dataPlayer))
+        {
+            Console.WriteLine($"{setting.SuperVault_GrabItemsWhenOverflowing} {setting.SuperVault_PrioritizeGrabbing}");
+
+            if ((setting.SuperVault_GrabItemsWhenOverflowing && item.CanStackToArray(dataPlayer.SuperVault)) ||
+                (setting.SuperVault_PrioritizeGrabbing && item.CanStackToArray(dataPlayer.SuperVault) && item.TheArrayHas(dataPlayer.SuperVault)))
+            {
+                return true;
+            }
+        }
+
+        if (Config.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+        {
+            if (improvePlayer.HasPiggyBank = improvePlayer.HasPiggyBank && item.CanStackToArray(player.bank.item))
+            {
+                return true;
+            }
+
+            if (improvePlayer.HasSafe = improvePlayer.HasSafe && item.CanStackToArray(player.bank2.item))
+            {
+                return true;
+            }
+
+            if (improvePlayer.HasDefendersForge = improvePlayer.HasDefendersForge && item.CanStackToArray(player.bank3.item))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -175,6 +210,8 @@ public class GrabAndPickup : GlobalItem
     /// </summary>
     public override bool OnPickup(Item source, Player player)
     {
+        Console.WriteLine($"netMode: {Main.netMode} 先执行 type: {source.type} stack: {source.stack}");
+
         if (UIConfigs.Instance.QoLAutoTrash &&
             player.TryGetModPlayer(out AutoTrashPlayer autoTrashPlayer) && true &&
             autoTrashPlayer.AutoDiscardItems.Any(adItem => adItem.type == source.type))
@@ -211,8 +248,8 @@ public class GrabAndPickup : GlobalItem
 
         // 大背包
         if (Config.SuperVault &&
-            player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting) && uiPlayerSetting.SuperVault_SmartGrab &&
-            player.TryGetModPlayer(out DataPlayer dataPlayer) && source.TheArrayHas(dataPlayer.SuperVault))
+            player.TryGetModPlayer(out UIPlayerSetting setting) && player.TryGetModPlayer(out DataPlayer dataPlayer) &&
+            setting.SuperVault_PrioritizeGrabbing && source.TheArrayHas(dataPlayer.SuperVault))
         {
             Item cloneItem = source.Clone();
             source.StackToArray(dataPlayer.SuperVault);
@@ -269,55 +306,15 @@ public class GrabAndPickup : GlobalItem
         return true;
     }
 
-    // 抓取距离
-    public override void GrabRange(Item item, Player player, ref int grabRange)
+    /// <summary>
+    /// 物品拾取后提示
+    /// </summary>
+    private static void PickupPopupText(Item cloneItem, Item self)
     {
-        grabRange += Config.GrabDistance * 16;
-    }
-
-    public override bool ItemSpace(Item item, Player player)
-    {
-        if (item.IsACoin)
+        if (self.stack < cloneItem.stack)
         {
-            return false;
+            SoundEngine.PlaySound(SoundID.Grab);
+            PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, cloneItem, cloneItem.stack - self.stack);
         }
-
-        // 大背包
-        if (Config.SuperVault &&
-            player.TryGetModPlayer(out UIPlayerSetting uiPlayerSetting) &&
-            player.TryGetModPlayer(out DataPlayer dataPlayer))
-        {
-            if (uiPlayerSetting.SuperVault_OverflowGrab &&
-                item.CanStackToArray(dataPlayer.SuperVault))
-            {
-                return true;
-            }
-            else if (uiPlayerSetting.SuperVault_SmartGrab &&
-                item.CanStackToArray(dataPlayer.SuperVault) &&
-                item.TheArrayHas(dataPlayer.SuperVault))
-            {
-                return true;
-            }
-        }
-
-        if (Config.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
-        {
-            if (improvePlayer.HasPiggyBank = improvePlayer.HasPiggyBank && item.CanStackToArray(player.bank.item))
-            {
-                return true;
-            }
-
-            if (improvePlayer.HasSafe = improvePlayer.HasSafe && item.CanStackToArray(player.bank2.item))
-            {
-                return true;
-            }
-
-            if (improvePlayer.HasDefendersForge = improvePlayer.HasDefendersForge && item.CanStackToArray(player.bank3.item))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
