@@ -1,4 +1,5 @@
-﻿namespace ImproveGame.Interface.BaseViews;
+﻿
+namespace ImproveGame.Interface.BaseViews;
 
 public abstract class BaseBody : View
 {
@@ -8,7 +9,7 @@ public abstract class BaseBody : View
         Height.Percent = 1f;
         base.Recalculate();
     }
-    
+
     /// <summary>
     /// 启用 body
     /// </summary>
@@ -23,4 +24,17 @@ public abstract class BaseBody : View
     /// 是否占用光标，使得不对其下层元素进行 主动类型的事件触发
     /// </summary>
     public abstract bool CanDisableMouse(UIElement target);
+
+    private float lastUIScale = Main.UIScale;
+
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+        if (lastUIScale != Main.UIScale)
+        {
+            lastUIScale = Main.UIScale;
+            Recalculate();
+        }
+    }
 }
