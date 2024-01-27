@@ -231,7 +231,7 @@ public partial class SpaceWand : ModItem, IMarqueeItem
         {
             PlaceType.Platform => item => item.createTile > -1 && TileID.Sets.Platforms[item.createTile],
             PlaceType.Soild => item =>
-                item.tileWand < 0 && item.createTile > -1 && !Main.tileSolidTop[item.createTile] &&
+                item.createTile > -1 && !Main.tileSolidTop[item.createTile] &&
                 Main.tileSolid[item.createTile] && !GrassSeeds.Contains(item.createTile) &&
                 TileID.ClosedDoor != item.createTile,
             PlaceType.Rope => item => item.createTile > -1 && Main.tileRope[item.createTile],

@@ -67,6 +67,10 @@
 - **[v1.6.7.1]** Tool speed boost is not applied to hammers used to destroy walls
 - **[v1.6.7.1]** Opening the full-screen map resets the UI state
 - **[v1.6.7.1]** Space wand doesn't set slope for tiles properly sometimes
+- **[v1.6.7.2]** 空间法杖放置沙子会使部分沙子以物品形式掉落
+- **[v1.6.7.2]** 在某些情况下影烛的随身增益站不会正常作用
+- **[v1.6.7.2]** 在某些情况下自动垃圾桶UI错位
+- **[v1.6.7.2]** 大背包设置项 “智能拾取” “自动拾取” 联机中无效
 
 ## Adjustments
 
@@ -88,6 +92,7 @@
 - **[v1.6.7.1]** "Faster Respawn" and "Fast Respawn When No Boss" is combined into one option
 - **[v1.6.7.1]** Added a tip to hide the infinite buff icon in the buff icon's tooltip
 - **[v1.6.7.2]** 修改部分UI绘制逻辑以适配High FPS Support Mod
+- **[v1.6.7.2]** 空间法杖现已支持物块放置魔棒（如生命木魔棒、树叶魔棒）
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0

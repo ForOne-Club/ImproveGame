@@ -11,7 +11,16 @@ public partial class SpaceWand
         if (oneIndex <= -1)
             return;
 
+        int indexOfItemBeingConsumed = oneIndex;
         Item item = player.inventory[oneIndex];
+        if (item.tileWand >= 0)
+        {
+            int actualItemIndex = EnoughItem(player, i => i.type == item.tileWand);
+            if (actualItemIndex <= -1)
+                return;
+
+            indexOfItemBeingConsumed = actualItemIndex;
+        }
 
         if (!TileLoader.CanPlace(x, y, item.createTile))
             return;
@@ -21,8 +30,8 @@ public partial class SpaceWand
             if (WorldGen.PlaceTile(x, y, item.createTile, true, false, player.whoAmI, item.placeStyle))
             {
                 playSound = true;
-                PickItemInInventory(player, GetConditions(placeType), false, out int index);
-                HandleItemConsumption(player, index, itemsConsumed);
+                // PickItemInInventory(player, GetConditions(placeType), false, out int index);
+                HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed);
             }
         }
         else
@@ -54,8 +63,8 @@ public partial class SpaceWand
                     if (WorldGen.ReplaceTile(x, y, (ushort)item.createTile, item.placeStyle))
                     {
                         playSound = true;
-                        PickItemInInventory(player, GetConditions(placeType), false, out int index);
-                        HandleItemConsumption(player, index, itemsConsumed);
+                        // PickItemInInventory(player, GetConditions(placeType), false, out int index);
+                        HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed);
                         SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
                     }
                     else
@@ -66,8 +75,8 @@ public partial class SpaceWand
                                 player.whoAmI, item.placeStyle))
                         {
                             playSound = true;
-                            PickItemInInventory(player, GetConditions(placeType), false, out int index);
-                            HandleItemConsumption(player, index, itemsConsumed);
+                            // PickItemInInventory(player, GetConditions(placeType), false, out int index);
+                            HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed);
                             SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
                         }
                     }
@@ -76,8 +85,8 @@ public partial class SpaceWand
             else if (WorldGen.PlaceTile(x, y, item.createTile, true, true, player.whoAmI, item.placeStyle))
             {
                 playSound = true;
-                PickItemInInventory(player, GetConditions(placeType), false, out int index);
-                HandleItemConsumption(player, index, itemsConsumed);
+                // PickItemInInventory(player, GetConditions(placeType), false, out int index);
+                HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed);
                 SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
             }
         }
