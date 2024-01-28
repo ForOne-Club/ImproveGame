@@ -9,18 +9,18 @@ namespace ImproveGame.Interface.UIElements
         public readonly SUIScrollBar Scrollbar;
 
         // ReSharper disable once MemberCanBePrivate.Global
-        public readonly ListView ListView;
+        public readonly TimerView ListView = new TimerView();
 
         public ScrollView()
         {
             OverflowHidden = true;
             DragIgnore = true;
 
-            ListView = new ListView();
-            ListView.Join(this);
+            ListView.IsAdaptiveHeight = true;
+            ListView.JoinParent(this);
 
             Scrollbar = new SUIScrollBar();
-            Scrollbar.Join(this);
+            Scrollbar.JoinParent(this);
         }
 
         public override void ScrollWheel(UIScrollWheelEvent evt)

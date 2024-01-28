@@ -1,12 +1,12 @@
 ﻿using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 
-namespace ImproveGame.Interface.GUI.FunctionList;
+namespace ImproveGame.GlobalGUI.FunctionList;
 
 [AutoCreateGUI("Radial Hotbars", "Function List GUI")]
 public class FunctionListGUI : BaseBody
 {
-    public override bool Enabled { get => _enabled && Main.playerInventory; set => _enabled = value; }
+    public override bool Enabled { get => Main.playerInventory && _enabled; set => _enabled = value; }
     private bool _enabled = true;
 
     public override bool CanDisableMouse(UIElement target)
@@ -26,16 +26,16 @@ public class FunctionListGUI : BaseBody
 
     public override void OnInitialize()
     {
-        Window = new SUIPanel(Color.Transparent, Color.Black * .0f);
+        Window = new SUIPanel(Color.Transparent, Color.Transparent);
         Window.SetPadding(0f);
         Window.Left.Percent = Window.Top.Percent = 1f;
 
-        Window.Join(this);
+        Window.JoinParent(this);
 
         InitializeBigBagButton();
         InitializeSettingButton();
 
-        Window.SetSizePixels(new Vector2((BigBagButton.TextSize.X + SettingButton.TextSize.X) * 1.2f + 8f, 90f));
+        Window.SetSizePixels(new Vector2((BigBagButton.TextSize.X + SettingButton.TextSize.X) * 1.1f + 8f, 90f));
         Window.SetPosPixels(-Window.GetSize() - new Vector2(55f, 25f));
     }
 
@@ -43,13 +43,13 @@ public class FunctionListGUI : BaseBody
     {
         BigBagButton = new SUIText
         {
-            Relative = RelativeMode.Horizontal,
+            RelativeMode = RelativeMode.Horizontal,
             TextOrKey = GetText("SuperVault.Name"),
             TextPercentOffset = Vector2.One / 2f,
             TextOrigin = Vector2.One / 2f,
             IsLarge = true,
         };
-        BigBagButton.SetSize(BigBagButton.TextSize * 1.2f);
+        BigBagButton.SetSize(BigBagButton.TextSize * 1.1f);
         BigBagButton.SetAlign(0f, 0.5f);
 
         BigBagButton.OnMouseOver += (_, _) =>
@@ -82,23 +82,23 @@ public class FunctionListGUI : BaseBody
         BigBagButton.OnUpdate += (_) =>
         {
             BigBagButton.TextColor = BigBagButton.HoverTimer.Lerp(Color.White, Config.SuperVault ? Color.Yellow : Color.Red);
-            BigBagButton.TextScale = BigBagButton.HoverTimer.Lerp(1f, 1.2f);
+            BigBagButton.TextScale = BigBagButton.HoverTimer.Lerp(1f, 1.1f);
         };
-        BigBagButton.Join(Window);
+        BigBagButton.JoinParent(Window);
     }
 
     public void InitializeSettingButton()
     {
         SettingButton = new SUIText
         {
-            Relative = RelativeMode.Horizontal,
+            RelativeMode = RelativeMode.Horizontal,
             Spacing = new Vector2(8f, 0f),
             TextOrKey = Lang.inter[62].Value,
             TextPercentOffset = Vector2.One / 2f,
             TextOrigin = Vector2.One / 2f,
             IsLarge = true,
         };
-        SettingButton.SetSize(SettingButton.TextSize * 1.2f);
+        SettingButton.SetSize(SettingButton.TextSize * 1.1f);
         SettingButton.SetAlign(0f, 0.5f);
 
         SettingButton.OnMouseOver += (_, _) =>
@@ -114,8 +114,8 @@ public class FunctionListGUI : BaseBody
         SettingButton.OnUpdate += (_) =>
         {
             SettingButton.TextColor = SettingButton.HoverTimer.Lerp(Color.White, Color.Yellow);
-            SettingButton.TextScale = SettingButton.HoverTimer.Lerp(1f, 1.2f);
+            SettingButton.TextScale = SettingButton.HoverTimer.Lerp(1f, 1.1f);
         };
-        SettingButton.Join(Window);
+        SettingButton.JoinParent(Window);
     }
 }

@@ -44,9 +44,9 @@ namespace ImproveGame.Interface.SUIElements
             Items = items;
             Index = index;
 
-            Relative = RelativeMode.Horizontal;
+            RelativeMode = RelativeMode.Horizontal;
             Spacing = new Vector2(10, 10);
-            Wrap = true;
+            PreventOverflow = true;
             Border = UIColor.ItemSlotBorderSize;
             Rounded = new Vector4(UIColor.ItemSlotBorderRound);
         }

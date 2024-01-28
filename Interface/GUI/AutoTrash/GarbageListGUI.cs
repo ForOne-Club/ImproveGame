@@ -55,7 +55,7 @@ public class GarbageListGUI : BaseBody
             Window.SetPadding(0);
             Window.SetSizePixels(gridSize.X + 14f, 42f + gridSize.Y + 11f);
             Window.SetPosPixels(492f - Window.Width.Pixels, 306f);
-            Window.Join(this);
+            Window.JoinParent(this);
 
             // 标题
             TitleView = new View
@@ -69,7 +69,7 @@ public class GarbageListGUI : BaseBody
             TitleView.SetPadding(0);
             TitleView.Width.Precent = 1f;
             TitleView.Height.Pixels = 42f;
-            TitleView.Join(Window);
+            TitleView.JoinParent(Window);
 
             Title = new SUITitle("自动丢弃列表", 0.42f)
             {
@@ -77,7 +77,7 @@ public class GarbageListGUI : BaseBody
             };
             Title.SetPadding(15f, 0f, 10f, 0f);
             Title.SetInnerPixels(Title.TextSize);
-            Title.Join(TitleView);
+            Title.JoinParent(TitleView);
 
             Cross = new SUICross
             {
@@ -89,7 +89,7 @@ public class GarbageListGUI : BaseBody
             };
             Cross.Width.Pixels = 42f;
             Cross.Height.Set(0f, 1f);
-            Cross.Join(TitleView);
+            Cross.JoinParent(TitleView);
 
             Cross.OnLeftMouseDown += (_, _) =>
             {
@@ -99,14 +99,14 @@ public class GarbageListGUI : BaseBody
 
             GarbagesView = new View();
             GarbagesView.SetPadding(7f, 4f, 6f, 7f);
-            GarbagesView.Top.Pixels = TitleView.BottomPixels();
+            GarbagesView.Top.Pixels = TitleView.BottomPixels;
             GarbagesView.Width.Percent = 1f;
             GarbagesView.Height.Pixels = Window.Height.Pixels - 42f;
-            GarbagesView.Join(Window);
+            GarbagesView.JoinParent(Window);
 
             GarbageListGrid = new GarbageListGrid();
             GarbageListGrid.Width.Percent = GarbageListGrid.Height.Percent = 1f;
-            GarbageListGrid.Join(GarbagesView);
+            GarbageListGrid.JoinParent(GarbagesView);
         }
     }
 

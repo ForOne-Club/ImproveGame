@@ -29,7 +29,7 @@ public class BuffTrackerGUI : BaseBody
 
     public override bool CanDisableMouse(UIElement target)
     {
-        return (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
+        return (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
     }
 
     public override void OnInitialize()
@@ -39,7 +39,7 @@ public class BuffTrackerGUI : BaseBody
             Shaded = true,
             ShadowThickness = UIColor.ShadowThicknessThinnerer
         };
-        MainPanel.SetPosPixels(630, 160).SetSizePixels(450, 220).Join(this);
+        MainPanel.SetPosPixels(630, 160).SetSizePixels(450, 220).JoinParent(this);
 
         SUICross closeButton = new()
         {
@@ -97,7 +97,7 @@ public class BuffTrackerGUI : BaseBody
         };
         // _searchBar.OnDraw += SearchBarOnDraw;
         _searchBar.OnSearchContentsChanged += _ => SetupBuffButtons();
-        _searchBar.Join(MainPanel);
+        _searchBar.JoinParent(MainPanel);
 
         OnLeftMouseDown += (_, _) => TryCancelInput();
         OnRightMouseDown += (_, _) => TryCancelInput();
@@ -250,7 +250,7 @@ public class BuffTrackerGUI : BaseBody
     /// </summary>
     public void Open()
     {
-        MainPanel.KeepPressed = false;
+        MainPanel.IsPressed = false;
         Visible = true;
         SoundEngine.PlaySound(SoundID.MenuOpen);
         SetupBuffButtons();

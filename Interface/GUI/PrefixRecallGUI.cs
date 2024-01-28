@@ -22,7 +22,7 @@ public class PrefixRecallGUI : BaseBody, ISidedView
     public override bool CanPriority(UIElement target) => target != this;
 
     public override bool CanDisableMouse(UIElement target)
-        => (target != this && _basePanel.IsMouseHovering) || _basePanel.KeepPressed;
+        => (target != this && _basePanel.IsMouseHovering) || _basePanel.IsPressed;
 
     private static int _oldItemType; // 用于监测type以及时更新uiList
     private static int _oldPrefixCount; // 用于监测词缀数量以及时更新uiList

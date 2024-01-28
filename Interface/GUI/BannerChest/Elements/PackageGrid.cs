@@ -8,7 +8,7 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
 
         public PackageGrid()
         {
-            ListView.SetInnerPixels(GridSize(52f, 8f, 5));
+            ListView.SetInnerPixels(new Vector2(GridSize(52f, 8f, 5)));
 
             Scrollbar.HAlign = 1f;
             Scrollbar.Left.Pixels = -1;
@@ -75,7 +75,7 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
             int length = RequiredChildrenCount(items.Count);
             for (int i = 0; i < length; i++)
             {
-                new PackageItemSlot(items, i).Join(ListView);
+                new PackageItemSlot(items, i).JoinParent(ListView);
             }
 
             ListView.SetInnerPixels(GridSize(52f, 8f, 5, length / 5));

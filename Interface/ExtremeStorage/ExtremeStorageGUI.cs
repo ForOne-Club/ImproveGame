@@ -67,8 +67,8 @@ namespace ImproveGame.Interface.ExtremeStorage
 
             _basePanel.Append(_itemGrid = new StorageGrids
             {
-                First = true,
-                Relative = RelativeMode.Vertical,
+                ResetAnotherPosition = true,
+                RelativeMode = RelativeMode.Vertical,
                 Spacing = new Vector2(10, 15)
             });
 
@@ -340,6 +340,6 @@ namespace ImproveGame.Interface.ExtremeStorage
         public override bool CanPriority(UIElement target) => target != this;
 
         public override bool CanDisableMouse(UIElement target) =>
-            (target != this && _basePanel.IsMouseHovering) || _basePanel.KeepPressed;
+            (target != this && _basePanel.IsMouseHovering) || _basePanel.IsPressed;
     }
 }

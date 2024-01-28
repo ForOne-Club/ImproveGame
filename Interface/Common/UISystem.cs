@@ -7,7 +7,6 @@ using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.GUI.DummyControl;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
-using ImproveGame.Interface.GUI.PlayerStats;
 using ImproveGame.Interface.GUI.SpaceWand;
 using ImproveGame.Interface.GUI.WorldFeature;
 using System.Reflection;
@@ -43,10 +42,6 @@ public class UISystem : ModSystem
     // 生命体检测仪筛选
     public LifeformAnalyzerGUI LifeformAnalyzerGUI;
     public EventTrigger LifeformAnalyzerTrigger;
-
-    // 玩家信息表
-    public PlayerStatsGUI PlayerStatsGUI;
-    public EventTrigger PlayerStatsTrigger;
 
     // 假人控制器
     public DummyControlGUI DummyControlGUI;
@@ -130,9 +125,6 @@ public class UISystem : ModSystem
         AutoCreateGUIAttributes.Clear();
         EventTriggerInstances.Clear();
         BaseBodyInstances.Clear();
-
-        PlayerStatsGUI = null;
-        PlayerStatsTrigger = null;
 
         // 假人控制器
         DummyControlGUI = null;
@@ -229,8 +221,6 @@ public class UISystem : ModSystem
         AutoTrashTrigger = new EventTrigger("Radial Hotbars", "Auto Trash");
         InventoryTrashTrigger = new EventTrigger("Radial Hotbars", "Inventory Trash");
         PackageTrigger = new EventTrigger("Radial Hotbars", "Package");
-        // BigBagTrigger = new EventTrigger("Radial Hotbars", "Big Bag");
-        PlayerStatsTrigger = new EventTrigger("Radial Hotbars", "Player Info");
         DummyControlTrigger = new EventTrigger("Radial Hotbars", "Dummy Control");
         LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand");
         ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture");

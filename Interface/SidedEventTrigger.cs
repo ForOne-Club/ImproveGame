@@ -17,7 +17,7 @@ namespace ImproveGame.Interface
             internal ISidedView AsSidedView => ViewBody as ISidedView;
         }
 
-        public static bool ViewBodyIs(BaseBody body) => UISystem.Instance.SidedEventTrigger.ViewBody == body;
+        public static bool ViewBodyIs(BaseBody body) => UISystem.Instance.SidedEventTrigger.BaseBody == body;
 
         private static readonly List<SideUIData> UIPool = new();
 
@@ -116,7 +116,7 @@ namespace ImproveGame.Interface
 
         protected override void Update(GameTime gameTime)
         {
-            ViewBody = null;
+            BaseBody = null;
 
             foreach (var uiData in UIPool.Where(uiData => uiData.AnimationTimer.AnyOpen))
             {
@@ -135,7 +135,7 @@ namespace ImproveGame.Interface
                 }
                 if (uiData.AnimationTimer.CompleteOpen)
                 {
-                    ViewBody = uiData.ViewBody;
+                    BaseBody = uiData.ViewBody;
                 }
             }
 

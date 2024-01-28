@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Packets.NetStorager;
+using ImproveGame.GlobalGUI;
 using ImproveGame.Interface.Common;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;

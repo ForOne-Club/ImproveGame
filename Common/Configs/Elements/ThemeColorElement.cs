@@ -38,7 +38,7 @@ public class ThemeColorElement : EnumElement
         MainPanel.SetPadding(0f);
         MainPanel.SetPosPixels(0f, 38f);
         MainPanel.SetSize(480f, -60f, 0f, 1f);
-        MainPanel.Join(this);
+        MainPanel.JoinParent(this);
         ResetPreviewUI();
     }
 
@@ -50,18 +50,18 @@ public class ThemeColorElement : EnumElement
             Width = {Pixels = 0f, Precent = 1f},
             Height = {Pixels = 50f, Precent = 0f},
             Rounded = new Vector4(10f, 10f, 0f, 0f),
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(0f, 8f)
         };
         TitlePanel.SetPadding(0f);
-        TitlePanel.Join(MainPanel);
+        TitlePanel.JoinParent(MainPanel);
 
         // 标题
         Title = new SUITitle(GetText("UI.ThemePreview.Title"), 0.5f)
         {
             VAlign = 0.5f
         };
-        Title.Join(TitlePanel);
+        Title.JoinParent(TitlePanel);
 
         // Cross
         Cross = new SUICross
@@ -71,21 +71,21 @@ public class ThemeColorElement : EnumElement
             Height = {Pixels = 0f, Precent = 1f},
             Rounded = new Vector4(0f, 10f, 0f, 0f)
         };
-        Cross.Join(TitlePanel);
+        Cross.JoinParent(TitlePanel);
 
         var itemsPanel = new View
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             OverflowHidden = true
         };
         itemsPanel.SetPadding(15, 15, 14, 14);
         itemsPanel.SetSize(0f, 164f, 1f, 0f);
-        itemsPanel.Join(MainPanel);
+        itemsPanel.JoinParent(MainPanel);
 
         ItemGrid = new BaseGrid();
         ItemGrid.SetBaseValues(-1, 8, new Vector2(4f), new Vector2(48f));
-        ItemGrid.Join(itemsPanel);
+        ItemGrid.JoinParent(itemsPanel);
 
         Scrollbar = new SUIScrollBar
         {
@@ -93,13 +93,13 @@ public class ThemeColorElement : EnumElement
             Height = {Precent = 1f},
             Width = {Pixels = 20f}
         };
-        Scrollbar.Join(itemsPanel);
+        Scrollbar.JoinParent(itemsPanel);
 
         for (var i = 0; i < 32; i++)
         {
             var itemSlot = new BaseItemSlot();
             itemSlot.SetSizePixels(48f, 48f);
-            itemSlot.Join(ItemGrid);
+            itemSlot.JoinParent(ItemGrid);
         }
 
         ItemGrid.CalculateAndSetSize();

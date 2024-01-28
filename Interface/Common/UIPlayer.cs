@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Core;
+using ImproveGame.GlobalGUI;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.AutoTrash;
@@ -70,12 +71,10 @@ public class UIPlayer : ModPlayer
         }
 
         // 玩家信息
-        uiSystem.PlayerStatsGUI = new PlayerStatsGUI();
-        uiSystem.PlayerStatsTrigger.SetBaseBody(uiSystem.PlayerStatsGUI);
         CheckPositionValid(ref PlayerInfoTogglePosition, PlayerInfoToggleDefPosition);
-        uiSystem.PlayerStatsGUI.ControllerSwitch.SetPos(PlayerInfoTogglePosition).Recalculate();
         PlayerStatsGUI.Visible = true;
-        uiSystem.PlayerStatsGUI.LoadAndSetupFavorites();
+        PlayerStatsGUI.Instance.ControllerSwitch.SetPos(PlayerInfoTogglePosition).Recalculate();
+        PlayerStatsGUI.Instance.LoadAndSetupFavorites();
 
         // 假人控制器
         uiSystem.DummyControlGUI = new DummyControlGUI();

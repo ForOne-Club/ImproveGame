@@ -1,8 +1,24 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.BaseViews;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface;
+
+public enum MouseButton { Left, Middle, Right }
+public enum MouseEvent { Down, Up }
+public struct MouseStateMinor(bool leftButton, bool middleButton, bool rightButton)
+{
+    public bool LeftButton { get; set; } = leftButton;
+    public bool MiddleButton { get; set; } = middleButton;
+    public bool RightButton { get; set; } = rightButton;
+
+    public readonly bool this[MouseButton button] => button switch
+    {
+        MouseButton.Left => LeftButton,
+        MouseButton.Middle => MiddleButton,
+        MouseButton.Right => RightButton,
+        _ => throw new NotImplementedException()
+    };
+}
 
 /// <summary>
 /// 事件触发器，用于取代原版的 UserInterface <br/>
@@ -13,29 +29,22 @@ namespace ImproveGame.Interface;
 /// </summary>
 public class EventTrigger
 {
-    private static bool DisableMouse { get; set; }
+    #region Static Fields and Propertices and Methods
+    public static Vector2 MouseScreen => new(Main.mouseX, Main.mouseY);
+    private static bool DisableMouse { get; set; } = false;
     private static EventTrigger CurrentEventTrigger { get; set; }
 
-    private static readonly List<string> LayersPriority;
-    protected static readonly Dictionary<string, List<EventTrigger>> LayersDictionary;
+    private static readonly List<string> LayersPriority = [];
+    protected static readonly Dictionary<string, List<EventTrigger>> LayersDictionary = [];
 
     public static int LayerCount => LayersDictionary["Radial Hotbars"].Count;
 
-    static EventTrigger()
-    {
-        LayersPriority = [];
-        LayersDictionary = [];
-
-        DisableMouse = false;
-    }
-
     /// <summary>
-    /// 首次调用时 CurrentEventTrigger 已经被赋值了<br/>
-    /// 所以不用判断是不是 null
+    /// 首次调用时 CurrentEventTrigger 已经被赋值了 所以不用判断是不是 null
     /// </summary>
     private static void MakePriority()
     {
-        string layerName = CurrentEventTrigger._layerName;
+        string layerName = CurrentEventTrigger.LayerName;
         if (LayersDictionary[layerName][0] == CurrentEventTrigger)
         {
             return;
@@ -45,10 +54,6 @@ public class EventTrigger
         LayersDictionary[layerName].Insert(0, CurrentEventTrigger);
     }
 
-    /// <summary>
-    /// 事件处理
-    /// </summary>
-    /// <param name="gameTime"></param>
     public static void UpdateUI(GameTime gameTime)
     {
         foreach (string layerName in LayersPriority.Where(LayersDictionary.ContainsKey))
@@ -64,9 +69,6 @@ public class EventTrigger
         DisableMouse = false;
     }
 
-    /// <summary>
-    /// 嗯 嗯 啊啊啊啊
-    /// </summary>
     public static void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
     {
         // 防止进入世界时UI闪一下
@@ -83,7 +85,7 @@ public class EventTrigger
                 layerIndex.Add(keyValuePair.Key, index);
                 foreach (EventTrigger trigger in keyValuePair.Value)
                 {
-                    layers.Insert(index + 1, new LegacyGameInterfaceLayer($"ImproveGame: {trigger._name}",
+                    layers.Insert(index + 1, new LegacyGameInterfaceLayer($"ImproveGame: {trigger.Name}",
                         () => trigger.Draw(), InterfaceScaleType.UI));
                 }
             });
@@ -91,16 +93,22 @@ public class EventTrigger
 
         LayersPriority.Sort(((a, b) => -layerIndex[a].CompareTo(layerIndex[b])));
     }
+    #endregion
 
-    private readonly string _name, _layerName;
-
-    public BaseBody ViewBody { get => BaseBody; protected set => BaseBody = value; }
+    public string Name { get; protected set; }
+    public string LayerName { get; protected set; }
     public BaseBody BaseBody { get; protected set; }
-    private Vector2 _mouse;
-    private readonly UIElement[] _last;
-    private readonly bool[] _pressed;
 
-    public BaseBody Body => BaseBody;
+    protected UIElement PreviousHoverTarget;
+    protected readonly Dictionary<MouseButton, UIElement> PreviousMouseTargets = new()
+    {
+        { MouseButton.Left, null },
+        { MouseButton.Middle, null },
+        { MouseButton.Right, null }
+    };
+
+    protected MouseStateMinor MouseState;
+    protected MouseStateMinor PreviousMouseState;
 
     /// <summary>
     /// 我在这里提醒一下需要为 CanRunFunc 赋值否则 UI 将永不生效<br/>
@@ -111,16 +119,18 @@ public class EventTrigger
     /// <param name="name">114514</param>
     public EventTrigger(string layerName, string name)
     {
-        _last = new UIElement[4];
-        _pressed = new bool[3];
-
-        _layerName = layerName;
-        _name = name;
+        LayerName = layerName;
+        Name = name;
 
         if (!LayersPriority.Contains(layerName))
+        {
             LayersPriority.Add(layerName);
+        }
+
         if (!LayersDictionary.ContainsKey(layerName))
-            LayersDictionary.Add(layerName, new List<EventTrigger>());
+        {
+            LayersDictionary.Add(layerName, []);
+        }
 
         LayersDictionary[layerName].Add(this);
     }
@@ -148,23 +158,20 @@ public class EventTrigger
             return;
         }
 
-        _mouse = new Vector2(Main.mouseX, Main.mouseY);
-        bool mouse = DisableMouse;
-        bool[] down = [Main.mouseLeft, Main.mouseRight, Main.mouseMiddle];
-        // 鼠标目标元素
-        UIElement target = mouse ? null : BaseBody.GetElementAt(_mouse);
-        var targetMouseEvent = new UIMouseEvent(target, _mouse);
+        Vector2 focus = MouseScreen;
+
+        PreviousMouseState = MouseState;
+        MouseState = new MouseStateMinor(Main.mouseLeft, Main.mouseMiddle, Main.mouseRight);
 
         try
         {
-            // 当前目标元素不是上一个目标元素
-            if (_last[^1] != target)
+            UIElement target = DisableMouse ? null : BaseBody.GetElementAt(focus);
+
+            BaseBody.PreUpdate(gameTime);
+
+            if (target != PreviousHoverTarget)
             {
-                // 鼠标离开元素
-                _last[^1]?.MouseOut(new UIMouseEvent(_last[^1], _mouse));
-                _last[^1] = target;
-                // 鼠标进入元素
-                target?.MouseOver(targetMouseEvent);
+                HandleChangeTarget(target, PreviousHoverTarget, new UIMouseEvent(target, focus));
             }
 
             // 禁用鼠标
@@ -173,85 +180,91 @@ public class EventTrigger
                 DisableMouse = true;
             }
 
-            for (int i = 0; i < 3; i++)
+            // 遍历三种鼠标按键：左键、右键和中键
+            foreach (MouseButton mouseButton in Enum.GetValues(typeof(MouseButton)))
             {
-                switch (down[i])
+                // 判断当前按键是否被按下
+                if (MouseState[mouseButton])
                 {
-                    case true when !_pressed[i]:
-                        _last[i] = target;
-                        // 按下事件
-                        switch (i)
-                        {
-                            case 0:
-                                target?.LeftMouseDown(new UIMouseEvent(target, _mouse));
-                                break;
-                            case 1:
-                                target?.RightMouseDown(new UIMouseEvent(target, _mouse));
-                                break;
-                            default:
-                                target?.MiddleMouseDown(new UIMouseEvent(target, _mouse));
-                                break;
-                        }
-
-                        // 视图置于顶层
-                        if (target != null && BaseBody.CanPriority(target))
-                        {
-                            MakePriority();
-                        }
-
-                        break;
-                    case false when _pressed[i] && _last[i] != null:
-                        {
-                            if (_last[i].ContainsPoint(_mouse))
-                            {
-                                // 左键点击事件
-                                switch (i)
-                                {
-                                    case 0:
-                                        _last[i]?.LeftClick(new UIMouseEvent(target, _mouse));
-                                        break;
-                                    case 1:
-                                        _last[i]?.RightClick(new UIMouseEvent(target, _mouse));
-                                        break;
-                                    case 2:
-                                        _last[i]?.MiddleClick(new UIMouseEvent(target, _mouse));
-                                        break;
-                                }
-                            }
-
-                            // 鼠标离开事件
-                            switch (i)
-                            {
-                                case 0:
-                                    _last[i]?.LeftMouseUp(new UIMouseEvent(target, _mouse));
-                                    break;
-                                case 1:
-                                    _last[i]?.RightMouseUp(new UIMouseEvent(target, _mouse));
-                                    break;
-                                case 2:
-                                    _last[i]?.MiddleMouseUp(new UIMouseEvent(target, _mouse));
-                                    break;
-                            }
-
-                            _last[i] = null;
-                            break;
-                        }
+                    if (!PreviousMouseState[mouseButton])
+                    {
+                        HandleMouseEvent(MouseEvent.Down, target, focus, mouseButton);
+                    }
+                }
+                else
+                {
+                    if (PreviousMouseState[mouseButton])
+                    {
+                        HandleMouseEvent(MouseEvent.Up, target, focus, mouseButton);
+                    }
                 }
             }
 
             if (PlayerInput.ScrollWheelDeltaForUI != 0)
             {
-                target?.ScrollWheel(new UIScrollWheelEvent(target, _mouse,
-                    PlayerInput.ScrollWheelDeltaForUI));
+                target?.ScrollWheel(new UIScrollWheelEvent(target, focus, PlayerInput.ScrollWheelDeltaForUI));
             }
 
             BaseBody.Update(gameTime);
-        } finally
-        {
-            _pressed[0] = down[0] && !mouse;
-            _pressed[1] = down[1] && !mouse;
-            _pressed[2] = down[2] && !mouse;
         }
+        catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+    }
+
+    private void HandleChangeTarget(UIElement target, UIElement originalTarget, UIMouseEvent @event)
+    {
+        originalTarget?.MouseOut(@event);
+        target?.MouseOver(@event);
+
+        PreviousHoverTarget = target;
+    }
+
+    private void HandleMouseEvent(MouseEvent eventType, UIElement target, Vector2 focus, MouseButton mouseButton)
+    {
+        // 根据按键类型触发对应的事件
+        switch (mouseButton)
+        {
+            case MouseButton.Left:
+                if (eventType is MouseEvent.Down)
+                {
+                    target?.LeftMouseDown(new UIMouseEvent(target, focus));
+                }
+                else
+                {
+                    PreviousMouseTargets[mouseButton]?.LeftMouseUp(new UIMouseEvent(target, focus));
+                }
+
+                break;
+            case MouseButton.Middle:
+                if (eventType is MouseEvent.Down)
+                {
+                    target?.MiddleMouseDown(new UIMouseEvent(target, focus));
+                }
+                else
+                {
+                    PreviousMouseTargets[mouseButton]?.MiddleMouseUp(new UIMouseEvent(target, focus));
+                }
+
+                break;
+            case MouseButton.Right:
+                if (eventType is MouseEvent.Down)
+                {
+                    target?.RightMouseDown(new UIMouseEvent(target, focus));
+                }
+                else
+                {
+                    PreviousMouseTargets[mouseButton]?.RightMouseUp(new UIMouseEvent(target, focus));
+                }
+
+                break;
+        }
+
+        // 如果目标元素存在且可以被优先处理，则将视图置于顶层
+        if (eventType is MouseEvent.Down && target != null && BaseBody.CanPriority(target))
+        {
+            MakePriority();
+        }
+
+        PreviousMouseTargets[mouseButton] = target;
     }
 
     protected virtual bool Draw(bool drawToGame = true)
@@ -279,7 +292,7 @@ public class EventTrigger
             BaseBody?.Draw(Main.spriteBatch);
             return true;
         }
-        
+
         BaseBody?.Draw(Main.spriteBatch);
 
         return true;

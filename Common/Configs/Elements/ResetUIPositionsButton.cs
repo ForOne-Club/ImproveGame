@@ -1,4 +1,5 @@
-﻿using ImproveGame.Interface.GUI;
+﻿using ImproveGame.GlobalGUI;
+using ImproveGame.Interface.GUI.PlayerStats;
 
 namespace ImproveGame.Common.Configs.Elements;
 
@@ -23,6 +24,6 @@ internal class ResetUIPositionsButton : LargerPanelElement
         uiSystem.WorldFeatureGUI.MainPanel.SetPos(UIPlayer.WorldFeaturePosition).Recalculate();
         uiSystem.ItemSearcherGUI.MainPanel.SetPos(UIPlayer.ItemSearcherPosition).Recalculate();
         uiSystem.OpenBagGUI.MainPanel.SetPos(UIPlayer.OpenBagPosition).Recalculate();
-        uiSystem.PlayerStatsGUI.ControllerSwitch.SetPosPixels(UIPlayer.PlayerInfoTogglePosition).Recalculate();
+        PlayerStatsGUI.Instance.ControllerSwitch.SetPosPixels(UIPlayer.PlayerInfoTogglePosition).Recalculate();
     }
 }

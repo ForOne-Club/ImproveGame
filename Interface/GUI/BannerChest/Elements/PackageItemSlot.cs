@@ -34,9 +34,9 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
             this.items = items;
             this.index = index;
 
-            Wrap = true;
+            PreventOverflow = true;
             Spacing = new Vector2(8);
-            Relative = RelativeMode.Horizontal;
+            RelativeMode = RelativeMode.Horizontal;
             Rounded = new Vector4(12f);
             BgColor = UIColor.ItemSlotBg;
             Border = 2f;

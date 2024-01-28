@@ -9,7 +9,7 @@ public class GarbageListGrid : ScrollView
 
     public GarbageListGrid()
     {
-        ListView.SetInnerPixels(GridSize(44f, 4f, 4));
+        ListView.SetInnerPixels(new Vector2(GridSize(44f, 4f, 4)));
 
         Scrollbar.HAlign = 1f;
         Scrollbar.Left.Pixels = -1;
@@ -38,10 +38,10 @@ public class GarbageListGrid : ScrollView
         for (int i = 0; i < Garbages.Count; i++)
         {
             GarbageListSlot itemSlot = new GarbageListSlot(AutoTrashPlayer.Instance.AutoDiscardItems, i);
-            itemSlot.Wrap = true;
+            itemSlot.PreventOverflow = true;
             itemSlot.Spacing = new Vector2(4f);
-            itemSlot.Relative = RelativeMode.Horizontal;
-            itemSlot.Join(ListView);
+            itemSlot.RelativeMode = RelativeMode.Horizontal;
+            itemSlot.JoinParent(ListView);
         }
 
         int length = Math.Max(16, Garbages.Count);

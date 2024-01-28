@@ -19,7 +19,7 @@ namespace ImproveGame.Interface.GUI
         public override bool CanPriority(UIElement target) => target != this;
 
         public override bool CanDisableMouse(UIElement target)
-            => (target != this && _basePanel.IsMouseHovering) || _basePanel.KeepPressed;
+            => (target != this && _basePanel.IsMouseHovering) || _basePanel.IsPressed;
 
         private const float PanelLeft = 730f;
         private const float PanelTop = 160f;
@@ -245,7 +245,7 @@ namespace ImproveGame.Interface.GUI
         
         public void Open()
         {
-            _basePanel.KeepPressed = false;
+            _basePanel.IsPressed = false;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             SetupList();

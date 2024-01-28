@@ -57,13 +57,13 @@ public class InventoryTrashGUI : BaseBody
                     TrashScale = 0.85f,
                     ItemIconScale = 0.85f
                 };
-                itemSlot.Join(TrashGrid);
+                itemSlot.JoinParent(TrashGrid);
             }
 
             TrashGrid.CalculateAndSetSize();
             TrashGrid.CalculateAndSetChildrenPosition();
             TrashGrid.Recalculate();
-            TrashGrid.Join(Window);
+            TrashGrid.JoinParent(Window);
 
             // 设置按钮
             Texture2D setting = ModAsset.Setting.Value;
@@ -76,9 +76,9 @@ public class InventoryTrashGUI : BaseBody
             SettingsButton.ImageScale = 0.85f;
 
             SettingsButton.SetSizePixels(ClosedChestTrashSize);
-            SettingsButton.SetRoundedRectangleValues(default, default, default, default);
+            SettingsButton.SetRoundedRectProperties(default, default, default, 0f);
 
-            SettingsButton.Join(Window);
+            SettingsButton.JoinParent(Window);
 
             SettingsButton.OnMouseOver += (_, _) => SettingsButton.Texture = settingHover;
             SettingsButton.OnMouseOut += (_, _) => SettingsButton.Texture = setting;
@@ -96,7 +96,7 @@ public class InventoryTrashGUI : BaseBody
                 }
             };
 
-            Window.Join(this);
+            Window.JoinParent(this);
         }
     }
 

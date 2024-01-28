@@ -4,16 +4,16 @@ namespace ImproveGame.Interface.GUI.PlayerStats;
 
 public class StatsGrid : ScrollView
 {
-    public ListView ListView2;
+    public readonly TimerView ListView2 = new TimerView();
 
     public StatsGrid()
     {
         ListView.Width.Pixels = 160f;
 
-        ListView2 = new ListView();
+        ListView2.IsAdaptiveHeight = true;
         ListView2.Width.Pixels = 160f;
         ListView2.Left.Pixels = 164f;
-        ListView2.Join(this);
+        ListView2.JoinParent(this);
 
         Scrollbar.HAlign = 1f;
         Scrollbar.Left.Pixels = -1;

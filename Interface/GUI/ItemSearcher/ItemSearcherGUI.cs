@@ -19,7 +19,7 @@ public class ItemSearcherGUI : BaseBody
     public override bool CanPriority(UIElement target) => target != this;
 
     public override bool CanDisableMouse(UIElement target)
-        => (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
+        => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
 
     // 服务器相关，是否正在向服务器请求物品
     private int _requestsSent; // 发送了多少个还没有结果的请求，只有该值为0才会更新物品列表
@@ -83,10 +83,10 @@ public class ItemSearcherGUI : BaseBody
                 Width = new StyleDimension(-16f, 1f),
                 HAlign = 0.5f,
                 DragIgnore = true,
-                Relative = RelativeMode.Vertical,
+                RelativeMode = RelativeMode.Vertical,
                 Spacing = new Vector2(0, 6)
             };
-            searchArea.Join(MainPanel);
+            searchArea.JoinParent(MainPanel);
             searchArea.Append(new UIHorizontalSeparator
             {
                 Width = StyleDimension.FromPercent(1f),
@@ -109,7 +109,7 @@ public class ItemSearcherGUI : BaseBody
         MainPanel.SetPadding(0f);
         MainPanel.SetPosPixels(620, 400)
             .SetSizePixels(356, 416)
-            .Join(this);
+            .JoinParent(this);
 
         TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
         {
@@ -117,17 +117,17 @@ public class ItemSearcherGUI : BaseBody
             Width = {Pixels = 0f, Precent = 1f},
             Height = {Pixels = 50f, Precent = 0f},
             Rounded = new Vector4(10f, 10f, 0f, 0f),
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         TitlePanel.SetPadding(0f);
-        TitlePanel.Join(MainPanel);
+        TitlePanel.JoinParent(MainPanel);
 
         // 标题
         Title = new SUITitle(GetText("UI.ItemSearcher.Title"), 0.5f)
         {
             VAlign = 0.5f
         };
-        Title.Join(TitlePanel);
+        Title.JoinParent(TitlePanel);
 
         // Cross
         Cross = new SUICross
@@ -138,7 +138,7 @@ public class ItemSearcherGUI : BaseBody
             Rounded = new Vector4(0f, 10f, 0f, 0f)
         };
         Cross.OnLeftMouseDown += (_, _) => Close();
-        Cross.Join(TitlePanel);
+        Cross.JoinParent(TitlePanel);
 
         _searchBar = new SUISearchBar(false, false)
         {
@@ -146,12 +146,12 @@ public class ItemSearcherGUI : BaseBody
             Width = new StyleDimension(-26f, 1f),
             HAlign = 0.5f,
             DragIgnore = true,
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(0, 6)
         };
         // _searchBar.OnDraw += SearchBarOnDraw;
         _searchBar.OnSearchContentsChanged += _ => SetupSearchResults();
-        _searchBar.Join(MainPanel);
+        _searchBar.JoinParent(MainPanel);
         SetupButtonsBox();
 
         // 分割
@@ -160,11 +160,11 @@ public class ItemSearcherGUI : BaseBody
         var banksPanel = new View
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         banksPanel.SetPadding(20, 6, 16, 4);
         banksPanel.SetSize(0f, 80f, 1f, 0f);
-        banksPanel.Join(MainPanel);
+        banksPanel.JoinParent(MainPanel);
         SetupBanks(banksPanel);
 
         // 分割
@@ -173,12 +173,12 @@ public class ItemSearcherGUI : BaseBody
         var itemsPanel = new View
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             OverflowHidden = true
         };
         itemsPanel.SetPadding(15, 0, 14, 14);
         itemsPanel.SetSize(0f, 138f, 1f, 0f);
-        itemsPanel.Join(MainPanel);
+        itemsPanel.JoinParent(MainPanel);
 
         // 没搜到物品时显示的提示，这里先Append，要用到的时候调一下Left就行
         TipText = new UIText(GetText("UI.ItemSearcher.TipText"))
@@ -192,13 +192,13 @@ public class ItemSearcherGUI : BaseBody
 
         ItemsFoundGrid = new BaseGrid();
         ItemsFoundGrid.SetBaseValues(-1, 7, new Vector2(4f), new Vector2(43));
-        ItemsFoundGrid.Join(itemsPanel);
+        ItemsFoundGrid.JoinParent(itemsPanel);
 
         Scrollbar = new SUIScrollBar {HAlign = 1f};
         Scrollbar.Left.Pixels = -1;
         Scrollbar.Height.Pixels = ItemsFoundGrid.Height();
         Scrollbar.SetView(itemsPanel.GetInnerSizePixels().Y, ItemsFoundGrid.Height.Pixels);
-        Scrollbar.Join(this);
+        Scrollbar.JoinParent(this);
         RefreshItemsFoundGrid(new HashSet<int>());
     }
 
@@ -210,11 +210,11 @@ public class ItemSearcherGUI : BaseBody
             Width = new StyleDimension(-26f, 1f),
             HAlign = 0.5f,
             DragIgnore = true,
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(0, 8)
         };
         ButtonsBox.SetPadding(0f);
-        ButtonsBox.Join(MainPanel);
+        ButtonsBox.JoinParent(MainPanel);
 
         // 开关
         UIPlayerSetting setting = Main.LocalPlayer.GetModPlayer<UIPlayerSetting>();
@@ -224,23 +224,23 @@ public class ItemSearcherGUI : BaseBody
             state => setting.FuzzySearch = state,
             "UI.ItemSearcher.FuzzySearch")
         {
-            First = true,
-            Relative = RelativeMode.Vertical,
+            ResetAnotherPosition = true,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = switchSpacing,
             Height = {Pixels = 34f}
         };
-        FuzzySwitch.Join(ButtonsBox);
+        FuzzySwitch.JoinParent(ButtonsBox);
 
         TooltipSwitch = new LongSwitch(
             () => setting.SearchTooltip,
             state => setting.SearchTooltip = state,
             "UI.ItemSearcher.SearchTooltip")
         {
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = switchSpacing,
             Height = {Pixels = 34f}
         };
-        TooltipSwitch.Join(ButtonsBox);
+        TooltipSwitch.JoinParent(ButtonsBox);
     }
 
     private void SetupBanks(UIElement parent)
@@ -313,7 +313,7 @@ public class ItemSearcherGUI : BaseBody
             itemSlot.SetSizePixels(43, 43);
             itemSlot.ItemIconMaxWidthAndHeight = 27;
             itemSlot.AirItem.SetDefaults(type);
-            itemSlot.Join(ItemsFoundGrid);
+            itemSlot.JoinParent(ItemsFoundGrid);
         }
 
         // 控制提示文本是否显示及其内容

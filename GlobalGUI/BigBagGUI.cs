@@ -5,7 +5,7 @@ using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
 
-namespace ImproveGame.Interface.GUI;
+namespace ImproveGame.GlobalGUI;
 
 [AutoCreateGUI("Radial Hotbars", "Big Bag")]
 public class BigBagGUI : BaseBody
@@ -19,7 +19,7 @@ public class BigBagGUI : BaseBody
     public override bool CanPriority(UIElement target) => target != this;
 
     public override bool CanDisableMouse(UIElement target)
-        => (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
+        => target != this && MainPanel.IsMouseHovering || MainPanel.IsPressed;
 
     private static bool _visible = true;
 
@@ -70,7 +70,7 @@ public class BigBagGUI : BaseBody
             Draggable = true
         };
         MainPanel.SetPadding(0f);
-        MainPanel.Join(this);
+        MainPanel.JoinParent(this);
 
         TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
         {
@@ -78,10 +78,10 @@ public class BigBagGUI : BaseBody
             Width = { Pixels = 0f, Precent = 1f },
             Height = { Pixels = 50f, Precent = 0f },
             Rounded = new Vector4(10f, 10f, 0f, 0f),
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         TitlePanel.SetPadding(0f);
-        TitlePanel.Join(MainPanel);
+        TitlePanel.JoinParent(MainPanel);
 
         // 标题
         Title = new SUIText()
@@ -95,7 +95,7 @@ public class BigBagGUI : BaseBody
         Title.TextBorder = 2f / Title.TextScale;
         Title.PaddingLeft = 20f;
         Title.SetInnerPixels(Title.TextSize * Title.TextScale);
-        Title.Join(TitlePanel);
+        Title.JoinParent(TitlePanel);
 
         // Cross
         Cross = new SUICross
@@ -106,15 +106,15 @@ public class BigBagGUI : BaseBody
             Rounded = new Vector4(0f, 10f, 0f, 0f)
         };
         Cross.OnLeftMouseDown += (_, _) => Close();
-        Cross.Join(TitlePanel);
+        Cross.JoinParent(TitlePanel);
 
         ButtonPanel = new View
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         ButtonPanel.SetPadding(12f, 10f, 11f, 12f);
-        ButtonPanel.Join(MainPanel);
+        ButtonPanel.JoinParent(MainPanel);
 
         #region 开关按钮
         Vector2 switchSpacing = new Vector2(10, 10);
@@ -125,11 +125,11 @@ public class BigBagGUI : BaseBody
                 Recipe.FindRecipes();
             }, GetText("SuperVault.Synthesis"), 0.8f)
         {
-            First = true,
-            Relative = RelativeMode.Vertical,
+            ResetAnotherPosition = true,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = switchSpacing
         };
-        RecipesSwitch.Join(ButtonPanel);
+        RecipesSwitch.JoinParent(ButtonPanel);
 
         SmartGrabSwitch = new SUISwitch(() => setting.SuperVault_PrioritizeGrabbing,
             state =>
@@ -139,10 +139,10 @@ public class BigBagGUI : BaseBody
             },
             GetText("SuperVault.SmartPickup"), 0.8f)
         {
-            Relative = RelativeMode.Horizontal,
+            RelativeMode = RelativeMode.Horizontal,
             Spacing = switchSpacing
         };
-        SmartGrabSwitch.Join(ButtonPanel);
+        SmartGrabSwitch.JoinParent(ButtonPanel);
 
         AutoGrabSwitch = new SUISwitch(() => setting.SuperVault_GrabItemsWhenOverflowing,
             state =>
@@ -152,56 +152,56 @@ public class BigBagGUI : BaseBody
             },
             GetText("SuperVault.OverflowPickup"), 0.8f)
         {
-            Relative = RelativeMode.Horizontal,
+            RelativeMode = RelativeMode.Horizontal,
             Spacing = switchSpacing
         };
-        AutoGrabSwitch.Join(ButtonPanel);
+        AutoGrabSwitch.JoinParent(ButtonPanel);
         #endregion
 
         // 按钮
         Vector2 buttonSpacing = new Vector2(10, 8);
         QuickButton = new SUIButton(GetTexture("UI/Quick").Value, Lang.inter[29].Value)
         {
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = buttonSpacing,
-            First = true
+            ResetAnotherPosition = true
         };
         QuickButton.OnLeftMouseDown += (_, _) => QuickTakeOutToPlayerInventory();
-        QuickButton.Join(ButtonPanel);
+        QuickButton.JoinParent(ButtonPanel);
 
         PutButton = new SUIButton(GetTexture("UI/Put").Value, Lang.inter[30].Value)
         {
-            Relative = RelativeMode.Horizontal,
+            RelativeMode = RelativeMode.Horizontal,
             Spacing = buttonSpacing
         };
         PutButton.OnLeftMouseDown += (_, _) => PutAll();
-        PutButton.Join(ButtonPanel);
+        PutButton.JoinParent(ButtonPanel);
 
         ReplenishButton = new SUIButton(GetTexture("UI/Put").Value, Lang.inter[31].Value)
         {
-            Relative = RelativeMode.Horizontal,
+            RelativeMode = RelativeMode.Horizontal,
             Spacing = buttonSpacing
         };
         ReplenishButton.OnLeftMouseDown += (_, _) => Replenish();
-        ReplenishButton.Join(ButtonPanel);
+        ReplenishButton.JoinParent(ButtonPanel);
 
         SortButton = new SUIButton(GetTexture("UI/Put").Value, GetText("SuperVault.Sort"))
         {
-            Relative = RelativeMode.Horizontal,
+            RelativeMode = RelativeMode.Horizontal,
             Spacing = buttonSpacing
         };
         SortButton.OnLeftMouseDown += (_, _) => Sort();
-        SortButton.Join(ButtonPanel);
+        SortButton.JoinParent(ButtonPanel);
 
         // Inventory 滚动视图
         ItemGrid = new ModItemGrid
         {
-            First = true,
-            Relative = RelativeMode.Vertical,
+            ResetAnotherPosition = true,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(10, 15)
         };
         ItemGrid.ItemList.OnMouseDownSlot += NetSyncItem;
-        ItemGrid.Join(ButtonPanel);
+        ItemGrid.JoinParent(ButtonPanel);
         ButtonPanel.SetInnerPixels(ItemGrid.Width.Pixels, ItemGrid.Bottom());
         MainPanel.SetInnerPixels(ButtonPanel.Width.Pixels, ButtonPanel.Bottom());
     }
@@ -237,7 +237,7 @@ public class BigBagGUI : BaseBody
             ButtonPanel.Recalculate();
         }
 
-        if ((Math.Abs(MainPanel.Height.Pixels - ButtonPanel.Bottom()) < 0.000000001))
+        if (Math.Abs(MainPanel.Height.Pixels - ButtonPanel.Bottom()) < 0.000000001)
         {
             return;
         }

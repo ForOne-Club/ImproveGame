@@ -22,10 +22,10 @@ namespace ImproveGame.Interface.ExtremeStorage
                 },
                 "UI.ExtremeStorage.CountForCrafting")
             {
-                First = true,
-                Relative = RelativeMode.Vertical
+                ResetAnotherPosition = true,
+                RelativeMode = RelativeMode.Vertical
             };
-            recipesSwitch.Join(this);
+            recipesSwitch.JoinParent(this);
             
             LongSwitch buffsSwitch = new(
                 () => Storage.UseUnlimitedBuffs,
@@ -36,9 +36,9 @@ namespace ImproveGame.Interface.ExtremeStorage
                 },
                 "UI.ExtremeStorage.UseUnlimitedPotion")
             {
-                Relative = RelativeMode.Vertical
+                RelativeMode = RelativeMode.Vertical
             };
-            buffsSwitch.Join(this);
+            buffsSwitch.JoinParent(this);
             
             LongSwitch stationsSwitch = new(
                 () => Storage.UsePortableStations,
@@ -50,9 +50,9 @@ namespace ImproveGame.Interface.ExtremeStorage
                 },
                 "UI.ExtremeStorage.UsePortableStation")
             {
-                Relative = RelativeMode.Vertical
+                RelativeMode = RelativeMode.Vertical
             };
-            stationsSwitch.Join(this);
+            stationsSwitch.JoinParent(this);
             
             LongSwitch bannersSwitch = new(
                 () => Storage.UsePortableBanner,
@@ -64,9 +64,9 @@ namespace ImproveGame.Interface.ExtremeStorage
                 },
                 "UI.ExtremeStorage.UsePortableBanner")
             {
-                Relative = RelativeMode.Vertical
+                RelativeMode = RelativeMode.Vertical
             };
-            bannersSwitch.Join(this);
+            bannersSwitch.JoinParent(this);
             
             var uiText = new UIText(GetText("UI.ExtremeStorage.BasicIntroduction"))
             {

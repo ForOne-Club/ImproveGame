@@ -1,17 +1,16 @@
-﻿using ImproveGame.Interface.Common;
-using ImproveGame.Interface.SUIElements;
+﻿using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.GUI.PlayerStats;
 
 /// <summary>
 /// 属性类别
 /// </summary>
-public class BaseStatsCategory
+public class BaseStatsCategory(Texture2D texture, string nameKey, bool isAddedFromCall = false, Texture2D modSmallIcon = null)
 {
     /// <summary>
     /// Whether this stats category is added via Mod.Call
     /// </summary>
-    public bool IsAddedFromCall { get; set; }
+    public bool IsAddedFromCall { get; set; } = isAddedFromCall;
 
     public Vector2? UIPosition;
 
@@ -22,19 +21,11 @@ public class BaseStatsCategory
 
     public List<BaseStat> BaseProperties { get; private set; } = new();
 
-    public BaseStatsCategory(Texture2D texture, string nameKey, bool isAddedFromCall = false, Texture2D modSmallIcon = null)
-    {
-        Texture = texture;
-        NameKey = nameKey;
-        IsAddedFromCall = isAddedFromCall;
-        ModSmallIcon = modSmallIcon;
-    }
+    public Texture2D ModSmallIcon { get; set; } = modSmallIcon;
 
-    public Texture2D ModSmallIcon { get; set; }
+    public Texture2D Texture { get; set; } = texture;
 
-    public Texture2D Texture { get; set; }
-
-    public string NameKey { get; set; }
+    public string NameKey { get; set; } = nameKey;
 
     public string Name => IsAddedFromCall ? Language.GetTextValue(NameKey) : GetText(NameKey);
 
@@ -58,7 +49,7 @@ public class BaseStatsCategory
         };
         image.Width.Pixels = 20f;
         image.Height.Percent = 1f;
-        image.Join(card.TitleView);
+        image.JoinParent(card.TitleView);
 
         // 标题文字
         title = new(Name, 0.36f)
@@ -67,11 +58,11 @@ public class BaseStatsCategory
         };
         title.Height.Percent = 1f;
         title.Width.Pixels = title.TextSize.X;
-        title.Join(card.TitleView);
+        title.JoinParent(card.TitleView);
 
         // 模组图标
         if (ModSmallIcon is null) return card;
-        
+
         var modIcon = new SUIImage(ModSmallIcon)
         {
             ImagePercent = new Vector2(0.5f),
@@ -79,11 +70,11 @@ public class BaseStatsCategory
             ImageScale = 0.8f,
             DragIgnore = true,
             TickSound = false,
-            Width = {Pixels = 20f},
-            Height = {Percent = 1f},
-            Left = {Pixels = -20f, Percent = 1f}
+            Width = { Pixels = 20f },
+            Height = { Percent = 1f },
+            Left = { Pixels = -20f, Percent = 1f }
         };
-        modIcon.Join(card.TitleView);
+        modIcon.JoinParent(card.TitleView);
 
         return card;
     }

@@ -26,7 +26,7 @@ namespace ImproveGame.Interface.GUI
         public override bool CanPriority(UIElement target) => target != this;
 
         public override bool CanDisableMouse(UIElement target)
-            => (target != this && basePanel.IsMouseHovering) || basePanel.KeepPressed;
+            => (target != this && basePanel.IsMouseHovering) || basePanel.IsPressed;
 
         private const float PanelLeft = 590f;
         private const float PanelTop = 120f;

@@ -24,13 +24,13 @@ namespace ImproveGame.Interface.UIElements
                 DragIgnore = true
             };
             ItemList.ModifyHVCount(10, 10);
-            ItemList.Join(this);
+            ItemList.JoinParent(this);
 
             Scrollbar = new SUIScrollBar
             {
                 HAlign = 1f
             };
-            Scrollbar.Join(this);
+            Scrollbar.JoinParent(this);
 
             ShowSize = ModItemList.GetSize(10, 5);
 

@@ -351,7 +351,7 @@ namespace ImproveGame.Interface.GUI
 
         public override bool CanDisableMouse(UIElement target)
         {
-            return (target != this && basePanel.IsMouseHovering) || basePanel.KeepPressed;
+            return (target != this && basePanel.IsMouseHovering) || basePanel.IsPressed;
         }
     }
 

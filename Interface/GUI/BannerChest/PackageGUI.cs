@@ -45,7 +45,7 @@ public class PackageGUI : BaseBody
             Draggable = true
         };
         _mainPanel.SetPadding(0);
-        _mainPanel.Join(this);
+        _mainPanel.JoinParent(this);
 
         // 标题容器
         _titlePanel = new View
@@ -59,7 +59,7 @@ public class PackageGUI : BaseBody
         _titlePanel.SetPadding(0);
         _titlePanel.Width.Precent = 1f;
         _titlePanel.Height.Pixels = 50f;
-        _titlePanel.Join(_mainPanel);
+        _titlePanel.JoinParent(_mainPanel);
 
         // 标题
         _title = new SUITitle("中文|Chinese", 0.5f)
@@ -68,7 +68,7 @@ public class PackageGUI : BaseBody
         };
         _title.SetPadding(20f, 0f, 10f, 0f);
         _title.SetInnerPixels(_title.TextSize);
-        _title.Join(_titlePanel);
+        _title.JoinParent(_titlePanel);
 
         // 关闭按钮
         _cross = new SUICross
@@ -79,16 +79,16 @@ public class PackageGUI : BaseBody
         };
         _cross.Height.Set(0f, 1f);
         _cross.OnLeftMouseDown += (_, _) => Close();
-        _cross.Join(_titlePanel);
+        _cross.JoinParent(_titlePanel);
 
         _autoStorageSwitch = new SUISwitch(() => Package.AutoStorage, state => Package.AutoStorage = state,
             GetText("PackageGUI.AutoStorage"), 0.8f);
-        _autoStorageSwitch.SetPosPixels(10, _titlePanel.Bottom() + 8f).Join(_mainPanel);
+        _autoStorageSwitch.SetPosPixels(10, _titlePanel.Bottom() + 8f).JoinParent(_mainPanel);
 
         _autoSortSwitch = new SUISwitch(() => Package.AutoSort, state => Package.AutoSort = state,
             GetText("PackageGUI.AutoSort"), 0.8f);
         _autoSortSwitch.SetPosPixels(_autoStorageSwitch.Right() + 8f, _autoStorageSwitch.Top.Pixels)
-            .Join(_mainPanel);
+            .JoinParent(_mainPanel);
 
         _grid = new PackageGrid();
         _grid.Top.Pixels = _autoStorageSwitch.Bottom() + 8f;
@@ -106,7 +106,7 @@ public class PackageGUI : BaseBody
                     break;
             }
         };
-        _grid.Join(_mainPanel);
+        _grid.JoinParent(_mainPanel);
 
         _mainPanel.SetInnerPixels(_grid.Width.Pixels, _grid.Bottom());
     }
@@ -152,6 +152,6 @@ public class PackageGUI : BaseBody
 
     public override bool CanDisableMouse(UIElement target)
     {
-        return target != this && _mainPanel.IsMouseHovering || _mainPanel.KeepPressed;
+        return target != this && _mainPanel.IsMouseHovering || _mainPanel.IsPressed;
     }
 }

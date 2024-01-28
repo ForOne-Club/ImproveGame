@@ -1,5 +1,4 @@
-﻿using ImproveGame.Interface.Common;
-using ImproveGame.Interface.SUIElements;
+﻿using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.Interface.GUI.PlayerStats;
 
@@ -23,7 +22,7 @@ public class StatsCard : SUIPanel
         TitleView.SetPadding(8f, 0f);
         TitleView.Width.Percent = 1f;
         TitleView.Height.Pixels = 30f;
-        TitleView.Join(this);
+        TitleView.JoinParent(this);
     }
 
     public StatsCard(BaseStatsCategory proCat, Color backgroundColor, Color borderColor, Vector4 rounded, float border, bool draggable = false) : base(backgroundColor, borderColor, rounded, border, draggable)
@@ -40,14 +39,14 @@ public class StatsCard : SUIPanel
         TitleView.SetPadding(8f, 0f);
         TitleView.Width.Percent = 1f;
         TitleView.Height.Pixels = 160f;
-        TitleView.Join(this);
+        TitleView.JoinParent(this);
     }
 
     public override void Update(GameTime gameTime)
     {
         if (!Console)
         {
-            StatsCategory.UIPosition = GetPosPixel();
+            StatsCategory.UIPosition = PositionPixels;
 
             List<UIElement> list = Children.ToList();
             HashSet<BaseStat> appeared = new HashSet<BaseStat>();

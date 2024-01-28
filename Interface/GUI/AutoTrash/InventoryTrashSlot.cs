@@ -29,7 +29,7 @@ public class InventoryTrashSlot : BaseItemSlot
         Index = index;
         SetBaseItemSlotValues(true, true);
         SetSizePixels(44, 44);
-        SetRoundedRectangleValues(
+        SetRoundedRectProperties(
             UIColor.TrashSlotBg,
             UIColor.ItemSlotBorderSize,
             UIColor.TrashSlotBorder,

@@ -14,8 +14,8 @@ public class StatBar : TimerView
 
     public StatBar(string statName, Func<string> statValue, BaseStat baseStat)
     {
-        Wrap = false;
-        Relative = RelativeMode.Vertical;
+        PreventOverflow = false;
+        RelativeMode = RelativeMode.Vertical;
         Spacing = new Vector2(2f);
 
         Width.Pixels = 0f;

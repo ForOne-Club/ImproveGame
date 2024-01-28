@@ -17,7 +17,7 @@ namespace ImproveGame.Interface.GUI
         public override bool CanPriority(UIElement target) => target != this;
 
         public override bool CanDisableMouse(UIElement target)
-            => (target != this && BasePanel.IsMouseHovering) || BasePanel.KeepPressed;
+            => (target != this && BasePanel.IsMouseHovering) || BasePanel.IsPressed;
 
         public bool CacheSetupStructures; // 缓存，在下一帧Setup
         public bool CacheSetupStructureInfos; // 缓存，在下一帧Setup
