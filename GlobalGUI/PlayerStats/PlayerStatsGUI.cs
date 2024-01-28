@@ -18,7 +18,7 @@ public class PlayerStatsGUI : BaseBody
 
     public override bool CanPriority(UIElement target) => this != target && this != Body;
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
     {
         if (target != this)
         {
@@ -85,16 +85,16 @@ public class PlayerStatsGUI : BaseBody
         #endregion
 
         #region 控制窗口
-        Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, 10, 2, true);
+        Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg, 10, 2, true);
 
         #region 标题栏
         // 标题
         var TitleView = new View
         {
             DragIgnore = true,
-            BgColor = UIColor.TitleBg2,
+            BgColor = UIStyle.TitleBg2,
             Border = 2f,
-            BorderColor = UIColor.PanelBorder,
+            BorderColor = UIStyle.PanelBorder,
             Rounded = new Vector4(10f, 10f, 0f, 0f),
         };
         TitleView.SetPadding(0);
@@ -344,18 +344,18 @@ public class PlayerStatsGUI : BaseBody
         {
             if (card.StatsCategory.Favorite)
             {
-                card.BorderColor = UIColor.ItemSlotBorderFav;
+                card.BorderColor = UIStyle.ItemSlotBorderFav;
             }
             else
             {
-                card.BorderColor = UIColor.PanelBorder;
+                card.BorderColor = UIStyle.PanelBorder;
             }
         };
 
         card.TitleView.OnUpdate += (_) =>
         {
             card.TitleView.Border = card.TitleView.HoverTimer.Lerp(0, 2);
-            card.TitleView.BorderColor = card.TitleView.HoverTimer.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav);
+            card.TitleView.BorderColor = card.TitleView.HoverTimer.Lerp(UIStyle.PanelBorder, UIStyle.ItemSlotBorderFav);
         };
 
         card.TitleView.OnLeftMouseDown += (_, _) =>

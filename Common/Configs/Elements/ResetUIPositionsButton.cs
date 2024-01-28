@@ -1,4 +1,5 @@
 ﻿using ImproveGame.GlobalGUI;
+using ImproveGame.Interface;
 using ImproveGame.Interface.GUI.PlayerStats;
 
 namespace ImproveGame.Common.Configs.Elements;

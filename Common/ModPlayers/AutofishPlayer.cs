@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 
 namespace ImproveGame.Common.ModPlayers

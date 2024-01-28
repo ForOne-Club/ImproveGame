@@ -317,7 +317,7 @@ public class TerrariaVanillaUIResetter : ModSystem
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
         float bgRounded = MathF.Min(size.X, size.Y) / 2;
-        SDFRectangle.HasBorder(pos, size, new Vector4(bgRounded), UIColor.ScrollBarBg, 2, UIColor.PanelBorder);
+        SDFRectangle.HasBorder(pos, size, new Vector4(bgRounded), UIStyle.ScrollBarBg, 2, UIStyle.PanelBorder);
         CalculatedStyle barDimensions = GetHandleCalculatedStyle(self);
         Vector2 barPos = barDimensions.Position() + new Vector2(5, 3);
         Vector2 barSize = barDimensions.Size() - new Vector2(10, 7);

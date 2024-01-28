@@ -2,7 +2,7 @@
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Entitys;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface;
 using ImproveGame.Interface.GUI;
 using Terraria.ModLoader.IO;
 using static ImproveGame.Entitys.TileData;

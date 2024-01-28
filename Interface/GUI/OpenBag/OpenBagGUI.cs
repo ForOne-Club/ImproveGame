@@ -14,7 +14,7 @@ public class OpenBagGUI : BaseBody
 
     public override bool CanPriority(UIElement target) => target != this;
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
         => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
 
     // 主面板
@@ -56,7 +56,7 @@ public class OpenBagGUI : BaseBody
         }
 
         // 主面板
-        MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+        MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Shaded = true,
             Draggable = true
@@ -66,7 +66,7 @@ public class OpenBagGUI : BaseBody
             .SetSizePixels(404, 366)
             .JoinParent(this);
 
-        TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
+        TitlePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.TitleBg2)
         {
             DragIgnore = true,
             Width = {Pixels = 0f, Precent = 1f},

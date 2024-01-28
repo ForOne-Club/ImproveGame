@@ -28,10 +28,10 @@ public class SUIButton : TimerView
         }
     }
 
-    public Color BeginBorderColor = UIColor.PanelBorder;
-    public Color EndBorderColor = UIColor.ItemSlotBorderFav;
-    public Color BeginBgColor = UIColor.ButtonBg;
-    public Color EndBgColor = UIColor.ButtonBgHover;
+    public Color BeginBorderColor = UIStyle.PanelBorder;
+    public Color EndBorderColor = UIStyle.ItemSlotBorderFav;
+    public Color BeginBgColor = UIStyle.ButtonBg;
+    public Color EndBgColor = UIStyle.ButtonBgHover;
     public Color TextColor = Color.White;
 
     public SUIButton(string text)

@@ -16,7 +16,7 @@ public class GarbageListGUI : BaseBody
         set { }
     }
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
     {
         return Window.IsMouseHovering;
     }
@@ -47,7 +47,7 @@ public class GarbageListGUI : BaseBody
             Vector2 gridSize = ScrollView.GridSize(44f, 4f, 4, 4) + new Vector2(20f, 0f);
 
             // 窗口
-            Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
                 Shaded = true,
                 Draggable = true
@@ -61,9 +61,9 @@ public class GarbageListGUI : BaseBody
             TitleView = new View
             {
                 DragIgnore = true,
-                BgColor = UIColor.TitleBg2,
+                BgColor = UIStyle.TitleBg2,
                 Border = 2f,
-                BorderColor = UIColor.PanelBorder,
+                BorderColor = UIStyle.PanelBorder,
                 Rounded = new Vector4(10f, 10f, 0f, 0f),
             };
             TitleView.SetPadding(0);

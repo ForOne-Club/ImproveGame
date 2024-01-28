@@ -37,7 +37,7 @@ public class PackageGUI : BaseBody
     public override void OnInitialize()
     {
         // 窗口
-        _mainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+        _mainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             HAlign = 0.5f,
             VAlign = 0.5f,
@@ -51,9 +51,9 @@ public class PackageGUI : BaseBody
         _titlePanel = new View
         {
             DragIgnore = true,
-            BgColor = UIColor.TitleBg2,
+            BgColor = UIStyle.TitleBg2,
             Border = 2f,
-            BorderColor = UIColor.PanelBorder,
+            BorderColor = UIStyle.PanelBorder,
             Rounded = new Vector4(10f, 10f, 0f, 0f),
         };
         _titlePanel.SetPadding(0);
@@ -150,7 +150,7 @@ public class PackageGUI : BaseBody
 
     public override bool CanPriority(UIElement target) => target != this;
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
     {
         return target != this && _mainPanel.IsMouseHovering || _mainPanel.IsPressed;
     }

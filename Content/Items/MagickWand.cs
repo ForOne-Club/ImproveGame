@@ -2,7 +2,7 @@
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.Packets;
 using ImproveGame.Entitys;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface;
 using ImproveGame.Interface.GUI;
 using Terraria.GameInput;
 using Terraria.ID;

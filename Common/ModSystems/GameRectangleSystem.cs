@@ -3,10 +3,10 @@ using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Entitys;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using Terraria.DataStructures;
+using ImproveGame.Interface;
 
 namespace ImproveGame.Common.ModSystems;
 

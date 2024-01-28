@@ -20,16 +20,17 @@ public struct MouseStateMinor(bool leftButton, bool middleButton, bool rightButt
 }
 
 /// <summary>
-/// 事件触发器，用于取代原版的 UserInterface <br/>
-/// 支持 Update MouseOut MouseOver 左 & 中 & 右键的 MouseDown MouseUp Click <br/>
-/// 鼠标侧键方法 & 双击方法都取消了，因为用不到。 <br/>
-/// (全凭感觉设计) <br/>
-/// (越写越乱，不确定哪里写的有没有问题，使用遇到问题了随时告诉我) <br/>
+/// 事件触发器，用于取代 <see cref="UserInterface"/><br/>
+/// 添加一个很早就执行的 <see cref="View.PreUpdate(GameTime)"/><br/>
+/// 因为完全 鼠标侧键 和 双击 事件，所以都未实现。
 /// </summary>
-public class EventTrigger
+/// <param name="layerName"></param>
+/// <param name="name"></param>
+public class EventTrigger(string layerName, string name)
 {
-    public string Name { get; protected set; }
-    public string LayerName { get; protected set; }
+    public string LayerName { get; protected set; } = layerName;
+    public string Name { get; protected set; } = name;
+
     public BaseBody BaseBody { get; protected set; }
 
     protected UIElement PreviousHoverTarget;
@@ -43,29 +44,26 @@ public class EventTrigger
     protected MouseStateMinor MouseState;
     protected MouseStateMinor PreviousMouseState;
 
-    /// <summary>
-    /// 我在这里提醒一下需要为 CanRunFunc 赋值否则 UI 将永不生效<br/>
-    /// CanRunFunc 用于判断此 UI 是否执行 Update() 与 Draw() <br/>
-    /// 此类构建的方法不需要再与 UISystem.UpdateUI() 中添加代码 <br/>
-    /// </summary>
-    /// <param name="layerName">114514</param>
-    /// <param name="name">114514</param>
-    public EventTrigger(string layerName, string name)
+    public EventTrigger Register()
     {
-        LayerName = layerName;
-        Name = name;
-
-        if (!EventTriggerManager.LayersPriority.Contains(layerName))
+        if (!EventTriggerManager.LayersPriority.Contains(LayerName))
         {
-            EventTriggerManager.LayersPriority.Add(layerName);
+            EventTriggerManager.LayersPriority.Add(LayerName);
         }
 
-        if (!EventTriggerManager.LayersDictionary.ContainsKey(layerName))
+        if (!EventTriggerManager.EventTriggerInstances.ContainsKey(LayerName))
         {
-            EventTriggerManager.LayersDictionary.Add(layerName, []);
+            EventTriggerManager.EventTriggerInstances.Add(LayerName, []);
         }
 
-        EventTriggerManager.LayersDictionary[layerName].Add(this);
+        var targgers = EventTriggerManager.EventTriggerInstances[LayerName];
+
+        if (!targgers.Contains(this))
+        {
+            targgers.Add(this);
+        }
+
+        return this;
     }
 
     public void SetBaseBody(BaseBody baseBody)
@@ -98,7 +96,7 @@ public class EventTrigger
 
         try
         {
-            UIElement target = EventTriggerManager.DisableMouse ? null : BaseBody.GetElementAt(focus);
+            UIElement target = EventTriggerManager.FocusHasUIElement ? null : BaseBody.GetElementAt(focus);
 
             BaseBody.PreUpdate(gameTime);
 
@@ -108,9 +106,9 @@ public class EventTrigger
             }
 
             // 禁用鼠标
-            if (BaseBody.CanDisableMouse(target))
+            if (BaseBody.CanSetFocusUIElement(target))
             {
-                EventTriggerManager.DisableMouse = true;
+                EventTriggerManager.FocusUIElement = target;
             }
 
             // 遍历三种鼠标按键：左键、右键和中键
@@ -194,7 +192,7 @@ public class EventTrigger
         // 如果目标元素存在且可以被优先处理，则将视图置于顶层
         if (eventType is MouseEvent.Down && target != null && BaseBody.CanPriority(target))
         {
-            EventTriggerManager.MakePriority();
+            EventTriggerManager.SetHeadEventTigger(this);
         }
 
         PreviousMouseTargets[mouseButton] = target;
@@ -211,7 +209,7 @@ public class EventTrigger
         // drawToGame 表示这是拿来绘制到游戏上的，不是拿来造玻璃或者干啥的
         if (drawToGame && GlassVfxType is GlassType.MicaLike)
         {
-            var layers = EventTriggerManager.LayersDictionary["Radial Hotbars"];
+            var layers = EventTriggerManager.EventTriggerInstances["Radial Hotbars"];
             int index = layers.IndexOf(this);
             if (index is -1)
             {

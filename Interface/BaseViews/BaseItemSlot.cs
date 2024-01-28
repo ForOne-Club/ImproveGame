@@ -29,10 +29,10 @@ public class BaseItemSlot : TimerView
     {
         SetSizePixels(52f, 52f);
         SetRoundedRectProperties(
-            UIColor.ItemSlotBg,
-            UIColor.ItemSlotBorderSize,
-            UIColor.ItemSlotBorder,
-            new Vector4(UIColor.ItemSlotBorderRound));
+            UIStyle.ItemSlotBg,
+            UIStyle.ItemSlotBorderSize,
+            UIStyle.ItemSlotBorder,
+            new Vector4(UIStyle.ItemSlotBorderRound));
     }
 
     /// <summary>

@@ -10,7 +10,7 @@ namespace ImproveGame.Interface.UIElements
         private UIImage tickUI;
         private int _npcId;
 
-        public LifeformTab(int npcId) : base(UIColor.PanelBorderLight, UIColor.PanelBg)
+        public LifeformTab(int npcId) : base(UIStyle.PanelBorderLight, UIStyle.PanelBg)
         {
             _npcId = npcId;
             this.SetSize(new Vector2(-20f, 36f), 1f);

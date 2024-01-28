@@ -30,10 +30,10 @@ public class InventoryTrashSlot : BaseItemSlot
         SetBaseItemSlotValues(true, true);
         SetSizePixels(44, 44);
         SetRoundedRectProperties(
-            UIColor.TrashSlotBg,
-            UIColor.ItemSlotBorderSize,
-            UIColor.TrashSlotBorder,
-            new Vector4(UIColor.ItemSlotBorderRound * 0.8f));
+            UIStyle.TrashSlotBg,
+            UIStyle.ItemSlotBorderSize,
+            UIStyle.TrashSlotBorder,
+            new Vector4(UIStyle.ItemSlotBorderRound * 0.8f));
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)

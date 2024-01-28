@@ -18,7 +18,7 @@ public class InventoryTrashGUI : BaseBody
         set { }
     }
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
     {
         return Window.IsMouseHovering;
     }

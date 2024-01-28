@@ -27,17 +27,17 @@ public class BuffTrackerGUI : BaseBody
 
     public override bool CanPriority(UIElement target) => target != this;
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
     {
         return (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
     }
 
     public override void OnInitialize()
     {
-        MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, draggable: true)
+        MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg, draggable: true)
         {
             Shaded = true,
-            ShadowThickness = UIColor.ShadowThicknessThinnerer
+            ShadowThickness = UIStyle.ShadowThicknessThinnerer
         };
         MainPanel.SetPosPixels(630, 160).SetSizePixels(450, 220).JoinParent(this);
 

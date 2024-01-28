@@ -195,7 +195,7 @@ public class GlassmorphismVfx : ModSystem
         var batch = Main.spriteBatch;
 
         shader.Parameters["uScreenResolution"].SetValue(Main.ScreenSize.ToVector2());
-        shader.Parameters["uIntensity"].SetValue(UIColor.AcrylicIntensity);
+        shader.Parameters["uIntensity"].SetValue(UIStyle.AcrylicIntensity);
 
         int times = GlassVfxType is GlassType.MicaLike ? 6 : 4;
         for (int i = 1; i <= times; i++)

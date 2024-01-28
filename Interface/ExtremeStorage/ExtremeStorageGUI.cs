@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Animations;
 using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using PinyinNet;
 using Terraria.GameInput;
@@ -58,7 +57,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             _totalPanel.SetPos(60f, Main.instance.invBottom + 40).SetSize(560f, 600f);
             Append(_totalPanel);
 
-            _basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            _basePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
                 Shaded = true
             };
@@ -339,7 +338,7 @@ namespace ImproveGame.Interface.ExtremeStorage
 
         public override bool CanPriority(UIElement target) => target != this;
 
-        public override bool CanDisableMouse(UIElement target) =>
+        public override bool CanSetFocusUIElement(UIElement target) =>
             (target != this && _basePanel.IsMouseHovering) || _basePanel.IsPressed;
     }
 }

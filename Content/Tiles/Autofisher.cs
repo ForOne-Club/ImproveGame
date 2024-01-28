@@ -1,7 +1,6 @@
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Interface;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.GUI;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;

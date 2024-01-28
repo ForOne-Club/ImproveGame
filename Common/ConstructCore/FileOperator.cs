@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface;
 using ImproveGame.Interface.GUI;
 using System.Collections.Generic;
 using System.IO.Compression;

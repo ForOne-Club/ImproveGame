@@ -82,9 +82,9 @@ public class ModNotificationPopup : IInGameNotification
         Rectangle r = Utils.CenteredRectangle(bottomAnchorPosition + new Vector2(0f, (0f - size.Y) * 0.5f), size);
         Vector2 mouseScreen = Main.MouseScreen;
         _isMouseHovering = r.Contains(mouseScreen.ToPoint());
-        var panelBorder = UIColor.PanelBorder * Opacity * (_isMouseHovering ? 0.75f : 0.5f);
-        SDFRectangle.HasBorder(r.TopLeft(), r.Size(), new Vector4(UIColor.ItemSlotBorderRound),
-            UIColor.PanelBg * Opacity, UIColor.ItemSlotBorderSize, panelBorder);
+        var panelBorder = UIStyle.PanelBorder * Opacity * (_isMouseHovering ? 0.75f : 0.5f);
+        SDFRectangle.HasBorder(r.TopLeft(), r.Size(), new Vector4(UIStyle.ItemSlotBorderRound),
+            UIStyle.PanelBg * Opacity, UIStyle.ItemSlotBorderSize, panelBorder);
 
         var textPos = r.Center.ToVector2();
         textPos.Y += 4f * Scale;

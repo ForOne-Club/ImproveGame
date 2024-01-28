@@ -13,17 +13,17 @@ public class SUICross : TimerView
         SetSizePixels(50f, 50f);
 
         CrossSize = 24f;
-        CrossRounded = UIColor.CrossThickness;
-        CrossBeginColor = UIColor.Cross * 0.5f;
-        CrossEndColor = UIColor.Cross;
-        CrossBorder = UIColor.CrossBorderSize;
-        CrossBorderColor = UIColor.PanelBorder;
-        CrossBorderHoverColor = UIColor.ItemSlotBorderFav;
+        CrossRounded = UIStyle.CrossThickness;
+        CrossBeginColor = UIStyle.Cross * 0.5f;
+        CrossEndColor = UIStyle.Cross;
+        CrossBorder = UIStyle.CrossBorderSize;
+        CrossBorderColor = UIStyle.PanelBorder;
+        CrossBorderHoverColor = UIStyle.ItemSlotBorderFav;
 
         // MarginRight = 2f;
         Rounded = new Vector4(10f);
         Border = 2;
-        BorderColor = UIColor.PanelBorder;
+        BorderColor = UIStyle.PanelBorder;
     }
 
     public override void MouseOver(UIMouseEvent evt)

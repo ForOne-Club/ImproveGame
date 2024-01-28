@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Content.Tiles;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface;
 using ImproveGame.Interface.GUI;
 using Terraria.ModLoader.IO;
 

@@ -35,7 +35,7 @@ public class BaseStatsCategory(Texture2D texture, string nameKey, bool isAddedFr
     public StatsCard CreateCard(out SUIImage image, out SUITitle title)
     {
         // 卡片主体
-        StatsCard card = new(this, UIColor.PanelBorder * 0f, UIColor.PanelBg * 0f, 10f, 2);
+        StatsCard card = new(this, UIStyle.PanelBorder * 0f, UIStyle.PanelBg * 0f, 10f, 2);
         card.OverflowHidden = true;
 
         // 标题图标
@@ -103,7 +103,7 @@ public class BaseStatsCategory(Texture2D texture, string nameKey, bool isAddedFr
             bar.OnUpdate += (_) =>
             {
                 Color red = new Color(1f, 0f, 0f);
-                bar.BorderColor = (stat.Parent.Favorite && stat.Favorite) ? UIColor.ItemSlotBorderFav : Color.Transparent;
+                bar.BorderColor = (stat.Parent.Favorite && stat.Favorite) ? UIStyle.ItemSlotBorderFav : Color.Transparent;
                 bar.Border = (stat.Parent.Favorite && stat.Favorite) ? 2 : 0;
             };
 

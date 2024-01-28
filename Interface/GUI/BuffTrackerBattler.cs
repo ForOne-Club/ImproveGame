@@ -8,7 +8,7 @@ namespace ImproveGame.Interface.GUI
 {
     public class BattlerPanel : SUIPanel
     {
-        public BattlerPanel() : base(Color.Black, UIColor.TitleBg) { }
+        public BattlerPanel() : base(Color.Black, UIStyle.TitleBg) { }
 
         public override void Draw(SpriteBatch spriteBatch)
         {

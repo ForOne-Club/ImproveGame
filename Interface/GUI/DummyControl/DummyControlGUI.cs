@@ -7,7 +7,7 @@ public class DummyControlGUI : BaseBody
     #region ViewBody
     public override bool Enabled { get => IsVisible; set => IsVisible = value; }
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
     {
         return Window?.IsMouseHovering ?? false;
     }
@@ -25,7 +25,7 @@ public class DummyControlGUI : BaseBody
 
     public override void OnInitialize()
     {
-        Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+        Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Draggable = true
         };
@@ -38,9 +38,9 @@ public class DummyControlGUI : BaseBody
         var titleBar = new View
         {
             DragIgnore = true,
-            BgColor = UIColor.TitleBg2,
+            BgColor = UIStyle.TitleBg2,
             Border = 2f,
-            BorderColor = UIColor.PanelBorder,
+            BorderColor = UIStyle.PanelBorder,
             Rounded = new Vector4(10f, 10f, 0f, 0f),
         };
         titleBar.SetPadding(0);
@@ -92,7 +92,7 @@ public class DummyControlGUI : BaseBody
             IsWrapped = true,
             PreventOverflow = true
         };
-        ST.SetRoundedRectProperties(new Color(0, 155, 255) * 0.5f, 2f, Color.Transparent, new Vector4(UIColor.ItemSlotBorderRound));
+        ST.SetRoundedRectProperties(new Color(0, 155, 255) * 0.5f, 2f, Color.Transparent, new Vector4(UIStyle.ItemSlotBorderRound));
         ST.SetPadding(15f, 5f);
         ST.TextAlign = new Vector2(0.5f);
         ST.Width.Precent = 1f;
@@ -106,7 +106,7 @@ public class DummyControlGUI : BaseBody
             RelativeMode = RelativeMode.Horizontal,
             PreventOverflow = true
         };
-        ST.SetRoundedRectProperties(new Color(255, 155, 0) * 0.5f, 2f, Color.Transparent, new Vector4(UIColor.ItemSlotBorderRound));
+        ST.SetRoundedRectProperties(new Color(255, 155, 0) * 0.5f, 2f, Color.Transparent, new Vector4(UIStyle.ItemSlotBorderRound));
         ST.SetPadding(15f, 5f);
         ST.SetInnerPixels(ST.TextSize);
         ST.JoinParent(ContentView);
@@ -118,7 +118,7 @@ public class DummyControlGUI : BaseBody
             RelativeMode = RelativeMode.Horizontal,
             PreventOverflow = true
         };
-        ST.SetRoundedRectProperties(new Color(255, 0, 155) * 0.5f, 2f, Color.Transparent, new Vector4(UIColor.ItemSlotBorderRound));
+        ST.SetRoundedRectProperties(new Color(255, 0, 155) * 0.5f, 2f, Color.Transparent, new Vector4(UIStyle.ItemSlotBorderRound));
         ST.SetPadding(15f, 5f);
         ST.SetInnerPixels(ST.TextSize);
         ST.JoinParent(ContentView);

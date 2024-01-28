@@ -94,12 +94,12 @@ namespace ImproveGame.Interface.SUIElements
             Width.Pixels = 20f;
             SetPadding(5);
 
-            BgColor = UIColor.ScrollBarBg;
-            Border = UIColor.ItemSlotBorderSize;
-            BorderColor = UIColor.ScrollBarBorder;
-            InnerBg = UIColor.ScrollBarInnerBg;
-            InnerBgHover = UIColor.ScrollBarInnerBgHover;
-            RoundMultiplier = UIColor.ScrollBarRoundMultiplier;
+            BgColor = UIStyle.ScrollBarBg;
+            Border = UIStyle.ItemSlotBorderSize;
+            BorderColor = UIStyle.ScrollBarBorder;
+            InnerBg = UIStyle.ScrollBarInnerBg;
+            InnerBgHover = UIStyle.ScrollBarInnerBgHover;
+            RoundMultiplier = UIStyle.ScrollBarRoundMultiplier;
         }
 
         public override void Update(GameTime gameTime)

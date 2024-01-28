@@ -21,9 +21,9 @@ public abstract class BaseBody : View
     public abstract bool CanPriority(UIElement target);
 
     /// <summary>
-    /// 是否占用光标，使得不对其下层元素进行 主动类型的事件触发
+    /// 返回 <see langword="true"/> 会占用光标，防止下层 UI 再触发鼠标事件
     /// </summary>
-    public abstract bool CanDisableMouse(UIElement target);
+    public abstract bool CanSetFocusUIElement(UIElement target);
 
     private float lastUIScale = Main.UIScale;
 

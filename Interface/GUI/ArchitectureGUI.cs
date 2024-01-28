@@ -23,7 +23,7 @@ namespace ImproveGame.Interface.GUI
 
         public override bool CanPriority(UIElement target) => target != this;
 
-        public override bool CanDisableMouse(UIElement target)
+        public override bool CanSetFocusUIElement(UIElement target)
             => (target != this && basePanel.IsMouseHovering) || basePanel.IsPressed;
 
         private static float panelLeft;
@@ -50,10 +50,10 @@ namespace ImproveGame.Interface.GUI
             panelHeight = 190f;
             panelWidth = 190f;
 
-            Append(basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            Append(basePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
                 Shaded = true,
-                ShadowThickness = UIColor.ShadowThicknessThinnerer,
+                ShadowThickness = UIStyle.ShadowThicknessThinnerer,
                 Draggable = true,
                 Left = {Pixels = panelLeft},
                 Top = {Pixels = panelTop},

@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Packets.NetChest;
 using ImproveGame.Common.Packets.WorldFeatures;
 using ImproveGame.Content.Patches;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI.WorldFeature;
 using ImproveGame.Interface.SUIElements;
@@ -18,7 +17,7 @@ public class ItemSearcherGUI : BaseBody
 
     public override bool CanPriority(UIElement target) => target != this;
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
         => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
 
     // 服务器相关，是否正在向服务器请求物品
@@ -101,7 +100,7 @@ public class ItemSearcherGUI : BaseBody
         OnXButton2MouseDown += (_, _) => TryCancelInput();
 
         // 主面板
-        MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+        MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Shaded = true,
             Draggable = true
@@ -111,7 +110,7 @@ public class ItemSearcherGUI : BaseBody
             .SetSizePixels(356, 416)
             .JoinParent(this);
 
-        TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
+        TitlePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.TitleBg2)
         {
             DragIgnore = true,
             Width = {Pixels = 0f, Precent = 1f},

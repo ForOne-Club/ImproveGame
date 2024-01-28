@@ -11,7 +11,7 @@ using ImproveGame.Interface.GUI.SpaceWand;
 using ImproveGame.Interface.GUI.WorldFeature;
 using System.Reflection;
 
-namespace ImproveGame.Interface.Common;
+namespace ImproveGame.Interface;
 
 /// <summary>
 /// 用户界面
@@ -201,7 +201,7 @@ public class UISystem : ModSystem
                 {
                     AutoCreateBodyTypes.Add(type);
                     AutoCreateGUIAttributes[type] = autoCreateGUIAttribute;
-                    EventTriggerInstances[type] = new EventTrigger(autoCreateGUIAttribute.LayerName, autoCreateGUIAttribute.OwnName);
+                    EventTriggerInstances[type] = new EventTrigger(autoCreateGUIAttribute.LayerName, autoCreateGUIAttribute.OwnName).Register();
                     BaseBodyInstances[type] = null;
                 }
             }
@@ -218,21 +218,22 @@ public class UISystem : ModSystem
         LoadGUIInfo();
 
         // UserInterface 之 EventTrigger 版
-        AutoTrashTrigger = new EventTrigger("Radial Hotbars", "Auto Trash");
-        InventoryTrashTrigger = new EventTrigger("Radial Hotbars", "Inventory Trash");
-        PackageTrigger = new EventTrigger("Radial Hotbars", "Package");
-        DummyControlTrigger = new EventTrigger("Radial Hotbars", "Dummy Control");
-        LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand");
-        ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture");
-        StructureTrigger = new EventTrigger("Radial Hotbars", "Structure");
-        LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer");
-        WorldFeatureTrigger = new EventTrigger("Radial Hotbars", "World Feature");
-        ItemSearcherTrigger = new EventTrigger("Radial Hotbars", "Item Searcher");
-        OpenBagTrigger = new EventTrigger("Radial Hotbars", "Open Bag");
-        BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI");
-        GrabBagInfoTrigger = new EventTrigger("Radial Hotbars", "Grab Bag Info GUI");
+        AutoTrashTrigger = new EventTrigger("Radial Hotbars", "Auto Trash").Register();
+        InventoryTrashTrigger = new EventTrigger("Radial Hotbars", "Inventory Trash").Register();
+        PackageTrigger = new EventTrigger("Radial Hotbars", "Package").Register();
+        DummyControlTrigger = new EventTrigger("Radial Hotbars", "Dummy Control").Register();
+        LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand").Register();
+        ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture").Register();
+        StructureTrigger = new EventTrigger("Radial Hotbars", "Structure").Register();
+        LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer").Register();
+        WorldFeatureTrigger = new EventTrigger("Radial Hotbars", "World Feature").Register();
+        ItemSearcherTrigger = new EventTrigger("Radial Hotbars", "Item Searcher").Register();
+        OpenBagTrigger = new EventTrigger("Radial Hotbars", "Open Bag").Register();
+        BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI").Register();
+        GrabBagInfoTrigger = new EventTrigger("Radial Hotbars", "Grab Bag Info GUI").Register();
 
         SidedEventTrigger = new SidedEventTrigger();
+        SidedEventTrigger.Register();
 
         BrustGUI = new BrustGUI();
         SpaceWandGUI = new SpaceWandGUI();
@@ -277,9 +278,9 @@ public class UISystem : ModSystem
 
         if (_themeLastTick != UIConfigs.Instance.ThemeType || _acrylicVfxLastTick != GlassVfxEnabled)
         {
-            UIColor.SetUIColors(UIConfigs.Instance.ThemeType);
+            UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
             if (GlassVfxAvailable)
-                UIColor.AcrylicRedesign();
+                UIStyle.AcrylicRedesign();
             UIPlayer.InitUI();
         }
 

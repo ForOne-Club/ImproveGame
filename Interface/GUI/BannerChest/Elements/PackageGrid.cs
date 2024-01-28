@@ -82,9 +82,9 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
                 itemSlot.Spacing = new Vector2(8);
                 itemSlot.RelativeMode = RelativeMode.Horizontal;
                 itemSlot.Rounded = new Vector4(12f);
-                itemSlot.BgColor = UIColor.ItemSlotBg;
+                itemSlot.BgColor = UIStyle.ItemSlotBg;
                 itemSlot.Border = 2f;
-                itemSlot.BorderColor = UIColor.ItemSlotBorder;
+                itemSlot.BorderColor = UIStyle.ItemSlotBorder;
 
                 itemSlot.JoinParent(ListView);
             }

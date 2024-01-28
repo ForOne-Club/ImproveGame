@@ -2,6 +2,7 @@
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
 using ImproveGame.GlobalGUI;
+using ImproveGame.Interface;
 using ImproveGame.Interface.GUI.PlayerStats;
 using Newtonsoft.Json;
 using System.ComponentModel;

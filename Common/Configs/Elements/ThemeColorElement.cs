@@ -30,7 +30,7 @@ public class ThemeColorElement : EnumElement
         Height.Set(280f, 0f);
 
         // 主面板
-        MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+        MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Shaded = true,
             HAlign = 0.5f
@@ -44,7 +44,7 @@ public class ThemeColorElement : EnumElement
 
     private void MakePreviewGUI()
     {
-        TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
+        TitlePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.TitleBg2)
         {
             DragIgnore = true,
             Width = {Pixels = 0f, Precent = 1f},
@@ -112,14 +112,14 @@ public class ThemeColorElement : EnumElement
     {
         MainPanel.RemoveAllChildren();
         var curThemeType = UIConfigs.Instance.ThemeType;
-        UIColor.SetUIColors(Value);
+        UIStyle.SetUIColors(Value);
 
-        MainPanel.BorderColor = UIColor.PanelBorder;
-        MainPanel.BgColor = UIColor.PanelBg;
+        MainPanel.BorderColor = UIStyle.PanelBorder;
+        MainPanel.BgColor = UIStyle.PanelBg;
         MainPanel.ShadowColor = MainPanel.BorderColor * 0.35f;
         MakePreviewGUI();
 
-        UIColor.SetUIColors(curThemeType);
+        UIStyle.SetUIColors(curThemeType);
     }
 
     public override void Draw(SpriteBatch spriteBatch)

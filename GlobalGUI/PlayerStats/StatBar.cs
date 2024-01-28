@@ -31,7 +31,7 @@ public class StatBar : TimerView
         StatValue = statValue;
         StatValue ??= () => string.Empty;
 
-        BgColor = UIColor.StatCardBg;
+        BgColor = UIStyle.StatCardBg;
         Rounded = new Vector4(6f);
 
         BaseStat = baseStat;

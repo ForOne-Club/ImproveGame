@@ -5,44 +5,43 @@ namespace ImproveGame.Interface;
 public static class EventTriggerManager
 {
     #region Static Fields and Propertices
-    public static Vector2 MouseScreen => new(Main.mouseX, Main.mouseY);
-    public static bool DisableMouse { get; set; } = false;
+    public static Vector2 MouseScreen => new Vector2(Main.mouseX, Main.mouseY);
+
+    public static bool FocusHasUIElement => FocusUIElement is not null;
+    public static UIElement FocusUIElement { get; set; } = null;
+
     public static EventTrigger CurrentEventTrigger { get; private set; }
 
     public static List<string> LayersPriority { get; private set; } = [];
-    public static Dictionary<string, List<EventTrigger>> LayersDictionary { get; private set; } = [];
+    public static Dictionary<string, List<EventTrigger>> EventTriggerInstances { get; private set; } = [];
 
-    public static int LayerCount => LayersDictionary["Radial Hotbars"].Count;
+    public static int LayerCount => EventTriggerInstances["Radial Hotbars"].Count;
     #endregion
 
-    /// <summary>
-    /// 首次调用时 CurrentEventTrigger 已经被赋值了 所以不用判断是不是 null
-    /// </summary>
-    public static void MakePriority()
+    public static void SetHeadEventTigger(EventTrigger trigger)
     {
-        string layerName = CurrentEventTrigger.LayerName;
-        if (LayersDictionary[layerName][0] == CurrentEventTrigger)
-        {
-            return;
-        }
+        List<EventTrigger> triggers = EventTriggerInstances[trigger.LayerName];
 
-        LayersDictionary[layerName].Remove(CurrentEventTrigger);
-        LayersDictionary[layerName].Insert(0, CurrentEventTrigger);
+        if (triggers[0] != trigger && triggers.Contains(trigger))
+        {
+            triggers.Remove(trigger);
+            triggers.Insert(0, trigger);
+        }
     }
 
     public static void UpdateUI(GameTime gameTime)
     {
-        foreach (string layerName in LayersPriority.Where(LayersDictionary.ContainsKey))
+        FocusUIElement = null;
+
+        foreach (string layerName in LayersPriority.Where(EventTriggerInstances.ContainsKey))
         {
-            List<EventTrigger> triggers = LayersDictionary[layerName];
+            List<EventTrigger> triggers = EventTriggerInstances[layerName];
             for (int i = 0; i < triggers.Count; i++)
             {
                 CurrentEventTrigger = triggers[i];
                 CurrentEventTrigger.Update(gameTime);
             }
         }
-
-        DisableMouse = false;
     }
 
     public static void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -54,7 +53,7 @@ public static class EventTriggerManager
         var layerIndex = new Dictionary<string, int>();
 
         // 插入到绘制层
-        foreach (KeyValuePair<string, List<EventTrigger>> keyValuePair in LayersDictionary)
+        foreach (KeyValuePair<string, List<EventTrigger>> keyValuePair in EventTriggerInstances)
         {
             layers.FindVanilla(keyValuePair.Key, index =>
             {
@@ -76,7 +75,7 @@ public static class EventTriggerManager
     public static void DrawAll()
     {
         // 不包含原版绘制层级的处理，因为目前都是添加到 Radial Hotbars 层的
-        foreach ((_, List<EventTrigger> eventTriggers) in LayersDictionary)
+        foreach ((_, List<EventTrigger> eventTriggers) in EventTriggerInstances)
         {
             // index 为 0 的应该处于最顶层，所以最后绘制
             for (var i = eventTriggers.Count - 1; i >= 0; i--)
@@ -93,7 +92,7 @@ public static class EventTriggerManager
         var shader = ModAsset.Mask.Value;
         var device = Main.instance.GraphicsDevice;
         var batch = Main.spriteBatch;
-        var triggers = LayersDictionary["Radial Hotbars"];
+        var triggers = EventTriggerInstances["Radial Hotbars"];
 
         for (var i = 0; i < triggers.Count; i++)
         {

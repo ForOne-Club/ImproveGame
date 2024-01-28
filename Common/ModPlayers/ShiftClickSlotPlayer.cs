@@ -2,7 +2,7 @@
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.GlobalGUI;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.BannerChest;
