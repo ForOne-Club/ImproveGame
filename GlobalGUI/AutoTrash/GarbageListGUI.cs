@@ -1,14 +1,18 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Players;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
 
-namespace ImproveGame.Interface.GUI.AutoTrash;
+namespace ImproveGame.GlobalGUI.AutoTrash;
 
+[AutoCreateGUI("Radial Hotbars", "Auto Trash")]
 public class GarbageListGUI : BaseBody
 {
+    public static GarbageListGUI Instace { get; private set; }
+    public GarbageListGUI() => Instace = this;
+
     #region 抽象实现
     public override bool Enabled
     {

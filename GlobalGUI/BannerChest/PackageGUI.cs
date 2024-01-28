@@ -1,14 +1,18 @@
-﻿using ImproveGame.Interface.Common;
-using ImproveGame.Interface.GUI.BannerChest.Elements;
+﻿using ImproveGame.GlobalGUI.BannerChest.Elements;
+using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
-namespace ImproveGame.Interface.GUI.BannerChest;
+namespace ImproveGame.GlobalGUI.BannerChest;
 
 public enum StorageType { Banners, Potions }
 
+[AutoCreateGUI("Radial Hotbars", "Package")]
 public class PackageGUI : BaseBody
 {
+    public static PackageGUI Instace { get; private set; }
+    public PackageGUI() => Instace = this;
+
     public static StorageType StorageType { get; private set; }
 
     private static bool _visible;
@@ -25,7 +29,7 @@ public class PackageGUI : BaseBody
         set => _visible = value;
     }
 
-    public IPackageItem Package;
+    public IContainerItem Container;
 
     private SUIPanel _mainPanel;
     private View _titlePanel;
@@ -81,11 +85,11 @@ public class PackageGUI : BaseBody
         _cross.OnLeftMouseDown += (_, _) => Close();
         _cross.JoinParent(_titlePanel);
 
-        _autoStorageSwitch = new SUISwitch(() => Package.AutoStorage, state => Package.AutoStorage = state,
+        _autoStorageSwitch = new SUISwitch(() => Container.AutoStorage, state => Container.AutoStorage = state,
             GetText("PackageGUI.AutoStorage"), 0.8f);
         _autoStorageSwitch.SetPosPixels(10, _titlePanel.Bottom() + 8f).JoinParent(_mainPanel);
 
-        _autoSortSwitch = new SUISwitch(() => Package.AutoSort, state => Package.AutoSort = state,
+        _autoSortSwitch = new SUISwitch(() => Container.AutoSort, state => Container.AutoSort = state,
             GetText("PackageGUI.AutoSort"), 0.8f);
         _autoSortSwitch.SetPosPixels(_autoStorageSwitch.Right() + 8f, _autoStorageSwitch.Top.Pixels)
             .JoinParent(_mainPanel);
@@ -102,7 +106,7 @@ public class PackageGUI : BaseBody
                 // 旗帜收纳箱, 药水袋子.
                 case StorageType.Banners when ItemToBanner(Main.mouseItem) != -1:
                 case StorageType.Potions when Main.mouseItem.buffType > 0 && Main.mouseItem.consumable:
-                    Package.PutInPackage(ref Main.mouseItem);
+                    Container.PutInPackage(ref Main.mouseItem);
                     break;
             }
         };
@@ -128,7 +132,7 @@ public class PackageGUI : BaseBody
         }
     }
 
-    public void Open(List<Item> items, string title, StorageType storageType, IPackageItem package)
+    public void Open(List<Item> items, string title, StorageType storageType, IContainerItem container)
     {
         StorageType = storageType;
         SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -138,7 +142,7 @@ public class PackageGUI : BaseBody
         _grid.Scrollbar.BarTop = 0;
         _title.Text = title;
         _title.SetInnerPixels(_title.TextSize);
-        Package = package;
+        Container = container;
         Recalculate();
     }
 

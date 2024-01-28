@@ -1,15 +1,16 @@
-﻿using ImproveGame.Interface.SUIElements;
+﻿using ImproveGame.GlobalGUI.BannerChest;
+using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.UI.Chat;
 using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Interface.GUI.BannerChest.Elements;
+namespace ImproveGame.GlobalGUI.BannerChest.Elements;
 
 public class PackageItemSlot(List<Item> items, int index) : View
 {
     private Item Item
     {
-        get => (_index > 0 && _index < _items.Count) ? _items[_index] : _airItem;
+        get => _index > 0 && _index < _items.Count ? _items[_index] : _airItem;
         set => _items[_index] = value;
     }
     private readonly List<Item> _items = items;
@@ -125,9 +126,9 @@ public class PackageItemSlot(List<Item> items, int index) : View
     /// </summary>
     protected void TakeSlotItemToMouseItem(int stack)
     {
-        if (((!Main.mouseItem.IsTheSameAs(Item) || !ItemLoader.CanStack(Main.mouseItem, Item)) &&
-             Main.mouseItem.type is not ItemID.None) || (Main.mouseItem.stack >= Main.mouseItem.maxStack &&
-                                                         Main.mouseItem.type is not ItemID.None))
+        if ((!Main.mouseItem.IsTheSameAs(Item) || !ItemLoader.CanStack(Main.mouseItem, Item)) &&
+             Main.mouseItem.type is not ItemID.None || Main.mouseItem.stack >= Main.mouseItem.maxStack &&
+                                                         Main.mouseItem.type is not ItemID.None)
         {
             return;
         }

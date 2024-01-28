@@ -2,9 +2,9 @@
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Projectiles;
 using ImproveGame.GlobalGUI;
+using ImproveGame.GlobalGUI.AutoTrash;
 using ImproveGame.Interface;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.AutoTrash;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.WorldFeature;

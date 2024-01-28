@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Players;
 using ImproveGame.Interface.UIElements;
 
-namespace ImproveGame.Interface.GUI.AutoTrash;
+namespace ImproveGame.GlobalGUI.AutoTrash;
 
 public class GarbageListGrid : ScrollView
 {

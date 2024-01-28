@@ -2,7 +2,7 @@
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
 
-namespace ImproveGame.Interface.GUI.AutoTrash;
+namespace ImproveGame.GlobalGUI.AutoTrash;
 
 public class InventoryTrashSlot : BaseItemSlot
 {

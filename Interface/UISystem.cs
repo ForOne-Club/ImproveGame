@@ -2,8 +2,6 @@
 using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.AutoTrash;
-using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.GUI.DummyControl;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
@@ -27,14 +25,14 @@ public class UISystem : ModSystem
     private ThemeType _themeLastTick;
     private bool _acrylicVfxLastTick;
 
+    public static UserInterface BrustInterface { get; private set; }
     public BrustGUI BrustGUI;
-    internal static UserInterface BrustInterface;
 
+    public static UserInterface SpaceWandInterface { get; private set; }
     public SpaceWandGUI SpaceWandGUI;
-    internal static UserInterface SpaceWandInterface;
 
+    public static UserInterface PaintWandInterface { get; private set; }
     public PaintWandGUI PaintWandGUI;
-    internal static UserInterface PaintWandInterface;
 
     public GrabBagInfoGUI GrabBagInfoGUI;
     public EventTrigger GrabBagInfoTrigger;
@@ -46,22 +44,6 @@ public class UISystem : ModSystem
     // 假人控制器
     public DummyControlGUI DummyControlGUI;
     public EventTrigger DummyControlTrigger;
-
-    // 自动垃圾桶
-    public GarbageListGUI AutoTrashGUI;
-    public EventTrigger AutoTrashTrigger;
-
-    // 物品栏下方多个垃圾桶
-    public InventoryTrashGUI InventoryTrashGUI;
-    public EventTrigger InventoryTrashTrigger;
-
-    // 药水袋 & 旗帜盒 UI
-    public PackageGUI PackageGUI;
-    public EventTrigger PackageTrigger;
-
-    /*// 大背包 UI
-    public BigBagGUI BigBagGUI;
-    public EventTrigger BigBagTrigger;*/
 
     // Buff 追踪站
     public BuffTrackerGUI BuffTrackerGUI;
@@ -96,7 +78,6 @@ public class UISystem : ModSystem
     public ExtremeStorageGUI ExtremeStorageGUI;
     public PrefixRecallGUI PrefixRecallGUI;
     public SidedEventTrigger SidedEventTrigger;
-
     #endregion
 
     #region 声明
@@ -121,87 +102,26 @@ public class UISystem : ModSystem
     #region 卸载 & 加载
     public override void Unload()
     {
-        AutoCreateBodyTypes.Clear();
-        AutoCreateGUIAttributes.Clear();
-        EventTriggerInstances.Clear();
-        BaseBodyInstances.Clear();
-
-        // 假人控制器
-        DummyControlGUI = null;
-        DummyControlTrigger = null;
-
-        // 侧栏GUI
-        ExtremeStorageGUI = null;
-        AutofisherGUI = null;
-        PrefixRecallGUI = null;
-        SidedEventTrigger = null;
-
-        BuffTrackerGUI = null;
-        BuffTrackerTrigger = null;
-
-        LiquidWandGUI = null;
-        LiquidWandTrigger = null;
-
-        ArchitectureGUI = null;
-        ArchitectureTrigger = null;
-
-        BrustGUI = null;
         BrustInterface = null;
-
-        AutoTrashGUI = null;
-        AutoTrashTrigger = null;
-
-        InventoryTrashGUI = null;
-        InventoryTrashTrigger = null;
-
-        /*BigBagGUI = null;
-        BigBagTrigger = null;*/
-
-        SpaceWandGUI = null;
         SpaceWandInterface = null;
-
-        PaintWandGUI = null;
         PaintWandInterface = null;
-
-        GrabBagInfoGUI = null;
-        GrabBagInfoTrigger = null;
-
-        LifeformAnalyzerGUI = null;
-        LifeformAnalyzerTrigger = null;
-
-        StructureGUI = null;
-        StructureTrigger = null;
-
-        WorldFeatureGUI = null;
-        WorldFeatureTrigger = null;
-
-        ItemSearcherGUI = null;
-        ItemSearcherTrigger = null;
-
-        OpenBagGUI = null;
-        OpenBagTrigger = null;
-
-        PackageGUI = null;
-        PackageTrigger = null;
     }
 
     private void LoadGUIInfo()
     {
         Type[] types = Assembly.GetExecutingAssembly().GetTypes();
 
-        for (int i = 0; i < types.Length; i++)
+        foreach (Type type in types)
         {
-            Type type = types[i];
-
             if (type.IsSubclassOf(typeof(BaseBody)))
             {
-                var autoCreateGUIAttribute = type.GetCustomAttribute<AutoCreateGUIAttribute>();
+                var autoCreate = type.GetCustomAttribute<AutoCreateGUIAttribute>();
 
-                if (autoCreateGUIAttribute != null)
+                if (autoCreate != null)
                 {
                     AutoCreateBodyTypes.Add(type);
-                    AutoCreateGUIAttributes[type] = autoCreateGUIAttribute;
-                    EventTriggerInstances[type] = new EventTrigger(autoCreateGUIAttribute.LayerName, autoCreateGUIAttribute.OwnName).Register();
+                    AutoCreateGUIAttributes[type] = autoCreate;
+                    EventTriggerInstances[type] = new EventTrigger(autoCreate.LayerName, autoCreate.OwnName).Register();
                     BaseBodyInstances[type] = null;
                 }
             }
@@ -218,9 +138,6 @@ public class UISystem : ModSystem
         LoadGUIInfo();
 
         // UserInterface 之 EventTrigger 版
-        AutoTrashTrigger = new EventTrigger("Radial Hotbars", "Auto Trash").Register();
-        InventoryTrashTrigger = new EventTrigger("Radial Hotbars", "Inventory Trash").Register();
-        PackageTrigger = new EventTrigger("Radial Hotbars", "Package").Register();
         DummyControlTrigger = new EventTrigger("Radial Hotbars", "Dummy Control").Register();
         LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand").Register();
         ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture").Register();
@@ -238,9 +155,10 @@ public class UISystem : ModSystem
         BrustGUI = new BrustGUI();
         SpaceWandGUI = new SpaceWandGUI();
         PaintWandGUI = new PaintWandGUI();
-        LoadGUI(ref BrustGUI, out BrustInterface);
-        LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
-        LoadGUI(ref PaintWandGUI, out PaintWandInterface);
+
+        LoadGUI(ref BrustGUI, out var ui); BrustInterface = ui;
+        LoadGUI(ref SpaceWandGUI, out ui); SpaceWandInterface = ui;
+        LoadGUI(ref PaintWandGUI, out ui); PaintWandInterface = ui;
     }
 
 
@@ -249,8 +167,6 @@ public class UISystem : ModSystem
     {
         uiInterface = new UserInterface();
         PreActive?.Invoke();
-        // SetState() 会执行 Activate()
-        // uiState.Activate();
         uiInterface.SetState(uiState);
     }
 

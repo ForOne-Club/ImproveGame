@@ -1,11 +1,13 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.Players;
+using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 using Terraria.ModLoader.UI;
 
-namespace ImproveGame.Interface.GUI.AutoTrash;
+namespace ImproveGame.GlobalGUI.AutoTrash;
 
+[AutoCreateGUI("Radial Hotbars", "Inventory Trash")]
 public class InventoryTrashGUI : BaseBody
 {
     #region ViewBody

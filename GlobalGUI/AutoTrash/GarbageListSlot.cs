@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Players;
 
-namespace ImproveGame.Interface.GUI.AutoTrash;
+namespace ImproveGame.GlobalGUI.AutoTrash;
 
 /// <summary>
 /// 垃圾列表槽

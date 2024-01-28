@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModPlayers;
+using ImproveGame.GlobalGUI.BannerChest;
 using ImproveGame.Interface;
-using ImproveGame.Interface.GUI.BannerChest;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
@@ -10,7 +10,7 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
-    public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem, IItemMiddleClickable
+    public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IContainerItem, IItemMiddleClickable
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
         public List<Item> StoredPotions = new();
@@ -30,9 +30,9 @@ namespace ImproveGame.Content.Items
         public override void RightClick(Player player)
         {
             if (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Potions)
-                UISystem.Instance.PackageGUI.Close();
+                PackageGUI.Instace.Close();
             else
-                UISystem.Instance.PackageGUI.Open(StoredPotions, Item.Name, StorageType.Potions, this);
+                PackageGUI.Instace.Open(StoredPotions, Item.Name, StorageType.Potions, this);
 
             // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
             // storedPotions.RemoveAt(storedPotions.Count - 1);
@@ -231,7 +231,7 @@ namespace ImproveGame.Content.Items
 
         public override void LoadData(TagCompound tag)
         {
-            (this as IPackageItem).ILoadData(tag);
+            IContainerItem.LoadData(tag, this);
             StoredPotions = tag.Get<List<Item>>("potions");
             StoredPotions ??= new();
 
@@ -257,7 +257,7 @@ namespace ImproveGame.Content.Items
 
         public override void SaveData(TagCompound tag)
         {
-            (this as IPackageItem).ISaveData(tag);
+            IContainerItem.SaveData(tag, this);
             tag["potions"] = StoredPotions;
         }
 

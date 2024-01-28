@@ -2,10 +2,10 @@
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.GlobalGUI;
+using ImproveGame.GlobalGUI.BannerChest;
 using ImproveGame.Interface;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.BannerChest;
 using ItemSlot = Terraria.UI.ItemSlot;
 
 namespace ImproveGame.Common.ModPlayers
@@ -15,8 +15,9 @@ namespace ImproveGame.Common.ModPlayers
         public override bool HoverSlot(Item[] inventory, int context, int slot)
         {
             var item = inventory[slot];
-            
-            foreach (var globalItem in from i in GlobalList<GlobalItem>.Globals where i is IItemOverrideHover select i) {
+
+            foreach (var globalItem in from i in GlobalList<GlobalItem>.Globals where i is IItemOverrideHover select i)
+            {
                 ((IItemOverrideHover)globalItem).OverrideHover(inventory, context, slot);
             }
 
@@ -99,14 +100,14 @@ namespace ImproveGame.Common.ModPlayers
                     // 旗帜
                     if (PackageGUI.StorageType is StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
                     {
-                        UISystem.Instance.PackageGUI.Package.PutInPackage(ref inventory[slot]);
+                        PackageGUI.Instace.Container.PutInPackage(ref inventory[slot]);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
                     // 药水
                     else if (PackageGUI.StorageType is StorageType.Potions && inventory[slot].buffType > 0 && inventory[slot].consumable)
                     {
-                        UISystem.Instance.PackageGUI.Package.PutInPackage(ref inventory[slot]);
+                        PackageGUI.Instace.Container.PutInPackage(ref inventory[slot]);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
