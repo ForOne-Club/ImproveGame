@@ -1,12 +1,12 @@
 ﻿using ImproveGame.Common.ModHooks;
-using ImproveGame.GlobalGUI.BannerChest;
+using ImproveGame.GlobalGUI.ItemContainer;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IContainerItem, IItemMiddleClickable
+    public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.BannerChest;
         public List<Item> StoredBanners = new List<Item>();
@@ -26,10 +26,10 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
-            if (PackageGUI.Visible && PackageGUI.StorageType == StorageType.Banners)
-                PackageGUI.Instace.Close();
+            if (ItemContainerGUI.Visible && ItemContainerGUI.StorageType == StorageType.Banners)
+                ItemContainerGUI.Instace.Close();
             else
-                PackageGUI.Instace.Open(StoredBanners, Item.Name, StorageType.Banners, this);
+                ItemContainerGUI.Instace.Open(StoredBanners, Item.Name, StorageType.Banners, this);
 
             //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
             //storedBanners.RemoveAt(storedBanners.Count - 1);
@@ -194,7 +194,7 @@ namespace ImproveGame.Content.Items
 
         public override void LoadData(TagCompound tag)
         {
-            IContainerItem.LoadData(tag, this);
+            IItemContainer.LoadData(tag, this);
             StoredBanners = tag.Get<List<Item>>("banners");
             StoredBanners ??= new List<Item>();
 
@@ -218,7 +218,7 @@ namespace ImproveGame.Content.Items
 
         public override void SaveData(TagCompound tag)
         {
-            IContainerItem.SaveData(tag, this);
+            IItemContainer.SaveData(tag, this);
             tag["banners"] = StoredBanners;
         }
 
@@ -254,7 +254,7 @@ namespace ImproveGame.Content.Items
         public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
         {
             // 决定文本显示的是“开启”还是“关闭”
-            string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Banners)
+            string text = (ItemContainerGUI.Visible && ItemContainerGUI.StorageType is StorageType.Banners)
                 ? GetTextWith("Tips.MouseMiddleClose", new { ItemName = Item.Name })
                 : GetTextWith("Tips.MouseMiddleOpen", new { ItemName = Item.Name });
             tooltips.Add(new TooltipLine(Mod, "BannerChest", text) { OverrideColor = Color.LightGreen });

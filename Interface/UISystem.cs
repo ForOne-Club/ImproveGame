@@ -100,13 +100,6 @@ public class UISystem : ModSystem
     #endregion
 
     #region 卸载 & 加载
-    public override void Unload()
-    {
-        BrustInterface = null;
-        SpaceWandInterface = null;
-        PaintWandInterface = null;
-    }
-
     private void LoadGUIInfo()
     {
         Type[] types = Assembly.GetExecutingAssembly().GetTypes();
@@ -161,15 +154,19 @@ public class UISystem : ModSystem
         LoadGUI(ref PaintWandGUI, out ui); PaintWandInterface = ui;
     }
 
-
-    private static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface, Action PreActive = null)
-        where T : UIState
+    private static void LoadGUI<T>(ref T uiState, out UserInterface ui, Action action = null) where T : UIState
     {
-        uiInterface = new UserInterface();
-        PreActive?.Invoke();
-        uiInterface.SetState(uiState);
+        ui = new UserInterface();
+        action?.Invoke();
+        ui.SetState(uiState);
     }
 
+    public override void Unload()
+    {
+        BrustInterface = null;
+        SpaceWandInterface = null;
+        PaintWandInterface = null;
+    }
     #endregion
 
     #region 更新

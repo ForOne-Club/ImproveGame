@@ -1,8 +1,8 @@
 ﻿using Terraria.ModLoader.IO;
 
-namespace ImproveGame.GlobalGUI.BannerChest;
+namespace ImproveGame.GlobalGUI.ItemContainer;
 
-public interface IContainerItem
+public interface IItemContainer
 {
     bool AutoStorage { get; set; }
 
@@ -12,13 +12,13 @@ public interface IContainerItem
 
     void PutInPackage(ref Item item);
 
-    static void SaveData(TagCompound tag, IContainerItem container)
+    static void SaveData(TagCompound tag, IItemContainer container)
     {
         tag["autoStorage"] = container.AutoStorage;
         tag["autoSort"] = container.AutoSort;
     }
 
-    static void LoadData(TagCompound tag, IContainerItem container)
+    static void LoadData(TagCompound tag, IItemContainer container)
     {
         if (tag.TryGet("autoStorage", out bool autoStorage))
         {

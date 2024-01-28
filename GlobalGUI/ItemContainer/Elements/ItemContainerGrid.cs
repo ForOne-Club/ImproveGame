@@ -1,12 +1,12 @@
 ﻿using ImproveGame.Interface.UIElements;
 
-namespace ImproveGame.GlobalGUI.BannerChest.Elements;
+namespace ImproveGame.GlobalGUI.ItemContainer.Elements;
 
-public class PackageGrid : ScrollView
+public class ItemContainerGrid : ScrollView
 {
     public List<Item> Items;
 
-    public PackageGrid()
+    public ItemContainerGrid()
     {
         ListView.SetInnerPixels(new Vector2(GridSize(52f, 8f, 5)));
 
@@ -75,7 +75,7 @@ public class PackageGrid : ScrollView
         int length = RequiredChildrenCount(items.Count);
         for (int i = 0; i < length; i++)
         {
-            var itemSlot = new PackageItemSlot(items, i);
+            var itemSlot = new ItemContainerItemSlot(items, i);
 
             itemSlot.SetSizePixels(52f, 52f);
             itemSlot.PreventOverflow = true;

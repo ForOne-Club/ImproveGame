@@ -1,16 +1,16 @@
-﻿using ImproveGame.GlobalGUI.BannerChest;
+﻿using ImproveGame.GlobalGUI.ItemContainer;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameContent.UI.Chat;
 using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.GlobalGUI.BannerChest.Elements;
+namespace ImproveGame.GlobalGUI.ItemContainer.Elements;
 
-public class PackageItemSlot(List<Item> items, int index) : View
+public class ItemContainerItemSlot(List<Item> items, int index) : View
 {
     private Item Item
     {
-        get => _index > 0 && _index < _items.Count ? _items[_index] : _airItem;
+        get => _index >= 0 && _index < _items.Count ? _items[_index] : _airItem;
         set => _items[_index] = value;
     }
     private readonly List<Item> _items = items;
@@ -78,7 +78,7 @@ public class PackageItemSlot(List<Item> items, int index) : View
 
         if (Item.IsAir)
         {
-            switch (PackageGUI.StorageType)
+            switch (ItemContainerGUI.StorageType)
             {
                 case StorageType.Banners:
                     BigBagItemSlot.DrawItemIcon(sb, Banner, Color.White * 0.5f, dimensions);
@@ -111,7 +111,7 @@ public class PackageItemSlot(List<Item> items, int index) : View
 
         if (Main.mouseItem.IsAir) return;
 
-        switch (PackageGUI.StorageType)
+        switch (ItemContainerGUI.StorageType)
         {
             // 旗帜收纳箱, 药水袋子.
             case StorageType.Banners when ItemToBanner(Main.mouseItem) == -1:

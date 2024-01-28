@@ -1,17 +1,17 @@
-﻿using ImproveGame.GlobalGUI.BannerChest.Elements;
+﻿using ImproveGame.GlobalGUI.ItemContainer.Elements;
 using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
-namespace ImproveGame.GlobalGUI.BannerChest;
+namespace ImproveGame.GlobalGUI.ItemContainer;
 
 public enum StorageType { Banners, Potions }
 
-[AutoCreateGUI("Radial Hotbars", "Package")]
-public class PackageGUI : BaseBody
+[AutoCreateGUI("Radial Hotbars", "Item Container GUI")]
+public class ItemContainerGUI : BaseBody
 {
-    public static PackageGUI Instace { get; private set; }
-    public PackageGUI() => Instace = this;
+    public static ItemContainerGUI Instace { get; private set; }
+    public ItemContainerGUI() => Instace = this;
 
     public static StorageType StorageType { get; private set; }
 
@@ -29,14 +29,14 @@ public class PackageGUI : BaseBody
         set => _visible = value;
     }
 
-    public IContainerItem Container;
+    public IItemContainer Container;
 
     private SUIPanel _mainPanel;
     private View _titlePanel;
     private SUITitle _title;
     private SUISwitch _autoStorageSwitch, _autoSortSwitch;
     private SUICross _cross;
-    private PackageGrid _grid;
+    private ItemContainerGrid _grid;
 
     public override void OnInitialize()
     {
@@ -94,7 +94,7 @@ public class PackageGUI : BaseBody
         _autoSortSwitch.SetPosPixels(_autoStorageSwitch.Right() + 8f, _autoStorageSwitch.Top.Pixels)
             .JoinParent(_mainPanel);
 
-        _grid = new PackageGrid();
+        _grid = new ItemContainerGrid();
         _grid.Top.Pixels = _autoStorageSwitch.Bottom() + 8f;
         _grid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(_grid.Width.Pixels, _grid.Height.Pixels);
         _grid.OnLeftMouseDown += (_, _) =>
@@ -132,7 +132,7 @@ public class PackageGUI : BaseBody
         }
     }
 
-    public void Open(List<Item> items, string title, StorageType storageType, IContainerItem container)
+    public void Open(List<Item> items, string title, StorageType storageType, IItemContainer container)
     {
         StorageType = storageType;
         SoundEngine.PlaySound(SoundID.MenuOpen);
