@@ -680,6 +680,18 @@ ImproveConfigs: {
 		Label: "[centeritem:WormholePotion] Unconditional Team Teleportation"
 		Tooltip: Players can teleport to teammates without comsuming Wormhole Potion, even if it's in inventory
 	}
+
+	OpenFaq: {
+		Tooltip:
+			'''
+			It is highly recommended to take a look at this webpage whenever you encounter
+			any problems, as it includes solutions to the following issues:
+			- How to hide infinite buffs?
+			- How to disable auto-deposit for money?
+			- How to hide the buff icons on the player's head?
+			'''
+		Label: Frequently Asked Questions
+	}
 }
 
 ModItemLoadPage: {

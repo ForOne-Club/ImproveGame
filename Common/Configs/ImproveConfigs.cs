@@ -29,6 +29,9 @@ namespace ImproveGame.Common.Configs
         [CustomModConfigItem(typeof(OpenConfigElement))]
         public object OpenConfig;
 
+        [CustomModConfigItem(typeof(FaqElement))]
+        public object OpenFaq;
+
         #endregion
 
         #region 预设

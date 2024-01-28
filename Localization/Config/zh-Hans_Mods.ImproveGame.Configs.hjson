@@ -682,6 +682,18 @@ ImproveConfigs: {
 		Label: "[centeritem:WormholePotion] 无条件队内传送"
 		Tooltip: 可无视条件使用队内传送，不需要携带虫洞药水，带了也不会消耗
 	}
+
+	OpenFaq: {
+		Tooltip:
+			'''
+			强烈建议在你遇到任何问题时，先看一眼这个网页
+			包含对以下问题的解答：
+			- 怎么隐藏无限增益？
+			- 怎么关闭自动存钱功能？
+			- 人物头顶的Buff怎么隐藏？
+			'''
+		Label: 常见问题解答
+	}
 }
 
 ModItemLoadPage: {
