@@ -75,7 +75,18 @@ namespace ImproveGame.Interface.GUI.BannerChest.Elements
             int length = RequiredChildrenCount(items.Count);
             for (int i = 0; i < length; i++)
             {
-                new PackageItemSlot(items, i).JoinParent(ListView);
+                var itemSlot = new PackageItemSlot(items, i);
+
+                itemSlot.SetSizePixels(52f, 52f);
+                itemSlot.PreventOverflow = true;
+                itemSlot.Spacing = new Vector2(8);
+                itemSlot.RelativeMode = RelativeMode.Horizontal;
+                itemSlot.Rounded = new Vector4(12f);
+                itemSlot.BgColor = UIColor.ItemSlotBg;
+                itemSlot.Border = 2f;
+                itemSlot.BorderColor = UIColor.ItemSlotBorder;
+
+                itemSlot.JoinParent(ListView);
             }
 
             ListView.SetInnerPixels(GridSize(52f, 8f, 5, length / 5));

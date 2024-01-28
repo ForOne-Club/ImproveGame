@@ -266,7 +266,7 @@ public class UISystem : ModSystem
         PrefixRecallGUI?.TrackDisplayment();
 
         // 可以看到，它执行的是最早的。
-        EventTrigger.UpdateUI(gameTime);
+        EventTriggerManager.UpdateUI(gameTime);
 
         if (BrustGUI.Visible)
             BrustInterface?.Update(gameTime);
@@ -297,7 +297,7 @@ public class UISystem : ModSystem
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
     {
         // 如果 Insert 是按照向前插入的逻辑，越早插入越晚绘制，也就是越靠近顶层。
-        EventTrigger.ModifyInterfaceLayers(layers);
+        EventTriggerManager.ModifyInterfaceLayers(layers);
 
         // 诊断网络？
         layers.FindVanilla("Diagnose Net", index =>

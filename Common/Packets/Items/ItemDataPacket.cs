@@ -92,7 +92,6 @@ public class InventoryItemDataPacket : NetModule
             player.inventory[_slot].favorited = oldFavorited;
         }
 
-        EndOfItemSet:
         if (Main.netMode is NetmodeID.MultiplayerClient)
         {
             Recipe.FindRecipes();
