@@ -1,7 +1,6 @@
 using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.Content.Items;
 using ImproveGame.Interface;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.ExtremeStorage;
 using Terraria.DataStructures;
 using Terraria.Enums;

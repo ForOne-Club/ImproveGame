@@ -18,8 +18,8 @@ namespace ImproveGame.Interface.GUI
 
         public override bool CanPriority(UIElement target) => target != this;
 
-        public override bool CanDisableMouse(UIElement target)
-            => (target != this && _basePanel.IsMouseHovering) || _basePanel.KeepPressed;
+        public override bool CanSetFocusUIElement(UIElement target)
+            => (target != this && _basePanel.IsMouseHovering) || _basePanel.IsPressed;
 
         private const float PanelLeft = 730f;
         private const float PanelTop = 160f;
@@ -38,10 +38,10 @@ namespace ImproveGame.Interface.GUI
 
         public override void OnInitialize()
         {
-            Append(_basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            Append(_basePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
                 Shaded = true,
-                ShadowThickness = UIColor.ShadowThicknessThinnerer,
+                ShadowThickness = UIStyle.ShadowThicknessThinnerer,
                 Draggable = true,
                 Left = {Pixels = PanelLeft},
                 Top = {Pixels = PanelTop},
@@ -106,7 +106,7 @@ namespace ImproveGame.Interface.GUI
 			uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
 			uIImageButton.SetVisibility(1f, 1f);
 			searchArea.Append(uIImageButton);
-            SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(UIColor.SearchBarBorder, UIColor.SearchBarBg) {
+            SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(UIStyle.SearchBarBorder, UIStyle.SearchBarBg) {
                 Left = new StyleDimension(4f, 0f),
 				Width = new StyleDimension(0f - uIImageButton.Width.Pixels - 3f, 1f),
 				Height = new StyleDimension(0f, 1f),
@@ -172,12 +172,12 @@ namespace ImproveGame.Interface.GUI
 
         private void OnStartTakingInput()
         {
-            _searchBoxPanel.BorderColor = UIColor.SearchBarBorderSelected;
+            _searchBoxPanel.BorderColor = UIStyle.SearchBarBorderSelected;
         }
 
         private void OnEndTakingInput()
         {
-            _searchBoxPanel.BorderColor = UIColor.SearchBarBorder;
+            _searchBoxPanel.BorderColor = UIStyle.SearchBarBorder;
         }
 
         private void SetupScrollBar(bool resetViewPosition = true) {
@@ -245,7 +245,7 @@ namespace ImproveGame.Interface.GUI
         
         public void Open()
         {
-            _basePanel.KeepPressed = false;
+            _basePanel.IsPressed = false;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             SetupList();

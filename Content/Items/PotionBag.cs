@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModPlayers;
-using ImproveGame.Interface.Common;
-using ImproveGame.Interface.GUI.BannerChest;
+using ImproveGame.GlobalGUI.ItemContainer;
+using ImproveGame.Interface;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
@@ -10,7 +10,7 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items
 {
-    public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IPackageItem, IItemMiddleClickable
+    public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable
     {
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
         public List<Item> StoredPotions = new();
@@ -29,10 +29,10 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
-            if (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Potions)
-                UISystem.Instance.PackageGUI.Close();
+            if (ItemContainerGUI.Visible && ItemContainerGUI.StorageType is StorageType.Potions)
+                ItemContainerGUI.Instace.Close();
             else
-                UISystem.Instance.PackageGUI.Open(StoredPotions, Item.Name, StorageType.Potions, this);
+                ItemContainerGUI.Instace.Open(StoredPotions, Item.Name, StorageType.Potions, this);
 
             // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
             // storedPotions.RemoveAt(storedPotions.Count - 1);
@@ -231,7 +231,7 @@ namespace ImproveGame.Content.Items
 
         public override void LoadData(TagCompound tag)
         {
-            (this as IPackageItem).ILoadData(tag);
+            IItemContainer.LoadData(tag, this);
             StoredPotions = tag.Get<List<Item>>("potions");
             StoredPotions ??= new();
 
@@ -257,7 +257,7 @@ namespace ImproveGame.Content.Items
 
         public override void SaveData(TagCompound tag)
         {
-            (this as IPackageItem).ISaveData(tag);
+            IItemContainer.SaveData(tag, this);
             tag["potions"] = StoredPotions;
         }
 
@@ -292,7 +292,7 @@ namespace ImproveGame.Content.Items
         public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
         {
             // 决定文本显示的是“开启”还是“关闭”
-            string text = (PackageGUI.Visible && PackageGUI.StorageType is StorageType.Potions)
+            string text = (ItemContainerGUI.Visible && ItemContainerGUI.StorageType is StorageType.Potions)
                 ? GetTextWith("Tips.MouseMiddleClose", new {ItemName = Item.Name})
                 : GetTextWith("Tips.MouseMiddleOpen", new {ItemName = Item.Name});
             tooltips.Add(new TooltipLine(Mod, "PotionBag", text) {OverrideColor = Color.LightGreen});

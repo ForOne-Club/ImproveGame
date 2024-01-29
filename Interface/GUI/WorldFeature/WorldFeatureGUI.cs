@@ -15,8 +15,8 @@ public class WorldFeatureGUI : BaseBody
 
     public override bool CanPriority(UIElement target) => target != this;
 
-    public override bool CanDisableMouse(UIElement target)
-        => (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
+    public override bool CanSetFocusUIElement(UIElement target)
+        => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
 
     // 主面板
     public SUIPanel MainPanel;
@@ -33,7 +33,7 @@ public class WorldFeatureGUI : BaseBody
     public override void OnInitialize()
     {
         // 主面板
-        MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+        MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Shaded = true,
             Draggable = true
@@ -41,25 +41,25 @@ public class WorldFeatureGUI : BaseBody
         MainPanel.SetPadding(0f);
         MainPanel.SetPosPixels(250, 280)
             .SetSizePixels(300, 306)
-            .Join(this);
+            .JoinParent(this);
 
-        TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
+        TitlePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.TitleBg2)
         {
             DragIgnore = true,
             Width = {Pixels = 0f, Precent = 1f},
             Height = {Pixels = 50f, Precent = 0f},
             Rounded = new Vector4(10f, 10f, 0f, 0f),
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         TitlePanel.SetPadding(0f);
-        TitlePanel.Join(MainPanel);
+        TitlePanel.JoinParent(MainPanel);
 
         // 标题
         Title = new SUITitle(GetText("UI.WorldFeature.Title"), 0.5f)
         {
             VAlign = 0.5f
         };
-        Title.Join(TitlePanel);
+        Title.JoinParent(TitlePanel);
 
         // Cross
         Cross = new SUICross
@@ -70,33 +70,33 @@ public class WorldFeatureGUI : BaseBody
             Rounded = new Vector4(0f, 10f, 0f, 0f)
         };
         Cross.OnLeftMouseDown += (_, _) => Close();
-        Cross.Join(TitlePanel);
+        Cross.JoinParent(TitlePanel);
 
         var contentPanel = new View
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         contentPanel.SetPadding(16, 14, 16, 14);
         contentPanel.SetSize(0f, 0f, 1f, 1f);
-        contentPanel.Join(MainPanel);
+        contentPanel.JoinParent(MainPanel);
         
         var festivalPanel = new View
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(0f, 6f)
         };
         festivalPanel.SetSize(0f, 100f, 1f, 0f);
-        festivalPanel.Join(contentPanel);
+        festivalPanel.JoinParent(contentPanel);
         
         var seedPanel = new View
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         seedPanel.SetSize(0f, -100f, 1f, 1f);
-        seedPanel.Join(contentPanel);
+        seedPanel.JoinParent(contentPanel);
 
         SetupFestivalButtons(festivalPanel);
         SetupSeedButtons(seedPanel);
@@ -111,22 +111,22 @@ public class WorldFeatureGUI : BaseBody
             FestivalPacket.SetHalloween,
             "UI.WorldFeature.Halloween")
         {
-            First = true,
-            Relative = RelativeMode.Vertical,
+            ResetAnotherPosition = true,
+            RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(0f, 4f)
         };
         halloweenSwitch.SetIcon(icon, new SpriteFrame(16, 5, 13, 2));
-        halloweenSwitch.Join(parent);
+        halloweenSwitch.JoinParent(parent);
 
         var xMasSwitch = new LongSwitch(
             () => ForceFestivalSystem.ForceXMas,
             FestivalPacket.SetXMas,
             "UI.WorldFeature.XMas")
         {
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         xMasSwitch.SetIcon(icon, new SpriteFrame(16, 5, 14, 2));
-        xMasSwitch.Join(parent);
+        xMasSwitch.JoinParent(parent);
     }
 
     private void SetupSeedButtons(UIElement parent)

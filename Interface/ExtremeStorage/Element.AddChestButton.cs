@@ -29,8 +29,8 @@ public class AddChestButton : TimerView
         var size = dimensions.Size();
         var center = dimensions.Center() + new Vector2(0, UIConfigs.Instance.GeneralFontOffsetY);
 
-        Color borderColor = Color.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav, HoverTimer.Schedule);
-        SDFRectangle.HasBorder(position, size, new Vector4(10f), UIColor.ButtonBg, 2, borderColor);
+        Color borderColor = Color.Lerp(UIStyle.PanelBorder, UIStyle.ItemSlotBorderFav, HoverTimer.Schedule);
+        SDFRectangle.HasBorder(position, size, new Vector4(10f), UIStyle.ButtonBg, 2, borderColor);
 
         string text = GetText("UI.ExtremeStorage.AddChest");
         if (ChestSelection.IsSelecting)

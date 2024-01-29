@@ -16,8 +16,8 @@ namespace ImproveGame.Interface.GUI
 
         public override bool CanPriority(UIElement target) => target != this;
 
-        public override bool CanDisableMouse(UIElement target)
-            => (target != this && BasePanel.IsMouseHovering) || BasePanel.KeepPressed;
+        public override bool CanSetFocusUIElement(UIElement target)
+            => (target != this && BasePanel.IsMouseHovering) || BasePanel.IsPressed;
 
         public bool CacheSetupStructures; // 缓存，在下一帧Setup
         public bool CacheSetupStructureInfos; // 缓存，在下一帧Setup
@@ -44,7 +44,7 @@ namespace ImproveGame.Interface.GUI
             BackTexture = GetTexture("UI/Construct/Back");
             ButtonBackgroundTexture = Main.Assets.Request<Texture2D>("Images/UI/CharCreation/CategoryPanel");
 
-            BasePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            BasePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
                 Shaded = true,
                 Top = StyleDimension.FromPixels(150f),

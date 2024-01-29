@@ -169,7 +169,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             Color color = Main.hslToRgb(hue, 1f, 0.5f);
             float opacity = ExtremeStorageGUI.ChestSlotsGlowTimer / 300f;
             opacity *= opacity;
-            BgColor = Color.Lerp(UIColor.ItemSlotBg, color, opacity / 2f);
+            BgColor = Color.Lerp(UIStyle.ItemSlotBg, color, opacity / 2f);
         }
 
         public override void DrawSelf(SpriteBatch sb)

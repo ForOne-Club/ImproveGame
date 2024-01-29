@@ -73,7 +73,7 @@ public class GlassmorphismVfx : ModSystem
     {
         Main.RunOnMainThread(() =>
         {
-            GlassCovers = new RenderTarget2D[EventTrigger.LayerCount + 1];
+            GlassCovers = new RenderTarget2D[EventTriggerManager.LayerCount + 1];
             for (var i = 0; i < GlassCovers.Length; i++)
                 GlassCovers[i] = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.ScreenSize.X, Main.ScreenSize.Y);
         });
@@ -138,7 +138,7 @@ public class GlassmorphismVfx : ModSystem
         if (GlassVfxType is GlassType.MicaLike)
         {
             PlayerInput.SetZoom_UI();
-            EventTrigger.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
+            EventTriggerManager.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
             PlayerInput.SetZoom_World();
 
             device.SetRenderTarget(null);
@@ -155,7 +155,7 @@ public class GlassmorphismVfx : ModSystem
         SDFRectangle.DontDrawShadow = true;
 
         PlayerInput.SetZoom_UI();
-        EventTrigger.DrawAll();
+        EventTriggerManager.DrawAll();
         PlayerInput.SetZoom_World();
 
         SDFRectangle.DontDrawShadow = false;
@@ -195,7 +195,7 @@ public class GlassmorphismVfx : ModSystem
         var batch = Main.spriteBatch;
 
         shader.Parameters["uScreenResolution"].SetValue(Main.ScreenSize.ToVector2());
-        shader.Parameters["uIntensity"].SetValue(UIColor.AcrylicIntensity);
+        shader.Parameters["uIntensity"].SetValue(UIStyle.AcrylicIntensity);
 
         int times = GlassVfxType is GlassType.MicaLike ? 6 : 4;
         for (int i = 1; i <= times; i++)

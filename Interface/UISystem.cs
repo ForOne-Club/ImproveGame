@@ -2,17 +2,14 @@
 using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.AutoTrash;
-using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.GUI.DummyControl;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
-using ImproveGame.Interface.GUI.PlayerStats;
 using ImproveGame.Interface.GUI.SpaceWand;
 using ImproveGame.Interface.GUI.WorldFeature;
 using System.Reflection;
 
-namespace ImproveGame.Interface.Common;
+namespace ImproveGame.Interface;
 
 /// <summary>
 /// 用户界面
@@ -28,14 +25,14 @@ public class UISystem : ModSystem
     private ThemeType _themeLastTick;
     private bool _acrylicVfxLastTick;
 
+    public static UserInterface BrustInterface { get; private set; }
     public BrustGUI BrustGUI;
-    internal static UserInterface BrustInterface;
 
+    public static UserInterface SpaceWandInterface { get; private set; }
     public SpaceWandGUI SpaceWandGUI;
-    internal static UserInterface SpaceWandInterface;
 
+    public static UserInterface PaintWandInterface { get; private set; }
     public PaintWandGUI PaintWandGUI;
-    internal static UserInterface PaintWandInterface;
 
     public GrabBagInfoGUI GrabBagInfoGUI;
     public EventTrigger GrabBagInfoTrigger;
@@ -44,29 +41,9 @@ public class UISystem : ModSystem
     public LifeformAnalyzerGUI LifeformAnalyzerGUI;
     public EventTrigger LifeformAnalyzerTrigger;
 
-    // 玩家信息表
-    public PlayerStatsGUI PlayerStatsGUI;
-    public EventTrigger PlayerStatsTrigger;
-
     // 假人控制器
     public DummyControlGUI DummyControlGUI;
     public EventTrigger DummyControlTrigger;
-
-    // 自动垃圾桶
-    public GarbageListGUI AutoTrashGUI;
-    public EventTrigger AutoTrashTrigger;
-
-    // 物品栏下方多个垃圾桶
-    public InventoryTrashGUI InventoryTrashGUI;
-    public EventTrigger InventoryTrashTrigger;
-
-    // 药水袋 & 旗帜盒 UI
-    public PackageGUI PackageGUI;
-    public EventTrigger PackageTrigger;
-
-    /*// 大背包 UI
-    public BigBagGUI BigBagGUI;
-    public EventTrigger BigBagTrigger;*/
 
     // Buff 追踪站
     public BuffTrackerGUI BuffTrackerGUI;
@@ -101,7 +78,6 @@ public class UISystem : ModSystem
     public ExtremeStorageGUI ExtremeStorageGUI;
     public PrefixRecallGUI PrefixRecallGUI;
     public SidedEventTrigger SidedEventTrigger;
-
     #endregion
 
     #region 声明
@@ -124,92 +100,21 @@ public class UISystem : ModSystem
     #endregion
 
     #region 卸载 & 加载
-    public override void Unload()
-    {
-        AutoCreateBodyTypes.Clear();
-        AutoCreateGUIAttributes.Clear();
-        EventTriggerInstances.Clear();
-        BaseBodyInstances.Clear();
-
-        PlayerStatsGUI = null;
-        PlayerStatsTrigger = null;
-
-        // 假人控制器
-        DummyControlGUI = null;
-        DummyControlTrigger = null;
-
-        // 侧栏GUI
-        ExtremeStorageGUI = null;
-        AutofisherGUI = null;
-        PrefixRecallGUI = null;
-        SidedEventTrigger = null;
-
-        BuffTrackerGUI = null;
-        BuffTrackerTrigger = null;
-
-        LiquidWandGUI = null;
-        LiquidWandTrigger = null;
-
-        ArchitectureGUI = null;
-        ArchitectureTrigger = null;
-
-        BrustGUI = null;
-        BrustInterface = null;
-
-        AutoTrashGUI = null;
-        AutoTrashTrigger = null;
-
-        InventoryTrashGUI = null;
-        InventoryTrashTrigger = null;
-
-        /*BigBagGUI = null;
-        BigBagTrigger = null;*/
-
-        SpaceWandGUI = null;
-        SpaceWandInterface = null;
-
-        PaintWandGUI = null;
-        PaintWandInterface = null;
-
-        GrabBagInfoGUI = null;
-        GrabBagInfoTrigger = null;
-
-        LifeformAnalyzerGUI = null;
-        LifeformAnalyzerTrigger = null;
-
-        StructureGUI = null;
-        StructureTrigger = null;
-
-        WorldFeatureGUI = null;
-        WorldFeatureTrigger = null;
-
-        ItemSearcherGUI = null;
-        ItemSearcherTrigger = null;
-
-        OpenBagGUI = null;
-        OpenBagTrigger = null;
-
-        PackageGUI = null;
-        PackageTrigger = null;
-    }
-
     private void LoadGUIInfo()
     {
         Type[] types = Assembly.GetExecutingAssembly().GetTypes();
 
-        for (int i = 0; i < types.Length; i++)
+        foreach (Type type in types)
         {
-            Type type = types[i];
-
             if (type.IsSubclassOf(typeof(BaseBody)))
             {
-                var autoCreateGUIAttribute = type.GetCustomAttribute<AutoCreateGUIAttribute>();
+                var autoCreate = type.GetCustomAttribute<AutoCreateGUIAttribute>();
 
-                if (autoCreateGUIAttribute != null)
+                if (autoCreate != null)
                 {
                     AutoCreateBodyTypes.Add(type);
-                    AutoCreateGUIAttributes[type] = autoCreateGUIAttribute;
-                    EventTriggerInstances[type] = new EventTrigger(autoCreateGUIAttribute.LayerName, autoCreateGUIAttribute.OwnName);
+                    AutoCreateGUIAttributes[type] = autoCreate;
+                    EventTriggerInstances[type] = new EventTrigger(autoCreate.LayerName, autoCreate.OwnName).Register();
                     BaseBodyInstances[type] = null;
                 }
             }
@@ -226,43 +131,42 @@ public class UISystem : ModSystem
         LoadGUIInfo();
 
         // UserInterface 之 EventTrigger 版
-        AutoTrashTrigger = new EventTrigger("Radial Hotbars", "Auto Trash");
-        InventoryTrashTrigger = new EventTrigger("Radial Hotbars", "Inventory Trash");
-        PackageTrigger = new EventTrigger("Radial Hotbars", "Package");
-        // BigBagTrigger = new EventTrigger("Radial Hotbars", "Big Bag");
-        PlayerStatsTrigger = new EventTrigger("Radial Hotbars", "Player Info");
-        DummyControlTrigger = new EventTrigger("Radial Hotbars", "Dummy Control");
-        LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand");
-        ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture");
-        StructureTrigger = new EventTrigger("Radial Hotbars", "Structure");
-        LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer");
-        WorldFeatureTrigger = new EventTrigger("Radial Hotbars", "World Feature");
-        ItemSearcherTrigger = new EventTrigger("Radial Hotbars", "Item Searcher");
-        OpenBagTrigger = new EventTrigger("Radial Hotbars", "Open Bag");
-        BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI");
-        GrabBagInfoTrigger = new EventTrigger("Radial Hotbars", "Grab Bag Info GUI");
+        DummyControlTrigger = new EventTrigger("Radial Hotbars", "Dummy Control").Register();
+        LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand").Register();
+        ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture").Register();
+        StructureTrigger = new EventTrigger("Radial Hotbars", "Structure").Register();
+        LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer").Register();
+        WorldFeatureTrigger = new EventTrigger("Radial Hotbars", "World Feature").Register();
+        ItemSearcherTrigger = new EventTrigger("Radial Hotbars", "Item Searcher").Register();
+        OpenBagTrigger = new EventTrigger("Radial Hotbars", "Open Bag").Register();
+        BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI").Register();
+        GrabBagInfoTrigger = new EventTrigger("Radial Hotbars", "Grab Bag Info GUI").Register();
 
         SidedEventTrigger = new SidedEventTrigger();
+        SidedEventTrigger.Register();
 
         BrustGUI = new BrustGUI();
         SpaceWandGUI = new SpaceWandGUI();
         PaintWandGUI = new PaintWandGUI();
-        LoadGUI(ref BrustGUI, out BrustInterface);
-        LoadGUI(ref SpaceWandGUI, out SpaceWandInterface);
-        LoadGUI(ref PaintWandGUI, out PaintWandInterface);
+
+        LoadGUI(ref BrustGUI, out var ui); BrustInterface = ui;
+        LoadGUI(ref SpaceWandGUI, out ui); SpaceWandInterface = ui;
+        LoadGUI(ref PaintWandGUI, out ui); PaintWandInterface = ui;
     }
 
-
-    private static void LoadGUI<T>(ref T uiState, out UserInterface uiInterface, Action PreActive = null)
-        where T : UIState
+    private static void LoadGUI<T>(ref T uiState, out UserInterface ui, Action action = null) where T : UIState
     {
-        uiInterface = new UserInterface();
-        PreActive?.Invoke();
-        // SetState() 会执行 Activate()
-        // uiState.Activate();
-        uiInterface.SetState(uiState);
+        ui = new UserInterface();
+        action?.Invoke();
+        ui.SetState(uiState);
     }
 
+    public override void Unload()
+    {
+        BrustInterface = null;
+        SpaceWandInterface = null;
+        PaintWandInterface = null;
+    }
     #endregion
 
     #region 更新
@@ -276,7 +180,7 @@ public class UISystem : ModSystem
         PrefixRecallGUI?.TrackDisplayment();
 
         // 可以看到，它执行的是最早的。
-        EventTrigger.UpdateUI(gameTime);
+        EventTriggerManager.UpdateUI(gameTime);
 
         if (BrustGUI.Visible)
             BrustInterface?.Update(gameTime);
@@ -287,9 +191,9 @@ public class UISystem : ModSystem
 
         if (_themeLastTick != UIConfigs.Instance.ThemeType || _acrylicVfxLastTick != GlassVfxEnabled)
         {
-            UIColor.SetUIColors(UIConfigs.Instance.ThemeType);
+            UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
             if (GlassVfxAvailable)
-                UIColor.AcrylicRedesign();
+                UIStyle.AcrylicRedesign();
             UIPlayer.InitUI();
         }
 
@@ -307,7 +211,7 @@ public class UISystem : ModSystem
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
     {
         // 如果 Insert 是按照向前插入的逻辑，越早插入越晚绘制，也就是越靠近顶层。
-        EventTrigger.ModifyInterfaceLayers(layers);
+        EventTriggerManager.ModifyInterfaceLayers(layers);
 
         // 诊断网络？
         layers.FindVanilla("Diagnose Net", index =>

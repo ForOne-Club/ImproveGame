@@ -147,10 +147,10 @@ namespace ImproveGame.Interface.UIElements
 
             if (RoundBorder)
             {
-                var borderColor = Item.favorited ? UIColor.ItemSlotBorderFav : UIColor.ItemSlotBorder;
-                var background = Item.favorited ? UIColor.ItemSlotBgFav : UIColor.ItemSlotBg;
+                var borderColor = Item.favorited ? UIStyle.ItemSlotBorderFav : UIStyle.ItemSlotBorder;
+                var background = Item.favorited ? UIStyle.ItemSlotBgFav : UIStyle.ItemSlotBg;
                 SDFRectangle.HasBorder(dimensions.Position(), dimensions.Size(),
-                    new Vector4(UIColor.ItemSlotBorderRound), background, UIColor.ItemSlotBorderSize, borderColor);
+                    new Vector4(UIStyle.ItemSlotBorderRound), background, UIStyle.ItemSlotBorderSize, borderColor);
             }
 
             // 这里设置inventoryScale原版也是这么干的

@@ -28,7 +28,7 @@ namespace ImproveGame.Interface.SUIElements
             Draggable = draggable;
             DragIgnore = true;
 
-            ShadowThickness = UIColor.ShadowThickness;
+            ShadowThickness = UIStyle.ShadowThickness;
             ShadowColor = borderColor * 0.35f;
 
             Border = border;
@@ -41,7 +41,7 @@ namespace ImproveGame.Interface.SUIElements
         {
             SetPadding(10f);
             DragIgnore = true;
-            ShadowThickness = UIColor.ShadowThickness;
+            ShadowThickness = UIStyle.ShadowThickness;
             ShadowColor = borderColor * 0.35f;
             Draggable = draggable;
 
@@ -61,7 +61,7 @@ namespace ImproveGame.Interface.SUIElements
                 (evt.Target == this || view is not null && view.DragIgnore ||
                  evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
             {
-                Offset = evt.MousePosition - GetPosPixel();
+                Offset = evt.MousePosition - PositionPixels;
                 Dragging = true;
             }
         }

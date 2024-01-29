@@ -1,280 +1,466 @@
 ﻿using ImproveGame.Common.Animations;
 
-namespace ImproveGame.Interface.BaseViews
+namespace ImproveGame.Interface.BaseViews;
+
+/// <summary>
+/// 使自身相对前一个 <see cref="View"/> 排列，横向或纵向 <br/>
+/// 启用会使 <see cref="UIElement.Left"/> <see cref="UIElement.Top"/>
+/// <see cref="UIElement.HAlign"/> <see cref="UIElement.VAlign"/> 失效
+/// </summary>
+public enum RelativeMode { None, Horizontal, Vertical };
+
+/// <summary>
+/// 相对定位，用于可变大小的 UI 更方便计算位置。
+/// </summary>
+public class View : UIElement
 {
     /// <summary>
-    /// 排列模式，横向排列或者纵向排列。
+    /// 用于记录先前的子元素数量
     /// </summary>
-    public enum RelativeMode { Disabled, Horizontal, Vertical };
+    public int PreviousChildCount { get; protected set; }
+
     /// <summary>
-    /// 相对定位，用于可变大小的 UI 更方便计算位置。
+    /// 子元素相较于先前是否有变化
     /// </summary>
-    public class View : UIElement
+    public bool HasChildCountChanges => Children.Count() != PreviousChildCount;
+
+    /// <summary>
+    /// 该类的大小会根据子元素位置大小自适应，其 <see cref="UIElement.Width"/> <see cref="UIElement.Height"/> 属性皆不生效 <br/>
+    /// 使用的时候要注意，只有继承自 <see cref="View"/> 的子元素才有效 <br/>
+    /// 并且需要注意子元素的 <see cref="UIElement.Width"/> <see cref="UIElement.Height"/> Percent 属性不要设置，因为获取到的会是无限大
+    /// </summary>
+    public bool IsAdaptiveWidth;
+    public bool IsAdaptiveHeight;
+
+    /// <summary>
+    /// 隐藏完全溢出元素
+    /// </summary>
+    public bool HideFullyOverflowedElements;
+
+    /// <summary>
+    /// 使自身相对前一个 <see cref="View"/> 排列，横向或纵向 <br/>
+    /// 启用会使 <see cref="UIElement.Left"/> <see cref="UIElement.Top"/>
+    /// <see cref="UIElement.HAlign"/> <see cref="UIElement.VAlign"/> 失效
+    /// </summary>
+    public RelativeMode RelativeMode;
+
+    /// <summary>
+    /// 间距
+    /// </summary>
+    public Vector2 Spacing;
+
+    /// <summary>
+    /// 防止溢出 (越界换行)
+    /// </summary>
+    public bool PreventOverflow;
+
+    /// <summary>
+    /// 设置 true 横向时不同步与前一个元素的 Top，纵向时不同步 Left<br/>
+    /// 在大背包中用于一排 Button 的时候，第一个 Button 前面有一个 Switch
+    /// </summary>
+    public bool ResetAnotherPosition;
+
+    /// <summary>
+    /// 拖动忽略
+    /// </summary>
+    public bool DragIgnore;
+
+    /// <summary>
+    /// 不透明度 [0,1]
+    /// </summary>
+    public readonly Opacity Opacity;
+
+    public bool IsPressed;
+
+    public Vector4 Rounded;
+    public float Border;
+    public Color BgColor, BorderColor;
+
+    public View()
     {
-        /// <summary>
-        /// 用于记录先前的子元素数量
-        /// </summary>
-        public int PrevChildCount { get; protected set; }
+        Opacity = new Opacity(this);
+    }
 
-        /// <summary>
-        /// 子元素相较于先前是否有变化
-        /// </summary>
-        public bool HasChildCountChanges => ((List<UIElement>)Children).Count != PrevChildCount;
+    /// <summary>
+    /// 设置圆角矩形的基本属性
+    /// </summary>
+    public void SetRoundedRectProperties(Color bgColor, float border, Color borderColor, Vector4 rounded)
+    {
+        BgColor = bgColor;
+        Border = border;
+        BorderColor = borderColor;
+        Rounded = rounded;
+    }
 
-        /// <summary>
-        /// 相对的模式，横向填充或者纵向填充
-        /// </summary>
-        public RelativeMode Relative;
-        /// <summary>
-        /// 间距
-        /// </summary>
-        public Vector2 Spacing;
-        /// <summary>
-        /// 越界换行
-        /// </summary>
-        public bool Wrap;
-        /// <summary>
-        /// 设置 true 横向时不同步与前一个元素的 Top，纵向时不同步 Left<br/>
-        /// 在大背包中用于一排 Button 的时候，第一个 Button 前面有一个 Switch
-        /// </summary>
-        public bool First;
+    /// <summary>
+    /// 设置圆角矩形的基本属性
+    /// </summary>
+    public void SetRoundedRectProperties(Color bgColor, float border, Color borderColor, float rounded)
+    {
+        BgColor = bgColor;
+        Border = border;
+        BorderColor = borderColor;
+        Rounded = new Vector4(rounded);
+    }
 
-        /// <summary>
-        /// 拖动忽略
-        /// </summary>
-        public bool DragIgnore;
+    #region Override Method
+    public override void Recalculate()
+    {
+        RecalculateFromView();
+        OrigianlRecalculate();
 
-        /// <summary>
-        /// 不透明度 [0,1]
-        /// </summary>
-        public readonly Opacity Opacity;
+        RecalculateChildren();
 
-        public bool KeepPressed;
-        public Vector4 Rounded;
-        public float Border;
-        public Color BgColor, BorderColor;
-
-        public View()
+        if (IsAdaptiveWidth || IsAdaptiveHeight)
         {
-            Opacity = new Opacity(this);
-        }
+            Vector2 minPos = GetInnerDimensions().Position();
+            Vector2 maxPos = GetInnerDimensions().Position();
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-
-            // 记录先前的子元素数量
-            PrevChildCount = Children.Count();
-        }
-
-        /// <summary>
-        /// 设置圆角矩形的基本属性
-        /// </summary>
-        /// <param name="bgColor"></param>
-        /// <param name="border"></param>
-        /// <param name="borderColor"></param>
-        /// <param name="rounded"></param>
-        public void SetRoundedRectangleValues(Color bgColor, float border, Color borderColor, Vector4 rounded)
-        {
-            BgColor = bgColor;
-            Border = border;
-            BorderColor = borderColor;
-            Rounded = rounded;
-        }
-
-        public override void Recalculate()
-        {
-            Opacity.Recalculate();
-
-            if (Relative != RelativeMode.Disabled && Parent is View)
+            foreach (UIElement child in Children)
             {
-                View Parent = this.Parent as View;
-                List<UIElement> uies = Parent.Children as List<UIElement>;
-                int index = uies.IndexOf(this);
-                // 判断前面有没有元素
-                if (index > 0 && uies[index - 1] is View)
+                CalculatedStyle dimension = child.GetDimensions();
+
+                if (IsAdaptiveWidth)
                 {
-                    View Before = uies[index - 1] as View;
-                    Vector2 BeforeSize = Before.GetDimensionsSize();
-                    Vector2 ParentSize = Parent.GetInnerDimensionsSize();
-                    switch (Relative)
+                    maxPos.X = Math.Max(maxPos.X, dimension.X + dimension.Width);
+                }
+
+                if (IsAdaptiveHeight)
+                {
+                    maxPos.Y = Math.Max(maxPos.Y, dimension.Y + dimension.Height);
+                }
+            }
+
+            if (IsAdaptiveWidth)
+            {
+                Width = default;
+                Width.Pixels = MathF.Round(maxPos.X - minPos.X, 2) + HPadding;
+                MaxWidth = Width;
+            }
+
+            if (IsAdaptiveHeight)
+            {
+                Height = default;
+                Height.Pixels = MathF.Round(maxPos.Y - minPos.Y, 2) + VPadding;
+                MaxHeight = Height;
+            }
+
+            RecalculateFromView();
+            OrigianlRecalculate();
+
+            if (HAlign != 0 || VAlign != 0)
+            {
+                RecalculateChildren();
+            }
+        }
+    }
+
+    public virtual void OrigianlRecalculate()
+    {
+        CalculatedStyle parentDimensions =
+            Parent?.GetInnerDimensions() ?? UserInterface.ActiveInstance.GetDimensions();
+
+        View view = Parent as View;
+
+        if (Parent is UIList || (view?.IsAdaptiveWidth ?? false))
+        {
+            MaxWidth = new StyleDimension(float.MaxValue, 0f);
+        }
+
+        if (Parent is UIList || (view?.IsAdaptiveHeight ?? false))
+        {
+            MaxHeight = new StyleDimension(float.MaxValue, 0f);
+        }
+
+        _outerDimensions = GetDimensionsBasedOnParentDimensions(parentDimensions);
+
+        _dimensions = _outerDimensions;
+        _dimensions.X += MarginLeft;
+        _dimensions.Y += MarginTop;
+        _dimensions.Width -= MarginLeft + MarginRight;
+        _dimensions.Height -= MarginTop + MarginBottom;
+
+        _innerDimensions = _dimensions;
+        _innerDimensions.X += PaddingLeft;
+        _innerDimensions.Y += PaddingTop;
+        _innerDimensions.Width -= HPadding;
+        _innerDimensions.Height -= VPadding;
+    }
+
+    public virtual void RecalculateFromView()
+    {
+        Opacity.Recalculate();
+
+        if (RelativeMode is RelativeMode.Horizontal or RelativeMode.Vertical)
+        {
+            if (RelativeMode is RelativeMode.Vertical)
+            {
+                HAlign = 0f;
+            }
+
+            if (RelativeMode is RelativeMode.Horizontal)
+            {
+                VAlign = 0f;
+            }
+
+            Left = Top = new StyleDimension();
+
+            if (Parent is View parent && parent.Children is List<UIElement> parentChildren &&
+                parentChildren.IndexOf(this) is int index && index >= 1)
+            {
+                View previousView = null;
+
+                for (int i = index - 1; i > -1; i--)
+                {
+                    if (parentChildren[i] is View view)
                     {
-                        // 横向
+                        previousView = view;
+                        break;
+                    }
+                }
+
+                if (previousView != null)
+                {
+                    Vector2 previousViewOuterSize = previousView.GetOuterDimensionsSize();
+                    Vector2 parentInnerSize = parent.GetInnerDimensionsSize();
+
+                    switch (RelativeMode)
+                    {
                         case RelativeMode.Horizontal:
-                            Left.Pixels = Before.Left.Pixels + BeforeSize.X + Spacing.X;
+                            SetPosPixels(
+                                previousView.Left.Pixels + previousViewOuterSize.X + Spacing.X,
+                                ResetAnotherPosition ? 0 : previousView.Top.Pixels);
 
-                            Top.Pixels = First ? 0 : Before.Top.Pixels;
-
-                            if (Wrap && Left.Pixels + Width.Pixels > ParentSize.X)
+                            if (PreventOverflow && RightPixels > parentInnerSize.X)
                             {
-                                Left.Pixels = 0;
-                                Top.Pixels = Before.Top.Pixels + BeforeSize.Y + Spacing.Y;
+                                SetPosPixels(0f, previousView.Top.Pixels + previousViewOuterSize.Y + Spacing.Y);
                             }
                             break;
-                        // 纵向
                         case RelativeMode.Vertical:
-                            Top.Pixels = Before.Top.Pixels + BeforeSize.Y + Spacing.Y;
+                            SetPosPixels(
+                                ResetAnotherPosition ? 0 : previousView.Left.Pixels,
+                                previousView.Top.Pixels + previousViewOuterSize.Y + Spacing.Y);
 
-                            Left.Pixels = First ? 0 : Before.Left.Pixels;
-
-                            if (Wrap && Top.Pixels + Height.Pixels > ParentSize.Y)
+                            if (PreventOverflow && BottomPixels > parentInnerSize.Y)
                             {
-                                Top.Pixels = 0;
-                                Left.Pixels = Before.Left.Pixels + BeforeSize.X + Spacing.X;
+                                SetPosPixels(previousView.Left.Pixels + previousViewOuterSize.X + Spacing.X, 0f);
                             }
                             break;
                     }
                 }
             }
-
-            CalculatedStyle parentDimensions = ((Parent == null) ? UserInterface.ActiveInstance.GetDimensions() : Parent.GetInnerDimensions());
-            if (Parent != null && (Parent is UIList || Parent is ListView))
-            {
-                parentDimensions.Height = float.MaxValue;
-            }
-
-            CalculatedStyle calculatedStyle = (_outerDimensions = GetDimensionsBasedOnParentDimensions(parentDimensions));
-            calculatedStyle.X += MarginLeft;
-            calculatedStyle.Y += MarginTop;
-            calculatedStyle.Width -= MarginLeft + MarginRight;
-            calculatedStyle.Height -= MarginTop + MarginBottom;
-            _dimensions = calculatedStyle;
-            calculatedStyle.X += PaddingLeft;
-            calculatedStyle.Y += PaddingTop;
-            calculatedStyle.Width -= PaddingLeft + PaddingRight;
-            calculatedStyle.Height -= PaddingTop + PaddingBottom;
-            _innerDimensions = calculatedStyle;
-            RecalculateChildren();
-        }
-
-        public override void LeftMouseDown(UIMouseEvent evt)
-        {
-            base.LeftMouseDown(evt);
-            KeepPressed = true;
-        }
-
-        public override void LeftMouseUp(UIMouseEvent evt)
-        {
-            base.LeftMouseUp(evt);
-            KeepPressed = false;
-        }
-
-        public override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            Vector2 pos = GetDimensions().Position();
-            Vector2 size = GetDimensions().Size();
-
-            if (Border > 0 && (BgColor != Color.Transparent || BorderColor != Color.Transparent))
-            {
-                SDFRectangle.HasBorder(pos, size, Rounded, BgColor * Opacity.Value, Border, BorderColor * Opacity.Value);
-            }
-            else if (BgColor != Color.Transparent)
-            {
-                SDFRectangle.NoBorder(pos, size, Rounded, BgColor * Opacity.Value);
-            }
-
-            base.DrawSelf(spriteBatch);
-        }
-
-        // 加入
-        public void Join(UIElement parent)
-        {
-            parent.Append(this);
-        }
-
-        // 下面这些方法只是为了更方便的使用 UIElement 这个类。
-        // 原来是写到了 UIElementHelper ，但是直接写这里比较舒服。
-        public View SetPosPixels(float left, float top)
-        {
-            Left.Pixels = left;
-            Top.Pixels = top;
-            return this;
-        }
-
-        public View SetPosPixels(Vector2 size)
-        {
-            Left.Pixels = size.X;
-            Top.Pixels = size.Y;
-            return this;
-        }
-
-        public View SetInnerPixels(float width, float height)
-        {
-            Width.Pixels = width + PaddingLeft + PaddingRight;
-            Height.Pixels = height + PaddingTop + PaddingBottom;
-            return this;
-        }
-
-        public View SetInnerPixels(Vector2 size)
-        {
-            Width.Pixels = size.X + PaddingLeft + PaddingRight;
-            Height.Pixels = size.Y + PaddingTop + PaddingBottom;
-            return this;
-        }
-
-        public View SetInnerPixels(float size)
-        {
-            Width.Pixels = size + PaddingLeft + PaddingRight;
-            Height.Pixels = size + PaddingTop + PaddingBottom;
-            return this;
-        }
-
-        public View SetSizePixels(float width, float height)
-        {
-            Width.Pixels = width;
-            Height.Pixels = height;
-            return this;
-        }
-
-        public View SetSizePixels(Vector2 size)
-        {
-            Width.Pixels = size.X;
-            Height.Pixels = size.Y;
-            return this;
-        }
-
-        public View SetPadding(float left, float top, float right, float bottom)
-        {
-            PaddingLeft = left;
-            PaddingTop = top;
-            PaddingRight = right;
-            PaddingBottom = bottom;
-            return this;
-        }
-
-        public View SetPadding(float h, float v)
-        {
-            PaddingLeft = PaddingRight = h;
-            PaddingTop = PaddingBottom = v;
-            return this;
-        }
-
-        // 获取
-        public float RightPixels()
-        {
-            return Left.Pixels + Width.Pixels + MarginLeft + MarginRight;
-        }
-
-        public float BottomPixels()
-        {
-            return Top.Pixels + Height.Pixels + MarginTop + MarginBottom;
-        }
-
-        public Vector2 GetPosPixel()
-        {
-            return new Vector2(Left.Pixels, Top.Pixels);
-        }
-
-        public Vector2 GetDimensionsSize()
-        {
-            CalculatedStyle dimensions = GetDimensions();
-            return new Vector2(dimensions.Width, dimensions.Height);
-        }
-
-        public Vector2 GetInnerDimensionsSize()
-        {
-            CalculatedStyle dimensions = GetInnerDimensions();
-            return new Vector2(dimensions.Width, dimensions.Height);
         }
     }
+
+    public virtual void PreUpdate(GameTime gameTime)
+    {
+        foreach (UIElement child in Children)
+        {
+            if (child is View view)
+            {
+                view.PreUpdate(gameTime);
+            }
+        }
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+
+        // 记录先前的子元素数量
+        PreviousChildCount = Children.Count();
+    }
+
+    public override void LeftMouseDown(UIMouseEvent evt)
+    {
+        IsPressed = true;
+
+        base.LeftMouseDown(evt);
+    }
+
+    public override void LeftMouseUp(UIMouseEvent evt)
+    {
+        IsPressed = false;
+
+        base.LeftMouseUp(evt);
+    }
+
+    public override void DrawChildren(SpriteBatch spriteBatch)
+    {
+        if (OverflowHidden && HideFullyOverflowedElements)
+        {
+            Vector2 pos = Parent.GetDimensions().Position();
+            Vector2 size = Parent.GetDimensions().Size();
+            foreach (UIElement uie in from uie in Elements
+                                      let dimensions2 = uie.GetDimensions()
+                                      let position2 = dimensions2.Position()
+                                      let size2 = dimensions2.Size()
+                                      where Collision.CheckAABBvAABBCollision(pos, size, position2, size2)
+                                      select uie)
+            {
+                uie.Draw(spriteBatch);
+            }
+        }
+        else
+        {
+            foreach (UIElement element in Elements)
+            {
+                element.Draw(spriteBatch);
+            }
+        }
+    }
+
+    public override void DrawSelf(SpriteBatch spriteBatch)
+    {
+        Vector2 pos = GetDimensions().Position();
+        Vector2 size = GetDimensions().Size();
+
+        if (Border > 0 && (BgColor != Color.Transparent || BorderColor != Color.Transparent))
+        {
+            SDFRectangle.HasBorder(pos, size, Rounded, BgColor * Opacity.Value, Border, BorderColor * Opacity.Value);
+        }
+        else if (BgColor != Color.Transparent)
+        {
+            SDFRectangle.NoBorder(pos, size, Rounded, BgColor * Opacity.Value);
+        }
+
+        base.DrawSelf(spriteBatch);
+    }
+    #endregion
+
+    #region 拓展一些 UIElement 原来没有的方法
+    public void JoinParent(UIElement parent)
+    {
+        parent.Append(this);
+    }
+
+    public View SetPosPixels(float left, float top)
+    {
+        Left.Pixels = left;
+        Top.Pixels = top;
+        return this;
+    }
+
+    public View SetPosPixels(Vector2 size)
+    {
+        Left.Pixels = size.X;
+        Top.Pixels = size.Y;
+        return this;
+    }
+
+    public View SetMaxInnerPixels(float width, float height)
+    {
+        MaxWidth.Pixels = width + HPadding;
+        MaxHeight.Pixels = height + VPadding;
+        return this;
+    }
+
+    public View SetMaxInnerPixels(Vector2 size)
+    {
+        MaxWidth.Pixels = size.X + HPadding;
+        MaxHeight.Pixels = size.Y + VPadding;
+        return this;
+    }
+
+    public View SetInnerPixels(float width, float height)
+    {
+        Width.Pixels = width + HPadding;
+        Height.Pixels = height + VPadding;
+        return this;
+    }
+
+    public View SetInnerPixels(Vector2 size)
+    {
+        Width.Pixels = size.X + HPadding;
+        Height.Pixels = size.Y + VPadding;
+        return this;
+    }
+
+    public View SetMaxSizePixels(float width, float height)
+    {
+        MaxWidth.Pixels = width;
+        MaxWidth.Pixels = height;
+        return this;
+    }
+
+    public View SetMaxSizePixels(Vector2 size)
+    {
+        MaxWidth.Pixels = size.X;
+        MaxHeight.Pixels = size.Y;
+        return this;
+    }
+
+    public View SetSizePixels(float width, float height)
+    {
+        Width.Pixels = width;
+        Height.Pixels = height;
+        return this;
+    }
+
+    public View SetSizePixels(Vector2 size)
+    {
+        Width.Pixels = size.X;
+        Height.Pixels = size.Y;
+        return this;
+    }
+
+    public View SetPadding(float left, float top, float right, float bottom)
+    {
+        PaddingLeft = left;
+        PaddingTop = top;
+        PaddingRight = right;
+        PaddingBottom = bottom;
+        return this;
+    }
+
+    public View SetPadding(float h, float v)
+    {
+        PaddingLeft = PaddingRight = h;
+        PaddingTop = PaddingBottom = v;
+        return this;
+    }
+
+    #region 获取一些属性
+    public Vector2 PositionPixels => new Vector2(Left.Pixels, Top.Pixels);
+
+    public float HMargin => MarginLeft + MarginRight;
+    public float VMargin => MarginTop + MarginBottom;
+
+    public float HPadding => PaddingLeft + PaddingRight;
+    public float VPadding => PaddingTop + PaddingBottom;
+
+    public float RightPixels => Left.Pixels + Width.Pixels + HMargin;
+    public float BottomPixels => Top.Pixels + Height.Pixels + VMargin;
+
+    public Vector2 GetOuterDimensionsRight()
+    {
+        return new Vector2(_outerDimensions.Width + _outerDimensions.X, _outerDimensions.Height + _outerDimensions.Y);
+    }
+
+    public Vector2 GetDimensionsRight()
+    {
+        return new Vector2(_dimensions.Width + _dimensions.X, _dimensions.Height + _dimensions.Y);
+    }
+
+    public Vector2 GetInnerDimensionsRight()
+    {
+        return new Vector2(_innerDimensions.Width + _innerDimensions.X, _innerDimensions.Height + _innerDimensions.Y);
+    }
+
+    public Vector2 GetOuterDimensionsSize()
+    {
+        return new Vector2(_outerDimensions.Width, _outerDimensions.Height);
+    }
+
+    public Vector2 GetDimensionsSize()
+    {
+        return new Vector2(_dimensions.Width, _dimensions.Height);
+    }
+
+    public Vector2 GetInnerDimensionsSize()
+    {
+        return new Vector2(_innerDimensions.Width, _innerDimensions.Height);
+    }
+    #endregion
+    #endregion
 }

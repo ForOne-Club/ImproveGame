@@ -44,11 +44,11 @@ namespace ImproveGame.Interface.SUIElements
             Items = items;
             Index = index;
 
-            Relative = RelativeMode.Horizontal;
+            RelativeMode = RelativeMode.Horizontal;
             Spacing = new Vector2(10, 10);
-            Wrap = true;
-            Border = UIColor.ItemSlotBorderSize;
-            Rounded = new Vector4(UIColor.ItemSlotBorderRound);
+            PreventOverflow = true;
+            Border = UIStyle.ItemSlotBorderSize;
+            Rounded = new Vector4(UIStyle.ItemSlotBorderRound);
         }
 
         /// <summary> 为了使该类的子类可以越过该类的 RightMouseDown 而直接调用 UIElement 的 RightMouseDown </summary>
@@ -367,8 +367,8 @@ namespace ImproveGame.Interface.SUIElements
 
         public override void DrawSelf(SpriteBatch sb)
         {
-            BorderColor = FavoritedTimer.Lerp(UIColor.ItemSlotBorder, UIColor.ItemSlotBorderFav);
-            BgColor = FavoritedTimer.Lerp(UIColor.ItemSlotBg, UIColor.ItemSlotBgFav);
+            BorderColor = FavoritedTimer.Lerp(UIStyle.ItemSlotBorder, UIStyle.ItemSlotBorderFav);
+            BgColor = FavoritedTimer.Lerp(UIStyle.ItemSlotBg, UIStyle.ItemSlotBgFav);
 
             BorderColor = NewAndShinyTimer.Lerp(BorderColor, new Color(99, 161, 157, 180));
             BgColor = NewAndShinyTimer.Lerp(BgColor, new Color(55, 93, 131, 180));

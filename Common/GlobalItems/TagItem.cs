@@ -238,7 +238,7 @@ namespace ImproveGame.Common.GlobalItems
             }
             if ((useBox is null && Main.SettingsEnabled_OpaqueBoxBehindTooltips) || useBox is true) {
                 if (shaderBorder)
-                    SDFRectangle.HasBorder(new Vector2(x - widthOffset, y - heightOffset), new Vector2(length + widthOffset * 2, lengthY + heightOffset + heightOffset / 2), new Vector4(12f), UIColor.PanelBg, 2, UIColor.PanelBorder);
+                    SDFRectangle.HasBorder(new Vector2(x - widthOffset, y - heightOffset), new Vector2(length + widthOffset * 2, lengthY + heightOffset + heightOffset / 2), new Vector4(12f), UIStyle.PanelBg, 2, UIStyle.PanelBorder);
                 else
                     TrUtils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
             }

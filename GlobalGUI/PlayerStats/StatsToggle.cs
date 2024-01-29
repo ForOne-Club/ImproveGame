@@ -29,7 +29,7 @@ public class StatsToggle : SUIImage
         if ((evt.Target == this || view is not null && view.DragIgnore ||
              evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
         {
-            Offset = evt.MousePosition - GetPosPixel();
+            Offset = evt.MousePosition - PositionPixels;
             Dragging = true;
         }
     }

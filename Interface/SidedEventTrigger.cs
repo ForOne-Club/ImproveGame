@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface
 {
@@ -17,7 +16,7 @@ namespace ImproveGame.Interface
             internal ISidedView AsSidedView => ViewBody as ISidedView;
         }
 
-        public static bool ViewBodyIs(BaseBody body) => UISystem.Instance.SidedEventTrigger.ViewBody == body;
+        public static bool ViewBodyIs(BaseBody body) => UISystem.Instance.SidedEventTrigger.BaseBody == body;
 
         private static readonly List<SideUIData> UIPool = new();
 
@@ -43,11 +42,11 @@ namespace ImproveGame.Interface
                     State = AnimationState.CompleteClose
                 }
             };
-            
+
             // 设置初始（关闭时）位置
             data.AsSidedView.OnSwapSlide(0f);
             data.ViewBody.Recalculate();
-            
+
             UIPool.Add(data);
         }
 
@@ -114,9 +113,9 @@ namespace ImproveGame.Interface
             }
         }
 
-        protected override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
-            ViewBody = null;
+            BaseBody = null;
 
             foreach (var uiData in UIPool.Where(uiData => uiData.AnimationTimer.AnyOpen))
             {
@@ -126,7 +125,8 @@ namespace ImproveGame.Interface
                 uiData.AsSidedView.Close();
             }
 
-            foreach (var uiData in UIPool) {
+            foreach (var uiData in UIPool)
+            {
                 uiData.AnimationTimer.Update();
                 if (uiData.AnimationTimer.State is AnimationState.Opening or AnimationState.Closing)
                 {
@@ -135,19 +135,19 @@ namespace ImproveGame.Interface
                 }
                 if (uiData.AnimationTimer.CompleteOpen)
                 {
-                    ViewBody = uiData.ViewBody;
+                    BaseBody = uiData.ViewBody;
                 }
             }
 
             base.Update(gameTime);
         }
 
-        protected override bool Draw(bool drawToGame = true)
+        public override bool Draw(bool drawToGame = true)
         {
             // 由于这里除了绘制 _body 还会处理没关完的UI，所以要单独处理云母
             if (drawToGame && GlassVfxType is GlassType.MicaLike)
             {
-                var layers = LayersDictionary["Radial Hotbars"];
+                var layers = EventTriggerManager.EventTriggerInstances["Radial Hotbars"];
                 int index = layers.IndexOf(this);
                 if (index is -1)
                     goto RealDraw;
@@ -158,7 +158,8 @@ namespace ImproveGame.Interface
             }
 
             RealDraw:
-            foreach (var uiData in UIPool.Where(uiData => !uiData.AnimationTimer.CompleteClose && !ViewBodyIs(uiData.ViewBody))) {
+            foreach (var uiData in UIPool.Where(uiData => !uiData.AnimationTimer.CompleteClose && !ViewBodyIs(uiData.ViewBody)))
+            {
                 uiData.ViewBody?.Draw(Main.spriteBatch);
             }
 

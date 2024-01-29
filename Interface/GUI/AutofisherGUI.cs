@@ -3,7 +3,6 @@ using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using Terraria.UI.Chat;
@@ -53,7 +52,7 @@ namespace ImproveGame.Interface.GUI
             panelHeight = 356f;
             panelWidth = 420f;
 
-            basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            basePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
                 Shaded = true
             };
@@ -108,7 +107,7 @@ namespace ImproveGame.Interface.GUI
                 basePanel.Append(fishSlot[i]);
             }
 
-            textPanel = new(UIColor.TitleBg, UIColor.TitleBg, rounded: 10)
+            textPanel = new(UIStyle.TitleBg, UIStyle.TitleBg, rounded: 10)
             {
                 HAlign = 0.5f,
                 Top = {Pixels = -34f, Percent = 1f},
@@ -349,9 +348,9 @@ namespace ImproveGame.Interface.GUI
 
         public override bool CanPriority(UIElement target) => target != this;
 
-        public override bool CanDisableMouse(UIElement target)
+        public override bool CanSetFocusUIElement(UIElement target)
         {
-            return (target != this && basePanel.IsMouseHovering) || basePanel.KeepPressed;
+            return (target != this && basePanel.IsMouseHovering) || basePanel.IsPressed;
         }
     }
 

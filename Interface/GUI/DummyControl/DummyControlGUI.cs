@@ -7,7 +7,7 @@ public class DummyControlGUI : BaseBody
     #region ViewBody
     public override bool Enabled { get => IsVisible; set => IsVisible = value; }
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
     {
         return Window?.IsMouseHovering ?? false;
     }
@@ -25,28 +25,28 @@ public class DummyControlGUI : BaseBody
 
     public override void OnInitialize()
     {
-        Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+        Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Draggable = true
         };
         Window.SetAlign(0.5f, 0.5f);
         Window.SetPadding(0f);
         Window.SetSizePixels(360f, 360f);
-        Window.Join(this);
+        Window.JoinParent(this);
 
         #region 标题栏
         var titleBar = new View
         {
             DragIgnore = true,
-            BgColor = UIColor.TitleBg2,
+            BgColor = UIStyle.TitleBg2,
             Border = 2f,
-            BorderColor = UIColor.PanelBorder,
+            BorderColor = UIStyle.PanelBorder,
             Rounded = new Vector4(10f, 10f, 0f, 0f),
         };
         titleBar.SetPadding(0);
         titleBar.Width.Precent = 1f;
         titleBar.Height.Pixels = 42f;
-        titleBar.Join(Window);
+        titleBar.JoinParent(Window);
 
         SUIText title = new SUIText
         {
@@ -56,7 +56,7 @@ public class DummyControlGUI : BaseBody
         };
         title.SetPadding(15f, 0f, 10f, 0f);
         title.SetInnerPixels(title.TextSize);
-        title.Join(titleBar);
+        title.JoinParent(titleBar);
 
         var cross = new SUICross
         {
@@ -68,7 +68,7 @@ public class DummyControlGUI : BaseBody
         };
         cross.Width.Pixels = 42f;
         cross.Height.Set(0f, 1f);
-        cross.Join(titleBar);
+        cross.JoinParent(titleBar);
 
         cross.OnLeftMouseDown += (_, _) =>
         {
@@ -78,50 +78,50 @@ public class DummyControlGUI : BaseBody
         #endregion
 
         ContentView = new View();
-        ContentView.Top.Pixels = titleBar.BottomPixels();
+        ContentView.Top.Pixels = titleBar.BottomPixels;
         ContentView.Width.Percent = 1f;
         ContentView.Height.Pixels = 360f - 42f;
         ContentView.SetPadding(6f, 4f);
-        ContentView.Join(Window);
+        ContentView.JoinParent(Window);
 
         ST = new SUIText()
         {
             TextOrKey = "Hello tML. Hello tML. Hello tML. Hello tML. Hello tML. Hello tML.",
             TextBorderColor = Color.Transparent,
-            Relative = RelativeMode.Horizontal,
+            RelativeMode = RelativeMode.Horizontal,
             IsWrapped = true,
-            Wrap = true
+            PreventOverflow = true
         };
-        ST.SetRoundedRectangleValues(new Color(0, 155, 255) * 0.5f, 2f, Color.Transparent, new Vector4(UIColor.ItemSlotBorderRound));
+        ST.SetRoundedRectProperties(new Color(0, 155, 255) * 0.5f, 2f, Color.Transparent, new Vector4(UIStyle.ItemSlotBorderRound));
         ST.SetPadding(15f, 5f);
         ST.TextAlign = new Vector2(0.5f);
         ST.Width.Precent = 1f;
         ST.Height.Pixels = 100f;
-        ST.Join(ContentView);
+        ST.JoinParent(ContentView);
 
         ST = new SUIText()
         {
             TextOrKey = "Hello tML.",
             TextBorderColor = Color.Transparent,
-            Relative = RelativeMode.Horizontal,
-            Wrap = true
+            RelativeMode = RelativeMode.Horizontal,
+            PreventOverflow = true
         };
-        ST.SetRoundedRectangleValues(new Color(255, 155, 0) * 0.5f, 2f, Color.Transparent, new Vector4(UIColor.ItemSlotBorderRound));
+        ST.SetRoundedRectProperties(new Color(255, 155, 0) * 0.5f, 2f, Color.Transparent, new Vector4(UIStyle.ItemSlotBorderRound));
         ST.SetPadding(15f, 5f);
         ST.SetInnerPixels(ST.TextSize);
-        ST.Join(ContentView);
+        ST.JoinParent(ContentView);
 
         ST = new SUIText()
         {
             TextOrKey = "Hello tML.",
             TextBorderColor = Color.Transparent,
-            Relative = RelativeMode.Horizontal,
-            Wrap = true
+            RelativeMode = RelativeMode.Horizontal,
+            PreventOverflow = true
         };
-        ST.SetRoundedRectangleValues(new Color(255, 0, 155) * 0.5f, 2f, Color.Transparent, new Vector4(UIColor.ItemSlotBorderRound));
+        ST.SetRoundedRectProperties(new Color(255, 0, 155) * 0.5f, 2f, Color.Transparent, new Vector4(UIStyle.ItemSlotBorderRound));
         ST.SetPadding(15f, 5f);
         ST.SetInnerPixels(ST.TextSize);
-        ST.Join(ContentView);
+        ST.JoinParent(ContentView);
     }
 
     /// <summary>

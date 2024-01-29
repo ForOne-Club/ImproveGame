@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
@@ -7,20 +7,24 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI.PlayerStats;
 
+[AutoCreateGUI("Radial Hotbars", "Player Stats")]
 public class PlayerStatsGUI : BaseBody
 {
+    public static PlayerStatsGUI Instance { get; private set; }
+    public PlayerStatsGUI() => Instance = this;
+
     #region ViewBody
     public override bool Enabled { get => Visible; set => Visible = value; }
 
     public override bool CanPriority(UIElement target) => this != target && this != Body;
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
     {
         if (target != this)
         {
             foreach (var item in Children)
             {
-                if (item != Body && (item.IsMouseHovering || (item is View view && view.KeepPressed)))
+                if (item != Body && (item.IsMouseHovering || (item is View view && view.IsPressed)))
                 {
                     return true;
                 }
@@ -28,7 +32,7 @@ public class PlayerStatsGUI : BaseBody
 
             foreach (var item in Body.Children)
             {
-                if (item.IsMouseHovering || (item is View view && view.KeepPressed))
+                if (item.IsMouseHovering || (item is View view && view.IsPressed))
                 {
                     return true;
                 }
@@ -68,35 +72,35 @@ public class PlayerStatsGUI : BaseBody
             Height = new StyleDimension(0, 1f),
         };
         Body.OnUpdate += Body_OnUpdate;
-        Body.Join(this);
+        Body.JoinParent(this);
 
         foreach (var item in PlayerStatsSystem.Instance.StatsCategories)
         {
             if (item.Value.Favorite)
             {
                 StatsCard card = CreateStatsCardForDisplay(Body, item.Value);
-                card.Join(Body);
+                card.JoinParent(Body);
             }
         }
         #endregion
 
         #region 控制窗口
-        Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg, 10, 2, true);
+        Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg, 10, 2, true);
 
         #region 标题栏
         // 标题
         var TitleView = new View
         {
             DragIgnore = true,
-            BgColor = UIColor.TitleBg2,
+            BgColor = UIStyle.TitleBg2,
             Border = 2f,
-            BorderColor = UIColor.PanelBorder,
+            BorderColor = UIStyle.PanelBorder,
             Rounded = new Vector4(10f, 10f, 0f, 0f),
         };
         TitleView.SetPadding(0);
         TitleView.Width.Precent = 1f;
         TitleView.Height.Pixels = 42f;
-        TitleView.Join(Window);
+        TitleView.JoinParent(Window);
 
         var Title = new SUITitle(GetText("UI.PlayerStats.Control"), 0.42f)
         {
@@ -104,7 +108,7 @@ public class PlayerStatsGUI : BaseBody
         };
         Title.SetPadding(15f, 0f, 10f, 0f);
         Title.SetInnerPixels(Title.TextSize);
-        Title.Join(TitleView);
+        Title.JoinParent(TitleView);
 
         var Cross = new SUICross
         {
@@ -116,7 +120,7 @@ public class PlayerStatsGUI : BaseBody
         };
         Cross.Width.Pixels = 42f;
         Cross.Height.Set(0f, 1f);
-        Cross.Join(TitleView);
+        Cross.JoinParent(TitleView);
 
         Cross.OnLeftMouseDown += (_, _) =>
         {
@@ -140,23 +144,23 @@ public class PlayerStatsGUI : BaseBody
 
             if (b1 <= b2)
             {
-                card.Join(StatsGrid.ListView);
+                card.JoinParent(StatsGrid.ListView);
             }
             else
             {
-                card.Join(StatsGrid.ListView2);
+                card.JoinParent(StatsGrid.ListView2);
             }
         }
 
-        StatsGrid.Top.Pixels = TitleView.BottomPixels();
+        StatsGrid.Top.Pixels = TitleView.BottomPixels;
         StatsGrid.SetPadding(7f);
         StatsGrid.PaddingTop -= 3;
         StatsGrid.PaddingRight -= 1;
         StatsGrid.SetInnerPixels(160f * 2f + 4 + 21f, 250f);
-        StatsGrid.Join(Window);
+        StatsGrid.JoinParent(Window);
 
         Window.SetPadding(0);
-        Window.SetInnerPixels(StatsGrid.Width.Pixels, StatsGrid.BottomPixels());
+        Window.SetInnerPixels(StatsGrid.Width.Pixels, StatsGrid.BottomPixels);
 
         Window.HAlign = Window.VAlign = 0.5f;
         #endregion
@@ -172,10 +176,10 @@ public class PlayerStatsGUI : BaseBody
                 }
                 else
                 {
-                    Window.Join(this);
+                    Window.JoinParent(this);
                 }
             };
-        ControllerSwitch.Join(this);
+        ControllerSwitch.JoinParent(this);
         #endregion
     }
 
@@ -219,7 +223,7 @@ public class PlayerStatsGUI : BaseBody
             if (item.Value.Favorite)
             {
                 StatsCard card = CreateStatsCardForDisplay(Body, item.Value);
-                card.Join(Body);
+                card.JoinParent(Body);
             }
         }
     }
@@ -262,7 +266,7 @@ public class PlayerStatsGUI : BaseBody
 
         foreach (var item in Children)
         {
-            if (item != Body && (item.IsMouseHovering || (item is View view && view.KeepPressed)))
+            if (item != Body && (item.IsMouseHovering || (item is View view && view.IsPressed)))
             {
                 b = true;
                 break;
@@ -271,7 +275,7 @@ public class PlayerStatsGUI : BaseBody
 
         foreach (var item in Body.Children)
         {
-            if (item.IsMouseHovering || (item is View view && view.KeepPressed))
+            if (item.IsMouseHovering || (item is View view && view.IsPressed))
             {
                 b = true;
                 break;
@@ -340,18 +344,18 @@ public class PlayerStatsGUI : BaseBody
         {
             if (card.StatsCategory.Favorite)
             {
-                card.BorderColor = UIColor.ItemSlotBorderFav;
+                card.BorderColor = UIStyle.ItemSlotBorderFav;
             }
             else
             {
-                card.BorderColor = UIColor.PanelBorder;
+                card.BorderColor = UIStyle.PanelBorder;
             }
         };
 
         card.TitleView.OnUpdate += (_) =>
         {
             card.TitleView.Border = card.TitleView.HoverTimer.Lerp(0, 2);
-            card.TitleView.BorderColor = card.TitleView.HoverTimer.Lerp(UIColor.PanelBorder, UIColor.ItemSlotBorderFav);
+            card.TitleView.BorderColor = card.TitleView.HoverTimer.Lerp(UIStyle.PanelBorder, UIStyle.ItemSlotBorderFav);
         };
 
         card.TitleView.OnLeftMouseDown += (_, _) =>
@@ -362,11 +366,11 @@ public class PlayerStatsGUI : BaseBody
             {
                 // 正常版的创建
                 StatsCard innerCard = CreateStatsCardForDisplay(view, proCat);
-                innerCard.Join(view);
+                innerCard.JoinParent(view);
             }
         };
 
-        card.Relative = RelativeMode.Vertical;
+        card.RelativeMode = RelativeMode.Vertical;
         card.Spacing = new Vector2(4f);
         card.SetInnerPixels(160, (30 + 2) * card.Children.Count() - 2);
 

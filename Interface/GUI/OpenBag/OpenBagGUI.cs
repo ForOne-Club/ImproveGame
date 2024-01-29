@@ -14,8 +14,8 @@ public class OpenBagGUI : BaseBody
 
     public override bool CanPriority(UIElement target) => target != this;
 
-    public override bool CanDisableMouse(UIElement target)
-        => (target != this && MainPanel.IsMouseHovering) || MainPanel.KeepPressed;
+    public override bool CanSetFocusUIElement(UIElement target)
+        => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
 
     // 主面板
     public SUIPanel MainPanel;
@@ -44,10 +44,10 @@ public class OpenBagGUI : BaseBody
                 Width = new StyleDimension(-16f, 1f),
                 HAlign = 0.5f,
                 DragIgnore = true,
-                Relative = RelativeMode.Vertical,
+                RelativeMode = RelativeMode.Vertical,
                 Spacing = new Vector2(0, 6)
             };
-            searchArea.Join(MainPanel);
+            searchArea.JoinParent(MainPanel);
             searchArea.Append(new UIHorizontalSeparator
             {
                 Width = StyleDimension.FromPercent(1f),
@@ -56,7 +56,7 @@ public class OpenBagGUI : BaseBody
         }
 
         // 主面板
-        MainPanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+        MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Shaded = true,
             Draggable = true
@@ -64,25 +64,25 @@ public class OpenBagGUI : BaseBody
         MainPanel.SetPadding(0f);
         MainPanel.SetPosPixels(410, 360)
             .SetSizePixels(404, 366)
-            .Join(this);
+            .JoinParent(this);
 
-        TitlePanel = new SUIPanel(UIColor.PanelBorder, UIColor.TitleBg2)
+        TitlePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.TitleBg2)
         {
             DragIgnore = true,
             Width = {Pixels = 0f, Precent = 1f},
             Height = {Pixels = 50f, Precent = 0f},
             Rounded = new Vector4(10f, 10f, 0f, 0f),
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         TitlePanel.SetPadding(0f);
-        TitlePanel.Join(MainPanel);
+        TitlePanel.JoinParent(MainPanel);
 
         // 标题
         Title = new SUITitle(GetText("UI.OpenBag.Title"), 0.5f)
         {
             VAlign = 0.5f
         };
-        Title.Join(TitlePanel);
+        Title.JoinParent(TitlePanel);
 
         // Cross
         Cross = new SUICross
@@ -93,7 +93,7 @@ public class OpenBagGUI : BaseBody
             Rounded = new Vector4(0f, 10f, 0f, 0f)
         };
         Cross.OnLeftMouseDown += (_, _) => Close();
-        Cross.Join(TitlePanel);
+        Cross.JoinParent(TitlePanel);
 
         MakeMainSlotAndButtons();
 
@@ -103,12 +103,12 @@ public class OpenBagGUI : BaseBody
         var itemsPanel = new View
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             OverflowHidden = true
         };
         itemsPanel.SetPadding(15, 0, 14, 14);
         itemsPanel.SetSize(0f, 190f, 1f, 0f);
-        itemsPanel.Join(MainPanel);
+        itemsPanel.JoinParent(MainPanel);
 
         // 没有物品时显示的提示，这里先Append，要用到的时候调一下Left就行
         TipText = new UIText(GetText("UI.OpenBag.TipText"))
@@ -122,25 +122,25 @@ public class OpenBagGUI : BaseBody
 
         LootsGrid = new BaseGrid();
         LootsGrid.SetBaseValues(-1, 8, new Vector2(4f), new Vector2(43));
-        LootsGrid.Join(itemsPanel);
+        LootsGrid.JoinParent(itemsPanel);
 
         Scrollbar = new SUIScrollBar {HAlign = 1f};
         Scrollbar.Left.Pixels = -1;
         Scrollbar.Height.Pixels = LootsGrid.Height();
         Scrollbar.SetView(itemsPanel.GetInnerSizePixels().Y, LootsGrid.Height.Pixels);
-        Scrollbar.Join(this);
+        Scrollbar.JoinParent(this);
         RefreshGrid();
 
         var sellAll = new SellAllButton(GetText("UI.OpenBag.SellAll.Name"), SellAll)
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical,
             OverflowHidden = true,
             HAlign = 0.5f
         };
         sellAll.SetPadding(14, 14, 14, 14);
         sellAll.SetSize(-30f, 38f, 1f, 0f);
-        sellAll.Join(MainPanel);
+        sellAll.JoinParent(MainPanel);
     }
 
     /// <summary>
@@ -151,11 +151,11 @@ public class OpenBagGUI : BaseBody
         var bagPanel = new View
         {
             DragIgnore = true,
-            Relative = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical
         };
         bagPanel.SetPadding(6, 6, 6, 6);
         bagPanel.SetSize(0f, 56, 1f, 0f);
-        bagPanel.Join(MainPanel);
+        bagPanel.JoinParent(MainPanel);
 
         var itemSlot = CreateItemSlot(20f, 6f, onItemChanged: (item, _) =>
             {
@@ -193,7 +193,7 @@ public class OpenBagGUI : BaseBody
         {
             openButton.Text = GetText(CoroutineSystem.OpenBagRunner.Count > 0 ? "UI.OpenBag.Stop" : "UI.OpenBag.Open");
         };
-        openButton.Join(bagPanel);
+        openButton.JoinParent(bagPanel);
 
         var depositButton = new SUIButton(ModAsset.Quick.Value, Lang.inter[29].Value) // 强夺全部
         {
@@ -213,7 +213,7 @@ public class OpenBagGUI : BaseBody
             // 控制提示文本是否显示
             TipText.Left.Pixels = 0;
         };
-        depositButton.Join(bagPanel);
+        depositButton.JoinParent(bagPanel);
     }
 
     /// <summary>
@@ -291,7 +291,7 @@ public class OpenBagGUI : BaseBody
                 }
 
                 var itemSlot = new LootItemSlot(keeper.Loots, i);
-                itemSlot.Join(LootsGrid);
+                itemSlot.JoinParent(LootsGrid);
             }
 
             // 控制提示文本是否显示

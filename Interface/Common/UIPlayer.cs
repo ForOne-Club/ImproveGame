@@ -1,9 +1,8 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Core;
+using ImproveGame.GlobalGUI;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.AutoTrash;
-using ImproveGame.Interface.GUI.BannerChest;
 using ImproveGame.Interface.GUI.DummyControl;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
@@ -70,32 +69,14 @@ public class UIPlayer : ModPlayer
         }
 
         // 玩家信息
-        uiSystem.PlayerStatsGUI = new PlayerStatsGUI();
-        uiSystem.PlayerStatsTrigger.SetBaseBody(uiSystem.PlayerStatsGUI);
         CheckPositionValid(ref PlayerInfoTogglePosition, PlayerInfoToggleDefPosition);
-        uiSystem.PlayerStatsGUI.ControllerSwitch.SetPos(PlayerInfoTogglePosition).Recalculate();
         PlayerStatsGUI.Visible = true;
-        uiSystem.PlayerStatsGUI.LoadAndSetupFavorites();
+        PlayerStatsGUI.Instance.ControllerSwitch.SetPos(PlayerInfoTogglePosition).Recalculate();
+        PlayerStatsGUI.Instance.LoadAndSetupFavorites();
 
         // 假人控制器
         uiSystem.DummyControlGUI = new DummyControlGUI();
         uiSystem.DummyControlTrigger.SetBaseBody(uiSystem.DummyControlGUI);
-
-        // 自动垃圾桶
-        uiSystem.AutoTrashGUI = new GarbageListGUI();
-        uiSystem.AutoTrashTrigger.SetBaseBody(uiSystem.AutoTrashGUI);
-
-        // 自动垃圾桶
-        uiSystem.InventoryTrashGUI = new InventoryTrashGUI();
-        uiSystem.InventoryTrashTrigger.SetBaseBody(uiSystem.InventoryTrashGUI);
-
-        // 旗帜盒
-        uiSystem.PackageGUI = new PackageGUI();
-        uiSystem.PackageTrigger.SetBaseBody(uiSystem.PackageGUI);
-
-        // 大背包
-        /*uiSystem.BigBagGUI = new BigBagGUI();
-        uiSystem.BigBagTrigger.SetBaseBody(uiSystem.BigBagGUI);*/
 
         BigBagGUI.Instance.ItemGrid.SetInventory(dataPlayer.SuperVault);
         CheckPositionValid(ref HugeInventoryUIPosition, HugeInventoryDefPosition);

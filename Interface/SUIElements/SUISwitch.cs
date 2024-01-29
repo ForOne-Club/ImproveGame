@@ -66,9 +66,9 @@ public class SUISwitch : View
 
     public override void DrawSelf(SpriteBatch sb)
     {
-        Color switchBgColor = _timer.Lerp(UIColor.SwitchBg, UIColor.SwitchBgHover);
-        Color switchBorderColor = _timer.Lerp(UIColor.SwitchBorder, UIColor.SwitchBorderHover);
-        Color roundColor = _timer.Lerp(UIColor.SwitchRound, UIColor.SwitchRoundHover);
+        Color switchBgColor = _timer.Lerp(UIStyle.SwitchBg, UIStyle.SwitchBgHover);
+        Color switchBorderColor = _timer.Lerp(UIStyle.SwitchBorder, UIStyle.SwitchBorderHover);
+        Color roundColor = _timer.Lerp(UIStyle.SwitchRound, UIStyle.SwitchRoundHover);
 
         Vector2 innerPos = GetInnerDimensions().Position();
         Vector2 innerSize = GetInnerDimensions().Size();

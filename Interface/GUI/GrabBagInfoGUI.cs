@@ -16,7 +16,7 @@ namespace ImproveGame.Interface.GUI
             return BasePanel.IsMouseHovering;
         }
 
-        public override bool CanDisableMouse(UIElement target)
+        public override bool CanSetFocusUIElement(UIElement target)
         {
             return BasePanel.IsMouseHovering;
         }

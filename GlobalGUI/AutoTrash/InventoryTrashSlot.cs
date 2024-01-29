@@ -2,7 +2,7 @@
 using ImproveGame.Common.Players;
 using ImproveGame.Interface.Common;
 
-namespace ImproveGame.Interface.GUI.AutoTrash;
+namespace ImproveGame.GlobalGUI.AutoTrash;
 
 public class InventoryTrashSlot : BaseItemSlot
 {
@@ -29,11 +29,11 @@ public class InventoryTrashSlot : BaseItemSlot
         Index = index;
         SetBaseItemSlotValues(true, true);
         SetSizePixels(44, 44);
-        SetRoundedRectangleValues(
-            UIColor.TrashSlotBg,
-            UIColor.ItemSlotBorderSize,
-            UIColor.TrashSlotBorder,
-            new Vector4(UIColor.ItemSlotBorderRound * 0.8f));
+        SetRoundedRectProperties(
+            UIStyle.TrashSlotBg,
+            UIStyle.ItemSlotBorderSize,
+            UIStyle.TrashSlotBorder,
+            new Vector4(UIStyle.ItemSlotBorderRound * 0.8f));
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)

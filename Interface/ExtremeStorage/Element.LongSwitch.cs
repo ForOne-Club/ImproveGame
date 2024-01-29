@@ -70,9 +70,9 @@ namespace ImproveGame.Interface.ExtremeStorage
 
         public override void DrawSelf(SpriteBatch sb)
         {
-            Color color = Color.Lerp(UIColor.SwitchBg, UIColor.SwitchBgHover, _timer.Schedule);
-            Color color2 = Color.Lerp(UIColor.SwitchBorder, UIColor.SwitchBorderHover, _timer.Schedule);
-            Color color3 = Color.Lerp(UIColor.SwitchRound, UIColor.SwitchRoundHover, _timer.Schedule);
+            Color color = Color.Lerp(UIStyle.SwitchBg, UIStyle.SwitchBgHover, _timer.Schedule);
+            Color color2 = Color.Lerp(UIStyle.SwitchBorder, UIStyle.SwitchBorderHover, _timer.Schedule);
+            Color color3 = Color.Lerp(UIStyle.SwitchRound, UIStyle.SwitchRoundHover, _timer.Schedule);
 
             var dimensions = GetDimensions();
             var position = dimensions.Position();
@@ -80,7 +80,7 @@ namespace ImproveGame.Interface.ExtremeStorage
             var size = dimensions.Size();
 
             // 背景板
-            var panelColor = IsMouseHovering ? UIColor.PanelBgLightHover : UIColor.PanelBgLight;
+            var panelColor = IsMouseHovering ? UIStyle.PanelBgLightHover : UIStyle.PanelBgLight;
             SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor);
 
             // 开关

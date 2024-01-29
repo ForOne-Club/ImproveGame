@@ -21,8 +21,8 @@ public class PrefixRecallGUI : BaseBody, ISidedView
 
     public override bool CanPriority(UIElement target) => target != this;
 
-    public override bool CanDisableMouse(UIElement target)
-        => (target != this && _basePanel.IsMouseHovering) || _basePanel.KeepPressed;
+    public override bool CanSetFocusUIElement(UIElement target)
+        => (target != this && _basePanel.IsMouseHovering) || _basePanel.IsPressed;
 
     private static int _oldItemType; // 用于监测type以及时更新uiList
     private static int _oldPrefixCount; // 用于监测词缀数量以及时更新uiList
@@ -67,7 +67,7 @@ public class PrefixRecallGUI : BaseBody, ISidedView
 
     public override void OnInitialize()
     {
-        Append(_basePanel = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+        Append(_basePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Shaded = true,
             Left = {Pixels = PanelLeft},
@@ -199,7 +199,7 @@ public class PrefixTab : SUIPanel
     internal int PrefixId;
     internal int Price;
 
-    public PrefixTab(int prefixId, int value) : base(UIColor.PanelBorderLight, UIColor.PanelBg)
+    public PrefixTab(int prefixId, int value) : base(UIStyle.PanelBorderLight, UIStyle.PanelBg)
     {
         PrefixId = prefixId;
         CalculatePrice(value);

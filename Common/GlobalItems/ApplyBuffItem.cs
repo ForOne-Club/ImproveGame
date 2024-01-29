@@ -2,7 +2,7 @@
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
 using ImproveGame.Core;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;

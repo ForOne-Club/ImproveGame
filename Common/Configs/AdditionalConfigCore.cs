@@ -1,7 +1,9 @@
 ﻿using ImproveGame.Common.Configs.FavoritedSystem;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
-using ImproveGame.Interface.GUI;
+using ImproveGame.GlobalGUI;
+using ImproveGame.Interface;
+using ImproveGame.Interface.GUI.PlayerStats;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
@@ -124,7 +126,7 @@ namespace ImproveGame.Common.Configs
                               new Vector2(410, 360);
             UIPlayer.OpenBagPosition = OpenBagPosition; // 在这里也保存一下
 
-            PlayerInfoTogglePosition = uiSystem.PlayerStatsGUI?.ControllerSwitch?.GetDimensions().Position() ??
+            PlayerInfoTogglePosition = PlayerStatsGUI.Instance?.ControllerSwitch?.GetDimensions().Position() ??
                                        UIPlayer.PlayerInfoToggleDefPosition;
             UIPlayer.PlayerInfoTogglePosition = PlayerInfoTogglePosition; // 在这里也保存一下
         }

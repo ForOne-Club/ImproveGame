@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Utils.Extensions;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 
@@ -24,7 +23,7 @@ public class StorageGrids : ModItemGrid
         ShowSize = ModItemList.GetSize(10, 4, 40, 4f);
 
         ItemList = new ItemSlotList {DragIgnore = true};
-        ItemList.Join(this);
+        ItemList.JoinParent(this);
 
         Scrollbar = new SUIScrollBar
         {
@@ -32,7 +31,7 @@ public class StorageGrids : ModItemGrid
             Height = new StyleDimension(0f, 1f),
             HideIfFilled = true
         };
-        Scrollbar.Join(this);
+        Scrollbar.JoinParent(this);
 
         _searchBar = new SUISearchBar(true)
         {
@@ -40,7 +39,7 @@ public class StorageGrids : ModItemGrid
             Left = StyleDimension.FromPixels(2f)
         };
         _searchBar.OnSearchContentsChanged += _ => UISystem.Instance.ExtremeStorageGUI.FindChestsAndPopulate(true);
-        _searchBar.Join(this);
+        _searchBar.JoinParent(this);
 
         Append(_addChestButton = new AddChestButton());
 

@@ -3,7 +3,7 @@ using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Patches;
 using ImproveGame.Content.Patches.PortableBuff;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface;
 using ImproveGame.Interface.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

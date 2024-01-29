@@ -1,14 +1,18 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Players;
-using ImproveGame.Interface.Common;
+using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
 
-namespace ImproveGame.Interface.GUI.AutoTrash;
+namespace ImproveGame.GlobalGUI.AutoTrash;
 
+[AutoCreateGUI("Radial Hotbars", "Auto Trash")]
 public class GarbageListGUI : BaseBody
 {
+    public static GarbageListGUI Instace { get; private set; }
+    public GarbageListGUI() => Instace = this;
+
     #region 抽象实现
     public override bool Enabled
     {
@@ -16,7 +20,7 @@ public class GarbageListGUI : BaseBody
         set { }
     }
 
-    public override bool CanDisableMouse(UIElement target)
+    public override bool CanSetFocusUIElement(UIElement target)
     {
         return Window.IsMouseHovering;
     }
@@ -47,7 +51,7 @@ public class GarbageListGUI : BaseBody
             Vector2 gridSize = ScrollView.GridSize(44f, 4f, 4, 4) + new Vector2(20f, 0f);
 
             // 窗口
-            Window = new SUIPanel(UIColor.PanelBorder, UIColor.PanelBg)
+            Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
                 Shaded = true,
                 Draggable = true
@@ -55,21 +59,21 @@ public class GarbageListGUI : BaseBody
             Window.SetPadding(0);
             Window.SetSizePixels(gridSize.X + 14f, 42f + gridSize.Y + 11f);
             Window.SetPosPixels(492f - Window.Width.Pixels, 306f);
-            Window.Join(this);
+            Window.JoinParent(this);
 
             // 标题
             TitleView = new View
             {
                 DragIgnore = true,
-                BgColor = UIColor.TitleBg2,
+                BgColor = UIStyle.TitleBg2,
                 Border = 2f,
-                BorderColor = UIColor.PanelBorder,
+                BorderColor = UIStyle.PanelBorder,
                 Rounded = new Vector4(10f, 10f, 0f, 0f),
             };
             TitleView.SetPadding(0);
             TitleView.Width.Precent = 1f;
             TitleView.Height.Pixels = 42f;
-            TitleView.Join(Window);
+            TitleView.JoinParent(Window);
 
             Title = new SUITitle("自动丢弃列表", 0.42f)
             {
@@ -77,7 +81,7 @@ public class GarbageListGUI : BaseBody
             };
             Title.SetPadding(15f, 0f, 10f, 0f);
             Title.SetInnerPixels(Title.TextSize);
-            Title.Join(TitleView);
+            Title.JoinParent(TitleView);
 
             Cross = new SUICross
             {
@@ -89,7 +93,7 @@ public class GarbageListGUI : BaseBody
             };
             Cross.Width.Pixels = 42f;
             Cross.Height.Set(0f, 1f);
-            Cross.Join(TitleView);
+            Cross.JoinParent(TitleView);
 
             Cross.OnLeftMouseDown += (_, _) =>
             {
@@ -99,14 +103,14 @@ public class GarbageListGUI : BaseBody
 
             GarbagesView = new View();
             GarbagesView.SetPadding(7f, 4f, 6f, 7f);
-            GarbagesView.Top.Pixels = TitleView.BottomPixels();
+            GarbagesView.Top.Pixels = TitleView.BottomPixels;
             GarbagesView.Width.Percent = 1f;
             GarbagesView.Height.Pixels = Window.Height.Pixels - 42f;
-            GarbagesView.Join(Window);
+            GarbagesView.JoinParent(Window);
 
             GarbageListGrid = new GarbageListGrid();
             GarbageListGrid.Width.Percent = GarbageListGrid.Height.Percent = 1f;
-            GarbageListGrid.Join(GarbagesView);
+            GarbageListGrid.JoinParent(GarbagesView);
         }
     }
 

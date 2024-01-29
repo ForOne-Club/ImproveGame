@@ -13,8 +13,8 @@ namespace ImproveGame.Common
     {
         public class BgItemSnippet : TextSnippet
         {
-            public Color BorderColor = UIColor.ItemSlotBorder;
-            public Color Background = UIColor.ItemSlotBg;
+            public Color BorderColor = UIStyle.ItemSlotBorder;
+            public Color Background = UIStyle.ItemSlotBg;
             private Item _item;
 
             public BgItemSnippet(Item item)
@@ -99,8 +99,8 @@ namespace ImproveGame.Common
                             }
                         case 'f':
                             {
-                                snippet.BorderColor = UIColor.ItemSlotBorderFav;
-                                snippet.Background = UIColor.ItemSlotBgFav;
+                                snippet.BorderColor = UIStyle.ItemSlotBorderFav;
+                                snippet.Background = UIStyle.ItemSlotBgFav;
                                 break;
                             }
                     }

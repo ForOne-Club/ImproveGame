@@ -1,10 +1,11 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.Packets.NetStorager;
-using ImproveGame.Interface.Common;
+using ImproveGame.GlobalGUI;
+using ImproveGame.GlobalGUI.ItemContainer;
+using ImproveGame.Interface;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.BannerChest;
 using ItemSlot = Terraria.UI.ItemSlot;
 
 namespace ImproveGame.Common.ModPlayers
@@ -14,8 +15,9 @@ namespace ImproveGame.Common.ModPlayers
         public override bool HoverSlot(Item[] inventory, int context, int slot)
         {
             var item = inventory[slot];
-            
-            foreach (var globalItem in from i in GlobalList<GlobalItem>.Globals where i is IItemOverrideHover select i) {
+
+            foreach (var globalItem in from i in GlobalList<GlobalItem>.Globals where i is IItemOverrideHover select i)
+            {
                 ((IItemOverrideHover)globalItem).OverrideHover(inventory, context, slot);
             }
 
@@ -42,9 +44,9 @@ namespace ImproveGame.Common.ModPlayers
                     return true;
                 }
                 // 旗帜收纳箱 + 药水袋
-                if (PackageGUI.Visible &&
-                    ((PackageGUI.StorageType is StorageType.Banners && ItemToBanner(item) != -1) ||
-                    (PackageGUI.StorageType is StorageType.Potions && item.buffType > 0 && item.consumable)))
+                if (ItemContainerGUI.Visible &&
+                    ((ItemContainerGUI.StorageType is StorageType.Banners && ItemToBanner(item) != -1) ||
+                    (ItemContainerGUI.StorageType is StorageType.Potions && item.buffType > 0 && item.consumable)))
                 {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
@@ -93,19 +95,19 @@ namespace ImproveGame.Common.ModPlayers
                     return true; // 阻止原版代码运行
                 }
                 // 旗帜收纳箱 + 药水袋
-                if (PackageGUI.Visible)
+                if (ItemContainerGUI.Visible)
                 {
                     // 旗帜
-                    if (PackageGUI.StorageType is StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
+                    if (ItemContainerGUI.StorageType is StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
                     {
-                        UISystem.Instance.PackageGUI.Package.PutInPackage(ref inventory[slot]);
+                        ItemContainerGUI.Instace.Container.PutInPackage(ref inventory[slot]);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
                     // 药水
-                    else if (PackageGUI.StorageType is StorageType.Potions && inventory[slot].buffType > 0 && inventory[slot].consumable)
+                    else if (ItemContainerGUI.StorageType is StorageType.Potions && inventory[slot].buffType > 0 && inventory[slot].consumable)
                     {
-                        UISystem.Instance.PackageGUI.Package.PutInPackage(ref inventory[slot]);
+                        ItemContainerGUI.Instace.Container.PutInPackage(ref inventory[slot]);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }

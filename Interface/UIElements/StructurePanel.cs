@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.ConstructCore;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Interface.Common;
 using ImproveGame.Interface.SUIElements;
 using Microsoft.Xna.Framework.Input;
 using System.IO;
@@ -20,10 +19,10 @@ namespace ImproveGame.Interface.UIElements
         private bool _oldMouseLeft;
         private string _selectedButtonName = "";
 
-        public static Color BorderSelectedColor => UIColor.PanelBorderLight;
-        public static Color BorderUnselectedColor => UIColor.PanelBorder;
-        public static Color SelectedColor => UIColor.PanelBgLight;
-        public static Color UnselectedColor => UIColor.PanelBg;
+        public static Color BorderSelectedColor => UIStyle.PanelBorderLight;
+        public static Color BorderUnselectedColor => UIStyle.PanelBorder;
+        public static Color SelectedColor => UIStyle.PanelBgLight;
+        public static Color UnselectedColor => UIStyle.PanelBg;
 
         public UIText NameText;
         public UIText PathText;
@@ -116,7 +115,7 @@ namespace ImproveGame.Interface.UIElements
             };
             Append(RenameButton);
 
-            PathPanel = new(UIColor.TitleBg, UIColor.TitleBg, rounded: 10)
+            PathPanel = new(UIStyle.TitleBg, UIStyle.TitleBg, rounded: 10)
             {
                 Top = detailButton.Top,
                 OverflowHidden = true,

@@ -1,4 +1,4 @@
-﻿using ImproveGame.Interface.Common;
+﻿using ImproveGame.Interface;
 using ImproveGame.Interface.GUI;
 
 namespace ImproveGame.Content.Patches
