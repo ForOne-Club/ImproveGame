@@ -187,6 +187,28 @@ namespace ImproveGame.Content.Patches
             }
         }
 
+        // 使存钱罐中物品生效，如同放入背包一样
+        private sealed class InfoAccessoryHelper : ModPlayer
+        {
+            public override void UpdateEquips()
+            {
+                if (Main.myPlayer != Player.whoAmI)
+                    return;
+
+                var items = GetAllInventoryItemsList(Player, "inv");
+                foreach (var item in items)
+                {
+                    if (item.type != ItemID.EncumberingStone)
+                    {
+                        ItemLoader.UpdateInventory(item, Player);
+
+                        Player.RefreshInfoAccsFromItemType(item);
+                        Player.RefreshMechanicalAccsFromItemType(item.type);
+                    }
+                }
+            }
+        }
+
         #endregion
 
         public override void ModifyTimeRate(ref double timeRate, ref double tileUpdateRate, ref double eventUpdateRate)
@@ -214,8 +236,6 @@ namespace ImproveGame.Content.Patches
             IL_ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += TweakDrawCountInventory;
             // 伤害波动
             On_Main.DamageVar_float_int_float += DisableDamageVar;
-            // 使存钱罐中物品生效，如同放入背包一样
-            On_Player.UpdateEquips += TweakExtraUpdateInventory;
             // 摇树总是掉落水果
             ShakeTreeTweak.Load();
             // “草药” 生长速度
@@ -701,29 +721,6 @@ namespace ImproveGame.Content.Patches
                 i => i.Match(OpCodes.Sub)))
                 return;
             c.EmitDelegate<Func<int, int>>(x => MyUtils.Config.DisableAlchemyPlantRipeCondition ? 0 : x); // “火焰花”*/
-        }
-
-        /// <summary>
-        /// 使存钱罐中物品如同放在背包
-        /// </summary>
-        private void TweakExtraUpdateInventory(On_Player.orig_UpdateEquips orig, Player self, int i)
-        {
-            orig(self, i);
-
-            if (Main.myPlayer != self.whoAmI)
-                return;
-
-            var items = GetAllInventoryItemsList(self, "inv");
-            foreach (var item in items)
-            {
-                if (item.type != ItemID.EncumberingStone)
-                {
-                    ItemLoader.UpdateInventory(item, self);
-
-                    self.RefreshInfoAccsFromItemType(item.type);
-                    self.RefreshMechanicalAccsFromItemType(item.type);
-                }
-            }
         }
 
         /// <summary>
