@@ -45,8 +45,6 @@ public class GrabAndPickup : GlobalItem
             return source;
         }
 
-        Console.WriteLine($"netMode: {Main.netMode} 后执行 type: {source.type} stack: {source.stack}");
-
         if (settings.LongText == false && settings.NoText == false && settings.CanGoIntoVoidVault == true)
         {
             Item cloneItem = source.Clone();
@@ -162,8 +160,6 @@ public class GrabAndPickup : GlobalItem
 
     public override bool ItemSpace(Item item, Player player)
     {
-        Console.WriteLine($"ItemSpace netMode: {Main.netMode}");
-
         if (item.IsACoin)
         {
             return false;
@@ -174,8 +170,6 @@ public class GrabAndPickup : GlobalItem
             player.TryGetModPlayer(out UIPlayerSetting setting) &&
             player.TryGetModPlayer(out DataPlayer dataPlayer))
         {
-            Console.WriteLine($"{setting.SuperVault_GrabItemsWhenOverflowing} {setting.SuperVault_PrioritizeGrabbing}");
-
             if ((setting.SuperVault_GrabItemsWhenOverflowing && item.CanStackToArray(dataPlayer.SuperVault)) ||
                 (setting.SuperVault_PrioritizeGrabbing && item.CanStackToArray(dataPlayer.SuperVault) && item.TheArrayHas(dataPlayer.SuperVault)))
             {
@@ -210,8 +204,6 @@ public class GrabAndPickup : GlobalItem
     /// </summary>
     public override bool OnPickup(Item source, Player player)
     {
-        Console.WriteLine($"netMode: {Main.netMode} 先执行 type: {source.type} stack: {source.stack}");
-
         if (UIConfigs.Instance.QoLAutoTrash &&
             player.TryGetModPlayer(out AutoTrashPlayer autoTrashPlayer) && true &&
             autoTrashPlayer.AutoDiscardItems.Any(adItem => adItem.type == source.type))
