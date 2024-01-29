@@ -7,12 +7,7 @@ public class DummyControlGUI : BaseBody
     #region ViewBody
     public override bool Enabled { get => IsVisible; set => IsVisible = value; }
 
-    public override bool CanSetFocusUIElement(UIElement target)
-    {
-        return Window?.IsMouseHovering ?? false;
-    }
-
-    public override bool CanPriority(UIElement target)
+    public override bool CanSetFocusTarget(UIElement target)
     {
         return Window?.IsMouseHovering ?? false;
     }

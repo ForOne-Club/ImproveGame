@@ -9,12 +9,7 @@ public class FunctionListGUI : BaseBody
     public override bool Enabled { get => Main.playerInventory && _enabled; set => _enabled = value; }
     private bool _enabled = true;
 
-    public override bool CanSetFocusUIElement(UIElement target)
-    {
-        return false;
-    }
-
-    public override bool CanPriority(UIElement target)
+    public override bool CanSetFocusTarget(UIElement target)
     {
         return false;
     }

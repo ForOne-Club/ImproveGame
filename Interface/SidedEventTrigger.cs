@@ -16,7 +16,7 @@ namespace ImproveGame.Interface
             internal ISidedView AsSidedView => ViewBody as ISidedView;
         }
 
-        public static bool ViewBodyIs(BaseBody body) => UISystem.Instance.SidedEventTrigger.BaseBody == body;
+        public static bool ViewBodyIs(BaseBody body) => UISystem.Instance.SidedEventTrigger.RootBody == body;
 
         private static readonly List<SideUIData> UIPool = new();
 
@@ -80,7 +80,7 @@ namespace ImproveGame.Interface
         /// <exception cref="Exception">此 ViewBody 没有被注册</exception>
         public static void ToggleViewBody(BaseBody viewBody)
         {
-            UISystem.Instance.SidedEventTrigger.SetBaseBody(null);
+            UISystem.Instance.SidedEventTrigger.SetRootBody(null);
 
             var existingBody = UIPool.Find(d => d.ViewBody == viewBody);
             if (existingBody is null)
@@ -115,7 +115,7 @@ namespace ImproveGame.Interface
 
         public override void Update(GameTime gameTime)
         {
-            BaseBody = null;
+            RootBody = null;
 
             foreach (var uiData in UIPool.Where(uiData => uiData.AnimationTimer.AnyOpen))
             {
@@ -135,7 +135,7 @@ namespace ImproveGame.Interface
                 }
                 if (uiData.AnimationTimer.CompleteOpen)
                 {
-                    BaseBody = uiData.ViewBody;
+                    RootBody = uiData.ViewBody;
                 }
             }
 

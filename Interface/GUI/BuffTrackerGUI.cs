@@ -25,9 +25,7 @@ public class BuffTrackerGUI : BaseBody
     internal BuffTrackerBattler BuffTrackerBattler;
     private static int _oldBuffCount; // 用于及时更新列表
 
-    public override bool CanPriority(UIElement target) => target != this;
-
-    public override bool CanSetFocusUIElement(UIElement target)
+    public override bool CanSetFocusTarget(UIElement target)
     {
         return (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
     }

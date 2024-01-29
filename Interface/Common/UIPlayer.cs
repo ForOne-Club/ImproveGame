@@ -64,7 +64,7 @@ public class UIPlayer : ModPlayer
             if (eventTrigger != null && Activator.CreateInstance(baseBodyType) is BaseBody bodyView)
             {
                 UISystem.Instance.BaseBodyInstances[baseBodyType] = bodyView;
-                eventTrigger.SetBaseBody(bodyView);
+                eventTrigger.SetRootBody(bodyView);
             }
         }
 
@@ -76,7 +76,7 @@ public class UIPlayer : ModPlayer
 
         // 假人控制器
         uiSystem.DummyControlGUI = new DummyControlGUI();
-        uiSystem.DummyControlTrigger.SetBaseBody(uiSystem.DummyControlGUI);
+        uiSystem.DummyControlTrigger.SetRootBody(uiSystem.DummyControlGUI);
 
         BigBagGUI.Instance.ItemGrid.SetInventory(dataPlayer.SuperVault);
         CheckPositionValid(ref HugeInventoryUIPosition, HugeInventoryDefPosition);
@@ -84,48 +84,48 @@ public class UIPlayer : ModPlayer
 
         // 增益追踪器
         uiSystem.BuffTrackerGUI = new BuffTrackerGUI();
-        uiSystem.BuffTrackerTrigger.SetBaseBody(uiSystem.BuffTrackerGUI);
+        uiSystem.BuffTrackerTrigger.SetRootBody(uiSystem.BuffTrackerGUI);
         CheckPositionValid(ref BuffTrackerPosition, BuffTrackerDefPosition);
         uiSystem.BuffTrackerGUI.MainPanel.SetPos(BuffTrackerPosition).Recalculate();
         UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Main.LocalPlayer.whoAmI);
 
         // 液体法杖
         uiSystem.LiquidWandGUI = new LiquidWandGUI();
-        uiSystem.LiquidWandTrigger.SetBaseBody(uiSystem.LiquidWandGUI);
+        uiSystem.LiquidWandTrigger.SetRootBody(uiSystem.LiquidWandGUI);
 
         // 建筑法杖
         uiSystem.ArchitectureGUI = new ArchitectureGUI();
-        uiSystem.ArchitectureTrigger.SetBaseBody(uiSystem.ArchitectureGUI);
+        uiSystem.ArchitectureTrigger.SetRootBody(uiSystem.ArchitectureGUI);
 
         // 构造法杖
         uiSystem.StructureGUI = new StructureGUI();
-        uiSystem.StructureTrigger.SetBaseBody(uiSystem.StructureGUI);
+        uiSystem.StructureTrigger.SetRootBody(uiSystem.StructureGUI);
 
         // 世界特性
         uiSystem.WorldFeatureGUI = new WorldFeatureGUI();
-        uiSystem.WorldFeatureTrigger.SetBaseBody(uiSystem.WorldFeatureGUI);
+        uiSystem.WorldFeatureTrigger.SetRootBody(uiSystem.WorldFeatureGUI);
         CheckPositionValid(ref WorldFeaturePosition, WorldFeatureDefPosition);
         uiSystem.WorldFeatureGUI.MainPanel.SetPos(WorldFeaturePosition).Recalculate();
 
         // 物品搜索
         uiSystem.ItemSearcherGUI = new ItemSearcherGUI();
-        uiSystem.ItemSearcherTrigger.SetBaseBody(uiSystem.ItemSearcherGUI);
+        uiSystem.ItemSearcherTrigger.SetRootBody(uiSystem.ItemSearcherGUI);
         CheckPositionValid(ref ItemSearcherPosition, ItemSearcherDefPosition);
         uiSystem.ItemSearcherGUI.MainPanel.SetPos(ItemSearcherPosition).Recalculate();
 
         // 快速开袋
         uiSystem.OpenBagGUI = new OpenBagGUI();
-        uiSystem.OpenBagTrigger.SetBaseBody(uiSystem.OpenBagGUI);
+        uiSystem.OpenBagTrigger.SetRootBody(uiSystem.OpenBagGUI);
         CheckPositionValid(ref OpenBagPosition, OpenBagDefPosition);
         uiSystem.OpenBagGUI.MainPanel.SetPos(OpenBagPosition).Recalculate();
 
         // 生命体检测仪筛选
         uiSystem.LifeformAnalyzerGUI = new LifeformAnalyzerGUI();
-        uiSystem.LifeformAnalyzerTrigger.SetBaseBody(uiSystem.LifeformAnalyzerGUI);
+        uiSystem.LifeformAnalyzerTrigger.SetRootBody(uiSystem.LifeformAnalyzerGUI);
 
         // 摸彩袋
         uiSystem.GrabBagInfoGUI = new GrabBagInfoGUI();
-        uiSystem.GrabBagInfoTrigger.SetBaseBody(uiSystem.GrabBagInfoGUI);
+        uiSystem.GrabBagInfoTrigger.SetRootBody(uiSystem.GrabBagInfoGUI);
 
         // 左侧栏
         uiSystem.ExtremeStorageGUI = new ExtremeStorageGUI();

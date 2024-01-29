@@ -2,11 +2,6 @@
 
 namespace ImproveGame.Interface.BaseViews;
 
-/// <summary>
-/// 使自身相对前一个 <see cref="View"/> 排列，横向或纵向 <br/>
-/// 启用会使 <see cref="UIElement.Left"/> <see cref="UIElement.Top"/>
-/// <see cref="UIElement.HAlign"/> <see cref="UIElement.VAlign"/> 失效
-/// </summary>
 public enum RelativeMode { None, Horizontal, Vertical };
 
 /// <summary>
@@ -45,23 +40,24 @@ public class View : UIElement
     public RelativeMode RelativeMode;
 
     /// <summary>
-    /// 间距
+    /// 间距，与 <see cref="RelativeMode"/> 搭配使用
     /// </summary>
     public Vector2 Spacing;
 
     /// <summary>
-    /// 防止溢出 (越界换行)
+    /// 防止溢出 (越界换行)，与 <see cref="RelativeMode"/> 搭配使用
     /// </summary>
     public bool PreventOverflow;
 
     /// <summary>
     /// 设置 true 横向时不同步与前一个元素的 Top，纵向时不同步 Left<br/>
-    /// 在大背包中用于一排 Button 的时候，第一个 Button 前面有一个 Switch
+    /// 在大背包中用于一排 Button 的时候，第一个 Button 前面有一个 Switch<br/>
+    /// 与 <see cref="RelativeMode"/> 搭配使用
     /// </summary>
     public bool ResetAnotherPosition;
 
     /// <summary>
-    /// 拖动忽略
+    /// 拖动忽略，默认为 <see langword="false"/> 不会影响长辈中可拖动元素拖动
     /// </summary>
     public bool DragIgnore;
 

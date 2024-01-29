@@ -346,9 +346,7 @@ namespace ImproveGame.Interface.GUI
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
 
-        public override bool CanPriority(UIElement target) => target != this;
-
-        public override bool CanSetFocusUIElement(UIElement target)
+        public override bool CanSetFocusTarget(UIElement target)
         {
             return (target != this && basePanel.IsMouseHovering) || basePanel.IsPressed;
         }

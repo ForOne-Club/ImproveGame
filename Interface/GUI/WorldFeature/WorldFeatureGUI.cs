@@ -13,9 +13,7 @@ public class WorldFeatureGUI : BaseBody
     public override bool Enabled { get => Visible; set => Visible = value; }
     public static bool Visible { get; private set; }
 
-    public override bool CanPriority(UIElement target) => target != this;
-
-    public override bool CanSetFocusUIElement(UIElement target)
+    public override bool CanSetFocusTarget(UIElement target)
         => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
 
     // 主面板

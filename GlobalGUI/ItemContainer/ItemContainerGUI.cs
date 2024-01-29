@@ -152,9 +152,7 @@ public class ItemContainerGUI : BaseBody
         Visible = false;
     }
 
-    public override bool CanPriority(UIElement target) => target != this;
-
-    public override bool CanSetFocusUIElement(UIElement target)
+    public override bool CanSetFocusTarget(UIElement target)
     {
         return target != this && _mainPanel.IsMouseHovering || _mainPanel.IsPressed;
     }

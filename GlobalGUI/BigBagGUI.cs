@@ -16,9 +16,7 @@ public class BigBagGUI : BaseBody
 
     public override bool Enabled { get => Visible; set => Visible = value; }
 
-    public override bool CanPriority(UIElement target) => target != this;
-
-    public override bool CanSetFocusUIElement(UIElement target)
+    public override bool CanSetFocusTarget(UIElement target)
         => target != this && MainPanel.IsMouseHovering || MainPanel.IsPressed;
 
     private static bool _visible = true;

@@ -16,9 +16,7 @@ public class PlayerStatsGUI : BaseBody
     #region ViewBody
     public override bool Enabled { get => Visible; set => Visible = value; }
 
-    public override bool CanPriority(UIElement target) => this != target && this != Body;
-
-    public override bool CanSetFocusUIElement(UIElement target)
+    public override bool CanSetFocusTarget(UIElement target)
     {
         if (target != this)
         {

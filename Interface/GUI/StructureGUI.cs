@@ -14,9 +14,7 @@ namespace ImproveGame.Interface.GUI
 
         public override bool Enabled { get => Visible; set => Visible = value; }
 
-        public override bool CanPriority(UIElement target) => target != this;
-
-        public override bool CanSetFocusUIElement(UIElement target)
+        public override bool CanSetFocusTarget(UIElement target)
             => (target != this && BasePanel.IsMouseHovering) || BasePanel.IsPressed;
 
         public bool CacheSetupStructures; // 缓存，在下一帧Setup

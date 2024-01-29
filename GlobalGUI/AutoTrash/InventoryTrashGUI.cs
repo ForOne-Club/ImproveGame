@@ -20,12 +20,7 @@ public class InventoryTrashGUI : BaseBody
         set { }
     }
 
-    public override bool CanSetFocusUIElement(UIElement target)
-    {
-        return Window.IsMouseHovering;
-    }
-
-    public override bool CanPriority(UIElement target)
+    public override bool CanSetFocusTarget(UIElement target)
     {
         return Window.IsMouseHovering;
     }

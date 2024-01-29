@@ -18,6 +18,26 @@ public static class EventTriggerManager
     public static int LayerCount => EventTriggerInstances["Radial Hotbars"].Count;
     #endregion
 
+    public static EventTrigger Register(EventTrigger trigger)
+    {
+        if (!LayersPriority.Contains(trigger.LayerName))
+        {
+            LayersPriority.Add(trigger.LayerName);
+        }
+
+        if (EventTriggerInstances.TryGetValue(trigger.LayerName, out List<EventTrigger> triggers))
+        {
+            if (!triggers.Contains(trigger))
+                triggers.Add(trigger);
+        }
+        else
+        {
+            EventTriggerInstances[trigger.LayerName] = [trigger];
+        }
+
+        return trigger;
+    }
+
     public static void SetHeadEventTigger(EventTrigger trigger)
     {
         List<EventTrigger> triggers = EventTriggerInstances[trigger.LayerName];
