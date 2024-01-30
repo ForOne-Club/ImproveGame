@@ -27,7 +27,7 @@ public class BuffTrackerGUI : BaseBody
 
     public override bool CanSetFocusTarget(UIElement target)
     {
-        return (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
+        return (target != this && MainPanel.IsMouseHovering) || MainPanel.IsLeftMousePressed;
     }
 
     public override void OnInitialize()
@@ -248,7 +248,7 @@ public class BuffTrackerGUI : BaseBody
     /// </summary>
     public void Open()
     {
-        MainPanel.IsPressed = false;
+        MainPanel.IsLeftMousePressed = false;
         Visible = true;
         SoundEngine.PlaySound(SoundID.MenuOpen);
         SetupBuffButtons();

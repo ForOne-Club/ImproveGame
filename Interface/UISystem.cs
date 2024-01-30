@@ -1,8 +1,8 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.GlobalGUI.DummyControl;
 using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.DummyControl;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.SpaceWand;
@@ -40,10 +40,6 @@ public class UISystem : ModSystem
     // 生命体检测仪筛选
     public LifeformAnalyzerGUI LifeformAnalyzerGUI;
     public EventTrigger LifeformAnalyzerTrigger;
-
-    // 假人控制器
-    public DummyControlGUI DummyControlGUI;
-    public EventTrigger DummyControlTrigger;
 
     // Buff 追踪站
     public BuffTrackerGUI BuffTrackerGUI;
@@ -131,7 +127,6 @@ public class UISystem : ModSystem
         LoadGUIInfo();
 
         // UserInterface 之 EventTrigger 版
-        DummyControlTrigger = new EventTrigger("Radial Hotbars", "Dummy Control").Register();
         LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand").Register();
         ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture").Register();
         StructureTrigger = new EventTrigger("Radial Hotbars", "Structure").Register();

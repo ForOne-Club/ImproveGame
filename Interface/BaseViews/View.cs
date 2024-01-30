@@ -66,7 +66,7 @@ public class View : UIElement
     /// </summary>
     public readonly Opacity Opacity;
 
-    public bool IsPressed;
+    public bool IsLeftMousePressed;
 
     public Vector4 Rounded;
     public float Border;
@@ -269,14 +269,14 @@ public class View : UIElement
 
     public override void LeftMouseDown(UIMouseEvent evt)
     {
-        IsPressed = true;
+        IsLeftMousePressed = true;
 
         base.LeftMouseDown(evt);
     }
 
     public override void LeftMouseUp(UIMouseEvent evt)
     {
-        IsPressed = false;
+        IsLeftMousePressed = false;
 
         base.LeftMouseUp(evt);
     }

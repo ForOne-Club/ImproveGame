@@ -348,7 +348,7 @@ namespace ImproveGame.Interface.GUI
 
         public override bool CanSetFocusTarget(UIElement target)
         {
-            return (target != this && basePanel.IsMouseHovering) || basePanel.IsPressed;
+            return (target != this && basePanel.IsMouseHovering) || basePanel.IsLeftMousePressed;
         }
     }
 

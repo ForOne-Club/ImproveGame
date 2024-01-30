@@ -14,7 +14,7 @@ public class WorldFeatureGUI : BaseBody
     public static bool Visible { get; private set; }
 
     public override bool CanSetFocusTarget(UIElement target)
-        => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
+        => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsLeftMousePressed;
 
     // 主面板
     public SUIPanel MainPanel;

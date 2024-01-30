@@ -22,7 +22,7 @@ public class PlayerStatsGUI : BaseBody
         {
             foreach (var item in Children)
             {
-                if (item != Body && (item.IsMouseHovering || (item is View view && view.IsPressed)))
+                if (item != Body && (item.IsMouseHovering || (item is View view && view.IsLeftMousePressed)))
                 {
                     return true;
                 }
@@ -30,7 +30,7 @@ public class PlayerStatsGUI : BaseBody
 
             foreach (var item in Body.Children)
             {
-                if (item.IsMouseHovering || (item is View view && view.IsPressed))
+                if (item.IsMouseHovering || (item is View view && view.IsLeftMousePressed))
                 {
                     return true;
                 }
@@ -264,7 +264,7 @@ public class PlayerStatsGUI : BaseBody
 
         foreach (var item in Children)
         {
-            if (item != Body && (item.IsMouseHovering || (item is View view && view.IsPressed)))
+            if (item != Body && (item.IsMouseHovering || (item is View view && view.IsLeftMousePressed)))
             {
                 b = true;
                 break;
@@ -273,7 +273,7 @@ public class PlayerStatsGUI : BaseBody
 
         foreach (var item in Body.Children)
         {
-            if (item.IsMouseHovering || (item is View view && view.IsPressed))
+            if (item.IsMouseHovering || (item is View view && view.IsLeftMousePressed))
             {
                 b = true;
                 break;

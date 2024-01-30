@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
-using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
@@ -11,15 +10,12 @@ namespace ImproveGame.GlobalGUI;
 public class BigBagGUI : BaseBody
 {
     public static BigBagGUI Instance { get; private set; }
-
     public BigBagGUI() => Instance = this;
 
     public override bool Enabled { get => Visible; set => Visible = value; }
 
     public override bool CanSetFocusTarget(UIElement target)
-        => target != this && MainPanel.IsMouseHovering || MainPanel.IsPressed;
-
-    private static bool _visible = true;
+        => target != this && (MainPanel.IsMouseHovering || MainPanel.IsLeftMousePressed);
 
     public static bool Visible
     {
@@ -31,6 +27,7 @@ public class BigBagGUI : BaseBody
         }
         set => _visible = value;
     }
+    private static bool _visible = true;
 
     // 主面板
     public SUIPanel MainPanel;

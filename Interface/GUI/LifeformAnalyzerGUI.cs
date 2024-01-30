@@ -17,7 +17,7 @@ namespace ImproveGame.Interface.GUI
         public override bool Enabled { get => Visible; set => Visible = value; }
 
         public override bool CanSetFocusTarget(UIElement target)
-            => (target != this && _basePanel.IsMouseHovering) || _basePanel.IsPressed;
+            => (target != this && _basePanel.IsMouseHovering) || _basePanel.IsLeftMousePressed;
 
         private const float PanelLeft = 730f;
         private const float PanelTop = 160f;
@@ -243,7 +243,7 @@ namespace ImproveGame.Interface.GUI
         
         public void Open()
         {
-            _basePanel.IsPressed = false;
+            _basePanel.IsLeftMousePressed = false;
             Visible = true;
             SoundEngine.PlaySound(SoundID.MenuOpen);
             SetupList();

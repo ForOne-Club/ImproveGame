@@ -3,7 +3,6 @@ using ImproveGame.Core;
 using ImproveGame.GlobalGUI;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
-using ImproveGame.Interface.GUI.DummyControl;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
 using ImproveGame.Interface.GUI.PlayerStats;
@@ -73,10 +72,6 @@ public class UIPlayer : ModPlayer
         PlayerStatsGUI.Visible = true;
         PlayerStatsGUI.Instance.ControllerSwitch.SetPos(PlayerInfoTogglePosition).Recalculate();
         PlayerStatsGUI.Instance.LoadAndSetupFavorites();
-
-        // 假人控制器
-        uiSystem.DummyControlGUI = new DummyControlGUI();
-        uiSystem.DummyControlTrigger.SetRootBody(uiSystem.DummyControlGUI);
 
         BigBagGUI.Instance.ItemGrid.SetInventory(dataPlayer.SuperVault);
         CheckPositionValid(ref HugeInventoryUIPosition, HugeInventoryDefPosition);

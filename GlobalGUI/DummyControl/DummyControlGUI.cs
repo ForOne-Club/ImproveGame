@@ -1,7 +1,8 @@
 ﻿using ImproveGame.Interface.SUIElements;
 
-namespace ImproveGame.Interface.GUI.DummyControl;
+namespace ImproveGame.GlobalGUI.DummyControl;
 
+[AutoCreateGUI("Radial Hotbars", "Dummy Control")]
 public class DummyControlGUI : BaseBody
 {
     #region ViewBody

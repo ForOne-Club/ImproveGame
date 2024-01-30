@@ -154,6 +154,6 @@ public class ItemContainerGUI : BaseBody
 
     public override bool CanSetFocusTarget(UIElement target)
     {
-        return target != this && _mainPanel.IsMouseHovering || _mainPanel.IsPressed;
+        return target != this && _mainPanel.IsMouseHovering || _mainPanel.IsLeftMousePressed;
     }
 }

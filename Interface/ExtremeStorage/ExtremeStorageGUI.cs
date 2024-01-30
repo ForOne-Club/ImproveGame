@@ -337,6 +337,6 @@ namespace ImproveGame.Interface.ExtremeStorage
         public static Item[] GetAllItems() => Storage.GetAllItemsByGroup(CurrentGroup);
 
         public override bool CanSetFocusTarget(UIElement target) =>
-            (target != this && _basePanel.IsMouseHovering) || _basePanel.IsPressed;
+            (target != this && _basePanel.IsMouseHovering) || _basePanel.IsLeftMousePressed;
     }
 }

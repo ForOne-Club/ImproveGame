@@ -24,7 +24,7 @@ namespace ImproveGame.Interface.GUI
         public override bool Enabled { get => Visible; set => Visible = value; }
 
         public override bool CanSetFocusTarget(UIElement target)
-            => (target != this && basePanel.IsMouseHovering) || basePanel.IsPressed;
+            => (target != this && basePanel.IsMouseHovering) || basePanel.IsLeftMousePressed;
 
         private const float PanelLeft = 590f;
         private const float PanelTop = 120f;

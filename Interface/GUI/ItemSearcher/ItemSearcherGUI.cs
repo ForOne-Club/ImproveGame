@@ -16,7 +16,7 @@ public class ItemSearcherGUI : BaseBody
     public static bool Visible { get; private set; }
 
     public override bool CanSetFocusTarget(UIElement target)
-        => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsPressed;
+        => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsLeftMousePressed;
 
     // 服务器相关，是否正在向服务器请求物品
     private int _requestsSent; // 发送了多少个还没有结果的请求，只有该值为0才会更新物品列表
