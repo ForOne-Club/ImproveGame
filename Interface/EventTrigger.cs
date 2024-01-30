@@ -5,6 +5,7 @@ namespace ImproveGame.Interface;
 #region enum and struct
 public enum MouseButtonType { Left, Middle, Right }
 public enum MouseEventType { Down, Up }
+
 public struct MouseStateMinor(bool leftButton, bool middleButton, bool rightButton)
 {
     public bool LeftButton = leftButton, MiddleButton = middleButton, RightButton = rightButton;
@@ -21,6 +22,40 @@ public struct MouseStateMinor(bool leftButton, bool middleButton, bool rightButt
         MouseButtonType.Right => RightButton,
         _ => throw new NotImplementedException()
     };
+}
+
+public struct MouseTarget()
+{
+    public UIElement LeftButton = null, MiddleButton = null, RightButton = null;
+
+    public UIElement this[MouseButtonType button]
+    {
+        readonly get
+        {
+            return button switch
+            {
+                MouseButtonType.Left => LeftButton,
+                MouseButtonType.Middle => MiddleButton,
+                MouseButtonType.Right => RightButton,
+                _ => throw new NotImplementedException()
+            };
+        }
+        set
+        {
+            switch (button)
+            {
+                case MouseButtonType.Left:
+                    LeftButton = value;
+                    break;
+                case MouseButtonType.Right:
+                    RightButton = value;
+                    break;
+                case MouseButtonType.Middle:
+                    MiddleButton = value;
+                    break;
+            }
+        }
+    }
 }
 #endregion
 
@@ -39,11 +74,8 @@ public class EventTrigger(string layerName, string name)
     public UIElement CurrentHoverTarget { get; protected set; }
     public UIElement PreviousHoverTarget { get; protected set; }
 
-    public IReadOnlyDictionary<MouseButtonType, UIElement> PreviousMouseTargets => _previousMouseTargets;
-    protected readonly Dictionary<MouseButtonType, UIElement> _previousMouseTargets = new()
-    {
-        { MouseButtonType.Left, null },  { MouseButtonType.Middle, null },  { MouseButtonType.Right, null }
-    };
+    public MouseTarget PreviousMouseTargets => _previousMouseTargets;
+    protected MouseTarget _previousMouseTargets = new();
 
     protected MouseStateMinor _mouseState;
     protected MouseStateMinor _previousMouseState;
@@ -142,12 +174,12 @@ public class EventTrigger(string layerName, string name)
         catch (Exception ex) { Console.WriteLine(ex.ToString()); }
     }
 
-    public static Action<UIMouseEvent> GetMouseDownEvent(MouseButtonType buttonType, UIElement element)
+    public static Action<UIMouseEvent> GetMouseDownEvent(MouseButtonType mouseButtonType, UIElement element)
     {
         if (element is null)
             return null;
 
-        return buttonType switch
+        return mouseButtonType switch
         {
             MouseButtonType.Left => element.LeftMouseDown,
             MouseButtonType.Right => element.RightMouseDown,
@@ -156,12 +188,12 @@ public class EventTrigger(string layerName, string name)
         };
     }
 
-    public static Action<UIMouseEvent> GetMouseUpEvent(MouseButtonType buttonType, UIElement element)
+    public static Action<UIMouseEvent> GetMouseUpEvent(MouseButtonType mouseButtonType, UIElement element)
     {
         if (element is null)
             return null;
 
-        return buttonType switch
+        return mouseButtonType switch
         {
             MouseButtonType.Left => element.LeftMouseUp,
             MouseButtonType.Right => element.RightMouseUp,
@@ -170,12 +202,12 @@ public class EventTrigger(string layerName, string name)
         };
     }
 
-    public static Action<UIMouseEvent> GetClickEvent(MouseButtonType buttonType, UIElement element)
+    public static Action<UIMouseEvent> GetClickEvent(MouseButtonType mouseButtonType, UIElement element)
     {
         if (element is null)
             return null;
 
-        return buttonType switch
+        return mouseButtonType switch
         {
             MouseButtonType.Left => element.LeftClick,
             MouseButtonType.Right => element.RightClick,
