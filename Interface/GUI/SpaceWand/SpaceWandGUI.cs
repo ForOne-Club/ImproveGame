@@ -29,7 +29,7 @@ public class SpaceWandGUI : UIState
 
     // 这么写能剩下很多重复的代码, 但是你必须保证他们长度是相同的.
     public readonly RoundButton[] RoundButtons = new RoundButton[6];
-    public readonly int[] ItemTypes = {94, 9, 2996, 2340, 62, 3215};
+    public readonly int[] ItemTypes = [94, 9, 2996, 2340, 62, 3215];
 
     public readonly PlaceType[] PlaceTypes =
     {
@@ -50,7 +50,7 @@ public class SpaceWandGUI : UIState
 
     public override void OnInitialize()
     {
-        timer = new() {OnClosed = () => Visible = false};
+        timer = new() { OnClosed = () => Visible = false };
 
         Append(MainPanel = new());
         MainPanel.SetSize(200f, 200f).SetPadding(0);
@@ -137,7 +137,7 @@ public class SpaceWandGUI : UIState
             Open(spaceWand);
         }
     }
-    
+
     #region 不同页面的Setup
 
     private void SetupSlopePage()
@@ -237,7 +237,7 @@ public class SpaceWandGUI : UIState
             };
         }
     }
-    
+
     #endregion
 
     public void Open(Content.Items.SpaceWand spaceWand)

@@ -125,44 +125,62 @@ public class EventTrigger(string layerName, string name)
         PreviousHoverTarget = target;
     }
 
+    public static Action<UIMouseEvent> GetMouseDownEvent(MouseButtonType buttonType, UIElement element)
+    {
+        if (element is null)
+            return null;
+
+        return buttonType switch
+        {
+            MouseButtonType.Left => element.LeftMouseDown,
+            MouseButtonType.Right => element.RightMouseDown,
+            MouseButtonType.Middle => element.MiddleMouseDown,
+            _ => null,
+        };
+    }
+
+    public static Action<UIMouseEvent> GetMouseUpEvent(MouseButtonType buttonType, UIElement element)
+    {
+        if (element is null)
+            return null;
+
+        return buttonType switch
+        {
+            MouseButtonType.Left => element.LeftMouseUp,
+            MouseButtonType.Right => element.RightMouseUp,
+            MouseButtonType.Middle => element.MiddleMouseUp,
+            _ => null,
+        };
+    }
+
+    public static Action<UIMouseEvent> GetClickEvent(MouseButtonType buttonType, UIElement element)
+    {
+        if (element is null)
+            return null;
+
+        return buttonType switch
+        {
+            MouseButtonType.Left => element.LeftClick,
+            MouseButtonType.Right => element.RightClick,
+            MouseButtonType.Middle => element.MiddleClick,
+            _ => null,
+        };
+    }
+
     private void HandleMouseEvent(MouseEventType eventType, UIElement target, Vector2 focus, MouseButtonType mouseButton)
     {
-        // 根据按键类型触发对应的事件
-        switch (mouseButton)
+        if (eventType is MouseEventType.Down)
         {
-            case MouseButtonType.Left:
-                if (eventType is MouseEventType.Down)
-                {
-                    target?.LeftMouseDown(new UIMouseEvent(target, focus));
-                }
-                else
-                {
-                    _previousMouseTargets[mouseButton]?.LeftMouseUp(new UIMouseEvent(target, focus));
-                }
+            GetMouseDownEvent(mouseButton, target)?.Invoke(new UIMouseEvent(target, focus));
+        }
+        else
+        {
+            GetMouseUpEvent(mouseButton, _previousMouseTargets[mouseButton])?.Invoke(new UIMouseEvent(target, focus));
 
-                break;
-            case MouseButtonType.Middle:
-                if (eventType is MouseEventType.Down)
-                {
-                    target?.MiddleMouseDown(new UIMouseEvent(target, focus));
-                }
-                else
-                {
-                    _previousMouseTargets[mouseButton]?.MiddleMouseUp(new UIMouseEvent(target, focus));
-                }
-
-                break;
-            case MouseButtonType.Right:
-                if (eventType is MouseEventType.Down)
-                {
-                    target?.RightMouseDown(new UIMouseEvent(target, focus));
-                }
-                else
-                {
-                    _previousMouseTargets[mouseButton]?.RightMouseUp(new UIMouseEvent(target, focus));
-                }
-
-                break;
+            if (_previousMouseTargets[mouseButton] == target)
+            {
+                GetClickEvent(mouseButton, _previousMouseTargets[mouseButton])?.Invoke(new UIMouseEvent(target, focus));
+            }
         }
 
         // 如果目标元素存在且可以被优先处理，则将视图置于顶层

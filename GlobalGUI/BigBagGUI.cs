@@ -21,8 +21,11 @@ public class BigBagGUI : BaseBody
     {
         get
         {
-            if (!Main.playerInventory)
+            if (!Main.playerInventory) /* 关闭背包时设置为 false，使背包再开启后是大背包处于未开启状态 */
+            {
                 _visible = false;
+            }
+
             return _visible;
         }
         set => _visible = value;
