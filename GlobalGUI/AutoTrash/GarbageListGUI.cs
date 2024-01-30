@@ -1,8 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Players;
-using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
-using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
 
 namespace ImproveGame.GlobalGUI.AutoTrash;
@@ -35,7 +33,6 @@ public class GarbageListGUI : BaseBody
     public View TitleView;
     public SUITitle Title;
     public SUICross Cross;
-    public View GarbagesView;
     public GarbageListGrid GarbageListGrid;
 
     public override void OnInitialize()
@@ -43,16 +40,17 @@ public class GarbageListGUI : BaseBody
         if (Main.LocalPlayer is not null &&
             Main.LocalPlayer.TryGetModPlayer(out AutoTrashPlayer atPlayer))
         {
-            Vector2 gridSize = ScrollView.GridSize(44f, 4f, 4, 4) + new Vector2(20f, 0f);
-
             // 窗口
             Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
                 Shaded = true,
-                Draggable = true
+                Draggable = true,
+                FinallyDrawBorder = true,
+                IsAdaptiveHeight = true
             };
+
             Window.SetPadding(0);
-            Window.SetSizePixels(gridSize.X + 14f, 42f + gridSize.Y + 11f);
+            Window.Width.Pixels = (44f + 4f) * 4f - 4f + 16f + 7f + 6f + 5f;
             Window.SetPosPixels(492f - Window.Width.Pixels, 306f);
             Window.JoinParent(this);
 
@@ -60,14 +58,14 @@ public class GarbageListGUI : BaseBody
             TitleView = new View
             {
                 DragIgnore = true,
-                BgColor = UIStyle.TitleBg2,
-                Border = 2f,
-                BorderColor = UIStyle.PanelBorder,
-                Rounded = new Vector4(10f, 10f, 0f, 0f),
+                BgColor = Color.Lerp(Color.Black, UIStyle.TitleBg, 0.5f) * 0.5f,
+                Border = 1.5f,
+                BorderColor = Color.Transparent,
+                Rounded = new Vector4(12f, 12f, 0f, 0f),
             };
             TitleView.SetPadding(0);
             TitleView.Width.Precent = 1f;
-            TitleView.Height.Pixels = 42f;
+            TitleView.Height.Pixels = 44f;
             TitleView.JoinParent(Window);
 
             Title = new SUITitle("自动丢弃列表", 0.42f)
@@ -82,30 +80,35 @@ public class GarbageListGUI : BaseBody
             {
                 HAlign = 1f,
                 VAlign = 0.5f,
-                Rounded = new Vector4(0f, 10f, 0f, 0f),
+                Rounded = new Vector4(0f, 12f, 0f, 0f),
                 CrossSize = 20f,
-                CrossRounded = 4.5f * 0.85f
+                CrossRounded = 4.5f * 0.85f,
+                Border = 1.5f,
+                BorderColor = Color.Transparent,
+                BgColor = Color.Transparent,
             };
-            Cross.Width.Pixels = 42f;
+            Cross.CrossOffset.X = 1f;
+            Cross.Width.Pixels = 46f;
             Cross.Height.Set(0f, 1f);
-            Cross.JoinParent(TitleView);
-
+            Cross.OnUpdate += (_) =>
+            {
+                Cross.BgColor = Cross.HoverTimer.Lerp(Color.Transparent, Color.Black * 0.25f);
+            };
             Cross.OnLeftMouseDown += (_, _) =>
             {
                 ShowWindow = false;
                 SoundEngine.PlaySound(SoundID.MenuClose);
             };
+            Cross.JoinParent(TitleView);
 
-            GarbagesView = new View();
-            GarbagesView.SetPadding(7f, 4f, 6f, 7f);
-            GarbagesView.Top.Pixels = TitleView.BottomPixels;
-            GarbagesView.Width.Percent = 1f;
-            GarbagesView.Height.Pixels = Window.Height.Pixels - 42f;
-            GarbagesView.JoinParent(Window);
-
-            GarbageListGrid = new GarbageListGrid();
-            GarbageListGrid.Width.Percent = GarbageListGrid.Height.Percent = 1f;
-            GarbageListGrid.JoinParent(GarbagesView);
+            GarbageListGrid = new GarbageListGrid
+            {
+                RelativeMode = RelativeMode.Vertical,
+            };
+            GarbageListGrid.SetPadding(7f, 4f, 6f, 8f);
+            GarbageListGrid.Width.Percent = 1f;
+            GarbageListGrid.SetInnerPixels(0f, (44f + 4f) * 4f - 4f);
+            GarbageListGrid.JoinParent(Window);
         }
     }
 

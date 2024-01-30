@@ -248,17 +248,6 @@ public class View : UIElement
         }
     }
 
-    public virtual void PreUpdate(GameTime gameTime)
-    {
-        foreach (UIElement child in Children)
-        {
-            if (child is View view)
-            {
-                view.PreUpdate(gameTime);
-            }
-        }
-    }
-
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -306,21 +295,51 @@ public class View : UIElement
         }
     }
 
+    /// <summary>
+    /// 其他一切绘制都结束之后再绘制边框
+    /// </summary>
+    public bool FinallyDrawBorder;
+
     public override void DrawSelf(SpriteBatch spriteBatch)
+    {
+        DrawSDFRectangle();
+        base.DrawSelf(spriteBatch);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        base.Draw(spriteBatch);
+
+        if (FinallyDrawBorder && Border > 0f && BorderColor != Color.Transparent)
+        {
+            Vector2 pos = GetDimensions().Position();
+            Vector2 size = GetDimensions().Size();
+
+            SDFRectangle.HasBorder(pos, size, Rounded, Color.Transparent, Border, BorderColor * Opacity.Value);
+        }
+    }
+
+    public void DrawSDFRectangle()
     {
         Vector2 pos = GetDimensions().Position();
         Vector2 size = GetDimensions().Size();
 
-        if (Border > 0 && (BgColor != Color.Transparent || BorderColor != Color.Transparent))
+        if (Border > 0)
         {
-            SDFRectangle.HasBorder(pos, size, Rounded, BgColor * Opacity.Value, Border, BorderColor * Opacity.Value);
+            if (BorderColor == Color.Transparent || FinallyDrawBorder)
+            {
+                if (BgColor != Color.Transparent)
+                    SDFRectangle.NoBorder(pos + new Vector2(Border), size - new Vector2(Border * 2f), Rounded - new Vector4(Border), BgColor * Opacity.Value);
+            }
+            else
+            {
+                SDFRectangle.HasBorder(pos, size, Rounded, BgColor * Opacity.Value, Border, BorderColor * Opacity.Value);
+            }
         }
         else if (BgColor != Color.Transparent)
         {
             SDFRectangle.NoBorder(pos, size, Rounded, BgColor * Opacity.Value);
         }
-
-        base.DrawSelf(spriteBatch);
     }
     #endregion
 

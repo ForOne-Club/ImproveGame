@@ -1,6 +1,6 @@
 ﻿namespace ImproveGame.Interface.BaseViews;
 
-public enum OpacityType { Parent, Self }
+public enum OpacityType { Parent, Own }
 
 public class Opacity
 {
@@ -13,7 +13,7 @@ public class Opacity
         get => Type switch
         {
             OpacityType.Parent => _parentValue,
-            OpacityType.Self => _value,
+            OpacityType.Own => _value,
             _ => _value
         };
     }
@@ -29,7 +29,7 @@ public class Opacity
     public bool SetValue(float value)
     {
         _value = value;
-        return Type is OpacityType.Self;
+        return Type is OpacityType.Own;
     }
 
     public void Recalculate()

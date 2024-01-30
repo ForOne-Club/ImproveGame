@@ -1,5 +1,4 @@
-﻿using ImproveGame.Interface.Attributes;
-using ImproveGame.Interface.SUIElements;
+﻿using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.GlobalGUI.FunctionList;
 
@@ -8,14 +7,9 @@ public class FunctionListGUI : BaseBody
 {
     public override bool Enabled { get => Main.playerInventory && _enabled; set => _enabled = value; }
     private bool _enabled = true;
+    public override bool CanSetFocusTarget(UIElement target) => false;
 
-    public override bool CanSetFocusTarget(UIElement target)
-    {
-        return false;
-    }
-
-    public SUIPanel Window;
-
+    public SUIPanel Window { get; private set; }
     public SUIText BigBagButton { get; private set; }
     public SUIText SettingButton { get; private set; }
 
@@ -23,15 +17,16 @@ public class FunctionListGUI : BaseBody
     {
         Window = new SUIPanel(Color.Transparent, Color.Transparent);
         Window.SetPadding(0f);
-        Window.Left.Percent = Window.Top.Percent = 1f;
+        Window.IsAdaptiveWidth = true;
+        Window.Height.Pixels = 90f;
+        Window.SetAlign(1f, 1f);
+        Window.SetPosPixels(-new Vector2(55f, 25f));
 
         Window.JoinParent(this);
 
         InitializeBigBagButton();
         InitializeSettingButton();
 
-        Window.SetSizePixels(new Vector2((BigBagButton.TextSize.X + SettingButton.TextSize.X) * 1.1f + 8f, 90f));
-        Window.SetPosPixels(-Window.GetSize() - new Vector2(55f, 25f));
     }
 
     public void InitializeBigBagButton()

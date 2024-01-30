@@ -2,6 +2,7 @@
 
 namespace ImproveGame.Interface;
 
+#region enum and struct
 public enum MouseButtonType { Left, Middle, Right }
 public enum MouseEventType { Down, Up }
 public struct MouseStateMinor(bool leftButton, bool middleButton, bool rightButton)
@@ -21,11 +22,11 @@ public struct MouseStateMinor(bool leftButton, bool middleButton, bool rightButt
         _ => throw new NotImplementedException()
     };
 }
+#endregion
 
 /// <summary>
 /// 事件触发器，用于取代 <see cref="UserInterface"/><br/>
-/// 添加一个很早就执行的 <see cref="View.PreUpdate(GameTime)"/><br/>
-/// 因为用不到 鼠标侧键 和 双击 事件，所以都未实现。
+/// 未实现 侧键 和 双击 事件。
 /// </summary>
 public class EventTrigger(string layerName, string name)
 {
@@ -34,6 +35,8 @@ public class EventTrigger(string layerName, string name)
 
     public BaseBody RootBody { get; protected set; }
 
+    public Vector2 MouseFocus { get; protected set; }
+    public UIElement CurrentHoverTarget { get; protected set; }
     public UIElement PreviousHoverTarget { get; protected set; }
 
     public IReadOnlyDictionary<MouseButtonType, UIElement> PreviousMouseTargets => _previousMouseTargets;
@@ -64,6 +67,23 @@ public class EventTrigger(string layerName, string name)
         }
     }
 
+    /// <summary>
+    /// 更新鼠标位置
+    /// </summary>
+    public virtual void UpdateMouseFocus()
+    {
+        MouseFocus = EventTriggerManager.MouseScreen;
+    }
+
+    /// <summary>
+    /// 更新鼠标悬停目标
+    /// </summary>
+    public virtual void UpdateHoverTarget()
+    {
+        PreviousHoverTarget = CurrentHoverTarget;
+        CurrentHoverTarget = EventTriggerManager.FocusHasUIElement ? null : RootBody.GetElementAt(MouseFocus);
+    }
+
     public virtual void Update(GameTime gameTime)
     {
         if (RootBody is null or { Enabled: false })
@@ -71,26 +91,25 @@ public class EventTrigger(string layerName, string name)
             return;
         }
 
-        Vector2 focus = EventTriggerManager.MouseScreen;
+        UpdateMouseFocus();
 
         _previousMouseState = _mouseState;
         _mouseState.SetState(Main.mouseLeft, Main.mouseMiddle, Main.mouseRight);
 
         try
         {
-            UIElement target = EventTriggerManager.FocusHasUIElement ? null : RootBody.GetElementAt(focus);
+            UpdateHoverTarget();
 
-            RootBody.PreUpdate(gameTime);
-
-            if (target != PreviousHoverTarget)
+            if (RootBody.CanSetFocusTarget(CurrentHoverTarget))
             {
-                HandleChangeTarget(target, PreviousHoverTarget, new UIMouseEvent(target, focus));
+                EventTriggerManager.FocusUIElement = CurrentHoverTarget;
             }
 
-            // 禁用鼠标
-            if (RootBody.CanSetFocusTarget(target))
+            if (CurrentHoverTarget != PreviousHoverTarget)
             {
-                EventTriggerManager.FocusUIElement = target;
+                var mouseOverOutEvent = new UIMouseEvent(CurrentHoverTarget, MouseFocus);
+                PreviousHoverTarget?.MouseOut(mouseOverOutEvent);
+                CurrentHoverTarget?.MouseOver(mouseOverOutEvent);
             }
 
             // 遍历三种鼠标按键：左键、右键和中键
@@ -99,30 +118,28 @@ public class EventTrigger(string layerName, string name)
                 // 判断当前按键是否被按下
                 if (_mouseState[mouseButton] && !_previousMouseState[mouseButton])
                 {
-                    HandleMouseEvent(MouseEventType.Down, target, focus, mouseButton);
+                    // 如果目标元素存在且可以被优先处理，则将视图置于顶层
+                    if (CurrentHoverTarget is not null && EventTriggerManager.FocusUIElement == CurrentHoverTarget)
+                    {
+                        EventTriggerManager.SetHeadEventTigger(this);
+                    }
+
+                    HandleMouseEvent(MouseEventType.Down, mouseButton);
                 }
                 else if (!_mouseState[mouseButton] && _previousMouseState[mouseButton])
                 {
-                    HandleMouseEvent(MouseEventType.Up, target, focus, mouseButton);
+                    HandleMouseEvent(MouseEventType.Up, mouseButton);
                 }
             }
 
             if (PlayerInput.ScrollWheelDeltaForUI != 0)
             {
-                target?.ScrollWheel(new UIScrollWheelEvent(target, focus, PlayerInput.ScrollWheelDeltaForUI));
+                CurrentHoverTarget?.ScrollWheel(new UIScrollWheelEvent(CurrentHoverTarget, MouseFocus, PlayerInput.ScrollWheelDeltaForUI));
             }
 
             RootBody.Update(gameTime);
         }
         catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-    }
-
-    private void HandleChangeTarget(UIElement target, UIElement previousHoverTarget, UIMouseEvent e)
-    {
-        previousHoverTarget?.MouseOut(e);
-        target?.MouseOver(e);
-
-        PreviousHoverTarget = target;
     }
 
     public static Action<UIMouseEvent> GetMouseDownEvent(MouseButtonType buttonType, UIElement element)
@@ -167,29 +184,28 @@ public class EventTrigger(string layerName, string name)
         };
     }
 
-    private void HandleMouseEvent(MouseEventType eventType, UIElement target, Vector2 focus, MouseButtonType mouseButton)
+    private void HandleMouseEvent(MouseEventType eventType, MouseButtonType mouseButton)
     {
+        UIMouseEvent evt;
+
         if (eventType is MouseEventType.Down)
         {
-            GetMouseDownEvent(mouseButton, target)?.Invoke(new UIMouseEvent(target, focus));
+            evt = new UIMouseEvent(CurrentHoverTarget, MouseFocus);
+            GetMouseDownEvent(mouseButton, CurrentHoverTarget)?.Invoke(evt);
         }
         else
         {
-            GetMouseUpEvent(mouseButton, _previousMouseTargets[mouseButton])?.Invoke(new UIMouseEvent(target, focus));
+            evt = new UIMouseEvent(CurrentHoverTarget, MouseFocus);
+            GetMouseUpEvent(mouseButton, _previousMouseTargets[mouseButton])?.Invoke(evt);
 
-            if (_previousMouseTargets[mouseButton] == target)
+            if (_previousMouseTargets[mouseButton] == CurrentHoverTarget)
             {
-                GetClickEvent(mouseButton, _previousMouseTargets[mouseButton])?.Invoke(new UIMouseEvent(target, focus));
+                evt = new UIMouseEvent(CurrentHoverTarget, MouseFocus);
+                GetClickEvent(mouseButton, _previousMouseTargets[mouseButton])?.Invoke(evt);
             }
         }
 
-        // 如果目标元素存在且可以被优先处理，则将视图置于顶层
-        if (eventType is MouseEventType.Down && target is not null && EventTriggerManager.FocusUIElement == target)
-        {
-            EventTriggerManager.SetHeadEventTigger(this);
-        }
-
-        _previousMouseTargets[mouseButton] = target;
+        _previousMouseTargets[mouseButton] = CurrentHoverTarget;
     }
 
     public virtual bool Draw(bool drawToGame = true)

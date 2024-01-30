@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.Common;
 
 namespace ImproveGame.Interface.SUIElements;
 
@@ -7,6 +6,8 @@ public class SUICross : TimerView
 {
     public float CrossSize, CrossRounded, CrossBorder;
     public Color CrossBorderColor, CrossBorderHoverColor, CrossBeginColor, CrossEndColor;
+
+    public Vector2 CrossOffset;
 
     public SUICross()
     {
@@ -40,6 +41,6 @@ public class SUICross : TimerView
         Vector2 size = GetDimensions().Size();
         Color fork = HoverTimer.Lerp(CrossBeginColor, CrossEndColor);
         Vector2 forkPos = pos + (size - new Vector2(CrossSize)) / 2f;
-        SDFGraphic.HasBorderCross(forkPos, CrossSize, CrossRounded, fork, CrossBorder, borderColor);
+        SDFGraphic.HasBorderCross(forkPos + CrossOffset, CrossSize, CrossRounded, fork, CrossBorder, borderColor);
     }
 }
