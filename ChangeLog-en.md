@@ -67,12 +67,12 @@
 - **[v1.6.7.1]** Tool speed boost is not applied to hammers used to destroy walls
 - **[v1.6.7.1]** Opening the full-screen map resets the UI state
 - **[v1.6.7.1]** Space wand doesn't set slope for tiles properly sometimes
-- **[v1.6.7.2]** 空间法杖放置沙子会使部分沙子以物品形式掉落
-- **[v1.6.7.2]** 在某些情况下影烛的随身增益站不会正常作用
-- **[v1.6.7.2]** 在某些情况下自动垃圾桶UI错位
-- **[v1.6.7.2]** 大背包设置项 “智能拾取” “自动拾取” 联机中无效
-- **[v1.6.7.2]** 构造法杖放不了火把
-- **[v1.6.7.2]** “信息饰品在便携存储中生效”功能不适配模组饰品
+- **[v1.6.7.2]** Placing sand with Wand of Space causes some of the sand to drop in item form.
+- **[v1.6.7.2]** In certain situations, the Shadow Candle's portable buff station does not work correctly.
+- **[v1.6.7.2]** In certain situations, the automated trash bin UI is misaligned.
+- **[v1.6.7.2]** The "Smart pickup" and "Auto pickup" options in the Big Backpack aren't functioning in multiplayer.
+- **[v1.6.7.2]** Wand of Construction is unable to place torches.
+- **[v1.6.7.2]** The feature "Info accessories work in portable storage" is incompatible with mod accessories.
 
 ## Adjustments
 
@@ -93,10 +93,10 @@
 - Items which have a buff duration below 60s are no longer considered as infinite potions, which solves some mod compatibility issues (e.g. Astral Injection from Calamity Mod)
 - **[v1.6.7.1]** "Faster Respawn" and "Fast Respawn When No Boss" is combined into one option
 - **[v1.6.7.1]** Added a tip to hide the infinite buff icon in the buff icon's tooltip
-- **[v1.6.7.2]** 修改部分UI绘制逻辑以适配High FPS Support Mod
-- **[v1.6.7.2]** 空间法杖现已支持物块放置魔棒（如生命木魔棒、树叶魔棒）
-- **[v1.6.7.2]** 树木迅速生长功能调整为“树木迅速生长 & 无视地层条件”
-- **[v1.6.7.2]** 精简了部分文本
+- **[v1.6.7.2]** Adjusted some UI drawing logic to adapt to the High FPS Support Mod.
+- **[v1.6.7.2]** Wand of Space now supports block wands (eg. Living Wood Wand, Leaf Wand).
+- **[v1.6.7.2]** Adjusted the "Trees grow rapidly" function to "Trees grow rapidly & ignore layer conditions".
+- **[v1.6.7.2]** Optimized some text.
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0
@@ -486,7 +486,7 @@ This mod has been updated to tModLoader 1.4.4 since v1.6.4.0
 - Added a function which greatly increases the drop rate of fruit of tree shaking
 - The tool speed boost now can be modified by a slider.
 - Herbs' blooming condition now can be disbled
-- Large Backpack:
+- Big Backpack:
   - Deposit all
   - Loot all
   - Quick stacking
