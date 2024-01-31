@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-
-namespace ImproveGame.Interface.BaseViews
+﻿namespace ImproveGame.Interface.BaseViews
 {
     /// <summary>
     /// 大背包按钮背景上的效果，需要直接继承此类即可。(继承自 RelativeUIE)

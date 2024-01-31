@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-
-namespace ImproveGame.Interface.GUI.SpaceWand;
+﻿namespace ImproveGame.Interface.GUI.SpaceWand;
 
 public sealed class SelectionButton : UIElement
 {
@@ -27,23 +25,23 @@ public sealed class SelectionButton : UIElement
             _ => _materialPiece
         };
     }
-    
+
     public SelectionButton(SpaceWandGUI parent)
     {
         this.SetSize(ModAsset.Background.Size());
-        
+
         _materialPiece = new SelectionPiece(
             GetText("SpaceWandGUI.PlaceType"),
             ModAsset.SelectionPieceMaterial_Hover,
             ModAsset.SelectionPieceMaterial,
             () => SpaceWandGUI.CurrentPage is SpaceWandGUI.PageType.Material);
-        
+
         _slopePiece = new SelectionPiece(
             GetText("SpaceWandGUI.BlockType"),
             ModAsset.SelectionPieceSlope_Hover,
             ModAsset.SelectionPieceSlope,
             () => SpaceWandGUI.CurrentPage is SpaceWandGUI.PageType.Slope);
-        
+
         _shapePiece = new SelectionPiece(
             GetText("SpaceWandGUI.ShapeType"),
             ModAsset.SelectionPieceShape_Hover,
@@ -59,7 +57,7 @@ public sealed class SelectionButton : UIElement
                 SpaceWandGUI.CurrentPage = SpaceWandGUI.PageType.Slope;
             if (piece == _shapePiece)
                 SpaceWandGUI.CurrentPage = SpaceWandGUI.PageType.Shape;
-            
+
             parent.SetupPage();
 
             parent.Recalculate();
@@ -99,7 +97,7 @@ public sealed class SelectionButton : UIElement
 
         var background = ModAsset.Background.Value;
         spriteBatch.Draw(background, position, null, color, 0, background.Size() / 2f, 1f, 0, 0f);
-        
+
         _materialPiece.DrawSelf(spriteBatch, this);
         _slopePiece.DrawSelf(spriteBatch, this);
         _shapePiece.DrawSelf(spriteBatch, this);

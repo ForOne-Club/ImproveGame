@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Content.Tiles;

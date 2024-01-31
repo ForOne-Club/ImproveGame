@@ -1,6 +1,6 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common.Configs;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.Graphics2D;
 using ImproveGame.Interface.UIStructs;
 using ReLogic.Graphics;
 using System.Reflection;

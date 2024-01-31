@@ -1,4 +1,4 @@
-﻿using ImproveGame.Common.Animations;
+﻿using ImproveGame.Interface.Graphics2D;
 
 namespace ImproveGame.Content.Projectiles
 {
@@ -74,7 +74,7 @@ namespace ImproveGame.Content.Projectiles
             {
                 Vector2 center = Projectile.Center - Main.screenPosition,
                     target = Walls[index - 1].ToVector2() * 16f + new Vector2(8) - Main.screenPosition;
-                SDFGraphic.HasBorderLine(center, target, 2f, background, 1f, border, false);
+                SDFGraphics.HasBorderLine(center, target, 2f, background, 1f, border, false);
             }
             return true;
         }

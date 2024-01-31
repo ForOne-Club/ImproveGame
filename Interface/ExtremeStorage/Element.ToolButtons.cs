@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Packets;
+﻿using ImproveGame.Common.Packets;
 using ImproveGame.Common.Packets.Items;
 using ImproveGame.Common.Packets.NetStorager;
 using Terraria.ModLoader.UI;

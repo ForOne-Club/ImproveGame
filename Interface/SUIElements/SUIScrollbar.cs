@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.Common;
+﻿using ImproveGame.Interface.Common;
+using ImproveGame.Interface.Graphics2D;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.SUIElements

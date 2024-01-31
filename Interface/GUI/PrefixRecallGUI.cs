@@ -1,12 +1,8 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.GlobalItems;
-using ImproveGame.Interface.Common;
-using ImproveGame.Interface.UIElements;
+﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Interface.SUIElements;
-using System.Reflection;
+using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
-using Terraria.ID;
 using UIImage = Terraria.GameContent.UI.Elements.UIImage;
 
 namespace ImproveGame.Interface.GUI;
@@ -45,7 +41,7 @@ public class PrefixRecallGUI : BaseBody, ISidedView
 
     public bool ForceCloseCondition() => Main.LocalPlayer.chest != -1 || !Main.playerInventory ||
                                          Main.LocalPlayer.sign > -1 || Main.LocalPlayer.talkNPC <= -1 ||
-                                         Main.npc[Main.LocalPlayer.talkNPC] is not {type: NPCID.GoblinTinkerer};
+                                         Main.npc[Main.LocalPlayer.talkNPC] is not { type: NPCID.GoblinTinkerer };
 
     // 检测是否满足显示条件并执行显示/隐藏命令
     public void TrackDisplayment()
@@ -68,10 +64,10 @@ public class PrefixRecallGUI : BaseBody, ISidedView
         Append(_basePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Shaded = true,
-            Left = {Pixels = PanelLeft},
-            Top = {Pixels = PanelTop},
-            Width = {Pixels = PanelWidth},
-            Height = {Pixels = PanelHeight}
+            Left = { Pixels = PanelLeft },
+            Top = { Pixels = PanelTop },
+            Width = { Pixels = PanelWidth },
+            Height = { Pixels = PanelHeight }
         });
 
         UIList = new UIList
@@ -117,7 +113,7 @@ public class PrefixRecallGUI : BaseBody, ISidedView
 
         UpdateList();
     }
-    
+
     private void UpdateList()
     {
         if (_oldItemType == Main.reforgeItem.type &&

@@ -1,11 +1,11 @@
-﻿namespace ImproveGame.Common.Animations;
+﻿namespace ImproveGame.Interface.Graphics2D;
 
 public class SDFRectangle
 {
     /// <summary>
     /// 强制不绘制阴影，用来实现一些“有趣”的效果
     /// </summary>
-    public static bool DontDrawShadow = false;
+    internal static bool DontDrawShadow = false;
 
     private static readonly GraphicsDevice GraphicsDevice = Main.graphics.GraphicsDevice;
 
@@ -19,7 +19,7 @@ public class SDFRectangle
     {
         size /= 2f;
 
-        List<SDFGraphicsVertexType> vertices = new List<SDFGraphicsVertexType>();
+        List<SDFGraphicsVertexType> vertices = [];
 
         Vector2 coordQ1 = new Vector2(rounded.X) - size;
         Vector2 coordQ2 = new Vector2(rounded.X);

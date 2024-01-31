@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.Common.Animations;
+﻿namespace ImproveGame.Interface;
 
 public enum AnimationState : byte // 动画当前的状态
 {

@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Packets.NetAutofisher;
+﻿using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Entitys;
@@ -7,6 +6,7 @@ using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using Terraria.DataStructures;
 using ImproveGame.Interface;
+using ImproveGame.Interface.Graphics2D;
 
 namespace ImproveGame.Common.ModSystems;
 

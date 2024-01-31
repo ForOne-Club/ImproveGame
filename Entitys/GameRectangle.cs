@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Interface.Graphics2D;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Entitys;

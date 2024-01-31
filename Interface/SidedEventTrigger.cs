@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-
-namespace ImproveGame.Interface
+﻿namespace ImproveGame.Interface
 {
     /// <summary>
     /// 一个特殊的 EventTrigger，用于所有不可共存的侧栏 UI，一般来说，UI 会在打开时，将其他 UI 关闭，且会有动画。

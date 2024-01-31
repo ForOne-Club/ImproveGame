@@ -1,7 +1,7 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Interface.Common;
+using ImproveGame.Interface.Graphics2D;
 using System.Collections.ObjectModel;
 using Terraria.UI.Chat;
 

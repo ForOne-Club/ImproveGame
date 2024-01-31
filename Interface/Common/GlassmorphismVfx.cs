@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Interface.Graphics2D;
 using Terraria.GameInput;
 using Terraria.Graphics.Effects;
 

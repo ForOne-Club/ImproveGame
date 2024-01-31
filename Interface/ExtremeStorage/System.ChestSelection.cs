@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Packets.NetChest;
+﻿using ImproveGame.Common.Packets.NetChest;
+using ImproveGame.Interface.Graphics2D;
 
 namespace ImproveGame.Interface.ExtremeStorage
 {

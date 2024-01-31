@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-
-namespace ImproveGame.Interface.GUI.SpaceWand;
+﻿namespace ImproveGame.Interface.GUI.SpaceWand;
 
 public record SelectionPiece(string HoverText, Asset<Texture2D> HoverImage, Asset<Texture2D> MainImage, Func<bool> Selected)
 {

@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Interface.Common;
+﻿using ImproveGame.Interface.Common;
+using ImproveGame.Interface.Graphics2D;
 
 namespace ImproveGame.Interface.SUIElements
 {

@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.Packets.NetStorager;
+﻿using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.SUIElements;
 using PinyinNet;

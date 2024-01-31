@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Assets;
-using ImproveGame.Common.Animations;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Interface.Common;
 using ReLogic.Graphics;

@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-
-namespace ImproveGame.Interface.UIElements
+﻿namespace ImproveGame.Interface.UIElements
 {
     public class RoundButton : UIElement
     {

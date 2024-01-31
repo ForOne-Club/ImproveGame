@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Content.Items;
+﻿using ImproveGame.Content.Items;
 using ImproveGame.Interface.UIElements;
 
 namespace ImproveGame.Interface.GUI.SpaceWand;

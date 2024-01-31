@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Animations;
-using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.ModSystems.MarqueeSystem;
 using ImproveGame.Common.Packets;
 using ImproveGame.Content.Packets;
