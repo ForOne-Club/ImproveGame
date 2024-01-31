@@ -7,13 +7,15 @@ public class SDFRectangle
     /// </summary>
     internal static bool DontDrawShadow = false;
 
-    private static readonly GraphicsDevice GraphicsDevice = Main.graphics.GraphicsDevice;
+    public static EffectPass SpriteEffectPass { get; private set; } = Main.spriteBatch.spriteEffectPass;
+    public static GraphicsDevice GraphicsDevice { get; private set; } = Main.graphics.GraphicsDevice;
 
     private static Effect _effect;
-
-    public static void Load() => _effect = ModAsset.RoundRectangle.Value;
-
+    public static void Load() => _effect = ModAsset.SDFRectangle.Value;
     public static void Unload() => _effect = null;
+
+    public static void ApplyPass(int passIndex) => _effect.CurrentTechnique.Passes[passIndex].Apply();
+    public static void ApplyPass(string passName) => _effect.CurrentTechnique.Passes[passName].Apply();
 
     private static void BaseDrawRectangle(Vector2 pos, Vector2 size, Vector4 rounded)
     {
@@ -42,7 +44,7 @@ public class SDFRectangle
 
         GraphicsDevice.DrawUserPrimitives(0, vertices.ToArray(), 0, vertices.Count / 3);
 
-        Main.spriteBatch.spriteEffectPass.Apply();
+        SpriteEffectPass.Apply();
     }
 
     public static void HasBorder(Vector2 pos, Vector2 size, Vector4 rounded, Color backgroundColor, float border,
@@ -58,7 +60,7 @@ public class SDFRectangle
         parameters["uBorder"].SetValue(border);
         parameters["uBorderColor"].SetValue(borderColor.ToVector4());
         parameters["uInnerShrinkage"].SetValue(innerShrinkage);
-        _effect.CurrentTechnique.Passes[0].Apply();
+        ApplyPass(0);
         BaseDrawRectangle(pos, size, rounded);
     }
 
@@ -71,7 +73,7 @@ public class SDFRectangle
         _effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         _effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
         _effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
-        _effect.CurrentTechnique.Passes[1].Apply();
+        ApplyPass(1);
         BaseDrawRectangle(pos, size, rounded);
     }
 
@@ -84,7 +86,7 @@ public class SDFRectangle
         _effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         _effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
         _effect.Parameters["uShadowSize"].SetValue(shadow);
-        _effect.CurrentTechnique.Passes[2].Apply();
+        ApplyPass(2);
         BaseDrawRectangle(pos, size, rounded + new Vector4(shadow));
     }
 }

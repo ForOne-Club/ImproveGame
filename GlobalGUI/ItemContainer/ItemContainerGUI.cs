@@ -1,5 +1,5 @@
 ﻿using ImproveGame.GlobalGUI.ItemContainer.Elements;
-using ImproveGame.Interface.Attributes;
+using ImproveGame.Interface;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 
@@ -7,7 +7,7 @@ namespace ImproveGame.GlobalGUI.ItemContainer;
 
 public enum StorageType { Banners, Potions }
 
-[AutoCreateGUI("Radial Hotbars", "Item Container GUI")]
+[AutoCreateGUI(VanillaLayer.RadialHotbars, "Item Container GUI")]
 public class ItemContainerGUI : BaseBody
 {
     public static ItemContainerGUI Instace { get; private set; }

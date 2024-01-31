@@ -1,12 +1,13 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Packets;
+using ImproveGame.Interface;
 using ImproveGame.Interface.SUIElements;
 using ImproveGame.Interface.UIElements;
 using Terraria.GameInput;
 
 namespace ImproveGame.GlobalGUI;
 
-[AutoCreateGUI("Radial Hotbars", "Big Bag")]
+[AutoCreateGUI(VanillaLayer.RadialHotbars, "Big Bag")]
 public class BigBagGUI : BaseBody
 {
     public static BigBagGUI Instance { get; private set; }

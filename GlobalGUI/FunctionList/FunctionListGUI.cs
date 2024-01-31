@@ -1,9 +1,10 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.Interface;
 using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.GlobalGUI.FunctionList;
 
-[AutoCreateGUI("Radial Hotbars", "Function List GUI")]
+[AutoCreateGUI(VanillaLayer.RadialHotbars, "Function List GUI")]
 public class FunctionListGUI : BaseBody
 {
     public override bool Enabled { get => Main.playerInventory && _enabled; set => _enabled = value; }

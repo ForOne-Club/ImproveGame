@@ -41,7 +41,7 @@ public static class SDFGraphics
     public static void HasBorderCross(Vector2 pos, float size, float round, Color backgroundColor, float border,
         Color borderColor, bool ui = true)
     {
-        Effect effect = ModAsset.SDFGraphic.Value;
+        Effect effect = ModAsset.SDFGraphics.Value;
         effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
         effect.Parameters["uBorder"].SetValue(border);
@@ -55,7 +55,7 @@ public static class SDFGraphics
     public static void HasBorderRound(Vector2 pos, float size, Color background, float border, Color borderColor,
         bool ui = true)
     {
-        Effect effect = ModAsset.SDFGraphic.Value;
+        Effect effect = ModAsset.SDFGraphics.Value;
         effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
         effect.Parameters["uBorder"].SetValue(border);
@@ -66,7 +66,7 @@ public static class SDFGraphics
 
     public static void NoBorderRound(Vector2 pos, float size, Color background, bool ui = true)
     {
-        Effect effect = ModAsset.SDFGraphic.Value;
+        Effect effect = ModAsset.SDFGraphics.Value;
         effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
         effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
@@ -85,7 +85,7 @@ public static class SDFGraphics
 
         start += new Vector2(width) - min;
         end += new Vector2(width) - min;
-        Effect effect = ModAsset.SDFGraphic.Value;
+        Effect effect = ModAsset.SDFGraphics.Value;
         effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         effect.Parameters["uStart"].SetValue(start);
         effect.Parameters["uEnd"].SetValue(end);
@@ -106,7 +106,7 @@ public static class SDFGraphics
 
         start += new Vector2(width) - min;
         end += new Vector2(width) - min;
-        Effect effect = ModAsset.SDFGraphic.Value;
+        Effect effect = ModAsset.SDFGraphics.Value;
         effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         effect.Parameters["uStart"].SetValue(start);
         effect.Parameters["uEnd"].SetValue(end);

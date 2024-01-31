@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.SUIElements;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
@@ -7,7 +6,7 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI.PlayerStats;
 
-[AutoCreateGUI("Radial Hotbars", "Player Stats")]
+[AutoCreateGUI(VanillaLayer.RadialHotbars, "Player Stats")]
 public class PlayerStatsGUI : BaseBody
 {
     public static PlayerStatsGUI Instance { get; private set; }

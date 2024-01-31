@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.GlobalGUI.DummyControl;
-using ImproveGame.Interface.Attributes;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.ItemSearcher;
