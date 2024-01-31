@@ -12,7 +12,7 @@
 
 - v1.6.7.0
 - v1.6.7.1
-- v1.6.7.2 (Not yet)
+- v1.6.7.2
 
 ## Additions
 - Fast Respawn When No Boss

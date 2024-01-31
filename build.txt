@@ -1,6 +1,6 @@
 displayName = Quality of Terraria 更好的体验
 author = 局长, Cyril, 夜谷紫幽, delete, Lacewing, Lastprismer, 合作一号
-version = 1.6.7.1
+version = 1.6.7.2
 homepage = https://github.com/487666123/ImproveGame
 buildIgnore = *.gif, *.aseprite
 includeSource = true
