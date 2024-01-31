@@ -778,6 +778,11 @@ ModItemLoadPage: {
 UIConfigs: {
 	DisplayName: 个人配置
 
+	BigBackpackButton: {
+		Label: "[centeritem:3813] 大背包快捷按钮"
+		Tooltip: ""
+	}
+
 	ResetNativeUI: {
 		Label: "[centeritem:1544] 重置原生用户界面"
 		// Tooltip: ""

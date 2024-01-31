@@ -776,6 +776,11 @@ ModItemLoadPage: {
 UIConfigs: {
 	DisplayName: Personal Config
 
+	BigBackpackButton: {
+		Label: "[centeritem:3813] Big Backpack Button"
+		Tooltip: ""
+	}
+
 	ResetNativeUI: {
 		Label: "[centeritem:1544] Reset to vanilla UI"
 		Tooltip: ""

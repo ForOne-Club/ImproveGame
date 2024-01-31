@@ -97,6 +97,7 @@
 - **[v1.6.7.2]** Wand of Space now supports block wands (eg. Living Wood Wand, Leaf Wand).
 - **[v1.6.7.2]** Adjusted the "Trees grow rapidly" function to "Trees grow rapidly & ignore layer conditions".
 - **[v1.6.7.2]** Optimized some text.
+- **[v1.6.7.3]** 大背包开启按钮添加设置，设置按钮位置适配 DragonLens
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0

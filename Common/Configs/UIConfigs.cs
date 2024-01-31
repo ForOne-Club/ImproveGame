@@ -28,6 +28,9 @@ public class UIConfigs : ModConfig
     [CustomModConfigItem(typeof(ThemeColorElement))]
     public ThemeType ThemeType;
 
+    [DefaultValue(true)]
+    public bool BigBackpackButton;
+
     [ReloadRequired]
     public bool ResetNativeUI;
 
