@@ -73,6 +73,7 @@
 - **[v1.6.7.2]** The "Smart pickup" and "Auto pickup" options in the Big Backpack aren't functioning in multiplayer.
 - **[v1.6.7.2]** Wand of Construction is unable to place torches.
 - **[v1.6.7.2]** The feature "Info accessories work in portable storage" is incompatible with mod accessories.
+- **[v1.6.7.4]** "Teleport all NPCs home" feature is incompatible with High FPS Support Mod
 
 ## Adjustments
 
@@ -97,7 +98,8 @@
 - **[v1.6.7.2]** Wand of Space now supports block wands (eg. Living Wood Wand, Leaf Wand).
 - **[v1.6.7.2]** Adjusted the "Trees grow rapidly" function to "Trees grow rapidly & ignore layer conditions".
 - **[v1.6.7.2]** Optimized some text.
-- **[v1.6.7.3]** 大背包开启按钮添加设置，设置按钮位置适配 DragonLens
+- **[v1.6.7.3]** Added toggle to the Big Backpack button, the settings button position adapts to DragonLens.
+- **[v1.6.7.4]** Removed the big backpack button and the custom settings button, to fix the issue of the buttons being massive.
 
 # v1.6.6
 The mod name have changed to Quality of Terraria since v1.6.6.0

@@ -21,17 +21,36 @@ public class TownNPCHome : ModSystem
     }
 
     private static bool TownNPCHomeLoaded => ModLoader.HasMod("TownNPCHome");
+    private static bool _callTeleportAll;
+    private static int _indexReadyToTeleport = -1;
     
     public override void Load()
     {
         On_WorldGen.moveRoom += WorldGen_moveRoom;
     }
 
+    public override void PreUpdateEntities()
+    {
+        if (_callTeleportAll)
+        {
+            TownNPCHomePacket.TeleportToHome();
+            _callTeleportAll = false;
+        }
+
+        ref int n = ref _indexReadyToTeleport;
+        if (Main.npc.IndexInRange(n) && Main.npc[n] is not null)
+        {
+            TownEntitiesTeleportToHome(Main.npc[n], Main.npc[n].homeTileX, Main.npc[n].homeTileY);
+            n = -1;
+        }
+    }
+
     private void WorldGen_moveRoom(On_WorldGen.orig_moveRoom orig, int x, int y, int n)
     {
         orig.Invoke(x, y, n);
         if (Config.TownNPCHome && !TownNPCHomeLoaded && Main.npc.IndexInRange(n) && Main.npc[n] is not null)
-            TownEntitiesTeleportToHome(Main.npc[n], Main.npc[n].homeTileX, Main.npc[n].homeTileY);
+            _indexReadyToTeleport = n;
+        // TownEntitiesTeleportToHome(Main.npc[n], Main.npc[n].homeTileX, Main.npc[n].homeTileY);
     }
 
     private static void TownEntitiesTeleportToHome(NPC npc, int homeFloorX, int homeFloorY)
@@ -83,7 +102,7 @@ public class TownNPCHome : ModSystem
                         if (Main.mouseRight && Main.mouseRightRelease)
                         {
                             SoundEngine.PlaySound(SoundID.Chat);
-                            TownNPCHomePacket.TeleportToHome();
+                            _callTeleportAll = true;
                         }
                     }
 

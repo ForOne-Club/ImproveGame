@@ -7,7 +7,7 @@ namespace ImproveGame.GlobalGUI.FunctionList;
 [AutoCreateGUI(VanillaLayer.RadialHotbars, "Function List GUI")]
 public class FunctionListGUI : BaseBody
 {
-    public override bool Enabled { get => Main.playerInventory && _enabled; set => _enabled = value; }
+    public override bool Enabled { get => false/*Main.playerInventory && _enabled*/; set => _enabled = value; }
     private bool _enabled = true;
     public override bool CanSetFocusTarget(UIElement target) => false;
 
@@ -22,7 +22,7 @@ public class FunctionListGUI : BaseBody
         Window.IsAdaptiveWidth = Window.IsAdaptiveHeight = true;
         // Window.Height.Pixels = 80f;
         Window.SetAlign(1f, 1f);
-        Window.SetPosPixels(-new Vector2(55f, ModLoader.IsEnabled("DragonLens") ? 35f : 15f));
+        Window.SetPosPixels(-new Vector2(175f, ModLoader.IsEnabled("DragonLens") ? 35f : 15f));
         Window.JoinParent(this);
 
         BigBagButton = MimicSettingsButton(GetText("SuperVault.Name"), Color.White, Color.Yellow);
@@ -43,12 +43,12 @@ public class FunctionListGUI : BaseBody
         BigBagButton.JoinParent(Window);
 
 
-        SettingButton = MimicSettingsButton(Lang.inter[62].Value, Color.White, Color.Yellow);
-        SettingButton.OnLeftMouseDown += (_, _) =>
-        {
-            IngameOptions.Open();
-        };
-        SettingButton.JoinParent(Window);
+        // SettingButton = MimicSettingsButton(Lang.inter[62].Value, Color.White, Color.Yellow);
+        // SettingButton.OnLeftMouseDown += (_, _) =>
+        // {
+        //     IngameOptions.Open();
+        // };
+        // SettingButton.JoinParent(Window);
 
     }
 
@@ -96,10 +96,13 @@ public class FunctionListGUI : BaseBody
             SoundEngine.PlaySound(SoundID.MenuTick);
         };
 
-        button.OnUpdate += (_) =>
+        button.OnUpdate += _ =>
         {
             button.TextColor = button.HoverTimer.Lerp(noHoverColor, hoverColor);
-            button.TextScale = button.HoverTimer.Lerp(0.85f, 1f);
+            if (Language.ActiveCulture.Name is "zh-Hans")
+                button.TextScale = button.HoverTimer.Lerp(0.85f, 1f);
+            else
+                button.TextScale = button.HoverTimer.Lerp(0.65f, 0.8f);
         };
 
         return button;

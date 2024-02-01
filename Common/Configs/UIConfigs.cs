@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.Interface.Common;
+using Newtonsoft.Json;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
@@ -29,6 +30,7 @@ public class UIConfigs : ModConfig
     public ThemeType ThemeType;
 
     [DefaultValue(true)]
+    [JsonIgnore]
     public bool BigBackpackButton;
 
     [ReloadRequired]

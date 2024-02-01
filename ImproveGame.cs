@@ -16,14 +16,6 @@ public class ImproveGame : Mod
         AddContent<NetModuleLoader>();
         ChatManager.Register<BgItemTagHandler>("bgitem");
         ChatManager.Register<CenteredItemTagHandler>("centeritem");
-
-        // On_Main.DrawSettingButton += On_Main_DrawSettingButton;
-
-        // ban 掉原版设置按钮
-        IL_Main.DrawInterface_29_SettingsButton += il =>
-        {
-            new ILCursor(il).EmitRet();
-        };
     }
 
     public override void Unload()
