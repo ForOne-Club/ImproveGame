@@ -24,17 +24,16 @@ public abstract class BaseBody : View
     {
         base.Update(gameTime);
 
-        bool recalculate = false;
+        CheckWhetherRecalculate(out bool recalculate);
 
         if (_lastUIScale != Main.UIScale)
         {
-            _lastUIScale = Main.UIScale;
             recalculate = true;
+
+            _lastUIScale = Main.UIScale;
         }
 
-        CheckWhetherRecalculate(out bool recalculate2);
-
-        if (recalculate || recalculate2)
+        if (recalculate)
         {
             Recalculate();
         }

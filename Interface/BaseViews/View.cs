@@ -45,7 +45,8 @@ public class View : UIElement
     public Vector2 Spacing;
 
     /// <summary>
-    /// 防止溢出 (越界换行)，与 <see cref="RelativeMode"/> 搭配使用
+    /// 防止溢出 (越界换行)，与 <see cref="RelativeMode"/> 搭配使用 <br/>
+    /// 只有设置了 <see cref="StyleDimension.Pixels"/> 属性才有效
     /// </summary>
     public bool PreventOverflow;
 
