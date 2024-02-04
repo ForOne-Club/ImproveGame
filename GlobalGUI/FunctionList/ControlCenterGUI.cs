@@ -4,11 +4,11 @@ using Terraria.GameInput;
 
 namespace ImproveGame.GlobalGUI.FunctionList;
 
-[AutoCreateGUI(VanillaLayer.RadialHotbars, "Control Center GUI")]
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Control Center GUI")]
 public class ControlCenterGUI : BaseBody
 {
-    public readonly AnimationTimer OOHover = new();
-    public override bool Enabled { get => Keyboard.GetState().IsKeyDown(Keys.OemTilde) || OOHover.AnyOpen || OOHover.Closing; set { } }
+    public readonly AnimationTimer OOTimer = new();
+    public override bool Enabled { get => Keyboard.GetState().IsKeyDown(Keys.OemTilde) || OOTimer.AnyOpen || OOTimer.Closing; set { } }
     public override bool CanSetFocusTarget(UIElement target) => Window.IsMouseHovering;
 
     public SUIPanel Window { get; init; } = new(Color.Transparent, Color.Transparent);
@@ -17,6 +17,7 @@ public class ControlCenterGUI : BaseBody
     public override void OnInitialize()
     {
         // BgColor = Color.White * 0.25f;
+        Opacity.Type = OpacityType.Own;
 
         Window.SetPadding(0f);
         Window.IsAdaptiveWidth = Window.IsAdaptiveHeight = true;
@@ -90,7 +91,7 @@ public class ControlCenterGUI : BaseBody
             TextBorder = 1.5f,
             HAlign = 1f,
         };
-        version.Width.Pixels = (version.TextSize.X + 30f) * version.TextScale;
+        version.Width.Pixels = version.TextSize.X * version.TextScale;
         version.Height.Percent = 1f;
         version.JoinParent(tail);
     }
@@ -99,27 +100,11 @@ public class ControlCenterGUI : BaseBody
     {
         base.CheckWhetherRecalculate(out recalculate);
 
-        OOHover.Update();
-
-        if (Keyboard.GetState().IsKeyDown(Keys.OemTilde))
+        if (OOTimer.Lerp(0, 1) != Opacity.Value)
         {
-            if (!OOHover.AnyOpen)
-            {
-                OOHover.OpenAndResetTimer();
-            }
+            Opacity.SetValue(OOTimer.Lerp(0, 1));
+            recalculate = true;
         }
-        else
-        {
-            if (!OOHover.AnyClose)
-            {
-                OOHover.CloseAndResetTimer();
-            }
-        }
-
-        Opacity.Type = OpacityType.Own;
-        Opacity.SetValue(OOHover.Lerp(0, 1));
-
-        recalculate = true;
     }
 
     public static View CreateTitle(Color bgColor, float height, float rounded)
@@ -130,6 +115,7 @@ public class ControlCenterGUI : BaseBody
             Rounded = new Vector4(rounded, rounded, 0, 0),
             PaddingTop = 1f,
         };
+        view.SetPadding(15f, 0f);
         view.Width.Percent = 1f;
         view.Height.Pixels = height;
 
@@ -147,6 +133,7 @@ public class ControlCenterGUI : BaseBody
             Spacing = new Vector2(4f),
             PaddingBottom = 1f,
         };
+        view.SetPadding(15f, 0f);
         view.Width.Percent = 1f;
         view.Height.Pixels = height;
 
@@ -155,13 +142,30 @@ public class ControlCenterGUI : BaseBody
 
     public override void Update(GameTime gameTime)
     {
+        OOTimer.Update();
+
         EventTriggerManager.SetHeadEventTigger(EventTriggerManager.CurrentEventTrigger);
 
         base.Update(gameTime);
 
         if (Window.IsMouseHovering)
         {
-            PlayerInput.LockVanillaMouseScroll("ImproveGame: Ach Panel GUI");
+            PlayerInput.LockVanillaMouseScroll($"{ImproveGame.Instance.Name}: Control Center GUI");
+        }
+
+        if (Keyboard.GetState().IsKeyDown(Keys.OemTilde))
+        {
+            if (!OOTimer.AnyOpen)
+            {
+                OOTimer.OpenAndResetTimer();
+            }
+        }
+        else
+        {
+            if (!OOTimer.AnyClose)
+            {
+                OOTimer.CloseAndResetTimer();
+            }
         }
     }
 

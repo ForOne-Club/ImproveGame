@@ -15,7 +15,7 @@ public class ControlCenterItem(string nameKey) : IComparable<ControlCenterItem>
     public event Action<TimerView> OnUpdate;
 
     public virtual Color GetBgColor(TimerView timerView) => BgColor?.Invoke(timerView) ?? Color.Black * timerView.HoverTimer.Lerp(0.35f, 0.5f);
-    public virtual Color GetBorderColor(TimerView timerView) => BorderColor?.Invoke(timerView) ?? Color.Black * 0.75f;
+    public virtual Color GetBorderColor(TimerView timerView) => BorderColor?.Invoke(timerView) ?? Color.Black * 0.5f;
 
     public virtual void Update(TimerView timerView)
     {

@@ -6,7 +6,7 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Interface.GUI.PlayerStats;
 
-[AutoCreateGUI(VanillaLayer.RadialHotbars, "Player Stats")]
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Player Stats")]
 public class PlayerStatsGUI : BaseBody
 {
     public static PlayerStatsGUI Instance { get; private set; }

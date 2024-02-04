@@ -6,7 +6,7 @@ using Terraria.GameInput;
 
 namespace ImproveGame.GlobalGUI.AutoTrash;
 
-[AutoCreateGUI(VanillaLayer.RadialHotbars, "Auto Trash")]
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Auto Trash")]
 public class GarbageListGUI : BaseBody
 {
     public static GarbageListGUI Instace { get; private set; }

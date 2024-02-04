@@ -3,7 +3,7 @@ using ImproveGame.Interface.SUIElements;
 
 namespace ImproveGame.GlobalGUI.DummyControl;
 
-[AutoCreateGUI(VanillaLayer.RadialHotbars, "Dummy Control")]
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Dummy Control")]
 public class DummyControlGUI : BaseBody
 {
     #region ViewBody

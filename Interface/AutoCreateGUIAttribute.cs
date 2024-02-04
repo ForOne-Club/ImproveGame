@@ -1,8 +1,11 @@
 ﻿namespace ImproveGame.Interface;
 
-public static class VanillaLayer
+public static class LayerName
 {
-    public const string RadialHotbars = "Radial Hotbars";
+    public static class Vanilla
+    {
+        public const string RadialHotbars = "Radial Hotbars";
+    }
 }
 
 [AttributeUsage(AttributeTargets.Class)]

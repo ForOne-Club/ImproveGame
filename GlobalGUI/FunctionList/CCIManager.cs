@@ -27,7 +27,7 @@ public class CCIManager : ModSystem
 
     public override void Load()
     {
-        var bigBackpack = new ControlCenterItem("大背包").Register();
+        var bigBackpack = new ControlCenterItem("Mods.ImproveGame.SuperVault.Name").Register();
 
         bigBackpack.OnMouseDown += tv =>
         {
@@ -37,9 +37,9 @@ public class CCIManager : ModSystem
                 BigBagGUI.Instance.Open();
         };
 
-        var playerStats = new ControlCenterItem("属性面板")
+        var playerStats = new ControlCenterItem("Mods.ImproveGame.UI.PlayerStats.Name")
         {
-            Priority = 1,
+            Priority = 0,
         }.Register();
 
         playerStats.OnMouseDown += tv =>

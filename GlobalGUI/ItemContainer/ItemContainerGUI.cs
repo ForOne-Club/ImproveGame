@@ -7,7 +7,7 @@ namespace ImproveGame.GlobalGUI.ItemContainer;
 
 public enum StorageType { Banners, Potions }
 
-[AutoCreateGUI(VanillaLayer.RadialHotbars, "Item Container GUI")]
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Item Container GUI")]
 public class ItemContainerGUI : BaseBody
 {
     public static ItemContainerGUI Instace { get; private set; }

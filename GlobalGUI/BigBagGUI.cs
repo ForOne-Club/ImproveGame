@@ -7,7 +7,7 @@ using Terraria.GameInput;
 
 namespace ImproveGame.GlobalGUI;
 
-[AutoCreateGUI(VanillaLayer.RadialHotbars, "Big Bag")]
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Big Bag")]
 public class BigBagGUI : BaseBody
 {
     public static BigBagGUI Instance { get; private set; }
