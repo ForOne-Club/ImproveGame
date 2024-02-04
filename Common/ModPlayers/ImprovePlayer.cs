@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Projectiles;
+using ImproveGame.Core;
 using ImproveGame.GlobalGUI;
 using ImproveGame.GlobalGUI.AutoTrash;
 using ImproveGame.Interface;
@@ -193,7 +194,7 @@ public class ImprovePlayer : ModPlayer
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
     {
         // 判断有没有存活的 Boss
-        bool hasBoss = Main.CurrentFrameFlags.AnyActiveBossNPC;
+        bool hasBoss = CurrentFrameProperties.AnyActiveBoss;
 
         // 计算要缩短多少时间
         float timeShortened = Player.respawnTimer *
@@ -222,7 +223,7 @@ public class ImprovePlayer : ModPlayer
         // 非Boss战时快速复活
         // 计算要缩短多少时间 15*60=900
         int minRemainingTime = (int)(900 * MathHelper.Clamp(100f - Config.ResurrectionTimeShortened, 0f, 100f) / 100f);
-        if (Config.ResurrectionTimeShortened is 0 || Player.respawnTimer <= minRemainingTime || Main.CurrentFrameFlags.AnyActiveBossNPC)
+        if (Config.ResurrectionTimeShortened is 0 || Player.respawnTimer <= minRemainingTime || CurrentFrameProperties.AnyActiveBoss)
             return;
         Player.respawnTimer = minRemainingTime;
     }

@@ -74,6 +74,7 @@
 - **[v1.6.7.2]** Wand of Construction is unable to place torches.
 - **[v1.6.7.2]** The feature "Info accessories work in portable storage" is incompatible with mod accessories.
 - **[v1.6.7.4]** "Teleport all NPCs home" feature is incompatible with High FPS Support Mod
+- **[v1.6.7.5]** 开启“非BOSS战快速复活”功能后，在世吞存活时也可以快速复活
 
 ## Adjustments
 
