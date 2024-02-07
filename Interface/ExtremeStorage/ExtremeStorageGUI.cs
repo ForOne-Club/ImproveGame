@@ -1,4 +1,4 @@
-﻿using ImproveGame.Common.Packets.NetStorager;
+using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.SUIElements;
 using PinyinNet;
@@ -277,14 +277,16 @@ namespace ImproveGame.Interface.ExtremeStorage
 
             bool check(Item item, (string variable, int val, string check) condition)
             {
-                if (typeof(Item).GetField(condition.variable, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase) == null)
+                var f = typeof(Item).GetField(condition.variable, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                var p = typeof(Item).GetProperty(condition.variable, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.IgnoreCase);
+                if ( f == null && p == null)
                 {
-                    Main.NewText($"Field not found: {condition.variable}");
+                    Main.NewText($"Field or Property not found: {condition.variable}");
                     checkList.Remove(condition);
                     return true;
                 }
 
-                var field = typeof(Item).GetField(condition.variable, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase).GetValue(item);
+                var field = f == null ? p.GetValue(item) : f.GetValue(item);
 
                 int value = -1;
 
