@@ -2,6 +2,8 @@
 using ImproveGame.Content.Tiles;
 using ImproveGame.Interface.SUIElements;
 using PinyinNet;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using Terraria.GameInput;
 
 namespace ImproveGame.Interface.ExtremeStorage
@@ -255,13 +257,83 @@ namespace ImproveGame.Interface.ExtremeStorage
             string RemoveSpaces(string s) => s.Replace(" ", "", StringComparison.Ordinal);
 
             string searchContent = RemoveSpaces(_itemGrid.SearchContent.ToLower());
+
+            var checkList = new List<(string, int, string)>();
+
+            var regExp = @"\[([a-z]+)(>|<|=|>=|<=)?([0-9]+)?\]";
+
+            foreach(var i in _itemGrid.SearchContent.ToLower().Split(" "))
+            {
+                if (Regex.IsMatch(i, regExp))
+                {
+                    var group = Regex.Match(i, regExp).Groups;
+                    if (group[2].Value != "")
+                        checkList.Add((group[1].Value, int.Parse(group[3].Value), group[2].Value));
+                    else
+                        checkList.Add((group[1].Value, 1, ""));
+                    searchContent = searchContent.Replace(i, "");
+                }
+            }
+
+            bool check(Item item, (string variable, int val, string check) condition)
+            {
+                if (typeof(Item).GetField(condition.variable, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase) == null)
+                {
+                    Main.NewText($"Field not found: {condition.variable}");
+                    checkList.Remove(condition);
+                    return true;
+                }
+
+                var field = typeof(Item).GetField(condition.variable, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase).GetValue(item);
+
+                int value = -1;
+
+                switch (field)
+                {
+                    case int:
+                        value = (int)field; break;
+                    case bool:
+                        value = Convert.ToInt32(field); break;
+                    default:
+                        Main.NewText($"Illegal format: {condition.variable}");
+                        checkList.Remove(condition);
+                        return true;
+                }
+
+                switch (condition.check) 
+                {
+                    case ">":
+                        return value > condition.val;
+                    case "<":
+                        return value < condition.val;
+                    case "=":
+                        return value == condition.val;
+                    case ">=":
+                        return value >= condition.val;
+                    case "<=":
+                        return value <= condition.val;
+                    default:
+                        if (field is bool) return value == condition.val;
+                        return false;
+                }
+            }
+
+            bool checkAll(Item item, List<(string, int, string)> conditions)
+            {
+                if (conditions.Count == 0) return true;
+                var conditionsCache = new List<(string, int, string)>(conditions.ToArray());
+                foreach(var i in conditionsCache)
+                    if (!check(item, i) || item.stack == 0) return false;
+                return true;
+            }
+
             for (var k = 0; k < chestItems.Count; k++)
             {
                 int itemType = chestItems[k].type;
                 string internalName =
                     RemoveSpaces(ItemID.Search.GetName(itemType).ToLower()); // 《英文名》因为没法在非英语语言获取英文名，只能用内部名了
                 string currentLanguageName = RemoveSpaces(Lang.GetItemNameValue(itemType).ToLower());
-                if (internalName.Contains(searchContent) || currentLanguageName.Contains(searchContent))
+                if ((internalName.Contains(searchContent) || currentLanguageName.Contains(searchContent)) && checkAll(chestItems[k], checkList))
                 {
                     yield return k;
                     continue;
@@ -270,7 +342,7 @@ namespace ImproveGame.Interface.ExtremeStorage
                 if (Language.ActiveCulture.Name is not "zh-Hans") continue;
 
                 string pinyin = RemoveSpaces(PinyinConvert.GetPinyinForAutoComplete(currentLanguageName));
-                if (pinyin.Contains(searchContent)) {
+                if (pinyin.Contains(searchContent) && checkAll(chestItems[k], checkList)) {
                     yield return k;
                 }
             }
