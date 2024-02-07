@@ -56,10 +56,11 @@ public static class EventTriggerManager
         foreach (string layerName in LayersPriority.Where(EventTriggerInstances.ContainsKey))
         {
             List<EventTrigger> triggers = EventTriggerInstances[layerName];
-            for (int i = 0; i < triggers.Count; i++)
+
+            foreach (var trigger in triggers.OrderBy(triggers => triggers))
             {
-                CurrentEventTrigger = triggers[i];
-                CurrentEventTrigger.Update(gameTime);
+                CurrentEventTrigger = trigger;
+                CurrentEventTrigger?.Update(gameTime);
             }
         }
     }
@@ -73,12 +74,13 @@ public static class EventTriggerManager
         var layerIndex = new Dictionary<string, int>();
 
         // 插入到绘制层
-        foreach (KeyValuePair<string, List<EventTrigger>> keyValuePair in EventTriggerInstances)
+        foreach (var keyValuePair in EventTriggerInstances)
         {
             layers.FindVanilla(keyValuePair.Key, index =>
             {
                 layerIndex.Add(keyValuePair.Key, index);
-                foreach (EventTrigger trigger in keyValuePair.Value)
+
+                foreach (EventTrigger trigger in keyValuePair.Value.OrderBy(trigger => trigger))
                 {
                     layers.Insert(index + 1, new LegacyGameInterfaceLayer($"ImproveGame: {trigger.Name}",
                         () => trigger.Draw(), InterfaceScaleType.UI));
@@ -86,7 +88,7 @@ public static class EventTriggerManager
             });
         }
 
-        LayersPriority.Sort(((a, b) => -layerIndex[a].CompareTo(layerIndex[b])));
+        LayersPriority.Sort((a, b) => -layerIndex[a].CompareTo(layerIndex[b]));
     }
 
     /// <summary>
@@ -97,6 +99,11 @@ public static class EventTriggerManager
         // 不包含原版绘制层级的处理，因为目前都是添加到 Radial Hotbars 层的
         foreach ((_, List<EventTrigger> eventTriggers) in EventTriggerInstances)
         {
+            foreach (var trigger in eventTriggers.OrderBy(triggers => triggers).Reverse())
+            {
+                trigger?.Draw();
+            }
+
             // index 为 0 的应该处于最顶层，所以最后绘制
             for (var i = eventTriggers.Count - 1; i >= 0; i--)
             {

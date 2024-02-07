@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.GlobalGUI.FunctionList;
+﻿namespace ImproveGame.GlobalGUI.ControlCenter;
 
 public class ControlCenterItem(string nameKey) : IComparable<ControlCenterItem>
 {

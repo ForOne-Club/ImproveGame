@@ -1,6 +1,7 @@
-﻿using ImproveGame.Interface.GUI.PlayerStats;
+﻿using ImproveGame.GlobalGUI.DeathSpectating;
+using ImproveGame.Interface.GUI.PlayerStats;
 
-namespace ImproveGame.GlobalGUI.FunctionList;
+namespace ImproveGame.GlobalGUI.ControlCenter;
 
 public class CCIManager : ModSystem
 {
@@ -37,10 +38,7 @@ public class CCIManager : ModSystem
                 BigBagGUI.Instance.Open();
         };
 
-        var playerStats = new ControlCenterItem("Mods.ImproveGame.UI.PlayerStats.Name")
-        {
-            Priority = 0,
-        }.Register();
+        var playerStats = new ControlCenterItem("Mods.ImproveGame.UI.PlayerStats.Name").Register();
 
         playerStats.OnMouseDown += tv =>
         {
@@ -53,6 +51,15 @@ public class CCIManager : ModSystem
                 Main.playerInventory = true;
                 body.Append(body.Window);
             }
+        };
+
+        var spectating = new ControlCenterItem("观战").Register();
+
+        spectating.OnMouseDown += tv =>
+        {
+            var body = SpectatingGUI.Instance;
+
+            body.Enabled = !body.Enabled;
         };
 
         Sort();

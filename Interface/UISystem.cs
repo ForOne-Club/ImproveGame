@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.GlobalGUI.DummyControl;
 using ImproveGame.Interface.ExtremeStorage;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.ItemSearcher;
@@ -110,6 +109,7 @@ public class UISystem : ModSystem
                     AutoCreateBodyTypes.Add(type);
                     AutoCreateGUIAttributes[type] = autoCreate;
                     EventTriggerInstances[type] = new EventTrigger(autoCreate.LayerName, autoCreate.OwnName).Register();
+                    EventTriggerInstances[type].Priority = autoCreate.Priority;
                     BaseBodyInstances[type] = null;
                 }
             }

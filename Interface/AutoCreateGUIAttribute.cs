@@ -9,8 +9,9 @@ public static class LayerName
 }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class AutoCreateGUIAttribute(string layerName, string ownName) : Attribute
+public class AutoCreateGUIAttribute(string layerName, string ownName, int priority = 0) : Attribute
 {
     public string LayerName = layerName;
     public string OwnName = ownName;
+    public int Priority = priority;
 }

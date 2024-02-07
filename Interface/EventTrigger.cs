@@ -63,8 +63,15 @@ public struct MouseTarget()
 /// 事件触发器，用于取代 <see cref="UserInterface"/><br/>
 /// 未实现 侧键 和 双击 事件。
 /// </summary>
-public class EventTrigger(string layerName, string name)
+public class EventTrigger(string layerName, string name) : IComparable<EventTrigger>
 {
+    /// <summary>
+    /// 优先级, 不常用
+    /// </summary>
+    public virtual int Priority { get; set; }
+
+    public int CompareTo(EventTrigger other) => -Priority.CompareTo(other.Priority);
+
     public string LayerName { get; init; } = layerName;
     public string Name { get; init; } = name;
 
@@ -113,7 +120,7 @@ public class EventTrigger(string layerName, string name)
     public virtual void UpdateHoverTarget()
     {
         PreviousHoverTarget = CurrentHoverTarget;
-        CurrentHoverTarget = EventTriggerManager.FocusHasUIElement ? null : RootBody.GetElementAt(MouseFocus);
+        CurrentHoverTarget = (EventTriggerManager.FocusHasUIElement || RootBody.IsNotSelectable) ? null : RootBody.GetElementAt(MouseFocus);
     }
 
     public virtual void Update(GameTime gameTime)

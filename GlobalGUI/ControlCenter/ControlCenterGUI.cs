@@ -2,14 +2,15 @@
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
 
-namespace ImproveGame.GlobalGUI.FunctionList;
+namespace ImproveGame.GlobalGUI.ControlCenter;
 
-[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Control Center GUI")]
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Control Center GUI", 100)]
 public class ControlCenterGUI : BaseBody
 {
     public readonly AnimationTimer OOTimer = new();
     public override bool Enabled { get => Keyboard.GetState().IsKeyDown(Keys.OemTilde) || OOTimer.AnyOpen || OOTimer.Closing; set { } }
     public override bool CanSetFocusTarget(UIElement target) => Window.IsMouseHovering;
+    public override bool IsNotSelectable => OOTimer.AnyClose;
 
     public SUIPanel Window { get; init; } = new(Color.Transparent, Color.Transparent);
     public SUIScrollView2 ListView { get; init; } = new(ScrollType.Vertical);
@@ -26,7 +27,7 @@ public class ControlCenterGUI : BaseBody
         Window.SetRoundedRectProperties(UIStyle.PanelBg, 2f, UIStyle.PanelBorder, 12);
         Window.JoinParent(this);
 
-        var title = CreateTitle(Color.Black * 0.3f, 45f, 12f);
+        var title = ViewHelper.CreateHead(Color.Black * 0.3f, 45f, 12f);
         title.JoinParent(Window);
 
         var titleText = new SUIText
@@ -80,7 +81,7 @@ public class ControlCenterGUI : BaseBody
             button.JoinParent(ListView.AdaptiveView);
         }
 
-        var tail = CreateTail(Color.Black * 0.3f, 35f, 12f);
+        var tail = ViewHelper.CreateTail(Color.Black * 0.3f, 35f, 12f);
         tail.JoinParent(Window);
 
         var version = new SUIText
@@ -107,44 +108,9 @@ public class ControlCenterGUI : BaseBody
         }
     }
 
-    public static View CreateTitle(Color bgColor, float height, float rounded)
-    {
-        var view = new View
-        {
-            BgColor = bgColor,
-            Rounded = new Vector4(rounded, rounded, 0, 0),
-            PaddingTop = 1f,
-        };
-        view.SetPadding(15f, 0f);
-        view.Width.Percent = 1f;
-        view.Height.Pixels = height;
-
-        return view;
-    }
-
-    public static View CreateTail(Color bgColor, float height, float rounded)
-    {
-        var view = new View
-        {
-            BgColor = bgColor,
-            Rounded = new Vector4(0, 0, rounded, rounded),
-            RelativeMode = RelativeMode.Horizontal,
-            PreventOverflow = true,
-            Spacing = new Vector2(4f),
-            PaddingBottom = 1f,
-        };
-        view.SetPadding(15f, 0f);
-        view.Width.Percent = 1f;
-        view.Height.Pixels = height;
-
-        return view;
-    }
-
     public override void Update(GameTime gameTime)
     {
         OOTimer.Update();
-
-        EventTriggerManager.SetHeadEventTigger(EventTriggerManager.CurrentEventTrigger);
 
         base.Update(gameTime);
 
