@@ -22,7 +22,7 @@ namespace ImproveGame;
 /// </summary>
 partial class MyUtils
 {
-    public static bool HasDevMark => Main.LocalPlayer.inventory.Any(i => i.type == ModContent.ItemType<DevMark>()) &&
+    public static bool HasDevMark => LocalPlayerHasItemFast(ModContent.ItemType<DevMark>(), "mod bank") &&
                                      Main.netMode is NetmodeID.SinglePlayer;
 
     public static GlassType GlassVfxType => UIConfigs.Instance.GlassVfx;

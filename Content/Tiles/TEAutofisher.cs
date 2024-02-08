@@ -323,10 +323,16 @@ namespace ImproveGame.Content.Tiles
 
         private void GiveItemToStorage(Player player, int itemType)
         {
+            // 怎么可能？
+            if (!ContentSamples.ItemsByType.ContainsKey(itemType))
+                return;
+            
             Item item = new(itemType);
 
             int fishType = 0; // 0 普通鱼 (稀有度大于白)
-            if (ItemID.Sets.IsFishingCrate[itemType]) fishType = 1; // 1 宝匣
+            if (ItemLoader.CanRightClick(ContentSamples.ItemsByType[itemType]) &&
+                (Main.ItemDropsDB.GetRulesForItemID(itemType).Any()))
+                fishType = 1; // 1 宝匣
             else if (item.accessory) fishType = 2; // 2 饰品
             else if (item.damage > 0) fishType = 3; // 3 工具武器
             else if (item.OriginalRarity <= ItemRarityID.White) fishType = 4; // 4 白色稀有度
