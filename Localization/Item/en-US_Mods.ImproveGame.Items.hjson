@@ -95,12 +95,13 @@ Autofisher: {
 		'''
 		Click the "+" in the panel to choose a pool. Put in a fishing rod and baits to start fishing
 		You may also put in accessories to increase fishing power or grant ability to fish in lava
-		Bait consumption is only 20% of that in manual-fishing
-		The initial fishing speed is 50% of the manual-fishing speed, you may speed up the fishing process by:
-		- Each [i:Bass] stored will provide a 10% fishing speed bonus, caps at 500% ([i/s50:Bass])
-		- [i:AnglerEarring], [i:AnglerTackleBag], [i:LavaproofTackleBag] can increase fishing speed by 200%, 300%, and 500%
-		- Fishing speed is increased by 300% in Hardmode
-		[c/AAAAAA:Only mod accessories that have added Quality of Terraria support is supported]
+		Bait consumption is only 40% of that in manual-fishing
+		The initial fishing speed is 30% of the manual-fishing speed, you may speed up the fishing process by:
+		- Each [i:Bass] stored will provide a 5% fishing speed bonus, caps at 500% ([i/s100:Bass])
+		- [i:AnglerEarring], [i:AnglerTackleBag], [i:LavaproofTackleBag] can increase fishing speed by 200%, 250%, and 300%
+		- Fishing speed is increased by 200% in Hardmode
+		- Final efficiency = Base efficiency * Sum of all bonuses. The maximum efficiency is 300% of the manual-fishing
+		[c/AAAAAA:Only mod accessories that have added QoT support is supported]
 		'''
 }
 

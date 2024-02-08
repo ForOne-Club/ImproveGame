@@ -126,13 +126,10 @@ namespace ImproveGame.Content.Tiles
                 FishingTimer += 60;
 
             bool accAvailable = ModIntegrationsSystem.FishingStatLookup.TryGetValue(accessory.type, out FishingStat stat);
-            
-            // 配饰为AnglerEarring可使钓鱼速度*200%
-            // 配饰为AnglerTackleBag可使钓鱼速度*300%
-            // 配饰为LavaproofTackleBag可使钓鱼速度*500%
+
             float fishingSpeedBonus = accAvailable ? stat.SpeedMultiplier : 1f;
 
-            // 钓鱼机内每条 Bass 将提供 10% 的钓鱼速度加成，最高可达 500% 加成
+            // 钓鱼机内每条 Bass 将提供 5% 的钓鱼速度加成，最高可达 500% 加成
             int bassCount = 0;
             for (int i = 0; i < fish.Length; i++)
             {
@@ -141,15 +138,16 @@ namespace ImproveGame.Content.Tiles
                     bassCount += fish[i].stack;
                 }
             }
-            fishingSpeedBonus += Math.Min(bassCount * 0.1f, 5f);
+            fishingSpeedBonus += Math.Min(bassCount * 0.05f, 5f);
             
-            // 肉后提升300%钓鱼速度
+            // 肉后提升200%钓鱼速度
             if (Main.hardMode)
-                fishingSpeedBonus += 3f;
+                fishingSpeedBonus += 2f;
 
-            const float fishingCooldown = 1320f; // 钓鱼机基础冷却在这里改，原版钓鱼速度是660
-            int multipleLures = Math.Max(1, ModIntegrationsSystem.MultipleLuresAmount); // 多线钓鱼Mod兼容
-            if (FishingTimer > fishingCooldown / fishingSpeedBonus / multipleLures)
+            // 钓鱼机基础冷却在这里改，原版钓鱼速度是660
+            // 2200 = 660 ÷ 3/10
+            const float fishingCooldown = 2200;
+            if (FishingTimer > fishingCooldown / fishingSpeedBonus)
             {
                 FishingTimer = 0;
                 _lavaFishing = false;
@@ -399,7 +397,7 @@ namespace ImproveGame.Content.Tiles
             int oldStack = item.stack;
 
             // 奇怪的文本，作为彩蛋
-            if (ModIntegrationsSystem.MultipleLuresAmount >= 100 && HasDevMark && Main.rand.NextBool(10) && Language.ActiveCulture.Name is "zh-Hans")
+            if (HasDevMark && Main.rand.NextBool(10) && Language.ActiveCulture.Name is "zh-Hans")
             {
                 var pos = Position.ToWorldCoordinates(16, 16).ToPoint();
                 var rect = new Rectangle(pos.X, pos.Y, 16, 16);
@@ -473,7 +471,8 @@ namespace ImproveGame.Content.Tiles
             if (_tackleBox)
                 chanceDenominator += 1f;
 
-            chanceDenominator *= 5f;
+            // 诱饵消耗概率仅为手动钓鱼的 40%
+            chanceDenominator *= 1f / 0.4f;
 
             if (Main.rand.NextFloat() * chanceDenominator < 1f)
                 canConsume = true;

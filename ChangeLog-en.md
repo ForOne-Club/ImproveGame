@@ -6,6 +6,33 @@
 
 </div>
 
+# v1.6.8
+
+## Subversions
+
+- v1.6.8.0 (Not yet)
+
+## Additions
+
+- “自动重召唤”功能，可在玩家复活后自动召唤生前最后一次召唤的仆从
+
+## BUG Fixes
+
+- 开启“非BOSS战快速复活”功能后，在世吞存活时也可以快速复活，但在四柱存在时却不能
+
+## Adjustments
+
+- 移除了召唤杖工具提示中的召唤栏提示
+- 削弱自动钓鱼机：
+  - 合成配方：任意铁锭x4 + 任意铜锭x2 -> 任意铁锭x10 + 任意铜锭x5 + 蜘蛛网x20，现在需要在铁砧处合成而非空手
+  - 诱饵消耗概率：手动钓鱼的20% -> 手动钓鱼的40%
+  - 初始钓鱼效率：手动钓鱼的50% -> 手动钓鱼的30%
+  - 鲈鱼加成：每条10% -> 每条5%。最大值不变，但现在需要100条才能达到最大值
+  - 渔夫耳环、钓具箱、熔岩钓具箱的加成：200%, 300%, 500% -> 200%, 250%, 300%
+  - 肉后钓鱼速度提升：300% -> 200%
+  - 满配效率：手动钓鱼的650% -> 手动钓鱼的300%
+  - 钓鱼效率不再受“多线钓鱼”模组中设置的鱼线数量影响
+
 # v1.6.7
 
 ## Subversions
@@ -13,6 +40,8 @@
 - v1.6.7.0
 - v1.6.7.1
 - v1.6.7.2
+- v1.6.7.3
+- v1.6.7.4
 
 ## Additions
 - Fast Respawn When No Boss
@@ -74,7 +103,6 @@
 - **[v1.6.7.2]** Wand of Construction is unable to place torches.
 - **[v1.6.7.2]** The feature "Info accessories work in portable storage" is incompatible with mod accessories.
 - **[v1.6.7.4]** "Teleport all NPCs home" feature is incompatible with High FPS Support Mod
-- **[v1.6.7.5]** 开启“非BOSS战快速复活”功能后，在世吞存活时也可以快速复活
 
 ## Adjustments
 

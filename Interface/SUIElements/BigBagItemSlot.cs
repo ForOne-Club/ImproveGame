@@ -459,62 +459,7 @@ namespace ImproveGame.Interface.SUIElements
         public static void DrawItemIcon(SpriteBatch sb, Item item, Color lightColor, CalculatedStyle dimensions,
             float maxSize = 32f, float itemScale = 1f)
         {
-            Main.instance.LoadItem(item.type);
-            Texture2D texture2D = TextureAssets.Item[item.type].Value;
-            Rectangle frame = Main.itemAnimations[item.type] is null
-                ? texture2D.Frame()
-                : Main.itemAnimations[item.type].GetFrame(texture2D);
-            itemScale *= frame.Width > maxSize || frame.Height > maxSize
-                ? frame.Width > frame.Height ? maxSize / frame.Width : maxSize / frame.Height
-                : 1f;
-            Vector2 position = dimensions.Center();
-            Vector2 origin = frame.Size() / 2f;
-            if (ItemLoader.PreDrawInInventory(item, sb, position, frame, item.GetAlpha(lightColor),
-                    item.GetColor(lightColor), origin, itemScale))
-            {
-                sb.Draw(texture2D, position, frame, item.GetAlpha(lightColor), 0f, origin, itemScale,
-                    SpriteEffects.None, 0f);
-                if (item.color != Color.Transparent)
-                    sb.Draw(texture2D, position, frame, item.GetColor(lightColor), 0f, origin, itemScale,
-                        SpriteEffects.None, 0f);
-            }
-
-            ItemLoader.PostDrawInInventory(item, sb, position, frame, item.GetAlpha(lightColor),
-                item.GetColor(lightColor), origin, itemScale);
-
-            if (ItemID.Sets.TrapSigned[item.type])
-                Main.spriteBatch.Draw(TextureAssets.Wire.Value, position + new Vector2(14f) * itemScale, new Rectangle(4, 58, 8, 8), lightColor, 0f, new Vector2(4f), 1f, SpriteEffects.None, 0f);
-
-            if (ItemID.Sets.DrawUnsafeIndicator[item.type]) {
-                Vector2 vector2 = new Vector2(-4f, -4f) * itemScale;
-                Texture2D value7 = TextureAssets.Extra[258].Value;
-                Rectangle rectangle2 = value7.Frame();
-                Main.spriteBatch.Draw(value7, position + vector2 + new Vector2(14f) * itemScale, rectangle2, lightColor, 0f, rectangle2.Size() / 2f, 1f, SpriteEffects.None, 0f);
-            }
-
-            if (item.type is ItemID.RubblemakerSmall or ItemID.RubblemakerMedium or ItemID.RubblemakerLarge) {
-                Vector2 vector3 = new Vector2(2f, -6f) * itemScale;
-                switch (item.type) {
-                    case 5324: {
-                            Texture2D value10 = TextureAssets.Extra[257].Value;
-                            Rectangle rectangle5 = value10.Frame(3, 1, 2);
-                            Main.spriteBatch.Draw(value10, position + vector3 + new Vector2(16f) * itemScale, rectangle5, lightColor, 0f, rectangle5.Size() / 2f, 1f, SpriteEffects.None, 0f);
-                            break;
-                        }
-                    case 5329: {
-                            Texture2D value9 = TextureAssets.Extra[257].Value;
-                            Rectangle rectangle4 = value9.Frame(3, 1, 1);
-                            Main.spriteBatch.Draw(value9, position + vector3 + new Vector2(16f) * itemScale, rectangle4, lightColor, 0f, rectangle4.Size() / 2f, 1f, SpriteEffects.None, 0f);
-                            break;
-                        }
-                    case 5330: {
-                            Texture2D value8 = TextureAssets.Extra[257].Value;
-                            Rectangle rectangle3 = value8.Frame(3);
-                            Main.spriteBatch.Draw(value8, position + vector3 + new Vector2(16f) * itemScale, rectangle3, lightColor, 0f, rectangle3.Size() / 2f, 1f, SpriteEffects.None, 0f);
-                            break;
-                        }
-                }
-            }
+            item.DrawIcon(sb, lightColor, dimensions.Center(), maxSize, itemScale);
         }
 
         public static void DrawItemIcon(SpriteBatch sb, Texture2D texture2D, Color color, CalculatedStyle dimensions,

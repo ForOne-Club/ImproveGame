@@ -945,6 +945,11 @@ UIConfigs: {
 			  - UIs are opaque, taking blurred game graphics where they cover as background
 			'''
 	}
+
+	AutoSummon: {
+		Label: "[i:SlimeStaff] 自动重召唤"
+		Tooltip: 复活后会自动召唤死前最后一次召唤的召唤物
+	}
 }
 
 PAPDisplayMode: {

@@ -19,20 +19,6 @@ namespace ImproveGame.Common.GlobalItems
                     tooltips.Add(line);
                 }
             }
-            if (item.DamageType == DamageClass.Summon && !item.sentry)
-            {
-                string key = "Tips.SummonSlot";
-                if (Main.LocalPlayer.slotsMinions >= Main.LocalPlayer.maxMinions)
-                {
-                    key += "Full";
-                }
-                string text = GetTextWith(key, new {
-                    Current = Math.Round(Main.LocalPlayer.slotsMinions, 2),
-                    Total = Main.LocalPlayer.maxMinions
-                });
-                TooltipLine line = new(Mod, Mod.Name, text);
-                tooltips.Add(line);
-            }
         }
     }
 }

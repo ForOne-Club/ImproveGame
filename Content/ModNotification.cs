@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Interface.Common;
 using ImproveGame.Interface.Graphics2D;
+using ImproveGame.Interface.SUIElements;
 using ReLogic.Graphics;
 using Terraria.GameInput;
 using Terraria.Social.Base;
@@ -9,11 +10,13 @@ namespace ImproveGame.Content;
 
 public class ModNotification
 {
+    public int ItemIconType;
     public string DisplayText;
     public Color TextColor;
 
-    public ModNotification(string displayText, Color textColor)
+    public ModNotification(string displayText, Color textColor, int itemIconType = -1)
     {
+        ItemIconType = itemIconType;
         DisplayText = displayText;
         TextColor = textColor;
     }
@@ -56,9 +59,9 @@ public class ModNotificationPopup : IInGameNotification
 
     public bool ShouldBeRemoved => _timeLeft <= 0;
 
-    public ModNotificationPopup(string displayText, Color textColor)
+    public ModNotificationPopup(string displayText, Color textColor, int itemIconType = -1)
     {
-        _notification = new ModNotification(displayText, textColor);
+        _notification = new ModNotification(displayText, textColor, itemIconType);
         _timeLeft = _timeLeftMax;
         CreationObject = _notification;
     }
@@ -76,22 +79,33 @@ public class ModNotificationPopup : IInGameNotification
             return;
 
         string displayText = _notification.DisplayText;
-
         float scaleFactor = Scale * 1.1f;
-        Vector2 size = (FontAssets.ItemStack.Value.MeasureString(displayText) + new Vector2(58f, 10f)) * scaleFactor;
-        Rectangle r = Utils.CenteredRectangle(bottomAnchorPosition + new Vector2(0f, (0f - size.Y) * 0.5f), size);
+        var size = (FontAssets.ItemStack.Value.MeasureString(displayText) + new Vector2(58f, 10f)) * scaleFactor;
+        var center = bottomAnchorPosition - new Vector2(0f, size.Y * 0.5f);
+        var textCenter = center;
+
+        bool iconExists = TextureAssets.Item.IndexInRange(_notification.ItemIconType);
+        if (iconExists)
+        {
+            textCenter.X += 14;
+            size.X += 24;
+            var item = new Item(_notification.ItemIconType);
+            var itemCenter = new Vector2(center.X - size.X / 2f + 32f, center.Y);
+            item.DrawIcon(spriteBatch, Color.White, itemCenter, maxSize: 24f, itemScale: scaleFactor);
+        }
+
+        Rectangle r = Utils.CenteredRectangle(center, size);
         Vector2 mouseScreen = Main.MouseScreen;
         _isMouseHovering = r.Contains(mouseScreen.ToPoint());
         var panelBorder = UIStyle.PanelBorder * Opacity * (_isMouseHovering ? 0.75f : 0.5f);
         SDFRectangle.HasBorder(r.TopLeft(), r.Size(), new Vector4(UIStyle.ItemSlotBorderRound),
             UIStyle.PanelBg * Opacity, UIStyle.ItemSlotBorderSize, panelBorder);
 
-        var textPos = r.Center.ToVector2();
-        textPos.Y += 4f * Scale;
+        textCenter.Y += 4f * Scale;
         Color textColor = _notification.TextColor * (Main.mouseTextColor / 255f) * opacity;
         DynamicSpriteFont font = FontAssets.MouseText.Value;
         Vector2 textSize = font.MeasureString(displayText);
-        ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, displayText, textPos, textColor, 0.0f,
+        ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, displayText, textCenter, textColor, 0.0f,
             textSize / 2f, new Vector2(Scale), spread: 1f);
 
         if (_isMouseHovering)

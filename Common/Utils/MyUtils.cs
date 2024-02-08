@@ -628,7 +628,7 @@ partial class MyUtils
     /// <returns>包含全部物品数组的Dictionary，Key为物品所属的物品空间</returns>
     public static Dictionary<string, Item[]> GetAllInventoryItems(Player player)
     {
-        var items = new Dictionary<string, Item[]>()
+        var items = new Dictionary<string, Item[]>
         {
             {"inv", player.inventory},
             {"piggy", player.bank.item},
@@ -720,6 +720,27 @@ partial class MyUtils
     public static bool HasItem(IEnumerable<Item> items, params int[] types)
     {
         return items.Any(item => types.Contains(item.type));
+    }
+    /// <summary>
+    /// 查找本地玩家的某个仓库是否有物品，因为提前建了表，所以时间复杂度是 O(1)
+    /// </summary>
+    /// <param name="itemToSearch">要找的物品的ID</param>
+    /// <param name="ignores">
+    /// 不包含哪些物品空间的物品，可同时包含多个<br/>
+    /// 可用字串有 inv, mod, bank。即忽略物品栏、大背包、原版便携仓库里的物品</param>
+    /// <returns>是否包含某物品</returns>
+    public static bool LocalPlayerHasItemFast(int itemToSearch, string ignores = "")
+    {
+        if (!ignores.Contains("inv", StringComparison.Ordinal) &&
+            CurrentFrameProperties.ExistItems.Inventory.Contains(itemToSearch))
+            return true;
+        if (!ignores.Contains("bank", StringComparison.Ordinal) &&
+            CurrentFrameProperties.ExistItems.Banks.Contains(itemToSearch))
+            return true;
+        if (!ignores.Contains("mod", StringComparison.Ordinal) &&
+            CurrentFrameProperties.ExistItems.BigBag.Contains(itemToSearch))
+            return true;
+        return false;
     }
 
     // 获取配置
@@ -995,11 +1016,11 @@ partial class MyUtils
     /// </summary>
     /// <param name="displayText">文本</param>
     /// <param name="textColor">文本颜色，一般提示建议用黄色（默认即黄色）</param>
-    public static void AddNotification(string displayText, Color textColor = default)
+    public static void AddNotification(string displayText, Color textColor = default, int itemIconType = -1)
     {
         if (textColor == default)
             textColor = Color.Yellow;
         if (Main.netMode != NetmodeID.Server)
-            InGameNotificationsTracker._notifications.Add(new ModNotificationPopup(displayText, textColor));
+            InGameNotificationsTracker.AddNotification(new ModNotificationPopup(displayText, textColor, itemIconType));
     }
 }

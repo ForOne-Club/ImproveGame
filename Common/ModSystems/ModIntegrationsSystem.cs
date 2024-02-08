@@ -42,11 +42,14 @@ public class ModIntegrationsSystem : ModSystem
     /// </summary>
     internal static Dictionary<int, FishingStat> FishingStatLookup = new()
     {
+        // 配饰为AnglerEarring可使钓鱼速度*200%
+        // 配饰为AnglerTackleBag可使钓鱼速度*250%
+        // 配饰为LavaproofTackleBag可使钓鱼速度*300%
         { ItemID.TackleBox, new FishingStat(TackleBox: true) }, // 钓具箱
         { ItemID.AnglerEarring, new FishingStat(10, 2f) }, // 渔夫耳环
-        { ItemID.AnglerTackleBag, new FishingStat(10, 3f, TackleBox: true) }, // 渔夫渔具袋
+        { ItemID.AnglerTackleBag, new FishingStat(10, 2.5f, TackleBox: true) }, // 渔夫渔具袋
         { ItemID.LavaFishingHook, new FishingStat(LavaFishing: true) }, // 防熔岩钓钩
-        { ItemID.LavaproofTackleBag, new FishingStat(10, 5f, true, true) }, // 防熔岩渔具袋
+        { ItemID.LavaproofTackleBag, new FishingStat(10, 3f, true, true) }, // 防熔岩渔具袋
         { ItemID.None, new FishingStat()}
     };
 
@@ -54,7 +57,6 @@ public class ModIntegrationsSystem : ModSystem
     internal static bool WMITFLoaded = false;
     internal static bool DialogueTweakLoaded = false;
 
-    internal static int MultipleLuresAmount;
     internal static int UnloadedItemType;
 
     public override void PostSetupContent()
@@ -65,17 +67,8 @@ public class ModIntegrationsSystem : ModSystem
         DoRecipeBrowserIntegration();
         DoDialogueTweakIntegration();
         DoModLoaderIntegration();
-        DoMultipleLuresIntegration();
         NoLakeSizePenaltyLoaded = ModLoader.HasMod("NoLakeSizePenalty");
         WMITFLoaded = ModLoader.HasMod("WMITF");
-
-        // Config加载的钩子
-        MonoModHooks.Add(typeof(ConfigManager).GetMethod("Load", BindingFlags.NonPublic | BindingFlags.Static),
-            (Action<ModConfig> orig, ModConfig config) =>
-            {
-                orig.Invoke(config);
-                DoMultipleLuresIntegration();
-            });
     }
 
     private static void DoRecipeBrowserIntegration()
@@ -196,25 +189,6 @@ public class ModIntegrationsSystem : ModSystem
             return;
 
         UnloadedItemType = modloader.Find<ModItem>("UnloadedItem").Type;
-    }
-
-    private static void DoMultipleLuresIntegration()
-    {
-        if (!ModLoader.HasMod("MultipleLures"))
-            return;
-
-        // Config是客户端的，服务器就给10个意思意思
-        if (Main.dedServ) MultipleLuresAmount = 10;
-
-        string luresConfigPath = Path.Combine(ConfigManager.ModConfigPath, "MultipleLures_Configuration.json");
-        if (!File.Exists(luresConfigPath))
-            return;
-
-        string jsonText = File.ReadAllText(luresConfigPath);
-        JObject jo = (JObject)JsonConvert.DeserializeObject(jsonText);
-        string amountText = jo?["LuresAmount"]?.ToString() ?? "0";
-        if (!int.TryParse(amountText, out MultipleLuresAmount))
-            MultipleLuresAmount = 0;
     }
 
     private static void AddCraftStationIntegration(Mod mod, string itemName, List<int> tileIDs)

@@ -94,6 +94,9 @@ public class UIConfigs : ModConfig
     [DefaultValue(true)]
     public bool MagicMirrorInstantTp;
 
+    [DefaultValue(true)]
+    public bool AutoSummon;
+
     [Header("MinimapHeader")]
     [DefaultValue(1f)]
     [Increment(0.1f)]
