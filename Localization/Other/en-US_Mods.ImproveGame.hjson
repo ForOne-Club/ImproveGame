@@ -23,7 +23,7 @@ CombatText: {
 
 AutoSummon: {
 	Set: 自动重召唤物品已设为{0}
-	Summoned: 召唤了{0}次{1}
+	Summoned: 使用{1}召唤了{0}次
 }
 
 Tips: {

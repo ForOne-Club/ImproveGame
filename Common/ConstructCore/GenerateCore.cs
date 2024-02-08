@@ -34,25 +34,13 @@ namespace ImproveGame.Common.ConstructCore
             TipRenderer.CurrentState = TipRenderer.State.Placing;
 
             _taskProcessed = 0;
-            var currentTask = CoroutineSystem.GenerateRunner.Run(KillTiles(structure, position));
-            while (currentTask.IsRunning)
-                yield return null;
-            currentTask = CoroutineSystem.GenerateRunner.Run(GenerateSingleTiles(structure, position));
-            while (currentTask.IsRunning)
-                yield return null;
-            currentTask = CoroutineSystem.GenerateRunner.Run(GenerateWalls(structure, position));
-            while (currentTask.IsRunning)
-                yield return null;
-            currentTask = CoroutineSystem.GenerateRunner.Run(GenerateMultiTiles(structure, position));
-            while (currentTask.IsRunning)
-                yield return null;
-            currentTask = CoroutineSystem.GenerateRunner.Run(GenerateOutSet(structure, position));
-            while (currentTask.IsRunning)
-                yield return null;
-            currentTask = CoroutineSystem.GenerateRunner.Run(SquareTiles(structure, position));
-            while (currentTask.IsRunning)
-                yield return null;
-            CoroutineSystem.GenerateRunner.Run(TextSigns(structure, position));
+            yield return KillTiles(structure, position);
+            yield return GenerateSingleTiles(structure, position);
+            yield return GenerateWalls(structure, position);
+            yield return GenerateMultiTiles(structure, position);
+            yield return GenerateOutSet(structure, position);
+            yield return SquareTiles(structure, position);
+            yield return TextSigns(structure, position);
 
             SoundEngine.PlaySound(SoundID.ResearchComplete);
             TipRenderer.CurrentState = TipRenderer.State.Placed;
@@ -85,7 +73,7 @@ namespace ImproveGame.Common.ConstructCore
                         _taskProcessed++;
                     }
 
-                    if (_taskProcessed >= 12)
+                    if (_taskProcessed >= 60)
                     {
                         _taskProcessed = 0;
                         yield return null;
@@ -167,7 +155,7 @@ namespace ImproveGame.Common.ConstructCore
                     }
 
                     _taskProcessed++;
-                    if (_taskProcessed >= 6)
+                    if (_taskProcessed >= 50)
                     {
                         _taskProcessed = 0;
                         yield return null;
@@ -210,7 +198,7 @@ namespace ImproveGame.Common.ConstructCore
                     var tile = Main.tile[placePosition];
                     tile.WallColor = tileData.WallColor;
                     _taskProcessed++;
-                    if (_taskProcessed >= 10)
+                    if (_taskProcessed >= 60)
                     {
                         _taskProcessed = 0;
                         yield return null;
@@ -390,7 +378,7 @@ namespace ImproveGame.Common.ConstructCore
                     }
 
                     _taskProcessed++;
-                    if (_taskProcessed >= 50)
+                    if (_taskProcessed >= 5000)
                     {
                         _taskProcessed = 0;
                         yield return null;
@@ -419,7 +407,7 @@ namespace ImproveGame.Common.ConstructCore
                     }
 
                     _taskProcessed++;
-                    if (_taskProcessed >= 50)
+                    if (_taskProcessed >= 5000)
                     {
                         _taskProcessed = 0;
                         yield return null;

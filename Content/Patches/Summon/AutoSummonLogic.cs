@@ -12,18 +12,15 @@ public class AutoSummonLogic : ModPlayer
 
     private static readonly CoroutineRunner SummonRunner = new();
     private int _lastUsedStaffType;
-    private int _lastUsedStaffMinion;
 
     public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity,
         int type, int damage, float knockback)
     {
         // 至少我们能适配灾厄
-        if (Player.altFunctionUse != 2 && ProjectileID.Sets.MinionTargettingFeature[type] &&
-            ContentSamples.ProjectilesByType[type].minion &&
-            (_lastUsedStaffType != item.type || _lastUsedStaffMinion != type))
+        if (Enabled && Player.altFunctionUse != 2 && ProjectileID.Sets.MinionTargettingFeature[type] &&
+            ContentSamples.ProjectilesByType[type].minion && _lastUsedStaffType != item.type)
         {
             _lastUsedStaffType = item.type;
-            _lastUsedStaffMinion = type;
             var text = GetText("AutoSummon.Set", item.Name);
             AddNotification(text, default, item.type);
         }
@@ -44,43 +41,44 @@ public class AutoSummonLogic : ModPlayer
             return;
 
         SummonRunner.StopAll();
+        // 等待3帧，确保玩家已经刷新
+        SummonRunner.Run(3, SummonMinions());
+    }
 
+    IEnumerator SummonMinions()
+    {
         // 还是要遍历，因为要正确处理词缀，找到正确的物品
         var allItems = GetAllInventoryItemsList(Player);
         Player.slotsMinions = 0f;
         foreach (var item in allItems.Where(item => item.type == _lastUsedStaffType))
         {
-            SummonRunner.Run(SummonMinions(item));
+            float slotsPerSpawn = ItemID.Sets.StaffMinionSlotsRequired[item.type];
+            int iterationTimes = (int)(Player.maxMinions / slotsPerSpawn);
+
+            for (int i = 0; i < iterationTimes; i++)
+            {
+                var mouseX = Main.mouseX;
+                var mouseY = Main.mouseY;
+                Main.mouseX = (int)(Player.Center.X - Main.screenPosition.X);
+                Main.mouseY = (int)(Player.Top.Y - Main.screenPosition.Y) - 32;
+
+                Player.ItemCheck_Shoot(Player.whoAmI, item, Player.GetWeaponDamage(item));
+                Player.ItemCheck_ApplyPetBuffs(item);
+
+                Main.mouseX = mouseX;
+                Main.mouseY = mouseY;
+            }
+
+            if (ContentSamples.ItemsByType.TryGetValue(item.type, out Item value))
+            {
+                SoundEngine.PlaySound(value.UseSound);
+                var text = GetText("AutoSummon.Summoned", iterationTimes, value.Name);
+                AddNotification(text, Color.Pink, item.type);
+            }
+
             break;
         }
-    }
 
-    IEnumerator SummonMinions(Item item)
-    {
-        yield return 2; // 等待2帧，确保玩家已经刷新
-
-        float slotsPerSpawn = ItemID.Sets.StaffMinionSlotsRequired[item.type];
-        int iterationTimes = (int)(Player.maxMinions / slotsPerSpawn);
-
-        for (int i = 0; i < iterationTimes; i++)
-        {
-            var mouseX = Main.mouseX;
-            var mouseY = Main.mouseY;
-            Main.mouseX = (int)(Player.Center.X - Main.screenPosition.X);
-            Main.mouseY = (int)(Player.Top.Y - Main.screenPosition.Y) - 32;
-
-            Player.FreeUpPetsAndMinions(item);
-            Player.ItemCheck_Shoot(Player.whoAmI, item, Player.GetWeaponDamage(item));
-            Player.ItemCheck_ApplyPetBuffs(item);
-
-            Main.mouseX = mouseX;
-            Main.mouseY = mouseY;
-            yield return 1;
-        }
-
-        if (ContentSamples.ItemsByType.TryGetValue(item.type, out Item value))
-            SoundEngine.PlaySound(value.UseSound);
-        var text = GetText("AutoSummon.Summoned", iterationTimes, Lang.GetProjectileName(_lastUsedStaffMinion).Value);
-        AddNotification(text, Color.Pink, item.type);
+        yield return null;
     }
 }

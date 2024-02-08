@@ -128,9 +128,13 @@ namespace ImproveGame.Core
 
             bool result = routine.MoveNext();
 
-            if (routine.Current is float)
-                delays[index] = (float)routine.Current;
-            
+            delays[index] = routine.Current switch
+            {
+                float currentFloat => currentFloat,
+                int currentInt => currentInt,
+                _ => delays[index]
+            };
+
             return result;
         }
 
