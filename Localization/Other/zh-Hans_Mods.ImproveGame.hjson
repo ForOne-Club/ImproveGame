@@ -21,6 +21,11 @@ CombatText: {
 	Commonds.ResurrectionTimeShortened: 重生加速 {Time} 秒 ！
 }
 
+AutoSummon: {
+	Set: 自动重召唤物品已设为{0}
+	Summoned: 召唤了{0}次{1}
+}
+
 Tips: {
 	ShimmerInto: "可在微光中转化为 "
 	ShimmerIntoWithStack: "每{0}个可在微光中转化为 "

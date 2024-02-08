@@ -79,19 +79,22 @@ public class ModNotificationPopup : IInGameNotification
             return;
 
         string displayText = _notification.DisplayText;
-        float scaleFactor = Scale * 1.1f;
-        var size = (FontAssets.ItemStack.Value.MeasureString(displayText) + new Vector2(58f, 10f)) * scaleFactor;
+        DynamicSpriteFont font = FontAssets.MouseText.Value;
+        Vector2 textSize = ChatManager.GetStringSize(font, displayText, Vector2.One);
+        var size = (textSize + new Vector2(30, 10)) * Scale;
         var center = bottomAnchorPosition - new Vector2(0f, size.Y * 0.5f);
         var textCenter = center;
 
         bool iconExists = TextureAssets.Item.IndexInRange(_notification.ItemIconType);
         if (iconExists)
         {
-            textCenter.X += 14;
-            size.X += 24;
+            const int iconWidth = 24;
+            textCenter.X += (iconWidth + 6) * Scale / 2f;
+            size.X += (iconWidth + 6) * Scale;
             var item = new Item(_notification.ItemIconType);
-            var itemCenter = new Vector2(center.X - size.X / 2f + 32f, center.Y);
-            item.DrawIcon(spriteBatch, Color.White, itemCenter, maxSize: 24f, itemScale: scaleFactor);
+            var itemCenter = new Vector2(center.X - size.X / 2f, center.Y);
+            itemCenter.X += (15 + iconWidth / 2) * Scale;
+            item.DrawIcon(spriteBatch, Color.White, itemCenter, maxSize: 24f, itemScale: Scale);
         }
 
         Rectangle r = Utils.CenteredRectangle(center, size);
@@ -103,8 +106,6 @@ public class ModNotificationPopup : IInGameNotification
 
         textCenter.Y += 4f * Scale;
         Color textColor = _notification.TextColor * (Main.mouseTextColor / 255f) * opacity;
-        DynamicSpriteFont font = FontAssets.MouseText.Value;
-        Vector2 textSize = font.MeasureString(displayText);
         ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, displayText, textCenter, textColor, 0.0f,
             textSize / 2f, new Vector2(Scale), spread: 1f);
 

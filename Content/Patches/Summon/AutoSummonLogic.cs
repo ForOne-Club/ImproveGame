@@ -24,7 +24,8 @@ public class AutoSummonLogic : ModPlayer
         {
             _lastUsedStaffType = item.type;
             _lastUsedStaffMinion = type;
-            AddNotification($"复活后自动使用的召唤杖已设置为{item.Name}", default, item.type);
+            var text = GetText("AutoSummon.Set", item.Name);
+            AddNotification(text, default, item.type);
         }
 
         return base.Shoot(item, source, position, velocity, type, damage, knockback);
@@ -75,6 +76,9 @@ public class AutoSummonLogic : ModPlayer
             yield return 1;
         }
 
-        AddNotification($"召唤了{iterationTimes}次{Lang.GetProjectileName(_lastUsedStaffMinion).Value}", Color.Pink, item.type);
+        if (ContentSamples.ItemsByType.TryGetValue(item.type, out Item value))
+            SoundEngine.PlaySound(value.UseSound);
+        var text = GetText("AutoSummon.Summoned", iterationTimes, Lang.GetProjectileName(_lastUsedStaffMinion).Value);
+        AddNotification(text, Color.Pink, item.type);
     }
 }
