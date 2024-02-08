@@ -247,3 +247,12 @@ StorageCommunicator: {
 	MissingStorage: Storage Manager not found
 	Unlocated: Not connected to any Storage Manager, <right> a Storage Manager while holding this item to connect them
 }
+
+WeatherBook: {
+	DisplayName: 天气之书
+	Tooltip:
+		'''
+		使用后在总控面板解锁气候控制
+		可以调节风向、月相、降雨，肉后还能调节时间
+		'''
+}

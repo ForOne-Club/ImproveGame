@@ -375,6 +375,9 @@ public class ImproveConfigs : ModConfig
     public bool WorldFeaturePanel;
 
     [DefaultValue(true)]
+    public bool WeatherControl;
+
+    [DefaultValue(true)]
     public bool MinimapMark;
 
     [DefaultValue(true)]

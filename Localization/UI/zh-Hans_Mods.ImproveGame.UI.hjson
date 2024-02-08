@@ -1,5 +1,40 @@
 DummyControl.Name: 假人控制器
 
+WeatherGUI: {
+	Title: 气候控制
+	Wind: 左键点击以调节风向
+	WindLockFalse: 右键点击以阻止风变化
+	WindLockTrue: 右键点击以允许风变化
+	WindWest: 已调节为大西风
+	WindNo: 已调节为无风
+	WindEast: 已调节为大东风
+	WindLocked: 风速与风向已锁定
+	WindUnlocked: 风速与风向已解锁
+	RainActive: 左键点击以开始降雨
+	RainInactive: 左键点击以停止降雨
+	RainLockFalse: 右键点击以锁定降雨状态
+	RainLockTrue: 右键点击以解锁降雨状态
+	RainOn: 已开始降雨
+	RainOff: 已停止降雨
+	RainLocked: 降雨状态已锁定
+	RainUnlocked: 降雨状态已解锁
+	Time: 左键点击以调节时间
+	Dawn: 已调节为黎明
+	Noon: 已调节为正午
+	Dusk: 已调节为黄昏
+	Midnight: 已调节为午夜
+	MoonPhase: 左键点击以调节月相
+	MoonPhaseLockFalse: 右键点击以阻止月相变化
+	MoonPhaseLockTrue: 右键点击以允许月相变化
+	MoonPhaseAdjusted: 已调节为{0}
+	MoonPhaseLocked: 月相已锁定为{0}
+	MoonPhaseUnlocked: 月相已解锁
+	AlreadyUnlocked: 该世界已经解锁了气候控制
+	Unlocked: 气候控制已解锁！请在总控页面打开
+	EasterEgg: 蘑菇！
+	TimeUnlockCondition: 肉后解锁时间控制
+}
+
 PlayerStats: {
 	// 翻译提示: 尽量简短，因为UI的空间有限，不要超过10个字符
 	Introduction:

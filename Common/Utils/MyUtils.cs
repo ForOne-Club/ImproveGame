@@ -1023,4 +1023,20 @@ partial class MyUtils
         if (Main.netMode != NetmodeID.Server)
             InGameNotificationsTracker.AddNotification(new ModNotificationPopup(displayText, textColor, itemIconType));
     }
+
+    public static string MoonPhaseToText(int moonPhase)
+    {
+        return moonPhase switch
+        {
+            0 => GetText("MoonPhases.FullMoon"),
+            1 => GetText("MoonPhases.WaningGibbous"),
+            2 => GetText("MoonPhases.ThirdQuarter"),
+            3 => GetText("MoonPhases.WaningCrescent"),
+            4 => GetText("MoonPhases.NewMoon"),
+            5 => GetText("MoonPhases.WaxingCrescent"),
+            6 => GetText("MoonPhases.FirstQuarter"),
+            7 => GetText("MoonPhases.WaxingGibbous"),
+            _ => "Unknown"
+        };
+    }
 }

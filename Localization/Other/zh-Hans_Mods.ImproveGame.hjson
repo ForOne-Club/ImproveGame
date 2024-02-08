@@ -5,6 +5,17 @@ Tiles: {
 	// ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
 }
 
+MoonPhases: {
+	FullMoon: 满月
+	WaningGibbous: 盈凸月
+	ThirdQuarter: 下弦月
+	WaningCrescent: 残月
+	NewMoon: 新月
+	WaxingCrescent: 娥眉月
+	FirstQuarter: 上弦月
+	WaxingGibbous: 盈凸月
+}
+
 ItemDropRule.WandDrop: 玩家拥有当前物品时不会再次掉落
 
 CombatText: {
@@ -364,6 +375,7 @@ Keybinds: {
 	ConfigMenu.DisplayName: 打开模组配置
 	ItemSearcher.DisplayName: 查找物品
 	OpenBagGUI.DisplayName: 快速开袋
+	// WeatherControl.DisplayName: Weather Control
 }
 
 Projectiles: {

@@ -12,6 +12,7 @@ public class KeybindSystem : ModSystem
     internal static bool UseKeybindTranslation = true;
 
     public static ModKeybind ConfigKeybind { get; private set; }
+    public static ModKeybind WeatherControlKeybind { get; private set; }
     public static ModKeybind OpenBagGUIKeybind { get; private set; }
     public static ModKeybind ItemSearcherKeybind { get; private set; }
     public static ModKeybind SuperVaultKeybind { get; private set; }
@@ -50,6 +51,7 @@ public class KeybindSystem : ModSystem
         ItemSearcherKeybind = KeybindLoader.RegisterKeybind(Mod, "ItemSearcher", "NumPad4");
         OpenBagGUIKeybind = KeybindLoader.RegisterKeybind(Mod, "OpenBagGUI", "NumPad5");
         ConfigKeybind = KeybindLoader.RegisterKeybind(Mod, "ConfigMenu", "NumPad6");
+        WeatherControlKeybind = KeybindLoader.RegisterKeybind(Mod, "WeatherControl", "NumPad7");
         SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "HugeInventory", "F");
         GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "GrabBagLoot", "OemQuotes");
         HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "HotbarSwitch", "OemQuestion");

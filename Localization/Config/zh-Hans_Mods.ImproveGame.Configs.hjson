@@ -694,6 +694,15 @@ ImproveConfigs: {
 			'''
 		Label: 常见问题解答
 	}
+
+	WeatherControl: {
+		Label: "[centeritem:ImproveGame/WeatherBook] 气候控制"
+		Tooltip:
+			'''
+			可以调节风向、月相、降雨，肉后还能调节时间，在总控面板中打开
+			使用气候之书后即可解锁此功能，解锁状态跟随世界存档
+			'''
+	}
 }
 
 ModItemLoadPage: {

@@ -8,7 +8,7 @@ public static class ViewHelper
         {
             BgColor = bgColor,
             Rounded = new Vector4(rounded, rounded, 0, 0),
-            PaddingTop = 1f,
+            DragIgnore = true,
         };
         view.SetPadding(15f, 0f);
         view.Width.Percent = 1f;
@@ -17,16 +17,16 @@ public static class ViewHelper
         return view;
     }
 
-    public static View CreateTail(Color bgColor, float height, float rounded)
+    public static View CreateTail(Color bgColor, float height, float rounded, float spacing = 4f)
     {
         var view = new View
         {
             BgColor = bgColor,
             Rounded = new Vector4(0, 0, rounded, rounded),
-            RelativeMode = RelativeMode.Horizontal,
-            PreventOverflow = true,
-            Spacing = new Vector2(4f),
+            RelativeMode = RelativeMode.Vertical,
+            Spacing = new Vector2(spacing),
             PaddingBottom = 1f,
+            DragIgnore = true,
         };
         view.SetPadding(15f, 0f);
         view.Width.Percent = 1f;

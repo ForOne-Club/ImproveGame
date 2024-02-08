@@ -5,6 +5,17 @@ Tiles: {
 	ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
 }
 
+MoonPhases: {
+	FullMoon: Full Moon
+	WaningGibbous: Waning Gibbous
+	ThirdQuarter: Third Quarter
+	WaningCrescent: Waning Crescent
+	NewMoon: New Moon
+	WaxingCrescent: Waxing Crescent
+	FirstQuarter: First Quarter
+	WaxingGibbous: Waxing Gibbous
+}
+
 ItemDropRule.WandDrop: Won't drop if the player already has one in the inventory
 
 CombatText: {
@@ -374,6 +385,7 @@ Keybinds: {
 	ConfigMenu.DisplayName: Open Mod Config
 	ItemSearcher.DisplayName: Search Item
 	OpenBagGUI.DisplayName: Bag Opener
+	WeatherControl.DisplayName: Weather Control
 }
 
 Projectiles: {

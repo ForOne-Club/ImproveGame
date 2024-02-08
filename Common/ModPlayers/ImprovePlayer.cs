@@ -4,10 +4,12 @@ using ImproveGame.Content.Projectiles;
 using ImproveGame.Core;
 using ImproveGame.GlobalGUI;
 using ImproveGame.GlobalGUI.AutoTrash;
+using ImproveGame.GlobalGUI.WeatherControl;
 using ImproveGame.Interface;
 using ImproveGame.Interface.GUI;
 using ImproveGame.Interface.GUI.ItemSearcher;
 using ImproveGame.Interface.GUI.OpenBag;
+using ImproveGame.Interface.GUI.WeatherControl;
 using ImproveGame.Interface.GUI.WorldFeature;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
@@ -254,6 +256,8 @@ public class ImprovePlayer : ModPlayer
             PressHotbarSwitchKeybind();
         if (KeybindSystem.AutoTrashKeybind.JustPressed)
             PressAutoTrashKeybind();
+        if (KeybindSystem.WeatherControlKeybind.JustPressed)
+            PressWeatherControlKeybind();
 
         // 下面是操作类快捷键
         if (Player.DeadOrGhost) return;
@@ -333,6 +337,14 @@ public class ImprovePlayer : ModPlayer
             ui.Close();
         else
             ui.Open();
+    }
+
+    private static void PressWeatherControlKeybind()
+    {
+        if (WeatherGUI.Visible)
+            WeatherGUI.Instance.Close();
+        else
+            WeatherGUI.Instance.Open();
     }
 
     private static void PressGrabBagKeybind()

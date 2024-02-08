@@ -247,3 +247,12 @@ StorageCommunicator: {
 	MissingStorage: 未找到储存管理器
 	Unlocated: 未连接至任何储存管理器，手持该物品右键任何储存管理器以连接
 }
+
+WeatherBook: {
+	DisplayName: 天气之书
+	Tooltip:
+		'''
+		使用后在总控面板解锁气候控制
+		可以调节风向、月相、降雨，肉后还能调节时间
+		'''
+}
