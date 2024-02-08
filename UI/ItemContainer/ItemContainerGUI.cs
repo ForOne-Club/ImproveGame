@@ -101,15 +101,16 @@ public class ItemContainerGUI : BaseBody
         _grid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(_grid.Width.Pixels, _grid.Height.Pixels);
         _grid.OnLeftMouseDown += (_, _) =>
         {
-            if (Main.mouseItem.IsAir || Main.LocalPlayer.ItemAnimationActive)
-                return;
-            switch (StorageType)
+            if (!Main.mouseItem.IsAir && !Main.LocalPlayer.ItemAnimationActive)
             {
-                // 旗帜收纳箱, 药水袋子.
-                case StorageType.Banners when ItemToBanner(Main.mouseItem) != -1:
-                case StorageType.Potions when Main.mouseItem.buffType > 0 && Main.mouseItem.consumable:
-                    Container.PutInPackage(ref Main.mouseItem);
-                    break;
+                switch (StorageType)
+                {
+                    // 旗帜收纳箱, 药水袋子.
+                    case StorageType.Banners when ItemToBanner(Main.mouseItem) != -1:
+                    case StorageType.Potions when Main.mouseItem.buffType > 0 && Main.mouseItem.consumable:
+                        Container.PutInPackage(ref Main.mouseItem);
+                        break;
+                }
             }
         };
         _grid.JoinParent(_mainPanel);

@@ -4,12 +4,11 @@ namespace ImproveGame.UI.ItemContainer;
 
 public interface IItemContainer
 {
+    List<Item> ItemContainer { get; }
     bool AutoStorage { get; set; }
-
     bool AutoSort { get; set; }
 
     void Sort();
-
     void PutInPackage(ref Item item);
 
     static void SaveData(TagCompound tag, IItemContainer container)
