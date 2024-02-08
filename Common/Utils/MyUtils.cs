@@ -1,12 +1,11 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.Packets;
 using ImproveGame.Common.ModPlayers;
-using ImproveGame.Common.Packets.Items;
 using ImproveGame.Content;
 using ImproveGame.Content.Items.Coin;
 using ImproveGame.Core;
-using ImproveGame.Interface.Common;
-using ImproveGame.Interface.GUI.WorldFeature;
+using ImproveGame.Packets.Items;
+using ImproveGame.UI.WorldFeature;
+using ImproveGame.UIFramework.Common;
 using ReLogic.Graphics;
 using System.Collections;
 using Terraria.DataStructures;

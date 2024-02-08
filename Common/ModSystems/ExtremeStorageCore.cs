@@ -1,7 +1,7 @@
-﻿using ImproveGame.Common.Packets.NetChest;
-using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Interface.ExtremeStorage;
+using ImproveGame.Packets.NetChest;
+using ImproveGame.UIFramework.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.Chat;

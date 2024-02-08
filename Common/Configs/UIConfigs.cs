@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Configs.Elements;
-using ImproveGame.Interface.Common;
+using ImproveGame.UIFramework.Common;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;

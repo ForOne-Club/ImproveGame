@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.Packets.WorldFeatures;
 using ImproveGame.Content.Tiles;
+using ImproveGame.Packets.WorldFeatures;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.Map;

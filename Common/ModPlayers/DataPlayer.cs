@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Packets;
+﻿using ImproveGame.Packets;
+using ImproveGame.UIFramework.Common;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Common.ModPlayers

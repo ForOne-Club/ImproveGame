@@ -1,8 +1,8 @@
-﻿using ImproveGame.Common.ConstructCore;
-using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.Functions.Construction;
 using ImproveGame.Core;
-using ImproveGame.Interface;
-using ImproveGame.Interface.GUI;
+using ImproveGame.UI;
+using ImproveGame.UIFramework;
 using System.Threading;
 using Terraria.ID;
 

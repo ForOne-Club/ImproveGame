@@ -44,4 +44,7 @@
 			<Visible>false</Visible>
 		</None>
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="UIFramework\GUI\" />
+	</ItemGroup>
 </Project>

@@ -1,6 +1,4 @@
 ﻿using ImproveGame.Common.ModPlayers;
-using ImproveGame.Interface.Common;
-using ImproveGame.Interface.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;

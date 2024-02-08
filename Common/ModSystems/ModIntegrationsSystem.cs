@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.ModPlayers;
-using ImproveGame.Common.Packets;
-using ImproveGame.Content.Patches;
-using ImproveGame.Interface.GUI.PlayerStats;
+using ImproveGame.Content.Functions;
+using ImproveGame.Packets;
+using ImproveGame.UI.PlayerStats;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Reflection;

@@ -1,4 +1,4 @@
-﻿using ImproveGame.Interface.Graphics2D;
+﻿using ImproveGame.UIFramework.Graphics2D;
 
 namespace ImproveGame.Common.ModSystems.MarqueeSystem;
 

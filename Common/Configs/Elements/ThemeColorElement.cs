@@ -1,6 +1,7 @@
-﻿using ImproveGame.Interface.Common;
-using ImproveGame.Interface.GUI.OpenBag;
-using ImproveGame.Interface.SUIElements;
+﻿using ImproveGame.UIFramework;
+using ImproveGame.UIFramework.BaseViews;
+using ImproveGame.UIFramework.Common;
+using ImproveGame.UIFramework.SUIElements;
 using Terraria.GameInput;
 using Terraria.ModLoader.Config.UI;
 
@@ -10,9 +11,6 @@ public class ThemeColorElement : EnumElement
 {
     // 主面板
     public SUIPanel MainPanel;
-    private SUIPanel TitlePanel;
-    private SUITitle Title;
-    private SUICross Cross;
     public BaseGrid ItemGrid;
     public SUIScrollBar Scrollbar;
 
@@ -44,34 +42,41 @@ public class ThemeColorElement : EnumElement
 
     private void MakePreviewGUI()
     {
-        TitlePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.TitleBg2)
-        {
-            DragIgnore = true,
-            Width = {Pixels = 0f, Precent = 1f},
-            Height = {Pixels = 50f, Precent = 0f},
-            Rounded = new Vector4(10f, 10f, 0f, 0f),
-            RelativeMode = RelativeMode.Vertical,
-            Spacing = new Vector2(0f, 8f)
-        };
-        TitlePanel.SetPadding(0f);
-        TitlePanel.JoinParent(MainPanel);
+        var titlePanel = ViewHelper.CreateHead(Color.Black * 0.25f, 45f, 10f);
+        titlePanel.SetPadding(0f);
+        titlePanel.JoinParent(MainPanel);
 
         // 标题
-        Title = new SUITitle(GetText("UI.ThemePreview.Title"), 0.5f)
+        var title = new SUIText
         {
-            VAlign = 0.5f
+            IsLarge = true,
+            UseKey = true,
+            TextOrKey = "Mods.ImproveGame.UI.ThemePreview.Title",
+            TextAlign = new Vector2(0f, 0.5f),
+            TextScale = 0.45f,
+            Height = StyleDimension.Fill,
+            Width = StyleDimension.Fill,
+            DragIgnore = true,
+            Left = new StyleDimension(16f, 0f)
         };
-        Title.JoinParent(TitlePanel);
+        title.JoinParent(titlePanel);
 
-        // Cross
-        Cross = new SUICross
+        var cross = new SUICross
         {
             HAlign = 1f,
-            VAlign = 0.5f,
-            Height = {Pixels = 0f, Precent = 1f},
-            Rounded = new Vector4(0f, 10f, 0f, 0f)
+            Rounded = new Vector4(0f, 10f, 0f, 0f),
+            CrossSize = 20f,
+            CrossRounded = 4.5f * 0.85f,
+            Border = 0f,
+            BorderColor = Color.Transparent,
+            BgColor = Color.Transparent,
         };
-        Cross.JoinParent(TitlePanel);
+        cross.CrossOffset.X = 1f;
+        cross.Width.Pixels = 46f;
+        cross.Height.Set(0f, 1f);
+        cross.OnUpdate += _ =>
+            cross.BgColor = cross.HoverTimer.Lerp(Color.Transparent, Color.Black * 0.25f);
+        cross.JoinParent(titlePanel);
 
         var itemsPanel = new View
         {

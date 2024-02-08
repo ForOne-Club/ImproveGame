@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.ConstructCore;
+using ImproveGame.Content.Functions.Construction;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ObjectData;

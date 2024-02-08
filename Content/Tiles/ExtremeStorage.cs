@@ -1,7 +1,7 @@
-using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.Content.Items;
-using ImproveGame.Interface;
-using ImproveGame.Interface.ExtremeStorage;
+using ImproveGame.Packets.NetStorager;
+using ImproveGame.UIFramework;
+using ImproveGame.UIFramework.ExtremeStorage;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;

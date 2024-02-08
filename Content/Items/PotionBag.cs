@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModPlayers;
-using ImproveGame.GlobalGUI.ItemContainer;
-using ImproveGame.Interface;
+using ImproveGame.UI.ItemContainer;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;

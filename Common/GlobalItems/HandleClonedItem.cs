@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.ModPlayers;
-using ImproveGame.Content.Patches;
+using ImproveGame.Content.Functions;
 
 namespace ImproveGame.Common.GlobalItems;
 

@@ -1,15 +1,14 @@
-using ImproveGame.Common.Packets.NetAutofisher;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.Placeable;
+using ImproveGame.Packets.NetAutofisher;
+using ImproveGame.UIFramework;
 using System;
 using System.Reflection;
 using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
-using ImproveGame.Interface.GUI;
-using ImproveGame.Interface;
 
 namespace ImproveGame.Content.Tiles
 {

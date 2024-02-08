@@ -26,10 +26,10 @@ SOFTWARE.
 */
 
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Common.Packets.NetStorager;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Interface;
-using ImproveGame.Interface.ExtremeStorage;
+using ImproveGame.Packets.NetStorager;
+using ImproveGame.UIFramework;
+using ImproveGame.UIFramework.ExtremeStorage;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 

@@ -1,9 +1,9 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Patches;
+using ImproveGame.Content.Functions;
 using ImproveGame.Core;
-using ImproveGame.Interface;
-using ImproveGame.Interface.GUI;
+using ImproveGame.UI;
+using ImproveGame.UIFramework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
 using Terraria.GameInput;

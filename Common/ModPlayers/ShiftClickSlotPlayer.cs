@@ -1,11 +1,10 @@
 ﻿using ImproveGame.Common.ModHooks;
-using ImproveGame.Common.Packets.NetAutofisher;
-using ImproveGame.Common.Packets.NetStorager;
-using ImproveGame.GlobalGUI;
-using ImproveGame.GlobalGUI.ItemContainer;
-using ImproveGame.Interface;
-using ImproveGame.Interface.ExtremeStorage;
-using ImproveGame.Interface.GUI;
+using ImproveGame.Packets.NetAutofisher;
+using ImproveGame.Packets.NetStorager;
+using ImproveGame.UI;
+using ImproveGame.UI.ItemContainer;
+using ImproveGame.UIFramework;
+using ImproveGame.UIFramework.ExtremeStorage;
 using ItemSlot = Terraria.UI.ItemSlot;
 
 namespace ImproveGame.Common.ModPlayers

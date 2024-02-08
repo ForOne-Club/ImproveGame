@@ -2,7 +2,7 @@
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Content;
 using ImproveGame.Core;
-using ImproveGame.Interface.SUIElements;
+using ImproveGame.UIFramework.SUIElements;
 using Microsoft.Xna.Framework.Input;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;

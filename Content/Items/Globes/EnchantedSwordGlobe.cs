@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
-using ImproveGame.Common.Packets.WorldFeatures;
+using ImproveGame.Packets.WorldFeatures;
 
 namespace ImproveGame.Content.Items.Globes;
 

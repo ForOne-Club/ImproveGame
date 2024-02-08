@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.Players;
+using ImproveGame.UIFramework.Common;
 
 namespace ImproveGame.Common.GlobalItems;
 

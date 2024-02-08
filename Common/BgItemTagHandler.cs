@@ -1,5 +1,5 @@
-﻿using ImproveGame.Interface.Common;
-using ImproveGame.Interface.Graphics2D;
+﻿using ImproveGame.UIFramework.Common;
+using ImproveGame.UIFramework.Graphics2D;
 using ReLogic.Graphics;
 using Terraria.GameContent.UI;
 using Terraria.UI.Chat;

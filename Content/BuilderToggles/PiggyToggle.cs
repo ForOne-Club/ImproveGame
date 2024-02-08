@@ -1,4 +1,4 @@
-﻿using ImproveGame.Content.Patches.AutoPiggyBank;
+﻿using ImproveGame.Content.Functions.AutoPiggyBank;
 
 namespace ImproveGame.Content.BuilderToggles;
 

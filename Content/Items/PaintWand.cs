@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
-using ImproveGame.Interface;
+using ImproveGame.UIFramework;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items

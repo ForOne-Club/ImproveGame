@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Patches;
+using ImproveGame.Content.Functions;
 using ImproveGame.Packets.Weather;
 
 namespace ImproveGame.Content.Items;

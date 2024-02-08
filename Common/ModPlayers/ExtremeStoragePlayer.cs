@@ -1,9 +1,9 @@
-﻿using ImproveGame.Common.Packets.NetChest;
-using ImproveGame.Common.Packets.NetStorager;
-using ImproveGame.Content.Items;
+﻿using ImproveGame.Content.Items;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Interface;
-using ImproveGame.Interface.ExtremeStorage;
+using ImproveGame.Packets.NetChest;
+using ImproveGame.Packets.NetStorager;
+using ImproveGame.UIFramework;
+using ImproveGame.UIFramework.ExtremeStorage;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.ModPlayers;

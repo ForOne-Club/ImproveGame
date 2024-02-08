@@ -1,7 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Patches;
-using ImproveGame.Content.Patches.PortableBuff;
-using ImproveGame.Interface.Common;
+using ImproveGame.Content.Functions.PortableBuff;
 using System.Collections.Generic;
 
 namespace ImproveGame.Common.ModPlayers

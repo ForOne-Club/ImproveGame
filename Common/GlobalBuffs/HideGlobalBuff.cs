@@ -1,10 +1,9 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Patches;
-using ImproveGame.Content.Patches.PortableBuff;
-using ImproveGame.Interface;
-using ImproveGame.Interface.GUI;
+using ImproveGame.Content.Functions.PortableBuff;
+using ImproveGame.UI;
+using ImproveGame.UIFramework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;

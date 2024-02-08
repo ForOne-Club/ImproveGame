@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
-using ImproveGame.GlobalGUI.ItemContainer;
+using ImproveGame.UI.ItemContainer;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 

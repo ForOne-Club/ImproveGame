@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.Common.GlobalProjectiles;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Patches;
+using ImproveGame.Content.Functions;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;

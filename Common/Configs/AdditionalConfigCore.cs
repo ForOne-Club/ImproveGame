@@ -1,9 +1,10 @@
 ﻿using ImproveGame.Common.Configs.FavoritedSystem;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Patches;
-using ImproveGame.GlobalGUI;
-using ImproveGame.Interface;
-using ImproveGame.Interface.GUI.PlayerStats;
+using ImproveGame.Content.Functions;
+using ImproveGame.UI;
+using ImproveGame.UI.PlayerStats;
+using ImproveGame.UIFramework;
+using ImproveGame.UIFramework.Common;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;

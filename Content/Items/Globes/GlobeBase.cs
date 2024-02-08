@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Packets.WorldFeatures;
-
-namespace ImproveGame.Content.Items.Globes;
+﻿namespace ImproveGame.Content.Items.Globes;
 
 public abstract class GlobeBase : ModItem
 {

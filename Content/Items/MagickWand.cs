@@ -1,9 +1,9 @@
-﻿using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Common.Packets;
-using ImproveGame.Entitys;
-using ImproveGame.Interface;
-using ImproveGame.Interface.GUI;
+using ImproveGame.Packets;
+using ImproveGame.UI;
+using ImproveGame.UIFramework;
 using Terraria.GameInput;
 using Terraria.ID;
 
@@ -154,10 +154,10 @@ namespace ImproveGame.Content.Items
 
             if (player.altFunctionUse == 2)
             {
-                if (BrustGUI.Visible && UISystem.Instance.BrustGUI.Timer.AnyOpen)
-                    UISystem.Instance.BrustGUI.Close();
+                if (BurstGUI.Visible && UISystem.Instance.BurstGUI.Timer.AnyOpen)
+                    UISystem.Instance.BurstGUI.Close();
                 else
-                    UISystem.Instance.BrustGUI.Open();
+                    UISystem.Instance.BurstGUI.Open();
                 return false;
             }
 

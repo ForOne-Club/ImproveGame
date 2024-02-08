@@ -1,6 +1,7 @@
-﻿using ImproveGame.GlobalGUI;
-using ImproveGame.Interface;
-using ImproveGame.Interface.GUI.PlayerStats;
+﻿using ImproveGame.UI;
+using ImproveGame.UI.PlayerStats;
+using ImproveGame.UIFramework;
+using ImproveGame.UIFramework.Common;
 
 namespace ImproveGame.Common.Configs.Elements;
 

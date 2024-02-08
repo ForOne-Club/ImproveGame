@@ -1,5 +1,5 @@
-using ImproveGame.Common.Packets.NetStorager;
-using ImproveGame.Interface.ExtremeStorage;
+using ImproveGame.Packets.NetStorager;
+using ImproveGame.UIFramework.ExtremeStorage;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 

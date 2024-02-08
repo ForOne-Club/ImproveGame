@@ -1,17 +1,19 @@
-﻿using ImproveGame.Common.Configs;
+﻿using ImproveGame.Common;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Entitys;
-using ImproveGame.Interface;
-using ImproveGame.Interface.GUI;
+using ImproveGame.UI;
+using ImproveGame.UIFramework;
 using Terraria.ModLoader.IO;
-using static ImproveGame.Entitys.TileData;
-using TileData = ImproveGame.Entitys.TileData;
 
 namespace ImproveGame.Content.Items;
 
 public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
 {
+    private record TileData(TileSort TileSort, int X, int Y);
+
+    public enum TileSort { None, Block, Platform, Torch, Chair, Table, Workbench, Bed, Wall, NoWall }
+
     public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.CreateWand;
     public override bool AltFunctionUse(Player player) => true;
 
@@ -290,15 +292,15 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
 
             for (int i = 0; i < tileDatas.Count; i++) // 火把，椅子，工作台，桌子，床
             {
-                int x = tileDatas[i].x;
-                int y = tileDatas[i].y;
+                int x = tileDatas[i].X;
+                int y = tileDatas[i].Y;
                 if (Main.tile[x, y].HasTile)
                 {
                     continue;
                 }
 
                 // 进行其他的放置尝试
-                switch (tileDatas[i].tileSort)
+                switch (tileDatas[i].TileSort)
                 {
                     case TileSort.Torch:
                         TryPlace(ref Torch, player, x, y,
@@ -309,8 +311,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
                         break;
                     case TileSort.Chair:
                         TryPlace(ref Chair, player, x, y, item => item.createTile == TileID.Chairs);
-                        Main.tile[tileDatas[i].x, tileDatas[i].y].TileFrameX += 18;
-                        Main.tile[tileDatas[i].x, tileDatas[i].y - 1].TileFrameX += 18;
+                        Main.tile[tileDatas[i].X, tileDatas[i].Y].TileFrameX += 18;
+                        Main.tile[tileDatas[i].X, tileDatas[i].Y - 1].TileFrameX += 18;
                         break;
                     // 目前似乎没有桌子的需求，而且我整UI的时候也没给桌子整
                     //case TileSort.Table:
@@ -369,6 +371,12 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
             _playedSound = true;
         }
     }
+
+    /// <summary>
+    /// 平台或实体块位置不放置
+    /// </summary>
+    public static bool ShouldPlaceWall(TileSort tileSort) =>
+        tileSort is not TileSort.Block and not TileSort.Platform and not TileSort.NoWall and not TileSort.Bed;
 
     private static bool TryPlacePlatform(Item item) =>
         item.createTile >= TileID.Dirt && TileID.Sets.Platforms[item.createTile];

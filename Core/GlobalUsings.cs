@@ -1,9 +1,5 @@
 ﻿global using ImproveGame.Common.Utils;
 global using ImproveGame.Common.Utils.Extensions;
-global using ImproveGame.Interface;
-global using ImproveGame.Interface.BaseViews;
-global using ImproveGame.Interface.Common.Extensions;
-global using ImproveGame.VertexTypes;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using NetSimplified;

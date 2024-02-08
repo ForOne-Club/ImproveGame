@@ -1,4 +1,4 @@
-﻿using ImproveGame.Content.Patches;
+﻿using ImproveGame.Content.Functions;
 
 namespace ImproveGame.Packets.Weather;
 

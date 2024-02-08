@@ -1,4 +1,5 @@
 ﻿using FuzzySearchNet;
+using ImproveGame.UIFramework.Common;
 using PinyinNet;
 using Terraria.GameContent.UI;
 

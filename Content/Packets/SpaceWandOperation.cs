@@ -1,6 +1,6 @@
-﻿using ImproveGame.Common.Packets;
-using ImproveGame.Common.Packets.Items;
-using ImproveGame.Content.Items;
+﻿using ImproveGame.Content.Items;
+using ImproveGame.Packets;
+using ImproveGame.Packets.Items;
 
 namespace ImproveGame.Content.Packets;
 
