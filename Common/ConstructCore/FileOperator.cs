@@ -31,10 +31,11 @@ namespace ImproveGame.Common.ConstructCore
                     }
                 }
             }
-
-            AddNotification(GetText("ConstructGUI.SavedAs") + thisPath, Color.Yellow);
+            // AddNotification(GetText("ConstructGUI.SavedAs") + thisPath, Color.Yellow);
 
             TagIO.ToFile(new QoLStructure(rectInWorld).Tag, thisPath);
+
+            AddNotification(GetText("ConstructGUI.SavedAs") + name, Color.Yellow);
             
             CachedStructureDatas.Clear();
             if (StructureGUI.Visible && UISystem.Instance.StructureGUI is not null)

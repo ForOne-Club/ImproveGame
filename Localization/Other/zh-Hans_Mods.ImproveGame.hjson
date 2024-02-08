@@ -131,13 +131,19 @@ Tips: {
 ConstructGUI: {
 	Structure: 建筑结构
 	# 这个是存储后的文件名
-	SavedAs: "结构已存储为文件 "
-	# 后接文件全路径(所属文件夹路径+文件名)
+	SavedAs: "结构已存储为 "
+	# 后接文件名
 	SaveMode: 存储模式
 	LoadMode: 放置模式
 	ExplodeAndPlace: 爆破并放置
 	PlaceOnly: 仅放置
 	Path: "文件路径: "
+	# 执行操作时，显示在玩家脚下
+	Saving: 保存中
+	Saved: 已保存
+	Placing: 放置中
+	Placed: 已放置
+	Stopped: 已终止
 
 	RenameTip: {
 		Exists: 已经存在一个相同名称的文件

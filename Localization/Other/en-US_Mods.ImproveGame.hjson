@@ -141,12 +141,18 @@ ConstructGUI: {
 	Structure: QoT Structure
 	# 这个是存储后的文件名
 	SavedAs: "Structure has been saved as "
-	# 后接文件全路径(所属文件夹路径+文件名)
+	# 后接文件名
 	SaveMode: Recording Mode
 	LoadMode: Placing Mode
 	ExplodeAndPlace: Destroy then Place
 	PlaceOnly: Place
 	Path: "File path: "
+	# 执行操作时，显示在玩家脚下
+	Saving: Saving
+	Saved: Saved
+	Placing: Placing
+	Placed: Placed
+	Stopped: Stopped
 
 	RenameTip: {
 		Exists: A file with the same name already exists

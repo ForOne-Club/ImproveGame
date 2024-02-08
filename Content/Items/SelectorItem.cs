@@ -3,6 +3,7 @@ using ImproveGame.Common.Packets.Items;
 using ImproveGame.Core;
 using ImproveGame.Entitys;
 using System.Collections;
+using System.Threading;
 
 namespace ImproveGame.Content.Items;
 
@@ -21,6 +22,8 @@ public abstract class SelectorItem : ModItem
     private Point start;
     private Point end;
     protected Point SelectRange;
+    protected int MaxTilesOneFrame = 30;
+    protected bool UseNewThread = false;
     protected Rectangle TileRect => new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y), (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);
 
     /// <summary>
@@ -130,7 +133,22 @@ public abstract class SelectorItem : ModItem
             ItemRotation(player);
             if (unCancelled)
             {
-                CoroutineSystem.TileRunner.Run(ModifyTiles(player));
+                if (!UseNewThread)
+                    CoroutineSystem.TileRunner.Run(ModifyTiles(player));
+                else
+                    new Thread(() =>
+                    {
+                        Rectangle tileRect = TileRect;
+                        int minI = tileRect.X;
+                        int maxI = tileRect.X + tileRect.Width - 1;
+                        int minJ = tileRect.Y;
+                        int maxJ = tileRect.Y + tileRect.Height - 1;
+                        for (int j = minJ; j <= maxJ; j++)
+                            for (int i = minI; i <= maxI; i++)
+                                if (WorldGen.InWorld(i, j) && !ModifySelectedTiles(player, i, j))
+                                    PostModifyTiles(player, minI, minJ, i, j);
+                        PostModifyTiles(player, minI, minJ, maxI, maxJ);
+                    }).Start();
             }
         }
     }
@@ -155,7 +173,7 @@ public abstract class SelectorItem : ModItem
                     PostModifyTiles(player, minI, minJ, i, j);
                     yield break;
                 }
-                if (countTiles >= 30)
+                if (countTiles >= MaxTilesOneFrame)
                 {
                     countTiles = 0;
                     yield return 0;

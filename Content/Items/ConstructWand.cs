@@ -17,7 +17,14 @@ namespace ImproveGame.Content.Items
         public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ)
         {
             var rectangle = new Rectangle(minI, minJ, maxI - minI, maxJ - minJ);
-            var saveTileThread = new Thread(() => FileOperator.SaveAsFile(rectangle));
+            var saveTileThread = new Thread(() =>
+            {
+                TipRenderer.CurrentState = TipRenderer.State.Saving;
+                FileOperator.SaveAsFile(rectangle);
+                SoundEngine.PlaySound(SoundID.ResearchComplete);
+                TipRenderer.CurrentState = TipRenderer.State.Saved;
+                TipRenderer.TextDisplayCountdown = 60;
+            });
             saveTileThread.Start();
         }
 
@@ -27,7 +34,8 @@ namespace ImproveGame.Content.Items
             Item.value = Item.sellPrice(0, 1, 0, 0);
             Item.mana = 20;
 
-            SelectRange = new(200, 200);
+            SelectRange = new Point(200, 200);
+            UseNewThread = true;
         }
 
         public override bool StartUseItem(Player player)
@@ -52,6 +60,9 @@ namespace ImproveGame.Content.Items
                 else if (CoroutineSystem.GenerateRunner.Count > 0) // 有任务 还使用了
                 {
                     CoroutineSystem.GenerateRunner.StopAll();
+
+                    TipRenderer.CurrentState = TipRenderer.State.Stopped;
+                    TipRenderer.TextDisplayCountdown = 60;
                 }
             }
             else if (player.altFunctionUse == 2)

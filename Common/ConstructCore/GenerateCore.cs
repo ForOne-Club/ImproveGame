@@ -31,6 +31,8 @@ namespace ImproveGame.Common.ConstructCore
             position.X -= structure.OriginX;
             position.Y -= structure.OriginY;
 
+            TipRenderer.CurrentState = TipRenderer.State.Placing;
+
             _taskProcessed = 0;
             var currentTask = CoroutineSystem.GenerateRunner.Run(KillTiles(structure, position));
             while (currentTask.IsRunning)
@@ -51,6 +53,10 @@ namespace ImproveGame.Common.ConstructCore
             while (currentTask.IsRunning)
                 yield return null;
             CoroutineSystem.GenerateRunner.Run(TextSigns(structure, position));
+
+            SoundEngine.PlaySound(SoundID.ResearchComplete);
+            TipRenderer.CurrentState = TipRenderer.State.Placed;
+            TipRenderer.TextDisplayCountdown = 60;
         }
 
         public static IEnumerator KillTiles(QoLStructure structure, Point position)
@@ -72,11 +78,13 @@ namespace ImproveGame.Common.ConstructCore
                     {
                         _taskProcessed++;
                     }
+
                     if (tile.WallType > 0)
                     {
                         WorldGen.KillWall(placePosition.X, placePosition.Y);
                         _taskProcessed++;
                     }
+
                     if (_taskProcessed >= 12)
                     {
                         _taskProcessed = 0;
@@ -103,6 +111,7 @@ namespace ImproveGame.Common.ConstructCore
                     {
                         tileItemFindType = TileID.Dirt;
                     }
+
                     int tileItemType = GetTileItem(tileItemFindType, tileData.TileFrameX, tileData.TileFrameY);
                     if (tileItemType == -1 || Main.tile[placePosition].HasTile)
                     {
@@ -129,13 +138,14 @@ namespace ImproveGame.Common.ConstructCore
                         var item = new Item(tileItemType);
                         TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true);
                     }
-                    
+
                     // 挖掉重来！
                     if (TileID.Sets.Grass[tileType])
                     {
                         Main.tile[placePosition].ResetToType((ushort)tileType);
                         WorldGen.TileFrame(placePosition.X, position.Y, true, false);
                     }
+
                     if (WorldGen.CanPoundTile(placePosition.X, placePosition.Y))
                     {
                         if (tileData.BlockType is BlockType.HalfBlock)
@@ -148,12 +158,14 @@ namespace ImproveGame.Common.ConstructCore
                             WorldGen.SlopeTile(placePosition.X, placePosition.Y, (int)tileData.BlockType - 1);
                         }
                     }
+
                     var tile = Main.tile[placePosition];
                     tile.TileColor = tileData.TileColor;
                     if (tileData.ExtraDatas[2] && !tile.IsActuated)
                     {
                         Wiring.ActuateForced(placePosition.X, placePosition.Y);
                     }
+
                     _taskProcessed++;
                     if (_taskProcessed >= 6)
                     {
@@ -181,7 +193,8 @@ namespace ImproveGame.Common.ConstructCore
                         continue;
                     }
 
-                    if (!HasDevMark) {
+                    if (!HasDevMark)
+                    {
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                         PickItemFromArray(Main.LocalPlayer, inventory, item =>
                                 item.type == wallItemType &&
@@ -193,7 +206,7 @@ namespace ImproveGame.Common.ConstructCore
                         var item = new Item(wallItemType);
                         TryPlaceWall(item, placePosition.X, placePosition.Y);
                     }
-                    
+
                     var tile = Main.tile[placePosition];
                     tile.WallColor = tileData.WallColor;
                     _taskProcessed++;
@@ -232,14 +245,17 @@ namespace ImproveGame.Common.ConstructCore
                     if (tileType is -1)
                         continue;
                     var tileObjectData = GetTileData(tileType, tileData.TileFrameX, tileData.TileFrameY);
-                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 && tileObjectData.CoordinateFullHeight <= 22))
+                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 &&
+                                                   tileObjectData.CoordinateFullHeight <= 22))
                     {
                         continue;
                     }
 
                     // 转换为帧坐标
-                    int subX = (tileData.TileFrameX / tileObjectData.CoordinateFullWidth) * tileObjectData.CoordinateFullWidth;
-                    int subY = (tileData.TileFrameY / tileObjectData.CoordinateFullHeight) * tileObjectData.CoordinateFullHeight;
+                    int subX = (tileData.TileFrameX / tileObjectData.CoordinateFullWidth) *
+                               tileObjectData.CoordinateFullWidth;
+                    int subY = (tileData.TileFrameY / tileObjectData.CoordinateFullHeight) *
+                               tileObjectData.CoordinateFullHeight;
                     int tileItemType = GetTileItem(tileType, subX, subY);
                     if (tileItemType == -1)
                     {
@@ -250,7 +266,9 @@ namespace ImproveGame.Common.ConstructCore
                     subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
                     Point16 frame = new(subX / 18, subY / 18);
                     var origin = tileObjectData.Origin.ToPoint();
-                    if (tileType is TileID.OpenDoor && tileData.TileFrameX / tileObjectData.CoordinateFullWidth % 2 == 1) // 开启的门实际上OriginX为0，这里对于向左开的要重新定位到他的轴心
+                    if (tileType is TileID.OpenDoor &&
+                        tileData.TileFrameX / tileObjectData.CoordinateFullWidth % 2 ==
+                        1) // 开启的门实际上OriginX为0，这里对于向左开的要重新定位到他的轴心
                     {
                         origin.X = 1;
                     }
@@ -268,11 +286,13 @@ namespace ImproveGame.Common.ConstructCore
                         _ => 0
                     };
 
-                    if (!HasDevMark) {
+                    if (!HasDevMark)
+                    {
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                         PickItemFromArray(Main.LocalPlayer, inventory, item =>
                                 item is not null && item.type == tileItemType &&
-                                TryPlaceMultiTileDirect(placePosition, item.createTile, item.placeStyle, direction, out _),
+                                TryPlaceMultiTileDirect(placePosition, item.createTile, item.placeStyle, direction,
+                                    out _),
                             true);
                     }
                     else
@@ -303,22 +323,27 @@ namespace ImproveGame.Common.ConstructCore
                     {
                         Wiring.ActuateForced(placePosition.X, placePosition.Y);
                     }
+
                     if (tileData.RedWire && !tile.RedWire && TryConsumeWire())
                     {
                         WorldGen.PlaceWire(placePosition.X, placePosition.Y);
                     }
+
                     if (tileData.BlueWire && !tile.BlueWire && TryConsumeWire())
                     {
                         WorldGen.PlaceWire2(placePosition.X, placePosition.Y);
                     }
+
                     if (tileData.GreenWire && !tile.GreenWire && TryConsumeWire())
                     {
                         WorldGen.PlaceWire3(placePosition.X, placePosition.Y);
                     }
+
                     if (tileData.YellowWire && !tile.YellowWire && TryConsumeWire())
                     {
                         WorldGen.PlaceWire4(placePosition.X, placePosition.Y);
                     }
+
                     if (tileData.HasActuator && !tile.HasActuator) // 促动器
                     {
                         bool TryConsume(Item item)
@@ -328,8 +353,10 @@ namespace ImproveGame.Common.ConstructCore
                                 WorldGen.PlaceActuator(placePosition.X, placePosition.Y);
                                 return true;
                             }
+
                             return false;
                         }
+
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                         var item = PickItemFromArray(Main.LocalPlayer, inventory, TryConsume, false);
                         if (HasDevMark)
@@ -344,6 +371,7 @@ namespace ImproveGame.Common.ConstructCore
                     bool TryConsumeWire()
                     {
                         bool hasWire = false;
+
                         bool TryConsume(Item item)
                         {
                             if (item.type != ItemID.Wire)
@@ -354,6 +382,7 @@ namespace ImproveGame.Common.ConstructCore
                             hasWire = true;
                             return true;
                         }
+
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                         var item = PickItemFromArray(Main.LocalPlayer, inventory, TryConsume, false);
                         TryConsumeItem(ref item, Main.LocalPlayer, true); // 要手动consume (即无视consumable)
@@ -383,10 +412,12 @@ namespace ImproveGame.Common.ConstructCore
                     {
                         WorldGen.TileFrame(placePosition.X, position.Y, true, false);
                     }
+
                     if (Main.tile[placePosition].WallType > 0)
                     {
                         Framing.WallFrame(placePosition.X, position.Y, true);
                     }
+
                     _taskProcessed++;
                     if (_taskProcessed >= 50)
                     {
@@ -395,6 +426,7 @@ namespace ImproveGame.Common.ConstructCore
                     }
                 }
             }
+
             if (Main.netMode is NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendTileSquare(Main.myPlayer, position.X - 1, position.Y - 1, width + 2, height + 2);

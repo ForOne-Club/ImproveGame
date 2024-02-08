@@ -31,7 +31,7 @@
 		<Reference Include="lib\*.dll" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="./README.md;./README-en.md">
+		<None Include="./README.md;./README-en.md;./How-To-Use-Search.md">
 			<Visible>false</Visible>
 		</None>
 		<None Include="./icon.png;./icon_workshop.png">

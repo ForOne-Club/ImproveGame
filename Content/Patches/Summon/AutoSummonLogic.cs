@@ -50,16 +50,18 @@ public class AutoSummonLogic : ModPlayer
         Player.slotsMinions = 0f;
         foreach (var item in allItems.Where(item => item.type == _lastUsedStaffType))
         {
-            float slotsPerSpawn = ItemID.Sets.StaffMinionSlotsRequired[item.type];
-            int iterationTimes = (int)(Player.maxMinions / slotsPerSpawn);
-
-            SummonRunner.Run(SummonMinions(item, iterationTimes));
+            SummonRunner.Run(SummonMinions(item));
             break;
         }
     }
 
-    IEnumerator SummonMinions(Item item, int iterationTimes)
+    IEnumerator SummonMinions(Item item)
     {
+        yield return 2; // 等待2帧，确保玩家已经刷新
+
+        float slotsPerSpawn = ItemID.Sets.StaffMinionSlotsRequired[item.type];
+        int iterationTimes = (int)(Player.maxMinions / slotsPerSpawn);
+
         for (int i = 0; i < iterationTimes; i++)
         {
             var mouseX = Main.mouseX;

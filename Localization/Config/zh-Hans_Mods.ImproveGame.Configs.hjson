@@ -951,7 +951,12 @@ UIConfigs: {
 
 	AutoSummon: {
 		Label: "[i:SlimeStaff] 自动重召唤"
-		Tooltip: 复活后会自动召唤死前最后一次召唤的召唤物
+		Tooltip:
+			'''
+			复活后会自动召唤死前最后一次召唤的召唤物
+			加载Summoners' Association模组后，此功能自动禁用
+			如果你要更加精细地控制召唤物，强推Summoners' Association（召唤物管理）模组，有官中！
+			'''
 	}
 }
 
