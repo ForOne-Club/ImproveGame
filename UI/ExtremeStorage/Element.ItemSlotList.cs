@@ -1,6 +1,6 @@
 ﻿using ImproveGame.UIFramework.UIElements;
 
-namespace ImproveGame.UIFramework.ExtremeStorage
+namespace ImproveGame.UI.ExtremeStorage
 {
     /// <summary>
     /// 与 <see cref="ItemSlot"/> 配套

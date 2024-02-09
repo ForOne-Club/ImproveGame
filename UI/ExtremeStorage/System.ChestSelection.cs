@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Packets.NetChest;
 using ImproveGame.UIFramework.Graphics2D;
 
-namespace ImproveGame.UIFramework.ExtremeStorage
+namespace ImproveGame.UI.ExtremeStorage
 {
     public class ChestSelection : ModSystem
     {
@@ -43,7 +43,7 @@ namespace ImproveGame.UIFramework.ExtremeStorage
             Main.cursorColor = Color.SkyBlue;
 
             var nearbyChestIndexes = ExtremeStorageGUI.Storage.FindAllNearbyChests();
-            char groupIdentifier = (char)ExtremeStorageGUI.CurrentGroup;
+            char groupIdentifier = ExtremeStorageGUI.CurrentGroup.GetIdentifier();
 
             foreach (int index in nearbyChestIndexes)
             {

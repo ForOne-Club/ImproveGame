@@ -3,7 +3,7 @@ using ImproveGame.Content.Tiles;
 using ImproveGame.Core;
 using ImproveGame.Packets.Items;
 using ImproveGame.Packets.NetChest;
-using ImproveGame.UIFramework.ExtremeStorage;
+using ImproveGame.UI.ExtremeStorage;
 using System.Collections;
 using System.Diagnostics;
 using ItemSlot = Terraria.UI.ItemSlot;

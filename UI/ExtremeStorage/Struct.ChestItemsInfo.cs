@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.UIFramework.ExtremeStorage;
+﻿namespace ImproveGame.UI.ExtremeStorage;
 
 public struct ChestItemsInfo
 {

@@ -3,7 +3,7 @@ using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.ModLoader.UI;
 
-namespace ImproveGame.UIFramework.ExtremeStorage
+namespace ImproveGame.UI.ExtremeStorage
 {
     /// <summary>
     /// 继承 BigBagItemSlot，但是有修改，以适合作为箱子的物品槽

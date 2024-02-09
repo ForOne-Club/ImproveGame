@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.UI;
+using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.SpaceWand;
@@ -7,7 +8,6 @@ using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Common.Extensions;
-using ImproveGame.UIFramework.ExtremeStorage;
 using System.Reflection;
 
 namespace ImproveGame.UIFramework;

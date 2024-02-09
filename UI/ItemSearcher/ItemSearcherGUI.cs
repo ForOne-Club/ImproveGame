@@ -1,8 +1,8 @@
 ﻿using ImproveGame.Packets.NetChest;
+using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.ExtremeStorage;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.GameInput;
 

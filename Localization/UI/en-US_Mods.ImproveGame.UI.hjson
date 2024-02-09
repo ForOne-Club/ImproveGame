@@ -156,11 +156,12 @@ ExtremeStorage: {
 		Armor: "{$CreativePowers.TabArmor}"
 		Accessory: "{$CreativePowers.TabAccessories}"
 		Furniture: "{$CreativePowers.TabFurniture}"
-		Block: "{$CreativePowers.TabBlocks}"
+		Block: Placeables
 		Material: "{$CreativePowers.TabMaterials}"
 		Alchemy: Alchemy
 		Misc: "{$CreativePowers.TabMisc}"
 		Setting: "{$LegacyMenu.14}"
+		Everything: Everything
 	}
 }
 

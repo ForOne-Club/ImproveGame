@@ -154,11 +154,12 @@ ExtremeStorage: {
 		// Armor: "{$CreativePowers.TabArmor}"
 		// Accessory: "{$CreativePowers.TabAccessories}"
 		// Furniture: "{$CreativePowers.TabFurniture}"
-		// Block: "{$CreativePowers.TabBlocks}"
+		Block: 放置物
 		// Material: "{$CreativePowers.TabMaterials}"
 		Alchemy: 炼药
 		// Misc: "{$CreativePowers.TabMisc}"
 		// Setting: "{$LegacyMenu.14}"
+		Everything: 全部
 	}
 }
 

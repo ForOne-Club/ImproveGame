@@ -2,9 +2,9 @@
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.Packets.NetStorager;
 using ImproveGame.UI;
+using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UIFramework;
-using ImproveGame.UIFramework.ExtremeStorage;
 using ItemSlot = Terraria.UI.ItemSlot;
 
 namespace ImproveGame.Common.ModPlayers

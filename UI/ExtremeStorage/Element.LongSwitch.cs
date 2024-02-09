@@ -1,11 +1,12 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using Terraria.DataStructures;
 using Terraria.ModLoader.UI;
 
-namespace ImproveGame.UIFramework.ExtremeStorage
+namespace ImproveGame.UI.ExtremeStorage
 {
     public class LongSwitch : View
     {
