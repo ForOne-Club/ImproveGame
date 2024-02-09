@@ -4,12 +4,19 @@ namespace ImproveGame.UI.ItemContainer;
 
 public interface IItemContainer
 {
+    Texture2D DefaultIcon { get; }
+
     List<Item> ItemContainer { get; }
     bool AutoStorage { get; set; }
     bool AutoSort { get; set; }
 
     void Sort();
     void PutInPackage(ref Item item);
+
+    /// <summary>
+    /// 符合进入标准
+    /// </summary>
+    bool MeetEntryCriteria(Item item);
 
     static void SaveData(TagCompound tag, IItemContainer container)
     {

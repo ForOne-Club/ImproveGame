@@ -43,9 +43,7 @@ namespace ImproveGame.Common.ModPlayers
                     return true;
                 }
                 // 旗帜收纳箱 + 药水袋
-                if (ItemContainerGUI.Visible &&
-                    ((ItemContainerGUI.StorageType is StorageType.Banners && ItemToBanner(item) != -1) ||
-                    (ItemContainerGUI.StorageType is StorageType.Potions && item.buffType > 0 && item.consumable)))
+                if (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container.MeetEntryCriteria(item))
                 {
                     Main.cursorOverride = CursorOverrideID.InventoryToChest;
                     return true;
@@ -94,22 +92,15 @@ namespace ImproveGame.Common.ModPlayers
                     return true; // 阻止原版代码运行
                 }
                 // 旗帜收纳箱 + 药水袋
-                if (ItemContainerGUI.Visible)
+                if (ItemContainerGUI.Instace.Enabled)
                 {
-                    // 旗帜
-                    if (ItemContainerGUI.StorageType is StorageType.Banners && ItemToBanner(inventory[slot]) != -1)
+                    if (ItemContainerGUI.Instace.Container.MeetEntryCriteria(inventory[slot]))
                     {
                         ItemContainerGUI.Instace.Container.PutInPackage(ref inventory[slot]);
                         Recipe.FindRecipes();
                         SoundEngine.PlaySound(SoundID.Grab);
                     }
-                    // 药水
-                    else if (ItemContainerGUI.StorageType is StorageType.Potions && inventory[slot].buffType > 0 && inventory[slot].consumable)
-                    {
-                        ItemContainerGUI.Instace.Container.PutInPackage(ref inventory[slot]);
-                        Recipe.FindRecipes();
-                        SoundEngine.PlaySound(SoundID.Grab);
-                    }
+
                     return true; // 阻止原版代码运行
                 }
 
@@ -118,6 +109,7 @@ namespace ImproveGame.Common.ModPlayers
                     inventory[slot] = ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
                     Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);
+
                     return true; // 阻止原版代码运行
                 }
 

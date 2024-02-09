@@ -10,9 +10,12 @@ namespace ImproveGame.Content.Items;
 public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable
 {
     public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
+
+    public Texture2D DefaultIcon => ModAsset.Potion.Value;
     public List<Item> ItemContainer { get; private set; } = [];
     public bool AutoStorage { get; set; }
     public bool AutoSort { get; set; }
+    public bool MeetEntryCriteria(Item item) => item.buffType > 0 && item.consumable;
 
     // 克隆内容不克隆引用
     public override ModItem Clone(Item newEntity)
@@ -26,10 +29,10 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
 
     public override void RightClick(Player player)
     {
-        if (ItemContainerGUI.Visible && ItemContainerGUI.StorageType is StorageType.Potions)
+        if (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this)
             ItemContainerGUI.Instace.Close();
         else
-            ItemContainerGUI.Instace.Open(ItemContainer, Item.Name, StorageType.Potions, this);
+            ItemContainerGUI.Instace.Open(Item.Name, this);
 
         // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
         // storedPotions.RemoveAt(storedPotions.Count - 1);
@@ -291,7 +294,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
     public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
     {
         // 决定文本显示的是“开启”还是“关闭”
-        string text = (ItemContainerGUI.Visible && ItemContainerGUI.StorageType is StorageType.Potions)
+        string text = (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this)
             ? GetTextWith("Tips.MouseMiddleClose", new { ItemName = Item.Name })
             : GetTextWith("Tips.MouseMiddleOpen", new { ItemName = Item.Name });
         tooltips.Add(new TooltipLine(Mod, "PotionBag", text) { OverrideColor = Color.LightGreen });

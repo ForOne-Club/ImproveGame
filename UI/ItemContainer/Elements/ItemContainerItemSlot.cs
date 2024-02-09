@@ -68,9 +68,6 @@ public class ItemContainerItemSlot(List<Item> items, int index) : View
         _rightMouseTimer++;
     }
 
-    private static Texture2D Banner => ModAsset.Banner.Value;
-    private static Texture2D Potion => ModAsset.Potion.Value;
-
     public override void DrawSelf(SpriteBatch sb)
     {
         base.DrawSelf(sb);
@@ -78,15 +75,7 @@ public class ItemContainerItemSlot(List<Item> items, int index) : View
 
         if (Item.IsAir)
         {
-            switch (ItemContainerGUI.StorageType)
-            {
-                case StorageType.Banners:
-                    BigBagItemSlot.DrawItemIcon(sb, Banner, Color.White * 0.5f, dimensions);
-                    break;
-                case StorageType.Potions:
-                    BigBagItemSlot.DrawItemIcon(sb, Potion, Color.White * 0.5f, dimensions);
-                    break;
-            }
+            BigBagItemSlot.DrawItemIcon(sb, ItemContainerGUI.Instace.Container.DefaultIcon, Color.White * 0.5f, dimensions);
         }
         else
         {
@@ -111,13 +100,9 @@ public class ItemContainerItemSlot(List<Item> items, int index) : View
 
         if (Main.mouseItem.IsAir) return;
 
-        switch (ItemContainerGUI.StorageType)
+        if (!ItemContainerGUI.Instace.Container.MeetEntryCriteria(Main.mouseItem))
         {
-            // 旗帜收纳箱, 药水袋子.
-            case StorageType.Banners when ItemToBanner(Main.mouseItem) == -1:
-            case StorageType.Potions when Main.mouseItem.buffType <= 0 || !Main.mouseItem.consumable:
-                UICommon.TooltipMouseText(GetText("PackageGUI.Incompatible"));
-                break;
+            UICommon.TooltipMouseText(GetText("PackageGUI.Incompatible"));
         }
     }
 

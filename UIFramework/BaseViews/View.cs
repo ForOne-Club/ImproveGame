@@ -51,6 +51,11 @@ public class View : UIElement
     public bool PreventOverflow;
 
     /// <summary>
+    /// 直接换行, 不考虑 <see cref="PreventOverflow"/>
+    /// </summary>
+    public bool DirectLineBreak;
+
+    /// <summary>
     /// 设置 true 横向时不同步与前一个元素的 Top，纵向时不同步 Left<br/>
     /// 在大背包中用于一排 Button 的时候，第一个 Button 前面有一个 Switch<br/>
     /// 与 <see cref="RelativeMode"/> 搭配使用
@@ -203,12 +208,12 @@ public class View : UIElement
 
             Left = Top = new StyleDimension();
 
-            if (Parent is View parent && parent.Children is List<UIElement> parentChildren &&
+            if (Parent is View parent && parent.Children is IList<UIElement> parentChildren &&
                 parentChildren.IndexOf(this) is int index && index >= 1)
             {
                 View previousView = null;
 
-                for (int i = index - 1; i > -1; i--)
+                for (int i = index - 1; i >= 0; i--)
                 {
                     if (parentChildren[i] is View view)
                     {
@@ -229,7 +234,7 @@ public class View : UIElement
                                 previousView.Left.Pixels + previousViewOuterSize.X + Spacing.X,
                                 ResetAnotherPosition ? 0 : previousView.Top.Pixels);
 
-                            if (PreventOverflow && RightPixels > parentInnerSize.X)
+                            if (DirectLineBreak || PreventOverflow && RightPixels > parentInnerSize.X)
                             {
                                 SetPosPixels(0f, previousView.Top.Pixels + previousViewOuterSize.Y + Spacing.Y);
                             }
@@ -239,7 +244,7 @@ public class View : UIElement
                                 ResetAnotherPosition ? 0 : previousView.Left.Pixels,
                                 previousView.Top.Pixels + previousViewOuterSize.Y + Spacing.Y);
 
-                            if (PreventOverflow && BottomPixels > parentInnerSize.Y)
+                            if (DirectLineBreak || PreventOverflow && BottomPixels > parentInnerSize.Y)
                             {
                                 SetPosPixels(previousView.Left.Pixels + previousViewOuterSize.X + Spacing.X, 0f);
                             }

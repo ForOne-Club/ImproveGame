@@ -78,7 +78,9 @@ public class ControlCenterGUI : BaseBody
                 button.BorderColor = cci.GetBorderColor(button);
             };
 
-            button.Width.Pixels = (500 - 12 /* padding */ - 12 /*scrollbar*/ - 2 - 8) / 3f;
+            button.Width.Percent = 1f / 3f;
+            button.Width.Pixels = -8 / 3f;
+            // button.Width.Pixels = (500 - 12 /* padding */ - 12 /*scrollbar*/ - 2 - 8) / 3f;
             button.Height.Pixels = 45f;
 
             button.JoinParent(ListView.AdaptiveView);

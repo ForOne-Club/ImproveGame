@@ -28,15 +28,18 @@ public class CCIManager : ModSystem
 
     public override void Load()
     {
-        var bigBackpack = new ControlCenterItem("Mods.ImproveGame.SuperVault.Name").Register();
-
-        bigBackpack.OnMouseDown += tv =>
+        for (int i = 0; i < 20; i++)
         {
-            if (BigBagGUI.Visible)
-                BigBagGUI.Instance.Close();
-            else
-                BigBagGUI.Instance.Open();
-        };
+            var bigBackpack = new ControlCenterItem("Mods.ImproveGame.SuperVault.Name").Register();
+
+            bigBackpack.OnMouseDown += tv =>
+            {
+                if (BigBagGUI.Visible)
+                    BigBagGUI.Instance.Close();
+                else
+                    BigBagGUI.Instance.Open();
+            };
+        }
 
         var playerStats = new ControlCenterItem("Mods.ImproveGame.UI.PlayerStats.Name").Register();
 

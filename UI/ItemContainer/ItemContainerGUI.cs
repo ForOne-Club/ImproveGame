@@ -7,156 +7,159 @@ using Terraria.GameInput;
 
 namespace ImproveGame.UI.ItemContainer;
 
-public enum StorageType { Banners, Potions }
-
 [AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Item Container GUI")]
 public class ItemContainerGUI : BaseBody
 {
     public static ItemContainerGUI Instace { get; private set; }
     public ItemContainerGUI() => Instace = this;
 
-    public static StorageType StorageType { get; private set; }
-
-    private static bool _visible;
-    public override bool Enabled { get => Visible; set => Visible = value; }
-
-    public static bool Visible
+    public override bool Enabled
     {
         get
         {
             if (!Main.playerInventory)
-                _visible = false;
-            return _visible;
+                _enabled = false;
+            return _enabled;
         }
-        set => _visible = value;
+        set => _enabled = value;
     }
+    private static bool _enabled;
 
     public IItemContainer Container;
 
-    private SUIPanel _mainPanel;
-    private View _titlePanel;
-    private SUITitle _title;
-    private SUISwitch _autoStorageSwitch, _autoSortSwitch;
-    private SUICross _cross;
-    private ItemContainerGrid _grid;
+    public SUIPanel Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
+    {
+        HAlign = 0.5f,
+        VAlign = 0.5f,
+        Shaded = true,
+        Draggable = true,
+        FinallyDrawBorder = true,
+        IsAdaptiveWidth = true,
+        IsAdaptiveHeight = true,
+    };
+
+    // 标题
+    public readonly View TitlePanel = ViewHelper.CreateHead(UIStyle.TitleBg2, 50f, 12f);
+    public readonly SUIText Title = new SUIText
+    {
+        IsLarge = true,
+        TextScale = 0.5f,
+        TextAlign = new Vector2(0, 0.5f),
+        DragIgnore = true,
+    };
+    public readonly SUICross CloseButton = new SUICross
+    {
+        HAlign = 1f,
+        VAlign = 0.5f,
+        Rounded = new Vector4(0f, 12f, 0f, 0f),
+        CrossSize = 24f,
+        CrossRounded = 4.5f * 0.95f,
+        Border = 1.5f,
+        BorderColor = Color.Transparent,
+        BgColor = Color.Transparent,
+    };
+
+    // 开关按钮
+    public readonly View SwitchPanel = new View
+    {
+        RelativeMode = RelativeMode.Vertical,
+        Spacing = new Vector2(4f),
+        IsAdaptiveWidth = true,
+        IsAdaptiveHeight = true,
+        PaddingLeft = 10f,
+    };
+    public SUISwitch AutoStorageSwitch, AutoSortSwitch;
+
+    public readonly ItemContainerGrid ItemContainerGrid = new ItemContainerGrid
+    {
+        RelativeMode = RelativeMode.Vertical,
+        Spacing = new Vector2(4),
+    };
 
     public override void OnInitialize()
     {
-        // 窗口
-        _mainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
+        Window.SetPadding(0);
+        Window.JoinParent(this);
+
+        #region 标题组件
+        TitlePanel.SetPadding(0);
+        TitlePanel.JoinParent(Window);
+
+        Title.SetPadding(20f, 0f, 10f, 0f);
+        Title.Height.Percent = 1f;
+        Title.Width.Pixels = 200f;
+        Title.JoinParent(TitlePanel);
+
+        CloseButton.CrossOffset += Vector2.One;
+        CloseButton.Width.Pixels = 55f;
+        CloseButton.Height.Set(0f, 1f);
+        CloseButton.OnUpdate += (_) =>
         {
-            HAlign = 0.5f,
-            VAlign = 0.5f,
-            Shaded = true,
-            Draggable = true
+            CloseButton.BgColor = CloseButton.HoverTimer.Lerp(Color.Transparent, Color.Black * 0.25f);
         };
-        _mainPanel.SetPadding(0);
-        _mainPanel.JoinParent(this);
+        CloseButton.OnLeftMouseDown += (_, _) => Close();
+        CloseButton.JoinParent(TitlePanel);
+        #endregion
 
-        // 标题容器
-        _titlePanel = new View
-        {
-            DragIgnore = true,
-            BgColor = UIStyle.TitleBg2,
-            Border = 2f,
-            BorderColor = UIStyle.PanelBorder,
-            Rounded = new Vector4(10f, 10f, 0f, 0f),
-        };
-        _titlePanel.SetPadding(0);
-        _titlePanel.Width.Precent = 1f;
-        _titlePanel.Height.Pixels = 50f;
-        _titlePanel.JoinParent(_mainPanel);
-
-        // 标题
-        _title = new SUITitle("中文|Chinese", 0.5f)
-        {
-            VAlign = 0.5f
-        };
-        _title.SetPadding(20f, 0f, 10f, 0f);
-        _title.SetInnerPixels(_title.TextSize);
-        _title.JoinParent(_titlePanel);
-
-        // 关闭按钮
-        _cross = new SUICross
-        {
-            HAlign = 1f,
-            VAlign = 0.5f,
-            Rounded = new Vector4(0f, 10f, 0f, 0f)
-        };
-        _cross.Height.Set(0f, 1f);
-        _cross.OnLeftMouseDown += (_, _) => Close();
-        _cross.JoinParent(_titlePanel);
-
-        _autoStorageSwitch = new SUISwitch(() => Container.AutoStorage, state => Container.AutoStorage = state,
-            GetText("PackageGUI.AutoStorage"), 0.8f);
-        _autoStorageSwitch.SetPosPixels(10, _titlePanel.Bottom() + 8f).JoinParent(_mainPanel);
-
-        _autoSortSwitch = new SUISwitch(() => Container.AutoSort, state => Container.AutoSort = state,
-            GetText("PackageGUI.AutoSort"), 0.8f);
-        _autoSortSwitch.SetPosPixels(_autoStorageSwitch.Right() + 8f, _autoStorageSwitch.Top.Pixels)
-            .JoinParent(_mainPanel);
-
-        _grid = new ItemContainerGrid();
-        _grid.Top.Pixels = _autoStorageSwitch.Bottom() + 8f;
-        _grid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(_grid.Width.Pixels, _grid.Height.Pixels);
-        _grid.OnLeftMouseDown += (_, _) =>
-        {
-            if (!Main.mouseItem.IsAir && !Main.LocalPlayer.ItemAnimationActive)
+        SwitchPanel.JoinParent(Window);
+        AutoStorageSwitch =
+            new SUISwitch(() => Container.AutoStorage, state => Container.AutoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f)
             {
-                switch (StorageType)
-                {
-                    // 旗帜收纳箱, 药水袋子.
-                    case StorageType.Banners when ItemToBanner(Main.mouseItem) != -1:
-                    case StorageType.Potions when Main.mouseItem.buffType > 0 && Main.mouseItem.consumable:
-                        Container.PutInPackage(ref Main.mouseItem);
-                        break;
-                }
+                RelativeMode = RelativeMode.Horizontal, Spacing = new Vector2(8),
+            };
+        AutoStorageSwitch.JoinParent(SwitchPanel);
+
+        AutoSortSwitch =
+            new SUISwitch(() => Container.AutoSort, state => Container.AutoSort = state, GetText("PackageGUI.AutoSort"), 0.8f)
+            {
+                RelativeMode = RelativeMode.Horizontal, Spacing = new Vector2(8),
+            };
+        AutoSortSwitch.JoinParent(SwitchPanel);
+
+        ItemContainerGrid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(ItemContainerGrid.Width.Pixels, ItemContainerGrid.Height.Pixels);
+        ItemContainerGrid.OnLeftMouseDown += (_, _) =>
+        {
+            if (!Main.mouseItem.IsAir && !Main.LocalPlayer.ItemAnimationActive && Container.MeetEntryCriteria(Main.mouseItem))
+            {
+                Container.PutInPackage(ref Main.mouseItem);
             }
         };
-        _grid.JoinParent(_mainPanel);
-
-        _mainPanel.SetInnerPixels(_grid.Width.Pixels, _grid.Bottom());
+        ItemContainerGrid.JoinParent(Window);
     }
-
-    /*public override void Draw(SpriteBatch spriteBatch)
-    {
-        base.Draw(spriteBatch);
-        PixelShader.DrawRoundRect(Main.MouseScreen, new Vector2(200, 100), new Vector4(10, 0, 10, 0),
-            UIColor.PanelBg, new Vector4(2, 3, 4, 5), UIColor.PanelBorder, 0f);
-    }*/
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        if (_mainPanel.IsMouseHovering)
+
+        if (Window.IsMouseHovering)
         {
             PlayerInput.LockVanillaMouseScroll("ImproveGame: Package GUI");
-            Main.LocalPlayer.mouseInterface = true;
         }
     }
 
-    public void Open(List<Item> items, string title, StorageType storageType, IItemContainer container)
+    public void Open(string title, IItemContainer container)
     {
-        StorageType = storageType;
+        Enabled = true;
+
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Main.playerInventory = true;
-        Visible = true;
-        _grid.SetInventory(items);
-        _grid.Scrollbar.BarTop = 0;
-        _title.Text = title;
-        _title.SetInnerPixels(_title.TextSize);
+        ItemContainerGrid.SetInventory(container.ItemContainer);
+        ItemContainerGrid.Scrollbar.BarTop = 0;
+        Title.TextOrKey = title;
+        Title.SetInnerPixels(Title.TextSize);
         Container = container;
         Recalculate();
     }
 
     public void Close()
     {
+        Enabled = false;
+
         SoundEngine.PlaySound(SoundID.MenuClose);
-        Visible = false;
     }
 
     public override bool CanSetFocusTarget(UIElement target)
     {
-        return target != this && _mainPanel.IsMouseHovering || _mainPanel.IsLeftMousePressed;
+        return target != this && Window.IsMouseHovering || Window.IsLeftMousePressed;
     }
 }

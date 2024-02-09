@@ -36,17 +36,21 @@ public class ControlCenterItem(string nameKey) : IComparable<ControlCenterItem>
             return -1;
         }
 
-        if (Priority == other.Priority)
+        return -Priority.CompareTo(other.Priority);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is ControlCenterItem cci && NameKey.Equals(cci.NameKey))
         {
-            return 0;
+            return true;
         }
-        else if (Priority > other.Priority)
-        {
-            return -1;
-        }
-        else
-        {
-            return 1;
-        }
+
+        return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return NameKey.GetHashCode();
     }
 }

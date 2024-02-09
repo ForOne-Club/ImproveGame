@@ -9,9 +9,13 @@ namespace ImproveGame.Content.Items;
 public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable
 {
     public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.BannerChest;
+
+    public Texture2D DefaultIcon => ModAsset.Banner.Value;
     public List<Item> ItemContainer { get; private set; } = [];
     public bool AutoStorage { get; set; }
     public bool AutoSort { get; set; }
+
+    public bool MeetEntryCriteria(Item item) => ItemToBanner(item) != -1;
 
     // 克隆内容不克隆引用
     public override ModItem Clone(Item newEntity)
@@ -25,10 +29,10 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
 
     public override void RightClick(Player player)
     {
-        if (ItemContainerGUI.Visible && ItemContainerGUI.StorageType == StorageType.Banners)
+        if (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this)
             ItemContainerGUI.Instace.Close();
         else
-            ItemContainerGUI.Instace.Open(ItemContainer, Item.Name, StorageType.Banners, this);
+            ItemContainerGUI.Instace.Open(Item.Name, this);
 
         //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
         //storedBanners.RemoveAt(storedBanners.Count - 1);
@@ -257,7 +261,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
     public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
     {
         // 决定文本显示的是“开启”还是“关闭”
-        string text = (ItemContainerGUI.Visible && ItemContainerGUI.StorageType is StorageType.Banners)
+        string text = (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this)
             ? GetTextWith("Tips.MouseMiddleClose", new { ItemName = Item.Name })
             : GetTextWith("Tips.MouseMiddleOpen", new { ItemName = Item.Name });
         tooltips.Add(new TooltipLine(Mod, "BannerChest", text) { OverrideColor = Color.LightGreen });

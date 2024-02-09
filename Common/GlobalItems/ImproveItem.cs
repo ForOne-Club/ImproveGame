@@ -208,7 +208,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         if (!UIConfigs.Instance.ShowMoreData)
             return;
 
-        tooltips.Add(new(Mod, "Total", "Total: " +
+        tooltips.Add(new(Mod, "TotalNumber", "TotalNumber: " +
             CurrentFrameProperties.ExistItems.GetTotalNumber(item.type)));
 
         tooltips.Add(new(Mod, "Rare", $"Rare: {item.rare}"));
@@ -218,7 +218,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
 
         if (item.shoot > ProjectileID.None)
         {
-            tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot));
+            tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot)); 
             tooltips.Add(new(Mod, "ShootSpeed", "ShootSpeed: " + item.shootSpeed));
         }
 
