@@ -1,6 +1,6 @@
 ﻿namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
 
-public class AddChestButton : ToolButtonBase
+public class AddChestButton : ToolButton
 {
     public override void OnTakeEffect()
     {

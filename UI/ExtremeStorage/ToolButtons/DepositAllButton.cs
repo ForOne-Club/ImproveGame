@@ -4,7 +4,7 @@ using ImproveGame.UIFramework;
 
 namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
 
-public class DepositAllButton : ToolButtonBase
+public class DepositAllButton : ToolButton
 {
     public override void OnTakeEffect()
     {

@@ -3,7 +3,7 @@ using ImproveGame.Packets.NetStorager;
 
 namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
 
-public class StackToStorageButton : ToolButtonBase
+public class StackToStorageButton : ToolButton
 {
     public override void OnTakeEffect()
     {

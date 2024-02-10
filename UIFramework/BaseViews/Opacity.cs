@@ -39,5 +39,11 @@ public class Opacity
             _parentValue = (_parent.Parent as View)?.Opacity?.Value ?? _value;
         }
     }
+
+    public static float operator *(Opacity opacity, float value) => opacity.Value * value;
+
+    public static Color operator *(Color value, Opacity opacity) => value * opacity.Value;
+
+    public static Color operator *(Opacity opacity, Color value) => value * opacity.Value;
 }
 

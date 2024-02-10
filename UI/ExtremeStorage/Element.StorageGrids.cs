@@ -1,4 +1,5 @@
 ﻿using ImproveGame.UI.ExtremeStorage.ToolButtons;
+using ImproveGame.UI.ExtremeStorage.ToolButtons.FilterButtons;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
@@ -11,6 +12,8 @@ public class StorageGrids : ModItemGrid
     public bool ScrollBarFilled => Scrollbar.InnerFilled;
     public string SearchContent => _searchBar.SearchContent ?? "";
     private float SearchBarHeight => _searchBar.Visible ? _searchBar.Height() + 6 : 0;
+    
+    internal static IEnumerable<FilterButton> FilterButtons = [];
 
     /// <summary> 缓存一个所有被使用的箱子的列表，用于物品栏检测是否可用 </summary>
     internal static HashSet<int> ChestsThatBeingUsedCache;
@@ -33,7 +36,7 @@ public class StorageGrids : ModItemGrid
             HideIfFilled = true
         };
         Scrollbar.JoinParent(this);
-        
+
         _contentSection = new View
         {
             Width = StyleDimension.FromPixels(ShowSize.X),
@@ -63,7 +66,7 @@ public class StorageGrids : ModItemGrid
         _toolSection.SetPadding(0f);
         _toolSection.JoinParent(_contentSection);
 
-        MakeSeparator();
+        _contentSection.MakeHorizontalSeparator(-12);
 
         ItemList = new ItemSlotList
         {
@@ -76,26 +79,6 @@ public class StorageGrids : ModItemGrid
         Height = new StyleDimension(0f, 1f);
 
         OnLeftMouseDown += (_, _) => AttemptStoppingUsingSearchbar();
-        return;
-
-        void MakeSeparator()
-        {
-            View separatorArea = new()
-            {
-                Height = new StyleDimension(10f, 0f),
-                Width = new StyleDimension(-12f, 1f),
-                HAlign = 0.5f,
-                DragIgnore = true,
-                RelativeMode = RelativeMode.Vertical,
-                Spacing = new Vector2(0, 6)
-            };
-            separatorArea.JoinParent(_contentSection);
-            separatorArea.Append(new UIHorizontalSeparator
-            {
-                Width = StyleDimension.FromPercent(1f),
-                Color = Color.Lerp(Color.White, new Color(63, 65, 151, 255), 0.85f) * 0.9f
-            });
-        }
     }
 
     public override void Update(GameTime gameTime)
@@ -208,12 +191,35 @@ public class StorageGrids : ModItemGrid
             default:
                 throw new ArgumentOutOfRangeException(nameof(group), group, null);
         }
+
+        AddFilterButtonForGroup(group);
     }
 
-    private void AddToolButton<T>() where T : ToolButtonBase
+    public bool CheckFiltersForItem(Item item)
+    {
+        var activatedButtons = FilterButtons.Where(filterButton => filterButton.Activated).ToList();
+        return activatedButtons.Count is 0 ||
+            // 只要有一个过了就行，这样多选的话就是并集
+            activatedButtons.Any(filterButton => filterButton.Filter(item));
+    }
+
+    private void AddFilterButtonForGroup(ItemGroup group)
+    {
+        if (!ToolHandler.TryGetFilterButtons(group, out var buttons))
+            return;
+        // 不要throw，因为有些组没有筛选器
+        // throw new InvalidOperationException($"FilterButtons for {group} is not registered.");
+
+        _toolSection.MakeVerticalSeparator(heightOffset: -2, spacing: 5);
+        FilterButtons = buttons;
+        foreach (var button in FilterButtons)
+            _toolSection.Append(button);
+    }
+
+    private void AddToolButton<T>() where T : ToolButton
     {
         if (!ToolHandler.TryGetButton<T>(out var button))
-            throw new InvalidOperationException($"ToolButtonBase {typeof(T).Name} is not registered.");
+            throw new InvalidOperationException($"ToolButton {typeof(T).Name} is not registered.");
         _toolSection.Append(button);
     }
 

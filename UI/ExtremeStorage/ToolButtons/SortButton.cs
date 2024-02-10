@@ -3,7 +3,7 @@ using ImproveGame.UIFramework;
 
 namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
 
-public class SortButton : ToolButtonBase
+public class SortButton : ToolButton
 {
     public override void OnTakeEffect() => ToolOperation.Send(ToolOperation.OperationType.SortStorage);
 

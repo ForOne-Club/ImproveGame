@@ -45,9 +45,13 @@ public class GroupTab : View
         var dimensions = GetDimensions();
         var pos = dimensions.Position();
         var center = dimensions.Center() - new Vector2(0f, 4f);
-        var groupTexture = UIConfigs.Instance.ThemeType is ThemeType.Stormdark ? ModAsset.Icons_Stormdark : ModAsset.Icons_Regular;
+        var groupTexture = UIConfigs.Instance.ThemeType is ThemeType.Stormdark
+            ? ModAsset.Icons_Stormdark
+            : ModAsset.Icons_Regular;
+        bool groupSelected = ExtremeStorageGUI.CurrentGroup == _group;
+        var iconColor = Color.White * (groupSelected ? 1f : 0.5f);
         spriteBatch.Draw(position: pos, texture: _tabTexture.Value, sourceRectangle: _tabFrame, color: Color.White);
-        spriteBatch.Draw(groupTexture.Value, center, _groupFrame, Color.White, 0f, _groupFrame.Size() / 2f, 1f,
+        spriteBatch.Draw(groupTexture.Value, center, _groupFrame, iconColor, 0f, _groupFrame.Size() / 2f, 1f,
             SpriteEffects.None, 0f);
 
         if (IsMouseHovering)

@@ -4,7 +4,7 @@ using ImproveGame.UIFramework;
 
 namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
 
-public class StackToInventoryButton : ToolButtonBase
+public class StackToInventoryButton : ToolButton
 {
     public override void OnTakeEffect()
     {

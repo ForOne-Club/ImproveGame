@@ -92,6 +92,8 @@ PlayerStats: {
 ExtremeStorage: {
 	AddChest: Add Chest
 	RejectNearbyStack: Failed to stack to nearby chests, because another player is using a nearby Storage Manager
+	CloseCraftingWindow: Close Crafting Window
+	OpenCraftingWindow: Open Crafting Window
 
 	CountForCrafting: {
 		Label: Count for Crafting
@@ -162,6 +164,22 @@ ExtremeStorage: {
 		Misc: "{$CreativePowers.TabMisc}"
 		Setting: "{$LegacyMenu.14}"
 		Everything: Everything
+	}
+
+	// 筛选器的文本
+	Weapon: {
+		Melee: 近战
+		Ranged: 远程
+		Magic: 魔法
+		Summon: 召唤
+		Other: 其他
+	}
+
+	Tool: {
+		Pickaxe: 镐
+		Axe: 斧
+		Hammer: 锤
+		Hook: 钩爪
 	}
 }
 

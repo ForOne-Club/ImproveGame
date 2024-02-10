@@ -4,17 +4,19 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
 
-public abstract class ToolButtonBase : View
+public abstract class ToolButton : View
 {
     protected static Asset<Texture2D> ToolIcons => ModAsset.ToolIcons;
     protected const int FrameVertically = 7;
+    protected new float Opacity;
 
-    public ToolButtonBase()
+    public ToolButton()
     {
         SetSizePixels(30f, 30f);
         RelativeMode = RelativeMode.Horizontal;
         VAlign = 0.5f;
         Spacing = new Vector2(2f, 0f);
+        Opacity = 1f;
     }
 
     public virtual Rectangle? SourceRectangle => null;
@@ -32,7 +34,8 @@ public abstract class ToolButtonBase : View
 
         var dimensions = GetDimensions();
         var pos = dimensions.Position();
-        spriteBatch.Draw(position: pos, texture: Texture, sourceRectangle: SourceRectangle, color: Color.White);
+        var color = Color.White * Opacity;
+        spriteBatch.Draw(Texture, pos, SourceRectangle, color);
 
         if (IsMouseHovering)
             UICommon.TooltipMouseText(HoverText);

@@ -4,7 +4,7 @@ using ImproveGame.UIFramework;
 namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
 
 [Obsolete("使用率较低，容易误触")]
-public class LootAllButton : ToolButtonBase
+public class LootAllButton : ToolButton
 {
     public override void OnTakeEffect() => ToolOperation.Send(ToolOperation.OperationType.LootAll);
 

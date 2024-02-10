@@ -165,7 +165,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
 
         // 应用动画，改变面板大小
         float maxPanelHeight = screenHeightZoomed - Main.instance.invBottom - 80;
-        float panelHeight = MathHelper.Lerp(200, maxPanelHeight, _foldTimer.Schedule);
+        float panelHeight = MathHelper.Lerp(230, maxPanelHeight, _foldTimer.Schedule);
         float panelWidth = MathHelper.Lerp(560f, 588f, _scrollBarTimer.Schedule);
         _totalPanel.SetSize(panelWidth, panelHeight);
         float panelLeft = MathHelper.Lerp(60, 20, _foldTimer.Schedule);
@@ -215,7 +215,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         var screenDimensions = GetDimensions();
         int screenHeightZoomed = (int)screenDimensions.Height;
         float maxPanelHeight = screenHeightZoomed - Main.instance.invBottom - 80;
-        float panelHeight = MathHelper.Lerp(200, maxPanelHeight, _foldTimer.Schedule);
+        float panelHeight = MathHelper.Lerp(230, maxPanelHeight, _foldTimer.Schedule);
         float panelWidth = MathHelper.Lerp(560f, 588f, _scrollBarTimer.Schedule);
         _totalPanel.SetSize(panelWidth, panelHeight);
 
@@ -334,6 +334,8 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         {
             var item = chestItems[k];
             if (!StorageHelper.CheckFromFilter(item, CurrentGroup))
+                continue;
+            if (!_itemGrid.CheckFiltersForItem(item))
                 continue;
             if (!checkAll(item, checkList))
                 continue;

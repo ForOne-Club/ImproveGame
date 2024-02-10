@@ -92,6 +92,8 @@ PlayerStats: {
 ExtremeStorage: {
 	AddChest: 添加箱子
 	RejectNearbyStack: 附近有玩家在使用储存管理器，无法快速堆叠到附近箱子
+	CloseCraftingWindow: 关闭合成窗口
+	OpenCraftingWindow: 打开合成窗口
 
 	CountForCrafting: {
 		Label: 物品参与合成
@@ -160,6 +162,22 @@ ExtremeStorage: {
 		// Misc: "{$CreativePowers.TabMisc}"
 		// Setting: "{$LegacyMenu.14}"
 		Everything: 全部
+	}
+
+	// 筛选器的文本
+	Weapon: {
+		Melee: 近战
+		Ranged: 远程
+		Magic: 魔法
+		Summon: 召唤
+		Other: 其他
+	}
+
+	Tool: {
+		Pickaxe: 镐
+		Axe: 斧
+		Hammer: 锤
+		Hook: 钩爪
 	}
 }
 
