@@ -23,10 +23,43 @@ public static class ToolHandler
         RegisterFilterButton<MagicFilter>(ItemGroup.Weapon);
         RegisterFilterButton<SummonFilter>(ItemGroup.Weapon);
         RegisterFilterButton<OtherDamageFilter>(ItemGroup.Weapon);
+        
         RegisterFilterButton<PickaxeFilter>(ItemGroup.Tool);
         RegisterFilterButton<AxeFilter>(ItemGroup.Tool);
         RegisterFilterButton<HammerFilter>(ItemGroup.Tool);
         RegisterFilterButton<HookFilter>(ItemGroup.Tool);
+        RegisterFilterButton<WiringFilter>(ItemGroup.Tool);
+        RegisterFilterButton<FishingPoleFilter>(ItemGroup.Tool);
+        RegisterFilterButton<OtherToolFilter>(ItemGroup.Tool);
+        
+        RegisterFilterButton<ArrowFilter>(ItemGroup.Ammo);
+        RegisterFilterButton<BulletFilter>(ItemGroup.Ammo);
+        RegisterFilterButton<RocketFilter>(ItemGroup.Ammo);
+        RegisterFilterButton<DartFilter>(ItemGroup.Ammo);
+        RegisterFilterButton<OtherAmmoFilter>(ItemGroup.Ammo);
+        
+        RegisterFilterButton<HeadgearFilter>(ItemGroup.Armor);
+        RegisterFilterButton<TorsoFilter>(ItemGroup.Armor);
+        RegisterFilterButton<PantsFilter>(ItemGroup.Armor);
+        RegisterFilterButton<VanityArmorFilter>(ItemGroup.Armor);
+        
+        RegisterFilterButton<BootFilter>(ItemGroup.Accessory);
+        RegisterFilterButton<WingFilter>(ItemGroup.Accessory);
+        RegisterFilterButton<ShieldFilter>(ItemGroup.Accessory);
+        RegisterFilterButton<OtherAccessoryFilter>(ItemGroup.Accessory);
+        RegisterFilterButton<VanityAccessoryFilter>(ItemGroup.Accessory);
+        
+        RegisterFilterButton<SolidFilter>(ItemGroup.Block);
+        RegisterFilterButton<WallFilter>(ItemGroup.Block);
+        RegisterFilterButton<PlatformFilter>(ItemGroup.Block);
+        RegisterFilterButton<OtherTileFilter>(ItemGroup.Block);
+        
+        RegisterFilterButton<HerbFilter>(ItemGroup.Misc);
+        RegisterFilterButton<SummonItemFilter>(ItemGroup.Misc);
+        RegisterFilterButton<PetFilter>(ItemGroup.Misc);
+        RegisterFilterButton<MountFilter>(ItemGroup.Misc);
+        RegisterFilterButton<MaterialFilter>(ItemGroup.Misc);
+        RegisterFilterButton<OtherMiscFilter>(ItemGroup.Misc);
     }
 
     public static bool TryGetFilterButtons(ItemGroup group, out IEnumerable<FilterButton> buttons)

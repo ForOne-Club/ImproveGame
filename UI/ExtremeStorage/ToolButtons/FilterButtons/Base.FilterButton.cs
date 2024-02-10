@@ -20,28 +20,8 @@ public abstract class FilterButton : ToolButton
 
     public sealed override string HoverText => GetText($"UI.ExtremeStorage.{Group}.{LocalizationKey}");
 
-    public override Rectangle? SourceRectangle
-    {
-        get
-        {
-            int frameY = Group switch
-            {
-                ItemGroup.Weapon => 0,
-                ItemGroup.Tool => 2,
-                ItemGroup.Ammo => 4,
-                ItemGroup.Armor => 6,
-                ItemGroup.Accessory => 8,
-                ItemGroup.Block => 10,
-                ItemGroup.Misc => 12,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            if (IsMouseHovering)
-                frameY++;
-
-            return Texture.Frame(5, 4, IconIndex, frameY);
-        }
-    }
+    // 这玩意没用，重写了DrawSelf
+    public sealed override Rectangle? SourceRectangle => null;
 
     public sealed override void OnTakeEffect()
     {
@@ -79,9 +59,10 @@ public abstract class FilterButton : ToolButton
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        const int verticalFrames = 4; // 14
-        var iconRectangle = Texture.Frame(5, verticalFrames, IconIndex, frameY);
-        var overlayRectangle = Texture.Frame(5, verticalFrames, IconIndex, frameY + 1);
+        const int horizontalFrames = 7;
+        const int verticalFrames = 14;
+        var iconRectangle = Texture.Frame(horizontalFrames, verticalFrames, IconIndex, frameY);
+        var overlayRectangle = Texture.Frame(horizontalFrames, verticalFrames, IconIndex, frameY + 1);
 
         var dimensions = GetDimensions();
         var pos = dimensions.Position();

@@ -31,3 +31,27 @@ public class HookFilter : FilterButton
 
     public override bool Filter(Item item) => item.IsHook();
 }
+
+public class WiringFilter : FilterButton
+{
+    protected override int IconIndex => 4;
+    protected override string LocalizationKey => "Wiring";
+
+    public override bool Filter(Item item) => item.IsWiringTool();
+}
+
+public class FishingPoleFilter : FilterButton
+{
+    protected override int IconIndex => 5;
+    protected override string LocalizationKey => "FishingPole";
+
+    public override bool Filter(Item item) => item.fishingPole > 0;
+}
+
+public class OtherToolFilter : FilterButton
+{
+    protected override int IconIndex => 6;
+    protected override string LocalizationKey => "Other";
+
+    public override bool Filter(Item item) => item.IsOtherTool();
+}

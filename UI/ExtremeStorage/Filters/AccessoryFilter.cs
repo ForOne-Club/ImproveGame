@@ -2,5 +2,5 @@
 
 public class AccessoryFilter : Filter
 {
-    protected override bool ShouldInclude(Item item) => item.accessory;
+    protected override bool ShouldInclude(Item item) => item.IsAccessory();
 }

@@ -4,6 +4,5 @@ namespace ImproveGame.UI.ExtremeStorage.Filters;
 
 public class AmmoFilter : Filter
 {
-    protected override bool ShouldInclude(Item item) =>
-        item.ammo != AmmoID.None && !item.notAmmo;
+    protected override bool ShouldInclude(Item item) => item.IsAmmo();
 }
