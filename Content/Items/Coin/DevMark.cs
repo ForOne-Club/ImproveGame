@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Content.Items.Coin;
+﻿using Terraria.ID;
+
+namespace ImproveGame.Content.Items.Coin;
 
 public class DevMark : ModItem
 {
@@ -100,5 +102,109 @@ public class Expelliarmus : ModItem
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type,ref int damage, ref float knockback)
     {
         position = Main.MouseWorld;
+    }
+}
+
+public class ShimmerTech : ModItem
+{
+    public override string Texture => $"Terraria/Images/Item_{ItemID.GoblinTech}";
+
+    public override bool IsLoadingEnabled(Mod mod) => true;
+
+    public override void SetStaticDefaults()
+    {
+        Item.ResearchUnlockCount = 0;
+    }
+
+    public override void SetDefaults()
+    {
+        Item.width = 24;
+        Item.height = 28;
+        Item.rare = ItemRarityID.Pink;
+        Item.useStyle = ItemUseStyleID.HoldUp;
+        Item.useAnimation = Item.useTime = 45;
+        Item.UseSound = SoundID.Item92;
+    }
+
+    public override bool AltFunctionUse(Player player) => true;
+
+    public override bool? UseItem(Player player)
+    {
+        if (player.altFunctionUse == 0)
+        {
+            player.usedAegisCrystal = false;
+            player.usedArcaneCrystal = false;
+            player.usedAegisFruit = false;
+            player.usedAmbrosia = false;
+            player.usedGummyWorm = false;
+            player.usedGalaxyPearl = false;
+            NetMessage.SendData(MessageID.SyncPlayer, -1, -1, null, player.whoAmI);
+        }
+        else
+        {
+            NPC.peddlersSatchelWasUsed = false;
+            NPC.combatBookVolumeTwoWasUsed = false;
+            NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, -17f);
+            NetMessage.SendData(MessageID.SpawnBossUseLicenseStartEvent, -1, -1, null, player.whoAmI, -18f);
+        }
+
+        return null;
+    }
+
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        Player player = Main.LocalPlayer;
+        for (int i = 0; i < tooltips.Count; i++)
+        {
+            TooltipLine tip = tooltips[i];
+
+            if (tip.Text == Language.GetTextValue("ItemName.AegisCrystal"))
+            {
+                if (player.usedAegisCrystal) tip.OverrideColor = Color.Green;
+                else tip.OverrideColor = Color.Red;
+            }
+
+            if (tip.Text == Language.GetTextValue("ItemName.ArcaneCrystal"))
+            {
+                if (player.usedArcaneCrystal) tip.OverrideColor = Color.Green;
+                else tip.OverrideColor = Color.Red;
+            }
+
+            if (tip.Text == Language.GetTextValue("ItemName.AegisFruit"))
+            {
+                if (player.usedAegisFruit) tip.OverrideColor = Color.Green;
+                else tip.OverrideColor = Color.Red;
+            }
+
+            if (tip.Text == Language.GetTextValue("ItemName.Ambrosia"))
+            {
+                if (player.usedAmbrosia) tip.OverrideColor = Color.Green;
+                else tip.OverrideColor = Color.Red;
+            }
+
+            if (tip.Text == Language.GetTextValue("ItemName.GummyWorm"))
+            {
+                if (player.usedGummyWorm) tip.OverrideColor = Color.Green;
+                else tip.OverrideColor = Color.Red;
+            }
+
+            if (tip.Text == Language.GetTextValue("ItemName.GalaxyPearl"))
+            {
+                if (player.usedGalaxyPearl) tip.OverrideColor = Color.Green;
+                else tip.OverrideColor = Color.Red;
+            }
+
+            if (tip.Text == Language.GetTextValue("ItemName.CombatBookVolumeTwo"))
+            {
+                if (NPC.peddlersSatchelWasUsed) tip.OverrideColor = Color.Green;
+                else tip.OverrideColor = Color.Red;
+            }
+
+            if (tip.Text == Language.GetTextValue("ItemName.PeddlersSatchel"))
+            {
+                if (NPC.combatBookVolumeTwoWasUsed) tip.OverrideColor = Color.Green;
+                else tip.OverrideColor = Color.Red;
+            }
+        }
     }
 }
