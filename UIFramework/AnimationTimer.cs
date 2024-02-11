@@ -2,7 +2,7 @@
 
 public enum AnimationState : byte // 动画当前的状态
 {
-    Default, Opening, Closing, CompleteOpen, CompleteClose
+    None, Opening, Closing, Opened, Closed
 }
 
 public enum AnimationType : byte
@@ -12,12 +12,16 @@ public enum AnimationType : byte
 }
 
 // 动画计时器
-public class AnimationTimer
+/// <summary>
+/// 它的 <see cref="TimerMax"/> = 100f <br/>
+/// 它的 <see cref="Type"/> = AnimationType.Nonlinear <br/>
+/// </summary>
+public class AnimationTimer(float speed = 5f, float timerMax = 100f)
 {
     /// <summary>
     /// 缓动系数 / 增量 / 速度
     /// </summary>
-    public float Speed;
+    public float Speed = speed;
 
     /// <summary>
     /// 当前位置
@@ -27,7 +31,7 @@ public class AnimationTimer
     /// <summary>
     /// 最大位置
     /// </summary>
-    public float TimerMax;
+    public float TimerMax = timerMax;
 
     /// <summary>
     /// 进度
@@ -44,29 +48,18 @@ public class AnimationTimer
         }
     }
 
-    public AnimationType Type;
+    public AnimationType Type = AnimationType.Easing;
     public AnimationState State;
     public Action OnOpened;
     public Action OnClosed;
 
+    public bool None => State == AnimationState.None;
     public bool Opening => State == AnimationState.Opening;
     public bool Closing => State == AnimationState.Closing;
-    public bool CompleteOpen => State == AnimationState.CompleteOpen;
-    public bool CompleteClose => State == AnimationState.CompleteClose;
-    public bool Default => State == AnimationState.Default;
-    public bool AnyOpen => State is AnimationState.Opening or AnimationState.CompleteOpen;
-    public bool AnyClose => State is AnimationState.Closing or AnimationState.CompleteClose;
-
-    /// <summary>
-    /// 它的 <see cref="TimerMax"/> = 100f <br/>
-    /// 它的 <see cref="Type"/> = AnimationType.Nonlinear <br/>
-    /// </summary>
-    public AnimationTimer(float speed = 5f, float timerMax = 100f)
-    {
-        Speed = speed;
-        TimerMax = timerMax;
-        Type = AnimationType.Easing;
-    }
+    public bool Opened => State == AnimationState.Opened;
+    public bool Closed => State == AnimationState.Closed;
+    public bool AnyOpen => State is AnimationState.Opening or AnimationState.Opened;
+    public bool AnyClose => State is AnimationState.Closing or AnimationState.Closed;
 
     /// <summary>
     /// 开启
@@ -123,7 +116,7 @@ public class AnimationTimer
                     if (TimerMax - Timer < 0f)
                     {
                         Timer = TimerMax;
-                        State = AnimationState.CompleteOpen;
+                        State = AnimationState.Opened;
                         OnOpened?.Invoke();
                     }
                 }
@@ -142,7 +135,7 @@ public class AnimationTimer
                     if (Timer < 0f)
                     {
                         Timer = 0;
-                        State = AnimationState.CompleteClose;
+                        State = AnimationState.Closed;
                         OnClosed?.Invoke();
                     }
                 }
@@ -163,5 +156,15 @@ public class AnimationTimer
     public float Lerp(float value1, float value2)
     {
         return value1 + (value2 - value1) * Schedule;
+    }
+
+    public static Vector2 operator *(AnimationTimer timer, Vector2 vector2)
+    {
+        return vector2 * timer.Schedule;
+    }
+
+    public static Vector2 operator *(Vector2 vector2, AnimationTimer timer)
+    {
+        return vector2 * timer.Schedule;
     }
 }

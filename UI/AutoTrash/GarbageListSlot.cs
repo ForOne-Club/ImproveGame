@@ -8,30 +8,27 @@ namespace ImproveGame.UI.AutoTrash;
 /// </summary>
 public class GarbageListSlot : BaseItemSlot
 {
+    public static Texture2D TrashTexture => ModAsset.TakeOutFromTrash.Value;
+
     /// <summary>
     /// 垃圾列表
     /// </summary>
     public readonly List<Item> Garbages;
     public readonly int Index;
-    public override Item Item
-    {
-        get
-        {
-            return Garbages.IndexInRange(Index) ? Garbages[Index] : AirItem;
-        }
-    }
-
-    public Texture2D TrashTexture { get; protected set; }
+    public override Item Item => (Index > 0 && Index < Garbages.Count) ? Garbages[Index] : AirItem;
 
     public GarbageListSlot(List<Item> items, int index)
     {
+        HoverTimer.Close();
+
         Garbages = items;
         Index = index;
+
         SetBaseItemSlotValues(true, false);
-        SetSizePixels(44, 44);
+        SetSizePixels(44f, 44f);
+
         ItemIconMaxWidthAndHeight = 32f;
         ItemIconScale = 0.85f;
-        TrashTexture = ModAsset.TakeOutFromTrash.Value;
 
         HoverTimer.Close();
     }

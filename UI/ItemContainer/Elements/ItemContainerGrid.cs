@@ -1,22 +1,28 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
+using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.ItemContainer.Elements;
 
-public class ItemContainerGrid : ScrollView
+public class ItemContainerGrid : SUIScrollView2
 {
+    public static int HNumber => 6;
+
     public List<Item> Items;
 
-    public ItemContainerGrid()
+    public ItemContainerGrid() : base(ScrollType.Vertical)
     {
-        ListView.SetInnerPixels(new Vector2(GridSize(52f, 8f, 5)));
+        IsAdaptiveWidth = true;
+        OverflowHiddenView.IsAdaptiveWidth = true;
+        AdaptiveView.IsAdaptiveWidth = true;
+        /*ListView.SetInnerPixels(new Vector2(GridSize(52f, 4f, 5)));
 
         Scrollbar.HAlign = 1f;
         Scrollbar.Left.Pixels = -1;
         Scrollbar.SetSizePixels(16, ListView.Height.Pixels);
         Scrollbar.SetPadding(4);
 
-        SetInnerPixels(ListView.Width.Pixels + Scrollbar.Width.Pixels + 9, ListView.Height.Pixels + 1);
+        SetInnerPixels(ListView.Width.Pixels + Scrollbar.Width.Pixels + 9, ListView.Height.Pixels + 1);*/
     }
 
     public override void Update(GameTime gameTime)
@@ -34,7 +40,7 @@ public class ItemContainerGrid : ScrollView
             Items.RemoveAt(i--);
         }
 
-        if (ListView.Children.Count() != RequiredChildrenCount(Items.Count))
+        if (AdaptiveView.Children.Count() != GetSlotNumber(Items.Count))
         {
             SetInventory(Items);
         }
@@ -45,52 +51,43 @@ public class ItemContainerGrid : ScrollView
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        if (Math.Abs(-Scrollbar.BarTop - ListView.Top.Pixels) > 0.000000001f)
+        /*if (Math.Abs(-Scrollbar.BarTop - ListView.Top.Pixels) > 0.000000001f)
         {
             ListView.Top.Pixels = -Scrollbar.BarTop;
             ListView.Recalculate();
-        }
+        }*/
 
         base.DrawSelf(spriteBatch);
     }
 
-    private static int RequiredChildrenCount(int length)
-    {
-        if (length < 25)
-        {
-            length = 25;
-        }
-        else
-        {
-            length += 5 - length % 5;
-        }
-
-        return length;
-    }
+    public static int GetSlotNumber(int count) => Math.Max(HNumber * 6, count - count % HNumber + HNumber * 2);
 
     public void SetInventory(List<Item> items)
     {
         Items = items;
-        ListView.RemoveAllChildren();
+        AdaptiveView.RemoveAllChildren();
 
-        int length = RequiredChildrenCount(items.Count);
+        int length = GetSlotNumber(Items.Count);
         for (int i = 0; i < length; i++)
         {
-            var itemSlot = new ItemContainerItemSlot(items, i);
+            var itemSlot = new ItemContainerItemSlot(items, i)
+            {
+                Spacing = new Vector2(4),
+                RelativeMode = RelativeMode.Horizontal,
+                Rounded = new Vector4(12f),
+                BgColor = UIStyle.ItemSlotBg,
+                Border = 2f,
+                BorderColor = UIStyle.ItemSlotBorder
+            };
 
-            itemSlot.SetSizePixels(52f, 52f);
-            itemSlot.PreventOverflow = true;
-            itemSlot.Spacing = new Vector2(8);
-            itemSlot.RelativeMode = RelativeMode.Horizontal;
-            itemSlot.Rounded = new Vector4(12f);
-            itemSlot.BgColor = UIStyle.ItemSlotBg;
-            itemSlot.Border = 2f;
-            itemSlot.BorderColor = UIStyle.ItemSlotBorder;
+            if (i % HNumber == 0)
+                itemSlot.DirectLineBreak = true;
 
-            itemSlot.JoinParent(ListView);
+            itemSlot.JoinParent(AdaptiveView);
         }
 
-        ListView.SetInnerPixels(GridSize(52f, 8f, 5, length / 5));
-        Scrollbar.SetView(GetInnerDimensions().Height, ListView.Height.Pixels + 1);
+        Recalculate();
+        // ListView.SetInnerPixels(GridSize(52f, 8f, 5, length / 5));
+        // Scrollbar.SetView(GetInnerDimensions().Height, ListView.Height.Pixels + 1);
     }
 }

@@ -116,7 +116,7 @@ public class View : UIElement
         if (IsAdaptiveWidth || IsAdaptiveHeight)
         {
             Vector2 minPos = GetInnerDimensions().Position();
-            Vector2 maxPos = GetInnerDimensions().Position();
+            Vector2 maxPos = minPos;
 
             foreach (UIElement child in Children)
             {
@@ -135,14 +135,14 @@ public class View : UIElement
 
             if (IsAdaptiveWidth)
             {
-                Width = default;
+                Width.Percent = 0f;
                 Width.Pixels = MathF.Round(maxPos.X - minPos.X, 2) + HPadding;
                 MaxWidth = Width;
             }
 
             if (IsAdaptiveHeight)
             {
-                Height = default;
+                Height.Percent = 0f;
                 Height.Pixels = MathF.Round(maxPos.Y - minPos.Y, 2) + VPadding;
                 MaxHeight = Height;
             }
@@ -162,14 +162,14 @@ public class View : UIElement
         CalculatedStyle parentDimensions =
             Parent?.GetInnerDimensions() ?? UserInterface.ActiveInstance.GetDimensions();
 
-        View view = Parent as View;
+        View parent = Parent as View;
 
-        if (Parent is UIList || (view?.IsAdaptiveWidth ?? false))
+        if (Parent is UIList || (parent?.IsAdaptiveWidth ?? false))
         {
             MaxWidth = new StyleDimension(float.MaxValue, 0f);
         }
 
-        if (Parent is UIList || (view?.IsAdaptiveHeight ?? false))
+        if (Parent is UIList || (parent?.IsAdaptiveHeight ?? false))
         {
             MaxHeight = new StyleDimension(float.MaxValue, 0f);
         }

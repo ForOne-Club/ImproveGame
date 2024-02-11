@@ -23,8 +23,8 @@ public class SUIScrollbar2 : TimerView
     public Vector2 OriginalScrollPosition;
     public Vector2 PreviousTargetScrollPosition;
 
-    public Color BarColor = Color.Black * 0.6f;
-    public Color BarHoverColor = Color.Black * 0.7f;
+    public Color BarColor = Color.Black * 0.4f;
+    public Color BarHoverColor = Color.Black * 0.5f;
 
     public bool IsBarSizeLimited = true;
 

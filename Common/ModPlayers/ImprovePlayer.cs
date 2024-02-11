@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
+using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Projectiles;
 using ImproveGame.Core;
 using ImproveGame.UI;

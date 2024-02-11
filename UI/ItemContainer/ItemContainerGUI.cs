@@ -10,6 +10,7 @@ namespace ImproveGame.UI.ItemContainer;
 [AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Item Container GUI")]
 public class ItemContainerGUI : BaseBody
 {
+    #region Base
     public static ItemContainerGUI Instace { get; private set; }
     public ItemContainerGUI() => Instace = this;
 
@@ -24,56 +25,52 @@ public class ItemContainerGUI : BaseBody
         set => _enabled = value;
     }
     private static bool _enabled;
+    #endregion
 
-    public IItemContainer Container;
+    public IItemContainer Container { get; private set; }
 
+    // 窗口
     public SUIPanel Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
     {
-        HAlign = 0.5f,
-        VAlign = 0.5f,
         Shaded = true,
         Draggable = true,
         FinallyDrawBorder = true,
-        IsAdaptiveWidth = true,
-        IsAdaptiveHeight = true,
+        HAlign = 0.5f, VAlign = 0.5f,
+        IsAdaptiveWidth = true, IsAdaptiveHeight = true,
     };
 
     // 标题
-    public readonly View TitlePanel = ViewHelper.CreateHead(UIStyle.TitleBg2, 50f, 12f);
+    public readonly View TitlePanel = ViewHelper.CreateHead(UIStyle.TitleBg2, 45f, 12f);
     public readonly SUIText Title = new SUIText
     {
+        DragIgnore = true,
         IsLarge = true,
         TextScale = 0.5f,
         TextAlign = new Vector2(0, 0.5f),
-        DragIgnore = true,
     };
-    public readonly SUICross CloseButton = new SUICross
+    public readonly SUICross Cross = new SUICross
     {
-        HAlign = 1f,
-        VAlign = 0.5f,
+        HAlign = 1f, VAlign = 0.5f,
         Rounded = new Vector4(0f, 12f, 0f, 0f),
-        CrossSize = 24f,
-        CrossRounded = 4.5f * 0.95f,
-        Border = 1.5f,
-        BorderColor = Color.Transparent,
+        CrossSize = 22f, CrossRounded = 4.5f * 0.85f,
         BgColor = Color.Transparent,
+        Border = 0f, BorderColor = Color.Transparent,
     };
 
     // 开关按钮
-    public readonly View SwitchPanel = new View
+    public readonly View SwitchView = new View
     {
         RelativeMode = RelativeMode.Vertical,
-        Spacing = new Vector2(4f),
+        Spacing = new Vector2(6f),
         IsAdaptiveWidth = true,
-        IsAdaptiveHeight = true,
-        PaddingLeft = 10f,
+        Height = new StyleDimension(20f, 0f),
+        PaddingLeft = 12f,
     };
-    public SUISwitch AutoStorageSwitch, AutoSortSwitch;
 
     public readonly ItemContainerGrid ItemContainerGrid = new ItemContainerGrid
     {
         RelativeMode = RelativeMode.Vertical,
-        Spacing = new Vector2(4),
+        Spacing = new Vector2(6f),
     };
 
     public override void OnInitialize()
@@ -90,42 +87,67 @@ public class ItemContainerGUI : BaseBody
         Title.Width.Pixels = 200f;
         Title.JoinParent(TitlePanel);
 
-        CloseButton.CrossOffset += Vector2.One;
-        CloseButton.Width.Pixels = 55f;
-        CloseButton.Height.Set(0f, 1f);
-        CloseButton.OnUpdate += (_) =>
+        Cross.CrossOffset += Vector2.One;
+        Cross.Width.Pixels = 50f;
+        Cross.Height.Set(0f, 1f);
+        Cross.OnUpdate += (_) =>
         {
-            CloseButton.BgColor = CloseButton.HoverTimer.Lerp(Color.Transparent, Color.Black * 0.25f);
+            Cross.BgColor = Cross.HoverTimer.Lerp(Color.Transparent, Color.Black * 0.25f);
         };
-        CloseButton.OnLeftMouseDown += (_, _) => Close();
-        CloseButton.JoinParent(TitlePanel);
+        Cross.OnLeftMouseDown += (_, _) => Close();
+        Cross.JoinParent(TitlePanel);
         #endregion
 
-        SwitchPanel.JoinParent(Window);
-        AutoStorageSwitch =
-            new SUISwitch(() => Container.AutoStorage, state => Container.AutoStorage = state, GetText("PackageGUI.AutoStorage"), 0.8f)
-            {
-                RelativeMode = RelativeMode.Horizontal, Spacing = new Vector2(8),
-            };
-        AutoStorageSwitch.JoinParent(SwitchPanel);
+        #region Switch
+        SwitchView.JoinParent(Window);
 
-        AutoSortSwitch =
-            new SUISwitch(() => Container.AutoSort, state => Container.AutoSort = state, GetText("PackageGUI.AutoSort"), 0.8f)
-            {
-                RelativeMode = RelativeMode.Horizontal, Spacing = new Vector2(8),
-            };
-        AutoSortSwitch.JoinParent(SwitchPanel);
+        View view = SUIToggleSwitch.CreateTextSwitch(out var toggleSwitch, out var text);
+        view.VAlign = 0.5f;
+        view.IsAdaptiveWidth = view.IsAdaptiveHeight = true;
+        view.RelativeMode = RelativeMode.Horizontal;
+        view.Spacing = new Vector2(4);
 
-        ItemContainerGrid.SetPadding(10f, 0f, 9f, 9f).SetInnerPixels(ItemContainerGrid.Width.Pixels, ItemContainerGrid.Height.Pixels);
+        toggleSwitch.Status += () => Container.AutoStorage;
+        toggleSwitch.Switch += () => Container.AutoStorage = !Container.AutoStorage;
+        toggleSwitch.Rounded = new Vector4(10f);
+        toggleSwitch.SetSizePixels(32f, 20f);
+
+        text.TextScale = 0.8f;
+        text.TextOrKey = GetText("PackageGUI.AutoStorage");
+        text.SetSizePixels(text.TextSize * text.TextScale);
+        view.JoinParent(SwitchView);
+
+        View view2 = SUIToggleSwitch.CreateTextSwitch(out var toggleSwitch2, out var text2);
+        view2.VAlign = 0.5f;
+        view2.IsAdaptiveWidth = view2.IsAdaptiveHeight = true;
+        view2.RelativeMode = RelativeMode.Horizontal;
+        view2.Spacing = new Vector2(8);
+
+        toggleSwitch2.Status += () => Container.AutoSort;
+        toggleSwitch2.Switch += () => Container.AutoSort = !Container.AutoSort;
+        toggleSwitch2.Rounded = new Vector4(10f);
+        toggleSwitch2.SetSizePixels(32f, 20f);
+
+        text2.TextScale = 0.8f;
+        text2.TextOrKey = GetText("PackageGUI.AutoSort");
+        text2.SetSizePixels(text2.TextSize * text2.TextScale);
+        view2.JoinParent(SwitchView);
+        #endregion
+
+        ItemContainerGrid.SetPadding(8f);
+        ItemContainerGrid.PaddingTop = 0f;
+        ItemContainerGrid.SetSizePixels(0, 220f);
         ItemContainerGrid.OnLeftMouseDown += (_, _) =>
         {
             if (!Main.mouseItem.IsAir && !Main.LocalPlayer.ItemAnimationActive && Container.MeetEntryCriteria(Main.mouseItem))
             {
-                Container.PutInPackage(ref Main.mouseItem);
+                Container.ItemIntoContainer(Main.mouseItem);
             }
         };
         ItemContainerGrid.JoinParent(Window);
     }
+
+    public bool Ya;
 
     public override void Update(GameTime gameTime)
     {
@@ -144,7 +166,6 @@ public class ItemContainerGUI : BaseBody
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Main.playerInventory = true;
         ItemContainerGrid.SetInventory(container.ItemContainer);
-        ItemContainerGrid.Scrollbar.BarTop = 0;
         Title.TextOrKey = title;
         Title.SetInnerPixels(Title.TextSize);
         Container = container;

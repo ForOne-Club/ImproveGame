@@ -1,4 +1,4 @@
-﻿using ImproveGame.Content.Items;
+﻿using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
 using ImproveGame.UIFramework.ExtremeStorage;
 using Terraria.DataStructures;

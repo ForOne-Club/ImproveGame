@@ -208,7 +208,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         if (!UIConfigs.Instance.ShowMoreData)
             return;
 
-        tooltips.Add(new(Mod, "TotalNumber", "TotalNumber: " +
+        tooltips.Add(new(Mod, "Quantity", "Quantity: " +
             CurrentFrameProperties.ExistItems.GetTotalNumber(item.type)));
 
         tooltips.Add(new(Mod, "Rare", $"Rare: {item.rare}"));

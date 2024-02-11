@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions.PortableBuff;
-using ImproveGame.Content.Items;
+using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.Items;
 using ImproveGame.UIFramework.ExtremeStorage;

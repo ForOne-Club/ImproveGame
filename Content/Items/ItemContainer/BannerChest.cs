@@ -3,14 +3,13 @@ using ImproveGame.UI.ItemContainer;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Content.Items;
+namespace ImproveGame.Content.Items.ItemContainer;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable
 {
     public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.BannerChest;
 
-    public Texture2D DefaultIcon => ModAsset.Banner.Value;
     public List<Item> ItemContainer { get; private set; } = [];
     public bool AutoStorage { get; set; }
     public bool AutoSort { get; set; }
@@ -60,7 +59,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
             return false;
         }
 
-        PutInPackage(ref Main.mouseItem);
+        ItemIntoContainer(Main.mouseItem);
         if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
         {
             NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
@@ -69,8 +68,9 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
         return true;
     }
 
-    public void PutInPackage(ref Item item)
+    public void ItemIntoContainer(Item item)
     {
+        // 清除 Air 和 堆叠物品
         for (int i = 0; i < ItemContainer.Count; i++)
         {
             if (ItemContainer[i].IsAir)
@@ -79,39 +79,38 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
                 continue;
             }
 
-            if (ItemContainer[i].type != item.type ||
-                ItemContainer[i].stack >= ItemContainer[i].maxStack ||
-                !ItemLoader.CanStack(ItemContainer[i], item))
+            if (ItemContainer[i].type == item.type &&
+                ItemContainer[i].stack < ItemContainer[i].maxStack &&
+                ItemLoader.CanStack(ItemContainer[i], item))
             {
-                continue;
-            }
-
-            int stackAvailable = ItemContainer[i].maxStack - ItemContainer[i].stack;
-            int stackAddition = Math.Min(item.stack, stackAvailable);
-            item.stack -= stackAddition;
-            ItemContainer[i].stack += stackAddition;
-            SoundEngine.PlaySound(SoundID.Grab);
-            if (item.stack <= 0)
-            {
-                item.TurnToAir();
+                int stackAvailable = ItemContainer[i].maxStack - ItemContainer[i].stack;
+                int stackAddition = Math.Min(item.stack, stackAvailable);
+                item.stack -= stackAddition;
+                ItemContainer[i].stack += stackAddition;
+                SoundEngine.PlaySound(SoundID.Grab);
+                if (item.stack <= 0)
+                {
+                    item.TurnToAir();
+                }
             }
         }
 
+        // 堆叠过后仍有剩余物品, 且有空间, 就 Add
         if (!item.IsAir && ItemContainer.Count < 500)
         {
             ItemContainer.Add(item.Clone());
             item.TurnToAir();
+
             SoundEngine.PlaySound(SoundID.Grab);
         }
 
-        // 依照type对物品进行排序
         if (AutoSort)
         {
-            Sort();
+            SortContainer();
         }
     }
 
-    public void Sort()
+    public void SortContainer()
     {
         ItemContainer.Sort((a, b) =>
         {
@@ -261,7 +260,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
     public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
     {
         // 决定文本显示的是“开启”还是“关闭”
-        string text = (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this)
+        string text = ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this
             ? GetTextWith("Tips.MouseMiddleClose", new { ItemName = Item.Name })
             : GetTextWith("Tips.MouseMiddleOpen", new { ItemName = Item.Name });
         tooltips.Add(new TooltipLine(Mod, "BannerChest", text) { OverrideColor = Color.LightGreen });

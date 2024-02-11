@@ -66,7 +66,7 @@ public sealed class SelectionButton : UIElement
 
         OnRightMouseDown += (_, _) =>
         {
-            if (SpaceWandGUI.Visible && parent.timer.CompleteOpen)
+            if (SpaceWandGUI.Visible && parent.timer.Opened)
                 parent.Close();
         };
     }

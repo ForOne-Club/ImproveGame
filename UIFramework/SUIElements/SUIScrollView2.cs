@@ -5,13 +5,9 @@ namespace ImproveGame.UIFramework.SUIElements;
 
 public enum ScrollType { TwoWay, Horizontal, Vertical }
 
-public enum Direction { Left, Top, Right, Bottom }
-
 public class SUIScrollView2 : TimerView
 {
     public readonly ScrollType ScrollType;
-
-    public Vector2 ContentAndScrollbarSpacing = new(4f);
 
     public View OverflowHiddenView { get; init; } = new();
     public TimerView AdaptiveView { get; init; } = new();
@@ -51,9 +47,9 @@ public class SUIScrollView2 : TimerView
         {
             HScrollBar.Width.Percent = 1f;
             HScrollBar.Height.Pixels = 8f;
+            HScrollBar.RelativeMode = RelativeMode.Vertical;
+            HScrollBar.Spacing = new Vector2(4f);
             HScrollBar.VAlign = 1f;
-            HScrollBar.BarColor = Color.Black * 0.6f;
-            HScrollBar.BarHoverColor = Color.Black * 0.7f;
             HScrollBar.BgColor = Color.Transparent;
             HScrollBar.BorderColor = Color.Transparent;
             HScrollBar.OnUpdate += (_) =>
@@ -63,18 +59,15 @@ public class SUIScrollView2 : TimerView
                 HScrollBar.SetWindowAndContentSize(windowSize, contentSize);
             };
             HScrollBar.JoinParent(this);
-
-            OverflowHiddenView.Height.Pixels = -ContentAndScrollbarSpacing.Y - HScrollBar.Height.Pixels;
         }
 
         if (ScrollType is ScrollType.TwoWay or ScrollType.Vertical)
         {
             VScrollBar.Width.Pixels = 8f;
             VScrollBar.Height.Percent = 1f;
-            VScrollBar.HAlign = 1f;
+            VScrollBar.RelativeMode = RelativeMode.Horizontal;
+            VScrollBar.Spacing = new Vector2(4f);
 
-            VScrollBar.BarColor = Color.Black * 0.6f;
-            VScrollBar.BarHoverColor = Color.Black * 0.7f;
             VScrollBar.BgColor = Color.Transparent;
             VScrollBar.BorderColor = Color.Transparent;
             VScrollBar.OnUpdate += (_) =>
@@ -84,31 +77,6 @@ public class SUIScrollView2 : TimerView
                 VScrollBar.SetWindowAndContentSize(windowSize, contentSize);
             };
             VScrollBar.JoinParent(this);
-
-            OverflowHiddenView.Width.Pixels = -ContentAndScrollbarSpacing.X - VScrollBar.Width.Pixels;
-        }
-    }
-
-    public void MoveScrollbar(Direction direction)
-    {
-        switch (direction)
-        {
-            case Direction.Left:
-                OverflowHiddenView.HAlign = 1f;
-                VScrollBar.HAlign = 0f;
-                break;
-            case Direction.Top:
-                OverflowHiddenView.VAlign = 1f;
-                HScrollBar.VAlign = 0f;
-                break;
-            case Direction.Right:
-                OverflowHiddenView.HAlign = 0f;
-                VScrollBar.HAlign = 1f;
-                break;
-            case Direction.Bottom:
-                OverflowHiddenView.VAlign = 0f;
-                HScrollBar.VAlign = 1f;
-                break;
         }
     }
 
@@ -157,11 +125,11 @@ public class SUIScrollView2 : TimerView
 
             if (HScrollBar.IsBeUsableH)
             {
-                if (OverflowHiddenView.Height.Pixels != -ContentAndScrollbarSpacing.Y - HScrollBar.Height.Pixels)
+                /*if (OverflowHiddenView.Height.Pixels != -ContentAndScrollbarSpacing.Y - HScrollBar.Height.Pixels)
                 {
                     OverflowHiddenView.Height.Pixels = -ContentAndScrollbarSpacing.Y - HScrollBar.Height.Pixels;
                     recalculate = true;
-                }
+                }*/
             }
             else if (OverflowHiddenView.Height.Pixels != 0f)
             {
@@ -180,11 +148,11 @@ public class SUIScrollView2 : TimerView
 
             if (VScrollBar.IsBeUsableV)
             {
-                if (OverflowHiddenView.Width.Pixels != -ContentAndScrollbarSpacing.X - VScrollBar.Width.Pixels)
+                /*if (OverflowHiddenView.Width.Pixels != -ContentAndScrollbarSpacing.X - VScrollBar.Width.Pixels)
                 {
                     OverflowHiddenView.Width.Pixels = -ContentAndScrollbarSpacing.X - VScrollBar.Width.Pixels;
                     recalculate = true;
-                }
+                }*/
             }
             else if (OverflowHiddenView.Width.Pixels != 0f)
             {

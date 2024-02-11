@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.GlobalBuffs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModPlayers;
-using ImproveGame.Content.Items;
+using ImproveGame.Content.Items.ItemContainer;
 
 namespace ImproveGame.Content.Functions.PortableBuff
 {

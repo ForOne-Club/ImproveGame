@@ -223,7 +223,7 @@ public class GrabAndPickup : GlobalItem
         if (improvePlayer.BannerChest is not null && improvePlayer.BannerChest.AutoStorage && ItemToBanner(source) != -1)
         {
             Item cloneItem = source.Clone();
-            improvePlayer.BannerChest.PutInPackage(ref source);
+            improvePlayer.BannerChest.ItemIntoContainer(source);
             PickupPopupText(cloneItem, source);
         }
 
@@ -233,7 +233,7 @@ public class GrabAndPickup : GlobalItem
         if (improvePlayer.PotionBag is not null && improvePlayer.PotionBag.AutoStorage && source.buffType > 0 && source.consumable)
         {
             Item item = source.Clone();
-            improvePlayer.PotionBag.PutInPackage(ref source);
+            improvePlayer.PotionBag.ItemIntoContainer(source);
             PickupPopupText(item, source);
         }
 

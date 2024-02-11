@@ -1,109 +1,110 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.SUIElements;
 using Terraria.GameContent.UI.Chat;
-using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.UI.ItemContainer.Elements;
 
-public class ItemContainerItemSlot(List<Item> items, int index) : View
+public class ItemContainerItemSlot : BaseItemSlot
 {
-    private Item Item
+    public override Item Item
     {
-        get => _index >= 0 && _index < _items.Count ? _items[_index] : _airItem;
+        get => _index >= 0 && _index < _items.Count ? _items[_index] : AirItem;
         set => _items[_index] = value;
     }
-    private readonly List<Item> _items = items;
-    private readonly int _index = index;
-
-    private readonly Item _airItem = new Item();
+    private readonly List<Item> _items;
+    private readonly int _index;
 
     private int _rightMouseTimer = 0;
     private int _superFastStackTimer = 0;
 
+    public ItemContainerItemSlot(List<Item> items, int index)
+    {
+        _items = items;
+        _index = index;
+
+        DisplayItemInfo = true;
+        DisplayItemStack = true;
+
+        ItemIconScale = 0.8f;
+        SetSizePixels(52f * 0.8f, 52f * 0.8f);
+    }
+
     public override void LeftMouseDown(UIMouseEvent evt)
     {
         bool mouseItemIsAir = Main.mouseItem.IsAir;
+
         base.LeftMouseDown(evt);
-        if (Item.IsAir || !mouseItemIsAir)
-            return;
 
-        SetCursor();
-        MouseDown_ItemSlot();
-    }
-
-    public override void RightMouseDown(UIMouseEvent evt)
-    {
-        base.RightMouseDown(evt);
-        if (Item.IsAir)
-            return;
-        _rightMouseTimer = 0;
-        _superFastStackTimer = 0;
+        if (!Item.IsAir && mouseItemIsAir)
+        {
+            SetCursor();
+            MouseDown_ItemSlot();
+        }
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        // 右键长按物品持续拿出
-        if (!Main.mouseRight || !IsMouseHovering || Item.IsAir)
+
+        if (IsMouseHovering && Main.mouseRight)
         {
-            return;
-        }
+            if (!Item.IsAir)
+            {
+                switch (_rightMouseTimer)
+                {
+                    case >= 60:
+                    case >= 30 when _rightMouseTimer % 3 == 0:
+                    case >= 15 when _rightMouseTimer % 6 == 0:
+                    case 1:
+                        int stack = _superFastStackTimer + 1;
+                        stack = Math.Min(stack, Item.stack);
+                        TakeSlotItemToMouseItem(stack);
+                        break;
+                }
 
-        switch (_rightMouseTimer)
-        {
-            case >= 60:
-            case >= 30 when _rightMouseTimer % 3 == 0:
-            case >= 15 when _rightMouseTimer % 6 == 0:
-            case 1:
-                int stack = _superFastStackTimer + 1;
-                stack = Math.Min(stack, Item.stack);
-                TakeSlotItemToMouseItem(stack);
-                break;
-        }
+                if (_rightMouseTimer >= 60 && _rightMouseTimer % 2 == 0 && _superFastStackTimer < 40)
+                    _superFastStackTimer++;
 
-        if (_rightMouseTimer >= 60 && _rightMouseTimer % 2 == 0 && _superFastStackTimer < 40)
-            _superFastStackTimer++;
-
-        _rightMouseTimer++;
-    }
-
-    public override void DrawSelf(SpriteBatch sb)
-    {
-        base.DrawSelf(sb);
-        CalculatedStyle dimensions = GetDimensions();
-
-        if (Item.IsAir)
-        {
-            BigBagItemSlot.DrawItemIcon(sb, ItemContainerGUI.Instace.Container.DefaultIcon, Color.White * 0.5f, dimensions);
+                _rightMouseTimer++;
+            }
         }
         else
         {
-            BigBagItemSlot.DrawItemIcon(sb, Item, Color.White, dimensions);
+            _rightMouseTimer = 0;
+            _superFastStackTimer = 0;
+        }
+    }
+
+    public override void DrawSelf(SpriteBatch spriteBatch)
+    {
+        base.DrawSelf(spriteBatch);
+        CalculatedStyle dimensions = GetDimensions();
+
+        /*if (!Item.IsAir)
+        {
+            BigBagItemSlot.DrawItemIcon(spriteBatch, Item, Color.White, dimensions);
         }
 
         if (!Item.IsAir && Item.stack > 1)
         {
             Vector2 textSize = GetFontSize(Item.stack) * 0.75f;
             Vector2 textPos = dimensions.Position() + new Vector2(52 * 0.18f, (52 - textSize.Y) * 0.9f);
-            TrUtils.DrawBorderString(sb, Item.stack.ToString(), textPos, Color.White, 0.75f);
+            TrUtils.DrawBorderString(spriteBatch, Item.stack.ToString(), textPos, Color.White, 0.75f);
         }
 
-        if (!IsMouseHovering)
+        if (IsMouseHovering)
         {
-            return;
-        }
+            Main.hoverItemName = Item.Name + " 123";
+            Main.HoverItem = Item.Clone();
+            SetCursor();
 
-        Main.hoverItemName = Item.Name;
-        Main.HoverItem = Item.Clone();
-        SetCursor();
+            if (Main.mouseItem.IsAir) return;
 
-        if (Main.mouseItem.IsAir) return;
-
-        if (!ItemContainerGUI.Instace.Container.MeetEntryCriteria(Main.mouseItem))
-        {
-            UICommon.TooltipMouseText(GetText("PackageGUI.Incompatible"));
-        }
+            if (!ItemContainerGUI.Instace.Container.MeetEntryCriteria(Main.mouseItem))
+            {
+                UICommon.TooltipMouseText(GetText("PackageGUI.Incompatible"));
+            }
+        }*/
     }
 
     /// <summary>

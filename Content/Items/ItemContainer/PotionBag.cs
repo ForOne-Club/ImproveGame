@@ -5,13 +5,12 @@ using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
 
-namespace ImproveGame.Content.Items;
+namespace ImproveGame.Content.Items.ItemContainer;
 
 public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable
 {
     public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
 
-    public Texture2D DefaultIcon => ModAsset.Potion.Value;
     public List<Item> ItemContainer { get; private set; } = [];
     public bool AutoStorage { get; set; }
     public bool AutoSort { get; set; }
@@ -59,7 +58,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
             return false;
         }
 
-        PutInPackage(ref Main.mouseItem);
+        ItemIntoContainer(Main.mouseItem);
         if (context != 114514 && Main.netMode == NetmodeID.MultiplayerClient)
         {
             NetMessage.SendData(MessageID.SyncEquipment, -1, -1, null, Main.myPlayer, slot, inventory[slot].prefix);
@@ -68,8 +67,9 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
         return true;
     }
 
-    public void PutInPackage(ref Item item)
+    public void ItemIntoContainer(Item item)
     {
+        // 清除 Air 和 堆叠物品
         for (int i = 0; i < ItemContainer.Count; i++)
         {
             if (ItemContainer[i].IsAir)
@@ -92,6 +92,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
             }
         }
 
+        // 堆叠过后仍有剩余物品, 且有空间, 就 Add
         if (!item.IsAir && ItemContainer.Count < 200)
         {
             ItemContainer.Add(item.Clone());
@@ -99,14 +100,13 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
             SoundEngine.PlaySound(SoundID.Grab);
         }
 
-        // 依照type对物品进行排序
         if (AutoSort)
         {
-            Sort();
+            SortContainer();
         }
     }
 
-    public void Sort()
+    public void SortContainer()
     {
         ItemContainer.Sort((a, b) =>
         {
@@ -294,7 +294,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
     public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
     {
         // 决定文本显示的是“开启”还是“关闭”
-        string text = (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this)
+        string text = ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this
             ? GetTextWith("Tips.MouseMiddleClose", new { ItemName = Item.Name })
             : GetTextWith("Tips.MouseMiddleOpen", new { ItemName = Item.Name });
         tooltips.Add(new TooltipLine(Mod, "PotionBag", text) { OverrideColor = Color.LightGreen });
