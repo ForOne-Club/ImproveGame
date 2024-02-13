@@ -83,34 +83,28 @@ public class SUIToggleSwitch : TimerView
     {
         View view = new View();
 
-        var ts = new SUIToggleSwitch
-        {
-            VAlign = 0.5f,
-            RelativeMode = RelativeMode.Horizontal,
-            Spacing = new Vector2(4f)
-        };
-        ts.JoinParent(view);
-
         var t = new SUIText
         {
-            VAlign = 0.5f,
+            TextAlign = new Vector2(0f, 0.5f),
             RelativeMode = RelativeMode.Horizontal,
             Spacing = new Vector2(4f)
         };
-        t.OnUpdate += _ => t.SetSizePixels(t.TextSize * t.TextScale);
         t.JoinParent(view);
+
+        var ts = new SUIToggleSwitch
+        {
+            HAlign = 1f,
+        };
+        ts.JoinParent(view);
 
         view.OnLeftMouseDown += (evt, uie) =>
         {
             if (evt.Target != ts)
-            {
                 ts.Toggle();
-            }
         };
 
         toggleSwitch = ts;
         text = t;
-
         return view;
     }
 }

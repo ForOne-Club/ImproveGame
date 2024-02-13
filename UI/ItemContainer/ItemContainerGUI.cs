@@ -36,11 +36,12 @@ public class ItemContainerGUI : BaseBody
         Draggable = true,
         FinallyDrawBorder = true,
         HAlign = 0.5f, VAlign = 0.5f,
-        IsAdaptiveWidth = true, IsAdaptiveHeight = true,
+        Width = { Pixels = 300f },
+        IsAdaptiveWidth = false, IsAdaptiveHeight = true,
     };
 
     // 标题
-    public readonly View TitlePanel = ViewHelper.CreateHead(UIStyle.TitleBg2, 45f, 12f);
+    public readonly View TitlePanel = ViewHelper.CreateHead(UIStyle.TitleBg2 * 0.75f, 45f, 12f);
     public readonly SUIText Title = new SUIText
     {
         DragIgnore = true,
@@ -58,14 +59,7 @@ public class ItemContainerGUI : BaseBody
     };
 
     // 开关按钮
-    public readonly View SwitchView = new View
-    {
-        RelativeMode = RelativeMode.Vertical,
-        Spacing = new Vector2(6f),
-        IsAdaptiveWidth = true,
-        Height = new StyleDimension(20f, 0f),
-        PaddingLeft = 12f,
-    };
+    public readonly View SwitchView = new View();
 
     public readonly ItemContainerGrid ItemContainerGrid = new ItemContainerGrid
     {
@@ -75,14 +69,14 @@ public class ItemContainerGUI : BaseBody
 
     public override void OnInitialize()
     {
-        Window.SetPadding(0);
+        Window.SetPadding(0f);
         Window.JoinParent(this);
 
         #region 标题组件
         TitlePanel.SetPadding(0);
         TitlePanel.JoinParent(Window);
 
-        Title.SetPadding(20f, 0f, 10f, 0f);
+        Title.SetPadding(12f, 0f, 0f, 0f);
         Title.Height.Percent = 1f;
         Title.Width.Pixels = 200f;
         Title.JoinParent(TitlePanel);
@@ -99,39 +93,63 @@ public class ItemContainerGUI : BaseBody
         #endregion
 
         #region Switch
+        SwitchView.RelativeMode = RelativeMode.Vertical;
+        SwitchView.Spacing = new Vector2(6f);
+        SwitchView.Width = new StyleDimension { Pixels = 0, Percent = 1f };
+        SwitchView.IsAdaptiveHeight = true;
+        SwitchView.SetPadding(12f, 0f);
         SwitchView.JoinParent(Window);
 
-        View view = SUIToggleSwitch.CreateTextSwitch(out var toggleSwitch, out var text);
-        view.VAlign = 0.5f;
-        view.IsAdaptiveWidth = view.IsAdaptiveHeight = true;
-        view.RelativeMode = RelativeMode.Horizontal;
-        view.Spacing = new Vector2(4);
+        View switchView1 = SUIToggleSwitch.CreateTextSwitch(out var toggleSwitch, out var text);
+        switchView1.Width.Percent = 1f;
+        switchView1.IsAdaptiveHeight = true;
+        switchView1.RelativeMode = RelativeMode.Vertical;
+        switchView1.Spacing = new Vector2(4);
+
+        text.Height.Pixels = 20f;
+        text.TextScale = 0.8f;
+        text.TextOrKey = GetText("PackageGUI.AutoStorage");
+        text.SetInnerPixels(text.TextSize.X, 20f);
+        text.SetSizePixels(text.TextSize * text.TextScale);
 
         toggleSwitch.Status += () => Container.AutoStorage;
         toggleSwitch.Switch += () => Container.AutoStorage = !Container.AutoStorage;
         toggleSwitch.Rounded = new Vector4(10f);
+        toggleSwitch.OnUpdate += _ =>
+        {
+            toggleSwitch.BorderColor =
+                toggleSwitch.SwitchTimer.Lerp(UIStyle.ScrollBarBorder, UIStyle.ItemSlotBorderFav);
+            toggleSwitch.ToggleCircleColor =
+                toggleSwitch.SwitchTimer.Lerp(UIStyle.ScrollBarBorder, UIStyle.ItemSlotBorderFav);
+        };
         toggleSwitch.SetSizePixels(32f, 20f);
 
-        text.TextScale = 0.8f;
-        text.TextOrKey = GetText("PackageGUI.AutoStorage");
-        text.SetSizePixels(text.TextSize * text.TextScale);
-        view.JoinParent(SwitchView);
+        switchView1.JoinParent(SwitchView);
 
-        View view2 = SUIToggleSwitch.CreateTextSwitch(out var toggleSwitch2, out var text2);
-        view2.VAlign = 0.5f;
-        view2.IsAdaptiveWidth = view2.IsAdaptiveHeight = true;
-        view2.RelativeMode = RelativeMode.Horizontal;
-        view2.Spacing = new Vector2(8);
+        View switchView2 = SUIToggleSwitch.CreateTextSwitch(out var toggleSwitch2, out var text2);
+        switchView2.Width.Percent = 1f;
+        switchView2.IsAdaptiveHeight = true;
+        switchView2.RelativeMode = RelativeMode.Vertical;
+        switchView2.Spacing = new Vector2(8);
+
+        text2.TextScale = 0.8f;
+        text2.TextOrKey = GetText("PackageGUI.AutoSort");
+        text2.SetInnerPixels(text2.TextSize.X, 20f);
+        text2.SetSizePixels(text2.TextSize * text2.TextScale);
 
         toggleSwitch2.Status += () => Container.AutoSort;
         toggleSwitch2.Switch += () => Container.AutoSort = !Container.AutoSort;
         toggleSwitch2.Rounded = new Vector4(10f);
+        toggleSwitch2.OnUpdate += _ =>
+        {
+            toggleSwitch2.BorderColor =
+                toggleSwitch2.SwitchTimer.Lerp(UIStyle.ScrollBarBorder, UIStyle.ItemSlotBorderFav);
+            toggleSwitch2.ToggleCircleColor =
+                toggleSwitch2.SwitchTimer.Lerp(UIStyle.ScrollBarBorder, UIStyle.ItemSlotBorderFav);
+        };
         toggleSwitch2.SetSizePixels(32f, 20f);
 
-        text2.TextScale = 0.8f;
-        text2.TextOrKey = GetText("PackageGUI.AutoSort");
-        text2.SetSizePixels(text2.TextSize * text2.TextScale);
-        view2.JoinParent(SwitchView);
+        switchView2.JoinParent(SwitchView);
         #endregion
 
         ItemContainerGrid.SetPadding(8f);
@@ -159,14 +177,14 @@ public class ItemContainerGUI : BaseBody
         }
     }
 
-    public void Open(string title, IItemContainer container)
+    public void Open(IItemContainer container)
     {
         Enabled = true;
 
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Main.playerInventory = true;
         ItemContainerGrid.SetInventory(container.ItemContainer);
-        Title.TextOrKey = title;
+        Title.TextOrKey = container.Name;
         Title.SetInnerPixels(Title.TextSize);
         Container = container;
         Recalculate();

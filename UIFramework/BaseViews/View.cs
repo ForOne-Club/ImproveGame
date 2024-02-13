@@ -136,14 +136,14 @@ public class View : UIElement
             if (IsAdaptiveWidth)
             {
                 Width.Percent = 0f;
-                Width.Pixels = MathF.Round(maxPos.X - minPos.X, 2) + HPadding;
+                Width.Pixels = maxPos.X - minPos.X + HPadding;
                 MaxWidth = Width;
             }
 
             if (IsAdaptiveHeight)
             {
                 Height.Percent = 0f;
-                Height.Pixels = MathF.Round(maxPos.Y - minPos.Y, 2) + VPadding;
+                Height.Pixels = maxPos.Y - minPos.Y + VPadding;
                 MaxHeight = Height;
             }
 
@@ -164,12 +164,12 @@ public class View : UIElement
 
         View parent = Parent as View;
 
-        if (Parent is UIList || (parent?.IsAdaptiveWidth ?? false))
+        if (Parent is UIList || (parent != null && parent.IsAdaptiveWidth))
         {
             MaxWidth = new StyleDimension(float.MaxValue, 0f);
         }
 
-        if (Parent is UIList || (parent?.IsAdaptiveHeight ?? false))
+        if (Parent is UIList || (parent != null && parent.IsAdaptiveHeight))
         {
             MaxHeight = new StyleDimension(float.MaxValue, 0f);
         }
@@ -419,11 +419,26 @@ public class View : UIElement
         return this;
     }
 
+    public View SetSizePercent(float width, float height)
+    {
+        Width.Percent = width;
+        Height.Percent = height;
+        return this;
+    }
+
     public View SetSizePixels(Vector2 size)
     {
         Width.Pixels = size.X;
         Height.Pixels = size.Y;
         return this;
+    }
+
+    /// <summary>
+    /// <see cref="UIElement.SetPadding(float)"/>
+    /// </summary>
+    public float Padding
+    {
+        set => SetPadding(value);
     }
 
     public View SetPadding(float left, float top, float right, float bottom)

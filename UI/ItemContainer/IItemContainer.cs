@@ -4,6 +4,8 @@ namespace ImproveGame.UI.ItemContainer;
 
 public interface IItemContainer
 {
+    string Name { get; }
+
     List<Item> ItemContainer { get; }
     bool AutoStorage { get; set; }
     bool AutoSort { get; set; }

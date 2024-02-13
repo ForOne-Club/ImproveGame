@@ -15,6 +15,9 @@ public class ItemContainerGrid : SUIScrollView2
         IsAdaptiveWidth = true;
         OverflowHiddenView.IsAdaptiveWidth = true;
         AdaptiveView.IsAdaptiveWidth = true;
+
+        VScrollBar.BarColor = UIStyle.ScrollBarBorder * 0.5f;
+        VScrollBar.BarHoverColor = UIStyle.ScrollBarBorder * 0.75f;
         /*ListView.SetInnerPixels(new Vector2(GridSize(52f, 4f, 5)));
 
         Scrollbar.HAlign = 1f;

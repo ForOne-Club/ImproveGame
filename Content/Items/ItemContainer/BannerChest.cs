@@ -10,6 +10,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
 {
     public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.BannerChest;
 
+    string IItemContainer.Name => Item.Name;
     public List<Item> ItemContainer { get; private set; } = [];
     public bool AutoStorage { get; set; }
     public bool AutoSort { get; set; }
@@ -31,7 +32,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
         if (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this)
             ItemContainerGUI.Instace.Close();
         else
-            ItemContainerGUI.Instace.Open(Item.Name, this);
+            ItemContainerGUI.Instace.Open(this);
 
         //player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedBanners[^1], storedBanners[^1].stack);
         //storedBanners.RemoveAt(storedBanners.Count - 1);

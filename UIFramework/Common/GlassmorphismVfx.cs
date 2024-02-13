@@ -28,7 +28,7 @@ public class GlassmorphismVfx : ModSystem
     /// <summary>
     /// 用于类云母效果的每个UI一人一个的RT2D
     /// </summary>
-    internal static RenderTarget2D[] GlassCovers;
+    internal static RenderTarget2D[] GlassCovers = [];
 
     public override void Load()
     {

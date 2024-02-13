@@ -11,6 +11,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
 {
     public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
 
+    string IItemContainer.Name => Item.Name;
     public List<Item> ItemContainer { get; private set; } = [];
     public bool AutoStorage { get; set; }
     public bool AutoSort { get; set; }
@@ -31,7 +32,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
         if (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this)
             ItemContainerGUI.Instace.Close();
         else
-            ItemContainerGUI.Instace.Open(Item.Name, this);
+            ItemContainerGUI.Instace.Open(this);
 
         // player.QuickSpawnItem(player.GetSource_OpenItem(Type), storedPotions[^1], storedPotions[^1].stack);
         // storedPotions.RemoveAt(storedPotions.Count - 1);

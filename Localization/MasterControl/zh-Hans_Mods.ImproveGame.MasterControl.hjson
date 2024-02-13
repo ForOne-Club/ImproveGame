@@ -1,0 +1,14 @@
+SuperVault: {
+	DisplayName: 大背包
+	Description: 一个拥有 100 格空间的背包
+}
+
+PlayerStats: {
+	DisplayName: 属性面板
+	Description: 查看玩家的一些属性
+}
+
+Spectating: {
+	DisplayName: 观战
+	Description: 观看队友的战斗
+}

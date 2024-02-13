@@ -1,11 +1,10 @@
-﻿using ImproveGame.Common.Players;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.BaseViews;
 
 namespace ImproveGame.UI.AutoTrash;
 
 public class GarbageListGrid : ScrollView
 {
-    public static List<Item> Garbages => AutoTrashPlayer.Instance.AutoDiscardItems;
+    public static List<Item> Garbages => AutoTrashPlayer.Instance.ThrowAwayItems;
 
     public GarbageListGrid()
     {
@@ -37,7 +36,7 @@ public class GarbageListGrid : ScrollView
 
         for (int i = 0; i < Garbages.Count; i++)
         {
-            GarbageListSlot itemSlot = new GarbageListSlot(AutoTrashPlayer.Instance.AutoDiscardItems, i);
+            GarbageListSlot itemSlot = new GarbageListSlot(AutoTrashPlayer.Instance.ThrowAwayItems, i);
             itemSlot.PreventOverflow = true;
             itemSlot.Spacing = new Vector2(4f);
             itemSlot.RelativeMode = RelativeMode.Horizontal;
