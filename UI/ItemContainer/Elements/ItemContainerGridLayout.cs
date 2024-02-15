@@ -4,20 +4,20 @@ using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.ItemContainer.Elements;
 
-public class ItemContainerGrid : SUIScrollView2
+public class ItemContainerGridLayout : SUIScrollView2
 {
-    public static int HNumber => 6;
+    public const int HNumber = 6;
 
-    public List<Item> Items;
+    public IList<Item> Items;
 
-    public ItemContainerGrid() : base(ScrollType.Vertical)
+    public ItemContainerGridLayout() : base(Orientation.Vertical)
     {
-        IsAdaptiveWidth = true;
-        OverflowHiddenView.IsAdaptiveWidth = true;
-        AdaptiveView.IsAdaptiveWidth = true;
+        FixedSize = false;
 
-        VScrollBar.BarColor = UIStyle.ScrollBarBorder * 0.5f;
-        VScrollBar.BarHoverColor = UIStyle.ScrollBarBorder * 0.75f;
+        ScrollBar.ScrollMultiplier = 0.8f;
+
+        ScrollBar.BarColor = UIStyle.ScrollBarBorder * 0.5f;
+        ScrollBar.BarHoverColor = UIStyle.ScrollBarBorder * 0.75f;
         /*ListView.SetInnerPixels(new Vector2(GridSize(52f, 4f, 5)));
 
         Scrollbar.HAlign = 1f;
@@ -30,22 +30,21 @@ public class ItemContainerGrid : SUIScrollView2
 
     public override void Update(GameTime gameTime)
     {
-        // 寻找 Items 中有没有 Item.IsAir
-        // 有的话删除掉
+        // 如果 Items 中有 Item.IsAir 删除掉
         for (int i = 0; i < Items.Count; i++)
         {
             Item item = Items[i];
+
             if (!item.IsAir)
-            {
                 continue;
-            }
 
             Items.RemoveAt(i--);
         }
 
-        if (AdaptiveView.Children.Count() != GetSlotNumber(Items.Count))
+        int slotNumber = GetSlotNumber(Items.Count);
+        if (ListView.Children.Count() != slotNumber)
         {
-            SetInventory(Items);
+            SetInventory(Items, slotNumber);
         }
 
         // 因为 Update 是一层一层调用子元素的 Update()，所以不能放在前面。
@@ -54,24 +53,20 @@ public class ItemContainerGrid : SUIScrollView2
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        /*if (Math.Abs(-Scrollbar.BarTop - ListView.Top.Pixels) > 0.000000001f)
-        {
-            ListView.Top.Pixels = -Scrollbar.BarTop;
-            ListView.Recalculate();
-        }*/
-
         base.DrawSelf(spriteBatch);
     }
 
     public static int GetSlotNumber(int count) => Math.Max(HNumber * 6, count - count % HNumber + HNumber * 2);
 
-    public void SetInventory(List<Item> items)
+    public void SetInventory(IList<Item> items, int slotNumber = -1)
     {
         Items = items;
-        AdaptiveView.RemoveAllChildren();
+        ListView.RemoveAllChildren();
 
-        int length = GetSlotNumber(Items.Count);
-        for (int i = 0; i < length; i++)
+        if (slotNumber < 0)
+            slotNumber = GetSlotNumber(Items.Count);
+
+        for (int i = 0; i < slotNumber; i++)
         {
             var itemSlot = new ItemContainerItemSlot(items, i)
             {
@@ -86,11 +81,9 @@ public class ItemContainerGrid : SUIScrollView2
             if (i % HNumber == 0)
                 itemSlot.DirectLineBreak = true;
 
-            itemSlot.JoinParent(AdaptiveView);
+            itemSlot.JoinParent(ListView);
         }
 
         Recalculate();
-        // ListView.SetInnerPixels(GridSize(52f, 8f, 5, length / 5));
-        // Scrollbar.SetView(GetInnerDimensions().Height, ListView.Height.Pixels + 1);
     }
 }

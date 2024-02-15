@@ -1,4 +1,6 @@
-﻿using ImproveGame.UI.DeathSpectating;
+﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.UI.DeathSpectating;
+using ImproveGame.UI.ItemContainer;
 using ImproveGame.UI.PlayerStats;
 
 namespace ImproveGame.UI.MasterControl;
@@ -8,11 +10,8 @@ public class MasterControlManager : ModSystem
     public static MasterControlManager Instance => ModContent.GetInstance<MasterControlManager>();
 
     /// <summary>
-    /// 原功能列表 (O, Strat!)
+    /// 注册
     /// </summary>
-    public IReadOnlyList<MasterControlFunction> OriginalMCFuncions => _originalMCFunctions;
-    private readonly List<MasterControlFunction> _originalMCFunctions = [];
-
     public MasterControlFunction Register(MasterControlFunction item)
     {
         if (!_originalMCFunctions.Contains(item))
@@ -22,6 +21,12 @@ public class MasterControlManager : ModSystem
 
         return item;
     }
+
+    /// <summary>
+    /// 原功能列表
+    /// </summary>
+    public IReadOnlyList<MasterControlFunction> OriginalMCFuncions => _originalMCFunctions;
+    private readonly List<MasterControlFunction> _originalMCFunctions = [];
 
     /// <summary>
     /// 排序之后的可用功能列表
@@ -34,6 +39,10 @@ public class MasterControlManager : ModSystem
     /// </summary>
     public IReadOnlyList<MasterControlFunction> UnavailableOrderedMCFunctions => _unavailableOrderedMCFunctions;
     private readonly List<MasterControlFunction> _unavailableOrderedMCFunctions = [];
+
+    /// <summary>
+    /// 排列功能列表
+    /// </summary>
     public void OrderMCFunctions()
     {
         _availableOrderedMCFunctions.Clear();
@@ -54,7 +63,7 @@ public class MasterControlManager : ModSystem
 
     public override void PostSetupContent()
     {
-        // 大背包
+        #region 大背包
         var bigBackpack = new MasterControlFunction("SuperVault")
         {
             Icon = ModAsset.BigBackpack.Value,
@@ -71,8 +80,9 @@ public class MasterControlManager : ModSystem
             else
                 BigBagGUI.Instance.Open();
         };
+        #endregion
 
-        // 属性面板
+        #region 属性面板
         var playerStats = new MasterControlFunction("PlayerStats")
         {
             Icon = ModAsset.PlayerStats.Value,
@@ -90,8 +100,9 @@ public class MasterControlManager : ModSystem
                 body.Append(body.Window);
             }
         };
+        #endregion
 
-        // 观战
+        #region 观战
         var spectating = new MasterControlFunction("Spectating")
         {
             Icon = ModAsset.Spectating.Value,
@@ -103,6 +114,67 @@ public class MasterControlManager : ModSystem
 
             body.Enabled = !body.Enabled;
         };
+        #endregion
+
+        #region 旗帜盒
+        var bannerChest = new MasterControlFunction("BannerChest")
+        {
+            Icon = ModAsset.BannerChest.Value,
+        }.Register();
+
+        bannerChest.Available += () =>
+        {
+            if (Main.LocalPlayer.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+            {
+                return improvePlayer.BannerChest != null;
+            }
+
+            return false;
+        };
+
+        bannerChest.OnMouseDown += _ =>
+        {
+            if (Main.LocalPlayer.TryGetModPlayer<ImprovePlayer>(out var improvePlayer) &&
+                improvePlayer.BannerChest != null)
+            {
+                if (!ItemContainerGUI.Instace.Enabled ||
+                    improvePlayer.BannerChest != ItemContainerGUI.Instace.Container)
+                    ItemContainerGUI.Instace.Open(improvePlayer.BannerChest);
+                else
+                    ItemContainerGUI.Instace.Close();
+            }
+        };
+        #endregion
+
+        #region 药水袋
+        var potionBag = new MasterControlFunction("PotionBag")
+        {
+            Icon = ModAsset.PotionBag.Value,
+        }.Register();
+
+        potionBag.Available += () =>
+        {
+            if (Main.LocalPlayer.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+            {
+                return improvePlayer.PotionBag != null;
+            }
+
+            return false;
+        };
+
+        potionBag.OnMouseDown += _ =>
+        {
+            if (Main.LocalPlayer.TryGetModPlayer<ImprovePlayer>(out var improvePlayer) &&
+                improvePlayer.PotionBag != null)
+            {
+                if (!ItemContainerGUI.Instace.Enabled ||
+                    improvePlayer.PotionBag != ItemContainerGUI.Instace.Container)
+                    ItemContainerGUI.Instace.Open(improvePlayer.PotionBag);
+                else
+                    ItemContainerGUI.Instace.Close();
+            }
+        };
+        #endregion
 
         OrderMCFunctions();
     }

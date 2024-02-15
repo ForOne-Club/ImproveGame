@@ -61,7 +61,7 @@ public class ItemContainerGUI : BaseBody
     // 开关按钮
     public readonly View SwitchView = new View();
 
-    public readonly ItemContainerGrid ItemContainerGrid = new ItemContainerGrid
+    public readonly ItemContainerGridLayout ItemContainerGrid = new ItemContainerGridLayout
     {
         RelativeMode = RelativeMode.Vertical,
         Spacing = new Vector2(6f),
@@ -165,8 +165,6 @@ public class ItemContainerGUI : BaseBody
         ItemContainerGrid.JoinParent(Window);
     }
 
-    public bool Ya;
-
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -193,7 +191,6 @@ public class ItemContainerGUI : BaseBody
     public void Close()
     {
         Enabled = false;
-
         SoundEngine.PlaySound(SoundID.MenuClose);
     }
 

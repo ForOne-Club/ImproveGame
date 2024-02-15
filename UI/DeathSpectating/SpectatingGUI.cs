@@ -14,7 +14,7 @@ public class SpectatingGUI : BaseBody
     public override bool CanSetFocusTarget(UIElement target) => ActivePlayerList.IsMouseHovering;
 
     public SUIPanel Window { get; init; } = new SUIPanel(Color.White, Color.LightGray * 0.5f);
-    public SUIScrollView2 ActivePlayerList { get; init; } = new SUIScrollView2(ScrollType.Vertical);
+    public SUIScrollView2 ActivePlayerList { get; init; } = new SUIScrollView2(Orientation.Vertical);
 
     public override void OnInitialize()
     {
@@ -44,7 +44,7 @@ public class SpectatingGUI : BaseBody
         {
             PreviousActivePlayers = new List<Player>(current);
 
-            ActivePlayerList.AdaptiveView.RemoveAllChildren();
+            ActivePlayerList.ListView.RemoveAllChildren();
             foreach (var player in current)
             {
                 var playerButton = new SUIText
@@ -68,10 +68,10 @@ public class SpectatingGUI : BaseBody
                 {
                     playerButton.BorderColor = Color.White * playerButton.HoverTimer.Lerp(0.5f, 1f);
                 };
-                playerButton.JoinParent(ActivePlayerList.AdaptiveView);
+                playerButton.JoinParent(ActivePlayerList.ListView);
             }
 
-            ActivePlayerList.AdaptiveView.Recalculate();
+            ActivePlayerList.ListView.Recalculate();
         }
     }
 }

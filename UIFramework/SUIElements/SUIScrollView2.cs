@@ -1,108 +1,185 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
-using Microsoft.Xna.Framework.Input;
 
 namespace ImproveGame.UIFramework.SUIElements;
 
-public enum ScrollType { TwoWay, Horizontal, Vertical }
+/// <summary>
+/// 方位, 朝向
+/// </summary>
+public enum Orientation
+{
+    /// <summary> 横向 </summary>
+    Horizontal,
+    /// <summary> 纵向 </summary>
+    Vertical
+}
 
+/// <summary>
+/// 为了更方便的使用滚动列表而设计，支持横向滚动和纵向滚动 <br/>
+/// 了解工作逻辑请查看 <see cref="FixedSize"/> <see cref="Update(GameTime)"/> 两处代码
+/// </summary>
 public class SUIScrollView2 : TimerView
 {
-    public readonly ScrollType ScrollType;
+    /// <summary>
+    /// 滚动朝向
+    /// </summary>
+    public readonly Orientation ScrollOrientation;
 
-    public View OverflowHiddenView { get; init; } = new();
-    public TimerView AdaptiveView { get; init; } = new();
-    public SUIScrollbar2 HScrollBar { get; init; } = new();
-    public SUIScrollbar2 VScrollBar { get; init; } = new();
-
-    public SUIScrollView2(ScrollType scrollType)
+    /// <summary>
+    /// 固定大小
+    /// </summary>
+    public bool FixedSize
     {
-        ScrollType = scrollType;
-
-        OverflowHiddenView.OverflowHidden = true;
-        OverflowHiddenView.Width.Percent = OverflowHiddenView.Height.Percent = 1f;
-        OverflowHiddenView.JoinParent(this);
-
-        DragIgnore = true;
-        OverflowHiddenView.DragIgnore = true;
-        AdaptiveView.DragIgnore = true;
-
-        if (ScrollType is ScrollType.TwoWay or ScrollType.Horizontal)
+        get => _fixedSize;
+        set
         {
-            AdaptiveView.IsAdaptiveWidth = true;
-            AdaptiveView.Height.Percent = 1f;
-        }
+            _fixedSize = value;
 
-        if (ScrollType is ScrollType.TwoWay or ScrollType.Vertical)
-        {
-            AdaptiveView.Width.Percent = 1f;
-            AdaptiveView.IsAdaptiveHeight = true;
-        }
-
-        AdaptiveView.HideFullyOverflowedElements = true;
-        AdaptiveView.SetPadding(1f);
-        AdaptiveView.JoinParent(OverflowHiddenView);
-
-
-        if (ScrollType is ScrollType.TwoWay or ScrollType.Horizontal)
-        {
-            HScrollBar.Width.Percent = 1f;
-            HScrollBar.Height.Pixels = 8f;
-            HScrollBar.RelativeMode = RelativeMode.Vertical;
-            HScrollBar.Spacing = new Vector2(4f);
-            HScrollBar.VAlign = 1f;
-            HScrollBar.BgColor = Color.Transparent;
-            HScrollBar.BorderColor = Color.Transparent;
-            HScrollBar.OnUpdate += (_) =>
+            if (_fixedSize)
             {
-                Vector2 windowSize = new Vector2(OverflowHiddenView.GetInnerDimensions().Width, 1f);
-                Vector2 contentSize = new Vector2(AdaptiveView.Children.Any() ? AdaptiveView.Width.Pixels : 0, 1f);
-                HScrollBar.SetWindowAndContentSize(windowSize, contentSize);
-            };
-            HScrollBar.JoinParent(this);
-        }
+                if (ScrollOrientation == Orientation.Horizontal)
+                {
+                    IsAdaptiveHeight = false;
 
-        if (ScrollType is ScrollType.TwoWay or ScrollType.Vertical)
-        {
-            VScrollBar.Width.Pixels = 8f;
-            VScrollBar.Height.Percent = 1f;
-            VScrollBar.RelativeMode = RelativeMode.Horizontal;
-            VScrollBar.Spacing = new Vector2(4f);
+                    MaskView.IsAdaptiveHeight = false;
+                    MaskView.Width.Percent = 1f;
 
-            VScrollBar.BgColor = Color.Transparent;
-            VScrollBar.BorderColor = Color.Transparent;
-            VScrollBar.OnUpdate += (_) =>
+                    ListView.IsAdaptiveHeight = false;
+                    ListView.Width.Percent = 1f;
+                }
+                else if (ScrollOrientation == Orientation.Vertical)
+                {
+                    IsAdaptiveWidth = false;
+
+                    MaskView.IsAdaptiveWidth = false;
+                    MaskView.Width.Percent = 1f;
+
+                    ListView.IsAdaptiveWidth = false;
+                    ListView.Width.Percent = 1f;
+                }
+            }
+            else
             {
-                Vector2 windowSize = new Vector2(1f, OverflowHiddenView.GetInnerDimensions().Height);
-                Vector2 contentSize = new Vector2(1f, AdaptiveView.Children.Any() ? AdaptiveView.Height.Pixels : 0);
-                VScrollBar.SetWindowAndContentSize(windowSize, contentSize);
-            };
-            VScrollBar.JoinParent(this);
+                if (ScrollOrientation == Orientation.Horizontal)
+                {
+                    IsAdaptiveHeight = true;
+
+                    MaskView.IsAdaptiveHeight = true;
+                    MaskView.Width.Percent = 0f;
+
+                    ListView.IsAdaptiveHeight = true;
+                    ListView.Width.Percent = 0f;
+                }
+                else if (ScrollOrientation == Orientation.Vertical)
+                {
+                    IsAdaptiveWidth = true;
+
+                    MaskView.IsAdaptiveWidth = true;
+                    MaskView.Width.Percent = 0f;
+
+                    ListView.IsAdaptiveWidth = true;
+                    ListView.Width.Percent = 0f;
+                }
+            }
+
+            Recalculate();
         }
+    }
+    protected bool _fixedSize;
+
+    /// <summary>
+    /// 滚动条是否常驻
+    /// </summary>
+    public bool ScrollbarPermanent;
+
+    /// <summary>
+    /// 蒙版
+    /// </summary>
+    public TimerView MaskView { get; init; } = new();
+    /// <summary>
+    /// 列表
+    /// </summary>
+    public TimerView ListView { get; init; } = new();
+    /// <summary>
+    /// 滚动条
+    /// </summary>
+    public SUIScrollbar2 ScrollBar { get; init; } = new();
+
+    /// <param name="scrollOrientation">滚动朝向</param>
+    /// <param name="fixedSize">固定大小</param>
+    public SUIScrollView2(Orientation scrollOrientation, bool fixedSize = true)
+    {
+        #region Mask ListView 蒙版 列表
+        ScrollOrientation = scrollOrientation;
+        FixedSize = fixedSize;
+
+        DragIgnore = MaskView.DragIgnore = ListView.DragIgnore = true;
+
+        MaskView.OverflowHidden = true;
+        MaskView.SetSizePercent(1f);
+        MaskView.JoinParent(this);
+
+        if (ScrollOrientation is Orientation.Vertical)
+        {
+            ListView.Width.Percent = 1f;
+            ListView.IsAdaptiveHeight = true;
+        }
+        else if (ScrollOrientation is Orientation.Horizontal)
+        {
+            ListView.IsAdaptiveWidth = true;
+            ListView.Height.Percent = 1f;
+        }
+
+        ListView.HideFullyOverflowedElements = true;
+        ListView.SetPadding(1f);
+        ListView.JoinParent(MaskView);
+        #endregion
+
+        #region Scrollbar 滚动条
+        ScrollBar.Spacing = new Vector2(4f);
+        ScrollBar.BgColor = Color.Transparent;
+        ScrollBar.BorderColor = Color.Transparent;
+
+        switch (ScrollOrientation)
+        {
+            case Orientation.Horizontal:
+                ScrollBar.SetSize(0f, 8f, 1f, 0f);
+                ScrollBar.RelativeMode = RelativeMode.Vertical;
+
+                ScrollBar.OnUpdate += (_) =>
+                {
+                    var maskSize = new Vector2(MaskView.GetInnerDimensions().Width, 1f);
+                    var targetSize = new Vector2(ListView.Children.Any() ? ListView.Width.Pixels : 0, 1f);
+
+                    ScrollBar.SetSizeForMaskAndTarget(maskSize, targetSize);
+                };
+                break;
+            case Orientation.Vertical or _:
+                ScrollBar.SetSize(8f, 0f, 0f, 1f);
+                ScrollBar.RelativeMode = RelativeMode.Horizontal;
+
+                ScrollBar.OnUpdate += (_) =>
+                {
+                    var maskSize = new Vector2(1f, MaskView.GetInnerDimensions().Height);
+                    var targetSize = new Vector2(1f, ListView.Children.Any() ? ListView.Height.Pixels : 0);
+
+                    ScrollBar.SetSizeForMaskAndTarget(maskSize, targetSize);
+                };
+                break;
+        }
+
+        ScrollBar.JoinParent(this);
+        #endregion
     }
 
     public override void ScrollWheel(UIScrollWheelEvent evt)
     {
-        KeyboardState state = Keyboard.GetState();
-
-        switch (ScrollType)
+        switch (ScrollOrientation)
         {
-            case ScrollType.TwoWay:
-                if (state.IsKeyDown(Keys.LeftShift) || state.IsKeyDown(Keys.RightShift))
-                {
-                    HScrollBar.TargetScrollPosition -= new Vector2(evt.ScrollWheelValue, 0f);
-                }
-                else
-                {
-                    VScrollBar.TargetScrollPosition -= new Vector2(0f, evt.ScrollWheelValue);
-                }
+            case Orientation.Horizontal:
+                ScrollBar.TargetScrollPosition -= new Vector2(evt.ScrollWheelValue, 0f);
                 break;
-            case ScrollType.Horizontal:
-                HScrollBar.TargetScrollPosition -= new Vector2(evt.ScrollWheelValue, 0f);
-                break;
-            case ScrollType.Vertical:
-                VScrollBar.TargetScrollPosition -= new Vector2(0f, evt.ScrollWheelValue);
-                break;
-            default:
+            case Orientation.Vertical or _:
+                ScrollBar.TargetScrollPosition -= new Vector2(0f, evt.ScrollWheelValue);
                 break;
         }
 
@@ -115,55 +192,66 @@ public class SUIScrollView2 : TimerView
 
         bool recalculate = false;
 
-        if (ScrollType is ScrollType.TwoWay or ScrollType.Horizontal)
+        switch (ScrollOrientation)
         {
-            if (AdaptiveView.Left.Pixels != -HScrollBar.CurrentScrollPosition.X)
-            {
-                AdaptiveView.Left.Pixels = -HScrollBar.CurrentScrollPosition.X;
-                recalculate = true;
-            }
-
-            if (HScrollBar.IsBeUsableH)
-            {
-                /*if (OverflowHiddenView.Height.Pixels != -ContentAndScrollbarSpacing.Y - HScrollBar.Height.Pixels)
+            case Orientation.Horizontal:
+                // 滚动条位置对准
+                if (ListView.Left.Pixels != -ScrollBar.CurrentScrollPosition.X)
                 {
-                    OverflowHiddenView.Height.Pixels = -ContentAndScrollbarSpacing.Y - HScrollBar.Height.Pixels;
+                    ListView.Left.Pixels = -ScrollBar.CurrentScrollPosition.X;
                     recalculate = true;
-                }*/
-            }
-            else if (OverflowHiddenView.Height.Pixels != 0f)
-            {
-                OverflowHiddenView.Height.Pixels = 0f;
-                recalculate = true;
-            }
+                }
+                break;
+            case Orientation.Vertical or _:
+                // 滚动条位置对准
+                if (ListView.Top.Pixels != -ScrollBar.CurrentScrollPosition.Y)
+                {
+                    ListView.Top.Pixels = -ScrollBar.CurrentScrollPosition.Y;
+                    recalculate = true;
+                }
+                break;
         }
 
-        if (ScrollType is ScrollType.TwoWay or ScrollType.Vertical)
+        if (FixedSize)
         {
-            if (AdaptiveView.Top.Pixels != -VScrollBar.CurrentScrollPosition.Y)
+            switch (ScrollOrientation)
             {
-                AdaptiveView.Top.Pixels = -VScrollBar.CurrentScrollPosition.Y;
-                recalculate = true;
-            }
-
-            if (VScrollBar.IsBeUsableV)
-            {
-                /*if (OverflowHiddenView.Width.Pixels != -ContentAndScrollbarSpacing.X - VScrollBar.Width.Pixels)
-                {
-                    OverflowHiddenView.Width.Pixels = -ContentAndScrollbarSpacing.X - VScrollBar.Width.Pixels;
-                    recalculate = true;
-                }*/
-            }
-            else if (OverflowHiddenView.Width.Pixels != 0f)
-            {
-                OverflowHiddenView.Width.Pixels = 0f;
-                recalculate = true;
+                case Orientation.Horizontal:
+                    // 设置正确的 蒙版 高度
+                    if (ScrollBar.IsBeUsableH)
+                    {
+                        if (MaskView.Height.Pixels != -(ScrollBar.Height.Pixels + ScrollBar.Spacing.Y))
+                        {
+                            MaskView.Height.Pixels = -ScrollBar.Height.Pixels - ScrollBar.Spacing.Y;
+                            recalculate = true;
+                        }
+                    }
+                    else if (MaskView.Height.Pixels != 0)
+                    {
+                        MaskView.Height.Pixels = 0f;
+                        recalculate = true;
+                    }
+                    break;
+                case Orientation.Vertical or _:
+                    // 设置正确的 蒙版 宽度
+                    if (ScrollBar.IsBeUsableV)
+                    {
+                        if (MaskView.Width.Pixels != -(ScrollBar.Width.Pixels + ScrollBar.Spacing.X))
+                        {
+                            MaskView.Width.Pixels = -(ScrollBar.Width.Pixels + ScrollBar.Spacing.X);
+                            recalculate = true;
+                        }
+                    }
+                    else if (MaskView.Width.Pixels != 0)
+                    {
+                        MaskView.Width.Pixels = 0;
+                        recalculate = true;
+                    }
+                    break;
             }
         }
 
         if (recalculate)
-        {
             Recalculate();
-        }
     }
 }

@@ -1,27 +1,16 @@
-﻿using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.SUIElements;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.UI.ItemContainer.Elements;
 
-public class ItemContainerItemSlot : BaseItemSlot
+public class ItemContainerItemSlot : GenericItemSlot
 {
-    public override Item Item
-    {
-        get => _index >= 0 && _index < _items.Count ? _items[_index] : AirItem;
-        set => _items[_index] = value;
-    }
-    private readonly List<Item> _items;
-    private readonly int _index;
-
     private int _rightMouseTimer = 0;
     private int _superFastStackTimer = 0;
 
-    public ItemContainerItemSlot(List<Item> items, int index)
+    public ItemContainerItemSlot(IList<Item> items, int index) : base(items, index)
     {
-        _items = items;
-        _index = index;
-
         DisplayItemInfo = true;
         DisplayItemStack = true;
 
@@ -78,9 +67,9 @@ public class ItemContainerItemSlot : BaseItemSlot
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
-        CalculatedStyle dimensions = GetDimensions();
+        /*CalculatedStyle dimensions = GetDimensions();
 
-        /*if (!Item.IsAir)
+        if (!Item.IsAir)
         {
             BigBagItemSlot.DrawItemIcon(spriteBatch, Item, Color.White, dimensions);
         }

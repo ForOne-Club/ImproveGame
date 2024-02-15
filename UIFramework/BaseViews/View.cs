@@ -20,11 +20,18 @@ public class View : UIElement
     public bool HasChildCountChanges => Children.Count() != PreviousChildCount;
 
     /// <summary>
-    /// 该类的大小会根据子元素位置大小自适应，其 <see cref="UIElement.Width"/> <see cref="UIElement.Height"/> 属性皆不生效 <br/>
-    /// 使用的时候要注意，只有继承自 <see cref="View"/> 的子元素才有效 <br/>
-    /// 并且需要注意子元素的 <see cref="UIElement.Width"/> <see cref="UIElement.Height"/> Percent 属性不要设置，因为获取到的会是无限大
+    /// 元素大小会根据子元素位置大小变化，自身的 <see cref="UIElement.Width"/> 属性会在每次统计子元素后变化 <br/>
+    /// 同时会使 <see cref="UIElement.MaxWidth"/> 强制等于统计子元素后 <see cref="UIElement.Width"/> <br/>
+    /// 使用的时候要注意，其子元素只有继承自 <see cref="View"/> 才会被统计 <br/>
+    /// 如果父元素开启此属性 元素自身的 <see cref="UIElement.MaxWidth"/> 会被强制设为 <see cref="float.MaxValue"/>
     /// </summary>
     public bool IsAdaptiveWidth;
+    /// <summary>
+    /// 元素大小会根据子元素位置大小变化，自身的 <see cref="UIElement.Height"/> 属性会在每次统计子元素后变化 <br/>
+    /// 同时会使 <see cref="UIElement.MaxHeight"/> 强制等于统计子元素后 <see cref="UIElement.Height"/> <br/>
+    /// 使用的时候要注意，其子元素只有继承自 <see cref="View"/> 才会被统计 <br/>
+    /// 如果父元素开启此属性 元素自身的 <see cref="UIElement.MaxHeight"/> 会被强制设为 <see cref="float.MaxValue"/>
+    /// </summary>
     public bool IsAdaptiveHeight;
 
     /// <summary>
@@ -416,6 +423,12 @@ public class View : UIElement
     {
         Width.Pixels = width;
         Height.Pixels = height;
+        return this;
+    }
+    public View SetSizePercent(float percent)
+    {
+        Width.Percent = percent;
+        Height.Percent = percent;
         return this;
     }
 

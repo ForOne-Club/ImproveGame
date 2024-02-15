@@ -80,50 +80,42 @@ public class MasterControlGUI : BaseBody
         {
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(4f),
+            TextScale = 0.8f,
             TextOrKey = "可用功能",
             TextOffset = new Vector2(12f, 0f)
         };
-        availableText.SetSize(0f, availableText.TextSize.Y, 1f, 0f);
+        availableText.SetSize(0f, availableText.TextSize.Y * availableText.TextScale, 1f, 0f);
         availableText.JoinParent(Window);
 
-        AvailableFunctions = new SUIScrollView2(ScrollType.Vertical)
+        AvailableFunctions = new SUIScrollView2(Orientation.Vertical)
         {
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(4f),
         };
         AvailableFunctions.SetPadding(6f, 0f);
-        AvailableFunctions.SetSizePixels(400, 100);
+        AvailableFunctions.SetSizePixels(500, 120);
         AvailableFunctions.JoinParent(Window);
 
         ReloadAvailableFunctionsElement();
-
-        /*var dividing = new View
-        {
-            BgColor = UIStyle.PanelBorder,
-            RelativeMode = RelativeMode.Vertical,
-            Spacing = new Vector2(4f)
-        };
-        dividing.Width.Percent = 1f;
-        dividing.Height.Pixels = 2.5f;
-        dividing.JoinParent(Window);*/
 
         var unavailableText = new SUIText
         {
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(4f),
+            TextScale = 0.8f,
             TextOrKey = "不可用功能",
             TextOffset = new Vector2(12f, 0f)
         };
-        unavailableText.SetSize(0f, availableText.TextSize.Y, 1f, 0f);
+        unavailableText.SetSize(0f, unavailableText.TextSize.Y * unavailableText.TextScale, 1f, 0f);
         unavailableText.JoinParent(Window);
 
-        UnavailableFunctions = new SUIScrollView2(ScrollType.Vertical)
+        UnavailableFunctions = new SUIScrollView2(Orientation.Vertical)
         {
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(4f)
         };
         UnavailableFunctions.SetPadding(6f, 0f);
-        UnavailableFunctions.SetSizePixels(400, 100);
+        UnavailableFunctions.SetSizePixels(500, 120);
         UnavailableFunctions.JoinParent(Window);
 
         ReloadUnavailableFunctionsElement();
@@ -146,16 +138,16 @@ public class MasterControlGUI : BaseBody
         #endregion
     }
 
-    public const float HCount = 4f;
+    public const float HNumber = 5f;
     public const float ChildrenSpacing = 4f;
-    public const float ItemWidthPercent = 1f / HCount;
+    public const float ItemWidthPercent = 1f / HNumber;
 
     /// <summary>
     /// 重新加载 可用的 功能列表视图
     /// </summary>
     public void ReloadAvailableFunctionsElement()
     {
-        AvailableFunctions.AdaptiveView.RemoveAllChildren();
+        AvailableFunctions.ListView.RemoveAllChildren();
 
         for (int i = 0; i < MasterControlManager.Instance.AvailableOrderedMCFunctions.Count; i++)
         {
@@ -165,8 +157,11 @@ public class MasterControlGUI : BaseBody
                 Spacing = new Vector2(ChildrenSpacing),
             };
 
-            functionComponent.SetSize(-ChildrenSpacing * (HCount - 1) / HCount, 46f, ItemWidthPercent);
-            functionComponent.JoinParent(AvailableFunctions.AdaptiveView);
+            if (i % HNumber == 0)
+                functionComponent.DirectLineBreak = true;
+
+            functionComponent.SetSize(-ChildrenSpacing * (HNumber - 1) / HNumber, 52f, ItemWidthPercent);
+            functionComponent.JoinParent(AvailableFunctions.ListView);
         }
     }
 
@@ -175,7 +170,7 @@ public class MasterControlGUI : BaseBody
     /// </summary>
     public void ReloadUnavailableFunctionsElement()
     {
-        UnavailableFunctions.AdaptiveView.RemoveAllChildren();
+        UnavailableFunctions.ListView.RemoveAllChildren();
 
         for (int i = 0; i < MasterControlManager.Instance.UnavailableOrderedMCFunctions.Count; i++)
         {
@@ -185,8 +180,11 @@ public class MasterControlGUI : BaseBody
                 Spacing = new Vector2(ChildrenSpacing),
             };
 
-            functionComponent.SetSize(-ChildrenSpacing * (HCount - 1) / HCount, 46f, ItemWidthPercent);
-            functionComponent.JoinParent(UnavailableFunctions.AdaptiveView);
+            if (i % HNumber == 0)
+                functionComponent.DirectLineBreak = true;
+
+            functionComponent.SetSize(-ChildrenSpacing * (HNumber - 1) / HNumber, 52f, ItemWidthPercent);
+            functionComponent.JoinParent(UnavailableFunctions.ListView);
         }
     }
 
@@ -194,8 +192,8 @@ public class MasterControlGUI : BaseBody
     {
         base.CheckWhetherRecalculate(out recalculate);
 
-        if (AvailableFunctions.AdaptiveView.Children.Count() != MasterControlManager.Instance.AvailableOrderedMCFunctions.Count &&
-            UnavailableFunctions.AdaptiveView.Children.Count() != MasterControlManager.Instance.UnavailableOrderedMCFunctions.Count)
+        if (AvailableFunctions.ListView.Children.Count() != MasterControlManager.Instance.AvailableOrderedMCFunctions.Count &&
+            UnavailableFunctions.ListView.Children.Count() != MasterControlManager.Instance.UnavailableOrderedMCFunctions.Count)
         {
             ReloadAvailableFunctionsElement();
             ReloadUnavailableFunctionsElement();
