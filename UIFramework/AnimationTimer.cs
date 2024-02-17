@@ -165,4 +165,14 @@ public class AnimationTimer(float speed = 5f, float timerMax = 100f, AnimationTy
     {
         return vector2 * timer.Schedule;
     }
+
+    public static float operator *(float number, AnimationTimer timer)
+    {
+        return number * timer.Schedule;
+    }
+
+    public static float operator *(AnimationTimer timer, float number)
+    {
+        return number * timer.Schedule;
+    }
 }

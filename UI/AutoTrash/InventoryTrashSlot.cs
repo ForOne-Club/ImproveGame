@@ -57,7 +57,7 @@ public class InventoryTrashSlot : GenericItemSlot
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensionsSize();
             var texture = ModAsset.Trash.Value;
-            var opacity = (GlassVfxAvailable ? 0.25f : 0.5f) * Opacity.Value;
+            var opacity = GlassVfxAvailable ? 0.25f : 0.5f;
 
             spriteBatch.Draw(texture, pos + size / 2f, null, Color.White * opacity, 0f, texture.Size() / 2f, ItemIconScale, 0, 0);
         }

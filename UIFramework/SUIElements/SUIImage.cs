@@ -46,7 +46,7 @@ namespace ImproveGame.UIFramework.SUIElements
                 Vector2 imagePosition = position + ImagePosition + size * ImagePercent;
                 imagePosition += (size - Texture.Size()) * ImageAlign;
 
-                sb.Draw(Texture, imagePosition, SourceRectangle, ImageColor * Opacity.Value,
+                sb.Draw(Texture, imagePosition, SourceRectangle, ImageColor,
                     0f, Texture.Size() * ImageOrigin, ImageScale, 0f, 0f);
             }
         }

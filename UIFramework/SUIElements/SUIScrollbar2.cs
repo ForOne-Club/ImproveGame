@@ -195,7 +195,7 @@ public class SUIScrollbar2 : TimerView
         if (barSize.X > 0 && barSize.Y > 0)
         {
             Color barBgColor = IsMouseOverScrollbar() || _isScrollbarDragging ? BarHoverColor : BarColor;
-            SDFRectangle.NoBorder(barPos, barSize, new Vector4(Math.Min(barSize.X, barSize.Y) / 2f), barBgColor * Opacity.Value);
+            SDFRectangle.NoBorder(barPos, barSize, new Vector4(Math.Min(barSize.X, barSize.Y) / 2f), barBgColor);
         }
     }
 }

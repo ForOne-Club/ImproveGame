@@ -199,10 +199,10 @@ public class SUIText : TimerView
         textPos.Y += TextScale * (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
 
         DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets,
-            textPos, TextBorderColor * Opacity.Value, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder * TextScale);
+            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder * TextScale);
 
         DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
-            textPos, TextColor * Opacity.Value, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f, true);
+            textPos, TextColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f, true);
     }
 
     public static readonly Vector2[] ShadowDirections = [-Vector2.UnitX, Vector2.UnitX, -Vector2.UnitY, Vector2.UnitY];

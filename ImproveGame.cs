@@ -1,15 +1,18 @@
 using ImproveGame.Common;
 using ImproveGame.Common.ModSystems;
-using MonoMod.Cil;
+using ImproveGame.Core;
 using Terraria.UI.Chat;
 
 namespace ImproveGame;
 
 public class ImproveGame : Mod
 {
+    public static ImproveGame Instance => ModContent.GetInstance<ImproveGame>();
+
     // 额外BUFF槽
     public override uint ExtraPlayerBuffSlots => (uint)Config.ExtraPlayerBuffSlots;
-    public static ImproveGame Instance => ModContent.GetInstance<ImproveGame>();
+
+    public RenderTargetPool RenderTargetPool { get; init; } = new RenderTargetPool();
 
     public override void Load()
     {

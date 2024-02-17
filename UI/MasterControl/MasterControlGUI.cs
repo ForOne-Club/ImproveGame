@@ -11,7 +11,7 @@ namespace ImproveGame.UI.MasterControl;
 [AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Master Control GUI", 100)]
 public class MasterControlGUI : BaseBody
 {
-    public readonly AnimationTimer OpacityTimer = new();
+    public readonly AnimationTimer OpacityTimer = new(2.5f);
     public override bool Enabled
     {
         get => Main.keyState.IsKeyDown(Keys.OemTilde) || OpacityTimer.AnyOpen || OpacityTimer.Closing;
@@ -46,8 +46,6 @@ public class MasterControlGUI : BaseBody
 
     public override void OnInitialize()
     {
-        Opacity.Type = OpacityType.Own;
-
         #region Window
         Window = new SUIPanel(Color.Transparent, Color.Transparent)
         {
@@ -200,12 +198,6 @@ public class MasterControlGUI : BaseBody
 
             recalculate = true;
         }
-
-        if (OpacityTimer.Lerp(0, 1) != Opacity.Value)
-        {
-            Opacity.SetValue(OpacityTimer.Lerp(0, 1));
-            recalculate = true;
-        }
     }
 
     public override void Update(GameTime gameTime)
@@ -219,12 +211,22 @@ public class MasterControlGUI : BaseBody
         if (Main.keyState.IsKeyDown(Keys.OemTilde))
         {
             if (!OpacityTimer.AnyOpen)
-                OpacityTimer.OpenAndResetTimer();
+                OpacityTimer.Open();
         }
         else
         {
             if (!OpacityTimer.AnyClose)
-                OpacityTimer.CloseAndResetTimer();
+                OpacityTimer.Close();
         }
     }
+
+    #region Animation
+    public override bool RenderTarget2DDraw => OpacityTimer.State != AnimationState.Opened;
+    public override float Opacity => OpacityTimer.Schedule;
+    public override Vector2 RenderTarget2DPosition =>
+        Window.GetDimensions().Position() + Window.GetDimensionsSize() / 2f;
+    public override Vector2 RenderTarget2DOrigin =>
+        Window.GetDimensions().Position() + Window.GetDimensionsSize() / 2f;
+    public override Vector2 RenderTarget2DScale => new Vector2(0.95f + OpacityTimer * 0.05f);
+    #endregion
 }

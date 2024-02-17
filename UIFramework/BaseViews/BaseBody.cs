@@ -53,4 +53,42 @@ public abstract class BaseBody : View
             _lastScreenSize = currentScreenSize;
         }
     }
+
+    public virtual bool RenderTarget2DDraw => false;
+    public virtual float Opacity => 1f;
+    public virtual Vector2 RenderTarget2DScale => Vector2.One;
+    public virtual Vector2 RenderTarget2DPosition => Vector2.Zero;
+    public virtual Vector2 RenderTarget2DOrigin => Vector2.Zero;
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        var renderTargetPool = ImproveGame.Instance.RenderTargetPool;
+        var graphicsDevice = Main.graphics.GraphicsDevice;
+
+        if (RenderTarget2DDraw)
+        {
+            var rt2d = renderTargetPool.Borrow(Main.screenWidth, Main.screenHeight);
+
+            var lastRenderTargetUsage = graphicsDevice.PresentationParameters.RenderTargetUsage;
+            graphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+
+            graphicsDevice.SetRenderTarget(rt2d);
+            graphicsDevice.Clear(Color.Transparent);
+
+            base.Draw(spriteBatch);
+
+            graphicsDevice.SetRenderTarget(null);
+
+            spriteBatch.Draw(rt2d, RenderTarget2DPosition, null,
+                Color.White * Opacity, 0f, RenderTarget2DOrigin, RenderTarget2DScale, 0, 0);
+
+            graphicsDevice.PresentationParameters.RenderTargetUsage = lastRenderTargetUsage;
+
+            renderTargetPool.Return(rt2d);
+        }
+        else
+        {
+            base.Draw(spriteBatch);
+        }
+    }
 }

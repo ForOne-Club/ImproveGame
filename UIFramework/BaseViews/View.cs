@@ -74,21 +74,11 @@ public class View : UIElement
     /// </summary>
     public bool DragIgnore;
 
-    /// <summary>
-    /// 不透明度 [0,1]
-    /// </summary>
-    public readonly Opacity Opacity;
-
     public bool IsLeftMousePressed;
 
     public Vector4 Rounded;
     public float Border;
     public Color BgColor, BorderColor;
-
-    public View()
-    {
-        Opacity = new Opacity(this);
-    }
 
     /// <summary>
     /// 设置圆角矩形的基本属性
@@ -198,8 +188,6 @@ public class View : UIElement
 
     public virtual void RecalculateFromView()
     {
-        Opacity.Recalculate();
-
         if (RelativeMode is RelativeMode.Horizontal or RelativeMode.Vertical)
         {
             // 这边VAlign和HAlign相比局长写的反过来了，暂没有发现问题，先保持这样
@@ -329,7 +317,7 @@ public class View : UIElement
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
 
-            SDFRectangle.HasBorder(pos, size, Rounded, Color.Transparent, Border, BorderColor * Opacity.Value);
+            SDFRectangle.HasBorder(pos, size, Rounded, Color.Transparent, Border, BorderColor);
         }
     }
 
@@ -343,16 +331,16 @@ public class View : UIElement
             if (BorderColor == Color.Transparent || FinallyDrawBorder)
             {
                 if (BgColor != Color.Transparent)
-                    SDFRectangle.NoBorder(pos + new Vector2(Border), size - new Vector2(Border * 2f), Rounded - new Vector4(Border), BgColor * Opacity.Value);
+                    SDFRectangle.NoBorder(pos + new Vector2(Border), size - new Vector2(Border * 2f), Rounded - new Vector4(Border), BgColor);
             }
             else
             {
-                SDFRectangle.HasBorder(pos, size, Rounded, BgColor * Opacity.Value, Border, BorderColor * Opacity.Value);
+                SDFRectangle.HasBorder(pos, size, Rounded, BgColor, Border, BorderColor);
             }
         }
         else if (BgColor != Color.Transparent)
         {
-            SDFRectangle.NoBorder(pos, size, Rounded, BgColor * Opacity.Value);
+            SDFRectangle.NoBorder(pos, size, Rounded, BgColor);
         }
     }
     #endregion
