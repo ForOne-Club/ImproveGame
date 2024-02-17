@@ -11,6 +11,8 @@
 </div>
 
 ## ✨ 功能
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F487666123%2FImproveGame.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2F487666123%2FImproveGame?ref=badge_shield)
+
 详细列表请到模组配置或更新日志中查看
 1. 物品最大堆叠等辅助Mod普遍功能(对标老牌辅助Luiafk)
 2. 非时装饰品也可放置在时装栏（启用模组直接生效）
@@ -123,3 +125,6 @@ public override void PostSetupContent() {
     }
 }
 ```
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F487666123%2FImproveGame.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2F487666123%2FImproveGame?ref=badge_large)
