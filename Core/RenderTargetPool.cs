@@ -36,12 +36,11 @@ public class RenderTargetPool
     }*/
 
     /// <summary>
-    /// 借走 RenderTarget2D （记得还）
+    /// 借出 RenderTarget2D (需归还)
     /// </summary>
     /// <param name="width">宽度</param>
     /// <param name="height">高度</param>
-    /// <param name="rt2d">返回值</param>
-    /// <returns> （记得还）</returns>
+    /// <returns>(需归还)</returns>
     public RenderTarget2D Borrow(int width, int height)
     {
         // 必须要有大小
@@ -82,7 +81,6 @@ public class RenderTargetPool
     /// 归还 RenderTarget2D
     /// </summary>
     /// <param name="rt2d">要归还的 RenderTarget2D</param>
-    /// <returns>归还是否成功 false 意味着并不记录在案</returns>
     public void Return(RenderTarget2D rt2d)
     {
         (int width, int height) size = (rt2d.Width, rt2d.Height);

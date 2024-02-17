@@ -220,13 +220,11 @@ public class MasterControlGUI : BaseBody
         }
     }
 
-    #region Animation
+    #region Animation 开关动画
     public override bool RenderTarget2DDraw => OpacityTimer.State != AnimationState.Opened;
-    public override float Opacity => OpacityTimer.Schedule;
-    public override Vector2 RenderTarget2DPosition =>
-        Window.GetDimensions().Position() + Window.GetDimensionsSize() / 2f;
-    public override Vector2 RenderTarget2DOrigin =>
-        Window.GetDimensions().Position() + Window.GetDimensionsSize() / 2f;
+    public override float RenderTarget2DOpacity => OpacityTimer.Schedule;
+    public override Vector2 RenderTarget2DPosition => Window.GetDimensionsCenter();
+    public override Vector2 RenderTarget2DOrigin => Window.GetDimensionsCenter();
     public override Vector2 RenderTarget2DScale => new Vector2(0.95f + OpacityTimer * 0.05f);
     #endregion
 }

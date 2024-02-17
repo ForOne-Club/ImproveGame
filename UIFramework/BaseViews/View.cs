@@ -475,9 +475,9 @@ public class View : UIElement
         return new Vector2(_outerDimensions.Width + _outerDimensions.X, _outerDimensions.Height + _outerDimensions.Y);
     }
 
-    public Vector2 GetDimensionsRight()
+    public Vector2 GetOuterDimensionsSize()
     {
-        return new Vector2(_dimensions.Width + _dimensions.X, _dimensions.Height + _dimensions.Y);
+        return new Vector2(_outerDimensions.Width, _outerDimensions.Height);
     }
 
     public Vector2 GetInnerDimensionsRight()
@@ -485,9 +485,14 @@ public class View : UIElement
         return new Vector2(_innerDimensions.Width + _innerDimensions.X, _innerDimensions.Height + _innerDimensions.Y);
     }
 
-    public Vector2 GetOuterDimensionsSize()
+    public Vector2 GetInnerDimensionsSize()
     {
-        return new Vector2(_outerDimensions.Width, _outerDimensions.Height);
+        return new Vector2(_innerDimensions.Width, _innerDimensions.Height);
+    }
+
+    public Vector2 GetDimensionsRight()
+    {
+        return new Vector2(_dimensions.Width + _dimensions.X, _dimensions.Height + _dimensions.Y);
     }
 
     public Vector2 GetDimensionsSize()
@@ -495,9 +500,9 @@ public class View : UIElement
         return new Vector2(_dimensions.Width, _dimensions.Height);
     }
 
-    public Vector2 GetInnerDimensionsSize()
+    public Vector2 GetDimensionsCenter()
     {
-        return new Vector2(_innerDimensions.Width, _innerDimensions.Height);
+        return new Vector2(_dimensions.X + _dimensions.Width / 2f, _dimensions.Y + _dimensions.Height / 2f);
     }
     #endregion
     #endregion

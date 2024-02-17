@@ -55,36 +55,49 @@ public abstract class BaseBody : View
     }
 
     public virtual bool RenderTarget2DDraw => false;
-    public virtual float Opacity => 1f;
+    public virtual float RenderTarget2DOpacity => 1f;
     public virtual Vector2 RenderTarget2DScale => Vector2.One;
     public virtual Vector2 RenderTarget2DPosition => Vector2.Zero;
     public virtual Vector2 RenderTarget2DOrigin => Vector2.Zero;
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        var renderTargetPool = ImproveGame.Instance.RenderTargetPool;
-        var graphicsDevice = Main.graphics.GraphicsDevice;
+        var rt2dPool = ImproveGame.Instance.RenderTargetPool;
+        var device = Main.graphics.GraphicsDevice;
 
         if (RenderTarget2DDraw)
         {
-            var rt2d = renderTargetPool.Borrow(Main.screenWidth, Main.screenHeight);
+            var originalRT2Ds = device.GetRenderTargets();
 
-            var lastRenderTargetUsage = graphicsDevice.PresentationParameters.RenderTargetUsage;
-            graphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+            if (originalRT2Ds != null)
+            {
+                foreach (var item in originalRT2Ds)
+                {
+                    if (item.renderTarget is RenderTarget2D rt)
+                    {
+                        rt.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+                    }
+                }
+            }
 
-            graphicsDevice.SetRenderTarget(rt2d);
-            graphicsDevice.Clear(Color.Transparent);
+            var rt2d = rt2dPool.Borrow(Main.screenWidth, Main.screenHeight);
+
+            var lastRenderTargetUsage = device.PresentationParameters.RenderTargetUsage;
+            device.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+
+            device.SetRenderTarget(rt2d);
+            device.Clear(Color.Transparent);
 
             base.Draw(spriteBatch);
 
-            graphicsDevice.SetRenderTarget(null);
+            device.SetRenderTargets(originalRT2Ds);
 
             spriteBatch.Draw(rt2d, RenderTarget2DPosition, null,
-                Color.White * Opacity, 0f, RenderTarget2DOrigin, RenderTarget2DScale, 0, 0);
+                Color.White * RenderTarget2DOpacity, 0f, RenderTarget2DOrigin, RenderTarget2DScale, 0, 0);
 
-            graphicsDevice.PresentationParameters.RenderTargetUsage = lastRenderTargetUsage;
+            device.PresentationParameters.RenderTargetUsage = lastRenderTargetUsage;
 
-            renderTargetPool.Return(rt2d);
+            rt2dPool.Return(rt2d);
         }
         else
         {
