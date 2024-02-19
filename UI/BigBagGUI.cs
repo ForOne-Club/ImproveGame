@@ -14,27 +14,25 @@ public class BigBagGUI : BaseBody
 {
     public static BigBagGUI Instance { get; private set; }
     public BigBagGUI() => Instance = this;
+    public override bool IsNotSelectable => StartTimer.AnyClose;
 
-    public override bool Enabled { get => Visible; set => Visible = value; }
+    public override bool Enabled
+    {
+        get
+        {
+            if (!Main.playerInventory)
+                _enabled = false;
+
+            return StartTimer.Closing || _enabled;
+        }
+        set => _enabled = value;
+    }
+    private bool _enabled;
 
     public override bool CanSetFocusTarget(UIElement target)
         => target != this && (MainPanel.IsMouseHovering || MainPanel.IsLeftMousePressed);
 
-    public static bool Visible
-    {
-        get
-        {
-            if (!Main.playerInventory) /* 关闭背包时设置为 false，使背包再开启后是大背包处于未开启状态 */
-            {
-                _visible = false;
-            }
-
-            return _visible;
-        }
-        set => _visible = value;
-    }
-    private static bool _visible = true;
-
+    #region Components
     // 主面板
     public SUIPanel MainPanel;
 
@@ -58,6 +56,7 @@ public class BigBagGUI : BaseBody
 
     // 物品列表
     public ModItemGrid ItemGrid;
+    #endregion
 
     public override void OnInitialize()
     {
@@ -225,6 +224,7 @@ public class BigBagGUI : BaseBody
 
     public override void Update(GameTime gameTime)
     {
+        StartTimer.Update();
         base.Update(gameTime);
         if (MainPanel.IsMouseHovering)
         {
@@ -247,17 +247,23 @@ public class BigBagGUI : BaseBody
         MainPanel.Recalculate();
     }
 
+    public AnimationTimer StartTimer = new(3);
+
     public void Open()
     {
+        Enabled = true;
+        StartTimer.Open();
+
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Main.playerInventory = true;
-        _visible = true;
     }
 
     public void Close()
     {
+        Enabled = false;
+        StartTimer.Close();
+
         SoundEngine.PlaySound(SoundID.MenuClose);
-        _visible = false;
         AdditionalConfig.Save();
     }
 
@@ -267,7 +273,8 @@ public class BigBagGUI : BaseBody
         Item[] items = ItemGrid.ItemList.items;
 
         // 拿出来非空非收藏的物品
-        List<Item> testSort = new();
+        List<Item> testSort = [];
+
         for (int i = 0; i < items.Length; i++)
         {
             if (items[i].IsAir || items[i].favorited)
@@ -342,4 +349,10 @@ public class BigBagGUI : BaseBody
 
         Recipe.FindRecipes();
     }
+
+    public override bool RenderTarget2DDraw => !StartTimer.Opened;
+    public override float RenderTarget2DOpacity => StartTimer.Schedule;
+    public override Vector2 RenderTarget2DOrigin => MainPanel.GetDimensionsCenter();
+    public override Vector2 RenderTarget2DPosition => MainPanel.GetDimensionsCenter();
+    public override Vector2 RenderTarget2DScale => new Vector2(0.95f + StartTimer.Lerp(0, 0.05f));
 }

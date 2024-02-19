@@ -61,7 +61,7 @@ public class MasterControlGUI : BaseBody
         #endregion
 
         #region HeadBar
-        HeadBar = ViewHelper.CreateHead(Color.Black * 0.3f, 45f, 12f);
+        HeadBar = ViewHelper.CreateHead(UIStyle.PanelBorder * 0.5f, 45f, 12f);
         HeadBar.JoinParent(Window);
 
         Title = new SUIText

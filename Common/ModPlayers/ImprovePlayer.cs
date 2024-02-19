@@ -299,7 +299,7 @@ public class ImprovePlayer : ModPlayer
     {
         if (!Config.SuperVault) return;
 
-        if (BigBagGUI.Visible)
+        if (BigBagGUI.Instance.Enabled && BigBagGUI.Instance.StartTimer.AnyOpen)
             BigBagGUI.Instance.Close();
         else
             BigBagGUI.Instance.Open();

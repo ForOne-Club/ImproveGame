@@ -48,7 +48,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                 Main.cursorOverride = CursorOverrideID.InventoryToChest;
                 return true;
             }
-            if (BigBagGUI.Visible && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var dataPlayer) &&
+            if (BigBagGUI.Instance.Enabled && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var dataPlayer) &&
                 dataPlayer.SuperVault.Any(s => CanPlaceInSlot(s, item) is 2 or 3))
             {
                 Main.cursorOverride = CursorOverrideID.InventoryToChest;
@@ -106,7 +106,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                 return true; // 阻止原版代码运行
             }
 
-            if (BigBagGUI.Visible)
+            if (BigBagGUI.Instance.Enabled)
             {
                 inventory[slot] = ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
                 Recipe.FindRecipes();

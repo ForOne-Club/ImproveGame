@@ -86,6 +86,7 @@ public class PlayerStatsGUI : BaseBody
 
         #region 控制窗口
         Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg, 10, 2, true);
+        Window.FinallyDrawBorder = true;
 
         #region 标题栏
         // 标题
@@ -93,8 +94,8 @@ public class PlayerStatsGUI : BaseBody
         {
             DragIgnore = true,
             BgColor = UIStyle.TitleBg2,
-            Border = 2f,
-            BorderColor = UIStyle.PanelBorder,
+            Border = 0f,
+            BorderColor = Color.Transparent,
             Rounded = new Vector4(10f, 10f, 0f, 0f),
         };
         TitleView.SetPadding(0);
@@ -118,6 +119,8 @@ public class PlayerStatsGUI : BaseBody
             CrossSize = 20f,
             CrossRounded = 4.5f * 0.85f
         };
+        Cross.Border = 0f;
+        Cross.BorderColor = Color.Transparent;
         Cross.Width.Pixels = 42f;
         Cross.Height.Set(0f, 1f);
         Cross.JoinParent(TitleView);
