@@ -18,11 +18,22 @@ public class ItemContainerGUI : BaseBody
     {
         get
         {
-            if (!Main.playerInventory)
+            if (_enabled && !Main.playerInventory)
+            {
                 _enabled = false;
-            return _enabled;
+                StartTimer.Close();
+            }
+
+            return StartTimer.Closing || _enabled;
         }
-        set => _enabled = value;
+        set
+        {
+            _enabled = value;
+            if (_enabled)
+                StartTimer.Open();
+            else
+                StartTimer.Close();
+        }
     }
     private static bool _enabled;
     #endregion
@@ -69,6 +80,8 @@ public class ItemContainerGUI : BaseBody
 
     public override void OnInitialize()
     {
+        StartTimer.State = AnimationState.Closed;
+
         Window.SetPadding(0f);
         Window.JoinParent(this);
 
@@ -167,6 +180,7 @@ public class ItemContainerGUI : BaseBody
 
     public override void Update(GameTime gameTime)
     {
+        StartTimer.Update();
         base.Update(gameTime);
 
         if (Window.IsMouseHovering)
@@ -198,4 +212,12 @@ public class ItemContainerGUI : BaseBody
     {
         return target != this && Window.IsMouseHovering || Window.IsLeftMousePressed;
     }
+
+    public AnimationTimer StartTimer = new(3);
+
+    public override bool RenderTarget2DDraw => !StartTimer.Opened;
+    public override Vector2 RenderTarget2DScale => new Vector2(0.95f + StartTimer * 0.05f);
+    public override float RenderTarget2DOpacity => StartTimer.Schedule;
+    public override Vector2 RenderTarget2DPosition => Window.GetDimensionsCenter();
+    public override Vector2 RenderTarget2DOrigin => Window.GetDimensionsCenter();
 }

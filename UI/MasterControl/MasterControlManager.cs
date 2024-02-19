@@ -137,11 +137,12 @@ public class MasterControlManager : ModSystem
             if (Main.LocalPlayer.TryGetModPlayer<ImprovePlayer>(out var improvePlayer) &&
                 improvePlayer.BannerChest != null)
             {
-                if (!ItemContainerGUI.Instace.Enabled ||
-                    improvePlayer.BannerChest != ItemContainerGUI.Instace.Container)
-                    ItemContainerGUI.Instace.Open(improvePlayer.BannerChest);
-                else
+                if (ItemContainerGUI.Instace.Enabled &&
+                    improvePlayer.BannerChest == ItemContainerGUI.Instace.Container &&
+                    ItemContainerGUI.Instace.StartTimer.AnyOpen)
                     ItemContainerGUI.Instace.Close();
+                else
+                    ItemContainerGUI.Instace.Open(improvePlayer.BannerChest);
             }
         };
         #endregion
@@ -167,11 +168,12 @@ public class MasterControlManager : ModSystem
             if (Main.LocalPlayer.TryGetModPlayer<ImprovePlayer>(out var improvePlayer) &&
                 improvePlayer.PotionBag != null)
             {
-                if (!ItemContainerGUI.Instace.Enabled ||
-                    improvePlayer.PotionBag != ItemContainerGUI.Instace.Container)
-                    ItemContainerGUI.Instace.Open(improvePlayer.PotionBag);
-                else
+                if (ItemContainerGUI.Instace.Enabled &&
+                    improvePlayer.PotionBag == ItemContainerGUI.Instace.Container &&
+                    ItemContainerGUI.Instace.StartTimer.AnyOpen)
                     ItemContainerGUI.Instace.Close();
+                else
+                    ItemContainerGUI.Instace.Open(improvePlayer.PotionBag);
             }
         };
         #endregion

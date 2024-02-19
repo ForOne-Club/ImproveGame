@@ -29,7 +29,8 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
 
     public override void RightClick(Player player)
     {
-        if (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this)
+        if (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this &&
+            ItemContainerGUI.Instace.StartTimer.AnyOpen)
             ItemContainerGUI.Instace.Close();
         else
             ItemContainerGUI.Instace.Open(this);

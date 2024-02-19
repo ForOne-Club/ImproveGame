@@ -20,8 +20,11 @@ public class BigBagGUI : BaseBody
     {
         get
         {
-            if (!Main.playerInventory)
+            if (_enabled && !Main.playerInventory)
+            {
                 _enabled = false;
+                StartTimer.Close();
+            }
 
             return StartTimer.Closing || _enabled;
         }
@@ -32,12 +35,17 @@ public class BigBagGUI : BaseBody
     public override bool CanSetFocusTarget(UIElement target)
         => target != this && (MainPanel.IsMouseHovering || MainPanel.IsLeftMousePressed);
 
+    /// <summary>
+    /// 启动关闭动画计时器
+    /// </summary>
+    public AnimationTimer StartTimer = new(3);
+
     #region Components
     // 主面板
     public SUIPanel MainPanel;
 
     // 标题面板
-    private SUIPanel TitlePanel;
+    private View TitlePanel;
 
     // 内容面板
     private View ButtonPanel;
@@ -63,37 +71,33 @@ public class BigBagGUI : BaseBody
         PlayerBigBagSettingPacket.SendMyPlayer();
 
         UIPlayerSetting setting = Main.LocalPlayer.GetModPlayer<UIPlayerSetting>();
+
         // 主面板
         MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Shaded = true,
-            Draggable = true
+            Draggable = true,
+            FinallyDrawBorder = true
         };
-        MainPanel.SetPadding(0f);
+        MainPanel.SetPadding(1f);
         MainPanel.JoinParent(this);
 
-        TitlePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.TitleBg2)
-        {
-            DragIgnore = true,
-            Width = { Pixels = 0f, Precent = 1f },
-            Height = { Pixels = 50f, Precent = 0f },
-            Rounded = new Vector4(10f, 10f, 0f, 0f),
-            RelativeMode = RelativeMode.Vertical
-        };
+        TitlePanel = ViewHelper.CreateHead(UIStyle.PanelBorder * 0.5f, 50f, 10f);
+        TitlePanel.RelativeMode = RelativeMode.Vertical;
         TitlePanel.SetPadding(0f);
         TitlePanel.JoinParent(MainPanel);
 
         // 标题
-        Title = new SUIText()
+        Title = new SUIText
         {
             TextOrKey = "Mods.ImproveGame.SuperVault.Name",
             UseKey = true,
             IsLarge = true,
             TextScale = 0.55f,
             VAlign = 0.5f,
+            TextBorder = 2f,
+            PaddingLeft = 20f
         };
-        Title.TextBorder = 2f / Title.TextScale;
-        Title.PaddingLeft = 20f;
         Title.SetInnerPixels(Title.TextSize * Title.TextScale);
         Title.JoinParent(TitlePanel);
 
@@ -102,11 +106,30 @@ public class BigBagGUI : BaseBody
         {
             HAlign = 1f,
             VAlign = 0.5f,
+            Width = { Pixels = 55f, Percent = 0f },
             Height = { Pixels = 0f, Precent = 1f },
-            Rounded = new Vector4(0f, 10f, 0f, 0f)
+            Rounded = new Vector4(0f, 10f, 0f, 0f),
+            Border = 0f,
+            BorderColor = Color.Transparent,
+            CrossOffset = new Vector2(1f, 0f),
+            CrossRounded = UIStyle.CrossThickness * 0.95f
         };
         Cross.OnLeftMouseDown += (_, _) => Close();
+        Cross.OnUpdate += (_) =>
+        {
+            Cross.BgColor = Cross.HoverTimer.Lerp(Color.Transparent, UIStyle.PanelBorder * 0.5f);
+        };
         Cross.JoinParent(TitlePanel);
+
+        var view = new View
+        {
+            Width = { Precent = 1f },
+            Height = { Pixels = 2.5f },
+            BgColor = UIStyle.PanelBorder,
+            RelativeMode = RelativeMode.Vertical,
+            Spacing = new Vector2(-1f),
+        };
+        view.JoinParent(MainPanel);
 
         ButtonPanel = new View
         {
@@ -246,8 +269,6 @@ public class BigBagGUI : BaseBody
         MainPanel.SetInnerPixels(ButtonPanel.Width.Pixels, ButtonPanel.Bottom());
         MainPanel.Recalculate();
     }
-
-    public AnimationTimer StartTimer = new(3);
 
     public void Open()
     {

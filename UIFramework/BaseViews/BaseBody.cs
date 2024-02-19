@@ -80,7 +80,9 @@ public abstract class BaseBody : View
                 }
             }
 
-            var rt2d = rt2dPool.Borrow(Main.screenWidth, Main.screenHeight);
+            // 刺客获取的屏幕大小不是正常的
+            var rt2d = rt2dPool.Borrow((int)Math.Round(Main.screenWidth * Main.UIScale),
+                (int)Math.Round(Main.screenHeight * Main.UIScale));
 
             var lastRenderTargetUsage = device.PresentationParameters.RenderTargetUsage;
             device.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
@@ -92,8 +94,11 @@ public abstract class BaseBody : View
 
             device.SetRenderTargets(originalRT2Ds);
 
-            spriteBatch.Draw(rt2d, RenderTarget2DPosition, null,
-                Color.White * RenderTarget2DOpacity, 0f, RenderTarget2DOrigin, RenderTarget2DScale, 0, 0);
+            // 使用默认矩阵，因为图像已经是根据 UIZoom 矩阵 绘制的了。
+            spriteBatch.End();
+            spriteBatch.Begin();
+            spriteBatch.Draw(rt2d, RenderTarget2DPosition * Main.UIScale, null,
+                Color.White * RenderTarget2DOpacity, 0f, RenderTarget2DOrigin * Main.UIScale, RenderTarget2DScale, 0, 0);
 
             device.PresentationParameters.RenderTargetUsage = lastRenderTargetUsage;
 
