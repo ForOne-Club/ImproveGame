@@ -1,61 +1,36 @@
-﻿using ImproveGame.Common.Players;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.AutoTrash;
 
 /// <summary>
 /// 垃圾列表槽
 /// </summary>
-public class GarbageListSlot : BaseItemSlot
+public class GarbageListSlot : GenericItemSlot
 {
-    /// <summary>
-    /// 垃圾列表
-    /// </summary>
-    public readonly List<Item> Garbages;
-    public readonly int Index;
-    public override Item Item
+    public static AutoTrashPlayer AutoTrashPlayer =>
+        Main.LocalPlayer.GetModPlayer<AutoTrashPlayer>();
+    public static Texture2D TrashTexture => ModAsset.TakeOutFromTrash.Value;
+
+    public GarbageListSlot(List<Item> items, int index) : base(items, index)
     {
-        get
-        {
-            return Garbages.IndexInRange(Index) ? Garbages[Index] : AirItem;
-        }
-    }
-
-    public Texture2D TrashTexture { get; protected set; }
-
-    public GarbageListSlot(List<Item> items, int index)
-    {
-        Garbages = items;
-        Index = index;
-        SetBaseItemSlotValues(true, false);
-        SetSizePixels(44, 44);
-        ItemIconMaxWidthAndHeight = 32f;
-        ItemIconScale = 0.85f;
-        TrashTexture = ModAsset.TakeOutFromTrash.Value;
-
         HoverTimer.Close();
+        ItemIconScale = 0.85f;
+
+        SetBaseItemSlotValues(true, false);
+        SetSizePixels(44f, 44f);
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)
     {
-        List<Item> trashItems = AutoTrashPlayer.Instance.TrashItems;
+        List<Item> recentlyThrownAwayItems = AutoTrashPlayer.Instance.RecentlyThrownAwayItems;
 
-        int trashIndex = trashItems.FindIndex(item => item.type == Item.type);
+        int trashIndex = recentlyThrownAwayItems.FindIndex(i => i.type == Item.type);
         if (trashIndex > -1)
         {
-            int worldIndex = Item.NewItem(null, Main.LocalPlayer.getRect(), trashItems[trashIndex].type, trashItems[trashIndex].stack, true);
-            if (worldIndex > -1)
-            {
-                trashItems[trashIndex].active = true;
-                trashItems[trashIndex].position = Main.item[worldIndex].position;
-                Main.item[worldIndex] = trashItems[trashIndex];
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, worldIndex, 0);
-            }
-
-            trashItems.RemoveAt(trashIndex);
+            Main.LocalPlayer.QuickSpawnItem(null, Item.type, Item.stack);
         }
 
-        Garbages.RemoveAt(Index);
+        AutoTrashPlayer.RemoveItem(Item);
         SoundEngine.PlaySound(SoundID.Grab);
     }
 

@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Common.Players;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
@@ -11,7 +10,7 @@ namespace ImproveGame.UI.AutoTrash;
 [AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Inventory Trash")]
 public class InventoryTrashGUI : BaseBody
 {
-    #region ViewBody
+    #region 抽象实现
 
     public override bool Enabled
     {
@@ -21,10 +20,7 @@ public class InventoryTrashGUI : BaseBody
         set { }
     }
 
-    public override bool CanSetFocusTarget(UIElement target)
-    {
-        return Window.IsMouseHovering;
-    }
+    public override bool CanSetFocusTarget(UIElement target) => Window.IsMouseHovering;
     #endregion
 
     private static bool ChestMenuExists => (Main.LocalPlayer.chest != -1 || Main.npcShop > 0) && !Main.recBigList;
@@ -45,14 +41,13 @@ public class InventoryTrashGUI : BaseBody
 
             // 上面物品栏的网格
             TrashGrid = new BaseGrid();
-            TrashGrid.SetBaseValues(1, atPlayer.MaxCapacity, new Vector2(4f), new Vector2(44f));
+            TrashGrid.SetBaseValues(1, AutoTrashPlayer.MaxCapacity, new Vector2(4f), new Vector2(44f));
 
-            for (int i = 0; i < atPlayer.MaxCapacity; i++)
+            for (int i = 0; i < AutoTrashPlayer.MaxCapacity; i++)
             {
-                var itemSlot = new InventoryTrashSlot(atPlayer.TrashItems, i)
+                var itemSlot = new InventoryTrashSlot(atPlayer.RecentlyThrownAwayItems, i)
                 {
                     Border = 2f * 0.85f,
-                    TrashScale = 0.85f,
                     ItemIconScale = 0.85f
                 };
                 itemSlot.JoinParent(TrashGrid);
@@ -82,16 +77,12 @@ public class InventoryTrashGUI : BaseBody
             SettingsButton.OnMouseOut += (_, _) => SettingsButton.Texture = setting;
             SettingsButton.OnLeftMouseDown += (_, _) =>
             {
-                GarbageListGUI.ShowWindow = !GarbageListGUI.ShowWindow;
+                GarbageListGUI.Instace.Enabled = !GarbageListGUI.Instace.Enabled;
 
-                if (GarbageListGUI.ShowWindow)
-                {
+                if (GarbageListGUI.Instace.Enabled)
                     SoundEngine.PlaySound(SoundID.MenuOpen);
-                }
                 else
-                {
                     SoundEngine.PlaySound(SoundID.MenuClose);
-                }
             };
 
             Window.JoinParent(this);
@@ -127,25 +118,11 @@ public class InventoryTrashGUI : BaseBody
     /// <summary>
     /// 如果两个值不同，就把第一个值设置成第二个
     /// </summary>
-    public static bool Different(ref float value1, float value2)
+    public static bool SetIfDifferent<T>(ref T a, T b)
     {
-        if (value1 != value2)
+        if (!EqualityComparer<T>.Default.Equals(a, b))
         {
-            value1 = value2;
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// 如果两个值不同，就把第一个值设置成第二个
-    /// </summary>
-    public static bool Different(ref Vector2 value1, Vector2 value2)
-    {
-        if (value1 != value2)
-        {
-            value1 = value2;
+            a = b;
             return true;
         }
 
@@ -161,11 +138,11 @@ public class InventoryTrashGUI : BaseBody
         Vector2 trashCellSpacing = ChestMenuExists ? OpenedChestTrashSpacing : ClosedChestTrashSpacing;
 
         /* Window Left */
-        bool a = Different(ref Window.Left.Pixels, windowLeft);
+        bool a = SetIfDifferent(ref Window.Left.Pixels, windowLeft);
         /* Window Top */
-        bool b = Different(ref Window.Top.Pixels, windowTop);
+        bool b = SetIfDifferent(ref Window.Top.Pixels, windowTop);
         /* ItemSlot 间距 */
-        bool c = Different(ref TrashGrid.CellSpacing, trashCellSpacing);
+        bool c = SetIfDifferent(ref TrashGrid.CellSpacing, trashCellSpacing);
 
         if (a || b || c)
         {
@@ -174,7 +151,7 @@ public class InventoryTrashGUI : BaseBody
 
         // ItemSlot 大小
         Vector2 trashSize = ChestMenuExists ? OpenedChestTrashSize : ClosedChestTrashSize;
-        if (Different(ref TrashGrid.CellSize, trashSize))
+        if (SetIfDifferent(ref TrashGrid.CellSize, trashSize))
         {
             recalculate = true;
 
@@ -189,7 +166,6 @@ public class InventoryTrashGUI : BaseBody
                     {
                         itemSlot.SetSizePixels(trashSize);
                         itemSlot.Border = 2f * 0.75f;
-                        itemSlot.TrashScale = 0.75f;
                         itemSlot.ItemIconScale = 0.75f;
                     }
                 }
@@ -204,7 +180,6 @@ public class InventoryTrashGUI : BaseBody
                     {
                         itemSlot.SetSizePixels(trashSize);
                         itemSlot.Border = 2f * 0.85f;
-                        itemSlot.TrashScale = 0.85f;
                         itemSlot.ItemIconScale = 0.85f;
                     }
                 }
@@ -217,7 +192,7 @@ public class InventoryTrashGUI : BaseBody
         }
 
         // 设置按钮
-        if (Different(ref SettingsButton.Left.Pixels, TrashGrid.Right()))
+        if (SetIfDifferent(ref SettingsButton.Left.Pixels, TrashGrid.Right()))
         {
             recalculate = true;
         }

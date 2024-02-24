@@ -108,7 +108,7 @@ namespace ImproveGame.UI
         private void SwitchMode(UIMouseEvent evt, UIElement listeningElement)
         {
             WandSystem.FixedMode = !WandSystem.FixedMode;
-            modeButton.mainImage = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
+            modeButton.MainTexture = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace ImproveGame.UI
             TransformToUIPosition(ref x, ref y);
             Timer.OpenAndResetTimer();
             modeButton.SetCenterPixels(x, y);
-            modeButton.mainImage = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
+            modeButton.MainTexture = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
             Visible = true;
             _mouseRightPrev = true; // 防止一打开就关闭
             Recalculate();

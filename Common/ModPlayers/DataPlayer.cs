@@ -21,12 +21,12 @@ namespace ImproveGame.Common.ModPlayers
         /// <summary>
         /// 记录ID
         /// </summary>
-        public HashSet<int> InfBuffDisabledVanilla = new();
+        public HashSet<int> InfBuffDisabledVanilla = [];
 
         /// <summary>
         /// 格式：Mod内部名/Buff类名
         /// </summary>
-        public HashSet<string> InfBuffDisabledMod = new();
+        public HashSet<string> InfBuffDisabledMod = [];
 
         public override void Initialize()
         {

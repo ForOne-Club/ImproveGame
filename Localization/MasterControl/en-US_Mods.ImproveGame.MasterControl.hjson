@@ -1,0 +1,14 @@
+SuperVault: {
+	DisplayName: Big Backpack
+	Description: A backpack with 100 slots of space
+}
+
+PlayerStats: {
+	DisplayName: Stats Panel
+	Description: View various statistics of a player
+}
+
+Spectating: {
+	DisplayName: Spectate
+	Description: Watch your teammates' battles
+}

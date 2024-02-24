@@ -20,11 +20,18 @@ public class View : UIElement
     public bool HasChildCountChanges => Children.Count() != PreviousChildCount;
 
     /// <summary>
-    /// 该类的大小会根据子元素位置大小自适应，其 <see cref="UIElement.Width"/> <see cref="UIElement.Height"/> 属性皆不生效 <br/>
-    /// 使用的时候要注意，只有继承自 <see cref="View"/> 的子元素才有效 <br/>
-    /// 并且需要注意子元素的 <see cref="UIElement.Width"/> <see cref="UIElement.Height"/> Percent 属性不要设置，因为获取到的会是无限大
+    /// 元素大小会根据子元素位置大小变化，自身的 <see cref="UIElement.Width"/> 属性会在每次统计子元素后变化 <br/>
+    /// 同时会使 <see cref="UIElement.MaxWidth"/> 强制等于统计子元素后 <see cref="UIElement.Width"/> <br/>
+    /// 使用的时候要注意，其子元素只有继承自 <see cref="View"/> 才会被统计 <br/>
+    /// 如果父元素开启此属性 元素自身的 <see cref="UIElement.MaxWidth"/> 会被强制设为 <see cref="float.MaxValue"/>
     /// </summary>
     public bool IsAdaptiveWidth;
+    /// <summary>
+    /// 元素大小会根据子元素位置大小变化，自身的 <see cref="UIElement.Height"/> 属性会在每次统计子元素后变化 <br/>
+    /// 同时会使 <see cref="UIElement.MaxHeight"/> 强制等于统计子元素后 <see cref="UIElement.Height"/> <br/>
+    /// 使用的时候要注意，其子元素只有继承自 <see cref="View"/> 才会被统计 <br/>
+    /// 如果父元素开启此属性 元素自身的 <see cref="UIElement.MaxHeight"/> 会被强制设为 <see cref="float.MaxValue"/>
+    /// </summary>
     public bool IsAdaptiveHeight;
 
     /// <summary>
@@ -51,6 +58,11 @@ public class View : UIElement
     public bool PreventOverflow;
 
     /// <summary>
+    /// 直接换行, 不考虑 <see cref="PreventOverflow"/>
+    /// </summary>
+    public bool DirectLineBreak;
+
+    /// <summary>
     /// 设置 true 横向时不同步与前一个元素的 Top，纵向时不同步 Left<br/>
     /// 在大背包中用于一排 Button 的时候，第一个 Button 前面有一个 Switch<br/>
     /// 与 <see cref="RelativeMode"/> 搭配使用
@@ -62,21 +74,11 @@ public class View : UIElement
     /// </summary>
     public bool DragIgnore;
 
-    /// <summary>
-    /// 不透明度 [0,1]
-    /// </summary>
-    public readonly Opacity Opacity;
-
     public bool IsLeftMousePressed;
 
     public Vector4 Rounded;
     public float Border;
     public Color BgColor, BorderColor;
-
-    public View()
-    {
-        Opacity = new Opacity(this);
-    }
 
     /// <summary>
     /// 设置圆角矩形的基本属性
@@ -111,7 +113,7 @@ public class View : UIElement
         if (IsAdaptiveWidth || IsAdaptiveHeight)
         {
             Vector2 minPos = GetInnerDimensions().Position();
-            Vector2 maxPos = GetInnerDimensions().Position();
+            Vector2 maxPos = minPos;
 
             foreach (UIElement child in Children)
             {
@@ -130,15 +132,15 @@ public class View : UIElement
 
             if (IsAdaptiveWidth)
             {
-                Width = default;
-                Width.Pixels = MathF.Round(maxPos.X - minPos.X, 2) + HPadding;
+                Width.Percent = 0f;
+                Width.Pixels = maxPos.X - minPos.X + HPadding;
                 MaxWidth = Width;
             }
 
             if (IsAdaptiveHeight)
             {
-                Height = default;
-                Height.Pixels = MathF.Round(maxPos.Y - minPos.Y, 2) + VPadding;
+                Height.Percent = 0f;
+                Height.Pixels = maxPos.Y - minPos.Y + VPadding;
                 MaxHeight = Height;
             }
 
@@ -157,14 +159,14 @@ public class View : UIElement
         CalculatedStyle parentDimensions =
             Parent?.GetInnerDimensions() ?? UserInterface.ActiveInstance.GetDimensions();
 
-        View view = Parent as View;
+        View parent = Parent as View;
 
-        if (Parent is UIList || (view?.IsAdaptiveWidth ?? false))
+        if (Parent is UIList || (parent != null && parent.IsAdaptiveWidth))
         {
             MaxWidth = new StyleDimension(float.MaxValue, 0f);
         }
 
-        if (Parent is UIList || (view?.IsAdaptiveHeight ?? false))
+        if (Parent is UIList || (parent != null && parent.IsAdaptiveHeight))
         {
             MaxHeight = new StyleDimension(float.MaxValue, 0f);
         }
@@ -186,8 +188,6 @@ public class View : UIElement
 
     public virtual void RecalculateFromView()
     {
-        Opacity.Recalculate();
-
         if (RelativeMode is RelativeMode.Horizontal or RelativeMode.Vertical)
         {
             // 这边VAlign和HAlign相比局长写的反过来了，暂没有发现问题，先保持这样
@@ -203,12 +203,12 @@ public class View : UIElement
 
             Left = Top = new StyleDimension();
 
-            if (Parent is View parent && parent.Children is List<UIElement> parentChildren &&
+            if (Parent is View parent && parent.Children is IList<UIElement> parentChildren &&
                 parentChildren.IndexOf(this) is int index && index >= 1)
             {
                 View previousView = null;
 
-                for (int i = index - 1; i > -1; i--)
+                for (int i = index - 1; i >= 0; i--)
                 {
                     if (parentChildren[i] is View view)
                     {
@@ -229,7 +229,7 @@ public class View : UIElement
                                 previousView.Left.Pixels + previousViewOuterSize.X + Spacing.X,
                                 ResetAnotherPosition ? 0 : previousView.Top.Pixels);
 
-                            if (PreventOverflow && RightPixels > parentInnerSize.X)
+                            if (DirectLineBreak || PreventOverflow && RightPixels > parentInnerSize.X)
                             {
                                 SetPosPixels(0f, previousView.Top.Pixels + previousViewOuterSize.Y + Spacing.Y);
                             }
@@ -239,7 +239,7 @@ public class View : UIElement
                                 ResetAnotherPosition ? 0 : previousView.Left.Pixels,
                                 previousView.Top.Pixels + previousViewOuterSize.Y + Spacing.Y);
 
-                            if (PreventOverflow && BottomPixels > parentInnerSize.Y)
+                            if (DirectLineBreak || PreventOverflow && BottomPixels > parentInnerSize.Y)
                             {
                                 SetPosPixels(previousView.Left.Pixels + previousViewOuterSize.X + Spacing.X, 0f);
                             }
@@ -317,7 +317,7 @@ public class View : UIElement
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
 
-            SDFRectangle.HasBorder(pos, size, Rounded, Color.Transparent, Border, BorderColor * Opacity.Value);
+            SDFRectangle.HasBorder(pos, size, Rounded, Color.Transparent, Border, BorderColor);
         }
     }
 
@@ -331,16 +331,16 @@ public class View : UIElement
             if (BorderColor == Color.Transparent || FinallyDrawBorder)
             {
                 if (BgColor != Color.Transparent)
-                    SDFRectangle.NoBorder(pos + new Vector2(Border), size - new Vector2(Border * 2f), Rounded - new Vector4(Border), BgColor * Opacity.Value);
+                    SDFRectangle.NoBorder(pos + new Vector2(Border), size - new Vector2(Border * 2f), Rounded - new Vector4(Border), BgColor);
             }
             else
             {
-                SDFRectangle.HasBorder(pos, size, Rounded, BgColor * Opacity.Value, Border, BorderColor * Opacity.Value);
+                SDFRectangle.HasBorder(pos, size, Rounded, BgColor, Border, BorderColor);
             }
         }
         else if (BgColor != Color.Transparent)
         {
-            SDFRectangle.NoBorder(pos, size, Rounded, BgColor * Opacity.Value);
+            SDFRectangle.NoBorder(pos, size, Rounded, BgColor);
         }
     }
     #endregion
@@ -413,12 +413,33 @@ public class View : UIElement
         Height.Pixels = height;
         return this;
     }
+    public View SetSizePercent(float percent)
+    {
+        Width.Percent = percent;
+        Height.Percent = percent;
+        return this;
+    }
+
+    public View SetSizePercent(float width, float height)
+    {
+        Width.Percent = width;
+        Height.Percent = height;
+        return this;
+    }
 
     public View SetSizePixels(Vector2 size)
     {
         Width.Pixels = size.X;
         Height.Pixels = size.Y;
         return this;
+    }
+
+    /// <summary>
+    /// <see cref="UIElement.SetPadding(float)"/>
+    /// </summary>
+    public float Padding
+    {
+        set => SetPadding(value);
     }
 
     public View SetPadding(float left, float top, float right, float bottom)
@@ -454,9 +475,9 @@ public class View : UIElement
         return new Vector2(_outerDimensions.Width + _outerDimensions.X, _outerDimensions.Height + _outerDimensions.Y);
     }
 
-    public Vector2 GetDimensionsRight()
+    public Vector2 GetOuterDimensionsSize()
     {
-        return new Vector2(_dimensions.Width + _dimensions.X, _dimensions.Height + _dimensions.Y);
+        return new Vector2(_outerDimensions.Width, _outerDimensions.Height);
     }
 
     public Vector2 GetInnerDimensionsRight()
@@ -464,9 +485,14 @@ public class View : UIElement
         return new Vector2(_innerDimensions.Width + _innerDimensions.X, _innerDimensions.Height + _innerDimensions.Y);
     }
 
-    public Vector2 GetOuterDimensionsSize()
+    public Vector2 GetInnerDimensionsSize()
     {
-        return new Vector2(_outerDimensions.Width, _outerDimensions.Height);
+        return new Vector2(_innerDimensions.Width, _innerDimensions.Height);
+    }
+
+    public Vector2 GetDimensionsRight()
+    {
+        return new Vector2(_dimensions.Width + _dimensions.X, _dimensions.Height + _dimensions.Y);
     }
 
     public Vector2 GetDimensionsSize()
@@ -474,9 +500,9 @@ public class View : UIElement
         return new Vector2(_dimensions.Width, _dimensions.Height);
     }
 
-    public Vector2 GetInnerDimensionsSize()
+    public Vector2 GetDimensionsCenter()
     {
-        return new Vector2(_innerDimensions.Width, _innerDimensions.Height);
+        return new Vector2(_dimensions.X + _dimensions.Width / 2f, _dimensions.Y + _dimensions.Height / 2f);
     }
     #endregion
     #endregion

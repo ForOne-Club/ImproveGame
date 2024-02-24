@@ -40,7 +40,7 @@ namespace ImproveGame.UIFramework
                 AnimationTimer = new AnimationTimer
                 {
                     Timer = 0,
-                    State = AnimationState.CompleteClose
+                    State = AnimationState.Closed
                 }
             };
 
@@ -134,7 +134,7 @@ namespace ImproveGame.UIFramework
                     uiData.AsSidedView.OnSwapSlide(uiData.AnimationTimer.Schedule);
                     uiData.ViewBody.Recalculate();
                 }
-                if (uiData.AnimationTimer.CompleteOpen)
+                if (uiData.AnimationTimer.Opened)
                 {
                     RootBody = uiData.ViewBody;
                 }
@@ -159,7 +159,7 @@ namespace ImproveGame.UIFramework
             }
 
             RealDraw:
-            foreach (var uiData in UIPool.Where(uiData => !uiData.AnimationTimer.CompleteClose && !ViewBodyIs(uiData.ViewBody)))
+            foreach (var uiData in UIPool.Where(uiData => !uiData.AnimationTimer.Closed && !ViewBodyIs(uiData.ViewBody)))
             {
                 uiData.ViewBody?.Draw(Main.spriteBatch);
             }

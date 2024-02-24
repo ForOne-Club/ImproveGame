@@ -232,7 +232,7 @@ public class SpaceWandGUI : UIState
         {
             t.OnRightMouseDown += (_, _) =>
             {
-                if (Visible && timer.CompleteOpen)
+                if (Visible && timer.Opened)
                     Close();
             };
         }

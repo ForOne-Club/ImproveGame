@@ -218,6 +218,25 @@ Expelliarmus: {
 		'''
 }
 
+ShimmerTech: {
+	DisplayName: 微光数据仪
+	Tooltip:
+		'''
+		[c/ff0000:调试物品]
+		“I can see forever!”
+		使用该仪器可以清除你自身的微光加成
+		右键则会清除世界上的微光加成
+		{$ItemName.AegisCrystal}
+		{$ItemName.ArcaneCrystal}
+		{$ItemName.AegisFruit}
+		{$ItemName.Ambrosia}
+		{$ItemName.GummyWorm}
+		{$ItemName.GalaxyPearl}
+		{$ItemName.CombatBookVolumeTwo}
+		{$ItemName.PeddlersSatchel}
+		'''
+}
+
 Dummy: {
 	DisplayName: Scarecrow Dummy
 	Tooltip:

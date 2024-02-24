@@ -1,4 +1,4 @@
-﻿using ImproveGame.Content.Items;
+﻿using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
 using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;
@@ -66,9 +66,9 @@ public class BannerPatches : ModSystem
         {
             AddBannerBuff(item);
             if (item is not null && !item.IsAir && item.ModItem is BannerChest bannerChest &&
-                bannerChest.StoredBanners.Count > 0)
+                bannerChest.ItemContainer.Count > 0)
             {
-                foreach (var p in bannerChest.StoredBanners)
+                foreach (var p in bannerChest.ItemContainer)
                 {
                     AddBannerBuff(p);
                 }

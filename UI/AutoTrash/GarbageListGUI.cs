@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.Players;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -17,20 +16,13 @@ public class GarbageListGUI : BaseBody
     #region 抽象实现
     public override bool Enabled
     {
-        get => UIConfigs.Instance.QoLAutoTrash && Main.playerInventory && ShowWindow;
-        set { }
+        get => UIConfigs.Instance.QoLAutoTrash && Main.playerInventory && _enabled;
+        set { _enabled = value; }
     }
+    private bool _enabled;
 
-    public override bool CanSetFocusTarget(UIElement target)
-    {
-        return Window.IsMouseHovering;
-    }
+    public override bool CanSetFocusTarget(UIElement target) => Window.IsMouseHovering;
     #endregion
-
-    /// <summary>
-    /// 显示窗口
-    /// </summary>
-    public static bool ShowWindow { get; set; }
 
     public SUIPanel Window;
     public View TitleView;
@@ -57,7 +49,7 @@ public class GarbageListGUI : BaseBody
             Window.SetPosPixels(492f - Window.Width.Pixels, 306f);
             Window.JoinParent(this);
 
-            // 标题
+            #region 标题
             TitleView = new View
             {
                 DragIgnore = true,
@@ -99,10 +91,11 @@ public class GarbageListGUI : BaseBody
             };
             Cross.OnLeftMouseDown += (_, _) =>
             {
-                ShowWindow = false;
+                Enabled = false;
                 SoundEngine.PlaySound(SoundID.MenuClose);
             };
             Cross.JoinParent(TitleView);
+            #endregion
 
             GarbageListGrid = new GarbageListGrid
             {
@@ -113,34 +106,6 @@ public class GarbageListGUI : BaseBody
             GarbageListGrid.SetInnerPixels(0f, (44f + 4f) * 4f - 4f);
             GarbageListGrid.JoinParent(Window);
         }
-    }
-
-    /// <summary>
-    /// 如果两个值不同，就把第一个值设置成第二个
-    /// </summary>
-    public static bool Different(ref float value1, float value2)
-    {
-        if (value1 != value2)
-        {
-            value1 = value2;
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// 如果两个值不同，就把第一个值设置成第二个
-    /// </summary>
-    public static bool Different(ref Vector2 value1, Vector2 value2)
-    {
-        if (value1 != value2)
-        {
-            value1 = value2;
-            return true;
-        }
-
-        return false;
     }
 
     public override void Update(GameTime gameTime)

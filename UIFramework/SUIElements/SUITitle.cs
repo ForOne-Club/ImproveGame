@@ -54,6 +54,6 @@ public class SUITitle : View
         Vector2 textOffset = (innerSize - TextSize) * TextAlign + TextOffset;
         textOffset.Y += UIConfigs.Instance.BigFontOffsetY * TextScale;
         Vector2 textPos = innerPos + textOffset;
-        DrawString(textPos, _text, TextColor * Opacity.Value, TextBorderColor * Opacity.Value, TextScale, true);
+        DrawString(textPos, _text, TextColor, TextBorderColor, TextScale, true);
     }
 }

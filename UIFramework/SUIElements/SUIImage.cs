@@ -13,16 +13,23 @@ namespace ImproveGame.UIFramework.SUIElements
         public Color ImageColor = Color.White;
         public bool TickSound = true;
 
-        public SUIImage(Texture2D texture)
+        public Rectangle? SourceRectangle { get; set; } = null;
+
+        public SUIImage(Texture2D texture, bool setSizeViaTexture = true)
         {
             Texture = texture;
-            Width.Pixels = Texture.Width + this.HPadding();
-            Height.Pixels = Texture.Height + this.VPadding();
+
+            if (setSizeViaTexture && Texture != null)
+            {
+                Width.Pixels = Texture.Width + this.HPadding();
+                Height.Pixels = Texture.Height + this.VPadding();
+            }
         }
 
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
+
             if (TickSound)
                 SoundEngine.PlaySound(SoundID.MenuTick);
         }
@@ -31,13 +38,17 @@ namespace ImproveGame.UIFramework.SUIElements
         {
             base.DrawSelf(sb);
 
-            Vector2 position = GetDimensions().Position();
-            Vector2 size = GetDimensions().Size();
+            if (Texture != null)
+            {
+                Vector2 position = GetDimensions().Position();
+                Vector2 size = GetDimensions().Size();
 
-            Vector2 imagePosition = position + ImagePosition + size * ImagePercent;
-            imagePosition += (size - Texture.Size()) * ImageAlign;
-            sb.Draw(Texture, imagePosition, null,
-                ImageColor * Opacity.Value, 0f, Texture.Size() * ImageOrigin, ImageScale, 0f, 0f);
+                Vector2 imagePosition = position + ImagePosition + size * ImagePercent;
+                imagePosition += (size - Texture.Size()) * ImageAlign;
+
+                sb.Draw(Texture, imagePosition, SourceRectangle, ImageColor,
+                    0f, Texture.Size() * ImageOrigin, ImageScale, 0f, 0f);
+            }
         }
 
     }

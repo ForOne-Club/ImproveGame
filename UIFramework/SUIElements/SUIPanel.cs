@@ -55,11 +55,10 @@ namespace ImproveGame.UIFramework.SUIElements
         public override void LeftMouseDown(UIMouseEvent evt)
         {
             base.LeftMouseDown(evt);
-            // 可拖动界面
-            View view = evt.Target as View;
+
             // 当点击的是子元素不进行移动
             if (Draggable &&
-                (evt.Target == this || view is not null && view.DragIgnore ||
+                (evt.Target == this || (evt.Target is View view && view.DragIgnore) ||
                  evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
             {
                 Offset = evt.MousePosition - PositionPixels;

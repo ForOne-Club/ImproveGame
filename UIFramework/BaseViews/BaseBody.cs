@@ -53,4 +53,60 @@ public abstract class BaseBody : View
             _lastScreenSize = currentScreenSize;
         }
     }
+
+    public virtual bool RenderTarget2DDraw => false;
+    public virtual float RenderTarget2DOpacity => 1f;
+    public virtual Vector2 RenderTarget2DScale => Vector2.One;
+    public virtual Vector2 RenderTarget2DPosition => Vector2.Zero;
+    public virtual Vector2 RenderTarget2DOrigin => Vector2.Zero;
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        var rt2dPool = ImproveGame.Instance.RenderTargetPool;
+        var device = Main.graphics.GraphicsDevice;
+
+        if (RenderTarget2DDraw)
+        {
+            var originalRT2Ds = device.GetRenderTargets();
+
+            if (originalRT2Ds != null)
+            {
+                foreach (var item in originalRT2Ds)
+                {
+                    if (item.renderTarget is RenderTarget2D rt)
+                    {
+                        rt.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+                    }
+                }
+            }
+
+            // 刺客获取的屏幕大小不是正常的
+            var rt2d = rt2dPool.Borrow((int)Math.Round(Main.screenWidth * Main.UIScale),
+                (int)Math.Round(Main.screenHeight * Main.UIScale));
+
+            var lastRenderTargetUsage = device.PresentationParameters.RenderTargetUsage;
+            device.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+
+            device.SetRenderTarget(rt2d);
+            device.Clear(Color.Transparent);
+
+            base.Draw(spriteBatch);
+
+            device.SetRenderTargets(originalRT2Ds);
+
+            // 使用默认矩阵，因为图像已经是根据 UIZoom 矩阵 绘制的了。
+            spriteBatch.End();
+            spriteBatch.Begin();
+            spriteBatch.Draw(rt2d, RenderTarget2DPosition * Main.UIScale, null,
+                Color.White * RenderTarget2DOpacity, 0f, RenderTarget2DOrigin * Main.UIScale, RenderTarget2DScale, 0, 0);
+
+            device.PresentationParameters.RenderTargetUsage = lastRenderTargetUsage;
+
+            rt2dPool.Return(rt2d);
+        }
+        else
+        {
+            base.Draw(spriteBatch);
+        }
+    }
 }

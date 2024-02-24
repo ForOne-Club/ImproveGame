@@ -1,23 +1,35 @@
 ﻿namespace ImproveGame.UIFramework;
 
-public enum AnimationState : byte // 动画当前的状态
+#region Enums
+/// <summary>
+/// 动画当前的状态
+/// </summary>
+public enum AnimationState : byte
 {
-    Default, Opening, Closing, CompleteOpen, CompleteClose
+    Opening, Closing, Opened, Closed
 }
 
+/// <summary>
+/// 动画类型
+/// </summary>
 public enum AnimationType : byte
 {
-    Linear, // 线性动画 (就一种类型, 还是一个大分类)
-    Easing, // 缓动动画 (最简单的非线性动画). 如果能学到其他的非线性动画, 我就都加进来.
+    /// <summary> 线性动画 </summary>
+    Linear,
+    /// <summary> 缓动动画 </summary>
+    Easing,
 }
+#endregion
 
-// 动画计时器
-public class AnimationTimer
+/// <summary>
+/// 动画计时器 <br/>
+/// </summary>
+public class AnimationTimer(float speed = 5f, float timerMax = 100f, AnimationType animationType = AnimationType.Easing)
 {
     /// <summary>
     /// 缓动系数 / 增量 / 速度
     /// </summary>
-    public float Speed;
+    public float Speed = speed;
 
     /// <summary>
     /// 当前位置
@@ -27,7 +39,7 @@ public class AnimationTimer
     /// <summary>
     /// 最大位置
     /// </summary>
-    public float TimerMax;
+    public float TimerMax = timerMax;
 
     /// <summary>
     /// 进度
@@ -44,30 +56,20 @@ public class AnimationTimer
         }
     }
 
-    public AnimationType Type;
-    public AnimationState State;
+    public AnimationType Type = animationType;
+    public AnimationState State = AnimationState.Closed;
     public Action OnOpened;
     public Action OnClosed;
 
-    public bool Opening => State == AnimationState.Opening;
-    public bool Closing => State == AnimationState.Closing;
-    public bool CompleteOpen => State == AnimationState.CompleteOpen;
-    public bool CompleteClose => State == AnimationState.CompleteClose;
-    public bool Default => State == AnimationState.Default;
-    public bool AnyOpen => State is AnimationState.Opening or AnimationState.CompleteOpen;
-    public bool AnyClose => State is AnimationState.Closing or AnimationState.CompleteClose;
+    public bool AnyOpen => State is AnimationState.Opening or AnimationState.Opened;
+    public bool Opening => State is AnimationState.Opening;
+    public bool Opened => State is AnimationState.Opened;
 
-    /// <summary>
-    /// 它的 <see cref="TimerMax"/> = 100f <br/>
-    /// 它的 <see cref="Type"/> = AnimationType.Nonlinear <br/>
-    /// </summary>
-    public AnimationTimer(float speed = 5f, float timerMax = 100f)
-    {
-        Speed = speed;
-        TimerMax = timerMax;
-        Type = AnimationType.Easing;
-    }
+    public bool AnyClose => State is AnimationState.Closing or AnimationState.Closed;
+    public bool Closing => State is AnimationState.Closing;
+    public bool Closed => State is AnimationState.Closed;
 
+    #region Open() And Close()
     /// <summary>
     /// 开启
     /// </summary>
@@ -101,6 +103,7 @@ public class AnimationTimer
         State = AnimationState.Closing;
         Timer = TimerMax;
     }
+    #endregion
 
     /// <summary>
     /// 更新计时器
@@ -110,41 +113,29 @@ public class AnimationTimer
         switch (State)
         {
             case AnimationState.Opening:
-                {
-                    if (Type == AnimationType.Easing)
-                    {
-                        Timer += (TimerMax + 1 - Timer) / Speed;
-                    }
-                    else
-                    {
-                        Timer += Speed;
-                    }
+                if (Type == AnimationType.Easing)
+                    Timer += (TimerMax - Timer) / Speed;
+                else
+                    Timer += Speed;
 
-                    if (TimerMax - Timer < 0f)
-                    {
-                        Timer = TimerMax;
-                        State = AnimationState.CompleteOpen;
-                        OnOpened?.Invoke();
-                    }
+                if (TimerMax - Timer < TimerMax * 0.0001f)
+                {
+                    Timer = TimerMax;
+                    State = AnimationState.Opened;
+                    OnOpened?.Invoke();
                 }
                 break;
             case AnimationState.Closing:
-                {
-                    if (Type == AnimationType.Easing)
-                    {
-                        Timer -= (Timer + 1) / Speed;
-                    }
-                    else
-                    {
-                        Timer -= Speed;
-                    }
+                if (Type == AnimationType.Easing)
+                    Timer -= Timer / Speed;
+                else
+                    Timer -= Speed;
 
-                    if (Timer < 0f)
-                    {
-                        Timer = 0;
-                        State = AnimationState.CompleteClose;
-                        OnClosed?.Invoke();
-                    }
+                if (Timer < TimerMax * 0.0001f)
+                {
+                    Timer = 0;
+                    State = AnimationState.Closed;
+                    OnClosed?.Invoke();
                 }
                 break;
         }
@@ -163,5 +154,25 @@ public class AnimationTimer
     public float Lerp(float value1, float value2)
     {
         return value1 + (value2 - value1) * Schedule;
+    }
+
+    public static Vector2 operator *(AnimationTimer timer, Vector2 vector2)
+    {
+        return vector2 * timer.Schedule;
+    }
+
+    public static Vector2 operator *(Vector2 vector2, AnimationTimer timer)
+    {
+        return vector2 * timer.Schedule;
+    }
+
+    public static float operator *(float number, AnimationTimer timer)
+    {
+        return number * timer.Schedule;
+    }
+
+    public static float operator *(AnimationTimer timer, float number)
+    {
+        return number * timer.Schedule;
     }
 }

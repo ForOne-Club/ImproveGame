@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModPlayers;
-using ImproveGame.Common.Players;
+using ImproveGame.UI.AutoTrash;
 using ImproveGame.UIFramework.Common;
 
 namespace ImproveGame.Common.GlobalItems;
@@ -207,9 +207,9 @@ public class GrabAndPickup : GlobalItem
     {
         if (UIConfigs.Instance.QoLAutoTrash &&
             player.TryGetModPlayer(out AutoTrashPlayer autoTrashPlayer) && true &&
-            autoTrashPlayer.AutoDiscardItems.Any(adItem => adItem.type == source.type))
+            autoTrashPlayer.ThrowAwayItems.Any(adItem => adItem.type == source.type))
         {
-            autoTrashPlayer.StackToLastItemsWithCleanUp(source);
+            autoTrashPlayer.EnterRecentlyThrownAwayItems(source);
             SoundEngine.PlaySound(SoundID.Grab);
             return false;
         }
@@ -223,7 +223,7 @@ public class GrabAndPickup : GlobalItem
         if (improvePlayer.BannerChest is not null && improvePlayer.BannerChest.AutoStorage && ItemToBanner(source) != -1)
         {
             Item cloneItem = source.Clone();
-            improvePlayer.BannerChest.PutInPackage(ref source);
+            improvePlayer.BannerChest.ItemIntoContainer(source);
             PickupPopupText(cloneItem, source);
         }
 
@@ -233,7 +233,7 @@ public class GrabAndPickup : GlobalItem
         if (improvePlayer.PotionBag is not null && improvePlayer.PotionBag.AutoStorage && source.buffType > 0 && source.consumable)
         {
             Item item = source.Clone();
-            improvePlayer.PotionBag.PutInPackage(ref source);
+            improvePlayer.PotionBag.ItemIntoContainer(source);
             PickupPopupText(item, source);
         }
 

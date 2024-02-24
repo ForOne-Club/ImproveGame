@@ -1,32 +1,15 @@
-﻿using ImproveGame.Common.Players;
-using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.Common;
+﻿using ImproveGame.UIFramework.Common;
+using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.AutoTrash;
 
-public class InventoryTrashSlot : BaseItemSlot
+public class InventoryTrashSlot : GenericItemSlot
 {
-    public float TrashScale = 1f;
-    public readonly List<Item> TrashItems;
-    public readonly int Index;
+    public static AutoTrashPlayer AutoTrashPlayer =>
+        Main.LocalPlayer.GetModPlayer<AutoTrashPlayer>();
 
-    public override Item Item
+    public InventoryTrashSlot(IList<Item> items, int index) : base(items, index)
     {
-        get
-        {
-            if (TrashItems.IndexInRange(Index))
-            {
-                return TrashItems[Index];
-            }
-
-            return AirItem;
-        }
-    }
-
-    public InventoryTrashSlot(List<Item> items, int index)
-    {
-        TrashItems = items;
-        Index = index;
         SetBaseItemSlotValues(true, true);
         SetSizePixels(44, 44);
         SetRoundedRectProperties(
@@ -40,33 +23,27 @@ public class InventoryTrashSlot : BaseItemSlot
     {
         base.LeftMouseDown(evt);
 
-        if (Main.LocalPlayer.ItemAnimationActive)
-        {
-            return;
-        }
+        if (Main.LocalPlayer.ItemAnimationActive) { return; }
 
-        Main.playerInventory = true;
-
-        if (Main.mouseItem?.IsAir ?? true)
+        if (Main.mouseItem.IsAir)
         {
             if (!Item.IsAir)
             {
-                Main.mouseItem = Item;
-                TrashItems.RemoveAt(Index);
-                AutoTrashPlayer.Instance.CleanUpTrash();
-                AutoTrashPlayer.Instance.AutoDiscardItems.RemoveAll(item => item.type == Main.mouseItem.type);
+                Main.mouseItem = Item.Clone();
+
+                AutoTrashPlayer.RemoveItem(Item);
+                AutoTrashPlayer.CleanUpRecentlyThrownAwayItems();
+
                 SoundEngine.PlaySound(SoundID.Grab);
             }
         }
         else
         {
-            if (AutoTrashPlayer.Instance.AutoDiscardItems.All(item => item.type != Main.mouseItem.type))
-            {
-                AutoTrashPlayer.Instance.AutoDiscardItems.Add(new Item(Main.mouseItem.type));
-            }
+            AutoTrashPlayer.EnterThrowAwayItems(Main.mouseItem);
+            AutoTrashPlayer.EnterRecentlyThrownAwayItems(Main.mouseItem);
 
-            AutoTrashPlayer.Instance.StackToLastItemsWithCleanUp(Main.mouseItem);
-            Main.mouseItem = new Item();
+            Main.mouseItem.TurnToAir();
+
             SoundEngine.PlaySound(SoundID.Grab);
         }
     }
@@ -75,14 +52,14 @@ public class InventoryTrashSlot : BaseItemSlot
     {
         base.DrawSelf(spriteBatch);
 
-        if (!Item.IsAir)
-            return;
+        if (Item.IsAir)
+        {
+            Vector2 pos = GetDimensions().Position();
+            Vector2 size = GetDimensionsSize();
+            var texture = ModAsset.Trash.Value;
+            var opacity = GlassVfxAvailable ? 0.25f : 0.5f;
 
-        var dimensions = GetDimensions();
-        Vector2 pos = dimensions.Position();
-        Vector2 size = dimensions.Size();
-        var textureTrash = ModAsset.Trash.Value;
-        var opacity = GlassVfxAvailable ? 0.25f : 0.5f;
-        spriteBatch.Draw(textureTrash, pos + size / 2f, null, Color.White * opacity, 0f, textureTrash.Size() / 2f, TrashScale, 0, 0);
+            spriteBatch.Draw(texture, pos + size / 2f, null, Color.White * opacity, 0f, texture.Size() / 2f, ItemIconScale, 0, 0);
+        }
     }
 }

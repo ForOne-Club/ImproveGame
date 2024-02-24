@@ -13,29 +13,30 @@ public class SUIScrollbar2 : TimerView
     }
     protected Vector2 _currentScrollPosition;
 
+    public float ScrollMultiplier = 1f;
     public Vector2 TargetScrollPosition
     {
         get => Vector2.Clamp(_targetScrollPosition, Vector2.Zero, GetScrollRange());
-        set => _targetScrollPosition = Vector2.Clamp(value, Vector2.Zero, GetScrollRange());
+        set => _targetScrollPosition = Vector2.Clamp(value * ScrollMultiplier, Vector2.Zero, GetScrollRange());
     }
     public Vector2 _targetScrollPosition;
 
     public Vector2 OriginalScrollPosition;
     public Vector2 PreviousTargetScrollPosition;
 
-    public Color BarColor = Color.Black * 0.6f;
-    public Color BarHoverColor = Color.Black * 0.7f;
+    public Color BarColor = Color.Black * 0.4f;
+    public Color BarHoverColor = Color.Black * 0.5f;
 
     public bool IsBarSizeLimited = true;
 
-    public Vector2 ScrollViewSize
+    public Vector2 MaskSize
     {
         get => Vector2.Max(Vector2.One, _scrollViewSize);
         set => _scrollViewSize = Vector2.Max(Vector2.One, value);
     }
     public Vector2 _scrollViewSize = Vector2.One;
 
-    public Vector2 ScrollableContentSize
+    public Vector2 TargetSize
     {
         get => Vector2.Max(Vector2.One, _scrollableContentSize);
         set => _scrollableContentSize = Vector2.Max(Vector2.One, value);
@@ -43,28 +44,45 @@ public class SUIScrollbar2 : TimerView
     public Vector2 _scrollableContentSize = Vector2.One;
 
     public bool AutomaticallyDisabled = true;
-    public bool IsBeUsableH => !AutomaticallyDisabled || ScrollableContentSize.X > ScrollViewSize.X;
-    public bool IsBeUsableV => !AutomaticallyDisabled || ScrollableContentSize.Y > ScrollViewSize.Y;
+
+    /// <summary>
+    /// <see cref="TargetSize"/> 宽度是否大于 <see cref="MaskSize"/> 宽度<br/>
+    /// 如果小于等于，无论如何调节都无效，所以就是不可用
+    /// </summary>
+    public bool IsBeUsableH => !AutomaticallyDisabled || TargetSize.X > MaskSize.X;
+    /// <summary>
+    /// <see cref="TargetSize"/> 高度是否大于 <see cref="MaskSize"/> 高度<br/>
+    /// 如果小于等于，无论如何调节都无效，所以就是不可用
+    /// </summary>
+    public bool IsBeUsableV => !AutomaticallyDisabled || TargetSize.Y > MaskSize.Y;
     #endregion
 
     #region Base Method
-
-    public void SetWindowAndContentSize(Vector2 windowSize, Vector2 contentSize)
+    public void SetSizeForMaskAndTarget(Vector2 maskSize, Vector2 targetSize)
     {
-        ScrollViewSize = windowSize;
-        ScrollableContentSize = contentSize;
+        MaskSize = maskSize;
+        TargetSize = targetSize;
     }
 
-    public Vector2 GetScrollRange() => Vector2.Max(Vector2.Zero, ScrollableContentSize - ScrollViewSize);
+    /// <summary>
+    /// 获取滚动范围
+    /// </summary>
+    public Vector2 GetScrollRange()
+    {
+        Vector2 result = Vector2.Max(Vector2.Zero, TargetSize - MaskSize);
+        result.X = MathF.Round(result.X, 2);
+        result.Y = MathF.Round(result.Y, 2);
+        return result;
+    }
 
-    public Vector2 BarPosition => CurrentScrollPosition / ScrollableContentSize * GetInnerDimensionsSize();
+    public Vector2 BarPosition => CurrentScrollPosition / TargetSize * GetInnerDimensionsSize();
 
     public Vector2 GetBarSize()
     {
         float innerWidth = GetInnerDimensions().Width;
         float innerHeight = GetInnerDimensions().Height;
 
-        Vector2 barSize = GetInnerDimensionsSize() * (ScrollViewSize / ScrollableContentSize);
+        Vector2 barSize = GetInnerDimensionsSize() * (MaskSize / TargetSize);
 
         if (IsBarSizeLimited)
         {
@@ -77,6 +95,9 @@ public class SUIScrollbar2 : TimerView
 
     public Vector2 GetBarScreenPosition() => GetInnerDimensions().Position() + BarPosition;
 
+    /// <summary>
+    /// 直接设置滚动位置
+    /// </summary>
     public void SetScrollPositionDirectly(Vector2 position)
     {
         position = Vector2.Clamp(position, Vector2.Zero, GetScrollRange());
@@ -88,7 +109,7 @@ public class SUIScrollbar2 : TimerView
     }
 
     public void SetBarPositionDirectly(Vector2 barPosition) =>
-        SetScrollPositionDirectly(ScrollableContentSize * barPosition / GetInnerDimensionsSize());
+        SetScrollPositionDirectly(TargetSize * barPosition / GetInnerDimensionsSize());
 
     public bool IsMouseOverScrollbar()
     {
@@ -104,7 +125,7 @@ public class SUIScrollbar2 : TimerView
     protected bool _isScrollbarDragging; // 滚动条拖动中
     protected Vector2 _scrollbarDragOffset; // 滚动条拖动偏移
 
-    protected readonly AnimationTimer ScrollTimer = new(5); // 动画
+    protected readonly AnimationTimer ScrollTimer = new(5f); // 动画
     #endregion
 
     #region Override Method

@@ -4,13 +4,23 @@ namespace ImproveGame.UI.ItemContainer;
 
 public interface IItemContainer
 {
-    bool AutoStorage { get; set; }
+    string Name { get; }
 
+    List<Item> ItemContainer { get; }
+    bool AutoStorage { get; set; }
     bool AutoSort { get; set; }
 
-    void Sort();
+    void SortContainer();
 
-    void PutInPackage(ref Item item);
+    /// <summary>
+    /// 将物品放入容器中
+    /// </summary>
+    void ItemIntoContainer(Item item);
+
+    /// <summary>
+    /// 符合进入标准
+    /// </summary>
+    bool MeetEntryCriteria(Item item);
 
     static void SaveData(TagCompound tag, IItemContainer container)
     {

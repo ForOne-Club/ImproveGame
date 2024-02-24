@@ -36,43 +36,44 @@ public class RenderTargetPool
     }*/
 
     /// <summary>
-    /// 借走 RenderTarget2D （记得还）
+    /// 借出 RenderTarget2D (需归还)
     /// </summary>
     /// <param name="width">宽度</param>
     /// <param name="height">高度</param>
-    /// <param name="rt2d">返回值</param>
-    /// <returns> （记得还）</returns>
-    public bool TryBorrow(int width, int height, out RenderTarget2D rt2d)
+    /// <returns>(需归还)</returns>
+    public RenderTarget2D Borrow(int width, int height)
     {
+        // 必须要有大小
         if (width <= 0 || height <= 0)
         {
-            rt2d = null;
-            return false;
+            throw new Exception("width 和 height 都必须大于 0");
         }
 
-        (int width, int height) size = (width, height);
+        var size = (width, height);
 
+        #region 检查有没有对应池子，没有则创建
         if (!_cached.ContainsKey(size))
         {
-            _cached[size] = new Stack<RenderTarget2D>();
+            _cached.Add(size, new Stack<RenderTarget2D>());
         }
 
         if (!_occupied.ContainsKey(size))
         {
-            _occupied[size] = new Stack<RenderTarget2D>();
+            _occupied.Add(size, new Stack<RenderTarget2D>());
         }
+        #endregion
 
         if (_cached[size].Count > 0)
         {
-            _cached[size].TryPop(out rt2d);
-            _occupied[size].Push(rt2d);
-            return true;
+            _cached[size].TryPop(out var renderTarget2D);
+            _occupied[size].Push(renderTarget2D);
+            return renderTarget2D;
         }
         else
         {
-            rt2d = Create(width, height);
-            _occupied[size].Push(rt2d);
-            return true;
+            var renderTarget2D = Create(width, height);
+            _occupied[size].Push(renderTarget2D);
+            return renderTarget2D;
         }
     }
 
@@ -80,20 +81,17 @@ public class RenderTargetPool
     /// 归还 RenderTarget2D
     /// </summary>
     /// <param name="rt2d">要归还的 RenderTarget2D</param>
-    /// <returns>归还是否成功 false 意味着并不记录在案</returns>
-    public bool TryReturn(RenderTarget2D rt2d)
+    public void Return(RenderTarget2D rt2d)
     {
         (int width, int height) size = (rt2d.Width, rt2d.Height);
 
         if (!_cached.ContainsKey(size) || !_occupied.ContainsKey(size) || !_occupied[size].Contains(rt2d))
         {
-            return false;
+            throw new Exception("不属于此池");
         }
 
         _occupied[size].TryPop(out var _);
         _cached[size].Push(rt2d);
-
-        return true;
     }
 
     public void Dispose()

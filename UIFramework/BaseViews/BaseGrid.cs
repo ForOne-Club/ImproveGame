@@ -99,7 +99,6 @@ public class BaseGrid : View
 
     public override void Recalculate()
     {
-        Opacity.Recalculate();
         CalculateAndSetChildrenPosition();
         base.Recalculate();
     }
