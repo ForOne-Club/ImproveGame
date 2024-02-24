@@ -1,5 +1,5 @@
 using ImproveGame.Packets.NetStorager;
-using ImproveGame.UIFramework.ExtremeStorage;
+using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
@@ -124,7 +124,7 @@ namespace ImproveGame.Content.Tiles
         }
 
         public List<int> FindAllNearbyChestsWithGroup(ItemGroup group) => FindAllNearbyChests().FindAll(i =>
-            !string.IsNullOrEmpty(Main.chest[i].name) && Main.chest[i].name[0] == (char)group);
+            !string.IsNullOrEmpty(Main.chest[i].name) && Main.chest[i].RedirectChestToGroup() == group);
 
         /// <summary>
         /// 将物品堆叠到附近箱子，指定组别，这个只用于单人模式

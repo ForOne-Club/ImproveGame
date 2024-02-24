@@ -1,12 +1,12 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Core;
 using ImproveGame.UI;
+using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
 using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.ExtremeStorage;
 using System.Collections;
 
 namespace ImproveGame.UIFramework.Common;

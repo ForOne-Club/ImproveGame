@@ -2,8 +2,8 @@
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.NetChest;
 using ImproveGame.Packets.NetStorager;
+using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UIFramework;
-using ImproveGame.UIFramework.ExtremeStorage;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.ModPlayers;

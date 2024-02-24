@@ -1,7 +1,11 @@
 ﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Content.Functions;
 using ImproveGame.UI.DeathSpectating;
 using ImproveGame.UI.ItemContainer;
+using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.PlayerStats;
+using ImproveGame.UI.WeatherControl;
+using ImproveGame.UIFramework;
 
 namespace ImproveGame.UI.MasterControl;
 
@@ -175,6 +179,43 @@ public class MasterControlManager : ModSystem
                 else
                     ItemContainerGUI.Instace.Open(improvePlayer.PotionBag);
             }
+        };
+        #endregion
+
+        #region 天气控制
+        var weatherControl = new MasterControlFunction("WeatherControl")
+        {
+            Icon = ModAsset.WeatherControl.Value,
+        }.Register();
+
+        weatherControl.Available += () => WeatherController.Enabled;
+
+        weatherControl.OnMouseDown += _ =>
+        {
+            if (!WeatherController.Enabled) return;
+
+            if (WeatherGUI.Visible)
+                WeatherGUI.Instance.Close();
+            else
+                WeatherGUI.Instance.Open();
+        };
+        #endregion
+
+        #region 搜索物品
+        var itemSearcher = new MasterControlFunction("ItemSearcher")
+        {
+            Icon = ModAsset.ItemSearcher.Value,
+        }.Register();
+
+        itemSearcher.OnMouseDown += _ =>
+        {
+            var ui = UISystem.Instance.ItemSearcherGUI;
+            if (ui is null) return;
+
+            if (ItemSearcherGUI.Visible)
+                ui.Close();
+            else
+                ui.Open();
         };
         #endregion
 

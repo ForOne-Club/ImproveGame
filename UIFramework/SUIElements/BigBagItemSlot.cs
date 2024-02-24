@@ -24,6 +24,8 @@ namespace ImproveGame.UIFramework.SUIElements
 
         public bool FavoriteAllowed = true;
 
+        protected bool DrawStack = true;
+
         public readonly int Index;
         public Item[] Items { get; set; }
 
@@ -392,14 +394,14 @@ namespace ImproveGame.UIFramework.SUIElements
             }
 
             DrawItemIcon(sb, Item, Color.White, GetDimensions(), size * 0.6154f);
-            if (Item.stack <= 1)
+            if (Item.stack <= 1 || !DrawStack)
             {
                 return;
             }
 
             Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(Item.stack.ToString()) * 0.75f;
             Vector2 textPos = pos + new Vector2(size * 0.16f, (size - textSize.Y) * 0.92f);
-            DrawItemStackStringInternal(sb, Item.stack.ToString(), textPos);
+            sb.DrawItemStackString(Item.stack.ToString(), textPos, GetDimensions().Width * 0.016f);
             // 这段是直接绘制文字，不带边框的，留到这里防止忘了咋写。
             /*DynamicSpriteFontExtensionMethods.DrawString(
                     sb,
@@ -410,50 +412,6 @@ namespace ImproveGame.UIFramework.SUIElements
                     0f,
                     new Vector2(0),
                     0.75f, 0, 0f);*/
-        }
-
-        /// <summary>
-        /// 专门用于绘制物品栏物品的堆叠，直接调用字体的 InternalDraw 相比 TrUtils.DrawBorderString 性能消耗更小
-        /// 且这个的描边大小经过调节，看起来更舒服
-        /// </summary>
-        private void DrawItemStackStringInternal(SpriteBatch sb, string text, Vector2 position)
-        {
-            DynamicSpriteFont font = FontAssets.ItemStack.Value;
-            Color color = Color.Black * 0.8f;
-            Vector2 zero = Vector2.Zero;
-            float x = position.X;
-            float y = position.Y;
-            float scale = GetDimensions().Width * 0.016f;
-            float spread = 1.5f * scale;
-            for (int index = 0; index <= 4; ++index)
-            {
-                switch (index)
-                {
-                    case 0:
-                        zero.X = x - spread;
-                        zero.Y = y;
-                        break;
-                    case 1:
-                        zero.X = x + spread;
-                        zero.Y = y;
-                        break;
-                    case 2:
-                        zero.X = x;
-                        zero.Y = y - spread;
-                        break;
-                    case 3:
-                        zero.X = x;
-                        zero.Y = y + spread;
-                        break;
-                    default:
-                        zero.X = x;
-                        zero.Y = y;
-                        color = Color.White;
-                        break;
-                }
-
-                sb.DrawString(font, text, zero, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.0f);
-            }
         }
 
         public static void DrawItemIcon(SpriteBatch sb, Item item, Color lightColor, CalculatedStyle dimensions,

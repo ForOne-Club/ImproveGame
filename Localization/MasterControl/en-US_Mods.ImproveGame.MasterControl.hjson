@@ -12,3 +12,13 @@ Spectating: {
 	DisplayName: Spectate
 	Description: Watch your teammates' battles
 }
+
+WeatherControl: {
+	DisplayName: "{$Mods.ImproveGame.UI.WeatherGUI.Title}"
+	Description: 随意控制时间、月相、风向和降雨
+}
+
+ItemSearcher: {
+	DisplayName: "{$Mods.ImproveGame.UI.ItemSearcher.Title}"
+	Description: 查找附近箱子和便携储存内有没有某个物品
+}

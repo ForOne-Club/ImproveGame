@@ -28,8 +28,8 @@ SOFTWARE.
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.NetStorager;
+using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UIFramework;
-using ImproveGame.UIFramework.ExtremeStorage;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 

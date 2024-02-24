@@ -92,6 +92,8 @@ PlayerStats: {
 ExtremeStorage: {
 	AddChest: 添加箱子
 	RejectNearbyStack: 附近有玩家在使用储存管理器，无法快速堆叠到附近箱子
+	CloseCraftingWindow: 关闭合成窗口
+	OpenCraftingWindow: 打开合成窗口
 
 	CountForCrafting: {
 		Label: 物品参与合成
@@ -141,8 +143,8 @@ ExtremeStorage: {
 		注意:
 		  1. 分类依靠箱子名称前的标识符运作，
 		     请勿随意修改箱子名称
-		  2. 你还是要对物品手动分类，
-		     分类标签只是方便你进行分类
+		  2. 推荐将家具和药水放在对应分类，
+		     其他均放入“全部”分类
 		  3. 多人模式下，如果别人打开了某个箱子，
 		     你就不能对其内物品进行操作
 		'''
@@ -154,11 +156,70 @@ ExtremeStorage: {
 		// Armor: "{$CreativePowers.TabArmor}"
 		// Accessory: "{$CreativePowers.TabAccessories}"
 		// Furniture: "{$CreativePowers.TabFurniture}"
-		// Block: "{$CreativePowers.TabBlocks}"
+		Block: 放置物
 		// Material: "{$CreativePowers.TabMaterials}"
 		Alchemy: 炼药
 		// Misc: "{$CreativePowers.TabMisc}"
 		// Setting: "{$LegacyMenu.14}"
+		Everything: 全部
+	}
+
+	// 筛选器的文本
+	Weapon: {
+		Melee: 近战
+		Ranged: 远程
+		Magic: 魔法
+		Summon: 召唤
+		Other: 其它
+	}
+
+	Tool: {
+		Pickaxe: 镐
+		Axe: 斧
+		Hammer: 锤
+		Hook: 钩爪
+		Wiring: 电路工具
+		FishingPole: 钓竿
+		Other: 其它
+	}
+
+	Ammo: {
+		Arrow: 箭
+		Bullet: 子弹
+		Rocket: 火箭
+		Dart: 飞镖
+		Other: 其它
+	}
+
+	Armor: {
+		Headgear: 头部装备
+		Torso: 身部装备
+		Pants: 腿部装备
+		Vanity: 时装
+	}
+
+	Accessory: {
+		Boot: 靴子
+		Wing: 翅膀
+		Shield: 护盾
+		Other: 其它
+		Vanity: 时装
+	}
+
+	Block: {
+		Solid: 实心块
+		Wall: 墙
+		Platform: 平台
+		Other: 其它
+	}
+
+	Misc: {
+		Herb: 草药
+		SummonItem: 召唤物
+		Pet: 宠物
+		Mount: 坐骑
+		Material: 材料
+		Other: 其它
 	}
 }
 

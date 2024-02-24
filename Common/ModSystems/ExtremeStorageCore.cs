@@ -1,7 +1,8 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.NetChest;
-using ImproveGame.UIFramework.ExtremeStorage;
+using ImproveGame.UI.ExtremeStorage;
+using ImproveGame.UI.ExtremeStorage.ToolButtons;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.Chat;
@@ -16,8 +17,6 @@ public class ExtremeStorageCore : ModSystem
 
     public override void Load()
     {
-        ToolButtonBase.ToolIcons = GetTexture("UI/ExtremeStorage/ToolIcons");
-
         // 同步快速堆叠
         IL_Chest.PutItemInNearbyChest += il =>
         {

@@ -2,7 +2,7 @@
 using ImproveGame.Packets.NetStorager;
 using ImproveGame.UIFramework.BaseViews;
 
-namespace ImproveGame.UIFramework.ExtremeStorage
+namespace ImproveGame.UI.ExtremeStorage
 {
     public class SettingsPage : View
     {

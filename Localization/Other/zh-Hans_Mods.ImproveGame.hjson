@@ -375,7 +375,6 @@ Keybinds: {
 	ConfigMenu.DisplayName: 打开模组配置
 	ItemSearcher.DisplayName: 查找物品
 	OpenBagGUI.DisplayName: 快速开袋
-	// WeatherControl.DisplayName: Weather Control
 }
 
 Projectiles: {
