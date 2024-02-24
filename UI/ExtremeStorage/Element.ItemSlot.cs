@@ -1,4 +1,5 @@
-﻿using ImproveGame.Packets.NetStorager;
+﻿using ImproveGame.Common.RenderTargetContents;
+using ImproveGame.Packets.NetStorager;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.ModLoader.UI;
@@ -156,8 +157,8 @@ namespace ImproveGame.UI.ExtremeStorage
                 }
             });
         }
-
-        public override void ModifyDrawColor()
+        
+        public void ModifySlotColor(ref Color slotColor)
         {
             if (!Interactable || Item.IsAir || !ExtremeStorageGUI.ChestSlotsGlowHue.ContainsKey(_chestIndex)) return;
 
@@ -169,12 +170,53 @@ namespace ImproveGame.UI.ExtremeStorage
             Color color = Main.hslToRgb(hue, 1f, 0.5f);
             float opacity = ExtremeStorageGUI.ChestSlotsGlowTimer / 300f;
             opacity *= opacity;
-            BgColor = Color.Lerp(UIStyle.ItemSlotBg, color, opacity / 2f);
+            slotColor = Color.Lerp(UIStyle.ItemSlotBg, color, opacity / 2f);
         }
 
         public override void DrawSelf(SpriteBatch sb)
         {
-            base.DrawSelf(sb);
+            Vector2 pos = GetDimensions().Position();
+            float size = GetDimensions().Size().X;
+
+            var slotColor = Color.White;
+            if (!Interactable)
+                slotColor = Color.Gray * 0.3f;
+
+            ModifySlotColor(ref slotColor);
+            // ModifyDrawColor();
+            // DrawSDFRectangle();
+
+            var slotTarget = RenderTargetContentSystem.ItemSlotTarget;
+            slotTarget.Request();
+            if (slotTarget.IsReady)
+            {
+                RenderTarget2D target = slotTarget.GetTarget();
+                sb.Draw(target, pos, null, slotColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            }
+            
+            if (Item.IsAir)
+                return;
+
+            if (IsMouseHovering && Interactable)
+            {
+                PlayerLoader.HoverSlot(Main.player[Main.myPlayer], Items, Terraria.UI.ItemSlot.Context.InventoryItem, Index);
+                Main.hoverItemName = Item.Name;
+                Main.HoverItem = Item.Clone();
+                SetCursorOverride();
+            }
+
+            DrawItemIcon(sb, Item, Color.White, GetDimensions(), size * 0.6154f);
+            if (Item.stack <= 1)
+            {
+                return;
+            }
+
+            Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(Item.stack.ToString()) * 0.75f;
+            Vector2 textPos = pos + new Vector2(size * 0.16f, (size - textSize.Y) * 0.92f);
+            sb.DrawItemStackByRenderTarget(Item.stack, textPos, GetDimensions().Width * 0.016f);
+            // sb.DrawItemStackString(Item.stack.ToString(), textPos, GetDimensions().Width * 0.016f);
+
+            // base.DrawSelf(sb);
             if (!Interactable && IsMouseHovering)
             {
                 UICommon.TooltipMouseText(GetText("UI.ExtremeStorage.ChestBeingUsed"));

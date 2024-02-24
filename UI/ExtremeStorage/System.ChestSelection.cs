@@ -43,7 +43,7 @@ namespace ImproveGame.UI.ExtremeStorage
             Main.cursorColor = Color.SkyBlue;
 
             var nearbyChestIndexes = ExtremeStorageGUI.Storage.FindAllNearbyChests();
-            char groupIdentifier = ExtremeStorageGUI.CurrentGroup.GetIdentifier();
+            char groupIdentifier = ExtremeStorageGUI.RealGroup.GetIdentifier();
 
             foreach (int index in nearbyChestIndexes)
             {

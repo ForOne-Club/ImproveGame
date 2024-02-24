@@ -116,8 +116,6 @@ public class StorageGrids : ModItemGrid
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        base.DrawSelf(spriteBatch);
-
         if (-Scrollbar.BarTop == _contentSection.Top.Pixels)
             return;
 
@@ -141,9 +139,6 @@ public class StorageGrids : ModItemGrid
         itemList.SetInventory(items, 40, 4f);
         ShowSize = itemList.GetSize();
         RecalculateScrollBar();
-
-        // 搜索栏
-        _searchBar.Visible = items.Count is not 0;
     }
 
     private void SetupTools(ItemGroup group)
@@ -152,17 +147,15 @@ public class StorageGrids : ModItemGrid
 
         // 啥时候都有的按钮
         AddToolButton<RecipeToggleButton>();
-        // 要顺序对，所以这里只能写得难看点了
-        if (group is ItemGroup.Everything or ItemGroup.Furniture or ItemGroup.Alchemy)
-            AddToolButton<AddChestButton>();
-        AddToolButton<StackToInventoryButton>();
-        AddToolButton<StackToStorageButton>();
+        AddToolButton<AddChestButton>();
 
         switch (group)
         {
             case ItemGroup.Everything:
                 AddToolButton<SortButton>();
                 AddToolButton<DepositAllButton>();
+                AddToolButton<StackToInventoryButton>();
+                AddToolButton<StackToStorageButton>();
                 break;
             case ItemGroup.Weapon:
                 break;
@@ -181,10 +174,14 @@ public class StorageGrids : ModItemGrid
             case ItemGroup.Alchemy:
                 AddToolButton<SortButton>();
                 AddToolButton<DepositAllButton>();
+                AddToolButton<StackToInventoryButton>();
+                AddToolButton<StackToStorageButton>();
                 break;
             case ItemGroup.Furniture:
                 AddToolButton<SortButton>();
                 AddToolButton<DepositAllButton>();
+                AddToolButton<StackToInventoryButton>();
+                AddToolButton<StackToStorageButton>();
                 break;
             case ItemGroup.Setting:
                 break;
