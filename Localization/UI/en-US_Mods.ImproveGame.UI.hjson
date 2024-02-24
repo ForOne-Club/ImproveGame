@@ -144,8 +144,8 @@ ExtremeStorage: {
 		  1. Chest sorting depends on identifiers prefixed
 		     on the chests' names. Please do NOT arbitrarily
 		     edit chest names
-		  2. You still need to sort items manually
-		     The identifiers are just for convenience
+		  2. Put furniture and potions in their categories,
+		     and put all others in the "Everything" category
 		  3. In multiplayer mode, if a chest is being used by
 		     another player, you are not able to take actions
 		     on items inside the chest

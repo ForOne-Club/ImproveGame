@@ -152,13 +152,10 @@ ExtremeStorage: {
 		'''
 		[c/cc2200:Read this manual if you don't know what to do:] 
 		It is used for managing items in chests
-		After placement, <right> to open chest panel
-		The manager has several built-in [c/0099ff:filter options] for you to access the items
-		Click '{$Mods.ImproveGame.UI.ExtremeStorage.AddChest}' to add a chest into a category
+		Click [i:ImproveGame/AddChestIconDummy] to add a chest into a category
 		Chest sorting depends on identifiers prefixed on the chests' names, [c/0088dd:Please do NOT arbitrarily edit chest names]
-		You still need to sort items manually, the identifiers are just for convenience
-		If enabled [c/0099ff:Portable Crafting Station], items under '{$Mods.ImproveGame.UI.ItemGroup.Furniture}' will be seen as portable crafting stations
-		If enabled [c/0099ff:Infinite Potion], you can gain potion effects from items under '{$Mods.ImproveGame.UI.ItemGroup.Alchemy}'
+		Put furniture and potions in their categories, and put all others in the "Everything" category
+		All players will gain effects from [c/0099ff:Portable Crafting Stations] and [c/0099ff:Infinite Potions] stored in the corresponding categories
 		[c/cc2200:Placing multiple Storage Managers in multiplayer mode may increase bandwidth consumption] 
 		'''
 }
@@ -255,4 +252,9 @@ WeatherBook: {
 		使用后在总控面板解锁气候控制
 		可以调节风向、月相、降雨，肉后还能调节时间
 		'''
+}
+
+AddChestIconDummy: {
+	DisplayName: Add Chest Icon Dummy
+	Tooltip: ""
 }

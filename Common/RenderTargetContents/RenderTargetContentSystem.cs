@@ -30,10 +30,10 @@ public class RenderTargetContentSystem : ILoadable
             if (ItemSlotTarget is {IsReady: false })
                 ItemSlotTarget.PrepareRenderTarget(Main.instance.GraphicsDevice, Main.spriteBatch);
 
-            foreach (var stackNumberRenderTarget in StackNumberRenderTargets)
+            foreach (var stackNumberRenderTarget in StackNumberRenderTargets.Where(stackNumberRenderTarget =>
+                         stackNumberRenderTarget is {IsReady: false }))
             {
-                if (stackNumberRenderTarget != null && !stackNumberRenderTarget.IsReady)
-                    stackNumberRenderTarget.PrepareRenderTarget(Main.instance.GraphicsDevice, Main.spriteBatch);
+                stackNumberRenderTarget.PrepareRenderTarget(Main.instance.GraphicsDevice, Main.spriteBatch);
             }
         };
     }
