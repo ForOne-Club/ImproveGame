@@ -385,7 +385,6 @@ Keybinds: {
 	ConfigMenu.DisplayName: Open Mod Config
 	ItemSearcher.DisplayName: Search Item
 	OpenBagGUI.DisplayName: Bag Opener
-	WeatherControl.DisplayName: Weather Control
 }
 
 Projectiles: {

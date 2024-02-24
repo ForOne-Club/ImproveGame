@@ -234,8 +234,6 @@ public class ImprovePlayer : ModPlayer
             PressConfigKeybind();
         if (KeybindSystem.OpenBagGUIKeybind.JustPressed)
             PressOpenBagGUIKeybind();
-        if (KeybindSystem.ItemSearcherKeybind.JustPressed)
-            PressItemSearcherKeybind();
         if (KeybindSystem.SuperVaultKeybind.JustPressed)
             PressSuperVaultKeybind();
         if (KeybindSystem.BuffTrackerKeybind.JustPressed)
@@ -248,8 +246,6 @@ public class ImprovePlayer : ModPlayer
             PressHotbarSwitchKeybind();
         if (KeybindSystem.AutoTrashKeybind.JustPressed)
             PressAutoTrashKeybind();
-        if (KeybindSystem.WeatherControlKeybind.JustPressed)
-            PressWeatherControlKeybind();
 
         // 下面是操作类快捷键
         if (Player.DeadOrGhost) return;
@@ -279,17 +275,6 @@ public class ImprovePlayer : ModPlayer
         if (ui is null) return;
 
         if (OpenBagGUI.Visible)
-            ui.Close();
-        else
-            ui.Open();
-    }
-
-    private static void PressItemSearcherKeybind()
-    {
-        var ui = UISystem.Instance.ItemSearcherGUI;
-        if (ui is null) return;
-
-        if (ItemSearcherGUI.Visible)
             ui.Close();
         else
             ui.Open();
@@ -329,14 +314,6 @@ public class ImprovePlayer : ModPlayer
             ui.Close();
         else
             ui.Open();
-    }
-
-    private static void PressWeatherControlKeybind()
-    {
-        if (WeatherGUI.Visible)
-            WeatherGUI.Instance.Close();
-        else
-            WeatherGUI.Instance.Open();
     }
 
     private static void PressGrabBagKeybind()
