@@ -29,7 +29,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
 
     public static bool Visible => SidedEventTrigger.IsOpened(UISystem.Instance.ExtremeStorageGUI);
 
-    public static bool VisibleAndExpanded => Visible && !UISystem.Instance.ExtremeStorageGUI._foldTimer.CompleteClose;
+    public static bool VisibleAndExpanded => Visible && !UISystem.Instance.ExtremeStorageGUI._foldTimer.Closed;
 
     public static ItemGroup CurrentGroup { get; private set; } = ItemGroup.Everything;
 
@@ -99,7 +99,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
 
         // 初始数据设置
         _foldTimer.Timer = _foldTimer.TimerMax;
-        _foldTimer.State = AnimationState.CompleteOpen;
+        _foldTimer.State = AnimationState.Opened;
         _totalPanel.Left.Pixels = 20;
     }
 
@@ -380,12 +380,12 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         if (_itemGrid.ScrollBarFilled)
         {
             _scrollBarTimer.Timer = 0f;
-            _scrollBarTimer.State = AnimationState.CompleteClose;
+            _scrollBarTimer.State = AnimationState.Closed;
         }
         else
         {
             _scrollBarTimer.Timer = _scrollBarTimer.TimerMax;
-            _scrollBarTimer.State = AnimationState.CompleteOpen;
+            _scrollBarTimer.State = AnimationState.Opened;
         }
     }
 
