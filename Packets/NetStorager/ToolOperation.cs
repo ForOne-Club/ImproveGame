@@ -3,7 +3,7 @@ using ImproveGame.Content.Tiles;
 using ImproveGame.Core;
 using ImproveGame.Packets.Items;
 using ImproveGame.Packets.NetChest;
-using ImproveGame.UIFramework.ExtremeStorage;
+using ImproveGame.UI.ExtremeStorage;
 using System.Collections;
 using System.Diagnostics;
 using ItemSlot = Terraria.UI.ItemSlot;
@@ -34,7 +34,7 @@ public class ToolOperation : NetModule
         var packet = ModContent.GetInstance<ToolOperation>();
 
         packet._tileEntityID = (ushort)ExtremeStorageGUI.Storage.ID;
-        packet._group = (byte)ExtremeStorageGUI.CurrentGroup;
+        packet._group = (byte)ExtremeStorageGUI.RealGroup;
         packet._operationType = (byte)operationType;
         // runLocally 使其在客户端和单人模式都执行 Receive，可以帮忙设置
         packet.Send(runLocally: true);

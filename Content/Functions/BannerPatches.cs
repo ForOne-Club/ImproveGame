@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
-using ImproveGame.UIFramework.ExtremeStorage;
+using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Functions;

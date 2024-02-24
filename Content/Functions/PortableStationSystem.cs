@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
-using ImproveGame.UIFramework.ExtremeStorage;
+using ImproveGame.UI.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Terraria.DataStructures;

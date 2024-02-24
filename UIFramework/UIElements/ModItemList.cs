@@ -54,7 +54,7 @@ namespace ImproveGame.UIFramework.UIElements
         }
 
         // 因为,
-        public override bool ContainsPoint(Vector2 point) => true;
+        public override bool ContainsPoint(Vector2 point) => base.ContainsPoint(point);
 
         // 只绘制范围内的孩子.
         public override void DrawChildren(SpriteBatch spriteBatch)

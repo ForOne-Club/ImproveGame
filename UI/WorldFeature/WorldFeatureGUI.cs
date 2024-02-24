@@ -1,9 +1,9 @@
 ﻿using ImproveGame.Content.Functions;
 using ImproveGame.Packets.WorldFeatures;
+using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.ExtremeStorage;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.DataStructures;
 using Terraria.GameInput;

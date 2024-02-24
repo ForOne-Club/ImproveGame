@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.Items;
 using ImproveGame.Packets.NetChest;
-using ImproveGame.UIFramework.ExtremeStorage;
+using ImproveGame.UI.ExtremeStorage;
 
 namespace ImproveGame.Packets.NetStorager;
 

@@ -92,6 +92,8 @@ PlayerStats: {
 ExtremeStorage: {
 	AddChest: Add Chest
 	RejectNearbyStack: Failed to stack to nearby chests, because another player is using a nearby Storage Manager
+	CloseCraftingWindow: Close Crafting Window
+	OpenCraftingWindow: Open Crafting Window
 
 	CountForCrafting: {
 		Label: Count for Crafting
@@ -142,8 +144,8 @@ ExtremeStorage: {
 		  1. Chest sorting depends on identifiers prefixed
 		     on the chests' names. Please do NOT arbitrarily
 		     edit chest names
-		  2. You still need to sort items manually
-		     The identifiers are just for convenience
+		  2. Put furniture and potions in their categories,
+		     and put all others in the "Everything" category
 		  3. In multiplayer mode, if a chest is being used by
 		     another player, you are not able to take actions
 		     on items inside the chest
@@ -156,11 +158,70 @@ ExtremeStorage: {
 		Armor: "{$CreativePowers.TabArmor}"
 		Accessory: "{$CreativePowers.TabAccessories}"
 		Furniture: "{$CreativePowers.TabFurniture}"
-		Block: "{$CreativePowers.TabBlocks}"
+		Block: Placeables
 		Material: "{$CreativePowers.TabMaterials}"
 		Alchemy: Alchemy
 		Misc: "{$CreativePowers.TabMisc}"
 		Setting: "{$LegacyMenu.14}"
+		Everything: Everything
+	}
+
+	// 筛选器的文本
+	Weapon: {
+		Melee: Melee
+		Ranged: Ranged
+		Magic: Magic
+		Summon: Summon
+		Other: 其它
+	}
+
+	Tool: {
+		Pickaxe: Pickaxe
+		Axe: Axe
+		Hammer: Hammer
+		Hook: Grappling Hook
+		Wiring: 电路工具
+		FishingPole: Fishing Pole
+		Other: 其它
+	}
+
+	Ammo: {
+		Arrow: Arrow
+		Bullet: Bullet
+		Rocket: Rocket
+		Dart: Dart
+		Other: 其它
+	}
+
+	Armor: {
+		Headgear: 头部装备
+		Torso: 身部装备
+		Pants: 腿部装备
+		Vanity: 时装
+	}
+
+	Accessory: {
+		Boot: 靴子
+		Wing: Wing
+		Shield: Shield
+		Other: 其它
+		Vanity: 时装
+	}
+
+	Block: {
+		Solid: 实心块
+		Wall: 墙
+		Platform: 平台
+		Other: 其它
+	}
+
+	Misc: {
+		Herb: 草药
+		SummonItem: 召唤物
+		Pet: Pet
+		Mount: Mount
+		Material: Material
+		Other: 其它
 	}
 }
 

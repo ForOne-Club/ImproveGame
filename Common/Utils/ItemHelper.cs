@@ -140,4 +140,6 @@ public static class ItemHelper
                 }
             }
     }
+
+    public static bool IsHook(this Item item) => Main.projHook.IndexInRange(item.shoot) && Main.projHook[item.shoot];
 }
