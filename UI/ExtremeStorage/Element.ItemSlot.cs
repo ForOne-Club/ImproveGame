@@ -178,6 +178,10 @@ namespace ImproveGame.UI.ExtremeStorage
             Vector2 pos = GetDimensions().Position();
             float size = GetDimensions().Size().X;
 
+            // 超出屏幕的不绘制
+            if (pos.Y < Main.instance.invBottom || pos.Y > Main.screenHeight)
+                return;
+
             var slotColor = Color.White;
             if (!Interactable)
                 slotColor = Color.Gray * 0.3f;
