@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
-using static Terraria.GameContent.UI.Elements.On_UIKeybindingListItem;
-using static Terraria.GameContent.UI.States.On_UIManageControls;
+using Terraria.GameContent.UI.States;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -11,11 +11,10 @@ public class KeybindSystem : ModSystem
 {
     internal static bool UseKeybindTranslation = true;
 
+    public static ModKeybind MasterControlKeybind { get; private set; }
     public static ModKeybind ConfigKeybind { get; private set; }
-    public static ModKeybind OpenBagGUIKeybind { get; private set; }
     public static ModKeybind SuperVaultKeybind { get; private set; }
     public static ModKeybind BuffTrackerKeybind { get; private set; }
-    public static ModKeybind WorldFeatureKeybind { get; private set; }
     public static ModKeybind GrabBagKeybind { get; private set; }
     public static ModKeybind HotbarSwitchKeybind { get; private set; }
     public static ModKeybind AutoTrashKeybind { get; private set; }
@@ -29,7 +28,7 @@ public class KeybindSystem : ModSystem
         {"Escape", "Esc键" }, { "Back", "退格" }, {"Enter", "回车" },
         {"LeftShift", "左Shift" }, {"LeftControl", "左Ctrl" }, {"LeftAlt", "左Alt" },
         {"RightShift", "右Shift" }, {"RightControl", "右Ctrl" }, {"RightAlt", "右Alt" },
-        {"VolumeUp", "提高音量"},{"VolumeDown", "减少音量"},
+        {"VolumeUp", "提高音量"}, {"VolumeDown", "减少音量"},
         {"Divide", "小键盘 /" }, {"Add", "小键盘 +" },
         {"Subtract", "小键盘 -" }, {"Multiply", "小键盘 *" },
         {"OemComma", "< ," }, {"OemPeriod", "> ." }, {"OemQuestion", "? /" },
@@ -40,14 +39,13 @@ public class KeybindSystem : ModSystem
 
     public override void Load()
     {
-        DrawSelf += DrawHoverText;
-        GenInput += TranslatedInput;
-        CreateBindingGroup += AddModifyTip;
-        WorldFeatureKeybind = KeybindLoader.RegisterKeybind(Mod, "WorldFeature", "NumPad1");
-        AutoTrashKeybind = KeybindLoader.RegisterKeybind(Mod, "AutoTrashKeybind", "NumPad2");
-        BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "BuffTracker", "NumPad3");
-        OpenBagGUIKeybind = KeybindLoader.RegisterKeybind(Mod, "OpenBagGUI", "NumPad5");
-        ConfigKeybind = KeybindLoader.RegisterKeybind(Mod, "ConfigMenu", "NumPad6");
+        On_UIKeybindingListItem.DrawSelf += DrawHoverText;
+        On_UIKeybindingListItem.GenInput += TranslatedInput;
+        On_UIManageControls.CreateBindingGroup += AddModifyTip;
+        MasterControlKeybind = KeybindLoader.RegisterKeybind(Mod, "MasterControl", "OemTilde");
+        AutoTrashKeybind = KeybindLoader.RegisterKeybind(Mod, "AutoTrashKeybind", "NumPad1");
+        BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "BuffTracker", "NumPad2");
+        ConfigKeybind = KeybindLoader.RegisterKeybind(Mod, "ConfigMenu", "NumPad3");
         SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "HugeInventory", "F");
         GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "GrabBagLoot", "OemQuotes");
         HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "HotbarSwitch", "OemQuestion");
@@ -55,27 +53,35 @@ public class KeybindSystem : ModSystem
         HomeKeybind = KeybindLoader.RegisterKeybind(Mod, "HomeKeybind", "Home");
     }
 
-    private void DrawHoverText(orig_DrawSelf orig, UIKeybindingListItem self, SpriteBatch spriteBatch)
+    private void DrawHoverText(On_UIKeybindingListItem.orig_DrawSelf orig, UIKeybindingListItem self, SpriteBatch spriteBatch)
     {
         orig.Invoke(self, spriteBatch);
 
         if (!self.IsMouseHovering)
-        {
             return;
-        }
 
+        string key = "";
         switch (self._keybind)
         {
-            case "ImproveGame: $Mods.ImproveGame.Keybind.HotbarSwitch":
-                Main.instance.MouseText(GetText("Keybind.HotbarSwitch.Tip"));
+            case "ImproveGame/MasterControl":
+                key = "MasterControl";
                 break;
-            case "ImproveGame: $Mods.ImproveGame.Keybind.BuffTracker":
-                Main.instance.MouseText(GetText("Keybind.BuffTracker.Tip"));
+            case "ImproveGame/HotbarSwitch":
+                key = "HotbarSwitch";
+                break;
+            case "ImproveGame/BuffTracker":
+                key = "BuffTracker";
                 break;
         }
+        
+        if (key is "")
+            return;
+        
+        var localizedText = Language.GetOrRegister($"Mods.ImproveGame.Keybinds.{key}.Tip", () => "");
+        UICommon.TooltipMouseText(localizedText.Value);
     }
 
-    private string TranslatedInput(orig_GenInput orig, UIKeybindingListItem self, List<string> list)
+    private string TranslatedInput(On_UIKeybindingListItem.orig_GenInput orig, UIKeybindingListItem self, List<string> list)
     {
         if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans")
         {
@@ -87,14 +93,19 @@ public class KeybindSystem : ModSystem
                 {
                     text = translatedString;
                 }
+
                 displayTexts.Add(text);
             }
+
             return orig.Invoke(self, displayTexts);
         }
+
         return orig.Invoke(self, list);
     }
 
-    private Terraria.GameContent.UI.States.UISortableElement AddModifyTip(orig_CreateBindingGroup orig, Terraria.GameContent.UI.States.UIManageControls self, int elementIndex, List<string> bindings, Terraria.GameInput.InputMode currentInputMode)
+    private UISortableElement AddModifyTip(On_UIManageControls.orig_CreateBindingGroup orig,
+        UIManageControls self, int elementIndex, List<string> bindings,
+        Terraria.GameInput.InputMode currentInputMode)
     {
         var uISortableElement = orig.Invoke(self, elementIndex, bindings, currentInputMode);
         if (Language.ActiveCulture.Name == "zh-Hans" && elementIndex == 0)
@@ -131,6 +142,7 @@ public class KeybindSystem : ModSystem
 
             uISortableElement.Recalculate();
         }
+
         return uISortableElement;
     }
 

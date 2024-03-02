@@ -368,16 +368,21 @@ RecipeGroup: {
 	AnyGem: Any Gem
 }
 
-Keybind: {
-	BuffTracker.Tip: Clicking on a buff icon no longer opens the Buff Tracker if the keybind is set
-	HotbarSwitch.Tip: Swap items in the first row with the second row in inventory
-}
-
 Keybinds: {
 	HugeInventory.DisplayName: Big Backpack
-	BuffTracker.DisplayName: Buff Tracker
+
+	BuffTracker: {
+		DisplayName: Buff Tracker
+		Tip: Clicking on a buff icon no longer opens the Buff Tracker if the keybind is set
+	}
+
 	GrabBagLoot.DisplayName: Display Grab Bag Loot
-	HotbarSwitch.DisplayName: Swap Hotbar
+
+	HotbarSwitch: {
+		DisplayName: Swap Hotbar
+		Tip: Swap items in the first row with the second row in inventory
+	}
+
 	AutoTrashKeybind.DisplayName: Hide/Show the Auto-Trash Bin
 	DiscordRodKeybind.DisplayName: Use Teleportation Rods
 	HomeKeybind.DisplayName: Use Recall Items
@@ -385,6 +390,15 @@ Keybinds: {
 	ConfigMenu.DisplayName: Open Mod Config
 	ItemSearcher.DisplayName: Search Item
 	OpenBagGUI.DisplayName: Bag Opener
+
+	MasterControl: {
+		DisplayName: 总控
+		Tip:
+			'''
+			更好的体验快捷功能的打开方式
+			要使用快捷功能，您必须绑定该快捷键
+			'''
+	}
 }
 
 Projectiles: {

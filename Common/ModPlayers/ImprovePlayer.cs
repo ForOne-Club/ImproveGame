@@ -232,14 +232,10 @@ public class ImprovePlayer : ModPlayer
     {
         if (KeybindSystem.ConfigKeybind.JustPressed)
             PressConfigKeybind();
-        if (KeybindSystem.OpenBagGUIKeybind.JustPressed)
-            PressOpenBagGUIKeybind();
         if (KeybindSystem.SuperVaultKeybind.JustPressed)
             PressSuperVaultKeybind();
         if (KeybindSystem.BuffTrackerKeybind.JustPressed)
             PressBuffTrackerKeybind();
-        if (KeybindSystem.WorldFeatureKeybind.JustPressed)
-            PressWorldFeatureKeybind();
         if (KeybindSystem.GrabBagKeybind.JustPressed)
             PressGrabBagKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
@@ -269,17 +265,6 @@ public class ImprovePlayer : ModPlayer
         Main.InGameUI.SetState(Terraria.ModLoader.UI.Interface.modConfig);
     }
 
-    private static void PressOpenBagGUIKeybind()
-    {
-        var ui = UISystem.Instance.OpenBagGUI;
-        if (ui is null) return;
-
-        if (OpenBagGUI.Visible)
-            ui.Close();
-        else
-            ui.Open();
-    }
-
     private static void PressSuperVaultKeybind()
     {
         if (!Config.SuperVault) return;
@@ -296,24 +281,6 @@ public class ImprovePlayer : ModPlayer
             UISystem.Instance.BuffTrackerGUI.Close();
         else
             UISystem.Instance.BuffTrackerGUI.Open();
-    }
-
-    private static void PressWorldFeatureKeybind()
-    {
-        if (!Config.WorldFeaturePanel)
-        {
-            if (WorldFeatureGUI.Visible)
-                UISystem.Instance.WorldFeatureGUI?.Close();
-            return;
-        }
-
-        var ui = UISystem.Instance.WorldFeatureGUI;
-        if (ui is null) return;
-
-        if (WorldFeatureGUI.Visible)
-            ui.Close();
-        else
-            ui.Open();
     }
 
     private static void PressGrabBagKeybind()

@@ -14,8 +14,6 @@ namespace ImproveGame.UI.RecipeSearch;
 [AutoCreateGUI(LayerName.Vanilla.Inventory, "Recipe Search UI")]
 public class RecipeSearchUI : BaseBody
 {
-    private static bool _recalculateNextTick;
-
     public override bool Enabled
     {
         get => Main.recBigList && Main.screenWidth >= 1180 && UIConfigs.Instance.RecipeSearch &&
@@ -74,12 +72,6 @@ public class RecipeSearchUI : BaseBody
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-
-        if (_recalculateNextTick)
-        {
-            _recalculateNextTick = false;
-            Recalculate();
-        }
 
         if (Hovering)
         {

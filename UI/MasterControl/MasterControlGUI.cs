@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.MasterControl.Components;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.UI.MasterControl.Components;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -14,7 +15,7 @@ public class MasterControlGUI : BaseBody
     public readonly AnimationTimer OpacityTimer = new(2.5f);
     public override bool Enabled
     {
-        get => Main.keyState.IsKeyDown(Keys.OemTilde) || OpacityTimer.AnyOpen || OpacityTimer.Closing;
+        get => KeybindSystem.MasterControlKeybind.Current || OpacityTimer.AnyOpen || OpacityTimer.Closing;
         set { }
     }
     public override bool CanSetFocusTarget(UIElement target) => Window.IsMouseHovering;

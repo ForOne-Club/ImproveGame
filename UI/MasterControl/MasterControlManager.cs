@@ -3,8 +3,10 @@ using ImproveGame.Content.Functions;
 using ImproveGame.UI.DeathSpectating;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UI.ItemSearcher;
+using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
 using ImproveGame.UI.WeatherControl;
+using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework;
 
 namespace ImproveGame.UI.MasterControl;
@@ -30,18 +32,21 @@ public class MasterControlManager : ModSystem
     /// 原功能列表
     /// </summary>
     public IReadOnlyList<MasterControlFunction> OriginalMCFuncions => _originalMCFunctions;
+
     private readonly List<MasterControlFunction> _originalMCFunctions = [];
 
     /// <summary>
     /// 排序之后的可用功能列表
     /// </summary>
     public IReadOnlyList<MasterControlFunction> AvailableOrderedMCFunctions => _availableOrderedMCFunctions;
+
     private readonly List<MasterControlFunction> _availableOrderedMCFunctions = [];
 
     /// <summary>
     /// 排序之后的不可用功能列表
     /// </summary>
     public IReadOnlyList<MasterControlFunction> UnavailableOrderedMCFunctions => _unavailableOrderedMCFunctions;
+
     private readonly List<MasterControlFunction> _unavailableOrderedMCFunctions = [];
 
     /// <summary>
@@ -68,6 +73,7 @@ public class MasterControlManager : ModSystem
     public override void PostSetupContent()
     {
         #region 大背包
+
         var bigBackpack = new MasterControlFunction("SuperVault")
         {
             Icon = ModAsset.BigBackpack.Value,
@@ -77,16 +83,21 @@ public class MasterControlManager : ModSystem
         bigBackpack.OnMouseDown += tv =>
         {
             if (!Config.SuperVault)
+            {
+                Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
                 return;
+            }
 
             if (BigBagGUI.Instance.Enabled && BigBagGUI.Instance.StartTimer.AnyOpen)
                 BigBagGUI.Instance.Close();
             else
                 BigBagGUI.Instance.Open();
         };
+
         #endregion
 
         #region 属性面板
+
         var playerStats = new MasterControlFunction("PlayerStats")
         {
             Icon = ModAsset.PlayerStats.Value,
@@ -104,9 +115,11 @@ public class MasterControlManager : ModSystem
                 body.Append(body.Window);
             }
         };
+
         #endregion
 
         #region 观战
+
         var spectating = new MasterControlFunction("Spectating")
         {
             Icon = ModAsset.Spectating.Value,
@@ -118,9 +131,11 @@ public class MasterControlManager : ModSystem
 
             body.Enabled = !body.Enabled;
         };
+
         #endregion
 
         #region 旗帜盒
+
         var bannerChest = new MasterControlFunction("BannerChest")
         {
             Icon = ModAsset.BannerChest.Value,
@@ -149,9 +164,11 @@ public class MasterControlManager : ModSystem
                     ItemContainerGUI.Instace.Open(improvePlayer.BannerChest);
             }
         };
+
         #endregion
 
         #region 药水袋
+
         var potionBag = new MasterControlFunction("PotionBag")
         {
             Icon = ModAsset.PotionBag.Value,
@@ -180,9 +197,11 @@ public class MasterControlManager : ModSystem
                     ItemContainerGUI.Instace.Open(improvePlayer.PotionBag);
             }
         };
+
         #endregion
 
         #region 天气控制
+
         var weatherControl = new MasterControlFunction("WeatherControl")
         {
             Icon = ModAsset.WeatherControl.Value,
@@ -192,16 +211,22 @@ public class MasterControlManager : ModSystem
 
         weatherControl.OnMouseDown += _ =>
         {
-            if (!WeatherController.Enabled) return;
+            if (!WeatherController.Enabled)
+            {
+                Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
+                return;
+            }
 
             if (WeatherGUI.Visible)
                 WeatherGUI.Instance.Close();
             else
                 WeatherGUI.Instance.Open();
         };
+
         #endregion
 
         #region 搜索物品
+
         var itemSearcher = new MasterControlFunction("ItemSearcher")
         {
             Icon = ModAsset.ItemSearcher.Value,
@@ -217,6 +242,54 @@ public class MasterControlManager : ModSystem
             else
                 ui.Open();
         };
+
+        #endregion
+
+        #region 世界特性
+
+        var worldFeature = new MasterControlFunction("WorldFeature")
+        {
+            Icon = ModAsset.WorldFeature.Value,
+        }.Register();
+
+        worldFeature.Available += () => Config.WorldFeaturePanel;
+        worldFeature.OnMouseDown += _ =>
+        {
+            if (!Config.WorldFeaturePanel)
+            {
+                Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
+                return;
+            }
+
+            var ui = UISystem.Instance.WorldFeatureGUI;
+            if (ui is null) return;
+
+            if (WorldFeatureGUI.Visible)
+                ui.Close();
+            else
+                ui.Open();
+        };
+
+        #endregion
+
+        #region 世界特性
+
+        var bagOpener = new MasterControlFunction("BagOpener")
+        {
+            Icon = ModAsset.BagOpener.Value,
+        }.Register();
+
+        bagOpener.OnMouseDown += _ =>
+        {
+            var ui = UISystem.Instance.OpenBagGUI;
+            if (ui is null) return;
+
+            if (OpenBagGUI.Visible)
+                ui.Close();
+            else
+                ui.Open();
+        };
+
         #endregion
 
         OrderMCFunctions();

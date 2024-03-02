@@ -1,3 +1,5 @@
+NotEnabled: 你需要在模组配置中打开此功能
+
 SuperVault: {
 	DisplayName: 大背包
 	Description: 一个拥有 100 格空间的背包
@@ -21,4 +23,24 @@ WeatherControl: {
 ItemSearcher: {
 	// DisplayName: "{$Mods.ImproveGame.UI.ItemSearcher.Title}"
 	Description: 查找附近箱子和便携储存内有没有某个物品
+}
+
+BagOpener: {
+	Description: 快速开启一整组摸彩袋
+	// DisplayName: "{$Mods.ImproveGame.UI.OpenBag.Title}"
+}
+
+WorldFeature: {
+	Description: 调节当前世界的种子和节日特性
+	// DisplayName: "{$Mods.ImproveGame.UI.WorldFeature.Title}"
+}
+
+PotionBag: {
+	Description: 你物品栏中的首个药水袋
+	// DisplayName: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}"
+}
+
+BannerChest: {
+	Description: 你物品栏中的首个旗帜盒
+	// DisplayName: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
 }

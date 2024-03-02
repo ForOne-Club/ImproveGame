@@ -1,15 +1,17 @@
-﻿using ImproveGame.UIFramework;
+﻿using ImproveGame.UI.WeatherControl;
+using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 
-namespace ImproveGame.UI.WeatherControl;
+namespace ImproveGame.UI.MasterControl;
 
-[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Weather Control")]
-public class WeatherGUI : BaseBody
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Popup Panel")]
+// 没绑定快捷键的时候弹出
+public class PopupPanel : BaseBody
 {
-    public static WeatherGUI Instance { get; private set; }
-    public WeatherGUI() => Instance = this;
+    public static PopupPanel Instance { get; private set; }
+    public PopupPanel() => Instance = this;
     public override bool Enabled { get => Visible; set => Visible = value; }
     public static bool Visible { get; private set; }
 
@@ -20,9 +22,6 @@ public class WeatherGUI : BaseBody
     public SUIPanel MainPanel;
     // 标题面板
     private View TitlePanel;
-
-    // 天气环境
-    private WeatherAmbientElement WeatherAmbient;
 
     public override void OnInitialize()
     {
@@ -36,8 +35,8 @@ public class WeatherGUI : BaseBody
             IsAdaptiveHeight = true
         };
         MainPanel.SetPadding(1.5f);
-        MainPanel.SetPosPixels(630, 400)
-            .SetSizePixels(403, 0)
+        MainPanel.SetPosPixels(490, 400)
+            .SetSizePixels(280, 0)
             .JoinParent(this);
 
         TitlePanel = ViewHelper.CreateHead(Color.Black * 0.25f, 45f, 10f);
@@ -49,7 +48,7 @@ public class WeatherGUI : BaseBody
         {
             IsLarge = true,
             UseKey = true,
-            TextOrKey = "Mods.ImproveGame.UI.WeatherGUI.Title",
+            TextOrKey = "Mods.ImproveGame.UI.MasterControl.PopupTitle",
             TextAlign = new Vector2(0f, 0.5f),
             TextScale = 0.45f,
             Height = StyleDimension.Fill,
@@ -83,17 +82,24 @@ public class WeatherGUI : BaseBody
         {
             DragIgnore = true,
             RelativeMode = RelativeMode.Vertical,
-            OverflowHidden = true
+            OverflowHidden = true,
+            HAlign = 0.5f
         };
-        bottomArea.SetPadding(0f);
-        bottomArea.SetSize(0f, 208f, 1f, 0f);
+        bottomArea.SetPadding(12f);
+        bottomArea.SetSize(0f, 180f, 1f, 0f);
         bottomArea.JoinParent(MainPanel);
 
-        WeatherAmbient = new WeatherAmbientElement
-        {
-            RelativeMode = RelativeMode.Vertical
-        };
-        WeatherAmbient.JoinParent(bottomArea);
+        var text = new SUIText
+            {
+                TextBorder = 1,
+                IsWrapped = true,
+                UseKey = true,
+                HAlign = 0.5f,
+                TextOrKey = "Mods.ImproveGame.UI.MasterControl.PopupText",
+                ShadowDirections = [new Vector2(1f)]
+            }
+            .SetSizePercent(1f, 1f);
+        text.JoinParent(bottomArea);
 
         Recalculate();
     }
@@ -118,6 +124,5 @@ public class WeatherGUI : BaseBody
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
         Visible = false;
-        WeatherAmbientElement.StarRandomSeed = Main.rand.Next(10000000);
     }
 }

@@ -205,9 +205,9 @@ public class SUIText : TimerView
             textPos, TextColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f, true);
     }
 
-    public static readonly Vector2[] ShadowDirections = [-Vector2.UnitX, Vector2.UnitX, -Vector2.UnitY, Vector2.UnitY];
+    public Vector2[] ShadowDirections = [-Vector2.UnitX, Vector2.UnitX, -Vector2.UnitY, Vector2.UnitY];
 
-    public static void DrawColorCodedStringShadow(SpriteBatch spriteBatch, DynamicSpriteFont font, TextSnippet[] snippets, Vector2 position, Color baseColor, float rotation, Vector2 origin, Vector2 baseScale, float maxWidth = -1f, float spread = 2f)
+    public void DrawColorCodedStringShadow(SpriteBatch spriteBatch, DynamicSpriteFont font, TextSnippet[] snippets, Vector2 position, Color baseColor, float rotation, Vector2 origin, Vector2 baseScale, float maxWidth = -1f, float spread = 2f)
     {
         for (int i = 0; i < ShadowDirections.Length; i++)
         {

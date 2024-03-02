@@ -598,8 +598,7 @@ ImproveConfigs: {
 		Label: "[centeritem:WorldGlobe] World Feature Panel"
 		Tooltip:
 			'''
-			Turn this on and bind a hotkey in "Controls"
-			to use the World Feature Panel.
+			在总控面板打开世界特性调节面板以使用
 			It can toggle holidays and secret seeds.
 			'''
 	}

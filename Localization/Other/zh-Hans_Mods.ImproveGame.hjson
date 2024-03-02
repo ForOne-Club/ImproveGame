@@ -358,16 +358,21 @@ RecipeGroup: {
 	AnyGem: 任何 宝石
 }
 
-Keybind: {
-	BuffTracker.Tip: 设置快捷键后，点击增益图标不再会打开增益追踪器
-	HotbarSwitch.Tip: 按下快捷键后，物品栏第一栏与第二栏的物品将会互换
-}
-
 Keybinds: {
 	HugeInventory.DisplayName: 大背包
-	BuffTracker.DisplayName: 增益追踪器
+
+	BuffTracker: {
+		DisplayName: 增益追踪器
+		Tip: 设置快捷键后，点击增益图标不再会打开增益追踪器
+	}
+
 	GrabBagLoot.DisplayName: 显示摸彩袋物品明细
-	HotbarSwitch.DisplayName: 切换快捷栏
+
+	HotbarSwitch: {
+		DisplayName: 切换快捷栏
+		Tip: 按下快捷键后，物品栏第一栏与第二栏的物品将会互换
+	}
+
 	AutoTrashKeybind.DisplayName: 隐藏/显示自动垃圾桶
 	DiscordRodKeybind.DisplayName: 传送法杖快捷键
 	HomeKeybind.DisplayName: 回程快捷键
@@ -375,6 +380,15 @@ Keybinds: {
 	ConfigMenu.DisplayName: 打开模组配置
 	ItemSearcher.DisplayName: 查找物品
 	OpenBagGUI.DisplayName: 快速开袋
+
+	MasterControl: {
+		DisplayName: 总控
+		Tip:
+			'''
+			更好的体验快捷功能的打开方式
+			要使用快捷功能，您必须绑定该快捷键
+			'''
+	}
 }
 
 Projectiles: {

@@ -5,7 +5,13 @@ namespace ImproveGame.UI.MasterControl;
 
 public class MasterControlFunction(string nameKey) : IComparable<MasterControlFunction>
 {
-    public virtual MasterControlFunction Register() => MasterControlManager.Instance.Register(this);
+    public virtual MasterControlFunction Register()
+    {
+        // 自动创建hjson词条
+        Language.GetOrRegister($"Mods.ImproveGame.MasterControl.{Name}.DisplayName", () => Name);
+        Language.GetOrRegister($"Mods.ImproveGame.MasterControl.{Name}.Description", () => "");
+        return MasterControlManager.Instance.Register(this);
+    }
 
     /// <summary>
     /// 是否可用

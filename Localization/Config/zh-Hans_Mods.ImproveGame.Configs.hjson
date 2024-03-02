@@ -604,8 +604,7 @@ ImproveConfigs: {
 		Label: "[centeritem:WorldGlobe] 世界特性调节面板"
 		Tooltip:
 			'''
-			开启并在“控件”中绑定快捷键后
-			按下快捷键可打开世界特性调节面板
+			在总控面板打开世界特性调节面板
 			可调节秘密种子效果、特殊节日
 			'''
 	}

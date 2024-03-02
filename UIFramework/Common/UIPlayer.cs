@@ -1,8 +1,10 @@
 ﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.ItemSearcher;
+using ImproveGame.UI.MasterControl;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
 using ImproveGame.UI.WorldFeature;
@@ -130,6 +132,11 @@ public class UIPlayer : ModPlayer
         SidedEventTrigger.RegisterViewBody(uiSystem.ExtremeStorageGUI);
         SidedEventTrigger.RegisterViewBody(uiSystem.AutofisherGUI);
         SidedEventTrigger.RegisterViewBody(uiSystem.PrefixRecallGUI);
+        
+        // 总控快捷键弹窗提示
+        bool hasKeybind = TryGetKeybindString(KeybindSystem.MasterControlKeybind, out _);
+        if (!hasKeybind && UISystem.TryGetBaseBody<PopupPanel>(out var panel) && panel is not null)
+            panel.Open();
         yield return null;
     }
 
