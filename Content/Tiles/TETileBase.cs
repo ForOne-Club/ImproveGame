@@ -9,9 +9,6 @@ namespace ImproveGame.Content.Tiles
         {
             Main.tileFrameImportant[Type] = true;
 
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-            TileObjectData.newTile.Origin = new Point16(1, 1);
-            TileObjectData.newTile.LavaDeath = false;
             ModifyObjectData();
             ModTileEntity tileEntity = GetTileEntity();
             if (tileEntity is not null)
@@ -95,7 +92,12 @@ namespace ImproveGame.Content.Tiles
             return base.RightClick(i, j);
         }
 
-        public virtual void ModifyObjectData() { }
+        public virtual void ModifyObjectData()
+        {
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+            TileObjectData.newTile.Origin = new Point16(1, 1);
+            TileObjectData.newTile.LavaDeath = false;
+        }
 
         public virtual bool ModifyObjectDataAlternate(ref int alternateStyle) => false;
 

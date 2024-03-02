@@ -277,3 +277,8 @@ AddChestIconDummy: {
 	// DisplayName: Add Chest Icon Dummy
 	// Tooltip: ""
 }
+
+SearchIcon: {
+	DisplayName: 找不到配方
+	Tooltip: 没有任何配方与搜索内容相匹配
+}

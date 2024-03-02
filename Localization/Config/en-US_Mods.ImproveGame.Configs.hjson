@@ -964,6 +964,11 @@ UIConfigs: {
 			如果你要更加精细地控制召唤物，强推Summoners' Association模组！
 			'''
 	}
+
+	RecipeSearch: {
+		Label: "[centeritem:ImproveGame/SearchIcon] 搜索配方"
+		Tooltip: 展开全配方时，显示搜索框，以搜索能够合成指定物品的配方
+	}
 }
 
 PAPDisplayMode: {

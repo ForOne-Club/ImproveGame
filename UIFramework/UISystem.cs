@@ -241,6 +241,23 @@ public class UISystem : ModSystem
     }
 
     #endregion
+    
+    #region 获取
+
+    public static bool TryGetBaseBody<T>(out T body) where T : BaseBody
+    {
+        if (Instance?.BaseBodyInstances is null)
+        {
+            body = null;
+            return false;
+        }
+
+        bool success = Instance.BaseBodyInstances.TryGetValue(typeof(T), out var baseBody);
+        body = baseBody as T;
+        return success;
+    }
+    
+    #endregion
 
     public override void PreSaveAndQuit()
     {

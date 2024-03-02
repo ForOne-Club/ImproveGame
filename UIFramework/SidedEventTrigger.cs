@@ -134,6 +134,7 @@ namespace ImproveGame.UIFramework
                     uiData.AsSidedView.OnSwapSlide(uiData.AnimationTimer.Schedule);
                     uiData.ViewBody.Recalculate();
                 }
+
                 if (uiData.AnimationTimer.Opened)
                 {
                     RootBody = uiData.ViewBody;
@@ -159,9 +160,11 @@ namespace ImproveGame.UIFramework
             }
 
             RealDraw:
-            foreach (var uiData in UIPool.Where(uiData => !uiData.AnimationTimer.Closed && !ViewBodyIs(uiData.ViewBody)))
+            foreach (var uiData in UIPool.Where(uiData =>
+                         !uiData.AnimationTimer.Closed && !ViewBodyIs(uiData.ViewBody) &&
+                         uiData.ViewBody is {Enabled: true}))
             {
-                uiData.ViewBody?.Draw(Main.spriteBatch);
+                uiData.ViewBody.Draw(Main.spriteBatch);
             }
 
             // 上面处理了云母，原来的方法就不用处理了

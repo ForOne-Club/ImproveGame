@@ -124,6 +124,18 @@ public class SUISearchBar : View
             }
 
             base.Update(gameTime);
+
+            string inputText = Main.GetInputText(this.actualContents);
+            if (Main.inputTextEnter)
+                this.ToggleTakingText();
+            else if (Main.inputTextEscape)
+            {
+                this.ToggleTakingText();
+                if (this.OnCanceledTakingInput != null)
+                    this.OnCanceledTakingInput();
+            }
+
+            this.SetContents(inputText);
         }
 
         public bool NeedsVirtualkeyboard() => PlayerInput.SettingsForUI.ShowGamepadHints;
@@ -139,17 +151,6 @@ public class SUISearchBar : View
                 (float)(this._text.GetDimensions().ToRectangle().Bottom + 32));
             if (ShowImePanel)
                 Main.instance.DrawWindowsIMEPanel(position, 0.5f);
-            string inputText = Main.GetInputText(this.actualContents);
-            if (Main.inputTextEnter)
-                this.ToggleTakingText();
-            else if (Main.inputTextEscape)
-            {
-                this.ToggleTakingText();
-                if (this.OnCanceledTakingInput != null)
-                    this.OnCanceledTakingInput();
-            }
-
-            this.SetContents(inputText);
             position = new Vector2((float)(Main.screenWidth / 2),
                 (float)(this._text.GetDimensions().ToRectangle().Bottom + 32));
             if (ShowImePanel)
@@ -178,22 +179,25 @@ public class SUISearchBar : View
 
     public event Action<string> OnSearchContentsChanged;
     public event Action OnDraw;
-    
+
+    public bool IsSearchButtonMouseHovering => _searchBtn.IsMouseHovering;
+
     public bool IsWritingText => _searchBar.IsWritingText;
 
     /// <summary> 在搜索栏加一段 (支持拼音及拼音首字母搜索) 的文本 </summary>
-    private readonly bool _allowPinyinSearch;
+    private readonly bool _pinyinSearchTip;
 
     public string SearchContent { get; private set; }
     public bool Visible = true;
     private CustomSearchBar _searchBar;
     private SUIPanel _searchBoxPanel;
+    private UIImageButton _searchBtn;
     private bool _didClickSomething;
     private bool _didClickSearchBar;
 
-    public SUISearchBar(bool allowPinyinSearch = false, bool showIme = true)
+    public SUISearchBar(bool pinyinSearchTip = false, bool showIme = true)
     {
-        _allowPinyinSearch = allowPinyinSearch;
+        _pinyinSearchTip = pinyinSearchTip;
         Height = new StyleDimension(28f, 0f);
         this.SetPadding(0f);
         AddSearchBar();
@@ -212,20 +216,20 @@ public class SUISearchBar : View
 
     private void AddSearchBar()
     {
-        UIImageButton searchBtn = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search"))
+        _searchBtn = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search"))
         {
             VAlign = 0.5f,
             HAlign = 0f
         };
-        searchBtn.OnLeftMouseDown += Click_SearchArea;
-        searchBtn.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
-        searchBtn.SetVisibility(1f, 1f);
-        Append(searchBtn);
+        _searchBtn.OnLeftMouseDown += Click_SearchArea;
+        _searchBtn.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
+        _searchBtn.SetVisibility(1f, 1f);
+        Append(_searchBtn);
 
         _searchBoxPanel = new SUIPanel(UIStyle.SearchBarBorder, UIStyle.SearchBarBg)
         {
             Left = new StyleDimension(4f, 0f),
-            Width = new StyleDimension(-searchBtn.Width.Pixels - 3f, 1f),
+            Width = new StyleDimension(-_searchBtn.Width.Pixels - 3f, 1f),
             Height = new StyleDimension(0f, 1f),
             VAlign = 0.5f,
             HAlign = 1f
@@ -235,7 +239,7 @@ public class SUISearchBar : View
         Append(_searchBoxPanel);
 
         var searchBarText = Language.GetText("UI.PlayerNameSlot");
-        if (Language.ActiveCulture.Name is "zh-Hans" && _allowPinyinSearch)
+        if (Language.ActiveCulture.Name is "zh-Hans" && _pinyinSearchTip)
         {
             // 由于在这不能直接访问 new LocalizedText，我们借助 Language.GetText 来获取
             searchBarText = Language.GetText("搜索名称(支持拼音或首字母): ");

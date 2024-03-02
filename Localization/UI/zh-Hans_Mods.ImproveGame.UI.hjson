@@ -1,4 +1,9 @@
 DummyControl.Name: 假人控制器
+RecipeSearchUI.Tips:
+	'''
+	配方搜索功能由更好的体验提供
+	你可以在更好的体验的个人配置中关闭它
+	'''
 
 WeatherGUI: {
 	Title: 气候控制

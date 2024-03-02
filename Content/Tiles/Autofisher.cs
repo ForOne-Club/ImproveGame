@@ -87,6 +87,7 @@ namespace ImproveGame.Content.Tiles
 
         public override void ModifyObjectData()
         {
+            base.ModifyObjectData();
             TileObjectData.newTile.Direction = TileObjectDirection.PlaceRight;
             TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.newTile.StyleHorizontal = true;

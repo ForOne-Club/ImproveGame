@@ -70,6 +70,9 @@ public class UIConfigs : ModConfig
     [DefaultValue(true)]
     public bool QoLAutoTrash;
 
+    [DefaultValue(true)]
+    public bool RecipeSearch;
+
     [DefaultValue(false)]
     public bool KeepFocus;
 

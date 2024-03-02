@@ -206,6 +206,11 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
     {
         // 是否开启制作栏侧栏
         Main.hidePlayerCraftingMenu |= !DisplayCrafting;
+        if (!DisplayCrafting && Main.recBigList)
+        {
+            DisplayCrafting = true;
+            _foldTimer.Timer = 0;
+        }
 
         float widthNext = _totalPanel.GetDimensions().Width;
         float shownPositionNext = MathHelper.Lerp(60, 20, _foldTimer.Schedule);

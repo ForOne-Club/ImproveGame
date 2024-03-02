@@ -5,6 +5,7 @@ public static class LayerName
     public static class Vanilla
     {
         public const string RadialHotbars = "Radial Hotbars";
+        public const string Inventory = "Inventory";
     }
 }
 
