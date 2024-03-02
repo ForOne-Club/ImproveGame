@@ -82,7 +82,7 @@ public class BigBagGUI : BaseBody
         MainPanel.SetPadding(1f);
         MainPanel.JoinParent(this);
 
-        TitlePanel = ViewHelper.CreateHead(UIStyle.PanelBorder * 0.5f, 50f, 10f);
+        TitlePanel = ViewHelper.CreateHead(UIStyle.TitleBg * 0.75f, 50f, 10f);
         TitlePanel.RelativeMode = RelativeMode.Vertical;
         TitlePanel.SetPadding(0f);
         TitlePanel.JoinParent(MainPanel);
