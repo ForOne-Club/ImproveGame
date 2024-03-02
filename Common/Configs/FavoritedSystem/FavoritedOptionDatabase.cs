@@ -9,11 +9,7 @@ public class FavoritedOptionDatabase
     /// </summary>
     internal static HashSet<string> NewOptions =>
     [
-        nameof(ImproveConfigs.NoPylonRestrictions),
-        nameof(ImproveConfigs.NoSleepRestrictions),
-        nameof(ImproveConfigs.BombsNotDamage),
-        nameof(ImproveConfigs.LightNotBlocked),
-        nameof(ImproveConfigs.NoConditionTP)
+        nameof(ImproveConfigs.WeatherControl)
     ];
 
     public static void SetDefaultFavoritedOptions()

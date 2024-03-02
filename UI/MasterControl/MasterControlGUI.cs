@@ -80,8 +80,9 @@ public class MasterControlGUI : BaseBody
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(4f),
             TextScale = 0.8f,
-            TextOrKey = "可用功能",
-            TextOffset = new Vector2(12f, 0f)
+            TextOrKey = "Mods.ImproveGame.UI.MasterControl.Available",
+            TextOffset = new Vector2(12f, 0f),
+            UseKey = true
         };
         availableText.SetSize(0f, availableText.TextSize.Y * availableText.TextScale, 1f, 0f);
         availableText.JoinParent(Window);
@@ -102,8 +103,9 @@ public class MasterControlGUI : BaseBody
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(4f),
             TextScale = 0.8f,
-            TextOrKey = "不可用功能",
-            TextOffset = new Vector2(12f, 0f)
+            TextOrKey = "Mods.ImproveGame.UI.MasterControl.Unavailable",
+            TextOffset = new Vector2(12f, 0f),
+            UseKey = true
         };
         unavailableText.SetSize(0f, unavailableText.TextSize.Y * unavailableText.TextScale, 1f, 0f);
         unavailableText.JoinParent(Window);
@@ -126,7 +128,8 @@ public class MasterControlGUI : BaseBody
         VersionText = new SUIText
         {
             TextScale = 0.9f,
-            TextOrKey = $"版本号: {ImproveGame.Instance.Version}",
+            // KeyMode暂不支持传参
+            TextOrKey = GetText("UI.MasterControl.Version", ImproveGame.Instance.Version),
             TextAlign = new Vector2(0.5f),
             TextBorder = 1.5f,
             HAlign = 1f,

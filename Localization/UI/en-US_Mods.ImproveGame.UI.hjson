@@ -6,6 +6,9 @@ RecipeSearchUI.Tips:
 	'''
 
 MasterControl: {
+	Available: 可用功能
+	Unavailable: 不可用功能
+	Version: 版本号: {0}
 	PopupTitle: 未绑定快捷键
 	PopupText: 您尚未绑定更好的体验总控面板快捷键，请绑定快捷键以使用快捷功能。绑定按键后此消息不再弹出。
 }
