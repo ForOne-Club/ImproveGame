@@ -648,22 +648,20 @@ partial class MyUtils
     /// </summary>
     /// <param name="player">玩家实例</param>
     /// <param name="ignores">
-    /// 不获取哪些物品空间的物品，可同时包含多个<br/>
-    /// 可用字串有 inv, piggy, safe, forge, void, mod, portable(即piggy+safe+forge+void)</param>
+    ///     不获取哪些物品空间的物品，可同时包含多个<br/>
+    ///     可用字串有 inv, piggy, safe, forge, void, mod, portable(即piggy+safe+forge+void)</param>
+    /// <param name="estimatedCapacity">获取过程中会创建数组，设置预期元素数量可以减少数组扩容的开销</param>
     /// <returns>包含全部物品的List</returns>
-    public static List<Item> GetAllInventoryItemsList(Player player, string ignores = "")
+    public static List<Item> GetAllInventoryItemsList(Player player, string ignores = "", int estimatedCapacity = 80)
     {
         ignores = ignores.Replace("portable", "piggy safe forge void", StringComparison.Ordinal);
-        var itemList = new List<Item>();
+        var itemList = new List<Item>(estimatedCapacity);
         var items = GetAllInventoryItems(player);
         foreach ((string name, Item[] itemArray) in items)
         {
             if (ignores.Contains(name, StringComparison.Ordinal))
                 continue;
-            foreach (var item in itemArray)
-            {
-                itemList.Add(item);
-            }
+            itemList.AddRange(itemArray);
         }
 
         return itemList;
@@ -691,8 +689,7 @@ partial class MyUtils
         return item;
     }
 
-    public static bool IsBankItem(int type) => Lookups.Bank2Items.Contains(type) || Lookups.Bank3Items.Contains(type) ||
-                                               Lookups.Bank4Items.Contains(type) || Lookups.Bank5Items.Contains(type);
+    #region 判断物品存在
 
     /// <summary>
     /// 判断指定 Item[] 中是否有 item
@@ -720,6 +717,7 @@ partial class MyUtils
     {
         return items.Any(item => types.Contains(item.type));
     }
+
     /// <summary>
     /// 查找本地玩家的某个仓库是否有物品，因为提前建了表，所以时间复杂度是 O(1)
     /// </summary>
@@ -731,16 +729,63 @@ partial class MyUtils
     public static bool LocalPlayerHasItemFast(int itemToSearch, string ignores = "")
     {
         if (!ignores.Contains("inv", StringComparison.Ordinal) &&
-            CurrentFrameProperties.ExistItems.Inventory.Contains(itemToSearch))
+            CurrentFrameProperties.ExistItems.InventoryCount.ContainsKey(itemToSearch))
             return true;
         if (!ignores.Contains("bank", StringComparison.Ordinal) &&
-            CurrentFrameProperties.ExistItems.Banks.Contains(itemToSearch))
+            CurrentFrameProperties.ExistItems.BanksCount.ContainsKey(itemToSearch))
             return true;
         if (!ignores.Contains("mod", StringComparison.Ordinal) &&
-            CurrentFrameProperties.ExistItems.BigBag.Contains(itemToSearch))
+            CurrentFrameProperties.ExistItems.BigBagCount.ContainsKey(itemToSearch))
             return true;
         return false;
     }
+
+    /// <summary>
+    /// 查找本地玩家的某个仓库是否有多个物品中的一个，因为提前建了表，所以时间复杂度是 O(1)
+    /// </summary>
+    /// <param name="items">要找的多个物品的ID</param>
+    /// <param name="ignores">
+    /// 不包含哪些物品空间的物品，可同时包含多个<br/>
+    /// 可用字串有 inv, mod, bank。即忽略物品栏、大背包、原版便携仓库里的物品</param>
+    /// <returns>是否包含某物品</returns>
+    public static bool LocalPlayerHasItemFast(string ignores, params int[] items)
+    {
+        if (!ignores.Contains("inv", StringComparison.Ordinal) &&
+            items.Any(i => CurrentFrameProperties.ExistItems.InventoryCount.ContainsKey(i)))
+            return true;
+        if (!ignores.Contains("bank", StringComparison.Ordinal) &&
+            items.Any(i => CurrentFrameProperties.ExistItems.BanksCount.ContainsKey(i)))
+            return true;
+        if (!ignores.Contains("mod", StringComparison.Ordinal) &&
+            items.Any(i => CurrentFrameProperties.ExistItems.BigBagCount.ContainsKey(i)))
+            return true;
+        return false;
+    }
+
+    /// <summary>
+    /// 查找本地玩家的物品栏是否有物品，因为提前建了表，所以时间复杂度是 O(1)
+    /// </summary>
+    /// <param name="itemToSearch">要找的物品的ID</param>
+    /// <returns>是否包含某物品</returns>
+    public static bool InventoryHasItemFast(Player player, int itemToSearch)
+    {
+        var dict = CurrentFrameProperties.ExistItems.GetPlayerInventoryCount(player);
+        return dict.ContainsKey(itemToSearch);
+    }
+
+    /// <summary>
+    /// 查找本地玩家的物品栏是否有多个物品中的一个，因为提前建了表，所以时间复杂度是 O(1) <para/>
+    /// 不和 <see cref="InventoryHasItemFast(Terraria.Player,int)"/> 合并，因为 params 参数会创建数组加大开销
+    /// </summary>
+    /// <param name="itemToSearch">要找的多个物品的ID</param>
+    /// <returns>是否包含某物品</returns>
+    public static bool InventoryHasItemFast(Player player, params int[] itemToSearch)
+    {
+        var dict = CurrentFrameProperties.ExistItems.GetPlayerInventoryCount(player);
+        return itemToSearch.Any(item => dict.ContainsKey(item));
+    }
+
+    #endregion
 
     // 获取配置
     public static ImproveConfigs Config;

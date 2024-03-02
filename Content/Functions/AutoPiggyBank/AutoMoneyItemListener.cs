@@ -99,12 +99,17 @@ public class AutoMoneyPlayerListener : ModPlayer
     {
         _detectCd++;
 
+        if (Main.myPlayer != Player.whoAmI)
+            return;
+
         // 看看能不能解锁自动存钱
         if (!AutoSaveUnlocked && _detectCd % 90 == 0)
-            AutoSaveUnlocked = HasItem(GetAllInventoryItemsList(Player), ItemID.PiggyBank,
-                ItemID.ChesterPetItem, ItemID.MoneyTrough);
+        {
+            AutoSaveUnlocked = InventoryHasItemFast(Main.LocalPlayer,
+                ItemID.PiggyBank, ItemID.ChesterPetItem, ItemID.MoneyTrough);
+        }
 
-        if (Main.myPlayer != Player.whoAmI || !PiggyToggle.AutoSaveEnabled)
+        if (!PiggyToggle.AutoSaveEnabled)
             return;
 
         // 10帧检测一次，仅存钱币槽

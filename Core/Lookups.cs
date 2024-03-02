@@ -6,21 +6,21 @@
 public static class Lookups
 {
     // 便捷储存
-    public static readonly List<int> Bank2Items = new() { ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem };
-    public static readonly List<int> Bank3Items = new() { ItemID.Safe };
-    public static readonly List<int> Bank4Items = new() { ItemID.DefendersForge };
-    public static readonly List<int> Bank5Items = new() { ItemID.VoidLens, ItemID.VoidVault, ItemID.ClosedVoidBag };
+    public static readonly HashSet<int> Bank2Items = [ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem];
+    public static readonly HashSet<int> Bank3Items = [ItemID.Safe];
+    public static readonly HashSet<int> Bank4Items = [ItemID.DefendersForge];
+    public static readonly HashSet<int> Bank5Items = [ItemID.VoidLens, ItemID.VoidVault, ItemID.ClosedVoidBag];
     
     // 特殊药水
-    public static readonly List<int> SpecialPotions = new()
-    {
+    public static readonly HashSet<int> SpecialPotions =
+    [
         ItemID.RecallPotion,
         ItemID.TeleportationPotion,
         ItemID.WormholePotion,
         ItemID.PotionOfReturn
-    };
+    ];
 
-    public static readonly List<PortableBuffTile> BuffTiles = new()
+    public static readonly HashSet<PortableBuffTile> BuffTiles = new()
     {
         new PortableBuffTile(TileID.CatBast, -1, BuffID.CatBast), // 巴斯特雕像
         new PortableBuffTile(TileID.Campfire, -1, BuffID.Campfire), // 篝火

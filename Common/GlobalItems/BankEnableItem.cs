@@ -1,9 +1,6 @@
 ﻿using ImproveGame.Common.ModHooks;
-using ImproveGame.Common.ModPlayers;
 using ImproveGame.Core;
-using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
-using Terraria.GameInput;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -66,7 +63,7 @@ namespace ImproveGame.Common.GlobalItems
             if (player.frozen || player.tongued || player.webbed || player.stoned || player.gravDir is -1f ||
                 player.dead || player.noItems)
                 return false;
-            return Config.MiddleEnableBank && IsBankItem(item.type);
+            return Config.MiddleEnableBank && item.IsBankItem();
         }
 
         public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)

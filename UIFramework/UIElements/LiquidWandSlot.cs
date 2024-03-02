@@ -102,10 +102,9 @@ public class LiquidWandSlot : ModImageButton
         _ => -1
     };
 
-    public bool BucketExists => HasItem(GetAllInventoryItemsList(Main.LocalPlayer).ToArray(), itemTypes: BucketId);
+    public bool BucketExists => LocalPlayerHasItemFast(BucketId);
 
-    public bool SpongeExists => HasItem(GetAllInventoryItemsList(Main.LocalPlayer).ToArray(), -1, SpongeId,
-        ItemID.UltraAbsorbantSponge);
+    public bool SpongeExists => LocalPlayerHasItemFast("", SpongeId, ItemID.UltraAbsorbantSponge);
 
     public void SetLiquidAmount(float amount) => _liquidAmount = amount;
 

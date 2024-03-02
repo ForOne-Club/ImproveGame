@@ -91,13 +91,13 @@ public class ImprovePlayer : ModPlayer
         {
             if (!Player.IsVoidVaultEnabled)
             {
-                Player.IsVoidVaultEnabled = Player.HasItem(ItemID.VoidVault);
+                Player.IsVoidVaultEnabled = InventoryHasItemFast(Player, ItemID.VoidVault);
             }
 
             // 激活猪猪钱罐的条件：猪猪钱罐，铅笔槽，眼骨
-            HasPiggyBank = Player.inventory.HasOne(ItemID.PiggyBank, ItemID.MoneyTrough, ItemID.ChesterPetItem);
-            HasSafe = Player.HasItem(ItemID.Safe);
-            HasDefendersForge = Player.HasItem(ItemID.DefendersForge);
+            HasPiggyBank = InventoryHasItemFast(Player, ItemID.PiggyBank, ItemID.ChesterPetItem, ItemID.MoneyTrough);
+            HasSafe = InventoryHasItemFast(Player, ItemID.Safe);
+            HasDefendersForge = InventoryHasItemFast(Player, ItemID.DefendersForge);
         }
 
         BannerChest = null;

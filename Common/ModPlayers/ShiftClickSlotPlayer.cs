@@ -79,10 +79,10 @@ public class ShiftClickSlotPlayer : ModPlayer
                 switch (Main.netMode)
                 {
                     case NetmodeID.MultiplayerClient:
-                        InvToChestPacket.Send(ExtremeStorageGUI.Storage.ID, slot, ExtremeStorageGUI.CurrentGroup);
+                        InvToChestPacket.Send(ExtremeStorageGUI.Storage.ID, slot, ExtremeStorageGUI.RealGroup);
                         break;
                     default:
-                        inventory[slot] = ExtremeStorageGUI.Storage.StackToNearbyChests(inventory[slot], ExtremeStorageGUI.CurrentGroup);
+                        inventory[slot] = ExtremeStorageGUI.Storage.StackToNearbyChests(inventory[slot], ExtremeStorageGUI.RealGroup);
                         ExtremeStorageGUI.RefreshCachedAllItems();
                         Recipe.FindRecipes();
                         break;
