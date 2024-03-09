@@ -1,51 +1,56 @@
-DummyControl.Name: 假人控制器
+DummyControl.Name: Dummy Control
 RecipeSearchUI.Tips:
 	'''
-	配方搜索功能由更好的体验提供
-	你可以在更好的体验的个人配置中关闭它
+	Recipe Search provided by Quality of Life
+	You may disable it in Personal Config of Quality of Life
 	'''
 
 MasterControl: {
-	Available: 可用功能
-	Unavailable: 不可用功能
-	Version: 版本号: {0}
-	PopupTitle: 未绑定快捷键
-	PopupText: 您尚未绑定更好的体验总控面板快捷键，请绑定快捷键以使用快捷功能。绑定按键后此消息不再弹出。
+	Available: Available
+	Unavailable: Unavailable
+	Version: Version {0}
+	PopupTitle: Hotkey Missing
+	PopupText:
+		'''
+		You have not assign a hotkey to Quality of Terraria's Control Panel
+		Please assign it a hotkey to use the mod's shortcuts,
+		this message will disappear once you have done so
+		'''
 }
 
 WeatherGUI: {
-	Title: Climate Controller
-	Wind: Left click to adjust wind speed
-	WindLockFalse: Right click to lock wind status
-	WindLockTrue: Right click to unlock wind status
-	WindWest: 已调节为大西风
-	WindNo: 已调节为无风
-	WindEast: 已调节为大东风
-	WindLocked: 风速与风向已锁定
-	WindUnlocked: 风速与风向已解锁
-	RainActive: Left click to start raining
-	RainInactive: Left click to stop raining
-	RainLockFalse: Right click to lock rain status
-	RainLockTrue: Right click to unlock rain status
-	RainOn: 已开始下雨
-	RainOff: 已停止下雨
-	RainLocked: 下雨状态已锁定
-	RainUnlocked: 下雨状态已解锁
-	Time: Left click to adjust time
-	Dawn: 已调节为黎明
-	Noon: 已调节为正午
-	Dusk: 已调节为黄昏
-	Midnight: 已调节为午夜
-	MoonPhase: Left click to adjust moon phase
-	MoonPhaseLockFalse: Right click to lock moon phase
-	MoonPhaseLockTrue: Right click to unlock moon phase
-	MoonPhaseAdjusted: 已调节为{0}
-	MoonPhaseLocked: 月相已锁定为{0}
-	MoonPhaseUnlocked: 月相已解锁
-	AlreadyUnlocked: 该世界已经解锁了气候控制
-	Unlocked: 气候控制已解锁！请在总控页面打开
+	Title: Weather Control
+	Wind: <left> to adjust wind direction
+	WindLockFalse: <right> to lock wind direction
+	WindLockTrue: <right> to unlock wind direction
+	WindWest: West gale set
+	WindNo: Windless set
+	WindEast: East gale set
+	WindLocked: Wind speed and direction locked
+	WindUnlocked: Wind speed and direction unlocked
+	RainActive: <left> to start a rain
+	RainInactive: <left> to stop a rain
+	RainLockFalse: <right> to lock rain
+	RainLockTrue: <right> to unlock rain
+	RainOn: Rain started
+	RainOff: Rain stopped
+	RainLocked: Rain locked
+	RainUnlocked: Rain unlocked
+	Time: <left> to adjust time
+	Dawn: Dawn set
+	Noon: Noon set
+	Dusk: Dusk set
+	Midnight: Midnight set
+	MoonPhase: <left> to adjust moon phase
+	MoonPhaseLockFalse: <right> to lock moon phase
+	MoonPhaseLockTrue: <right> to unlock moon phase
+	MoonPhaseAdjusted: {0} set
+	MoonPhaseLocked: Moon phase locked to {0}
+	MoonPhaseUnlocked: Moon phase unlocked
+	AlreadyUnlocked: Weather Control unlocked for this world
+	Unlocked: Weather Control is unlocked! Open it via the Control Panel
 	EasterEgg: Mushroom!
-	TimeUnlockCondition: 肉后解锁时间控制
+	TimeUnlockCondition: Defeat the Wall of Flesh to control time
 }
 
 PlayerStats: {
@@ -185,56 +190,56 @@ ExtremeStorage: {
 		Ranged: Ranged
 		Magic: Magic
 		Summon: Summon
-		Other: 其它
+		Other: Others
 	}
 
 	Tool: {
-		Pickaxe: Pickaxe
-		Axe: Axe
-		Hammer: Hammer
-		Hook: Grappling Hook
-		Wiring: 电路工具
-		FishingPole: Fishing Pole
-		Other: 其它
+		Pickaxe: Pickaxes
+		Axe: Axes
+		Hammer: Hammers
+		Hook: Grappling Hooks
+		Wiring: Wiring Tools
+		FishingPole: Fishing Poles
+		Other: Others
 	}
 
 	Ammo: {
-		Arrow: Arrow
-		Bullet: Bullet
-		Rocket: Rocket
-		Dart: Dart
-		Other: 其它
+		Arrow: Arrows
+		Bullet: Bullets
+		Rocket: Rockets
+		Dart: Darts
+		Other: Others
 	}
 
 	Armor: {
-		Headgear: 头部装备
-		Torso: 身部装备
-		Pants: 腿部装备
-		Vanity: 时装
+		Headgear: Head
+		Torso: Body
+		Pants: Leg
+		Vanity: Vanities
 	}
 
 	Accessory: {
-		Boot: 靴子
-		Wing: Wing
-		Shield: Shield
-		Other: 其它
-		Vanity: 时装
+		Boot: Boots
+		Wing: Wings
+		Shield: Shields
+		Other: Others
+		Vanity: Vanities
 	}
 
 	Block: {
-		Solid: 实心块
-		Wall: 墙
-		Platform: 平台
-		Other: 其它
+		Solid: Solid Blocks
+		Wall: Walls
+		Platform: Platforms
+		Other: Others
 	}
 
 	Misc: {
-		Herb: 草药
-		SummonItem: 召唤物
-		Pet: Pet
-		Mount: Mount
-		Material: Material
-		Other: 其它
+		Herb: Herbs
+		SummonItem: Summons
+		Pet: Pets
+		Mount: Mounts
+		Material: Materials
+		Other: Others
 	}
 }
 
@@ -357,7 +362,7 @@ MapLayer: {
 	Pyramid: Pyramid
 	FloatingIsland: Floating Island
 	FloatingLake: Floating Lake
-	EmptyAutofisher: Fishing Machine (Bait-Lacking)
+	EmptyAutofisher: Fishing Machine (Bait-lacking)
 }
 
 ThemePreview.Title: Theme Preview

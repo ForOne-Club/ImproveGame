@@ -33,8 +33,8 @@ CombatText: {
 }
 
 AutoSummon: {
-	Set: 自动重召唤物品已设为{0}
-	Summoned: 使用{1}召唤了{0}次
+	Set: Auto re-summon item set to {0}
+	Summoned: Summoned {0} times using {1}
 }
 
 Tips: {
@@ -392,11 +392,11 @@ Keybinds: {
 	OpenBagGUI.DisplayName: Bag Opener
 
 	MasterControl: {
-		DisplayName: 总控
+		DisplayName: Control Panel
 		Tip:
 			'''
-			更好的体验快捷功能的打开方式
-			要使用快捷功能，您必须绑定该快捷键
+			Access to Quality of Terraria shortcuts
+			You must assign it a hotkey to use the shortcuts
 			'''
 	}
 }

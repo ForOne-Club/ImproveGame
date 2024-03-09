@@ -14,35 +14,35 @@
 
 ## Additions
 
-- 总控面板，用于打开本模组的一系列快捷功能，如大背包、药水袋等
-- “自动重召唤”功能，可在玩家复活后自动召唤生前最后一次召唤的仆从
-- 新增气候控制功能：可以调节风向、月相、降雨，肉后还能调节时间
-- 合成表搜索功能，可以搜索你想要合成的物品的可用配方
-- 新增微光数据仪，用于调试的妙妙工具
+- Control Panel for accessing the mod's shortcuts, such as the Big Backpack and Potion Bags
+- Auto Re-summon, summons last used summon after respawn
+- Weather Control, including wind direction, moon phase and rain, plus time after defeating Wall of Flesh
+- Recipe Search, finds available recipes for desired items
+- Shimmemeter for debugging
 
 ## BUG Fixes
 
-- 开启“非BOSS战快速复活”功能后，在世吞存活时也可以快速复活，但在四柱存在时却不能
-- “自动开袋”和“物品搜素”界面元素错位
-- NPC快捷回家功能有时失效
+- Fast Respawn When No Boss seeing the Celestial Pillars as bosses, but not the Eater of Worlds
+- Bag Opener and Item Search's UI glitch
+- Teleport NPCs Home's occasional failure
 
 ## Adjustments
 
-- 自动开袋更快了
-- 移除了召唤杖工具提示中的召唤栏提示
-- 调整自动钓鱼机：
-  - 现在牡蛎等可右键打开的物品也算作匣子
-  - 合成配方：任意铁锭x4 + 任意铜锭x2 -> 任意铁锭x10 + 任意铜锭x5 + 蜘蛛网x20，现在需要在铁砧处合成而非空手
-  - 诱饵消耗概率：手动钓鱼的20% -> 手动钓鱼的40%
-  - 初始钓鱼效率：手动钓鱼的50% -> 手动钓鱼的30%
-  - 鲈鱼加成：每条10% -> 每条5%。最大值不变，但现在需要100条才能达到最大值
-  - 渔夫耳环、钓具箱、熔岩钓具箱的加成：200%, 300%, 500% -> 200%, 250%, 300%
-  - 肉后钓鱼速度提升：300% -> 200%
-  - 满配效率：手动钓鱼的650% -> 手动钓鱼的300%
-  - 钓鱼效率不再受“多线钓鱼”模组中设置的鱼线数量影响
-- 构造法杖保存构造的时间大幅减少，并为保存和放置操作加了小提示
-- 储存管理器部分物品存储逻辑重制，此外提高了性能
-- 略微提高了性能
+- Faster Bag Opener
+- Removed summon slot tooltip from summon weapons
+- Fishing Machine
+  - Items that can be right clicked to open, like Oysters, are now treated as crates
+  - Changed recipe, making it harder to craft
+  - Doubled bait consumption rate
+  - Reduced initial fishing efficiency by 40%
+  - Reduced Bass fishing bonus rate by half, while the maximum remains the same
+  - Reduced fishing bonuses from certain fishing accessories
+  - Reduced hard mode fishing bonus by 33%
+  - Lowered max fishing efficiency by 58%
+  - Fishing efficiency is no longer affected by lure number set by the mod Multi-lure
+- Optimized Wand of Construction structure saving time; added tips to saving and placing
+- Refactored some Storage Manager logics; improved performance
+- Other performance improvements
 
 # v1.6.7
 

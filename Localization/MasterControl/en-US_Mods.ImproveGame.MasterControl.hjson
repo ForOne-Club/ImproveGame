@@ -1,46 +1,46 @@
-NotEnabled: 你需要在模组配置中打开此功能
+NotEnabled: You need to enable this in Mod Config
 
 SuperVault: {
 	DisplayName: Big Backpack
-	Description: A backpack with 100 slots of space
+	Description: A backpack with 100 item slots
 }
 
 PlayerStats: {
-	DisplayName: Stats Panel
+	DisplayName: Player Stats
 	Description: View various statistics of a player
 }
 
 Spectating: {
-	DisplayName: Spectate
+	DisplayName: Spectating
 	Description: Watch your teammates' battles
 }
 
 WeatherControl: {
 	DisplayName: "{$Mods.ImproveGame.UI.WeatherGUI.Title}"
-	Description: 随意控制时间、月相、风向和降雨
+	Description: Alter time, moon phase, wind direction and rain
 }
 
 ItemSearcher: {
 	DisplayName: "{$Mods.ImproveGame.UI.ItemSearcher.Title}"
-	Description: 查找附近箱子和便携储存内有没有某个物品
+	Description: Find items in personal storages and nearby chests
 }
 
 BagOpener: {
-	Description: 快速开启一整组摸彩袋
+	Description: Batch open loot bags
 	DisplayName: "{$Mods.ImproveGame.UI.OpenBag.Title}"
 }
 
 WorldFeature: {
-	Description: 调节当前世界的种子和节日特性
+	Description: Alter world's holiday and secret seed features
 	DisplayName: "{$Mods.ImproveGame.UI.WorldFeature.Title}"
 }
 
 PotionBag: {
-	Description: 你物品栏中的首个药水袋
+	Description: The first Potion Bag in your inventory
 	DisplayName: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}"
 }
 
 BannerChest: {
-	Description: 你物品栏中的首个旗帜盒
+	Description: The first Banner Box in your inventory
 	DisplayName: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
 }

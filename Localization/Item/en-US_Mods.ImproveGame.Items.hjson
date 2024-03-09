@@ -213,19 +213,18 @@ Expelliarmus: {
 	Tooltip:
 		'''
 		[c/ff0000:Debug item]
-		Loot NPCs
-		Can be used to test the NPC loot
+		Loots NPCs
+		Can test NPC loot
 		'''
 }
 
 ShimmerTech: {
-	DisplayName: 微光数据仪
+	DisplayName: Shimmemeter
 	Tooltip:
 		'''
-		[c/ff0000:调试物品]
-		“I can see forever!”
-		使用该仪器可以清除你自身的微光加成
-		右键则会清除世界上的微光加成
+		[c/ff0000:Debug Item]
+		Removes shimmer bonuses of your player
+		<right> instead removes shimmer bonuses of the world
 		{$ItemName.AegisCrystal}
 		{$ItemName.ArcaneCrystal}
 		{$ItemName.AegisFruit}
@@ -234,6 +233,7 @@ ShimmerTech: {
 		{$ItemName.GalaxyPearl}
 		{$ItemName.CombatBookVolumeTwo}
 		{$ItemName.PeddlersSatchel}
+		"Oh God I can see forever!"
 		'''
 }
 
@@ -265,11 +265,12 @@ StorageCommunicator: {
 }
 
 WeatherBook: {
-	DisplayName: 天气之书
+	DisplayName: Book of Weathers
 	Tooltip:
 		'''
-		使用后在总控面板解锁气候控制
-		可以调节风向、月相、降雨，肉后还能调节时间
+		Unlocks weather control on the Control Panel
+		It alters wind direction, moon phase and rain,
+		plus time after defeating Wall of Flesh
 		'''
 }
 
@@ -279,6 +280,6 @@ AddChestIconDummy: {
 }
 
 SearchIcon: {
-	DisplayName: 找不到配方
-	Tooltip: 没有任何配方与搜索内容相匹配
+	DisplayName: Recipe Not Found
+	Tooltip: No recipe macthes the conditions
 }

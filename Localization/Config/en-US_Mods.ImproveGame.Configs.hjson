@@ -598,8 +598,8 @@ ImproveConfigs: {
 		Label: "[centeritem:WorldGlobe] World Feature Panel"
 		Tooltip:
 			'''
-			在总控面板打开世界特性调节面板以使用
-			It can toggle holidays and secret seeds.
+			Opens from the Control Panel
+			Toggles holiday and secret seed features
 			'''
 	}
 
@@ -693,11 +693,13 @@ ImproveConfigs: {
 	}
 
 	WeatherControl: {
-		Label: "[centeritem:ImproveGame/WeatherBook] Climate Controller"
+		Label: "[centeritem:ImproveGame/WeatherBook] Weather Control"
 		Tooltip:
 			'''
-			可以调节风向、月相、降雨，肉后还能调节时间，在总控面板中打开
-			使用气候之书后即可解锁此功能，解锁状态跟随世界存档
+			Alters wind direction, moon phase, rain,
+			plus time after defeating Wall of Flesh
+			Unlocks via Book of Weather, opens from the Control Panel
+			Availability changes per world
 			'''
 	}
 }
@@ -955,18 +957,18 @@ UIConfigs: {
 	}
 
 	AutoSummon: {
-		Label: "[i:SlimeStaff] 自动重召唤"
+		Label: "[i:SlimeStaff] Auto Re-summoning"
 		Tooltip:
 			'''
-			复活后会自动召唤死前最后一次召唤的召唤物
-			加载Summoners' Association模组后，此功能自动禁用
-			如果你要更加精细地控制召唤物，强推Summoners' Association模组！
+			Summons last used summon after respawn
+			Disabled if the mod "Summoners' Association" is loaded
+			Summoners' Association powers finer summon control!
 			'''
 	}
 
 	RecipeSearch: {
-		Label: "[centeritem:ImproveGame/SearchIcon] 搜索配方"
-		Tooltip: 展开全配方时，显示搜索框，以搜索能够合成指定物品的配方
+		Label: "[centeritem:ImproveGame/SearchIcon] Recipe Search"
+		Tooltip: Shows a search bar when recipe menu is extend
 	}
 }
 
