@@ -10,12 +10,9 @@ MasterControl: {
 	Unavailable: Unavailable
 	Version: Version {0}
 	PopupTitle: Hotkey Missing
-	PopupText:
-		'''
-		You have not assign a hotkey to Quality of Terraria's Control Panel
-		Please assign it a hotkey to use the mod's shortcuts,
-		this message will disappear once you have done so
-		'''
+	PopupText: You have not assign a hotkey to Quality of Terraria's Control Panel. Please assign it a hotkey to use the mod's shortcuts. This message will disappear once you have done so.
+	PopupPanelWidth: "290"
+	PopupPanelHeight: "200"
 }
 
 WeatherGUI: {

@@ -152,6 +152,7 @@ public class SUIText : TimerView
 
         if (_isWrapped)
         {
+            /* 原来的有Bug，不支持英文空格换行，暂时换掉
             List<TextSnippet> finalSnippets = [];
             List<List<TextSnippet>> firstSnippets = TextSnippetHelper.WordwrapString(LastString, TextColor, Font, GetInnerDimensions().Width / TextScale);
 
@@ -167,6 +168,8 @@ public class SUIText : TimerView
             }
 
             FinalTextSnippets = [.. finalSnippets];
+            */
+            FinalTextSnippets = TextSnippetHelper.WordwrapString(LastString, TextColor, Font, (int)(GetInnerDimensions().Width / TextScale), out _);
         }
         else
         {
@@ -202,7 +205,7 @@ public class SUIText : TimerView
             textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder * TextScale);
 
         DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
-            textPos, TextColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f, true);
+            textPos, TextColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
     }
 
     public Vector2[] ShadowDirections = [-Vector2.UnitX, Vector2.UnitX, -Vector2.UnitY, Vector2.UnitY];

@@ -1,4 +1,5 @@
 ﻿using ReLogic.Graphics;
+using ReLogic.Text;
 using System.Text.RegularExpressions;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
@@ -91,6 +92,105 @@ public static class TextSnippetHelper
         return finalSnippets;
     }
 
+    /// <summary>
+    /// 针对textSnippet特殊文本的换行
+    /// </summary>
+    public static TextSnippet[] WordwrapString(string text, Color textColor, DynamicSpriteFont font, int maxWidth,
+        out float lastLineLength)
+    {
+        float workingLineLength = 0f; // 当前行长度
+        TextSnippet[] originalSnippets = ChatManager.ParseMessage(text, textColor).ToArray();
+        ChatManager.ConvertNormalSnippets(originalSnippets);
+        List<TextSnippet> finalSnippets = new() {new TextSnippet()};
+
+        foreach (var snippet in originalSnippets)
+        {
+            if (snippet is PlainTagHandler.PlainSnippet)
+            {
+                string cacheString = ""; // 缓存字符串 - 准备输入的字符
+                for (int i = 0; i < snippet.Text.Length; i++)
+                {
+                    GlyphMetrics characterMetrics = font.GetCharacterMetrics(snippet.Text[i]);
+                    workingLineLength += font.CharacterSpacing + characterMetrics.KernedWidth;
+
+                    if (workingLineLength > maxWidth && !char.IsWhiteSpace(snippet.Text[i]))
+                    {
+                        // 如果第一个字符是空格，单词长度小于19（实际上是18因为第一个字符为空格），可以空格换行
+                        bool canWrapWord = cacheString.Length > 1 && cacheString.Length < 19;
+
+                        // 找不到空格，或者拆腻子，则强制换行
+                        if (!canWrapWord || (i > 0 && CanBreakBetween(snippet.Text[i - 1], snippet.Text[i])))
+                        {
+                            finalSnippets.Add(new PlainTagHandler.PlainSnippet(cacheString, snippet.Color));
+                            finalSnippets.Add(new PlainTagHandler.PlainSnippet("\n"));
+                            workingLineLength = characterMetrics.KernedWidthOnNewLine;
+                            cacheString = "";
+                        }
+                        // 空格换行
+                        else
+                        {
+                            finalSnippets.Add(new PlainTagHandler.PlainSnippet("\n"));
+                            finalSnippets.Add(new PlainTagHandler.PlainSnippet(cacheString[1..], snippet.Color));
+                            workingLineLength = font.MeasureString(cacheString).X;
+                            cacheString = "";
+                        }
+                    }
+
+                    // 这么做可以分割单词，并且使自然分割单词（即不因换行过长强制分割的单词）第一个字符总是空格
+                    // 或者是将CJK字符与非CJK字符分割
+                    if (cacheString != string.Empty && (char.IsWhiteSpace(snippet.Text[i]) ||
+                                                        IsCjk(cacheString[^1]) != IsCjk(snippet.Text[i])))
+                    {
+                        finalSnippets.Add(new PlainTagHandler.PlainSnippet(cacheString, snippet.Color));
+                        cacheString = "";
+                    }
+
+                    // 原有换行则将当前行长度重置
+                    if (snippet.Text[i] is '\n')
+                    {
+                        workingLineLength = 0;
+                    }
+
+                    cacheString += snippet.Text[i];
+                }
+
+                finalSnippets.Add(new PlainTagHandler.PlainSnippet(cacheString, snippet.Color));
+            }
+            else
+            {
+                float length = snippet.GetStringLength(font);
+                workingLineLength += length;
+                // 超了 - 换行再添加，注意起始长度
+                if (workingLineLength > maxWidth)
+                {
+                    workingLineLength = length;
+                    finalSnippets.Add(new PlainTagHandler.PlainSnippet("\n"));
+                }
+
+                finalSnippets.Add(snippet);
+            }
+        }
+
+        lastLineLength = workingLineLength;
+        return finalSnippets.ToArray();
+    }
+
+    // https://unicode-table.com/cn/blocks/cjk-unified-ideographs/ 中日韩统一表意文字
+    // https://unicode-table.com/cn/blocks/cjk-symbols-and-punctuation/ 中日韩符号和标点
+    public static bool IsCjk(char a)
+    {
+        return (a >= 0x4E00 && a <= 0x9FFF) || (a >= 0x3000 && a <= 0x303F);
+    }
+
+    internal static bool CanBreakBetween(char previousChar, char nextChar)
+    {
+        if (IsCjk(previousChar) || IsCjk(nextChar))
+            return true;
+
+        return false;
+    }
+
+    /* 有Bug，不支持英文空格换行
     public static List<List<TextSnippet>> WordwrapString(string input, Color color, DynamicSpriteFont font, float maxWidth)
     {
         List<TextSnippet> originalSnippets = ConvertNormalSnippets(ParseMessage(input, color));
@@ -222,4 +322,5 @@ public static class TextSnippetHelper
 
         return finalSnippets;
     }
+    */
 }

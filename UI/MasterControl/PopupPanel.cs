@@ -25,6 +25,13 @@ public class PopupPanel : BaseBody
 
     public override void OnInitialize()
     {
+        int panelWidth = int.TryParse(GetText("UI.MasterControl.PopupPanelWidth"), out int wValue)
+            ? wValue
+            : 280;
+        int panelHeight = int.TryParse(GetText("UI.MasterControl.PopupPanelHeight"), out int hValue)
+            ? hValue
+            : 180;
+        
         // 主面板
         MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
@@ -36,7 +43,7 @@ public class PopupPanel : BaseBody
         };
         MainPanel.SetPadding(1.5f);
         MainPanel.SetPosPixels(490, 400)
-            .SetSizePixels(280, 0)
+            .SetSizePixels(panelWidth, 0)
             .JoinParent(this);
 
         TitlePanel = ViewHelper.CreateHead(Color.Black * 0.25f, 45f, 10f);
@@ -86,19 +93,18 @@ public class PopupPanel : BaseBody
             HAlign = 0.5f
         };
         bottomArea.SetPadding(12f);
-        bottomArea.SetSize(0f, 180f, 1f, 0f);
+        bottomArea.SetSize(0f, panelHeight, 1f, 0f);
         bottomArea.JoinParent(MainPanel);
 
         var text = new SUIText
-            {
-                TextBorder = 1,
-                IsWrapped = true,
-                UseKey = true,
-                HAlign = 0.5f,
-                TextOrKey = "Mods.ImproveGame.UI.MasterControl.PopupText",
-                ShadowDirections = [new Vector2(1f)]
-            }
-            .SetSizePercent(1f, 1f);
+        {
+            TextBorder = 1,
+            IsWrapped = true,
+            UseKey = true,
+            HAlign = 0.5f,
+            TextOrKey = "Mods.ImproveGame.UI.MasterControl.PopupText"
+        };
+        text.SetSize(-4f, 0f, 1f, 1f);
         text.JoinParent(bottomArea);
 
         Recalculate();
