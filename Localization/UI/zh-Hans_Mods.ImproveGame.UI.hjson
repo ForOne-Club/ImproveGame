@@ -45,6 +45,7 @@ WeatherGUI: {
 	AlreadyUnlocked: 该世界已经解锁了气候控制
 	Unlocked: 气候控制已解锁！请在总控页面打开
 	EasterEgg: 蘑菇！
+	Locked: 使用 [i:ImproveGame/WeatherBook] 以解锁气候控制
 	TimeUnlockCondition: 肉后解锁时间控制
 }
 

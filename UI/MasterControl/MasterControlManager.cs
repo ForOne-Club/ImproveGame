@@ -8,6 +8,7 @@ using ImproveGame.UI.PlayerStats;
 using ImproveGame.UI.WeatherControl;
 using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework;
+using Terraria.ModLoader.Config;
 
 namespace ImproveGame.UI.MasterControl;
 
@@ -119,7 +120,7 @@ public class MasterControlManager : ModSystem
         #endregion
 
         #region 观战
-
+/*
         var spectating = new MasterControlFunction("Spectating")
         {
             Icon = ModAsset.Spectating.Value,
@@ -131,14 +132,14 @@ public class MasterControlManager : ModSystem
 
             body.Enabled = !body.Enabled;
         };
-
+*/
         #endregion
 
         #region 旗帜盒
 
         var bannerChest = new MasterControlFunction("BannerChest")
         {
-            Icon = ModAsset.BannerChest.Value,
+            Icon = ModAsset.BannerChestIcon.Value,
         }.Register();
 
         bannerChest.Available += () =>
@@ -171,7 +172,7 @@ public class MasterControlManager : ModSystem
 
         var potionBag = new MasterControlFunction("PotionBag")
         {
-            Icon = ModAsset.PotionBag.Value,
+            Icon = ModAsset.PotionBagIcon.Value,
         }.Register();
 
         potionBag.Available += () =>
@@ -211,9 +212,15 @@ public class MasterControlManager : ModSystem
 
         weatherControl.OnMouseDown += _ =>
         {
-            if (!WeatherController.Enabled)
+            if (!Config.WeatherControl)
             {
                 Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
+                return;
+            }
+
+            if (!WeatherController.Unlocked)
+            {
+                Main.NewText(GetText("UI.WeatherGUI.Locked"), Color.Pink);
                 return;
             }
 
@@ -272,7 +279,7 @@ public class MasterControlManager : ModSystem
 
         #endregion
 
-        #region 世界特性
+        #region 自动开袋
 
         var bagOpener = new MasterControlFunction("BagOpener")
         {
@@ -288,6 +295,29 @@ public class MasterControlManager : ModSystem
                 ui.Close();
             else
                 ui.Open();
+        };
+
+        #endregion
+
+        #region 模组配置
+
+        var modConfig = new MasterControlFunction("ModConfig")
+        {
+            Icon = ModAsset.ModConfigIcon.Value,
+        }.Register();
+
+        modConfig.OnMouseDown += _ =>
+        {
+            if (Main.inFancyUI) return;
+
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+            Main.inFancyUI = true;
+            // 不可能找不到
+            var favoritedConfigs = ConfigManager.Configs[Mod].Find(i => i.Name == "FavoritedConfigs");
+            Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, favoritedConfigs);
+            // 打开模组配置
+            // Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, Config);
+            Main.InGameUI.SetState(Terraria.ModLoader.UI.Interface.modConfig);
         };
 
         #endregion

@@ -230,8 +230,6 @@ public class ImprovePlayer : ModPlayer
     /// </summary>
     public override void ProcessTriggers(TriggersSet triggersSet)
     {
-        if (KeybindSystem.ConfigKeybind.JustPressed)
-            PressConfigKeybind();
         if (KeybindSystem.SuperVaultKeybind.JustPressed)
             PressSuperVaultKeybind();
         if (KeybindSystem.BuffTrackerKeybind.JustPressed)
@@ -249,20 +247,6 @@ public class ImprovePlayer : ModPlayer
             PressDiscordKeybind();
         if (KeybindSystem.HomeKeybind.JustPressed)
             PressHomeKeybind();
-    }
-
-    private void PressConfigKeybind()
-    {
-        if (Main.inFancyUI) return;
-
-        SoundEngine.PlaySound(SoundID.MenuOpen);
-        Main.inFancyUI = true;
-        // 不可能找不到
-        var favoritedConfigs = ConfigManager.Configs[Mod].Find(i => i.Name == "FavoritedConfigs");
-        Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, favoritedConfigs);
-        // 打开模组配置
-        // Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, Config);
-        Main.InGameUI.SetState(Terraria.ModLoader.UI.Interface.modConfig);
     }
 
     private static void PressSuperVaultKeybind()

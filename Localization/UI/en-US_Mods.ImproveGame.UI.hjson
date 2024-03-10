@@ -44,12 +44,13 @@ WeatherGUI: {
 	MoonPhase: <left> to adjust moon phase
 	MoonPhaseLockFalse: <right> to lock moon phase
 	MoonPhaseLockTrue: <right> to unlock moon phase
-	MoonPhaseAdjusted: {0} set
+	MoonPhaseAdjusted: "{0} set"
 	MoonPhaseLocked: Moon phase locked to {0}
 	MoonPhaseUnlocked: Moon phase unlocked
 	AlreadyUnlocked: Weather Control unlocked for this world
 	Unlocked: Weather Control is unlocked! Open it via the Control Panel
 	EasterEgg: Mushroom!
+	Locked: Use [i:ImproveGame/WeatherBook] to unlock weather control
 	TimeUnlockCondition: Defeat the Wall of Flesh to control time
 }
 

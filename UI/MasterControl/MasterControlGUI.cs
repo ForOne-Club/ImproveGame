@@ -67,9 +67,11 @@ public class MasterControlGUI : BaseBody
 
         Title = new SUIText
         {
-            TextOrKey = $"{ImproveGame.Instance.DisplayName}",
             TextAlign = new Vector2(0.5f),
             TextBorder = 1.5f,
+            TextOrKey = "Mods.ImproveGame.ModName",
+            TextOffset = new Vector2(12f, 0f),
+            UseKey = true
         };
         Title.SetSizePercent(1f, 1f);
         Title.JoinParent(HeadBar);

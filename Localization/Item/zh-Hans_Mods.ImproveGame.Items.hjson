@@ -223,7 +223,6 @@ ShimmerTech: {
 	Tooltip:
 		'''
 		[c/ff0000:调试物品]
-		“I can see forever!”
 		使用该仪器可以清除你自身的微光加成
 		右键则会清除世界上的微光加成
 		{$ItemName.AegisCrystal}
@@ -234,6 +233,7 @@ ShimmerTech: {
 		{$ItemName.GalaxyPearl}
 		{$ItemName.CombatBookVolumeTwo}
 		{$ItemName.PeddlersSatchel}
+		“I can see forever!”
 		'''
 }
 

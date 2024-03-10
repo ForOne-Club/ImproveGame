@@ -44,3 +44,8 @@ BannerChest: {
 	Description: The first Banner Box in your inventory
 	DisplayName: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
 }
+
+ModConfig: {
+	DisplayName: Mod Config
+	Description: Quick access to Favorite Configs
+}

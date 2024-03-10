@@ -44,3 +44,8 @@ BannerChest: {
 	Description: 你物品栏中的首个旗帜盒
 	// DisplayName: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
 }
+
+ModConfig: {
+	DisplayName: 模组配置
+	Description: 快捷打开配置选项收藏夹
+}

@@ -85,7 +85,7 @@ BannerChest: {
 		Stores your banners
 		Hold a banner and <left> to put it into a Banner Box
 		<right> a Banner Box to take out banners
-		Can store 200 stacks of banners
+		Can store 500 stacks of banners
 		'''
 }
 

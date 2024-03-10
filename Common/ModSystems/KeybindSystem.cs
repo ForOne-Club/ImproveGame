@@ -12,7 +12,6 @@ public class KeybindSystem : ModSystem
     internal static bool UseKeybindTranslation = true;
 
     public static ModKeybind MasterControlKeybind { get; private set; }
-    public static ModKeybind ConfigKeybind { get; private set; }
     public static ModKeybind SuperVaultKeybind { get; private set; }
     public static ModKeybind BuffTrackerKeybind { get; private set; }
     public static ModKeybind GrabBagKeybind { get; private set; }
@@ -45,7 +44,6 @@ public class KeybindSystem : ModSystem
         MasterControlKeybind = KeybindLoader.RegisterKeybind(Mod, "MasterControl", "OemTilde");
         AutoTrashKeybind = KeybindLoader.RegisterKeybind(Mod, "AutoTrashKeybind", "NumPad1");
         BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "BuffTracker", "NumPad2");
-        ConfigKeybind = KeybindLoader.RegisterKeybind(Mod, "ConfigMenu", "NumPad3");
         SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "HugeInventory", "F");
         GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "GrabBagLoot", "OemQuotes");
         HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "HotbarSwitch", "OemQuestion");
