@@ -127,11 +127,12 @@ namespace ImproveGame.UI
 
             selectPoolOff = GetTexture("UI/Autofisher/SelectPoolOff");
             selectPoolOn = GetTexture("UI/Autofisher/SelectPoolOn");
-            relocateButton = new(selectPoolOff);
+            relocateButton = new UIImage(selectPoolOff);
             relocateButton.Left.Set(250f, 0f);
             relocateButton.Top.Set(0f, 0f);
             relocateButton.Width.Set(46f, 0f);
             relocateButton.Height.Set(46f, 0f);
+            relocateButton.AllowResizingDimensions = false;
             relocateButton.OnLeftMouseDown += (_, _) => ToggleSelectPool();
             basePanel.Append(relocateButton);
 
@@ -152,6 +153,15 @@ namespace ImproveGame.UI
             filter = new CatchNormalCatchesFilter(basePanel).SetPos(filtersX, filtersY);
             filtersY += filter.Height.Pixels + 8f;
             Append(filter);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            
+            relocateButton.SetImage(WandSystem.SelectPoolMode
+                ? selectPoolOn
+                : selectPoolOff);
         }
 
         public void ToggleSelectPool()
@@ -428,7 +438,7 @@ namespace ImproveGame.UI
         {
             ItemType = itemType;
             _panel = panel;
-            _timer = new(timerMax: 90f)
+            _timer = new(timerMax: 60f)
             {
                 State = AnimationState.Closing
             };
@@ -488,8 +498,8 @@ namespace ImproveGame.UI
                     {
                         if (Math.Abs(k) + Math.Abs(l) == 1)
                         {
-                            var offset = new Vector2(k * 2f, l * 2f) * _timer.Schedule;
-                            spriteBatch.Draw(tex.Value, dimensions.Position() + offset, Main.OurFavoriteColor);
+                            var offset = new Vector2(k * 2f, l * 2f);
+                            spriteBatch.Draw(tex.Value, dimensions.Position() + offset, Main.OurFavoriteColor * _timer.Schedule);
                         }
                     }
                 }
