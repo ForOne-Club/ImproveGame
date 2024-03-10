@@ -7,21 +7,6 @@
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
-	<PropertyGroup>
-		<!-- Set the correct dotnet path to use based on platform. On Windows, it's
-             dotnet.exe, on Linux it's dotnet. Unsure of the path on Mac. If there
-             is ever a need to differentiate, switch to using
-             $([MSBuild]::IsOSPlatform('PLATFORM_HERE')) instead.
-             
-             This is needed because, despite Visual Studio handling extensions,
-             editors such as Rider do not. A more fully-qualified name has to be
-             given instead. -->
-		<DotNetPath Condition=" '$(OS)' == 'Windows_NT' ">dotnet.exe</DotNetPath>
-		<DotNetPath Condition=" '$(OS)' == 'Unix' ">dotnet</DotNetPath>
-
-		<!-- Fallback. -->
-		<DotNetPath Condition=" '$(DotNetPath)' == '' ">dotnet</DotNetPath>
-	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="FuzzySearch.Net" Version="0.3.3" />
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.4.1" />
