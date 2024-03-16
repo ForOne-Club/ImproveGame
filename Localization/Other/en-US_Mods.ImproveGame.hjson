@@ -274,20 +274,6 @@ SuperVault: {
 
 MoveChest.Heavy: Weight of the chest limits your mobility
 
-Autofisher: {
-	Accessory: Accessories for fishing
-	FishingPole: Fishing rod
-	Bait: Bait
-	SelectPool: Please select fishing pool
-	CarefulNextTime: Be careful next time!
-	Unavailable: Currently no fishing info
-	CatchCratesFilter: Crates
-	CatchAccessoriesFilter: Accessories
-	CatchToolsFilter: Tools and weapons
-	CatchWhiteRarityCatchesFilter: White rarity
-	CatchNormalCatchesFilter: Higher than white rarity
-}
-
 BuffTracker: {
 	Title: Buff Tracker
 	LeftClickDisable: "[c/CC88AA:<left>] to disable this buff"

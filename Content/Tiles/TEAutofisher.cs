@@ -3,6 +3,7 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Packets.NetAutofisher;
+using ImproveGame.UI.Autofisher;
 using ImproveGame.UIFramework;
 using System;
 using System.Reflection;
@@ -30,6 +31,7 @@ namespace ImproveGame.Content.Tiles
         public bool CatchTools = true;
         public bool CatchWhiteRarityCatches = true;
         public bool CatchNormalCatches = true;
+        public HashSet<int> ExcludedItems = new();
 
         public bool IsEmpty => accessory.IsAir && bait.IsAir && fishingPole.IsAir && (fish is null || fish.All(item => item.IsAir));
         
@@ -49,7 +51,7 @@ namespace ImproveGame.Content.Tiles
                 Autofisher.TipType.NotEnoughWater => Language.GetTextValue("GameUI.NotEnoughWater"),
                 Autofisher.TipType.FishingPower => Language.GetTextValue("GameUI.FishingPower", fishingLevel),
                 Autofisher.TipType.FullFishingPower => Language.GetTextValue("GameUI.FullFishingPower", fishingLevel, 0.0 - Math.Round(waterQuality * 100f)),
-                Autofisher.TipType.Unavailable => GetText("Autofisher.Unavailable"),
+                Autofisher.TipType.Unavailable => GetText("UI.Autofisher.Unavailable"),
                 _ => ""
             };
             FishingTipTimer = 0;
@@ -205,7 +207,7 @@ namespace ImproveGame.Content.Tiles
                     switch (Main.netMode)
                     {
                         case NetmodeID.SinglePlayer:
-                            Main.NewText(GetText("Autofisher.CarefulNextTime"), 175, 75);
+                            Main.NewText(GetText("UI.Autofisher.CarefulNextTime"), 175, 75);
                             Main.NewText(Language.GetTextValue("Announcement.HasAwoken", typeName), 175, 75);
                             break;
                         case NetmodeID.Server:
@@ -325,7 +327,12 @@ namespace ImproveGame.Content.Tiles
             // 怎么可能？
             if (!ContentSamples.ItemsByType.ContainsKey(itemType))
                 return;
-            
+
+            // 物品筛选没过
+            if (ExcludedItems.Contains(itemType))
+                return;
+
+            CatchRecord.AddCatch(itemType);
             Item item = new(itemType);
 
             int fishType = 0; // 0 普通鱼 (稀有度大于白)
@@ -711,6 +718,20 @@ namespace ImproveGame.Content.Tiles
             drop.newAndShiny = false;
         }
 
+        // 返回的是物品禁用状态，true就是没禁用，false就是禁用了
+        public bool ToggleItem(Item item)
+        {
+            bool alreadyExcluded = ExcludedItems.Contains(item.type);
+            if (alreadyExcluded)
+            {
+                ExcludedItems.Remove(item.type);
+                return true;
+            }
+
+            ExcludedItems.Add(item.type);
+            return false;
+        }
+
         public override void OnNetPlace()
         {
             if (Main.netMode == NetmodeID.Server)
@@ -725,6 +746,7 @@ namespace ImproveGame.Content.Tiles
             fishingPole = tag.Get<Item>("fishingPole");
             bait = tag.Get<Item>("bait");
             accessory = tag.Get<Item>("accessory");
+            ExcludedItems = tag.Get<int[]>("excludedItems").ToHashSet();
 
             if (tag.ContainsKey("fishes"))
                 fish = tag.Get<Item[]>("fishes");
@@ -757,6 +779,7 @@ namespace ImproveGame.Content.Tiles
             tag["CatchTools"] = CatchTools;
             tag["CatchWhiteRarityCatches"] = CatchWhiteRarityCatches;
             tag["CatchNormalCatches"] = CatchNormalCatches;
+            tag["excludedItems"] = ExcludedItems.ToArray();
         }
 
         public override void NetSend(BinaryWriter writer)
@@ -767,6 +790,16 @@ namespace ImproveGame.Content.Tiles
             ItemIO.Send(bait, writer, true);
             ItemIO.Send(accessory, writer, true);
             writer.Write(fish);
+            writer.Write(ExcludedItems);
+
+            var flags = new BitsByte(
+                CatchCrates,
+                CatchAccessories,
+                CatchTools,
+                CatchWhiteRarityCatches,
+                CatchNormalCatches
+            );
+            writer.Write(flags);
         }
 
         public override void NetReceive(BinaryReader reader)
@@ -776,6 +809,14 @@ namespace ImproveGame.Content.Tiles
             bait = ItemIO.Receive(reader, true);
             accessory = ItemIO.Receive(reader, true);
             fish = reader.ReadItemArray();
+            ExcludedItems = reader.ReadIntEnumerable().ToHashSet();
+
+            var flags = (BitsByte)reader.ReadByte();
+            CatchCrates = flags[0];
+            CatchAccessories = flags[1];
+            CatchTools = flags[2];
+            CatchWhiteRarityCatches = flags[3];
+            CatchNormalCatches = flags[4];
         }
     }
 }

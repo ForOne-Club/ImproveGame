@@ -2,6 +2,7 @@
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.Packets.NetStorager;
 using ImproveGame.UI;
+using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UIFramework;

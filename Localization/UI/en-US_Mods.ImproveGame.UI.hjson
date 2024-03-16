@@ -355,6 +355,21 @@ OpenBag: {
 	}
 }
 
+Autofisher: {
+	Accessory: Accessories for fishing
+	FishingPole: Fishing rod
+	Bait: Bait
+	SelectPool: Please select fishing pool
+	CarefulNextTime: Be careful next time!
+	Unavailable: Currently no fishing info
+	CatchCratesFilter: Crates
+	CatchAccessoriesFilter: Accessories
+	CatchToolsFilter: Tools and weapons
+	CatchWhiteRarityCatchesFilter: White rarity
+	CatchNormalCatchesFilter: Higher than white rarity
+	PerItemFilter: Filter Catches
+}
+
 MapLayer: {
 	TheAether: The Aether
 	Pyramid: Pyramid

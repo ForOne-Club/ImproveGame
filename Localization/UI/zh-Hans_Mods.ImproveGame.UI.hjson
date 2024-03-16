@@ -353,6 +353,21 @@ OpenBag: {
 	}
 }
 
+Autofisher: {
+	Accessory: 钓鱼饰品
+	FishingPole: 钓竿
+	Bait: 诱饵
+	SelectPool: 请选择鱼池
+	CarefulNextTime: 下次注意点！
+	Unavailable: 暂无钓鱼信息
+	CatchCratesFilter: 钓宝匣
+	CatchAccessoriesFilter: 钓配饰
+	CatchToolsFilter: 钓工具与武器
+	CatchWhiteRarityCatchesFilter: 钓白色稀有度渔获
+	CatchNormalCatchesFilter: 钓高于白色稀有度渔获
+	PerItemFilter: 筛选物品
+}
+
 MapLayer: {
 	TheAether: 以太
 	Pyramid: 金字塔

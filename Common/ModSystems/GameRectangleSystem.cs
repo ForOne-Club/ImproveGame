@@ -2,6 +2,7 @@
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UI;
+using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Graphics2D;
