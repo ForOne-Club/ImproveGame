@@ -1,94 +1,58 @@
-﻿using Terraria.ModLoader.Default;
+﻿using ImproveGame.Packets.NetAutofisher;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.UI.Autofisher;
 
 public class CatchRecord : ModSystem
 {
-    private class CatchData(Item item) : TagSerializable
-    {
-        public static readonly Func<TagCompound, CatchData> DESERIALIZER = Load;
+    private static List<Item> _catches = [];
 
-        internal readonly Item Item = item;
-
-        public TagCompound SerializeData()
-        {
-            var tag = new TagCompound();
-
-            if (Item.type <= 0)
-                return tag;
-
-            if (Item.ModItem == null)
-            {
-                tag.Set("mod", "Terraria");
-                tag.Set("id", Item.netID);
-            }
-            else
-            {
-                tag.Set("mod", Item.ModItem.Mod.Name);
-                tag.Set("name", Item.ModItem.Name);
-            }
-
-            return tag;
-        }
-
-        public static CatchData Load(TagCompound tag)
-        {
-            var item = new Item();
-            string modName = tag.GetString("mod");
-            if (modName == "")
-            {
-                item.netDefaults(0);
-                return new CatchData(item);
-            }
-
-            if (modName == "Terraria")
-            {
-                item.netDefaults(tag.GetInt("id"));
-            }
-            else
-            {
-                if (ModContent.TryFind(modName, tag.GetString("name"), out ModItem modItem))
-                {
-                    item.SetDefaults(modItem.Type);
-                }
-                else
-                {
-                    item.SetDefaults(ModContent.ItemType<UnloadedItem>());
-                    ((UnloadedItem)item.ModItem).Setup(tag);
-                }
-            }
-
-            return new CatchData(item);
-        }
-
-        public override int GetHashCode() => Item.GetHashCode();
-    }
-
-    private static List<Item> _itemsCaught = [];
-
+    /// <summary>
+    /// 添加捕获物品，不可能在客户端调用
+    /// </summary>
     public static void AddCatch(int type)
     {
-        if (_itemsCaught.All(i => i.type != type))
-            _itemsCaught.Add(new Item(type));
+        if (_catches.All(i => i.type != type))
+            _catches.Add(new Item(type));
+        RecordedCatchesSyncer.Sync();
     }
 
-    public static List<Item> GetRecordedCatches => _itemsCaught;
+    public static void SetCatchesList(List<Item> list)
+    {
+        _catches = list ?? [];
+    }
+
+    public static List<Item> GetRecordedCatches => _catches;
 
     public override void ClearWorld()
     {
-        _itemsCaught = [];
+        _catches = [];
     }
 
     public override void SaveWorldData(TagCompound tag)
     {
-        var catches = _itemsCaught.Select(item => new CatchData(item)).ToList();
+        var catches = _catches.Select(item => new CatchData(item)).ToList();
         tag["catches"] = catches;
     }
 
     public override void LoadWorldData(TagCompound tag)
     {
         var catchData = tag.Get<List<CatchData>>("catches") ?? [];
-        _itemsCaught = catchData.Select(data => data.Item).ToList();
+        _catches = catchData.Select(data => data.Item).ToList();
+    }
+
+    public override void NetSend(BinaryWriter writer)
+    {
+        writer.Write(_catches.Count);
+        foreach (var item in _catches)
+            writer.Write(item.type);
+    }
+
+    public override void NetReceive(BinaryReader reader)
+    {
+        _catches.Clear();
+        int count = reader.ReadInt32();
+        for (int i = 0; i < count; i++)
+            _catches.Add(new Item(reader.ReadInt32()));
     }
 }

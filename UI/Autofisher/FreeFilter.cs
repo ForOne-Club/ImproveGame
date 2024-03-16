@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.ModPlayers;
-using ImproveGame.UI.AutoTrash;
+﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -50,6 +48,7 @@ public class FreeFilter : BaseBody
 
         TitleView = new View
         {
+            DragIgnore = true,
             BgColor = Color.Lerp(Color.Black, UIStyle.TitleBg, 0.5f) * 0.5f,
             Border = 1.5f,
             BorderColor = Color.Transparent,
@@ -62,11 +61,15 @@ public class FreeFilter : BaseBody
         
         Title = new SUIText
         {
-            TextAlign = new Vector2(0f, 0.5f),
-            TextBorder = 1.5f,
+            DragIgnore = true,
+            IsLarge = true,
+            UseKey = true,
             TextOrKey = "Mods.ImproveGame.UI.Autofisher.PerItemFilter",
-            TextOffset = new Vector2(12f, 0f),
-            UseKey = true
+            TextAlign = new Vector2(0f, 0.5f),
+            TextScale = 0.45f,
+            Height = StyleDimension.Fill,
+            Width = StyleDimension.Fill,
+            Left = new StyleDimension(16f, 0f)
         };
         Title.SetSizePercent(1f, 1f);
         Title.JoinParent(TitleView);
@@ -100,7 +103,7 @@ public class FreeFilter : BaseBody
 
         FreeFilterItemGrid = new FreeFilterItemGrid
         {
-            RelativeMode = RelativeMode.Vertical,
+            RelativeMode = RelativeMode.Vertical
         };
         FreeFilterItemGrid.SetPadding(7f, 4f, 6f, 8f);
         FreeFilterItemGrid.Width.Percent = 1f;

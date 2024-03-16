@@ -1,12 +1,8 @@
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Items;
-using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UIFramework;
-using System;
-using System.Reflection;
 using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
@@ -31,7 +27,7 @@ namespace ImproveGame.Content.Tiles
         public bool CatchTools = true;
         public bool CatchWhiteRarityCatches = true;
         public bool CatchNormalCatches = true;
-        public HashSet<int> ExcludedItems = new();
+        public List<CatchData> ExcludedItems = [];
 
         public bool IsEmpty => accessory.IsAir && bait.IsAir && fishingPole.IsAir && (fish is null || fish.All(item => item.IsAir));
         
@@ -329,7 +325,7 @@ namespace ImproveGame.Content.Tiles
                 return;
 
             // 物品筛选没过
-            if (ExcludedItems.Contains(itemType))
+            if (ExcludedItems.Any(i => i.Item.type == itemType))
                 return;
 
             CatchRecord.AddCatch(itemType);
@@ -721,14 +717,16 @@ namespace ImproveGame.Content.Tiles
         // 返回的是物品禁用状态，true就是没禁用，false就是禁用了
         public bool ToggleItem(Item item)
         {
-            bool alreadyExcluded = ExcludedItems.Contains(item.type);
+            bool alreadyExcluded = ExcludedItems.Any(i => ItemExtensions.IsSameItem(i.Item, item));
             if (alreadyExcluded)
             {
-                ExcludedItems.Remove(item.type);
+                ExcludedItems.RemoveAll(i => ItemExtensions.IsSameItem(i.Item, item));
+                MachineExcludedItemSyncer.Sync(ID, ExcludedItems);
                 return true;
             }
 
-            ExcludedItems.Add(item.type);
+            ExcludedItems.Add(new CatchData(item));
+            MachineExcludedItemSyncer.Sync(ID, ExcludedItems);
             return false;
         }
 
@@ -746,7 +744,6 @@ namespace ImproveGame.Content.Tiles
             fishingPole = tag.Get<Item>("fishingPole");
             bait = tag.Get<Item>("bait");
             accessory = tag.Get<Item>("accessory");
-            ExcludedItems = tag.Get<int[]>("excludedItems").ToHashSet();
 
             if (tag.ContainsKey("fishes"))
                 fish = tag.Get<Item[]>("fishes");
@@ -765,6 +762,11 @@ namespace ImproveGame.Content.Tiles
                 CatchWhiteRarityCatches = true;
             if (!tag.TryGet("CatchNormalCatches", out CatchNormalCatches))
                 CatchNormalCatches = true;
+
+            ExcludedItems = tag.Get<List<CatchData>>("excludedItemData") ?? [];
+            Console.WriteLine(ExcludedItems.Count);
+            // var excludedItemData = tag.Get<List<CatchData>>("excludedItemData") ?? [];
+            // ExcludedItems = excludedItemData.Select(data => data.Item.type).ToHashSet();
         }
 
         public override void SaveData(TagCompound tag)
@@ -779,7 +781,11 @@ namespace ImproveGame.Content.Tiles
             tag["CatchTools"] = CatchTools;
             tag["CatchWhiteRarityCatches"] = CatchWhiteRarityCatches;
             tag["CatchNormalCatches"] = CatchNormalCatches;
-            tag["excludedItems"] = ExcludedItems.ToArray();
+
+            tag["excludedItemData"] = ExcludedItems;
+            // 转换成CatchData保存，带有模组物品信息
+            // var excludedItems = ExcludedItems.Select(t => new CatchData(new Item(t))).ToList();
+            // tag["excludedItemData"] = excludedItems;
         }
 
         public override void NetSend(BinaryWriter writer)
@@ -809,7 +815,7 @@ namespace ImproveGame.Content.Tiles
             bait = ItemIO.Receive(reader, true);
             accessory = ItemIO.Receive(reader, true);
             fish = reader.ReadItemArray();
-            ExcludedItems = reader.ReadIntEnumerable().ToHashSet();
+            ExcludedItems = reader.ReadListCatchData();
 
             var flags = (BitsByte)reader.ReadByte();
             CatchCrates = flags[0];

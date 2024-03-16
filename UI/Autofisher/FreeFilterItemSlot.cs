@@ -13,11 +13,16 @@ public class FreeFilterItemSlot : GenericItemSlot
 
     public FreeFilterItemSlot(List<Item> items, int index) : base(items, index)
     {
-        _disableAnimTimer.Close();
         ItemIconScale = 0.8f;
 
         SetBaseItemSlotValues(true, false);
         SetSizePixels(44f, 44f);
+        
+        bool disabled = Autofisher.ExcludedItems.Any(i => ItemExtensions.IsSameItem(i.Item, Item));
+        if (disabled)
+            _disableAnimTimer.Open();
+        else
+            _disableAnimTimer.Close();
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)
@@ -34,7 +39,7 @@ public class FreeFilterItemSlot : GenericItemSlot
         base.Update(gameTime);
         if (Autofisher is null)
             return;
-        bool disabled = Autofisher.ExcludedItems.Contains(Item.type);
+        bool disabled = Autofisher.ExcludedItems.Any(i => ItemExtensions.IsSameItem(i.Item, Item));
         if (disabled)
         {
             if (!_disableAnimTimer.AnyOpen)
@@ -55,12 +60,13 @@ public class FreeFilterItemSlot : GenericItemSlot
             return;
 
         ItemIconMaxWidthAndHeight = 32f * _disableAnimTimer.Lerp(1f, 0.9f);
+        ItemIconScale = HoverTimer.Lerp(0.8f, 0.94f);
         ItemColor = _disableAnimTimer.Lerp(Color.White, Color.Gray);
         ItemIconResize = _disableAnimTimer.Lerp(new Vector2(), -GetInnerDimensions().Size() * 0.1f);
 
         base.DrawSelf(spriteBatch);
 
-        bool itemExcluded = Autofisher.ExcludedItems.Contains(Item.type);
+        bool itemExcluded = Autofisher.ExcludedItems.Any(i => ItemExtensions.IsSameItem(i.Item, Item));
         if (_disableAnimTimer.Opening || _disableAnimTimer.Closing || itemExcluded)
         {
             Rectangle scissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;

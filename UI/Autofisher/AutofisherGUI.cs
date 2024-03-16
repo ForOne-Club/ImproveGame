@@ -242,6 +242,11 @@ public partial class AutofisherGUI : BaseBody, ISidedView
             }
         }
 
+        if (_buttonLootAll.IsMouseHovering)
+        {
+            Main.instance.MouseText(Lang.inter[29].Value);
+        }
+
         // 用 title.IsMouseHovering 出框之后就会没
         if (textPanel.IsMouseHovering)
         {

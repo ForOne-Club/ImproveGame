@@ -4,6 +4,7 @@ using ImproveGame.UIFramework.Common;
 using PinyinNet;
 using Terraria.GameContent.Creative;
 using Terraria.GameContent.UI;
+using Terraria.ModLoader.Default;
 
 namespace ImproveGame.Common.Utils.Extensions;
 
@@ -329,6 +330,20 @@ public static class ItemExtensions
     #endregion
 
     #region 其他 - Misc
+
+    public static bool IsSameItem(Item item1, Item item2)
+    {
+        // 卸载物品是特殊的
+        if (item1.ModItem is UnloadedItem u1 && item2.ModItem is UnloadedItem u2)
+        {
+            if (u1.ItemName == u2.ItemName && u1.ModName == u2.ModName)
+                return true;
+            return false;
+        }
+
+        // 正常物品
+        return item1.type == item2.type;
+    }
 
     private static IEnumerable<string> GetItemTooltipLines(Item item)
     {
