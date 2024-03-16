@@ -31,6 +31,7 @@
 - Faster Bag Opener
 - Removed summon slot tooltip from summon weapons
 - Fishing Machine
+  - Advanced filtering that allows you to individually filter each item
   - Items that can be right clicked to open, like Oysters, are now treated as crates
   - Changed recipe, making it harder to craft
   - Doubled bait consumption rate
