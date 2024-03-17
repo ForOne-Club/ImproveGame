@@ -25,6 +25,7 @@
 - Fast Respawn When No Boss seeing the Celestial Pillars as bosses, but not the Eater of Worlds
 - Bag Opener and Item Search's UI glitch
 - Teleport NPCs Home's occasional failure
+- Scarecrow Dummy appears in the Bestiary
 
 ## Adjustments
 

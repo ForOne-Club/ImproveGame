@@ -12,6 +12,12 @@ public class DummyNPC : ModNPC
     public override bool CheckDead() => false;
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
 
+    public override void SetStaticDefaults()
+    {
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, new NPCID.Sets.NPCBestiaryDrawModifiers {
+            Hide = true
+        });
+    }
 
     public override void SetDefaults()
     {
