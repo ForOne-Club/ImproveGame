@@ -960,7 +960,7 @@ UIConfigs: {
 		Label: "[i:SlimeStaff] Auto Re-summoning"
 		Tooltip:
 			'''
-			Summons last used summon after respawn
+			Summons last used minion after respawn
 			Disabled if the mod "Summoners' Association" is loaded
 			Summoners' Association powers finer summon control!
 			'''

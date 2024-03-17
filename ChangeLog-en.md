@@ -15,7 +15,7 @@
 ## Additions
 
 - Control Panel for accessing the mod's shortcuts, such as the Big Backpack and Potion Bags
-- Auto Re-summon, summons last used summon after respawn
+- Auto Re-summon, summons last used minion after respawn
 - Weather Control, including wind direction, moon phase and rain, plus time after defeating Wall of Flesh
 - Recipe Search, finds available recipes for desired items
 - Shimmemeter for debugging
