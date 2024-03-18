@@ -6,11 +6,11 @@
 
 </div>
 
-# v1.6.8
+# v1.7
 
 ## Subversions
 
-- v1.6.8.0 (Not yet)
+- v1.7.0.0
 
 ## Additions
 
