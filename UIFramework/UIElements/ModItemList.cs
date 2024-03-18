@@ -9,6 +9,7 @@ namespace ImproveGame.UIFramework.UIElements
         public ModItemList()
         {
             SetPadding(0);
+            MaxWidth = MaxHeight = new StyleDimension(float.MaxValue, 0f);
         }
 
         public static Vector2 GetSize(int HCount, int VCount, int slotSize = 52, float spacing = 10f)
