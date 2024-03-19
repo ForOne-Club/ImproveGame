@@ -26,6 +26,7 @@
 - Bag Opener and Item Search's UI glitch
 - Teleport NPCs Home's occasional failure
 - Scarecrow Dummy appears in the Bestiary
+- **[v1.7.0.1]** 修复总控只能只用 ~ 作为快捷键否者不显示的 BUG
 
 ## Adjustments
 

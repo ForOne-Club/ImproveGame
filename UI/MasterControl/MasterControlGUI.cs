@@ -214,7 +214,7 @@ public class MasterControlGUI : BaseBody
         if (Window.IsMouseHovering)
             PlayerInput.LockVanillaMouseScroll($"{ImproveGame.Instance.Name}: Control Center GUI");
 
-        if (Main.keyState.IsKeyDown(Keys.OemTilde))
+        if (KeybindSystem.MasterControlKeybind.Current)
         {
             if (!OpacityTimer.AnyOpen)
                 OpacityTimer.Open();
