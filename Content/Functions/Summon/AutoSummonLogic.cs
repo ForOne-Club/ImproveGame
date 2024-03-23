@@ -16,6 +16,10 @@ public class AutoSummonLogic : ModPlayer
     public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity,
         int type, int damage, float knockback)
     {
+        // 有人报索引超出数组界限了，非常抽象，加个判定
+        if (type < 0)
+            return base.Shoot(item, source, position, velocity, type, damage, knockback);
+
         // 至少我们能适配灾厄
         if (Enabled && Player.altFunctionUse != 2 && ProjectileID.Sets.MinionTargettingFeature[type] &&
             ContentSamples.ProjectilesByType[type].minion && _lastUsedStaffType != item.type)
