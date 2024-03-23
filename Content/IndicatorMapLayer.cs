@@ -121,6 +121,8 @@ public class StructureDatas : ModSystem
     public static List<Point16> EnchantedSwordPositions { get; set; }
     public static List<Point16> BaitlessAutofisherPositions { get; set; }
 
+    private static int _autofisherValidateTimer;
+
     public override void PostUpdateWorld()
     {
         if (Main.netMode is NetmodeID.MultiplayerClient)
@@ -131,7 +133,11 @@ public class StructureDatas : ModSystem
         ValidatePlanteraPositions();
         ValidateEnchantedSwordPositions();
 
-        BaitlessAutofisherPositions ??= new List<Point16>();
+        _autofisherValidateTimer++;
+        if (_autofisherValidateTimer % 300 != 0)
+            return;
+
+        BaitlessAutofisherPositions ??= [];
         var existingBaitlessAutofishers = TileEntity.ByID
             .Where(pair => pair.Value is TEAutofisher {HasBait: false})
             .Select(pair => pair.Value.Position)

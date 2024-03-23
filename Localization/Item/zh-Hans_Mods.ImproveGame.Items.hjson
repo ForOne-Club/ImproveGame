@@ -282,3 +282,12 @@ SearchIcon: {
 	DisplayName: 找不到配方
 	Tooltip: 没有任何配方与搜索内容相匹配
 }
+
+BaitSupplier: {
+	DisplayName: 诱饵腔
+	Tooltip:
+		'''
+		自动从相邻箱子中拿取诱饵
+		以补充世界上所有无诱饵的钓鱼机
+		'''
+}

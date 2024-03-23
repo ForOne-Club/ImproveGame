@@ -437,6 +437,9 @@ public class ImproveConfigs : ModConfig
         [DefaultValue(true)]
         public bool DetectorDrone = true;
 
+        [DefaultValue(true)]
+        public bool BaitSupplier = true;
+
         public override bool Equals(object obj)
         {
             if (obj is ModItemLoadPage other)
@@ -444,7 +447,8 @@ public class ImproveConfigs : ModConfig
                        WallPlace == other.WallPlace && CreateWand == other.CreateWand && LiquidWand == other.LiquidWand &&
                        PotionBag == other.PotionBag && BannerChest == other.BannerChest && Autofisher == other.Autofisher &&
                        PaintWand == other.PaintWand && ConstructWand == other.ConstructWand && MoveChest == other.MoveChest &&
-                       CoinOne == other.CoinOne && ExtremeStorage == other.ExtremeStorage && DetectorDrone == other.DetectorDrone;
+                       CoinOne == other.CoinOne && ExtremeStorage == other.ExtremeStorage && DetectorDrone == other.DetectorDrone &&
+                       BaitSupplier == other.BaitSupplier;
             return base.Equals(obj);
         }
 
@@ -454,7 +458,7 @@ public class ImproveConfigs : ModConfig
             {
                 MagickWand, SpaceWand, StarburstWand, WallPlace, CreateWand, LiquidWand, PotionBag,
                 BannerChest, Autofisher, PaintWand, ConstructWand, MoveChest, CoinOne, ExtremeStorage,
-                DetectorDrone
+                DetectorDrone, BaitSupplier
             }.GetHashCode();
         }
     }

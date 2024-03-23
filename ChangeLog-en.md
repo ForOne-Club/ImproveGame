@@ -22,6 +22,7 @@
 - Recipe Search, finds available recipes for desired items
 - Shimmemeter for debugging
 - **[v1.7.0.2]** 自动钓鱼机自动存储
+- **[v1.7.0.2]** Bait Chamber, automatically replenishes all the baitless fishing machines with baits in chests
 
 ## BUG Fixes
 
@@ -32,6 +33,7 @@
 - **[v1.7.0.1]** 修复总控只能只用 ~ 作为快捷键否者不显示的 BUG
 - **[v1.7.0.2]** 自动重召唤功能可能使游戏出错
 - **[v1.7.0.2]** 物品框可能出现渲染问题
+- **[v1.7.0.2]** "Town NPC spawn mechanics improvement" is useless if "Town NPC spawn rate multiplier" is set to 1x
 
 ## Adjustments
 

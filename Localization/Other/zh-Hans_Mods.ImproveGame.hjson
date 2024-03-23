@@ -3,6 +3,7 @@ ModName: 更好的体验
 Tiles: {
 	// Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
 	// ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
+	// BaitSupplier.MapEntry: Bait Supplier
 }
 
 MoonPhases: {

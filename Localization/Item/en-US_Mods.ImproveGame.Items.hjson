@@ -283,3 +283,12 @@ SearchIcon: {
 	DisplayName: Recipe Not Found
 	Tooltip: No recipe macthes the conditions
 }
+
+BaitSupplier: {
+	DisplayName: Bait Chamber
+	Tooltip:
+		'''
+		Automatically takes bait from side-by-side chests
+		to replenish all the baitless fishing machines in the world
+		'''
+}

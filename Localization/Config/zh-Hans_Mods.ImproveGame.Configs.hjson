@@ -780,6 +780,11 @@ ModItemLoadPage: {
 		// Tooltip: ""
 	}
 
+	BaitSupplier: {
+		// Label: "{$Mods.ImproveGame.Items.BaitSupplier.DisplayName}"
+		// Tooltip: ""
+	}
+
 	// Tooltip: ""
 }
 
