@@ -6,11 +6,13 @@
 
 </div>
 
-# v1.7
+# v1.7.0
 
 ## Subversions
 
 - v1.7.0.0
+- v1.7.0.1
+- v1.7.0.2
 
 ## Additions
 
@@ -19,6 +21,7 @@
 - Weather Control, including wind direction, moon phase and rain, plus time after defeating Wall of Flesh
 - Recipe Search, finds available recipes for desired items
 - Shimmemeter for debugging
+- **[v1.7.0.2]** 自动钓鱼机自动存储
 
 ## BUG Fixes
 
@@ -27,6 +30,8 @@
 - Teleport NPCs Home's occasional failure
 - Scarecrow Dummy appears in the Bestiary
 - **[v1.7.0.1]** 修复总控只能只用 ~ 作为快捷键否者不显示的 BUG
+- **[v1.7.0.2]** 自动重召唤功能可能使游戏出错
+- **[v1.7.0.2]** 物品框可能出现渲染问题
 
 ## Adjustments
 

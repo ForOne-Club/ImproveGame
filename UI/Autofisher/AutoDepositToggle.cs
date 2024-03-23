@@ -1,21 +1,22 @@
-﻿using ImproveGame.UI.ExtremeStorage;
+﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Content.Tiles;
+using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.Autofisher;
 
-public class FreeFilterButton : TimerView
+public sealed class AutoDepositToggle : TimerView
 {
+    private TEAutofisher Autofisher => AutofishPlayer.LocalPlayer.Autofisher;
     private readonly SUIPanel _panel;
 
-    public FreeFilterButton(SUIPanel panel)
+    public AutoDepositToggle(SUIPanel panel)
     {
-        SetSizePixels(34f, 26f);
+        SetSizePixels(32, 30);
         _panel = panel;
     }
-
-    public virtual Rectangle? SourceRectangle => null;
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
@@ -31,20 +32,24 @@ public class FreeFilterButton : TimerView
         var dimensions = GetDimensions();
         var pos = dimensions.Position();
         var color = Color.White;
-        var texture = ModAsset.IconFreeFilter.Value;
-        var hoverTexture = ModAsset.IconFreeFilterHover.Value;
-        spriteBatch.Draw(texture, pos, SourceRectangle, color);
-        if (IsMouseHovering)
-            spriteBatch.Draw(hoverTexture, pos, SourceRectangle, color * HoverTimer.Schedule);
+        var texture = ModAsset.ChestAutoDeposit.Value;
+        var hoverTexture = ModAsset.ChestAutoDeposit_Hover.Value;
+        if (Autofisher is not null && !Autofisher.AutoDeposit)
+            color = color.MultiplyRGB(Color.White * 0.4f);
+        spriteBatch.Draw(texture, pos, null, color);
 
         if (IsMouseHovering)
-            UICommon.TooltipMouseText(GetText("UI.Autofisher.PerItemFilter"));
+        {
+            spriteBatch.Draw(hoverTexture, pos, null, Color.White * HoverTimer.Schedule);
+            UICommon.TooltipMouseText(GetText("UI.Autofisher.ChestAutoDeposit"));
+        }
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)
     {
         base.LeftMouseDown(evt);
-        FreeFilter.Visible = !FreeFilter.Visible;
+        if (Autofisher is not null)
+            FishFiltersPacket.Get(Autofisher.Position, !Autofisher.AutoDeposit, 5).Send(runLocally: true);
     }
 
     public override void MouseOver(UIMouseEvent evt)

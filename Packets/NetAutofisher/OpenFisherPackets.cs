@@ -43,7 +43,8 @@ namespace ImproveGame.Packets.NetAutofisher
                         autofisher.CatchAccessories,
                         autofisher.CatchTools,
                         autofisher.CatchWhiteRarityCatches,
-                        autofisher.CatchNormalCatches
+                        autofisher.CatchNormalCatches,
+                        autofisher.AutoDeposit
                     ),
                     LocatePointPacket.Get(
                         tileEntityID,

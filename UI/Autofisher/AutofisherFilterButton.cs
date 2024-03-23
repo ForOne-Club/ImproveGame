@@ -57,7 +57,6 @@ internal abstract class AutofisherFilterButton : UIElement
             Main.LocalPlayer.mouseInterface = true;
 
             Main.instance.MouseText(GetText($"UI.Autofisher.{GetType().Name}"));
-
         }
         else
         {
@@ -93,5 +92,11 @@ internal abstract class AutofisherFilterButton : UIElement
         if (!IsActivated(AutofishPlayer.LocalPlayer.Autofisher))
             color = color.MultiplyRGB(Color.White * 0.4f);
         spriteBatch.Draw(tex.Value, dimensions.Position(), color);
+    }
+
+    public override void MouseOver(UIMouseEvent evt)
+    {
+        base.MouseOver(evt);
+        SoundEngine.PlaySound(SoundID.MenuTick);
     }
 }

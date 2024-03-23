@@ -368,6 +368,11 @@ Autofisher: {
 	CatchWhiteRarityCatchesFilter: White rarity
 	CatchNormalCatchesFilter: Higher than white rarity
 	PerItemFilter: Filter Catches
+	ChestAutoDeposit:
+		'''
+		Auto deposit to nearby chests
+		Catches will be auto deposited to the nearest chest per minute
+		'''
 }
 
 MapLayer: {

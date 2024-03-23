@@ -1,7 +1,13 @@
-﻿namespace ImproveGame.Common.Utils.Extensions;
+﻿using Terraria.DataStructures;
+
+namespace ImproveGame.Common.Utils.Extensions;
 
 public static class PointExtensions
 {
+    public static float DistanceSQ(this Point16 point1, Point16 point2)
+    {
+        return (MathF.Pow(point1.X - point2.X, 2)) + MathF.Pow(point1.Y - point2.Y, 2);
+    }
     public static float DistanceSQ(this Point point1, Point point2)
     {
         return (MathF.Pow(point1.X - point2.X, 2)) + MathF.Pow(point1.Y - point2.Y, 2);

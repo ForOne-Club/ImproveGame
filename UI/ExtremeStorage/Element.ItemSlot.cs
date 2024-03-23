@@ -209,7 +209,24 @@ namespace ImproveGame.UI.ExtremeStorage
                 SetCursorOverride();
             }
 
+            Rectangle scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
+            RasterizerState rasterizerState = sb.GraphicsDevice.RasterizerState;
+
             DrawItemIcon(sb, Item, Color.White, GetDimensions(), size * 0.6154f);
+
+            // 防止某些mod的不规范绘制炸UI（比如灾厄）
+            if (rasterizerState != sb.GraphicsDevice.RasterizerState || scissorRectangle != sb.GraphicsDevice.ScissorRectangle)
+            {
+                Main.spriteBatch.End();
+
+                sb.GraphicsDevice.ScissorRectangle = scissorRectangle;
+                sb.GraphicsDevice.RasterizerState = rasterizerState;
+
+                Main.spriteBatch.Begin(0, BlendState.AlphaBlend,
+                    SamplerState.LinearClamp, DepthStencilState.Default,
+                    rasterizerState, null, Main.UIScaleMatrix);
+            }
+
             if (Item.stack <= 1)
             {
                 return;

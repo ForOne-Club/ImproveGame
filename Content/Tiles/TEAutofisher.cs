@@ -27,6 +27,7 @@ namespace ImproveGame.Content.Tiles
         public bool CatchTools = true;
         public bool CatchWhiteRarityCatches = true;
         public bool CatchNormalCatches = true;
+        public bool AutoDeposit = true;
         public List<CatchData> ExcludedItems = [];
 
         public bool IsEmpty => accessory.IsAir && bait.IsAir && fishingPole.IsAir && (fish is null || fish.All(item => item.IsAir));
@@ -94,6 +95,8 @@ namespace ImproveGame.Content.Tiles
         #region 钓鱼
 
         public int FishingTimer;
+        public int AutoDepositTimer;
+
         public override void Update()
         {
             for (int i = 0; i < fish.Length; i++)
@@ -153,6 +156,13 @@ namespace ImproveGame.Content.Tiles
                 if (accAvailable)
                     ApplyAccessories(stat);
                 FishingCheck();
+            }
+
+            AutoDepositTimer++;
+            if (AutoDepositTimer > 3600 && AutoDeposit)
+            {
+                AutoDepositTimer = 0;
+                AutoDepositManipulation();
             }
         }
 
@@ -687,6 +697,75 @@ namespace ImproveGame.Content.Tiles
 
         #endregion
 
+        private void AutoDepositManipulation()
+        {
+            // 寻找离中心点最近的箱子
+            var chests = new List<(int, float)>(8);
+            Point16 center = Position + new Point16(1, 1);
+            for (int i = 0; i < Main.maxChests; i++)
+            {
+                if (Main.chest[i] == null || Main.chest[i].x < 0 || Main.chest[i].y < 0)
+                    continue;
+
+                Point16 chestPosition = new(Main.chest[i].x, Main.chest[i].y);
+                float distance = center.DistanceSQ(chestPosition);
+                if (distance < 30 * 30)
+                    chests.Add((i, distance));
+            }
+
+            // 没找到箱子
+            if (chests.Count is 0)
+                return;
+
+            // 按照距离排序
+            chests.Sort((a, b) => a.Item2.CompareTo(b.Item2));
+            
+            // 逐个箱子尝试存放
+            foreach ((int index, float distance) in chests)
+            {
+                // 正在使用
+                if (Chest.IsPlayerInChest(index) && Main.netMode is NetmodeID.Server)
+                    continue;
+
+                // 存入
+                bool fullyDeposited = true;
+                Chest chest = Main.chest[index];
+                for (int i = 0; i < fish.Length; i++)
+                {
+                    if (fish[i] is null || fish[i].IsAir)
+                        continue;
+
+                    ref var item = ref fish[i];
+                    var dummyItem = item.Clone();
+                    int oldStack = item.stack;
+                
+                    item = ItemStackToInventory(chest.item, fish[i], false);
+
+                    // 必须是消耗了，也就是真的能存 | TryConsumeBait返回true表示鱼饵消耗了
+                    if (item.stack != oldStack)
+                    {
+                        // 没了
+                        if (item.IsAir)
+                            ItemSyncPacket.Get(ID, (byte)i).Send(runLocally: false);
+                        else // 还在，同步stack
+                            ItemsStackChangePacket.Get(ID, (byte)i, -1).Send(runLocally: false);
+                    
+                        // 用dummyItem，因为填充后item可能是Air
+                        Chest.VisualizeChestTransfer(Position.ToWorldCoordinates(16, 16), new Vector2(chest.x * 16 + 16, chest.y * 16 + 16), dummyItem, dummyItem.stack);
+                    }
+
+                    if (Main.netMode is NetmodeID.SinglePlayer)
+                        UISystem.Instance.AutofisherGUI?.RefreshItems();
+
+                    if (!item.IsAir)
+                        fullyDeposited = false;
+                }
+                
+                if (fullyDeposited)
+                    break;
+            }
+        }
+
         public override void OnKill()
         {
             if (!fishingPole.IsAir)
@@ -762,6 +841,19 @@ namespace ImproveGame.Content.Tiles
                 CatchWhiteRarityCatches = true;
             if (!tag.TryGet("CatchNormalCatches", out CatchNormalCatches))
                 CatchNormalCatches = true;
+            if (!tag.TryGet("autoDeposit", out AutoDeposit))
+                AutoDeposit = false;
+
+            if (tag.TryGet("flags", out byte flags))
+            {
+                var bitsByte = (BitsByte) flags;
+                CatchCrates = bitsByte[0];
+                CatchAccessories = bitsByte[1];
+                CatchTools = bitsByte[2];
+                CatchWhiteRarityCatches = bitsByte[3];
+                CatchNormalCatches = bitsByte[4];
+                AutoDeposit = bitsByte[5];
+            }
 
             ExcludedItems = tag.Get<List<CatchData>>("excludedItemData") ?? [];
             Console.WriteLine(ExcludedItems.Count);
@@ -776,16 +868,17 @@ namespace ImproveGame.Content.Tiles
             tag["bait"] = bait;
             tag["accessory"] = accessory;
             tag["fishes"] = fish;
-            tag["CatchCrates"] = CatchCrates;
-            tag["CatchAccessories"] = CatchAccessories;
-            tag["CatchTools"] = CatchTools;
-            tag["CatchWhiteRarityCatches"] = CatchWhiteRarityCatches;
-            tag["CatchNormalCatches"] = CatchNormalCatches;
+            // tag["CatchCrates"] = CatchCrates;
+            // tag["CatchAccessories"] = CatchAccessories;
+            // tag["CatchTools"] = CatchTools;
+            // tag["CatchWhiteRarityCatches"] = CatchWhiteRarityCatches;
+            // tag["CatchNormalCatches"] = CatchNormalCatches;
+            // tag["autoDeposit"] = AutoDeposit;
+            var flags = new BitsByte(CatchCrates, CatchAccessories, CatchTools, CatchWhiteRarityCatches,
+                CatchNormalCatches, AutoDeposit);
+            tag["flags"] = (byte) flags;
 
             tag["excludedItemData"] = ExcludedItems;
-            // 转换成CatchData保存，带有模组物品信息
-            // var excludedItems = ExcludedItems.Select(t => new CatchData(new Item(t))).ToList();
-            // tag["excludedItemData"] = excludedItems;
         }
 
         public override void NetSend(BinaryWriter writer)
@@ -803,7 +896,8 @@ namespace ImproveGame.Content.Tiles
                 CatchAccessories,
                 CatchTools,
                 CatchWhiteRarityCatches,
-                CatchNormalCatches
+                CatchNormalCatches,
+                AutoDeposit
             );
             writer.Write(flags);
         }
@@ -823,6 +917,7 @@ namespace ImproveGame.Content.Tiles
             CatchTools = flags[2];
             CatchWhiteRarityCatches = flags[3];
             CatchNormalCatches = flags[4];
+            AutoDeposit = flags[5];
         }
     }
 }

@@ -366,6 +366,11 @@ Autofisher: {
 	CatchWhiteRarityCatchesFilter: 钓白色稀有度渔获
 	CatchNormalCatchesFilter: 钓高于白色稀有度渔获
 	PerItemFilter: 筛选物品
+	ChestAutoDeposit:
+		'''
+		自动存储
+		      每分钟将渔获自动存入最近的箱子
+		'''
 }
 
 MapLayer: {

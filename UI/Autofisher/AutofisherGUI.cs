@@ -135,7 +135,7 @@ public partial class AutofisherGUI : BaseBody, ISidedView
         relocateButton.OnLeftMouseDown += (_, _) => ToggleSelectPool();
         basePanel.Append(relocateButton);
 
-        _buttonLootAll = new UIImage(ModAsset.Button_LootAll.Value);
+        _buttonLootAll = new UIImage(ModAsset.FisherLootAll.Value);
         _buttonLootAll.AllowResizingDimensions = false;
         _buttonLootAll.Left.Set(0f, 0f);
         _buttonLootAll.Top.Set(4f, 0f);
@@ -147,24 +147,21 @@ public partial class AutofisherGUI : BaseBody, ISidedView
 
         float filtersX = panelLeft + panelWidth + 10f;
         float filtersY = panelTop + 8f;
-        var filter = new FreeFilterButton(basePanel).SetPos(filtersX, filtersY);
-        filtersY += filter.Height.Pixels + 8f;
-        Append(filter);
-        filter = new CatchCratesFilter(basePanel).SetPos(filtersX, filtersY);
-        filtersY += filter.Height.Pixels + 8f;
-        Append(filter);
-        filter = new CatchAccessoriesFilter(basePanel).SetPos(filtersX, filtersY);
-        filtersY += filter.Height.Pixels + 8f;
-        Append(filter);
-        filter = new CatchToolsFilter(basePanel).SetPos(filtersX, filtersY);
-        filtersY += filter.Height.Pixels + 8f;
-        Append(filter);
-        filter = new CatchWhiteRarityCatchesFilter(basePanel).SetPos(filtersX, filtersY);
-        filtersY += filter.Height.Pixels + 8f;
-        Append(filter);
-        filter = new CatchNormalCatchesFilter(basePanel).SetPos(filtersX, filtersY);
-        filtersY += filter.Height.Pixels + 8f;
-        Append(filter);
+        AddToolButton(new FreeFilterButton(basePanel));
+        AddToolButton(new CatchCratesFilter(basePanel));
+        AddToolButton(new CatchAccessoriesFilter(basePanel));
+        AddToolButton(new CatchToolsFilter(basePanel));
+        AddToolButton(new CatchWhiteRarityCatchesFilter(basePanel));
+        AddToolButton(new CatchNormalCatchesFilter(basePanel));
+        AddToolButton(new AutoDepositToggle(basePanel));
+        return;
+
+        void AddToolButton(UIElement button) 
+        {
+            var filter = button.SetPos(filtersX, filtersY);
+            filtersY += filter.Height.Pixels + 8f;
+            Append(filter);
+        }
     }
 
     public override void Update(GameTime gameTime)
@@ -176,8 +173,8 @@ public partial class AutofisherGUI : BaseBody, ISidedView
             : selectPoolOff);
 
         _buttonLootAll.SetImage(_buttonLootAll.IsMouseHovering
-            ? ModAsset.Button_LootAll_Hover.Value
-            : ModAsset.Button_LootAll.Value);
+            ? ModAsset.FisherLootAll_Hover.Value
+            : ModAsset.FisherLootAll.Value);
     }
 
     public void ToggleSelectPool()
