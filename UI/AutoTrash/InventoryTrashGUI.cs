@@ -80,9 +80,14 @@ public class InventoryTrashGUI : BaseBody
                 GarbageListGUI.Instace.Enabled = !GarbageListGUI.Instace.Enabled;
 
                 if (GarbageListGUI.Instace.Enabled)
+                {
+                    EventTriggerManager.FocusUIElement = GarbageListGUI.Instace;
                     SoundEngine.PlaySound(SoundID.MenuOpen);
+                }
                 else
+                {
                     SoundEngine.PlaySound(SoundID.MenuClose);
+                }
             };
 
             Window.JoinParent(this);

@@ -7,7 +7,7 @@ public struct DummyConfig
     [Annotate]
     public bool LockHP = true;
     [Annotate]
-    public int LifeMax = 2000;
+    public int LifeMax = 200000;
     [Annotate]
     public int Defense = 0;
     [Annotate]

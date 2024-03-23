@@ -1,4 +1,4 @@
-﻿using ImproveGame.UI.ExtremeStorage;
+﻿using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.ModLoader.UI;
@@ -45,6 +45,9 @@ public class FreeFilterButton : TimerView
     {
         base.LeftMouseDown(evt);
         FreeFilter.Visible = !FreeFilter.Visible;
+        if (FreeFilter.Visible)
+            EventTriggerManager.FocusUIElement = FreeFilter.Instance;
+        FreeFilter.Instance.Recalculate();
     }
 
     public override void MouseOver(UIMouseEvent evt)

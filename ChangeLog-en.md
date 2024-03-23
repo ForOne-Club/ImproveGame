@@ -21,7 +21,7 @@
 - Weather Control, including wind direction, moon phase and rain, plus time after defeating Wall of Flesh
 - Recipe Search, finds available recipes for desired items
 - Shimmemeter for debugging
-- **[v1.7.0.2]** 自动钓鱼机自动存储
+- **[v1.7.0.2]** Auto depositing catches in Fishing Machines to nearby chests
 - **[v1.7.0.2]** Bait Chamber, automatically replenishes all the baitless fishing machines with baits in chests
 
 ## BUG Fixes
@@ -30,13 +30,12 @@
 - Bag Opener and Item Search's UI glitch
 - Teleport NPCs Home's occasional failure
 - Scarecrow Dummy appears in the Bestiary
-- **[v1.7.0.1]** 修复总控只能只用 ~ 作为快捷键否者不显示的 BUG
-- **[v1.7.0.2]** 自动重召唤功能可能使游戏出错
-- **[v1.7.0.2]** 物品框可能出现渲染问题
+- **[v1.7.0.1]** The Control Panel is unable to use when not using ~ as the keybind
+- **[v1.7.0.2]** Auto re-summon may crash the game
+- **[v1.7.0.2]** Modded item slots may have rendering issue
 - **[v1.7.0.2]** "Town NPC spawn mechanics improvement" is useless if "Town NPC spawn rate multiplier" is set to 1x
 - **[v1.7.0.2]** Spam messages in console
-- **[v1.7.0.2]** 储存管理器物品框有时渲染出错
-- **[v1.7.0.2]** 储存管理器筛选器在切换类别时无法正确应用
+- **[v1.7.0.2]** Filters are not applied when changing categories in Storage Manager
 
 ## Adjustments
 
@@ -56,7 +55,8 @@
 - Optimized Wand of Construction structure saving time; added tips to saving and placing
 - Refactored some Storage Manager logics; improved performance
 - Other performance improvements
-- **[v1.7.0.2]** 旗帜盒/药水袋中键改为从所有随身储存中收集物品
+- **[v1.7.0.2]** Middle clicking Banner Box and Potion Bag now collects items from all portable storages
+- **[v1.7.0.2]** Scarecrow Dummy's default life changed from 2000 to 200000
 
 # v1.6.7
 
