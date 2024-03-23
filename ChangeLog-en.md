@@ -56,6 +56,7 @@
 - Optimized Wand of Construction structure saving time; added tips to saving and placing
 - Refactored some Storage Manager logics; improved performance
 - Other performance improvements
+- **[v1.7.0.2]** 旗帜盒/药水袋中键改为从所有随身储存中收集物品
 
 # v1.6.7
 

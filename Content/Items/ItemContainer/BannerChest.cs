@@ -15,6 +15,8 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
     public bool AutoStorage { get; set; }
     public bool AutoSort { get; set; }
 
+    public void ItemIntoContainer(Item item) => ItemIntoContainer(item, true);
+
     public bool MeetEntryCriteria(Item item) => ItemToBanner(item) != -1;
 
     // 克隆内容不克隆引用
@@ -70,7 +72,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
         return true;
     }
 
-    public void ItemIntoContainer(Item item)
+    public void ItemIntoContainer(Item item, bool sort)
     {
         // 清除 Air 和 堆叠物品
         for (int i = 0; i < ItemContainer.Count; i++)
@@ -83,12 +85,8 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
 
             if (ItemContainer[i].type == item.type &&
                 ItemContainer[i].stack < ItemContainer[i].maxStack &&
-                ItemLoader.CanStack(ItemContainer[i], item))
+                ItemLoader.TryStackItems(ItemContainer[i], item, out _))
             {
-                int stackAvailable = ItemContainer[i].maxStack - ItemContainer[i].stack;
-                int stackAddition = Math.Min(item.stack, stackAvailable);
-                item.stack -= stackAddition;
-                ItemContainer[i].stack += stackAddition;
                 SoundEngine.PlaySound(SoundID.Grab);
                 if (item.stack <= 0)
                 {
@@ -106,7 +104,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
             SoundEngine.PlaySound(SoundID.Grab);
         }
 
-        if (AutoSort)
+        if (sort && AutoSort)
         {
             SortContainer();
         }
@@ -256,15 +254,12 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
 
     public void OnMiddleClicked(Item item)
     {
-        RightClick(Main.LocalPlayer);
-    }
+        var items = GetAllInventoryItemsList(Main.LocalPlayer, estimatedCapacity: 260);
+        foreach (var sourceItem in items.Where(sourceItem => !sourceItem.IsAir && MeetEntryCriteria(sourceItem)))
+        {
+            ItemIntoContainer(sourceItem, false);
+        }
 
-    public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
-    {
-        // 决定文本显示的是“开启”还是“关闭”
-        string text = ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container == this
-            ? GetTextWith("Tips.MouseMiddleClose", new { ItemName = Item.Name })
-            : GetTextWith("Tips.MouseMiddleOpen", new { ItemName = Item.Name });
-        tooltips.Add(new TooltipLine(Mod, "BannerChest", text) { OverrideColor = Color.LightGreen });
+        SortContainer();
     }
 }
