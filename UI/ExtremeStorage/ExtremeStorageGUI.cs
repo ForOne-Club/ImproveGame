@@ -238,6 +238,9 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         if (!forced && sameChest)
             return;
 
+        // 更新物品之前先更新工具栏，把新的筛选器选出来，这样初次切换才能正确选取筛选器选择正确物品
+        _itemGrid.ResetToolbar(CurrentGroup);
+        
         // 更新物品
         var items = new List<ChestItemsInfo>();
         chestIndexes.ForEach(i =>
@@ -248,7 +251,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         });
 
         _prevChestIndexes = chestIndexes;
-        _itemGrid.Reset(items, CurrentGroup);
+        _itemGrid.ResetInventory(items);
         RefreshCachedAllItems();
         Recipe.FindRecipes();
     }

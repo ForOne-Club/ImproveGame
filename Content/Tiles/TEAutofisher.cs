@@ -856,7 +856,6 @@ namespace ImproveGame.Content.Tiles
             }
 
             ExcludedItems = tag.Get<List<CatchData>>("excludedItemData") ?? [];
-            Console.WriteLine(ExcludedItems.Count);
             // var excludedItemData = tag.Get<List<CatchData>>("excludedItemData") ?? [];
             // ExcludedItems = excludedItemData.Select(data => data.Item.type).ToHashSet();
         }

@@ -123,11 +123,15 @@ public class StorageGrids : ModItemGrid
         _contentSection.Recalculate();
     }
 
-    public void Reset(List<ChestItemsInfo> items, ItemGroup group)
+    public void ResetInventory(List<ChestItemsInfo> items)
     {
         SetInventory(items);
-        SetupTools(group);
         Recalculate();
+    }
+
+    public void ResetToolbar(ItemGroup group)
+    {
+        SetupTools(group);
     }
 
     private void SetInventory(List<ChestItemsInfo> items)

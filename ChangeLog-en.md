@@ -34,6 +34,9 @@
 - **[v1.7.0.2]** 自动重召唤功能可能使游戏出错
 - **[v1.7.0.2]** 物品框可能出现渲染问题
 - **[v1.7.0.2]** "Town NPC spawn mechanics improvement" is useless if "Town NPC spawn rate multiplier" is set to 1x
+- **[v1.7.0.2]** Spam messages in console
+- **[v1.7.0.2]** 储存管理器物品框有时渲染出错
+- **[v1.7.0.2]** 储存管理器筛选器在切换类别时无法正确应用
 
 ## Adjustments
 
