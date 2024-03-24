@@ -56,7 +56,6 @@ PlayerStats: {
 	Introduction:
 		'''
 		[c/CC88AA:Stat Panel]
-		<left> to open controller for adding stats to display
 		<left> a category or a stat to toggle its display
 		Hold right click to drag this button
 		'''
