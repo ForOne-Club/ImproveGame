@@ -8,9 +8,9 @@
 
 # v1.7.0
 
-- [v1.7.0.0](Changelogs/zh/v1.7.0.0.md)
-- [v1.7.0.1](Changelogs/zh/v1.7.0.1.md)
-- [v1.7.0.2](Changelogs/zh/v1.7.0.2.md)
+- [v1.7.0.0](Changelog/zh/v1.7.0.0.md)
+- [v1.7.0.1](Changelog/zh/v1.7.0.1.md)
+- [v1.7.0.2](Changelog/zh/v1.7.0.2.md)
 
 # 旧版本
-v1.7.0 之前版本的更新日志请参考[旧版更新日志](Changelogs/zh/legacy-changelog.md)。
+v1.7.0 之前版本的更新日志请参考[旧版更新日志](Changelog/zh/legacy-changelog.md)。

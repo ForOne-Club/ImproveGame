@@ -1,7 +1,7 @@
 Quality of Terraria v{ModVersion} has been published to {tMLBuildPurpose} tML v{tMLVersion}
-For a detailed changelog, see: https://github.com/487666123/ImproveGame/blob/1.4.4/Changelogs/en/v{ModVersion}.md
+For a detailed changelog, see: https://github.com/487666123/ImproveGame/blob/1.4.4/Changelog/en/v{ModVersion}.md
 The change note page of the workshop does not provide a detailed changelog
 
 更好的体验 v{ModVersion} 已发布到 tML {tMLBuildPurpose} v{tMLVersion}
-详细更新日志请见: https://github.com/487666123/ImproveGame/blob/1.4.4/Changelogs/zh/v{ModVersion}.md
+详细更新日志请见: https://github.com/487666123/ImproveGame/blob/1.4.4/Changelog/zh/v{ModVersion}.md
 创意工坊的改动说明页面不提供详细更新日志
