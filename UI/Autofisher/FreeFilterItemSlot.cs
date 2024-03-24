@@ -85,7 +85,7 @@ public class FreeFilterItemSlot : GenericItemSlot
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensionsSize();
 
-            spriteBatch.Draw(ModAsset.DisabledItem.Value, pos + size * 0.6f, null,
+            spriteBatch.Draw(ModAsset.DisabledItem.Value, pos + size * 0.7f, null,
                 _disableAnimTimer.Lerp(Color.Transparent, Color.White), 0f,
                 ModAsset.DisabledItem.Size() / 2f, _disableAnimTimer.Lerp(0.8f, 1f), 0, 0);
         }

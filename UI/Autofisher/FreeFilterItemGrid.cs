@@ -49,6 +49,7 @@ public class FreeFilterItemGrid : ScrollView
         int length = Math.Max(16, Items.Count);
         ListView.SetInnerPixels(GridSize(44f, 4f, 4, (int)MathF.Ceiling(length / 4f)));
         Scrollbar.SetView(GetInnerDimensions().Height, ListView.Height.Pixels);
+        Recalculate();
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
