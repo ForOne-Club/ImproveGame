@@ -11,6 +11,8 @@ public partial class SpaceWand
         if (oneIndex <= -1)
             return;
 
+        // 使用物块魔杖时，ignoreConsumable应为true，无论如何都消耗物品。这是原版的逻辑
+        bool usingTileWand = false;
         int indexOfItemBeingConsumed = oneIndex;
         Item item = player.inventory[oneIndex];
         if (item.tileWand >= 0)
@@ -19,6 +21,7 @@ public partial class SpaceWand
             if (actualItemIndex <= -1)
                 return;
 
+            usingTileWand = true;
             indexOfItemBeingConsumed = actualItemIndex;
         }
 
@@ -31,7 +34,7 @@ public partial class SpaceWand
             {
                 playSound = true;
                 // PickItemInInventory(player, GetConditions(placeType), false, out int index);
-                HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed);
+                HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed, usingTileWand);
             }
         }
         else
@@ -64,7 +67,7 @@ public partial class SpaceWand
                     {
                         playSound = true;
                         // PickItemInInventory(player, GetConditions(placeType), false, out int index);
-                        HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed);
+                        HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed, usingTileWand);
                         SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
                     }
                     else
@@ -76,7 +79,7 @@ public partial class SpaceWand
                         {
                             playSound = true;
                             // PickItemInInventory(player, GetConditions(placeType), false, out int index);
-                            HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed);
+                            HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed, usingTileWand);
                             SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
                         }
                     }
@@ -86,7 +89,7 @@ public partial class SpaceWand
             {
                 playSound = true;
                 // PickItemInInventory(player, GetConditions(placeType), false, out int index);
-                HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed);
+                HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed, usingTileWand);
                 SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
             }
         }
@@ -94,14 +97,15 @@ public partial class SpaceWand
         // NetMessage.SendTileSquare(player.whoAmI, x, y);
     }
 
-    private static void HandleItemConsumption(Player player, int index, Dictionary<int, int> itemsConsumed)
+    private static void HandleItemConsumption(Player player, int index, Dictionary<int, int> itemsConsumed,
+        bool ignoreConsumable)
     {
         if (index is -1)
             return;
 
         ref Item item = ref player.inventory[index];
         int type = item.type; // TurnToAir之后type就为0了，提前存好
-        if (!TryConsumeItem(ref item, player))
+        if (!TryConsumeItem(ref item, player, ignoreConsumable))
             return;
 
         if (!itemsConsumed.TryAdd(type, 1))

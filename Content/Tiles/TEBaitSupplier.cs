@@ -91,7 +91,7 @@ public class TEBaitSupplier : ModTileEntity
                     Chest.VisualizeChestTransfer(new Point16(chest.x, chest.y).ToWorldCoordinates(),
                         Position.ToWorldCoordinates(16, 24),
                         item, item.stack);
-                    autofisher.bait = ItemLoader.TransferWithLimit(item, 5);
+                    autofisher.bait = ItemLoader.TransferWithLimit(item, 15);
 
                     ItemSyncPacket.Get(autofisher.ID, ItemSyncPacket.Bait).Send(runLocally: false);
                     
