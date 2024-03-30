@@ -107,7 +107,7 @@ public class SpaceWandGUI : UIState
         float includedAngle = MathF.PI * 2 / RoundButtons.Length; // 夹角
         float startAngle = -MathF.PI / 2 - includedAngle / 2; // 起始角度
 
-        if (ModeButton.IsMouseHovering)
+        if (ModeButton.IsMouseHovering && !timer.AnyClose)
             Main.LocalPlayer.mouseInterface = true;
         ModeButton.Opacity = timer.Schedule;
         ModeButton.SetCenterPixels(center).Recalculate();
@@ -155,6 +155,8 @@ public class SpaceWandGUI : UIState
             });
             RoundButtons[i].OnLeftMouseDown += (_, _) =>
             {
+                if (timer.AnyClose)
+                    return;
                 SpaceWand.BlockType = blockType;
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };
@@ -179,6 +181,8 @@ public class SpaceWandGUI : UIState
             });
             RoundButtons[i].OnLeftMouseDown += (_, _) =>
             {
+                if (timer.AnyClose)
+                    return;
                 SpaceWand.PlaceType = placeType;
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };
@@ -203,6 +207,8 @@ public class SpaceWandGUI : UIState
             });
             RoundButtons[i].OnLeftMouseDown += (_, _) =>
             {
+                if (timer.AnyClose)
+                    return;
                 SpaceWand.ShapeType = shapeType;
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };

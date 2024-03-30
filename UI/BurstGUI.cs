@@ -41,14 +41,24 @@ namespace ImproveGame.UI
             tileButton.OnMouseOver += MouseOver;
             tileButton.OnMouseOut += MouseOut;
             tileButton.Selected += () => WandSystem.TileMode;
-            tileButton.OnLeftMouseDown += (_, _) => WandSystem.TileMode = !WandSystem.TileMode;
+            tileButton.OnLeftMouseDown += (_, _) =>
+            {
+                if (Timer.AnyClose)
+                    return;
+                WandSystem.TileMode = !WandSystem.TileMode;
+            };
             Append(tileButton);
 
             wallButton = new(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/WallMode"));
             wallButton.OnMouseOver += MouseOver;
             wallButton.OnMouseOut += MouseOut;
             wallButton.Selected += () => WandSystem.WallMode;
-            wallButton.OnLeftMouseDown += (_, _) => WandSystem.WallMode = !WandSystem.WallMode;
+            wallButton.OnLeftMouseDown += (_, _) =>
+            {
+                if (Timer.AnyClose)
+                    return;
+                WandSystem.WallMode = !WandSystem.WallMode;
+            };
             Append(wallButton);
         }
 
@@ -86,6 +96,8 @@ namespace ImproveGame.UI
             _mouseRightPrev = Main.mouseRight;
 
             base.Update(gameTime);
+            if (Timer.AnyClose)
+                return;
             if (wallButton.IsMouseHovering || tileButton.IsMouseHovering || modeButton.IsMouseHovering)
             {
                 Main.LocalPlayer.mouseInterface = true;
@@ -107,6 +119,8 @@ namespace ImproveGame.UI
 
         private void SwitchMode(UIMouseEvent evt, UIElement listeningElement)
         {
+            if (Timer.AnyClose)
+                return;
             WandSystem.FixedMode = !WandSystem.FixedMode;
             modeButton.MainTexture = WandSystem.FixedMode ? fixedModeButton : freeModeButton;
         }
