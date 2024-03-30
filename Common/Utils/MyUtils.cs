@@ -1054,7 +1054,7 @@ partial class MyUtils
         if (Language.ActiveCulture.CultureInfo.Name is "zh-Hans")
             depthText = depth + layer; // 不要空格
     }
-    
+
     /// <summary>
     /// 生成一个弹出提示，文字颜色默认为黄色
     /// </summary>
@@ -1062,11 +1062,33 @@ partial class MyUtils
     /// <param name="textColor">文本颜色，一般提示建议用黄色（默认即黄色）</param>
     public static void AddNotification(string displayText, Color textColor = default, int itemIconType = -1)
     {
+        if (Main.netMode == NetmodeID.Server)
+            return;
+
         if (textColor == default)
             textColor = Color.Yellow;
-        if (Main.netMode != NetmodeID.Server)
-            InGameNotificationsTracker.AddNotification(new ModNotificationPopup(displayText, textColor, itemIconType));
+
+        var popup = new ModNotificationPopup(displayText, textColor, itemIconType);
+        foreach (var inGameNotification in from n in InGameNotificationsTracker._notifications
+                 where n is ModNotificationPopup select n as ModNotificationPopup)
+        {
+            if (inGameNotification.Equals(popup))
+            {
+                inGameNotification.TimeLeft = ModNotificationPopup.TimeLeftMax;
+                return;
+            }
+        }
+
+        InGameNotificationsTracker.AddNotification(popup);
     }
+
+    /// <summary>
+    /// 生成一个弹出提示，文字颜色默认为黄色
+    /// </summary>
+    /// <param name="key">文本的本地化键</param>
+    /// <param name="textColor">文本颜色，一般提示建议用黄色（默认即黄色）</param>
+    public static void AddNotificationFromKey(string key, Color textColor = default, int itemIconType = -1) =>
+        AddNotification(GetText(key), textColor, itemIconType);
 
     public static string MoonPhaseToText(int moonPhase)
     {

@@ -90,7 +90,7 @@ internal class PlayerUpdater : ModPlayer
 {
     internal readonly Dictionary<int, ItemTotalStack> InventoryCount = new (60);
 
-    public override void ResetEffects()
+    public override void PreUpdate()
     {
         UpdateHasItemLists();
     }

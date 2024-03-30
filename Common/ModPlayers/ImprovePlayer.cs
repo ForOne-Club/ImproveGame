@@ -245,8 +245,6 @@ public class ImprovePlayer : ModPlayer
         if (Player.DeadOrGhost) return;
         if (KeybindSystem.DiscordRodKeybind.JustPressed)
             PressDiscordKeybind();
-        if (KeybindSystem.HomeKeybind.JustPressed)
-            PressHomeKeybind();
     }
 
     private static void PressSuperVaultKeybind()
@@ -332,51 +330,5 @@ public class ImprovePlayer : ModPlayer
 
         _oldItemSelected = Player.selectedItem;
         UseItemByType(Player, itemType);
-    }
-
-    private void PressHomeKeybind()
-    {
-        var items = GetAllInventoryItemsList(Player);
-
-        // 返回药水优先级最高
-        int itemType =
-            (from item in items
-             where item.type is ItemID.PotionOfReturn && item.stack >= Config.NoConsume_PotionRequirement
-             select item.type).FirstOrDefault();
-
-        // 然后是回忆
-        if (itemType is ItemID.None)
-        {
-            itemType = (from item in items
-                        where item.type is ItemID.RecallPotion && item.stack >= Config.NoConsume_PotionRequirement
-                        select item.type).FirstOrDefault();
-        }
-
-        // 最后是魔镜
-        if (itemType is ItemID.None)
-        {
-            itemType = (from item in items where item.type is ItemID.MagicMirror or ItemID.CellPhone or ItemID.IceMirror
-                    or ItemID.Shellphone or ItemID.ShellphoneOcean or ItemID.ShellphoneHell or ItemID.ShellphoneSpawn
-                        select item.type).FirstOrDefault();
-        }
-
-        if (itemType is ItemID.None)
-            return;
-
-        Projectile.NewProjectile(new EntitySource_Sync(), Player.position, Vector2.Zero, ModContent.ProjectileType<HomeEffect>(), 0, 0, Player.whoAmI);
-
-        if (itemType is ItemID.PotionOfReturn)
-        {
-            Player.DoPotionOfReturnTeleportationAndSetTheComebackPoint();
-        }
-        else
-        {
-            Player.RemoveAllGrapplingHooks();
-            bool immune = Player.immune;
-            int immuneTime = Player.immuneTime;
-            Player.Spawn(PlayerSpawnContext.RecallFromItem);
-            Player.immune = immune;
-            Player.immuneTime = immuneTime;
-        }
     }
 }

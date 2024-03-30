@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
+using ImproveGame.Content.Functions.HomeTeleporting;
 using ImproveGame.Packets;
 using ImproveGame.UI.PlayerStats;
 using Newtonsoft.Json;
@@ -150,6 +151,7 @@ public class ModIntegrationsSystem : ModSystem
         AddBuffIntegration(thoriumMod, "ConductorsStand", "ConductorsStandBuff", true);
         AddBuffIntegration(thoriumMod, "Mistletoe", "MistletoeBuff", true);
         AddBuffIntegration(thoriumMod, "NinjaRack", "NinjaBuff", true);
+        AddHomeTpIntegration(thoriumMod, "WishingGlass", false, false);
         PlayerStatsSystem.ThoriumIntegration(thoriumMod);
     }
 
@@ -202,6 +204,12 @@ public class ModIntegrationsSystem : ModSystem
             ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> { mod.Find<ModBuff>(buffName).Type };
         else
             ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> { mod.Find<ModBuff>(buffName).Type };
+    }
+
+    private static void AddHomeTpIntegration(Mod mod, string itemName, bool isPotion, bool isComebackItem)
+    {
+        // 属于是自我测试了
+        Call("AddHomeTpItem", mod.Find<ModItem>(itemName).Type, isPotion, isComebackItem);
     }
 
     public override void Unload()
@@ -297,6 +305,20 @@ public class ModIntegrationsSystem : ModSystem
                                 return true;
                             }
 
+                            return false;
+                        }
+                    // 添加回家物品
+                    case "AddHomeTpItem":
+                        {
+                            List<int> items = AsListOfInt(args[1]); // Item IDs
+                            bool isPotion = Convert.ToBoolean(args[2]); // Whether the item should meet the Infinite Potion requirement (stacked over 30 by default and can be changed via mod config)
+                            bool isComebackItem = Convert.ToBoolean(args[3]); // Potion of Return like item
+
+                            foreach (int item in items)
+                            {
+                                HomeTeleportingPlayer.HomeTeleportingItems.Add(
+                                    new HomeTeleportingItem(item, isPotion, isComebackItem));
+                            }
                             return false;
                         }
                     default:

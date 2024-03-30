@@ -38,6 +38,11 @@ AutoSummon: {
 	Summoned: 使用{1}召唤了{0}次
 }
 
+QuickHome: {
+	Teleported: 已使用{0}回程
+	NoItem: 你没有任何回程物品
+}
+
 Tips: {
 	ShimmerInto: "可在微光中转化为 "
 	ShimmerIntoWithStack: "每{0}个可在微光中转化为 "

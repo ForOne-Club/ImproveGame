@@ -105,6 +105,13 @@ Add a stat to an existing stat category
 - `string` The localization key of the stat's display name
 - `Func<string>` Getter function of the stat's display value
 
+### AddHomeTpItem
+Add home-teleporting item
+#### Parameters
+- `int/List<int>` The item(s) to be added
+- `bool` Whether it should be considered as a potion. Potions should meet the Infinite Potion requirement (stacked over 30 by default and can be changed via mod config) in order to be used via hotkeys
+- `bool` Whether it creates a return portal when used
+
 ### Example
 Here is an example of adding infinite buffs for 2 mod buff stations
 ```CSharp

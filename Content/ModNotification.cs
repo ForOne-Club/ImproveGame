@@ -7,36 +7,31 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Content;
 
-public class ModNotification
+public record ModNotification(string DisplayText, Color TextColor, int ItemIconType = -1)
 {
-    public int ItemIconType;
-    public string DisplayText;
-    public Color TextColor;
+    public virtual bool Equals(ModNotification other) =>
+        other != null && DisplayText == other.DisplayText && TextColor == other.TextColor &&
+        ItemIconType == other.ItemIconType;
 
-    public ModNotification(string displayText, Color textColor, int itemIconType = -1)
-    {
-        ItemIconType = itemIconType;
-        DisplayText = displayText;
-        TextColor = textColor;
-    }
+    public override int GetHashCode() => (DisplayText, TextColor, ItemIconType).GetHashCode();
 }
 
 public class ModNotificationPopup : IInGameNotification
 {
-    private ModNotification _notification;
-    private int _timeLeft;
+    private readonly ModNotification _notification;
     private bool _isMouseHovering;
-    private const int _timeLeftMax = 300;
+    public const int TimeLeftMax = 300;
+    public int TimeLeft;
 
     private float Scale
     {
         get
         {
-            if (_timeLeft < 24)
-                return MathHelper.Lerp(0f, 1f, (float)_timeLeft / 24);
+            if (TimeLeft < 24)
+                return MathHelper.Lerp(0f, 1f, (float)TimeLeft / 24);
 
-            if (_timeLeft > _timeLeftMax - 15)
-                return MathHelper.Lerp(1f, 0f, ((float)_timeLeft - _timeLeftMax + 15) / 15f);
+            if (TimeLeft > TimeLeftMax - 15)
+                return MathHelper.Lerp(1f, 0f, ((float)TimeLeft - TimeLeftMax + 15) / 15f);
 
             return 1f;
         }
@@ -56,19 +51,19 @@ public class ModNotificationPopup : IInGameNotification
 
     public object CreationObject { get; private set; }
 
-    public bool ShouldBeRemoved => _timeLeft <= 0;
+    public bool ShouldBeRemoved => TimeLeft <= 0;
 
     public ModNotificationPopup(string displayText, Color textColor, int itemIconType = -1)
     {
         _notification = new ModNotification(displayText, textColor, itemIconType);
-        _timeLeft = _timeLeftMax;
+        TimeLeft = TimeLeftMax;
         CreationObject = _notification;
     }
 
     public void Update()
     {
-        if (!_isMouseHovering || _timeLeft <= 24 || _timeLeft >= _timeLeftMax - 15)
-            _timeLeft--;
+        if (!_isMouseHovering || TimeLeft <= 24 || TimeLeft >= TimeLeftMax - 15)
+            TimeLeft--;
     }
 
     public void DrawInGame(SpriteBatch spriteBatch, Vector2 bottomAnchorPosition)
@@ -127,7 +122,7 @@ public class ModNotificationPopup : IInGameNotification
         if (Main.mouseLeft && Main.mouseLeftRelease)
         {
             Main.mouseLeftRelease = false;
-            _timeLeft = 24;
+            TimeLeft = 24;
         }
     }
 
@@ -136,4 +131,9 @@ public class ModNotificationPopup : IInGameNotification
     {
         Utils.DrawInvBG(spriteBatch, area, Color.Red);
     }
+
+    public override bool Equals(object obj) =>
+        obj is ModNotificationPopup other && other._notification.Equals(_notification);
+
+    public override int GetHashCode() => _notification.GetHashCode();
 }

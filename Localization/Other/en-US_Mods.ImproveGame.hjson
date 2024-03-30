@@ -38,6 +38,11 @@ AutoSummon: {
 	Summoned: Summoned {0} times using {1}
 }
 
+QuickHome: {
+	Teleported: Recalled using {0}
+	NoItem: You don't have any recall items
+}
+
 Tips: {
 	ShimmerInto: "Can be shimmered into "
 	ShimmerIntoWithStack: "Every {0} can be shimmered into "
