@@ -54,34 +54,34 @@ public class AutoSummonLogic : ModPlayer
     {
         // 还是要遍历，因为要正确处理词缀，找到正确的物品
         var allItems = GetAllInventoryItemsList(Player);
+        var item = allItems.Find(item => item.type == _lastUsedStaffType);
         Player.slotsMinions = 0f;
-        foreach (var item in allItems.Where(item => item.type == _lastUsedStaffType))
+        
+        if (item is null)
+            yield break;
+
+        float slotsPerSpawn = ItemID.Sets.StaffMinionSlotsRequired[item.type];
+        int iterationTimes = (int)(Player.maxMinions / slotsPerSpawn);
+
+        SoundEngine.PlaySound(item.UseSound);
+        var text = GetText("AutoSummon.Summoned", iterationTimes, item.Name);
+        AddNotification(text, Color.Pink, item.type);
+
+        for (int i = 0; i < iterationTimes; i++)
         {
-            float slotsPerSpawn = ItemID.Sets.StaffMinionSlotsRequired[item.type];
-            int iterationTimes = (int)(Player.maxMinions / slotsPerSpawn);
+            var mouseX = Main.mouseX;
+            var mouseY = Main.mouseY;
+            Main.mouseX = (int)(Player.Center.X - Main.screenPosition.X);
+            Main.mouseY = (int)(Player.Top.Y - Main.screenPosition.Y) - 32;
 
-            for (int i = 0; i < iterationTimes; i++)
-            {
-                var mouseX = Main.mouseX;
-                var mouseY = Main.mouseY;
-                Main.mouseX = (int)(Player.Center.X - Main.screenPosition.X);
-                Main.mouseY = (int)(Player.Top.Y - Main.screenPosition.Y) - 32;
+            Player.ItemCheck_Shoot(Player.whoAmI, item, Player.GetWeaponDamage(item));
+            Player.ItemCheck_ApplyPetBuffs(item);
 
-                Player.ItemCheck_Shoot(Player.whoAmI, item, Player.GetWeaponDamage(item));
-                Player.ItemCheck_ApplyPetBuffs(item);
+            Main.mouseX = mouseX;
+            Main.mouseY = mouseY;
 
-                Main.mouseX = mouseX;
-                Main.mouseY = mouseY;
-            }
-
-            if (ContentSamples.ItemsByType.TryGetValue(item.type, out Item value))
-            {
-                SoundEngine.PlaySound(value.UseSound);
-                var text = GetText("AutoSummon.Summoned", iterationTimes, value.Name);
-                AddNotification(text, Color.Pink, item.type);
-            }
-
-            break;
+            // 等2帧再召唤，有一些Mod通过检测场上召唤物数量来改变下一个召唤物的行为（说的就是你灾厄）
+            yield return 2;
         }
 
         yield return null;

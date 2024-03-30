@@ -271,14 +271,8 @@ public class ImprovePlayer : ModPlayer
     {
         if (Main.HoverItem is not { } item || item.IsAir) return;
 
-        // ItemLoader.CanRightClick 里面只要 Main.mouseRight == false 就直接返回了，不知道为什么
-        // 所以这里必须伪装成右键点击
-        bool oldRight = Main.mouseRight;
-        Main.mouseRight = true;
-
-        bool hasLoot = Main.ItemDropsDB.GetRulesForItemID(item.type).Count > 0;
-        hasLoot &= CollectHelper.ItemCanRightClick[Main.HoverItem.type] || ItemLoader.CanRightClick(Main.HoverItem);
-        Main.mouseRight = oldRight;
+        bool hasLoot = ItemLoader.CanRightClick(Main.HoverItem);
+        hasLoot &= Main.ItemDropsDB.GetRulesForItemID(item.type).Count > 0;
 
         if (GrabBagInfoGUI.Visible && (GrabBagInfoGUI.ItemID == item.type || item.IsAir || !hasLoot))
             UISystem.Instance.GrabBagInfoGUI.Close();

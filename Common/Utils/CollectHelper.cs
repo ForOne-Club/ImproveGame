@@ -7,31 +7,8 @@ namespace ImproveGame.Common.Utils
     // 这里主要放一些战利表，比如摇树可能掉落、普通箱子战利品之类的
     public class CollectHelper : ModSystem
     {
-        internal static bool[] ItemCanRightClick;
-
         public override void PostSetupContent()
         {
-            ItemCanRightClick = ItemID.Sets.Factory.CreateBoolSet(false,
-                ItemID.HerbBag,
-                ItemID.CanOfWorms,
-                ItemID.Oyster,
-                ItemID.CapricornLegs,
-                ItemID.CapricornTail,
-                ItemID.GoodieBag,
-                ItemID.LockBox,
-                ItemID.ObsidianLockbox,
-                ItemID.Present,
-                ItemID.BluePresent,
-                ItemID.GreenPresent,
-                ItemID.YellowPresent
-            );
-            for (int i = 0; i < ItemLoader.ItemCount; i++)
-            {
-                if (ItemID.Sets.IsFishingCrate[i] || ItemID.Sets.BossBag[i])
-                {
-                    ItemCanRightClick[i] = true;
-                }
-            }
         }
 
         public static List<Item> GetShimmerResult(Item input, out int stackRequired)
