@@ -38,6 +38,8 @@ namespace ImproveGame.UIFramework.SUIElements
         protected int RightMouseDownTimer = -1;
         protected int SuperFastStackTimer;
 
+        public Action FastStackAction;
+
         public BigBagItemSlot(Item[] items, int index)
         {
             Width.Pixels = 52;
@@ -138,6 +140,7 @@ namespace ImproveGame.UIFramework.SUIElements
                     int stack = SuperFastStackTimer + 1;
                     stack = Math.Min(stack, Item.stack);
                     stackCallback(stack);
+                    FastStackAction?.Invoke();
                     break;
             }
 

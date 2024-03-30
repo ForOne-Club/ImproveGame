@@ -1,5 +1,6 @@
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Core;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UIFramework;
@@ -28,7 +29,7 @@ namespace ImproveGame.Content.Tiles
         public bool CatchWhiteRarityCatches = true;
         public bool CatchNormalCatches = true;
         public bool AutoDeposit = true;
-        public List<CatchData> ExcludedItems = [];
+        public List<ItemTypeData> ExcludedItems = [];
 
         public bool IsEmpty => accessory.IsAir && bait.IsAir && fishingPole.IsAir && (fish is null || fish.All(item => item.IsAir));
         
@@ -804,7 +805,7 @@ namespace ImproveGame.Content.Tiles
                 return true;
             }
 
-            ExcludedItems.Add(new CatchData(item));
+            ExcludedItems.Add(new ItemTypeData(item));
             MachineExcludedItemSyncer.Sync(ID, ExcludedItems);
             return false;
         }
@@ -855,7 +856,7 @@ namespace ImproveGame.Content.Tiles
                 AutoDeposit = bitsByte[5];
             }
 
-            ExcludedItems = tag.Get<List<CatchData>>("excludedItemData") ?? [];
+            ExcludedItems = tag.Get<List<ItemTypeData>>("excludedItemData") ?? [];
             // var excludedItemData = tag.Get<List<CatchData>>("excludedItemData") ?? [];
             // ExcludedItems = excludedItemData.Select(data => data.Item.type).ToHashSet();
         }
@@ -908,7 +909,7 @@ namespace ImproveGame.Content.Tiles
             bait = ItemIO.Receive(reader, true);
             accessory = ItemIO.Receive(reader, true);
             fish = reader.ReadItemArray();
-            ExcludedItems = reader.ReadListCatchData();
+            ExcludedItems = reader.ReadListItemTypeData();
 
             var flags = (BitsByte)reader.ReadByte();
             CatchCrates = flags[0];

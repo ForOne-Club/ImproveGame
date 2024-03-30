@@ -19,6 +19,11 @@ public class BaseItemSlot : TimerView
     /// </summary>
     public bool DisplayItemStack;
 
+    /// <summary>
+    /// 总是显示物品堆叠数量，即使堆叠数量为 1
+    /// </summary>
+    public bool AlwaysDisplayItemStack;
+
     public float ItemIconMaxWidthAndHeight = 32f;
     public float ItemIconScale = 1f;
 
@@ -65,7 +70,7 @@ public class BaseItemSlot : TimerView
 
         BigBagItemSlot.DrawItemIcon(Main.spriteBatch, Item, ItemColor, innerDimensions, ItemIconMaxWidthAndHeight, ItemIconScale);
 
-        if (DisplayItemStack && Item.stack > 1)
+        if (AlwaysDisplayItemStack || (DisplayItemStack && Item.stack > 1))
         {
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();

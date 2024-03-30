@@ -1,11 +1,11 @@
 ﻿using Terraria.ModLoader.Default;
 using Terraria.ModLoader.IO;
 
-namespace ImproveGame.UI.Autofisher;
+namespace ImproveGame.Core;
 
-public class CatchData(Item item) : TagSerializable
+public class ItemTypeData(Item item) : TagSerializable
 {
-    public static readonly Func<TagCompound, CatchData> DESERIALIZER = Load;
+    public static readonly Func<TagCompound, ItemTypeData> DESERIALIZER = Load;
 
     internal readonly Item Item = item;
 
@@ -40,14 +40,14 @@ public class CatchData(Item item) : TagSerializable
         return tag;
     }
 
-    public static CatchData Load(TagCompound tag)
+    public static ItemTypeData Load(TagCompound tag)
     {
         var item = new Item();
         string modName = tag.GetString("mod");
         if (string.IsNullOrEmpty(modName))
         {
             item.netDefaults(0);
-            return new CatchData(item);
+            return new ItemTypeData(item);
         }
 
         if (modName == "Terraria")
@@ -60,7 +60,7 @@ public class CatchData(Item item) : TagSerializable
             if (string.IsNullOrEmpty(itemName))
             {
                 item.netDefaults(0);
-                return new CatchData(item);
+                return new ItemTypeData(item);
             }
 
             if (ModContent.TryFind(modName, itemName, out ModItem modItem))
@@ -74,15 +74,15 @@ public class CatchData(Item item) : TagSerializable
             }
         }
 
-        return new CatchData(item);
+        return new ItemTypeData(item);
     }
 
     public override int GetHashCode() => Item.GetHashCode();
 }
 
-public static class CatchDataExtensions
+public static class ItemTypeDataExtensions
 {
-    public static void Write(this BinaryWriter w, CatchData data)
+    public static void Write(this BinaryWriter w, ItemTypeData data)
     {
         var tag = data.SerializeData();
         string modName = tag.GetString("mod");
@@ -100,7 +100,7 @@ public static class CatchDataExtensions
         }
     }
 
-    public static CatchData ReadCatchData(this BinaryReader r)
+    public static ItemTypeData ReadItemTypeData(this BinaryReader r)
     {
         var tag = new TagCompound();
         string modName = r.ReadString();
@@ -115,22 +115,22 @@ public static class CatchDataExtensions
             tag.Set("name", r.ReadString());
         }
 
-        return CatchData.Load(tag);
+        return ItemTypeData.Load(tag);
     }
 
-    public static void Write(this BinaryWriter w, List<CatchData> data)
+    public static void Write(this BinaryWriter w, List<ItemTypeData> data)
     {
         w.Write(data.Count);
         foreach (var d in data)
             w.Write(d);
     }
 
-    public static List<CatchData> ReadListCatchData(this BinaryReader r)
+    public static List<ItemTypeData> ReadListItemTypeData(this BinaryReader r)
     {
         int count = r.ReadInt32();
-        List<CatchData> data = [];
+        List<ItemTypeData> data = [];
         for (int i = 0; i < count; i++)
-            data.Add(r.ReadCatchData());
+            data.Add(r.ReadItemTypeData());
         return data;
     }
 }

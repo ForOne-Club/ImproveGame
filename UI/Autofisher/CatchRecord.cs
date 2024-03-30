@@ -1,4 +1,5 @@
-﻿using ImproveGame.Packets.NetAutofisher;
+﻿using ImproveGame.Core;
+using ImproveGame.Packets.NetAutofisher;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.UI.Autofisher;
@@ -31,13 +32,13 @@ public class CatchRecord : ModSystem
 
     public override void SaveWorldData(TagCompound tag)
     {
-        var catches = _catches.Select(item => new CatchData(item)).ToList();
+        var catches = _catches.Select(item => new ItemTypeData(item)).ToList();
         tag["catches"] = catches;
     }
 
     public override void LoadWorldData(TagCompound tag)
     {
-        var catchData = tag.Get<List<CatchData>>("catches") ?? [];
+        var catchData = tag.Get<List<ItemTypeData>>("catches") ?? [];
         _catches = catchData.Select(data => data.Item).ToList();
     }
 

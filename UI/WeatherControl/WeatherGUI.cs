@@ -10,11 +10,16 @@ public class WeatherGUI : BaseBody
 {
     public static WeatherGUI Instance { get; private set; }
     public WeatherGUI() => Instance = this;
-    public override bool Enabled { get => Visible; set => Visible = value; }
+    public override bool Enabled { get => Visible || StartTimer.Closing; set => Visible = value; }
     public static bool Visible { get; private set; }
 
     public override bool CanSetFocusTarget(UIElement target)
         => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsLeftMousePressed;
+
+    /// <summary>
+    /// 启动关闭动画计时器
+    /// </summary>
+    public AnimationTimer StartTimer = new(3);
 
     // 主面板
     public SUIPanel MainPanel;
@@ -101,6 +106,7 @@ public class WeatherGUI : BaseBody
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+        StartTimer.Update();
 
         if (!MainPanel.IsMouseHovering)
             return;
@@ -112,6 +118,7 @@ public class WeatherGUI : BaseBody
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Visible = true;
+        StartTimer.Open();
     }
 
     public void Close()
@@ -119,5 +126,12 @@ public class WeatherGUI : BaseBody
         SoundEngine.PlaySound(SoundID.MenuClose);
         Visible = false;
         WeatherAmbientElement.StarRandomSeed = Main.rand.Next(10000000);
+        StartTimer.Close();
     }
+
+    public override bool RenderTarget2DDraw => !StartTimer.Opened;
+    public override float RenderTarget2DOpacity => StartTimer.Schedule;
+    public override Vector2 RenderTarget2DOrigin => MainPanel.GetDimensionsCenter();
+    public override Vector2 RenderTarget2DPosition => MainPanel.GetDimensionsCenter();
+    public override Vector2 RenderTarget2DScale => new Vector2(0.95f + StartTimer.Lerp(0, 0.05f));
 }

@@ -49,3 +49,8 @@ ModConfig: {
 	DisplayName: 模组配置
 	Description: 快捷打开配置选项收藏夹
 }
+
+AmmoChain: {
+	// DisplayName: AmmoChain
+	// Description: ""
+}

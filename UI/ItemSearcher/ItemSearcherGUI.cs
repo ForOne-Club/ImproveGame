@@ -10,11 +10,16 @@ namespace ImproveGame.UI.ItemSearcher;
 
 public class ItemSearcherGUI : BaseBody
 {
-    public override bool Enabled { get => Visible; set => Visible = value; }
+    public override bool Enabled { get => Visible || StartTimer.Closing; set => Visible = value; }
     public static bool Visible { get; private set; }
 
     public override bool CanSetFocusTarget(UIElement target)
         => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsLeftMousePressed;
+
+    /// <summary>
+    /// 启动关闭动画计时器
+    /// </summary>
+    public AnimationTimer StartTimer = new(3);
 
     // 服务器相关，是否正在向服务器请求物品
     private int _requestsSent; // 发送了多少个还没有结果的请求，只有该值为0才会更新物品列表
@@ -375,6 +380,7 @@ public class ItemSearcherGUI : BaseBody
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+        StartTimer.Update();
 
         if (_requestsSent > 0)
         {
@@ -463,6 +469,7 @@ public class ItemSearcherGUI : BaseBody
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Visible = true;
+        StartTimer.Open();
     }
 
     public void Close()
@@ -470,5 +477,12 @@ public class ItemSearcherGUI : BaseBody
         SoundEngine.PlaySound(SoundID.MenuClose);
         Visible = false;
         _searchBar.AttemptStoppingUsingSearchbar();
+        StartTimer.Close();
     }
+
+    public override bool RenderTarget2DDraw => !StartTimer.Opened;
+    public override float RenderTarget2DOpacity => StartTimer.Schedule;
+    public override Vector2 RenderTarget2DOrigin => MainPanel.GetDimensionsCenter();
+    public override Vector2 RenderTarget2DPosition => MainPanel.GetDimensionsCenter();
+    public override Vector2 RenderTarget2DScale => new Vector2(0.95f + StartTimer.Lerp(0, 0.05f));
 }

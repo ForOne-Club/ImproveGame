@@ -15,6 +15,16 @@ MasterControl: {
 	PopupPanelHeight: "150"
 }
 
+AmmoChain: {
+	Title: 弹药链
+	LoadError: 文件不合法或不是弹药链文件
+	ClickToAddL1: 选取一个弹药后
+	ClickToAddL2: 点击此处以添加到弹药链
+	FileName: 弹药链
+	Cancel: 取消
+	Confirm: 确定
+}
+
 WeatherGUI: {
 	Title: 气候控制
 	Wind: 左键点击以调节风向

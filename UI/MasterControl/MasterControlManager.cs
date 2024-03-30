@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
+using ImproveGame.UI.AmmoChainPanel;
 using ImproveGame.UI.DeathSpectating;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UI.ItemSearcher;
@@ -224,7 +225,7 @@ public class MasterControlManager : ModSystem
                 return;
             }
 
-            if (WeatherGUI.Visible)
+            if (WeatherGUI.Visible && WeatherGUI.Instance.StartTimer.AnyOpen)
                 WeatherGUI.Instance.Close();
             else
                 WeatherGUI.Instance.Open();
@@ -244,7 +245,7 @@ public class MasterControlManager : ModSystem
             var ui = UISystem.Instance.ItemSearcherGUI;
             if (ui is null) return;
 
-            if (ItemSearcherGUI.Visible)
+            if (ItemSearcherGUI.Visible && ui.StartTimer.AnyOpen)
                 ui.Close();
             else
                 ui.Open();
@@ -271,7 +272,7 @@ public class MasterControlManager : ModSystem
             var ui = UISystem.Instance.WorldFeatureGUI;
             if (ui is null) return;
 
-            if (WorldFeatureGUI.Visible)
+            if (WorldFeatureGUI.Visible && ui.StartTimer.AnyOpen)
                 ui.Close();
             else
                 ui.Open();
@@ -291,10 +292,27 @@ public class MasterControlManager : ModSystem
             var ui = UISystem.Instance.OpenBagGUI;
             if (ui is null) return;
 
-            if (OpenBagGUI.Visible)
+            if (OpenBagGUI.Visible && ui.StartTimer.AnyOpen)
                 ui.Close();
             else
                 ui.Open();
+        };
+
+        #endregion
+
+        #region 弹药链
+
+        var ammoChain = new MasterControlFunction("AmmoChain")
+        {
+            Icon = ModAsset.DevMark.Value,
+        }.Register();
+
+        ammoChain.OnMouseDown += _ =>
+        {
+            if (AmmoChainUI.Instance.Enabled && AmmoChainUI.Instance.StartTimer.AnyOpen)
+                AmmoChainUI.Instance.Close();
+            else
+                AmmoChainUI.Instance.Open();
         };
 
         #endregion

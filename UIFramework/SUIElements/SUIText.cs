@@ -91,6 +91,41 @@ public class SUIText : TimerView
     protected bool _isWrapped;
 
     /// <summary>
+    /// 一个单词里最多可以含有的字符数，如果单词字符数超过该值，就会在超过maxWidth时直接就地换行，
+    /// 而不是向前寻找第一个空格。根据宽度和字符尺寸适当调整
+    /// </summary>
+    public int MaxCharacterCount
+    {
+        get => _maxCharacterCount;
+        set
+        {
+            if (_maxCharacterCount != value)
+            {
+                _maxCharacterCount = value;
+                RecalculateText();
+            }
+        }
+    }
+    protected int _maxCharacterCount = 19;
+
+    /// <summary>
+    /// 最大行数，-1即不作限制。超过该值的行数将不会被显示
+    /// </summary>
+    public int MaxLines
+    {
+        get => _maxLines;
+        set
+        {
+            if (_maxLines != value)
+            {
+                _maxLines = value;
+                RecalculateText();
+            }
+        }
+    }
+    protected int _maxLines = -1;
+
+    /// <summary>
     /// 文字缩放比例
     /// </summary>
     public float TextScale = 1f;
@@ -169,7 +204,7 @@ public class SUIText : TimerView
 
             FinalTextSnippets = [.. finalSnippets];
             */
-            FinalTextSnippets = TextSnippetHelper.WordwrapString(LastString, TextColor, Font, (int)(GetInnerDimensions().Width / TextScale), out _);
+            FinalTextSnippets = TextSnippetHelper.WordwrapString(LastString, TextColor, Font, (int)(GetInnerDimensions().Width / TextScale), out _, MaxCharacterCount, MaxLines);
         }
         else
         {

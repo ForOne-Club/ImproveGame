@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
 using Terraria.ModLoader.IO;
@@ -8,7 +9,7 @@ namespace ImproveGame.Content.Functions.Construction
     public class FileOperator : ILoadable
     {
         internal static Dictionary<string, TagCompound> CachedStructureDatas = new();
-        internal static string SavePath => Path.Combine(ModLoader.ModPath, "ImproveGame");
+        internal static string SavePath => Paths.SavePath;
         internal static string Extension => ".qotstruct";
 
         public static void SaveAsFile(Rectangle rectInWorld)

@@ -49,3 +49,8 @@ ModConfig: {
 	DisplayName: Mod Config
 	Description: Quick access to Favorite Configs
 }
+
+AmmoChain: {
+	DisplayName: AmmoChain
+	Description: ""
+}

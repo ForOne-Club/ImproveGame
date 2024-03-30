@@ -92,10 +92,10 @@ public abstract class BaseBody : View
 
             base.Draw(spriteBatch);
 
+            spriteBatch.End();
             device.SetRenderTargets(originalRT2Ds);
 
             // 使用默认矩阵，因为图像已经是根据 UIZoom 矩阵 绘制的了。
-            spriteBatch.End();
             spriteBatch.Begin();
             spriteBatch.Draw(rt2d, RenderTarget2DPosition * Main.UIScale, null,
                 Color.White * RenderTarget2DOpacity, 0f, RenderTarget2DOrigin * Main.UIScale, RenderTarget2DScale, 0, 0);

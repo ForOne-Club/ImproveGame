@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.Tiles;
+using ImproveGame.Core;
 using ImproveGame.UI.Autofisher;
 
 namespace ImproveGame.Packets.NetAutofisher;
@@ -6,12 +7,12 @@ namespace ImproveGame.Packets.NetAutofisher;
 public class MachineExcludedItemSyncer : NetModule
 {
     [AutoSync] private int _tileEntityID;
-    private List<CatchData> _excludedItemData;
+    private List<ItemTypeData> _excludedItemData;
 
     /// <summary>
     /// 这个方法仅可能由客户端同步给服务器调用
     /// </summary>
-    public static void Sync(int tileEntityID, List<CatchData> excludedItem)
+    public static void Sync(int tileEntityID, List<ItemTypeData> excludedItem)
     {
         var module = NetModuleLoader.Get<MachineExcludedItemSyncer>();
         module._tileEntityID = tileEntityID;
@@ -35,7 +36,7 @@ public class MachineExcludedItemSyncer : NetModule
 
     public override void Read(BinaryReader r)
     {
-        _excludedItemData = r.ReadListCatchData();
+        _excludedItemData = r.ReadListItemTypeData();
     }
 }
 
@@ -44,12 +45,12 @@ public class MachineExcludedItemSyncer : NetModule
 /// </summary>
 public class RecordedCatchesSyncer : NetModule
 {
-    private List<CatchData> _worldExcludedItem;
+    private List<ItemTypeData> _worldExcludedItem;
 
     public static void Sync()
     {
         var module = NetModuleLoader.Get<RecordedCatchesSyncer>();
-        module._worldExcludedItem = CatchRecord.GetRecordedCatches.Select(i => new CatchData(i)).ToList();
+        module._worldExcludedItem = CatchRecord.GetRecordedCatches.Select(i => new ItemTypeData(i)).ToList();
         module.Send();
     }
 
@@ -65,6 +66,6 @@ public class RecordedCatchesSyncer : NetModule
 
     public override void Read(BinaryReader r)
     {
-        _worldExcludedItem = r.ReadListCatchData();
+        _worldExcludedItem = r.ReadListItemTypeData();
     }
 }

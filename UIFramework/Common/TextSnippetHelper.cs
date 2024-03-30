@@ -96,8 +96,9 @@ public static class TextSnippetHelper
     /// 针对textSnippet特殊文本的换行
     /// </summary>
     public static TextSnippet[] WordwrapString(string text, Color textColor, DynamicSpriteFont font, int maxWidth,
-        out float lastLineLength)
+        out float lastLineLength, int maxCharacterCount = 19, int maxLines = -1)
     {
+        int lineCount = 1; // 行数
         float workingLineLength = 0f; // 当前行长度
         TextSnippet[] originalSnippets = ChatManager.ParseMessage(text, textColor).ToArray();
         ChatManager.ConvertNormalSnippets(originalSnippets);
@@ -116,7 +117,7 @@ public static class TextSnippetHelper
                     if (workingLineLength > maxWidth && !char.IsWhiteSpace(snippet.Text[i]))
                     {
                         // 如果第一个字符是空格，单词长度小于19（实际上是18因为第一个字符为空格），可以空格换行
-                        bool canWrapWord = cacheString.Length > 1 && cacheString.Length < 19;
+                        bool canWrapWord = cacheString.Length > 1 && cacheString.Length < maxCharacterCount;
 
                         // 找不到空格，或者拆腻子，则强制换行
                         if (!canWrapWord || (i > 0 && CanBreakBetween(snippet.Text[i - 1], snippet.Text[i])))
@@ -125,14 +126,20 @@ public static class TextSnippetHelper
                             finalSnippets.Add(new PlainTagHandler.PlainSnippet("\n"));
                             workingLineLength = characterMetrics.KernedWidthOnNewLine;
                             cacheString = "";
+                            lineCount++;
                         }
                         // 空格换行
                         else
                         {
+                            // 由于下面那一段“将CJK字符与非CJK字符分割”可能会导致空格换行后的第一个字符不是空格，所以这里手动加一个空格
+                            // 就不改下面的cacheString[1..]了
+                            if (cacheString[0] != ' ')
+                                cacheString = " " + cacheString;
                             finalSnippets.Add(new PlainTagHandler.PlainSnippet("\n"));
                             finalSnippets.Add(new PlainTagHandler.PlainSnippet(cacheString[1..], snippet.Color));
                             workingLineLength = font.MeasureString(cacheString).X;
                             cacheString = "";
+                            lineCount++;
                         }
                     }
 
@@ -149,6 +156,7 @@ public static class TextSnippetHelper
                     if (snippet.Text[i] is '\n')
                     {
                         workingLineLength = 0;
+                        lineCount++;
                     }
 
                     cacheString += snippet.Text[i];
@@ -165,9 +173,26 @@ public static class TextSnippetHelper
                 {
                     workingLineLength = length;
                     finalSnippets.Add(new PlainTagHandler.PlainSnippet("\n"));
+                    lineCount++;
                 }
 
                 finalSnippets.Add(snippet);
+            }
+            
+            if (lineCount >= maxLines + 1 && maxLines != -1)
+            {
+                // 一直向前移除到最后一个换行，并把最后一个换行也移除
+                int linesToBeRemoved = lineCount - maxLines;
+                for (int i = 0; i < linesToBeRemoved; i++)
+                {
+                    while (finalSnippets.Count > 1 && finalSnippets[^1].Text != "\n")
+                    {
+                        finalSnippets.RemoveAt(finalSnippets.Count - 1);
+                    }
+                    finalSnippets.RemoveAt(finalSnippets.Count - 1);
+                }
+                lastLineLength = 0;
+                return finalSnippets.ToArray();
             }
         }
 
