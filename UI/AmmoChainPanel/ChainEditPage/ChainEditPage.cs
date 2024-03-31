@@ -1,7 +1,10 @@
 ﻿using ImproveGame.Content.Functions.ChainedAmmo;
+using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
+using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
+using Terraria.Utilities;
 
 namespace ImproveGame.UI.AmmoChainPanel.ChainEditPage;
 
@@ -19,7 +22,10 @@ public class ChainEditPage : View
     // 下半部分面板
     private View _lowerPanel;
 
-    private SUIScrollView2 _currentChain { get; set; }
+    private IconElement _iconElement { get; set; }
+
+    private EditChainScrollView _currentChain { get; set; }
+
     public SUIScrollView2 _availableAmmos { get; private set; }
 
     public ChainEditPage()
@@ -52,11 +58,16 @@ public class ChainEditPage : View
 
     private void SetupUpperPanel()
     {
+        _iconElement = new IconElement(this, ChainName)
+        {
+            RelativeMode = RelativeMode.Vertical
+        };
+        _iconElement.JoinParent(_upperPanel);
     }
 
     private void SetupLowerPanel()
     {
-        _currentChain = new SUIScrollView2(Orientation.Horizontal)
+        _currentChain = new EditChainScrollView(Orientation.Horizontal)
         {
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(4f)
@@ -64,6 +75,7 @@ public class ChainEditPage : View
         _currentChain.SetPadding(2f, 0f);
         _currentChain.SetSize(0f, 76f, 1f, 0f);
         _currentChain.JoinParent(_lowerPanel);
+        _currentChain.Append(new TipClickToAdd(this));
         EditingChain = new AmmoChain();
         SetupCurrentChain(EditingChain);
 
@@ -76,10 +88,9 @@ public class ChainEditPage : View
         _availableAmmos.SetSize(0f, 150f, 1f, 0f);
         _availableAmmos.JoinParent(_lowerPanel);
         SetupAvailableAmmos();
-        
+
         var saveButton = new SUIButton(GetText("UI.AmmoChain.Confirm"))
         {
-            DragIgnore = true,
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(10f, 10f),
             TextAlign = new Vector2(0.5f)
@@ -87,10 +98,9 @@ public class ChainEditPage : View
         saveButton.OnLeftMouseDown += ClickOnSaveButton;
         saveButton.SetSize(280f, 40f, 0f, 0f);
         saveButton.JoinParent(_lowerPanel);
-        
+
         var cancelButton = new SUIButton(GetText("UI.AmmoChain.Cancel"))
         {
-            DragIgnore = true,
             RelativeMode = RelativeMode.Horizontal,
             Spacing = new Vector2(10f, 0f),
             TextAlign = new Vector2(0.5f)
@@ -102,7 +112,10 @@ public class ChainEditPage : View
 
     private void ClickOnSaveButton(UIMouseEvent evt, UIElement listeningelement)
     {
-        ChainSaver.SaveAsFile(EditingChain, ChainName);
+        if (!IsCreatingAChain)
+            ChainSaver.ModifyExistingFile(EditingChain, ChainName);
+        else
+            ChainSaver.SaveAsFile(EditingChain, ChainName);
         AmmoChainUI.Instance.GoToWeaponPage();
     }
 
@@ -117,14 +130,31 @@ public class ChainEditPage : View
     public void SetupAvailableAmmos()
     {
         _availableAmmos.ListView.RemoveAllChildren();
+        
+        // 特殊弹药，代表选择当前武器的常规弹药（就是不限制，根据原版逻辑选择）
+        new SelectableAmmoSlot(new Item(ModContent.ItemType<UniversalAmmoIcon>()), this)
+        {
+            BgColor = UIStyle.ItemSlotBgFav * 0.8f
+        }.JoinParent(_availableAmmos.ListView);
 
         var items = ContentSamples.ItemsByType.Values.Where(i => i.IsAmmo()).ToList();
         items.Sort((a, b) => a.ammo.CompareTo(b.ammo));
-        foreach (var itemSlot in items.Select(item => new SelectableAmmoSlot(item, this))) {
+        foreach (var itemSlot in items.Select(item => new SelectableAmmoSlot(item, this)))
+        {
+            itemSlot.BgColor = UIStyle.TrashSlotBg;
             itemSlot.JoinParent(_availableAmmos.ListView);
         }
 
         Recalculate();
+    }
+
+    public void StartEditing(AmmoChain chain, bool isCreatingAChain, string chainName)
+    {
+        IsCreatingAChain = isCreatingAChain;
+        EditingChain = chain;
+        ChainName = chainName;
+        _iconElement.OriginalName = ChainName;
+        SetupCurrentChain(EditingChain);
     }
 
     public void SetupCurrentChain(AmmoChain chain)
@@ -132,11 +162,7 @@ public class ChainEditPage : View
         _currentChain.ListView.RemoveAllChildren();
 
         if (chain.Chain.Count == 0)
-        {
-            _currentChain.ListView.Append(new TipClickToAdd(this));
-            Recalculate();
             return;
-        }
 
         new AmmoGapElement(0, this).JoinParent(_currentChain.ListView);
 

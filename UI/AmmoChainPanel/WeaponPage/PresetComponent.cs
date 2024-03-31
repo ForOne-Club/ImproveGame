@@ -43,15 +43,27 @@ public class PresetComponent : TimerView
     {
         base.LeftMouseDown(evt);
 
-        if (_parent.SlotItem.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem))
+        if (_parent.SlotItem.useAmmo > 0 && _parent.SlotItem.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem))
         {
             globalItem.Chain = Chain;
+            globalItem.Index = 0;
+            globalItem.Count = 0;
+
+            SoundEngine.PlaySound(SoundID.ResearchComplete);
+
+            var parentPosition = AmmoChainUI.Instance.MainPanel.GetInnerDimensions().Center();
+            var mousePosition = Main.MouseScreen;
+            var finalPosition = mousePosition - parentPosition;
+            finalPosition.Y += 4f;
+            AmmoChainUI.Instance.GenerateParticleAt(finalPosition);
         }
     }
 
     public override void RightMouseDown(UIMouseEvent evt)
     {
         base.RightMouseDown(evt);
+
+        AmmoChainUI.Instance.StartEditingChain(Chain, false, Text.TextOrKey);
     }
 
     public override void Update(GameTime gameTime)
@@ -71,6 +83,6 @@ public class PresetComponent : TimerView
         ammoClipCenter.X -= innerDimensions.Width / 3.5f;
         var ammoClip = ModAsset.AmmoClip.Value;
         var ammoClipPos = ammoClipCenter - ammoClip.Size() / 2f;
-        spriteBatch.Draw(ammoClip, ammoClipPos, Color.White);
+        spriteBatch.Draw(ammoClip, ammoClipPos, Chain.Color);
     }
 }

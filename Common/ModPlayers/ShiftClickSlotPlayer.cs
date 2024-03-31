@@ -2,6 +2,7 @@
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.Packets.NetStorager;
 using ImproveGame.UI;
+using ImproveGame.UI.AmmoChainPanel;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.ItemContainer;
@@ -27,6 +28,12 @@ public class ShiftClickSlotPlayer : ModPlayer
         if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 && (context is ItemSlot.Context.InventoryItem or 114514)
             && ItemSlot.ShiftInUse && !item.IsAir && !item.favorited)
         {
+            // 弹药链
+            if (AmmoChainUI.Instance.Enabled && AmmoChainUI.Instance.SlotQuickPutAvailable(item))
+            {
+                Main.cursorOverride = CursorOverrideID.InventoryToChest;
+                return true;
+            }
             // 至尊储存
             if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.AllItemsCached
                     .Any(s => CanPlaceInSlot(s, item) is 2 or 3))
@@ -74,6 +81,13 @@ public class ShiftClickSlotPlayer : ModPlayer
         if (Player.chest == -1 & Player.talkNPC == -1 && context == ItemSlot.Context.InventoryItem &&
             !inventory[slot].IsAir && !inventory[slot].favorited)
         {
+            // 弹药链
+            if (AmmoChainUI.Instance.Enabled && AmmoChainUI.Instance.SlotQuickPutAvailable(inventory[slot]))
+            {
+                AmmoChainUI.Instance.TryQuickPlaceIntoSlot(ref inventory[slot]);
+                return true; // 阻止原版代码运行
+            }
+
             // 至尊储存
             if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.AllItemsCached.Any(s => CanPlaceInSlot(s, inventory[slot]) is 2 or 3))
             {

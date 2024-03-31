@@ -8,6 +8,17 @@ namespace ImproveGame.Content.Items.IconDummies;
 
 public class AddChestIconDummy : ModItem;
 
+public class UniversalAmmoIcon : ModItem, IHideExtraTooltips
+{
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        foreach (var line in tooltips.Where(line => line.Name is not "ItemName" and not "Tooltip0" and not "Tooltip1"))
+        {
+            line.Visible = false;
+        }
+    }
+}
+
 public class SearchIcon : ModItem, IHideExtraTooltips
 {
     public override void AddRecipes()

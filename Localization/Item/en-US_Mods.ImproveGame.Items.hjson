@@ -294,3 +294,12 @@ BaitSupplier: {
 		to replenish all the baitless fishing machines in the world
 		'''
 }
+
+UniversalAmmoIcon: {
+	DisplayName: Unspecified Ammo
+	Tooltip:
+		'''
+		[c/00ffff:D][c/12ffff:o][c/24ffff:e][c/36ffff:s] [c/5bffff:n][c/6dffff:o][c/80ffff:t] specify the type of ammo,
+		Use the ammo that the weapon [c/00ffff:i][c/0fffff:s] [c/2dffff:s][c/3cffff:u][c/4bffff:p][c/5affff:p][c/69ffff:o][c/78ffff:s][c/78ffff:e][c/69ffff:d] [c/4bffff:t][c/3cffff:o] [c/1effff:u][c/0fffff:s][c/00ffff:e]
+		'''
+}

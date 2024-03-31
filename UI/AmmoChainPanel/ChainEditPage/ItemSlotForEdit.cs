@@ -37,7 +37,7 @@ public class ItemSlotForEdit : BaseItemSlot
     {
         base.ScrollWheel(evt);
 
-        if (!IsMouseHovering)
+        if (!IsMouseHovering || ItemSlot.ShiftInUse)
             return;
 
         int value = Math.Clamp(evt.ScrollWheelValue / 120, -10, 10);

@@ -30,6 +30,9 @@ public class WeaponSlot : BigBagItemSlot
     {
         base.LeftMouseDown(evt);
         DoPossibleItemChange();
+
+        if (!Main.mouseItem.IsAir && !Main.playerInventory)
+            Main.playerInventory = true;
     }
 
     public override void RightMouseDown(UIMouseEvent evt)
@@ -37,10 +40,19 @@ public class WeaponSlot : BigBagItemSlot
         if (Main.LocalPlayer is null || !Main.LocalPlayer.TryGetModPlayer(out WeaponKeeper keeper))
             return;
 
-        if (keeper.Weapon.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem))
+        if (keeper.Weapon.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) && globalItem.Chain is not null &&
+            globalItem.Chain.Chain.Count > 0)
         {
             globalItem.Chain = new AmmoChain();
             _parent.SetupPreview();
+
+            SoundEngine.PlaySound(SoundID.ResearchComplete);
+
+            var parentPosition = AmmoChainUI.Instance.MainPanel.GetInnerDimensions().Center();
+            var mousePosition = Main.MouseScreen;
+            var finalPosition = mousePosition - parentPosition;
+            finalPosition.Y += 4f;
+            AmmoChainUI.Instance.GenerateParticleAt(finalPosition);
         }
     }
 

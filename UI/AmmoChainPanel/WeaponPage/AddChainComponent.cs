@@ -10,7 +10,7 @@ public class AddChainComponent : TimerView
     private WeaponPage _parent;
     public SUIText Text;
 
-    public AddChainComponent(WeaponPage parent, string name)
+    public AddChainComponent(WeaponPage parent)
     {
         _parent = parent;
         Border = 2f;
@@ -21,17 +21,19 @@ public class AddChainComponent : TimerView
 
         Text = new SUIText
         {
-            TextOrKey = name,
+            TextOrKey = GetText("UI.AmmoChain.AddChain"),
             IsLarge = false,
             TextAlign = new Vector2(0.5f, 0.5f),
             TextBorder = 1f,
-            TextScale = 1f,
+            TextScale = 0.9f,
             IsWrapped = true,
             MaxCharacterCount = 10,
             OverflowHidden = true,
             MaxLines = 3
         };
-        Text.SetSizePercent(1f, 1f);
+        Text.SetSizePercent(0.6f, 1f);
+        Text.SetSizePixels(-6f, 0f);
+        Text.SetPos(0f, 0f, 0.4f, 0f);
         Text.JoinParent(this);
     }
 
@@ -54,5 +56,12 @@ public class AddChainComponent : TimerView
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
+
+        var innerDimensions = GetInnerDimensions();
+        var center = innerDimensions.Center();
+        center.X -= innerDimensions.Width / 4f;
+        var addChainIcon = ModAsset.AddChainIcon.Value;
+        var pos = center - addChainIcon.Size() / 2f;
+        spriteBatch.Draw(addChainIcon, pos, Color.White);
     }
 }

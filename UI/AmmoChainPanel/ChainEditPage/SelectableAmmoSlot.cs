@@ -19,6 +19,7 @@ public class SelectableAmmoSlot : BaseItemSlot
         RelativeMode = RelativeMode.Vertical;
         PreventOverflow = true;
         Spacing = new Vector2(2);
+        DisplayItemInfo = true;
         DisplayItemStack = false;
         SetSizePixels(44, 44);
     }
@@ -34,17 +35,13 @@ public class SelectableAmmoSlot : BaseItemSlot
             FavoritedTimer.Close();
 
         BorderColor = FavoritedTimer.Lerp(UIStyle.ItemSlotBorder, UIStyle.ItemSlotBorderFav);
-        BgColor = UIStyle.TrashSlotBg;
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        base.DrawSelf(spriteBatch);
+        ItemIconScale = HoverTimer.Lerp(0.8f, 1.04f);
 
-        if (!IsMouseHovering)
-            return;
-        Main.HoverItem = Item;
-        Main.hoverItemName = Item.Name;
+        base.DrawSelf(spriteBatch);
     }
 
     public override void LeftMouseDown(UIMouseEvent evt)
@@ -53,5 +50,7 @@ public class SelectableAmmoSlot : BaseItemSlot
         Parent.SelectedAmmoType = Parent.SelectedAmmoType == Item.type
             ? ItemID.None
             : Item.type;
+
+        SoundEngine.PlaySound(SoundID.MenuTick);
     }
 }

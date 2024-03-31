@@ -2,6 +2,7 @@
 using ImproveGame.UI.AmmoChainPanel;
 using System.Threading.Tasks;
 using Terraria.ModLoader.IO;
+using Terraria.Utilities;
 
 namespace ImproveGame.Content.Functions.ChainedAmmo;
 
@@ -34,6 +35,34 @@ public class ChainSaver
         TagIO.ToFile(chain.SerializeData(), thisPath);
 
         AmmoChains.Clear();
+    }
+
+    public static void ModifyExistingFile(AmmoChain chain, string chainName)
+    {
+        string name = $"{chainName}{Extension}";
+        string thisPath = Path.Combine(SavePath, name);
+        if (!File.Exists(thisPath))
+        {
+            SaveAsFile(chain, chainName);
+            return;
+        }
+
+        using var stream = File.OpenWrite(thisPath);
+        // 清空文件
+        stream.Seek(0, SeekOrigin.Begin);
+        stream.SetLength(0);
+        // 写入
+        TagIO.ToStream(chain.SerializeData(), stream);
+    }
+
+    public static void TryDeleteFile(string chainName)
+    {
+        string name = $"{chainName}{Extension}";
+        string thisPath = Path.Combine(SavePath, name);
+        if (!File.Exists(thisPath))
+            return;
+
+        FileUtilities.Delete(thisPath, false);
     }
 
     public static bool LoadFile(string path)

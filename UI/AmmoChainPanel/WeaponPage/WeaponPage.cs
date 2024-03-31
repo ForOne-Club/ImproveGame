@@ -23,7 +23,6 @@ public class WeaponPage : View
     public SUIScrollView2 Presets { get; private set; }
 
     private PresetComponent _hoveredPreset;
-    private Item _oldSlotItem;
 
     public WeaponPage()
     {
@@ -92,9 +91,9 @@ public class WeaponPage : View
     {
         Presets.ListView.RemoveAllChildren();
         ChainSaver.ReadAllAmmoChains();
-        
+
         float length = 87;
-        var addChain = new AddChainComponent(this, GetText("UI.AmmoChain.FileName"))
+        var addChain = new AddChainComponent(this)
         {
             RelativeMode = RelativeMode.Horizontal,
             Spacing = new Vector2(8f),
@@ -157,23 +156,20 @@ public class WeaponPage : View
         {
             globalItem.Chain ??= new AmmoChain();
             chain = globalItem.Chain.Chain;
-            slotBgColor = UIStyle.ItemSlotBg;
+            slotBgColor = UIStyle.ItemSlotBg * 0.8f;
         }
         else
             return;
 
         foreach ((ItemTypeData itemTypeData, int times) in chain)
         {
-            var itemSlot = new BaseItemSlot
+            var itemSlot = new ItemSlotForPreview(itemTypeData.Item.Clone())
             {
                 RelativeMode = RelativeMode.Horizontal,
                 Spacing = new Vector2(4),
-                AlwaysDisplayItemStack = true,
-                BgColor = slotBgColor
+                BgColor = slotBgColor,
+                Item = {stack = times}
             };
-            itemSlot.AirItem.SetDefaults(itemTypeData.Item.type);
-            itemSlot.AirItem.stack = times;
-            itemSlot.SetSizePixels(80, 80);
             itemSlot.JoinParent(_currentPreview.ListView);
         }
 

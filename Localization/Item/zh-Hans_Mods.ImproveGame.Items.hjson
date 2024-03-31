@@ -293,3 +293,12 @@ BaitSupplier: {
 		以补充世界上所有无诱饵的钓鱼机
 		'''
 }
+
+UniversalAmmoIcon: {
+	DisplayName: 不限弹药
+	Tooltip:
+		'''
+		[c/00ffff:不][c/40ffff:指][c/80ffff:定]弹药种类
+		使用武器[c/00ffff:原][c/80ffff:本]应使用的弹药
+		'''
+}

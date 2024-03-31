@@ -8,11 +8,11 @@ namespace ImproveGame.UI.AmmoChainPanel.ChainEditPage;
 public class TipClickToAdd : TimerView
 {
     public ChainEditPage Parent;
-    
+
     public TipClickToAdd(ChainEditPage parent)
     {
         Parent = parent;
-        SetSizePixels(566, 80);
+        SetSizePercent(1f);
         Border = 0f;
         Rounded = new Vector4(4f);
         Spacing = new Vector2(2);
@@ -40,21 +40,39 @@ public class TipClickToAdd : TimerView
 
     public override void LeftMouseDown(UIMouseEvent evt)
     {
+        if (Parent.EditingChain.Chain.Count != 0)
+            return;
+
         base.LeftMouseDown(evt);
 
         if (Parent.SelectedAmmoType is ItemID.None)
             return;
         var item = new Item(Parent.SelectedAmmoType);
-        if (!item.IsAmmo())
-            return;
         Parent.EditingChain.Chain.Add(new AmmoChain.Ammo(new ItemTypeData(item), 10));
         Parent.ShouldResetCurrentChain = true;
     }
 
     public override void Update(GameTime gameTime)
     {
+        if (Parent.EditingChain.Chain.Count != 0)
+        {
+            SetSizePercent(0f);
+            Recalculate();
+            return;
+        }
+
         base.Update(gameTime);
 
+        SetSizePercent(1f);
+        Recalculate();
         BgColor = Color.Black * HoverTimer.Lerp(0.3f, 0.6f);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        if (Parent.EditingChain.Chain.Count != 0)
+            return;
+
+        base.Draw(spriteBatch);
     }
 }

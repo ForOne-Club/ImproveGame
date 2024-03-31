@@ -27,8 +27,6 @@ public class AmmoGapElement : TimerView
         if (Parent.SelectedAmmoType is ItemID.None)
             return;
         var item = new Item(Parent.SelectedAmmoType);
-        if (!item.IsAmmo())
-            return;
         Parent.EditingChain.Chain.Insert(Index, new AmmoChain.Ammo(new ItemTypeData(item), 10));
         Parent.ShouldResetCurrentChain = true;
     }
@@ -37,6 +35,6 @@ public class AmmoGapElement : TimerView
     {
         base.Update(gameTime);
 
-        BgColor = Color.Black * HoverTimer.Lerp(0, 0.5f);
+        BgColor = Color.Black * HoverTimer.Lerp(0f, 0.5f);
     }
 }

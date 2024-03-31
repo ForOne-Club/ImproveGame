@@ -21,6 +21,7 @@ AmmoChain: {
 	ClickToAddL1: 选取一个弹药后
 	ClickToAddL2: 点击此处以添加到弹药链
 	FileName: 弹药链
+	AddChain: 添加弹药链
 	Cancel: 取消
 	Confirm: 确定
 }

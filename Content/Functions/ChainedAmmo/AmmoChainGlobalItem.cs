@@ -1,4 +1,5 @@
-﻿using ImproveGame.Core;
+﻿using ImproveGame.Content.Items.IconDummies;
+using ImproveGame.Core;
 using System.Diagnostics.CodeAnalysis;
 using Terraria.ModLoader.IO;
 
@@ -9,25 +10,48 @@ public class AmmoChainGlobalItem : GlobalItem
     public int Count;
     public int Index;
     public AmmoChain Chain;
+    public static bool IsPickingAmmo = false;
 
     public override void Load()
     {
+        On_Player.PickAmmo_Item_refInt32_refSingle_refBoolean_refInt32_refSingle_refInt32_bool += OnPickAmmo;
         On_Player.ChooseAmmo += OnChooseAmmo;
+    }
+
+    private void OnPickAmmo(
+        On_Player.orig_PickAmmo_Item_refInt32_refSingle_refBoolean_refInt32_refSingle_refInt32_bool orig, Player self,
+        Item sitem, ref int projtoshoot, ref float speed, ref bool canshoot, ref int totaldamage, ref float knockback,
+        out int usedammoitemid, bool dontconsume)
+    {
+        IsPickingAmmo = true;
+
+        orig.Invoke(self, sitem, ref projtoshoot, ref speed, ref canshoot, ref totaldamage, ref knockback,
+            out usedammoitemid, dontconsume);
+
+        IsPickingAmmo = false;
     }
 
     private Item OnChooseAmmo(On_Player.orig_ChooseAmmo orig, Player player, Item weapon)
     {
-        if (!weapon.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) ||
-            globalItem.Chain is null)
+        if (!IsPickingAmmo || !weapon.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) ||
+            globalItem.Chain is null || globalItem.Chain.Chain.Count is 0)
         {
             return orig.Invoke(player, weapon);
         }
-
         // 超界重置
         if (!globalItem.Chain.Chain.IndexInRange(globalItem.Index))
             globalItem.ResetToZero();
 
         var ammoType = globalItem.Chain.Chain[globalItem.Index];
+        
+        // 即为沿用原版弹药
+        if (ammoType.ItemData.Item.type == ModContent.ItemType<UniversalAmmoIcon>())
+        {
+            var foundedAmmo = orig.Invoke(player, weapon);
+            // 这里不判断是否null，无论实际有没有找到弹药，都直接跳到下一个弹药
+            GoToNextAmmo(globalItem);
+            return foundedAmmo;
+        }
 
         // 至少要有能用的弹药
         int failCounter = 0;
@@ -81,16 +105,21 @@ public class AmmoChainGlobalItem : GlobalItem
 
         // 找到了，前进
         if (itemFound)
-        {
-            globalItem.Count++;
-            if (globalItem.Count >= ammoType.Times)
-            {
-                globalItem.Index++;
-                globalItem.Count = 0;
-            }
-        }
+            GoToNextAmmo(globalItem);
 
         return item;
+    }
+
+    private void GoToNextAmmo(AmmoChainGlobalItem globalItem)
+    {
+        var ammoType = globalItem.Chain.Chain[globalItem.Index];
+
+        globalItem.Count++;
+        if (globalItem.Count >= ammoType.Times)
+        {
+            globalItem.Index++;
+            globalItem.Count = 0;
+        }
     }
 
     private void ResetToZero()
@@ -113,7 +142,8 @@ public class AmmoChainGlobalItem : GlobalItem
     {
         writer.WriteRGB(Chain.Color);
         writer.Write(Chain.Chain.Count);
-        foreach ((ItemTypeData itemTypeData, int times) in Chain.Chain) {
+        foreach ((ItemTypeData itemTypeData, int times) in Chain.Chain)
+        {
             writer.Write(itemTypeData);
             writer.Write((ushort)times);
         }
@@ -141,6 +171,7 @@ public class AmmoChainGlobalItem : GlobalItem
             globalFrom.Chain = (AmmoChain) Chain?.Clone();
             return globalFrom;
         }
+
         return base.Clone(from, to);
     }
 
