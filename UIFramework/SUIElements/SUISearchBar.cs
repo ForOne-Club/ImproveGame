@@ -109,7 +109,7 @@ public class SUISearchBar : View
 
         public override void Update(GameTime gameTime)
         {
-            if (this.isWritingText)
+            if (IsWritingText)
             {
                 if (this.NeedsVirtualkeyboard())
                 {
@@ -124,6 +124,9 @@ public class SUISearchBar : View
             }
 
             base.Update(gameTime);
+
+            if (!IsWritingText)
+                return;
 
             string inputText = Main.GetInputText(this.actualContents);
             if (Main.inputTextEnter)

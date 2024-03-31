@@ -9,7 +9,7 @@ public class AmmoChainGlobalItem : GlobalItem
 {
     public int Count;
     public int Index;
-    public AmmoChain Chain;
+    public AmmoChain Chain = new ();
     public static bool IsPickingAmmo = false;
 
     public override void Load()
@@ -140,6 +140,7 @@ public class AmmoChainGlobalItem : GlobalItem
 
     public override void NetSend(Item item, BinaryWriter writer)
     {
+        Chain ??= new AmmoChain();
         writer.WriteRGB(Chain.Color);
         writer.Write(Chain.Chain.Count);
         foreach ((ItemTypeData itemTypeData, int times) in Chain.Chain)
