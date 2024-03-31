@@ -251,13 +251,16 @@ ExtremeStorage: {
 	}
 }
 
-AutoTrash.Introduction:
-	'''
-	[c/CC88AA:Auto Trash] (Quality of Terraria)
-	[c/CC88AA:Shift+Ctrl+<left>] an item to add it to an auto-trash list
-	Press [c/CC88AA:{0}] to hide this UI (Make sure you have set a keybind for this)
-	Hit this button to view the auto-trash list
-	'''
+AutoTrash: {
+	Introduction:
+		'''
+		[c/CC88AA:Auto Trash] (Quality of Terraria)
+		[c/CC88AA:Shift+Ctrl+<left>] an item to add it to an auto-trash list
+		Press [c/CC88AA:{0}] to hide this UI (Make sure you have set a keybind for this)
+		Hit this button to view the auto-trash list
+		'''
+	TrashedItemsList: Trash Items
+}
 
 WorldFeature: {
 	Title: World Features

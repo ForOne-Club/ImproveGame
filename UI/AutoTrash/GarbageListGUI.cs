@@ -63,7 +63,7 @@ public class GarbageListGUI : BaseBody
             TitleView.Height.Pixels = 44f;
             TitleView.JoinParent(Window);
 
-            Title = new SUITitle("自动丢弃列表", 0.42f)
+            Title = new SUITitle(GetText("UI.AutoTrash.TrashedItemsList"), 0.42f)
             {
                 VAlign = 0.5f
             };

@@ -249,13 +249,16 @@ ExtremeStorage: {
 	}
 }
 
-AutoTrash.Introduction:
-	'''
-	[c/CC88AA:自动垃圾桶]
-	对物品按下 [c/CC88AA:Shift+Ctrl+<left>] 可将其设为自动丢弃
-	按下 [c/CC88AA:{0}] 以隐藏该界面（确保你在控件中绑定了按键）
-	按下此按钮查看自动丢弃列表
-	'''
+AutoTrash: {
+	Introduction:
+		'''
+		[c/CC88AA:自动垃圾桶]
+		对物品按下 [c/CC88AA:Shift+Ctrl+<left>] 可将其设为自动丢弃
+		按下 [c/CC88AA:{0}] 以隐藏该界面（确保你在控件中绑定了按键）
+		按下此按钮查看自动丢弃列表
+		'''
+	TrashedItemsList: 自动丢弃列表
+}
 
 WorldFeature: {
 	Title: 世界特性
