@@ -304,7 +304,7 @@ public class MasterControlManager : ModSystem
 
         var ammoChain = new MasterControlFunction("AmmoChain")
         {
-            Icon = ModAsset.DevMark.Value,
+            Icon = ModAsset.AmmoChain.Value,
         }.Register();
 
         ammoChain.OnMouseDown += _ =>

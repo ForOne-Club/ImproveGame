@@ -51,6 +51,6 @@ ModConfig: {
 }
 
 AmmoChain: {
-	// DisplayName: AmmoChain
-	// Description: ""
+	DisplayName: 弹药链
+	Description: 让武器以规定顺序射出特定子弹
 }
