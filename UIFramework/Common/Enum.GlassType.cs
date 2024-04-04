@@ -3,6 +3,5 @@
 public enum GlassType
 {
     Disabled,
-    SimpleBlur,
     MicaLike
 }

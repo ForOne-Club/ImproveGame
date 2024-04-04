@@ -994,6 +994,7 @@ GlassType: {
 	Disabled.Label: Off
 	SimpleBlur.Label: Simple
 	MicaLike.Label: Mica
+	aaa.Label: aaa
 }
 
 BombsNotDamageType: {

@@ -995,6 +995,7 @@ GlassType: {
 	Disabled.Label: 关闭
 	SimpleBlur.Label: 简单模糊
 	MicaLike.Label: 类云母
+	// aaa.Label: aaa
 }
 
 BombsNotDamageType: {

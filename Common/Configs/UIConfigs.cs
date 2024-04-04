@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.UIFramework.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
@@ -10,7 +11,6 @@ public class UIConfigs : ModConfig
 {
     public static UIConfigs Instance { get; set; }
     public override ConfigScope Mode => ConfigScope.ClientSide;
-    public override void OnLoaded() => Instance = this;
 
     [CustomModConfigItem(typeof(OpenUIConfigElement))]
     public object OpenConfig;
@@ -148,4 +148,26 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     public float MarkEmptyAutofisher;
+
+    public override void OnLoaded()
+    {
+        Instance = this;
+        ValidateValues();
+    }
+
+    public override void OnChanged()
+    {
+        ValidateValues();
+    }
+
+    private void ValidateValues()
+    {
+        // 旧版兼容，TML居然不自带错误检测，遇到超限直接Crash
+        if ((int)GlassVfx > 1)
+        {
+            GlassVfx = GlassType.MicaLike;
+            ConfigManager.Save(this);
+            ConfigManager.Load(this);
+        }
+    }
 }

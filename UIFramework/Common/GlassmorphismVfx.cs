@@ -101,21 +101,9 @@ public class GlassmorphismVfx : ModSystem
         if (Main.gameMenu || !GlassVfxAvailable || Main.InGameUI.IsVisible || Main.ingameOptionsWindow)
             return;
 
-        // // 对原版游戏画面高斯模糊处理的 target
-        // if (!_targetPool.TryBorrow(Main.ScreenSize.ToVector2(), out var blurredTarget))
-        // {
-        //     return;
-        // }
-        //
-        // // 储存 UI 绘制内容的 target
-        // if (!_targetPool.TryBorrow(Main.ScreenSize.ToVector2(), out var uiTarget))
-        // {
-        //     _targetPool.TryReturn(blurredTarget);
-        //     return;
-        // }
-
         var device = Main.instance.GraphicsDevice;
         var batch = Main.spriteBatch;
+        device.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
 
         // “保存”原来的Rt2d
         device.SetRenderTarget(Main.screenTargetSwap);
@@ -134,54 +122,16 @@ public class GlassmorphismVfx : ModSystem
         // 再对 blurredTarget 调用 ApplyGaussBlur
         ApplyGaussBlur(_blurredTarget);
 
-        if (GlassVfxType is GlassType.MicaLike)
+        if (GlassVfxType is not GlassType.MicaLike)
         {
-            PlayerInput.SetZoom_UI();
-            EventTriggerManager.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
-            PlayerInput.SetZoom_World();
-
-            device.SetRenderTarget(null);
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            batch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-            batch.End();
             return;
         }
 
-        // 在 uiTarget 上绘制 UI
-        device.SetRenderTarget(_uiTarget);
-        device.Clear(Color.Transparent);
-        batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.UIScaleMatrix);
-        SDFRectangle.DontDrawShadow = true;
-
         PlayerInput.SetZoom_UI();
-        EventTriggerManager.DrawAll();
+        EventTriggerManager.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
         PlayerInput.SetZoom_World();
 
-        SDFRectangle.DontDrawShadow = false;
-        batch.End();
-
-        // 在 Main.screenTarget 上绘制最终结果
-        var shader = ModAsset.Mask.Value;
-        device.SetRenderTarget(Main.screenTarget);
-        batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-        shader.CurrentTechnique.Passes["Mask"].Apply();
-        device.Textures[1] = _blurredTarget;
-        device.Textures[2] = _uiTarget;
-        batch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
-        batch.End();
-
-        // 最后绘制到游戏显示的实际画布上
         device.SetRenderTarget(null);
-        batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-        batch.Draw(Main.screenTarget, Vector2.Zero, Color.White);
-        batch.End();
-
-        // 复原
-        device.Textures[0] = null;
-        device.Textures[1] = null;
-        device.Textures[2] = null;
-        // _targetPool.TryReturn(blurredTarget);
-        // _targetPool.TryReturn(uiTarget);
     }
 
     public void ApplyGaussBlur(RenderTarget2D target)
