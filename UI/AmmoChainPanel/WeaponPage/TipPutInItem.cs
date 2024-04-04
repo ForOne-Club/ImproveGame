@@ -42,11 +42,13 @@ public class TipPutInItem : TimerView
             : "Mods.ImproveGame.UI.AmmoChain.ClickAmmoChain";
         if (ChainSaver.AmmoChains.Count is 0)
             _text.TextOrKey = "Mods.ImproveGame.UI.AmmoChain.AddAmmoChain";
-
-        base.Draw(spriteBatch);
+        if (!Parent.WeaponSlot.Item.IsAir && Parent.WeaponSlot.Item.useAmmo <= 0)
+            _text.TextOrKey = "Mods.ImproveGame.UI.AmmoChain.ItemNotAvailable";
 
         SetSizePercent(1f);
         Recalculate();
         BgColor = Color.Transparent;
+
+        base.Draw(spriteBatch);
     }
 }

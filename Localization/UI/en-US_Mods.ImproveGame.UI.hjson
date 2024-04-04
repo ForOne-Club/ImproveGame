@@ -27,7 +27,8 @@ AmmoChain: {
 	GetHelp: 这玩意咋用啊？
 	Cancel: 取消
 	Confirm: 确定
-	PutInItem: ← 将物品放入此处
+	ItemNotAvailable: × 此物品不使用弹药
+	PutInItem: ← 将武器放入此处
 	ClickAmmoChain: 点击弹药链以应用
 	AddAmmoChain: 你现在没有弹药链，先添加一个吧
 	Empty: 你不能设置一个空的弹药链

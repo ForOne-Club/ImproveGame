@@ -951,11 +951,8 @@ UIConfigs: {
 			Only takes effect when lighting mode is "Color" or "White"
 			May affect performance
 
-			2 applicable glassmorphisms:
-			1. Simple
-			  - only blurs game graphics covered by UIs, the UIs themselves is semitransparent
-			  - UIs do not mask on each other
-			2. Mica
+			only 1 applicable glassmorphisms currently:
+			1. Mica
 			  - UIs are opaque, taking blurred game graphics where they cover as background
 			'''
 	}
