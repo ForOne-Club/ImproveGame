@@ -44,7 +44,8 @@ QuickHome: {
 }
 
 Tips: {
-	AmmoChain: "[i:ImproveGame/AmmoChainItem] 当前弹药链："
+	AmmoChainDisabled: 弹药链功能已关闭
+	AmmoChain: "[centeritem:ImproveGame/AmmoChainItem]弹药链: "
 	ShimmerInto: "Can be shimmered into "
 	ShimmerIntoWithStack: "Every {0} can be shimmered into "
 	ShimmerIntoWithCoinLuck: Can be shimmered into {0} 'coin luck'

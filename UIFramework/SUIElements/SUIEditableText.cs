@@ -30,10 +30,17 @@ public class SUIEditableText : TimerView
 
             int cursor = Cursor;
             cursor = Math.Min(OriginalString.Length, cursor);
-            LastString = OriginalString.Insert(cursor,
-                ShowCursorTicker
-                    ? CursorSnippet.GenerateTag(Color.White)
-                    : CursorSnippet.GenerateTag(Color.Transparent));
+
+            var cursorColor = Color.Transparent;
+            if (ShowCursorTicker)
+            {
+                cursorColor = Color.White;
+                // 算是个小彩蛋？
+                if (Main.LocalPlayer.hasRainbowCursor)
+                    cursorColor = Main.hslToRgb(Main.GlobalTimeWrappedHourly * 0.25f % 1f, 1f, 0.5f);
+            }
+
+            LastString = OriginalString.Insert(cursor, CursorSnippet.GenerateTag(cursorColor));
 
             FinalTextSnippets = TextSnippetHelper
                 .ConvertNormalSnippets(TextSnippetHelper.ParseMessageWithCursorCheck(LastString, TextColor)).ToArray();
@@ -287,10 +294,22 @@ public class SUIEditableText : TimerView
         Text = Text[..(curCursor - 1)] + Text[curCursor..];
     }
 
+    public void CursorLeftest()
+    {
+        Cursor = 0;
+        _cursorBlinkCount = 0;
+    }
+
     public void CursorLeft()
     {
         if (Cursor != 0)
             Cursor--;
+        _cursorBlinkCount = 0;
+    }
+
+    public void CursorRightest()
+    {
+        Cursor = Text.Length;
         _cursorBlinkCount = 0;
     }
 
@@ -406,6 +425,8 @@ public class SUIEditableText : TimerView
         HandleKeyHoldFor(Keys.Left, CursorLeft);
         HandleKeyHoldFor(Keys.Right, CursorRight);
         HandleKeyHoldFor(Keys.Delete, Delete);
+        if (Pressed(Keys.Up)) CursorLeftest();
+        if (Pressed(Keys.Down)) CursorRightest();
 
         return;
 

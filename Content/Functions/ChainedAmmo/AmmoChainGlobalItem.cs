@@ -34,30 +34,27 @@ public class AmmoChainGlobalItem : GlobalItem
 
     private Item OnChooseAmmo(On_Player.orig_ChooseAmmo orig, Player player, Item weapon)
     {
-        if (!IsPickingAmmo || !weapon.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) ||
+        if (!Config.AmmoChain || !IsPickingAmmo || !weapon.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) ||
             globalItem.Chain is null || globalItem.Chain.Chain.Count is 0)
         {
-            return orig.Invoke(player, weapon);
+            return DoVanillaChooseAmmoPlusBigBagAmmo(orig, player, weapon);
         }
+
         // 超界重置
         if (!globalItem.Chain.Chain.IndexInRange(globalItem.Index))
             globalItem.ResetToZero();
 
         var ammoType = globalItem.Chain.Chain[globalItem.Index];
-        
-        // 即为沿用原版弹药
-        if (ammoType.ItemData.Item.type == ModContent.ItemType<UniversalAmmoIcon>())
-        {
-            var foundedAmmo = orig.Invoke(player, weapon);
-            // 这里不判断是否null，无论实际有没有找到弹药，都直接跳到下一个弹药
-            GoToNextAmmo(globalItem);
-            return foundedAmmo;
-        }
 
         // 至少要有能用的弹药
         int failCounter = 0;
-        while (ammoType.ItemData.Item.ammo != weapon.useAmmo ||
-               player.inventory.All(i => ammoType.ItemData.Item.type != i.type))
+        var bigBagItems = GetAllInventoryItemsList(player, "portable inv", 110);
+
+        bool isNotUniversalAmmo = ammoType.ItemData.Item.type != ModContent.ItemType<UniversalAmmoIcon>();
+        bool ammoDoesntFitWeapon = ammoType.ItemData.Item.ammo != weapon.useAmmo;
+        bool anyAmmoInInventories = player.inventory.All(i => ammoType.ItemData.Item.type != i.type) &&
+                                    bigBagItems.All(i => ammoType.ItemData.Item.type != i.type);
+        while (isNotUniversalAmmo && (ammoDoesntFitWeapon || anyAmmoInInventories))
         {
             globalItem.Index++;
             Count = 0;
@@ -68,10 +65,24 @@ public class AmmoChainGlobalItem : GlobalItem
 
                 // 两轮没找到，说明就没有适合的，直接原版行为
                 if (failCounter >= 2)
-                    return orig.Invoke(player, weapon);
+                    return DoVanillaChooseAmmoPlusBigBagAmmo(orig, player, weapon);
             }
 
+            // 更新变量
             ammoType = globalItem.Chain.Chain[globalItem.Index];
+            isNotUniversalAmmo = ammoType.ItemData.Item.type != ModContent.ItemType<UniversalAmmoIcon>();
+            ammoDoesntFitWeapon = ammoType.ItemData.Item.ammo != weapon.useAmmo;
+            anyAmmoInInventories = player.inventory.All(i => ammoType.ItemData.Item.type != i.type) &&
+                                   bigBagItems.All(i => ammoType.ItemData.Item.type != i.type);
+        }
+
+        // 不限弹药，即为沿用原版弹药
+        if (ammoType.ItemData.Item.type == ModContent.ItemType<UniversalAmmoIcon>())
+        {
+            var foundedAmmo = DoVanillaChooseAmmoPlusBigBagAmmo(orig, player, weapon);
+            // 这里不判断是否null，无论实际有没有找到弹药，都直接跳到下一个弹药
+            GoToNextAmmo(globalItem);
+            return foundedAmmo;
         }
 
         // 找到对应弹药
@@ -104,9 +115,40 @@ public class AmmoChainGlobalItem : GlobalItem
             }
         }
 
+        // 找大背包里的
+        if (!itemFound)
+        {
+            foreach (var ammo in bigBagItems.Where(ammo =>
+                         ammo.stack > 0 && ammoType.ItemData.Item.type == ammo.type &&
+                         ItemLoader.CanChooseAmmo(weapon, ammo, player)))
+            {
+                item = ammo;
+                itemFound = true;
+                break;
+            }
+        }
+
         // 找到了，前进
         if (itemFound)
             GoToNextAmmo(globalItem);
+
+        return item;
+    }
+
+    // 调用orig，但同时算入大背包的子弹
+    private Item DoVanillaChooseAmmoPlusBigBagAmmo(On_Player.orig_ChooseAmmo orig, Player player, Item weapon)
+    {
+        var item = orig.Invoke(player, weapon);
+        if (item is null)
+        {
+            var bigBagItems = GetAllInventoryItemsList(player, "portable, inv", 110);
+            foreach (var ammo in bigBagItems.Where(ammo =>
+                         ammo.stack > 0 && ItemLoader.CanChooseAmmo(weapon, ammo, player)))
+            {
+                item = ammo;
+                break;
+            }
+        }
 
         return item;
     }

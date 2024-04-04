@@ -453,6 +453,7 @@ ImproveConfigs: {
 			All hair styles can be chosen upon character creation.
 			Teleportation rod hotkey. Uses Rod of Discord or Rod of Harmony in any inventory, prioritize RoH.
 			Home-returning hotkey. Uses any infinite home-returning item in any inventory, prioritize Potion of Return.
+			Ammo can be chosen from Big Backpack
 			'''
 	}
 
@@ -699,6 +700,15 @@ ImproveConfigs: {
 			plus time after defeating Wall of Flesh
 			Unlocks via Book of Weather, opens from the Control Panel
 			Availability changes per world
+			'''
+	}
+
+	AmmoChain: {
+		Label: "[centeritem:ImproveGame/AmmoChainItem] 弹药链"
+		Tooltip:
+			'''
+			可以让武器以规定顺序使用特定子弹
+			在总控面板中打开
 			'''
 	}
 }

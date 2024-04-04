@@ -307,8 +307,15 @@ public class MasterControlManager : ModSystem
             Icon = ModAsset.AmmoChain.Value,
         }.Register();
 
+        ammoChain.Available += () => Config.AmmoChain;
         ammoChain.OnMouseDown += _ =>
         {
+            if (!Config.AmmoChain)
+            {
+                Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
+                return;
+            }
+
             if (AmmoChainUI.Instance.Enabled && AmmoChainUI.Instance.StartTimer.AnyOpen)
                 AmmoChainUI.Instance.Close();
             else

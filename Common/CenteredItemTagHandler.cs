@@ -54,11 +54,11 @@ public class CenteredItemTagHandler : ITagHandler
                 Main.inventoryScale = inventoryScale;
             }
 
-            size = new Vector2(32f) * scale * num;
+            size = new Vector2(28) * scale;
             return true;
         }
 
-        public override float GetStringLength(DynamicSpriteFont font) => 32f * Scale * 0.65f;
+        public override float GetStringLength(DynamicSpriteFont font) => 28 * Scale;
     }
 
     TextSnippet ITagHandler.Parse(string text, Color baseColor, string options)

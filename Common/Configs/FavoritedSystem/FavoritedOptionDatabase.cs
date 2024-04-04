@@ -9,7 +9,7 @@ public class FavoritedOptionDatabase
     /// </summary>
     internal static HashSet<string> NewOptions =>
     [
-        nameof(ImproveConfigs.WeatherControl)
+        nameof(ImproveConfigs.AmmoChain)
     ];
 
     public static void SetDefaultFavoritedOptions()

@@ -44,7 +44,7 @@ public class ChainEditPage : View
             DragIgnore = true,
             RelativeMode = RelativeMode.Vertical
         };
-        _upperPanel.SetPadding(30, 10f, 30, 10f);
+        _upperPanel.SetPadding(24, 14f, 24, 6f);
         _upperPanel.SetSize(0f, midPixel, 1f, 0f);
         _upperPanel.JoinParent(this);
         SetupUpperPanel();

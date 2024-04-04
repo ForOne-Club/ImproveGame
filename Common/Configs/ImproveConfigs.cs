@@ -59,6 +59,9 @@ public class ImproveConfigs : ModConfig
     [ReloadRequired]
     public bool QuestFishStack;
 
+    [DefaultValue(true)]
+    public bool AmmoChain;
+
     [DefaultValue(false)]
     public bool SuperVault;
 

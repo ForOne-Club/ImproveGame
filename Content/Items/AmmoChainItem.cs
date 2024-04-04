@@ -72,14 +72,16 @@ public class AmmoChainItem : ModItem
         AddAmmoChainTooltips(Mod, Chain, tooltips);
     }
 
-    public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor,
+    public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor,
+        Color itemColor,
         Vector2 origin, float scale)
     {
         Item.color = Chain.Color;
         return base.PreDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
     }
 
-    public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale,
+    public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation,
+        ref float scale,
         int whoAmI)
     {
         Item.color = Chain.Color;
@@ -88,31 +90,61 @@ public class AmmoChainItem : ModItem
 
     public static void AddAmmoChainTooltips(Mod mod, AmmoChain ammoChain, List<TooltipLine> tooltips)
     {
-        tooltips.Add(new TooltipLine(mod, "AmmoChain", GetText("Tips.AmmoChain"))
+        if (!Config.AmmoChain)
+        {
+            tooltips.Add(new TooltipLine(mod, "AmmoChainDisabled", GetText("Tips.AmmoChainDisabled"))
+            {
+                OverrideColor = Color.Yellow
+            });
+            return;
+        }
+
+        var ammoChainLineText = GetText("Tips.AmmoChain");
+        // 如果少于或等于9个，就是很少，直接一行显示得了
+        if (ammoChain.Chain.Count <= 9)
+        {
+            string theText = "";
+            foreach ((ItemTypeData itemData, int times) in ammoChain.Chain)
+            {
+                string text = $"[centeritem/s{times}:{itemData.Item.type}]";
+                theText += text;
+            }
+
+            ammoChainLineText += theText;
+            tooltips.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
+            {
+                OverrideColor = Color.Yellow
+            });
+
+            // 这里return，强调一下
+            return;
+        }
+
+        tooltips.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
         {
             OverrideColor = Color.Yellow
         });
 
-        string cachedText = string.Empty;
+        string cachedText = "";
         int count = 0;
         int line = 1;
-        foreach ((ItemTypeData itemData, int times) in ammoChain.Chain) {
+        foreach ((ItemTypeData itemData, int times) in ammoChain.Chain)
+        {
             // 用 centeritem 没有 maxStack 限制
             string text = $"[centeritem/s{times}:{itemData.Item.type}]";
             cachedText += text;
             count++;
 
-            if (count < 6)
+            if (count < 12)
                 continue;
 
             count = 0;
             tooltips.Add(new TooltipLine(mod, $"AmmoChainL{line}", cachedText));
-            cachedText = string.Empty;
+            cachedText = "";
             line++;
-
         }
 
-        if (!string.IsNullOrEmpty(cachedText))
+        if (!string.IsNullOrWhiteSpace(cachedText))
         {
             tooltips.Add(new TooltipLine(mod, $"AmmoChainL{line}", cachedText));
         }
