@@ -302,3 +302,14 @@ UniversalAmmoIcon: {
 		使用武器[c/00ffff:原][c/80ffff:本]应使用的弹药
 		'''
 }
+
+AmmoChainItem: {
+	DisplayName: 弹药链
+	Tooltip:
+		'''
+		储存着弹药链信息，可以分享给其他玩家
+		使用该物品会自动将弹药链储存到你的PC上
+		'''
+	FromPlayer: 来自玩家：{0}
+	Added: 弹药链已添加为 {0}
+}

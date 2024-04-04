@@ -13,7 +13,7 @@ public class AmmoGapElement : TimerView
     {
         Index = index;
         Parent = parent;
-        SetSizePixels(10, 60);
+        SetSizePixels(14, 60);
         Border = 0f;
         Rounded = new Vector4(4f);
         RelativeMode = RelativeMode.Horizontal;
@@ -29,6 +29,7 @@ public class AmmoGapElement : TimerView
         var item = new Item(Parent.SelectedAmmoType);
         Parent.EditingChain.Chain.Insert(Index, new AmmoChain.Ammo(new ItemTypeData(item), 10));
         Parent.ShouldResetCurrentChain = true;
+        SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
     public override void Update(GameTime gameTime)

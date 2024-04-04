@@ -1,4 +1,5 @@
-﻿using ReLogic.Graphics;
+﻿using ImproveGame.Common;
+using ReLogic.Graphics;
 using ReLogic.Text;
 using System.Text.RegularExpressions;
 using Terraria.GameContent.UI.Chat;
@@ -33,6 +34,7 @@ public static class TextSnippetHelper
             // 如果有, 添加两正则之间的文本.
             if (match.Index > inputIndex)
             {
+                // AddTextSnippetWithCursorCheck(input[inputIndex..match.Index], snippets, baseColor);
                 snippets.Add(new TextSnippet(input[inputIndex..match.Index], baseColor));
             }
 
@@ -63,10 +65,79 @@ public static class TextSnippetHelper
         // 如果有, 添加最后一个正则后的文本.
         if (input.Length > inputIndex)
         {
+            // AddTextSnippetWithCursorCheck(input[inputIndex..], snippets, baseColor);
             snippets.Add(new TextSnippet(input[inputIndex..], baseColor));
         }
 
         return snippets;
+    }
+
+    public static List<TextSnippet> ParseMessageWithCursorCheck(string input, Color baseColor)
+    {
+        string pattern = @"%\$#\?\?>\s*(.*?)\s*%\$#\?\?>";
+
+        Match match = Regex.Match(input, pattern);
+        if (!match.Success)
+            return ParseMessage(input, baseColor);
+
+        var snippets = new List<TextSnippet>();
+        string result = match.Groups[1].Value;
+        string textBefore = input[..match.Index];
+        string textAfter = input[(match.Index + match.Length)..];
+
+        // 消除插入文本不同字符间的kerning的影响，避免鼠标闪烁时文字位置不稳定
+        float leftSize = FontAssets.MouseText.Value.MeasureString(textBefore).X;
+        float rightSize = FontAssets.MouseText.Value.MeasureString(textAfter).X;
+        float togetherSize = FontAssets.MouseText.Value.MeasureString(textBefore + textAfter).X;
+        int kerning = (int)(togetherSize - (leftSize + rightSize));
+
+        if (textBefore is {Length: > 0 })
+            snippets.AddRange(ParseMessage(textBefore, baseColor));
+
+        var cursorSnippet = CursorSnippet.Parse(result, kerning);
+        if (result == "transparent")
+            cursorSnippet.Color = Color.Transparent;
+        snippets.Add(cursorSnippet);
+
+        if (textAfter is {Length: > 0 })
+            snippets.AddRange(ParseMessage(textAfter, baseColor));
+
+        return snippets;
+    }
+
+    public static void AddTextSnippetWithCursorCheck(string text, List<TextSnippet> snippets, Color baseColor)
+    {
+        // 匹配所有被 %$#??> 包裹的文本
+        // 比如 %$#??>你的文本%$#??>
+        // 用来标记指针位置
+        string pattern = @"%\$#\?\?>\s*(.*?)\s*%\$#\?\?>";
+
+        Match match = Regex.Match(text, pattern);
+        if (match.Success)
+        {
+            string result = match.Groups[1].Value;
+            string textBefore = text[..match.Index];
+            string textAfter = text[(match.Index + match.Length)..];
+
+            // 消除插入文本不同字符间的kerning的影响，避免鼠标闪烁时文字位置不稳定
+            float leftSize = FontAssets.MouseText.Value.MeasureString(textBefore).X;
+            float rightSize = FontAssets.MouseText.Value.MeasureString(textAfter).X;
+            float togetherSize = FontAssets.MouseText.Value.MeasureString(textBefore + textAfter).X;
+            int kerning = (int)(togetherSize - (leftSize + rightSize));
+
+            if (textBefore is {Length: > 0 })
+                snippets.Add(new TextSnippet(textBefore, baseColor));
+
+            Main.NewText(kerning);
+
+            snippets.Add(CursorSnippet.Parse(result, kerning));
+
+            if (textAfter is {Length: > 0 })
+                snippets.Add(new TextSnippet(textAfter, baseColor));
+            return;
+        }
+
+        snippets.Add(new TextSnippet(text, baseColor));
     }
 
     /// <summary>
@@ -95,13 +166,11 @@ public static class TextSnippetHelper
     /// <summary>
     /// 针对textSnippet特殊文本的换行
     /// </summary>
-    public static TextSnippet[] WordwrapString(string text, Color textColor, DynamicSpriteFont font, int maxWidth,
-        out float lastLineLength, int maxCharacterCount = 19, int maxLines = -1)
+    public static TextSnippet[] WordwrapString(TextSnippet[] originalSnippets, Color textColor, DynamicSpriteFont font,
+        int maxWidth, out float lastLineLength, int maxCharacterCount = 19, int maxLines = -1)
     {
         int lineCount = 1; // 行数
         float workingLineLength = 0f; // 当前行长度
-        TextSnippet[] originalSnippets = ChatManager.ParseMessage(text, textColor).ToArray();
-        ChatManager.ConvertNormalSnippets(originalSnippets);
         List<TextSnippet> finalSnippets = new() {new TextSnippet()};
 
         foreach (var snippet in originalSnippets)
@@ -178,7 +247,7 @@ public static class TextSnippetHelper
 
                 finalSnippets.Add(snippet);
             }
-            
+
             if (lineCount >= maxLines + 1 && maxLines != -1)
             {
                 // 一直向前移除到最后一个换行，并把最后一个换行也移除
@@ -189,8 +258,10 @@ public static class TextSnippetHelper
                     {
                         finalSnippets.RemoveAt(finalSnippets.Count - 1);
                     }
+
                     finalSnippets.RemoveAt(finalSnippets.Count - 1);
                 }
+
                 lastLineLength = 0;
                 return finalSnippets.ToArray();
             }
@@ -198,6 +269,18 @@ public static class TextSnippetHelper
 
         lastLineLength = workingLineLength;
         return finalSnippets.ToArray();
+    }
+
+    /// <summary>
+    /// 针对textSnippet特殊文本的换行
+    /// </summary>
+    public static TextSnippet[] WordwrapString(string text, Color textColor, DynamicSpriteFont font, int maxWidth,
+        out float lastLineLength, int maxCharacterCount = 19, int maxLines = -1)
+    {
+        TextSnippet[] originalSnippets = ChatManager.ParseMessage(text, textColor).ToArray();
+        ChatManager.ConvertNormalSnippets(originalSnippets);
+        return WordwrapString(originalSnippets, textColor, font, maxWidth, out lastLineLength, maxCharacterCount,
+            maxLines);
     }
 
     // https://unicode-table.com/cn/blocks/cjk-unified-ideographs/ 中日韩统一表意文字
@@ -229,7 +312,7 @@ public static class TextSnippetHelper
             // 以换行分隔开
             string[] strings = textSnippet.Text.Split('\n');
 
-            // length - 1: 
+            // length - 1:
             // 最后一行开头前分行
             for (int i = 0; i < strings.Length - 1; i++)
             {

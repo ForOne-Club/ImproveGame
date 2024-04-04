@@ -10,11 +10,13 @@ using Terraria.Graphics.Renderers;
 
 namespace ImproveGame.UI.AmmoChainPanel;
 
-[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Ammo Chain")]
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Ammo Chain UI")]
 public class AmmoChainUI : BaseBody
 {
     public static AmmoChainUI Instance { get; private set; }
+
     public AmmoChainUI() => Instance = this;
+
     public override bool IsNotSelectable => StartTimer.AnyClose;
 
     public override bool Enabled
@@ -36,45 +38,76 @@ public class AmmoChainUI : BaseBody
     /// <summary>
     /// 两个页面之间滑动动画计时器
     /// </summary>
-    public AnimationTimer PageSlideTimer;
+    public AnimationTimer PageSlideTimer = new (3);
 
     #region Components
 
     // 主面板
-    public SUIPanel MainPanel;
+    public SUIPanel MainPanel = new (UIStyle.PanelBorder, UIStyle.PanelBg)
+    {
+        Shaded = true,
+        Draggable = true,
+        FinallyDrawBorder = true,
+        OverflowHidden = true
+    };
 
     // 标题面板
     private View _titlePanel;
 
     // 标题
-    private SUIText _title;
+    private SUIText _title = new()
+    {
+        TextOrKey = "Mods.ImproveGame.UI.AmmoChain.Title",
+        UseKey = true,
+        IsLarge = true,
+        TextScale = 0.55f,
+        VAlign = 0.5f,
+        TextBorder = 2f,
+        PaddingLeft = 20f,
+        DragIgnore = true
+    };
 
     // 关闭按钮
-    private SUICross _cross;
+    private SUICross _cross = new()
+    {
+        HAlign = 1f,
+        VAlign = 0.5f,
+        Width = { Pixels = 45f, Percent = 0f },
+        Height = { Pixels = 0f, Precent = 1f },
+        Rounded = new Vector4(0f, 10f, 0f, 0f),
+        Border = 0f,
+        BorderColor = Color.Transparent,
+        CrossOffset = new Vector2(0f, 0f),
+        CrossRounded = UIStyle.CrossThickness * 0.95f
+    };
 
-    // 当前显示页
-    private PageContainer _shownPage;
+    // 用来放页的空间
+    private View _shownPage = new()
+    {
+        RelativeMode = RelativeMode.Vertical
+    };
 
     // 武器页
-    private WeaponPage.WeaponPage _weaponPage;
+    private WeaponPage.WeaponPage _weaponPage = new ();
 
     // 编辑页
-    private ChainEditPage.ChainEditPage _chainEditPage;
+    private ChainEditPage.ChainEditPage _chainEditPage = new ();
 
-    private UIParticleLayer _particleSystem;
+    private UIParticleLayer _particleSystem = new()
+    {
+        Width = new StyleDimension(0f, 1f),
+        Height = new StyleDimension(0f, 1f),
+        AnchorPositionOffsetByPercents = Vector2.One / 2f,
+        AnchorPositionOffsetByPixels = Vector2.Zero
+    };
 
     #endregion
 
     public override void OnInitialize()
     {
+        Instance = this;
+
         // 主面板
-        MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
-        {
-            Shaded = true,
-            Draggable = true,
-            FinallyDrawBorder = true,
-            OverflowHidden = true
-        };
         MainPanel.SetPadding(0f);
         MainPanel.SetPosPixels(610, 320)
             .SetSizePixels(600, 460)
@@ -86,33 +119,10 @@ public class AmmoChainUI : BaseBody
         _titlePanel.JoinParent(MainPanel);
 
         // 标题
-        _title = new SUIText
-        {
-            TextOrKey = "Mods.ImproveGame.UI.AmmoChain.Title",
-            UseKey = true,
-            IsLarge = true,
-            TextScale = 0.55f,
-            VAlign = 0.5f,
-            TextBorder = 2f,
-            PaddingLeft = 20f,
-            DragIgnore = true
-        };
         _title.SetInnerPixels(_title.TextSize * _title.TextScale);
         _title.JoinParent(_titlePanel);
 
         // Cross
-        _cross = new SUICross
-        {
-            HAlign = 1f,
-            VAlign = 0.5f,
-            Width = { Pixels = 55f, Percent = 0f },
-            Height = { Pixels = 0f, Precent = 1f },
-            Rounded = new Vector4(0f, 10f, 0f, 0f),
-            Border = 0f,
-            BorderColor = Color.Transparent,
-            CrossOffset = new Vector2(1f, 0f),
-            CrossRounded = UIStyle.CrossThickness * 0.95f
-        };
         _cross.OnLeftMouseDown += (_, _) => Close();
         _cross.OnUpdate += _ =>
         {
@@ -120,28 +130,36 @@ public class AmmoChainUI : BaseBody
         };
         _cross.JoinParent(_titlePanel);
 
-        _shownPage = new PageContainer();
+        // 灯泡 - 使用方法界面
+        var lightBulb = new LightBulbHelp
+        {
+            VAlign = 0.5f,
+            Left = {Pixels = -80f, Percent = 1f},
+            BorderColor = Color.Transparent,
+            BgColor = Color.Transparent
+        };
+        lightBulb.JoinParent(_titlePanel);
+
+        // 文件夹 - 打开文件夹
+        var folder = new OpenFolderButton
+        {
+            VAlign = 0.5f,
+            Left = {Pixels = -124f, Percent = 1f},
+            BorderColor = Color.Transparent,
+            BgColor = Color.Transparent
+        };
+        folder.JoinParent(_titlePanel);
+
+        _shownPage.SetSize(0f, 400f, 1f, 0f);
+        _shownPage.SetPadding(0f);
         _shownPage.JoinParent(MainPanel);
         // _shownPage.SetPage(_weaponPage);
 
-        _weaponPage = new WeaponPage.WeaponPage();
         _weaponPage.JoinParent(_shownPage);
-        _chainEditPage = new ChainEditPage.ChainEditPage();
         _chainEditPage.JoinParent(_shownPage);
 
-        PageSlideTimer = new AnimationTimer(3)
-        {
-            OnClosed = ResetPagePosition,
-            OnOpened = ResetPagePosition
-        };
-
-        _particleSystem = new UIParticleLayer
-        {
-            Width = new StyleDimension(0f, 1f),
-            Height = new StyleDimension(0f, 1f),
-            AnchorPositionOffsetByPercents = Vector2.One / 2f,
-            AnchorPositionOffsetByPixels = Vector2.Zero
-        };
+        PageSlideTimer.OnClosed = ResetPagePosition;
+        PageSlideTimer.OnOpened = ResetPagePosition;
 
         MainPanel.Append(_particleSystem);
     }
@@ -171,6 +189,14 @@ public class AmmoChainUI : BaseBody
         _chainEditPage.Recalculate();
     }
 
+    public void GenerateParticleAtMouse() {
+        var parentPosition = Instance.MainPanel.GetInnerDimensions().Center();
+        var mousePosition = Main.MouseScreen;
+        var finalPosition = mousePosition - parentPosition;
+        finalPosition.Y += 4f;
+        Instance.GenerateParticleAt(finalPosition);
+    }
+
     public void GenerateParticleAt(Vector2 position)
     {
         Vector2 accelerationPerFrame = new (0f, 0.16350001f);
@@ -191,13 +217,27 @@ public class AmmoChainUI : BaseBody
         }
     }
 
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        base.Draw(spriteBatch);
+        
+        if (PageSlideTimer.Opened)
+            _chainEditPage.DrawImePanel();
+    }
+    
+    public void RefreshWeaponPage() {
+        ChainSaver.ReadAllAmmoChains();
+        _weaponPage.ReloadPresetsElement();
+        _weaponPage.SetupPreview();
+    }
+
     public void Open()
     {
         Enabled = true;
         StartTimer.Open();
 
-        _weaponPage.ReloadPresetsElement();
-        _weaponPage.SetupPreview();
+        _chainEditPage.DisableTextInput();
+        RefreshWeaponPage();
         ResetPagePosition();
 
         SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -208,15 +248,16 @@ public class AmmoChainUI : BaseBody
     {
         Enabled = false;
         StartTimer.Close();
+        _chainEditPage.DisableTextInput();
 
         SoundEngine.PlaySound(SoundID.MenuClose);
-        AdditionalConfig.Save();
     }
 
     public void GoToWeaponPage()
     {
         // _shownPage.SetPage(_weaponPage);
         PageSlideTimer.Close();
+        ChainSaver.ReadAllAmmoChains();
         _weaponPage.ReloadPresetsElement();
     }
 
@@ -248,5 +289,5 @@ public class AmmoChainUI : BaseBody
     public override float RenderTarget2DOpacity => StartTimer.Schedule;
     public override Vector2 RenderTarget2DOrigin => MainPanel.GetDimensionsCenter();
     public override Vector2 RenderTarget2DPosition => MainPanel.GetDimensionsCenter();
-    public override Vector2 RenderTarget2DScale => new Vector2(0.95f + StartTimer.Lerp(0, 0.05f));
+    public override Vector2 RenderTarget2DScale => new (0.95f + StartTimer.Lerp(0, 0.05f));
 }

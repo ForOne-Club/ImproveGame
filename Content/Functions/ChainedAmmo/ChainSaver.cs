@@ -13,7 +13,11 @@ public class ChainSaver
     internal static string SavePath => Paths.SavePath;
     internal static string Extension => ".ammochain";
 
-    public static void SaveAsFile(AmmoChain chain, string chainName)
+    /// <summary>
+    /// 将弹药链保存成文件
+    /// </summary>
+    /// <returns>弹药链最终以什么名字保存</returns>
+    public static string SaveAsFile(AmmoChain chain, string chainName)
     {
         TrUtils.TryCreatingDirectory(SavePath);
 
@@ -35,6 +39,8 @@ public class ChainSaver
         TagIO.ToFile(chain.SerializeData(), thisPath);
 
         AmmoChains.Clear();
+
+        return name;
     }
 
     public static void ModifyExistingFile(AmmoChain chain, string chainName)
@@ -55,20 +61,33 @@ public class ChainSaver
         TagIO.ToStream(chain.SerializeData(), stream);
     }
 
-    public static void TryDeleteFile(string chainName)
+    public static void TryDeleteFile(string chainName, bool force = false)
     {
         string name = $"{chainName}{Extension}";
         string thisPath = Path.Combine(SavePath, name);
         if (!File.Exists(thisPath))
             return;
 
-        FileUtilities.Delete(thisPath, false);
+        FileUtilities.Delete(thisPath, false, forceDeleteFile: force);
     }
 
     public static bool LoadFile(string path)
     {
         TagCompound tag = TagIO.FromFile(path);
-        AmmoChains.Add(path, AmmoChain.DESERIALIZER.Invoke(tag));
+        if (AmmoChain.IsTagInvalid(tag))
+            return false;
+
+        AmmoChain ammoChain;
+        try
+        {
+            ammoChain = AmmoChain.DESERIALIZER.Invoke(tag);
+        }
+        catch
+        {
+            return false;
+        }
+
+        AmmoChains.Add(path, ammoChain);
         return true;
     }
 
@@ -98,6 +117,10 @@ public class ChainSaver
     public static void ReadAllAmmoChains()
     {
         AmmoChains.Clear();
+
+        if (!TrUtils.TryCreatingDirectory(SavePath))
+            return;
+
         foreach (string file in Directory.GetFiles(SavePath, $"*{Extension}"))
         {
             LoadFile(file);

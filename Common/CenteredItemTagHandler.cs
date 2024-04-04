@@ -45,7 +45,7 @@ public class CenteredItemTagHandler : ITagHandler
             if (num > 0.75f)
                 num = 0.75f;
 
-            if (!justCheckingString && color != Color.Black)
+            if (!justCheckingString && (color.R != 0 || color.G != 0 || color.B != 0))
             {
                 float inventoryScale = Main.inventoryScale;
                 Main.inventoryScale = scale * num;

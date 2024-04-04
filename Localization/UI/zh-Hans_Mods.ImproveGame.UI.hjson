@@ -22,8 +22,15 @@ AmmoChain: {
 	ClickToAddL2: 点击此处以添加到弹药链
 	FileName: 弹药链
 	AddChain: 添加弹药链
+	OpenFolder: 打开文件夹
+	// 一个按钮，点击后打开帮助网页
+	GetHelp: 这玩意咋用啊？
 	Cancel: 取消
 	Confirm: 确定
+	PutInItem: ← 将物品放入此处
+	ClickAmmoChain: 点击弹药链以应用
+	AddAmmoChain: 你现在没有弹药链，先添加一个吧
+	Empty: 你不能设置一个空的弹药链
 }
 
 WeatherGUI: {

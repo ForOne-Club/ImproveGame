@@ -13,6 +13,7 @@ public class TipClickToAdd : TimerView
     {
         Parent = parent;
         SetSizePercent(1f);
+        SetSizePixels(0, -6);
         Border = 0f;
         Rounded = new Vector4(4f);
         Spacing = new Vector2(2);
@@ -50,6 +51,7 @@ public class TipClickToAdd : TimerView
         var item = new Item(Parent.SelectedAmmoType);
         Parent.EditingChain.Chain.Add(new AmmoChain.Ammo(new ItemTypeData(item), 10));
         Parent.ShouldResetCurrentChain = true;
+        SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
     public override void Update(GameTime gameTime)

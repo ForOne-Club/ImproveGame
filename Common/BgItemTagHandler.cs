@@ -48,7 +48,7 @@ namespace ImproveGame.Common
 
                 size = new Vector2(52f) * scale * invScale;
 
-                if (!justCheckingString && color != Color.Black)
+                if (!justCheckingString && (color.R != 0 || color.G != 0 || color.B != 0))
                 {
                     float inventoryScale = Main.inventoryScale;
                     Main.inventoryScale = scale * invScale;

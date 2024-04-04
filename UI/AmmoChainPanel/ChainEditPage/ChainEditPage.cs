@@ -1,5 +1,7 @@
 ﻿using ImproveGame.Content.Functions.ChainedAmmo;
+using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.IconDummies;
+using ImproveGame.Core;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -12,6 +14,8 @@ public class ChainEditPage : View
 {
     public bool ShouldResetCurrentChain;
     public int SelectedAmmoType;
+
+    public string OriginalChainName => _iconElement is null ? "" : _iconElement.OriginalName;
     public string ChainName;
     public bool IsCreatingAChain;
     public AmmoChain EditingChain;
@@ -22,11 +26,13 @@ public class ChainEditPage : View
     // 下半部分面板
     private View _lowerPanel;
 
+    private SUIEditableText _editableText;
+
     private IconElement _iconElement { get; set; }
 
     private EditChainScrollView _currentChain { get; set; }
 
-    public SUIScrollView2 _availableAmmos { get; private set; }
+    private SUIScrollView2 _availableAmmos { get;  set; }
 
     public ChainEditPage()
     {
@@ -38,7 +44,7 @@ public class ChainEditPage : View
             DragIgnore = true,
             RelativeMode = RelativeMode.Vertical
         };
-        _upperPanel.SetPadding(20, 10f, 20, 10f);
+        _upperPanel.SetPadding(30, 10f, 30, 10f);
         _upperPanel.SetSize(0f, midPixel, 1f, 0f);
         _upperPanel.JoinParent(this);
         SetupUpperPanel();
@@ -63,6 +69,39 @@ public class ChainEditPage : View
             RelativeMode = RelativeMode.Vertical
         };
         _iconElement.JoinParent(_upperPanel);
+
+        _editableText = new SUIEditableText
+        {
+            RelativeMode = RelativeMode.Horizontal,
+            BgColor = Color.Black * 0.4f,
+            Spacing = new Vector2(16f),
+            Rounded = new Vector4(4f),
+            InnerText =
+            {
+                TextAlign = new Vector2(0.5f),
+                MaxLines = 2
+            },
+            MaxLength = 26
+        };
+        _editableText.ContentsChanged += OnTextContentChanged;
+        _editableText.SetPadding(10, 4, 10, 4); // Padding影响里面的文字绘制
+        _editableText.SetSizePixels(336, 70);
+        _editableText.JoinParent(_upperPanel);
+
+        var colorGrids = new SUIScrollView2(Orientation.Vertical)
+        {
+            RelativeMode = RelativeMode.Horizontal,
+            Spacing = new Vector2(12f)
+        };
+        colorGrids.SetPadding(0f, 4f);
+        colorGrids.SetSize(140f, 70f, 0f, 0f);
+        colorGrids.JoinParent(_upperPanel);
+        SetupColorGrids(colorGrids);
+    }
+
+    private void OnTextContentChanged(string content)
+    {
+        ChainName = content;
     }
 
     private void SetupLowerPanel()
@@ -93,7 +132,8 @@ public class ChainEditPage : View
         {
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(10f, 10f),
-            TextAlign = new Vector2(0.5f)
+            TextAlign = new Vector2(0.5f),
+            TextColor = new Color(153, 229, 80)
         };
         saveButton.OnLeftMouseDown += ClickOnSaveButton;
         saveButton.SetSize(280f, 40f, 0f, 0f);
@@ -103,7 +143,8 @@ public class ChainEditPage : View
         {
             RelativeMode = RelativeMode.Horizontal,
             Spacing = new Vector2(10f, 0f),
-            TextAlign = new Vector2(0.5f)
+            TextAlign = new Vector2(0.5f),
+            TextColor = new Color(217, 87, 99)
         };
         cancelButton.OnLeftMouseDown += ClickOnCancelButton;
         cancelButton.SetSize(280f, 40f, 0f, 0f);
@@ -112,16 +153,50 @@ public class ChainEditPage : View
 
     private void ClickOnSaveButton(UIMouseEvent evt, UIElement listeningelement)
     {
+        if (EditingChain.Chain.Count is 0)
+        {
+            AddNotification(GetText("UI.AmmoChain.Empty"), itemIconType: ModContent.ItemType<AmmoChainItem>());
+            return;
+        }
+        
+        if (ChainName.IsPathIllegal())
+        {
+            AddNotification(GetText("ConstructGUI.RenameTip.Illegal"));
+            return;
+        }
+
         if (!IsCreatingAChain)
-            ChainSaver.ModifyExistingFile(EditingChain, ChainName);
+        {
+            // 改名了，删了原来的再创建新的
+            if (OriginalChainName != ChainName)
+            {
+                ChainSaver.TryDeleteFile(OriginalChainName, true);
+                ChainSaver.SaveAsFile(EditingChain, ChainName);
+            }
+            else
+            {
+                ChainSaver.ModifyExistingFile(EditingChain, ChainName);
+            }
+        }
         else
+        {
             ChainSaver.SaveAsFile(EditingChain, ChainName);
+        }
+
         AmmoChainUI.Instance.GoToWeaponPage();
+        DisableTextInput();
     }
 
     private void ClickOnCancelButton(UIMouseEvent evt, UIElement listeningelement)
     {
+        DisableTextInput();
         AmmoChainUI.Instance.GoToWeaponPage();
+    }
+
+    public void DisableTextInput()
+    {
+        if (_editableText.IsWritingText)
+            _editableText.ToggleTakingText();
     }
 
     /// <summary>
@@ -130,7 +205,7 @@ public class ChainEditPage : View
     public void SetupAvailableAmmos()
     {
         _availableAmmos.ListView.RemoveAllChildren();
-        
+
         // 特殊弹药，代表选择当前武器的常规弹药（就是不限制，根据原版逻辑选择）
         new SelectableAmmoSlot(new Item(ModContent.ItemType<UniversalAmmoIcon>()), this)
         {
@@ -153,6 +228,8 @@ public class ChainEditPage : View
         IsCreatingAChain = isCreatingAChain;
         EditingChain = chain;
         ChainName = chainName;
+        _editableText.Text = ChainName;
+        DisableTextInput();
         _iconElement.OriginalName = ChainName;
         SetupCurrentChain(EditingChain);
     }
@@ -172,15 +249,29 @@ public class ChainEditPage : View
             var itemTypeData = element.ItemData;
             int times = element.Times;
 
-            var itemSlot = new ItemSlotForEdit(i, this);
-            itemSlot.AirItem.SetDefaults(itemTypeData.Item.type);
-            itemSlot.AirItem.stack = times;
+            var itemSlot = new ItemSlotForEdit(i, this)
+            {
+                RealItem = itemTypeData.Item.Clone()
+            };
+            itemSlot.RealItem.stack = times;
             itemSlot.JoinParent(_currentChain.ListView);
 
             new AmmoGapElement(i + 1, this).JoinParent(_currentChain.ListView);
         }
 
         Recalculate();
+    }
+
+    private void SetupColorGrids(SUIScrollView2 scrollView)
+    {
+        new WhiteColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
+        new OrangeColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
+        new YellowColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
+        new BlueColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
+        new GreenColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
+        new PinkColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
+        new RedColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
+        new BrownColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
     }
 
     public override void Update(GameTime gameTime)
@@ -194,8 +285,13 @@ public class ChainEditPage : View
         }
     }
 
-    public override void Draw(SpriteBatch spriteBatch)
+    public void DrawImePanel()
     {
-        base.Draw(spriteBatch);
+        if (!_editableText.IsWritingText)
+            return;
+
+        Vector2 position = _editableText.InnerText.GetDimensions().ToRectangle().Bottom();
+        position.Y += 32f;
+        Main.instance.DrawWindowsIMEPanel(position, 0.5f);
     }
 }

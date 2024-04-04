@@ -44,6 +44,7 @@ QuickHome: {
 }
 
 Tips: {
+	AmmoChain: "[i:ImproveGame/AmmoChainItem] 当前弹药链："
 	ShimmerInto: "可在微光中转化为 "
 	ShimmerIntoWithStack: "每{0}个可在微光中转化为 "
 	ShimmerIntoWithCoinLuck: 可在微光中转换为{0}点钱币幸运

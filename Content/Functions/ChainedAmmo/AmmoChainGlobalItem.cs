@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items.IconDummies;
+﻿using ImproveGame.Content.Items;
+using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.Core;
 using System.Diagnostics.CodeAnalysis;
 using Terraria.ModLoader.IO;
@@ -128,6 +129,12 @@ public class AmmoChainGlobalItem : GlobalItem
         Count = 0;
     }
 
+    public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+    {
+        if (Chain != null && Chain.Chain.Count > 0)
+            AmmoChainItem.AddAmmoChainTooltips(Mod, Chain, tooltips);
+    }
+
     public override void SaveData(Item item, TagCompound tag)
     {
         tag["ammoChain"] = Chain;
@@ -141,28 +148,12 @@ public class AmmoChainGlobalItem : GlobalItem
     public override void NetSend(Item item, BinaryWriter writer)
     {
         Chain ??= new AmmoChain();
-        writer.WriteRGB(Chain.Color);
-        writer.Write(Chain.Chain.Count);
-        foreach ((ItemTypeData itemTypeData, int times) in Chain.Chain)
-        {
-            writer.Write(itemTypeData);
-            writer.Write((ushort)times);
-        }
+        writer.Write(Chain);
     }
 
     public override void NetReceive(Item item, BinaryReader reader)
     {
-        Chain = new AmmoChain
-        {
-            Color = reader.ReadRGB()
-        };
-        int count = reader.ReadInt32();
-        for (int i = 0; i < count; i++)
-        {
-            ItemTypeData data = reader.ReadItemTypeData();
-            int times = reader.ReadUInt16();
-            Chain.Chain.Add(new AmmoChain.Ammo(data, times));
-        }
+        Chain = reader.ReadAmmoChain();
     }
 
     public override GlobalItem Clone(Item from, Item to)

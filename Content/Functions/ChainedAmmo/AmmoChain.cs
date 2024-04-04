@@ -35,6 +35,11 @@ public class AmmoChain : TagSerializable, ICloneable
     // tML反射获取叫这个的Field，获取不到就报错，不能删啊
     public static Func<TagCompound, AmmoChain> DESERIALIZER = s => DeserializeData(s);
 
+    public static bool IsTagInvalid(TagCompound tag)
+    {
+        return !tag.ContainsKey("chain") || !tag.ContainsKey("color");
+    }
+
     public static AmmoChain DeserializeData(TagCompound tag)
     {
         var output = new AmmoChain();

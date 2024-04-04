@@ -33,6 +33,7 @@ public class IconElement : TimerView
 
         ChainSaver.TryDeleteFile(OriginalName);
         AmmoChainUI.Instance.GoToWeaponPage();
+        SoundEngine.PlaySound(SoundID.MenuClose);
     }
 
     public override void Update(GameTime gameTime)
@@ -60,15 +61,16 @@ public class IconElement : TimerView
         if (Chain is null)
             return;
 
+        float ammoClipOpacity = _parent.IsCreatingAChain ? 1f : HoverTimer.Lerp(1f, 0.6f);
         var ammoClipTex = ModAsset.AmmoClip.Value;
         float ammoScale = _parent.IsCreatingAChain ? 1f : HoverTimer.Lerp(1f, 0.9f);
-        spriteBatch.Draw(ammoClipTex, center, null, Chain.Color, 0f, ammoClipTex.Size() / 2f, ammoScale,
-            SpriteEffects.None, 0f);
+        spriteBatch.Draw(ammoClipTex, center, null, Chain.Color * ammoClipOpacity, 0f, ammoClipTex.Size() / 2f,
+            ammoScale, SpriteEffects.None, 0f);
 
         if (_parent.IsCreatingAChain)
             return;
         var deleteColor = Color.White * HoverTimer.Lerp(0f, 1f);
-        var trashTex = ModAsset.Trash.Value;
+        var trashTex = ModAsset.TrashHighlight.Value;
         float trashScale = HoverTimer.Lerp(0.9f, 1f);
         spriteBatch.Draw(trashTex, center, null, deleteColor, 0f, trashTex.Size() / 2f, trashScale,
             SpriteEffects.None, 0f);

@@ -6,7 +6,7 @@ namespace ImproveGame.UI.AmmoChainPanel.WeaponPage;
 public class WeaponSlot : BigBagItemSlot
 {
     private WeaponPage _parent;
-    
+
     public WeaponSlot(WeaponPage parent) : base([new Item()], 0)
     {
         _parent = parent;
@@ -47,12 +47,7 @@ public class WeaponSlot : BigBagItemSlot
             _parent.SetupPreview();
 
             SoundEngine.PlaySound(SoundID.ResearchComplete);
-
-            var parentPosition = AmmoChainUI.Instance.MainPanel.GetInnerDimensions().Center();
-            var mousePosition = Main.MouseScreen;
-            var finalPosition = mousePosition - parentPosition;
-            finalPosition.Y += 4f;
-            AmmoChainUI.Instance.GenerateParticleAt(finalPosition);
+            AmmoChainUI.Instance.GenerateParticleAtMouse();
         }
     }
 

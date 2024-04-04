@@ -154,10 +154,6 @@ public class SUISearchBar : View
                 (float)(this._text.GetDimensions().ToRectangle().Bottom + 32));
             if (ShowImePanel)
                 Main.instance.DrawWindowsIMEPanel(position, 0.5f);
-            position = new Vector2((float)(Main.screenWidth / 2),
-                (float)(this._text.GetDimensions().ToRectangle().Bottom + 32));
-            if (ShowImePanel)
-                Main.instance.DrawWindowsIMEPanel(position, 0.5f);
         }
 
         public void ToggleTakingText()

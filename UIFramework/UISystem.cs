@@ -9,6 +9,7 @@ using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Common.Extensions;
+using ImproveGame.UIFramework.SUIElements;
 using System.Reflection;
 
 namespace ImproveGame.UIFramework;
@@ -20,6 +21,16 @@ public class UISystem : ModSystem
 {
     public static UISystem Instance { get; private set; }
     public UISystem() => Instance = this;
+
+    /// <summary>
+    /// 鼠标是否悬停于可编辑文本上
+    /// </summary>
+    public static bool IsHoveringOnEditableText;
+
+    /// <summary>
+    /// 当前焦点的可编辑文本，此字段便于界面上所有UI与一个可编辑文本的交互
+    /// </summary>
+    public static SUIEditableText FocusedEditableText;
 
     #region 定义
 
@@ -173,6 +184,8 @@ public class UISystem : ModSystem
     {
         if (Main.ingameOptionsWindow || Main.InGameUI.IsVisible)
             return;
+
+        IsHoveringOnEditableText = false;
 
         // 特殊处理
         PrefixRecallGUI?.TrackDisplayment();

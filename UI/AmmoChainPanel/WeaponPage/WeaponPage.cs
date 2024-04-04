@@ -19,10 +19,12 @@ public class WeaponPage : View
     private View _lowerPanel;
 
     private WeaponSlot _weaponSlot;
-    private SUIScrollView2 _currentPreview { get; set; }
+    public SUIScrollView2 CurrentPreview { get; set; }
     public SUIScrollView2 Presets { get; private set; }
 
     private PresetComponent _hoveredPreset;
+
+    private int _checkChainsCounter; // 每30帧检测一下有没有新的弹药链
 
     public WeaponPage()
     {
@@ -60,14 +62,15 @@ public class WeaponPage : View
         };
         _weaponSlot.JoinParent(_upperPanel);
 
-        _currentPreview = new SUIScrollView2(Orientation.Horizontal)
+        CurrentPreview = new SUIScrollView2(Orientation.Horizontal)
         {
             RelativeMode = RelativeMode.Horizontal,
             Spacing = new Vector2(4f)
         };
-        _currentPreview.SetPadding(2f, 0f);
-        _currentPreview.SetSize(-90f, 0f, 1f, 1f);
-        _currentPreview.JoinParent(_upperPanel);
+        CurrentPreview.SetPadding(2f, 0f);
+        CurrentPreview.SetSize(-90f, 0f, 1f, 1f);
+        CurrentPreview.JoinParent(_upperPanel);
+        CurrentPreview.Append(new TipPutInItem(this));
         SetupPreview();
     }
 
@@ -81,6 +84,7 @@ public class WeaponPage : View
         Presets.SetPadding(2f, 0f);
         Presets.SetSize(0f, 0f, 1f, 1f);
         Presets.JoinParent(_lowerPanel);
+        ChainSaver.ReadAllAmmoChains();
         ReloadPresetsElement();
     }
 
@@ -90,16 +94,12 @@ public class WeaponPage : View
     public void ReloadPresetsElement()
     {
         Presets.ListView.RemoveAllChildren();
-        ChainSaver.ReadAllAmmoChains();
 
         float length = 87;
-        var addChain = new AddChainComponent(this)
-        {
-            RelativeMode = RelativeMode.Horizontal,
-            Spacing = new Vector2(8f),
-            PreventOverflow = true,
-        };
-        addChain.SetSize(length * 2 + 8, length);
+        var size = new Vector2(length * 2 + 8, length);
+
+        var addChain = new AddChainComponent(this);
+        addChain.SetSize(size);
         addChain.JoinParent(Presets.ListView);
 
         foreach ((string path, AmmoChain ammoChain) in ChainSaver.AmmoChains)
@@ -117,9 +117,16 @@ public class WeaponPage : View
             // if (i % HNumber == 0)
             //     component.DirectLineBreak = true;
 
-            component.SetSize(length * 2 + 8, length);
+            component.SetSize(size);
             component.JoinParent(Presets.ListView);
         }
+
+        // var getHelp = new GetHelpComponent(this);
+        // getHelp.SetSize(size);
+        // getHelp.JoinParent(Presets.ListView);
+        // var openFolder = new OpenFolderComponent(this);
+        // openFolder.SetSize(size);
+        // openFolder.JoinParent(Presets.ListView);
 
         Recalculate();
     }
@@ -128,6 +135,21 @@ public class WeaponPage : View
     {
         base.Update(gameTime);
 
+        // 检查有没有新东西
+        _checkChainsCounter++;
+        if (_checkChainsCounter >= 30)
+        {
+            int oldAmmoChainsCount = ChainSaver.AmmoChains.Count;
+            ChainSaver.ReadAllAmmoChains();
+            if (ChainSaver.AmmoChains.Count != oldAmmoChainsCount)
+            {
+                ReloadPresetsElement();
+                SetupPreview();
+            }
+            _checkChainsCounter = 0;
+        }
+
+        // 检查鼠标悬停在哪个上面
         var oldHovered = _hoveredPreset;
         _hoveredPreset = null;
         foreach (var preset in from c in Presets.ListView.Children where c is PresetComponent
@@ -146,13 +168,13 @@ public class WeaponPage : View
 
     public void SetupPreview()
     {
-        _currentPreview.ListView.RemoveAllChildren();
+        CurrentPreview.ListView.RemoveAllChildren();
 
         Color slotBgColor = UIStyle.TrashSlotBg;
         List<AmmoChain.Ammo> chain;
         if (_hoveredPreset is not null)
             chain = _hoveredPreset.Chain.Chain;
-        else if (SlotItem.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem))
+        else if (!SlotItem.IsAir && SlotItem.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem))
         {
             globalItem.Chain ??= new AmmoChain();
             chain = globalItem.Chain.Chain;
@@ -170,7 +192,7 @@ public class WeaponPage : View
                 BgColor = slotBgColor,
                 Item = {stack = times}
             };
-            itemSlot.JoinParent(_currentPreview.ListView);
+            itemSlot.JoinParent(CurrentPreview.ListView);
         }
 
         Recalculate();

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.UIFramework.Graphics2D;
+using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UIFramework.BaseViews;
 
@@ -26,6 +27,7 @@ public class View : UIElement
     /// 如果父元素开启此属性 元素自身的 <see cref="UIElement.MaxWidth"/> 会被强制设为 <see cref="float.MaxValue"/>
     /// </summary>
     public bool IsAdaptiveWidth;
+
     /// <summary>
     /// 元素大小会根据子元素位置大小变化，自身的 <see cref="UIElement.Height"/> 属性会在每次统计子元素后变化 <br/>
     /// 同时会使 <see cref="UIElement.MaxHeight"/> 强制等于统计子元素后 <see cref="UIElement.Height"/> <br/>
@@ -76,6 +78,8 @@ public class View : UIElement
 
     public bool IsLeftMousePressed;
 
+    public bool IsRightMousePressed;
+
     public Vector4 Rounded;
     public float Border;
     public Color BgColor, BorderColor;
@@ -103,6 +107,7 @@ public class View : UIElement
     }
 
     #region Override Method
+
     public override void Recalculate()
     {
         RecalculateFromView();
@@ -233,6 +238,7 @@ public class View : UIElement
                             {
                                 SetPosPixels(0f, previousView.Top.Pixels + previousViewOuterSize.Y + Spacing.Y);
                             }
+
                             break;
                         case RelativeMode.Vertical:
                             SetPosPixels(
@@ -243,10 +249,22 @@ public class View : UIElement
                             {
                                 SetPosPixels(previousView.Left.Pixels + previousViewOuterSize.X + Spacing.X, 0f);
                             }
+
                             break;
                     }
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// 禁用可能的文本编辑操作，一般在按下除编辑框以外的UI元素时执行
+    /// </summary>
+    public void DisablePossibleTextEditing()
+    {
+        if (this is not SUIEditableText && UISystem.FocusedEditableText is {IsWritingText: true} && !UISystem.FocusedEditableText.IsMouseHovering)
+        {
+            UISystem.FocusedEditableText.ToggleTakingText();
         }
     }
 
@@ -260,9 +278,22 @@ public class View : UIElement
 
     public override void LeftMouseDown(UIMouseEvent evt)
     {
+        // 文本框处理
+        DisablePossibleTextEditing();
+
         IsLeftMousePressed = true;
 
         base.LeftMouseDown(evt);
+    }
+
+    public override void RightMouseDown(UIMouseEvent evt)
+    {
+        // 文本框处理
+        DisablePossibleTextEditing();
+
+        IsRightMousePressed = true;
+
+        base.RightMouseDown(evt);
     }
 
     public override void LeftMouseUp(UIMouseEvent evt)
@@ -279,11 +310,11 @@ public class View : UIElement
             Vector2 pos = Parent.GetDimensions().Position();
             Vector2 size = Parent.GetDimensions().Size();
             foreach (UIElement uie in from uie in Elements
-                                      let dimensions2 = uie.GetDimensions()
-                                      let position2 = dimensions2.Position()
-                                      let size2 = dimensions2.Size()
-                                      where Collision.CheckAABBvAABBCollision(pos, size, position2, size2)
-                                      select uie)
+                     let dimensions2 = uie.GetDimensions()
+                     let position2 = dimensions2.Position()
+                     let size2 = dimensions2.Size()
+                     where Collision.CheckAABBvAABBCollision(pos, size, position2, size2)
+                     select uie)
             {
                 uie.Draw(spriteBatch);
             }
@@ -331,7 +362,8 @@ public class View : UIElement
             if (BorderColor == Color.Transparent || FinallyDrawBorder)
             {
                 if (BgColor != Color.Transparent)
-                    SDFRectangle.NoBorder(pos + new Vector2(Border), size - new Vector2(Border * 2f), Rounded - new Vector4(Border), BgColor);
+                    SDFRectangle.NoBorder(pos + new Vector2(Border), size - new Vector2(Border * 2f),
+                        Rounded - new Vector4(Border), BgColor);
             }
             else
             {
@@ -343,9 +375,11 @@ public class View : UIElement
             SDFRectangle.NoBorder(pos, size, Rounded, BgColor);
         }
     }
+
     #endregion
 
     #region 拓展一些 UIElement 原来没有的方法
+
     public void JoinParent(UIElement parent)
     {
         parent.Append(this);
@@ -413,6 +447,7 @@ public class View : UIElement
         Height.Pixels = height;
         return this;
     }
+
     public View SetSizePercent(float percent)
     {
         Width.Percent = percent;
@@ -459,6 +494,7 @@ public class View : UIElement
     }
 
     #region 获取一些属性
+
     public Vector2 PositionPixels => new Vector2(Left.Pixels, Top.Pixels);
 
     public float HMargin => MarginLeft + MarginRight;
@@ -504,6 +540,8 @@ public class View : UIElement
     {
         return new Vector2(_dimensions.X + _dimensions.Width / 2f, _dimensions.Y + _dimensions.Height / 2f);
     }
+
     #endregion
+
     #endregion
 }

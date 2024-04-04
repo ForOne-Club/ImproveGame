@@ -9,6 +9,9 @@ public class ItemSlotForEdit : BaseItemSlot
 {
     public int Index;
     public ChainEditPage Parent;
+    public Item RealItem;
+
+    public override Item Item { get => RealItem; set => RealItem = value; }
 
     public ItemSlotForEdit(int index, ChainEditPage parent)
     {
@@ -25,12 +28,13 @@ public class ItemSlotForEdit : BaseItemSlot
         base.LeftMouseDown(evt);
 
         int selectedType = Parent.SelectedAmmoType;
-        if (selectedType is ItemID.None || selectedType == AirItem.type)
+        if (selectedType is ItemID.None || selectedType == RealItem.type)
             Parent.EditingChain.Chain.RemoveAt(Index);
         else
             Parent.EditingChain.Chain[Index].ItemData.Item.SetDefaults(Parent.SelectedAmmoType);
 
         Parent.ShouldResetCurrentChain = true;
+        SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
     public override void ScrollWheel(UIScrollWheelEvent evt)
@@ -44,12 +48,14 @@ public class ItemSlotForEdit : BaseItemSlot
         ref int times = ref Parent.EditingChain.Chain[Index].Times;
         times += value;
         times = Math.Clamp(Parent.EditingChain.Chain[Index].Times, 1, 999);
-        AirItem.stack = times;
+        RealItem.stack = times;
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+
+        DisplayItemInfo = Main.keyState.IsKeyDown(Main.FavoriteKey);
 
         if (!IsMouseHovering || !Parent.EditingChain.Chain.IndexInRange(Index))
             return;
@@ -60,6 +66,6 @@ public class ItemSlotForEdit : BaseItemSlot
         if (Main.keyState.IsKeyDown(Keys.Down))
             times -= 4;
         times = Math.Clamp(Parent.EditingChain.Chain[Index].Times, 1, 999);
-        AirItem.stack = times;
+        RealItem.stack = times;
     }
 }

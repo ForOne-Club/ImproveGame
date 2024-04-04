@@ -230,6 +230,9 @@ public class SUIText : TimerView
         Vector2 innerPos = inner.Position();
 
         Vector2 textSize = TextSize;
+        // 无字符时会出问题，加上下面这两行就好了
+        if (textSize.Y < Font.LineSpacing)
+            textSize.Y = Font.LineSpacing;
         Vector2 textPos = innerPos + TextOffset;
         textPos += TextPercentOffset * innerSize;
         textPos += TextAlign * (innerSize - textSize * TextScale);

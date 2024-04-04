@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.Functions.ChainedAmmo;
+using ImproveGame.Content.Items;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
@@ -50,13 +51,22 @@ public class PresetComponent : TimerView
             globalItem.Count = 0;
 
             SoundEngine.PlaySound(SoundID.ResearchComplete);
-
-            var parentPosition = AmmoChainUI.Instance.MainPanel.GetInnerDimensions().Center();
-            var mousePosition = Main.MouseScreen;
-            var finalPosition = mousePosition - parentPosition;
-            finalPosition.Y += 4f;
-            AmmoChainUI.Instance.GenerateParticleAt(finalPosition);
+            AmmoChainUI.Instance.GenerateParticleAtMouse();
         }
+    }
+
+    public override void MiddleMouseDown(UIMouseEvent evt)
+    {
+        base.MiddleMouseDown(evt);
+
+        if (Chain is null)
+            return;
+
+        SoundEngine.PlaySound(SoundID.Research);
+        AmmoChainUI.Instance.GenerateParticleAtMouse();
+
+        var item = AmmoChainItem.GetItemWithChainData(Chain, Text.TextOrKey, Main.LocalPlayer);
+        Main.LocalPlayer.QuickSpawnItemDirect(Main.LocalPlayer.GetSource_Misc("AmmoChainGift"), item);
     }
 
     public override void RightMouseDown(UIMouseEvent evt)
@@ -64,6 +74,8 @@ public class PresetComponent : TimerView
         base.RightMouseDown(evt);
 
         AmmoChainUI.Instance.StartEditingChain(Chain, false, Text.TextOrKey);
+        SoundEngine.PlaySound(SoundID.Item37);
+        AmmoChainUI.Instance.GenerateParticleAtMouse();
     }
 
     public override void Update(GameTime gameTime)
