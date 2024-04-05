@@ -169,6 +169,9 @@ public class SUIScrollbar2 : TimerView
             }
 
             UpdateScrollPosition();
+            
+            ScrollTimer.UpdateHighFps();
+            _shrinkTimer.UpdateHighFps();
 
             base.DrawSelf(spriteBatch);
 
@@ -183,9 +186,6 @@ public class SUIScrollbar2 : TimerView
         
         if (IsBeUsableH || IsBeUsableV)
         {
-            ScrollTimer.Update();
-            _shrinkTimer.Update();
-            
             if (IsMouseHovering || _isScrollbarDragging)
                 _shrinkTimer.Close();
             else

@@ -4,6 +4,7 @@ using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
+using System.Diagnostics;
 using Terraria.GameContent.Drawing;
 using Terraria.GameInput;
 using Terraria.Graphics.Renderers;
@@ -38,7 +39,7 @@ public class AmmoChainUI : BaseBody
     /// <summary>
     /// 两个页面之间滑动动画计时器
     /// </summary>
-    public AnimationTimer PageSlideTimer = new (3);
+    public AnimationTimer PageSlideTimer = new ();
 
     #region Components
 
@@ -166,12 +167,6 @@ public class AmmoChainUI : BaseBody
 
     public override void Update(GameTime gameTime)
     {
-        PageSlideTimer.Update();
-        StartTimer.Update();
-
-        if (PageSlideTimer.Closing || PageSlideTimer.Opening)
-            ResetPagePosition();
-
         base.Update(gameTime);
     }
 
@@ -183,7 +178,8 @@ public class AmmoChainUI : BaseBody
         _chainEditPage.Recalculate();
     }
 
-    public void GenerateParticleAtMouse() {
+    public void GenerateParticleAtMouse()
+    {
         var parentPosition = Instance.MainPanel.GetInnerDimensions().Center();
         var mousePosition = Main.MouseScreen;
         var finalPosition = mousePosition - parentPosition;
@@ -214,12 +210,20 @@ public class AmmoChainUI : BaseBody
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
-        
+
+        StartTimer.UpdateHighFps();
+
+        PageSlideTimer.UpdateHighFps();
+
         if (PageSlideTimer.Opened)
             _chainEditPage.DrawImePanel();
+
+        if (PageSlideTimer.Closing || PageSlideTimer.Opening)
+            ResetPagePosition();
     }
-    
-    public void RefreshWeaponPage() {
+
+    public void RefreshWeaponPage()
+    {
         ChainSaver.ReadAllAmmoChains();
         _weaponPage.ReloadPresetsElement();
         _weaponPage.SetupPreview();

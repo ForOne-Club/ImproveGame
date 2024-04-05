@@ -28,7 +28,7 @@ public class TerrariaVanillaUIResetter : ModSystem
         }
 
         // 修改原版 UI 裁切算法
-        On_UIElement.GetClippingRectangle += On_UIElement_GetClippingRectangle;
+        On_UIElement.GetClippingRectangle += (_, self, batch) => ClippingRectangleFix.FixedGet(self, batch);
 
         // 让所有 UI 都立刻绘制
         On_UIElement.OnInitialize += (orig, self) =>
@@ -76,22 +76,6 @@ public class TerrariaVanillaUIResetter : ModSystem
         On_UIScrollbar.DrawSelf += UIScrollbar_DrawSelf;
         // 替换游戏内原来的 Utils.DrawInvBG
         On_Utils.DrawInvBG_SpriteBatch_int_int_int_int_Color += Utils_DrawInvBG;
-    }
-
-    private Rectangle On_UIElement_GetClippingRectangle(On_UIElement.orig_GetClippingRectangle orig, UIElement self, SpriteBatch spriteBatch)
-    {
-        RectangleFloat InnerRectangle = new RectangleFloat(self._innerDimensions.X, self._innerDimensions.Y,
-            self._innerDimensions.Width, self._innerDimensions.Height);
-
-        Rectangle rectangle = RectangleFloat.Transform(InnerRectangle, Main.UIScaleMatrix).CeilingSize().ToRectangle();
-        Rectangle scissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
-
-        int left = Utils.Clamp(rectangle.Left, scissorRectangle.Left, scissorRectangle.Right);
-        int top = Utils.Clamp(rectangle.Top, scissorRectangle.Top, scissorRectangle.Bottom);
-        int right = Utils.Clamp(rectangle.Right, scissorRectangle.Left, scissorRectangle.Right);
-        int bottom = Utils.Clamp(rectangle.Bottom, scissorRectangle.Top, scissorRectangle.Bottom);
-
-        return new Rectangle(left, top, right - left, bottom - top);
     }
 
     private UIElement FlavorTextBestiaryInfoElement_ProvideUIElement(On_FlavorTextBestiaryInfoElement.orig_ProvideUIElement orig, FlavorTextBestiaryInfoElement self, BestiaryUICollectionInfo info)

@@ -8,6 +8,7 @@ using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework.Common;
 using ReLogic.Graphics;
 using System.Collections;
+using System.Diagnostics;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
@@ -1104,5 +1105,31 @@ partial class MyUtils
             7 => GetText("MoonPhases.WaxingGibbous"),
             _ => "Unknown"
         };
+    }
+
+    /// <summary>
+    /// 获取刷新率因子，可以乘在AnimationTimer的缓动上，来根据帧率实时调节动画速度，实现高帧率下的丝滑动画。
+    /// 获取到的值为【60 / 当前帧速率】，也就是说若fps为120，则返回值为0.5，若fps为30，则返回值为2。
+    /// </summary>
+    /// <param name="timer">用于统计两次操作间用时的计时器</param>
+    /// <param name="restartTimer">是否重设计时器</param>
+    /// <returns>刷新率因子</returns>
+    public static float GetRefreshRateFactor(Stopwatch timer, bool restartTimer = true)
+    {
+        int elapsedMilliseconds = 0;
+        float factor = 1f;
+        float msPerTick = 1000f / 60f; // 一帧有多少毫秒
+        if (!timer.IsRunning && restartTimer)
+        {
+            timer.Start();
+        }
+        else
+        {
+            factor = timer.ElapsedMilliseconds / msPerTick;
+            if (restartTimer)
+                timer.Restart();
+        }
+
+        return factor;
     }
 }

@@ -7,6 +7,14 @@ namespace ImproveGame;
 
 public class ImproveGame : Mod
 {
+    private class DisplayNameUpdater : ModSystem
+    {
+        public override void OnLocalizationsLoaded()
+        {
+            Instance.DisplayName = GetText("ModName");
+        }
+    }
+    
     public static ImproveGame Instance => ModContent.GetInstance<ImproveGame>();
 
     // 额外BUFF槽

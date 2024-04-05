@@ -9,7 +9,7 @@ public class OpenFolderButton : TimerView
 {
     public OpenFolderButton()
     {
-        HoverTimer = new AnimationTimer (5);
+        HoverTimer = new AnimationTimer (3);
         SetSizePixels(32, 32);
     }
 

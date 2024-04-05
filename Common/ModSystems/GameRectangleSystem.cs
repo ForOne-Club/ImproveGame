@@ -63,7 +63,8 @@ public class GameRectangleSystem : ModSystem
             );
             layers.Insert(rulerIndex, new LegacyGameInterfaceLayer("ImproveGame: Matched Chests", delegate
                 {
-                    if (!ItemSearcherGUI.Instance.Enabled || ItemSearcherGUI.MatchedChests is not {Count: > 0})
+                    if (ItemSearcherGUI.Instance is null ||
+                        !ItemSearcherGUI.Instance.Enabled || ItemSearcherGUI.MatchedChests is not {Count: > 0})
                         return true;
 
                     var border = new Color(255, 231, 69);

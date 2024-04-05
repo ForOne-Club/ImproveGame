@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UIFramework;
+﻿using ImproveGame.Core;
+
+namespace ImproveGame.UIFramework;
 
 #region Enums
 /// <summary>
@@ -124,17 +126,22 @@ public class AnimationTimer(float speed = 5f, float timerMax = 100f, AnimationTy
     #endregion
 
     /// <summary>
+    /// 以高帧率更新计时器，这个方法必须在绘制中调用（而不是UI的更新方法），以实现高帧缓动。
+    /// </summary>
+    public void UpdateHighFps() => Update(CountRefreshRate.CurrentRefreshRateFactor);
+
+    /// <summary>
     /// 更新计时器
     /// </summary>
-    public virtual void Update()
+    public virtual void Update(float speedFactor = 1f)
     {
         switch (State)
         {
             case AnimationState.Opening:
                 if (Type == AnimationType.Easing)
-                    Timer += (TimerMax - Timer) / Speed;
+                    Timer += (TimerMax - Timer) / Speed * speedFactor;
                 else
-                    Timer += Speed;
+                    Timer += Speed * speedFactor;
 
                 if (TimerMax - Timer < TimerMax * 0.0001f)
                 {
@@ -145,9 +152,9 @@ public class AnimationTimer(float speed = 5f, float timerMax = 100f, AnimationTy
                 break;
             case AnimationState.Closing:
                 if (Type == AnimationType.Easing)
-                    Timer -= Timer / Speed;
+                    Timer -= Timer / Speed * speedFactor;
                 else
-                    Timer -= Speed;
+                    Timer -= Speed * speedFactor;
 
                 if (Timer < TimerMax * 0.0001f)
                 {

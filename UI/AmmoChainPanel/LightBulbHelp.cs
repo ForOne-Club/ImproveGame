@@ -8,7 +8,7 @@ public class LightBulbHelp : TimerView
 {
     public LightBulbHelp()
     {
-        HoverTimer = new AnimationTimer (5);
+        HoverTimer = new AnimationTimer (3);
         SetSizePixels(30, 38);
     }
 

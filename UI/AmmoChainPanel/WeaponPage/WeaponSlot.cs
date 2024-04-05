@@ -54,8 +54,12 @@ public class WeaponSlot : BigBagItemSlot
     public override void Update(GameTime gameTime)
     {
         RightMouseDownTimer = -1; // 不能右键拿取，因为右键是拿来清除弹药链的
-        if (Main.LocalPlayer is not null && Main.LocalPlayer.TryGetModPlayer(out WeaponKeeper keeper))
+        if (Main.LocalPlayer is not null && Main.LocalPlayer.TryGetModPlayer(out WeaponKeeper keeper) &&
+            keeper.Weapon != Item)
+        {
             Items[Index] = keeper.Weapon;
+            _parent.Recalculate();
+        }
         base.Update(gameTime);
     }
 }

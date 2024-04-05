@@ -52,5 +52,5 @@ ModConfig: {
 
 AmmoChain: {
 	DisplayName: Ammo Chain
-	Description: Let weapons pick ammos in a specific sequence
+	Description: Let weapons pick ammo in a specific sequence
 }

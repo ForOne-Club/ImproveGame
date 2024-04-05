@@ -114,6 +114,7 @@ public class SUIScrollView2 : TimerView
 
         DragIgnore = MaskView.DragIgnore = ListView.DragIgnore = true;
 
+        // MaskView.BgColor = Color.White * 0.5f; // 测试用
         MaskView.OverflowHidden = true;
         MaskView.SetSizePercent(1f);
         MaskView.JoinParent(this);
