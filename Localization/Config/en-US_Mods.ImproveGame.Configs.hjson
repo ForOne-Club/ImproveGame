@@ -711,6 +711,18 @@ ImproveConfigs: {
 			Opens from the Control Panel
 			'''
 	}
+
+	SimpleVeinMining: {
+		Label: "[centeritem:IronPickaxe] Simple Vein Mining"
+		Tooltip:
+			'''
+			Basic vein mining function. Simply mine with a pickaxe to use.
+			Does not have blacklist/whitelist functions and does not support further adjustments.
+			If you have such needs, it is recommended to use Ore Excavator or Basic Automated Mining.
+			If one of the above two mods is loaded, this function will take no effect.
+			'''
+		PopupTip: Vein Mining can be disabled via QoT Config if you don't want it
+	}
 }
 
 ModItemLoadPage: {

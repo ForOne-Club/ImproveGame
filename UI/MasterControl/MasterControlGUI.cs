@@ -43,6 +43,10 @@ public class MasterControlGUI : BaseBody
     /// 版本号文本框
     /// </summary>
     public SUIText VersionText { get; private set; }
+    /// <summary>
+    /// 更新日志文本框
+    /// </summary>
+    public SUIText ChangelogText { get; private set; }
     #endregion
 
     public override void OnInitialize()
@@ -139,6 +143,24 @@ public class MasterControlGUI : BaseBody
         VersionText.Width.Pixels = VersionText.TextSize.X * VersionText.TextScale;
         VersionText.Height.Percent = 1f;
         VersionText.JoinParent(TailBar);
+
+        ChangelogText = new SUIText
+        {
+            TextScale = 0.9f,
+            // KeyMode暂不支持传参
+            TextOrKey = GetText("UI.MasterControl.Changelog", ImproveGame.Instance.Version),
+            TextAlign = new Vector2(0.5f),
+            TextBorder = 1.5f
+        };
+        ChangelogText.OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
+        ChangelogText.OnLeftMouseDown += (_, _) =>
+        {
+            string link = GetText("UI.MasterControl.ChangelogLink", ImproveGame.Instance.Version);
+            TrUtils.OpenToURL(link);
+        };
+        ChangelogText.Width.Pixels = ChangelogText.TextSize.X * ChangelogText.TextScale;
+        ChangelogText.Height.Percent = 1f;
+        ChangelogText.JoinParent(TailBar);
         #endregion
     }
 
@@ -210,6 +232,9 @@ public class MasterControlGUI : BaseBody
     {
         OpacityTimer.Update();
         base.Update(gameTime);
+
+        ChangelogText.TextColor = ChangelogText.HoverTimer.Lerp(Color.White, Color.Yellow);
+        ChangelogText.RecalculateText();
 
         if (Window.IsMouseHovering)
             PlayerInput.LockVanillaMouseScroll($"{ImproveGame.Instance.Name}: Control Center GUI");

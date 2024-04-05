@@ -20,7 +20,7 @@ public class ModNotificationPopup : IInGameNotification
 {
     private readonly ModNotification _notification;
     private bool _isMouseHovering;
-    public const int TimeLeftMax = 300;
+    public const int TimeLeftMax = 480;
     public int TimeLeft;
 
     private float Scale

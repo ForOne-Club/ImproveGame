@@ -59,9 +59,6 @@ public class ImproveConfigs : ModConfig
     [ReloadRequired]
     public bool QuestFishStack;
 
-    [DefaultValue(true)]
-    public bool AmmoChain;
-
     [DefaultValue(false)]
     public bool SuperVault;
 
@@ -284,6 +281,12 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(BombsNotDamageType.Disabled)]
     [DrawTicks]
     public BombsNotDamageType BombsNotDamage;
+
+    [DefaultValue(true)]
+    public bool AmmoChain;
+
+    [DefaultValue(true)]
+    public bool SimpleVeinMining;
 
     #endregion
 

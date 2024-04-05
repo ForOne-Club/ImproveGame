@@ -711,6 +711,18 @@ ImproveConfigs: {
 			在总控面板中打开
 			'''
 	}
+
+	SimpleVeinMining: {
+		Label: "[centeritem:IronPickaxe] 简单连锁挖矿"
+		Tooltip:
+			'''
+			最基础的连锁挖矿功能，无需快捷键，使用镐子挖矿即可
+			不具备黑/白名单功能，不支持进一步调节
+			若有此类需求，建议使用Ore Excavator或Basic Automated Mining，均有民间或官方汉化
+			为避免冲突，若加载了以上两个模组之一，本功能将被强制禁用
+			'''
+		PopupTip: 若不想要，连锁挖矿可在更好的体验配置中关闭
+	}
 }
 
 ModItemLoadPage: {
