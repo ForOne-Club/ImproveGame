@@ -28,6 +28,11 @@ public class SUIScrollbar2 : TimerView
     public Color BarHoverColor = Color.Black * 0.5f;
 
     public bool IsBarSizeLimited = true;
+    
+    /// <summary>
+    /// 若鼠标不在滚动条上，缩小滚动条内部部分宽度
+    /// </summary>
+    public bool ShrinkIfNotHovering = false;
 
     public Vector2 MaskSize
     {
@@ -122,6 +127,8 @@ public class SUIScrollbar2 : TimerView
     #endregion
 
     #region private static Fields
+
+    protected AnimationTimer _shrinkTimer = new(5f, 20f, AnimationType.Linear);
     protected bool _isScrollbarDragging; // 滚动条拖动中
     protected Vector2 _scrollbarDragOffset; // 滚动条拖动偏移
 
@@ -163,13 +170,29 @@ public class SUIScrollbar2 : TimerView
 
             UpdateScrollPosition();
 
-            ScrollTimer.Update();
-
             base.DrawSelf(spriteBatch);
 
             DrawScrollbar();
         }
     }
+
+    public override void Update(GameTime gameTime)
+    {
+        // 这个不知放到if外面还是里面好，我就放外面了先
+        base.Update(gameTime);
+        
+        if (IsBeUsableH || IsBeUsableV)
+        {
+            ScrollTimer.Update();
+            _shrinkTimer.Update();
+            
+            if (IsMouseHovering || _isScrollbarDragging)
+                _shrinkTimer.Close();
+            else
+                _shrinkTimer.Open();
+        }
+    }
+
     #endregion
 
     protected virtual void UpdateScrollPosition()
@@ -192,7 +215,14 @@ public class SUIScrollbar2 : TimerView
         Vector2 barSize = GetBarSize();
         Vector2 barPos = GetInnerDimensions().Position() + BarPosition;
 
-        if (barSize.X > 0 && barSize.Y > 0)
+        if (ShrinkIfNotHovering)
+        {
+            float shrinkFactor = 0.4f;
+            barPos.X += _shrinkTimer.Lerp(0, barSize.X * (1f - shrinkFactor));
+            barSize.X = _shrinkTimer.Lerp(barSize.X, barSize.X * shrinkFactor);
+        }
+
+        if (barSize is {X: > 0, Y: > 0})
         {
             Color barBgColor = IsMouseOverScrollbar() || _isScrollbarDragging ? BarHoverColor : BarColor;
             SDFRectangle.NoBorder(barPos, barSize, new Vector4(Math.Min(barSize.X, barSize.Y) / 2f), barBgColor);

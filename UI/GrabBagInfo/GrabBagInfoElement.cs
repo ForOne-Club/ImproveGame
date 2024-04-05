@@ -14,7 +14,7 @@ public class GrabBagInfoPanel : TimerView
 
     public GrabBagInfoPanel(DropRateInfo info)
     {
-        this.SetSize(new Vector2(168, 40f));
+        this.SetSize(new Vector2(169, 40f));
         BgColor = UIStyle.PanelBg;
         DropRateInfo = info;
 
@@ -23,6 +23,7 @@ public class GrabBagInfoPanel : TimerView
         Border = 2;
         Rounded = new Vector4(12f);
         PreventOverflow = true;
+        DragIgnore = true;
 
         GetDropInfo(DropRateInfo, out string stackRange, out string droprate);
         if (!string.IsNullOrEmpty(stackRange))

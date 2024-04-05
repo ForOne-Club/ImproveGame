@@ -25,6 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.NetStorager;
@@ -35,7 +36,7 @@ using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items;
 
-public class StorageCommunicator : ModItem
+public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClickable
 {
     public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
@@ -112,6 +113,18 @@ public class StorageCommunicator : ModItem
             DoOpenStorage();
 
         return true;
+    }
+
+    public bool OverrideHover(Item[] inventory, int context, int slot)
+    {
+        ((IItemMiddleClickable)this).HandleHover(inventory, context, slot);
+
+        return false;
+    }
+
+    public void OnMiddleClicked(Item item)
+    {
+        DoOpenStorage();
     }
 
     private void DoOpenStorage()

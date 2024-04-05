@@ -84,6 +84,7 @@ public class GrabBagInfoGUI : BaseBody
         RelativeMode = RelativeMode.Vertical,
         DisplayItemInfo = true,
         DisplayItemStack = false,
+        DragIgnore = true
     };
 
     // 当前物品展示
@@ -96,7 +97,8 @@ public class GrabBagInfoGUI : BaseBody
         TextAlign = new Vector2(0.5f),
         IsLarge = true,
         Spacing = new Vector2(8f, 0f),
-        Rounded = new Vector4(6f)
+        Rounded = new Vector4(6f),
+        DragIgnore = true
     };
 
     // 明细列表
@@ -154,7 +156,7 @@ public class GrabBagInfoGUI : BaseBody
         };
         _cross.JoinParent(_titlePanel);
 
-        _upperPanel.SetPadding(20, 6f, 20, 6f);
+        _upperPanel.SetPadding(17, 6f, 20, 6f);
         _upperPanel.SetSize(0f, 60, 1f, 0f);
         _upperPanel.JoinParent(MainPanel);
         SetupUpperPanel();
@@ -174,13 +176,15 @@ public class GrabBagInfoGUI : BaseBody
         ItemSlot.SetSizePixels(48, 48);
         ItemSlot.JoinParent(_upperPanel);
 
-        ItemNameText.SetSizePixels(280, 48);
+        ItemNameText.SetSizePixels(290, 48);
         ItemNameText.JoinParent(_upperPanel);
     }
 
     private void SetupLowerPanel()
     {
-        InfoScroll.SetPadding(18, 8, 0, 8);
+        InfoScroll.ScrollBar.ShrinkIfNotHovering = true;
+        InfoScroll.ScrollBar.Spacing = new Vector2(2f);
+        InfoScroll.SetPadding(16, 8, 2, 8);
         InfoScroll.SetSize(0f, 0f, 1f, 1f);
         InfoScroll.JoinParent(_lowerPanel);
     }
