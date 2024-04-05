@@ -135,8 +135,9 @@ public class GrabBagInfoGUI : BaseBody
 
         // 主面板
         MainPanel.SetPadding(0f);
+        MainPanel.IsAdaptiveHeight = true;
         MainPanel.SetPosPixels(panelLeft, panelTop)
-            .SetSizePixels(panelWidth, panelHeight)
+            .SetSizePixels(panelWidth, 0)
             .JoinParent(this);
 
         _titlePanel = ViewHelper.CreateHead(UIStyle.TitleBg * 0.75f, 46f, 10f);
@@ -162,19 +163,9 @@ public class GrabBagInfoGUI : BaseBody
         SetupUpperPanel();
 
         // MainPanel.MakeHorizontalSeparator();
-        MainPanel.Append(new View()
-        {
-            RelativeMode = RelativeMode.Vertical,
-            Spacing = new Vector2(8f),
-            Width = new StyleDimension(0f, 1f),
-            Height = new StyleDimension(4f, 0f),
-            BgColor = UIStyle.PanelBorder * 0.8f,
-            Border = 1f,
-            BorderColor = Color.Transparent,
-        });
 
-        _lowerPanel.SetPadding(0);
-        _lowerPanel.SetSize(0f, 190, 1f, 0f);
+        _lowerPanel.SetPadding(0, 0, 0, 8);
+        _lowerPanel.SetSize(0f, 198, 1f, 0f);
         _lowerPanel.JoinParent(MainPanel);
         SetupLowerPanel();
 
@@ -192,7 +183,6 @@ public class GrabBagInfoGUI : BaseBody
 
     private void SetupLowerPanel()
     {
-        InfoScroll.ScrollBar.ShrinkIfNotHovering = true;
         InfoScroll.ScrollBar.Spacing = new Vector2(8f);
         InfoScroll.SetPadding(16, 8, 16, 8);
         InfoScroll.SetSize(0f, 0f, 1f, 1f);

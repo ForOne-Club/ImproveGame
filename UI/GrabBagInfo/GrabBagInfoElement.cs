@@ -15,7 +15,6 @@ public class GrabBagInfoPanel : TimerView
     public GrabBagInfoPanel(DropRateInfo info)
     {
         this.SetSize(-4, 40f, 0.5f, 0f);
-        BgColor = UIStyle.PanelBg;
         DropRateInfo = info;
 
         RelativeMode = RelativeMode.Horizontal;
@@ -50,7 +49,8 @@ public class GrabBagInfoPanel : TimerView
             SetBestiaryNotesOnItemCache(DropRateInfo, item);
         }
 
-        BorderColor = HoverTimer.Lerp(UIStyle.PanelBorderLight, Main.OurFavoriteColor);
+        BorderColor = HoverTimer.Lerp(UIStyle.PanelBg, UIStyle.PanelBorderLight);
+        BgColor = UIStyle.PanelBg;
 
         base.DrawSelf(spriteBatch);
 
