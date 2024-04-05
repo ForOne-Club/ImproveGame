@@ -1,5 +1,5 @@
 MagickWand: {
-	DisplayName: Wand of Bursts
+	DisplayName: Wand of Blasts
 	Tooltip:
 		'''
 		Destroy tiles in both fixed area and free selection
@@ -21,7 +21,7 @@ SpaceWand: {
 }
 
 StarburstWand: {
-	DisplayName: Wand of Starbursts
+	DisplayName: Wand of Starblasts
 	Tooltip:
 		'''
 		Destroy tiles in both fixed area and free selection
@@ -305,12 +305,12 @@ UniversalAmmoIcon: {
 }
 
 AmmoChainItem: {
-	DisplayName: 弹药链
+	DisplayName: Ammo Chain
 	Tooltip:
 		'''
-		储存着弹药链信息，可以分享给其他玩家
-		使用该物品会自动将弹药链储存到你的PC上
+		Stores Ammo Chain info, can be shared with other players
+		Using this item will save that info to your computer
 		'''
-	FromPlayer: 来自玩家：{0}
-	Added: 弹药链已添加为 {0}
+	FromPlayer: From player: {0}
+	Added: Ammo Chain added as: {0}
 }

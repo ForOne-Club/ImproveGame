@@ -51,6 +51,6 @@ ModConfig: {
 }
 
 AmmoChain: {
-	DisplayName: 弹药链
-	Description: 让武器以规定顺序射出特定子弹
+	DisplayName: Ammo Chain
+	Description: Let weapons pick ammos in a specific sequence
 }

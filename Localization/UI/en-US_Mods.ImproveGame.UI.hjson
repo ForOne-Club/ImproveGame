@@ -17,22 +17,22 @@ MasterControl: {
 }
 
 AmmoChain: {
-	Title: 弹药链
-	LoadError: 文件不合法或不是弹药链文件
-	ClickToAddL1: 选取一个弹药后
-	ClickToAddL2: 点击此处以添加到弹药链
-	FileName: 弹药链
-	AddChain: 添加弹药链
-	OpenFolder: 打开文件夹
+	Title: Ammo Chain
+	LoadError: Not an Ammo Chain file or illegal Ammo Chain
+	ClickToAddL1: After picking an ammo
+	ClickToAddL2: Click here to add it to the chain
+	FileName: Ammo Chain
+	AddChain: Add Ammo Chain
+	OpenFolder: Open Folder
 	// 一个按钮，点击后打开帮助网页
-	GetHelp: 这玩意咋用啊？
-	Cancel: 取消
-	Confirm: 确定
-	ItemNotAvailable: × 此物品不使用弹药
-	PutInItem: ← 将武器放入此处
-	ClickAmmoChain: 点击弹药链以应用
-	AddAmmoChain: 你现在没有弹药链，先添加一个吧
-	Empty: 你不能设置一个空的弹药链
+	GetHelp: How? Please help!
+	Cancel: Cancel
+	Confirm: Confirm
+	ItemNotAvailable: × This item does not use ammo
+	PutInItem: ← Place a weapon here
+	ClickAmmoChain: Click an Ammo Chain to apply
+	AddAmmoChain: You have no Ammo Chain for now, add one first
+	Empty: You can't save an empty Ammo Chain
 }
 
 WeatherGUI: {

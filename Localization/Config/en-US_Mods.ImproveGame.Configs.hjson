@@ -684,7 +684,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			It is highly recommended to take a look at this webpage whenever you encounter
-			any problems, as it includes solutions to the following issues:
+			any problems, as it includes solutions to the following questions:
 			- How to hide infinite buffs?
 			- How to disable auto-deposit for money?
 			- How to hide the buff icons on the player's head?
@@ -704,11 +704,11 @@ ImproveConfigs: {
 	}
 
 	AmmoChain: {
-		Label: "[centeritem:ImproveGame/AmmoChainItem] 弹药链"
+		Label: "[centeritem:ImproveGame/AmmoChainItem] Ammo Chain"
 		Tooltip:
 			'''
-			可以让武器以规定顺序使用特定子弹
-			在总控面板中打开
+			Let weapons pick ammos in a specific sequence
+			Opens from the Control Panel
 			'''
 	}
 }
