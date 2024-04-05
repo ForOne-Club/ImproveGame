@@ -7,6 +7,15 @@ public class TimerView : View
 {
     public AnimationTimer HoverTimer = new AnimationTimer(3);
 
+    /*public AnimationTimer WidthTimer = new AnimationTimer(3);
+    public AnimationTimer HeightTimer = new AnimationTimer(3);
+
+    public StyleDimension OrignWidth = new StyleDimension();
+    public StyleDimension TargetWidth = new StyleDimension();
+
+    public StyleDimension OrignHeight = new StyleDimension();
+    public StyleDimension TargetHeight = new StyleDimension();*/
+
     public override void Update(GameTime gameTime)
     {
         if (IsMouseHovering)

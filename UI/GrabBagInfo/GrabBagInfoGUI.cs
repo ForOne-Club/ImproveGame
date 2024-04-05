@@ -40,7 +40,7 @@ public class GrabBagInfoGUI : BaseBody
     #region Components
 
     // 主面板
-    public SUIPanel MainPanel = new (UIStyle.PanelBorder, UIStyle.PanelBg)
+    public SUIPanel MainPanel = new(UIStyle.PanelBorder, UIStyle.PanelBg)
     {
         Shaded = true,
         Draggable = true,
@@ -69,7 +69,7 @@ public class GrabBagInfoGUI : BaseBody
     {
         HAlign = 1f,
         VAlign = 0.5f,
-        Width = { Pixels = 45f, Percent = 0f },
+        Width = { Pixels = 50f, Percent = 0f },
         Height = { Pixels = 0f, Precent = 1f },
         Rounded = new Vector4(0f, 10f, 0f, 0f),
         Border = 0f,
@@ -102,7 +102,7 @@ public class GrabBagInfoGUI : BaseBody
     };
 
     // 明细列表
-    public SUIScrollView2 InfoScroll = new (Orientation.Vertical)
+    public SUIScrollView2 InfoScroll = new(Orientation.Vertical)
     {
         RelativeMode = RelativeMode.Vertical,
         Spacing = new Vector2(4f)
@@ -156,18 +156,28 @@ public class GrabBagInfoGUI : BaseBody
         };
         _cross.JoinParent(_titlePanel);
 
-        _upperPanel.SetPadding(17, 6f, 20, 6f);
+        _upperPanel.SetPadding(17f, 10f, 20f, 2f);
         _upperPanel.SetSize(0f, 60, 1f, 0f);
         _upperPanel.JoinParent(MainPanel);
         SetupUpperPanel();
 
-        MainPanel.MakeHorizontalSeparator();
+        // MainPanel.MakeHorizontalSeparator();
+        MainPanel.Append(new View()
+        {
+            RelativeMode = RelativeMode.Vertical,
+            Spacing = new Vector2(8f),
+            Width = new StyleDimension(0f, 1f),
+            Height = new StyleDimension(4f, 0f),
+            BgColor = UIStyle.PanelBorder * 0.8f,
+            Border = 1f,
+            BorderColor = Color.Transparent,
+        });
 
-        _lowerPanel.SetPadding(0, 2, 4, 2);
+        _lowerPanel.SetPadding(0);
         _lowerPanel.SetSize(0f, 190, 1f, 0f);
         _lowerPanel.JoinParent(MainPanel);
         SetupLowerPanel();
-        
+
         Recalculate();
     }
 
@@ -183,8 +193,8 @@ public class GrabBagInfoGUI : BaseBody
     private void SetupLowerPanel()
     {
         InfoScroll.ScrollBar.ShrinkIfNotHovering = true;
-        InfoScroll.ScrollBar.Spacing = new Vector2(2f);
-        InfoScroll.SetPadding(16, 8, 2, 8);
+        InfoScroll.ScrollBar.Spacing = new Vector2(8f);
+        InfoScroll.SetPadding(16, 8, 16, 8);
         InfoScroll.SetSize(0f, 0f, 1f, 1f);
         InfoScroll.JoinParent(_lowerPanel);
     }
@@ -254,5 +264,5 @@ public class GrabBagInfoGUI : BaseBody
     public override float RenderTarget2DOpacity => StartTimer.Schedule;
     public override Vector2 RenderTarget2DOrigin => MainPanel.GetDimensionsCenter();
     public override Vector2 RenderTarget2DPosition => MainPanel.GetDimensionsCenter();
-    public override Vector2 RenderTarget2DScale => new (0.95f + StartTimer.Lerp(0, 0.05f));
+    public override Vector2 RenderTarget2DScale => new(0.95f + StartTimer.Lerp(0, 0.05f));
 }

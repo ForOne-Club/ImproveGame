@@ -239,13 +239,19 @@ public class SUIScrollView2 : TimerView
                     {
                         if (MaskView.Width.Pixels != -(ScrollBar.Width.Pixels + ScrollBar.Spacing.X))
                         {
-                            MaskView.Width.Pixels = -(ScrollBar.Width.Pixels + ScrollBar.Spacing.X);
+                            WidthTimer.Open();
+
+                            MaskView.Width.Pixels =
+                                WidthTimer.Lerp(0, -(ScrollBar.Width.Pixels + ScrollBar.Spacing.X));
                             recalculate = true;
                         }
                     }
                     else if (MaskView.Width.Pixels != 0)
                     {
-                        MaskView.Width.Pixels = 0;
+                        WidthTimer.Close();
+
+                        MaskView.Width.Pixels =
+                            WidthTimer.Lerp(0, -(ScrollBar.Width.Pixels + ScrollBar.Spacing.X));
                         recalculate = true;
                     }
                     break;
@@ -255,4 +261,15 @@ public class SUIScrollView2 : TimerView
         if (recalculate)
             Recalculate();
     }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        WidthTimer.UpdateHighFps();
+        HeightTimer.UpdateHighFps();
+
+        base.Draw(spriteBatch);
+    }
+
+    public AnimationTimer WidthTimer = new AnimationTimer(3);
+    public AnimationTimer HeightTimer = new AnimationTimer(3);
 }
