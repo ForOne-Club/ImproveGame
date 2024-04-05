@@ -28,7 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-namespace ImproveGame
+namespace ImproveGame.Core
 {
     public class TextureGIF
     {

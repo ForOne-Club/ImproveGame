@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UIFramework.UIElements
+﻿using ImproveGame.Core;
+
+namespace ImproveGame.UIFramework.UIElements
 {
     public class GIFImage : UIElement
     {
