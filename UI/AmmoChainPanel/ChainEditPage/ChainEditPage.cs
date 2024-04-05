@@ -6,6 +6,7 @@ using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
+using Terraria.GameInput;
 using Terraria.Utilities;
 
 namespace ImproveGame.UI.AmmoChainPanel.ChainEditPage;
@@ -277,6 +278,13 @@ public class ChainEditPage : View
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+
+        // 鼠标滚轮锁定
+        if (_currentChain.IsMouseHovering || _availableAmmos.IsMouseHovering)
+        {
+            PlayerInput.LockVanillaMouseScroll("ImproveGame: Ammo Chain UI");
+            Main.LocalPlayer.mouseInterface = true;
+        }
 
         if (ShouldResetCurrentChain)
         {

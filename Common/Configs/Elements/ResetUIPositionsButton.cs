@@ -1,4 +1,6 @@
 ﻿using ImproveGame.UI;
+using ImproveGame.UI.ItemSearcher;
+using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Common;
@@ -23,9 +25,8 @@ internal class ResetUIPositionsButton : LargerPanelElement
         UISystem uiSystem = UISystem.Instance;
         BigBagGUI.Instance.MainPanel.SetPos(UIPlayer.HugeInventoryUIPosition).Recalculate();
         uiSystem.BuffTrackerGUI.MainPanel.SetPos(UIPlayer.BuffTrackerPosition).Recalculate();
-        uiSystem.WorldFeatureGUI.MainPanel.SetPos(UIPlayer.WorldFeaturePosition).Recalculate();
-        uiSystem.ItemSearcherGUI.MainPanel.SetPos(UIPlayer.ItemSearcherPosition).Recalculate();
-        uiSystem.OpenBagGUI.MainPanel.SetPos(UIPlayer.OpenBagPosition).Recalculate();
+        ItemSearcherGUI.Instance.MainPanel.SetPos(UIPlayer.ItemSearcherPosition).Recalculate();
+        OpenBagGUI.Instance.MainPanel.SetPos(UIPlayer.OpenBagPosition).Recalculate();
         PlayerStatsGUI.Instance.ControllerSwitch.SetPosPixels(UIPlayer.PlayerInfoTogglePosition).Recalculate();
     }
 }

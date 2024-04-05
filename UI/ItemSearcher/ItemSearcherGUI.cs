@@ -8,10 +8,22 @@ using Terraria.GameInput;
 
 namespace ImproveGame.UI.ItemSearcher;
 
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Item Searcher GUI")]
 public class ItemSearcherGUI : BaseBody
 {
-    public override bool Enabled { get => Visible || StartTimer.Closing; set => Visible = value; }
-    public static bool Visible { get; private set; }
+    public static ItemSearcherGUI Instance { get; private set; }
+
+    public ItemSearcherGUI() => Instance = this;
+
+    public override bool IsNotSelectable => StartTimer.AnyClose;
+
+    public override bool Enabled
+    {
+        get => StartTimer.Closing || _enabled;
+        set => _enabled = value;
+    }
+
+    private bool _enabled;
 
     public override bool CanSetFocusTarget(UIElement target)
         => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsLeftMousePressed;
@@ -35,11 +47,11 @@ public class ItemSearcherGUI : BaseBody
     {
         get
         {
-            if (UISystem.Instance?.ItemSearcherGUI is null) return new HashSet<short>();
+            if (Instance is null) return new HashSet<short>();
 
-            var gui = UISystem.Instance.ItemSearcherGUI;
+            var gui = Instance;
             if (string.IsNullOrEmpty(gui.SearchContent) || gui.SearchContent.Length is 0)
-                return new HashSet<short>();
+                return [];
 
             return gui._matchedChests;
         }
@@ -284,9 +296,9 @@ public class ItemSearcherGUI : BaseBody
     public static void TryUpdateItems(HashSet<short> matchedChests, HashSet<int> itemTypes)
     {
         // Main.NewText("Update " + matchedChests.Count);
-        if (UISystem.Instance?.ItemSearcherGUI is null) return;
+        if (Instance is null) return;
 
-        var gui = UISystem.Instance.ItemSearcherGUI;
+        var gui = Instance;
         gui._requestsSent--;
         if (gui._requestsSent > 0)
             return;
@@ -468,14 +480,14 @@ public class ItemSearcherGUI : BaseBody
     public void Open()
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
-        Visible = true;
+        Enabled = true;
         StartTimer.Open();
     }
 
     public void Close()
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
-        Visible = false;
+        Enabled = false;
         _searchBar.AttemptStoppingUsingSearchbar();
         StartTimer.Close();
     }

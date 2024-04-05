@@ -9,10 +9,22 @@ using Terraria.GameInput;
 
 namespace ImproveGame.UI.OpenBag;
 
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Open Bag GUI")]
 public class OpenBagGUI : BaseBody
 {
-    public override bool Enabled { get => Visible || StartTimer.Closing; set => Visible = value; }
-    public static bool Visible { get; private set; }
+    public static OpenBagGUI Instance { get; private set; }
+
+    public OpenBagGUI() => Instance = this;
+
+    public override bool IsNotSelectable => StartTimer.AnyClose;
+
+    public override bool Enabled
+    {
+        get => StartTimer.Closing || _enabled;
+        set => _enabled = value;
+    }
+
+    private bool _enabled;
 
     public override bool CanSetFocusTarget(UIElement target)
         => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsLeftMousePressed;
@@ -375,14 +387,14 @@ public class OpenBagGUI : BaseBody
     public void Open()
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
-        Visible = true;
+        Enabled = true;
         StartTimer.Open();
     }
 
     public void Close()
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
-        Visible = false;
+        Enabled = false;
         StartTimer.Close();
     }
 

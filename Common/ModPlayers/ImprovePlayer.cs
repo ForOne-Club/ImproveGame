@@ -5,6 +5,7 @@ using ImproveGame.Content.Projectiles;
 using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UI.AutoTrash;
+using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.OpenBag;
@@ -236,6 +237,8 @@ public class ImprovePlayer : ModPlayer
             PressBuffTrackerKeybind();
         if (KeybindSystem.GrabBagKeybind.JustPressed)
             PressGrabBagKeybind();
+        if (KeybindSystem.OpenBagKeybind.JustPressed)
+            PressOpenBagKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
             PressHotbarSwitchKeybind();
         if (KeybindSystem.AutoTrashKeybind.JustPressed)
@@ -265,17 +268,29 @@ public class ImprovePlayer : ModPlayer
             UISystem.Instance.BuffTrackerGUI.Open();
     }
 
+    private static void PressOpenBagKeybind()
+    {
+        var ui = OpenBagGUI.Instance;
+        if (ui is null) return;
+
+        if (ui.Enabled && ui.StartTimer.AnyOpen)
+            ui.Close();
+        else
+            ui.Open();
+    }
+
     private static void PressGrabBagKeybind()
     {
-        if (Main.HoverItem is not { } item || item.IsAir) return;
+        if (Main.HoverItem is not { } item || item.IsAir || GrabBagInfoGUI.Instance is null) return;
 
         bool hasLoot = ItemLoader.CanRightClick(Main.HoverItem);
         hasLoot &= Main.ItemDropsDB.GetRulesForItemID(item.type).Count > 0;
 
-        if (GrabBagInfoGUI.Visible && (GrabBagInfoGUI.ItemID == item.type || item.IsAir || !hasLoot))
-            UISystem.Instance.GrabBagInfoGUI.Close();
+        if (GrabBagInfoGUI.Instance.Enabled && GrabBagInfoGUI.Instance.StartTimer.AnyOpen &&
+            (GrabBagInfoGUI.ItemID == item.type || item.IsAir || !hasLoot))
+            GrabBagInfoGUI.Instance.Close();
         else if (hasLoot)
-            UISystem.Instance.GrabBagInfoGUI.Open(Main.HoverItem.type);
+            GrabBagInfoGUI.Instance.Open(Main.HoverItem.type);
     }
 
     private void PressHotbarSwitchKeybind()

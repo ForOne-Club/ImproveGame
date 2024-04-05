@@ -4,6 +4,7 @@ using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
+using Terraria.GameInput;
 
 namespace ImproveGame.UI.AmmoChainPanel.WeaponPage;
 
@@ -134,6 +135,13 @@ public class WeaponPage : View
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+
+        // 鼠标滚轮锁定
+        if (CurrentPreview.IsMouseHovering || Presets.IsMouseHovering)
+        {
+            PlayerInput.LockVanillaMouseScroll("ImproveGame: Ammo Chain UI");
+            Main.LocalPlayer.mouseInterface = true;
+        }
 
         // 检查有没有新东西
         _checkChainsCounter++;

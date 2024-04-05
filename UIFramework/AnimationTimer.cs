@@ -103,6 +103,24 @@ public class AnimationTimer(float speed = 5f, float timerMax = 100f, AnimationTy
         State = AnimationState.Closing;
         Timer = TimerMax;
     }
+
+    /// <summary>
+    /// 直接跳到完全关闭状态
+    /// </summary>
+    public void ImmediateClose()
+    {
+        State = AnimationState.Closed;
+        Timer = 0;
+    }
+
+    /// <summary>
+    /// 直接跳到完全开启状态
+    /// </summary>
+    public void ImmediateOpen()
+    {
+        State = AnimationState.Opened;
+        Timer = TimerMax;
+    }
     #endregion
 
     /// <summary>

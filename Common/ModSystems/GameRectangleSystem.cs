@@ -63,16 +63,17 @@ public class GameRectangleSystem : ModSystem
             );
             layers.Insert(rulerIndex, new LegacyGameInterfaceLayer("ImproveGame: Matched Chests", delegate
                 {
-                    if (!ItemSearcherGUI.Visible || ItemSearcherGUI.MatchedChests is not {Count: > 0}) return true;
+                    if (!ItemSearcherGUI.Instance.Enabled || ItemSearcherGUI.MatchedChests is not {Count: > 0})
+                        return true;
 
-                    
                     var border = new Color(255, 231, 69);
                     var background = border * 0.4f;
 
                     Vector2 size = new(36, 36);
 
                     ItemSearcherGUI.MatchedChests.RemoveWhere(i => Main.chest[i] == null);
-                    foreach (var chest in ItemSearcherGUI.MatchedChests.Select(matchedChest => Main.chest[matchedChest]))
+                    foreach (var chest in
+                             ItemSearcherGUI.MatchedChests.Select(matchedChest => Main.chest[matchedChest]))
                     {
                         var position = new Vector2(chest.x, chest.y) * 16f - Main.screenPosition;
                         position.X -= 2f;

@@ -2,7 +2,10 @@
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.UI;
+using ImproveGame.UI.ItemSearcher;
+using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
+using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Common;
 using Newtonsoft.Json;
@@ -115,15 +118,15 @@ namespace ImproveGame.Common.Configs
                                   new Vector2(630, 160);
             UIPlayer.BuffTrackerPosition = BuffTrackerPosition; // 在这里也保存一下
 
-            WorldFeaturePosition = uiSystem.WorldFeatureGUI?.MainPanel?.GetDimensions().Position() ??
+            WorldFeaturePosition = WorldFeatureGUI.Instance?.MainPanel?.GetDimensions().Position() ??
                                    new Vector2(250, 280);
             UIPlayer.WorldFeaturePosition = WorldFeaturePosition; // 在这里也保存一下
 
-            ItemSearcherPosition = uiSystem.ItemSearcherGUI?.MainPanel?.GetDimensions().Position() ??
+            ItemSearcherPosition = ItemSearcherGUI.Instance?.MainPanel?.GetDimensions().Position() ??
                                    new Vector2(620, 400);
             UIPlayer.ItemSearcherPosition = ItemSearcherPosition; // 在这里也保存一下
 
-            OpenBagPosition = uiSystem.OpenBagGUI?.MainPanel?.GetDimensions().Position() ??
+            OpenBagPosition = OpenBagGUI.Instance?.MainPanel?.GetDimensions().Position() ??
                               new Vector2(410, 360);
             UIPlayer.OpenBagPosition = OpenBagPosition; // 在这里也保存一下
 

@@ -2,6 +2,7 @@
 using ImproveGame.UI;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ExtremeStorage;
+using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.SpaceWand;
@@ -47,9 +48,6 @@ public class UISystem : ModSystem
     public static UserInterface PaintWandInterface { get; private set; }
     public PaintWandGUI PaintWandGUI;
 
-    public GrabBagInfoGUI GrabBagInfoGUI;
-    public EventTrigger GrabBagInfoTrigger;
-
     // 生命体检测仪筛选
     public LifeformAnalyzerGUI LifeformAnalyzerGUI;
     public EventTrigger LifeformAnalyzerTrigger;
@@ -69,18 +67,6 @@ public class UISystem : ModSystem
     // 构造法杖
     public StructureGUI StructureGUI;
     public EventTrigger StructureTrigger;
-
-    // 世界特性
-    public WorldFeatureGUI WorldFeatureGUI;
-    public EventTrigger WorldFeatureTrigger;
-
-    // 物品搜索
-    public ItemSearcherGUI ItemSearcherGUI;
-    public EventTrigger ItemSearcherTrigger;
-
-    // 快速开袋
-    public OpenBagGUI OpenBagGUI;
-    public EventTrigger OpenBagTrigger;
 
     // 侧栏 UI
     public AutofisherGUI AutofisherGUI;
@@ -145,11 +131,7 @@ public class UISystem : ModSystem
         ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture").Register();
         StructureTrigger = new EventTrigger("Radial Hotbars", "Structure").Register();
         LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer").Register();
-        WorldFeatureTrigger = new EventTrigger("Radial Hotbars", "World Feature").Register();
-        ItemSearcherTrigger = new EventTrigger("Radial Hotbars", "Item Searcher").Register();
-        OpenBagTrigger = new EventTrigger("Radial Hotbars", "Open Bag").Register();
         BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI").Register();
-        GrabBagInfoTrigger = new EventTrigger("Radial Hotbars", "Grab Bag Info GUI").Register();
 
         SidedEventTrigger = new SidedEventTrigger();
         SidedEventTrigger.Register();

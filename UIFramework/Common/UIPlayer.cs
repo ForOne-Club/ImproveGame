@@ -4,6 +4,7 @@ using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ExtremeStorage;
+using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.MasterControl;
 using ImproveGame.UI.OpenBag;
@@ -100,30 +101,20 @@ public class UIPlayer : ModPlayer
         uiSystem.StructureTrigger.SetRootBody(uiSystem.StructureGUI);
 
         // 世界特性
-        uiSystem.WorldFeatureGUI = new WorldFeatureGUI();
-        uiSystem.WorldFeatureTrigger.SetRootBody(uiSystem.WorldFeatureGUI);
         CheckPositionValid(ref WorldFeaturePosition, WorldFeatureDefPosition);
-        uiSystem.WorldFeatureGUI.MainPanel.SetPos(WorldFeaturePosition).Recalculate();
+        WorldFeatureGUI.Instance?.MainPanel.SetPos(WorldFeaturePosition).Recalculate();
 
         // 物品搜索
-        uiSystem.ItemSearcherGUI = new ItemSearcherGUI();
-        uiSystem.ItemSearcherTrigger.SetRootBody(uiSystem.ItemSearcherGUI);
         CheckPositionValid(ref ItemSearcherPosition, ItemSearcherDefPosition);
-        uiSystem.ItemSearcherGUI.MainPanel.SetPos(ItemSearcherPosition).Recalculate();
+        ItemSearcherGUI.Instance.MainPanel.SetPos(ItemSearcherPosition).Recalculate();
 
         // 快速开袋
-        uiSystem.OpenBagGUI = new OpenBagGUI();
-        uiSystem.OpenBagTrigger.SetRootBody(uiSystem.OpenBagGUI);
         CheckPositionValid(ref OpenBagPosition, OpenBagDefPosition);
-        uiSystem.OpenBagGUI.MainPanel.SetPos(OpenBagPosition).Recalculate();
+        OpenBagGUI.Instance?.MainPanel.SetPos(OpenBagPosition).Recalculate();
 
         // 生命体检测仪筛选
         uiSystem.LifeformAnalyzerGUI = new LifeformAnalyzerGUI();
         uiSystem.LifeformAnalyzerTrigger.SetRootBody(uiSystem.LifeformAnalyzerGUI);
-
-        // 摸彩袋
-        uiSystem.GrabBagInfoGUI = new GrabBagInfoGUI();
-        uiSystem.GrabBagInfoTrigger.SetRootBody(uiSystem.GrabBagInfoGUI);
 
         // 左侧栏
         uiSystem.ExtremeStorageGUI = new ExtremeStorageGUI();

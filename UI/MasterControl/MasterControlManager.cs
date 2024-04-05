@@ -242,10 +242,10 @@ public class MasterControlManager : ModSystem
 
         itemSearcher.OnMouseDown += _ =>
         {
-            var ui = UISystem.Instance.ItemSearcherGUI;
+            var ui = ItemSearcherGUI.Instance;
             if (ui is null) return;
 
-            if (ItemSearcherGUI.Visible && ui.StartTimer.AnyOpen)
+            if (ui.Enabled && ui.StartTimer.AnyOpen)
                 ui.Close();
             else
                 ui.Open();
@@ -269,10 +269,10 @@ public class MasterControlManager : ModSystem
                 return;
             }
 
-            var ui = UISystem.Instance.WorldFeatureGUI;
+            var ui = WorldFeatureGUI.Instance;
             if (ui is null) return;
 
-            if (WorldFeatureGUI.Visible && ui.StartTimer.AnyOpen)
+            if (ui.Enabled && ui.StartTimer.AnyOpen)
                 ui.Close();
             else
                 ui.Open();
@@ -289,10 +289,10 @@ public class MasterControlManager : ModSystem
 
         bagOpener.OnMouseDown += _ =>
         {
-            var ui = UISystem.Instance.OpenBagGUI;
+            var ui = OpenBagGUI.Instance;
             if (ui is null) return;
 
-            if (OpenBagGUI.Visible && ui.StartTimer.AnyOpen)
+            if (ui.Enabled && ui.StartTimer.AnyOpen)
                 ui.Close();
             else
                 ui.Open();

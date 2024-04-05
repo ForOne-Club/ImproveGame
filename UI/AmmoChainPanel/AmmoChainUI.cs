@@ -173,12 +173,6 @@ public class AmmoChainUI : BaseBody
             ResetPagePosition();
 
         base.Update(gameTime);
-
-        if (MainPanel.IsMouseHovering)
-        {
-            PlayerInput.LockVanillaMouseScroll("ImproveGame: Ammo Chain UI");
-            Main.LocalPlayer.mouseInterface = true;
-        }
     }
 
     private void ResetPagePosition()

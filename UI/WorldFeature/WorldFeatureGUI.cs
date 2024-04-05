@@ -10,11 +10,22 @@ using Terraria.GameInput;
 
 namespace ImproveGame.UI.WorldFeature;
 
+[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "World Feature GUI")]
 public class WorldFeatureGUI : BaseBody
 {
-    public override bool Enabled { get => Visible || StartTimer.Closing; set => Visible = value; }
+    public static WorldFeatureGUI Instance { get; private set; }
 
-    public static bool Visible { get; private set; }
+    public WorldFeatureGUI() => Instance = this;
+
+    public override bool IsNotSelectable => StartTimer.AnyClose;
+
+    public override bool Enabled
+    {
+        get => StartTimer.Closing || _enabled;
+        set => _enabled = value;
+    }
+
+    private bool _enabled;
 
     public override bool CanSetFocusTarget(UIElement target)
         => (target != this && MainPanel.IsMouseHovering) || MainPanel.IsLeftMousePressed;
@@ -161,14 +172,14 @@ public class WorldFeatureGUI : BaseBody
     public void Open()
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
-        Visible = true;
+        Enabled = true;
         StartTimer.Open();
     }
 
     public void Close()
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
-        Visible = false;
+        Enabled = false;
         StartTimer.Close();
     }
 
