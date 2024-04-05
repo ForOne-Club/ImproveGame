@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Core;
+using ImproveGame.Packets.Tiles;
 
 namespace ImproveGame.Content.Functions.VeinMiner;
 
@@ -27,15 +28,18 @@ public class VeinMinerSystem : ModSystem
     }
 
     // 递推搜索同类物块
-    private static void SearchOres(Point center, int oreType, ref HashSet<Point> ores)
+    private static void SearchOres(Point center, int oreType, ref HashSet<Point> ores, out int maxDistance)
     {
         var posQueue = new Queue<Point>();
+        maxDistance = 0;
         EnqueueForNearbyOres(center, posQueue);
 
         while (posQueue.TryDequeue(out var pos))
         {
             // 达到指标，下班！
-            if (ores.Count >= 599)
+            // 服务器指标更小，减少网络开销
+            int maxOres = Main.netMode is NetmodeID.Server ? 199 : 599;
+            if (ores.Count >= maxOres)
                 return;
 
             // 不在世界内
@@ -53,6 +57,7 @@ public class VeinMinerSystem : ModSystem
                 continue;
 
             EnqueueForNearbyOres(pos, posQueue);
+            maxDistance = TrUtils.Max(maxDistance, Math.Abs(center.X - pos.X), Math.Abs(center.Y - pos.Y));
         }
     }
 
@@ -104,9 +109,11 @@ public class VeinMinerSystem : ModSystem
             // 平滑斜坡，美观至上！
             Tile.SmoothSlope(pos.X, pos.Y, applyToNeighbors: true, sync: true);
 
-            // 每30个方块合并一次物品
-            if (++count % 30 == 0)
+            // 每30个方块合并一次物品，服务器不合并因为有bug
+            if (++count % 30 == 0 && Main.netMode is not NetmodeID.Server)
+            {
                 CombineItems();
+            }
         }
     }
 
@@ -120,9 +127,21 @@ public class VeinMinerSystem : ModSystem
         AddNotification(GetText("Configs.ImproveConfigs.SimpleVeinMining.PopupTip"), itemIconType: ItemID.IronPickaxe);
     }
 
+    public static void DoVeinMiningAt(Point pos, int tileType)
+    {
+        var ores = new HashSet<Point>(66);
+        SearchOres(pos, tileType, ref ores, out int maxDistance);
+        BreakAllOres(ores.ToList());
+
+        int syncDistance = maxDistance + 1;
+        if (Main.netMode is NetmodeID.Server)
+            NetMessage.SendTileSquare(-1, pos.X - syncDistance, pos.Y - syncDistance,
+                syncDistance * 2, syncDistance * 2);
+    }
+
     public override void Load()
     {
-        // 此方法在双端运行
+        // 此方法仅在操作方客户端运行
         On_Player.PickTile += (orig, self, x, y, power) =>
         {
             var tile = Main.tile[x, y];
@@ -146,10 +165,9 @@ public class VeinMinerSystem : ModSystem
             // 如果破坏了方块
             if (!tileActiveNow && tileActiveOld)
             {
-                var ores = new HashSet<Point>(66);
                 var pos = new Point(x, y);
-                SearchOres(pos, type, ref ores);
-                BreakAllOres(ores.ToList());
+                // 使用了runLocally，单人模式也会正常运行
+                VeinMiningPacket.Run(pos, type);
                 DoPopupTip();
             }
 
