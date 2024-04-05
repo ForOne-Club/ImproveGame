@@ -1,5 +1,5 @@
 MagickWand: {
-	DisplayName: Wand of Brusts
+	DisplayName: Wand of Bursts
 	Tooltip:
 		'''
 		Destroy tiles in both fixed area and free selection

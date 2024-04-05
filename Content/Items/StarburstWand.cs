@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using ImproveGame.Common.ModSystems;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -29,6 +30,19 @@ namespace ImproveGame.Content.Items
 
         public override void AddRecipes()
         {
+            // 没开法爆，但是开了星爆，用另一个合成表
+            if (!Config.LoadModItems.MagickWand)
+            {
+                CreateRecipe()
+                    .AddRecipeGroup(RecipeSystem.AnyCobaltBar, 10)
+                    .AddIngredient(ItemID.Diamond, 1)
+                    .AddIngredient(ItemID.FallenStar, 8)
+                    .AddIngredient(ItemID.SoulofLight, 6)
+                    .AddIngredient(ItemID.SoulofNight, 6)
+                    .AddTile(TileID.CrystalBall).Register();
+                return;
+            }
+
             CreateRecipe().AddIngredient(ModContent.ItemType<MagickWand>())
                 .AddIngredient(ItemID.FallenStar, 8)
                 .AddIngredient(ItemID.SoulofLight, 6)

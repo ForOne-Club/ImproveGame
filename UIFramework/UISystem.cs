@@ -231,7 +231,7 @@ public class UISystem : ModSystem
         layers.FindVanilla("Wire Selection", index =>
         {
             layers.Insert(index, "SpaceWand GUI", SpaceWandGUI, () => SpaceWandGUI.Visible);
-            layers.Insert(index, "Brust GUI", BurstGUI, () => BurstGUI.Visible);
+            layers.Insert(index, "Burst GUI", BurstGUI, () => BurstGUI.Visible);
             layers.Insert(index, "Paint GUI", PaintWandGUI, () => PaintWandGUI.Visible);
         });
     }

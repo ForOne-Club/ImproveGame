@@ -1,30 +1,19 @@
 ﻿using ImproveGame.Content.Functions.AutoPiggyBank;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Content.BuilderToggles;
 
 public class PiggyToggle : BuilderToggle
 {
-    public override string Texture
-    {
-        get
-        {
-            if (Main.gameMenu || !Main.player.IndexInRange(Main.myPlayer) ||
-                !Main.player[Main.myPlayer].builderAccStatus.IndexInRange(Type))
-                return (GetType().Namespace + "." + "Piggy_On").Replace('.', '/');
-
-            string name = "Piggy_";
-            name += CurrentState is 0 ? "On" : "Off";
-            return (GetType().Namespace + "." + name).Replace('.', '/');
-        }
-    }
-
-    public override string HoverTexture => Texture + "_Hover";
+    public override string HoverTexture => Texture;
 
     public static LocalizedText OnText { get; private set; }
     public static LocalizedText OffText { get; private set; }
 
     public override bool Active() => Main.LocalPlayer.TryGetModPlayer<AutoMoneyPlayerListener>(out var listener) &&
                                      listener.AutoSaveUnlocked;
+
+    public override Position OrderPosition => new After(TorchBiome);
 
     public override int NumberOfStates => 2;
 
@@ -39,18 +28,30 @@ public class PiggyToggle : BuilderToggle
 
     public override void SetStaticDefaults()
     {
-        // 预加载
-        Mod.Assets.Request<Texture2D>(ModAsset.Piggy_OnPath);
-        Mod.Assets.Request<Texture2D>(ModAsset.Piggy_OffPath);
-        Mod.Assets.Request<Texture2D>(ModAsset.Piggy_On_HoverPath);
-        Mod.Assets.Request<Texture2D>(ModAsset.Piggy_Off_HoverPath);
-
         OnText = this.GetLocalization(nameof(OnText));
         OffText = this.GetLocalization(nameof(OffText));
+    }
+
+    public override bool OnLeftClick(ref SoundStyle? sound)
+    {
+        sound = SoundID.Item59;
+        return base.OnLeftClick(ref sound);
     }
 
     public override string DisplayValue()
     {
         return CurrentState == 0 ? OnText.Value : OffText.Value;
+    }
+
+    public override bool Draw(SpriteBatch spriteBatch, ref BuilderToggleDrawParams drawParams)
+    {
+        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState % 2);
+        return true;
+    }
+
+    public override bool DrawHover(SpriteBatch spriteBatch, ref BuilderToggleDrawParams drawParams)
+    {
+        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState % 2, 1);
+        return true;
     }
 }
