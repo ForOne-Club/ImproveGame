@@ -49,7 +49,7 @@ public class GrabBagInfoPanel : TimerView
             SetBestiaryNotesOnItemCache(DropRateInfo, item);
         }
 
-        BorderColor = HoverTimer.Lerp(UIStyle.PanelBg, UIStyle.PanelBorderLight);
+        BorderColor = HoverTimer.Lerp(UIStyle.PanelBg, UIStyle.ItemSlotBorderFav);
         BgColor = UIStyle.PanelBg;
 
         base.DrawSelf(spriteBatch);

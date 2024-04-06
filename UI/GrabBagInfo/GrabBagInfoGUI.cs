@@ -128,7 +128,6 @@ public class GrabBagInfoGUI : BaseBody
     {
         int panelLeft = 730;
         int panelTop = 160;
-        int panelHeight = 316;
         int panelWidth = 380;
 
         Instance = this;
