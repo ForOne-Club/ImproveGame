@@ -5,14 +5,14 @@ namespace ImproveGame.Content.Functions.VeinMiner;
 
 public class VeinMinerSystem : ModSystem
 {
-    private bool VeinMiningEnabled =>
+    private static bool VeinMiningEnabled =>
         Config.SimpleVeinMining && !ModLoader.HasMod("BAM") && !ModLoader.HasMod("OreExcavator");
 
     // 连锁挖矿可以关闭的提示每3min弹出一次
     private static int _popupTipTimer = 99999;
     private static bool _usingMiningTools;
-    public static int MinerIndex;
-    public static bool VeinMining => MinerIndex is not -1;
+    public static int MinerIndex = -1;
+    public static bool VeinMining => MinerIndex is not -1 && VeinMiningEnabled;
 
     private static readonly List<Point> NearbyPoints =
     [

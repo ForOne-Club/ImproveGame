@@ -33,7 +33,8 @@ public class AmmoChainItem : ModItem
 
     public override bool? UseItem(Player player)
     {
-        if (player.whoAmI != Main.myPlayer)
+        // 后面那个服务器判断保险用，一般来说第一个就跳了
+        if (player.whoAmI != Main.myPlayer || Main.netMode is NetmodeID.Server)
             return true;
 
         var name = ChainSaver.SaveAsFile(Chain, ChainName);

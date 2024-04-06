@@ -19,6 +19,9 @@ public class ChainSaver
     /// <returns>弹药链最终以什么名字保存</returns>
     public static string SaveAsFile(AmmoChain chain, string chainName)
     {
+        if (Main.netMode is NetmodeID.Server)
+            return "";
+
         TrUtils.TryCreatingDirectory(SavePath);
 
         string name = $"{chainName}{Extension}";
@@ -45,6 +48,9 @@ public class ChainSaver
 
     public static void ModifyExistingFile(AmmoChain chain, string chainName)
     {
+        if (Main.netMode is NetmodeID.Server)
+            return;
+
         string name = $"{chainName}{Extension}";
         string thisPath = Path.Combine(SavePath, name);
         if (!File.Exists(thisPath))
@@ -63,6 +69,9 @@ public class ChainSaver
 
     public static void TryDeleteFile(string chainName, bool force = false)
     {
+        if (Main.netMode is NetmodeID.Server)
+            return;
+
         string name = $"{chainName}{Extension}";
         string thisPath = Path.Combine(SavePath, name);
         if (!File.Exists(thisPath))
@@ -73,6 +82,9 @@ public class ChainSaver
 
     public static bool LoadFile(string path)
     {
+        if (Main.netMode is NetmodeID.Server)
+            return false;
+
         TagCompound tag = TagIO.FromFile(path);
         if (AmmoChain.IsTagInvalid(tag))
             return false;
@@ -91,32 +103,15 @@ public class ChainSaver
         return true;
     }
 
-    public static AmmoChain GetChainFromFile(string path)
-    {
-        if (!AmmoChains.TryGetValue(path, out AmmoChain chain))
-        {
-            try
-            {
-                LoadFile(path);
-            }
-            catch
-            {
-                AddNotification(GetText("UI.AmmoChain.FileLoadError"), Color.Red);
-                return null;
-            }
-
-            chain = AmmoChains[path];
-        }
-
-        return chain;
-    }
-
     /// <summary>
     /// 读取所有弹药链文件，并将其存入AmmoChains。由于文件小，不需要异步（除非你搞几百个来专门压力测试）
     /// </summary>
     public static void ReadAllAmmoChains()
     {
         AmmoChains.Clear();
+
+        if (Main.netMode is NetmodeID.Server)
+            return;
 
         if (!TrUtils.TryCreatingDirectory(SavePath))
             return;
