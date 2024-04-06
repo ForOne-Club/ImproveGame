@@ -14,8 +14,10 @@ public class CatchRecord : ModSystem
     public static void AddCatch(int type)
     {
         if (_catches.All(i => i.type != type))
+        {
             _catches.Add(new Item(type));
-        RecordedCatchesSyncer.Sync();
+            RecordedCatchesSyncer.Sync();
+        }
     }
 
     public static void SetCatchesList(List<Item> list)
@@ -32,6 +34,7 @@ public class CatchRecord : ModSystem
 
     public override void SaveWorldData(TagCompound tag)
     {
+        _catches ??= []; // 超级保险
         var catches = _catches.Select(item => new ItemTypeData(item)).ToList();
         tag["catches"] = catches;
     }
@@ -44,16 +47,20 @@ public class CatchRecord : ModSystem
 
     public override void NetSend(BinaryWriter writer)
     {
+        _catches ??= []; // 超级超级保险
+        var catches = _catches.Select(item => new ItemTypeData(item)).ToList();
         writer.Write(_catches.Count);
-        foreach (var item in _catches)
-            writer.Write(item.type);
+        foreach (var itemData in catches)
+            writer.Write(itemData);
     }
 
     public override void NetReceive(BinaryReader reader)
     {
-        _catches.Clear();
+        List<ItemTypeData> catchData = [];
         int count = reader.ReadInt32();
         for (int i = 0; i < count; i++)
-            _catches.Add(new Item(reader.ReadInt32()));
+            catchData.Add(reader.ReadItemTypeData());
+
+        _catches = catchData.Select(data => data.Item).ToList();
     }
 }

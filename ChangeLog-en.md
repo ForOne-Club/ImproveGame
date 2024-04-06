@@ -10,6 +10,7 @@
 
 - [v1.7.1.0](Changelog/en/v1.7.1.0.md)
 - [v1.7.1.1](Changelog/en/v1.7.1.1.md)
+- [v1.7.1.2](Changelog/en/v1.7.1.2.md)
 
 # v1.7.0
 
