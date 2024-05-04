@@ -415,4 +415,21 @@ BuilderToggles: {
 	}
 }
 
+FakeShops: {
+	Wand: {
+		Label: Shop of wands
+		Wand: Shop of wands
+	}
+
+	Locator: {
+		Label: Shop of locator
+		Locator: Shop of locator
+	}
+
+	Other: {
+		Label: Shop of other
+		Other: Shop of other
+	}
+}
+
 NPCs.DummyNPC.DisplayName: Scarecrow Dummy

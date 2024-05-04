@@ -405,4 +405,21 @@ BuilderToggles: {
 	}
 }
 
+FakeShops: {
+	Wand: {
+		Label: 魔杖商店
+		Wand: 魔杖商店
+	}
+
+	Locator: {
+		Label: 定位球商店
+		Locator: 定位球商店
+	}
+
+	Other: {
+		Label: 其他物品商店
+		Other: 其他物品商店
+	}
+}
+
 NPCs.DummyNPC.DisplayName: 稻草人
