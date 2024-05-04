@@ -1,12 +1,13 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
 using ImproveGame.Content.Functions.HomeTeleporting;
+using ImproveGame.Content.Items;
+using ImproveGame.Content.Items.Globes;
+using ImproveGame.Content.Items.ItemContainer;
+using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Packets;
 using ImproveGame.UI.PlayerStats;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Reflection;
-using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -68,6 +69,7 @@ public class ModIntegrationsSystem : ModSystem
         DoRecipeBrowserIntegration();
         DoDialogueTweakIntegration();
         DoModLoaderIntegration();
+        DoShopLookupIntergration();
         NoLakeSizePenaltyLoaded = ModLoader.HasMod("NoLakeSizePenalty");
         WMITFLoaded = ModLoader.HasMod("WMITF");
     }
@@ -210,6 +212,44 @@ public class ModIntegrationsSystem : ModSystem
     {
         // 属于是自我测试了
         Call("AddHomeTpItem", mod.Find<ModItem>(itemName).Type, isPotion, isComebackItem);
+    }
+    private static void DoShopLookupIntergration()
+    {
+        Mod qot = ImproveGame.Instance;
+        if (ModLoader.TryGetMod("ShopLookup", out Mod mod))
+        {
+            mod.Call(3, qot, "Wand", TextureAssets.Item[ModContent.ItemType<StarburstWand>()].Value,
+                new NPCShop(-1, "Wand")
+                .Add<CreateWand>()
+                .Add<MagickWand>()
+                .Add<PaintWand>()
+                .Add<MoveChest>()
+                .Add<WallPlace>(Condition.DownedKingSlime)
+                .Add<SpaceWand>(Condition.DownedKingSlime)
+                .Add<LiquidWand>(Condition.DownedEowOrBoc)
+                .Add<StarburstWand>(Condition.Hardmode)
+                .Add<ConstructWand>(Condition.Hardmode));
+            mod.Call(3, qot, "Locator", TextureAssets.Item[ModContent.ItemType<AetherGlobe>()].Value,
+                new NPCShop(-1, "Locator")
+                .Add<FloatingIslandGlobe>()
+                .Add<PyramidGlobe>()
+                .Add<AetherGlobe>()
+                .Add<DungeonGlobe>()
+                .Add<EnchantedSwordGlobe>()
+                .Add<PlanteraGlobe>(Condition.Hardmode)
+                .Add<TempleGlobe>(Condition.DownedPlantera));
+            mod.Call(3, qot, "Other", TextureAssets.Item[ModContent.ItemType<ExtremeStorage>()].Value,
+                new NPCShop(-1, "Other")
+                .Add<BannerChest>()
+                .Add<ExtremeStorage>()
+                .Add<Autofisher>()
+                .Add<DetectorDrone>()
+                .Add<StorageCommunicator>()
+                .Add<BaitSupplier>()
+                .Add<PotionBag>()
+                .Add<Dummy>()
+                .Add<WeatherBook>(Condition.DownedEowOrBoc));
+        }
     }
 
     public override void Unload()
