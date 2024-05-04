@@ -1,12 +1,14 @@
-﻿using ImproveGame.Content.Items;
+﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.Core;
+using ImproveGame.UI.AmmoChainPanel;
 using System.Diagnostics.CodeAnalysis;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Functions.ChainedAmmo;
 
-public class AmmoChainGlobalItem : GlobalItem
+public class AmmoChainGlobalItem : GlobalItem, IItemOverrideHover, IItemOverrideLeftClick
 {
     public int Count;
     public int Index;
@@ -175,6 +177,30 @@ public class AmmoChainGlobalItem : GlobalItem
     {
         if (Chain != null && Chain.Chain.Count > 0)
             AmmoChainItem.AddAmmoChainTooltips(Mod, Chain, tooltips);
+    }
+
+    // 在打开弹药链编辑界面时，Alt点击一个弹药可以直接将其添加到弹药链末端（作为一个附加便捷功能）
+    public bool OverrideHover(Item[] inventory, int context, int slot)
+    {
+        if (!inventory[slot].IsAmmo() || !Main.keyState.IsKeyDown(Main.FavoriteKey))
+            return false;
+        if (AmmoChainUI.Instance is null || AmmoChainUI.Instance.PageSlideTimer is null)
+            return false;
+        if (!AmmoChainUI.Instance.Enabled || !AmmoChainUI.Instance.PageSlideTimer.Opened)
+            return false;
+
+        Main.cursorOverride = CursorOverrideID.GamepadDefaultCursor;
+        Main.cursorColor = Color.Lime;
+        return true;
+    }
+
+    public bool OverrideLeftClick(Item[] inventory, int context, int slot)
+    {
+        if (!OverrideHover(inventory, context, slot))
+            return false;
+
+        AmmoChainUI.Instance.TryAddToChain(inventory[slot]);
+        return true;
     }
 
     public override void SaveData(Item item, TagCompound tag)

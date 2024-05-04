@@ -17,16 +17,19 @@ public class ShiftClickSlotPlayer : ModPlayer
     {
         var item = inventory[slot];
 
+        bool result = false;
         foreach (var globalItem in from i in GlobalList<GlobalItem>.Globals where i is IItemOverrideHover select i)
-        {
-            ((IItemOverrideHover)globalItem).OverrideHover(inventory, context, slot);
-        }
+            result |= ((IItemOverrideHover)globalItem).OverrideHover(inventory, context, slot);
 
         if (item.ModItem is IItemOverrideHover overrideHover && overrideHover.OverrideHover(inventory, context, slot))
+            result |= overrideHover.OverrideHover(inventory, context, slot);
+
+        if (result)
             return true;
 
-        if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 && (context is ItemSlot.Context.InventoryItem or 114514)
-            && ItemSlot.ShiftInUse && !item.IsAir && !item.favorited)
+        if (Main.LocalPlayer.chest == -1 & Main.LocalPlayer.talkNPC == -1 &&
+            (context is ItemSlot.Context.InventoryItem or 114514) && ItemSlot.ShiftInUse && !item.IsAir &&
+            !item.favorited)
         {
             // 弹药链
             if (AmmoChainUI.Instance.Enabled && AmmoChainUI.Instance.SlotQuickPutAvailable(item))
@@ -34,6 +37,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                 Main.cursorOverride = CursorOverrideID.InventoryToChest;
                 return true;
             }
+
             // 至尊储存
             if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.AllItemsCached
                     .Any(s => CanPlaceInSlot(s, item) is 2 or 3))
@@ -41,21 +45,24 @@ public class ShiftClickSlotPlayer : ModPlayer
                 Main.cursorOverride = CursorOverrideID.InventoryToChest;
                 return true;
             }
+
             // 建筑法杖
             if (ArchitectureGUI.Visible &&
                 UISystem.Instance.ArchitectureGUI.ItemSlot.Any(s =>
-                                             s.Value.CanPlaceItem(item) &&
-                                             CanPlaceInSlot(s.Value.Item, item) is 2 or 3))
+                    s.Value.CanPlaceItem(item) &&
+                    CanPlaceInSlot(s.Value.Item, item) is 2 or 3))
             {
                 Main.cursorOverride = CursorOverrideID.InventoryToChest;
                 return true;
             }
+
             // 旗帜收纳箱 + 药水袋
             if (ItemContainerGUI.Instace.Enabled && ItemContainerGUI.Instace.Container.MeetEntryCriteria(item))
             {
                 Main.cursorOverride = CursorOverrideID.InventoryToChest;
                 return true;
             }
+
             if (BigBagGUI.Instance.Enabled && Main.LocalPlayer.TryGetModPlayer<DataPlayer>(out var dataPlayer) &&
                 dataPlayer.SuperVault.Any(s => CanPlaceInSlot(s, item) is 2 or 3))
             {
@@ -70,6 +77,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                 return true;
             }
         }
+
         return false;
     }
 
@@ -89,7 +97,8 @@ public class ShiftClickSlotPlayer : ModPlayer
             }
 
             // 至尊储存
-            if (ExtremeStorageGUI.Visible && ExtremeStorageGUI.AllItemsCached.Any(s => CanPlaceInSlot(s, inventory[slot]) is 2 or 3))
+            if (ExtremeStorageGUI.Visible &&
+                ExtremeStorageGUI.AllItemsCached.Any(s => CanPlaceInSlot(s, inventory[slot]) is 2 or 3))
             {
                 switch (Main.netMode)
                 {
@@ -97,7 +106,8 @@ public class ShiftClickSlotPlayer : ModPlayer
                         InvToChestPacket.Send(ExtremeStorageGUI.Storage.ID, slot, ExtremeStorageGUI.RealGroup);
                         break;
                     default:
-                        inventory[slot] = ExtremeStorageGUI.Storage.StackToNearbyChests(inventory[slot], ExtremeStorageGUI.RealGroup);
+                        inventory[slot] =
+                            ExtremeStorageGUI.Storage.StackToNearbyChests(inventory[slot], ExtremeStorageGUI.RealGroup);
                         ExtremeStorageGUI.RefreshCachedAllItems();
                         Recipe.FindRecipes();
                         break;
@@ -123,7 +133,8 @@ public class ShiftClickSlotPlayer : ModPlayer
 
             if (BigBagGUI.Instance.Enabled)
             {
-                inventory[slot] = ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
+                inventory[slot] =
+                    ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
                 Recipe.FindRecipes();
                 SoundEngine.PlaySound(SoundID.Grab);
 
@@ -131,7 +142,8 @@ public class ShiftClickSlotPlayer : ModPlayer
             }
 
             var fisher = AutofishPlayer.LocalPlayer.Autofisher;
-            if (AutofisherGUI.Visible && fisher is not null && fisher.fish.Any(s => CanPlaceInSlot(s, inventory[slot]) is 2 or 3))
+            if (AutofisherGUI.Visible && fisher is not null &&
+                fisher.fish.Any(s => CanPlaceInSlot(s, inventory[slot]) is 2 or 3))
             {
                 inventory[slot] = ItemStackToInventory(fisher.fish, inventory[slot], false);
                 AutofisherGUI.RequireRefresh = true;
@@ -147,8 +159,8 @@ public class ShiftClickSlotPlayer : ModPlayer
             if (!inventory[slot].IsAir && ArchitectureGUI.Visible)
             {
                 foreach (var itemSlot in from s in UISystem.Instance.ArchitectureGUI.ItemSlot
-                                         where s.Value.CanPlaceItem(inventory[slot])
-                                         select s)
+                         where s.Value.CanPlaceItem(inventory[slot])
+                         select s)
                 {
                     // 放到建筑GUI里面
                     ref Item slotItem = ref itemSlot.Value.Item;
@@ -166,6 +178,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                         itemSlot.Value.ItemChange();
                         return true; // 阻止原版代码运行
                     }
+
                     // type相同，里面的能堆叠，放进去
                     if (placeMode is 2)
                     {
@@ -182,6 +195,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                 }
             }
         }
+
         return false;
     }
 }

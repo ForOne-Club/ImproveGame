@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Content.Functions.ChainedAmmo;
+using ImproveGame.Core;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -265,6 +266,13 @@ public class AmmoChainUI : BaseBody
         // _shownPage.SetPage(_chainEditPage);
         PageSlideTimer.Open();
         _chainEditPage.StartEditing(chain, isCreatingAChain, chainName);
+    }
+
+    public void TryAddToChain(Item item)
+    {
+        _chainEditPage.EditingChain.Chain.Add(new AmmoChain.Ammo(new ItemTypeData(item), 10));
+        _chainEditPage.ShouldResetCurrentChain = true;
+        SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
     public void TryQuickPlaceIntoSlot(ref Item item)

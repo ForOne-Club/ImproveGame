@@ -15,7 +15,7 @@ public class SUIEditableText : TimerView
 
     public class SUITextWithTicker : SUIText
     {
-        public bool ShowCursorTicker;
+        public float CursorOpacity;
         public int Cursor;
 
         public SUITextWithTicker()
@@ -31,14 +31,12 @@ public class SUIEditableText : TimerView
             int cursor = Cursor;
             cursor = Math.Min(OriginalString.Length, cursor);
 
-            var cursorColor = Color.Transparent;
-            if (ShowCursorTicker)
-            {
-                cursorColor = Color.White;
-                // 算是个小彩蛋？
-                if (Main.LocalPlayer.hasRainbowCursor)
-                    cursorColor = Main.hslToRgb(Main.GlobalTimeWrappedHourly * 0.25f % 1f, 1f, 0.5f);
-            }
+            var cursorColor = Color.White;
+            // 算是个小彩蛋？
+            if (Main.LocalPlayer.hasRainbowCursor)
+                cursorColor = Main.hslToRgb(Main.GlobalTimeWrappedHourly * 0.25f % 1f, 1f, 0.5f);
+
+            cursorColor *= CursorOpacity;
 
             LastString = OriginalString.Insert(cursor, CursorSnippet.GenerateTag(cursorColor));
 
@@ -325,13 +323,31 @@ public class SUIEditableText : TimerView
     public override void DrawChildren(SpriteBatch spriteBatch)
     {
         InnerText.Cursor = _cursor;
-        InnerText.ShowCursorTicker = IsWritingText;
-        if (_cursorBlinkCount >= 20)
-            InnerText.ShowCursorTicker = false;
 
-        // 强制关闭，为了强调，和上面的if不合并
-        if (!ShowInputTicker)
-            InnerText.ShowCursorTicker = false;
+        // 没在写字，或者强制不显示指针
+        if (!IsWritingText || !ShowInputTicker)
+        {
+            InnerText.CursorOpacity = 0f;
+        }
+        // 下面是一个带淡入淡出的鼠标指针
+        else
+        {
+            // Opacity: 1        |   Time: 0 -> 14
+            if (_cursorBlinkCount is > 0 and < 14)
+                InnerText.CursorOpacity = 1f;
+
+            // Opacity: 1 -> 0   |   Time: 14 -> 20
+            if (_cursorBlinkCount is >= 14 and <= 20)
+                InnerText.CursorOpacity = TrUtils.GetLerpValue(20, 14, _cursorBlinkCount);
+
+            // Opacity: 0        |   Time: 20 -> 34
+            if (_cursorBlinkCount is > 20 and < 34)
+                InnerText.CursorOpacity = 0f;
+
+            // Opacity: 0 -> 1   |   Time: 34 -> 40(0)
+            if (_cursorBlinkCount is >= 37 and <= 40)
+                InnerText.CursorOpacity = TrUtils.GetLerpValue(34, 40, _cursorBlinkCount);
+        }
 
         base.DrawChildren(spriteBatch);
     }
