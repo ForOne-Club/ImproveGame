@@ -22,6 +22,7 @@ public class PlanteraGlobe : ModItem
         Item.consumable = true;
         Item.maxStack = Item.CommonMaxStack;
         Item.rare = ItemRarityID.Pink;
+        Item.value = Item.sellPrice(silver: 30);
     }
 
     public override void AddRecipes() =>

@@ -54,7 +54,7 @@ namespace ImproveGame.Content.Items
         public override void SetItemDefaults()
         {
             Item.rare = ItemRarityID.Cyan;
-            Item.value = Item.sellPrice(0, 1, 0, 0);
+            Item.value = Item.sellPrice(0, 2, 0, 0);
 
             SelectRange = new(20, 20);
             KillSize = new(5, 3);
@@ -115,10 +115,6 @@ namespace ImproveGame.Content.Items
                         BongBong(new Vector2(x, y) * 16f, 16, 16);
                 }, (x, y, wid, hei) => DoBoomPacket.Send(x, y, wid, hei)); // 同步爆炸特效
             }
-        }
-
-        private void FixedModeTileManipulation(Player player, int x, int y)
-        {
         }
 
         public override bool CanUseSelector(Player player)

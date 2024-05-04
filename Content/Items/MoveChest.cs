@@ -294,6 +294,7 @@ public class MoveChest : ModItem
         Item.autoReuse = true;
         Item.tileBoost = 6;
         Item.shoot = ProjectileID.PurificationPowder; // 占位符
+        Item.value = Item.sellPrice(gold: 3);
     }
 
     public override void UpdateInventory(Player player)

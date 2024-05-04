@@ -211,6 +211,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         tooltips.Add(new(Mod, "Quantity", "Quantity: " +
             CurrentFrameProperties.ExistItems.GetTotalStack(item.type)));
 
+        tooltips.Add(new(Mod, "Value", $"Value: {item.value}"));
         tooltips.Add(new(Mod, "Rare", $"Rare: {item.rare}"));
         tooltips.Add(new(Mod, "Type", "Type: " + item.type));
         tooltips.Add(new(Mod, "useTime", "UseTime: " + item.useTime));

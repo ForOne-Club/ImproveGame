@@ -15,7 +15,7 @@ namespace ImproveGame.Content.Functions
             {
                 _isExtraUpdate = false;
                 orig.Invoke();
-                SpawnNPCsThatNeedsToUntie();
+                TrySpawnNPCsThatNeedsToUntie();
 
                 // 2023.3.25: 调用次数从指数级改为乘数，发现实际速度并无差异，减少开销的操作也可有可无了，不过还是保留吧
                 int times = Config.TownNPCSpawnSpeed - 1;
@@ -64,14 +64,15 @@ namespace ImproveGame.Content.Functions
             if (HasEnoughMoneyForMerchant())
                 TrySetNPCSpawn(NPCID.Merchant);
 
+            TrySpawnNPCsThatNeedsToUntie();
+        }
+
+        private static void TrySpawnNPCsThatNeedsToUntie()
+        {
             // 更好的生成机制
             if (!Config.TownNPCGetTFIntoHouse)
                 return;
-            SpawnNPCsThatNeedsToUntie();
-        }
 
-        private static void SpawnNPCsThatNeedsToUntie()
-        {
             if (NPC.downedSlimeKing || NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3 || NPC.downedQueenBee ||
                 Main.hardMode || NPC.downedDeerclops)
                 TrySetNPCSpawn(NPCID.Stylist);

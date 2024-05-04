@@ -23,6 +23,7 @@ public abstract class GlobeBase : ModItem
         Item.consumable = true;
         Item.maxStack = Item.CommonMaxStack;
         Item.rare = ItemRarityID.Quest;
+        Item.value = Item.sellPrice(silver: 10);
     }
 
     public override bool CanUseItem(Player player)

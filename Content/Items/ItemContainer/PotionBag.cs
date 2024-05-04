@@ -224,6 +224,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
         Item.expert = false;
         Item.width = 48;
         Item.height = 42;
+        Item.value = Item.sellPrice(silver: 30);
     }
 
     public override void SetStaticDefaults() =>

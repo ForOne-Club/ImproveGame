@@ -119,8 +119,8 @@ public class VeinMinerSystem : ModSystem
 
     private static void DoPopupTip()
     {
-        // 3min一次提示
-        if (_popupTipTimer < 60 * 60 * 3)
+        // 60min一次提示
+        if (_popupTipTimer < 60 * 60 * 60)
             return;
 
         _popupTipTimer = 0;
@@ -147,8 +147,9 @@ public class VeinMinerSystem : ModSystem
             var tile = Main.tile[x, y];
             int type = tile.TileType;
 
-            bool isNotOre = (TileID.Sets.IsAContainer[type] || !Main.tileShine2[type]) || (!TileID.Sets.Ore[type] &&
-                Main.tileOreFinderPriority[type] <= 0 && !Main.tileSpelunker[type]) || Main.tileContainer[tile.TileType];
+            bool isNotOre = TileID.Sets.IsAContainer[type] ||
+                            (!TileID.Sets.Ore[type] && Main.tileOreFinderPriority[type] <= 0 &&
+                             !Main.tileSpelunker[type]);
             if (!_usingMiningTools || isNotOre)
             {
                 orig.Invoke(self, x, y , power);

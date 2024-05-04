@@ -45,6 +45,7 @@ public class DetectorDrone : ModItem
         Item.CloneDefaults(ItemID.JimsDrone);
         Item.shoot = ModContent.ProjectileType<DetectorDroneProj>();
         Item.shootSpeed = 2;
+        Item.value = Item.sellPrice(silver: 80);
     }
 
     public override void HoldItem(Player player)

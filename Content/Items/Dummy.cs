@@ -7,7 +7,7 @@ public class Dummy : ModItem
 {
     public override void SetDefaults()
     {
-        Item.SetBaseValues(34, 36, ItemRarityID.Red, Item.sellPrice(0), 1);
+        Item.SetBaseValues(34, 36, ItemRarityID.Red, Item.sellPrice(silver: 40), 1);
         Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 15, 15);
     }
 

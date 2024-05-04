@@ -23,6 +23,7 @@ public class EnchantedSwordGlobe : ModItem
         Item.consumable = true;
         Item.maxStack = Item.CommonMaxStack;
         Item.rare = ItemRarityID.Green;
+        Item.value = Item.sellPrice(silver: 50);
     }
 
     public override void AddRecipes() =>

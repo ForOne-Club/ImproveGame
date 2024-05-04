@@ -170,7 +170,7 @@ public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClick
         Item.useTime = 20;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.rare = ItemRarityID.Cyan;
-        Item.value = Item.sellPrice(gold: 5);
+        Item.value = Item.sellPrice(gold: 2, silver: 60);
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(-8f, -10f);

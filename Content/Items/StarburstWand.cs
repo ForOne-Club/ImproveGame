@@ -14,7 +14,7 @@ namespace ImproveGame.Content.Items
             Item.width = 40;
             Item.height = 46;
             Item.rare = ItemRarityID.Red;
-            Item.value = Item.sellPrice(0, 5, 0, 0);
+            Item.value = Item.sellPrice(0, 8, 0, 0);
 
             SelectRange = new(40, 40);
             KillSize = new(7, 5);
