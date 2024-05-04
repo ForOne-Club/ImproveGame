@@ -409,16 +409,19 @@ FakeShops: {
 	Wand: {
 		Label: 魔杖商店
 		Wand: 魔杖商店
+		Disable: 无
 	}
 
 	Locator: {
 		Label: 定位球商店
 		Locator: 定位球商店
+		Disable: 无
 	}
 
 	Other: {
 		Label: 其他物品商店
 		Other: 其他物品商店
+		Disable: 无
 	}
 }
 
