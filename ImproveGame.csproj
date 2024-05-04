@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\tModLoader.targets" />
 	<PropertyGroup>
 		<AssemblyName>ImproveGame</AssemblyName>
-		<TargetFramework>net6.0</TargetFramework>
-		<PlatformTarget>AnyCPU</PlatformTarget>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="FuzzySearch.Net" Version="0.3.3" />
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.4.1" />
-		<PackageReference Include="tModLoader.CodeAssist" Version="0.1.5" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="lib\*.dll" />

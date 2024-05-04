@@ -1,6 +1,7 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using Terraria.GameInput;
+using Terraria.ID;
 
 namespace ImproveGame.UIFramework.SUIElements;
 
@@ -104,7 +105,7 @@ public class SUISearchBar : View
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
-            SoundEngine.PlaySound(12);
+            SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         public override void Update(GameTime gameTime)

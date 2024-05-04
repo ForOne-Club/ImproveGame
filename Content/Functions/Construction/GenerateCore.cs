@@ -435,7 +435,7 @@ namespace ImproveGame.Content.Functions.Construction
                 {
                     var placePosition = position + new Point(x, y);
                     var tile = Main.tile[placePosition];
-                    if (!tile.HasTile || !Main.tileSign[tile.type])
+                    if (!tile.HasTile || !Main.tileSign[tile.TileType])
                         continue;
                     if ((tile.TileFrameX / 18) % 2 is not 0 || tile.TileFrameY / 18 is not 0)
                         continue;

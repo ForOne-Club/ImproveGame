@@ -66,12 +66,12 @@ namespace ImproveGame.Content.Functions
                     if (WorldGen.numTreeShakes == WorldGen.maxTreeShakes || _hasItemDropped || treeShaken)
                         return;
 
-                    TreeTypes treeType = WorldGen.GetTreeType(Main.tile[x, y].type);
+                    TreeTypes treeType = WorldGen.GetTreeType(Main.tile[x, y].TileType);
                     if (treeType == TreeTypes.None)
                         return;
 
                     y--;
-                    while (y > 10 && Main.tile[x, y].active() && TileID.Sets.IsShakeable[Main.tile[x, y].type])
+                    while (y > 10 && Main.tile[x, y].HasTile && TileID.Sets.IsShakeable[Main.tile[x, y].TileType])
                     {
                         y--;
                     }
@@ -384,7 +384,7 @@ namespace ImproveGame.Content.Functions
                 if (Main.tile[x, y - 1] == null)
                     return false;
 
-                if (!Main.tile[x, y - 1].active() || !TileID.Sets.IsValidSpawnPoint[Main.tile[x, y - 1].type])
+                if (!Main.tile[x, y - 1].HasTile || !TileID.Sets.IsValidSpawnPoint[Main.tile[x, y - 1].TileType])
                     return false;
 
                 return true;

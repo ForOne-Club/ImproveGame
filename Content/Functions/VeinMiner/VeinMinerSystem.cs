@@ -47,7 +47,7 @@ public class VeinMinerSystem : ModSystem
                 continue;
 
             var tile = Main.tile[pos];
-            int type = tile.type;
+            int type = tile.TileType;
             // 不是同类物块
             if (type != oreType)
                 continue;
@@ -145,10 +145,10 @@ public class VeinMinerSystem : ModSystem
         On_Player.PickTile += (orig, self, x, y, power) =>
         {
             var tile = Main.tile[x, y];
-            int type = tile.type;
+            int type = tile.TileType;
 
             bool isNotOre = (TileID.Sets.IsAContainer[type] || !Main.tileShine2[type]) || (!TileID.Sets.Ore[type] &&
-                Main.tileOreFinderPriority[type] <= 0 && !Main.tileSpelunker[type]) || Main.tileContainer[tile.type];
+                Main.tileOreFinderPriority[type] <= 0 && !Main.tileSpelunker[type]) || Main.tileContainer[tile.TileType];
             if (!_usingMiningTools || isNotOre)
             {
                 orig.Invoke(self, x, y , power);

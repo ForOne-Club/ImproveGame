@@ -43,7 +43,7 @@ public partial class SpaceWand
             {
                 WorldGen.SlopeTile(x, y, noEffects: true);
                 // 同种类，设置个斜坡就走
-                if (Main.tile[x, y].type == item.createTile)
+                if (Main.tile[x, y].TileType == item.createTile)
                 {
                     SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
                 }

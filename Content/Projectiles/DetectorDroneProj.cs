@@ -146,12 +146,12 @@ public class DetectorDroneProj : ModProjectile
                      Utils.Remap(Projectile.localAI[0], 5f, 15f, 1f, 0f);
         float volume = Utils.Clamp(MathHelper.Max(Utils.Remap(Projectile.localAI[1], 0f, 100f, 0f, 25f), num3 * 12f),
             0f, 100f) * 2f;
-        ActiveSound activeSound = SoundEngine.GetActiveSound(SlotId.FromFloat(Projectile.localAI[2]));
+        SoundEngine.TryGetActiveSound(SlotId.FromFloat(Projectile.localAI[2]), out ActiveSound activeSound);
         if (activeSound == null && volume != 0f)
         {
             Projectile.localAI[2] = SoundEngine.PlayTrackedLoopedSound(SoundID.JimsDrone, Projectile.Center,
                 new ProjectileAudioTracker(Projectile).IsActiveAndInGame).ToFloat();
-            activeSound = SoundEngine.GetActiveSound(SlotId.FromFloat(Projectile.localAI[2]));
+            SoundEngine.TryGetActiveSound(SlotId.FromFloat(Projectile.localAI[2]), out activeSound);
         }
 
         if (activeSound != null)
@@ -195,8 +195,10 @@ public class DetectorDroneProj : ModProjectile
 
     public override void OnKill(int timeLeft)
     {
-        SoundEngine.GetActiveSound(SlotId.FromFloat(Projectile.localAI[2]))?.Stop();
+        if (SoundEngine.TryGetActiveSound(SlotId.FromFloat(Projectile.localAI[2]), out var sound))
+            sound.Stop();
         SoundEngine.PlaySound(SoundID.Item62, Projectile.position);
+
         Color transparent = Color.Transparent;
         for (int i = 0; i < 15; i++)
         {

@@ -24,7 +24,7 @@ public class RevealPlanteraPacket : NetModule
             for (int j = 10; j < Main.maxTilesY - 10; j++)
             {
                 var tile = Framing.GetTileSafely(i, j);
-                if (!tile.HasTile || tile.type is not TileID.PlanteraBulb ||
+                if (!tile.HasTile || tile.TileType is not TileID.PlanteraBulb ||
                     tile.TileFrameX is not 18 || tile.TileFrameY is not 18)
                     continue;
 

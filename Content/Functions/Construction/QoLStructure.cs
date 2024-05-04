@@ -82,7 +82,7 @@ namespace ImproveGame.Content.Functions.Construction
                         wallIndex = -1; // 统一一点
                     }
 
-                    if (Main.tileSign[tile.type] && (tile.TileFrameX / 18) % 2 is 0 && tile.TileFrameY / 18 is 0)
+                    if (Main.tileSign[tile.TileType] && (tile.TileFrameX / 18) % 2 is 0 && tile.TileFrameY / 18 is 0)
                     {
                         int sign = Sign.ReadSign(x, y);
                         if (sign != -1)
