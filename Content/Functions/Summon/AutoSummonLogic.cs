@@ -74,8 +74,11 @@ public class AutoSummonLogic : ModPlayer
             Main.mouseX = (int)(Player.Center.X - Main.screenPosition.X);
             Main.mouseY = (int)(Player.Top.Y - Main.screenPosition.Y) - 32;
 
-            Player.ItemCheck_Shoot(Player.whoAmI, item, Player.GetWeaponDamage(item));
-            Player.ItemCheck_ApplyPetBuffs(item);
+            if (CombinedHooks.CanUseItem(Player, item) && CombinedHooks.CanShoot(Player, item))
+            {
+                Player.ItemCheck_Shoot(Player.whoAmI, item, Player.GetWeaponDamage(item));
+                Player.ItemCheck_ApplyPetBuffs(item);
+            }
 
             Main.mouseX = mouseX;
             Main.mouseY = mouseY;

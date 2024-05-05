@@ -417,18 +417,21 @@ BuilderToggles: {
 
 FakeShops: {
 	Wand: {
-		Label: Shop of wands
-		Wand: Shop of wands
+		Label: Wand Shop
+		Wand: Wand Shop
+		Disable: None
 	}
 
 	Locator: {
-		Label: Shop of locator
-		Locator: Shop of locator
+		Label: Locator Shop
+		Locator: Locator Shop
+		Disable: None
 	}
 
 	Other: {
-		Label: Shop of other
-		Other: Shop of other
+		Label: Misc Shop
+		Other: Misc Shop
+		Disable: None
 	}
 }
 

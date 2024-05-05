@@ -277,7 +277,65 @@ public static class ItemExtensions
 
     #region 筛选 - Filtering
 
-    public static HashSet<int> SpecialToolIds => new ItemFilters.Tools()._itemIdsThatAreAccepted;
+    // 为了与部分选了2024.04测试版的傻子玩家兼容，这里不引用原版的东西了，直接硬编码
+    // 等到时候2024.04版推送到“无”分支了，就把Preview分支里的东西合并进来
+    public static HashSet<int> SpecialToolIds =>
+    [
+        509,
+        850,
+        851,
+        3612,
+        3625,
+        3611,
+        510,
+        849,
+        3620,
+        1071,
+        1543,
+        1072,
+        1544,
+        1100,
+        1545,
+        50,
+        3199,
+        3124,
+        5358,
+        5359,
+        5360,
+        5361,
+        5437,
+        1326,
+        5335,
+        3384,
+        4263,
+        4819,
+        4262,
+        946,
+        4707,
+        205,
+        206,
+        207,
+        1128,
+        3031,
+        4820,
+        5302,
+        5364,
+        4460,
+        4608,
+        4872,
+        3032,
+        5303,
+        5304,
+        1991,
+        4821,
+        3183,
+        779,
+        5134,
+        1299,
+        4711,
+        4049,
+        114
+    ];
 
     public static bool IsHook(this Item item) => Main.projHook.IndexInRange(item.shoot) && Main.projHook[item.shoot];
 
