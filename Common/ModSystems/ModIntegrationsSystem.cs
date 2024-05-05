@@ -30,7 +30,7 @@ public class ModIntegrationsSystem : ModSystem
     /// <summary>
     /// A list of the items that don't apply infinite buffs
     /// </summary>
-    internal static List<int> ModdedInfBuffsIgnore = new();
+    internal static HashSet<int> ModdedInfBuffsIgnore = new();
 
     /// <summary>
     /// 添加物品ID对应的一系列Tile
@@ -279,8 +279,11 @@ public class ModIntegrationsSystem : ModSystem
                 {
                     case "IgnoreInfItem":
                         {
-                            List<int> potions = AsListOfInt(args[1]); // Potion IDs
-                            ModdedInfBuffsIgnore.AddRange(potions);
+                            List<int> ignores = AsListOfInt(args[1]); // Potion IDs
+                            foreach (int ignore in ignores)
+                            {
+                                ModdedInfBuffsIgnore.Add(ignore);
+                            }
                             return true;
                         }
                     case "AddPotion":

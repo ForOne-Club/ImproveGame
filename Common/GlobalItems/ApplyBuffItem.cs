@@ -6,7 +6,6 @@ using ImproveGame.UI;
 using ImproveGame.UIFramework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
-using Terraria.GameInput;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -97,7 +96,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             // 会给玩家buff的雕像
             buffTypes = (from t in Lookups.BuffTiles
-                    where item.createTile == t.TileID && (item.placeStyle == t.Style || t.Style == -1) select t.BuffID)
+                         where item.createTile == t.TileID && (item.placeStyle == t.Style || t.Style == -1) select t.BuffID)
                 .ToList();
 
             // 其他Mod的，自行添加了引用
@@ -111,8 +110,10 @@ namespace ImproveGame.Common.GlobalItems
         {
             if (item.ModItem?.Mod.Name is "Everglow") return base.ConsumeItem(item, player);
 
-            if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement &&
-                (item.buffType > 0 || Lookups.SpecialPotions.Contains(item.type)))
+            if (Config.NoConsume_Potion && !ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type) &&
+                item.stack >= Config.NoConsume_PotionRequirement &&
+
+               (item.buffType > 0 || Lookups.SpecialPotions.Contains(item.type)))
             {
                 return false;
             }
