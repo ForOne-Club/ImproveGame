@@ -112,7 +112,6 @@ namespace ImproveGame.Common.GlobalItems
 
             if (Config.NoConsume_Potion && !ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type) &&
                 item.stack >= Config.NoConsume_PotionRequirement &&
-
                (item.buffType > 0 || Lookups.SpecialPotions.Contains(item.type)))
             {
                 return false;

@@ -13,6 +13,9 @@ namespace ImproveGame.Common.ModSystems;
 
 public record FishingStat(int Power = 0, float SpeedMultiplier = 1f, bool TackleBox = false, bool LavaFishing = false);
 
+/// <summary>
+/// 处理几乎所有跨模组的集成
+/// </summary>
 public class ModIntegrationsSystem : ModSystem
 {
     /// <summary>
@@ -69,7 +72,7 @@ public class ModIntegrationsSystem : ModSystem
         DoRecipeBrowserIntegration();
         DoDialogueTweakIntegration();
         DoModLoaderIntegration();
-        DoShopLookupIntergration();
+        DoShopLookupIntegration();
         NoLakeSizePenaltyLoaded = ModLoader.HasMod("NoLakeSizePenalty");
         WMITFLoaded = ModLoader.HasMod("WMITF");
     }
@@ -213,43 +216,42 @@ public class ModIntegrationsSystem : ModSystem
         // 属于是自我测试了
         Call("AddHomeTpItem", mod.Find<ModItem>(itemName).Type, isPotion, isComebackItem);
     }
-    private static void DoShopLookupIntergration()
+    private static void DoShopLookupIntegration()
     {
-        Mod qot = ImproveGame.Instance;
-        if (ModLoader.TryGetMod("ShopLookup", out Mod mod))
-        {
-            mod.Call(3, qot, "Wand", TextureAssets.Item[ModContent.ItemType<StarburstWand>()].Value,
-                new NPCShop(-1, "Wand")
-                .Add<CreateWand>()
-                .Add<MagickWand>()
-                .Add<PaintWand>()
-                .Add<MoveChest>()
-                .Add<WallPlace>(Condition.DownedKingSlime)
-                .Add<SpaceWand>(Condition.DownedKingSlime)
-                .Add<LiquidWand>(Condition.DownedEowOrBoc)
-                .Add<StarburstWand>(Condition.Hardmode)
-                .Add<ConstructWand>(Condition.Hardmode));
-            mod.Call(3, qot, "Locator", TextureAssets.Item[ModContent.ItemType<AetherGlobe>()].Value,
-                new NPCShop(-1, "Locator")
-                .Add<FloatingIslandGlobe>()
-                .Add<PyramidGlobe>()
-                .Add<AetherGlobe>()
-                .Add<DungeonGlobe>()
-                .Add<EnchantedSwordGlobe>()
-                .Add<PlanteraGlobe>(Condition.Hardmode)
-                .Add<TempleGlobe>(Condition.DownedPlantera));
-            mod.Call(3, qot, "Other", TextureAssets.Item[ModContent.ItemType<ExtremeStorage>()].Value,
-                new NPCShop(-1, "Other")
-                .Add<BannerChest>()
-                .Add<ExtremeStorage>()
-                .Add<Autofisher>()
-                .Add<DetectorDrone>()
-                .Add<StorageCommunicator>()
-                .Add<BaitSupplier>()
-                .Add<PotionBag>()
-                .Add<Dummy>()
-                .Add<WeatherBook>(Condition.DownedEowOrBoc));
-        }
+        if (!ModLoader.TryGetMod("ShopLookup", out Mod mod))
+            return;
+
+        mod.Call(3, ImproveGame.Instance, "Wand", TextureAssets.Item[ModContent.ItemType<StarburstWand>()].Value,
+            new NPCShop(-1, "Wand")
+                .Add<CreateWand>(gold: 10)
+                .Add<MagickWand>(gold: 10)
+                .Add<PaintWand>(gold: 5)
+                .Add<MoveChest>(gold: 15)
+                .Add<WallPlace>(Condition.DownedKingSlime, gold: 8)
+                .Add<SpaceWand>(Condition.DownedKingSlime, gold: 12, silver: 50)
+                .Add<LiquidWand>(Condition.DownedEowOrBoc, gold: 20)
+                .Add<StarburstWand>(Condition.Hardmode, gold: 50)
+                .Add<ConstructWand>(Condition.Hardmode, gold: 30));
+        mod.Call(3, ImproveGame.Instance, "Locator", TextureAssets.Item[ModContent.ItemType<AetherGlobe>()].Value,
+            new NPCShop(-1, "Locator")
+                .Add<FloatingIslandGlobe>(gold: 8)
+                .Add<PyramidGlobe>(gold: 16)
+                .Add<AetherGlobe>(gold: 30)
+                .Add<DungeonGlobe>(gold: 1, silver: 80)
+                .Add<EnchantedSwordGlobe>(gold: 8)
+                .Add<PlanteraGlobe>(Condition.Hardmode, gold: 16)
+                .Add<TempleGlobe>(Condition.DownedPlantera, gold: 20));
+        mod.Call(3, ImproveGame.Instance, "Other", TextureAssets.Item[ModContent.ItemType<ExtremeStorage>()].Value,
+            new NPCShop(-1, "Other")
+                .Add<BannerChest>(gold: 2, silver: 50)
+                .Add<ExtremeStorage>(gold: 12)
+                .Add<Autofisher>(gold: 4)
+                .Add<DetectorDrone>(gold: 2, silver: 20)
+                .Add<StorageCommunicator>(Condition.Hardmode, gold: 50)
+                .Add<BaitSupplier>(gold: 30)
+                .Add<PotionBag>(gold: 2, silver: 50)
+                .Add<Dummy>(silver: 50)
+                .Add<WeatherBook>(Condition.DownedEowOrBoc, gold: 25, silver: 60));
     }
 
     public override void Unload()
