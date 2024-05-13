@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModHooks;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content;
 using ImproveGame.Core;
 using ImproveGame.UIFramework.SUIElements;
@@ -192,7 +193,8 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             return;
         }
 
-        var items = CollectHelper.GetShimmerResult(item, out int stackRequired);
+        var items = RecipeSystem.ShimmerInto[item.type];
+        int stackRequired = RecipeSystem.ShimmerIntoWithStack[item.type];
         if (items is null) return;
 
         string text = stackRequired is not 1
