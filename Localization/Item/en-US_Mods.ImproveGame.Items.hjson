@@ -15,6 +15,7 @@ SpaceWand: {
 		'''
 		[c/0099ff:Right click to open the control panel]
 		Places selected type of tile in the indicated area
+		Uses the first applicable item in your inventory
 		<right> while selecting area to cancel placement
 		'I pity these tools'
 		'''
