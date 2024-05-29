@@ -1,9 +1,4 @@
 ﻿using ImproveGame.Common.GlobalProjectiles;
-using ReLogic.Graphics;
-using System.Diagnostics;
-using Terraria.ModLoader.Config.UI;
-using Terraria.ModLoader.UI;
-using Terraria.UI.Chat;
 
 namespace ImproveGame.Common.Configs.Elements;
 
@@ -31,7 +26,7 @@ public class FukMeCalamityElement : PresetElement
         config.TownNPCGetTFIntoHouse = true;
         config.NPCLiveInEvil = true;
         config.TownNPCSpawnSpeed = 12;
-        config.NoCD_FishermanQuest = true;
+        config.NoCD_FishermanQuest = 1;
         config.NPCCoinDropRate = 8;
         config.ModifyNPCHappiness = true;
         config.NPCHappiness = 75;
@@ -94,7 +89,7 @@ public class ILoveBalanceElement : PresetElement
         config.TownNPCGetTFIntoHouse = false;
         config.NPCLiveInEvil = true;
         config.TownNPCSpawnSpeed = 1;
-        config.NoCD_FishermanQuest = true;
+        config.NoCD_FishermanQuest = 1;
         config.NPCCoinDropRate = 1;
         config.ModifyNPCHappiness = false;
         config.NPCHappiness = 75;
@@ -158,7 +153,7 @@ public class AllOffElement : PresetElement
         config.TownNPCGetTFIntoHouse = false;
         config.NPCLiveInEvil = false;
         config.TownNPCSpawnSpeed = 1;
-        config.NoCD_FishermanQuest = false;
+        config.NoCD_FishermanQuest = 0;
         config.NPCCoinDropRate = 1;
         config.ModifyNPCHappiness = false;
         config.NPCHappiness = 100;
@@ -208,9 +203,10 @@ public class AllOffElement : PresetElement
 
 public abstract class PresetElement : LargerPanelElement
 {
-    public override void LeftClick(UIMouseEvent evt) {
+    public override void LeftClick(UIMouseEvent evt)
+    {
         base.LeftClick(evt);
-        
+
         if (Item is not ImproveConfigs config) return;
         SetPreset(config);
         Terraria.ModLoader.UI.Interface.modConfig.SetPendingChanges();
