@@ -1,21 +1,16 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.ItemContainer;
-using ImproveGame.Content.Projectiles;
 using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UI.AutoTrash;
 using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemContainer;
-using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.OpenBag;
-using ImproveGame.UI.WeatherControl;
-using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
-using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.ModPlayers;
 
@@ -146,15 +141,23 @@ public class ImprovePlayer : ModPlayer
             }
         }
 
-        if (Config.NoCD_FishermanQuest)
+        switch (Config.NoCD_FishermanQuest)
         {
-            if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name))
-            {
-                Main.anglerQuestFinished = false;
-                Main.anglerWhoFinishedToday.Clear();
-
-                AddNotification(GetText("Tips.AnglerQuest"), Color.Cyan);
-            }
+            case 1:
+                if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name))
+                {
+                    Main.anglerQuestFinished = false;
+                    Main.anglerWhoFinishedToday.Clear();
+                    AddNotification(GetText("Tips.AnglerQuest"), Color.Cyan);
+                }
+                break;
+            case 2:
+                if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name))
+                {
+                    Main.AnglerQuestSwap();
+                    AddNotification(GetText("Tips.AnglerQuest"), Color.Cyan);
+                }
+                break;
         }
 
         if (Player.whoAmI == Main.myPlayer)

@@ -196,7 +196,12 @@ ImproveConfigs: {
 
 	NoCD_FishermanQuest: {
 		Label: "[centeritem:4608] Instant refresh Angler's quests"
-		Tooltip: ""
+		Tooltip: 
+		'''
+		0 - Off
+		1 - Not refresh quest fish
+		2 - Will refresh quest fish
+		'''
 	}
 
 	NPCCoinDropRate: {

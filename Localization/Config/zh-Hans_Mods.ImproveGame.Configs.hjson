@@ -198,8 +198,13 @@ ImproveConfigs: {
 	}
 
 	NoCD_FishermanQuest: {
-		Label: "[centeritem:4608] 渔夫任务取消冷却"
-		// Tooltip: ""
+		Label: "[centeritem:4608] 渔夫任务立即刷新"
+		Tooltip: 
+		'''
+		0 - 关闭
+		1 - 不刷新任务鱼
+		2 - 会刷新任务鱼
+		'''
 	}
 
 	NPCCoinDropRate: {

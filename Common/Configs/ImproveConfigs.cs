@@ -178,8 +178,10 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(1)]
     public int TownNPCSpawnSpeed;
 
-    [DefaultValue(false)]
-    public bool NoCD_FishermanQuest;
+    [DefaultValue(0)]
+    [Range(0, 2)]
+    [Slider]
+    public int NoCD_FishermanQuest;
 
     [Range(1, 25)]
     [DefaultValue(1)]
