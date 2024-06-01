@@ -56,7 +56,30 @@ Magic Storage开源链接: https://github.com/blushiemagic/MagicStorage
 ## 🤝 跨Mod支持 (Mod.Call)
 
 如果你是一名玩家，并想要让其他模组修复与更好的体验不兼容的问题，你可以向其他模组作者提出请求，让他们阅读此文档并添加跨Mod支持。
-Mod.Call的返回值是一个 `bool`，指示这个操作是否成功执行
+
+除了以 `GetXX` 开头的，其他Mod.Call的返回值是一个 `bool`，指示这个操作是否成功执行
+
+### GetAmmoChainSequence
+获取指定物品的弹药链序列
+建议将本模组源码的 [AmmoChain.cs](Content\Functions\ChainedAmmo\AmmoChain.cs) 和 [ItemTypeData.cs](Core\ItemTypeData.cs) 复制到你的模组源码中，以便操作弹药链
+#### 参数
+- `Item` 要获取弹药链序列的物品实例
+#### 返回值
+- `TagCompound` 以TagCompound形式存储的弹药链数据，数据读取方式参考AmmoChain.cs和ItemTypeData.cs。如果物品没有弹药链，返回 `null`
+
+### GetUniversalAmmoId
+获取“任意弹药”物品的ID，这是一个用于弹药链中，表示该位置弹药任意的物品，搭配弹药链使用
+#### 参数
+无
+#### 返回值
+- `int` “任意弹药”物品的ID
+
+### GetBigBagItems
+获取大背包中的物品
+#### 参数
+- `Player` 大背包所属玩家的实例
+#### 返回值
+- `List<Item>` 大背包中共100格的物品的实例，包括空气
 
 ### IgnoreInfItem
 为某个/些指定的物品添加无尽增益忽略，以防止在拥有30个时无限提供增益

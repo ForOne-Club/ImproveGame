@@ -55,7 +55,30 @@ Auto Piggy Bank: https://github.com/diniamo/auto-piggy-bank
 ## 🤝 Cross-mod Support (Mod.Call)
 
 If you are a player who want to have other mods fix incompatibilities with Quality of Terraria, you can make a request to other modders to have them read this document and add cross-mod support
-The return value of Mod.Call is a `bool`, indicating whether the operation was successfully executed
+
+With the exception of GetXX-prefixed calls, all other Mod.Call methods return a `bool` value indicating whether the operation was executed successfully
+
+### GetAmmoChainSequence
+Get the ammo chain sequence of the specified item
+It is recommended to copy the [AmmoChain.cs](Content\Functions\ChainedAmmo\AmmoChain.cs) and [ItemTypeData.cs](Core\ItemTypeData.cs) to your mod source to easily operate ammo chains
+#### Parameters
+- `Item` The item instance you are getting ammo chain from
+#### Return Value
+- `TagCompound` Ammo chain data saved as TagCompound. See [AmmoChain.cs](Content\Functions\ChainedAmmo\AmmoChain.cs) and [ItemTypeData.cs](Core\ItemTypeData.cs) to learn how to read the data. Returns `null` if the item has no ammo chain
+
+### GetUniversalAmmoId
+Get the item ID of "Unspecified Ammo", an item used in ammo chains to indicate that this ammo can be anything. Usually used with ammo chain related logic.
+#### Parameters
+None
+#### Return Value
+- `int` The item ID of "Unspecified Ammo"
+
+### GetBigBagItems
+Get all items in big backpack
+#### Parameters
+- `Player` The player instance
+#### Return Value
+- `List<Item>` All 100 items in the big backpack, including air
 
 ### IgnoreInfItem
 Ignore infinite buff(s) provided by certain item(s), hence it/they no longer provide(s) infinite buff(s)

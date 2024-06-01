@@ -1,8 +1,10 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
+using ImproveGame.Content.Functions.ChainedAmmo;
 using ImproveGame.Content.Functions.HomeTeleporting;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.Globes;
+using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Packets;
@@ -365,6 +367,27 @@ public class ModIntegrationsSystem : ModSystem
                                     new HomeTeleportingItem(item, isPotion, isComebackItem));
                             }
                             return false;
+                        }
+                    // 获取弹药链序列
+                    case "GetAmmoChainSequence":
+                        {
+                            Item item = (Item)args[1];
+                            if (item is null || item.IsAir ||
+                                !item.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) ||
+                                globalItem.Chain is null)
+                                return null;
+                            return globalItem.Chain.SerializeData();
+                        }
+                    // 获取大背包物品
+                    case "GetBigBagItems":
+                        {
+                            Player player = (Player)args[1];
+                            return GetAllInventoryItemsList(player, "portable, inv", 110);
+                        }
+                    // 获取“任意弹药”物品的ID
+                    case "GetUniversalAmmoId":
+                        {
+                            return ModContent.ItemType<UniversalAmmoIcon>();
                         }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");

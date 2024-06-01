@@ -91,12 +91,15 @@ public class AmmoChainItem : ModItem
 
     public static void AddAmmoChainTooltips(Mod mod, AmmoChain ammoChain, List<TooltipLine> tooltips)
     {
+        var tooltipLines = new List<TooltipLine>();
+
         if (!Config.AmmoChain)
         {
-            tooltips.Add(new TooltipLine(mod, "AmmoChainDisabled", GetText("Tips.AmmoChainDisabled"))
+            tooltipLines.Add(new TooltipLine(mod, "AmmoChainDisabled", GetText("Tips.AmmoChainDisabled"))
             {
                 OverrideColor = Color.Yellow
             });
+            AddToTooltip();
             return;
         }
 
@@ -112,16 +115,17 @@ public class AmmoChainItem : ModItem
             }
 
             ammoChainLineText += theText;
-            tooltips.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
+            tooltipLines.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
             {
                 OverrideColor = Color.Yellow
             });
 
             // 这里return，强调一下
+            AddToTooltip();
             return;
         }
 
-        tooltips.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
+        tooltipLines.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
         {
             OverrideColor = Color.Yellow
         });
@@ -140,14 +144,26 @@ public class AmmoChainItem : ModItem
                 continue;
 
             count = 0;
-            tooltips.Add(new TooltipLine(mod, $"AmmoChainL{line}", cachedText));
+            tooltipLines.Add(new TooltipLine(mod, $"AmmoChainL{line}", cachedText));
             cachedText = "";
             line++;
         }
 
         if (!string.IsNullOrWhiteSpace(cachedText))
         {
-            tooltips.Add(new TooltipLine(mod, $"AmmoChainL{line}", cachedText));
+            tooltipLines.Add(new TooltipLine(mod, $"AmmoChainL{line}", cachedText));
+        }
+
+        AddToTooltip();
+        return;
+
+        void AddToTooltip()
+        {
+            int fromModIndex = tooltips.FindIndex(i => i.Name == "FromModTip" && i.Mod == ImproveGame.Instance.Name);
+            if (fromModIndex != -1)
+                tooltips.InsertRange(fromModIndex, tooltipLines);
+            else
+                tooltips.AddRange(tooltipLines);
         }
     }
 
