@@ -32,6 +32,7 @@ public class Dummy : ModItem
             {
                 hasDummy = true;
                 npc.active = false;
+                DummyNPC.DummyDPS.Reset();
 
                 for (int i = 0; i < 20; i++)
                 {

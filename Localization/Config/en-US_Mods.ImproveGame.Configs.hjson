@@ -199,8 +199,8 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			0 - Off
-			1 - Not refresh quest fish
-			2 - Will refresh quest fish
+			1 - Refresh quest, don't reset the desired fish
+			2 - Refresh quest, and reset the desired fish
 			'''
 	}
 
@@ -727,6 +727,11 @@ ImproveConfigs: {
 			If one of the above two mods is loaded, this function will take no effect.
 			'''
 		PopupTip: Vein Mining can be disabled via QoT Config if you don't want it
+	}
+
+	DisableVeinMiningPopup: {
+		Label: "[centeritem:IronPickaxe] Disable Vein Mining Popup"
+		Tooltip: Disable the annoying popup for good
 	}
 }
 

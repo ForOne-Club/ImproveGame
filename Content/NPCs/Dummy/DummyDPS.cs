@@ -6,6 +6,7 @@ public class DummyDPS
 {
     public static readonly int ResetInterval = 120;
 
+    public DummyNPC Parent;
     public bool IsStarted;
     public int SurvivalTimer;
     public int FirstHitTime;
@@ -44,6 +45,7 @@ public class DummyDPS
         LastHitTime = SurvivalTimer;
         TotalDamage = 0;
         FinalBlow = 0;
+        Parent?.ClearBuffs();
     }
 
     public override string ToString()

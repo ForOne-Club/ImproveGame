@@ -8,7 +8,7 @@ public class VeinMinerSystem : ModSystem
     private static bool VeinMiningEnabled =>
         Config.SimpleVeinMining && !ModLoader.HasMod("BAM") && !ModLoader.HasMod("OreExcavator");
 
-    // 连锁挖矿可以关闭的提示每3min弹出一次
+    // 连锁挖矿可以关闭的提示每60min弹出一次
     private static int _popupTipTimer = 99999;
     private static bool _usingMiningTools;
     public static int MinerIndex = -1;
@@ -120,7 +120,7 @@ public class VeinMinerSystem : ModSystem
     private static void DoPopupTip()
     {
         // 60min一次提示
-        if (_popupTipTimer < 60 * 60 * 60)
+        if (_popupTipTimer < 60 * 60 * 60 || Config.DisableVeinMiningPopup)
             return;
 
         _popupTipTimer = 0;

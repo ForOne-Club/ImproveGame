@@ -133,7 +133,7 @@ public class InfBuffPlayer : ModPlayer
                     case -1:
                         break;
                     default:
-                        Main.LocalPlayer.AddBuff(buffType, 2);
+                        Main.LocalPlayer.AddBuff(buffType, 30);
 
                         // 本地玩家的对应ModPlayer
                         var modPlayer = Get(Main.LocalPlayer);

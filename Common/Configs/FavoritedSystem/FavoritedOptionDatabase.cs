@@ -10,7 +10,8 @@ public class FavoritedOptionDatabase
     internal static HashSet<string> NewOptions =>
     [
         nameof(ImproveConfigs.AmmoChain),
-        nameof(ImproveConfigs.SimpleVeinMining)
+        nameof(ImproveConfigs.SimpleVeinMining),
+        nameof(ImproveConfigs.DisableVeinMiningPopup)
     ];
 
     public static void SetDefaultFavoritedOptions()

@@ -102,7 +102,7 @@ public partial class AutofisherGUI : BaseBody, ISidedView
             fishSlot[i] = new(i);
             fishSlot[i].SetPos(x, y);
             fishSlot[i].SetSize(46f, 46f);
-            fishSlot[i].AllowFavorite = false;
+            // fishSlot[i].AllowFavorite = false;
             fishSlot[i].OnFishChange += ChangeFishSlot;
             fishSlot[i].OnFishRightClickChange += ChangeFishSlotStack;
             basePanel.Append(fishSlot[i]);
@@ -193,7 +193,7 @@ public partial class AutofisherGUI : BaseBody, ISidedView
         Item[] fish = autoFisher.fish;
         for (int i = 0; i < fish.Length; i++)
         {
-            if (fish[i].IsAir)
+            if (fish[i].IsAir || fish[i].favorited)
                 continue;
             fish[i] = ItemStackToInventory(inventory, fish[i], false, 50);
         }

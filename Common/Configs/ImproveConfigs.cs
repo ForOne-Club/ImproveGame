@@ -290,6 +290,9 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(true)]
     public bool SimpleVeinMining;
 
+    [DefaultValue(false)]
+    public bool DisableVeinMiningPopup;
+
     #endregion
 
     #region 树木设置

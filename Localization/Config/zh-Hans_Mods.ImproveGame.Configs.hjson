@@ -202,8 +202,8 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			0 - 关闭
-			1 - 不刷新任务鱼
-			2 - 会刷新任务鱼
+			1 - 刷新任务但不重置任务鱼
+			2 - 刷新任务并重置任务鱼
 			'''
 	}
 
@@ -727,6 +727,11 @@ ImproveConfigs: {
 			为避免冲突，若加载了以上两个模组之一，本功能将被强制禁用
 			'''
 		PopupTip: 若不想要，连锁挖矿可在更好的体验配置中关闭
+	}
+
+	DisableVeinMiningPopup: {
+		Label: "[centeritem:IronPickaxe] 禁用连锁挖矿弹出提示"
+		Tooltip: 永久关闭烦人的连锁挖矿弹出提示
 	}
 }
 

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.UIFramework.Graphics2D;
+using Terraria.ID;
 
 namespace ImproveGame.Content.NPCs.Dummy;
 
@@ -14,7 +15,8 @@ public class DummyNPC : ModNPC
 
     public override void SetStaticDefaults()
     {
-        NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, new NPCID.Sets.NPCBestiaryDrawModifiers {
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, new NPCID.Sets.NPCBestiaryDrawModifiers
+        {
             Hide = true
         });
     }
@@ -27,6 +29,7 @@ public class DummyNPC : ModNPC
             value: 0, damage: Config.Damage, defense: Config.Defense);
         npc.HitSound = SoundID.NPCHit1;
         npc.aiStyle = -1;
+        DummyDPS.Parent = this;
     }
 
     private float HitScale { get => NPC.ai[0]; set => NPC.ai[0] = value; }
@@ -76,6 +79,21 @@ public class DummyNPC : ModNPC
 
         NPC.frame = new Rectangle(0, NPC.frameCounter > 0 ? 76 : 0, 56, 74);
         npc.scale = 1f + HitScale;
+        npc.velocity = Vector2.Zero;
+    }
+
+    public void ClearBuffs()
+    {
+        if (!NPC.active) return;
+
+        for (int i = 0; i < NPC.maxBuffs; i++)
+        {
+            NPC.buffTime[i] = 0;
+            NPC.buffType[i] = 0;
+        }
+
+        if (Main.netMode == NetmodeID.Server)
+            NetMessage.SendData(MessageID.NPCBuffs, -1, -1, null, NPC.whoAmI);
     }
 
     public void UpdateTimer()

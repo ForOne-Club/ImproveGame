@@ -737,6 +737,9 @@ namespace ImproveGame.Content.Tiles
                         continue;
 
                     ref var item = ref fish[i];
+                    if (item.favorited)
+                        continue;
+
                     var dummyItem = item.Clone();
                     int oldStack = item.stack;
                 
