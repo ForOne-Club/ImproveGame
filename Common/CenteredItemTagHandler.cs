@@ -42,6 +42,13 @@ public class CenteredItemTagHandler : ITagHandler
                     position.Y += 8f;
                 }
                 _item.DrawIcon(spriteBatch, Color.White, position, 24f, scale);
+                if (_item.stack > 1)
+                {
+                    var text = _item.stack.ToString();
+                    Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(text) * 0.75f;
+                    Vector2 textPos = position + new Vector2(7f, 9f) - textSize / 2f;
+                    spriteBatch.DrawItemStackString(text, textPos, scale);
+                }
             }
 
             size = new Vector2(24) * scale;

@@ -2,6 +2,7 @@
 using ImproveGame.Common.GlobalProjectiles;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
+using ImproveGame.UI.ModernConfig;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
@@ -156,7 +157,7 @@ public class ImproveConfigs : ModConfig
     public bool RedPotionEverywhere;
 
     [DefaultValue(30)]
-    [Range(10, 999)]
+    [Range(10, 99)]
     public int RedPotionRequirement;
 
     #endregion
@@ -191,6 +192,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(false)]
     public bool ModifyNPCHappiness;
 
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ModifyNPCHappiness))]
     [DefaultValue(75)]
     [Range(75, 150)]
     [Slider]

@@ -108,7 +108,8 @@ public class SUIEditableText : TimerView
                 text = text[..MaxLength] ?? "";
 
             if (InnerText.TextOrKey != text)
-                ContentsChanged?.Invoke(text);
+                ContentsChanged?.Invoke(ref text);
+            text ??= "";
 
             if (string.IsNullOrEmpty(text))
                 Cursor = 0;
@@ -154,10 +155,11 @@ public class SUIEditableText : TimerView
     /// </summary>
     private static List<Keys> _oldPressedKeys = [];
 
+    public delegate void ContentsChangedDelegate(ref string text);
     /// <summary>
     /// 当输入内容更改时触发
     /// </summary>
-    public event Action<string> ContentsChanged;
+    public event ContentsChangedDelegate ContentsChanged;
 
     /// <summary>
     /// 当开始输入操作时触发
@@ -267,8 +269,11 @@ public class SUIEditableText : TimerView
 
     public void Write(string text)
     {
+        int originalLength = Text.Length;
         SetText(Text.Insert(Cursor, text));
-        Cursor += text.Length;
+        // 考虑各种情况
+        Cursor += Text.Length - originalLength;
+        Cursor = Math.Min(Text.Length, Cursor);
     }
 
     public void SetText(string text)

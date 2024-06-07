@@ -1,4 +1,5 @@
 ﻿using ImproveGame.UI.ModernConfig.OptionElements;
+using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.ModLoader.Config;
 
@@ -31,5 +32,10 @@ public sealed class ConfigOptionsPanel : SUIPanel
     public void AddToggle(ModConfig config, string name)
     {
         new OptionToggle(config, name).JoinParent(this);
+    }
+
+    public void AddValueSlider(ModConfig config, string name)
+    {
+        new OptionSlider(config, name).JoinParent(this);
     }
 }

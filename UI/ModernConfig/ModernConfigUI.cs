@@ -24,13 +24,17 @@ public sealed class ModernConfigUI : BaseBody
     // 侧栏放类别
     public CategorySidePanel CategoryPanel;
     
-    // 主栏放选项
+    // 主栏上放选项
     public ConfigOptionsPanel OptionsPanel;
+    
+    // 主栏下放描述
+    public TooltipPanel TooltipPanel;
 
     public ModernConfigUI()
     {
         int gapBetweenPanels = 20;
         int sidePanelWidth = 200;
+        int tooltipPanelHeight = 146;
         Instance = this;
         
         // 主面板
@@ -53,14 +57,33 @@ public sealed class ModernConfigUI : BaseBody
         CategoryPanel.SetSize(sidePanelWidth, 0f, 0f, 1f);
         CategoryPanel.JoinParent(MainPanel);
         
-        // 主栏放选项
+        // 把主栏框起来的容器
+        var mainPanelContainer = new View
+        {
+            Spacing = new Vector2(gapBetweenPanels),
+            RelativeMode = RelativeMode.Horizontal,
+            BorderColor = Color.White
+        };
+        mainPanelContainer.SetSize(-sidePanelWidth - gapBetweenPanels, 0f, 1f, 1f);
+        mainPanelContainer.JoinParent(MainPanel);
+        
+        // 主栏上放选项
         OptionsPanel = new ConfigOptionsPanel
         {
             Spacing = new Vector2(gapBetweenPanels),
-            RelativeMode = RelativeMode.Horizontal
+            RelativeMode = RelativeMode.Vertical
         };
-        OptionsPanel.SetSize(-sidePanelWidth - gapBetweenPanels, 0f, 1f, 1f);
-        OptionsPanel.JoinParent(MainPanel);
+        OptionsPanel.SetSize(0f, -tooltipPanelHeight - gapBetweenPanels, 1f, 1f);
+        OptionsPanel.JoinParent(mainPanelContainer);
+        
+        // 主栏下放描述
+        TooltipPanel = new TooltipPanel
+        {
+            Spacing = new Vector2(gapBetweenPanels),
+            RelativeMode = RelativeMode.Vertical
+        };
+        TooltipPanel.SetSize(0f, tooltipPanelHeight, 1f, 0f);
+        TooltipPanel.JoinParent(mainPanelContainer);
     }
 
     public override void Draw(SpriteBatch spriteBatch)

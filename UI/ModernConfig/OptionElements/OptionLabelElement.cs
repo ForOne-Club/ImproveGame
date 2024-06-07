@@ -27,7 +27,7 @@ public class OptionLabelElement : View
         Height.Set(40f, 0f);
 
         OverflowHidden = true;
-        currentTextSlideSpeed = 0.01f;
+        _currentTextSlideSpeed = TextSlideSpeed;
     }
 
     public override void Update(GameTime gameTime)
@@ -69,11 +69,11 @@ public class OptionLabelElement : View
     private void UpdateTextSlide()
     {
         var rateFactor = CountRefreshRate.CurrentRefreshRateFactor;
-        textSlideFactor += currentTextSlideSpeed * rateFactor;
-        if (textSlideFactor > 1.5)
-            currentTextSlideSpeed = -0.01f;
-        if (textSlideFactor < -0.5)
-            currentTextSlideSpeed = 0.01f;
+        _textSlideFactor += _currentTextSlideSpeed * rateFactor;
+        if (_textSlideFactor > 1.5)
+            _currentTextSlideSpeed = -TextSlideSpeed;
+        if (_textSlideFactor < -0.5)
+            _currentTextSlideSpeed = TextSlideSpeed;
     }
 
     public override void DrawSelf(SpriteBatch sb)
@@ -102,9 +102,10 @@ public class OptionLabelElement : View
             rasterizerState, null, Main.UIScaleMatrix);
     }
 
-    private float textSlideFactor; // 值域 [-0.5, 1.5]
-    private float currentTextSlideSpeed;
-    private float RealTextSlideFactor => Math.Clamp(textSlideFactor, 0, 1); // 值域 [0, 1]
+    private const float TextSlideSpeed = 0.01f;
+    private float _textSlideFactor; // 值域 [-0.5, 1.5]
+    private float _currentTextSlideSpeed;
+    private float RealTextSlideFactor => Math.Clamp(_textSlideFactor, 0, 1); // 值域 [0, 1]
 
     /// <summary>
     /// 给右侧留出的适当空间

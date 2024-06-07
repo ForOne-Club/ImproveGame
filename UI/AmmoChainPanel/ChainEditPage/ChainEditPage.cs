@@ -100,7 +100,7 @@ public class ChainEditPage : View
         SetupColorGrids(colorGrids);
     }
 
-    private void OnTextContentChanged(string content)
+    private void OnTextContentChanged(ref string content)
     {
         ChainName = content;
     }

@@ -13,5 +13,12 @@ public sealed class NpcSettings : Category
         panel.AddToggle(Config, nameof(Config.TownNPCHome));
         panel.AddToggle(Config, nameof(Config.TownNPCGetTFIntoHouse));
         panel.AddToggle(Config, nameof(Config.NPCLiveInEvil));
+        panel.AddValueSlider(Config, nameof(Config.TownNPCSpawnSpeed));
+        panel.AddValueSlider(Config, nameof(Config.NoCD_FishermanQuest));
+        panel.AddToggle(Config, nameof(Config.ModifyNPCHappiness));
+        panel.AddValueSlider(Config, nameof(Config.NPCHappiness));
+        panel.AddToggle(Config, nameof(Config.TravellingMerchantStay));
+        panel.AddToggle(Config, nameof(Config.TravellingMerchantRefresh));
+        panel.AddToggle(Config, nameof(Config.QuickNurse));
     }
 }

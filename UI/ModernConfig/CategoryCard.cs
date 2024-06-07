@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.SUIElements;
 using ReLogic.Graphics;
 using Terraria.UI.Chat;
 
@@ -9,7 +8,7 @@ namespace ImproveGame.UI.ModernConfig;
 
 public sealed class CategoryCard : TimerView
 {
-    public readonly Category Category;
+    private readonly Category Category;
     
     public CategoryCard(Category category)
     {
@@ -24,29 +23,19 @@ public sealed class CategoryCard : TimerView
 
         Main.instance.LoadItem(category.ItemIconId);
         _texture = TextureAssets.Item[category.ItemIconId].Value;
-        _text = GetText($"ModernConfig.{category.LocalizationKey}");
+        _text = category.Label;
         
         OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
-        OnLeftClick += LeftClickEvent;
+        OnLeftMouseDown += LeftMouseDownEvent;
     }
 
-    private void LeftClickEvent(UIMouseEvent evt, UIElement listeningElement)
+    private void LeftMouseDownEvent(UIMouseEvent evt, UIElement listeningelement)
     {
         ConfigOptionsPanel.CurrentCategory = Category;
     }
-    public Vector2 TextAlign;
+
     private readonly Texture2D _texture;
     private string _text;
-    public Vector2 TextSize { get; private set; }
-    public string Text
-    {
-        get => _text;
-        set
-        {
-            _text = value;
-            TextSize = FontAssets.MouseText.Value.MeasureString(value);
-        }
-    }
 
     public Color BeginBorderColor = UIStyle.PanelBorder;
     public Color EndBorderColor = UIStyle.ItemSlotBorderFav;

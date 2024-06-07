@@ -1,40 +1,19 @@
-﻿using ImproveGame.Common.Configs;
-using ImproveGame.UIFramework;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.UI;
-using Terraria.UI.Chat;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
-public class OptionToggle : View, ConfigOption
+public sealed class OptionToggle : ModernConfigOption
 {
-    public OptionToggle(ModConfig config, string optionName)
+    public OptionToggle(ModConfig config, string optionName) : base(config, optionName, 60)
     {
-        Config = config;
-        OptionName = optionName;
-
-        Width.Set(0f, 1f);
-        Height.Set(40f, 0f);
-
-        FieldInfo = Config.GetType().GetField(OptionName);
-        if (FieldInfo is null)
-            throw new Exception($"Field \"{OptionName}\" not found in config \"{Config.GetType().Name}\"");
         if (FieldInfo.FieldType != typeof(bool))
             throw new Exception($"Field \"{OptionName}\" is not a bool");
-
-        RelativeMode = RelativeMode.Vertical;
-        Spacing = new Vector2(4);
-        
         if (Enabled)
             _timer.ImmediateOpen();
-
-        SetPadding(4f);
-        var labelElement = new OptionLabelElement(config, optionName);
-        labelElement.JoinParent(this);
     }
 
     public override void Update(GameTime gameTime)
@@ -62,7 +41,6 @@ public class OptionToggle : View, ConfigOption
 
         var dimensions = GetDimensions();
         var position = dimensions.Position();
-        var center = dimensions.Center();
         var size = dimensions.Size();
 
         // 背景板
@@ -84,21 +62,15 @@ public class OptionToggle : View, ConfigOption
         // 提示
         if (IsMouseHovering)
         {
-            UICommon.TooltipMouseText(Tooltip);
+            TooltipPanel.SetText(Tooltip);
         }
     }
 
     private readonly AnimationTimer _timer = new (4);
 
-    private string Tooltip => ConfigHelper.GetTooltip(Config, OptionName);
-
     public bool Enabled
     {
-        get => (bool)FieldInfo.GetValue(Config);
+        get => (bool)FieldInfo.GetValue(Config)!;
         set => ConfigHelper.SetConfigValue(Config, FieldInfo, value);
     }
-
-    public FieldInfo FieldInfo { get; }
-    public ModConfig Config { get; }
-    public string OptionName { get; }
 }

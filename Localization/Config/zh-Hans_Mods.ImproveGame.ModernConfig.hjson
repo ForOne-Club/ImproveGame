@@ -1,2 +1,30 @@
-GameMechanics: 游戏机制
-NpcSettings: NPC设置
+GameMechanics: {
+	Label: 游戏机制
+	Tooltip: 更好的体验修改了部分游戏机制，例如不生成墓碑、重生加速等。
+}
+
+NpcSettings: {
+	Label: 友好NPC
+	Tooltip:
+		'''
+		更好的体验修改了友好NPC的部分行为，例如NPC入住机制、NPC幸福度、旅商行为等。
+		'''
+}
+
+EnemySettings: {
+	Label: 敌对生物
+	Tooltip:
+		'''
+		更好的体验修改了敌对生物的部分行为，例如使熔岩史莱姆不掉落熔岩、可调节钱币掉落倍率等。
+		'''
+}
+
+PlayerAbility: {
+	Label: 玩家能力
+	Tooltip: 更好的体验提供部分修改玩家能力的功能，以使游玩流程更加舒适。例如延长物块放置速度、满血复活、死后保持增益等。
+}
+
+Minimap: {
+	Label: 地图
+	Tooltip: 开启结构标记功能后，可通过定位球在地图上定位特定结构。
+}

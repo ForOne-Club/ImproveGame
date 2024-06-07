@@ -1132,4 +1132,9 @@ partial class MyUtils
 
         return factor;
     }
+    
+    public static bool MouseInRound(Vector2 roundCenter, int radius)
+    {
+        return DistanceSquared(Main.MouseScreen, roundCenter) <= radius * radius;
+    }
 }
