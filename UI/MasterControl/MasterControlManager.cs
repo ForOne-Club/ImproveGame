@@ -4,6 +4,7 @@ using ImproveGame.UI.AmmoChainPanel;
 using ImproveGame.UI.DeathSpectating;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UI.ItemSearcher;
+using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
 using ImproveGame.UI.WeatherControl;
@@ -333,6 +334,15 @@ public class MasterControlManager : ModSystem
 
         modConfig.OnMouseDown += _ =>
         {
+            var ui = ModernConfigUI.Instance;
+            if (ui is null) return;
+
+            if (ui.Enabled)
+                ui.Close();
+            else
+                ui.Open();
+            
+            return;
             if (Main.inFancyUI) return;
 
             SoundEngine.PlaySound(SoundID.MenuOpen);
