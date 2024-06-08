@@ -4,6 +4,7 @@ using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemSearcher;
+using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.SpaceWand;
 using ImproveGame.UI.WorldFeature;
@@ -157,6 +158,12 @@ public class UISystem : ModSystem
         BrustInterface = null;
         SpaceWandInterface = null;
         PaintWandInterface = null;
+    }
+
+    public override void PostSetupContent()
+    {
+        // 配置的特殊处理
+        ModernConfigUI.Instance = new ModernConfigUI();
     }
     #endregion
 

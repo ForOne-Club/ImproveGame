@@ -2,7 +2,6 @@
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using Terraria.ModLoader.Config;
-using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -29,6 +28,7 @@ public sealed class OptionToggle : ModernConfigOption
     public override void LeftMouseDown(UIMouseEvent evt)
     {
         base.LeftMouseDown(evt);
+        if (!Interactable) return;
         Enabled = !Enabled;
         SoundEngine.PlaySound(SoundID.MenuTick);
     }
@@ -43,9 +43,17 @@ public sealed class OptionToggle : ModernConfigOption
         var position = dimensions.Position();
         var size = dimensions.Size();
 
-        // 背景板
-        var panelColor = IsMouseHovering ? UIStyle.PanelBgLightHover : UIStyle.PanelBgLight;
-        SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor);
+        base.DrawSelf(sb);
+
+        if (Height.Pixels < 10)
+            return;
+
+        if (!Interactable)
+        {
+            color *= 0.5f;
+            color2 = Color.Gray * 0.6f;
+            color3 = Color.Gray * 0.6f;
+        }
 
         // 开关
         var boxSize = new Vector2(48, 26);
@@ -58,12 +66,6 @@ public sealed class OptionToggle : ModernConfigOption
         Vector2 position2 = boxPosition + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),
             new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), _timer.Schedule);
         SDFGraphics.NoBorderRound(position2, boxSize2.X, color3);
-
-        // 提示
-        if (IsMouseHovering)
-        {
-            TooltipPanel.SetText(Tooltip);
-        }
     }
 
     private readonly AnimationTimer _timer = new (4);

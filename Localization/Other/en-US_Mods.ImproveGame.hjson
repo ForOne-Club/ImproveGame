@@ -1,4 +1,5 @@
 ModName: Quality of Terraria
+Search: Search...
 
 Tiles: {
 	Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"

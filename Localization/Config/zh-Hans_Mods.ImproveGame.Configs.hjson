@@ -952,12 +952,12 @@ UIConfigs: {
 
 	InfernoTransparency: {
 		Label: "[centeritem:InfernoPotion] 狱火圈不透明度"
-		Tooltip: 影响你看所有玩家的狱火圈的不透明度，1为不透明，0为完全透明·
+		Tooltip: 影响你看所有玩家的狱火圈的不透明度，1为不透明，0为完全透明。
 	}
 
 	InvisibleTransparency: {
 		Label: "[centeritem:InvisibilityPotion] 隐身不透明度"
-		Tooltip: 只会影响自己看自己的不透明度，看别人或别人看你不会受到影响，1为不透明，0为完全透明·
+		Tooltip: 只会影响自己看自己的不透明度，看别人或别人看你不会受到影响，1为不透明，0为完全透明。
 	}
 
 	ThemeType: {
@@ -991,7 +991,7 @@ UIConfigs: {
 	}
 
 	AutoSummon: {
-		Label: "[i:SlimeStaff] 自动重召唤"
+		Label: "[centeritem:SlimeStaff] 自动重召唤"
 		Tooltip:
 			'''
 			复活后会自动召唤死前最后一次召唤的召唤物

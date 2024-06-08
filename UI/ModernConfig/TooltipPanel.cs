@@ -20,6 +20,8 @@ public class TooltipPanel : SUIPanel
 
     public override void Draw(SpriteBatch spriteBatch)
     {
+        if (Instance.Text.TextOrKey == "")
+            Instance.Text.TextOrKey = GetText("ModernConfig.NoTooltip");
         base.Draw(spriteBatch);
         Instance.Text.TextOrKey = ConfigOptionsPanel.CurrentCategory?.Tooltip ?? "";
     }

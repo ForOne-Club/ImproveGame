@@ -6,8 +6,6 @@ public sealed class EnemySettings : Category
 {
     public override int ItemIconId => ItemID.BloodMoonStarter;
 
-    public override string LocalizationKey => "EnemySettings";
-
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         panel.AddValueSlider(Config, nameof(Config.NPCCoinDropRate));

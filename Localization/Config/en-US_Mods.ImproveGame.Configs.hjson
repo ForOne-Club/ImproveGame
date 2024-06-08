@@ -990,7 +990,7 @@ UIConfigs: {
 	}
 
 	AutoSummon: {
-		Label: "[i:SlimeStaff] Auto Re-summoning"
+		Label: "[centeritem:SlimeStaff] Auto Re-summoning"
 		Tooltip:
 			'''
 			Summons last used minion after respawn

@@ -105,7 +105,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(true)]
     public bool NoConsume_Projectile;
 
-    [DefaultValue(false)]
+    [DefaultValue(true)]
     public bool ImprovePrefix;
 
     [DefaultValue(true)]
@@ -146,18 +146,21 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(true)]
     public bool NoConsume_Potion;
 
+    [DisplayCondition(nameof(ImproveConfigs), nameof(NoConsume_Potion))]
     [DefaultValue(30)]
-    [Range(10, 999)]
+    [Range(10, 300)]
     public int NoConsume_PotionRequirement;
 
     [DefaultValue(false)]
     public bool InfiniteRedPotion;
 
     [DefaultValue(false)]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(InfiniteRedPotion))]
     public bool RedPotionEverywhere;
 
     [DefaultValue(30)]
-    [Range(10, 99)]
+    [Range(10, 300)]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(InfiniteRedPotion))]
     public int RedPotionRequirement;
 
     #endregion
@@ -309,27 +312,27 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(false)]
     public bool GemTreeAlwaysDropGem;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(5)]
     public int MostTreeMin;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(16)]
     public int MostTreeMax;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(10)]
     public int PalmTreeMin;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(20)]
     public int PalmTreeMax;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(7)]
     public int GemTreeMin;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(12)]
     public int GemTreeMax;
 

@@ -6,8 +6,6 @@ public sealed class Minimap : Category
 {
     public override int ItemIconId => ItemID.TrifoldMap;
 
-    public override string LocalizationKey => "Minimap";
-
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         var uiConfig = UIConfigs.Instance;

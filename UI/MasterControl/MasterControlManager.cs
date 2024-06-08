@@ -338,9 +338,14 @@ public class MasterControlManager : ModSystem
             if (ui is null) return;
 
             if (ui.Enabled)
+            {
                 ui.Close();
+            }
             else
+            {
                 ui.Open();
+                ui.OpenFromMasterControl = true;
+            }
             
             return;
             if (Main.inFancyUI) return;

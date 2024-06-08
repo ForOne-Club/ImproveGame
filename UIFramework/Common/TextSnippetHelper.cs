@@ -76,6 +76,7 @@ public static class TextSnippetHelper
     {
         string pattern = @"%\$#\?\?>\s*(.*?)\s*%\$#\?\?>";
 
+        input ??= "";
         Match match = Regex.Match(input, pattern);
         if (!match.Success)
             return ParseMessage(input, baseColor);

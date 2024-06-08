@@ -2,9 +2,15 @@
 
 public abstract class Category
 {
-    public abstract int ItemIconId { get; }
+    public virtual int ItemIconId => 0;
 
-    public abstract string LocalizationKey { get; }
+    public virtual Texture2D GetIcon()
+    {
+        Main.instance.LoadItem(ItemIconId);
+        return TextureAssets.Item[ItemIconId].Value;
+    }
+
+    public virtual string LocalizationKey => GetType().Name;
 
     public abstract void AddOptions(ConfigOptionsPanel panel);
 

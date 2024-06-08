@@ -6,8 +6,6 @@ public sealed class Multiplayer : Category
 {
     public override int ItemIconId => ItemID.GolfCupFlagRed;
 
-    public override string LocalizationKey => "Multiplayer";
-
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         panel.AddToggle(Config, nameof(Config.ShareCraftingStation));

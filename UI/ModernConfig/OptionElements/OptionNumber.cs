@@ -15,14 +15,10 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 public sealed class OptionNumber : ModernConfigOption
 {
     private readonly SUINumericText _numericTextBox;
-    internal double Min = 0;
-    internal double Max = 1;
-    internal double Default = 1;
 
     public OptionNumber(ModConfig config, string optionName) : base(config, optionName, 70)
     {
         CheckValid();
-        CheckAttributes();
 
         var box = new View
         {
@@ -78,46 +74,9 @@ public sealed class OptionNumber : ModernConfigOption
             throw new Exception($"Field \"{OptionName}\" is not a int, float or double");
     }
 
-    private void CheckAttributes()
-    {
-        var rangeAttribute = FieldInfo.GetCustomAttribute<RangeAttribute>();
-        if (rangeAttribute is {Min: int, Max: int })
-        {
-            Max = (int)rangeAttribute.Max;
-            Min = (int)rangeAttribute.Min;
-        }
-
-        if (rangeAttribute is {Min: float, Max: float })
-        {
-            Max = (float)rangeAttribute.Max;
-            Min = (float)rangeAttribute.Min;
-        }
-
-        if (rangeAttribute is {Min: double, Max: double })
-        {
-            Max = (double)rangeAttribute.Max;
-            Min = (double)rangeAttribute.Min;
-        }
-
-        var defaultValueAttributeAttribute = FieldInfo.GetCustomAttribute<DefaultValueAttribute>();
-        if (defaultValueAttributeAttribute is {Value: int })
-        {
-            Default = (int)defaultValueAttributeAttribute.Value;
-        }
-
-        if (defaultValueAttributeAttribute is {Value: float })
-        {
-            Default = (float)defaultValueAttributeAttribute.Value;
-        }
-
-        if (defaultValueAttributeAttribute is {Value: double })
-        {
-            Default = (double)defaultValueAttributeAttribute.Value;
-        }
-    }
-
     private void SetConfigValue(double value, bool broadcast)
     {
+        if (!Interactable) return;
         if (FieldInfo.FieldType == typeof(int))
             ConfigHelper.SetConfigValue(Config, FieldInfo, (int)value, broadcast);
         else if (FieldInfo.FieldType == typeof(float))
@@ -130,6 +89,8 @@ public sealed class OptionNumber : ModernConfigOption
     {
         base.Update(gameTime);
 
+        _numericTextBox.IgnoresMouseInteraction = !Interactable;
+
         // 简直是天才的转换
         var value = float.Parse(FieldInfo.GetValue(Config)!.ToString()!);
         if (!_numericTextBox.IsWritingText)
@@ -138,18 +99,6 @@ public sealed class OptionNumber : ModernConfigOption
 
     public override void DrawSelf(SpriteBatch sb)
     {
-        var dimensions = GetDimensions();
-        var position = dimensions.Position();
-        var size = dimensions.Size();
-
-        // 背景板
-        var panelColor = IsMouseHovering ? UIStyle.PanelBgLightHover : UIStyle.PanelBgLight;
-        SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor);
-
-        // 提示
-        if (IsMouseHovering)
-        {
-            TooltipPanel.SetText(Tooltip);
-        }
+        base.DrawSelf(sb);
     }
 }

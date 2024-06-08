@@ -6,12 +6,18 @@ public sealed class GameMechanics : Category
 {
     public override int ItemIconId => ItemID.Cog;
 
-    public override string LocalizationKey => "GameMechanics";
-
     public override void AddOptions(ConfigOptionsPanel panel)
     {
-        panel.AddToggle(Config, nameof(Config.AlchemyGrassGrowsFaster));
-        panel.AddToggle(Config, nameof(Config.AlchemyGrassAlwaysBlooms));
-        panel.AddToggle(Config, nameof(Config.StaffOfRegenerationAutomaticPlanting));
+        panel.AddToggle(Config, nameof(Config.BedEverywhere));
+        panel.AddToggle(Config, nameof(Config.NoSleepRestrictions));
+        panel.AddValueSlider(Config, nameof(Config.BedTimeRate));
+        panel.AddToggle(Config, nameof(Config.NoPylonRestrictions));
+        panel.AddToggle(Config, nameof(Config.FasterExtractinator));
+        panel.AddToggle(Config, nameof(Config.MiddleEnableBank));
+        panel.AddToggle(Config, nameof(Config.NoBiomeSpread));
+        panel.AddToggle(Config, nameof(Config.JourneyResearch));
+        panel.AddToggle(Config, nameof(Config.BanDamageVar));
+        panel.AddToggle(Config, nameof(Config.NoLakeSizePenalty));
+        panel.AddToggle(Config, nameof(Config.LightNotBlocked));
     }
 }

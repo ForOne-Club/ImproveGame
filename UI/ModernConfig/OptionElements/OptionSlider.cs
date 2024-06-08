@@ -38,6 +38,7 @@ public sealed class OptionSlider : ModernConfigOption
             Rounded = new Vector4(6f);
             SetSizePixels(80f, 28f);
             VAlign = 0.5f;
+            Rounded = new Vector4(14f);
         }
 
         public override void LeftMouseDown(UIMouseEvent evt)
@@ -104,14 +105,10 @@ public sealed class OptionSlider : ModernConfigOption
 
     private SlideBox _slideBox;
     private SUINumericText _numericTextBox;
-    internal double Min = 0;
-    internal double Max = 1;
-    internal double Default = 1;
 
-    public OptionSlider(ModConfig config, string optionName) : base(config, optionName, 110)
+    public OptionSlider(ModConfig config, string optionName) : base(config, optionName, 140)
     {
         CheckValid();
-        CheckAttributes();
 
         var box = new View
         {
@@ -133,44 +130,6 @@ public sealed class OptionSlider : ModernConfigOption
             throw new Exception($"Field \"{OptionName}\" is not a int, float or double");
     }
 
-    private void CheckAttributes()
-    {
-        var rangeAttribute = FieldInfo.GetCustomAttribute<RangeAttribute>();
-        if (rangeAttribute is {Min: int, Max: int })
-        {
-            Max = (int)rangeAttribute.Max;
-            Min = (int)rangeAttribute.Min;
-        }
-
-        if (rangeAttribute is {Min: float, Max: float })
-        {
-            Max = (float)rangeAttribute.Max;
-            Min = (float)rangeAttribute.Min;
-        }
-
-        if (rangeAttribute is {Min: double, Max: double })
-        {
-            Max = (double)rangeAttribute.Max;
-            Min = (double)rangeAttribute.Min;
-        }
-
-        var defaultValueAttributeAttribute = FieldInfo.GetCustomAttribute<DefaultValueAttribute>();
-        if (defaultValueAttributeAttribute is {Value: int })
-        {
-            Default = (int)defaultValueAttributeAttribute.Value;
-        }
-
-        if (defaultValueAttributeAttribute is {Value: float })
-        {
-            Default = (float)defaultValueAttributeAttribute.Value;
-        }
-
-        if (defaultValueAttributeAttribute is {Value: double })
-        {
-            Default = (double)defaultValueAttributeAttribute.Value;
-        }
-    }
-
     private void AddTextBox(View box)
     {
         bool isInt = FieldInfo.FieldType == typeof(int);
@@ -178,7 +137,7 @@ public sealed class OptionSlider : ModernConfigOption
         {
             RelativeMode = RelativeMode.Horizontal,
             BgColor = Color.Black * 0.4f,
-            Rounded = new Vector4(16f),
+            Rounded = new Vector4(14f),
             MinValue = Min,
             MaxValue = Max,
             InnerText =
@@ -233,9 +192,10 @@ public sealed class OptionSlider : ModernConfigOption
 
     private void SetConfigValue(double value, bool broadcast)
     {
-        if (FieldInfo.FieldType == typeof(int))
-            ConfigHelper.SetConfigValue(Config, FieldInfo, (int)value, broadcast);
-        else if (FieldInfo.FieldType == typeof(float))
+        if (!Interactable) return;
+        if (IsInt)
+            ConfigHelper.SetConfigValue(Config, FieldInfo, (int)Math.Round(value), broadcast);
+        else if (IsFloat)
             ConfigHelper.SetConfigValue(Config, FieldInfo, (float)value, broadcast);
         else
             ConfigHelper.SetConfigValue(Config, FieldInfo, value, broadcast);
@@ -244,6 +204,9 @@ public sealed class OptionSlider : ModernConfigOption
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+        
+        _slideBox.IgnoresMouseInteraction = !Interactable;
+        _numericTextBox.IgnoresMouseInteraction = !Interactable;
 
         // 简直是天才的转换
         var value = float.Parse(FieldInfo.GetValue(Config)!.ToString()!);
@@ -256,13 +219,7 @@ public sealed class OptionSlider : ModernConfigOption
 
     public override void DrawSelf(SpriteBatch sb)
     {
-        var dimensions = GetDimensions();
-        var position = dimensions.Position();
-        var size = dimensions.Size();
-
-        // 背景板
-        var panelColor = IsMouseHovering ? UIStyle.PanelBgLightHover : UIStyle.PanelBgLight;
-        SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor);
+        base.DrawSelf(sb);
 
         // 提示
         if (IsMouseHovering)
@@ -270,4 +227,8 @@ public sealed class OptionSlider : ModernConfigOption
             TooltipPanel.SetText(Tooltip);
         }
     }
+
+    private bool IsFloat => FieldInfo.FieldType == typeof(float);
+    private bool IsInt => FieldInfo.FieldType == typeof(int);
+    private bool IsDouble => FieldInfo.FieldType == typeof(double);
 }

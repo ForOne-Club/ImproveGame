@@ -34,7 +34,7 @@ public class CenteredItemTagHandler : ITagHandler
                 if (ModernConfigDrawing)
                 {
                     position.X += 10f;
-                    position.Y -= 4f;
+                    position.Y -= 6f;
                 }
                 else
                 {
@@ -46,8 +46,8 @@ public class CenteredItemTagHandler : ITagHandler
                 {
                     var text = _item.stack.ToString();
                     Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(text) * 0.75f;
-                    Vector2 textPos = position + new Vector2(7f, 9f) - textSize / 2f;
-                    spriteBatch.DrawItemStackString(text, textPos, scale);
+                    Vector2 textPos = position + new Vector2(-4f, 9f) - textSize / 2f;
+                    spriteBatch.DrawItemStackString(text, textPos, scale * 0.8f);
                 }
             }
 

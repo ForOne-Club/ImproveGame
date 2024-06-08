@@ -15,6 +15,10 @@ public class SUIEditableText : TimerView
 
     public class SUITextWithTicker : SUIText
     {
+        /// <summary>
+        /// 没有任何文字输入时的占位符
+        /// </summary>
+        public string Placeholder;
         public float CursorOpacity;
         public int Cursor;
 
@@ -39,11 +43,24 @@ public class SUIEditableText : TimerView
             cursorColor *= CursorOpacity;
 
             LastString = OriginalString.Insert(cursor, CursorSnippet.GenerateTag(cursorColor));
+            var text = LastString;
+            Color textColor;
+        
+            // 没在写字，没文字：显示占位符
+            if (Parent is SUIEditableText {IsWritingText: false }  && string.IsNullOrEmpty(OriginalString))
+            {
+                text = Placeholder;
+                textColor = Color.Gray;
+            }
+            else
+            {
+                textColor = TextColor;
+            }
 
             FinalTextSnippets = TextSnippetHelper
-                .ConvertNormalSnippets(TextSnippetHelper.ParseMessageWithCursorCheck(LastString, TextColor)).ToArray();
+                .ConvertNormalSnippets(TextSnippetHelper.ParseMessageWithCursorCheck(text, textColor)).ToArray();
             if (_isWrapped)
-                FinalTextSnippets = TextSnippetHelper.WordwrapString(FinalTextSnippets, TextColor, Font,
+                FinalTextSnippets = TextSnippetHelper.WordwrapString(FinalTextSnippets, textColor, Font,
                     (int)(GetInnerDimensions().Width / TextScale), out _, MaxCharacterCount, MaxLines);
 
             TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
@@ -67,7 +84,7 @@ public class SUIEditableText : TimerView
                 textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder * TextScale);
 
             DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
-                textPos, TextColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
+                textPos, textColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
         }
     }
 
@@ -138,7 +155,7 @@ public class SUIEditableText : TimerView
     /// <summary>
     /// 用于周期性闪烁指针的计时器
     /// </summary>
-    private static int _cursorBlinkCount;
+    private int _cursorBlinkCount;
 
     /// <summary>
     /// 是否绘制输入法框，一般建议由父元素绘制，而将此值设为false，这样的话不会被其他元素遮挡
