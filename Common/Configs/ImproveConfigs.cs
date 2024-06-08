@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs.Elements;
+using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
@@ -182,10 +183,9 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(1)]
     public int TownNPCSpawnSpeed;
 
-    [DefaultValue(0)]
-    [Range(0, 2)]
-    [Slider]
-    public int NoCD_FishermanQuest;
+    [DefaultValue(FishQuestResetType.NotResetFish)]
+    [DrawTicks]
+    public FishQuestResetType NoCD_FishermanQuest;
 
     [Range(1, 25)]
     [DefaultValue(1)]

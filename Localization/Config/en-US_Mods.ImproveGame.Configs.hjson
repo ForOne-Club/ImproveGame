@@ -196,12 +196,7 @@ ImproveConfigs: {
 
 	NoCD_FishermanQuest: {
 		Label: "[centeritem:4608] Instant refresh Angler's quests"
-		Tooltip:
-			'''
-			0 - Off
-			1 - Refresh quest, don't reset the desired fish
-			2 - Refresh quest, and reset the desired fish
-			'''
+		Tooltip: ""
 	}
 
 	NPCCoinDropRate: {
@@ -1050,4 +1045,11 @@ FavoritedConfigs: {
 			Besides, the page shows newly added configs after updates
 			'''
 	}
+}
+
+FishQuestResetType: {
+	Tooltip: ""
+	Disabled.Label: Disabled
+	NotResetFish.Label: Not Reset Fish
+	ResetFish.Label: Reset Fish
 }

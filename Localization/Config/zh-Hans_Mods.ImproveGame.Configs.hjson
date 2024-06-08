@@ -199,12 +199,7 @@ ImproveConfigs: {
 
 	NoCD_FishermanQuest: {
 		Label: "[centeritem:4608] 渔夫任务立即刷新"
-		Tooltip:
-			'''
-			0 - 关闭
-			1 - 刷新任务但不重置任务鱼
-			2 - 刷新任务并重置任务鱼
-			'''
+		Tooltip: ""
 	}
 
 	NPCCoinDropRate: {
@@ -1051,4 +1046,11 @@ FavoritedConfigs: {
 			此外，此页面也会显示每次模组更新后新增的配置选项
 			'''
 	}
+}
+
+FishQuestResetType: {
+	// Tooltip: ""
+	Disabled.Label: 关闭
+	NotResetFish.Label: 不刷新任务鱼
+	ResetFish.Label: 刷新任务鱼
 }
