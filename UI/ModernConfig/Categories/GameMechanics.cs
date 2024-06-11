@@ -1,6 +1,4 @@
-﻿using ImproveGame.UI.ModernConfig.OptionElements;
-
-namespace ImproveGame.UI.ModernConfig.Categories;
+﻿namespace ImproveGame.UI.ModernConfig.Categories;
 
 public sealed class GameMechanics : Category
 {
@@ -11,7 +9,6 @@ public sealed class GameMechanics : Category
         panel.AddToggle(Config, nameof(Config.BedEverywhere));
         panel.AddToggle(Config, nameof(Config.NoSleepRestrictions));
         panel.AddValueSlider(Config, nameof(Config.BedTimeRate));
-        panel.AddToggle(Config, nameof(Config.NoPylonRestrictions));
         panel.AddToggle(Config, nameof(Config.FasterExtractinator));
         panel.AddToggle(Config, nameof(Config.MiddleEnableBank));
         panel.AddToggle(Config, nameof(Config.NoBiomeSpread));

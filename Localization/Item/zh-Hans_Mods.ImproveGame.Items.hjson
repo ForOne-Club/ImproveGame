@@ -314,3 +314,13 @@ AmmoChainItem: {
 	FromPlayer: 来自玩家：{0}
 	Added: 弹药链已添加为 {0}
 }
+
+CrimsonAltarItem: {
+	DisplayName: 猩红祭坛
+	Tooltip: ""
+}
+
+DemonAltarItem: {
+	DisplayName: 恶魔祭坛
+	Tooltip: ""
+}

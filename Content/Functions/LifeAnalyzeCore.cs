@@ -11,7 +11,7 @@ namespace ImproveGame.Content.Functions
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            int index = layers.FindIndex(layer => layer.Name == "Vanilla: Info Accessories Bar");
+            int index = layers.FindIndex(layer => layer.Name == "Vanilla: Info Accessories Bars");
             if (index != -1)
             {
                 layers.Insert(index + 1, new LegacyGameInterfaceLayer("ImproveGame: Modify Info Acc Display",

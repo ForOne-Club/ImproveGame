@@ -8,7 +8,7 @@ public sealed class CategorySidePanel : SUIPanel
 {
     internal static readonly Dictionary<string, CategoryCard> Cards = new();
 
-    private SUIScrollView2 Categories { get;  set; }
+    private SUIScrollView2 Categories { get; set; }
 
     static CategorySidePanel()
     {
@@ -20,6 +20,7 @@ public sealed class CategorySidePanel : SUIPanel
         AddCard<NpcSettings>();
         AddCard<EnemySettings>();
         AddCard<GameMechanics>();
+        AddCard<PylonMechanics>();
         AddCard<Multiplayer>();
         AddCard<ModFeatures>();
         AddCard<VisualAndInterface>();

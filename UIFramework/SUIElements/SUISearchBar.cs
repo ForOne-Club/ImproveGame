@@ -45,7 +45,7 @@ public class SUISearchBar : View
             uiTextBox.ShowInputTicker = false;
             UITextBox element = uiTextBox;
             element.SetTextMaxLength(50);
-            this.Append((UIElement)element);
+            this.Append(element);
             this._text = element;
         }
 
@@ -75,7 +75,7 @@ public class SUISearchBar : View
         public void TrimDisplayIfOverElementDimensions(int padding)
         {
             CalculatedStyle dimensions1 = this.GetDimensions();
-            if ((double)dimensions1.Width == 0.0 && (double)dimensions1.Height == 0.0)
+            if (dimensions1.Width == 0.0 && dimensions1.Height == 0.0)
                 return;
             Point point1 = new Point((int)dimensions1.X, (int)dimensions1.Y);
             Point point2 = new Point(point1.X + (int)dimensions1.Width, point1.Y + (int)dimensions1.Height);
@@ -121,7 +121,7 @@ public class SUISearchBar : View
                 }
 
                 PlayerInput.WritingText = true;
-                Main.CurrentInputTextTakerOverride = (object)this;
+                Main.CurrentInputTextTakerOverride = this;
             }
 
             base.Update(gameTime);
@@ -151,8 +151,8 @@ public class SUISearchBar : View
                 return;
             PlayerInput.WritingText = true;
             Main.instance.HandleIME();
-            Vector2 position = new Vector2((float)(Main.screenWidth / 2),
-                (float)(this._text.GetDimensions().ToRectangle().Bottom + 32));
+            Vector2 position = new Vector2(Main.screenWidth / 2,
+                this._text.GetDimensions().ToRectangle().Bottom + 32);
             if (ShowImePanel)
                 Main.instance.DrawWindowsIMEPanel(position, 0.5f);
         }

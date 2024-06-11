@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
+using ImproveGame.Common.GlobalPylons;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.UI.ModernConfig;
@@ -121,14 +122,32 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(true)]
     public bool NoSleepRestrictions;
 
-    [DefaultValue(false)]
-    public bool NoPylonRestrictions;
-
     [DefaultValue(5)]
     [Increment(5)]
     [Range(5, 100)]
     [Slider]
     public int BedTimeRate;
+
+    #endregion
+
+    #region 晶塔限制
+
+    [Header("PylonMechanics")]
+
+    [DefaultValue(PylonPlaceLimit.Default)]
+    public PylonPlaceLimit PylonPlaceLimit;
+
+    [DefaultValue(false)]
+    public bool PylonTeleNoNear;
+
+    [DefaultValue(false)]
+    public bool PylonTeleNoNPC;
+
+    [DefaultValue(false)]
+    public bool PylonTeleNoDanger;
+
+    [DefaultValue(false)]
+    public bool PylonTeleNoBiome;
 
     #endregion
 

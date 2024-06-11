@@ -173,7 +173,7 @@ namespace ImproveGame.Content.Functions
                 // 下面这条会允许任意地点传送到任意地点，暂不考虑加入
                 // validNearbyPylonFound |= Config.NoPylonRestrictions;
             }*/
-            public override bool? ValidTeleportCheck_PreAnyDanger(TeleportPylonInfo pylonInfo)
+            /*public override bool? ValidTeleportCheck_PreAnyDanger(TeleportPylonInfo pylonInfo)
             {
                 if (Config.NoPylonRestrictions)
                     return true; // 无视原版的威胁检测
@@ -184,7 +184,7 @@ namespace ImproveGame.Content.Functions
                 if (Config.NoPylonRestrictions)
                     return true; // 无视原版的npc数量检测
                 return null;
-            }
+            }*/
         }
 
         // 使存钱罐中物品生效，如同放入背包一样

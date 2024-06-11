@@ -5,6 +5,7 @@ Tiles: {
 	// Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
 	// ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
 	// BaitSupplier.MapEntry: Bait Supplier
+	FakeAltar.MapEntry: 伪造祭坛
 }
 
 MoonPhases: {

@@ -47,7 +47,7 @@
             Append(uIText);
             _title = uIText;
             if (_iconTexture != null && changeSize) {
-                Width.Set(_title.GetDimensions().Width + (float)_iconTexture.Width() + 26f, 0f);
+                Width.Set(_title.GetDimensions().Width + _iconTexture.Width() + 26f, 0f);
                 Height.Set(Math.Max(_title.GetDimensions().Height, _iconTexture.Height()) + 16f, 0f);
             }
         }
@@ -69,7 +69,7 @@
             Utils.DrawSplicedPanel(spriteBatch, _BasePanelTexture.Value, (int)dimensions.X, (int)dimensions.Y, (int)dimensions.Width, (int)dimensions.Height, 10, 10, 10, 10, Color.Lerp(Color.Black, color, FadeFromBlack) * opacity);
             if (_iconTexture != null) {
                 Color color2 = Color.Lerp(color, Color.White, _whiteLerp) * opacity;
-                spriteBatch.Draw(_iconTexture.Value, new Vector2(dimensions.X + dimensions.Width - (float)_iconTexture.Width() - 5f, dimensions.Center().Y - (float)(_iconTexture.Height() / 2)), color2);
+                spriteBatch.Draw(_iconTexture.Value, new Vector2(dimensions.X + dimensions.Width - _iconTexture.Width() - 5f, dimensions.Center().Y - _iconTexture.Height() / 2), color2);
             }
         }
 
