@@ -6,6 +6,7 @@ using ImproveGame.UI;
 using ImproveGame.UIFramework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -45,7 +46,7 @@ namespace ImproveGame.Common.GlobalItems
             return false;
         }
 
-        public static List<int> GetItemBuffType(Item item)
+        public static List<int> GetItemBuffType(Item item, Player player = null)
         {
             if (ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type))
                 return new List<int>();
@@ -56,7 +57,11 @@ namespace ImproveGame.Common.GlobalItems
                 if (item.stack >= Config.NoConsume_PotionRequirement)
                 {
                     if (_potionToBuffs.TryGetValue(item.type, out var buffsInTable))
+                    {
+                        // 针对于幻想乡mod所作的适配
+                        GensokyoSpecialJudgment(item, buffsInTable, player);
                         return buffsInTable;
+                    }
 
                     var buffs = new List<int>();
                     // 自带buffType的物品，小于60s持续时间的不算
@@ -65,6 +70,8 @@ namespace ImproveGame.Common.GlobalItems
                     // 其他Mod的，自行添加了引用
                     if (ModIntegrationsSystem.ModdedPotionBuffs.TryGetValue(item.type, out List<int> buffTypes))
                         buffs.AddRange(buffTypes);
+                    // 针对于幻想乡mod所作的适配
+                    GensokyoSpecialJudgment(item, buffs, player);
                     if (buffs.Count > 0)
                     {
                         _potionToBuffs[item.type] = buffs;
@@ -92,6 +99,32 @@ namespace ImproveGame.Common.GlobalItems
             return new List<int>();
         }
 
+        public static void GensokyoSpecialJudgment(Item item, List<int> buffs, Player player)
+        {
+            if (!ModLoader.TryGetMod("Gensokyo", out Mod gensokyo))
+                return;
+
+            if (player == null)
+                return;
+
+            #region p点和满p的适配
+            if (item.type == gensokyo.Find<ModItem>("FullPowerItem").Type || item.type == gensokyo.Find<ModItem>("PowerItem").Type)
+            {
+                int powerLevel = 0;
+
+                if (item.type == gensokyo.Find<ModItem>("FullPowerItem").Type)
+                    powerLevel = 20;
+                else if (item.type == gensokyo.Find<ModItem>("PowerItem").Type)
+                    powerLevel = 1;
+
+                ModPlayer gensokyoPlayer = player.modPlayers.First(player => player.FullName == "Gensokyo/GensokyoPlayer");
+                var pL = gensokyoPlayer.GetType().GetField("PowerLevel", BindingFlags.Public | BindingFlags.Instance);
+                if (pL.GetValue(gensokyoPlayer) is not 20)
+                    pL.SetValue(gensokyoPlayer, powerLevel);
+            }
+            #endregion
+        }
+
         public static bool IsBuffTileItem(Item item, out List<int> buffTypes)
         {
             // 会给玩家buff的雕像
@@ -112,6 +145,7 @@ namespace ImproveGame.Common.GlobalItems
 
             if (Config.NoConsume_Potion && !ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type) &&
                 item.stack >= Config.NoConsume_PotionRequirement &&
+                !ModIntegrationsSystem.ModdedInfBuffsConsume.Contains(item.type) &&
                (item.buffType > 0 || Lookups.SpecialPotions.Contains(item.type)))
             {
                 return false;
@@ -130,7 +164,7 @@ namespace ImproveGame.Common.GlobalItems
             if (IsBuffTileItem(item, out _) || item.type is ItemID.HoneyBucket or ItemID.GardenGnome ||
                 (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
             {
-                var buffTypes = GetItemBuffType(item);
+                var buffTypes = GetItemBuffType(item, Main.LocalPlayer);
                 if (buffTypes.Count != 1)
                 {
                     if (buffTypes.Count is 0) return;
@@ -194,7 +228,7 @@ namespace ImproveGame.Common.GlobalItems
             if (IsBuffTileItem(item, out _) || item.type is ItemID.HoneyBucket ||
                 (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
             {
-                var buffTypes = GetItemBuffType(item);
+                var buffTypes = GetItemBuffType(item, Main.LocalPlayer);
 
                 if (buffTypes.Count != 1)
                     return base.PreDrawTooltip(item, lines, ref x, ref y);
