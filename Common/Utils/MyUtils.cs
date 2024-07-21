@@ -1137,4 +1137,15 @@ partial class MyUtils
     {
         return DistanceSquared(Main.MouseScreen, roundCenter) <= radius * radius;
     }
+
+    public static T Min<T>(params T[] args) where T : IComparable
+    {
+        T result = args[0];
+        for (int i = 1; i < args.Length; i++) {
+            if (result.CompareTo(args[i]) > 0)
+                result = args[i];
+        }
+
+        return result;
+    }
 }

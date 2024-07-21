@@ -96,9 +96,4 @@ public sealed class OptionNumber : ModernConfigOption
         if (!_numericTextBox.IsWritingText)
             _numericTextBox.Value = value;
     }
-
-    public override void DrawSelf(SpriteBatch sb)
-    {
-        base.DrawSelf(sb);
-    }
 }

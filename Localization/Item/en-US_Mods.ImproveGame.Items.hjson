@@ -257,12 +257,12 @@ StorageCommunicator: {
 	DisplayName: Storage Telecom
 	Tooltip:
 		'''
+		Allows you to remotely open a Storage Manager
 		<right> any Storage Manager to connect to it
 		Use the item to open the connected Storage Manager
 		'''
-	NotSet: Unconnected
-	CurrentlySetTo: Connecting to Storage Manager at [{0}, {1}]
-	SetTo: Connected to Storage Manafer at [{0}, {1}]
+	NotSet: Currently not connected
+	SetTo: Connected to Storage Manager at [{0}, {1}]
 	MissingStorage: Storage Manager not found
 	Unlocated: Not connected to any Storage Manager, <right> a Storage Manager while holding this item to connect them
 }

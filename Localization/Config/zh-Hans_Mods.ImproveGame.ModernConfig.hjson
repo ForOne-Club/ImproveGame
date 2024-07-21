@@ -24,19 +24,24 @@ Presets: {
 	Tooltip: 更好的体验提供了部分快捷预设，以便玩家根据模组快速调整游戏体验。你也可以在这里保存和加载自己的预设。
 }
 
+Everything: {
+	Label: 全部
+	Tooltip: 此处包含一切可控制的功能，建议使用搜索功能快速找到你需要的选项。
+}
+
 GameMechanics: {
 	Label: 游戏机制
-	Tooltip: 更好的体验修改了部分游戏机制，例如不生成墓碑、重生加速等。
+	Tooltip: 可在此处修改部分游戏机制，例如不生成墓碑、重生加速等。
 }
 
 NpcSettings: {
 	Label: 友好NPC
-	Tooltip: 更好的体验修改了友好NPC的部分行为，例如NPC入住机制、NPC幸福度、旅商行为等。
+	Tooltip: 可在此处修改友好NPC的部分行为，例如NPC入住机制、NPC幸福度、旅商行为等。
 }
 
 EnemySettings: {
 	Label: 敌对生物
-	Tooltip: 更好的体验修改了敌对生物的部分行为，例如使熔岩史莱姆不掉落熔岩、可调节钱币掉落倍率等。
+	Tooltip: 可在此处修改敌对生物的部分行为，例如使熔岩史莱姆不掉落熔岩、可调节钱币掉落倍率等。
 }
 
 PlayerAbility: {

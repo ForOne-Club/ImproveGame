@@ -15,9 +15,11 @@ public sealed class ConfigOptionsPanel : SUIPanel
     private static Category _currentCategory;
     public static Category CategoryToSelectOnOpen;
 
+    private HashSet<string> _addedOptions = [];
     private List<ModernConfigOption> _allOptions = [];
     private SUIEditableText _searchBar { get;  set; }
     private SUIScrollView2 _options { get;  set; }
+    public SUIDropdownListContainer DropdownList { get;  set; }
 
     public static Category CurrentCategory
     {
@@ -31,6 +33,7 @@ public sealed class ConfigOptionsPanel : SUIPanel
                 Instance._options.ScrollBar.TargetScrollPosition = Vector2.Zero;
                 Instance._options.ScrollBar.CurrentScrollPosition = Vector2.Zero;
                 Instance._allOptions.Clear();
+                Instance._addedOptions.Clear();
                 Instance.IsInFakePage = false;
                 _currentCategory.AddOptions(Instance);
                 string text = Instance._searchBar.Text;
@@ -85,10 +88,14 @@ public sealed class ConfigOptionsPanel : SUIPanel
         _options.SetPadding(0f, 0f);
         _options.SetSize(0f, -searchBarHeight - gap, 1f, 1f);
         _options.JoinParent(this);
+
+        DropdownList = new SUIDropdownListContainer();
+        DropdownList.JoinParent(this);
     }
 
     private void SearchBarTextChanged(ref string text)
     {
+        DropdownList.Enabled = false;
         if (IsInFakePage)
             return;
 
@@ -141,19 +148,33 @@ public sealed class ConfigOptionsPanel : SUIPanel
 
     public void AddToggle(ModConfig config, string name)
     {
+        if (!_addedOptions.Add(name))
+            return;
         var option = new OptionToggle(config, name);
         _allOptions.Add(option);
     }
 
     public void AddValueSlider(ModConfig config, string name)
     {
+        if (!_addedOptions.Add(name))
+            return;
         var option = new OptionSlider(config, name);
         _allOptions.Add(option);
     }
 
     public void AddValueText(ModConfig config, string name)
     {
+        if (!_addedOptions.Add(name))
+            return;
         var option = new OptionNumber(config, name);
+        _allOptions.Add(option);
+    }
+
+    public void AddEnum(ModConfig config, string name)
+    {
+        if (!_addedOptions.Add(name))
+            return;
+        var option = new OptionDropdownList(config, name);
         _allOptions.Add(option);
     }
 

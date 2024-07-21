@@ -217,17 +217,6 @@ public sealed class OptionSlider : ModernConfigOption
 
     private static float InverseLerp(float a, float b, float value) => (value - a) / (b - a);
 
-    public override void DrawSelf(SpriteBatch sb)
-    {
-        base.DrawSelf(sb);
-
-        // 提示
-        if (IsMouseHovering)
-        {
-            TooltipPanel.SetText(Tooltip);
-        }
-    }
-
     private bool IsFloat => FieldInfo.FieldType == typeof(float);
     private bool IsInt => FieldInfo.FieldType == typeof(int);
     private bool IsDouble => FieldInfo.FieldType == typeof(double);

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common;
+using ImproveGame.Common.Configs;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -87,9 +88,10 @@ public sealed class ModernConfigUI : UIState
         };
         TooltipPanel.SetSize(0f, tooltipPanelHeight, 1f, 0f);
         TooltipPanel.JoinParent(mainPanelContainer);
-        
+
         // 返回按钮
-        var backButton = new UITextPanel<LocalizedText>(Language.GetText("UI.Back"), 0.7f, large: true) {
+        var backButton = new UITextPanel<LocalizedText>(Language.GetText("UI.Back"), 0.7f, large: true)
+        {
             Width = { Pixels = -30f, Percent = 0.5f },
             Height = { Pixels = 50f },
             Top = { Pixels = -35f },
@@ -103,7 +105,8 @@ public sealed class ModernConfigUI : UIState
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        if (Glass is not null && !Main.gameMenu && !DrawCalledForMakingGlass)
+        if (Glass is not null && !Main.gameMenu && !DrawCalledForMakingGlass &&
+            UIConfigs.Instance.GlassVfx is GlassType.MicaLike)
         {
             // 云母效果特殊处理
             Main.spriteBatch.ReBegin(null, Matrix.Identity);
@@ -171,7 +174,7 @@ public sealed class ModernConfigUI : UIState
     {
         if (Instance?.Enabled is not true)
             return;
-        
+
         var shader = ModAsset.Mask.Value;
         var device = Main.instance.GraphicsDevice;
         var batch = Main.spriteBatch;

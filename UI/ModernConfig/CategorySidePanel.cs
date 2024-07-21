@@ -6,6 +6,20 @@ namespace ImproveGame.UI.ModernConfig;
 
 public sealed class CategorySidePanel : SUIPanel
 {
+    internal static readonly Category[] CategoriesArray =
+    {
+        new PlayerAbility(),
+        new ItemSettings(),
+        new PlantSettings(),
+        new NpcSettings(),
+        new EnemySettings(),
+        new GameMechanics(),
+        new Multiplayer(),
+        new ModFeatures(),
+        new VisualAndInterface(),
+        new Minimap(),
+    };
+
     internal static readonly Dictionary<string, CategoryCard> Cards = new();
 
     private SUIScrollView2 Categories { get;  set; }
@@ -14,16 +28,9 @@ public sealed class CategorySidePanel : SUIPanel
     {
         AddCard<AboutPage>();
         AddCard<Presets>();
-        AddCard<PlayerAbility>();
-        AddCard<ItemSettings>();
-        AddCard<PlantSettings>();
-        AddCard<NpcSettings>();
-        AddCard<EnemySettings>();
-        AddCard<GameMechanics>();
-        AddCard<Multiplayer>();
-        AddCard<ModFeatures>();
-        AddCard<VisualAndInterface>();
-        AddCard<Minimap>();
+        AddCard<Everything>();
+        foreach (var card in CategoriesArray)
+            AddCard(new CategoryCard(card));
         AddCard<LicensePage>();
     }
 

@@ -593,15 +593,8 @@ ImproveConfigs: {
 		Label: "[centeritem:TNTBarrel] 禁止爆炸物伤害"
 		Tooltip:
 			'''
-			禁止可破坏物块相关物的伤害
-
-			有两种可选的范围：
-			1. 爆炸物
-			  - 仅针对物品类爆炸物
-			  - 炸药也算在内
-			2. 爆炸物和火箭
-			  - 同时针对物品和火箭
-			  - 炸药也算在内
+			禁止可破坏物块物品造成伤害（对玩家和敌人均无伤害）
+			只影响会破坏物块的爆炸物，不影响手雷、不破坏方块的火箭等
 			'''
 	}
 
@@ -1010,28 +1003,46 @@ PAPDisplayMode: {
 	// Tooltip: ""
 	AlwaysDisplayed.Label: 始终显示
 	NotDisplayed.Label: 不显示
-	WhenOpeningBackpack.Label: 开启背包时显示
+
+	WhenOpeningBackpack: {
+		Label: 开启物品栏时显示
+		Tooltip: 仅在打开物品栏时显示常驻属性
+	}
 }
 
 ThemeType: {
-	// Stormdark.Label: Stormdark
-	Blue.Label: 经典
+	Stormdark: {
+		// Label: Stormdark
+		Tooltip: Stormdark暗色风格，建议搭配Stormdark材质包使用（于原版创意工坊订阅）
+	}
+
+	Blue: {
+		Label: 经典
+		Tooltip: 原版风格
+	}
+
 	// Tooltip: ""
 }
 
 GlassType: {
 	// Tooltip: ""
 	Disabled.Label: 关闭
-	SimpleBlur.Label: 简单模糊
 	MicaLike.Label: 类云母
-	// aaa.Label: aaa
 }
 
 BombsNotDamageType: {
 	// Tooltip: ""
 	Disabled.Label: 关闭
-	Item.Label: 爆炸物
-	ItemAndRocket.Label: 爆炸物和火箭
+
+	Item: {
+		Label: 爆炸物
+		Tooltip: 仅物品类爆炸物无伤害
+	}
+
+	ItemAndRocket: {
+		Label: 爆炸物和火箭
+		Tooltip: 物品类爆炸物和火箭均无伤害
+	}
 }
 
 FavoritedConfigs: {

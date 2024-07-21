@@ -53,7 +53,7 @@ public sealed class CategoryCard : TimerView
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        // 即使更新文字，用于切换语言的情况
+        // 及时更新文字，用于切换语言的情况
         if (Category.Label != _labelElement.DisplayText)
             _labelElement.DisplayText = Category.Label;
         // 英文长一点，因此缩小字体

@@ -584,18 +584,11 @@ ImproveConfigs: {
 	}
 
 	BombsNotDamage: {
-		Label: "[centeritem:TNTBarrel] Nondamaging Explosives"
+		Label: "[centeritem:TNTBarrel] Non-damaging Explosives"
 		Tooltip:
 			'''
 			Disable tile-breaking items' damage
-
-			Two ranges availible:
-			1. Explosives Only
-			  - item explosives only
-			  - also includes the "Explosives" tile
-			2. Explosives and Rockets
-			  - item and rocket explosives
-			  - also includes the "Explosives" tile
+			Only affects items that break tiles. Grenades, rockets that don't break tiles, etc. are not affected
 			'''
 	}
 
@@ -1009,28 +1002,46 @@ PAPDisplayMode: {
 	Tooltip: ""
 	AlwaysDisplayed.Label: Always
 	NotDisplayed.Label: Hidden
-	WhenOpeningBackpack.Label: Inventory-only
+
+	WhenOpeningBackpack: {
+		Label: Inventory-only
+		Tooltip: Show pinned stats only when the inventory is open
+	}
 }
 
 ThemeType: {
-	Stormdark.Label: Stormdark
-	Blue.Label: Classic
+	Stormdark: {
+		Label: Stormdark
+		Tooltip: Stormdark scheme. Works best with Stormdark texture pack (subscribe in Terraria steam workshop)
+	}
+
+	Blue: {
+		Label: Classic
+		Tooltip: Vanilla scheme
+	}
+
 	Tooltip: ""
 }
 
 GlassType: {
 	Tooltip: ""
 	Disabled.Label: Off
-	SimpleBlur.Label: Simple
 	MicaLike.Label: Mica
-	aaa.Label: aaa
 }
 
 BombsNotDamageType: {
 	Tooltip: ""
 	Disabled.Label: Off
-	Item.Label: Explosives Only
-	ItemAndRocket.Label: Explosives and Rockets
+
+	Item: {
+		Label: Explosives Only
+		Tooltip: Item explosives only
+	}
+
+	ItemAndRocket: {
+		Label: Explosives and Rockets
+		Tooltip: Item and rocket explosives
+	}
 }
 
 FavoritedConfigs: {

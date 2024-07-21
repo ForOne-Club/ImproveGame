@@ -13,6 +13,7 @@ public sealed class PlayerAbility : Category
         panel.AddToggle(Config, nameof(Config.SuperVault));
         panel.AddToggle(Config, nameof(Config.SuperVoidVault));
         panel.AddToggle(Config, nameof(Config.SmartVoidVault));
+        panel.AddEnum(uiConfig, nameof(uiConfig.PlyInfo));
         panel.AddValueSlider(Config, nameof(Config.GrabDistance));
         panel.AddValueSlider(Config, nameof(Config.ExtraToolSpeed));
         panel.AddToggle(Config, nameof(Config.ModifyPlayerPlaceSpeed));
