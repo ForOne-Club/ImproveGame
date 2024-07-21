@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.GlobalProjectiles;
+﻿using ImproveGame.Common.GlobalNPCs;
+using ImproveGame.Common.GlobalProjectiles;
 
 namespace ImproveGame.Common.Configs.Elements;
 
@@ -26,7 +27,7 @@ public class FukMeCalamityElement : PresetElement
         config.TownNPCGetTFIntoHouse = true;
         config.NPCLiveInEvil = true;
         config.TownNPCSpawnSpeed = 12;
-        config.NoCD_FishermanQuest = 1;
+        config.NoCD_FishermanQuest = FishQuestResetType.NotResetFish;
         config.NPCCoinDropRate = 8;
         config.ModifyNPCHappiness = true;
         config.NPCHappiness = 75;
@@ -89,7 +90,7 @@ public class ILoveBalanceElement : PresetElement
         config.TownNPCGetTFIntoHouse = false;
         config.NPCLiveInEvil = true;
         config.TownNPCSpawnSpeed = 1;
-        config.NoCD_FishermanQuest = 1;
+        config.NoCD_FishermanQuest = FishQuestResetType.NotResetFish;
         config.NPCCoinDropRate = 1;
         config.ModifyNPCHappiness = false;
         config.NPCHappiness = 75;

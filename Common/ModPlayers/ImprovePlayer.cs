@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.GlobalNPCs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Core;
@@ -143,7 +144,7 @@ public class ImprovePlayer : ModPlayer
 
         switch (Config.NoCD_FishermanQuest)
         {
-            case 1:
+            case FishQuestResetType.NotResetFish:
                 if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name))
                 {
                     Main.anglerQuestFinished = false;
@@ -151,7 +152,7 @@ public class ImprovePlayer : ModPlayer
                     AddNotification(GetText("Tips.AnglerQuest"), Color.Cyan);
                 }
                 break;
-            case 2:
+            case FishQuestResetType.ResetFish:
                 if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name))
                 {
                     Main.AnglerQuestSwap();
