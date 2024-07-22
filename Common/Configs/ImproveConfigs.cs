@@ -81,7 +81,7 @@ public class ImproveConfigs : ModConfig
     [Range(0, 75)]
     public int GrabDistance;
 
-    [DefaultValue(0d)]
+    [DefaultValue(0f)]
     [Range(0, 1f)]
     [Slider]
     [Increment(0.125f)]
@@ -90,6 +90,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(false)]
     public bool ModifyPlayerPlaceSpeed;
 
+    [DefaultValue(0)]
     [Slider]
     [Range(0, 20)]
     [Increment(2)]

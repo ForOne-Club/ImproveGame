@@ -34,7 +34,7 @@ public sealed class CategorySidePanel : SUIPanel
         AddCard<LicensePage>();
     }
 
-    public CategorySidePanel() : base(Color.Black * 0.4f, Color.Black * 0.4f)
+    public CategorySidePanel(Color color) : base(color, color)
     {
         // 自动添加没法直观地调节顺序，所以手动添加
         // Type[] types = Assembly.GetExecutingAssembly().GetTypes();

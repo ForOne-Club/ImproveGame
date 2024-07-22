@@ -46,13 +46,17 @@ public sealed class CategoryCard : TimerView
 
     private readonly Texture2D _texture;
 
-    public Color BeginBorderColor = UIStyle.PanelBorder;
-    public Color EndBorderColor = UIStyle.ItemSlotBorderFav;
-    public Color BeginBgColor = UIStyle.ButtonBg;
-    public Color EndBgColor = UIStyle.ButtonBgHover;
+    public Color BeginBorderColor => UIStyle.PanelBorder;
+    public Color EndBorderColor => UIStyle.ItemSlotBorderFav;
+    public Color BeginBgColor => UIStyle.ButtonBg;
+    public Color EndBgColor => UIStyle.ButtonBgHover;
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
+        // 即时更新风格
+        Rounded = new Vector4(UIStyle.ItemSlotBorderRound);
+        Border = UIStyle.ItemSlotBorderSize;
+
         // 及时更新文字，用于切换语言的情况
         if (Category.Label != _labelElement.DisplayText)
             _labelElement.DisplayText = Category.Label;
@@ -61,7 +65,7 @@ public sealed class CategoryCard : TimerView
             ? 1f
             : 0.94f;
         _labelElement.TextScale = textScale;
-        
+
         _selectTimer.UpdateHighFps();
         if (ConfigOptionsPanel.CurrentCategory == Category)
             _selectTimer.Open();

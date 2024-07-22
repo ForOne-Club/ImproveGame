@@ -346,18 +346,6 @@ public class MasterControlManager : ModSystem
                 ui.Open();
                 ui.OpenFromMasterControl = true;
             }
-            
-            return;
-            if (Main.inFancyUI) return;
-
-            SoundEngine.PlaySound(SoundID.MenuOpen);
-            Main.inFancyUI = true;
-            // 不可能找不到
-            var favoritedConfigs = ConfigManager.Configs[Mod].Find(i => i.Name == "FavoritedConfigs");
-            Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, favoritedConfigs);
-            // 打开模组配置
-            // Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, Config);
-            Main.InGameUI.SetState(Terraria.ModLoader.UI.Interface.modConfig);
         };
 
         #endregion

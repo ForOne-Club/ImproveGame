@@ -196,7 +196,7 @@ ImproveConfigs: {
 
 	NoCD_FishermanQuest: {
 		Label: "[centeritem:4608] Instant refresh Angler's quests"
-		Tooltip: ""
+		Tooltip: Refresh quest immediately when you turn in quest fish. You can choose whether to reset the quest fish as well
 	}
 
 	NPCCoinDropRate: {
@@ -970,10 +970,6 @@ UIConfigs: {
 			Applies glassmorphism effect to this mod's UI, making them prettier
 			Only takes effect when lighting mode is "Color" or "White"
 			May affect performance
-
-			only 1 applicable glassmorphisms currently:
-			1. Mica
-			  - UIs are opaque, taking blurred game graphics where they cover as background
 			'''
 	}
 

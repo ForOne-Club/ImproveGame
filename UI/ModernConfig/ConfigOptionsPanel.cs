@@ -42,10 +42,10 @@ public sealed class ConfigOptionsPanel : SUIPanel
         }
     }
 
-    public ConfigOptionsPanel() : base(Color.Black * 0.4f, Color.Black * 0.4f, 12, 2, false)
+    public ConfigOptionsPanel(Color color) : base(color, color)
     {
-        int searchBarHeight = 30;
-        int gap = 6;
+        const int searchBarHeight = 30;
+        const int gap = 6;
         Instance = this;
 
         _searchBar = new SUIEditableText
@@ -62,6 +62,8 @@ public sealed class ConfigOptionsPanel : SUIPanel
         {
             var view = (SUIEditableText)element;
             view.BorderColor = view.IsMouseHovering ? UIStyle.SearchBarBorderSelected : UIStyle.SearchBarBorder;
+            view.BgColor = UIStyle.SearchBarBg;
+
             switch (IsInFakePage)
             {
                 case true when _searchBar.Height.Pixels != 0:

@@ -10,18 +10,17 @@ public class SUIDropdownListContainer : View
     private class DropdownOption : TimerView
     {
         internal const int ElementHeight = 32;
-        internal const int ElementSpacing = 1;
         private readonly SUIDropdownListContainer _container;
         private readonly SlideText _labelElement;
 
         public DropdownOption(string name, SUIDropdownListContainer father)
         {
             RelativeMode = RelativeMode.Vertical;
-            Spacing = new Vector2(ElementSpacing);
+            Spacing = new Vector2(0);
             SetSizePixels(0f, ElementHeight);
             SetSizePercent(1f, 0f);
             Rounded = new Vector4(8);
-            Border = UIStyle.ItemSlotBorderSize;
+            Border = 3;
             _container = father; // 叠！
 
             OnLeftMouseDown += LeftMouseDownEvent;
@@ -40,8 +39,8 @@ public class SUIDropdownListContainer : View
             _container.OnOptionSelected(_labelElement._text);
         }
 
-        public Color BeginBgColor = UIStyle.ButtonBg;
-        public Color EndBgColor = UIStyle.ButtonBgHover;
+        private static Color BeginBgColor => UIStyle.ButtonBg;
+        private static Color EndBgColor => UIStyle.ButtonBgHover;
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
@@ -106,7 +105,7 @@ public class SUIDropdownListContainer : View
             VAlign = 0f,
             OverflowHidden = true,
             Rounded = new Vector4(10f),
-            BgColor = new Color(29, 40, 80, 230),
+            BgColor = UIStyle.DropdownListBg,
             IgnoresMouseInteraction = false
         };
         _dropdownList.SetPadding(4);
@@ -123,13 +122,13 @@ public class SUIDropdownListContainer : View
         // 决定高度
         float containerHeight = dimensions.Height - 10;
         float containerCapHeight = containerHeight - 20;
-        float optionsHeight = DropdownOption.ElementHeight * count + DropdownOption.ElementSpacing * (count + 1) + 8;
+        float optionsHeight = DropdownOption.ElementHeight * count + 10;
         float maximumHeight = 340; // 不要太长，限制高度
         float height = Min(containerCapHeight, optionsHeight, maximumHeight);
         _dropdownList.SetSizePixels(width, height);
 
         // 决定位置，x和y给的是屏幕坐标
-        mouseYClicked = y * Main.UIScale;
+        _mouseYClicked = y * Main.UIScale;
         // 限制在UI界面内
         x -= dimensions.X;
         float bottom = y + height;
@@ -172,8 +171,8 @@ public class SUIDropdownListContainer : View
 
     #region Animation - 出现动画
 
-    private float mouseYClicked; // 鼠标点击时的Y坐标
-    private AnimationTimer _animationTimer = new AnimationTimer(3f);
+    private float _mouseYClicked; // 鼠标点击时的Y坐标
+    private readonly AnimationTimer _animationTimer = new AnimationTimer(3f);
 
     public override void Draw(SpriteBatch sb)
     {
@@ -181,16 +180,16 @@ public class SUIDropdownListContainer : View
             return;
 
         _animationTimer.UpdateHighFps();
-        _dropdownList.BgColor = new Color(29, 40, 80, 230);
+        _dropdownList.BgColor = UIStyle.DropdownListBg;
 
         // 创建矩形
         var dimensionsRect = _dropdownList.GetDimensions().ToRectangle();
         float top = dimensionsRect.Top * Main.UIScale;
         float bottom = dimensionsRect.Bottom * Main.UIScale;
-        float maxOffset = Math.Max(Math.Abs(top - mouseYClicked), Math.Abs(bottom - mouseYClicked));
+        float maxOffset = Math.Max(Math.Abs(top - _mouseYClicked), Math.Abs(bottom - _mouseYClicked));
         float offset = _animationTimer.Lerp(0, maxOffset);
         int screenWidth = (int)(Main.screenWidth * Main.UIScale);
-        var clippingRectangle = new Rectangle(0, (int)(mouseYClicked - offset), screenWidth, (int)offset * 2);
+        var clippingRectangle = new Rectangle(0, (int)(_mouseYClicked - offset), screenWidth, (int)offset * 2);
 
         Rectangle scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
         SamplerState anisotropicClamp = SamplerState.AnisotropicClamp;

@@ -199,7 +199,7 @@ ImproveConfigs: {
 
 	NoCD_FishermanQuest: {
 		Label: "[centeritem:4608] 渔夫任务立即刷新"
-		Tooltip: ""
+		Tooltip: 提交任务鱼后立即刷新任务，可选择是否重置任务鱼
 	}
 
 	NPCCoinDropRate: {
@@ -970,11 +970,6 @@ UIConfigs: {
 			为本模组的UI应用毛玻璃效果，使其更加美观
 			仅当照明模式设为“颜色”或“白”时可用
 			这个功能可能会影响性能
-
-			目前仅一种可选的毛玻璃效果：
-			1. 类云母
-			  - UI本身不透明，以其所覆盖的模糊处理后的游戏画面为背景
-			  - UI之间会互相遮罩
 			'''
 	}
 
