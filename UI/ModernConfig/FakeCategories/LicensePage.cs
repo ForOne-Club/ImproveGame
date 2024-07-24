@@ -9,7 +9,7 @@ public class LicensePage : Category
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
-        panel.IsInFakePage = true;
+        panel.ShouldHideSearchBar = true;
 
         const float textScale = 0.9f;
         var text = new SUIText

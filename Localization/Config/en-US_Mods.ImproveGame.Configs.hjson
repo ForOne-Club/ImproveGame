@@ -950,7 +950,7 @@ UIConfigs: {
 
 	ThemeType: {
 		Tooltip: Quality of Terraria's UI color scheme.
-		Label: "[g:12] UI Color Scheme"
+		Label: "[qotglyph:12] UI Color Scheme"
 	}
 
 	ShowShimmerInfo: {

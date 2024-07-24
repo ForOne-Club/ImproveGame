@@ -17,7 +17,9 @@ namespace ImproveGame
         /// <param name="parent">该元件的父元件</param>
         /// <param name="folderName">贴图资源在Assets/Images/UI文件夹里面的子文件夹名称</param>
         /// <returns>一个<see cref="ModItemSlot"/>实例</returns>
-        public static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName = null, float scale = 0.85f, Func<Item, Item, bool> canPlace = null, Action<Item, bool> onItemChanged = null, Func<string> emptyText = null, UIElement parent = null, string folderName = null)
+        public static ModItemSlot CreateItemSlot(float x, float y, string iconTextureName = null, float scale = 0.85f,
+            Func<Item, Item, bool> canPlace = null, Action<Item, bool> onItemChanged = null,
+            Func<string> emptyText = null, UIElement parent = null, string folderName = null)
         {
             string path = null;
             if (iconTextureName is not null)
@@ -26,6 +28,7 @@ namespace ImproveGame
                 if (folderName is not null)
                     path = $"ImproveGame/Assets/Images/UI/{folderName}/{iconTextureName}";
             }
+
             ModItemSlot slot = new(scale, path, emptyText);
             slot.Left.Set(x, 0f);
             slot.Top.Set(y, 0f);
@@ -48,6 +51,7 @@ namespace ImproveGame
                 if (uie.Width() > width)
                     width = uie.Width();
             }
+
             return width;
         }
 
@@ -57,6 +61,30 @@ namespace ImproveGame
             {
                 uie.Recalculate();
             }
+        }
+
+        public static void DrawInClippingRectangle(SpriteBatch sb, Rectangle clippingRectangle,
+            Action<SpriteBatch> drawAction)
+        {
+            Rectangle scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
+            SamplerState anisotropicClamp = SamplerState.AnisotropicClamp;
+
+            sb.End();
+            Rectangle adjustedClippingRectangle =
+                Rectangle.Intersect(clippingRectangle, sb.GraphicsDevice.ScissorRectangle);
+            sb.GraphicsDevice.ScissorRectangle = adjustedClippingRectangle;
+            sb.GraphicsDevice.RasterizerState = UIElement.OverflowHiddenRasterizerState;
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, anisotropicClamp, DepthStencilState.None,
+                UIElement.OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
+
+            drawAction(sb);
+
+            var rasterizerState = sb.GraphicsDevice.RasterizerState;
+            sb.End();
+            sb.GraphicsDevice.ScissorRectangle = scissorRectangle;
+            sb.GraphicsDevice.RasterizerState = rasterizerState;
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, anisotropicClamp, DepthStencilState.None,
+                rasterizerState, null, Main.UIScaleMatrix);
         }
     }
 }

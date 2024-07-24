@@ -1,4 +1,6 @@
-﻿using ImproveGame.UI.ModernConfig.OptionElements;
+﻿using ImproveGame.UI.ModernConfig.OfficialPresets;
+using ImproveGame.UI.ModernConfig.OptionElements;
+using ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
@@ -11,7 +13,8 @@ namespace ImproveGame.UI.ModernConfig;
 public sealed class ConfigOptionsPanel : SUIPanel
 {
     internal static ConfigOptionsPanel Instance;
-    public bool IsInFakePage;
+    public bool ShouldHideSearchBar;
+    public bool DelayRefreshCurrentPage;
     private static Category _currentCategory;
     public static Category CategoryToSelectOnOpen;
 
@@ -29,15 +32,9 @@ public sealed class ConfigOptionsPanel : SUIPanel
             if (_currentCategory != value)
             {
                 _currentCategory = value;
-                Instance._options.ListView.RemoveAllChildren();
                 Instance._options.ScrollBar.TargetScrollPosition = Vector2.Zero;
                 Instance._options.ScrollBar.CurrentScrollPosition = Vector2.Zero;
-                Instance._allOptions.Clear();
-                Instance._addedOptions.Clear();
-                Instance.IsInFakePage = false;
-                _currentCategory.AddOptions(Instance);
-                string text = Instance._searchBar.Text;
-                Instance.SearchBarTextChanged(ref text);
+                Instance.RefreshCurrentPage();
             }
         }
     }
@@ -64,7 +61,7 @@ public sealed class ConfigOptionsPanel : SUIPanel
             view.BorderColor = view.IsMouseHovering ? UIStyle.SearchBarBorderSelected : UIStyle.SearchBarBorder;
             view.BgColor = UIStyle.SearchBarBg;
 
-            switch (IsInFakePage)
+            switch (ShouldHideSearchBar)
             {
                 case true when _searchBar.Height.Pixels != 0:
                     _searchBar.SetSize(0f, 0f, 1f);
@@ -95,10 +92,22 @@ public sealed class ConfigOptionsPanel : SUIPanel
         DropdownList.JoinParent(this);
     }
 
+    public void RefreshCurrentPage()
+    {
+        _options.ListView.RemoveAllChildren();
+        _allOptions.Clear();
+        _addedOptions.Clear();
+        ShouldHideSearchBar = false;
+        _currentCategory.AddOptions(this);
+        string text = _searchBar.Text;
+        SearchBarTextChanged(ref text);
+        Recalculate();
+    }
+
     private void SearchBarTextChanged(ref string text)
     {
         DropdownList.Enabled = false;
-        if (IsInFakePage)
+        if (ShouldHideSearchBar)
             return;
 
         if (string.IsNullOrEmpty(text))
@@ -185,9 +194,22 @@ public sealed class ConfigOptionsPanel : SUIPanel
         view.JoinParent(_options.ListView);
     }
 
+    public void AddOfficialPreset<T>() where T : OfficialPreset
+    {
+        var preset = Activator.CreateInstance<T>();
+        AddToOptionsDirect(new OfficialPresetElement(preset.Label, preset.Tooltip, preset.Link, preset.OnApply));
+    }
+
     public override void Update(GameTime gameTime)
     {
+        if (DelayRefreshCurrentPage)
+        {
+            DelayRefreshCurrentPage = false;
+            RefreshCurrentPage();
+        }
+
         base.Update(gameTime);
+
         if (IsMouseHovering)
             PlayerInput.LockVanillaMouseScroll("ImproveGame: Modern Config UI");
         if (CategoryToSelectOnOpen is not null)

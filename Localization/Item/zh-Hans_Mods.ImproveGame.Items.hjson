@@ -314,3 +314,13 @@ AmmoChainItem: {
 	FromPlayer: 来自玩家：{0}
 	Added: 弹药链已添加为 {0}
 }
+
+AddIconDummy: {
+	// DisplayName: Add Icon Dummy
+	// Tooltip: ""
+}
+
+OpenFolderDummy: {
+	// DisplayName: Open Folder Dummy
+	// Tooltip: ""
+}

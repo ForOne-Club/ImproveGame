@@ -9,7 +9,7 @@ public class AboutPage : Category
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
-        panel.IsInFakePage = true;
+        panel.ShouldHideSearchBar = true;
         
         var text = new SUIText
         {

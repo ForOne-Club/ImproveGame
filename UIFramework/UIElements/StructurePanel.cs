@@ -270,7 +270,7 @@ namespace ImproveGame.UIFramework.UIElements
                 }
                 if (inputText.Contains('\\') || inputText.Contains('/') || inputText.Contains(':') || inputText.Contains('*') || inputText.Contains('?') || inputText.Contains('\"') || inputText.Contains('\'') || inputText.Contains('<') || inputText.Contains('>') || inputText.Contains('|'))
                 {
-                    AddNotification(GetText("ConstructGUI.RenameTip.Illegal"));
+                    AddNotification(GetText("PathIllegal"));
                     return;
                 }
                 else

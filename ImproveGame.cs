@@ -27,6 +27,7 @@ public class ImproveGame : Mod
         AddContent<NetModuleLoader>();
         ChatManager.Register<BgItemTagHandler>("bgitem");
         ChatManager.Register<CenteredItemTagHandler>("centeritem");
+        ChatManager.Register<QotGlyphTagHandler>("qotglyph");
     }
 
     public override void Unload()

@@ -315,3 +315,13 @@ AmmoChainItem: {
 	FromPlayer: From player: {0}
 	Added: Ammo Chain added as: {0}
 }
+
+AddIconDummy: {
+	DisplayName: Add Icon Dummy
+	Tooltip: ""
+}
+
+OpenFolderDummy: {
+	DisplayName: Open Folder Dummy
+	Tooltip: ""
+}

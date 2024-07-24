@@ -80,26 +80,7 @@ public class SlideText : View
     {
         UpdateTextSlide();
 
-        Rectangle scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
-        SamplerState anisotropicClamp = SamplerState.AnisotropicClamp;
-
-        sb.End();
-        Rectangle clippingRectangle = GetClippingRectangle(sb);
-        Rectangle adjustedClippingRectangle =
-            Rectangle.Intersect(clippingRectangle, sb.GraphicsDevice.ScissorRectangle);
-        sb.GraphicsDevice.ScissorRectangle = adjustedClippingRectangle;
-        sb.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
-        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, anisotropicClamp, DepthStencilState.None,
-            OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-
-        DrawText(sb);
-
-        var rasterizerState = sb.GraphicsDevice.RasterizerState;
-        sb.End();
-        sb.GraphicsDevice.ScissorRectangle = scissorRectangle;
-        sb.GraphicsDevice.RasterizerState = rasterizerState;
-        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, anisotropicClamp, DepthStencilState.None,
-            rasterizerState, null, Main.UIScaleMatrix);
+        DrawInClippingRectangle(sb, GetClippingRectangle(sb), DrawText);
     }
 
     private const float TextSlideSpeed = 0.01f;
@@ -114,7 +95,7 @@ public class SlideText : View
 
     private float _textWidth;
     private float _textScale;
-    
+
     public float TextScale
     {
         get => _textScale;
@@ -142,5 +123,4 @@ public class SlideText : View
     }
 
     public string _text;
-
 }

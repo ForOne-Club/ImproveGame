@@ -1,5 +1,9 @@
 NoTooltip: 此项暂无详细说明。
 Name: 配置控制中心
+ButtonApply: 应用预设
+ButtonInfo: 更多信息
+ButtonDelete: 删除预设
+ButtonRename: 重命名
 
 AboutPage: {
 	Label: 关于
@@ -19,7 +23,37 @@ AboutPage: {
 
 Presets: {
 	Label: 预设
-	Tooltip: 更好的体验提供了部分快捷预设，以便玩家根据模组快速调整游戏体验。你也可以在这里保存和加载自己的预设。
+	Tooltip: 更好的体验提供了部分快捷预设，以便玩家根据模组快速调整游戏体验。 你也可以在这里保存和加载自己的预设。
+	PlayerPresetTooltip: 这是一个由玩家自定义的预设。
+
+	ExplorerPreset: {
+		Label: "[centeritem:GravityGlobe] 主探索"
+		Tooltip: 适合以探索冒险为主要玩法的流程，提供适度的辅助，同时保留原版游戏的挑战性和慢节奏。 适合与瑟银、魂灵等原版风格模组搭配。
+		Link: todo 添加Wiki页面
+	}
+
+	WarriorPreset: {
+		Label: "[centeritem:EmpressBlade] 主战斗"
+		Tooltip: 适合以打Boss推进度为主要玩法的流程，大幅度简化探索流程。 适合与灾厄、Fargo等模组搭配。
+		Link: todo 添加Wiki页面
+	}
+
+	VanillaPreset: {
+		Label: "[centeritem:MusicBoxCredits] 完全原版"
+		Tooltip: 关闭更好的体验的几乎所有功能，使游戏体验完全回归原版。
+		Link: todo 添加Wiki页面
+	}
+
+	AddPreset: {
+		Label: "[centeritem:ImproveGame/AddIconDummy] 添加预设"
+		Tooltip: 左键点击可将当前配置保存为自定义预设。
+		Link: todo 添加Wiki页面
+	}
+
+	OpenFolder: {
+		Label: "[centeritem:ImproveGame/OpenFolderDummy] 打开文件夹"
+		Tooltip: 打开预设文件夹。
+	}
 }
 
 Everything: {

@@ -19,6 +19,7 @@ public class SUIEditableText : TimerView
         /// 没有任何文字输入时的占位符
         /// </summary>
         public string Placeholder;
+
         public float CursorOpacity;
         public int Cursor;
 
@@ -45,7 +46,7 @@ public class SUIEditableText : TimerView
             LastString = OriginalString.Insert(cursor, CursorSnippet.GenerateTag(cursorColor));
             var text = LastString;
             Color textColor;
-        
+
             // 没在写字，没文字：显示占位符
             if (Parent is SUIEditableText {IsWritingText: false }  && string.IsNullOrEmpty(OriginalString))
             {
@@ -60,10 +61,17 @@ public class SUIEditableText : TimerView
             FinalTextSnippets = TextSnippetHelper
                 .ConvertNormalSnippets(TextSnippetHelper.ParseMessageWithCursorCheck(text, textColor)).ToArray();
             if (_isWrapped)
+            {
                 FinalTextSnippets = TextSnippetHelper.WordwrapString(FinalTextSnippets, textColor, Font,
                     (int)(GetInnerDimensions().Width / TextScale), out _, MaxCharacterCount, MaxLines);
+                TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
+            }
+            else
+            {
+                TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
+                TextScale = Math.Min(1f, (GetInnerDimensions().Width - 4) / TextSize.X);
+            }
 
-            TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
 
             var inner = GetInnerDimensions();
 
@@ -165,14 +173,15 @@ public class SUIEditableText : TimerView
     /// <summary>
     /// 此帧按下的键
     /// </summary>
-    private static List<Keys> _pressedKeys = [];
+    private List<Keys> _pressedKeys = [];
 
     /// <summary>
     /// 上一帧按下的键
     /// </summary>
-    private static List<Keys> _oldPressedKeys = [];
+    private List<Keys> _oldPressedKeys = [];
 
     public delegate void ContentsChangedDelegate(ref string text);
+
     /// <summary>
     /// 当输入内容更改时触发
     /// </summary>
@@ -507,9 +516,9 @@ public class SUIEditableText : TimerView
         return finalText;
     }
 
-    private static string GetPasteText(bool allowMultiLine) => allowMultiLine
+    private string GetPasteText(bool allowMultiLine) => allowMultiLine
         ? Platform.Get<IClipboard>().MultiLineValue
         : Platform.Get<IClipboard>().Value;
 
-    private static bool Pressed(Keys key) => _pressedKeys.Contains(key) && !_oldPressedKeys.Contains(key);
+    private bool Pressed(Keys key) => _pressedKeys.Contains(key) && !_oldPressedKeys.Contains(key);
 }

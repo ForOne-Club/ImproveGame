@@ -186,19 +186,20 @@ public class UISystem : ModSystem
             UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
             if (GlassVfxAvailable)
                 UIStyle.AcrylicRedesign();
-            UIPlayer.InitUI();
+            if (!Main.gameMenu)
+                UIPlayer.InitUI();
         }
 
         _themeLastTick = UIConfigs.Instance.ThemeType;
         _acrylicVfxLastTick = GlassVfxEnabled;
+
+        IsHoveringOnEditableText = false;
     }
 
     public override void UpdateUI(GameTime gameTime)
     {
         if (Main.ingameOptionsWindow || Main.InGameUI.IsVisible)
             return;
-
-        IsHoveringOnEditableText = false;
 
         // 特殊处理
         PrefixRecallGUI?.TrackDisplayment();

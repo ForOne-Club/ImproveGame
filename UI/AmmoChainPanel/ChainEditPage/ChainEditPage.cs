@@ -162,7 +162,7 @@ public class ChainEditPage : View
         
         if (ChainName.IsPathIllegal())
         {
-            AddNotification(GetText("ConstructGUI.RenameTip.Illegal"));
+            AddNotification(GetText("PathIllegal"));
             return;
         }
 

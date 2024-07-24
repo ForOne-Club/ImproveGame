@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
 using ImproveGame.UI.AmmoChainPanel;
 using ImproveGame.UI.DeathSpectating;
@@ -106,8 +107,15 @@ public class MasterControlManager : ModSystem
             Icon = ModAsset.PlayerStats.Value,
         }.Register();
 
+        playerStats.Available += () => UIConfigs.Instance.PlyInfo is not UIConfigs.PAPDisplayMode.NotDisplayed;
         playerStats.OnMouseDown += tv =>
         {
+            if (UIConfigs.Instance.PlyInfo is UIConfigs.PAPDisplayMode.NotDisplayed)
+            {
+                Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
+                return;
+            }
+
             var body = PlayerStatsGUI.Instance;
 
             if (body.HasChild(body.Window))

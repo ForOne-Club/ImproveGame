@@ -950,7 +950,7 @@ UIConfigs: {
 
 	ThemeType: {
 		Tooltip: 控制更好的体验UI的整体配色方案
-		Label: "[g:12] UI主题"
+		Label: "[qotglyph:12] UI主题"
 	}
 
 	ShowShimmerInfo: {

@@ -1,5 +1,7 @@
 ModName: Quality of Terraria
 Search: Search...
+PathIllegal: File name must not include following characterts: \, /, :, *, ?, ", <, > or |
+FolderNameEmpty: Folder name cannot be empty
 
 Tiles: {
 	Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
@@ -177,7 +179,6 @@ ConstructGUI: {
 	RenameTip: {
 		Exists: A file with the same name already exists
 		TooLong: File name must not exceed 40 characters
-		Illegal: File name must not include following characterts: \, /, :, *, ?, ", <, > or |
 	}
 
 	FileInfo: {

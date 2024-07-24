@@ -23,7 +23,7 @@ public class UIConfigs : ModConfig
     public object SuicideButton;
 
     [Header("UIHeader")]
-    [DefaultValue(GlassType.Disabled)]
+    [DefaultValue(GlassType.MicaLike)]
     [DrawTicks]
     public GlassType GlassVfx;
 

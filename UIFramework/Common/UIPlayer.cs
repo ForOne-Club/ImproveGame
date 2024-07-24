@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Core;
 using ImproveGame.UI;
@@ -37,6 +38,9 @@ public class UIPlayer : ModPlayer
     // 函数在玩家进入地图时候调用, 不会在服务器调用, 用来加载 UI, 可以避免一些因 HJson 未加载产生的问题.
     public override void OnEnterWorld()
     {
+        UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
+        if (GlassVfxAvailable)
+            UIStyle.AcrylicRedesign();
         // 协程延时执行可以防止进入世界时UI闪一下
         InitUI();
     }

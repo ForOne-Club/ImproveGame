@@ -76,6 +76,11 @@ public class View : UIElement
     /// </summary>
     public bool DragIgnore;
 
+    /// <summary>
+    /// 按下这个元素时，不会结束正在编辑的文本框
+    /// </summary>
+    public bool DontDisableTextEditing;
+
     public bool IsLeftMousePressed;
 
     public bool IsRightMousePressed;
@@ -262,7 +267,8 @@ public class View : UIElement
     /// </summary>
     public void DisablePossibleTextEditing()
     {
-        if (this is not SUIEditableText && UISystem.FocusedEditableText is {IsWritingText: true} && !UISystem.FocusedEditableText.IsMouseHovering)
+        if (this is not SUIEditableText && UISystem.FocusedEditableText is {IsWritingText: true} &&
+            !UISystem.FocusedEditableText.IsMouseHovering && !DontDisableTextEditing)
         {
             UISystem.FocusedEditableText.ToggleTakingText();
         }
@@ -283,6 +289,16 @@ public class View : UIElement
 
         IsLeftMousePressed = true;
 
+        // base.LeftMouseDown会调用父元素的LeftMouseDown，这里要防止父元素的LeftMouseDown再次调用DisablePossibleTextEditing
+        if (Parent is View viewParent)
+        {
+            bool parentNotCheckTextEditing = viewParent.DontDisableTextEditing;
+            viewParent.DontDisableTextEditing = true;
+            base.LeftMouseDown(evt);
+            viewParent.DontDisableTextEditing = parentNotCheckTextEditing;
+            return;
+        }
+
         base.LeftMouseDown(evt);
     }
 
@@ -292,6 +308,16 @@ public class View : UIElement
         DisablePossibleTextEditing();
 
         IsRightMousePressed = true;
+
+        // base.LeftMouseDown会调用父元素的LeftMouseDown，这里要防止父元素的LeftMouseDown再次调用DisablePossibleTextEditing
+        if (Parent is View viewParent)
+        {
+            bool parentNotCheckTextEditing = viewParent.DontDisableTextEditing;
+            viewParent.DontDisableTextEditing = true;
+            base.RightMouseDown(evt);
+            viewParent.DontDisableTextEditing = parentNotCheckTextEditing;
+            return;
+        }
 
         base.RightMouseDown(evt);
     }
