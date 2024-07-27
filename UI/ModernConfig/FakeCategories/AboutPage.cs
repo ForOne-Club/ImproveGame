@@ -3,7 +3,7 @@ using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.ModernConfig.FakeCategories;
 
-public class AboutPage : Category
+public sealed class AboutPage : Category
 {
     public override int ItemIconId => ItemID.GPS;
 

@@ -157,36 +157,25 @@ public sealed class ConfigOptionsPanel : SUIPanel
         Recalculate();
     }
 
-    public void AddToggle(ModConfig config, string name)
-    {
-        if (!_addedOptions.Add(name))
-            return;
-        var option = new OptionToggle(config, name);
-        _allOptions.Add(option);
-    }
+    public void AddToggle(ModConfig config, string name) => AddToAllOptions<OptionToggle>(config, name);
 
-    public void AddValueSlider(ModConfig config, string name)
-    {
-        if (!_addedOptions.Add(name))
-            return;
-        var option = new OptionSlider(config, name);
-        _allOptions.Add(option);
-    }
+    public void AddValueSlider(ModConfig config, string name) => AddToAllOptions<OptionSlider>(config, name);
 
-    public void AddValueText(ModConfig config, string name)
-    {
-        if (!_addedOptions.Add(name))
-            return;
-        var option = new OptionNumber(config, name);
-        _allOptions.Add(option);
-    }
+    public void AddValueText(ModConfig config, string name) => AddToAllOptions<OptionNumber>(config, name);
 
-    public void AddEnum(ModConfig config, string name)
+    public void AddEnum(ModConfig config, string name) => AddToAllOptions<OptionDropdownList>(config, name);
+
+    private void AddToAllOptions<T>(ModConfig config, string name) where T : ModernConfigOption
     {
+        // 如果已经添加过这个选项，直接返回
         if (!_addedOptions.Add(name))
             return;
-        var option = new OptionDropdownList(config, name);
-        _allOptions.Add(option);
+        // 如果当前分类不允许添加这个选项，直接返回
+        if (!CurrentCategory.CanOptionBeAdded(config, name))
+            return;
+        // 创建实例并加入到_allOptions列表
+        var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T), config, name);
+        _allOptions.Add(instance);
     }
 
     public void AddToOptionsDirect(View view)

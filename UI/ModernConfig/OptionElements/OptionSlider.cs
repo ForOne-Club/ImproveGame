@@ -98,6 +98,12 @@ public sealed class OptionSlider : ModernConfigOption
             if (MouseInRound(roundCenter, (int)roundRadius))
                 borderColor = UIStyle.SliderRoundHover;
 
+            if (IgnoresMouseInteraction)
+            {
+                borderColor = Color.Gray * 0.6f;
+                innerColor = Color.Gray * 0.6f;
+            }
+
             // 绘制
             SDFGraphics.HasBorderRound(roundLeftTop, roundDiameter, innerColor, 2f, borderColor);
         }

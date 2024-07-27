@@ -42,7 +42,7 @@ public class FavoriteDetourSubscriber : ILoadable
         PropertyFieldWrapper memberInfo, object item, int order, object list, Type arrayType, int index)
     {
         var result = orig(parent, ref top, memberInfo, item, order, list, arrayType, index);
-        if (item is not ImproveConfigs)
+        if (item is not ImproveConfigs improveConfigs)
             return result;
 
         var container = result.Item1;
@@ -53,7 +53,7 @@ public class FavoriteDetourSubscriber : ILoadable
                 return;
 
             string key = memberInfo.Name;
-            FavoritedOptionDatabase.ToggleFavoriteForOption(key);
+            FavoritedOptionDatabase.ToggleFavoriteForOption(improveConfigs, key);
         };
         return result;
     }

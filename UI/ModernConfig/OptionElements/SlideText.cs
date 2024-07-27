@@ -13,6 +13,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class SlideText : View
 {
+    public Color TextColor = Color.White;
+    public Color TextBorderColor = Color.Black;
+    
     public SlideText(string text, int reservedWidth = 60, float textScale = 1f)
     {
         _text = text;
@@ -63,7 +66,7 @@ public class SlideText : View
         }
 
         ChatManager.DrawColorCodedStringWithShadow(sb, FontAssets.MouseText.Value, DisplayText, textCenter,
-            Color.White, Color.Black, 0f, textOrigin, new Vector2(TextScale), -1f, 1.5f);
+            TextColor, TextBorderColor, 0f, textOrigin, new Vector2(TextScale), -1f, 1.3f);
     }
 
     private void UpdateTextSlide()

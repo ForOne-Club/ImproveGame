@@ -1,6 +1,9 @@
-﻿using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
+using Terraria.ModLoader.Config;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
 
@@ -39,13 +42,44 @@ public class BasePresetElement : TimerView
 
         // 背景板
         var panelColor = HoverTimer.Lerp(UIStyle.PanelBgLight, UIStyle.PanelBgLightHover);
+        if (!Interactable)
+            panelColor = Color.Gray * 0.3f;
 
         SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor * 0.8f);
 
         // 提示
-        if (IsMouseHovering)
+        if (!IsMouseHovering)
+            return;
+
+        TooltipPanel.SetText(Tooltip);
+
+        // 不可控制，为什么呢？
+        if (Interactable || !CanShowInteractTip)
+            return;
+
+        if (CantOperateDueToHostVerification)
         {
-            TooltipPanel.SetText(Tooltip);
+            string hostTip = GetText("Configs.ImproveConfigs.OnlyHost.Tips");
+            UICommon.TooltipMouseText(hostTip);
+        }
+        else if (CantOperateDueToPasswordVerification)
+        {
+            string passwordTip = GetText("Configs.ImproveConfigs.OnlyHostByPassword.Tips");
+            UICommon.TooltipMouseText(passwordTip);
         }
     }
+
+    protected virtual bool Interactable => !CantOperateInGame || Main.gameMenu;
+
+    private bool CantOperateInGame => CantOperateDueToPasswordVerification || CantOperateDueToHostVerification;
+
+    private bool CantOperateDueToHostVerification =>
+        Main.netMode is NetmodeID.MultiplayerClient &&
+        Config.OnlyHost && !Main.countsAsHostForGameplay[Main.myPlayer];
+
+    private bool CantOperateDueToPasswordVerification =>
+        Main.netMode is NetmodeID.MultiplayerClient &&
+        Config.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered;
+    
+    internal bool CanShowInteractTip = true;
 }

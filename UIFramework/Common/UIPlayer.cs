@@ -38,9 +38,6 @@ public class UIPlayer : ModPlayer
     // 函数在玩家进入地图时候调用, 不会在服务器调用, 用来加载 UI, 可以避免一些因 HJson 未加载产生的问题.
     public override void OnEnterWorld()
     {
-        UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
-        if (GlassVfxAvailable)
-            UIStyle.AcrylicRedesign();
         // 协程延时执行可以防止进入世界时UI闪一下
         InitUI();
     }
@@ -58,6 +55,10 @@ public class UIPlayer : ModPlayer
 
     static IEnumerator SetupUI()
     {
+        UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
+        if (GlassVfxAvailable)
+            UIStyle.AcrylicRedesign();
+
         ShouldShowUI = true;
         UISystem uiSystem = UISystem.Instance;
         DataPlayer dataPlayer = Main.LocalPlayer.GetModPlayer<DataPlayer>();
@@ -128,7 +129,7 @@ public class UIPlayer : ModPlayer
         SidedEventTrigger.RegisterViewBody(uiSystem.ExtremeStorageGUI);
         SidedEventTrigger.RegisterViewBody(uiSystem.AutofisherGUI);
         SidedEventTrigger.RegisterViewBody(uiSystem.PrefixRecallGUI);
-        
+
         // 总控快捷键弹窗提示
         bool hasKeybind = TryGetKeybindString(KeybindSystem.MasterControlKeybind, out _);
         if (!hasKeybind && UISystem.TryGetBaseBody<PopupPanel>(out var panel) && panel is not null)

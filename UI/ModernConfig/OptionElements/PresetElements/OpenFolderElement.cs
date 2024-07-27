@@ -12,4 +12,6 @@ public class OpenFolderElement () : BasePresetElement(GetText("ModernConfig.Pres
 
         TrUtils.OpenFolder(PresetHandler.ConfigPresetsPath);
     }
+
+    protected override bool Interactable => true;
 }

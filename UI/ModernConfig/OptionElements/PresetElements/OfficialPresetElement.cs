@@ -16,6 +16,10 @@ public class OfficialPresetElement : BasePresetElement
             VAlign = 0.5f,
             HAlign = 1f
         };
+        buttonBox.OnUpdate += element =>
+        {
+            CanShowInteractTip = element.Children.ToList().All(i => !i.IsMouseHovering);
+        };
         buttonBox.SetPadding(0);
         buttonBox.JoinParent(this);
 
@@ -51,6 +55,16 @@ public class OfficialPresetElement : BasePresetElement
             SoundEngine.PlaySound(SoundID.Chat);
             applyCallback.Invoke();
         };
+        applyButton.OnUpdate += _ =>
+        {
+            applyButton.IgnoresMouseInteraction = !Interactable;
+        };
         applyButton.JoinParent(buttonBox);
+    }
+
+    public override void DrawSelf(SpriteBatch spriteBatch)
+    {
+
+        base.DrawSelf(spriteBatch);
     }
 }

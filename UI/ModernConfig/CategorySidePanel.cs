@@ -28,6 +28,7 @@ public sealed class CategorySidePanel : SUIPanel
     {
         AddCard<AboutPage>();
         AddCard<Presets>();
+        AddCard<Favorites>();
         AddCard<Everything>();
         foreach (var card in CategoriesArray)
             AddCard(new CategoryCard(card));

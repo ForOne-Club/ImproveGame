@@ -377,7 +377,12 @@ ImproveConfigs: {
 			该选项仅主机玩家可控制开关
 			如果你使用端口映射手段开服，请使用下面那个选项
 			'''
-		Unaccepted: 无法更改: 你不是服务器主机玩家！
+		Unaccepted: 无法更改：你不是服务器主机玩家！
+		Tips:
+			'''
+			“仅主机可调节配置”功能已开启
+			仅主机玩家(即IP为127.0.0.1)可调节模组配置
+			'''
 	}
 
 	OnlyHostByPassword: {
@@ -392,7 +397,12 @@ ImproveConfigs: {
 			若密码正确，将获得调节模组设置的权限
 			对于端口映射手段开服有用，因为此时IP无法验证身份(均为127.0.0.1)
 			'''
-		Unaccepted: 你没有通过密码验证！
+		Unaccepted: 无法更改：你没有通过密码验证！
+		Tips:
+			'''
+			“仅密码验证通过的玩家可调节设置”功能已开启
+			仅密码验证通过的玩家可以调节模组设置
+			'''
 		Registered: 你已获得修改配置权限，无需认证
 		Correct: 密码正确，你已获得修改配置权限
 		Incorrect: 密码错误！
@@ -426,11 +436,6 @@ ImproveConfigs: {
 	LoadModItems: {
 		Label: 模组物品加载配置
 		Tooltip: 可选择移除模组内的物品，使其不出现在游戏中
-	}
-
-	ShowModName: {
-		Label: "[centeritem:ImproveGame/LiquidWand] 显示物品所属模组"
-		// Tooltip: ""
 	}
 
 	EmptyAutofisher: {
@@ -832,6 +837,11 @@ UIConfigs: {
 
 	ShowMoreData: {
 		Label: "[centeritem:1344] 显示调试数据"
+		// Tooltip: ""
+	}
+
+	ShowModName: {
+		Label: "[centeritem:ImproveGame/LiquidWand] 显示物品所属模组"
 		// Tooltip: ""
 	}
 

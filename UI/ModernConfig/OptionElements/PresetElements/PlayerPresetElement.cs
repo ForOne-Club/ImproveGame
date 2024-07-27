@@ -53,6 +53,10 @@ public class PlayerPresetElement : BasePresetElement
             HAlign = 1f,
             DontDisableTextEditing = true
         };
+        buttonBox.OnUpdate += element =>
+        {
+            CanShowInteractTip = element.Children.ToList().All(i => !i.IsMouseHovering);
+        };
         buttonBox.SetPadding(0);
         buttonBox.JoinParent(this);
 
@@ -107,6 +111,10 @@ public class PlayerPresetElement : BasePresetElement
         {
             SoundEngine.PlaySound(SoundID.Chat);
             PresetHandler.LoadAndApplyPreset(presetName);
+        };
+        applyButton.OnUpdate += _ =>
+        {
+            applyButton.IgnoresMouseInteraction = !Interactable;
         };
         applyButton.JoinParent(buttonBox);
     }

@@ -3,7 +3,7 @@ using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.ModernConfig.FakeCategories;
 
-public class LicensePage : Category
+public sealed class LicensePage : Category
 {
     public override int ItemIconId => ItemID.Book;
 

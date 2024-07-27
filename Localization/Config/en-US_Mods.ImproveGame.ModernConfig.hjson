@@ -56,6 +56,11 @@ Presets: {
 	}
 }
 
+Favorites: {
+	Label: 收藏
+	Tooltip: Right click any config option to favorite it. Favorited configs will be shown in this page for quick access
+}
+
 Everything: {
 	Label: Everything
 	Tooltip: This contains all the controllable functions. It is recommended to search for the options you need.
@@ -103,7 +108,7 @@ VisualAndInterface: {
 
 ModFeatures: {
 	Label: 体系化功能
-	Tooltip: 更好的体验提供了一系列诸如弹药链、自动垃圾桶、大背包等成体系的功能，以使游戏体验更上一层楼。 同时这些功能也可以替代掉一些独立的模组，避免不必要的麻烦。
+	Tooltip: 更好的体验提供了一系列诸如弹药链、自动垃圾桶、大背包等成体系的功能，以使游戏体验更上一层楼。 这些功能也可以替代掉一些独立的模组，简化模组管理。
 }
 
 Minimap: {
@@ -112,6 +117,6 @@ Minimap: {
 }
 
 LicensePage: {
-	Label: 许可
+	Label: 许可声明
 	Tooltip: 更好的体验的许可信息，以及其参考的开源项目。
 }

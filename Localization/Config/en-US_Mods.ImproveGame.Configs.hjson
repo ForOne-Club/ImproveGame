@@ -371,6 +371,11 @@ ImproveConfigs: {
 			If the server runs with port forwarding, please use the function below
 			'''
 		Unaccepted: Cannot save changes: you are not the host!
+		Tips:
+			'''
+			"Only the host can change the mod configs" enabled
+			Only the host(IP: 127.0.0.1) can change the mod configs
+			'''
 	}
 
 	OnlyHostByPassword: {
@@ -386,6 +391,11 @@ ImproveConfigs: {
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''
 		Unaccepted: Your password is not verified!
+		Tips:
+			'''
+			"Only the player(s) with verified password can change the mod configs" enabled
+			Only the player(s) with verified password can change the mod configs
+			'''
 		Registered: You can change the mod configs already
 		Correct: Correct password, you can change the mod configs
 		Incorrect: Incorrect password!
@@ -420,11 +430,6 @@ ImproveConfigs: {
 	LoadModItems: {
 		Label: Mod Items Load Config
 		Tooltip: Remove some modded items so they do not appear in the game
-	}
-
-	ShowModName: {
-		Label: "[centeritem:ImproveGame/LiquidWand] Display which mod are the items from"
-		Tooltip: ""
 	}
 
 	EmptyAutofisher: {
@@ -832,6 +837,11 @@ UIConfigs: {
 
 	ShowMoreData: {
 		Label: "[centeritem:1344] Display debug data"
+		Tooltip: ""
+	}
+
+	ShowModName: {
+		Label: "[centeritem:ImproveGame/LiquidWand] Display which mod are the items from"
 		Tooltip: ""
 	}
 

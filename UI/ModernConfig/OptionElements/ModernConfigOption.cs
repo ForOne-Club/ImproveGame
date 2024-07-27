@@ -1,4 +1,7 @@
-﻿using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.Common.Configs.FavoritedSystem;
+using ImproveGame.Common.ModSystems;
+using ImproveGame.UI.ModernConfig.Categories;
+using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using System.ComponentModel;
@@ -27,7 +30,16 @@ public class ModernConfigOption : TimerView
         RelativeMode = RelativeMode.Vertical;
         OverflowHidden = true;
 
-        var labelElement = new OptionLabelElement(config, optionName, reservedWidth);
+        var labelElement = new OptionLabelElement(config, optionName, reservedWidth)
+        {
+            RelativeMode = RelativeMode.None
+        };
+        labelElement.OnUpdate += _ =>
+        {
+            labelElement.TextColor = MarkedAsFavorite
+                ? Color.Yellow
+                : Color.White;
+        };
         labelElement.JoinParent(this);
         CheckAttributes();
     }
@@ -65,6 +77,7 @@ public class ModernConfigOption : TimerView
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         var dimensions = GetDimensions();
+        var dimensionsRect = dimensions.ToRectangle();
         var position = dimensions.Position();
         var size = dimensions.Size();
 
@@ -79,7 +92,7 @@ public class ModernConfigOption : TimerView
 
         if (Highlighted)
         {
-            SDFRectangle.HasBorder(position, size, new Vector4(8f), panelColor, 2f, UIStyle.ItemSlotBorderFav);
+            SDFRectangle.HasBorder(position, size, new Vector4(8f), panelColor, 2f, UIStyle.ItemSlotBorderFav * 0.8f);
         }
         else
         {
@@ -87,12 +100,30 @@ public class ModernConfigOption : TimerView
         }
 
         // 提示
-        if (IsMouseHovering)
+        if (!IsMouseHovering)
+            return;
+
+        TooltipPanel.SetText(Tooltip);
+
+        // 不可控制，为什么呢？
+        if (Interactable)
+            return;
+
+        if (ReloadRequired)
         {
-            TooltipPanel.SetText(Tooltip);
-            string reloadTip = Language.GetTextValue("tModLoader.ModConfigCantSaveBecauseChangesWouldRequireAReload");
-            if (!Interactable)
-                UICommon.TooltipMouseText(reloadTip);
+            string reloadTip =
+                Language.GetTextValue("tModLoader.ModConfigCantSaveBecauseChangesWouldRequireAReload");
+            UICommon.TooltipMouseText(reloadTip);
+        }
+        else if (CantOperateDueToHostVerification)
+        {
+            string hostTip = GetText("Configs.ImproveConfigs.OnlyHost.Tips");
+            UICommon.TooltipMouseText(hostTip);
+        }
+        else if (CantOperateDueToPasswordVerification)
+        {
+            string passwordTip = GetText("Configs.ImproveConfigs.OnlyHostByPassword.Tips");
+            UICommon.TooltipMouseText(passwordTip);
         }
     }
 
@@ -105,6 +136,15 @@ public class ModernConfigOption : TimerView
             ConfigHelper.SetConfigValue(Config, FieldInfo, defaultValueAttribute.Value);
             SoundEngine.PlaySound(SoundID.Chat);
         }
+    }
+
+    public override void MiddleMouseDown(UIMouseEvent evt)
+    {
+        base.MiddleMouseDown(evt);
+        FavoritedOptionDatabase.ToggleFavoriteForOption(Config, OptionName);
+
+        if (ConfigOptionsPanel.CurrentCategory.LocalizationKey is nameof(Favorites))
+            ConfigOptionsPanel.Instance.RefreshCurrentPage();
     }
 
     private void CheckAttributes()
@@ -152,7 +192,7 @@ public class ModernConfigOption : TimerView
     /// </summary>
     public bool Highlighted;
 
-    protected bool Interactable => !ReloadRequired || Main.gameMenu;
+    protected bool Interactable => !CantOperateInGame || Main.gameMenu;
 
     public string Label => ConfigHelper.GetLabel(Config, OptionName);
     public string Tooltip => ConfigHelper.GetTooltip(Config, OptionName);
@@ -165,4 +205,19 @@ public class ModernConfigOption : TimerView
     internal double Max = 1;
     internal double Default = 1;
     internal bool ReloadRequired;
+
+    private bool CantOperateDueToHostVerification =>
+        Config.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient &&
+        MyUtils.Config.OnlyHost && !Main.countsAsHostForGameplay[Main.myPlayer];
+
+    private bool CantOperateDueToPasswordVerification =>
+        Config.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient &&
+        MyUtils.Config.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered;
+
+    private bool CantOperateInGame =>
+        ReloadRequired || CantOperateDueToPasswordVerification || CantOperateDueToHostVerification;
+
+    private bool MarkedAsFavorite =>
+        FavoritedOptionDatabase.FavoritedOptions.Contains($"{Config.Name}.{OptionName}") &&
+        ConfigOptionsPanel.CurrentCategory.LocalizationKey is not nameof(Favorites);
 }
