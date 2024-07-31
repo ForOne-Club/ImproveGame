@@ -284,16 +284,53 @@ namespace ImproveGame.Content.Tiles
                 return;
 
             fisher.heightLevel = 0;
-            if (fisher.Y < Main.worldSurface * 0.5)
+            if (Main.remixWorld)
+            {
+                if (fisher.Y < Main.worldSurface * 0.5)
+                {
+                    fisher.heightLevel = 0;
+                }
+                else if (fisher.Y < Main.worldSurface)
+                {
+                    fisher.heightLevel = 1;
+                }
+                else if (fisher.Y < Main.rockLayer)
+                {
+                    fisher.heightLevel = 3;
+                }
+                else if (fisher.Y < Main.maxTilesY - 300)
+                {
+                    fisher.heightLevel = 2;
+                }
+                else
+                {
+                    fisher.heightLevel = 4;
+                }
+                if (fisher.heightLevel == 2 && Main.rand.NextBool(2))
+                {
+                    fisher.heightLevel = 1;
+                }
+            }
+            else if (fisher.Y < Main.worldSurface * 0.5)
+            {
                 fisher.heightLevel = 0;
+            }
             else if (fisher.Y < Main.worldSurface)
+            {
                 fisher.heightLevel = 1;
+            }
             else if (fisher.Y < Main.rockLayer)
+            {
                 fisher.heightLevel = 2;
+            }
             else if (fisher.Y < Main.maxTilesY - 300)
+            {
                 fisher.heightLevel = 3;
+            }
             else
+            {
                 fisher.heightLevel = 4;
+            }
 
             FishingCheck_RollDropLevels(player, fisher.fishingLevel, out fisher.common, out fisher.uncommon, out fisher.rare, out fisher.veryrare, out fisher.legendary, out fisher.crate);
             //FishingCheck_ProbeForQuestFish(ref fisher);
