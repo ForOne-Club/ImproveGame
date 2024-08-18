@@ -196,12 +196,7 @@ ImproveConfigs: {
 
 	NoCD_FishermanQuest: {
 		Label: "[centeritem:4608] Instant refresh Angler's quests"
-		Tooltip:
-			'''
-			0 - Off
-			1 - Refresh quest, don't reset the desired fish
-			2 - Refresh quest, and reset the desired fish
-			'''
+		Tooltip: Refresh quest immediately when you turn in quest fish. You can choose whether to reset the quest fish as well
 	}
 
 	NPCCoinDropRate: {
@@ -376,6 +371,11 @@ ImproveConfigs: {
 			If the server runs with port forwarding, please use the function below
 			'''
 		Unaccepted: Cannot save changes: you are not the host!
+		Tips:
+			'''
+			"Only the host can change the mod configs" enabled
+			Only the host(IP: 127.0.0.1) can change the mod configs
+			'''
 	}
 
 	OnlyHostByPassword: {
@@ -391,6 +391,11 @@ ImproveConfigs: {
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''
 		Unaccepted: Your password is not verified!
+		Tips:
+			'''
+			"Only the player(s) with verified password can change the mod configs" enabled
+			Only the player(s) with verified password can change the mod configs
+			'''
 		Registered: You can change the mod configs already
 		Correct: Correct password, you can change the mod configs
 		Incorrect: Incorrect password!
@@ -425,11 +430,6 @@ ImproveConfigs: {
 	LoadModItems: {
 		Label: Mod Items Load Config
 		Tooltip: Remove some modded items so they do not appear in the game
-	}
-
-	ShowModName: {
-		Label: "[centeritem:ImproveGame/LiquidWand] Display which mod are the items from"
-		Tooltip: ""
 	}
 
 	EmptyAutofisher: {
@@ -584,18 +584,11 @@ ImproveConfigs: {
 	}
 
 	BombsNotDamage: {
-		Label: "[centeritem:TNTBarrel] Nondamaging Explosives"
+		Label: "[centeritem:TNTBarrel] Non-damaging Explosives"
 		Tooltip:
 			'''
 			Disable tile-breaking items' damage
-
-			Two ranges availible:
-			1. Explosives Only
-			  - item explosives only
-			  - also includes the "Explosives" tile
-			2. Explosives and Rockets
-			  - item and rocket explosives
-			  - also includes the "Explosives" tile
+			Only affects items that break tiles. Grenades, rockets that don't break tiles, etc. are not affected
 			'''
 	}
 
@@ -847,6 +840,11 @@ UIConfigs: {
 		Tooltip: ""
 	}
 
+	ShowModName: {
+		Label: "[centeritem:ImproveGame/LiquidWand] Display which mod are the items from"
+		Tooltip: ""
+	}
+
 	PlyInfo: {
 		Label: "[centeritem:3124] Player Stats"
 		Tooltip: A four-leaf clover appears next to the achievement icon
@@ -962,7 +960,7 @@ UIConfigs: {
 
 	ThemeType: {
 		Tooltip: Quality of Terraria's UI color scheme.
-		Label: "[g:12] UI Color Scheme"
+		Label: "[qotglyph:12] UI Color Scheme"
 	}
 
 	ShowShimmerInfo: {
@@ -982,15 +980,11 @@ UIConfigs: {
 			Applies glassmorphism effect to this mod's UI, making them prettier
 			Only takes effect when lighting mode is "Color" or "White"
 			May affect performance
-
-			only 1 applicable glassmorphisms currently:
-			1. Mica
-			  - UIs are opaque, taking blurred game graphics where they cover as background
 			'''
 	}
 
 	AutoSummon: {
-		Label: "[i:SlimeStaff] Auto Re-summoning"
+		Label: "[centeritem:SlimeStaff] Auto Re-summoning"
 		Tooltip:
 			'''
 			Summons last used minion after respawn
@@ -1009,28 +1003,46 @@ PAPDisplayMode: {
 	Tooltip: ""
 	AlwaysDisplayed.Label: Always
 	NotDisplayed.Label: Hidden
-	WhenOpeningBackpack.Label: Inventory-only
+
+	WhenOpeningBackpack: {
+		Label: Inventory-only
+		Tooltip: Show pinned stats only when the inventory is open
+	}
 }
 
 ThemeType: {
-	Stormdark.Label: Stormdark
-	Blue.Label: Classic
+	Stormdark: {
+		Label: Stormdark
+		Tooltip: Stormdark scheme. Works best with Stormdark texture pack (subscribe in Terraria steam workshop)
+	}
+
+	Blue: {
+		Label: Classic
+		Tooltip: Vanilla scheme
+	}
+
 	Tooltip: ""
 }
 
 GlassType: {
 	Tooltip: ""
 	Disabled.Label: Off
-	SimpleBlur.Label: Simple
 	MicaLike.Label: Mica
-	aaa.Label: aaa
 }
 
 BombsNotDamageType: {
 	Tooltip: ""
 	Disabled.Label: Off
-	Item.Label: Explosives Only
-	ItemAndRocket.Label: Explosives and Rockets
+
+	Item: {
+		Label: Explosives Only
+		Tooltip: Item explosives only
+	}
+
+	ItemAndRocket: {
+		Label: Explosives and Rockets
+		Tooltip: Item and rocket explosives
+	}
 }
 
 FavoritedConfigs: {
@@ -1050,4 +1062,11 @@ FavoritedConfigs: {
 			Besides, the page shows newly added configs after updates
 			'''
 	}
+}
+
+FishQuestResetType: {
+	Tooltip: ""
+	Disabled.Label: Disabled
+	NotResetFish.Label: Not Reset Fish
+	ResetFish.Label: Reset Fish
 }

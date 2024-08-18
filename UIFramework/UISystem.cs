@@ -4,6 +4,7 @@ using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemSearcher;
+using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.SpaceWand;
 using ImproveGame.UI.WorldFeature;
@@ -143,6 +144,13 @@ public class UISystem : ModSystem
         LoadGUI(ref BurstGUI, out var ui); BrustInterface = ui;
         LoadGUI(ref SpaceWandGUI, out ui); SpaceWandInterface = ui;
         LoadGUI(ref PaintWandGUI, out ui); PaintWandInterface = ui;
+        
+        // 委托到Main.UpdateUIStates以实现Main.gameMenu为true时更新UI，用于配色风格的设置
+        On_Main.UpdateUIStates += (orig, time) =>
+        {
+            orig.Invoke(time);
+            Instance.UpdateMenuUI(time);
+        };
     }
 
     private static void LoadGUI<T>(ref T uiState, out UserInterface ui, Action action = null) where T : UIState
@@ -158,16 +166,40 @@ public class UISystem : ModSystem
         SpaceWandInterface = null;
         PaintWandInterface = null;
     }
+
+    public override void PostSetupContent()
+    {
+        // 配置的特殊处理
+        ModernConfigUI.Instance = new ModernConfigUI();
+    }
     #endregion
 
     #region 更新
+
+    /// <summary>
+    /// 即使游戏暂停也会执行的UI更新方法
+    /// </summary>
+    private void UpdateMenuUI(GameTime gameTime)
+    {
+        if (_themeLastTick != UIConfigs.Instance.ThemeType || _acrylicVfxLastTick != GlassVfxEnabled)
+        {
+            UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
+            if (GlassVfxAvailable)
+                UIStyle.AcrylicRedesign();
+            if (!Main.gameMenu)
+                UIPlayer.InitUI();
+        }
+
+        _themeLastTick = UIConfigs.Instance.ThemeType;
+        _acrylicVfxLastTick = GlassVfxEnabled;
+
+        IsHoveringOnEditableText = false;
+    }
 
     public override void UpdateUI(GameTime gameTime)
     {
         if (Main.ingameOptionsWindow || Main.InGameUI.IsVisible)
             return;
-
-        IsHoveringOnEditableText = false;
 
         // 特殊处理
         PrefixRecallGUI?.TrackDisplayment();
@@ -181,17 +213,6 @@ public class UISystem : ModSystem
             SpaceWandInterface?.Update(gameTime);
         if (PaintWandGUI.Visible)
             PaintWandInterface?.Update(gameTime);
-
-        if (_themeLastTick != UIConfigs.Instance.ThemeType || _acrylicVfxLastTick != GlassVfxEnabled)
-        {
-            UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
-            if (GlassVfxAvailable)
-                UIStyle.AcrylicRedesign();
-            UIPlayer.InitUI();
-        }
-
-        _themeLastTick = UIConfigs.Instance.ThemeType;
-        _acrylicVfxLastTick = GlassVfxEnabled;
     }
 
     #endregion

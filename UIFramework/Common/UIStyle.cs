@@ -70,6 +70,11 @@ internal static class UIStyle
         SwitchRound,
         SwitchRoundHover;
 
+    // ModernConfig中的拖动条的拖动圆的颜色
+    public static Color
+        SliderRound,
+        SliderRoundHover;
+
     public static Color Cross;
 
     public static float
@@ -80,6 +85,10 @@ internal static class UIStyle
     public static Color
         StatCardBg,
         StatCategoryBg;
+
+    // 下拉框的背景色
+    public static Color
+        DropdownListBg;
 
     static UIStyle()
     {
@@ -150,12 +159,18 @@ internal static class UIStyle
         SwitchBg = new Color(20, 25, 60, 127);
         SwitchBgHover = new Color(72, 63, 63, 127);
 
+        // 拖动点
+        SliderRound = new Color(20, 25, 60);
+        SliderRoundHover = new Color(233, 176, 0);
+
         Cross = new Color(200, 40, 40);
         CrossBorderSize = 2f;
         CrossThickness = 4.6f;
 
         StatCategoryBg = new Color(37, 46, 92, 230);
         StatCardBg = new Color(28, 35, 69, 172);
+
+        DropdownListBg = new Color(29, 40, 80, 230);
     }
 
     private static void Stormdark()
@@ -205,12 +220,18 @@ internal static class UIStyle
         SwitchBg = new Color(41, 73, 84, 127);
         SwitchBgHover = new Color(30, 53, 58, 127);
 
+        // 拖动点
+        SliderRound = new Color(41, 63, 65);
+        SliderRoundHover = new Color(255, 255, 255);
+
         Cross = new Color(200, 40, 40);
         CrossBorderSize = 1f;
         CrossThickness = 3.6f;
 
         StatCategoryBg = new Color(7, 22, 26, 200);
         StatCardBg = new Color(5, 17, 20, 150);
+
+        DropdownListBg = new Color(5, 17, 20, 230);
     }
 
     public static void AcrylicRedesign()

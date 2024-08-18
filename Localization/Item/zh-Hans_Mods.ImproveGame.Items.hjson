@@ -257,11 +257,11 @@ StorageCommunicator: {
 	DisplayName: 储存通讯器
 	Tooltip:
 		'''
+		可以远程打开储存管理器
 		<right>任何储存管理器以连接
 		使用以打开该通讯器连接到的储存管理器
 		'''
 	NotSet: 未连接至任何储存管理器
-	CurrentlySetTo: 当前连接至 [{0}, {1}] 的储存管理器
 	SetTo: 已连接至 [{0}, {1}] 的储存管理器
 	MissingStorage: 未找到储存管理器
 	Unlocated: 未连接至任何储存管理器，手持该物品右键任何储存管理器以连接
@@ -313,4 +313,14 @@ AmmoChainItem: {
 		'''
 	FromPlayer: 来自玩家：{0}
 	Added: 弹药链已添加为 {0}
+}
+
+AddIconDummy: {
+	// DisplayName: Add Icon Dummy
+	// Tooltip: ""
+}
+
+OpenFolderDummy: {
+	// DisplayName: Open Folder Dummy
+	// Tooltip: ""
 }

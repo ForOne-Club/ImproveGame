@@ -1,7 +1,9 @@
 ﻿using ImproveGame.Common.Configs.Elements;
+using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
+using ImproveGame.UI.ModernConfig;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
@@ -79,7 +81,7 @@ public class ImproveConfigs : ModConfig
     [Range(0, 75)]
     public int GrabDistance;
 
-    [DefaultValue(0d)]
+    [DefaultValue(0f)]
     [Range(0, 1f)]
     [Slider]
     [Increment(0.125f)]
@@ -88,6 +90,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(false)]
     public bool ModifyPlayerPlaceSpeed;
 
+    [DefaultValue(0)]
     [Slider]
     [Range(0, 20)]
     [Increment(2)]
@@ -104,7 +107,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(true)]
     public bool NoConsume_Projectile;
 
-    [DefaultValue(false)]
+    [DefaultValue(true)]
     public bool ImprovePrefix;
 
     [DefaultValue(true)]
@@ -145,18 +148,21 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(true)]
     public bool NoConsume_Potion;
 
+    [DisplayCondition(nameof(ImproveConfigs), nameof(NoConsume_Potion))]
     [DefaultValue(30)]
-    [Range(10, 999)]
+    [Range(10, 300)]
     public int NoConsume_PotionRequirement;
 
     [DefaultValue(false)]
     public bool InfiniteRedPotion;
 
     [DefaultValue(false)]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(InfiniteRedPotion))]
     public bool RedPotionEverywhere;
 
     [DefaultValue(30)]
-    [Range(10, 999)]
+    [Range(10, 300)]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(InfiniteRedPotion))]
     public int RedPotionRequirement;
 
     #endregion
@@ -178,10 +184,9 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(1)]
     public int TownNPCSpawnSpeed;
 
-    [DefaultValue(0)]
-    [Range(0, 2)]
-    [Slider]
-    public int NoCD_FishermanQuest;
+    [DefaultValue(FishQuestResetType.NotResetFish)]
+    [DrawTicks]
+    public FishQuestResetType NoCD_FishermanQuest;
 
     [Range(1, 25)]
     [DefaultValue(1)]
@@ -191,6 +196,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(false)]
     public bool ModifyNPCHappiness;
 
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ModifyNPCHappiness))]
     [DefaultValue(75)]
     [Range(75, 150)]
     [Slider]
@@ -307,27 +313,27 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(false)]
     public bool GemTreeAlwaysDropGem;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(5)]
     public int MostTreeMin;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(16)]
     public int MostTreeMax;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(10)]
     public int PalmTreeMin;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(20)]
     public int PalmTreeMax;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(7)]
     public int GemTreeMin;
 
-    [Range(1, 100)]
+    [Range(1, 80)]
     [DefaultValue(12)]
     public int GemTreeMax;
 
@@ -370,9 +376,6 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(50)]
     [Range(1, 100)]
     public int SpawnRateMaxValue;
-
-    [DefaultValue(true)]
-    public bool ShowModName;
 
     [DefaultValue(true)]
     public bool EmptyAutofisher;
@@ -516,19 +519,13 @@ public class ImproveConfigs : ModConfig
         return base.AcceptClientChanges(pendingConfig, whoAmI, ref message);
     }
 
-    public static bool TryAcceptChanges(int whoAmI, ref NetworkText message)
+    private static bool TryAcceptChanges(int whoAmI, ref NetworkText message)
     {
-        // DoesPlayerSlotCountAsAHost是preview的，stable还没有，又被坑了
-        // if (MessageBuffer.DoesPlayerSlotCountAsAHost(whoAmI)) {
-        if (Netplay.Clients[whoAmI].Socket.GetRemoteAddress().IsLocalHost())
-        {
+        if (NetMessage.DoesPlayerSlotCountAsAHost(whoAmI))
             return true;
-        }
-        else
-        {
-            message = new NetworkText(
-                GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted"), NetworkText.Mode.Literal);
-            return false;
-        }
+
+        message = new NetworkText(
+            GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted"), NetworkText.Mode.Literal);
+        return false;
     }
 }

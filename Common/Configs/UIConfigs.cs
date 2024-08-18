@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs.Elements;
+using ImproveGame.UI.ModernConfig;
 using ImproveGame.UIFramework.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -22,7 +23,7 @@ public class UIConfigs : ModConfig
     public object SuicideButton;
 
     [Header("UIHeader")]
-    [DefaultValue(GlassType.Disabled)]
+    [DefaultValue(GlassType.MicaLike)]
     [DrawTicks]
     public GlassType GlassVfx;
 
@@ -56,6 +57,9 @@ public class UIConfigs : ModConfig
 
     [DefaultValue(true)]
     public bool ShowShimmerInfo;
+
+    [DefaultValue(true)]
+    public bool ShowModName;
 
     public enum PAPDisplayMode
     {
@@ -105,48 +109,56 @@ public class UIConfigs : ModConfig
     [Increment(0.1f)]
     [Range(0f, 1.5f)]
     [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     public float MarkDungeon;
 
     [DefaultValue(1f)]
     [Increment(0.1f)]
     [Range(0f, 1.5f)]
     [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     public float MarkTemple;
 
     [DefaultValue(1f)]
     [Increment(0.1f)]
     [Range(0f, 1.5f)]
     [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     public float MarkAether;
 
     [DefaultValue(0.9f)]
     [Increment(0.1f)]
     [Range(0f, 1.5f)]
     [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     public float MarkFloatingIsland;
 
     [DefaultValue(1f)]
     [Increment(0.1f)]
     [Range(0f, 1.5f)]
     [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     public float MarkPyramid;
 
     [DefaultValue(0.8f)]
     [Increment(0.1f)]
     [Range(0f, 1.5f)]
     [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     public float MarkPlantera;
 
     [DefaultValue(0.8f)]
     [Increment(0.1f)]
     [Range(0f, 1.5f)]
     [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     public float MarkEnchantedSword;
 
     [DefaultValue(0.8f)]
     [Increment(0.1f)]
     [Range(0f, 1.5f)]
     [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     public float MarkEmptyAutofisher;
 
     public override void OnLoaded()

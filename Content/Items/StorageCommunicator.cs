@@ -57,21 +57,29 @@ public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClick
 
         if (!isSet)
         {
-            int indexTooltip1 = lines.FindIndex(static line => line.Mod == "Terraria" && line.Name == "Tooltip1");
-            if (indexTooltip1 >= 0)
-                lines.RemoveAt(indexTooltip1);
+            // 文本：使用以打开该通讯器连接到的储存管理器。如果还没连接就不显示
+            int indexTooltip = lines.FindIndex(static line => line.Mod == "Terraria" && line.Name == "Tooltip2");
+            if (indexTooltip >= 0)
+                lines.RemoveAt(indexTooltip);
+        }
+        else
+        {
+            // 文本：可以远程打开储存管理器。如果已经连接了就不显示
+            int indexTooltip = lines.FindIndex(static line => line.Mod == "Terraria" && line.Name == "Tooltip0");
+            if (indexTooltip >= 0)
+                lines.RemoveAt(indexTooltip);
         }
 
-        int index = lines.FindIndex(static line => line.Mod == "Terraria" && line.Name == "Tooltip0");
+        int index = lines.FindIndex(static line => line.Mod == "Terraria" && line.Name == "Tooltip1");
         if (index < 0)
             return;
 
         GetMeterCoords(location.ToPoint(), out string compassText, out string depthText);
         string text = isSet
-            ? this.GetLocalization("CurrentlySetTo").WithFormatArgs(compassText, depthText).Value
+            ? this.GetLocalization("SetTo").WithFormatArgs(compassText, depthText).Value
             : this.GetLocalizedValue("NotSet");
 
-        lines[index].Text = text;
+        lines.Insert(index + 1, new TooltipLine(Mod, "StorageCommunicator", text));
     }
 
     public override void SaveData(TagCompound tag)

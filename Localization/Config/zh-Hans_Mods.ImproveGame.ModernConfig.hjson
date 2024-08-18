@@ -1,0 +1,122 @@
+NoTooltip: 此项暂无详细说明。
+Name: 配置控制中心
+ButtonApply: 应用预设
+ButtonInfo: 更多信息
+ButtonDelete: 删除预设
+ButtonRename: 重命名
+
+AboutPage: {
+	Label: 关于
+	Tooltip: 这个全新配置界面的简要介绍。
+	About:
+		'''
+		这是更好的体验[c/0099ff:全新的配置界面]，你可以在这里找到更好的体验的所有功能。如果你有任何问题或建议，或是遇上了一些BUG，欢迎加入我们的QQ群或Discord反馈。如果你更喜欢TML的配置界面，你也可以用传统方式（从设置）打开它。
+
+		左侧是我们根据功能分出的[c/0099ff:各大类别]，点击一个类别即可查看并调节该类别下的所有功能。
+		下方是[c/0099ff:说明区域]，将鼠标指针悬停在某个选项上即可查看其详细说明。
+
+		[c/0099ff:右键点击]任意选项可将其[c/0099ff:重置]为默认值。
+		'''
+	LinkDiscord: Discord: https://discord.gg/rEmGMQv5z7（可点击！）
+	LinkQQ: QQ群：https://qm.qq.com/q/MQG5T6E3io（群号971038831）
+}
+
+Presets: {
+	Label: 预设
+	Tooltip: 更好的体验提供了部分快捷预设，以便玩家根据模组快速调整游戏体验。 你也可以在这里保存和加载自己的预设。
+	PlayerPresetTooltip: 这是一个由玩家自定义的预设。
+
+	ExplorerPreset: {
+		Label: "[centeritem:GravityGlobe] 主探索"
+		Tooltip: 适合以探索冒险为主要玩法的流程，提供适度的辅助，同时保留原版游戏的挑战性和慢节奏。 适合与瑟银、魂灵等原版风格模组搭配。
+		Link: todo 添加Wiki页面
+	}
+
+	WarriorPreset: {
+		Label: "[centeritem:EmpressBlade] 主战斗"
+		Tooltip: 适合以打Boss推进度为主要玩法的流程，大幅度简化探索流程。 适合与灾厄、Fargo等模组搭配。
+		Link: todo 添加Wiki页面
+	}
+
+	VanillaPreset: {
+		Label: "[centeritem:MusicBoxCredits] 完全原版"
+		Tooltip: 关闭更好的体验的几乎所有功能，使游戏体验完全回归原版。
+		Link: todo 添加Wiki页面
+	}
+
+	AddPreset: {
+		Label: "[centeritem:ImproveGame/AddIconDummy] 添加预设"
+		Tooltip: 左键点击可将当前配置保存为自定义预设。
+		Link: todo 添加Wiki页面
+	}
+
+	OpenFolder: {
+		Label: "[centeritem:ImproveGame/OpenFolderDummy] 打开文件夹"
+		Tooltip: 打开预设文件夹。
+	}
+}
+
+Favorites: {
+	Label: 收藏
+	Tooltip: 中键单击配置中的任何选项，即可将选项加入收藏。 被收藏的选项会显示在此页面中，以便快速访问
+}
+
+Everything: {
+	Label: 全部
+	Tooltip: 此处包含一切可控制的功能，建议使用搜索功能快速找到你需要的选项。
+}
+
+GameMechanics: {
+	Label: 游戏机制
+	Tooltip: 可在此处修改部分游戏机制，例如不生成墓碑、重生加速等。
+}
+
+NpcSettings: {
+	Label: 友好NPC
+	Tooltip: 可在此处修改友好NPC的部分行为，例如NPC入住机制、NPC幸福度、旅商行为等。
+}
+
+EnemySettings: {
+	Label: 敌对生物
+	Tooltip: 可在此处修改敌对生物的部分行为，例如使熔岩史莱姆不掉落熔岩、可调节钱币掉落倍率等。
+}
+
+PlayerAbility: {
+	Label: 玩家能力
+	Tooltip: 更好的体验提供部分修改玩家能力的功能，以使游玩流程更加舒适。 例如延长物块放置速度、满血复活、死后保持增益、连锁挖矿等。
+}
+
+Multiplayer: {
+	Label: 多人游戏
+	Tooltip: 更好的体验为多人游戏提供了一些特别优化，例如自动加队伍、无条件传送等。
+}
+
+PlantSettings: {
+	Label: 植物
+	Tooltip: 更好的体验提供加速草药生长、再生法杖自动重种植等功能。 对于树木也可以调节高度、使宝石树掉落大量宝石等。
+}
+
+ItemSettings: {
+	Label: 物品
+	Tooltip: 更好的体验提供了一些物品的优化，以避免游玩大型模组时的重复劳动，例如使堆叠足够的弹药、召唤物、药水可无限使用、令增益站放在背包也生效等。
+}
+
+VisualAndInterface: {
+	Label: 视效与界面
+	Tooltip: 你可以在此处关闭或简化原版以及更好的体验的部分视觉效果，以及调节更好的体验的UI界面效果。
+}
+
+ModFeatures: {
+	Label: 体系化功能
+	Tooltip: 更好的体验提供了一系列诸如弹药链、自动垃圾桶、大背包等成体系的功能，以使游戏体验更上一层楼。 这些功能也可以替代掉一些独立的模组，简化模组管理。
+}
+
+Minimap: {
+	Label: 地图
+	Tooltip: 开启结构标记功能后，可通过定位球在地图上定位特定结构。
+}
+
+LicensePage: {
+	Label: 许可声明
+	Tooltip: 更好的体验的许可信息，以及其参考的开源项目。
+}

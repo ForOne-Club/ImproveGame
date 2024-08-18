@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Packets;
 
 namespace ImproveGame.Common.Commands
 {
@@ -39,6 +40,7 @@ namespace ImproveGame.Common.Commands
             if (password.ToUpper() == NetPasswordSystem.ConfigPassword) {
                 caller.Reply(GetText("Configs.ImproveConfigs.OnlyHostByPassword.Correct"), new(40, 240, 40));
                 NetPasswordSystem.Registered[caller.Player.whoAmI] = true;
+                AuthorizedPacket.Send(caller.Player.whoAmI); // 告诉玩家已认证
             }
             else {
                 caller.Reply(GetText("Configs.ImproveConfigs.OnlyHostByPassword.Incorrect"), new(240, 40, 40));

@@ -26,35 +26,32 @@ public class CenteredItemTagHandler : ITagHandler
             Main.instance.MouseText(_item.Name, _item.rare, 0);
         }
 
-        public override bool UniqueDraw(bool justCheckingString, out Vector2 size, SpriteBatch spriteBatch, Vector2 position = default(Vector2), Color color = default(Color), float scale = 1f)
+        public override bool UniqueDraw(bool justCheckingString, out Vector2 size, SpriteBatch spriteBatch,
+            Vector2 position = default(Vector2), Color color = default(Color), float scale = 1f)
         {
-            float num = 1f;
-            float num2 = 1f;
-            if (Main.netMode is not NetmodeID.Server && !Main.dedServ)
-            {
-                Main.instance.LoadItem(_item.type);
-                Texture2D value = TextureAssets.Item[_item.type].Value;
-                if (Main.itemAnimations[_item.type] != null)
-                    Main.itemAnimations[_item.type].GetFrame(value);
-                else
-                    value.Frame();
-            }
-
-            num2 *= scale;
-            num *= num2;
-            if (num > 0.75f)
-                num = 0.75f;
-
             if (!justCheckingString && (color.R != 0 || color.G != 0 || color.B != 0))
             {
-                float inventoryScale = Main.inventoryScale;
-                Main.inventoryScale = scale * num;
-                var offset = new Vector2(12, 16 - HeightOffset);
-                ItemSlot.Draw(spriteBatch, ref _item, 14, position - offset * scale * num, Color.White);
-                Main.inventoryScale = inventoryScale;
+                if (ModernConfigDrawing)
+                {
+                    position.X += 10f;
+                    position.Y -= 6f;
+                }
+                else
+                {
+                    position.X += 8f;
+                    position.Y += 8f;
+                }
+                _item.DrawIcon(spriteBatch, Color.White, position, 24f, scale);
+                if (_item.stack > 1)
+                {
+                    var text = _item.stack.ToString();
+                    Vector2 textSize = FontAssets.ItemStack.Value.MeasureString(text) * 0.75f;
+                    Vector2 textPos = position + new Vector2(-4f, 9f) - textSize / 2f;
+                    spriteBatch.DrawItemStackString(text, textPos, scale * 0.8f);
+                }
             }
 
-            size = new Vector2(28) * scale;
+            size = new Vector2(24) * scale;
             return true;
         }
 
@@ -124,4 +121,9 @@ public class CenteredItemTagHandler : ITagHandler
             str = $"{str}/s{I.stack}";
         return $"{str}:{I.netID}]";
     }
+
+    /// <summary>
+    /// 如果是用于ModernConfig的文字绘制，图标会有所调整以适应
+    /// </summary>
+    public static bool ModernConfigDrawing;
 }

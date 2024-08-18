@@ -6,7 +6,16 @@ public class NetPasswordSystem : ModSystem
     /// 允许调节设置的密码，只会在服务器有值
     /// </summary>
     internal static string ConfigPassword;
+    
+    /// <summary>
+    /// 服务器端记录所有玩家是否已经认证的数组
+    /// </summary>
     internal static bool[] Registered = new bool[Main.maxPlayers];
+
+    /// <summary>
+    /// 客户端记录自己是否已经认证
+    /// </summary>
+    internal static bool LocalPlayerRegistered;
 
     public override void Load() {
         On_Netplay.StartServer += SendPassword;
@@ -21,7 +30,13 @@ public class NetPasswordSystem : ModSystem
             }
         }
     }
-        
+
+    // 退出时取消认证
+    public override void PreSaveAndQuit()
+    {
+        LocalPlayerRegistered = false;
+    }
+
     private void SendPassword(On_Netplay.orig_StartServer orig) {
         orig.Invoke();
 
@@ -50,7 +65,7 @@ public class NetPasswordSystem : ModSystem
             return true;
         if (Config.OnlyHostByPassword && !Registered[whoAmI])
             return false;
-        if (Config.OnlyHost && !Netplay.Clients[whoAmI].Socket.GetRemoteAddress().IsLocalHost())
+        if (Config.OnlyHost && !NetMessage.DoesPlayerSlotCountAsAHost(whoAmI))
             return false;
         return true;
     }
