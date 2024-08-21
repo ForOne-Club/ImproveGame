@@ -1,4 +1,4 @@
-NotEnabled: You need to enable this in Mod Config
+NotEnabled: You need to enable this in the mod's config
 
 SuperVault: {
 	DisplayName: Big Backpack
@@ -12,12 +12,12 @@ PlayerStats: {
 
 Spectating: {
 	DisplayName: Spectating
-	Description: Watch your teammates' battles
+	Description: Watch your teammates during boss fights
 }
 
 WeatherControl: {
 	DisplayName: "{$Mods.ImproveGame.UI.WeatherGUI.Title}"
-	Description: Alter time, moon phase, wind direction and rain
+	Description: Alter time, moon phase, wind direction, and rain
 }
 
 ItemSearcher: {
@@ -47,7 +47,7 @@ BannerChest: {
 
 ModConfig: {
 	DisplayName: Mod Config
-	Description: Quick access to Favorite Configs
+	Description: Quick access to the Favorite Configs
 }
 
 AmmoChain: {
