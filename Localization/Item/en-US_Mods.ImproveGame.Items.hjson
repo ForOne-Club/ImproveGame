@@ -2,8 +2,8 @@ MagickWand: {
 	DisplayName: Wand of Blasts
 	Tooltip:
 		'''
-		Destroy tiles in both fixed area and free selection
-		The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
+		Destroys tiles in both fixed area and free selection
+		The mining power is equivalent to your strongest pickaxe
 		<right> while holding to edit destruction settings
 		<right> while selecting area to cancel
 		'''
@@ -13,11 +13,11 @@ SpaceWand: {
 	DisplayName: Wand of Space
 	Tooltip:
 		'''
-		[c/0099ff:Right click to open the control panel]
+		[c/0099ff:Right click to open the Control Panel]
 		Places selected type of tile in the indicated area
 		Uses the first applicable item in your inventory
 		<right> while selecting area to cancel placement
-		'I pity these tools'
+		'I pity the tools'
 		'''
 }
 
@@ -25,8 +25,8 @@ StarburstWand: {
 	DisplayName: Wand of Starblasts
 	Tooltip:
 		'''
-		Destroy tiles in both fixed area and free selection
-		The pickaxe power is equivalent to the strongest pickaxe's one in your inventory
+		Destroys tiles in both fixed area and free selection
+		The mining power is equivalent to your strongest pickaxe
 		<right> while holding to edit destruction settings
 		<right> while selecting area to cancel
 		'''
@@ -37,10 +37,10 @@ CreateWand: {
 	Tooltip:
 		'''
 		Builds a house using materials stored in it
-		If there are no materials stored, will use the materials in your inventory
+		If there are no materials stored, it will use the materials from your inventory
 		<right> to open the material storage and house style switch panel
 		Please prepare enough materials, or the house will not be built completely!
-		[c/ff0000:If the item is discarded, the stored materials inside will not be returned!] 
+		[c/ff0000:If the item is trashed, the stored materials inside will not be returned!] 
 		'''
 }
 
@@ -49,9 +49,9 @@ WallPlace: {
 	Tooltip:
 		'''
 		Summons a wall placer at your cursor
-		Automatically recognizes possible rooms and places walls in your inventory
-		The recognized room can have at most 10000 tiles' space
-		Considers tangible blocks, platforms and doors as boundaries
+		Automatically recognizes possible rooms and places walls from your inventory
+		The recognized room can have at most 10000 tiles of space
+		Considers solid blocks, platforms and doors as boundaries
 		Each player can only summon one, use again to recall it
 		'''
 }
@@ -60,7 +60,7 @@ LiquidWand: {
 	DisplayName: Wand of Liquids
 	Tooltip:
 		'''
-		Absorb/Place an amount of liquid
+		Absorbs/Places chosen liquid in a selected area
 		<right> while holding to open the liquid control panel
 		Absorbing Mode: Absorbs the selected liquid within the selected area
 		Placing Mode: Fills the selected area with the selected liquid
@@ -76,7 +76,7 @@ PotionBag: {
 		[c/0099ff:<left>] while holding a potion to deposit
 		[c/0099ff:<right>] to open potion bag
 		[c/0099ff:Middle Click] to collect potions from portable storages
-		Can store 200 stacks of potions
+		Can store up to 200 stacks of potions
 		'''
 }
 
@@ -88,7 +88,7 @@ BannerChest: {
 		[c/0099ff:<left>] while banner a potion to deposit
 		[c/0099ff:<right>] to open banner box
 		[c/0099ff:Middle Click] to collect banners from portable storages
-		Can store 500 stacks of banners
+		Can store up to 500 stacks of banners
 		'''
 }
 
@@ -98,13 +98,13 @@ Autofisher: {
 		'''
 		Click the "+" in the panel to choose a pool. Put in a fishing rod and baits to start fishing
 		You may also put in accessories to increase fishing power or grant ability to fish in lava
-		Bait consumption is only 40% of that in manual-fishing
-		The initial fishing speed is 30% of the manual-fishing speed, you may speed up the fishing process by:
+		Bait consumption is only 40% of the manual fishing
+		The initial fishing speed is 30% of the manual fishing speed, but it can be increased in different ways:
 		- Each [i:Bass] stored will provide a 5% fishing speed bonus, caps at 500% ([i/s100:Bass])
-		- [i:AnglerEarring], [i:AnglerTackleBag], [i:LavaproofTackleBag] can increase fishing speed by 200%, 250%, and 300%
+		- [i:AnglerEarring], [i:AnglerTackleBag] and [i:LavaproofTackleBag] can increase fishing speed by 200%, 250%, and 300% respectively
 		- Fishing speed is increased by 200% in Hardmode
 		- Final efficiency = Base efficiency * Sum of all bonuses. The maximum efficiency is 300% of the manual-fishing
-		[c/AAAAAA:Only mod accessories that have added QoT support is supported]
+		[c/AAAAAA:Works with modded accessories, but only if that mod has the QoT support]
 		'''
 }
 
@@ -112,10 +112,10 @@ PaintWand: {
 	DisplayName: Wand of Painting
 	Tooltip:
 		'''
-		[c/0099ff:<right> to open painting mode panel]
+		[c/0099ff:<right> to open Painting Mode Panel]
 		Select an area to paint/remove paint on tiles within the area
 		Also removes moss on the tiles while removing paints, like the [i:PaintScraper]
-		Paint which stacks above 999 will not be consumed
+		Paint in stacks above 999 will not be consumed
 		'''
 }
 
@@ -127,7 +127,7 @@ ConstructWand: {
 		Has ability to place structures freely, structures can be saved and placed while material is sufficient
 		Will not record/place liquids. Wires will not be shown in preview, but will be recorded and placed
 		Click the 'Introduction' at the right top for more information
-		[c/AAAAAA:Kindly report bugs in this mod's Steam workshop page]
+		[c/AAAAAA:Please report all tge bugs in this mod's Steam Workshop page]
 		'''
 }
 
@@ -155,11 +155,11 @@ ExtremeStorage: {
 		'''
 		[c/cc2200:Read this manual if you don't know what to do:] 
 		It is used for managing items in chests
-		Click [i:ImproveGame/AddChestIconDummy] to add a chest into a category
-		Chest sorting depends on identifiers prefixed on the chests' names, [c/0088dd:Please do NOT arbitrarily edit chest names]
+		Choose a category and then click [i:ImproveGame/AddChestIconDummy] to add a chest into that category
+		Chest sorting depends on identifiers prefixed on the chests' names. [c/0088dd:Please do NOT edit chest names afterwards!]
 		Put furniture and potions in their categories, and put all others in the "Everything" category
 		All players will gain effects from [c/0099ff:Portable Crafting Stations] and [c/0099ff:Infinite Potions] stored in the corresponding categories
-		[c/cc2200:Placing multiple Storage Managers in multiplayer mode may increase bandwidth consumption] 
+		[c/cc2200:Placing multiple Storage Managers in multiplayer mode may increase the packages sent and lag the game] 
 		'''
 }
 
@@ -189,14 +189,14 @@ PyramidGlobe: {
 TempleGlobe.BiomeName: Jungle Temple
 # 在世界上没有花苞或花苞全部标记完了的情况下显示，附魔剑的文本亦是如此
 PlanteraGlobe.NotFound: Couldn't find more {$MapObject.PlanterasBulb}
-EnchantedSwordGlobe.NotFound: Couldn't find more Enchanted Sword in Stone
+EnchantedSwordGlobe.NotFound: Couldn't find more Enchanted Sword Shrines
 
 DetectorDrone: {
 	Tooltip:
 		'''
 		Flies high and low to explore terrains.
-		Lighting is included.
-		CAUTION: don't go too far, else it'll explode.
+		Updates your explored map and emits lighting to see in the dark.
+		CAUTION: Don't go too far, else it'll explode.
 		'''
 	DisplayName: Explorer Drone
 }
@@ -205,8 +205,8 @@ DevMark: {
 	DisplayName: Developer's Mark
 	Tooltip:
 		'''
-		When in inventory, wand of construction will not consume materials
-		Only works in single player
+		When in inventory, Wand of Construction will not consume materials
+		Only works in single	player
 		[c/ff0000:Developer's item]
 		'''
 }
@@ -236,7 +236,7 @@ ShimmerTech: {
 		{$ItemName.GalaxyPearl}
 		{$ItemName.CombatBookVolumeTwo}
 		{$ItemName.PeddlersSatchel}
-		"Oh God I can see forever!"
+		"Oh God, I can see forever!"
 		'''
 }
 
@@ -248,9 +248,9 @@ Dummy: {
 		Chat commands:
 		 /dummy info → view dummy stats
 		 /help dummy → get dummy usage
-		(Can't work in multiplayer yet.)
+		(Doesn't work in multiplayer.)
 		'''
-	CannotUse: Does not support multiplayer yet.
+	CannotUse: This item currently does not work in multiplayer.
 }
 
 StorageCommunicator: {
@@ -273,7 +273,7 @@ WeatherBook: {
 		'''
 		Unlocks weather control on the Control Panel
 		It alters wind direction, moon phase and rain,
-		plus time after defeating Wall of Flesh
+		as well as time after defeating Wall of Flesh
 		'''
 }
 
@@ -291,7 +291,7 @@ BaitSupplier: {
 	DisplayName: Bait Chamber
 	Tooltip:
 		'''
-		Automatically takes bait from side-by-side chests
+		Automatically takes bait from chests placed closely
 		to replenish all the baitless fishing machines in the world
 		'''
 }
@@ -300,8 +300,8 @@ UniversalAmmoIcon: {
 	DisplayName: Unspecified Ammo
 	Tooltip:
 		'''
-		[c/00ffff:D][c/12ffff:o][c/24ffff:e][c/36ffff:s] [c/5bffff:n][c/6dffff:o][c/80ffff:t] specify the type of ammo,
-		Use the ammo that the weapon [c/00ffff:i][c/0fffff:s] [c/2dffff:s][c/3cffff:u][c/4bffff:p][c/5affff:p][c/69ffff:o][c/78ffff:s][c/78ffff:e][c/69ffff:d] [c/4bffff:t][c/3cffff:o] [c/1effff:u][c/0fffff:s][c/00ffff:e]
+		[c/00ffff:Does] [c/60ffff:not] specify the type of ammo,
+		Use the ammo that the weapon [c/00ffff:is] [c/20ffff:supposed] [c/40ffff:to] [c/60ffff:use]
 		'''
 }
 
