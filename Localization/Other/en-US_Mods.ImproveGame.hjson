@@ -6,7 +6,7 @@ FolderNameEmpty: Folder name cannot be empty
 Tiles: {
 	Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
 	ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
-	BaitSupplier.MapEntry: Bait Supplier
+	BaitSupplier.MapEntry: Bait Chamber
 }
 
 MoonPhases: {
@@ -32,7 +32,7 @@ CombatText: {
 		WallPlace_Kill: Stopped placing!
 	}
 
-	Projectile.PlaceWall_Lack: Stopped placing due to lack of wall
+	Projectile.PlaceWall_Lack: Stopped placing due to lack of walls
 	Commonds.ResurrectionTimeShortened: "{Time}s reduced respawn time！"
 }
 
@@ -56,45 +56,45 @@ Tips: {
 	AnglerQuest: Angler's quest refreshed
 	FromMod: From mod {DisplayName}
 	LootDisplay: Press {KeybindName} to see detailed item drop
-	LootDisplayBindless: (You have not bind a hotkey for this function, please do so in Controls)
+	LootDisplayBindless: (You have not bound a hotkey for this function, please do so in Controls)
 	Refreshing: Refreshing
 	Refresh: Refresh Shop
 	SummonSlot: Minion slot occupancy: [c/22CC22:{Current}/{Total}]
 	SummonSlotFull: Minion slot occupancy: [c/CC2222:{Current}/{Total} (Full!)]
 	BuffTrackerOn: <left> to open buff tracker
 	BuffTrackerOff: <left> to close buff tracker
-	HideMyBuffs: To hide infinite buffs, enable it in 'Personal Config'
+	HideMyBuffs: To hide infinite buffs, toggle it in 'Personal Config'
 	BankEnableOn: Middle click to open personal inventory
 	BankEnableOff: Middle click to close personal inventory
 	MouseMiddleOpen: Middle click to open {ItemName}
 	MouseMiddleClose: Middle click to close {ItemName}
 	MouseMiddleUse: Middle click to use {ItemName}
-	CreateWandOn: Middle click to open house material panel
-	CreateWandOff: Middle click to close house material panel
-	LiquidWandOn: Middle click to open liquid control panel
-	LiquidWandOff: Middle click to close liquid control panel
+	CreateWandOn: Middle click to open House Material Panel
+	CreateWandOff: Middle click to close House Material Panel
+	LiquidWandOn: Middle click to open Liquid Control Panel
+	LiquidWandOff: Middle click to close Liquid Control Panel
 	PotionBagCurrent: Contains the following potions ({StoredCount}/200):
 	PotionBagCurrentFull: Contains the following potions (Full!):
 	PotionBagNone: Empty (0/200)
 	PotionBagAvailable: (Active)
 	PotionBagUnavailable: (Inactive)
 	PotionBagDisabled: (Disabled)
-	BannerChestCurrent: Stored banners: ({StoredCount}/500):
-	BannerChestCurrentFull: Stored banners: (Full!):
-	BannerChestNone: No banners inside (0/500)
+	BannerChestCurrent: Stored banners ({StoredCount}/500):
+	BannerChestCurrentFull: Stored banners (Full!):
+	BannerChestNone: Empty (0/500)
 	BannerChestUseless: Portable Banners is not on, banners inside will not function
 	Tag.ShiftEnable: "[Hold [c/88CCEE:Shift] for more information]"
 
 	TagDetailed: {
-		OwnedInfineBuff: "[Infinite buff obtained {Count}/{Threshold}]"
-		NotOwnedInfineBuff: "[Infinite buff not obtained {Count}/{Threshold}]"
+		OwnedInfineBuff: "[Infinite buff is obtained {Count}/{Threshold}]"
+		NotOwnedInfineBuff: "[Infinite buff is not obtained {Count}/{Threshold}]"
 		RedPotion: "[Red Potion]"
 		GardenGnome: "[Garden Gnome]"
 		Enabled: "[Enabled]"
 		Disabled: "[Disabled]"
 		Hided: "[Buff icons hidden]"
 		NonHided: "[Buff icons shown]"
-		CombinedBuff: "[Has available buff combination]"
+		CombinedBuff: "[Has a buff combination available]"
 		AutoCollect: "[Auto-deposit]"
 	}
 
@@ -105,12 +105,12 @@ Tips: {
 			{$BuffName.ObsidianSkin}, {$BuffName.Regeneration}, {$BuffName.Swiftness}, {$BuffName.Ironskin},
 			{$BuffName.ManaRegeneration}, {$BuffName.MagicPower}, {$BuffName.Featherfall}, {$BuffName.Spelunker},
 			{$BuffName.Archery}, {$BuffName.Heartreach}, {$BuffName.Hunter}, {$BuffName.Endurance}, {$BuffName.Lifeforce}, {$BuffName.Inferno},
-			{$BuffName.Mining}, {$BuffName.Rage}, {$BuffName.Wrath}, {$BuffName.Dangersense}
+			{$BuffName.Mining}, {$BuffName.Rage}, {$BuffName.Wrath}, {$BuffName.Dangersense}.
 			'''
 		GardenGnome:
 			'''
 			Luck bonus of the Garden Gnome has been applied
-			You could not disable this effect as it is not a 'buff'
+			You cannot disable this effect as it is not a 'buff'
 			'''
 		Enabled:
 			'''
@@ -152,8 +152,8 @@ Tips: {
 			'''
 			[c/88CCEE:Buff Combination: ][i:CalmingPotion][i:Sunflower][i:PeaceCandle][i:WaterCandle][i:BattlePotion]
 			When you have all the infinite buff items
-			above. A spawn rate slider will appear at the
-			right side of the Buff Tracker. Allows you
+			above, a spawn rate slider will appear at the
+			right side of the Buff Tracker, allowing you
 			to multiply the spawn rate from x0-x{MaxSpawn}
 			'''
 	}
@@ -164,7 +164,7 @@ ConstructGUI: {
 	# 这个是存储后的文件名
 	SavedAs: "Structure has been saved as "
 	# 后接文件名
-	SaveMode: Recording Mode
+	SaveMode: Dropper Mode
 	LoadMode: Placing Mode
 	ExplodeAndPlace: Destroy then Place
 	PlaceOnly: Place
@@ -214,7 +214,7 @@ ConstructGUI: {
 
 		AlphaTest: {
 			Count: "3"
-			1: Kindly report bugs in this mod's Steam workshop page
+			1: Please report bugs in this mod's Steam Workshop page
 			2: Support is not guaranteed for modded tiles and walls,
 			3: and should not be considered a bug
 		}
@@ -223,10 +223,10 @@ ConstructGUI: {
 			Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
 			Text:
 				'''
-				The third button at the left top of the panel can switch mode to Recording Mode or Placing Mode
+				The third button at the left top of the panel can switch mode to Dropper Mode or Placing Mode
 
-				In recording mode, you can hold the left key and drag to select structures
-				Then save them on your PC as files to place them even in different worlds and servers
+				In the Dropper Mode, you can hold the left key and drag to select structures
+				and then save them on your PC as files to place them even in different worlds and servers
 				    
 				The picture below shows how to select and save structures:
 				'''
@@ -236,9 +236,9 @@ ConstructGUI: {
 			Title: "{$Mods.ImproveGame.ConstructGUI.LoadMode}"
 			Text:
 				'''
-				In placing mode, you need to choose a structure in the main panel, a structure is selected if its name is in yellow
+				In the Placing Mode, you need to choose a structure in the main panel, a structure is selected if its name is in yellow
 				    
-				if material in your inventory or the Big Backpack is sufficient, left click to place the structure
+				if materials in your inventory or the Big Backpack are sufficient, left click to place the structure
 				Directions of certain tiles may be incorrect
 				    
 				Here is an example of placing structures: 
@@ -269,7 +269,7 @@ ConstructGUI: {
 
 		Preview: {
 			Title: "{$Mods.ImproveGame.ConstructGUI.Preview.Title}"
-			Text: Structure preview also shows the placement center(the yellow box), which is the position of the cursor while placing.
+			Text: Structure preview also shows the placement center (the yellow box), which is the position of the cursor while placing.
 		}
 	}
 }
@@ -278,8 +278,8 @@ SuperVault: {
 	Name: Big Backpack
 	Sort: Sort
 	Synthesis: Use in crafting
-	SmartPickup: Smart pickup
-	OverflowPickup: Auto pickup
+	SmartPickup: Smart Pickup
+	OverflowPickup: Auto Pickup
 }
 
 MoveChest.Heavy: Weight of the chest limits your mobility
@@ -323,7 +323,7 @@ LiquidWand: {
 PaintWandGUI: {
 	Paintbrush: Paint tiles
 	PaintRoller: Paint walls
-	PaintScraper: Remove paints
+	PaintScraper: Remove paint
 }
 
 SpaceWandGUI: {
@@ -392,7 +392,7 @@ Keybinds: {
 		Tip:
 			'''
 			Access to Quality of Terraria shortcuts
-			You must assign it a hotkey to use the shortcuts
+			You must assign a hotkey to use the shortcuts
 			'''
 	}
 }
