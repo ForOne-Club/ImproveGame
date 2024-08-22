@@ -21,7 +21,7 @@ MasterControl: {
 AmmoChain: {
 	Title: Ammo Chain
 	LoadError: Not an Ammo Chain file or illegal Ammo Chain
-	ClickToAddL1: After picking an ammo
+	ClickToAddL1: After picking an ammo type
 	ClickToAddL2: Click here to add it to the chain
 	FileName: Ammo Chain
 	AddChain: Add Ammo Chain
@@ -40,33 +40,33 @@ AmmoChain: {
 WeatherGUI: {
 	Title: Weather Control
 	Wind: <left> to adjust wind direction
-	WindLockFalse: <right> to lock wind direction
-	WindLockTrue: <right> to unlock wind direction
-	WindWest: West gale set
-	WindNo: Windless set
-	WindEast: East gale set
+	WindLockFalse: <right> to lock the wind's direction
+	WindLockTrue: <right> to unlock the wind's direction
+	WindWest: Set to strong west wind
+	WindNo: Set to windless
+	WindEast: Set to strong east wind
 	WindLocked: Wind speed and direction locked
 	WindUnlocked: Wind speed and direction unlocked
 	RainActive: <left> to start a rain
 	RainInactive: <left> to stop a rain
-	RainLockFalse: <right> to lock rain
-	RainLockTrue: <right> to unlock rain
+	RainLockFalse: <right> to lock the rain
+	RainLockTrue: <right> to unlock the rain
 	RainOn: Rain started
 	RainOff: Rain stopped
 	RainLocked: Rain locked
 	RainUnlocked: Rain unlocked
 	Time: <left> to adjust time
-	Dawn: Dawn set
-	Noon: Noon set
-	Dusk: Dusk set
-	Midnight: Midnight set
+	Dawn: Set to dawn
+	Noon: Set to noon
+	Dusk: Set to dusk
+	Midnight: Set to midnight
 	MoonPhase: <left> to adjust moon phase
-	MoonPhaseLockFalse: <right> to lock moon phase
-	MoonPhaseLockTrue: <right> to unlock moon phase
-	MoonPhaseAdjusted: "{0} set"
+	MoonPhaseLockFalse: <right> to lock the moon phase
+	MoonPhaseLockTrue: <right> to unlock the moon phase
+	MoonPhaseAdjusted: Set to {0}
 	MoonPhaseLocked: Moon phase locked to {0}
 	MoonPhaseUnlocked: Moon phase unlocked
-	AlreadyUnlocked: Weather Control unlocked for this world
+	AlreadyUnlocked: Weather Control is already available in this world
 	Unlocked: Weather Control is unlocked! Open it via the Control Panel
 	EasterEgg: Mushroom!
 	Locked: Use [i:ImproveGame/WeatherBook] to unlock weather control
@@ -128,7 +128,7 @@ PlayerStats: {
 
 ExtremeStorage: {
 	AddChest: Add Chest
-	RejectNearbyStack: Failed to stack to nearby chests, because another player is using a nearby Storage Manager
+	RejectNearbyStack: Failed to stack to nearby chests, likely because another player is using a nearby Storage Manager
 	CloseCraftingWindow: Close Crafting Window
 	OpenCraftingWindow: Open Crafting Window
 
@@ -136,9 +136,9 @@ ExtremeStorage: {
 		Label: Count for Crafting
 		Tooltip:
 			'''
-			Controls whether items under the selected category [c/CC88AA:can be counted in crafting]
+			Controls whether items under the selected category [c/CC88AA:can be used in crafting]
 			You could still craft with items in the chest you open
-			To many items under a category may cause performance issues, use with caution on low-end PCs
+			Too many items under a category may cause performance issues, use with caution on low-end PCs
 			'''
 	}
 
@@ -197,7 +197,7 @@ ExtremeStorage: {
 		Furniture: "{$CreativePowers.TabFurniture}"
 		Block: Placeables
 		Material: "{$CreativePowers.TabMaterials}"
-		Alchemy: Alchemy
+		Alchemy: Potions
 		Misc: "{$CreativePowers.TabMisc}"
 		Setting: "{$LegacyMenu.14}"
 		Everything: Everything
@@ -209,7 +209,7 @@ ExtremeStorage: {
 		Ranged: Ranged
 		Magic: Magic
 		Summon: Summon
-		Other: Others
+		Other: Other
 	}
 
 	Tool: {
@@ -227,29 +227,29 @@ ExtremeStorage: {
 		Bullet: Bullets
 		Rocket: Rockets
 		Dart: Darts
-		Other: Others
+		Other: Other
 	}
 
 	Armor: {
 		Headgear: Head
 		Torso: Body
 		Pants: Leg
-		Vanity: Vanities
+		Vanity: Vanity
 	}
 
 	Accessory: {
 		Boot: Boots
 		Wing: Wings
 		Shield: Shields
-		Other: Others
-		Vanity: Vanities
+		Other: Other
+		Vanity: Vanity
 	}
 
 	Block: {
 		Solid: Solid Blocks
 		Wall: Walls
 		Platform: Platforms
-		Other: Others
+		Other: Other
 	}
 
 	Misc: {
@@ -258,7 +258,7 @@ ExtremeStorage: {
 		Pet: Pets
 		Mount: Mounts
 		Material: Materials
-		Other: Others
+		Other: Other
 	}
 }
 
@@ -268,7 +268,7 @@ AutoTrash: {
 		[c/CC88AA:Auto Trash] (Quality of Terraria)
 		[c/CC88AA:Shift+Ctrl+<left>] an item to add it to an auto-trash list
 		Press [c/CC88AA:{0}] to hide this UI (Make sure you have set a keybind for this)
-		Hit this button to view the auto-trash list
+		Press this button to view the auto-trash list
 		'''
 	TrashedItemsList: Trash Items
 }
@@ -395,7 +395,7 @@ Autofisher: {
 	ChestAutoDeposit:
 		'''
 		Auto deposit to nearby chests
-		Catches will be auto deposited to the nearest chest per minute
+		Catches will be auto deposited to the nearest chest every minute
 		'''
 }
 
