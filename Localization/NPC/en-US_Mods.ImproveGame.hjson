@@ -15,7 +15,7 @@ NPC: {
 	Dummy_FinalBlow: Last Hit: {FinalBlow}
 	DummyCommand_DummyAttributes: Dummy Stats
 	DummyCommand_Usage: Usage: /dummy <attribute> <value> (case-insensitive)
-	DummyCommand_Description: Chat command '/dummy info' will output available attributes, their types, and current values.
+	DummyCommand_Description: Chat command '/dummy info' will output available attributes, their types and current values.
 	DummyCommand_Success: Change succeeded: {name} {args}!
 	DummyCommand_Fail: Change failed ({input})!
 	DummyCommand_Invalid: Invalid command ( {input} )!
