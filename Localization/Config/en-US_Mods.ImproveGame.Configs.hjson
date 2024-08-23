@@ -8,7 +8,7 @@ ImproveConfigs: {
 			If you want a more vanilla-based gameplay experience, this preset will be your choice
 			In this preset, you will keep buffs on death instead of having infinite buffs
 			Most functions are adjusted to a relatively balanced level
-			To let you have a decent gameplay while enjoying a vanilla-like difficulty
+			to let you have a decent gameplay while enjoying a vanilla-like difficulty
 			(Use this mod's items on your own consideration, as some of them might be IMBA)
 			(You can still make adjustments after choosing a preset)
 			'''
@@ -18,9 +18,9 @@ ImproveConfigs: {
 		Label: tIMBALoader
 		Tooltip:
 			'''
-			This preset includes most convenient features, significantly reduces repetitive works
-			If you are playing Calamity's Revenge Mode or Fargo's Souls's Eternity Mode, it would be a nice option
-			Most configurations are for convenience, make the gameplay focus on progressing and defeating bosses
+			This preset includes most convenient features that significantly reduce repetitive works
+			If you are playing Calamity's Revengeance Mode or Fargo's Souls's Eternity Mode, it would be a nice option
+			Most configurations are for convenience, to make the gameplay focus on progressing and defeating bosses
 			(You can still make adjustments after choosing a preset)
 			'''
 	}
@@ -29,57 +29,57 @@ ImproveConfigs: {
 		Label: "[centeritem:3813] Big Backpack"
 		Tooltip:
 			'''
-			A separate UI pannel, 100 slots and can be used in crafting
+			A separate inventory with 100 slots which can be used in crafting
 			Has 'auto pickup' and 'smart pickup' features
-			please assign a hotkey in Settings → Controls → scroll down and find 'Big Backpack'
+			Please assign a hotkey in Settings → Controls → scroll down and find 'Big Backpack'
 			'''
 	}
 
 	SuperVoidVault: {
-		Label: "[centeritem:4131] Auto pickup for personal storage"
+		Label: "[centeritem:4131] Auto Pickup for Personal Storage"
 		Tooltip:
 			'''
-			Allow other portable storages automatically store items collected after the player's inventory is full
+			Allows other portable storages to automatically store collected items once the player's inventory is full
 			Priority: Piggy Bank → Safe → Defender's Forge → Void Vault
 			'''
 	}
 
 	SmartVoidVault: {
-		Label: "[centeritem:4076] Smart pickup for personal storage"
-		Tooltip: If an item is present in Void Vault, the same item will be picked into Void Vault
+		Label: "[centeritem:4076] Smart Pickup for Personal Storage"
+		Tooltip: If some items are already in your Void Vault, the items will be picked from your inventory into the Void Vault
 	}
 
 	ItemMaxStack: {
-		Label: "[centeritem:9] Max stack"
+		Label: "[centeritem:9] Max Stack"
 		Tooltip:
 			'''
-			Set the max stack of items
+			Sets the max stack of items
 			The max stack of coins cannot be changed
 			'''
 	}
 
 	GrabDistance: {
-		Label: "[centeritem:5010] Increase item pickup range (measured in blocks)"
-		Tooltip: Increase pickup range of items. Drawing speed will also increase automatically
+		Label: "[centeritem:5010] Increase Item Pickup Range (measured in blocks)"
+		Tooltip: Increases pickup range of items. Pickup speed will also be increased
 	}
 
 	NoConsume_SummonItem: {
-		Label: "[centeritem:560] No longer consume summon items"
+		Label: "[centeritem:560] Non-Consumable Summon Items"
 		Tooltip: Only for vanilla boss and event summon items
 	}
 
 	ModifyPlayerPlaceSpeed: {
-		Label: "[centeritem:2214] Increase tile placement speed"
+		Label: "[centeritem:2214] Increase Tile Placement Speed"
 		Tooltip: ""
 	}
 
 	ModifyPlayerTileRange: {
-		Label: "[centeritem:2215] Increase tile placement range"
+		Label: "[centeritem:2215] Increase Tile Placement Range"
 		Tooltip: ""
 	}
 
 	TileSpeed_Blacklist: {
-		Label: "[centeritem:1448] Blacklist of tile placing boost"
+		Label: "[centeritem:1448] Blacklist of Tile Placing Boost"
 		Tooltip:
 			'''
 			Tile's placing speed and range won't be boosted if its name contains any of the following texts
@@ -91,55 +91,55 @@ ImproveConfigs: {
 		Label: "[centeritem:WorkBench] Portable Crafting Stations"
 		Tooltip:
 			'''
-			Crafting stations in your inventory and personal inventories will function as they are placed
+			Crafting stations in your inventory and personal storages will function as if they are placed
 			No need to place them down
-			E.g. You have a Furnace in your inventory, so you can craft ores into bars at anywhere
-			Water Bucket is considered as a source of water, similarly for Lava Bucket and Honey Bucket
+			E.g., if you have a Furnace in your inventory, you'll be able to craft ores into bars anywhere
+			Water Bucket is considered as a source of water, same	 for Lava Bucket and Honey Bucket
 			'''
 	}
 
 	NoPlace_BUFFTile: {
-		Label: "[centeritem:3198] Portable buff stations"
-		Tooltip: Vanilla buff stations and banners in any of your inventories provide you with their buffs
+		Label: "[centeritem:3198] Portable Buff Stations"
+		Tooltip: Vanilla buff stations in any of your inventories provide you with their buffs
 	}
 
 	NoPlace_BUFFTile_Banner: {
 		Label: "[centeritem:2901] Portable Banners"
-		Tooltip: The same as portable buff stations
+		Tooltip: Any enemy banners in any of your inventories provide you with their buffs
 	}
 
 	NoConsume_Potion: {
-		Label: "[centeritem:227] Enable infinite potions"
+		Label: "[centeritem:227] Enable Infinite Potions"
 		Tooltip:
 			'''
-			Potions in your inventory or personal inventories(Piggy bank, Safe, etc.)
-			Which stack not less than a certain number no longer consume and grant you infinite buffs
+			Potions in your inventory or personal storages (Piggy Bank, Safe, etc.)
+			in a stack of a set number or more than it are no longer consumed and will grant you infinite buffs
 			Requirement is in the next config
 			'''
 	}
 
 	NoConsume_PotionRequirement: {
-		Label: "[centeritem:TeleportationPotion] Infinite Potion requirement"
+		Label: "[centeritem:TeleportationPotion] Infinite Potion Requirement"
 		Tooltip:
 			'''
-			Only potions stack not less than this number grant you infinite buff
+			Only potion stacks of this number or more than it will grant you infinite buff
 			Range: 10~999
 			'''
 	}
 
 	NoConsume_Ammo: {
-		Label: "[centeritem:3104] Enable infinite ammo"
-		Tooltip: Ammo which stack not less than 3996 will not be consumed
+		Label: "[centeritem:3104] Enable Infinite Ammo"
+		Tooltip: Ammo in a stack of 3996 or more will not be consumed
 	}
 
 	NoConsume_Projectile: {
-		Label: "[centeritem:42] Infinite thrown weapons"
-		Tooltip: Thrown weapons stack over 3996 will not be consumed
+		Label: "[centeritem:42] Infinite Thrown Weapons"
+		Tooltip: Thrown weapons in a stack of 3996 or more  will not be consumed
 	}
 
 	ImprovePrefix: {
 		Label: "[centeritem:1551] Retrospective Reforging"
-		Tooltip: Prefixes which have been rolled can be applied manually
+		Tooltip: Prefixes which have been already rolled can be applied manually
 		Unknown: Unknown prefix
 	}
 
@@ -154,17 +154,17 @@ ImproveConfigs: {
 	}
 
 	MiddleEnableBank: {
-		Label: "[centeritem:87] Middle click to open personal inventories"
+		Label: "[centeritem:87] Middle Click to Open Personal Inventories"
 		Tooltip:
 			'''
-			When you middle click a personal inventory item in your inventory
+			When you middle click a personal storage item in your inventory,
 			it will open the corresponding inventory
-			Also disables the distance limit of portable inventories
+			Also disables the distance limit of portable storages
 			'''
 	}
 
 	BanTombstone: {
-		Label: "[centeritem:3230] Disable tombstone spawn"
+		Label: "[centeritem:3230] Disable Tombstone Spawns"
 		Tooltip: ""
 	}
 
@@ -174,62 +174,62 @@ ImproveConfigs: {
 	}
 
 	TownNPCGetTFIntoHouse: {
-		Label: "[centeritem:MusicBoxTownDay] Town NPC spawn mechanics improvement"
+		Label: "[centeritem:MusicBoxTownDay] Town NPC Spawn Mechanics Improvement"
 		Tooltip:
 			'''
-			When the spawn conditions of unsaved Goblin Tinkerer, Tavernkeep, Wizard, Mechanic or Tax Collector are met
-			They don't need to be saved, but will be able to spawn if there are valid houses. They will be considered as saved once they spawn
+			When the spawn conditions of unsaved Goblin Tinkerer, Tavernkeep, Wizard, Mechanic or Tax Collector are met,
+			they don't need to be saved, and will be able to spawn if there are valid houses. They will be considered as saved once they spawn
 			Stylist will be able to spawn if any vanilla pre-hardmode boss is downed
 			Town NPCs will spawn at nighttime
 			'''
 	}
 
 	NPCLiveInEvil: {
-		Label: "[centeritem:MusicBoxTownNight] Town NPCs can live in evil biomes"
+		Label: "[centeritem:MusicBoxTownNight] Town NPCs Can Live in Evil Biomes"
 		Tooltip: Town NPCs can live in the Corruption and the Crimson
 	}
 
 	TownNPCSpawnSpeed: {
-		Label: "[centeritem:4910] Town NPC spawn rate multiplier"
+		Label: "[centeritem:4910] Town NPC Spawn Rate Multiplier"
 		Tooltip: Disable this modification by setting the value to 1
 	}
 
 	NoCD_FishermanQuest: {
-		Label: "[centeritem:4608] Instant refresh Angler's quests"
-		Tooltip: Refresh quest immediately when you turn in quest fish. You can choose whether to reset the quest fish as well
+		Label: "[centeritem:4608] Instant REefresh Angler's Quests"
+		Tooltip: Refresh quests immediately when you turn in quest fish. You can choose whether to reset the quest fish as well
 	}
 
 	NPCCoinDropRate: {
-		Label: "[centeritem:73] Enemy money drop multiplier"
+		Label: "[centeritem:73] Enemy Money Drop Multiplier"
 		Tooltip: ""
 	}
 
 	SlimeExDrop: {
-		Label: "[centeritem:11] Guaranteed Slime Item Drop"
+		Label: "[centeritem:11] Guaranteed Slime Item Drops"
 		Tooltip:
 			'''
 			Slimes are guaranteed to contain a random item
-			Follows vanilla drop rate if off
+			Follows vanilla drop rate if the config is off
 			'''
 	}
 
 	LavalessLavaSlime: {
-		Label: "[centeritem:LavaSlimeBanner] Lavaless lava slime"
-		Tooltip: Killing lava slime no longer spawns lava in expert or master mode
+		Label: "[centeritem:LavaSlimeBanner] Lavaless Lava Slime"
+		Tooltip: Killing Lava Slime no longer spawns lava in Expert or Master modes
 	}
 
 	TravellingMerchantStay: {
-		Label: "[centeritem:2222] The Travelling Merchant doesn't depart"
-		Tooltip: The Travelling Merchant will not depart unless been killed
+		Label: "[centeritem:2222] The Travelling Merchant Doesn't Depart"
+		Tooltip: The Travelling Merchant will not depart unless he has been killed
 	}
 
 	TravellingMerchantRefresh: {
 		Label: "[centeritem:PeddlersSatchel] Refreshable Travelling Merchant's Shop"
-		Tooltip: Adds a Refresh button for the Travelling Merchant, you may manually refresh the goods
+		Tooltip: Adds a Refresh button for the Travelling Merchant which lets you manually refresh the goods
 	}
 
 	QuickNurse: {
-		Label: "[centeritem:AdhesiveBandage] Emergency treatment"
+		Label: "[centeritem:AdhesiveBandage] Emergency Treatment"
 		Tooltip:
 			'''
 			The Nurse will heal you once you right click to talk to her
@@ -239,47 +239,47 @@ ImproveConfigs: {
 
 	BestiaryQuickUnlock: {
 		Label: "[centeritem:DontHurtCrittersBook] Lesson Learned"
-		Tooltip: As long as a creature's bestiary is unlocked, its bestiary will be completely unlocked regardless the killing count
+		Tooltip: As long as a creature's bestiary is unlocked, its bestiary will be completely unlocked regardless of the kill count
 	}
 
 	BannerRequirement: {
-		Label: "[centeritem:2990] Number of kills to obtain a banner"
+		Label: "[centeritem:2990] Number of Kills to Obtain a Banner"
 		Tooltip:
 			'''
-			Adjusts number of kills to obtain a banner, smaller the multiplier the fewer kills you need to get a banner
-			For reference, when the multiplier is set to 0.1(10%), killing 5 Blue Slimes will grant you a Blue Slime Banner instead of 50
-			When the multiplier is set to 10(1000%), killing 500 Blue Slimes will grant you a Blue Slime Banner instead of 50
+			Adjusts number of kills to obtain a banner. The smaller the multiplier, the fewer kills you need to get a banner
+			For example, when the multiplier is set to 0.1(10%), killing 5 Blue Slimes will give you a Blue Slime Banner instead of 50
+			Likewise, when the multiplier is set to 10(1000%), killing 500 Blue Slimes will gives you a Blue Slime Banner instead of 50
 			'''
 	}
 
 	AlchemyGrassGrowsFaster: {
-		Label: "[centeritem:313] Accelerate herb growth"
+		Label: "[centeritem:313] Accelerate Herb Growth"
 		Tooltip: Makes all the herbs grow faster
 	}
 
 	AlchemyGrassAlwaysBlooms: {
-		Label: "[centeritem:316] Herbs can bloom in any condition"
-		Tooltip: Makes all the herbs able to bloom and to drop seeds
+		Label: "[centeritem:316] Herbs Can Bloom in Any Condition"
+		Tooltip: Makes all the herbs able to bloom and to drop seeds in any condition
 	}
 
 	StaffOfRegenerationAutomaticPlanting: {
-		Label: "[centeritem:213] Staff/Axe of Regrowth auto-plant"
-		Tooltip: Automatically plant the gathered herb when using the Axe/Staff of Regrowth
+		Label: "[centeritem:213] Staff/Axe of Regrowth Auto-Plant"
+		Tooltip: Automatically plants the gathered herb when using the Staff/Axe of Regrowth
 	}
 
 	NoBiomeSpread: {
-		Label: "[centeritem:Sunflower] Stop the evil biomes and the Hallow biome from spreading"
+		Label: "[centeritem:Sunflower] Stop The Evil Biomes and The Hallow Biome From Spreading"
 		Tooltip: ""
 	}
 
 	RespawnWithFullHP: {
-		Label: "[centeritem:LifeCrystal] Respawn with full HP"
+		Label: "[centeritem:LifeCrystal] Respawn With Full HP"
 		Tooltip: ""
 	}
 
 	DontDeleteBuff: {
-		Label: "[centeritem:FlaskofNanites] Keep buffs after death"
-		Tooltip: Make all buffs stay active after death
+		Label: "[centeritem:FlaskofNanites] Keep Buffs After Death"
+		Tooltip: Make all the buffs stay active after death
 	}
 
 	JourneyResearch: {
@@ -292,7 +292,7 @@ ImproveConfigs: {
 	}
 
 	BanDamageVar: {
-		Label: "[centeritem:6] Disable damage spread"
+		Label: "[centeritem:6] Disable Damage Spread"
 		Tooltip: ""
 	}
 
@@ -302,10 +302,10 @@ ImproveConfigs: {
 	}
 
 	TreeGrowFaster: {
-		Label: "[centeritem:1182] Trees grow rapidly & ignore layer conditions"
+		Label: "[centeritem:1182] Trees Grow Rapidly & Ignore Layer Conditions"
 		Tooltip:
 			'''
-			Growing speed of trees * 500%
+			Trees growing speed is multiplied by 5
 			Gem trees can grow on the surface, and regular trees can grow underground
 			Will not affect the natural generation speed of Jungle Trees or Giant Glowing Mushrooms
 			'''
@@ -315,14 +315,14 @@ ImproveConfigs: {
 		Label: "[centeritem:4009] Guaranteed Fruit Drop From Tree Shake"
 		Tooltip:
 			'''
-			Greatly increases drop rate of fruit (Drop rates of other items are not affected)
+			Greatly increases drop rate of fruit (drop rates of other items are not affected)
 			If it seems doing nothing, please check Terraria Wiki for the conditions
 			'''
 	}
 
 	GemTreeAlwaysDropGem: {
-		Label: "[centeritem:3649] Gem trees always drop gem"
-		Tooltip: Every part of a gem tree will drop gem or gemcorn
+		Label: "[centeritem:3649] Gem Trees Always Drop Gems"
+		Tooltip: Every part of a gem tree will drop gems or gemcorns
 	}
 
 	ShareCraftingStation: {
@@ -330,9 +330,9 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			Players in the same team will share their portable crafting stations
-			Which means: If a player in your team has a Workbench, you will not need to have a Workbench to craft a Chair
+			E.g., if a player on your team has a Workbench, you will not need to have a Workbench to craft a Chair
 			Requires 'Portable Crafting Stations' to be on
-			May cause lagging if there are too many players(>100)
+			May cause lagging if there are too many players (>100)
 			'''
 	}
 
@@ -341,14 +341,14 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			Players in the same team will share their infinite buffs, including banner buffs
-			Which means: If a player in your team has a Slice of Cake, you will be granted the Sugar Rush buff without having to take one
-			Requires at least one infinite buffs function to be on
-			May cause lagging if there are too many players(>100)
+			E.g., if a player on your team has a Slice of Cake, you will be granted the Sugar Rush buff without having to take one
+			Requires at least one infinite buffs configuration to be on
+			May cause lagging if there are too many players (>100)
 			'''
 	}
 
 	ShareRange: {
-		Label: "[centeritem:WorldGlobe] Range of Shared Effects(in tiles)"
+		Label: "[centeritem:WorldGlobe] Range of Shared Effects (in tiles)"
 		Tooltip:
 			'''
 			Only teammates within this range will share the shared effects
@@ -362,48 +362,47 @@ ImproveConfigs: {
 	}
 
 	OnlyHost: {
-		Label: "[centeritem:2203] Only the host can change the mod configs(does not work with port forwarding)"
+		Label: "[centeritem:2203] Only The Host Can Change The Mod Configs (does not work with port forwarding)"
 		Tooltip:
 			'''
-			Does not work in single player mode
-			After enabled, only the host(IP: 127.0.0.1) can change the mod configs
+			Does nothing in singleplayer mode
+			After enabled, only the host (IP: 127.0.0.1) can change the mod configs
 			Only the host can toggle this on/off
 			If the server runs with port forwarding, please use the function below
 			'''
-		Unaccepted: Cannot save changes: you are not the host!
+		Unaccepted: Cannot save changes: You are not the host!
 		Tips:
 			'''
-			"Only the host can change the mod configs" enabled
-			Only the host(IP: 127.0.0.1) can change the mod configs
+			"Only The Host Can Change The Mod Configs" is enabled
+			Only the host (IP: 127.0.0.1) can change the mod configs
 			'''
 	}
 
 	OnlyHostByPassword: {
-		Label: "[centeritem:2203] Only the player(s) with verified password can change the mod configs"
+		Label: "[centeritem:2203] Only The Verified Player(s) Can Change The Mod Configs"
 		Tooltip:
 			'''
-			Does not work in single player mode, reloading is required
-			After enabled, only the player(s) with verified password can change the mod configs
+			Does nothing in singleplayer mode, reloading is required
+			After enabled, only the verified player(s) can change the mod configs
 			While starting the server, a random 8-digit password will be sent in the server console
-			Players can type /qotpassword <password> to verify
+			Players can type /qotpassword <password> to verify themselves
 			The server console can query the password by typing /qotpassword
 			If the password is correct, the player will be able to change mod configs
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''
-		Unaccepted: Your password is not verified!
+		Unaccepted: You have not passed the verification!
 		Tips:
 			'''
-			"Only the player(s) with verified password can change the mod configs" enabled
-			Only the player(s) with verified password can change the mod configs
+			"Only The Verified Player(s) Can Change The Mod Configs" is enabled
 			'''
 		Registered: You can change the mod configs already
 		Correct: Correct password, you can change the mod configs
 		Incorrect: Incorrect password!
 		ServerPassword: "[Quality of Terraria] Password for config verification: {Password}"
 		ServerPasswordLog: Password for config verification: {Password}
-		CommandDescription: To verify the client, asking permission to change the mod configs
+		CommandDescription: To verify the client, ask for permission to change the mod configs
 		NotOn: Password verification option is not enabled
-		Format: The password should be 4 letters (not case-sensitive)
+		Format: The password should have 4 letters (not case-sensitive)
 	}
 
 	SpawnRateMaxValue: {
@@ -429,7 +428,7 @@ ImproveConfigs: {
 
 	LoadModItems: {
 		Label: Mod Items Load Config
-		Tooltip: Remove some modded items so they do not appear in the game
+		Tooltip: Removes some items from the mod so they do not appear in the game
 	}
 
 	EmptyAutofisher: {
@@ -451,20 +450,20 @@ ImproveConfigs: {
 			Displaying detailed item drop of a grab bag while clicking the "Display grab bag loot" keybind.
 			A hotkey to swap the hotbar with the second row of inventory.
 			A filter panel which opens when the icon of Lifeform Analyzer is clicked.
-			Chest item inspection when the cursor is hovered on it and Alt is pressed.
-			Tooltip Simplification ('favorite' tooltip removal, detailed tooltip in vanity slots).
-			Increased using speed of and enabled auto-reuse for Life Crystal, Mana Crystal and Life Fruit.
-			Middle click mount items will toggle the mounts.
+			Chest items inspection when the cursor is hovered on it and Alt is pressed.
+			Tooltip simplification ('favorite' tooltip removal, detailed tooltip in vanity slots).
+			Increased using speed of and enabled auto-use for Life Crystal, Mana Crystal and Life Fruit.
+			Middle clicking mount items will toggle the mounts.
 			All hair styles can be chosen upon character creation.
 			Teleportation rod hotkey. Uses Rod of Discord or Rod of Harmony in any inventory, prioritize RoH.
 			Home-returning hotkey. Uses any infinite home-returning item in any inventory, prioritize Potion of Return.
-			Ammo can be chosen from Big Backpack
+			Ammo can be used from the Big Backpack
 			'''
 	}
 
 	ExtraToolSpeed: {
-		Label: "[centeritem:4056] Tool speed multiplier"
-		Tooltip: Setting it to 0 won't increase speed, and the higher the value, the faster the speed
+		Label: "[centeritem:4056] Tool Speed Multiplier"
+		Tooltip: Setting it to 0 disables the config. The higher the value, the faster the speed
 	}
 
 	MostTreeMin: {
@@ -510,7 +509,7 @@ ImproveConfigs: {
 	}
 
 	OpenConfig: {
-		Label: Open configuration file
+		Label: Open Configuration File
 		Tooltip: Any config will only appear in the file after being modified.
 	}
 
@@ -519,7 +518,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			Right-clicking the "Housing" button will teleport all town NPCs home.
-			Once a town NPC's home changes, it will be teleported to its home.
+			Once a town NPC's home is changed, it will be teleported to it immediately.
 			'''
 		HoverText: （<right> to teleport town NPCs home）
 	}
@@ -550,8 +549,8 @@ ImproveConfigs: {
 		Label: "[centeritem:RedPotion] Unlimited Red Potion Extension"
 		Tooltip:
 			'''
-			Unlock the Red Potion Extension for all kinds of worlds,
-			Instead of "Get fixed boi" and "For the worthy" only.
+			Unlocks the Red Potion Extension for all kinds of worlds
+			instead of only "Get fixed boi" and "For the worthy".
 			'''
 		Condition: Unlimited Red Potion Extension enabled/{$Conditions.WorldForTheWorthy}
 	}
@@ -569,7 +568,7 @@ ImproveConfigs: {
 		Label: "[centeritem:DemonHeart] Expert Debuff Duration"
 		Tooltip:
 			'''
-			Toggles longer debuff duration under expert/master mode.
+			Toggles longer debuff duration in Expert/Master mode.
 			Classic mode duration will be used if this is off.
 			'''
 	}
@@ -584,11 +583,11 @@ ImproveConfigs: {
 	}
 
 	BombsNotDamage: {
-		Label: "[centeritem:TNTBarrel] Non-damaging Explosives"
+		Label: "[centeritem:TNTBarrel] Non-Damaging Explosives"
 		Tooltip:
 			'''
-			Disable tile-breaking items' damage
-			Only affects items that break tiles. Grenades, rockets that don't break tiles, etc. are not affected
+			Disables tile-breaking items' damage
+			Only affects explosives that break tiles. Grenades, rockets that don't break tiles, etc. are not affected
 			'''
 	}
 
@@ -609,8 +608,8 @@ ImproveConfigs: {
 	MinimapMark: {
 		Tooltip:
 			'''
-			Allows use of 'Locators' to mark following structures on map:
-			The Aether, Dungeon, Jungle Temple, Floating Islands, Pyramid, Plantera's Bulb and Enchanted Sword in Stone.
+			Allows the use of 'Locators' to mark following structures on map:
+			The Aether, Dungeon, Jungle Temple, Floating Islands, Pyramid, Plantera's Bulb and Enchanted Sword Shrines.
 			'''
 		Label: "[centeritem:WorldGlobe] Structure Markers"
 	}
@@ -647,15 +646,15 @@ ImproveConfigs: {
 	WandMaterialNoConsume: {
 		Tooltip:
 			'''
-			Tiles and walls with stack over 999 will not be consumed if placed by Wand of Space/Technology/Construction,
-			working benches, tables, beds, etc. with stack over 99 instead will not be consumed.
+			Tiles and walls in stack over 999 will not be consumed if placed by Wand of Space/Technology/Construction.
+			Workbenches, tables, beds, etc. will not be consumed in stack over 99.
 			'''
 		Label: "[centeritem:ImproveGame/SpaceWand] Infinite Wand Placeables"
 	}
 
 	QuestFishStack: {
 		Label: "[centeritem:Clownfish] Stackable Quest Fishes"
-		Tooltip: Quest fishes will be stackable, and can be fished or picked up even if their same types exist in inventory.
+		Tooltip: Quest fishes will be stackable, and can be fished or picked up even if the same fish is in the inventory.
 	}
 
 	QuickRespawn: {
@@ -675,7 +674,7 @@ ImproveConfigs: {
 
 	NoConditionTP: {
 		Label: "[centeritem:WormholePotion] Unconditional Team Teleportation"
-		Tooltip: Players can teleport to teammates without comsuming Wormhole Potion, even if it's in inventory
+		Tooltip: Players can teleport to teammates without the need of a Wormhole Potion, even if it's in inventory
 	}
 
 	OpenFaq: {
@@ -695,7 +694,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			Alters wind direction, moon phase, rain,
-			plus time after defeating Wall of Flesh
+			as well as time after defeating Wall of Flesh
 			Unlocks via Book of Weather, opens from the Control Panel
 			Availability changes per world
 			'''
@@ -821,27 +820,27 @@ UIConfigs: {
 	}
 
 	ResetNativeUI: {
-		Label: "[centeritem:1544] Reset to vanilla UI"
+		Label: "[centeritem:1544] Reset to Vanilla UI"
 		Tooltip: ""
 	}
 
 	GeneralFontOffsetY: {
-		Label: "[centeritem:1543] UI normal font Y offset"
+		Label: "[centeritem:1543] UI Normal Font Y Offset"
 		Tooltip: ""
 	}
 
 	BigFontOffsetY: {
-		Label: "[centeritem:1543] UI large font Y offset"
+		Label: "[centeritem:1543] UI Large Font Y Offset"
 		Tooltip: ""
 	}
 
 	ShowMoreData: {
-		Label: "[centeritem:1344] Display debug data"
+		Label: "[centeritem:1344] Display Debug Data"
 		Tooltip: ""
 	}
 
 	ShowModName: {
-		Label: "[centeritem:ImproveGame/LiquidWand] Display which mod are the items from"
+		Label: "[centeritem:ImproveGame/LiquidWand] Display Which Mod The Items Are From"
 		Tooltip: ""
 	}
 
@@ -873,7 +872,7 @@ UIConfigs: {
 		Label: "[centeritem:TVHeadMask] Keep Game Running When Focus Is Lost"
 		Tooltip:
 			'''
-			The game will continue to run even if focus is lost (aka. in background),
+			The game will continue to run even if focus is lost (aka. in background)
 			instead of being paused in single player.
 			'''
 	}
@@ -930,20 +929,20 @@ UIConfigs: {
 	}
 
 	SuicideButton: {
-		Label: K.Y.S.
+		Label: Kill The Player
 		Tooltip: Your character will die after hitting this button, [c/FF4444:think twice before pressing it].
 	}
 
 	MagicMirrorInstantTp: {
-		Label: "[centeritem:MagicMirror] Instant Home-returning Items"
+		Label: "[centeritem:MagicMirror] Instant Home-Returning Items"
 		Tooltip: Home-returning items such as Magic Mirror are instant, delay before teleportation is removed.
 	}
 
 	HideNoConsumeBuffs: {
-		Label: "[centeritem:297] Hide buff icons of Infinite Potions"
+		Label: "[centeritem:297] Hide Buff Icons of Infinite Potions"
 		Tooltip:
 			'''
-			Hide buff icons of Infinite Potions
+			Hide buff icons of infinite potions
 			The effects are still provided by their original buffs, but are not displayed
 			'''
 	}
@@ -984,7 +983,7 @@ UIConfigs: {
 	}
 
 	AutoSummon: {
-		Label: "[centeritem:SlimeStaff] Auto Re-summoning"
+		Label: "[centeritem:SlimeStaff] Auto Resummoning"
 		Tooltip:
 			'''
 			Summons last used minion after respawn
