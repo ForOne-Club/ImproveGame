@@ -15,6 +15,11 @@ public class SUIEditableText : TimerView
 
     public class SUITextWithTicker : SUIText
     {
+        /// <summary>
+        /// 没有任何文字输入时的占位符
+        /// </summary>
+        public string Placeholder;
+
         public float CursorOpacity;
         public int Cursor;
 
@@ -39,14 +44,34 @@ public class SUIEditableText : TimerView
             cursorColor *= CursorOpacity;
 
             LastString = OriginalString.Insert(cursor, CursorSnippet.GenerateTag(cursorColor));
+            var text = LastString;
+            Color textColor;
+
+            // 没在写字，没文字：显示占位符
+            if (Parent is SUIEditableText {IsWritingText: false }  && string.IsNullOrEmpty(OriginalString))
+            {
+                text = Placeholder;
+                textColor = Color.Gray;
+            }
+            else
+            {
+                textColor = TextColor;
+            }
 
             FinalTextSnippets = TextSnippetHelper
-                .ConvertNormalSnippets(TextSnippetHelper.ParseMessageWithCursorCheck(LastString, TextColor)).ToArray();
+                .ConvertNormalSnippets(TextSnippetHelper.ParseMessageWithCursorCheck(text, textColor)).ToArray();
             if (_isWrapped)
-                FinalTextSnippets = TextSnippetHelper.WordwrapString(FinalTextSnippets, TextColor, Font,
+            {
+                FinalTextSnippets = TextSnippetHelper.WordwrapString(FinalTextSnippets, textColor, Font,
                     (int)(GetInnerDimensions().Width / TextScale), out _, MaxCharacterCount, MaxLines);
+                TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
+            }
+            else
+            {
+                TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
+                TextScale = Math.Min(1f, (GetInnerDimensions().Width - 4) / TextSize.X);
+            }
 
-            TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
 
             var inner = GetInnerDimensions();
 
@@ -67,7 +92,7 @@ public class SUIEditableText : TimerView
                 textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder * TextScale);
 
             DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
-                textPos, TextColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
+                textPos, textColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
         }
     }
 
@@ -108,7 +133,8 @@ public class SUIEditableText : TimerView
                 text = text[..MaxLength] ?? "";
 
             if (InnerText.TextOrKey != text)
-                ContentsChanged?.Invoke(text);
+                ContentsChanged?.Invoke(ref text);
+            text ??= "";
 
             if (string.IsNullOrEmpty(text))
                 Cursor = 0;
@@ -137,7 +163,7 @@ public class SUIEditableText : TimerView
     /// <summary>
     /// 用于周期性闪烁指针的计时器
     /// </summary>
-    private static int _cursorBlinkCount;
+    private int _cursorBlinkCount;
 
     /// <summary>
     /// 是否绘制输入法框，一般建议由父元素绘制，而将此值设为false，这样的话不会被其他元素遮挡
@@ -147,17 +173,19 @@ public class SUIEditableText : TimerView
     /// <summary>
     /// 此帧按下的键
     /// </summary>
-    private static List<Keys> _pressedKeys = [];
+    private List<Keys> _pressedKeys = [];
 
     /// <summary>
     /// 上一帧按下的键
     /// </summary>
-    private static List<Keys> _oldPressedKeys = [];
+    private List<Keys> _oldPressedKeys = [];
+
+    public delegate void ContentsChangedDelegate(ref string text);
 
     /// <summary>
     /// 当输入内容更改时触发
     /// </summary>
-    public event Action<string> ContentsChanged;
+    public event ContentsChangedDelegate ContentsChanged;
 
     /// <summary>
     /// 当开始输入操作时触发
@@ -267,8 +295,11 @@ public class SUIEditableText : TimerView
 
     public void Write(string text)
     {
+        int originalLength = Text.Length;
         SetText(Text.Insert(Cursor, text));
-        Cursor += text.Length;
+        // 考虑各种情况
+        Cursor += Text.Length - originalLength;
+        Cursor = Math.Min(Text.Length, Cursor);
     }
 
     public void SetText(string text)
@@ -485,9 +516,9 @@ public class SUIEditableText : TimerView
         return finalText;
     }
 
-    private static string GetPasteText(bool allowMultiLine) => allowMultiLine
+    private string GetPasteText(bool allowMultiLine) => allowMultiLine
         ? Platform.Get<IClipboard>().MultiLineValue
         : Platform.Get<IClipboard>().Value;
 
-    private static bool Pressed(Keys key) => _pressedKeys.Contains(key) && !_oldPressedKeys.Contains(key);
+    private bool Pressed(Keys key) => _pressedKeys.Contains(key) && !_oldPressedKeys.Contains(key);
 }

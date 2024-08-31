@@ -1,3 +1,5 @@
+using Terraria.ModLoader.Config;
+
 namespace ImproveGame.Common.Configs.FavoritedSystem;
 
 public class FavoritedOptionDatabase
@@ -18,24 +20,23 @@ public class FavoritedOptionDatabase
     {
         FavoritedOptions =
         [
-            "SuperVault",
-            "GrabDistance",
-            "ExtraToolSpeed",
-            "ModifyPlayerPlaceSpeed",
-            "ModifyPlayerTileRange",
-            "NPCCoinDropRate",
-            "BannerRequirement",
-            "ModifyNPCHappiness",
-            "WandMaterialNoConsume"
+            "ImproveConfigs.SuperVault",
+            "ImproveConfigs.GrabDistance",
+            "ImproveConfigs.ExtraToolSpeed",
+            "ImproveConfigs.ModifyPlayerPlaceSpeed",
+            "ImproveConfigs.ModifyPlayerTileRange",
+            "ImproveConfigs.NPCCoinDropRate",
+            "ImproveConfigs.BannerRequirement",
+            "ImproveConfigs.ModifyNPCHappiness",
+            "ImproveConfigs.WandMaterialNoConsume"
         ];
     }
 
-    public static void ToggleFavoriteForOption(string name)
+    public static void ToggleFavoriteForOption(ModConfig config, string optionName)
     {
-        if (FavoritedOptions.Contains(name))
+        string name = $"{config.Name}.{optionName}";
+        if (!FavoritedOptions.Add(name))
             FavoritedOptions.Remove(name);
-        else
-            FavoritedOptions.Add(name);
 
         AdditionalConfig.Save();
     }

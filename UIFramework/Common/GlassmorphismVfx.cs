@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework.Graphics2D;
+﻿using ImproveGame.UI.ModernConfig;
+using ImproveGame.UIFramework.Graphics2D;
 using Terraria.GameInput;
 using Terraria.Graphics.Effects;
 
@@ -60,11 +61,13 @@ public class GlassmorphismVfx : ModSystem
             if (GlassCovers is not null)
                 foreach (var t in GlassCovers)
                     t?.Dispose();
+            ModernConfigUI.Glass?.Dispose();
 
             _blurredTarget = null;
             _uiTarget = null;
             _helperTarget = null;
             GlassCovers = null;
+            ModernConfigUI.Glass = null;
         });
     }
 
@@ -75,6 +78,7 @@ public class GlassmorphismVfx : ModSystem
             GlassCovers = new RenderTarget2D[EventTriggerManager.LayerCount + 1];
             for (var i = 0; i < GlassCovers.Length; i++)
                 GlassCovers[i] = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.ScreenSize.X, Main.ScreenSize.Y);
+            ModernConfigUI.Glass = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.ScreenSize.X, Main.ScreenSize.Y);
         });
     }
 
@@ -85,6 +89,7 @@ public class GlassmorphismVfx : ModSystem
         _helperTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
         for (var i = 0; i < GlassCovers.Length; i++)
             GlassCovers[i] = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
+        ModernConfigUI.Glass = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
     }
 
     private void ReleaseTarget()
@@ -94,11 +99,12 @@ public class GlassmorphismVfx : ModSystem
         _helperTarget?.Dispose();
         foreach (var t in GlassCovers)
             t?.Dispose();
+        ModernConfigUI.Glass?.Dispose();
     }
 
     private void RenderGlassmorphismVfx()
     {
-        if (Main.gameMenu || !GlassVfxAvailable || Main.InGameUI.IsVisible || Main.ingameOptionsWindow)
+        if (Main.gameMenu || !GlassVfxAvailable)
             return;
 
         var device = Main.instance.GraphicsDevice;
@@ -128,7 +134,9 @@ public class GlassmorphismVfx : ModSystem
         }
 
         PlayerInput.SetZoom_UI();
-        EventTriggerManager.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
+        if (!Main.InGameUI.IsVisible && !Main.ingameOptionsWindow)
+            EventTriggerManager.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
+        ModernConfigUI.MakeGlass(_blurredTarget, _uiTarget);
         PlayerInput.SetZoom_World();
 
         device.SetRenderTarget(null);

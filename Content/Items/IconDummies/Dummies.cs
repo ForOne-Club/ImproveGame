@@ -8,6 +8,16 @@ namespace ImproveGame.Content.Items.IconDummies;
 
 public class AddChestIconDummy : ModItem;
 
+public class AddIconDummy : ModItem
+{
+    public override string Texture => "ImproveGame/Assets/Images/UI/AmmoChain/AddChainIcon";
+}
+
+public class OpenFolderDummy : ModItem
+{
+    public override string Texture => "Terraria/Images/UI/Camera_6";
+}
+
 public class UniversalAmmoIcon : ModItem, IHideExtraTooltips
 {
     public override void ModifyTooltips(List<TooltipLine> tooltips)

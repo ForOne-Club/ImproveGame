@@ -25,6 +25,15 @@ namespace ImproveGame.UIFramework.SUIElements
                 Height.Pixels = Texture.Height + this.VPadding();
             }
         }
+        
+        public void ResetSize()
+        {
+            if (Texture == null)
+                return;
+
+            Width.Pixels = Texture.Width * ImageScale + this.HPadding();
+            Height.Pixels = Texture.Height * ImageScale + this.VPadding();
+        }
 
         public override void MouseOver(UIMouseEvent evt)
         {

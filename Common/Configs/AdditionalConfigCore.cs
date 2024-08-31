@@ -55,7 +55,7 @@ namespace ImproveGame.Common.Configs
             public WandSystem.PaintMode PaintMode;
         }
 
-        public HashSet<string> FavoritedConfigOptions;
+        public HashSet<string> FavoritedModernConfigOptions;
 
         public const string FileName = "ImproveGame_AdditionalConfig.json";
         public static readonly string FullPath = Path.Combine(ConfigManager.ModConfigPath, FileName);
@@ -104,7 +104,7 @@ namespace ImproveGame.Common.Configs
             WandMode.LiquidSelectedType = WandSystem.LiquidMode;
             WandMode.PaintMode = WandSystem.PaintWandMode;
 
-            FavoritedConfigOptions = FavoritedOptionDatabase.FavoritedOptions;
+            FavoritedModernConfigOptions = FavoritedOptionDatabase.FavoritedOptions;
 
             UseKeybindTranslation = KeybindSystem.UseKeybindTranslation;
 
@@ -158,10 +158,10 @@ namespace ImproveGame.Common.Configs
                 WandSystem.PaintWandMode = WandMode.PaintMode;
             }
 
-            if (FavoritedConfigOptions is null || FavoritedConfigOptions.Count is 0)
+            if (FavoritedModernConfigOptions is null || FavoritedModernConfigOptions.Count is 0)
                 FavoritedOptionDatabase.SetDefaultFavoritedOptions();
             else
-                FavoritedOptionDatabase.FavoritedOptions = FavoritedConfigOptions;
+                FavoritedOptionDatabase.FavoritedOptions = FavoritedModernConfigOptions;
 
             KeybindSystem.UseKeybindTranslation = UseKeybindTranslation;
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition == Vector2.Zero

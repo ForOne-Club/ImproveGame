@@ -100,7 +100,7 @@ public class ChainEditPage : View
         SetupColorGrids(colorGrids);
     }
 
-    private void OnTextContentChanged(string content)
+    private void OnTextContentChanged(ref string content)
     {
         ChainName = content;
     }
@@ -162,7 +162,7 @@ public class ChainEditPage : View
         
         if (ChainName.IsPathIllegal())
         {
-            AddNotification(GetText("ConstructGUI.RenameTip.Illegal"));
+            AddNotification(GetText("PathIllegal"));
             return;
         }
 

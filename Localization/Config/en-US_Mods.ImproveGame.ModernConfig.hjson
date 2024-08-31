@@ -1,0 +1,122 @@
+NoTooltip: No tooltip yet...
+Name: Config Center
+ButtonApply: Apply Preset
+ButtonInfo: More Info
+ButtonDelete: Delete Preset
+ButtonRename: Rename
+
+AboutPage: {
+	Label: About
+	Tooltip: About the new config interface.
+	About:
+		'''
+		This is [c/0099ff:the brand new config interface] of Quality of Terraria, you will find all features here. Join our Discord server for feedback. It's totally okay to use the classic tModLoader mod config menu.
+
+		At the left are the [c/0099ff:categories] based on functionality, click them to view their children entries.
+		At the bottom is the [c/0099ff:tooltip], hover the cursor on an entry to view its.
+
+		[c/0099ff:Right click] an entry to [c/0099ff:reset it to default].
+		'''
+	LinkDiscord: Discord: https://discord.gg/rEmGMQv5z7 (clickable!)
+	LinkQQ: Hidden, only relavent in Chinese
+}
+
+Presets: {
+	Label: Presets
+	Tooltip: There are presets by Quality of Terraria for batch configuration. You may also have your own presets.
+	PlayerPresetTooltip: A player-defined preset.
+
+	ExplorerPreset: {
+		Label: "[centeritem:GravityGlobe] Explorer"
+		Tooltip: Best for vanilla-paced playthrough. Explore while facing typical challenges with moderate assistance. Might work well with mods like Thorium or Spirit.
+		Link: TODO Add Wiki page
+	}
+
+	WarriorPreset: {
+		Label: "[centeritem:EmpressBlade] Battler"
+		Tooltip: Stop digging and start fighting! Skip most grindings. Might work well with mods like Calamity or Fargo's Souls.
+		Link: TODO Add Wiki page
+	}
+
+	VanillaPreset: {
+		Label: "[centeritem:MusicBoxCredits] Vanilla Enjoyer"
+		Tooltip: Just vanilla. Play with few QoL features.
+		Link: TODO Add Wiki page
+	}
+
+	AddPreset: {
+		Label: "[centeritem:ImproveGame/AddIconDummy] Save as Preset"
+		Tooltip: Save the current config as a preset.
+		Link: TODO Add Wiki page
+	}
+
+	OpenFolder: {
+		Label: "[centeritem:ImproveGame/OpenFolderDummy] Open Preset Folder"
+		Tooltip: Open the preset folder.
+	}
+}
+
+Favorites: {
+	Label: Mark as Favorite
+	Tooltip: Right click an entry to favorite it. Favorited entries will show up here.
+}
+
+Everything: {
+	Label: Everything
+	Tooltip: All configurable features. You'll likely find searching to be useful.
+}
+
+GameMechanics: {
+	Label: Game Mechanics
+	Tooltip: Edit game mechanics, e.g. Tombstone spawning & respawn speed.
+}
+
+NpcSettings: {
+	Label: Friendly NPCs
+	Tooltip: Edit friednly NPC behaviors, e.g. housing & happiness.
+}
+
+EnemySettings: {
+	Label: Enemies
+	Tooltip: Edit enemy behaviors, e.g. Lava Slime No Lava & coin drop rate.
+}
+
+PlayerAbility: {
+	Label: Player Abilities
+	Tooltip: Boost player abilities, e.g. tile placement range, respawning with full heath, keep buffs on death & ore excavation.
+}
+
+Multiplayer: {
+	Label: Multiplayer
+	Tooltip: Enhance multiplayer experience, e.g. auto-joining teams & unlimited teleportation.
+}
+
+PlantSettings: {
+	Label: Plants
+	Tooltip: Edit plant behaviors, e.g. herb growth speed, tree heights & gem tree drops.
+}
+
+ItemSettings: {
+	Label: Items
+	Tooltip: Edit item behaviors, which can save grinding, e.g. infinite ammo/potions & buff stations from inventory.
+}
+
+VisualAndInterface: {
+	Label: Visuals & Interfaces
+	Tooltip: Edit vanilla & QoT visuals, tweak QoT user interfaces.
+}
+
+ModFeatures: {
+	Label: Others
+	Tooltip: Edit other features, e.g. Ammo Chain, Auto-trash & Big backpack.
+}
+
+Minimap: {
+	Label: Map
+	Tooltip: Edit map featuers, e.g. Locators.
+}
+
+LicensePage: {
+	Label: Licence
+	Tooltip: View QoT's licence and references.
+}

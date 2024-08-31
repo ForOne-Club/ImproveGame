@@ -57,6 +57,7 @@ public static class SDFGraphics
     {
         Effect effect = ModAsset.SDFGraphics.Value;
         effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
+        effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
         effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
         effect.Parameters["uBorder"].SetValue(border);
         effect.Parameters["uBorderColor"].SetValue(borderColor.ToVector4());

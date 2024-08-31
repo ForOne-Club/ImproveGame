@@ -1,9 +1,11 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
 using ImproveGame.UI.AmmoChainPanel;
 using ImproveGame.UI.DeathSpectating;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UI.ItemSearcher;
+using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
 using ImproveGame.UI.WeatherControl;
@@ -105,8 +107,15 @@ public class MasterControlManager : ModSystem
             Icon = ModAsset.PlayerStats.Value,
         }.Register();
 
+        playerStats.Available += () => UIConfigs.Instance.PlyInfo is not UIConfigs.PAPDisplayMode.NotDisplayed;
         playerStats.OnMouseDown += tv =>
         {
+            if (UIConfigs.Instance.PlyInfo is UIConfigs.PAPDisplayMode.NotDisplayed)
+            {
+                Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
+                return;
+            }
+
             var body = PlayerStatsGUI.Instance;
 
             if (body.HasChild(body.Window))
@@ -333,16 +342,18 @@ public class MasterControlManager : ModSystem
 
         modConfig.OnMouseDown += _ =>
         {
-            if (Main.inFancyUI) return;
+            var ui = ModernConfigUI.Instance;
+            if (ui is null) return;
 
-            SoundEngine.PlaySound(SoundID.MenuOpen);
-            Main.inFancyUI = true;
-            // 不可能找不到
-            var favoritedConfigs = ConfigManager.Configs[Mod].Find(i => i.Name == "FavoritedConfigs");
-            Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, favoritedConfigs);
-            // 打开模组配置
-            // Terraria.ModLoader.UI.Interface.modConfig.SetMod(Mod, Config);
-            Main.InGameUI.SetState(Terraria.ModLoader.UI.Interface.modConfig);
+            if (ui.Enabled)
+            {
+                ui.Close();
+            }
+            else
+            {
+                ui.Open();
+                ui.OpenFromMasterControl = true;
+            }
         };
 
         #endregion
