@@ -13,17 +13,17 @@ AboutPage: {
 		This is [c/0099ff:the brand new config interface] of Quality of Terraria, you will find all features here. Join our Discord server for feedback. It's totally okay to use the classic tModLoader mod config menu.
 
 		At the left are the [c/0099ff:categories] based on functionality, click them to view their children entries.
-		At the bottom is the [c/0099ff:tooltip], hover the cursor on an entry to view its.
+		At the bottom is the [c/0099ff:tooltip], hover the cursor on an entry to view its tooltip.
 
 		[c/0099ff:Right click] an entry to [c/0099ff:reset it to default].
 		'''
 	LinkDiscord: Discord: https://discord.gg/rEmGMQv5z7 (clickable!)
-	LinkQQ: Hidden, only relavent in Chinese
+	LinkQQ: Hidden, only relavent for Chinese
 }
 
 Presets: {
 	Label: Presets
-	Tooltip: There are presets by Quality of Terraria for batch configuration. You may also have your own presets.
+	Tooltip: There are presets by Quality of Terraria for batch configuration. You may also create your own presets.
 	PlayerPresetTooltip: A player-defined preset.
 
 	ExplorerPreset: {
@@ -33,14 +33,14 @@ Presets: {
 	}
 
 	WarriorPreset: {
-		Label: "[centeritem:EmpressBlade] Battler"
+		Label: "[centeritem:EmpressBlade] Fighter"
 		Tooltip: Stop digging and start fighting! Skip most grindings. Might work well with mods like Calamity or Fargo's Souls.
 		Link: TODO Add Wiki page
 	}
 
 	VanillaPreset: {
 		Label: "[centeritem:MusicBoxCredits] Vanilla Enjoyer"
-		Tooltip: Just vanilla. Play with few QoL features.
+		Tooltip: Just like vanilla. Play with few QoL features.
 		Link: TODO Add Wiki page
 	}
 
@@ -73,7 +73,7 @@ GameMechanics: {
 
 NpcSettings: {
 	Label: Friendly NPCs
-	Tooltip: Edit friednly NPC behaviors, e.g. housing & happiness.
+	Tooltip: Edit friendly NPC behaviors, e.g. housing & happiness.
 }
 
 EnemySettings: {
