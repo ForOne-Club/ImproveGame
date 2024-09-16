@@ -80,21 +80,6 @@ public class InfBuffPlayer : ModPlayer
         // 重设部分Buff站效果
         ApplyBuffStation.Reset();
 
-        // 对幻想乡mod的适配（byd整个永续buff，必须特判削除）
-        if (ModLoader.TryGetMod("Gensokyo", out Mod gensokyo))
-        {
-            var items = Get(Player).AvailableItemsHash.ToList();
-            if (items.Count() > 0)
-            {
-                ModPlayer gensokyoPlayer = Main.LocalPlayer.modPlayers.First(player => player.FullName == "Gensokyo/GensokyoPlayer");
-                var pL = gensokyoPlayer.GetType().GetField("PowerLevel", BindingFlags.Public | BindingFlags.Instance);
-                pL.SetValue(gensokyoPlayer, 0);
-
-                if (items.All(item => item.type != gensokyo.Find<ModItem>("FullPowerItem").Type && item.type != gensokyo.Find<ModItem>("PowerItem").Type))
-                    Main.LocalPlayer.ClearBuff(gensokyo.Find<ModBuff>("Buff_PoweredUp").Type);
-            }
-        }
-
         // 从玩家身上获取所有的无尽Buff物品
         ApplyAvailableBuffsFromPlayer(Player);
         if (Config.ShareInfBuffs)
@@ -141,7 +126,7 @@ public class InfBuffPlayer : ModPlayer
             if (item.createTile is TileID.GardenGnome)
                 ApplyBuffStation.HasGardenGnome = true;
 
-            var buffTypes = ApplyBuffItem.GetItemBuffType(item, Main.LocalPlayer);
+            var buffTypes = ApplyBuffItem.GetItemBuffType(item);
 
             buffTypes.ForEach(buffType =>
             {
@@ -261,7 +246,7 @@ public class InfBuffPlayer : ModPlayer
     public static void HandleBuffItem(Item item, List<Item> availableItems)
     {
         // 增益物品
-        var buffTypes = ApplyBuffItem.GetItemBuffType(item, Main.LocalPlayer);
+        var buffTypes = ApplyBuffItem.GetItemBuffType(item);
         if (buffTypes.Count > 0 || item.createTile is TileID.GardenGnome)
         {
             availableItems.Add(item);
