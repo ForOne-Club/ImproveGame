@@ -38,6 +38,22 @@ public class ModIntegrationsSystem : ModSystem
     internal static HashSet<int> ModdedInfBuffsIgnore = new();
 
     /// <summary>
+    /// 储存即使在触发无限增益的情况下，也会正常消耗的物品列表
+    /// </summary>
+    internal static HashSet<int> ModdedInfBuffsConsume = new();
+
+    /// <summary>
+    /// 储存冲突Buff（当玩家拥有某个增益时，一个/些增益会被清除）列表
+    /// <br>Key为BuffID，Value为会被清除的BuffIDs</br>
+    /// </summary>
+    internal static Dictionary<int, List<int>> ModdedBuffConflicts = new()
+    {
+        // 高等级的饱腹会覆盖低等级的
+        {BuffID.WellFed3, [BuffID.WellFed2, BuffID.WellFed] },
+        {BuffID.WellFed2, [BuffID.WellFed] }
+    };
+
+    /// <summary>
     /// 添加物品ID对应的一系列Tile
     /// <br>Key为物品ID，Value为一个TileID的列表</br>
     /// </summary>
@@ -71,6 +87,7 @@ public class ModIntegrationsSystem : ModSystem
         DoCalamityModIntegration();
         DoThoriumModIntegration();
         DoFargowiltasIntegration();
+        DoGensokyoIntegration();
         DoRecipeBrowserIntegration();
         DoDialogueTweakIntegration();
         DoModLoaderIntegration();
@@ -169,6 +186,41 @@ public class ModIntegrationsSystem : ModSystem
 
         AddBuffIntegration(fargowiltas, "Omnistation", "Omnistation", true);
         AddBuffIntegration(fargowiltas, "Omnistation2", "Omnistation", true);
+    }
+
+    private static void DoGensokyoIntegration()
+    {
+        if (!ModLoader.TryGetMod("Gensokyo", out Mod gensokyo))
+            return;
+
+        
+        AddBuffIntegration(gensokyo, "ButterflyPheromones", "Buff_ButterflyPheromones", true);
+        AddBuffIntegration(gensokyo, "OniSake", "Buff_SakeBoth", true);
+        AddBuffIntegration(gensokyo, "HoshigumaDish", "Debuff_SakeHoshiguma", true);
+        AddBuffIntegration(gensokyo, "IbarakiBox", "Buff_SakeIbaraki", true);
+
+        ModdedPotionBuffs.Add(gensokyo.Find<ModItem>("EagleRaviProvisions").Type, 
+            [gensokyo.Find<ModBuff>("Buff_DangoPower1").Type, gensokyo.Find<ModBuff>("Buff_DangoPower2").Type,
+             gensokyo.Find<ModBuff>("Buff_DangoPower3").Type, gensokyo.Find<ModBuff>("Buff_DangoPower4").Type,
+             gensokyo.Find<ModBuff>("Buff_DangoPower5").Type]);
+
+        ModdedInfBuffsConsume.Add(gensokyo.Find<ModItem>("JellyStone").Type);
+
+        ModdedBuffConflicts.Add(gensokyo.Find<ModBuff>("Buff_SakeBoth").Type, [BuffID.Tipsy,
+             gensokyo.Find<ModBuff>("Buff_SakeIbaraki").Type, gensokyo.Find<ModBuff>("Debuff_SakeHoshiguma").Type]);
+        ModdedBuffConflicts.Add(gensokyo.Find<ModBuff>("Buff_DangoPower5").Type,
+            [gensokyo.Find<ModBuff>("Buff_DangoPower1").Type, gensokyo.Find<ModBuff>("Buff_DangoPower2").Type,
+             gensokyo.Find<ModBuff>("Buff_DangoPower3").Type, gensokyo.Find<ModBuff>("Buff_DangoPower4").Type]);
+        ModdedBuffConflicts.Add(gensokyo.Find<ModBuff>("Buff_DangoPower4").Type,
+            [gensokyo.Find<ModBuff>("Buff_DangoPower1").Type, gensokyo.Find<ModBuff>("Buff_DangoPower2").Type,
+             gensokyo.Find<ModBuff>("Buff_DangoPower3").Type]);
+        ModdedBuffConflicts.Add(gensokyo.Find<ModBuff>("Buff_DangoPower3").Type,
+            [gensokyo.Find<ModBuff>("Buff_DangoPower1").Type, gensokyo.Find<ModBuff>("Buff_DangoPower2").Type]);
+        ModdedBuffConflicts.Add(gensokyo.Find<ModBuff>("Buff_DangoPower2").Type,
+            [gensokyo.Find<ModBuff>("Buff_DangoPower1").Type]);
+        ModdedBuffConflicts.Add(gensokyo.Find<ModBuff>("Buff_SakeIbaraki").Type, [BuffID.Tipsy,
+             gensokyo.Find<ModBuff>("Debuff_SakeHoshiguma").Type]);
+        ModdedBuffConflicts.Add(gensokyo.Find<ModBuff>("Debuff_SakeHoshiguma").Type, [BuffID.Tipsy]);
     }
 
     private static void DoDialogueTweakIntegration()
@@ -295,6 +347,22 @@ public class ModIntegrationsSystem : ModSystem
                             int itemType = Convert.ToInt32(args[1]); // Item ID
                             List<int> buffTypes = AsListOfInt(args[2]); // Buff IDs
                             ModdedPotionBuffs[itemType] = buffTypes;
+                            return true;
+                        }
+                    case "ConsumePotion":
+                        {
+                            List<int> consumes = AsListOfInt(args[1]); // Potion IDs
+                            foreach (int consume in consumes)
+                            {
+                                ModdedInfBuffsConsume.Add(consume);
+                            }
+                            return true;
+                        }
+                    case "BuffConflict":
+                        {
+                            int buffType = Convert.ToInt32(args[1]); // Buff ID
+                            List<int> ClearedBuffTypes = AsListOfInt(args[2]); // Cleared Buff IDs
+                            ModdedBuffConflicts[buffType] = ClearedBuffTypes;
                             return true;
                         }
                     case "AddStation":

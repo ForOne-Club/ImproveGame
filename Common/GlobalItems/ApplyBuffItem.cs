@@ -6,6 +6,7 @@ using ImproveGame.UI;
 using ImproveGame.UIFramework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace ImproveGame.Common.GlobalItems
 {
@@ -56,7 +57,9 @@ namespace ImproveGame.Common.GlobalItems
                 if (item.stack >= Config.NoConsume_PotionRequirement)
                 {
                     if (_potionToBuffs.TryGetValue(item.type, out var buffsInTable))
+                    {
                         return buffsInTable;
+                    }
 
                     var buffs = new List<int>();
                     // 自带buffType的物品，小于60s持续时间的不算
@@ -112,6 +115,7 @@ namespace ImproveGame.Common.GlobalItems
 
             if (Config.NoConsume_Potion && !ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type) &&
                 item.stack >= Config.NoConsume_PotionRequirement &&
+                !ModIntegrationsSystem.ModdedInfBuffsConsume.Contains(item.type) &&
                (item.buffType > 0 || Lookups.SpecialPotions.Contains(item.type)))
             {
                 return false;
