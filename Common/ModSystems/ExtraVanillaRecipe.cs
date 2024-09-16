@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Terraria.GameContent.ItemDropRules;
 
+/// 禁用了
 namespace ImproveGame.Common.ModSystems
 {
     public static class RecipeExt
@@ -17,6 +18,7 @@ namespace ImproveGame.Common.ModSystems
         }
         public static void AddRecipeGroups()
         {
+            return;
             bars = [];
             bars[1] = RegisterPairsBars(1, ItemID.CopperBar, ItemID.TinBar);
             bars[2] = RegisterPairsBars(2, ItemID.IronBar, ItemID.LeadBar);
@@ -78,6 +80,8 @@ namespace ImproveGame.Common.ModSystems
 
     public class ExtraVanillaRecipe : ModSystem
     {
+        // TODO: 这部分不完善，暂时禁用
+        public override bool IsLoadingEnabled(Mod mod)=> false;
         public override void AddRecipeGroups() => RecipeExt.AddRecipeGroups();
         public override void AddRecipes()
         {
