@@ -56,7 +56,6 @@ public class FukMeCalamityElement : PresetElement
         config.BedTimeRate = 80;
         config.BedEverywhere = true;
         config.NoSleepRestrictions = true;
-        config.NoPylonRestrictions = true;
         config.WandMaterialNoConsume = true;
         config.MinimapMark = true;
         config.BedOnlyOne = true;
@@ -119,7 +118,6 @@ public class ILoveBalanceElement : PresetElement
         config.BedTimeRate = 10;
         config.BedEverywhere = true;
         config.NoSleepRestrictions = true;
-        config.NoPylonRestrictions = false;
         config.WandMaterialNoConsume = false;
         config.MinimapMark = true;
         config.BedOnlyOne = false;
@@ -183,7 +181,6 @@ public class AllOffElement : PresetElement
         config.BedTimeRate = 10;
         config.BedEverywhere = false;
         config.NoSleepRestrictions = false;
-        config.NoPylonRestrictions = false;
         config.BedTimeRate = 5;
         config.WandMaterialNoConsume = false;
         config.MinimapMark = false;

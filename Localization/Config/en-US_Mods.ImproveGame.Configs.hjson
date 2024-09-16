@@ -506,6 +506,7 @@ ImproveConfigs: {
 		Presets: "[centeritem:ImproveGame/PaintWand] Presets"
 		Others: "[centeritem/h4:HandOfCreation] Others"
 		ItemEffect: "[centeritem/h4:RedPotion] Item Effects"
+		PylonMechanics: "[centeritem:4951] Pylon Restrictions"
 	}
 
 	OpenConfig: {
@@ -662,11 +663,11 @@ ImproveConfigs: {
 		Tooltip: Respawn time is reduced to 1.5s when no boss is present
 	}
 
-	NoPylonRestrictions: {
-		Label: "[centeritem:TeleportationPylonPurity] Unconditional Pylon Teleportation"
-		Tooltip: Pylons may be used for teleportation unconditionally, but you still need to stand nearby a pylon
-	}
-
+	/*NoPylonRestrictions: {
+	Label: "[centeritem:TeleportationPylonPurity] Unconditional Pylon Teleportation"
+	Tooltip: Pylons may be used for teleportation unconditionally, but you still need to stand nearby a pylon
+	}*/
+	
 	AllOff: {
 		Label: Turn Them OFF
 		Tooltip: Restores (almost) all configurations to vanilla state, play vanilla Terraria
@@ -724,6 +725,31 @@ ImproveConfigs: {
 	DisableVeinMiningPopup: {
 		Label: "[centeritem:IronPickaxe] Disable Vein Mining Popup"
 		Tooltip: Disable the annoying popup for good
+	}
+
+	PylonPlaceLimit: {
+		Label: "[centeritem:TeleportationPylonPurity] Pylon Place Limit"
+		Tooltip: ""
+	}
+
+	PylonTeleNoNear: {
+		Label: "[centeritem:TeleportationPylonUnderground] Teleport needn't near"
+		Tooltip: ""
+	}
+
+	PylonTeleNoNPC: {
+		Label: "[centeritem:TeleportationPylonHallow] Teleport needn't NPCs"
+		Tooltip: ""
+	}
+
+	PylonTeleNoDanger: {
+		Label: "[centeritem:TeleportationPylonJungle] Teleport ignore danger"
+		Tooltip: ""
+	}
+
+	PylonTeleNoBiome: {
+		Label: "[centeritem:TeleportationPylonMushroom] Teleport ignore biome"
+		Tooltip: ""
 	}
 }
 
@@ -1068,4 +1094,11 @@ FishQuestResetType: {
 	Disabled.Label: Disabled
 	NotResetFish.Label: Not Reset Fish
 	ResetFish.Label: Reset Fish
+}
+
+PylonPlaceLimit: {
+	Tooltip: ""
+	Default.Label: Default
+	NoCountLimit.Label: No Count Limit
+	NoBiomeLimit.Label: No Count Limit and ignore biome
 }

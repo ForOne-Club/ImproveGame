@@ -325,3 +325,13 @@ OpenFolderDummy: {
 	DisplayName: Open Folder Dummy
 	Tooltip: ""
 }
+
+CrimsonAltarItem: {
+	DisplayName: Crimson Altar
+	Tooltip: ""
+}
+
+DemonAltarItem: {
+	DisplayName: Demon Altar
+	Tooltip: ""
+}

@@ -53,15 +53,15 @@ namespace ImproveGame.Content.Functions.PortableBuff
             foreach (var item in items)
             {
                 var buffTypes = ApplyBuffItem.GetItemBuffType(item);
-                buffTypes.ForEach((Action<int>)(buffType =>
+                buffTypes.ForEach(buffType =>
                 {
                     if (buffType is not -1)
                         BuffTypesShouldHide[buffType] = true;
 
                     if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.ItemContainer.Count > 0)
                         foreach (var potion in from p in potionBag.ItemContainer where p.stack >= Config.NoConsume_PotionRequirement select p)
-                            BuffTypesShouldHide[(int)potion.buffType] = true;
-                }));
+                            BuffTypesShouldHide[potion.buffType] = true;
+                });
             }
         }
     }

@@ -22,7 +22,7 @@ public sealed class CategorySidePanel : SUIPanel
 
     internal static readonly Dictionary<string, CategoryCard> Cards = new();
 
-    private SUIScrollView2 Categories { get;  set; }
+    private SUIScrollView2 Categories { get; set; }
 
     static CategorySidePanel()
     {

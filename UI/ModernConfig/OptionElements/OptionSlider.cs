@@ -2,7 +2,6 @@
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
-using System.ComponentModel;
 using System.Reflection;
 using Terraria.ModLoader.Config;
 
@@ -211,7 +210,7 @@ public sealed class OptionSlider : ModernConfigOption
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        
+
         _slideBox.IgnoresMouseInteraction = !Interactable;
         _numericTextBox.IgnoresMouseInteraction = !Interactable;
 

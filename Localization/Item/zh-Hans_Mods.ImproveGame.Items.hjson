@@ -324,3 +324,13 @@ OpenFolderDummy: {
 	// DisplayName: Open Folder Dummy
 	// Tooltip: ""
 }
+
+CrimsonAltarItem: {
+	DisplayName: 猩红祭坛
+	Tooltip: ""
+}
+
+DemonAltarItem: {
+	DisplayName: 恶魔祭坛
+	Tooltip: ""
+}

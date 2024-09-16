@@ -1,6 +1,4 @@
-﻿using ImproveGame.UI.ModernConfig.OptionElements;
-
-namespace ImproveGame.UI.ModernConfig.Categories;
+﻿namespace ImproveGame.UI.ModernConfig.Categories;
 
 public sealed class GameMechanics : Category
 {
