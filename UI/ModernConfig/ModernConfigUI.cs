@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common;
+using ImproveGame.Common.Configs;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -41,7 +42,7 @@ public sealed class ModernConfigUI : UIState
         Instance = this;
 
         // 主面板
-        MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
+        MainPanel = new SUIPanel(ConfigColors.MainPanelBorder, ConfigColors.MainPanelBg)
         {
             Shaded = true,
             HAlign = 0.5f,
@@ -53,7 +54,7 @@ public sealed class ModernConfigUI : UIState
             .JoinParent(this);
 
         // 侧栏放类别
-        CategoryPanel = new CategorySidePanel
+        CategoryPanel = new CategorySidePanel(ConfigColors.DarkBorderlessPanel)
         {
             RelativeMode = RelativeMode.Horizontal
         };
@@ -71,7 +72,7 @@ public sealed class ModernConfigUI : UIState
         mainPanelContainer.JoinParent(MainPanel);
 
         // 主栏上放选项
-        OptionsPanel = new ConfigOptionsPanel
+        OptionsPanel = new ConfigOptionsPanel(ConfigColors.DarkBorderlessPanel)
         {
             Spacing = new Vector2(gapBetweenPanels),
             RelativeMode = RelativeMode.Vertical
@@ -80,16 +81,17 @@ public sealed class ModernConfigUI : UIState
         OptionsPanel.JoinParent(mainPanelContainer);
 
         // 主栏下放描述
-        TooltipPanel = new TooltipPanel
+        TooltipPanel = new TooltipPanel(ConfigColors.DarkBorderlessPanel)
         {
             Spacing = new Vector2(gapBetweenPanels),
             RelativeMode = RelativeMode.Vertical
         };
         TooltipPanel.SetSize(0f, tooltipPanelHeight, 1f, 0f);
         TooltipPanel.JoinParent(mainPanelContainer);
-        
+
         // 返回按钮
-        var backButton = new UITextPanel<LocalizedText>(Language.GetText("UI.Back"), 0.7f, large: true) {
+        var backButton = new UITextPanel<LocalizedText>(Language.GetText("UI.Back"), 0.7f, large: true)
+        {
             Width = { Pixels = -30f, Percent = 0.5f },
             Height = { Pixels = 50f },
             Top = { Pixels = -35f },
@@ -103,7 +105,11 @@ public sealed class ModernConfigUI : UIState
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        if (Glass is not null && !Main.gameMenu && !DrawCalledForMakingGlass)
+        // 修复鼠标移到标牌上会导致标牌文字一直显示的问题
+        Main._MouseOversCanClear = true;
+        
+        if (Glass is not null && !Main.gameMenu && !DrawCalledForMakingGlass &&
+            UIConfigs.Instance.GlassVfx is GlassType.MicaLike)
         {
             // 云母效果特殊处理
             Main.spriteBatch.ReBegin(null, Matrix.Identity);
@@ -163,6 +169,10 @@ public sealed class ModernConfigUI : UIState
         {
             Close();
         }
+
+        // 适配即时风格切换
+        MainPanel.BorderColor = ConfigColors.MainPanelBorder;
+        MainPanel.BgColor = ConfigColors.MainPanelBg;
     }
 
     #region Mica - 云母效果特殊处理
@@ -171,7 +181,7 @@ public sealed class ModernConfigUI : UIState
     {
         if (Instance?.Enabled is not true)
             return;
-        
+
         var shader = ModAsset.Mask.Value;
         var device = Main.instance.GraphicsDevice;
         var batch = Main.spriteBatch;

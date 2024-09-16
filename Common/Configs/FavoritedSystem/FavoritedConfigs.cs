@@ -31,7 +31,7 @@ public class FavoritedConfigs : ModConfig
         AddHeader(configUI, "Favorited", order++);
         foreach (PropertyFieldWrapper variable in ConfigManager.GetFieldsAndProperties(_pendingConfig))
         {
-            if (!FavoritedOptionDatabase.FavoritedOptions.Contains(variable.Name))
+            if (!FavoritedOptionDatabase.FavoritedOptions.Contains($"ImproveConfigs.{variable.Name}"))
                 continue;
 
             UIModConfig.WrapIt(configUI.mainConfigList, ref top, variable, _pendingConfig, order++);

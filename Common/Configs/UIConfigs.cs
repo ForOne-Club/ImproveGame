@@ -23,7 +23,7 @@ public class UIConfigs : ModConfig
     public object SuicideButton;
 
     [Header("UIHeader")]
-    [DefaultValue(GlassType.Disabled)]
+    [DefaultValue(GlassType.MicaLike)]
     [DrawTicks]
     public GlassType GlassVfx;
 
@@ -57,6 +57,9 @@ public class UIConfigs : ModConfig
 
     [DefaultValue(true)]
     public bool ShowShimmerInfo;
+
+    [DefaultValue(true)]
+    public bool ShowModName;
 
     public enum PAPDisplayMode
     {

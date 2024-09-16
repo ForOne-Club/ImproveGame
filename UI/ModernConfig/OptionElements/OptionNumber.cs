@@ -41,10 +41,11 @@ public sealed class OptionNumber : ModernConfigOption
             {
                 TextAlign = new Vector2(0.5f, 0.5f),
                 TextOffset = new Vector2(0f, -2f),
-                MaxCharacterCount = 4,
+                MaxCharacterCount = isInt ? 12 : 4,
                 MaxLines = 1,
+                IsWrapped = false
             },
-            MaxLength = 4,
+            MaxLength = isInt ? 12 : 4,
             DefaultValue = Default,
             Format = isInt ? "0" : "0.00",
             VAlign = 0.5f
@@ -95,10 +96,5 @@ public sealed class OptionNumber : ModernConfigOption
         var value = float.Parse(FieldInfo.GetValue(Config)!.ToString()!);
         if (!_numericTextBox.IsWritingText)
             _numericTextBox.Value = value;
-    }
-
-    public override void DrawSelf(SpriteBatch sb)
-    {
-        base.DrawSelf(sb);
     }
 }

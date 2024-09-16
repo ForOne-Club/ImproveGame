@@ -3,13 +3,13 @@ using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.ModernConfig.FakeCategories;
 
-public class AboutPage : Category
+public sealed class AboutPage : Category
 {
     public override int ItemIconId => ItemID.GPS;
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
-        panel.IsInFakePage = true;
+        panel.ShouldHideSearchBar = true;
         
         var text = new SUIText
         {

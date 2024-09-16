@@ -8,6 +8,8 @@ public sealed class Multiplayer : Category
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
+        panel.AddToggle(Config, nameof(Config.OnlyHost));
+        panel.AddToggle(Config, nameof(Config.OnlyHostByPassword));
         panel.AddToggle(Config, nameof(Config.ShareCraftingStation));
         panel.AddToggle(Config, nameof(Config.ShareInfBuffs));
         panel.AddValueSlider(Config, nameof(Config.ShareRange));

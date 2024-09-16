@@ -13,10 +13,14 @@ public static class TextSnippetHelper
     /// 将文本转换为文本片段 <br/>
     /// 根据格式: [tag/options:text] 拆分
     /// </summary>
-    public static List<TextSnippet> ParseMessage(string input, Color baseColor)
+    public static List<TextSnippet> ParseMessage(string input, Color baseColor, bool onlyTextSnippet = false)
     {
         // 删除文本中回车 (怎么会有回车捏?)
         input = input.Replace("\r", "");
+        
+        // 如果只转化成纯文字。。直接结束
+        if (onlyTextSnippet)
+            return [new TextSnippet(input, baseColor)];
 
         // 创建正则列表
         MatchCollection matchCollection = ChatManager.Regexes.Format.Matches(input);
@@ -72,14 +76,22 @@ public static class TextSnippetHelper
         return snippets;
     }
 
-    public static List<TextSnippet> ParseMessageWithCursorCheck(string input, Color baseColor)
+    /// <summary>
+    /// 带指针的文本解析，allPlainText一般都应该是true，因为编辑文本的时候不应该有彩字、物品图标等
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="baseColor"></param>
+    /// <param name="allPlainText"></param>
+    /// <returns></returns>
+    public static List<TextSnippet> ParseMessageWithCursorCheck(string input, Color baseColor,
+        bool allPlainText = true)
     {
         string pattern = @"%\$#\?\?>\s*(.*?)\s*%\$#\?\?>";
 
         input ??= "";
         Match match = Regex.Match(input, pattern);
         if (!match.Success)
-            return ParseMessage(input, baseColor);
+            return ParseMessage(input, baseColor, allPlainText);
 
         var snippets = new List<TextSnippet>();
         string result = match.Groups[1].Value;
@@ -93,7 +105,7 @@ public static class TextSnippetHelper
         int kerning = (int)(togetherSize - (leftSize + rightSize));
 
         if (textBefore is {Length: > 0 })
-            snippets.AddRange(ParseMessage(textBefore, baseColor));
+            snippets.AddRange(ParseMessage(textBefore, baseColor, allPlainText));
 
         var cursorSnippet = CursorSnippet.Parse(result, kerning);
         if (result == "transparent")
@@ -101,7 +113,7 @@ public static class TextSnippetHelper
         snippets.Add(cursorSnippet);
 
         if (textAfter is {Length: > 0 })
-            snippets.AddRange(ParseMessage(textAfter, baseColor));
+            snippets.AddRange(ParseMessage(textAfter, baseColor, allPlainText));
 
         return snippets;
     }

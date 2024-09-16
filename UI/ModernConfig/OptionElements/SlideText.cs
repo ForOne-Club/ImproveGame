@@ -13,6 +13,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class SlideText : View
 {
+    public Color TextColor = Color.White;
+    public Color TextBorderColor = Color.Black;
+    
     public SlideText(string text, int reservedWidth = 60, float textScale = 1f)
     {
         _text = text;
@@ -63,7 +66,7 @@ public class SlideText : View
         }
 
         ChatManager.DrawColorCodedStringWithShadow(sb, FontAssets.MouseText.Value, DisplayText, textCenter,
-            Color.White, Color.Black, 0f, textOrigin, new Vector2(TextScale), -1f, 1.5f);
+            TextColor, TextBorderColor, 0f, textOrigin, new Vector2(TextScale), -1f, 1.3f);
     }
 
     private void UpdateTextSlide()
@@ -80,26 +83,7 @@ public class SlideText : View
     {
         UpdateTextSlide();
 
-        Rectangle scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
-        SamplerState anisotropicClamp = SamplerState.AnisotropicClamp;
-
-        sb.End();
-        Rectangle clippingRectangle = GetClippingRectangle(sb);
-        Rectangle adjustedClippingRectangle =
-            Rectangle.Intersect(clippingRectangle, sb.GraphicsDevice.ScissorRectangle);
-        sb.GraphicsDevice.ScissorRectangle = adjustedClippingRectangle;
-        sb.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
-        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, anisotropicClamp, DepthStencilState.None,
-            OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-
-        DrawText(sb);
-
-        var rasterizerState = sb.GraphicsDevice.RasterizerState;
-        sb.End();
-        sb.GraphicsDevice.ScissorRectangle = scissorRectangle;
-        sb.GraphicsDevice.RasterizerState = rasterizerState;
-        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, anisotropicClamp, DepthStencilState.None,
-            rasterizerState, null, Main.UIScaleMatrix);
+        DrawInClippingRectangle(sb, GetClippingRectangle(sb), DrawText);
     }
 
     private const float TextSlideSpeed = 0.01f;
@@ -114,7 +98,7 @@ public class SlideText : View
 
     private float _textWidth;
     private float _textScale;
-    
+
     public float TextScale
     {
         get => _textScale;
@@ -142,5 +126,4 @@ public class SlideText : View
     }
 
     public string _text;
-
 }

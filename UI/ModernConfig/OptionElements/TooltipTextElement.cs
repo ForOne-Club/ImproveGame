@@ -38,26 +38,7 @@ public class TooltipTextElement : SUIText
             TextOffset.Y = -textOffset; // 文字滑动
         }
 
-        Rectangle scissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
-        SamplerState anisotropicClamp = SamplerState.AnisotropicClamp;
-
-        spriteBatch.End();
-        Rectangle clippingRectangle = GetClippingRectangle(spriteBatch);
-        Rectangle adjustedClippingRectangle =
-            Rectangle.Intersect(clippingRectangle, spriteBatch.GraphicsDevice.ScissorRectangle);
-        spriteBatch.GraphicsDevice.ScissorRectangle = adjustedClippingRectangle;
-        spriteBatch.GraphicsDevice.RasterizerState = OverflowHiddenRasterizerState;
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, anisotropicClamp, DepthStencilState.None,
-            OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
-
-        base.DrawSelf(spriteBatch);
-
-        var rasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
-        spriteBatch.End();
-        spriteBatch.GraphicsDevice.ScissorRectangle = scissorRectangle;
-        spriteBatch.GraphicsDevice.RasterizerState = rasterizerState;
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, anisotropicClamp, DepthStencilState.None,
-            rasterizerState, null, Main.UIScaleMatrix);
+        DrawInClippingRectangle(spriteBatch, GetClippingRectangle(spriteBatch), base.DrawSelf);
     }
 
     private const float TextSlideSpeed = 0.006f;

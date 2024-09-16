@@ -1,4 +1,6 @@
-﻿using ImproveGame.UI.ModernConfig.OptionElements;
+﻿using ImproveGame.UI.ModernConfig.OfficialPresets;
+using ImproveGame.UI.ModernConfig.OptionElements;
+using ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
@@ -11,13 +13,16 @@ namespace ImproveGame.UI.ModernConfig;
 public sealed class ConfigOptionsPanel : SUIPanel
 {
     internal static ConfigOptionsPanel Instance;
-    public bool IsInFakePage;
+    public bool ShouldHideSearchBar;
+    public bool DelayRefreshCurrentPage;
     private static Category _currentCategory;
     public static Category CategoryToSelectOnOpen;
 
+    private HashSet<string> _addedOptions = [];
     private List<ModernConfigOption> _allOptions = [];
     private SUIEditableText _searchBar { get;  set; }
     private SUIScrollView2 _options { get;  set; }
+    public SUIDropdownListContainer DropdownList { get;  set; }
 
     public static Category CurrentCategory
     {
@@ -27,22 +32,17 @@ public sealed class ConfigOptionsPanel : SUIPanel
             if (_currentCategory != value)
             {
                 _currentCategory = value;
-                Instance._options.ListView.RemoveAllChildren();
                 Instance._options.ScrollBar.TargetScrollPosition = Vector2.Zero;
                 Instance._options.ScrollBar.CurrentScrollPosition = Vector2.Zero;
-                Instance._allOptions.Clear();
-                Instance.IsInFakePage = false;
-                _currentCategory.AddOptions(Instance);
-                string text = Instance._searchBar.Text;
-                Instance.SearchBarTextChanged(ref text);
+                Instance.RefreshCurrentPage();
             }
         }
     }
 
-    public ConfigOptionsPanel() : base(Color.Black * 0.4f, Color.Black * 0.4f, 12, 2, false)
+    public ConfigOptionsPanel(Color color) : base(color, color)
     {
-        int searchBarHeight = 30;
-        int gap = 6;
+        const int searchBarHeight = 30;
+        const int gap = 6;
         Instance = this;
 
         _searchBar = new SUIEditableText
@@ -59,7 +59,9 @@ public sealed class ConfigOptionsPanel : SUIPanel
         {
             var view = (SUIEditableText)element;
             view.BorderColor = view.IsMouseHovering ? UIStyle.SearchBarBorderSelected : UIStyle.SearchBarBorder;
-            switch (IsInFakePage)
+            view.BgColor = UIStyle.SearchBarBg;
+
+            switch (ShouldHideSearchBar)
             {
                 case true when _searchBar.Height.Pixels != 0:
                     _searchBar.SetSize(0f, 0f, 1f);
@@ -85,11 +87,27 @@ public sealed class ConfigOptionsPanel : SUIPanel
         _options.SetPadding(0f, 0f);
         _options.SetSize(0f, -searchBarHeight - gap, 1f, 1f);
         _options.JoinParent(this);
+
+        DropdownList = new SUIDropdownListContainer();
+        DropdownList.JoinParent(this);
+    }
+
+    public void RefreshCurrentPage()
+    {
+        _options.ListView.RemoveAllChildren();
+        _allOptions.Clear();
+        _addedOptions.Clear();
+        ShouldHideSearchBar = false;
+        _currentCategory.AddOptions(this);
+        string text = _searchBar.Text;
+        SearchBarTextChanged(ref text);
+        Recalculate();
     }
 
     private void SearchBarTextChanged(ref string text)
     {
-        if (IsInFakePage)
+        DropdownList.Enabled = false;
+        if (ShouldHideSearchBar)
             return;
 
         if (string.IsNullOrEmpty(text))
@@ -139,22 +157,25 @@ public sealed class ConfigOptionsPanel : SUIPanel
         Recalculate();
     }
 
-    public void AddToggle(ModConfig config, string name)
-    {
-        var option = new OptionToggle(config, name);
-        _allOptions.Add(option);
-    }
+    public void AddToggle(ModConfig config, string name) => AddToAllOptions<OptionToggle>(config, name);
 
-    public void AddValueSlider(ModConfig config, string name)
-    {
-        var option = new OptionSlider(config, name);
-        _allOptions.Add(option);
-    }
+    public void AddValueSlider(ModConfig config, string name) => AddToAllOptions<OptionSlider>(config, name);
 
-    public void AddValueText(ModConfig config, string name)
+    public void AddValueText(ModConfig config, string name) => AddToAllOptions<OptionNumber>(config, name);
+
+    public void AddEnum(ModConfig config, string name) => AddToAllOptions<OptionDropdownList>(config, name);
+
+    private void AddToAllOptions<T>(ModConfig config, string name) where T : ModernConfigOption
     {
-        var option = new OptionNumber(config, name);
-        _allOptions.Add(option);
+        // 如果已经添加过这个选项，直接返回
+        if (!_addedOptions.Add(name))
+            return;
+        // 如果当前分类不允许添加这个选项，直接返回
+        if (!CurrentCategory.CanOptionBeAdded(config, name))
+            return;
+        // 创建实例并加入到_allOptions列表
+        var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T), config, name);
+        _allOptions.Add(instance);
     }
 
     public void AddToOptionsDirect(View view)
@@ -162,9 +183,22 @@ public sealed class ConfigOptionsPanel : SUIPanel
         view.JoinParent(_options.ListView);
     }
 
+    public void AddOfficialPreset<T>() where T : OfficialPreset
+    {
+        var preset = Activator.CreateInstance<T>();
+        AddToOptionsDirect(new OfficialPresetElement(preset.Label, preset.Tooltip, preset.Link, preset.OnApply));
+    }
+
     public override void Update(GameTime gameTime)
     {
+        if (DelayRefreshCurrentPage)
+        {
+            DelayRefreshCurrentPage = false;
+            RefreshCurrentPage();
+        }
+
         base.Update(gameTime);
+
         if (IsMouseHovering)
             PlayerInput.LockVanillaMouseScroll("ImproveGame: Modern Config UI");
         if (CategoryToSelectOnOpen is not null)

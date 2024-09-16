@@ -82,7 +82,7 @@ public class ImproveConfigs : ModConfig
     [Range(0, 75)]
     public int GrabDistance;
 
-    [DefaultValue(0d)]
+    [DefaultValue(0f)]
     [Range(0, 1f)]
     [Slider]
     [Increment(0.125f)]
@@ -91,6 +91,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(false)]
     public bool ModifyPlayerPlaceSpeed;
 
+    [DefaultValue(0)]
     [Slider]
     [Range(0, 20)]
     [Increment(2)]
@@ -396,9 +397,6 @@ public class ImproveConfigs : ModConfig
     public int SpawnRateMaxValue;
 
     [DefaultValue(true)]
-    public bool ShowModName;
-
-    [DefaultValue(true)]
     public bool EmptyAutofisher;
 
     [DefaultValue(11)]
@@ -540,19 +538,13 @@ public class ImproveConfigs : ModConfig
         return base.AcceptClientChanges(pendingConfig, whoAmI, ref message);
     }
 
-    public static bool TryAcceptChanges(int whoAmI, ref NetworkText message)
+    private static bool TryAcceptChanges(int whoAmI, ref NetworkText message)
     {
-        // DoesPlayerSlotCountAsAHost是preview的，stable还没有，又被坑了
-        // if (MessageBuffer.DoesPlayerSlotCountAsAHost(whoAmI)) {
-        if (Netplay.Clients[whoAmI].Socket.GetRemoteAddress().IsLocalHost())
-        {
+        if (NetMessage.DoesPlayerSlotCountAsAHost(whoAmI))
             return true;
-        }
-        else
-        {
-            message = new NetworkText(
-                GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted"), NetworkText.Mode.Literal);
-            return false;
-        }
+
+        message = new NetworkText(
+            GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted"), NetworkText.Mode.Literal);
+        return false;
     }
 }

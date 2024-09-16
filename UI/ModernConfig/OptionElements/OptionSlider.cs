@@ -97,6 +97,12 @@ public sealed class OptionSlider : ModernConfigOption
             if (MouseInRound(roundCenter, (int)roundRadius))
                 borderColor = UIStyle.SliderRoundHover;
 
+            if (IgnoresMouseInteraction)
+            {
+                borderColor = Color.Gray * 0.6f;
+                innerColor = Color.Gray * 0.6f;
+            }
+
             // 绘制
             SDFGraphics.HasBorderRound(roundLeftTop, roundDiameter, innerColor, 2f, borderColor);
         }
@@ -143,10 +149,11 @@ public sealed class OptionSlider : ModernConfigOption
             {
                 TextAlign = new Vector2(0.5f, 0.5f),
                 TextOffset = new Vector2(0f, -2f),
-                MaxCharacterCount = 4,
+                MaxCharacterCount = isInt ? 12 : 4,
                 MaxLines = 1,
+                IsWrapped = false
             },
-            MaxLength = 4,
+            MaxLength = isInt ? 12 : 4,
             DefaultValue = Default,
             Format = isInt ? "0" : "0.00",
             VAlign = 0.5f
@@ -215,17 +222,6 @@ public sealed class OptionSlider : ModernConfigOption
     }
 
     private static float InverseLerp(float a, float b, float value) => (value - a) / (b - a);
-
-    public override void DrawSelf(SpriteBatch sb)
-    {
-        base.DrawSelf(sb);
-
-        // 提示
-        if (IsMouseHovering)
-        {
-            TooltipPanel.SetText(Tooltip);
-        }
-    }
 
     private bool IsFloat => FieldInfo.FieldType == typeof(float);
     private bool IsInt => FieldInfo.FieldType == typeof(int);

@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UI.ModernConfig;
+﻿using Terraria.ModLoader.Config;
+
+namespace ImproveGame.UI.ModernConfig;
 
 public abstract class Category
 {
@@ -16,6 +18,6 @@ public abstract class Category
 
     public string Label => GetText($"ModernConfig.{LocalizationKey}.Label");
     public string Tooltip => GetText($"ModernConfig.{LocalizationKey}.Tooltip");
-}
 
-public interface DoNotAutoload;
+    public virtual Func<ModConfig, string, bool> CanOptionBeAdded => (config, optionName) => true;
+}

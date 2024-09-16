@@ -1,5 +1,7 @@
-﻿using ImproveGame.Packets;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Packets;
 using System.Reflection;
+using Terraria.Chat;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Common.Utils;
@@ -41,6 +43,21 @@ public static class ConfigHelper
             // 服务器端配置，处于客户端，需要广播
             if (modConfig.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient && broadcast)
             {
+                // 没有通过主机IP验证
+                if (Config.OnlyHost && !Main.countsAsHostForGameplay[Main.myPlayer])
+                {
+                    // “无法更改: 你不是服务器主机玩家！”
+                    Main.NewText(GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted"), Color.Red);
+                    return;
+                }
+
+                if (Config.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered)
+                {
+                    // “无法更改：你没有通过密码验证！”
+                    Main.NewText(GetText("Configs.ImproveConfigs.OnlyHostByPassword.Unaccepted"), Color.Red);
+                    return;
+                }
+
                 // 发送更好的体验自己的包
                 ConfigOptionPacket.Send(config, fieldInfo, value);
                 return;

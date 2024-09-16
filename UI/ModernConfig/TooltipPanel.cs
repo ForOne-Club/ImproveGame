@@ -9,7 +9,7 @@ public class TooltipPanel : SUIPanel
 
     public TooltipTextElement Text;
 
-    public TooltipPanel() : base(Color.Black * 0.4f, Color.Black * 0.4f)
+    public TooltipPanel(Color color) : base(color, color)
     {
         Instance = this;
 

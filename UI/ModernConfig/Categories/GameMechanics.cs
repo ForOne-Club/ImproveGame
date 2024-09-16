@@ -9,6 +9,8 @@ public sealed class GameMechanics : Category
         panel.AddToggle(Config, nameof(Config.BedEverywhere));
         panel.AddToggle(Config, nameof(Config.NoSleepRestrictions));
         panel.AddValueSlider(Config, nameof(Config.BedTimeRate));
+        panel.AddEnum(Config, nameof(Config.BombsNotDamage));
+        panel.AddToggle(Config, nameof(Config.NoPylonRestrictions));
         panel.AddToggle(Config, nameof(Config.FasterExtractinator));
         panel.AddToggle(Config, nameof(Config.MiddleEnableBank));
         panel.AddToggle(Config, nameof(Config.NoBiomeSpread));

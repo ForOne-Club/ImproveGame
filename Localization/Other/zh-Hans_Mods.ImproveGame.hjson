@@ -1,5 +1,7 @@
 ModName: 更好的体验
 Search: 搜索...
+PathIllegal: 文件名不能包含以下字符: \、/、:、*、?、"、<、>、|
+FolderNameEmpty: 文件夹名不能为空
 
 Tiles: {
 	// Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
@@ -169,7 +171,6 @@ ConstructGUI: {
 	RenameTip: {
 		Exists: 已经存在一个相同名称的文件
 		TooLong: 名称不能超过40个字符
-		Illegal: 文件名不能包含以下字符: \、/、:、*、?、"、<、>、|
 	}
 
 	FileInfo: {

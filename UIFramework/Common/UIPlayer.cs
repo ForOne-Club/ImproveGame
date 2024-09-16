@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Core;
 using ImproveGame.UI;
@@ -54,6 +55,10 @@ public class UIPlayer : ModPlayer
 
     static IEnumerator SetupUI()
     {
+        UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
+        if (GlassVfxAvailable)
+            UIStyle.AcrylicRedesign();
+
         ShouldShowUI = true;
         UISystem uiSystem = UISystem.Instance;
         DataPlayer dataPlayer = Main.LocalPlayer.GetModPlayer<DataPlayer>();
@@ -124,7 +129,7 @@ public class UIPlayer : ModPlayer
         SidedEventTrigger.RegisterViewBody(uiSystem.ExtremeStorageGUI);
         SidedEventTrigger.RegisterViewBody(uiSystem.AutofisherGUI);
         SidedEventTrigger.RegisterViewBody(uiSystem.PrefixRecallGUI);
-        
+
         // 总控快捷键弹窗提示
         bool hasKeybind = TryGetKeybindString(KeybindSystem.MasterControlKeybind, out _);
         if (!hasKeybind && UISystem.TryGetBaseBody<PopupPanel>(out var panel) && panel is not null)

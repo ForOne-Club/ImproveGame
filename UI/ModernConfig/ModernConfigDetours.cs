@@ -17,7 +17,8 @@ public class ModernConfigDetours : ILoadable
             BindingFlags.NonPublic | BindingFlags.Static);
         MonoModHooks.Add(drawMenuMethod, DrawMenuDetour);
 
-        On_Main.CanPauseGame += orig => orig.Invoke() || ModernConfigUI.Instance?.Enabled is true;
+        On_Main.CanPauseGame += orig =>
+            orig.Invoke() || (Main.netMode is NetmodeID.SinglePlayer && ModernConfigUI.Instance?.Enabled is true);
     }
 
     private static void PopulateConfigsDetour(Action<UIModConfigList> orig, UIModConfigList self)

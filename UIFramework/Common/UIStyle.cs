@@ -86,6 +86,10 @@ internal static class UIStyle
         StatCardBg,
         StatCategoryBg;
 
+    // 下拉框的背景色
+    public static Color
+        DropdownListBg;
+
     static UIStyle()
     {
         SetUIColors(UIConfigs.Instance.ThemeType);
@@ -165,6 +169,8 @@ internal static class UIStyle
 
         StatCategoryBg = new Color(37, 46, 92, 230);
         StatCardBg = new Color(28, 35, 69, 172);
+
+        DropdownListBg = new Color(29, 40, 80, 230);
     }
 
     private static void Stormdark()
@@ -224,6 +230,8 @@ internal static class UIStyle
 
         StatCategoryBg = new Color(7, 22, 26, 200);
         StatCardBg = new Color(5, 17, 20, 150);
+
+        DropdownListBg = new Color(5, 17, 20, 230);
     }
 
     public static void AcrylicRedesign()

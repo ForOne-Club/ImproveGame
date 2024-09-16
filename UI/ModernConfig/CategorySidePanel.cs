@@ -6,6 +6,20 @@ namespace ImproveGame.UI.ModernConfig;
 
 public sealed class CategorySidePanel : SUIPanel
 {
+    internal static readonly Category[] CategoriesArray =
+    {
+        new PlayerAbility(),
+        new ItemSettings(),
+        new PlantSettings(),
+        new NpcSettings(),
+        new EnemySettings(),
+        new GameMechanics(),
+        new Multiplayer(),
+        new ModFeatures(),
+        new VisualAndInterface(),
+        new Minimap(),
+    };
+
     internal static readonly Dictionary<string, CategoryCard> Cards = new();
 
     private SUIScrollView2 Categories { get; set; }
@@ -14,21 +28,14 @@ public sealed class CategorySidePanel : SUIPanel
     {
         AddCard<AboutPage>();
         AddCard<Presets>();
-        AddCard<PlayerAbility>();
-        AddCard<ItemSettings>();
-        AddCard<PlantSettings>();
-        AddCard<NpcSettings>();
-        AddCard<EnemySettings>();
-        AddCard<GameMechanics>();
-        AddCard<PylonMechanics>();
-        AddCard<Multiplayer>();
-        AddCard<ModFeatures>();
-        AddCard<VisualAndInterface>();
-        AddCard<Minimap>();
+        AddCard<Favorites>();
+        AddCard<Everything>();
+        foreach (var card in CategoriesArray)
+            AddCard(new CategoryCard(card));
         AddCard<LicensePage>();
     }
 
-    public CategorySidePanel() : base(Color.Black * 0.4f, Color.Black * 0.4f)
+    public CategorySidePanel(Color color) : base(color, color)
     {
         // 自动添加没法直观地调节顺序，所以手动添加
         // Type[] types = Assembly.GetExecutingAssembly().GetTypes();
