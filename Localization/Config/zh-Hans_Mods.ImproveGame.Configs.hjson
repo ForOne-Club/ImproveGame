@@ -999,7 +999,7 @@ UIConfigs: {
 		Tooltip: 重设所有UI的位置，在你找不到大背包UI时尤其有用
 	}
 
-	GlassVfx: {
+	GlassVfxOn: {
 		Label: "[centeritem:MulticoloredStainedGlass] 毛玻璃效果"
 		Tooltip:
 			'''

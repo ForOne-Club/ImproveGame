@@ -995,7 +995,7 @@ UIConfigs: {
 		Tooltip: Restore all UI positions to default, especially useful when you can't find your Big Backpack UI
 	}
 
-	GlassVfx: {
+	GlassVfxOn: {
 		Label: "[centeritem:MulticoloredStainedGlass] Glassmorphism Effect"
 		Tooltip:
 			'''

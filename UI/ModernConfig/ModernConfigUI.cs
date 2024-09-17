@@ -108,8 +108,7 @@ public sealed class ModernConfigUI : UIState
         // 修复鼠标移到标牌上会导致标牌文字一直显示的问题
         Main._MouseOversCanClear = true;
         
-        if (Glass is not null && !Main.gameMenu && !DrawCalledForMakingGlass &&
-            UIConfigs.Instance.GlassVfx is GlassType.MicaLike)
+        if (Glass is not null && !Main.gameMenu && !DrawCalledForMakingGlass && GlassVfxEnabled)
         {
             // 云母效果特殊处理
             Main.spriteBatch.ReBegin(null, Matrix.Identity);
