@@ -27,7 +27,9 @@ partial class MyUtils
 
     public static GlassType GlassVfxType => UIConfigs.Instance.GlassVfx;
 
-    public static bool GlassVfxEnabled => Lighting.NotRetro && Terraria.Graphics.Effects.Filters.Scene.CanCapture() && UIConfigs.Instance.GlassVfx is not GlassType.Disabled;
+    public static bool AllowRenderTargets => Lighting.NotRetro && Terraria.Graphics.Effects.Filters.Scene.CanCapture();
+    
+    public static bool GlassVfxEnabled => AllowRenderTargets && UIConfigs.Instance.GlassVfx is not GlassType.Disabled;
 
     // Enabled和Available是不一样的，Available是能不能用，Enabled是有没有开
     public static bool GlassVfxAvailable => !Main.drawToScreen && !Main.gameMenu && !Main.mapFullscreen && GlassVfxEnabled;

@@ -258,7 +258,7 @@ public class EventTrigger(string layerName, string name) : IComparable<EventTrig
 
         // 类云母，UI本身不透明，背景是游戏画面高斯模糊处理后的结果
         // drawToGame 表示这是拿来绘制到游戏上的，不是拿来造玻璃或者干啥的
-        if (drawToGame && GlassVfxType is GlassType.MicaLike)
+        if (drawToGame && GlassVfxType is GlassType.MicaLike && AllowRenderTargets)
         {
             var layers = EventTriggerManager.EventTriggerInstances["Radial Hotbars"];
             int index = layers.IndexOf(this);
