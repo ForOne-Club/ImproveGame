@@ -391,10 +391,7 @@ ImproveConfigs: {
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''
 		Unaccepted: You have not passed the verification!
-		Tips:
-			'''
-			"Only The Verified Player(s) Can Change The Mod Configs" is enabled
-			'''
+		Tips: '''"Only The Verified Player(s) Can Change The Mod Configs" is enabled'''
 		Registered: You can change the mod configs already
 		Correct: Correct password, you can change the mod configs
 		Incorrect: Incorrect password!

@@ -6,7 +6,7 @@ FolderNameEmpty: 文件夹名不能为空
 Tiles: {
 	// Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
 	// ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
-	// BaitSupplier.MapEntry: Bait Supplier
+	BaitSupplier.MapEntry: 诱饵腔
 	FakeAltar.MapEntry: 伪造祭坛
 }
 

@@ -169,6 +169,12 @@ public class SUIText : TimerView
     /// </summary>
     public Vector2 TextSize { get; protected set; } = Vector2.Zero;
     #endregion
+    
+    #region Actions
+    
+    public Action OnRecalculateText;
+    
+    #endregion
 
     /// <summary>
     /// 修改后会影响 “文本大小” 的属性
@@ -212,6 +218,7 @@ public class SUIText : TimerView
         }
 
         TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
+        OnRecalculateText?.Invoke();
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)

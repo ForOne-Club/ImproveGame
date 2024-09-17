@@ -10,7 +10,7 @@ public sealed class AboutPage : Category
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         panel.ShouldHideSearchBar = true;
-        
+
         var text = new SUIText
         {
             TextOrKey = "Mods.ImproveGame.ModernConfig.AboutPage.About",
@@ -24,7 +24,7 @@ public sealed class AboutPage : Category
         panel.AddToOptionsDirect(text);
         text.RecalculateText();
         text.SetInnerPixels(new Vector2(0f, text.TextSize.Y));
-        
+
         var discordLink = new SUIText
         {
             TextOrKey = "Mods.ImproveGame.ModernConfig.AboutPage.LinkDiscord",
@@ -50,10 +50,10 @@ public sealed class AboutPage : Category
         panel.AddToOptionsDirect(discordLink);
         discordLink.RecalculateText();
         discordLink.SetInnerPixels(new Vector2(0f, discordLink.TextSize.Y));
-        
+
         if (Language.ActiveCulture.Name is not "zh-Hans")
             return;
-        
+
         var qqLink = new SUIText
         {
             TextOrKey = "Mods.ImproveGame.ModernConfig.AboutPage.LinkQQ",
@@ -79,7 +79,7 @@ public sealed class AboutPage : Category
         panel.AddToOptionsDirect(qqLink);
         qqLink.RecalculateText();
         qqLink.SetInnerPixels(new Vector2(0f, qqLink.TextSize.Y));
-        
+
         panel.Recalculate();
     }
 }
