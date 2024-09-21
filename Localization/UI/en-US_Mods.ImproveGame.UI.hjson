@@ -386,6 +386,7 @@ Autofisher: {
 	SelectPool: Please select fishing pool
 	CarefulNextTime: Be careful next time!
 	Unavailable: Currently no fishing info
+	InShimmer: 在微光钓鱼只会空军
 	CatchCratesFilter: Crates
 	CatchAccessoriesFilter: Accessories
 	CatchToolsFilter: Tools and weapons

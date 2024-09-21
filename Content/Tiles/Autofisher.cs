@@ -17,7 +17,8 @@ namespace ImproveGame.Content.Tiles
             NotEnoughWater,
             FishingPower,
             FullFishingPower,
-            Unavailable
+            Unavailable,
+            InShimmer
         }
 
         public override ModTileEntity GetTileEntity() => ModContent.GetInstance<TEAutofisher>();

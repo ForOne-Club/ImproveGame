@@ -50,6 +50,7 @@ namespace ImproveGame.Content.Tiles
                 Autofisher.TipType.FishingPower => Language.GetTextValue("GameUI.FishingPower", fishingLevel),
                 Autofisher.TipType.FullFishingPower => Language.GetTextValue("GameUI.FullFishingPower", fishingLevel, 0.0 - Math.Round(waterQuality * 100f)),
                 Autofisher.TipType.Unavailable => GetText("UI.Autofisher.Unavailable"),
+                Autofisher.TipType.InShimmer => GetText("UI.Autofisher.InShimmer"),
                 _ => ""
             };
             FishingTipTimer = 0;
@@ -186,10 +187,15 @@ namespace ImproveGame.Content.Tiles
             fisher.X = locatePoint.X;
             fisher.Y = locatePoint.Y;
             fisher.bobberType = fishingPole.shoot;
-            GetFishingPondState(fisher.X, fisher.Y, out fisher.inLava, out fisher.inHoney, out fisher.waterTilesCount, out fisher.chumsInWater);
+            GetFishingPondState(fisher.X, fisher.Y, out fisher.inLava, out fisher.inHoney, out bool inShimmer, out fisher.waterTilesCount, out fisher.chumsInWater);
             if (fisher.waterTilesCount < 75)
             {
                 SetFishingTip(Autofisher.TipType.NotEnoughWater);
+                return;
+            }
+            if (inShimmer)
+            {
+                SetFishingTip(Autofisher.TipType.InShimmer);
                 return;
             }
 
@@ -614,11 +620,12 @@ namespace ImproveGame.Content.Tiles
                 crate = true;
         }
 
-        private void GetFishingPondState(int x, int y, out bool lava, out bool honey, out int numWaters, out int chumCount)
+        private void GetFishingPondState(int x, int y, out bool lava, out bool honey, out bool shimmer, out int numWaters, out int chumCount)
         {
             chumCount = 0;
             lava = false;
             honey = false;
+            shimmer = false;
             for (int i = 0; i < tileChecked.GetLength(0); i++)
             {
                 for (int j = 0; j < tileChecked.GetLength(1); j++)
@@ -627,7 +634,7 @@ namespace ImproveGame.Content.Tiles
                 }
             }
 
-            numWaters = GetFishingPondSize(x, y, ref lava, ref honey, ref chumCount);
+            numWaters = GetFishingPondSize(x, y, ref lava, ref honey, ref shimmer, ref chumCount);
             if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded || Config.NoLakeSizePenalty) // 不用if else是为了判定是否在熔岩/蜂蜜
                 numWaters = 10000;
 
@@ -643,7 +650,7 @@ namespace ImproveGame.Content.Tiles
             _fishingSkill = 0;
         }
 
-        private int GetFishingPondSize(int x, int y, ref bool lava, ref bool honey, ref int chumCount)
+        private int GetFishingPondSize(int x, int y, ref bool lava, ref bool honey, ref bool shimmer, ref int chumCount)
         {
             Point16 arrayLeftTop = new(Position.X + 1 - checkWidth, Position.Y + 1 - checkHeight);
             if (x - arrayLeftTop.X < 0 || x - arrayLeftTop.X > checkWidth * 2 || y - arrayLeftTop.Y < 0 || y - arrayLeftTop.Y > checkHeight * 2)
@@ -659,12 +666,14 @@ namespace ImproveGame.Content.Tiles
                     lava = true;
                 if (tile.LiquidType == LiquidID.Honey)
                     honey = true;
+                if (tile.LiquidType == LiquidID.Shimmer)
+                    shimmer = true;
                 chumCount += Main.instance.ChumBucketProjectileHelper.GetChumsInLocation(new Point(x, y));
                 // 递归临近的四个物块
-                int left = GetFishingPondSize(x - 1, y, ref lava, ref honey, ref chumCount);
-                int right = GetFishingPondSize(x + 1, y, ref lava, ref honey, ref chumCount);
-                int up = GetFishingPondSize(x, y - 1, ref lava, ref honey, ref chumCount);
-                int bottom = GetFishingPondSize(x, y + 1, ref lava, ref honey, ref chumCount);
+                int left = GetFishingPondSize(x - 1, y, ref lava, ref honey, ref shimmer, ref chumCount);
+                int right = GetFishingPondSize(x + 1, y, ref lava, ref honey, ref shimmer, ref chumCount);
+                int up = GetFishingPondSize(x, y - 1, ref lava, ref honey, ref shimmer, ref chumCount);
+                int bottom = GetFishingPondSize(x, y + 1, ref lava, ref honey, ref shimmer, ref chumCount);
                 return left + right + up + bottom + 1;
             }
             return 0;

@@ -384,6 +384,7 @@ Autofisher: {
 	SelectPool: 请选择鱼池
 	CarefulNextTime: 下次注意点！
 	Unavailable: 暂无钓鱼信息
+	InShimmer: 在微光钓鱼只会空军
 	CatchCratesFilter: 钓宝匣
 	CatchAccessoriesFilter: 钓配饰
 	CatchToolsFilter: 钓工具与武器
