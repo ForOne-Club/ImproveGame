@@ -115,8 +115,3 @@ Minimap: {
 	Label: Map
 	Tooltip: Edit map featuers, e.g. Locators.
 }
-
-LicensePage: {
-	Label: Licence
-	Tooltip: View QoT's licence and references.
-}

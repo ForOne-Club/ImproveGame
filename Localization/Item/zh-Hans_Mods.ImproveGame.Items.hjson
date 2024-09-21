@@ -334,3 +334,8 @@ DemonAltarItem: {
 	DisplayName: 恶魔祭坛
 	Tooltip: ""
 }
+
+LicenseBook: {
+	DisplayName: 许可声明
+	Tooltip: 使用以查看更好的体验的许可信息，以及其参考的开源项目。
+}

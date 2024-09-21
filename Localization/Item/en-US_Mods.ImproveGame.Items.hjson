@@ -335,3 +335,8 @@ DemonAltarItem: {
 	DisplayName: Demon Altar
 	Tooltip: ""
 }
+
+LicenseBook: {
+	DisplayName: Licence
+	Tooltip: Use to view QoT's licence and references.
+}

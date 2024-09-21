@@ -32,7 +32,6 @@ public sealed class CategorySidePanel : SUIPanel
         AddCard<Everything>();
         foreach (var card in CategoriesArray)
             AddCard(new CategoryCard(card));
-        AddCard<LicensePage>();
     }
 
     public CategorySidePanel(Color color) : base(color, color)

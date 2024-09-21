@@ -115,8 +115,3 @@ Minimap: {
 	Label: 地图
 	Tooltip: 开启结构标记功能后，可通过定位球在地图上定位特定结构。
 }
-
-LicensePage: {
-	Label: 许可声明
-	Tooltip: 更好的体验的许可信息，以及其参考的开源项目。
-}
