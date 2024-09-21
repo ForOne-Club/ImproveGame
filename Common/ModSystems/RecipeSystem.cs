@@ -17,22 +17,6 @@ public class RecipeSystem : ModSystem
     internal static RecipeGroup AnyAdamantiteBar;
     internal static RecipeGroup AnyGem;
 
-    public static Dictionary<int, int> ShimmerIntoWithStack;
-    public static Dictionary<int, List<Item>> ShimmerInto;
-
-    public override void PreUpdateItems()
-    {
-        if (ShimmerInto == null)
-        {
-            ShimmerInto = [];
-            ShimmerIntoWithStack = [];
-            for (int i = 1; i < ItemLoader.ItemCount; i++)
-            {
-                ShimmerInto.Add(i, CollectHelper.GetShimmerResult(new Item(i), out int stackRequired));
-                ShimmerIntoWithStack.Add(i, stackRequired);
-            }
-        }
-    }
     public override void Unload()
     {
         AnyCopperBar = null;
@@ -43,9 +27,6 @@ public class RecipeSystem : ModSystem
         AnyCobaltBar = null;
         AnyMythrilBar = null;
         AnyAdamantiteBar = null;
-
-        ShimmerIntoWithStack = null;
-        ShimmerInto = null;
     }
 
     public override void AddRecipeGroups()

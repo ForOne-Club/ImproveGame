@@ -19,13 +19,13 @@ namespace ImproveGame.Common.Utils
             switch (shimmerEquivalentType)
             {
                 case 1326 when NPC.downedMoonlord:
-                    return new List<Item> {new(5335)};
+                    return [new Item(5335)];
                 case 779 when NPC.downedMoonlord:
-                    return new List<Item> {new(5134)};
+                    return [new Item(5134)];
                 case 3031 when NPC.downedMoonlord:
-                    return new List<Item> {new(5364)};
+                    return [new Item(5364)];
                 case 5364 when NPC.downedMoonlord:
-                    return new List<Item> {new(3031)};
+                    return [new Item(3031)];
                 case 3461:
                     {
                         short type = Main.GetMoonPhase() switch
@@ -40,18 +40,18 @@ namespace ImproveGame.Common.Utils
                             _ => 5406
                         };
 
-                        return new List<Item> {new(type)};
+                        return [new Item(type)];
                     }
                 default:
                     {
                         if (input.createTile is TileID.MusicBoxes)
                         {
-                            return new List<Item> {new(576)};
+                            return [new Item(576)];
                         }
 
                         if (ItemID.Sets.ShimmerTransformToItem[shimmerEquivalentType] > 0)
                         {
-                            return new List<Item> {new(ItemID.Sets.ShimmerTransformToItem[shimmerEquivalentType])};
+                            return [new Item(ItemID.Sets.ShimmerTransformToItem[shimmerEquivalentType])];
                         }
 
                         if (decraftingRecipeIndex >= 0)
