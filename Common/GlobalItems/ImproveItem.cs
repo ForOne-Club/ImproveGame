@@ -211,7 +211,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             text.Append("[i");
             if (result.stack != 1)
                 text.Append($"/s{result.stack}");
-            text.Append($":{result.netID}");
+            text.Append($":{result.netID}]");
         }
 
         tooltips.Add(new TooltipLine(Mod, "ShimmerResult", text.ToString()) { OverrideColor = new Color(241, 175, 233) });
