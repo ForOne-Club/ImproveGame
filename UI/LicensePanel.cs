@@ -8,7 +8,6 @@ using Terraria.GameInput;
 namespace ImproveGame.UI;
 
 [AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "License Panel")]
-// 没绑定快捷键的时候弹出
 public class LicensePanel : BaseBody
 {
     public static LicensePanel Instance { get; private set; }

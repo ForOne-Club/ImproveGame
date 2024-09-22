@@ -57,7 +57,7 @@ Presets: {
 }
 
 Favorites: {
-	Label: Mark as Favorite
+	Label: Favorited Entries
 	Tooltip: Right click an entry to favorite it. Favorited entries will show up here.
 }
 
@@ -107,7 +107,7 @@ ItemSettings: {
 }
 
 VisualAndInterface: {
-	Label: Visuals & Interfaces
+	Label: Visuals
 	Tooltip: Edit vanilla & QoT visuals, tweak QoT user interfaces.
 }
 
@@ -119,4 +119,11 @@ ModFeatures: {
 Minimap: {
 	Label: Map
 	Tooltip: Edit map featuers, e.g. Locators.
+}
+
+Keybinds: {
+	Label: 控件
+	Tooltip: 在此处管理更好的体验的所有快捷键，右键单击条目可将其重置为默认快捷键。
+	// 快捷键会在Tooltip显示其默认绑定的键位
+	Default: 默认绑定：{0}
 }

@@ -33,6 +33,7 @@ public sealed class CategorySidePanel : SUIPanel
         AddCard<Everything>();
         foreach (var card in CategoriesArray)
             AddCard(new CategoryCard(card));
+        AddCard<Keybinds>();
     }
 
     public CategorySidePanel(Color color) : base(color, color)

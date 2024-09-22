@@ -37,7 +37,7 @@ public class ModernConfigOption : TimerView
         labelElement.OnUpdate += _ =>
         {
             labelElement.TextColor = MarkedAsFavorite
-                ? Color.Yellow
+                ? Color.Gold
                 : Color.White;
         };
         labelElement.JoinParent(this);

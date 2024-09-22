@@ -382,12 +382,8 @@ ImproveConfigs: {
 		Label: "[centeritem:2203] Only The Verified Player(s) Can Change The Mod Configs"
 		Tooltip:
 			'''
-			Does nothing in singleplayer mode, reloading is required
-			After enabled, only the verified player(s) can change the mod configs
-			While starting the server, a random 8-digit password will be sent in the server console
-			Players can type /qotpassword <password> to verify themselves
-			The server console can query the password by typing /qotpassword
-			If the password is correct, the player will be able to change mod configs
+			Does nothing in singleplayer mode, reloading is required. After enabled, only the verified player(s) can change the mod configs
+			While starting the server, a random 8-digit password will be sent in the server console. The server console can query the password by typing /qotpassword. Players can type /qotpassword <password> to verify themselves. If the password is correct, the player will be able to change mod configs
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''
 		Unaccepted: You have not passed the verification!
