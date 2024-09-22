@@ -751,7 +751,7 @@ namespace ImproveGame.Content.Tiles
             Point16 center = Position + new Point16(1, 1);
             for (int i = 0; i < Main.maxChests; i++)
             {
-                if (Main.chest[i] == null || Main.chest[i].x < 0 || Main.chest[i].y < 0)
+                if (Main.chest[i] == null || Main.chest[i].x < 0 || Main.chest[i].y < 0 || Chest.IsLocked(Main.chest[i].x, Main.chest[i].y))
                     continue;
 
                 Point16 chestPosition = new(Main.chest[i].x, Main.chest[i].y);
