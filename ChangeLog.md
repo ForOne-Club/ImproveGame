@@ -6,6 +6,10 @@
 
 </div>
 
+# v2.0.0
+
+- [v2.0.0.0](Changelog/zh/v2.0.0.0.md)
+
 # v1.7.1
 
 - [v1.7.1.7](Changelog/zh/v1.7.1.7.md)
