@@ -71,6 +71,11 @@ GameMechanics: {
 	Tooltip: 可在此处修改部分游戏机制，例如不生成墓碑、重生加速等。
 }
 
+PylonMechanics: {
+	Label: 晶塔限解
+	Tooltip: 可在此解除晶塔的各种限制
+}
+
 NpcSettings: {
 	Label: 友好NPC
 	Tooltip: 可在此处修改友好NPC的部分行为，例如NPC入住机制、NPC幸福度、旅商行为等。

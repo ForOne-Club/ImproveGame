@@ -71,6 +71,11 @@ GameMechanics: {
 	Tooltip: Edit game mechanics, e.g. Tombstone spawning & respawn speed.
 }
 
+PylonMechanics: {
+	Label: Pylons mrchanics
+	Tooltip: Here you can remove various restrictions.
+}
+
 NpcSettings: {
 	Label: Friendly NPCs
 	Tooltip: Edit friendly NPC behaviors, e.g. housing & happiness.

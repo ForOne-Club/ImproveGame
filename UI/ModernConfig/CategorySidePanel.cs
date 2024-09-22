@@ -14,6 +14,7 @@ public sealed class CategorySidePanel : SUIPanel
         new NpcSettings(),
         new EnemySettings(),
         new GameMechanics(),
+        new PylonMechanics(),
         new Multiplayer(),
         new ModFeatures(),
         new VisualAndInterface(),

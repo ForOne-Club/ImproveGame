@@ -660,11 +660,6 @@ ImproveConfigs: {
 		Tooltip: Respawn time is reduced to 1.5s when no boss is present
 	}
 
-	/*NoPylonRestrictions: {
-	Label: "[centeritem:TeleportationPylonPurity] Unconditional Pylon Teleportation"
-	Tooltip: Pylons may be used for teleportation unconditionally, but you still need to stand nearby a pylon
-	}*/
-	
 	AllOff: {
 		Label: Turn Them OFF
 		Tooltip: Restores (almost) all configurations to vanilla state, play vanilla Terraria
@@ -724,8 +719,13 @@ ImproveConfigs: {
 		Tooltip: Disable the annoying popup for good
 	}
 
-	PylonPlaceLimit: {
-		Label: "[centeritem:TeleportationPylonPurity] Pylon Place Limit"
+	PylonPlaceNoAmount: {
+		Label: "[centeritem:TeleportationPylonPurity] Place amount unlimit"
+		Tooltip: ""
+	}
+
+	PylonPlaceNoBiome: {
+		Label: "[centeritem:TeleportationPylonSea] Place ignore biomes"
 		Tooltip: ""
 	}
 
@@ -1091,11 +1091,4 @@ FishQuestResetType: {
 	Disabled.Label: Disabled
 	NotResetFish.Label: Not Reset Fish
 	ResetFish.Label: Reset Fish
-}
-
-PylonPlaceLimit: {
-	Tooltip: ""
-	Default.Label: Default
-	NoCountLimit.Label: No Count Limit
-	NoBiomeLimit.Label: No Count Limit and ignore biome
 }

@@ -666,11 +666,6 @@ ImproveConfigs: {
 		Tooltip: 当场上无任何BOSS或BOSS被击败/脱战时，将复活时间缩短为1.5s
 	}
 
-	/*NoPylonRestrictions: {
-	Label: "[centeritem:TeleportationPylonPurity] Unconditional Pylon Teleportation"
-	Tooltip: Pylons may be used for teleportation unconditionally, but you still need to stand nearby a pylon
-	}*/
-	
 	AllOff: {
 		Label: 全给我关掉
 		Tooltip: 将（几乎）所有配置还原到原版状态，还你一个原汁原味的泰拉瑞亚体验
@@ -728,28 +723,33 @@ ImproveConfigs: {
 		Tooltip: 永久关闭烦人的连锁挖矿弹出提示
 	}
 
-	PylonPlaceLimit: {
-		Label: "[centeritem:TeleportationPylonPurity] 放置限制"
+	PylonPlaceNoAmount: {
+		Label: "[centeritem:TeleportationPylonPurity] 晶塔放置无视数量"
+		// Tooltip: ""
+	}
+
+	PylonPlaceNoBiome: {
+		Label: "[centeritem:TeleportationPylonOcean] 晶塔放置无视生物群落"
 		// Tooltip: ""
 	}
 
 	PylonTeleNoNear: {
-		Label: "[centeritem:TeleportationPylonUnderground] 传送无需靠近"
+		Label: "[centeritem:TeleportationPylonUnderground] 晶塔传送无需靠近"
 		// Tooltip: ""
 	}
 
 	PylonTeleNoNPC: {
-		Label: "[centeritem:TeleportationPylonHallow] 传送无需NPC"
+		Label: "[centeritem:TeleportationPylonHallow] 晶塔传送无需NPC"
 		// Tooltip: ""
 	}
 
 	PylonTeleNoDanger: {
-		Label: "[centeritem:TeleportationPylonJungle] 传送无视危险"
+		Label: "[centeritem:TeleportationPylonJungle] 晶塔传送无视危险"
 		// Tooltip: ""
 	}
 
 	PylonTeleNoBiome: {
-		Label: "[centeritem:TeleportationPylonMushroom] 传送无视生物群落"
+		Label: "[centeritem:TeleportationPylonMushroom] 晶塔传送无视生物群落"
 		// Tooltip: ""
 	}
 }
@@ -1095,11 +1095,4 @@ FishQuestResetType: {
 	Disabled.Label: 关闭
 	NotResetFish.Label: 不刷新任务鱼
 	ResetFish.Label: 刷新任务鱼
-}
-
-PylonPlaceLimit: {
-	Tooltip: 晶塔放置限制
-	Default.Label: 默认
-	NoCountLimit.Label: 无数量上限
-	NoBiomeLimit.Label: 无数量上限且无视生物群落
 }

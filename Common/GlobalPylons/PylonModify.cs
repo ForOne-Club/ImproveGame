@@ -41,72 +41,81 @@
         }
         public override bool? PreCanPlacePylon(int x, int y, int tileType, TeleportPylonType pylonType)
         {
-            switch (Config.PylonPlaceLimit)
+            bool amount = Config.PylonPlaceNoAmount, biome = Config.PylonPlaceNoBiome;
+            if (amount && biome)
             {
-                case PylonPlaceLimit.NoBiomeLimit: return true;
-                case PylonPlaceLimit.NoCountLimit:
-                    TeleportPylonInfo info = new()
+                return true;
+            }
+            if (biome)
+            {
+                if(Main.PylonSystem.HasPylonOfType(pylonType))
+                {
+                    return null;
+                }
+            }
+            if (amount)
+            {
+                TeleportPylonInfo info = new()
+                {
+                    PositionInTiles = new(x, y),
+                    TypeOfPylon = pylonType,
+                };
+                var scene = Main.PylonSystem._sceneMetrics;
+                if (TileLoader.GetTile(tileType) is ModPylon pylon)
+                {
+                    if (pylon.ValidTeleportCheck_BiomeRequirements(info, scene))
                     {
-                        PositionInTiles = new(x, y),
-                        TypeOfPylon = pylonType,
-                    };
-                    var scene = Main.PylonSystem._sceneMetrics;
-                    if (TileLoader.GetTile(tileType) is ModPylon pylon)
-                    {
-                        if (pylon.ValidTeleportCheck_BiomeRequirements(info, scene))
+                        return true;
+                    }
+                }
+                switch (pylonType)
+                {
+                    case TeleportPylonType.SurfacePurity:
                         {
+                            bool flag = info.PositionInTiles.Y <= Main.worldSurface;
+                            if (Main.remixWorld)
+                                flag = info.PositionInTiles.Y > Main.rockLayer && info.PositionInTiles.Y < Main.maxTilesY - 350;
+
+                            bool flag2 = info.PositionInTiles.X >= Main.maxTilesX - 380 || info.PositionInTiles.X <= 380;
+                            if (!flag || flag2)
+                                return false;
+
+                            if (scene.EnoughTilesForJungle || scene.EnoughTilesForSnow || scene.EnoughTilesForDesert || scene.EnoughTilesForGlowingMushroom || scene.EnoughTilesForHallow || scene.EnoughTilesForCrimson || scene.EnoughTilesForCorruption)
+                                return false;
+
                             return true;
                         }
-                    }
-                    switch (pylonType)
-                    {
-                        case TeleportPylonType.SurfacePurity:
+                    case TeleportPylonType.Jungle:
+                        return scene.EnoughTilesForJungle;
+                    case TeleportPylonType.Snow:
+                        return scene.EnoughTilesForSnow;
+                    case TeleportPylonType.Desert:
+                        return scene.EnoughTilesForDesert;
+                    case TeleportPylonType.Beach:
+                        {
+                            bool flag3 = info.PositionInTiles.Y <= Main.worldSurface && info.PositionInTiles.Y > Main.worldSurface * 0.3499999940395355;
+                            bool flag4 = info.PositionInTiles.X >= Main.maxTilesX - 380 || info.PositionInTiles.X <= 380;
+                            if (Main.remixWorld)
                             {
-                                bool flag = info.PositionInTiles.Y <= Main.worldSurface;
-                                if (Main.remixWorld)
-                                    flag = info.PositionInTiles.Y > Main.rockLayer && info.PositionInTiles.Y < Main.maxTilesY - 350;
-
-                                bool flag2 = info.PositionInTiles.X >= Main.maxTilesX - 380 || info.PositionInTiles.X <= 380;
-                                if (!flag || flag2)
-                                    return false;
-
-                                if (scene.EnoughTilesForJungle || scene.EnoughTilesForSnow || scene.EnoughTilesForDesert || scene.EnoughTilesForGlowingMushroom || scene.EnoughTilesForHallow || scene.EnoughTilesForCrimson || scene.EnoughTilesForCorruption)
-                                    return false;
-
-                                return true;
+                                flag3 |= info.PositionInTiles.Y > Main.rockLayer && info.PositionInTiles.Y < Main.maxTilesY - 350;
+                                flag4 |= info.PositionInTiles.X < Main.maxTilesX * 0.43 || info.PositionInTiles.X > Main.maxTilesX * 0.57;
                             }
-                        case TeleportPylonType.Jungle:
-                            return scene.EnoughTilesForJungle;
-                        case TeleportPylonType.Snow:
-                            return scene.EnoughTilesForSnow;
-                        case TeleportPylonType.Desert:
-                            return scene.EnoughTilesForDesert;
-                        case TeleportPylonType.Beach:
-                            {
-                                bool flag3 = info.PositionInTiles.Y <= Main.worldSurface && info.PositionInTiles.Y > Main.worldSurface * 0.3499999940395355;
-                                bool flag4 = info.PositionInTiles.X >= Main.maxTilesX - 380 || info.PositionInTiles.X <= 380;
-                                if (Main.remixWorld)
-                                {
-                                    flag3 |= info.PositionInTiles.Y > Main.rockLayer && info.PositionInTiles.Y < Main.maxTilesY - 350;
-                                    flag4 |= info.PositionInTiles.X < Main.maxTilesX * 0.43 || info.PositionInTiles.X > Main.maxTilesX * 0.57;
-                                }
 
-                                return flag4 && flag3;
-                            }
-                        case TeleportPylonType.GlowingMushroom:
-                            if (Main.remixWorld && info.PositionInTiles.Y >= Main.maxTilesY - 200)
-                                return false;
-                            return scene.EnoughTilesForGlowingMushroom;
-                        case TeleportPylonType.Hallow:
-                            return scene.EnoughTilesForHallow;
-                        case TeleportPylonType.Underground:
-                            return info.PositionInTiles.Y >= Main.worldSurface;
-                        case TeleportPylonType.Victory:
-                            return true;
-                    }
-                    break;
+                            return flag4 && flag3;
+                        }
+                    case TeleportPylonType.GlowingMushroom:
+                        if (Main.remixWorld && info.PositionInTiles.Y >= Main.maxTilesY - 200)
+                            return false;
+                        return scene.EnoughTilesForGlowingMushroom;
+                    case TeleportPylonType.Hallow:
+                        return scene.EnoughTilesForHallow;
+                    case TeleportPylonType.Underground:
+                        return info.PositionInTiles.Y >= Main.worldSurface;
+                    case TeleportPylonType.Victory:
+                        return true;
+                }
             }
-            return base.PreCanPlacePylon(x, y, tileType, pylonType);
+            return null;
         }
     }
 }

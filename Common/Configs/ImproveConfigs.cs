@@ -135,8 +135,11 @@ public class ImproveConfigs : ModConfig
 
     [Header("PylonMechanics")]
 
-    [DefaultValue(PylonPlaceLimit.Default)]
-    public PylonPlaceLimit PylonPlaceLimit;
+    [DefaultValue(false)]
+    public bool PylonPlaceNoAmount;
+
+    [DefaultValue(false)]
+    public bool PylonPlaceNoBiome;
 
     [DefaultValue(false)]
     public bool PylonTeleNoNear;
