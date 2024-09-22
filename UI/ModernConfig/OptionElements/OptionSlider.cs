@@ -2,7 +2,6 @@
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
-using System.Reflection;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;

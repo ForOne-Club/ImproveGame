@@ -53,50 +53,44 @@ public class KeybindSystem : ModSystem
         HomeKeybind = KeybindLoader.RegisterKeybind(Mod, "HomeKeybind", "Home");
     }
 
-    private void DrawHoverText(On_UIKeybindingListItem.orig_DrawSelf orig, UIKeybindingListItem self, SpriteBatch spriteBatch)
+    private void DrawHoverText(On_UIKeybindingListItem.orig_DrawSelf orig, UIKeybindingListItem self,
+        SpriteBatch spriteBatch)
     {
         orig.Invoke(self, spriteBatch);
 
         if (!self.IsMouseHovering)
             return;
 
-        string key = "";
-        switch (self._keybind)
+        if (self._keybind.StartsWith("ImproveGame/"))
         {
-            case "ImproveGame/MasterControl":
-                key = "MasterControl";
-                break;
-            case "ImproveGame/HotbarSwitch":
-                key = "HotbarSwitch";
-                break;
-            case "ImproveGame/BuffTracker":
-                key = "BuffTracker";
-                break;
+            string key = self._keybind.Remove(0, "ImproveGame/".Length);
+            var localizedText = Language.GetOrRegister($"Mods.ImproveGame.Keybinds.{key}.Tip", () => "");
+            UICommon.TooltipMouseText(localizedText.Value);
         }
-        
-        if (key is "")
-            return;
-        
-        var localizedText = Language.GetOrRegister($"Mods.ImproveGame.Keybinds.{key}.Tip", () => "");
-        UICommon.TooltipMouseText(localizedText.Value);
     }
 
-    private string TranslatedInput(On_UIKeybindingListItem.orig_GenInput orig, UIKeybindingListItem self, List<string> list)
+    public static string TranslateBinding(string key)
     {
         if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans")
         {
-            var displayTexts = new List<string>();
-            for (int i = 0; i < list.Count; i++)
+            string text = key.Replace("NumPad", "小键盘 ");
+            if (ZhTranslationKeybind.TryGetValue(key, out string translatedString))
             {
-                string text = list[i].Replace("NumPad", "小键盘 ");
-                if (ZhTranslationKeybind.TryGetValue(list[i], out string translatedString))
-                {
-                    text = translatedString;
-                }
-
-                displayTexts.Add(text);
+                text = translatedString;
             }
 
+            return text;
+        }
+
+        return key;
+    }
+
+    private string TranslatedInput(On_UIKeybindingListItem.orig_GenInput orig, UIKeybindingListItem self,
+        List<string> list)
+    {
+        if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans")
+        {
+            var displayTexts = list.Select(TranslateBinding).ToList();
             return orig.Invoke(self, displayTexts);
         }
 

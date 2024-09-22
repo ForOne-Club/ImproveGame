@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.WeatherControl;
+﻿using ImproveGame.UI.ModernConfig;
+using ImproveGame.UI.WeatherControl;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -20,6 +21,7 @@ public class PopupPanel : BaseBody
 
     // 主面板
     public SUIPanel MainPanel;
+
     // 标题面板
     private View TitlePanel;
 
@@ -31,7 +33,7 @@ public class PopupPanel : BaseBody
         int panelHeight = int.TryParse(GetText("UI.MasterControl.PopupPanelHeight"), out int hValue)
             ? hValue
             : 180;
-        
+
         // 主面板
         MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
@@ -82,7 +84,17 @@ public class PopupPanel : BaseBody
         {
             cross.BgColor = cross.HoverTimer.Lerp(Color.Transparent, Color.Black * 0.25f);
         };
-        cross.OnLeftMouseDown += (_, _) => Close();
+        cross.OnLeftMouseDown += (_, _) =>
+        {
+            Close();
+
+            var ui = ModernConfigUI.Instance;
+            if (ui is null || ui.Enabled) return;
+
+            ui.Open();
+            ui.OpenFromMasterControl = true;
+            ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["Keybinds"].Category;
+        };
         cross.JoinParent(TitlePanel);
 
         var bottomArea = new View

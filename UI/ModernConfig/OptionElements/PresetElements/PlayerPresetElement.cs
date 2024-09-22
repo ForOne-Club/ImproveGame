@@ -1,7 +1,5 @@
 ﻿using ImproveGame.Core;
 using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
