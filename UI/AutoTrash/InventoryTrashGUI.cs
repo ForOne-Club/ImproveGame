@@ -7,7 +7,7 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.AutoTrash;
 
-[AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Inventory Trash")]
+[AutoCreateGUI(LayerName.Vanilla.Inventory, "Inventory Trash")]
 public class InventoryTrashGUI : BaseBody
 {
     #region 抽象实现
