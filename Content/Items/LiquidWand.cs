@@ -49,11 +49,17 @@ namespace ImproveGame.Content.Items
             if (WandSystem.AbsorptionMode)
                 return new Color(188, 188, 188);
             float lerpFactor = Main.GlobalTimeWrappedHourly * 0.1f % 1f;
+            // 呼吸灯
+            var shimmerLight = new Color(153, 135, 198);
+            var shimmerDark = new Color(135, 98, 192);
+            var shimmerColor = lerpFactor < 0.5f
+                ? Color.Lerp(shimmerLight, shimmerDark, lerpFactor * 2f)
+                :  Color.Lerp(shimmerLight, shimmerDark, (1f - lerpFactor) * 2f);
             return WandSystem.LiquidMode switch
             {
                 LiquidID.Lava => new Color(253, 32, 3),
                 LiquidID.Honey => new Color(255, 156, 12),
-                LiquidID.Shimmer => Color.Lerp(new Color(153, 135, 198), new Color(135, 98, 192), lerpFactor),
+                LiquidID.Shimmer => shimmerColor,
                 _ => new Color(9, 61, 191),
             };
         }

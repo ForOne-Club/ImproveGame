@@ -100,6 +100,7 @@ public class LiquidWandUI : BaseBody
         HoneyButton.JoinParent(MainPanel);
 
         ShimmerButton = new LiquidElement(LiquidID.Shimmer);
+        ShimmerButton.Infinite = true;
         ShimmerButton.JoinParent(MainPanel);
 
         // 这里这个是必要的，因为开了毛玻璃调整光照会运行OnInitalize
@@ -128,6 +129,10 @@ public class LiquidWandUI : BaseBody
 
         if (_wand.IsAdvancedWand && (ShimmerButton.Hide || MainPanel.Height.Pixels != 300))
         {
+            WaterButton.Infinite = true;
+            LavaButton.Infinite = true;
+            HoneyButton.Infinite = true;
+
             MainPanel.Height.Pixels = 300;
             ShimmerButton.Hide = false;
             Recalculate();
@@ -135,6 +140,10 @@ public class LiquidWandUI : BaseBody
 
         if (!_wand.IsAdvancedWand && (!ShimmerButton.Hide || MainPanel.Height.Pixels != 250))
         {
+            WaterButton.Infinite = false;
+            LavaButton.Infinite = false;
+            HoneyButton.Infinite = false;
+
             MainPanel.Height.Pixels = 250;
             ShimmerButton.Hide = true;
             Recalculate();

@@ -14,6 +14,7 @@ public class LiquidElement : TimerView
     private readonly AnimationTimer _selectTimer = new ();
     private readonly UITextPanel<string> _percentageLeft;
     private readonly short _liquidID;
+    public bool Infinite;
     public bool Hide;
 
     public LiquidElement(short liquidID)
@@ -94,7 +95,7 @@ public class LiquidElement : TimerView
         // 转换为百分数，保留后一位，来自: https://www.jianshu.com/p/3f88338bde60
         float liquidPercentage = (float)LiquidAmount / DataPlayer.LiquidCap;
         string text = $"{liquidPercentage:p1}";
-        if (BucketExists || _liquidID is LiquidID.Shimmer)
+        if (BucketExists || Infinite)
         {
             text = "∞"; // 无限使用
         }
