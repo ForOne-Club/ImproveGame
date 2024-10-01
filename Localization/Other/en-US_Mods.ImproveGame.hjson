@@ -313,14 +313,6 @@ Architecture: {
 	Bed: Bed
 }
 
-LiquidWand: {
-	Title: Liquid Control
-	Water: Water ({LiquidAmount})
-	Lava: Lava ({LiquidAmount})
-	Honey: Honey ({LiquidAmount})
-	Shimmer: Shimmer ({LiquidAmount})
-}
-
 PaintWandGUI: {
 	Paintbrush: Paint tiles
 	PaintRoller: Paint walls

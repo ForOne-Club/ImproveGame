@@ -6,6 +6,15 @@ RecipeSearchUI.Tips:
 	You may disable it in Personal Config of Quality of Life
 	'''
 
+LiquidWandUI: {
+	Name: Liquid Control
+	Absorb: 吸取
+	Water: Water
+	Lava: Lava
+	Honey: Honey
+	Shimmer: Shimmer
+}
+
 MasterControl: {
 	Available: Available
 	Unavailable: Unavailable
@@ -15,7 +24,7 @@ MasterControl: {
 	PopupText: You have not assign a hotkey to Quality of Terraria's Control Panel. Please assign it a hotkey to use the mod's shortcuts. This message will disappear once you have done so.
 	PopupPanelWidth: "290"
 	PopupPanelHeight: "200"
-	ChangelogLink: https://github.com/487666123/ImproveGame/blob/1.4.4/Changelog/en/v{0}.md
+	ChangelogLink: https://github.com/ForOne-Club/ImproveGame/blob/1.4.4/Changelog/en/v{0}.md
 }
 
 AmmoChain: {

@@ -6,9 +6,9 @@
 
 </div>
 
-# v2.0.0
+# v1.8.0
 
-- [v2.0.0.0](Changelog/en/v2.0.0.0.md)
+- [v1.8.0.0](Changelog/en/v1.8.0.0.md)
 
 # v1.7.1
 

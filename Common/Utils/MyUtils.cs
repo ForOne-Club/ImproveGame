@@ -831,7 +831,7 @@ partial class MyUtils
         return new Item();
     }
 
-    // 获取背包第一个平台
+    // 获取背包第一个墙
     public static Item FirstWall(Player player)
     {
         for (int i = 0; i < 50; i++)

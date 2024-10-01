@@ -339,3 +339,13 @@ LicenseBook: {
 	DisplayName: 许可声明
 	Tooltip: 使用以查看更好的体验的许可信息，以及其参考的开源项目。
 }
+
+LiquidWandAdvanced: {
+	// DisplayName: Liquid Wand Advanced
+	// Tooltip: ""
+}
+
+WallPlaceSelectorMode: {
+	// DisplayName: Wall Place Selector Mode
+	// Tooltip: ""
+}

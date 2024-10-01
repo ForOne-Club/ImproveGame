@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Content.Items;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
@@ -103,5 +104,14 @@ public class RecipeSystem : ModSystem
             .AddIngredient(ItemID.Hemopiranha)
             .AddIngredient(ItemID.Ebonkoi)
             .Register();
+    }
+
+    public override void PreUpdateItems()
+    {
+        // 控制微光
+        // 液体法杖月后可直接微光转换为终极液体法杖
+        int liquidWand = ModContent.ItemType<LiquidWand>();
+        int liquidWandAdvanced = ModContent.ItemType<LiquidWandAdvanced>();
+        ItemID.Sets.ShimmerTransformToItem[liquidWand] = NPC.downedMoonlord ? liquidWandAdvanced : -1;
     }
 }

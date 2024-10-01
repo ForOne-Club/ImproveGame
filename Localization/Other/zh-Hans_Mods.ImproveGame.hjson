@@ -303,14 +303,6 @@ Architecture: {
 	Bed: 床
 }
 
-LiquidWand: {
-	Title: 液体控制
-	Water: 水 ({LiquidAmount})
-	Lava: 熔岩 ({LiquidAmount})
-	Honey: 蜂蜜 ({LiquidAmount})
-	Shimmer: 微光 ({LiquidAmount})
-}
-
 PaintWandGUI: {
 	Paintbrush: 物块刷漆
 	PaintRoller: 墙刷漆

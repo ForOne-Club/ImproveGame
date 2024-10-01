@@ -340,3 +340,13 @@ LicenseBook: {
 	DisplayName: Licence
 	Tooltip: Use to view QoT's licence and references.
 }
+
+LiquidWandAdvanced: {
+	DisplayName: Liquid Wand Advanced
+	Tooltip: ""
+}
+
+WallPlaceSelectorMode: {
+	DisplayName: Wall Place Selector Mode
+	Tooltip: ""
+}

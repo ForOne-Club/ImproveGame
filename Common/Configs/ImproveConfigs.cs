@@ -447,6 +447,9 @@ public class ImproveConfigs : ModConfig
         public bool LiquidWand = true;
 
         [DefaultValue(true)]
+        public bool LiquidWandAdvanced = true;
+
+        [DefaultValue(true)]
         public bool PotionBag = true;
 
         [DefaultValue(true)]

@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI;
+using ImproveGame.UI.LiquidWandUI;
 using ImproveGame.UIFramework;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
@@ -10,6 +12,14 @@ namespace ImproveGame.Content.Items
 {
     public class LiquidWand : SelectorItem, IItemOverrideHover, IItemMiddleClickable
     {
+        public bool IsAdvancedWand;
+        public bool[] CanInfiniteUse = new bool[4];
+        
+        /// <summary>
+        /// 多人同步用，因为WandSystem.LiquidMode是static，在服务器用会有Bug
+        /// </summary>
+        public short LiquidMode = 0;
+
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.LiquidWand;
 
         // 修改物块
@@ -20,10 +30,7 @@ namespace ImproveGame.Content.Items
                 for (int i = minI; i <= maxI; i++)
                 {
                     WorldGen.SquareTileFrame(i, j, false);
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NetMessage.sendWater(i, j);
-                    else
-                        Liquid.AddWater(i, j);
+                    Liquid.AddWater(i, j);
                 }
             }
         }
@@ -33,10 +40,13 @@ namespace ImproveGame.Content.Items
         {
             if (cancelled)
                 return base.ModifyColor(true);
+            if (WandSystem.AbsorptionMode)
+                return new Color(188, 188, 188);
             return WandSystem.LiquidMode switch
             {
                 LiquidID.Lava => new Color(253, 32, 3),
                 LiquidID.Honey => new Color(255, 156, 12),
+                LiquidID.Shimmer => new Color(255, 115, 115),
                 _ => new Color(9, 61, 191),
             };
         }
@@ -46,82 +56,92 @@ namespace ImproveGame.Content.Items
         // 修改选择的方块
         public override bool ModifySelectedTiles(Player player, int i, int j)
         {
+            // 单人模式下直接设置成WandSystem.LiquidMode，物品的LiquidMode是给多人用的
+            if (Main.netMode is not NetmodeID.Server)
+                LiquidMode = WandSystem.LiquidMode;
+            
             Tile t = Main.tile[i, j];
+            var dataPlayer = DataPlayer.Get(player);
+
+            void AddToStorageWithCap(ref int storage)
+            {
+                storage = Math.Min(storage + t.LiquidAmount, DataPlayer.LiquidCap);
+                t.LiquidAmount = 0;
+            }
+
+            void AddToLiquidWithCap(ref int storage, int requiredAmount)
+            {
+                if (IsAdvancedWand || CanInfiniteUse[t.LiquidType])
+                {
+                    t.LiquidAmount = byte.MaxValue;
+                    return;
+                }
+
+                byte usedAmount = (byte)Math.Min(storage, requiredAmount);
+                t.LiquidAmount += usedAmount;
+                storage -= usedAmount;
+            }
+
             // 吸收模式
             if (WandSystem.AbsorptionMode)
             {
-                if (t.LiquidAmount > 0)
+                if (t.LiquidAmount <= 0)
+                    return true;
+
+                switch (t.LiquidType)
                 {
-                    UISystem.Instance.LiquidWandGUI.CurrentItem = Item;
-                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount, true);
+                    case LiquidID.Water:
+                        AddToStorageWithCap(ref dataPlayer.LiquidWandWater);
+                        break;
+                    case LiquidID.Lava:
+                        AddToStorageWithCap(ref dataPlayer.LiquidWandLava);
+                        break;
+                    case LiquidID.Honey:
+                        AddToStorageWithCap(ref dataPlayer.LiquidWandHoney);
+                        break;
+                    case LiquidID.Shimmer:
+                        if (IsAdvancedWand)
+                            t.LiquidAmount = 0;
+                        break;
                 }
             }
             // 放置模式
             else if (!t.HasTile || !WorldGen.SolidTile(new Point(i, j)))
             {
-                // 原来没有液体的
-                if (t.LiquidAmount == 0)
+                if (t.LiquidAmount > 0 && t.LiquidType != LiquidMode)
+                    return true;
+
+                t.LiquidType = LiquidMode; // 设置成相应的液体
+                int shimmer = 255; // 无实际作用，仅用于给 ref 提供变量
+                int required = byte.MaxValue - t.LiquidAmount;
+
+                switch (t.LiquidType)
                 {
-                    int oldType = t.LiquidType;
-                    t.LiquidType = WandSystem.LiquidMode; // 设置成相应的液体
-                    UISystem.Instance.LiquidWandGUI.CurrentItem = Item;
-                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount,
-                        false);
-                    // 还是没有液体，设置回来（虽然我不知道有啥用）
-                    if (t.LiquidAmount == 0)
-                    {
-                        t.LiquidType = oldType;
-                        return true;
-                    }
-                }
-                else
-                {
-                    UISystem.Instance.LiquidWandGUI.CurrentItem = Item;
-                    UISystem.Instance.LiquidWandGUI.TryChangeLiquidAmount((byte)t.LiquidType, ref t.LiquidAmount,
-                        false);
+                    case LiquidID.Water:
+                        AddToLiquidWithCap(ref dataPlayer.LiquidWandWater, required);
+                        break;
+                    case LiquidID.Lava:
+                        AddToLiquidWithCap(ref dataPlayer.LiquidWandLava, required);
+                        break;
+                    case LiquidID.Honey:
+                        AddToLiquidWithCap(ref dataPlayer.LiquidWandHoney, required);
+                        break;
+                    case LiquidID.Shimmer:
+                        AddToLiquidWithCap(ref shimmer, required);
+                        break;
                 }
             }
 
             return true;
         }
 
-        [CloneByReference] internal float Water;
-        [CloneByReference] internal float Lava;
-        [CloneByReference] internal float Honey;
+        private static bool BucketExists(int bucketId) => LocalPlayerHasItemFast(bucketId);
 
         public override bool CanUseItem(Player player)
         {
             if (player.noBuilding)
                 return false;
             return base.CanUseItem(player);
-        }
-
-        public override void SaveData(TagCompound tag)
-        {
-            tag[nameof(Water)] = Water;
-            tag[nameof(Lava)] = Lava;
-            tag[nameof(Honey)] = Honey;
-        }
-
-        public override void LoadData(TagCompound tag)
-        {
-            Water = tag.Get<float>(nameof(Water));
-            Lava = tag.Get<float>(nameof(Lava));
-            Honey = tag.Get<float>(nameof(Honey));
-        }
-
-        public override void NetSend(BinaryWriter writer)
-        {
-            writer.Write(Water);
-            writer.Write(Lava);
-            writer.Write(Honey);
-        }
-
-        public override void NetReceive(BinaryReader reader)
-        {
-            Water = reader.ReadSingle();
-            Lava = reader.ReadSingle();
-            Honey = reader.ReadSingle();
         }
 
         public override bool AltFunctionUse(Player player) => true;
@@ -133,6 +153,8 @@ namespace ImproveGame.Content.Items
             // Item.mana = 20;
 
             SelectRange = new(30, 30);
+            RunOnServer = true;
+            MaxTilesOneFrame = 9999;
         }
 
         public override bool StartUseItem(Player player)
@@ -154,24 +176,29 @@ namespace ImproveGame.Content.Items
             if (Main.dedServ || Main.myPlayer != player.whoAmI)
                 return;
 
+            CanInfiniteUse[LiquidID.Water] = BucketExists(ItemID.BottomlessBucket);
+            CanInfiniteUse[LiquidID.Lava] = BucketExists(ItemID.BottomlessLavaBucket);
+            CanInfiniteUse[LiquidID.Honey] = BucketExists(ItemID.BottomlessHoneyBucket);
+            CanInfiniteUse[LiquidID.Shimmer] = true;
+
+            if (!IsAdvancedWand && WandSystem.LiquidMode is LiquidID.Shimmer)
+            {
+                WandSystem.LiquidMode = LiquidID.Water;
+            }
+
             player.cursorItemIconEnabled = true;
             player.cursorItemIconPush = 6;
             player.cursorItemIconID = WandSystem.LiquidMode switch
             {
-                LiquidID.Water => WandSystem.AbsorptionMode
-                    ? ItemID.SuperAbsorbantSponge
-                    : ItemID.BottomlessBucket,
-                LiquidID.Lava => WandSystem.AbsorptionMode
-                    ? ItemID.LavaAbsorbantSponge
-                    : ItemID.BottomlessLavaBucket,
-                LiquidID.Honey => WandSystem.AbsorptionMode
-                    ? ItemID.HoneyAbsorbantSponge
-                    : ItemID.BottomlessHoneyBucket,
-                LiquidID.Shimmer => WandSystem.AbsorptionMode
-                    ? ItemID.UltraAbsorbantSponge
-                    : ItemID.BottomlessShimmerBucket,
+                LiquidID.Water => ItemID.BottomlessBucket,
+                LiquidID.Lava => ItemID.BottomlessLavaBucket,
+                LiquidID.Honey => ItemID.BottomlessHoneyBucket,
+                LiquidID.Shimmer => ItemID.BottomlessShimmerBucket,
                 _ => 0
             };
+
+            if (WandSystem.AbsorptionMode)
+                player.cursorItemIconID = ItemID.UltraAbsorbantSponge;
 
             // 还在用物品的时候不能打开UI
             if (player.mouseInterface || player.itemAnimation > 0 || !Main.mouseRight || !Main.mouseRightRelease ||
@@ -181,13 +208,13 @@ namespace ImproveGame.Content.Items
                 return;
             }
 
-            if (!LiquidWandGUI.Visible)
+            if (!LiquidWandUI.Instance.Enabled)
             {
-                UISystem.Instance.LiquidWandGUI.Open(this);
+                LiquidWandUI.Instance.Open(this);
             }
             else
             {
-                UISystem.Instance.LiquidWandGUI.Close();
+                LiquidWandUI.Instance.Close();
             }
         }
 
@@ -200,10 +227,10 @@ namespace ImproveGame.Content.Items
 
         public void OnMiddleClicked(Item item)
         {
-            if (!LiquidWandGUI.Visible)
-                UISystem.Instance.LiquidWandGUI.Open(this);
+            if (!LiquidWandUI.Instance.Enabled)
+                LiquidWandUI.Instance.Open(this);
             else
-                UISystem.Instance.LiquidWandGUI.Close();
+                LiquidWandUI.Instance.Close();
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -215,7 +242,7 @@ namespace ImproveGame.Content.Items
         {
             // 决定文本显示的是“开启”还是“关闭”
             string tooltip = GetText("Tips.LiquidWandOn");
-            if (LiquidWandGUI.Visible)
+            if (LiquidWandUI.Instance.Enabled)
                 tooltip = GetText("Tips.LiquidWandOff");
 
             tooltips.Add(new TooltipLine(Mod, "LiquidWand", tooltip) {OverrideColor = Color.LightGreen});
@@ -229,6 +256,23 @@ namespace ImproveGame.Content.Items
                 .AddRecipeGroup(RecipeSystem.AnyGoldBar, 6)
                 .AddTile(TileID.Anvils)
                 .Register();
+        }
+
+        public override void NetSend(BinaryWriter writer)
+        {
+            LiquidMode = WandSystem.LiquidMode;
+            writer.Write(LiquidMode);
+            writer.Write(new BitsByte(CanInfiniteUse[0], CanInfiniteUse[1], CanInfiniteUse[2], CanInfiniteUse[3]));
+        }
+
+        public override void NetReceive(BinaryReader reader)
+        {
+            LiquidMode = reader.ReadInt16();
+            var infiniteUseState = (BitsByte)reader.ReadByte();
+            CanInfiniteUse[0] = infiniteUseState[0];
+            CanInfiniteUse[1] = infiniteUseState[1];
+            CanInfiniteUse[2] = infiniteUseState[2];
+            CanInfiniteUse[3] = infiniteUseState[3];
         }
     }
 }

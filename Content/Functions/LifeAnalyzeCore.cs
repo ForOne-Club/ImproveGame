@@ -67,6 +67,7 @@ namespace ImproveGame.Content.Functions
         public override void ModifyDisplayParameters(InfoDisplay currentDisplay, ref string displayValue, ref string displayName,
             ref Color displayColor, ref Color displayShadowColor)
         {
+            return; // 暂时取消此功能，待重置
             if (currentDisplay != InfoDisplay.LifeformAnalyzer)
                 return;
 

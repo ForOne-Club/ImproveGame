@@ -24,8 +24,6 @@ namespace ImproveGame.Content.Items
             if (Main.tile[i, j].WallType > 0 && WandSystem.WallMode)
             {
                 WorldGen.KillWall(i, j);
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 2, i, j);
             }
 
             if (WandSystem.TileMode && Main.tile[i, j].HasTile)
@@ -35,6 +33,14 @@ namespace ImproveGame.Content.Items
 
         public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ)
         {
+            if (Main.netMode is NetmodeID.Server)
+            {
+                var size = new Point(maxI - minI, maxJ - minJ).Abs();
+                size.X += 2;
+                size.Y += 2;
+                NetMessage.SendTileSquare(-1, minI - 1, minJ - 1, size.X , size.Y);
+            }
+            
             DoBoomPacket.Send(TileRect);
             PlaySoundPacket.PlaySound(LegacySoundIDs.Item, Main.MouseWorld, style: 14, false);
         }
@@ -59,6 +65,7 @@ namespace ImproveGame.Content.Items
             SelectRange = new(20, 20);
             KillSize = new(5, 3);
             ExtraRange = new(5, 3);
+            RunOnServer = true;
         }
 
         public override bool StartUseItem(Player player)

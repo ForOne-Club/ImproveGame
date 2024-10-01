@@ -832,6 +832,11 @@ ModItemLoadPage: {
 	}
 
 	// Tooltip: ""
+
+	LiquidWandAdvanced: {
+		// Label: Liquid Wand Advanced
+		// Tooltip: ""
+	}
 }
 
 UIConfigs: {

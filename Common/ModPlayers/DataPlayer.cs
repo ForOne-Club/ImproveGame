@@ -14,9 +14,15 @@ namespace ImproveGame.Common.ModPlayers
         // 保存的物品前缀，哥布林重铸栏
         public int ReforgeItemPrefix = 0;
         private readonly int[] oldSuperVaultStack = new int[100]; // 上一帧的SuperVault的stack情况
-        public readonly Item[] SuperVault = new Item[100];
+        public Item[] SuperVault = new Item[100];
         public bool SuperVaultVisable;
         public Vector2 SuperVaultPos;
+
+        // 液体法杖
+        public const int LiquidCap = 255 * 400;
+        public int LiquidWandWater;
+        public int LiquidWandLava;
+        public int LiquidWandHoney;
 
         /// <summary>
         /// 记录ID
@@ -58,6 +64,10 @@ namespace ImproveGame.Common.ModPlayers
             InfBuffDisabledVanilla = tag.Get<List<int>>("InfBuffDisabledVanilla").ToHashSet();
             // MOD Buff 禁用列表
             InfBuffDisabledMod = tag.Get<List<string>>("InfBuffDisabledMod").ToHashSet();
+
+            LiquidWandWater = tag.GetInt(nameof(LiquidWandWater));
+            LiquidWandLava = tag.GetInt(nameof(LiquidWandLava));
+            LiquidWandHoney = tag.GetInt(nameof(LiquidWandHoney));
         }
 
         public override void SaveData(TagCompound tag)
@@ -65,6 +75,9 @@ namespace ImproveGame.Common.ModPlayers
             tag["SuperVault"] = SuperVault;
             tag["InfBuffDisabledVanilla"] = InfBuffDisabledVanilla.ToList();
             tag["InfBuffDisabledMod"] = InfBuffDisabledMod.ToList();
+            tag[nameof(LiquidWandWater)] = LiquidWandWater;
+            tag[nameof(LiquidWandLava)] = LiquidWandLava;
+            tag[nameof(LiquidWandHoney)] = LiquidWandHoney;
         }
 
         public override void PostUpdate()
@@ -116,6 +129,25 @@ namespace ImproveGame.Common.ModPlayers
 
             // 按照Example的写法 - 直接写就完了！
             BigBagAllSlotsPacket.Get(this).Send(toWho, fromWho, false);
+            LiquidStoragePacket.Send(toWho, fromWho, this);
+        }
+
+        public override void CopyClientState(ModPlayer targetCopy)
+        {
+            DataPlayer clone = (DataPlayer)targetCopy;
+            clone.SuperVault = SuperVault;
+            clone.LiquidWandWater = LiquidWandWater;
+            clone.LiquidWandLava = LiquidWandLava;
+            clone.LiquidWandHoney = LiquidWandHoney;
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            DataPlayer clone = (DataPlayer)clientPlayer;
+
+            if (LiquidWandWater != clone.LiquidWandWater || LiquidWandLava != clone.LiquidWandLava ||
+                LiquidWandHoney != clone.LiquidWandHoney)
+                LiquidStoragePacket.Send(-1, Main.myPlayer, this);
         }
 
         public override IEnumerable<Item> AddMaterialsForCrafting(out ItemConsumedCallback itemConsumedCallback)
