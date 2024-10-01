@@ -195,7 +195,7 @@ ImproveConfigs: {
 	}
 
 	NoCD_FishermanQuest: {
-		Label: "[centeritem:4608] Instant REefresh Angler's Quests"
+		Label: "[centeritem:4608] Instant Refresh Angler's Quests"
 		Tooltip: Refresh quests immediately when you turn in quest fish. You can choose whether to reset the quest fish as well
 	}
 
@@ -831,6 +831,11 @@ ModItemLoadPage: {
 
 	LiquidWandAdvanced: {
 		Label: "{$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}"
+		Tooltip: ""
+	}
+
+	ActuationRodMkII: {
+		Label: "{$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}"
 		Tooltip: ""
 	}
 }

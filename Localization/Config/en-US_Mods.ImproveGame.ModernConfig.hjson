@@ -72,8 +72,8 @@ GameMechanics: {
 }
 
 PylonMechanics: {
-	Label: Pylons mrchanics
-	Tooltip: Here you can remove various restrictions.
+	Label: Pylon Mechanics
+	Tooltip: 可在此解除晶塔的各种限制
 }
 
 NpcSettings: {

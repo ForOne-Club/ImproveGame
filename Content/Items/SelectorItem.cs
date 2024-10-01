@@ -22,7 +22,7 @@ public abstract class SelectorItem : ModItem
     private Point start;
     private Point end;
     protected Point SelectRange;
-    protected int MaxTilesOneFrame = 30;
+    protected int MaxTilesPerFrame = 30;
     protected bool UseNewThread = false;
     protected bool RunOnServer = false;
 
@@ -184,7 +184,7 @@ public abstract class SelectorItem : ModItem
                     yield break;
                 }
 
-                if (countTiles >= MaxTilesOneFrame)
+                if (countTiles >= MaxTilesPerFrame)
                 {
                     countTiles = 0;
                     yield return 0;

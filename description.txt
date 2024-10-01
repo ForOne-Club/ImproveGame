@@ -1,7 +1,7 @@
 这些功能会为你带来更好的游戏体验
 默认仅开启部分功能，详情请查看模组设置。
 ---------------------------
-模组物品获得方式：
+部分模组物品获得方式：
 旗帜盒: 铁锭(铅锭)x12
 药水袋: 丝绸x8
 自动钓鱼机: 铁锭(铅锭)x4 铜锭(锡锭)x2
@@ -33,10 +33,10 @@
   9、 药水袋与旗帜盒，更方便地将你的药水旗帜整合在一个物品，节省空间
   10、几乎所有功能都是可以调节的，自行选择适合你的功能
 ---------------------------
-[c/990000:画师：枫林半叶, 逆风而行的信鸽]
+[c/990000:画师：枫林半叶, 逆风而行的信鸽, 中学生]
 [c/9900ff:翻译：Lastprismer, Lacewing]
-[c/0099ff:代码：局长, Cyril, 夜谷紫幽]
-[c/00ff99:贡献者: 炜尔, han.liu, 合作一号]
+[c/0099ff:代码：局长, Cyril, 夜谷紫幽, Reits, 合作一号]
+[c/00ff99:贡献者: 炜尔, han.liu]
 ---------------------------
 版权声明:
 本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本。”因此本模组不存在侵权问题
@@ -82,10 +82,10 @@ For a detailed list, check mod configurations or changelog above
   9. Potion Bag and Banner Box, integrate all your potions or banners as a single item (and you are free to take them out)
   10. Most features are configurable, use on your own preference
 ---------------------------
-[c/990000:Spriter: 枫林半叶, 逆风而行的信鸽]
+[c/990000:Spriter: 枫林半叶, 逆风而行的信鸽, 中学生]
 [c/9900ff:Translators: Lastprismer, Lacewing]
-[c/0099ff:Coder: 局长, Cyril, 夜谷紫幽]
-[c/00ff99:Contributor: WeiAL, han.liu, hezuo1hao]
+[c/0099ff:Coder: 局长, Cyril, 夜谷紫幽, Reits, hezuo1hao]
+[c/00ff99:Contributor: WeiAL, han.liu]
 ---------------------------
 Copyright Statement:
 A part of the source code of the 'showing which mod is an item from' function is from mod 'WMITF', this mod and WMITF are open-source using the MIT Licence, which means 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:

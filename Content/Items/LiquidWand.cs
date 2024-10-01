@@ -154,7 +154,7 @@ namespace ImproveGame.Content.Items
 
             SelectRange = new(30, 30);
             RunOnServer = true;
-            MaxTilesOneFrame = 9999;
+            MaxTilesPerFrame = 9999;
         }
 
         public override bool StartUseItem(Player player)

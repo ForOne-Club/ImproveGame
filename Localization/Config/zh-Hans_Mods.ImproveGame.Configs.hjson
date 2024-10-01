@@ -837,6 +837,11 @@ ModItemLoadPage: {
 		// Label: "{$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}"
 		// Tooltip: ""
 	}
+
+	ActuationRodMkII: {
+		// Label: "{$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}"
+		// Tooltip: ""
+	}
 }
 
 UIConfigs: {

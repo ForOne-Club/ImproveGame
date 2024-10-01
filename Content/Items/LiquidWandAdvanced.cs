@@ -18,7 +18,7 @@ namespace ImproveGame.Content.Items
         {
             base.SetItemDefaults();
             SelectRange = new(50, 50);
-            MaxTilesOneFrame = 9999;
+            MaxTilesPerFrame = 9999;
             IsAdvancedWand = true;
         }
 
