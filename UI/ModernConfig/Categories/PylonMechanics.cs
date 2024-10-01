@@ -5,8 +5,7 @@ public sealed class PylonMechanics : Category
     public override int ItemIconId => ItemID.TeleportationPylonVictory;
     public override void AddOptions(ConfigOptionsPanel panel)
     {
-        panel.AddToggle(Config, nameof(Config.PylonPlaceNoAmount));
-        panel.AddToggle(Config, nameof(Config.PylonPlaceNoBiome));
+        panel.AddToggle(Config, nameof(Config.PylonPlaceNoRestriction));
         panel.AddToggle(Config, nameof(Config.PylonTeleNoBiome));
         panel.AddToggle(Config, nameof(Config.PylonTeleNoDanger));
         panel.AddToggle(Config, nameof(Config.PylonTeleNoNear));

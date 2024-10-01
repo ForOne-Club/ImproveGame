@@ -26,6 +26,7 @@ public sealed class PlayerAbility : Category
         panel.AddToggle(Config, nameof(Config.BanTombstone));
         panel.AddToggle(Config, nameof(Config.LongerExpertDebuff));
         panel.AddToggle(Config, nameof(Config.SimpleVeinMining));
+        panel.AddToggle(Config, nameof(Config.DisableVeinMiningPopup));
         panel.AddToggle(uiConfig, nameof(uiConfig.AutoSummon));
     }
 }

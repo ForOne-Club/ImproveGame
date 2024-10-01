@@ -715,34 +715,29 @@ ImproveConfigs: {
 		Tooltip: Disable the annoying popup for good
 	}
 
-	PylonPlaceNoAmount: {
-		Label: "[centeritem:TeleportationPylonPurity] Place amount unlimit"
-		Tooltip: ""
-	}
-
-	PylonPlaceNoBiome: {
-		Label: "[centeritem:TeleportationPylonSea] Place ignore biomes"
-		Tooltip: ""
+	PylonPlaceNoRestriction: {
+		Label: "[centeritem:TeleportationPylonPurity] 移除晶塔放置限制"
+		Tooltip: 在任何地点都可以放置不限量的晶塔
 	}
 
 	PylonTeleNoNear: {
-		Label: "[centeritem:TeleportationPylonUnderground] Teleport needn't near"
-		Tooltip: ""
+		Label: "[centeritem:TeleportationPylonUnderground] 晶塔传送无需靠近"
+		Tooltip: 无论在哪都可立即传送到晶塔
 	}
 
 	PylonTeleNoNPC: {
-		Label: "[centeritem:TeleportationPylonHallow] Teleport needn't NPCs"
-		Tooltip: ""
+		Label: "[centeritem:TeleportationPylonHallow] 晶塔传送无需NPC"
+		Tooltip: 就算NPC死光了也能传送到晶塔
 	}
 
 	PylonTeleNoDanger: {
-		Label: "[centeritem:TeleportationPylonJungle] Teleport ignore danger"
-		Tooltip: ""
+		Label: "[centeritem:TeleportationPylonJungle] 晶塔传送无视危险"
+		Tooltip: Boss打到一半也可以传送到晶塔开溜
 	}
 
 	PylonTeleNoBiome: {
-		Label: "[centeritem:TeleportationPylonMushroom] Teleport ignore biome"
-		Tooltip: ""
+		Label: "[centeritem:TeleportationPylonMushroom] 晶塔传送无视生物群落"
+		Tooltip: 我说它是森林它就是森林
 	}
 }
 

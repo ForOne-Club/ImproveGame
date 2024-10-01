@@ -136,10 +136,7 @@ public class ImproveConfigs : ModConfig
     [Header("PylonMechanics")]
 
     [DefaultValue(false)]
-    public bool PylonPlaceNoAmount;
-
-    [DefaultValue(false)]
-    public bool PylonPlaceNoBiome;
+    public bool PylonPlaceNoRestriction;
 
     [DefaultValue(false)]
     public bool PylonTeleNoNear;
@@ -318,6 +315,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(true)]
     public bool SimpleVeinMining;
 
+    [DisplayCondition(nameof(ImproveConfigs), nameof(SimpleVeinMining))]
     [DefaultValue(false)]
     public bool DisableVeinMiningPopup;
 
