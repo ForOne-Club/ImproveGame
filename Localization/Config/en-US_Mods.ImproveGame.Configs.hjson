@@ -830,7 +830,7 @@ ModItemLoadPage: {
 	Tooltip: ""
 
 	LiquidWandAdvanced: {
-		Label: Liquid Wand Advanced
+		Label: "{$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}"
 		Tooltip: ""
 	}
 }

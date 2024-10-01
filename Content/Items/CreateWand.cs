@@ -124,8 +124,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
 
     public override void HoldItem(Player player)
     {
-        if (player.itemAnimation == 0)
-            Item.mana = 40;
+        // if (player.itemAnimation == 0)
+        //     Item.mana = 40;
         if (!Main.dedServ && Main.myPlayer == player.whoAmI)
         {
             Point point = Main.MouseWorld.ToTileCoordinates() - (Prison.Size() / 2f).ToPoint(); // 鼠标位置

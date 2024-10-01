@@ -46,7 +46,7 @@ CreateWand: {
 }
 
 WallPlace: {
-	DisplayName: 科技魔杖
+	DisplayName: 科技魔杖（放置器模式）
 	Tooltip:
 		'''
 		在鼠标指针位置召唤一个放置器
@@ -54,6 +54,7 @@ WallPlace: {
 		识别的区域至多拥有 10000 格
 		实体物块，平台，门可作为边界
 		每位玩家至多召唤一个，再次释放来收回它
+		右键点击可切换至框选模式
 		'''
 }
 
@@ -341,11 +342,20 @@ LicenseBook: {
 }
 
 LiquidWandAdvanced: {
-	// DisplayName: Liquid Wand Advanced
-	// Tooltip: ""
+	DisplayName: 终极液体魔杖
+	Tooltip:
+		'''
+		吸收/放置定量液体
+		<right>打开液体控制界面
+		可以无限放置液体
+		'''
 }
 
 WallPlaceSelectorMode: {
-	// DisplayName: Wall Place Selector Mode
-	// Tooltip: ""
+	DisplayName: 科技魔杖（框选模式）
+	Tooltip:
+		'''
+		框选一片区域，放置背包中的墙体
+		右键点击可切换至放置器模式
+		'''
 }

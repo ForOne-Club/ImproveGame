@@ -32,7 +32,7 @@ namespace ImproveGame.Content.Items
         {
             Item.rare = ItemRarityID.Red;
             Item.value = Item.sellPrice(0, 8, 0, 0);
-            Item.mana = 20;
+            // Item.mana = 20;
 
             SelectRange = new Point(200, 200);
             UseNewThread = true;
