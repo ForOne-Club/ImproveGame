@@ -7,6 +7,7 @@ using ImproveGame.UIFramework;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items
 {
@@ -14,11 +15,13 @@ namespace ImproveGame.Content.Items
     {
         public bool IsAdvancedWand;
         public bool[] CanInfiniteUse = new bool[4];
-        
+
         /// <summary>
         /// 多人同步用，因为WandSystem.LiquidMode是static，在服务器用会有Bug
         /// </summary>
         public short LiquidMode = 0;
+
+        public bool AbsorptionMode;
 
         public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.LiquidWand;
 
@@ -29,8 +32,11 @@ namespace ImproveGame.Content.Items
             {
                 for (int i = minI; i <= maxI; i++)
                 {
-                    WorldGen.SquareTileFrame(i, j, false);
-                    Liquid.AddWater(i, j);
+                    WorldGen.SquareTileFrame(i, j, resetFrame: false);
+                    if (Main.netMode is NetmodeID.Server)
+                        NetMessage.sendWater(i, j);
+                    else
+                        Liquid.AddWater(i, j);
                 }
             }
         }
@@ -42,11 +48,12 @@ namespace ImproveGame.Content.Items
                 return base.ModifyColor(true);
             if (WandSystem.AbsorptionMode)
                 return new Color(188, 188, 188);
+            float lerpFactor = Main.GlobalTimeWrappedHourly * 0.1f % 1f;
             return WandSystem.LiquidMode switch
             {
                 LiquidID.Lava => new Color(253, 32, 3),
                 LiquidID.Honey => new Color(255, 156, 12),
-                LiquidID.Shimmer => new Color(255, 115, 115),
+                LiquidID.Shimmer => Color.Lerp(new Color(153, 135, 198), new Color(135, 98, 192), lerpFactor),
                 _ => new Color(9, 61, 191),
             };
         }
@@ -58,8 +65,11 @@ namespace ImproveGame.Content.Items
         {
             // 单人模式下直接设置成WandSystem.LiquidMode，物品的LiquidMode是给多人用的
             if (Main.netMode is not NetmodeID.Server)
+            {
                 LiquidMode = WandSystem.LiquidMode;
-            
+                AbsorptionMode = WandSystem.AbsorptionMode;
+            }
+
             Tile t = Main.tile[i, j];
             var dataPlayer = DataPlayer.Get(player);
 
@@ -83,7 +93,7 @@ namespace ImproveGame.Content.Items
             }
 
             // 吸收模式
-            if (WandSystem.AbsorptionMode)
+            if (AbsorptionMode)
             {
                 if (t.LiquidAmount <= 0)
                     return true;
@@ -261,18 +271,21 @@ namespace ImproveGame.Content.Items
         public override void NetSend(BinaryWriter writer)
         {
             LiquidMode = WandSystem.LiquidMode;
+            AbsorptionMode = WandSystem.AbsorptionMode;
             writer.Write(LiquidMode);
-            writer.Write(new BitsByte(CanInfiniteUse[0], CanInfiniteUse[1], CanInfiniteUse[2], CanInfiniteUse[3]));
+            writer.Write(new BitsByte(CanInfiniteUse[0], CanInfiniteUse[1], CanInfiniteUse[2], CanInfiniteUse[3],
+                AbsorptionMode));
         }
 
         public override void NetReceive(BinaryReader reader)
         {
             LiquidMode = reader.ReadInt16();
-            var infiniteUseState = (BitsByte)reader.ReadByte();
-            CanInfiniteUse[0] = infiniteUseState[0];
-            CanInfiniteUse[1] = infiniteUseState[1];
-            CanInfiniteUse[2] = infiniteUseState[2];
-            CanInfiniteUse[3] = infiniteUseState[3];
+            var bitsByte = (BitsByte)reader.ReadByte();
+            CanInfiniteUse[0] = bitsByte[0];
+            CanInfiniteUse[1] = bitsByte[1];
+            CanInfiniteUse[2] = bitsByte[2];
+            CanInfiniteUse[3] = bitsByte[3];
+            AbsorptionMode = bitsByte[4];
         }
     }
 }

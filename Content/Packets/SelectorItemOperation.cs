@@ -36,7 +36,7 @@ public class SelectorItemOperation : NetModule
 
     public override void Read(BinaryReader r)
     {
-        if (Main.LocalPlayer.HeldItem?.ModItem is not SelectorItem selector)
+        if (Main.player[Sender].HeldItem?.ModItem is not SelectorItem selector)
             return;
         selector.NetReceive(r);
     }

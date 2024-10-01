@@ -141,7 +141,7 @@ public abstract class SelectorItem : ModItem
             {
                 if (!UseNewThread)
                 {
-                    if (RunOnServer && Main.netMode is NetmodeID.Server)
+                    if (RunOnServer && Main.netMode is NetmodeID.MultiplayerClient)
                         SelectorItemOperation.Proceed(start, end);
                     else
                         CoroutineSystem.TileRunner.Run(ModifyTiles(player, TileRect));
