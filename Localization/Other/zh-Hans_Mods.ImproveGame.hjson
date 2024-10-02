@@ -6,7 +6,8 @@ FolderNameEmpty: 文件夹名不能为空
 Tiles: {
 	// Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
 	// ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
-	// BaitSupplier.MapEntry: Bait Chamber
+	BaitSupplier.MapEntry: 诱饵腔
+	FakeAltar.MapEntry: 伪造祭坛
 }
 
 MoonPhases: {
@@ -302,14 +303,6 @@ Architecture: {
 	Bed: 床
 }
 
-LiquidWand: {
-	Title: 液体控制
-	Water: 水 ({LiquidAmount})
-	Lava: 熔岩 ({LiquidAmount})
-	Honey: 蜂蜜 ({LiquidAmount})
-	Shimmer: 微光 ({LiquidAmount})
-}
-
 PaintWandGUI: {
 	Paintbrush: 物块刷漆
 	PaintRoller: 墙刷漆
@@ -355,33 +348,51 @@ RecipeGroup: {
 }
 
 Keybinds: {
-	HugeInventory.DisplayName: 大背包
+	HugeInventory: {
+		DisplayName: 大背包
+		Tip: 按下后打开大背包，也可以在总控面板中打开
+	}
 
 	BuffTracker: {
 		DisplayName: 增益追踪器
 		Tip: 设置快捷键后，点击增益图标不再会打开增益追踪器
 	}
 
-	GrabBagLoot.DisplayName: 显示摸彩袋物品明细
+	GrabBagLoot: {
+		DisplayName: 显示摸彩袋物品明细
+		Tip: 对着一个摸彩袋（宝藏袋、宝匣等）按下此快捷键可查看其各物品掉率
+	}
 
 	HotbarSwitch: {
 		DisplayName: 切换快捷栏
 		Tip: 按下快捷键后，物品栏第一栏与第二栏的物品将会互换
 	}
 
-	AutoTrashKeybind.DisplayName: 隐藏/显示自动垃圾桶
-	DiscordRodKeybind.DisplayName: 传送法杖快捷键
-	HomeKeybind.DisplayName: 回程快捷键
-	WorldFeature.DisplayName: 世界特性
-	ConfigMenu.DisplayName: 打开模组配置
-	ItemSearcher.DisplayName: 查找物品
-	OpenBagGUI.DisplayName: 快速开袋
+	AutoTrashKeybind: {
+		DisplayName: 隐藏/显示自动垃圾桶
+		Tip: 仅隐藏功能，并不会关闭，若想彻底关闭此功能可在“体系化功能”配置中调节
+	}
+
+	DiscordRodKeybind: {
+		DisplayName: 传送法杖快捷键
+		Tip: 按下后快捷使用物品栏中的传送法杖（混沌传送杖与调谐传送杖）
+	}
+
+	HomeKeybind: {
+		DisplayName: 回程快捷键
+		Tip: 按下后快捷使用物品栏中的回程物品（优先级：无限返回药水>无限回忆药水>魔镜类物品）
+	}
+
+	OpenBagGUI: {
+		DisplayName: 快速开袋
+		Tip: 按下后打开快速开袋界面，也可以在总控面板中打开
+	}
 
 	MasterControl: {
 		DisplayName: 总控
 		Tip:
 			'''
-			更好的体验快捷功能的打开方式
+			按住（按住！）此快捷键以打开更好的体验快捷功能
 			要使用快捷功能，您必须绑定该快捷键
 			'''
 	}

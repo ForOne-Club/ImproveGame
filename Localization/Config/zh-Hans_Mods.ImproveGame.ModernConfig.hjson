@@ -71,6 +71,11 @@ GameMechanics: {
 	Tooltip: 可在此处修改部分游戏机制，例如不生成墓碑、重生加速等。
 }
 
+PylonMechanics: {
+	Label: 晶塔限解
+	Tooltip: 可在此解除晶塔的各种限制
+}
+
 NpcSettings: {
 	Label: 友好NPC
 	Tooltip: 可在此处修改友好NPC的部分行为，例如NPC入住机制、NPC幸福度、旅商行为等。
@@ -116,7 +121,9 @@ Minimap: {
 	Tooltip: 开启结构标记功能后，可通过定位球在地图上定位特定结构。
 }
 
-LicensePage: {
-	Label: 许可声明
-	Tooltip: 更好的体验的许可信息，以及其参考的开源项目。
+Keybinds: {
+	Label: 控件
+	Tooltip: 在此处管理更好的体验的所有快捷键，右键单击条目可将其重置为默认快捷键。
+	// 快捷键会在Tooltip显示其默认绑定的键位
+	Default: 默认绑定：{0}
 }

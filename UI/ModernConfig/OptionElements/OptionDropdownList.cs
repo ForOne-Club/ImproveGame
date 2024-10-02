@@ -1,5 +1,4 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.SUIElements;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 using Terraria.UI.Chat;

@@ -1,12 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Core;
-using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.Graphics2D;
-using System.Reflection;
-using Terraria.ModLoader.Config;
-using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;

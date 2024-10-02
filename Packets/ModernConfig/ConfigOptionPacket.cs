@@ -27,7 +27,7 @@ public class ConfigOptionPacket : NetModule
     public override void Receive()
     {
         // 理论上不可能出现的情况，没有验证还是发了包
-        if (Main.netMode is NetmodeID.Server && !NetPasswordSystem.Registered[Sender])
+        if (Main.netMode is NetmodeID.Server && Config.OnlyHostByPassword && !NetPasswordSystem.Registered[Sender])
         {
             ChatHelper.SendChatMessageToClient(
                 new NetworkText(GetText("Configs.ImproveConfigs.OnlyHostByPassword.Unaccepted"),

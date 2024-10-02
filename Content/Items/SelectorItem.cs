@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.Packets;
 using ImproveGame.Core;
 using System.Collections;
 using System.Threading;
@@ -21,14 +22,18 @@ public abstract class SelectorItem : ModItem
     private Point start;
     private Point end;
     protected Point SelectRange;
-    protected int MaxTilesOneFrame = 30;
+    protected int MaxTilesPerFrame = 30;
     protected bool UseNewThread = false;
-    protected Rectangle TileRect => new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y), (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);
+    protected bool RunOnServer = false;
+
+    protected Rectangle TileRect => new((int)MathF.Min(start.X, end.X), (int)MathF.Min(start.Y, end.Y),
+        (int)MathF.Abs(start.X - end.X) + 1, (int)MathF.Abs(start.Y - end.Y) + 1);
 
     /// <summary>
     /// 封装了原来的SetDefaults()，现在用这个，在里面应该设置SelectRange
     /// </summary>
     public virtual void SetItemDefaults() { }
+
     public sealed override void SetDefaults()
     {
         // 基本属性
@@ -100,7 +105,8 @@ public abstract class SelectorItem : ModItem
             ItemRotation(player);
         }
 
-        player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, player.itemRotation - player.direction * MathHelper.ToRadians(90f));
+        player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full,
+            player.itemRotation - player.direction * MathHelper.ToRadians(90f));
 
         return base.UseItem(player);
     }
@@ -114,6 +120,7 @@ public abstract class SelectorItem : ModItem
         {
             unCancelled = false;
         }
+
         end = ModifySize(start, Main.MouseWorld.ToTileCoordinates(), SelectRange.X, SelectRange.Y);
         Color color = ModifyColor(!unCancelled);
         GameRectangle.Create(this, IsNeedKill, start, end, color * 0.35f, color, TextDisplayType.All);
@@ -133,7 +140,12 @@ public abstract class SelectorItem : ModItem
             if (unCancelled)
             {
                 if (!UseNewThread)
-                    CoroutineSystem.TileRunner.Run(ModifyTiles(player));
+                {
+                    if (RunOnServer && Main.netMode is NetmodeID.MultiplayerClient)
+                        SelectorItemOperation.Proceed(start, end);
+                    else
+                        CoroutineSystem.TileRunner.Run(ModifyTiles(player, TileRect));
+                }
                 else
                     new Thread(() =>
                     {
@@ -143,9 +155,9 @@ public abstract class SelectorItem : ModItem
                         int minJ = tileRect.Y;
                         int maxJ = tileRect.Y + tileRect.Height - 1;
                         for (int j = minJ; j <= maxJ; j++)
-                            for (int i = minI; i <= maxI; i++)
-                                if (WorldGen.InWorld(i, j) && !ModifySelectedTiles(player, i, j))
-                                    PostModifyTiles(player, minI, minJ, i, j);
+                        for (int i = minI; i <= maxI; i++)
+                            if (WorldGen.InWorld(i, j) && !ModifySelectedTiles(player, i, j))
+                                PostModifyTiles(player, minI, minJ, i, j);
                         PostModifyTiles(player, minI, minJ, maxI, maxJ);
                     }).Start();
             }
@@ -154,10 +166,9 @@ public abstract class SelectorItem : ModItem
 
     public virtual bool IsNeedKill() => true;
 
-    IEnumerator ModifyTiles(Player player)
+    internal IEnumerator ModifyTiles(Player player, Rectangle tileRect)
     {
         int countTiles = 0;
-        Rectangle tileRect = TileRect;
         int minI = tileRect.X;
         int maxI = tileRect.X + tileRect.Width - 1;
         int minJ = tileRect.Y;
@@ -172,13 +183,15 @@ public abstract class SelectorItem : ModItem
                     PostModifyTiles(player, minI, minJ, i, j);
                     yield break;
                 }
-                if (countTiles >= MaxTilesOneFrame)
+
+                if (countTiles >= MaxTilesPerFrame)
                 {
                     countTiles = 0;
                     yield return 0;
                 }
             }
         }
+
         yield return 0;
         PostModifyTiles(player, minI, minJ, maxI, maxJ);
     }

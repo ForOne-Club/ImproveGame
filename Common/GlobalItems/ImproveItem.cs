@@ -4,6 +4,7 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Content;
 using ImproveGame.Core;
 using ImproveGame.UIFramework.SUIElements;
+using System.Text;
 using Terraria.GameContent.UI.Chat;
 
 namespace ImproveGame.Common.GlobalItems;
@@ -189,19 +190,31 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
 
         if (ItemID.Sets.CoinLuckValue[item.type] > 0)
         {
-            tooltips.Add(new TooltipLine(Mod, "ShimmerResult", GetText("Tips.ShimmerIntoWithCoinLuck", ItemID.Sets.CoinLuckValue[item.type])) { OverrideColor = new Color(241, 175, 233) });
+            tooltips.Add(
+                new TooltipLine(Mod, "ShimmerResult",
+                        GetText("Tips.ShimmerIntoWithCoinLuck", ItemID.Sets.CoinLuckValue[item.type]))
+                    { OverrideColor = new Color(241, 175, 233) });
             return;
         }
 
-        var items = RecipeSystem.ShimmerInto[item.type];
-        int stackRequired = RecipeSystem.ShimmerIntoWithStack[item.type];
+        // 微光
+        var items = CollectHelper.GetShimmerResult(item, out int stackRequired);
         if (items is null) return;
 
-        string text = stackRequired is not 1
+        var text = new StringBuilder();
+        text.Append(stackRequired is not 1
             ? GetText("Tips.ShimmerIntoWithStack", stackRequired)
-            : GetText("Tips.ShimmerInto");
-        items.ForEach(i => text += ItemTagHandler.GenerateTag(i));
-        tooltips.Add(new TooltipLine(Mod, "ShimmerResult", text) { OverrideColor = new Color(241, 175, 233) });
+            : GetText("Tips.ShimmerInto"));
+
+        foreach (var result in items)
+        {
+            text.Append("[i");
+            if (result.stack != 1)
+                text.Append($"/s{result.stack}");
+            text.Append($":{result.netID}]");
+        }
+
+        tooltips.Add(new TooltipLine(Mod, "ShimmerResult", text.ToString()) { OverrideColor = new Color(241, 175, 233) });
     }
 
     private void TooltipMoreData(Item item, List<TooltipLine> tooltips)
@@ -211,7 +224,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             return;
 
         tooltips.Add(new(Mod, "Quantity", "Quantity: " +
-            CurrentFrameProperties.ExistItems.GetTotalStack(item.type)));
+                                          CurrentFrameProperties.ExistItems.GetTotalStack(item.type)));
 
         tooltips.Add(new(Mod, "Value", $"Value: {item.value}"));
         tooltips.Add(new(Mod, "Rare", $"Rare: {item.rare}"));
@@ -221,7 +234,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
 
         if (item.shoot > ProjectileID.None)
         {
-            tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot)); 
+            tooltips.Add(new(Mod, "Shoot", "Shoot: " + item.shoot));
             tooltips.Add(new(Mod, "ShootSpeed", "ShootSpeed: " + item.shootSpeed));
         }
 

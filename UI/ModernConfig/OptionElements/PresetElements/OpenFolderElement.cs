@@ -1,7 +1,4 @@
-﻿using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.SUIElements;
-
-namespace ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
+﻿namespace ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
 
 public class OpenFolderElement () : BasePresetElement(GetText("ModernConfig.Presets.OpenFolder.Label"),
     GetText("ModernConfig.Presets.OpenFolder.Tooltip"))

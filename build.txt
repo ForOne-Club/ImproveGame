@@ -1,6 +1,6 @@
 displayName = Quality of Terraria 更好的体验
-author = 局长, Cyril, 夜谷紫幽, delete, Lacewing, Lastprismer, 合作一号, Reits
-version = 1.7.1.7
+author = 局长, Cyril, 夜谷紫幽, delete, Lacewing, Lastprismer, 合作一号, Reits, 中学生
+version = 1.8.0.0
 homepage = https://github.com/487666123/ImproveGame
 buildIgnore = *.gif, *.aseprite
 includeSource = true

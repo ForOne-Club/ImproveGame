@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.BuilderToggles;
+using Terraria.GameContent.UI;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Functions.AutoPiggyBank;
@@ -30,7 +31,7 @@ public class AutoMoneyItemListener : GlobalItem
         if (!player.bank.item.Any(i =>
             {
                 // 铂金币和护卫奖章 - 有对应钱币且不到最大堆叠
-                if (item.type is ItemID.PlatinumCoin or ItemID.DefenderMedal)
+                if (item.type is ItemID.PlatinumCoin or ItemID.DefenderMedal || (!item.IsACoin && CustomCurrencyManager._currencies.Any(currencies => currencies.Value._valuePerUnit.ContainsKey(item.type))))
                 {
                     if (item.type == i.type && i.stack < i.maxStack)
                         return true;
@@ -48,7 +49,7 @@ public class AutoMoneyItemListener : GlobalItem
 
         int type = item.type;
 
-        if (type is ItemID.DefenderMedal)
+        if (type is ItemID.DefenderMedal || (!item.IsACoin && CustomCurrencyManager._currencies.Any(currencies => currencies.Value._valuePerUnit.ContainsKey(item.type))))
         {
             PopupText.NewText(PopupTextContext.RegularItemPickup, item, item.stack);
             SoundEngine.PlaySound(SoundID.Grab, player.position);

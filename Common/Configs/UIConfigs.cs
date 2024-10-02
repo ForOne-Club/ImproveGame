@@ -23,9 +23,9 @@ public class UIConfigs : ModConfig
     public object SuicideButton;
 
     [Header("UIHeader")]
-    [DefaultValue(GlassType.MicaLike)]
+    [DefaultValue(true)]
     [DrawTicks]
-    public GlassType GlassVfx;
+    public bool GlassVfxOn;
 
     [CustomModConfigItem(typeof(ThemeColorElement))]
     public ThemeType ThemeType;
@@ -164,22 +164,5 @@ public class UIConfigs : ModConfig
     public override void OnLoaded()
     {
         Instance = this;
-        ValidateValues();
-    }
-
-    public override void OnChanged()
-    {
-        ValidateValues();
-    }
-
-    private void ValidateValues()
-    {
-        // 旧版兼容，TML居然不自带错误检测，遇到超限直接Crash
-        if ((int)GlassVfx > 1)
-        {
-            GlassVfx = GlassType.MicaLike;
-            ConfigManager.Save(this);
-            ConfigManager.Load(this);
-        }
     }
 }

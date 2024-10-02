@@ -11,7 +11,7 @@ namespace ImproveGame.Content.Functions
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            int index = layers.FindIndex(layer => layer.Name == "Vanilla: Info Accessories Bar");
+            int index = layers.FindIndex(layer => layer.Name == "Vanilla: Info Accessories Bars");
             if (index != -1)
             {
                 layers.Insert(index + 1, new LegacyGameInterfaceLayer("ImproveGame: Modify Info Acc Display",
@@ -67,6 +67,7 @@ namespace ImproveGame.Content.Functions
         public override void ModifyDisplayParameters(InfoDisplay currentDisplay, ref string displayValue, ref string displayName,
             ref Color displayColor, ref Color displayShadowColor)
         {
+            return; // 暂时取消此功能，待重置
             if (currentDisplay != InfoDisplay.LifeformAnalyzer)
                 return;
 

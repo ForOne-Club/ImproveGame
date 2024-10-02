@@ -147,7 +147,7 @@ namespace ImproveGame.UIFramework
         public override bool Draw(bool drawToGame = true)
         {
             // 由于这里除了绘制 _body 还会处理没关完的UI，所以要单独处理云母
-            if (drawToGame && GlassVfxType is GlassType.MicaLike)
+            if (drawToGame && GlassVfxEnabled)
             {
                 var layers = EventTriggerManager.EventTriggerInstances["Radial Hotbars"];
                 int index = layers.IndexOf(this);

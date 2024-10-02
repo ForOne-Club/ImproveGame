@@ -38,6 +38,22 @@ public class ModIntegrationsSystem : ModSystem
     internal static HashSet<int> ModdedInfBuffsIgnore = new();
 
     /// <summary>
+    /// 储存即使在触发无限增益的情况下，也会正常消耗的物品列表
+    /// </summary>
+    internal static HashSet<int> ModdedInfBuffsConsume = new();
+
+    /// <summary>
+    /// 储存冲突Buff（当玩家拥有某个增益时，一个/些增益会被清除）列表
+    /// <br>Key为BuffID，Value为会被清除的BuffIDs</br>
+    /// </summary>
+    internal static Dictionary<int, List<int>> ModdedBuffConflicts = new()
+    {
+        // 高等级的饱腹会覆盖低等级的
+        {BuffID.WellFed3, [BuffID.WellFed2, BuffID.WellFed] },
+        {BuffID.WellFed2, [BuffID.WellFed] }
+    };
+
+    /// <summary>
     /// 添加物品ID对应的一系列Tile
     /// <br>Key为物品ID，Value为一个TileID的列表</br>
     /// </summary>
@@ -71,6 +87,7 @@ public class ModIntegrationsSystem : ModSystem
         DoCalamityModIntegration();
         DoThoriumModIntegration();
         DoFargowiltasIntegration();
+        DoGensokyoIntegration();
         DoRecipeBrowserIntegration();
         DoDialogueTweakIntegration();
         DoModLoaderIntegration();
@@ -137,15 +154,15 @@ public class ModIntegrationsSystem : ModSystem
         if (!ModLoader.TryGetMod("CalamityMod", out Mod calamityMod))
             return;
 
-        AddBuffIntegration(calamityMod, "WeightlessCandle", "CirrusBlueCandleBuff", true);
-        AddBuffIntegration(calamityMod, "VigorousCandle", "CirrusPinkCandleBuff", true);
-        AddBuffIntegration(calamityMod, "SpitefulCandle", "CirrusYellowCandleBuff", true);
-        AddBuffIntegration(calamityMod, "ResilientCandle", "CirrusPurpleCandleBuff", true);
-        AddBuffIntegration(calamityMod, "ChaosCandle", "ChaosCandleBuff", true);
-        AddBuffIntegration(calamityMod, "TranquilityCandle", "TranquilityCandleBuff", true);
-        AddBuffIntegration(calamityMod, "EffigyOfDecay", "EffigyOfDecayBuff", true);
-        AddBuffIntegration(calamityMod, "CrimsonEffigy", "CrimsonEffigyBuff", true);
-        AddBuffIntegration(calamityMod, "CorruptionEffigy", "CorruptionEffigyBuff", true);
+        AddBuffIntegration(calamityMod, "WeightlessCandle", true, "CirrusBlueCandleBuff");
+        AddBuffIntegration(calamityMod, "VigorousCandle", true, "CirrusPinkCandleBuff");
+        AddBuffIntegration(calamityMod, "SpitefulCandle", true, "CirrusYellowCandleBuff");
+        AddBuffIntegration(calamityMod, "ResilientCandle", true, "CirrusPurpleCandleBuff");
+        AddBuffIntegration(calamityMod, "ChaosCandle", true, "ChaosCandleBuff");
+        AddBuffIntegration(calamityMod, "TranquilityCandle", true, "TranquilityCandleBuff");
+        AddBuffIntegration(calamityMod, "EffigyOfDecay", true, "EffigyOfDecayBuff");
+        AddBuffIntegration(calamityMod, "CrimsonEffigy", true, "CrimsonEffigyBuff");
+        AddBuffIntegration(calamityMod, "CorruptionEffigy", true, "CorruptionEffigyBuff");
         PlayerStatsSystem.CalamityIntegration(calamityMod);
     }
 
@@ -154,10 +171,10 @@ public class ModIntegrationsSystem : ModSystem
         if (!ModLoader.TryGetMod("ThoriumMod", out Mod thoriumMod))
             return;
 
-        AddBuffIntegration(thoriumMod, "Altar", "AltarBuff", true);
-        AddBuffIntegration(thoriumMod, "ConductorsStand", "ConductorsStandBuff", true);
-        AddBuffIntegration(thoriumMod, "Mistletoe", "MistletoeBuff", true);
-        AddBuffIntegration(thoriumMod, "NinjaRack", "NinjaBuff", true);
+        AddBuffIntegration(thoriumMod, "Altar", true, "AltarBuff");
+        AddBuffIntegration(thoriumMod, "ConductorsStand", true, "ConductorsStandBuff");
+        AddBuffIntegration(thoriumMod, "Mistletoe", true, "MistletoeBuff");
+        AddBuffIntegration(thoriumMod, "NinjaRack", true, "NinjaBuff");
         AddHomeTpIntegration(thoriumMod, "WishingGlass", false, false);
         PlayerStatsSystem.ThoriumIntegration(thoriumMod);
     }
@@ -167,8 +184,30 @@ public class ModIntegrationsSystem : ModSystem
         if (!ModLoader.TryGetMod("Fargowiltas", out Mod fargowiltas))
             return;
 
-        AddBuffIntegration(fargowiltas, "Omnistation", "Omnistation", true);
-        AddBuffIntegration(fargowiltas, "Omnistation2", "Omnistation", true);
+        AddBuffIntegration(fargowiltas, "Omnistation", true, "Omnistation");
+        AddBuffIntegration(fargowiltas, "Omnistation2", true, "Omnistation");
+    }
+
+    private static void DoGensokyoIntegration()
+    {
+        if (!ModLoader.TryGetMod("Gensokyo", out Mod gensokyo))
+            return;
+
+        
+        AddBuffIntegration(gensokyo, "ButterflyPheromones", true, "Buff_ButterflyPheromones");
+        AddBuffIntegration(gensokyo, "OniSake", true, "Buff_SakeBoth");
+        AddBuffIntegration(gensokyo, "HoshigumaDish", true, "Debuff_SakeHoshiguma");
+        AddBuffIntegration(gensokyo, "IbarakiBox", true, "Buff_SakeIbaraki");
+        AddBuffIntegration(gensokyo, "EagleRaviProvisions", true, "Buff_DangoPower1", "Buff_DangoPower2",
+            "Buff_DangoPower3", "Buff_DangoPower4", "Buff_DangoPower5");
+        AddInfBuffsConsume(gensokyo, "JellyStone");
+        AddBuffConflicts(gensokyo, "Buff_SakeBoth", BuffID.Tipsy, "Buff_SakeIbaraki", "Debuff_SakeHoshiguma");
+        AddBuffConflicts(gensokyo, "Buff_SakeIbaraki", BuffID.Tipsy, "Debuff_SakeHoshiguma");
+        AddBuffConflicts(gensokyo, "Debuff_SakeHoshiguma", BuffID.Tipsy);
+        AddBuffConflicts(gensokyo, "Buff_DangoPower5", "Buff_DangoPower4", "Buff_DangoPower3", "Buff_DangoPower2", "Buff_DangoPower1");
+        AddBuffConflicts(gensokyo, "Buff_DangoPower4", "Buff_DangoPower3", "Buff_DangoPower2", "Buff_DangoPower1");
+        AddBuffConflicts(gensokyo, "Buff_DangoPower3", "Buff_DangoPower2", "Buff_DangoPower1");
+        AddBuffConflicts(gensokyo, "Buff_DangoPower2", "Buff_DangoPower1");
     }
 
     private static void DoDialogueTweakIntegration()
@@ -205,12 +244,36 @@ public class ModIntegrationsSystem : ModSystem
         PortableStations[mod.Find<ModItem>(itemName).Type] = tileIDs;
     }
 
-    private static void AddBuffIntegration(Mod mod, string itemName, string buffName, bool isPlaceable)
+    private static void AddBuffIntegration(Mod mod, string itemName, bool isPlaceable, params string[] buffNames)
     {
+        List<int> buffs = [];
+        foreach (string buffName in buffNames)
+            buffs.Add(mod.Find<ModBuff>(buffName).Type);
+
         if (isPlaceable)
-            ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> { mod.Find<ModBuff>(buffName).Type };
+            ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = buffs;
         else
-            ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = new List<int> { mod.Find<ModBuff>(buffName).Type };
+            ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = buffs;
+    }
+
+    private static void AddInfBuffsConsume(Mod mod, string itemName)
+    {
+        ModdedInfBuffsConsume.Add(mod.Find<ModItem>(itemName).Type);
+    }
+
+    /// <param name="BuffIDOrName">填int（原版）或string（Mod）</param>
+    /// <param name="removeBuffIDOrName">填int（原版）或string（Mod）</param>
+    public static void AddBuffConflicts(Mod mod, object BuffIDOrName, params object[] removeBuffIDOrName)
+    {
+        List<int> buffs = [];
+        foreach (object obj in removeBuffIDOrName)
+        {
+            if (obj is int removeBuffID) buffs.Add(removeBuffID);
+            if (obj is string removeBuffName) buffs.Add(mod.Find<ModBuff>(removeBuffName).Type);
+        }
+
+        if (BuffIDOrName is int buffID) ModdedBuffConflicts[buffID] = buffs;
+        if (BuffIDOrName is string buffName) ModdedBuffConflicts[mod.Find<ModBuff>(buffName).Type] = buffs;
     }
 
     private static void AddHomeTpIntegration(Mod mod, string itemName, bool isPotion, bool isComebackItem)
@@ -295,6 +358,22 @@ public class ModIntegrationsSystem : ModSystem
                             int itemType = Convert.ToInt32(args[1]); // Item ID
                             List<int> buffTypes = AsListOfInt(args[2]); // Buff IDs
                             ModdedPotionBuffs[itemType] = buffTypes;
+                            return true;
+                        }
+                    case "ConsumePotion":
+                        {
+                            List<int> consumes = AsListOfInt(args[1]); // Potion IDs
+                            foreach (int consume in consumes)
+                            {
+                                ModdedInfBuffsConsume.Add(consume);
+                            }
+                            return true;
+                        }
+                    case "BuffConflict":
+                        {
+                            int buffType = Convert.ToInt32(args[1]); // Buff ID
+                            List<int> ClearedBuffTypes = AsListOfInt(args[2]); // Cleared Buff IDs
+                            ModdedBuffConflicts[buffType] = ClearedBuffTypes;
                             return true;
                         }
                     case "AddStation":

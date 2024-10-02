@@ -128,11 +128,6 @@ public class GlassmorphismVfx : ModSystem
         // 再对 blurredTarget 调用 ApplyGaussBlur
         ApplyGaussBlur(_blurredTarget);
 
-        if (GlassVfxType is not GlassType.MicaLike)
-        {
-            return;
-        }
-
         PlayerInput.SetZoom_UI();
         if (!Main.InGameUI.IsVisible && !Main.ingameOptionsWindow)
             EventTriggerManager.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
@@ -154,7 +149,7 @@ public class GlassmorphismVfx : ModSystem
         shader.Parameters["uScreenResolution"].SetValue(Main.ScreenSize.ToVector2());
         shader.Parameters["uIntensity"].SetValue(UIStyle.AcrylicIntensity);
 
-        int times = GlassVfxType is GlassType.MicaLike ? 6 : 4;
+        int times = GlassVfxEnabled ? 6 : 4;
         for (int i = 1; i <= times; i++)
         {
             shader.Parameters["uRange"].SetValue(1.2f * i);

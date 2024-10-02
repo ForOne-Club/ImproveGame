@@ -7,6 +7,7 @@ Tiles: {
 	Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
 	ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
 	BaitSupplier.MapEntry: Bait Chamber
+	FakeAltar.MapEntry: Fake Altar
 }
 
 MoonPhases: {
@@ -312,14 +313,6 @@ Architecture: {
 	Bed: Bed
 }
 
-LiquidWand: {
-	Title: Liquid Control
-	Water: Water ({LiquidAmount})
-	Lava: Lava ({LiquidAmount})
-	Honey: Honey ({LiquidAmount})
-	Shimmer: Shimmer ({LiquidAmount})
-}
-
 PaintWandGUI: {
 	Paintbrush: Paint tiles
 	PaintRoller: Paint walls
@@ -365,34 +358,52 @@ RecipeGroup: {
 }
 
 Keybinds: {
-	HugeInventory.DisplayName: Big Backpack
+	HugeInventory: {
+		DisplayName: Big Backpack
+		Tip: 按下后打开大背包，也可以在总控面板中打开
+	}
 
 	BuffTracker: {
 		DisplayName: Buff Tracker
 		Tip: Clicking on a buff icon no longer opens the Buff Tracker if the keybind is set
 	}
 
-	GrabBagLoot.DisplayName: Display Grab Bag Loot
+	GrabBagLoot: {
+		DisplayName: Display Grab Bag Loot
+		Tip: 对着一个摸彩袋（宝藏袋、宝匣等）按下此快捷键可查看其各物品掉率
+	}
 
 	HotbarSwitch: {
 		DisplayName: Swap Hotbar
 		Tip: Swap items in the first row with the second row in inventory
 	}
 
-	AutoTrashKeybind.DisplayName: Hide/Show the Auto-Trash Bin
-	DiscordRodKeybind.DisplayName: Use Teleportation Rods
-	HomeKeybind.DisplayName: Use Recall Items
-	WorldFeature.DisplayName: Hide/Show the World Feature Panel
-	ConfigMenu.DisplayName: Open Mod Config
-	ItemSearcher.DisplayName: Search Item
-	OpenBagGUI.DisplayName: Bag Opener
+	AutoTrashKeybind: {
+		DisplayName: Hide/Show the Auto-Trash Bin
+		Tip: 仅隐藏功能，并不会关闭，若想彻底关闭此功能可在“体系化功能”配置中调节
+	}
+
+	DiscordRodKeybind: {
+		DisplayName: Use Teleportation Rods
+		Tip: 按下后快捷使用物品栏中的传送法杖（混沌传送杖与调谐传送杖）
+	}
+
+	HomeKeybind: {
+		DisplayName: Use Recall Items
+		Tip: 按下后快捷使用物品栏中的回程物品（优先级：无限返回药水>无限回忆药水>魔镜类物品）
+	}
+
+	OpenBagGUI: {
+		DisplayName: Bag Opener
+		Tip: 按下后打开快速开袋界面，也可以在总控面板中打开
+	}
 
 	MasterControl: {
 		DisplayName: Control Panel
 		Tip:
 			'''
 			Access to Quality of Terraria shortcuts
-			You must assign a hotkey to use the shortcuts
+			You MUST assign a hotkey to use the shortcuts
 			'''
 	}
 

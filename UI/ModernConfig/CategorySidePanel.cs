@@ -14,6 +14,7 @@ public sealed class CategorySidePanel : SUIPanel
         new NpcSettings(),
         new EnemySettings(),
         new GameMechanics(),
+        new PylonMechanics(),
         new Multiplayer(),
         new ModFeatures(),
         new VisualAndInterface(),
@@ -22,7 +23,7 @@ public sealed class CategorySidePanel : SUIPanel
 
     internal static readonly Dictionary<string, CategoryCard> Cards = new();
 
-    private SUIScrollView2 Categories { get;  set; }
+    private SUIScrollView2 Categories { get; set; }
 
     static CategorySidePanel()
     {
@@ -32,7 +33,7 @@ public sealed class CategorySidePanel : SUIPanel
         AddCard<Everything>();
         foreach (var card in CategoriesArray)
             AddCard(new CategoryCard(card));
-        AddCard<LicensePage>();
+        AddCard<Keybinds>();
     }
 
     public CategorySidePanel(Color color) : base(color, color)

@@ -195,7 +195,7 @@ ImproveConfigs: {
 	}
 
 	NoCD_FishermanQuest: {
-		Label: "[centeritem:4608] Instant REefresh Angler's Quests"
+		Label: "[centeritem:4608] Instant Refresh Angler's Quests"
 		Tooltip: Refresh quests immediately when you turn in quest fish. You can choose whether to reset the quest fish as well
 	}
 
@@ -382,12 +382,8 @@ ImproveConfigs: {
 		Label: "[centeritem:2203] Only The Verified Player(s) Can Change The Mod Configs"
 		Tooltip:
 			'''
-			Does nothing in singleplayer mode, reloading is required
-			After enabled, only the verified player(s) can change the mod configs
-			While starting the server, a random 8-digit password will be sent in the server console
-			Players can type /qotpassword <password> to verify themselves
-			The server console can query the password by typing /qotpassword
-			If the password is correct, the player will be able to change mod configs
+			Does nothing in singleplayer mode, reloading is required. After enabled, only the verified player(s) can change the mod configs
+			While starting the server, a random 8-digit password will be sent in the server console. The server console can query the password by typing /qotpassword. Players can type /qotpassword <password> to verify themselves. If the password is correct, the player will be able to change mod configs
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''
 		Unaccepted: You have not passed the verification!
@@ -503,6 +499,7 @@ ImproveConfigs: {
 		Presets: "[centeritem:ImproveGame/PaintWand] Presets"
 		Others: "[centeritem/h4:HandOfCreation] Others"
 		ItemEffect: "[centeritem/h4:RedPotion] Item Effects"
+		PylonMechanics: "[centeritem:4951] Pylon Restrictions"
 	}
 
 	OpenConfig: {
@@ -659,11 +656,6 @@ ImproveConfigs: {
 		Tooltip: Respawn time is reduced to 1.5s when no boss is present
 	}
 
-	NoPylonRestrictions: {
-		Label: "[centeritem:TeleportationPylonPurity] Unconditional Pylon Teleportation"
-		Tooltip: Pylons may be used for teleportation unconditionally, but you still need to stand nearby a pylon
-	}
-
 	AllOff: {
 		Label: Turn Them OFF
 		Tooltip: Restores (almost) all configurations to vanilla state, play vanilla Terraria
@@ -731,6 +723,32 @@ ImproveConfigs: {
 			Unlocks via Shimmer ship in bottle, opens from the Control Panel
 			Availability changes per world
 			'''
+	}
+}
+
+	PylonPlaceNoRestriction: {
+		Label: "[centeritem:TeleportationPylonPurity] 移除晶塔放置限制"
+		Tooltip: 在任何地点都可以放置不限量的晶塔
+	}
+
+	PylonTeleNoNear: {
+		Label: "[centeritem:TeleportationPylonUnderground] 晶塔传送无需靠近"
+		Tooltip: 无论在哪都可立即传送到晶塔
+	}
+
+	PylonTeleNoNPC: {
+		Label: "[centeritem:TeleportationPylonHallow] 晶塔传送无需NPC"
+		Tooltip: 就算NPC死光了也能传送到晶塔
+	}
+
+	PylonTeleNoDanger: {
+		Label: "[centeritem:TeleportationPylonJungle] 晶塔传送无视危险"
+		Tooltip: Boss打到一半也可以传送到晶塔开溜
+	}
+
+	PylonTeleNoBiome: {
+		Label: "[centeritem:TeleportationPylonMushroom] 晶塔传送无视生物群落"
+		Tooltip: 我说它是森林它就是森林
 	}
 }
 
@@ -816,6 +834,16 @@ ModItemLoadPage: {
 	}
 
 	Tooltip: ""
+
+	LiquidWandAdvanced: {
+		Label: "{$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}"
+		Tooltip: ""
+	}
+
+	ActuationRodMkII: {
+		Label: "{$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}"
+		Tooltip: ""
+	}
 }
 
 UIConfigs: {
@@ -979,7 +1007,7 @@ UIConfigs: {
 		Tooltip: Restore all UI positions to default, especially useful when you can't find your Big Backpack UI
 	}
 
-	GlassVfx: {
+	GlassVfxOn: {
 		Label: "[centeritem:MulticoloredStainedGlass] Glassmorphism Effect"
 		Tooltip:
 			'''

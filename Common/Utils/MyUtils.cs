@@ -25,9 +25,9 @@ partial class MyUtils
     public static bool HasDevMark => LocalPlayerHasItemFast(ModContent.ItemType<DevMark>(), "mod bank") &&
                                      Main.netMode is NetmodeID.SinglePlayer;
 
-    public static GlassType GlassVfxType => UIConfigs.Instance.GlassVfx;
-
-    public static bool GlassVfxEnabled => Lighting.NotRetro && Terraria.Graphics.Effects.Filters.Scene.CanCapture() && UIConfigs.Instance.GlassVfx is not GlassType.Disabled;
+    public static bool AllowRenderTargets => Lighting.NotRetro && Terraria.Graphics.Effects.Filters.Scene.CanCapture();
+    
+    public static bool GlassVfxEnabled => AllowRenderTargets && UIConfigs.Instance.GlassVfxOn;
 
     // Enabled和Available是不一样的，Available是能不能用，Enabled是有没有开
     public static bool GlassVfxAvailable => !Main.drawToScreen && !Main.gameMenu && !Main.mapFullscreen && GlassVfxEnabled;
@@ -831,7 +831,7 @@ partial class MyUtils
         return new Item();
     }
 
-    // 获取背包第一个平台
+    // 获取背包第一个墙
     public static Item FirstWall(Player player)
     {
         for (int i = 0; i < 50; i++)

@@ -73,7 +73,7 @@ public class GrabBagInfoPanel : TimerView
             stackRange = " (" + dropRateInfo.stackMin + ")";
 
         string originalFormat = "P";
-        if ((double)dropRateInfo.dropRate < 0.001)
+        if (dropRateInfo.dropRate < 0.001)
             originalFormat = "P4";
 
         droprate = dropRateInfo.dropRate is not 1f ? Utils.PrettifyPercentDisplay(dropRateInfo.dropRate, originalFormat) : "100%";

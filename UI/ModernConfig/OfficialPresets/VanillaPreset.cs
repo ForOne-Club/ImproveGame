@@ -56,7 +56,6 @@ public class VanillaPreset : OfficialPreset
         modConfig.BedTimeRate = 10;
         modConfig.BedEverywhere = false;
         modConfig.NoSleepRestrictions = false;
-        modConfig.NoPylonRestrictions = false;
         modConfig.BedTimeRate = 5;
         modConfig.WandMaterialNoConsume = false;
         modConfig.MinimapMark = false;

@@ -55,7 +55,6 @@ public class ExplorerPreset : OfficialPreset
         modConfig.BedTimeRate = 10;
         modConfig.BedEverywhere = true;
         modConfig.NoSleepRestrictions = true;
-        modConfig.NoPylonRestrictions = false;
         modConfig.WandMaterialNoConsume = false;
         modConfig.MinimapMark = true;
         modConfig.BedOnlyOne = false;

@@ -93,10 +93,6 @@ public class UIPlayer : ModPlayer
         uiSystem.BuffTrackerGUI.MainPanel.SetPos(BuffTrackerPosition).Recalculate();
         UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Main.LocalPlayer.whoAmI);
 
-        // 液体法杖
-        uiSystem.LiquidWandGUI = new LiquidWandGUI();
-        uiSystem.LiquidWandTrigger.SetRootBody(uiSystem.LiquidWandGUI);
-
         // 建筑法杖
         uiSystem.ArchitectureGUI = new ArchitectureGUI();
         uiSystem.ArchitectureTrigger.SetRootBody(uiSystem.ArchitectureGUI);

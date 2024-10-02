@@ -5,6 +5,7 @@ using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.Items;
 using ImproveGame.UI.ExtremeStorage;
+using System.Reflection;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.ModPlayers;
@@ -75,7 +76,7 @@ public class InfBuffPlayer : ModPlayer
     {
         if (Player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server)
             return;
-        
+
         // 重设部分Buff站效果
         ApplyBuffStation.Reset();
 
@@ -86,6 +87,18 @@ public class InfBuffPlayer : ModPlayer
 
         // 从TE中获取所有的无尽Buff物品
         ApplyAvailableBuffs(Get(Player).ExStorageAvailableItems);
+
+        // 清除冲突的Buff
+        foreach (int buffType in ModIntegrationsSystem.ModdedBuffConflicts.Keys)
+        {
+            if (Main.LocalPlayer.HasBuff(buffType))
+            {
+                foreach (int clearedBuffType in ModIntegrationsSystem.ModdedBuffConflicts[buffType])
+                {
+                    Main.LocalPlayer.ClearBuff(clearedBuffType);
+                }
+            }
+        }
 
         // 每隔一段时间更新一次Buff列表
         SetupBuffListCooldown++;
@@ -117,9 +130,6 @@ public class InfBuffPlayer : ModPlayer
 
             buffTypes.ForEach(buffType =>
             {
-                // 饱食三级Buff不应该覆盖，而是取最高级
-                bool wellFed3Enabled = Main.LocalPlayer.FindBuffIndex(BuffID.WellFed3) != -1;
-                bool wellFed2Enabled = Main.LocalPlayer.FindBuffIndex(BuffID.WellFed2) != -1;
 
                 if (!CheckInfBuffEnable(buffType))
                     return;
@@ -127,9 +137,6 @@ public class InfBuffPlayer : ModPlayer
                 // Buff
                 switch (buffType)
                 {
-                    case BuffID.WellFed when wellFed2Enabled || wellFed3Enabled:
-                    case BuffID.WellFed2 when wellFed3Enabled:
-                        return;
                     case -1:
                         break;
                     default:

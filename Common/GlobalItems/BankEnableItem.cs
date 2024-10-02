@@ -60,7 +60,7 @@ namespace ImproveGame.Common.GlobalItems
         public bool MiddleClickable(Item item)
         {
             var player = Main.LocalPlayer;
-            if (player.frozen || player.tongued || player.webbed || player.stoned || player.gravDir is -1f ||
+            if (player.frozen || player.tongued || player.webbed || player.stoned ||
                 player.dead || player.noItems)
                 return false;
             return Config.MiddleEnableBank && item.IsBankItem();

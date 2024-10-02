@@ -151,5 +151,14 @@ namespace ImproveGame.Content.Items
                 return false;
             return base.CanUseItem(player);
         }
+
+        public override void RightClick(Player player)
+        {
+            Item.SetDefaults(ModContent.ItemType<WallPlaceSelectorMode>());
+        }
+
+        public override bool ConsumeItem(Player player) => false;
+
+        public override bool CanRightClick() => true;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
+using ImproveGame.Common.GlobalPylons;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.UI.ModernConfig;
@@ -122,14 +123,32 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(true)]
     public bool NoSleepRestrictions;
 
-    [DefaultValue(false)]
-    public bool NoPylonRestrictions;
-
     [DefaultValue(5)]
     [Increment(5)]
     [Range(5, 100)]
     [Slider]
     public int BedTimeRate;
+
+    #endregion
+
+    #region 晶塔限制
+
+    [Header("PylonMechanics")]
+
+    [DefaultValue(false)]
+    public bool PylonPlaceNoRestriction;
+
+    [DefaultValue(false)]
+    public bool PylonTeleNoNear;
+
+    [DefaultValue(false)]
+    public bool PylonTeleNoNPC;
+
+    [DefaultValue(false)]
+    public bool PylonTeleNoDanger;
+
+    [DefaultValue(false)]
+    public bool PylonTeleNoBiome;
 
     #endregion
 
@@ -296,6 +315,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(true)]
     public bool SimpleVeinMining;
 
+    [DisplayCondition(nameof(ImproveConfigs), nameof(SimpleVeinMining))]
     [DefaultValue(false)]
     public bool DisableVeinMiningPopup;
 
@@ -428,6 +448,9 @@ public class ImproveConfigs : ModConfig
         public bool LiquidWand = true;
 
         [DefaultValue(true)]
+        public bool LiquidWandAdvanced = true;
+
+        [DefaultValue(true)]
         public bool PotionBag = true;
 
         [DefaultValue(true)]
@@ -457,6 +480,9 @@ public class ImproveConfigs : ModConfig
         [DefaultValue(true)]
         public bool BaitSupplier = true;
 
+        [DefaultValue(true)]
+        public bool ActuationRodMkII = true;
+
         public override bool Equals(object obj)
         {
             if (obj is ModItemLoadPage other)
@@ -465,7 +491,7 @@ public class ImproveConfigs : ModConfig
                        PotionBag == other.PotionBag && BannerChest == other.BannerChest && Autofisher == other.Autofisher &&
                        PaintWand == other.PaintWand && ConstructWand == other.ConstructWand && MoveChest == other.MoveChest &&
                        CoinOne == other.CoinOne && ExtremeStorage == other.ExtremeStorage && DetectorDrone == other.DetectorDrone &&
-                       BaitSupplier == other.BaitSupplier;
+                       BaitSupplier == other.BaitSupplier && ActuationRodMkII == other.ActuationRodMkII && LiquidWandAdvanced == other.LiquidWandAdvanced;
             return base.Equals(obj);
         }
 
@@ -475,7 +501,7 @@ public class ImproveConfigs : ModConfig
             {
                 MagickWand, SpaceWand, StarburstWand, WallPlace, CreateWand, LiquidWand, PotionBag,
                 BannerChest, Autofisher, PaintWand, ConstructWand, MoveChest, CoinOne, ExtremeStorage,
-                DetectorDrone, BaitSupplier
+                DetectorDrone, BaitSupplier, LiquidWandAdvanced, ActuationRodMkII
             }.GetHashCode();
         }
     }

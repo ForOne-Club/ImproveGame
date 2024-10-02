@@ -57,10 +57,6 @@ public class UISystem : ModSystem
     public BuffTrackerGUI BuffTrackerGUI;
     public EventTrigger BuffTrackerTrigger;
 
-    // 液体法杖
-    public LiquidWandGUI LiquidWandGUI;
-    public EventTrigger LiquidWandTrigger;
-
     // 建筑法杖
     public ArchitectureGUI ArchitectureGUI;
     public EventTrigger ArchitectureTrigger;
@@ -128,7 +124,6 @@ public class UISystem : ModSystem
         LoadGUIInfo();
 
         // UserInterface 之 EventTrigger 版
-        LiquidWandTrigger = new EventTrigger("Radial Hotbars", "Liquid Wand").Register();
         ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture").Register();
         StructureTrigger = new EventTrigger("Radial Hotbars", "Structure").Register();
         LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer").Register();

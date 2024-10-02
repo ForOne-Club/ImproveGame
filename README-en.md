@@ -91,6 +91,17 @@ Add infinite buff(s) for a potion, especially effective to items which do not ha
 - `int` The potion's item type
 - `int/List<int>` Type(s) of buff(s) provided by the potion
 
+### ConsumePotion
+让某个/些指定的物品在触发无尽增益的情况下也会被正常消耗
+#### 参数
+- `int/List<int>` 会被正常消耗的某个物品/一些物品的ID
+
+### BuffConflict
+设置当玩家拥有某个增益时，一个/些增益会被清除
+#### 参数
+- `int` 某个增益的ID
+- `int/List<int>` 会被清除的增益ID
+
 ### AddStation
 Add infinite buff(s) for a buff station, usually you have to call manually for mod buff station. Only 1 item is needed to activate its effect
 #### Parameters

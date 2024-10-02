@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Content.Items;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
@@ -17,22 +18,6 @@ public class RecipeSystem : ModSystem
     internal static RecipeGroup AnyAdamantiteBar;
     internal static RecipeGroup AnyGem;
 
-    public static Dictionary<int, int> ShimmerIntoWithStack;
-    public static Dictionary<int, List<Item>> ShimmerInto;
-
-    public override void PreUpdateItems()
-    {
-        if (ShimmerInto == null)
-        {
-            ShimmerInto = [];
-            ShimmerIntoWithStack = [];
-            for (int i = 1; i < ItemLoader.ItemCount; i++)
-            {
-                ShimmerInto.Add(i, CollectHelper.GetShimmerResult(new Item(i), out int stackRequired));
-                ShimmerIntoWithStack.Add(i, stackRequired);
-            }
-        }
-    }
     public override void Unload()
     {
         AnyCopperBar = null;
@@ -43,9 +28,6 @@ public class RecipeSystem : ModSystem
         AnyCobaltBar = null;
         AnyMythrilBar = null;
         AnyAdamantiteBar = null;
-
-        ShimmerIntoWithStack = null;
-        ShimmerInto = null;
     }
 
     public override void AddRecipeGroups()
@@ -122,5 +104,14 @@ public class RecipeSystem : ModSystem
             .AddIngredient(ItemID.Hemopiranha)
             .AddIngredient(ItemID.Ebonkoi)
             .Register();
+    }
+
+    public override void PreUpdateItems()
+    {
+        // 控制微光
+        // 液体法杖月后可直接微光转换为终极液体法杖
+        int liquidWand = ModContent.ItemType<LiquidWand>();
+        int liquidWandAdvanced = ModContent.ItemType<LiquidWandAdvanced>();
+        ItemID.Sets.ShimmerTransformToItem[liquidWand] = NPC.downedMoonlord ? liquidWandAdvanced : -1;
     }
 }

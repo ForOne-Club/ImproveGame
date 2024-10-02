@@ -46,7 +46,7 @@ CreateWand: {
 }
 
 WallPlace: {
-	DisplayName: 科技魔杖
+	DisplayName: 科技魔杖（放置器模式）
 	Tooltip:
 		'''
 		在鼠标指针位置召唤一个放置器
@@ -54,6 +54,7 @@ WallPlace: {
 		识别的区域至多拥有 10000 格
 		实体物块，平台，门可作为边界
 		每位玩家至多召唤一个，再次释放来收回它
+		右键点击可切换至框选模式
 		'''
 }
 
@@ -323,6 +324,49 @@ AddIconDummy: {
 OpenFolderDummy: {
 	// DisplayName: Open Folder Dummy
 	// Tooltip: ""
+}
+
+CrimsonAltarItem: {
+	DisplayName: 猩红祭坛
+	Tooltip: ""
+}
+
+DemonAltarItem: {
+	DisplayName: 恶魔祭坛
+	Tooltip: ""
+}
+
+LicenseBook: {
+	DisplayName: 许可声明
+	Tooltip: 使用以查看更好的体验的许可信息，以及其参考的开源项目。
+}
+
+LiquidWandAdvanced: {
+	DisplayName: 终极液体魔杖
+	Tooltip:
+		'''
+		吸收/放置定量液体
+		<right>打开液体控制界面
+		可以无限放置液体
+		'''
+}
+
+WallPlaceSelectorMode: {
+	DisplayName: 科技魔杖（框选模式）
+	Tooltip:
+		'''
+		框选一片区域，放置背包中的墙体
+		右键点击可切换至放置器模式
+		'''
+}
+
+ActuationRodMkII: {
+	DisplayName: 终极致动魔杖
+	Tooltip:
+		'''
+		框选并致动一大片区域
+		不需要放置致动器
+		'''
 }
 
 ShellShipInBottle: {

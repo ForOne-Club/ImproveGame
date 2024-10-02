@@ -92,6 +92,17 @@ Magic Storage开源链接: https://github.com/blushiemagic/MagicStorage
 - `int` 添加药水类无尽增益支持的物品的ID
 - `int/List<int>` 该物品提供的一个/一些增益的ID
 
+### ConsumePotion
+让某个/些指定的物品在触发无尽增益的情况下也会被正常消耗
+#### 参数
+- `int/List<int>` 会被正常消耗的某个物品/一些物品的ID
+
+### BuffConflict
+设置当玩家拥有某个增益时，一个/些增益会被清除
+#### 参数
+- `int` 某个增益的ID
+- `int/List<int>` 会被清除的增益ID
+
 ### AddStation
 为某个指定的物品添加无尽增益支持(放置站类)，放置站类指有一个即可提供增益。放置站一般需要手动提供支持
 #### 参数

@@ -55,7 +55,6 @@ public class WarriorPreset : OfficialPreset
         modConfig.BedTimeRate = 80;
         modConfig.BedEverywhere = true;
         modConfig.NoSleepRestrictions = true;
-        modConfig.NoPylonRestrictions = true;
         modConfig.WandMaterialNoConsume = true;
         modConfig.MinimapMark = true;
         modConfig.BedOnlyOne = true;

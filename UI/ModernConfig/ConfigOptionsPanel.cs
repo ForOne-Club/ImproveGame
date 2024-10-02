@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.ModernConfig.OfficialPresets;
+﻿using ImproveGame.UI.ModernConfig.FakeCategories;
+using ImproveGame.UI.ModernConfig.OfficialPresets;
 using ImproveGame.UI.ModernConfig.OptionElements;
 using ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
 using ImproveGame.UIFramework.BaseViews;
@@ -206,5 +207,20 @@ public sealed class ConfigOptionsPanel : SUIPanel
             CurrentCategory = CategoryToSelectOnOpen;
             CategoryToSelectOnOpen = null;
         }
+    }
+
+    // 用于捕获分辨率变化，以便 Recalculate 并且重新计算位置
+    private sealed class CaptureResolutionChange : ILoadable
+    {
+        public void Load(Mod mod)
+        {
+            Main.OnResolutionChanged += _ =>
+            {
+                if (CurrentCategory is AboutPage)
+                    Instance.DelayRefreshCurrentPage = true;
+            };
+        }
+
+        public void Unload() { }
     }
 }
