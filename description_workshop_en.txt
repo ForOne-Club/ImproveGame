@@ -43,7 +43,7 @@ Source code: https://github.com/487666123/ImproveGame
 [h2]Authors and Special Thanks[/h2]
 Spriter: 枫林半叶, 逆风而行的信鸽, 中学生
 Translators: Lastprismer, Lacewing
-Coder: 局长, Cyril, 夜谷紫幽, Reits, hezuo1hao
+Coder: 局长, Cyril, 夜谷紫幽, Reits, hezuo1hao, LogSpiral
 Special Thanks: gardenapple - WMITF
            ChevyRay - Coroutines class
            Tomat - Part of GIF-rendering code
