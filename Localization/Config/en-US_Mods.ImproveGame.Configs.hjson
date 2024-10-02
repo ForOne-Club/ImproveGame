@@ -724,7 +724,6 @@ ImproveConfigs: {
 			Availability changes per world
 			'''
 	}
-}
 
 	PylonPlaceNoRestriction: {
 		Label: "[centeritem:TeleportationPylonPurity] 移除晶塔放置限制"

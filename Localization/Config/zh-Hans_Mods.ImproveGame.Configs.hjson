@@ -719,11 +719,6 @@ ImproveConfigs: {
 		Tooltip: 永久关闭烦人的连锁挖矿弹出提示
 	}
 
-	PylonPlaceNoRestriction: {
-		Label: "[centeritem:TeleportationPylonPurity] 移除晶塔放置限制"
-		Tooltip: 在任何地点都可以放置不限量的晶塔
-	}
-
 	QuickShimmer: {
 		Label: "[centeritem:ImproveGame/ShellShipInBottle_Shimmered] 快速微光"
 		Tooltip:
@@ -732,7 +727,11 @@ ImproveConfigs: {
 			使用瓶中微光船后即可解锁此功能，解锁状态跟随世界存档
 			'''
 	}
-}
+
+	PylonPlaceNoRestriction: {
+		Label: "[centeritem:TeleportationPylonPurity] 移除晶塔放置限制"
+		Tooltip: 在任何地点都可以放置不限量的晶塔
+	}
 
 	PylonTeleNoNear: {
 		Label: "[centeritem:TeleportationPylonUnderground] 晶塔传送无需靠近"
