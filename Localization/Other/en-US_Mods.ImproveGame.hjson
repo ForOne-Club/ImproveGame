@@ -395,6 +395,8 @@ Keybinds: {
 			You must assign a hotkey to use the shortcuts
 			'''
 	}
+
+	QuickShimmerGUI.DisplayName: Quick Shimmer
 }
 
 Projectiles: {

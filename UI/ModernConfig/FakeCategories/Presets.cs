@@ -25,6 +25,7 @@ public sealed class Presets : Category
 
         string folderPath = PresetHandler.ConfigPresetsPath; // 替换为你的文件夹路径
         var di = new DirectoryInfo(folderPath);
+        if(!Path.Exists(folderPath))Directory.CreateDirectory(folderPath);
         var directories = di.GetDirectories();
         foreach (DirectoryInfo directory in directories)
             panel.AddToOptionsDirect(new PlayerPresetElement(directory.Name));

@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
+using ImproveGame.Content.Items;
 using ImproveGame.UI.AmmoChainPanel;
 using ImproveGame.UI.DeathSpectating;
 using ImproveGame.UI.ItemContainer;
@@ -8,6 +9,7 @@ using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
+using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UI.WeatherControl;
 using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework;
@@ -300,6 +302,37 @@ public class MasterControlManager : ModSystem
         {
             var ui = OpenBagGUI.Instance;
             if (ui is null) return;
+
+            if (ui.Enabled && ui.StartTimer.AnyOpen)
+                ui.Close();
+            else
+                ui.Open();
+        };
+
+        #endregion
+
+        #region 快速微光
+        if (Main.netMode != NetmodeID.Server) Main.instance.LoadItem(ItemID.BottomlessShimmerBucket);
+        var quickShimmer = new MasterControlFunction("QuickShimmer")
+        {
+            Icon = ModAsset.QuickShimmer.Value,
+        }.Register();
+        quickShimmer.Available += () => QuickShimmerSystem.Enabled;
+        quickShimmer.OnMouseDown += _ =>
+        {
+            var ui = QuickShimmerGUI.Instance;
+            if (ui is null) return;
+            if (!Config.QuickShimmer)
+            {
+                Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
+                return;
+            }
+
+            if (!QuickShimmerSystem.Unlocked)
+            {
+                Main.NewText(GetText("UI.QuickShimmer.Locked"), Color.Pink);
+                return;
+            }
 
             if (ui.Enabled && ui.StartTimer.AnyOpen)
                 ui.Close();

@@ -391,10 +391,7 @@ ImproveConfigs: {
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''
 		Unaccepted: You have not passed the verification!
-		Tips:
-			'''
-			"Only The Verified Player(s) Can Change The Mod Configs" is enabled
-			'''
+		Tips: '''"Only The Verified Player(s) Can Change The Mod Configs" is enabled'''
 		Registered: You can change the mod configs already
 		Correct: Correct password, you can change the mod configs
 		Incorrect: Incorrect password!
@@ -724,6 +721,16 @@ ImproveConfigs: {
 	DisableVeinMiningPopup: {
 		Label: "[centeritem:IronPickaxe] Disable Vein Mining Popup"
 		Tooltip: Disable the annoying popup for good
+	}
+
+	QuickShimmer: {
+		Label: "[centeritem:ImproveGame/ShellShipInBottle_Shimmered] Quick Shimmer"
+		Tooltip:
+			'''
+			Allow you to use shimmer transmutations in inventory
+			Unlocks via Shimmer ship in bottle, opens from the Control Panel
+			Availability changes per world
+			'''
 	}
 }
 

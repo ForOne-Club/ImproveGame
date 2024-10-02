@@ -726,6 +726,15 @@ ImproveConfigs: {
 		Label: "[centeritem:IronPickaxe] 禁用连锁挖矿弹出提示"
 		Tooltip: 永久关闭烦人的连锁挖矿弹出提示
 	}
+
+	QuickShimmer: {
+		Label: "[centeritem:ImproveGame/ShellShipInBottle_Shimmered] 快速微光"
+		Tooltip:
+			'''
+			允许你在背包内使用微光嬗变，在总控面板中打开
+			使用瓶中微光船后即可解锁此功能，解锁状态跟随世界存档
+			'''
+	}
 }
 
 ModItemLoadPage: {

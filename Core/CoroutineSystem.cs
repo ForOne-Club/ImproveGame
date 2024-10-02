@@ -6,7 +6,7 @@ public class CoroutineSystem : ModSystem
     internal static CoroutineRunner GenerateRunner = new();
     internal static CoroutineRunner MiscRunner = new();
     internal static CoroutineRunner OpenBagRunner = new();
-
+    internal static CoroutineRunner QuickShimmerRunner = new();
     public override void PreUpdateTime()
     {
         TileRunner.Update(1);
@@ -16,5 +16,7 @@ public class CoroutineSystem : ModSystem
         // 加速！
         for (int i = 0; i < 5; i++)
             OpenBagRunner.Update(1);
+
+        QuickShimmerRunner.Update(1);
     }
 }

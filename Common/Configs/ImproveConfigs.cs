@@ -392,6 +392,9 @@ public class ImproveConfigs : ModConfig
     public bool WeatherControl;
 
     [DefaultValue(true)]
+    public bool QuickShimmer;
+
+    [DefaultValue(true)]
     public bool MinimapMark;
 
     [DefaultValue(true)]

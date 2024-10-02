@@ -65,9 +65,10 @@ public abstract class BaseBody : View
         var rt2dPool = ImproveGame.Instance.RenderTargetPool;
         var device = Main.graphics.GraphicsDevice;
 
+        var originalRT2Ds = device.GetRenderTargets();
+        // && originalRT2Ds != null && originalRT2Ds.Length != 0
         if (RenderTarget2DDraw)
         {
-            var originalRT2Ds = device.GetRenderTargets();
 
             if (originalRT2Ds != null)
             {

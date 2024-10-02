@@ -325,3 +325,13 @@ OpenFolderDummy: {
 	DisplayName: Open Folder Dummy
 	Tooltip: ""
 }
+
+ShellShipInBottle: {
+	DisplayName: Shell Ship In Bottle
+	Tooltip: Throw it into shimmer lake and see what would happen!
+}
+
+ShellShipInBottle_Shimmered: {
+	DisplayName: Shimmered Ship In Bottle
+	Tooltip: Unlocks Quick Shimmer on the Control Panel
+}

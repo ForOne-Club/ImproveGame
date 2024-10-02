@@ -54,3 +54,8 @@ AmmoChain: {
 	DisplayName: Ammo Chain
 	Description: Let weapons pick ammo in a specific sequence
 }
+
+QuickShimmer: {
+	DisplayName: Quick Shimmer
+	Description: Shimmer in Inventory, Guys!
+}

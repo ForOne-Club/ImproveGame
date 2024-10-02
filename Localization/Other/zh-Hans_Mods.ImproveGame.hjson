@@ -6,7 +6,7 @@ FolderNameEmpty: 文件夹名不能为空
 Tiles: {
 	// Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
 	// ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
-	// BaitSupplier.MapEntry: Bait Supplier
+	// BaitSupplier.MapEntry: Bait Chamber
 }
 
 MoonPhases: {
@@ -385,6 +385,8 @@ Keybinds: {
 			要使用快捷功能，您必须绑定该快捷键
 			'''
 	}
+
+	QuickShimmerGUI.DisplayName: 快速微光
 }
 
 Projectiles: {

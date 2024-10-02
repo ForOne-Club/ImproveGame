@@ -54,3 +54,8 @@ AmmoChain: {
 	DisplayName: 弹药链
 	Description: 让武器以规定顺序射出特定子弹
 }
+
+QuickShimmer: {
+	DisplayName: 快速微光
+	Description: 包内微光，小子！
+}

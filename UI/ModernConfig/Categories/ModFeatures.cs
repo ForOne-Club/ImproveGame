@@ -17,6 +17,7 @@ public sealed class ModFeatures : Category
         panel.AddToggle(uiConfig, nameof(uiConfig.RecipeSearch));
         panel.AddToggle(Config, nameof(Config.WorldFeaturePanel));
         panel.AddToggle(Config, nameof(Config.WeatherControl));
+        panel.AddToggle(Config, nameof(Config.QuickShimmer));
         panel.AddToggle(Config, nameof(Config.MinimapMark));
         panel.AddToggle(Config, nameof(Config.SuperVault));
         panel.AddToggle(Config, nameof(Config.ImprovePrefix));

@@ -377,6 +377,18 @@ OpenBag: {
 	}
 }
 
+QuickShimmer: {
+	Title: 快速微光
+	TipText: 转换好的物品将暂存在此处
+	Open: 全部转换
+	Stop: 停止
+	EmptyText: 微光嬗变
+	NotFullyDisplayed: 此外，还有{0}个物品被隐藏
+	AlreadyUnlocked: 该世界已经解锁了快速微光
+	Unlocked: 快速微光已解锁！请在总控页面打开
+	Locked: 使用 [i:ImproveGame/ShellShipInBottle_Shimmered] 以解锁快速微光
+}
+
 Autofisher: {
 	Accessory: 钓鱼饰品
 	FishingPole: 钓竿

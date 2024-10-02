@@ -8,6 +8,7 @@ using ImproveGame.UI.AutoTrash;
 using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UI.OpenBag;
+using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UIFramework;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
@@ -243,6 +244,8 @@ public class ImprovePlayer : ModPlayer
             PressGrabBagKeybind();
         if (KeybindSystem.OpenBagKeybind.JustPressed)
             PressOpenBagKeybind();
+        if (KeybindSystem.QuickShimmerKeybind.JustPressed)
+            PressQuickShimmerKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
             PressHotbarSwitchKeybind();
         if (KeybindSystem.AutoTrashKeybind.JustPressed)
@@ -275,6 +278,17 @@ public class ImprovePlayer : ModPlayer
     private static void PressOpenBagKeybind()
     {
         var ui = OpenBagGUI.Instance;
+        if (ui is null) return;
+
+        if (ui.Enabled && ui.StartTimer.AnyOpen)
+            ui.Close();
+        else
+            ui.Open();
+    }
+
+    private static void PressQuickShimmerKeybind()
+    {
+        var ui = QuickShimmerGUI.Instance;
         if (ui is null) return;
 
         if (ui.Enabled && ui.StartTimer.AnyOpen)
