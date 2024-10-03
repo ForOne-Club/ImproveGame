@@ -20,6 +20,11 @@ MasterControl: {
 	Unavailable: 不可用功能
 	Version: 版本号: {0}
 	Changelog: 点我查看更新内容
+	PinIntro:
+		'''
+		固定总控
+		固定后，面板开关方式将变为按下总控快捷键
+		'''
 	PopupTitle: 未绑定快捷键
 	PopupText: 您尚未绑定更好的体验总控面板快捷键，请绑定快捷键以使用快捷功能。 绑定按键后此消息不再弹出。
 	PopupPanelWidth: "280"

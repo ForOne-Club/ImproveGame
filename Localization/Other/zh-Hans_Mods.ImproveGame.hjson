@@ -396,8 +396,6 @@ Keybinds: {
 			要使用快捷功能，您必须绑定该快捷键
 			'''
 	}
-
-	QuickShimmerGUI.DisplayName: 快速微光
 }
 
 Projectiles: {

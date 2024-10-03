@@ -7,6 +7,7 @@ using ImproveGame.UI;
 using ImproveGame.UI.AutoTrash;
 using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemContainer;
+using ImproveGame.UI.MasterControl;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UIFramework;
@@ -244,12 +245,12 @@ public class ImprovePlayer : ModPlayer
             PressGrabBagKeybind();
         if (KeybindSystem.OpenBagKeybind.JustPressed)
             PressOpenBagKeybind();
-        if (KeybindSystem.QuickShimmerKeybind.JustPressed)
-            PressQuickShimmerKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
             PressHotbarSwitchKeybind();
         if (KeybindSystem.AutoTrashKeybind.JustPressed)
             PressAutoTrashKeybind();
+        if (KeybindSystem.MasterControlKeybind.JustPressed)
+            PressMasterControlKeybind();
 
         // 下面是操作类快捷键
         if (Player.DeadOrGhost) return;
@@ -278,17 +279,6 @@ public class ImprovePlayer : ModPlayer
     private static void PressOpenBagKeybind()
     {
         var ui = OpenBagGUI.Instance;
-        if (ui is null) return;
-
-        if (ui.Enabled && ui.StartTimer.AnyOpen)
-            ui.Close();
-        else
-            ui.Open();
-    }
-
-    private static void PressQuickShimmerKeybind()
-    {
-        var ui = QuickShimmerGUI.Instance;
         if (ui is null) return;
 
         if (ui.Enabled && ui.StartTimer.AnyOpen)
@@ -338,6 +328,11 @@ public class ImprovePlayer : ModPlayer
     private void PressAutoTrashKeybind()
     {
         InventoryTrashGUI.Hidden = !InventoryTrashGUI.Hidden;
+    }
+
+    private void PressMasterControlKeybind()
+    {
+        MasterControlGUI.Opened = !MasterControlGUI.Opened;
     }
 
     private void PressDiscordKeybind()

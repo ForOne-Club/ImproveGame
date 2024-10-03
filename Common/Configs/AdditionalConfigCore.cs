@@ -3,6 +3,7 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.UI;
 using ImproveGame.UI.ItemSearcher;
+using ImproveGame.UI.MasterControl;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
 using ImproveGame.UI.WorldFeature;
@@ -69,6 +70,7 @@ namespace ImproveGame.Common.Configs
         public Vector2 ItemSearcherPosition;
         public Vector2 OpenBagPosition;
         public Vector2 PlayerInfoTogglePosition;
+        public bool MasterControlPinned;
 
         /// <summary>
         /// (根据模组内容)获取 Config
@@ -133,6 +135,8 @@ namespace ImproveGame.Common.Configs
             PlayerInfoTogglePosition = PlayerStatsGUI.Instance?.ControllerSwitch?.GetDimensions().Position() ??
                                        UIPlayer.PlayerInfoToggleDefPosition;
             UIPlayer.PlayerInfoTogglePosition = PlayerInfoTogglePosition; // 在这里也保存一下
+
+            MasterControlPinned = MasterControlGUI.Pinned;
         }
 
         /// <summary>
@@ -182,6 +186,8 @@ namespace ImproveGame.Common.Configs
             UIPlayer.PlayerInfoTogglePosition = PlayerInfoTogglePosition == Vector2.Zero
                 ? UIPlayer.PlayerInfoToggleDefPosition
                 : PlayerInfoTogglePosition;
+            
+            MasterControlGUI.Pinned = MasterControlPinned;
         }
 
         public static void Load()

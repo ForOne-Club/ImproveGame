@@ -13,23 +13,39 @@ namespace ImproveGame.UI.MasterControl;
 public class MasterControlGUI : BaseBody
 {
     public readonly AnimationTimer OpacityTimer = new(2.5f);
+
     public override bool Enabled
     {
-        get => KeybindSystem.MasterControlKeybind.Current || OpacityTimer.AnyOpen || OpacityTimer.Closing;
-        set { }
+        get => Visible || OpacityTimer.AnyOpen || OpacityTimer.Closing;
+        set => Opened = value;
     }
+
     public override bool CanSetFocusTarget(UIElement target) => Window.IsMouseHovering;
     public override bool IsNotSelectable => OpacityTimer.AnyClose;
+
+    /// <summary>
+    /// 固定面板，开启关闭改为按下快捷键而不是按住
+    /// </summary>
+    public static bool Pinned;
+
+    /// <summary>
+    /// 固定面板后，使用Opened来控制面板的开启关闭
+    /// </summary>
+    public static bool Opened;
+
+    public bool Visible => (!Pinned && KeybindSystem.MasterControlKeybind.Current) || (Pinned && Opened);
 
     public SUIPanel Window { get; private set; }
     public SUIScrollView2 AvailableFunctions { get; private set; }
     public SUIScrollView2 UnavailableFunctions { get; private set; }
 
     #region HeadBar and TailBar
+
     /// <summary>
     /// 面板头部
     /// </summary>
     public View HeadBar { get; private set; }
+
     /// <summary>
     /// 标题
     /// </summary>
@@ -39,19 +55,23 @@ public class MasterControlGUI : BaseBody
     /// 面板尾部
     /// </summary>
     public View TailBar { get; private set; }
+
     /// <summary>
     /// 版本号文本框
     /// </summary>
     public SUIText VersionText { get; private set; }
+
     /// <summary>
     /// 更新日志文本框
     /// </summary>
     public SUIText ChangelogText { get; private set; }
+
     #endregion
 
     public override void OnInitialize()
     {
         #region Window
+
         Window = new SUIPanel(Color.Transparent, Color.Transparent)
         {
             Padding = 0f,
@@ -63,9 +83,11 @@ public class MasterControlGUI : BaseBody
         };
         Window.SetRoundedRectProperties(UIStyle.PanelBg, 2f, UIStyle.PanelBorder, 12);
         Window.JoinParent(this);
+
         #endregion
 
         #region HeadBar
+
         HeadBar = ViewHelper.CreateHead(UIStyle.PanelBorder * 0.5f, 45f, 12f);
         HeadBar.JoinParent(Window);
 
@@ -75,10 +97,19 @@ public class MasterControlGUI : BaseBody
             TextBorder = 1.5f,
             TextOrKey = "Mods.ImproveGame.ModName",
             TextOffset = new Vector2(12f, 0f),
-            UseKey = true
+            UseKey = true,
+            HAlign = 0.5f
         };
-        Title.SetSizePercent(1f, 1f);
+        Title.SetSizePercent(0.8f, 1f);
         Title.JoinParent(HeadBar);
+
+        var pingButton = new MasterControlPing
+        {
+            HAlign = 1f,
+            VAlign = 0.5f
+        };
+        pingButton.JoinParent(HeadBar);
+
         #endregion
 
         var availableText = new SUIText
@@ -128,6 +159,7 @@ public class MasterControlGUI : BaseBody
         ReloadUnavailableFunctionsElement();
 
         #region TailBar
+
         TailBar = ViewHelper.CreateTail(Color.Black * 0.3f, 35f, 12f);
         TailBar.JoinParent(Window);
 
@@ -161,6 +193,7 @@ public class MasterControlGUI : BaseBody
         ChangelogText.Width.Pixels = ChangelogText.TextSize.X * ChangelogText.TextScale;
         ChangelogText.Height.Percent = 1f;
         ChangelogText.JoinParent(TailBar);
+
         #endregion
     }
 
@@ -218,8 +251,10 @@ public class MasterControlGUI : BaseBody
     {
         base.CheckWhetherRecalculate(out recalculate);
 
-        if (AvailableFunctions.ListView.Children.Count() != MasterControlManager.Instance.AvailableOrderedMCFunctions.Count &&
-            UnavailableFunctions.ListView.Children.Count() != MasterControlManager.Instance.UnavailableOrderedMCFunctions.Count)
+        if (AvailableFunctions.ListView.Children.Count() !=
+            MasterControlManager.Instance.AvailableOrderedMCFunctions.Count &&
+            UnavailableFunctions.ListView.Children.Count() !=
+            MasterControlManager.Instance.UnavailableOrderedMCFunctions.Count)
         {
             ReloadAvailableFunctionsElement();
             ReloadUnavailableFunctionsElement();
@@ -239,7 +274,7 @@ public class MasterControlGUI : BaseBody
         if (Window.IsMouseHovering)
             PlayerInput.LockVanillaMouseScroll($"{ImproveGame.Instance.Name}: Control Center GUI");
 
-        if (KeybindSystem.MasterControlKeybind.Current)
+        if (Visible)
         {
             if (!OpacityTimer.AnyOpen)
                 OpacityTimer.Open();
@@ -252,10 +287,12 @@ public class MasterControlGUI : BaseBody
     }
 
     #region Animation 开关动画
+
     public override bool RenderTarget2DDraw => OpacityTimer.State != AnimationState.Opened;
     public override float RenderTarget2DOpacity => OpacityTimer.Schedule;
     public override Vector2 RenderTarget2DPosition => Window.GetDimensionsCenter();
     public override Vector2 RenderTarget2DOrigin => Window.GetDimensionsCenter();
     public override Vector2 RenderTarget2DScale => new Vector2(0.95f + OpacityTimer * 0.05f);
+
     #endregion
 }

@@ -8,7 +8,7 @@ RecipeSearchUI.Tips:
 
 LiquidWandUI: {
 	Name: Liquid Control
-	Absorb: 吸取
+	Absorb: Absorb
 	Water: Water
 	Lava: Lava
 	Honey: Honey
@@ -20,6 +20,11 @@ MasterControl: {
 	Unavailable: Unavailable
 	Version: Version {0}
 	Changelog: Click to see what's new
+	PinIntro:
+		'''
+		Pin Master Control
+		Pressing the Master Control keybind will toggle the panel if pinned
+		'''
 	PopupTitle: Hotkey Missing
 	PopupText: You have not assign a hotkey to Quality of Terraria's Control Panel. Please assign it a hotkey to use the mod's shortcuts. This message will disappear once you have done so.
 	PopupPanelWidth: "290"
