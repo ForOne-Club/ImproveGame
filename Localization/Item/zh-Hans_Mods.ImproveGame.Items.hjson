@@ -371,7 +371,7 @@ ActuationRodMkII: {
 
 ShellShipInBottle: {
 	DisplayName: 瓶中贝壳船
-	Tooltip: 把它丢尽微光湖看看会发生什么！
+	Tooltip: 把它丢进微光湖看看会发生什么！
 }
 
 ShellShipInBottle_Shimmered: {

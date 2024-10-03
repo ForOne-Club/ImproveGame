@@ -11,11 +11,11 @@ namespace ImproveGame.Common.Utils
         {
         }
 
-        public static List<Item> GetShimmerResult(Item input, out int stackRequired)
+        public static List<Item> GetShimmerResult(Item input, out int stackRequired, out int decraftingRecipeIndex)
         {
             stackRequired = 1;
             int shimmerEquivalentType = input.GetShimmerEquivalentType();
-            int decraftingRecipeIndex = ShimmerTransforms.GetDecraftingRecipeIndex(shimmerEquivalentType);
+            decraftingRecipeIndex = ShimmerTransforms.GetDecraftingRecipeIndex(shimmerEquivalentType);
             switch (shimmerEquivalentType)
             {
                 case 1326 when NPC.downedMoonlord:

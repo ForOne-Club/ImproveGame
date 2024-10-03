@@ -198,7 +198,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         }
 
         // 微光
-        var items = CollectHelper.GetShimmerResult(item, out int stackRequired);
+        var items = CollectHelper.GetShimmerResult(item, out int stackRequired, out _);
         if (items is null) return;
 
         var text = new StringBuilder();

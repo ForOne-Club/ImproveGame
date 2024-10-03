@@ -389,15 +389,16 @@ OpenBag: {
 }
 
 QuickShimmer: {
-	Title: Qucik Shimmer
+	Title: Quick Shimmer
 	TipText: Items transmuted are staged here
 	Open: Transmute All
 	Stop: Stop
 	EmptyText: Shimmer Transmuting
 	NotFullyDisplayed: Besides, {0} items are hidden
-	AlreadyUnlocked: Qucik Shimmer is already available in this world
-	Unlocked: Qucik Shimmer is unlocked! Open it via the Control Panel
-	Locked: Use [i:ImproveGame/WeatherBook] to unlock Qucik Shimmer
+	CoinLuck: Shimmered into {0} 'coin luck'
+	AlreadyUnlocked: Quick Shimmer is already available in this world
+	Unlocked: Quick Shimmer is unlocked! Open it via the Control Panel
+	Locked: Use [i:ImproveGame/ShellShipInBottle_Shimmered] to unlock Quick Shimmer
 }
 
 Autofisher: {

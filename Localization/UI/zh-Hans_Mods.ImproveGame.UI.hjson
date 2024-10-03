@@ -393,6 +393,7 @@ QuickShimmer: {
 	Stop: 停止
 	EmptyText: 微光嬗变
 	NotFullyDisplayed: 此外，还有{0}个物品被隐藏
+	CoinLuck: 已转换为{0}点钱币幸运
 	AlreadyUnlocked: 该世界已经解锁了快速微光
 	Unlocked: 快速微光已解锁！请在总控页面打开
 	Locked: 使用 [i:ImproveGame/ShellShipInBottle_Shimmered] 以解锁快速微光

@@ -16,8 +16,10 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Achievements;
 using Terraria.GameInput;
+using Terraria.ID;
 
 namespace ImproveGame.UI.QuickShimmer;
+
 [AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Quick Shimmer GUI")]
 public class QuickShimmerGUI : BaseBody
 {
@@ -178,10 +180,10 @@ public class QuickShimmerGUI : BaseBody
         bagPanel.JoinParent(MainPanel);
 
         var itemSlot = CreateItemSlot(20f, 6f, onItemChanged: (item, _) =>
-        {
-            if (Main.LocalPlayer is not null && Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
-                keeper.targetItem = item;
-        },
+            {
+                if (Main.LocalPlayer is not null && Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
+                    keeper.targetItem = item;
+            },
             parent: bagPanel,
             iconTextureName: "Bag",
             emptyText: () => GetText("UI.QuickShimmer.EmptyText"));
@@ -207,11 +209,33 @@ public class QuickShimmerGUI : BaseBody
             if (Main.LocalPlayer is null || !Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
                 return;
 
-            CoroutineSystem.QuickShimmerRunner.Run(QuickShimmerRunner(keeper));
+            // 钱币幸运直接换完
+            var item = keeper.targetItem;
+            int coinValue = ItemID.Sets.CoinLuckValue[item.type];
+            if (coinValue > 0)
+            {
+                SoundEngine.PlaySound(SoundID.Item176);
+                float coinLuckOld = Main.LocalPlayer.coinLuck;
+                Main.LocalPlayer.AddCoinLuck(Main.LocalPlayer.Center, coinValue * item.stack);
+                float coinLuckGain = Main.LocalPlayer.coinLuck - coinLuckOld;
+                AddNotification(GetText("UI.QuickShimmer.CoinLuck", coinLuckGain), Color.Pink, item.type);
+                item.TurnToAir();
+                return;
+            }
+
+            // 否则进入正常转化
+            var items = CollectHelper.GetShimmerResult(item, out int stackRequired, out int decraftingRecipeIndex);
+            if (items is null)
+                return;
+
+            CoroutineSystem.QuickShimmerRunner.Run(QuickShimmerRunner(keeper, items, stackRequired,
+                decraftingRecipeIndex));
         };
         openButton.OnUpdate += _ =>
         {
-            openButton.Text = GetText(CoroutineSystem.QuickShimmerRunner.Count > 0 ? "UI.QuickShimmer.Stop" : "UI.QuickShimmer.Open");
+            openButton.Text = GetText(CoroutineSystem.QuickShimmerRunner.Count > 0
+                ? "UI.QuickShimmer.Stop"
+                : "UI.QuickShimmer.Open");
         };
         openButton.JoinParent(bagPanel);
 
@@ -235,16 +259,19 @@ public class QuickShimmerGUI : BaseBody
         };
         depositButton.JoinParent(bagPanel);
     }
+
     internal class EntitySource_Shimmer_QOT : IEntitySource
     {
         public string? Context { get; }
         public int Type { get; }
+
         public EntitySource_Shimmer_QOT(int type)
         {
             Type = type;
             Context = "context";
         }
     }
+
     private void GetShimmeredQOT(Item item, int consumeStep)
     {
         //SoundEngine.PlaySound(SoundID.Item176, Main.LocalPlayer.Center);
@@ -256,7 +283,8 @@ public class QuickShimmerGUI : BaseBody
         {
             var value = consumeStep * ItemID.Sets.CoinLuckValue[shimmerEquivalentType];
             Main.LocalPlayer.AddCoinLuck(Main.LocalPlayer.Center, consumeStep);
-            NetMessage.SendData(146, -1, -1, null, 1, (int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y, consumeStep);
+            NetMessage.SendData(146, -1, -1, null, 1, (int)Main.LocalPlayer.Center.X, (int)Main.LocalPlayer.Center.Y,
+                consumeStep);
             item.stack -= consumeStep;
             if (item.stack <= 0)
                 item.TurnToAir();
@@ -373,13 +401,17 @@ public class QuickShimmerGUI : BaseBody
                 num11--;
                 consumeStep--;
                 int num12 = -1;
-                num12 = ((NPCID.Sets.ShimmerTransformToNPC[item.makeNPC] < 0) ? NPC.ReleaseNPC((int)plr.Center.X, (int)plr.Bottom.Y, item.makeNPC, item.placeStyle, Main.myPlayer) : NPC.ReleaseNPC((int)plr.Center.X, (int)plr.Bottom.Y, NPCID.Sets.ShimmerTransformToNPC[item.makeNPC], 0, Main.myPlayer));
+                num12 = ((NPCID.Sets.ShimmerTransformToNPC[item.makeNPC] < 0)
+                    ? NPC.ReleaseNPC((int)plr.Center.X, (int)plr.Bottom.Y, item.makeNPC, item.placeStyle, Main.myPlayer)
+                    : NPC.ReleaseNPC((int)plr.Center.X, (int)plr.Bottom.Y,
+                        NPCID.Sets.ShimmerTransformToNPC[item.makeNPC], 0, Main.myPlayer));
                 if (num12 >= 0)
                 {
                     Main.npc[num12].shimmerTransparency = 1f;
                     NetMessage.SendData(146, -1, -1, null, 2, num12);
                 }
             }
+
             cache = cache - consumeStep;
             item.stack -= cache;
             if (item.stack <= 0)
@@ -387,7 +419,6 @@ public class QuickShimmerGUI : BaseBody
         }
         else if (decraftingRecipeIndex >= 0)
         {
-
             int num13 = Math.Min(item.FindDecraftAmount(), consumeStep);
             Recipe recipe = Main.recipe[decraftingRecipeIndex];
             int num14 = 0;
@@ -420,7 +451,8 @@ public class QuickShimmerGUI : BaseBody
                         num18 = 9999;
 
                     num16 -= num18;
-                    int num19 = Item.NewItem(source, (int)plr.position.X, (int)plr.position.Y, plr.width, plr.height, item2.type, num18);
+                    int num19 = Item.NewItem(source, (int)plr.position.X, (int)plr.position.Y, plr.width, plr.height,
+                        item2.type, num18);
                     Item _item = Main.item[num19];
                     _item.stack = num18;
                     _item.playerIndexTheItemIsReservedFor = Main.myPlayer;
@@ -435,6 +467,7 @@ public class QuickShimmerGUI : BaseBody
                 item.type = 0;
             }
         }
+
         AchievementsHelper.NotifyProgressionEvent(27);
         if (Main.netMode == 0)
         {
@@ -445,58 +478,89 @@ public class QuickShimmerGUI : BaseBody
             NetMessage.SendData(146, -1, -1, null, 0, (int)plr.Center.X, (int)plr.Center.Y);
             NetMessage.SendData(145, -1, -1, null, item.whoAmI, 1f);
         }
+
         if (item.stack == 0)
         {
             item.makeNPC = -1;
             item.active = false;
         }
     }
+
     /// <summary>
     /// 协程开袋，在袋子很多的同时不卡，也有一个很好的动画效果
     /// </summary>
-    private IEnumerator QuickShimmerRunner(ShimmerLootKeeper keeper)
+    private IEnumerator QuickShimmerRunner(ShimmerLootKeeper keeper, List<Item> items, int stackRequired,
+        int decraftingRecipeIndex)
     {
-        while (keeper is not null && !keeper.targetItem.IsAir && keeper.targetItem.CanShimmer())
+        if (keeper is null || keeper.targetItem.IsAir)
+            yield break;
+
+        var item = keeper.targetItem;
+        // 可以转化的次数
+        int decraftAmount = item.stack / stackRequired;
+        // 计算步长，一帧进行多少次转化
+        int step = 1;
+        if (decraftAmount > 100)
         {
-
-            var item = keeper.targetItem;
-
-            ShimmerLootListener._listening = item.type;
-
-            //var itemT = item.Clone();
-            //itemT.Center = Main.LocalPlayer.Center;
-            //itemT.GetShimmered();
-            int step = 1;
-            if (item.stack > 100)
+            int counter = decraftAmount;
+            while (counter > 0)
             {
-                int counter = item.stack;
-                while (counter > 0)
-                {
-                    counter /= 10;
-                    step *= 10;
-                }
-                step /= 100;
+                counter /= 10;
+                step *= 10;
             }
 
-            GetShimmeredQOT(item, step);
-            //if (itemT.type != ItemID.None)
-            //{
-            //    itemT.shimmered = false;
-            //    itemT.shimmerTime = 0;
-            //    Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_DropAsItem(), itemT, step);
+            step /= 100;
+        }
 
-            //}
+        // 执行Decraft的次数
+        int decraftExecuted = 0;
+        while (!item.IsAir && item.CanShimmer())
+        {
+            // 原版写法，这里仅仅是做了点小改动
+            foreach (var result in items)
+            {
+                if (result.type <= ItemID.None)
+                    break;
 
-            //if (ItemLoader.ConsumeItem(item, Main.LocalPlayer))
-            //    item.stack -= step;
+                var recipe = decraftingRecipeIndex >= 0 ? Main.recipe[decraftingRecipeIndex] : null;
 
-            //if (item.stack == 0)
-            //    item.SetDefaults();
+                int resultStack = result.stack;
+                if (recipe is {alchemy: true })
+                {
+                    for (int i = resultStack; i > 0; i--)
+                    {
+                        if (Main.rand.NextBool(3))
+                            resultStack--;
+                    }
+                }
 
-            ShimmerLootListener._listening = -1;
+                while (resultStack > 0)
+                {
+                    int outputStack = resultStack;
+                    if (outputStack > 9999)
+                        outputStack = 9999;
 
+                    resultStack -= outputStack;
+                    keeper.AddToLoots(new Item(result.type, outputStack));
+                }
+            }
+
+            item.stack -= stackRequired;
+            if (item.stack <= 0) // 原版写法，我也不知道为什么不TurnToAir
+            {
+                item.stack = 0;
+                item.type = ItemID.None;
+            }
+            
             RefreshGrid();
-            yield return 1;
+            decraftExecuted++;
+            if (decraftExecuted % step == 0)
+            {
+                var sound = SoundID.Item176;
+                sound.MaxInstances = 0; // 爽！！！！
+                SoundEngine.PlaySound(sound);
+                yield return 1;
+            }
         }
     }
 
