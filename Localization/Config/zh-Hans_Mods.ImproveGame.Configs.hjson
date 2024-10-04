@@ -595,6 +595,11 @@ ImproveConfigs: {
 			'''
 	}
 
+	DisableNonPlayerBombsExplosions: {
+		Label: "[centeritem:TNTBarrel] 禁止非玩家爆炸物破坏物块"
+		Tooltip: 禁止各种非玩家主观上想造成爆炸破坏物块的情况
+	}
+
 	WorldFeaturePanel: {
 		Label: "[centeritem:WorldGlobe] 世界特性调节面板"
 		Tooltip:
@@ -1078,6 +1083,21 @@ BombsNotDamageType: {
 	ItemAndRocket: {
 		Label: 爆炸物和火箭
 		Tooltip: 物品类爆炸物和火箭均无伤害
+	}
+}
+
+DisableNonPlayerBombsExplosionsType: {
+	// Tooltip: ""
+	Disabled.Label: 关闭
+
+	FTW: {
+		Label: FTW特供
+		Tooltip: 仅FTW里，由罐子、摇树、机械骷髅王发射的炸弹不破坏物块
+	}
+
+	FTWAndExplosives: {
+		Label: 全部涵盖
+		Tooltip: 炸药、FTW里，由罐子、摇树、机械骷髅王发射的炸弹均不破坏物块
 	}
 }
 

@@ -1,7 +1,27 @@
-﻿namespace ImproveGame.Common.GlobalProjectiles
+﻿using Terraria.DataStructures;
+
+namespace ImproveGame.Common.GlobalProjectiles
 {
     public class ImproveProjectile : GlobalProjectile
     {
+        public bool NonPlayer = false;
+        public override bool InstancePerEntity => true;
+        public override void OnSpawn(Projectile projectile, IEntitySource source)
+        {
+            // 用于判断该炸弹是不是由玩家发射的
+            if (projectile.type == ProjectileID.Bomb && source is not EntitySource_ItemUse_WithAmmo)
+                NonPlayer = true;
+        }
+        public override bool? CanCutTiles(Projectile projectile)
+        {
+            if (Config.DisableNonPlayerBombsExplosions != DisableNonPlayerBombsExplosionsType.Disabled && (projectile.type == ProjectileID.Bomb && NonPlayer || projectile.type == ProjectileID.BombSkeletronPrime))
+                return false;
+
+            if (Config.DisableNonPlayerBombsExplosions == DisableNonPlayerBombsExplosionsType.FTWAndExplosives && projectile.type == ProjectileID.Explosives)
+                return false;
+
+            return null;
+        }
         public override bool? CanDamage(Projectile projectile)
         {
             // 禁止爆炸物伤害（我是超激打表大师）

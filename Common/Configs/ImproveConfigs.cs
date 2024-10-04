@@ -309,6 +309,10 @@ public class ImproveConfigs : ModConfig
     [DrawTicks]
     public BombsNotDamageType BombsNotDamage;
 
+    [DefaultValue(DisableNonPlayerBombsExplosionsType.Disabled)]
+    [DrawTicks]
+    public DisableNonPlayerBombsExplosionsType DisableNonPlayerBombsExplosions;
+
     [DefaultValue(true)]
     public bool AmmoChain;
 

@@ -62,6 +62,7 @@ public class FukMeCalamityElement : PresetElement
         config.QuestFishStack = true;
         config.BombsNotDamage = BombsNotDamageType.Item;
         config.NoConditionTP = true;
+        config.DisableNonPlayerBombsExplosions = DisableNonPlayerBombsExplosionsType.FTW;
     }
 }
 
@@ -124,6 +125,7 @@ public class ILoveBalanceElement : PresetElement
         config.QuestFishStack = true;
         config.BombsNotDamage = BombsNotDamageType.Item;
         config.NoConditionTP = false;
+        config.DisableNonPlayerBombsExplosions = DisableNonPlayerBombsExplosionsType.FTW;
     }
 }
 
@@ -196,6 +198,7 @@ public class AllOffElement : PresetElement
         config.TeamAutoJoin = false;
         config.BombsNotDamage = BombsNotDamageType.Disabled;
         config.NoConditionTP = false;
+        config.DisableNonPlayerBombsExplosions = DisableNonPlayerBombsExplosionsType.Disabled;
     }
 }
 

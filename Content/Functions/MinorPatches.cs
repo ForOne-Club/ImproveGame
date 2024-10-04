@@ -1,8 +1,10 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.GlobalProjectiles;
 using ImproveGame.Content.Items;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
@@ -371,6 +373,19 @@ namespace ImproveGame.Content.Functions
             On_Player.HasUnityPotion += (orig, self) => Config.NoConditionTP || orig(self);
             // 无条件队内传送-虫洞药水无消耗
             On_Player.TakeUnityPotion += NotTakeUnityPotion;
+            // 禁止非玩家爆炸物破坏物块
+            On_Projectile.ExplodeTiles += NoExplodeTiles;
+        }
+
+        private void NoExplodeTiles(On_Projectile.orig_ExplodeTiles orig, Projectile self, Vector2 compareSpot, int radius, int minI, int maxI, int minJ, int maxJ, bool wallSplode)
+        {
+            if (Config.DisableNonPlayerBombsExplosions != DisableNonPlayerBombsExplosionsType.Disabled && (self.type == ProjectileID.Bomb && self.GetGlobalProjectile<ImproveProjectile>().NonPlayer || self.type == ProjectileID.BombSkeletronPrime))
+                return;
+
+            if (Config.DisableNonPlayerBombsExplosions == DisableNonPlayerBombsExplosionsType.FTWAndExplosives && self.type == ProjectileID.Explosives)
+                return;
+
+            orig(self, compareSpot, radius, minI, maxI, minJ, maxJ, wallSplode);
         }
 
         private bool BetterCheckSpawn(On_Player.orig_CheckSpawn orig, int x, int y)
