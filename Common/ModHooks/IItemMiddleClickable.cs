@@ -39,10 +39,10 @@ public interface IItemMiddleClickable
         MouseState mouseState = Mouse.GetState();
         if (_oldMiddlePressed)
         {
-            _oldMiddlePressed = mouseState.MiddleButton is ButtonState.Pressed;
+            _oldMiddlePressed = Main.mouseMiddle;
         }
 
-        if (mouseState.MiddleButton is ButtonState.Pressed && !_oldMiddlePressed)
+        if (Main.mouseMiddle && !_oldMiddlePressed)
         {
             _oldMiddlePressed = true;
             // 防止玩家把物品买出来，中键使用，然后原价退还。这里从shopSellbackHelper中移除这个物品

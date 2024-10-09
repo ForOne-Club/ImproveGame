@@ -155,13 +155,12 @@ namespace ImproveGame.Common.GlobalItems
                 var buffType = buffTypes[0];
                 if (buffType is -1 && item.type != ItemID.GardenGnome) return;
 
-                MouseState mouseState = Mouse.GetState();
                 if (_oldMiddlePressed)
                 {
-                    _oldMiddlePressed = mouseState.MiddleButton == ButtonState.Pressed;
+                    _oldMiddlePressed = Main.mouseMiddle;
                 }
 
-                if (mouseState.MiddleButton == ButtonState.Pressed && !_oldMiddlePressed)
+                if (Main.mouseMiddle && !_oldMiddlePressed)
                 {
                     _oldMiddlePressed = true;
                     if (BuffTrackerGUI.Visible)
