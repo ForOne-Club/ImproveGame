@@ -65,15 +65,15 @@ Tips: {
 	BuffTrackerOn: <left>以打开增益追踪器
 	BuffTrackerOff: <left>以关闭增益追踪器
 	HideMyBuffs: 如果你想隐藏无限增益，请到“个人配置”处打开相应选项
-	BankEnableOn: 中键单击以打开个人储存库
-	BankEnableOff: 中键单击以关闭个人储存库
-	MouseMiddleOpen: 中键单击以打开{ItemName}
-	MouseMiddleClose: 中键单击以关闭{ItemName}
-	MouseMiddleUse: 中键单击以使用{ItemName}
-	CreateWandOn: 中键单击以开启房屋材料面板
-	CreateWandOff: 中键单击以关闭房屋材料面板
-	LiquidWandOn: 中键单击以开启液体控制面板
-	LiquidWandOff: 中键单击以关闭液体控制面板
+	BankEnableOn: 按下 {KeybindName} 以打开个人储存库
+	BankEnableOff: 按下 {KeybindName} 以关闭个人储存库
+	MouseMiddleOpen: 按下 {KeybindName} 以打开{ItemName}
+	MouseMiddleClose: 按下 {KeybindName} 以关闭{ItemName}
+	MouseMiddleUse: 按下 {KeybindName} 以使用{ItemName}
+	CreateWandOn: 按下 {KeybindName} 以开启房屋材料面板
+	CreateWandOff: 按下 {KeybindName} 以关闭房屋材料面板
+	LiquidWandOn: 按下 {KeybindName} 以开启液体控制面板
+	LiquidWandOff: 按下 {KeybindName} 以关闭液体控制面板
 	PotionBagCurrent: 该药水袋内目前拥有下列药水 ({StoredCount}/200):
 	PotionBagCurrentFull: 该药水袋内目前拥有下列药水 (已满!):
 	PotionBagNone: 该药水袋未装有药水 (0/200)
@@ -115,13 +115,13 @@ Tips: {
 			'''
 			物品增益 [c/88CCEE:[{BuffName}][c/88CCEE:]] 已自动应用
 			如果你想要单独禁用该物品的增益
-			请中键点击该物品或左键点击增益图标
+			请对着该物品按下 {KeybindName} 或左键点击增益图标
 			开启增益追踪器，以控制增益是否启用
 			'''
 		Disabled:
 			'''
 			物品增益 [c/88CCEE:[{BuffName}][c/88CCEE:]] 已因设置被禁用
-			中键点击该物品或左键点击增益图标
+			对着该物品按下 {KeybindName} 或左键点击增益图标
 			开启增益追踪器，以控制增益是否启用
 			'''
 		Hided:
@@ -395,6 +395,11 @@ Keybinds: {
 			按住（按住！）此快捷键以打开更好的体验快捷功能
 			要使用快捷功能，您必须绑定该快捷键
 			'''
+	}
+
+	ItemInteract: {
+		DisplayName: 随身物品特殊交互快捷键
+		Tip: 用于部分物品的快捷交互，如激活坐骑、打开猪猪存钱罐等
 	}
 }
 

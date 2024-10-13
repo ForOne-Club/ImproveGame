@@ -65,15 +65,15 @@ Tips: {
 	BuffTrackerOn: <left> to open buff tracker
 	BuffTrackerOff: <left> to close buff tracker
 	HideMyBuffs: To hide infinite buffs, toggle it in 'Personal Config'
-	BankEnableOn: Middle click to open personal inventory
-	BankEnableOff: Middle click to close personal inventory
-	MouseMiddleOpen: Middle click to open {ItemName}
-	MouseMiddleClose: Middle click to close {ItemName}
-	MouseMiddleUse: Middle click to use {ItemName}
-	CreateWandOn: Middle click to open House Material Panel
-	CreateWandOff: Middle click to close House Material Panel
-	LiquidWandOn: Middle click to open Liquid Control Panel
-	LiquidWandOff: Middle click to close Liquid Control Panel
+	BankEnableOn: Press {KeybindName} to open personal inventory
+	BankEnableOff: Press {KeybindName} to close personal inventory
+	MouseMiddleOpen: Press {KeybindName} to open {ItemName}
+	MouseMiddleClose: Press {KeybindName} to close {ItemName}
+	MouseMiddleUse: Press {KeybindName} to use {ItemName}
+	CreateWandOn: Press {KeybindName} to open House Material Panel
+	CreateWandOff: Press {KeybindName} to close House Material Panel
+	LiquidWandOn: Press {KeybindName} to open Liquid Control Panel
+	LiquidWandOff: Press {KeybindName} to close Liquid Control Panel
 	PotionBagCurrent: Contains the following potions ({StoredCount}/200):
 	PotionBagCurrentFull: Contains the following potions (Full!):
 	PotionBagNone: Empty (0/200)
@@ -117,7 +117,7 @@ Tips: {
 			'''
 			The buff [c/88CCEE:[{BuffName}][c/88CCEE:]] is already applied.
 			If you just want to disable buff of this item,
-			please middle click on this item or left click
+			请对着该物品按下 {KeybindName} 或左键点击增益图标
 			on the buff icon to open buff tracker,
 			to enable/disable that buff.
 			'''
@@ -125,7 +125,7 @@ Tips: {
 			'''
 			Item buff [c/88CCEE:[{BuffName}][c/88CCEE:]] has been disabled
 			due to configuration.
-			Middle click on this item or left click on the
+			对着该物品按下 {KeybindName} 或左键点击增益图标
 			buff icon to open buff tracker, to
 			enable/disable that buff.
 			'''
@@ -405,6 +405,11 @@ Keybinds: {
 			Access to Quality of Terraria shortcuts
 			You MUST assign a hotkey to use the shortcuts
 			'''
+	}
+
+	ItemInteract: {
+		DisplayName: 随身物品特殊交互快捷键
+		Tip: 用于部分物品的快捷交互，如激活坐骑、打开猪猪存钱罐等
 	}
 }
 

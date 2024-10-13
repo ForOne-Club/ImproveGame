@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using ImproveGame.Common.ModSystems;
+using Microsoft.Xna.Framework.Input;
 
 namespace ImproveGame.Common.ModHooks;
 
@@ -36,13 +37,12 @@ public interface IItemMiddleClickable
 
         _isHoveringInInventory = true;
 
-        MouseState mouseState = Mouse.GetState();
         if (_oldMiddlePressed)
         {
-            _oldMiddlePressed = Main.mouseMiddle;
+            _oldMiddlePressed = KeybindSystem.ItemInteractKeybind.JustPressed;
         }
 
-        if (Main.mouseMiddle && !_oldMiddlePressed)
+        if ((KeybindSystem.ItemInteractKeybind.JustPressed) && !_oldMiddlePressed)
         {
             _oldMiddlePressed = true;
             // 防止玩家把物品买出来，中键使用，然后原价退还。这里从shopSellbackHelper中移除这个物品

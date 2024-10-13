@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Common.Configs;
 using Terraria.GameContent.UI.States;
+using Terraria.GameInput;
 using Terraria.ModLoader.UI;
+using static Terraria.Localization.NetworkText;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -20,6 +22,7 @@ public class KeybindSystem : ModSystem
     public static ModKeybind AutoTrashKeybind { get; private set; }
     public static ModKeybind DiscordRodKeybind { get; private set; }
     public static ModKeybind HomeKeybind { get; private set; }
+    public static ModKeybind ItemInteractKeybind { get; private set; }
 
     private static readonly Dictionary<string, string> ZhTranslationKeybind = new()
     {
@@ -51,6 +54,14 @@ public class KeybindSystem : ModSystem
         HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "HotbarSwitch", "OemQuestion");
         DiscordRodKeybind = KeybindLoader.RegisterKeybind(Mod, "DiscordRodKeybind", "U");
         HomeKeybind = KeybindLoader.RegisterKeybind(Mod, "HomeKeybind", "Home");
+        ItemInteractKeybind = KeybindLoader.RegisterKeybind(Mod, "ItemInteract", "Mouse3");
+    }
+
+    public override void PostUpdateEverything()
+    {
+        // 如果玩家不设置此快捷键则强制设置为默认按键
+        if (ItemInteractKeybind.GetAssignedKeys().Count == 0)
+            PlayerInput.CurrentProfile.InputModes[InputMode.Keyboard].KeyStatus[ItemInteractKeybind.FullName] = [ItemInteractKeybind.DefaultBinding];
     }
 
     private void DrawHoverText(On_UIKeybindingListItem.orig_DrawSelf orig, UIKeybindingListItem self,
@@ -142,8 +153,15 @@ public class KeybindSystem : ModSystem
 
     public override void Unload()
     {
+        MasterControlKeybind = null;
         SuperVaultKeybind = null;
         BuffTrackerKeybind = null;
+        OpenBagKeybind = null;
         GrabBagKeybind = null;
+        HotbarSwitchKeybind = null;
+        AutoTrashKeybind = null;
+        DiscordRodKeybind = null;
+        HomeKeybind = null;
+        ItemInteractKeybind = null;
     }
 }

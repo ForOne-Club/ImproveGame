@@ -63,7 +63,8 @@ public class WarriorPreset : OfficialPreset
         modConfig.NoConditionTP = true;
         modConfig.WeatherControl = true;
         modConfig.WorldFeaturePanel = true;
-        
+        modConfig.DisableNonPlayerBombsExplosions = DisableNonPlayerBombsExplosionsType.FTW;
+
         uiConfig.ShowShimmerInfo = true;
         uiConfig.QoLAutoTrash = true;
         uiConfig.AutoSummon = true;

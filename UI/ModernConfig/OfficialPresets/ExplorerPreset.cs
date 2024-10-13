@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
+using tModPorter;
 
 namespace ImproveGame.UI.ModernConfig.OfficialPresets;
 
@@ -63,7 +64,8 @@ public class ExplorerPreset : OfficialPreset
         modConfig.NoConditionTP = false;
         modConfig.WeatherControl = false;
         modConfig.WorldFeaturePanel = false;
-        
+        modConfig.DisableNonPlayerBombsExplosions = DisableNonPlayerBombsExplosionsType.FTW;
+
         uiConfig.ShowShimmerInfo = true;
         uiConfig.QoLAutoTrash = true;
         uiConfig.AutoSummon = true;

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Core;
 using System.Collections.ObjectModel;
 
@@ -70,13 +71,14 @@ namespace ImproveGame.Common.GlobalItems
         {
             // 决定文本显示的是“开启”还是“关闭”
             var player = Main.LocalPlayer;
-            string tooltip = GetText("Tips.BankEnableOn");
+            TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
+            string tooltip = GetTextWith("Tips.BankEnableOn", new { KeybindName = keybind });
             if ((player.chest is -2 && Lookups.Bank2Items.Contains(item.type)) ||
                 (player.chest is -3 && Lookups.Bank3Items.Contains(item.type)) ||
                 (player.chest is -4 && Lookups.Bank4Items.Contains(item.type)) ||
                 (player.chest is -5 && Lookups.Bank5Items.Contains(item.type)))
             {
-                tooltip = GetText("Tips.BankEnableOff");
+                tooltip = GetTextWith("Tips.BankEnableOff", new { KeybindName = keybind });
             }
 
             tooltips.Add(new TooltipLine(Mod, "BankEnable", tooltip) {OverrideColor = Color.LightGreen});

@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.UI.ItemContainer;
+using ImproveGame.UI.ModernConfig.FakeCategories;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;
@@ -117,6 +119,12 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
     public override void ModifyTooltips(List<TooltipLine> tooltips)
     {
         ((IItemMiddleClickable)this).HandleTooltips(Item, tooltips);
+
+        // 显示当前绑定的特殊交互按键
+        TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
+        foreach (TooltipLine tooltip in tooltips)
+            if (tooltip.Text == "{TooltipByKeybind}")
+                tooltip.Text = GetTextWith($"Items.{Name}.TooltipByKeybind", new { KeybindName = keybind });
 
         if (ItemContainer is not null && ItemContainer.Count > 0)
         {

@@ -74,9 +74,12 @@ PotionBag: {
 		Stores you buff potions
 		[c/0099ff:<left>] while holding a potion to deposit
 		[c/0099ff:<right>] to open potion bag
-		[c/0099ff:Middle Click] to collect potions from portable storages
+		{TooltipByKeybind}
+		自动收纳即将进入背包的药水
+		仅背包中位列第一的药水袋可以自动收纳
 		Can store up to 200 stacks of potions
 		'''
+	TooltipByKeybind: Press [c/0099ff:{KeybindName}] to collect potions from portable storages
 }
 
 BannerChest: {
@@ -86,9 +89,12 @@ BannerChest: {
 		Stores your banners
 		[c/0099ff:<left>] while banner a potion to deposit
 		[c/0099ff:<right>] to open banner box
-		[c/0099ff:Middle Click] to collect banners from portable storages
+		{TooltipByKeybind}
+		自动收纳即将进入背包的旗帜
+		仅背包中位列第一的旗帜盒可以自动收纳
 		Can store up to 500 stacks of banners
 		'''
+	TooltipByKeybind: Press [c/0099ff:{KeybindName}] to collect banners from portable storages
 }
 
 Autofisher: {

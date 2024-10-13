@@ -257,9 +257,10 @@ namespace ImproveGame.Content.Items
         public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
         {
             // 决定文本显示的是“开启”还是“关闭”
-            string tooltip = GetText("Tips.LiquidWandOn");
+            TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
+            string tooltip = GetTextWith("Tips.LiquidWandOn", new { KeybindName = keybind });
             if (LiquidWandUI.Instance.Enabled)
-                tooltip = GetText("Tips.LiquidWandOff");
+                tooltip = GetTextWith("Tips.LiquidWandOff", new { KeybindName = keybind });
 
             tooltips.Add(new TooltipLine(Mod, "LiquidWand", tooltip) {OverrideColor = Color.LightGreen});
         }

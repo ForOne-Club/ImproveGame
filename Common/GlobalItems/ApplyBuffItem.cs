@@ -157,10 +157,10 @@ namespace ImproveGame.Common.GlobalItems
 
                 if (_oldMiddlePressed)
                 {
-                    _oldMiddlePressed = Main.mouseMiddle;
+                    _oldMiddlePressed = KeybindSystem.ItemInteractKeybind.JustPressed;
                 }
 
-                if (Main.mouseMiddle && !_oldMiddlePressed)
+                if (KeybindSystem.ItemInteractKeybind.JustPressed && !_oldMiddlePressed)
                 {
                     _oldMiddlePressed = true;
                     if (BuffTrackerGUI.Visible)
@@ -206,10 +206,12 @@ namespace ImproveGame.Common.GlobalItems
                 if (buffType is -1)
                     return base.PreDrawTooltip(item, lines, ref x, ref y);
 
+                TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
                 object arg = new
                 {
                     BuffName = Lang.GetBuffName(buffType),
-                    MaxSpawn = Config.SpawnRateMaxValue
+                    MaxSpawn = Config.SpawnRateMaxValue,
+                    KeybindName = keybind
                 };
                 if (ItemSlot.ShiftInUse)
                     TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines, arg), x, y);

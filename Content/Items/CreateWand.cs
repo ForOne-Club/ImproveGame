@@ -3,6 +3,7 @@ using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI;
+using ImproveGame.UI.ModernConfig.FakeCategories;
 using ImproveGame.UIFramework;
 using Terraria.ModLoader.IO;
 
@@ -486,7 +487,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
     {
         // 决定文本显示的是“开启”还是“关闭”
         string text = ArchitectureGUI.Visible ? "Off" : "On";
-        tooltips.Add(new TooltipLine(Mod, "CreateWand", GetText($"Tips.CreateWand{text}"))
+        TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
+        tooltips.Add(new TooltipLine(Mod, "CreateWand", GetTextWith($"Tips.CreateWand{text}", new { KeybindName = keybind }))
             {OverrideColor = Color.LightGreen});
     }
 

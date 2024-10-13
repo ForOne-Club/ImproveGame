@@ -73,7 +73,8 @@ public class VanillaPreset : OfficialPreset
         modConfig.NoConditionTP = false;
         modConfig.WeatherControl = false;
         modConfig.WorldFeaturePanel = false;
-        
+        modConfig.DisableNonPlayerBombsExplosions = DisableNonPlayerBombsExplosionsType.Disabled;
+
         uiConfig.ShowShimmerInfo = false;
         uiConfig.PlyInfo = UIConfigs.PAPDisplayMode.NotDisplayed;
         uiConfig.QoLAutoTrash = false;

@@ -164,7 +164,8 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
 
     public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
     {
-        string text = (GetTextWith("Tips.MouseMiddleUse", new { ItemName = item.Name }));
+        TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
+        string text = (GetTextWith("Tips.MouseMiddleUse", new { ItemName = item.Name, KeybindName = keybind }));
         tooltips.Add(new TooltipLine(Mod, "MountQuickUse", text) { OverrideColor = Color.LightGreen });
     }
 
