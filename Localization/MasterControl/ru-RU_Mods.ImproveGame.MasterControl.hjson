@@ -1,0 +1,61 @@
+// NotEnabled: You need to enable this in the mod's config
+
+SuperVault: {
+	// DisplayName: Big Backpack
+	// Description: A backpack with 100 item slots
+}
+
+PlayerStats: {
+	// DisplayName: Player Stats
+	// Description: View various statistics of a player
+}
+
+Spectating: {
+	// DisplayName: Spectating
+	// Description: Watch your teammates during boss fights
+}
+
+WeatherControl: {
+	// DisplayName: "{$Mods.ImproveGame.UI.WeatherGUI.Title}"
+	// Description: Alter time, moon phase, wind direction, and rain
+}
+
+ItemSearcher: {
+	// DisplayName: "{$Mods.ImproveGame.UI.ItemSearcher.Title}"
+	// Description: Find items in personal storages and nearby chests
+}
+
+BagOpener: {
+	// Description: Batch open loot bags
+	// DisplayName: "{$Mods.ImproveGame.UI.OpenBag.Title}"
+}
+
+WorldFeature: {
+	// Description: Alter world's holiday and secret seed features
+	// DisplayName: "{$Mods.ImproveGame.UI.WorldFeature.Title}"
+}
+
+PotionBag: {
+	// Description: The first Potion Bag in your inventory
+	// DisplayName: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}"
+}
+
+BannerChest: {
+	// Description: The first Banner Box in your inventory
+	// DisplayName: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
+}
+
+ModConfig: {
+	// DisplayName: Mod Config
+	// Description: Quick access to the Favorite Configs
+}
+
+AmmoChain: {
+	// DisplayName: Ammo Chain
+	// Description: Let weapons pick ammo in a specific sequence
+}
+
+QuickShimmer: {
+	// DisplayName: Quick Shimmer
+	// Description: Shimmer in Inventory, Guys!
+}

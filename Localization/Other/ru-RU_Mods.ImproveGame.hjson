@@ -1,0 +1,477 @@
+ModName: Quality of Terraria
+Search: Поиск...
+PathIllegal: Имя файла не должно содержать следующие символы: \, /, :, *, ?, ", <, > или |
+FolderNameEmpty: Имя папки не может быть пустым
+
+Tiles: {
+	// Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
+	// ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
+	// BaitSupplier.MapEntry: Bait Chamber
+	// FakeAltar.MapEntry: Fake Altar
+}
+
+MoonPhases: {
+	FullMoon: Полнолуние
+	WaningGibbous: Убывающая луна
+	ThirdQuarter: Последняя четверть
+	WaningCrescent: Старая луна
+	NewMoon: Новолуние
+	WaxingCrescent: Молодая луна
+	FirstQuarter: Первая четверть
+	WaxingGibbous: Прибывающая луна
+}
+
+// ItemDropRule.WandDrop: Won't drop if the player already has one in the inventory
+
+CombatText: {
+	Item: {
+		// CreateWand_NotEnough: Missing materials!
+		// SpaceWand_Cancel: Canceled!
+		// SpaceWand_Lack: Not enough platform!
+		// WallPlace_Limit: This area is too big!
+		// WallPlace_Consume: "Expected consumption: "
+		// WallPlace_Kill: Stopped placing!
+	}
+
+	// Projectile.PlaceWall_Lack: Stopped placing due to lack of walls
+	// Commonds.ResurrectionTimeShortened: "{Time}s reduced respawn time！"
+}
+
+AutoSummon: {
+	// Set: Auto re-summon item set to {0}
+	// Summoned: Summoned {0} times using {1}
+}
+
+QuickHome: {
+	// Teleported: Recalled using {0}
+	// NoItem: You don't have any recall items
+}
+
+Tips: {
+	// AmmoChainDisabled: Ammo Chain disabled
+	// AmmoChain: "[centeritem:ImproveGame/AmmoChainItem]Ammo Chain: "
+	// ShimmerInto: "Can be shimmered into "
+	// ShimmerIntoWithStack: "Every {0} can be shimmered into "
+	// ShimmerIntoWithCoinLuck: Can be shimmered into {0} 'coin luck'
+	// PrefixCount: "Reforge count: "
+	// AnglerQuest: Angler's quest refreshed
+	// FromMod: From mod {DisplayName}
+	// LootDisplay: Press {KeybindName} to see detailed item drop
+	// LootDisplayBindless: (You have not bound a hotkey for this function, please do so in Controls)
+	// Refreshing: Refreshing
+	// Refresh: Refresh Shop
+	// SummonSlot: Minion slot occupancy: [c/22CC22:{Current}/{Total}]
+	// SummonSlotFull: Minion slot occupancy: [c/CC2222:{Current}/{Total} (Full!)]
+	// BuffTrackerOn: <left> to open buff tracker
+	// BuffTrackerOff: <left> to close buff tracker
+	// HideMyBuffs: To hide infinite buffs, toggle it in 'Personal Config'
+	// BankEnableOn: Press {KeybindName} to open personal inventory
+	// BankEnableOff: Press {KeybindName} to close personal inventory
+	// MouseMiddleOpen: Press {KeybindName} to open {ItemName}
+	// MouseMiddleClose: Press {KeybindName} to close {ItemName}
+	// MouseMiddleUse: Press {KeybindName} to use {ItemName}
+	// CreateWandOn: Press {KeybindName} to open House Material Panel
+	// CreateWandOff: Press {KeybindName} to close House Material Panel
+	// LiquidWandOn: Press {KeybindName} to open Liquid Control Panel
+	// LiquidWandOff: Press {KeybindName} to close Liquid Control Panel
+	// PotionBagCurrent: Contains the following potions ({StoredCount}/200):
+	// PotionBagCurrentFull: Contains the following potions (Full!):
+	// PotionBagNone: Empty (0/200)
+	// PotionBagAvailable: (Active)
+	// PotionBagUnavailable: (Inactive)
+	// PotionBagDisabled: (Disabled)
+	// BannerChestCurrent: Stored banners ({StoredCount}/500):
+	// BannerChestCurrentFull: Stored banners (Full!):
+	// BannerChestNone: Empty (0/500)
+	// BannerChestUseless: Portable Banners is not on, banners inside will not function
+	// Tag.ShiftEnable: "[Hold [c/88CCEE:Shift] for more information]"
+
+	TagDetailed: {
+		// OwnedInfineBuff: "[Infinite buff is obtained {Count}/{Threshold}]"
+		// NotOwnedInfineBuff: "[Infinite buff is not obtained {Count}/{Threshold}]"
+		// RedPotion: "[Red Potion]"
+		// GardenGnome: "[Garden Gnome]"
+		// Enabled: "[Enabled]"
+		// Disabled: "[Disabled]"
+		// Hided: "[Buff icons hidden]"
+		// NonHided: "[Buff icons shown]"
+		// CombinedBuff: "[Has a buff combination available]"
+		// AutoCollect: "[Auto-deposit]"
+	}
+
+	TagDetailedTip: {
+		/* RedPotion:
+			'''
+			The Red Potion Extension is enabled, the following infinite buffs are granted:
+			{$BuffName.ObsidianSkin}, {$BuffName.Regeneration}, {$BuffName.Swiftness}, {$BuffName.Ironskin},
+			{$BuffName.ManaRegeneration}, {$BuffName.MagicPower}, {$BuffName.Featherfall}, {$BuffName.Spelunker},
+			{$BuffName.Archery}, {$BuffName.Heartreach}, {$BuffName.Hunter}, {$BuffName.Endurance}, {$BuffName.Lifeforce}, {$BuffName.Inferno},
+			{$BuffName.Mining}, {$BuffName.Rage}, {$BuffName.Wrath}, {$BuffName.Dangersense}.
+			''' */
+		/* GardenGnome:
+			'''
+			Luck bonus of the Garden Gnome has been applied
+			You cannot disable this effect as it is not a 'buff'
+			''' */
+		/* Enabled:
+			'''
+			The buff [c/88CCEE:[{BuffName}][c/88CCEE:]] is already applied.
+			If you just want to disable buff of this item,
+			请对着该物品按下 {KeybindName} 或左键点击增益图标
+			on the buff icon to open buff tracker,
+			to enable/disable that buff.
+			''' */
+		/* Disabled:
+			'''
+			Item buff [c/88CCEE:[{BuffName}][c/88CCEE:]] has been disabled
+			due to configuration.
+			对着该物品按下 {KeybindName} 或左键点击增益图标
+			buff icon to open buff tracker, to
+			enable/disable that buff.
+			''' */
+		/* Hided:
+			'''
+			Buff icons have been hidden.
+			To display them, disable "Hide buff icons of
+			infinite potions" in [c/CC88AA:Personal Config].
+			''' */
+		/* NonHided:
+			'''
+			Change the mod's [c/CC88AA:Personal Config] to hide infinite
+			buff icons if you want.
+			''' */
+		/* AutoCollect:
+			'''
+			Your coins in coin slots will be automatically
+			saved into the Piggy Bank.
+			This feature can be toggled in the upper-left
+			of the inventory.
+			The Merchant's spawning condition counts
+			coins in the Piggy Bank.
+			''' */
+		/* CombinedBuff.Battle:
+			'''
+			[c/88CCEE:Buff Combination: ][i:CalmingPotion][i:Sunflower][i:PeaceCandle][i:WaterCandle][i:BattlePotion]
+			When you have all the infinite buff items
+			above, a spawn rate slider will appear at the
+			right side of the Buff Tracker, allowing you
+			to multiply the spawn rate from x0-x{MaxSpawn}
+			''' */
+	}
+}
+
+ConstructGUI: {
+	// Structure: QoT Structure
+	# 这个是存储后的文件名
+	// SavedAs: "Structure has been saved as "
+	# 后接文件名
+	// SaveMode: Dropper Mode
+	// LoadMode: Placing Mode
+	// ExplodeAndPlace: Destroy then Place
+	// PlaceOnly: Place
+	// Path: "File path: "
+	# 执行操作时，显示在玩家脚下
+	// Saving: Saving
+	// Saved: Saved
+	// Placing: Placing
+	// Placed: Placed
+	// Stopped: Stopped
+
+	RenameTip: {
+		// Exists: A file with the same name already exists
+		// TooLong: File name must not exceed 40 characters
+	}
+
+	FileInfo: {
+		// Title: File Info
+		// Name: File name: {Name}
+		// Time: Time saved: {Time}
+		// Version: Version: {Version}
+		// Size: Structure size: {Size}
+
+		ModMissing: {
+			// Count: "2"
+			// 1: This structure contains tiles or walls from the unloaded mods
+			// 2: Placement error may occur
+		}
+
+		// LoadError: File is not legal or not a structure file
+	}
+
+	MaterialInfo: {
+		// Title: Material Info
+		// Tip: Materials stored in Big Backpack also count
+		// Stored: Has: {Stack}
+		// Requirement: Needed: {Stack}
+	}
+
+	Preview: {
+		// Title: Structure Preview
+		// CenterSet: Click to set it as the placement center
+	}
+
+	Tutorial: {
+		// Button: Introduction
+
+		AlphaTest: {
+			// Count: "3"
+			// 1: Please report bugs in this mod's Steam Workshop page
+			// 2: Support is not guaranteed for modded tiles and walls,
+			// 3: and should not be considered a bug
+		}
+
+		Save: {
+			// Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
+			/* Text:
+				'''
+				The third button at the left top of the panel can switch mode to Dropper Mode or Placing Mode
+
+				In the Dropper Mode, you can hold the left key and drag to select structures
+				and then save them on your PC as files to place them even in different worlds and servers
+				    
+				The picture below shows how to select and save structures:
+				''' */
+		}
+
+		Place: {
+			// Title: "{$Mods.ImproveGame.ConstructGUI.LoadMode}"
+			/* Text:
+				'''
+				In the Placing Mode, you need to choose a structure in the main panel, a structure is selected if its name is in yellow
+				    
+				if materials in your inventory or the Big Backpack are sufficient, left click to place the structure
+				Directions of certain tiles may be incorrect
+				    
+				Here is an example of placing structures: 
+				''' */
+		}
+
+		Explode: {
+			// Title: Destroy Then Place
+			// Text: If you choose 'Destroy Then Place', the area to place the structure will be cleared for enough placement space
+		}
+
+		Panel: {
+			// Title: Structure List
+			/* Text:
+				'''
+				The main panel displays structure files on your PC, including file name and path
+				    
+				If you accidentally delete a structure on your Windows system, you can restore it in the Recycle Bin
+
+				Click '{$tModLoader.ModsMoreInfo}' button at the right side to check detailed info and preview, placement center can be adjusted in the preview
+				''' */
+		}
+
+		Materials: {
+			// Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
+			// Text: You can check needed and stored materials in Material Info
+		}
+
+		Preview: {
+			// Title: "{$Mods.ImproveGame.ConstructGUI.Preview.Title}"
+			// Text: Structure preview also shows the placement center (the yellow box), which is the position of the cursor while placing.
+		}
+	}
+}
+
+SuperVault: {
+	// Name: Big Backpack
+	// Sort: Sort
+	// Synthesis: Use in crafting
+	// SmartPickup: Smart Pickup
+	// OverflowPickup: Auto Pickup
+}
+
+// MoveChest.Heavy: Weight of the chest limits your mobility
+
+BuffTracker: {
+	// Title: Buff Tracker
+	// LeftClickDisable: "[c/CC88AA:<left>] to disable this buff"
+	// LeftClickEnable: "[c/CC88AA:<left>] to enable this buff"
+	// NoInfBuff: Currently no infinite buff available
+	// NoInfBuffAlt: Enable the Infinite Potions in the mod config
+	// NPCSpawnRatePanel: Enemy Spawn Rate Panel
+}
+
+LifeAnalyzer: {
+	// Priority: "Priority: "
+	// Tip: <left> to control the detection
+}
+
+Architecture: {
+	// Materials: House Materials
+	// StoredMaterials: (Stored: {MaterialCount})
+	// MaterialsRequired: "Materials Needed: "
+	// Block: Block
+	// Platform: Platform
+	// Torch: Torch
+	// Chair: Chair
+	// Table: Table
+	// Workbench: Workbench
+	// Wall: Wall
+	// Bed: Bed
+}
+
+PaintWandGUI: {
+	// Paintbrush: Paint tiles
+	// PaintRoller: Paint walls
+	// PaintScraper: Remove paint
+}
+
+SpaceWandGUI: {
+	// PlaceType: Object
+	// Platform: Platforms
+	// Soild: Solid Blocks
+	// Rope: Ropes
+	// Rail: Minecart Tracks
+	// GrassSeed: Grass Seeds
+	// PlantPot: Planter Boxes
+	// BlockType: Slope
+	// ShapeType: Shape
+}
+
+PackageGUI: {
+	// AutoStorage: Auto Collection
+	// AutoSort: Auto Sortation
+	// Incompatible: The item cannot be contained in this inventory.
+}
+
+Common: {
+	// Loading: Loading...
+	// Refresh: Refresh
+	// Switch: Switch
+	// Unavailable: Not available
+	// Cancel: Cancel
+}
+
+RecipeGroup: {
+	// AnyCopperBar: Any Copper Bar
+	// AnyGoldBar: Any Gold Bar
+	// AnySilverBar: Any Silver Bar
+	// AnyDemoniteBar: Any Demonite Bar
+	// AnyShadowScale: Any Shadow Scale
+	// AnyCobaltBar: Any Cobalt Bar
+	// AnyMythrilBar: Any Mythril Bar
+	// AnyAdamantiteBar: Any Adamantite Bar
+	// AnyGem: Any Gem
+}
+
+Keybinds: {
+	HugeInventory: {
+		DisplayName: Большой Рюкзак
+		Tip: Нажмите, чтобы открыть большой рюкзак, также можно открыть через панель управления.
+	}
+
+	BuffTracker: {
+		DisplayName: Бафф-Трекер
+		Tip: Щелчок по значку баффа больше не открывает Бафф-Трекер, если установлена горячая клавиша.
+	}
+
+	GrabBagLoot: {
+		DisplayName: Показать Список Предметов
+		Tip:
+			'''
+			Показать добычу из мешка с сокровищами.
+			Нажмите эту клавишу рядом с мешком удачи (сокровищем, сундуком и т.д.),
+			чтобы увидеть вероятность выпадения каждого предмета.
+			'''
+	}
+
+	HotbarSwitch: {
+		DisplayName: Панель Быстрого Доступа
+		Tip: Меняет местами предметы первого ряда инвенторя с панелью быстрого доступа.
+	}
+
+	AutoTrashKeybind: {
+		DisplayName: Автоматическая Утилизация
+		Tip:
+			'''
+			Показать/Скрыть Автоматическую Утилизацию.
+			Функция только скрывает, но не отключает корзину.
+			Для полного отключения измените:
+			Конфигурация мода >
+			Персональные настройки >
+			Настройка Игры >
+			Автоматическая утилизация
+			'''
+	}
+
+	DiscordRodKeybind: {
+		DisplayName: Жезлы Мгновенного Перемещения
+		Tip: Быстрое использование предметов из инвентаря, таких как {$ItemName.RodofDiscord} и {$ItemName.RodOfHarmony}.
+	}
+
+	HomeKeybind: {
+		DisplayName: Возвратные Предметы
+		Tip:
+			'''
+			Быстрое использование предметов возврата из инвентаря
+			приоритет:
+			  > бесконечные {$ItemName.PotionOfReturn}
+			  > бесконечные {$ItemName.RecallPotion} (телепортации)
+			  > предметы типа {$ItemName.MagicMirror})
+			'''
+	}
+
+	OpenBagGUI: {
+		DisplayName: Открытие Мешков с Сокровищами
+		Tip: Нажмите, чтобы открыть интерфейс быстрого открытия мешков с сокровищами, также можно открыть через панель управления.
+	}
+
+	MasterControl: {
+		DisplayName: Панель Управления
+		Tip:
+			'''
+			Доступ к ярлыкам Quality of Terraria.
+			Вы ДОЛЖНЫ назначить горячую клавишу для использования ярлыков.
+			'''
+	}
+
+	ItemInteract: {
+		DisplayName: Быстрая Активация Предметов
+		Tip: Используется для быстрого взаимодействия с некоторыми предметами, такими как активация ездовых животных, открытие копилки и т.д.
+	}
+}
+
+Projectiles: {
+	// KillProj.DisplayName: Kill Proj
+	// WallRobot.DisplayName: Wall Robot
+	// ExpelliarmusProj.DisplayName: Expelliarmus!
+
+	DetectorDroneProj: {
+		// DisplayName: Explorer Drone
+		// TooFarAway: Explorer Drone is too far away from you.
+	}
+
+	// HomeEffect.DisplayName: Home Effect
+}
+
+BuilderToggles: {
+	PiggyToggle: {
+		// OffText: Auto-deposit: Off
+		// OnText: Auto-deposit: On
+	}
+}
+
+FakeShops: {
+	Wand: {
+		// Label: Wand Shop
+		// Wand: Wand Shop
+		// Disable: None
+	}
+
+	Locator: {
+		// Label: Locator Shop
+		// Locator: Locator Shop
+		// Disable: None
+	}
+
+	Other: {
+		// Label: Misc Shop
+		// Other: Misc Shop
+		// Disable: None
+	}
+}
+
+// NPCs.DummyNPC.DisplayName: Scarecrow Dummy
