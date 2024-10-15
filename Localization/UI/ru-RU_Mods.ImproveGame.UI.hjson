@@ -1,0 +1,438 @@
+// DummyControl.Name: Dummy Control
+// GrabBagInfo.Title: Detailed Item Drop
+/* RecipeSearchUI.Tips:
+	'''
+	Recipe Search provided by Quality of Life
+	You may disable it in Personal Config of Quality of Life
+	''' */
+
+LiquidWandUI: {
+	// Name: Liquid Control
+	// Absorb: Absorb
+	// Water: Water
+	// Lava: Lava
+	// Honey: Honey
+	// Shimmer: Shimmer
+}
+
+MasterControl: {
+	// Available: Available
+	// Unavailable: Unavailable
+	// Version: Version {0}
+	// Changelog: Click to see what's new
+	/* PinIntro:
+		'''
+		Pin Master Control
+		Pressing the Master Control keybind will toggle the panel if pinned
+		''' */
+	// PopupTitle: Hotkey Missing
+	// PopupText: You have not assign a hotkey to Quality of Terraria's Control Panel. Please assign it a hotkey to use the mod's shortcuts. This message will disappear once you have done so.
+	// PopupPanelWidth: "290"
+	// PopupPanelHeight: "200"
+	// ChangelogLink: https://github.com/ForOne-Club/ImproveGame/blob/1.4.4/Changelog/en/v{0}.md
+}
+
+AmmoChain: {
+	// Title: Ammo Chain
+	// LoadError: Not an Ammo Chain file or illegal Ammo Chain
+	// ClickToAddL1: After picking an ammo type
+	// ClickToAddL2: Click here to add it to the chain
+	// FileName: Ammo Chain
+	// AddChain: Add Ammo Chain
+	// OpenFolder: Open Folder
+	// 一个按钮，点击后打开帮助网页
+	// GetHelp: How? Please help!
+	// Cancel: Cancel
+	// Confirm: Confirm
+	// ItemNotAvailable: × This item does not use ammo
+	// PutInItem: ← Place a weapon here
+	// ClickAmmoChain: Click an Ammo Chain to apply
+	// AddAmmoChain: You have no Ammo Chain for now, add one first
+	// Empty: You can't save an empty Ammo Chain
+}
+
+WeatherGUI: {
+	// Title: Weather Control
+	// Wind: <left> to adjust wind direction
+	// WindLockFalse: <right> to lock the wind's direction
+	// WindLockTrue: <right> to unlock the wind's direction
+	// WindWest: Set to strong west wind
+	// WindNo: Set to windless
+	// WindEast: Set to strong east wind
+	// WindLocked: Wind speed and direction locked
+	// WindUnlocked: Wind speed and direction unlocked
+	// RainActive: <left> to start a rain
+	// RainInactive: <left> to stop a rain
+	// RainLockFalse: <right> to lock the rain
+	// RainLockTrue: <right> to unlock the rain
+	// RainOn: Rain started
+	// RainOff: Rain stopped
+	// RainLocked: Rain locked
+	// RainUnlocked: Rain unlocked
+	// Time: <left> to adjust time
+	// Dawn: Set to dawn
+	// Noon: Set to noon
+	// Dusk: Set to dusk
+	// Midnight: Set to midnight
+	// MoonPhase: <left> to adjust moon phase
+	// MoonPhaseLockFalse: <right> to lock the moon phase
+	// MoonPhaseLockTrue: <right> to unlock the moon phase
+	// MoonPhaseAdjusted: Set to {0}
+	// MoonPhaseLocked: Moon phase locked to {0}
+	// MoonPhaseUnlocked: Moon phase unlocked
+	// AlreadyUnlocked: Weather Control is already available in this world
+	// Unlocked: Weather Control is unlocked! Open it via the Control Panel
+	// EasterEgg: Mushroom!
+	// Locked: Use [i:ImproveGame/WeatherBook] to unlock weather control
+	// TimeUnlockCondition: Defeat the Wall of Flesh to control time
+}
+
+PlayerStats: {
+	// 翻译提示: 尽量简短，因为UI的空间有限，不要超过10个字符
+	/* Introduction:
+		'''
+		[c/CC88AA:Stat Panel]
+		<left> a category or a stat to toggle its display
+		Hold right click to drag this button
+		''' */
+	// Control: Stat Panel Controller
+	// Name: Player Stats
+	// Melee: Melee
+	// Ranged: Ranged
+	// Magic: Magic
+	// Summon: Summon
+	// Throwing: Throwing
+	// 其他玩家属性
+	// Other: Others
+	// LifeRegen: Life Regen
+	// ArmorPenetration: Armor Pen
+	// 魔力恢复，因为归在大类“魔法”下所以用Regen代替
+	// Regen: Regen
+	// 魔力消耗，因为归在大类“魔法”下所以用Cost代替
+	// Cost: Cost
+	// MaxMinions: Minions
+	// MaxTurrets: Sentry
+	// Endurance: Endurance
+	// Luck: Luck
+	// Aggro: Aggro
+	// BulletDamage: Bullet Dmg
+	// ArrowDamage: Arrow Dmg
+	// SpecialistDamage: Spec Dmg
+	// Damage: Damage
+	// Crit: Crit
+	// 攻击速度
+	// Speed: Atk Speed
+	// SummonMeleeSpeed: Whip Speed
+
+	CalamityMod: {
+		// Rogue: Rogue
+		// 盗贼弹幕速度，英文原文“Rogue Velocity”，这里归在大类“Rogue”下所以用Velocity代替
+		// RogueVelocity: Velocity
+	}
+
+	ThoriumMod: {
+		// Healer: Healer
+		// 牧师治疗工具（法术）的攻击速度，英文原文即“Healing Speed”，由于UI空间有限去掉了"ing"
+		// HealingSpeed: Heal Speed
+		// 瑟银的一些牧师装备增加法术回血量
+		// HealBonus: Heal Bonus
+		// Bard: Bard
+	}
+}
+
+ExtremeStorage: {
+	// AddChest: Add Chest
+	// RejectNearbyStack: Failed to stack to nearby chests, likely because another player is using a nearby Storage Manager
+	// CloseCraftingWindow: Close Crafting Window
+	// OpenCraftingWindow: Open Crafting Window
+
+	CountForCrafting: {
+		// Label: Count for Crafting
+		/* Tooltip:
+			'''
+			Controls whether items under the selected category [c/CC88AA:can be used in crafting]
+			You could still craft with items in the chest you open
+			Too many items under a category may cause performance issues, use with caution on low-end PCs
+			''' */
+	}
+
+	UseUnlimitedPotion: {
+		// Label: Infinite Potion
+		/* Tooltip:
+			'''
+			Controls whether potions and buff stations under [c/CC88AA:'{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}'] can be used for [c/CC88AA:Infinite Potion]
+			You need to enable 'Infinite Potions' in mod config
+			''' */
+	}
+
+	UsePortableStation: {
+		// Label: Portable Crafting Station
+		/* Tooltip:
+			'''
+			Controls whether stations under [c/CC88AA:'{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}'] can be used for [c/CC88AA:Portable Crafting Station]
+			You need to enable 'Portable Crafting Stations' in mod config
+			''' */
+	}
+
+	UsePortableBanner: {
+		// Label: Portable Banners
+		/* Tooltip:
+			'''
+			Controls whether banners under [c/CC88AA:'{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}'] can be used for [c/CC88AA:Portable Banners]
+			You need to enable 'Portable Banners' in mod config
+			''' */
+	}
+
+	/* ChestBeingUsed:
+		'''
+		Chest for this slot is being used by another player
+		No action can be taken
+		''' */
+	// 介绍使用了手动换行让排版看起来舒服点
+	/* BasicIntroduction:
+		'''
+		Note:
+		  1. Chest sorting depends on identifiers prefixed
+		     on the chests' names. Please do NOT arbitrarily
+		     edit chest names
+		  2. Put furniture and potions in their categories,
+		     and put all others in the "Everything" category
+		  3. In multiplayer mode, if a chest is being used by
+		     another player, you are not able to take actions
+		     on items inside the chest
+		''' */
+
+	ItemGroup: {
+		// Weapon: "{$CreativePowers.TabWeapons}"
+		// Tool: "{$CreativePowers.TabTools}"
+		// Ammo: "{$LegacyInterface.27}"
+		// Armor: "{$CreativePowers.TabArmor}"
+		// Accessory: "{$CreativePowers.TabAccessories}"
+		// Furniture: "{$CreativePowers.TabFurniture}"
+		// Block: Placeables
+		// Material: "{$CreativePowers.TabMaterials}"
+		// Alchemy: Potions
+		// Misc: "{$CreativePowers.TabMisc}"
+		// Setting: "{$LegacyMenu.14}"
+		// Everything: Everything
+	}
+
+	// 筛选器的文本
+	Weapon: {
+		// Melee: Melee
+		// Ranged: Ranged
+		// Magic: Magic
+		// Summon: Summon
+		// Other: Other
+	}
+
+	Tool: {
+		// Pickaxe: Pickaxes
+		// Axe: Axes
+		// Hammer: Hammers
+		// Hook: Grappling Hooks
+		// Wiring: Wiring Tools
+		// FishingPole: Fishing Poles
+		// Other: Others
+	}
+
+	Ammo: {
+		// Arrow: Arrows
+		// Bullet: Bullets
+		// Rocket: Rockets
+		// Dart: Darts
+		// Other: Other
+	}
+
+	Armor: {
+		// Headgear: Head
+		// Torso: Body
+		// Pants: Leg
+		// Vanity: Vanity
+	}
+
+	Accessory: {
+		// Boot: Boots
+		// Wing: Wings
+		// Shield: Shields
+		// Other: Other
+		// Vanity: Vanity
+	}
+
+	Block: {
+		// Solid: Solid Blocks
+		// Wall: Walls
+		// Platform: Platforms
+		// Other: Other
+	}
+
+	Misc: {
+		// Herb: Herbs
+		// SummonItem: Summons
+		// Pet: Pets
+		// Mount: Mounts
+		// Material: Materials
+		// Other: Other
+	}
+}
+
+AutoTrash: {
+	/* Introduction:
+		'''
+		[c/CC88AA:Auto Trash] (Quality of Terraria)
+		[c/CC88AA:Shift+Ctrl+<left>] an item to add it to an auto-trash list
+		Press [c/CC88AA:{0}] to hide this UI (Make sure you have set a keybind for this)
+		Press this button to view the auto-trash list
+		''' */
+	// TrashedItemsList: Trash Items
+}
+
+WorldFeature: {
+	// Title: World Features
+
+	Halloween: {
+		// Label: Halloween
+		// Tooltip: Toggles Halloween status.
+	}
+
+	XMas: {
+		// Label: Christmas
+		// Tooltip: Toggles Christmas status.
+	}
+
+	/* Drunk:
+		'''
+		Drunk world
+		Seeds: 05162020 | 5162020
+		''' */
+	/* Bees:
+		'''
+		Not the bees
+		Seeds: not the bees | not the bees! | notthebees
+		''' */
+	/* Ftw:
+		'''
+		For the worthy
+		Seeds: for the worthy | fortheworthy
+		''' */
+	/* Anniversary:
+		'''
+		Celebrationmk10
+		Seeds: celebrationmk10 | 05162011 | 5162011 | 05162021 | 5162021
+		''' */
+	/* DontStarve:
+		'''
+		The Constant
+		Seeds: constant | theconstant | the constant | eye4aneye | eyeforaneye
+		''' */
+	/* Traps:
+		'''
+		No traps
+		Seeds: no traps | notraps
+		P.S. No effect if toggled inside a world.
+		''' */
+	/* Remix:
+		'''
+		Don't dig up
+		Seeds: don't dig up | dont dig up | dontdigup
+		''' */
+	/* Zenith:
+		'''
+		Get fixed boi
+		Seeds: get fixed boi | getfixedboi
+		P.S. Get fixed boi is only complete with all other secrete seeds enabled.
+		''' */
+	// OpenWiki: <right> to open its wiki page
+	// NotPermitted: You have no permission to modify this world's features.
+}
+
+ItemSearcher: {
+	// Title: Find Items
+	// TipText: Items found are shown here
+	// NotFoundText: No item found
+
+	FuzzySearch: {
+		// Label: Fuzzy Search
+		/* Tooltip:
+			'''
+			Allows deviation of 1 character in searching.
+			E.g. "obsdian" can search "obsidian".
+			''' */
+	}
+
+	SearchTooltip: {
+		// Label: Search Tooltip
+		// Tooltip: Searches item tooltips instead of names.
+	}
+}
+
+OpenBag: {
+	// Title: Bag Opener
+	// TipText: Items obtained are staged here
+	// Open: Open All
+	// Stop: Stop
+	// EmptyText: Grab Bag
+	// NotFullyDisplayed: Besides, {0} items are hidden
+
+	SellAll: {
+		// Name: Sell All
+		/* Tooltip:
+			'''
+			Sell all items at 110% of their base price.
+			Coins will go to your coin slots.
+			''' */
+	}
+
+	AreYouSure: {
+		// Name: Are you sure?
+		/* Tooltip:
+			'''
+			<left> to sell,
+			<right> to cancel.
+			''' */
+	}
+}
+
+QuickShimmer: {
+	// Title: Quick Shimmer
+	// TipText: Items transmuted are staged here
+	// Open: Transmute All
+	// Stop: Stop
+	// EmptyText: Shimmer Transmuting
+	// NotFullyDisplayed: Besides, {0} items are hidden
+	// CoinLuck: Shimmered into {0} 'coin luck'
+	// AlreadyUnlocked: Quick Shimmer is already available in this world
+	// Unlocked: Quick Shimmer is unlocked! Open it via the Control Panel
+	// Locked: Use [i:ImproveGame/ShellShipInBottle_Shimmered] to unlock Quick Shimmer
+}
+
+Autofisher: {
+	// Accessory: Accessories for fishing
+	// FishingPole: Fishing rod
+	// Bait: Bait
+	// SelectPool: Please select fishing pool
+	// CarefulNextTime: Be careful next time!
+	// Unavailable: Currently no fishing info
+	// InShimmer: 在微光钓鱼只会空军
+	// CatchCratesFilter: Crates
+	// CatchAccessoriesFilter: Accessories
+	// CatchToolsFilter: Tools and weapons
+	// CatchWhiteRarityCatchesFilter: White rarity
+	// CatchNormalCatchesFilter: Higher than white rarity
+	// PerItemFilter: Filter Catches
+	/* ChestAutoDeposit:
+		'''
+		Auto deposit to nearby chests
+		Catches will be auto deposited to the nearest chest every minute
+		''' */
+}
+
+MapLayer: {
+	// TheAether: The Aether
+	// Pyramid: Pyramid
+	// FloatingIsland: Floating Island
+	// FloatingLake: Floating Lake
+	// EmptyAutofisher: Fishing Machine (Bait-lacking)
+}
+
+// ThemePreview.Title: Theme Preview
