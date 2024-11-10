@@ -39,31 +39,53 @@ public class ModernConfigDetours : ILoadable
     {
         orig.Invoke(self);
 
-        // 确保是自家的
-        if (self.selectedMod?.Name is not "ImproveGame")
-            return;
+
         // 确保里面有东西了
         if (self.configList.Count == 0)
             return;
+        // 确保是自家的
+        if (self.selectedMod?.Name is "ImproveGame")
+        {
+            var configPanel = new UIButton<LocalizedText>(Language.GetText("Mods.ImproveGame.ModernConfig.Name"))
+            {
+                MaxWidth = { Percent = 0.95f },
+                HAlign = 0.5f,
+                ScalePanel = true,
+                UseInnerDimensions = true,
+                ClickSound = SoundID.MenuOpen,
+            };
+            configPanel.OnUpdate += delegate
+            {
+                configPanel.TextColor = Main.DiscoColor;
+            };
+            configPanel.OnLeftClick += delegate
+            {
+                ModernConfigUI.Instance.Open();
+            };
 
-        var configPanel = new UIButton<LocalizedText>(Language.GetText("Mods.ImproveGame.ModernConfig.Name"))
+            self.configList.Add(configPanel);
+        }
+        else 
         {
-            MaxWidth = { Percent = 0.95f },
-            HAlign = 0.5f,
-            ScalePanel = true,
-            UseInnerDimensions = true,
-            ClickSound = SoundID.MenuOpen,
-        };
-        configPanel.OnUpdate += delegate
-        {
-            configPanel.TextColor = Main.DiscoColor;
-        };
-        configPanel.OnLeftClick += delegate
-        {
-            ModernConfigUI.Instance.Open();
-        };
+            var configPanel = new UIButton<string>(self.selectedMod?.Name + "总控面板(测试)")
+            {
+                MaxWidth = { Percent = 0.95f },
+                HAlign = 0.5f,
+                ScalePanel = true,
+                UseInnerDimensions = true,
+                ClickSound = SoundID.MenuOpen,
+            };
+            configPanel.OnUpdate += delegate
+            {
+                configPanel.TextColor = Main.DiscoColor;
+            };
+            configPanel.OnLeftClick += delegate
+            {
+                ModernConfigUI.Instance.Open();
+            };
 
-        self.configList.Add(configPanel);
+            self.configList.Add(configPanel);
+        }
     }
 
     private static void DrawMenuDetour(Action<SpriteBatch, GameTime, Color, float, float> orig, SpriteBatch spriteBatch,
