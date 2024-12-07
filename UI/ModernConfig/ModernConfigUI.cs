@@ -119,7 +119,7 @@ public sealed class ModernConfigUI : UIState
     {
         // 修复鼠标移到标牌上会导致标牌文字一直显示的问题
         Main._MouseOversCanClear = true;
-        
+
         if (Glass is not null && !Main.gameMenu && !DrawCalledForMakingGlass && GlassVfxEnabled)
         {
             // 云母效果特殊处理
@@ -160,7 +160,13 @@ public sealed class ModernConfigUI : UIState
             if (OpenFromMasterControl)
                 IngameFancyUI.Close();
             else
+            {
+                Interface.modConfigList.ModToSelectOnOpen = ImproveGame.Instance;
                 Main.InGameUI.SetState(Interface.modConfigList);
+
+
+            }
+
         }
         else
         {
@@ -197,7 +203,7 @@ public sealed class ModernConfigUI : UIState
 
     public void GenerateParticleAt(Vector2 position)
     {
-        Vector2 accelerationPerFrame = new (0f, 0.16350001f);
+        Vector2 accelerationPerFrame = new(0f, 0.16350001f);
         var texture = Main.Assets.Request<Texture2D>("Images/UI/Creative/Research_Spark");
 
         for (int i = 0; i < 12; i++)

@@ -13,7 +13,7 @@ public static class ConfigHelper
         if (fieldInfo.FieldType != value.GetType())
             throw new Exception($"Field type mismatch: {fieldInfo.FieldType} != {value.GetType()}");
 
-        var modConfig = ConfigManager.Configs[ImproveGame.Instance].Find(i => i.Name == config.Name);
+        var modConfig = ConfigManager.Configs[config.Mod].Find(i => i.Name == config.Name);//ImproveGame.Instance //由螺线魔改
 
         // TML的注释：
         // Main Menu: Save, leave reload for later
@@ -75,8 +75,8 @@ public static class ConfigHelper
         => $"Configs.{config.Name}.{optionName}";
 
     public static string GetTooltip(ModConfig config, string optionName)
-        => GetText($"{GetLocalizationKey(config, optionName)}.Tooltip");
+        => ConvertLeftRight(Language.GetTextValue($"Mods.{config.Mod.Name}.{GetLocalizationKey(config, optionName)}.Tooltip"));//GetText($"{GetLocalizationKey(config, optionName)}.Tooltip");
 
     public static string GetLabel(ModConfig config, string optionName)
-        => GetText($"{GetLocalizationKey(config, optionName)}.Label");
+        => ConvertLeftRight(Language.GetTextValue($"Mods.{config.Mod.Name}.{GetLocalizationKey(config, optionName)}.Label"));
 }

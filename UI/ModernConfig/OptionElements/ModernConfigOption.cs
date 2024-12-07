@@ -76,6 +76,7 @@ public class ModernConfigOption : TimerView
     // 为了让UI之间实际上无间隔，防止鼠标滑过时Tooltip文字闪现，这里重写绘制，而不使用Spacing
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
+
         var dimensions = GetDimensions();
         var dimensionsRect = dimensions.ToRectangle();
         var position = dimensions.Position();
@@ -103,7 +104,8 @@ public class ModernConfigOption : TimerView
         if (!IsMouseHovering)
             return;
 
-        TooltipPanel.SetText(Tooltip);
+        string text = Tooltip;
+        TooltipPanel.SetText(text);
 
         // 不可控制，为什么呢？
         if (Interactable)

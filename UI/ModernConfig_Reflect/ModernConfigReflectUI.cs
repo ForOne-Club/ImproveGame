@@ -9,15 +9,16 @@ using Microsoft.Xna.Framework.Input;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader.UI;
 
-namespace ImproveGame.UI.ModernConfig;
+namespace ImproveGame.UI.ModernConfig_Reflect;
 
-public sealed class ModernReflectConfigUI : UIState
+public sealed partial class ModernReflectConfigUI : UIState
 {
     public static ModernReflectConfigUI Instance { get; set; }
 
+    public static Mod currentMod;
+
     public bool Enabled { get; set; }
 
-    public bool OpenFromMasterControl;
 
     public static bool DrawCalledForMakingGlass;
 
@@ -27,22 +28,14 @@ public sealed class ModernReflectConfigUI : UIState
     public SUIPanel MainPanel;
 
     // 侧栏放类别
-    public CategorySidePanel CategoryPanel;
+    private CategorySidePanelForModConfig CategoryPanel;
 
     // 主栏上放选项
     public ConfigOptionsPanel OptionsPanel;
 
     // 主栏下放描述
-    public TooltipPanel TooltipPanel;
+    public ModernConfig.TooltipPanel TooltipPanel;
 
-    // 有点爽的东西，中键收藏生成粒子
-    private UIParticleLayer _particleSystem = new()
-    {
-        Width = new StyleDimension(0f, 1f),
-        Height = new StyleDimension(0f, 1f),
-        AnchorPositionOffsetByPercents = Vector2.One / 2f,
-        AnchorPositionOffsetByPixels = Vector2.Zero
-    };
 
     public override void OnInitialize()
     {
@@ -52,7 +45,7 @@ public sealed class ModernReflectConfigUI : UIState
         Instance = this;
 
         // 主面板
-        MainPanel = new SUIPanel(ConfigColors.MainPanelBorder, ConfigColors.MainPanelBg)
+        MainPanel = new SUIPanel(ModernConfig.ConfigColors.MainPanelBorder, ModernConfig.ConfigColors.MainPanelBg)
         {
             Shaded = true,
             HAlign = 0.5f,
@@ -64,7 +57,7 @@ public sealed class ModernReflectConfigUI : UIState
             .JoinParent(this);
 
         // 侧栏放类别
-        CategoryPanel = new CategorySidePanel(ConfigColors.DarkBorderlessPanel)
+        CategoryPanel = new CategorySidePanelForModConfig(ModernConfig.ConfigColors.DarkBorderlessPanel)
         {
             RelativeMode = RelativeMode.Horizontal
         };
@@ -82,7 +75,7 @@ public sealed class ModernReflectConfigUI : UIState
         mainPanelContainer.JoinParent(MainPanel);
 
         // 主栏上放选项
-        OptionsPanel = new ConfigOptionsPanel(ConfigColors.DarkBorderlessPanel)
+        OptionsPanel = new ConfigOptionsPanel(ModernConfig.ConfigColors.DarkBorderlessPanel)
         {
             Spacing = new Vector2(gapBetweenPanels),
             RelativeMode = RelativeMode.Vertical
@@ -91,7 +84,7 @@ public sealed class ModernReflectConfigUI : UIState
         OptionsPanel.JoinParent(mainPanelContainer);
 
         // 主栏下放描述
-        TooltipPanel = new TooltipPanel(ConfigColors.DarkBorderlessPanel)
+        TooltipPanel = new ModernConfig.TooltipPanel(ModernConfig.ConfigColors.DarkBorderlessPanel)
         {
             Spacing = new Vector2(gapBetweenPanels),
             RelativeMode = RelativeMode.Vertical
@@ -99,7 +92,6 @@ public sealed class ModernReflectConfigUI : UIState
         TooltipPanel.SetSize(0f, tooltipPanelHeight, 1f, 0f);
         TooltipPanel.JoinParent(mainPanelContainer);
 
-        MainPanel.Append(_particleSystem);
 
         // 返回按钮
         var backButton = new UITextPanel<LocalizedText>(Language.GetText("UI.Back"), 0.7f, large: true)
@@ -133,12 +125,12 @@ public sealed class ModernReflectConfigUI : UIState
         CenteredItemTagHandler.ModernConfigDrawing = false;
     }
 
-    public void Open()
+    public void Open(Mod mod)
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
-        ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["AboutPage"].Category;
+        //ConfigOptionsPanel.CategoryToSelectOnOpen = ModernConfig.CategorySidePanel.Cards["AboutPage"].Category;
         Enabled = true;
-
+        currentMod = mod;
         if (Main.gameMenu)
         {
             Main.menuMode = 888;
@@ -148,6 +140,7 @@ public sealed class ModernReflectConfigUI : UIState
         {
             IngameFancyUI.OpenUIState(this);
         }
+        CategoryPanel.SwitchMod(currentMod);
     }
 
     public void Close()
@@ -156,19 +149,13 @@ public sealed class ModernReflectConfigUI : UIState
         Enabled = false;
 
         if (!Main.gameMenu)
-        {
-            if (OpenFromMasterControl)
-                IngameFancyUI.Close();
-            else
-                Main.InGameUI.SetState(Interface.modConfigList);
-        }
+            Main.InGameUI.SetState(Interface.modConfigList);
         else
         {
             Main.menuMode = Interface.modConfigListID;
-            Interface.modConfigList.ModToSelectOnOpen = ImproveGame.Instance;
+            Interface.modConfigList.ModToSelectOnOpen = currentMod ?? ImproveGame.Instance;
         }
 
-        OpenFromMasterControl = false;
     }
 
     public override void Update(GameTime gameTime)
@@ -182,38 +169,10 @@ public sealed class ModernReflectConfigUI : UIState
         }
 
         // 适配即时风格切换
-        MainPanel.BorderColor = ConfigColors.MainPanelBorder;
-        MainPanel.BgColor = ConfigColors.MainPanelBg;
+        MainPanel.BorderColor = ModernConfig.ConfigColors.MainPanelBorder;
+        MainPanel.BgColor = ModernConfig.ConfigColors.MainPanelBg;
     }
 
-    public void GenerateParticleAtMouse()
-    {
-        var parentPosition = Instance.MainPanel.GetInnerDimensions().Center();
-        var mousePosition = Main.MouseScreen;
-        var finalPosition = mousePosition - parentPosition;
-        finalPosition.Y += 4f;
-        Instance.GenerateParticleAt(finalPosition);
-    }
-
-    public void GenerateParticleAt(Vector2 position)
-    {
-        Vector2 accelerationPerFrame = new(0f, 0.16350001f);
-        var texture = Main.Assets.Request<Texture2D>("Images/UI/Creative/Research_Spark");
-
-        for (int i = 0; i < 12; i++)
-        {
-            Vector2 initialVelocity = Main.rand.NextVector2Circular(4f, 3f);
-
-            initialVelocity.Y -= 2f;
-
-            _particleSystem.AddParticle(new CreativeSacrificeParticle(texture, null, initialVelocity, position)
-            {
-                AccelerationPerFrame = accelerationPerFrame,
-                ScaleOffsetPerFrame = -1f / 60f,
-                _scale = Main.rand.NextFloat(0.2f, 0.5f)
-            });
-        }
-    }
 
     #region Mica - 云母效果特殊处理
 

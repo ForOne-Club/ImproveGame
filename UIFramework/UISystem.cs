@@ -5,6 +5,7 @@ using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.ModernConfig;
+using ImproveGame.UI.ModernConfig_Reflect;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.SpaceWand;
 using ImproveGame.UI.WorldFeature;
@@ -166,6 +167,7 @@ public class UISystem : ModSystem
     {
         // 配置的特殊处理
         ModernConfigUI.Instance = new ModernConfigUI();
+        ModernReflectConfigUI.Instance = new ModernReflectConfigUI();
     }
     #endregion
 

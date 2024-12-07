@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using ImproveGame.UI.ModernConfig_Reflect;
+using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
@@ -81,7 +82,7 @@ public class ModernConfigDetours : ILoadable
             };
             configPanel.OnLeftClick += delegate
             {
-                ModernConfigUI.Instance.Open();
+                ModernReflectConfigUI.Instance.Open(self.selectedMod);
             };
 
             self.configList.Add(configPanel);
