@@ -428,6 +428,16 @@ DummyConfiguration: {
 		KnockBackResist: Knockback coefficient
 		AIStyle: AI Style
 	}
+
+	AIType: {
+		Default: Default
+		Slime: Slime
+		EvilEye: Evil Eye
+		Soilder: Soilder
+		GoldenFish: Golden Fish
+		JellyFish: Jelly Fish
+		HugeMimic: Huge Mimic
+	}
 }
 
 Autofisher: {

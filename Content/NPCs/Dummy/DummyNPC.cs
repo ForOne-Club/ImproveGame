@@ -163,11 +163,11 @@ public class DummyNPC : ModNPC
         npc.SetBaseValues(56, 74, Config.LifeMax, false,
             value: 0, damage: Config.Damage, defense: Config.Defense);
         npc.HitSound = SoundID.NPCHit1;
-        //npc.aiStyle = (int)Config.AIStyle;
-        if (ModContent.TryFind("FargowiltasSouls", "ClippedWingsBuff", out ModBuff buff)) 
-        {
-            npc.buffImmune[buff.Type] = true;
-        }
+        npc.aiStyle = (int)Config.AIStyle;
+        //if (ModContent.TryFind("FargowiltasSouls", "ClippedWingsBuff", out ModBuff buff)) 
+        //{
+        //    npc.buffImmune[buff.Type] = true;
+        //}
         DummyDPS.Parent = this;
     }
     public override void SendExtraAI(BinaryWriter writer)
@@ -216,6 +216,7 @@ public class DummyNPC : ModNPC
             Main.dust[dust].noGravity = true;
         }
     }
+
     public override void AI()
     {
         Reset();
@@ -223,6 +224,7 @@ public class DummyNPC : ModNPC
             RemoveDummyModule.Get(NPC.whoAmI, Main.myPlayer).Send(runLocally: true);
         NPC npc = NPC;
         npc.dontTakeDamage = CurrentFrameProperties.AnyActiveBoss;
+        npc.friendly = CurrentFrameProperties.AnyActiveBoss;
         if (npc.HasPlayerTarget)
         {
             Player player = Main.player[npc.target];
@@ -242,7 +244,9 @@ public class DummyNPC : ModNPC
         NPC.frame = new Rectangle(0, NPC.frameCounter > 0 ? 76 : 0, 56, 74);
         npc.scale = 1f + HitScale;
 
-        //npc.velocity *= .9f;
+        if (npc.aiStyle == -1)
+            npc.velocity = Vector2.Zero;
+
     }
 
     public void ClearBuffs()

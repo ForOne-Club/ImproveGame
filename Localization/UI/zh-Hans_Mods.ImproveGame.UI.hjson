@@ -426,6 +426,16 @@ DummyConfiguration: {
 		KnockBackResist: 击退系数
 		AIStyle: AI类型
 	}
+
+	AIType: {
+		Default: 默认
+		Slime: 史莱姆
+		EvilEye: 恶魔之眼
+		Soilder: 战士
+		GoldenFish: 金鱼
+		JellyFish: 水母
+		HugeMimic: 大宝箱怪
+	}
 }
 
 Autofisher: {

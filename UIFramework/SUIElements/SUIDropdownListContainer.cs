@@ -112,13 +112,9 @@ public class SUIDropdownListContainer : View
         _dropdownList.JoinParent(this);
     }
 
-    public void BuildDropdownList(float x, float y, float width, string[] options, string currentLabel, View caller)
+    public void SetCurrentPosition(float x, float y, float width, int count) 
     {
-        int count = options.Length;
-        _dropdownList.ListView.RemoveAllChildren();
         var dimensions = GetDimensions();
-        DropdownCaller = caller;
-
         // 决定高度
         float containerHeight = dimensions.Height - 10;
         float containerCapHeight = containerHeight - 20;
@@ -141,11 +137,26 @@ public class SUIDropdownListContainer : View
             y -= dimensions.Y;
             _dropdownList.SetPosPixels(x, y);
         }
+    }
+
+    public void BuildDropdownList(float x, float y, float width, string[] options, string currentLabel, View caller)
+    {
+        int count = options.Length;
+        _dropdownList.ListView.RemoveAllChildren();
+        DropdownCaller = caller;
+        SetCurrentPosition(x, y, width, count);
+
 
         // 添加元素
         foreach (string label in options)
         {
             var option = new DropdownOption(label, this);
+            option.OnUpdate += delegate
+            {
+                if(option.IsMouseHovering)
+                    Main.LocalPlayer.mouseInterface = true;
+            };
+
             option.JoinParent(_dropdownList.ListView);
         }
 

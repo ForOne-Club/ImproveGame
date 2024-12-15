@@ -46,8 +46,14 @@ namespace ImproveGame.UI
         public SUIScrollBar Scrollbar;
         public UIText TipText;
 
+        public SUIDropdownListContainer DropdownList { get; set; }
+
         public override void OnInitialize()
         {
+            DropdownList = new SUIDropdownListContainer();
+            DropdownList.JoinParent(this);
+
+
             // 主面板
             MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
@@ -142,6 +148,13 @@ namespace ImproveGame.UI
                 fPanel.SetSize(0f, 40, 1f, 0f);
                 fPanel.JoinParent(bagPanel);
                 fPanel.BgColor = Color.Black * .125f;
+                fPanel.OnUpdate += delegate
+                {
+                    Color targetColor = fPanel.IsMouseHovering ? Color.White * .0625f : Color.Black * .25f;
+                    fPanel.BgColor = Color.Lerp(fPanel.BgColor, targetColor, 0.1f);
+                    fPanel.Border = 1;
+                    fPanel.BorderColor = UIStyle.PanelBorder;
+                };
                 var fieldName = new SUIText
                 {
                     UseKey = true,
@@ -197,7 +210,7 @@ namespace ImproveGame.UI
                     {
                         fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
                         SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                    }, "")
+                    },DropdownList, "")
                     {
                         HAlign = 1f,
                         Width = new StyleDimension(180, 0),
@@ -227,6 +240,7 @@ namespace ImproveGame.UI
                 //MakeSeparator();
 
             }
+
         }
 
 
