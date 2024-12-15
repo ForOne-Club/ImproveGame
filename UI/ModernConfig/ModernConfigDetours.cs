@@ -1,5 +1,4 @@
-﻿using ImproveGame.UI.ModernConfig_Reflect;
-using System.Reflection;
+﻿using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
@@ -44,49 +43,27 @@ public class ModernConfigDetours : ILoadable
         // 确保里面有东西了
         if (self.configList.Count == 0)
             return;
-        // 确保是自家的
-        if (self.selectedMod?.Name is "ImproveGame")
+        bool flag = self.selectedMod.Name == "ImproveGame";
+        if (!(flag || true)) return;
+        string text = flag ? "Mods.ImproveGame.ModernConfig.Name" : (self.selectedMod.Name + "总控面板(测试功能)");
+        var configPanel = new UIButton<LocalizedText>(Language.GetText(text))
         {
-            var configPanel = new UIButton<LocalizedText>(Language.GetText("Mods.ImproveGame.ModernConfig.Name"))
-            {
-                MaxWidth = { Percent = 0.95f },
-                HAlign = 0.5f,
-                ScalePanel = true,
-                UseInnerDimensions = true,
-                ClickSound = SoundID.MenuOpen,
-            };
-            configPanel.OnUpdate += delegate
-            {
-                configPanel.TextColor = Main.DiscoColor;
-            };
-            configPanel.OnLeftClick += delegate
-            {
-                ModernConfigUI.Instance.Open();
-            };
-
-            self.configList.Add(configPanel);
-        }
-        else 
+            MaxWidth = { Percent = 0.95f },
+            HAlign = 0.5f,
+            ScalePanel = true,
+            UseInnerDimensions = true,
+            ClickSound = SoundID.MenuOpen,
+        };
+        configPanel.OnUpdate += delegate
         {
-            var configPanel = new UIButton<string>(self.selectedMod?.Name + "总控面板(测试)")
-            {
-                MaxWidth = { Percent = 0.95f },
-                HAlign = 0.5f,
-                ScalePanel = true,
-                UseInnerDimensions = true,
-                ClickSound = SoundID.MenuOpen,
-            };
-            configPanel.OnUpdate += delegate
-            {
-                configPanel.TextColor = Main.DiscoColor;
-            };
-            configPanel.OnLeftClick += delegate
-            {
-                ModernReflectConfigUI.Instance.Open(self.selectedMod);
-            };
+            configPanel.TextColor = Main.DiscoColor;
+        };
+        configPanel.OnLeftClick += delegate
+        {
+            ModernConfigUI.Instance.Open(self.selectedMod);
+        };
 
-            self.configList.Add(configPanel);
-        }
+        self.configList.Add(configPanel);
     }
 
     private static void DrawMenuDetour(Action<SpriteBatch, GameTime, Color, float, float> orig, SpriteBatch spriteBatch,

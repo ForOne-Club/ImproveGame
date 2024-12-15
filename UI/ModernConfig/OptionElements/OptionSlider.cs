@@ -129,14 +129,14 @@ public sealed class OptionSlider : ModernConfigOption
 
     private void CheckValid()
     {
-        if (FieldInfo.FieldType != typeof(int) && FieldInfo.FieldType != typeof(float) &&
-            FieldInfo.FieldType != typeof(double))
+        if (VariableInfo.Type != typeof(int) && VariableInfo.Type != typeof(float) &&
+            VariableInfo.Type != typeof(double))
             throw new Exception($"Field \"{OptionName}\" is not a int, float or double");
     }
 
     private void AddTextBox(View box)
     {
-        bool isInt = FieldInfo.FieldType == typeof(int);
+        bool isInt = VariableInfo.Type == typeof(int);
         _numericTextBox = new SUINumericText
         {
             RelativeMode = RelativeMode.Horizontal,
@@ -199,11 +199,11 @@ public sealed class OptionSlider : ModernConfigOption
     {
         if (!Interactable) return;
         if (IsInt)
-            ConfigHelper.SetConfigValue(Config, FieldInfo, (int)Math.Round(value), broadcast);
+            ConfigHelper.SetConfigValue(Config, VariableInfo, (int)Math.Round(value), broadcast);
         else if (IsFloat)
-            ConfigHelper.SetConfigValue(Config, FieldInfo, (float)value, broadcast);
+            ConfigHelper.SetConfigValue(Config, VariableInfo, (float)value, broadcast);
         else
-            ConfigHelper.SetConfigValue(Config, FieldInfo, value, broadcast);
+            ConfigHelper.SetConfigValue(Config, VariableInfo, value, broadcast);
     }
 
     public override void Update(GameTime gameTime)
@@ -214,7 +214,7 @@ public sealed class OptionSlider : ModernConfigOption
         _numericTextBox.IgnoresMouseInteraction = !Interactable;
 
         // 简直是天才的转换
-        var value = float.Parse(FieldInfo.GetValue(Config)!.ToString()!);
+        var value = float.Parse(VariableInfo.GetValue(Config)!.ToString()!);
         if (!_numericTextBox.IsWritingText)
             _numericTextBox.Value = value;
         _slideBox.Value = InverseLerp((float)Min, (float)Max, value);
@@ -222,7 +222,7 @@ public sealed class OptionSlider : ModernConfigOption
 
     private static float InverseLerp(float a, float b, float value) => (value - a) / (b - a);
 
-    private bool IsFloat => FieldInfo.FieldType == typeof(float);
-    private bool IsInt => FieldInfo.FieldType == typeof(int);
-    private bool IsDouble => FieldInfo.FieldType == typeof(double);
+    private bool IsFloat => VariableInfo.Type == typeof(float);
+    private bool IsInt => VariableInfo.Type == typeof(int);
+    private bool IsDouble => VariableInfo.Type == typeof(double);
 }

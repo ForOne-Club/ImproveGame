@@ -8,6 +8,7 @@ using ImproveGame.UIFramework.SUIElements;
 using PinyinNet;
 using Terraria.GameInput;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig;
 
@@ -21,9 +22,9 @@ public sealed class ConfigOptionsPanel : SUIPanel
 
     private HashSet<string> _addedOptions = [];
     private List<ModernConfigOption> _allOptions = [];
-    private SUIEditableText _searchBar { get;  set; }
-    private SUIScrollView2 _options { get;  set; }
-    public SUIDropdownListContainer DropdownList { get;  set; }
+    private SUIEditableText _searchBar { get; set; }
+    private SUIScrollView2 _options { get; set; }
+    public SUIDropdownListContainer DropdownList { get; set; }
 
     public static Category CurrentCategory
     {
@@ -104,7 +105,10 @@ public sealed class ConfigOptionsPanel : SUIPanel
         SearchBarTextChanged(ref text);
         Recalculate();
     }
-
+    public override void Recalculate()
+    {
+        base.Recalculate();
+    }
     private void SearchBarTextChanged(ref string text)
     {
         DropdownList.Enabled = false;
@@ -119,6 +123,10 @@ public sealed class ConfigOptionsPanel : SUIPanel
             {
                 o.Highlighted = false;
                 o.JoinParent(_options.ListView);
+                if (o is OptionNotSupportText text) 
+                {
+                    var h = o.Height.Pixels;
+                }
             });
             Recalculate();
             return;
@@ -166,6 +174,7 @@ public sealed class ConfigOptionsPanel : SUIPanel
 
     public void AddEnum(ModConfig config, string name) => AddToAllOptions<OptionDropdownList>(config, name);
 
+
     private void AddToAllOptions<T>(ModConfig config, string name) where T : ModernConfigOption
     {
         // 如果已经添加过这个选项，直接返回
@@ -176,6 +185,20 @@ public sealed class ConfigOptionsPanel : SUIPanel
             return;
         // 创建实例并加入到_allOptions列表
         var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T), config, name);
+        _allOptions.Add(instance);
+    }
+    public void AddNotSupportText(ModConfig config, PropertyFieldWrapper variableInfo) => AddToAllOptions<OptionNotSupportText>(config, variableInfo);
+
+    private void AddToAllOptions<T>(ModConfig config, PropertyFieldWrapper variableInfo) where T : ModernConfigOption
+    {
+        // 如果已经添加过这个选项，直接返回
+        if (!_addedOptions.Add(variableInfo.Name))
+            return;
+        // 如果当前分类不允许添加这个选项，直接返回
+        if (!CurrentCategory.CanOptionBeAdded(config, variableInfo.Name))
+            return;
+        // 创建实例并加入到_allOptions列表
+        var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T), config, variableInfo);
         _allOptions.Add(instance);
     }
 
@@ -197,7 +220,6 @@ public sealed class ConfigOptionsPanel : SUIPanel
             DelayRefreshCurrentPage = false;
             RefreshCurrentPage();
         }
-
         base.Update(gameTime);
 
         if (IsMouseHovering)

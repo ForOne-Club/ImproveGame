@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using Terraria.Chat;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.Packets;
 
@@ -23,7 +24,15 @@ public class ConfigOptionPacket : NetModule
         module._json = json;
         module.Send();
     }
-
+    public static void Send(ModConfig modConfig, PropertyFieldWrapper variableInfo, object value)
+    {
+        string json = JsonConvert.SerializeObject(value, ConfigManager.serializerSettings);
+        var module = NetModuleLoader.Get<ConfigOptionPacket>();
+        module._configName = modConfig.Name;
+        module._fieldName = variableInfo.Name;
+        module._json = json;
+        module.Send();
+    }
     public override void Receive()
     {
         // 理论上不可能出现的情况，没有验证还是发了包
@@ -36,12 +45,19 @@ public class ConfigOptionPacket : NetModule
         }
 
         var modConfig = ConfigManager.Configs[ImproveGame.Instance].Find(i => i.Name == _configName);
-        var fieldInfo = modConfig.GetType().GetField(_fieldName);
-        if (fieldInfo == null)
-            return;
 
+
+        PropertyFieldWrapper variableInfo = null;
+        var fieldInfo = modConfig.GetType().GetField(_fieldName);
+        var propertyInfo = modConfig.GetType().GetField(_fieldName);
+        if (fieldInfo != null)
+            variableInfo = new PropertyFieldWrapper(fieldInfo);
+        else if (propertyInfo != null)
+            variableInfo = new PropertyFieldWrapper(propertyInfo);
+        if (variableInfo == null)
+            return;
         var value = JsonConvert.DeserializeObject(_json, fieldInfo.FieldType, ConfigManager.serializerSettings);
-        ConfigHelper.SetConfigValue(modConfig, fieldInfo, value, false);
+        ConfigHelper.SetConfigValue(modConfig, variableInfo, value, false);
 
         // 转发到全体
         if (Main.netMode is NetmodeID.Server)

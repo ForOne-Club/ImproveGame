@@ -1,6 +1,7 @@
 ﻿using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UI.ModernConfig.FakeCategories;
 using ImproveGame.UIFramework.SUIElements;
+using Terraria.ModLoader.Config;
 
 namespace ImproveGame.UI.ModernConfig;
 
@@ -20,10 +21,14 @@ public sealed class CategorySidePanel : SUIPanel
         new VisualAndInterface(),
         new Minimap(),
     };
+    static Dictionary<Mod, Action<Mod, Dictionary<string, CategoryCard>>> cardAddingProcesses = [];
+    internal static readonly Dictionary<string, CategoryCard> Cards = [];
 
-    internal static readonly Dictionary<string, CategoryCard> Cards = new();
+    static Dictionary<Mod, Dictionary<string, CategoryCard>> ModedCards = [];
 
     private SUIScrollView2 Categories { get; set; }
+
+    internal static Category AboutPage_ModConfig = new AboutPage_ModConfig();
 
     static CategorySidePanel()
     {
@@ -54,12 +59,46 @@ public sealed class CategorySidePanel : SUIPanel
         Categories.SetSize(0f, 0f, 1f, 1f);
         Categories.JoinParent(this);
 
-        foreach ((string _, CategoryCard card) in Cards)
+
+    }
+    public void ChangeMod(Mod mod, bool reprocess = false)
+    {
+        //Categories.RemoveAllChildren();
+        Categories.ListView.RemoveAllChildren();
+        if (mod.Name == "ImproveGame")
+            foreach ((string _, CategoryCard card) in Cards)
+                card.JoinParent(Categories.ListView);
+        else
         {
-            card.JoinParent(Categories.ListView);
+            if (!ModedCards.TryGetValue(mod, out var dict)) 
+            {
+                dict = [];
+                ModedCards.Add(mod, dict);
+                reprocess = true;
+            }
+            if (reprocess) 
+            {
+                dict.Clear();
+                if (cardAddingProcesses.TryGetValue(mod, out var process))//我们莫得有自己的分类方式！！
+                    process.Invoke(mod, dict);
+                else
+                    DefaultCardAddingProcess(mod, dict);
+            }
+            foreach ((string _, CategoryCard card) in dict)
+                card.JoinParent(Categories.ListView);
         }
     }
-
+    public static void DefaultCardAddingProcess(Mod mod, Dictionary<string, CategoryCard> dict) 
+    {
+        if (mod == null || !ConfigManager.Configs.TryGetValue(mod, out var configs))
+            return;
+		var sortedConfigs = configs.OrderBy(x => Utils.CleanChatTags(x.DisplayName.Value)).ToList();
+        dict.Add("AboutPage_ModConfig",new CategoryCard(AboutPage_ModConfig));
+        foreach (var config in sortedConfigs) 
+        {
+            dict.Add(config.Name, new CategoryCard(new SingleConfigCategory(config)));
+        }
+    }
     private static void AddCard<T>() where T : Category
     {
         var category = Activator.CreateInstance<T>();
@@ -69,5 +108,10 @@ public sealed class CategorySidePanel : SUIPanel
     private static void AddCard(CategoryCard card)
     {
         Cards.Add(card.Category.LocalizationKey, card);
+    }
+
+    public static void RegisterCardAddingProcess(Mod mod, Action<Mod, Dictionary<string, CategoryCard>> process)
+    {
+        cardAddingProcesses[mod] = process;
     }
 }

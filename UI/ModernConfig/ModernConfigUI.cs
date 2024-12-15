@@ -35,6 +35,9 @@ public sealed class ModernConfigUI : UIState
     // 主栏下放描述
     public TooltipPanel TooltipPanel;
 
+    //当前打开的mod
+    public Mod currentMod;
+
     // 有点爽的东西，中键收藏生成粒子
     private UIParticleLayer _particleSystem = new()
     {
@@ -133,10 +136,12 @@ public sealed class ModernConfigUI : UIState
         CenteredItemTagHandler.ModernConfigDrawing = false;
     }
 
-    public void Open()
+    public void Open(Mod mod)
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
-        ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["AboutPage"].Category;
+
+
+        ConfigOptionsPanel.CategoryToSelectOnOpen =mod.Name == "ImproveGame" ? CategorySidePanel.Cards["AboutPage"].Category : CategorySidePanel.AboutPage_ModConfig;
         Enabled = true;
 
         if (Main.gameMenu)
@@ -148,6 +153,8 @@ public sealed class ModernConfigUI : UIState
         {
             IngameFancyUI.OpenUIState(this);
         }
+        currentMod = mod;
+        CategoryPanel.ChangeMod(mod,true);
     }
 
     public void Close()
@@ -161,7 +168,7 @@ public sealed class ModernConfigUI : UIState
                 IngameFancyUI.Close();
             else
             {
-                Interface.modConfigList.ModToSelectOnOpen = ImproveGame.Instance;
+                Interface.modConfigList.ModToSelectOnOpen = currentMod ?? ImproveGame.Instance;
                 Main.InGameUI.SetState(Interface.modConfigList);
 
 
@@ -171,7 +178,7 @@ public sealed class ModernConfigUI : UIState
         else
         {
             Main.menuMode = Interface.modConfigListID;
-            Interface.modConfigList.ModToSelectOnOpen = ImproveGame.Instance;
+            Interface.modConfigList.ModToSelectOnOpen = currentMod ?? ImproveGame.Instance;
         }
 
         OpenFromMasterControl = false;

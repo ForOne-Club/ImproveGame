@@ -216,7 +216,6 @@ public class SUIText : TimerView
         {
             FinalTextSnippets = [.. TextSnippetHelper.ConvertNormalSnippets(TextSnippetHelper.ParseMessage(LastString, TextColor))];
         }
-
         TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
         OnRecalculateText?.Invoke();
     }
@@ -229,6 +228,8 @@ public class SUIText : TimerView
 
         if (LastString != OriginalString || (_isWrapped && LastInnerWidth != inner.Width))
         {
+            bool f1 = LastString != OriginalString;
+            var w = LastInnerWidth;
             LastInnerWidth = inner.Width;
             RecalculateText();
         }

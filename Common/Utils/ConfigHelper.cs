@@ -3,17 +3,18 @@ using ImproveGame.Packets;
 using System.Reflection;
 using Terraria.Chat;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.Common.Utils;
 
 public static class ConfigHelper
 {
-    public static void SetConfigValue(ModConfig config, FieldInfo fieldInfo, object value, bool broadcast = true)
+    public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, bool broadcast = true)
     {
-        if (fieldInfo.FieldType != value.GetType())
-            throw new Exception($"Field type mismatch: {fieldInfo.FieldType} != {value.GetType()}");
+        if (variableInfo.Type != value.GetType())
+            throw new Exception($"Field type mismatch: {variableInfo.Type} != {value.GetType()}");
 
-        var modConfig = ConfigManager.Configs[config.Mod].Find(i => i.Name == config.Name);//ImproveGame.Instance //由螺线魔改
+        var modConfig = ConfigManager.Configs[config.Mod].Find(i => i.Name == config.Name);
 
         // TML的注释：
         // Main Menu: Save, leave reload for later
@@ -21,7 +22,8 @@ public static class ConfigHelper
         // SP or MP with ClientSide: Apply immediately if !NeedsReload
         if (Main.gameMenu)
         {
-            fieldInfo.SetValue(config, value);
+            variableInfo.SetValue(config, value);
+            //fieldInfo.SetValue(config, value);
             ConfigManager.Save(config); // 保存配置到文件
             ConfigManager.Load(modConfig); // 重新加载配置
             // modConfig.OnChanged(); delayed until ReloadRequired checked
@@ -31,7 +33,7 @@ public static class ConfigHelper
         else
         {
             // 需要重新加载，不允许保存
-            bool reloadRequired = fieldInfo.GetCustomAttribute<ReloadRequiredAttribute>() is not null;
+            bool reloadRequired = variableInfo.MemberInfo.GetCustomAttribute<ReloadRequiredAttribute>() is not null;
             if (reloadRequired)
             {
                 SoundEngine.PlaySound(SoundID.MenuClose);
@@ -59,24 +61,28 @@ public static class ConfigHelper
                 }
 
                 // 发送更好的体验自己的包
-                ConfigOptionPacket.Send(config, fieldInfo, value);
+                ConfigOptionPacket.Send(config, variableInfo, value);
                 return;
             }
 
             // 本地配置，或者处于服务器端，或者处于客户端，但不需要广播
-            fieldInfo.SetValue(config, value);
+            variableInfo.SetValue(config, value);
             ConfigManager.Save(config);
             ConfigManager.Load(modConfig);
             modConfig.OnChanged();
         }
     }
-
+    public static string GetModText(string modName, string str, params object[] arg)
+    {
+        string text = Language.GetTextValue($"Mods.{modName}.{str}", arg);
+        return ConvertLeftRight(text);
+    }
     public static string GetLocalizationKey(ModConfig config, string optionName)
         => $"Configs.{config.Name}.{optionName}";
 
     public static string GetTooltip(ModConfig config, string optionName)
-        => ConvertLeftRight(Language.GetTextValue($"Mods.{config.Mod.Name}.{GetLocalizationKey(config, optionName)}.Tooltip"));//GetText($"{GetLocalizationKey(config, optionName)}.Tooltip");
+        => GetModText(config.Mod.Name, $"{GetLocalizationKey(config, optionName)}.Tooltip");
 
     public static string GetLabel(ModConfig config, string optionName)
-        => ConvertLeftRight(Language.GetTextValue($"Mods.{config.Mod.Name}.{GetLocalizationKey(config, optionName)}.Label"));
+        => GetModText(config.Mod.Name, $"{GetLocalizationKey(config, optionName)}.Label");
 }

@@ -9,7 +9,7 @@ public sealed class OptionToggle : ModernConfigOption
 {
     public OptionToggle(ModConfig config, string optionName) : base(config, optionName, 60)
     {
-        if (FieldInfo.FieldType != typeof(bool))
+        if (VariableInfo.Type != typeof(bool))
             throw new Exception($"Field \"{OptionName}\" is not a bool");
         if (Enabled)
             _timer.ImmediateOpen();
@@ -72,7 +72,7 @@ public sealed class OptionToggle : ModernConfigOption
 
     public bool Enabled
     {
-        get => (bool)FieldInfo.GetValue(Config)!;
-        set => ConfigHelper.SetConfigValue(Config, FieldInfo, value);
+        get => (bool)VariableInfo.GetValue(Config)!;
+        set => ConfigHelper.SetConfigValue(Config, VariableInfo, value);
     }
 }

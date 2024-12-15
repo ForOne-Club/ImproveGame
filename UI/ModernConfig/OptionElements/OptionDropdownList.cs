@@ -84,12 +84,12 @@ public class OptionDropdownList : ModernConfigOption
 
     private void GetOptions()
     {
-        _valueStrings = Enum.GetNames(FieldInfo.FieldType);
+        _valueStrings = Enum.GetNames(VariableInfo.Type);
         _valueTooltips = new string[_valueStrings.Length];
 
         for (int i = 0; i < _valueStrings.Length; i++)
         {
-            var enumFieldFieldInfo = FieldInfo.FieldType.GetField(_valueStrings[i]);
+            var enumFieldFieldInfo = VariableInfo.Type.GetField(_valueStrings[i]);
             if (enumFieldFieldInfo is null)
                 continue;
 
@@ -104,7 +104,7 @@ public class OptionDropdownList : ModernConfigOption
 
     private void CheckValid()
     {
-        if (!FieldInfo.FieldType.IsEnum)
+        if (!VariableInfo.Type.IsEnum)
             throw new Exception($"Field \"{OptionName}\" is not a enum type");
     }
 
@@ -112,8 +112,8 @@ public class OptionDropdownList : ModernConfigOption
     {
         if (!Interactable) return;
 
-        var value = Enum.GetValues(FieldInfo.FieldType).GetValue(index);
-        ConfigHelper.SetConfigValue(Config, FieldInfo, value, broadcast);
+        var value = Enum.GetValues(VariableInfo.Type).GetValue(index);
+        ConfigHelper.SetConfigValue(Config, VariableInfo, value, broadcast);
     }
 
     public override void Update(GameTime gameTime)
@@ -147,6 +147,6 @@ public class OptionDropdownList : ModernConfigOption
             null, Color.White, 0f, tex.Size() / 2f, Vector2.One, effects, 0f);
     }
 
-    private int GetIndex() => Array.IndexOf(Enum.GetValues(FieldInfo.FieldType), FieldInfo.GetValue(Config));
+    private int GetIndex() => Array.IndexOf(Enum.GetValues(VariableInfo.Type), VariableInfo.GetValue(Config));
     private string GetString() => _valueStrings[GetIndex()];
 }

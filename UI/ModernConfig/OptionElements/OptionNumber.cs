@@ -24,7 +24,7 @@ public sealed class OptionNumber : ModernConfigOption
         };
         box.JoinParent(this);
 
-        bool isInt = FieldInfo.FieldType == typeof(int);
+        bool isInt = VariableInfo.Type == typeof(int);
         _numericTextBox = new SUINumericText
         {
             RelativeMode = RelativeMode.Horizontal,
@@ -65,20 +65,20 @@ public sealed class OptionNumber : ModernConfigOption
 
     private void CheckValid()
     {
-        if (FieldInfo.FieldType != typeof(int) && FieldInfo.FieldType != typeof(float) &&
-            FieldInfo.FieldType != typeof(double))
+        if (VariableInfo.Type != typeof(int) && VariableInfo.Type != typeof(float) &&
+            VariableInfo.Type != typeof(double))
             throw new Exception($"Field \"{OptionName}\" is not a int, float or double");
     }
 
     private void SetConfigValue(double value, bool broadcast)
     {
         if (!Interactable) return;
-        if (FieldInfo.FieldType == typeof(int))
-            ConfigHelper.SetConfigValue(Config, FieldInfo, (int)value, broadcast);
-        else if (FieldInfo.FieldType == typeof(float))
-            ConfigHelper.SetConfigValue(Config, FieldInfo, (float)value, broadcast);
+        if (VariableInfo.Type == typeof(int))
+            ConfigHelper.SetConfigValue(Config, VariableInfo, (int)value, broadcast);
+        else if (VariableInfo.Type == typeof(float))
+            ConfigHelper.SetConfigValue(Config, VariableInfo, (float)value, broadcast);
         else
-            ConfigHelper.SetConfigValue(Config, FieldInfo, value, broadcast);
+            ConfigHelper.SetConfigValue(Config, VariableInfo, value, broadcast);
     }
 
     public override void Update(GameTime gameTime)
@@ -88,7 +88,7 @@ public sealed class OptionNumber : ModernConfigOption
         _numericTextBox.IgnoresMouseInteraction = !Interactable;
 
         // 简直是天才的转换
-        var value = float.Parse(FieldInfo.GetValue(Config)!.ToString()!);
+        var value = float.Parse(VariableInfo.GetValue(Config)!.ToString()!);
         if (!_numericTextBox.IsWritingText)
             _numericTextBox.Value = value;
     }

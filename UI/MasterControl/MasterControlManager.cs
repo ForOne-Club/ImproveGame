@@ -384,7 +384,7 @@ public class MasterControlManager : ModSystem
             }
             else
             {
-                ui.Open();
+                ui.Open(Mod);
                 ui.OpenFromMasterControl = true;
             }
         };

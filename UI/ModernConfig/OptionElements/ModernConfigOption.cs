@@ -7,12 +7,41 @@ using ImproveGame.UIFramework.Graphics2D;
 using System.ComponentModel;
 using System.Reflection;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class ModernConfigOption : TimerView
 {
+    public ModernConfigOption(ModConfig config, PropertyFieldWrapper propertyFieldWrapper, int reservedWidth)
+    {
+        Config = config;
+        OptionName = propertyFieldWrapper.Name;
+
+        Width.Set(0f, 1f);
+        Height.Set(46f, 0f);
+        Rounded = new Vector4(12f);
+        SetPadding(12, 4);
+
+        VariableInfo = propertyFieldWrapper;
+
+        RelativeMode = RelativeMode.Vertical;
+        OverflowHidden = true;
+
+        var labelElement = new OptionLabelElement(config, OptionName, reservedWidth)
+        {
+            RelativeMode = RelativeMode.None
+        };
+        labelElement.OnUpdate += _ =>
+        {
+            labelElement.TextColor = MarkedAsFavorite
+                ? Color.Gold
+                : Color.White;
+        };
+        labelElement.JoinParent(this);
+        CheckAttributes();
+    }
     public ModernConfigOption(ModConfig config, string optionName, int reservedWidth)
     {
         Config = config;
@@ -23,8 +52,14 @@ public class ModernConfigOption : TimerView
         Rounded = new Vector4(12f);
         SetPadding(12, 4);
 
-        FieldInfo = Config.GetType().GetField(OptionName);
-        if (FieldInfo is null)
+        var fieldInfo = Config.GetType().GetField(OptionName);
+        var propertyInfo = Config.GetType().GetProperty(OptionName);
+        if(fieldInfo != null)
+            VariableInfo = new PropertyFieldWrapper(fieldInfo);
+        else if(propertyInfo != null)
+            VariableInfo = new PropertyFieldWrapper(propertyInfo);
+
+        if (VariableInfo is null)
             throw new Exception($"Field \"{OptionName}\" not found in config \"{Config.GetType().Name}\"");
 
         RelativeMode = RelativeMode.Vertical;
@@ -46,7 +81,7 @@ public class ModernConfigOption : TimerView
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        var displayConditionAttribute = FieldInfo.GetCustomAttribute<DisplayConditionAttribute>();
+        var displayConditionAttribute = VariableInfo.MemberInfo.GetCustomAttribute<DisplayConditionAttribute>();
         if (displayConditionAttribute == null)
         {
             base.Draw(spriteBatch);
@@ -132,10 +167,10 @@ public class ModernConfigOption : TimerView
     public override void RightMouseDown(UIMouseEvent evt)
     {
         base.RightMouseDown(evt);
-        var defaultValueAttribute = FieldInfo.GetCustomAttribute<DefaultValueAttribute>();
+        var defaultValueAttribute = VariableInfo.MemberInfo.GetCustomAttribute<DefaultValueAttribute>();
         if (defaultValueAttribute != null)
         {
-            ConfigHelper.SetConfigValue(Config, FieldInfo, defaultValueAttribute.Value);
+            ConfigHelper.SetConfigValue(Config, VariableInfo, defaultValueAttribute.Value);
             SoundEngine.PlaySound(SoundID.Chat);
         }
     }
@@ -157,9 +192,9 @@ public class ModernConfigOption : TimerView
 
     private void CheckAttributes()
     {
-        ReloadRequired = FieldInfo.GetCustomAttribute<ReloadRequiredAttribute>() is not null;
+        ReloadRequired = VariableInfo.MemberInfo.GetCustomAttribute<ReloadRequiredAttribute>() is not null;
 
-        var rangeAttribute = FieldInfo.GetCustomAttribute<RangeAttribute>();
+        var rangeAttribute = VariableInfo.MemberInfo.GetCustomAttribute<RangeAttribute>();
         if (rangeAttribute is {Min: int, Max: int })
         {
             Max = (int)rangeAttribute.Max;
@@ -178,7 +213,7 @@ public class ModernConfigOption : TimerView
             Min = (double)rangeAttribute.Min;
         }
 
-        var defaultValueAttribute = FieldInfo.GetCustomAttribute<DefaultValueAttribute>();
+        var defaultValueAttribute = VariableInfo.MemberInfo.GetCustomAttribute<DefaultValueAttribute>();
         if (defaultValueAttribute is {Value: int })
         {
             Default = (int)defaultValueAttribute.Value;
@@ -205,7 +240,9 @@ public class ModernConfigOption : TimerView
     public string Label => ConfigHelper.GetLabel(Config, OptionName);
     public string Tooltip => ConfigHelper.GetTooltip(Config, OptionName);
 
-    public FieldInfo FieldInfo { get; }
+    //public FieldInfo FieldInfo { get; }
+    public PropertyFieldWrapper VariableInfo { get; }
+
     public ModConfig Config { get; }
     public string OptionName { get; }
 
