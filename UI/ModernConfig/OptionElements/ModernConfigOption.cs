@@ -29,6 +29,8 @@ public class ModernConfigOption : TimerView
         RelativeMode = RelativeMode.Vertical;
         OverflowHidden = true;
 
+        CheckAttributes();
+
         var labelElement = new OptionLabelElement(config, OptionName, reservedWidth)
         {
             RelativeMode = RelativeMode.None
@@ -40,7 +42,6 @@ public class ModernConfigOption : TimerView
                 : Color.White;
         };
         labelElement.JoinParent(this);
-        CheckAttributes();
     }
     public ModernConfigOption(ModConfig config, string optionName, int reservedWidth)
     {
@@ -65,7 +66,7 @@ public class ModernConfigOption : TimerView
         RelativeMode = RelativeMode.Vertical;
         OverflowHidden = true;
 
-        var labelElement = new OptionLabelElement(config, optionName, reservedWidth)
+        var labelElement = new OptionLabelElement(config, optionName, reservedWidth, Label)
         {
             RelativeMode = RelativeMode.None
         };
@@ -74,6 +75,7 @@ public class ModernConfigOption : TimerView
             labelElement.TextColor = MarkedAsFavorite
                 ? Color.Gold
                 : Color.White;
+
         };
         labelElement.JoinParent(this);
         CheckAttributes();
@@ -139,14 +141,29 @@ public class ModernConfigOption : TimerView
         if (!IsMouseHovering)
             return;
 
-        string text = Tooltip;
+        string text = "";
+        if(ReloadRequired)
+            text += $" - [c/{Color.Orange.Hex3()}:{Language.GetTextValue("tModLoader.ModReloadRequiredMemberTooltip")}]\n";
+        text += Tooltip;
         TooltipPanel.SetText(text);
-
         // 不可控制，为什么呢？
+
+        bool f = CantOperateDueToOnlyGetter;
+
+        if (f) 
+        {
+            string readOnlyTip = GetText("Configs.ModernConfig.ReadOnlyTip");
+            UICommon.TooltipMouseText(readOnlyTip);
+        }
         if (Interactable)
             return;
 
-        if (ReloadRequired)
+        if (CantOperateDueToOnlyGetter) 
+        {
+            string readOnlyTip = GetText("Configs.ModernConfig.ReadOnlyTip");
+            UICommon.TooltipMouseText(readOnlyTip);
+        }
+        else if (ReloadRequired)
         {
             string reloadTip =
                 Language.GetTextValue("tModLoader.ModConfigCantSaveBecauseChangesWouldRequireAReload");
@@ -190,44 +207,10 @@ public class ModernConfigOption : TimerView
         ModernConfigUI.Instance.GenerateParticleAtMouse();
     }
 
-    private void CheckAttributes()
+    protected virtual void CheckAttributes()
     {
+        //我把只有输入框那个删了，然后Min这些值交由Slider处理，毕竟只有它用得到这些
         ReloadRequired = VariableInfo.MemberInfo.GetCustomAttribute<ReloadRequiredAttribute>() is not null;
-
-        var rangeAttribute = VariableInfo.MemberInfo.GetCustomAttribute<RangeAttribute>();
-        if (rangeAttribute is {Min: int, Max: int })
-        {
-            Max = (int)rangeAttribute.Max;
-            Min = (int)rangeAttribute.Min;
-        }
-
-        if (rangeAttribute is {Min: float, Max: float })
-        {
-            Max = (float)rangeAttribute.Max;
-            Min = (float)rangeAttribute.Min;
-        }
-
-        if (rangeAttribute is {Min: double, Max: double })
-        {
-            Max = (double)rangeAttribute.Max;
-            Min = (double)rangeAttribute.Min;
-        }
-
-        var defaultValueAttribute = VariableInfo.MemberInfo.GetCustomAttribute<DefaultValueAttribute>();
-        if (defaultValueAttribute is {Value: int })
-        {
-            Default = (int)defaultValueAttribute.Value;
-        }
-
-        if (defaultValueAttribute is {Value: float })
-        {
-            Default = (float)defaultValueAttribute.Value;
-        }
-
-        if (defaultValueAttribute is {Value: double })
-        {
-            Default = (double)defaultValueAttribute.Value;
-        }
     }
 
     /// <summary>
@@ -235,10 +218,10 @@ public class ModernConfigOption : TimerView
     /// </summary>
     public bool Highlighted;
 
-    protected bool Interactable => !CantOperateInGame || Main.gameMenu;
+    protected bool Interactable => !CantOperateDueToOnlyGetter && (!CantOperateInGame || Main.gameMenu) ;
 
-    public string Label => ConfigHelper.GetLabel(Config, OptionName);
-    public string Tooltip => ConfigHelper.GetTooltip(Config, OptionName);
+    public string Label => ConfigManager.GetLocalizedText<LabelKeyAttribute, LabelArgsAttribute>(VariableInfo, "Label") ?? ConfigHelper.GetLabel(Config, OptionName);
+    public string Tooltip => ConfigManager.GetLocalizedText<TooltipKeyAttribute, TooltipArgsAttribute>(VariableInfo, "Tooltip") ?? ConfigHelper.GetTooltip(Config, OptionName);
 
     //public FieldInfo FieldInfo { get; }
     public PropertyFieldWrapper VariableInfo { get; }
@@ -246,10 +229,10 @@ public class ModernConfigOption : TimerView
     public ModConfig Config { get; }
     public string OptionName { get; }
 
-    internal double Min = 0;
-    internal double Max = 1;
-    internal double Default = 1;
     internal bool ReloadRequired;
+    internal LabelKeyAttribute LabelKeyAttribute;
+    internal TooltipKeyAttribute TooltipKeyAttribute;
+
 
     private bool CantOperateDueToHostVerification =>
         Config.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient &&
@@ -258,6 +241,9 @@ public class ModernConfigOption : TimerView
     private bool CantOperateDueToPasswordVerification =>
         Config.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient &&
         MyUtils.Config.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered;
+
+    private bool CantOperateDueToOnlyGetter => 
+        !VariableInfo.CanWrite;
 
     private bool CantOperateInGame =>
         ReloadRequired || CantOperateDueToPasswordVerification || CantOperateDueToHostVerification;

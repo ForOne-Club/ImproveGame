@@ -170,7 +170,7 @@ public sealed class ConfigOptionsPanel : SUIPanel
 
     public void AddValueSlider(ModConfig config, string name) => AddToAllOptions<OptionSlider>(config, name);
 
-    public void AddValueText(ModConfig config, string name) => AddToAllOptions<OptionNumber>(config, name);
+    //public void AddValueText(ModConfig config, string name) => AddToAllOptions<OptionNumber>(config, name);
 
     public void AddEnum(ModConfig config, string name) => AddToAllOptions<OptionDropdownList>(config, name);
 

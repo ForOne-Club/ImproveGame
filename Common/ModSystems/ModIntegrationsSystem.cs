@@ -8,6 +8,7 @@ using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Packets;
+using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.PlayerStats;
 using System.Reflection;
 
@@ -193,7 +194,7 @@ public class ModIntegrationsSystem : ModSystem
         if (!ModLoader.TryGetMod("Gensokyo", out Mod gensokyo))
             return;
 
-        
+
         AddBuffIntegration(gensokyo, "ButterflyPheromones", true, "Buff_ButterflyPheromones");
         AddBuffIntegration(gensokyo, "OniSake", true, "Buff_SakeBoth");
         AddBuffIntegration(gensokyo, "HoshigumaDish", true, "Debuff_SakeHoshiguma");
@@ -467,6 +468,36 @@ public class ModIntegrationsSystem : ModSystem
                     case "GetUniversalAmmoId":
                         {
                             return ModContent.ItemType<UniversalAmmoIcon>();
+                        }
+                    case "RegisterCategory":
+                        {
+                            int length = args.Length;
+                            CategorySidePanel.RegisterCategory(args[1] as Mod, args[2] as List<KeyValuePair<string, Terraria.ModLoader.Config.ModConfig>>, 
+                                length > 3 ? (int)args[3] : 0, 
+                                length > 4 ? args[4] as Func<Texture2D> : null,
+                                length > 5 ? args[5] as Func<string> : null,
+                                length > 6 ? args[6] as Func<string> : null);
+                            break;
+                        }
+                    case "SetAboutPage":
+                        {
+                            int length = args.Length;
+                            CategorySidePanel.SetAboutPage(args[1] as Mod, args[2] as Func<string>,
+                                length > 3 ? (int)args[3] : 0,
+                                length > 4 ? args[4] as Func<Texture2D> : null,
+                                length > 5 ? args[5] as Func<string> : null,
+                                length > 6 ? args[6] as Func<string> : null);
+                            break;
+                        }
+                    case "RemoveCategory":
+                        {
+                            CategorySidePanel.RemoveCategory(args[1] as Mod);
+                            break;
+                        }
+                    case "RemoveAboutPage": 
+                        {
+                            CategorySidePanel.RemoveAboutPage(args[1] as Mod);
+                            break;
                         }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");

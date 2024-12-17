@@ -1,7 +1,10 @@
-﻿using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework;
+using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
+using System.ComponentModel;
+using System.Reflection;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
@@ -109,7 +112,8 @@ public sealed class OptionSlider : ModernConfigOption
 
     private SlideBox _slideBox;
     private SUINumericText _numericTextBox;
-
+    public readonly static Type[] SupportedTypes = [typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal)];
+    private readonly static Type[] FractionTypes = [typeof(float), typeof(double), typeof(decimal)];
     public OptionSlider(ModConfig config, string optionName) : base(config, optionName, 140)
     {
         CheckValid();
@@ -126,17 +130,57 @@ public sealed class OptionSlider : ModernConfigOption
         AddTextBox(box);
         AddSlideBox(box);
     }
+    internal double Min = 0;
+    internal double Max = 1;
+    internal double Default = 1;
+    internal double? Increment = null;
+    protected override void CheckAttributes()
+    {
+        base.CheckAttributes();
+        var type = VariableInfo.Type;
+        var pair = (Min, Max);
+        if (type == typeof(byte))
+            pair = (0.0, 255.0);
+        else if (type == typeof(sbyte))
+            pair = (-128.0, 127.0);
+        /*else if (type == typeof(short))
+            pair = (-32768.0, 32767.0);
+        else if (type == typeof(ushort))
+            pair = (0.0, 65536.0);
+        else if (type == typeof(int))
+            pair = (-2147483648.0, 2147483647.0);
+        else if (type == typeof(uint))
+            pair = (0.0, 4294967295);*/ //写high了突然想起来应该是0到100
+        else if (IsInt)
+            pair = (0.0, 100.0);
+        (Min, Max) = pair;
 
+
+        var rangeAttribute = VariableInfo.MemberInfo.GetCustomAttribute<RangeAttribute>();
+        if (rangeAttribute != null)
+        {
+            Max = Convert.ToDouble(rangeAttribute.Max);
+            Min = Convert.ToDouble(rangeAttribute.Min);
+        }
+
+
+        var defaultValueAttribute = VariableInfo.MemberInfo.GetCustomAttribute<DefaultValueAttribute>();
+        if (defaultValueAttribute != null)
+            Default = Convert.ToDouble(defaultValueAttribute.Value);
+
+        var incrementAttribute = VariableInfo.MemberInfo.GetCustomAttribute<IncrementAttribute>();
+        if (incrementAttribute != null)
+            Increment = Convert.ToDouble(incrementAttribute.Increment);
+    }
     private void CheckValid()
     {
-        if (VariableInfo.Type != typeof(int) && VariableInfo.Type != typeof(float) &&
-            VariableInfo.Type != typeof(double))
-            throw new Exception($"Field \"{OptionName}\" is not a int, float or double");
+        if (!SupportedTypes.Contains(VariableInfo.Type))
+            throw new Exception($"Field \"{OptionName}\" is not a supported type. OptionSlider supports all build-in-types except for Boolean, IntPtr and UIntPtr");
     }
 
     private void AddTextBox(View box)
     {
-        bool isInt = VariableInfo.Type == typeof(int);
+        bool isInt = IsInt;
         _numericTextBox = new SUINumericText
         {
             RelativeMode = RelativeMode.Horizontal,
@@ -161,6 +205,8 @@ public sealed class OptionSlider : ModernConfigOption
         {
             if (!double.TryParse(text, out var value))
                 return;
+            if (Increment is double d)
+                value = Math.Round((value - Min) / d) * d;
             value = Math.Clamp(value, Min, Max);
             SetConfigValue(value, broadcast: false);
         };
@@ -168,7 +214,11 @@ public sealed class OptionSlider : ModernConfigOption
         {
             if (!_numericTextBox.IsValueSafe)
                 return;
-            SetConfigValue(_numericTextBox.Value, broadcast: true);
+            var value = _numericTextBox.Value;
+            if (Increment is double d)
+                value = Math.Round((value - Min) / d) * d;
+            value = Math.Clamp(value, Min, Max);
+            SetConfigValue(value, broadcast: true);
         };
         _numericTextBox.SetPadding(2, 2, 2, 2); // Padding影响里面的文字绘制
         _numericTextBox.SetSizePixels(48, 28);
@@ -184,12 +234,22 @@ public sealed class OptionSlider : ModernConfigOption
         };
         _slideBox.ValueChangeCallback += () =>
         {
-            float value = MathHelper.Lerp((float)Min, (float)Max, _slideBox.Value);
+            double value = Min + (Max - Min) * _slideBox.Value;
+            if (Increment is double d && d != 0)
+            {
+                value = Math.Round(value / d) * d;
+            }
+            value = Math.Clamp(value, Min, Max);
             SetConfigValue(value, broadcast: false);
         };
         _slideBox.EndDraggingCallback += () =>
         {
-            float value = MathHelper.Lerp((float)Min, (float)Max, _slideBox.Value);
+            double value = Min + (Max - Min) * _slideBox.Value;
+            if (Increment is double d && d != 0)
+            {
+                value = Math.Round(value / d) * d;
+            }
+            value = Math.Clamp(value, Min, Max);
             SetConfigValue(value, broadcast: true);
         };
         _slideBox.JoinParent(box);
@@ -198,12 +258,8 @@ public sealed class OptionSlider : ModernConfigOption
     private void SetConfigValue(double value, bool broadcast)
     {
         if (!Interactable) return;
-        if (IsInt)
-            ConfigHelper.SetConfigValue(Config, VariableInfo, (int)Math.Round(value), broadcast);
-        else if (IsFloat)
-            ConfigHelper.SetConfigValue(Config, VariableInfo, (float)value, broadcast);
-        else
-            ConfigHelper.SetConfigValue(Config, VariableInfo, value, broadcast);
+        object realValue = Convert.ChangeType(IsFractional ? value : Math.Round(value), VariableInfo.Type);
+        ConfigHelper.SetConfigValue(Config, VariableInfo, realValue, broadcast);
     }
 
     public override void Update(GameTime gameTime)
@@ -221,8 +277,8 @@ public sealed class OptionSlider : ModernConfigOption
     }
 
     private static float InverseLerp(float a, float b, float value) => (value - a) / (b - a);
+    // 为什么不用Utils.GetLerpValue() //((
 
-    private bool IsFloat => VariableInfo.Type == typeof(float);
-    private bool IsInt => VariableInfo.Type == typeof(int);
-    private bool IsDouble => VariableInfo.Type == typeof(double);
+    private bool IsFractional => FractionTypes.Contains(VariableInfo.Type);
+    private bool IsInt => !IsFractional;
 }

@@ -4,6 +4,7 @@ ButtonApply: 应用预设
 ButtonInfo: 更多信息
 ButtonDelete: 删除预设
 ButtonRename: 重命名
+ReadOnlyTip: 该项配置只能读取值，无法写入
 
 AboutPage: {
 	Label: 关于

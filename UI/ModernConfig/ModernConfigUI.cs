@@ -140,8 +140,12 @@ public sealed class ModernConfigUI : UIState
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
 
-
-        ConfigOptionsPanel.CategoryToSelectOnOpen =mod.Name == "ImproveGame" ? CategorySidePanel.Cards["AboutPage"].Category : CategorySidePanel.AboutPage_ModConfig;
+        if (mod.Name == "ImproveGame")
+            ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["AboutPage"].Category;
+        else if (CategorySidePanel.ModedAboutPage.TryGetValue(mod, out var value))
+            ConfigOptionsPanel.CategoryToSelectOnOpen = value;
+        else
+            ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.AboutPage_ModConfig;
         Enabled = true;
 
         if (Main.gameMenu)

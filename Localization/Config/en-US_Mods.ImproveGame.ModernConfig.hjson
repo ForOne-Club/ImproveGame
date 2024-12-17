@@ -4,6 +4,7 @@ ButtonApply: Apply Preset
 ButtonInfo: More Info
 ButtonDelete: Delete Preset
 ButtonRename: Rename
+ReadOnlyTip: You can only get the value of this option.
 
 AboutPage: {
 	Label: About
