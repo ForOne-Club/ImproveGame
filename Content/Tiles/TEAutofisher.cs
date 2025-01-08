@@ -1057,4 +1057,36 @@ namespace ImproveGame.Content.Tiles
             AutoDeposit = flags[5];
         }
     }
+
+    /*
+     * 现在有三个方案：
+     * 1.用代理结构体暴露物品，结构体从TE得到，好处是扩展性强，
+     * 以后可以添加更多操作，但是需要使用者引用本mod。
+     * 2.通过ModCall接口返回物品字典，可以用简单的Call实现。
+     * 3.或者直接在TE里公开getter属性，也需要引用本mod。
+     * 
+     * 方案1和2均已经实现，提交时再决定使用哪个。
+     */
+    public readonly struct AutoFisherProxy(TEAutofisher autofisher)
+    {
+        public TEAutofisher Fisher { get; } = autofisher;
+        internal Point16 LocatePoint
+        {
+            get => Fisher.locatePoint;
+            set
+            {
+                if (value.X < 0 || value.Y < 0)
+                    return;
+                if (Framing.GetTileSafely(value).LiquidAmount == 0)
+                {
+                    value = Point16.NegativeOne;
+                }
+                Fisher.locatePoint = value;
+            }
+        }
+        public Item FishingPole => Fisher.fishingPole;
+        public Item Bait => Fisher.bait;
+        public Item Accessory => Fisher.accessory;
+        public Item[] Fish => Fisher.fish;
+    }
 }

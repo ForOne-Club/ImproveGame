@@ -11,6 +11,8 @@ using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Packets;
 using ImproveGame.UI.PlayerStats;
 using System.Reflection;
+using Terraria.DataStructures;
+using TEAutofisher = ImproveGame.Content.Tiles.TEAutofisher;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -500,7 +502,68 @@ public class ModIntegrationsSystem : ModSystem
                         {
                             return ModContent.ItemType<UniversalAmmoIcon>();
                         }
-                    default:
+                    // 获取钓鱼机物品
+                    case "GetFisherItems":
+                        {
+                            // Dictionary<string, object> Call(string, Point16)
+                            // or Dictionary<string, object> Call(string, int, int);
+                            Point16 location = default;
+                            Dictionary<string, object> dict;
+                            if(args.Length < 2)
+                            {
+                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
+                                    "expects at least 2 arguments but not.");
+                                dict = [];
+                                return dict;
+                            }
+                            else if (args[1] is Point16 point)
+                            {
+                                location = point;
+                            }
+                            else if (args[1] is int x)
+                            {
+                                if (args.Length >= 2 && args[2] is int y)
+                                {
+                                    location = new Point16(x, y);
+                                }
+                                else
+                                {
+                                    ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
+                                        "expects arg[2] as int but not.");
+                                    dict = [];
+                                    return dict;
+                                }
+                            }
+                            else
+                            {
+                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
+                                    "expects arg[1] as Point16 or int but not.");
+                                dict = [];
+                                return dict;
+                            }
+
+                            TEAutofisher fisher = TileEntity.ByPosition.
+                                TryGetValue(location, out var entity)
+                                ? entity as TEAutofisher
+                                : null;
+                            if (fisher is null)
+                            {
+                                ImproveGame.Instance.Logger.Error
+                                    ("Invalid arguments for GetFisherItems: " +
+                                    "expects a valid autofisher but not.");
+                                dict = [];
+                                return dict;
+                            }
+                            dict = new()
+                            {
+                                { "accessory", Enumerable.Repeat(fisher.accessory, 1) },
+                                { "bait", Enumerable.Repeat(fisher.bait, 1) },
+                                { "pole", Enumerable.Repeat(fisher.fishingPole, 1) },
+                                { "fish", Enumerable.Repeat(fisher.fish, 1) }
+                            };
+                            return dict;
+                        }
+                            default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");
                         return false;
                 }
