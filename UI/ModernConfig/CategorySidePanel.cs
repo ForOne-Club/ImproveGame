@@ -131,6 +131,8 @@ public sealed class CategorySidePanel : SUIPanel
             else
                 new CategoryCard(page).JoinParent(Categories.ListView);
 
+            new CategoryCard(new Favorites()).JoinParent(Categories.ListView);
+            new CategoryCard(new Everything()).JoinParent(Categories.ListView);
 
             if (!ModedCards.TryGetValue(mod, out var list))
                 DefaultCardAddingProcess(mod);

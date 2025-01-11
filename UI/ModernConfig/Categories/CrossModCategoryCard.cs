@@ -20,16 +20,34 @@ namespace ImproveGame.UI.ModernConfig.Categories
         }
         public static void AddOptionToPanel(PropertyFieldWrapper variable, ModConfig config, ConfigOptionsPanel panel)
         {
-            string name = variable.Name;
             Type type = variable.Type;
             if (type == typeof(bool))
-                panel.AddToggle(config, name);
+                panel.AddToggle(config, variable);
             else if (OptionSlider.SupportedTypes.Contains(type))
-                panel.AddValueSlider(config, name);
+                panel.AddValueSlider(config, variable);
             else if (type.IsEnum)
-                panel.AddEnum(config, name);
-            else
+                panel.AddEnum(config, variable);
+            else if (type == typeof(string))
+                panel.AddEditableText(config, variable);
+            else if (type.IsArray)
+            {
                 panel.AddNotSupportText(config, variable);
+            }
+            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                panel.AddNotSupportText(config, variable);
+            }
+            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(HashSet<>))
+            {
+                panel.AddNotSupportText(config, variable);
+            }
+            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            {
+                panel.AddNotSupportText(config, variable);
+            }
+            else
+                panel.AddObject(config, variable);
+            //panel.AddNotSupportText(config, variable);
         }
         public override int ItemIconId => iconID;
         readonly int iconID;

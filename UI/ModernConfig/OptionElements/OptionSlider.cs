@@ -6,10 +6,11 @@ using ImproveGame.UIFramework.SUIElements;
 using System.ComponentModel;
 using System.Reflection;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
-public sealed class OptionSlider : ModernConfigOption
+public class OptionSlider : ModernConfigOption //去掉了sealed
 {
     private class SlideBox : View
     {
@@ -116,6 +117,15 @@ public sealed class OptionSlider : ModernConfigOption
     private readonly static Type[] FractionTypes = [typeof(float), typeof(double), typeof(decimal)];
     public OptionSlider(ModConfig config, string optionName) : base(config, optionName, 140)
     {
+
+    }
+    public OptionSlider(ModConfig config, PropertyFieldWrapper variableInfo) : base(config, variableInfo, 140)
+    {
+
+    }
+    protected override void OnBind(ModConfig config, string optionName, int reservedWidth)
+    {
+        base.OnBind(config, optionName, reservedWidth);
         CheckValid();
 
         var box = new View
@@ -172,7 +182,7 @@ public sealed class OptionSlider : ModernConfigOption
         if (incrementAttribute != null)
             Increment = Convert.ToDouble(incrementAttribute.Increment);
     }
-    private void CheckValid()
+    protected virtual void CheckValid()
     {
         if (!SupportedTypes.Contains(VariableInfo.Type))
             throw new Exception($"Field \"{OptionName}\" is not a supported type. OptionSlider supports all build-in-types except for Boolean, IntPtr and UIntPtr");
@@ -257,9 +267,10 @@ public sealed class OptionSlider : ModernConfigOption
 
     private void SetConfigValue(double value, bool broadcast)
     {
-        if (!Interactable) return;
+        //if (!Interactable) return;
         object realValue = Convert.ChangeType(IsFractional ? value : Math.Round(value), VariableInfo.Type);
-        ConfigHelper.SetConfigValue(Config, VariableInfo, realValue, broadcast);
+        SetValueDirect(realValue);
+        //ConfigHelper.SetConfigValue(Config, VariableInfo, realValue, Item, broadcast, path: path);
     }
 
     public override void Update(GameTime gameTime)
@@ -270,7 +281,7 @@ public sealed class OptionSlider : ModernConfigOption
         _numericTextBox.IgnoresMouseInteraction = !Interactable;
 
         // 简直是天才的转换
-        var value = float.Parse(VariableInfo.GetValue(Config)!.ToString()!);
+        var value = float.Parse(VariableInfo.GetValue(Item)!.ToString()!);
         if (!_numericTextBox.IsWritingText)
             _numericTextBox.Value = value;
         _slideBox.Value = InverseLerp((float)Min, (float)Max, value);

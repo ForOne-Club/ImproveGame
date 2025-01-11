@@ -1,18 +1,25 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 /// <summary>
-/// 用于输入文本，未完工
+/// 用于输入文本
 /// </summary>
-public sealed class OptionStringText : ModernConfigOption
+public sealed class OptionEditableText : ModernConfigOption
 {
-    private readonly SUINumericText _numericTextBox;
-
-    public OptionStringText(ModConfig config, string optionName) : base(config, optionName, 70)
+    private SUIEditableText _TextBox;
+    public OptionEditableText(ModConfig config, string optionName) : base(config, optionName, 70)
     {
+    }
+    public OptionEditableText(ModConfig config, PropertyFieldWrapper variableInfo) : base(config, variableInfo, 70)
+    {
+    }
+    protected override void OnBind(ModConfig config, string optionName, int reservedWidth)
+    {
+        base.OnBind(config, optionName, reservedWidth);
         CheckValid();
 
         var box = new View
@@ -25,13 +32,11 @@ public sealed class OptionStringText : ModernConfigOption
         box.JoinParent(this);
 
         bool isInt = VariableInfo.Type == typeof(int);
-        _numericTextBox = new SUINumericText
+        _TextBox = new SUIEditableText
         {
             RelativeMode = RelativeMode.Horizontal,
             BgColor = Color.Black * 0.4f,
             Rounded = new Vector4(12f),
-            MinValue = 0,
-            MaxValue = 1 ,
             InnerText =
             {
                 TextAlign = new Vector2(0.5f, 0.5f),
@@ -41,55 +46,40 @@ public sealed class OptionStringText : ModernConfigOption
                 IsWrapped = false
             },
             MaxLength = isInt ? 12 : 4,
-            DefaultValue = 0,
-            Format = isInt ? "0" : "0.00",
             VAlign = 0.5f
         };
-        _numericTextBox.ContentsChanged += (ref string text) =>
+        _TextBox.ContentsChanged += (ref string text) =>
         {
-            if (!double.TryParse(text, out var value))
-                return;
-            value = Math.Clamp(value, 0, 1);
-            SetConfigValue(value, broadcast: false);
+            SetConfigValue(text, broadcast: false);
         };
-        _numericTextBox.EndTakingInput += () =>
+        _TextBox.EndTakingInput += () =>
         {
-            if (!_numericTextBox.IsValueSafe)
-                return;
-            SetConfigValue(_numericTextBox.Value, broadcast: true);
+            SetConfigValue(_TextBox.Text, broadcast: true);
         };
-        _numericTextBox.SetPadding(2, 2, 2, 2); // Padding影响里面的文字绘制
-        _numericTextBox.SetSizePixels(50, 28);
-        _numericTextBox.JoinParent(box);
+        _TextBox.SetPadding(2, 2, 2, 2); // Padding影响里面的文字绘制
+        _TextBox.SetSizePixels(50, 28);
+        _TextBox.JoinParent(box);
     }
-
     private void CheckValid()
     {
-        if (VariableInfo.Type != typeof(int) && VariableInfo.Type != typeof(float) &&
-            VariableInfo.Type != typeof(double))
-            throw new Exception($"Field \"{OptionName}\" is not a int, float or double");
+        if (VariableInfo.Type != typeof(string))
+            throw new Exception($"Field \"{OptionName}\" is not a string");
     }
 
-    private void SetConfigValue(double value, bool broadcast)
+    private void SetConfigValue(string value, bool broadcast)
     {
-        if (!Interactable) return;
-        if (VariableInfo.Type == typeof(int))
-            ConfigHelper.SetConfigValue(Config, VariableInfo, (int)value, broadcast);
-        else if (VariableInfo.Type == typeof(float))
-            ConfigHelper.SetConfigValue(Config, VariableInfo, (float)value, broadcast);
-        else
-            ConfigHelper.SetConfigValue(Config, VariableInfo, value, broadcast);
+        //if (!Interactable) return;
+        SetValueDirect(value);
+        //ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadcast, path: path);
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
 
-        _numericTextBox.IgnoresMouseInteraction = !Interactable;
-
-        // 简直是天才的转换
-        var value = float.Parse(VariableInfo.GetValue(Config)!.ToString()!);
-        if (!_numericTextBox.IsWritingText)
-            _numericTextBox.Value = value;
+        _TextBox.IgnoresMouseInteraction = !Interactable;
+        var value = VariableInfo.GetValue(Item)?.ToString();
+        if (!_TextBox.IsWritingText)
+            _TextBox.Text = value;
     }
 }

@@ -11,14 +11,23 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 public class OptionDropdownList : ModernConfigOption
 {
     private bool DropdownListPersists => ConfigOptionsPanel.Instance.DropdownList.DropdownCaller == this;
-    private readonly TimerView _textBox;
-    private readonly SlideText _textElement;
+    private TimerView _textBox;
+    private SlideText _textElement;
     private string[] _valueStrings;
     private string[] _valueTooltips;
     private float _maxTextWidth;
 
     public OptionDropdownList(ModConfig config, string optionName) : base(config, optionName, 70)
     {
+
+    }
+    public OptionDropdownList(ModConfig config, PropertyFieldWrapper variableInfo) : base(config, variableInfo, 70)
+    {
+
+    }
+    protected override void OnBind(ModConfig config, string optionName, int reservedWidth)
+    {
+        base.OnBind(config, optionName, reservedWidth);
         CheckValid();
 
         var box = new View
@@ -76,12 +85,11 @@ public class OptionDropdownList : ModernConfigOption
         _textElement = new SlideText(GetString(), 30)
         {
             VAlign = 0.5f,
-            Left = {Pixels = 8},
+            Left = { Pixels = 8 },
             RelativeMode = RelativeMode.None
         };
         _textElement.JoinParent(_textBox);
     }
-
     private void GetOptions()
     {
         _valueStrings = Enum.GetNames(VariableInfo.Type);
@@ -110,16 +118,17 @@ public class OptionDropdownList : ModernConfigOption
 
     private void SetConfigValue(int index, bool broadcast)
     {
-        if (!Interactable) return;
+        //if (!Interactable) return;
 
         var value = Enum.GetValues(VariableInfo.Type).GetValue(index);
-        ConfigHelper.SetConfigValue(Config, VariableInfo, value, broadcast);
+        SetValueDirect(value);
+        //ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadcast, path: path);
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        
+
         // 就算没有Hover，要是下拉框打开了也要高光（调整AnimationTimer）
         if (!IsMouseHovering)
         {
@@ -147,6 +156,6 @@ public class OptionDropdownList : ModernConfigOption
             null, Color.White, 0f, tex.Size() / 2f, Vector2.One, effects, 0f);
     }
 
-    private int GetIndex() => Array.IndexOf(Enum.GetValues(VariableInfo.Type), VariableInfo.GetValue(Config));
+    private int GetIndex() => Array.IndexOf(Enum.GetValues(VariableInfo.Type), VariableInfo.GetValue(Item));
     private string GetString() => _valueStrings[GetIndex()];
 }

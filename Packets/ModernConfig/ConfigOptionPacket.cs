@@ -14,23 +14,15 @@ public class ConfigOptionPacket : NetModule
     private string _configName;
     private string _fieldName;
     private string _json;
-
-    public static void Send(ModConfig modConfig, FieldInfo fieldInfo, object value)
-    {
-        string json = JsonConvert.SerializeObject(value, ConfigManager.serializerSettings);
-        var module = NetModuleLoader.Get<ConfigOptionPacket>();
-        module._configName = modConfig.Name;
-        module._fieldName = fieldInfo.Name;
-        module._json = json;
-        module.Send();
-    }
-    public static void Send(ModConfig modConfig, PropertyFieldWrapper variableInfo, object value)
+    private string[] path;
+    public static void Send(ModConfig modConfig, PropertyFieldWrapper variableInfo, object value,List<string> path = null)
     {
         string json = JsonConvert.SerializeObject(value, ConfigManager.serializerSettings);
         var module = NetModuleLoader.Get<ConfigOptionPacket>();
         module._configName = modConfig.Name;
         module._fieldName = variableInfo.Name;
         module._json = json;
+        module.path = path?.ToArray();
         module.Send();
     }
     public override void Receive()
@@ -57,7 +49,24 @@ public class ConfigOptionPacket : NetModule
         if (variableInfo == null)
             return;
         var value = JsonConvert.DeserializeObject(_json, fieldInfo.FieldType, ConfigManager.serializerSettings);
-        ConfigHelper.SetConfigValue(modConfig, variableInfo, value, false);
+
+        object item = modConfig;
+        var bindFlag = BindingFlags.Public | BindingFlags.Instance;
+        if (path != null) 
+            foreach(var p in path) 
+            {
+                var curType = item.GetType();
+                var fld = curType.GetField(p, bindFlag);
+                var prop = curType.GetProperty(p, bindFlag);
+                if (fld != null)
+                    item = fld.GetValue(item);
+                else if (prop != null)
+                    item = prop.GetValue(item);
+                else
+                    throw new Exception("Property or field doesn't exist in " + curType.Name);
+            }
+
+        ConfigHelper.SetConfigValue(modConfig, variableInfo, value,item, false, path: [.. path]);
 
         // 转发到全体
         if (Main.netMode is NetmodeID.Server)

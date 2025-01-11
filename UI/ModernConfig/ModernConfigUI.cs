@@ -165,7 +165,6 @@ public sealed class ModernConfigUI : UIState
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
         Enabled = false;
-
         if (!Main.gameMenu)
         {
             if (OpenFromMasterControl)

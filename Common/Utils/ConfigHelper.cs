@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets;
+using rail;
 using System.Reflection;
 using Terraria.Chat;
 using Terraria.ModLoader.Config;
@@ -9,20 +10,60 @@ namespace ImproveGame.Common.Utils;
 
 public static class ConfigHelper
 {
-    public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, bool broadcast = true)
+    public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, object item, bool broadcast = true, List<string> path = null)
     {
         if (variableInfo.Type != value.GetType())
             throw new Exception($"Field type mismatch: {variableInfo.Type} != {value.GetType()}");
 
         var modConfig = ConfigManager.Configs[config.Mod].Find(i => i.Name == config.Name);
-
+        bool valueType = item.GetType().IsValueType;
         // TML的注释：
         // Main Menu: Save, leave reload for later
         // MP with ServerSide: Send request to server
         // SP or MP with ClientSide: Apply immediately if !NeedsReload
         if (Main.gameMenu)
         {
-            variableInfo.SetValue(config, value);
+            if (!valueType)
+                variableInfo.SetValue(item, value);
+            else
+            {
+                //给struct套struct做的神必适配
+                //按说应该没人会把struct高强度套娃塞进ModConfig吧不会吧
+                if (path == null)
+                    throw new Exception("You must give a path when setvalue to a struct");
+                var flag = BindingFlags.Public | BindingFlags.Instance;
+                List<PropertyFieldWrapper> fldInfo = [];
+                List<object> objs = [modConfig];
+                Type curType = modConfig.GetType();
+                object curObj = modConfig;
+                for (int i = 0; i < path.Count; i++)
+                {
+                    var curFld = curType.GetField(path[i], flag);
+                    var curProp = curType.GetField(path[i], flag);
+                    PropertyFieldWrapper wrapper = null;
+                    if (curFld != null)
+                        wrapper = new PropertyFieldWrapper(curFld);
+                    else if (curProp != null)
+                        wrapper = new PropertyFieldWrapper(curProp);
+                    else
+                        throw new Exception("Property or field doesn't exist in " + curType.Name);
+
+                    fldInfo.Add(wrapper);
+                    curObj = curFld.GetValue(curObj);
+                    objs.Add(curObj);
+                    curType = curFld.FieldType;
+                }
+                fldInfo.Add(variableInfo);
+                for (int k = 1; k <= objs.Count; k++)
+                {
+                    fldInfo[^k].SetValue(objs[^k], k == 1 ? value : objs[^(k - 1)]);
+                    if (!objs[^k].GetType().IsValueType && k != objs.Count)
+                    {
+                        break;
+                    }
+                }
+
+            }
             //fieldInfo.SetValue(config, value);
             ConfigManager.Save(config); // 保存配置到文件
             ConfigManager.Load(modConfig); // 重新加载配置
@@ -61,7 +102,7 @@ public static class ConfigHelper
                 }
 
                 // 发送更好的体验自己的包
-                ConfigOptionPacket.Send(config, variableInfo, value);
+                ConfigOptionPacket.Send(config, variableInfo, value, path);
                 return;
             }
 
@@ -72,6 +113,7 @@ public static class ConfigHelper
             modConfig.OnChanged();
         }
     }
+    //public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, bool broadcast = true) => SetConfigValue(config, variableInfo, value, config, broadcast);
     public static string GetModText(string modName, string str, params object[] arg)
     {
         string text = Language.GetTextValue($"Mods.{modName}.{str}", arg);
