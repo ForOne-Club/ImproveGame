@@ -16,20 +16,13 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
     /// </summary>
     internal class OptionNotSupportText : ModernConfigOption
     {
-        public OptionNotSupportText(ModConfig config, PropertyFieldWrapper propertyFieldWrapper) : base(config, propertyFieldWrapper, 140)
+        protected override void OnBind()
         {
-            //var box = new View
-            //{
-            //    IsAdaptiveWidth = true,
-            //    HAlign = 1f,
-            //    VAlign = 0.5f,
-            //    Height = StyleDimension.Fill
-            //};
-            //box.JoinParent(this);
-            var variable = propertyFieldWrapper;
+            var variable = VariableInfo;
+            //TODO 本地化+对多级嵌套的正确支持
             var text = new SUIText
             {
-                TextOrKey = $"属性 {ConfigHelper.GetLabel(config, variable.Name)}({variable.Name}) \n类型 {variable.Type} 不受支持, 请前往普通模组配置修改",
+                TextOrKey = $"属性 {ConfigHelper.GetLabel(Config, variable.Name)}({variable.Name}) \n类型 {variable.Type} 不受支持, 请前往普通模组配置修改",
                 UseKey = true,
                 TextAlign = new Vector2(0f),
                 IsWrapped = true,
@@ -45,9 +38,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 Height.Set(text.TextSize.Y + 60, 0);
                 text.SetInnerPixels(new Vector2(0f, text.TextSize.Y));
                 Parent?.Recalculate();
-                //Recalculate();
             };
-
         }
 
     }

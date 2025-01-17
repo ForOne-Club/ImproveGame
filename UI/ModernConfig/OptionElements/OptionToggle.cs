@@ -8,33 +8,15 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public sealed class OptionToggle : ModernConfigOption
 {
-    public OptionToggle(ModConfig config, string optionName) : base(config, optionName, 60)
+    public override int labelReservedWidth => 60;
+    protected override void OnBind()
     {
-
-    }
-    public OptionToggle(ModConfig config, PropertyFieldWrapper variableInfo) : base(config, variableInfo, 60)
-    {
-
-    }
-    protected override void OnBind(ModConfig config, string optionName, int reservedWidth)
-    {
-        base.OnBind(config, optionName, reservedWidth);
-        if (VariableInfo.Type != typeof(bool))
+        if (VarType != typeof(bool))
             throw new Exception($"Field \"{OptionName}\" is not a bool");
 
-        try //有可能在还没绑定上正确的Item的时候就执行这里了
-        {
-            if (Enabled)
-                _timer.ImmediateOpen();
-        }
-        catch { }
-        
-    }
-    protected override void OnBind2()
-    {
         if (Enabled)
             _timer.ImmediateOpen();
-        base.OnBind2();
+
     }
     public override void Update(GameTime gameTime)
     {
@@ -93,7 +75,7 @@ public sealed class OptionToggle : ModernConfigOption
 
     public bool Enabled
     {
-        get => (bool)VariableInfo.GetValue(Item)!;
+        get => (bool)GetValue()!;
         set => SetValueDirect(value);//;ConfigHelper.SetConfigValue(Config, VariableInfo, value,Item, path: path);
     }
 }

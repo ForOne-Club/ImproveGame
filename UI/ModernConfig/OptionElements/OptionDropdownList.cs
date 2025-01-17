@@ -16,18 +16,9 @@ public class OptionDropdownList : ModernConfigOption
     private string[] _valueStrings;
     private string[] _valueTooltips;
     private float _maxTextWidth;
-
-    public OptionDropdownList(ModConfig config, string optionName) : base(config, optionName, 70)
+    public override int labelReservedWidth => 70;
+    protected override void OnBind()
     {
-
-    }
-    public OptionDropdownList(ModConfig config, PropertyFieldWrapper variableInfo) : base(config, variableInfo, 70)
-    {
-
-    }
-    protected override void OnBind(ModConfig config, string optionName, int reservedWidth)
-    {
-        base.OnBind(config, optionName, reservedWidth);
         CheckValid();
 
         var box = new View
@@ -92,12 +83,12 @@ public class OptionDropdownList : ModernConfigOption
     }
     private void GetOptions()
     {
-        _valueStrings = Enum.GetNames(VariableInfo.Type);
+        _valueStrings = Enum.GetNames(VarType);
         _valueTooltips = new string[_valueStrings.Length];
 
         for (int i = 0; i < _valueStrings.Length; i++)
         {
-            var enumFieldFieldInfo = VariableInfo.Type.GetField(_valueStrings[i]);
+            var enumFieldFieldInfo = VarType.GetField(_valueStrings[i]);
             if (enumFieldFieldInfo is null)
                 continue;
 
@@ -112,7 +103,7 @@ public class OptionDropdownList : ModernConfigOption
 
     private void CheckValid()
     {
-        if (!VariableInfo.Type.IsEnum)
+        if (!VarType.IsEnum)
             throw new Exception($"Field \"{OptionName}\" is not a enum type");
     }
 
@@ -120,7 +111,7 @@ public class OptionDropdownList : ModernConfigOption
     {
         //if (!Interactable) return;
 
-        var value = Enum.GetValues(VariableInfo.Type).GetValue(index);
+        var value = Enum.GetValues(VarType).GetValue(index);
         SetValueDirect(value);
         //ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadcast, path: path);
     }
@@ -156,6 +147,6 @@ public class OptionDropdownList : ModernConfigOption
             null, Color.White, 0f, tex.Size() / 2f, Vector2.One, effects, 0f);
     }
 
-    private int GetIndex() => Array.IndexOf(Enum.GetValues(VariableInfo.Type), VariableInfo.GetValue(Item));
+    private int GetIndex() => Array.IndexOf(Enum.GetValues(VarType), GetValue());
     private string GetString() => _valueStrings[GetIndex()];
 }

@@ -16,16 +16,5 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 {
     public class OptionVector2 : ModernConfigOption
     {
-        public OptionVector2(ModConfig config, PropertyFieldWrapper propertyFieldWrapper) : base(config, propertyFieldWrapper, 70)
-        {
-        }
-        public OptionVector2(ModConfig config, string name) : base(config, name, 70)
-        {
-
-        }
-        protected override void OnBind(ModConfig config, string optionName, int reservedWidth)
-        {
-            base.OnBind(config, optionName, reservedWidth);
-        }
     }
 }

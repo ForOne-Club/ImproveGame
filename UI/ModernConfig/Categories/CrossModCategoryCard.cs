@@ -30,9 +30,7 @@ namespace ImproveGame.UI.ModernConfig.Categories
             else if (type == typeof(string))
                 panel.AddEditableText(config, variable);
             else if (type.IsArray)
-            {
-                panel.AddNotSupportText(config, variable);
-            }
+                panel.AddArray(config, variable);
             else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
             {
                 panel.AddNotSupportText(config, variable);

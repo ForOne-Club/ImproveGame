@@ -18,99 +18,80 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class ModernConfigOption : TimerView
 {
-    public static UIElement WrapIt(UIElement parent, ref int top, ModConfig modConfig, PropertyFieldWrapper variable, object item, int order, object list = null, Type arrayType = null, int index = -1)
+    public static UIElement WrapIt(UIElement parent, ModConfig modConfig, PropertyFieldWrapper variable, object item, object list = null, Type arrayType = null, int index = -1)
     {
         Type type = variable.Type;
+        if (arrayType != null)
+        {
+            type = arrayType;
+        }
         ModernConfigOption option;
-        bool unsupported = false;
         if (type == typeof(bool))
-            option = new OptionToggle(modConfig, variable);
+            option = new OptionToggle();
         else if (OptionSlider.SupportedTypes.Contains(type))
-            option = new OptionSlider(modConfig, variable);
+            option = new OptionSlider();
         else if (type.IsEnum)
-            option = new OptionDropdownList(modConfig, variable);
+            option = new OptionDropdownList();
         else if (type == typeof(string))
-            option = new OptionEditableText(modConfig, variable);
+            option = new OptionEditableText();
         else if (type.IsArray)
-        {
-            option = new OptionNotSupportText(modConfig, variable);
-            unsupported = true;
-        }
+            option = new OptionArray();
         else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
-        {
-            option = new OptionNotSupportText(modConfig, variable);
-            unsupported = true;
-        }
+            option = new OptionNotSupportText();
         else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(HashSet<>))
-        {
-            option = new OptionNotSupportText(modConfig, variable);
-            unsupported = true;
-        }
+            option = new OptionNotSupportText();
         else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
-        {
-            option = new OptionNotSupportText(modConfig, variable);
-            unsupported = true;
-        }
+            option = new OptionNotSupportText();
         else
-        {
-            option = new OptionObject(modConfig, variable);
-            //unsupported = true;
-        }
-        if (!unsupported)
-        {
-            option.index = index;
-            option.List = (IList)list;
-            option.Item = item;
-            option.path = [];
-            if (parent is ModernConfigOption parentOption)
-            {
-                if (parentOption.path != null)
-                    option.path.AddRange(parentOption.path);
-                option.path.Add(parentOption.VariableInfo.Name);
-            }
-            option.OnBind2();
-        }
+            option = new OptionObject();
 
+        option.index = index;
+        option.List = (IList)list;
+        option.Item = item;
+        option.path = [];
+        if (parent is ModernConfigOption parentOption)
+        {
+            if (parentOption.path != null)
+                option.path.AddRange(parentOption.path);
+            option.path.Add(parentOption.VariableInfo.Name);
+        }
+        option.Bind(modConfig, variable);
         option.JoinParent(parent);
 
         return option;
     }
-
-
-    public ModernConfigOption(ModConfig config, string optionName, int reservedWidth, object ownerItem = null)
+    public static PropertyFieldWrapper GetWrapper(Type type,string optionName) 
     {
-        Config = config;
-        OptionName = optionName;
-        var fieldInfo = config.GetType().GetField(OptionName);
-        var propertyInfo = config.GetType().GetProperty(OptionName);
+        var fieldInfo = type.GetField(optionName);
+        var propertyInfo = type.GetProperty(optionName);
+        PropertyFieldWrapper result = null;
         if (fieldInfo != null)
-            VariableInfo = new PropertyFieldWrapper(fieldInfo);
+            result = new PropertyFieldWrapper(fieldInfo);
         else if (propertyInfo != null)
-            VariableInfo = new PropertyFieldWrapper(propertyInfo);
-        if (VariableInfo is null)
-            throw new Exception($"Field \"{OptionName}\" not found in config \"{config.GetType().Name}\"");
-        Item = ownerItem ?? config;
-        OnBind(config, optionName, reservedWidth);
+            result = new PropertyFieldWrapper(propertyInfo);
+        else
+            throw new Exception($"Field \"{optionName}\" not found in type \"{type.Name}\"");
+        return result;
     }
 
-    public ModernConfigOption(ModConfig config, PropertyFieldWrapper propertyFieldWrapper, int reservedWidth, object ownerItem = null)
+    public virtual int labelReservedWidth => 70;
+    public Type VarType => List != null ? List[index].GetType() : VariableInfo.Type;
+    //原来的构造函数改成OnBind了
+    //因为现在要构造出来另外赋一些值再Bind，都写构造函数太杂乱了
+    public void Bind(ModConfig config, PropertyFieldWrapper propertyFieldWrapper) 
     {
         Config = config;
         OptionName = propertyFieldWrapper.Name;
         VariableInfo = propertyFieldWrapper;
-        Item = ownerItem ?? config;
-        OnBind(config, OptionName, reservedWidth);
-    }
+        Item ??= config;
 
-    protected virtual void OnBind(ModConfig config, string optionName, int reservedWidth)
-    {
         RelativeMode = RelativeMode.Vertical;
         OverflowHidden = true;
         Width.Set(0f, 1f);
         Height.Set(46f, 0f);
         Rounded = new Vector4(12f);
         SetPadding(12, 4);
-        var labelElement = new OptionLabelElement(config, optionName, reservedWidth, Label)
+        var labelElement = new OptionLabelElement(config, OptionName, labelReservedWidth, Label)
         {
             RelativeMode = RelativeMode.None
         };
@@ -123,16 +104,27 @@ public class ModernConfigOption : TimerView
         };
         labelElement.JoinParent(this);
         CheckAttributes();
-
+        OnBind();
     }
-    protected virtual void OnBind2() 
+    
+    protected virtual void OnBind()
     {
+        
 
     }
     protected void SetValueDirect(object value)
     {
         if (!Interactable) return;
-        ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, path: path);
+
+        ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, path: path, List: List, Index: index);
+
+    }
+    protected object GetValue() 
+    {
+        if (List != null)
+            return List[index];
+
+        return VariableInfo.GetValue(Item);
     }
     public override void Draw(SpriteBatch spriteBatch)
     {
@@ -283,14 +275,14 @@ public class ModernConfigOption : TimerView
 
     protected bool Interactable => !CantOperateDueToOnlyGetter && (!CantOperateInGame || Main.gameMenu);
 
-    public string Label => List != null ? index.ToString() : (ConfigManager.GetLocalizedText<LabelKeyAttribute, LabelArgsAttribute>(VariableInfo, "Label") ?? ConfigHelper.GetLabel(Config, OptionName));
+    public string Label => List != null ? (index + 1).ToString() : (ConfigManager.GetLocalizedText<LabelKeyAttribute, LabelArgsAttribute>(VariableInfo, "Label") ?? ConfigHelper.GetLabel(Config, OptionName));
     public string Tooltip => ConfigManager.GetLocalizedText<TooltipKeyAttribute, TooltipArgsAttribute>(VariableInfo, "Tooltip") ?? ConfigHelper.GetTooltip(Config, OptionName);
 
     //public FieldInfo FieldInfo { get; }
-    public PropertyFieldWrapper VariableInfo { get; }
+    public PropertyFieldWrapper VariableInfo { get; private set; }
 
-    public ModConfig Config { get; }
-    public string OptionName { get; }
+    public ModConfig Config { get; private set; }
+    public string OptionName { get; private set; }
 
     internal bool ReloadRequired;
     internal LabelKeyAttribute LabelKeyAttribute;
@@ -330,14 +322,8 @@ public class ModernConfigOption : TimerView
     /// </summary>
     public object Item
     {
-        get
-        {
-            return item;
-        }
-        set
-        {
-            item = value;
-        }
+        get=> item;
+        set => item = value;
     }
     object item;
     /// <summary>

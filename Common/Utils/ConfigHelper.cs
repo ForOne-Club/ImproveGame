@@ -1,18 +1,75 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets;
 using rail;
+using System.IO;
+using System;
 using System.Reflection;
+using Terraria;
 using Terraria.Chat;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
+using System.Collections.Generic;
+using Terraria.ModLoader.UI;
+using System.Collections;
 
 namespace ImproveGame.Common.Utils;
 
 public static class ConfigHelper
 {
-    public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, object item, bool broadcast = true, List<string> path = null)
+    static void InternalSetValue(ModConfig modConfig, PropertyFieldWrapper variableInfo, object value, object item, List<string> path, IList List, int Index)
     {
-        if (variableInfo.Type != value.GetType())
+        if (!item.GetType().IsValueType)
+            if (List != null)
+                List[Index] = value;
+            else
+                variableInfo.SetValue(item, value);
+        else
+        {
+            //给struct套struct做的神必适配
+            //按说应该没人会把struct高强度套娃塞进ModConfig吧不会吧
+            if (path == null)
+                throw new Exception("You must give a path when setvalue to a struct");
+            var flag = BindingFlags.Public | BindingFlags.Instance;
+            List<PropertyFieldWrapper> fldInfo = [];
+            List<object> objs = [modConfig];
+            Type curType = modConfig.GetType();
+            object curObj = modConfig;
+            for (int i = 0; i < path.Count; i++)
+            {
+                var curFld = curType.GetField(path[i], flag);
+                var curProp = curType.GetProperty(path[i], flag);
+                PropertyFieldWrapper wrapper = null;
+                if (curFld != null)
+                    wrapper = new PropertyFieldWrapper(curFld);
+                else if (curProp != null)
+                    wrapper = new PropertyFieldWrapper(curProp);
+                else
+                    throw new Exception("Property or field doesn't exist in " + curType.Name);
+
+                fldInfo.Add(wrapper);
+                curObj = curFld.GetValue(curObj);
+                objs.Add(curObj);
+                curType = curFld.FieldType;
+            }
+            fldInfo.Add(variableInfo);
+            variableInfo.SetValue(objs[^1], value);
+            variableInfo.SetValue(item, value);//两个是不同的引用，一个在ModConfig里，一个在Option里，都得改
+
+            for (int k = 2; k <= objs.Count; k++)
+            {
+                fldInfo[^k].SetValue(objs[^k], objs[^(k - 1)]);
+                if (!objs[^k].GetType().IsValueType && k != objs.Count)
+                    break;
+
+            }
+
+        }
+    }
+
+    public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, object item, bool broadcast = true, List<string> path = null, IList List = null, int Index = -1)
+    {
+        Type type = List != null ? List[Index].GetType() : variableInfo.Type;
+        if (type != value.GetType())
             throw new Exception($"Field type mismatch: {variableInfo.Type} != {value.GetType()}");
 
         var modConfig = ConfigManager.Configs[config.Mod].Find(i => i.Name == config.Name);
@@ -23,50 +80,11 @@ public static class ConfigHelper
         // SP or MP with ClientSide: Apply immediately if !NeedsReload
         if (Main.gameMenu)
         {
-            if (!valueType)
-                variableInfo.SetValue(item, value);
-            else
-            {
-                //给struct套struct做的神必适配
-                //按说应该没人会把struct高强度套娃塞进ModConfig吧不会吧
-                if (path == null)
-                    throw new Exception("You must give a path when setvalue to a struct");
-                var flag = BindingFlags.Public | BindingFlags.Instance;
-                List<PropertyFieldWrapper> fldInfo = [];
-                List<object> objs = [modConfig];
-                Type curType = modConfig.GetType();
-                object curObj = modConfig;
-                for (int i = 0; i < path.Count; i++)
-                {
-                    var curFld = curType.GetField(path[i], flag);
-                    var curProp = curType.GetField(path[i], flag);
-                    PropertyFieldWrapper wrapper = null;
-                    if (curFld != null)
-                        wrapper = new PropertyFieldWrapper(curFld);
-                    else if (curProp != null)
-                        wrapper = new PropertyFieldWrapper(curProp);
-                    else
-                        throw new Exception("Property or field doesn't exist in " + curType.Name);
-
-                    fldInfo.Add(wrapper);
-                    curObj = curFld.GetValue(curObj);
-                    objs.Add(curObj);
-                    curType = curFld.FieldType;
-                }
-                fldInfo.Add(variableInfo);
-                for (int k = 1; k <= objs.Count; k++)
-                {
-                    fldInfo[^k].SetValue(objs[^k], k == 1 ? value : objs[^(k - 1)]);
-                    if (!objs[^k].GetType().IsValueType && k != objs.Count)
-                    {
-                        break;
-                    }
-                }
-
-            }
+            InternalSetValue(config, variableInfo, value, item, path, List, Index);
             //fieldInfo.SetValue(config, value);
             ConfigManager.Save(config); // 保存配置到文件
-            ConfigManager.Load(modConfig); // 重新加载配置
+            //ConfigManager.Load(modConfig); // 重新加载配置
+
             // modConfig.OnChanged(); delayed until ReloadRequired checked
             // Reload will be forced by Back Button in UIMods if needed
         }
@@ -107,9 +125,10 @@ public static class ConfigHelper
             }
 
             // 本地配置，或者处于服务器端，或者处于客户端，但不需要广播
-            variableInfo.SetValue(config, value);
+            //variableInfo.SetValue(item, value);
+            InternalSetValue(config, variableInfo, value, item, path, List, Index);
             ConfigManager.Save(config);
-            ConfigManager.Load(modConfig);
+            //ConfigManager.Load(modConfig);
             modConfig.OnChanged();
         }
     }

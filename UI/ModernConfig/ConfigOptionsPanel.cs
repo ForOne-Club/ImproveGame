@@ -176,17 +176,18 @@ public sealed class ConfigOptionsPanel : SUIPanel
     public void AddEnum(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionDropdownList>(config, nameOrMemberInfo);
 
     public void AddObject(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionObject>(config, nameOrMemberInfo);
+    public void AddArray(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionArray>(config, nameOrMemberInfo);
 
 
     public void AddNotSupportText(ModConfig config, PropertyFieldWrapper variableInfo) => AddToAllOptions<OptionNotSupportText>(config, variableInfo);
 
     private void AddToAllOptions<T>(ModConfig config, object nameOrMemberInfo) where T : ModernConfigOption
     {
-        if (nameOrMemberInfo is not string name)
-            if (nameOrMemberInfo is PropertyFieldWrapper MemberInfo)
-                name = MemberInfo.Name;
+        if (nameOrMemberInfo is not PropertyFieldWrapper MemberInfo)
+            if (nameOrMemberInfo is string memberName)
+                MemberInfo = ModernConfigOption.GetWrapper(config.GetType(),memberName);
             else return;
-        
+         var name = MemberInfo.Name;
         // 如果已经添加过这个选项，直接返回
         if (!_addedOptions.Add(name))
             return;
@@ -194,7 +195,8 @@ public sealed class ConfigOptionsPanel : SUIPanel
         if (!CurrentCategory.CanOptionBeAdded(config, name))
             return;
         // 创建实例并加入到_allOptions列表
-        var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T), config, nameOrMemberInfo);
+        var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T));//, config, nameOrMemberInfo
+        instance.Bind(config, MemberInfo);
         _allOptions.Add(instance);
     }
 

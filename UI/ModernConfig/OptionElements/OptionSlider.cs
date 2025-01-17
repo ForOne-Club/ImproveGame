@@ -115,17 +115,8 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     private SUINumericText _numericTextBox;
     public readonly static Type[] SupportedTypes = [typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal)];
     private readonly static Type[] FractionTypes = [typeof(float), typeof(double), typeof(decimal)];
-    public OptionSlider(ModConfig config, string optionName) : base(config, optionName, 140)
+    protected override void OnBind()
     {
-
-    }
-    public OptionSlider(ModConfig config, PropertyFieldWrapper variableInfo) : base(config, variableInfo, 140)
-    {
-
-    }
-    protected override void OnBind(ModConfig config, string optionName, int reservedWidth)
-    {
-        base.OnBind(config, optionName, reservedWidth);
         CheckValid();
 
         var box = new View
@@ -147,22 +138,28 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     protected override void CheckAttributes()
     {
         base.CheckAttributes();
-        var type = VariableInfo.Type;
+        var type = VarType;
         var pair = (Min, Max);
+        if (IsInt)
+            pair = (0.0, 100.0);
+
+
         if (type == typeof(byte))
             pair = (0.0, 255.0);
         else if (type == typeof(sbyte))
             pair = (-128.0, 127.0);
-        /*else if (type == typeof(short))
-            pair = (-32768.0, 32767.0);
-        else if (type == typeof(ushort))
-            pair = (0.0, 65536.0);
-        else if (type == typeof(int))
-            pair = (-2147483648.0, 2147483647.0);
-        else if (type == typeof(uint))
-            pair = (0.0, 4294967295);*/ //写high了突然想起来应该是0到100
-        else if (IsInt)
-            pair = (0.0, 100.0);
+
+        if (VariableInfo.IsProperty) //如果是属性就可以玩得花一点(x
+        {
+            if (type == typeof(short))
+                pair = (-32768.0, 32767.0);
+            else if (type == typeof(ushort))
+                pair = (0.0, 65536.0);
+            else if (type == typeof(int))
+                pair = (-2147483648.0, 2147483647.0);
+            else if (type == typeof(uint))
+                pair = (0.0, 4294967295);
+        }
         (Min, Max) = pair;
 
 
@@ -184,10 +181,9 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     }
     protected virtual void CheckValid()
     {
-        if (!SupportedTypes.Contains(VariableInfo.Type))
+        if (!SupportedTypes.Contains(VarType))
             throw new Exception($"Field \"{OptionName}\" is not a supported type. OptionSlider supports all build-in-types except for Boolean, IntPtr and UIntPtr");
     }
-
     private void AddTextBox(View box)
     {
         bool isInt = IsInt;
@@ -215,6 +211,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         {
             if (!double.TryParse(text, out var value))
                 return;
+            if (!_numericTextBox.IsWritingText) return; // 有可能是属性导致跟着另一个变了
             if (Increment is double d)
                 value = Math.Round((value - Min) / d) * d;
             value = Math.Clamp(value, Min, Max);
@@ -268,7 +265,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     private void SetConfigValue(double value, bool broadcast)
     {
         //if (!Interactable) return;
-        object realValue = Convert.ChangeType(IsFractional ? value : Math.Round(value), VariableInfo.Type);
+        object realValue = Convert.ChangeType(IsFractional ? value : Math.Round(value), VarType);
         SetValueDirect(realValue);
         //ConfigHelper.SetConfigValue(Config, VariableInfo, realValue, Item, broadcast, path: path);
     }
@@ -281,7 +278,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         _numericTextBox.IgnoresMouseInteraction = !Interactable;
 
         // 简直是天才的转换
-        var value = float.Parse(VariableInfo.GetValue(Item)!.ToString()!);
+        var value = float.Parse(GetValue()!.ToString()!);
         if (!_numericTextBox.IsWritingText)
             _numericTextBox.Value = value;
         _slideBox.Value = InverseLerp((float)Min, (float)Max, value);
@@ -290,6 +287,6 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     private static float InverseLerp(float a, float b, float value) => (value - a) / (b - a);
     // 为什么不用Utils.GetLerpValue() //((
 
-    private bool IsFractional => FractionTypes.Contains(VariableInfo.Type);
+    private bool IsFractional => FractionTypes.Contains(VarType);
     private bool IsInt => !IsFractional;
 }

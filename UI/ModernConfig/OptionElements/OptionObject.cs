@@ -12,39 +12,22 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 {
     public class OptionObject:ModernConfigOption
     {
-        public OptionObject(ModConfig config, PropertyFieldWrapper propertyFieldWrapper) : base(config, propertyFieldWrapper, 70)
+        protected override void OnBind()
         {
-        }
-        public OptionObject(ModConfig config, string name) : base(config, name, 70)
-        {
-
-        }
-        protected override void OnBind2()
-        {
-            base.OnBind2();
-            int order = 0;
-            object data = VariableInfo.GetValue(Item);
+            object data = GetValue();
             if (data == null)
                 return;
+            float subHeight = 0;
             foreach (PropertyFieldWrapper variable in ConfigManager.GetFieldsAndProperties(data))
             {
                 if (Attribute.IsDefined(variable.MemberInfo, typeof(JsonIgnoreAttribute)))
                     continue;
-
-                int top = 0;
-
-                //UIModConfig.HandleHeader(dataList, ref top, ref order, variable);
-
-                var wrapped = WrapIt(this, ref top, Config, variable, data, order++);
+                var wrapped = WrapIt(this, Config, variable, data);
+                subHeight += wrapped.Height.Pixels;
             }
-            Height.Set(46 * (1 + Children.Count()), 0);
+
+            Height.Set(60 + subHeight, 0);
             Recalculate();
-        }
-        protected override void OnBind(ModConfig config, string optionName, int reservedWidth)
-        {
-            base.OnBind(config, optionName, reservedWidth);
-
-
         }
     }
 }

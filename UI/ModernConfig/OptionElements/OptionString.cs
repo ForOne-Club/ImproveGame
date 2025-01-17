@@ -11,15 +11,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 public sealed class OptionEditableText : ModernConfigOption
 {
     private SUIEditableText _TextBox;
-    public OptionEditableText(ModConfig config, string optionName) : base(config, optionName, 70)
+    protected override void OnBind()
     {
-    }
-    public OptionEditableText(ModConfig config, PropertyFieldWrapper variableInfo) : base(config, variableInfo, 70)
-    {
-    }
-    protected override void OnBind(ModConfig config, string optionName, int reservedWidth)
-    {
-        base.OnBind(config, optionName, reservedWidth);
         CheckValid();
 
         var box = new View
@@ -31,7 +24,6 @@ public sealed class OptionEditableText : ModernConfigOption
         };
         box.JoinParent(this);
 
-        bool isInt = VariableInfo.Type == typeof(int);
         _TextBox = new SUIEditableText
         {
             RelativeMode = RelativeMode.Horizontal,
@@ -41,11 +33,11 @@ public sealed class OptionEditableText : ModernConfigOption
             {
                 TextAlign = new Vector2(0.5f, 0.5f),
                 TextOffset = new Vector2(0f, -2f),
-                MaxCharacterCount = isInt ? 12 : 4,
+                MaxCharacterCount = 200,
                 MaxLines = 1,
                 IsWrapped = false
             },
-            MaxLength = isInt ? 12 : 4,
+            MaxLength = 200,
             VAlign = 0.5f
         };
         _TextBox.ContentsChanged += (ref string text) =>
@@ -62,7 +54,7 @@ public sealed class OptionEditableText : ModernConfigOption
     }
     private void CheckValid()
     {
-        if (VariableInfo.Type != typeof(string))
+        if (VarType != typeof(string))
             throw new Exception($"Field \"{OptionName}\" is not a string");
     }
 
@@ -78,7 +70,7 @@ public sealed class OptionEditableText : ModernConfigOption
         base.Update(gameTime);
 
         _TextBox.IgnoresMouseInteraction = !Interactable;
-        var value = VariableInfo.GetValue(Item)?.ToString();
+        var value = GetValue()?.ToString();
         if (!_TextBox.IsWritingText)
             _TextBox.Text = value;
     }
