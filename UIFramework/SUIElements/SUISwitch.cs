@@ -81,7 +81,7 @@ public class SUISwitch : View
         Vector2 roundSize = new(switchSize.Y - 10 * _scale);
         Vector2 roundPos = innerPos + _timer.Lerp(new Vector2(3 + 2, innerSize.Y / 2 - roundSize.Y / 2),
             new Vector2(switchSize.X - 3 - 2 - roundSize.X, (innerSize.Y - roundSize.Y) / 2));
-        SDFGraphics.NoBorderRound(roundPos, roundSize.X, roundColor);
+        SDFGraphics.NoBorderRound(roundPos, roundSize.X, roundColor, GetMatrix(true));
 
         Vector2 textPos = innerPos + new Vector2(switchSize.X + InnerRowSpacing * _scale, (innerSize.Y - _textSize.Y) / 2);
         textPos.Y += UIConfigs.Instance.GeneralFontOffsetY * _scale;

@@ -205,7 +205,7 @@ public sealed class KeybindChineseToggle : TimerView
         Vector2 boxSize2 = new(boxSize.Y - 10);
         Vector2 position2 = boxPosition + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),
             new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), _timer.Schedule);
-        SDFGraphics.NoBorderRound(position2, boxSize2.X, color3);
+        SDFGraphics.NoBorderRound(position2, boxSize2.X, color3, GetMatrix(true));
     }
 
     private readonly AnimationTimer _timer = new (4);
