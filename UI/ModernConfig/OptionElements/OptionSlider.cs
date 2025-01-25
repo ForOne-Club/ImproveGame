@@ -163,7 +163,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         (Min, Max) = pair;
 
 
-        var rangeAttribute = VariableInfo.MemberInfo.GetCustomAttribute<RangeAttribute>();
+        var rangeAttribute = GetAttribute<RangeAttribute>();
         if (rangeAttribute != null)
         {
             Max = Convert.ToDouble(rangeAttribute.Max);
@@ -171,11 +171,11 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         }
 
 
-        var defaultValueAttribute = VariableInfo.MemberInfo.GetCustomAttribute<DefaultValueAttribute>();
+        var defaultValueAttribute = GetAttribute<DefaultValueAttribute>();
         if (defaultValueAttribute != null)
             Default = Convert.ToDouble(defaultValueAttribute.Value);
 
-        var incrementAttribute = VariableInfo.MemberInfo.GetCustomAttribute<IncrementAttribute>();
+        var incrementAttribute = GetAttribute<IncrementAttribute>();
         if (incrementAttribute != null)
             Increment = Convert.ToDouble(incrementAttribute.Increment);
     }

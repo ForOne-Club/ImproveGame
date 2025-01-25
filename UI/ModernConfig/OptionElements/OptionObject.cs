@@ -22,7 +22,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 if (Attribute.IsDefined(variable.MemberInfo, typeof(JsonIgnoreAttribute)))
                     continue;
-                var wrapped = WrapIt(this, Config, variable, data);
+                var wrapped = WrapIt(this, Config, variable, data,owner:this);
                 subHeight += wrapped.Height.Pixels;
             }
 

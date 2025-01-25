@@ -18,7 +18,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class ModernConfigOption : TimerView
 {
-    public static UIElement WrapIt(UIElement parent, ModConfig modConfig, PropertyFieldWrapper variable, object item, object list = null, Type arrayType = null, int index = -1)
+    public static UIElement WrapIt(UIElement parent, ModConfig modConfig, PropertyFieldWrapper variable, object item, object list = null, Type arrayType = null, int index = -1,ModernConfigOption owner = null)
     {
         Type type = variable.Type;
         if (arrayType != null)
@@ -49,12 +49,21 @@ public class ModernConfigOption : TimerView
         option.List = (IList)list;
         option.Item = item;
         option.path = [];
-        if (parent is ModernConfigOption parentOption)
+        if (owner != null) 
+        {
+            if (owner.path != null)
+                option.path.AddRange(owner.path);
+            if (owner.List != null)
+                option.path.Add(owner.index.ToString());
+            else
+                option.path.Add(owner.VariableInfo.Name);
+        }
+        /*if (parent is ModernConfigOption parentOption)
         {
             if (parentOption.path != null)
                 option.path.AddRange(parentOption.path);
             option.path.Add(parentOption.VariableInfo.Name);
-        }
+        }*/
         option.Bind(modConfig, variable);
         option.JoinParent(parent);
 
@@ -62,8 +71,9 @@ public class ModernConfigOption : TimerView
     }
     public static PropertyFieldWrapper GetWrapper(Type type,string optionName) 
     {
-        var fieldInfo = type.GetField(optionName);
-        var propertyInfo = type.GetProperty(optionName);
+        BindingFlags flag = BindingFlags.Instance | BindingFlags.Public;
+        var fieldInfo = type.GetField(optionName,flag);
+        var propertyInfo = type.GetProperty(optionName,flag);
         PropertyFieldWrapper result = null;
         if (fieldInfo != null)
             result = new PropertyFieldWrapper(fieldInfo);
@@ -119,6 +129,7 @@ public class ModernConfigOption : TimerView
         ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, path: path, List: List, Index: index);
 
     }
+    protected T GetAttribute<T>() where T : Attribute => ConfigManager.GetCustomAttributeFromMemberThenMemberType<T>(VariableInfo, Item, List);
     protected object GetValue() 
     {
         if (List != null)
@@ -202,7 +213,7 @@ public class ModernConfigOption : TimerView
 
         if (f)
         {
-            string readOnlyTip = GetText("Configs.ModernConfig.ReadOnlyTip");
+            string readOnlyTip = GetText("ModernConfig.ReadOnlyTip");
             UICommon.TooltipMouseText(readOnlyTip);
         }
         if (Interactable)
@@ -210,7 +221,7 @@ public class ModernConfigOption : TimerView
 
         if (CantOperateDueToOnlyGetter)
         {
-            string readOnlyTip = GetText("Configs.ModernConfig.ReadOnlyTip");
+            string readOnlyTip = GetText("ModernConfig.ReadOnlyTip");
             UICommon.TooltipMouseText(readOnlyTip);
         }
         else if (ReloadRequired)
@@ -234,7 +245,7 @@ public class ModernConfigOption : TimerView
     public override void RightMouseDown(UIMouseEvent evt)
     {
         base.RightMouseDown(evt);
-        var defaultValueAttribute = VariableInfo.MemberInfo.GetCustomAttribute<DefaultValueAttribute>();
+        var defaultValueAttribute = GetAttribute<DefaultValueAttribute>();
         if (defaultValueAttribute != null)
         {
             SetValueDirect(defaultValueAttribute.Value);
@@ -261,9 +272,9 @@ public class ModernConfigOption : TimerView
     protected virtual void CheckAttributes()
     {
         //我把只有输入框那个删了，然后Min这些值交由Slider处理，毕竟只有它用得到这些
-        ReloadRequired = VariableInfo.MemberInfo.GetCustomAttribute<ReloadRequiredAttribute>() is not null;
+        ReloadRequired = GetAttribute<ReloadRequiredAttribute>() is not null;
 
-        var colorAttribute = ConfigManager.GetCustomAttributeFromMemberThenMemberType<BackgroundColorAttribute>(VariableInfo, Item, List);
+        var colorAttribute = GetAttribute<BackgroundColorAttribute>();
         if (colorAttribute != null)
             BgColor = colorAttribute.Color;
     }

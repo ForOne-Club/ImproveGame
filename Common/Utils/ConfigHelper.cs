@@ -11,6 +11,7 @@ using Terraria.ModLoader.Config.UI;
 using System.Collections.Generic;
 using Terraria.ModLoader.UI;
 using System.Collections;
+using ImproveGame.UI.ModernConfig.OptionElements;
 
 namespace ImproveGame.Common.Utils;
 
@@ -29,40 +30,56 @@ public static class ConfigHelper
             //按说应该没人会把struct高强度套娃塞进ModConfig吧不会吧
             if (path == null)
                 throw new Exception("You must give a path when setvalue to a struct");
-            var flag = BindingFlags.Public | BindingFlags.Instance;
             List<PropertyFieldWrapper> fldInfo = [];
-            List<object> objs = [modConfig];
-            Type curType = modConfig.GetType();
-            object curObj = modConfig;
-            for (int i = 0; i < path.Count; i++)
-            {
-                var curFld = curType.GetField(path[i], flag);
-                var curProp = curType.GetProperty(path[i], flag);
-                PropertyFieldWrapper wrapper = null;
-                if (curFld != null)
-                    wrapper = new PropertyFieldWrapper(curFld);
-                else if (curProp != null)
-                    wrapper = new PropertyFieldWrapper(curProp);
-                else
-                    throw new Exception("Property or field doesn't exist in " + curType.Name);
 
+            object obj = modConfig;
+            int start = 0;
+            IList objList = null;
+            int listIndex = -1;
+            for (int i = path.Count - 1; i >=0; i--) 
+            {
+                if (int.TryParse(path[i], out var index)) 
+                {
+                    start = i + 1;
+                    for (int k = 0; k < i; k++) 
+                    {
+                        if (int.TryParse(path[k], out var idx))
+                            obj = ((IList)obj)[idx];
+                        else
+                            obj = ModernConfigOption.GetWrapper(obj.GetType(), path[k]).GetValue(obj);
+                    }
+                    objList = (IList)obj;
+                    obj = objList[index];
+                    listIndex = index;
+                    break;
+                }
+            }
+            List<object> objs = [obj];
+            Type curType = obj.GetType();
+            object curObj = obj;
+            for (int i = start; i < path.Count; i++)
+            {
+                var wrapper = ModernConfigOption.GetWrapper(curType, path[i]);
                 fldInfo.Add(wrapper);
-                curObj = curFld.GetValue(curObj);
+                curObj = wrapper.GetValue(curObj);
                 objs.Add(curObj);
-                curType = curFld.FieldType;
+                curType = wrapper.Type;
             }
             fldInfo.Add(variableInfo);
             variableInfo.SetValue(objs[^1], value);
             variableInfo.SetValue(item, value);//两个是不同的引用，一个在ModConfig里，一个在Option里，都得改
 
-            for (int k = 2; k <= objs.Count; k++)
+            int count = objs.Count;
+            for (int k = 2; k <= count; k++)
             {
                 fldInfo[^k].SetValue(objs[^k], objs[^(k - 1)]);
-                if (!objs[^k].GetType().IsValueType && k != objs.Count)
+                if (!objs[^k].GetType().IsValueType && k != count)
                     break;
-
             }
-
+            if (objList != null)
+            {
+                objList[listIndex] = objs[^1];
+            }
         }
     }
 

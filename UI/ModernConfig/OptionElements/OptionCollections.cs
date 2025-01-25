@@ -70,11 +70,11 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         protected override void CheckAttributes()
         {
             base.CheckAttributes();
-            var expandAttribute = ConfigManager.GetCustomAttributeFromMemberThenMemberType<ExpandAttribute>(VariableInfo, Item, List);
+            var expandAttribute = GetAttribute<ExpandAttribute>();
             if (expandAttribute != null)
                 expanded = expandAttribute.Expand;
 
-            DefaultListValueAttribute = ConfigManager.GetCustomAttributeFromMemberThenMemberType<DefaultListValueAttribute>(VariableInfo, null, null);
+            DefaultListValueAttribute = GetAttribute<DefaultListValueAttribute>();
         }
 
         protected override void OnBind()

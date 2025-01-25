@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.UI.ModernConfig.OptionElements;
 using Newtonsoft.Json;
 using System.Reflection;
 using Terraria.Chat;
@@ -39,16 +40,8 @@ public class ConfigOptionPacket : NetModule
         var modConfig = ConfigManager.Configs[ImproveGame.Instance].Find(i => i.Name == _configName);
 
 
-        PropertyFieldWrapper variableInfo = null;
-        var fieldInfo = modConfig.GetType().GetField(_fieldName);
-        var propertyInfo = modConfig.GetType().GetField(_fieldName);
-        if (fieldInfo != null)
-            variableInfo = new PropertyFieldWrapper(fieldInfo);
-        else if (propertyInfo != null)
-            variableInfo = new PropertyFieldWrapper(propertyInfo);
-        if (variableInfo == null)
-            return;
-        var value = JsonConvert.DeserializeObject(_json, fieldInfo.FieldType, ConfigManager.serializerSettings);
+        PropertyFieldWrapper variableInfo = ModernConfigOption.GetWrapper(modConfig.GetType(), _fieldName);
+        var value = JsonConvert.DeserializeObject(_json, variableInfo.Type, ConfigManager.serializerSettings);
 
         object item = modConfig;
         var bindFlag = BindingFlags.Public | BindingFlags.Instance;

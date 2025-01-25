@@ -44,5 +44,12 @@ public class SUICross : TimerView
         Color fork = HoverTimer.Lerp(CrossBeginColor, CrossEndColor);
         Vector2 forkPos = pos + (size - new Vector2(CrossSize)) / 2f;
         SDFGraphics.HasBorderCross(forkPos + CrossOffset, CrossSize, CrossRounded, fork, CrossBorder, borderColor);
+
+
+
+        float round = CrossRounded;
+        Color backgroundColor = fork;
+        float border = CrossBorder;
+        SDFGraphics.Gallery(new Vector2(80, 400), new Vector2(40, 60), backgroundColor, border, borderColor);
     }
 }
