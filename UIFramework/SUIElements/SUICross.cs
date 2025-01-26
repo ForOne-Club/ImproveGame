@@ -43,13 +43,13 @@ public class SUICross : TimerView
         Vector2 size = GetDimensions().Size();
         Color fork = HoverTimer.Lerp(CrossBeginColor, CrossEndColor);
         Vector2 forkPos = pos + (size - new Vector2(CrossSize)) / 2f;
-        SDFGraphics.HasBorderCross(forkPos + CrossOffset, CrossSize, CrossRounded, fork, CrossBorder, borderColor, GetMatrix(true));
+        SDFGraphics.HasBorderCross(forkPos + CrossOffset, default, CrossSize, CrossRounded, fork, CrossBorder, borderColor, GetMatrix(true));
 
-
-
-        float round = CrossRounded;
+        SDFGraphics.FumoFumoKoishi(Main.ScreenSize.ToVector2() * .5f - Vector2.UnitX * 400);
+        /*float round = CrossRounded;
         Color backgroundColor = fork;
         float border = CrossBorder;
-        SDFGraphics.Gallery(new Vector2(80, 400), new Vector2(40, 60), backgroundColor, border, borderColor, GetMatrix(true));
+        SDFGraphics.Gallery(new Vector2(80, 400), default, new Vector2(40, 60), backgroundColor, border, borderColor, TextureAssets.Extra[156].Value, Main.GlobalTimeWrappedHourly * 0.5f, 0.02f,GetMatrix(true));
+        */
     }
 }

@@ -107,7 +107,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             }
 
             // 绘制
-            SDFGraphics.HasBorderRound(roundLeftTop, roundDiameter, innerColor, 2f, borderColor, GetMatrix(true));
+            SDFGraphics.HasBorderRound(roundLeftTop,default, roundDiameter, innerColor, 2f, borderColor, GetMatrix(true));
         }
     }
 

@@ -2,19 +2,31 @@
 //#define CreateShapeNoBorder(shape,k) float4 NoBorder(shape)(float2 coords:TEXCOORD0):COLOR0{return GetNoBorderColor(coords,k);}
 //#define ShapePass(shape) pass HasBorder shape { VertexShader = compile vs_3_0 VSFunction(); PixelShader = compile ps_3_0 HasBordershape(); } pass NoBordershape { VertexShader = compile vs_3_0 VSFunction(); PixelShader = compile ps_3_0 NoBordershape(); }
 //↑错误的宏，非常的低级
+sampler uImage0 : register(s0);
+
+#define DEFINE_SINGLEPASS(type,suffix) \
+pass type##suffix { \
+    VertexShader = compile vs_2_0 VSFunction(); \
+    PixelShader = compile ps_3_0 type##suffix(); \
+}
 
 #define DEFINE_PASS(suffix) \
-pass HasBorder##suffix { \
-    VertexShader = compile vs_2_0 VSFunction(); \
-    PixelShader = compile ps_3_0 HasBorder##suffix(); \
-} \
-pass NoBorder##suffix { \
-    VertexShader = compile vs_2_0 VSFunction(); \
-    PixelShader = compile ps_3_0 NoBorder##suffix(); \
-}
+DEFINE_SINGLEPASS(HasBorder,suffix)\
+DEFINE_SINGLEPASS(NoBorder,suffix)\
+DEFINE_SINGLEPASS(Bar,suffix)
+
+
+#define DEFINE_SINGLEFUNCTION(type,suffix) \
+float4 type##suffix(float2 coords : TEXCOORD0):COLOR0{return Get##type##Color(##suffix(coords));}
+
 #define DEFINE_FUNCTION(suffix) \
-float4 NoBorder##suffix(float2 coords : TEXCOORD0) : COLOR0 {  return GetNoBorderColor(##suffix(coords)); }\
-float4 HasBorder##suffix(float2 coords : TEXCOORD0) : COLOR0 { return GetBorderedColor(##suffix(coords)); }
+DEFINE_SINGLEFUNCTION(NoBorder,suffix)\
+DEFINE_SINGLEFUNCTION(HasBorder,suffix)\
+DEFINE_SINGLEFUNCTION(Bar,suffix)
+
+#define MAXPOLYGONPOINT 24
+#define MAXBEZIERPOINT 9
+
 //SDF全部改自iq佬的文章↓
 //https://iquilezles.org/articles/distfunctions2d/
 float4x4 uTransform;
@@ -32,7 +44,11 @@ float uBottomScaler;
 float uInnerShrinkage;
 
 int uCurrentPointCount;
-float2 uVectors[20];
+float2 uVectors[MAXPOLYGONPOINT];
+float2 uBVectors[MAXBEZIERPOINT];
+
+float uTime;
+float uValueScaler;
 //bool uHasBorder;
 //int uStyle;
 struct VSInput
@@ -65,6 +81,95 @@ float dot2(float2 v)
 float mod(float x, float y)
 {
 	return x - y * floor(x / y);
+}
+float bezier(float2 p,float2 A, float2 B, float2 C)
+{
+	float2 a = B - A;
+	float2 b = A - 2.0 * B + C;
+	float2 c = a * 2.0;
+	float2 d = A - p;
+	float kk = 1.0 / dot(b, b);
+	float kx = kk * dot(a, b);
+	float ky = kk * (2.0 * dot(a, a) + dot(d, b)) / 3.0;
+	float kz = kk * dot(d, a);
+	float res = 0.0;
+	float u = ky - kx * kx;
+	float u3 = u * u * u;
+	float q = kx * (2.0 * kx * kx - 3.0 * ky) + kz;
+	float h = q * q + 4.0 * u3;
+	if (h >= 0.0)
+	{
+		h = sqrt(h);
+		float2 x = (float2(h, -h) - q) / 2.0;
+		float2 uv = sign(x) * pow(abs(x), float2(1.0 / 3.0, 1.0 / 3.0));
+		float t = saturate(uv.x + uv.y - kx);
+		res = dot2(d + (c + b * t) * t);
+	}
+	else
+	{
+		float z = sqrt(-u);
+		float v = acos(q / (u * z * 2.0)) / 3.0;
+		float m = cos(v);
+		float n = sin(v) * 1.732050808;
+		float3 t = saturate(float3(m + m, -n - m, n - m) * z - kx);
+		res = min(dot2(d + (c + b * t.x) * t.x),
+                   dot2(d + (c + b * t.y) * t.y));
+        // the third root cannot be the closest
+        // res = min(res,dot2(d+(c+b*t.z)*t.z));
+	}
+	return sqrt(res);
+
+}
+float Gtlp(float from, float to, float value)
+{
+	return (value - from) / (to - from);
+}
+float Cross(float2 A, float2 B)
+{
+	return A.x * B.y - A.y * B.x;
+}
+
+int LRoot(float2 P, float2 A, float2 B)
+{
+	float v = Gtlp(A.y, B.y, P.y);
+	if (v * (1.0 - v) > 0.0 && sign(A.y - B.y) * Cross(P - A, B - A) > 0.0)
+		return 1;
+	return 0;
+}
+int QRoot(float2 p, float2 A, float2 B, float2 C)
+{
+	float2 a = A - 2.0 * B + C;
+	float2 b = A - B;
+	if (abs(a.y) <= 0.00000001)
+	{
+		b = 2.0 * (B - A);
+		float m = (p.y - A.y) / b.y;
+		if (m * (1 - m) > 0 && a.x * m * m + b.x * m + A.x > p.x)
+			return 1;
+		return 0;
+        
+	}
+	else
+	{
+		b.y /= a.y;
+		float d = b.y * b.y - (A.y - p.y) / a.y;
+        //d*=4.0;
+		if (d < 0.0)
+			return 0;
+		d = sqrt(d);
+		
+		float m = b.y - d;
+		float m2 = m * m;
+		int r = 0;
+		if (m > m2 && a.x * m2 - 2.0 * b.x * m + A.x > p.x)
+			r++;
+		m = b.y + d;
+		m2 = m * m;
+		if (m > m2 && a.x * m2 - 2.0 * b.x * m + A.x > p.x)
+			r++;
+		return r;
+	}
+
 }
 //下面这些函数负责形形
 float Circle(float2 p) //圆
@@ -510,18 +615,18 @@ float Cross(float2 p) //叉叉，需要指定 uRound.xy-半径以及宽度
 float Polygon(float2 p) //多边形，需要指定uCurrentPointCount-当前顶点数 uVectors-顶点坐标 最多支持20边形
 {
 	int N = uCurrentPointCount;
-	float2 v[20] = uVectors;
-	float d = dot(p - v[0], p - v[0]);
+	float2 v[MAXPOLYGONPOINT] = uVectors;
+	float d = dot2(p - v[0]);
 	float s = 1.0;
 	for (int i = 0, j = N - 1; i < N; j = i, i++)
 	{
 		float2 e = v[j] - v[i];
 		float2 w = p - v[i];
-		float2 b = w - e * clamp(dot(w, e) / dot(e, e), 0.0, 1.0);
-		d = min(d, dot(b, b));
+		float2 b = w - e * saturate(dot(w, e) / dot2(e));
+		d = min(d, dot2(b));
 		bool3 c = bool3(p.y >= v[i].y, p.y < v[j].y, e.x * w.y > e.y * w.x);
 		if (all(c) || all(!c))
-			s *= -1.0;
+			s = -s;
 	}
 	return s * sqrt(d);
 }
@@ -603,44 +708,7 @@ float ParabolaSegment(float2 p)
 }
 float QuadraticBezier(float2 p)
 {
-	float2 A = uStart;
-	float2 B = uAnother;
-	float2 C = uEnd;
-	
-	float2 a = B - A;
-	float2 b = A - 2.0 * B + C;
-	float2 c = a * 2.0;
-	float2 d = A - p;
-	float kk = 1.0 / dot(b, b);
-	float kx = kk * dot(a, b);
-	float ky = kk * (2.0 * dot(a, a) + dot(d, b)) / 3.0;
-	float kz = kk * dot(d, a);
-	float res = 0.0;
-	float u = ky - kx * kx;
-	float u3 = u * u * u;
-	float q = kx * (2.0 * kx * kx - 3.0 * ky) + kz;
-	float h = q * q + 4.0 * u3;
-	if (h >= 0.0)
-	{
-		h = sqrt(h);
-		float2 x = (float2(h, -h) - q) / 2.0;
-		float2 uv = sign(x) * pow(abs(x), float2(1.0 / 3.0, 1.0 / 3.0));
-		float t = clamp(uv.x + uv.y - kx, 0.0, 1.0);
-		res = dot2(d + (c + b * t) * t);
-	}
-	else
-	{
-		float z = sqrt(-u);
-		float v = acos(q / (u * z * 2.0)) / 3.0;
-		float m = cos(v);
-		float n = sin(v) * 1.732050808;
-		float3 t = clamp(float3(m + m, -n - m, n - m) * z - kx, 0.0, 1.0);
-		res = min(dot2(d + (c + b * t.x) * t.x),
-                   dot2(d + (c + b * t.y) * t.y));
-        // the third root cannot be the closest
-        // res = min(res,dot2(d+(c+b*t.z)*t.z));
-	}
-	return sqrt(res) - uLineWidth;
+	return bezier(p, uStart, uAnother, uEnd) - uLineWidth;
 }
 float BlobbyCross(float2 p)//需要指定uRound.xyz-基准大小 控制点系数 半径
 {
@@ -807,9 +875,33 @@ float CircleWave(float2 p) //圆波 需要指定uRound.xy-圆弧占5/6完整圆�
 	float d2 = ((co.y * p2.x > co.x * p2.y) ? length(p2 - co) : abs(length(p2) - ra));
 	return min(d1, d2) - uLineWidth;
 }
+float ChainedQuadraticBezier(float2 p)
+{
+	//float d = -1.0;
+	float d = 100000.0;
+	int N = uCurrentPointCount;
+	float2 v[MAXBEZIERPOINT] = uBVectors;
+	int r = 0;
+	//float s = 1.0;
+	for (int n = 0; n < N - 2; n+=2)
+	{
+		float2 A = v[n];
+		float2 B = v[n + 1];
+		float2 C = v[n + 2];
+		float cd = bezier(p, A, B, C);
+		if ( d > cd)
+			d = cd;
+		//s *= QRoot(p, A, B, C);
+		r += QRoot(p, A, B, C);
+	}
+	
+	//return LRoot(p,v[0],v[N-1]) * s * d;
+	r += LRoot(p, v[0], v[N - 1]);
+	return (1.0 - 2.0 * float(r % 2)) * d;
+}
 //这两个函数负责色色
 //把SDF塞进去就对了√
-float4 GetBorderedColor(float distance)
+float4 GetHasBorderColor(float distance)
 {
 	return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(uTransition.x, uTransition.y, distance + uBorder)), 0, smoothstep(uTransition.x, uTransition.y, distance));
 }
@@ -817,7 +909,11 @@ float4 GetNoBorderColor(float distance)
 {
 	return lerp(uBackgroundColor, 0, smoothstep(uTransition.x, uTransition.y, distance));
 }
-
+float4 GetBarColor(float distance)
+{
+	float4 color = tex2D(uImage0, float2(uTime + distance * uValueScaler, 0.0));
+	return lerp(color, 0, smoothstep(uTransition.x, uTransition.y, distance));
+}
 
 DEFINE_FUNCTION(Circle)
 DEFINE_FUNCTION(RoundedBox)
@@ -863,7 +959,7 @@ DEFINE_FUNCTION(QuadraticCircle)
 DEFINE_FUNCTION(Hyperbola)
 DEFINE_FUNCTION(CoolS)
 DEFINE_FUNCTION(CircleWave)
-
+DEFINE_FUNCTION(ChainedQuadraticBezier)
 technique Technique1
 {
 	DEFINE_PASS(Circle)
@@ -910,6 +1006,7 @@ technique Technique1
 	DEFINE_PASS(Hyperbola)
 	DEFINE_PASS(CoolS)
 	DEFINE_PASS(CircleWave)
+	DEFINE_PASS(ChainedQuadraticBezier)
 }
 
 
