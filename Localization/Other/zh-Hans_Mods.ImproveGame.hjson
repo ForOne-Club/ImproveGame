@@ -451,6 +451,11 @@ Keybinds: {
 			- 复制光标悬停处物品的内部全名称（也就是模组名/物品名的形式）
 			'''
 	}
+
+	QuickShimmerGUI: {
+		// DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
+		Tip: 按下后打开快捷微光界面，也可以在总控面板中打开
+	}
 }
 
 Projectiles: {

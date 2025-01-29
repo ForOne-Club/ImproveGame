@@ -17,6 +17,7 @@ public class KeybindSystem : ModSystem
     public static ModKeybind SuperVaultKeybind { get; private set; }
     public static ModKeybind BuffTrackerKeybind { get; private set; }
     public static ModKeybind OpenBagKeybind { get; private set; }
+    public static ModKeybind QuickShimmerKeybind { get; private set; }
     public static ModKeybind GrabBagKeybind { get; private set; }
     public static ModKeybind HotbarSwitchKeybind { get; private set; }
     public static ModKeybind AutoTrashKeybind { get; private set; }
@@ -51,6 +52,7 @@ public class KeybindSystem : ModSystem
         AutoTrashKeybind = KeybindLoader.RegisterKeybind(Mod, "AutoTrashKeybind", "NumPad1");
         BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "BuffTracker", "NumPad2");
         OpenBagKeybind = KeybindLoader.RegisterKeybind(Mod, "OpenBagGUI", "NumPad3");
+        QuickShimmerKeybind = KeybindLoader.RegisterKeybind(Mod, "QuickShimmerGUI", "NumPad4");
         SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "HugeInventory", "F");
         GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "GrabBagLoot", "OemQuotes");
         HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "HotbarSwitch", "OemQuestion");
@@ -165,6 +167,7 @@ public class KeybindSystem : ModSystem
         SuperVaultKeybind = null;
         BuffTrackerKeybind = null;
         OpenBagKeybind = null;
+        QuickShimmerKeybind = null;
         GrabBagKeybind = null;
         HotbarSwitchKeybind = null;
         AutoTrashKeybind = null;
