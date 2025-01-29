@@ -31,7 +31,7 @@ public class AutoMoneyItemListener : GlobalItem
         if (!player.bank.item.Any(i =>
             {
                 // 铂金币和护卫奖章 - 有对应钱币且不到最大堆叠
-                if (item.type is ItemID.PlatinumCoin or ItemID.DefenderMedal || (!item.IsACoin && CustomCurrencyManager._currencies.Any(currencies => currencies.Value._valuePerUnit.ContainsKey(item.type))))
+                if (item.type is ItemID.PlatinumCoin || (!item.IsACoin && CustomCurrencyManager.IsCustomCurrency(item)))
                 {
                     if (item.type == i.type && i.stack < i.maxStack)
                         return true;
@@ -49,7 +49,7 @@ public class AutoMoneyItemListener : GlobalItem
 
         int type = item.type;
 
-        if (type is ItemID.DefenderMedal || (!item.IsACoin && CustomCurrencyManager._currencies.Any(currencies => currencies.Value._valuePerUnit.ContainsKey(item.type))))
+        if (!item.IsACoin && CustomCurrencyManager.IsCustomCurrency(item))
         {
             PopupText.NewText(PopupTextContext.RegularItemPickup, item, item.stack);
             SoundEngine.PlaySound(SoundID.Grab, player.position);
@@ -77,84 +77,5 @@ public class AutoMoneyItemListener : GlobalItem
         PopupText.NewText(PopupTextContext.RegularItemPickup, item, item.stack);
         SoundEngine.PlaySound(SoundID.CoinPickup, player.position);
         return true;
-    }
-}
-
-// 试存钱币槽
-public class AutoMoneyPlayerListener : ModPlayer
-{
-    internal bool AutoSaveUnlocked;
-    private int _detectCd;
-
-    public override void SaveData(TagCompound tag)
-    {
-        tag["unlocked"] = AutoSaveUnlocked;
-    }
-
-    public override void LoadData(TagCompound tag)
-    {
-        AutoSaveUnlocked = tag.GetBool("unlocked");
-    }
-
-    public override void PostUpdate()
-    {
-        _detectCd++;
-
-        if (Main.myPlayer != Player.whoAmI)
-            return;
-
-        // 看看能不能解锁自动存钱
-        if (!AutoSaveUnlocked && _detectCd % 90 == 0)
-        {
-            AutoSaveUnlocked = InventoryHasItemFast(Main.LocalPlayer,
-                ItemID.PiggyBank, ItemID.ChesterPetItem, ItemID.MoneyTrough);
-        }
-
-        if (!PiggyToggle.AutoSaveEnabled)
-            return;
-
-        // 10帧检测一次，仅存钱币槽
-        if (_detectCd % 10 == 0)
-            DetectCoins();
-        // 60帧检测一次，护卫奖章
-        if (_detectCd % 60 == 0)
-            DetectDefenderMedal();
-        // 30帧更新一下铂金最大堆叠
-        if (_detectCd % 30 == 0)
-            CoinUtils.PlatinumMaxStack = new Item(ItemID.PlatinumCoin).maxStack;
-    }
-
-    private void DetectCoins()
-    {
-        bool isDepositSucceed = false;
-        for (var i = 50; i <= 53; i++)
-        {
-            var item = Player.inventory[i];
-            if (!item.IsAir && item.IsACoin && AutoMoneyItemListener.TryDepositACoin(item, Player))
-            {
-                isDepositSucceed = true;
-                item.TurnToAir();
-            }
-        }
-
-        if (isDepositSucceed)
-            Recipe.FindRecipes();
-    }
-
-    private void DetectDefenderMedal()
-    {
-        bool isDepositSucceed = false;
-        for (var i = 0; i <= 49; i++)
-        {
-            var item = Player.inventory[i];
-            if (!item.IsAir && item.type is ItemID.DefenderMedal && AutoMoneyItemListener.TryDepositACoin(item, Player))
-            {
-                isDepositSucceed = true;
-                item.TurnToAir();
-            }
-        }
-
-        if (isDepositSucceed)
-            Recipe.FindRecipes();
     }
 }

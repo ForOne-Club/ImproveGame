@@ -477,6 +477,7 @@ BuilderToggles: {
 	PiggyToggle: {
 		OffText: Auto-deposit: Off
 		OnText: Auto-deposit: On
+		RightFilter: Right click to open currency filter
 	}
 }
 

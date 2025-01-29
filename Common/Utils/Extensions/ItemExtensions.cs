@@ -348,6 +348,9 @@ public static class ItemExtensions
         return item1.type == item2.type;
     }
 
+    public static bool IsCustomCurrency(int type) =>
+        CustomCurrencyManager._currencies.Any(currencies => currencies.Value._valuePerUnit.ContainsKey(type));
+
     private static IEnumerable<string> GetItemTooltipLines(Item item)
     {
         Item hoverItem = item;

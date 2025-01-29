@@ -470,6 +470,7 @@ BuilderToggles: {
 	PiggyToggle: {
 		OffText: 自动存钱：关
 		OnText: 自动存钱：开
+		RightFilter: 右键点击以筛选货币
 	}
 }
 
