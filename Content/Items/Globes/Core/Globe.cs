@@ -40,7 +40,7 @@ public abstract class Globe : ModItem
         Item.value = itemValue;
     }
 
-    public abstract bool RevealOperation(Projectile projectile);
+    public abstract bool RevealOperation(Projectile projectile, bool onlyJudging);
 
     protected abstract Recipe AddCraftingMaterials(Recipe recipe);
 

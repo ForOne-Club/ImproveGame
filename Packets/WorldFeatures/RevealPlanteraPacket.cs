@@ -11,7 +11,7 @@ public class RevealPlanteraPacket : NetModule
 {
     private Point16 _position;
 
-    public static bool Reveal(Projectile projectile)
+    public static bool Reveal(Projectile projectile, bool onlyJudging)
     {
         if (Main.netMode is NetmodeID.MultiplayerClient)
             return true;
@@ -41,6 +41,9 @@ public class RevealPlanteraPacket : NetModule
                 }
             }
         }
+
+        if (onlyJudging)
+            return position != Point16.Zero;
 
         if (position == Point16.Zero)
         {

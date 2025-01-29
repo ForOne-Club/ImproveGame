@@ -141,6 +141,11 @@ ImproveConfigs: {
 		Tooltip: 所有堆叠数  ≥ 3996 的投掷物将不再消耗。
 	}
 
+	NoConsume_Wire: {
+		Label: "[centeritem:530] 无限电线"
+		Tooltip: 当电线的堆叠数  ≥ 3996 时将不再消耗。
+	}
+
 	ImprovePrefix: {
 		Label: "[centeritem:1551] 可追溯重铸"
 		Tooltip: 允许你直接选择已获得过的前缀

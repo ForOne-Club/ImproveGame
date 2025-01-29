@@ -122,6 +122,10 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         if (Config.NoConsume_Projectile && item.stack >= 3996 && item.shoot > ProjectileID.None)
             return false;
 
+        // 电线不消耗
+        if (Config.NoConsume_Wire &&  item.stack >= 3996 && item.type == ItemID.Wire)
+            return false;
+
         return base.ConsumeItem(item, player);
     }
 

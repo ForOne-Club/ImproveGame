@@ -136,6 +136,11 @@ ImproveConfigs: {
 		Tooltip: Thrown weapons in a stack of 3996 or more  will not be consumed
 	}
 
+	NoConsume_Wire: {
+		Label: "[centeritem:530] 无限电线"
+		Tooltip: 当电线的堆叠数  ≥ 3996 时将不再消耗。
+	}
+
 	ImprovePrefix: {
 		Label: "[centeritem:1551] Retrospective Reforging"
 		Tooltip: Prefixes which have been already rolled can be applied manually

@@ -9,28 +9,31 @@ public abstract class OnceForAllGlobe () : Globe(ItemRarityID.Quest, Item.sellPr
 
     public virtual bool NotFoundCheck() => false;
 
-    public override bool RevealOperation(Projectile projectile)
+    public override bool RevealOperation(Projectile projectile, bool onlyJudging)
     {
         if (StructureType is StructureDatas.UnlockID.Pyramids && StructureDatas.PyramidPositions.Count is 0)
         {
-            if (projectile.owner == Main.myPlayer)
+            if (!onlyJudging && projectile.owner == Main.myPlayer)
                 AddNotification(this.GetLocalizedValue("NotFound"), Color.PaleVioletRed * 1.4f);
             return false;
         }
 
         if (NotFoundCheck())
         {
-            if (projectile.owner == Main.myPlayer)
+            if (!onlyJudging && projectile.owner == Main.myPlayer)
                 AddNotification(GetLocalizedText("NotFound").Value, Color.PaleVioletRed * 1.4f);
             return false;
         }
 
         if (StructureDatas.StructuresUnlocked[(byte)StructureType])
         {
-            if (projectile.owner == Main.myPlayer)
+            if (!onlyJudging && projectile.owner == Main.myPlayer)
                 AddNotification(GetLocalizedText("AlreadyRevealed").Value, Color.PaleVioletRed * 1.4f);
             return false;
         }
+
+        if (onlyJudging)
+            return true;
 
         StructureDatas.StructuresUnlocked[(byte)StructureType] = true;
         var text = Language.GetText("Mods.ImproveGame.Items.GlobeBase.Reveal")

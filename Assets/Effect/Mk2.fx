@@ -7,7 +7,7 @@ float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
 {
     float4 pickerColor = tex2D(picker, coords);
     if (pickerColor.a > 0.2)
-        return tex2D(mask, coords);
+        return lerp(tex2D(background, coords), tex2D(mask, coords), pickerColor.a);
     else
         return tex2D(background, coords);
 }

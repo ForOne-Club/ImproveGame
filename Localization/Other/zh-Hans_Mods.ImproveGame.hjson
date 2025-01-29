@@ -464,6 +464,7 @@ Projectiles: {
 	}
 
 	// HomeEffect.DisplayName: Home Effect
+	// GlobeEffect.DisplayName: Globe Effect
 }
 
 BuilderToggles: {

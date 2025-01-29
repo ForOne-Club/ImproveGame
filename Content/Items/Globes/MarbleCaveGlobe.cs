@@ -12,21 +12,24 @@ public class MarbleCaveGlobe () : GlobePlentyTooltip(ItemRarityID.Quest, Item.se
         public override ModItem GetModItemDummy() => ModContent.GetInstance<MarbleCaveGlobe>();
     }
 
-    public override bool RevealOperation(Projectile projectile)
+    public override bool RevealOperation(Projectile projectile, bool onlyJudging)
     {
         if (StructureDatas.AllMarbleCavePositions.Count is 0)
         {
-            if (projectile.owner == Main.myPlayer)
+            if (!onlyJudging && projectile.owner == Main.myPlayer)
                 AddNotification(GetLocalizedText("NotFound").ToString(), Color.PaleVioletRed * 1.4f);
             return false;
         }
 
         if (StructureDatas.AllMarbleCavePositions.Count <= StructureDatas.MarbleCavePositions.Count)
         {
-            if (projectile.owner == Main.myPlayer)
+            if (!onlyJudging && projectile.owner == Main.myPlayer)
                 AddNotification(this.GetLocalizedValue("NotFound"), Color.PaleVioletRed * 1.4f);
             return false;
         }
+
+        if (onlyJudging)
+            return true;
 
         StructureDatas.MarbleCavePositions.Add(StructureDatas.AllMarbleCavePositions
             .Except(StructureDatas.MarbleCavePositions)

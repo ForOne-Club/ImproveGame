@@ -109,6 +109,9 @@ public class ImproveConfigs : ModConfig
     public bool NoConsume_Projectile;
 
     [DefaultValue(true)]
+    public bool NoConsume_Wire;
+
+    [DefaultValue(true)]
     public bool ImprovePrefix;
 
     [DefaultValue(true)]

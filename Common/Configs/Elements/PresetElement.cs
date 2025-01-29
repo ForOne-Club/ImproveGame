@@ -149,6 +149,7 @@ public class AllOffElement : PresetElement
         config.NoPlace_BUFFTile_Banner = false;
         config.NoConsume_Potion = false;
         config.NoConsume_Ammo = false;
+        config.NoConsume_Wire = false;
         config.ImprovePrefix = false;
         config.MiddleEnableBank = false;
         config.FasterExtractinator = false;

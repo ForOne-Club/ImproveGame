@@ -12,9 +12,9 @@ public class PlanteraGlobe () : GlobePlentyTooltip(ItemRarityID.Pink, Item.sellP
         public override ModItem GetModItemDummy() => ModContent.GetInstance<PlanteraGlobe>();
     }
 
-    public override bool RevealOperation(Projectile projectile)
+    public override bool RevealOperation(Projectile projectile, bool onlyJudging)
     {
-        return RevealPlanteraPacket.Reveal(projectile);
+        return RevealPlanteraPacket.Reveal(projectile, onlyJudging);
     }
 
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>

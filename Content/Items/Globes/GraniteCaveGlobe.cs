@@ -11,21 +11,24 @@ public class GraniteCaveGlobe () : GlobePlentyTooltip(ItemRarityID.Quest, Item.s
         public override ModItem GetModItemDummy() => ModContent.GetInstance<GraniteCaveGlobe>();
     }
 
-    public override bool RevealOperation(Projectile projectile)
+    public override bool RevealOperation(Projectile projectile, bool onlyJudging)
     {
         if (StructureDatas.AllGraniteCavePositions.Count is 0)
         {
-            if (projectile.owner == Main.myPlayer)
+            if (!onlyJudging && projectile.owner == Main.myPlayer)
                 AddNotification(GetLocalizedText("NotFound").ToString(), Color.PaleVioletRed * 1.4f);
             return false;
         }
 
         if (StructureDatas.AllGraniteCavePositions.Count <= StructureDatas.GraniteCavePositions.Count)
         {
-            if (projectile.owner == Main.myPlayer)
+            if (!onlyJudging && projectile.owner == Main.myPlayer)
                 AddNotification(this.GetLocalizedValue("NotFound"), Color.PaleVioletRed * 1.4f);
             return false;
         }
+
+        if (onlyJudging)
+            return true;
 
         StructureDatas.GraniteCavePositions.Add(StructureDatas.AllGraniteCavePositions
             .Except(StructureDatas.GraniteCavePositions)

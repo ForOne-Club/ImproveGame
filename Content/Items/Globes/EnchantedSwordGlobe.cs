@@ -13,9 +13,9 @@ public class EnchantedSwordGlobe () : GlobePlentyTooltip(ItemRarityID.Green, Ite
         public override ModItem GetModItemDummy() => ModContent.GetInstance<EnchantedSwordGlobe>();
     }
 
-    public override bool RevealOperation(Projectile projectile)
+    public override bool RevealOperation(Projectile projectile, bool onlyJudging)
     {
-        return RevealEnchantedSwordPacket.Reveal(projectile);
+        return RevealEnchantedSwordPacket.Reveal(projectile, onlyJudging);
     }
 
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
