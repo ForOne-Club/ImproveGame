@@ -271,7 +271,7 @@ ImproveConfigs: {
 
 	PumpkinGrowsFaster: {
 		Label: "[centeritem:1725] 南瓜迅速生长"
-		Tooltip: 使南瓜生长的更快
+		Tooltip: 使南瓜生长得更快
 	}
 
 	StaffOfRegenerationAutomaticPlanting: {
@@ -899,7 +899,11 @@ UIConfigs: {
 
 	ShowMoreData: {
 		Label: "[centeritem:1344] 显示调试数据"
-		// Tooltip: ""
+		Tooltip:
+			'''
+			开发者选项，普通玩家请勿启用
+			开启后会显示调试信息
+			'''
 	}
 
 	ShowModName: {

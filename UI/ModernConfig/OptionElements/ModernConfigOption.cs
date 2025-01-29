@@ -147,6 +147,7 @@ public class ModernConfigOption : TimerView
         var text = DebugText ?? "";
         var textPosition = dimensionsRect.Top();
         textPosition.Y += 6;
+        textPosition.X -= 50;
 
         ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, textPosition,
             Color.Gray, Color.Black, 0f, Vector2.Zero, new Vector2(0.8f), -1f, 1f);

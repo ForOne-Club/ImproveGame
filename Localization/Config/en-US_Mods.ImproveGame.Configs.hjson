@@ -891,7 +891,11 @@ UIConfigs: {
 
 	ShowMoreData: {
 		Label: "[centeritem:1344] Display Debug Data"
-		Tooltip: ""
+		Tooltip:
+			'''
+			Developer options, not for players
+			Enabling will display debugging information
+			'''
 	}
 
 	ShowModName: {
