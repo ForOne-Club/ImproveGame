@@ -1085,6 +1085,11 @@ UIConfigs: {
 		Label: "[centeritem:RichGravestone2] Remove Graveyard Music"
 		Tooltip: Removes the graveyard background music
 	}
+
+	GlobeEffect: {
+		Tooltip: "[centeritem:WorldGlobe] Locator Effect"
+		Label: Turn it off if you don't like it
+	}
 }
 
 PAPDisplayMode: {

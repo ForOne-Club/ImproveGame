@@ -1093,6 +1093,11 @@ UIConfigs: {
 		Label: "[centeritem:RichGravestone2] 移除墓地背景音乐"
 		Tooltip: 开启后，移除墓地环境的背景音乐
 	}
+
+	GlobeEffect: {
+		Tooltip: "[centeritem:WorldGlobe] 定位球特效"
+		Label: 如果你觉得特效太光污染了，可以关掉
+	}
 }
 
 PAPDisplayMode: {

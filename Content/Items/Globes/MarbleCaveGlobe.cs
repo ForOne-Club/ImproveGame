@@ -12,6 +12,8 @@ public class MarbleCaveGlobe () : GlobePlentyTooltip(ItemRarityID.Quest, Item.se
         public override ModItem GetModItemDummy() => ModContent.GetInstance<MarbleCaveGlobe>();
     }
 
+    public override Color GetEffectColor() => new (132, 137, 164);
+
     public override bool RevealOperation(Projectile projectile, bool onlyJudging)
     {
         if (StructureDatas.AllMarbleCavePositions.Count is 0)

@@ -12,6 +12,8 @@ public class PlanteraGlobe () : GlobePlentyTooltip(ItemRarityID.Pink, Item.sellP
         public override ModItem GetModItemDummy() => ModContent.GetInstance<PlanteraGlobe>();
     }
 
+    public override Color GetEffectColor() => new (228, 131, 212);
+
     public override bool RevealOperation(Projectile projectile, bool onlyJudging)
     {
         return RevealPlanteraPacket.Reveal(projectile, onlyJudging);

@@ -11,6 +11,8 @@ public class GraniteCaveGlobe () : GlobePlentyTooltip(ItemRarityID.Quest, Item.s
         public override ModItem GetModItemDummy() => ModContent.GetInstance<GraniteCaveGlobe>();
     }
 
+    public override Color GetEffectColor() => new (77, 80, 136);
+
     public override bool RevealOperation(Projectile projectile, bool onlyJudging)
     {
         if (StructureDatas.AllGraniteCavePositions.Count is 0)

@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items.Globes;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Content.Items.Globes;
 using ImproveGame.Content.Items.Globes.Core;
 using ImproveGame.Core;
 using Terraria;
@@ -15,13 +16,15 @@ public abstract class GlobeProjBase : ModProjectile
     public override void SetStaticDefaults()
     {
         ProjectileID.Sets.TrailingMode[Type] = 2;
-        ProjectileID.Sets.TrailCacheLength[Type] = 10;
+        ProjectileID.Sets.TrailCacheLength[Type] = 30;
         Globe.GlobeLookup[GetModItemDummy().Type] = Type;
     }
 
     public override void SetDefaults()
     {
         Projectile.CloneDefaults(ProjectileID.MoonGlobe);
+        Projectile.width = 32;
+        Projectile.height = 32;
         AIType = ProjectileID.MoonGlobe;
     }
 
@@ -48,7 +51,7 @@ public abstract class GlobeProjBase : ModProjectile
                 Projectile.velocity.Y += 0.13f;
                 Projectile.rotation += Projectile.velocity.X / 10f;
             }
-            
+
             if (Projectile.ai[2] == -180)
             {
                 Projectile.velocity = Projectile.rotation.ToRotationVector2() * 4;
@@ -65,8 +68,9 @@ public abstract class GlobeProjBase : ModProjectile
             // 目标速度
             var targetVel = Vector2.Normalize(player.Center - Projectile.Center) * (7f - Projectile.ai[2] / 60f);
             // 加权平均
-            Projectile.velocity = (targetVel + Projectile.velocity * (60 + Projectile.ai[2] / 10f)) / (61f + Projectile.ai[2] / 10f);
-            
+            Projectile.velocity = (targetVel + Projectile.velocity * (60 + Projectile.ai[2] / 10f)) /
+                                  (61f + Projectile.ai[2] / 10f);
+
             Projectile.rotation = Projectile.velocity.ToRotation();
 
             // 死亡判定与幽默特效
@@ -78,8 +82,8 @@ public abstract class GlobeProjBase : ModProjectile
                 SoundEngine.PlaySound(SoundID.Item13 with { MaxInstances = 114514}, Projectile.Center);
 
             if (Main.rand.NextBool(2))
-                Dust.NewDustPerfect(Projectile.Center + (Vector2.Normalize(Projectile.velocity) * -16), DustID.Smoke, -Projectile.velocity.RotatedByRandom(0.3f) * 0.5f, 0, default, 2f);
-
+                Dust.NewDustPerfect(Projectile.Center + (Vector2.Normalize(Projectile.velocity) * -16), DustID.Smoke,
+                    -Projectile.velocity.RotatedByRandom(0.3f) * 0.5f, 0, default, 2f);
         }
     }
 
@@ -88,16 +92,18 @@ public abstract class GlobeProjBase : ModProjectile
         // 爆改ai之反弹
         if (Projectile.ai[2] < 0)
         {
-            if (Projectile.velocity.X != oldVelocity.X && Math.Abs(oldVelocity.X) > 1f)
+            if (Projectile.velocity.X != oldVelocity.X && Math.Abs(oldVelocity.X) > 0.4f)
             {
-                Projectile.velocity.X = oldVelocity.X * -0.85f;
+                Projectile.velocity.X = oldVelocity.X * -0.9f;
             }
+
             if (Projectile.velocity.Y != oldVelocity.Y && Math.Abs(oldVelocity.Y) > 1f)
             {
                 Projectile.velocity.Y = oldVelocity.Y * -0.85f;
             }
 
-            SoundEngine.PlaySound(Main.rand.Next([SoundID.Item140, SoundID.Item141, SoundID.Item142]), Projectile.Center);
+            SoundEngine.PlaySound(Main.rand.Next([SoundID.Item140, SoundID.Item141, SoundID.Item142]),
+                Projectile.Center);
             return false;
         }
 
@@ -115,43 +121,61 @@ public abstract class GlobeProjBase : ModProjectile
             SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
 
             #region 别展开，里头有答辩
+
             // 你 好
             for (int i = 0; i < 10; i++)
             {
-                int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
+                int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y),
+                    Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
                 Main.dust[dustIndex].velocity *= 1.4f;
             }
+
             for (int i = 0; i < 20; i++)
             {
-                int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3f);
+                int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y),
+                    Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3f);
                 Main.dust[dustIndex].noGravity = true;
                 Main.dust[dustIndex].velocity *= 5f;
-                dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 2f);
+                dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width,
+                    Projectile.height, DustID.Torch, 0f, 0f, 100, default, 2f);
                 Main.dust[dustIndex].velocity *= 3f;
             }
+
             for (int g = 0; g < 2; g++)
             {
-                int goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + Projectile.width / 2 - 24f, Projectile.position.Y + Projectile.height / 2 - 24f), default, Main.rand.Next(61, 64), 1f);
-                Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X + 1.5f;
-                Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y + 1.5f;
-                goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + Projectile.width / 2 - 24f, Projectile.position.Y + Projectile.height / 2 - 24f), default, Main.rand.Next(61, 64), 1f);
-                Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X - 1.5f;
-                Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y + 1.5f;
-                goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + Projectile.width / 2 - 24f, Projectile.position.Y + Projectile.height / 2 - 24f), default, Main.rand.Next(61, 64), 1f);
-                Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X + 1.5f;
-                Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y - 1.5f;
-                goreIndex = Gore.NewGore(Projectile.GetSource_Death(), new Vector2(Projectile.position.X + Projectile.width / 2 - 24f, Projectile.position.Y + Projectile.height / 2 - 24f), default, Main.rand.Next(61, 64), 1f);
-                Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X - 1.5f;
-                Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y - 1.5f;
+                int goreIndex = Gore.NewGore(Projectile.GetSource_Death(),
+                    new Vector2(Projectile.position.X + Projectile.width / 2 - 24f,
+                        Projectile.position.Y + Projectile.height / 2 - 24f), default, Main.rand.Next(61, 64), 1f);
+                Main.gore[goreIndex].velocity.X += 1.5f;
+                Main.gore[goreIndex].velocity.Y += 1.5f;
+                goreIndex = Gore.NewGore(Projectile.GetSource_Death(),
+                    new Vector2(Projectile.position.X + Projectile.width / 2 - 24f,
+                        Projectile.position.Y + Projectile.height / 2 - 24f), default, Main.rand.Next(61, 64), 1f);
+                Main.gore[goreIndex].velocity.X -= 1.5f;
+                Main.gore[goreIndex].velocity.Y += 1.5f;
+                goreIndex = Gore.NewGore(Projectile.GetSource_Death(),
+                    new Vector2(Projectile.position.X + Projectile.width / 2 - 24f,
+                        Projectile.position.Y + Projectile.height / 2 - 24f), default, Main.rand.Next(61, 64), 1f);
+                Main.gore[goreIndex].velocity.X += 1.5f;
+                Main.gore[goreIndex].velocity.Y -= 1.5f;
+                goreIndex = Gore.NewGore(Projectile.GetSource_Death(),
+                    new Vector2(Projectile.position.X + Projectile.width / 2 - 24f,
+                        Projectile.position.Y + Projectile.height / 2 - 24f), default, Main.rand.Next(61, 64), 1f);
+                Main.gore[goreIndex].velocity.X -= 1.5f;
+                Main.gore[goreIndex].velocity.Y -= 1.5f;
             }
+
             #endregion
 
             return;
         }
 
         // 特效弹幕只能在服务器/单人生成
+        var effectColor = GetEffectColor();
         if (Main.netMode is not NetmodeID.MultiplayerClient)
-            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GlobeEffect>(), 0, 0);
+            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero,
+                ModContent.ProjectileType<GlobeEffect>(), 0, 0, ai0: effectColor.R, ai1: effectColor.G,
+                ai2: effectColor.B);
 
         SoundEngine.PlaySound(SoundID.Item107, Projectile.Center);
         for (int i = 0; i < 15; i++)
@@ -161,60 +185,125 @@ public abstract class GlobeProjBase : ModProjectile
         }
     }
 
-    // 用于视觉特效，没必要同步
-    float rand = Main.rand.NextFloat(6.00f, 12.00f);
-    Color color = new Color(Main.rand.Next(255), Main.rand.Next(255), Main.rand.Next(255));
     public override bool PreDraw(ref Color lightColor)
     {
+        if (!UIConfigs.Instance.GlobeEffect)
+            return base.PreDraw(ref lightColor);
+
         var projTex = TextureAssets.Projectile[Type].Value;
-        var tex = TextureAssets.Extra[89].Value;
-        var pos = Projectile.Center - Main.screenPosition - (Projectile.rotation + 2.355f).ToRotationVector2() * 8;
+        var cross = ModAsset.CrazyGlowCross.Value;
+        var roundGlow = ModAsset.GlowOrb.Value;
+        var center = Projectile.Center - Main.screenPosition;
+        var glowCrossColor = GetEffectColor();
+        glowCrossColor.A = 0;
 
         // 顶点拖尾
-        List<VertexInfo2> vertices = [];
-        for (int i = Projectile.oldPos.Length - 1; i > 0; i--)
-        {
-            if (Projectile.oldPos[i] != Vector2.Zero)
-            {
-                Vector2 oldVel;
-                if (i > 0)
-                    oldVel = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-                else oldVel = Projectile.position - Projectile.oldPos[i];
-                Vector2 correct = Vector2.Normalize(oldVel).RotatedBy(1.57f) * (20 - i * 2);
-                vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f - Main.screenPosition + correct, new Vector3(0, 0f, 1 - i / 360f), new Color(255, 255, 255, 0)));
-                vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f - Main.screenPosition - correct, new Vector3(1, 1, 1 - i / 360f), new Color(255, 255, 255, 0)));
-            }
-        }
+        var triangleList = PrepareTriangleList();
+        DrawTrail(triangleList);
 
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, Main.GameViewMatrix.TransformationMatrix);
-
-        Main.graphics.GraphicsDevice.Textures[0] = projTex;
-        if (vertices.Count >= 3)
-        {
-            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
-        }
-
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, Main.GameViewMatrix.TransformationMatrix);
+        // 背后发光大圆球
+        Main.spriteBatch.Draw(roundGlow, center, null, glowCrossColor * 0.7f,
+            1.57f, roundGlow.Size() / 2f, 0.45f, SpriteEffects.None, 0);
 
         // 本体绘制
-        Main.spriteBatch.Draw(projTex, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation + 1.57f, projTex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+        Main.spriteBatch.Draw(projTex, center, null, Color.White,
+            Projectile.rotation + 1.57f, projTex.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 
         // 十字高光绘制
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, Main.GameViewMatrix.TransformationMatrix);
+        Main.spriteBatch.Draw(cross, center, null, glowCrossColor,
+            0f, cross.Size() / 2f, 1f, SpriteEffects.None, 0);
 
-        Main.spriteBatch.Draw(tex, pos, null, color, Main.GameUpdateCount / rand + Projectile.rotation, tex.Size() / 2f, 0.8f, SpriteEffects.None, 0);
-        Main.spriteBatch.Draw(tex, pos, null, color, Main.GameUpdateCount / rand + 1.57f + Projectile.rotation, tex.Size() / 2f, 0.8f, SpriteEffects.None, 0);
-
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, Main.GameViewMatrix.TransformationMatrix);
+        Main.spriteBatch.ReBegin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
         return false;
     }
 
+    private void DrawTrail(List<VertexInfo2> triangleList)
+    {
+        var projTex = TextureAssets.Projectile[Type].Value;
+
+        Main.spriteBatch.ReBegin(SpriteSortMode.Deferred, BlendState.Additive);
+
+        // 干掉注释就可以显示三角形栅格
+        // RasterizerState rasterizerState = new RasterizerState();
+        // rasterizerState.CullMode = CullMode.None;
+        // rasterizerState.FillMode = FillMode.WireFrame;
+        // Main.graphics.GraphicsDevice.RasterizerState = rasterizerState;
+
+        var screenCenter = Main.screenPosition + Main.ScreenSize.ToVector2() / 2f;
+        var screenSize = Main.ScreenSize.ToVector2() / Main.GameViewMatrix.Zoom;
+        if (Main.LocalPlayer.gravDir == -1)
+        {
+            screenSize.Y = -screenSize.Y;
+        }
+
+        var screenPos = screenCenter - screenSize / 2f;
+
+        var projection = Matrix.CreateOrthographicOffCenter(0, screenSize.X, screenSize.Y, 0, 0, 1);
+        var model = Matrix.CreateTranslation(new Vector3(-screenPos.X, -screenPos.Y, 0));
+
+        float uTime = (Main.GameUpdateCount % 30) / 30f;
+
+        ModAsset.GlobeTrail.Value.Parameters["uTransform"].SetValue(model * projection);
+        ModAsset.GlobeTrail.Value.Parameters["pixelSize"].SetValue(new Vector2(1f) / projTex.Size() * 6f);
+        ModAsset.GlobeTrail.Value.Parameters["uTime"].SetValue(uTime);
+
+        Main.graphics.GraphicsDevice.Textures[0] = projTex;
+        Main.graphics.GraphicsDevice.Textures[1] = ModAsset.TrailStyle2.Value;
+
+        ModAsset.GlobeTrail.Value.CurrentTechnique.Passes[0].Apply();
+
+        Main.instance.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, triangleList.ToArray(), 0,
+            triangleList.Count / 3);
+
+        Main.spriteBatch.ReBegin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+    }
+
+    private List<VertexInfo2> PrepareTriangleList()
+    {
+        List<VertexInfo2> vertices = [];
+        List<VertexInfo2> triangleList = [];
+        for (var i = 1; i < Projectile.oldPos.Length; i++)
+        {
+            float actualLength = Projectile.oldPos.Count(vec => vec != Vector2.Zero);
+            if (Projectile.oldPos[i] == Vector2.Zero)
+                continue;
+
+            Vector2 oldVel = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
+            var factor = i / actualLength; // 遍历时以0-1递增
+            var factorSquare = (float)Math.Pow(factor, 2);
+            var color = GetEffectColor();
+            color.A = (byte)MathHelper.Lerp(150, 0, factorSquare);
+
+            Vector2 correct = Vector2.Normalize(oldVel).RotatedBy(1.57f) * MathHelper.SmoothStep(20, 0, factorSquare);
+            vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f + correct,
+                new Vector3(factor, 0f, 0f), color));
+            vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f - correct,
+                new Vector3(factor, 1f, 0f), color));
+        }
+
+        if (vertices.Count > 2)
+        {
+            // 按照顺序连接三角形
+            for (int i = 0; i < vertices.Count - 2; i += 2)
+            {
+                // 这是一个四边形 [i] [i+2] [i+1] [i+3]
+                triangleList.Add(vertices[i]);
+                triangleList.Add(vertices[i + 2]);
+                triangleList.Add(vertices[i + 1]);
+
+                triangleList.Add(vertices[i + 1]);
+                triangleList.Add(vertices[i + 2]);
+                triangleList.Add(vertices[i + 3]);
+            }
+        }
+
+        return triangleList;
+    }
+
     public abstract ModItem GetModItemDummy();
+
+    private Color GetEffectColor() => GetModItemDummy() is Globe globe ? globe.GetEffectColor() : Color.White;
 
     public virtual bool RevealOperation(bool onlyJudging)
     {

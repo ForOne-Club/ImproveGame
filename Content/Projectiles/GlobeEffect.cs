@@ -32,17 +32,18 @@ namespace ImproveGame.Content.Projectiles
 
             graphicsDevice.SetRenderTarget(screenTargetSwap);
             graphicsDevice.Clear(Color.Transparent);
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            Main.spriteBatch.ReBegin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             spriteBatch.Draw(screenTarget, Vector2.Zero, Color.White);
 
             graphicsDevice.SetRenderTarget(render);
             graphicsDevice.Clear(Color.Transparent);
             spriteBatch.Draw(screenTarget, Vector2.Zero, Color.White);
+            
+            var color = new Color((int)Projectile.ai[0], (int)Projectile.ai[1], (int)Projectile.ai[2]);
             for (int i = (int)Main.screenPosition.X / 16 * 16; i < Main.screenPosition.X + Main.screenWidth; i += 16)
-                spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Vector2(i - Main.screenPosition.X, 0), new Rectangle(0, 0, 1, 1), new Color(0, 120, 0), 1.57f, Vector2.Zero, new Vector2(Main.screenHeight, 2), SpriteEffects.None, 0);
+                spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Vector2(i - Main.screenPosition.X, 0), new Rectangle(0, 0, 1, 1), color, 1.57f, Vector2.Zero, new Vector2(Main.screenHeight, 2), SpriteEffects.None, 0);
             for (int i = (int)Main.screenPosition.Y / 16 * 16; i < Main.screenPosition.Y + Main.screenHeight; i += 16)
-                spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Vector2(0, i - Main.screenPosition.Y), new Rectangle(0, 0, 1, 1), new Color(0, 120, 0), 0, Vector2.Zero, new Vector2(Main.screenWidth, 2), SpriteEffects.None, 0);
+                spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Vector2(0, i - Main.screenPosition.Y), new Rectangle(0, 0, 1, 1), color, 0, Vector2.Zero, new Vector2(Main.screenWidth, 2), SpriteEffects.None, 0);
 
             graphicsDevice.SetRenderTarget(render2);
             graphicsDevice.Clear(Color.Transparent);
@@ -60,8 +61,7 @@ namespace ImproveGame.Content.Projectiles
             graphicsDevice.Textures[1] = null;
             graphicsDevice.Textures[2] = null;
 
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.ReBegin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             return false;
         }
         public override void OnKill(int timeLeft)

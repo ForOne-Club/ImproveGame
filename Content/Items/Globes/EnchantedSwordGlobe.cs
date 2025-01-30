@@ -13,6 +13,8 @@ public class EnchantedSwordGlobe () : GlobePlentyTooltip(ItemRarityID.Green, Ite
         public override ModItem GetModItemDummy() => ModContent.GetInstance<EnchantedSwordGlobe>();
     }
 
+    public override Color GetEffectColor() => new (57, 87, 244);
+
     public override bool RevealOperation(Projectile projectile, bool onlyJudging)
     {
         return RevealEnchantedSwordPacket.Reveal(projectile, onlyJudging);

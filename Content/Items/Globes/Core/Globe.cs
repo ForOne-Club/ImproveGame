@@ -31,7 +31,7 @@ public abstract class Globe : ModItem
 
     public override void SetDefaults()
     {
-        Item.DefaultToThrownWeapon(GlobeLookup.GetValueOrDefault(Type), 20, 8f, hasAutoReuse: true);
+        Item.DefaultToThrownWeapon(GlobeLookup.GetValueOrDefault(Type), 20, 12f, hasAutoReuse: true);
         Item.UseSound = SoundID.Item106;
         Item.width = 32;
         Item.height = 32;
@@ -39,6 +39,8 @@ public abstract class Globe : ModItem
         Item.rare = rarity;
         Item.value = itemValue;
     }
+
+    public abstract Color GetEffectColor();
 
     public abstract bool RevealOperation(Projectile projectile, bool onlyJudging);
 

@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.BuilderToggles;
+﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Content.BuilderToggles;
 using ImproveGame.Core;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader.IO;
@@ -6,7 +7,7 @@ using Terraria.ModLoader.IO;
 namespace ImproveGame.Content.Functions.AutoPiggyBank;
 
 // 试存钱币槽
-public class AutoMoneyPlayerListener : ModPlayer
+public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
 {
     public static AutoMoneyPlayerListener LocalPlayer => Main.LocalPlayer.GetModPlayer<AutoMoneyPlayerListener>();
     public List<ItemTypeData> ExcludedItems = [];
@@ -26,14 +27,13 @@ public class AutoMoneyPlayerListener : ModPlayer
         ExcludedItems = tag.Get<List<ItemTypeData>>("excludedItems") ?? [];
     }
 
-    public override void SetStaticDefaults()
+    public void PostSetupContent()
     {
         AllCurrencies = [new Item(ItemID.GoldCoin)];
-        foreach ((int type, Item item) in ContentSamples.ItemsByType)
-        {
-            if (CustomCurrencyManager.IsCustomCurrency(item))
-                AllCurrencies.Add(new Item(type));
-        }
+        AllCurrencies.AddRange(ContentSamples.ItemsByType
+            .Where(i => CustomCurrencyManager.IsCustomCurrency(i.Value))
+            .Select(i => new Item(i.Key)) // 实例化一个新的，直接用ContentSamples.ItemsByType里面的会出问题
+            .ToList());
     }
 
     public override void PostUpdate()

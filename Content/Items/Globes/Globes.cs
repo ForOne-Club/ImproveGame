@@ -16,6 +16,8 @@ public class AetherGlobe : OnceForAllGlobe
 
     public override bool NotFoundCheck() => StructureDatas.ShimmerPosition == default;
 
+    public override Color GetEffectColor() => Main.DiscoColor;
+
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
         recipe.AddIngredient(ItemID.Glass, 10)
             .AddIngredient(ItemID.StoneBlock, 80)
@@ -33,6 +35,8 @@ public class DungeonGlobe : OnceForAllGlobe
 
     public override StructureDatas.UnlockID StructureType => StructureDatas.UnlockID.Dungeon;
 
+    public override Color GetEffectColor() => new (76, 95, 109);
+
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
         recipe.AddRecipeGroup(RecipeGroupID.Sand, 10)
             .AddIngredient(ItemID.DirtBlock, 30)
@@ -49,6 +53,8 @@ public class TempleGlobe : OnceForAllGlobe
     }
 
     public override StructureDatas.UnlockID StructureType => StructureDatas.UnlockID.Temple;
+
+    public override Color GetEffectColor() => new (210, 105, 24);
 
     public override bool NotFoundCheck() => StructureDatas.TemplePosition == default;
 
@@ -70,6 +76,8 @@ public class PyramidGlobe : OnceForAllGlobe
 
     public override StructureDatas.UnlockID StructureType => StructureDatas.UnlockID.Pyramids;
 
+    public override Color GetEffectColor() => new (197, 174, 79);
+
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
         recipe.AddRecipeGroup(RecipeGroupID.Sand, 50)
             .AddTile(TileID.WorkBenches)
@@ -84,6 +92,8 @@ public class FloatingIslandGlobe : OnceForAllGlobe
     }
 
     public override StructureDatas.UnlockID StructureType => StructureDatas.UnlockID.FloatingIslands;
+
+    public override Color GetEffectColor() => new (34, 170, 82);
 
     public override bool NotFoundCheck() =>
         StructureDatas.SkyHousePositions.Count is 0 && StructureDatas.SkyLakePositions.Count is 0;

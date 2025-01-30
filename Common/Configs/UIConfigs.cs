@@ -31,6 +31,9 @@ public class UIConfigs : ModConfig
     public ThemeType ThemeType;
 
     [DefaultValue(true)]
+    public bool GlobeEffect;
+
+    [DefaultValue(true)]
     [JsonIgnore]
     public bool BigBackpackButton;
 
