@@ -89,4 +89,30 @@ public class SDFRectangle
         ApplyPass(2);
         BaseDrawRectangle(pos, size, rounded + new Vector4(shadow));
     }
+
+    public static void BarColor(Vector2 pos, Vector2 size, Vector4 rounded, Texture2D barTexture,Vector2 direction,float time, bool ui = true)
+    {
+        const float innerShrinkage = 1;
+        pos -= new Vector2(innerShrinkage);
+        size += new Vector2(innerShrinkage * 2);
+        rounded += new Vector4(innerShrinkage);
+        _effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
+        _effect.Parameters["uBarInfo"].SetValue(new Vector3(direction, time));
+        _effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
+        _effect.Parameters["uSizeOver2"].SetValue(size * .5f);
+        _effect.Parameters["uRound"].SetValue(rounded);
+        Main.instance.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
+        Main.instance.GraphicsDevice.Textures[0] = barTexture;
+        ApplyPass(3);
+
+        SDFGraphicsVertexType[] triangles = [  new(pos, new(0, 0),0),
+                                        new(pos + new Vector2(size.X, 0), new(size.X, 0),0),
+                                        new(pos + new Vector2(0, size.Y), new(0, size.Y),0),
+                                        new(pos + new Vector2(0, size.Y), new(0, size.Y),0),
+                                        new(pos + new Vector2(size.X, 0), new(size.X, 0),0),
+                                        new(pos + size, size,0)];//.. vertices
+        Main.graphics.GraphicsDevice.DrawUserPrimitives(0, triangles, 0, 2);
+        Main.spriteBatch.spriteEffectPass.Apply();
+        //BaseDrawRectangle(pos, size, rounded);
+    }
 }

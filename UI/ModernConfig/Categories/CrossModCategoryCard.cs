@@ -28,20 +28,27 @@ namespace ImproveGame.UI.ModernConfig.Categories
             else if (type.IsEnum)
                 panel.AddEnum(config, variable);
             else if (type == typeof(string))
-                panel.AddEditableText(config, variable);
+            {
+                if (ConfigManager.GetCustomAttributeFromMemberThenMemberType<OptionStringsAttribute>(variable, null, null) != null)
+                    panel.AddEnum(config, variable);
+                else
+                    panel.AddEditableText(config, variable);
+
+            }
             else if (type.IsArray)
                 panel.AddArray(config, variable);
             else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
-            {
-                panel.AddNotSupportText(config, variable);
-            }
+                panel.AddList(config, variable);
             else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(HashSet<>))
-            {
-                panel.AddNotSupportText(config, variable);
-            }
+                panel.AddHashSet(config, variable);
             else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+                panel.AddDictionary(config, variable);
+                //panel.AddNotSupportText(config, variable);
+
+            else if (type.IsSubclassOf(typeof(EntityDefinition)))
             {
                 panel.AddNotSupportText(config, variable);
+
             }
             else
                 panel.AddObject(config, variable);

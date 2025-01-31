@@ -22,10 +22,11 @@ public sealed class ConfigOptionsPanel : SUIPanel
 
     private HashSet<string> _addedOptions = [];
     private List<ModernConfigOption> _allOptions = [];
+    public List<ModernConfigOption> AllOptions => _allOptions;
     private SUIEditableText _searchBar { get; set; }
     private SUIScrollView2 _options { get; set; }
     public SUIDropdownListContainer DropdownList { get; set; }
-
+    public static object GlobalItem;
     public static Category CurrentCategory
     {
         get => _currentCategory;
@@ -177,6 +178,9 @@ public sealed class ConfigOptionsPanel : SUIPanel
 
     public void AddObject(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionObject>(config, nameOrMemberInfo);
     public void AddArray(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionArray>(config, nameOrMemberInfo);
+    public void AddList(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionList>(config, nameOrMemberInfo);
+    public void AddHashSet(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionHashSet>(config, nameOrMemberInfo);
+    public void AddDictionary(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionDictionary>(config, nameOrMemberInfo);
 
 
     public void AddNotSupportText(ModConfig config, PropertyFieldWrapper variableInfo) => AddToAllOptions<OptionNotSupportText>(config, variableInfo);

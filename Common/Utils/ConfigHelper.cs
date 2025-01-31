@@ -10,6 +10,7 @@ using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 using System.Collections.Generic;
 using Terraria.ModLoader.UI;
+using System.Linq;
 using System.Collections;
 using ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -31,26 +32,40 @@ public static class ConfigHelper
             if (path == null)
                 throw new Exception("You must give a path when setvalue to a struct");
             List<PropertyFieldWrapper> fldInfo = [];
-
             object obj = modConfig;
             int start = 0;
             IList objList = null;
             int listIndex = -1;
-            for (int i = path.Count - 1; i >=0; i--) 
+            for (int i = path.Count - 1; i >= 0; i--)
             {
-                if (int.TryParse(path[i], out var index)) 
+                if (int.TryParse(path[i], out var index))
                 {
                     start = i + 1;
-                    for (int k = 0; k < i; k++) 
+                    for (int k = 0; k < i; k++)
                     {
                         if (int.TryParse(path[k], out var idx))
                             obj = ((IList)obj)[idx];
                         else
                             obj = ModernConfigOption.GetWrapper(obj.GetType(), path[k]).GetValue(obj);
                     }
-                    objList = (IList)obj;
-                    obj = objList[index];
+                    if (obj is IList list)
+                    {
+                        objList = list;
+                        obj = objList[index];
+                    }
+                    else if (obj is IDictionary dict)
+                    {
+                        string type = path[i + 1];
+                        objList = new List<object>();
+                        foreach (var v in (type == "Value" ? dict.Values : dict.Keys))
+                        {
+                            objList.Add(v);
+                        }
+                        obj = objList[index];
+
+                    }
                     listIndex = index;
+
                     break;
                 }
             }
@@ -86,7 +101,7 @@ public static class ConfigHelper
     public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, object item, bool broadcast = true, List<string> path = null, IList List = null, int Index = -1)
     {
         Type type = List != null ? List[Index].GetType() : variableInfo.Type;
-        if (type != value.GetType())
+        if (value != null && type != value.GetType())
             throw new Exception($"Field type mismatch: {variableInfo.Type} != {value.GetType()}");
 
         var modConfig = ConfigManager.Configs[config.Mod].Find(i => i.Name == config.Name);
@@ -150,17 +165,25 @@ public static class ConfigHelper
         }
     }
     //public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, bool broadcast = true) => SetConfigValue(config, variableInfo, value, config, broadcast);
-    public static string GetModText(string modName, string str, params object[] arg)
+    public static string GetModText(string modName, string str,out bool hasValue, params object[] arg)
     {
-        string text = Language.GetTextValue($"Mods.{modName}.{str}", arg);
+        string key = $"Mods.{modName}.{str}";
+        string text = Language.GetTextValue(key, arg);
+        hasValue = Language.Exists(key);
         return ConvertLeftRight(text);
     }
     public static string GetLocalizationKey(ModConfig config, string optionName)
         => $"Configs.{config.Name}.{optionName}";
 
-    public static string GetTooltip(ModConfig config, string optionName)
-        => GetModText(config.Mod.Name, $"{GetLocalizationKey(config, optionName)}.Tooltip");
+    public static string GetTooltip(ModConfig config, string optionName) 
+    {
+        string result = GetModText(config.Mod.Name, $"{GetLocalizationKey(config, optionName)}.Tooltip", out bool hasValue);
+        return hasValue ? result : optionName;
+    }
 
     public static string GetLabel(ModConfig config, string optionName)
-        => GetModText(config.Mod.Name, $"{GetLocalizationKey(config, optionName)}.Label");
+    {
+        string result = GetModText(config.Mod.Name, $"{GetLocalizationKey(config, optionName)}.Label", out bool hasValue);
+        return hasValue ? result : optionName;
+    }
 }

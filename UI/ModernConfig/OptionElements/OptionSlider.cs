@@ -3,10 +3,12 @@ using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
+using Microsoft.Xna.Framework.Graphics;
 using System.ComponentModel;
 using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -19,6 +21,11 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         public event Action EndDraggingCallback;
         private float _value;
         private bool _dragging;
+
+        public Utils.ColorLerpMethod ColorMethod;
+        public bool colorMethodPendingModified = true;
+        Texture2D colorBar;
+
 
         public float Value
         {
@@ -41,6 +48,12 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             SetSizePixels(80f, 28f);
             VAlign = 0.5f;
             Rounded = new Vector4(14f);
+        }
+
+        ~SlideBox()
+        {
+            Main.RunOnMainThread(() => colorBar?.Dispose());
+            //colorBar?.Dispose();
         }
 
         public override void LeftMouseDown(UIMouseEvent evt)
@@ -74,16 +87,44 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
-            base.DrawSelf(spriteBatch);
-
-            if (_dragging)
-                UpdateDragging();
-
             // 基本字段
             var dimensions = GetDimensions();
             var position = dimensions.Position();
             var center = dimensions.Center();
             var size = dimensions.Size();
+
+            if (ColorMethod != null && !IgnoresMouseInteraction)
+            {
+                if (colorBar == null)
+                {
+                    try
+                    {
+                        colorBar = new Texture2D(Main.graphics.GraphicsDevice, 300, 1);
+                    }
+                    catch
+                    {
+                        Texture2D texdummy = null;
+                        Main.RunOnMainThread(() => { texdummy = new Texture2D(Main.graphics.GraphicsDevice, 300, 1); });
+                        colorBar = texdummy;
+                    }
+                }
+                if (colorMethodPendingModified)
+                {
+                    Color[] colors = new Color[300];
+                    for (int n = 0; n < 300; n++)
+                        colors[n] = ColorMethod.Invoke(n / 299f);
+                    colorBar.SetData(colors);
+                    colorMethodPendingModified = false;
+                }
+                SDFRectangle.BarColor(position, size, Rounded, colorBar, Vector2.UnitX / dimensions.Width, 0, true);//-Main.GlobalTimeWrappedHourly
+            }
+            else
+                base.DrawSelf(spriteBatch);
+
+            if (_dragging)
+                UpdateDragging();
+
+
 
             // 圆的属性
             float roundRadius = size.Y / 2f - 2f; // 半径
@@ -95,10 +136,12 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             var roundLeftTop = roundCenter - new Vector2(roundRadius);
 
             // 颜色选择
-            var innerColor = UIStyle.SliderRound;
+            var innerColor = ColorMethod != null ? ColorMethod.Invoke(_value) : UIStyle.SliderRound;
+            //var borderColor = innerColor;
             var borderColor = UIStyle.SliderRound;
             if (MouseInRound(roundCenter, (int)roundRadius))
                 borderColor = UIStyle.SliderRoundHover;
+
 
             if (IgnoresMouseInteraction)
             {
@@ -107,10 +150,11 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             }
 
             // 绘制
-            SDFGraphics.HasBorderRound(roundLeftTop,default, roundDiameter, innerColor, 2f, borderColor, GetMatrix(true));
+            SDFGraphics.HasBorderRound(roundLeftTop, default, roundDiameter, innerColor, 2f, borderColor, GetMatrix(true));
         }
     }
-
+    private Utils.ColorLerpMethod _colorLerpMethod;
+    private SUISplitButton _splitButton;
     private SlideBox _slideBox;
     private SUINumericText _numericTextBox;
     public readonly static Type[] SupportedTypes = [typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal)];
@@ -127,7 +171,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             Height = StyleDimension.Fill
         };
         box.JoinParent(this);
-
+        AddUpDown(box);
         AddTextBox(box);
         AddSlideBox(box);
     }
@@ -178,12 +222,51 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         var incrementAttribute = GetAttribute<IncrementAttribute>();
         if (incrementAttribute != null)
             Increment = Convert.ToDouble(incrementAttribute.Increment);
+        if (Increment == null && IsInt)
+            Increment = 1.0;
+
+        var customConfigAttribute = GetAttribute<CustomModConfigItemAttribute>();
+        if (customConfigAttribute != null)
+        {
+            var elem = Activator.CreateInstance(customConfigAttribute.Type);
+            if (elem is RangeElement range)
+            {
+                _colorLerpMethod = range.ColorMethod;
+            }
+        }
+        var sliderColor = GetAttribute<SliderColorAttribute>()?.Color;
+        if (_colorLerpMethod == null && sliderColor != null)
+            _colorLerpMethod = t => Color.Lerp(Color.Black * 0.3f, sliderColor.Value, t * t);// 
     }
     protected virtual void CheckValid()
     {
         if (!SupportedTypes.Contains(VarType))
             throw new Exception($"Field \"{OptionName}\" is not a supported type. OptionSlider supports all build-in-types except for Boolean, IntPtr and UIntPtr");
     }
+    private void AddUpDown(View box)
+    {
+        if (Increment == null) return;
+        _splitButton = new SUISplitButton()
+        {
+            RelativeMode = RelativeMode.Horizontal,
+            BgColor = Color.Black * 0.4f,
+            Rounded = new Vector4(14f),
+            VAlign = 0.5f,
+            buttonBorderColor = Color.Black,
+            buttonColor = Color.Black * 0.4f,
+            Width = new(25, .0f),
+            Height = new(25, .0f)
+        };
+        _splitButton.OnLeftClick += (evt, elem) =>
+        {
+            var btn = elem as SUISplitButton;
+            double value = Min + (Max - Min) * _slideBox.Value + (btn.IsUP ? 1 : -1) * Increment.Value;
+            value = Math.Clamp(value, Min, Max);
+            SetConfigValue(value, broadcast: false);
+        };
+        _splitButton.JoinParent(box);
+    }
+
     private void AddTextBox(View box)
     {
         bool isInt = IsInt;
@@ -239,6 +322,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             RelativeMode = RelativeMode.Horizontal,
             Spacing = new Vector2(4),
         };
+        _slideBox.ColorMethod = _colorLerpMethod;
         _slideBox.ValueChangeCallback += () =>
         {
             double value = Min + (Max - Min) * _slideBox.Value;

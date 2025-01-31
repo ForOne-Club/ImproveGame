@@ -1,48 +1,70 @@
-﻿using System.Collections.Generic;
-
+﻿using ImproveGame.UIFramework.SUIElements;
+using System.Collections;
+using Terraria.ModLoader.Config;
 using ImproveGame.UIFramework.BaseViews;
+
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
-public class OptionArray : OptionCollections
+public class OptionList : OptionCollections
 {
-    private Type itemType;
+    private Type listType;
 
-    protected override bool CanAdd => false;
+    protected override bool CanAdd => true;
 
     protected override void AddItem()
     {
-        throw new NotImplementedException();
+        ((IList)Data).Add(CreateCollectionElementInstance(listType));
     }
 
     protected override void ClearCollection()
     {
-        throw new NotImplementedException();
+        ((IList)Data).Clear();
+
     }
 
     protected override void InitializeCollection()
     {
-        throw new NotImplementedException();
+        Data = Activator.CreateInstance(typeof(List<>).MakeGenericType(listType));
+        SetValueDirect(Data);
     }
 
-    protected override void NullCollection()
-    {
-        throw new NotImplementedException();
-    }
 
     protected override void PrepareTypes()
     {
-        itemType = VariableInfo.Type.GetElementType();
+        listType = VariableInfo.Type.GetGenericArguments()[0];
+        JsonDefaultListValueAttribute = ConfigManager.GetCustomAttributeFromCollectionMemberThenElementType<JsonDefaultListValueAttribute>(VariableInfo.MemberInfo, listType);
     }
 
     protected override void SetupList()
     {
         //ListPanel.Clear();
         OptionView.ListView.RemoveAllChildren();
-        Array array = VariableInfo.GetValue(Item) as Array;
-        int count = array.Length;
+        IList list = VariableInfo.GetValue(Item) as IList;
+        int count = list.Count;
         for (int i = 0; i < count; i++)
         {
-            var e = WrapIt(OptionView.ListView, Config, VariableInfo, Item, array, itemType, i, this);
+            var e = WrapIt(OptionView.ListView, Config, VariableInfo, Item, list, listType, i, this);
+            var DeleteButton = new SUICross()
+            {
+                RelativeMode = RelativeMode.None,
+                BgColor = Color.Black * 0.4f,
+                Rounded = new Vector4(4f),
+                Width = new(25, .0f),
+                Height = new(25, .0f),
+                Left = new(0, 0),
+                Top = new(6, 0),
+            };
+            DeleteButton.OnLeftClick += (evt, elem) =>
+            {
+                ((IList)Data).RemoveAt(index);
+                SetupList();
+                pendingChanges = true;
+            };
+            DeleteButton.JoinParent(e);
+            if (e.Elements[0] is OptionLabelElement label)
+            {
+                label.Left = new(30, 0);
+            }
             int idx = i;
             e.OnLeftMouseDown += (evt, elem) =>
             {
@@ -50,12 +72,12 @@ public class OptionArray : OptionCollections
 
                 var c = 0;
                 float h = 0;
-                while (c < idx)
+                while (c < idx) 
                 {
                     h += OptionView.ListView.Elements[c].Height.Pixels;
                     c++;
                 }
-                var pos = new Vector2(0, h - OptionView.ScrollBar.TargetScrollPosition.Y);
+                var pos = new Vector2(0,h);
                 offset = evt.MousePosition - pos;
                 e.RelativeMode = RelativeMode.None;
                 e.Remove();
@@ -64,7 +86,7 @@ public class OptionArray : OptionCollections
             };
             e.OnUpdate += (elem) =>
             {
-                if (currentDraggingOption == null || currentDraggingOption != elem)
+                if (currentDraggingOption == null || currentDraggingOption != elem) 
                     return;
                 var pos = Main.MouseScreen - offset;
                 e.SetPosPixels(pos);
@@ -89,14 +111,9 @@ public class OptionArray : OptionCollections
                         break;
                     n++;
                 }
-                var dummy = array.GetValue(idx);
-                if (idx > n)
-                    for (int m = idx - 1; m >= n; m--)
-                        array.SetValue(array.GetValue(m), m + 1);
-                else if (idx < n)
-                    for (int m = idx + 1; m <= n; m++)
-                        array.SetValue(array.GetValue(m), m - 1);
-                array.SetValue(dummy, n);
+                var dummy = list[idx];
+                list.RemoveAt(idx);
+                list.Insert(n, dummy);
                 SetupList();
                 pendingChanges = true;
             };

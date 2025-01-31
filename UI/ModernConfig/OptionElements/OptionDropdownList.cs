@@ -15,6 +15,7 @@ public class OptionDropdownList : ModernConfigOption
     private SlideText _textElement;
     private string[] _valueStrings;
     private string[] _valueTooltips;
+    bool IsStringOption;
     private float _maxTextWidth;
     public override int labelReservedWidth => 70;
     protected override void OnBind()
@@ -52,6 +53,13 @@ public class OptionDropdownList : ModernConfigOption
             dropdownList.BuildDropdownList(x, y, width, _valueStrings, GetString(), this);
             dropdownList.OptionSelectedCallback = s =>
             {
+
+                if (IsStringOption) 
+                {
+                    SetValueDirect(s);
+                    return;
+                }
+                
                 int index = Array.IndexOf(_valueStrings, s);
                 SetConfigValue(index, true);
             };
@@ -83,39 +91,46 @@ public class OptionDropdownList : ModernConfigOption
     }
     private void GetOptions()
     {
-        _valueStrings = Enum.GetNames(VarType);
+        if (!IsStringOption)
+            _valueStrings = Enum.GetNames(VarType);
         _valueTooltips = new string[_valueStrings.Length];
 
-        for (int i = 0; i < _valueStrings.Length; i++)
-        {
-            var enumFieldFieldInfo = VarType.GetField(_valueStrings[i]);
-            if (enumFieldFieldInfo is null)
-                continue;
+        if (!IsStringOption)
+            for (int i = 0; i < _valueStrings.Length; i++)
+            {
+                var enumFieldFieldInfo = VarType.GetField(_valueStrings[i]);
+                if (enumFieldFieldInfo is null)
+                    continue;
 
-            string name = ConfigManager.GetLocalizedLabel(new PropertyFieldWrapper(enumFieldFieldInfo));
-            _valueStrings[i] = name;
-            string tooltip = ConfigManager.GetLocalizedTooltip(new PropertyFieldWrapper(enumFieldFieldInfo));
-            _valueTooltips[i] = tooltip;
-        }
+                string name = ConfigManager.GetLocalizedLabel(new PropertyFieldWrapper(enumFieldFieldInfo));
+                _valueStrings[i] = name;
+                string tooltip = ConfigManager.GetLocalizedTooltip(new PropertyFieldWrapper(enumFieldFieldInfo));
+                _valueTooltips[i] = tooltip;
+            }
 
         _maxTextWidth = _valueStrings.Max(i => ChatManager.GetStringSize(FontAssets.MouseText.Value, i, Vector2.One).X);
     }
 
     private void CheckValid()
     {
-        if (!VarType.IsEnum)
+        var strOptionAttribute = GetAttribute<OptionStringsAttribute>();
+        if (strOptionAttribute != null)
+        {
+            _valueStrings = strOptionAttribute.OptionLabels;
+            IsStringOption = true;
+            return;
+        }
+        if (!VarType.IsEnum && !IsStringOption)
             throw new Exception($"Field \"{OptionName}\" is not a enum type");
     }
 
     private void SetConfigValue(int index, bool broadcast)
     {
         //if (!Interactable) return;
-
         var value = Enum.GetValues(VarType).GetValue(index);
         SetValueDirect(value);
         //ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadcast, path: path);
     }
-
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -147,6 +162,6 @@ public class OptionDropdownList : ModernConfigOption
             null, Color.White, 0f, tex.Size() / 2f, Vector2.One, effects, 0f);
     }
 
-    private int GetIndex() => Array.IndexOf(Enum.GetValues(VarType), GetValue());
-    private string GetString() => _valueStrings[GetIndex()];
+    private int GetIndex() => IsStringOption ? Array.IndexOf(_valueStrings, GetValue()) : Array.IndexOf(Enum.GetValues(VarType), GetValue());
+    private string GetString() => IsStringOption ? GetValue().ToString() : _valueStrings[GetIndex()];
 }

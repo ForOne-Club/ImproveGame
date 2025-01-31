@@ -38,11 +38,17 @@ public sealed class OptionEditableText : ModernConfigOption
                 IsWrapped = false
             },
             MaxLength = 200,
-            VAlign = 0.5f
+            VAlign = 0.5f,
+            MaxWidth = new(0, 0.75f),
+            MinWidth = new(50,0)
         };
         _TextBox.ContentsChanged += (ref string text) =>
         {
             SetConfigValue(text, broadcast: false);
+            var size = FontAssets.MouseText.Value.MeasureString(text);
+            var dimension = _TextBox.GetDimensions();
+            _TextBox.Width.Set(size.X + 8, 0);
+            this.Recalculate();
         };
         _TextBox.EndTakingInput += () =>
         {

@@ -54,10 +54,15 @@ public static class SDFGraphics
     static void ApplyPass(string passName) => SDF_Effect.CurrentTechnique.Passes[passName].Apply();
     private static void BaseDraw(Vector2 pos, Vector2 size)
     {
-        List<VertexPosCoord> vertices = [];
-        GetSDFVertexInfo(ref vertices, pos, size);
-        VertexPosCoord[] triangles = [.. vertices];
-        Main.graphics.GraphicsDevice.DrawUserPrimitives(0, triangles, 0, triangles.Length / 3);
+        //List<VertexPosCoord> vertices = [];
+        //GetSDFVertexInfo(ref vertices, pos, size);
+        VertexPosCoord[] triangles = [  new(pos, new(0, 0)),
+                                        new(pos + new Vector2(size.X, 0), new(size.X, 0)),
+                                        new(pos + new Vector2(0, size.Y), new(0, size.Y)),
+                                        new(pos + new Vector2(0, size.Y), new(0, size.Y)),
+                                        new(pos + new Vector2(size.X, 0), new(size.X, 0)),
+                                        new(pos + size, size)];//.. vertices
+        Main.graphics.GraphicsDevice.DrawUserPrimitives(0, triangles, 0, 2);
         Main.spriteBatch.spriteEffectPass.Apply();
 
 

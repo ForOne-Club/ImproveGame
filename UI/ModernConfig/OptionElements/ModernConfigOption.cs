@@ -5,6 +5,7 @@ using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
+using ImproveGame.UIFramework.SUIElements;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +19,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class ModernConfigOption : TimerView
 {
-    public static UIElement WrapIt(UIElement parent, ModConfig modConfig, PropertyFieldWrapper variable, object item, object list = null, Type arrayType = null, int index = -1,ModernConfigOption owner = null)
+    public static ModernConfigOption WrapIt(UIElement parent, ModConfig modConfig, PropertyFieldWrapper variable, object item, object list = null, Type arrayType = null, int index = -1, ModernConfigOption owner = null)
     {
         Type type = variable.Type;
         if (arrayType != null)
@@ -33,14 +34,19 @@ public class ModernConfigOption : TimerView
         else if (type.IsEnum)
             option = new OptionDropdownList();
         else if (type == typeof(string))
-            option = new OptionEditableText();
+        {
+            var ost = ConfigManager.GetCustomAttributeFromMemberThenMemberType<OptionStringsAttribute>(variable, item, list);
+            option = ost != null ? new OptionDropdownList() : new OptionEditableText();
+        }
         else if (type.IsArray)
             option = new OptionArray();
         else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
-            option = new OptionNotSupportText();
+            option = new OptionList();
         else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(HashSet<>))
-            option = new OptionNotSupportText();
+            option = new OptionHashSet();
         else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            option = new OptionDictionary();
+        else if (type.IsSubclassOf(typeof(EntityDefinition)))
             option = new OptionNotSupportText();
         else
             option = new OptionObject();
@@ -49,7 +55,7 @@ public class ModernConfigOption : TimerView
         option.List = (IList)list;
         option.Item = item;
         option.path = [];
-        if (owner != null) 
+        if (owner != null)
         {
             if (owner.path != null)
                 option.path.AddRange(owner.path);
@@ -57,6 +63,7 @@ public class ModernConfigOption : TimerView
                 option.path.Add(owner.index.ToString());
             else
                 option.path.Add(owner.VariableInfo.Name);
+            option.owner = owner;
         }
         /*if (parent is ModernConfigOption parentOption)
         {
@@ -65,15 +72,18 @@ public class ModernConfigOption : TimerView
             option.path.Add(parentOption.VariableInfo.Name);
         }*/
         option.Bind(modConfig, variable);
-        option.JoinParent(parent);
+        /*if (parent.Parent.Parent is SUIScrollViewDraggingSortable scroll)
+            scroll.AddToList(option);
+        else*/
+            option.JoinParent(parent);
 
         return option;
     }
-    public static PropertyFieldWrapper GetWrapper(Type type,string optionName) 
+    public static PropertyFieldWrapper GetWrapper(Type type, string optionName)
     {
         BindingFlags flag = BindingFlags.Instance | BindingFlags.Public;
-        var fieldInfo = type.GetField(optionName,flag);
-        var propertyInfo = type.GetProperty(optionName,flag);
+        var fieldInfo = type.GetField(optionName, flag);
+        var propertyInfo = type.GetProperty(optionName, flag);
         PropertyFieldWrapper result = null;
         if (fieldInfo != null)
             result = new PropertyFieldWrapper(fieldInfo);
@@ -88,12 +98,12 @@ public class ModernConfigOption : TimerView
     public Type VarType => List != null ? List[index].GetType() : VariableInfo.Type;
     //原来的构造函数改成OnBind了
     //因为现在要构造出来另外赋一些值再Bind，都写构造函数太杂乱了
-    public void Bind(ModConfig config, PropertyFieldWrapper propertyFieldWrapper) 
+    public void Bind(ModConfig config, PropertyFieldWrapper propertyFieldWrapper)
     {
         Config = config;
         OptionName = propertyFieldWrapper.Name;
         VariableInfo = propertyFieldWrapper;
-        Item ??= config;
+        Item ??= ConfigOptionsPanel.GlobalItem ?? config;
 
         RelativeMode = RelativeMode.Vertical;
         OverflowHidden = true;
@@ -110,27 +120,38 @@ public class ModernConfigOption : TimerView
             labelElement.TextColor = MarkedAsFavorite
                 ? Color.Gold
                 : Color.White;
+            if (ReloadRequired)
+                labelElement.DisplayText = labelElement.OriginLabel() + (ValueChanged ? $" - [c/FF0000:{Language.GetTextValue("tModLoader.ModReloadRequired")}]" : "");
+            else if (labelElement.DisplayText == "")
+                labelElement.DisplayText = labelElement.OriginLabel();
 
         };
         labelElement.JoinParent(this);
         CheckAttributes();
         OnBind();
     }
-    
+
     protected virtual void OnBind()
     {
-        
+
 
     }
     protected void SetValueDirect(object value)
     {
         if (!Interactable) return;
 
-        ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, path: path, List: List, Index: index);
+
+        if (VariableInfo.Type.IsValueType)
+        {
+            VariableInfo.SetValue(item, value);
+            owner?.SetValueDirect(item);
+        }
+        else
+            ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, path: path, List: List, Index: index);
 
     }
     protected T GetAttribute<T>() where T : Attribute => ConfigManager.GetCustomAttributeFromMemberThenMemberType<T>(VariableInfo, Item, List);
-    protected object GetValue() 
+    protected object GetValue()
     {
         if (List != null)
             return List[index];
@@ -273,7 +294,11 @@ public class ModernConfigOption : TimerView
     {
         //我把只有输入框那个删了，然后Min这些值交由Slider处理，毕竟只有它用得到这些
         ReloadRequired = GetAttribute<ReloadRequiredAttribute>() is not null;
-
+        if (ReloadRequired && List == null && Item is ModConfig modConfig)
+        {
+            ModConfig loadTimeConfig = ConfigManager.GetLoadTimeConfig(modConfig.Mod, modConfig.Name);
+            OldValue = VariableInfo.GetValue(loadTimeConfig);
+        }
         var colorAttribute = GetAttribute<BackgroundColorAttribute>();
         if (colorAttribute != null)
             BgColor = colorAttribute.Color;
@@ -298,6 +323,7 @@ public class ModernConfigOption : TimerView
     internal bool ReloadRequired;
     internal LabelKeyAttribute LabelKeyAttribute;
     internal TooltipKeyAttribute TooltipKeyAttribute;
+
 
 
     private bool CantOperateDueToHostVerification =>
@@ -333,7 +359,7 @@ public class ModernConfigOption : TimerView
     /// </summary>
     public object Item
     {
-        get=> item;
+        get => item;
         set => item = value;
     }
     object item;
@@ -344,4 +370,8 @@ public class ModernConfigOption : TimerView
     // 到当前目标的字段/属性路径  直接在某config下是null 在它的字段myField下是["myField"]，再在字段myField2下是["myField","myField2"]，依此类推
     // 是为了和联机同步那边的代码实现妥协的产物，那边之前直接是给config的某个字段设置就直接很多，这里不得不记录下字段路径了
     // 原版的做法似乎是直接把整个config都重新写入了一遍？
+    public ModernConfigOption owner;//当前选项所属的设置选项
+    object OldValue;
+    protected bool ValueChanged => !ConfigManager.ObjectEquals(OldValue, GetValue());
+
 }

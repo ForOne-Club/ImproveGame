@@ -10,19 +10,21 @@ using Terraria.GameContent.UI.States;
 using Terraria.ID;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
     public abstract class OptionCollections : ModernConfigOption
     {
         protected DefaultListValueAttribute DefaultListValueAttribute { get; set; }
+        protected NullAllowedAttribute NullAllowedAttribute;
         protected JsonDefaultListValueAttribute JsonDefaultListValueAttribute { get; set; }
         protected object Data { get; set; }
         private bool expanded = true;
         protected float Scale { get; set; } = 1f;
         protected virtual bool CanAdd => true;
 
-        private bool pendingChanges = false;
+        protected bool pendingChanges = false;
 
         protected object CreateCollectionElementInstance(Type type)
         {
@@ -67,6 +69,11 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
         protected SUIScrollView2 OptionView;
 
+        SUITriangleIcon ExpandButton;
+        SUITriangleIcon InitialButton;
+        SUICross DeleteButton;
+        SUIPlus AddButton;
+
         protected override void CheckAttributes()
         {
             base.CheckAttributes();
@@ -75,12 +82,15 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 expanded = expandAttribute.Expand;
 
             DefaultListValueAttribute = GetAttribute<DefaultListValueAttribute>();
+            NullAllowedAttribute = GetAttribute<NullAllowedAttribute>();
         }
 
         protected override void OnBind()
         {
             Data = VariableInfo.GetValue(Item);
             Height.Set(360, 0);
+            MaxHeight.Set(360, 0);
+            MinHeight.Set(60, 0);
             /*ListPanel = new View
             {
                 HAlign = 1f,
@@ -92,16 +102,91 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 MaxHeight = { Pixels = 300}
             };
             ListPanel.JoinParent(this);*/
-
+            InitialButton = new SUITriangleIcon()
+            {
+                RelativeMode = RelativeMode.None,
+                BgColor = Color.Black * 0.4f,
+                Rounded = new Vector4(4f),
+                Width = new(25, .0f),
+                Height = new(25, .0f),
+                Left = new(-30, 1),
+                Top = new(6, 0),
+            };
+            InitialButton.OnLeftClick += (evt, elem) =>
+            {
+                SoundEngine.PlaySound(SoundID.Tink);
+                InitializeCollection();
+                pendingChanges = true;
+                expanded = true;
+                SetupList();
+            };
+            DeleteButton = new SUICross()
+            {
+                RelativeMode = RelativeMode.None,
+                BgColor = Color.Black * 0.4f,
+                Rounded = new Vector4(4f),
+                Width = new(25, .0f),
+                Height = new(25, .0f),
+                Left = new(-30, 1),
+                Top = new(6, 0),
+            };
+            DeleteButton.OnLeftClick += (evt, elem) =>
+            {
+                SoundEngine.PlaySound(SoundID.Tink);
+                if (NullAllowedAttribute != null)
+                    NullCollection();
+                else
+                    ClearCollection();
+                SetupList();
+                pendingChanges = true;
+            };
+            ExpandButton = new SUITriangleIcon()
+            {
+                RelativeMode = RelativeMode.None,
+                BgColor = Color.Black * 0.4f,
+                Rounded = new Vector4(4f),
+                Left = new(-60, 1),
+                Top = new(6, 0),
+                Width = new(25, .0f),
+                Height = new(25, .0f)
+            };
+            //ExpandButton.trianglePercentCoord[1] = new(0f, .5f);
+            ExpandButton.OnLeftClick += (evt, elem) =>
+            {
+                expanded = !expanded;
+                pendingChanges = true;
+            };
+            AddButton = new SUIPlus
+            {
+                RelativeMode = RelativeMode.None,
+                BgColor = Color.Black * 0.4f,
+                Rounded = new Vector4(4f),
+                Left = new(-90, 1),
+                Top = new(6, 0),
+                Width = new(25, .0f),
+                Height = new(25, .0f)
+            };
+            //ExpandButton.trianglePercentCoord[1] = new(0f, .5f);
+            AddButton.OnLeftClick += (evt, elem) =>
+            {
+                SoundEngine.PlaySound(SoundID.Tink);
+                AddItem();
+                SetupList();
+                pendingChanges = true;
+                expanded = true;
+            };
             OptionView = new SUIScrollView2(Orientation.Vertical)
             {
-                RelativeMode = RelativeMode.Vertical,
+                RelativeMode = RelativeMode.None,
+                Top = new(46, 0),
                 Spacing = new Vector2(6)
             };
             OptionView.SetPadding(0f, 0f);
             OptionView.SetSize(0f, -60, 1f, 1f);
             OptionView.JoinParent(this);
-            
+
+
+
 
             PrepareTypes();
 
@@ -117,61 +202,86 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             base.Update(gameTime);
             //var dimension = ListPanel.GetDimensions();
             //var dimension2 = GetDimensions();
+            #region Expand的更新
+            if (ExpandButton != null)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    Vector2 targetCoord = i switch
+                    {
+                        0 => expanded ? new(0, .5f) : new(.5f, 0),
+                        1 => expanded ? new(.5f, 1) : new(0, .5f),
+                        2 or _ => expanded ? new(1, .5f) : new(.5f, 1)
+                    };
+                    ExpandButton.trianglePercentCoord[i] = Vector2.Lerp(ExpandButton.trianglePercentCoord[i], targetCoord, .15f + i * .05f);
 
+                }
+                //var targetCoord = expanded ? new Vector2(1, .5f) : new(.5f, 0f);
+                //ExpandButton.trianglePercentCoord[0] = Vector2.Lerp(ExpandButton.trianglePercentCoord[0],targetCoord,.25f);
+            }
+            #endregion
+            #region 高度上限调整
+            if (dragging)
+            {
+                showMaxHeight = Main.MouseScreen.Y - mousePos.Y + oldHeight;
+                pendingChanges = true;
+            }
+            #endregion
             if (!pendingChanges)
                 return;
             pendingChanges = false;
-            /*
+
             if (CanAdd)
             {
-                RemoveChild(initializeButton);
-                RemoveChild(addButton);
-                RemoveChild(deleteButton);
+                RemoveChild(InitialButton);
+                RemoveChild(AddButton);
+                RemoveChild(DeleteButton);
             }
-            RemoveChild(expandButton);
-            RemoveChild(upDownButton);
-            RemoveChild(DataListElement);
+            RemoveChild(ExpandButton);
+            RemoveChild(OptionView);
 
             if (Data == null)
             {
-                Append(initializeButton);
+                Append(InitialButton);
+                
             }
             else
             {
                 if (CanAdd)
                 {
-                    Append(addButton);
-                    Append(deleteButton);
+                    Append(AddButton);
+                    Append(DeleteButton);
                 }
-                Append(expandButton);
+                Append(ExpandButton);
                 if (expanded)
-                {
-                    Append(upDownButton);
-                    Append(DataListElement);
-                    expandButton.HoverText = Language.GetTextValue("tModLoader.ModConfigCollapse");
-                    expandButton.SetImage(ExpandedTexture);
-                }
-                else
-                {
-                    expandButton.HoverText = Language.GetTextValue("tModLoader.ModConfigExpand");
-                    expandButton.SetImage(CollapsedTexture);
-                }
+                    Append(OptionView);
             }
-            */
+            //Parent?.Recalculate();
+            UIElement target = this;
+            ModernConfigOption optionObject = this;
+            while (target.Parent != null)
+            {
+                target = target.Parent;
+                if (target is OptionObject optionO)
+                    optionObject = optionO;
+                if (target is OptionCollections optionC)
+                    optionObject = optionC;
+            }
+            optionObject.Recalculate();
+            optionObject.Parent?.Recalculate();
         }
         public override void Recalculate()
         {
-            //float h = ListPanel.GetDimensions().Height + 46;
-            //h = Utils.Clamp(h, 46, 300 * Scale);
-
-            //MaxHeight.Set(300 * Scale, 0f);
-            //Height.Set(h, 0f);
-
-            //if (Parent != null)
-            //{
-            //    Parent.Height.Set(h, 0f);
-            //}
-
+            if (!expanded || GetValue() == null)
+            {
+                Height.Set(46, 0);
+                base.Recalculate();
+                return;
+            }
+            float h = OptionView.ListView.GetDimensions().Height + 70;
+            h = Utils.Clamp(h, 70, showMaxHeight);
+            Height.Set(h, 0f);
+            Parent?.Height.Set(h, 0f);
             base.Recalculate();
         }
         public override void ScrollWheel(UIScrollWheelEvent evt)
@@ -180,6 +290,30 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             if (!OptionView.ListView.IsMouseHovering)
                 return;
+        }
+        float showMaxHeight = 360;
+        float oldHeight;
+        Vector2 mousePos;
+        bool dragging;
+        public override void LeftMouseDown(UIMouseEvent evt)
+        {
+            var dimension = GetDimensions();
+            if (evt.Target == this && evt.MousePosition.Y > dimension.Y + .9f * dimension.Height)
+            {
+                mousePos = evt.MousePosition;
+                oldHeight = showMaxHeight;
+                dragging = true;
+            }
+            base.LeftMouseDown(evt);
+        }
+        public override void LeftMouseUp(UIMouseEvent evt)
+        {
+            if (dragging)
+            {
+                dragging = false;
+
+            }
+            base.LeftMouseUp(evt);
         }
     }
 }

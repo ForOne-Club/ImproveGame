@@ -6,7 +6,9 @@ float uBorder;
 float4 uBorderColor;
 float uShadowSize;
 float uInnerShrinkage;
-
+float3 uBarInfo;
+float2 uSizeOver2;
+float4 uRound;
 struct VSInput
 {
     float2 Position : POSITION0;
@@ -57,6 +59,25 @@ float4 Shadow(float2 q : TEXCOORD0, float rounded : COLOR0) : COLOR0
     return lerp(uBackgroundColor, 0, smoothstep(-1 - uShadowSize, 0.5, Distance));
 }
 
+float RoundedBox(float2 p) //圆角矩形-需要另外指定 uRound-四个圆角的半径
+{
+	p -= uSizeOver2;
+	float4 r = uRound;
+	float2 b = uSizeOver2;
+	r.xy = (p.x > 0.0) ? r.xy : r.zw;
+	r.x = (p.y > 0.0) ? r.x : r.y;
+	float2 q = abs(p) - b + r.x;
+	return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r.x;
+}
+
+float4 BarColor(float2 q : TEXCOORD0, float rounded : COLOR0) : COLOR0
+{
+	float Distance = RoundedBox(q) + uInnerShrinkage;
+	float4 color = tex2D(uImage0, float2(dot(q, uBarInfo.xy) + uBarInfo.z, .5));
+	return lerp(color, 0, smoothstep(-1, 0.5, Distance));
+}
+
+
 technique T1
 {
     pass HasBorder
@@ -76,4 +97,9 @@ technique T1
         VertexShader = compile vs_2_0 VS_PCR();
         PixelShader = compile ps_2_0 Shadow();
     }
+	pass BarColor
+	{
+		VertexShader = compile vs_2_0 VS_PCR();
+		PixelShader = compile ps_2_0 BarColor();
+	}
 }
