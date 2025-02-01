@@ -1,4 +1,6 @@
-﻿一些计划内容，不一定会做，只是防忘记
+﻿原版特殊粒子Particle Orchestra效果速查表：https://gist.github.com/Rijam/971b5252707860b65b582093580aa49c
+
+一些计划内容，不一定会做，只是防忘记
 
 现存Bug:
 - [ ] 自动垃圾桶什么声音bug？@for one群 浪心羽生
