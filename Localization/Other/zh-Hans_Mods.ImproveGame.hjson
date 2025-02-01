@@ -437,18 +437,15 @@ Keybinds: {
 	}
 
 	CopyItemName: {
-		DisplayName: 快速复制物品内部名称
-		Tip: 按下后将会复制光标悬停处物品的内部名称
+		DisplayName: 复制物品内部名
+		Tip: 当光标处有物品时，按下此快捷键将会复制其内部名
 	}
 
-	CopyItemName_Switch: {
-		DisplayName: 切换复制名称的模式
+	CopyItemName_Control: {
+		DisplayName: 复制物品内部名全称组合键
 		Tip:
 			'''
-			按下后，将会切换 {$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName} 按键所复制的名称格式
-			在以下两个模式中切换：
-			- 复制光标悬停处物品的内部名称
-			- 复制光标悬停处物品的内部全名称（也就是模组名/物品名的形式）
+			按下此快捷键的同时按下 "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" 将改为复制全称
 			'''
 	}
 

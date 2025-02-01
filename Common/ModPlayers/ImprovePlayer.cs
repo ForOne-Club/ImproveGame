@@ -231,8 +231,6 @@ public class ImprovePlayer : ModPlayer
             PressAutoTrashKeybind();
         if (KeybindSystem.MasterControlKeybind.JustPressed)
             PressMasterControlKeybind();
-        if (KeybindSystem.CopyItemNameSwitchKeybind.JustPressed)
-            KeybindItem.SwitchCopyMode ^= true;
 
         // 下面是操作类快捷键
         if (Player.DeadOrGhost) return;
