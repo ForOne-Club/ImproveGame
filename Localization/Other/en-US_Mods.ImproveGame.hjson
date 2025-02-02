@@ -450,10 +450,7 @@ Keybinds: {
 
 	CopyItemName_Control: {
 		DisplayName: 复制物品内部名全称组合键
-		Tip:
-			'''
-			按下此快捷键的同时按下 "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" 将改为复制全称
-			'''
+		Tip: 按下此快捷键的同时按下 "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" 将改为复制全称
 	}
 
 	QuickShimmerGUI: {

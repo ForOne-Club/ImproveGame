@@ -186,7 +186,6 @@ GlobeBase: {
 	NotFound: Data of {0} is not present, it's likely that newest QoT was not enabled during world creation
 }
 
-AetherGlobe.BiomeName: The Aether
 DungeonGlobe.BiomeName: Dungeon
 FloatingIslandGlobe.BiomeName: Floating Island
 
@@ -210,7 +209,7 @@ EnchantedSwordGlobe: {
 	Reveal: "{0} marked up {$ItemName.EnchantedSword} on the map."
 }
 
-# NotFound在大理石洞全部标记完了的情况下到显示，花岗岩洞的文本亦是如此
+# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞的文本亦是如此
 MarbleCaveGlobe: {
 	BiomeName: Marble Cave
 	NotFound: Couldn't find more Marble Cave
@@ -219,6 +218,13 @@ MarbleCaveGlobe: {
 GraniteCaveGlobe: {
 	BiomeName: Granite Cave
 	NotFound: Couldn't find more Granite Cave
+}
+
+# NotFound在世界上没有足够的微光液体的情况下显示
+AetherGlobe: {
+	BiomeName: The Aether
+	NotFound: 未能找到足够大的微光湖
+	Reveal: "{0} marked up {ImproveGame.Mods.Items.AetherGlobe.BiomeName} on the map."
 }
 
 DetectorDrone: {

@@ -1,30 +1,8 @@
 ﻿using ImproveGame.Common.Conditions;
-using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items.Globes.Core;
 using ImproveGame.Content.Projectiles;
 
 namespace ImproveGame.Content.Items.Globes;
-
-public class AetherGlobe : OnceForAllGlobe
-{
-    public class AetherGlobeProj : GlobeProjBase
-    {
-        public override ModItem GetModItemDummy() => ModContent.GetInstance<AetherGlobe>();
-    }
-
-    public override StructureDatas.UnlockID StructureType => StructureDatas.UnlockID.Shimmer;
-
-    public override bool NotFoundCheck() => StructureDatas.ShimmerPosition == default;
-
-    public override Color GetEffectColor() => Main.DiscoColor;
-
-    protected override Recipe AddCraftingMaterials(Recipe recipe) =>
-        recipe.AddIngredient(ItemID.Glass, 10)
-            .AddIngredient(ItemID.StoneBlock, 80)
-            .AddRecipeGroup(RecipeSystem.AnyGem, 6)
-            .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.EnableMinimapMarkC);
-}
 
 public class DungeonGlobe : OnceForAllGlobe
 {

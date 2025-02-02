@@ -186,7 +186,6 @@ GlobeBase: {
 	NotFound: 本世界没有{0}的数据，原因可能是创建地图时未启用更好的体验最新版
 }
 
-AetherGlobe.BiomeName: 以太
 DungeonGlobe.BiomeName: 地牢
 FloatingIslandGlobe.BiomeName: 空岛
 
@@ -210,7 +209,7 @@ EnchantedSwordGlobe: {
 	Reveal: "{0}在地图上标记了{$ItemName.EnchantedSword}"
 }
 
-# NotFound在大理石洞全部标记完了的情况下到显示，花岗岩洞的文本亦是如此
+# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞的文本亦是如此
 MarbleCaveGlobe: {
 	BiomeName: 大理石洞
 	NotFound: 未能找到更多的大理石洞
@@ -219,6 +218,13 @@ MarbleCaveGlobe: {
 GraniteCaveGlobe: {
 	BiomeName: 花岗岩洞
 	NotFound: 未能找到更多的花岗岩洞
+}
+
+# NotFound在世界上没有足够的微光液体的情况下显示
+AetherGlobe: {
+	BiomeName: 以太
+	NotFound: 未能找到足够大的微光湖
+	Reveal: "{0}在地图上标记了{ImproveGame.Mods.Items.AetherGlobe.BiomeName}"
 }
 
 DetectorDrone: {
