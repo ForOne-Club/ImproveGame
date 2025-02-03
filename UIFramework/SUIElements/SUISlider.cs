@@ -111,7 +111,7 @@ namespace ImproveGame.UIFramework.SUIElements
                 }
 
                 // 绘制
-                SDFGraphics.HasBorderRound(roundLeftTop, roundDiameter, innerColor, 2f, borderColor);
+                SDFGraphics.HasBorderRound(roundLeftTop,default, roundDiameter, innerColor, 2f, borderColor,GetMatrix(true));
             }
         }
 

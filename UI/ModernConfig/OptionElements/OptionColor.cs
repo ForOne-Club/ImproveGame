@@ -275,7 +275,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 Width = new(160, 0),
                 Height = new(160, 0),
                 Left = new(-180, 1),
-                Top = new(36, 0),
+                Top = new(60, 0),
                 RelativeMode = RelativeMode.None,
                 Rounded = new(8f),
                 BgColor = Color.Black * .3f
@@ -285,7 +285,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 Width = new(160, 0),
                 Height = new(160, 0),
                 Left = new(-180, 1),
-                Top = new(216, 0),
+                Top = new(240, 0),
                 RelativeMode = RelativeMode.None,
                 Rounded = new(8f),
                 BgColor = Color.Black * .3f
