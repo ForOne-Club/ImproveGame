@@ -9,6 +9,7 @@ using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
+using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -154,6 +155,12 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         }
     }
     private Utils.ColorLerpMethod _colorLerpMethod;
+    public void SetColorMethod(Utils.ColorLerpMethod colorMethod) 
+    {
+        _colorLerpMethod = colorMethod;
+        _slideBox.ColorMethod = colorMethod;
+    }
+    public void SetColorPendingModified() => _slideBox.colorMethodPendingModified = true;
     private SUISplitButton _splitButton;
     private SlideBox _slideBox;
     private SUINumericText _numericTextBox;
@@ -245,7 +252,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     }
     private void AddUpDown(View box)
     {
-        if (Increment == null) return;
+        //if (Increment == null) return;
         _splitButton = new SUISplitButton()
         {
             RelativeMode = RelativeMode.Horizontal,
@@ -357,7 +364,8 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-
+        if (Increment == null)
+            _splitButton?.Remove();
         _slideBox.IgnoresMouseInteraction = !Interactable;
         _numericTextBox.IgnoresMouseInteraction = !Interactable;
 
@@ -373,4 +381,14 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
 
     private bool IsFractional => FractionTypes.Contains(VarType);
     private bool IsInt => !IsFractional;
+    public float LerpValue 
+    {
+        get => _slideBox.Value;
+        set
+        {
+            if (!_numericTextBox.IsWritingText)
+                _numericTextBox.Value = MathHelper.Lerp((float)Min, (float)Max, value);
+            _slideBox.Value = value;
+        }
+    }
 }

@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.Config;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Newtonsoft.Json;
 using ImproveGame.UIFramework.SUIElements;
 using ImproveGame.UIFramework.BaseViews;
 using Terraria.ModLoader.UI;
 using Terraria.ID;
 using ImproveGame.UI.ModernConfig.Categories;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
@@ -104,29 +104,51 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             pendingChanges = true;
         }
-        void SetupList()
+        protected virtual void ObjectToOption(object data) 
         {
-            object data = GetValue();
-            OptionView.ListView.RemoveAllChildren();
             foreach (PropertyFieldWrapper variable in ConfigManager.GetFieldsAndProperties(data))
             {
                 if (Attribute.IsDefined(variable.MemberInfo, typeof(JsonIgnoreAttribute)))
                     continue;
-                WrapIt(OptionView.ListView, Config, variable, data, owner: this);
+                var e = WrapIt(OptionView.ListView, Config, variable, data, owner: this);
+                if (e is OptionSlider slider)
+                {
+                    if (RangeAttribute != null)
+                    {
+                        slider.Max = Convert.ToDouble(RangeAttribute.Max);
+                        slider.Min = Convert.ToDouble(RangeAttribute.Min);
+                    }
+                    if (IncrementAttribute != null)
+                    {
+                        slider.Increment = Convert.ToDouble(IncrementAttribute.Increment);
+                    }
+                }
+                OnWrapOption(e);
             }
+        }
+        void SetupList()
+        {
+            OptionView.ListView.RemoveAllChildren();
+            ObjectToOption(GetValue());
             OptionView.Recalculate();
             Height.Set(Math.Min((OptionView.ListView.Children.Any() ? OptionView.ListView.Height.Pixels : 0) + 70, 360), 0);//不知道为什么MaxHeight不管用了
             pendingChanges = true;
         }
-        SUIScrollView2 OptionView;
+        protected virtual void OnWrapOption(ModernConfigOption option) 
+        {
+
+        }
+        protected SUIScrollView2 OptionView;
         SUITriangleIcon ExpandButton;
         SUITriangleIcon InitialButton;
         SUICross DeleteButton;
-        bool expanded = true;
-        bool pendingChanges;
+        protected bool expanded = true;
+        protected bool pendingChanges;
         protected JsonDefaultValueAttribute JsonDefaultValueAttribute;
         NullAllowedAttribute NullAllowedAttribute;
         SeparatePageAttribute SeparatePageAttribute;
+        protected RangeAttribute RangeAttribute;
+        protected IncrementAttribute IncrementAttribute;
         bool SeparatePage => SeparatePageAttribute != null;
         bool innerPage;//旧版实现子页面的手段，现在用不到了？
         public override void Update(GameTime gameTime)
@@ -213,7 +235,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             Parent?.Height.Set(h, 0f);
             base.Recalculate();
         }
-        float showMaxHeight = 360;
+        protected float showMaxHeight = 360;
         float oldHeight;
         Vector2 mousePos;
         bool dragging;
@@ -272,6 +294,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             JsonDefaultValueAttribute = GetAttribute<JsonDefaultValueAttribute>();
             NullAllowedAttribute = GetAttribute<NullAllowedAttribute>();
             SeparatePageAttribute = GetAttribute<SeparatePageAttribute>();
+            RangeAttribute = GetAttribute<RangeAttribute>();
+            IncrementAttribute = GetAttribute<IncrementAttribute>();
             base.CheckAttributes();
         }
     }

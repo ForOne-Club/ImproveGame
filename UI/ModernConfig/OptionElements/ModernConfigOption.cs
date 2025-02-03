@@ -31,6 +31,10 @@ public class ModernConfigOption : TimerView
             option = new OptionToggle();
         else if (OptionSlider.SupportedTypes.Contains(type))
             option = new OptionSlider();
+        else if (type == typeof(Vector2))
+            option = new OptionVector2();
+        else if(type == typeof(Color))
+            option = new OptionColor(); 
         else if (type.IsEnum)
             option = new OptionDropdownList();
         else if (type == typeof(string))
@@ -141,7 +145,7 @@ public class ModernConfigOption : TimerView
         if (!Interactable) return;
 
 
-        if (VariableInfo.Type.IsValueType)
+        if (item.GetType().IsValueType)//VariableInfo.Type
         {
             VariableInfo.SetValue(item, value);
             owner?.SetValueDirect(item);
@@ -266,6 +270,7 @@ public class ModernConfigOption : TimerView
     public override void RightMouseDown(UIMouseEvent evt)
     {
         base.RightMouseDown(evt);
+        if (evt.Target != this) return;
         var defaultValueAttribute = GetAttribute<DefaultValueAttribute>();
         if (defaultValueAttribute != null)
         {
@@ -278,6 +283,7 @@ public class ModernConfigOption : TimerView
     public override void MiddleMouseDown(UIMouseEvent evt)
     {
         base.MiddleMouseDown(evt);
+        if (evt.Target != this) return;
         FavoritedOptionDatabase.ToggleFavoriteForOption(Config, OptionName);
 
         if (ConfigOptionsPanel.CurrentCategory.LocalizationKey is nameof(Favorites))

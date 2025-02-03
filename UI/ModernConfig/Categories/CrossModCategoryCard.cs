@@ -23,6 +23,10 @@ namespace ImproveGame.UI.ModernConfig.Categories
             Type type = variable.Type;
             if (type == typeof(bool))
                 panel.AddToggle(config, variable);
+            else if (type == typeof(Vector2))
+                panel.AddVector2(config, variable);
+            else if (type == typeof(Color))
+                panel.AddColor(config, variable);
             else if (OptionSlider.SupportedTypes.Contains(type))
                 panel.AddValueSlider(config, variable);
             else if (type.IsEnum)
@@ -43,7 +47,7 @@ namespace ImproveGame.UI.ModernConfig.Categories
                 panel.AddHashSet(config, variable);
             else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                 panel.AddDictionary(config, variable);
-                //panel.AddNotSupportText(config, variable);
+            //panel.AddNotSupportText(config, variable);
 
             else if (type.IsSubclassOf(typeof(EntityDefinition)))
             {

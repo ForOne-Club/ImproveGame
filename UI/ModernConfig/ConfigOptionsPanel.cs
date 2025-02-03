@@ -181,7 +181,8 @@ public sealed class ConfigOptionsPanel : SUIPanel
     public void AddList(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionList>(config, nameOrMemberInfo);
     public void AddHashSet(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionHashSet>(config, nameOrMemberInfo);
     public void AddDictionary(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionDictionary>(config, nameOrMemberInfo);
-
+    public void AddVector2(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionVector2>(config, nameOrMemberInfo);
+    public void AddColor(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionColor>(config, nameOrMemberInfo);
 
     public void AddNotSupportText(ModConfig config, PropertyFieldWrapper variableInfo) => AddToAllOptions<OptionNotSupportText>(config, variableInfo);
 
