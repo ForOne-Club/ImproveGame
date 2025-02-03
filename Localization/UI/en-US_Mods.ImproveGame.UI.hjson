@@ -293,12 +293,12 @@ WorldFeature: {
 
 	Halloween: {
 		Label: Halloween
-		Tooltip: Toggles Halloween status.
+		Tooltip: Toggles Halloween status
 	}
 
 	XMas: {
 		Label: Christmas
-		Tooltip: Toggles Christmas status.
+		Tooltip: Toggles Christmas status
 	}
 
 	Drunk:
@@ -330,7 +330,7 @@ WorldFeature: {
 		'''
 		No traps
 		Seeds: no traps | notraps
-		P.S. No effect if toggled inside a world.
+		P.S. No effect if toggled inside a world
 		'''
 	Remix:
 		'''
@@ -341,10 +341,10 @@ WorldFeature: {
 		'''
 		Get fixed boi
 		Seeds: get fixed boi | getfixedboi
-		P.S. Get fixed boi is only complete with all other secrete seeds enabled.
+		P.S. Get fixed boi is only complete with all other secrete seeds enabled
 		'''
 	OpenWiki: <right> to open its wiki page
-	NotPermitted: You have no permission to modify this world's features.
+	NotPermitted: You have no permission to modify this world's features
 }
 
 ItemSearcher: {
@@ -356,14 +356,14 @@ ItemSearcher: {
 		Label: Fuzzy Search
 		Tooltip:
 			'''
-			Allows deviation of 1 character in searching.
-			E.g. "obsdian" can search "obsidian".
+			Allows deviation of 1 character in searching
+			E.g. "obsdian" can search "obsidian"
 			'''
 	}
 
 	SearchTooltip: {
 		Label: Search Tooltip
-		Tooltip: Searches item tooltips instead of names.
+		Tooltip: Searches item tooltips instead of names
 	}
 }
 
@@ -373,14 +373,14 @@ OpenBag: {
 	Open: Open All
 	Stop: Stop
 	EmptyText: Grab Bag
-	NotFullyDisplayed: Besides, {0} items are hidden
+	NotFullyDisplayed: "{0} other items are currently hidden"
 
 	SellAll: {
 		Name: Sell All
 		Tooltip:
 			'''
-			Sell all items at 110% of their base price.
-			Coins will go to your coin slots.
+			Sells all items at 110% of their base price
+			Coins will go to your coin slots
 			'''
 	}
 
@@ -388,8 +388,8 @@ OpenBag: {
 		Name: Are you sure?
 		Tooltip:
 			'''
-			<left> to sell,
-			<right> to cancel.
+			<left> to sell
+			<right> to cancel
 			'''
 	}
 }
@@ -397,10 +397,10 @@ OpenBag: {
 QuickShimmer: {
 	Title: Quick Shimmer
 	TipText: Items transmuted are staged here
-	Open: Transmute All
+	Open: Transmute
 	Stop: Stop
 	EmptyText: Shimmer Transmuting
-	NotFullyDisplayed: Besides, {0} items are hidden
+	NotFullyDisplayed: "{0} other items are currently hidden"
 	CoinLuck: Shimmered into {0} 'coin luck'
 	AlreadyUnlocked: Quick Shimmer is already available in this world
 	Unlocked: Quick Shimmer is unlocked! Open it via the Control Panel
@@ -411,6 +411,25 @@ QuickShimmer: {
 		'''
 }
 
+DummyConfiguration: {
+	Title: Dummy Configuration
+
+	fieldName: {
+		LockHP: Lock Life
+		LifeMax: Maximum Life
+		Defense: Defense
+		Damage: Contact Damage
+		ShowBox: Show Hitbox
+		ShowDamageData: Show Damage Stats
+		ShowNameOnHover: Show NPC Name
+		Immortal: Not count as Target
+		NoGravity: Not Affected By Gravity
+		NoTileCollide: Disable Tile Collision
+		KnockBackResist: Knockback coefficient
+		AIStyle: AI Style
+	}
+}
+
 Autofisher: {
 	Accessory: Accessories for fishing
 	FishingPole: Fishing rod
@@ -418,7 +437,7 @@ Autofisher: {
 	SelectPool: Please select fishing pool
 	CarefulNextTime: Be careful next time!
 	Unavailable: Currently no fishing info
-	InShimmer: Ain't working in Shimmer
+	InShimmer: I ain't work in no shimmer!
 	CatchCratesFilter: Crates
 	CatchAccessoriesFilter: Accessories
 	CatchToolsFilter: Tools and weapons
@@ -430,6 +449,14 @@ Autofisher: {
 		Auto deposit to nearby chests
 		Catches will be auto deposited to the nearest chest every minute
 		'''
+	AccBoost:
+		'''
+		[i:{IconID}] Accessory Bonus for Fishing Machine:
+		    Fishing speed：{Speed}
+		    Fishing power：{Power}
+		'''
+	AccBoostTackle: "    Decreases chance of bait consumption"
+	AccBoostLava: "    Allows fishing in lava"
 }
 
 MapLayer: {
@@ -437,7 +464,8 @@ MapLayer: {
 	Pyramid: Pyramid
 	FloatingIsland: Floating Island
 	FloatingLake: Floating Lake
-	EmptyAutofisher: Fishing Machine (Bait-lacking)
+	EmptyAutofisher: Fishing Machine (No bait!)
 }
 
 ThemePreview.Title: Theme Preview
+PiggyFilter.Title: Filter Currencies

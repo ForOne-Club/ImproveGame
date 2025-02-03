@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UI.ModernConfig.Categories;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.UI.ModernConfig.Categories;
 
 public sealed class GameMechanics : Category
 {
@@ -6,6 +8,7 @@ public sealed class GameMechanics : Category
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
+        var uiConfig = UIConfigs.Instance;
         panel.AddToggle(Config, nameof(Config.BedEverywhere));
         panel.AddToggle(Config, nameof(Config.NoSleepRestrictions));
         panel.AddValueSlider(Config, nameof(Config.BedTimeRate));
@@ -18,5 +21,6 @@ public sealed class GameMechanics : Category
         panel.AddToggle(Config, nameof(Config.BanDamageVar));
         panel.AddToggle(Config, nameof(Config.NoLakeSizePenalty));
         panel.AddToggle(Config, nameof(Config.LightNotBlocked));
+        panel.AddToggle(uiConfig, nameof(uiConfig.KeepFocus));
     }
 }

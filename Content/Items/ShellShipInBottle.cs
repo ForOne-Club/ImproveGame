@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.Packets.Weather;
 using System;
@@ -20,12 +21,10 @@ public class ShellShipInBottle : ModItem
 
     public override void SetDefaults()
     {
-        Item.CloneDefaults(ItemID.CombatBook);
-        Item.useAnimation = Item.useTime = 0;
+        Item.maxStack = Item.CommonMaxStack;
         Item.rare = ItemRarityID.Blue;
         Item.Size = new Vector2(42, 20);
         Item.value = Item.sellPrice(silver: 20);
-        base.SetDefaults();
     }
 
     public override void AddRecipes()
@@ -36,6 +35,7 @@ public class ShellShipInBottle : ModItem
             .AddIngredient(ItemID.Wood, 10)
             .AddIngredient(ItemID.FallenStar, 1)
             .AddTile(TileID.WorkBenches)
+            .AddCondition(ConfigCondition.EnableQuickShimmerC)
             .Register();
     }
 }
@@ -62,21 +62,9 @@ public class ShellShipInBottle_Shimmered : ModItem
             return null;
         }
 
-        QuickShimmerSystem.Unlocked = true;
+        QuickShimmerUnlockPacket.Unlock();
         WorldGen.BroadcastText(NetworkText.FromKey("Mods.ImproveGame.UI.QuickShimmer.Unlocked"), Color.Pink);
         return true;
-    }
-
-    public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame,
-        Color drawColor, Color itemColor, Vector2 origin, float scale)
-    {
-        base.PostDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
-    }
-
-    public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation,
-        float scale, int whoAmI)
-    {
-        base.PostDrawInWorld(spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
     }
 }
 
@@ -113,5 +101,25 @@ public class QuickShimmerSystem : ModSystem
     public override void ClearWorld()
     {
         Unlocked = false;
+    }
+}
+
+public class QuickShimmerUnlockPacket : NetModule
+{
+    /// <summary>
+    /// 这个包只要一发，就会解锁快捷微光功能，所以“解锁”就是发个包罢了
+    /// </summary>
+    public static void Unlock()
+    {
+        var module = NetModuleLoader.Get<QuickShimmerUnlockPacket>();
+        module.Send(runLocally: true);
+    }
+
+    public override void Receive()
+    {
+        QuickShimmerSystem.Unlocked = true;
+
+        if (Main.netMode is NetmodeID.Server)
+            Send(-1, Sender);
     }
 }

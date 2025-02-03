@@ -31,6 +31,9 @@ public class UIConfigs : ModConfig
     public ThemeType ThemeType;
 
     [DefaultValue(true)]
+    public bool GlobeEffect;
+
+    [DefaultValue(true)]
     [JsonIgnore]
     public bool BigBackpackButton;
 
@@ -164,6 +167,20 @@ public class UIConfigs : ModConfig
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     public float MarkEnchantedSword;
+
+    [DefaultValue(0.8f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    public float MarkMarbleCave;
+
+    [DefaultValue(0.8f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    public float MarkGraniteCave;
 
     [DefaultValue(0.8f)]
     [Increment(0.1f)]

@@ -11,11 +11,12 @@ public class RevealPlanteraPacket : NetModule
 {
     private Point16 _position;
 
-    public static bool Reveal(Player player)
+    public static bool Reveal(Projectile projectile, bool onlyJudging)
     {
         if (Main.netMode is NetmodeID.MultiplayerClient)
             return true;
 
+        var player = Main.player[projectile.owner];
         var playerPosition = player.position.ToTileCoordinates().ToVector2();
         Point16 position = Point16.Zero;
         float currentDistance = float.MaxValue;
@@ -41,17 +42,12 @@ public class RevealPlanteraPacket : NetModule
             }
         }
 
+        if (onlyJudging)
+            return position != Point16.Zero;
+
         if (position == Point16.Zero)
         {
             SyncNotificationKey.Send("Items.PlanteraGlobe.NotFound", Color.PaleVioletRed * 1.4f, player.whoAmI);
-
-            // 服务器给玩家生成物品，补回消耗
-            if (Main.netMode is NetmodeID.Server)
-            {
-                var globeId = ModContent.ItemType<PlanteraGlobe>();
-                player.QuickSpawnItem(player.GetSource_ItemUse(player.HeldItem), globeId);
-                return true;
-            }
             return false;
         }
 
@@ -59,8 +55,8 @@ public class RevealPlanteraPacket : NetModule
         module._position = position;
         module.Send(runLocally: true);
 
-        // 由于服务器和客户端使用的语言可能不一样，所以用FromKey并专门设了个RevealPlantera
-        var text = NetworkText.FromKey("Mods.ImproveGame.Items.GlobeBase.RevealPlantera", player.name);
+        // 由于服务器和客户端使用的语言可能不一样，所以用FromKey并专门设了个翻译文本
+        var text = NetworkText.FromKey("Mods.ImproveGame.Items.PlanteraGlobe.Reveal", player.name);
         ChatHelper.BroadcastChatMessage(text, Color.Pink);
         return true;
     }

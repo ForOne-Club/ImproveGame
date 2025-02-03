@@ -2,8 +2,6 @@
 {
     public class CoinOne : ModItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.CoinOne;
-
         public override void SetStaticDefaults()
         {
             Item.ResearchUnlockCount = 5;

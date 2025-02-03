@@ -2,8 +2,8 @@
 
 public class RoundButton : UIElement
 {
-    public static Texture2D BgTexture => ModAsset.Background.Value;
-    public static Texture2D HoverTexture => ModAsset.Hover.Value;
+    public static Texture2D BgTexture => ModAsset.RoundBackground.Value;
+    public static Texture2D HoverTexture => ModAsset.RoundHover.Value;
 
     public Asset<Texture2D> MainTexture { get; set; }
 

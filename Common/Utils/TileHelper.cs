@@ -128,6 +128,24 @@ namespace ImproveGame
             return -1;
         }
 
+        public static void SpawnTileBreakItem(int x, int y, ref Item item, string? context = null) =>
+            SpawnTileBreakItem(new Point16(x, y), ref item, context);
+
+        public static void SpawnTileBreakItem(Point16 tileCoords, ref Item item, string? context = null)
+        {
+            var position = tileCoords.ToWorldCoordinates();
+            int i = Item.NewItem(new EntitySource_TileBreak(tileCoords.X, tileCoords.Y, context), (int)position.X, (int)position.Y, 32, 32,
+                item.type);
+            item.position = Main.item[i].position;
+            Main.item[i] = item;
+            var drop = Main.item[i];
+            item = new Item();
+            drop.velocity.Y = -2f;
+            drop.velocity.X = Main.rand.NextFloat(-4f, 4f);
+            drop.favorited = false;
+            drop.newAndShiny = false;
+        }
+
         /// <summary>
         /// 获取多格物块的左上角位置
         /// </summary>
@@ -234,8 +252,7 @@ namespace ImproveGame
 
                 SoundEngine.PlaySound(sound ?? SoundID.MenuOpen);
             }
-            Main.playerInventory = true;
-            Recipe.FindRecipes();
+            OperateInventory(true);
         }
 
         /// <summary>

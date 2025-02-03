@@ -25,6 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using ImproveGame.Common.Conditions;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
@@ -39,8 +40,6 @@ namespace ImproveGame.Content.Items;
 public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClickable
 {
     public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
-
-    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.ExtremeStorage;
 
     [CloneByReference] internal Dictionary<string, Point16> locationsByWorld = new();
 
@@ -190,6 +189,7 @@ public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClick
             .AddRecipeGroup(RecipeGroupID.IronBar, 8)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 4)
             .AddTile(TileID.MythrilAnvil)
+            .AddCondition(ConfigCondition.AvailableExtremeStorageC)
             .Register();
     }
 }

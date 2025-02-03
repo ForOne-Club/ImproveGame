@@ -16,6 +16,23 @@ internal class FishItemSlot : ModItemSlot
 
     public Action<Item, int, bool> OnFishChange;
 
+    public override void LeftMouseDown(UIMouseEvent evt)
+    {
+        bool lastFavorited = Item.favorited;
+        int lastStack = Item.stack;
+        int lastType = Item.type;
+        int lastPrefix = Item.prefix;
+
+        base.LeftMouseDown(evt);
+
+        bool itemChangeNotCalled = lastStack == Item.stack && lastType == Item.type && lastPrefix == Item.prefix;
+        if (itemChangeNotCalled && lastFavorited != Item.favorited && Item.type is not ItemID.None)
+        {
+            // 使其发包
+            ItemChange();
+        }
+    }
+
     public override void ItemChange(bool rightClick = false)
     {
         base.ItemChange(rightClick);

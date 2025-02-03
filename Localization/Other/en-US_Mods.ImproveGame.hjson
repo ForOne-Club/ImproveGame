@@ -21,7 +21,37 @@ MoonPhases: {
 	WaxingGibbous: Waxing Gibbous
 }
 
-ItemDropRule.WandDrop: Won't drop if the player already has one in the inventory
+ItemDropRule: {
+	DropWhenEnabled: Drops when '{0}' is enabled
+	DropCoinOne: Drops when 'Enemy Money Drop Multiplier' is maxed out and '{$Mods.ImproveGame.Conditions.AvailableCoinOne}' is enabled
+	WandDrop: Won't drop if the player already has one in the inventory
+}
+
+Conditions: {
+	AvailableAutofisher: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableActuationRodMkII: "{$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableBaitSupplier: "{$Mods.ImproveGame.Items.BaitSupplier.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableExtremeStorage: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableLiquidWand: "{$Mods.ImproveGame.Items.LiquidWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	NotAvailableLiquidWand: "{$Mods.ImproveGame.Items.LiquidWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Unavailable}"
+	AvailableLiquidWandAdvanced: "{$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableMagickWand: "{$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	NotAvailableMagickWand: "{$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Unavailable}"
+	AvailableStarburstWand: "{$Mods.ImproveGame.Items.StarburstWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailablePotionBag: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableSpaceWand: "{$Mods.ImproveGame.Items.SpaceWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableWallPlace: "{$Mods.ImproveGame.Items.WallPlace.PureName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailablePaintWand: "{$Mods.ImproveGame.Items.PaintWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableBannerChest: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableConstructWand: "{$Mods.ImproveGame.Items.ConstructWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableCreateWand: "{$Mods.ImproveGame.Items.CreateWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableDetectorDrone: "{$Mods.ImproveGame.Items.DetectorDrone.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableMoveChest: "{$Mods.ImproveGame.Items.MoveChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableCoinOne: "{$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	EnableQuickShimmer: "{$Mods.ImproveGame.UI.QuickShimmer.Title}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}"
+	EnableMinimapMark: Structure Markers{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}
+	EnableWeatherControl: "{$Mods.ImproveGame.UI.WeatherGUI.Title}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}"
+}
 
 CombatText: {
 	Item: {
@@ -387,7 +417,11 @@ Keybinds: {
 
 	HomeKeybind: {
 		DisplayName: Use Recall Items
-		Tip: Use home-returning items in inventory (Return Potion > Recall Potion > magic mirrors)
+		Tip:
+			'''
+			Use home-returning items in inventory (Return Potion > Recall Potion > magic mirrors)
+			Potions can only be used if "Infinite Potion" is enabled and the required amount is reached
+			'''
 	}
 
 	OpenBagGUI: {
@@ -408,6 +442,21 @@ Keybinds: {
 		DisplayName: Special Interactions
 		Tip: Interact with some items, e.g. mounts and Piggy Bank
 	}
+
+	CopyItemName: {
+		DisplayName: 复制物品内部名
+		Tip: 当光标处有物品时，按下此快捷键将会复制其内部名
+	}
+
+	CopyItemName_Control: {
+		DisplayName: 复制物品内部名全称组合键
+		Tip: 按下此快捷键的同时按下 "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" 将改为复制全称
+	}
+
+	QuickShimmerGUI: {
+		DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
+		Tip: 按下后打开快捷微光界面，也可以在总控面板中打开
+	}
 }
 
 Projectiles: {
@@ -421,12 +470,14 @@ Projectiles: {
 	}
 
 	HomeEffect.DisplayName: Home Effect
+	GlobeEffect.DisplayName: Globe Effect
 }
 
 BuilderToggles: {
 	PiggyToggle: {
 		OffText: Auto-deposit: Off
 		OnText: Auto-deposit: On
+		RightFilter: Right click to open currency filter
 	}
 }
 

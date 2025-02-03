@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions.Construction;
 using ImproveGame.Core;
 using ImproveGame.UI;
@@ -10,7 +11,6 @@ namespace ImproveGame.Content.Items
 {
     public class ConstructWand : SelectorItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.ConstructWand;
 
         public override bool ModifySelectedTiles(Player player, int i, int j) => true;
 
@@ -93,7 +93,9 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.Amber, 8)
                 .AddRecipeGroup(RecipeGroupID.Wood, 80)
                 .AddIngredient(ItemID.StoneBlock, 80)
-                .AddTile(TileID.MythrilAnvil).Register();
+                .AddTile(TileID.MythrilAnvil)
+                .AddCondition(ConfigCondition.AvailableConstructWandC)
+                .Register();
         }
     }
 }

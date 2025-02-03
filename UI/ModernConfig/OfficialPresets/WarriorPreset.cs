@@ -6,7 +6,8 @@ namespace ImproveGame.UI.ModernConfig.OfficialPresets;
 
 public class WarriorPreset : OfficialPreset
 {
-    public override void ApplyPreset(ImproveConfigs modConfig, UIConfigs uiConfig)
+    public override void ApplyPreset(ImproveConfigs modConfig, UIConfigs uiConfig,
+        AvailableModItemConfigs modItemConfig)
     {
         modConfig.SuperVoidVault = true;
         modConfig.SmartVoidVault = true;
@@ -38,6 +39,7 @@ public class WarriorPreset : OfficialPreset
         modConfig.BestiaryQuickUnlock = true;
         modConfig.AlchemyGrassGrowsFaster = true;
         modConfig.AlchemyGrassAlwaysBlooms = true;
+        modConfig.PumpkinGrowsFaster = true;
         modConfig.StaffOfRegenerationAutomaticPlanting = true;
         modConfig.NoBiomeSpread = true;
         modConfig.RespawnWithFullHP = true;

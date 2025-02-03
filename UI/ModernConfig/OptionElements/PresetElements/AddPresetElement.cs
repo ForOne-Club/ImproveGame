@@ -46,7 +46,7 @@ public class AddPresetElement : BasePresetElement
             return;
 
         SoundEngine.PlaySound(SoundID.Item37);
-        PresetHandler.SaveAsPreset("预设");
+        PresetHandler.SaveAsPreset(GetText("ModernConfig.Presets.DefaultPresetName"));
     }
 
     protected override bool Interactable => true;

@@ -110,7 +110,7 @@ public class RecipeSystem : ModSystem
     {
         // 控制微光
         // 液体法杖月后可直接微光转换为终极液体法杖
-        if (!Config.LoadModItems.LiquidWand || !Config.LoadModItems.LiquidWandAdvanced)
+        if (!AvailableConfig.AvailableLiquidWandAdvanced)
             return;
         int liquidWand = ModContent.ItemType<LiquidWand>();
         int liquidWandAdvanced = ModContent.ItemType<LiquidWandAdvanced>();

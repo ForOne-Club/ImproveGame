@@ -4,8 +4,6 @@ public class WallPlaceSelectorMode : SelectorItem
 {
     public override string Texture => "ImproveGame/Content/Items/WallPlace";
 
-    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.WallPlace;
-
     // 修改物块
     public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ)
     {

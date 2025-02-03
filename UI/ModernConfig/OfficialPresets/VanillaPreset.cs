@@ -1,12 +1,14 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
+using System.Reflection;
 
 namespace ImproveGame.UI.ModernConfig.OfficialPresets;
 
 public class VanillaPreset : OfficialPreset
 {
-    public override void ApplyPreset(ImproveConfigs modConfig, UIConfigs uiConfig)
+    public override void ApplyPreset(ImproveConfigs modConfig, UIConfigs uiConfig,
+        AvailableModItemConfigs modItemConfig)
     {
         modConfig.SuperVoidVault = false;
         modConfig.SmartVoidVault = false;
@@ -21,6 +23,7 @@ public class VanillaPreset : OfficialPreset
         modConfig.NoPlace_BUFFTile_Banner = false;
         modConfig.NoConsume_Potion = false;
         modConfig.NoConsume_Ammo = false;
+        modConfig.NoConsume_Wire = false;
         modConfig.ImprovePrefix = false;
         modConfig.MiddleEnableBank = false;
         modConfig.FasterExtractinator = false;
@@ -39,6 +42,7 @@ public class VanillaPreset : OfficialPreset
         modConfig.BestiaryQuickUnlock = false;
         modConfig.AlchemyGrassGrowsFaster = false;
         modConfig.AlchemyGrassAlwaysBlooms = false;
+        modConfig.PumpkinGrowsFaster = false;
         modConfig.StaffOfRegenerationAutomaticPlanting = false;
         modConfig.NoBiomeSpread = false;
         modConfig.RespawnWithFullHP = false;
@@ -74,6 +78,11 @@ public class VanillaPreset : OfficialPreset
         modConfig.WeatherControl = false;
         modConfig.WorldFeaturePanel = false;
         modConfig.DisableNonPlayerBombsExplosions = DisableNonPlayerBombsExplosionsType.Disabled;
+        modConfig.PylonPlaceNoRestriction = false;
+        modConfig.PylonTeleNoBiome = false;
+        modConfig.PylonTeleNoDanger = false;
+        modConfig.PylonTeleNoNear = false;
+        modConfig.PylonTeleNoNPC = false;
 
         uiConfig.ShowShimmerInfo = false;
         uiConfig.PlyInfo = UIConfigs.PAPDisplayMode.NotDisplayed;
@@ -84,5 +93,16 @@ public class VanillaPreset : OfficialPreset
         uiConfig.InvisibleTransparency = 0f;
         uiConfig.MagicMirrorInstantTp = false;
         uiConfig.AutoSummon = false;
+        uiConfig.RemoveGraveyardMist = false;
+        uiConfig.RemoveGraveyardMusic = false;
+        uiConfig.RemoveGraveyardVisual = false;
+        
+        // 全部不可获取
+        foreach (var fieldInfo in modItemConfig.GetType().GetFields()) {
+            if (!fieldInfo.Name.StartsWith("Available") || fieldInfo.FieldType != typeof(bool))
+                continue;
+            
+            fieldInfo.SetValue(modItemConfig, false);
+        }
     }
 }

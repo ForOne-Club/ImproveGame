@@ -65,12 +65,11 @@ namespace ImproveGame.Common.Utils
         private void SimulateUpdateBiomes(ILContext il)
         {
             var c = new ILCursor(il);
-            if (!c.TryGotoNext(MoveType.Before, i => i.MatchCallvirt<BiomeLoader>(nameof(BiomeLoader.UpdateBiomes))))
+            if (!c.TryGotoNext(MoveType.After, i => i.MatchCallvirt<BiomeLoader>(nameof(BiomeLoader.UpdateBiomes))))
             {
                 return;
             }
 
-            c.Index -= 2;
             var label = c.DefineLabel(); // 记录位置
             c.Emit(OpCodes.Call,
                 typeof(TileCounter).GetMethod($"get_{nameof(Simulating)}", BindingFlags.Static | BindingFlags.Public));

@@ -210,6 +210,14 @@ public partial class AutofisherGUI : BaseBody, ISidedView
     {
         base.Draw(spriteBatch);
 
+        // 处理饰品栏物品的特殊tooltip
+        if (accessorySlot.IsMouseHovering && !accessorySlot.Item.IsAir &&
+            (Main.mouseItem is null || Main.mouseItem.IsAir))
+        {
+            // 添加特殊标识，在AutofishItemListener中将根据这个标识特异性识别物品并添加tooltip
+            Main.HoverItem.playerIndexTheItemIsReservedFor = 254;
+        }
+
         // 是否开启制作栏侧栏，只有在开启或正在开启状态才隐藏，正在关闭状态不隐藏
         if (SidedEventTrigger.IsOpened(this))
             Main.hidePlayerCraftingMenu = true;
@@ -287,7 +295,7 @@ public partial class AutofisherGUI : BaseBody, ISidedView
     public void Open()
     {
         WandSystem.SelectPoolMode = false;
-        Main.playerInventory = true;
+        OperateInventory(true);
         // AutofishPlayer.LocalPlayer.SetAutofisher(point);
         RefreshItems();
     }

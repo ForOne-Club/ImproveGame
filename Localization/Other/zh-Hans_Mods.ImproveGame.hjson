@@ -21,7 +21,37 @@ MoonPhases: {
 	WaxingGibbous: 盈凸月
 }
 
-ItemDropRule.WandDrop: 玩家拥有当前物品时不会再次掉落
+ItemDropRule: {
+	DropWhenEnabled: 开启了“{0}”时掉落
+	DropCoinOne: “敌人钱币掉落倍率”拉满且开启了“{$Mods.ImproveGame.Conditions.AvailableCoinOne}”时掉落
+	WandDrop: 玩家拥有当前物品时不会再次掉落
+}
+
+Conditions: {
+	// AvailableAutofisher: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableActuationRodMkII: "{$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableBaitSupplier: "{$Mods.ImproveGame.Items.BaitSupplier.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableExtremeStorage: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableLiquidWand: "{$Mods.ImproveGame.Items.LiquidWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// NotAvailableLiquidWand: "{$Mods.ImproveGame.Items.LiquidWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Unavailable}"
+	// AvailableLiquidWandAdvanced: "{$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableMagickWand: "{$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// NotAvailableMagickWand: "{$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Unavailable}"
+	// AvailableStarburstWand: "{$Mods.ImproveGame.Items.StarburstWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailablePotionBag: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableSpaceWand: "{$Mods.ImproveGame.Items.SpaceWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableWallPlace: "{$Mods.ImproveGame.Items.WallPlace.PureName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailablePaintWand: "{$Mods.ImproveGame.Items.PaintWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableBannerChest: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableConstructWand: "{$Mods.ImproveGame.Items.ConstructWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableCreateWand: "{$Mods.ImproveGame.Items.CreateWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableDetectorDrone: "{$Mods.ImproveGame.Items.DetectorDrone.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableMoveChest: "{$Mods.ImproveGame.Items.MoveChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// AvailableCoinOne: "{$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// EnableQuickShimmer: "{$Mods.ImproveGame.UI.QuickShimmer.Title}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}"
+	EnableMinimapMark: 结构标记{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}
+	// EnableWeatherControl: "{$Mods.ImproveGame.UI.WeatherGUI.Title}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}"
+}
 
 CombatText: {
 	Item: {
@@ -380,7 +410,11 @@ Keybinds: {
 
 	HomeKeybind: {
 		DisplayName: 回程快捷键
-		Tip: 按下后快捷使用物品栏中的回程物品（优先级：无限返回药水>无限回忆药水>魔镜类物品）
+		Tip:
+			'''
+			按下后快捷使用物品栏中的回程物品（优先级：无限返回药水>无限回忆药水>魔镜类物品）
+			对于药水，只有开启了“无限续杯”且达到需求量才会被使用
+			'''
 	}
 
 	OpenBagGUI: {
@@ -401,6 +435,21 @@ Keybinds: {
 		DisplayName: 随身物品特殊交互快捷键
 		Tip: 用于部分物品的快捷交互，如激活坐骑、打开猪猪存钱罐等
 	}
+
+	CopyItemName: {
+		DisplayName: 复制物品内部名
+		Tip: 当光标处有物品时，按下此快捷键将会复制其内部名
+	}
+
+	CopyItemName_Control: {
+		DisplayName: 复制物品内部名全称组合键
+		Tip: 按下此快捷键的同时按下 "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" 将改为复制全称
+	}
+
+	QuickShimmerGUI: {
+		// DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
+		Tip: 按下后打开快捷微光界面，也可以在总控面板中打开
+	}
 }
 
 Projectiles: {
@@ -414,12 +463,14 @@ Projectiles: {
 	}
 
 	// HomeEffect.DisplayName: Home Effect
+	// GlobeEffect.DisplayName: Globe Effect
 }
 
 BuilderToggles: {
 	PiggyToggle: {
 		OffText: 自动存钱：关
 		OnText: 自动存钱：开
+		RightFilter: 右键点击以筛选货币
 	}
 }
 

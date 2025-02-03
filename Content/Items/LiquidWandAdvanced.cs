@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModHooks;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
@@ -10,7 +11,6 @@ namespace ImproveGame.Content.Items
 {
     public class LiquidWandAdvanced : LiquidWand
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.LiquidWandAdvanced;
 
         public override bool AltFunctionUse(Player player) => true;
 
@@ -24,20 +24,18 @@ namespace ImproveGame.Content.Items
 
         public override void AddRecipes()
         {
-            if (!Config.LoadModItems.LiquidWand)
-            {
-                CreateRecipe()
-                    .AddRecipeGroup(RecipeGroupID.Wood, 24)
-                    .AddRecipeGroup(RecipeSystem.AnyShadowScale, 8)
-                    .AddRecipeGroup(RecipeSystem.AnyGoldBar, 6)
-                    .AddIngredient(ItemID.UltraAbsorbantSponge)
-                    .AddIngredient(ItemID.BottomlessLavaBucket)
-                    .AddIngredient(ItemID.BottomlessHoneyBucket)
-                    .AddIngredient(ItemID.BottomlessShimmerBucket)
-                    .AddTile(TileID.MythrilAnvil)
-                    .Register();
-                return;
-            }
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddRecipeGroup(RecipeSystem.AnyShadowScale, 8)
+                .AddRecipeGroup(RecipeSystem.AnyGoldBar, 6)
+                .AddIngredient(ItemID.UltraAbsorbantSponge)
+                .AddIngredient(ItemID.BottomlessLavaBucket)
+                .AddIngredient(ItemID.BottomlessHoneyBucket)
+                .AddIngredient(ItemID.BottomlessShimmerBucket)
+                .AddTile(TileID.MythrilAnvil)
+                .AddCondition(ConfigCondition.NotAvailableLiquidWandC)
+                .AddCondition(ConfigCondition.AvailableLiquidWandAdvancedC)
+                .Register();
 
             CreateRecipe()
                 .AddIngredient(ModContent.ItemType<LiquidWand>())
@@ -46,6 +44,7 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.BottomlessHoneyBucket)
                 .AddIngredient(ItemID.BottomlessShimmerBucket)
                 .AddTile(TileID.MythrilAnvil)
+                .AddCondition(ConfigCondition.AvailableLiquidWandAdvancedC)
                 .DisableDecraft() // 防止刷物品，因为月后基础液体法杖可以直接微光转化为终极液体法杖
                 .Register();
         }

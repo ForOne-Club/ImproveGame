@@ -60,12 +60,15 @@ public class SDFRectangle
         parameters["uBorder"].SetValue(border);
         parameters["uBorderColor"].SetValue(borderColor.ToVector4());
         parameters["uInnerShrinkage"].SetValue(innerShrinkage);
+        const float root2Over2 = 1.414213562373f / 2f;
+        parameters["uTransition"].SetValue(new Vector2(-root2Over2, root2Over2) / Main.UIScale);
         ApplyPass(0);
         BaseDrawRectangle(pos, size, rounded);
     }
 
     public static void NoBorder(Vector2 pos, Vector2 size, Vector4 rounded, Color backgroundColor, bool ui = true)
     {
+        const float root2Over2 = 1.414213562373f / 2f;
         const float innerShrinkage = 1;
         pos -= new Vector2(innerShrinkage);
         size += new Vector2(innerShrinkage * 2);
@@ -73,6 +76,7 @@ public class SDFRectangle
         _effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         _effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
         _effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
+        _effect.Parameters["uTransition"].SetValue(new Vector2(-root2Over2, root2Over2) / Main.UIScale);
         ApplyPass(1);
         BaseDrawRectangle(pos, size, rounded);
     }
@@ -83,9 +87,11 @@ public class SDFRectangle
         if (DontDrawShadow)
             return;
 
+        const float root2Over2 = 1.414213562373f / 2f;
         _effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
         _effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
         _effect.Parameters["uShadowSize"].SetValue(shadow);
+        _effect.Parameters["uTransition"].SetValue(new Vector2(-root2Over2, root2Over2) / Main.UIScale);
         ApplyPass(2);
         BaseDrawRectangle(pos, size, rounded + new Vector4(shadow));
     }

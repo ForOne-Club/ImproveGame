@@ -7,7 +7,8 @@ namespace ImproveGame.UI.ModernConfig.OfficialPresets;
 
 public class ExplorerPreset : OfficialPreset
 {
-    public override void ApplyPreset(ImproveConfigs modConfig, UIConfigs uiConfig)
+    public override void ApplyPreset(ImproveConfigs modConfig, UIConfigs uiConfig,
+        AvailableModItemConfigs modItemConfig)
     {
         modConfig.SuperVoidVault = false;
         modConfig.SmartVoidVault = false;
@@ -39,6 +40,7 @@ public class ExplorerPreset : OfficialPreset
         modConfig.BestiaryQuickUnlock = false;
         modConfig.AlchemyGrassGrowsFaster = false;
         modConfig.AlchemyGrassAlwaysBlooms = false;
+        modConfig.PumpkinGrowsFaster = false;
         modConfig.StaffOfRegenerationAutomaticPlanting = true;
         modConfig.NoBiomeSpread = false;
         modConfig.RespawnWithFullHP = true;

@@ -14,7 +14,7 @@ public class ItemsSyncAllPacket : NetModule
     private Item fishingPole;
     private Item bait;
     private Item accessory;
-    private Item[] fish;
+    [ItemSync(syncFavorite: true)] private Item[] fish;
 
     public static ItemsSyncAllPacket Get(int tileEntityID, bool isOpenFisher, Item fishingPole, Item bait,
         Item accessory, Item[] fishes)
@@ -175,9 +175,9 @@ public class ItemSyncPacket : NetModule
         if (type <= Fishes)
         {
             if (fish[type] is null)
-                ItemIO.Send(new(), p, true);
+                ItemIO.Send(new(), p, true, true);
             else
-                ItemIO.Send(fish[type], p, true);
+                ItemIO.Send(fish[type], p, true, true);
         }
 
         // 发送鱼竿
@@ -204,7 +204,7 @@ public class ItemSyncPacket : NetModule
             ItemIO.Send(fishingPole, p, true);
             ItemIO.Send(bait, p, true);
             ItemIO.Send(accessory, p, true);
-            p.Write(fish);
+            p.Write(fish, writeFavorite: true);
         }
     }
 
@@ -218,7 +218,7 @@ public class ItemSyncPacket : NetModule
         // 发送鱼
         if (type <= Fishes)
         {
-            fish[type] = ItemIO.Receive(r, true);
+            fish[type] = ItemIO.Receive(r, true, true);
         }
 
         // 发送鱼竿
@@ -245,7 +245,7 @@ public class ItemSyncPacket : NetModule
             fishingPole = ItemIO.Receive(r, true);
             bait = ItemIO.Receive(r, true);
             accessory = ItemIO.Receive(r, true);
-            fish = r.ReadItemArray();
+            fish = r.ReadItemArray(readFavorite: true);
         }
     }
 

@@ -355,7 +355,7 @@ ItemSearcher: {
 		Tooltip:
 			'''
 			会搜到与搜索内容相差一个字符的结果
-			如输入“黑石”可搜索到“黑曜石”
+			如输入“白曜石”可搜索到“黑曜石”
 			'''
 	}
 
@@ -409,6 +409,25 @@ QuickShimmer: {
 		'''
 }
 
+DummyConfiguration: {
+	Title: 假人配置
+
+	fieldName: {
+		LockHP: 锁定生命值
+		LifeMax: 最大生命值
+		Defense: 防御
+		Damage: 触碰伤害
+		ShowBox: 显示碰撞范围
+		ShowDamageData: 显示伤害数据
+		ShowNameOnHover: 显示 NPC 名称
+		Immortal: 不被视作目标
+		NoGravity: 不受重力影响
+		NoTileCollide: 关闭物块碰撞
+		KnockBackResist: 击退系数
+		AIStyle: AI类型
+	}
+}
+
 Autofisher: {
 	Accessory: 钓鱼饰品
 	FishingPole: 钓竿
@@ -428,6 +447,14 @@ Autofisher: {
 		自动存储
 		每分钟将渔获自动存入最近的箱子
 		'''
+	AccBoost:
+		'''
+		[i:{IconID}] 饰品对钓鱼机的加成：
+		    钓鱼速率：{Speed}
+		    渔力加成：{Power}
+		'''
+	AccBoostTackle: "    降低鱼饵消耗几率"
+	AccBoostLava: "    可在熔岩中钓鱼"
 }
 
 MapLayer: {
@@ -439,3 +466,4 @@ MapLayer: {
 }
 
 ThemePreview.Title: 主题预览
+PiggyFilter.Title: 筛选钱币

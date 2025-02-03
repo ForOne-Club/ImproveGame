@@ -54,29 +54,30 @@ Presets: {
 	Label: 预设
 	Tooltip: 更好的体验提供了部分快捷预设，以便玩家根据模组快速调整游戏体验。 你也可以在这里保存和加载自己的预设。
 	PlayerPresetTooltip: 这是一个由玩家自定义的预设。
+	DefaultPresetName: 我的预设
 
 	ExplorerPreset: {
 		Label: "[centeritem:GravityGlobe] 主探索"
 		Tooltip: 适合以探索冒险为主要玩法的流程，提供适度的辅助，同时保留原版游戏的挑战性和慢节奏。 适合与瑟银、魂灵等原版风格模组搭配。
-		Link: todo 添加Wiki页面
+		Link: https://gitee.com/MyGoold/improve-game/wikis/%E9%85%8D%E7%BD%AE%E9%A2%84%E8%AE%BE?sort_id=12944590#%E4%B8%BB%E6%8E%A2%E7%B4%A2
 	}
 
 	WarriorPreset: {
 		Label: "[centeritem:EmpressBlade] 主战斗"
 		Tooltip: 适合以打Boss推进度为主要玩法的流程，大幅度简化探索流程。 适合与灾厄、Fargo等模组搭配。
-		Link: todo 添加Wiki页面
+		Link: https://gitee.com/MyGoold/improve-game/wikis/%E9%85%8D%E7%BD%AE%E9%A2%84%E8%AE%BE?sort_id=12944590#%E4%B8%BB%E6%88%98%E6%96%97
 	}
 
 	VanillaPreset: {
 		Label: "[centeritem:MusicBoxCredits] 完全原版"
 		Tooltip: 关闭更好的体验的几乎所有功能，使游戏体验完全回归原版。
-		Link: todo 添加Wiki页面
+		Link: https://gitee.com/MyGoold/improve-game/wikis/%E9%85%8D%E7%BD%AE%E9%A2%84%E8%AE%BE?sort_id=12944590#%E5%AE%8C%E5%85%A8%E5%8E%9F%E7%89%88
 	}
 
 	AddPreset: {
 		Label: "[centeritem:ImproveGame/AddIconDummy] 添加预设"
 		Tooltip: 左键点击可将当前配置保存为自定义预设。
-		Link: todo 添加Wiki页面
+		Link: https://gitee.com/MyGoold/improve-game/wikis/%E9%85%8D%E7%BD%AE%E9%A2%84%E8%AE%BE?sort_id=12944590#%E6%B7%BB%E5%8A%A0%E9%A2%84%E8%AE%BE
 	}
 
 	OpenFolder: {
@@ -133,6 +134,11 @@ PlantSettings: {
 ItemSettings: {
 	Label: 物品
 	Tooltip: 更好的体验提供了一些物品的优化，以避免游玩大型模组时的重复劳动，例如使堆叠足够的弹药、召唤物、药水可无限使用、令增益站放在背包也生效等。
+}
+
+ModItemSettings: {
+	Label: 模组物品
+	Tooltip: 可在此处修改一些更好的体验新增物品的设置，并且还可以调整部分物品是否可以获取。
 }
 
 VisualAndInterface: {

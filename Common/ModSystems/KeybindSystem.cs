@@ -17,12 +17,15 @@ public class KeybindSystem : ModSystem
     public static ModKeybind SuperVaultKeybind { get; private set; }
     public static ModKeybind BuffTrackerKeybind { get; private set; }
     public static ModKeybind OpenBagKeybind { get; private set; }
+    public static ModKeybind QuickShimmerKeybind { get; private set; }
     public static ModKeybind GrabBagKeybind { get; private set; }
     public static ModKeybind HotbarSwitchKeybind { get; private set; }
     public static ModKeybind AutoTrashKeybind { get; private set; }
     public static ModKeybind DiscordRodKeybind { get; private set; }
     public static ModKeybind HomeKeybind { get; private set; }
     public static ModKeybind ItemInteractKeybind { get; private set; }
+    public static ModKeybind CopyItemNameKeybind { get; private set; }
+    public static ModKeybind CopyItemNameControlKeybind { get; private set; }
 
     private static readonly Dictionary<string, string> ZhTranslationKeybind = new()
     {
@@ -49,12 +52,15 @@ public class KeybindSystem : ModSystem
         AutoTrashKeybind = KeybindLoader.RegisterKeybind(Mod, "AutoTrashKeybind", "NumPad1");
         BuffTrackerKeybind = KeybindLoader.RegisterKeybind(Mod, "BuffTracker", "NumPad2");
         OpenBagKeybind = KeybindLoader.RegisterKeybind(Mod, "OpenBagGUI", "NumPad3");
+        QuickShimmerKeybind = KeybindLoader.RegisterKeybind(Mod, "QuickShimmerGUI", "NumPad4");
         SuperVaultKeybind = KeybindLoader.RegisterKeybind(Mod, "HugeInventory", "F");
         GrabBagKeybind = KeybindLoader.RegisterKeybind(Mod, "GrabBagLoot", "OemQuotes");
         HotbarSwitchKeybind = KeybindLoader.RegisterKeybind(Mod, "HotbarSwitch", "OemQuestion");
         DiscordRodKeybind = KeybindLoader.RegisterKeybind(Mod, "DiscordRodKeybind", "U");
         HomeKeybind = KeybindLoader.RegisterKeybind(Mod, "HomeKeybind", "Home");
         ItemInteractKeybind = KeybindLoader.RegisterKeybind(Mod, "ItemInteract", "Mouse3");
+        CopyItemNameKeybind = KeybindLoader.RegisterKeybind(Mod, "CopyItemName", "X");
+        CopyItemNameControlKeybind = KeybindLoader.RegisterKeybind(Mod, "CopyItemName_Control", "LeftControl");
     }
 
     public override void PostUpdateEverything()
@@ -161,11 +167,14 @@ public class KeybindSystem : ModSystem
         SuperVaultKeybind = null;
         BuffTrackerKeybind = null;
         OpenBagKeybind = null;
+        QuickShimmerKeybind = null;
         GrabBagKeybind = null;
         HotbarSwitchKeybind = null;
         AutoTrashKeybind = null;
         DiscordRodKeybind = null;
         HomeKeybind = null;
         ItemInteractKeybind = null;
+        CopyItemNameKeybind = null;
+        CopyItemNameControlKeybind = null;
     }
 }

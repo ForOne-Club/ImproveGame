@@ -200,9 +200,22 @@ public class GrabBagInfoGUI : BaseBody
             item.ReportDroprates(list, ratesInfo);
         }
 
+        // 用于防止在特定条件下哪个神人摸彩袋一个掉落规则都没给ui玩坏了
+        bool noAnyDrop = true;
+
         foreach (DropRateInfo item2 in list)
         {
-            new GrabBagInfoPanel(item2).JoinParent(InfoScroll.ListView);
+            if (Config.ICanSeeForeverAllBag || item2.conditions == null || item2.conditions.All(condition => condition.CanShowItemDropInUI()))
+            {
+                new GrabBagInfoPanel(item2).JoinParent(InfoScroll.ListView);
+                noAnyDrop = false;
+            }
+        }
+
+        if (noAnyDrop)
+        {
+            new GrabBagInfoPanel(new DropRateInfo(Terraria.ID.ItemID.SleepingIcon, 1, 1, 0.114f)).JoinParent(InfoScroll.ListView);
+            new GrabBagInfoPanel(new DropRateInfo(Terraria.ID.ItemID.SleepingIcon, 1, 1, 0.514f)).JoinParent(InfoScroll.ListView);
         }
     }
 

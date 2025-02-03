@@ -3,6 +3,19 @@
 internal static class SpriteBatchExtensions
 {
     /// <summary>
+    /// 仅改变SpriteSortMode和BlendState
+    /// </summary>
+    public static void ReBegin(this SpriteBatch sb, SpriteSortMode mode, BlendState blendState)
+    {
+        var matrix = sb.transformMatrix;
+        var effect = sb.customEffect;
+        
+        sb.End();
+        sb.Begin(mode, blendState, sb.GraphicsDevice.SamplerStates[0],
+            sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, matrix);
+    }
+
+    /// <summary>
     /// 仅改变SpriteSortMode
     /// </summary>
     public static void ReBegin(this SpriteBatch sb, SpriteSortMode mode)

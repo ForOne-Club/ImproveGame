@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.ModSystems.MarqueeSystem;
 using ImproveGame.Content.Packets;
 using ImproveGame.Core;
@@ -45,8 +46,6 @@ public partial class SpaceWand : ModItem, IMarqueeItem
     #endregion
 
     #region Item 基础设置
-
-    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.SpaceWand;
 
     public override bool AltFunctionUse(Player player) => true;
 
@@ -261,6 +260,7 @@ public partial class SpaceWand : ModItem, IMarqueeItem
             .AddRecipeGroup(RecipeSystem.AnyDemoniteBar, 8)
             .AddIngredient(ItemID.Amethyst, 8)
             .AddTile(TileID.WorkBenches)
+            .AddCondition(ConfigCondition.AvailableSpaceWandC)
             .Register();
     }
 }

@@ -51,107 +51,113 @@ AboutPage_ModConfig: {
 
 Presets: {
 	Label: Presets
-	Tooltip: There are presets by Quality of Terraria for batch configuration. You may also create your own presets.
-	PlayerPresetTooltip: A player-defined preset.
+	Tooltip: There are presets by Quality of Terraria for batch configuration. You may also create your own presets
+	PlayerPresetTooltip: A player-defined preset
+	DefaultPresetName: My Preset
 
 	ExplorerPreset: {
 		Label: "[centeritem:GravityGlobe] Explorer"
-		Tooltip: Best for vanilla-paced playthrough. Explore while facing typical challenges with moderate assistance. Might work well with mods like Thorium or Spirit.
-		Link: TODO Add Wiki page
+		Tooltip: Best for vanilla-like playthroughs. Explore while facing typical challenges with moderate assistance. Might work well with mods like Thorium or Spirit
+		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#explorer
 	}
 
 	WarriorPreset: {
 		Label: "[centeritem:EmpressBlade] Fighter"
-		Tooltip: Stop digging and start fighting! Skip most grindings. Might work well with mods like Calamity or Fargo's Souls.
-		Link: TODO Add Wiki page
+		Tooltip: Stop digging and start fighting! Skip most grindings. Might work well with mods like Calamity or Fargo's Souls
+		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#fighter
 	}
 
 	VanillaPreset: {
 		Label: "[centeritem:MusicBoxCredits] Vanilla Enjoyer"
-		Tooltip: Just like vanilla. Play with few QoL features.
-		Link: TODO Add Wiki page
+		Tooltip: Just like vanilla. Play with few QoL features
+		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#vanilla-enjoyer
 	}
 
 	AddPreset: {
 		Label: "[centeritem:ImproveGame/AddIconDummy] Save as Preset"
-		Tooltip: Save the current config as a preset.
-		Link: TODO Add Wiki page
+		Tooltip: Saves the current config as a preset
+		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#adding-a-preset
 	}
 
 	OpenFolder: {
 		Label: "[centeritem:ImproveGame/OpenFolderDummy] Open Preset Folder"
-		Tooltip: Open the preset folder.
+		Tooltip: Opens the preset folder
 	}
 }
 
 Favorites: {
 	Label: Favorited Entries
-	Tooltip: Right click an entry to favorite it. Favorited entries will show up here.
+	Tooltip: <right> an entry to favorite it. Favorited entries will show up here
 }
 
 Everything: {
 	Label: Everything
-	Tooltip: All configurable features. You'll likely find searching to be useful.
+	Tooltip: All configurable features. You'll likely find searching to be useful
 }
 
 GameMechanics: {
 	Label: Game Mechanics
-	Tooltip: Edit game mechanics, e.g. Tombstone spawning & respawn speed.
+	Tooltip: Edit game mechanics, e.g. Tombstone spawning & respawn speed
 }
 
 PylonMechanics: {
 	Label: Pylon Mechanics
-	Tooltip: Remove various pylon limitations.
+	Tooltip: Remove various pylon limitations
 }
 
 NpcSettings: {
 	Label: Friendly NPCs
-	Tooltip: Edit friendly NPC behaviors, e.g. housing & happiness.
+	Tooltip: Edit friendly NPC behaviors, e.g. housing & happiness
 }
 
 EnemySettings: {
 	Label: Enemies
-	Tooltip: Edit enemy behaviors, e.g. Lava Slime No Lava & coin drop rate.
+	Tooltip: Edit enemy behaviors, e.g. Lava Slime No Lava & coin drop rate
 }
 
 PlayerAbility: {
 	Label: Player Abilities
-	Tooltip: Boost player abilities, e.g. tile placement range, respawning with full heath, keep buffs on death & ore excavation.
+	Tooltip: Boost player abilities, e.g. tile placement range, respawning with full heath, keep buffs on death & ore excavation
 }
 
 Multiplayer: {
 	Label: Multiplayer
-	Tooltip: Enhance multiplayer experience, e.g. auto-joining teams & unlimited teleportation.
+	Tooltip: Enhance multiplayer experience, e.g. auto-joining teams & unlimited teleportation
 }
 
 PlantSettings: {
 	Label: Plants
-	Tooltip: Edit plant behaviors, e.g. herb growth speed, tree heights & gem tree drops.
+	Tooltip: Edit plant behaviors, e.g. herb growth speed, tree heights & gem tree drops
 }
 
 ItemSettings: {
 	Label: Items
-	Tooltip: Edit item behaviors, which can save grinding, e.g. infinite ammo/potions & buff stations from inventory.
+	Tooltip: Edit item behaviors, which can save grinding, e.g. infinite ammo/potions & buff stations from inventory
+}
+
+ModItemSettings: {
+	Label: Mod Items
+	Tooltip: Here you can modify some of the settings for Quality of Terraria items, and adjust whether some items are obtainable.
 }
 
 VisualAndInterface: {
 	Label: Visuals
-	Tooltip: Edit vanilla & QoT visuals, tweak QoT user interfaces.
+	Tooltip: Edit vanilla & QoT visuals, tweak QoT user interfaces
 }
 
 ModFeatures: {
 	Label: Others
-	Tooltip: Edit other features, e.g. Ammo Chain, Auto-trash & Big backpack.
+	Tooltip: Edit other features, e.g. Ammo Chain, Auto-trash & Big backpack
 }
 
 Minimap: {
 	Label: Map
-	Tooltip: Edit map featuers, e.g. Locators.
+	Tooltip: Edit map features, e.g. Locators
 }
 
 Keybinds: {
 	Label: Controls
-	Tooltip: Manage Quality of Terraria hotkeys, right click on an entry to set it to default.
+	Tooltip: Manage Quality of Terraria hotkeys, <right> on an entry to set it to default
 	// 快捷键会在Tooltip显示其默认绑定的键位
 	Default: Default: {0}
 }

@@ -14,6 +14,8 @@ using Terraria.GameInput;
 using Terraria.UI.Chat;
 using static Microsoft.Xna.Framework.Vector2;
 using Terraria.ID;
+using ImproveGame.Common.ModSystems;
+using Terraria.ModLoader.Config;
 
 namespace ImproveGame;
 
@@ -791,6 +793,9 @@ partial class MyUtils
     // 获取配置
     public static ImproveConfigs Config;
 
+    // 模组物品加载配置
+    public static AvailableModItemConfigs AvailableConfig;
+
     /// <summary>
     /// 获取瓷砖数量
     /// </summary>
@@ -1147,5 +1152,51 @@ partial class MyUtils
         }
 
         return result;
+    }
+    /// <summary>
+    /// 一个基于更好的体验现有密码系统，用于判断是否接受客户端修改的方法
+    /// </summary>
+    /// <param name="config">MyUtils.Config</param>
+    /// <param name="pendingConfig">照着 AcceptClientChanges 重写函数填</param>
+    /// <param name="whoAmI">照着 AcceptClientChanges 重写函数填</param>
+    /// <param name="message">照着 AcceptClientChanges 重写函数填</param>
+    /// <returns>返回一个bool用于指示是否接受客户端修改</returns>
+    public static bool AcceptClientChanges(ImproveConfigs config, ModConfig pendingConfig, int whoAmI, ref NetworkText message)
+    {
+        if (config.OnlyHostByPassword)
+        {
+            if (!NetPasswordSystem.Registered[whoAmI])
+            {
+                message = new NetworkText(
+                    GetText("Configs.ImproveConfigs.OnlyHostByPassword.Unaccepted"), NetworkText.Mode.Literal);
+            }
+            return NetPasswordSystem.Registered[whoAmI];
+        }
+
+        if (pendingConfig is ImproveConfigs improveConfigs && improveConfigs.OnlyHost != config.OnlyHost)
+        {
+            return TryAcceptChanges(whoAmI, ref message);
+        }
+        else if (config.OnlyHost)
+        {
+            return TryAcceptChanges(whoAmI, ref message);
+        }
+        return true;
+    }
+
+    public static void OperateInventory(bool openInventory, bool canDelayCheckRecipes = false)
+    {
+        Main.playerInventory = openInventory;
+        Recipe.FindRecipes(canDelayCheckRecipes);
+    }
+
+    private static bool TryAcceptChanges(int whoAmI, ref NetworkText message)
+    {
+        if (NetMessage.DoesPlayerSlotCountAsAHost(whoAmI))
+            return true;
+
+        message = new NetworkText(
+            GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted"), NetworkText.Mode.Literal);
+        return false;
     }
 }

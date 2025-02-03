@@ -2,6 +2,7 @@
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.WorldFeatures;
 using Terraria.DataStructures;
+using Terraria.GameContent.Biomes;
 using Terraria.Graphics.Shaders;
 using Terraria.Map;
 using Terraria.ModLoader.IO;
@@ -58,6 +59,14 @@ public class IndicatorMapLayer : ModMapLayer
         ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.EnchantedSwordPositions,
             UIConfigs.Instance.MarkEnchantedSword, "ItemName.EnchantedSword", new SpriteFrame(columns, rows, 7, 0),
             new Vector2(1.5f, 1f));
+
+        // 大理石洞
+        ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.MarbleCavePositions,
+            UIConfigs.Instance.MarkMarbleCave, "Mods.ImproveGame.Items.MarbleCaveGlobe.BiomeName", new SpriteFrame(columns, rows, 1, 1));
+
+        // 花岗岩洞
+        ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.GraniteCavePositions,
+            UIConfigs.Instance.MarkGraniteCave, "Mods.ImproveGame.Items.GraniteCaveGlobe.BiomeName", new SpriteFrame(columns, rows, 2, 1));
     }
 
     private void ProcessStructure(ref MapOverlayDrawContext context, ref string text, bool isUnlocked, Point16 position,
@@ -119,6 +128,10 @@ public class StructureDatas : ModSystem
     public static List<Point16> SkyLakePositions { get; set; }
     public static List<Point16> PlanteraPositions { get; set; }
     public static List<Point16> EnchantedSwordPositions { get; set; }
+    public static List<Point16> AllMarbleCavePositions { get; set; }
+    public static List<Point16> MarbleCavePositions { get; set; }
+    public static List<Point16> AllGraniteCavePositions { get; set; }
+    public static List<Point16> GraniteCavePositions { get; set; }
     public static List<Point16> BaitlessAutofisherPositions { get; set; }
 
     private static int _autofisherValidateTimer;
@@ -191,6 +204,28 @@ public class StructureDatas : ModSystem
 
             return false;
         };
+
+        On_MarbleBiome.Place += (orig, marbleBiome, origin, structures) =>
+        {
+            if (orig(marbleBiome, origin, structures))
+            {
+                AllMarbleCavePositions.Add(new Point16(origin.X, origin.Y));
+                return true;
+            }
+
+            return false;
+        };
+
+        On_GraniteBiome.Place += (orig, graniteBiome, origin, structures) =>
+        {
+            if (orig(graniteBiome, origin, structures))
+            {
+                AllGraniteCavePositions.Add(new Point16(origin.X, origin.Y));
+                return true;
+            }
+
+            return false;
+        };
     }
 
     public override void PreWorldGen()
@@ -230,6 +265,10 @@ public class StructureDatas : ModSystem
         SkyLakePositions = new List<Point16>();
         PlanteraPositions = new List<Point16>();
         EnchantedSwordPositions = new List<Point16>();
+        AllMarbleCavePositions = new List<Point16>();
+        MarbleCavePositions = new List<Point16>();
+        AllGraniteCavePositions = new List<Point16>();
+        GraniteCavePositions = new List<Point16>();
         BaitlessAutofisherPositions = new List<Point16>();
     }
 
@@ -243,6 +282,10 @@ public class StructureDatas : ModSystem
         tag["skyLakes"] = SkyLakePositions ?? [];
         tag["planteras"] = PlanteraPositions ?? [];
         tag["swords"] = EnchantedSwordPositions ?? [];
+        tag["allMarbleCave"] = AllMarbleCavePositions ?? [];
+        tag["marbleCave"] = MarbleCavePositions ?? [];
+        tag["allGraniteCave"] = AllGraniteCavePositions ?? [];
+        tag["graniteCave"] = GraniteCavePositions ?? [];
     }
 
     public override void LoadWorldData(TagCompound tag)
@@ -255,6 +298,10 @@ public class StructureDatas : ModSystem
         SkyLakePositions = tag.Get<List<Point16>>("skyLakes") ?? [];
         PlanteraPositions = tag.Get<List<Point16>>("planteras") ?? [];
         EnchantedSwordPositions = tag.Get<List<Point16>>("swords") ?? [];
+        AllMarbleCavePositions = tag.Get<List<Point16>>("allMarbleCave") ?? [];
+        MarbleCavePositions = tag.Get<List<Point16>>("marbleCave") ?? [];
+        AllGraniteCavePositions = tag.Get<List<Point16>>("allGraniteCave") ?? [];
+        GraniteCavePositions = tag.Get<List<Point16>>("graniteCave") ?? [];
     }
 
     public override void NetSend(BinaryWriter writer)
@@ -269,6 +316,10 @@ public class StructureDatas : ModSystem
         writer.Write(SkyLakePositions);
         writer.Write(PlanteraPositions);
         writer.Write(EnchantedSwordPositions);
+        writer.Write(AllMarbleCavePositions);
+        writer.Write(MarbleCavePositions);
+        writer.Write(AllGraniteCavePositions);
+        writer.Write(GraniteCavePositions);
         writer.Write(BaitlessAutofisherPositions);
     }
 
@@ -283,6 +334,10 @@ public class StructureDatas : ModSystem
         SkyLakePositions = reader.ReadPoint16List().ToList();
         PlanteraPositions = reader.ReadPoint16List().ToList();
         EnchantedSwordPositions = reader.ReadPoint16List().ToList();
+        AllMarbleCavePositions = reader.ReadPoint16List().ToList();
+        MarbleCavePositions = reader.ReadPoint16List().ToList();
+        AllGraniteCavePositions = reader.ReadPoint16List().ToList();
+        GraniteCavePositions = reader.ReadPoint16List().ToList();
         BaitlessAutofisherPositions = reader.ReadPoint16List().ToList();
     }
 }

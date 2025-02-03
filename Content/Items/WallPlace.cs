@@ -10,8 +10,6 @@ namespace ImproveGame.Content.Items
 
         public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.WallPlace;
-
         public override void SetDefaults()
         {
             Item.SetBaseValues(46, 42, ItemRarityID.Red, Item.sellPrice(0, 0, 50));

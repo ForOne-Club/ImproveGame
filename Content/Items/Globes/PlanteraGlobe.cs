@@ -1,46 +1,29 @@
-﻿using ImproveGame.Packets.WorldFeatures;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Content.Items.Globes.Core;
+using ImproveGame.Content.Projectiles;
+using ImproveGame.Packets.WorldFeatures;
 
 namespace ImproveGame.Content.Items.Globes;
 
-public class PlanteraGlobe : ModItem
+public class PlanteraGlobe () : GlobePlentyTooltip(ItemRarityID.Pink, Item.sellPrice(silver: 30))
 {
-    private LocalizedText GetLocalizedText(string suffix) =>
-        Language.GetText($"Mods.ImproveGame.Items.GlobeBase.{suffix}")
-            .WithFormatArgs(Language.GetTextValue("NPCName.Plantera"));
-
-    public override LocalizedText DisplayName => GetLocalizedText(nameof(DisplayName));
-
-    public override LocalizedText Tooltip => GetLocalizedText(nameof(Tooltip));
-
-    public override void SetDefaults()
+    public class PlanteraGlobeProj : GlobeProjBase
     {
-        Item.width = 32;
-        Item.height = 32;
-        Item.useStyle = ItemUseStyleID.HoldUp;
-        Item.useTime = 30;
-        Item.useAnimation = 30;
-        Item.consumable = true;
-        Item.maxStack = Item.CommonMaxStack;
-        Item.rare = ItemRarityID.Pink;
-        Item.value = Item.sellPrice(silver: 30);
+        public override ModItem GetModItemDummy() => ModContent.GetInstance<PlanteraGlobe>();
     }
 
-    public override void AddRecipes() =>
-        CreateRecipe()
-            .AddIngredient(ItemID.Glass, 5)
+    public override Color GetEffectColor() => new (228, 131, 212);
+
+    public override bool RevealOperation(Projectile projectile, bool onlyJudging)
+    {
+        return RevealPlanteraPacket.Reveal(projectile, onlyJudging);
+    }
+
+    protected override Recipe AddCraftingMaterials(Recipe recipe) =>
+        recipe.AddIngredient(ItemID.Glass, 5)
             .AddIngredient(ItemID.MudBlock, 100)
             .AddIngredient(ItemID.RichMahogany, 30)
             .AddIngredient(ItemID.JungleSpores, 1)
             .AddTile(TileID.MythrilAnvil)
-            .Register();
-    
-    public override bool CanUseItem(Player player)
-    {
-        return RevealPlanteraPacket.Reveal(player);
-    }
-
-    public override bool? UseItem(Player player)
-    {
-        return true;
-    }
+            .AddCondition(ConfigCondition.EnableMinimapMarkC);
 }

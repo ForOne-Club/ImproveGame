@@ -21,5 +21,11 @@ public sealed class ModFeatures : Category
         panel.AddToggle(Config, nameof(Config.MinimapMark));
         panel.AddToggle(Config, nameof(Config.SuperVault));
         panel.AddToggle(Config, nameof(Config.ImprovePrefix));
+        panel.AddToggle(Config, nameof(Config.AmmoChain));
+        panel.AddValueText(Config, nameof(Config.SpawnRateMaxValue));
+        panel.AddToggle(Config, nameof(Config.EmptyAutofisher));
+        panel.AddValueSlider(Config, nameof(Config.ExStorageSearchDistance));
+        panel.AddToggle(Config, nameof(Config.ICanSeeForeverAllBag));
+        panel.AddToggle(Config, nameof(Config.WandMaterialNoConsume));
     }
 }

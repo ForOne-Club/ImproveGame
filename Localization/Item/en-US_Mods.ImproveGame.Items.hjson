@@ -13,7 +13,7 @@ SpaceWand: {
 	DisplayName: Wand of Space
 	Tooltip:
 		'''
-		[c/0099ff:Right click to open the Control Panel]
+		[c/0099ff:<right> to open the Control Panel]
 		Places selected type of tile in the indicated area
 		Uses the first applicable item in your inventory
 		<right> while selecting area to cancel placement
@@ -45,15 +45,16 @@ CreateWand: {
 }
 
 WallPlace: {
+	PureName: Wand of Technology
 	DisplayName: Wand of Technology (Placing)
 	Tooltip:
 		'''
 		Summons a wall placer at your cursor
 		Automatically recognizes possible rooms and places walls from your inventory
-		The recognized room can have at most 10000 tiles of space
+		Recognized rooms can have up to 10000 tiles of space
 		Considers solid blocks, platforms and doors as boundaries
 		Each player can only summon one, use again to recall it
-		Right click to switch to Selection mode
+		<right> to switch to selection mode
 		'''
 }
 
@@ -71,12 +72,12 @@ PotionBag: {
 	DisplayName: Potion Bag
 	Tooltip:
 		'''
-		Stores you buff potions
+		Stores your buff potions
 		[c/0099ff:<left>] while holding a potion to deposit
 		[c/0099ff:<right>] to open potion bag
 		{TooltipByKeybind}
-		Automatically collect potions picked up,
-		but only when this Potion Bag is the first in inventory
+		Automatically collects picked up potions,
+		but only when this Potion Bag is the first in the inventory
 		Can store up to 200 stacks of potions
 		'''
 	TooltipByKeybind: Press [c/0099ff:{KeybindName}] to collect potions from portable storages
@@ -87,11 +88,11 @@ BannerChest: {
 	Tooltip:
 		'''
 		Stores your banners
-		[c/0099ff:<left>] while banner a potion to deposit
+		[c/0099ff:<left>] while holding a banner to deposit
 		[c/0099ff:<right>] to open banner box
 		{TooltipByKeybind}
-		Automatically collect banners picked up,
-		but only when this Banner Box is the first in inventory
+		Automatically collect picked up banners,
+		but only when this Banner Box is the first in the inventory
 		Can store up to 500 stacks of banners
 		'''
 	TooltipByKeybind: Press [c/0099ff:{KeybindName}] to collect banners from portable storages
@@ -175,14 +176,16 @@ GlobeBase: {
 		Marks {0} on the map.
 		You can hide the marker in [c/CC88AA:Personal Config]
 		'''
+	Tooltip_1:
+		'''
+		在地图上标记距离你最近的{0}
+		You can hide the marker in [c/CC88AA:Personal Config]
+		'''
 	AlreadyRevealed: "{0} has already been marked"
 	Reveal: "{1} marked up {0} on the map."
-	RevealPlantera: "{0} marked up {$NPCName.Plantera} on the map."
-	RevealEnchantedSword: "{0} marked up {$ItemName.EnchantedSword} on the map."
-	NotFound: Data of {0} is not present, it's likely that QoT v1.6.6+ was not enabled during world creation
+	NotFound: Data of {0} is not present, it's likely that newest QoT was not enabled during world creation
 }
 
-AetherGlobe.BiomeName: The Aether
 DungeonGlobe.BiomeName: Dungeon
 FloatingIslandGlobe.BiomeName: Floating Island
 
@@ -192,9 +195,37 @@ PyramidGlobe: {
 }
 
 TempleGlobe.BiomeName: Jungle Temple
-# 在世界上没有花苞或花苞全部标记完了的情况下显示，附魔剑的文本亦是如此
-PlanteraGlobe.NotFound: Couldn't find more {$MapObject.PlanterasBulb}
-EnchantedSwordGlobe.NotFound: Couldn't find more Enchanted Sword Shrines
+
+# NotFound在世界上没有花苞或花苞全部标记完了的情况下显示，附魔剑的文本亦是如此
+PlanteraGlobe: {
+	BiomeName: "{$NPCName.Plantera}"
+	NotFound: Couldn't find more {$MapObject.PlanterasBulb}
+	Reveal: "{0} marked up {$NPCName.Plantera} on the map."
+}
+
+EnchantedSwordGlobe: {
+	BiomeName: "{$ItemName.EnchantedSword}"
+	NotFound: Couldn't find more Enchanted Sword Shrines
+	Reveal: "{0} marked up {$ItemName.EnchantedSword} on the map."
+}
+
+# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞的文本亦是如此
+MarbleCaveGlobe: {
+	BiomeName: Marble Cave
+	NotFound: Couldn't find more Marble Cave
+}
+
+GraniteCaveGlobe: {
+	BiomeName: Granite Cave
+	NotFound: Couldn't find more Granite Cave
+}
+
+# NotFound在世界上没有足够的微光液体的情况下显示
+AetherGlobe: {
+	BiomeName: The Aether
+	NotFound: 未能找到足够大的微光湖
+	Reveal: "{0} marked up {ImproveGame.Mods.Items.AetherGlobe.BiomeName} on the map."
+}
 
 DetectorDrone: {
 	Tooltip:
@@ -210,8 +241,8 @@ DevMark: {
 	DisplayName: Developer's Mark
 	Tooltip:
 		'''
-		When in inventory, Wand of Construction will not consume materials
-		Only works in single	player
+		When in the inventory, Wand of Construction will not consume materials (Only works in single player)
+		Use with fishing machine opened to automatically fill it with fishing equipment
 		[c/ff0000:Developer's item]
 		'''
 }
@@ -253,7 +284,9 @@ Dummy: {
 		Chat commands:
 		 /dummy info → view dummy stats
 		 /help dummy → get dummy usage
-		(Doesn't work in multiplayer.)
+		 Left click to spawn Dummy on mouse
+		 Right click to remove the chosen dummy
+		 Middle click to show configuration panel
 		'''
 	CannotUse: This item currently does not work in multiplayer.
 }
@@ -350,7 +383,7 @@ LiquidWandAdvanced: {
 	DisplayName: Ultimate Wand of Liquids
 	Tooltip:
 		'''
-		Absorbs/Places chosen liquid in a selected area
+		Absorbs/places chosen liquid in a selected area
 		<right> while holding to open the liquid control panel
 		Unlimited amount of liquids
 		'''
@@ -360,9 +393,8 @@ WallPlaceSelectorMode: {
 	DisplayName: Wand of Technology (Selecting)
 	Tooltip:
 		'''
-		Select a rectangualr area,
-		place walls in inventory in it
-		Right click to switch to Placement mode
+		Select a rectangular area and place walls from the inventory in it
+		<right> to switch to placement mode
 		'''
 }
 
@@ -370,8 +402,8 @@ ActuationRodMkII: {
 	DisplayName: Ultimate Wand of Actuation
 	Tooltip:
 		'''
-		Select a rectangular area then actuate it
-		No need of Actuator
+		Select a rectangular area to actuate it
+		Doesn't need placed actuators
 		'''
 }
 
@@ -380,7 +412,7 @@ ShellShipInBottle: {
 	Tooltip:
 		'''
 		Ask the Guide how to make it with Sea Shell
-		And then Throw it into shimmer lake and see what would happen!
+		Then throw it into shimmer lake, and see what will happen!
 		'''
 }
 

@@ -124,7 +124,7 @@ public class MasterControlManager : ModSystem
                 body.RemoveChild(body.Window);
             else
             {
-                Main.playerInventory = true;
+                OperateInventory(true);
                 body.Append(body.Window);
             }
         };

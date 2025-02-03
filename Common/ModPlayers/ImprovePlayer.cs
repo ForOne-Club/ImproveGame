@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.GlobalNPCs;
+﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.ItemContainer;
@@ -104,14 +105,12 @@ public class ImprovePlayer : ModPlayer
         // 玩家背包
         foreach (var item in from i in Player.inventory where !i.IsAir select i)
         {
-            if (Config.LoadModItems.BannerChest &&
-                BannerChest is null && item.ModItem is BannerChest bannerChest)
+            if (BannerChest is null && item.ModItem is BannerChest bannerChest)
             {
                 BannerChest = bannerChest;
             }
 
-            if (Config.LoadModItems.PotionBag &&
-                PotionBag is null && item.ModItem is PotionBag potionBag)
+            if (PotionBag is null && item.ModItem is PotionBag potionBag)
             {
                 PotionBag = potionBag;
             }
@@ -121,14 +120,12 @@ public class ImprovePlayer : ModPlayer
         Item[] superVault = Player.GetModPlayer<DataPlayer>().SuperVault;
         foreach (var item in from i in superVault where !i.IsAir select i)
         {
-            if (Config.LoadModItems.BannerChest &&
-                BannerChest is null && item.ModItem is BannerChest bannerChest)
+            if (BannerChest is null && item.ModItem is BannerChest bannerChest)
             {
                 BannerChest = bannerChest;
             }
 
-            if (Config.LoadModItems.PotionBag &&
-                PotionBag is null && item.ModItem is PotionBag potionBag)
+            if (PotionBag is null && item.ModItem is PotionBag potionBag)
             {
                 PotionBag = potionBag;
             }
@@ -142,25 +139,6 @@ public class ImprovePlayer : ModPlayer
                 NetMessage.SendData(MessageID.PlayerTeam, -1, -1, null, Player.whoAmI);
                 ShouldUpdateTeam = false;
             }
-        }
-
-        switch (Config.NoCD_FishermanQuest)
-        {
-            case FishQuestResetType.NotResetFish:
-                if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name))
-                {
-                    Main.anglerQuestFinished = false;
-                    Main.anglerWhoFinishedToday.Clear();
-                    AddNotification(GetText("Tips.AnglerQuest"), Color.Cyan);
-                }
-                break;
-            case FishQuestResetType.ResetFish:
-                if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Contains(Name))
-                {
-                    Main.AnglerQuestSwap();
-                    AddNotification(GetText("Tips.AnglerQuest"), Color.Cyan);
-                }
-                break;
         }
 
         if (Player.whoAmI == Main.myPlayer)
@@ -245,6 +223,8 @@ public class ImprovePlayer : ModPlayer
             PressGrabBagKeybind();
         if (KeybindSystem.OpenBagKeybind.JustPressed)
             PressOpenBagKeybind();
+        if (KeybindSystem.QuickShimmerKeybind.JustPressed)
+            PressQuickShimmerKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
             PressHotbarSwitchKeybind();
         if (KeybindSystem.AutoTrashKeybind.JustPressed)
@@ -263,9 +243,19 @@ public class ImprovePlayer : ModPlayer
         if (!Config.SuperVault) return;
 
         if (BigBagGUI.Instance.Enabled && BigBagGUI.Instance.StartTimer.AnyOpen)
+        {
             BigBagGUI.Instance.Close();
+        }
         else
+        {
+            bool oldInventory = Main.playerInventory;
+
             BigBagGUI.Instance.Open();
+
+            // 假设也按了物品栏快捷键...
+            if (PlayerInput.Triggers.JustPressed.Inventory)
+                OperateInventory(oldInventory);
+        }
     }
 
     private static void PressBuffTrackerKeybind()
@@ -280,6 +270,16 @@ public class ImprovePlayer : ModPlayer
     {
         var ui = OpenBagGUI.Instance;
         if (ui is null) return;
+
+        if (ui.Enabled && ui.StartTimer.AnyOpen)
+            ui.Close();
+        else
+            ui.Open();
+    }
+    private static void PressQuickShimmerKeybind()
+    {
+        var ui = QuickShimmerGUI.Instance;
+        if (ui is null || !Config.QuickShimmer || !QuickShimmerSystem.Unlocked) return;
 
         if (ui.Enabled && ui.StartTimer.AnyOpen)
             ui.Close();

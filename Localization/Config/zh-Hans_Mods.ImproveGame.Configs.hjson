@@ -141,6 +141,11 @@ ImproveConfigs: {
 		Tooltip: 所有堆叠数  ≥ 3996 的投掷物将不再消耗。
 	}
 
+	NoConsume_Wire: {
+		Label: "[centeritem:530] 无限电线"
+		Tooltip: 当电线的堆叠数  ≥ 3996 时将不再消耗。
+	}
+
 	ImprovePrefix: {
 		Label: "[centeritem:1551] 可追溯重铸"
 		Tooltip: 允许你直接选择已获得过的前缀
@@ -267,6 +272,11 @@ ImproveConfigs: {
 	AlchemyGrassAlwaysBlooms: {
 		Label: "[centeritem:316] 草药允许在任何情况下开花"
 		Tooltip: 使所有草药可以在任何时候开花，收获种子。
+	}
+
+	PumpkinGrowsFaster: {
+		Label: "[centeritem:1725] 南瓜迅速生长"
+		Tooltip: 使南瓜生长得更快
 	}
 
 	StaffOfRegenerationAutomaticPlanting: {
@@ -429,6 +439,15 @@ ImproveConfigs: {
 			'''
 	}
 
+	ICanSeeForeverAllBag: {
+		Label: "[centeritem:GoodieBag] 摸彩袋明细是否显示隐藏的掉落规则"
+		Tooltip:
+			'''
+			当关闭时，会遵照掉落规则里的设置来决定是否显示
+			当开启时，会显示所有掉落规则
+			'''
+	}
+
 	LoadModItems: {
 		Label: 模组物品加载配置
 		Tooltip: 可选择移除模组内的物品，使其不出现在游戏中
@@ -470,33 +489,33 @@ ImproveConfigs: {
 	}
 
 	MostTreeMin: {
-		Label: "[centeritem:9] 普遍树最小高度 (默认: 7)"
-		// Tooltip: ""
+		Label: "[centeritem:9] 普遍树最小高度"
+		Tooltip: 默认: 7
 	}
 
 	MostTreeMax: {
-		Label: "[centeritem:9] 普遍树最大高度 (默认: 12)"
-		// Tooltip: ""
+		Label: "[centeritem:9] 普遍树最大高度"
+		Tooltip: 默认: 12
 	}
 
 	PalmTreeMin: {
-		Label: "[centeritem:2504] 棕榈树最小高度 (默认: 10)"
-		// Tooltip: ""
+		Label: "[centeritem:2504] 棕榈树最小高度"
+		Tooltip: 默认: 10
 	}
 
 	PalmTreeMax: {
-		Label: "[centeritem:2504] 棕榈树最大高度 (默认: 20)"
-		// Tooltip: ""
+		Label: "[centeritem:2504] 棕榈树最大高度"
+		Tooltip: 默认: 20
 	}
 
 	GemTreeMin: {
-		Label: "[centeritem:4856] 宝石树最小高度 (默认: 7)"
-		// Tooltip: ""
+		Label: "[centeritem:4856] 宝石树最小高度"
+		Tooltip: 默认: 7
 	}
 
 	GemTreeMax: {
-		Label: "[centeritem:4856] 宝石树最大高度 (默认: 12)"
-		// Tooltip: ""
+		Label: "[centeritem:4856] 宝石树最大高度"
+		Tooltip: 默认: 12
 	}
 
 	Headers: {
@@ -625,12 +644,16 @@ ImproveConfigs: {
 
 	ModifyNPCHappiness: {
 		Label: "[centeritem:LifeCrystal] 固定 NPC 快乐度"
-		// Tooltip: ""
+		Tooltip: 将NPC价格修正系数（即“快乐度”）固定为特定值
 	}
 
 	NPCHappiness: {
-		Label: "[centeritem:LifeCrystal] NPC 快乐度"
-		Tooltip: 设置的值越小从 NPC 购买物品价格越便宜，卖给 NPC 物品价格越高
+		Label: "[centeritem:LifeCrystal] NPC 价格修正系数(%)"
+		Tooltip:
+			'''
+			设置的值越小，NPC越快乐，从NPC购买物品价格越便宜，卖给NPC物品价格越高
+			该值≤90时，NPC会出售晶塔
+			'''
 	}
 
 	NoSleepRestrictions: {
@@ -694,7 +717,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			可以调节风向、月相、降雨，肉后还能调节时间，在总控面板中打开
-			使用气候之书后即可解锁此功能，解锁状态跟随世界存档
+			使用天气之书后即可解锁此功能，解锁状态跟随世界存档
 			'''
 	}
 
@@ -759,96 +782,99 @@ ImproveConfigs: {
 	}
 }
 
-ModItemLoadPage: {
-	MagickWand: {
-		// Label: "{$Mods.ImproveGame.Items.MagickWand.DisplayName}"
+AvailableModItemConfigs: {
+	DisplayName: 模组物品加载配置
+	Available: 可获取
+	Unavailable: 不可获取
+	Enable: 启用
+
+	AvailableMagickWand: {
+		// Label: "[centeritem:ImproveGame/MagickWand] {$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	SpaceWand: {
-		// Label: "{$Mods.ImproveGame.Items.SpaceWand.DisplayName}"
+	AvailableSpaceWand: {
+		// Label: "[centeritem:ImproveGame/SpaceWand] {$Mods.ImproveGame.Items.SpaceWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	StarburstWand: {
-		// Label: "{$Mods.ImproveGame.Items.StarburstWand.DisplayName}"
+	AvailableStarburstWand: {
+		// Label: "[centeritem:ImproveGame/StarburstWand] {$Mods.ImproveGame.Items.StarburstWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	WallPlace: {
-		// Label: "{$Mods.ImproveGame.Items.WallPlace.DisplayName}"
+	AvailableWallPlace: {
+		// Label: "[centeritem:ImproveGame/WallPlace] {$Mods.ImproveGame.Items.WallPlace.PureName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	CreateWand: {
-		// Label: "{$Mods.ImproveGame.Items.CreateWand.DisplayName}"
+	AvailableCreateWand: {
+		// Label: "[centeritem:ImproveGame/CreateWand] {$Mods.ImproveGame.Items.CreateWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	LiquidWand: {
-		// Label: "{$Mods.ImproveGame.Items.LiquidWand.DisplayName}"
+	AvailableLiquidWand: {
+		// Label: "[centeritem:ImproveGame/LiquidWand] {$Mods.ImproveGame.Items.LiquidWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	PotionBag: {
-		// Label: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}"
+	AvailablePotionBag: {
+		// Label: "[centeritem:ImproveGame/PotionBag] {$Mods.ImproveGame.Items.PotionBag.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	BannerChest: {
-		// Label: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
+	AvailableBannerChest: {
+		// Label: "[centeritem:ImproveGame/BannerChest] {$Mods.ImproveGame.Items.BannerChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	Autofisher: {
-		// Label: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
+	AvailableAutofisher: {
+		// Label: "[centeritem:ImproveGame/Autofisher] {$Mods.ImproveGame.Items.Autofisher.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	PaintWand: {
-		// Label: "{$Mods.ImproveGame.Items.PaintWand.DisplayName}"
+	AvailablePaintWand: {
+		// Label: "[centeritem:ImproveGame/PaintWand] {$Mods.ImproveGame.Items.PaintWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	ConstructWand: {
-		// Label: "{$Mods.ImproveGame.Items.ConstructWand.DisplayName}"
+	AvailableConstructWand: {
+		// Label: "[centeritem:ImproveGame/ConstructWand] {$Mods.ImproveGame.Items.ConstructWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	MoveChest: {
-		// Label: "{$Mods.ImproveGame.Items.MoveChest.DisplayName}"
+	AvailableMoveChest: {
+		// Label: "[centeritem:ImproveGame/MoveChest] {$Mods.ImproveGame.Items.MoveChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	CoinOne: {
-		// Label: "{$Mods.ImproveGame.Items.CoinOne.DisplayName}"
+	AvailableCoinOne: {
+		// Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	ExtremeStorage: {
-		// Label: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
+	AvailableExtremeStorage: {
+		// Label: "[centeritem:ImproveGame/ExtremeStorage] {$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	DetectorDrone: {
-		// Label: "{$Mods.ImproveGame.Items.DetectorDrone.DisplayName}"
+	AvailableDetectorDrone: {
+		// Label: "[centeritem:ImproveGame/DetectorDrone] {$Mods.ImproveGame.Items.DetectorDrone.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	BaitSupplier: {
-		// Label: "{$Mods.ImproveGame.Items.BaitSupplier.DisplayName}"
+	AvailableBaitSupplier: {
+		// Label: "[centeritem:ImproveGame/BaitSupplier] {$Mods.ImproveGame.Items.BaitSupplier.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	// Tooltip: ""
-
-	LiquidWandAdvanced: {
-		// Label: "{$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}"
+	AvailableLiquidWandAdvanced: {
+		// Label: "[centeritem:ImproveGame/LiquidWandAdvanced] {$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 
-	ActuationRodMkII: {
-		// Label: "{$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}"
+	AvailableActuationRodMkII: {
+		// Label: "[centeritem:ImproveGame/ActuationRodMkII] {$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 }
@@ -878,7 +904,11 @@ UIConfigs: {
 
 	ShowMoreData: {
 		Label: "[centeritem:1344] 显示调试数据"
-		// Tooltip: ""
+		Tooltip:
+			'''
+			开发者选项，普通玩家请勿启用
+			开启后会显示调试信息
+			'''
 	}
 
 	ShowModName: {
@@ -963,6 +993,16 @@ UIConfigs: {
 	MarkEnchantedSword: {
 		Label: "[centeritem:ImproveGame/EnchantedSwordGlobe] 附魔剑图标大小"
 		Tooltip: 在地图上显示的已标记的{$ItemName.EnchantedSword}的图标的大小，设为0以隐藏图标
+	}
+
+	MarkMarbleCave: {
+		Label: "[centeritem:ImproveGame/MarbleCaveGlobe] 大理石洞图标大小"
+		Tooltip: 在地图上显示的已标记的大理石洞的图标的大小，设为0以隐藏图标
+	}
+
+	MarkGraniteCave: {
+		Label: "[centeritem:ImproveGame/GraniteCaveGlobe] 花岗岩洞图标大小"
+		Tooltip: 在地图上显示的已标记的花岗岩洞的图标的大小，设为0以隐藏图标
 	}
 
 	MarkEmptyAutofisher: {
@@ -1052,6 +1092,11 @@ UIConfigs: {
 	RemoveGraveyardMusic: {
 		Label: "[centeritem:RichGravestone2] 移除墓地背景音乐"
 		Tooltip: 开启后，移除墓地环境的背景音乐
+	}
+
+	GlobeEffect: {
+		Tooltip: "[centeritem:WorldGlobe] 定位球特效"
+		Label: 如果你觉得特效太光污染了，可以关掉
 	}
 }
 

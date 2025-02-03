@@ -28,7 +28,7 @@ public sealed class SelectionButton : UIElement
 
     public SelectionButton(SpaceWandGUI parent)
     {
-        this.SetSize(ModAsset.Background.Size());
+        this.SetSize(ModAsset.RoundBackground.Size());
 
         _materialPiece = new SelectionPiece(
             GetText("SpaceWandGUI.PlaceType"),
@@ -95,7 +95,7 @@ public sealed class SelectionButton : UIElement
         Vector2 position = dimensions.Position() + this.GetSize() / 2f;
         Color color = Color.White * Opacity;
 
-        var background = ModAsset.Background.Value;
+        var background = ModAsset.RoundBackground.Value;
         spriteBatch.Draw(background, position, null, color, 0, background.Size() / 2f, 1f, 0, 0f);
 
         _materialPiece.DrawSelf(spriteBatch, this);

@@ -8,6 +8,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 using Terraria.ID;
+using ImproveGame.Common.Conditions;
 
 namespace ImproveGame.Content.Items;
 
@@ -358,10 +359,10 @@ public class MoveChest : ModItem
             .AddRecipeGroup(RecipeGroupID.IronBar, 6)
             .AddRecipeGroup(RecipeGroupID.Wood, 18)
             .AddIngredient(ItemID.Diamond)
-            .AddTile(TileID.Anvils).Register();
+            .AddTile(TileID.Anvils)
+            .AddCondition(ConfigCondition.AvailableMoveChestC)
+            .Register();
     }
-
-    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.MoveChest;
 
     #endregion
 }

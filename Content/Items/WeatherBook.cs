@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.Packets.Weather;
 
@@ -40,6 +41,7 @@ public sealed class WeatherBook : ModItem
             .AddIngredient(ItemID.FallenStar, 3)
             .AddRecipeGroup(RecipeSystem.AnyShadowScale, 5)
             .AddTile(TileID.WorkBenches)
+            .AddCondition(ConfigCondition.EnableWeatherControlC)
             .Register();
     }
 }

@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModSystems;
 using Terraria.ID;
 
 namespace ImproveGame.Content.Items.Placeable
@@ -6,8 +7,6 @@ namespace ImproveGame.Content.Items.Placeable
     public class ExtremeStorage : ModItem
     {
         public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
-
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.ExtremeStorage;
 
         public override void SetDefaults()
         {
@@ -32,6 +31,7 @@ namespace ImproveGame.Content.Items.Placeable
                 .AddIngredient(ItemID.FallenStar, 8)
                 .AddRecipeGroup(RecipeSystem.AnyGoldBar, 12)
                 .AddTile(TileID.Anvils)
+                .AddCondition(ConfigCondition.AvailableExtremeStorageC)
                 .Register();
         }
     }

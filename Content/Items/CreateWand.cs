@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common;
+using ImproveGame.Common.Conditions;
 using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
@@ -15,7 +16,6 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
 
     public enum TileSort { None, Block, Platform, Torch, Chair, Table, Workbench, Bed, Wall, NoWall }
 
-    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.CreateWand;
     public override bool AltFunctionUse(Player player) => true;
 
     private static Texture2D[] _prisons;
@@ -554,6 +554,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
             .AddRecipeGroup(RecipeGroupID.Wood, 24)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 12)
             .AddIngredient(ItemID.FallenStar, 2)
+            .AddCondition(ConfigCondition.AvailableCreateWandC)
             .Register();
     }
 }

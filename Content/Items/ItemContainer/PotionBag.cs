@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModHooks;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI.ItemContainer;
@@ -11,7 +12,6 @@ namespace ImproveGame.Content.Items.ItemContainer;
 
 public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable
 {
-    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PotionBag;
 
     string IItemContainer.Name => Item.Name;
     public List<Item> ItemContainer { get; private set; } = [];
@@ -286,7 +286,9 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
     {
         CreateRecipe()
             .AddIngredient(ItemID.Silk, 8)
-            .AddTile(TileID.WorkBenches).Register();
+            .AddTile(TileID.WorkBenches)
+            .AddCondition(ConfigCondition.AvailablePotionBagC)
+            .Register();
     }
 
     public bool OverrideHover(Item[] inventory, int context, int slot)
@@ -302,6 +304,13 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
         foreach (var sourceItem in items.Where(sourceItem => !sourceItem.IsAir && MeetEntryCriteria(sourceItem)))
         {
             ItemIntoContainer(sourceItem, false);
+        }
+
+        // 对光标位物品的特殊处理（inventory[58]是通过mouseItem.Clone来的，引用不是同一个，故需要特殊处理）
+        Main.mouseItem.stack = Main.LocalPlayer.inventory[58].stack;
+        if (Main.mouseItem.stack <= 0)
+        {
+            Main.mouseItem.TurnToAir();
         }
 
         SortContainer();

@@ -109,6 +109,9 @@ public class ImproveConfigs : ModConfig
     public bool NoConsume_Projectile;
 
     [DefaultValue(true)]
+    public bool NoConsume_Wire;
+
+    [DefaultValue(true)]
     public bool ImprovePrefix;
 
     [DefaultValue(true)]
@@ -264,6 +267,9 @@ public class ImproveConfigs : ModConfig
     public bool AlchemyGrassAlwaysBlooms;
 
     [DefaultValue(false)]
+    public bool PumpkinGrowsFaster;
+
+    [DefaultValue(false)]
     public bool StaffOfRegenerationAutomaticPlanting;
 
     [DefaultValue(true)]
@@ -409,6 +415,9 @@ public class ImproveConfigs : ModConfig
     [Slider]
     public int ExStorageSearchDistance;
 
+    [DefaultValue(false)]
+    public bool ICanSeeForeverAllBag;
+
     [DefaultValue(true)]
     public bool WorldFeaturePanel;
 
@@ -426,89 +435,6 @@ public class ImproveConfigs : ModConfig
 
     // [DefaultValue(true)]
     // public bool WandManaConsumption;
-
-    [ReloadRequired]
-    public ModItemLoadPage LoadModItems = new();
-
-    [SeparatePage]
-    public class ModItemLoadPage
-    {
-        [DefaultValue(true)]
-        public bool MagickWand = true;
-
-        [DefaultValue(true)]
-        public bool SpaceWand = true;
-
-        [DefaultValue(true)]
-        public bool StarburstWand = true;
-
-        [DefaultValue(true)]
-        public bool WallPlace = true;
-
-        [DefaultValue(true)]
-        public bool CreateWand = true;
-
-        [DefaultValue(true)]
-        public bool LiquidWand = true;
-
-        [DefaultValue(true)]
-        public bool LiquidWandAdvanced = true;
-
-        [DefaultValue(true)]
-        public bool PotionBag = true;
-
-        [DefaultValue(true)]
-        public bool BannerChest = true;
-
-        [DefaultValue(true)]
-        public bool Autofisher = true;
-
-        [DefaultValue(true)]
-        public bool PaintWand = true;
-
-        [DefaultValue(true)]
-        public bool ConstructWand = true;
-
-        [DefaultValue(true)]
-        public bool MoveChest = true;
-
-        [DefaultValue(true)]
-        public bool CoinOne = true;
-
-        [DefaultValue(true)]
-        public bool ExtremeStorage = true;
-
-        [DefaultValue(true)]
-        public bool DetectorDrone = true;
-
-        [DefaultValue(true)]
-        public bool BaitSupplier = true;
-
-        [DefaultValue(true)]
-        public bool ActuationRodMkII = true;
-
-        public override bool Equals(object obj)
-        {
-            if (obj is ModItemLoadPage other)
-                return MagickWand == other.MagickWand && SpaceWand == other.SpaceWand && StarburstWand == other.StarburstWand &&
-                       WallPlace == other.WallPlace && CreateWand == other.CreateWand && LiquidWand == other.LiquidWand &&
-                       PotionBag == other.PotionBag && BannerChest == other.BannerChest && Autofisher == other.Autofisher &&
-                       PaintWand == other.PaintWand && ConstructWand == other.ConstructWand && MoveChest == other.MoveChest &&
-                       CoinOne == other.CoinOne && ExtremeStorage == other.ExtremeStorage && DetectorDrone == other.DetectorDrone &&
-                       BaitSupplier == other.BaitSupplier && ActuationRodMkII == other.ActuationRodMkII && LiquidWandAdvanced == other.LiquidWandAdvanced;
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return new
-            {
-                MagickWand, SpaceWand, StarburstWand, WallPlace, CreateWand, LiquidWand, PotionBag,
-                BannerChest, Autofisher, PaintWand, ConstructWand, MoveChest, CoinOne, ExtremeStorage,
-                DetectorDrone, BaitSupplier, LiquidWandAdvanced, ActuationRodMkII
-            }.GetHashCode();
-        }
-    }
 
     #endregion
 
@@ -531,34 +457,6 @@ public class ImproveConfigs : ModConfig
 
     public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref NetworkText message)
     {
-        if (OnlyHostByPassword)
-        {
-            if (!NetPasswordSystem.Registered[whoAmI])
-            {
-                message = new NetworkText(
-                    GetText("Configs.ImproveConfigs.OnlyHostByPassword.Unaccepted"), NetworkText.Mode.Literal);
-            }
-            return NetPasswordSystem.Registered[whoAmI];
-        }
-
-        if (((ImproveConfigs)pendingConfig).OnlyHost != OnlyHost)
-        {
-            return TryAcceptChanges(whoAmI, ref message);
-        }
-        else if (OnlyHost)
-        {
-            return TryAcceptChanges(whoAmI, ref message);
-        }
-        return base.AcceptClientChanges(pendingConfig, whoAmI, ref message);
-    }
-
-    private static bool TryAcceptChanges(int whoAmI, ref NetworkText message)
-    {
-        if (NetMessage.DoesPlayerSlotCountAsAHost(whoAmI))
-            return true;
-
-        message = new NetworkText(
-            GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted"), NetworkText.Mode.Literal);
-        return false;
+        return MyUtils.AcceptClientChanges(Config, pendingConfig, whoAmI, ref message);
     }
 }

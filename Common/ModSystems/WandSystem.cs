@@ -8,6 +8,7 @@ namespace ImproveGame.Common.ModSystems
         public static bool FixedMode = true;
         public static bool TileMode = true;
         public static bool WallMode = true;
+        public static bool ChestMode = false;
 
         // 液体法杖
         public static bool AbsorptionMode = false;

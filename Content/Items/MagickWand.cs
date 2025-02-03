@@ -1,9 +1,11 @@
 ﻿using ImproveGame.Common;
+using ImproveGame.Common.Conditions;
 using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
+using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ID;
 
@@ -13,8 +15,7 @@ namespace ImproveGame.Content.Items
     {
         public bool WallMode;
         public bool TileMode;
-
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.MagickWand;
+        public bool ChestMode;
 
         public override bool ModifySelectedTiles(Player player, int i, int j)
         {
@@ -23,6 +24,7 @@ namespace ImproveGame.Content.Items
             {
                 TileMode = WandSystem.TileMode;
                 WallMode = WandSystem.WallMode;
+                ChestMode = WandSystem.ChestMode;
             }
 
             if (UIConfigs.Instance.ExplosionEffect && Main.netMode is not NetmodeID.Server)
@@ -31,13 +33,45 @@ namespace ImproveGame.Content.Items
                 BongBong(new Vector2(i, j) * 16f, 16, 16);
             }
 
-            if (Main.tile[i, j].WallType > 0 && WallMode)
+            var tile = Main.tile[i, j];
+            if (tile.WallType > 0 && WallMode)
             {
                 WorldGen.KillWall(i, j);
             }
 
-            if (TileMode && Main.tile[i, j].HasTile)
+            if (TileMode && tile.HasTile)
+            {
                 TryKillTile(i, j, player);
+                CheckChestDestroy(player, i, j);
+            }
+
+            return true;
+        }
+
+        private bool CheckChestDestroy(Player player, int i, int j)
+        {
+            var tile = Main.tile[i, j];
+            // 先一步if判断再下一步，不要每次都FindChestByGuessing，性能损耗太大
+            if (!TileID.Sets.IsAContainer[tile.TileType] || !ChestMode)
+                return false;
+
+            var origin = GetTileOrigin(i, j);
+            int chestIndex = Chest.FindChest(origin.X, origin.Y);
+            if (chestIndex == -1 || !Main.chest.IndexInRange(chestIndex))
+                return false;
+
+            var chest = Main.chest[chestIndex];
+            if (Chest.IsLocked(chest.x, chest.y) || chest?.item is null)
+            {
+                return false;
+            }
+
+            // 爆物品
+            for (int k = 0; k < chest.item.Length; k++)
+                if (!chest.item[k].IsAir)
+                    SpawnTileBreakItem(i, j, ref chest.item[k], "ChestBrokenFromBlastsWand");
+            // 爆箱子
+            TryKillTile(i, j, player);
             return true;
         }
 
@@ -127,7 +161,11 @@ namespace ImproveGame.Content.Items
                     }
 
                     if (WandSystem.TileMode && Main.tile[x, y].HasTile)
+                    {
                         TryKillTile(x, y, player);
+                        ChestMode = WandSystem.ChestMode;
+                        CheckChestDestroy(player, x, y);
+                    }
 
                     if (UIConfigs.Instance.ExplosionEffect)
                         BongBong(new Vector2(x, y) * 16f, 16, 16);
@@ -196,7 +234,8 @@ namespace ImproveGame.Content.Items
         {
             WallMode = WandSystem.WallMode;
             TileMode = WandSystem.TileMode;
-            writer.Write(new BitsByte(WallMode, TileMode));
+            ChestMode = WandSystem.ChestMode;
+            writer.Write(new BitsByte(WallMode, TileMode, ChestMode));
         }
 
         public override void NetReceive(BinaryReader reader)
@@ -204,6 +243,7 @@ namespace ImproveGame.Content.Items
             var bitsByte = (BitsByte)reader.ReadByte();
             WallMode = bitsByte[0];
             TileMode = bitsByte[1];
+            ChestMode = bitsByte[2];
         }
 
         public override void AddRecipes()
@@ -212,7 +252,9 @@ namespace ImproveGame.Content.Items
                 .AddRecipeGroup(RecipeGroupID.Wood, 18)
                 .AddIngredient(ItemID.JungleSpores, 6)
                 .AddIngredient(ItemID.Ruby, 1)
-                .AddTile(TileID.WorkBenches).Register();
+                .AddTile(TileID.WorkBenches)
+                .AddCondition(ConfigCondition.AvailableMagickWandC)
+                .Register();
         }
     }
 }

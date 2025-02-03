@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.UIFramework;
 using Terraria.DataStructures;
 
@@ -6,7 +7,6 @@ namespace ImproveGame.Content.Items
 {
     public class PaintWand : SelectorItem
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.PaintWand;
 
         public override bool ModifySelectedTiles(Player player, int i, int j)
         {
@@ -150,7 +150,9 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.Paintbrush, 1)
                 .AddIngredient(ItemID.PaintRoller, 1)
                 .AddIngredient(ItemID.PaintScraper, 1)
-                .AddTile(TileID.Anvils).Register();
+                .AddTile(TileID.Anvils)
+                .AddCondition(ConfigCondition.AvailablePaintWandC)
+                .Register();
         }
     }
 }

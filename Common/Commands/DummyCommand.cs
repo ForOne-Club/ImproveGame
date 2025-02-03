@@ -41,7 +41,7 @@ public class DummyCommand : ModCommand
                             }
 
                             caller.Reply(
-                                $"[{field.FieldType.Name}] {field.Name}: {field.GetValue(DummyNPC.Config)} ({annotate})",
+                                $"[{field.FieldType.Name}] {field.Name}: {field.GetValue(DummyNPC.LocalConfig)} ({annotate})",
                                 MyColor.Normal);
                         }
                     }
@@ -59,10 +59,12 @@ public class DummyCommand : ModCommand
                         {
                             try
                             {
-                                field.SetValueDirect(__makeref(DummyNPC.Config),
+                                field.SetValueDirect(__makeref(DummyNPC.LocalConfig),
                                     Convert.ChangeType(args[1], field.FieldType));
                                 caller.Reply(GetTextWith("NPC.DummyCommand_Success", new {name, args = args[1]}),
                                     MyColor.Success);
+
+                                SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
                                 return;
                             }
                             catch

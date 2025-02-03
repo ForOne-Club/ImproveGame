@@ -39,6 +39,10 @@ namespace ImproveGame.Common.GlobalItems
             if (Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0)
                 return true;
 
+            // 电线
+            if (Config.NoConsume_Wire &&  item.stack >= 3996 && item.type == ItemID.Wire)
+                return true;
+
             // 花园侏儒
             if (item.type is ItemID.GardenGnome)
                 return true;

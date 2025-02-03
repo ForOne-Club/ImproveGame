@@ -9,7 +9,8 @@ NPC: {
 	Immortal: 原版只有假人为 true, 绿叶弹会忽略追踪
 	NoGravity: 不受重力影响
 	NoTileCollide: 关闭物块碰撞检测
-	KnockBackResist: 击退抗性, 0 免疫击退
+	KnockBackResist: 击退系数, 0 免疫击退
+	AIStyle: 行为AI类型，请参考WIKI，默认-1
 	Dummy_Damage: 伤害: {S}/秒 {F}/帧
 	Dummy_Time: 时长: {S}秒 {F}帧
 	Dummy_FinalBlow: 最后一击: {FinalBlow}

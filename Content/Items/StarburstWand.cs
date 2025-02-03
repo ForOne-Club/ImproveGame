@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModSystems;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,7 +8,6 @@ namespace ImproveGame.Content.Items
 {
     public class StarburstWand : MagickWand
     {
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.StarburstWand;
 
         public override void SetItemDefaults()
         {
@@ -31,24 +31,24 @@ namespace ImproveGame.Content.Items
 
         public override void AddRecipes()
         {
-            // 没开法爆，但是开了星爆，用另一个合成表
-            if (!Config.LoadModItems.MagickWand)
-            {
-                CreateRecipe()
-                    .AddRecipeGroup(RecipeSystem.AnyCobaltBar, 10)
-                    .AddIngredient(ItemID.Diamond, 1)
-                    .AddIngredient(ItemID.FallenStar, 8)
-                    .AddIngredient(ItemID.SoulofLight, 6)
-                    .AddIngredient(ItemID.SoulofNight, 6)
-                    .AddTile(TileID.CrystalBall).Register();
-                return;
-            }
+            CreateRecipe()
+                .AddRecipeGroup(RecipeSystem.AnyCobaltBar, 10)
+                .AddIngredient(ItemID.Diamond, 1)
+                .AddIngredient(ItemID.FallenStar, 8)
+                .AddIngredient(ItemID.SoulofLight, 6)
+                .AddIngredient(ItemID.SoulofNight, 6)
+                .AddTile(TileID.CrystalBall)
+                .AddCondition(ConfigCondition.NotAvailableMagickWandC)
+                .AddCondition(ConfigCondition.AvailableStarburstWandC)
+                .Register();
 
             CreateRecipe().AddIngredient(ModContent.ItemType<MagickWand>())
                 .AddIngredient(ItemID.FallenStar, 8)
                 .AddIngredient(ItemID.SoulofLight, 6)
                 .AddIngredient(ItemID.SoulofNight, 6)
-                .AddTile(TileID.CrystalBall).Register();
+                .AddTile(TileID.CrystalBall)
+                .AddCondition(ConfigCondition.AvailableStarburstWandC)
+                .Register();
         }
     }
 }

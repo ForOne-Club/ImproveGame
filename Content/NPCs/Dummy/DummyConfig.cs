@@ -4,6 +4,17 @@ namespace ImproveGame.Content.NPCs.Dummy;
 
 public struct DummyConfig
 {
+    public enum AIType
+    {
+        Default = -1,
+        Slime = 1,
+        EvilEye = 2,
+        Soilder = 3,
+        GoldenFish = 16,
+        JellyFish = 18,
+        HugeMimic = 87,
+        SelfDefine = 124
+    }
     [Annotate]
     public bool LockHP = true;
     [Annotate]
@@ -26,6 +37,7 @@ public struct DummyConfig
     public bool NoTileCollide = true;
     [Annotate]
     public float KnockBackResist = 0f;
-
+    //[Annotate]
+    //public AIType AIStyle = AIType.Default;
     public DummyConfig() { }
 }

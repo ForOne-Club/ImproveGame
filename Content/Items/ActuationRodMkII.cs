@@ -1,8 +1,9 @@
-﻿namespace ImproveGame.Content.Items;
+﻿using ImproveGame.Common.Conditions;
+
+namespace ImproveGame.Content.Items;
 
 public class ActuationRodMkII : SelectorItem
 {
-    public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.ActuationRodMkII;
 
     public override bool IsNeedKill() => !Main.mouseLeft;
 
@@ -58,6 +59,7 @@ public class ActuationRodMkII : SelectorItem
             .AddIngredient(ItemID.Wire, 500)
             .AddIngredient(ItemID.Lever, 10)
             .AddTile(TileID.AlchemyTable)
+            .AddCondition(ConfigCondition.AvailableActuationRodMkIIC)
             .Register();
     }
 }

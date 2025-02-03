@@ -12,6 +12,7 @@ public class PresetHandler
     public static string ConfigPresetsPath => Path.Combine(Paths.SavePath, "ConfigPresets");
     private const string FileNameModConfig = "ImproveConfigs.json";
     private const string FileNameUIConfig = "UIConfigs.json";
+    private const string FileNameModItemConfig = "AvailableModItemConfigs.json";
 
     public static readonly JsonSerializerSettings SerializerSettings = new ()
     {
@@ -78,6 +79,9 @@ public class PresetHandler
 
         string jsonUIConfig = JsonConvert.SerializeObject(UIConfigs.Instance, SerializerSettings);
         File.WriteAllText(Path.Combine(path, FileNameUIConfig), jsonUIConfig);
+
+        string jsonModItemConfig = JsonConvert.SerializeObject(AvailableConfig, SerializerSettings);
+        File.WriteAllText(Path.Combine(path, FileNameModItemConfig), jsonModItemConfig);
     }
 
     /// <summary>
@@ -91,6 +95,7 @@ public class PresetHandler
 
         var modConfigPath = Path.Combine(path, FileNameModConfig);
         var uiConfigPath = Path.Combine(path, FileNameUIConfig);
+        var modItemConfigPath = Path.Combine(path, FileNameModItemConfig);
 
         if (File.Exists(modConfigPath))
         {
@@ -102,6 +107,12 @@ public class PresetHandler
         {
             var jsonUIConfig = File.ReadAllText(uiConfigPath);
             LoadAndApplyConfig<UIConfigs>(jsonUIConfig);
+        }
+
+        if (File.Exists(modItemConfigPath))
+        {
+            var jsonModItemConfig = File.ReadAllText(modItemConfigPath);
+            LoadAndApplyConfig<AvailableModItemConfigs>(jsonModItemConfig);
         }
     }
 

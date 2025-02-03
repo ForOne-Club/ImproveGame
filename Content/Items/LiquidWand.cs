@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
 using Terraria.ModLoader.IO;
 using Terraria.ID;
+using ImproveGame.Common.Conditions;
 
 namespace ImproveGame.Content.Items
 {
@@ -22,8 +23,6 @@ namespace ImproveGame.Content.Items
         public short LiquidMode = 0;
 
         public bool AbsorptionMode;
-
-        public override bool IsLoadingEnabled(Mod mod) => Config.LoadModItems.LiquidWand;
 
         // 修改物块
         public override void PostModifyTiles(Player player, int minI, int minJ, int maxI, int maxJ)
@@ -272,6 +271,7 @@ namespace ImproveGame.Content.Items
                 .AddRecipeGroup(RecipeSystem.AnyShadowScale, 8)
                 .AddRecipeGroup(RecipeSystem.AnyGoldBar, 6)
                 .AddTile(TileID.Anvils)
+                .AddCondition(ConfigCondition.AvailableLiquidWandC)
                 .Register();
         }
 

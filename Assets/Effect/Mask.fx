@@ -6,7 +6,7 @@ sampler picker : register(s2); // 取点图
 float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
 {
     float4 pickerColor = tex2D(picker, coords);
-    if (any(pickerColor) && pickerColor.a > 0.2)
+    if (pickerColor.a > 0.2)
         return tex2D(mask, coords);
     else
         return tex2D(background, coords);

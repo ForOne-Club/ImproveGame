@@ -18,6 +18,7 @@ namespace ImproveGame.UI
         private RoundButton modeButton;
         private RoundButton tileButton;
         private RoundButton wallButton;
+        private RoundButton chestButton;
 
         public AnimationTimer Timer;
 
@@ -27,8 +28,8 @@ namespace ImproveGame.UI
 
             Timer = new() { OnClosed = () => Visible = false };
 
-            fixedModeButton = ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/FixedMode");
-            freeModeButton = ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/FreeMode");
+            fixedModeButton = ModAsset.FixedMode;
+            freeModeButton = ModAsset.FreeMode;
 
             modeButton = new(fixedModeButton);
             modeButton.OnLeftMouseDown += SwitchMode;
@@ -37,7 +38,7 @@ namespace ImproveGame.UI
             modeButton.Selected += () => true;
             Append(modeButton);
 
-            tileButton = new(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/TileMode"));
+            tileButton = new(ModAsset.TileMode);
             tileButton.OnMouseOver += MouseOver;
             tileButton.OnMouseOut += MouseOut;
             tileButton.Selected += () => WandSystem.TileMode;
@@ -49,7 +50,7 @@ namespace ImproveGame.UI
             };
             Append(tileButton);
 
-            wallButton = new(ModContent.Request<Texture2D>("ImproveGame/Assets/Images/UI/Brust/WallMode"));
+            wallButton = new(ModAsset.WallMode);
             wallButton.OnMouseOver += MouseOver;
             wallButton.OnMouseOut += MouseOut;
             wallButton.Selected += () => WandSystem.WallMode;
@@ -60,6 +61,18 @@ namespace ImproveGame.UI
                 WandSystem.WallMode = !WandSystem.WallMode;
             };
             Append(wallButton);
+
+            chestButton = new(ModAsset.ChestMode);
+            chestButton.OnMouseOver += MouseOver;
+            chestButton.OnMouseOut += MouseOut;
+            chestButton.Selected += () => WandSystem.ChestMode;
+            chestButton.OnLeftMouseDown += (_, _) =>
+            {
+                if (Timer.AnyClose)
+                    return;
+                WandSystem.ChestMode = !WandSystem.ChestMode;
+            };
+            Append(chestButton);
         }
 
         private void MouseOut(UIMouseEvent evt, UIElement listeningElement)
@@ -80,7 +93,8 @@ namespace ImproveGame.UI
                 Close();
             }
 
-            if (Main.LocalPlayer.dead || Main.mouseItem.type > ItemID.None || Main.LocalPlayer.HeldItem?.ModItem is not MagickWand)
+            if (Main.LocalPlayer.dead || Main.mouseItem.type > ItemID.None ||
+                Main.LocalPlayer.HeldItem?.ModItem is not MagickWand)
             {
                 Close();
             }
@@ -98,7 +112,8 @@ namespace ImproveGame.UI
             base.Update(gameTime);
             if (Timer.AnyClose)
                 return;
-            if (wallButton.IsMouseHovering || tileButton.IsMouseHovering || modeButton.IsMouseHovering)
+            if (wallButton.IsMouseHovering || tileButton.IsMouseHovering || chestButton.IsMouseHovering ||
+                modeButton.IsMouseHovering)
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
@@ -113,6 +128,8 @@ namespace ImproveGame.UI
             tileButton.SetCenterPixels(center + new Vector2(-1, 0) * length).Recalculate();
             wallButton.Opacity = Timer.Schedule;
             wallButton.SetCenterPixels(center + new Vector2(1, 0) * length).Recalculate();
+            chestButton.Opacity = Timer.Schedule;
+            chestButton.SetCenterPixels(center + new Vector2(0, -1) * length).Recalculate();
             modeButton.Opacity = Timer.Schedule;
             Recalculate();
         }

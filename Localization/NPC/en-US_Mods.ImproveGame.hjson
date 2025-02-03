@@ -9,7 +9,8 @@ NPC: {
 	Immortal: Setting this to 'True' will make it behave like the vanilla Target Dummy, meaning that homing attacks won't target it.
 	NoGravity: Not Affected By Gravity
 	NoTileCollide: Disable Tile Collision
-	KnockBackResist: Knockback resistance, 0 gives knockback immunity
+	KnockBackResist: Knockback coefficient, 0 gives knockback immunity
+	AIStyle: AI Style, Please refer to the WIKI, default -1
 	Dummy_Damage: Damage: {S}/second, {F}/tick
 	Dummy_Time: Duration: {S} seconds, {F} ticks
 	Dummy_FinalBlow: Last Hit: {FinalBlow}
