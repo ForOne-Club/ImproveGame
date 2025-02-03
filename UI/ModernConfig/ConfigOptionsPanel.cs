@@ -183,7 +183,7 @@ public sealed class ConfigOptionsPanel : SUIPanel
     public void AddDictionary(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionDictionary>(config, nameOrMemberInfo);
     public void AddVector2(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionVector2>(config, nameOrMemberInfo);
     public void AddColor(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionColor>(config, nameOrMemberInfo);
-
+    public void AddDefinition(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionDefinition>(config, nameOrMemberInfo);
     public void AddNotSupportText(ModConfig config, PropertyFieldWrapper variableInfo) => AddToAllOptions<OptionNotSupportText>(config, variableInfo);
 
     private void AddToAllOptions<T>(ModConfig config, object nameOrMemberInfo) where T : ModernConfigOption

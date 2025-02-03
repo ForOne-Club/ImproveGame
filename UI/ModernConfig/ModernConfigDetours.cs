@@ -45,7 +45,7 @@ public class ModernConfigDetours : ILoadable
             return;
         bool flag = self.selectedMod.Name == "ImproveGame";
         if (!(flag || true)) return;
-        string text = flag ? "Mods.ImproveGame.ModernConfig.Name" : (self.selectedMod.Name + "总控面板(测试功能)");
+        string text = flag ? "Mods.ImproveGame.ModernConfig.Name" : "Mods.ImproveGame.ModernConfig.Name_ModConfig";
         var configPanel = new UIButton<LocalizedText>(Language.GetText(text))
         {
             MaxWidth = { Percent = 0.95f },

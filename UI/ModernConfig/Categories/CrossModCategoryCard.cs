@@ -48,12 +48,8 @@ namespace ImproveGame.UI.ModernConfig.Categories
             else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                 panel.AddDictionary(config, variable);
             //panel.AddNotSupportText(config, variable);
-
             else if (type.IsSubclassOf(typeof(EntityDefinition)))
-            {
-                panel.AddNotSupportText(config, variable);
-
-            }
+                panel.AddDefinition(config, variable); // panel.AddNotSupportText(config, variable);
             else
                 panel.AddObject(config, variable);
             //panel.AddNotSupportText(config, variable);

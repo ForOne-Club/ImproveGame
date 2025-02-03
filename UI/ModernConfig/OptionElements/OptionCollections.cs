@@ -266,6 +266,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     optionObject = optionO;
                 if (target is OptionCollections optionC)
                     optionObject = optionC;
+                if(target is OptionDefinition optionD)
+                    optionObject = optionD;
             }
             optionObject.Recalculate();
             optionObject.Parent?.Recalculate();

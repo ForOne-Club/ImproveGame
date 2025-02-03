@@ -51,7 +51,7 @@ public class ModernConfigOption : TimerView
         else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             option = new OptionDictionary();
         else if (type.IsSubclassOf(typeof(EntityDefinition)))
-            option = new OptionNotSupportText();
+            option = new OptionDefinition();
         else
             option = new OptionObject();
 
