@@ -2,6 +2,7 @@
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.UIStructs;
+using MonoMod.RuntimeDetour;
 using ReLogic.Graphics;
 using System.Reflection;
 using System.Text;
@@ -25,6 +26,12 @@ public class TerrariaVanillaUIResetter : ModSystem
         if (Main.dedServ || !UIConfigs.Instance.ResetNativeUI)
         {
             return;
+        }
+
+        // hookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+        if (typeof(Hook).GetMethod("CheckSupported", BindingFlags.Instance | BindingFlags.NonPublic) is { } hook_CheckSupported)
+        {
+            MonoModHooks.Add(hook_CheckSupported, (Action<Hook> orig, Hook self) => { });
         }
 
         // 修改原版 UI 裁切算法
