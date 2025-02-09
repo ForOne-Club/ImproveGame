@@ -223,7 +223,7 @@ GraniteCaveGlobe: {
 # NotFound在世界上没有足够的微光液体的情况下显示
 AetherGlobe: {
 	BiomeName: The Aether
-	NotFound: 未能找到足够大的微光湖
+	NotFound: Couldn't find any Shimmer liquid
 	Reveal: "{0} marked up {ImproveGame.Mods.Items.AetherGlobe.BiomeName} on the map."
 }
 
