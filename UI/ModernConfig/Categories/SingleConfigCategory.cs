@@ -24,6 +24,5 @@ namespace ImproveGame.UI.ModernConfig.Categories
             }
         }
         public override string Label => config.DisplayName.Value;
-        public override string Tooltip => "螺线反射生成的配置界面\n目前只支持布尔 整数 单双精度浮点 枚举";
     }
 }
