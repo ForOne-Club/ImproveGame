@@ -49,6 +49,20 @@ AboutPage_ModConfig: {
 		'''
 }
 
+SingleConfigCategory.Tooltip:
+	'''
+	Configuration Interface Generated Based on Reflection
+	In addition to the basic functionalities of the original configuration interface, new features have been added:
+	-Colors now have a better setup interface. Whether HSL mode is enabled or not, 
+	 both RGBA and HSL will be enabled simultaneously, and the hexadecimal code (Hex) can be edited.
+	 Left-click on the color block to copy the hexadecimal code.
+	 Right-click on the color block to paste.
+	 Middle-click to toggle expansion.
+	 The button next to the expand button will display the sliders in a more detailed and vibrant form.
+	-Lists and other elements can now be resized by dragging the bottom edge.
+	-Elements within lists and arrays can be dragged to reorder them.
+	'''
+
 Presets: {
 	Label: Presets
 	Tooltip: There are presets by Quality of Terraria for batch configuration. You may also create your own presets

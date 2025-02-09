@@ -1,6 +1,8 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Graphics2D;
 using ReLogic.Graphics;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace ImproveGame.UIFramework.SUIElements;
 
@@ -174,18 +176,25 @@ public class SUIScrollView2 : TimerView
         #endregion
     }
 
+    static FieldInfo scrollWhellValueField;
     public override void ScrollWheel(UIScrollWheelEvent evt)
     {
+        float delta = 0;
         switch (ScrollOrientation)
         {
             case Orientation.Horizontal:
+                float origX = ScrollBar.TargetScrollPosition.X;
                 ScrollBar.TargetScrollPosition -= new Vector2(evt.ScrollWheelValue, 0f);
+                delta = ScrollBar.TargetScrollPosition.X - origX;
                 break;
             case Orientation.Vertical or _:
+                float origY = ScrollBar.TargetScrollPosition.Y;
                 ScrollBar.TargetScrollPosition -= new Vector2(0f, evt.ScrollWheelValue);
+                delta = ScrollBar.TargetScrollPosition.Y - origY;
                 break;
         }
-
+        scrollWhellValueField ??= typeof(UIScrollWheelEvent).GetField("ScrollWheelValue", BindingFlags.Public | BindingFlags.Instance);
+        scrollWhellValueField.SetValue(evt, evt.ScrollWheelValue + (int)delta);
         base.ScrollWheel(evt);
     }
 

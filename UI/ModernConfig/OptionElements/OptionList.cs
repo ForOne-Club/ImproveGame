@@ -68,6 +68,7 @@ public class OptionList : OptionCollections
             int idx = i;
             e.OnLeftMouseDown += (evt, elem) =>
             {
+                var dimension = elem.GetDimensions();
                 if (evt.Target != elem) return;
 
                 var c = 0;
@@ -79,10 +80,16 @@ public class OptionList : OptionCollections
                 }
                 var pos = new Vector2(0,h);
                 offset = evt.MousePosition - pos;
-                e.RelativeMode = RelativeMode.None;
-                e.Remove();
-                e.JoinParent(OptionView.MaskView);
-                currentDraggingOption = e;
+
+
+                float deltaY = evt.MousePosition.Y - OptionView.GetDimensions().Y - h;
+                if (deltaY < elem.Height.Pixels * .5f)
+                {
+                    e.RelativeMode = RelativeMode.None;
+                    e.Remove();
+                    e.JoinParent(OptionView.MaskView);
+                    currentDraggingOption = e;
+                }
             };
             e.OnUpdate += (elem) =>
             {

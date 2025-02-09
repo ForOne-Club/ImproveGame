@@ -34,6 +34,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             private readonly IList<Color> array;
             private readonly int index;
             internal Color current;
+            internal Vector3 hsl;
             internal List<OptionSlider> sliders = [];
             [LabelKey("$Config.Color.Red.Label")]
             public byte Red
@@ -42,6 +43,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 set
                 {
                     current.R = value;
+                    UpdateHSL();
                     Update();
                 }
             }
@@ -53,6 +55,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 set
                 {
                     current.G = value;
+                    UpdateHSL();
                     Update();
                 }
             }
@@ -64,6 +67,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 set
                 {
                     current.B = value;
+                    UpdateHSL();
                     Update();
                 }
             }
@@ -71,39 +75,42 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             [LabelKey("$Config.Color.Hue.Label")]
             public float Hue
             {
-                get => Main.rgbToHsl(current).X;
+                get => hsl.X;
                 set
                 {
                     byte a = Alpha;
                     current = Main.hslToRgb(value, Saturation, Lightness);
                     current.A = a;
                     Update();
+                    hsl.X = value;
                 }
             }
 
             [LabelKey("$Config.Color.Saturation.Label")]
             public float Saturation
             {
-                get => Main.rgbToHsl(current).Y;
+                get => hsl.Y;
                 set
                 {
                     byte a = Alpha;
                     current = Main.hslToRgb(Hue, value, Lightness);
                     current.A = a;
                     Update();
+                    hsl.Y = value;
                 }
             }
 
             [LabelKey("$Config.Color.Lightness.Label")]
             public float Lightness
             {
-                get => Main.rgbToHsl(current).Z;
+                get => hsl.Z;
                 set
                 {
                     byte a = Alpha;
                     current = Main.hslToRgb(Hue, Saturation, value);
                     current.A = a;
                     Update();
+                    hsl.Z = value;
                 }
             }
 
@@ -145,6 +152,18 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     array[index] = current;
                 foreach (var s in sliders)
                     s.SetColorPendingModified();
+            }
+
+            private void UpdateHSL() 
+            {
+                Vector3 neoHsl = Main.rgbToHsl(current);
+                if (neoHsl.Z != 0 && neoHsl.Z != 1) //只有亮度不为1或0时剩下两个才有意义
+                {
+                    hsl.Y = neoHsl.Y;
+                    if (neoHsl.Y != 0) //只有饱和度不为0色调才有意义
+                        hsl.X = neoHsl.X;
+                }
+                hsl.Z = neoHsl.Z;
             }
 
             public ColorHandler(PropertyFieldWrapper memberInfo, object item)
@@ -195,6 +214,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         public IList<Color> ColorList { get; set; }
         ColorHandler c;
         Color currentColor;
+        Vector3 currentHSL;
         View colorPanel;
         View colorfulSliderButton;
         bool colorfulMode;
@@ -369,7 +389,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     dragging = true;
                     currentDragTarget = hueButton;
                 }
-                v = Vector2.Transform(v, Matrix.CreateRotationZ(Main.rgbToHsl(currentColor).X * MathHelper.TwoPi));
+                v = Vector2.Transform(v, Matrix.CreateRotationZ(currentHSL.X * MathHelper.TwoPi));
                 if (MathF.Abs(v.X) + MathF.Abs(v.Y) < 0.3)
                 {
                     dragging = true;
@@ -463,7 +483,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 float ls = v.LengthSquared();
                 if (currentDragTarget == hueButton)
                     c.Hue = (v.ToRotation() + 6.283f) % 6.283f / 6.283f;
-                v = Vector2.Transform(v, Matrix.CreateRotationZ(-Main.rgbToHsl(currentColor).X * MathHelper.TwoPi));
+                v = Vector2.Transform(v, Matrix.CreateRotationZ(-currentHSL.X * MathHelper.TwoPi));
                 if (currentDragTarget == slButton)
                 {
                     c.Saturation = MathHelper.Clamp(v.X / .6f + .5f, 0.01f, 1);
@@ -500,8 +520,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             gbButton.SetPos(default, MathHelper.Lerp(0.2f, 0.8f, currentColor.G / 255f), MathHelper.Lerp(0.1f, 0.7f, currentColor.B / 255f));
 
-            var hsl = Main.rgbToHsl(currentColor);
-            hueButton.SetPos(default, MathF.Cos(hsl.X * MathHelper.TwoPi) * .35f + .5f, MathF.Sin(hsl.X * MathHelper.TwoPi) * .35f + .5f);
+            var hsl = currentHSL;
+            hueButton.SetPos(new(1f), MathF.Cos(hsl.X * MathHelper.TwoPi) * .37f + .5f, MathF.Sin(hsl.X * MathHelper.TwoPi) * .37f + .5f);
 
             var vec = new Vector2(hsl.Y * .6f - .3f, (hsl.Z * .6f - .3f) * (1 - 2 * MathF.Abs(hsl.Y - .5f)));
             vec = Vector2.Transform(vec, Matrix.CreateRotationZ(hsl.X * MathHelper.TwoPi));
@@ -541,9 +561,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 "Green" => t => colorfulMode ? currentColor with { A = 255, G = (byte)(255 * t) } : Color.Black * 0.3f,
                 "Blue" => t => colorfulMode ? currentColor with { A = 255, B = (byte)(255 * t) } : Color.Black * 0.3f,
                 "Alpha" => t => colorfulMode ? currentColor with { A = 255 } * t : Color.Black * 0.3f,
-                "Hue" => t => colorfulMode ? Main.hslToRgb(Main.rgbToHsl(currentColor) with { X = t }) : Color.Black * 0.3f,
-                "Saturation" => t => colorfulMode ? Main.hslToRgb(Main.rgbToHsl(currentColor) with { Y = t }) : Color.Black * 0.3f,
-                "Lightness" or _ => t => colorfulMode ? Main.hslToRgb(Main.rgbToHsl(currentColor) with { Z = t }) : Color.Black * 0.3f,
+                "Hue" => t => colorfulMode ? Main.hslToRgb(currentHSL with { X = t }) : Color.Black * 0.3f,
+                "Saturation" => t => colorfulMode ? Main.hslToRgb(currentHSL with { Y = t }) : Color.Black * 0.3f,
+                "Lightness" or _ => t => colorfulMode ? Main.hslToRgb(currentHSL with { Z = t }) : Color.Black * 0.3f,
             });
             c.sliders.Add(slider);
             base.OnWrapOption(option);
@@ -554,6 +574,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             Matrix matrix = GetMatrix(true);
             //currentColor = c.current;
             currentColor = c.current with { A = 255 };
+            currentHSL = c.hsl;
             base.DrawChildren(spriteBatch);
             //var dimension = GetDimensions();
             //SDFGraphics.NoBorderRoundedBox(dimension.Position() + new Vector2(dimension.Width - 400, 8), default, new Vector2(180, 30), new(16), currentColor, matrix);
@@ -572,7 +593,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 DrawRGBPanel(RgbPanel.GetDimensions().Position(), RgbPanel.GetDimensions().Size(), currentColor);
                 //DrawRGBPanel(RgbPanel.GetDimensions().Position(), RgbPanel.GetDimensions().Size(), currentColor);
 
-                DrawHSLRing(HslRing.GetDimensions().Position(), HslRing.GetDimensions().Size(), Main.rgbToHsl(currentColor));
+                DrawHSLRing(HslRing.GetDimensions().Position(), HslRing.GetDimensions().Size(), currentHSL);
 
                 SDFGraphics.HasBorderRound(gbButton.GetDimensions().Position(), new(.5f), 8f, currentColor, 1, currentDragTarget == gbButton ? UIStyle.SliderRoundHover : Color.Black * .3f, matrix);
 

@@ -358,11 +358,11 @@ public class ModernConfigOption : TimerView
 
     private bool CantOperateDueToHostVerification =>
         Config.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient &&
-        MyUtils.Config.OnlyHost && !Main.countsAsHostForGameplay[Main.myPlayer];
+        (Config is not ImproveConfigs configs || configs.OnlyHost) && !Main.countsAsHostForGameplay[Main.myPlayer];
 
     private bool CantOperateDueToPasswordVerification =>
         Config.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient &&
-        MyUtils.Config.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered;
+        (Config is not ImproveConfigs configs || configs.OnlyHostByPassword) && !NetPasswordSystem.LocalPlayerRegistered;
 
     private bool CantOperateDueToOnlyGetter =>
         !VariableInfo.CanWrite;

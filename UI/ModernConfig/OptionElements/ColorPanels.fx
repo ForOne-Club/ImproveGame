@@ -51,11 +51,14 @@ float4 HSLRing(PSInput input) : COLOR0
 {
 	float2 coord = input.Texcoord - .5;
 	float ls = dot(coord,coord);
-	if (ls > 0.09 && ls < 0.16)
-		return float4(hslToRGB(atan2(coord.y, coord.x) / 6.283, uHsl.y, uHsl.z), 1.0);
+	//if (ls > 0.09 && ls < 0.16)
+	//	return float4(hslToRGB(atan2(coord.y, coord.x) / 6.283, uHsl.y, uHsl.z), 1.0);
+	if (ls > 0.0961 && ls < 0.1849) //.31^2ºÍ.43^2
+		return float4(hslToRGB(atan2(coord.y, coord.x) / 6.283, uHsl.y, uHsl.z), 1.0) * saturate((0.74 * sqrt(ls) - ls - 0.1333) / 0.0011);
 	coord = mul(uHueRotation, coord);
-	if (abs(coord.x) + abs(coord.y) < 0.3)
-		return float4(hslToRGB(uHsl.x, coord.x / 0.6 + 0.5, coord.y / (0.3 - abs(coord.x)) * .5 + 0.5), 1.0);
+	ls = abs(coord.x) + abs(coord.y);
+	if (ls < 0.31)
+		return float4(hslToRGB(uHsl.x, coord.x / 0.62 + 0.5, coord.y / (0.31 - abs(coord.x)) * .5 + 0.5), 1.0) * saturate((0.0961 - ls * ls) / 0.0061);
 	return float4(0.0, 0.0, 0.0, 0.0);
 }
 
