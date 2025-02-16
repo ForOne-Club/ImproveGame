@@ -173,6 +173,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
     public void AddEnum(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionDropdownList>(config, nameOrMemberInfo);
 
     public void AddObject(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionObject>(config, nameOrMemberInfo);
+    public void AddCustomUIConfig(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionCustomUIConfig>(config, nameOrMemberInfo);
     public void AddArray(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionArray>(config, nameOrMemberInfo);
     public void AddList(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionList>(config, nameOrMemberInfo);
     public void AddHashSet(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionHashSet>(config, nameOrMemberInfo);

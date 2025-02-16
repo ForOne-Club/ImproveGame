@@ -153,6 +153,8 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             // 绘制
             SDFGraphics.HasBorderRound(roundLeftTop, default, roundDiameter, innerColor, 2f, borderColor, GetMatrix(true));
         }
+
+        public void OutSideEditEnd()=> EndDraggingCallback?.Invoke();
     }
     private Utils.ColorLerpMethod _colorLerpMethod;
     public void SetColorMethod(Utils.ColorLerpMethod colorMethod) 
@@ -199,8 +201,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             pair = (0.0, 255.0);
         else if (type == typeof(sbyte))
             pair = (-128.0, 127.0);
-
-        if (VariableInfo.IsProperty) //如果是属性就可以玩得花一点(x
+        if (VariableInfo.IsProperty && false) //如果是属性就可以玩得花一点(x
         {
             if (type == typeof(short))
                 pair = (-32768.0, 32767.0);
@@ -357,7 +358,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     {
         //if (!Interactable) return;
         object realValue = Convert.ChangeType(IsFractional ? value : Math.Round(value), VarType);
-        SetValueDirect(realValue);
+        SetValueDirect(realValue,broadcast);
         //ConfigHelper.SetConfigValue(Config, VariableInfo, realValue, Item, broadcast, path: path);
     }
 
@@ -391,4 +392,5 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             _slideBox.Value = value;
         }
     }
+    public void OutSideEditEnd() => _slideBox?.OutSideEditEnd();
 }

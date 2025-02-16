@@ -12,6 +12,7 @@ using ImproveGame.UIFramework.SUIElements;
 using System.ComponentModel;
 using System.Reflection;
 using Terraria.ModLoader.UI;
+using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
@@ -41,38 +42,34 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             };
             panel.JoinParent(this);
 
-            if (true) 
+            double m = IncrementAttribute != null ? (sliderX.Max - sliderX.Min) / sliderX.Increment.Value : 7;
+            int n = (int)m;
+
+            for (int u = 0; u <= n; u++)
             {
-                double m = IncrementAttribute != null?(sliderX.Max - sliderX.Min) / sliderX.Increment.Value:7;
-                int n = (int)m;
-
-                for (int u = 0; u <= n; u++) 
+                var icBarX = new View()
                 {
-                    var icBarX = new View()
-                    {
-                        Left = new(2+92* u / (float)m,0 ),
-                        Width = new(4, 0),
-                        Height = new(100, 0),
-                        RelativeMode = RelativeMode.None,
-                        Rounded = new(1.0f),
-                        BgColor = Color.Black * .2f,
-                        IgnoresMouseInteraction = true
-                    };
-                    var icBarY = new View()
-                    {
-                        Top = new(2+ 92*u / (float)m,0 ),
-                        Width = new(100, 0),
-                        Height = new(4, 0),
-                        RelativeMode = RelativeMode.None,
-                        Rounded = new(1.0f),
-                        BgColor = Color.Black * .2f,
-                        IgnoresMouseInteraction= true
-                    };
-                    icBarX.JoinParent(panel);
-                    icBarY.JoinParent(panel);
-                }
+                    Left = new(2 + 92 * u / (float)m, 0),
+                    Width = new(4, 0),
+                    Height = new(100, 0),
+                    RelativeMode = RelativeMode.None,
+                    Rounded = new(1.0f),
+                    BgColor = Color.Black * .2f,
+                    IgnoresMouseInteraction = true
+                };
+                var icBarY = new View()
+                {
+                    Top = new(2 + 92 * u / (float)m, 0),
+                    Width = new(100, 0),
+                    Height = new(4, 0),
+                    RelativeMode = RelativeMode.None,
+                    Rounded = new(1.0f),
+                    BgColor = Color.Black * .2f,
+                    IgnoresMouseInteraction = true
+                };
+                icBarX.JoinParent(panel);
+                icBarY.JoinParent(panel);
             }
-
 
 
             var barX = new View()
@@ -163,6 +160,10 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             point.OnLeftMouseUp += (evt, elem) =>
             {
                 dragging = false;
+                if (!lockX)
+                    sliderX.OutSideEditEnd();
+                if (!lockY)
+                    sliderY.OutSideEditEnd();
             };
             panel.OnLeftMouseUp += (evt, elem) =>
             {
@@ -184,6 +185,13 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             controlBarX.Recalculate();
             controlBarY.Recalculate();
             base.Update(gameTime);
+        }
+        protected override void OnSetDefault(object value)
+        {
+            Vector2 vec = (Vector2)value;
+            sliderX.LerpValue = Utils.GetLerpValue((float)sliderX.Min, (float)sliderX.Max, vec.X);
+            sliderY.LerpValue = Utils.GetLerpValue((float)sliderY.Min, (float)sliderY.Max, vec.Y);
+            base.OnSetDefault(value);
         }
         OptionSlider sliderX;
         OptionSlider sliderY;

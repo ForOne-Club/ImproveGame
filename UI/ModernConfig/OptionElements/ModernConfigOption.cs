@@ -33,8 +33,8 @@ public class ModernConfigOption : TimerView
             option = new OptionSlider();
         else if (type == typeof(Vector2))
             option = new OptionVector2();
-        else if(type == typeof(Color))
-            option = new OptionColor(); 
+        else if (type == typeof(Color))
+            option = new OptionColor();
         else if (type.IsEnum)
             option = new OptionDropdownList();
         else if (type == typeof(string))
@@ -54,6 +54,11 @@ public class ModernConfigOption : TimerView
             option = new OptionDefinition();
         else
             option = new OptionObject();
+        //{
+        //    var attri = ConfigManager.GetCustomAttributeFromMemberThenMemberType<CustomModConfigItemAttribute>(variable, item, list);
+        //    option = attri != null ? new OptionCustomUIConfig() : new OptionObject();
+
+        //}
 
         option.index = index;
         option.List = (IList)list;
@@ -79,7 +84,7 @@ public class ModernConfigOption : TimerView
         /*if (parent.Parent.Parent is SUIScrollViewDraggingSortable scroll)
             scroll.AddToList(option);
         else*/
-            option.JoinParent(parent);
+        option.JoinParent(parent);
 
         return option;
     }
@@ -140,7 +145,7 @@ public class ModernConfigOption : TimerView
 
 
     }
-    protected void SetValueDirect(object value)
+    protected void SetValueDirect(object value, bool broadCast = true)
     {
         if (!Interactable) return;
 
@@ -151,7 +156,7 @@ public class ModernConfigOption : TimerView
             owner?.SetValueDirect(item);
         }
         else
-            ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, path: path, List: List, Index: index);
+            ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadCast, path, List, index);
 
     }
     protected T GetAttribute<T>() where T : Attribute => ConfigManager.GetCustomAttributeFromMemberThenMemberType<T>(VariableInfo, Item, List);
@@ -269,18 +274,23 @@ public class ModernConfigOption : TimerView
             string passwordTip = GetText("Configs.ImproveConfigs.OnlyHostByPassword.Tips");
             UICommon.TooltipMouseText(passwordTip);
         }
+        //else if (CantOperateDueToCustomCondition(out var networkText)) 
+        //{
+        //    string tip = networkText.ToString();
+        //    UICommon.TooltipMouseText(tip);
+        //}
     }
 
     private void DrawDebugText(SpriteBatch spriteBatch)
     {
         if (!UIConfigs.Instance.ShowMoreData)
             return;
-        
+
         var dimensions = GetDimensions();
         var dimensionsRect = dimensions.ToRectangle();
         var position = dimensions.Position();
         var size = dimensions.Size();
-        
+
         // 文字
         var text = DebugText ?? "";
         var textPosition = dimensionsRect.Top();
@@ -291,6 +301,11 @@ public class ModernConfigOption : TimerView
             Color.Gray, Color.Black, 0f, Vector2.Zero, new Vector2(0.8f), -1f, 1f);
     }
 
+
+    protected virtual void OnSetDefault(object value)
+    {
+
+    }
     public override void RightMouseDown(UIMouseEvent evt)
     {
         base.RightMouseDown(evt);
@@ -298,6 +313,7 @@ public class ModernConfigOption : TimerView
         var defaultValueAttribute = GetAttribute<DefaultValueAttribute>();
         if (defaultValueAttribute != null)
         {
+            OnSetDefault(defaultValueAttribute.Value);
             SetValueDirect(defaultValueAttribute.Value);
             //ConfigHelper.SetConfigValue(Config, VariableInfo, defaultValueAttribute.Value, Item, path: path);
             SoundEngine.PlaySound(SoundID.Chat);
@@ -358,17 +374,23 @@ public class ModernConfigOption : TimerView
 
     private bool CantOperateDueToHostVerification =>
         Config.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient &&
-        (Config is not ImproveConfigs configs || configs.OnlyHost) && !Main.countsAsHostForGameplay[Main.myPlayer];
+        (Config is ImproveConfigs configs && configs.OnlyHost) && !Main.countsAsHostForGameplay[Main.myPlayer];
 
     private bool CantOperateDueToPasswordVerification =>
         Config.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient &&
-        (Config is not ImproveConfigs configs || configs.OnlyHostByPassword) && !NetPasswordSystem.LocalPlayerRegistered;
+        (Config is ImproveConfigs configs && configs.OnlyHostByPassword) && !NetPasswordSystem.LocalPlayerRegistered;
 
     private bool CantOperateDueToOnlyGetter =>
         !VariableInfo.CanWrite;
 
     private bool CantOperateInGame =>
-        ReloadRequired || CantOperateDueToPasswordVerification || CantOperateDueToHostVerification;
+        ReloadRequired || CantOperateDueToPasswordVerification || CantOperateDueToHostVerification;//|| CantOperateDueToCustomCondition(out _);
+
+    private bool CantOperateDueToCustomCondition(out NetworkText text)
+    {
+        text = NetworkText.FromKey("tModLoader.ModConfigAccepted");
+        return Config.AcceptClientChanges(Config, Main.myPlayer, ref text);
+    }
 
     private bool MarkedAsFavorite =>
         FavoritedOptionDatabase.FavoritedOptions.Contains($"{Config.Name}.{OptionName}") &&

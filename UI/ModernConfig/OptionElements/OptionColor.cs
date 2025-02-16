@@ -33,6 +33,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             private readonly object item;
             private readonly IList<Color> array;
             private readonly int index;
+            private int hslImmuneCount;//用来锁hsl防止编辑它们的时候因为另外四个的变化函数又间接编辑到它们
             internal Color current;
             internal Vector3 hsl;
             internal List<OptionSlider> sliders = [];
@@ -82,6 +83,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     current = Main.hslToRgb(value, Saturation, Lightness);
                     current.A = a;
                     Update();
+                    hslImmuneCount = 4;
                     hsl.X = value;
                 }
             }
@@ -96,6 +98,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     current = Main.hslToRgb(Hue, value, Lightness);
                     current.A = a;
                     Update();
+                    hslImmuneCount = 4;
                     hsl.Y = value;
                 }
             }
@@ -110,6 +113,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     current = Main.hslToRgb(Hue, Saturation, value);
                     current.A = a;
                     Update();
+                    hslImmuneCount = 4;
                     hsl.Z = value;
                 }
             }
@@ -138,6 +142,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                         current.R = (byte)r;
                         current.G = (byte)g;
                         current.B = (byte)b;
+                        UpdateHSL();
                         //current.packedValue = result;
                         Update();
                     }
@@ -156,6 +161,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             private void UpdateHSL() 
             {
+                if (hslImmuneCount-->=0) return;
                 Vector3 neoHsl = Main.rgbToHsl(current);
                 if (neoHsl.Z != 0 && neoHsl.Z != 1) //只有亮度不为1或0时剩下两个才有意义
                 {
@@ -229,6 +235,11 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         bool dragging;
         View currentDragTarget;
         static Asset<Effect> colorPanelEffect = ModAsset.ColorPanels;
+        void OutSideEditEnd() 
+        {
+            foreach (var slider in c.sliders) 
+                slider.OutSideEditEnd();
+        }
         protected override void OnBind()
         {
             ColorList = (IList<Color>)List;
@@ -280,7 +291,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 Left = new(-30, 1),
                 Top = new(8, 0),
                 RelativeMode = RelativeMode.None,
-                Rounded = new(2)
+                Rounded = new(12)
             };
             colorfulSliderButton.OnLeftClick += (evt, elem) =>
             {
@@ -401,12 +412,14 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 dragging = false;
                 currentDragTarget = null;
+                OutSideEditEnd();
             };
 
             hslRing.OnLeftMouseUp += (evt, elem) =>
             {
                 dragging = false;
                 currentDragTarget = null;
+                OutSideEditEnd();
             };
 
 
@@ -439,21 +452,25 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 dragging = false;
                 currentDragTarget = null;
+                OutSideEditEnd();
             };
             gbButton.OnLeftMouseUp += (evt, elem) =>
             {
                 dragging = false;
                 currentDragTarget = null;
+                OutSideEditEnd();
             };
             hueButton.OnLeftMouseUp += (evt, elem) =>
             {
                 dragging = false;
                 currentDragTarget = null;
+                OutSideEditEnd();
             };
             slButton.OnLeftMouseUp += (evt, elem) =>
             {
                 dragging = false;
                 currentDragTarget = null;
+                OutSideEditEnd();
             };
 
 
@@ -586,8 +603,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             if (expanded)
             {
                 if (colorfulSliderButton.IsMouseHovering)
-                    SDFGraphics.NoBorderRound(colorfulDimension.Center() + new Vector2(1), new(.5f), 24, UIStyle.SliderRoundHover, matrix);
-                SDFRectangle.BarColor(colorfulDimension.Position(), colorfulDimension.Size(), colorPanel.Rounded, TextureAssets.Extra[180].Value, Vector2.UnitX * .05f, 0, true);
+                    SDFGraphics.NoBorderRound(colorfulDimension.Center() + new Vector2(1), new(.5f), 28, UIStyle.SliderRoundHover, matrix);
+                SDFRectangle.BarColor(colorfulDimension.Position(), colorfulDimension.Size(), colorfulSliderButton.Rounded, TextureAssets.Extra[180].Value, Vector2.UnitX * .05f, 0, true);
 
 
                 DrawRGBPanel(RgbPanel.GetDimensions().Position(), RgbPanel.GetDimensions().Size(), currentColor);
@@ -609,6 +626,15 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         {
             base.DrawSelf(spriteBatch);
 
+        }
+        protected override void OnSetDefault(object value)
+        {
+            var color = (Color)value;
+            c.Red = color.R;
+            c.Green = color.G;
+            c.Blue = color.B;
+            c.Alpha = color.A;
+            base.OnSetDefault(value);
         }
     }
 }

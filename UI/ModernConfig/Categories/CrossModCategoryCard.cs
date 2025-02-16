@@ -50,8 +50,23 @@ namespace ImproveGame.UI.ModernConfig.Categories
             //panel.AddNotSupportText(config, variable);
             else if (type.IsSubclassOf(typeof(EntityDefinition)))
                 panel.AddDefinition(config, variable); // panel.AddNotSupportText(config, variable);
-            else
-                panel.AddObject(config, variable);
+            else 
+            {
+                try
+                {
+                    //if (ConfigManager.GetCustomAttributeFromMemberThenMemberType<CustomModConfigItemAttribute>(variable, null, null) != null)
+                    //    panel.AddCustomUIConfig(config, variable);
+                    //else
+                        panel.AddObject(config, variable);
+
+                }
+                catch 
+                {
+                    panel.AddNotSupportText(config, variable);
+
+                }
+            }
+                //panel.AddObject(config, variable);
             //panel.AddNotSupportText(config, variable);
         }
         public override int ItemIconId => iconID;
