@@ -98,7 +98,7 @@ public static class ConfigHelper
         }
     }
 
-    public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, object item, bool broadcast = true, List<string> path = null, IList List = null, int Index = -1)
+    public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, object item, bool broadcast = true, bool pending = false, List<string> path = null, IList List = null, int Index = -1)
     {
         Type type = List != null ? List[Index].GetType() : variableInfo.Type;
         if (value != null && type != value.GetType())
@@ -159,13 +159,18 @@ public static class ConfigHelper
             // 本地配置，或者处于服务器端，或者处于客户端，但不需要广播
             //variableInfo.SetValue(item, value);
             InternalSetValue(config, variableInfo, value, item, path, List, Index);
-            ConfigManager.Save(config);
-            //ConfigManager.Load(modConfig);
-            modConfig.OnChanged();
+
+            if (!pending) 
+            {
+                ConfigManager.Save(config);
+                //ConfigManager.Load(modConfig);
+                modConfig.OnChanged();
+            }
+
         }
     }
     //public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, bool broadcast = true) => SetConfigValue(config, variableInfo, value, config, broadcast);
-    public static string GetModText(string modName, string str,out bool hasValue, params object[] arg)
+    public static string GetModText(string modName, string str, out bool hasValue, params object[] arg)
     {
         string key = $"Mods.{modName}.{str}";
         string text = Language.GetTextValue(key, arg);
@@ -175,7 +180,7 @@ public static class ConfigHelper
     public static string GetLocalizationKey(ModConfig config, string optionName)
         => $"Configs.{config.Name}.{optionName}";
 
-    public static string GetTooltip(ModConfig config, string optionName) 
+    public static string GetTooltip(ModConfig config, string optionName)
     {
         string result = GetModText(config.Mod.Name, $"{GetLocalizationKey(config, optionName)}.Tooltip", out bool hasValue);
         return hasValue ? result : "";

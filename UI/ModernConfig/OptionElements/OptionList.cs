@@ -78,8 +78,8 @@ public class OptionList : OptionCollections
                     h += OptionView.ListView.Elements[c].Height.Pixels;
                     c++;
                 }
-                var pos = new Vector2(0,h);
-                offset = evt.MousePosition - pos;
+                var pos = new Vector2(0, h - OptionView.ScrollBar.TargetScrollPosition.Y);
+                offset = evt.MousePosition - pos - GetDimensions().Position();
 
 
                 float deltaY = evt.MousePosition.Y - OptionView.GetDimensions().Y - h;
@@ -88,6 +88,7 @@ public class OptionList : OptionCollections
                     e.RelativeMode = RelativeMode.None;
                     e.Remove();
                     e.JoinParent(OptionView.MaskView);
+                    OptionView.Recalculate();
                     currentDraggingOption = e;
                 }
             };
@@ -95,7 +96,7 @@ public class OptionList : OptionCollections
             {
                 if (currentDraggingOption == null || currentDraggingOption != elem) 
                     return;
-                var pos = Main.MouseScreen - offset;
+                var pos = Main.MouseScreen - offset - GetDimensions().Position();
                 e.SetPosPixels(pos);
                 e.Recalculate();
             };

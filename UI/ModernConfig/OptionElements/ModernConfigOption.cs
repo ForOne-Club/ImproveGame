@@ -53,6 +53,8 @@ public class ModernConfigOption : TimerView
             option = new OptionDictionary();
         else if (type.IsSubclassOf(typeof(EntityDefinition)))
             option = new OptionDefinition();
+        else if (type == typeof(object))
+            option = new OptionNotSupportText();
         else
             option = new OptionObject();
         //{
@@ -81,7 +83,17 @@ public class ModernConfigOption : TimerView
                 option.path.AddRange(parentOption.path);
             option.path.Add(parentOption.VariableInfo.Name);
         }*/
-        option.Bind(modConfig, variable);
+        try
+        {
+            option.Bind(modConfig, variable);
+
+        }
+        catch
+        {
+            option = new OptionNotSupportText();
+            option.Bind(modConfig, variable);
+
+        }
         /*if (parent.Parent.Parent is SUIScrollViewDraggingSortable scroll)
             scroll.AddToList(option);
         else*/
@@ -158,7 +170,7 @@ public class ModernConfigOption : TimerView
             owner?.SetValueDirect(item);
         }
         else
-            ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadCast, path, List, index);
+            ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadCast, false, path, List, index);
 
     }
     protected T GetAttribute<T>() where T : Attribute => ConfigManager.GetCustomAttributeFromMemberThenMemberType<T>(VariableInfo, Item, List);

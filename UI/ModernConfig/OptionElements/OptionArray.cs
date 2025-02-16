@@ -44,6 +44,7 @@ public class OptionArray : OptionCollections
         {
             var e = WrapIt(OptionView.ListView, Config, VariableInfo, Item, array, itemType, i, this);
             int idx = i;
+            
             e.OnLeftMouseDown += (evt, elem) =>
             {
                 if (evt.Target != elem) return;
@@ -54,9 +55,8 @@ public class OptionArray : OptionCollections
                     h += OptionView.ListView.Elements[c].Height.Pixels;
                     c++;
                 }
-                var pos = new Vector2(0, h - OptionView.ScrollBar.TargetScrollPosition.Y);
-                offset = evt.MousePosition - pos;
-
+                var pos = new Vector2(0, h - OptionView.ScrollBar.TargetScrollPosition.Y);// 
+                offset = evt.MousePosition - pos-GetDimensions().Position();
 
                 float deltaY = evt.MousePosition.Y - OptionView.GetDimensions().Y - h;
                 if (deltaY < elem.Height.Pixels * .5f) 
@@ -64,6 +64,7 @@ public class OptionArray : OptionCollections
                     e.RelativeMode = RelativeMode.None;
                     e.Remove();
                     e.JoinParent(OptionView.MaskView);
+                    OptionView.Recalculate();
                     currentDraggingOption = e;
                 }
 
@@ -72,7 +73,7 @@ public class OptionArray : OptionCollections
             {
                 if (currentDraggingOption == null || currentDraggingOption != elem)
                     return;
-                var pos = Main.MouseScreen - offset;
+                var pos = Main.MouseScreen - GetDimensions().Position() - offset;// + new Vector2(0, OptionView.ScrollBar.TargetScrollPosition.Y);
                 e.SetPosPixels(pos);
                 e.Recalculate();
             };

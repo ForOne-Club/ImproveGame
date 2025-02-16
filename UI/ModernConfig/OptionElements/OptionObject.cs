@@ -23,7 +23,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         //在内部取消折叠按钮
         protected override void OnBind()
         {
-            
+
             //var box = new View
             //{
             //    IsAdaptiveWidth = true,
@@ -104,7 +104,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             pendingChanges = true;
         }
-        protected virtual void ObjectToOption(object data) 
+        protected virtual void ObjectToOption(object data)
         {
             foreach (PropertyFieldWrapper variable in ConfigManager.GetFieldsAndProperties(data))
             {
@@ -134,7 +134,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             Height.Set(Math.Min((OptionView.ListView.Children.Any() ? OptionView.ListView.Height.Pixels : 0) + 70, 360), 0);//不知道为什么MaxHeight不管用了
             pendingChanges = true;
         }
-        protected virtual void OnWrapOption(ModernConfigOption option) 
+        protected virtual void OnWrapOption(ModernConfigOption option)
         {
 
         }
@@ -154,9 +154,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (SeparatePage && !innerPage) 
+            if (SeparatePage && !innerPage)
             {
-                if(!pendingChanges)
+                if (!pendingChanges)
                     return;
                 InitialButton.Remove();
                 if (GetValue() == null)
@@ -185,6 +185,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             if (dragging && !innerPage)
             {
                 showMaxHeight = Main.MouseScreen.Y - mousePos.Y + oldHeight;
+                showMaxHeight = Math.Max(150, showMaxHeight); // 别拖没了
                 pendingChanges = true;
             }
             #endregion
@@ -202,8 +203,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 if (NullAllowedAttribute != null)
                     DeleteButton.JoinParent(this);
-                if(!innerPage)
-                ExpandButton.JoinParent(this);
+                if (!innerPage)
+                    ExpandButton.JoinParent(this);
                 if (expanded)
                     OptionView.JoinParent(this);
             }
@@ -225,14 +226,17 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         }
         public override void Recalculate()
         {
-            if (!expanded || GetValue() == null ||(SeparatePage && !innerPage))
+            if (!expanded || GetValue() == null || (SeparatePage && !innerPage))
             {
                 Height.Set(46, 0);
                 base.Recalculate();
                 return;
             }
             float h = OptionView.ListView.GetDimensions().Height + 70;
-            h = Utils.Clamp(h, 70, innerPage?214514:showMaxHeight);
+
+            h = Utils.Clamp(h, 70, innerPage ? 214514 : showMaxHeight);
+            if (h < showMaxHeight)
+                showMaxHeight = h;
             Height.Set(h, 0f);
             Parent?.Height.Set(h, 0f);
             base.Recalculate();
@@ -243,6 +247,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         bool dragging;
         public override void LeftMouseDown(UIMouseEvent evt)
         {
+            //ModernConfigUI.PopNewInfo("我去是新信息耶耶耶(", evt.MousePosition - ModernConfigUI.Instance.MainPanel.GetDimensions().Position(),Color.Cyan);
             if (SeparatePage) return;
             var dimension = GetDimensions();
             if (evt.Target == this && evt.MousePosition.Y > dimension.Y + .9f * dimension.Height)
@@ -264,27 +269,31 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         }
         public override void LeftClick(UIMouseEvent evt)
         {
-            object data = GetValue();
-            if (SeparatePage && data != null)
+            if (SeparatePage && evt.Target == this)
             {
-                List<KeyValuePair<PropertyFieldWrapper, ModConfig>> list = [];
-                //List<KeyValuePair<PropertyFieldWrapper, ModConfig>> list = [new(VariableInfo, Config)];
-                foreach (PropertyFieldWrapper variable in ConfigManager.GetFieldsAndProperties(data))
+                object data = GetValue();
+                if (data != null)
                 {
-                    if (Attribute.IsDefined(variable.MemberInfo, typeof(JsonIgnoreAttribute)))
-                        continue;
-                    list.Add(new(variable, Config));
-                    //WrapIt(OptionView.ListView, Config, variable, data, owner: this);
+                    List<KeyValuePair<PropertyFieldWrapper, ModConfig>> list = [];
+                    //List<KeyValuePair<PropertyFieldWrapper, ModConfig>> list = [new(VariableInfo, Config)];
+                    foreach (PropertyFieldWrapper variable in ConfigManager.GetFieldsAndProperties(data))
+                    {
+                        if (Attribute.IsDefined(variable.MemberInfo, typeof(JsonIgnoreAttribute)))
+                            continue;
+                        list.Add(new(variable, Config));
+                        //WrapIt(OptionView.ListView, Config, variable, data, owner: this);
+                    }
+                    ConfigOptionsPanel.GlobalItem = data;
+                    CrossModCategoryCard card = new CrossModCategoryCard(list);
+                    ConfigOptionsPanel.CurrentCategory = card;
+                    ConfigOptionsPanel.GlobalItem = null;
+                    //ConfigOptionsPanel.GlobalItem = Item;
+                    //CrossModCategoryCard card = new CrossModCategoryCard(list);
+                    //ConfigOptionsPanel.CurrentCategory = card;
+                    //(ConfigOptionsPanel.Instance.AllOptions[0] as OptionObject).innerPage = true;
+                    //ConfigOptionsPanel.GlobalItem = null;
                 }
-                ConfigOptionsPanel.GlobalItem = data;
-                CrossModCategoryCard card = new CrossModCategoryCard(list);
-                ConfigOptionsPanel.CurrentCategory = card;
-                ConfigOptionsPanel.GlobalItem = null;
-                //ConfigOptionsPanel.GlobalItem = Item;
-                //CrossModCategoryCard card = new CrossModCategoryCard(list);
-                //ConfigOptionsPanel.CurrentCategory = card;
-                //(ConfigOptionsPanel.Instance.AllOptions[0] as OptionObject).innerPage = true;
-                //ConfigOptionsPanel.GlobalItem = null;
+
             }
             base.LeftClick(evt);
         }

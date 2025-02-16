@@ -10,7 +10,12 @@ ColorCopiedPopup: Hex copied!
 ColorPastedPopup: Hex pasted!
 ColorButtonTip: Left-click on the color block to copy the hexadecimal code. Right-click on the color block to paste.
 ModdedExtraText: Editing the config of {0}. This page is provided by Quality of Terraria.
-CollectionsTip: You can adjust the display size by dragging the bottom of the view area, and elements can be reordered by dragging.
+CollectionsTip: You can adjust the display size by dragging the bottom of the view area, and elements of List or Array can be reordered by dragging it's up half.
+NotSupportText:
+	'''
+	Property or field {0}({1}) 
+	Type {2} not supported yet, Click to goto vanilla tModLoader's config UI to edit it.
+	'''
 
 AboutPage: {
 	Label: About
@@ -40,7 +45,7 @@ AboutPage_ModConfig: {
 
 		Report crashes/issues via our [c/7289da:Discord]. Comments under steam workshop won't be checked.
 
-		Feature created by [c/9966cc:LogSpiral] from Quality of Terraria Team.
+		Feature created by [c/9966cc:LogSpiral] and [c/9966cc:Cyril] from Quality of Terraria Team.
 
 		Modders implementing cross-mod support should refer to the Mod.Call documentation in our GitHub repository's README.md file.
 		'''

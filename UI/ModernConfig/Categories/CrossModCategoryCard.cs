@@ -50,6 +50,8 @@ namespace ImproveGame.UI.ModernConfig.Categories
             //panel.AddNotSupportText(config, variable);
             else if (type.IsSubclassOf(typeof(EntityDefinition)))
                 panel.AddDefinition(config, variable); // panel.AddNotSupportText(config, variable);
+            else if (type == typeof(object))
+                panel.AddNotSupportText(config, variable);
             else
             {
                 try

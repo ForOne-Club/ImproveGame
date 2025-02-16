@@ -23,10 +23,11 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         {
             var variable = VariableInfo;
             //TODO 本地化+对多级嵌套的正确支持
+
+            
             var text = new SUIText
             {
-                TextOrKey = $"属性 {ConfigHelper.GetLabel(Config, variable.Name)}({variable.Name}) \n类型 {variable.Type} 不受支持, 请前往普通模组配置修改",
-                UseKey = true,
+                TextOrKey = Language.GetTextValue("Mods.ImproveGame.ModernConfig.NotSupportText", [ConfigHelper.GetLabel(Config, variable.Name), variable.Name, variable.Type]),
                 TextAlign = new Vector2(0f),
                 IsWrapped = true,
                 Width = { Precent = 1f },

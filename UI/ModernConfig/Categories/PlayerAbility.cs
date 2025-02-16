@@ -10,7 +10,6 @@ public sealed class PlayerAbility : Category
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         var uiConfig = UIConfigs.Instance;
-        panel.AddObject(Config, nameof(Config.ILoveBalance));
         panel.AddToggle(Config, nameof(Config.SuperVault));
         panel.AddToggle(Config, nameof(Config.SuperVoidVault));
         panel.AddToggle(Config, nameof(Config.SmartVoidVault));

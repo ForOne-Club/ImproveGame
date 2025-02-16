@@ -10,7 +10,12 @@ ColorCopiedPopup: 已复制Hex！
 ColorPastedPopup: 已粘贴Hex！
 ColorButtonTip: 左键点击颜色块复制十六进制码，右键点击颜色块粘贴
 ModdedExtraText: 正在编辑{0}的配置，该页面由更好的体验提供
-CollectionsTip: 可以拖动显示区域底部来调整显示大小，元素可以用鼠标拖动来重新排序
+CollectionsTip: 可以拖动显示区域底部来调整显示大小，数组或者列表元素可以用鼠标拖动它的上半部分来重新排序
+NotSupportText:
+	'''
+	属性 {0}({1}) 
+	类型 {2} 不受支持, 点击以前往普通模组配置修改
+	'''
 
 AboutPage: {
 	Label: 关于
@@ -38,7 +43,7 @@ AboutPage_ModConfig: {
 		基本可以替代tModLoader原版的配置界面，但可能不支持某些特殊的配置项，点击不受支持的选项可直接跳转到原版配置
 		如果出现崩溃或报错问题，也可加入我们的QQ群或Discord反馈
 
-		由更好的体验团队成员[c/9966cc:错数螺线]制作
+		由更好的体验团队成员[c/9966cc:错数螺线]和[c/9966cc:Cyril]制作
 
 		要添加跨模组支持的Modder，请参考更好的体验GitHub仓库README.md文件中关于Mod.Call的部分
 		'''

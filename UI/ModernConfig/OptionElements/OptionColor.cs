@@ -143,7 +143,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                         current.R = (byte)r;
                         current.G = (byte)g;
                         current.B = (byte)b;
-                        UpdateHSL();
+                        for (int n = 0; n < 3; n++)
+                            UpdateHSL();
                         //current.packedValue = result;
                         Update();
                     }
@@ -162,7 +163,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             private void UpdateHSL()
             {
-                if (hslImmuneCount-->=0) return;
+                if (hslImmuneCount-- >= 0) return;
                 Vector3 neoHsl = Main.rgbToHsl(current);
                 if (neoHsl.Z != 0 && neoHsl.Z != 1) //只有亮度不为1或0时剩下两个才有意义
                 {
@@ -237,9 +238,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         bool dragging;
         View currentDragTarget;
         static Asset<Effect> colorPanelEffect = ModAsset.ColorPanels;
-        void OutSideEditEnd() 
+        void OutSideEditEnd()
         {
-            foreach (var slider in c.sliders) 
+            foreach (var slider in c.sliders)
                 slider.OutSideEditEnd();
         }
         protected override void OnBind()

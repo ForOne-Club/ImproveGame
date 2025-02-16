@@ -51,6 +51,19 @@ public sealed class ModernConfigUI : UIState
         AnchorPositionOffsetByPixels = Vector2.Zero
     };
 
+    public static void PopNewInfo(string info, Vector2 position,Color color)
+    {
+        Instance.noticeTimer = 120;
+        Instance.noticeColor = color;
+        Instance.PopNotice.TextOrKey = info;
+        Instance.PopNoticePanel.SetPos(position);
+
+        Instance.PopNoticePanel.Recalculate();
+    }
+    public int noticeTimer;
+    public Color noticeColor;
+    public SUIText PopNotice;
+    public View PopNoticePanel;
     public override void OnInitialize()
     {
         const int gapBetweenPanels = 20;
@@ -119,6 +132,16 @@ public sealed class ModernConfigUI : UIState
         }.WithFadedMouseOver();
         backButton.OnLeftClick += (_, _) => Close();
 
+        PopNoticePanel = new()
+        {
+            Padding = 4f,
+            Rounded = new(8),
+            IgnoresMouseInteraction = true
+        };
+        PopNoticePanel.JoinParent(MainPanel);
+        PopNotice = new();
+        PopNotice.JoinParent(PopNoticePanel);
+
         this.Append(backButton);
     }
 
@@ -183,7 +206,7 @@ public sealed class ModernConfigUI : UIState
     public void Close()
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
-
+        noticeTimer = 0;
         Enabled = false;
         if (!Main.gameMenu)
         {
@@ -209,6 +232,25 @@ public sealed class ModernConfigUI : UIState
         // 适配即时风格切换
         MainPanel.BorderColor = ConfigColors.MainPanelBorder;
         MainPanel.BgColor = ConfigColors.MainPanelBg;
+
+        if (noticeTimer-- > 0)
+        {
+            float k = noticeTimer switch
+            {
+                > 105 => MathHelper.SmoothStep(0, 1, (120 - noticeTimer) / 15f),
+                > 30 => 1f,
+                _ => MathHelper.SmoothStep(0, 1, noticeTimer / 30f)
+            };
+            PopNoticePanel.BorderColor = Color.Lerp(ConfigColors.MainPanelBorder,Color.Black,.5f) * k;
+            PopNoticePanel.BgColor = Color.Lerp(ConfigColors.MainPanelBg, Color.Black, .5f) * k;
+            //PopNoticePanel.SetSize(PopNotice.TextSize * k + new Vector2(8));
+            PopNotice.TextColor = noticeColor * k;
+            PopNotice.TextBorderColor = Color.Black * k;
+            PopNotice.RecalculateText();
+            //PopNoticePanel.SetPos(0, 0, 0, 0.5f);
+            //PopNoticePanel.HAlign = 0.5f;
+            PopNoticePanel.Recalculate();
+        }
     }
 
     public void GenerateParticleAtMouse()

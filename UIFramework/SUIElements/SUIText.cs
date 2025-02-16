@@ -223,7 +223,6 @@ public class SUIText : TimerView
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
-
         var inner = GetInnerDimensions();
 
         if (LastString != OriginalString || (_isWrapped && LastInnerWidth != inner.Width))
