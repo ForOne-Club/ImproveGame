@@ -120,11 +120,10 @@ public class SUIDropdownListContainer : View
         DropdownCaller = caller;
 
         // 决定高度
-        float containerHeight = dimensions.Height - 10;
-        float containerCapHeight = containerHeight - 20;
+        float containerBottom = dimensions.ToRectangle().Bottom - 10;
         float optionsHeight = DropdownOption.ElementHeight * count + 10;
         float maximumHeight = 340; // 不要太长，限制高度
-        float height = Min(containerCapHeight, optionsHeight, maximumHeight);
+        float height = Min(optionsHeight, maximumHeight);
         _dropdownList.SetSizePixels(width, height);
 
         // 决定位置，x和y给的是屏幕坐标
@@ -132,9 +131,13 @@ public class SUIDropdownListContainer : View
         // 限制在UI界面内
         x -= dimensions.X;
         float bottom = y + height;
-        if (bottom > containerHeight)
+        if (bottom > containerBottom)
         {
-            _dropdownList.SetPosPixels(x, containerHeight - height);
+            // 计算屏幕坐标
+            var scrnY = containerBottom - height;
+            // 计算对父元素的相对坐标
+            var relativeY = scrnY - dimensions.Y;
+            _dropdownList.SetPosPixels(x, relativeY);
         }
         else
         {

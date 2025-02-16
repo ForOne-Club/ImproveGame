@@ -27,27 +27,27 @@ public sealed class CategorySidePanel : SUIPanel
     //static Dictionary<Mod, Action<Mod, Dictionary<string, CategoryCard>>> cardAddingProcesses = [];
     internal static readonly Dictionary<string, CategoryCard> Cards = [];
 
-    public static Dictionary<Mod, List<Category>> ModedCards = [];
+    public static Dictionary<Mod, List<Category>> ModdedCards = [];
 
-    public static Dictionary<Mod, Category> ModedAboutPage = [];
+    public static Dictionary<Mod, Category> ModdedAboutPage = [];
 
     public static void RemoveCategory(Mod mod)
     {
-        if (ModedCards.TryGetValue(mod, out var dict))
+        if (ModdedCards.TryGetValue(mod, out var dict))
             dict.Clear();
     }
 
     public static void RegisterCategory(Mod mod, Category category)
     {
-        if (!ModedCards.TryGetValue(mod, out var list))
+        if (!ModdedCards.TryGetValue(mod, out var list))
         {
             list = [];
-            ModedCards.Add(mod, list);
+            ModdedCards.Add(mod, list);
         }
         list.Add(category);
     }
 
-    public static void RegisterCategory(Mod mod, List<KeyValuePair<PropertyFieldWrapper, ModConfig>> variables, int itemIconID = 0, Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string> getTooltip = null) 
+    public static void RegisterCategory(Mod mod, List<KeyValuePair<PropertyFieldWrapper, ModConfig>> variables, int itemIconID = 0, Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string> getTooltip = null)
     {
         CrossModCategoryCard categoryCard = new CrossModCategoryCard(variables, itemIconID, getIconTexture, getLabel, getTooltip);
 
@@ -57,7 +57,7 @@ public sealed class CategorySidePanel : SUIPanel
     public static void RegisterCategory(Mod mod, List<KeyValuePair<string, ModConfig>> variables, int itemIconID = 0, Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string> getTooltip = null)
     {
         List<KeyValuePair<PropertyFieldWrapper, ModConfig>> variables_member = [];
-        foreach (var pair in variables) 
+        foreach (var pair in variables)
         {
             var configType = pair.Value.GetType();
             var fieldInfo = configType.GetField(pair.Key);
@@ -74,13 +74,13 @@ public sealed class CategorySidePanel : SUIPanel
 
         RegisterCategory(mod, categoryCard);
     }
-    public static void SetAboutPage(Mod mod, Category category) => ModedAboutPage[mod] = category;
+    public static void SetAboutPage(Mod mod, Category category) => ModdedAboutPage[mod] = category;
 
-    public static void SetAboutPage(Mod mod, Func<string> getAboutText, int itemIconID = 0, Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string> getTooltip = null) 
-        => ModedAboutPage[mod] = new AboutPage_CrossMod(getAboutText,itemIconID,getIconTexture,getLabel,getTooltip);
+    public static void SetAboutPage(Mod mod, Func<string> getAboutText, int itemIconID = 0, Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string> getTooltip = null)
+        => ModdedAboutPage[mod] = new AboutPage_CrossMod(getAboutText, itemIconID, getIconTexture, getLabel, getTooltip);
 
-        
-    public static void RemoveAboutPage(Mod mod) => ModedAboutPage.Remove(mod);
+
+    public static void RemoveAboutPage(Mod mod) => ModdedAboutPage.Remove(mod);
 
     private SUIScrollView2 Categories { get; set; }
 
@@ -126,7 +126,7 @@ public sealed class CategorySidePanel : SUIPanel
                 card.JoinParent(Categories.ListView);
         else
         {
-            if (!ModedAboutPage.TryGetValue(mod, out var page))
+            if (!ModdedAboutPage.TryGetValue(mod, out var page))
                 new CategoryCard(AboutPage_ModConfig).JoinParent(Categories.ListView);
             else
                 new CategoryCard(page).JoinParent(Categories.ListView);
@@ -134,11 +134,15 @@ public sealed class CategorySidePanel : SUIPanel
             new CategoryCard(new Favorites()).JoinParent(Categories.ListView);
             new CategoryCard(new Everything()).JoinParent(Categories.ListView);
 
-            if (!ModedCards.TryGetValue(mod, out var list))
+            if (!ModdedCards.TryGetValue(mod, out var list))
                 DefaultCardAddingProcess(mod);
             else
                 foreach (Category card in list)
                     new CategoryCard(card).JoinParent(Categories.ListView);
+
+            // 控件页，检测到此Mod确实有控件才添加
+            if (KeybindLoader.Keybinds.Any(x => x.Mod.Name == mod.Name))
+                new CategoryCard(new Keybinds(mod.Name)).JoinParent(Categories.ListView);
         }
     }
     public void DefaultCardAddingProcess(Mod mod)

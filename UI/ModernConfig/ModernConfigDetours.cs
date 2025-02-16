@@ -32,6 +32,13 @@ public class ModernConfigDetours : ILoadable
 
             OperateInventory(false);
             ModernConfigUI.Instance.Enabled = false;
+
+            // 如果是从tModLoader配置选择界面打开的，就重新打开主界面
+            if (!ModernConfigUI.Instance.OpenFromMasterControl)
+            {
+                Interface.modConfigList.ModToSelectOnOpen = ModernConfigUI.Instance.currentMod ?? ImproveGame.Instance;
+                IngameFancyUI.OpenUIState(Interface.modConfigList);
+            }
         };
     }
 
@@ -60,6 +67,7 @@ public class ModernConfigDetours : ILoadable
         };
         configPanel.OnLeftClick += delegate
         {
+            ModernConfigUI.Instance.OpenFromMasterControl = false;
             ModernConfigUI.Instance.Open(self.selectedMod);
         };
 

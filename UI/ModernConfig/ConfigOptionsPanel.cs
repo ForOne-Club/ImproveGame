@@ -89,6 +89,21 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(gap)
         };
+        _options.OnUpdate += element =>
+        {
+            // 如果隐藏了搜索栏，这里的size要补上对应的高度，不然最底部会有一片空域
+            switch (ShouldHideSearchBar)
+            {
+                case true when element.Height.Pixels != -gap:
+                    element.SetSize(0f, -gap, 1f, 1f);
+                    Recalculate();
+                    break;
+                case false when element.Height.Pixels != -searchBarHeight - gap:
+                    element.SetSize(0f, -searchBarHeight - gap, 1f, 1f);
+                    Recalculate();
+                    break;
+            }
+        };
         _options.SetPadding(0f, 0f);
         _options.SetSize(0f, -searchBarHeight - gap, 1f, 1f);
         _options.JoinParent(this);
@@ -125,12 +140,8 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             _allOptions.ForEach(o =>
             {
                 o.Highlighted = false;
-                o.DebugText = "";
+                o.ResetDebugText();
                 o.JoinParent(_options.ListView);
-                if (o is OptionNotSupportText text) 
-                {
-                    var h = o.Height.Pixels;
-                }
             });
             Recalculate();
             return;
@@ -163,7 +174,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         Recalculate();
     }
 
-    public void AddToggle(ModConfig config,object nameOrMemberInfo) => AddToAllOptions<OptionToggle>(config, nameOrMemberInfo);
+    public void AddToggle(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionToggle>(config, nameOrMemberInfo);
 
     public void AddValueSlider(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionSlider>(config, nameOrMemberInfo);
 
@@ -186,9 +197,9 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
     {
         if (nameOrMemberInfo is not PropertyFieldWrapper MemberInfo)
             if (nameOrMemberInfo is string memberName)
-                MemberInfo = ModernConfigOption.GetWrapper(config.GetType(),memberName);
+                MemberInfo = ModernConfigOption.GetWrapper(config.GetType(), memberName);
             else return;
-         var name = MemberInfo.Name;
+        var name = MemberInfo.Name;
         // 如果已经添加过这个选项，直接返回
         if (!_addedOptions.Add(name))
             return;
@@ -199,6 +210,18 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T));//, config, nameOrMemberInfo
         instance.Bind(config, MemberInfo);
         _allOptions.Add(instance);
+    }
+
+    public void RemoveFromAllOptions(ModConfig config, object nameOrMemberInfo)
+    {
+        if (nameOrMemberInfo is not PropertyFieldWrapper MemberInfo)
+            if (nameOrMemberInfo is string memberName)
+                MemberInfo = ModernConfigOption.GetWrapper(config.GetType(), memberName);
+            else return;
+        var name = MemberInfo.Name;
+
+        _addedOptions.Remove(name);
+        _allOptions.RemoveAll(o => o.OptionName == name);
     }
 
 

@@ -178,7 +178,7 @@ public static class ConfigHelper
     public static string GetTooltip(ModConfig config, string optionName) 
     {
         string result = GetModText(config.Mod.Name, $"{GetLocalizationKey(config, optionName)}.Tooltip", out bool hasValue);
-        return hasValue ? result : optionName;
+        return hasValue ? result : "";
     }
 
     public static string GetLabel(ModConfig config, string optionName)

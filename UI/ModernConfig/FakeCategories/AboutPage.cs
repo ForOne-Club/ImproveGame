@@ -17,7 +17,7 @@ public sealed class AboutPage : Category
             UseKey = true,
             TextAlign = new Vector2(0f),
             IsWrapped = true,
-            Width = {Precent = 1f},
+            Width = { Precent = 1f },
             TextScale = 1.1f,
             RelativeMode = RelativeMode.Vertical
         };
@@ -25,38 +25,35 @@ public sealed class AboutPage : Category
         text.RecalculateText();
         text.SetInnerPixels(new Vector2(0f, text.TextSize.Y));
 
-        var discordLink = new SUIText
+        AddLinksToPanel(panel);
+
+        panel.Recalculate();
+    }
+
+    public static void AddLinksToPanel(ConfigOptionsPanel panel)
+    {
+        var gapProvider = new View
         {
-            TextOrKey = "Mods.ImproveGame.ModernConfig.AboutPage.LinkDiscord",
-            UseKey = true,
-            TextAlign = new Vector2(0f),
-            IsWrapped = true,
             Width = StyleDimension.Fill,
-            TextScale = 1.1f,
-            RelativeMode = RelativeMode.Vertical,
-            Spacing = new Vector2(40f)
+            Height = new(30, 0f),
+            RelativeMode = RelativeMode.Vertical
         };
-        discordLink.OnUpdate += _ =>
-        {
-            discordLink.TextColor = discordLink.HoverTimer.Lerp(Color.White, Main.OurFavoriteColor);
-            discordLink.RecalculateText();
-        };
-        discordLink.OnLeftMouseDown += (_, _) =>
-        {
-            TrUtils.OpenToURL("https://discord.gg/rEmGMQv5z7");
-            SoundEngine.PlaySound(SoundID.MenuOpen);
-        };
-        discordLink.OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
-        panel.AddToOptionsDirect(discordLink);
-        discordLink.RecalculateText();
-        discordLink.SetInnerPixels(new Vector2(0f, discordLink.TextSize.Y));
+        panel.AddToOptionsDirect(gapProvider);
+
+        GenerateLinkElement(panel, "Mods.ImproveGame.ModernConfig.AboutPage.LinkGitHub", "https://github.com/ForOne-Club/ImproveGame");
+        GenerateLinkElement(panel, "Mods.ImproveGame.ModernConfig.AboutPage.LinkDiscord", "https://discord.gg/rEmGMQv5z7");
 
         if (Language.ActiveCulture.Name is not "zh-Hans")
             return;
 
-        var qqLink = new SUIText
+        GenerateLinkElement(panel, "Mods.ImproveGame.ModernConfig.AboutPage.LinkQQ", "https://qm.qq.com/q/MQG5T6E3io");
+    }
+
+    private static void GenerateLinkElement(ConfigOptionsPanel panel, string key, string url)
+    {
+        var link = new SUIText
         {
-            TextOrKey = "Mods.ImproveGame.ModernConfig.AboutPage.LinkQQ",
+            TextOrKey = key,
             UseKey = true,
             TextAlign = new Vector2(0f),
             IsWrapped = true,
@@ -65,21 +62,20 @@ public sealed class AboutPage : Category
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(2f)
         };
-        qqLink.OnUpdate += _ =>
+        link.OnUpdate += _ =>
         {
-            qqLink.TextColor = qqLink.HoverTimer.Lerp(Color.White, Main.OurFavoriteColor);
-            qqLink.RecalculateText();
+            link.TextColor = link.HoverTimer.Lerp(Color.White, Main.OurFavoriteColor);
+            link.RecalculateText();
         };
-        qqLink.OnLeftMouseDown += (_, _) =>
+        link.OnLeftMouseDown += (_, _) =>
         {
-            TrUtils.OpenToURL("https://qm.qq.com/q/MQG5T6E3io");
+            TrUtils.OpenToURL(url);
             SoundEngine.PlaySound(SoundID.MenuOpen);
         };
-        qqLink.OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
-        panel.AddToOptionsDirect(qqLink);
-        qqLink.RecalculateText();
-        qqLink.SetInnerPixels(new Vector2(0f, qqLink.TextSize.Y));
+        link.OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
+        panel.AddToOptionsDirect(link);
+        link.RecalculateText();
+        link.SetInnerPixels(new Vector2(0f, link.TextSize.Y));
 
-        panel.Recalculate();
     }
 }

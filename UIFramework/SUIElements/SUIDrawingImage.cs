@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ImproveGame.UIFramework.SUIElements
 {
-    public class SUIDrawingImage(Action drawingFunction):View
+    public class SUIDrawingImage(Action<View> drawingFunction) : View
     {
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
             base.DrawSelf(spriteBatch);
-            drawingFunction?.Invoke();
+            drawingFunction?.Invoke(this);
         }
     }
 }

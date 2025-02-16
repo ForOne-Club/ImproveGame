@@ -16,6 +16,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
     /// </summary>
     internal class OptionNotSupportText : ModernConfigOption
     {
+        private static Mod _modInMemory;
+        private static Category _categoryInMemory;
+
         protected override void OnBind()
         {
             var variable = VariableInfo;
@@ -41,5 +44,18 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             };
         }
 
+
+        public override void LeftMouseDown(UIMouseEvent evt)
+        {
+            base.LeftMouseDown(evt);
+            SoundEngine.PlaySound(SoundID.MenuTick);
+            _modInMemory = ModernConfigUI.Instance.currentMod;
+            _categoryInMemory = ConfigOptionsPanel.CurrentCategory;
+            Config.Open(() =>
+            {
+                ModernConfigUI.Instance.Open(_modInMemory);
+                ConfigOptionsPanel.CurrentCategory = _categoryInMemory;
+            }, OptionName);
+        }
     }
 }

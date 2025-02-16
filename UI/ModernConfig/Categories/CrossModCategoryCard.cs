@@ -51,8 +51,17 @@ namespace ImproveGame.UI.ModernConfig.Categories
             else if (type.IsSubclassOf(typeof(EntityDefinition)))
                 panel.AddDefinition(config, variable); // panel.AddNotSupportText(config, variable);
             else
-                panel.AddObject(config, variable);
-            //panel.AddNotSupportText(config, variable);
+            {
+                try
+                {
+                    panel.AddObject(config, variable);
+                }
+                catch
+                {
+                    panel.RemoveFromAllOptions(config, variable);
+                    panel.AddNotSupportText(config, variable);
+                }
+            }
         }
         public override int ItemIconId => iconID;
         readonly int iconID;

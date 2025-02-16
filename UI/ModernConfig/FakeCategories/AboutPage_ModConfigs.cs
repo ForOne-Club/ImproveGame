@@ -1,11 +1,6 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImproveGame.UI.ModernConfig.FakeCategories;
 public sealed class AboutPage_ModConfig : Category
@@ -27,22 +22,36 @@ public sealed class AboutPage_ModConfig : Category
             TextScale = 1f,
             RelativeMode = RelativeMode.Vertical
         };
+        panel.AddToOptionsDirect(text);
         text.RecalculateText();
         text.SetInnerPixels(new Vector2(0f, text.TextSize.Y));
 
-        var koishi = new SUIDrawingImage(() => SDFGraphics.FumoFumoKoishi(text.GetDimensions().Position() + new Vector2(400,680))) { Width = new(0,1f),Height = new(300,0),RelativeMode = RelativeMode.Vertical};//new Vector2(770,180)
-        panel.AddToOptionsDirect(text);
-        panel.AddToOptionsDirect(koishi);
+        AboutPage.AddLinksToPanel(panel);
 
-        var v = new View()
+        var fumoText = new SUIText
         {
-            Height =new(300,0),
-            Width =new(300,0),
+            TextOrKey = "Mods.ImproveGame.ModernConfig.AboutPage_ModConfig.FumoText",
+            UseKey = true,
+            TextAlign = new Vector2(0f),
+            IsWrapped = true,
+            Width = StyleDimension.Fill,
+            TextScale = 1.1f,
+            RelativeMode = RelativeMode.Vertical,
+            Spacing = new Vector2(20f)
+        };
+        panel.AddToOptionsDirect(fumoText);
+        fumoText.RecalculateText();
+        fumoText.SetInnerPixels(new Vector2(0f, fumoText.TextSize.Y));
+
+        var koishi = new SUIDrawingImage(self => SDFGraphics.FumoFumoKoishi(self.GetDimensions().Center() + new Vector2(0, -75)))
+        {
+            Width = new(400, 0f),
+            Height = new(500, 0),
             RelativeMode = RelativeMode.Vertical
         };
-        panel.AddToOptionsDirect(v);
+        panel.AddToOptionsDirect(koishi);
 
-
+        panel.Recalculate();
     }
     //public override string Label => "关于(";
     //public override string Tooltip => "通用版ModernConfig PrPrPrPrPr";

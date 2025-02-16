@@ -264,12 +264,13 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             Width = new(25, .0f),
             Height = new(25, .0f)
         };
-        _splitButton.OnLeftClick += (evt, elem) =>
+        _splitButton.OnLeftMouseDown += (evt, elem) =>
         {
+            SoundEngine.PlaySound(SoundID.MenuTick);
             var btn = elem as SUISplitButton;
             double value = Min + (Max - Min) * _slideBox.Value + (btn.IsUP ? 1 : -1) * Increment.Value;
             value = Math.Clamp(value, Min, Max);
-            SetConfigValue(value, broadcast: false);
+            SetConfigValue(value, broadcast: true);
         };
         _splitButton.JoinParent(box);
     }
@@ -366,6 +367,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         base.Update(gameTime);
         if (Increment == null)
             _splitButton?.Remove();
+        _splitButton.IgnoresMouseInteraction = !Interactable;
         _slideBox.IgnoresMouseInteraction = !Interactable;
         _numericTextBox.IgnoresMouseInteraction = !Interactable;
 
