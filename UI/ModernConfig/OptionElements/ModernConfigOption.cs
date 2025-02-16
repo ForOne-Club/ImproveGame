@@ -6,6 +6,7 @@ using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
+using ReLogic.Graphics;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -137,6 +138,7 @@ public class ModernConfigOption : TimerView
         };
         labelElement.JoinParent(this);
         CheckAttributes();
+        ResetDebugText();
         OnBind();
     }
 
@@ -295,10 +297,12 @@ public class ModernConfigOption : TimerView
         var text = DebugText ?? "";
         var textPosition = dimensionsRect.Top();
         textPosition.Y += 6;
-        textPosition.X -= 50;
+        textPosition.X -= 80;
 
-        ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, textPosition,
-            Color.Gray, Color.Black, 0f, Vector2.Zero, new Vector2(0.8f), -1f, 1f);
+        DrawString(textPosition, text, Color.Gray, Color.Black, Vector2.Zero, 0.8f, false, 1);
+
+        // 不希望绘制Tag文字
+        // ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, textPosition, Color.Gray, Color.Black, 0f, Vector2.Zero, new Vector2(0.8f), -1f, 1f);
     }
 
 
@@ -323,7 +327,6 @@ public class ModernConfigOption : TimerView
     public override void MiddleMouseDown(UIMouseEvent evt)
     {
         base.MiddleMouseDown(evt);
-        if (evt.Target != this) return;
         FavoritedOptionDatabase.ToggleFavoriteForOption(Config, OptionName);
 
         if (ConfigOptionsPanel.CurrentCategory.LocalizationKey is nameof(Favorites))
@@ -350,6 +353,11 @@ public class ModernConfigOption : TimerView
             BgColor = colorAttribute.Color;
     }
 
+    public void ResetDebugText()
+    {
+        DebugText = $"cfg:{Config.Name}, opt:{OptionName}, label:{Label}";
+    }
+
     /// <summary>
     /// 是否被高光显示，用于搜索
     /// </summary>
@@ -369,8 +377,6 @@ public class ModernConfigOption : TimerView
     internal bool ReloadRequired;
     internal LabelKeyAttribute LabelKeyAttribute;
     internal TooltipKeyAttribute TooltipKeyAttribute;
-
-
 
     private bool CantOperateDueToHostVerification =>
         Config.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient &&

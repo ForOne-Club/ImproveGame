@@ -15,9 +15,10 @@ public sealed class Favorites : Category
             var allCards = CategorySidePanel.CategoriesArray;
             foreach (var categoryCard in allCards)
                 categoryCard.AddOptions(panel);
+                
             return;
         }
-        if (!CategorySidePanel.ModedCards.TryGetValue(mod, out var list))
+        if (!CategorySidePanel.ModdedCards.TryGetValue(mod, out var list))
         {
             if (mod == null || !ConfigManager.Configs.TryGetValue(mod, out var configs))
                 return;

@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.Content;
+using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using Newtonsoft.Json;
@@ -159,7 +160,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     s.SetColorPendingModified();
             }
 
-            private void UpdateHSL() 
+            private void UpdateHSL()
             {
                 if (hslImmuneCount-->=0) return;
                 Vector3 neoHsl = Main.rgbToHsl(current);
@@ -222,6 +223,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         Color currentColor;
         Vector3 currentHSL;
         View colorPanel;
+        string textOnColorPanel;
         View colorfulSliderButton;
         bool colorfulMode;
 
@@ -253,7 +255,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             OptionView.Width.Set(-200, 1);
             showMaxHeight = 480;
-            var panel = new View()
+            colorPanel = new View()
             {
                 Width = new(180, 0),
                 Height = new(30, 0),
@@ -262,28 +264,26 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 RelativeMode = RelativeMode.None,
                 Rounded = new(16)
             };
-            colorPanel = panel;
 
-            panel.OnRightClick += (evt, elem) =>
+            colorPanel.OnRightClick += (evt, elem) =>
             {
+                SoundEngine.PlaySound(SoundID.MenuTick);
                 var str = Platform.Get<IClipboard>().Value;
                 if (uint.TryParse(str, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out var result))
                 {
                     //currentColor.packedValue = result;
                     c.Hex = str;
+                    textOnColorPanel = GetText("ModernConfig.ColorPastedPopup");
                 }
             };
-            panel.OnLeftClick += (evt, elem) =>
+            colorPanel.OnLeftClick += (evt, elem) =>
             {
-                Platform.Get<IClipboard>().Value = currentColor.Hex3();
-
+                SoundEngine.PlaySound(SoundID.MenuTick);
+                string code = currentColor.Hex3();
+                Platform.Get<IClipboard>().Value = code;
+                textOnColorPanel = GetText("ModernConfig.ColorCopiedPopup");
             };
-            panel.OnMiddleClick += (evt, elem) =>
-            {
-                expanded = !expanded;
-                pendingChanges = true;
-            };
-            panel.JoinParent(this);
+            colorPanel.JoinParent(this);
             colorfulSliderButton = new View()
             {
                 Width = new(24, 0),
@@ -596,7 +596,23 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             //var dimension = GetDimensions();
             //SDFGraphics.NoBorderRoundedBox(dimension.Position() + new Vector2(dimension.Width - 400, 8), default, new Vector2(180, 30), new(16), currentColor, matrix);
             var colorDimension = colorPanel.GetDimensions();
-            SDFGraphics.NoBorderRoundedBox(colorDimension.Position(), default, colorDimension.Size(), colorPanel.Rounded, currentColor, matrix);
+
+            if (!colorPanel.IsMouseHovering)
+            {
+                textOnColorPanel = "";
+                SDFGraphics.NoBorderRoundedBox(colorDimension.Position(), default, colorDimension.Size(), colorPanel.Rounded, currentColor, matrix);
+            }
+            else
+            {
+                SDFGraphics.HasBorderRoundedBox(colorDimension.Position(), default, colorDimension.Size(), colorPanel.Rounded, currentColor, 2, UIStyle.SwitchBorderHover, matrix);
+
+                if (!string.IsNullOrWhiteSpace(textOnColorPanel))
+                {
+                    var textColor = c.hsl.Z > 0.5f ? Color.Black : Color.White;
+                    var boderColor = c.hsl.Z > 0.5f ? Color.White : Color.Black;
+                    DrawString(colorDimension.Position() + new Vector2(8, 8), textOnColorPanel, textColor, boderColor, scale: 0.8f, spread: 1.2f);
+                }
+            }
 
             var colorfulDimension = colorfulSliderButton.GetDimensions();
             //SDFGraphics.BarRoundedBox(colorfulDimension.Position(), default, colorfulDimension.Size(), colorPanel.Rounded, TextureAssets.Extra[180].Value,0,0.05f, matrix);
@@ -621,11 +637,26 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 SDFGraphics.HasBorderRound(slButton.GetDimensions().Position(), new(.5f), 8f, currentColor, 1, currentDragTarget == slButton ? UIStyle.SliderRoundHover : Color.Black * .3f, matrix);
 
             }
-        }
-        public override void DrawSelf(SpriteBatch spriteBatch)
-        {
-            base.DrawSelf(spriteBatch);
 
+            // 提示，DrawChildren后再绘制一次，因为子元素的DrawSelf会覆盖提示，我们希望鼠标悬停在这整个Color元素上时显示原本提示
+            if (!IsMouseHovering)
+                return;
+
+            string text = "";
+            if (ReloadRequired)
+                text += $" - [c/{Color.Orange.Hex3()}:{Language.GetTextValue("tModLoader.ModReloadRequiredMemberTooltip")}]\n";
+            text += Tooltip;
+
+            // 颜色条会显示左右键交互的提示
+            if (colorPanel.IsMouseHovering)
+            {
+                // 这里如果Tooltip为空，就显示默认提示
+                if (text == "")
+                    text = GetText("ModernConfig.NoTooltip");
+                text += $"\n{GetText("ModernConfig.ColorButtonTip")}";
+            }
+
+            TooltipPanel.SetText(text);
         }
         protected override void OnSetDefault(object value)
         {

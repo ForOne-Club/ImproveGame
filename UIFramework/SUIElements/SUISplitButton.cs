@@ -29,7 +29,8 @@ namespace ImproveGame.UIFramework.SUIElements
         }
         public Color buttonColor;
         public Color buttonBorderColor;
-        public bool IsUP => IsMouseHovering && Main.mouseY < GetDimensions().ToRectangle().Center.Y;
-        public bool IsDown => IsMouseHovering && Main.mouseY >= GetDimensions().ToRectangle().Center.Y;
+        // Cy修改：添加了IgnoresMouseInteraction判断，在这个属性为true时，不会响应鼠标悬停事件（不会高光边框）
+        public bool IsUP => !IgnoresMouseInteraction && IsMouseHovering && Main.mouseY < GetDimensions().ToRectangle().Center.Y;
+        public bool IsDown => !IgnoresMouseInteraction && IsMouseHovering && Main.mouseY >= GetDimensions().ToRectangle().Center.Y;
     }
 }

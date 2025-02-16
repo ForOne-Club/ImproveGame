@@ -27,7 +27,7 @@
 		<None Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt">
 			<Visible>true</Visible>
 		</None>
-		<None Include=".gitignore;.gitattributes;./.editorconfig;./LICENSE">
+		<None Include=".gitignore;.gitattributes;./LICENSE">
 			<Visible>false</Visible>
 		</None>
 	</ItemGroup>

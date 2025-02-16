@@ -8,6 +8,7 @@ using ImproveGame.UIFramework.SUIElements;
 using Microsoft.Xna.Framework.Input;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader.UI;
+using Terraria.UI.Chat;
 
 namespace ImproveGame.UI.ModernConfig;
 
@@ -35,8 +36,11 @@ public sealed class ModernConfigUI : UIState
     // 主栏下放描述
     public TooltipPanel TooltipPanel;
 
-    //当前打开的mod
+    // 当前打开的mod
     public Mod currentMod;
+
+    // 额外文本提示，显示在主面板左上方之外
+    public string ExtraText;
 
     // 有点爽的东西，中键收藏生成粒子
     private UIParticleLayer _particleSystem = new()
@@ -134,6 +138,14 @@ public sealed class ModernConfigUI : UIState
         CenteredItemTagHandler.ModernConfigDrawing = true;
         base.Draw(spriteBatch);
         CenteredItemTagHandler.ModernConfigDrawing = false;
+
+        if (!string.IsNullOrWhiteSpace(ExtraText))
+        {
+            var font = FontAssets.MouseText.Value;
+            var textPosition = MainPanel.GetDimensions().Position();
+            textPosition += new Vector2(6f, -font.LineSpacing + 4f);
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, ExtraText, textPosition, Color.LightGray, 0f, Vector2.Zero, Vector2.One, spread: 1.2f);
+        }
     }
 
     public void Open(Mod mod)
@@ -141,11 +153,18 @@ public sealed class ModernConfigUI : UIState
         SoundEngine.PlaySound(SoundID.MenuOpen);
 
         if (mod.Name == "ImproveGame")
+        {
+            ExtraText = "";
             ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["AboutPage"].Category;
-        else if (CategorySidePanel.ModedAboutPage.TryGetValue(mod, out var value))
-            ConfigOptionsPanel.CategoryToSelectOnOpen = value;
+        }
         else
-            ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.AboutPage_ModConfig;
+        {
+            ExtraText = GetText("ModernConfig.ModdedExtraText", mod.DisplayName);
+            if (CategorySidePanel.ModdedAboutPage.TryGetValue(mod, out var value))
+                ConfigOptionsPanel.CategoryToSelectOnOpen = value;
+            else
+                ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.AboutPage_ModConfig;
+        }
         Enabled = true;
 
         if (Main.gameMenu)
@@ -158,33 +177,23 @@ public sealed class ModernConfigUI : UIState
             IngameFancyUI.OpenUIState(this);
         }
         currentMod = mod;
-        CategoryPanel.ChangeMod(mod,true);
+        CategoryPanel.ChangeMod(mod, true);
     }
 
     public void Close()
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
+
         Enabled = false;
         if (!Main.gameMenu)
         {
-            if (OpenFromMasterControl)
-                IngameFancyUI.Close();
-            else
-            {
-                Interface.modConfigList.ModToSelectOnOpen = currentMod ?? ImproveGame.Instance;
-                Main.InGameUI.SetState(Interface.modConfigList);
-
-
-            }
-
+            IngameFancyUI.Close();
         }
         else
         {
             Main.menuMode = Interface.modConfigListID;
             Interface.modConfigList.ModToSelectOnOpen = currentMod ?? ImproveGame.Instance;
         }
-
-        OpenFromMasterControl = false;
     }
 
     public override void Update(GameTime gameTime)

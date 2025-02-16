@@ -224,6 +224,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             if (dragging)
             {
                 showMaxHeight = Main.MouseScreen.Y - mousePos.Y + oldHeight;
+                showMaxHeight = Math.Max(150, showMaxHeight); // 别拖没了
                 pendingChanges = true;
             }
             #endregion
@@ -243,7 +244,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             if (Data == null)
             {
                 Append(InitialButton);
-                
+
             }
             else
             {
@@ -266,7 +267,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     optionObject = optionO;
                 if (target is OptionCollections optionC)
                     optionObject = optionC;
-                if(target is OptionDefinition optionD)
+                if (target is OptionDefinition optionD)
                     optionObject = optionD;
             }
             optionObject.Recalculate();
@@ -292,6 +293,27 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             if (!OptionView.ListView.IsMouseHovering)
                 return;
+        }
+        public override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            base.DrawSelf(spriteBatch);
+
+            // 提示，因为OptionCollections要显示专门的操作提示（教玩家可以拖动元素），所以这里单独处理
+            if (!IsMouseHovering)
+                return;
+
+            string text = "";
+            if (ReloadRequired)
+                text += $" - [c/{Color.Orange.Hex3()}:{Language.GetTextValue("tModLoader.ModReloadRequiredMemberTooltip")}]\n";
+            text += Tooltip;
+
+            // 这里如果Tooltip为空，就显示默认提示
+            if (text == "")
+                text = GetText("ModernConfig.NoTooltip");
+
+            text += $"\n{GetText("ModernConfig.CollectionsTip")}";
+
+            TooltipPanel.SetText(text);
         }
         float showMaxHeight = 360;
         float oldHeight;
