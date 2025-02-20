@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria.GameInput;
+using System.Reflection;
+using Terraria.GameContent.UI.Elements;
 
 namespace ImproveGame.UI
 {
@@ -47,6 +49,10 @@ namespace ImproveGame.UI
         public UIText TipText;
 
         public SUIDropdownListContainer DropdownList { get; set; }
+
+        public SUINumericText customAIStyleBox;
+
+        public SUIImageButton aiStyleWikiOpener;
 
         public override void OnInitialize()
         {
@@ -115,7 +121,64 @@ namespace ImproveGame.UI
             bagPanel.SetSize(0f, 640, 1f, 0f);
             bagPanel.JoinParent(MainPanel);
 
+            customAIStyleBox = new SUINumericText
+            {
+                HAlign = 1f,
+                Left = new(-180,0),
+                Width = new(60f, 0),
+                Height = new(0, 1f),
+                BgColor = Color.Black * 0.4f,
+                Rounded = new Vector4(14f),
+                MinValue = 1,
+                MaxValue = 125,
+                InnerText =
+                {
+                    TextAlign = new Vector2(0.5f, 0.5f),
+                    TextOffset = new Vector2(0f, -2f),
+                    MaxCharacterCount = 10,
+                    MaxLines = 1,
+                    IsWrapped = false
+                },
+                MaxLength = 3,
+                DefaultValue = 0,
+                Format = "0",
+                VAlign = 0.5f
+            };
+            customAIStyleBox.ContentsChanged += (ref string content) =>
+            {
 
+                if (int.TryParse(content, out int value))
+                    DummyNPC.LocalConfig.customAIStyle = value;
+            };
+            customAIStyleBox.EndTakingInput += () =>
+            {
+                if (int.TryParse(customAIStyleBox.Text, out int value))
+                {
+                    DummyNPC.LocalConfig.customAIStyle = value;
+
+                    SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                }
+
+            };
+            customAIStyleBox.OnUpdate += (elem) =>
+            {
+
+                var value = DummyNPC.LocalConfig.customAIStyle;
+                if (!customAIStyleBox.IsWritingText)
+                    customAIStyleBox.Value = value;
+            };
+            aiStyleWikiOpener = new SUIImageButton(TextureAssets.Item[ItemID.Book].Value, GetText("UI.DummyConfiguration.OpenWikiTip"),false) 
+            {
+                HAlign = 1f,
+                Left = new(-140, 0),
+                Width = new(40f, 0),
+                Height = new(0, 1f),
+                VAlign = 0.5f
+            };
+            aiStyleWikiOpener.OnLeftClick += (evt, elem) =>
+            {
+                Utils.OpenToURL(GetText("UI.DummyConfiguration.WikiURL"));
+            };
             //void MakeSeparator()
             //{
             //    View searchArea = new()
@@ -137,6 +200,7 @@ namespace ImproveGame.UI
             var fieldInfos = typeof(DummyConfig).GetFields();
             foreach (var fInfo in fieldInfos)
             {
+                if (fInfo.Name == nameof(DummyConfig.customAIStyle)) continue;
                 var fPanel = new View
                 {
                     DragIgnore = true,
@@ -188,35 +252,114 @@ namespace ImproveGame.UI
                 }
                 else if (fType == typeof(int))
                 {
-                    SUISlider<int> sUISlider = new SUISlider<int>(
-                    () => (int)fInfo.GetValue(DummyNPC.LocalConfig),
-                    obj =>
+                    if (fInfo.Name == "LifeMax")
                     {
-                        fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
-                        SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                    }, "",
-                    fInfo.Name == "LifeMax" ? 1 : 0, fInfo.Name == "LifeMax" ? 400000 : 1000, fInfo.Name == "LifeMax" ? 200000 : 0
-                    )
+                        SUINumericText numberBox =
+                        new SUINumericText
+                        {
+                            HAlign = 1f,
+                            Width = new(120f, 0),
+                            Height = new(0, 1f),
+                            BgColor = Color.Black * 0.4f,
+                            Rounded = new Vector4(14f),
+                            MinValue = 1,
+                            MaxValue = 2147483647,
+                            InnerText =
+                            {
+                                TextAlign = new Vector2(0.5f, 0.5f),
+                                TextOffset = new Vector2(0f, -2f),
+                                MaxCharacterCount = 10,
+                                MaxLines = 1,
+                                IsWrapped = false
+                            },
+                            MaxLength = 10,
+                            DefaultValue = 2000000000,
+                            Format = "0",
+                            VAlign = 0.5f
+                        };
+                        numberBox.ContentsChanged += (ref string content) =>
+                        {
+                            if (int.TryParse(content, out int value))
+                                DummyNPC.LocalConfig.LifeMax = value;
+                        };
+                        numberBox.EndTakingInput += () =>
+                        {
+                            if (int.TryParse(numberBox.Text, out int value))
+                            {
+                                DummyNPC.LocalConfig.LifeMax = value;
+                                SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                            }
+
+                        };
+                        numberBox.OnUpdate += (elem) =>
+                        {
+
+                            var value = DummyNPC.LocalConfig.LifeMax;
+                            if (!numberBox.IsWritingText)
+                                numberBox.Value = value;
+                        };
+                        numberBox.JoinParent(fPanel);
+                    }
+                    else
                     {
-                        HAlign = 1f,
-                        Width = new StyleDimension(180, 0),
-                        Height = StyleDimension.Fill
-                    };
-                    sUISlider.JoinParent(fPanel);
+                        SUISlider<int> sUISlider = new SUISlider<int>(
+                        () => (int)fInfo.GetValue(DummyNPC.LocalConfig),
+                        obj =>
+                        {
+                            fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
+                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                        }, "",
+                        0, 1000, 0
+                        )
+                        {
+                            HAlign = 1f,
+                            Width = new StyleDimension(180, 0),
+                            Height = StyleDimension.Fill
+                        };
+                        sUISlider.JoinParent(fPanel);
+                    }
                 }
                 else if (fType == typeof(DummyConfig.AIType))
                 {
                     SUIDropdownList<DummyConfig.AIType> list = new(() => (DummyConfig.AIType)fInfo.GetValue(DummyNPC.LocalConfig), obj =>
                     {
                         fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
+                        var aistyle = (DummyConfig.AIType)obj;
+                        if (aistyle != DummyConfig.AIType.Default && aistyle != DummyConfig.AIType.SelfDefine)
+                            DummyNPC.LocalConfig = aistyle switch
+                            {
+                                DummyConfig.AIType.Slime or DummyConfig.AIType.Soilder or DummyConfig.AIType.JellyFish or DummyConfig.AIType.GoldenFish or DummyConfig.AIType.HugeMimic => DummyNPC.LocalConfig with { NoTileCollide = false, NoGravity = false },
+                                DummyConfig.AIType.EvilEye => DummyNPC.LocalConfig with { NoGravity = true },
+                                _ => DummyNPC.LocalConfig
+                            };
                         SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                    },DropdownList, "")
+                        if (aistyle == DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent == null)
+                        {
+                            customAIStyleBox.JoinParent(fPanel);
+                            aiStyleWikiOpener.JoinParent(fPanel);
+                        }
+                        else if (aistyle != DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent != null) 
+                        {
+                            customAIStyleBox.Remove();
+                            aiStyleWikiOpener.Remove();
+                        }
+                    }, DropdownList, "")
                     {
                         HAlign = 1f,
                         Width = new StyleDimension(180, 0),
                         Height = StyleDimension.Fill
                     };
                     list.JoinParent(fPanel);
+                    if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent == null)
+                    {
+                        customAIStyleBox.JoinParent(fPanel);
+                        aiStyleWikiOpener.JoinParent(fPanel);
+                    }
+                    else if (DummyNPC.LocalConfig.AIStyle != DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent != null)
+                    {
+                        customAIStyleBox.Remove();
+                        aiStyleWikiOpener.Remove();
+                    }
 
                 }
                 else
@@ -240,7 +383,6 @@ namespace ImproveGame.UI
                 //MakeSeparator();
 
             }
-
         }
 
 

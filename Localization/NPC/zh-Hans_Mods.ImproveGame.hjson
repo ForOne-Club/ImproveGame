@@ -6,11 +6,17 @@ NPC: {
 	ShowBox: 显示碰撞范围
 	ShowDamageData: 显示伤害数据
 	ShowNameOnHover: 鼠标悬浮时显示 NPC 名称
-	Immortal: 原版只有假人为 true, 绿叶弹会忽略追踪
+	Immortal:
+	'''
+	原版只有假人为 true
+	影响如绿叶弹等会忽略追踪
+	近战效果不会触发
+	假人不会死等等
+	'''
 	NoGravity: 不受重力影响
 	NoTileCollide: 关闭物块碰撞检测
 	KnockBackResist: 击退系数, 0 免疫击退
-	AIStyle: 行为AI类型，请参考WIKI，默认-1
+	AIStyle: 行为AI类型，此项目建议通过UI修改，默认为Default
 	Dummy_Damage: 伤害: {S}/秒 {F}/帧
 	Dummy_Time: 时长: {S}秒 {F}帧
 	Dummy_FinalBlow: 最后一击: {FinalBlow}

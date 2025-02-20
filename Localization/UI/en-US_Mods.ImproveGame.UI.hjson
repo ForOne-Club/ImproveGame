@@ -422,7 +422,7 @@ DummyConfiguration: {
 		ShowBox: Show Hitbox
 		ShowDamageData: Show Damage Stats
 		ShowNameOnHover: Show NPC Name
-		Immortal: Not count as Target
+		Immortal: Not count as Target and immortal
 		NoGravity: Not Affected By Gravity
 		NoTileCollide: Disable Tile Collision
 		KnockBackResist: Knockback coefficient
@@ -437,7 +437,11 @@ DummyConfiguration: {
 		GoldenFish: Golden Fish
 		JellyFish: Jelly Fish
 		HugeMimic: Huge Mimic
+		SelfDefine: Self Define
 	}
+
+	OpenWikiTip: Click to open Relevent Wiki page
+	WikiURL: https://terraria.wiki.gg/wiki/AI
 }
 
 Autofisher: {

@@ -420,7 +420,7 @@ DummyConfiguration: {
 		ShowBox: 显示碰撞范围
 		ShowDamageData: 显示伤害数据
 		ShowNameOnHover: 显示 NPC 名称
-		Immortal: 不被视作目标
+		Immortal: 不被视作目标且无敌
 		NoGravity: 不受重力影响
 		NoTileCollide: 关闭物块碰撞
 		KnockBackResist: 击退系数
@@ -435,7 +435,11 @@ DummyConfiguration: {
 		GoldenFish: 金鱼
 		JellyFish: 水母
 		HugeMimic: 大宝箱怪
+		SelfDefine: 自定义
 	}
+
+	OpenWikiTip: 点击以打开相关Wiki页面
+	WikiURL: https://terraria.wiki.gg/zh/wiki/AI
 }
 
 Autofisher: {

@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.NPCs.Dummy;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.NPCs.Dummy;
 using ImproveGame.UI;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
@@ -65,7 +66,7 @@ public class Dummy : ModItem
     }
     public override void HoldStyle(Player player, Rectangle heldItemFrame)
     {
-        if (PlayerInput.MouseInfo.MiddleButton == ButtonState.Pressed && player.itemAnimation == 0)
+        if (KeybindSystem.ItemInteractKeybind.JustPressed && player.itemAnimation == 0)
         {
             if (!DummyConfigurationUI.Instance.Enabled)
                 DummyConfigurationUI.Instance.Open();
@@ -74,6 +75,14 @@ public class Dummy : ModItem
             player.itemAnimation = player.itemAnimationMax = 30;
         }
         base.HoldStyle(player, heldItemFrame);
+    }
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        string keyBindName;
+        if (!TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out keyBindName))
+            keyBindName = GetText("Items.Dummy.NoneKeyBind"); 
+        tooltips.Add(new TooltipLine(Mod, "openUITip", GetText("Items.Dummy.ConfigUIOpenTip", keyBindName)));
+        base.ModifyTooltips(tooltips);
     }
     public override void AddRecipes()
     {

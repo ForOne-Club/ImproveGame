@@ -64,6 +64,7 @@ public class SyncDummyModule : NetModule
         config.NoGravity = r.ReadBoolean();
         config.NoTileCollide = r.ReadBoolean();
         config.KnockBackResist = r.ReadSingle();
+        config.customAIStyle = r.ReadByte();
         base.Read(r);
     }
     public override void Send(ModPacket p)
@@ -84,6 +85,7 @@ public class SyncDummyModule : NetModule
         p.Write(config.NoGravity);
         p.Write(config.NoTileCollide);
         p.Write(config.KnockBackResist);
+        p.Write((byte)config.customAIStyle);
         base.Send(p);
     }
     public static SyncDummyModule Get(Vector2? position, int owner, DummyConfig dummyConfig)
@@ -146,7 +148,19 @@ public class DummyNPC : ModNPC
     public DummyConfig Config = new();
     public DummyDPS DummyDPS = new();
     public int Owner;
-    public override bool CheckDead() => false;
+    public override bool PreKill()
+    {
+        return true;
+    }
+    public override bool CheckDead()
+    {
+        if (Config.LockHP)
+        {
+            NPC.life = NPC.lifeMax;
+            return false;
+        }
+        return true;
+    }
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
 
     public override void SetStaticDefaults()
@@ -163,7 +177,10 @@ public class DummyNPC : ModNPC
         npc.SetBaseValues(56, 74, Config.LifeMax, false,
             value: 0, damage: Config.Damage, defense: Config.Defense);
         npc.HitSound = SoundID.NPCHit1;
-        npc.aiStyle = (int)Config.AIStyle;
+        if (Config.AIStyle != DummyConfig.AIType.SelfDefine)
+            npc.aiStyle = (int)Config.AIStyle;
+        else
+            npc.aiStyle = Config.customAIStyle;
         //if (ModContent.TryFind("FargowiltasSouls", "ClippedWingsBuff", out ModBuff buff)) 
         //{
         //    npc.buffImmune[buff.Type] = true;

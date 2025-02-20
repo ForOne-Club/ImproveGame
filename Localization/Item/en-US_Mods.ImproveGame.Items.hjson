@@ -286,8 +286,9 @@ Dummy: {
 		 /help dummy → get dummy usage
 		 Left click to spawn Dummy on mouse
 		 Right click to remove the chosen dummy
-		 Middle click to show configuration panel
 		'''
+	ConfigUIOpenTip: Press {0} to show configuration panel when holding it
+	NoneKeyBind: <None>
 	CannotUse: This item currently does not work in multiplayer.
 }
 

@@ -23,12 +23,13 @@ public struct DummyConfig
         JellyFish = 18,
         [LabelKey($"{key}HugeMimic")]
         HugeMimic = 87,
-        //SelfDefine = 124
+        [LabelKey($"{key}SelfDefine")]
+        SelfDefine = 126
     }
     [Annotate]
     public bool LockHP = true;
     [Annotate]
-    public int LifeMax = 200000;
+    public int LifeMax = 2000000000;
     [Annotate]
     public int Defense = 0;
     [Annotate]
@@ -49,5 +50,7 @@ public struct DummyConfig
     public float KnockBackResist = 0f;
     [Annotate]
     public AIType AIStyle = AIType.Default;
+
+    public int customAIStyle = 0;
     public DummyConfig() { }
 }
