@@ -23,6 +23,7 @@ public class VanillaPreset : OfficialPreset
         modConfig.NoPlace_BUFFTile_Banner = false;
         modConfig.NoConsume_Potion = false;
         modConfig.NoConsume_Ammo = false;
+        modConfig.NoConsume_Wire = false;
         modConfig.ImprovePrefix = false;
         modConfig.MiddleEnableBank = false;
         modConfig.FasterExtractinator = false;
@@ -41,6 +42,7 @@ public class VanillaPreset : OfficialPreset
         modConfig.BestiaryQuickUnlock = false;
         modConfig.AlchemyGrassGrowsFaster = false;
         modConfig.AlchemyGrassAlwaysBlooms = false;
+        modConfig.PumpkinGrowsFaster = false;
         modConfig.StaffOfRegenerationAutomaticPlanting = false;
         modConfig.NoBiomeSpread = false;
         modConfig.RespawnWithFullHP = false;

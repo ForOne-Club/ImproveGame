@@ -38,6 +38,7 @@ public class FukMeCalamityElement : PresetElement
         config.BestiaryQuickUnlock = true;
         config.AlchemyGrassGrowsFaster = true;
         config.AlchemyGrassAlwaysBlooms = true;
+        config.PumpkinGrowsFaster = true;
         config.StaffOfRegenerationAutomaticPlanting = true;
         config.NoBiomeSpread = true;
         config.RespawnWithFullHP = true;
@@ -101,6 +102,7 @@ public class ILoveBalanceElement : PresetElement
         config.BestiaryQuickUnlock = false;
         config.AlchemyGrassGrowsFaster = false;
         config.AlchemyGrassAlwaysBlooms = false;
+        config.PumpkinGrowsFaster = false;
         config.StaffOfRegenerationAutomaticPlanting = true;
         config.NoBiomeSpread = false;
         config.RespawnWithFullHP = true;
@@ -147,6 +149,7 @@ public class AllOffElement : PresetElement
         config.NoPlace_BUFFTile_Banner = false;
         config.NoConsume_Potion = false;
         config.NoConsume_Ammo = false;
+        config.NoConsume_Wire = false;
         config.ImprovePrefix = false;
         config.MiddleEnableBank = false;
         config.FasterExtractinator = false;
@@ -165,6 +168,7 @@ public class AllOffElement : PresetElement
         config.BestiaryQuickUnlock = false;
         config.AlchemyGrassGrowsFaster = false;
         config.AlchemyGrassAlwaysBlooms = false;
+        config.PumpkinGrowsFaster = false;
         config.StaffOfRegenerationAutomaticPlanting = false;
         config.NoBiomeSpread = false;
         config.RespawnWithFullHP = false;

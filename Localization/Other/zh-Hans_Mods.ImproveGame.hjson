@@ -48,6 +48,9 @@ Conditions: {
 	// AvailableDetectorDrone: "{$Mods.ImproveGame.Items.DetectorDrone.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 	// AvailableMoveChest: "{$Mods.ImproveGame.Items.MoveChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 	// AvailableCoinOne: "{$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	// EnableQuickShimmer: "{$Mods.ImproveGame.UI.QuickShimmer.Title}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}"
+	EnableMinimapMark: 结构标记{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}
+	// EnableWeatherControl: "{$Mods.ImproveGame.UI.WeatherGUI.Title}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}"
 }
 
 CombatText: {
@@ -407,7 +410,11 @@ Keybinds: {
 
 	HomeKeybind: {
 		DisplayName: 回程快捷键
-		Tip: 按下后快捷使用物品栏中的回程物品（优先级：无限返回药水>无限回忆药水>魔镜类物品）
+		Tip:
+			'''
+			按下后快捷使用物品栏中的回程物品（优先级：无限返回药水>无限回忆药水>魔镜类物品）
+			对于药水，只有开启了“无限续杯”且达到需求量才会被使用
+			'''
 	}
 
 	OpenBagGUI: {
@@ -428,6 +435,21 @@ Keybinds: {
 		DisplayName: 随身物品特殊交互快捷键
 		Tip: 用于部分物品的快捷交互，如激活坐骑、打开猪猪存钱罐等
 	}
+
+	CopyItemName: {
+		DisplayName: 复制物品内部名
+		Tip: 当光标处有物品时，按下此快捷键将会复制其内部名
+	}
+
+	CopyItemName_Control: {
+		DisplayName: 复制物品内部名全称组合键
+		Tip: 按下此快捷键的同时按下 "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" 将改为复制全称
+	}
+
+	QuickShimmerGUI: {
+		// DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
+		Tip: 按下后打开快捷微光界面，也可以在总控面板中打开
+	}
 }
 
 Projectiles: {
@@ -441,12 +463,14 @@ Projectiles: {
 	}
 
 	// HomeEffect.DisplayName: Home Effect
+	// GlobeEffect.DisplayName: Globe Effect
 }
 
 BuilderToggles: {
 	PiggyToggle: {
 		OffText: 自动存钱：关
 		OnText: 自动存钱：开
+		RightFilter: 右键点击以筛选货币
 	}
 }
 

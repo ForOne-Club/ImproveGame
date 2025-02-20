@@ -194,7 +194,7 @@ public class ItemContainerGUI : BaseBody
         Enabled = true;
 
         SoundEngine.PlaySound(SoundID.MenuOpen);
-        Main.playerInventory = true;
+        OperateInventory(true);
         ItemContainerGrid.SetInventory(container.ItemContainer);
         Title.TextOrKey = container.Name;
         Title.SetInnerPixels(Title.TextSize);

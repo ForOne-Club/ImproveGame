@@ -6,6 +6,7 @@ float uBorder;
 float4 uBorderColor;
 float uShadowSize;
 float uInnerShrinkage;
+float2 uTransition;
 
 struct VSInput
 {
@@ -40,21 +41,21 @@ float4 HasBorder(float2 q : TEXCOORD0, float rounded : COLOR0) : COLOR0
 {
     // float2 q = pos - sizeOver2 + rounded;
     float Distance = min(max(q.x, q.y), 0) + length(max(q.xy, 0)) - rounded + uInnerShrinkage;
-    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-1, 0.5, Distance + uBorder)), 0, smoothstep(-1, 0.5, Distance));
+    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(uTransition.x, uTransition.y, Distance + uBorder)), 0, smoothstep(uTransition.x, uTransition.y, Distance));
 }
 
 float4 NoBorder(float2 q : TEXCOORD0, float rounded : COLOR0) : COLOR0
 {
     // float2 q = pos - sizeOver2 + rounded;
     float Distance = min(max(q.x, q.y), 0) + length(max(q.xy, 0)) - rounded + uInnerShrinkage;
-    return lerp(uBackgroundColor, 0, smoothstep(-1, 0.5, Distance));
+    return lerp(uBackgroundColor, 0, smoothstep(uTransition.x, uTransition.y, Distance));
 }
 
 float4 Shadow(float2 q : TEXCOORD0, float rounded : COLOR0) : COLOR0
 {
     // float2 q = pos - sizeOver2 + rounded;
     float Distance = min(max(q.x, q.y), 0) + length(max(q.xy, 0)) - rounded;
-    return lerp(uBackgroundColor, 0, smoothstep(-1 - uShadowSize, 0.5, Distance));
+    return lerp(uBackgroundColor, 0, smoothstep(uTransition.x - uShadowSize, uTransition.y, Distance));
 }
 
 technique T1

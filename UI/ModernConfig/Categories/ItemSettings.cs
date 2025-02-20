@@ -19,6 +19,7 @@ public sealed class ItemSettings : Category
         panel.AddToggle(Config, nameof(Config.NoConsume_SummonItem));
         panel.AddToggle(Config, nameof(Config.NoConsume_Ammo));
         panel.AddToggle(Config, nameof(Config.NoConsume_Projectile));
+        panel.AddToggle(Config, nameof(Config.NoConsume_Wire));
         panel.AddToggle(Config, nameof(Config.ImprovePrefix));
         panel.AddToggle(Config, nameof(Config.MiddleEnableBank));
         panel.AddToggle(Config, nameof(Config.PortableCraftingStation));

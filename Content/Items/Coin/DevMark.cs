@@ -1,4 +1,7 @@
-﻿using Terraria.ID;
+﻿using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.ModSystems;
+using ImproveGame.Packets.NetAutofisher;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items.Coin;
 
@@ -16,6 +19,31 @@ public class DevMark : ModItem
         Item.rare = ItemRarityID.Quest;
         Item.value = 0;
         Item.maxStack = 9999;
+        Item.useStyle = ItemUseStyleID.HoldUp;
+        Item.useTime = Item.useAnimation = 30;
+    }
+
+    public override void UseAnimation(Player player)
+    {
+        if (!NetPasswordSystem.Permitted(player.whoAmI))
+            return;
+
+        if (AutofishPlayer.TryGet(player, out AutofishPlayer autofishPlayer) && autofishPlayer.Autofisher is not null)
+        {
+            var fisher = autofishPlayer.Autofisher;
+            fisher.fishingPole = new Item(ItemID.GoldenFishingRod);
+            fisher.bait = new Item(ItemID.MasterBait, 9999);
+            fisher.accessory = new Item(ItemID.LavaproofTackleBag);
+            // 不想传输鱼饵，于是只能三次独立发包，用AggregateModule整合
+            var packets = AggregateModule.Get(
+                [
+                    ItemSyncPacket.Get(fisher.ID, ItemSyncPacket.FishingPole),
+                    ItemSyncPacket.Get(fisher.ID, ItemSyncPacket.Bait),
+                    ItemSyncPacket.Get(fisher.ID, ItemSyncPacket.Accessory)
+                ]
+            );
+            packets.Send();
+        }
     }
 }
 
@@ -99,7 +127,8 @@ public class Expelliarmus : ModItem
         Item.shoot = ModContent.ProjectileType<ExpelliarmusProj>();
     }
 
-    public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type,ref int damage, ref float knockback)
+    public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type,
+        ref int damage, ref float knockback)
     {
         position = Main.MouseWorld;
     }

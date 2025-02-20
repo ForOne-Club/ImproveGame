@@ -28,7 +28,7 @@ public class ShimmerLootItemSlot : BaseItemSlot
     {
         if (Main.LocalPlayer.ItemAnimationActive) return;
         
-        Main.playerInventory = true;
+        OperateInventory(true);
 
         if (Item.IsAir)
             return;

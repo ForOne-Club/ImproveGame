@@ -355,7 +355,7 @@ ItemSearcher: {
 		Tooltip:
 			'''
 			会搜到与搜索内容相差一个字符的结果
-			如输入“黑石”可搜索到“黑曜石”
+			如输入“白曜石”可搜索到“黑曜石”
 			'''
 	}
 
@@ -476,3 +476,4 @@ MapLayer: {
 }
 
 ThemePreview.Title: 主题预览
+PiggyFilter.Title: 筛选钱币

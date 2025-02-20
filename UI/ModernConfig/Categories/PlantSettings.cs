@@ -10,6 +10,7 @@ public sealed class PlantSettings : Category
     {
         panel.AddToggle(Config, nameof(Config.AlchemyGrassGrowsFaster));
         panel.AddToggle(Config, nameof(Config.AlchemyGrassAlwaysBlooms));
+        panel.AddToggle(Config, nameof(Config.PumpkinGrowsFaster));
         panel.AddToggle(Config, nameof(Config.StaffOfRegenerationAutomaticPlanting));
         panel.AddToggle(Config, nameof(Config.TreeGrowFaster));
         panel.AddToggle(Config, nameof(Config.ShakeTreeFruit));

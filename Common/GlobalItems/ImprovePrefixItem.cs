@@ -91,7 +91,7 @@ public class PrefixInfo : TagSerializable
         {
             try
             {
-                info.PrefixId = ModContent.Find<ModPrefix>(info.ModName, info.ModPrefixName).Type;
+                info.PrefixId = ModContent.Find<ModPrefix>(info.ModName, info.ModPrefixName)?.Type ?? -1;
             }
             catch
             {

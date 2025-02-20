@@ -247,7 +247,7 @@ public class SUIText : TimerView
         textPos.Y += TextScale * (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
 
         DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets,
-            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder * TextScale);
+            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder);
 
         DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
             textPos, TextColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);

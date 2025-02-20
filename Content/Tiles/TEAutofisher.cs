@@ -98,7 +98,7 @@ namespace ImproveGame.Content.Tiles
         }
 
         public static int GetClosestPlayerIndex(Point16 Position) =>
-            Player.FindClosest(new Vector2(Position.X * 16, Position.Y * 16), 1, 1);
+            Player.FindClosest(new Vector2(Position.X * 16, Position.Y * 16), 2, 2);
 
         public static Player GetClosestPlayer(Point16 Position)
         {
@@ -129,6 +129,7 @@ namespace ImproveGame.Content.Tiles
                 return;
             }
 
+            ResetStats();
             int finalFishingLevel = GetFishingConditions().FinalFishingLevel;
 
             if (Main.rand.Next(300) < finalFishingLevel)
@@ -139,10 +140,7 @@ namespace ImproveGame.Content.Tiles
             if (Main.rand.NextBool(60))
                 FishingTimer += 60;
 
-            bool accAvailable =
-                ModIntegrationsSystem.FishingStatLookup.TryGetValue(accessory.type, out FishingStat stat);
-
-            float fishingSpeedBonus = accAvailable ? stat.SpeedMultiplier : 1f;
+            float fishingSpeedBonus = SpeedMultiplier;
 
             // 钓鱼机内每条 Bass 将提供 5% 的钓鱼速度加成，最高可达 500% 加成
             int bassCount = 0;
@@ -166,11 +164,6 @@ namespace ImproveGame.Content.Tiles
             if (FishingTimer > fishingCooldown / fishingSpeedBonus)
             {
                 FishingTimer = 0;
-                LavaFishing = false;
-                TackleBox = false;
-                FishingSkill = 0;
-                if (accAvailable)
-                    ApplyAccessories(stat);
                 FishingCheck();
             }
 
@@ -185,12 +178,23 @@ namespace ImproveGame.Content.Tiles
         public bool LavaFishing;
         public bool TackleBox;
         public int FishingSkill;
+        public float SpeedMultiplier;
 
-        public void ApplyAccessories(FishingStat stat)
+        public void ResetStats()
         {
+            bool accAvailable =
+                ModIntegrationsSystem.FishingStatLookup.TryGetValue(accessory.type, out FishingStat stat);
+            LavaFishing = false;
+            TackleBox = false;
+            FishingSkill = 0;
+            SpeedMultiplier = 1f;
+            if (!accAvailable)
+                return;
+            
             LavaFishing = stat.LavaFishing;
             TackleBox = stat.TackleBox;
-            FishingSkill += stat.Power;
+            FishingSkill = stat.Power;
+            SpeedMultiplier = stat.SpeedMultiplier;
         }
 
         public void FishingCheck()

@@ -133,7 +133,12 @@ ImproveConfigs: {
 
 	NoConsume_Projectile: {
 		Label: "[centeritem:42] Infinite Thrown Weapons"
-		Tooltip: Thrown weapons in a stack of 3996 or more  will not be consumed
+		Tooltip: Thrown weapons in a stack of 3996 or more will not be consumed
+	}
+
+	NoConsume_Wire: {
+		Label: "[centeritem:530] Infinite Wire"
+		Tooltip: Wire in a stack of 3996 or more will not be consumed
 	}
 
 	ImprovePrefix: {
@@ -259,6 +264,11 @@ ImproveConfigs: {
 	AlchemyGrassAlwaysBlooms: {
 		Label: "[centeritem:316] Herbs Can Bloom in Any Condition"
 		Tooltip: Makes all the herbs able to bloom and to drop seeds in any condition
+	}
+
+	PumpkinGrowsFaster: {
+		Label: "[centeritem:1725] Accelerate Pumpkin Growth"
+		Tooltip: Makes all the pumpkins grow faster
 	}
 
 	StaffOfRegenerationAutomaticPlanting: {
@@ -468,33 +478,33 @@ ImproveConfigs: {
 	}
 
 	MostTreeMin: {
-		Label: "[centeritem:9] Minimum Regular Tree Height (Default: 7)"
-		Tooltip: ""
+		Label: "[centeritem:9] Minimum Regular Tree Height"
+		Tooltip: Default: 7
 	}
 
 	MostTreeMax: {
-		Label: "[centeritem:9] Maximum Regular Tree Height (Default: 12)"
-		Tooltip: ""
+		Label: "[centeritem:9] Maximum Regular Tree Height"
+		Tooltip: Default: 12
 	}
 
 	PalmTreeMin: {
-		Label: "[centeritem:2504] Minimum Palm Tree Height (Default: 10)"
-		Tooltip: ""
+		Label: "[centeritem:2504] Minimum Palm Tree Height"
+		Tooltip: Default: 10
 	}
 
 	PalmTreeMax: {
-		Label: "[centeritem:2504] Maximum Palm Tree Height (Default: 20)"
-		Tooltip: ""
+		Label: "[centeritem:2504] Maximum Palm Tree Height"
+		Tooltip: Default: 20
 	}
 
 	GemTreeMin: {
-		Label: "[centeritem:4856] Minimum Gem Tree Height (Default: 7)"
-		Tooltip: ""
+		Label: "[centeritem:4856] Minimum Gem Tree Height"
+		Tooltip: Default: 7
 	}
 
 	GemTreeMax: {
-		Label: "[centeritem:4856] Maximum Gem Tree Height (Default: 12)"
-		Tooltip: ""
+		Label: "[centeritem:4856] Maximum Gem Tree Height"
+		Tooltip: Default: 12
 	}
 
 	Headers: {
@@ -768,6 +778,7 @@ AvailableModItemConfigs: {
 	DisplayName: Mod Item Config
 	Available: " Obtainable"
 	Unavailable: " Unobtainable"
+	Enable: 启用
 
 	AvailableMagickWand: {
 		Label: "[centeritem:ImproveGame/MagickWand] {$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
@@ -885,7 +896,11 @@ UIConfigs: {
 
 	ShowMoreData: {
 		Label: "[centeritem:1344] Display Debug Data"
-		Tooltip: ""
+		Tooltip:
+			'''
+			Developer options, not for players
+			Enabling will display debugging information
+			'''
 	}
 
 	ShowModName: {
@@ -970,6 +985,16 @@ UIConfigs: {
 	MarkEnchantedSword: {
 		Label: "[centeritem:ImproveGame/EnchantedSwordGlobe] Enchanted Sword Icon Size"
 		Tooltip: Size of map icons of marked {$ItemName.EnchantedSword}, set to 0 to hide
+	}
+
+	MarkMarbleCave: {
+		Label: "[centeritem:ImproveGame/MarbleCaveGlobe] Marble Cave Icon Size"
+		Tooltip: Size of map icons of marked Marble Caves, set to 0 to hide
+	}
+
+	MarkGraniteCave: {
+		Label: "[centeritem:ImproveGame/GraniteCaveGlobe] Granite Cave Icon Size"
+		Tooltip: Size of map icons of marked Granite Caves, set to 0 to hide
 	}
 
 	MarkEmptyAutofisher: {
@@ -1059,6 +1084,11 @@ UIConfigs: {
 	RemoveGraveyardMusic: {
 		Label: "[centeritem:RichGravestone2] Remove Graveyard Music"
 		Tooltip: Removes the graveyard background music
+	}
+
+	GlobeEffect: {
+		Tooltip: "[centeritem:WorldGlobe] Locator Effect"
+		Label: Turn it off if you don't like it
 	}
 }
 

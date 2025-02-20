@@ -1184,6 +1184,12 @@ partial class MyUtils
         return true;
     }
 
+    public static void OperateInventory(bool openInventory, bool canDelayCheckRecipes = false)
+    {
+        Main.playerInventory = openInventory;
+        Recipe.FindRecipes(canDelayCheckRecipes);
+    }
+
     private static bool TryAcceptChanges(int whoAmI, ref NetworkText message)
     {
         if (NetMessage.DoesPlayerSlotCountAsAHost(whoAmI))

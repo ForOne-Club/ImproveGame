@@ -7,6 +7,8 @@ float4 uBackgroundColor;
 float2 uStart;
 float2 uEnd;
 float uLineWidth;
+float2 uTransition;
+float uInnerShrinkage;
 
 struct VSInput
 {
@@ -31,8 +33,8 @@ PSInput VSFunction(VSInput input)
 float4 Cross(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 p = abs(coords - uSizeOver2);
-    float d = length(p - min(p.x + p.y, uSizeOver2) * 0.5) - uRound;
-    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-1, 0.5, d + uBorder)), 0, smoothstep(-1, 0.5, d));
+    float d = length(p - min(p.x + p.y, uSizeOver2) * 0.5) - uRound + uInnerShrinkage;
+    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(uTransition.x, uTransition.y, d + uBorder)), 0, smoothstep(uTransition.x, uTransition.y, d));
 }
 
 float4 HasBorderLine(float2 coords : TEXCOORD0) : COLOR0
@@ -40,7 +42,7 @@ float4 HasBorderLine(float2 coords : TEXCOORD0) : COLOR0
     float2 ba = uEnd - uStart;
     float2 pa = coords - uStart;
     float h = clamp(dot(pa, ba) / dot(ba, ba), 0, 1);
-    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-0.5, 0.5, length(pa - h * ba) - uLineWidth + uBorder)), 0, smoothstep(-0.5, 0.5, length(pa - h * ba) - uLineWidth));
+    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(uTransition.x, uTransition.y, length(pa - h * ba) - uLineWidth + uBorder)), 0, smoothstep(uTransition.x, uTransition.y, length(pa - h * ba) - uLineWidth));
 }
 
 float4 NoBorderLine(float2 coords : TEXCOORD0) : COLOR0
@@ -48,20 +50,20 @@ float4 NoBorderLine(float2 coords : TEXCOORD0) : COLOR0
     float2 ba = uEnd - uStart;
     float2 pa = coords - uStart;
     float h = clamp(dot(pa, ba) / dot(ba, ba), 0, 1);
-    return lerp(uBackgroundColor, 0, smoothstep(-0.5, 0.5, length(pa - h * ba) - uLineWidth));
+    return lerp(uBackgroundColor, 0, smoothstep(uTransition.x, uTransition.y, length(pa - h * ba) - uLineWidth));
 }
 
 float4 HasBorderRound(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 p = abs(coords - uSizeOver2);
-    float d = distance(p, 0);
-    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(-1, 0.5, d - uSizeOver2.x + uBorder)), 0, smoothstep(-1, 0.5, d - uSizeOver2.x));
+    float d = distance(p, 0) + uInnerShrinkage;
+    return lerp(lerp(uBackgroundColor, uBorderColor, smoothstep(uTransition.x, uTransition.y, d - uSizeOver2.x + uBorder)), 0, smoothstep(uTransition.x, uTransition.y, d - uSizeOver2.x));
 }
 
 float4 NoBorderRound(float2 coords : TEXCOORD0) : COLOR0
 {
     float2 p = abs(coords - uSizeOver2);
-    return lerp(uBackgroundColor, 0, smoothstep(-1, 0.5, distance(p, 0) - uSizeOver2.x));
+    return lerp(uBackgroundColor, 0, smoothstep(uTransition.x, uTransition.y, distance(p, 0) + uInnerShrinkage - uSizeOver2.x));
 }
 
 technique Technique1

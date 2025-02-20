@@ -323,13 +323,15 @@ public class ModIntegrationsSystem : ModSystem
                     ConfigCondition.AvailableConstructWandC));
         mod.Call(3, ImproveGame.Instance, "Locator", TextureAssets.Item[ModContent.ItemType<AetherGlobe>()].Value,
             new NPCShop(-1, "Locator")
-                .Add<FloatingIslandGlobe>(gold: 8)
-                .Add<PyramidGlobe>(gold: 16)
-                .Add<AetherGlobe>(gold: 30)
-                .Add<DungeonGlobe>(gold: 1, silver: 80)
-                .Add<EnchantedSwordGlobe>(gold: 8)
-                .Add<PlanteraGlobe>(Condition.Hardmode, gold: 16)
-                .Add<TempleGlobe>(Condition.DownedPlantera, gold: 20));
+                .Add<FloatingIslandGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 8)
+                .Add<PyramidGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 16)
+                .Add<AetherGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 30)
+                .Add<DungeonGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 1, silver: 80)
+                .Add<GraniteCaveGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 1)
+                .Add<MarbleCaveGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 1)
+                .Add<EnchantedSwordGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 8)
+                .Add<PlanteraGlobe>(Item.buyPrice(gold: 16), Condition.Hardmode, ConfigCondition.EnableMinimapMarkC)
+                .Add<TempleGlobe>(Item.buyPrice(gold: 20), Condition.DownedPlantera, ConfigCondition.EnableMinimapMarkC));
         mod.Call(3, ImproveGame.Instance, "Other", TextureAssets.Item[ModContent.ItemType<ExtremeStorage>()].Value,
             new NPCShop(-1, "Other")
                 .Add<BannerChest>(ConfigCondition.AvailableBannerChestC, gold: 2, silver: 50)
@@ -341,7 +343,8 @@ public class ModIntegrationsSystem : ModSystem
                 .Add<BaitSupplier>(ConfigCondition.AvailableBaitSupplierC, gold: 30)
                 .Add<PotionBag>(ConfigCondition.AvailablePotionBagC, gold: 2, silver: 50)
                 .Add<Dummy>(silver: 50)
-                .Add<WeatherBook>(Condition.DownedEowOrBoc, gold: 25, silver: 60));
+                .Add<ShellShipInBottle>(ConfigCondition.EnableQuickShimmerC, gold: 5)
+                .Add<WeatherBook>(Item.buyPrice(gold: 25, silver: 60), Condition.DownedEowOrBoc, ConfigCondition.EnableWeatherControlC));
     }
 
     public override void Unload()

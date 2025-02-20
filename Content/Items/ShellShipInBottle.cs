@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.Packets.Weather;
 using System;
@@ -20,12 +21,10 @@ public class ShellShipInBottle : ModItem
 
     public override void SetDefaults()
     {
-        Item.CloneDefaults(ItemID.CombatBook);
-        Item.useAnimation = Item.useTime = 0;
+        Item.maxStack = Item.CommonMaxStack;
         Item.rare = ItemRarityID.Blue;
         Item.Size = new Vector2(42, 20);
         Item.value = Item.sellPrice(silver: 20);
-        base.SetDefaults();
     }
 
     public override void AddRecipes()
@@ -36,6 +35,7 @@ public class ShellShipInBottle : ModItem
             .AddIngredient(ItemID.Wood, 10)
             .AddIngredient(ItemID.FallenStar, 1)
             .AddTile(TileID.WorkBenches)
+            .AddCondition(ConfigCondition.EnableQuickShimmerC)
             .Register();
     }
 }

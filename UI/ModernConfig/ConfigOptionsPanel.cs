@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.ModernConfig.FakeCategories;
+﻿using FuzzySearchNet;
+using ImproveGame.UI.ModernConfig.FakeCategories;
 using ImproveGame.UI.ModernConfig.OfficialPresets;
 using ImproveGame.UI.ModernConfig.OptionElements;
 using ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
@@ -6,12 +7,13 @@ using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using PinyinNet;
+using System.Text.RegularExpressions;
 using Terraria.GameInput;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.UI.ModernConfig;
 
-public sealed class ConfigOptionsPanel : SUIPanel
+public sealed partial class ConfigOptionsPanel : SUIPanel
 {
     internal static ConfigOptionsPanel Instance;
     public bool ShouldHideSearchBar;
@@ -118,6 +120,7 @@ public sealed class ConfigOptionsPanel : SUIPanel
             _allOptions.ForEach(o =>
             {
                 o.Highlighted = false;
+                o.DebugText = "";
                 o.JoinParent(_options.ListView);
             });
             Recalculate();
@@ -125,36 +128,29 @@ public sealed class ConfigOptionsPanel : SUIPanel
         }
 
         // 找出所有匹配的选项，并着色（设置Highlighted）
-        var allOptions = _allOptions.ToList(); // ToList() 防止遍历时修改列表
-        var matchedOptions = new List<ModernConfigOption>();
-        string searchContent = RemoveSpaces(text.ToLower());
-        foreach (var option in allOptions)
-        {
-            string name = option.Label;
-            string pinyin = RemoveSpaces(PinyinConvert.GetPinyinForAutoComplete(name));
-            bool labelMatched = name.Contains(searchContent);
-            bool pinyinMatched = Language.ActiveCulture.Name is "zh-Hans" && pinyin.Contains(searchContent);
-            if (labelMatched || pinyinMatched)
-            {
-                option.Highlighted = true;
-                matchedOptions.Add(option);
-            }
-            else
-            {
-                option.Highlighted = false;
-            }
-        }
+        var sortedOptions = new List<ModernConfigOption>();
 
-        // 将所有匹配的选项排序到allOptions列表的最前面
-        foreach (var option in matchedOptions)
+        // 转换成标准字符串搜索输入
+        var optionNames = _allOptions
+            .Select(o => ItemTagRegex().Replace(o.Label, "")).ToList();
+        // 调用DeepSeek写的搜索方法
+        var results = TextSearch(text, optionNames);
+        // 对结果进行处理
+        foreach (SearchResult result in results)
         {
-            allOptions.Remove(option);
-            allOptions.Insert(0, option);
+            var option = _allOptions[result.OriginalIndex];
+            // 将allOptions里的对应元素按照次序生成排序后的列表
+            sortedOptions.Add(option);
+            // 匹配高亮
+            option.Highlighted = result.HasAnyMatch;
+            // 调试信息
+            option.DebugText =
+                $"oi: {result.OriginalIndex}, ld: {result.LevenshteinDistance}, ldp: {result.LevenshteinDistancePinyin}, ms: {result.MatchScore}";
         }
 
         // 最后重新加入到_options
         _options.ListView.RemoveAllChildren();
-        allOptions.ForEach(o => o.JoinParent(_options.ListView));
+        sortedOptions.ForEach(o => o.JoinParent(_options.ListView));
         Recalculate();
     }
 
@@ -223,4 +219,7 @@ public sealed class ConfigOptionsPanel : SUIPanel
 
         public void Unload() { }
     }
+
+    [GeneratedRegex(@"\[centeritem:[^\]]*\]", RegexOptions.IgnoreCase, "zh-CN")]
+    private static partial Regex ItemTagRegex();
 }

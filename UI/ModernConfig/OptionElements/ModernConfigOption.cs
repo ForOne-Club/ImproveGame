@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.Configs.FavoritedSystem;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.Configs.FavoritedSystem;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UIFramework.BaseViews;
@@ -8,6 +9,7 @@ using System.ComponentModel;
 using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.UI;
+using Terraria.UI.Chat;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -50,6 +52,7 @@ public class ModernConfigOption : TimerView
         if (displayConditionAttribute == null)
         {
             base.Draw(spriteBatch);
+            DrawDebugText(spriteBatch);
             return;
         }
 
@@ -71,6 +74,9 @@ public class ModernConfigOption : TimerView
         }
 
         base.Draw(spriteBatch);
+
+        if (displayConditionAttribute.IsVisible)
+            DrawDebugText(spriteBatch);
     }
 
     // 为了让UI之间实际上无间隔，防止鼠标滑过时Tooltip文字闪现，这里重写绘制，而不使用Spacing
@@ -125,6 +131,26 @@ public class ModernConfigOption : TimerView
             string passwordTip = GetText("Configs.ImproveConfigs.OnlyHostByPassword.Tips");
             UICommon.TooltipMouseText(passwordTip);
         }
+    }
+
+    private void DrawDebugText(SpriteBatch spriteBatch)
+    {
+        if (!UIConfigs.Instance.ShowMoreData)
+            return;
+        
+        var dimensions = GetDimensions();
+        var dimensionsRect = dimensions.ToRectangle();
+        var position = dimensions.Position();
+        var size = dimensions.Size();
+        
+        // 文字
+        var text = DebugText ?? "";
+        var textPosition = dimensionsRect.Top();
+        textPosition.Y += 6;
+        textPosition.X -= 50;
+
+        ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, textPosition,
+            Color.Gray, Color.Black, 0f, Vector2.Zero, new Vector2(0.8f), -1f, 1f);
     }
 
     public override void RightMouseDown(UIMouseEvent evt)
@@ -206,6 +232,7 @@ public class ModernConfigOption : TimerView
     public FieldInfo FieldInfo { get; }
     public ModConfig Config { get; }
     public string OptionName { get; }
+    public string DebugText { get; set; }
 
     internal double Min = 0;
     internal double Max = 1;

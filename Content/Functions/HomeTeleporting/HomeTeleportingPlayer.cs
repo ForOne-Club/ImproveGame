@@ -39,7 +39,7 @@ public class HomeTeleportingPlayer : ModPlayer
             int totalStack = CurrentFrameProperties.ExistItems.GetTotalStack(itemType);
             if (totalStack is 0)
                 continue;
-            if (isPotion && totalStack < Config.NoConsume_PotionRequirement)
+            if (isPotion && totalStack < Config.NoConsume_PotionRequirement && Config.NoConsume_Potion)
                 continue;
 
             Projectile.NewProjectile(new EntitySource_Sync(), Player.position, Vector2.Zero,

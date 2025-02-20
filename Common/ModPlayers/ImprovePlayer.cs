@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.GlobalNPCs;
+﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.ItemContainer;
@@ -222,6 +223,8 @@ public class ImprovePlayer : ModPlayer
             PressGrabBagKeybind();
         if (KeybindSystem.OpenBagKeybind.JustPressed)
             PressOpenBagKeybind();
+        if (KeybindSystem.QuickShimmerKeybind.JustPressed)
+            PressQuickShimmerKeybind();
         if (KeybindSystem.HotbarSwitchKeybind.JustPressed || _cacheSwitchSlot)
             PressHotbarSwitchKeybind();
         if (KeybindSystem.AutoTrashKeybind.JustPressed)
@@ -240,9 +243,19 @@ public class ImprovePlayer : ModPlayer
         if (!Config.SuperVault) return;
 
         if (BigBagGUI.Instance.Enabled && BigBagGUI.Instance.StartTimer.AnyOpen)
+        {
             BigBagGUI.Instance.Close();
+        }
         else
+        {
+            bool oldInventory = Main.playerInventory;
+
             BigBagGUI.Instance.Open();
+
+            // 假设也按了物品栏快捷键...
+            if (PlayerInput.Triggers.JustPressed.Inventory)
+                OperateInventory(oldInventory);
+        }
     }
 
     private static void PressBuffTrackerKeybind()
@@ -257,6 +270,16 @@ public class ImprovePlayer : ModPlayer
     {
         var ui = OpenBagGUI.Instance;
         if (ui is null) return;
+
+        if (ui.Enabled && ui.StartTimer.AnyOpen)
+            ui.Close();
+        else
+            ui.Open();
+    }
+    private static void PressQuickShimmerKeybind()
+    {
+        var ui = QuickShimmerGUI.Instance;
+        if (ui is null || !Config.QuickShimmer || !QuickShimmerSystem.Unlocked) return;
 
         if (ui.Enabled && ui.StartTimer.AnyOpen)
             ui.Close();
