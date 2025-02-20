@@ -7,6 +7,8 @@ using ImproveGame.UIFramework.SUIElements;
 using ImproveGame.UIFramework.BaseViews;
 using System.Collections;
 using Terraria.UI;
+using MonoMod.Cil;
+using ImproveGame.UIFramework.Common;
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class OptionDefinition : ModernConfigOption
@@ -122,7 +124,7 @@ public class OptionDefinition : ModernConfigOption
 
     protected override void OnBind()
     {
-        leftClickEvtInfo = typeof(UIElement).GetField("OnLeftClick",BindingFlags.Public | BindingFlags.Instance|BindingFlags.NonPublic);
+        leftClickEvtInfo = typeof(UIElement).GetField("OnLeftClick", BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
         ElementInstance = Activator.CreateInstance(EntityDefinitionElementType) as ConfigElement;
         ElementInstance.Bind(VariableInfo, Item, List, index);
         ElementInstance.OnBind();
@@ -203,7 +205,7 @@ public class OptionDefinition : ModernConfigOption
             Height = new(40, 0),
             BgColor = Color.Black * .3f,
             Rounded = new(8),
-            Spacing = new(20,0)
+            Spacing = new(20, 0)
         };
         filteringName.ContentsChanged += (ref string content) =>
         {
@@ -224,7 +226,7 @@ public class OptionDefinition : ModernConfigOption
             Spacing = new Vector2(6)
         };
         OptionView.SetPadding(0f, 0f);
-        OptionView.SetSize(0f, -60, 1f, 1f);
+        OptionView.SetSize(0f, -90, 1f, 1f);
         OptionView.JoinParent(MainOptionPanel);
     }
 
@@ -288,7 +290,7 @@ public class OptionDefinition : ModernConfigOption
         foreach (var p in passed)
             passedElem.Add(p as UIElement);
 
-        float fullWidth = GetDimensions().Width - 5;
+        float fullWidth = GetDimensions().Width - 25;
         if (passedElem.Count == 0) return;
         Vector2 unitSize = passedElem.First().GetSize() + new Vector2(8);
         int singleLineOptCount = (int)(fullWidth / unitSize.X);
@@ -346,14 +348,94 @@ public class DefinitionSUIDetour : ILoadable
     public void Load(Mod mod)
     {
         On_UIPanel.DrawSelf += SUIize;
+        MonoModHooks.Modify(typeof(NPCDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Normal);
+        MonoModHooks.Modify(typeof(BuffDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Normal);
+        MonoModHooks.Modify(typeof(ProjectileDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Normal);
+        MonoModHooks.Modify(typeof(ItemDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Item);
+        MonoModHooks.Modify(typeof(TileDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Tile);
     }
+    void Modify_SUIDefinition_Normal(ILContext il)
+    {
+        var cursor = new ILCursor(il);
+        for (int n = 0; n < 4; n++)
+            if (!cursor.TryGotoNext(i => i.MatchLdarg0()))
+                return;
 
+        var ilLabel = cursor.MarkLabel();
+
+        cursor.Index = 0;
+        if (!cursor.TryGotoNext(i => i.MatchLdarg1()))
+            return;
+        cursor.EmitLdloc0();
+        cursor.EmitDelegate<Func<CalculatedStyle, bool>>(dimension =>
+        {
+            if (OptionDefinition.InModernConfig)
+            {
+            SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, true);
+
+                return true;
+            }
+            return false;
+        });
+        cursor.EmitBrtrue(ilLabel);
+    }
+    void Modify_SUIDefinition_Item(ILContext il)
+    {
+        var cursor = new ILCursor(il);
+        for (int n = 0; n < 5; n++)
+            if (!cursor.TryGotoNext(i => i.MatchLdarg0()))
+                return;
+
+        var ilLabel = cursor.MarkLabel();
+
+        cursor.Index = 0;
+        if (!cursor.TryGotoNext(i => i.MatchLdarg1()))
+            return;
+        cursor.EmitLdloc0();
+        cursor.EmitDelegate<Func<CalculatedStyle, bool>>(dimension =>
+        {
+            if (OptionDefinition.InModernConfig)
+            {
+                SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, true);
+
+                return true;
+            }
+            return false;
+        });
+        cursor.EmitBrtrue(ilLabel);
+    }
+    void Modify_SUIDefinition_Tile(ILContext il)
+    {
+        var cursor = new ILCursor(il);
+        for (int n = 0; n < 5; n++)
+            if (!cursor.TryGotoNext(i => i.MatchLdarg0()))
+                return;
+
+        var ilLabel = cursor.MarkLabel();
+
+        cursor.Index = 0;
+        if (!cursor.TryGotoNext(i => i.MatchLdloc0()))
+            return;
+        cursor.EmitLdarg0();
+        cursor.EmitDelegate<Func<UIElement, bool>>(element =>
+        {
+            if (OptionDefinition.InModernConfig)
+            {
+                var dimension = element.GetInnerDimensions();
+                SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, true);
+
+                return true;
+            }
+            return false;
+        });
+        cursor.EmitBrtrue(ilLabel);
+    }
     private void SUIize(On_UIPanel.orig_DrawSelf orig, UIPanel self, SpriteBatch spriteBatch)
     {
         if (OptionDefinition.InModernConfig)
         {
             var dimension = self.GetDimensions();
-            SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(12f), self.BackgroundColor, 2f, self.BorderColor, true);
+            SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(12f), UIStyle.PanelBg, 2f, UIStyle.PanelBorder, true);
         }
         else
             orig.Invoke(self, spriteBatch);

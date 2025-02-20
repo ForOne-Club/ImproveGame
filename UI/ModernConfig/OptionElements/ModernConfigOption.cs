@@ -115,7 +115,8 @@ public class ModernConfigOption : TimerView
             throw new Exception($"Field \"{optionName}\" not found in type \"{type.Name}\"");
         return result;
     }
-
+    protected static Mod _modInMemory;
+    protected static Category _categoryInMemory;
     public virtual int labelReservedWidth => 70;
     public Type VarType => List != null ? List[index].GetType() : VariableInfo.Type;
     //原来的构造函数改成OnBind了
@@ -133,9 +134,51 @@ public class ModernConfigOption : TimerView
         Height.Set(46f, 0f);
         Rounded = new Vector4(12f);
         SetPadding(12, 4);
+
+        if (GetAttribute<CustomModConfigItemAttribute>() != null)
+        {
+            var customButton = new SUIDrawingImage(v =>
+            {
+                var dimension = v.GetDimensions();
+                if (v.IsMouseHovering)
+                    SDFGraphics.BarStarX(dimension.Center(), new(.5f), dimension.Width * .5f, 4, .5f, TextureAssets.Extra[180].Value, Main.GlobalTimeWrappedHourly, 0.15f, GetMatrix(true));
+                else
+                    SDFGraphics.NoBorderStarX(dimension.Center(), new(.5f), dimension.Width * .5f, 4, .5f, Color.Yellow, GetMatrix(true));
+                //SDFRectangle.HasBorder(dimension.Position(),dimension.Size(),v.Rounded,v.BgColor,v.);
+            }
+            )
+            {
+                RelativeMode = RelativeMode.None,
+                //BgColor = Color.Black * 0.4f,
+                //Rounded = new Vector4(4f),
+                //Left = new(-120, 1),
+                Top = new(6, 0),
+                Width = new(25, .0f),
+                Height = new(25, .0f)
+            };
+            customButton.JoinParent(this);
+            customButton.OnLeftClick += (evt, elem) =>
+            {
+                SoundEngine.PlaySound(SoundID.MenuTick);
+                _modInMemory = ModernConfigUI.Instance.currentMod;
+                _categoryInMemory = ConfigOptionsPanel.CurrentCategory;
+                Config.Open(() =>
+                {
+                    ModernConfigUI.Instance.Open(_modInMemory);
+                    ConfigOptionsPanel.CurrentCategory = _categoryInMemory;
+                }, OptionName);
+            };
+            customButton.OnMouseOver += (evt, elem) =>
+            {
+                string info = GetText("ModernConfig.CustomItemTip");
+                ModernConfigUI.PopNewInfo(info, elem.GetDimensions().Position() - FontAssets.MouseText.Value.MeasureString(info), Color.Cyan);
+            };
+        }
+
+
         var labelElement = new OptionLabelElement(config, OptionName, labelReservedWidth, Label)
         {
-            RelativeMode = RelativeMode.None
+            RelativeMode = RelativeMode.Horizontal
         };
         labelElement.OnUpdate += _ =>
         {
@@ -143,9 +186,9 @@ public class ModernConfigOption : TimerView
                 ? Color.Gold
                 : Color.White;
             if (ReloadRequired)
-                labelElement.DisplayText = labelElement.OriginLabel() + (ValueChanged ? $" - [c/FF0000:{Language.GetTextValue("tModLoader.ModReloadRequired")}]" : "");
+                labelElement.DisplayText = ConvertLeftRight(Label) + (ValueChanged ? $" - [c/FF0000:{Language.GetTextValue("tModLoader.ModReloadRequired")}]" : "");
             else if (labelElement.DisplayText == "")
-                labelElement.DisplayText = labelElement.OriginLabel();
+                labelElement.DisplayText = ConvertLeftRight(Label);
 
         };
         labelElement.JoinParent(this);
@@ -377,7 +420,7 @@ public class ModernConfigOption : TimerView
 
     protected bool Interactable => !CantOperateDueToOnlyGetter && (!CantOperateInGame || Main.gameMenu);
 
-    public string Label => List != null ? (index + 1).ToString() : (ConfigManager.GetLocalizedText<LabelKeyAttribute, LabelArgsAttribute>(VariableInfo, "Label") ?? ConfigHelper.GetLabel(Config, OptionName));
+    public virtual string Label => List != null ? (index + 1).ToString() : (ConfigManager.GetLocalizedText<LabelKeyAttribute, LabelArgsAttribute>(VariableInfo, "Label") ?? ConfigHelper.GetLabel(Config, OptionName));
     public string Tooltip => ConfigManager.GetLocalizedText<TooltipKeyAttribute, TooltipArgsAttribute>(VariableInfo, "Tooltip") ?? ConfigHelper.GetTooltip(Config, OptionName);
 
     //public FieldInfo FieldInfo { get; }
@@ -422,7 +465,7 @@ public class ModernConfigOption : TimerView
     /// <summary>
     /// List中的索引
     /// </summary>
-    public int index;
+    public int index = -1;
     /// <summary>
     /// 当前设置块指向的目标
     /// <br>为了和object等适配，不能直接在config改了</br>

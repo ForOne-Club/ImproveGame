@@ -11,6 +11,11 @@ ColorPastedPopup: 已粘贴Hex！
 ColorButtonTip: 左键点击颜色块复制十六进制码，右键点击颜色块粘贴
 ModdedExtraText: 正在编辑{0}的配置，该页面由更好的体验提供
 CollectionsTip: 可以拖动显示区域底部来调整显示大小，数组或者列表元素可以用鼠标拖动它的上半部分来重新排序
+CustomItemTip:
+	'''
+	检测到这个选项实现了自己的界面
+	左键点击按钮以进入
+	'''
 NotSupportText:
 	'''
 	属性 {0}({1}) 

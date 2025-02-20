@@ -284,7 +284,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             float h = OptionView.ListView.GetDimensions().Height + 70;
             h = Utils.Clamp(h, 70, showMaxHeight);
             if (h < showMaxHeight)
-                showMaxHeight = h;
+                showMaxHeight = Math.Max(h,150);
             Height.Set(h, 0f);
             Parent?.Height.Set(h, 0f);
             base.Recalculate();

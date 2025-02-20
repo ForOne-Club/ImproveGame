@@ -116,7 +116,7 @@ public class ConfigOptionPacket : NetModule
             ConfigHelper.SetConfigValue(modConfig, variableInfo, value, item, false,false, path: path == null ? null : [.. path]);
             if (_popInfo != null && _popInfo.Length > 0)
             {
-                ModernConfigUI.PopNewInfo(_popInfo, Main.MouseScreen - ModernConfigUI.Instance.MainPanel.GetDimensions().Position() - FontAssets.MouseText.Value.MeasureString(_popInfo) * new Vector2(1f, 0f) - new Vector2(64,32), _rejected ? Color.Red : Color.Green);
+                ModernConfigUI.PopNewInfo(_popInfo, Main.MouseScreen - FontAssets.MouseText.Value.MeasureString(_popInfo) * new Vector2(1f, 0f) - new Vector2(64,32), _rejected ? Color.Red : Color.Green);
             }
         }
 

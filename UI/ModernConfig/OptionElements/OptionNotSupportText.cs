@@ -16,8 +16,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
     /// </summary>
     internal class OptionNotSupportText : ModernConfigOption
     {
-        private static Mod _modInMemory;
-        private static Category _categoryInMemory;
+        //private static Mod _modInMemory;
+        //private static Category _categoryInMemory;
 
         protected override void OnBind()
         {

@@ -11,6 +11,11 @@ ColorPastedPopup: Hex pasted!
 ColorButtonTip: Left-click on the color block to copy the hexadecimal code. Right-click on the color block to paste.
 ModdedExtraText: Editing the config of {0}. This page is provided by Quality of Terraria.
 CollectionsTip: You can adjust the display size by dragging the bottom of the view area, and elements of List or Array can be reordered by dragging it's up half.
+CustomItemTip:
+	'''
+	Found that this option has its own interface
+	Left click to goto vanilla tModLoader's config UI
+	'''
 NotSupportText:
 	'''
 	Property or field {0}({1}) 

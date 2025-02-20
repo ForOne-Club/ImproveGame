@@ -12,11 +12,14 @@ using Terraria.ModLoader.UI;
 using Terraria.ID;
 using ImproveGame.UI.ModernConfig.Categories;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using ImproveGame.UIFramework.Graphics2D;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
     public class OptionObject : ModernConfigOption
     {
+
+
         //SeparatePage:有分页面，内外都为True
         //innerPage:处于分页面，内部为True
         //在外页面保留初始化按钮
@@ -83,7 +86,42 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 expanded = !expanded;
                 pendingChanges = true;
             };
-
+            //if (HasCustom)
+            //{
+            //    var customButton = new SUIDrawingImage(v =>
+            //    {
+            //        var dimension = v.GetDimensions();
+            //        SDFGraphics.NoBorderStarX(dimension.Center(), new(.5f), dimension.Width * .5f, 4, .5f, Color.Yellow, GetMatrix(true));
+            //        //SDFRectangle.HasBorder(dimension.Position(),dimension.Size(),v.Rounded,v.BgColor,v.);
+            //    }
+            //    )
+            //    {
+            //        RelativeMode = RelativeMode.None,
+            //        BgColor = Color.Black * 0.4f,
+            //        Rounded = new Vector4(4f),
+            //        Left = new(-120, 1),
+            //        Top = new(6, 0),
+            //        Width = new(25, .0f),
+            //        Height = new(25, .0f)
+            //    };
+            //    customButton.JoinParent(this);
+            //    customButton.OnLeftClick += (evt, elem) =>
+            //    {
+            //        SoundEngine.PlaySound(SoundID.MenuTick);
+            //        _modInMemory = ModernConfigUI.Instance.currentMod;
+            //        _categoryInMemory = ConfigOptionsPanel.CurrentCategory;
+            //        Config.Open(() =>
+            //        {
+            //            ModernConfigUI.Instance.Open(_modInMemory);
+            //            ConfigOptionsPanel.CurrentCategory = _categoryInMemory;
+            //        }, OptionName);
+            //    };
+            //    customButton.OnMouseOver += (evt, elem) =>
+            //    {
+            //        string info = GetText("ModernConfig.CustomItemTip");
+            //        ModernConfigUI.PopNewInfo(info, elem.GetDimensions().Position() - FontAssets.MouseText.Value.MeasureString(info), Color.Cyan);
+            //    };
+            //}
             OptionView = new SUIScrollView2(Orientation.Vertical)
             {
                 RelativeMode = RelativeMode.None,
@@ -138,6 +176,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         {
 
         }
+        public override string Label => base.Label + (HasToString ? $":{GetValue()?.ToString() ?? "null"}" : "");
         protected SUIScrollView2 OptionView;
         SUITriangleIcon ExpandButton;
         SUITriangleIcon InitialButton;
@@ -149,8 +188,10 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         SeparatePageAttribute SeparatePageAttribute;
         protected RangeAttribute RangeAttribute;
         protected IncrementAttribute IncrementAttribute;
+        bool HasToString;
         bool SeparatePage => SeparatePageAttribute != null;
         bool innerPage;//旧版实现子页面的手段，现在用不到了？
+        bool HasCustom;
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -236,7 +277,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             h = Utils.Clamp(h, 70, innerPage ? 214514 : showMaxHeight);
             if (h < showMaxHeight)
-                showMaxHeight = h;
+                showMaxHeight = Math.Max(h, 150);
+
             Height.Set(h, 0f);
             Parent?.Height.Set(h, 0f);
             base.Recalculate();
@@ -283,10 +325,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                         list.Add(new(variable, Config));
                         //WrapIt(OptionView.ListView, Config, variable, data, owner: this);
                     }
-                    ConfigOptionsPanel.GlobalItem = data;
-                    CrossModCategoryCard card = new CrossModCategoryCard(list);
-                    ConfigOptionsPanel.CurrentCategory = card;
-                    ConfigOptionsPanel.GlobalItem = null;
+                    CrossModCategoryCard card = new CrossModCategoryCard(list, getLabel: () => List == null ? base.Label : $"{owner.Label}#{index + 1}");//() => VariableInfo.Name + (index != -1 ? $"#{index+1}" : ""
+                    ConfigOptionsPanel.SwitchToSubPage(card, data);
                     //ConfigOptionsPanel.GlobalItem = Item;
                     //CrossModCategoryCard card = new CrossModCategoryCard(list);
                     //ConfigOptionsPanel.CurrentCategory = card;
@@ -307,6 +347,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             SeparatePageAttribute = GetAttribute<SeparatePageAttribute>();
             RangeAttribute = GetAttribute<RangeAttribute>();
             IncrementAttribute = GetAttribute<IncrementAttribute>();
+            HasCustom = GetAttribute<CustomModConfigItemAttribute>() != null;
+			HasToString = VarType.GetMethod("ToString", []).DeclaringType != typeof(object) && this.GetType() == typeof(OptionObject);
             base.CheckAttributes();
         }
     }

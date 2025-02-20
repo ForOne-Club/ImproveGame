@@ -56,7 +56,7 @@ public sealed class ModernConfigUI : UIState
         Instance.noticeTimer = 120;
         Instance.noticeColor = color;
         Instance.PopNotice.TextOrKey = info;
-        Instance.PopNoticePanel.SetPos(position);
+        Instance.PopNoticePanel.SetPos(position - ModernConfigUI.Instance.MainPanel.GetDimensions().Position());
 
         Instance.PopNoticePanel.Recalculate();
     }
@@ -64,6 +64,7 @@ public sealed class ModernConfigUI : UIState
     public Color noticeColor;
     public SUIText PopNotice;
     public View PopNoticePanel;
+    public SUIScrollView2 PathPanel;
     public override void OnInitialize()
     {
         const int gapBetweenPanels = 20;
@@ -142,6 +143,17 @@ public sealed class ModernConfigUI : UIState
         PopNotice = new();
         PopNotice.JoinParent(PopNoticePanel);
 
+        PathPanel = new(Orientation.Horizontal)
+        {
+            BgColor = UIStyle.PanelBg,
+            BorderColor = UIStyle.PanelBorder,
+            Width = new(0, 0.5f),
+            Height = new(40, 0),
+            Rounded = new (8),
+            Border = 1f,
+            
+        };
+        PathPanel.SetPos(0, -20 - 40 - 10, 0.5f + 0.86f * .5f - 0.5f, 0.5f - 0.82f * .5f);
         this.Append(backButton);
     }
 
@@ -174,7 +186,6 @@ public sealed class ModernConfigUI : UIState
     public void Open(Mod mod)
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
-
         if (mod.Name == "ImproveGame")
         {
             ExtraText = "";
@@ -189,6 +200,7 @@ public sealed class ModernConfigUI : UIState
                 ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.AboutPage_ModConfig;
         }
         Enabled = true;
+        noticeTimer = 1;
 
         if (Main.gameMenu)
         {
@@ -206,7 +218,9 @@ public sealed class ModernConfigUI : UIState
     public void Close()
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
-        noticeTimer = 0;
+        PathPanel.ListView.RemoveAllChildren();
+        PathPanel.Remove();
+        noticeTimer = 1;
         Enabled = false;
         if (!Main.gameMenu)
         {
@@ -222,7 +236,6 @@ public sealed class ModernConfigUI : UIState
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-
         if (Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape) &&
             UISystem.FocusedEditableText is null && Main.gameMenu) // 游戏里按照物品栏快捷键关闭，只有gameMenu才用Esc
         {
@@ -232,7 +245,8 @@ public sealed class ModernConfigUI : UIState
         // 适配即时风格切换
         MainPanel.BorderColor = ConfigColors.MainPanelBorder;
         MainPanel.BgColor = ConfigColors.MainPanelBg;
-
+        PathPanel.BorderColor = ConfigColors.MainPanelBorder;
+        PathPanel.BgColor = ConfigColors.MainPanelBg;
         if (noticeTimer-- > 0)
         {
             float k = noticeTimer switch

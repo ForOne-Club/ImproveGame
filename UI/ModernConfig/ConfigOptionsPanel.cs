@@ -7,6 +7,7 @@ using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using PinyinNet;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Terraria.GameInput;
 using Terraria.ModLoader.Config;
@@ -43,7 +44,74 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             }
         }
     }
+    //public static List<Category> PreviousPageList = [];
+    static SUIText CategoryToPanel(Category current, object item)
+    {
+        var list = ModernConfigUI.Instance.PathPanel;
+        SUIText prevPage = new()
+        {
+            TextOrKey = current.Label + "->",
+            //BgColor = UIStyle.PanelBg,
+            //BorderColor = UIStyle.PanelBorder,
+            Padding = 8f,
+            RelativeMode = RelativeMode.Horizontal,
+            Rounded = new(4f),
+            TextScale = 0.75f,
+            VAlign = .5f
+        };
+        prevPage.OnLeftClick += (evt, elem) =>
+        {
+            if (CurrentCategory == current) return;
+            int index = list.ListView.Elements.IndexOf(elem);
 
+            if (index == 0)
+            {
+                list.ListView.Elements.Clear();
+                list.Remove();
+            }
+            else
+            {
+                list.ListView.Elements.RemoveRange(index + 1, list.ListView.Elements.Count - index - 1);
+                list.Recalculate();
+            }
+            GlobalItem = item;
+            CurrentCategory = current;
+            GlobalItem = null;
+            SoundEngine.PlaySound(SoundID.MenuClose);
+        };
+        prevPage.OnUpdate += (elem) =>
+        {
+            var s = elem as SUIText;
+            var dimension = s.GetDimensions();
+            Color targetColor;
+            if (CurrentCategory == current)
+                targetColor = Color.White;
+            else if (s.IsMouseHovering)//ContainsPoint(Main.MouseScreen)
+                targetColor = Color.Yellow;
+            else
+                targetColor = Color.Lerp(Color.LightGray, Color.Gray, 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly * 4.0f + dimension.Position().X * .5f));
+            s.TextColor = Color.Lerp(s.TextColor, targetColor, 0.15f);
+            s.RecalculateText();
+        };
+        prevPage.SetSize(prevPage.TextSize * new Vector2(.8f, 1f));
+        return prevPage;
+    }
+    public static void SwitchToSubPage(Category destination, object item)
+    {
+        //PreviousPageList.Add(CurrentCategory);
+        var list = ModernConfigUI.Instance.PathPanel;
+        if (list.Parent == null)
+        {
+            CategoryToPanel(CurrentCategory, null).JoinParent(list.ListView);
+            list.JoinParent(ModernConfigUI.Instance);
+        }
+        SoundEngine.PlaySound(SoundID.MenuOpen);
+        GlobalItem = item;
+        CurrentCategory = destination;
+        GlobalItem = null;
+        CategoryToPanel(CurrentCategory, item).JoinParent(list.ListView);
+        list.Recalculate();
+    }
     public ConfigOptionsPanel(Color color) : base(color, color)
     {
         const int searchBarHeight = 30;
