@@ -30,7 +30,7 @@ public class ModernConfigDetours : ILoadable
             if (!isInGameModernConfig)
                 return;
 
-            Main.playerInventory = false;
+            OperateInventory(false);
             ModernConfigUI.Instance.Enabled = false;
         };
     }

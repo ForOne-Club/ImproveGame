@@ -39,6 +39,7 @@ public class WarriorPreset : OfficialPreset
         modConfig.BestiaryQuickUnlock = true;
         modConfig.AlchemyGrassGrowsFaster = true;
         modConfig.AlchemyGrassAlwaysBlooms = true;
+        modConfig.PumpkinGrowsFaster = true;
         modConfig.StaffOfRegenerationAutomaticPlanting = true;
         modConfig.NoBiomeSpread = true;
         modConfig.RespawnWithFullHP = true;

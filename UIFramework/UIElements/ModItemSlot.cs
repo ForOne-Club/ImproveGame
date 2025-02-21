@@ -140,7 +140,7 @@ namespace ImproveGame.UIFramework.UIElements
             {
                 ItemChange(true);
                 RightClickItemChange(Item.stack - lastStack, lastType != Item.type);
-                Main.playerInventory = true;
+                OperateInventory(true);
             }
 
             Vector2 origin = GetDimensions().Position();
@@ -247,7 +247,7 @@ namespace ImproveGame.UIFramework.UIElements
                 {
                     SwapItem(ref placeItem);
                     SoundEngine.PlaySound(SoundID.Grab);
-                    Main.playerInventory = true;
+                    OperateInventory(true);
                     return;
                 }
                 // type相同，里面的能堆叠，放进去

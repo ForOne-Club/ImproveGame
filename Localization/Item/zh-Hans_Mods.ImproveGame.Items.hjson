@@ -176,14 +176,16 @@ GlobeBase: {
 		在地图上标记{0}
 		可在[c/CC88AA:个人配置]中隐藏标记
 		'''
+	Tooltip_1:
+		'''
+		在地图上标记距离你最近的{0}
+		可在[c/CC88AA:个人配置]中隐藏标记
+		'''
 	AlreadyRevealed: 这个世界已经标记过{0}了
 	Reveal: "{1}在地图上标记了{0}"
-	RevealPlantera: "{0}在地图上标记了{$NPCName.Plantera}"
-	RevealEnchantedSword: "{0}在地图上标记了{$ItemName.EnchantedSword}"
 	NotFound: 本世界没有{0}的数据，原因可能是创建地图时未启用更好的体验最新版
 }
 
-AetherGlobe.BiomeName: 以太
 DungeonGlobe.BiomeName: 地牢
 FloatingIslandGlobe.BiomeName: 空岛
 
@@ -193,11 +195,21 @@ PyramidGlobe: {
 }
 
 TempleGlobe.BiomeName: 丛林神庙
-# 在世界上没有花苞或花苞全部标记完了的情况下显示，附魔剑的文本亦是如此
-PlanteraGlobe.NotFound: 未能找到更多的世纪之花球茎
-EnchantedSwordGlobe.NotFound: 未能找到更多的石中附魔剑
 
-# 在大理石洞全部标记完了的情况下到显示，花岗岩洞的文本亦是如此
+# NotFound在世界上没有花苞或花苞全部标记完了的情况下显示，附魔剑的文本亦是如此
+PlanteraGlobe: {
+	// BiomeName: "{$NPCName.Plantera}"
+	NotFound: 未能找到更多的世纪之花球茎
+	Reveal: "{0}在地图上标记了{$NPCName.Plantera}"
+}
+
+EnchantedSwordGlobe: {
+	// BiomeName: "{$ItemName.EnchantedSword}"
+	NotFound: 未能找到更多的石中附魔剑
+	Reveal: "{0}在地图上标记了{$ItemName.EnchantedSword}"
+}
+
+# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞的文本亦是如此
 MarbleCaveGlobe: {
 	BiomeName: 大理石洞
 	NotFound: 未能找到更多的大理石洞
@@ -206,6 +218,13 @@ MarbleCaveGlobe: {
 GraniteCaveGlobe: {
 	BiomeName: 花岗岩洞
 	NotFound: 未能找到更多的花岗岩洞
+}
+
+# NotFound在世界上没有足够的微光液体的情况下显示
+AetherGlobe: {
+	BiomeName: 以太
+	NotFound: 未能找到足够大的微光湖
+	Reveal: "{0}在地图上标记了{ImproveGame.Mods.Items.AetherGlobe.BiomeName}"
 }
 
 DetectorDrone: {

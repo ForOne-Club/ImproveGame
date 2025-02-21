@@ -32,7 +32,7 @@ public class WeaponSlot : BigBagItemSlot
         DoPossibleItemChange();
 
         if (!Main.mouseItem.IsAir && !Main.playerInventory)
-            Main.playerInventory = true;
+            OperateInventory(true);
     }
 
     public override void RightMouseDown(UIMouseEvent evt)

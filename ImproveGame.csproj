@@ -1,4 +1,4 @@
-
+﻿
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\tModLoader.targets" />
 	<PropertyGroup>
@@ -7,10 +7,15 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="FuzzySearch.Net" Version="0.3.3" />
-		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.4.1" />
+		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />
 	</ItemGroup>
+	<PropertyGroup>
+		<!--自动打开DragonLens-->
+		<DebugMod>DragonLens</DebugMod>
+	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="lib\*.dll" />
+		<ModReference Include="lib\*.dll" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="./README.md;./README-en.md;./How-To-Use-Search.md">
@@ -20,7 +25,7 @@
 			<Visible>false</Visible>
 		</None>
 		<None Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt">
-			<Visible>false</Visible>
+			<Visible>true</Visible>
 		</None>
 		<None Include=".gitignore;.gitattributes;./.editorconfig;./LICENSE">
 			<Visible>false</Visible>

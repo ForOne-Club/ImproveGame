@@ -161,7 +161,11 @@ namespace ImproveGame.UIFramework.UIElements
         {
             _renaming = false;
             Main.blockInput = false;
-            string newPath = FilePath.Replace(Name, _inputName);
+            // 原始名称有可能是空，空字符串使用Replace会报错，所以要分情况
+            string newPath = Path.Combine(FileOperator.SavePath, $"{_inputName}{FileOperator.Extension}");
+            if (!string.IsNullOrEmpty(Name))
+                newPath = FilePath.Replace(Name, _inputName);
+
             if (File.Exists(newPath) && Name != _inputName)
             {
                 AddNotification(GetText("ConstructGUI.RenameTip.Exists"));

@@ -213,7 +213,7 @@ public class ChainEditPage : View
             BgColor = UIStyle.ItemSlotBgFav * 0.8f
         }.JoinParent(_availableAmmos.ListView);
 
-        var items = ContentSamples.ItemsByType.Values.Where(i => i.IsAmmo()).ToList();
+        var items = ContentSamples.ItemsByType.Values.Where(i => i.CanBeUsedAsAmmo()).ToList();
         items.Sort((a, b) => a.ammo.CompareTo(b.ammo));
         foreach (var itemSlot in items.Select(item => new SelectableAmmoSlot(item, this)))
         {

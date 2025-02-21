@@ -12,6 +12,7 @@ public sealed class VisualAndInterface : Category
         var uiConfig = UIConfigs.Instance;
         panel.AddToggle(uiConfig, nameof(uiConfig.GlassVfxOn));
         panel.AddEnum(uiConfig, nameof(uiConfig.ThemeType));
+        panel.AddToggle(uiConfig, nameof(uiConfig.GlobeEffect));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.GeneralFontOffsetY));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.BigFontOffsetY));
         panel.AddToggle(uiConfig, nameof(uiConfig.HideNoConsumeBuffs));

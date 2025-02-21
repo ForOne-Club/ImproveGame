@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UIFramework.Graphics2D;
+﻿using Terraria.ID;
+
+namespace ImproveGame.UIFramework.Graphics2D;
 
 public static class SDFGraphics
 {
@@ -41,38 +43,53 @@ public static class SDFGraphics
     public static void HasBorderCross(Vector2 pos, float size, float round, Color backgroundColor, float border,
         Color borderColor, bool ui = true)
     {
+        const float innerShrinkage = 1;
+        pos -= new Vector2(innerShrinkage);
         Effect effect = ModAsset.SDFGraphics.Value;
         effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
-        effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
+        effect.Parameters["uSizeOver2"].SetValue(new Vector2(size / 2f + innerShrinkage));
         effect.Parameters["uBorder"].SetValue(border);
-        effect.Parameters["uRound"].SetValue(round);
+        effect.Parameters["uRound"].SetValue(round + innerShrinkage / 2f);
         effect.Parameters["uBorderColor"].SetValue(borderColor.ToVector4());
         effect.Parameters["uBackgroundColor"].SetValue(backgroundColor.ToVector4());
+        effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
+        const float root2Over2 = 1.414213562373f / 2f;
+        effect.Parameters["uTransition"].SetValue(new Vector2(-root2Over2, root2Over2) / Main.UIScale);
         effect.CurrentTechnique.Passes["HasBorderCross"].Apply();
-        BaseDraw(pos, new Vector2(size));
+        BaseDraw(pos, new Vector2(size + innerShrinkage * 2));
     }
 
     public static void HasBorderRound(Vector2 pos, float size, Color background, float border, Color borderColor,
         bool ui = true)
     {
+        const float innerShrinkage = 1;
+        pos -= new Vector2(innerShrinkage);
         Effect effect = ModAsset.SDFGraphics.Value;
         effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
-        effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
+        effect.Parameters["uSizeOver2"].SetValue(new Vector2(size + innerShrinkage * 2) / 2f);
         effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
         effect.Parameters["uBorder"].SetValue(border);
         effect.Parameters["uBorderColor"].SetValue(borderColor.ToVector4());
+        effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
+        const float root2Over2 = 1.414213562373f / 2f;
+        effect.Parameters["uTransition"].SetValue(new Vector2(-root2Over2, root2Over2) / Main.UIScale);
         effect.CurrentTechnique.Passes["HasBorderRound"].Apply();
-        BaseDraw(pos, new Vector2(size));
+        BaseDraw(pos, new Vector2(size + innerShrinkage * 2));
     }
 
     public static void NoBorderRound(Vector2 pos, float size, Color background, bool ui = true)
     {
+        const float innerShrinkage = 1;
+        pos -= new Vector2(innerShrinkage);
         Effect effect = ModAsset.SDFGraphics.Value;
         effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
-        effect.Parameters["uSizeOver2"].SetValue(new Vector2(size) / 2f);
+        effect.Parameters["uSizeOver2"].SetValue(new Vector2(size + innerShrinkage * 2) / 2f);
         effect.Parameters["uBackgroundColor"].SetValue(background.ToVector4());
+        effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
+        const float root2Over2 = 1.414213562373f / 2f;
+        effect.Parameters["uTransition"].SetValue(new Vector2(-root2Over2, root2Over2) / Main.UIScale);
         effect.CurrentTechnique.Passes["NoBorderRound"].Apply();
-        BaseDraw(pos, new Vector2(size));
+        BaseDraw(pos, new Vector2(size + innerShrinkage * 2));
     }
 
     /// <summary>

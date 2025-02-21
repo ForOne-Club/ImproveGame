@@ -109,6 +109,9 @@ public class ImproveConfigs : ModConfig
     public bool NoConsume_Projectile;
 
     [DefaultValue(true)]
+    public bool NoConsume_Wire;
+
+    [DefaultValue(true)]
     public bool ImprovePrefix;
 
     [DefaultValue(true)]
@@ -262,6 +265,9 @@ public class ImproveConfigs : ModConfig
 
     [DefaultValue(false)]
     public bool AlchemyGrassAlwaysBlooms;
+
+    [DefaultValue(false)]
+    public bool PumpkinGrowsFaster;
 
     [DefaultValue(false)]
     public bool StaffOfRegenerationAutomaticPlanting;

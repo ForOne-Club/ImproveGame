@@ -252,8 +252,7 @@ namespace ImproveGame
 
                 SoundEngine.PlaySound(sound ?? SoundID.MenuOpen);
             }
-            Main.playerInventory = true;
-            Recipe.FindRecipes();
+            OperateInventory(true);
         }
 
         /// <summary>

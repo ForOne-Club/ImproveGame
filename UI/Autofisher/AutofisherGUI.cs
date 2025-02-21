@@ -295,7 +295,7 @@ public partial class AutofisherGUI : BaseBody, ISidedView
     public void Open()
     {
         WandSystem.SelectPoolMode = false;
-        Main.playerInventory = true;
+        OperateInventory(true);
         // AutofishPlayer.LocalPlayer.SetAutofisher(point);
         RefreshItems();
     }

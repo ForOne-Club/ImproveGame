@@ -10,6 +10,16 @@ public class ModHookSystem : ModSystem
         On_ItemSlot.OverrideLeftClick += ApplyLeftClick;
     }
 
+    public override void PostSetupContent()
+    {
+        foreach (var modPlayer in PlayerLoader.players
+                     .FindAll(p => p is IHookPostSetup)
+                     .Select(p => p as IHookPostSetup))
+        {
+            modPlayer?.PostSetupContent();
+        }
+    }
+
     private bool ApplyLeftClick(On_ItemSlot.orig_OverrideLeftClick orig, Item[] inv, int context, int slot)
     {
         if (Main.mouseLeft && Main.mouseLeftRelease)

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.Functions.AutoPiggyBank;
+using ImproveGame.UI.AutoPiggyBank;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.BuilderToggles;
@@ -9,6 +10,7 @@ public class PiggyToggle : BuilderToggle
 
     public static LocalizedText OnText { get; private set; }
     public static LocalizedText OffText { get; private set; }
+    public static LocalizedText RightFilter { get; private set; }
 
     public override bool Active() => Main.LocalPlayer.TryGetModPlayer<AutoMoneyPlayerListener>(out var listener) &&
                                      listener.AutoSaveUnlocked;
@@ -30,6 +32,7 @@ public class PiggyToggle : BuilderToggle
     {
         OnText = this.GetLocalization(nameof(OnText));
         OffText = this.GetLocalization(nameof(OffText));
+        RightFilter = this.GetLocalization(nameof(RightFilter));
     }
 
     public override bool OnLeftClick(ref SoundStyle? sound)
@@ -38,9 +41,16 @@ public class PiggyToggle : BuilderToggle
         return base.OnLeftClick(ref sound);
     }
 
+    public override void OnRightClick()
+    {
+        PiggyFilterUI.Instance.Enabled = !PiggyFilterUI.Instance.Enabled;
+        SoundEngine.PlaySound(PiggyFilterUI.Instance.Enabled ? SoundID.MenuOpen : SoundID.MenuClose);
+        base.OnRightClick();
+    }
+
     public override string DisplayValue()
     {
-        return CurrentState == 0 ? OnText.Value : OffText.Value;
+        return (CurrentState == 0 ? OnText.Value : OffText.Value) + '\n' + RightFilter.Value;
     }
 
     public override bool Draw(SpriteBatch spriteBatch, ref BuilderToggleDrawParams drawParams)

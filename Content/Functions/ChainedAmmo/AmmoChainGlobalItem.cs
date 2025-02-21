@@ -182,7 +182,7 @@ public class AmmoChainGlobalItem : GlobalItem, IItemOverrideHover, IItemOverride
     // 在打开弹药链编辑界面时，Alt点击一个弹药可以直接将其添加到弹药链末端（作为一个附加便捷功能）
     public bool OverrideHover(Item[] inventory, int context, int slot)
     {
-        if (!inventory[slot].IsAmmo() || !Main.keyState.IsKeyDown(Main.FavoriteKey))
+        if (!inventory[slot].CanBeUsedAsAmmo() || !Main.keyState.IsKeyDown(Main.FavoriteKey))
             return false;
         if (AmmoChainUI.Instance is null || AmmoChainUI.Instance.PageSlideTimer is null)
             return false;
@@ -235,7 +235,7 @@ public class AmmoChainGlobalItem : GlobalItem, IItemOverrideHover, IItemOverride
         return base.Clone(from, to);
     }
 
-    public override bool AppliesToEntity(Item entity, bool lateInstantiation) => lateInstantiation && entity.damage > 0;
+    public override bool AppliesToEntity(Item entity, bool lateInstantiation) => lateInstantiation && entity.useAmmo > 0;
 
     public override bool InstancePerEntity => true;
 }

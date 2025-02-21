@@ -2,6 +2,7 @@
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Packets.NetAutofisher;
 
@@ -13,12 +14,22 @@ namespace ImproveGame.Packets.NetAutofisher;
 public class RollItemRequest : NetModule
 {
     private int _tileEntityID;
+    private byte _fishingStatFlags;
+    private int _fishingSkill;
+    private float _speedMultiplier;
+
+    private Point16 _locatePoint;
     private int _rolledItemDrop;
 
     public static void SendTo(TEAutofisher fisher, int toClient)
     {
+        fisher.ResetStats();
         var module = NetModuleLoader.Get<RollItemRequest>();
         module._tileEntityID = fisher.ID;
+        module._fishingStatFlags = new BitsByte(fisher.LavaFishing, fisher.TackleBox);
+        module._fishingSkill = fisher.FishingSkill;
+        module._speedMultiplier = fisher.SpeedMultiplier;
+        module._locatePoint = fisher.locatePoint;
         module._rolledItemDrop = 0;
         module.Send(toClient);
     }
@@ -34,13 +45,13 @@ public class RollItemRequest : NetModule
         switch (Main.netMode)
         {
             case NetmodeID.MultiplayerClient:
-                bool accAvailable = ModIntegrationsSystem.FishingStatLookup.TryGetValue(autofisher.accessory.type,
-                    out FishingStat stat);
-                autofisher.LavaFishing = false;
-                autofisher.TackleBox = false;
-                autofisher.FishingSkill = 0;
-                if (accAvailable)
-                    autofisher.ApplyAccessories(stat);
+                // 使用服务器传来的数据
+                autofisher.ResetStats();
+                ((BitsByte)_fishingStatFlags).Deconstruct(out autofisher.LavaFishing, out autofisher.TackleBox);
+                autofisher.FishingSkill = _fishingSkill;
+                autofisher.SpeedMultiplier = _speedMultiplier;
+                autofisher.locatePoint = _locatePoint;
+
                 var fisher = autofisher.GetFisher(out _);
 
                 autofisher.RollItemDrop(ref fisher);

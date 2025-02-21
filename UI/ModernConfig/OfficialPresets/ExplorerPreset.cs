@@ -40,6 +40,7 @@ public class ExplorerPreset : OfficialPreset
         modConfig.BestiaryQuickUnlock = false;
         modConfig.AlchemyGrassGrowsFaster = false;
         modConfig.AlchemyGrassAlwaysBlooms = false;
+        modConfig.PumpkinGrowsFaster = false;
         modConfig.StaffOfRegenerationAutomaticPlanting = true;
         modConfig.NoBiomeSpread = false;
         modConfig.RespawnWithFullHP = true;

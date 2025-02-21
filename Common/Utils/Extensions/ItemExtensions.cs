@@ -286,6 +286,11 @@ public static class ItemExtensions
 
     public static bool IsAmmo(this Item item) => item.ammo != AmmoID.None && !item.notAmmo;
 
+    /// <summary>
+    /// 可被用作弹药，与 IsAmmo 不同的是钱币（钱币枪弹药）、沙子（沙枪弹药）什么的也会算进来
+    /// </summary>
+    public static bool CanBeUsedAsAmmo(this Item item) => item.ammo != AmmoID.None;
+
     public static bool IsArmor(this Item item) => item.headSlot >= 0 || item.bodySlot >= 0 || item.legSlot >= 0;
 
     public static bool IsPlaceable(this Item item) => item.createTile >= TileID.Dirt || item.createWall > WallID.None;
@@ -342,6 +347,9 @@ public static class ItemExtensions
         // 正常物品
         return item1.type == item2.type;
     }
+
+    public static bool IsCustomCurrency(int type) =>
+        CustomCurrencyManager._currencies.Any(currencies => currencies.Value._valuePerUnit.ContainsKey(type));
 
     private static IEnumerable<string> GetItemTooltipLines(Item item)
     {

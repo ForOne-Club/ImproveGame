@@ -183,7 +183,7 @@ namespace ImproveGame.UI
         /// 打开GUI界面
         /// </summary>
         public void Open(CreateWand wand) {
-            Main.playerInventory = true;
+            OperateInventory(true);
             PrevMouseRight = true; // 防止一打开就关闭
             basePanel.Dragging = false;
             Visible = true;

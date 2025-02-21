@@ -8,6 +8,7 @@
 
 # v1.8.0
 
+- [v1.8.0.6](Changelog/zh/v1.8.0.6.md)
 - [v1.8.0.4](Changelog/zh/v1.8.0.4.md)
 - [v1.8.0.3](Changelog/zh/v1.8.0.3.md)
 - [v1.8.0.2](Changelog/zh/v1.8.0.2.md)

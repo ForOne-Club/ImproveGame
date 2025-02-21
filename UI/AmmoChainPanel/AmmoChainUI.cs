@@ -240,7 +240,7 @@ public class AmmoChainUI : BaseBody
         ResetPagePosition();
 
         SoundEngine.PlaySound(SoundID.MenuOpen);
-        Main.playerInventory = true;
+        OperateInventory(true);
     }
 
     public void Close()
