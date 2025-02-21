@@ -1,4 +1,5 @@
-﻿namespace ImproveGame.Core;
+﻿
+namespace ImproveGame.Core;
 
 public class CoroutineSystem : ModSystem
 {
@@ -17,6 +18,11 @@ public class CoroutineSystem : ModSystem
         for (int i = 0; i < 5; i++)
             OpenBagRunner.Update(1);
 
+    }
+    public override void UpdateUI(GameTime gameTime)
+    {
         QuickShimmerRunner.Update(1);
+
+        base.UpdateUI(gameTime);
     }
 }
