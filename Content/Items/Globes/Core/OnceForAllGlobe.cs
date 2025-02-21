@@ -1,45 +1,30 @@
-﻿namespace ImproveGame.Content.Items.Globes.Core;
+﻿using ImproveGame.Content.Projectiles;
+using Terraria.DataStructures;
+
+namespace ImproveGame.Content.Items.Globes.Core;
 
 /// <summary>
 /// 世界生成时就保存了数据，而且不会变的球，使用一次可以解锁全部对应数据
 /// </summary>
-public abstract class OnceForAllGlobe () : Globe(ItemRarityID.Quest, Item.sellPrice(silver: 10))
+public abstract class OnceForAllGlobe() : Globe(ItemRarityID.Quest, Item.sellPrice(silver: 10));
+public interface IOnceForAllGlobeProj
+{
+    StructureDatas.UnlockID StructureType { get; }
+    bool NotFoundCheck();
+    void ExtraCheckWhenNotRecorded();
+    Point16[] Positions { get; }
+    Point16[] PositionsAnother { get; }
+}
+public abstract class OnceForAllGlobeProj<T>(Color mainColor) : GlobeProjBase<T>(mainColor), IOnceForAllGlobeProj where T : OnceForAllGlobe
 {
     public abstract StructureDatas.UnlockID StructureType { get; }
+    public abstract bool NotFoundCheck();
+    public override bool RevealOperation(bool onlyJudging) => GlobeRevealer.RevealOnceForAll(Projectile, GetModItemDummy(), onlyJudging);
+    /// <summary>
+    /// 用于在世界生成时没记录数据的额外检测，因为是可选就virtual了
+    /// </summary>
+    public virtual void ExtraCheckWhenNotRecorded() { }
+    public abstract Point16[] Positions { get; }
+    public virtual Point16[] PositionsAnother => null;
 
-    public virtual bool NotFoundCheck() => false;
-
-    public override bool RevealOperation(Projectile projectile, bool onlyJudging)
-    {
-        if (StructureType is StructureDatas.UnlockID.Pyramids && StructureDatas.PyramidPositions.Count is 0)
-        {
-            if (!onlyJudging && projectile.owner == Main.myPlayer)
-                AddNotification(this.GetLocalizedValue("NotFound"), Color.PaleVioletRed * 1.4f);
-            return false;
-        }
-
-        if (NotFoundCheck())
-        {
-            if (!onlyJudging && projectile.owner == Main.myPlayer)
-                AddNotification(GetLocalizedText("NotFound").Value, Color.PaleVioletRed * 1.4f);
-            return false;
-        }
-
-        if (StructureDatas.StructuresUnlocked[(byte)StructureType])
-        {
-            if (!onlyJudging && projectile.owner == Main.myPlayer)
-                AddNotification(GetLocalizedText("AlreadyRevealed").Value, Color.PaleVioletRed * 1.4f);
-            return false;
-        }
-
-        if (onlyJudging)
-            return true;
-
-        StructureDatas.StructuresUnlocked[(byte)StructureType] = true;
-        var text = Language.GetText("Mods.ImproveGame.Items.GlobeBase.Reveal")
-            .WithFormatArgs(this.GetLocalizedValue("BiomeName"), Main.player[projectile.owner].name);
-        AddNotification(text.Value, Color.Pink);
-
-        return true;
-    }
 }
