@@ -39,7 +39,7 @@ namespace MechTransfer.ContainerAdapters
             {
                 item.stack -= amount;
             }
-            SyncItem(isAir ? null : -amount, teFisher, (byte)slotIndex);
+            SyncItem(isAir ? 0 : -amount, teFisher, (byte)slotIndex);
         }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
@@ -99,7 +99,7 @@ namespace MechTransfer.ContainerAdapters
             }
             if(fromAir is bool air)
             {
-                SyncItem(air ? null : 1, teFisher, ItemSyncPacket.Bait);
+                SyncItem(air ? 0 : 1, teFisher, ItemSyncPacket.Bait);
             }
 
             return fromAir.HasValue;
@@ -136,7 +136,7 @@ namespace MechTransfer.ContainerAdapters
             return true;
         }
 
-        public static void SyncItem(int? amount, TEAutofisher fisher , byte slotIndex)
+        public static void SyncItem(int amount, TEAutofisher fisher , byte slotIndex)
         {
             if (Main.netMode is NetmodeID.Server)
             {
@@ -147,9 +147,9 @@ namespace MechTransfer.ContainerAdapters
                     if (client.active && !client.DeadOrGhost &&
                         client.GetModPlayer<AutofishPlayer>().IsAutofisherOpened)
                     {
-                        if (amount is int changed)
+                        if (amount != 0)
                         {
-                            ItemsStackChangePacket.Get(fisher.ID, (byte)slotIndex, changed).Send(p);
+                            ItemsStackChangePacket.Get(fisher.ID, (byte)slotIndex, amount).Send(p);
                         }
                         else
                         {

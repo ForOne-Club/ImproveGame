@@ -515,16 +515,15 @@ public class ModIntegrationsSystem : ModSystem
                     // 获取钓鱼机物品
                     case "GetFisherItems":
                         {
-                            // Item Call(string, Point16, int)
-                            // or Item Call(string, int, int, int);
+                            // Item[]? Call(string, Point16)
+                            // or Item[]? Call(string, int, int);
                             Point16 location = default;
-                            Dictionary<string, object> dict;
                             int argIndex = 1;
                             if (args.Length < 3)
                             {
                                 ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
-                                    "expects at least 3 arguments but not.");
-                                return new();
+                                    "expects at least 2 arguments but not.");
+                                return Array.Empty<Item>();
                             }
                             else if (args[argIndex++] is Point16 point)
                             {
@@ -540,7 +539,7 @@ public class ModIntegrationsSystem : ModSystem
                                 {
                                     ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
                                         "expects arg[2] as int but not.");
-                                    return new();
+                                    return Array.Empty<Item>();
                                 }
                             }
                             else
@@ -559,35 +558,11 @@ public class ModIntegrationsSystem : ModSystem
                                 ImproveGame.Instance.Logger.Error
                                     ("Invalid arguments for GetFisherItems: " +
                                     "expects a valid autofisher but not.");
-                                return new();
+                                return Array.Empty<Item>();
                             }
 
-                            if (args.Length == argIndex || args[argIndex] is not int index)
-                            {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
-                                    "expects a int slot index but not.");
-                                return new();
-                            }
-
-                            if (index < 0 || index >= ItemSyncPacket.All)
-                            {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
-                                    "expects a valid slot index but not." +
-                                    $"[0..{ItemSyncPacket.Fishes + 1}] => Fishes, " +
-                                    $"{ItemSyncPacket.FishingPole} => FishingPole, " +
-                                    $"{ItemSyncPacket.Bait} => Bait, " +
-                                    $"{ItemSyncPacket.Accessory} => Accessory.");
-                                return new();
-                            }
-
-                            return index switch
-                            {
-                                >= 0 and < ItemSyncPacket.Fishes => fisher.fish[index],
-                                ItemSyncPacket.FishingPole => fisher.fishingPole,
-                                ItemSyncPacket.Bait => fisher.bait,
-                                ItemSyncPacket.Accessory => fisher.accessory,
-                                _ => new()
-                            };
+                            Item[] items = [..fisher.fish, fisher.fishingPole, fisher.bait, fisher.accessory];
+                            return items;
                         }
                     // 同步钓鱼机物品
                     case "SyncFisherItems":
@@ -595,33 +570,34 @@ public class ModIntegrationsSystem : ModSystem
                             // bool Call(string, Point16, int, int)
                             // or bool Call(string, int, int, int, int)
                             Point16 location = default;
-                            int argIndex = 1;
+                            int argIndex = 1; 
                             if (args.Length < 4)
                             {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
+                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
                                     "expects at least 4 arguments but not.");
                                 return false;
                             }
-                            else if (args[argIndex++] is Point16 point)
+                            else if (args[argIndex] is Point16 point)
                             {
                                 location = point;
                             }
-                            else if (args[argIndex++] is int x)
+                            else if (args[argIndex] is int x)
                             {
-                                if (args.Length >= argIndex && args[argIndex++] is int y)
+                                argIndex++;
+                                if (args.Length >= argIndex && args[argIndex] is int y)
                                 {
                                     location = new Point16(x, y);
                                 }
                                 else
                                 {
-                                    ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
+                                    ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
                                         "expects arg[2] as int but not.");
                                     return false;
                                 }
                             }
                             else
                             {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
+                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
                                     "expects arg[1] as Point16 or int but not.");
                                 return false;
                             }
@@ -633,37 +609,37 @@ public class ModIntegrationsSystem : ModSystem
                             if (fisher is null)
                             {
                                 ImproveGame.Instance.Logger.Error
-                                    ("Invalid arguments for GetFisherItems: " +
+                                    ("Invalid arguments for SyncFisherItems: " +
                                     "expects a valid autofisher but not.");
                                 return false;
                             }
-
-                            if (args.Length == argIndex || args[argIndex++] is not int index)
+                            argIndex++;
+                            if (args.Length == argIndex || args[argIndex] is not int index)
                             {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
+                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
                                     "expects a int slot index but not.");
                                 return false;
                             }
 
                             if (index < 0 || index >= ItemSyncPacket.All)
                             {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
-                                    "expects a valid slot index but not." +
-                                    $"[0..{ItemSyncPacket.Fishes + 1}] => Fishes, " +
-                                    $"{ItemSyncPacket.FishingPole} => FishingPole, " +
-                                    $"{ItemSyncPacket.Bait} => Bait, " +
-                                    $"{ItemSyncPacket.Accessory} => Accessory.");
+                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
+                                    "expects a valid slot index but not.\n" +
+                                    $"[0..{ItemSyncPacket.Fishes + 1}] => Fishes, \n" +
+                                    $"{ItemSyncPacket.FishingPole} => FishingPole, \n" +
+                                    $"{ItemSyncPacket.Bait} => Bait, \n" +
+                                    $"{ItemSyncPacket.Accessory} => Accessory.\n");
                                 return new();
                             }
 
                             if(args.Length == argIndex || args[argIndex] is not int amount)
                             {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
+                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
                                     "expects a int amount but not.");
                                 return false;
                             }
 
-                            AutoFisherAdapter.SyncItem(amount == 0 ? null : amount, fisher, (byte)index);
+                            AutoFisherAdapter.SyncItem(amount, fisher, (byte)index);
                             return true;
                         }
                     default:
