@@ -17,6 +17,8 @@ using Terraria.Enums;
 using Terraria.GameContent.Achievements;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.ModLoader.UI;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ImproveGame.UI.QuickShimmer;
 
@@ -193,10 +195,15 @@ public class QuickShimmerGUI : BaseBody
                 itemSlot.Item = keeper.targetItem;
         };
 
-        var openButton = new SUIButton(ModAsset.Open.Value, GetText("UI.QuickShimmer.Open"))
+        var openButton = new SUIImage(ModAsset.Shimmer_Start.Value)
         {
-            Left = { Pixels = 80f },
-            Top = { Pixels = 8f }
+            Left = { Pixels = 80f},
+            Top = { Pixels = 8f },
+            BgColor  = Color.Black * .4f,
+            Border = 1f,
+            BorderColor = UIStyle.PanelBorder,
+            Spacing = Vector2.UnitX * 8,
+            Rounded = new(8f)
         };
         openButton.OnLeftMouseDown += (_, _) =>
         {
@@ -227,15 +234,22 @@ public class QuickShimmerGUI : BaseBody
             var items = CollectHelper.GetShimmerResult(item, out int stackRequired, out int decraftingRecipeIndex);
             if (items is null)
                 return;
-
             CoroutineSystem.QuickShimmerRunner.Run(QuickShimmerRunner(keeper, items, stackRequired,
                 decraftingRecipeIndex));
         };
         openButton.OnUpdate += _ =>
         {
-            openButton.Text = GetText(CoroutineSystem.QuickShimmerRunner.Count > 0
+            if (openButton.IsMouseHovering) 
+            {
+                var text = GetText(CoroutineSystem.QuickShimmerRunner.Count > 0
                 ? "UI.QuickShimmer.Stop"
                 : "UI.QuickShimmer.Open");
+                UICommon.TooltipMouseText(text);
+            }
+            openButton.Texture = (CoroutineSystem.QuickShimmerRunner.Count > 0 ? ModAsset.Shimmer_Pause : ModAsset.Shimmer_Start).Value;
+            openButton.BorderColor = openButton.HoverTimer.Lerp(UIStyle.SearchBarBorder, UIStyle.SearchBarBorderSelected);
+            openButton.Rounded = new(8f);
+
             if (Main.LocalPlayer is null || !Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
                 return;
 
@@ -261,17 +275,20 @@ public class QuickShimmerGUI : BaseBody
             var items = CollectHelper.GetShimmerResult(item, out int stackRequired, out int decraftingRecipeIndex);
             if (items is null)
                 return;
-
             CoroutineSystem.QuickShimmerRunner.Run(QuickShimmerRunner(keeper, items, stackRequired,
                 decraftingRecipeIndex));
         };
         openButton.JoinParent(bagPanel);
 
-        var depositButton = new SUIButton(ModAsset.Quick.Value, Lang.inter[29].Value) // 强夺全部
+        var depositButton = new SUIImage(ModAsset.ToBag.Value) // 强夺全部
         {
-            Left = { Pixels = openButton.Left.Pixels + openButton.Width.Pixels + 10f },
             Top = { Pixels = 8f },
-            Width = { Pixels = 136f }
+            Spacing = Vector2.UnitX * 8,
+            RelativeMode = RelativeMode.Horizontal,
+            BgColor = Color.Black * .4f,
+            Border = 1f,
+            Rounded = new(8f)
+
         };
         depositButton.OnLeftMouseDown += (_, _) =>
         {
@@ -285,28 +302,52 @@ public class QuickShimmerGUI : BaseBody
             // 控制提示文本是否显示
             TipText.Left.Pixels = 0;
         };
+        depositButton.OnUpdate += _ =>
+        {
+            if (depositButton.IsMouseHovering)
+                UICommon.TooltipMouseText(Lang.inter[29].Value);
+            depositButton.BorderColor = depositButton.HoverTimer.Lerp(UIStyle.SearchBarBorder, UIStyle.SearchBarBorderSelected);
+        };
         depositButton.JoinParent(bagPanel);
 
+        SUIImageSwitch autoStartSwitch = new SUIImageSwitch(ModAsset.Auto_Enabled.Value,ModAsset.Auto.Value, flag => AutoStart = flag, () => AutoStart)
+        {
+            Top = { Pixels = 8f },
+            Spacing = Vector2.UnitX * 8,
+            RelativeMode = RelativeMode.Horizontal,
+            BgColor = Color.Black * .4f,
+            Border = 1f,
+            Rounded = new(8f)
 
-        SUISwitch autoStartToggle = new SUISwitch(()=>AutoStart,flag=>AutoStart = flag, GetText("UI.QuickShimmer.AutoStart"))
-        {
-            Left = { Pixels = 72f },
-            Top = { Pixels = 58f },
-            Width = { Pixels = 136f },
-            
-        };
-        autoStartToggle.JoinParent(bagPanel);
-        SUISwitch reallyQuickToggle = new SUISwitch(() => ReallyQuickShimmer, flag => ReallyQuickShimmer = flag, GetText("UI.QuickShimmer.ReallyQuick"))
-        {
-            Left = { Pixels = openButton.Left.Pixels + openButton.Width.Pixels + 2f },
-            Top = { Pixels = 58f },
-            Width = { Pixels = 136f },
 
         };
-        reallyQuickToggle.JoinParent(bagPanel);
+        autoStartSwitch.OnUpdate += _ =>
+        {
+            if (autoStartSwitch.IsMouseHovering)
+                UICommon.TooltipMouseText(Lang.inter[29].Value);
+            autoStartSwitch.BorderColor = autoStartSwitch.HoverTimer.Lerp(UIStyle.SearchBarBorder, UIStyle.SearchBarBorderSelected);
+        };
+        autoStartSwitch.JoinParent(bagPanel);
+        SUIImageSwitch quickModeSwitch = new SUIImageSwitch(ModAsset.Timer_Enabled.Value,ModAsset.Timer.Value, flag => QuickMode = flag, () => QuickMode)
+        {
+            Top = { Pixels = 8f },
+            Spacing = Vector2.UnitX * 8,
+            RelativeMode = RelativeMode.Horizontal,
+            BgColor = Color.Black * .4f,
+            Border = 1f,
+            Rounded = new(8f)
+
+        };
+        quickModeSwitch.OnUpdate += _ =>
+        {
+            if (quickModeSwitch.IsMouseHovering)
+                UICommon.TooltipMouseText(Lang.inter[29].Value);
+            quickModeSwitch.BorderColor = quickModeSwitch.HoverTimer.Lerp(UIStyle.SearchBarBorder, UIStyle.SearchBarBorderSelected);
+        };
+        quickModeSwitch.JoinParent(bagPanel);
     }
     public static bool AutoStart;
-    public static bool ReallyQuickShimmer;
+    public static bool QuickMode;
     internal class EntitySource_Shimmer_QOT : IEntitySource
     {
         public string? Context { get; }
@@ -332,7 +373,7 @@ public class QuickShimmerGUI : BaseBody
         int decraftAmount = item.stack / stackRequired;
         // 计算步长，一帧进行多少次转化
         int step;
-        if (ReallyQuickShimmer)
+        if (QuickMode)
             step = decraftAmount;
         else
         {
