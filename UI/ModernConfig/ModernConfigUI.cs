@@ -51,20 +51,20 @@ public sealed class ModernConfigUI : UIState
         AnchorPositionOffsetByPixels = Vector2.Zero
     };
 
-    public static void PopNewInfo(string info, Vector2 position,Color color)
-    {
-        Instance.noticeTimer = 120;
-        Instance.noticeColor = color;
-        Instance.PopNotice.TextOrKey = info;
-        Instance.PopNoticePanel.SetPos(position - ModernConfigUI.Instance.MainPanel.GetDimensions().Position());
+    public int NoticeTimer;
 
-        Instance.PopNoticePanel.Recalculate();
-    }
-    public int noticeTimer;
-    public Color noticeColor;
+    public Color NoticeColor;
+
     public SUIText PopNotice;
+
     public View PopNoticePanel;
+
+    // 子页面路径选框
     public SUIScrollView2 PathPanel;
+
+    // 子页面路径选框的弹出动画计时器
+    public AnimationTimer PathPanelTimer;
+
     public override void OnInitialize()
     {
         const int gapBetweenPanels = 20;
@@ -143,24 +143,56 @@ public sealed class ModernConfigUI : UIState
         PopNotice = new();
         PopNotice.JoinParent(PopNoticePanel);
 
+        SetupPathPanel();
+
+        this.Append(backButton);
+    }
+
+    private void SetupPathPanel()
+    {
         PathPanel = new(Orientation.Horizontal)
         {
             BgColor = UIStyle.PanelBg,
             BorderColor = UIStyle.PanelBorder,
             Width = new(0, 0.5f),
-            Height = new(40, 0),
-            Rounded = new (8),
+            Height = new(30, 0),
+            Rounded = new(8),
             Border = 1f,
-            
         };
-        PathPanel.SetPos(0, -20 - 40 - 10, 0.5f + 0.86f * .5f - 0.5f, 0.5f - 0.82f * .5f);
-        this.Append(backButton);
+        PathPanel.ListView.SetPadding(8f, 2f);
+        PathPanel.SetPos(0, -58, 0.5f - 0.86f * 0.5f, 0.5f - 0.82f * 0.5f);
+        PathPanel.JoinParent(this);
+
+        PathPanelTimer = new(3);
+        PathPanelTimer.ImmediateClose();
+        PathPanelTimer.OnClosed += () =>
+        {
+            Instance.PathPanel.ListView.RemoveAllChildren();
+            Instance.PathPanel.Recalculate();
+        };
+        PathPanelTimer.OnOpened += Instance.PathPanel.Recalculate;
+    }
+
+    public static void PopNewInfo(string info, Vector2 position, Color color)
+    {
+        Instance.NoticeTimer = 120;
+        Instance.NoticeColor = color;
+        Instance.PopNotice.TextOrKey = info;
+        Instance.PopNoticePanel.SetPos(position - ModernConfigUI.Instance.MainPanel.GetDimensions().Position());
+
+        Instance.PopNoticePanel.Recalculate();
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
         // 修复鼠标移到标牌上会导致标牌文字一直显示的问题
         Main._MouseOversCanClear = true;
+
+        // SubPage目录缓动
+        PathPanelTimer.UpdateHighFps();
+        PathPanel.Top.Percent = PathPanelTimer.Lerp(0f, 0.5f - 0.82f * 0.5f);
+        if (PathPanelTimer.Closing || PathPanelTimer.Opening)
+            PathPanel.Recalculate();
 
         if (Glass is not null && !Main.gameMenu && !DrawCalledForMakingGlass && GlassVfxEnabled)
         {
@@ -174,7 +206,7 @@ public sealed class ModernConfigUI : UIState
         base.Draw(spriteBatch);
         CenteredItemTagHandler.ModernConfigDrawing = false;
 
-        if (!string.IsNullOrWhiteSpace(ExtraText))
+        if (!PathPanelTimer.AnyOpen && !string.IsNullOrWhiteSpace(ExtraText))
         {
             var font = FontAssets.MouseText.Value;
             var textPosition = MainPanel.GetDimensions().Position();
@@ -186,6 +218,8 @@ public sealed class ModernConfigUI : UIState
     public void Open(Mod mod)
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
+
+        PathPanelTimer?.ImmediateClose();
         if (mod.Name == "ImproveGame")
         {
             ExtraText = "";
@@ -200,7 +234,7 @@ public sealed class ModernConfigUI : UIState
                 ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.AboutPage_ModConfig;
         }
         Enabled = true;
-        noticeTimer = 1;
+        NoticeTimer = 1;
 
         if (Main.gameMenu)
         {
@@ -218,9 +252,11 @@ public sealed class ModernConfigUI : UIState
     public void Close()
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
+
         PathPanel.ListView.RemoveAllChildren();
-        PathPanel.Remove();
-        noticeTimer = 1;
+        PathPanelTimer.ImmediateClose();
+
+        NoticeTimer = 1;
         Enabled = false;
         if (!Main.gameMenu)
         {
@@ -247,22 +283,23 @@ public sealed class ModernConfigUI : UIState
         MainPanel.BgColor = ConfigColors.MainPanelBg;
         PathPanel.BorderColor = ConfigColors.MainPanelBorder;
         PathPanel.BgColor = ConfigColors.MainPanelBg;
-        if (noticeTimer-- > 0)
+
+        if (NoticeTimer-- > 0)
         {
-            float k = noticeTimer switch
+            float k = NoticeTimer switch
             {
-                > 105 => MathHelper.SmoothStep(0, 1, (120 - noticeTimer) / 15f),
+                > 105 => MathHelper.SmoothStep(0, 1, (120 - NoticeTimer) / 15f),
                 > 30 => 1f,
-                _ => MathHelper.SmoothStep(0, 1, noticeTimer / 30f)
+                _ => MathHelper.SmoothStep(0, 1, NoticeTimer / 30f)
             };
-            PopNoticePanel.BorderColor = Color.Lerp(ConfigColors.MainPanelBorder,Color.Black,.5f) * k;
+            PopNoticePanel.BorderColor = Color.Lerp(ConfigColors.MainPanelBorder, Color.Black, .5f) * k;
             PopNoticePanel.BgColor = Color.Lerp(ConfigColors.MainPanelBg, Color.Black, .5f) * k;
-            //PopNoticePanel.SetSize(PopNotice.TextSize * k + new Vector2(8));
-            PopNotice.TextColor = noticeColor * k;
+            // PopNoticePanel.SetSize(PopNotice.TextSize * k + new Vector2(8));
+            PopNotice.TextColor = NoticeColor * k;
             PopNotice.TextBorderColor = Color.Black * k;
             PopNotice.RecalculateText();
-            //PopNoticePanel.SetPos(0, 0, 0, 0.5f);
-            //PopNoticePanel.HAlign = 0.5f;
+            // PopNoticePanel.SetPos(0, 0, 0, 0.5f);
+            // PopNoticePanel.HAlign = 0.5f;
             PopNoticePanel.Recalculate();
         }
     }

@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader.Config.UI;
+﻿using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.Config;
 using Newtonsoft.Json;
 using ImproveGame.UIFramework.SUIElements;
 using ImproveGame.UIFramework.BaseViews;
-using Terraria.ModLoader.UI;
-using Terraria.ID;
 using ImproveGame.UI.ModernConfig.Categories;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using ImproveGame.UIFramework.Graphics2D;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
@@ -325,7 +316,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                         list.Add(new(variable, Config));
                         //WrapIt(OptionView.ListView, Config, variable, data, owner: this);
                     }
-                    CrossModCategoryCard card = new CrossModCategoryCard(list, getLabel: () => List == null ? base.Label : $"{owner.Label}#{index + 1}");//() => VariableInfo.Name + (index != -1 ? $"#{index+1}" : ""
+                    CrossModCategoryCard card = new CrossModCategoryCard(list,
+                    getLabel: () => List == null ? base.Label : $"{owner.Label}#{index + 1}",
+                    getTooltip:  () => List == null ? base.Tooltip : owner.Tooltip);
                     ConfigOptionsPanel.SwitchToSubPage(card, data);
                     //ConfigOptionsPanel.GlobalItem = Item;
                     //CrossModCategoryCard card = new CrossModCategoryCard(list);
