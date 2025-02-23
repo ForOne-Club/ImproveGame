@@ -72,6 +72,12 @@ public class View : UIElement
     public bool ResetAnotherPosition;
 
     /// <summary>
+    /// ResetAnotherPosition 为 true 时，使得横向时固定 Top 到该值，纵向时固定 Left<br/>
+    /// 与 <see cref="RelativeMode"/> 和 <see cref="ResetAnotherPosition"/> 搭配使用
+    /// </summary>
+    public float FixedAnchorPixels = 0;
+
+    /// <summary>
     /// 拖动忽略，默认为 <see langword="false"/> 不会影响长辈中可拖动元素拖动
     /// </summary>
     public bool DragIgnore;
@@ -237,7 +243,7 @@ public class View : UIElement
                         case RelativeMode.Horizontal:
                             SetPosPixels(
                                 previousView.Left.Pixels + previousViewOuterSize.X + Spacing.X,
-                                ResetAnotherPosition ? 0 : previousView.Top.Pixels);
+                                ResetAnotherPosition ? FixedAnchorPixels : previousView.Top.Pixels);
 
                             if (DirectLineBreak || PreventOverflow && RightPixels > parentInnerSize.X)
                             {
@@ -247,7 +253,7 @@ public class View : UIElement
                             break;
                         case RelativeMode.Vertical:
                             SetPosPixels(
-                                ResetAnotherPosition ? 0 : previousView.Left.Pixels,
+                                ResetAnotherPosition ? FixedAnchorPixels : previousView.Left.Pixels,
                                 previousView.Top.Pixels + previousViewOuterSize.Y + Spacing.Y);
 
                             if (DirectLineBreak || PreventOverflow && BottomPixels > parentInnerSize.Y)

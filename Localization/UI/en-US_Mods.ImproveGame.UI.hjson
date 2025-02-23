@@ -404,8 +404,17 @@ QuickShimmer: {
 	CoinLuck: Shimmered into {0} 'coin luck'
 	AlreadyUnlocked: Quick Shimmer is already available in this world
 	Unlocked: Quick Shimmer is unlocked! Open it via the Control Panel
-	AutoStart: Auto Start
-	ReallyQuick: Quick Mode
+
+	AutoStart: {
+		Label: Auto Start
+		Tooltip: Auto start transmuting when items are thrown in
+	}
+
+	ReallyQuick: {
+		Label: Quick Mode
+		Tooltip: Transmute instantly without waiting
+	}
+
 	Locked:
 		'''
 		Use [i:ImproveGame/ShellShipInBottle_Shimmered] {$Mods.ImproveGame.Items.ShellShipInBottle_Shimmered.DisplayName} to unlock Quick Shimmer

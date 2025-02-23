@@ -402,8 +402,17 @@ QuickShimmer: {
 	CoinLuck: 已转换为{0}点钱币幸运
 	AlreadyUnlocked: 该世界已经解锁了快速微光
 	Unlocked: 快速微光已解锁！请在总控页面打开
-	AutoStart: 自动开始
-	ReallyQuick: 瞬间完成
+
+	AutoStart: {
+		Label: 自动开始
+		Tooltip: 使得放入栏位的物品自动开始转化，无需手动点击开始按钮
+	}
+
+	ReallyQuick: {
+		Label: 瞬间完成
+		Tooltip: 使得转化过程瞬间完成，无需等待
+	}
+
 	Locked:
 		'''
 		使用 [i:ImproveGame/ShellShipInBottle_Shimmered] {$Mods.ImproveGame.Items.ShellShipInBottle_Shimmered.DisplayName} 以解锁快速微光

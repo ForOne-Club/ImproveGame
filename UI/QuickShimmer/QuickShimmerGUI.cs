@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Content.Functions.AutoPiggyBank;
 using ImproveGame.Core;
+using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
@@ -177,7 +178,7 @@ public class QuickShimmerGUI : BaseBody
             RelativeMode = RelativeMode.Vertical
         };
         bagPanel.SetPadding(6, 6, 6, 6);
-        bagPanel.SetSize(0f, 160, 1f, 0f);
+        bagPanel.SetSize(0f, 150, 1f, 0f);
         bagPanel.JoinParent(MainPanel);
 
         var itemSlot = CreateItemSlot(20f, 6f, onItemChanged: (item, _) =>
@@ -208,7 +209,7 @@ public class QuickShimmerGUI : BaseBody
             }
             if (Main.LocalPlayer is null || !Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
                 return;
-            
+
             // 钱币幸运直接换完
             var item = keeper.targetItem;
             int coinValue = ItemID.Sets.CoinLuckValue[item.type];
@@ -288,70 +289,33 @@ public class QuickShimmerGUI : BaseBody
         };
         depositButton.JoinParent(bagPanel);
 
-        var autoStartPanel = new View()
+        var autoStartToggle = new LongSwitch(
+            () => AutoStart,
+            state => AutoStart = state,
+            "UI.QuickShimmer.AutoStart")
         {
-            Left = { Pixels = 6 },
-            Top = { Pixels = 60 },
-            DragIgnore = true,
-            Rounded = new Vector4(6),
-            Spacing = new Vector2(0, 8)
-        };
-        autoStartPanel.SetPadding(6, 6, 6, 6);
-        autoStartPanel.SetSize(-10f, 40, 1f, 0f);
-        autoStartPanel.BgColor = Color.Black * .125f;
-        autoStartPanel.JoinParent(bagPanel);
-
-        SUIText autoStartText = new SUIText()
-        {
-            TextOrKey = "Mods.ImproveGame.UI.QuickShimmer.AutoStart",
-            UseKey = true,
-            TextAlign = new Vector2(0f, 0f),
-            TextScale = 1f,
-            Height = new StyleDimension(40, 0),
-            Width = StyleDimension.Fill,
-            DragIgnore = true,
-            Left = new StyleDimension(10f, 0f)
-        };
-        autoStartText.JoinParent(autoStartPanel);
-        SUISwitch autoStartToggle = new SUISwitch(() => AutoStart, flag => AutoStart = flag, "")
-        {
-            HAlign = 1f,
-            Height = StyleDimension.Fill,
-            Width = { Pixels = 60f },
-        };
-        autoStartToggle.JoinParent(autoStartPanel);
-
-        var quickModePanel = new View()
-        {
-            Left = { Pixels = 6 },
+            ResetAnotherPosition = true,
             RelativeMode = RelativeMode.Vertical,
-            DragIgnore = true,
-            Rounded = new Vector4(6),
-            Spacing = new Vector2(0, 8)
+            Spacing = new Vector2(0, 16),
+            FixedAnchorPixels = 18,
+            Width = { Pixels = 358, Percent = 0f },
+            Height = { Pixels = 34f }
         };
-        quickModePanel.SetPadding(6, 6, 6, 6);
-        quickModePanel.SetSize(-10f, 40, 1f, 0f);
-        quickModePanel.BgColor = Color.Black * .125f;
-        quickModePanel.JoinParent(bagPanel);
-        SUIText quickModeText = new SUIText()
+        autoStartToggle.JoinParent(bagPanel);
+
+        var quickModeToggle = new LongSwitch(
+            () => QuickMode,
+            state => QuickMode = state,
+            "UI.QuickShimmer.ReallyQuick")
         {
-            TextOrKey = "Mods.ImproveGame.UI.QuickShimmer.ReallyQuick",
-            UseKey = true,
-            TextAlign = new Vector2(0f, 0f),
-            TextScale = 1f,
-            Height = new StyleDimension(40, 0),
-            Width = StyleDimension.Fill,
-            DragIgnore = true,
-            Left = new StyleDimension(10f, 0f)
+            ResetAnotherPosition = true,
+            RelativeMode = RelativeMode.Vertical,
+            Spacing = new Vector2(0, 8),
+            FixedAnchorPixels = 18,
+            Width = { Pixels = 358, Percent = 0f },
+            Height = { Pixels = 34f }
         };
-        quickModeText.JoinParent(quickModePanel);
-        SUISwitch quickModeToggle = new SUISwitch(() => QuickMode, flag => QuickMode = flag, "")
-        {
-            HAlign = 1f,
-            Height = StyleDimension.Fill,
-            Width = { Pixels = 60f },
-        };
-        quickModeToggle.JoinParent(quickModePanel);
+        quickModeToggle.JoinParent(bagPanel);
     }
     public static bool AutoStart;
     public static bool QuickMode;
