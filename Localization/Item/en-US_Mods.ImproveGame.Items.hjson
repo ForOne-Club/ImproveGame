@@ -176,9 +176,9 @@ GlobeBase: {
 		Marks {0} on the map.
 		You can hide the marker in [c/CC88AA:Personal Config]
 		'''
-	Tooltip_1:
+	Tooltip_Multi:
 		'''
-		在地图上标记距离你最近的{0}
+		Marks the closest {0} on the map.
 		You can hide the marker in [c/CC88AA:Personal Config]
 		'''
 	AlreadyRevealed: "{0} has already been marked"
