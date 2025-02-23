@@ -7,7 +7,7 @@ using Terraria.ID;
 
 namespace ImproveGame.Content.Projectiles;
 
-public abstract class GlobeProjBase : ModProjectile
+public abstract class GlobeProjBase(Color mainColor) : ModProjectile
 {
     public override string Texture => GetModItemDummy().Texture;
 
@@ -84,7 +84,7 @@ public abstract class GlobeProjBase : ModProjectile
 
             // 幽默特效
             if (Projectile.ai[2] % 12 == 0)
-                SoundEngine.PlaySound(SoundID.Item13 with { MaxInstances = 114514}, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Item13 with { MaxInstances = 114514 }, Projectile.Center);
 
             if (Main.rand.NextBool(2))
                 Dust.NewDustPerfect(Projectile.Center + (Vector2.Normalize(Projectile.velocity) * -16), DustID.Smoke,
@@ -155,11 +155,10 @@ public abstract class GlobeProjBase : ModProjectile
             }
 
             // 特效弹幕只能在服务器/单人生成
-            var effectColor = GetEffectColor();
+            //var effectColor = GetEffectColor();
             if (Main.netMode is not NetmodeID.MultiplayerClient)
                 Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero,
-                    ModContent.ProjectileType<GlobeEffect>(), 0, 0, ai0: effectColor.R, ai1: effectColor.G,
-                    ai2: effectColor.B);
+                    ModContent.ProjectileType<GlobeEffect>(), 0, 0, ai0: Type);
 
             SoundEngine.PlaySound(SoundID.Item107, Projectile.Center);
             for (int i = 0; i < 15; i++)
@@ -222,7 +221,7 @@ public abstract class GlobeProjBase : ModProjectile
         var cross = ModAsset.CrazyGlowCross.Value;
         var roundGlow = ModAsset.GlowOrb.Value;
         var center = Projectile.Center - Main.screenPosition;
-        var glowCrossColor = GetEffectColor();
+        var glowCrossColor = RealColor;
         glowCrossColor.A = 0;
 
         // 顶点拖尾
@@ -305,7 +304,7 @@ public abstract class GlobeProjBase : ModProjectile
             Vector2 oldVel = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
             var factor = i / actualLength; // 遍历时以0-1递增
             var factorSquare = (float)Math.Pow(factor, 2);
-            var color = GetEffectColor();
+            var color = RealColor;
             color.A = (byte)MathHelper.Lerp(150, 0, factorSquare);
 
             Vector2 correct = Vector2.Normalize(oldVel).RotatedBy(1.57f) * MathHelper.SmoothStep(20, 0, factorSquare);
@@ -334,18 +333,22 @@ public abstract class GlobeProjBase : ModProjectile
         return triangleList;
     }
 
-    public abstract ModItem GetModItemDummy();
+    public abstract Globe GetModItemDummy();
 
-    private Color GetEffectColor() => GetModItemDummy() is Globe globe ? globe.GetEffectColor() : Color.White;
+    public virtual Color? GetEffectColor() => null;
 
-    public virtual bool RevealOperation(bool onlyJudging)
+    protected GlobeProjBase() : this(Color.White)
     {
-        var modItem = GetModItemDummy();
-        return modItem switch
-        {
-            OnceForAllGlobe onceForAllGlobe => onceForAllGlobe.RevealOperation(Projectile, onlyJudging),
-            Globe basicGlobe => basicGlobe.RevealOperation(Projectile, onlyJudging),
-            _ => false
-        };
+
     }
+
+    public Color mainColor = mainColor;
+
+    public Color RealColor => GetEffectColor() ?? mainColor;
+
+    public abstract bool RevealOperation(bool onlyJudging);
+}
+public abstract class GlobeProjBase<T>(Color mainColor) : GlobeProjBase(mainColor) where T : Globe
+{
+    public override Globe GetModItemDummy() => ModContent.GetInstance<T>();
 }

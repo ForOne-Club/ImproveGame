@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
+using static Terraria.Localization.NetworkText;
 
 namespace ImproveGame.Content.Projectiles
 {
@@ -18,10 +22,31 @@ namespace ImproveGame.Content.Projectiles
             Projectile.timeLeft = 90;
             Projectile.tileCollide = false;
         }
-        RenderTarget2D render = null;
-        RenderTarget2D render2 = null;
+        //RenderTarget2D render = null;
+        //RenderTarget2D render2 = null;
         public override bool PreDraw(ref Color lightColor)
         {
+            Main.spriteBatch.ReBegin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            float factor = 1 - Projectile.timeLeft / 90f;
+            var effect = ModAsset.GlobeBall.Value;
+            effect.Parameters["uCenter"].SetValue(Projectile.Center - Main.screenPosition);
+            effect.Parameters["uScreenSize"].SetValue(Main.ScreenSize.ToVector2());//
+            effect.Parameters["uTime"].SetValue(MathF.Pow(factor, 2.0f) * 4.0f);
+            effect.CurrentTechnique.Passes[0].Apply();
+            float scaler = (1 - MathF.Cos(MathHelper.TwoPi * MathF.Sqrt(factor))) * .5f;
+            scaler = MathF.Pow(scaler, 0.5f);
+            Color color = Color.White;
+            if (ProjectileLoader.GetProjectile((int)Projectile.ai[0]) is GlobeProjBase projBase)
+                color = projBase.RealColor;
+            Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color * scaler);
+
+            Main.spriteBatch.ReBegin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            return false;
+            /*var sb = Main.spriteBatch;
+            Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Vector2(1600, 800), new(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), 16, 0, 0);
+            if (false)
+                goto label;
+            #region 特效
             render ??= new(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
             render2 ??= new(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
             var spriteBatch = Main.spriteBatch;
@@ -30,15 +55,18 @@ namespace ImproveGame.Content.Projectiles
             var screenTargetSwap = Main.screenTargetSwap;
             var tex = TextureAssets.Projectile[Type].Value;
 
+            sb.End();
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, sb.GraphicsDevice.SamplerStates[0],
+                sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, null, Matrix.Identity);
+            //Main.spriteBatch.ReBegin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             graphicsDevice.SetRenderTarget(screenTargetSwap);
             graphicsDevice.Clear(Color.Transparent);
-            Main.spriteBatch.ReBegin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             spriteBatch.Draw(screenTarget, Vector2.Zero, Color.White);
 
             graphicsDevice.SetRenderTarget(render);
             graphicsDevice.Clear(Color.Transparent);
             spriteBatch.Draw(screenTarget, Vector2.Zero, Color.White);
-            
+
             var color = new Color((int)Projectile.ai[0], (int)Projectile.ai[1], (int)Projectile.ai[2]);
             for (int i = (int)Main.screenPosition.X / 16 * 16; i < Main.screenPosition.X + Main.screenWidth; i += 16)
                 spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Vector2(i - Main.screenPosition.X, 0), new Rectangle(0, 0, 1, 1), color, 1.57f, Vector2.Zero, new Vector2(Main.screenHeight, 2), SpriteEffects.None, 0);
@@ -62,12 +90,15 @@ namespace ImproveGame.Content.Projectiles
             graphicsDevice.Textures[2] = null;
 
             Main.spriteBatch.ReBegin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            return false;
+            #endregion
+            label:
+            Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Vector2(1600, 800), new(0, 0, 1, 1), Color.Gray, 0, new Vector2(.5f), 16, 0, 0);
+            return false;*/
         }
         public override void OnKill(int timeLeft)
         {
-            render = null;
-            render2 = null;
+            //render = null;
+            //render2 = null;
         }
     }
 }

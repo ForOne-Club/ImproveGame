@@ -1095,8 +1095,8 @@ UIConfigs: {
 	}
 
 	GlobeEffect: {
-		Tooltip: "[centeritem:WorldGlobe] 定位球特效"
-		Label: 如果你觉得特效太光污染了，可以关掉
+		Label: "[centeritem:WorldGlobe] 定位球特效"
+		Tooltip: 如果你觉得特效太光污染了，可以关掉
 	}
 }
 

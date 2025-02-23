@@ -184,6 +184,7 @@ public class ModernConfigOption : TimerView
         {
             RelativeMode = RelativeMode.Horizontal,
             IgnoresMouseInteraction = true,
+            ResetAnotherPosition = true,
         };
         labelElement.OnUpdate += _ =>
         {

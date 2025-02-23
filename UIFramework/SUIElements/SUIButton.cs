@@ -16,7 +16,7 @@ public class SUIButton : TimerView
     public Vector2 TextAlign;
 
     private static readonly float iconAndTextSpacing = 6f;
-    private readonly Texture2D _texture;
+    private Texture2D _texture;
     private string _text;
     public Vector2 TextSize { get; private set; }
     public string Text
@@ -58,7 +58,11 @@ public class SUIButton : TimerView
         Rounded = new Vector4(10f);
         Border = 2f;
     }
-
+    public void SetIcon(Texture2D texture) 
+    {
+        _texture = texture;
+        SetInnerPixels(_texture.Width + TextSize.X + 4 + iconAndTextSpacing, 40f);
+    }
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         BgColor = HoverTimer.Lerp(BeginBgColor, EndBgColor);

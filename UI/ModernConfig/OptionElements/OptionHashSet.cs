@@ -66,19 +66,10 @@ internal class OptionHashSet : OptionCollections
                 DataWrapperList.Add(proxy);
                 wrappermemberInfo ??= ConfigManager.GetFieldsAndProperties(this).ToList().First(x => x.Name == "DataWrapperList");
 
-                // 设置了RelativeMode就不能设置Top.Pixels了，因此这里用元素套Box实现和上边界留有间隔
-                var helperBox = new View
-                {
-                    RelativeMode = RelativeMode.Horizontal,
-                    IsAdaptiveWidth = true,
-                    HAlign = 0f,
-                    Height = new(36, .0f),
-                    PaddingTop = 8,
-                };
-
                 var deleteButton = new SUICross()
                 {
                     Spacing = new Vector2(4f, 10f),
+                    Top = { Pixels = 8f },
                     BgColor = Color.Black * 0.4f,
                     Rounded = new Vector4(4f),
                     Width = new(25, .0f),
@@ -93,9 +84,8 @@ internal class OptionHashSet : OptionCollections
                     SetupList();
                     pendingChanges = true;
                 };
-                deleteButton.JoinParent(helperBox);
 
-                var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, DataWrapperList, genericType, i, this, preLabelAppend: helperBox.JoinParent);
+                var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, DataWrapperList, genericType, i, this, preLabelAppend: deleteButton.JoinParent);
 
                 if (e.Elements[0] is OptionLabelElement label)
                 {
