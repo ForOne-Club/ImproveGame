@@ -34,7 +34,7 @@ namespace ImproveGame.UIFramework.SUIElements
         public override void MouseOver(UIMouseEvent evt)
         {
             base.MouseOver(evt);
-            //SoundEngine.PlaySound(SoundID.MenuTick);
+            SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
         public override void DrawSelf(SpriteBatch sb)

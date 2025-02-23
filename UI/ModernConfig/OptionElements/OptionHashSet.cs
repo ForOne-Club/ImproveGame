@@ -16,7 +16,7 @@ internal class OptionHashSet : OptionCollections
 
     public List<ISetElementWrapper> DataWrapperList { get; set; }
 
-    protected override bool CanAdd => true;
+    protected override bool CanItemBeAdded => true;
 
     MethodInfo addMethod;
     MethodInfo clearMethod;
@@ -65,29 +65,38 @@ internal class OptionHashSet : OptionCollections
                 ISetElementWrapper proxy = (ISetElementWrapper)Activator.CreateInstance(genericType, [valuesEnumerator.Current, Data]);
                 DataWrapperList.Add(proxy);
                 wrappermemberInfo ??= ConfigManager.GetFieldsAndProperties(this).ToList().First(x => x.Name == "DataWrapperList");
-                var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, DataWrapperList, genericType, i, this);
 
-
-                var DeleteButton = new SUICross()
+                // 设置了RelativeMode就不能设置Top.Pixels了，因此这里用元素套Box实现和上边界留有间隔
+                var helperBox = new View
                 {
-                    RelativeMode = RelativeMode.None,
+                    RelativeMode = RelativeMode.Horizontal,
+                    IsAdaptiveWidth = true,
+                    HAlign = 0f,
+                    Height = new(36, .0f),
+                    PaddingTop = 8,
+                };
+
+                var deleteButton = new SUICross()
+                {
+                    Spacing = new Vector2(4f, 10f),
                     BgColor = Color.Black * 0.4f,
                     Rounded = new Vector4(4f),
                     Width = new(25, .0f),
                     Height = new(25, .0f),
-                    Left = new(0, 0),
-                    Top = new(6, 0),
                 };
                 object o = valuesEnumerator.Current; // needed for closure?
 
-                DeleteButton.OnLeftClick += (evt, elem) =>
+                deleteButton.OnLeftClick += (evt, elem) =>
                 {
                     removeMethod ??= Data.GetType().GetMethods().FirstOrDefault(m => m.Name == "Remove");
                     removeMethod.Invoke(Data, [o]);
                     SetupList();
                     pendingChanges = true;
                 };
-                DeleteButton.JoinParent(e);
+                deleteButton.JoinParent(helperBox);
+
+                var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, DataWrapperList, genericType, i, this, preLabelAppend: helperBox.JoinParent);
+
                 if (e.Elements[0] is OptionLabelElement label)
                 {
                     label.Left = new(30, 0);

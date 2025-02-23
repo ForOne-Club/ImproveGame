@@ -20,7 +20,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class ModernConfigOption : TimerView
 {
-    public static ModernConfigOption WrapIt(UIElement parent, ModConfig modConfig, PropertyFieldWrapper variable, object item, object list = null, Type arrayType = null, int index = -1, ModernConfigOption owner = null)
+    public static ModernConfigOption WrapIt(UIElement parent, ModConfig modConfig, PropertyFieldWrapper variable, object item, object list = null, Type arrayType = null, int index = -1, ModernConfigOption owner = null, Action<ModernConfigOption> preLabelAppend = null)
     {
         Type type = variable.Type;
         if (arrayType != null)
@@ -85,13 +85,13 @@ public class ModernConfigOption : TimerView
         }*/
         try
         {
-            option.Bind(modConfig, variable);
+            option.Bind(modConfig, variable, preLabelAppend);
 
         }
         catch
         {
             option = new OptionNotSupportText();
-            option.Bind(modConfig, variable);
+            option.Bind(modConfig, variable, preLabelAppend);
 
         }
         /*if (parent.Parent.Parent is SUIScrollViewDraggingSortable scroll)
@@ -119,9 +119,10 @@ public class ModernConfigOption : TimerView
     protected static Category _categoryInMemory;
     public virtual int labelReservedWidth => 70;
     public Type VarType => List != null ? List[index].GetType() : VariableInfo.Type;
-    //原来的构造函数改成OnBind了
-    //因为现在要构造出来另外赋一些值再Bind，都写构造函数太杂乱了
-    public void Bind(ModConfig config, PropertyFieldWrapper propertyFieldWrapper)
+
+    // 原来的构造函数改成OnBind了
+    // 因为现在要构造出来另外赋一些值再Bind，都写构造函数太杂乱了
+    public void Bind(ModConfig config, PropertyFieldWrapper propertyFieldWrapper, Action<ModernConfigOption> preLabelAppend)
     {
         Config = config;
         OptionName = propertyFieldWrapper.Name;
@@ -145,8 +146,7 @@ public class ModernConfigOption : TimerView
                 else
                     SDFGraphics.NoBorderStarX(dimension.Center(), new(.5f), dimension.Width * .5f, 4, .5f, Color.Yellow, GetMatrix(true));
                 //SDFRectangle.HasBorder(dimension.Position(),dimension.Size(),v.Rounded,v.BgColor,v.);
-            }
-            )
+            })
             {
                 RelativeMode = RelativeMode.None,
                 //BgColor = Color.Black * 0.4f,
@@ -156,7 +156,6 @@ public class ModernConfigOption : TimerView
                 Width = new(25, .0f),
                 Height = new(25, .0f)
             };
-            customButton.JoinParent(this);
             customButton.OnLeftClick += (evt, elem) =>
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
@@ -173,12 +172,18 @@ public class ModernConfigOption : TimerView
                 string info = GetText("ModernConfig.CustomItemTip");
                 ModernConfigUI.PopNewInfo(info, elem.GetDimensions().Position() - FontAssets.MouseText.Value.MeasureString(info), Color.Cyan);
             };
+
+            // 这个按钮是如果有CustomModConfigItemAttribute的话，点击就会跳转过去，但是我觉得这个功能没什么用，而且和整体风格不匹配，所以删了
+            // 取消注释下面的代码就可以恢复
+            // customButton.JoinParent(this);
         }
 
+        preLabelAppend?.Invoke(this);
 
         var labelElement = new OptionLabelElement(config, OptionName, labelReservedWidth, Label)
         {
-            RelativeMode = RelativeMode.Horizontal
+            RelativeMode = RelativeMode.Horizontal,
+            IgnoresMouseInteraction = true,
         };
         labelElement.OnUpdate += _ =>
         {
@@ -365,18 +370,19 @@ public class ModernConfigOption : TimerView
     {
 
     }
+
     public override void RightMouseDown(UIMouseEvent evt)
     {
         base.RightMouseDown(evt);
         if (evt.Target != this) return;
         var defaultValueAttribute = GetAttribute<DefaultValueAttribute>();
-        if (defaultValueAttribute != null)
-        {
-            OnSetDefault(defaultValueAttribute.Value);
-            SetValueDirect(defaultValueAttribute.Value);
-            //ConfigHelper.SetConfigValue(Config, VariableInfo, defaultValueAttribute.Value, Item, path: path);
-            SoundEngine.PlaySound(SoundID.Chat);
-        }
+        var typeDefault = VariableInfo.Type.IsValueType ? Activator.CreateInstance(VariableInfo.Type) : null;
+        var defaultValue = defaultValueAttribute?.Value ?? typeDefault;
+
+        OnSetDefault(defaultValue);
+        SetValueDirect(defaultValue);
+        // ConfigHelper.SetConfigValue(Config, VariableInfo, defaultValue, Item, path: path);
+        SoundEngine.PlaySound(SoundID.Chat);
     }
 
     public override void MiddleMouseDown(UIMouseEvent evt)

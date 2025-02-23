@@ -289,9 +289,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 Width = new(24, 0),
                 Height = new(24, 0),
-                Left = new(-30, 1),
-                Top = new(8, 0),
-                RelativeMode = RelativeMode.None,
+                RelativeMode = RelativeMode.Horizontal,
                 Rounded = new(12)
             };
             colorfulSliderButton.OnLeftClick += (evt, elem) =>
@@ -522,7 +520,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             //};
 
-            colorPanel.Left.Set(MathHelper.Lerp(colorPanel.Left.Pixels, expanded ? -400 : -260, 0.15f), 1);
+            colorPanel.Left.Set(MathHelper.Lerp(colorPanel.Left.Pixels, expanded ? -400 : -214, 0.15f), 1);
             colorPanel.Top.Set(MathHelper.Lerp(colorPanel.Top.Pixels, expanded ? 8 : 4, 0.15f), 0);
 
             colorPanel.Recalculate();
@@ -530,7 +528,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 colorfulSliderButton.Remove();
                 if (expanded)
-                    colorfulSliderButton.JoinParent(this);
+                    colorfulSliderButton.JoinParent(HelperBox);
             }
 
             rButton.Left.Set(0, MathHelper.Lerp(0.2f, 0.8f, currentColor.R / 255f));

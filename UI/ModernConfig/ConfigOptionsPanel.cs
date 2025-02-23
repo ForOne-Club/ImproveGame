@@ -42,7 +42,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             }
         }
     }
-    
+
     private static SUIText CreateRightArrow()
     {
         SUIText arrow = new()
@@ -84,7 +84,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
 
             if (index == 0)
             {
-        ModernConfigUI.Instance.PathPanelTimer.Close();
+                ModernConfigUI.Instance.PathPanelTimer.Close();
             }
             else
             {
@@ -125,7 +125,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         if (timer.AnyClose)
         {
             GeneratePathTextElement(CurrentCategory, null).JoinParent(list.ListView);
-        timer.Open();
+            timer.Open();
         }
 
         GlobalItem = item;
@@ -301,7 +301,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             return;
         // 创建实例并加入到_allOptions列表
         var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T));//, config, nameOrMemberInfo
-        instance.Bind(config, MemberInfo);
+        instance.Bind(config, MemberInfo, null);
         _allOptions.Add(instance);
     }
 

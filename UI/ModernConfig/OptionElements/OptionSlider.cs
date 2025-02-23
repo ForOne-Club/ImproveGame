@@ -304,8 +304,8 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             if (!double.TryParse(text, out var value))
                 return;
             if (!_numericTextBox.IsWritingText) return; // 有可能是属性导致跟着另一个变了
-            if (Increment is double d)
-                value = Math.Round((value - Min) / d) * d;
+            // if (Increment is double d)
+            //     value = Math.Round((value - Min) / d) * d + Min;
             value = Math.Clamp(value, Min, Max);
             SetConfigValue(value, broadcast: false);
         };
@@ -314,13 +314,13 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             if (!_numericTextBox.IsValueSafe)
                 return;
             var value = _numericTextBox.Value;
-            if (Increment is double d)
-                value = Math.Round((value - Min) / d) * d;
+            // if (Increment is double d)
+            //     value = Math.Round((value - Min) / d) * d + Min;
             value = Math.Clamp(value, Min, Max);
             SetConfigValue(value, broadcast: true);
         };
         _numericTextBox.SetPadding(2, 2, 2, 2); // Padding影响里面的文字绘制
-        _numericTextBox.SetSizePixels(48, 28);
+        _numericTextBox.SetSizePixels(50, 28);
         _numericTextBox.JoinParent(box);
     }
 
@@ -335,7 +335,8 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         _slideBox.ValueChangeCallback += () =>
         {
             double value = Min + (Max - Min) * _slideBox.Value;
-            if (Increment is double d && d != 0)
+            // 更好的体验不要Increment检测
+            if (Config.Mod.Name is not "ImproveGame" && Increment is double d && d != 0)
             {
                 value = Math.Round(value / d) * d;
             }
@@ -345,7 +346,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         _slideBox.EndDraggingCallback += () =>
         {
             double value = Min + (Max - Min) * _slideBox.Value;
-            if (Increment is double d && d != 0)
+            if (Config.Mod.Name is not "ImproveGame" && Increment is double d && d != 0)
             {
                 value = Math.Round(value / d) * d;
             }

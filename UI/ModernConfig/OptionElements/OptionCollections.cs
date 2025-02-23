@@ -22,7 +22,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         protected object Data { get; set; }
         private bool expanded = true;
         protected float Scale { get; set; } = 1f;
-        protected virtual bool CanAdd => true;
+        protected virtual bool CanItemBeAdded => true;
 
         protected bool pendingChanges = false;
 
@@ -74,6 +74,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         SUICross DeleteButton;
         SUIPlus AddButton;
 
+        // 使用自动排列从右向左排，加个透明Box来控制位置，子元素从左到右全部加到这个Box里，就能从右向左排了
+        View HelperBox;
+
         protected override void CheckAttributes()
         {
             base.CheckAttributes();
@@ -91,6 +94,17 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             Height.Set(360, 0);
             MaxHeight.Set(360, 0);
             MinHeight.Set(60, 0);
+
+            HelperBox = new View
+            {
+                IsAdaptiveWidth = true,
+                HAlign = 1f,
+                VAlign = 0.5f,
+                Height = StyleDimension.Fill,
+                PaddingTop = 8,
+            };
+            HelperBox.JoinParent(this);
+
             /*ListPanel = new View
             {
                 HAlign = 1f,
@@ -104,13 +118,12 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             ListPanel.JoinParent(this);*/
             InitialButton = new SUITriangleIcon()
             {
-                RelativeMode = RelativeMode.None,
+                RelativeMode = RelativeMode.Horizontal,
+                Spacing = new Vector2(4f, 0f),
                 BgColor = Color.Black * 0.4f,
                 Rounded = new Vector4(4f),
-                Width = new(25, .0f),
-                Height = new(25, .0f),
-                Left = new(-30, 1),
-                Top = new(6, 0),
+                Width = new(25, 0.0f),
+                Height = new(25, 0.0f),
             };
             InitialButton.OnLeftClick += (evt, elem) =>
             {
@@ -122,13 +135,12 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             };
             DeleteButton = new SUICross()
             {
-                RelativeMode = RelativeMode.None,
+                RelativeMode = RelativeMode.Horizontal,
+                Spacing = new Vector2(4f, 0f),
                 BgColor = Color.Black * 0.4f,
                 Rounded = new Vector4(4f),
-                Width = new(25, .0f),
-                Height = new(25, .0f),
-                Left = new(-30, 1),
-                Top = new(6, 0),
+                Width = new(25, 0.0f),
+                Height = new(25, 0.0f),
             };
             DeleteButton.OnLeftClick += (evt, elem) =>
             {
@@ -142,13 +154,12 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             };
             ExpandButton = new SUITriangleIcon()
             {
-                RelativeMode = RelativeMode.None,
+                RelativeMode = RelativeMode.Horizontal,
+                Spacing = new Vector2(4f, 0f),
                 BgColor = Color.Black * 0.4f,
                 Rounded = new Vector4(4f),
-                Left = new(-60, 1),
-                Top = new(6, 0),
-                Width = new(25, .0f),
-                Height = new(25, .0f)
+                Width = new(25, 0.0f),
+                Height = new(25, 0.0f)
             };
             //ExpandButton.trianglePercentCoord[1] = new(0f, .5f);
             ExpandButton.OnLeftClick += (evt, elem) =>
@@ -158,13 +169,12 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             };
             AddButton = new SUIPlus
             {
-                RelativeMode = RelativeMode.None,
+                RelativeMode = RelativeMode.Horizontal,
+                Spacing = new Vector2(4f, 0f),
                 BgColor = Color.Black * 0.4f,
                 Rounded = new Vector4(4f),
-                Left = new(-90, 1),
-                Top = new(6, 0),
-                Width = new(25, .0f),
-                Height = new(25, .0f)
+                Width = new(25, 0.0f),
+                Height = new(25, 0.0f)
             };
             //ExpandButton.trianglePercentCoord[1] = new(0f, .5f);
             AddButton.OnLeftClick += (evt, elem) =>
@@ -209,9 +219,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 {
                     Vector2 targetCoord = i switch
                     {
-                        0 => expanded ? new(0, .5f) : new(.5f, 0),
-                        1 => expanded ? new(.5f, 1) : new(0, .5f),
-                        2 or _ => expanded ? new(1, .5f) : new(.5f, 1)
+                        0 => expanded ? new(0.0f, 0.3f) : new(0.7f, 0.0f),
+                        1 => expanded ? new(0.5f, 0.8f) : new(0.2f, 0.5f),
+                        2 or _ => expanded ? new(1.0f, 0.3f) : new(0.7f, 1.0f)
                     };
                     ExpandButton.trianglePercentCoord[i] = Vector2.Lerp(ExpandButton.trianglePercentCoord[i], targetCoord, .15f + i * .05f);
 
@@ -232,28 +242,27 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 return;
             pendingChanges = false;
 
-            if (CanAdd)
+            if (CanItemBeAdded)
             {
-                RemoveChild(InitialButton);
-                RemoveChild(AddButton);
-                RemoveChild(DeleteButton);
+                HelperBox.RemoveChild(InitialButton);
+                HelperBox.RemoveChild(AddButton);
+                HelperBox.RemoveChild(DeleteButton);
             }
-            RemoveChild(ExpandButton);
+            HelperBox.RemoveChild(ExpandButton);
             RemoveChild(OptionView);
 
             if (Data == null)
             {
-                Append(InitialButton);
-
+                HelperBox.Append(InitialButton);
             }
             else
             {
-                if (CanAdd)
+                HelperBox.Append(ExpandButton);
+                if (CanItemBeAdded)
                 {
-                    Append(AddButton);
-                    Append(DeleteButton);
+                    HelperBox.Append(AddButton);
+                    HelperBox.Append(DeleteButton);
                 }
-                Append(ExpandButton);
                 if (expanded)
                     Append(OptionView);
             }
@@ -284,7 +293,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             float h = OptionView.ListView.GetDimensions().Height + 70;
             h = Utils.Clamp(h, 70, showMaxHeight);
             if (h < showMaxHeight)
-                showMaxHeight = Math.Max(h,150);
+                showMaxHeight = Math.Max(h, 150);
             Height.Set(h, 0f);
             Parent?.Height.Set(h, 0f);
             base.Recalculate();

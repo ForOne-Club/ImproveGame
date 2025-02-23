@@ -160,7 +160,7 @@ public sealed class ModernConfigUI : UIState
             Border = 1f,
         };
         PathPanel.ListView.SetPadding(8f, 2f);
-        PathPanel.SetPos(0, -58, 0.5f - 0.86f * 0.5f, 0.5f - 0.82f * 0.5f);
+        PathPanel.SetPos(0, -58, 0.5f - 0.86f * 0.5f, 0f);
         PathPanel.JoinParent(this);
 
         PathPanelTimer = new(3);
@@ -178,7 +178,7 @@ public sealed class ModernConfigUI : UIState
         Instance.NoticeTimer = 120;
         Instance.NoticeColor = color;
         Instance.PopNotice.TextOrKey = info;
-        Instance.PopNoticePanel.SetPos(position - ModernConfigUI.Instance.MainPanel.GetDimensions().Position());
+        Instance.PopNoticePanel.SetPos(position - Instance.MainPanel.GetDimensions().Position());
 
         Instance.PopNoticePanel.Recalculate();
     }

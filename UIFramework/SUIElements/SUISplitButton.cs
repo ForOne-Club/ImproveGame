@@ -12,9 +12,31 @@ namespace ImproveGame.UIFramework.SUIElements
 {
     public class SUISplitButton : View
     {
+        private AnimationTimer _upButtonTimer = new(3);
+        private AnimationTimer _downButtonTimer = new(3);
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            // 更新Timer
+            _upButtonTimer.Update();
+            _downButtonTimer.Update();
+
+            if (IsUP)
+                _upButtonTimer.Open();
+            else
+                _upButtonTimer.Close();
+
+            if (IsDown)
+                _downButtonTimer.Open();
+            else
+                _downButtonTimer.Close();
+        }
+
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
-            //base.DrawSelf(spriteBatch);
+            // base.DrawSelf(spriteBatch);
             var dimension = GetDimensions();
             var pos = dimension.Position();
             var size = dimension.Size();
@@ -22,10 +44,11 @@ namespace ImproveGame.UIFramework.SUIElements
             float h = (pos + size * Vector2.UnitY * .25f).Y;
             var flip = Matrix.CreateTranslation(0, -h, 0) * Matrix.CreateScale(1, -1, 1) * Matrix.CreateTranslation(0, h, 0);
 
-            SDFGraphics.HasBorderTriangleIsosceles(pos + size * Vector2.UnitY * .05f + size * Vector2.UnitX * .5f, new Vector2(.5f, 0), size * new Vector2(.75f, .4f), buttonColor, 1, IsUP ? UIStyle.SliderRoundHover : UIStyle.SliderRound, flip * GetMatrix(true));
+            Color upColor = _upButtonTimer.Lerp(UIStyle.SliderRound, UIStyle.SliderRoundHover);
+            SDFGraphics.HasBorderTriangleIsosceles(pos + size * Vector2.UnitY * .05f + size * Vector2.UnitX * .5f, new Vector2(.5f, 0), size * new Vector2(.75f, .4f), buttonColor, 1, upColor, flip * GetMatrix(true));
 
-
-            SDFGraphics.HasBorderTriangleIsosceles(pos + size * Vector2.UnitY * .55f + size * Vector2.UnitX * .5f, new Vector2(.5f, 0), size * new Vector2(.75f, .4f), buttonColor, 1, IsDown ? UIStyle.SliderRoundHover : UIStyle.SliderRound, GetMatrix(true));
+            Color downColor = _downButtonTimer.Lerp(UIStyle.SliderRound, UIStyle.SliderRoundHover);
+            SDFGraphics.HasBorderTriangleIsosceles(pos + size * Vector2.UnitY * .55f + size * Vector2.UnitX * .5f, new Vector2(.5f, 0), size * new Vector2(.75f, .4f), buttonColor, 1, downColor, GetMatrix(true));
         }
         public Color buttonColor;
         public Color buttonBorderColor;
