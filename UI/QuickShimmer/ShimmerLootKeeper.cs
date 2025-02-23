@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader.IO;
+﻿using Terraria;
+using Terraria.ModLoader.IO;
 
 namespace ImproveGame.UI.QuickShimmer;
 
@@ -36,5 +37,23 @@ public class ShimmerLootKeeper : ModPlayer
 
         // 还有剩余，加在后面
         Loots.Add(item.Clone());
+    }
+
+    public override bool ShiftClickSlot(Item[] inventory, int context, int slot)
+    {
+        if (context != 0 ||inventory[slot].IsAir || !QuickShimmerGUI.Instance.Enabled || targetItem == null || !targetItem.IsAir || !inventory[slot].CanShimmer())
+            return base.ShiftClickSlot(inventory, context, slot);
+        targetItem = inventory[slot];
+        inventory[slot] = new();
+        return true;
+    }
+    public override bool HoverSlot(Item[] inventory, int context, int slot)
+    {
+        if (context != 0 ||inventory[slot].IsAir || !QuickShimmerGUI.Instance.Enabled || targetItem == null || !targetItem.IsAir || !ItemSlot.ShiftInUse || !inventory[slot].CanShimmer())
+            return base.HoverSlot(inventory, context, slot);
+
+        Main.cursorOverride = CursorOverrideID.InventoryToChest;
+        return true;
+
     }
 }
