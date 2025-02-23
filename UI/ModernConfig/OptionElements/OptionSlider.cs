@@ -239,6 +239,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             var elem = Activator.CreateInstance(customConfigAttribute.Type);
             if (elem is RangeElement range)
             {
+                if(range.ColorMethod.Invoke(0.0f) != Color.Black && range.ColorMethod.Invoke(1.0f) != Color.White)
                 _colorLerpMethod = range.ColorMethod;
             }
         }
