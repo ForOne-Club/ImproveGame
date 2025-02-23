@@ -24,7 +24,8 @@ public enum AnimationType : byte
 #endregion
 
 /// <summary>
-/// 动画计时器 <br/>
+/// 动画计时器<br/>
+/// 建议参考同目录下的 AnimationTimerDocs.md 了解使用方法
 /// </summary>
 public class AnimationTimer(float speed = 5f, float timerMax = 100f, AnimationType animationType = AnimationType.Easing)
 {

@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader.Config.UI;
+﻿using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.Config;
 using Newtonsoft.Json;
 using ImproveGame.UIFramework.SUIElements;
 using ImproveGame.UIFramework.BaseViews;
-using Terraria.ModLoader.UI;
-using Terraria.ID;
 using ImproveGame.UI.ModernConfig.Categories;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using ImproveGame.UIFramework.Graphics2D;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
     public class OptionObject : ModernConfigOption
     {
-
+        // 使用自动排列从右向左排，加个透明Box来控制位置，子元素从左到右全部加到这个Box里，就能从右向左排了
+        public View HelperBox;
 
         //SeparatePage:有分页面，内外都为True
         //innerPage:处于分页面，内部为True
@@ -26,24 +18,24 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         //在内部取消折叠按钮
         protected override void OnBind()
         {
+            HelperBox = new View
+            {
+                IsAdaptiveWidth = true,
+                HAlign = 1f,
+                VAlign = 0.5f,
+                Height = StyleDimension.Fill,
+                PaddingTop = 8,
+            };
+            HelperBox.JoinParent(this);
 
-            //var box = new View
-            //{
-            //    IsAdaptiveWidth = true,
-            //    HAlign = 1f,
-            //    VAlign = 0.5f,
-            //    Height = StyleDimension.Fill
-            //};
-            //box.JoinParent(this);
             InitialButton = new SUITriangleIcon()
             {
-                RelativeMode = RelativeMode.None,
+                RelativeMode = RelativeMode.Horizontal,
+                Spacing = new Vector2(4f, 0f),
                 BgColor = Color.Black * 0.4f,
                 Rounded = new Vector4(4f),
-                Width = new(25, .0f),
-                Height = new(25, .0f),
-                Left = new(-30, 1),
-                Top = new(6, 0),
+                Width = new(25, 0.0f),
+                Height = new(25, 0.0f),
             };
             InitialButton.OnLeftClick += (evt, elem) =>
             {
@@ -57,13 +49,12 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             };
             DeleteButton = new SUICross()
             {
-                RelativeMode = RelativeMode.None,
+                RelativeMode = RelativeMode.Horizontal,
+                Spacing = new Vector2(4f, 0f),
                 BgColor = Color.Black * 0.4f,
                 Rounded = new Vector4(4f),
-                Width = new(25, .0f),
-                Height = new(25, .0f),
-                Left = new(-30, 1),
-                Top = new(6, 0),
+                Width = new(25, 0.0f),
+                Height = new(25, 0.0f),
             };
             DeleteButton.OnLeftClick += (evt, elem) =>
             {
@@ -72,13 +63,12 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             };
             ExpandButton = new SUITriangleIcon()
             {
-                RelativeMode = RelativeMode.None,
+                RelativeMode = RelativeMode.Horizontal,
+                Spacing = new Vector2(4f, 0f),
                 BgColor = Color.Black * 0.4f,
                 Rounded = new Vector4(4f),
-                Left = new(-60, 1),
-                Top = new(6, 0),
-                Width = new(25, .0f),
-                Height = new(25, .0f)
+                Width = new(25, 0.0f),
+                Height = new(25, 0.0f)
             };
             //ExpandButton.trianglePercentCoord[1] = new(0f, .5f);
             ExpandButton.OnLeftClick += (evt, elem) =>
@@ -211,9 +201,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 {
                     Vector2 targetCoord = i switch
                     {
-                        0 => expanded ? new(0, .5f) : new(.5f, 0),
-                        1 => expanded ? new(.5f, 1) : new(0, .5f),
-                        2 or _ => expanded ? new(1, .5f) : new(.5f, 1)
+                        0 =>      expanded ? new(0.0f, 0.3f) : new(0.7f, 0.0f),
+                        1 =>      expanded ? new(0.5f, 0.8f) : new(0.2f, 0.5f),
+                        2 or _ => expanded ? new(1.0f, 0.3f) : new(0.7f, 1.0f)
                     };
                     ExpandButton.trianglePercentCoord[i] = Vector2.Lerp(ExpandButton.trianglePercentCoord[i], targetCoord, .15f + i * .05f);
 
@@ -239,13 +229,13 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             OptionView.Remove();
 
             if (GetValue() == null)
-                InitialButton.JoinParent(this);
+                InitialButton.JoinParent(HelperBox);
             else
             {
                 if (NullAllowedAttribute != null)
-                    DeleteButton.JoinParent(this);
+                    DeleteButton.JoinParent(HelperBox);
                 if (!innerPage)
-                    ExpandButton.JoinParent(this);
+                    ExpandButton.JoinParent(HelperBox);
                 if (expanded)
                     OptionView.JoinParent(this);
             }
@@ -325,7 +315,9 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                         list.Add(new(variable, Config));
                         //WrapIt(OptionView.ListView, Config, variable, data, owner: this);
                     }
-                    CrossModCategoryCard card = new CrossModCategoryCard(list, getLabel: () => List == null ? base.Label : $"{owner.Label}#{index + 1}");//() => VariableInfo.Name + (index != -1 ? $"#{index+1}" : ""
+                    CrossModCategoryCard card = new CrossModCategoryCard(list,
+                    getLabel: () => List == null ? base.Label : $"{owner.Label}#{index + 1}",
+                    getTooltip:  () => List == null ? base.Tooltip : owner.Tooltip);
                     ConfigOptionsPanel.SwitchToSubPage(card, data);
                     //ConfigOptionsPanel.GlobalItem = Item;
                     //CrossModCategoryCard card = new CrossModCategoryCard(list);

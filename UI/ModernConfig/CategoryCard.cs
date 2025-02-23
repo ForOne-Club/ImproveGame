@@ -42,8 +42,7 @@ public sealed class CategoryCard : TimerView
     private void LeftMouseDownEvent(UIMouseEvent evt, UIElement listeningElement)
     {
         ConfigOptionsPanel.CurrentCategory = Category;
-        ModernConfigUI.Instance.PathPanel.ListView.RemoveAllChildren();
-        ModernConfigUI.Instance.PathPanel.Remove();
+        ModernConfigUI.Instance.PathPanelTimer.Close();
     }
 
     private readonly Texture2D _texture;

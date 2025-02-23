@@ -7,7 +7,7 @@ public class OptionArray : OptionCollections
 {
     private Type itemType;
 
-    protected override bool CanAdd => false;
+    protected override bool CanItemBeAdded => false;
 
     protected override void AddItem()
     {

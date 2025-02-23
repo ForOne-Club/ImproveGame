@@ -6,8 +6,6 @@ using ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using PinyinNet;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Terraria.GameInput;
 using Terraria.ModLoader.Config;
@@ -44,20 +42,40 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             }
         }
     }
+
+    private static SUIText CreateRightArrow()
+    {
+        SUIText arrow = new()
+        {
+            TextOrKey = ">",
+            RelativeMode = RelativeMode.Horizontal,
+            TextScale = 0.9f,
+            Spacing = new Vector2(6f, 0f),
+            // 碰撞箱测试用代码，显示轮廓
+            // BorderColor = Color.Red,
+            // BgColor = Color.Black * 0.4f,
+            // Border = 2f,
+            // Rounded = new Vector4(2f),
+        };
+        arrow.RecalculateText();
+        arrow.SetInnerPixels(arrow.TextSize * arrow.TextScale);
+        return arrow;
+    }
     //public static List<Category> PreviousPageList = [];
-    static SUIText CategoryToPanel(Category current, object item)
+    private static SUIText GeneratePathTextElement(Category current, object item)
     {
         var list = ModernConfigUI.Instance.PathPanel;
         SUIText prevPage = new()
         {
-            TextOrKey = current.Label + "->",
-            //BgColor = UIStyle.PanelBg,
-            //BorderColor = UIStyle.PanelBorder,
-            Padding = 8f,
+            TextOrKey = current.Label.Trim(),
+            Spacing = new Vector2(6f, 0f),
             RelativeMode = RelativeMode.Horizontal,
-            Rounded = new(4f),
-            TextScale = 0.75f,
-            VAlign = .5f
+            TextScale = 0.9f,
+            // 碰撞箱测试用代码，显示轮廓
+            // BorderColor = Color.Red,
+            // BgColor = Color.Black * 0.4f,
+            // Border = 2f,
+            // Rounded = new Vector4(2f),
         };
         prevPage.OnLeftClick += (evt, elem) =>
         {
@@ -66,8 +84,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
 
             if (index == 0)
             {
-                list.ListView.Elements.Clear();
-                list.Remove();
+                ModernConfigUI.Instance.PathPanelTimer.Close();
             }
             else
             {
@@ -86,30 +103,37 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             Color targetColor;
             if (CurrentCategory == current)
                 targetColor = Color.White;
-            else if (s.IsMouseHovering)//ContainsPoint(Main.MouseScreen)
+            else if (s.IsMouseHovering)
                 targetColor = Color.Yellow;
             else
-                targetColor = Color.Lerp(Color.LightGray, Color.Gray, 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly * 4.0f + dimension.Position().X * .5f));
+                targetColor = Color.Lerp(Color.LightGray, Color.Gray, 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly * 2.5f + dimension.Position().X * .02f));
             s.TextColor = Color.Lerp(s.TextColor, targetColor, 0.15f);
             s.RecalculateText();
         };
-        prevPage.SetSize(prevPage.TextSize * new Vector2(.8f, 1f));
+        prevPage.RecalculateText();
+        prevPage.SetInnerPixels(prevPage.TextSize * prevPage.TextScale);
         return prevPage;
     }
     public static void SwitchToSubPage(Category destination, object item)
     {
-        //PreviousPageList.Add(CurrentCategory);
+        var timer = ModernConfigUI.Instance.PathPanelTimer;
         var list = ModernConfigUI.Instance.PathPanel;
-        if (list.Parent == null)
-        {
-            CategoryToPanel(CurrentCategory, null).JoinParent(list.ListView);
-            list.JoinParent(ModernConfigUI.Instance);
-        }
+
         SoundEngine.PlaySound(SoundID.MenuOpen);
+
+        // PreviousPageList.Add(CurrentCategory);
+        if (timer.AnyClose)
+        {
+            GeneratePathTextElement(CurrentCategory, null).JoinParent(list.ListView);
+            timer.Open();
+        }
+
         GlobalItem = item;
         CurrentCategory = destination;
         GlobalItem = null;
-        CategoryToPanel(CurrentCategory, item).JoinParent(list.ListView);
+
+        CreateRightArrow().JoinParent(list.ListView);
+        GeneratePathTextElement(CurrentCategory, item).JoinParent(list.ListView);
         list.Recalculate();
     }
     public ConfigOptionsPanel(Color color) : base(color, color)
@@ -277,7 +301,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             return;
         // 创建实例并加入到_allOptions列表
         var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T));//, config, nameOrMemberInfo
-        instance.Bind(config, MemberInfo);
+        instance.Bind(config, MemberInfo, null);
         _allOptions.Add(instance);
     }
 

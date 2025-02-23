@@ -9,7 +9,7 @@ public class OptionList : OptionCollections
 {
     private Type listType;
 
-    protected override bool CanAdd => true;
+    protected override bool CanItemBeAdded => true;
 
     protected override void AddItem()
     {
@@ -43,24 +43,34 @@ public class OptionList : OptionCollections
         int count = list.Count;
         for (int i = 0; i < count; i++)
         {
-            var e = WrapIt(OptionView.ListView, Config, VariableInfo, Item, list, listType, i, this);
-            var DeleteButton = new SUICross()
+            // 设置了RelativeMode就不能设置Top.Pixels了，因此这里用元素套Box实现和上边界留有间隔
+            var helperBox = new View
             {
-                RelativeMode = RelativeMode.None,
+                RelativeMode = RelativeMode.Horizontal,
+                IsAdaptiveWidth = true,
+                HAlign = 0f,
+                Height = new(36, .0f),
+                PaddingTop = 8,
+            };
+
+            var deleteButton = new SUICross()
+            {
+                Spacing = new Vector2(4f, 10f),
                 BgColor = Color.Black * 0.4f,
                 Rounded = new Vector4(4f),
                 Width = new(25, .0f),
                 Height = new(25, .0f),
-                Left = new(0, 0),
-                Top = new(6, 0),
             };
-            DeleteButton.OnLeftClick += (evt, elem) =>
+            deleteButton.OnLeftClick += (evt, elem) =>
             {
                 ((IList)Data).RemoveAt(index);
                 SetupList();
                 pendingChanges = true;
             };
-            DeleteButton.JoinParent(e);
+            deleteButton.JoinParent(helperBox);
+
+            var e = WrapIt(OptionView.ListView, Config, VariableInfo, Item, list, listType, i, this, preLabelAppend: helperBox.JoinParent);
+
             if (e.Elements[0] is OptionLabelElement label)
             {
                 label.Left = new(30, 0);
@@ -73,7 +83,7 @@ public class OptionList : OptionCollections
 
                 var c = 0;
                 float h = 0;
-                while (c < idx) 
+                while (c < idx)
                 {
                     h += OptionView.ListView.Elements[c].Height.Pixels;
                     c++;
@@ -94,7 +104,7 @@ public class OptionList : OptionCollections
             };
             e.OnUpdate += (elem) =>
             {
-                if (currentDraggingOption == null || currentDraggingOption != elem) 
+                if (currentDraggingOption == null || currentDraggingOption != elem)
                     return;
                 var pos = Main.MouseScreen - offset - GetDimensions().Position();
                 e.SetPosPixels(pos);

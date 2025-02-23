@@ -18,7 +18,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         // These 2 hold the default value of the dictionary value, hence ValueValue
         protected DefaultDictionaryKeyValueAttribute defaultDictionaryKeyValueAttribute;
         protected JsonDefaultDictionaryKeyValueAttribute jsonDefaultDictionaryKeyValueAttribute;
-        protected override bool CanAdd => true;
+        protected override bool CanItemBeAdded => true;
         PropertyFieldWrapper wrappermemberInfo;
 
         protected override void AddItem()
@@ -92,27 +92,36 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     dataWrapperList.Add(proxy);
                     Type itemType = VariableInfo.Type.GetGenericArguments()[0];
                     wrappermemberInfo ??= ConfigManager.GetFieldsAndProperties(this).ToList()[0];
-                    var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, dataWrapperList, genericType, i, this);
 
-
-                    var DeleteButton = new SUICross()
+                    // 设置了RelativeMode就不能设置Top.Pixels了，因此这里用元素套Box实现和上边界留有间隔
+                    var helperBox = new View
                     {
-                        RelativeMode = RelativeMode.None,
+                        RelativeMode = RelativeMode.Horizontal,
+                        IsAdaptiveWidth = true,
+                        HAlign = 0f,
+                        Height = new(36, .0f),
+                        PaddingTop = 8,
+                    };
+
+                    var deleteButton = new SUICross()
+                    {
+                        Spacing = new Vector2(4f, 10f),
                         BgColor = Color.Black * 0.4f,
                         Rounded = new Vector4(4f),
                         Width = new(25, .0f),
                         Height = new(25, .0f),
-                        Left = new(0, 0),
-                        Top = new(6, 0),
                     };
                     object o = keysEnumerator.Current;
-                    DeleteButton.OnLeftClick += (evt, elem) =>
+                    deleteButton.OnLeftClick += (evt, elem) =>
                     {
                         ((IDictionary)Data).Remove(o);
                         SetupList();
                         pendingChanges = true;
                     };
-                    DeleteButton.JoinParent(e);
+                    deleteButton.JoinParent(helperBox);
+
+                    var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, dataWrapperList, genericType, i, this, preLabelAppend: helperBox.JoinParent);
+
                     if (e.Elements[0] is OptionLabelElement label)
                     {
                         label.Left = new(30, 0);
