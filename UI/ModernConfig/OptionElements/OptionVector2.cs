@@ -193,6 +193,11 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             sliderY.LerpValue = Utils.GetLerpValue((float)sliderY.Min, (float)sliderY.Max, vec.Y);
             base.OnSetDefault(value);
         }
+        protected override void CheckAttributes()
+        {
+            base.CheckAttributes();
+            ShowStringValueInLabel = false;
+        }
         OptionSlider sliderX;
         OptionSlider sliderY;
         View controlPoint;

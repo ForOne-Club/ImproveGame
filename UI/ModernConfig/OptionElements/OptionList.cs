@@ -61,9 +61,10 @@ public class OptionList : OptionCollections
                 Width = new(25, .0f),
                 Height = new(25, .0f),
             };
+            int idx = i;
             deleteButton.OnLeftClick += (evt, elem) =>
             {
-                ((IList)Data).RemoveAt(index);
+                ((IList)Data).RemoveAt(idx);
                 SetupList();
                 pendingChanges = true;
             };
@@ -75,7 +76,6 @@ public class OptionList : OptionCollections
             {
                 label.Left = new(30, 0);
             }
-            int idx = i;
             e.OnLeftMouseDown += (evt, elem) =>
             {
                 var dimension = elem.GetDimensions();

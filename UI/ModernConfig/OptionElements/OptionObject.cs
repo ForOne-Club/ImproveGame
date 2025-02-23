@@ -166,7 +166,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         {
 
         }
-        public override string Label => base.Label + (HasToString ? $":{GetValue()?.ToString() ?? "null"}" : "");
+        public override string Label => base.Label + (ShowStringValueInLabel ? $":{GetValue()?.ToString() ?? "null"}" : "");
         protected SUIScrollView2 OptionView;
         SUITriangleIcon ExpandButton;
         SUITriangleIcon InitialButton;
@@ -178,7 +178,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         SeparatePageAttribute SeparatePageAttribute;
         protected RangeAttribute RangeAttribute;
         protected IncrementAttribute IncrementAttribute;
-        bool HasToString;
+        protected bool ShowStringValueInLabel;
         bool SeparatePage => SeparatePageAttribute != null;
         bool innerPage;//旧版实现子页面的手段，现在用不到了？
         bool HasCustom;
@@ -317,7 +317,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     }
                     CrossModCategoryCard card = new CrossModCategoryCard(list,
                     getLabel: () => List == null ? base.Label : $"{owner.Label}#{index + 1}",
-                    getTooltip:  () => List == null ? base.Tooltip : owner.Tooltip);
+                    getTooltip:  () => List == null ? Tooltip : owner.Tooltip);
                     ConfigOptionsPanel.SwitchToSubPage(card, data);
                     //ConfigOptionsPanel.GlobalItem = Item;
                     //CrossModCategoryCard card = new CrossModCategoryCard(list);
@@ -340,7 +340,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             RangeAttribute = GetAttribute<RangeAttribute>();
             IncrementAttribute = GetAttribute<IncrementAttribute>();
             HasCustom = GetAttribute<CustomModConfigItemAttribute>() != null;
-			HasToString = VarType.GetMethod("ToString", []).DeclaringType != typeof(object) && this.GetType() == typeof(OptionObject);
+			ShowStringValueInLabel = VarType.GetMethod("ToString", []).DeclaringType != typeof(object);
             base.CheckAttributes();
         }
     }

@@ -162,6 +162,7 @@ public sealed class ModernConfigUI : UIState
         PathPanel.ListView.SetPadding(8f, 2f);
         PathPanel.SetPos(0, -58, 0.5f - 0.86f * 0.5f, 0f);
         PathPanel.JoinParent(this);
+        PathPanel.ScrollBar.Height = default;
 
         PathPanelTimer = new(3);
         PathPanelTimer.ImmediateClose();

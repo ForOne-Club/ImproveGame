@@ -118,7 +118,6 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
     {
         var timer = ModernConfigUI.Instance.PathPanelTimer;
         var list = ModernConfigUI.Instance.PathPanel;
-
         SoundEngine.PlaySound(SoundID.MenuOpen);
 
         // PreviousPageList.Add(CurrentCategory);

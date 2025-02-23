@@ -666,5 +666,10 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             c.Alpha = color.A;
             base.OnSetDefault(value);
         }
+        protected override void CheckAttributes()
+        {
+            base.CheckAttributes();
+            ShowStringValueInLabel = false;
+        }
     }
 }
