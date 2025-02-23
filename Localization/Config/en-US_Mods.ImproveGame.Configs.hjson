@@ -1087,8 +1087,8 @@ UIConfigs: {
 	}
 
 	GlobeEffect: {
-		Tooltip: "[centeritem:WorldGlobe] Locator Effect"
-		Label: Turn it off if you don't like it
+		Label: "[centeritem:WorldGlobe] Locator Effect"
+		Tooltip: Turn it off if you don't like it
 	}
 }
 
