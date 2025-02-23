@@ -15,10 +15,9 @@ using System.Threading.Tasks;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Achievements;
+using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.ID;
-using Terraria.ModLoader.UI;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ImproveGame.UI.QuickShimmer;
 
@@ -178,14 +177,14 @@ public class QuickShimmerGUI : BaseBody
             RelativeMode = RelativeMode.Vertical
         };
         bagPanel.SetPadding(6, 6, 6, 6);
-        bagPanel.SetSize(0f, 110, 1f, 0f);
+        bagPanel.SetSize(0f, 160, 1f, 0f);
         bagPanel.JoinParent(MainPanel);
 
         var itemSlot = CreateItemSlot(20f, 6f, onItemChanged: (item, _) =>
-            {
-                if (Main.LocalPlayer is not null && Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
-                    keeper.targetItem = item;
-            },
+        {
+            if (Main.LocalPlayer is not null && Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
+                keeper.targetItem = item;
+        },
             parent: bagPanel,
             iconTextureName: "Bag",
             emptyText: () => GetText("UI.QuickShimmer.EmptyText"));
@@ -195,15 +194,10 @@ public class QuickShimmerGUI : BaseBody
                 itemSlot.Item = keeper.targetItem;
         };
 
-        var openButton = new SUIImage(ModAsset.Shimmer_Start.Value)
+        var openButton = new SUIButton(ModAsset.Open.Value, GetText("UI.QuickShimmer.Open"))
         {
-            Left = { Pixels = 80f},
-            Top = { Pixels = 8f },
-            BgColor  = Color.Black * .4f,
-            Border = 1f,
-            BorderColor = UIStyle.PanelBorder,
-            Spacing = Vector2.UnitX * 8,
-            Rounded = new(8f)
+            Left = { Pixels = 80f },
+            Top = { Pixels = 8f }
         };
         openButton.OnLeftMouseDown += (_, _) =>
         {
@@ -212,10 +206,9 @@ public class QuickShimmerGUI : BaseBody
                 CoroutineSystem.QuickShimmerRunner.StopAll();
                 return;
             }
-
             if (Main.LocalPlayer is null || !Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
                 return;
-
+            
             // 钱币幸运直接换完
             var item = keeper.targetItem;
             int coinValue = ItemID.Sets.CoinLuckValue[item.type];
@@ -234,22 +227,16 @@ public class QuickShimmerGUI : BaseBody
             var items = CollectHelper.GetShimmerResult(item, out int stackRequired, out int decraftingRecipeIndex);
             if (items is null)
                 return;
+
             CoroutineSystem.QuickShimmerRunner.Run(QuickShimmerRunner(keeper, items, stackRequired,
                 decraftingRecipeIndex));
         };
         openButton.OnUpdate += _ =>
         {
-            if (openButton.IsMouseHovering) 
-            {
-                var text = GetText(CoroutineSystem.QuickShimmerRunner.Count > 0
+            openButton.Text = GetText(CoroutineSystem.QuickShimmerRunner.Count > 0
                 ? "UI.QuickShimmer.Stop"
                 : "UI.QuickShimmer.Open");
-                UICommon.TooltipMouseText(text);
-            }
-            openButton.Texture = (CoroutineSystem.QuickShimmerRunner.Count > 0 ? ModAsset.Shimmer_Pause : ModAsset.Shimmer_Start).Value;
-            openButton.BorderColor = openButton.HoverTimer.Lerp(UIStyle.SearchBarBorder, UIStyle.SearchBarBorderSelected);
-            openButton.Rounded = new(8f);
-
+            //openButton.SetIcon(CoroutineSystem.QuickShimmerRunner.Count > 0 ? ModAsset.Shimmer_Pause.Value : ModAsset.Shimmer_Start.Value);
             if (Main.LocalPlayer is null || !Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
                 return;
 
@@ -275,20 +262,17 @@ public class QuickShimmerGUI : BaseBody
             var items = CollectHelper.GetShimmerResult(item, out int stackRequired, out int decraftingRecipeIndex);
             if (items is null)
                 return;
+
             CoroutineSystem.QuickShimmerRunner.Run(QuickShimmerRunner(keeper, items, stackRequired,
                 decraftingRecipeIndex));
         };
         openButton.JoinParent(bagPanel);
 
-        var depositButton = new SUIImage(ModAsset.ToBag.Value) // 强夺全部
+        var depositButton = new SUIButton(ModAsset.Quick.Value, Lang.inter[29].Value) // 强夺全部
         {
+            Left = { Pixels = openButton.Left.Pixels + openButton.Width.Pixels + 10f },
             Top = { Pixels = 8f },
-            Spacing = Vector2.UnitX * 8,
-            RelativeMode = RelativeMode.Horizontal,
-            BgColor = Color.Black * .4f,
-            Border = 1f,
-            Rounded = new(8f)
-
+            Width = { Pixels = 136f }
         };
         depositButton.OnLeftMouseDown += (_, _) =>
         {
@@ -302,49 +286,72 @@ public class QuickShimmerGUI : BaseBody
             // 控制提示文本是否显示
             TipText.Left.Pixels = 0;
         };
-        depositButton.OnUpdate += _ =>
-        {
-            if (depositButton.IsMouseHovering)
-                UICommon.TooltipMouseText(Lang.inter[29].Value);
-            depositButton.BorderColor = depositButton.HoverTimer.Lerp(UIStyle.SearchBarBorder, UIStyle.SearchBarBorderSelected);
-        };
         depositButton.JoinParent(bagPanel);
 
-        SUIImageSwitch autoStartSwitch = new SUIImageSwitch(ModAsset.Auto_Enabled.Value,ModAsset.Auto.Value, flag => AutoStart = flag, () => AutoStart)
+        var autoStartPanel = new View()
         {
-            Top = { Pixels = 8f },
-            Spacing = Vector2.UnitX * 8,
-            RelativeMode = RelativeMode.Horizontal,
-            BgColor = Color.Black * .4f,
-            Border = 1f,
-            Rounded = new(8f)
+            Left = { Pixels = 6 },
+            Top = { Pixels = 60 },
+            DragIgnore = true,
+            Rounded = new Vector4(6),
+            Spacing = new Vector2(0, 8)
+        };
+        autoStartPanel.SetPadding(6, 6, 6, 6);
+        autoStartPanel.SetSize(-10f, 40, 1f, 0f);
+        autoStartPanel.BgColor = Color.Black * .125f;
+        autoStartPanel.JoinParent(bagPanel);
 
+        SUIText autoStartText = new SUIText()
+        {
+            TextOrKey = "Mods.ImproveGame.UI.QuickShimmer.AutoStart",
+            UseKey = true,
+            TextAlign = new Vector2(0f, 0f),
+            TextScale = 1f,
+            Height = new StyleDimension(40, 0),
+            Width = StyleDimension.Fill,
+            DragIgnore = true,
+            Left = new StyleDimension(10f, 0f)
+        };
+        autoStartText.JoinParent(autoStartPanel);
+        SUISwitch autoStartToggle = new SUISwitch(() => AutoStart, flag => AutoStart = flag, "")
+        {
+            HAlign = 1f,
+            Height = StyleDimension.Fill,
+            Width = { Pixels = 60f },
+        };
+        autoStartToggle.JoinParent(autoStartPanel);
 
-        };
-        autoStartSwitch.OnUpdate += _ =>
+        var quickModePanel = new View()
         {
-            if (autoStartSwitch.IsMouseHovering)
-                UICommon.TooltipMouseText(Lang.inter[29].Value);
-            autoStartSwitch.BorderColor = autoStartSwitch.HoverTimer.Lerp(UIStyle.SearchBarBorder, UIStyle.SearchBarBorderSelected);
+            Left = { Pixels = 6 },
+            RelativeMode = RelativeMode.Vertical,
+            DragIgnore = true,
+            Rounded = new Vector4(6),
+            Spacing = new Vector2(0, 8)
         };
-        autoStartSwitch.JoinParent(bagPanel);
-        SUIImageSwitch quickModeSwitch = new SUIImageSwitch(ModAsset.Timer_Enabled.Value,ModAsset.Timer.Value, flag => QuickMode = flag, () => QuickMode)
+        quickModePanel.SetPadding(6, 6, 6, 6);
+        quickModePanel.SetSize(-10f, 40, 1f, 0f);
+        quickModePanel.BgColor = Color.Black * .125f;
+        quickModePanel.JoinParent(bagPanel);
+        SUIText quickModeText = new SUIText()
         {
-            Top = { Pixels = 8f },
-            Spacing = Vector2.UnitX * 8,
-            RelativeMode = RelativeMode.Horizontal,
-            BgColor = Color.Black * .4f,
-            Border = 1f,
-            Rounded = new(8f)
-
+            TextOrKey = "Mods.ImproveGame.UI.QuickShimmer.ReallyQuick",
+            UseKey = true,
+            TextAlign = new Vector2(0f, 0f),
+            TextScale = 1f,
+            Height = new StyleDimension(40, 0),
+            Width = StyleDimension.Fill,
+            DragIgnore = true,
+            Left = new StyleDimension(10f, 0f)
         };
-        quickModeSwitch.OnUpdate += _ =>
+        quickModeText.JoinParent(quickModePanel);
+        SUISwitch quickModeToggle = new SUISwitch(() => QuickMode, flag => QuickMode = flag, "")
         {
-            if (quickModeSwitch.IsMouseHovering)
-                UICommon.TooltipMouseText(Lang.inter[29].Value);
-            quickModeSwitch.BorderColor = quickModeSwitch.HoverTimer.Lerp(UIStyle.SearchBarBorder, UIStyle.SearchBarBorderSelected);
+            HAlign = 1f,
+            Height = StyleDimension.Fill,
+            Width = { Pixels = 60f },
         };
-        quickModeSwitch.JoinParent(bagPanel);
+        quickModeToggle.JoinParent(quickModePanel);
     }
     public static bool AutoStart;
     public static bool QuickMode;
