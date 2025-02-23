@@ -53,7 +53,10 @@ public class ModernConfigDetours : ILoadable
         bool flag = self.selectedMod.Name == "ImproveGame";
         if (!(flag || true)) return;
         string text = flag ? "Mods.ImproveGame.ModernConfig.Name" : "Mods.ImproveGame.ModernConfig.Name_ModConfig";
-        var configPanel = new UIButton<LocalizedText>(Language.GetText(text))
+        LocalizedText localizedText;
+        if (!CategorySidePanel.ModdedTitle.TryGetValue(self.selectedMod, out localizedText))
+            localizedText = Language.GetText(text);
+        var configPanel = new UIButton<LocalizedText>(localizedText)
         {
             MaxWidth = { Percent = 0.95f },
             HAlign = 0.5f,

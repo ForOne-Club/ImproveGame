@@ -300,6 +300,9 @@ public class ModernConfigOption : TimerView
         TooltipPanel.SetText(text);
         // 不可控制，为什么呢？
 
+        if (VariableInfo.MemberInfo.DeclaringType.IsSubclassOf(typeof(ModConfig)))
+            TooltipPanel.SetOption(this);
+
         bool f = CantOperateDueToOnlyGetter;
 
         if (f)

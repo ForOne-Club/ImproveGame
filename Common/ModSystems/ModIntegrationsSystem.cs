@@ -11,7 +11,13 @@ using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Packets;
 using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.PlayerStats;
+using System.Collections.Generic;
+using System;
 using System.Reflection;
+using Terraria.ModLoader.Config;
+using Terraria;
+using Terraria.ModLoader.Config.UI;
+using System.Collections;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -532,6 +538,16 @@ public class ModIntegrationsSystem : ModSystem
                     case "RemoveAboutPage": 
                         {
                             CategorySidePanel.RemoveAboutPage(args[1] as Mod);
+                            break;
+                        }
+                    case "AddModernConfigTitle": 
+                        {
+                            CategorySidePanel.ModdedTitle[args[1] as Mod] = args[2] as LocalizedText;
+                            break;
+                        }
+                    case "RegisterPreview": 
+                        {
+                            CategorySidePanel.ModdedPreviews[args[1] as PropertyFieldWrapper] = new CategorySidePanel.PreviewDrawing(args[2] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
                             break;
                         }
                     default:

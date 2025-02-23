@@ -1,6 +1,7 @@
 ﻿using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UI.ModernConfig.FakeCategories;
 using ImproveGame.UIFramework.SUIElements;
+using System.Collections;
 using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
@@ -30,6 +31,12 @@ public sealed class CategorySidePanel : SUIPanel
     public static Dictionary<Mod, List<Category>> ModdedCards = [];
 
     public static Dictionary<Mod, Category> ModdedAboutPage = [];
+
+    public static Dictionary<Mod, LocalizedText> ModdedTitle = [];
+
+    public delegate void PreviewDrawing(UIElement element, ModConfig currentConfig, PropertyFieldWrapper varibleInfo, object item, IList list, int index);
+
+    public static Dictionary<PropertyFieldWrapper, PreviewDrawing> ModdedPreviews = [];
 
     public static void RemoveCategory(Mod mod)
     {
