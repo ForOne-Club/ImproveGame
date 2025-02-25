@@ -34,7 +34,6 @@ public sealed class CategorySidePanel : SUIPanel
 
     public static Dictionary<Mod, LocalizedText> ModdedTitle = [];
 
-    public delegate void PreviewDrawing(UIElement element, ModConfig currentConfig, PropertyFieldWrapper varibleInfo, object item, IList list, int index);
 
     public static Dictionary<PropertyFieldWrapper, PreviewDrawing> ModdedPreviews = [];
 

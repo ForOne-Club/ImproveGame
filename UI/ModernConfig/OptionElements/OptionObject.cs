@@ -201,8 +201,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 {
                     Vector2 targetCoord = i switch
                     {
-                        0 =>      expanded ? new(0.0f, 0.3f) : new(0.7f, 0.0f),
-                        1 =>      expanded ? new(0.5f, 0.8f) : new(0.2f, 0.5f),
+                        0 => expanded ? new(0.0f, 0.3f) : new(0.7f, 0.0f),
+                        1 => expanded ? new(0.5f, 0.8f) : new(0.2f, 0.5f),
                         2 or _ => expanded ? new(1.0f, 0.3f) : new(0.7f, 1.0f)
                     };
                     ExpandButton.trianglePercentCoord[i] = Vector2.Lerp(ExpandButton.trianglePercentCoord[i], targetCoord, .15f + i * .05f);
@@ -317,8 +317,12 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     }
                     CrossModCategoryCard card = new CrossModCategoryCard(list,
                     getLabel: () => List == null ? base.Label : $"{owner.Label}#{index + 1}",
-                    getTooltip:  () => List == null ? Tooltip : owner.Tooltip);
-                    ConfigOptionsPanel.SwitchToSubPage(card, data);
+                    getTooltip: () => List == null ? Tooltip : owner.Tooltip);
+                    List<string> pth = [];
+                    if (path != null)
+                        pth.AddRange(path);
+                    pth.Add(VariableInfo.Name);
+                    ConfigOptionsPanel.SwitchToSubPage(card, data, pth);
                     //ConfigOptionsPanel.GlobalItem = Item;
                     //CrossModCategoryCard card = new CrossModCategoryCard(list);
                     //ConfigOptionsPanel.CurrentCategory = card;
@@ -340,8 +344,29 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             RangeAttribute = GetAttribute<RangeAttribute>();
             IncrementAttribute = GetAttribute<IncrementAttribute>();
             HasCustom = GetAttribute<CustomModConfigItemAttribute>() != null;
-			ShowStringValueInLabel = VarType.GetMethod("ToString", []).DeclaringType != typeof(object);
+            ShowStringValueInLabel = VarType.GetMethod("ToString", []).DeclaringType != typeof(object);
             base.CheckAttributes();
+        }
+        public override void DrawSelf(SpriteBatch spriteBatch)
+        {
+            base.DrawSelf(spriteBatch);
+            var dimemsion = GetDimensions();
+            if ((Main.mouseY > dimemsion.Y + dimemsion.Height * .9f && IsMouseHovering) || dragging)
+            {
+                Main.instance.MouseText("[i:536]", 0, 0, Main.mouseX + 16, Main.mouseY - 10);
+            }
+        }
+        public override void RightMouseDown(UIMouseEvent evt)
+        {
+            base.RightMouseDown(evt);
+            pendingChanges = true;
+        }
+        protected override void OnSetDefault(object value)
+        {
+            if (value != null)
+                SetupList();
+            pendingChanges = true;
+            base.OnSetDefault(value);
         }
     }
 }

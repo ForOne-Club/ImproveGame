@@ -90,7 +90,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
         protected override void OnBind()
         {
-            Data = VariableInfo.GetValue(Item);
+            Data = GetValue();
             Height.Set(360, 0);
             MaxHeight.Set(360, 0);
             MinHeight.Set(60, 0);
@@ -238,6 +238,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 pendingChanges = true;
             }
             #endregion
+
             if (!pendingChanges)
                 return;
             pendingChanges = false;
@@ -281,6 +282,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             }
             optionObject.Recalculate();
             optionObject.Parent?.Recalculate();
+
         }
         public override void Recalculate()
         {
@@ -292,7 +294,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             }
             float h = OptionView.ListView.GetDimensions().Height + 70;
             h = Utils.Clamp(h, 70, showMaxHeight);
-            if (h < showMaxHeight)
+            if (h < showMaxHeight && h > 80)
                 showMaxHeight = Math.Max(h, 150);
             Height.Set(h, 0f);
             Parent?.Height.Set(h, 0f);
@@ -308,7 +310,11 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
             base.DrawSelf(spriteBatch);
-
+            var dimemsion = GetDimensions();
+            if ((Main.mouseY > dimemsion.Y + dimemsion.Height * .9f && IsMouseHovering) || dragging)
+            {
+                Main.instance.MouseText("[i:536]", 0, 0, Main.mouseX + 16, Main.mouseY - 10);
+            }
             // 提示，因为OptionCollections要显示专门的操作提示（教玩家可以拖动元素），所以这里单独处理
             if (!IsMouseHovering)
                 return;
@@ -330,6 +336,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         float oldHeight;
         Vector2 mousePos;
         bool dragging;
+
         public override void LeftMouseDown(UIMouseEvent evt)
         {
             var dimension = GetDimensions();
@@ -349,6 +356,18 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             }
             base.LeftMouseUp(evt);
+        }
+
+        public override void RightMouseDown(UIMouseEvent evt)
+        {
+            base.RightMouseDown(evt);
+        }
+        protected override void OnSetDefault(object value)
+        {
+            base.OnSetDefault(value);
+            Data = GetValue();
+            SetupList();
+            Recalculate();
         }
     }
 }

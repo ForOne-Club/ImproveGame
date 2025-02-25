@@ -22,5 +22,10 @@ namespace ImproveGame.UI.ModernConfig
                 position += Vector2.UnitY * -14;
             return orig(self, justCheckingString, out size, spriteBatch, position, color, scale);
         }
+        public override void PostDrawInterface(SpriteBatch spriteBatch)
+        {
+            //TooltipPanel.SetOption(null);
+            base.PostDrawInterface(spriteBatch);
+        }
     }
 }

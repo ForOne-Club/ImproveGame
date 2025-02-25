@@ -13,6 +13,8 @@ using Terraria.ModLoader.UI;
 using System.Linq;
 using System.Collections;
 using ImproveGame.UI.ModernConfig.OptionElements;
+using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ImproveGame.Common.Utils;
 
@@ -97,8 +99,168 @@ public static class ConfigHelper
             }
         }
     }
+    public static object GetItemViaPathForSetDefault(object target, IEnumerable<string> path, out bool failed, bool privateAllowed = false)
+    {
+        failed = false;
+        object item = target;
+        object lastItem = item;
+        PropertyFieldWrapper prevWrapper = null;
+        var bindFlag = BindingFlags.Public | BindingFlags.Instance;
+        if (privateAllowed)
+            bindFlag |= BindingFlags.NonPublic;
+        if (path != null)
+            foreach (var p in path)
+            {
+                if (item == null)
+                {
+                    failed = true;
+                    return null;
+                }
+                var curType = item.GetType();
+                var fld = curType.GetField(p, bindFlag);
+                var prop = curType.GetProperty(p, bindFlag);
+                if (fld != null)
+                {
+                    item = fld.GetValue(item);
+                    prevWrapper = new PropertyFieldWrapper(fld);
+                }
+                else if (prop != null)
+                {
+                    item = prop.GetValue(item);
+                    prevWrapper = new PropertyFieldWrapper(prop);
+                }
+                else if (item is IEnumerable collection && int.TryParse(p, out int index))
+                {
+                    int counter = 0;
+                    bool useElementDefault = true;
+                    foreach (var i in collection)
+                    {
+                        if (counter == index)
+                        {
+                            item = i;
+                            useElementDefault = false;
+                            break;
+                        }
+                        counter++;
+                    }
+                    if (useElementDefault)
+                    {
+                        object toAdd;
+                        var DefaultListValueAttribute = ConfigManager.GetCustomAttributeFromMemberThenMemberType<DefaultListValueAttribute>(prevWrapper, lastItem, null);
+                        var JsonDefaultListValueAttribute = ConfigManager.GetCustomAttributeFromMemberThenMemberType<JsonDefaultListValueAttribute>(prevWrapper, lastItem, null);
+                        bool isList = curType.GetGenericTypeDefinition() == typeof(List<>);
+                        bool isSet = curType.GetGenericTypeDefinition() == typeof(HashSet<>);
+                        bool isDictionary = curType.GetGenericTypeDefinition() == typeof(Dictionary<,>);
+                        if (!isList && !isDictionary && !isSet)
+                            throw new Exception("Collection Not Support");
+                        if (DefaultListValueAttribute != null)
+                        {
+                            toAdd = DefaultListValueAttribute.Value;
+                        }
+                        else
+                        {
+                            var type = curType.GetGenericArguments()[isDictionary ? 1 : 0];
+                            toAdd = ConfigManager.AlternateCreateInstance(type);
+                            if (!type.IsValueType && type != typeof(string))
+                            {
+                                string json = JsonDefaultListValueAttribute?.Json ?? "{}";
 
-    public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, object item, bool broadcast = true, bool pending = false, List<string> path = null, IList List = null, int Index = -1)
+                                JsonConvert.PopulateObject(json, toAdd, ConfigManager.serializerSettings);
+                            }
+                        }
+                        if (isList)
+                        {
+                            item = toAdd;
+                        }
+                        else if (isSet)
+                        {
+                            var genericType = typeof(SetElementWrapper<>).MakeGenericType(curType.GetGenericArguments()[0]);
+                            item = Activator.CreateInstance(genericType, [toAdd, item]);
+                        }
+                        else
+                        {
+                            object keyValue;
+                            var keyType = curType.GetGenericArguments()[0];
+
+                            var defaultDictionaryKeyValueAttribute = ConfigManager.GetCustomAttributeFromMemberThenMemberType<DefaultDictionaryKeyValueAttribute>(prevWrapper, lastItem, null);
+                            if (defaultDictionaryKeyValueAttribute != null)
+                            {
+                                keyValue = defaultDictionaryKeyValueAttribute.Value;
+                            }
+                            else
+                            {
+                                keyValue = ConfigManager.AlternateCreateInstance(keyType);
+                                var jsonDefaultDictionaryKeyValueAttribute = ConfigManager.GetCustomAttributeFromMemberThenMemberType<JsonDefaultDictionaryKeyValueAttribute>(prevWrapper, lastItem, null);
+                                if (!keyType.IsValueType && keyType != typeof(string))
+                                {
+                                    string json = jsonDefaultDictionaryKeyValueAttribute?.Json ?? "{}";
+
+                                    JsonConvert.PopulateObject(json, keyValue, ConfigManager.serializerSettings);
+                                }
+                            }
+                            Type genericType = typeof(DictionaryElementWrapper<,>).MakeGenericType(keyType, toAdd.GetType());
+
+                            item = Activator.CreateInstance(genericType, [keyValue, toAdd, item]);
+
+                        }
+                    }
+                }
+                else
+                    throw new Exception("Property or field doesn't exist in " + curType.Name);
+                lastItem = item;
+            }
+        if (item == null) return null;
+        var lastType = item.GetType();
+        if (lastType.IsGenericType && lastType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+        {
+            var wrapperType = typeof(DictionaryElementWrapper<,>).MakeGenericType(lastType.GenericTypeArguments[0], lastType.GenericTypeArguments[1]);
+            var Key = lastType.GetProperty("Key").GetValue(item);
+            var Value = lastType.GetProperty("Value").GetValue(item);
+            item = Activator.CreateInstance(wrapperType, [Key, Value, null]);
+        }
+        return item;
+    }
+    public static object GetItemViaPath(object target, IEnumerable<string> path, bool privateAllowed = false)
+    {
+        object item = target;
+        object lastItem = item;
+        var bindFlag = BindingFlags.Public | BindingFlags.Instance;
+        if (privateAllowed)
+            bindFlag |= BindingFlags.NonPublic;
+        if (path != null)
+            foreach (var p in path)
+            {
+                var curType = item!.GetType();
+                var fld = curType.GetField(p, bindFlag);
+                var prop = curType.GetProperty(p, bindFlag);
+                if (fld != null)
+                    item = fld!.GetValue(item)!;
+                else if (prop != null)
+                    item = prop!.GetValue(item)!;
+                else if (item is IEnumerable collection && int.TryParse(p, out int index))
+                {
+                    int counter = 0;
+                    bool flag = true;
+                    foreach (var i in collection)
+                    {
+                        if (counter == index)
+                        {
+                            item = i;
+                            flag = false;
+                            break;
+                        }
+                        counter++;
+                    }
+                    if (flag)
+                        throw new IndexOutOfRangeException();
+                }
+                else
+                    throw new Exception("Property or field doesn't exist in " + curType.Name);
+
+            }
+        return item;
+    }
+    public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, object item, bool broadcast = true, List<string> path = null, IList List = null, int Index = -1)
     {
         Type type = List != null ? List[Index].GetType() : variableInfo.Type;
         if (value != null && type != value.GetType())
@@ -160,16 +322,97 @@ public static class ConfigHelper
             //variableInfo.SetValue(item, value);
             InternalSetValue(config, variableInfo, value, item, path, List, Index);
 
-            if (!pending) 
-            {
-                ConfigManager.Save(config);
-                //ConfigManager.Load(modConfig);
-                modConfig.OnChanged();
-            }
+            ConfigManager.Save(config);
+            modConfig.OnChanged();
 
         }
     }
     //public static void SetConfigValue(ModConfig config, PropertyFieldWrapper variableInfo, object value, bool broadcast = true) => SetConfigValue(config, variableInfo, value, config, broadcast);
+
+    public static void SetItemViaPath(object target, IEnumerable<string> path, object value)
+    {
+        object item = target;
+        object lastItem = item; ;
+        var bindFlag = BindingFlags.Public | BindingFlags.Instance;
+        int max = path.Count();
+        int count = 0;
+        if (path != null)
+            foreach (var p in path)
+            {
+                var curType = item!.GetType();
+                var fld = curType.GetField(p, bindFlag);
+                var prop = curType.GetProperty(p, bindFlag);
+                if (count != max - 1)
+                {
+                    lastItem = item;
+                    if (fld != null)
+                        item = fld!.GetValue(item)!;
+                    else if (prop != null)
+                        item = prop!.GetValue(item)!;
+                    else if (item is IEnumerable collection && int.TryParse(p, out int index))
+                    {
+                        int counter = 0;
+                        bool flag = true;
+                        foreach (var i in collection)
+                        {
+                            if (counter == index)
+                            {
+                                item = i;
+                                flag = false;
+                                break;
+                            }
+                            counter++;
+                        }
+                        if (flag)
+                            throw new IndexOutOfRangeException();
+                    }
+                    else
+                        throw new Exception("Property or field doesn't exist in " + curType.Name);
+                }
+                else
+                {
+                    if (lastItem is IDictionary dict)
+                    {
+                        object Key = ((dynamic)item).Key;
+                        object Value = ((dynamic)item).Value;
+                        if (p == "Key")
+                        {
+                            dict.Remove(Key);
+                            dict.Add(value, Value);
+                        }
+                        else
+                            dict[Key] = value;
+                        return;
+                    }
+                    fld?.SetValue(item, value);
+                    prop?.SetValue(item, value);
+                    if (item is IEnumerable collection && int.TryParse(p, out int index))
+                    {
+                        if (item is Array array)
+                            array.SetValue(value, index);
+                        else if (item is IList list)
+                            list[index] = value;
+                        else if (item.GetType().IsGenericType && item.GetType().GetGenericTypeDefinition() == typeof(HashSet<>))
+                        {
+                            var addMethod = item.GetType().GetMethod("Add", bindFlag);
+                            var removeMethod = item.GetType().GetMethod("Remove", bindFlag);
+                            List<object> cache = [.. collection];
+                            cache.Reverse();
+                            int targetCount = cache.Count - index;
+                            foreach (var i in cache[0..targetCount])
+                            {
+                                removeMethod?.Invoke(item, [i]);
+                            }
+                            addMethod?.Invoke(item, [value]);
+                            for (int i = targetCount - 2; i >= 0; i--)
+                                addMethod?.Invoke(item, [cache[i]]);
+                        }
+                    }
+                }
+                count++;
+            }
+    }
+
     public static string GetModText(string modName, string str, out bool hasValue, params object[] arg)
     {
         string key = $"Mods.{modName}.{str}";

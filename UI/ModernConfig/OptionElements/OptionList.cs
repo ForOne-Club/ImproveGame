@@ -125,11 +125,53 @@ public class OptionList : OptionCollections
                 SetupList();
                 pendingChanges = true;
             };
+            /*e.OnRightMouseDown += (evt, elem) =>
+            {
+                if (evt.Target != elem) return;
+                e.SetValueDirect(CreateCollectionElementInstance(listType));
+            };*/
         }
         OptionView.Recalculate();
         Height.Set(Math.Min((OptionView.ListView.Children.Any() ? OptionView.ListView.Height.Pixels : 0) + 70, 360), 0);//不知道为什么MaxHeight不管用了
         //TODO 排版上改成网格式而不是纵向列表
 
+    }
+    public override void DrawChildren(SpriteBatch spriteBatch)
+    {
+        base.DrawChildren(spriteBatch);
+        if (currentDraggingOption != null) 
+        {
+            float y = Main.mouseY;
+            var en = OptionView.ListView.Children.GetEnumerator();
+
+            CalculatedStyle curDimension = default;
+            bool last = true;
+            while (en.MoveNext())
+            {
+                var cur = en.Current;
+                curDimension = cur.GetDimensions();
+                if (y < curDimension.Center().Y)
+                {
+                    y = curDimension.Position().Y;
+                    last = false;
+                    break;
+                }
+            }
+            if (last)
+                y = curDimension.Position().Y + curDimension.Height;
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Vector2(GetDimensions().X - 10, y), new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(240, 2), 0, 0);
+            goto label;
+        }
+        foreach (var elem in OptionView.ListView.Elements)
+        {
+            var dimemsion = elem.GetDimensions();
+            if (elem.IsMouseHovering && Main.mouseY < dimemsion.Y + dimemsion.Height * .5f)
+                goto label;
+        }
+        return;
+        label:
+        if (!Main.instance._mouseTextCache.isValid)
+            Main.instance.MouseText("[i:897]", 0, 0, Main.mouseX + 16, Main.mouseY - 10);
     }
     ModernConfigOption currentDraggingOption;
     Vector2 offset;

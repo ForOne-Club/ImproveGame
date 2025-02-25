@@ -28,6 +28,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
     private SUIScrollView2 _options { get; set; }
     public SUIDropdownListContainer DropdownList { get; set; }
     public static object GlobalItem;
+    public static List<string> GlobalPath;
     public static Category CurrentCategory
     {
         get => _currentCategory;
@@ -62,7 +63,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         return arrow;
     }
     //public static List<Category> PreviousPageList = [];
-    private static SUIText GeneratePathTextElement(Category current, object item)
+    private static SUIText GeneratePathTextElement(Category current, object item, List<string> path)
     {
         var list = ModernConfigUI.Instance.PathPanel;
         SUIText prevPage = new()
@@ -92,8 +93,10 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
                 list.Recalculate();
             }
             GlobalItem = item;
+            GlobalPath = path;
             CurrentCategory = current;
             GlobalItem = null;
+            GlobalPath = null;
             SoundEngine.PlaySound(SoundID.MenuClose);
         };
         prevPage.OnUpdate += (elem) =>
@@ -114,7 +117,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         prevPage.SetInnerPixels(prevPage.TextSize * prevPage.TextScale);
         return prevPage;
     }
-    public static void SwitchToSubPage(Category destination, object item)
+    public static void SwitchToSubPage(Category destination, object item, List<string> path)
     {
         var timer = ModernConfigUI.Instance.PathPanelTimer;
         var list = ModernConfigUI.Instance.PathPanel;
@@ -123,16 +126,17 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         // PreviousPageList.Add(CurrentCategory);
         if (timer.AnyClose)
         {
-            GeneratePathTextElement(CurrentCategory, null).JoinParent(list.ListView);
+            GeneratePathTextElement(CurrentCategory, null, null).JoinParent(list.ListView);
             timer.Open();
         }
 
         GlobalItem = item;
+        GlobalPath = path;
         CurrentCategory = destination;
         GlobalItem = null;
-
+        GlobalPath = null;
         CreateRightArrow().JoinParent(list.ListView);
-        GeneratePathTextElement(CurrentCategory, item).JoinParent(list.ListView);
+        GeneratePathTextElement(CurrentCategory, item, path).JoinParent(list.ListView);
         list.Recalculate();
     }
     public ConfigOptionsPanel(Color color) : base(color, color)

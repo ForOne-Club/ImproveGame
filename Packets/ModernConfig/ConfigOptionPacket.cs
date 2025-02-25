@@ -10,13 +10,13 @@ using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.Packets;
 
-[AutoSync]
+//[AutoSync]//不知道为什么path会同步失败，就自己发包了
 public class ConfigOptionPacket : NetModule
 {
     private string _modName;
     private string _configName;
-    private string _fieldName;
     private string _json;
+    private string _valueTypeFullName;
     private string[] path;
     private string _popInfo;
     private bool _rejected;
@@ -26,12 +26,44 @@ public class ConfigOptionPacket : NetModule
         var module = NetModuleLoader.Get<ConfigOptionPacket>();
         module._modName = modConfig.Mod.Name;
         module._configName = modConfig.Name;
-        module._fieldName = variableInfo.Name;
         module._json = json;
-        module.path = path?.ToArray();
+        module._valueTypeFullName = value.GetType().FullName;
+        List<string> cachedPath = [];
+        if (path != null)
+            cachedPath.AddRange(path);
+        cachedPath.Add(variableInfo.Name);
+        module.path = [.. cachedPath];
+        path?.ToArray();
         module._popInfo = "";
         module._rejected = false;
         module.Send();
+    }
+    public override void Send(ModPacket p)
+    {
+        p.Write(_modName);
+        p.Write(_configName);
+        p.Write(_json);
+        p.Write(_valueTypeFullName);
+        p.Write(path.Length);
+        foreach (var str in path)
+            p.Write(str);
+        p.Write(_popInfo);
+        p.Write(_rejected);
+        base.Send(p);
+    }
+    public override void Read(BinaryReader r)
+    {
+        _modName = r.ReadString();
+        _configName = r.ReadString();
+        _json = r.ReadString();
+        _valueTypeFullName = r.ReadString();
+        int length = r.ReadInt32();
+        path = new string[length];
+        for (int n = 0; n < length; n++)
+            path[n] = r.ReadString();
+        _popInfo = r.ReadString();
+        _rejected = r.ReadBoolean();
+        base.Read(r);
     }
     public override void Receive()
     {
@@ -50,45 +82,14 @@ public class ConfigOptionPacket : NetModule
 
         }
 
+        var valueTypeFullName = System.Type.GetType(_valueTypeFullName);
+        object value = JsonConvert.DeserializeObject(_json, valueTypeFullName, ConfigManager.serializerSettings);
 
-        PropertyFieldWrapper variableInfo = ModernConfigOption.GetWrapper(modConfig.GetType(), _fieldName);
-        var value = JsonConvert.DeserializeObject(_json, variableInfo.Type, ConfigManager.serializerSettings);
-
-        object item = modConfig;
-        var bindFlag = BindingFlags.Public | BindingFlags.Instance;
-        if (path != null)
-            foreach (var p in path)
-            {
-                var curType = item.GetType();
-                var fld = curType.GetField(p, bindFlag);
-                var prop = curType.GetProperty(p, bindFlag);
-                if (fld != null)
-                    item = fld.GetValue(item);
-                else if (prop != null)
-                    item = prop.GetValue(item);
-                else
-                    throw new Exception("Property or field doesn't exist in " + curType.Name);
-            }
         // 转发到全体
         if (Main.netMode is NetmodeID.Server)
         {
             ModConfig pendingConfig = ConfigManager.GeneratePopulatedClone(modConfig);
-            object pendingItem = pendingConfig;
-            if (path != null)
-                foreach (var p in path)
-                {
-                    var curType = item.GetType();
-                    var fld = curType.GetField(p, bindFlag);
-                    var prop = curType.GetProperty(p, bindFlag);
-                    if (fld != null)
-                        item = fld.GetValue(item);
-                    else if (prop != null)
-                        item = prop.GetValue(item);
-                    else
-                        throw new Exception("Property or field doesn't exist in " + curType.Name);
-                }
-            ConfigHelper.SetConfigValue(pendingConfig, variableInfo, value, pendingItem, false, true, path: path == null ? null : [.. path]);
-
+            ConfigHelper.SetItemViaPath(pendingConfig, path, value);
             var netText = NetworkText.FromKey("tModLoader.ModConfigAccepted");
             bool flag = modConfig.AcceptClientChanges(pendingConfig, Sender, ref netText);
             if (!flag)
@@ -106,17 +107,23 @@ public class ConfigOptionPacket : NetModule
             }
 #pragma warning restore CS0618 // Type or member is obsolete
 
-            ConfigHelper.SetConfigValue(modConfig, variableInfo, value, item, false,false, path: path == null ? null : [.. path]);
+            ConfigHelper.SetItemViaPath(modConfig, path, value);
+            ConfigManager.Save(modConfig);
+            if (!Main.gameMenu)
+                modConfig.OnChanged();
             _popInfo = Language.GetTextValue("tModLoader.ModConfigServerResponse", netText.ToString());
             _rejected = false;
             Send();
         }
         else
         {
-            ConfigHelper.SetConfigValue(modConfig, variableInfo, value, item, false,false, path: path == null ? null : [.. path]);
+            ConfigHelper.SetItemViaPath(modConfig, path, value);
+            ConfigManager.Save(modConfig);
+            if (!Main.gameMenu)
+                modConfig.OnChanged();
             if (_popInfo != null && _popInfo.Length > 0)
             {
-                ModernConfigUI.PopNewInfo(_popInfo, Main.MouseScreen - FontAssets.MouseText.Value.MeasureString(_popInfo) * new Vector2(1f, 0f) - new Vector2(64,32), _rejected ? Color.Red : Color.Green);
+                ModernConfigUI.PopNewInfo(_popInfo, Main.MouseScreen - FontAssets.MouseText.Value.MeasureString(_popInfo) * new Vector2(1f, 0f) - new Vector2(64, 32), _rejected ? Color.Red : Color.Green);
             }
         }
 
@@ -126,23 +133,8 @@ public class ConfigOptionPacket : NetModule
         _rejected = true;
         _popInfo = text;
         //var modConfig = ConfigManager.Configs[ModLoader.GetMod(_modName)].Find(i => i.Name == _configName);
-        object item = modConfig;
-        var bindFlag = BindingFlags.Public | BindingFlags.Instance;
-        if (path != null)
-            foreach (var p in path)
-            {
-                var curType = item.GetType();
-                var fld = curType.GetField(p, bindFlag);
-                var prop = curType.GetProperty(p, bindFlag);
-                if (fld != null)
-                    item = fld.GetValue(item);
-                else if (prop != null)
-                    item = prop.GetValue(item);
-                else
-                    throw new Exception("Property or field doesn't exist in " + curType.Name);
-            }
-        PropertyFieldWrapper variableInfo = ModernConfigOption.GetWrapper(modConfig.GetType(), _fieldName);
-        _json = JsonConvert.SerializeObject(variableInfo.GetValue(item), ConfigManager.serializerSettings);
+        object item = ConfigHelper.GetItemViaPath(modConfig, path);
+        _json = JsonConvert.SerializeObject(item, ConfigManager.serializerSettings);
         Send();
     }
 }

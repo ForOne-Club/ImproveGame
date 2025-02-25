@@ -191,7 +191,6 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             Vector2 vec = (Vector2)value;
             sliderX.LerpValue = Utils.GetLerpValue((float)sliderX.Min, (float)sliderX.Max, vec.X);
             sliderY.LerpValue = Utils.GetLerpValue((float)sliderY.Min, (float)sliderY.Max, vec.Y);
-            base.OnSetDefault(value);
         }
         protected override void CheckAttributes()
         {

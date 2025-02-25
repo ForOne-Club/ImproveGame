@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Terraria.ModLoader.UI;
 using System.Collections;
 using ImproveGame.UIFramework.BaseViews;
+using System.Reflection;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
@@ -116,6 +117,36 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     {
                         label.Left = new(30, 0);
                     }
+                    /*e.OnRightMouseDown += (evt, elem) =>
+                    {
+                        var pair = (IDictionaryElementWrapper)Activator.CreateInstance(genericType, [null,null, (IDictionary)Data]);
+                        object keyValue;
+
+                        if (defaultDictionaryKeyValueAttribute != null)
+                        {
+                            keyValue = defaultDictionaryKeyValueAttribute.Value;
+                        }
+                        else
+                        {
+                            keyValue = ConfigManager.AlternateCreateInstance(keyType);
+
+                            if (!keyType.IsValueType && keyType != typeof(string))
+                            {
+                                string json = jsonDefaultDictionaryKeyValueAttribute?.Json ?? "{}";
+
+                                JsonConvert.PopulateObject(json, keyValue, ConfigManager.serializerSettings);
+                            }
+                        }
+                        genericType.GetField("_key", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(pair,keyValue);
+
+                        var itemValue = CreateCollectionElementInstance(valueType);
+                        genericType.GetField("_value", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(pair, itemValue);
+                        var oldPair = (IDictionaryElementWrapper)e.List[e.index];
+                        ((IDictionary)Data).Remove(oldPair.Key);
+                        e.SetValueDirect(pair);
+                        ((IDictionary)Data)[keyValue] = itemValue;
+                        SetupList();
+                    };*/
 
                     i++;
                 }

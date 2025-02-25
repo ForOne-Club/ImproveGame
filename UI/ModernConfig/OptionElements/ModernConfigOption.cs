@@ -6,6 +6,7 @@ using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
+using Newtonsoft.Json;
 using ReLogic.Graphics;
 using System.Collections;
 using System.Collections.Generic;
@@ -69,12 +70,16 @@ public class ModernConfigOption : TimerView
         option.path = [];
         if (owner != null)
         {
+            //if(ConfigOptionsPanel.GlobalPath != null)
+            //    option.path.AddRange(ConfigOptionsPanel.GlobalPath);
             if (owner.path != null)
                 option.path.AddRange(owner.path);
-            if (owner.List != null)
-                option.path.Add(owner.index.ToString());
-            else
+            if (owner.List == null)
                 option.path.Add(owner.VariableInfo.Name);
+            //else
+            //    option.path.Add(variable.Name);
+            if (list != null)
+                option.path.Add(index.ToString());
             option.owner = owner;
         }
         /*if (parent is ModernConfigOption parentOption)
@@ -128,7 +133,8 @@ public class ModernConfigOption : TimerView
         OptionName = propertyFieldWrapper.Name;
         VariableInfo = propertyFieldWrapper;
         Item ??= ConfigOptionsPanel.GlobalItem ?? config;
-
+        if (ConfigOptionsPanel.GlobalPath != null)
+            path ??= [.. ConfigOptionsPanel.GlobalPath];
         RelativeMode = RelativeMode.Vertical;
         OverflowHidden = true;
         Width.Set(0f, 1f);
@@ -193,7 +199,9 @@ public class ModernConfigOption : TimerView
                 : Color.White;
             if (ReloadRequired)
                 labelElement.DisplayText = ConvertLeftRight(Label) + (ValueChanged ? $" - [c/FF0000:{Language.GetTextValue("tModLoader.ModReloadRequired")}]" : "");
-            else if (labelElement.DisplayText == "")
+            //else if (labelElement.DisplayText == "")
+            //    labelElement.DisplayText = ConvertLeftRight(Label);
+            else
                 labelElement.DisplayText = ConvertLeftRight(Label);
 
         };
@@ -208,7 +216,7 @@ public class ModernConfigOption : TimerView
 
 
     }
-    protected void SetValueDirect(object value, bool broadCast = true)
+    public void SetValueDirect(object value, bool broadCast = true)
     {
         if (!Interactable) return;
 
@@ -219,7 +227,7 @@ public class ModernConfigOption : TimerView
             owner?.SetValueDirect(item);
         }
         else
-            ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadCast, false, path, List, index);
+            ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadCast, path, List, index);
 
     }
     protected T GetAttribute<T>() where T : Attribute => ConfigManager.GetCustomAttributeFromMemberThenMemberType<T>(VariableInfo, Item, List);
@@ -306,8 +314,7 @@ public class ModernConfigOption : TimerView
         TooltipPanel.SetText(text);
         // 不可控制，为什么呢？
 
-        if (VariableInfo.MemberInfo.DeclaringType.IsSubclassOf(typeof(ModConfig)))
-            TooltipPanel.SetOption(this);
+
 
         bool f = CantOperateDueToOnlyGetter;
 
@@ -370,6 +377,19 @@ public class ModernConfigOption : TimerView
     }
 
 
+    public override void MouseOver(UIMouseEvent evt)
+    {
+        base.MouseOver(evt);
+        if (VariableInfo.MemberInfo.DeclaringType.IsSubclassOf(typeof(ModConfig)))
+            TooltipPanel.SetOption(this);
+    }
+    public override void MouseOut(UIMouseEvent evt)
+    {
+        base.MouseOut(evt);
+        if (VariableInfo.MemberInfo.DeclaringType.IsSubclassOf(typeof(ModConfig)))
+            TooltipPanel.SetOption(null);
+    }
+
     protected virtual void OnSetDefault(object value)
     {
 
@@ -378,15 +398,81 @@ public class ModernConfigOption : TimerView
     public override void RightMouseDown(UIMouseEvent evt)
     {
         base.RightMouseDown(evt);
-        if (evt.Target != this) return;
-        var defaultValueAttribute = GetAttribute<DefaultValueAttribute>();
-        var typeDefault = VariableInfo.Type.IsValueType ? Activator.CreateInstance(VariableInfo.Type) : null;
-        var defaultValue = defaultValueAttribute?.Value ?? typeDefault;
+        if (evt.Target != this || !Interactable) return;
 
-        OnSetDefault(defaultValue);
-        SetValueDirect(defaultValue);
-        // ConfigHelper.SetConfigValue(Config, VariableInfo, defaultValue, Item, path: path);
-        SoundEngine.PlaySound(SoundID.Chat);
+        var defaultValueAttribute = GetAttribute<DefaultValueAttribute>();
+        bool cantSetValue = false;
+        object defaultValue = defaultValueAttribute?.Value;
+        if (defaultValue == null || index > -1)
+        {
+            string json = "{}";
+            var dummyConfig = Config.Clone();
+            JsonConvert.PopulateObject(json, dummyConfig, ConfigManager.serializerSettings);
+
+            var item = ConfigHelper.GetItemViaPathForSetDefault(dummyConfig, path, out cantSetValue);
+            var itemType = item?.GetType();
+            if (itemType != VarType)//path == null || path.Count == 0 || !int.TryParse(path[^1], out _) ||
+            {
+                if (item == null)
+                    cantSetValue = true;
+                else
+                {
+                    if (item is Color color)
+                        item = Activator.CreateInstance(VariableInfo.MemberInfo.DeclaringType, [color]);
+                    //if (itemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+                    //    defaultValue = itemType.GetProperty(VariableInfo.Name, BindingFlags.Instance | BindingFlags.Public).GetValue(item);
+                    //else
+                    defaultValue = VariableInfo.GetValue(item);
+
+                }
+            }
+            else
+                defaultValue = item;
+
+        }
+        if (!cantSetValue)
+        {
+            switch (defaultValue)
+            {
+                case ISetElementWrapper setWrapper:
+                    {
+                        if (this is OptionObject objectOption && ConfigHelper.GetItemViaPath(objectOption, ["OptionView", "ListView", "Elements"], true) is IEnumerable elems)
+                            foreach (var elem in elems)
+                            {
+                                if (elem is ModernConfigOption subOption && subOption.VariableInfo.Name == "Value")
+                                {
+                                    subOption.SetValueDirect(setWrapper.Value);
+                                    break;
+                                }
+                            }
+                        break;
+                    }
+                case IDictionaryElementWrapper dictWrapper:
+                    {
+                        if (this is OptionObject objectOption && ConfigHelper.GetItemViaPath(objectOption, ["OptionView", "ListView", "Elements"], true) is IEnumerable elems)
+                            foreach (var elem in elems)
+                            {
+                                if (elem is ModernConfigOption subOption)
+                                {
+                                    if (subOption.VariableInfo.Name == "Value")
+                                        subOption.SetValueDirect(dictWrapper.Value);
+                                    else if (subOption.VariableInfo.Name == "Key")
+                                        subOption.SetValueDirect(dictWrapper.Key);
+                                }
+                            }
+                        break;
+                    }
+                default:
+                    {
+                        SetValueDirect(defaultValue);
+                        break;
+                    }
+            }
+            OnSetDefault(defaultValue);
+            //Recalculate();
+            SoundEngine.PlaySound(SoundID.Chat);
+        }
+
     }
 
     public override void MiddleMouseDown(UIMouseEvent evt)
@@ -496,5 +582,4 @@ public class ModernConfigOption : TimerView
     public ModernConfigOption owner;//当前选项所属的设置选项
     object OldValue;
     protected bool ValueChanged => !ConfigManager.ObjectEquals(OldValue, GetValue());
-
 }

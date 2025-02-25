@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using MonoMod.Cil;
+using System.Reflection;
+using Terraria.Graphics.Effects;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
@@ -40,8 +42,55 @@ public class ModernConfigDetours : ILoadable
                 IngameFancyUI.OpenUIState(Interface.modConfigList);
             }
         };
-    }
 
+
+        //IL_Main.DoDraw += AddRenderOn;
+
+    }
+    //改自LogSpiralLibrary，不知道为什么会经常导致崩溃，于是先移除了
+    /*private void AddRenderOn(ILContext il)
+    {
+        ILCursor cursor = new ILCursor(il);
+        for (int n = 0; n < 5; n++)
+            if (!cursor.TryGotoNext(i => i.MatchLdstr("Sepia")))
+                return;
+        cursor.Index += 14;
+        cursor.EmitDelegate(() =>
+        {
+            return !RenderUsing;
+        });
+        cursor.EmitAnd();
+        for (int n = 0; n < 2; n++)
+            if (!cursor.TryGotoNext(i => i.MatchCallOrCallvirt(typeof(FilterManager).GetMethod(nameof(FilterManager.EndCapture), BindingFlags.Public | BindingFlags.Instance))))
+                return;
+        cursor.Index -= 6;
+        cursor.EmitDelegate<Func<bool, bool>>(flag =>
+        {
+            return flag && (!RenderUsing || Main.hideUI);
+        });
+
+        for (int n = 0; n < 2; n++)
+            if (!cursor.TryGotoNext(i => i.MatchCallOrCallvirt(typeof(Main).GetMethod(nameof(Main.DrawInterface), BindingFlags.NonPublic | BindingFlags.Instance))))
+                return;
+
+        cursor.Index += 3;
+        cursor.EmitDelegate(() =>
+        {
+            if (Lighting.NotRetro && RenderUsing)
+                Filters.Scene.EndCapture(null, Main.screenTarget, Main.screenTargetSwap, Color.Black);
+        });
+    }*/
+    /*public static List<Func<bool>> RenderOnConditions = [];
+    public static bool RenderUsing
+    {
+        get
+        {
+            bool result = false && ModernConfigUI.Instance != null && ModernConfigUI.Instance.Enabled;
+            foreach (var condition in RenderOnConditions)
+                result |= condition.Invoke();
+            return result;
+        }
+    }*/
     private static void PopulateConfigsDetour(Action<UIModConfigList> orig, UIModConfigList self)
     {
         orig.Invoke(self);

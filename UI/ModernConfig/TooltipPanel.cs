@@ -1,17 +1,19 @@
 ﻿using ImproveGame.UI.ModernConfig.OptionElements;
 using ImproveGame.UIFramework.SUIElements;
+using System.Collections;
+using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig;
 
+public delegate void PreviewDrawing(UIElement element, ModConfig currentConfig, PropertyFieldWrapper varibleInfo, object item, IList list, int index);
 public class TooltipPanel : SUIPanel
 {
     internal static TooltipPanel Instance;
-
     public TooltipTextElement Text;
     public SUIDrawingImage PreviewDrawer;
     public ModernConfigOption currentOption;
-
+    public static PreviewDrawing globalDrawing;
     public TooltipPanel(Color color) : base(color, color)
     {
         Instance = this;
@@ -22,8 +24,9 @@ public class TooltipPanel : SUIPanel
         PreviewDrawer = new SUIDrawingImage(view =>
         {
             if (currentOption == null) return;
-            if (!CategorySidePanel.ModdedPreviews.TryGetValue(currentOption.VariableInfo, out CategorySidePanel.PreviewDrawing drawingMethod))
-                foreach (var pair in CategorySidePanel.ModdedPreviews) 
+
+            if (!CategorySidePanel.ModdedPreviews.TryGetValue(currentOption.VariableInfo, out PreviewDrawing drawingMethod))
+                foreach (var pair in CategorySidePanel.ModdedPreviews)
                 {
                     if (pair.Key.fieldInfo == currentOption.VariableInfo.fieldInfo && pair.Key.IsField)
                         drawingMethod = pair.Value;
@@ -31,9 +34,9 @@ public class TooltipPanel : SUIPanel
                         drawingMethod = pair.Value;
                     if (drawingMethod != null) break;
                 }
-            if (drawingMethod == null) return;
+            drawingMethod?.Invoke(view, currentOption.Config, currentOption.VariableInfo, currentOption.Item, currentOption.List, currentOption.index);
 
-            drawingMethod.Invoke(view, currentOption.Config, currentOption.VariableInfo, currentOption.Item, currentOption.List, currentOption.index);
+            globalDrawing?.Invoke(view, currentOption.Config, currentOption.VariableInfo, currentOption.Item, currentOption.List, currentOption.index);
         })
         {
             Width = new(0, 1),
@@ -50,9 +53,7 @@ public class TooltipPanel : SUIPanel
             Instance.Text.TextOrKey = GetText("ModernConfig.NoTooltip");
         base.Draw(spriteBatch);
         Instance.Text.TextOrKey = ConfigOptionsPanel.CurrentCategory?.Tooltip ?? "";
-        currentOption = null;
     }
-
     public static void SetText(string text)
     {
         Instance.Text.TextOrKey = text;

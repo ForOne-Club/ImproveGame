@@ -91,6 +91,17 @@ internal class OptionHashSet : OptionCollections
                 {
                     label.Left = new(30, 0);
                 }
+                /*e.OnRightMouseDown += (evt, elem) =>
+                    {
+                        var oldValue = (ISetElementWrapper)e.List[e.index];
+                        removeMethod ??= Data.GetType().GetMethods().FirstOrDefault(m => m.Name == "Remove");
+                        removeMethod.Invoke(Data, [oldValue.Value]);
+                        var newValue = CreateCollectionElementInstance(setType);
+                        e.SetValueDirect(Activator.CreateInstance(genericType, [newValue, Data]));
+                        addMethod ??= Data.GetType().GetMethods().FirstOrDefault(m => m.Name == "Add");
+                        addMethod?.Invoke(Data, [newValue]);
+                        SetupList();
+                    };*/
                 i++;
             }
         }

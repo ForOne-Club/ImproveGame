@@ -171,7 +171,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     protected override void OnBind()
     {
         CheckValid();
-
+        var v = GetValue();
         var box = new View
         {
             IsAdaptiveWidth = true,

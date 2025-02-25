@@ -187,6 +187,11 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 this.array = array;
                 this.index = index;
             }
+            public ColorHandler(Color color) //仅用于设置单项默认值
+            {
+                current = color;
+                hsl = Main.rgbToHsl(color);
+            }
         }
         static void DrawRGBPanel(Vector2 pos, Vector2 size, Color current)
         {
@@ -664,7 +669,6 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             c.Green = color.G;
             c.Blue = color.B;
             c.Alpha = color.A;
-            base.OnSetDefault(value);
         }
         protected override void CheckAttributes()
         {

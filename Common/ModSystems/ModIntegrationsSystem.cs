@@ -547,9 +547,19 @@ public class ModIntegrationsSystem : ModSystem
                         }
                     case "RegisterPreview": 
                         {
-                            CategorySidePanel.ModdedPreviews[args[1] as PropertyFieldWrapper] = new CategorySidePanel.PreviewDrawing(args[2] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
+                            CategorySidePanel.ModdedPreviews[args[1] as PropertyFieldWrapper] = new PreviewDrawing(args[2] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
                             break;
                         }
+                    case "OnGlobalConfigPreview": 
+                        {
+                            TooltipPanel.globalDrawing = new PreviewDrawing(args[1] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
+                            break;
+                        }
+                    //case "AddRenderOnCondition": 
+                    //    {
+                    //        ModernConfigDetours.RenderOnConditions.Add(args[1] as Func<bool>);
+                    //        break;
+                    //    }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");
                         return false;
