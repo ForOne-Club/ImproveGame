@@ -38,7 +38,7 @@ public class GlassmorphismVfx : ModSystem
     public override void Load()
     {
         // _targetPool = new RenderTargetPool();
-        //Filters.Scene.OnPostDraw += RenderGlassmorphismVfx;
+        Filters.Scene.OnPostDraw += () => { };//RenderGlassmorphismVfx
         Main.OnRenderTargetsInitialized += InitializeTarget;
         Main.OnRenderTargetsReleased += ReleaseTarget;
 
@@ -78,7 +78,7 @@ public class GlassmorphismVfx : ModSystem
         //找到DrawMenu之前，我们要在这里先进行毛玻璃的生成
         if (!cursor.TryGotoNext(i => i.MatchCallOrCallvirt(typeof(Main).GetMethod(nameof(Main.DrawMenu), BindingFlags.NonPublic | BindingFlags.Instance))))
             return;
-        cursor.Index-=2;
+        cursor.Index -= 2;
         cursor.EmitLdloc(11);//这个是一个bool值，表示当前是否开启了屏幕捕获
         cursor.EmitDelegate<Action<bool>>(flag =>
         {
@@ -194,14 +194,14 @@ public class GlassmorphismVfx : ModSystem
 
         // 再对 blurredTarget 调用 ApplyGaussBlur
         ApplyGaussBlur(_blurredTarget);
-        if(!Main.gameMenu)
-        PlayerInput.SetZoom_UI();
+        if (!Main.gameMenu)
+            PlayerInput.SetZoom_UI();
         if (!Main.InGameUI.IsVisible && !Main.ingameOptionsWindow)
             EventTriggerManager.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
 
         ModernConfigUI.MakeGlass(_blurredTarget, _uiTarget);
-        if(!Main.gameMenu)
-        PlayerInput.SetZoom_World();
+        if (!Main.gameMenu)
+            PlayerInput.SetZoom_World();
 
         if (captureScreen)
         {
@@ -215,7 +215,7 @@ public class GlassmorphismVfx : ModSystem
             device.SetRenderTarget(null);
 
         if (needReBegin)
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer,null,Main.UIScaleMatrix);
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
     }
 
     public void ApplyGaussBlur(RenderTarget2D target)
