@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.Packets;
+using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
 using Newtonsoft.Json;
 using System;
@@ -49,6 +50,19 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             return toAdd;
         }
 
+        protected void NetSyncManually()
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                List<string> pathDirectly = [];
+                if (path != null)
+                    pathDirectly.AddRange(path);
+                if (List == null)
+                    pathDirectly.Add(VariableInfo.Name);
+                ConfigOptionPacket.Send(Config, Data, pathDirectly);
+            }
+        }
+
         // SetupList called in base.ctor, but children need Types.
         protected abstract void PrepareTypes();
 
@@ -60,7 +74,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         {
             Data = null;
             SetValueDirect(Data);
-
+            NetSyncManually();
         }
 
         protected abstract void ClearCollection();
@@ -357,14 +371,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             }
             base.LeftMouseUp(evt);
         }
-
-        public override void RightMouseDown(UIMouseEvent evt)
+        protected override void OnSetValueExternal(object value)
         {
-            base.RightMouseDown(evt);
-        }
-        protected override void OnSetDefault(object value)
-        {
-            base.OnSetDefault(value);
             Data = GetValue();
             SetupList();
             Recalculate();

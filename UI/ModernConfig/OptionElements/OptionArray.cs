@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using ImproveGame.Packets;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Graphics2D;
 namespace ImproveGame.UI.ModernConfig.OptionElements;
@@ -106,6 +106,8 @@ public class OptionArray : OptionCollections
                 array.SetValue(dummy, n);
                 SetupList();
                 pendingChanges = true;
+
+                NetSyncManually();
             };
             //e.OnRightMouseDown += (evt, elem) => e.SetValueDirect(CreateCollectionElementInstance(itemType));
         }

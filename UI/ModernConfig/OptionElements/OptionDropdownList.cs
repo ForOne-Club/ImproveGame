@@ -61,7 +61,7 @@ public class OptionDropdownList : ModernConfigOption
                 }
                 
                 int index = Array.IndexOf(_valueStrings, s);
-                SetConfigValue(index, true);
+                SetConfigValue(index);
             };
             dropdownList.DrawCallback = () =>
             {
@@ -124,7 +124,7 @@ public class OptionDropdownList : ModernConfigOption
             throw new Exception($"Field \"{OptionName}\" is not a enum type");
     }
 
-    private void SetConfigValue(int index, bool broadcast)
+    private void SetConfigValue(int index)
     {
         //if (!Interactable) return;
         var value = Enum.GetValues(VarType).GetValue(index);

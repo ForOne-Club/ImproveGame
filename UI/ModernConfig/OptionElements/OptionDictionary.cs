@@ -6,6 +6,7 @@ using Terraria.ModLoader.UI;
 using System.Collections;
 using ImproveGame.UIFramework.BaseViews;
 using System.Reflection;
+using ImproveGame.Packets;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
@@ -44,13 +45,15 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             var dict = (IDictionary)Data;
             if (!dict.Contains(keyValue))
                 dict.Add(keyValue, CreateCollectionElementInstance(valueType));
+
+            NetSyncManually();
         }
 
         protected override void ClearCollection()
         {
             ((IDictionary)Data).Clear();
 
-
+            NetSyncManually();
         }
 
         protected override void InitializeCollection()
@@ -58,6 +61,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             Data = Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(keyType, valueType));
 
             SetValueDirect(Data);
+            NetSyncManually();
         }
 
 
@@ -109,14 +113,32 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                         ((IDictionary)Data).Remove(o);
                         SetupList();
                         pendingChanges = true;
+                        NetSyncManually();
                     };
-
                     var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, dataWrapperList, genericType, i, this, preLabelAppend: deleteButton.JoinParent);
 
                     if (e.Elements[0] is OptionLabelElement label)
                     {
                         label.Left = new(30, 0);
                     }
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        int idx = i;
+                        e.OnUpdate += (elem) =>
+                        {
+                            if ((int)(Main.GlobalTimeWrappedHourly * 60) % 20 == 0) 
+                            {
+                                var keyObject = ConfigHelper.GetItemViaPath(Data, [idx.ToString(), "Key"], true);
+                                if (keyObject != proxy.Key)
+                                    ConfigHelper.SetItemViaPath(proxy, ["_key"], keyObject);
+                                var valueObject = ConfigHelper.GetItemViaPath(Data, [idx.ToString(), "Value"], true);
+                                if (valueObject != proxy.Value)
+                                    ConfigHelper.SetItemViaPath(proxy, ["_value"], valueObject);
+                            }
+
+                        };
+                    }
+
                     /*e.OnRightMouseDown += (evt, elem) =>
                     {
                         var pair = (IDictionaryElementWrapper)Activator.CreateInstance(genericType, [null,null, (IDictionary)Data]);

@@ -67,7 +67,7 @@ public sealed class OptionEditableText : ModernConfigOption
     private void SetConfigValue(string value, bool broadcast)
     {
         //if (!Interactable) return;
-        SetValueDirect(value);
+        SetValueDirect(value,broadcast);
         //ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadcast, path: path);
     }
 

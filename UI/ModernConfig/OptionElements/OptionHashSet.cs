@@ -7,6 +7,7 @@ using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
 using ImproveGame.UIFramework.BaseViews;
 using System.Collections.Generic;
+using ImproveGame.Packets;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -26,12 +27,14 @@ internal class OptionHashSet : OptionCollections
     {
         addMethod ??= Data.GetType().GetMethods().FirstOrDefault(m => m.Name == "Add");
         addMethod?.Invoke(Data, [CreateCollectionElementInstance(setType)]);
+        NetSyncManually();
     }
 
     protected override void ClearCollection()
     {
         clearMethod ??= Data.GetType().GetMethods().FirstOrDefault(m => m.Name == "Clear");
         clearMethod?.Invoke(Data, []);
+        NetSyncManually();
     }
 
     protected override void InitializeCollection()
@@ -83,6 +86,7 @@ internal class OptionHashSet : OptionCollections
                     removeMethod.Invoke(Data, [o]);
                     SetupList();
                     pendingChanges = true;
+                    NetSyncManually();
                 };
 
                 var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, DataWrapperList, genericType, i, this, preLabelAppend: deleteButton.JoinParent);
@@ -90,6 +94,20 @@ internal class OptionHashSet : OptionCollections
                 if (e.Elements[0] is OptionLabelElement label)
                 {
                     label.Left = new(30, 0);
+                }
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    int idx = i;
+                    e.OnUpdate += (elem) =>
+                    {
+                        if ((int)(Main.GlobalTimeWrappedHourly * 60) % 20 == 0)//每隔20帧检测一次值是不是被外部修改乐
+                        {
+                            var valueObject = ConfigHelper.GetItemViaPath(Data, [idx.ToString()], true);
+                            if (valueObject != proxy.Value)
+                                ConfigHelper.SetItemViaPath(proxy, ["_value"], valueObject);
+                        }
+
+                    };
                 }
                 /*e.OnRightMouseDown += (evt, elem) =>
                     {

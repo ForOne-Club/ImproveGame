@@ -45,7 +45,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 JsonConvert.PopulateObject(json, data, ConfigManager.serializerSettings);
                 SetValueDirect(data);
                 pendingChanges = true;
-                SetupList();
+                pendingSetupList = true;
             };
             DeleteButton = new SUICross()
             {
@@ -157,7 +157,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         void SetupList()
         {
             OptionView.ListView.RemoveAllChildren();
-            ObjectToOption(GetValue());
+            var v = GetValue();
+            ObjectToOption(v);
             OptionView.Recalculate();
             Height.Set(Math.Min((OptionView.ListView.Children.Any() ? OptionView.ListView.Height.Pixels : 0) + 70, 360), 0);//不知道为什么MaxHeight不管用了
             pendingChanges = true;
@@ -173,6 +174,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         SUICross DeleteButton;
         protected bool expanded = true;
         protected bool pendingChanges;
+        protected bool pendingSetupList;
         protected JsonDefaultValueAttribute JsonDefaultValueAttribute;
         NullAllowedAttribute NullAllowedAttribute;
         SeparatePageAttribute SeparatePageAttribute;
@@ -184,6 +186,10 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         bool HasCustom;
         public override void Update(GameTime gameTime)
         {
+            if (VariableInfo.Type.Name == "SimpleData")
+            {
+                var v = GetValue();
+            }
             base.Update(gameTime);
             if (SeparatePage && !innerPage)
             {
@@ -220,6 +226,11 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 pendingChanges = true;
             }
             #endregion
+            if (pendingSetupList && GetValue() != null)
+            {
+                SetupList();
+                pendingSetupList = false;
+            }
             if (!pendingChanges)
                 return;
             pendingChanges = false;
@@ -321,7 +332,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                     List<string> pth = [];
                     if (path != null)
                         pth.AddRange(path);
-                    pth.Add(VariableInfo.Name);
+                    if (List == null)
+                        pth.Add(VariableInfo.Name);
                     ConfigOptionsPanel.SwitchToSubPage(card, data, pth);
                     //ConfigOptionsPanel.GlobalItem = Item;
                     //CrossModCategoryCard card = new CrossModCategoryCard(list);
@@ -361,12 +373,11 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             base.RightMouseDown(evt);
             pendingChanges = true;
         }
-        protected override void OnSetDefault(object value)
+        protected override void OnSetValueExternal(object value)
         {
             if (value != null)
                 SetupList();
             pendingChanges = true;
-            base.OnSetDefault(value);
         }
     }
 }

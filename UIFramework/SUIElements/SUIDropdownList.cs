@@ -63,7 +63,7 @@ namespace ImproveGame.UIFramework.SUIElements
                 dropdownList.OptionSelectedCallback = s =>
                 {
                     int index = Array.IndexOf(_valueStrings, s);
-                    SetConfigValue(index, true);
+                    SetConfigValue(index);
                 };
                 //dropdownList.DrawCallback = () =>
                 //{
@@ -118,7 +118,7 @@ namespace ImproveGame.UIFramework.SUIElements
         //        throw new Exception($"Field \"{OptionName}\" is not a enum type");
         //}
 
-        private void SetConfigValue(int index, bool broadcast)
+        private void SetConfigValue(int index)
         {
             //if (!Interactable) return;
 

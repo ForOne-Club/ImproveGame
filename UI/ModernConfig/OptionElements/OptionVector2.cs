@@ -100,6 +100,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 dragging = false;
                 lockY = false;
+                sliderX.OutSideEditEnd();
             };
             barY.OnLeftMouseDown += (evt, elem) =>
             {
@@ -111,6 +112,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 dragging = false;
                 lockX = false;
+                sliderY.OutSideEditEnd();
             };
             var point = new View()
             {
@@ -169,6 +171,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 dragging = false;
                 lockX = lockY = false;
+                sliderX.OutSideEditEnd();
+                sliderY.OutSideEditEnd();
             };
             controlPoint = point;
             controlBarX = barX;
@@ -186,7 +190,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             controlBarY.Recalculate();
             base.Update(gameTime);
         }
-        protected override void OnSetDefault(object value)
+        protected override void OnSetValueExternal(object value)
         {
             Vector2 vec = (Vector2)value;
             sliderX.LerpValue = Utils.GetLerpValue((float)sliderX.Min, (float)sliderX.Max, vec.X);

@@ -342,9 +342,8 @@ public class OptionDefinition : ModernConfigOption
         base.DrawChildren(spriteBatch);
         InModernConfig = false;
     }
-    public override void RightMouseDown(UIMouseEvent evt)
+    protected override void OnSetValueExternal(object value)
     {
-        base.RightMouseDown(evt);
         UpdateNeeded = true;
         SelectionExpanded = false;
         OptionChoice.GetType().GetMethod("SetItem", BindingFlags.Instance | BindingFlags.Public).Invoke(OptionChoice, [GetValue()]);

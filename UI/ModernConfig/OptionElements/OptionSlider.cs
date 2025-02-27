@@ -397,4 +397,8 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
         }
     }
     public void OutSideEditEnd() => _slideBox?.OutSideEditEnd();
+    protected override void OnSetValueExternal(object value)
+    {
+        base.OnSetValueExternal(value);
+    }
 }

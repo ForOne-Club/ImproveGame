@@ -662,7 +662,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
             TooltipPanel.SetText(text);
         }
-        protected override void OnSetDefault(object value)
+        protected override void OnSetValueExternal(object value)
         {
             var color = (Color)value;
             c.Red = color.R;

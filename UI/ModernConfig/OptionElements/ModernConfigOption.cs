@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Configs.FavoritedSystem;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Packets;
 using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -16,6 +17,7 @@ using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -141,7 +143,7 @@ public class ModernConfigOption : TimerView
         Height.Set(46f, 0f);
         Rounded = new Vector4(12f);
         SetPadding(12, 4);
-
+        oldValue = GetValue();
         if (GetAttribute<CustomModConfigItemAttribute>() != null)
         {
             var customButton = new SUIDrawingImage(v =>
@@ -219,12 +221,12 @@ public class ModernConfigOption : TimerView
     public void SetValueDirect(object value, bool broadCast = true)
     {
         if (!Interactable) return;
-
+        blockNextCheck = true;
 
         if (item.GetType().IsValueType)//VariableInfo.Type
         {
             VariableInfo.SetValue(item, value);
-            owner?.SetValueDirect(item);
+            owner?.SetValueDirect(item, broadCast);
         }
         else
             ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadCast, path, List, index);
@@ -376,7 +378,6 @@ public class ModernConfigOption : TimerView
         // ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, text, textPosition, Color.Gray, Color.Black, 0f, Vector2.Zero, new Vector2(0.8f), -1f, 1f);
     }
 
-
     public override void MouseOver(UIMouseEvent evt)
     {
         base.MouseOver(evt);
@@ -390,7 +391,11 @@ public class ModernConfigOption : TimerView
             TooltipPanel.SetOption(null);
     }
 
-    protected virtual void OnSetDefault(object value)
+    /// <summary>
+    /// 外部操作(如联机同步)写入新值时的更新
+    /// </summary>
+    /// <param name="value"></param>
+    protected virtual void OnSetValueExternal(object value)
     {
 
     }
@@ -468,7 +473,7 @@ public class ModernConfigOption : TimerView
                         break;
                     }
             }
-            OnSetDefault(defaultValue);
+            OnSetValueExternal(defaultValue);
             //Recalculate();
             SoundEngine.PlaySound(SoundID.Chat);
         }
@@ -497,7 +502,7 @@ public class ModernConfigOption : TimerView
         if (ReloadRequired && List == null && Item is ModConfig modConfig)
         {
             ModConfig loadTimeConfig = ConfigManager.GetLoadTimeConfig(modConfig.Mod, modConfig.Name);
-            OldValue = VariableInfo.GetValue(loadTimeConfig);
+            LoadTimeValue = VariableInfo.GetValue(loadTimeConfig);
         }
         var colorAttribute = GetAttribute<BackgroundColorAttribute>();
         if (colorAttribute != null)
@@ -508,6 +513,22 @@ public class ModernConfigOption : TimerView
     {
         DebugText = $"cfg:{Config.Name}, opt:{OptionName}, label:{Label}";
     }
+
+    public override void Update(GameTime gameTime)
+    {
+        if (CheckExternalModify)
+        {
+            var value = GetValue();
+
+            if (oldValue?.Equals(value) != true && !(oldValue == null && value == null) && !blockNextCheck)
+                OnSetValueExternal(value);
+            oldValue = value;
+            blockNextCheck = false;
+        }
+
+        base.Update(gameTime);
+    }
+
 
     /// <summary>
     /// 是否被高光显示，用于搜索
@@ -580,6 +601,9 @@ public class ModernConfigOption : TimerView
     // 是为了和联机同步那边的代码实现妥协的产物，那边之前直接是给config的某个字段设置就直接很多，这里不得不记录下字段路径了
     // 原版的做法似乎是直接把整个config都重新写入了一遍？
     public ModernConfigOption owner;//当前选项所属的设置选项
-    object OldValue;
-    protected bool ValueChanged => !ConfigManager.ObjectEquals(OldValue, GetValue());
+    object LoadTimeValue;
+    bool blockNextCheck;
+    object oldValue;//上一帧的值，用于检测是否被外部修改
+    protected bool CheckExternalModify = true;
+    protected bool ValueChanged => !ConfigManager.ObjectEquals(LoadTimeValue, GetValue());
 }

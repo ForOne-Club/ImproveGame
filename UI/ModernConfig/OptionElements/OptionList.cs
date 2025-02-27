@@ -2,6 +2,7 @@
 using System.Collections;
 using Terraria.ModLoader.Config;
 using ImproveGame.UIFramework.BaseViews;
+using ImproveGame.Packets;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -14,12 +15,13 @@ public class OptionList : OptionCollections
     protected override void AddItem()
     {
         ((IList)Data).Add(CreateCollectionElementInstance(listType));
+        NetSyncManually();
     }
 
     protected override void ClearCollection()
     {
         ((IList)Data).Clear();
-
+        NetSyncManually();
     }
 
     protected override void InitializeCollection()
@@ -58,6 +60,7 @@ public class OptionList : OptionCollections
                 ((IList)Data).RemoveAt(idx);
                 SetupList();
                 pendingChanges = true;
+                NetSyncManually();
             };
 
             var e = WrapIt(OptionView.ListView, Config, VariableInfo, Item, list, listType, i, this, preLabelAppend: deleteButton.JoinParent);
@@ -124,6 +127,8 @@ public class OptionList : OptionCollections
                 list.Insert(n, dummy);
                 SetupList();
                 pendingChanges = true;
+
+                NetSyncManually();
             };
             /*e.OnRightMouseDown += (evt, elem) =>
             {

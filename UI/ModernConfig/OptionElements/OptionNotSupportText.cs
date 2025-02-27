@@ -21,6 +21,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
         protected override void OnBind()
         {
+            CheckExternalModify = false;
             var variable = VariableInfo;
             //TODO 本地化+对多级嵌套的正确支持
 
@@ -44,7 +45,6 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 Parent?.Recalculate();
             };
         }
-
 
         public override void LeftMouseDown(UIMouseEvent evt)
         {

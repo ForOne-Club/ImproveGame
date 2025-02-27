@@ -178,13 +178,13 @@ namespace ImproveGame.UIFramework.SUIElements
                 if (!double.TryParse(text, out var value))
                     return;
                 value = Math.Clamp(value, Min, Max);
-                SetConfigValue(value, broadcast: false);
+                SetConfigValue(value);
             };
             _numericTextBox.EndTakingInput += () =>
             {
                 if (!_numericTextBox.IsValueSafe)
                     return;
-                SetConfigValue(_numericTextBox.Value, broadcast: true);
+                SetConfigValue(_numericTextBox.Value);
             };
             _numericTextBox.SetPadding(2, 2, 2, 2); // Padding影响里面的文字绘制
             _numericTextBox.SetSizePixels(48, 28);
@@ -201,17 +201,17 @@ namespace ImproveGame.UIFramework.SUIElements
             _slideBox.ValueChangeCallback += () =>
             {
                 float value = MathHelper.Lerp((float)Min, (float)Max, _slideBox.Value);
-                SetConfigValue(value, broadcast: false);
+                SetConfigValue(value);
             };
             _slideBox.EndDraggingCallback += () =>
             {
                 float value = MathHelper.Lerp((float)Min, (float)Max, _slideBox.Value);
-                SetConfigValue(value, broadcast: true);
+                SetConfigValue(value);
             };
             _slideBox.JoinParent(box);
         }
 
-        private void SetConfigValue(double value, bool broadcast)
+        private void SetConfigValue(double value)
         {
             object v;
             if (IsInt)

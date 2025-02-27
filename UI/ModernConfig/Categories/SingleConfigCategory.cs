@@ -8,7 +8,7 @@ namespace ImproveGame.UI.ModernConfig.Categories
 {
     public class SingleConfigCategory(ModConfig config) : Category
     {
-        public override int ItemIconId => ItemID.WireKite;
+        public override int ItemIconId => config.Mode == ConfigScope.ServerSide ? ItemID.CellPhone : ItemID.WireKite;
         public override void AddOptions(ConfigOptionsPanel panel)
         {
             //panel.ShouldHideSearchBar = true;
