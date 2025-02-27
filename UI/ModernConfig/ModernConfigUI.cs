@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
+using Terraria.WorldBuilding;
 
 namespace ImproveGame.UI.ModernConfig;
 

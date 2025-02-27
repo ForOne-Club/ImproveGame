@@ -1,7 +1,11 @@
 ﻿using ImproveGame.UI.ModernConfig;
 using ImproveGame.UIFramework.Graphics2D;
+using MonoMod.Cil;
+using System.Reflection;
 using Terraria.GameInput;
 using Terraria.Graphics.Effects;
+using Terraria.WorldBuilding;
+using static Terraria.Localization.NetworkText;
 
 namespace ImproveGame.UIFramework.Common;
 
@@ -34,7 +38,7 @@ public class GlassmorphismVfx : ModSystem
     public override void Load()
     {
         // _targetPool = new RenderTargetPool();
-        Filters.Scene.OnPostDraw += RenderGlassmorphismVfx;
+        //Filters.Scene.OnPostDraw += RenderGlassmorphismVfx;
         Main.OnRenderTargetsInitialized += InitializeTarget;
         Main.OnRenderTargetsReleased += ReleaseTarget;
 
@@ -44,12 +48,67 @@ public class GlassmorphismVfx : ModSystem
             _uiTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.ScreenSize.X, Main.ScreenSize.Y);
             _helperTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.ScreenSize.X, Main.ScreenSize.Y);
         });
+        IL_Main.DoDraw += RenderGlassmorphismVfx_ILEmit;
+    }
+
+    private void RenderGlassmorphismVfx_ILEmit(ILContext il)
+    {
+        //这部分代码负责在主页面开启screenTarget捕获
+        ILCursor cursor = new(il);
+        //"Sepia"是饥荒世界的滤镜，这里世界生成的时候也会开启，这里用for查找到最后一个
+        for (int n = 0; n < 5; n++)
+            if (!cursor.TryGotoNext(i => i.MatchLdstr("Sepia")))
+                return;
+        //神人螺线直接Index+=14了，这里是导航到or指令前面
+        //具体说来是drawToScreen || netMode == 2 || flag
+        //这里只要有一个成立就不会开启screenTarget
+        //其中flag表示  不启用饥荒滤镜
+        if (!cursor.TryGotoNext(i => i.MatchOr()))
+            return;
+        cursor.EmitDelegate(() =>
+        {
+            return !MyUtils.GlassVfxEnabled;//
+        });
+        cursor.EmitAnd();
+        //↑这里我加入了一个 *不启用设置预览的Render绘制*然后取与
+        //也就是说如果既不要饥荒滤镜也不要毛玻璃就不开screenTarget捕获，很合理
+
+
+
+        //找到DrawMenu之前，我们要在这里先进行毛玻璃的生成
+        if (!cursor.TryGotoNext(i => i.MatchCallOrCallvirt(typeof(Main).GetMethod(nameof(Main.DrawMenu), BindingFlags.NonPublic | BindingFlags.Instance))))
+            return;
+        cursor.Index-=2;
+        cursor.EmitLdloc(11);//这个是一个bool值，表示当前是否开启了屏幕捕获
+        cursor.EmitDelegate<Action<bool>>(flag =>
+        {
+            if (flag)
+                RenderGlassmorphismVfx();
+        });
+        //这里用EmitCall和brfalse还有打标签之类的应该也是可以的，但是比较麻烦，干脆EmitDelegate了
+
+
+        if (!cursor.TryGotoNext(i => i.MatchCallOrCallvirt(typeof(Main).GetMethod(nameof(Main.DrawInterface), BindingFlags.NonPublic | BindingFlags.Instance))))
+            return;
+
+        if (!cursor.TryGotoPrev(i => i.MatchCallOrCallvirt(typeof(SpriteBatch).GetMethod(nameof(SpriteBatch.End), BindingFlags.Public | BindingFlags.Instance, []))))
+            return;
+        //导航到DrawInterface前，我们要在那里构造毛玻璃
+        //不用原来的OnPostDraw是因为我的绘制预览把那个EndCapture延后了
+        cursor.Index++;
+
+        cursor.EmitLdloc(11);
+        cursor.EmitDelegate<Action<bool>>(flag =>
+        {
+            if (flag)
+                RenderGlassmorphismVfx();
+        });
     }
 
     public override void Unload()
     {
         // Main.RunOnMainThread(_targetPool.Dispose);
-        Filters.Scene.OnPostDraw -= RenderGlassmorphismVfx;
+        //Filters.Scene.OnPostDraw -= RenderGlassmorphismVfx;
         Main.OnRenderTargetsInitialized -= InitializeTarget;
         Main.OnRenderTargetsReleased -= ReleaseTarget;
 
@@ -75,18 +134,21 @@ public class GlassmorphismVfx : ModSystem
     {
         Main.RunOnMainThread(() =>
         {
+            RenderInitialized = true;
             GlassCovers = new RenderTarget2D[EventTriggerManager.LayerCount + 1];
             for (var i = 0; i < GlassCovers.Length; i++)
                 GlassCovers[i] = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.ScreenSize.X, Main.ScreenSize.Y);
             ModernConfigUI.Glass = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.ScreenSize.X, Main.ScreenSize.Y);
         });
     }
+    public static bool RenderInitialized;
 
-    private void InitializeTarget(int width, int height)
+    public static void InitializeTarget(int width, int height)
     {
-        _blurredTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
-        _uiTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
-        _helperTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
+        var instance = ModContent.GetInstance<GlassmorphismVfx>();
+        instance._blurredTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
+        instance._uiTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
+        instance._helperTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
         for (var i = 0; i < GlassCovers.Length; i++)
             GlassCovers[i] = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
         ModernConfigUI.Glass = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height);
@@ -104,12 +166,17 @@ public class GlassmorphismVfx : ModSystem
 
     private void RenderGlassmorphismVfx()
     {
-        if (Main.gameMenu || !GlassVfxAvailable)
-            return;
 
+        if (!GlassVfxAvailable || !RenderInitialized)//Main.gameMenu || 
+            return;
         var device = Main.instance.GraphicsDevice;
         var batch = Main.spriteBatch;
         device.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+
+        var needReBegin = batch.beginCalled;
+        var captureScreen = device.GetRenderTargets().Length > 0;
+        if (needReBegin)
+            batch.End();
 
         // “保存”原来的Rt2d
         device.SetRenderTarget(Main.screenTargetSwap);
@@ -127,14 +194,28 @@ public class GlassmorphismVfx : ModSystem
 
         // 再对 blurredTarget 调用 ApplyGaussBlur
         ApplyGaussBlur(_blurredTarget);
-
+        if(!Main.gameMenu)
         PlayerInput.SetZoom_UI();
         if (!Main.InGameUI.IsVisible && !Main.ingameOptionsWindow)
             EventTriggerManager.MakeGlasses(ref GlassCovers, _blurredTarget, _uiTarget);
+
         ModernConfigUI.MakeGlass(_blurredTarget, _uiTarget);
+        if(!Main.gameMenu)
         PlayerInput.SetZoom_World();
 
-        device.SetRenderTarget(null);
+        if (captureScreen)
+        {
+            device.SetRenderTarget(Main.screenTarget);
+            device.Clear(Color.Black);
+            batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            batch.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+            batch.End();
+        }
+        else
+            device.SetRenderTarget(null);
+
+        if (needReBegin)
+            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer,null,Main.UIScaleMatrix);
     }
 
     public void ApplyGaussBlur(RenderTarget2D target)
