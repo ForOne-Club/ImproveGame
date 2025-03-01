@@ -1104,8 +1104,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="rf"></param>
+    /// <param name="r">外接圆半径</param>
+    /// <param name="rf">内切圆半径与外接圆半径比值，小于1</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1121,8 +1121,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="rf"></param>
+    /// <param name="r">外接圆半径</param>
+    /// <param name="rf">内切圆半径与外接圆半径比值，小于1</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderStar5(Vector2 pos, Vector2 percentOrigin, float r, float rf, Color background, Matrix matrix)
@@ -1135,8 +1135,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="rf"></param>
+    /// <param name="r">外接圆半径</param>
+    /// <param name="rf">内切圆半径与外接圆半径比值，小于1</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1171,9 +1171,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="N"></param>
-    /// <param name="k"></param>
+    /// <param name="r">外接圆半径</param>
+    /// <param name="N">角数</param>
+    /// <param name="k">内切圆半径与外接圆半径比值，小于1</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1189,9 +1189,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="N"></param>
-    /// <param name="k"></param>
+    /// <param name="r">外接圆半径</param>
+    /// <param name="N">角数</param>
+    /// <param name="k">内切圆半径与外接圆半径比值，小于1</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderStarX(Vector2 pos, Vector2 percentOrigin, float r, float N, float k, Color background, Matrix matrix)
@@ -1204,9 +1204,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="N"></param>
-    /// <param name="k"></param>
+    /// <param name="r">外接圆半径</param>
+    /// <param name="N">角数</param>
+    /// <param name="k">内切圆半径与外接圆半径比值，小于1</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1240,8 +1240,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">开口角大小，向上开口</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1257,8 +1257,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">开口角大小，向上开口</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderPie(Vector2 pos, Vector2 percentOrigin, float r, float angle, Color background, Matrix matrix)
@@ -1271,8 +1271,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">开口角大小，向上开口</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1304,8 +1304,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="k"></param>
+    /// <param name="r">完整圆半径</param>
+    /// <param name="k">切除部分占半径占比，1为半圆/param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1321,8 +1321,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="k"></param>
+    /// <param name="r">完整圆半径</param>
+    /// <param name="k">切除部分占半径占比，1为半圆/param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderCutDisk(Vector2 pos, Vector2 percentOrigin, float r, float k, Color background, Matrix matrix)
@@ -1335,8 +1335,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="k"></param>
+    /// <param name="r">完整圆半径</param>
+    /// <param name="k">切除部分占半径占比，1为半圆/param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1371,9 +1371,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
-    /// <param name="width"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">开口角大小，向上开口</param>
+    /// <param name="width">线宽</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1389,9 +1389,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
-    /// <param name="width"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">开口角大小，向上开口</param>
+    /// <param name="width">线宽</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderArc(Vector2 pos, Vector2 percentOrigin, float r, float angle, float width, Color background, Matrix matrix)
@@ -1404,9 +1404,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
-    /// <param name="width"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">开口角大小，向上开口</param>
+    /// <param name="width">线宽</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1440,9 +1440,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
-    /// <param name="width"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">开口角大小，向上开口</param>
+    /// <param name="width">线宽</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1458,9 +1458,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
-    /// <param name="width"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">开口角大小，向上开口</param>
+    /// <param name="width">线宽</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderRing(Vector2 pos, Vector2 percentOrigin, float r, float angle, float width, Color background, Matrix matrix)
@@ -1473,9 +1473,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
-    /// <param name="width"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">开口角大小，向上开口</param>
+    /// <param name="width">线宽</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1515,10 +1515,10 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
-    /// <param name="width"></param>
-    /// <param name="length"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">扇环部分圆心角大小，向下开口</param>
+    /// <param name="width">线宽</param>
+    /// <param name="length">延长线长</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1534,10 +1534,10 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
-    /// <param name="width"></param>
-    /// <param name="length"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">扇环部分圆心角大小，向下开口</param>
+    /// <param name="width">线宽</param>
+    /// <param name="length">延长线长</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderHorseshoe(Vector2 pos, Vector2 percentOrigin, float r, float angle, float width, float length, Color background, Matrix matrix)
@@ -1550,10 +1550,10 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="angle"></param>
-    /// <param name="width"></param>
-    /// <param name="length"></param>
+    /// <param name="r">半径</param>
+    /// <param name="angle">扇环部分圆心角大小，向下开口</param>
+    /// <param name="width">线宽</param>
+    /// <param name="length">延长线长</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1586,8 +1586,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="distance"></param>
+    /// <param name="r">圆半径</param>
+    /// <param name="distance">圆心距</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1603,8 +1603,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="distance"></param>
+    /// <param name="r">圆半径</param>
+    /// <param name="distance">圆心距</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderVesica(Vector2 pos, Vector2 percentOrigin, float r, float distance, Color background, Matrix matrix)
@@ -1617,8 +1617,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
-    /// <param name="distance"></param>
+    /// <param name="r">圆半径</param>
+    /// <param name="distance">圆心距</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1666,9 +1666,9 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个正交鱼鳔，有边框
     /// </summary>
-    /// <param name="pos1"></param>
-    /// <param name="pos2"></param>
-    /// <param name="r"></param>
+    /// <param name="pos1">第一个圆位置</param>
+    /// <param name="pos2">第二个圆位置</param>
+    /// <param name="r">圆半径</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1682,9 +1682,9 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个正交鱼鳔，无边框
     /// </summary>
-    /// <param name="pos1"></param>
-    /// <param name="pos2"></param>
-    /// <param name="r"></param>
+    /// <param name="pos1">第一个圆位置</param>
+    /// <param name="pos2">第二个圆位置</param>
+    /// <param name="r">圆半径</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderOrientedVesica(Vector2 pos1, Vector2 pos2, float r, Color background, Matrix matrix)
@@ -1695,9 +1695,9 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个正交鱼鳔，根据距离场使用采样色条染色
     /// </summary>
-    /// <param name="pos1"></param>
-    /// <param name="pos2"></param>
-    /// <param name="r"></param>
+    /// <param name="pos1">第一个圆位置</param>
+    /// <param name="pos2">第二个圆位置</param>
+    /// <param name="r">圆半径</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1734,9 +1734,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r1"></param>
-    /// <param name="r2"></param>
-    /// <param name="x"></param>
+    /// <param name="r1">底圆半径</param>
+    /// <param name="r2">切除圆半径</param>
+    /// <param name="x">切除圆的圆心横坐标</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1753,9 +1753,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r1"></param>
-    /// <param name="r2"></param>
-    /// <param name="x"></param>
+    /// <param name="r1">底圆半径</param>
+    /// <param name="r2">切除圆半径</param>
+    /// <param name="x">切除圆的圆心横坐标</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderMoon(Vector2 pos, Vector2 percentOrigin, float r1, float r2, float x, Color background, Matrix matrix)
@@ -1768,9 +1768,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r1"></param>
-    /// <param name="r2"></param>
-    /// <param name="x"></param>
+    /// <param name="r1">底圆半径</param>
+    /// <param name="r2">切除圆半径</param>
+    /// <param name="x">切除圆的圆心横坐标</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1802,8 +1802,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="baseSize"></param>
-    /// <param name="r"></param>
+    /// <param name="baseSize">基准大小</param>
+    /// <param name="r">曲边圆半径</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1819,8 +1819,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="baseSize"></param>
-    /// <param name="r"></param>
+    /// <param name="baseSize">基准大小</param>
+    /// <param name="r">曲边圆半径</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderCircleCross(Vector2 pos, Vector2 percentOrigin, Vector2 baseSize, float r, Color background, Matrix matrix)
@@ -1833,8 +1833,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="baseSize"></param>
-    /// <param name="r"></param>
+    /// <param name="baseSize">基准大小</param>
+    /// <param name="r">曲边圆半径</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1866,9 +1866,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="ra"></param>
-    /// <param name="rb"></param>
-    /// <param name="height"></param>
+    /// <param name="ra">上圆半径</param>
+    /// <param name="rb">下圆半径</param>
+    /// <param name="height">圆心距</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1884,9 +1884,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="ra"></param>
-    /// <param name="rb"></param>
-    /// <param name="height"></param>
+    /// <param name="ra">上圆半径</param>
+    /// <param name="rb">下圆半径</param>
+    /// <param name="height">圆心距</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderEgg(Vector2 pos, Vector2 percentOrigin, float ra, float rb, float height, Color background, Matrix matrix)
@@ -1899,9 +1899,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="ra"></param>
-    /// <param name="rb"></param>
-    /// <param name="height"></param>
+    /// <param name="ra">上圆半径</param>
+    /// <param name="rb">下圆半径</param>
+    /// <param name="height">圆心距</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1932,7 +1932,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="sizeX"></param>
+    /// <param name="sizeX">宽度</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -1948,7 +1948,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="sizeX"></param>
+    /// <param name="sizeX">宽度</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderHeart(Vector2 pos, Vector2 percentOrigin, float sizeX, Color background, Matrix matrix)
@@ -1961,7 +1961,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="sizeX"></param>
+    /// <param name="sizeX">宽度</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -1994,9 +1994,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="d"></param>
-    /// <param name="c"></param>
-    /// <param name="r"></param>
+    /// <param name="d">基准大小，在拐角圆不相交时大小为2 * (d - r)，否则取拐角圆交出的星形作大小</param>
+    /// <param name="c">十字拐点处圆心横纵坐标</param>
+    /// <param name="r">小于零时为圆角半径，大于时为拐角圆半径</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2012,9 +2012,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="d"></param>
-    /// <param name="c"></param>
-    /// <param name="r"></param>
+    /// <param name="d">基准大小，在拐角圆不相交时大小为2 * (d - r)，否则取拐角圆交出的星形作大小</param>
+    /// <param name="c">十字拐点处圆心横纵坐标</param>
+    /// <param name="r">小于零时为圆角半径，大于时为拐角圆半径</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderPlus(Vector2 pos, Vector2 percentOrigin, float d, float c, float r, Color background, Matrix matrix)
@@ -2027,9 +2027,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="d"></param>
-    /// <param name="c"></param>
-    /// <param name="r"></param>
+    /// <param name="d">基准大小，在拐角圆不相交时大小为2 * (d - r)，否则取拐角圆交出的星形作大小</param>
+    /// <param name="c">十字拐点处圆心横纵坐标</param>
+    /// <param name="r">小于零时为圆角半径，大于时为拐角圆半径</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2065,8 +2065,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="width"></param>
-    /// <param name="round"></param>
+    /// <param name="width">线宽</param>
+    /// <param name="round">圆角半径</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2082,8 +2082,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="width"></param>
-    /// <param name="round"></param>
+    /// <param name="width">线宽</param>
+    /// <param name="round">圆角半径</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderCross(Vector2 pos, Vector2 percentOrigin, float width, float round, Color background, Matrix matrix)
@@ -2096,8 +2096,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="width"></param>
-    /// <param name="round"></param>
+    /// <param name="width">线宽</param>
+    /// <param name="round">圆角半径</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2139,7 +2139,7 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个多边形，有边框
     /// </summary>
-    /// <param name="vecs"></param>
+    /// <param name="vecs">多边形顶点坐标</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2153,7 +2153,7 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个多边形，无边框
     /// </summary>
-    /// <param name="vecs"></param>
+    /// <param name="vecs">多边形顶点坐标</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderPolygon(IEnumerable<Vector2> vecs, Color background, Matrix matrix)
@@ -2164,7 +2164,7 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个多边形，根据距离场使用采样色条染色
     /// </summary>
-    /// <param name="vecs"></param>
+    /// <param name="vecs">多边形顶点坐标</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2177,8 +2177,8 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个多边形，有边框
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="offsets"></param>
+    /// <param name="position">多边形基准点坐标</param>
+    /// <param name="offsets">相对与基准点的偏移顶点坐标</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2188,8 +2188,8 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个多边形，无边框
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="offsets"></param>
+    /// <param name="position">多边形基准点坐标</param>
+    /// <param name="offsets">相对与基准点的偏移顶点坐标</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderPolygon(Vector2 position, IEnumerable<Vector2> offsets, Color background, Matrix matrix)
@@ -2197,8 +2197,8 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个多边形，根据距离场使用采样色条染色
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="offsets"></param>
+    /// <param name="position">多边形基准点坐标</param>
+    /// <param name="offsets">相对与基准点的偏移顶点坐标</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2208,9 +2208,9 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个多边形，有边框
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="unit"></param>
-    /// <param name="percents"></param>
+    /// <param name="position">多边形基准点坐标</param>
+    /// <param name="unit">单位偏移量</param>
+    /// <param name="percents">基准点的偏移顶点系数</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2220,9 +2220,9 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个多边形，无边框
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="unit"></param>
-    /// <param name="percents"></param>
+    /// <param name="position">多边形基准点坐标</param>
+    /// <param name="unit">单位偏移量</param>
+    /// <param name="percents">基准点的偏移顶点系数</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderPolygon(Vector2 position, Vector2 unit, IEnumerable<Vector2> percents, Color background, Matrix matrix)
@@ -2230,9 +2230,9 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个多边形，根据距离场使用采样色条染色
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="unit"></param>
-    /// <param name="percents"></param>
+    /// <param name="position">多边形基准点坐标</param>
+    /// <param name="unit">单位偏移量</param>
+    /// <param name="percents">基准点的偏移顶点系数</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2260,7 +2260,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
+    /// <param name="r">半长轴半短轴</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2276,7 +2276,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
+    /// <param name="r">半长轴半短轴</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderEllipse(Vector2 pos, Vector2 percentOrigin, Vector2 r, Color background, Matrix matrix)
@@ -2289,7 +2289,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
+    /// <param name="r">半长轴半短轴</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2381,7 +2381,7 @@ public static partial class SDFGraphics
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
     /// <param name="size">大小</param>
-    /// <param name="height"></param>
+    /// <param name="height">线段所占高度</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2398,7 +2398,7 @@ public static partial class SDFGraphics
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
     /// <param name="size">大小</param>
-    /// <param name="height"></param>
+    /// <param name="height">线段所占高度</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderParabolaSegment(Vector2 pos, Vector2 percentOrigin, Vector2 size, float height, Color background, Matrix matrix)
@@ -2412,7 +2412,7 @@ public static partial class SDFGraphics
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
     /// <param name="size">大小</param>
-    /// <param name="height"></param>
+    /// <param name="height">线段所占高度</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2466,10 +2466,10 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个二阶贝塞尔曲线，有边框
     /// </summary>
-    /// <param name="start"></param>
-    /// <param name="control"></param>
-    /// <param name="end"></param>
-    /// <param name="width"></param>
+    /// <param name="start">起点</param>
+    /// <param name="control">控制点</param>
+    /// <param name="end">终点</param>
+    /// <param name="width">线宽</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2483,10 +2483,10 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个二阶贝塞尔曲线，无边框
     /// </summary>
-    /// <param name="start"></param>
-    /// <param name="control"></param>
-    /// <param name="end"></param>
-    /// <param name="width"></param>
+    /// <param name="start">起点</param>
+    /// <param name="control">控制点</param>
+    /// <param name="end">终点</param>
+    /// <param name="width">线宽</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderQuadraticBezier(Vector2 start, Vector2 control, Vector2 end, float width, Color background, Matrix matrix)
@@ -2497,10 +2497,10 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个二阶贝塞尔曲线，根据距离场使用采样色条染色
     /// </summary>
-    /// <param name="start"></param>
-    /// <param name="control"></param>
-    /// <param name="end"></param>
-    /// <param name="width"></param>
+    /// <param name="start">起点</param>
+    /// <param name="control">控制点</param>
+    /// <param name="end">终点</param>
+    /// <param name="width">线宽</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2542,9 +2542,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="s"></param>
-    /// <param name="k"></param>
-    /// <param name="r"></param>
+    /// <param name="s">基准半边长</param>
+    /// <param name="k">控制点坐标参量<br>起点(s,0)，终点(0,s)，控制点横纵坐标s * (0.5 - sqrt(2) * k )</br><br>实际由四段抛物线段拼合，再圆角处理</br></param>
+    /// <param name="r">圆角半径</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2560,9 +2560,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="s"></param>
-    /// <param name="k"></param>
-    /// <param name="r"></param>
+    /// <param name="s">基准半边长</param>
+    /// <param name="k">控制点坐标参量<br>起点(s,0)，终点(0,s)，控制点横纵坐标s * (0.5 - sqrt(2) * k )</br><br>实际由四段抛物线段拼合，再圆角处理</br></param>
+    /// <param name="r">圆角半径</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderBlobbyCross(Vector2 pos, Vector2 percentOrigin, float s, float k, float r, Color background, Matrix matrix)
@@ -2575,9 +2575,9 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="s"></param>
-    /// <param name="k"></param>
-    /// <param name="r"></param>
+    /// <param name="s">基准半边长</param>
+    /// <param name="k">控制点坐标参量<br>起点(s,0)，终点(0,s)，控制点横纵坐标s * (0.5 - sqrt(2) * k )</br><br>实际由四段抛物线段拼合，再圆角处理</br></param>
+    /// <param name="r">圆角半径</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2607,7 +2607,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="wh"></param>
+    /// <param name="wh">半圆半径和矩形高</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2623,7 +2623,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="wh"></param>
+    /// <param name="wh">半圆半径和矩形高</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderTunnel(Vector2 pos, Vector2 percentOrigin, Vector2 wh, Color background, Matrix matrix)
@@ -2636,7 +2636,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="wh"></param>
+    /// <param name="wh">半圆半径和矩形高</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2668,8 +2668,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="unit"></param>
-    /// <param name="count"></param>
+    /// <param name="unit">单级步长</param>
+    /// <param name="count">阶数</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2685,8 +2685,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="unit"></param>
-    /// <param name="count"></param>
+    /// <param name="unit">单级步长</param>
+    /// <param name="count">阶数</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderStairs(Vector2 pos, Vector2 percentOrigin, Vector2 unit, float count, Color background, Matrix matrix)
@@ -2699,8 +2699,8 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="unit"></param>
-    /// <param name="count"></param>
+    /// <param name="unit">单级步长</param>
+    /// <param name="count">阶数</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2729,7 +2729,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
+    /// <param name="r">半径</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2745,7 +2745,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
+    /// <param name="r">半径</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderQuadraticCircle(Vector2 pos, Vector2 percentOrigin, float r, Color background, Matrix matrix)
@@ -2758,7 +2758,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="r"></param>
+    /// <param name="r">半径</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2850,7 +2850,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="height"></param>
+    /// <param name="height">高度</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2866,7 +2866,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="height"></param>
+    /// <param name="height">高度</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderCoolS(Vector2 pos, Vector2 percentOrigin, float height, Color background, Matrix matrix)
@@ -2879,7 +2879,7 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="height"></param>
+    /// <param name="height">高度</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -2916,10 +2916,10 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="width"></param>
-    /// <param name="k"></param>
-    /// <param name="r"></param>
-    /// <param name="lineWidth"></param>
+    /// <param name="width">绘制宽度</param>
+    /// <param name="k">圆心角占5/6整圆的比例，从0到1</param>
+    /// <param name="r">半径</param>
+    /// <param name="lineWidth">线宽</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -2935,10 +2935,10 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="width"></param>
-    /// <param name="k"></param>
-    /// <param name="r"></param>
-    /// <param name="lineWidth"></param>
+    /// <param name="width">绘制宽度</param>
+    /// <param name="k">圆心角占5/6整圆的比例，从0到1</param>
+    /// <param name="r">半径</param>
+    /// <param name="lineWidth">线宽</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderCircleWave(Vector2 pos, Vector2 percentOrigin, float width, float k, float r, float lineWidth, Color background, Matrix matrix)
@@ -2951,10 +2951,10 @@ public static partial class SDFGraphics
     /// </summary>
     /// <param name="pos">锚点位置</param>
     /// <param name="percentOrigin">相对中心位置<br>0到1从左上到右下</br></param>
-    /// <param name="width"></param>
-    /// <param name="k"></param>
-    /// <param name="r"></param>
-    /// <param name="lineWidth"></param>
+    /// <param name="width">绘制宽度</param>
+    /// <param name="k">圆心角占5/6整圆的比例，从0到1</param>
+    /// <param name="r">半径</param>
+    /// <param name="lineWidth">线宽</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -3011,7 +3011,7 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个连段二阶贝塞尔曲线，有边框
     /// </summary>
-    /// <param name="vecs"></param>
+    /// <param name="vecs">点列</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -3025,7 +3025,7 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个连段二阶贝塞尔曲线，无边框
     /// </summary>
-    /// <param name="vecs"></param>
+    /// <param name="vecs">点列</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderChainedQuadraticBezier(IEnumerable<Vector2> vecs, Color background, Matrix matrix)
@@ -3036,7 +3036,7 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个连段二阶贝塞尔曲线，根据距离场使用采样色条染色
     /// </summary>
-    /// <param name="vecs"></param>
+    /// <param name="vecs">点列</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -3049,8 +3049,8 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个连段二阶贝塞尔曲线，有边框
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="offsets"></param>
+    /// <param name="position">基准点坐标</param>
+    /// <param name="offsets">偏移点列</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -3060,8 +3060,8 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个连段二阶贝塞尔曲线，无边框
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="offsets"></param>
+    /// <param name="position">基准点坐标</param>
+    /// <param name="offsets">偏移点列</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderChainedQuadraticBezier(Vector2 position, IEnumerable<Vector2> offsets, Color background, Matrix matrix)
@@ -3069,8 +3069,8 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个连段二阶贝塞尔曲线，根据距离场使用采样色条染色
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="offsets"></param>
+    /// <param name="position">基准点坐标</param>
+    /// <param name="offsets">偏移点列</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>
@@ -3080,9 +3080,9 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个连段二阶贝塞尔曲线，有边框
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="unit"></param>
-    /// <param name="percents"></param>
+    /// <param name="position">基准点坐标</param>
+    /// <param name="unit">单位偏移量</param>
+    /// <param name="percents">基准点的偏移顶点系数</param>
     /// <param name="background">背景色</param>
     /// <param name="border">边界宽度</param>
     /// <param name="borderColor">边界颜色</param>
@@ -3092,9 +3092,9 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个连段二阶贝塞尔曲线，无边框
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="unit"></param>
-    /// <param name="percents"></param>
+    /// <param name="position">基准点坐标</param>
+    /// <param name="unit">单位偏移量</param>
+    /// <param name="percents">基准点的偏移顶点系数</param>
     /// <param name="background">背景色</param>
     /// <param name="matrix">视角矩阵<br>使用<see cref="GetMatrix(bool)"/>来获取UI层(true)或者世界层(false)矩阵</br></param>
     public static void NoBorderChainedQuadraticBezier(Vector2 position, Vector2 unit, IEnumerable<Vector2> percents, Color background, Matrix matrix)
@@ -3102,9 +3102,9 @@ public static partial class SDFGraphics
     /// <summary>
     /// 绘制一个连段二阶贝塞尔曲线，根据距离场使用采样色条染色
     /// </summary>
-    /// <param name="position"></param>
-    /// <param name="unit"></param>
-    /// <param name="percents"></param>
+    /// <param name="position">基准点坐标</param>
+    /// <param name="unit">单位偏移量</param>
+    /// <param name="percents">基准点的偏移顶点系数</param>
     /// <param name="barTexture">采样色条</param>
     /// <param name="time">时间偏移量</param>
     /// <param name="distanceScaler">距离系数</param>

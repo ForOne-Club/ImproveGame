@@ -17,15 +17,21 @@ public class CountRefreshRate : ModSystem
     {
         // 使用IL而不是On插入代码，这样的话如果哪个Mod把DoDraw炸了，报错里不会显示我们的信息，不会有人找上门来
         // 原先的实现是在ModifyInterfaceLayers里执行下面的代码，但是那个方法在游戏主界面不会运行，配置中心的界面使用UpdateHighFps就会出问题
-        IL_Main.DoDraw += il =>
-        {
-            var c = new ILCursor(il);
+        IL_Main.DoDraw += IL_EmitRefreshRate;
+    }
+    static void IL_EmitRefreshRate(ILContext il) 
+    {
+        var c = new ILCursor(il);
 
-            c.EmitDelegate(() =>
-            {
-                CurrentRefreshRateFactor = GetRefreshRateFactor(RefreshRateStopwatch);
-                CurrentRefreshRateFactor = MathHelper.Clamp(CurrentRefreshRateFactor, 0.1f, 10f);
-            });
-        };
+        c.EmitDelegate(() =>
+        {
+            CurrentRefreshRateFactor = GetRefreshRateFactor(RefreshRateStopwatch);
+            CurrentRefreshRateFactor = MathHelper.Clamp(CurrentRefreshRateFactor, 0.1f, 10f);
+        });
+    }
+    public override void Unload()
+    {
+        IL_Main.DoDraw -= IL_EmitRefreshRate;
+        base.Unload();
     }
 }

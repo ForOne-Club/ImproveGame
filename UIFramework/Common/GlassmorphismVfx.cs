@@ -128,6 +128,7 @@ public class GlassmorphismVfx : ModSystem
             GlassCovers = null;
             ModernConfigUI.Glass = null;
         });
+        IL_Main.DoDraw -= RenderGlassmorphismVfx_ILEmit;
     }
 
     public override void PostSetupContent()
