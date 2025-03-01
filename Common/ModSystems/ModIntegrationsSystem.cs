@@ -11,7 +11,6 @@ using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Packets;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UI.PlayerStats;
-using MechTransfer.ContainerAdapters;
 using System.Reflection;
 using Terraria.DataStructures;
 using TEAutofisher = ImproveGame.Content.Tiles.TEAutofisher;
@@ -97,13 +96,9 @@ public class ModIntegrationsSystem : ModSystem
         DoDialogueTweakIntegration();
         DoModLoaderIntegration();
         DoShopLookupIntegration();
+        DoMechTransferIntegration();
         NoLakeSizePenaltyLoaded = ModLoader.HasMod("NoLakeSizePenalty");
         WMITFLoaded = ModLoader.HasMod("WMITF");
-        if (ModLoader.TryGetMod("MechTransfer", out var mechTansfer)) 
-        {
-            AutoFisherAdapter adapter = new AutoFisherAdapter();
-            mechTansfer.Call("RegisterAdapterReflection", adapter, new int[] { ModContent.TileType<Content.Tiles.Autofisher>() });
-        }
     }
 
     private static void DoRecipeBrowserIntegration()
@@ -259,6 +254,16 @@ public class ModIntegrationsSystem : ModSystem
             return;
 
         UnloadedItemType = modloader.Find<ModItem>("UnloadedItem").Type;
+    }
+
+    private static void DoMechTransferIntegration() 
+    {
+        if (!ModLoader.TryGetMod("MechTransfer", out Mod mechTansfer))
+        {
+            return;
+        }
+        AutoFisherAdapter adapter = new AutoFisherAdapter();
+        mechTansfer.Call("RegisterAdapterReflection", adapter, new int[] { ModContent.TileType<Content.Tiles.Autofisher>() });
     }
 
     private static void AddCraftStationIntegration(Mod mod, string itemName, List<int> tileIDs)
@@ -515,132 +520,93 @@ public class ModIntegrationsSystem : ModSystem
                     // 获取钓鱼机物品
                     case "GetFisherItems":
                         {
-                            // Item[]? Call(string, Point16)
-                            // or Item[]? Call(string, int, int);
+                            // Item[] Call(string, Point16)
+                            // or Item[] Call(string, AutoFisher)
+                            // or Item[] Call(string, int, int);
                             Point16 location = default;
+                            TEAutofisher fisher = null;
+                            bool ok = false;
                             int argIndex = 1;
-                            if (args.Length < 3)
+                            object arg = args[argIndex++];
+                            if (arg is TEAutofisher autofisher)
                             {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
-                                    "expects at least 2 arguments but not.");
-                                return Array.Empty<Item>();
-                            }
-                            else if (args[argIndex++] is Point16 point)
-                            {
-                                location = point;
-                            }
-                            else if (args[argIndex++] is int x)
-                            {
-                                if (args.Length >= argIndex && args[argIndex++] is int y)
-                                {
-                                    location = new Point16(x, y);
-                                }
-                                else
-                                {
-                                    ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
-                                        "expects arg[2] as int but not.");
-                                    return Array.Empty<Item>();
-                                }
+                                fisher = autofisher;
+                                ok = true;
                             }
                             else
                             {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for GetFisherItems: " +
-                                    "expects arg[1] as Point16 or int but not.");
-                                return new();
+                                if (arg is Point16 point)
+                                {
+                                    location = point;
+                                }
+                                else if (arg is int x && args[argIndex] is int y)
+                                {
+                                    location = new Point16(x, y);
+                                    ok = true;
+                                }
+                                if (ok)
+                                {
+                                    fisher = TileEntity.ByPosition[location] as TEAutofisher;
+                                    ok = fisher != null;
+                                }
                             }
-
-                            TEAutofisher fisher = TileEntity.ByPosition.
-                                TryGetValue(location, out var entity)
-                                ? entity as TEAutofisher
-                                : null;
-                            if (fisher is null)
+                            if (ok)
                             {
-                                ImproveGame.Instance.Logger.Error
-                                    ("Invalid arguments for GetFisherItems: " +
-                                    "expects a valid autofisher but not.");
-                                return Array.Empty<Item>();
+                                Item[] items = [.. fisher.fish, fisher.fishingPole, fisher.bait, fisher.accessory];
+                                return items;
                             }
-
-                            Item[] items = [..fisher.fish, fisher.fishingPole, fisher.bait, fisher.accessory];
-                            return items;
+                            return Array.Empty<Item>();
                         }
                     // 同步钓鱼机物品
                     case "SyncFisherItems":
                         {
                             // bool Call(string, Point16, int, int)
+                            // or bool Item[] Call(string, AutoFisher, int, int)
                             // or bool Call(string, int, int, int, int)
                             Point16 location = default;
-                            int argIndex = 1; 
-                            if (args.Length < 4)
+                            bool ok = false;
+                            int argIndex = 1;
+                            object arg = args[argIndex++];
+                            TEAutofisher fisher = null;
+                            if (arg is TEAutofisher autofisher)
                             {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
-                                    "expects at least 4 arguments but not.");
-                                return false;
-                            }
-                            else if (args[argIndex] is Point16 point)
-                            {
-                                location = point;
-                            }
-                            else if (args[argIndex] is int x)
-                            {
-                                argIndex++;
-                                if (args.Length >= argIndex && args[argIndex] is int y)
-                                {
-                                    location = new Point16(x, y);
-                                }
-                                else
-                                {
-                                    ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
-                                        "expects arg[2] as int but not.");
-                                    return false;
-                                }
+                                fisher = autofisher;
+                                ok = true;
                             }
                             else
                             {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
-                                    "expects arg[1] as Point16 or int but not.");
-                                return false;
+                                if (arg is Point16 point)
+                                {
+                                    location = point;
+                                }
+                                else if (arg is int x && args[argIndex] is int y)
+                                {
+                                    location = new Point16(x, y);
+                                    ok = true;
+                                }
+                                if (ok)
+                                {
+                                    fisher = TileEntity.ByPosition[location] as TEAutofisher;
+                                    ok = fisher != null;
+                                }
                             }
-
-                            TEAutofisher fisher = TileEntity.ByPosition.
-                                TryGetValue(location, out var entity)
-                                ? entity as TEAutofisher
-                                : null;
-                            if (fisher is null)
+                            if (ok)
                             {
-                                ImproveGame.Instance.Logger.Error
-                                    ("Invalid arguments for SyncFisherItems: " +
-                                    "expects a valid autofisher but not.");
-                                return false;
+                                fisher = TileEntity.ByPosition[location] as TEAutofisher;
+                                int index = (int)args[argIndex++];
+                                if (index is > 0 and < ItemSyncPacket.All)
+                                {
+                                    int amount = (int)args[argIndex];
+                                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                                    {
+                                        // TODO: Send packet when in multiplayer client
+                                        return false;
+                                    }
+                                    AutoFisherAdapter.SyncItem(fisher, (byte)index, amount);
+                                    return true;
+                                }
                             }
-                            argIndex++;
-                            if (args.Length == argIndex || args[argIndex] is not int index)
-                            {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
-                                    "expects a int slot index but not.");
-                                return false;
-                            }
-
-                            if (index < 0 || index >= ItemSyncPacket.All)
-                            {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
-                                    "expects a valid slot index but not.\n" +
-                                    $"[0..{ItemSyncPacket.Fishes + 1}] => Fishes, \n" +
-                                    $"{ItemSyncPacket.FishingPole} => FishingPole, \n" +
-                                    $"{ItemSyncPacket.Bait} => Bait, \n" +
-                                    $"{ItemSyncPacket.Accessory} => Accessory.\n");
-                                return new();
-                            }
-
-                            if(args.Length == argIndex || args[argIndex] is not int amount)
-                            {
-                                ImproveGame.Instance.Logger.Error("Invalid arguments for SyncFisherItems: " +
-                                    "expects a int amount but not.");
-                                return false;
-                            }
-
-                            AutoFisherAdapter.SyncItem(amount, fisher, (byte)index);
-                            return true;
+                            return false;
                         }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");

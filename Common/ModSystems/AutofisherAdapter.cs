@@ -5,15 +5,11 @@ using ImproveGame.UIFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 
-namespace MechTransfer.ContainerAdapters
+namespace ImproveGame.Common.ModSystems
 {
     public class AutoFisherAdapter
     {
@@ -39,7 +35,7 @@ namespace MechTransfer.ContainerAdapters
             {
                 item.stack -= amount;
             }
-            SyncItem(isAir ? 0 : -amount, teFisher, (byte)slotIndex);
+            SyncItem(teFisher, (byte)slotIndex, isAir ? 0 : -amount);
         }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
@@ -48,7 +44,6 @@ namespace MechTransfer.ContainerAdapters
             {
                 yield break;
             }
-            // maybe use reflection?
             Item[] fishes = teFisher.fish;
             int bassExists = 0;
 
@@ -97,15 +92,15 @@ namespace MechTransfer.ContainerAdapters
                     fromAir = true;
                 }
             }
-            if(fromAir is bool air)
+            if (fromAir is bool air)
             {
-                SyncItem(air ? 0 : 1, teFisher, ItemSyncPacket.Bait);
+                SyncItem(teFisher, ItemSyncPacket.Bait, air ? 0 : 1);
             }
 
             return fromAir.HasValue;
         }
 
-        public static bool TryGetTEAutofisher(int x, int y, out TEAutofisher teFisher)
+        internal static bool TryGetTEAutofisher(int x, int y, out TEAutofisher teFisher)
         {
 
             Tile tile = Main.tile[x, y];
@@ -136,7 +131,13 @@ namespace MechTransfer.ContainerAdapters
             return true;
         }
 
-        public static void SyncItem(int amount, TEAutofisher fisher , byte slotIndex)
+        /// <summary>
+        /// 同步钓鱼机的指定物品
+        /// </summary>
+        /// <param name="fisher">钓鱼机TE实例</param>
+        /// <param name="slotIndex">物品栏位，具体栏位参考<see cref="ItemSyncPacket"/></param>
+        /// /// <param name="amount">物品变动数量，若为0则同步整个物品</param>
+        internal static void SyncItem(TEAutofisher fisher, byte slotIndex, int amount)
         {
             if (Main.netMode is NetmodeID.Server)
             {
@@ -158,12 +159,13 @@ namespace MechTransfer.ContainerAdapters
                     }
                 }
 
-
-                if (Main.netMode == NetmodeID.SinglePlayer)
-                {
-                    UISystem.Instance.AutofisherGUI?.RefreshItems();
-                }
             }
+
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                UISystem.Instance.AutofisherGUI?.RefreshItems();
+            }
+        }
         }
     }
 }
