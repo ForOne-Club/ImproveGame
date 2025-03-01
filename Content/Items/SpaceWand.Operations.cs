@@ -39,11 +39,13 @@ public partial class SpaceWand
         }
         else
         {
-            if (Main.tile[x, y].HasTile)
+            Tile originalTile = Main.tile[x, y];
+
+            if (originalTile.HasTile)
             {
                 WorldGen.SlopeTile(x, y, noEffects: true);
                 // 同种类，设置个斜坡就走
-                if (Main.tile[x, y].TileType == item.createTile)
+                if (originalTile.TileType == item.createTile)
                 {
                     SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
                 }
@@ -57,6 +59,10 @@ public partial class SpaceWand
                         SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
                         return;
                     }
+
+                    // 如果放的是绳子，且试图替换的是平台/铁轨，那就不放（笑点解析：绳子和平台/铁轨相交原理是判断上下有没有绳子，本身还是平台/铁轨）
+                    if (placeType == PlaceType.Rope && (TileID.Sets.Platforms[originalTile.TileType] || originalTile.TileType == TileID.MinecartTrack))
+                        return;
 
                     // 有没有足够强大的镐子破坏瓷砖
                     if (!player.HasEnoughPickPowerToHurtTile(x, y))
@@ -74,7 +80,7 @@ public partial class SpaceWand
                     {
                         // 尝试破坏
                         TryKillTile(x, y, player);
-                        if (!Main.tile[x, y].HasTile && WorldGen.PlaceTile(x, y, item.createTile, true, true,
+                        if (!originalTile.HasTile && WorldGen.PlaceTile(x, y, item.createTile, true, true,
                                 player.whoAmI, item.placeStyle))
                         {
                             playSound = true;

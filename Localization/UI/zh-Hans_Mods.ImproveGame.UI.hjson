@@ -395,13 +395,24 @@ OpenBag: {
 QuickShimmer: {
 	Title: 快速微光
 	TipText: 转换好的物品将暂存在此处
-	Open: 全部转换
+	Open: 开始转化
 	Stop: 停止
 	EmptyText: 微光嬗变
 	NotFullyDisplayed: 此外，还有{0}个物品被隐藏
 	CoinLuck: 已转换为{0}点钱币幸运
 	AlreadyUnlocked: 该世界已经解锁了快速微光
 	Unlocked: 快速微光已解锁！请在总控页面打开
+
+	AutoStart: {
+		Label: 自动开始
+		Tooltip: 使得放入栏位的物品自动开始转化，无需手动点击开始按钮
+	}
+
+	ReallyQuick: {
+		Label: 瞬间完成
+		Tooltip: 使得转化过程瞬间完成，无需等待
+	}
+
 	Locked:
 		'''
 		使用 [i:ImproveGame/ShellShipInBottle_Shimmered] {$Mods.ImproveGame.Items.ShellShipInBottle_Shimmered.DisplayName} 以解锁快速微光
