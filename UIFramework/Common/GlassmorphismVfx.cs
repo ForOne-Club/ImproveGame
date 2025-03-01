@@ -76,9 +76,9 @@ public class GlassmorphismVfx : ModSystem
 
 
         //找到DrawMenu之前，我们要在这里先进行毛玻璃的生成
-        if (!cursor.TryGotoNext(i => i.MatchCallOrCallvirt(typeof(Main).GetMethod(nameof(Main.DrawMenu), BindingFlags.NonPublic | BindingFlags.Instance))))
+        if (!cursor.TryGotoNext(i => i.MatchCallOrCallvirt(typeof(Main).GetMethod(nameof(Main.PreDrawMenu), BindingFlags.NonPublic | BindingFlags.Instance))))
             return;
-        cursor.Index -= 2;
+        cursor.Index++;
         cursor.EmitLdloc(11);//这个是一个bool值，表示当前是否开启了屏幕捕获
         cursor.EmitDelegate<Action<bool>>(flag =>
         {
@@ -173,11 +173,7 @@ public class GlassmorphismVfx : ModSystem
         var batch = Main.spriteBatch;
         device.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
 
-        var needReBegin = batch.beginCalled;
         var captureScreen = device.GetRenderTargets().Length > 0;
-        if (needReBegin)
-            batch.End();
-
         // “保存”原来的Rt2d
         device.SetRenderTarget(Main.screenTargetSwap);
         device.Clear(Color.Black);
@@ -213,9 +209,6 @@ public class GlassmorphismVfx : ModSystem
         }
         else
             device.SetRenderTarget(null);
-
-        if (needReBegin)
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
     }
 
     public void ApplyGaussBlur(RenderTarget2D target)

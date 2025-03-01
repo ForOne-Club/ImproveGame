@@ -172,7 +172,7 @@ int QRoot(float2 p, float2 A, float2 B, float2 C)
 
 }
 //下面这些函数负责形形
-float Circle(float2 p) //圆
+float Round(float2 p) //圆
 {
 	return length(p - uSizeOver2) - uSizeOver2.x + uInnerShrinkage;
 }
@@ -205,7 +205,7 @@ float OrientedBox(float2 p) //倾斜矩形-需要指定 uStart|uEnd-起终点 �
 	q = abs(q) - float2(l, th) * 0.5;
 	return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0);
 }
-float Segment(float2 p) //线段-需要指定 uStart|uEnd-起终点 以及 uLineWidth-线宽
+float Line(float2 p) //线段-需要指定 uStart|uEnd-起终点 以及 uLineWidth-线宽
 {
 	float2 a = uStart;
 	float2 b = uEnd;
@@ -915,11 +915,11 @@ float4 GetBarColor(float distance)
 	return lerp(color, 0, smoothstep(uTransition.x, uTransition.y, distance));
 }
 
-DEFINE_FUNCTION(Circle)
+DEFINE_FUNCTION(Round)
 DEFINE_FUNCTION(RoundedBox)
 DEFINE_FUNCTION(Box)
 DEFINE_FUNCTION(OrientedBox)
-DEFINE_FUNCTION(Segment)
+DEFINE_FUNCTION(Line)
 DEFINE_FUNCTION(Rhombus)
 DEFINE_FUNCTION(Trapezoid)
 DEFINE_FUNCTION(Parallelogram)
@@ -962,11 +962,11 @@ DEFINE_FUNCTION(CircleWave)
 DEFINE_FUNCTION(ChainedQuadraticBezier)
 technique Technique1
 {
-	DEFINE_PASS(Circle)
+	DEFINE_PASS(Round)
 	DEFINE_PASS(RoundedBox)
 	DEFINE_PASS(Box)
 	DEFINE_PASS(OrientedBox)
-	DEFINE_PASS(Segment)
+	DEFINE_PASS(Line)
 	DEFINE_PASS(Rhombus)
 	DEFINE_PASS(Trapezoid)
 	DEFINE_PASS(Parallelogram)

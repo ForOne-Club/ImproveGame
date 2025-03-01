@@ -24,8 +24,10 @@ public class OptionDefinition : ModernConfigOption
     PropertyInfo optionProperty;
     PropertyInfo filterModProperty;
     PropertyInfo filterNameProperty;
-
     FieldInfo leftClickEvtInfo;
+
+    PropertyInfo tooltipProperty;
+    MethodInfo setItemMethod;
 
     float showMaxHeight;
     bool SelectionExpanded;
@@ -140,6 +142,9 @@ public class OptionDefinition : ModernConfigOption
 
         tweakDefinitionMethod.Invoke(ElementInstance, [OptionChoice]);
         Append(OptionChoice);
+
+        setItemMethod = OptionChoice.GetType().GetMethod("SetItem", BindingFlags.Instance | BindingFlags.Public);
+        tooltipProperty = OptionChoice.GetType().GetProperty("Tooltip", BindingFlags.Instance | BindingFlags.Public);
 
         OptionChoice.Top.Set(OptionChoice.Top.Pixels + 2, 0f);
 
@@ -281,7 +286,7 @@ public class OptionDefinition : ModernConfigOption
                     SetValueDirect(prop.GetValue(p));
                     UpdateNeeded = true;
                     SelectionExpanded = false;
-                    OptionChoice.GetType().GetMethod("SetItem", BindingFlags.Instance | BindingFlags.Public).Invoke(OptionChoice, [GetValue()]);
+                    setItemMethod?.Invoke(OptionChoice, [GetValue()]);
                 };
             }
         }
@@ -340,14 +345,26 @@ public class OptionDefinition : ModernConfigOption
     {
         InModernConfig = true;
         base.DrawChildren(spriteBatch);
+        if (OptionChoice.IsMouseHovering)
+            UICommon.TooltipMouseText(tooltipProperty.GetValue(OptionChoice).ToString());
+        else
+            foreach (var elem in OptionView.ListView.Elements)
+                foreach (var optionItem in elem.Elements)
+                    if (optionItem.IsMouseHovering)
+                    {
+                        UICommon.TooltipMouseText(tooltipProperty.GetValue(optionItem.Elements[0]).ToString());
+                        break;
+                    }
         InModernConfig = false;
     }
     protected override void OnSetValueExternal(object value)
     {
         UpdateNeeded = true;
         SelectionExpanded = false;
-        OptionChoice.GetType().GetMethod("SetItem", BindingFlags.Instance | BindingFlags.Public).Invoke(OptionChoice, [GetValue()]);
+        setItemMethod.Invoke(OptionChoice, [GetValue()]);
     }
+
+    public override string Label => base.Label + ":" + tooltipProperty?.GetValue(OptionChoice).ToString() ?? "";
 }
 public class DefinitionSUIDetour : ILoadable
 {
@@ -377,7 +394,7 @@ public class DefinitionSUIDetour : ILoadable
         {
             if (OptionDefinition.InModernConfig)
             {
-            SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, true);
+                SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, true);
 
                 return true;
             }

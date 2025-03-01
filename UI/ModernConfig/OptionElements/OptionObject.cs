@@ -284,7 +284,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             Parent?.Height.Set(h, 0f);
             base.Recalculate();
         }
-        protected float showMaxHeight = 360;
+        protected float showMaxHeight = 3600;
         float oldHeight;
         Vector2 mousePos;
         bool dragging;
