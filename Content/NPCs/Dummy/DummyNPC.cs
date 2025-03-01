@@ -177,14 +177,19 @@ public class DummyNPC : ModNPC
         npc.SetBaseValues(56, 74, Config.LifeMax, false,
             value: 0, damage: Config.Damage, defense: Config.Defense);
         npc.HitSound = SoundID.NPCHit1;
-        if (Config.AIStyle != DummyConfig.AIType.SelfDefine)
-            npc.aiStyle = (int)Config.AIStyle;
+
+        if (Config.AIStyle == DummyConfig.AIType.SelfDefine)
+        {
+            if (MyUtils.Config.DummyCustomAIStyleAllowed)
+                npc.aiStyle = Config.customAIStyle;
+            else
+            {
+                Config.AIStyle = DummyConfig.AIType.Default;
+                npc.aiStyle = -1;
+            }
+        }
         else
-            npc.aiStyle = Config.customAIStyle;
-        //if (ModContent.TryFind("FargowiltasSouls", "ClippedWingsBuff", out ModBuff buff)) 
-        //{
-        //    npc.buffImmune[buff.Type] = true;
-        //}
+            npc.aiStyle = (int)Config.AIStyle;
         DummyDPS.Parent = this;
     }
     public override void SendExtraAI(BinaryWriter writer)
@@ -218,6 +223,18 @@ public class DummyNPC : ModNPC
         npc.noTileCollide = Config.NoTileCollide;
         npc.knockBackResist = Config.KnockBackResist;
 
+        if (Config.AIStyle == DummyConfig.AIType.SelfDefine) 
+        {
+            if (MyUtils.Config.DummyCustomAIStyleAllowed)
+                npc.aiStyle = Config.customAIStyle;
+            else 
+            {
+                Config.AIStyle = DummyConfig.AIType.Default;
+                npc.aiStyle = -1;
+            }
+        }
+        else
+            npc.aiStyle = (int)Config.AIStyle;
         DummyDPS.Update();
     }
     public void Disappear()
@@ -318,8 +335,11 @@ public class DummyNPC : ModNPC
 
         if (Config.ShowBox)
         {
-            SDFRectangle.HasBorder(position, npc.Size,
-                new(0f), Color.Transparent, 2f, Color.White, false);
+            //SDFRectangle.HasBorder(position, npc.Size, new(0f), Color.Transparent, 2f, Color.White, false);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 0)-Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 1)-Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(0, .5f)-Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(1, .5f)-Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
         }
 
         sb.Draw(texture2D, position + fSize / 2f,

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Terraria.GameInput;
 using System.Reflection;
 using Terraria.GameContent.UI.Elements;
+using ImproveGame.UI.ModernConfig;
 
 namespace ImproveGame.UI
 {
@@ -124,12 +125,12 @@ namespace ImproveGame.UI
             customAIStyleBox = new SUINumericText
             {
                 HAlign = 1f,
-                Left = new(-180,0),
+                Left = new(-180, 0),
                 Width = new(60f, 0),
                 Height = new(0, 1f),
                 BgColor = Color.Black * 0.4f,
                 Rounded = new Vector4(14f),
-                MinValue = 1,
+                MinValue = 0,
                 MaxValue = 125,
                 InnerText =
                 {
@@ -142,7 +143,7 @@ namespace ImproveGame.UI
                 MaxLength = 3,
                 DefaultValue = 0,
                 Format = "0",
-                VAlign = 0.5f
+                VAlign = 0.5f,
             };
             customAIStyleBox.ContentsChanged += (ref string content) =>
             {
@@ -167,10 +168,10 @@ namespace ImproveGame.UI
                 if (!customAIStyleBox.IsWritingText)
                     customAIStyleBox.Value = value;
             };
-            aiStyleWikiOpener = new SUIImageButton(TextureAssets.Item[ItemID.Book].Value, GetText("UI.DummyConfiguration.OpenWikiTip"),false) 
+            aiStyleWikiOpener = new SUIImageButton(TextureAssets.Item[ItemID.Book].Value, GetText("UI.DummyConfiguration.OpenWikiTip"), false)
             {
                 HAlign = 1f,
-                Left = new(-140, 0),
+                Left = new(Language.ActiveCulture.Name is not "zh-Hans" ? -135 : -125, 0),
                 Width = new(40f, 0),
                 Height = new(0, 1f),
                 VAlign = 0.5f
@@ -321,10 +322,23 @@ namespace ImproveGame.UI
                 }
                 else if (fType == typeof(DummyConfig.AIType))
                 {
-                    SUIDropdownList<DummyConfig.AIType> list = new(() => (DummyConfig.AIType)fInfo.GetValue(DummyNPC.LocalConfig), obj =>
+                    SUIDropdownList <DummyConfig.AIType> list = new(() => (DummyConfig.AIType)fInfo.GetValue(DummyNPC.LocalConfig), obj =>
                     {
-                        fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
+                        if ((DummyConfig.AIType)obj == DummyConfig.AIType.SelfDefine && !MyUtils.Config.DummyCustomAIStyleAllowed)
+                        {
+                            DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
+                            AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Red, -1, () =>
+                            {
+                                ModernConfigUI.Instance.Open();
+                                ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["ModFeatures"].Category;
+                                ConfigOptionsPanel.Instance.SetSearchBarText(GetText("UI.DummyConfiguration.DummyConfigLabel"));
+
+                            });
+                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                            return;
+                        }
                         var aistyle = (DummyConfig.AIType)obj;
+                        DummyNPC.LocalConfig.AIStyle = aistyle;
                         if (aistyle != DummyConfig.AIType.Default && aistyle != DummyConfig.AIType.SelfDefine)
                             DummyNPC.LocalConfig = aistyle switch
                             {
@@ -338,7 +352,7 @@ namespace ImproveGame.UI
                             customAIStyleBox.JoinParent(fPanel);
                             aiStyleWikiOpener.JoinParent(fPanel);
                         }
-                        else if (aistyle != DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent != null) 
+                        else if (aistyle != DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent != null)
                         {
                             customAIStyleBox.Remove();
                             aiStyleWikiOpener.Remove();
@@ -347,9 +361,28 @@ namespace ImproveGame.UI
                     {
                         HAlign = 1f,
                         Width = new StyleDimension(180, 0),
-                        Height = StyleDimension.Fill
+                        Height = StyleDimension.Fill,
                     };
                     list.JoinParent(fPanel);
+                    list.OnUpdate += elem =>
+                    {
+                        if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine && !MyUtils.Config.DummyCustomAIStyleAllowed) 
+                        {
+                            if(customAIStyleBox.Parent != null)
+                            {
+                                customAIStyleBox.Remove();
+                                aiStyleWikiOpener.Remove();
+                            };
+                            DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
+                            AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Red, -1, () => 
+                            {
+                                ModernConfigUI.Instance.Open();
+                                ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["ModFeatures"].Category;
+                                ConfigOptionsPanel.Instance.SetSearchBarText(GetText("UI.DummyConfiguration.DummyConfigLabel"));
+                            });
+                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                        }
+                    };
                     if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent == null)
                     {
                         customAIStyleBox.JoinParent(fPanel);
@@ -376,7 +409,7 @@ namespace ImproveGame.UI
                     {
                         HAlign = 1f,
                         Width = new StyleDimension(180, 0),
-                        Height = StyleDimension.Fill
+                        Height = StyleDimension.Fill,
                     };
                     sUISlider.JoinParent(fPanel);
                 }

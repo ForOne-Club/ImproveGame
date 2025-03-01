@@ -27,5 +27,6 @@ public sealed class ModFeatures : Category
         panel.AddValueSlider(Config, nameof(Config.ExStorageSearchDistance));
         panel.AddToggle(Config, nameof(Config.ICanSeeForeverAllBag));
         panel.AddToggle(Config, nameof(Config.WandMaterialNoConsume));
+        panel.AddToggle(Config, nameof(Config.DummyCustomAIStyleAllowed));
     }
 }

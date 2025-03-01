@@ -436,6 +436,8 @@ public class ImproveConfigs : ModConfig
     // [DefaultValue(true)]
     // public bool WandManaConsumption;
 
+    [DefaultValue(false)]
+    public bool DummyCustomAIStyleAllowed;
     #endregion
 
     public override void OnChanged()
