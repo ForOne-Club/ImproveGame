@@ -778,7 +778,7 @@ AvailableModItemConfigs: {
 	DisplayName: Mod Item Config
 	Available: " Obtainable"
 	Unavailable: " Unobtainable"
-	Enable: 启用
+	Enable: Enable
 
 	AvailableMagickWand: {
 		Label: "[centeritem:ImproveGame/MagickWand] {$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
@@ -1087,8 +1087,8 @@ UIConfigs: {
 	}
 
 	GlobeEffect: {
-		Tooltip: "[centeritem:WorldGlobe] Locator Effect"
-		Label: Turn it off if you don't like it
+		Label: "[centeritem:WorldGlobe] Locator Effect"
+		Tooltip: Turn it off if you don't like it
 	}
 }
 

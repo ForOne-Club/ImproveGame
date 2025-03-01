@@ -2,21 +2,15 @@
 using ImproveGame.Content.Items.Globes.Core;
 using ImproveGame.Content.Projectiles;
 using ImproveGame.Packets.WorldFeatures;
+using Terraria;
 
 namespace ImproveGame.Content.Items.Globes;
 
-public class PlanteraGlobe () : GlobePlentyTooltip(ItemRarityID.Pink, Item.sellPrice(silver: 30))
+public class PlanteraGlobe() : GlobePlentyTooltip(ItemRarityID.Pink, Item.sellPrice(silver: 30))
 {
-    public class PlanteraGlobeProj : GlobeProjBase
+    public class PlanteraGlobeProj() : GlobeProjBase<PlanteraGlobe>(new(228, 131, 212))
     {
-        public override ModItem GetModItemDummy() => ModContent.GetInstance<PlanteraGlobe>();
-    }
-
-    public override Color GetEffectColor() => new (228, 131, 212);
-
-    public override bool RevealOperation(Projectile projectile, bool onlyJudging)
-    {
-        return RevealPlanteraPacket.Reveal(projectile, onlyJudging);
+        public override bool RevealOperation(bool onlyJudging)=> GlobeRevealer.RevealPlantera(Projectile,GetModItemDummy(), onlyJudging);
     }
 
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
