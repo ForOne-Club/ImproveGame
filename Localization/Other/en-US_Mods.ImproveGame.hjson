@@ -444,18 +444,18 @@ Keybinds: {
 	}
 
 	CopyItemName: {
-		DisplayName: 复制物品内部名
-		Tip: 当光标处有物品时，按下此快捷键将会复制其内部名
+		DisplayName: Copy the internal name of the item
+		Tip: When there's an item under cursor, press the key will copy the internal name of the item.
 	}
 
 	CopyItemName_Control: {
-		DisplayName: 复制物品内部名全称组合键
-		Tip: 按下此快捷键的同时按下 "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" 将改为复制全称
+		DisplayName: Key combinations to Copy the full-internal name of the item
+		Tip: Press both this key and "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" will copy the full-internal name
 	}
 
 	QuickShimmerGUI: {
 		DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
-		Tip: 按下后打开快捷微光界面，也可以在总控面板中打开
+		Tip: Press to open the QuickShimmer Interface. You can also open it in MasterControl.按下后打开快捷微光界面，也可以在总控面板中打开
 	}
 }
 

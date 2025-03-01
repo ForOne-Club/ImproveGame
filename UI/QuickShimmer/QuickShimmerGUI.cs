@@ -375,20 +375,20 @@ public class QuickShimmerGUI : BaseBody
                 var recipe = decraftingRecipeIndex >= 0 ? Main.recipe[decraftingRecipeIndex] : null;
 
                 int resultStack = result.stack;
-                if (recipe is { alchemy: true })
+                /*if (recipe is { alchemy: true })
                 {
                     for (int i = resultStack; i > 0; i--)
                     {
                         if (Main.rand.NextBool(3))
                             resultStack--;
                     }
-                }
-
+                }*/
+                RecipeLoader.ConsumeIngredient(recipe, result.type, ref resultStack, isDecrafting: true);
                 while (resultStack > 0)
                 {
                     int outputStack = resultStack;
-                    if (outputStack > 9999)
-                        outputStack = 9999;
+                    if (outputStack > result.maxStack)
+                        outputStack = result.maxStack;
 
                     resultStack -= outputStack;
                     keeper.AddToLoots(new Item(result.type, outputStack));
