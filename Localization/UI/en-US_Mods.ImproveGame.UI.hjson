@@ -452,10 +452,10 @@ DummyConfiguration: {
 	}
 	CustomDisabled: 
 		'''
-		Custom AI Style is not allowed. 
+		Custom AI Style is not allowed in this sever. 
 		Click here to modify config if you are the Host.
 		'''
-	DummyConfigLabel:Allow Custom Dummy AI Style
+	DummyConfigLabel:Allow Custom Dummy AI Style In MultiPlayer
 	OpenWikiTip: Click to open Relevent Wiki page
 	WikiURL: https://terraria.wiki.gg/wiki/AI
 }

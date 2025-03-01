@@ -324,7 +324,7 @@ namespace ImproveGame.UI
                 {
                     SUIDropdownList <DummyConfig.AIType> list = new(() => (DummyConfig.AIType)fInfo.GetValue(DummyNPC.LocalConfig), obj =>
                     {
-                        if ((DummyConfig.AIType)obj == DummyConfig.AIType.SelfDefine && !MyUtils.Config.DummyCustomAIStyleAllowed)
+                        if ((DummyConfig.AIType)obj == DummyConfig.AIType.SelfDefine && !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
                         {
                             DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
                             AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Red, -1, () =>
@@ -366,7 +366,7 @@ namespace ImproveGame.UI
                     list.JoinParent(fPanel);
                     list.OnUpdate += elem =>
                     {
-                        if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine && !MyUtils.Config.DummyCustomAIStyleAllowed) 
+                        if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine && !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer)) 
                         {
                             if(customAIStyleBox.Parent != null)
                             {

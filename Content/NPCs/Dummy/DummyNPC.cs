@@ -180,7 +180,7 @@ public class DummyNPC : ModNPC
 
         if (Config.AIStyle == DummyConfig.AIType.SelfDefine)
         {
-            if (MyUtils.Config.DummyCustomAIStyleAllowed)
+            if (MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer)
                 npc.aiStyle = Config.customAIStyle;
             else
             {
@@ -225,7 +225,7 @@ public class DummyNPC : ModNPC
 
         if (Config.AIStyle == DummyConfig.AIType.SelfDefine) 
         {
-            if (MyUtils.Config.DummyCustomAIStyleAllowed)
+            if (MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer)
                 npc.aiStyle = Config.customAIStyle;
             else 
             {
