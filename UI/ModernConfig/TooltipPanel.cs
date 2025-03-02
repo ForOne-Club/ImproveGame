@@ -13,7 +13,7 @@ public class TooltipPanel : SUIPanel
     public TooltipTextElement Text;
     public SUIDrawingImage PreviewDrawer;
     public ModernConfigOption currentOption;
-    public static PreviewDrawing globalDrawing;
+    public static event PreviewDrawing GlobalDrawing;
     public TooltipPanel(Color color) : base(color, color)
     {
         Instance = this;
@@ -36,7 +36,7 @@ public class TooltipPanel : SUIPanel
                 }
             drawingMethod?.Invoke(view, currentOption.Config, currentOption.VariableInfo, currentOption.Item, currentOption.List, currentOption.index);
 
-            globalDrawing?.Invoke(view, currentOption.Config, currentOption.VariableInfo, currentOption.Item, currentOption.List, currentOption.index);
+            GlobalDrawing?.Invoke(view, currentOption.Config, currentOption.VariableInfo, currentOption.Item, currentOption.List, currentOption.index);
         })
         {
             Width = new(0, 1),
