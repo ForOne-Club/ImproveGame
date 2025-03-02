@@ -166,6 +166,5 @@ namespace ImproveGame.Common.ModSystems
                 UISystem.Instance.AutofisherGUI?.RefreshItems();
             }
         }
-        }
     }
 }
