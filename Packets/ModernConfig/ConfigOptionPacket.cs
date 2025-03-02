@@ -12,7 +12,7 @@ using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.Packets;
 
-//[AutoSync]//不知道为什么path会同步失败，就自己发包了
+//[AutoSync]// 不知道为什么path会同步失败，就自己发包了
 public class ConfigOptionPacket : NetModule
 {
     private string _modName;
@@ -28,6 +28,7 @@ public class ConfigOptionPacket : NetModule
         #region ColorHandlerCheck
         if (path != null && path.Count > 0)
         {
+            // 我们发现要同步的值发送自ColorHandler，所以就干脆写入它处理好的Color本身
             string[] colorPropNames = ["Red", "Green", "Blue", "Hue", "Saturation", "Lightness", "Alpha", "Hex"];
             if (colorPropNames.Contains(path[^1]) && ConfigHelper.GetItemViaPath(modConfig, path[..^1]) is Color color)
             {
@@ -36,6 +37,8 @@ public class ConfigOptionPacket : NetModule
             }
             if (path.Count > 2)
             {
+                // HashSet中的元素的编辑是用IHashSetWrapper实现的，它有个Value属性，而这个在原本的HashSet中的元素显然是没有的
+                // 字典虽然用类似的手段实现，但是字典直接遍历得到的是键值对，也就是本来就有Value属性，所以不需要移除最后一层路径
                 if (path[^1] == "Value")
                 {
                     var setType = ConfigHelper.GetItemViaPath(modConfig, path[..^2]).GetType();
@@ -51,6 +54,7 @@ public class ConfigOptionPacket : NetModule
         module._modName = modConfig.Mod.Name;
         module._configName = modConfig.Name;
         if (value == null)
+            // 我不知道null序列化会变成什么，就算是{}那也很可能会对不上号，就加了个isNull
             module.isNull = true;
         else
         {
@@ -58,11 +62,12 @@ public class ConfigOptionPacket : NetModule
             module._json = json;
             module.isNull = false;
             module._valueTypeFullName = value.GetType().FullName + "," + value.GetType().Assembly.FullName;
+            // 上面这个是反序列化的时候查找类型用的，虽然不知道为什么有时候还是查找不到
         }
         List<string> cachedPath = [];
         if (path != null)
             cachedPath.AddRange(path);
-        module.path = [.. cachedPath];
+        module.path = [.. cachedPath]; // 其实按说这里如果path是null应该可以直接报警(划掉) 报错了，但是万一有直接给config本身赋值的时候呢..?
         path?.ToArray();
         module._popInfo = "";
         module._rejected = false;
@@ -128,7 +133,7 @@ public class ConfigOptionPacket : NetModule
             
             var valueTypeFullName = System.Type.GetType(_valueTypeFullName);
             //valueTypeFullName ??= TypeDescriptor.GetConverter(typeof(Type)).ConvertFrom(_valueTypeFullName) as Type;
-            valueTypeFullName ??= ConfigHelper.GetTypeViaPath(modConfig, path, true);
+            valueTypeFullName ??= ConfigHelper.GetTypeViaPath(modConfig, path, true); // 如果通过发来的信息没找到，通过path来直接查找到某个子对象的type
             if (valueTypeFullName == null)
                 throw new Exception($"Type Not Found:{_valueTypeFullName}");
             value = JsonConvert.DeserializeObject(_json, valueTypeFullName, ConfigManager.serializerSettings);
@@ -139,9 +144,9 @@ public class ConfigOptionPacket : NetModule
         if (Main.netMode is NetmodeID.Server)
         {
             ModConfig pendingConfig = ConfigManager.GeneratePopulatedClone(modConfig);
-            ConfigHelper.SetItemViaPath(pendingConfig, path, value);
+            ConfigHelper.SetItemViaPath(pendingConfig, path, value);// 通过path直接给某个子对象写入值
             var netText = NetworkText.FromKey("tModLoader.ModConfigAccepted");
-            bool flag = modConfig.AcceptClientChanges(pendingConfig, Sender, ref netText);
+            bool flag = modConfig.AcceptClientChanges(pendingConfig, Sender, ref netText);// 检测挂起的config是否合法
             if (!flag)
             {
                 SendRejectedConfig(netText.ToString(), modConfig);
@@ -157,17 +162,17 @@ public class ConfigOptionPacket : NetModule
             }
 #pragma warning restore CS0618 // Type or member is obsolete
 
-            ConfigHelper.SetItemViaPath(modConfig, path, value);
+            ConfigHelper.SetItemViaPath(modConfig, path, value);// 给modconfig正式写入值
             try
             {
-                ConfigManager.Save(modConfig);
+                ConfigManager.Save(modConfig);// try一脚是因为我自己测的时候总是有文件访问冲突
             }
             catch { }
             if (!Main.gameMenu)
                 modConfig.OnChanged();
             _popInfo = Language.GetTextValue("tModLoader.ModConfigServerResponse", netText.ToString());
             _rejected = false;
-            Send();
+            Send();// 转发给所有客户端，赋值大胜利
         }
         else
         {
@@ -193,7 +198,7 @@ public class ConfigOptionPacket : NetModule
         //var modConfig = ConfigManager.Configs[ModLoader.GetMod(_modName)].Find(i => i.Name == _configName);
         object item = ConfigHelper.GetItemViaPath(modConfig, path);
         _json = JsonConvert.SerializeObject(item, ConfigManager.serializerSettings);
-        Send();
+        Send(); //打回，发还原始信息并同步，不过按说这里也许发还给发送者就可以了？
     }
 }
 

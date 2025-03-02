@@ -388,7 +388,7 @@ public static class ConfigHelper
                     return;
                 }
 
-                if (item.GetType().Name == "ColorHandler")//因为Color实现上的特殊性，这里不得不先写入一次了
+                if (item.GetType().Name == "ColorHandler")// 因为Color实现上的特殊性，这里不得不先写入一次了
                     InternalSetValue(config, variableInfo, value, item, path, List, Index);
                 // 发送更好的体验自己的包
                 List<string> pathDirectly = [];
@@ -396,6 +396,8 @@ public static class ConfigHelper
                     pathDirectly.AddRange(path);
                 if (List == null)
                     pathDirectly.Add(variableInfo.Name);
+                // 这里是写入从Config实例到选项内容的完整路径
+                // 所谓路径也就是一串 成员名或者下标 组成的东西
                 ConfigOptionPacket.Send(config, value, pathDirectly);
                 return;
             }

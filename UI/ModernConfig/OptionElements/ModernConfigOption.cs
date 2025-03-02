@@ -407,14 +407,17 @@ public class ModernConfigOption : TimerView
 
         var defaultValueAttribute = GetAttribute<DefaultValueAttribute>();
         bool cantSetValue = false;
-        object defaultValue = defaultValueAttribute?.Value;
+        object defaultValue = defaultValueAttribute?.Value; // 有默认值标签就默认值优先
         if (defaultValue == null || index > -1)
         {
             string json = "{}";
             var dummyConfig = Config.Clone();
-            JsonConvert.PopulateObject(json, dummyConfig, ConfigManager.serializerSettings);
+            JsonConvert.PopulateObject(json, dummyConfig, ConfigManager.serializerSettings); // 否则从默认的config里面摘录出来
 
             var item = ConfigHelper.GetItemViaPathForSetDefault(dummyConfig, path, out cantSetValue);
+            // 会有一个专门的ForSetDefault版本是因为Config这里实现的特殊性
+            // 像列表那些，下标在原始config中有的就采取那个的值，否则采取list内新添加元素的默认值
+            // 除此之外，如果点到了字典里的pair，那么还要另外转字典内那个代理元素
             var itemType = item?.GetType();
             if (itemType != VarType)//path == null || path.Count == 0 || !int.TryParse(path[^1], out _) ||
             {
@@ -423,7 +426,9 @@ public class ModernConfigOption : TimerView
                 else
                 {
                     if (item is Color color)
-                        item = Activator.CreateInstance(VariableInfo.MemberInfo.DeclaringType, [color]);
+                        item = Activator.CreateInstance(VariableInfo.MemberInfo.DeclaringType, [color]); 
+                    // 欸，这里转ColorHandler为什么不像字典的那个一样在上面函数里就转好，我不知道，当时做昏头了有点，但是下面还会有别的特殊处理的，嗯
+
                     //if (itemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
                     //    defaultValue = itemType.GetProperty(VariableInfo.Name, BindingFlags.Instance | BindingFlags.Public).GetValue(item);
                     //else
@@ -437,6 +442,7 @@ public class ModernConfigOption : TimerView
         }
         if (!cantSetValue)
         {
+            // 直接交由子元素代理赋值了
             switch (defaultValue)
             {
                 case ISetElementWrapper setWrapper:
