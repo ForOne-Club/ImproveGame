@@ -164,3 +164,115 @@ public override void PostSetupContent() {
     }
 }
 ```
+
+### RegisterCategory  
+Register a category card  
+#### Parameters  
+- `Mod` The instance of the mod where the category card is registered  
+- `List<KeyValuePair<string, ModConfig>>` Configuration options in the category card. Key is the field/property name, value is the mod's config instance  
+- `int` Item ID for the category card's icon (optional, default: 0)  
+- `Func<Texture2D>` Function to get category card icon (overrides item ID icon, default: null)  
+- `Func<string>` Function to get category card label (default: null)  
+- `Func<string>` Function to get category card description (default: null)  
+
+### SetAboutPage  
+Register an "About" page  
+#### Parameters  
+- `Mod` The instance of the mod where the "About" page is registered  
+- `Func<string>` Function to get text content for the "About" page  
+- `int` Item ID for the "About" page icon (optional, default: 0)  
+- `Func<Texture2D>` Function to get "About" page icon (overrides item ID icon, default: null)  
+- `Func<string>` Function to get "About" page label (default: null)  
+- `Func<string>` Function to get "About" page description (default: null)  
+
+### RemoveCategory  
+Remove all category cards registered by a mod  
+#### Parameters  
+- `Mod` Target mod instance  
+
+### RemoveAboutPage  
+Remove the "About" page registered by a mod  
+#### Parameters  
+- `Mod` Target mod instance  
+
+### AddModernConfigTitle  
+Set the config center title text for the mod's settings entry  
+#### Parameters  
+- `Mod` Target mod instance  
+- `LocalizedText` Localized text instance for the title  
+
+### RegisterPreview  
+Register preview rendering  
+#### Parameters  
+- `PropertyFieldWrapper` Field/property info of the target option (must belong to a Config)  
+- `Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>`  
+Preview rendering content  
+##### Action Parameters  
+- `UIElement` Canvas element  
+- `ModConfig` Config instance for the previewed option  
+- `PropertyFieldWrapper` Field/property info  
+- `object` Parent object  
+- `IList` Parent list  
+- `int` Index in the list  
+
+### OnGlobalConfigPreview  
+Add global preview rendering (batch rendering not tied to specific options)  
+#### Parameters  
+- `Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>`  
+Same as above  
+
+---
+
+### Example  
+
+```CSharp  
+// Used some function from ImproveGame_ModernConfigCrossModHelper.cs  
+// This is a Mod class's Load method
+public override void Load()  
+{  
+    if (Main.netMode == NetmodeID.Server ||  
+    !ModLoader.TryGetMod("ImproveGame", out var qot)) return;  
+
+    // Add title  
+    AddModernConfigTitle(qot,  this,  
+    Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));  
+
+    SetAboutPage(qot, this, () => "Customizing the config center is exhausting\nBetter auto-generate via reflection (",  
+    (int)ItemID.IronShortsword, null, () => "About Example", () => "Please ignore the complaints(");  
+    // Replace these texts with your localized strings  
+
+    // Batch-add options for a single config instance  
+    // MyConfig.Instance is a pre-loaded MyConfig instance  
+    RegisterCategory(qot, this, MyConfig.Instance,  
+    [  
+        nameof(MyConfig.SomeField),  
+        nameof(MyConfig.SomeProperty),  
+        nameof(MyConfig.SomeArray),  
+        nameof(MyConfig.SomeDefinition),  
+    ],  
+    ItemID.Cog, null, () => "Some Data", () => "Here's what's supported");  
+    // Replace these with localized texts  
+
+    // Batch-add options for multiple config instances  
+    RegisterCategory(qot, this,  
+    [  
+        (MyConfig.Instance,  
+        [  
+            nameof(MyConfig.SomeField),  
+            nameof(MyConfig.SomeProperty),  
+            nameof(MyConfig.SomeArray),  
+            nameof(MyConfig.SomeDefinition),  
+        ]),  
+        (SeverConfig.Instance,  
+        [  
+            nameof(MyConfig.SomeVector2),  
+            nameof(MyConfig.SomeColor),  
+            nameof(MyConfig.SomePoint),  
+            nameof(MyConfig.SomeClass),  
+        ])  
+    ],  
+        ItemID.WireKite, null, () => "Combine Both!",  
+        () => "When some features require both client and server management,\n"  
+            + "this setup becomes particularly useful.");  
+}  
+```  
