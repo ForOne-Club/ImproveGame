@@ -546,8 +546,7 @@ public class ModIntegrationsSystem : ModSystem
                                 }
                                 if (ok)
                                 {
-                                    fisher = TileEntity.ByPosition[location] as TEAutofisher;
-                                    ok = fisher != null;
+                                    ok = AutoFisherAdapter.TryGetTEAutofisher(location.X, location.Y, out fisher);
                                 }
                             }
                             if (ok)
@@ -586,13 +585,11 @@ public class ModIntegrationsSystem : ModSystem
                                 }
                                 if (ok)
                                 {
-                                    fisher = TileEntity.ByPosition[location] as TEAutofisher;
-                                    ok = fisher != null;
+                                    ok = AutoFisherAdapter.TryGetTEAutofisher(location.X, location.Y, out fisher);
                                 }
                             }
                             if (ok)
                             {
-                                fisher = TileEntity.ByPosition[location] as TEAutofisher;
                                 int index = (int)args[argIndex++];
                                 if (index is > 0 and < ItemSyncPacket.All)
                                 {
