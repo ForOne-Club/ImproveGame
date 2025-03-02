@@ -313,9 +313,10 @@ namespace ImproveGame.UI
                         if ((DummyConfig.AIType)obj == DummyConfig.AIType.SelfDefine && !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
                         {
                             DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
-                            AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Red, -1, () =>
+                            AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Yellow, -1, () =>
                             {
                                 ModernConfigUI.Instance.Open();
+                                ModernConfigUI.Instance.OpenFromMasterControl = true;
                                 ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["ModFeatures"].Category;
                                 ConfigOptionsPanel.Instance.SetSearchBarText(GetText("UI.DummyConfiguration.DummyConfigLabel"));
 
@@ -361,9 +362,10 @@ namespace ImproveGame.UI
                             }
                             ;
                             DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
-                            AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Red, -1, () =>
+                            AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Yellow, -1, () =>
                             {
                                 ModernConfigUI.Instance.Open();
+                                ModernConfigUI.Instance.OpenFromMasterControl = true;
                                 ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["ModFeatures"].Category;
                                 ConfigOptionsPanel.Instance.SetSearchBarText(GetText("UI.DummyConfiguration.DummyConfigLabel"));
                             });

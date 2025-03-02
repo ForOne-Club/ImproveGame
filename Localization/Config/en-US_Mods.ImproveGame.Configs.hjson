@@ -671,11 +671,10 @@ ImproveConfigs: {
 	DummyCustomAIStyleAllowed: {
 		Tooltip:
 			'''
-			When switch off this, it will be set to Default if you try to set Custom.
-			If you has been set Custom before, it would set to Default as well.
-			Please think carefully as switch on this might lead a disaster to a sever.
+			When enabled, in multiplayer, anyone can customize Dummy to mimic NPC behavior.
+			Given the potential for dummies to become server-crashing or cheating tools, please consider this option carefully.
 			'''
-		Label: "[centeritem:ImproveGame/Dummy] Allow Custom Dummy AI Style In MultiPlayer"
+		Label: "[centeritem:ImproveGame/Dummy] {$Mods.ImproveGame.UI.DummyConfiguration.DummyConfigLabel}"
 	}
 
 	QuestFishStack: {

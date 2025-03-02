@@ -683,10 +683,10 @@ ImproveConfigs: {
 	DummyCustomAIStyleAllowed: {
 		Tooltip:
 			'''
-			如果关闭，在尝试切为自定义时会强制更改为默认，如果之前已经选择自定义，也会被切换回无
-			鉴于很可能让假人成为炸服神器，请慎重考虑这个选项。
+			开启后，多人模式下可以自定义假人模拟NPC行为
+			鉴于很可能让假人成为作弊或炸服神器，请慎重考虑这个选项
 			'''
-		Label: "[centeritem:ImproveGame/Dummy] 允许在多人模式假人使用自定义AI类型"
+		Label: "[centeritem:ImproveGame/Dummy] {$Mods.ImproveGame.UI.DummyConfiguration.DummyConfigLabel}"
 	}
 
 	QuestFishStack: {

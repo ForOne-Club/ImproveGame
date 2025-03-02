@@ -451,10 +451,10 @@ DummyConfiguration: {
 	}
 	CustomDisabled:
 		'''
-		目前服务器不允许自定义模拟NPC行为。
+		目前服务器不允许自定义模拟NPC行为
 		如果你有权限，点击这里修改设置
 		'''
-	DummyConfigLabel: 允许在多人模式假人使用自定义模拟NPC行为
+	DummyConfigLabel: 允许多人模式假人自定义模拟NPC行为
 	OpenWikiTip: 点击以打开相关Wiki页面
 	WikiURL: https://terraria.wiki.gg/zh/wiki/NPC_ID
 }
