@@ -10,21 +10,21 @@ public struct DummyConfig
     public enum AIType
     {
         [LabelKey($"{key}Default")]
-        Default = -1,
+        Default = 0,
         [LabelKey($"{key}Slime")]
-        Slime = 1,
+        Slime = NPCID.BlueSlime,
         [LabelKey($"{key}EvilEye")]
-        EvilEye = 2,
+        EvilEye = NPCID.DemonEye,
         [LabelKey($"{key}Soilder")]
-        Soilder = 3,
+        Soilder = NPCID.PossessedArmor,
         [LabelKey($"{key}GoldenFish")]
-        GoldenFish = 16,
+        GoldenFish = NPCID.Goldfish,
         [LabelKey($"{key}JellyFish")]
-        JellyFish = 18,
+        JellyFish = NPCID.BlueJellyfish,
         [LabelKey($"{key}HugeMimic")]
-        HugeMimic = 87,
+        HugeMimic = NPCID.BigMimicCorruption,
         [LabelKey($"{key}SelfDefine")]
-        SelfDefine = 126
+        SelfDefine = 688
     }
     [Annotate]
     public bool LockHP = true;
@@ -34,6 +34,8 @@ public struct DummyConfig
     public int Defense = 0;
     [Annotate]
     public int Damage = 0;
+    [Annotate]
+    public float Scale = 1f;
     [Annotate]
     public bool ShowBox = true;
     [Annotate]
@@ -51,6 +53,6 @@ public struct DummyConfig
     [Annotate]
     public AIType AIStyle = AIType.Default;
 
-    public int customAIStyle = 0;
+    public int customAIType = 0;
     public DummyConfig() { }
 }

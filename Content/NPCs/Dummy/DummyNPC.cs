@@ -11,15 +11,18 @@ using System.Diagnostics;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.Map;
 using Terraria.ModLoader.IO;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Content.NPCs.Dummy;
+
 [AutoSync]
 public class RemoveDummyModule : NetModule
 {
-    int whoami;
-    int from;
+    private int whoami;
+    private int from;
+
     public static RemoveDummyModule Get(int whoami, int from)
     {
         var packet = NetModuleLoader.Get<RemoveDummyModule>();
@@ -27,6 +30,7 @@ public class RemoveDummyModule : NetModule
         packet.from = from;
         return packet;
     }
+
     public override void Receive()
     {
         if (Main.npc[whoami].ModNPC is DummyNPC dummy)
@@ -34,39 +38,40 @@ public class RemoveDummyModule : NetModule
         if (Main.netMode == NetmodeID.Server)
         {
             Get(whoami, from).Send(-1, from);
-            //Console.WriteLine(whoami);
         }
-        //else
-        //    Main.NewText(whoami);
     }
 }
 
 public class SyncDummyModule : NetModule
 {
-    Vector2? position;
-    int owner;
-    DummyConfig config;
+    private Vector2? position;
+    private int owner;
+    private DummyConfig config;
+
+    private const int MaxNPCs = 200;
+
     public override void Read(BinaryReader r)
     {
-        if (r.ReadBoolean())
-            position = r.ReadVector2();
-        else position = null;
+        position = r.ReadBoolean() ? r.ReadVector2() : null;
         owner = r.ReadByte();
-
-        config.LockHP = r.ReadBoolean();
-        config.LifeMax = r.ReadInt32();
-        config.Defense = r.ReadInt32();
-        config.Damage = r.ReadInt32();
-        config.ShowBox = r.ReadBoolean();
-        config.ShowDamageData = r.ReadBoolean();
-        config.ShowNameOnHover = r.ReadBoolean();
-        config.Immortal = r.ReadBoolean();
-        config.NoGravity = r.ReadBoolean();
-        config.NoTileCollide = r.ReadBoolean();
-        config.KnockBackResist = r.ReadSingle();
-        config.customAIStyle = r.ReadByte();
-        base.Read(r);
+        config = new DummyConfig
+        {
+            LockHP = r.ReadBoolean(),
+            LifeMax = r.ReadInt32(),
+            Defense = r.ReadInt32(),
+            Damage = r.ReadInt32(),
+            Scale = r.ReadSingle(),
+            ShowBox = r.ReadBoolean(),
+            ShowDamageData = r.ReadBoolean(),
+            ShowNameOnHover = r.ReadBoolean(),
+            Immortal = r.ReadBoolean(),
+            NoGravity = r.ReadBoolean(),
+            NoTileCollide = r.ReadBoolean(),
+            KnockBackResist = r.ReadSingle(),
+            customAIType = r.ReadByte()
+        };
     }
+
     public override void Send(ModPacket p)
     {
         p.Write(position != null);
@@ -78,6 +83,7 @@ public class SyncDummyModule : NetModule
         p.Write(config.LifeMax);
         p.Write(config.Defense);
         p.Write(config.Damage);
+        p.Write(config.Scale);
         p.Write(config.ShowBox);
         p.Write(config.ShowDamageData);
         p.Write(config.ShowNameOnHover);
@@ -85,9 +91,10 @@ public class SyncDummyModule : NetModule
         p.Write(config.NoGravity);
         p.Write(config.NoTileCollide);
         p.Write(config.KnockBackResist);
-        p.Write((byte)config.customAIStyle);
+        p.Write((byte)config.customAIType);
         base.Send(p);
     }
+
     public static SyncDummyModule Get(Vector2? position, int owner, DummyConfig dummyConfig)
     {
         var packet = NetModuleLoader.Get<SyncDummyModule>();
@@ -96,62 +103,97 @@ public class SyncDummyModule : NetModule
         packet.config = dummyConfig;
         return packet;
     }
+
     public override void Receive()
     {
         if (position == null)
         {
-            foreach (var n in Main.npc)
-            {
-                if (n.ModNPC is DummyNPC dummy && dummy.Owner == owner)
-                {
-                    dummy.Config = config;
-                    dummy.SetDefaults();
-                    n.life = n.lifeMax;
-                }
-            }
+            SyncExistingDummies();
         }
         else
         {
-            NPC npc = NPC.NewNPCDirect(null, 0, 0, ModContent.NPCType<DummyNPC>(), target: owner);
-            npc.Center = position.Value;
-            //var tileCoord = position.Value.ToTileCoordinates();
-            //npc.ai[0] = tileCoord.X;
-            //npc.ai[1] = tileCoord.Y;
-            var dummy = npc.ModNPC as DummyNPC;
-            dummy.Owner = owner;
-            dummy.Config = config;
-            dummy.SetDefaults();
-            npc.life = npc.lifeMax = config.LifeMax;
-            for (int i = 0; i < 20; i++)
-            {
-                int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, Scale: 2f);
-                Main.dust[dust].velocity.Y = -1f;
-                Main.dust[dust].noGravity = true;
-            }
+            SpawnNewDummy();
         }
 
         if (Main.netMode == NetmodeID.Server)
         {
             Get(position, owner, config).Send(-1, owner);
-            //Console.WriteLine(position?.ToString() ?? "Null");
-
         }
-        //else
-        //{
-        //    Main.NewText(position?.ToString() ?? "Null");
-        //}
+    }
+
+    private void SyncExistingDummies()
+    {
+        foreach (var npc in Main.npc.Where(n => n?.ModNPC is DummyNPC dummy && dummy.Owner == owner))
+        {
+            if (npc.ModNPC is DummyNPC dummy)
+            {
+                dummy.Config = config;
+                dummy.SetDefaults();
+                npc.life = npc.lifeMax;
+            }
+        }
+    }
+
+    private void SpawnNewDummy()
+    {
+        NPC npc = NPC.NewNPCDirect(null, 0, 0, ModContent.NPCType<DummyNPC>(), target: owner);
+        if (npc.whoAmI >= MaxNPCs)
+            return;
+
+        if (npc.ModNPC is DummyNPC dummy)
+        {
+            dummy.Owner = owner;
+            dummy.Config = config;
+            dummy.SetDefaults();
+            npc.life = npc.lifeMax = config.LifeMax;
+            npc.Center = position.Value;
+            CreateSpawnDust(npc);
+        }
+    }
+
+    private static void CreateSpawnDust(NPC npc)
+    {
+        const int dustCount = 20;
+        for (int i = 0; i < dustCount; i++)
+        {
+            int dust = Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch, Scale: 2f);
+            Main.dust[dust].velocity.Y = -1f;
+            Main.dust[dust].noGravity = true;
+        }
     }
 }
+
+public class DummyMapLayer : ModMapLayer
+{
+    public override void Draw(ref MapOverlayDrawContext context, ref string text)
+    {
+        foreach (var n in Main.npc)
+        {
+            if (n.ModNPC is DummyNPC)
+            {
+                var pos = n.Center / 16f;
+                context.Draw(ModAsset.DummyNPC_Head.Value, pos, Alignment.Center);
+            }
+        }
+    }
+}
+
 public class DummyNPC : ModNPC
 {
+    private const float HitScaleDecayRate = 0.01f;
+    private const float MaxDistance = 4096f;
+    private const int HitFrameDuration = 60;
+
     public static DummyConfig LocalConfig = new();
     public DummyConfig Config = new();
     public DummyDPS DummyDPS = new();
     public int Owner;
+
     public override bool PreKill()
     {
         return true;
     }
+
     public override bool CheckDead()
     {
         if (Config.LockHP)
@@ -161,6 +203,7 @@ public class DummyNPC : ModNPC
         }
         return true;
     }
+
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
 
     public override void SetStaticDefaults()
@@ -173,36 +216,68 @@ public class DummyNPC : ModNPC
 
     public override void SetDefaults()
     {
-        NPC npc = NPC;
-        npc.SetBaseValues(56, 74, Config.LifeMax, false,
-            value: 0, damage: Config.Damage, defense: Config.Defense);
-        npc.HitSound = SoundID.NPCHit1;
+        float scaledWidth = 56 * Config.Scale;
+        float scaledHeight = 74 * Config.Scale;
+        NPC.SetBaseValues(
+            width: (int)scaledWidth,
+            height: (int)scaledHeight,
+            lifeMax: Config.LifeMax,
+            friendly: false,
+            value: 0,
+            damage: Config.Damage,
+            defense: Config.Defense
+        );
+        NPC.HitSound = SoundID.NPCHit1;
+        ResetAI();
+        DummyDPS.Parent = this;
+    }
 
+    private void ResetAI()
+    {
         if (Config.AIStyle == DummyConfig.AIType.SelfDefine)
         {
             if (MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer)
-                npc.aiStyle = Config.customAIStyle;
+            {
+                AIType = Config.customAIType;
+                var mimicNpc = new NPC();
+                mimicNpc.SetDefaults(Config.customAIType);
+                NPC.aiStyle = mimicNpc.aiStyle;
+            }
             else
             {
                 Config.AIStyle = DummyConfig.AIType.Default;
-                npc.aiStyle = -1;
+                NPC.aiStyle = -1;
+                AIType = 0;
             }
         }
         else
-            npc.aiStyle = (int)Config.AIStyle;
-        DummyDPS.Parent = this;
+        {
+            AIType = (int)Config.AIStyle;
+            if (Config.AIStyle is DummyConfig.AIType.Default)
+            {
+                NPC.aiStyle = -1;
+            }
+            else
+            {
+                var mimicNpc = new NPC();
+                mimicNpc.SetDefaults((int)Config.AIStyle);
+                NPC.aiStyle = mimicNpc.aiStyle;
+            }
+        }
     }
+
     public override void SendExtraAI(BinaryWriter writer)
     {
         writer.Write(HitScale);
         base.SendExtraAI(writer);
     }
+
     public override void ReceiveExtraAI(BinaryReader reader)
     {
         HitScale = reader.ReadSingle();
         base.ReceiveExtraAI(reader);
     }
-    //private float HitScale { get => NPC.ai[0]; set => NPC.ai[0] = value; }
+
     private float HitScale { get; set; }
 
     public void Reset()
@@ -213,6 +288,9 @@ public class DummyNPC : ModNPC
         npc.ShowNameOnHover = Config.ShowNameOnHover;
         npc.damage = Config.Damage;
         npc.lifeMax = Config.LifeMax;
+        npc.scale = Config.Scale;
+        npc.width = (int)(56 * npc.scale);
+        npc.height = (int)(74 * npc.scale);
         if (Config.LockHP)
         {
             npc.life = npc.lifeMax;
@@ -223,25 +301,14 @@ public class DummyNPC : ModNPC
         npc.noTileCollide = Config.NoTileCollide;
         npc.knockBackResist = Config.KnockBackResist;
 
-        if (Config.AIStyle == DummyConfig.AIType.SelfDefine) 
-        {
-            if (MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer)
-                npc.aiStyle = Config.customAIStyle;
-            else 
-            {
-                Config.AIStyle = DummyConfig.AIType.Default;
-                npc.aiStyle = -1;
-            }
-        }
-        else
-            npc.aiStyle = (int)Config.AIStyle;
+        ResetAI();
         DummyDPS.Update();
     }
+
     public void Disappear()
     {
         NPC npc = NPC;
         npc.active = false;
-        //(npc.ModNPC as DummyNPC).DummyDPS.Reset();
 
         for (int i = 0; i < 20; i++)
         {
@@ -253,34 +320,52 @@ public class DummyNPC : ModNPC
 
     public override void AI()
     {
-        Reset();
-        if (!Main.player[Owner].active || Vector2.Distance(Main.player[Owner].Center, NPC.Center) > 4096)
-            RemoveDummyModule.Get(NPC.whoAmI, Main.myPlayer).Send(runLocally: true);
-        NPC npc = NPC;
-        npc.dontTakeDamage = CurrentFrameProperties.AnyActiveBoss;
-        npc.friendly = CurrentFrameProperties.AnyActiveBoss;
-        if (npc.HasPlayerTarget)
+        if (!IsPlayerInRange())
         {
-            Player player = Main.player[npc.target];
-
-            if (player.position.X < npc.position.X)
-            {
-                npc.spriteDirection = 1;
-            }
-            else
-            {
-                npc.spriteDirection = -1;
-            }
+            RemoveDummyModule.Get(NPC.whoAmI, Main.myPlayer).Send(runLocally: true);
+            return;
         }
 
-        UpdateTimer();
+        Reset();
+        UpdateBossInteraction();
+        UpdateDirection();
+        UpdateHitEffects();
+        UpdateFrame();
 
+        if (NPC.aiStyle == -1)
+            NPC.velocity = Vector2.Zero;
+    }
+
+    private bool IsPlayerInRange()
+    {
+        return Main.player[Owner].active &&
+               Vector2.Distance(Main.player[Owner].Center, NPC.Center) <= MaxDistance;
+    }
+
+    private void UpdateBossInteraction()
+    {
+        NPC.dontTakeDamage = CurrentFrameProperties.AnyActiveBoss;
+        NPC.friendly = CurrentFrameProperties.AnyActiveBoss;
+    }
+
+    private void UpdateDirection()
+    {
+        if (NPC.HasPlayerTarget)
+        {
+            NPC.spriteDirection = Main.player[NPC.target].position.X < NPC.position.X ? 1 : -1;
+        }
+    }
+
+    private void UpdateFrame()
+    {
         NPC.frame = new Rectangle(0, NPC.frameCounter > 0 ? 76 : 0, 56, 74);
-        npc.scale = 1f + HitScale;
+        NPC.scale = Config.Scale + HitScale;
+    }
 
-        if (npc.aiStyle == -1)
-            npc.velocity = Vector2.Zero;
-
+    private void UpdateHitEffects()
+    {
+        HitScale = Math.Max(0, HitScale - HitScaleDecayRate);
+        NPC.frameCounter = Math.Max(0, NPC.frameCounter - 1f);
     }
 
     public void ClearBuffs()
@@ -297,24 +382,12 @@ public class DummyNPC : ModNPC
             NetMessage.SendData(MessageID.NPCBuffs, -1, -1, null, NPC.whoAmI);
     }
 
-    public void UpdateTimer()
-    {
-        HitScale -= 0.01f;
-        HitScale = Math.Max(0, HitScale);
-        NPC.frameCounter -= 1f;
-        NPC.frameCounter = Math.Max(0, NPC.frameCounter);
-    }
-
     public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
     {
         DummyDPS.Hurt(damageDone);
 
         HitScale = 0.1f;
-        NPC.frameCounter = 60f;
-        //if (Main.netMode == NetmodeID.Server)
-        //    Console.WriteLine("服务器端执行受击");
-        //else
-        //    Main.NewText($"客户端{Main.myPlayer}号执行受击");
+        NPC.frameCounter = HitFrameDuration;
     }
 
     public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
@@ -322,7 +395,7 @@ public class DummyNPC : ModNPC
         DummyDPS.Hurt(damageDone);
 
         HitScale = 0.1f;
-        NPC.frameCounter = 60f;
+        NPC.frameCounter = HitFrameDuration;
     }
 
     public override bool PreDraw(SpriteBatch sb, Vector2 screenPos, Color drawColor)
@@ -332,27 +405,24 @@ public class DummyNPC : ModNPC
         Vector2 fSize = npc.frame.Size();
 
         Vector2 position = npc.position - screenPos;
+        Vector2 center = npc.Center - screenPos;
 
         if (Config.ShowBox)
         {
-            //SDFRectangle.HasBorder(position, npc.Size, new(0f), Color.Transparent, 2f, Color.White, false);
-            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 0)-Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
-            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 1)-Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
-            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(0, .5f)-Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
-            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(1, .5f)-Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 0) - Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 1) - Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(0, .5f) - Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(1, .5f) - Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
         }
 
-        sb.Draw(texture2D, position + fSize / 2f,
+        sb.Draw(texture2D, center,
             npc.frame, drawColor, npc.rotation, fSize / 2f, npc.scale,
             npc.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0f);
 
         if (Config.ShowDamageData)
         {
-            DummyDPS.DrawString(position + new Vector2(fSize.X + 10f, 0f), new Vector2(0f, 0f));
+            DummyDPS.DrawString(position + new Vector2(fSize.X * npc.scale + 10f, 0f), new Vector2(0f, 0f));
         }
-        /*sb.DrawString(FontAssets.MouseText.Value, $"{npc.whoAmI}\n{Config.LockHP}\n{(npc.lifeMax, Config.LifeMax)}\n{(npc.defense, Config.Defense)}\n" +
-            $"{(npc.damage, Config.Damage)}\n{Config.ShowBox}\n{Config.ShowDamageData}\n{(npc.ShowNameOnHover, Config.ShowNameOnHover)}\n{(npc.immortal, Config.Immortal)}\n" +
-            $"{(npc.noGravity, Config.NoGravity)}\n{(npc.noTileCollide, Config.NoTileCollide)}\n{(npc.knockBackResist, Config.KnockBackResist)}", npc.Center - Main.screenPosition + new Vector2(0, 80), Color.White);*/
         return false;
     }
 }

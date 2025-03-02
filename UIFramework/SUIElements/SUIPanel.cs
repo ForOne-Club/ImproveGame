@@ -18,9 +18,29 @@ namespace ImproveGame.UIFramework.SUIElements
         /// 可拖动
         /// </summary>
         internal bool Draggable;
-
         internal bool Dragging;
         internal Vector2 Offset;
+
+        /// <summary>
+        /// 可调节大小
+        /// </summary>
+        internal bool Resizeable;
+        internal bool Resizing;
+        internal int MinResizeWidth = 200;
+        internal int MinResizeHeight = 200;
+        /// <summary>
+        /// 鼠标放到可以调节大小的范围时，会显示一个物品图标，设置为-1则不显示
+        /// </summary>
+        internal int ItemIdForResizeIcon = ItemID.TitanGlove;
+
+        public Rectangle ResizeRectangle
+        {
+            get
+            {
+                CalculatedStyle innerDimensions = GetInnerDimensions();
+                return new Rectangle((int)(innerDimensions.X + innerDimensions.Width - 12), (int)(innerDimensions.Y + innerDimensions.Height - 12), 12 + (int)PaddingRight, 12 + (int)PaddingBottom);
+            }
+        }
 
         public SUIPanel(Color borderColor, Color backgroundColor, float rounded = 12, float border = 2,
             bool draggable = false)
@@ -56,8 +76,14 @@ namespace ImproveGame.UIFramework.SUIElements
         {
             base.LeftMouseDown(evt);
 
+            CalculatedStyle innerDimensions = GetInnerDimensions();
+            if (Resizeable && ResizeRectangle.Contains(evt.MousePosition.ToPoint()))
+            {
+                Offset = new Vector2(evt.MousePosition.X - PositionPixels.X - innerDimensions.Width, evt.MousePosition.Y - PositionPixels.Y - innerDimensions.Height);
+                Resizing = true;
+            }
             // 当点击的是子元素不进行移动
-            if (Draggable &&
+            else if (Draggable &&
                 (evt.Target == this || (evt.Target is View view && view.DragIgnore) ||
                  evt.Target.GetType().IsAssignableFrom(typeof(UIElement))))
             {
@@ -70,6 +96,7 @@ namespace ImproveGame.UIFramework.SUIElements
         {
             base.LeftMouseUp(evt);
             Dragging = false;
+            Resizing = false;
         }
 
         public override void Update(GameTime gameTime)
@@ -87,6 +114,19 @@ namespace ImproveGame.UIFramework.SUIElements
             if (Dragging)
             {
                 SetPosPixels(Main.mouseX - Offset.X, Main.mouseY - Offset.Y).Recalculate();
+            }
+
+            if (Resizing)
+            {
+                CalculatedStyle dimensions = GetOuterDimensions();
+                Width.Pixels = Math.Max(Main.MouseScreen.X - dimensions.X - Offset.X, MinResizeWidth);
+                Height.Pixels = Math.Max(Main.MouseScreen.Y - dimensions.Y - Offset.Y, MinResizeHeight);
+                Recalculate();
+            }
+
+            if (ResizeRectangle.Contains(Main.MouseScreen.ToPoint()))
+            {
+                Main.instance.MouseText($"[i:{ItemIdForResizeIcon}]", 0, 0, Main.mouseX + 16, Main.mouseY - 10);
             }
 
             base.Draw(spriteBatch);

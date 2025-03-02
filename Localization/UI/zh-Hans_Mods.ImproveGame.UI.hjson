@@ -423,11 +423,12 @@ QuickShimmer: {
 DummyConfiguration: {
 	Title: 假人配置
 
-	fieldName: {
+	FieldName: {
 		LockHP: 锁定生命值
 		LifeMax: 最大生命值
 		Defense: 防御
 		Damage: 触碰伤害
+		Scale: 大小
 		ShowBox: 显示碰撞范围
 		ShowDamageData: 显示伤害数据
 		ShowNameOnHover: 显示 NPC 名称
@@ -435,7 +436,7 @@ DummyConfiguration: {
 		NoGravity: 不受重力影响
 		NoTileCollide: 关闭物块碰撞
 		KnockBackResist: 击退系数
-		AIStyle: AI类型
+		AIStyle: 模拟NPC行为
 	}
 
 	AIType: {
@@ -450,12 +451,12 @@ DummyConfiguration: {
 	}
 	CustomDisabled:
 		'''
-		目前服务器不允许自定义AI类型。
+		目前服务器不允许自定义模拟NPC行为。
 		如果你有权限，点击这里修改设置
 		'''
-	DummyConfigLabel:允许在多人模式假人使用自定义AI类型
+	DummyConfigLabel: 允许在多人模式假人使用自定义模拟NPC行为
 	OpenWikiTip: 点击以打开相关Wiki页面
-	WikiURL: https://terraria.wiki.gg/zh/wiki/AI
+	WikiURL: https://terraria.wiki.gg/zh/wiki/NPC_ID
 }
 
 Autofisher: {

@@ -7,12 +7,12 @@ NPC: {
 	ShowDamageData: Show Damage Stats
 	ShowNameOnHover: Show NPC Name On Cursor Hover
 	Immortal:
-	'''
-	Setting this to 'True' will make it behave like the vanilla Target Dummy
-	meaning that homing attacks won't target it
-	melee attack effect won't triggered
-	and the dummy won't be defeated
-	'''
+		'''
+		Setting this to 'True' will make it behave like the vanilla Target Dummy
+		meaning that homing attacks won't target it
+		melee attack effect won't triggered
+		and the dummy won't be defeated
+		'''
 	NoGravity: Not Affected By Gravity
 	NoTileCollide: Disable Tile Collision
 	KnockBackResist: Knockback coefficient, 0 gives knockback immunity
