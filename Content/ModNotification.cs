@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework.Common;
+﻿using ImproveGame.UI.ModernConfig;
+using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ReLogic.Graphics;
 using Terraria.GameInput;
@@ -60,10 +61,21 @@ public class ModNotificationPopup : IInGameNotification
         CreationObject = _notification;
     }
 
+    public event Action OnLeftMouseClick;
+
+    int clickCoolDown;
+
     public void Update()
     {
         if (!_isMouseHovering || TimeLeft <= 24 || TimeLeft >= TimeLeftMax - 15)
             TimeLeft--;
+
+        if (_isMouseHovering && Main.mouseLeft && Main.hasFocus && clickCoolDown <= 0) 
+        {
+            OnLeftMouseClick?.Invoke();
+            clickCoolDown = 10;
+        }
+        clickCoolDown--;
     }
 
     public void DrawInGame(SpriteBatch spriteBatch, Vector2 bottomAnchorPosition)

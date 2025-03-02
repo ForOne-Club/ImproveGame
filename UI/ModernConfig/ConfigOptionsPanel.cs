@@ -106,7 +106,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         SearchBarTextChanged(ref text);
         Recalculate();
     }
-
+    public void SetSearchBarText(string text) => _searchBar.Text = text;
     private void SearchBarTextChanged(ref string text)
     {
         DropdownList.Enabled = false;
