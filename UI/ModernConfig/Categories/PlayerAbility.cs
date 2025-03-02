@@ -18,6 +18,7 @@ public sealed class PlayerAbility : Category
         panel.AddValueSlider(Config, nameof(Config.ExtraToolSpeed));
         panel.AddToggle(Config, nameof(Config.ModifyPlayerPlaceSpeed));
         panel.AddValueSlider(Config, nameof(Config.ModifyPlayerTileRange));
+        panel.AddList(Config, nameof(Config.TileSpeed_Blacklist));
         panel.AddValueSlider(Config, nameof(Config.ExtraPlayerBuffSlots));
         panel.AddToggle(Config, nameof(Config.RespawnWithFullHP));
         panel.AddToggle(Config, nameof(Config.DontDeleteBuff));

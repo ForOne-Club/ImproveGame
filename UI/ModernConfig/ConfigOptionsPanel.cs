@@ -6,10 +6,10 @@ using ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using PinyinNet;
 using System.Text.RegularExpressions;
 using Terraria.GameInput;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig;
 
@@ -23,10 +23,12 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
 
     private HashSet<string> _addedOptions = [];
     private List<ModernConfigOption> _allOptions = [];
-    private SUIEditableText _searchBar { get;  set; }
-    private SUIScrollView2 _options { get;  set; }
-    public SUIDropdownListContainer DropdownList { get;  set; }
-
+    public List<ModernConfigOption> AllOptions => _allOptions;
+    private SUIEditableText _searchBar { get; set; }
+    private SUIScrollView2 _options { get; set; }
+    public SUIDropdownListContainer DropdownList { get; set; }
+    public static object GlobalItem;
+    public static List<string> GlobalPath;
     public static Category CurrentCategory
     {
         get => _currentCategory;
@@ -42,6 +44,101 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         }
     }
 
+    private static SUIText CreateRightArrow()
+    {
+        SUIText arrow = new()
+        {
+            TextOrKey = ">",
+            RelativeMode = RelativeMode.Horizontal,
+            TextScale = 0.9f,
+            Spacing = new Vector2(6f, 0f),
+            // 碰撞箱测试用代码，显示轮廓
+            // BorderColor = Color.Red,
+            // BgColor = Color.Black * 0.4f,
+            // Border = 2f,
+            // Rounded = new Vector4(2f),
+        };
+        arrow.RecalculateText();
+        arrow.SetInnerPixels(arrow.TextSize * arrow.TextScale);
+        return arrow;
+    }
+    //public static List<Category> PreviousPageList = [];
+    private static SUIText GeneratePathTextElement(Category current, object item, List<string> path)
+    {
+        var list = ModernConfigUI.Instance.PathPanel;
+        SUIText prevPage = new()
+        {
+            TextOrKey = current.Label.Trim(),
+            Spacing = new Vector2(6f, 0f),
+            RelativeMode = RelativeMode.Horizontal,
+            TextScale = 0.9f,
+            // 碰撞箱测试用代码，显示轮廓
+            // BorderColor = Color.Red,
+            // BgColor = Color.Black * 0.4f,
+            // Border = 2f,
+            // Rounded = new Vector4(2f),
+        };
+        prevPage.OnLeftClick += (evt, elem) =>
+        {
+            if (CurrentCategory == current) return;
+            int index = list.ListView.Elements.IndexOf(elem);
+
+            if (index == 0)
+            {
+                ModernConfigUI.Instance.PathPanelTimer.Close();
+            }
+            else
+            {
+                list.ListView.Elements.RemoveRange(index + 1, list.ListView.Elements.Count - index - 1);
+                list.Recalculate();
+            }
+            GlobalItem = item;
+            GlobalPath = path;
+            CurrentCategory = current;
+            GlobalItem = null;
+            GlobalPath = null;
+            SoundEngine.PlaySound(SoundID.MenuClose);
+        };
+        prevPage.OnUpdate += (elem) =>
+        {
+            var s = elem as SUIText;
+            var dimension = s.GetDimensions();
+            Color targetColor;
+            if (CurrentCategory == current)
+                targetColor = Color.White;
+            else if (s.IsMouseHovering)
+                targetColor = Color.Yellow;
+            else
+                targetColor = Color.Lerp(Color.LightGray, Color.Gray, 0.5f + 0.5f * MathF.Cos(Main.GlobalTimeWrappedHourly * 2.5f + dimension.Position().X * .02f));
+            s.TextColor = Color.Lerp(s.TextColor, targetColor, 0.15f);
+            s.RecalculateText();
+        };
+        prevPage.RecalculateText();
+        prevPage.SetInnerPixels(prevPage.TextSize * prevPage.TextScale);
+        return prevPage;
+    }
+    public static void SwitchToSubPage(Category destination, object item, List<string> path)
+    {
+        var timer = ModernConfigUI.Instance.PathPanelTimer;
+        var list = ModernConfigUI.Instance.PathPanel;
+        SoundEngine.PlaySound(SoundID.MenuOpen);
+
+        // PreviousPageList.Add(CurrentCategory);
+        if (timer.AnyClose)
+        {
+            GeneratePathTextElement(CurrentCategory, null, null).JoinParent(list.ListView);
+            timer.Open();
+        }
+
+        GlobalItem = item;
+        GlobalPath = path;
+        CurrentCategory = destination;
+        GlobalItem = null;
+        GlobalPath = null;
+        CreateRightArrow().JoinParent(list.ListView);
+        GeneratePathTextElement(CurrentCategory, item, path).JoinParent(list.ListView);
+        list.Recalculate();
+    }
     public ConfigOptionsPanel(Color color) : base(color, color)
     {
         const int searchBarHeight = 30;
@@ -87,6 +184,21 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             RelativeMode = RelativeMode.Vertical,
             Spacing = new Vector2(gap)
         };
+        _options.OnUpdate += element =>
+        {
+            // 如果隐藏了搜索栏，这里的size要补上对应的高度，不然最底部会有一片空域
+            switch (ShouldHideSearchBar)
+            {
+                case true when element.Height.Pixels != -gap:
+                    element.SetSize(0f, -gap, 1f, 1f);
+                    Recalculate();
+                    break;
+                case false when element.Height.Pixels != -searchBarHeight - gap:
+                    element.SetSize(0f, -searchBarHeight - gap, 1f, 1f);
+                    Recalculate();
+                    break;
+            }
+        };
         _options.SetPadding(0f, 0f);
         _options.SetSize(0f, -searchBarHeight - gap, 1f, 1f);
         _options.JoinParent(this);
@@ -120,7 +232,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             _allOptions.ForEach(o =>
             {
                 o.Highlighted = false;
-                o.DebugText = "";
+                o.ResetDebugText();
                 o.JoinParent(_options.ListView);
             });
             Recalculate();
@@ -154,16 +266,33 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         Recalculate();
     }
 
-    public void AddToggle(ModConfig config, string name) => AddToAllOptions<OptionToggle>(config, name);
+    public void AddToggle(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionToggle>(config, nameOrMemberInfo);
 
-    public void AddValueSlider(ModConfig config, string name) => AddToAllOptions<OptionSlider>(config, name);
+    public void AddValueSlider(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionSlider>(config, nameOrMemberInfo);
 
-    public void AddValueText(ModConfig config, string name) => AddToAllOptions<OptionNumber>(config, name);
+    public void AddEditableText(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionEditableText>(config, nameOrMemberInfo);
+    //public void AddValueText(ModConfig config, string name) => AddToAllOptions<OptionNumber>(config, name);
 
-    public void AddEnum(ModConfig config, string name) => AddToAllOptions<OptionDropdownList>(config, name);
+    public void AddEnum(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionDropdownList>(config, nameOrMemberInfo);
 
-    private void AddToAllOptions<T>(ModConfig config, string name) where T : ModernConfigOption
+    public void AddObject(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionObject>(config, nameOrMemberInfo);
+    public void AddCustomUIConfig(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionCustomUIConfig>(config, nameOrMemberInfo);
+    public void AddArray(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionArray>(config, nameOrMemberInfo);
+    public void AddList(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionList>(config, nameOrMemberInfo);
+    public void AddHashSet(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionHashSet>(config, nameOrMemberInfo);
+    public void AddDictionary(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionDictionary>(config, nameOrMemberInfo);
+    public void AddVector2(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionVector2>(config, nameOrMemberInfo);
+    public void AddColor(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionColor>(config, nameOrMemberInfo);
+    public void AddDefinition(ModConfig config, object nameOrMemberInfo) => AddToAllOptions<OptionDefinition>(config, nameOrMemberInfo);
+    public void AddNotSupportText(ModConfig config, PropertyFieldWrapper variableInfo) => AddToAllOptions<OptionNotSupportText>(config, variableInfo);
+
+    private void AddToAllOptions<T>(ModConfig config, object nameOrMemberInfo) where T : ModernConfigOption
     {
+        if (nameOrMemberInfo is not PropertyFieldWrapper MemberInfo)
+            if (nameOrMemberInfo is string memberName)
+                MemberInfo = ModernConfigOption.GetWrapper(config.GetType(), memberName);
+            else return;
+        var name = MemberInfo.Name;
         // 如果已经添加过这个选项，直接返回
         if (!_addedOptions.Add(name))
             return;
@@ -171,9 +300,23 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         if (!CurrentCategory.CanOptionBeAdded(config, name))
             return;
         // 创建实例并加入到_allOptions列表
-        var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T), config, name);
+        var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T));//, config, nameOrMemberInfo
+        instance.Bind(config, MemberInfo, null);
         _allOptions.Add(instance);
     }
+
+    public void RemoveFromAllOptions(ModConfig config, object nameOrMemberInfo)
+    {
+        if (nameOrMemberInfo is not PropertyFieldWrapper MemberInfo)
+            if (nameOrMemberInfo is string memberName)
+                MemberInfo = ModernConfigOption.GetWrapper(config.GetType(), memberName);
+            else return;
+        var name = MemberInfo.Name;
+
+        _addedOptions.Remove(name);
+        _allOptions.RemoveAll(o => o.OptionName == name);
+    }
+
 
     public void AddToOptionsDirect(View view)
     {
@@ -193,7 +336,6 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
             DelayRefreshCurrentPage = false;
             RefreshCurrentPage();
         }
-
         base.Update(gameTime);
 
         if (IsMouseHovering)

@@ -2,6 +2,7 @@
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.UIStructs;
+using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using ReLogic.Graphics;
 using System.Reflection;
@@ -29,11 +30,23 @@ public class TerrariaVanillaUIResetter : ModSystem
         }
 
         // hookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+        // ilhookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+#if true
+        if (typeof(Hook).GetMethod("PrepareRealTarget", BindingFlags.Instance | BindingFlags.NonPublic) is { } hook_PrepareRealTarget)
+        {
+            MonoModHooks.Modify(hook_PrepareRealTarget, ilContext =>
+            {
+                var cursor = new ILCursor(ilContext);
+                cursor.RemoveRange(2);//第一行把this实例压到栈上，第二行调用函数，两行都踹了
+            });
+        };
+
+#else
         if (typeof(Hook).GetMethod("CheckSupported", BindingFlags.Instance | BindingFlags.NonPublic) is { } hook_CheckSupported)
         {
             MonoModHooks.Add(hook_CheckSupported, (Action<Hook> orig, Hook self) => { });
         }
-
+#endif
         // 修改原版 UI 裁切算法
         On_UIElement.GetClippingRectangle += (_, self, batch) => ClippingRectangleFix.FixedGet(self, batch);
 

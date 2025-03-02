@@ -161,6 +161,119 @@ public override void PostSetupContent() {
             "AddStation",//加入你自己的增益站2
             ModContent.ItemType<MyStation2>(), // 物品ID 2
             ModContent.BuffType<MyStationBuff2>() // BuffID 2
+        );
     }
+}
+```
+
+### RegisterCategory
+注册分类卡
+#### 参数
+- `Mod` 注册的分类卡所在的模组的实例
+- `List<KeyValuePair<string, ModConfig>>` 分类卡中的选项信息，键为字段/属性名，值为该模组设置的实例
+- `int` 分类卡的物品图标对应物品id，可选参数，默认值为0
+- `Func<Texture2D>` 获取分类卡图标的函数，会覆盖上面的物品图标id的效果，默认值为null
+- `Func<string>` 获取该分类卡的标签的函数，默认值为null
+- `Func<string>` 获取该分类卡的描述的函数，默认值为null
+
+### SetAboutPage
+注册 “关于” 页面
+#### 参数
+- `Mod` 注册的 “关于” 页面所在的模组的实例
+- `Func<string>` 获取 “关于” 页面中所写的文本的函数
+- `int`  “关于” 页面的物品图标对应物品id，可选参数，默认值为0
+- `Func<Texture2D>` 获取 “关于” 页面图标的函数，会覆盖上面的物品图标id的效果，默认值为null
+- `Func<string>` 获取该 “关于” 页面的标签的函数，默认值为null
+- `Func<string>` 获取该 “关于” 页面的描述的函数，默认值为null
+
+### RemoveCategory
+移除模组注册的所有分类卡
+#### 参数
+- `Mod` 目标模组的实例
+
+### RemoveAboutPage
+移除模组注册的 “关于” 页面
+#### 参数
+- `Mod` 目标模组的实例
+
+### AddModernConfigTitle
+设置模组的配置中心在模组设置入口处的文本标题
+#### 参数
+- `Mod` 目标模组的实例
+- `LocalizedText` 标题的本地化文本实例
+
+### RegisterPreview
+注册预览绘制
+#### 参数
+- `PropertyFieldWrapper` 注册的预览绘制对应的选项的字段/属性信息，注意需要直接属于某个Config才有效
+- `Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>` 
+注册的预览绘制内容
+##### Action参数的参数
+- `UIElement` 绘制框元素
+- `ModConfig` 预览绘制的选项对应的设置实例
+- `PropertyFieldWrapper` 对应的选项的字段/属性信息
+- `object` 直接隶属对象
+- `IList` 直接隶属列表
+- `int` 列表中的下标
+
+### OnGlobalConfigPreview
+添加全局预览绘制，与上一个唯一的区别是这个不针对任何一个特定选项，用来批量添加绘制
+#### 参数
+- `Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>`
+参考上个条目的内容
+
+
+### 使用例
+
+```CSharp
+// 此处示例使用了ImproveGame_ModernConfigCrossModHelper.cs文件的内容
+// 这个是一个Mod类的Load函数
+public override void Load() 
+{
+    if (Main.netMode == NetmodeID.Server || 
+    !ModLoader.TryGetMod("ImproveGame", out var qot)) return;
+
+    //添加标题
+    AddModernConfigTitle(qot,  this, 
+    Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));
+
+    SetAboutPage(qot, this, () => "自己适配配置中心好累哦\n不如反射生成(逃", 
+    (int)ItemID.IronShortsword, null, () => "关于示例", () => "请不要在意吐槽");
+    //上面三个文本自己写本地化获取文本吧(
+
+    //此处示例为给单个设置实例批量添加设置选项
+    //MyConfig.Instance为加载时获取的MyConfig实例
+    RegisterCategory(qot, this, MyConfig.Instance,
+    [
+        nameof(MyConfig.SomeField),
+        nameof(MyConfig.SomeProperty),
+        nameof(MyConfig.SomeArray),
+        nameof(MyConfig.SomeDefinition),
+    ],
+    ItemID.Cog, null, () => "这是一些数据", () => "我顺带告诉你这个支持哪些东西了");
+    //上面两个文本自己写本地化获取文本吧(
+
+    //此处示例为给多个设置示例批量添加设置选项
+    //一个选项名一个设置实例那种太麻烦了我就不写示例了
+    RegisterCategory(qot, this, 
+    [
+        (MyConfig.Instance, //上面水过的再水一遍(
+        [
+            nameof(MyConfig.SomeField),
+            nameof(MyConfig.SomeProperty),
+            nameof(MyConfig.SomeArray),
+            nameof(MyConfig.SomeDefinition),
+        ]),
+        (SeverConfig.Instance,
+        [
+            nameof(MyConfig.SomeVector2),
+            nameof(MyConfig.SomeColor),
+            nameof(MyConfig.SomePoint),
+            nameof(MyConfig.SomeClass),
+        ])
+    ],
+        ItemID.WireKite, null, () => "两家的拼在一起！", 
+        () => "也许有些内容同时需要客户端和服务端来管理，"
+            + "这时这个就大抵能派上很大用场了，嗯。");
 }
 ```

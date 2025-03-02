@@ -1,12 +1,19 @@
-﻿using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework;
+using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
+using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel;
+using System.Reflection;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.UI;
+using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
-public sealed class OptionSlider : ModernConfigOption
+public class OptionSlider : ModernConfigOption //去掉了sealed
 {
     private class SlideBox : View
     {
@@ -15,6 +22,11 @@ public sealed class OptionSlider : ModernConfigOption
         public event Action EndDraggingCallback;
         private float _value;
         private bool _dragging;
+
+        public Utils.ColorLerpMethod ColorMethod;
+        public bool colorMethodPendingModified = true;
+        Texture2D colorBar;
+
 
         public float Value
         {
@@ -37,6 +49,12 @@ public sealed class OptionSlider : ModernConfigOption
             SetSizePixels(80f, 28f);
             VAlign = 0.5f;
             Rounded = new Vector4(14f);
+        }
+
+        ~SlideBox()
+        {
+            Main.RunOnMainThread(() => colorBar?.Dispose());
+            //colorBar?.Dispose();
         }
 
         public override void LeftMouseDown(UIMouseEvent evt)
@@ -70,16 +88,44 @@ public sealed class OptionSlider : ModernConfigOption
 
         public override void DrawSelf(SpriteBatch spriteBatch)
         {
-            base.DrawSelf(spriteBatch);
-
-            if (_dragging)
-                UpdateDragging();
-
             // 基本字段
             var dimensions = GetDimensions();
             var position = dimensions.Position();
             var center = dimensions.Center();
             var size = dimensions.Size();
+
+            if (ColorMethod != null && !IgnoresMouseInteraction)
+            {
+                if (colorBar == null)
+                {
+                    try
+                    {
+                        colorBar = new Texture2D(Main.graphics.GraphicsDevice, 300, 1);
+                    }
+                    catch
+                    {
+                        Texture2D texdummy = null;
+                        Main.RunOnMainThread(() => { texdummy = new Texture2D(Main.graphics.GraphicsDevice, 300, 1); });
+                        colorBar = texdummy;
+                    }
+                }
+                if (colorMethodPendingModified)
+                {
+                    Color[] colors = new Color[300];
+                    for (int n = 0; n < 300; n++)
+                        colors[n] = ColorMethod.Invoke(n / 299f);
+                    colorBar.SetData(colors);
+                    colorMethodPendingModified = false;
+                }
+                SDFRectangle.BarColor(position, size, Rounded, colorBar, Vector2.UnitX / dimensions.Width, 0, true);//-Main.GlobalTimeWrappedHourly
+            }
+            else
+                base.DrawSelf(spriteBatch);
+
+            if (_dragging)
+                UpdateDragging();
+
+
 
             // 圆的属性
             float roundRadius = size.Y / 2f - 2f; // 半径
@@ -91,10 +137,12 @@ public sealed class OptionSlider : ModernConfigOption
             var roundLeftTop = roundCenter - new Vector2(roundRadius);
 
             // 颜色选择
-            var innerColor = UIStyle.SliderRound;
+            var innerColor = ColorMethod != null ? ColorMethod.Invoke(_value) : UIStyle.SliderRound;
+            //var borderColor = innerColor;
             var borderColor = UIStyle.SliderRound;
             if (MouseInRound(roundCenter, (int)roundRadius))
                 borderColor = UIStyle.SliderRoundHover;
+
 
             if (IgnoresMouseInteraction)
             {
@@ -103,17 +151,27 @@ public sealed class OptionSlider : ModernConfigOption
             }
 
             // 绘制
-            SDFGraphics.HasBorderRound(roundLeftTop, roundDiameter, innerColor, 2f, borderColor);
+            SDFGraphics.HasBorderRound(roundLeftTop, default, roundDiameter, innerColor, 2f, borderColor, GetMatrix(true));
         }
-    }
 
+        public void OutSideEditEnd()=> EndDraggingCallback?.Invoke();
+    }
+    private Utils.ColorLerpMethod _colorLerpMethod;
+    public void SetColorMethod(Utils.ColorLerpMethod colorMethod) 
+    {
+        _colorLerpMethod = colorMethod;
+        _slideBox.ColorMethod = colorMethod;
+    }
+    public void SetColorPendingModified() => _slideBox.colorMethodPendingModified = true;
+    private SUISplitButton _splitButton;
     private SlideBox _slideBox;
     private SUINumericText _numericTextBox;
-
-    public OptionSlider(ModConfig config, string optionName) : base(config, optionName, 140)
+    public readonly static Type[] SupportedTypes = [typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal)];
+    private readonly static Type[] FractionTypes = [typeof(float), typeof(double), typeof(decimal)];
+    protected override void OnBind()
     {
         CheckValid();
-
+        var v = GetValue();
         var box = new View
         {
             IsAdaptiveWidth = true,
@@ -122,21 +180,106 @@ public sealed class OptionSlider : ModernConfigOption
             Height = StyleDimension.Fill
         };
         box.JoinParent(this);
-
+        AddUpDown(box);
         AddTextBox(box);
         AddSlideBox(box);
     }
-
-    private void CheckValid()
+    internal double Min = 0;
+    internal double Max = 1;
+    internal double Default = 1;
+    internal double? Increment = null;
+    protected override void CheckAttributes()
     {
-        if (FieldInfo.FieldType != typeof(int) && FieldInfo.FieldType != typeof(float) &&
-            FieldInfo.FieldType != typeof(double))
-            throw new Exception($"Field \"{OptionName}\" is not a int, float or double");
+        base.CheckAttributes();
+        var type = VarType;
+        var pair = (Min, Max);
+        if (IsInt)
+            pair = (0.0, 100.0);
+
+
+        if (type == typeof(byte))
+            pair = (0.0, 255.0);
+        else if (type == typeof(sbyte))
+            pair = (-128.0, 127.0);
+        if (VariableInfo.IsProperty && false) //如果是属性就可以玩得花一点(x
+        {
+            if (type == typeof(short))
+                pair = (-32768.0, 32767.0);
+            else if (type == typeof(ushort))
+                pair = (0.0, 65536.0);
+            else if (type == typeof(int))
+                pair = (-2147483648.0, 2147483647.0);
+            else if (type == typeof(uint))
+                pair = (0.0, 4294967295);
+        }
+        (Min, Max) = pair;
+
+
+        var rangeAttribute = GetAttribute<RangeAttribute>();
+        if (rangeAttribute != null)
+        {
+            Max = Convert.ToDouble(rangeAttribute.Max);
+            Min = Convert.ToDouble(rangeAttribute.Min);
+        }
+
+
+        var defaultValueAttribute = GetAttribute<DefaultValueAttribute>();
+        if (defaultValueAttribute != null)
+            Default = Convert.ToDouble(defaultValueAttribute.Value);
+
+        var incrementAttribute = GetAttribute<IncrementAttribute>();
+        if (incrementAttribute != null)
+            Increment = Convert.ToDouble(incrementAttribute.Increment);
+        if (Increment == null && IsInt)
+            Increment = 1.0;
+
+        var customConfigAttribute = GetAttribute<CustomModConfigItemAttribute>();
+        if (customConfigAttribute != null)
+        {
+            var elem = Activator.CreateInstance(customConfigAttribute.Type);
+            if (elem is RangeElement range)
+            {
+                if(range.ColorMethod.Invoke(0.0f) != Color.Black && range.ColorMethod.Invoke(1.0f) != Color.White)
+                _colorLerpMethod = range.ColorMethod;
+            }
+        }
+        var sliderColor = GetAttribute<SliderColorAttribute>()?.Color;
+        if (_colorLerpMethod == null && sliderColor != null)
+            _colorLerpMethod = t => Color.Lerp(Color.Black * 0.3f, sliderColor.Value, t * t);// 
+    }
+    protected virtual void CheckValid()
+    {
+        if (!SupportedTypes.Contains(VarType))
+            throw new Exception($"Field \"{OptionName}\" is not a supported type. OptionSlider supports all build-in-types except for Boolean, IntPtr and UIntPtr");
+    }
+    private void AddUpDown(View box)
+    {
+        //if (Increment == null) return;
+        _splitButton = new SUISplitButton()
+        {
+            RelativeMode = RelativeMode.Horizontal,
+            BgColor = Color.Black * 0.4f,
+            Rounded = new Vector4(14f),
+            VAlign = 0.5f,
+            buttonBorderColor = Color.Black,
+            buttonColor = Color.Black * 0.4f,
+            Width = new(25, .0f),
+            Height = new(25, .0f)
+        };
+        _splitButton.OnLeftMouseDown += (evt, elem) =>
+        {
+            SoundEngine.PlaySound(SoundID.MenuTick);
+            var btn = elem as SUISplitButton;
+            double value = Min + (Max - Min) * _slideBox.Value + (btn.IsUP ? 1 : -1) * Increment.Value;
+            value = Math.Clamp(value, Min, Max);
+            SetConfigValue(value, broadcast: true);
+        };
+        _splitButton.JoinParent(box);
     }
 
     private void AddTextBox(View box)
     {
-        bool isInt = FieldInfo.FieldType == typeof(int);
+        bool isInt = IsInt;
         _numericTextBox = new SUINumericText
         {
             RelativeMode = RelativeMode.Horizontal,
@@ -161,6 +304,9 @@ public sealed class OptionSlider : ModernConfigOption
         {
             if (!double.TryParse(text, out var value))
                 return;
+            if (!_numericTextBox.IsWritingText) return; // 有可能是属性导致跟着另一个变了
+            // if (Increment is double d)
+            //     value = Math.Round((value - Min) / d) * d + Min;
             value = Math.Clamp(value, Min, Max);
             SetConfigValue(value, broadcast: false);
         };
@@ -168,10 +314,14 @@ public sealed class OptionSlider : ModernConfigOption
         {
             if (!_numericTextBox.IsValueSafe)
                 return;
-            SetConfigValue(_numericTextBox.Value, broadcast: true);
+            var value = _numericTextBox.Value;
+            // if (Increment is double d)
+            //     value = Math.Round((value - Min) / d) * d + Min;
+            value = Math.Clamp(value, Min, Max);
+            SetConfigValue(value, broadcast: true);
         };
         _numericTextBox.SetPadding(2, 2, 2, 2); // Padding影响里面的文字绘制
-        _numericTextBox.SetSizePixels(48, 28);
+        _numericTextBox.SetSizePixels(50, 28);
         _numericTextBox.JoinParent(box);
     }
 
@@ -182,14 +332,26 @@ public sealed class OptionSlider : ModernConfigOption
             RelativeMode = RelativeMode.Horizontal,
             Spacing = new Vector2(4),
         };
+        _slideBox.ColorMethod = _colorLerpMethod;
         _slideBox.ValueChangeCallback += () =>
         {
-            float value = MathHelper.Lerp((float)Min, (float)Max, _slideBox.Value);
+            double value = Min + (Max - Min) * _slideBox.Value;
+            // 更好的体验不要Increment检测
+            if (Config.Mod.Name is not "ImproveGame" && Increment is double d && d != 0)
+            {
+                value = Math.Round(value / d) * d;
+            }
+            value = Math.Clamp(value, Min, Max);
             SetConfigValue(value, broadcast: false);
         };
         _slideBox.EndDraggingCallback += () =>
         {
-            float value = MathHelper.Lerp((float)Min, (float)Max, _slideBox.Value);
+            double value = Min + (Max - Min) * _slideBox.Value;
+            if (Config.Mod.Name is not "ImproveGame" && Increment is double d && d != 0)
+            {
+                value = Math.Round(value / d) * d;
+            }
+            value = Math.Clamp(value, Min, Max);
             SetConfigValue(value, broadcast: true);
         };
         _slideBox.JoinParent(box);
@@ -197,32 +359,46 @@ public sealed class OptionSlider : ModernConfigOption
 
     private void SetConfigValue(double value, bool broadcast)
     {
-        if (!Interactable) return;
-        if (IsInt)
-            ConfigHelper.SetConfigValue(Config, FieldInfo, (int)Math.Round(value), broadcast);
-        else if (IsFloat)
-            ConfigHelper.SetConfigValue(Config, FieldInfo, (float)value, broadcast);
-        else
-            ConfigHelper.SetConfigValue(Config, FieldInfo, value, broadcast);
+        //if (!Interactable) return;
+        object realValue = Convert.ChangeType(IsFractional ? value : Math.Round(value), VarType);
+        SetValueDirect(realValue,broadcast);
+        //ConfigHelper.SetConfigValue(Config, VariableInfo, realValue, Item, broadcast, path: path);
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-
+        if (Increment == null)
+            _splitButton?.Remove();
+        _splitButton.IgnoresMouseInteraction = !Interactable;
         _slideBox.IgnoresMouseInteraction = !Interactable;
         _numericTextBox.IgnoresMouseInteraction = !Interactable;
 
         // 简直是天才的转换
-        var value = float.Parse(FieldInfo.GetValue(Config)!.ToString()!);
+        var value = float.Parse(GetValue()!.ToString()!);
         if (!_numericTextBox.IsWritingText)
             _numericTextBox.Value = value;
         _slideBox.Value = InverseLerp((float)Min, (float)Max, value);
     }
 
     private static float InverseLerp(float a, float b, float value) => (value - a) / (b - a);
+    // 为什么不用Utils.GetLerpValue() //((
 
-    private bool IsFloat => FieldInfo.FieldType == typeof(float);
-    private bool IsInt => FieldInfo.FieldType == typeof(int);
-    private bool IsDouble => FieldInfo.FieldType == typeof(double);
+    private bool IsFractional => FractionTypes.Contains(VarType);
+    private bool IsInt => !IsFractional;
+    public float LerpValue 
+    {
+        get => _slideBox.Value;
+        set
+        {
+            if (!_numericTextBox.IsWritingText)
+                _numericTextBox.Value = MathHelper.Lerp((float)Min, (float)Max, value);
+            _slideBox.Value = value;
+        }
+    }
+    public void OutSideEditEnd() => _slideBox?.OutSideEditEnd();
+    protected override void OnSetValueExternal(object value)
+    {
+        base.OnSetValueExternal(value);
+    }
 }

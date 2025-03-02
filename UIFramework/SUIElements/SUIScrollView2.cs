@@ -1,4 +1,8 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
+using ImproveGame.UIFramework.Graphics2D;
+using ReLogic.Graphics;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace ImproveGame.UIFramework.SUIElements;
 
@@ -172,18 +176,31 @@ public class SUIScrollView2 : TimerView
         #endregion
     }
 
+    static FieldInfo scrollWhellValueField;
     public override void ScrollWheel(UIScrollWheelEvent evt)
     {
+        float delta = 0;
+
+        var maxRange = ScrollBar.GetScrollRange();
         switch (ScrollOrientation)
         {
             case Orientation.Horizontal:
+                float origX = ScrollBar.TargetScrollPosition.X;
                 ScrollBar.TargetScrollPosition -= new Vector2(evt.ScrollWheelValue, 0f);
+                delta = ScrollBar.TargetScrollPosition.X - origX;
+                if (Math.Abs(delta) > 0 && (ScrollBar.TargetScrollPosition.X == 0 || ScrollBar.TargetScrollPosition.X == maxRange.X))
+                    delta = -evt.ScrollWheelValue;
                 break;
             case Orientation.Vertical or _:
+                float origY = ScrollBar.TargetScrollPosition.Y;
                 ScrollBar.TargetScrollPosition -= new Vector2(0f, evt.ScrollWheelValue);
+                delta = ScrollBar.TargetScrollPosition.Y - origY;
+                if (Math.Abs(delta) > 0 && (ScrollBar.TargetScrollPosition.Y == 0 || ScrollBar.TargetScrollPosition.Y == maxRange.Y))
+                    delta = -evt.ScrollWheelValue;
                 break;
         }
-
+        scrollWhellValueField ??= typeof(UIScrollWheelEvent).GetField("ScrollWheelValue", BindingFlags.Public | BindingFlags.Instance);
+        scrollWhellValueField.SetValue(evt, evt.ScrollWheelValue + (int)delta);
         base.ScrollWheel(evt);
     }
 
@@ -268,6 +285,9 @@ public class SUIScrollView2 : TimerView
         HeightTimer.UpdateHighFps();
 
         base.Draw(spriteBatch);
+        //var d = GetDimensions();
+        //SDFGraphics.HasBorderBox(d.Position(), default, d.Size(), Color.Purple * .5f, 4f, Main.DiscoColor, GetMatrix(true));
+        //spriteBatch.DrawString(FontAssets.MouseText.Value, "芝士中心", d.Center(), Main.DiscoColor * .5f);
     }
 
     public AnimationTimer WidthTimer = new AnimationTimer(3);

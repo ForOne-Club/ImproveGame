@@ -8,6 +8,8 @@ using ImproveGame.UIFramework.SUIElements;
 using Microsoft.Xna.Framework.Input;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader.UI;
+using Terraria.UI.Chat;
+using Terraria.WorldBuilding;
 
 namespace ImproveGame.UI.ModernConfig;
 
@@ -35,6 +37,12 @@ public sealed class ModernConfigUI : UIState
     // 主栏下放描述
     public TooltipPanel TooltipPanel;
 
+    // 当前打开的mod
+    public Mod currentMod;
+
+    // 额外文本提示，显示在主面板左上方之外
+    public string ExtraText;
+
     // 有点爽的东西，中键收藏生成粒子
     private UIParticleLayer _particleSystem = new()
     {
@@ -43,6 +51,20 @@ public sealed class ModernConfigUI : UIState
         AnchorPositionOffsetByPercents = Vector2.One / 2f,
         AnchorPositionOffsetByPixels = Vector2.Zero
     };
+
+    public int NoticeTimer;
+
+    public Color NoticeColor;
+
+    public SUIText PopNotice;
+
+    public View PopNoticePanel;
+
+    // 子页面路径选框
+    public SUIScrollView2 PathPanel;
+
+    // 子页面路径选框的弹出动画计时器
+    public AnimationTimer PathPanelTimer;
 
     public override void OnInitialize()
     {
@@ -112,15 +134,69 @@ public sealed class ModernConfigUI : UIState
         }.WithFadedMouseOver();
         backButton.OnLeftClick += (_, _) => Close();
 
+        PopNoticePanel = new()
+        {
+            Padding = 4f,
+            Rounded = new(8),
+            IgnoresMouseInteraction = true
+        };
+        PopNoticePanel.JoinParent(MainPanel);
+        PopNotice = new();
+        PopNotice.JoinParent(PopNoticePanel);
+
+        SetupPathPanel();
+
         this.Append(backButton);
+    }
+
+    private void SetupPathPanel()
+    {
+        PathPanel = new(Orientation.Horizontal)
+        {
+            BgColor = UIStyle.PanelBg,
+            BorderColor = UIStyle.PanelBorder,
+            Width = new(0, 0.5f),
+            Height = new(30, 0),
+            Rounded = new(8),
+            Border = 1f,
+        };
+        PathPanel.ListView.SetPadding(8f, 2f);
+        PathPanel.SetPos(0, -58, 0.5f - 0.86f * 0.5f, 0f);
+        PathPanel.JoinParent(this);
+        PathPanel.ScrollBar.Height = default;
+
+        PathPanelTimer = new(3);
+        PathPanelTimer.ImmediateClose();
+        PathPanelTimer.OnClosed += () =>
+        {
+            Instance.PathPanel.ListView.RemoveAllChildren();
+            Instance.PathPanel.Recalculate();
+        };
+        PathPanelTimer.OnOpened += Instance.PathPanel.Recalculate;
+    }
+
+    public static void PopNewInfo(string info, Vector2 position, Color color)
+    {
+        Instance.NoticeTimer = 120;
+        Instance.NoticeColor = color;
+        Instance.PopNotice.TextOrKey = info;
+        Instance.PopNoticePanel.SetPos(position - Instance.MainPanel.GetDimensions().Position());
+
+        Instance.PopNoticePanel.Recalculate();
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
         // 修复鼠标移到标牌上会导致标牌文字一直显示的问题
         Main._MouseOversCanClear = true;
-        
-        if (Glass is not null && !Main.gameMenu && !DrawCalledForMakingGlass && GlassVfxEnabled)
+
+        // SubPage目录缓动
+        PathPanelTimer.UpdateHighFps();
+        PathPanel.Top.Percent = PathPanelTimer.Lerp(0f, 0.5f - 0.82f * 0.5f);
+        if (PathPanelTimer.Closing || PathPanelTimer.Opening)
+            PathPanel.Recalculate();
+
+        if (Glass is not null  && !DrawCalledForMakingGlass && GlassVfxEnabled)//&& !Main.gameMenu
         {
             // 云母效果特殊处理
             Main.spriteBatch.ReBegin(null, Matrix.Identity);
@@ -131,13 +207,36 @@ public sealed class ModernConfigUI : UIState
         CenteredItemTagHandler.ModernConfigDrawing = true;
         base.Draw(spriteBatch);
         CenteredItemTagHandler.ModernConfigDrawing = false;
+
+        if (!PathPanelTimer.AnyOpen && !string.IsNullOrWhiteSpace(ExtraText))
+        {
+            var font = FontAssets.MouseText.Value;
+            var textPosition = MainPanel.GetDimensions().Position();
+            textPosition += new Vector2(6f, -font.LineSpacing + 4f);
+            ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, ExtraText, textPosition, Color.LightGray, 0f, Vector2.Zero, Vector2.One, spread: 1.2f);
+        }
     }
 
-    public void Open()
+    public void Open(Mod mod)
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
-        ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["AboutPage"].Category;
+
+        PathPanelTimer?.ImmediateClose();
+        if (mod.Name == "ImproveGame")
+        {
+            ExtraText = "";
+            ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["AboutPage"].Category;
+        }
+        else
+        {
+            ExtraText = GetText("ModernConfig.ModdedExtraText", mod.DisplayName);
+            if (CategorySidePanel.ModdedAboutPage.TryGetValue(mod, out var value))
+                ConfigOptionsPanel.CategoryToSelectOnOpen = value;
+            else
+                ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.AboutPage_ModConfig;
+        }
         Enabled = true;
+        NoticeTimer = 1;
 
         if (Main.gameMenu)
         {
@@ -148,33 +247,33 @@ public sealed class ModernConfigUI : UIState
         {
             IngameFancyUI.OpenUIState(this);
         }
+        currentMod = mod;
+        CategoryPanel.ChangeMod(mod, true);
     }
 
     public void Close()
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
-        Enabled = false;
 
+        PathPanel.ListView.RemoveAllChildren();
+        PathPanelTimer.ImmediateClose();
+
+        NoticeTimer = 1;
+        Enabled = false;
         if (!Main.gameMenu)
         {
-            if (OpenFromMasterControl)
-                IngameFancyUI.Close();
-            else
-                Main.InGameUI.SetState(Interface.modConfigList);
+            IngameFancyUI.Close();
         }
         else
         {
             Main.menuMode = Interface.modConfigListID;
-            Interface.modConfigList.ModToSelectOnOpen = ImproveGame.Instance;
+            Interface.modConfigList.ModToSelectOnOpen = currentMod ?? ImproveGame.Instance;
         }
-
-        OpenFromMasterControl = false;
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-
         if (Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape) &&
             UISystem.FocusedEditableText is null && Main.gameMenu) // 游戏里按照物品栏快捷键关闭，只有gameMenu才用Esc
         {
@@ -184,6 +283,27 @@ public sealed class ModernConfigUI : UIState
         // 适配即时风格切换
         MainPanel.BorderColor = ConfigColors.MainPanelBorder;
         MainPanel.BgColor = ConfigColors.MainPanelBg;
+        PathPanel.BorderColor = ConfigColors.MainPanelBorder;
+        PathPanel.BgColor = ConfigColors.MainPanelBg;
+
+        if (NoticeTimer-- > 0)
+        {
+            float k = NoticeTimer switch
+            {
+                > 105 => MathHelper.SmoothStep(0, 1, (120 - NoticeTimer) / 15f),
+                > 30 => 1f,
+                _ => MathHelper.SmoothStep(0, 1, NoticeTimer / 30f)
+            };
+            PopNoticePanel.BorderColor = Color.Lerp(ConfigColors.MainPanelBorder, Color.Black, .5f) * k;
+            PopNoticePanel.BgColor = Color.Lerp(ConfigColors.MainPanelBg, Color.Black, .5f) * k;
+            // PopNoticePanel.SetSize(PopNotice.TextSize * k + new Vector2(8));
+            PopNotice.TextColor = NoticeColor * k;
+            PopNotice.TextBorderColor = Color.Black * k;
+            PopNotice.RecalculateText();
+            // PopNoticePanel.SetPos(0, 0, 0, 0.5f);
+            // PopNoticePanel.HAlign = 0.5f;
+            PopNoticePanel.Recalculate();
+        }
     }
 
     public void GenerateParticleAtMouse()
@@ -197,7 +317,7 @@ public sealed class ModernConfigUI : UIState
 
     public void GenerateParticleAt(Vector2 position)
     {
-        Vector2 accelerationPerFrame = new (0f, 0.16350001f);
+        Vector2 accelerationPerFrame = new(0f, 0.16350001f);
         var texture = Main.Assets.Request<Texture2D>("Images/UI/Creative/Research_Spark");
 
         for (int i = 0; i < 12; i++)

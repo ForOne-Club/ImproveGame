@@ -367,6 +367,7 @@ public class View : UIElement
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
+        //spriteBatch.Draw(TextureAssets.MagicPixel.Value, GetDimensions().ToRectangle(), Main.DiscoColor);
         DrawSDFRectangle();
         base.DrawSelf(spriteBatch);
     }

@@ -9,7 +9,7 @@ public class SlideText : View
 {
     public Color TextColor = Color.White;
     public Color TextBorderColor = Color.Black;
-    
+
     public SlideText(string text, int reservedWidth = 60, float textScale = 1f)
     {
         _text = text;
@@ -44,10 +44,11 @@ public class SlideText : View
         var dimensions = GetDimensions();
         var position = dimensions.Position();
         var center = dimensions.Center();
+        var font = FontAssets.MouseText.Value;
 
         // 文字
         string text = DisplayText;
-        var textSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, text, Vector2.One);
+        var textSize = ChatManager.GetStringSize(font, text, Vector2.One);
         var textOrigin = textSize / 2f;
         textOrigin.X = 0;
         var textCenter = new Vector2(position.X + 2, center.Y + UIConfigs.Instance.GeneralFontOffsetY - 2);
@@ -59,8 +60,23 @@ public class SlideText : View
             textCenter.X -= textOffset; // 文字滑动
         }
 
-        ChatManager.DrawColorCodedStringWithShadow(sb, FontAssets.MouseText.Value, DisplayText, textCenter,
-            TextColor, TextBorderColor, 0f, textOrigin, new Vector2(TextScale), -1f, 1.3f);
+        var scale = new Vector2(TextScale);
+        bool favorited = TextColor == Color.Gold;
+
+        // 为啥不用ChatManager.DrawColorCodedStringWithShadow？因为要对Tag文字处理，对于已收藏的，覆盖一切颜色Tag特效到金色
+        TextSnippet[] snippets = [.. ChatManager.ParseMessage(text, TextColor)];
+        ChatManager.ConvertNormalSnippets(snippets);
+        ChatManager.DrawColorCodedStringShadow(sb, font, snippets, textCenter, TextBorderColor, 0f, textOrigin, scale, -1, 1.3f);
+        // 金色高亮覆盖一切tag文字
+        if (favorited)
+        {
+            snippets.ToList().ForEach(snippet =>
+            {
+                if (snippet is TextSnippet textSnippet)
+                    textSnippet.Color = TextColor;
+            });
+        }
+        ChatManager.DrawColorCodedString(sb, font, snippets, textCenter, TextColor, 0f, textOrigin, scale, out _, -1);
     }
 
     private void UpdateTextSlide()

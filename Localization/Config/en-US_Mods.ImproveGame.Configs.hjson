@@ -1186,3 +1186,31 @@ FishQuestResetType: {
 	NotResetFish.Label: Don't Reset Fish
 	ResetFish.Label: Reset Fish
 }
+
+TestConfig: {
+	DisplayName: Test Config
+
+	test: {
+		Label: test
+		Tooltip: ""
+	}
+}
+
+TestData: {
+	Tooltip: ""
+
+	x: {
+		Label: x
+		Tooltip: ""
+	}
+
+	value: {
+		Label: value
+		Tooltip: ""
+	}
+
+	text: {
+		Label: text
+		Tooltip: ""
+	}
+}

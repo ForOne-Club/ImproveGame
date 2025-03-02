@@ -1195,3 +1195,31 @@ FishQuestResetType: {
 	NotResetFish.Label: 不刷新任务鱼
 	ResetFish.Label: 刷新任务鱼
 }
+
+TestConfig: {
+	// DisplayName: Test Config
+
+	test: {
+		// Label: test
+		// Tooltip: ""
+	}
+}
+
+TestData: {
+	// Tooltip: ""
+
+	x: {
+		// Label: x
+		// Tooltip: ""
+	}
+
+	value: {
+		// Label: value
+		// Tooltip: ""
+	}
+
+	text: {
+		// Label: text
+		// Tooltip: ""
+	}
+}

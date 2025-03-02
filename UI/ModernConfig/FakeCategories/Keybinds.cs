@@ -2,12 +2,13 @@
 
 namespace ImproveGame.UI.ModernConfig.FakeCategories;
 
-public class Keybinds : Category
+public class Keybinds(string ModName) : Category()
 {
-    // 为没有给总控绑定快捷键的玩家高亮显示总控
-    public static bool HighlightMasterControl;
-    
+    public Keybinds() : this("ImproveGame") { }
+
     public override int ItemIconId => ItemID.RainbowCursor;
+
+    public string ModName { get; } = ModName;
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
@@ -20,7 +21,7 @@ public class Keybinds : Category
 
         foreach (var modKeybind in KeybindLoader.Keybinds)
         {
-            if (modKeybind.Mod.Name == ImproveGame.Instance.Name)
+            if (modKeybind.Mod.Name == ModName)
             {
                 panel.AddToOptionsDirect(new OptionKeybind(modKeybind.FullName));
             }

@@ -13,8 +13,62 @@ internal class PortableStationSystem : ModSystem
     {
         // 便携制作站
         IL_Player.AdjTiles += AddPortableStations;
+        On_Recipe.FindRecipes += AddZoneStation;
     }
 
+    private void AddZoneStation(On_Recipe.orig_FindRecipes orig, bool canDelayCheck)
+    {
+        if (!Config.PortableCraftingStation) 
+        {
+            orig.Invoke(canDelayCheck);
+            return;
+        }
+        var flag = Main.LocalPlayer.ZoneGraveyard;
+        var flag2 = Main.LocalPlayer.ZoneSnow;
+
+        CheckZoneItemFromPlayer(Main.LocalPlayer);
+        if (Config.ShareCraftingStation)
+            CheckTeamPlayers(Main.myPlayer, CheckZoneItemFromPlayer);
+
+        orig.Invoke(canDelayCheck);
+        
+        Main.LocalPlayer.ZoneGraveyard = flag;
+        Main.LocalPlayer.ZoneSnow = flag2;
+    }
+    static void CheckZoneItemFromPlayer(Player player) 
+    {
+        int counter = 0;
+        int counter2 = 0;
+        HashSet<int> GraveStones = [ItemID.Tombstone,ItemID.GraveMarker,ItemID.CrossGraveMarker,ItemID.Headstone,ItemID.Gravestone,ItemID.Obelisk,ItemID.RichGravestone1, ItemID.RichGravestone2, ItemID.RichGravestone3, ItemID.RichGravestone4, ItemID.RichGravestone5];
+        HashSet<int> snowAndIces = [ItemID.SnowBlock, ItemID.SnowBrick, ItemID.IceBlock, ItemID.PinkIceBlock, ItemID.PurpleIceBlock, ItemID.RedIceBlock];
+        foreach (var item in GetAllInventoryItemsList(player)) 
+        {
+            if (GraveStones.Contains(item.type))
+            {
+                counter += item.stack;
+                if (counter >= 5) 
+                {
+                    Main.LocalPlayer.ZoneGraveyard = true;
+                    goto Label;
+                }
+
+            }
+            else if (snowAndIces.Contains(item.type)) 
+            {
+                counter2 += item.stack;
+                if (counter2 >= 1500)
+                {
+                    Main.LocalPlayer.ZoneSnow = true;
+                    goto Label;
+                }
+            }
+            continue;
+            Label:
+            if (counter >= 5 && counter2 >= 1500)
+                break;
+        }
+        
+    }
     private void AddPortableStations(ILContext il)
     {
         var c = new ILCursor(il);
