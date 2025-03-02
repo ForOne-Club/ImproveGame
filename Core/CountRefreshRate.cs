@@ -26,7 +26,6 @@ public class CountRefreshRate : ModSystem
         c.EmitDelegate(() =>
         {
             CurrentRefreshRateFactor = GetRefreshRateFactor(RefreshRateStopwatch);
-            CurrentRefreshRateFactor = MathHelper.Clamp(CurrentRefreshRateFactor, 0.1f, 10f);
         });
     }
     public override void Unload()
