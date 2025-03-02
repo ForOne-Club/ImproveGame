@@ -28,7 +28,7 @@ public class SUIDropdownListContainer : View
             _labelElement = new SlideText(name, 2)
             {
                 VAlign = 0.5f,
-                Left = {Pixels = 8},
+                Left = { Pixels = 8 },
                 RelativeMode = RelativeMode.None
             };
             _labelElement.JoinParent(this);
@@ -62,17 +62,17 @@ public class SUIDropdownListContainer : View
 
     private readonly SUIScrollView2 _dropdownList;
     private string _currentSelectedLabel;
-    
+
     /// <summary>
     /// 某个选项被选中时调用
     /// </summary>
     public Action<string> OptionSelectedCallback;
-    
+
     /// <summary>
     /// 绘制时调用，用于显示Tooltip
     /// </summary>
     public Action DrawCallback;
-    
+
     /// <summary>
     /// 鼠标悬停在某个选项上时调用，用于显示Tooltip，执行后于DrawCallback
     /// </summary>
@@ -112,13 +112,9 @@ public class SUIDropdownListContainer : View
         _dropdownList.JoinParent(this);
     }
 
-    public void BuildDropdownList(float x, float y, float width, string[] options, string currentLabel, View caller)
+    public void SetCurrentPosition(float x, float y, float width, int count)
     {
-        int count = options.Length;
-        _dropdownList.ListView.RemoveAllChildren();
         var dimensions = GetDimensions();
-        DropdownCaller = caller;
-
         // 决定高度
         float containerBottom = dimensions.ToRectangle().Bottom - 10;
         float optionsHeight = DropdownOption.ElementHeight * count + 10;
@@ -144,11 +140,26 @@ public class SUIDropdownListContainer : View
             y -= dimensions.Y;
             _dropdownList.SetPosPixels(x, y);
         }
+    }
+
+    public void BuildDropdownList(float x, float y, float width, string[] options, string currentLabel, View caller)
+    {
+        int count = options.Length;
+        _dropdownList.ListView.RemoveAllChildren();
+        DropdownCaller = caller;
+        SetCurrentPosition(x, y, width, count);
+
 
         // 添加元素
         foreach (string label in options)
         {
             var option = new DropdownOption(label, this);
+            option.OnUpdate += delegate
+            {
+                if (option.IsMouseHovering)
+                    Main.LocalPlayer.mouseInterface = true;
+            };
+
             option.JoinParent(_dropdownList.ListView);
         }
 
@@ -170,6 +181,15 @@ public class SUIDropdownListContainer : View
         Enabled = false;
         SoundEngine.PlaySound(SoundID.MenuTick);
         base.LeftMouseDown(evt);
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
+        if (!IsMouseHovering)
+            return;
+
+        Main.LocalPlayer.mouseInterface = true;
     }
 
     #region Animation - 出现动画

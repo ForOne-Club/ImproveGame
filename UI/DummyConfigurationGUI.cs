@@ -1,4 +1,4 @@
-﻿using ImproveGame.Content.NPCs.Dummy;
+﻿﻿using ImproveGame.Content.NPCs.Dummy;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
@@ -9,6 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria.GameInput;
+using System.Reflection;
+using Terraria.GameContent.UI.Elements;
+using ImproveGame.UI.ModernConfig;
 
 namespace ImproveGame.UI
 {
@@ -23,7 +26,7 @@ namespace ImproveGame.UI
 
         public override bool Enabled
         {
-            get => StartTimer.Closing || _enabled;
+            get => StartTimer.Closing || StartTimer.AnyOpen;
             set => _enabled = value;
         }
 
@@ -46,18 +49,30 @@ namespace ImproveGame.UI
         public SUIScrollBar Scrollbar;
         public UIText TipText;
 
+        public SUIDropdownListContainer DropdownList { get; set; }
+
+        public SUINumericText customAIStyleBox;
+
+        public SUIImageButton aiStyleWikiOpener;
+
+        public SUIScrollView2 Options;
+
         public override void OnInitialize()
         {
+            DropdownList = new SUIDropdownListContainer();
+
             // 主面板
             MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
             {
                 Shaded = true,
                 Draggable = true,
-                IsAdaptiveHeight = true
+                Resizeable = true,
+                MinResizeHeight = 200,
+                MinResizeWidth = 400
             };
             MainPanel.SetPadding(0f);
             MainPanel.SetPosPixels(410, 360)
-                .SetSizePixels(404, 0)
+                .SetSizePixels(500, 500)
                 .JoinParent(this);
 
             TitlePanel = ViewHelper.CreateHead(Color.Black * 0.25f, 45f, 10f);
@@ -99,58 +114,99 @@ namespace ImproveGame.UI
             cross.OnLeftMouseDown += (_, _) => Close();
             cross.JoinParent(TitlePanel);
 
-            var bagPanel = new View
+            Options = new SUIScrollView2(Orientation.Vertical)
             {
-                DragIgnore = true,
-                RelativeMode = RelativeMode.Vertical,
-                IsAdaptiveHeight = true,
+                RelativeMode = RelativeMode.Vertical
             };
-            bagPanel.SetPadding(6, 6, 6, 6);
-            bagPanel.SetSize(0f, 640, 1f, 0f);
-            bagPanel.JoinParent(MainPanel);
+            Options.SetPadding(8);
+            Options.SetSize(0f, -TitlePanel.Height.Pixels, 1f, 1f);
+            Options.JoinParent(MainPanel);
 
+            customAIStyleBox = new SUINumericText
+            {
+                HAlign = 1f,
+                Left = new(-180, 0),
+                Width = new(60f, 0),
+                Height = new(0, 1f),
+                BgColor = Color.Black * 0.4f,
+                Rounded = new Vector4(14f),
+                MinValue = -65,
+                MaxValue = NPCID.Count - 1,
+                InnerText =
+                {
+                    TextAlign = new Vector2(0.5f, 0.5f),
+                    TextOffset = new Vector2(0f, -2f),
+                    MaxCharacterCount = 10,
+                    MaxLines = 1,
+                    IsWrapped = false
+                },
+                MaxLength = 3,
+                DefaultValue = 0,
+                Format = "0",
+                VAlign = 0.5f,
+            };
+            customAIStyleBox.ContentsChanged += (ref string content) =>
+            {
+                if (int.TryParse(content, out int value))
+                    DummyNPC.LocalConfig.customAIType = value;
+            };
+            customAIStyleBox.EndTakingInput += () =>
+            {
+                if (int.TryParse(customAIStyleBox.Text, out int value))
+                {
+                    DummyNPC.LocalConfig.customAIType = value;
 
-            //void MakeSeparator()
-            //{
-            //    View searchArea = new()
-            //    {
-            //        Height = new StyleDimension(10f, 0f),
-            //        Width = new StyleDimension(-16f, 1f),
-            //        HAlign = 0.5f,
-            //        DragIgnore = true,
-            //        RelativeMode = RelativeMode.Vertical,
-            //        Spacing = new Vector2(0, 6)
-            //    };
-            //    searchArea.JoinParent(bagPanel);
-            //    searchArea.Append(new UIHorizontalSeparator
-            //    {
-            //        Width = StyleDimension.FromPercent(1f),
-            //        Color = Color.Lerp(Color.White, new Color(63, 65, 151, 255), 0.85f) * 0.9f
-            //    });
-            //}
+                    SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                }
+
+            };
+            customAIStyleBox.OnUpdate += (elem) =>
+            {
+                var value = DummyNPC.LocalConfig.customAIType;
+                if (!customAIStyleBox.IsWritingText)
+                    customAIStyleBox.Value = value;
+            };
+            aiStyleWikiOpener = new SUIImageButton(TextureAssets.Item[ItemID.Book].Value, GetText("UI.DummyConfiguration.OpenWikiTip"), false)
+            {
+                HAlign = 1f,
+                Left = new(Language.ActiveCulture.Name is not "zh-Hans" ? -140 : -125, 0),
+                Width = new(40f, 0),
+                Height = new(0, 1f),
+                VAlign = 0.5f
+            };
+            aiStyleWikiOpener.OnLeftClick += (evt, elem) =>
+            {
+                TrUtils.OpenToURL(GetText("UI.DummyConfiguration.WikiURL"));
+            };
             var fieldInfos = typeof(DummyConfig).GetFields();
             foreach (var fInfo in fieldInfos)
             {
-                var fPanel = new View
+                if (fInfo.Name == nameof(DummyConfig.customAIType)) continue;
+                var fPanel = new TimerView
                 {
-                    DragIgnore = true,
-                    RelativeMode = RelativeMode.Vertical,
+                    RelativeMode = RelativeMode.Horizontal,
+                    DirectLineBreak = true,
                     Rounded = new Vector4(6),
                     Spacing = new Vector2(0, 8)
                 };
                 fPanel.SetPadding(6, 6, 6, 6);
                 fPanel.SetSize(0f, 40, 1f, 0f);
-                fPanel.JoinParent(bagPanel);
+                fPanel.JoinParent(Options.ListView);
                 fPanel.BgColor = Color.Black * .125f;
+                fPanel.OnUpdate += delegate
+                {
+                    // 这里和LongSwitch保持一致，为了整体协调
+                    fPanel.BgColor = fPanel.HoverTimer.Lerp(UIStyle.PanelBgLight, UIStyle.PanelBgLightHover);
+                    fPanel.Border = 0;
+                };
                 var fieldName = new SUIText
                 {
                     UseKey = true,
-                    TextOrKey = $"Mods.ImproveGame.UI.DummyConfiguration.fieldName.{fInfo.Name}",
+                    TextOrKey = $"Mods.ImproveGame.UI.DummyConfiguration.FieldName.{fInfo.Name}",
                     TextAlign = new Vector2(0f, 0f),
                     TextScale = 1f,
                     Height = new StyleDimension(40, 0),
                     Width = StyleDimension.Fill,
-                    DragIgnore = true,
                     Left = new StyleDimension(10f, 0f)
 
                 };
@@ -162,8 +218,9 @@ namespace ImproveGame.UI
                         () => (bool)fInfo.GetValue(DummyNPC.LocalConfig),
                         flag =>
                         {
-                            fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), flag);
-                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                            // 开关只是拿来看的，真正操作加到了fPanel.OnLeftMouseDown
+                            // fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), flag);
+                            // SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
                         }, ""
                         )
                     {
@@ -171,43 +228,167 @@ namespace ImproveGame.UI
                         Width = new StyleDimension(60, 0),
                         Height = StyleDimension.Fill
                     };
+                    fPanel.OnLeftMouseDown += (evt, self) =>
+                    {
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                        bool flag = !(bool)fInfo.GetValue(DummyNPC.LocalConfig);
+                        fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), flag);
+                        SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                    };
                     uiSwitch.JoinParent(fPanel);
                 }
                 else if (fType == typeof(int))
                 {
-                    SUISlider<int> sUISlider = new SUISlider<int>(
-                    () => (int)fInfo.GetValue(DummyNPC.LocalConfig),
-                    obj =>
+                    if (fInfo.Name == "LifeMax")
                     {
-                        fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
-                        SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                    }, "",
-                    fInfo.Name == "LifeMax" ? 1 : 0, fInfo.Name == "LifeMax" ? 400000 : 1000, fInfo.Name == "LifeMax" ? 200000 : 0
-                    )
+                        SUINumericText numberBox =
+                        new SUINumericText
+                        {
+                            HAlign = 1f,
+                            Width = new(120f, 0),
+                            Height = new(0, 1f),
+                            BgColor = Color.Black * 0.4f,
+                            Rounded = new Vector4(14f),
+                            MinValue = 1,
+                            MaxValue = 2147483647,
+                            InnerText =
+                            {
+                                TextAlign = new Vector2(0.5f, 0.5f),
+                                TextOffset = new Vector2(0f, -2f),
+                                MaxCharacterCount = 10,
+                                MaxLines = 1,
+                                IsWrapped = false
+                            },
+                            MaxLength = 10,
+                            DefaultValue = 2000000000,
+                            Format = "0",
+                            VAlign = 0.5f
+                        };
+                        numberBox.ContentsChanged += (ref string content) =>
+                        {
+                            if (int.TryParse(content, out int value))
+                                DummyNPC.LocalConfig.LifeMax = value;
+                        };
+                        numberBox.EndTakingInput += () =>
+                        {
+                            if (int.TryParse(numberBox.Text, out int value))
+                            {
+                                DummyNPC.LocalConfig.LifeMax = value;
+                                SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                            }
+
+                        };
+                        numberBox.OnUpdate += (elem) =>
+                        {
+
+                            var value = DummyNPC.LocalConfig.LifeMax;
+                            if (!numberBox.IsWritingText)
+                                numberBox.Value = value;
+                        };
+                        numberBox.JoinParent(fPanel);
+                    }
+                    else
                     {
-                        HAlign = 1f,
-                        Width = new StyleDimension(180, 0),
-                        Height = StyleDimension.Fill
-                    };
-                    sUISlider.JoinParent(fPanel);
+                        SUISlider<int> sUISlider = new SUISlider<int>(
+                        () => (int)fInfo.GetValue(DummyNPC.LocalConfig),
+                        obj =>
+                        {
+                            fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
+                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                        }, "",
+                        0, 1000, 0
+                        )
+                        {
+                            HAlign = 1f,
+                            Width = new StyleDimension(180, 0),
+                            Height = StyleDimension.Fill
+                        };
+                        sUISlider.JoinParent(fPanel);
+                    }
                 }
                 else if (fType == typeof(DummyConfig.AIType))
                 {
                     SUIDropdownList<DummyConfig.AIType> list = new(() => (DummyConfig.AIType)fInfo.GetValue(DummyNPC.LocalConfig), obj =>
                     {
-                        fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
+                        if ((DummyConfig.AIType)obj == DummyConfig.AIType.SelfDefine && !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
+                        {
+                            DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
+                            AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Yellow, -1, () =>
+                            {
+                                ModernConfigUI.Instance.Open();
+                                ModernConfigUI.Instance.OpenFromMasterControl = true;
+                                ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["ModFeatures"].Category;
+                                ConfigOptionsPanel.Instance.SetSearchBarText(GetText("UI.DummyConfiguration.DummyConfigLabel"));
+
+                            });
+                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                            return;
+                        }
+                        var aistyle = (DummyConfig.AIType)obj;
+                        DummyNPC.LocalConfig.AIStyle = aistyle;
+                        if (aistyle != DummyConfig.AIType.Default && aistyle != DummyConfig.AIType.SelfDefine)
+                            DummyNPC.LocalConfig = aistyle switch
+                            {
+                                DummyConfig.AIType.Slime or DummyConfig.AIType.Soilder or DummyConfig.AIType.JellyFish or DummyConfig.AIType.GoldenFish or DummyConfig.AIType.HugeMimic => DummyNPC.LocalConfig with { NoTileCollide = false, NoGravity = false },
+                                DummyConfig.AIType.EvilEye => DummyNPC.LocalConfig with { NoGravity = true },
+                                _ => DummyNPC.LocalConfig
+                            };
                         SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                    }, "")
+                        if (aistyle == DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent == null)
+                        {
+                            customAIStyleBox.JoinParent(fPanel);
+                            aiStyleWikiOpener.JoinParent(fPanel);
+                        }
+                        else if (aistyle != DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent != null)
+                        {
+                            customAIStyleBox.Remove();
+                            aiStyleWikiOpener.Remove();
+                        }
+                    }, DropdownList, "")
                     {
                         HAlign = 1f,
                         Width = new StyleDimension(180, 0),
-                        Height = StyleDimension.Fill
+                        Height = StyleDimension.Fill,
                     };
                     list.JoinParent(fPanel);
+                    list.OnUpdate += elem =>
+                    {
+                        if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine && !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
+                        {
+                            if (customAIStyleBox.Parent != null)
+                            {
+                                customAIStyleBox.Remove();
+                                aiStyleWikiOpener.Remove();
+                            }
+                            ;
+                            DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
+                            AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Yellow, -1, () =>
+                            {
+                                ModernConfigUI.Instance.Open();
+                                ModernConfigUI.Instance.OpenFromMasterControl = true;
+                                ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["ModFeatures"].Category;
+                                ConfigOptionsPanel.Instance.SetSearchBarText(GetText("UI.DummyConfiguration.DummyConfigLabel"));
+                            });
+                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                        }
+                    };
+                    if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent == null)
+                    {
+                        customAIStyleBox.JoinParent(fPanel);
+                        aiStyleWikiOpener.JoinParent(fPanel);
+                    }
+                    else if (DummyNPC.LocalConfig.AIStyle != DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent != null)
+                    {
+                        customAIStyleBox.Remove();
+                        aiStyleWikiOpener.Remove();
+                    }
 
                 }
                 else
                 {
+                    double minValue = fInfo.Name == nameof(DummyConfig.Scale) ? 0.5 : 0;
+                    double maxValue = fInfo.Name == nameof(DummyConfig.Scale) ? 3 : 2;
+
                     SUISlider<float> sUISlider = new SUISlider<float>(
                     () => (float)fInfo.GetValue(DummyNPC.LocalConfig),
                     obj =>
@@ -215,20 +396,21 @@ namespace ImproveGame.UI
                         fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
                         SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
                     }, "",
-                    0, 2, 0
+                    minValue, maxValue, 0
                     )
                     {
                         HAlign = 1f,
                         Width = new StyleDimension(180, 0),
-                        Height = StyleDimension.Fill
+                        Height = StyleDimension.Fill,
                     };
                     sUISlider.JoinParent(fPanel);
+
                 }
-                //MakeSeparator();
-
             }
-        }
 
+
+            DropdownList.JoinParent(this);
+        }
 
 
         public override void Update(GameTime gameTime)
@@ -245,22 +427,40 @@ namespace ImproveGame.UI
         public void Open()
         {
             SoundEngine.PlaySound(SoundID.MenuOpen);
-            Enabled = true;
             StartTimer.Open();
 
-            var vec = Main.MouseScreen;
-            vec /= Main.UIScale;
+            var center = Main.MouseScreen;
+            center /= Main.UIScale;
             float zoom = Main.GameZoomTarget * Main.ForcedMinimumZoom;
-            vec = (vec - Main.ScreenSize.ToVector2() * .5f) * zoom + Main.ScreenSize.ToVector2() * .5f;
+            center = (center - Main.ScreenSize.ToVector2() * .5f) * zoom + Main.ScreenSize.ToVector2() * .5f;
 
-            MainPanel.SetPosPixels(vec.X, vec.Y);
+            // 保证UI不超出屏幕范围
+            // center是UI当前位置的坐标，需要修正这个坐标，使UI框在屏幕内
+            var size = MainPanel.GetDimensions().Size();
+            Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
+            float margin = 20f;
+
+            // 计算实际显示尺寸（包含缩放）
+            Vector2 actualSize = size * zoom;
+
+            // 限制X坐标
+            center.X = Math.Clamp(center.X,
+                actualSize.X / 2 + margin,
+                screenSize.X - actualSize.X / 2 - margin);
+
+            // 限制Y坐标
+            center.Y = Math.Clamp(center.Y,
+                actualSize.Y / 2 + margin,
+                screenSize.Y - actualSize.Y / 2 - margin);
+
+
+            MainPanel.SetCenterPixels(center.X, center.Y);
             MainPanel.Recalculate();
         }
 
         public void Close()
         {
             SoundEngine.PlaySound(SoundID.MenuClose);
-            Enabled = false;
             StartTimer.Close();
         }
 

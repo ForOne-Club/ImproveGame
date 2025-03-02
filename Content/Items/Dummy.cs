@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.NPCs.Dummy;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.NPCs.Dummy;
 using ImproveGame.UI;
 using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
@@ -11,7 +12,7 @@ public class Dummy : ModItem
     public override void SetDefaults()
     {
         Item.SetBaseValues(34, 36, ItemRarityID.Red, Item.sellPrice(silver: 40), 1);
-        Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 15, 15);
+        Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 5, 5);
     }
 
     public override bool? UseItem(Player player)
@@ -34,12 +35,15 @@ public class Dummy : ModItem
         {
             foreach (var npc in Main.npc)
             {
-
-                if (npc.active && npc.ModNPC is DummyNPC dummy && dummy.Owner == player.whoAmI && npc.HasPlayerTarget && npc.target == player.whoAmI && npc.Hitbox.Contains(Main.MouseWorld.ToPoint()))
+                // 按住Alt可以直接删除所有的Dummy
+                bool pressingAlt = Main.keyState.IsKeyDown(Keys.LeftAlt) || Main.keyState.IsKeyDown(Keys.RightAlt);
+                bool hoverCheck = pressingAlt || npc.Hitbox.Contains(Main.MouseWorld.ToPoint());
+                if (npc.active && npc.ModNPC is DummyNPC dummy && dummy.Owner == player.whoAmI && npc.HasPlayerTarget && npc.target == player.whoAmI && hoverCheck)
                 {
                     //dummy.Disappear();
                     RemoveDummyModule.Get(npc.whoAmI, player.whoAmI).Send(runLocally: true);
-                    break;
+                    if (!pressingAlt)
+                        break;
                 }
             }
         }
@@ -51,7 +55,7 @@ public class Dummy : ModItem
             for (var i = 0; i < Main.npc.Length; i++)
             {
                 var npc = Main.npc[i];
-                if (!npc.active || npc.ModNPC is not DummyNPC dummy || npc.Center != spawnPosition)
+                if (!npc.active || npc.ModNPC is not DummyNPC dummy || npc.Center.DistanceSQ(spawnPosition) > 2)
                     continue;
 
                 spawnPosition += new Vector2(4);
@@ -65,15 +69,24 @@ public class Dummy : ModItem
     }
     public override void HoldStyle(Player player, Rectangle heldItemFrame)
     {
-        if (PlayerInput.MouseInfo.MiddleButton == ButtonState.Pressed && player.itemAnimation == 0)
+        if (KeybindSystem.ItemInteractKeybind.JustPressed && player.itemAnimation == 0)
         {
-            if (!DummyConfigurationUI.Instance.Enabled)
+            // 检测StartTimer.AnyClose而不是Enabled是为了不卡手
+            if (DummyConfigurationUI.Instance.StartTimer.AnyClose)
                 DummyConfigurationUI.Instance.Open();
             else
                 DummyConfigurationUI.Instance.Close();
-            player.itemAnimation = player.itemAnimationMax = 30;
+            player.itemAnimation = player.itemAnimationMax = 5;
         }
         base.HoldStyle(player, heldItemFrame);
+    }
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        string keyBindName;
+        if (!TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out keyBindName))
+            keyBindName = GetText("Items.Dummy.NoneKeyBind");
+        tooltips.Add(new TooltipLine(Mod, "openUITip", GetText("Items.Dummy.ConfigUIOpenTip", keyBindName)));
+        base.ModifyTooltips(tooltips);
     }
     public override void AddRecipes()
     {

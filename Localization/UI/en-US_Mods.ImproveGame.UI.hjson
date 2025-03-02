@@ -425,20 +425,40 @@ QuickShimmer: {
 DummyConfiguration: {
 	Title: Dummy Configuration
 
-	fieldName: {
+	FieldName: {
 		LockHP: Lock Life
 		LifeMax: Maximum Life
 		Defense: Defense
 		Damage: Contact Damage
+		Scale: Scale
 		ShowBox: Show Hitbox
 		ShowDamageData: Show Damage Stats
 		ShowNameOnHover: Show NPC Name
-		Immortal: Not count as Target
+		Immortal: Not Count as Target & Immortal
 		NoGravity: Not Affected By Gravity
 		NoTileCollide: Disable Tile Collision
 		KnockBackResist: Knockback coefficient
-		AIStyle: AI Style
+		AIStyle: Mimic NPC Behavior
 	}
+
+	AIType: {
+		Default: Default
+		Slime: Slime
+		EvilEye: Demon Eye
+		Soilder: Fighter
+		GoldenFish: Goldfish
+		JellyFish: Jellyfish
+		HugeMimic: Biome Mimic
+		SelfDefine: Custom
+	}
+	CustomDisabled: 
+		'''
+		Custom Mimic NPC Behavior is not allowed in this sever. 
+		Click here to modify config if you are the Host.
+		'''
+	DummyConfigLabel: Allow Custom Dummy Mimic NPC Behavior In Multiplayer
+	OpenWikiTip: Click to open Relevent Wiki page
+	WikiURL: https://terraria.wiki.gg/wiki/NPC_ID
 }
 
 Autofisher: {

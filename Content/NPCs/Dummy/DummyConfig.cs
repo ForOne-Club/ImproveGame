@@ -1,28 +1,41 @@
 ﻿using ImproveGame.Attributes;
+using Terraria.ModLoader.Config;
 
 namespace ImproveGame.Content.NPCs.Dummy;
 
 public struct DummyConfig
 {
+    const string key = "$Mods.ImproveGame.UI.DummyConfiguration.AIType.";
+
     public enum AIType
     {
-        Default = -1,
-        Slime = 1,
-        EvilEye = 2,
-        Soilder = 3,
-        GoldenFish = 16,
-        JellyFish = 18,
-        HugeMimic = 87,
-        SelfDefine = 124
+        [LabelKey($"{key}Default")]
+        Default = 0,
+        [LabelKey($"{key}Slime")]
+        Slime = NPCID.BlueSlime,
+        [LabelKey($"{key}EvilEye")]
+        EvilEye = NPCID.DemonEye,
+        [LabelKey($"{key}Soilder")]
+        Soilder = NPCID.PossessedArmor,
+        [LabelKey($"{key}GoldenFish")]
+        GoldenFish = NPCID.Goldfish,
+        [LabelKey($"{key}JellyFish")]
+        JellyFish = NPCID.BlueJellyfish,
+        [LabelKey($"{key}HugeMimic")]
+        HugeMimic = NPCID.BigMimicCorruption,
+        [LabelKey($"{key}SelfDefine")]
+        SelfDefine = 688
     }
     [Annotate]
     public bool LockHP = true;
     [Annotate]
-    public int LifeMax = 200000;
+    public int LifeMax = 2000000000;
     [Annotate]
     public int Defense = 0;
     [Annotate]
     public int Damage = 0;
+    [Annotate]
+    public float Scale = 1f;
     [Annotate]
     public bool ShowBox = true;
     [Annotate]
@@ -37,7 +50,9 @@ public struct DummyConfig
     public bool NoTileCollide = true;
     [Annotate]
     public float KnockBackResist = 0f;
-    //[Annotate]
-    //public AIType AIStyle = AIType.Default;
+    [Annotate]
+    public AIType AIStyle = AIType.Default;
+
+    public int customAIType = 0;
     public DummyConfig() { }
 }
