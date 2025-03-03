@@ -39,7 +39,7 @@ public class GlassmorphismVfx : ModSystem
     public override void Load()
     {
         // _targetPool = new RenderTargetPool();
-        Filters.Scene.OnPostDraw += () => { };//RenderGlassmorphismVfx
+        Filters.Scene.OnPostDraw += RenderGlassmorphismVfx;//RenderGlassmorphismVfx
         Main.OnRenderTargetsInitialized += InitializeTarget;
         Main.OnRenderTargetsReleased += ReleaseTarget;
 
@@ -49,7 +49,7 @@ public class GlassmorphismVfx : ModSystem
             _uiTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.ScreenSize.X, Main.ScreenSize.Y);
             _helperTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.ScreenSize.X, Main.ScreenSize.Y);
         });
-        IL_Main.DoDraw += RenderGlassmorphismVfx_ILEmit;
+        //IL_Main.DoDraw += RenderGlassmorphismVfx_ILEmit;
     }
 
     private void RenderGlassmorphismVfx_ILEmit(ILContext il)
@@ -132,7 +132,7 @@ public class GlassmorphismVfx : ModSystem
             GlassCovers = null;
             ModernConfigUI.Glass = null;
         });
-        IL_Main.DoDraw -= RenderGlassmorphismVfx_ILEmit;
+        //IL_Main.DoDraw -= RenderGlassmorphismVfx_ILEmit;
     }
 
     public override void PostSetupContent()

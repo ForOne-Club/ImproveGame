@@ -196,7 +196,7 @@ public sealed class ModernConfigUI : UIState
         if (PathPanelTimer.Closing || PathPanelTimer.Opening)
             PathPanel.Recalculate();
 
-        if (Glass is not null  && !DrawCalledForMakingGlass && GlassVfxEnabled)//&& !Main.gameMenu
+        if (Glass is not null  && !DrawCalledForMakingGlass && GlassVfxEnabled && !Main.gameMenu)//
         {
             // 云母效果特殊处理
             Main.spriteBatch.ReBegin(null, Matrix.Identity);
