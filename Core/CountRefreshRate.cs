@@ -19,14 +19,14 @@ public class CountRefreshRate : ModSystem
         // 原先的实现是在ModifyInterfaceLayers里执行下面的代码，但是那个方法在游戏主界面不会运行，配置中心的界面使用UpdateHighFps就会出问题
         IL_Main.DoDraw += IL_EmitRefreshRate;
     }
-    static void IL_EmitRefreshRate(ILContext il) 
+
+    public static void UpdateRateFactor() => CurrentRefreshRateFactor = GetRefreshRateFactor(RefreshRateStopwatch);
+
+    static void IL_EmitRefreshRate(ILContext il)
     {
         var c = new ILCursor(il);
 
-        c.EmitDelegate(() =>
-        {
-            CurrentRefreshRateFactor = GetRefreshRateFactor(RefreshRateStopwatch);
-        });
+        c.EmitDelegate(UpdateRateFactor);
     }
     public override void Unload()
     {

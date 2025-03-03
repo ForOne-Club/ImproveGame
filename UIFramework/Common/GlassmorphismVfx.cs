@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.ModernConfig;
+﻿using ImproveGame.Core;
+using ImproveGame.UI.ModernConfig;
 using ImproveGame.UIFramework.Graphics2D;
 using MonoMod.Cil;
 using System.Reflection;
@@ -53,8 +54,11 @@ public class GlassmorphismVfx : ModSystem
 
     private void RenderGlassmorphismVfx_ILEmit(ILContext il)
     {
-        //这部分代码负责在主页面开启screenTarget捕获
         ILCursor cursor = new(il);
+        //cursor.EmitDelegate(CountRefreshRate.UpdateRateFactor);
+
+        //这部分代码负责在主页面开启screenTarget捕获
+
         //"Sepia"是饥荒世界的滤镜，这里世界生成的时候也会开启，这里用for查找到最后一个
         for (int n = 0; n < 5; n++)
             if (!cursor.TryGotoNext(i => i.MatchLdstr("Sepia")))
