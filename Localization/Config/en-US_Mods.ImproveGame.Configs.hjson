@@ -108,7 +108,7 @@ ImproveConfigs: {
 	}
 
 	NoConsume_Potion: {
-		Label: "[centeritem:227] Enable Infinite Potions"
+		Label: "[centeritem:227] Infinite Potions"
 		Tooltip:
 			'''
 			Potions in your inventory or personal storages (Piggy Bank, Safe, etc.)
@@ -127,7 +127,7 @@ ImproveConfigs: {
 	}
 
 	NoConsume_Ammo: {
-		Label: "[centeritem:3104] Enable Infinite Ammo"
+		Label: "[centeritem:3104] Infinite Ammo"
 		Tooltip: Ammo in a stack of 3996 or more will not be consumed
 	}
 
@@ -392,7 +392,8 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			Does nothing in singleplayer mode, reloading is required. After enabled, only the verified player(s) can change the mod configs
-			While starting the server, a random 8-digit password will be sent in the server console. The server console can query the password by typing /qotpassword. Players can type /qotpassword <password> to verify themselves. If the password is correct, the player will be able to change mod configs
+			While starting the server, a random 8-digit password will be sent in the server console. The server console can query the password by typing /qotpassword.
+			Players can type /qotpassword <password> to verify themselves. If the password is correct, the player will be able to change mod configs
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''
 		Unaccepted: You have not passed the verification!
@@ -668,6 +669,7 @@ ImproveConfigs: {
 			'''
 		Label: "[centeritem:ImproveGame/SpaceWand] Infinite Wand Placeables"
 	}
+	
 	DummyCustomAIStyleAllowed: {
 		Tooltip:
 			'''

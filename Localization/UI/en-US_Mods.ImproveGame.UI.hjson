@@ -341,7 +341,7 @@ WorldFeature: {
 		'''
 		Get fixed boi
 		Seeds: get fixed boi | getfixedboi
-		P.S. Get fixed boi is only complete with all other secrete seeds enabled
+		P.S. Get fixed boi is only complete with all other secret seeds enabled
 		'''
 	OpenWiki: <right> to open its wiki page
 	NotPermitted: You have no permission to modify this world's features
@@ -453,11 +453,11 @@ DummyConfiguration: {
 	}
 	CustomDisabled: 
 		'''
-		Custom Mimic NPC Behavior is not allowed in this sever. 
-		Click here to modify config if you are the Host.
+		Custom Mimic NPC Behavior is not allowed in this server. 
+		Click here to modify config if you are the host.
 		'''
 	DummyConfigLabel: Allow Custom Dummy Mimic NPC Behavior In Multiplayer
-	OpenWikiTip: Click to open Relevent Wiki page
+	OpenWikiTip: Click to open relevant Wiki page
 	WikiURL: https://terraria.wiki.gg/wiki/NPC_ID
 }
 

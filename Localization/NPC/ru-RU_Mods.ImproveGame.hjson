@@ -1,0 +1,29 @@
+﻿NPC: {
+	LockHP: Сделать бессмертным
+	LifeMax: Макс. здоровье
+	Defense: Защита
+	Damage: Конт. урон
+	ShowBox: Показывать хитбок
+	ShowDamageData: Показывать хар-ки урона
+	ShowNameOnHover: Показывать имя НИПа
+	Immortal: 
+		'''
+		Если значение настройки 'True', пугало будет вести себя как ванильный манекен,
+		т.е. самонаводящиеся атаки не будут самонаводиться,
+		эффекты оружий ближнего боя не будут активироваться,
+		а само пугало никогда не умрёт
+		'''
+	NoGravity: Игнорировать гравитацию
+	NoTileCollide: Игнорировать блоки
+	KnockBackResist: Получаемое отбрасывание, 0 значит иммунитет к отбрасыванию
+	AIStyle: Тип ИИ, можно изменить в настройках предмета
+	Dummy_Damage: Урон: {S}/сек., {F}/тик
+	Dummy_Time: Duration: {S} секунд(а), {F} тик(ов)
+	Dummy_FinalBlow: Последний удар: {FinalBlow}
+	DummyCommand_DummyAttributes: Хар-ки пугала
+	DummyCommand_Usage: Использование: /dummy <хар-ка> <знач.> (не чувствителен к регистру символов)
+	DummyCommand_Description: Команда в чате '/dummy info' выведет все доступные хар-ки, их тип и нынешние значения
+	DummyCommand_Success: Успешно изменено: {name} {args}!
+	DummyCommand_Fail: Изменене провалено ({input})!
+	DummyCommand_Invalid: Неправильная команда ( {input} )!
+}

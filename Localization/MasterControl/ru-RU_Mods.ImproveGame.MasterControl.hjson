@@ -1,0 +1,61 @@
+NotEnabled: Нужно включить это в конфигурации мода
+
+SuperVault: {
+	DisplayName: Большой рюкзак
+	Description: Рюкзак на 100 слотов инвентаря
+}
+
+PlayerStats: {
+	DisplayName: Характеристики игрока
+	Description: Различные характеристики игрока
+}
+
+Spectating: {
+	DisplayName: Наблюдение
+	Description: Наблюдать за своими сокомандниками во время битв с боссами
+}
+
+WeatherControl: {
+	DisplayName: "{$Mods.ImproveGame.UI.WeatherGUI.Title}"
+	Description: Меню для изменения времени, фазы луны, направления ветра и дождя
+}
+
+ItemSearcher: {
+	DisplayName: "{$Mods.ImproveGame.UI.ItemSearcher.Title}"
+	Description: Найти предметы в личных хранилищах и ближайших сундуках
+}
+
+BagOpener: {
+	Description: Меню для массового открытия мешков
+	DisplayName: "{$Mods.ImproveGame.UI.OpenBag.Title}"
+}
+
+WorldFeature: {
+	Description: Активировать праздники или функции секретных сидов
+	DisplayName: "{$Mods.ImproveGame.UI.WorldFeature.Title}"
+}
+
+PotionBag: {
+	Description: Первая сумка для зелий в вашем инвентаре
+	DisplayName: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}"
+}
+
+BannerChest: {
+	Description: Первая коробка со знамёнами в вашем инвентаре
+	DisplayName: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
+}
+
+ModConfig: {
+	DisplayName: Конфигурации мода
+	Description: Быстрый доступ к избранным конфигурациям
+}
+
+AmmoChain: {
+	DisplayName: Цепочка боеприпасов
+	Description: Позволяет оружиям использовать боеприпасы в определённой последовательности
+}
+
+QuickShimmer: {
+	DisplayName: Быстрое мерцание
+	Description: Пацаны, смотрите, трансмутации в инвентаре!
+}

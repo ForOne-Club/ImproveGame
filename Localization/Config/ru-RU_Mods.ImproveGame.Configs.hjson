@@ -1,0 +1,1267 @@
+ImproveConfigs: {
+	DisplayName: 1. Основная конфигурация
+
+	ILoveBalance: {
+		Label: Я ОБОЖАЮ баланс
+		Tooltip:
+			'''
+			Если Вы хотите, чтобы Ваши прохождения были близки к ванильной Terraria, то данный пресет – Ваш наилучший вариант.
+			С данным пресетом, вместо бесконечных баффов, Ваши дебаффы будут оставаться после смерти.
+			Большинство функций скорректированы до относительно сбалансированного уровня,
+			чтобы достичь упрощённый, но всё ещё похожий на ванильный геймплей.
+			(Используйте предметы данного мода на своё усмотрение, т.к. некоторые из них могут быть несбалансированными)
+			(Вы можете вносить изменения после выбора пресета)
+			'''
+	}
+
+	FukMeCalamity: {
+		Label: Эти моды просто имба!
+		Tooltip:
+			'''
+			Данный пресет включает в себя самые удобные настройки, которые значительно уменьшают репетативные действия.
+			Если Вы играете в Calamity в режиме Месть или Fargo's Souls в режиме Вечность, этот пресет подойдёт лучше всего.
+			Большинство настроек упрощают геймплей, направляя фокус на продвижение и битвы с боссами.
+			(Вы можете вносить изменения после выбора пресета)
+			'''
+	}
+
+	SuperVault: {
+		Label: "[centeritem:3813] Большой рюкзак"
+		Tooltip:
+			'''
+			Отдельный инвентарь на 100 слотов, которые также можно использовать в крафтах.
+			Есть функции авто-подбора и умного подбора предметов.
+			Пожалуйста, назначьте клавишу: Настройки → Управление → пролистните вниз и найдите «Большой рюкзак».
+			'''
+	}
+
+	SuperVoidVault: {
+		Label: "[centeritem:4131] Авто-подбор предметов для личных хранилищ"
+		Tooltip:
+			'''
+			Позволяет другим личным хранилищам автоматически складывать собираемые предметы, когда Ваш инвентарь полон.
+			Приоритет: Свинья-копилка → Сейф → Печь защитника → Сейф пустоты.
+			'''
+	}
+
+	SmartVoidVault: {
+		Label: "[centeritem:4076] Умный подбор предметов для личных хранилищ"
+		Tooltip: Если в Вашем сейфе пустоты уже есть предметы, эти предметы будут автоматически переноситься в сейф пустоты.
+	}
+
+	ItemMaxStack: {
+		Label: "[centeritem:9] Максимальный стак"
+		Tooltip:
+			'''
+			Ставит максимальный размер стаков для предметов.
+			Максимальный размер стака для монет не изменяется.
+			'''
+	}
+
+	GrabDistance: {
+		Label: "[centeritem:5010] Увеличить дистанцию подбора предметов (изм. в блоках)"
+		Tooltip: Увеличивает дистанцию подбора предметов. Скорость подбора также увеличивается.
+	}
+
+	NoConsume_SummonItem: {
+		Label: "[centeritem:560] Нерасходуемые предметы призыва"
+		Tooltip: Только для предметов призыва ванильных боссов и событий.
+	}
+
+	ModifyPlayerPlaceSpeed: {
+		Label: "[centeritem:2214] Увеличить скорость размещения блоков"
+		Tooltip: ""
+	}
+
+	ModifyPlayerTileRange: {
+		Label: "[centeritem:2215] Увеличить дальность размещения блоков"
+		Tooltip: ""
+	}
+
+	TileSpeed_Blacklist: {
+		Label: "[centeritem:1448] Чёрный список для улучшений размещения блоков"
+		Tooltip:
+			'''
+			Скорость и дальность размещения не будет увеличиваться для блоков, если их название
+			или часть названия включено в данный список.
+			Не чувствителен к регистру символов.
+			'''
+	}
+
+	PortableCraftingStation: {
+		Label: "[centeritem:WorkBench] Переносные станции создания"
+		Tooltip:
+			'''
+			Станции создания в инвенторе и личных хранилищах будут функционировать так, будто они поставлены.
+			Например, если в Вашем инвентаре есть печь, Вы сможете переплавить руду в слитки в любой момент.
+			Вёдра воды, лавы и мёда считается источником их соответствующих жидкостей.
+			'''
+	}
+
+	NoPlace_BUFFTile: {
+		Label: "[centeritem:3198] Переносные станции баффов"
+		Tooltip: Ванильные станции баффов (напр. Точильный камень) в любом из Ваших инвентарей будут давать свои баффы.
+	}
+
+	NoPlace_BUFFTile_Banner: {
+		Label: "[centeritem:2901] Переносные знамёна"
+		Tooltip: Знамёна любых врагов в любом из Ваших инвентарей будут давать свои баффы.
+	}
+
+	NoConsume_Potion: {
+		Label: "[centeritem:227] Бесконечные зелья"
+		Tooltip:
+			'''
+			Зелья в Вашем инвентаре или личных хранилища (свинья-копилка, сейф и т.д.)
+			в стаке определённого размера или более больше не тратятся и дают свои баффы.
+			Установите требуемое число в следующей настройке.
+			'''
+	}
+
+	NoConsume_PotionRequirement: {
+		Label: "[centeritem:TeleportationPotion] Требования для бесконечных зелий"
+		Tooltip:
+			'''
+			Только стаки зелий этого размера или более будут давать свои баффы.
+			Пределы: от 10 до 999.
+			'''
+	}
+
+	NoConsume_Ammo: {
+		Label: "[centeritem:3104] Бесконечные боеприпасы"
+		Tooltip: Боеприпасы в стаке 3996 или более не тратятся.
+	}
+
+	NoConsume_Projectile: {
+		Label: "[centeritem:42] Бесконечные метательные оружия"
+		Tooltip: Метательные оружия в стаке 3996 или более не тратятся.
+	}
+
+	NoConsume_Wire: {
+		Label: "[centeritem:530] Бесконечные провода"
+		Tooltip: Предмет «Провод» в стаке 3996 или более не тратится.
+	}
+
+	ImprovePrefix: {
+		Label: "[centeritem:1551] Ретроспективная перековка"
+		Tooltip: Префиксы, которые уже были получены, можно добавить вручную.
+		Unknown: Неизвестный префикс
+	}
+
+	ResurrectionTimeShortened: {
+		Label: "[centeritem:3232] Ускоренное возрождение"
+		Tooltip: Значение 25 соответствует уменьшению времени возрождения на 25%.
+	}
+
+	BOSSBattleResurrectionTimeShortened: {
+		Label: "[centeritem:3232] Ускоренное возрождение при битве с боссом"
+		Tooltip: ""
+	}
+
+	MiddleEnableBank: {
+		Label: "[centeritem:87] Открытие личных хранилищ колёсиком мыши"
+		Tooltip:
+			'''
+			Когда Вы нажимаете колёсиком по предмету личного хранилища в инвентаре,
+			соответсвующее хранилище открывается.
+			Также отключает лимит по расстоянию открытия личных хранилищ.
+			'''
+	}
+
+	BanTombstone: {
+		Label: "[centeritem:3230] Отключить надгробия"
+		Tooltip: ""
+	}
+
+	FasterExtractinator: {
+		Label: "[centeritem:ChlorophyteExtractinator] Ускоренная переработка"
+		Tooltip: Значительно увеличивает скорость работы перерабатывателя.
+	}
+
+	TownNPCGetTFIntoHouse: {
+		Label: "[centeritem:MusicBoxTownDay] Улучшение механик появления городских НИПов"
+		Tooltip:
+			'''
+			Когда соблюдены все требования для появления Гоблина-изобретателя, Трактирщика, Волшебника, Механика или Сборщика налогов,
+			их не нужно будет спасать, и они сами появятся, если есть пустые дома. Они будут считаться спасёнными после первого появления.
+			Стилист может появиться после победы над любым ванильным боссом прехардмода.
+			Городские НИПы могут появляться ночью.
+			'''
+	}
+
+	NPCLiveInEvil: {
+		Label: "[centeritem:MusicBoxTownNight] Городские НИПы могут жить в биомах мирового зла"
+		Tooltip: Городские НИПы могут жить в порче и багрянце.
+	}
+
+	TownNPCSpawnSpeed: {
+		Label: "[centeritem:4910] Мультипликатор скорости появления городских НИПов"
+		Tooltip: Выставьте значение на 1, чтобы отключить данную настройку.
+	}
+
+	NoCD_FishermanQuest: {
+		Label: "[centeritem:4608] Мгновенное обновление заданий Рыбака"
+		Tooltip: Мгновенно обновляет задания Рыбака, когда Вы даёте ему нужную рыбу. Вы также можете настроить, чтобы рыба не менялась.
+	}
+
+	NPCCoinDropRate: {
+		Label: "[centeritem:73] Мультипликатор выпадающих из врагов монет"
+		Tooltip: ""
+	}
+
+	SlimeExDrop: {
+		Label: "[centeritem:11] Гарантированные предметы из слизней"
+		Tooltip:
+			'''
+			У слизней теперь гарантированно есть случайный предмет внутри.
+			Следует ванильным шансам выпадения, если настройка выключена.
+			'''
+	}
+
+	LavalessLavaSlime: {
+		Label: "[centeritem:LavaSlimeBanner] Лавовые слизни без слизней"
+		Tooltip: Убитые лавовые слизни больше не создают лаву в режиме Эксперта или выше.
+	}
+
+	TravellingMerchantStay: {
+		Label: "[centeritem:2222] Странствующий торговец не уходит"
+		Tooltip: Странствующий торговец не уйдёт из мира, пока он не будет убит.
+	}
+
+	TravellingMerchantRefresh: {
+		Label: "[centeritem:PeddlersSatchel] Обновляемый магазин Странствующего торговца"
+		Tooltip: Добавляет Странствующему торговку кнопку «Обновить», что позволяет обновить его магазин.
+	}
+
+	QuickNurse: {
+		Label: "[centeritem:AdhesiveBandage] Первая помощь"
+		Tooltip:
+			'''
+			Медсестра лечит Вас сразу, когда Вы нажимаете правой кнопкой мыши по ней.
+			Цена будет указана над игроком.
+			'''
+	}
+
+	BestiaryQuickUnlock: {
+		Label: "[centeritem:DontHurtCrittersBook] Экспресс-курс"
+		Tooltip: Бестиарий любого существа будет открыт сразу после первого убийства/взаимодействия.
+	}
+
+	BannerRequirement: {
+		Label: "[centeritem:2990] Количество убийств для знамени"
+		Tooltip:
+			'''
+			Меняет кол-во убийств, нужных для получения знамени. Чем меньше число, тем меньше понадобится убийств.
+			Например, когда выставлен мультипликатор 0,1(10%), понадобится убить 5 Синих слизней, чтобы получить знамя.
+			Наоборот, когда выставлен мультипликатор 10(1000%), понадобится убить 500 Синих слизней.
+			'''
+	}
+
+	AlchemyGrassGrowsFaster: {
+		Label: "[centeritem:313] Ускоренный рост цветов"
+		Tooltip: Ускоряет рост цветов по типу цветка дня.
+	}
+
+	AlchemyGrassAlwaysBlooms: {
+		Label: "[centeritem:316] Цветы цветут при любых условиях"
+		Tooltip: Цветы теперь могут цвести и давать семена в любых условиях.
+	}
+
+	PumpkinGrowsFaster: {
+		Label: "[centeritem:1725] Ускоренный рост тыкв"
+		Tooltip: Ускоряет рост тыкв.
+	}
+
+	StaffOfRegenerationAutomaticPlanting: {
+		Label: "[centeritem:213] Посох/Топор выращивания автоматически садят семена"
+		Tooltip: Автоматически ставит семя собранного цвета при использовании посоха/топора выращивания.
+	}
+
+	NoBiomeSpread: {
+		Label: "[centeritem:Sunflower] Биомы мирового зла и Освящение не распространяются"
+		Tooltip: ""
+	}
+
+	RespawnWithFullHP: {
+		Label: "[centeritem:LifeCrystal] Возрождение с полным здоровьем"
+		Tooltip: ""
+	}
+
+	DontDeleteBuff: {
+		Label: "[centeritem:FlaskofNanites] Оставлять баффы после смерти"
+		Tooltip: Баффы остаются при Вас после смерти.
+	}
+
+	JourneyResearch: {
+		Label: "[centeritem:GoldBunny] Автоматическое исследование"
+		Tooltip:
+			'''
+			В режиме Приключения, предметы в необходимом кол-ве и помеченные как избранное будут автоматически исследованы.
+			Эта функция не расходует предметы.
+			'''
+	}
+
+	BanDamageVar: {
+		Label: "[centeritem:6] Отключить разброс урона"
+		Tooltip: ""
+	}
+
+	ExtraPlayerBuffSlots: {
+		Label: "[centeritem:3000] Дополнительные слоты баффов"
+		Tooltip: ""
+	}
+
+	TreeGrowFaster: {
+		Label: "[centeritem:1182] Деревья растут быстрее и игнорируют высоту"
+		Tooltip:
+			'''
+			Увеличивает скорость роста деревьев на 5.
+			Самоцветные деревья могут расти на поверхности, а обычные – под землёй.
+			Не влияет на скорость роста деревьев джунглей и огромных светящихся грибов.
+			'''
+	}
+
+	ShakeTreeFruit: {
+		Label: "[centeritem:4009] Гарантированное выпадение фруктов при тряске деревьев"
+		Tooltip:
+			'''
+			Значительно увеличивает шанс выпадения фруктов (не влияет на шанс выпадения других предметов).
+			Если кажется, будто это функция ничего не делает, обратитесь к вики Terraria и посмотрите условия выпадения.
+			'''
+	}
+
+	GemTreeAlwaysDropGem: {
+		Label: "[centeritem:3649] С самоцветных деревьев всегда выпадают самоцветы"
+		Tooltip: С каждой части самоцветного дерева выпадают самоцветы и самоцветные жёлуди.
+	}
+
+	ShareCraftingStation: {
+		Label: "[centeritem:WorkBench] Общие переносные станции создания"
+		Tooltip:
+			'''
+			Игроки в одной команде делятся своими эффектами станций создания.
+			Например, если у другого игрока на Вашей команде есть верстак, Вы сможете скрафтить стул без верстака.
+			Для работы этой настройки, пожалуйста, включите «Переносные станции создания».
+			Может вызывать лаги при большой количестве игроков (>100).
+			'''
+	}
+
+	ShareInfBuffs: {
+		Label: "[centeritem:227] Общие бесконечные баффы"
+		Tooltip:
+			'''
+			Игроки в одной команде делятся своими бесконечными баффами зелий и знамён.
+			Например, если у другого игрока на Вашей команде есть кусок торта, Вы тоже получите бафф «Эйфория».
+			Для работы этой настройки, пожалуйста, включите любую настройку, связанную с бесконечными баффами.
+			Может вызывать лаги при большой количестве игроков (>100).
+			'''
+	}
+
+	ShareRange: {
+		Label: "[centeritem:WorldGlobe] Дальность общих эффектов (в блоках)"
+		Tooltip:
+			'''
+			Только игроки из одной команды в этом радиусе будут получать общие эффекты.
+			По умолчанию стоит -1, означающее бесконечную дальность.
+			'''
+	}
+
+	TeamAutoJoin: {
+		Label: "[centeritem:TeamBlockRed] Автоматически присоединяться к красной команде"
+		Tooltip: Только что подключившиеся игроки будут автоматически присоединяться к красной команде в мультиплеерею
+	}
+
+	OnlyHost: {
+		Label: "[centeritem:2203] Только хост может менять настройки мода (не работает при присоединении к порту)"
+		Tooltip:
+			'''
+			Не делает ничего в одиночной игре.
+			Если включена, только хост (IP: 127.0.0.1) может изменять настройки мода.
+			Только хост может включить/выключить эту настройку.
+			Если сервер работает на присоединении к порту, пожалуйста, используйте настройку ниже.
+			'''
+		Unaccepted: Нельзя сохранить: Вы не хост!
+		Tips:
+			'''
+			Включена настройка «Только хост может менять настройки мода».
+			Только хост (IP: 127.0.0.1) может изменять настройки мода.
+			'''
+	}
+
+	OnlyHostByPassword: {
+		Label: "[centeritem:2203] Только подтвержденные игроки могут менять настройки мода"
+		Tooltip:
+			'''
+			Не делает ничего в одиночной игре, требует перезагрузку. Если включена, только подтвержденныу игроки могут изменять настройки мода.
+			При запуске сервера, в консоль сервера будет отправлен случайный пароль из 8 знаков. Можно запросить пароль в консоли с помощью команды /qotpassword.
+			Игроки могут ввести /qotpassword <пароль>, чтобы стать подтверждёнными. Если пароль верный, игрок сможет изменять настройки.
+			Эффективна на серверах с присоединением к порту, т.к. верификация по IP не работает.
+			'''
+		Unaccepted: Вы не прошли подтверждение!
+		Tips: Включена настройка «Только подтвержденные игроки могут менять настройки мода».
+		Registered: Вы уже можете изменять настройки.
+		Correct: Пароль верный, Вы можете изменять настройки.
+		Incorrect: Пароль неверный!
+		ServerPassword: "[Quality of Terraria] Пароль для подтверждения: {Password}."
+		ServerPasswordLog: Пароль для подтверждения: {Password}.
+		CommandDescription: Чтобы подтвердить себя, спросите разрешения менять настройки мода.
+		NotOn: Настройка подтверждения пароля не включена.
+		Format: Пароль должен содержать хотя бы 4 знака (не чувствителен к регистру).
+	}
+
+	SpawnRateMaxValue: {
+		Label: "[centeritem:2649] Мультипликатор максимальной скорости появления врагов"
+		Tooltip:
+			'''
+			Позволяет игрокам изменять максимальную скорость появления врагов.
+			Внимание:
+			Данная панель появляется только при условии, если у Вас есть бесконечные баффы:
+			[Подсолнух][Свеча спокойствия][Успокаивающее зелье][Водяная свеча] и [Зелье битвы].
+			Если Вы не хотите, чтобы игроки на сервере повышали спавнрейт врагов до небес, эта настройка поможет поставить лимит.
+			'''
+	}
+
+	ExStorageSearchDistance: {
+		Label: "[centeritem:ImproveGame/ExtremeStorage] Дальность обнаружения сундуков панелью управления хранилищем"
+		Tooltip:
+			'''
+			Изменяет, насколько далеко панель управления хранилищем может испать сундуки.
+			В мультиплеере, чем больше сундуков manages, тем выше нагрузка на сеть.
+			'''
+	}
+
+	ICanSeeForeverAllBag: {
+		Label: "[centeritem:GoodieBag] Детали мешков показывают скрытые выпадающие предметы"
+		Tooltip:
+			'''
+			Пока выключена, код выпадения предметов определяет что скрывать.
+			Пока включена, скрытые правила всегда показываются.
+			'''
+	}
+
+	LoadModItems: {
+		Label: Конфигуграции загрузки предметов мода
+		Tooltip: Отключает код некоторых предметов из мода, чтобы они не появлялись в игре.
+	}
+
+	EmptyAutofisher: {
+		Label: "[centeritem:ImproveGame/Autofisher] Предупреждения о нехватке наживки"
+		Tooltip:
+			'''
+			Если в рыболовной машине кончается наживка, в чате появится сообщение: 
+			“\"У рыболовной машины на [горизонтальная позиция, глубина] кончилась наживка\".
+			'''
+		Tip: У рыболовной машины на [c/15d36a:{Compass}, {Depth}] кончилась наживка.
+	}
+
+	OtherFunctions: {
+		Label: Неизменяемые функции
+		ExpandTip: Нажмите, чтобы раскрыть
+		Subtitle: Данные функции мода не изменяются настройками.
+		Tooltip:
+			'''
+			Нажатие клавиши «Предметы в мешке» детально показывает выпадаемые из мешка предметы.
+			Горячая клавиша для смены панели быстрого доступа на второй ряд инвентаря.
+			Панель фильтрования, которая открывается при нажатии на иконку анализатора форм жизни.
+			Проверка предметов в сундуке при наведении курсора и нажатии Alt.
+			Упрощение описаний (убрано описание избранных предметов, детальное описание в слотах для украшений).
+			Увеличивает скорость и включает авто-использование для кристаллов жизни, кристаллов маны и фруктов жизни.
+			Нажатие колёсиком по предметам наездных питомцев садит Вас на питомца.
+			Все виды причёски доступны при создании персонажа.
+			Горячая клавиша жезла телепортации. Использует жезл раздора или жезл гармонии из любого инвентаря, приоритет на жезле гармонии.
+			Горячая клавиша телепортации домой. Использует любой бесконечный возвращающий домой предмет из любого инвентаря, приоритет на [centeritem:4870] зелье возвращения.
+			Можно использовать боеприпасы из большого рюкзака.
+			'''
+	}
+
+	ExtraToolSpeed: {
+		Label: "[centeritem:4056] Множитель скорости инструментов"
+		Tooltip: Выставьте значение на 0, чтобы отключить. Чем выше значение, тем больше скорость.
+	}
+
+	MostTreeMin: {
+		Label: "[centeritem:9] Минимальная высота обычных деревьев"
+		Tooltip: По умолчанию – 7
+	}
+
+	MostTreeMax: {
+		Label: "[centeritem:9] Максимальная высота обычных деревьев"
+		Tooltip: По умолчанию – 12
+	}
+
+	PalmTreeMin: {
+		Label: "[centeritem:2504] Минимальная высота пальм"
+		Tooltip: По умолчанию – 10
+	}
+
+	PalmTreeMax: {
+		Label: "[centeritem:2504] Максимальная высота пальм"
+		Tooltip: По умолчанию – 20
+	}
+
+	GemTreeMin: {
+		Label: "[centeritem:4856] Минимальная высота самоцветных деревьев"
+		Tooltip: По умолчанию – 7
+	}
+
+	GemTreeMax: {
+		Label: "[centeritem:4856] Максимальная высота самоцветных деревьев"
+		Tooltip: По умолчанию – 12
+	}
+
+	Headers: {
+		Item: "[centeritem/h4:LifeCrystal] Настройки предметов"
+		NPC: "[centeritem:4382] Настройки НИПов"
+		GameMechanics: "[centeritem:1344] Игровые механики"
+		Tree: "[centeritem/h4:27] Настройки деревьев"
+		Together: "[centeritem/h2:GolfCupFlagRed] Вместе весело шагать..."
+		Server: "[centeritem:ImproveGame/CreateWand] Настройки мода"
+		Presets: "[centeritem:ImproveGame/PaintWand] Пресеты"
+		Others: "[centeritem/h4:HandOfCreation] Другое"
+		ItemEffect: "[centeritem/h4:RedPotion] Эффекты предметов"
+		PylonMechanics: "[centeritem:4951] Ограничения столбов"
+	}
+
+	OpenConfig: {
+		Label: Открыть файл конфигурации
+		Tooltip: Любая настройка появится в файле только после внесения изменений.
+	}
+
+	TownNPCHome: {
+		Label: "[centeritem:MusicBoxTownDay] Телепортировать НИПов домой"
+		Tooltip:
+			'''
+			Нажатие ПКМ по кнопке «Дом» телепортирует всех НИПов домой.
+			При изменении дома НИПа, его сразу же телепортирует в новый дом.
+			'''
+		HoverText: （<right>, чтобы телепортировать НИПов домой）
+	}
+
+	NoLakeSizePenalty: {
+		Label: "[centeritem:FishingPotion] Нет ограничений по размерам водоёма"
+		Tooltip:
+			'''
+			Любой водоём будет считаться полным для рыбалки.
+			Это убирает снижение мастерства рыбалки из-за рыбалки в маленьких водоёмах.
+			Позволяет рыбачить даже в 2 блоках воды.
+			'''
+	}
+
+	InfiniteRedPotion: {
+		Label: "[centeritem:RedPotion] Создание красного зелья"
+		Tooltip:
+			'''
+			Если Ваш мир использует сид «Get fixed boi» или «For the worthy»,
+			Вы можете использовать все предметы для создания зелий, чтобы скрафтить красное зелье.
+			Бесконечное красное зелье будет давать все свои возможные баффы.
+			Однако, их нельзя складывать в сумку для зелий.
+			'''
+		Condition: Включено «Создание красного зелья»
+	}
+
+	RedPotionEverywhere: {
+		Label: "[centeritem:RedPotion] Безграничное красное зелье"
+		Tooltip:
+			'''
+			Включает «Создание красного зелья» для всех миров,
+			а не только для «Get fixed boi» и «For the worthy».
+			'''
+		Condition: Включено «Безграничное красное зелье»/{$Conditions.WorldForTheWorthy}
+	}
+
+	RedPotionRequirement: {
+		Label: "[centeritem:RedPotion] Требования бесконечного красного зелья"
+		Tooltip:
+			'''
+			Требует	«Создание красного зелья» для работы.
+			Определяет требуемый размер стака для бесконечного зелья только для красного зелья.
+			'''
+	}
+
+	LongerExpertDebuff: {
+		Label: "[centeritem:DemonHeart] Длительность дебаффов в режиме Эксперта"
+		Tooltip:
+			'''
+			Переключает увеличенную длительность дебаффов в режиме Эксперта/Мастера.
+			Если настройка выключена, будет использована длительность дебаффов Классического режима.
+			'''
+	}
+
+	LightNotBlocked: {
+		Label: "[centeritem:UltrabrightTorch] Блоки не блокируют свет"
+		Tooltip:
+			'''
+			Определяет, блокируют ли блоки свет или нет.
+			Если настройка выключена, использует ванильное поведение света.
+			'''
+	}
+
+	BombsNotDamage: {
+		Label: "[centeritem:TNTBarrel] Взрывы не наносят урона"
+		Tooltip:
+			'''
+			Отключает урон от взрывчатки.
+			Влияет только на взрывчатку, ломащую блоки. Не влияет на гранаты, ракеты, которые не ломают блоки и др.
+			'''
+	}
+
+	DisableNonPlayerBombsExplosions: {
+		Label: "[centeritem:TNTBarrel] Взрывчатка не от игроков не ломают блоки"
+		Tooltip: Взрывчатка, созданная не игроком, не ломает блоки.
+	}
+
+	WorldFeaturePanel: {
+		Label: "[centeritem:WorldGlobe] Панель особенностей мира"
+		Tooltip:
+			'''
+			Открывается через панель контроля.
+			Переключает праздники и особенности секретных сидов.
+			'''
+	}
+
+	BedEverywhere: {
+		Label: "[centeritem:Bed] Безграничное возрождение на кровати"
+		Tooltip:
+			'''
+			Кровати могут быть использованы как точки возрождения при любых условиях,
+			несмотря на требования для дома.
+			'''
+	}
+
+	MinimapMark: {
+		Tooltip:
+			'''
+			Позволяет использовать «локаторы», чтобы отмечать следующие структуры на карте:
+			Эфир, подземелье, храм джунглей, парящие острова, пирамиды, бутоны Плантеры и святилища зачарованных мечей.
+			'''
+		Label: "[centeritem:WorldGlobe] Маркеры для структур"
+	}
+
+	ModifyNPCHappiness: {
+		Label: "[centeritem:LifeCrystal] Фиксированное счастье НИПов"
+		Tooltip: Фиксирует "счастье" городских НИПов на определённом значении.
+	}
+
+	NPCHappiness: {
+		Label: "[centeritem:LifeCrystal] Модификатор ценников НИПов (%)"
+		Tooltip:
+			'''
+			Чем меньше значение, тем "счастливее" НИПы, тем дешевле они продают свои предметы и тем дороже они покупают Ваши.
+			НИПы всегда продают столбы, когда значение меньше или равно 90.
+			'''
+	}
+
+	NoSleepRestrictions: {
+		Label: "[centeritem:Bed] Безусловный сон"
+		Tooltip: Сон ускоряет время в любых условиях.
+	}
+
+	BedTimeRate: {
+		Label: "[centeritem:Bed] Скорость ускорения сна"
+		Tooltip: Позволяет изменить скорость ускорения времени, когда игрок спит, по умолчанию – 5-кратное ускорение.
+	}
+
+	BedOnlyOne: {
+		Label: "[centeritem:Bed] Отоспаться за десятерых"
+		Tooltip: В мультиплеере хватит одного игрока, чтобы ускорить время в мире.
+	}
+
+	WandMaterialNoConsume: {
+		Tooltip:
+			'''
+			Блоки и стены в стаках более 999 не будут тратиться при использовании Wand of Space/Technology/Construction.
+			Предметы мебели не будут тратиться в стаках более 99.
+			'''
+		Label: "[centeritem:ImproveGame/SpaceWand] Бесконечные ставящие жезли"
+	}
+
+	DummyCustomAIStyleAllowed: {
+		Tooltip:
+			'''
+			Когда включена, кто угодно на сервере сможет изменять поведение пугала на любого НИПа
+			Т.к. пугала и манекены могут вызывать много лагов, рекомендуем дважды подумать, прежде чем включать данную настойку.
+			'''
+		Label: "[centeritem:ImproveGame/Dummy] {$Mods.ImproveGame.UI.DummyConfiguration.DummyConfigLabel}"
+	}
+
+	QuestFishStack: {
+		Label: "[centeritem:Clownfish] Стакающиеся рыбы заданий"
+		Tooltip: Рыбы заданий Рыбака могут складываться, а также их можно выловить и подобрать, даже когда эта рыба уже есть в Вашем инвентаре.
+	}
+
+	QuickRespawn: {
+		Label: "[centeritem:3232] Ускоренное возрождение без боссов"
+		Tooltip: Время возрождения уменьшено до 1,5 секунд, когда в мире нет боссов.
+	}
+
+	AllOff: {
+		Label: Экстренное выключение
+		Tooltip: Восстанавливает (почти) все настройки до ванильных значений. Приятной игры в ванильную Terraria!
+	}
+
+	NoConditionTP: {
+		Label: "[centeritem:WormholePotion] Безусловная телепортация в команде"
+		Tooltip: Игроки могут телепортироваться к сокомандникам без зелий червоточины, даже если они у них есть
+	}
+
+	OpenFaq: {
+		Tooltip:
+			'''
+			Рекомендуем посмотреть данную страницу в случае, если Вы встретитесь
+			с любыми проблемами. Данная страница включает в себя решения для следующих проблем:
+			- Как скрыть бесконечные баффы?
+			- Как автоматически складывать деньги в копилку?
+			- Как скрыть баффы над головой персонажа?
+			'''
+		Label: Часто задаваемые вопросы
+	}
+
+	WeatherControl: {
+		Label: "[centeritem:ImproveGame/WeatherBook] Контроль над погодой"
+		Tooltip:
+			'''
+			Позволяет менять направление ветра, фазу луны, дождь,
+			а также время после победы над Стеной плоти.
+			Становится доступным с помощью «Weather Book», открывается через панель контроля.
+			Доступность зависит от мира.
+			'''
+	}
+
+	AmmoChain: {
+		Label: "[centeritem:ImproveGame/AmmoChainItem] Цепочка боеприпасов"
+		Tooltip:
+			'''
+			Позволяет оружиям использовать боеприпасы в определённой последовательности.
+			Открывается через панель контроля.
+			'''
+	}
+
+	SimpleVeinMining: {
+		Label: "[centeritem:IronPickaxe] Простое копание жил"
+		Tooltip:
+			'''
+			Простая функция копания жил руды. Пассивно работает при копании киркой.
+			Нет чёрного/белого списка, и не поддерживает какие-либо изменения.
+			Если Вам нужны эти функции, рекомендуем использовать мод «Ore Excavator» или «Basic Automated Mining».
+			Если один из этих двух модов включён, эта настройка будет отключена.
+			'''
+		PopupTip: Копание жил руды можно отключить в конфигурациях Quality of Terraria
+	}
+
+	DisableVeinMiningPopup: {
+		Label: "[centeritem:IronPickaxe] Отключить уведомление о копании жил"
+		Tooltip: Отключает надоедливое уведомление раз и навсегда.
+	}
+
+	QuickShimmer: {
+		Label: "[centeritem:ImproveGame/ShellShipInBottle_Shimmered] Быстрое мерцание"
+		Tooltip:
+			'''
+			Позволяет превращать предметы с помощью мерцания в инвентаре.
+			Становится доступным с помощью «Shimmer ship in bottle», открывается через панель контроля.
+			Доступность зависит от мира.
+			'''
+	}
+
+	PylonPlaceNoRestriction: {
+		Label: "[centeritem:TeleportationPylonPurity] Неограниченные столбы"
+		Tooltip: Позволяет поставить сколько угодно столбов где угодно.
+	}
+
+	PylonTeleNoNear: {
+		Label: "[centeritem:TeleportationPylonUnderground] Глобальная телепортация к столбам"
+		Tooltip: Позволяет телепортироваться к столбам из любой точки мира.
+	}
+
+	PylonTeleNoNPC: {
+		Label: "[centeritem:TeleportationPylonHallow] Телепортация по столбам без НИПов"
+		Tooltip: Позволяет телепортироваться к столбу, даже когда рядом с ним нет НИПов.
+	}
+
+	PylonTeleNoDanger: {
+		Label: "[centeritem:TeleportationPylonJungle] Телепортация по столбам, игнорирующая угрозы"
+		Tooltip: Позволяет телепортироваться к столбу, даже когда жив босс/активно событие.
+	}
+
+	PylonTeleNoBiome: {
+		Label: "[centeritem:TeleportationPylonMushroom] Телепортация по столбам, игнорирующая биомы"
+		Tooltip: "'Ты меня уважаешь? Тогда пей!'"
+	}
+}
+
+AvailableModItemConfigs: {
+	DisplayName: 3. Конфигурация предметов мода
+	Available: ": доступен(-на)"
+	Unavailable: ": недоступен(-на)"
+	Enable: ": настройка включена"
+
+	AvailableMagickWand: {
+		Label: "[centeritem:ImproveGame/MagickWand] {$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableSpaceWand: {
+		Label: "[centeritem:ImproveGame/SpaceWand] {$Mods.ImproveGame.Items.SpaceWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableStarburstWand: {
+		Label: "[centeritem:ImproveGame/StarburstWand] {$Mods.ImproveGame.Items.StarburstWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableWallPlace: {
+		Label: "[centeritem:ImproveGame/WallPlace] {$Mods.ImproveGame.Items.WallPlace.PureName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableCreateWand: {
+		Label: "[centeritem:ImproveGame/CreateWand] {$Mods.ImproveGame.Items.CreateWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableLiquidWand: {
+		Label: "[centeritem:ImproveGame/LiquidWand] {$Mods.ImproveGame.Items.LiquidWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailablePotionBag: {
+		Label: "[centeritem:ImproveGame/PotionBag] {$Mods.ImproveGame.Items.PotionBag.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableBannerChest: {
+		Label: "[centeritem:ImproveGame/BannerChest] {$Mods.ImproveGame.Items.BannerChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableAutofisher: {
+		Label: "[centeritem:ImproveGame/Autofisher] {$Mods.ImproveGame.Items.Autofisher.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailablePaintWand: {
+		Label: "[centeritem:ImproveGame/PaintWand] {$Mods.ImproveGame.Items.PaintWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableConstructWand: {
+		Label: "[centeritem:ImproveGame/ConstructWand] {$Mods.ImproveGame.Items.ConstructWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableMoveChest: {
+		Label: "[centeritem:ImproveGame/MoveChest] {$Mods.ImproveGame.Items.MoveChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableCoinOne: {
+		Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableExtremeStorage: {
+		Label: "[centeritem:ImproveGame/ExtremeStorage] {$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableDetectorDrone: {
+		Label: "[centeritem:ImproveGame/DetectorDrone] {$Mods.ImproveGame.Items.DetectorDrone.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableBaitSupplier: {
+		Label: "[centeritem:ImproveGame/BaitSupplier] {$Mods.ImproveGame.Items.BaitSupplier.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableLiquidWandAdvanced: {
+		Label: "[centeritem:ImproveGame/LiquidWandAdvanced] {$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableActuationRodMkII: {
+		Label: "[centeritem:ImproveGame/ActuationRodMkII] {$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+}
+
+UIConfigs: {
+	DisplayName: 2. Личная конфигурация
+
+	BigBackpackButton: {
+		Label: "[centeritem:3813] Кнопка большого рюкзака"
+		Tooltip: ""
+	}
+
+	ResetNativeUI: {
+		Label: "[centeritem:1544] Сброс к ванильному интерфейсу"
+		Tooltip: ""
+	}
+
+	GeneralFontOffsetY: {
+		Label: "[centeritem:1543] Отступ по Y среднего шрифта интерфейса"
+		Tooltip: ""
+	}
+
+	BigFontOffsetY: {
+		Label: "[centeritem:1543] Отступ по Y большого шрифта интерфейса"
+		Tooltip: ""
+	}
+
+	ShowMoreData: {
+		Label: "[centeritem:1344] Показывать дебаг-данные"
+		Tooltip:
+			'''
+			Настройка разработчиков, не предназначена для обычных игроков
+			Если настройка включена, будут выводиться различные дебаг-данные
+			'''
+	}
+
+	ShowModName: {
+		Label: "[centeritem:ImproveGame/LiquidWand] Показывать, из какого мода предметы"
+		Tooltip: ""
+	}
+
+	PlyInfo: {
+		Label: "[centeritem:3124] Характеристики игрока"
+		Tooltip: Рядом с иконкой достижений появляется четырёхлистный клевер.
+	}
+
+	QoLAutoTrash: {
+		Label: "[centeritem:348] Авто-выбрасывание"
+		Tooltip:
+			'''
+			Автоматическая корзина для мусора.
+			Предметы автоматически будут перемещаться в корзину, если их тип уже есть внутри.
+			Сохраняет 6 последних выброшенных предметов.
+			Shift+Ctrl+Щелчок левой клавиши мыши по предмету, чтобы переместить его в корзину.
+			'''
+	}
+
+	FontOffsetPreviewText: Откалибруйте отступ, чтобы текст помещался на линии.
+	BigFontOffsetPreviewText: Съешь ещё этих...
+
+	OpenConfig: {
+		Label: "{$Mods.ImproveGame.Configs.ImproveConfigs.OpenConfig.Label}"
+		Tooltip: "{$Mods.ImproveGame.Configs.ImproveConfigs.OpenConfig.Tooltip}"
+	}
+
+	KeepFocus: {
+		Label: "[centeritem:TVHeadMask] Игра работает даже в фоновом режиме"
+		Tooltip:
+			'''
+			Даже пока игра не является активным окном (т.е. находится в фоне),
+			она всё ещё продолжает работать, а не ставится на паузу.
+			'''
+	}
+
+	ExplosionEffect: {
+		Label: "[centeritem:TNTBarrel] Эффекты взрывов жезлов"
+		Tooltip: Включает эффекты взрывов для жезлов этого мода.
+	}
+
+	Headers: {
+		MinimapHeader: "[centeritem:WorldGlobe] Настройки отметок на карте"
+		UIHeader: "[centeritem:EchoMonolith] Настройки пользовательского интерфейса"
+		GameHeader: "[centeritem:JimsDrone] Настройки игры"
+	}
+
+	MarkFloatingIsland: {
+		Tooltip:
+			'''
+			Размер иконок отмеченных на карте парящих островов.
+			Выставьте значение на 0, чтобы их скрыть.
+			'''
+		Label: "[centeritem:ImproveGame/FloatingIslandGlobe] Размер иконки парящих островов"
+	}
+
+	MarkAether: {
+		Tooltip:
+			'''
+			Размер иконки отмеченного на карте эфира.
+			Выставьте значение на 0, чтобы её скрыть.
+			'''
+		Label: "[centeritem:ImproveGame/AetherGlobe] Размер иконки эфира"
+	}
+
+	MarkTemple: {
+		Tooltip:
+			'''
+			Размер иконки отмеченного на карте храма джунглей.
+			Выставьте значение на 0, чтобы её скрыть.
+			'''
+		Label: "[centeritem:ImproveGame/TempleGlobe] Размер иконки храма джунглей"
+	}
+
+	MarkDungeon: {
+		Tooltip:
+			'''
+			Размер иконки отмеченной на карте темницы.
+			Выставьте значение на 0, чтобы её скрыть.
+			'''
+		Label: "[centeritem:ImproveGame/DungeonGlobe] Размер иконки темницы"
+	}
+
+	MarkPyramid: {
+		Label: "[centeritem:ImproveGame/PyramidGlobe] Размер иконок пирамид"
+		Tooltip:
+			'''
+			Размер иконок отмеченных на карте пирамид.
+			Выставьте значение на 0, чтобы их скрыть.
+			'''
+	}
+
+	MarkPlantera: {
+		Label: "[centeritem:ImproveGame/PlanteraGlobe] Размер иконок бутонов Плантеры"
+		Tooltip:
+			'''
+			Размер иконок отмеченных на карте бутонов Плантеры.
+			Выставьте значение на 0, чтобы их скрыть.
+			'''
+	}
+
+	MarkEnchantedSword: {
+		Label: "[centeritem:ImproveGame/EnchantedSwordGlobe] Размер иконок зачарованных святилищ"
+		Tooltip:
+			'''
+			Размер иконок отмеченных на карте святилищ зачарованного меча.
+			Выставьте значение на 0, чтобы их скрыть.
+			'''
+	}
+
+	MarkMarbleCave: {
+		Label: "[centeritem:ImproveGame/MarbleCaveGlobe] Размер иконок мраморных пещер"
+		Tooltip:
+			'''
+			Размер иконок отмеченных на карте мраморных пещер.
+			Выставьте значение на 0, чтобы их скрыть.
+			'''
+	}
+
+	MarkGraniteCave: {
+		Label: "[centeritem:ImproveGame/GraniteCaveGlobe] Размер иконок гранитных пещер"
+		Tooltip:
+			'''
+			Размер иконок отмеченных на карте гранитных пещер.
+			Выставьте значение на 0, чтобы их скрыть.
+			'''
+	}
+
+	MarkEmptyAutofisher: {
+		Label: "[centeritem:ImproveGame/Autofisher] Размер иконок рыболовных машин без наживки"
+		Tooltip:
+			'''
+			Размер иконок на карте рыболовных машин без наживки.
+			Выставьте значение на 0, чтобы их скрыть.
+			'''
+	}
+
+	SuicideButton: {
+		Label: Убить игрока
+		Tooltip: Ваш персонаж умрёт при нажатии этой кнопки, [c/FF4444:подумайте дважды, прежде чем нажать на неё].
+	}
+
+	MagicMirrorInstantTp: {
+		Label: "[centeritem:MagicMirror] Мгновенные предметы для возврата домой"
+		Tooltip: Предметы для возврата домой, напр. Волшебное зеркало, работают мгновенно, без задержки.
+	}
+
+	HideNoConsumeBuffs: {
+		Label: "[centeritem:297] Прятать иконки баффов бесконечных зелий"
+		Tooltip:
+			'''
+			Прячет иконки баффов бесконечных зелий.
+			Эффекты баффов всё ещё накладываются, но сами баффы не показываются.
+			'''
+	}
+
+	InfernoTransparency: {
+		Label: "[centeritem:InfernoPotion] Прозрачность кольца инферно"
+		Tooltip: Прозрачность кольца от зелья инферно от Вашей перспективы, 1 делает кольцо полностью видимым, а 0 – невидимым.
+	}
+
+	InvisibleTransparency: {
+		Label: "[centeritem:InvisibilityPotion] Прозрачность невидимости"
+		Tooltip: Прозрачность Вашего персонажа при невидимости от Вашей перспективы, 1 делает Вас полностью видимым, а 0 – невидимым.
+	}
+
+	ThemeType: {
+		Tooltip: Цвета пользовательского интерфейса мода Quality of Terraria.
+		Label: "[qotglyph:12] Цветовая схема пользовательского интерфейса"
+	}
+
+	ShowShimmerInfo: {
+		Label: "[centeritem:BottomlessShimmerBucket] Показывать информацию мерцания"
+		Tooltip: В описаниях предметов добавляется информация о том, во что можно превратить предмет с помощью мерцания.
+	}
+
+	ResetUIPositionsButton: {
+		Label: Сбросить положение интерфейса
+		Tooltip: Сбрасывает положение всего интерфейса по умолчанию. Особенно полезно, когда Вы не можете найти, например, интерфейс большого рюкзака.
+	}
+
+	GlassVfxOn: {
+		Label: "[centeritem:MulticoloredStainedGlass] Эффект глассморфизма"
+		Tooltip:
+			'''
+			Накладывает эффект глассморфизма на пользовательский интерфейс мода.
+			Эффект виден только в режимах освещения	«Цвет» или «Белое».
+			Может влиять на производительность.
+			'''
+	}
+
+	AutoSummon: {
+		Label: "[centeritem:SlimeStaff] Авто-призыв миньонов"
+		Tooltip:
+			'''
+			Призывает последнее призванное существо по возрождении.
+			Настройка отключена, если включён мод «Summoners' Association», т.к. у “Summoners' Association»
+			гораздо больше функций, связанных с призываемыми существами.
+			'''
+	}
+
+	RecipeSearch: {
+		Label: "[centeritem:ImproveGame/SearchIcon] Поиск рецептов"
+		Tooltip: Показывает строку поиска при раскрытии окна изготовления.
+	}
+
+	RemoveGraveyardVisual: {
+		Label: "[centeritem:RichGravestone2] Убрать визуал кладбища"
+		Tooltip: Убирает визуальные эффекты кладбища. Кладбище будет продолжать функционировать как биом.
+	}
+
+	RemoveGraveyardMist: {
+		Label: "[centeritem:RichGravestone2] Убрать туман кладбища"
+		Tooltip:
+			'''
+			Убирает эффект тумана кладбища.
+			Не рекомендуется выключать, т.к. туман помогает определить, находитесь ли Вы в биоме кладбища или нет.
+			'''
+	}
+
+	RemoveGraveyardMusic: {
+		Label: "[centeritem:RichGravestone2] Убрать музыку кладбища"
+		Tooltip: Убирает музыку кладбища.
+	}
+
+	GlobeEffect: {
+		Tooltip: "[centeritem:WorldGlobe] Эффекты обнаружителя"
+		Label: Убирает с карты отметки различных локаций.
+	}
+}
+
+PAPDisplayMode: {
+	Tooltip: ""
+	AlwaysDisplayed.Label: Всегда
+	NotDisplayed.Label: Скрыты
+
+	WhenOpeningBackpack: {
+		Label: Только в инвентаре
+		Tooltip: Показывать закреплённые характеристики только когда инвентарь открыт.
+	}
+}
+
+ThemeType: {
+	Stormdark: {
+		Label: Stormdark
+		Tooltip: Цветовая схема «Stormdark». Соответствует текстурпаку «Stormdark» (доступен в мастерской Terraria).
+	}
+
+	Blue: {
+		Label: Классика
+		Tooltip: Цветовая схема ваниллы.
+	}
+
+	Tooltip: ""
+}
+
+GlassType: {
+	Tooltip: ""
+	Disabled.Label: Выкл.
+	MicaLike.Label: Слюда
+}
+
+BombsNotDamageType: {
+	Tooltip: ""
+	Disabled.Label: Выкл.
+
+	Item: {
+		Label: Только взрывчатка
+		Tooltip: Влияет только на предметы.
+	}
+
+	ItemAndRocket: {
+		Label: Взрывчатка и ракеты
+		Tooltip: Влияет на предметы и на ракеты.
+	}
+}
+
+DisableNonPlayerBombsExplosionsType: {
+	Tooltip: ""
+	Disabled.Label: Выкл.
+
+	FTW: {
+		Label: Только в «For the Worthy»
+		Tooltip: Бомбы из ваз и деревьев, а также бомбы Скелетрона Прайма не ломают блоки только в мирах «For the Worthy».
+	}
+
+	FTWAndExplosives: {
+		Label: Везде
+		Tooltip: Блок взрывчатки и бомбы из ваз, деревьев и Скелетрона Прайма не ломают блоки вообще.
+	}
+}
+
+FavoritedConfigs: {
+	DisplayName: 4. Избранные настройки
+
+	Header: {
+		Favorited: "[centeritem:FallenStar] Избранные настройки"
+		News: "[centeritem:RainbowCursor] Новые настройками"
+	}
+
+	FavoriteIntroduction: {
+		Label: Страница с избранными настройками
+		Tooltip:
+			'''
+			Щелчок правой клавиши мыши по любой настройке модификации, чтобы отметить её как избранную.
+			Избранные настройки будут показываться на этой странице для быстрого доступа.
+			Также на этой странице показываются все новые настройки, добавленные с обновлением.
+			'''
+	}
+}
+
+FishQuestResetType: {
+	Tooltip: ""
+	Disabled.Label: Отключено
+	NotResetFish.Label: Не менять рыбу
+	ResetFish.Label: Менять рыбу
+}
+
+TestConfig: {
+	DisplayName: Test Config
+
+	test: {
+		Label: test
+		Tooltip: ""
+	}
+}
+
+TestData: {
+	Tooltip: ""
+
+	x: {
+		Label: x
+		Tooltip: ""
+	}
+
+	value: {
+		Label: value
+		Tooltip: ""
+	}
+
+	text: {
+		Label: text
+		Tooltip: ""
+	}
+}
