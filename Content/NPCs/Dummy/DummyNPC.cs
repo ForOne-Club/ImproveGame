@@ -169,7 +169,7 @@ public class DummyMapLayer : ModMapLayer
     {
         foreach (var n in Main.npc)
         {
-            if (n.ModNPC is DummyNPC)
+            if (n.ModNPC is DummyNPC && n.active)
             {
                 var pos = n.Center / 16f;
                 context.Draw(ModAsset.DummyNPC_Head.Value, pos, Alignment.Center);
