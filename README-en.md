@@ -197,24 +197,72 @@ Add home-teleporting item
 - `bool` Whether it should be considered as a potion. Potions should meet the Infinite Potion requirement (stacked over 30 by default and can be changed via mod config) in order to be used via hotkeys
 - `bool` Whether it creates a return portal when used
 
+### GetFisherItems
+
+Retrieves items from the specified Auto-Fisher machine.
+
+#### Parameters
+
+- `Point16/TEAutoFisher` Coordinates or instance of the Auto-Fisher machine. Accepts **any valid tile coordinate** within the machine’s bounds.
+
+##### Alternative Syntax
+
+- `int` X-coordinate (world tile coordinates)
+- `int` Y-coordinate (world tile coordinates)
+#### Return Value
+
+- `Item[]`An array of length **43**, containing items or air (empty slots). Slot definitions:
+- **0-39**: Fishing catch items
+- **40**: Fishing rod slot
+- **41**: Bait slot
+- **42**: Fishing accessory slot
+- Returns `Array.Empty<Item>()` (not `null`) if the Auto-Fisher is inaccessible.
+- *Note*: The returned array is a **snapshot** and player interaction may cause changes to the items instance bound to the Auto-Fisher. Attention should be paid to data expiration issues.
+
+### SyncFisherItems
+
+Synchronizes items in the specified Auto-Fisher machine. Used for:
+- UI refresh in single-player mode
+- Server-side item synchronization in multiplayer mode
+
+#### Parameters
+
+- `Point16/TEAutoFisher` Coordinates or instance of the Auto-Fisher machine. Accepts **any valid tile coordinate** within the machine’s bounds.
+- `int` Slot ID to synchronize (refer to `GetFisherItems` slot definitions)
+- `int` Quantity delta (positive, negative, or zero)
+##### Alternative Syntax
+
+- `int` X-coordinate (world tile coordinates)
+- `int` Y-coordinate (world tile coordinates)
+- `int` Slot ID (same as above)
+- `int` Quantity delta (same as above)
+
+#### Behavior
+
+- **Single-player Mode**:Forces UI refresh. The `quantity delta` parameter is **ignored**. Slot ID must be in range **0-42**.
+- **Multiplayer Mode**:
+- If `delta = 0`: Full synchronization of the slot (item type, stack count, and properties).
+- If `delta ≠ 0`: Incremental stack count update only (supports positive/negative values).
+- **Note**: Client calls in multiplayer mode are **invalid** and will be intercepted by the server, returning `false`.
+
 ### Example
 
 Here is an example of adding infinite buffs for 2 mod buff stations
 
 ```CSharp
 public override void PostSetupContent() {
-    if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame)) {
-        improveGame.Call(
-            "AddStation", // Add your first buff station
-            ModContent.ItemType<MyStation1>(), // ItemID 1
-            ModContent.BuffType<MyStationBuff1>() // BuffID 1
-        );
-        improveGame.Call(
-            "AddStation", // Add your second buff station
-            ModContent.ItemType<MyStation2>(), // ItemID 2
-            ModContent.BuffType<MyStationBuff2>() // BuffID 2
-        );
-    }
+if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame)) {
+improveGame.Call(
+"AddStation", // Add your first buff station
+ModContent.ItemType<MyStation1>(), // ItemID 1
+ModContent.BuffType<MyStationBuff1>() // BuffID 1
+);
+improveGame.Call(
+"AddStation", // Add your second buff station
+ModContent.ItemType<MyStation2>(), // ItemID 2
+ModContent.BuffType<MyStationBuff2>() // BuffID 2
+);
+}
 }
 ```
 
@@ -306,49 +354,49 @@ Same as above
 // This is a Mod class's Load method
 public override void Load()  
 {  
-    if (Main.netMode == NetmodeID.Server ||  
-    !ModLoader.TryGetMod("ImproveGame", out var qot)) return;  
+if (Main.netMode == NetmodeID.Server ||  
+!ModLoader.TryGetMod("ImproveGame", out var qot)) return;  
 
-    // Add title  
-    AddModernConfigTitle(qot,  this,  
-    Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));  
+// Add title  
+AddModernConfigTitle(qot,  this,  
+Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));  
 
-    SetAboutPage(qot, this, () => "Customizing the config center is exhausting\nBetter auto-generate via reflection (",  
-    (int)ItemID.IronShortsword, null, () => "About Example", () => "Please ignore the complaints(");  
-    // Replace these texts with your localized strings  
+SetAboutPage(qot, this, () => "Customizing the config center is exhausting\nBetter auto-generate via reflection (",  
+(int)ItemID.IronShortsword, null, () => "About Example", () => "Please ignore the complaints(");  
+// Replace these texts with your localized strings  
 
-    // Batch-add options for a single config instance  
-    // MyConfig.Instance is a pre-loaded MyConfig instance  
-    RegisterCategory(qot, this, MyConfig.Instance,  
-    [  
-        nameof(MyConfig.SomeField),  
-        nameof(MyConfig.SomeProperty),  
-        nameof(MyConfig.SomeArray),  
-        nameof(MyConfig.SomeDefinition),  
-    ],  
-    ItemID.Cog, null, () => "Some Data", () => "Here's what's supported");  
-    // Replace these with localized texts  
+// Batch-add options for a single config instance  
+// MyConfig.Instance is a pre-loaded MyConfig instance  
+RegisterCategory(qot, this, MyConfig.Instance,  
+[  
+nameof(MyConfig.SomeField),  
+nameof(MyConfig.SomeProperty),  
+nameof(MyConfig.SomeArray),  
+nameof(MyConfig.SomeDefinition),  
+],  
+ItemID.Cog, null, () => "Some Data", () => "Here's what's supported");  
+// Replace these with localized texts  
 
-    // Batch-add options for multiple config instances  
-    RegisterCategory(qot, this,  
-    [  
-        (MyConfig.Instance,  
-        [  
-            nameof(MyConfig.SomeField),  
-            nameof(MyConfig.SomeProperty),  
-            nameof(MyConfig.SomeArray),  
-            nameof(MyConfig.SomeDefinition),  
-        ]),  
-        (SeverConfig.Instance,  
-        [  
-            nameof(MyConfig.SomeVector2),  
-            nameof(MyConfig.SomeColor),  
-            nameof(MyConfig.SomePoint),  
-            nameof(MyConfig.SomeClass),  
-        ])  
-    ],  
-        ItemID.WireKite, null, () => "Combine Both!",  
-        () => "When some features require both client and server management,\n"  
-            + "this setup becomes particularly useful.");  
+// Batch-add options for multiple config instances  
+RegisterCategory(qot, this,  
+[  
+(MyConfig.Instance,  
+[  
+nameof(MyConfig.SomeField),  
+nameof(MyConfig.SomeProperty),  
+nameof(MyConfig.SomeArray),  
+nameof(MyConfig.SomeDefinition),  
+]),  
+(SeverConfig.Instance,  
+[  
+nameof(MyConfig.SomeVector2),  
+nameof(MyConfig.SomeColor),  
+nameof(MyConfig.SomePoint),  
+nameof(MyConfig.SomeClass),  
+])  
+],  
+ItemID.WireKite, null, () => "Combine Both!",  
+() => "When some features require both client and server management,\n"  
++ "this setup becomes particularly useful.");  
 }  
-```  
+```
