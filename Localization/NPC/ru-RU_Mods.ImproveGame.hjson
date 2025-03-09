@@ -3,7 +3,7 @@
 	LifeMax: Макс. здоровье
 	Defense: Защита
 	Damage: Конт. урон
-	ShowBox: Показывать хитбок
+	ShowBox: Показывать хитбокс
 	ShowDamageData: Показывать хар-ки урона
 	ShowNameOnHover: Показывать имя НИПа
 	Immortal: 
@@ -24,6 +24,7 @@
 	DummyCommand_Usage: Использование: /dummy <хар-ка> <знач.> (не чувствителен к регистру символов)
 	DummyCommand_Description: Команда в чате '/dummy info' выведет все доступные хар-ки, их тип и нынешние значения
 	DummyCommand_Success: Успешно изменено: {name} {args}!
-	DummyCommand_Fail: Изменене провалено ({input})!
+	DummyCommand_Fail: Изменение провалено ({input})!
 	DummyCommand_Invalid: Неправильная команда ( {input} )!
 }
+

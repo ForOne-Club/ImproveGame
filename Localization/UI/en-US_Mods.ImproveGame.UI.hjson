@@ -2,8 +2,8 @@ DummyControl.Name: Dummy Control
 GrabBagInfo.Title: Detailed Item Drop
 RecipeSearchUI.Tips:
 	'''
-	Recipe Search provided by Quality of Life
-	You may disable it in Personal Config of Quality of Life
+	Recipe Search provided by Quality of Terraria
+	You may disable it in Personal Config of Quality of Terraria
 	'''
 
 LiquidWandUI: {
