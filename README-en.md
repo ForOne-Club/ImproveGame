@@ -217,7 +217,7 @@ Retrieves items from the specified Auto-Fisher machine.
 - **41**: Bait slot
 - **42**: Fishing accessory slot
 - Returns `Array.Empty<Item>()` (not `null`) if the Auto-Fisher is inaccessible.
-- *Note*: The returned array is a **snapshot** and player interaction may cause changes to the items instance bound to the Auto-Fisher. Attention should be paid to data expiration issues.
+- *Note*: The returned array is a **snapshot** and not bound to the actual Auto-Fisher instance. Subsequent player interactions may invalidate the data.
 
 ### SyncFisherItems
 
@@ -251,18 +251,18 @@ Here is an example of adding infinite buffs for 2 mod buff stations
 
 ```CSharp
 public override void PostSetupContent() {
-if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame)) {
-improveGame.Call(
-"AddStation", // Add your first buff station
-ModContent.ItemType<MyStation1>(), // ItemID 1
-ModContent.BuffType<MyStationBuff1>() // BuffID 1
-);
-improveGame.Call(
-"AddStation", // Add your second buff station
-ModContent.ItemType<MyStation2>(), // ItemID 2
-ModContent.BuffType<MyStationBuff2>() // BuffID 2
-);
-}
+    if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame)) {
+        improveGame.Call(
+            "AddStation",//Add your first buff station 
+            ModContent.ItemType<MyStation1>(), // ItemID 1
+            ModContent.BuffType<MyStationBuff1>() // BuffID 1
+        );
+        improveGame.Call(
+            "AddStation",//Add your second buff station 
+            ModContent.ItemType<MyStation2>(), // ItemID 2
+            ModContent.BuffType<MyStationBuff2>() // BuffID 2
+        );
+    }
 }
 ```
 
@@ -354,49 +354,40 @@ Same as above
 // This is a Mod class's Load method
 public override void Load()  
 {  
-if (Main.netMode == NetmodeID.Server ||  
-!ModLoader.TryGetMod("ImproveGame", out var qot)) return;  
+    if (Main.netMode == NetmodeID.Server ||  
+    !ModLoader.TryGetMod("ImproveGame", out var qot)) return;  
+ 
+    // Add title  
+    AddModernConfigTitle(qot,  this,  
+    Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));  
+ 
+    SetAboutPage(qot, this, () => "Customizing the config center is exhausting\nBetter auto-generate via reflection(",  
+    (int)ItemID.IronShortsword, null, () => "About Example", () => "Please ignore the complaints(");  
+    // Replace these texts with your localized strings  
+ 
+    // Batch-add options for a single config instance  
+    // Replace these with localized texts  
 
-// Add title  
-AddModernConfigTitle(qot,  this,  
-Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));  
-
-SetAboutPage(qot, this, () => "Customizing the config center is exhausting\nBetter auto-generate via reflection (",  
-(int)ItemID.IronShortsword, null, () => "About Example", () => "Please ignore the complaints(");  
-// Replace these texts with your localized strings  
-
-// Batch-add options for a single config instance  
-// MyConfig.Instance is a pre-loaded MyConfig instance  
-RegisterCategory(qot, this, MyConfig.Instance,  
-[  
-nameof(MyConfig.SomeField),  
-nameof(MyConfig.SomeProperty),  
-nameof(MyConfig.SomeArray),  
-nameof(MyConfig.SomeDefinition),  
-],  
-ItemID.Cog, null, () => "Some Data", () => "Here's what's supported");  
-// Replace these with localized texts  
-
-// Batch-add options for multiple config instances  
-RegisterCategory(qot, this,  
-[  
-(MyConfig.Instance,  
-[  
-nameof(MyConfig.SomeField),  
-nameof(MyConfig.SomeProperty),  
-nameof(MyConfig.SomeArray),  
-nameof(MyConfig.SomeDefinition),  
-]),  
-(SeverConfig.Instance,  
-[  
-nameof(MyConfig.SomeVector2),  
-nameof(MyConfig.SomeColor),  
-nameof(MyConfig.SomePoint),  
-nameof(MyConfig.SomeClass),  
-])  
-],  
-ItemID.WireKite, null, () => "Combine Both!",  
-() => "When some features require both client and server management,\n"  
-+ "this setup becomes particularly useful.");  
+    // Batch-add options for multiple config instances  
+    RegisterCategory(qot, this,  
+    [  
+        (MyConfig.Instance,  
+        [  
+            nameof(MyConfig.SomeField),  
+            nameof(MyConfig.SomeProperty),  
+            nameof(MyConfig.SomeArray),  
+            nameof(MyConfig.SomeDefinition),  
+        ]),  
+        (SeverConfig.Instance,  
+        [  
+            nameof(MyConfig.SomeVector2),  
+            nameof(MyConfig.SomeColor),  
+            nameof(MyConfig.SomePoint),  
+            nameof(MyConfig.SomeClass),  
+        ])  
+    ],  
+        ItemID.WireKite, null, () => "Combine Both!",  
+        () => "When some features require both client and server management,\n"  
+            + "this setup becomes particularly useful.");  
 }  
 ```

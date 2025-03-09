@@ -202,24 +202,24 @@ Magic Storage开源链接: <https://github.com/blushiemagic/MagicStorage>
 获取指定自动钓鱼机内的物品
 #### 参数
 - `Point16/TEAutoFisher` 钓鱼机坐标/实例，支持钓鱼机覆盖的任一图格坐标
-
+ 
 ##### 另一种样式
-
+ 
 - `int` 钓鱼机位置的横坐标，世界图格坐标
 - `int` 钓鱼机位置的纵坐标，世界图格坐标
-
+ 
 #### 返回值
-
+ 
 - `Item[]` 长度为43的数组，包括空气，槽位说明：
-- 0-39: 渔获
-- 40: 钓竿
-- 41: 鱼饵
-- 42: 钓鱼饰品
-- 若钓鱼机获取失败返回空数组（`Array.Empty<Item>()`而非`null`，可以通过数组长度判断）
+  - 0-39: 渔获
+  - 40: 钓竿
+  - 41: 鱼饵
+  - 42: 钓鱼饰品
+  - 若钓鱼机获取失败返回空数组（`Array.Empty<Item>()`而非`null`，可以通过数组长度判断）
 - Note: 返回的数组为快照，玩家交互可能导致钓鱼机绑定物品实例改变，需要注意数据过期问题
-
+ 
 ### SyncFisherItems
-
+ 
 同步指定自动钓鱼机内的物品，用于在单人模式请求钓鱼机UI刷新和多人模式服务器端物品同步
 #### 参数
 - `Point16/TEAutoFisher` 钓鱼机坐标/实例，支持钓鱼机覆盖的任一图格坐标
@@ -232,30 +232,30 @@ Magic Storage开源链接: <https://github.com/blushiemagic/MagicStorage>
 - `int` 物品数量的变化量
 #### 行为说明
 - **单人模式**：  
-- 强制刷新钓鱼机UI，`栏位id` 需在0-42范围内，`变化量` 参数值被忽略
+  - 强制刷新钓鱼机UI，`栏位id` 需在0-42范围内，`变化量` 参数值被忽略
 - **多人模式**：  
-- `变化量` 为0时：同步指定槽位物品的完整状态（类型、数量、属性）  
-- `变化量` 非0时：仅更新物品数量（支持增量修改）  
+  - `变化量` 为0时：同步指定槽位物品的完整状态（类型、数量、属性）  
+  - `变化量` 非0时：仅更新物品数量（支持增量修改）  
 - Note：多人模式中，客户端调用无效，会被拦截并直接返回false。
-
+ 
 ### 使用例
 
 以下是一个为自己的放置站添加支持的例子
 
 ```CSharp
 public override void PostSetupContent() {
-if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame)) {
-improveGame.Call(
-"AddStation",//加入你自己的增益站1
-ModContent.ItemType<MyStation1>(), // 物品ID 1
-ModContent.BuffType<MyStationBuff1>() // BuffID 1
-);
-improveGame.Call(
-"AddStation",//加入你自己的增益站2
-ModContent.ItemType<MyStation2>(), // 物品ID 2
-ModContent.BuffType<MyStationBuff2>() // BuffID 2
-);
-}
+    if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame)) {
+        improveGame.Call(
+            "AddStation",//加入你自己的增益站1
+            ModContent.ItemType<MyStation1>(), // 物品ID 1
+            ModContent.BuffType<MyStationBuff1>() // BuffID 1
+        );
+        improveGame.Call(
+            "AddStation",//加入你自己的增益站2
+            ModContent.ItemType<MyStation2>(), // 物品ID 2
+            ModContent.BuffType<MyStationBuff2>() // BuffID 2
+        );
+    }
 }
 ```
 
@@ -345,50 +345,50 @@ ModContent.BuffType<MyStationBuff2>() // BuffID 2
 // 这个是一个Mod类的Load函数
 public override void Load() 
 {
-if (Main.netMode == NetmodeID.Server || 
-!ModLoader.TryGetMod("ImproveGame", out var qot)) return;
+    if (Main.netMode == NetmodeID.Server || 
+    !ModLoader.TryGetMod("ImproveGame", out var qot)) return;
 
-//添加标题
-AddModernConfigTitle(qot,  this, 
-Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));
+    //添加标题
+    AddModernConfigTitle(qot,  this, 
+    Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));
 
-SetAboutPage(qot, this, () => "自己适配配置中心好累哦\n不如反射生成(逃", 
-(int)ItemID.IronShortsword, null, () => "关于示例", () => "请不要在意吐槽");
-//上面三个文本自己写本地化获取文本吧(
+    SetAboutPage(qot, this, () => "自己适配配置中心好累哦\n不如反射生成(逃", 
+    (int)ItemID.IronShortsword, null, () => "关于示例", () => "请不要在意吐槽");
+    //上面三个文本自己写本地化获取文本吧(
 
-//此处示例为给单个设置实例批量添加设置选项
-//MyConfig.Instance为加载时获取的MyConfig实例
-RegisterCategory(qot, this, MyConfig.Instance,
-[
-nameof(MyConfig.SomeField),
-nameof(MyConfig.SomeProperty),
-nameof(MyConfig.SomeArray),
-nameof(MyConfig.SomeDefinition),
-],
-ItemID.Cog, null, () => "这是一些数据", () => "我顺带告诉你这个支持哪些东西了");
-//上面两个文本自己写本地化获取文本吧(
+    //此处示例为给单个设置实例批量添加设置选项
+    //MyConfig.Instance为加载时获取的MyConfig实例
+    RegisterCategory(qot, this, MyConfig.Instance,
+    [
+        nameof(MyConfig.SomeField),
+        nameof(MyConfig.SomeProperty),
+        nameof(MyConfig.SomeArray),
+        nameof(MyConfig.SomeDefinition),
+    ],
+    ItemID.Cog, null, () => "这是一些数据", () => "我顺带告诉你这个支持哪些东西了");
+    //上面两个文本自己写本地化获取文本吧(
 
-//此处示例为给多个设置示例批量添加设置选项
-//一个选项名一个设置实例那种太麻烦了我就不写示例了
-RegisterCategory(qot, this, 
-[
-(MyConfig.Instance, //上面水过的再水一遍(
-[
-nameof(MyConfig.SomeField),
-nameof(MyConfig.SomeProperty),
-nameof(MyConfig.SomeArray),
-nameof(MyConfig.SomeDefinition),
-]),
-(SeverConfig.Instance,
-[
-nameof(MyConfig.SomeVector2),
-nameof(MyConfig.SomeColor),
-nameof(MyConfig.SomePoint),
-nameof(MyConfig.SomeClass),
-])
-],
-ItemID.WireKite, null, () => "两家的拼在一起！", 
-() => "也许有些内容同时需要客户端和服务端来管理，"
-+ "这时这个就大抵能派上很大用场了，嗯。");
+    //此处示例为给多个设置示例批量添加设置选项
+    //一个选项名一个设置实例那种太麻烦了我就不写示例了
+    RegisterCategory(qot, this, 
+    [
+        (MyConfig.Instance, //上面水过的再水一遍(
+        [
+            nameof(MyConfig.SomeField),
+            nameof(MyConfig.SomeProperty),
+            nameof(MyConfig.SomeArray),
+            nameof(MyConfig.SomeDefinition),
+        ]),
+        (SeverConfig.Instance,
+        [
+            nameof(MyConfig.SomeVector2),
+            nameof(MyConfig.SomeColor),
+            nameof(MyConfig.SomePoint),
+            nameof(MyConfig.SomeClass),
+        ])
+    ],
+        ItemID.WireKite, null, () => "两家的拼在一起！", 
+        () => "也许有些内容同时需要客户端和服务端来管理，"
+            + "这时这个就大抵能派上很大用场了，嗯。");
 }
 ```
