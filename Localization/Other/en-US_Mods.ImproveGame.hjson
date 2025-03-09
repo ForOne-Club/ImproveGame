@@ -457,6 +457,11 @@ Keybinds: {
 		DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
 		Tip: Jpens the Quick Shimmer Interface; also can be opened from Control Panel
 	}
+
+	LocalizationDebugging: {
+		DisplayName: "[DEBUG] Localization Debugging"
+		Tip: For Devs only. Press reload localization from source files.
+	}
 }
 
 Projectiles: {

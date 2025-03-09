@@ -450,6 +450,11 @@ Keybinds: {
 		// DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
 		Tip: 按下后打开快捷微光界面，也可以在总控面板中打开
 	}
+
+	LocalizationDebugging: {
+		DisplayName: "[DEBUG] 本地化调试"
+		Tip: 仅开发者使用。按下以从源文件重新加载本地化文本
+	}
 }
 
 Projectiles: {
