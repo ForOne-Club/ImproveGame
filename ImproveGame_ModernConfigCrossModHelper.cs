@@ -9,27 +9,27 @@ using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 using Terraria.UI;
 namespace ImproveGame;
-// ¸´ÖÆµ½ÄãµÄÏîÄ¿ÖĞÖ®ºó¼ÇµÃÓÒ¼ü½â¾ö·½°¸×ÊÔ´¹ÜÀíÆ÷ÖĞµÄÏîÄ¿È»ºóÍ¬²½ÃüÃû¿Õ¼ä
+// å¤åˆ¶åˆ°ä½ çš„é¡¹ç›®ä¸­ä¹‹åè®°å¾—å³é”®è§£å†³æ–¹æ¡ˆèµ„æºç®¡ç†å™¨ä¸­çš„é¡¹ç›®ç„¶ååŒæ­¥å‘½åç©ºé—´
 // Copy it to your project and sync the namespace
 
-//¸ÃÎÄ¼ş¸øÆäËüÄ£×é¿ª·¢ÕßÌá¹©ÅäÖÃÖĞĞÄµÄ¿çÄ£×éÖ§³Ö£¬¾ßÌå²ÎÊıĞÅÏ¢²ÎÔÄREADME.mdµÄ¿çÄ£×éÖ§³Ö²¿·Ö
-//This file provides cross-mod assistance for other modders, read README.md for more details
+//è¯¥æ–‡ä»¶ç»™å…¶å®ƒæ¨¡ç»„å¼€å‘è€…æä¾›é…ç½®ä¸­å¿ƒçš„è·¨æ¨¡ç»„æ”¯æŒï¼Œå…·ä½“å‚æ•°ä¿¡æ¯å‚é˜…README.mdçš„è·¨æ¨¡ç»„æ”¯æŒéƒ¨åˆ†
+//This file provides cross-mod assistance for other modders, read README-en.md for more details
 public static class ImproveGame_ModernConfigCrossModHelper
 {
-    #region ×¢²á·ÖÀà±íÏµÁĞ
+    #region æ³¨å†Œåˆ†ç±»è¡¨ç³»åˆ—
 
     /// <summary>
-    /// Õâ¸öº¯ÊıÌá¹©ÁË×î»ù±¾µÄ×¢²áÖ§³Ö | Basic support for registration
-    /// <br>¼øÓÚÍ¨³£»á×¢²á¶à¸ö·ÖÀà±í£¬qotÇëÔÚÍâ²¿×ÔĞĞµ÷ÓÃ<see cref="ModLoader.TryGetMod(string, out Mod)"/> | Use the method to get ImproveGame outside</br>
-    /// <br>¸ü¾ßÌåÒ»µã | In detail: <code>if(Main.netMode == NetmodeID.Server || !ModLoader.TryGetMod("ImproveGame",out var qot)) <br>    return;</br></code></br>
+    /// è¿™ä¸ªå‡½æ•°æä¾›äº†æœ€åŸºæœ¬çš„æ³¨å†Œæ”¯æŒ | Basic support for registration
+    /// <br>é‰´äºé€šå¸¸ä¼šæ³¨å†Œå¤šä¸ªåˆ†ç±»è¡¨ï¼Œqotè¯·åœ¨å¤–éƒ¨è‡ªè¡Œè°ƒç”¨<see cref="ModLoader.TryGetMod(string, out Mod)"/> | Use the method to get ImproveGame outside</br>
+    /// <br>æ›´å…·ä½“ä¸€ç‚¹ | In detail: <code>if(Main.netMode == NetmodeID.Server || !ModLoader.TryGetMod("ImproveGame",out var qot)) <br>    return;</br></code></br>
     /// </summary>
-    /// <returns>ÊÇ·ñ×¢²á³É¹¦ | Success or not</returns>
+    /// <returns>æ˜¯å¦æ³¨å†ŒæˆåŠŸ | Success or not</returns>
     public static bool RegisterCategory(Mod qot, Mod target, List<KeyValuePair<string, ModConfig>> variables, int itemIconID = 0,
 Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string> getTooltip = null)
 => (bool)qot.Call(nameof(RegisterCategory), target, variables, itemIconID, getIconTexture, getLabel, getTooltip);
 
     /// <summary>
-    /// Õâ¸öº¯ÊıÓÃÓÚ¸øµ¥¸öÉèÖÃÊµÀıÅúÁ¿Ìí¼ÓÉèÖÃÑ¡Ïî½øÒ»¸ö·ÖÀà¿¨ | Register plenty of options from a single configuration
+    /// è¿™ä¸ªå‡½æ•°ç”¨äºç»™å•ä¸ªè®¾ç½®å®ä¾‹æ‰¹é‡æ·»åŠ è®¾ç½®é€‰é¡¹è¿›ä¸€ä¸ªåˆ†ç±»å¡ | Register plenty of options from a single configuration
     /// </summary>
     public static void RegisterCategory(Mod qot, Mod target, ModConfig modConfig, List<string> variables, int itemIconID = 0,
         Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string> getTooltip = null)
@@ -37,7 +37,7 @@ Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string
             itemIconID, getIconTexture, getLabel, getTooltip);
 
     /// <summary>
-    /// Õâ¸öº¯ÊıÓÃÓÚ¸ø¶à¸öÉèÖÃÊµÀıÅúÁ¿Ìí¼ÓÉèÖÃÑ¡Ïî½øÒ»¸ö·ÖÀà¿¨ | Register plenty of options from multi-configuration
+    /// è¿™ä¸ªå‡½æ•°ç”¨äºç»™å¤šä¸ªè®¾ç½®å®ä¾‹æ‰¹é‡æ·»åŠ è®¾ç½®é€‰é¡¹è¿›ä¸€ä¸ªåˆ†ç±»å¡ | Register plenty of options from multi-configuration
     /// </summary>
     public static void RegisterCategory(Mod qot, Mod target, List<(ModConfig, List<string>)> variables, int itemIconID = 0, Func<Texture2D> getIconTexture = null,
         Func<string> getLabel = null, Func<string> getTooltip = null)
@@ -51,7 +51,7 @@ Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string
     #endregion
 
     /// <summary>
-    /// ÉèÖÃ ¡°¹ØÓÚ¡± Ò³Ãæ | Set ¡°About¡± page
+    /// è®¾ç½® â€œå…³äºâ€ é¡µé¢ | Set â€œAboutâ€ page
     /// </summary>
     public static bool SetAboutPage(Mod qot, Mod target, Func<string> getAboutText, int itemIconID = 0,
 Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string> getTooltip = null)
@@ -61,13 +61,13 @@ Func<Texture2D> getIconTexture = null, Func<string> getLabel = null, Func<string
         => (bool)qot.Call(nameof(AddModernConfigTitle), target, titleText);
 
     /// <summary>
-    /// ×¢²áÄ³Ñ¡ÏîµÄÔ¤ÀÀ»æÖÆ | Register a preview drawing for an option
+    /// æ³¨å†ŒæŸé€‰é¡¹çš„é¢„è§ˆç»˜åˆ¶ | Register a preview drawing for an option
     /// </summary>
     public static bool RegisterPreview(Mod qot, PropertyFieldWrapper variableInfo, Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int> previewDrawingMethod)
         => (bool)qot.Call(nameof(RegisterPreview), variableInfo, previewDrawingMethod);
 
     /// <summary>
-    /// ×¢²áÈ«¾ÖÔ¤ÀÀ»æÖÆ | Register a global preview drawing
+    /// æ³¨å†Œå…¨å±€é¢„è§ˆç»˜åˆ¶ | Register a global preview drawing
     /// </summary>
     public static bool OnGlobalConfigPreview(Mod qot, Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int> previewDrawingMethod)
         => (bool)qot.Call(nameof(OnGlobalConfigPreview), previewDrawingMethod);
