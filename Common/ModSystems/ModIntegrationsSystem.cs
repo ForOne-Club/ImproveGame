@@ -10,9 +10,16 @@ using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Items.Placeable;
 using ImproveGame.Packets;
 using ImproveGame.Packets.NetAutofisher;
+using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.PlayerStats;
+using System.Collections.Generic;
+using System;
 using System.Reflection;
 using Terraria.DataStructures;
+using Terraria.ModLoader.Config;
+using Terraria;
+using Terraria.ModLoader.Config.UI;
+using System.Collections;
 using TEAutofisher = ImproveGame.Content.Tiles.TEAutofisher;
 
 namespace ImproveGame.Common.ModSystems;
@@ -516,94 +523,6 @@ public class ModIntegrationsSystem : ModSystem
                     case "GetUniversalAmmoId":
                         {
                             return ModContent.ItemType<UniversalAmmoIcon>();
-                        }
-                    // 获取钓鱼机物品
-                    case "GetFisherItems":
-                        {
-                            // Item[] Call(string, Point16)
-                            // or Item[] Call(string, AutoFisher)
-                            // or Item[] Call(string, int, int);
-                            Point16 location = default;
-                            TEAutofisher fisher = null;
-                            bool ok = false;
-                            int argIndex = 1;
-                            object arg = args[argIndex++];
-                            if (arg is TEAutofisher autofisher)
-                            {
-                                fisher = autofisher;
-                                ok = true;
-                            }
-                            else
-                            {
-                                if (arg is Point16 point)
-                                {
-                                    location = point;
-                                }
-                                else if (arg is int x && args[argIndex] is int y)
-                                {
-                                    location = new Point16(x, y);
-                                    ok = true;
-                                }
-                                if (ok)
-                                {
-                                    ok = AutoFisherAdapter.TryGetTEAutofisher(location.X, location.Y, out fisher);
-                                }
-                            }
-                            if (ok)
-                            {
-                                Item[] items = [.. fisher.fish, fisher.fishingPole, fisher.bait, fisher.accessory];
-                                return items;
-                            }
-                            return Array.Empty<Item>();
-                        }
-                    // 同步钓鱼机物品
-                    case "SyncFisherItems":
-                        {
-                            // bool Call(string, Point16, int, int)
-                            // or bool Item[] Call(string, AutoFisher, int, int)
-                            // or bool Call(string, int, int, int, int)
-                            Point16 location = default;
-                            bool ok = false;
-                            int argIndex = 1;
-                            object arg = args[argIndex++];
-                            TEAutofisher fisher = null;
-                            if (arg is TEAutofisher autofisher)
-                            {
-                                fisher = autofisher;
-                                ok = true;
-                            }
-                            else
-                            {
-                                if (arg is Point16 point)
-                                {
-                                    location = point;
-                                }
-                                else if (arg is int x && args[argIndex] is int y)
-                                {
-                                    location = new Point16(x, y);
-                                    ok = true;
-                                }
-                                if (ok)
-                                {
-                                    ok = AutoFisherAdapter.TryGetTEAutofisher(location.X, location.Y, out fisher);
-                                }
-                            }
-                            if (ok)
-                            {
-                                int index = (int)args[argIndex++];
-                                if (index is > 0 and < ItemSyncPacket.All)
-                                {
-                                    int amount = (int)args[argIndex];
-                                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                                    {
-                                        // TODO: Send packet when in multiplayer client
-                                        return false;
-                                    }
-                                    AutoFisherAdapter.SyncItem(fisher, (byte)index, amount);
-                                    return true;
-                                }
-                            }
-                            return false;
                         }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");

@@ -13,11 +13,11 @@ namespace ImproveGame.Content.Tiles
 {
     public class TEAutofisher : ModTileEntity
     {
-        internal Point16 locatePoint = Point16.NegativeOne;
-        internal Item fishingPole = new();
-        internal Item bait = new();
-        internal Item accessory = new();
-        internal Item[] fish = new Item[40];
+        public Point16 locatePoint = Point16.NegativeOne;
+        public Item fishingPole = new();
+        public Item bait = new();
+        public Item accessory = new();
+        public Item[] fish = new Item[40];
         internal const int checkWidth = 50;
         internal const int checkHeight = 30;
 
