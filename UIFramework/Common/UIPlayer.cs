@@ -128,7 +128,7 @@ public class UIPlayer : ModPlayer
 
         // 总控快捷键弹窗提示
         bool hasKeybind = TryGetKeybindString(KeybindSystem.MasterControlKeybind, out _);
-        if (!hasKeybind && UISystem.TryGetBaseBody<PopupPanel>(out var panel) && panel is not null)
+        if (!UIConfigs.Instance.FckKeybindPopup && !hasKeybind && UISystem.TryGetBaseBody<PopupPanel>(out var panel) && panel is not null)
             panel.Open();
         yield return null;
     }

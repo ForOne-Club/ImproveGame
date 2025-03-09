@@ -30,6 +30,9 @@
 		<None Include=".gitignore;.gitattributes;./LICENSE">
 			<Visible>false</Visible>
 		</None>
+		<None Include="Localization\Other\en-US_Mods.ImproveGame.hjson">
+			<Visible>true</Visible>
+		</None>
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Assets\Images\UI\Brust\" />

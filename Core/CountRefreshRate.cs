@@ -20,17 +20,10 @@ public class CountRefreshRate : ModSystem
         IL_Main.DoDraw += IL_EmitRefreshRate;
     }
 
-    public static void UpdateRateFactor() => CurrentRefreshRateFactor = GetRefreshRateFactor(RefreshRateStopwatch);
-
     static void IL_EmitRefreshRate(ILContext il)
     {
         var c = new ILCursor(il);
 
-        c.EmitDelegate(UpdateRateFactor);
-    }
-    public override void Unload()
-    {
-        IL_Main.DoDraw -= IL_EmitRefreshRate;
-        base.Unload();
+        c.EmitDelegate(() => { CurrentRefreshRateFactor = GetRefreshRateFactor(RefreshRateStopwatch); });
     }
 }
