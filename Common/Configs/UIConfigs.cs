@@ -118,6 +118,9 @@ public class UIConfigs : ModConfig
     [DisplayCondition(nameof(UIConfigs), nameof(RemoveGraveyardVisual))]
     public bool RemoveGraveyardMusic;
 
+    [DefaultValue(false)]
+    public bool FckKeybindPopup;
+
     [Header("MinimapHeader")]
     [DefaultValue(1f)]
     [Increment(0.1f)]

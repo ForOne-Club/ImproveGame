@@ -300,8 +300,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         if (!CurrentCategory.CanOptionBeAdded(config, name))
             return;
         // 创建实例并加入到_allOptions列表
-        var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T));//, config, nameOrMemberInfo
-        instance.Bind(config, MemberInfo, null);
+        var instance = GenerateOptionElement<T>(config, MemberInfo);
         _allOptions.Add(instance);
     }
 
@@ -317,6 +316,23 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         _allOptions.RemoveAll(o => o.OptionName == name);
     }
 
+    private static ModernConfigOption GenerateOptionElement<T>(ModConfig config, PropertyFieldWrapper memberInfo) where T : ModernConfigOption
+    {
+        var instance = (ModernConfigOption)Activator.CreateInstance(typeof(T));//, config, nameOrMemberInfo
+        instance.Bind(config, memberInfo, null);
+        return instance;
+    }
+
+    public void AddToOptionsDirect<T>(ModConfig config, object nameOrMemberInfo) where T : ModernConfigOption
+    {
+        if (nameOrMemberInfo is not PropertyFieldWrapper MemberInfo)
+            if (nameOrMemberInfo is string memberName)
+                MemberInfo = ModernConfigOption.GetWrapper(config.GetType(), memberName);
+            else return;
+        // 创建实例并加入到_allOptions列表
+        var instance = GenerateOptionElement<T>(config, MemberInfo);
+        instance.JoinParent(_options.ListView);
+    }
 
     public void AddToOptionsDirect(View view)
     {
@@ -352,14 +368,19 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
     {
         public void Load(Mod mod)
         {
-            Main.OnResolutionChanged += _ =>
-            {
-                if (CurrentCategory is AboutPage)
-                    Instance.DelayRefreshCurrentPage = true;
-            };
+            Main.OnResolutionChanged += OnResolutionChangedHandler;
         }
 
-        public void Unload() { }
+        public void Unload()
+        {
+            Main.OnResolutionChanged -= OnResolutionChangedHandler;
+        }
+
+        private void OnResolutionChangedHandler(Vector2 vector)
+        {
+            if (CurrentCategory is AboutPage)
+                Instance.DelayRefreshCurrentPage = true;
+        }
     }
 
     [GeneratedRegex(@"\[centeritem:[^\]]*\]", RegexOptions.IgnoreCase, "zh-CN")]

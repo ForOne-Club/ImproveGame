@@ -6,7 +6,7 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="FuzzySearch.Net" Version="0.3.3" />
+		<PackageReference Include="FuzzySearch.Net" Version="1.1.0" />
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />
 	</ItemGroup>
 	<PropertyGroup>
@@ -29,6 +29,9 @@
 		</None>
 		<None Include=".gitignore;.gitattributes;./LICENSE">
 			<Visible>false</Visible>
+		</None>
+		<None Include="Localization\Other\en-US_Mods.ImproveGame.hjson">
+			<Visible>true</Visible>
 		</None>
 	</ItemGroup>
 	<ItemGroup>

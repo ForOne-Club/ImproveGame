@@ -19,10 +19,18 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
     {
         public void Load(Mod mod)
         {
-            Main.OnResolutionChanged += _ => _recalculateNextTick = true;
+            Main.OnResolutionChanged += OnResolutionChangedHandler;
         }
 
-        public void Unload() { }
+        public void Unload()
+        {
+            Main.OnResolutionChanged -= OnResolutionChangedHandler;
+        }
+
+        private void OnResolutionChangedHandler(Vector2 vector)
+        {
+            _recalculateNextTick = true;
+        }
     }
 
     public override bool Enabled { get => !Main.recBigList; set { } }

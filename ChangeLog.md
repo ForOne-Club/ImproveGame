@@ -8,6 +8,8 @@
 
 # v1.8.1
 
+- [v1.8.1.2](Changelog/zh/v1.8.1.2.md)
+- [v1.8.1.1](Changelog/zh/v1.8.1.1.md)
 - [v1.8.1.0](Changelog/zh/v1.8.1.0.md)
 
 # v1.8.0
@@ -38,4 +40,5 @@
 - [v1.7.0.0](Changelog/zh/v1.7.0.0.md)
 
 # 旧版本
+
 v1.7.0 之前版本的更新日志请参考[旧版更新日志](Changelog/zh/legacy-changelog.md)。

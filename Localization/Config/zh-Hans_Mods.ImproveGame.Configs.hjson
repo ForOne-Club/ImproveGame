@@ -1107,6 +1107,11 @@ UIConfigs: {
 		Label: "[centeritem:WorldGlobe] 定位球特效"
 		Tooltip: 如果你觉得特效太光污染了，可以关掉
 	}
+
+	FckKeybindPopup: {
+		Label: "去他娘的绑定快捷键"
+		Tooltip: 移除快捷键绑定提示，如果你觉得它很烦，可以关掉
+	}
 }
 
 PAPDisplayMode: {

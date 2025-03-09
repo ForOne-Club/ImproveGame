@@ -444,12 +444,12 @@ Keybinds: {
 	}
 
 	CopyItemName: {
-		DisplayName: Copy the internal name of the item
+		DisplayName: Copy Item Internal Name
 		Tip: When there's an item under the cursor, press this key to copy its internal name.
 	}
 
 	CopyItemName_Control: {
-		DisplayName: Copy the full internal name of the item
+		DisplayName: Internal Name Copy Switcher
 		Tip: Press both this key and "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" to copy the full internal name
 	}
 
