@@ -12,9 +12,14 @@ public class LocDebugTemporaryFix : ModSystem
         LocalizationDebuggingKeybind = KeybindLoader.RegisterKeybind(Mod, "LocalizationDebugging", "OemTilde");
     }
 
+    public override void Unload()
+    {
+        LocalizationDebuggingKeybind = null;
+    }
+
     public override void PostUpdateInput()
     {
-        if (!LocalizationDebuggingKeybind.JustPressed)
+        if (LocalizationDebuggingKeybind == null || !LocalizationDebuggingKeybind.JustPressed)
             return;
 
         string path = Path.Combine(ModCompile.ModSourcePath, Mod.Name);

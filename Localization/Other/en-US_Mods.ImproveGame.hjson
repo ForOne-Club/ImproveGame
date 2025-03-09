@@ -460,7 +460,7 @@ Keybinds: {
 
 	LocalizationDebugging: {
 		DisplayName: "[DEBUG] Localization Debugging"
-		Tip: For Devs only. Press reload localization from source files.
+		Tip: For Devs only. Press to reload localization from source files.
 	}
 }
 
