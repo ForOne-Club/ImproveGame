@@ -9,7 +9,7 @@ public class LocDebugTemporaryFix : ModSystem
 
     public override void Load()
     {
-        LocalizationDebuggingKeybind = KeybindLoader.RegisterKeybind(Mod, "[DEBUG]LocalizationDebugging", "OemTilde");
+        LocalizationDebuggingKeybind = KeybindLoader.RegisterKeybind(Mod, "LocalizationDebugging", "OemTilde");
     }
 
     public override void PostUpdateInput()
