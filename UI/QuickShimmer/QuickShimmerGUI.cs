@@ -383,7 +383,8 @@ public class QuickShimmerGUI : BaseBody
                             resultStack--;
                     }
                 }*/
-                RecipeLoader.ConsumeIngredient(recipe, result.type, ref resultStack, isDecrafting: true);
+                if (recipe != null)
+                    RecipeLoader.ConsumeIngredient(recipe, result.type, ref resultStack, isDecrafting: true);
                 while (resultStack > 0)
                 {
                     int outputStack = resultStack;

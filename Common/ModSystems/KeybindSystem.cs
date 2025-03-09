@@ -92,15 +92,20 @@ public class KeybindSystem : ModSystem
 
     public static string TranslateBinding(string key)
     {
-        if (UseKeybindTranslation && Language.ActiveCulture.Name == "zh-Hans")
+        if (Language.ActiveCulture.Name == "zh-Hans")
         {
-            string text = key.Replace("NumPad", "小键盘 ");
-            if (ZhTranslationKeybind.TryGetValue(key, out string translatedString))
+            if (key is "None")
+                return "无";
+            if (UseKeybindTranslation)
             {
-                text = translatedString;
-            }
+                string text = key.Replace("NumPad", "小键盘 ");
+                if (ZhTranslationKeybind.TryGetValue(key, out string translatedString))
+                {
+                    text = translatedString;
+                }
 
-            return text;
+                return text;
+            }
         }
 
         return key;

@@ -91,7 +91,7 @@ public class PopupPanel : BaseBody
             var ui = ModernConfigUI.Instance;
             if (ui is null || ui.Enabled) return;
 
-            ui.Open();
+            ui.Open(ImproveGame.Instance);
             ui.OpenFromMasterControl = true;
             ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["Keybinds"].Category;
         };

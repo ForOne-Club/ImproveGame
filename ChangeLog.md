@@ -6,8 +6,14 @@
 
 </div>
 
+# v1.8.1
+
+- [v1.8.1.1](Changelog/zh/v1.8.1.1.md)
+- [v1.8.1.0](Changelog/zh/v1.8.1.0.md)
+
 # v1.8.0
 
+- [v1.8.0.7](Changelog/zh/v1.8.0.7.md)
 - [v1.8.0.6](Changelog/zh/v1.8.0.6.md)
 - [v1.8.0.4](Changelog/zh/v1.8.0.4.md)
 - [v1.8.0.3](Changelog/zh/v1.8.0.3.md)
@@ -33,4 +39,5 @@
 - [v1.7.0.0](Changelog/zh/v1.7.0.0.md)
 
 # 旧版本
+
 v1.7.0 之前版本的更新日志请参考[旧版更新日志](Changelog/zh/legacy-changelog.md)。

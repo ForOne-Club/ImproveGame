@@ -10,7 +10,7 @@ public struct SDFGraphicsVertexType(Vector2 position, Vector2 coord, float corne
         [
             new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0),
             new VertexElement(8, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0),
-            new VertexElement(16, VertexElementFormat.Single, VertexElementUsage.Color, 0)
+            new VertexElement(16, VertexElementFormat.Single, VertexElementUsage.TextureCoordinate, 1)
         ]);
 
     readonly VertexDeclaration IVertexType.VertexDeclaration => VertexDeclaration;

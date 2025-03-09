@@ -11,13 +11,14 @@ namespace ImproveGame.UI.ModernConfig.OptionElements;
 public class OptionDropdownList : ModernConfigOption
 {
     private bool DropdownListPersists => ConfigOptionsPanel.Instance.DropdownList.DropdownCaller == this;
-    private readonly TimerView _textBox;
-    private readonly SlideText _textElement;
+    private TimerView _textBox;
+    private SlideText _textElement;
     private string[] _valueStrings;
     private string[] _valueTooltips;
+    bool IsStringOption;
     private float _maxTextWidth;
-
-    public OptionDropdownList(ModConfig config, string optionName) : base(config, optionName, 70)
+    public override int labelReservedWidth => 70;
+    protected override void OnBind()
     {
         CheckValid();
 
@@ -52,8 +53,15 @@ public class OptionDropdownList : ModernConfigOption
             dropdownList.BuildDropdownList(x, y, width, _valueStrings, GetString(), this);
             dropdownList.OptionSelectedCallback = s =>
             {
+
+                if (IsStringOption) 
+                {
+                    SetValueDirect(s);
+                    return;
+                }
+                
                 int index = Array.IndexOf(_valueStrings, s);
-                SetConfigValue(index, true);
+                SetConfigValue(index);
             };
             dropdownList.DrawCallback = () =>
             {
@@ -76,50 +84,57 @@ public class OptionDropdownList : ModernConfigOption
         _textElement = new SlideText(GetString(), 30)
         {
             VAlign = 0.5f,
-            Left = {Pixels = 8},
+            Left = { Pixels = 8 },
             RelativeMode = RelativeMode.None
         };
         _textElement.JoinParent(_textBox);
     }
-
     private void GetOptions()
     {
-        _valueStrings = Enum.GetNames(FieldInfo.FieldType);
+        if (!IsStringOption)
+            _valueStrings = Enum.GetNames(VarType);
         _valueTooltips = new string[_valueStrings.Length];
 
-        for (int i = 0; i < _valueStrings.Length; i++)
-        {
-            var enumFieldFieldInfo = FieldInfo.FieldType.GetField(_valueStrings[i]);
-            if (enumFieldFieldInfo is null)
-                continue;
+        if (!IsStringOption)
+            for (int i = 0; i < _valueStrings.Length; i++)
+            {
+                var enumFieldFieldInfo = VarType.GetField(_valueStrings[i]);
+                if (enumFieldFieldInfo is null)
+                    continue;
 
-            string name = ConfigManager.GetLocalizedLabel(new PropertyFieldWrapper(enumFieldFieldInfo));
-            _valueStrings[i] = name;
-            string tooltip = ConfigManager.GetLocalizedTooltip(new PropertyFieldWrapper(enumFieldFieldInfo));
-            _valueTooltips[i] = tooltip;
-        }
+                string name = ConfigManager.GetLocalizedLabel(new PropertyFieldWrapper(enumFieldFieldInfo));
+                _valueStrings[i] = name;
+                string tooltip = ConfigManager.GetLocalizedTooltip(new PropertyFieldWrapper(enumFieldFieldInfo));
+                _valueTooltips[i] = tooltip;
+            }
 
         _maxTextWidth = _valueStrings.Max(i => ChatManager.GetStringSize(FontAssets.MouseText.Value, i, Vector2.One).X);
     }
 
     private void CheckValid()
     {
-        if (!FieldInfo.FieldType.IsEnum)
+        var strOptionAttribute = GetAttribute<OptionStringsAttribute>();
+        if (strOptionAttribute != null)
+        {
+            _valueStrings = strOptionAttribute.OptionLabels;
+            IsStringOption = true;
+            return;
+        }
+        if (!VarType.IsEnum && !IsStringOption)
             throw new Exception($"Field \"{OptionName}\" is not a enum type");
     }
 
-    private void SetConfigValue(int index, bool broadcast)
+    private void SetConfigValue(int index)
     {
-        if (!Interactable) return;
-
-        var value = Enum.GetValues(FieldInfo.FieldType).GetValue(index);
-        ConfigHelper.SetConfigValue(Config, FieldInfo, value, broadcast);
+        //if (!Interactable) return;
+        var value = Enum.GetValues(VarType).GetValue(index);
+        SetValueDirect(value);
+        //ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadcast, path: path);
     }
-
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
-        
+
         // 就算没有Hover，要是下拉框打开了也要高光（调整AnimationTimer）
         if (!IsMouseHovering)
         {
@@ -147,6 +162,6 @@ public class OptionDropdownList : ModernConfigOption
             null, Color.White, 0f, tex.Size() / 2f, Vector2.One, effects, 0f);
     }
 
-    private int GetIndex() => Array.IndexOf(Enum.GetValues(FieldInfo.FieldType), FieldInfo.GetValue(Config));
-    private string GetString() => _valueStrings[GetIndex()];
+    private int GetIndex() => IsStringOption ? Array.IndexOf(_valueStrings, GetValue()) : Array.IndexOf(Enum.GetValues(VarType), GetValue());
+    private string GetString() => IsStringOption ? GetValue().ToString() : _valueStrings[GetIndex()];
 }

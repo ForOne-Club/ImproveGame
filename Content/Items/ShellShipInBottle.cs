@@ -55,6 +55,18 @@ public class ShellShipInBottle_Shimmered : ModItem
         if (player.whoAmI != Main.myPlayer)
             return null;
 
+        // 以50个一组获取可以微光转化的物品，测试用
+        /*int c = 0;
+        if (player.itemAnimation == 1)
+            for (int n = 0; n < ItemLoader.ItemCount; n++)
+                if (ItemID.Sets.ShimmerTransformToItem[n] > 0)
+                {
+                    if (c >= 200)
+                        player.QuickSpawnItem(Item.GetSource_FromThis(), n);
+                    c++;
+                    if (c >= 250)
+                        break;
+                }*/
         if (QuickShimmerSystem.Unlocked)
         {
             if (player.itemAnimation == player.itemAnimationMax)
@@ -94,7 +106,7 @@ public class QuickShimmerSystem : ModSystem
 
     public override void NetReceive(BinaryReader reader)
     {
-        var states = (BitsByte) reader.ReadByte();
+        var states = (BitsByte)reader.ReadByte();
         Unlocked = states[0];
     }
 

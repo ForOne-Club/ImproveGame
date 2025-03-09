@@ -11,7 +11,9 @@
 </div>
 
 ## ✨ 功能
+
 详细列表请到模组配置或更新日志中查看
+
 1. 物品最大堆叠等辅助Mod普遍功能(对标老牌辅助Luiafk)
 2. 非时装饰品也可放置在时装栏（启用模组直接生效）
 3. 城镇NPC入住机制修改: 夜晚入住、图鉴解锁后无视条件入住
@@ -24,10 +26,13 @@
 10. 几乎所有功能都是可以调节的，自行选择适合你的功能
 
 ## ⬇️ 下载
-本Mod已在Steam创意工坊发布，可直接订阅下载: https://steamcommunity.com/sharedfiles/filedetails/?id=2797518634
+
+本Mod已在Steam创意工坊发布，可直接订阅下载: <https://steamcommunity.com/sharedfiles/filedetails/?id=2797518634>
 
 ## 💻 编译
+
 更好的体验由于使用了NuGet，因此无法使用tModLoader进行编译，需要使用IDE进行编译
+
 1. 使用IDE，如Visual Studio 2022、Rider等打开项目
 2. 如果先前在tModLoader中启用了此Mod，先禁用，然后重新加载
 3. 使用IDE编译项目
@@ -35,6 +40,7 @@
 5. 成了
 
 ## 📗 版权声明
+
 本模组的“显示物品、NPC所属模组”功能部分代码来源于模组“WMITF”，本模组与模组“WMITF”皆在MIT许可协议下开源，意味着“被授权人有权利使用、复制、修改、合并、出版发行、散布、再授权及贩售软件及软件的副本，并允许软件提供者这样做，但须满足以下条件：
 
 上述版权声明和本许可声明应包含在本软件的所有副本或主要部分中。
@@ -46,12 +52,12 @@ TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也受
 本模组的StorageCommunicator部分代码来自模组“Magic Storage”，该模组也受 MIT 许可，与上面相同。
 
 附:
-本模组开源链接: https://gitee.com/MyGoold/improve-game (此为原仓库，Github仓库是由原仓库镜像而来)
-WMITF开源链接: https://github.com/gardenappl/WMITF
-ChevyRay的协程类: https://github.com/ChevyRay/Coroutines
-ProjectStarlight.Interchange: https://github.com/ProjectStarlight/ProjectStarlight.Interchange
-Auto Piggy Bank开源链接: https://github.com/diniamo/auto-piggy-bank
-Magic Storage开源链接: https://github.com/blushiemagic/MagicStorage
+本模组开源链接: <https://github.com/ForOne-Club/ImproveGame>
+WMITF开源链接: <https://github.com/gardenappl/WMITF>
+ChevyRay的协程类: <https://github.com/ChevyRay/Coroutines>
+ProjectStarlight.Interchange: <https://github.com/ProjectStarlight/ProjectStarlight.Interchange>
+Auto Piggy Bank开源链接: <https://github.com/diniamo/auto-piggy-bank>
+Magic Storage开源链接: <https://github.com/blushiemagic/MagicStorage>
 
 ## 🤝 跨Mod支持 (Mod.Call)
 
@@ -60,65 +66,101 @@ Magic Storage开源链接: https://github.com/blushiemagic/MagicStorage
 除了以 `GetXX` 开头的，其他Mod.Call的返回值是一个 `bool`，指示这个操作是否成功执行
 
 ### GetAmmoChainSequence
+
 获取指定物品的弹药链序列
 建议将本模组源码的 [AmmoChain.cs](Content/Functions/ChainedAmmo/AmmoChain.cs) 和 [ItemTypeData.cs](Core/ItemTypeData.cs) 复制到你的模组源码中，以便操作弹药链
+
 #### 参数
+
 - `Item` 要获取弹药链序列的物品实例
+
 #### 返回值
+
 - `TagCompound` 以TagCompound形式存储的弹药链数据，数据读取方式参考 [AmmoChain.cs](Content/Functions/ChainedAmmo/AmmoChain.cs) 和 [ItemTypeData.cs](Core/ItemTypeData.cs)。如果物品没有弹药链，返回 `null`
 
 ### GetUniversalAmmoId
+
 获取“任意弹药”物品的ID，这是一个用于弹药链中，表示该位置弹药任意的物品，搭配弹药链使用
+
 #### 参数
+
 无
+
 #### 返回值
+
 - `int` “任意弹药”物品的ID
 
 ### GetBigBagItems
+
 获取大背包中的物品
+
 #### 参数
+
 - `Player` 大背包所属玩家的实例
+
 #### 返回值
+
 - `List<Item>` 大背包中共100格的物品的实例，包括空气
 
 ### IgnoreInfItem
+
 为某个/些指定的物品添加无尽增益忽略，以防止在拥有30个时无限提供增益
+
 #### 参数
+
 - `int/List<int>` 不提供无限增益的某个物品/一些物品的ID
 
 ### AddPotion
+
 为某个指定的物品添加无尽增益支持(药水类)，对于没有设置Item.buffType或拥有多个增益的物品十分有用，药水类指需要达到30堆叠才能提供增益
+
 #### 参数
+
 - `int` 添加药水类无尽增益支持的物品的ID
 - `int/List<int>` 该物品提供的一个/一些增益的ID
 
 ### ConsumePotion
+
 让某个/些指定的物品在触发无尽增益的情况下也会被正常消耗
+
 #### 参数
+
 - `int/List<int>` 会被正常消耗的某个物品/一些物品的ID
 
 ### BuffConflict
+
 设置当玩家拥有某个增益时，一个/些增益会被清除
+
 #### 参数
+
 - `int` 某个增益的ID
 - `int/List<int>` 会被清除的增益ID
 
 ### AddStation
+
 为某个指定的物品添加无尽增益支持(放置站类)，放置站类指有一个即可提供增益。放置站一般需要手动提供支持
+
 #### 参数
+
 - `int` 添加放置站类无尽增益支持的物品的ID
 - `int/List<int>` 该物品提供的一个/一些增益的ID
 
 ### AddPortableCraftingStation
+
 为某个指定的物品添加便携制作站支持，对于没有设置Item.createTile但是应该充当某种制作站的物品十分有用，你可以指定多个制作站。
 如果你想要使其充当水源，应将“该物品充当的制作站的物块ID”(即第二个参数)设置为水槽 (TileID.Sink)
+
 #### 参数
+
 - `int` 添加便携制作站支持的物品的ID
 - `int/List<int>` 该物品可充当的一个/一些制作站的物块ID
 
 ### AddFishingAccessory
+
 为某个指定的物品添加自动钓鱼机的钓鱼饰品支持，可设置钓鱼速度加成、渔力加成、是否应被视为钓具箱和是否可在岩浆钓鱼。一般需要手动提供饰品支持
+
 #### 参数
+
 - `int` 添加自动钓鱼机的钓鱼饰品支持的物品的ID
 - `float` 该物品提供的钓鱼速度加成
 - `float` 该物品提供的渔力加成
@@ -126,23 +168,32 @@ Magic Storage开源链接: https://github.com/blushiemagic/MagicStorage
 - `bool` 该物品是否给予在熔岩中钓鱼的能力
 
 ### AddStatCategory
+
 向属性面板添加一个属性类别，后续可以使用 `AddStat` 添加属性
+
 #### 参数
+
 - `string` 添加的属性类别的字符串标识符
 - `Texture2D` 指示属性类别的图标
 - `string` 该属性类别的名称的本地化键
 - `Texture2D` 指示该属性类别所属模组的图标，建议使用模组的icon_small贴图
 
 ### AddStat
+
 向某个属性类别添加一个属性
+
 #### 参数
+
 - `string` 该属性要被添加到的属性类别的字符串标识符
 - `string` 该属性的名称的本地化键
 - `Func<string>` 该属性的值的获取函数
 
 ### AddHomeTpItem
+
 添加回家物品
+
 #### 参数
+
 - `int/List<int>` 你要添加的某个物品/一些物品的ID
 - `bool` 该物品是否应被视为药水，若为药水则需要堆叠超过无尽药水需求才能快捷使用
 - `bool` 该物品是否应被视为折返药水，在回程时会创造一个折返传送门
@@ -150,6 +201,7 @@ Magic Storage开源链接: https://github.com/blushiemagic/MagicStorage
 ### 使用例
 
 以下是一个为自己的放置站添加支持的例子
+
 ```CSharp
 public override void PostSetupContent() {
     if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame)) {
@@ -162,6 +214,141 @@ public override void PostSetupContent() {
             "AddStation",//加入你自己的增益站2
             ModContent.ItemType<MyStation2>(), // 物品ID 2
             ModContent.BuffType<MyStationBuff2>() // BuffID 2
+        );
     }
+}
+```
+
+### RegisterCategory
+
+注册分类卡
+
+#### 参数
+
+- `Mod` 注册的分类卡所在的模组的实例
+- `List<KeyValuePair<string, ModConfig>>` 分类卡中的选项信息，键为字段/属性名，值为该模组设置的实例
+- `int` 分类卡的物品图标对应物品id，可选参数，默认值为0
+- `Func<Texture2D>` 获取分类卡图标的函数，会覆盖上面的物品图标id的效果，默认值为null
+- `Func<string>` 获取该分类卡的标签的函数，默认值为null
+- `Func<string>` 获取该分类卡的描述的函数，默认值为null
+
+### SetAboutPage
+
+注册 “关于” 页面
+
+#### 参数
+
+- `Mod` 注册的 “关于” 页面所在的模组的实例
+- `Func<string>` 获取 “关于” 页面中所写的文本的函数
+- `int`  “关于” 页面的物品图标对应物品id，可选参数，默认值为0
+- `Func<Texture2D>` 获取 “关于” 页面图标的函数，会覆盖上面的物品图标id的效果，默认值为null
+- `Func<string>` 获取该 “关于” 页面的标签的函数，默认值为null
+- `Func<string>` 获取该 “关于” 页面的描述的函数，默认值为null
+
+### RemoveCategory
+
+移除模组注册的所有分类卡
+
+#### 参数
+
+- `Mod` 目标模组的实例
+
+### RemoveAboutPage
+
+移除模组注册的 “关于” 页面
+
+#### 参数
+
+- `Mod` 目标模组的实例
+
+### AddModernConfigTitle
+
+设置模组的配置中心在模组设置入口处的文本标题
+
+#### 参数
+
+- `Mod` 目标模组的实例
+- `LocalizedText` 标题的本地化文本实例
+
+### RegisterPreview
+
+注册预览绘制
+
+#### 参数
+
+- `PropertyFieldWrapper` 注册的预览绘制对应的选项的字段/属性信息，注意需要直接属于某个Config才有效
+- `Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>`
+注册的预览绘制内容
+
+##### Action参数的参数
+
+- `UIElement` 绘制框元素
+- `ModConfig` 预览绘制的选项对应的设置实例
+- `PropertyFieldWrapper` 对应的选项的字段/属性信息
+- `object` 直接隶属对象
+- `IList` 直接隶属列表
+- `int` 列表中的下标
+
+### OnGlobalConfigPreview
+
+添加全局预览绘制，与上一个唯一的区别是这个不针对任何一个特定选项，用来批量添加绘制
+
+#### 参数
+
+- `Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>`
+参考上个条目的内容
+
+### 使用例
+
+```CSharp
+// 此处示例使用了ImproveGame_ModernConfigCrossModHelper.cs文件的内容
+// 这个是一个Mod类的Load函数
+public override void Load() 
+{
+    if (Main.netMode == NetmodeID.Server || 
+    !ModLoader.TryGetMod("ImproveGame", out var qot)) return;
+
+    //添加标题
+    AddModernConfigTitle(qot,  this, 
+    Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));
+
+    SetAboutPage(qot, this, () => "自己适配配置中心好累哦\n不如反射生成(逃", 
+    (int)ItemID.IronShortsword, null, () => "关于示例", () => "请不要在意吐槽");
+    //上面三个文本自己写本地化获取文本吧(
+
+    //此处示例为给单个设置实例批量添加设置选项
+    //MyConfig.Instance为加载时获取的MyConfig实例
+    RegisterCategory(qot, this, MyConfig.Instance,
+    [
+        nameof(MyConfig.SomeField),
+        nameof(MyConfig.SomeProperty),
+        nameof(MyConfig.SomeArray),
+        nameof(MyConfig.SomeDefinition),
+    ],
+    ItemID.Cog, null, () => "这是一些数据", () => "我顺带告诉你这个支持哪些东西了");
+    //上面两个文本自己写本地化获取文本吧(
+
+    //此处示例为给多个设置示例批量添加设置选项
+    //一个选项名一个设置实例那种太麻烦了我就不写示例了
+    RegisterCategory(qot, this, 
+    [
+        (MyConfig.Instance, //上面水过的再水一遍(
+        [
+            nameof(MyConfig.SomeField),
+            nameof(MyConfig.SomeProperty),
+            nameof(MyConfig.SomeArray),
+            nameof(MyConfig.SomeDefinition),
+        ]),
+        (SeverConfig.Instance,
+        [
+            nameof(MyConfig.SomeVector2),
+            nameof(MyConfig.SomeColor),
+            nameof(MyConfig.SomePoint),
+            nameof(MyConfig.SomeClass),
+        ])
+    ],
+        ItemID.WireKite, null, () => "两家的拼在一起！", 
+        () => "也许有些内容同时需要客户端和服务端来管理，"
+            + "这时这个就大抵能派上很大用场了，嗯。");
 }
 ```

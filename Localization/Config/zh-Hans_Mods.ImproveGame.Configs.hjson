@@ -680,6 +680,15 @@ ImproveConfigs: {
 		Label: "[centeritem:ImproveGame/SpaceWand] 使用魔杖放置时无限材料"
 	}
 
+	DummyCustomAIStyleAllowed: {
+		Tooltip:
+			'''
+			开启后，多人模式下可以自定义假人模拟NPC行为
+			鉴于很可能让假人成为作弊或炸服神器，请慎重考虑这个选项
+			'''
+		Label: "[centeritem:ImproveGame/Dummy] {$Mods.ImproveGame.UI.DummyConfiguration.DummyConfigLabel}"
+	}
+
 	QuestFishStack: {
 		Label: "[centeritem:Clownfish] 任务鱼可堆叠"
 		Tooltip: 使任务鱼可堆叠，在背包有相同鱼时仍可钓出并捡起
@@ -1185,4 +1194,32 @@ FishQuestResetType: {
 	Disabled.Label: 关闭
 	NotResetFish.Label: 不刷新任务鱼
 	ResetFish.Label: 刷新任务鱼
+}
+
+TestConfig: {
+	// DisplayName: Test Config
+
+	test: {
+		// Label: test
+		// Tooltip: ""
+	}
+}
+
+TestData: {
+	// Tooltip: ""
+
+	x: {
+		// Label: x
+		// Tooltip: ""
+	}
+
+	value: {
+		// Label: value
+		// Tooltip: ""
+	}
+
+	text: {
+		// Label: text
+		// Tooltip: ""
+	}
 }

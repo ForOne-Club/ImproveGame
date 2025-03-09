@@ -16,5 +16,6 @@ public sealed class Multiplayer : Category
         panel.AddToggle(Config, nameof(Config.TeamAutoJoin));
         panel.AddToggle(Config, nameof(Config.BedOnlyOne));
         panel.AddToggle(Config, nameof(Config.NoConditionTP));
+        panel.AddToggle(Config, nameof(Config.DummyCustomAIStyleAllowed));
     }
 }

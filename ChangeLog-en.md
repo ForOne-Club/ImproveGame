@@ -6,8 +6,15 @@
 
 </div>
 
+# v1.8.1
+
+- [v1.8.1.1](Changelog/en/v1.8.1.1.md)
+- [v1.8.1.0](Changelog/en/v1.8.1.0.md)
+
 # v1.8.0
 
+- [v1.8.1.0](Changelog/en/v1.8.1.0.md)
+- [v1.8.0.7](Changelog/en/v1.8.0.7.md)
 - [v1.8.0.6](Changelog/en/v1.8.0.6.md)
 - [v1.8.0.4](Changelog/en/v1.8.0.4.md)
 - [v1.8.0.3](Changelog/en/v1.8.0.3.md)
@@ -33,4 +40,5 @@
 - [v1.7.0.0](Changelog/en/v1.7.0.0.md)
 
 # Legacy Versions
+
 For changelog of versions prior to v1.7.0, please refer to the [legacy changelog](Changelog/en/legacy-changelog.md).

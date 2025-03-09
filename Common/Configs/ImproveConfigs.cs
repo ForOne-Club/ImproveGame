@@ -97,7 +97,7 @@ public class ImproveConfigs : ModConfig
     [Increment(2)]
     public int ModifyPlayerTileRange;
 
-    public List<string> TileSpeed_Blacklist = new() { new("torch") };
+    public List<string> TileSpeed_Blacklist = ["torch"];
 
     [DefaultValue(false)]
     public bool NoConsume_SummonItem;
@@ -436,6 +436,8 @@ public class ImproveConfigs : ModConfig
     // [DefaultValue(true)]
     // public bool WandManaConsumption;
 
+    [DefaultValue(false)]
+    public bool DummyCustomAIStyleAllowed;
     #endregion
 
     public override void OnChanged()

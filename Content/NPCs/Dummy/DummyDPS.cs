@@ -68,6 +68,6 @@ public class DummyDPS
         string @string = ToString();
         Vector2 size = ChatManager.GetStringSize(FontAssets.ItemStack.Value, @string, new(1f));
 
-        MyUtils.DrawString(position, @string, Color.White, Color.Black, size * percentOrign, 1f, false);
+        MyUtils.DrawString(position, @string, Color.White, Color.Black, size * percentOrign, 1f, false, 2, Main.LocalPlayer.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None);
     }
 }

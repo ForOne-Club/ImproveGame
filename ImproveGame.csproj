@@ -6,7 +6,7 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="FuzzySearch.Net" Version="0.3.3" />
+		<PackageReference Include="FuzzySearch.Net" Version="1.1.0" />
 		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />
 	</ItemGroup>
 	<PropertyGroup>
@@ -27,7 +27,7 @@
 		<None Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt">
 			<Visible>true</Visible>
 		</None>
-		<None Include=".gitignore;.gitattributes;./.editorconfig;./LICENSE">
+		<None Include=".gitignore;.gitattributes;./LICENSE">
 			<Visible>false</Visible>
 		</None>
 	</ItemGroup>

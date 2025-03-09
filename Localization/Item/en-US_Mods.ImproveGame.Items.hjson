@@ -280,14 +280,18 @@ Dummy: {
 	DisplayName: Scarecrow Dummy
 	Tooltip:
 		'''
-		"Don't hurt me :)"
-		Chat commands:
+		Can be used to test DPS.
+		Hold and press the middle mouse button to open the control interface.
+		Left click to spawn Dummy on mouse
+		Right click to remove the chosen dummy
+		Alt + Right click to remove all dummies.
+		You can also use commands to modify attributes:
 		 /dummy info → view dummy stats
 		 /help dummy → get dummy usage
-		 Left click to spawn Dummy on mouse
-		 Right click to remove the chosen dummy
-		 Middle click to show configuration panel
+		"Don't hurt me :)"
 		'''
+	ConfigUIOpenTip: Press {0} to show configuration panel when holding it
+	NoneKeyBind: <None>
 	CannotUse: This item currently does not work in multiplayer.
 }
 

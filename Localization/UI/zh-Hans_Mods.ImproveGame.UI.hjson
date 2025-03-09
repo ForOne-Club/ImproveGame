@@ -423,20 +423,40 @@ QuickShimmer: {
 DummyConfiguration: {
 	Title: 假人配置
 
-	fieldName: {
+	FieldName: {
 		LockHP: 锁定生命值
 		LifeMax: 最大生命值
 		Defense: 防御
 		Damage: 触碰伤害
+		Scale: 大小
 		ShowBox: 显示碰撞范围
 		ShowDamageData: 显示伤害数据
 		ShowNameOnHover: 显示 NPC 名称
-		Immortal: 不被视作目标
+		Immortal: 不被视作目标且无敌
 		NoGravity: 不受重力影响
 		NoTileCollide: 关闭物块碰撞
 		KnockBackResist: 击退系数
-		AIStyle: AI类型
+		AIStyle: 模拟NPC行为
 	}
+
+	AIType: {
+		Default: 默认
+		Slime: 史莱姆
+		EvilEye: 恶魔之眼
+		Soilder: 战士
+		GoldenFish: 金鱼
+		JellyFish: 水母
+		HugeMimic: 大宝箱怪
+		SelfDefine: 自定义
+	}
+	CustomDisabled:
+		'''
+		目前服务器不允许自定义模拟NPC行为
+		如果你有权限，点击这里修改设置
+		'''
+	DummyConfigLabel: 允许多人模式假人自定义模拟NPC行为
+	OpenWikiTip: 点击以打开相关Wiki页面
+	WikiURL: https://terraria.wiki.gg/zh/wiki/NPC_ID
 }
 
 Autofisher: {

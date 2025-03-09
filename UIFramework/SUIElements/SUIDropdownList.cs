@@ -16,9 +16,9 @@ namespace ImproveGame.UIFramework.SUIElements
     /// <summary>
     /// 下拉框，用于Enum类型的字段
     /// </summary>
-    public class SUIDropdownList<T> : View where T : Enum
+    public class SUIDropdownList<T> : TimerView where T : Enum
     {
-        //private bool DropdownListPersists => ConfigOptionsPanel.Instance.DropdownList.DropdownCaller == this;
+        private bool DropdownListPersists => container.DropdownCaller == this;
         private readonly TimerView _textBox;
         private readonly SlideText _textElement;
         private string[] _valueStrings;
@@ -26,9 +26,13 @@ namespace ImproveGame.UIFramework.SUIElements
         private float _maxTextWidth;
         private Func<T> getState;
         private Action<object> setState;
-        public SUIDropdownList(Func<T> getState, Action<object> setState, string optionName)
+
+        public SUIDropdownListContainer container { get; private set; }
+
+        public SUIDropdownList(Func<T> getState, Action<object> setState,SUIDropdownListContainer container, string optionName)
         {
             //CheckValid();
+            this.container = container;
             this.getState = getState;
             this.setState = setState;
             var box = new View
@@ -52,18 +56,22 @@ namespace ImproveGame.UIFramework.SUIElements
             _textBox.OnLeftMouseDown += (_, _) =>
             {
                 //if (!Interactable) return;
-
+                if (this.container.Enabled) 
+                {
+                    this.container.Enabled = false;
+                    return;
+                }
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 var dimensions = _textBox.GetDimensions();
                 float x = dimensions.X;
                 float y = dimensions.Y + 29;
                 float width = _textBox.Width();
-                var dropdownList = ConfigOptionsPanel.Instance.DropdownList;
+                var dropdownList = this.container;
                 dropdownList.BuildDropdownList(x, y, width, _valueStrings, GetString(), this);
                 dropdownList.OptionSelectedCallback = s =>
                 {
                     int index = Array.IndexOf(_valueStrings, s);
-                    SetConfigValue(index, true);
+                    SetConfigValue(index);
                 };
                 //dropdownList.DrawCallback = () =>
                 //{
@@ -118,7 +126,7 @@ namespace ImproveGame.UIFramework.SUIElements
         //        throw new Exception($"Field \"{OptionName}\" is not a enum type");
         //}
 
-        private void SetConfigValue(int index, bool broadcast)
+        private void SetConfigValue(int index)
         {
             //if (!Interactable) return;
 
@@ -132,22 +140,44 @@ namespace ImproveGame.UIFramework.SUIElements
             base.Update(gameTime);
 
             // 就算没有Hover，要是下拉框打开了也要高光（调整AnimationTimer）
-            //if (!IsMouseHovering)
-            //{
-            //    if (DropdownListPersists)
-            //    {
-            //        //HoverTimer.ImmediateOpen();
-            //    }
-            //}
+            if (!IsMouseHovering)
+            {
+                if (DropdownListPersists)
+                {
+                    HoverTimer.ImmediateOpen();
+                }
+            }
 
             //_textBox.IgnoresMouseInteraction = !Interactable;
             _textBox.BgColor = _textBox.HoverTimer.Lerp(Color.Black * 0.4f, Color.Black * 0.2f);
             _textElement.DisplayText = GetString();
-        }
 
+
+
+
+        }
+        public override void Recalculate()
+        {
+            base.Recalculate();
+            var dimensions = _textBox.GetDimensions();
+            float x = dimensions.X;
+            float y = dimensions.Y + 29;
+            float width = _textBox.Width();
+            container.SetCurrentPosition(x, y, width, _valueStrings.Length);
+            container.Recalculate();
+        }
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+
+            /*
+            var dimensions = _textBox.GetDimensions();
+            float x = dimensions.X;
+            float y = dimensions.Y + 29;
+            float width = _textBox.Width();
+            container.SetCurrentPosition(x, y, width, _valueStrings.Length);
+            container.Recalculate();
+            */
 
             var textBoxRect = _textBox.GetDimensions().ToRectangle();
             var tex = ModAsset.DropdownListMark.Value;

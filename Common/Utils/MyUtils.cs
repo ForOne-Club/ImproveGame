@@ -28,11 +28,11 @@ partial class MyUtils
                                      Main.netMode is NetmodeID.SinglePlayer;
 
     public static bool AllowRenderTargets => Lighting.NotRetro && Terraria.Graphics.Effects.Filters.Scene.CanCapture();
-    
+
     public static bool GlassVfxEnabled => AllowRenderTargets && UIConfigs.Instance.GlassVfxOn;
 
     // Enabled和Available是不一样的，Available是能不能用，Enabled是有没有开
-    public static bool GlassVfxAvailable => !Main.drawToScreen && !Main.gameMenu && !Main.mapFullscreen && GlassVfxEnabled;
+    public static bool GlassVfxAvailable => !Main.drawToScreen && !Main.mapFullscreen && GlassVfxEnabled;// && !Main.gameMenu
 
     public static string RemoveSpaces(string s) => s.Replace(" ", "", StringComparison.Ordinal);
 
@@ -130,13 +130,13 @@ partial class MyUtils
     }
 
     public static void DrawString(Vector2 position, string text, Color textColor, Color borderColor, float scale = 1f,
-        bool large = false, float spread = 2f)
+        bool large = false, float spread = 2f, SpriteEffects effects = SpriteEffects.None)
     {
-        DrawString(position, text, textColor, borderColor, Zero, scale, large, spread);
+        DrawString(position, text, textColor, borderColor, Zero, scale, large, spread, effects);
     }
 
     public static void DrawString(Vector2 pos, string text, Color textColor, Color borderColor, Vector2 origin,
-        float textScale, bool large, float spread = 2f)
+        float textScale, bool large, float spread = 2f, SpriteEffects effects = SpriteEffects.None)
     {
         DynamicSpriteFont spriteFont = (large ? FontAssets.DeathText : FontAssets.MouseText).Value;
 
@@ -147,7 +147,7 @@ partial class MyUtils
 
         if (borderColor == Color.Transparent)
         {
-            Main.spriteBatch.DrawString(spriteFont, text, pos, textColor, 0f, origin, textScale, 0, 0f);
+            Main.spriteBatch.DrawString(spriteFont, text, pos, textColor, 0f, origin, textScale, effects, 0f);
             return;
         }
 
@@ -178,7 +178,7 @@ partial class MyUtils
                     break;
             }
 
-            Main.spriteBatch.DrawString(spriteFont, text, pos, color, 0f, origin, textScale, 0, 0f);
+            Main.spriteBatch.DrawString(spriteFont, text, pos, color, 0f, origin, textScale, effects, 0f);
         }
     }
 
@@ -1066,7 +1066,7 @@ partial class MyUtils
     /// </summary>
     /// <param name="displayText">文本</param>
     /// <param name="textColor">文本颜色，一般提示建议用黄色（默认即黄色）</param>
-    public static void AddNotification(string displayText, Color textColor = default, int itemIconType = -1)
+    public static void AddNotification(string displayText, Color textColor = default, int itemIconType = -1, Action OnLeftMouseClick = null)
     {
         if (Main.netMode == NetmodeID.Server)
             return;
@@ -1076,7 +1076,7 @@ partial class MyUtils
 
         var popup = new ModNotificationPopup(displayText, textColor, itemIconType);
         foreach (var inGameNotification in from n in InGameNotificationsTracker._notifications
-                 where n is ModNotificationPopup select n as ModNotificationPopup)
+                                           where n is ModNotificationPopup select n as ModNotificationPopup)
         {
             if (inGameNotification.Equals(popup))
             {
@@ -1084,7 +1084,7 @@ partial class MyUtils
                 return;
             }
         }
-
+        popup.OnLeftMouseClick += OnLeftMouseClick;
         InGameNotificationsTracker.AddNotification(popup);
     }
 
@@ -1093,8 +1093,8 @@ partial class MyUtils
     /// </summary>
     /// <param name="key">文本的本地化键</param>
     /// <param name="textColor">文本颜色，一般提示建议用黄色（默认即黄色）</param>
-    public static void AddNotificationFromKey(string key, Color textColor = default, int itemIconType = -1) =>
-        AddNotification(GetText(key), textColor, itemIconType);
+    public static void AddNotificationFromKey(string key, Color textColor = default, int itemIconType = -1, Action OnLeftMouseClick = null) =>
+        AddNotification(GetText(key), textColor, itemIconType, OnLeftMouseClick);
 
     public static string MoonPhaseToText(int moonPhase)
     {
@@ -1137,7 +1137,7 @@ partial class MyUtils
 
         return factor;
     }
-    
+
     public static bool MouseInRound(Vector2 roundCenter, int radius)
     {
         return DistanceSquared(Main.MouseScreen, roundCenter) <= radius * radius;
@@ -1146,7 +1146,8 @@ partial class MyUtils
     public static T Min<T>(params T[] args) where T : IComparable
     {
         T result = args[0];
-        for (int i = 1; i < args.Length; i++) {
+        for (int i = 1; i < args.Length; i++)
+        {
             if (result.CompareTo(args[i]) > 0)
                 result = args[i];
         }

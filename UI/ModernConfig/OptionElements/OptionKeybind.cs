@@ -85,10 +85,19 @@ public class OptionKeybind : TimerView
         if (!IsMouseHovering)
             return;
 
-        var tip = Language.GetOrRegister($"Mods.{ModKeybind.Mod.Name}.Keybinds.{ModKeybind.Name}.Tip", () => "");
         string defaultBinding = KeybindSystem.TranslateBinding(ModKeybind.DefaultBinding);
-        var text = $"{tip.Value}\n{GetText("ModernConfig.Keybinds.Default", defaultBinding)}";
-        TooltipPanel.SetText(text);
+
+        if (ModKeybind.Mod.Name == "ImproveGame")
+        {
+            var tip = Language.GetOrRegister($"Mods.{ModKeybind.Mod.Name}.Keybinds.{ModKeybind.Name}.Tip", () => "");
+            var text = $"{tip.Value}\n{GetText("ModernConfig.Keybinds.Default", defaultBinding)}";
+            TooltipPanel.SetText(text);
+        }
+        else
+        {
+            var text = GetText("ModernConfig.Keybinds.Default", defaultBinding);
+            TooltipPanel.SetText(text);
+        }
     }
 
     public override void LeftClick(UIMouseEvent evt)
@@ -205,10 +214,10 @@ public sealed class KeybindChineseToggle : TimerView
         Vector2 boxSize2 = new(boxSize.Y - 10);
         Vector2 position2 = boxPosition + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),
             new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), _timer.Schedule);
-        SDFGraphics.NoBorderRound(position2, boxSize2.X, color3);
+        SDFGraphics.NoBorderRound(position2, default, boxSize2.X, color3, GetMatrix(true));
     }
 
-    private readonly AnimationTimer _timer = new (4);
+    private readonly AnimationTimer _timer = new(4);
 
     public bool Enabled
     {

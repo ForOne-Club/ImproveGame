@@ -10,7 +10,8 @@ public sealed class ItemSettings : Category
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         var uiConfig = UIConfigs.Instance;
-        panel.AddValueText(Config, nameof(Config.ItemMaxStack));
+        //panel.AddValueText(Config, nameof(Config.ItemMaxStack));
+        panel.AddValueSlider(Config, nameof(Config.ItemMaxStack));
         panel.AddToggle(uiConfig, nameof(uiConfig.ShowModName));
         panel.AddToggle(uiConfig, nameof(uiConfig.ShowShimmerInfo));
         panel.AddToggle(uiConfig, nameof(uiConfig.AutoSummon));

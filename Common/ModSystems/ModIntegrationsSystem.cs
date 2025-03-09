@@ -524,6 +524,65 @@ public class ModIntegrationsSystem : ModSystem
                         {
                             return ModContent.ItemType<UniversalAmmoIcon>();
                         }
+                    // 注册分类卡
+                    case "RegisterCategory":
+                        {
+                            int length = args.Length;
+                            CategorySidePanel.RegisterCategory(args[1] as Mod, args[2] as List<KeyValuePair<string, Terraria.ModLoader.Config.ModConfig>>, 
+                                length > 3 ? (int)args[3] : 0, 
+                                length > 4 ? args[4] as Func<Texture2D> : null,
+                                length > 5 ? args[5] as Func<string> : null,
+                                length > 6 ? args[6] as Func<string> : null);
+                            return true;
+                        }
+                    // 注册“关于”页面
+                    case "SetAboutPage":
+                        {
+                            int length = args.Length;
+                            CategorySidePanel.SetAboutPage(args[1] as Mod, args[2] as Func<string>,
+                                length > 3 ? (int)args[3] : 0,
+                                length > 4 ? args[4] as Func<Texture2D> : null,
+                                length > 5 ? args[5] as Func<string> : null,
+                                length > 6 ? args[6] as Func<string> : null);
+                            return true;
+                        }
+                    // 移除模组注册的所有分类卡
+                    case "RemoveCategory":
+                        {
+                            CategorySidePanel.RemoveCategory(args[1] as Mod);
+                            return true;
+                        }
+                    // 移除模组注册的“关于”页面
+                    case "RemoveAboutPage": 
+                        {
+                            CategorySidePanel.RemoveAboutPage(args[1] as Mod);
+                            return true;
+                        }
+                    // 设置模组的配置中心在模组设置入口处的文本标题
+                    case "AddModernConfigTitle": 
+                        {
+                            CategorySidePanel.ModdedTitle[args[1] as Mod] = args[2] as LocalizedText;
+                            return true;
+                        }
+                    // 注册预览绘制
+                    case "RegisterPreview": 
+                        {
+                            CategorySidePanel.ModdedPreviews[args[1] as PropertyFieldWrapper] = new PreviewDrawing(args[2] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
+                            return true;
+                        }
+                    // 添加全局预览绘制
+                    case "OnGlobalConfigPreview": 
+                        {
+                            TooltipPanel.GlobalDrawing += new PreviewDrawing(args[1] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
+                            return true;
+                        }
+                    // 这个本来是LSL用来注册在UI层开启Render的条件的
+                    // 但是仔细研究之后发现LSL那一套和现在的主页毛玻璃插入的内容可以兼容，就没必要搬运过来了
+                    //case "AddRenderOnCondition": 
+                    //    {
+                    //        ModernConfigDetours.RenderOnConditions.Add(args[1] as Func<bool>);
+                    //        break;
+                    //    }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");
                         return false;

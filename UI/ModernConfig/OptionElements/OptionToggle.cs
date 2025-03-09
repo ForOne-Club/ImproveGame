@@ -2,19 +2,22 @@
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public sealed class OptionToggle : ModernConfigOption
 {
-    public OptionToggle(ModConfig config, string optionName) : base(config, optionName, 60)
+    public override int labelReservedWidth => 60;
+    protected override void OnBind()
     {
-        if (FieldInfo.FieldType != typeof(bool))
+        if (VarType != typeof(bool))
             throw new Exception($"Field \"{OptionName}\" is not a bool");
+
         if (Enabled)
             _timer.ImmediateOpen();
-    }
 
+    }
     public override void Update(GameTime gameTime)
     {
         _timer.Update();
@@ -65,14 +68,14 @@ public sealed class OptionToggle : ModernConfigOption
         Vector2 boxSize2 = new(boxSize.Y - 10);
         Vector2 position2 = boxPosition + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),
             new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), _timer.Schedule);
-        SDFGraphics.NoBorderRound(position2, boxSize2.X, color3);
+        SDFGraphics.NoBorderRound(position2,default, boxSize2.X, color3, GetMatrix(true));
     }
 
     private readonly AnimationTimer _timer = new (4);
 
     public bool Enabled
     {
-        get => (bool)FieldInfo.GetValue(Config)!;
-        set => ConfigHelper.SetConfigValue(Config, FieldInfo, value);
+        get => (bool)GetValue()!;
+        set => SetValueDirect(value);//;ConfigHelper.SetConfigValue(Config, VariableInfo, value,Item, path: path);
     }
 }

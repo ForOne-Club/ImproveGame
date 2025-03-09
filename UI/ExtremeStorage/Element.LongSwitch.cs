@@ -3,12 +3,13 @@ using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
+using System.Threading;
 using Terraria.DataStructures;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.ExtremeStorage
 {
-    public class LongSwitch : View
+    public class LongSwitch : TimerView
     {
         private const float InnerRowSpacing = 8;
         private readonly Func<bool> _getState;
@@ -82,7 +83,7 @@ namespace ImproveGame.UI.ExtremeStorage
             var size = dimensions.Size();
 
             // 背景板
-            var panelColor = IsMouseHovering ? UIStyle.PanelBgLightHover : UIStyle.PanelBgLight;
+            var panelColor = HoverTimer.Lerp(UIStyle.PanelBgLight, UIStyle.PanelBgLightHover);
             SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor);
 
             // 开关
@@ -95,7 +96,7 @@ namespace ImproveGame.UI.ExtremeStorage
             Vector2 boxSize2 = new(boxSize.Y - 10);
             Vector2 position2 = boxPosition + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),
                 new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), _timer.Schedule);
-            SDFGraphics.NoBorderRound(position2, boxSize2.X, color3);
+            SDFGraphics.NoBorderRound(position2,default, boxSize2.X, color3, GetMatrix(true));
 
             var textOffsetX = 0;
             if (_icon is not null)
