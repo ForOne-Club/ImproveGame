@@ -455,7 +455,7 @@ Keybinds: {
 
 	QuickShimmerGUI: {
 		DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
-		Tip: Jpens the Quick Shimmer Interface; also can be opened from Control Panel
+		Tip: Opens the Quick Shimmer Interface; also can be opened from Control Panel
 	}
 
 	LocalizationDebugging: {
