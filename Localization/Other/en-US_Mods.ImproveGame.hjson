@@ -64,7 +64,7 @@ CombatText: {
 	}
 
 	Projectile.PlaceWall_Lack: Stopped placing due to lack of walls
-	Commonds.ResurrectionTimeShortened: "{Time}s reduced respawn time！"
+	Commonds.ResurrectionTimeShortened: "{Time}s reduced respawn time!"
 }
 
 AutoSummon: {

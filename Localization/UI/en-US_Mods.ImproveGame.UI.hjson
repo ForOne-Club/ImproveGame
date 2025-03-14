@@ -483,8 +483,8 @@ Autofisher: {
 	AccBoost:
 		'''
 		[i:{IconID}] Accessory Bonus for Fishing Machine:
-		    Fishing speed：{Speed}
-		    Fishing power：{Power}
+		    Fishing speed: {Speed}
+		    Fishing power: {Power}
 		'''
 	AccBoostTackle: "    Decreases chance of bait consumption"
 	AccBoostLava: "    Allows fishing in lava"

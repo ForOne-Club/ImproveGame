@@ -533,7 +533,7 @@ ImproveConfigs: {
 			Right-clicking the "Housing" button will teleport all town NPCs home.
 			Once a town NPC's home is changed, it will be teleported to it immediately.
 			'''
-		HoverText: （<right> to teleport town NPCs home）
+		HoverText: (<right> to teleport town NPCs home)
 	}
 
 	NoLakeSizePenalty: {
