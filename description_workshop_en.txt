@@ -1,7 +1,7 @@
 ﻿[h2]Quality of Terraria, a mod to greatly improve your gameplay experience[/h2]
 [h2][url=https://discord.gg/rEmGMQv5z7]Join our Discord to report bugs and get replied quickly![/url][/h2]
 These features may bring you better gameplay experience
-Only some functions are enabled by default, please check mod configurations for details
+Only some functions are enabled by default, please check mod config for details
 
 [img]https://i.imgur.com/ki1CPZe.gif[/img]
 
@@ -23,7 +23,7 @@ Only some functions are enabled by default, please check mod configurations for 
 [/list]
 
 [h2]Feature Highlights[/h2]
-[b]For a detailed list, check mod configurations or changelog above[/b]
+[b]For a detailed list, check mod config or changelog above[/b]
 [olist]
 	[*]General features like max stack
 	[*]A Storage Manager that integrates storage, crafting, infinite buffs, and more
@@ -37,8 +37,8 @@ Only some functions are enabled by default, please check mod configurations for 
 	[*][b]Most features are configurable, use on your own preference[/b]
 [/olist]
 [h2]Open Source[/h2]
-Change log: https://github.com/487666123/ImproveGame/blob/1.4.4/ChangeLog-en.md
-Source code: https://github.com/487666123/ImproveGame
+Change log: https://github.com/ForOne-Club/ImproveGame/blob/1.4.4/ChangeLog-en.md
+Source code: https://github.com/ForOne-Club/ImproveGame
 
 [h2]Authors and Special Thanks[/h2]
 Spriter: 枫林半叶, 逆风而行的信鸽, 中学生
@@ -47,3 +47,4 @@ Coder: 局长, Cyril, 夜谷紫幽, Reits, hezuo1hao, LogSpiral
 Special Thanks: gardenapple - WMITF
            ChevyRay - Coroutines class
            Tomat - Part of GIF-rendering code
+           Kadeanon - Call and MechTransfer support for the Fishing Machine
