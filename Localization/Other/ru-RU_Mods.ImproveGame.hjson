@@ -79,7 +79,7 @@ QuickHome: {
 
 Tips: {
 	AmmoChainDisabled: Цепочка боеприпасов отключена
-	AmmoChain: "[centeritem:ImproveGame/AmmoChainItem]Цепочка боеприпасо: "
+	AmmoChain: "[centeritem:ImproveGame/AmmoChainItem]Цепочка боеприпасов: "
 	ShimmerInto: "Можно превратить с помощью мерцания в "
 	ShimmerIntoWithStack: "Каждые {0} можно превратить с помощью мерцания в "
 	ShimmerIntoWithCoinLuck: Можно превратить с помощью мерцания в {0} 'удачи монет'
@@ -329,7 +329,7 @@ LifeAnalyzer: {
 Architecture: {
 	Materials: Материалы для дома
 	StoredMaterials: (Хранится: {MaterialCount})
-	MaterialsRequired: "Нужно материала: "
+	MaterialsRequired: "Нужные материалы: "
 	Block: Блоки
 	Platform: Платформы
 	Torch: Факелы
@@ -456,6 +456,11 @@ Keybinds: {
 	QuickShimmerGUI: {
 		DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
 		Tip: Открывает интерфейс быстрого мерцания; также можно открыть через панель управления
+	}
+	
+	LocalizationDebugging: {
+		DisplayName: "[DEBUG] Localization Debugging"
+		Tip: For Devs only. Press reload localization from source files.
 	}
 }
 

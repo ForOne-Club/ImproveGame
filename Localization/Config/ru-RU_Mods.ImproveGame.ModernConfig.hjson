@@ -52,7 +52,7 @@ AboutPage_ModConfig: {
 
 		Данная панель управления была создана разработчиками [c/9966cc:LogSpiral] и [c/9966cc:Cyril] из команды Quality of Terraria.
 
-		Разработчики, желающие добавить поддержку кросс-моддинга – пожалуйста, обратитесь к документации ModCall'ов в файле README.md нашей репозитории GitHub.
+		Разработчики, желающие добавить поддержку кросс-моддинга — пожалуйста, обратитесь к документации ModCall'ов в файле README.md нашей репозитории GitHub.
 		'''
 	FumoText: Наконец, держите [c/0099ff:милую фумо Комейдзи Койси], потому что она нравится LogSpiral.
 }
@@ -67,19 +67,19 @@ Presets: {
 
 	ExplorerPreset: {
 		Label: "[centeritem:GravityGlobe] Исследователь"
-		Tooltip: Лучше всего для прохождений, близких к ванилле. Исследуйте мир, который теперь исследовать чуть легче. Подходит лучше всего для таких модов, как «Thorium» или «Spirit».
+		Tooltip: Лучше всего для прохождений, близких к ванилле. Исследуйте мир, который теперь исследовать чуть легче. Подходит лучше всего для таких модов, как Thorium или Spirit.
 		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#explorer
 	}
 
 	WarriorPreset: {
 		Label: "[centeritem:EmpressBlade] Воевода"
-		Tooltip: Хватит копать, пора убивать! Пропускает большую часть гринда, переводя фокус на битвы с боссами. Подходит лучше всего для таких модов, как «Calamity» или «Fargo's Souls».
+		Tooltip: Хватит копать, пора убивать! Пропускает большую часть гринда, переводя фокус на битвы с боссами. Подходит лучше всего для таких модов, как Calamity или Fargo's Souls.
 		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#fighter
 	}
 
 	VanillaPreset: {
 		Label: "[centeritem:MusicBoxCredits] Любитель ваниллы"
-		Tooltip: Почти как ванильная «Terraria». Включает в себя лишь некоторые "quality of life" функции.
+		Tooltip: Почти как ванильная Terraria. Включает в себя лишь некоторые функции 'улучшения качества жизни'.
 		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#vanilla-enjoyer
 	}
 
