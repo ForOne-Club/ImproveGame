@@ -64,7 +64,8 @@ LiquidWand: {
 		'''
 		Absorbs/Places chosen liquid in a selected area
 		<right> while holding to open the liquid control panel
-		If there is too little liquid, no excess liquid will be placed
+		If there is too much liquid stored, the excess liquid will be put out
+		Likewise, it will not place any liquid if there is no liquid stored
 		'''
 }
 
@@ -183,7 +184,7 @@ GlobeBase: {
 		'''
 	AlreadyRevealed: "{0} has already been marked"
 	Reveal: "{1} marked up {0} on the map."
-	NotFound: Data of {0} is not present, it's likely that newest QoT was not enabled during world creation
+	NotFound: Data of {0} is not present, it's likely that newest QoT was not enabled during world creation.
 }
 
 DungeonGlobe.BiomeName: Dungeon
@@ -230,9 +231,9 @@ AetherGlobe: {
 DetectorDrone: {
 	Tooltip:
 		'''
-		Flies high and low to explore terrains.
-		Updates your explored map and emits lighting to see in the dark.
-		CAUTION: Don't go too far, else it'll explode.
+		Flies high and low to explore terrains
+		Updates your explored map and emits lighting to see in the dark
+		WARNING: Don't go too far, else it'll explode
 		'''
 	DisplayName: Explorer Drone
 }
@@ -241,9 +242,9 @@ DevMark: {
 	DisplayName: Developer's Mark
 	Tooltip:
 		'''
-		When in the inventory, Wand of Construction will not consume materials (Only works in single player)
-		Use with fishing machine opened to automatically fill it with fishing equipment
 		[c/ff0000:Developer's item]
+		When in the inventory, Wand of Construction will not consume materials (Only works in single player)
+		Opening the Fishing Machine will automatically fill it with fishing equipment
 		'''
 }
 
@@ -272,7 +273,7 @@ ShimmerTech: {
 		{$ItemName.GalaxyPearl}
 		{$ItemName.CombatBookVolumeTwo}
 		{$ItemName.PeddlersSatchel}
-		"Oh God, I can see forever!"
+		'Oh God, I can see forever!'
 		'''
 }
 
@@ -280,17 +281,16 @@ Dummy: {
 	DisplayName: Scarecrow Dummy
 	Tooltip:
 		'''
-		Can be used to test DPS.
-		Hold and press the middle mouse button to open the control interface.
+		Can be used to test DPS
 		Left click to spawn Dummy on mouse
 		Right click to remove the chosen dummy
-		Alt + Right click to remove all dummies.
+		Alt + Right click to remove all dummies
 		You can also use commands to modify attributes:
 		 /dummy info → view dummy stats
 		 /help dummy → get dummy usage
-		"Don't hurt me :)"
+		'Don't hurt me :)'
 		'''
-	ConfigUIOpenTip: Press {0} to show configuration panel when holding it
+	ConfigUIOpenTip: Press {0} to show configuration panel when holding the item
 	NoneKeyBind: <None>
 	CannotUse: This item currently does not work in multiplayer.
 }
@@ -333,7 +333,7 @@ BaitSupplier: {
 	DisplayName: Bait Chamber
 	Tooltip:
 		'''
-		Automatically takes bait from chests placed closely
+		Automatically takes bait from chests placed nearby
 		to replenish all the baitless fishing machines in the world
 		'''
 }
@@ -352,7 +352,7 @@ AmmoChainItem: {
 	Tooltip:
 		'''
 		Stores Ammo Chain info, can be shared with other players
-		Using this item will save that info to your computer
+		Use this item to save that info to your computer
 		'''
 	FromPlayer: From player: {0}
 	Added: Ammo Chain added as: {0}
@@ -387,9 +387,9 @@ LiquidWandAdvanced: {
 	DisplayName: Ultimate Wand of Liquids
 	Tooltip:
 		'''
-		Absorbs/places chosen liquid in a selected area
+		Absorbs/Places chosen liquid in a selected area
 		<right> while holding to open the liquid control panel
-		Unlimited amount of liquids
+		Can absorb/place unlimited amount of liquids
 		'''
 }
 
@@ -397,7 +397,7 @@ WallPlaceSelectorMode: {
 	DisplayName: Wand of Technology (Selecting)
 	Tooltip:
 		'''
-		Select a rectangular area and place walls from the inventory in it
+		Places walls from the inventory in a selected area
 		<right> to switch to placement mode
 		'''
 }
@@ -406,7 +406,7 @@ ActuationRodMkII: {
 	DisplayName: Ultimate Wand of Actuation
 	Tooltip:
 		'''
-		Select a rectangular area to actuate it
+		Actuates tiles in a selected area
 		Doesn't need placed actuators
 		'''
 }
@@ -416,7 +416,7 @@ ShellShipInBottle: {
 	Tooltip:
 		'''
 		Ask the Guide how to make it with Sea Shell
-		Then throw it into shimmer lake, and see what will happen!
+		Then throw it into Shimmer and see what will happen!
 		'''
 }
 

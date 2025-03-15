@@ -1,0 +1,509 @@
+DummyControl.Name: Функции манекена
+GrabBagInfo.Title: Детали о выпадающих предметах
+RecipeSearchUI.Tips:
+	'''
+	Поиск рецептов от мода «Quality of Terraria»
+	Вы можете выключить его в конфигурации «Quality of Terraria»
+	'''
+
+LiquidWandUI: {
+	Name: Функции жидкостей
+	Absorb: Впитывать
+	Water: Вода
+	Lava: Лава
+	Honey: Мёд
+	Shimmer: Мерцание
+}
+
+MasterControl: {
+	Available: Доступные
+	Unavailable: Недоступные
+	Version: Версия: {0}
+	Changelog: Нажмите, чтобы увидеть новые функции
+	PinIntro:
+		'''
+		Закрепить панель управления
+		Если вы закрепили панель управления, для появления меню надо будет нажать,
+		а не зажимать клавишу
+		'''
+	PopupTitle: Отсутствует горячая клавиша
+	PopupText: Вы не назначили горячую клавишу для панели управления Quality of Terraria. Назначьте горячую клавишу для панели управления, чтобы иметь быстрый доступ к функциям модификации. Данное сообщение пропадёт сразу после того, как вы сделаете это.
+	PopupPanelWidth: "290"
+	PopupPanelHeight: "200"
+	ChangelogLink: https://github.com/ForOne-Club/ImproveGame/blob/1.4.4/Changelog/en/v{0}.md
+}
+
+AmmoChain: {
+	Title: Цепочка боеприпасов
+	LoadError: Файл некорректен или не является файлом цепочки
+	ClickToAddL1: Сначала выберите любой боеприпас
+	ClickToAddL2: Затем нажмите сюда, чтобы добавить его в цепочку
+	FileName: Цепочка боеприпасов
+	AddChain: Создать цепочку
+	OpenFolder: Открыть папку
+	// 一个按钮，点击后打开帮助网页
+	GetHelp: Как? Помогите!
+	Cancel: Отмена
+	Confirm: Подтвердить
+	ItemNotAvailable: × Этот предмет не использует боеприпасы
+	PutInItem: ← Поместите сюда оружие
+	ClickAmmoChain: Нажмите на цепочку, чтобы применить её
+	AddAmmoChain:
+		'''
+		У вас пока нет цепочки боеприпасов
+		Для начала создайте одну
+		'''
+	Empty: Вы не можете сохранить пустую цепочку
+}
+
+WeatherGUI: {
+	Title: Управление погодой
+	Wind: <left>, чтобы изменить направление ветра
+	WindLockFalse: <right>, чтобы закрепить направление ветра
+	WindLockTrue: <right>, чтобы открепить направление ветра
+	WindWest: Изменено на сильный западный ветер
+	WindNo: Изменено на ветер по умолчанию
+	WindEast: Изменено на сильный восточный ветер
+	WindLocked: Скорость и направление ветра закреплены
+	WindUnlocked: Скорость и направление ветра откреплены
+	RainActive: <left>, чтобы начать дождь
+	RainInactive: <left>, чтобы закончить дождь
+	RainLockFalse: <right>, чтобы закрепить состояние дождя
+	RainLockTrue: <right>, чтобы открепить состояние дождя
+	RainOn: Дождь начался
+	RainOff: Дождь закончился
+	RainLocked: Изменения дождя приостановлены
+	RainUnlocked: Изменения дождя возобновлены
+	Time: <left>, чтобы изменить время
+	Dawn: Время изменено на рассвет
+	Noon: Время изменено на полдень
+	Dusk: Время изменено на закат
+	Midnight: Время изменено на полночь
+	MoonPhase: <left>, чтобы изменить фазу луны
+	MoonPhaseLockFalse: <right>, чтобы закрепить изменения фазы луны
+	MoonPhaseLockTrue: <right>, чтобы открепить изменения фазы луны
+	MoonPhaseAdjusted: Фаза изменена на: {0}
+	MoonPhaseLocked: Фаза луны закреплена на: {0}
+	MoonPhaseUnlocked: Фаза луны откреплена
+	AlreadyUnlocked: Управление погодой уже открыто в этом мире
+	Unlocked: Управление погодой открыто! Доступно в панели управления
+	EasterEgg: Гриб!
+	Locked: Используйте [i:ImproveGame/WeatherBook], чтобы открыть управление погодой
+	TimeUnlockCondition: Убейте Стену плоти, чтобы менять время
+}
+
+PlayerStats: {
+	// 翻译提示: 尽量简短，因为UI的空间有限，不要超过10个字符
+	Introduction:
+		'''
+		[c/CC88AA:Панель характеристик]
+		<left> по категории или характеристике, чтобы закрепить её
+		Удерживайте правую кнопку мыши, чтобы перетащить кнопку
+		'''
+	Control: Панель характеристик
+	Name: Характеристики игрока
+	Melee: Воин
+	Ranged: Стрелок
+	Magic: Маг
+	Summon: Призыватель
+	Throwing: Метатель
+	// 其他玩家属性
+	Other: Другие
+	LifeRegen: Регенерация
+	ArmorPenetration: Проб. брони
+	// 魔力恢复，因为归在大类“魔法”下所以用Regen代替
+	Regen: Реген. маны
+	// 魔力消耗，因为归在大类“魔法”下所以用Cost代替
+	Cost: Трата маны
+	MaxMinions: Миньоны
+	MaxTurrets: Стражники
+	Endurance: Сопр. урону
+	Luck: Удача
+	Aggro: Аггро
+	BulletDamage: Урон пуль
+	ArrowDamage: Урон стрел
+	SpecialistDamage: Особый урон
+	Damage: Урон
+	Crit: Шанс крита
+	// 攻击速度
+	Speed: Скор. атаки
+	SummonMeleeSpeed: Скор. хлыстов
+
+	CalamityMod: {
+		Rogue: Разбойник
+		// 盗贼弹幕速度，英文原文“Rogue Velocity”，这里归在大类“Rogue”下所以用Velocity代替
+		RogueVelocity: Скор. снарядов
+	}
+
+	ThoriumMod: {
+		Healer: Лекарь
+		// 牧师治疗工具（法术）的攻击速度，英文原文即“Healing Speed”，由于UI空间有限去掉了"ing"
+		HealingSpeed: Скор. лечения
+		// 瑟银的一些牧师装备增加法术回血量
+		HealBonus: Бонус лечения
+		Bard: Бард
+	}
+}
+
+ExtremeStorage: {
+	AddChest: Добавить сундук
+	AddChestTip: Нажмите ПКМ, чтобы отменить
+	RejectNearbyStack: Не удалось сложить предметы в сундуки. Возможно, другие игроки сейчас используют Storage Manager
+	CloseCraftingWindow: Закрыть окно создания
+	OpenCraftingWindow: Открыть окно создания
+
+	CountForCrafting: {
+		Label: Использовать при создании
+		Tooltip:
+			'''
+			Определяет, могут ли предметы данной категории [c/CC88AA:быть использованы при создании]
+			Вы всё ещё можете использовать предметы, если откроете сундук вручную
+			Слишком много предметов в одной категории могут вызвать проблемы с производительностью
+			'''
+	}
+
+	UseUnlimitedPotion: {
+		Label: Бесконечные зелья
+		Tooltip:
+			'''
+			Определяет, будут ли зелья и станции баффов в категории [c/CC88AA:«{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Alchemy}»] давать [c/CC88AA:бесконечные баффы]
+			Чтобы это работало, нужно будет включить настройку «Бесконечные зелья»
+			'''
+	}
+
+	UsePortableStation: {
+		Label: Переносные станции создания
+		Tooltip:
+			'''
+			Определяет, будут ли станции создания в категории [c/CC88AA:«{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}»] использоваться как [c/CC88AA:переносные станции создания]
+			Чтобы это работало, нужно будет включить настройку «Переносные станции создания»
+			'''
+	}
+
+	UsePortableBanner: {
+		Label: Переносные знамёна
+		Tooltip:
+			'''
+			Определяет, будут ли знамёна в категории [c/CC88AA:«{$Mods.ImproveGame.UI.ExtremeStorage.ItemGroup.Furniture}»] использоваться как [c/CC88AA:переносные знамёна]
+			Чтобы это работало, нужно будет включить настройку «Переносные знамёна»
+			'''
+	}
+
+	ChestBeingUsed: Сундук с этим предметов сейчас используется другим игроком
+	// 介绍使用了手动换行让排版看起来舒服点
+	BasicIntroduction:
+		'''
+		Заметки:
+		  1. Сортировка сундуков работает на системе
+			 идентификаторов в названии сундука. Пожалуйста,
+			 не меняйте название сундука после того, как вы
+			 добавили его в систему
+		  2. Помещайте сундуки с зельями и мебелью в
+			 соответствующие категории, всё остальное помещайте
+			 в категорию «Всё»
+		  3. В мультиплеере, если сундук используется другим
+			 игроком, вы никак не сможете взаимодействовать с
+			 предметами из этого сундука
+		'''
+
+	ItemGroup: {
+		Weapon: "{$CreativePowers.TabWeapons}"
+		Tool: "{$CreativePowers.TabTools}"
+		Ammo: "{$LegacyInterface.27}"
+		Armor: "{$CreativePowers.TabArmor}"	
+		Accessory: "{$CreativePowers.TabAccessories}"
+		Furniture: "{$CreativePowers.TabFurniture}"
+		Block: Блоки
+		Material: "{$CreativePowers.TabMaterials}"
+		Alchemy: Зелья
+		Misc: "{$CreativePowers.TabMisc}"
+		Setting: "{$LegacyMenu.14}"
+		Everything: Всё
+	}
+
+	// 筛选器的文本
+	Weapon: {
+		Melee: Ближнее
+		Ranged: Дальнее
+		Magic: Магическое
+		Summon: Призывательное
+		Other: Другие
+	}
+
+	Tool: {
+		Pickaxe: Кирки
+		Axe: Топоры
+		Hammer: Молоты
+		Hook: Крюки-кошки
+		Wiring: Проводка
+		FishingPole: Удочки
+		Other: Другие
+	}
+
+	Ammo: {
+		Arrow: Стрелы
+		Bullet: Пулы
+		Rocket: Ракеты
+		Dart: Дротики
+		Other: Другие
+	}
+
+	Armor: {
+		Headgear: Голова
+		Torso: Тело
+		Pants: Ноги
+		Vanity: Костюмы
+	}
+
+	Accessory: {
+		Boot: Ботинки
+		Wing: Крылья
+		Shield: Щиты
+		Other: Другие
+		Vanity: Украшения
+	}
+
+	Block: {
+		Solid: Твёрдые блоки
+		Wall: Стены
+		Platform: Платформы
+		Other: Другие
+	}
+
+	Misc: {
+		Herb: Растения
+		SummonItem: Предметы призыва
+		Pet: Питомцы
+		Mount: Ездовые предметы
+		Material: Материалы
+		Other: Другие
+	}
+}
+
+AutoTrash: {
+	Introduction:
+		'''
+		[c/CC88AA:Авто-выбрасывание] (Quality of Terraria)
+		Нажмите [c/CC88AA:Shift+Ctrl+<left>], чтобы добавить предмет в список для авто-выбрасывания
+		Нажмите [c/CC88AA:{0}], чтобы скрыть визуал (Убедитесь, что вы назначили для этого клавишу)
+		Нажмите на эту кнопку, чтобы открыть полный список авто-выбрасывания
+		'''
+	TrashedItemsList: Что выбрасывать:
+}
+
+WorldFeature: {
+	Title: Переключатели мира
+
+	Halloween: {
+		Label: Хэллоуин
+		Tooltip: Переключает Хэллоуин
+	}
+
+	XMas: {
+		Label: Рождество
+		Tooltip: Переключает рождество
+	}
+
+	Drunk:
+		'''
+		«Пьяный» мир
+		Сиды: 05162020 | 5162020
+		'''
+	Bees:
+		'''
+		«Только не пчёлы»
+		Сиды: not the bees | not the bees! | notthebees
+		'''
+	Ftw:
+		'''
+		For the worthy («Для достойных»)
+		Сиды: for the worthy | fortheworthy
+		'''
+	Anniversary:
+		'''
+		Celebrationmk10 («Празднование»)
+		Сиды: celebrationmk10 | 05162011 | 5162011 | 05162021 | 5162021
+		'''
+	DontStarve:
+		'''
+		«Постоянство»
+		Сиды: constant | theconstant | the constant | eye4aneye | eyeforaneye
+		'''
+	Traps:
+		'''
+		«Без ловушек»
+		Сиды: no traps | notraps
+		P.S. Ничего не делает, если включено в мире
+		'''
+	Remix:
+		'''
+		Don't dig up («Не копай вверх»)
+		Сиды: don't dig up | dont dig up | dontdigup
+		'''
+	Zenith:
+		'''
+		Get fixed boi
+		Сиды: get fixed boi | getfixedboi
+		P.S. Get fixed boi будет работать только если включены все остальные функции сидов
+		'''
+	OpenWiki: <right>, чтобы открыть страницу на вики
+	NotPermitted: У вас нет прав вносить изменения в мир
+}
+
+ItemSearcher: {
+	Title: Найти предметы
+	TipText:
+		'''
+		Найденные предметы
+		отображаются здесь
+		'''
+	NotFoundText: Предмет не найден
+
+	FuzzySearch: {
+		Label: Нечёткий поиск
+		Tooltip:
+			'''
+			Позволяет допустить 1 неточность при поиске
+			Например, "обсдиан" успешно найдёт "обсидиан"
+			'''
+	}
+
+	SearchTooltip: {
+		Label: Поиск по описанию
+		Tooltip: Ищет предметы по их описаниям вместо названий
+	}
+}
+
+OpenBag: {
+	Title: Открывашка для мешков
+	TipText: Предметы из мешков отображаются здесь
+	Open: Открыть все
+	Stop: Остановить
+	EmptyText: Мешок
+	NotFullyDisplayed: "{0} других предметов скрыты"
+
+	SellAll: {
+		Name: Продать всё
+		Tooltip:
+			'''
+			Продаёт предметы за 110% от их цены
+			Монеты сразу идут в ваши слоты для монет
+			'''
+	}
+
+	AreYouSure: {
+		Name: Вы уверены?
+		Tooltip:
+			'''
+			<left>, чтобы продать
+			<right>, чтобы отменить
+			'''
+	}
+}
+
+QuickShimmer: {
+	Title: Быстрое мерцание
+	TipText: Превращённые предметы отображаются здесь
+	Open: Превратить
+	Stop: Остановить
+	EmptyText: Предмет для превращения
+	NotFullyDisplayed: "{0} других предметов скрыты"
+	CoinLuck: Превращено в {0} ед. удачи от денег
+	AlreadyUnlocked: Быстрое мерцание уже доступно в этом мире
+	Unlocked: Быстрое мерцание открыто! Доступно через панель управления
+
+	AutoStart: {
+		Label: Автостарт
+		Tooltip: Автоматически превращает предметы, помещённые в него
+	}
+
+	ReallyQuick: {
+		Label: Быстрый режим
+		Tooltip: Превращает предметы мгновенно
+	}
+
+	Locked:
+		'''
+		Используйте [i:ImproveGame/ShellShipInBottle_Shimmered] {$Mods.ImproveGame.Items.ShellShipInBottle_Shimmered.DisplayName}, чтобы открыть быстрое мерцание
+		Попробуйте бросить ImproveGame/ShellShipInBottle] {$Mods.ImproveGame.Items.ShellShipInBottle.DisplayName} в мерцание!
+		'''
+}
+
+DummyConfiguration: {
+	Title: Настройки пугала
+
+	FieldName: {
+		LockHP: Сделать бессмертным
+		LifeMax: Максимальное здоровье
+		Defense: Защита
+		Damage: Контактный урон
+		Scale: Размер
+		ShowBox: Показывать хитбокс
+		ShowDamageData: Показывать хар-ки урона
+		ShowNameOnHover: Показывать имя НИПа
+		Immortal: Не числиться как цель
+		NoGravity: Игнорировать гравитацию
+		NoTileCollide: Игнорировать блоки
+		KnockBackResist: Получаемое отбрасывание
+		AIStyle: Тип ИИ
+	}
+
+	AIType: {
+		Default: Обычный
+		Slime: Слизень
+		EvilEye: Демон. глаз
+		Soilder: Боец
+		GoldenFish: Золотая рыбка
+		JellyFish: Медуза
+		HugeMimic: Мимик биома
+		SelfDefine: Кастомный
+	}
+	CustomDisabled: 
+		'''
+		Кастомное поведение не доступно на этом сервере.
+		Нажмите здесь, чтобы изменить настройку, если вы хост сервера.
+		'''
+	DummyConfigLabel: Позволить менять поведение пугала на кастомные в мультиплеере
+	OpenWikiTip: Нажмите, чтобы открыть соотв. страницу на вики
+	WikiURL: https://terraria.wiki.gg/wiki/NPC_ID
+}
+
+Autofisher: {
+	Accessory: Аксессуары для рыбалки
+	FishingPole: Удочка
+	Bait: Наживка
+	SelectPool: Выберите удочку
+	CarefulNextTime: Аккуратнее в следующий раз!
+	Unavailable: Никакой информации о рыбалке
+	InShimmer: Не работаю я в мерцании!
+	CatchCratesFilter: Ящики
+	CatchAccessoriesFilter: Аксессуары
+	CatchToolsFilter: Инструменты и оружия
+	CatchWhiteRarityCatchesFilter: Белая редкость
+	CatchNormalCatchesFilter: Выше, чем белая редкость
+	PerItemFilter: Фильтры для улова
+	ChestAutoDeposit:
+		'''
+		Автоматически выкладывать улов в ближайшие сундуки
+		Машина выкладывает улов каждую минуту
+		'''
+	AccBoost:
+		'''
+		[i:{IconID}] Бонус аксессуара для рыболовной машины:
+		    Скорость рыбалки: {Speed} 
+		    Мастерство рыбалки: {Power}
+		'''
+	AccBoostTackle: "    Уменьшает шанс потратить наживку"
+	AccBoostLava: "    Позволяет рыбачить в лаве"
+}
+
+MapLayer: {
+	TheAether: Эфир
+	Pyramid: Пирамида
+	FloatingIsland: Парящий остров
+	FloatingLake: Парящее озеро
+	EmptyAutofisher: Рыболовная машина (без наживки!)
+}
+
+ThemePreview.Title: Предпросмотр темы
+PiggyFilter.Title: Сортировать монеты

@@ -1,0 +1,509 @@
+ModName: Quality of Terraria
+Search: Поиск...
+PathIllegal: Имя файла не должно включать следующих знаков: \, /, :, *, ?, ", <, > или |
+FolderNameEmpty: Имя папки не может быть пустым
+
+Tiles: {
+	Autofisher.MapEntry: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}"
+	ExtremeStorage.MapEntry: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}"
+	BaitSupplier.MapEntry: Камера для наживки
+	FakeAltar.MapEntry: Ложный алтарь
+}
+
+MoonPhases: {
+	FullMoon: Полнолуние
+	WaningGibbous: Убывающая Луна
+	ThirdQuarter: Последняя четверть
+	WaningCrescent: Убывающий месяц
+	NewMoon: Новолуние
+	WaxingCrescent: Растущий месяц
+	FirstQuarter: Первая четверть
+	WaxingGibbous: Растущая Луна
+}
+
+ItemDropRule: {
+	DropWhenEnabled: Выпадает, если настройка «{0}» включена
+	DropCoinOne: Выпадает, если значение настройки «Мультипликатор выпадающих из врагов монет» стоит на максимуме и настройка «{Mods.ImproveGame.Conditions.AvailableCoinOne}» включена
+	WandDrop: Не выпадает, если игрок уже держит один в инвентаре
+}
+
+Conditions: {
+	AvailableAutofisher: "{$Mods.ImproveGame.Items.Autofisher.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableActuationRodMkII: "{$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableBaitSupplier: "{$Mods.ImproveGame.Items.BaitSupplier.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableExtremeStorage: "{$Mods.ImproveGame.Items.ExtremeStorage.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableLiquidWand: "{$Mods.ImproveGame.Items.LiquidWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	NotAvailableLiquidWand: "{$Mods.ImproveGame.Items.LiquidWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Unavailable}"
+	AvailableLiquidWandAdvanced: "{$Mods.ImproveGame.Items.LiquidWandAdvanced.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableMagickWand: "{$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	NotAvailableMagickWand: "{$Mods.ImproveGame.Items.MagickWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Unavailable}"
+	AvailableStarburstWand: "{$Mods.ImproveGame.Items.StarburstWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailablePotionBag: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableSpaceWand: "{$Mods.ImproveGame.Items.SpaceWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableWallPlace: "{$Mods.ImproveGame.Items.WallPlace.PureName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailablePaintWand: "{$Mods.ImproveGame.Items.PaintWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableBannerChest: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableConstructWand: "{$Mods.ImproveGame.Items.ConstructWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableCreateWand: "{$Mods.ImproveGame.Items.CreateWand.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableDetectorDrone: "{$Mods.ImproveGame.Items.DetectorDrone.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableMoveChest: "{$Mods.ImproveGame.Items.MoveChest.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	AvailableCoinOne: "{$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+	EnableQuickShimmer: "{$Mods.ImproveGame.UI.QuickShimmer.Title}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}"
+	EnableMinimapMark: Метки структур{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}
+	EnableWeatherControl: "{$Mods.ImproveGame.UI.WeatherGUI.Title}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Enable}"
+}
+
+CombatText: {
+	Item: {
+		CreateWand_NotEnough: Недостаточно материалов!
+		SpaceWand_Cancel: Отменено!
+		SpaceWand_Lack: Недостаточно платформ!
+		WallPlace_Limit: Слишком большая площадь!
+		WallPlace_Consume: "Приблизительная трата: "
+		WallPlace_Kill: Приостановлено!
+	}
+
+	Projectile.PlaceWall_Lack: Приостановлено из-за нехватки стен
+	Commonds.ResurrectionTimeShortened: "{Time}сек. сокращ. время возрождения!"
+}
+
+AutoSummon: {
+	Set: Предмет автоматического перепризыва: {0}
+	Summoned: Призвано {0} миньонов, используя {1}
+}
+
+QuickHome: {
+	Teleported: Вернулись с помощью {0}
+	NoItem: У вас нет предметов возврата
+}
+
+Tips: {
+	AmmoChainDisabled: Цепочка боеприпасов отключена
+	AmmoChain: "[centeritem:ImproveGame/AmmoChainItem]Цепочка боеприпасов: "
+	ShimmerInto: "Можно превратить с помощью мерцания в "
+	ShimmerIntoWithStack: "Каждые {0} можно превратить с помощью мерцания в "
+	ShimmerIntoWithCoinLuck: Можно превратить с помощью мерцания в {0} 'удачи монет'
+	PrefixCount: "Кол-во перековок: "
+	AnglerQuest: Задание Рыбака было обновлено
+	FromMod: Из модификации {DisplayName}
+	LootDisplay: Нажмите {KeybindName}, чтобы увидеть детали выпадающих предметов
+	LootDisplayBindless: (Вы не назначили клавишу, назначьте что-нибудь в настройках управления)
+	Refreshing: Обновляется
+	Refresh: Обновить магазин
+	SummonSlot: Занятые слоты призыва: [c/22CC22:{Current}/{Total}]
+	SummonSlotFull: Занятые слоты призыва: [c/CC2222:{Current}/{Total} (Full!)]
+	BuffTrackerOn: <left>, чтобы открыть трекер баффов
+	BuffTrackerOff: <left>, чтобы закрыть трекер баффов
+	HideMyBuffs: Чтобы скрыть, toggle it in 'Personal Config'
+	BankEnableOn: Нажмите {KeybindName}, чтобы открыть личное хранилище
+	BankEnableOff: Нажмите {KeybindName}, чтобы закрыть личное хранилище
+	MouseMiddleOpen: Нажмите {KeybindName}, чтобы открыть {ItemName}
+	MouseMiddleClose: Нажмите {KeybindName}, чтобы закрыть {ItemName}
+	MouseMiddleUse: Нажмите {KeybindName}, чтобы использовать {ItemName}
+	CreateWandOn: Нажмите {KeybindName}, чтобы открыть панель материалов дома
+	CreateWandOff: Нажмите {KeybindName}, чтобы закрыть панель материалов дома
+	LiquidWandOn: Нажмите {KeybindName}, чтобы открыть панель управления жидкостями
+	LiquidWandOff: Нажмите {KeybindName}, чтобы закрыть панель управления жидкостями
+	PotionBagCurrent: Содержит следующие зелья ({StoredCount}/200):
+	PotionBagCurrentFull: Содержит следующие зелья (Заполнена!):
+	PotionBagNone: Пустая (0/200)
+	PotionBagAvailable: (Активно)
+	PotionBagUnavailable: (Неактивно)
+	PotionBagDisabled: (Отключена)
+	BannerChestCurrent: Знамёна внутри ({StoredCount}/500):
+	BannerChestCurrentFull: Знамёна внутри (Заполнена!):
+	BannerChestNone: Пустая (0/500)
+	BannerChestUseless: Настройка «Переносные знамёна» отключена, знамёна внутри не будут работать
+	Tag.ShiftEnable: "[Удерживайте [c/88CCEE:Shift], чтобы узнать больше]"
+
+	TagDetailed: {
+		OwnedInfineBuff: "[Бесконечный бафф получен {Count}/{Threshold}]"
+		NotOwnedInfineBuff: "[Бесконечный бафф можно {Count}/{Threshold}]"
+		RedPotion: "[Красное зелье]"
+		GardenGnome: "[Садовый гном]"
+		Enabled: "[Включён]"
+		Disabled: "[Выключен]"
+		Hided: "[Иконки баффов скрыты]"
+		NonHided: "[Иконки баффов показаны]"
+		CombinedBuff: "[Доступна комбинация баффов]"
+		AutoCollect: "[Авто-сбор]"
+	}
+
+	TagDetailedTip: {
+		RedPotion:
+			'''
+			Включено «Бесконечное красное зелье», даёт следующие бесконечные баффы:
+			{$BuffName.ObsidianSkin}, {$BuffName.Regeneration}, {$BuffName.Swiftness}, {$BuffName.Ironskin},
+			{$BuffName.ManaRegeneration}, {$BuffName.MagicPower}, {$BuffName.Featherfall}, {$BuffName.Spelunker},
+			{$BuffName.Archery}, {$BuffName.Heartreach}, {$BuffName.Hunter}, {$BuffName.Endurance}, {$BuffName.Lifeforce}, {$BuffName.Inferno},
+			{$BuffName.Mining}, {$BuffName.Rage}, {$BuffName.Wrath}, {$BuffName.Dangersense}.
+			'''
+		GardenGnome:
+			'''
+			Вы получаете бонус к удаче от садового гнома
+			Вы не можете отключить данный бонус, т.к. это не 'бафф'
+			'''
+		Enabled:
+			'''
+			Бафф [c/88CCEE:[{BuffName}][c/88CCEE:]] уже активен.
+			Если вы хотите отключить данный бафф,
+			нажмите {KeybindName}, наведя курсор на предмет, либо ЛКМ по иконке баффа,
+			чтобы открыть трекер, и отключите бафф.
+			'''
+		Disabled:
+			'''
+			Бафф [c/88CCEE:[{BuffName}][c/88CCEE:]] неактивен
+			в связи с соотв. настройками.
+			Нажмите {KeybindName}, наведя курсор на предмет, либо ЛКМ по иконке баффа,
+			чтобы открыть трекер, и включите бафф.
+			'''
+		Hided:
+			'''
+			Иконки баффов были скрыты. Чтобы они показывались,
+			настройте это в [c/CC88AA:персональных настройках].
+			'''
+		NonHided:
+			'''
+			Измените [c/CC88AA:персональные настройки] мода,
+			если хотите скрыть иконки баффов.
+			'''
+		AutoCollect:
+			'''
+			ваши монеты будут автоматически
+			перемещаться в свинью-копилку.
+			Это можно переключить в левой верхней
+			части инвентаря.
+			Монеты, нужные для Торговца,
+			будут считаться и из свиньи-копилки.
+			'''
+		CombinedBuff.Battle:
+			'''
+			[c/88CCEE:Комбинация баффов: ][i:CalmingPotion][i:Sunflower][i:PeaceCandle][i:WaterCandle][i:BattlePotion]
+			Когда у вас есть бесконечные баффы предметов
+			выше, справа от трекера баффов появится
+			слайдер скорости появления мобов, позволяя
+			увеличивать множитель скорости от x0 до x{MaxSpawn}
+			'''
+	}
+}
+
+ConstructGUI: {
+	Structure: Структура QoT
+	# 这个是存储后的文件名
+	SavedAs: "Структура сохранена как "
+	# 后接文件名
+	SaveMode: Режим пипетки
+	LoadMode: Режим размещения
+	ExplodeAndPlace: Уничтожить и поставить
+	PlaceOnly: Поставить
+	Path: "Путь к файлу: "
+	# 执行操作时，显示在玩家脚下
+	Saving: Сохраняем
+	Saved: Сохранено
+	Placing: Размещаем
+	Placed: Размещено
+	Stopped: Приостановлено
+
+	RenameTip: {
+		Exists: Файл с таким именем уже существует
+		TooLong: Имя файла не должно превышать 40 символов
+	}
+
+	FileInfo: {
+		Title: Информация о файле
+		Name: Имя файла: {Name}
+		Time: Дата сохранения: {Time}
+		Version: Версия: {Version}
+		Size: Размер структуры: {Size}
+
+		ModMissing: {
+			Count: "2"
+			1: Данная структура содержит блоки и стены из незагруженного мода
+			2: При размещении могут возникнуть ошибки
+		}
+
+		LoadError: Файл некорректен или не является файлом структуры
+	}
+
+	MaterialInfo: {
+		Title: Материалы
+		Tip: Материалы из большого рюкзака также используются
+		Stored: Есть: {Stack}
+		Requirement: Нужно: {Stack}
+	}
+
+	Preview: {
+		Title: Предпросмотр структур
+		CenterSet: ЛКМ, чтобы указать центр размещения
+	}
+
+	Tutorial: {
+		Button: Инструкция
+
+		AlphaTest: {
+			Count: "3"
+			1: Сообщайте о багах на странице мода в Мастерской Steam
+			2: Поддержка блоков и стен из других модов не гарантирована
+			3: и не будет считаться за баги
+		}
+
+		Save: {
+			Title: "{$Mods.ImproveGame.ConstructGUI.SaveMode}"
+			Text:
+				'''
+				Третья кнопка в левой верхней части панели переключает между режимами пипетки и размещения
+
+				В режиме пипетки, удерживайте ЛКМ, чтобы выбрать структуру и сохранить её
+				на своём компьютере как файл, чтобы размещать их в других мирах и серверах
+				    
+				Изображение снизу показывает, как выделять и сохранять структуры:
+				'''
+		}
+
+		Place: {
+			Title: "{$Mods.ImproveGame.ConstructGUI.LoadMode}"
+			Text:
+				'''
+				В режиме размещения, вам нужно выбрать структуру на главной панели. Выбранная структура будет отмечена жёлтым
+				    
+				Если в вашем инвентаре или большом рюкзаке достаточно материалов, ЛКМ поставит структуру
+				Ориентация некоторых блоков может быть некорректна
+				    
+				Пример поставленной структуре: 
+				'''
+		}
+
+		Explode: {
+			Title: Уничтожить и поставить
+			Text: Если выбран режим «Уничтожить и поставить», территория для структуры будет очищена, чтобы предоставить достаточное место
+		}
+
+		Panel: {
+			Title: Лист структур
+			Text:
+				'''
+				Главная панель показывает список файлов структур на вашем компьютере, включая имя и путь файла
+				    
+				Если вы случайно удалили структуру на системе Windows, вы можете восстановить его из Корзины
+
+				Нажмите кнопку «{$tModLoader.ModsMoreInfo}» в правой стороне, чтобы посмотреть детали и предпросмотр. Центр размещения структуры можно изменить на предпросмотре
+				'''
+		}
+
+		Materials: {
+			Title: "{$Mods.ImproveGame.ConstructGUI.MaterialInfo.Title}"
+			Text: Вы можете посмотреть нужные и имеющиеся материалы под заголовком «Материалы»
+		}
+
+		Preview: {
+			Title: "{$Mods.ImproveGame.ConstructGUI.Preview.Title}"
+			Text: Предпросмотр структуры также показывает центр размещения (жёлтый 'блок'). Именно с этой точки будет ставиться структура.
+		}
+	}
+}
+
+SuperVault: {
+	Name: Большой рюкзак
+	Sort: Сортировать
+	Synthesis: Использовать в создании
+	SmartPickup: Умный подбор
+	OverflowPickup: Авто-подбор
+}
+
+MoveChest.Heavy: Вес сундука мешает вам в передвижении
+
+BuffTracker: {
+	Title: Трекер юаффов
+	LeftClickDisable: "[c/CC88AA:<left>], чтобы отключить этот бафф"
+	LeftClickEnable: "[c/CC88AA:<left>], чтобы включить этот бафф"
+	NoInfBuff: На данный момент нет бесконечных баффов
+	NoInfBuffAlt: Включите «Бесконечные зелья» в конфигурации мода
+	NPCSpawnRatePanel: Панель управления скоростью появления мобов
+}
+
+LifeAnalyzer: {
+	Priority: "Приоритет: "
+	Tip: <left>, чтобы контролировать обнаружение
+}
+
+Architecture: {
+	Materials: Материалы для дома
+	StoredMaterials: (Хранится: {MaterialCount})
+	MaterialsRequired: "Нужные материалы: "
+	Block: Блоки
+	Platform: Платформы
+	Torch: Факелы
+	Chair: Стулья
+	Table: Столы
+	Workbench: Верстаки
+	Wall: Стены
+	Bed: Кровати
+}
+
+PaintWandGUI: {
+	Paintbrush: Красить блоки
+	PaintRoller: Красить стены
+	PaintScraper: Убирать краску
+}
+
+SpaceWandGUI: {
+	PlaceType: Объект
+	Platform: Платформы
+	Soild: Осязаемые блоки
+	Rope: Верёвки
+	Rail: Рельсы
+	GrassSeed: Семена травы
+	PlantPot: Кадки
+	BlockType: Форма
+	ShapeType: Фигура
+}
+
+PackageGUI: {
+	AutoStorage: Авто-сбор
+	AutoSort: Авто-сортировка
+	Incompatible: Данный предмет не может храниться в данном хранилище.
+}
+
+Common: {
+	Loading: Загрузка...
+	Refresh: Обновить
+	Switch: Переключить
+	Unavailable: Недоступно
+	Cancel: Отменить
+}
+
+RecipeGroup: {
+	AnyCopperBar: Любой медный слиток
+	AnyGoldBar: Любой золотой слиток
+	AnySilverBar: Любой серебряный слиток
+	AnyDemoniteBar: Любой демонитовый слиток
+	AnyShadowScale: Любой кусочек тени
+	AnyCobaltBar: Любой кобальтовый слиток
+	AnyMythrilBar: Любой мифриловый слиток
+	AnyAdamantiteBar: Любой адамантитовый слиток
+	AnyGem: Любой самоцвет
+}
+
+Keybinds: {
+	HugeInventory: {
+		DisplayName: Большой рюкзак
+		Tip: Открывает большой рюкзак; также можно открыть через панель управления
+	}
+
+	BuffTracker: {
+		DisplayName: Трекер баффов
+		Tip: Если назначена клавиша, нажатие по иконке баффа больше не будет открывать трекер
+	}
+
+	GrabBagLoot: {
+		DisplayName: Предметы в мешке
+		Tip: Показывает предметы и шанс их выпадения из мешка под вашим курсором
+	}
+
+	HotbarSwitch: {
+		DisplayName: Сменить панель быстрого доступа
+		Tip: Меняет предметы в панели быстрого доступа со второй строкой вашего инвентаря
+	}
+
+	AutoTrashKeybind: {
+		DisplayName: Скрыть/Показать корзину для авто-выбрасывания
+		Tip: Только прячет слоты, не отключает функцию. Чтобы отключить её, используйте конфигурацию «Другое».
+	}
+
+	DiscordRodKeybind: {
+		DisplayName: Использовать телепортирующий жезл
+		Tip: Использует жезл раздора/гармонии из вашего инвентаря
+	}
+
+	HomeKeybind: {
+		DisplayName: Использовать предмет возврата
+		Tip:
+			'''
+			Использует предмет, возвращающий игрока на спавн ([centeritem:4870] > [centeritem:2350] > [centeritem:50]/[centeritem:3199])
+			Зелья могут быть использованы только если включена настройка «Бесконечные зелья» и в инвентаре есть нужное кол-во зелий
+			'''
+	}
+
+	OpenBagGUI: {
+		DisplayName: Открывашка для мешков
+		Tip: Открывает меню открывашки для мешков; также можно открыть через панель управления
+	}
+
+	MasterControl: {
+		DisplayName: Панель управления
+		Tip:
+			'''
+			Открывает панель управления мода Quality of Terraria
+			Вы ДОЛЖНЫ назначить клавишу, чтобы получить доступ к панели
+			'''
+	}
+
+	ItemInteract: {
+		DisplayName: Особые взаимодействия
+		Tip: Взаимодействия с предметами, напр. наездными питомцами или свиньёй-копилкой
+	}
+
+	CopyItemName: {
+		DisplayName: Скопировать внутреннее имя предмета
+		Tip: Нажмите эту клавишу, наведя курсор на предмет, чтобы скопировать внутреннее имя последнего
+	}
+
+	CopyItemName_Control: {
+		DisplayName: Скопировать полное внутреннее имя предмета
+		Tip: Нажмите эту клавишу и «{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}», чтобы скопировать полное внутреннее имя предмета
+	}
+
+	QuickShimmerGUI: {
+		DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
+		Tip: Открывает интерфейс быстрого мерцания; также можно открыть через панель управления
+	}
+	
+	LocalizationDebugging: {
+		DisplayName: "[DEBUG] Localization Debugging"
+		Tip: For Devs only. Press reload localization from source files.
+	}
+}
+
+Projectiles: {
+	KillProj.DisplayName: Убивающий снаряд
+	WallRobot.DisplayName: Настенный робот
+	ExpelliarmusProj.DisplayName: Экспеллиармус!
+
+	DetectorDroneProj: {
+		DisplayName: Дрон-исследователь
+		TooFarAway: Дрон-исследователь далеко от вас.
+	}
+
+	HomeEffect.DisplayName: Эффект дома
+	GlobeEffect.DisplayName: Эффект глобуса
+}
+
+BuilderToggles: {
+	PiggyToggle: {
+		OffText: Авто-выкладывание: Выкл.
+		OnText: Авто-выкладывание: Вкл.
+		RightFilter: ПКМ, чтобы открыть фильтр монет
+	}
+}
+
+FakeShops: {
+	Wand: {
+		Label: Магазин жезлов
+		Wand: Магазин жезлов
+		Disable: Нет
+	}
+
+	Locator: {
+		Label: Магазин обнаружителей
+		Locator: Магазин обнаружителей
+		Disable: Нет
+	}
+
+	Other: {
+		Label: Магазин прочего
+		Other: Магазин прочего
+		Disable: Нет
+	}
+}
+
+NPCs.DummyNPC.DisplayName: Пугало-минешь

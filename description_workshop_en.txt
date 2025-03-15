@@ -42,7 +42,7 @@ Source code: https://github.com/ForOne-Club/ImproveGame
 
 [h2]Authors and Special Thanks[/h2]
 Spriter: 枫林半叶, 逆风而行的信鸽, 中学生
-Translators: Lastprismer, Lacewing
+Translators: Lastprismer, Lacewing, Zavarski, Pengolin
 Coder: 局长, Cyril, 夜谷紫幽, Reits, hezuo1hao, LogSpiral
 Special Thanks: gardenapple - WMITF
            ChevyRay - Coroutines class

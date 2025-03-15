@@ -64,7 +64,7 @@ CombatText: {
 	}
 
 	Projectile.PlaceWall_Lack: Stopped placing due to lack of walls
-	Commonds.ResurrectionTimeShortened: "{Time}s reduced respawn time！"
+	Commonds.ResurrectionTimeShortened: "{Time}s reduced respawn time!"
 }
 
 AutoSummon: {
@@ -212,7 +212,7 @@ ConstructGUI: {
 	FileInfo: {
 		Title: File Info
 		Name: File name: {Name}
-		Time: Time saved: {Time}
+		Time: Save time: {Time}
 		Version: Version: {Version}
 		Size: Structure size: {Size}
 
@@ -266,7 +266,7 @@ ConstructGUI: {
 				'''
 				In the Placing Mode, you need to choose a structure in the main panel, a structure is selected if its name is in yellow
 				    
-				if materials in your inventory or the Big Backpack are sufficient, left click to place the structure
+				If materials in your inventory or the Big Backpack are sufficient, left click to place the structure
 				Directions of certain tiles may be incorrect
 				    
 				Here is an example of placing structures: 
@@ -341,9 +341,9 @@ Architecture: {
 }
 
 PaintWandGUI: {
-	Paintbrush: Paint tiles
-	PaintRoller: Paint walls
-	PaintScraper: Remove paint
+	Paintbrush: Paint Tiles
+	PaintRoller: Paint Walls
+	PaintScraper: Remove Paint
 }
 
 SpaceWandGUI: {
@@ -387,7 +387,7 @@ RecipeGroup: {
 Keybinds: {
 	HugeInventory: {
 		DisplayName: Big Backpack
-		Tip: Open the Big Backpack; also can open it from Control Panel
+		Tip: Opens the Big Backpack; also can be opened from Control Panel
 	}
 
 	BuffTracker: {
@@ -397,12 +397,12 @@ Keybinds: {
 
 	GrabBagLoot: {
 		DisplayName: Grab Bag Loots
-		Tip: Show loots and drop rates of the grab bag your cursor's hovering on
+		Tip: Shows loots and drop rates of the grab bag your cursor's hovering on
 	}
 
 	HotbarSwitch: {
 		DisplayName: Swap Hotbar
-		Tip: Swap items in the first row with the second row in inventory
+		Tip: Swaps items in the first row with the second row in inventory
 	}
 
 	AutoTrashKeybind: {
@@ -412,29 +412,29 @@ Keybinds: {
 
 	DiscordRodKeybind: {
 		DisplayName: Use Teleportation Rods
-		Tip: Use Rod of Discord/Harmony in inventory
+		Tip: Uses Rod of Discord/Harmony from your inventory
 	}
 
 	HomeKeybind: {
 		DisplayName: Use Recall Items
 		Tip:
 			'''
-			Use home-returning items in inventory (Return Potion > Recall Potion > magic mirrors)
+			Uses home-returning items from your inventory (Potion of Return > Potion of Recall > Magic Mirror)
 			Potions can only be used if "Infinite Potion" is enabled and the required amount is reached
 			'''
 	}
 
 	OpenBagGUI: {
 		DisplayName: Bag Opener
-		Tip: Open the Bag Opener, also can open it from Control Panel
+		Tip: Opens the Bag Opener; also can be opened from Control Panel
 	}
 
 	MasterControl: {
 		DisplayName: Control Panel
 		Tip:
 			'''
-			Access to Quality of Terraria shortcuts
-			You MUST assign a hotkey to use the shortcuts
+			Gives access to Quality of Terraria's Control Panel
+			You MUST assign a hotkey to access the panel
 			'''
 	}
 
@@ -445,17 +445,17 @@ Keybinds: {
 
 	CopyItemName: {
 		DisplayName: Copy Item Internal Name
-		Tip: When there's an item under cursor, press the key will copy the internal name of the item.
+		Tip: When there's an item under the cursor, press this key to copy its internal name.
 	}
 
 	CopyItemName_Control: {
 		DisplayName: Internal Name Copy Switcher
-		Tip: Press both this key and "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" will copy the full-internal name
+		Tip: Press both this key and "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" to copy the full internal name
 	}
 
 	QuickShimmerGUI: {
 		DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
-		Tip: Press to open the Quick Shimmer interface. You can also open it in Control Panel.
+		Tip: Opens the Quick Shimmer Interface; also can be opened from Control Panel
 	}
 
 	LocalizationDebugging: {
