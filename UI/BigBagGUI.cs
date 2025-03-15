@@ -96,7 +96,8 @@ public class BigBagGUI : BaseBody
             TextScale = 0.55f,
             VAlign = 0.5f,
             TextBorder = 2f,
-            PaddingLeft = 20f
+            PaddingLeft = 20f,
+            DragIgnore = true
         };
         Title.SetInnerPixels(Title.TextSize * Title.TextScale);
         Title.JoinParent(TitlePanel);

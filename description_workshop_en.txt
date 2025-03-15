@@ -41,10 +41,18 @@ Change log: https://github.com/ForOne-Club/ImproveGame/blob/1.4.4/ChangeLog-en.m
 Source code: https://github.com/ForOne-Club/ImproveGame
 
 [h2]Authors and Special Thanks[/h2]
-Spriter: 枫林半叶, 逆风而行的信鸽, 中学生
-Translators: Lastprismer, Lacewing, Zavarski, Pengolin
-Coder: 局长, Cyril, 夜谷紫幽, Reits, hezuo1hao, LogSpiral
-Special Thanks: gardenapple - WMITF
-           ChevyRay - Coroutines class
-           Tomat - Part of GIF-rendering code
-           Kadeanon - Call and MechTransfer support for the Fishing Machine
+Spriter:
+枫林半叶, 逆风而行的信鸽, 中学生
+
+Translators:
+English: Lastprismer, Lacewing
+Russian: Zavarski, Pengolin
+
+Coder:
+局长, Cyril, 夜谷紫幽, Reits, hezuo1hao, LogSpiral
+
+Special Thanks:
+gardenapple - WMITF
+ChevyRay - Coroutines class
+Tomat - Part of GIF-rendering code
+Kadeanon - Call and MechTransfer support for the Fishing Machine

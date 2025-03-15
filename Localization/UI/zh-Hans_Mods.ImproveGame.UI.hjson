@@ -18,7 +18,7 @@ LiquidWandUI: {
 MasterControl: {
 	Available: 可用功能
 	Unavailable: 不可用功能
-	Version: 版本号: {0}
+	Version: v{0}
 	Changelog: 点我查看更新内容
 	PinIntro:
 		'''

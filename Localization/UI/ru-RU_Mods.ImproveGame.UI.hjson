@@ -18,7 +18,7 @@ LiquidWandUI: {
 MasterControl: {
 	Available: Доступные
 	Unavailable: Недоступные
-	Version: Версия: {0}
+	Version: v{0}
 	Changelog: Нажмите, чтобы увидеть новые функции
 	PinIntro:
 		'''

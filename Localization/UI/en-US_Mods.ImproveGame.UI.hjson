@@ -18,7 +18,7 @@ LiquidWandUI: {
 MasterControl: {
 	Available: Available
 	Unavailable: Unavailable
-	Version: Version {0}
+	Version: v{0}
 	Changelog: Click to see what's new
 	PinIntro:
 		'''

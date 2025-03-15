@@ -124,7 +124,7 @@ namespace ImproveGame.UIFramework.SUIElements
                 Recalculate();
             }
 
-            if (ResizeRectangle.Contains(Main.MouseScreen.ToPoint()))
+            if (Resizeable && ResizeRectangle.Contains(Main.MouseScreen.ToPoint()))
             {
                 Main.instance.MouseText($"[i:{ItemIdForResizeIcon}]", 0, 0, Main.mouseX + 16, Main.mouseY - 10);
             }

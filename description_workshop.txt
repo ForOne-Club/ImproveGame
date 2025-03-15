@@ -50,10 +50,18 @@
 开源链接: https://github.com/ForOne-Club/ImproveGame
 
 [h2]作者 与 特别鸣谢[/h2]
-贴图: 枫林半叶, 逆风而行的信鸽, 中学生
-翻译: Lastprismer, Lacewing
-代码: 局长, Cyril, 夜谷紫幽, 合作一号, Reits, 错数螺线
-特别鸣谢: gardenapple - WMITF
-           ChevyRay - 协程类
-           Tomat - 部分GIF渲染代码
-           Kadeanon - 为自动钓鱼机添加Call与MechTransfer支持
+贴图:
+枫林半叶, 逆风而行的信鸽, 中学生
+
+翻译:
+英语: Lastprismer, Lacewing
+俄语: Zavarski, Pengolin
+
+代码:
+局长, Cyril, 夜谷紫幽, 合作一号, Reits, 错数螺线
+
+特别鸣谢:
+gardenapple - WMITF
+ChevyRay - 协程类
+Tomat - 部分GIF渲染代码
+Kadeanon - 为自动钓鱼机添加Call与MechTransfer支持

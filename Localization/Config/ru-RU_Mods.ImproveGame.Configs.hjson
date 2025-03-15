@@ -1146,8 +1146,8 @@ UIConfigs: {
 	}
 
 	GlobeEffect: {
-		Tooltip: "[centeritem:WorldGlobe] Эффекты обнаружителя"
-		Label: Убирает с карты отметки различных локаций.
+		Label: "[centeritem:WorldGlobe] Эффекты обнаружителя"
+		Tooltip: Убирает с карты отметки различных локаций.
 	}
 
 	FckKeybindPopup: {
