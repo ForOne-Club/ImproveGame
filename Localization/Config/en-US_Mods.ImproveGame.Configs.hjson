@@ -669,7 +669,7 @@ ImproveConfigs: {
 			'''
 		Label: "[centeritem:ImproveGame/SpaceWand] Infinite Wand Placeables"
 	}
-	
+
 	DummyCustomAIStyleAllowed: {
 		Tooltip:
 			'''
@@ -1102,7 +1102,7 @@ UIConfigs: {
 	}
 
 	FckKeybindPopup: {
-		Label: "Block Keybind Popup"
+		Label: Block Keybind Popup
 		Tooltip: Stop telling me I have to bind a key I don't want it.
 	}
 }

@@ -22,6 +22,7 @@ public sealed class CategorySidePanel : SUIPanel
         new PylonMechanics(),
         new Multiplayer(),
         new ModFeatures(),
+        new ModItemSettings(),
         new VisualAndInterface(),
         new Minimap(),
     ];

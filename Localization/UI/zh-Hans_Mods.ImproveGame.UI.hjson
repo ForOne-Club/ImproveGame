@@ -449,6 +449,7 @@ DummyConfiguration: {
 		HugeMimic: 大宝箱怪
 		SelfDefine: 自定义
 	}
+
 	CustomDisabled:
 		'''
 		目前服务器不允许自定义模拟NPC行为

@@ -210,7 +210,7 @@ ExtremeStorage: {
 		Weapon: "{$CreativePowers.TabWeapons}"
 		Tool: "{$CreativePowers.TabTools}"
 		Ammo: "{$LegacyInterface.27}"
-		Armor: "{$CreativePowers.TabArmor}"	
+		Armor: "{$CreativePowers.TabArmor}"
 		Accessory: "{$CreativePowers.TabAccessories}"
 		Furniture: "{$CreativePowers.TabFurniture}"
 		Block: Блоки
@@ -458,7 +458,8 @@ DummyConfiguration: {
 		HugeMimic: Мимик биома
 		SelfDefine: Кастомный
 	}
-	CustomDisabled: 
+
+	CustomDisabled:
 		'''
 		Кастомное поведение не доступно на этом сервере.
 		Нажмите здесь, чтобы изменить настройку, если вы хост сервера.

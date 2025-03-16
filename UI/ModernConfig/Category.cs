@@ -8,8 +8,16 @@ public abstract class Category
 
     public virtual Texture2D GetIcon()
     {
-        Main.instance.LoadItem(ItemIconId);
-        return TextureAssets.Item[ItemIconId].Value;
+        try
+        {
+            if (ItemIconId < ItemID.Count)
+                Main.instance.LoadItem(ItemIconId);
+            return TextureAssets.Item[ItemIconId].Value;
+        }
+        catch 
+        {
+            return TextureAssets.MagicPixel.Value;
+        }
     }
 
     public virtual string LocalizationKey => GetType().Name;

@@ -1109,7 +1109,7 @@ UIConfigs: {
 	}
 
 	FckKeybindPopup: {
-		Label: "去他娘的绑定快捷键"
+		Label: 去他娘的绑定快捷键
 		Tooltip: 移除快捷键绑定提示，如果你觉得它很烦，可以关掉
 	}
 }

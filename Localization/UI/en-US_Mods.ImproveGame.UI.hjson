@@ -451,7 +451,8 @@ DummyConfiguration: {
 		HugeMimic: Biome Mimic
 		SelfDefine: Custom
 	}
-	CustomDisabled: 
+
+	CustomDisabled:
 		'''
 		Custom Mimic NPC Behavior is not allowed in this server. 
 		Click here to modify config if you are the host.

@@ -6,7 +6,7 @@ NPC: {
 	ShowBox: Show Hitbox
 	ShowDamageData: Show Damage Stats
 	ShowNameOnHover: Show NPC Name On Cursor Hover
-	Immortal: 
+	Immortal:
 		'''
 		Setting this to 'True' will make it behave like the vanilla Target Dummy,
 		meaning that homing attacks won't target it,

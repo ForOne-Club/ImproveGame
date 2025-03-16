@@ -457,7 +457,7 @@ Keybinds: {
 		DisplayName: "{$Mods.ImproveGame.UI.QuickShimmer.Title}"
 		Tip: Открывает интерфейс быстрого мерцания; также можно открыть через панель управления
 	}
-	
+
 	LocalizationDebugging: {
 		DisplayName: "[DEBUG] Localization Debugging"
 		Tip: For Devs only. Press reload localization from source files.

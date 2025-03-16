@@ -4,7 +4,9 @@ namespace ImproveGame.UI.ModernConfig.Categories;
 
 public sealed class ModItemSettings : Category
 {
-    public override int ItemIconId => ModContent.ItemType<Content.Items.Placeable.ExtremeStorage>();
+    //public override int ItemIconId => ModContent.ItemType<Content.Items.Placeable.ExtremeStorage>();
+
+    public override Texture2D GetIcon() => ModAsset.Placeable_ExtremeStorage.Value;
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
