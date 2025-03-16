@@ -100,12 +100,6 @@ public class ItemSearcherGUI : BaseBody
             });
         }
 
-        OnLeftMouseDown += (_, _) => TryCancelInput();
-        OnRightMouseDown += (_, _) => TryCancelInput();
-        OnMiddleMouseDown += (_, _) => TryCancelInput();
-        OnXButton1MouseDown += (_, _) => TryCancelInput();
-        OnXButton2MouseDown += (_, _) => TryCancelInput();
-
         // 主面板
         MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
@@ -117,7 +111,7 @@ public class ItemSearcherGUI : BaseBody
         MainPanel.SetPosPixels(620, 400)
             .SetSizePixels(356, 0)
             .JoinParent(this);
-        
+
         TitlePanel = ViewHelper.CreateHead(Color.Black * 0.25f, 45f, 10f);
         TitlePanel.SetPadding(0f);
         TitlePanel.JoinParent(MainPanel);
@@ -200,8 +194,8 @@ public class ItemSearcherGUI : BaseBody
         // 没搜到物品时显示的提示，这里先Append，要用到的时候调一下Left就行
         TipText = new UIText(GetText("UI.ItemSearcher.TipText"))
         {
-            Width = {Percent = 1f},
-            Height = {Percent = 1f},
+            Width = { Percent = 1f },
+            Height = { Percent = 1f },
             TextOriginX = 0.5f,
             TextOriginY = 0.5f
         };
@@ -211,7 +205,7 @@ public class ItemSearcherGUI : BaseBody
         ItemsFoundGrid.SetBaseValues(-1, 7, new Vector2(4f), new Vector2(43));
         ItemsFoundGrid.JoinParent(itemsPanel);
 
-        Scrollbar = new SUIScrollBar {HAlign = 1f};
+        Scrollbar = new SUIScrollBar { HAlign = 1f };
         Scrollbar.Left.Pixels = -1;
         Scrollbar.Height.Pixels = ItemsFoundGrid.Height();
         Scrollbar.SetView(itemsPanel.GetInnerSizePixels().Y, ItemsFoundGrid.Height.Pixels);
@@ -244,7 +238,7 @@ public class ItemSearcherGUI : BaseBody
             ResetAnotherPosition = true,
             RelativeMode = RelativeMode.Vertical,
             Spacing = switchSpacing,
-            Height = {Pixels = 34f}
+            Height = { Pixels = 34f }
         };
         FuzzySwitch.JoinParent(ButtonsBox);
 
@@ -255,7 +249,7 @@ public class ItemSearcherGUI : BaseBody
         {
             RelativeMode = RelativeMode.Vertical,
             Spacing = switchSpacing,
-            Height = {Pixels = 34f}
+            Height = { Pixels = 34f }
         };
         TooltipSwitch.JoinParent(ButtonsBox);
     }
@@ -384,9 +378,12 @@ public class ItemSearcherGUI : BaseBody
         // 不被遮挡
         BankSlots.ForEach(s => s.DrawItems());
 
-        Vector2 position = _searchBar.GetDimensions().Position();
-        position.Y += 60f;
-        Main.instance.DrawWindowsIMEPanel(position, 0f);
+        if (_searchBar.IsWritingText)
+        {
+            Vector2 position = _searchBar.GetDimensions().Position();
+            position.Y += 60f;
+            Main.instance.DrawWindowsIMEPanel(position, 0f);
+        }
     }
 
     public override void Update(GameTime gameTime)
@@ -421,7 +418,8 @@ public class ItemSearcherGUI : BaseBody
 
         // 如果玩家打开了箱子，就在箱子里高亮显示
         var player = Main.LocalPlayer;
-        switch (player.chest) {
+        switch (player.chest)
+        {
             case >= 0 and < 8000 when Main.chest[player.chest] != null:
                 ColorChestSlots(Main.chest[player.chest]);
                 break;
@@ -455,7 +453,7 @@ public class ItemSearcherGUI : BaseBody
         {
             var item = chest.item[i];
             if (item is null) continue;
-            
+
             if (_oldItemTypes.Contains(item.type))
             {
                 Terraria.UI.ItemSlot.inventoryGlowTimeChest[i] = 300;
@@ -469,14 +467,6 @@ public class ItemSearcherGUI : BaseBody
         }
     }
 
-    private void TryCancelInput() {
-        if (!MainPanel.IsMouseHovering)
-            _searchBar.AttemptStoppingUsingSearchbar();
-        foreach (var element in MainPanel.Children)
-            if (element is not SUISearchBar && element.IsMouseHovering)
-                _searchBar.AttemptStoppingUsingSearchbar();
-    }
-
     public void Open()
     {
         SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -488,7 +478,6 @@ public class ItemSearcherGUI : BaseBody
     {
         SoundEngine.PlaySound(SoundID.MenuClose);
         Enabled = false;
-        _searchBar.AttemptStoppingUsingSearchbar();
         StartTimer.Close();
     }
 

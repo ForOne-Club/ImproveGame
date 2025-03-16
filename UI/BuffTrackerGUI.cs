@@ -71,10 +71,10 @@ public class BuffTrackerGUI : BaseBody
 
         Scrollbar = new SUIScrollBar
         {
-            Left = {Pixels = -20f, Percent = 1f},
-            Width = {Pixels = 18f},
-            Top = {Pixels = 44f},
-            Height = {Pixels = -48f, Percent = 1f}
+            Left = { Pixels = -20f, Percent = 1f },
+            Width = { Pixels = 18f },
+            Top = { Pixels = 44f },
+            Height = { Pixels = -48f, Percent = 1f }
         };
         Scrollbar.SetView(100f, 1000f);
         SetupScrollBar();
@@ -88,26 +88,12 @@ public class BuffTrackerGUI : BaseBody
         _searchBar = new SUISearchBar(true, false)
         {
             Height = new StyleDimension(28f, 0f),
-            Width = new StyleDimension(-42f, 1f),
+            Width = new StyleDimension(-56f, 1f),
             DragIgnore = true
         };
         // _searchBar.OnDraw += SearchBarOnDraw;
         _searchBar.OnSearchContentsChanged += _ => SetupBuffButtons();
         _searchBar.JoinParent(MainPanel);
-
-        OnLeftMouseDown += (_, _) => TryCancelInput();
-        OnRightMouseDown += (_, _) => TryCancelInput();
-        OnMiddleMouseDown += (_, _) => TryCancelInput();
-        OnXButton1MouseDown += (_, _) => TryCancelInput();
-        OnXButton2MouseDown += (_, _) => TryCancelInput();
-    }
-
-    private void TryCancelInput() {
-        if (!MainPanel.IsMouseHovering)
-            _searchBar.AttemptStoppingUsingSearchbar();
-        foreach (var element in MainPanel.Children)
-            if (element is not SUISearchBar && element.IsMouseHovering)
-                _searchBar.AttemptStoppingUsingSearchbar();
     }
 
     private void SetupScrollBar(bool resetViewPosition = true)
@@ -161,9 +147,12 @@ public class BuffTrackerGUI : BaseBody
         base.DrawChildren(spriteBatch);
 
         // 不被遮挡
-        Vector2 position = _searchBar.GetDimensions().Position();
-        position.Y += 60f;
-        Main.instance.DrawWindowsIMEPanel(position, 0f);
+        if (_searchBar.IsWritingText)
+        {
+            Vector2 position = _searchBar.GetDimensions().Position();
+            position.Y += 60f;
+            Main.instance.DrawWindowsIMEPanel(position, 0f);
+        }
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)

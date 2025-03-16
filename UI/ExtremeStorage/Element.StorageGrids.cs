@@ -10,16 +10,16 @@ namespace ImproveGame.UI.ExtremeStorage;
 public class StorageGrids : ModItemGrid
 {
     public bool ScrollBarFilled => Scrollbar.InnerFilled;
-    public string SearchContent => _searchBar.SearchContent ?? "";
-    private float SearchBarHeight => _searchBar.Visible ? _searchBar.Height() + 6 : 0;
-    
+    public string SearchContent => SearchBar.SearchContent ?? "";
+    private float SearchBarHeight => SearchBar.Visible ? SearchBar.Height() + 6 : 0;
+
     internal static IEnumerable<FilterButton> FilterButtons = [];
 
     /// <summary> 缓存一个所有被使用的箱子的列表，用于物品栏检测是否可用 </summary>
     internal static HashSet<int> ChestsThatBeingUsedCache;
 
     internal bool Hide;
-    private readonly SUISearchBar _searchBar;
+    public readonly SUISearchBar SearchBar;
     private readonly View _toolSection;
     private readonly View _contentSection;
 
@@ -46,14 +46,14 @@ public class StorageGrids : ModItemGrid
         };
         _contentSection.JoinParent(this);
 
-        _searchBar = new SUISearchBar(true)
+        SearchBar = new SUISearchBar(true, false)
         {
             Width = StyleDimension.FromPixels(ShowSize.X - 4f),
             Left = StyleDimension.FromPixels(2f),
             RelativeMode = RelativeMode.Vertical
         };
-        _searchBar.OnSearchContentsChanged += _ => UISystem.Instance.ExtremeStorageGUI.FindChestsAndPopulate(true);
-        _searchBar.JoinParent(_contentSection);
+        SearchBar.OnSearchContentsChanged += _ => UISystem.Instance.ExtremeStorageGUI.FindChestsAndPopulate(true);
+        SearchBar.JoinParent(_contentSection);
 
         _toolSection = new View
         {
@@ -77,8 +77,6 @@ public class StorageGrids : ModItemGrid
 
         Width.Pixels = ShowSize.X + Scrollbar.Width.Pixels + 11f;
         Height = new StyleDimension(0f, 1f);
-
-        OnLeftMouseDown += (_, _) => AttemptStoppingUsingSearchbar();
     }
 
     public override void Update(GameTime gameTime)
@@ -112,6 +110,13 @@ public class StorageGrids : ModItemGrid
     public override void Draw(SpriteBatch spriteBatch)
     {
         if (!Hide) base.Draw(spriteBatch);
+
+        if (!SearchBar.IsWritingText)
+            return;
+
+        Vector2 position = SearchBar.GetDimensions().ToRectangle().BottomLeft();
+        position.Y += 32f;
+        Main.instance.DrawWindowsIMEPanel(position, 0f);
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)
@@ -227,10 +232,8 @@ public class StorageGrids : ModItemGrid
     public void RecalculateScrollBar()
     {
         float highestY = ItemList.BottomPixels + 8;
-        float lowestY = _searchBar.Top();
+        float lowestY = SearchBar.Top();
         float totalHeight = highestY - lowestY;
         Scrollbar.SetView(GetDimensions().Height, totalHeight);
     }
-
-    public void AttemptStoppingUsingSearchbar() => _searchBar.AttemptStoppingUsingSearchbar();
 }

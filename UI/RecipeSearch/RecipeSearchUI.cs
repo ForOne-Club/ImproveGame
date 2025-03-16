@@ -61,12 +61,6 @@ public class RecipeSearchUI : BaseBody
         _rightSidePanel.SetPadding(0f);
         _rightSidePanel.JoinParent(this);
         SetupSettingButtons(_rightSidePanel);
-
-        OnLeftMouseDown += TryCancelInput;
-        OnRightMouseDown += TryCancelInput;
-        OnMiddleMouseDown += TryCancelInput;
-        OnXButton1MouseDown += TryCancelInput;
-        OnXButton2MouseDown += TryCancelInput;
     }
 
     public override void Update(GameTime gameTime)
@@ -83,18 +77,15 @@ public class RecipeSearchUI : BaseBody
     {
         base.DrawChildren(spriteBatch);
 
-        Vector2 position = _searchBar.GetDimensions().Position();
-        position.Y -= 30f;
-        Main.instance.DrawWindowsIMEPanel(position, 0f);
+        if (_searchBar.IsWritingText)
+        {
+            Vector2 position = _searchBar.GetDimensions().Position();
+            position.Y -= 30f;
+            Main.instance.DrawWindowsIMEPanel(position, 0f);
+        }
 
         if (_searchBar.IsSearchButtonMouseHovering)
             UICommon.TooltipMouseText(GetText("UI.RecipeSearchUI.Tips"));
-    }
-
-    private void TryCancelInput(UIMouseEvent evt, UIElement listeningElement)
-    {
-        if (!_mainPanel.IsMouseHovering)
-            _searchBar.AttemptStoppingUsingSearchbar();
     }
 
     private void SetupSettingButtons(View parent)
@@ -114,7 +105,7 @@ public class RecipeSearchUI : BaseBody
             ResetAnotherPosition = true,
             RelativeMode = RelativeMode.Vertical,
             Spacing = switchSpacing,
-            Height = {Pixels = 34f}
+            Height = { Pixels = 34f }
         };
         fuzzySwitch.JoinParent(parent);
 
@@ -129,7 +120,7 @@ public class RecipeSearchUI : BaseBody
         {
             RelativeMode = RelativeMode.Vertical,
             Spacing = switchSpacing,
-            Height = {Pixels = 34f}
+            Height = { Pixels = 34f }
         };
         tooltipSwitch.JoinParent(parent);
     }

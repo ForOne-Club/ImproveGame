@@ -363,6 +363,18 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
         }
     }
 
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        base.Draw(spriteBatch);
+
+        if (!_searchBar.IsWritingText)
+            return;
+
+        Vector2 position = _searchBar.GetDimensions().ToRectangle().BottomLeft();
+        position.Y += 32f;
+        Main.instance.DrawWindowsIMEPanel(position, 0f);
+    }
+
     // 用于捕获分辨率变化，以便 Recalculate 并且重新计算位置
     private sealed class CaptureResolutionChange : ILoadable
     {

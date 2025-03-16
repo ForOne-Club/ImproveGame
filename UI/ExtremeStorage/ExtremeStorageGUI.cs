@@ -111,17 +111,6 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         _totalPanel.Left.Pixels = 20;
     }
 
-    public override void LeftMouseDown(UIMouseEvent evt)
-    {
-        foreach (var element in _totalPanel.Children)
-        {
-            if (element is not StorageGrids && element.IsMouseHovering)
-            {
-                _itemGrid.AttemptStoppingUsingSearchbar();
-            }
-        }
-    }
-
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
@@ -407,7 +396,6 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
 
     public void Close()
     {
-        _itemGrid.AttemptStoppingUsingSearchbar();
         OpenStateUpdatePacket.SendClose();
         Main.blockInput = false;
         SoundEngine.PlaySound(SoundID.MenuClose);
