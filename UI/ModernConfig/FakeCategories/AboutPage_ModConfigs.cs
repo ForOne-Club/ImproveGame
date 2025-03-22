@@ -14,7 +14,6 @@ public sealed class AboutPage_ModConfig : Category
         var text = new SUIText
         {
             TextOrKey = "Mods.ImproveGame.ModernConfig.AboutPage_ModConfig.About",
-            //TextOrKey = "你好！这个页面是由错数螺线(LogSpiral)脑子一热试着做的！\n因为Cyril做的ModernConfig实在是太【顺滑口感】了\n如果出了什么问题【请求原谅】，我是说【私信轰炸】来催促他【摧毁漏洞】",
             UseKey = true,
             TextAlign = new Vector2(0f),
             IsWrapped = true,
@@ -26,9 +25,9 @@ public sealed class AboutPage_ModConfig : Category
         text.RecalculateText();
         text.SetInnerPixels(new Vector2(0f, text.TextSize.Y));
 
-        AboutPage.AddLinksToPanel(panel);
+        //AboutPage.AddLinksToPanel(panel);
 
-        var fumoText = new SUIText
+        /*ar fumoText = new SUIText
         {
             TextOrKey = "Mods.ImproveGame.ModernConfig.AboutPage_ModConfig.FumoText",
             UseKey = true,
@@ -49,10 +48,8 @@ public sealed class AboutPage_ModConfig : Category
             Height = new(500, 0),
             RelativeMode = RelativeMode.Vertical
         };
-        panel.AddToOptionsDirect(koishi);
+        panel.AddToOptionsDirect(koishi);*/
 
         panel.Recalculate();
     }
-    //public override string Label => "关于(";
-    //public override string Tooltip => "通用版ModernConfig PrPrPrPrPr";
 }

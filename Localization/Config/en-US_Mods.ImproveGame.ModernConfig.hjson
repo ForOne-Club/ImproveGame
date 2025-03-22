@@ -41,14 +41,16 @@ AboutPage: {
 
 AboutPage_ModConfig: {
 	Label: About
-	Tooltip: About the auto-generated Quality of Terraria style config center for mods.
+	Tooltip: About the [c/ff0000:auto-generated] [c/0099ff:Quality of Terraria style config center] for mods.
 	About:
 		'''
 		The config center is auto-generated via reflection by [c/0099ff:Quality of Terraria], serving as an enhanced replacement for vanilla tModLoader's config UI.
 
 		Some special entries may not be supported, but you can click to access the tModLoader config interface.
 
-		Report crashes/issues via our [c/7289da:Discord server]. Comments under the Steam Workshop page won't be checked.
+		Report crashes/issues of this [c/ff0000:config center] via our [c/7289da:Discord server]. Comments under the Steam Workshop page won't be checked.
+
+		Please turn to the [c/0099ff:Config Center of Quality of Terraria] for more infomation.
 
 		This feature was created by [c/9966cc:LogSpiral] and [c/9966cc:Cyril] from Quality of Terraria Team.
 
