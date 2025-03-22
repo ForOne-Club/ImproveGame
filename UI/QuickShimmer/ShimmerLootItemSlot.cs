@@ -27,13 +27,15 @@ public class ShimmerLootItemSlot : BaseItemSlot
     public override void LeftMouseDown(UIMouseEvent evt)
     {
         if (Main.LocalPlayer.ItemAnimationActive) return;
-        
+
         OperateInventory(true);
 
         if (Item.IsAir)
             return;
-
-        Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Loot(), Item, Item.stack);
+        if (Main.gamePaused && Main.mouseItem.type == ItemID.None)
+            Main.mouseItem = Item.Clone();
+        else
+            Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Loot(), Item, Item.stack);
         Item.TurnToAir();
     }
 
