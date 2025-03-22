@@ -66,9 +66,9 @@ public abstract class GlobePlentyTooltip(int rare, int itemValue) : Globe(rare, 
 }
 public static class GlobeRevealer
 {
-    public static void NotFoundNotification(Globe dummyItem)
+    public static void NotFoundNotification(Globe dummyItem, bool ForcedBaseDescription)
     {
-        if (dummyItem is OnceForAllGlobe)
+        if ((dummyItem is OnceForAllGlobe && dummyItem is not AetherGlobe) || ForcedBaseDescription)
             AddNotification(Language.GetText("Mods.ImproveGame.Items.GlobeBase.NotFound")
             .WithFormatArgs(dummyItem.GetLocalizedValue("BiomeName")).Value, Globe.hintTextColor);
         else
@@ -192,7 +192,7 @@ public static class GlobeRevealer
         if (StructureDatas.AllMarbleCavePositions.Count <= StructureDatas.MarbleCavePositions.Count)//没有判定0的必要，因为如果是0一定满足这个
         {
             if (!onlyJudging && projectile.owner == Main.myPlayer)
-                NotFoundNotification(dummyItem);
+                NotFoundNotification(dummyItem, StructureDatas.MarbleCavePositions.Count == 0);
             return false;
         }
         if (onlyJudging)
@@ -204,7 +204,7 @@ public static class GlobeRevealer
         var playerName = Main.player[projectile.owner].name;
         if (projectile.owner == Main.myPlayer)
             RevealNotification(dummyItem, playerName);
-        if(Main.netMode == NetmodeID.Server)
+        if (Main.netMode == NetmodeID.Server)
             RevealBroadcast(dummyItem, playerName);
         return true;
     }
@@ -213,7 +213,7 @@ public static class GlobeRevealer
         if (StructureDatas.AllGraniteCavePositions.Count <= StructureDatas.GraniteCavePositions.Count)//没有判定0的必要，因为如果是0一定满足这个
         {
             if (!onlyJudging && projectile.owner == Main.myPlayer)
-                NotFoundNotification(dummyItem);
+                NotFoundNotification(dummyItem, StructureDatas.GraniteCavePositions.Count == 0);
             return false;
         }
         if (onlyJudging)
@@ -247,7 +247,7 @@ public static class GlobeRevealer
         if (onceForAll.NotFoundCheck())
         {
             if (!onlyJudging && projectile.owner == Main.myPlayer)
-                NotFoundNotification(dummyItem);
+                NotFoundNotification(dummyItem, false);
             return false;
         }
         if (StructureDatas.StructuresUnlocked[(byte)onceForAll.StructureType])
