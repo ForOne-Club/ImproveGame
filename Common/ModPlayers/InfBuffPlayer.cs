@@ -188,7 +188,7 @@ public class InfBuffPlayer : ModPlayer
         HashSet<int> clearBuffTypes = [];
         foreach ((int buffType, List<int> value) in ModIntegrationsSystem.ModdedBuffConflicts)
         {
-            if (!buffTypes.Contains(buffType) || !CheckInfBuffEnable(buffType)) continue;
+            if (!buffTypes.Contains(buffType) || !CheckInfBuffEnable(buffType) || clearBuffTypes.Contains(buffType)) continue;
             value.ForEach(i => clearBuffTypes.Add(i));
         }
 

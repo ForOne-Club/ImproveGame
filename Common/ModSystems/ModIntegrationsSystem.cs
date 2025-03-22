@@ -175,6 +175,10 @@ public class ModIntegrationsSystem : ModSystem
         AddBuffIntegration(calamityMod, "EffigyOfDecay", true, "EffigyOfDecayBuff");
         AddBuffIntegration(calamityMod, "CrimsonEffigy", true, "CrimsonEffigyBuff");
         AddBuffIntegration(calamityMod, "CorruptionEffigy", true, "CorruptionEffigyBuff");
+        AddBuffConflicts(calamityMod, "CirrusBlueCandleBuff", "CirrusPinkCandleBuff", "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff");
+        AddBuffConflicts(calamityMod, "CirrusPinkCandleBuff", "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff");
+        AddBuffConflicts(calamityMod, "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff");
+        AddBuffConflicts(calamityMod, "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff", "CirrusYellowCandleBuff");
         AddFishingAccIntegration(calamityMod, "EnchantedPearl", 2f, 10, false, false);
         AddFishingAccIntegration(calamityMod, "AlluringBait", 2f, 30, false, false);
         AddFishingAccIntegration(calamityMod, "SupremeBaitTackleBoxFishingStation", 5f, 80, true, true);
