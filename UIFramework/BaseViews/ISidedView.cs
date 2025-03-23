@@ -2,6 +2,8 @@
 
 public interface ISidedView
 {
+public float SwapSlideFactor { get; set; }
+
     /// <summary>
     /// 开启GUI界面
     /// </summary>
@@ -17,6 +19,4 @@ public interface ISidedView
     /// </summary>
     public bool ForceCloseCondition() => Main.LocalPlayer.chest != -1 || !Main.playerInventory ||
                                          Main.LocalPlayer.sign > -1 || Main.LocalPlayer.talkNPC > -1;
-
-    public void OnSwapSlide(float factor);
 }

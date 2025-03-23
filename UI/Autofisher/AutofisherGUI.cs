@@ -16,6 +16,8 @@ public partial class AutofisherGUI : BaseBody, ISidedView
 
     public static bool Visible => SidedEventTrigger.IsOpened(UISystem.Instance.AutofisherGUI);
 
+    public float SwapSlideFactor { get; set; }
+
     private static float panelLeft;
     private static float panelWidth;
     private static float panelTop;
@@ -35,16 +37,6 @@ public partial class AutofisherGUI : BaseBody, ISidedView
     private SUIPanel textPanel;
 
     internal static bool RequireRefresh;
-
-    public void OnSwapSlide(float factor)
-    {
-        float widthNext = basePanel.GetDimensions().Width;
-        float shownPositionNext = panelLeft;
-        float hiddenPositionNext = -widthNext - 40;
-
-        basePanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, shownPositionNext, factor), 0f);
-        basePanel.Recalculate();
-    }
 
     public override void OnInitialize()
     {
@@ -111,7 +103,7 @@ public partial class AutofisherGUI : BaseBody, ISidedView
         textPanel = new(UIStyle.TitleBg, UIStyle.TitleBg, rounded: 10)
         {
             HAlign = 0.5f,
-            Top = {Pixels = -34f, Percent = 1f},
+            Top = { Pixels = -34f, Percent = 1f },
             Width = StyleDimension.FromPercent(1f),
             Height = StyleDimension.FromPixels(30f)
         };
@@ -156,7 +148,7 @@ public partial class AutofisherGUI : BaseBody, ISidedView
         AddToolButton(new AutoDepositToggle(basePanel));
         return;
 
-        void AddToolButton(UIElement button) 
+        void AddToolButton(UIElement button)
         {
             var filter = button.SetPos(filtersX, filtersY);
             filtersY += filter.Height.Pixels + 8f;
@@ -175,6 +167,16 @@ public partial class AutofisherGUI : BaseBody, ISidedView
         _buttonLootAll.SetImage(_buttonLootAll.IsMouseHovering
             ? ModAsset.FisherLootAll_Hover.Value
             : ModAsset.FisherLootAll.Value);
+
+        // 出现和退出动画
+        float oldLeft = basePanel.Left.Pixels;
+        float widthNext = basePanel.GetDimensions().Width;
+        float shownPositionNext = panelLeft;
+        float hiddenPositionNext = -widthNext - 40;
+
+        basePanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, shownPositionNext, SwapSlideFactor), 0f);
+        if (oldLeft != basePanel.Left.Pixels)
+            basePanel.Recalculate();
     }
 
     public void ToggleSelectPool()

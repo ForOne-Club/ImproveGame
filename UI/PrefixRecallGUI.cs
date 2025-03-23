@@ -18,6 +18,8 @@ public class PrefixRecallGUI : BaseBody, ISidedView
 
     public override bool Enabled { get => true; set { } }
 
+    public float SwapSlideFactor { get; set; }
+
     public override bool CanSetFocusTarget(UIElement target)
         => (target != this && _basePanel.IsMouseHovering) || _basePanel.IsLeftMousePressed;
 
@@ -33,14 +35,6 @@ public class PrefixRecallGUI : BaseBody, ISidedView
     private SUIPanel _basePanel; // 背景板
     public SUIScrollBar Scrollbar; // 拖动条
     public UIList UIList; // 明细列表
-
-    public void OnSwapSlide(float factor)
-    {
-        float widthNext = _basePanel.GetDimensions().Width;
-        float hiddenPositionNext = -widthNext - 78;
-        _basePanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, PanelLeft, factor), 0f);
-        _basePanel.Recalculate();
-    }
 
     public bool ForceCloseCondition() => Main.LocalPlayer.chest != -1 || !Main.playerInventory ||
                                          Main.LocalPlayer.sign > -1 || Main.LocalPlayer.talkNPC <= -1 ||
@@ -115,6 +109,14 @@ public class PrefixRecallGUI : BaseBody, ISidedView
             Main.LocalPlayer.mouseInterface = true;
 
         UpdateList();
+
+        // 进入和退出动画
+        float oldLeft = _basePanel.Left.Pixels;
+        float widthNext = _basePanel.GetDimensions().Width;
+        float hiddenPositionNext = -widthNext - 78;
+        _basePanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, PanelLeft, SwapSlideFactor), 0f);
+        if (oldLeft != _basePanel.Left.Pixels)
+            _basePanel.Recalculate();
     }
 
     private void UpdateList()

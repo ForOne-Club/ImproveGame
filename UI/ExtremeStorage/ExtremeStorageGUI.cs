@@ -49,6 +49,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
 
     public static TEExtremeStorage Storage { get; set; }
     public static Item[] AllItemsCached { get; private set; } // 缓存的所有附近物品，用于减少获取全物品时的卡顿
+    public float SwapSlideFactor { get; set; }
 
     internal static Dictionary<int, float[]> ChestSlotsGlowHue;
     internal static int ChestSlotsGlowTimer;
@@ -151,6 +152,13 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         }
 
         _findChestCountdown++;
+        
+        // 如果打开了制作大面板，强制将DisplayCrafting设为true
+        if (!DisplayCrafting && Main.recBigList)
+        {
+            DisplayCrafting = true;
+            _foldTimer.Timer = 0;
+        }
 
         // 根据屏幕高度重设框高度
         _itemGrid.RecalculateScrollBar();
@@ -165,8 +173,11 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         float panelHeight = MathHelper.Lerp(230, maxPanelHeight, _foldTimer.Schedule);
         float panelWidth = MathHelper.Lerp(560f, 588f, _scrollBarTimer.Schedule);
         _totalPanel.SetSize(panelWidth, panelHeight);
-        float panelLeft = MathHelper.Lerp(60, 20, _foldTimer.Schedule);
-        _totalPanel.Left.Pixels = panelLeft;
+    
+        float widthNext = _totalPanel.GetDimensions().Width;
+        float shownPositionNext = MathHelper.Lerp(60, 20, _foldTimer.Schedule);
+        float hiddenPositionNext = -widthNext - 78;
+        _totalPanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, shownPositionNext, SwapSlideFactor), 0f);
 
         if (oldWidth != _totalPanel.Width.Pixels || oldHeight != _totalPanel.Height.Pixels ||
             oldLeft != _totalPanel.Left.Pixels)
@@ -197,31 +208,6 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
 
         if (ChestSlotsGlowTimer is 0)
             ChestSlotsGlowHue.Clear();
-    }
-
-    public void OnSwapSlide(float factor)
-    {
-        // 是否开启制作栏侧栏
-        Main.hidePlayerCraftingMenu |= !DisplayCrafting;
-        if (!DisplayCrafting && Main.recBigList)
-        {
-            DisplayCrafting = true;
-            _foldTimer.Timer = 0;
-        }
-
-        float widthNext = _totalPanel.GetDimensions().Width;
-        float shownPositionNext = MathHelper.Lerp(60, 20, _foldTimer.Schedule);
-        float hiddenPositionNext = -widthNext - 78;
-
-        // 宽高
-        var screenDimensions = GetDimensions();
-        int screenHeightZoomed = (int)screenDimensions.Height;
-        float maxPanelHeight = screenHeightZoomed - Main.instance.invBottom - 80;
-        float panelHeight = MathHelper.Lerp(230, maxPanelHeight, _foldTimer.Schedule);
-        float panelWidth = MathHelper.Lerp(560f, 588f, _scrollBarTimer.Schedule);
-        _totalPanel.SetSize(panelWidth, panelHeight);
-
-        _totalPanel.Left.Set((int)MathHelper.Lerp(hiddenPositionNext, shownPositionNext, factor), 0f);
     }
 
     // 寻找箱子并设置物品栏

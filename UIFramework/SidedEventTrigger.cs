@@ -45,7 +45,7 @@ namespace ImproveGame.UIFramework
             };
 
             // 设置初始（关闭时）位置
-            data.AsSidedView.OnSwapSlide(0f);
+            data.AsSidedView.SwapSlideFactor = 0f;
             data.ViewBody.Recalculate();
 
             UIPool.Add(data);
@@ -116,6 +116,7 @@ namespace ImproveGame.UIFramework
 
         public override void Update(GameTime gameTime)
         {
+            // 在base.Update里会更新RootBody对应的UI
             RootBody = null;
 
             foreach (var uiData in UIPool.Where(uiData => uiData.AnimationTimer.AnyOpen))
@@ -131,8 +132,15 @@ namespace ImproveGame.UIFramework
                 uiData.AnimationTimer.Update();
                 if (uiData.AnimationTimer.State is AnimationState.Opening or AnimationState.Closing)
                 {
-                    uiData.AsSidedView.OnSwapSlide(uiData.AnimationTimer.Schedule);
+                    // 正在开关的UI也要更新
+                    var oldRootBody = RootBody;
+
+                    uiData.AsSidedView.SwapSlideFactor = uiData.AnimationTimer.Schedule;
+                    RootBody = uiData.ViewBody;
+                    base.Update(gameTime);
                     uiData.ViewBody.Recalculate();
+
+                    RootBody = oldRootBody;
                 }
 
                 if (uiData.AnimationTimer.Opened)
@@ -162,7 +170,7 @@ namespace ImproveGame.UIFramework
             RealDraw:
             foreach (var uiData in UIPool.Where(uiData =>
                          !uiData.AnimationTimer.Closed && !ViewBodyIs(uiData.ViewBody) &&
-                         uiData.ViewBody is {Enabled: true}))
+                         uiData.ViewBody is { Enabled: true }))
             {
                 uiData.ViewBody.Draw(Main.spriteBatch);
             }
