@@ -90,6 +90,8 @@ public class ModIntegrationsSystem : ModSystem
     internal static bool NoLakeSizePenaltyLoaded = false;
     internal static bool WMITFLoaded = false;
     internal static bool DialogueTweakLoaded = false;
+    internal static bool LuiafkRebornLoaded = false;
+    internal static int LuiafkTravellingMerchantType = NPCID.None;
 
     internal static int UnloadedItemType;
 
@@ -100,6 +102,7 @@ public class ModIntegrationsSystem : ModSystem
         DoFargowiltasIntegration();
         DoGensokyoIntegration();
         DoRecipeBrowserIntegration();
+        DoLuiafkRebornIntegration();
         DoDialogueTweakIntegration();
         DoModLoaderIntegration();
         DoShopLookupIntegration();
@@ -205,10 +208,10 @@ public class ModIntegrationsSystem : ModSystem
 
         AddBuffIntegration(fargowiltas, "Omnistation", true, "Omnistation");
         AddBuffIntegration(fargowiltas, "Omnistation2", true, "Omnistation");
-        
+
         if (!ModLoader.TryGetMod("FargowiltasSouls", out Mod fargowiltasSouls))
             return;
-        
+
         AddFishingAccIntegration(fargowiltasSouls, "AnglerEnchant", 5f, 10, true, true);
         AddFishingAccIntegration(fargowiltasSouls, "TrawlerSoul", 5f, 60, true, true);
         AddFishingAccIntegration(fargowiltasSouls, "DimensionSoul", 5f, 60, true, true);
@@ -244,19 +247,27 @@ public class ModIntegrationsSystem : ModSystem
             return;
 
         DialogueTweakLoaded = true;
+
+        List<int> travellingMerchants = [NPCID.TravellingMerchant];
+        if (LuiafkRebornLoaded)
+            travellingMerchants.Add(LuiafkTravellingMerchantType);
+
         dialogueTweak.Call("AddButton",
-            NPCID.TravellingMerchant, // NPC ID
+            travellingMerchants, // NPC IDs
             () => RefreshTravelShopSystem.DisplayText, // 文本
             "DialogueTweak/Interfaces/Assets/Icon_Help", // 显示的icon
-            () => // 点击操作
-            {
-                if (Main.mouseLeft && !RefreshTravelShopSystem.OldMouseLeft)
-                {
-                    RefreshShopPacket.Get().Send(runLocally: true);
-                }
-            },
+            ClickAction, // 点击操作
             () => Config.TravellingMerchantRefresh // 什么时候可用
-        );
+            );
+
+
+        static void ClickAction()
+        {
+            if (Main.mouseLeft && !RefreshTravelShopSystem.OldMouseLeft)
+            {
+                RefreshShopPacket.Get().Send(runLocally: true);
+            }
+        }
     }
 
     private static void DoModLoaderIntegration()
@@ -267,7 +278,7 @@ public class ModIntegrationsSystem : ModSystem
         UnloadedItemType = modloader.Find<ModItem>("UnloadedItem").Type;
     }
 
-    private static void DoMechTransferIntegration() 
+    private static void DoMechTransferIntegration()
     {
         if (!ModLoader.TryGetMod("MechTransfer", out Mod mechTansfer))
         {
@@ -370,6 +381,15 @@ public class ModIntegrationsSystem : ModSystem
                 .Add<Dummy>(silver: 50)
                 .Add<ShellShipInBottle>(ConfigCondition.EnableQuickShimmerC, gold: 5)
                 .Add<WeatherBook>(Item.buyPrice(gold: 25, silver: 60), Condition.DownedEowOrBoc, ConfigCondition.EnableWeatherControlC));
+    }
+
+    private static void DoLuiafkRebornIntegration()
+    {
+        if (!ModLoader.TryGetMod("miningcracks_take_on_luiafk", out Mod mod))
+            return;
+
+        LuiafkRebornLoaded = true;
+        LuiafkTravellingMerchantType = mod.Find<ModNPC>("TravellingMerchant").Type;
     }
 
     public override void Unload()
@@ -622,8 +642,8 @@ public class ModIntegrationsSystem : ModSystem
                     case "RegisterCategory":
                         {
                             int length = args.Length;
-                            CategorySidePanel.RegisterCategory(args[1] as Mod, args[2] as List<KeyValuePair<string, Terraria.ModLoader.Config.ModConfig>>, 
-                                length > 3 ? (int)args[3] : 0, 
+                            CategorySidePanel.RegisterCategory(args[1] as Mod, args[2] as List<KeyValuePair<string, Terraria.ModLoader.Config.ModConfig>>,
+                                length > 3 ? (int)args[3] : 0,
                                 length > 4 ? args[4] as Func<Texture2D> : null,
                                 length > 5 ? args[5] as Func<string> : null,
                                 length > 6 ? args[6] as Func<string> : null);
@@ -647,25 +667,25 @@ public class ModIntegrationsSystem : ModSystem
                             return true;
                         }
                     // 移除模组注册的“关于”页面
-                    case "RemoveAboutPage": 
+                    case "RemoveAboutPage":
                         {
                             CategorySidePanel.RemoveAboutPage(args[1] as Mod);
                             return true;
                         }
                     // 设置模组的配置中心在模组设置入口处的文本标题
-                    case "AddModernConfigTitle": 
+                    case "AddModernConfigTitle":
                         {
                             CategorySidePanel.ModdedTitle[args[1] as Mod] = args[2] as LocalizedText;
                             return true;
                         }
                     // 注册预览绘制
-                    case "RegisterPreview": 
+                    case "RegisterPreview":
                         {
                             CategorySidePanel.ModdedPreviews[args[1] as PropertyFieldWrapper] = new PreviewDrawing(args[2] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
                             return true;
                         }
                     // 添加全局预览绘制
-                    case "OnGlobalConfigPreview": 
+                    case "OnGlobalConfigPreview":
                         {
                             TooltipPanel.GlobalDrawing += new PreviewDrawing(args[1] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
                             return true;

@@ -13,6 +13,18 @@ namespace ImproveGame.Content.Functions
         private bool focused; // 上一帧是否鼠标hover在上面
         internal static bool OldMouseLeft { get; private set; } // 上一帧是否mouseLeft
 
+        private static bool IsTalkingToTravellingMerchant
+        {
+            get
+            {
+                List<int> travellingMerchants = [NPCID.TravellingMerchant];
+                if (ModIntegrationsSystem.LuiafkRebornLoaded)
+                    travellingMerchants.Add(ModIntegrationsSystem.LuiafkTravellingMerchantType);
+
+                return travellingMerchants.Contains(Main.npc[Main.LocalPlayer.talkNPC].type);
+            }
+        }
+
         internal static string DisplayText
         {
             get
@@ -32,7 +44,7 @@ namespace ImproveGame.Content.Functions
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCID.TravellingMerchant && Main.npcShop == 0 && !ModIntegrationsSystem.DialogueTweakLoaded && Config.TravellingMerchantRefresh)
+            if (Main.LocalPlayer.talkNPC != -1 && IsTalkingToTravellingMerchant && Main.npcShop == 0 && !ModIntegrationsSystem.DialogueTweakLoaded && Config.TravellingMerchantRefresh)
             {
                 AnimationTimer += 0.05f;
                 if (AnimationTimer >= 4f)
@@ -54,9 +66,11 @@ namespace ImproveGame.Content.Functions
             {
                 // 直接替换原版的绘制层
                 layers.Insert(dialogIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Travelling Merchant Refresh Button",
-                    delegate {
-                        if (Main.LocalPlayer.talkNPC != -1 && Main.npc[Main.LocalPlayer.talkNPC].type == NPCID.TravellingMerchant && Main.npcShop == 0 && !ModIntegrationsSystem.DialogueTweakLoaded && Config.TravellingMerchantRefresh)
+                    delegate
+                    {
+                        if (Main.LocalPlayer.talkNPC != -1 && IsTalkingToTravellingMerchant && Main.npcShop == 0 && !ModIntegrationsSystem.DialogueTweakLoaded && Config.TravellingMerchantRefresh)
                         {
+                            var talkNPC = Main.npc[Main.LocalPlayer.talkNPC];
                             Vector2 scale = new(0.9f);
                             string text = DisplayText; // 要显示的文本
                             int numLines = Main.instance._textDisplayCache.AmountOfLines;
@@ -70,6 +84,12 @@ namespace ImproveGame.Content.Functions
                             float posButton2 = posButton1 + ChatManager.GetStringSize(FontAssets.MouseText.Value, Language.GetTextValue("LegacyInterface.28"), scale).X + 30f; // 28 是 商店
                             float posButton3 = posButton2 + ChatManager.GetStringSize(FontAssets.MouseText.Value, Language.GetTextValue("LegacyInterface.52"), scale).X + 30f; // 52 是 关闭
                             Vector2 position = new(posButton3, 130 + numLines * 30);
+
+                            if (talkNPC.type == ModIntegrationsSystem.LuiafkTravellingMerchantType)
+                            {
+                                float posButton4 = posButton3 + ChatManager.GetStringSize(FontAssets.MouseText.Value, Language.GetTextValue("UI.NPCCheckHappiness"), scale).X + 30f; // 幸福
+                                position = new(posButton4, 130 + numLines * 30);
+                            }
 
                             // if the player is hovering over the button
                             if (Main.MouseScreen.Between(position, position + stringSize * scale * value2.X) && !PlayerInput.IgnoreMouseInterface)
