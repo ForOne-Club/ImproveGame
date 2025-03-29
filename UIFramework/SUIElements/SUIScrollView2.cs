@@ -141,7 +141,8 @@ public class SUIScrollView2 : TimerView
 
         #region Scrollbar 滚动条
         ScrollBar.Spacing = new Vector2(4f);
-        ScrollBar.BgColor = Color.Transparent;
+        ScrollBar.Rounded = new Vector4(4f);
+        ScrollBar.BgColor = Color.Black * 0.25f;
         ScrollBar.BorderColor = Color.Transparent;
 
         switch (ScrollOrientation)
@@ -179,6 +180,13 @@ public class SUIScrollView2 : TimerView
     static FieldInfo scrollWhellValueField;
     public override void ScrollWheel(UIScrollWheelEvent evt)
     {
+
+#if false
+        Main.NewText("123");
+        MaskView.BgColor = Color.Red * 0.25f;
+        ListView.BgColor = Color.Black * 0.25f;
+#endif
+
         float delta = 0;
 
         var maxRange = ScrollBar.GetScrollRange();

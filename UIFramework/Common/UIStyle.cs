@@ -7,6 +7,8 @@ internal static class UIStyle
     public static float
         AcrylicIntensity;
 
+    public static Color ListItemColor;
+
     public static Color
         PanelBorder,
         PanelBorderLight,
@@ -114,6 +116,8 @@ internal static class UIStyle
 
     private static void Blue()
     {
+        ListItemColor = Color.Black;
+
         PanelBorder = new Color(20, 25, 60);
         PanelBorderLight = new Color(89, 116, 213);
         PanelBg = new Color(44, 55, 105, 180);
@@ -175,6 +179,8 @@ internal static class UIStyle
 
     private static void Stormdark()
     {
+        ListItemColor = new Color(43, 74, 86);
+
         PanelBorder = new Color(41, 73, 84, 170);
         PanelBorderLight = new Color(104, 185, 212, 170);
         PanelBg = new Color(13, 16, 17, 220);

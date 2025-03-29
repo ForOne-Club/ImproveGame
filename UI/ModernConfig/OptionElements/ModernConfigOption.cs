@@ -292,7 +292,7 @@ public class ModernConfigOption : TimerView
         if (BgColor != Color.Transparent)
             panelColor = HoverTimer.Lerp(BgColor.MultiplyRGBA(new Color(180, 180, 180)), BgColor);
         else
-            panelColor = HoverTimer.Lerp(UIStyle.PanelBgLight, UIStyle.PanelBgLightHover);
+            panelColor = HoverTimer.Lerp(UIStyle.ListItemColor * 0.2f, UIStyle.ListItemColor * 0.4f);
         if (!Interactable)
             panelColor = Color.Gray * 0.3f;
 
@@ -426,7 +426,7 @@ public class ModernConfigOption : TimerView
                 else
                 {
                     if (item is Color color)
-                        item = Activator.CreateInstance(VariableInfo.MemberInfo.DeclaringType, [color]); 
+                        item = Activator.CreateInstance(VariableInfo.MemberInfo.DeclaringType, [color]);
                     // 欸，这里转ColorHandler为什么不像字典的那个一样在上面函数里就转好，我不知道，当时做昏头了有点，但是下面还会有别的特殊处理的，嗯
 
                     //if (itemType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))

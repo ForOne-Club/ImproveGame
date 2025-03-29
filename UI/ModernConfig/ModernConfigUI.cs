@@ -66,11 +66,14 @@ public sealed class ModernConfigUI : UIState
     // 子页面路径选框的弹出动画计时器
     public AnimationTimer PathPanelTimer;
 
+    public View[] DividingLines = new View[2];
+
     public override void OnInitialize()
     {
-        const int gapBetweenPanels = 20;
+        //const int gapBetweenPanels = 20;
+        const int gapBetweenPanels = 0;
         const int sidePanelWidth = 220;
-        const int tooltipPanelHeight = 146;
+        const int tooltipPanelHeight = 166;
         Instance = this;
 
         // 主面板
@@ -78,45 +81,71 @@ public sealed class ModernConfigUI : UIState
         {
             Shaded = true,
             HAlign = 0.5f,
-            VAlign = 0.5f
+            VAlign = 0.5f,
         };
-        MainPanel.SetPadding(gapBetweenPanels);
+        MainPanel.SetPadding(2);
         MainPanel.SetPosPixels(0f, -20f);
-        MainPanel.SetSizePercent(0.86f, 0.82f)
+        // 原来的大小
+        //MainPanel.SetSizePercent(0.86f, 0.82f)
+        //    .JoinParent(this);
+        MainPanel.SetSizePercent(0.65f, 0.8f)
             .JoinParent(this);
 
         // 侧栏放类别
-        CategoryPanel = new CategorySidePanel(ConfigColors.DarkBorderlessPanel)
+        CategoryPanel = new CategorySidePanel(ConfigColors.DarkBorderlessPanel * 0.75f)
         {
-            RelativeMode = RelativeMode.Horizontal
+            RelativeMode = RelativeMode.Horizontal,
+            Rounded = new Vector4(10f, 0f, 10f, 0f)
         };
         CategoryPanel.SetSize(sidePanelWidth, 0f, 0f, 1f);
         CategoryPanel.JoinParent(MainPanel);
+
+        // 纵向分割线
+        DividingLines[0] = new View
+        {
+            RelativeMode = RelativeMode.Horizontal,
+            Width = new StyleDimension(2f, 0f),
+            Height = new StyleDimension(0f, 1f),
+            BgColor = UIStyle.ListItemColor * 0.75f,
+        };
+        DividingLines[0].JoinParent(MainPanel);
 
         // 把主栏框起来的容器
         var mainPanelContainer = new View
         {
             Spacing = new Vector2(gapBetweenPanels),
             RelativeMode = RelativeMode.Horizontal,
-            BorderColor = Color.White
+            BorderColor = Color.White,
         };
-        mainPanelContainer.SetSize(-sidePanelWidth - gapBetweenPanels, 0f, 1f, 1f);
+        mainPanelContainer.SetSize(-sidePanelWidth - gapBetweenPanels - 2f, 0f, 1f, 1f);
         mainPanelContainer.JoinParent(MainPanel);
 
         // 主栏上放选项
-        OptionsPanel = new ConfigOptionsPanel(ConfigColors.DarkBorderlessPanel)
+        OptionsPanel = new ConfigOptionsPanel(ConfigColors.DarkBorderlessPanel * 0.5f)
         {
             Spacing = new Vector2(gapBetweenPanels),
-            RelativeMode = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical,
+            Rounded = new Vector4(0f, 10f, 0f, 0f)
         };
-        OptionsPanel.SetSize(0f, -tooltipPanelHeight - gapBetweenPanels, 1f, 1f);
+        OptionsPanel.SetSize(0f, -tooltipPanelHeight - gapBetweenPanels - 2, 1f, 1f);
         OptionsPanel.JoinParent(mainPanelContainer);
 
+        // 横向分割线
+        DividingLines[1] = new View
+        {
+            RelativeMode = RelativeMode.Vertical,
+            Width = new StyleDimension(0f, 1f),
+            Height = new StyleDimension(2f, 0f),
+            BgColor = UIStyle.ListItemColor * 0.75f,
+        };
+        DividingLines[1].JoinParent(mainPanelContainer);
+
         // 主栏下放描述
-        TooltipPanel = new TooltipPanel(ConfigColors.DarkBorderlessPanel)
+        TooltipPanel = new TooltipPanel(ConfigColors.DarkBorderlessPanel * 0.5f)
         {
             Spacing = new Vector2(gapBetweenPanels),
-            RelativeMode = RelativeMode.Vertical
+            RelativeMode = RelativeMode.Vertical,
+            Rounded = new Vector4(0f, 0f, 0f, 10f)
         };
         TooltipPanel.SetSize(0f, tooltipPanelHeight, 1f, 0f);
         TooltipPanel.JoinParent(mainPanelContainer);
@@ -196,7 +225,7 @@ public sealed class ModernConfigUI : UIState
         if (PathPanelTimer.Closing || PathPanelTimer.Opening)
             PathPanel.Recalculate();
 
-        if (Glass is not null  && !DrawCalledForMakingGlass && GlassVfxEnabled && !Main.gameMenu)//
+        if (Glass is not null && !DrawCalledForMakingGlass && GlassVfxEnabled && !Main.gameMenu)//
         {
             // 云母效果特殊处理
             Main.spriteBatch.ReBegin(null, Matrix.Identity);
@@ -274,6 +303,12 @@ public sealed class ModernConfigUI : UIState
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+
+        foreach (var line in DividingLines)
+        {
+            line.BgColor = UIStyle.ListItemColor * 0.75f;
+        }
+
         if (Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape) &&
             UISystem.FocusedEditableText is null && Main.gameMenu) // 游戏里按照物品栏快捷键关闭，只有gameMenu才用Esc
         {
