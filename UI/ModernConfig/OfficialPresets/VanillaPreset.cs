@@ -97,12 +97,13 @@ public class VanillaPreset : OfficialPreset
         uiConfig.RemoveGraveyardMusic = false;
         uiConfig.RemoveGraveyardVisual = false;
         
+        /*
         // 全部不可获取
         foreach (var fieldInfo in modItemConfig.GetType().GetFields()) {
             if (!fieldInfo.Name.StartsWith("Available") || fieldInfo.FieldType != typeof(bool))
                 continue;
             
             fieldInfo.SetValue(modItemConfig, false);
-        }
+        }*/
     }
 }
