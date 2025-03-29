@@ -602,7 +602,7 @@ namespace ImproveGame.Content.Functions
                 return;
 
             var label = c.DefineLabel();
-            c.Emit<MyUtils>(OpCodes.Ldsfld, nameof(Config));
+            c.Emit<MyUtils>(OpCodes.Ldsfld, "_config");
             c.Emit<ImproveConfigs>(OpCodes.Ldfld, nameof(Config.NoBiomeSpread));
             c.Emit(OpCodes.Brfalse, label); // 为False，跳走
             c.Emit(OpCodes.Ldc_I4_0); // 推一个0，也就是False，设置到AllowedToSpreadInfections
@@ -891,7 +891,7 @@ namespace ImproveGame.Content.Functions
                 typeof(ShoppingSettings).GetField(nameof(ShoppingSettings.PriceAdjustment),
                     BindingFlags.Instance | BindingFlags.Public);
             FieldInfo fMyUtilsConfig =
-                typeof(MyUtils).GetField(nameof(Config), BindingFlags.Static | BindingFlags.Public);
+                typeof(MyUtils).GetField("_config", BindingFlags.Static | BindingFlags.NonPublic);
             FieldInfo fImproveConfigsModifyNPCHappiness =
                 typeof(ImproveConfigs).GetField(nameof(ImproveConfigs.ModifyNPCHappiness),
                     BindingFlags.Instance | BindingFlags.Public);

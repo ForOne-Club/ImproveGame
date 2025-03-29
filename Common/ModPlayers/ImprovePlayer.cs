@@ -6,6 +6,7 @@ using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UI.AutoTrash;
+using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UI.MasterControl;
@@ -231,6 +232,8 @@ public class ImprovePlayer : ModPlayer
             PressAutoTrashKeybind();
         if (KeybindSystem.MasterControlKeybind.JustPressed)
             PressMasterControlKeybind();
+        if (KeybindSystem.ExtremeStorageSearch.JustPressed)
+            PressExtremeStorageSearchKeybind();
 
         // 下面是操作类快捷键
         if (Player.DeadOrGhost) return;
@@ -358,5 +361,13 @@ public class ImprovePlayer : ModPlayer
 
         _oldItemSelected = Player.selectedItem;
         UseItemByType(Player, itemType);
+    }
+
+    private void PressExtremeStorageSearchKeybind()
+    {
+        if (Main.HoverItem is not { } item || item.IsAir || UISystem.Instance.ExtremeStorageGUI is null) return;
+
+        if (ExtremeStorageGUI.Visible)
+            ExtremeStorageGUI.SetSearchContent(item.Name);
     }
 }

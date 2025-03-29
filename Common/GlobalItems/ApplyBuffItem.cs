@@ -18,6 +18,8 @@ namespace ImproveGame.Common.GlobalItems
 
         public static bool IsItemAvailable(Item item)
         {
+            if (Main.gameMenu) return false;
+
             if (InfBuffPlayer.TryGet(Main.LocalPlayer, out var infBuffPlayer) &&
                 infBuffPlayer.AvailableItemsHash.Contains(item))
                 return true;
@@ -40,7 +42,7 @@ namespace ImproveGame.Common.GlobalItems
                 return true;
 
             // 电线
-            if (Config.NoConsume_Wire &&  item.stack >= 3996 && item.type == ItemID.Wire)
+            if (Config.NoConsume_Wire && item.stack >= 3996 && item.type == ItemID.Wire)
                 return true;
 
             // 花园侏儒

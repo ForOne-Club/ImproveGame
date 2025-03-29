@@ -11,7 +11,8 @@ namespace ImproveGame.UI.ExtremeStorage
     /// </summary>
     public class ItemSlot : BigBagItemSlot
     {
-        private bool ChestBeingUsed => StorageGrids.ChestsThatBeingUsedCache is not null &&
+        private bool ChestBeingUsed => Main.netMode is not NetmodeID.SinglePlayer &&
+                                       StorageGrids.ChestsThatBeingUsedCache is not null &&
                                        StorageGrids.ChestsThatBeingUsedCache.Contains(_chestIndex) &&
                                        Main.LocalPlayer.chest != _chestIndex;
 
@@ -157,7 +158,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 }
             });
         }
-        
+
         public void ModifySlotColor(ref Color slotColor)
         {
             if (!Interactable || Item.IsAir || !ExtremeStorageGUI.ChestSlotsGlowHue.ContainsKey(_chestIndex)) return;
@@ -197,7 +198,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 RenderTarget2D target = slotTarget.GetTarget();
                 sb.Draw(target, pos, null, slotColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             }
-            
+
             if (Item.IsAir)
                 return;
 

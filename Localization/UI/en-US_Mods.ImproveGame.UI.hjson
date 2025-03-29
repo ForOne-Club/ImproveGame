@@ -141,6 +141,7 @@ PlayerStats: {
 }
 
 ExtremeStorage: {
+	QuickSearch: Press {0} to search for selected item
 	AddChest: Add Chest
 	AddChestTip: Right click to cancel
 	RejectNearbyStack: Failed to stack to nearby chests, likely because another player is using a nearby Storage Manager

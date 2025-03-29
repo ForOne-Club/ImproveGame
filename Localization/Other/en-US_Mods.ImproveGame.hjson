@@ -462,6 +462,11 @@ Keybinds: {
 		DisplayName: "[DEBUG] Localization Debugging"
 		Tip: For Devs only. Press to reload localization from source files.
 	}
+
+	ExtremeStorageSearch: {
+		DisplayName: "Search in Storage Manager"
+		Tip: When the Storage Manager is open, hover on any item and press this key to search for the item.
+	}
 }
 
 Projectiles: {

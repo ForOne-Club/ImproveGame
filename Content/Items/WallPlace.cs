@@ -152,7 +152,9 @@ namespace ImproveGame.Content.Items
 
         public override void RightClick(Player player)
         {
+            bool favorited = Item.favorited;
             Item.SetDefaults(ModContent.ItemType<WallPlaceSelectorMode>());
+            Item.favorited = favorited;
         }
 
         public override bool ConsumeItem(Player player) => false;

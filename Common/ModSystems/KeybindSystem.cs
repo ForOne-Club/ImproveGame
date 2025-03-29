@@ -24,6 +24,7 @@ public class KeybindSystem : ModSystem
     public static ModKeybind DiscordRodKeybind { get; private set; }
     public static ModKeybind HomeKeybind { get; private set; }
     public static ModKeybind ItemInteractKeybind { get; private set; }
+    public static ModKeybind ExtremeStorageSearch { get; private set; }
     public static ModKeybind CopyItemNameKeybind { get; private set; }
     public static ModKeybind CopyItemNameControlKeybind { get; private set; }
 
@@ -59,6 +60,7 @@ public class KeybindSystem : ModSystem
         DiscordRodKeybind = KeybindLoader.RegisterKeybind(Mod, "DiscordRodKeybind", "U");
         HomeKeybind = KeybindLoader.RegisterKeybind(Mod, "HomeKeybind", "Home");
         ItemInteractKeybind = KeybindLoader.RegisterKeybind(Mod, "ItemInteract", "Mouse3");
+        ExtremeStorageSearch = KeybindLoader.RegisterKeybind(Mod, "ExtremeStorageSearch", "CapsLock");
         CopyItemNameKeybind = KeybindLoader.RegisterKeybind(Mod, "CopyItemName", "X");
         CopyItemNameControlKeybind = KeybindLoader.RegisterKeybind(Mod, "CopyItemName_Control", "LeftControl");
     }
@@ -69,9 +71,16 @@ public class KeybindSystem : ModSystem
             return;
 
         // 如果玩家不设置此快捷键则强制设置为默认按键
-        if (ItemInteractKeybind.GetAssignedKeys().Count == 0)
-            PlayerInput.CurrentProfile.InputModes[InputMode.Keyboard].KeyStatus[ItemInteractKeybind.FullName] =
-                [ItemInteractKeybind.DefaultBinding];
+        CheckDefaultKeybindFor(ItemInteractKeybind);
+        CheckDefaultKeybindFor(ExtremeStorageSearch);
+    }
+
+    // 如果玩家不设置此快捷键则强制设置为默认按键
+    private void CheckDefaultKeybindFor(ModKeybind keybind)
+    {
+        if (keybind.GetAssignedKeys().Count == 0)
+            PlayerInput.CurrentProfile.InputModes[InputMode.Keyboard].KeyStatus[keybind.FullName] =
+                [keybind.DefaultBinding];
     }
 
     private void DrawHoverText(On_UIKeybindingListItem.orig_DrawSelf orig, UIKeybindingListItem self,
@@ -179,6 +188,7 @@ public class KeybindSystem : ModSystem
         DiscordRodKeybind = null;
         HomeKeybind = null;
         ItemInteractKeybind = null;
+        ExtremeStorageSearch = null;
         CopyItemNameKeybind = null;
         CopyItemNameControlKeybind = null;
     }

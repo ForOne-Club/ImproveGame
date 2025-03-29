@@ -152,7 +152,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         }
 
         _findChestCountdown++;
-        
+
         // 如果打开了制作大面板，强制将DisplayCrafting设为true
         if (!DisplayCrafting && Main.recBigList)
         {
@@ -173,7 +173,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         float panelHeight = MathHelper.Lerp(230, maxPanelHeight, _foldTimer.Schedule);
         float panelWidth = MathHelper.Lerp(560f, 588f, _scrollBarTimer.Schedule);
         _totalPanel.SetSize(panelWidth, panelHeight);
-    
+
         float widthNext = _totalPanel.GetDimensions().Width;
         float shownPositionNext = MathHelper.Lerp(60, 20, _foldTimer.Schedule);
         float hiddenPositionNext = -widthNext - 78;
@@ -223,7 +223,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
 
         // 更新物品之前先更新工具栏，把新的筛选器选出来，这样初次切换才能正确选取筛选器选择正确物品
         _itemGrid.ResetToolbar(CurrentGroup);
-        
+
         // 更新物品
         var items = new List<ChestItemsInfo>();
         chestIndexes.ForEach(i =>
@@ -268,7 +268,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
             var p = typeof(Item).GetProperty(condition.variable,
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.IgnoreCase);
-            if ( f == null && p == null)
+            if (f == null && p == null)
             {
                 Main.NewText($"Field or Property not found: {condition.variable}");
                 checkList.Remove(condition);
@@ -397,6 +397,11 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         // Setting 并不是一个实际上的 ItemGroup
         UISystem.Instance.ExtremeStorageGUI._itemGrid.Hide = CurrentGroup is ItemGroup.Setting;
         DisplayCrafting &= CurrentGroup is not ItemGroup.Setting;
+    }
+
+    public static void SetSearchContent(string content)
+    {
+        UISystem.Instance.ExtremeStorageGUI._itemGrid.SearchBar.SetText(content);
     }
 
     public static void RefreshCachedAllItems() => AllItemsCached = GetAllItems();
