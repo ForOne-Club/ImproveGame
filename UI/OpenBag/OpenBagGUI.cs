@@ -254,7 +254,7 @@ public class OpenBagGUI : BaseBody
     private IEnumerator OpenBagRunner(LootKeeper keeper)
     {
         while (keeper is not null && !keeper.Bag.IsAir && ItemLoader.CanRightClick(keeper.Bag) &&
-               (Main.ItemDropsDB.GetRulesForItemID(keeper.Bag.type).Any()))
+               (Main.ItemDropsDB.GetRulesForItemID(keeper.Bag.type).Count != 0))
         {
             LootListener._listening = keeper.Bag.type;
             ItemSlot.TryOpenContainer(keeper.Bag, Main.LocalPlayer);
