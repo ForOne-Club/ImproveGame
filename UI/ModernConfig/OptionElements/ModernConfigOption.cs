@@ -290,7 +290,7 @@ public class ModernConfigOption : TimerView
         //var panelColor = HoverTimer.Lerp(UIStyle.PanelBgLight, UIStyle.PanelBgLightHover);
         Color panelColor;
         if (BgColor != Color.Transparent)
-            panelColor = HoverTimer.Lerp(BgColor.MultiplyRGBA(new Color(180, 180, 180)), BgColor);
+            panelColor = HoverTimer.Lerp(BgColor.MultiplyRGBA(new Color(100, 100, 100)), BgColor);
         else
             panelColor = HoverTimer.Lerp(UIStyle.ListItemColor * 0.2f, UIStyle.ListItemColor * 0.4f);
         if (!Interactable)
@@ -298,7 +298,7 @@ public class ModernConfigOption : TimerView
 
         if (Highlighted)
         {
-            SDFRectangle.HasBorder(position, size, new Vector4(8f), panelColor, 2f, UIStyle.ItemSlotBorderFav * 0.8f);
+            SDFRectangle.HasBorder(position, size, new Vector4(8f), panelColor, UIStyle.ItemSlotBorderSize, UIStyle.ItemSlotBorderFav * 0.8f);
         }
         else
         {

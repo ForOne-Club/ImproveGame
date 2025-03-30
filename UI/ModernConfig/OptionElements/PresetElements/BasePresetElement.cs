@@ -40,7 +40,7 @@ public class BasePresetElement : TimerView
         size.Y -= 6f;
 
         // 背景板
-        var panelColor = HoverTimer.Lerp(UIStyle.PanelBgLight, UIStyle.PanelBgLightHover);
+        var panelColor = HoverTimer.Lerp(UIStyle.ListItemColor * 0.2f, UIStyle.ListItemColor * 0.4f);
         if (!Interactable)
             panelColor = Color.Gray * 0.3f;
 

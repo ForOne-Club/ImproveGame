@@ -77,7 +77,7 @@ public class OptionKeybind : TimerView
         size.Y -= 6f;
 
         // 背景板
-        var panelColor = HoverTimer.Lerp(UIStyle.PanelBgLight, UIStyle.PanelBgLightHover);
+        var panelColor = HoverTimer.Lerp(UIStyle.ListItemColor * 0.2f, UIStyle.ListItemColor * 0.4f);
 
         SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor * 0.8f);
 
@@ -162,7 +162,7 @@ public sealed class KeybindChineseToggle : TimerView
         size.Y -= 6f;
 
         // 背景板
-        var panelColor = HoverTimer.Lerp(UIStyle.PanelBgLight, UIStyle.PanelBgLightHover);
+        var panelColor = HoverTimer.Lerp(UIStyle.ListItemColor * 0.2f, UIStyle.ListItemColor * 0.4f);
 
         SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor * 0.8f);
 

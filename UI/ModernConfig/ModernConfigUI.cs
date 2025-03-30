@@ -68,10 +68,12 @@ public sealed class ModernConfigUI : UIState
 
     public View[] DividingLines = new View[2];
 
+    private const bool ClassicStyle = true;
+
     public override void OnInitialize()
     {
         //const int gapBetweenPanels = 20;
-        const int gapBetweenPanels = 0;
+        const int gapBetweenPanels = ClassicStyle ? 14 : 0;
         const int sidePanelWidth = 220;
         const int tooltipPanelHeight = 166;
         Instance = this;
@@ -83,32 +85,40 @@ public sealed class ModernConfigUI : UIState
             HAlign = 0.5f,
             VAlign = 0.5f,
         };
-        MainPanel.SetPadding(2);
+        MainPanel.SetPadding(gapBetweenPanels);
         MainPanel.SetPosPixels(0f, -20f);
-        // 原来的大小
-        //MainPanel.SetSizePercent(0.86f, 0.82f)
-        //    .JoinParent(this);
-        MainPanel.SetSizePercent(0.65f, 0.8f)
-            .JoinParent(this);
+        if (ClassicStyle)
+        {
+            // 原来的大小
+            // MainPanel.SetSizePercent(0.86f, 0.82f).JoinParent(this);
+            MainPanel.SetSizePercent(0.78f, 0.82f).JoinParent(this);
+        }
+        else
+        {
+            MainPanel.SetSizePercent(0.65f, 0.82f).JoinParent(this);
+        }
 
         // 侧栏放类别
         CategoryPanel = new CategorySidePanel(ConfigColors.DarkBorderlessPanel * 0.75f)
         {
             RelativeMode = RelativeMode.Horizontal,
-            Rounded = new Vector4(10f, 0f, 10f, 0f)
+            Rounded = ClassicStyle ? new Vector4(8) : new Vector4(10f, 0f, 10f, 0f)
         };
         CategoryPanel.SetSize(sidePanelWidth, 0f, 0f, 1f);
         CategoryPanel.JoinParent(MainPanel);
 
         // 纵向分割线
-        DividingLines[0] = new View
+        if (!ClassicStyle)
         {
-            RelativeMode = RelativeMode.Horizontal,
-            Width = new StyleDimension(2f, 0f),
-            Height = new StyleDimension(0f, 1f),
-            BgColor = UIStyle.ListItemColor * 0.75f,
-        };
-        DividingLines[0].JoinParent(MainPanel);
+            DividingLines[0] = new View
+            {
+                RelativeMode = RelativeMode.Horizontal,
+                Width = new StyleDimension(2f, 0f),
+                Height = new StyleDimension(0f, 1f),
+                BgColor = UIStyle.ListItemColor * 0.75f,
+            };
+            DividingLines[0].JoinParent(MainPanel);
+        }
 
         // 把主栏框起来的容器
         var mainPanelContainer = new View
@@ -125,27 +135,30 @@ public sealed class ModernConfigUI : UIState
         {
             Spacing = new Vector2(gapBetweenPanels),
             RelativeMode = RelativeMode.Vertical,
-            Rounded = new Vector4(0f, 10f, 0f, 0f)
+            Rounded = ClassicStyle ? new Vector4(8) : new Vector4(0f, 10f, 0f, 0f)
         };
         OptionsPanel.SetSize(0f, -tooltipPanelHeight - gapBetweenPanels - 2, 1f, 1f);
         OptionsPanel.JoinParent(mainPanelContainer);
 
         // 横向分割线
-        DividingLines[1] = new View
+        if (!ClassicStyle)
         {
-            RelativeMode = RelativeMode.Vertical,
-            Width = new StyleDimension(0f, 1f),
-            Height = new StyleDimension(2f, 0f),
-            BgColor = UIStyle.ListItemColor * 0.75f,
-        };
-        DividingLines[1].JoinParent(mainPanelContainer);
+            DividingLines[1] = new View
+            {
+                RelativeMode = RelativeMode.Vertical,
+                Width = new StyleDimension(0f, 1f),
+                Height = new StyleDimension(2f, 0f),
+                BgColor = UIStyle.ListItemColor * 0.75f,
+            };
+            DividingLines[1].JoinParent(mainPanelContainer);
+        }
 
         // 主栏下放描述
         TooltipPanel = new TooltipPanel(ConfigColors.DarkBorderlessPanel * 0.5f)
         {
             Spacing = new Vector2(gapBetweenPanels),
             RelativeMode = RelativeMode.Vertical,
-            Rounded = new Vector4(0f, 0f, 0f, 10f)
+            Rounded = ClassicStyle ? new Vector4(8) : new Vector4(0f, 0f, 0f, 10f)
         };
         TooltipPanel.SetSize(0f, tooltipPanelHeight, 1f, 0f);
         TooltipPanel.JoinParent(mainPanelContainer);
@@ -304,9 +317,12 @@ public sealed class ModernConfigUI : UIState
     {
         base.Update(gameTime);
 
-        foreach (var line in DividingLines)
+        if (!ClassicStyle)
         {
-            line.BgColor = UIStyle.ListItemColor * 0.75f;
+            foreach (var line in DividingLines)
+            {
+                line.BgColor = UIStyle.ListItemColor * 0.75f;
+            }
         }
 
         if (Main.keyState.IsKeyDown(Keys.Escape) && !Main.oldKeyState.IsKeyDown(Keys.Escape) &&
