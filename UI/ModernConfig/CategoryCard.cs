@@ -22,7 +22,7 @@ public sealed class CategoryCard : TimerView
         Spacing = new Vector2(4);
         SetSizePixels(0f, 40f);
         SetSizePercent(1f, 0f);
-        Rounded = new Vector4(UIStyle.ItemSlotBorderRound);
+        Rounded = new Vector4(4);
         Border = UIStyle.ItemSlotBorderSize;
 
         _texture = category.GetIcon();
@@ -61,10 +61,12 @@ public sealed class CategoryCard : TimerView
         // 及时更新文字，用于切换语言的情况
         if (Category.Label != _labelElement.DisplayText)
             _labelElement.DisplayText = Category.Label;
-        // 英文长一点，因此缩小字体
-        float textScale = Language.ActiveCulture.Name is "zh-Hans"
-            ? 1f
-            : 0.94f;
+        // 拉丁文长一点，因此缩小字体
+        float textScale = Language.ActiveCulture.Name switch {
+            "zh-Hans" => 1f,
+            "ru-RU" => 0.8f,
+            _ => 0.94f
+        };
         _labelElement.TextScale = textScale;
 
         _selectTimer.UpdateHighFps();

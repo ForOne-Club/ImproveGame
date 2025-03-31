@@ -72,44 +72,24 @@ namespace ImproveGame.UIFramework.SUIElements
 
         public override void RightMouseDown(UIMouseEvent evt)
         {
-            if (!Interactable)
+            if (!Interactable || Item.IsAir)
                 return;
-
-            if (!Item.IsAir && !ItemID.Sets.BossBag[Item.type] && !ItemID.Sets.IsFishingCrate[Item.type] &&
-                !ItemLoader.CanRightClick(Item))
-            {
-                RightMouseDownTimer = 0;
-                SuperFastStackTimer = 0;
-            }
-
-            if (ItemID.Sets.BossBag[Item.type] || ItemID.Sets.IsFishingCrate[Item.type])
-            {
-                if (ItemID.Sets.BossBag[Item.type] || ItemID.Sets.BossBag[Item.type])
-                    Main.LocalPlayer.OpenBossBag(Item.type);
-
-                if (ItemID.Sets.IsFishingCrate[Item.type])
-                    Main.LocalPlayer.OpenFishingCrate(Item.type);
-
-                if (ItemLoader.ConsumeItem(Item, Main.LocalPlayer))
-                    Item.stack--;
-
-                if (Item.stack == 0)
-                    Item.SetDefaults();
-
-                SoundEngine.PlaySound(SoundID.Grab);
-                Main.stackSplit = 30;
-                Main.mouseRightRelease = false;
-                Recipe.FindRecipes();
-                return;
-            }
 
             if (ItemLoader.CanRightClick(Item))
             {
                 Main.mouseRightRelease = true;
-                ItemLoader.RightClick(Item, Main.LocalPlayer);
+
+                if (Main.ItemDropsDB.GetRulesForItemID(Item.type).Count != 0)
+                    ItemSlot.TryOpenContainer(Item, Main.LocalPlayer);
+                else
+                    ItemLoader.RightClick(Item, Main.LocalPlayer);
+
                 Main.mouseRightRelease = false;
                 return;
             }
+
+            RightMouseDownTimer = 0;
+            SuperFastStackTimer = 0;
 
             base.RightMouseDown(evt);
         }

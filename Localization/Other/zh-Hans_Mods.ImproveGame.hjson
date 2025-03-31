@@ -437,12 +437,12 @@ Keybinds: {
 	}
 
 	CopyItemName: {
-		DisplayName: 复制物品内部名
+		DisplayName: "[调试功能] 复制物品内部名"
 		Tip: 当光标处有物品时，按下此快捷键将会复制其内部名
 	}
 
 	CopyItemName_Control: {
-		DisplayName: 复制物品内部名全称组合键
+		DisplayName: "[调试功能] 复制物品内部名全称组合键"
 		Tip: 按下此快捷键的同时按下 "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" 将改为复制全称
 	}
 
@@ -452,8 +452,13 @@ Keybinds: {
 	}
 
 	LocalizationDebugging: {
-		DisplayName: "[DEBUG] 本地化调试"
+		DisplayName: "[调试功能] 本地化调试"
 		Tip: 仅开发者使用。按下以从源文件重新加载本地化文本
+	}
+
+	ExtremeStorageSearch: {
+		DisplayName: "在储存管理器中搜索"
+		Tip: 打开储存管理器界面时，将鼠标悬停于任意物品上并按下此快捷键以搜索物品
 	}
 }
 

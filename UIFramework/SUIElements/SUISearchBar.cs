@@ -9,15 +9,15 @@ namespace ImproveGame.UIFramework.SUIElements;
 public class SUISearchBar : View
 {
     private const float DefaultHeight = 28f;
-    
+
     public event Action<string> OnSearchContentsChanged;
     public event Action OnDraw;
 
     private readonly bool _pinyinSearchTip;
-    private readonly SUIEditableText _searchBarInner;
+    public readonly SUIEditableText SearchBarInner;
 
-    public bool IsSearchButtonMouseHovering => _searchBarInner.IsMouseHovering;
-    public bool IsWritingText => _searchBarInner.IsWritingText;
+    public bool IsSearchButtonMouseHovering => SearchBarInner.IsMouseHovering;
+    public bool IsWritingText => SearchBarInner.IsWritingText;
     public string SearchContent { get; private set; }
     public bool Visible = true;
 
@@ -27,7 +27,7 @@ public class SUISearchBar : View
         Height = new StyleDimension(DefaultHeight, 0f);
         this.SetPadding(0f);
 
-        _searchBarInner = InitSearchBar(showIme);
+        SearchBarInner = InitSearchBar(showIme);
         InitCancelButton();
     }
 
@@ -44,13 +44,15 @@ public class SUISearchBar : View
             ShowImePanel = showIme
         };
 
-        searchBar.OnUpdate += element => {
+        searchBar.OnUpdate += element =>
+        {
             var view = (SUIEditableText)element;
             view.BorderColor = view.IsMouseHovering ? UIStyle.SearchBarBorderSelected : UIStyle.SearchBarBorder;
             view.BgColor = UIStyle.SearchBarBg;
         };
 
-        searchBar.ContentsChanged += (ref string s) => {
+        searchBar.ContentsChanged += (ref string s) =>
+        {
             SearchContent = s;
             OnSearchContentsChanged?.Invoke(s);
         };
@@ -58,13 +60,13 @@ public class SUISearchBar : View
         searchBar.InnerText.TextScale = 0.9f;
         searchBar.InnerText.TextOffset.X = 6f;
         searchBar.InnerText.Placeholder = GetText("Search");
-        
+
         if (string.Equals(Language.ActiveCulture.Name, "zh-Hans") && _pinyinSearchTip)
             searchBar.InnerText.Placeholder = "搜索名称(支持拼音或首字母): ";
-            
+
         searchBar.SetSize(0f, 0f, 1f, 1f);
         searchBar.JoinParent(this);
-        
+
         return searchBar;
     }
 
@@ -76,7 +78,7 @@ public class SUISearchBar : View
             VAlign = 0.5f,
             Left = new StyleDimension(-2f, 0f)
         };
-        
+
         cancelBtn.OnMouseOver += SearchCancelButton_OnMouseOver;
         cancelBtn.OnLeftClick += SearchCancelButton_OnClick;
         Append(cancelBtn);
@@ -84,9 +86,9 @@ public class SUISearchBar : View
 
     private void SearchCancelButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
     {
-        if (!string.IsNullOrEmpty(_searchBarInner.Text))
+        if (!string.IsNullOrEmpty(SearchBarInner.Text))
         {
-            _searchBarInner.Text = "";
+            SearchBarInner.Text = "";
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
         else
@@ -114,5 +116,10 @@ public class SUISearchBar : View
         if (!Visible) return;
 
         base.Update(gameTime);
+    }
+
+    public void SetText(string text)
+    {
+        SearchBarInner.Text = text;
     }
 }

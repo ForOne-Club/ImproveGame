@@ -444,12 +444,12 @@ Keybinds: {
 	}
 
 	CopyItemName: {
-		DisplayName: Copy Item Internal Name
+		DisplayName: "[DEBUG] Copy Item Internal Name"
 		Tip: When there's an item under the cursor, press this key to copy its internal name.
 	}
 
 	CopyItemName_Control: {
-		DisplayName: Internal Name Copy Switcher
+		DisplayName: "[DEBUG] Internal Name Copy Switcher"
 		Tip: Press both this key and "{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}" to copy the full internal name
 	}
 
@@ -461,6 +461,11 @@ Keybinds: {
 	LocalizationDebugging: {
 		DisplayName: "[DEBUG] Localization Debugging"
 		Tip: For Devs only. Press to reload localization from source files.
+	}
+
+	ExtremeStorageSearch: {
+		DisplayName: "Search in Storage Manager"
+		Tip: When the Storage Manager is open, hover on any item and press this key to search for the item.
 	}
 }
 

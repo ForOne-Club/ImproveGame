@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.ExtremeStorage.ToolButtons;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.UI.ExtremeStorage.ToolButtons;
 using ImproveGame.UI.ExtremeStorage.ToolButtons.FilterButtons;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
@@ -104,6 +105,15 @@ public class StorageGrids : ModItemGrid
         {
             Scrollbar.Left.Pixels = 0f;
             Scrollbar.Recalculate();
+        }
+
+        ref string placeholder = ref SearchBar.SearchBarInner.InnerText.Placeholder;
+        placeholder = GetText("Search");
+        if (string.Equals(Language.ActiveCulture.Name, "zh-Hans"))
+            placeholder = "搜索名称(支持拼音或首字母): ";
+        if (Main.HoverItem is { } item && !item.IsAir && UISystem.Instance.ExtremeStorageGUI is not null && TryGetKeybindString(KeybindSystem.ExtremeStorageSearch, out string keybindName))
+        {
+            placeholder = GetText("UI.ExtremeStorage.QuickSearch", keybindName);
         }
     }
 

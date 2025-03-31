@@ -97,7 +97,9 @@ public class WallPlaceSelectorMode : SelectorItem
 
     public override void RightClick(Player player)
     {
+        bool favorited = Item.favorited;
         Item.SetDefaults(ModContent.ItemType<WallPlace>());
+        Item.favorited = favorited;
     }
 
     public override bool ConsumeItem(Player player) => false;
