@@ -342,8 +342,8 @@ UniversalAmmoIcon: {
 	DisplayName: Unspecified Ammo
 	Tooltip:
 		'''
-		[c/00ffff:Does] [c/60ffff:not] specify the type of ammo,
-		Use the ammo that the weapon [c/00ffff:is] [c/20ffff:supposed] [c/40ffff:to] [c/60ffff:use]
+		[c/00ffff:Does] [c/60ffff:not] specify the type of ammo
+		Counts as the first ammo in the inventory that the weapon [c/00ffff:can] [c/60ffff:use]
 		'''
 }
 
