@@ -444,12 +444,12 @@ Keybinds: {
 	}
 
 	CopyItemName: {
-		DisplayName: Скопировать внутреннее имя предмета
+		DisplayName: "[DEBUG] Скопировать внутреннее имя предмета"
 		Tip: Нажмите эту клавишу, наведя курсор на предмет, чтобы скопировать внутреннее имя последнего
 	}
 
 	CopyItemName_Control: {
-		DisplayName: Скопировать полное внутреннее имя предмета
+		DisplayName: "[DEBUG] Скопировать полное внутреннее имя предмета"
 		Tip: Нажмите эту клавишу и «{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}», чтобы скопировать полное внутреннее имя предмета
 	}
 
@@ -461,6 +461,11 @@ Keybinds: {
 	LocalizationDebugging: {
 		DisplayName: "[DEBUG] Localization Debugging"
 		Tip: For Devs only. Press reload localization from source files.
+	}
+
+	ExtremeStorageSearch: {
+		DisplayName: Поиск в панели управления хранилищем
+		Tip: Когда панель управления хранилищем открыта, наведите на любой предмет и нажмите на эту клавину, чтобы начать поиск этого предмета.
 	}
 }
 
