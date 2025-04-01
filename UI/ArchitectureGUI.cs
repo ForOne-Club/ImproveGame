@@ -45,7 +45,7 @@ namespace ImproveGame.UI
         public override void OnInitialize() {
             panelLeft = 590f;
             panelTop = 120f;
-            panelHeight = 190f;
+            panelHeight = 250f;
             panelWidth = 190f;
 
             Append(basePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
@@ -62,7 +62,8 @@ namespace ImproveGame.UI
             // 排布
             // O O O
             // O O O
-            // O 切换
+            // O O O
+            // 切 换
             // 排布如上
             const float slotFirst = 0f;
             const float slotSecond = 60f;
@@ -102,6 +103,16 @@ namespace ImproveGame.UI
                     (i, item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Beds),
                     (item, _) => CurrentWand.SetItem(nameof(CreateWand.Bed), item.Clone()),
                     () => Lang.GetItemNameValue(ItemID.Bed)),
+
+                [nameof(CreateWand.Table)] = CreateItemSlot(slotSecond, slotThird, nameof(CreateWand.Table),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && (item.createTile is TileID.Tables or TileID.Tables2)),
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Table), item.Clone()),
+                    () => GetText($"Architecture.{nameof(CreateWand.Table)}")),
+
+                [nameof(CreateWand.Door)] = CreateItemSlot(slotThird, slotThird, nameof(CreateWand.Door),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile ==TileID.ClosedDoor),
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Door), item.Clone()),
+                    () => GetText($"Architecture.{nameof(CreateWand.Door)}")),
             };
 
             // 头顶大字
@@ -116,9 +127,9 @@ namespace ImproveGame.UI
 
             // 房屋样式修改按钮
             styleButton = new(Language.GetText("Mods.ImproveGame.Common.Switch"), Color.White, "Images/UI/DisplaySlots_5");
-            styleButton.Left.Set(slotSecond, 0f);
-            styleButton.Top.Set(slotThird, 0f);
-            styleButton.Width.Set(104f, 0f);
+            styleButton.Left.Set(slotFirst, 0f);
+            styleButton.Top.Set(slotThird + slotSecond, 0f);
+            styleButton.Width.Set(164f, 0f);
             styleButton.Height.Set(42f, 0f);
             styleButton.OnLeftClick += (_, _) => CreateWand.NextStyle();
             basePanel.Append(styleButton);

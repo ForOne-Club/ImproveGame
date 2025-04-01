@@ -697,6 +697,12 @@ public class ModIntegrationsSystem : ModSystem
                     //        ModernConfigDetours.RenderOnConditions.Add(args[1] as Func<bool>);
                     //        break;
                     //    }
+                    // 添加新的监狱
+                    case "AddPrison": 
+                        {
+                            CreateWand.AddNewPrisonStyle(args[1] as Texture2D, args[2] as Texture2D);
+                            return true;
+                        }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");
                         return false;

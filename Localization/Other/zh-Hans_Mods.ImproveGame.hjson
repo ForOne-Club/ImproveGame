@@ -331,6 +331,7 @@ Architecture: {
 	Workbench: 工作台
 	Wall: 墙
 	Bed: 床
+	Door: 门
 }
 
 PaintWandGUI: {
@@ -457,7 +458,7 @@ Keybinds: {
 	}
 
 	ExtremeStorageSearch: {
-		DisplayName: "在储存管理器中搜索"
+		DisplayName: 在储存管理器中搜索
 		Tip: 打开储存管理器界面时，将鼠标悬停于任意物品上并按下此快捷键以搜索物品
 	}
 }

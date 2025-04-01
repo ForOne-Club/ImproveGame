@@ -146,6 +146,7 @@ PlayerStats: {
 }
 
 ExtremeStorage: {
+	// QuickSearch: Press {0} to search for selected item
 	AddChest: Добавить сундук
 	AddChestTip: Нажмите ПКМ, чтобы отменить
 	RejectNearbyStack: Не удалось сложить предметы в сундуки. Возможно, другие игроки сейчас используют Storage Manager

@@ -338,6 +338,7 @@ Architecture: {
 	Workbench: Верстаки
 	Wall: Стены
 	Bed: Кровати
+	// Door: Door
 }
 
 PaintWandGUI: {
@@ -461,6 +462,11 @@ Keybinds: {
 	LocalizationDebugging: {
 		DisplayName: "[DEBUG] Localization Debugging"
 		Tip: For Devs only. Press reload localization from source files.
+	}
+
+	ExtremeStorageSearch: {
+		// DisplayName: Search in Storage Manager
+		// Tip: When the Storage Manager is open, hover on any item and press this key to search for the item.
 	}
 }
 
