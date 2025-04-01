@@ -131,9 +131,9 @@ public class ItemContainerGUI : BaseBody
         toggleSwitch.OnUpdate += _ =>
         {
             toggleSwitch.BorderColor =
-                toggleSwitch.SwitchTimer.Lerp(UIStyle.ScrollBarBorder, UIStyle.ItemSlotBorderFav);
+                toggleSwitch.SwitchTimer.Lerp(UIStyle.PanelBorder, UIStyle.ItemSlotBorderFav);
             toggleSwitch.ToggleCircleColor =
-                toggleSwitch.SwitchTimer.Lerp(UIStyle.ScrollBarBorder, UIStyle.ItemSlotBorderFav);
+                toggleSwitch.SwitchTimer.Lerp(UIStyle.PanelBorder, UIStyle.ItemSlotBorderFav);
         };
         toggleSwitch.SetSizePixels(32f, 20f);
 
@@ -156,9 +156,9 @@ public class ItemContainerGUI : BaseBody
         toggleSwitch2.OnUpdate += _ =>
         {
             toggleSwitch2.BorderColor =
-                toggleSwitch2.SwitchTimer.Lerp(UIStyle.ScrollBarBorder, UIStyle.ItemSlotBorderFav);
+                toggleSwitch2.SwitchTimer.Lerp(UIStyle.PanelBorder, UIStyle.ItemSlotBorderFav);
             toggleSwitch2.ToggleCircleColor =
-                toggleSwitch2.SwitchTimer.Lerp(UIStyle.ScrollBarBorder, UIStyle.ItemSlotBorderFav);
+                toggleSwitch2.SwitchTimer.Lerp(UIStyle.PanelBorder, UIStyle.ItemSlotBorderFav);
         };
         toggleSwitch2.SetSizePixels(32f, 20f);
 
