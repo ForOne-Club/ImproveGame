@@ -120,7 +120,8 @@ public class BuffTrackerGUI : BaseBody
             if(!BuffID.Search.TryGetId(favBuff,out var id))
                 return;
             favIds.Add(id);
-
+            if (!HideBuffSystem.BuffTypesShouldHide[id])
+                continue;
             if (string.IsNullOrEmpty(SearchContent) || Match(searchString, id))
                 BuffList.Add(new BuffButton(id));
         }
