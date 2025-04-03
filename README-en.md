@@ -393,20 +393,22 @@ public override void Load()
 ```
 
 ### AddPrison
-Add new building style for Creat Wand
+Add new house for Wand of Architecture
 #### Parameters
-- `Texture2D` Data texture contains the info of the building
-- `Texture2D` A preview for the building
+- `Texture2D` Data texture containing the info of the house
+- `Texture2D` A preview for the house
 
 #### Data texture format
 
-- `Red    FF0000` Block
-- `Black  000000` Platform
-- `White  FFFFFF` Torch
-- `Yellow FFFF00` Chair
-- `Pink   FF00FF` Table
-- `Blue   0000FF` Workbench
-- `Purple 7F00FF` Bed
-- `Cyan   00FFFF` NoWall
-- `Green  00FF00` Door
-- `Transparent` Wall
+| Color       | Hex Code | Represents   |
+|-------------|----------|--------------|
+| Red         | FF0000   | Block        |
+| Black       | 000000   | Platform     |
+| White       | FFFFFF   | Torch        |
+| Yellow      | FFFF00   | Chair        |
+| Pink        | FF00FF   | Table        |
+| Blue        | 0000FF   | Workbench    |
+| Purple      | 7F00FF   | Bed          |
+| Cyan        | 00FFFF   | NoWall       |
+| Green       | 00FF00   | Door         |
+| Transparent |          | Wall         |
