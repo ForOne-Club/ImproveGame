@@ -60,6 +60,8 @@ namespace ImproveGame.Common.Configs
 
         public HashSet<string> FavoritedModernConfigOptions;
 
+        public HashSet<string> FavoritedBuffs;
+
         public const string FileName = "ImproveGame_AdditionalConfig.json";
         public static readonly string FullPath = Path.Combine(ConfigManager.ModConfigPath, FileName);
 
@@ -111,6 +113,8 @@ namespace ImproveGame.Common.Configs
             WandMode.PaintMode = WandSystem.PaintWandMode;
 
             FavoritedModernConfigOptions = FavoritedOptionDatabase.FavoritedOptions;
+
+            FavoritedBuffs = BuffTrackerGUI.FavoritedBuffs;
 
             UseKeybindTranslation = KeybindSystem.UseKeybindTranslation;
 
@@ -173,6 +177,9 @@ namespace ImproveGame.Common.Configs
                 FavoritedOptionDatabase.SetDefaultFavoritedOptions();
             else
                 FavoritedOptionDatabase.FavoritedOptions = FavoritedModernConfigOptions;
+
+            if(FavoritedBuffs is not null)
+                BuffTrackerGUI.FavoritedBuffs = FavoritedBuffs;
 
             KeybindSystem.UseKeybindTranslation = UseKeybindTranslation;
             UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition == Vector2.Zero
