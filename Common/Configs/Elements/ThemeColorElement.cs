@@ -31,7 +31,8 @@ public class ThemeColorElement : EnumElement
         MainPanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
         {
             Shaded = true,
-            HAlign = 0.5f
+            HAlign = 0.5f,
+            EnableBlur = false,
         };
         MainPanel.SetPadding(0f);
         MainPanel.SetPosPixels(0f, 38f);
