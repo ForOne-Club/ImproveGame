@@ -76,7 +76,6 @@ float RoundedBox(float2 p) //圆角矩形-需要另外指定 uRound-四个圆角
 float4 BarColor(float2 q : TEXCOORD0, float rounded : COLOR0) : COLOR0
 {
 	float Distance = RoundedBox(q) + uInnerShrinkage;
-	float4 color = tex2D(uImage0, float2(dot(q, uBarInfo.xy) + uBarInfo.z, .5));
 	return lerp(color, 0, smoothstep(-1, 0.5, Distance));
 }
 
