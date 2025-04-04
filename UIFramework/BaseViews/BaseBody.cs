@@ -1,5 +1,4 @@
-﻿
-using Terraria.GameInput;
+﻿using Terraria.GameInput;
 
 namespace ImproveGame.UIFramework.BaseViews;
 
@@ -62,52 +61,28 @@ public abstract class BaseBody : View
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        var rt2dPool = ImproveGame.Instance.RenderTargetPool;
+        if (!RenderTarget2DDraw)
+        {
+            base.Draw(spriteBatch);
+            return;
+        }
+
         var device = Main.graphics.GraphicsDevice;
+        var original = device.GetRenderTargets();
 
-        var originalRT2Ds = device.GetRenderTargets();
-        // && originalRT2Ds != null && originalRT2Ds.Length != 0
-        if (RenderTarget2DDraw)
-        {
+        var uiRenderTarget = RenderTargetPool.Instance.Rent(device.Viewport.Width, device.Viewport.Height);
 
-            if (originalRT2Ds != null)
-            {
-                foreach (var item in originalRT2Ds)
-                {
-                    if (item.renderTarget is RenderTarget2D rt)
-                    {
-                        rt.RenderTargetUsage = RenderTargetUsage.PreserveContents;
-                    }
-                }
-            }
+        device.SetRenderTarget(uiRenderTarget);
+        device.Clear(Color.Transparent);
+        // 进行原本的绘制
+        base.Draw(spriteBatch);
+        spriteBatch.End();
 
-            // 刺客获取的屏幕大小不是正常的
-            var rt2d = rt2dPool.Borrow((int)Math.Round(Main.screenWidth * Main.UIScale),
-                (int)Math.Round(Main.screenHeight * Main.UIScale));
+        original.RestoreRenderTargets(device);
+        spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, Matrix.Identity);
+        spriteBatch.Draw(uiRenderTarget, RenderTarget2DPosition * Main.UIScale, null,
+            Color.White * RenderTarget2DOpacity, 0f, RenderTarget2DOrigin * Main.UIScale, RenderTarget2DScale, 0, 0);
 
-            var lastRenderTargetUsage = device.PresentationParameters.RenderTargetUsage;
-            device.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
-
-            device.SetRenderTarget(rt2d);
-            device.Clear(Color.Transparent);
-
-            base.Draw(spriteBatch);
-
-            spriteBatch.End();
-            device.SetRenderTargets(originalRT2Ds);
-
-            // 使用默认矩阵，因为图像已经是根据 UIZoom 矩阵 绘制的了。
-            spriteBatch.Begin();
-            spriteBatch.Draw(rt2d, RenderTarget2DPosition * Main.UIScale, null,
-                Color.White * RenderTarget2DOpacity, 0f, RenderTarget2DOrigin * Main.UIScale, RenderTarget2DScale, 0, 0);
-
-            device.PresentationParameters.RenderTargetUsage = lastRenderTargetUsage;
-
-            rt2dPool.Return(rt2d);
-        }
-        else
-        {
-            base.Draw(spriteBatch);
-        }
+        RenderTargetPool.Instance.Return(uiRenderTarget);
     }
 }

@@ -298,11 +298,11 @@ public class ModernConfigOption : TimerView
 
         if (Highlighted)
         {
-            SDFRectangle.HasBorder(position, size, new Vector4(8f), panelColor, UIStyle.ItemSlotBorderSize, UIStyle.ItemSlotBorderFav * 0.8f);
+            SDFRectangle.HasBorder(position, size, new Vector4(8f), panelColor, UIStyle.ItemSlotBorderSize, UIStyle.ItemSlotBorderFav * 0.8f, Main.UIScaleMatrix);
         }
         else
         {
-            SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor * 0.8f);
+            SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor * 0.8f, Main.UIScaleMatrix);
         }
 
         // 提示

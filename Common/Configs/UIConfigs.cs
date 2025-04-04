@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.UI.ModernConfig;
+using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -22,10 +23,10 @@ public class UIConfigs : ModConfig
     [CustomModConfigItem(typeof(SuicideButtonElement))]
     public object SuicideButton;
 
-    [Header("UIHeader")]
-    [DefaultValue(false)]
-    [DrawTicks]
-    public bool GlassVfxOn;
+    //[Header("UIHeader")]
+    //[DefaultValue(false)]
+    //[DrawTicks]
+    //public bool GlassVfxOn;
 
     [CustomModConfigItem(typeof(ThemeColorElement))]
     public ThemeType ThemeType;
@@ -53,6 +54,34 @@ public class UIConfigs : ModConfig
     [CustomModConfigItem(typeof(BigFontOffsetPreview))]
     [Slider]
     public float BigFontOffsetY;
+
+    [DefaultValue(false)]
+    public bool EnableBlur;
+
+    [DefaultValue(false)]
+    public bool SingleBlur;
+
+    [Slider]
+    [DefaultValue(2f)]
+    [Range(1f, 8f)]
+    [Increment(0.5f)]
+    public float BlurZoomMultiplierDenominator;
+
+    [Slider]
+    [DefaultValue(2)]
+    [Range(0, 10)]
+    [Increment(1)]
+    public int BlurIterationCount;
+
+    [Slider]
+    [DefaultValue(2f)]
+    [Range(1f, 10f)]
+    [Increment(1f)]
+    public float IterationOffsetMultiplier;
+
+    [Slider]
+    [DefaultValue(BlurMixingNumber.Three)]
+    public BlurMixingNumber BlurMixingNumber;
 
     [Header("GameHeader")]
     [DefaultValue(false)]
@@ -195,5 +224,15 @@ public class UIConfigs : ModConfig
     public override void OnLoaded()
     {
         Instance = this;
+    }
+
+    public override void OnChanged()
+    {
+        BlurMakeSystem.EnableBlur = EnableBlur;
+        BlurMakeSystem.SingleBlur = SingleBlur;
+        BlurMakeSystem.BlurZoomMultiplierDenominator = BlurZoomMultiplierDenominator;
+        BlurMakeSystem.BlurIterationCount = BlurIterationCount;
+        BlurMakeSystem.IterationOffsetMultiplier = IterationOffsetMultiplier;
+        BlurMakeSystem.BlurMixingNumber = BlurMixingNumber;
     }
 }

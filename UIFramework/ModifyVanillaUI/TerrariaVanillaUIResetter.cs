@@ -160,7 +160,7 @@ public class TerrariaVanillaUIResetter : ModSystem
             color.B = (byte)Math.Round(self._color.B * colorX.Z / 255f);
             color.A = self._color.A;
 
-            SDFRectangle.NoBorder(pos, size, new Vector4(6f), color);
+            SDFRectangle.NoBorder(pos, size, new Vector4(6f), color, Main.UIScaleMatrix);
             return;
         }
 
@@ -283,7 +283,7 @@ public class TerrariaVanillaUIResetter : ModSystem
         borderColor.R = (byte)Math.Round(borderColor.R * 19d / 255);
         borderColor.G = (byte)Math.Round(borderColor.G * 30d / 255);
         borderColor.B = (byte)Math.Round(borderColor.B * 39d / 255);
-        SDFRectangle.HasBorder(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), color, 2, borderColor);
+        SDFRectangle.HasBorder(new Vector2(x, y), new Vector2(w, h), new Vector4(10f), color, 2, borderColor, Main.UIScaleMatrix);
     }
 
     private static CalculatedStyle GetHandleCalculatedStyle(UIScrollbar scrollbar)
@@ -321,12 +321,12 @@ public class TerrariaVanillaUIResetter : ModSystem
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
         float bgRounded = MathF.Min(size.X, size.Y) / 2;
-        SDFRectangle.HasBorder(pos, size, new Vector4(bgRounded), UIStyle.ScrollBarBg, 2, UIStyle.PanelBorder);
+        SDFRectangle.HasBorder(pos, size, new Vector4(bgRounded), UIStyle.ScrollBarBg, 2, UIStyle.PanelBorder, Main.UIScaleMatrix);
         CalculatedStyle barDimensions = GetHandleCalculatedStyle(self);
         Vector2 barPos = barDimensions.Position() + new Vector2(5, 3);
         Vector2 barSize = barDimensions.Size() - new Vector2(10, 7);
         float barRounded = MathF.Min(barSize.X, barSize.Y) / 2;
-        SDFRectangle.NoBorder(barPos, barSize, new Vector4(barRounded), new(220, 220, 220));
+        SDFRectangle.NoBorder(barPos, barSize, new Vector4(barRounded), new(220, 220, 220), Main.UIScaleMatrix);
     }
 
     private void UIPanel_DrawSelf(On_UIPanel.orig_DrawSelf orig, UIPanel self,
@@ -334,7 +334,7 @@ public class TerrariaVanillaUIResetter : ModSystem
     {
         Vector2 pos = self.GetDimensions().Position();
         Vector2 size = self.GetDimensions().Size();
-        SDFRectangle.HasBorder(pos, size, new Vector4(10f), self.BackgroundColor, 2, self.BorderColor);
+        SDFRectangle.HasBorder(pos, size, new Vector4(10f), self.BackgroundColor, 2, self.BorderColor, Main.UIScaleMatrix);
     }
 
     private static void PrintParent(UIElement self, UIElement target)

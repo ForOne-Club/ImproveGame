@@ -78,7 +78,7 @@ public class GameRectangleSystem : ModSystem
                     {
                         var position = new Vector2(chest.x, chest.y) * 16f - Main.screenPosition;
                         position.X -= 2f;
-                        SDFRectangle.HasBorder(position, size, new Vector4(4f), background, 2f, border, false);
+                        SDFRectangle.HasBorder(position, size, new Vector4(4f), background, 2f, border, Main.UIScaleMatrix);
                     }
                     return true;
                 },

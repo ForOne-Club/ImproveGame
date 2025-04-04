@@ -84,7 +84,7 @@ namespace ImproveGame.UI.ExtremeStorage
                     if (clicked)
                     {
                         // 所有的标识符
-                        var allIdentifiers = new HashSet<char> {'!', '@', '#', '$', '%', '&', '=', '*', '+', '-', '?'};
+                        var allIdentifiers = new HashSet<char> { '!', '@', '#', '$', '%', '&', '=', '*', '+', '-', '?' };
 
                         // 如果箱子名为空，直接赋值
                         // 如果箱子名不为空，且第一个字符是标识符，那么就把标识符替换掉
@@ -103,7 +103,7 @@ namespace ImproveGame.UI.ExtremeStorage
 
                 var drawPosition = positionInWorld.ToVector2() - Main.screenPosition - new Vector2(2f);
                 SDFRectangle.HasBorder(drawPosition, hitbox.Size() + new Vector2(4f), new Vector4(4), color * 0.2f, 2f,
-                    color, ui: false);
+                    color, Main.GameViewMatrix.EffectMatrix);
             }
         }
     }

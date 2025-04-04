@@ -139,7 +139,7 @@ public class UISystem : ModSystem
         LoadGUI(ref BurstGUI, out var ui); BrustInterface = ui;
         LoadGUI(ref SpaceWandGUI, out ui); SpaceWandInterface = ui;
         LoadGUI(ref PaintWandGUI, out ui); PaintWandInterface = ui;
-        
+
         // 委托到Main.UpdateUIStates以实现Main.gameMenu为true时更新UI，用于配色风格的设置
         On_Main.UpdateUIStates += (orig, time) =>
         {
@@ -176,17 +176,17 @@ public class UISystem : ModSystem
     /// </summary>
     private void UpdateMenuUI(GameTime gameTime)
     {
-        if (_themeLastTick != UIConfigs.Instance.ThemeType || _acrylicVfxLastTick != GlassVfxEnabled)
+        if (_themeLastTick != UIConfigs.Instance.ThemeType || false)//_acrylicVfxLastTick != GlassVfxEnabled
         {
             UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
-            if (GlassVfxAvailable)
-                UIStyle.AcrylicRedesign();
+            //if (GlassVfxAvailable)
+            //    UIStyle.AcrylicRedesign();
             if (!Main.gameMenu)
                 UIPlayer.InitUI();
         }
 
         _themeLastTick = UIConfigs.Instance.ThemeType;
-        _acrylicVfxLastTick = GlassVfxEnabled;
+        //_acrylicVfxLastTick = GlassVfxEnabled;
 
         IsHoveringOnEditableText = false;
     }
@@ -253,7 +253,7 @@ public class UISystem : ModSystem
     }
 
     #endregion
-    
+
     #region 获取
 
     public static bool TryGetBaseBody<T>(out T body) where T : BaseBody
@@ -268,7 +268,7 @@ public class UISystem : ModSystem
         body = baseBody as T;
         return success;
     }
-    
+
     #endregion
 
     public override void PreSaveAndQuit()

@@ -53,7 +53,7 @@ public class MarqueeSystem : ModSystem
         Player player = Main.LocalPlayer;
         Item item = player.HeldItem;
 
-        if (item.ModItem is IMarqueeItem {ShouldDraw: true } marqueeItem)
+        if (item.ModItem is IMarqueeItem { ShouldDraw: true } marqueeItem)
         {
             Rectangle marquee = marqueeItem.Marquee;
             Vector2 position = new Vector2(marquee.X, marquee.Y);
@@ -72,7 +72,7 @@ public class MarqueeSystem : ModSystem
                     position - new Vector2(2) - Main.screenPosition,
                     size + new Vector2(4),
                     new Vector4(2),
-                    backgroundColor, 2f, borderColor, false);
+                    backgroundColor, 2f, borderColor, Main.GameViewMatrix.EffectMatrix);
             }
 
             marqueeItem.PostDrawMarquee(marquee, backgroundColor, borderColor);

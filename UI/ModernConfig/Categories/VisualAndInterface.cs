@@ -10,7 +10,7 @@ public sealed class VisualAndInterface : Category
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         var uiConfig = UIConfigs.Instance;
-        panel.AddToggle(uiConfig, nameof(uiConfig.GlassVfxOn));
+        //panel.AddToggle(uiConfig, nameof(uiConfig.GlassVfxOn));
         panel.AddEnum(uiConfig, nameof(uiConfig.ThemeType));
         panel.AddToggle(uiConfig, nameof(uiConfig.GlobeEffect));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.GeneralFontOffsetY));

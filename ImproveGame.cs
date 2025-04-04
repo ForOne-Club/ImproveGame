@@ -1,6 +1,6 @@
 using ImproveGame.Common;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Core;
+using ImproveGame.UIFramework;
 using Terraria.UI.Chat;
 
 namespace ImproveGame;
@@ -14,7 +14,7 @@ public class ImproveGame : Mod
             Instance.DisplayName = GetText("ModName");
         }
     }
-    
+
     public static ImproveGame Instance => ModContent.GetInstance<ImproveGame>();
 
     // 额外BUFF槽

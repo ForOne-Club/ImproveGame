@@ -624,7 +624,8 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 if (colorfulSliderButton.IsMouseHovering)
                     SDFGraphics.NoBorderRound(colorfulDimension.Center() + new Vector2(1), new(.5f), 28, UIStyle.SliderRoundHover, matrix);
-                SDFRectangle.BarColor(colorfulDimension.Position(), colorfulDimension.Size(), colorfulSliderButton.Rounded, TextureAssets.Extra[180].Value, Vector2.UnitX * .05f, 0, true);
+                // 114514114514
+                //SDFRectangle.BarColor(colorfulDimension.Position(), colorfulDimension.Size(), colorfulSliderButton.Rounded, TextureAssets.Extra[180].Value, Vector2.UnitX * .05f, 0, Main.UIScaleMatrix);
 
 
                 DrawRGBPanel(RgbPanel.GetDimensions().Position(), RgbPanel.GetDimensions().Size(), currentColor);

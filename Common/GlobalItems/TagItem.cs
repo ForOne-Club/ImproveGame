@@ -33,7 +33,8 @@ namespace ImproveGame.Common.GlobalItems
         /// <summary>
         /// 为药水物品简介添加Tag标题文本
         /// </summary>
-        public static void ModifyBuffTooltips(Mod mod, int itemType, int buffType, List<TooltipLine> tooltips) {
+        public static void ModifyBuffTooltips(Mod mod, int itemType, int buffType, List<TooltipLine> tooltips)
+        {
             bool buffEnabled = InfBuffPlayer.CheckInfBuffEnable(buffType);
 
             if (itemType is ItemID.GardenGnome)
@@ -97,7 +98,7 @@ namespace ImproveGame.Common.GlobalItems
                 });
             }
         }
-        
+
         public static void AddShiftForMoreTooltip(List<TooltipLine> tooltips)
         {
             // Shift显示更多信息
@@ -111,42 +112,53 @@ namespace ImproveGame.Common.GlobalItems
         /// <summary>
         /// 根据物品原Tooltip中的Tag标题文本生成详细文本列表
         /// </summary>=
-        public static List<TooltipLine> GenerateDetailedTags(Mod Mod, ReadOnlyCollection<TooltipLine> tooltips, object arg = null) {
+        public static List<TooltipLine> GenerateDetailedTags(Mod Mod, ReadOnlyCollection<TooltipLine> tooltips, object arg = null)
+        {
             List<TooltipLine> list = new();
-            foreach (TooltipLine line in tooltips) {
-                if (line.Mod == Mod.Name) {
+            foreach (TooltipLine line in tooltips)
+            {
+                if (line.Mod == Mod.Name)
+                {
                     // 一般的Tag提示
-                    if (line.Name.StartsWith("TagDetailed")) {
+                    if (line.Name.StartsWith("TagDetailed"))
+                    {
                         RegularTagSetup();
                         // Tag详细信息
                         string[] parts = line.Name.Split('.');
                         AddToList($"Tips.{parts[0]}Tip.{parts[1]}");
                     }
                     // 增益组合提示
-                    if (line.Name.StartsWith("CombinedBuff")) {
+                    if (line.Name.StartsWith("CombinedBuff"))
+                    {
                         RegularTagSetup();
                         // Tag详细信息
                         AddToList($"Tips.TagDetailedTip.{line.Name}");
                     }
 
                     // 设置基本的Tag信息
-                    void RegularTagSetup() {
+                    void RegularTagSetup()
+                    {
                         // 一行空位隔开
-                        if (list.Count > 0) {
+                        if (list.Count > 0)
+                        {
                             list.Add(new(Mod, "Empty", ""));
                         }
                         // Tag名称
-                        list.Add(new(Mod, line.Name, line.Text) {
+                        list.Add(new(Mod, line.Name, line.Text)
+                        {
                             OverrideColor = line.OverrideColor
                         });
                     }
 
                     // 添加到list里面
-                    void AddToList(string key) {
-                        if (arg is not null) {
+                    void AddToList(string key)
+                    {
+                        if (arg is not null)
+                        {
                             list.Add(new(Mod, key, GetTextWith(key, arg)));
                         }
-                        else {
+                        else
+                        {
                             list.Add(new(Mod, key, GetText(key)));
                         }
                     }
@@ -163,21 +175,25 @@ namespace ImproveGame.Common.GlobalItems
         /// <param name="tagTooltips">Tag Tooltip文本</param>
         /// <param name="x">原Tooltip文本绘制起始点 X 坐标</param>
         /// <param name="y">原Tooltip文本绘制起始点 Y 坐标</param>
-        public static void DrawTagTooltips(ReadOnlyCollection<TooltipLine> tooltips, List<TooltipLine> tagTooltips, int x, int y) {
+        public static void DrawTagTooltips(ReadOnlyCollection<TooltipLine> tooltips, List<TooltipLine> tagTooltips, int x, int y)
+        {
             var font = FontAssets.MouseText.Value;
             int widthOffset = 14;
             int heightOffset = 9;
 
             float length = 0f;
-            foreach (TooltipLine line in tooltips) {
+            foreach (TooltipLine line in tooltips)
+            {
                 length = Math.Max(length, ChatManager.GetStringSize(font, line.Text, Vector2.One).X);
             }
             x += (int)length + widthOffset * 2 + 6;
 
             float lengthY = 0f;
             length = 0f;
-            foreach (TooltipLine line in tagTooltips) {
-                if (line.Name == "Empty") {
+            foreach (TooltipLine line in tagTooltips)
+            {
+                if (line.Name == "Empty")
+                {
                     lengthY += 24;
                     continue;
                 }
@@ -185,17 +201,21 @@ namespace ImproveGame.Common.GlobalItems
                 length = Math.Max(length, stringSize.X + 8);
                 lengthY += stringSize.Y;
             }
-            if (Main.SettingsEnabled_OpaqueBoxBehindTooltips) {
+            if (Main.SettingsEnabled_OpaqueBoxBehindTooltips)
+            {
                 TrUtils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
             }
 
-            foreach (TooltipLine line in tagTooltips) {
-                if (line.Name == "Empty") {
+            foreach (TooltipLine line in tagTooltips)
+            {
+                if (line.Name == "Empty")
+                {
                     y += 24;
                     continue;
                 }
                 int drawX = x;
-                if (!line.Name.StartsWith("TagDetailed") && !line.Name.StartsWith("CombinedBuff")) {
+                if (!line.Name.StartsWith("TagDetailed") && !line.Name.StartsWith("CombinedBuff"))
+                {
                     drawX += 8;
                 }
                 Color color = line.OverrideColor ?? new(0.7f, 0.7f, 0.7f);
@@ -203,7 +223,7 @@ namespace ImproveGame.Common.GlobalItems
                 y += (int)ChatManager.GetStringSize(font, line.Text, Vector2.One).Y;
             }
         }
-        
+
         /// <summary>
         /// 纯粹的绘制另一个tooltips，没有 DrawTagTooltips 那些特判
         /// <br/> 名称为 Empty 的行会生成一行空行
@@ -214,21 +234,25 @@ namespace ImproveGame.Common.GlobalItems
         /// <param name="y">原Tooltip文本绘制起始点 Y 坐标</param>
         /// <param name="useBox">是否使用box, true为强制使用, false为强制不使用, null为随原版</param>
         /// <param name="shaderBorder">是否使用局长特制的丝滑Shader边框</param>
-        public static void DrawTooltips(ReadOnlyCollection<TooltipLine> tooltips, List<TooltipLine> tagTooltips, int x, int y, bool? useBox = null, bool shaderBorder = true) {
+        public static void DrawTooltips(ReadOnlyCollection<TooltipLine> tooltips, List<TooltipLine> tagTooltips, int x, int y, bool? useBox = null, bool shaderBorder = true)
+        {
             var font = FontAssets.MouseText.Value;
             int widthOffset = 9;
             int heightOffset = 9;
 
             float length = 0f;
-            foreach (TooltipLine line in tooltips) {
+            foreach (TooltipLine line in tooltips)
+            {
                 length = Math.Max(length, ChatManager.GetStringSize(font, line.Text, Vector2.One).X);
             }
             x += (int)length + 34;
 
             float lengthY = 0f;
             length = 0f;
-            foreach (TooltipLine line in tagTooltips) {
-                if (line.Name == "Empty") {
+            foreach (TooltipLine line in tagTooltips)
+            {
+                if (line.Name == "Empty")
+                {
                     lengthY += 24;
                     continue;
                 }
@@ -236,15 +260,18 @@ namespace ImproveGame.Common.GlobalItems
                 length = Math.Max(length, stringSize.X);
                 lengthY += stringSize.Y;
             }
-            if ((useBox is null && Main.SettingsEnabled_OpaqueBoxBehindTooltips) || useBox is true) {
+            if ((useBox is null && Main.SettingsEnabled_OpaqueBoxBehindTooltips) || useBox is true)
+            {
                 if (shaderBorder)
-                    SDFRectangle.HasBorder(new Vector2(x - widthOffset, y - heightOffset), new Vector2(length + widthOffset * 2, lengthY + heightOffset + heightOffset / 2), new Vector4(12f), UIStyle.PanelBg, 2, UIStyle.PanelBorder);
+                    SDFRectangle.HasBorder(new Vector2(x - widthOffset, y - heightOffset), new Vector2(length + widthOffset * 2, lengthY + heightOffset + heightOffset / 2), new Vector4(12f), UIStyle.PanelBg, 2, UIStyle.PanelBorder, Main.UIScaleMatrix);
                 else
                     TrUtils.DrawInvBG(Main.spriteBatch, new Rectangle(x - widthOffset, y - heightOffset, (int)length + widthOffset * 2, (int)lengthY + heightOffset + heightOffset / 2), new Color(23, 25, 81, 255) * 0.925f);
             }
 
-            foreach (TooltipLine line in tagTooltips) {
-                if (line.Name == "Empty") {
+            foreach (TooltipLine line in tagTooltips)
+            {
+                if (line.Name == "Empty")
+                {
                     y += 24;
                     continue;
                 }

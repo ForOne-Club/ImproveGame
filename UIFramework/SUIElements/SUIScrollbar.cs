@@ -242,7 +242,7 @@ namespace ImproveGame.UIFramework.SUIElements
             var round = new Vector4(MathF.Min(innerSize.X, innerSize.Y) * RoundMultiplier);
 
             // 滚动条拖动块
-            SDFRectangle.NoBorder(innerPosition, innerSize, round, hoverColor);
+            SDFRectangle.NoBorder(innerPosition, innerSize, round, hoverColor, Main.UIScaleMatrix);
         }
 
         /// <summary>

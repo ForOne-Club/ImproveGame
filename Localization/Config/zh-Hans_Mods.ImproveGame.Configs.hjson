@@ -1073,6 +1073,54 @@ UIConfigs: {
 			'''
 	}
 
+	EnableBlur:
+    {
+        Label: "[centeritem:1344] 启用模糊效果（复古模式不管用）"
+        Tooltip: 高分辨率屏幕建议拉高缩放乘数分母
+    }
+
+    SingleBlur:
+    {
+        Label: "[centeritem:1344] 窗口独立模糊（消耗大）"
+        Tooltip: 每个 UI 都单独模糊，效果更好，可能有兼容性问题
+    }
+
+    BlurZoomMultiplierDenominator:
+    {
+        Label: "[centeritem:1344] 缩放乘数分母（值越大消耗越小）"
+        Tooltip:
+            '''
+            数值越大，处理的图像越小
+            如果卡顿，可以尝试增大此值
+            普通 GPU 4K 分辨率建议设为 4
+            高端 GPU 可直接设为 1
+            设为 1 则完全按照原分辨率渲染
+            缩小会影响模糊范围，所以需要结合调整下方值
+            '''
+    }
+
+    BlurIterationCount:
+    {
+        Label: "[centeritem:1344] 迭代次数（值越大消耗越大）"
+        Tooltip:
+            '''
+            数值越大，处理模糊的次数越多，同时会变得越模糊
+            如果卡顿，可以尝试降低此值
+            '''
+    }
+
+    IterationOffsetMultiplier:
+    {
+        Label: "[centeritem:1344] 采样偏移乘数（性能无关）"
+        Tooltip: 值越大越模糊，但同时越容易出现条纹
+    }
+
+    BlurMixingNumber:
+    {
+        Label: "[centeritem:1344] 颜色混合数（值越大消耗越大）"
+        Tooltip: 值越大越颜色采样越多
+    }
+
 	AutoSummon: {
 		Label: "[centeritem:SlimeStaff] 自动重召唤"
 		Tooltip:

@@ -381,11 +381,11 @@ public class View : UIElement
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
 
-            SDFRectangle.HasBorder(pos, size, Rounded, Color.Transparent, Border, BorderColor);
+            SDFRectangle.HasBorder(pos, size, Rounded, Color.Transparent, Border, BorderColor, Main.UIScaleMatrix);
         }
     }
 
-    public void DrawSDFRectangle()
+    public virtual void DrawSDFRectangle()
     {
         Vector2 pos = GetDimensions().Position();
         Vector2 size = GetDimensions().Size();
@@ -396,16 +396,16 @@ public class View : UIElement
             {
                 if (BgColor != Color.Transparent)
                     SDFRectangle.NoBorder(pos + new Vector2(Border), size - new Vector2(Border * 2f),
-                        Rounded - new Vector4(Border), BgColor);
+                        Rounded - new Vector4(Border), BgColor, Main.UIScaleMatrix);
             }
             else
             {
-                SDFRectangle.HasBorder(pos, size, Rounded, BgColor, Border, BorderColor);
+                SDFRectangle.HasBorder(pos, size, Rounded, BgColor, Border, BorderColor, Main.UIScaleMatrix);
             }
         }
         else if (BgColor != Color.Transparent)
         {
-            SDFRectangle.NoBorder(pos, size, Rounded, BgColor);
+            SDFRectangle.NoBorder(pos, size, Rounded, BgColor, Main.UIScaleMatrix);
         }
     }
 

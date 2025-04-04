@@ -136,15 +136,44 @@ namespace ImproveGame.UIFramework.SUIElements
         {
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
-            Vector2 ShadowThickness = new Vector2(this.ShadowThickness);
-            Vector2 shadowPos = pos - ShadowThickness;
-            Vector2 shadowSize = size + ShadowThickness * 2;
+            Vector2 shadowThickness = new Vector2(ShadowThickness);
+            Vector2 shadowPos = pos - shadowThickness;
+            Vector2 shadowSize = size + shadowThickness * 2;
+
+            // 默认开启改的代码就少了
+            // 然后放到 View 就不能默认开启了，要改太多
+            // 复古模式自动没
+            if (EnableBlur && BlurMakeSystem.BlurAvailable)
+            {
+                if (BlurMakeSystem.SingleBlur)
+                {
+                    var device = Main.graphics.GraphicsDevice;
+                    var scissorRectangle = device.ScissorRectangle;
+                    var batch = Main.spriteBatch;
+                    batch.End();
+                    BlurMakeSystem.MakeKawaseBlur();
+                    device.ScissorRectangle = scissorRectangle;
+                    batch.Begin(SpriteSortMode.Deferred, null, null, null, OverflowHiddenRasterizerState, null, Main.UIScaleMatrix);
+                }
+
+                var scale = Main.UIScale;
+                SDFRectangle.SampleVersion(BlurMakeSystem.BlurRenderTarget,
+                    _dimensions.Position() * scale, _dimensions.Size() * scale, Rounded * scale, Matrix.Identity);
+            }
 
             if (Shaded)
             {
-                SDFRectangle.Shadow(shadowPos, shadowSize, Rounded, ShadowColor, this.ShadowThickness);
+                SDFRectangle.Shadow(shadowPos, shadowSize, Rounded + new Vector4(ShadowThickness), ShadowColor, ShadowThickness, Main.UIScaleMatrix);
             }
             base.DrawSelf(spriteBatch);
+        }
+
+        public bool EnableBlur { get; set; } = true;
+
+        public override void DrawSDFRectangle()
+        {
+            // 写这里就会闪一下
+            base.DrawSDFRectangle();
         }
     }
 }

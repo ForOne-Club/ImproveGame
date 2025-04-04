@@ -3,6 +3,7 @@ using ImproveGame.Packets;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
+using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
 using ImproveGame.UIFramework.UIElements;
 using Terraria.GameInput;
@@ -377,4 +378,15 @@ public class BigBagGUI : BaseBody
     public override Vector2 RenderTarget2DOrigin => MainPanel.GetDimensionsCenter();
     public override Vector2 RenderTarget2DPosition => MainPanel.GetDimensionsCenter();
     public override Vector2 RenderTarget2DScale => new Vector2(0.95f + StartTimer.Lerp(0, 0.05f));
+
+    public override void DrawSelf(SpriteBatch spriteBatch)
+    {
+
+        base.DrawSelf(spriteBatch);
+    }
+
+    public override void DrawSDFRectangle()
+    {
+        base.DrawSDFRectangle();
+    }
 }

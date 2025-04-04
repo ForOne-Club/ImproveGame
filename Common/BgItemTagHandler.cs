@@ -52,7 +52,7 @@ namespace ImproveGame.Common
                 {
                     float inventoryScale = Main.inventoryScale;
                     Main.inventoryScale = scale * invScale;
-                    SDFRectangle.HasBorder(position, size, new Vector4(12f), Background, 2, BorderColor);
+                    SDFRectangle.HasBorder(position, size, new Vector4(12f), Background, 2, BorderColor, Main.UIScaleMatrix);
                     ItemSlot.Draw(spriteBatch, ref _item, ItemSlot.Context.ChatItem, position, Color.White);
                     Main.inventoryScale = inventoryScale;
                 }
