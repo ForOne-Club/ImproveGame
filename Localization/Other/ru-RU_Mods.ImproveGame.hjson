@@ -316,8 +316,8 @@ BuffTracker: {
 	Title: Трекер юаффов
 	LeftClickDisable: "[c/CC88AA:<left>], чтобы отключить этот бафф"
 	LeftClickEnable: "[c/CC88AA:<left>], чтобы включить этот бафф"
-	// RightClickDisable: "[c/CC88AA:<right>] to remove from favourites"
-	// RightClickEnable: "[c/CC88AA:<right>] to mark as favorite"
+	RightClickDisable: "[c/CC88AA:<right>], чтобы убрать из избранного"
+	RightClickEnable: "[c/CC88AA:<right>], чтобы пометить как избранное"
 	NoInfBuff: На данный момент нет бесконечных баффов
 	NoInfBuffAlt: Включите «Бесконечные зелья» в конфигурации мода
 	NPCSpawnRatePanel: Панель управления скоростью появления мобов
@@ -340,7 +340,7 @@ Architecture: {
 	Workbench: Верстаки
 	Wall: Стены
 	Bed: Кровати
-	// Door: Door
+	Door: Двери
 }
 
 PaintWandGUI: {
@@ -447,12 +447,12 @@ Keybinds: {
 	}
 
 	CopyItemName: {
-		DisplayName: Скопировать внутреннее имя предмета
+		DisplayName: "[DEBUG] Скопировать внутреннее имя предмета"
 		Tip: Нажмите эту клавишу, наведя курсор на предмет, чтобы скопировать внутреннее имя последнего
 	}
 
 	CopyItemName_Control: {
-		DisplayName: Скопировать полное внутреннее имя предмета
+		DisplayName: "[DEBUG] Скопировать полное внутреннее имя предмета"
 		Tip: Нажмите эту клавишу и «{$Mods.ImproveGame.Keybinds.CopyItemName.DisplayName}», чтобы скопировать полное внутреннее имя предмета
 	}
 
@@ -467,8 +467,8 @@ Keybinds: {
 	}
 
 	ExtremeStorageSearch: {
-		// DisplayName: Search in Storage Manager
-		// Tip: When the Storage Manager is open, hover on any item and press this key to search for the item.
+		DisplayName: Поиск в панели управления хранилищем
+		Tip: Когда панель управления хранилищем открыта, наведите на любой предмет и нажмите на эту клавину, чтобы начать поиск этого предмета.
 	}
 }
 
