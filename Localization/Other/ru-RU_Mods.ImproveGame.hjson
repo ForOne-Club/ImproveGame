@@ -316,6 +316,8 @@ BuffTracker: {
 	Title: Трекер юаффов
 	LeftClickDisable: "[c/CC88AA:<left>], чтобы отключить этот бафф"
 	LeftClickEnable: "[c/CC88AA:<left>], чтобы включить этот бафф"
+	// RightClickDisable: "[c/CC88AA:<right>] to remove from favourites"
+	// RightClickEnable: "[c/CC88AA:<right>] to mark as favorite"
 	NoInfBuff: На данный момент нет бесконечных баффов
 	NoInfBuffAlt: Включите «Бесконечные зелья» в конфигурации мода
 	NPCSpawnRatePanel: Панель управления скоростью появления мобов
@@ -338,6 +340,7 @@ Architecture: {
 	Workbench: Верстаки
 	Wall: Стены
 	Bed: Кровати
+	// Door: Door
 }
 
 PaintWandGUI: {

@@ -1,11 +1,15 @@
-﻿using ImproveGame.Common.GlobalBuffs;
+﻿using ImproveGame.Common.Configs.FavoritedSystem;
+using ImproveGame.Common.GlobalBuffs;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions.PortableBuff;
+using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using PinyinNet;
+using System.Linq;
 using Terraria.GameInput;
+using Terraria.ModLoader.Config;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI;
@@ -22,7 +26,7 @@ public class BuffTrackerGUI : BaseBody
     private string SearchContent => _searchBar.SearchContent;
     internal BuffTrackerBattler BuffTrackerBattler;
     private static int _oldBuffCount; // 用于及时更新列表
-
+    internal static HashSet<string> FavoritedBuffs = [];
     public override bool CanSetFocusTarget(UIElement target)
     {
         return (target != this && MainPanel.IsMouseHovering) || MainPanel.IsLeftMousePressed;
@@ -109,11 +113,25 @@ public class BuffTrackerGUI : BaseBody
         BuffList.Clear();
 
         string searchString = SearchContent?.Trim().ToLower();
+
+        HashSet<int> favIds = [];
+        foreach (var favBuff in FavoritedBuffs) 
+        {
+            if(!BuffID.Search.TryGetId(favBuff,out var id))
+                return;
+            favIds.Add(id);
+            if (!HideBuffSystem.BuffTypesShouldHide[id])
+                continue;
+            if (string.IsNullOrEmpty(SearchContent) || Match(searchString, id))
+                BuffList.Add(new BuffButton(id));
+        }
+
         for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
         {
             if (!HideBuffSystem.BuffTypesShouldHide[i])
                 continue;
-
+            if (favIds.Contains(i))
+                continue;
             if (string.IsNullOrEmpty(SearchContent) || Match(searchString, i))
                 BuffList.Add(new BuffButton(i));
         }
@@ -282,11 +300,12 @@ public class BuffButtonList : UIList
 
 public class BuffButton : UIElement
 {
+    bool _isFavorited;
     internal readonly int BuffId;
-
     public BuffButton(int buffId)
     {
         BuffId = buffId;
+        _isFavorited = BuffTrackerGUI.FavoritedBuffs.Contains(BuffID.Search.GetName(buffId));
         this.SetSize(32f, 32f);
     }
 
@@ -302,6 +321,25 @@ public class BuffButton : UIElement
         InfBuffPlayer.Get(Main.LocalPlayer).ToggleInfBuff(BuffId);
     }
 
+    public override void RightMouseDown(UIMouseEvent evt)
+    {
+        var name = BuffID.Search.GetName(BuffId);
+        if (_isFavorited)
+        {
+            SoundEngine.PlaySound(SoundID.Research);
+            BuffTrackerGUI.FavoritedBuffs.Remove(name);
+            _isFavorited = false;
+        }
+        else 
+        {
+            SoundEngine.PlaySound(SoundID.ResearchComplete);
+            BuffTrackerGUI.FavoritedBuffs.Add(name);
+            _isFavorited=true;
+        }
+        UISystem.Instance.BuffTrackerGUI.SetupBuffButtons();
+        base.RightMouseDown(evt);
+    }
+
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         bool buffEnabled = InfBuffPlayer.CheckInfBuffEnable(BuffId);
@@ -313,15 +351,19 @@ public class BuffButton : UIElement
 
         spriteBatch.Draw(texture, GetDimensions().Position(), new Color(grayScale, grayScale, grayScale));
 
+        if (_isFavorited)
+            spriteBatch.Draw(TextureAssets.Cursors[3].Value, drawPosition+new Vector2(-4,-4), Color.White);
+
         if (!IsMouseHovering)
-        {
             return;
-        }
+
 
         // 绘制边框
         drawPosition.X -= 2;
         drawPosition.Y -= 2;
         spriteBatch.Draw(GetTexture("UI/Buff_HoverBorder").Value, drawPosition, Color.White);
+
+
 
         string buffName = Lang.GetBuffName(BuffId);
         string buffTooltip = Main.GetBuffTooltip(Main.LocalPlayer, BuffId);
@@ -339,6 +381,11 @@ public class BuffButton : UIElement
             mouseText += $"\n{GetText("BuffTracker.LeftClickDisable")}";
         else
             mouseText += $"\n{GetText("BuffTracker.LeftClickEnable")}";
+
+        if (_isFavorited)
+            mouseText += $"\n{GetText("BuffTracker.RightClickDisable")}";
+        else
+            mouseText += $"\n{GetText("BuffTracker.RightClickEnable")}";
 
         UICommon.TooltipMouseText(mouseText);
     }

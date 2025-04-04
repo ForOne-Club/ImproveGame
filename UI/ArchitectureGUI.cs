@@ -42,10 +42,11 @@ namespace ImproveGame.UI
         private UIText materialTitle;
         private ModIconTextButton styleButton;
 
-        public override void OnInitialize() {
+        public override void OnInitialize()
+        {
             panelLeft = 590f;
             panelTop = 120f;
-            panelHeight = 190f;
+            panelHeight = 250f;
             panelWidth = 190f;
 
             Append(basePanel = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg)
@@ -53,23 +54,25 @@ namespace ImproveGame.UI
                 Shaded = true,
                 ShadowThickness = UIStyle.ShadowThicknessThinnerer,
                 Draggable = true,
-                Left = {Pixels = panelLeft},
-                Top = {Pixels = panelTop},
-                Width = {Pixels = panelWidth},
-                Height = {Pixels = panelHeight},
+                Left = { Pixels = panelLeft },
+                Top = { Pixels = panelTop },
+                Width = { Pixels = panelWidth },
+                Height = { Pixels = panelHeight },
             });
 
             // 排布
             // O O O
             // O O O
-            // O 切换
+            // O O O
+            // 切 换
             // 排布如上
             const float slotFirst = 0f;
             const float slotSecond = 60f;
             const float slotThird = 120f;
-            itemSlot = new() {
+            itemSlot = new()
+            {
                 [nameof(CreateWand.Block)] = CreateItemSlot(slotFirst, slotFirst, nameof(CreateWand.Block),
-                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile]), 
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile]),
                     (item, _) => CurrentWand.SetItem(nameof(CreateWand.Block), item.Clone()),
                     () => GetText($"Architecture.{nameof(CreateWand.Block)}")),
 
@@ -102,10 +105,21 @@ namespace ImproveGame.UI
                     (i, item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.Beds),
                     (item, _) => CurrentWand.SetItem(nameof(CreateWand.Bed), item.Clone()),
                     () => Lang.GetItemNameValue(ItemID.Bed)),
+
+                [nameof(CreateWand.Table)] = CreateItemSlot(slotSecond, slotThird, nameof(CreateWand.Table),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && (item.createTile is TileID.Tables or TileID.Tables2)),
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Table), item.Clone()),
+                    () => GetText($"Architecture.{nameof(CreateWand.Table)}")),
+
+                [nameof(CreateWand.Door)] = CreateItemSlot(slotThird, slotThird, nameof(CreateWand.Door),
+                    (i, item) => SlotPlace(i, item) || (item.createTile > -1 && item.createTile == TileID.ClosedDoor),
+                    (item, _) => CurrentWand.SetItem(nameof(CreateWand.Door), item.Clone()),
+                    () => GetText($"Architecture.{nameof(CreateWand.Door)}")),
             };
 
             // 头顶大字
-            materialTitle = new("Materials", 0.5f, large: true) {
+            materialTitle = new("Materials", 0.5f, large: true)
+            {
                 HAlign = 0.5f
             };
             materialTitle.Left.Set(0, 0f);
@@ -116,23 +130,26 @@ namespace ImproveGame.UI
 
             // 房屋样式修改按钮
             styleButton = new(Language.GetText("Mods.ImproveGame.Common.Switch"), Color.White, "Images/UI/DisplaySlots_5");
-            styleButton.Left.Set(slotSecond, 0f);
-            styleButton.Top.Set(slotThird, 0f);
-            styleButton.Width.Set(104f, 0f);
+            styleButton.Left.Set(slotFirst, 0f);
+            styleButton.Top.Set(slotThird + slotSecond, 0f);
+            styleButton.Width.Set(164f, 0f);
             styleButton.Height.Set(42f, 0f);
             styleButton.OnLeftClick += (_, _) => CreateWand.NextStyle();
             basePanel.Append(styleButton);
         }
 
-        public ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item, bool> onItemChanged = null, Func<string> emptyText = null) {
+        public ModItemSlot CreateItemSlot(float x, float y, string iconTextureName, Func<Item, Item, bool> canPlace = null, Action<Item, bool> onItemChanged = null, Func<string> emptyText = null)
+        {
             ModItemSlot slot = MyUtils.CreateItemSlot(x, y, iconTextureName, 0.85f, canPlace, onItemChanged, emptyText, basePanel, "Architecture");
             slot.OnUpdate += _ => HoveringOnSlots |= slot.IsMouseHovering;
             return slot;
         }
 
         // 主要是可拖动和一些判定吧
-        public override void Update(GameTime gameTime) {
-            if (CurrentItem?.ModItem is not CreateWand) {
+        public override void Update(GameTime gameTime)
+        {
+            if (CurrentItem?.ModItem is not CreateWand)
+            {
                 Close();
                 return;
             }
@@ -141,13 +158,15 @@ namespace ImproveGame.UI
 
             base.Update(gameTime);
 
-            if (!Main.playerInventory) {
+            if (!Main.playerInventory)
+            {
                 Close();
                 return;
             }
 
             // 右键点击空白直接关闭
-            if (Main.mouseRight && !PrevMouseRight && basePanel.IsMouseHovering && !HoveringOnSlots) {
+            if (Main.mouseRight && !PrevMouseRight && basePanel.IsMouseHovering && !HoveringOnSlots)
+            {
                 Close();
                 return;
             }
@@ -155,12 +174,14 @@ namespace ImproveGame.UI
             PrevMouseRight = Main.mouseRight;
         }
 
-        public override void Draw(SpriteBatch spriteBatch) {
+        public override void Draw(SpriteBatch spriteBatch)
+        {
             Player player = Main.LocalPlayer;
 
             base.Draw(spriteBatch);
 
-            if (basePanel.ContainsPoint(Main.MouseScreen)) {
+            if (basePanel.ContainsPoint(Main.MouseScreen))
+            {
                 player.mouseInterface = true;
             }
         }
@@ -169,7 +190,8 @@ namespace ImproveGame.UI
         /// 更新GUI物品槽与物品的同步
         /// </summary>
         /// <param name="createWand">建筑魔杖<see cref="CreateWand"/>实例</param>
-        public void RefreshSlots(CreateWand createWand) {
+        public void RefreshSlots(CreateWand createWand)
+        {
             itemSlot[nameof(CreateWand.Block)].Item = createWand.Block;
             itemSlot[nameof(CreateWand.Wall)].Item = createWand.Wall;
             itemSlot[nameof(CreateWand.Platform)].Item = createWand.Platform;
@@ -177,12 +199,15 @@ namespace ImproveGame.UI
             itemSlot[nameof(CreateWand.Chair)].Item = createWand.Chair;
             itemSlot[nameof(CreateWand.Workbench)].Item = createWand.Workbench;
             itemSlot[nameof(CreateWand.Bed)].Item = createWand.Bed;
+            ItemSlot[nameof(CreateWand.Table)].Item = createWand.Table;
+            ItemSlot[nameof(CreateWand.Door)].Item = createWand.Door;
         }
 
         /// <summary>
         /// 打开GUI界面
         /// </summary>
-        public void Open(CreateWand wand) {
+        public void Open(CreateWand wand)
+        {
             OperateInventory(true);
             PrevMouseRight = true; // 防止一打开就关闭
             basePanel.Dragging = false;
@@ -200,7 +225,8 @@ namespace ImproveGame.UI
         /// <summary>
         /// 关闭GUI界面
         /// </summary>
-        public void Close() {
+        public void Close()
+        {
             CurrentItem = new Item();
             Visible = false;
             PrevMouseRight = false;

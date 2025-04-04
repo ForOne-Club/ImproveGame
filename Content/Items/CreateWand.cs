@@ -14,13 +14,23 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
 {
     private record TileData(TileSort TileSort, int X, int Y);
 
-    public enum TileSort { None, Block, Platform, Torch, Chair, Table, Workbench, Bed, Wall, NoWall }
+    public enum TileSort { None, Block, Platform, Torch, Chair, Table, Workbench, Bed, Wall, NoWall, Door }
 
     public override bool AltFunctionUse(Player player) => true;
 
-    private static Texture2D[] _prisons;
-    private static Texture2D[] _prisonsPreView;
-    private static Color[][] _colors;
+    public static void AddNewPrisonStyle(Texture2D dataTexture, Texture2D previewTexture)
+    {
+        _prisons.Add(dataTexture);
+        _prisonsPreView.Add(previewTexture);
+        Main.RunOnMainThread(() =>
+        {
+            _colors.Add(GetColors(dataTexture));
+        });
+    }
+
+    private static List<Texture2D> _prisons;
+    private static List<Texture2D> _prisonsPreView;
+    private static List<Color[]> _colors;
 
     private static bool _colorsLoaded;
     private static int _styleIndex;
@@ -41,17 +51,17 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
                     if (_colorsLoaded)
                         return;
 
-                    _prisons = new[]
-                    {
+                    _prisons =
+                    [
                         ModAsset.Prison1.Value, ModAsset.Prison2.Value, ModAsset.Prison3.Value
-                    };
+                    ];
 
-                    _prisonsPreView = new[]
-                    {
+                    _prisonsPreView =
+                    [
                         ModAsset.PrisonPreview1.Value, ModAsset.PrisonPreview2.Value, ModAsset.PrisonPreview3.Value
-                    };
+                    ];
 
-                    _colors = new[] {GetColors(_prisons[0]), GetColors(_prisons[1]), GetColors(_prisons[2])};
+                    _colors = [GetColors(_prisons[0]), GetColors(_prisons[1]), GetColors(_prisons[2])];
                     _colorsLoaded = true;
                 }
             );
@@ -78,7 +88,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
     public static void NextStyle()
     {
         _styleIndex++;
-        _styleIndex %= _prisons.Length;
+        _styleIndex %= _prisons.Count;
     }
 
     [CloneByReference] public Item Block = new Item();
@@ -88,6 +98,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
     [CloneByReference] public Item Chair = new Item();
     [CloneByReference] public Item Workbench = new Item();
     [CloneByReference] public Item Bed = new Item();
+    [CloneByReference] public Item Table = new Item();
+    [CloneByReference] public Item Door = new Item();
 
     public override void SaveData(TagCompound tag)
     {
@@ -98,6 +110,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
         tag[nameof(Chair)] = Chair;
         tag[nameof(Workbench)] = Workbench;
         tag[nameof(Bed)] = Bed;
+        tag[nameof(Table)] = Table;
+        tag[nameof(Door)] = Door;
     }
 
     public override void LoadData(TagCompound tag)
@@ -109,6 +123,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
         tag.TryGet(nameof(Chair), out Chair);
         tag.TryGet(nameof(Workbench), out Workbench);
         tag.TryGet(nameof(Bed), out Bed);
+        tag.TryGet(nameof(Table), out Table);
+        tag.TryGet(nameof(Door), out Door);
     }
 
     public override void SetStaticDefaults()
@@ -195,6 +211,12 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
             case nameof(Bed):
                 item = Bed;
                 return;
+            case nameof(Table):
+                item = Table;
+                return;
+            case nameof(Door):
+                item = Door;
+                return;
         }
     }
 
@@ -227,6 +249,12 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
                 break;
             case nameof(Bed):
                 Bed = item;
+                break;
+            case nameof(Table):
+                Table = item;
+                break;
+            case nameof(Door):
+                Door = item;
                 break;
         }
     }
@@ -284,7 +312,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
                 {
                     if (tileSort == TileSort.Torch || tileSort == TileSort.Chair ||
                         tileSort == TileSort.Workbench || tileSort == TileSort.Table ||
-                        tileSort == TileSort.Bed) // 火把，椅子，工作台，桌子，床
+                        tileSort == TileSort.Bed||tileSort == TileSort.Door) // 火把，椅子，工作台，桌子，床，门
                     {
                         tileDatas.Add(new(tileSort, x, y));
                     }
@@ -316,9 +344,12 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
                         Main.tile[tileDatas[i].X, tileDatas[i].Y - 1].TileFrameX += 18;
                         break;
                     // 目前似乎没有桌子的需求，而且我整UI的时候也没给桌子整
-                    //case TileSort.Table:
-                    //    TryPlace(ref Table, player, x, y, (Item item) => item.createTile == TileID.Tables);
-                    //    break;
+                    case TileSort.Table:
+                        TryPlace(ref Table, player, x, y, (Item item) => item.createTile is TileID.Tables or TileID.Tables2);
+                        break;
+                    case TileSort.Door:
+                        TryPlace(ref Door, player, x, y, item => item.createTile == TileID.ClosedDoor);
+                        break;
                     case TileSort.Bed:
                         TryPlace(ref Bed, player, x, y, item => item.createTile == TileID.Beds);
                         break;
@@ -417,7 +448,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
         {TileSort.Table, 0},
         {TileSort.Workbench, 0},
         {TileSort.Bed, 0},
-        {TileSort.NoWall, 0}
+        {TileSort.NoWall, 0},
+        {TileSort.Door, 0}
     };
 
     // 计算消耗
@@ -455,6 +487,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
         ItemIO.Send(Chair, writer, true, true);
         ItemIO.Send(Workbench, writer, true, true);
         ItemIO.Send(Bed, writer, true, true);
+        ItemIO.Send(Table, writer, true, true);
+        ItemIO.Send(Door, writer, true, true);
     }
 
     public override void NetReceive(BinaryReader reader)
@@ -466,6 +500,8 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
         Chair = ItemIO.Receive(reader, true, true);
         Workbench = ItemIO.Receive(reader, true, true);
         Bed = ItemIO.Receive(reader, true, true);
+        Table = ItemIO.Receive(reader, true, true);
+        Door = ItemIO.Receive(reader, true, true);
     }
 
     public bool OverrideHover(Item[] inventory, int context, int slot)
@@ -489,7 +525,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
         string text = ArchitectureGUI.Visible ? "Off" : "On";
         TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
         tooltips.Add(new TooltipLine(Mod, "CreateWand", GetTextWith($"Tips.CreateWand{text}", new { KeybindName = keybind }))
-            {OverrideColor = Color.LightGreen});
+        { OverrideColor = Color.LightGreen });
     }
 
     public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -511,7 +547,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
 
                 string neededText = $"[c/ffff00:{GetText($"Architecture.{item.Key}")}: {MaterialConsume[item.Key]}]";
                 string hasText =
-                    $"[c/00a7df:{GetTextWith("Architecture.StoredMaterials", new {MaterialCount = stack})}]";
+                    $"[c/00a7df:{GetTextWith("Architecture.StoredMaterials", new { MaterialCount = stack })}]";
 
                 tooltips.Add(new(Mod, $"MaterialConsume.{item.Key}", $"{neededText}   {hasText}"));
             }
@@ -533,21 +569,23 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
             return TileSort.Torch; // 火把
         if (color == Color.Yellow)
             return TileSort.Chair; // 椅子
-        if (color == FenSe)
+        if (color == Pink)
             return TileSort.Table; // 桌子
         if (color == Color.Blue)
             return TileSort.Workbench; // 工作台
-        if (color == ZiSe)
+        if (color == Purple)
             return TileSort.Bed; // 床
-        if (color == QingSe)
+        if (color == Cyan)
             return TileSort.NoWall; // 禁止放置墙体
+        if (color == Green)
+            return TileSort.Door;
         return TileSort.None; // 没有任何
     }
 
-    private static readonly Color ZiSe = new(127, 0, 255);
-    private static readonly Color QingSe = new(0, 255, 255);
-    private static readonly Color FenSe = new(255, 0, 255);
-
+    private static readonly Color Purple = new(127, 0, 255);
+    private static readonly Color Cyan = new(0, 255, 255);
+    private static readonly Color Pink = new(255, 0, 255);
+    private static readonly Color Green = new(0, 255, 0);
     public override void AddRecipes()
     {
         CreateRecipe()
