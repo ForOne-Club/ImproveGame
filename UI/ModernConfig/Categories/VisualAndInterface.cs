@@ -22,5 +22,19 @@ public sealed class VisualAndInterface : Category
         panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardMusic));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.InfernoTransparency));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.InvisibleTransparency));
+
+        // 模糊相关配置
+        // 是否开启模糊
+        panel.AddToggle(uiConfig, nameof(uiConfig.EnableBlur));
+        // 单窗口模糊
+        panel.AddToggle(uiConfig, nameof(uiConfig.SingleBlur));
+        // 模糊缩放偏移分母
+        panel.AddValueSlider(uiConfig, nameof(uiConfig.BlurZoomMultiplierDenominator));
+        // 模糊迭代次数
+        panel.AddValueSlider(uiConfig, nameof(uiConfig.BlurIterationCount));
+        // 模糊迭代偏移乘数
+        panel.AddValueSlider(uiConfig, nameof(uiConfig.BlurIterationOffsetMultiplier));
+        // 混合颜色数
+        panel.AddEnum(uiConfig, nameof(uiConfig.BlurMixingNumber));
     }
 }

@@ -27,7 +27,7 @@ public class BlurMakeSystem : ModSystem
     public static int BlurIterationCount { get; internal set; } = 3;
 
     /// <summary> 模糊偏移乘数 </summary>
-    public static float IterationOffsetMultiplier { get; internal set; } = 1f;
+    public static float BlurIterationOffsetMultiplier { get; internal set; } = 1f;
     public static BlurMixingNumber BlurMixingNumber { get; internal set; } = BlurMixingNumber.Three;
 
     /// <summary>
@@ -131,12 +131,12 @@ public class BlurMakeSystem : ModSystem
 
     public static void MakeKawaseBlur()
     {
-        BlurHelper.KawaseBlur(UserInterfaceRenderTarget, BlurRenderTarget, BlurIterationCount, IterationOffsetMultiplier, BlurZoomMultiplierDenominator, BlurMixingNumber);
+        BlurHelper.KawaseBlur(UserInterfaceRenderTarget, BlurRenderTarget, BlurIterationCount, BlurIterationOffsetMultiplier, BlurZoomMultiplierDenominator, BlurMixingNumber);
     }
 
     public static void MakeKawaseBlur(RenderTarget2D renderTarget)
     {
-        BlurHelper.KawaseBlur(renderTarget, BlurRenderTarget, BlurIterationCount, IterationOffsetMultiplier, BlurZoomMultiplierDenominator, BlurMixingNumber);
+        BlurHelper.KawaseBlur(renderTarget, BlurRenderTarget, BlurIterationCount, BlurIterationOffsetMultiplier, BlurZoomMultiplierDenominator, BlurMixingNumber);
     }
 
     ///// <summary>

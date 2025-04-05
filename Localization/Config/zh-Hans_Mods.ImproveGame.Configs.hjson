@@ -1105,7 +1105,7 @@ UIConfigs: {
 			'''
 	}
 
-	IterationOffsetMultiplier: {
+	BlurIterationOffsetMultiplier: {
 		Label: "[centeritem:1344] 采样偏移乘数（性能无关）"
 		Tooltip: 值越大越模糊，但同时越容易出现条纹
 	}

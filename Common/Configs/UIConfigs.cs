@@ -77,7 +77,7 @@ public class UIConfigs : ModConfig
     [DefaultValue(2f)]
     [Range(1f, 10f)]
     [Increment(1f)]
-    public float IterationOffsetMultiplier;
+    public float BlurIterationOffsetMultiplier;
 
     [Slider]
     [DefaultValue(BlurMixingNumber.Three)]
@@ -259,7 +259,7 @@ public class UIConfigs : ModConfig
         BlurMakeSystem.SingleBlur = SingleBlur;
         BlurMakeSystem.BlurZoomMultiplierDenominator = BlurZoomMultiplierDenominator;
         BlurMakeSystem.BlurIterationCount = BlurIterationCount;
-        BlurMakeSystem.IterationOffsetMultiplier = IterationOffsetMultiplier;
+        BlurMakeSystem.BlurIterationOffsetMultiplier = BlurIterationOffsetMultiplier;
         BlurMakeSystem.BlurMixingNumber = BlurMixingNumber;
     }
 }
