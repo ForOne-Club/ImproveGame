@@ -249,6 +249,7 @@ public class ImproveConfigs : ModConfig
     [Range(0.1f, 10f)]
     [Increment(0.05f)]
     [DefaultValue(1f)]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float BannerRequirement;
 
     #endregion
