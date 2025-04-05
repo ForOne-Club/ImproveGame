@@ -30,8 +30,8 @@ public class GrabAndPickup : GlobalItem
     {
         if (Config.GrabDistance > 0)
         {
-            item.velocity = Vector2.Normalize(player.Center - item.Center) * Math.Clamp(item.velocity.Length() + 1f, 0f, Math.Max(player.velocity.Length() + 5f, 15f));
-            return true;
+            var dir = Vector2.Normalize(player.Center - item.Center) * 25f;
+            item.velocity = (item.velocity * 9 + dir) / 10;
         }
 
         return false;

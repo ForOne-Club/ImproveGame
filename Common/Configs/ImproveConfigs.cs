@@ -77,6 +77,9 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(false)]
     public bool SmartVoidVault;
 
+    /// <summary>
+    /// 物品拾取距离
+    /// </summary>
     [DefaultValue(0)]
     [Slider]
     [Range(0, 75)]
