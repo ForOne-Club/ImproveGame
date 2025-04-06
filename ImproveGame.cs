@@ -20,8 +20,6 @@ public class ImproveGame : Mod
     // 额外BUFF槽
     public override uint ExtraPlayerBuffSlots => (uint)Config.ExtraPlayerBuffSlots;
 
-    public RenderTargetPool RenderTargetPool { get; init; } = new RenderTargetPool();
-
     public override void Load()
     {
         AddContent<NetModuleLoader>();
