@@ -1067,45 +1067,51 @@ UIConfigs: {
 	}
 
 	EnableBlur: {
-		Label: "[centeritem:1344] 启用模糊效果（复古模式不管用）"
-		Tooltip: 高分辨率屏幕建议拉高缩放乘数分母
+		Label: "[centeritem:1344] UI Blur (not under Retro lighting)"
+		Tooltip:
+			'''
+			Tip: Larger "scale denominator" works better on high-resolution screens,
+			which is set by another config option
+			'''
 	}
 
 	SingleBlur: {
-		Label: "[centeritem:1344] 窗口独立模糊（消耗大）"
-		Tooltip: 每个 UI 都单独模糊，效果更好，可能有兼容性问题
+		Label: "[centeritem:1344] Individual UI Blur (performance-heavy)"
+		Tooltip: Individually blurs each UI window, prettier but might pose compatibility issues
 	}
 
 	BlurZoomMultiplierDenominator: {
-		Label: "[centeritem:1344] 缩放乘数分母（值越大消耗越小）"
+		Label: "[centeritem:1344] Scale denominator (higher means lighter performance)"
 		Tooltip:
 			'''
-			数值越大，处理的图像越小
-			如果卡顿，可以尝试增大此值
-			普通 GPU 4K 分辨率建议设为 4
-			高端 GPU 可直接设为 1
-			设为 1 则完全按照原分辨率渲染
-			缩小会影响模糊范围，所以需要结合调整下方值
+			The higher it is, the less computing power is required
+			If blur is causing lags, try increasing this value
+			The suffested values are:
+			- normal GPU, 4K resolution: 4
+			- high-end GPU: 1
+			1 means the blurring based on the original resolution
+			Increasing this value affetcs scope of the blur,
+			you may want to adjust options below accordingly
 			'''
 	}
 
 	BlurIterationCount: {
-		Label: "[centeritem:1344] 迭代次数（值越大消耗越大）"
+		Label: "[centeritem:1344] Iterations (higher means heavier performance)"
 		Tooltip:
 			'''
-			数值越大，处理模糊的次数越多，同时会变得越模糊
-			如果卡顿，可以尝试降低此值
+			The higher it is, the more blurred the background is
+			If blur is causing lags, try decreasing this value
 			'''
 	}
 
 	BlurIterationOffsetMultiplier: {
-		Label: "[centeritem:1344] 采样偏移乘数（性能无关）"
-		Tooltip: 值越大越模糊，但同时越容易出现条纹
+		Label: "[centeritem:1344] Sampling offset coefficient (no performance impact)"
+		Tooltip: The higher it is, the more blurred the background is, but stripes might show
 	}
 
 	BlurMixingNumber: {
-		Label: "[centeritem:1344] 颜色混合数（值越大消耗越大）"
-		Tooltip: 值越大越颜色采样越多
+		Label: "[centeritem:1344] Color sampling (higher means heavier performance)"
+		Tooltip: The higher it is, the more colors are sampled for blurring
 	}
 
 	AutoSummon: {
