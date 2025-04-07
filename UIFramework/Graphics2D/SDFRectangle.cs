@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UIFramework.Graphics2D;
+﻿using Microsoft.Xna.Framework;
+
+namespace ImproveGame.UIFramework.Graphics2D;
 
 public static class SDFRectangle
 {
@@ -84,40 +86,23 @@ public static class SDFRectangle
         DrawRectanglePrimitives(0f, position, size, borderRadius);
     }
 
-    /// <summary>
-    /// ...
-    /// </summary>
-    /// <param name="pos"></param>
-    /// <param name="size"></param>
-    /// <param name="rounded"></param>
-    /// <param name="barTexture"></param>
-    /// <param name="direction"></param>
-    /// <param name="time"></param>
-    /// <param name="ui"></param>
-    public static void BarColor(Vector2 pos, Vector2 size, Vector4 rounded, Texture2D barTexture, Vector2 direction, float time, bool ui = true)
+    public static void BarColor(Vector2 position, Vector2 size, Vector4 borderRadius,Texture2D texture, Vector2 direction,float time, Matrix matrix)
     {
-        const float innerShrinkage = 1;
-        pos -= new Vector2(innerShrinkage);
-        size += new Vector2(innerShrinkage * 2);
-        rounded += new Vector4(innerShrinkage);
-        Effect.Parameters["uTransform"].SetValue(GetMatrix(ui));
-        Effect.Parameters["uBarInfo"].SetValue(new Vector3(direction, time));
-        Effect.Parameters["uInnerShrinkage"].SetValue(innerShrinkage);
-        Effect.Parameters["uSizeOver2"].SetValue(size * .5f);
-        Effect.Parameters["uRound"].SetValue(rounded);
-        Main.instance.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
-        Main.instance.GraphicsDevice.Textures[0] = barTexture;
-        // ApplyPass(3);
 
-        // SDFGraphicsVertexType[] triangles = [  new(pos, new(0, 0),0),
-        //                                 new(pos + new Vector2(size.X, 0), new(size.X, 0),0),
-        //                                 new(pos + new Vector2(0, size.Y), new(0, size.Y),0),
-        //                                 new(pos + new Vector2(0, size.Y), new(0, size.Y),0),
-        //                                 new(pos + new Vector2(size.X, 0), new(size.X, 0),0),
-        //                                 new(pos + size, size,0)];//.. vertices
-        // Main.graphics.GraphicsDevice.DrawUserPrimitives(0, triangles, 0, 2);
-        Main.spriteBatch.spriteEffectPass.Apply();
-        //BaseDrawRectangle(pos, size, rounded);
+
+        Transform2SDFMatrix(ref matrix);
+
+        float innerShrinkage = 1 / Main.UIScale;
+
+        SetSmoothstepRange();
+        SetMatrixWithBgColor(matrix, default);
+        Effect.Parameters["uDirection"].SetValue(direction);
+        Effect.Parameters["uBarOffset"].SetValue(time);
+        Main.graphics.GraphicsDevice.Textures[0] = texture;
+        Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
+        Effect.CurrentTechnique.Passes["BarColor"].Apply();
+        DrawRectanglePrimitives(innerShrinkage, position, size, borderRadius, default, size);
+
     }
 
     #region SET
@@ -225,6 +210,17 @@ public static class SDFRectangle
         vertexData[indexOffset + 3].BorderRadius = borderRadius;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="vertexData"></param>
+    /// <param name="size"></param>
+    /// <param name="borderRadius"></param>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="c"></param>
+    /// <param name="d"></param>
+    /// <param name="indexOffset"></param>
     public static void SetDistanceFromEdge(this SDFGraphicsVertexType[] vertexData, Vector2 size, float borderRadius, int a, int b, int c, int d, int indexOffset)
     {
         vertexData[indexOffset + a].DistanceFromEdge = new Vector2(borderRadius);

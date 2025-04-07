@@ -561,8 +561,6 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
         }
         protected override void OnWrapOption(ModernConfigOption option)
         {
-            var slider = option as OptionSlider;
-
             #region 旧版
             /*slider.SetColorMethod(option.VariableInfo.Name switch
             {
@@ -575,7 +573,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                 "Lightness" or _ => t => Main.hslToRgb(Main.rgbToHsl(currentColor) with { Z = t }) * (currentColor.A / 255f)
             });*/
             #endregion
-            if (slider == null) return;
+            if (option is not OptionSlider slider) return;
             slider.SetColorMethod(option.VariableInfo.Name switch
             {
                 "Red" => t => colorfulMode ? currentColor with { A = 255, R = (byte)(255 * t) } : Color.Black * 0.3f,
@@ -624,8 +622,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             {
                 if (colorfulSliderButton.IsMouseHovering)
                     SDFGraphics.NoBorderRound(colorfulDimension.Center() + new Vector2(1), new(.5f), 28, UIStyle.SliderRoundHover, matrix);
-                // 114514114514
-                //SDFRectangle.BarColor(colorfulDimension.Position(), colorfulDimension.Size(), colorfulSliderButton.Rounded, TextureAssets.Extra[180].Value, Vector2.UnitX * .05f, 0, Main.UIScaleMatrix);
+                SDFRectangle.BarColor(colorfulDimension.Position(), colorfulDimension.Size(), colorfulSliderButton.Rounded, TextureAssets.Extra[180].Value, Vector2.UnitX * .05f, 0, Main.UIScaleMatrix);
 
 
                 DrawRGBPanel(RgbPanel.GetDimensions().Position(), RgbPanel.GetDimensions().Size(), currentColor);

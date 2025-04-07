@@ -1,4 +1,10 @@
-﻿// --------------------------------
+﻿#define DEFINEPASS(Name) \
+pass Name \
+{ \
+    VertexShader = compile vs_3_0 VS_PCR();\
+    PixelShader = compile ps_3_0 Name();\
+}
+// --------------------------------
 // 常量缓冲区定义（按逻辑分组）
 // --------------------------------
 sampler uImage0 : register(s0); // 纹理采样器（虽然未使用，但保留以备扩展）
@@ -11,6 +17,9 @@ cbuffer MatrixBuffer : register(b0)
     float2 uSmoothstepRange; // 过渡范围（原uTransition，更名以提高可读性）
     float uBorder; // 边框宽度
     float uShadowBlurSize; // 阴影大小
+    
+	float uBarOffset; // 采样色条的偏移量
+	float2 uDirection; // 采样色条的方向
 };
 
 struct VSInput
@@ -121,36 +130,22 @@ float4 Shadow(PSInput input) : SV_Target
     );
 }
 
-/*float4 BarColor(float2 q : TEXCOORD0, float rounded : COLOR0) : COLOR0
+// --------------------------------
+// 像素着色器 - 一维色条
+// --------------------------------
+float4 BarColor(PSInput input) : SV_Target
 {
-    float Distance = RoundedBox(q) + uInnerShrinkage;
-    return lerp(color, 0, smoothstep(-1, 0.5, Distance));
-}*/
+	float distance = RectangleDistance(input.DistanceFromEdge, input.BorderRadius);
+	return lerp(
+        tex2D(uImage0, float2(dot(input.TextureCoordinates, uDirection) + uBarOffset,0.5)), 0, smoothstep(uSmoothstepRange.x, uSmoothstepRange.y, distance)
+    );
+}
 
 technique T1
 {
-    pass HasBorder
-    {
-        VertexShader = compile vs_3_0 VS_PCR();
-        PixelShader = compile ps_3_0 HasBorder();
-    }
-
-    pass NoBorder
-    {
-        VertexShader = compile vs_3_0 VS_PCR();
-        PixelShader = compile ps_3_0 NoBorder();
-    }
-
-    pass Shadow
-    {
-        VertexShader = compile vs_3_0 VS_PCR();
-        PixelShader = compile ps_3_0 Shadow();
-    }
-
-    pass SampleVersion
-    {
-        VertexShader = compile vs_3_0 VS_PCR();
-        PixelShader = compile ps_3_0 SampleVersion();
-    }
-
+    DEFINEPASS(HasBorder)
+    DEFINEPASS(NoBorder)
+    DEFINEPASS(Shadow)
+    DEFINEPASS(SampleVersion)
+    DEFINEPASS(BarColor)
 }

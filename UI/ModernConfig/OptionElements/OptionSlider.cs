@@ -118,7 +118,9 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
                     colorMethodPendingModified = false;
                 }
                 // 114514114514
-                //SDFRectangle.BarColor(position, size, Rounded, colorBar, Vector2.UnitX / dimensions.Width, 0, true);//-Main.GlobalTimeWrappedHourly
+                SDFRectangle.BarColor(position, size, Rounded, colorBar, Vector2.UnitX / dimensions.Width, 0, Main.UIScaleMatrix);//-Main.GlobalTimeWrappedHourly
+
+                //SDFRectangle.HasBorder(position, size, Rounded, Color.Red, 4f, Color.White, Main.UIScaleMatrix);
             }
             else
                 base.DrawSelf(spriteBatch);
