@@ -1077,21 +1077,21 @@ UIConfigs: {
 
 	SingleBlur: {
 		Label: "[centeritem:1344] Individual UI Blur (performance-heavy)"
-		Tooltip: Individually blurs each UI window, prettier but might pose compatibility issues
+		Tooltip: Individually blurs each UI window, which is prettier, but might pose compatibility issues
 	}
 
 	BlurZoomMultiplierDenominator: {
-		Label: "[centeritem:1344] Scale denominator (higher means lighter performance)"
+		Label: "[centeritem:1344] Blur Scale (higher means lighter performance)"
 		Tooltip:
 			'''
-			The higher it is, the less computing power is required
-			If blur is causing lags, try increasing this value
-			The suffested values are:
+			The higher this value is, the less computing power is required
+			If blur is causing lag, try increasing this value
+			The suggested values are:
 			- normal GPU, 4K resolution: 4
 			- high-end GPU: 1
-			1 means the blurring based on the original resolution
-			Increasing this value affetcs scope of the blur,
-			you may want to adjust options below accordingly
+			1 means the blurring is based on the original resolution
+			Increasing this value affects the scope of the blur
+			You may want to adjust options below accordingly
 			'''
 	}
 
@@ -1099,19 +1099,19 @@ UIConfigs: {
 		Label: "[centeritem:1344] Iterations (higher means heavier performance)"
 		Tooltip:
 			'''
-			The higher it is, the more blurred the background is
-			If blur is causing lags, try decreasing this value
+			The higher the value is, the more blurred the background is
+			If blur is causing lag, try decreasing this value
 			'''
 	}
 
 	BlurIterationOffsetMultiplier: {
-		Label: "[centeritem:1344] Sampling offset coefficient (no performance impact)"
-		Tooltip: The higher it is, the more blurred the background is, but stripes might show
+		Label: "[centeritem:1344] Sampling Offset Coefficient (no performance impact)"
+		Tooltip: The higher the value is, the more blurred the background is, but stripes might show
 	}
 
 	BlurMixingNumber: {
-		Label: "[centeritem:1344] Color sampling (higher means heavier performance)"
-		Tooltip: The higher it is, the more colors are sampled for blurring
+		Label: "[centeritem:1344] Color Sampling (higher means heavier performance)"
+		Tooltip: The higher the value is, the more colors are sampled for blurring
 	}
 
 	AutoSummon: {
