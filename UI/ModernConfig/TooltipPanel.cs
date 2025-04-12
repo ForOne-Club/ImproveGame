@@ -17,6 +17,7 @@ public class TooltipPanel : SUIPanel
     public TooltipPanel(Color color) : base(color, color)
     {
         Instance = this;
+        EnableBlur = false;
 
         SetPadding(16, 10, 16, 10);
         Text = new TooltipTextElement();
