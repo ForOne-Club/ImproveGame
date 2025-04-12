@@ -1063,41 +1063,34 @@ UIConfigs: {
 		Tooltip: 重设所有UI的位置，在你找不到大背包UI时尤其有用
 	}
 
-	GlassVfxOn: {
-		Label: "[centeritem:MulticoloredStainedGlass] 毛玻璃效果"
+	EnableBlur: {
+		Label: "[centeritem:MulticoloredStainedGlass] 启用模糊效果"
 		Tooltip:
 			'''
-			为本模组的UI应用毛玻璃效果，使其更加美观
-			仅当照明模式设为“颜色”或“白”时可用
-			这个功能可能会影响性能
+			为更好的体验 UI 界面提供模糊效果
+			在“复古”或“迷幻”照明模式下不生效
+			高分辨率屏幕建议拉高缩放乘数分母
 			'''
-	}
-
-	EnableBlur: {
-		Label: "[centeritem:1344] 启用模糊效果（复古模式不管用）"
-		Tooltip: 高分辨率屏幕建议拉高缩放乘数分母
 	}
 
 	SingleBlur: {
-		Label: "[centeritem:1344] 窗口独立模糊（消耗大）"
+		Label: "[centeritem:MulticoloredStainedGlass] 窗口独立模糊（有一定性能损失）"
 		Tooltip: 每个 UI 都单独模糊，效果更好，可能有兼容性问题
 	}
 
 	BlurZoomMultiplierDenominator: {
-		Label: "[centeritem:1344] 缩放乘数分母（值越大消耗越小）"
+		Label: "[centeritem:MulticoloredStainedGlass] 缩放乘数分母（值越大消耗越小）"
 		Tooltip:
 			'''
-			数值越大，处理的图像越小
-			如果卡顿，可以尝试增大此值
-			普通 GPU 4K 分辨率建议设为 4
-			高端 GPU 可直接设为 1
+			数值越大，处理的图像越小。如果卡顿，可以尝试增大此值
+			普通 GPU 4K 分辨率建议设为 4；高端 GPU 可直接设为 1
 			设为 1 则完全按照原分辨率渲染
 			缩小会影响模糊范围，所以需要结合调整下方值
 			'''
 	}
 
 	BlurIterationCount: {
-		Label: "[centeritem:1344] 迭代次数（值越大消耗越大）"
+		Label: "[centeritem:MulticoloredStainedGlass] 迭代次数（值越大消耗越大）"
 		Tooltip:
 			'''
 			数值越大，处理模糊的次数越多，同时会变得越模糊
@@ -1106,12 +1099,12 @@ UIConfigs: {
 	}
 
 	BlurIterationOffsetMultiplier: {
-		Label: "[centeritem:1344] 采样偏移乘数（性能无关）"
+		Label: "[centeritem:MulticoloredStainedGlass] 采样偏移乘数（性能无关）"
 		Tooltip: 值越大越模糊，但同时越容易出现条纹
 	}
 
 	BlurMixingNumber: {
-		Label: "[centeritem:1344] 颜色混合数（值越大消耗越大）"
+		Label: "[centeritem:MulticoloredStainedGlass] 颜色混合数（值越大消耗越大）"
 		Tooltip: 值越大越颜色采样越多
 	}
 

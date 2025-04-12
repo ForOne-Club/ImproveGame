@@ -23,10 +23,7 @@ public class UIConfigs : ModConfig
     [CustomModConfigItem(typeof(SuicideButtonElement))]
     public object SuicideButton;
 
-    //[Header("UIHeader")]
-    //[DefaultValue(false)]
-    //[DrawTicks]
-    //public bool GlassVfxOn;
+    [Header("UIHeader")]
 
     [CustomModConfigItem(typeof(ThemeColorElement))]
     public ThemeType ThemeType;
@@ -59,28 +56,33 @@ public class UIConfigs : ModConfig
     public bool EnableBlur;
 
     [DefaultValue(false)]
+    [DisplayCondition(nameof(UIConfigs), nameof(EnableBlur))]
     public bool SingleBlur;
 
     [Slider]
     [DefaultValue(2f)]
     [Range(1f, 8f)]
     [Increment(0.5f)]
+    [DisplayCondition(nameof(UIConfigs), nameof(EnableBlur))]
     public float BlurZoomMultiplierDenominator;
 
     [Slider]
     [DefaultValue(2)]
     [Range(0, 10)]
     [Increment(1)]
+    [DisplayCondition(nameof(UIConfigs), nameof(EnableBlur))]
     public int BlurIterationCount;
 
     [Slider]
     [DefaultValue(2f)]
     [Range(1f, 10f)]
     [Increment(1f)]
+    [DisplayCondition(nameof(UIConfigs), nameof(EnableBlur))]
     public float BlurIterationOffsetMultiplier;
 
     [Slider]
     [DefaultValue(BlurMixingNumber.Three)]
+    [DisplayCondition(nameof(UIConfigs), nameof(EnableBlur))]
     public BlurMixingNumber BlurMixingNumber;
 
     /// <summary>

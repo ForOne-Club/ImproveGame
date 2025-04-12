@@ -10,20 +10,9 @@ public sealed class VisualAndInterface : Category
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         var uiConfig = UIConfigs.Instance;
-        //panel.AddToggle(uiConfig, nameof(uiConfig.GlassVfxOn));
         panel.AddEnum(uiConfig, nameof(uiConfig.ThemeType));
-        panel.AddToggle(uiConfig, nameof(uiConfig.GlobeEffect));
-        panel.AddValueSlider(uiConfig, nameof(uiConfig.GeneralFontOffsetY));
-        panel.AddValueSlider(uiConfig, nameof(uiConfig.BigFontOffsetY));
-        panel.AddToggle(uiConfig, nameof(uiConfig.HideNoConsumeBuffs));
-        panel.AddToggle(uiConfig, nameof(uiConfig.ExplosionEffect));
-        panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardVisual));
-        panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardMist));
-        panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardMusic));
-        panel.AddValueSlider(uiConfig, nameof(uiConfig.InfernoTransparency));
-        panel.AddValueSlider(uiConfig, nameof(uiConfig.InvisibleTransparency));
 
-        // 模糊相关配置
+        #region 模糊相关配置
         // 是否开启模糊
         panel.AddToggle(uiConfig, nameof(uiConfig.EnableBlur));
         // 单窗口模糊
@@ -36,5 +25,17 @@ public sealed class VisualAndInterface : Category
         panel.AddValueSlider(uiConfig, nameof(uiConfig.BlurIterationOffsetMultiplier));
         // 混合颜色数
         panel.AddEnum(uiConfig, nameof(uiConfig.BlurMixingNumber));
+        #endregion
+
+        panel.AddToggle(uiConfig, nameof(uiConfig.GlobeEffect));
+        panel.AddValueSlider(uiConfig, nameof(uiConfig.GeneralFontOffsetY));
+        panel.AddValueSlider(uiConfig, nameof(uiConfig.BigFontOffsetY));
+        panel.AddToggle(uiConfig, nameof(uiConfig.HideNoConsumeBuffs));
+        panel.AddToggle(uiConfig, nameof(uiConfig.ExplosionEffect));
+        panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardVisual));
+        panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardMist));
+        panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardMusic));
+        panel.AddValueSlider(uiConfig, nameof(uiConfig.InfernoTransparency));
+        panel.AddValueSlider(uiConfig, nameof(uiConfig.InvisibleTransparency));
     }
 }

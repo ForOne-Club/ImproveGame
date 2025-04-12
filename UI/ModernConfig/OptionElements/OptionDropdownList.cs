@@ -54,12 +54,12 @@ public class OptionDropdownList : ModernConfigOption
             dropdownList.OptionSelectedCallback = s =>
             {
 
-                if (IsStringOption) 
+                if (IsStringOption)
                 {
                     SetValueDirect(s);
                     return;
                 }
-                
+
                 int index = Array.IndexOf(_valueStrings, s);
                 SetConfigValue(index);
             };
@@ -152,6 +152,9 @@ public class OptionDropdownList : ModernConfigOption
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
+
+        // 被Attribute禁止的情况
+        if (Height.Pixels is 0) return;
 
         var textBoxRect = _textBox.GetDimensions().ToRectangle();
         var tex = ModAsset.DropdownListMark.Value;

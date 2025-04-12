@@ -56,8 +56,6 @@ public class UIPlayer : ModPlayer
     static IEnumerator SetupUI()
     {
         UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
-        //if (GlassVfxAvailable)
-        //    UIStyle.AcrylicRedesign();
 
         ShouldShowUI = true;
         UISystem uiSystem = UISystem.Instance;

@@ -207,15 +207,34 @@ public class SUIScrollView2 : TimerView
                     delta = -evt.ScrollWheelValue;
                 break;
         }
+
         scrollWhellValueField ??= typeof(UIScrollWheelEvent).GetField("ScrollWheelValue", BindingFlags.Public | BindingFlags.Instance);
         scrollWhellValueField.SetValue(evt, evt.ScrollWheelValue + (int)delta);
+
         base.ScrollWheel(evt);
     }
 
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
+    }
 
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        WidthTimer.UpdateHighFps();
+        HeightTimer.UpdateHighFps();
+
+        base.Draw(spriteBatch);
+
+        RecalculatePosition();
+
+        //var d = GetDimensions();
+        //SDFGraphics.HasBorderBox(d.Position(), default, d.Size(), Color.Purple * .5f, 4f, Main.DiscoColor, GetMatrix(true));
+        //spriteBatch.DrawString(FontAssets.MouseText.Value, "芝士中心", d.Center(), Main.DiscoColor * .5f);
+    }
+
+    private void RecalculatePosition()
+    {
         bool recalculate = false;
 
         switch (ScrollOrientation)
@@ -285,17 +304,6 @@ public class SUIScrollView2 : TimerView
 
         if (recalculate)
             Recalculate();
-    }
-
-    public override void Draw(SpriteBatch spriteBatch)
-    {
-        WidthTimer.UpdateHighFps();
-        HeightTimer.UpdateHighFps();
-
-        base.Draw(spriteBatch);
-        //var d = GetDimensions();
-        //SDFGraphics.HasBorderBox(d.Position(), default, d.Size(), Color.Purple * .5f, 4f, Main.DiscoColor, GetMatrix(true));
-        //spriteBatch.DrawString(FontAssets.MouseText.Value, "芝士中心", d.Center(), Main.DiscoColor * .5f);
     }
 
     public AnimationTimer WidthTimer = new AnimationTimer(3);

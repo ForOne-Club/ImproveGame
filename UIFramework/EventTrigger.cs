@@ -249,29 +249,10 @@ public class EventTrigger(string layerName, string name) : IComparable<EventTrig
         _previousMouseTargets[mouseButton] = CurrentHoverTarget;
     }
 
-    public virtual bool Draw(bool drawToGame = true)
+    public virtual bool Draw()
     {
         if (!RootBody?.Enabled ?? true)
         {
-            return true;
-        }
-
-        // 类云母，UI本身不透明，背景是游戏画面高斯模糊处理后的结果
-        // drawToGame 表示这是拿来绘制到游戏上的，不是拿来造玻璃或者干啥的
-        if (drawToGame && false) //GlassVfxEnabled
-        {
-            var layers = EventTriggerManager.EventTriggerInstances["Radial Hotbars"];
-            int index = layers.IndexOf(this);
-            if (index is -1)
-            {
-                RootBody?.Draw(Main.spriteBatch);
-                return true;
-            }
-
-            Main.spriteBatch.ReBegin(null, Matrix.Identity);
-            Main.spriteBatch.Draw(GlassmorphismVfx.GlassCovers[index], Vector2.Zero, Color.White);
-            Main.spriteBatch.ReBegin(null, Main.UIScaleMatrix);
-            RootBody?.Draw(Main.spriteBatch);
             return true;
         }
 

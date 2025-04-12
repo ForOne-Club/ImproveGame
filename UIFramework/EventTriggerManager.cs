@@ -114,42 +114,4 @@ public static class EventTriggerManager
             }
         }
     }
-
-    public static void MakeGlasses(ref RenderTarget2D[] glasses, RenderTarget2D blurredTarget,
-        RenderTarget2D uiTarget)
-    {
-        var shader = ModAsset.Mask.Value;
-        var device = Main.instance.GraphicsDevice;
-        var batch = Main.spriteBatch;
-        var triggers = EventTriggerInstances["Radial Hotbars"];
-
-        for (var i = 0; i < triggers.Count; i++)
-        {
-            var trigger = triggers[i];
-            var glass = glasses[i];
-
-            device.SetRenderTarget(uiTarget);
-            device.Clear(Color.Transparent);
-            batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.UIScaleMatrix);
-            SDFRectangle.DontDrawShadow = true;
-            trigger?.Draw(false);
-            SDFRectangle.DontDrawShadow = false;
-            batch.End();
-
-            device.SetRenderTarget(glass);
-            device.Clear(Color.Transparent);
-            batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            shader.CurrentTechnique.Passes["Mask"].Apply();
-            device.Textures[1] = blurredTarget;
-            device.Textures[2] = uiTarget;
-            // 颜色是 Transparent，所以背景图是完全透明
-            batch.Draw(uiTarget, Vector2.Zero, Color.White);
-            batch.End();
-        }
-
-        // 复原
-        device.Textures[0] = null;
-        device.Textures[1] = null;
-        device.Textures[2] = null;
-    }
 }

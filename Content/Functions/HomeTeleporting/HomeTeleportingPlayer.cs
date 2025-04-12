@@ -39,7 +39,8 @@ public class HomeTeleportingPlayer : ModPlayer
             int totalStack = CurrentFrameProperties.ExistItems.GetTotalStack(itemType);
             if (totalStack is 0)
                 continue;
-            if (isPotion && totalStack < Config.NoConsume_PotionRequirement && Config.NoConsume_Potion)
+            // 是药水的条件下：必须同时满足“开启了无限药水”与“达到了药水需求量”
+            if (isPotion && (totalStack < Config.NoConsume_PotionRequirement || !Config.NoConsume_Potion))
                 continue;
 
             Projectile.NewProjectile(new EntitySource_Sync(), Player.position, Vector2.Zero,

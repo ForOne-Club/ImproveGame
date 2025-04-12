@@ -176,17 +176,14 @@ public class UISystem : ModSystem
     /// </summary>
     private void UpdateMenuUI(GameTime gameTime)
     {
-        if (_themeLastTick != UIConfigs.Instance.ThemeType || false)//_acrylicVfxLastTick != GlassVfxEnabled
+        if (_themeLastTick != UIConfigs.Instance.ThemeType || false)
         {
             UIStyle.SetUIColors(UIConfigs.Instance.ThemeType);
-            //if (GlassVfxAvailable)
-            //    UIStyle.AcrylicRedesign();
             if (!Main.gameMenu)
                 UIPlayer.InitUI();
         }
 
         _themeLastTick = UIConfigs.Instance.ThemeType;
-        //_acrylicVfxLastTick = GlassVfxEnabled;
 
         IsHoveringOnEditableText = false;
     }

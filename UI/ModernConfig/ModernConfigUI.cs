@@ -239,14 +239,6 @@ public sealed class ModernConfigUI : UIState
         if (PathPanelTimer.Closing || PathPanelTimer.Opening)
             PathPanel.Recalculate();
 
-        //if (Glass is not null && !DrawCalledForMakingGlass && GlassVfxEnabled && !Main.gameMenu)//
-        //{
-        //    // 云母效果特殊处理
-        //    Main.spriteBatch.ReBegin(null, Matrix.Identity);
-        //    Main.spriteBatch.Draw(Glass, Vector2.Zero, Color.White);
-        //    Main.spriteBatch.ReBegin(null, Main.UIScaleMatrix);
-        //}
-
         CenteredItemTagHandler.ModernConfigDrawing = true;
         base.Draw(spriteBatch);
         CenteredItemTagHandler.ModernConfigDrawing = false;
@@ -386,45 +378,4 @@ public sealed class ModernConfigUI : UIState
             });
         }
     }
-
-    #region Mica - 云母效果特殊处理
-
-    public static void MakeGlass(RenderTarget2D blurredTarget, RenderTarget2D uiTarget)
-    {
-        if (Instance?.Enabled is not true)
-            return;
-
-        var shader = ModAsset.Mask.Value;
-        var device = Main.instance.GraphicsDevice;
-        var batch = Main.spriteBatch;
-
-        var glass = Glass;
-
-        device.SetRenderTarget(uiTarget);
-        device.Clear(Color.Transparent);
-        batch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.UIScaleMatrix);
-        SDFRectangle.DontDrawShadow = true;
-        DrawCalledForMakingGlass = true;
-        Instance?.Draw(batch);
-        DrawCalledForMakingGlass = false;
-        SDFRectangle.DontDrawShadow = false;
-        batch.End();
-
-        device.SetRenderTarget(glass);
-        device.Clear(Color.Transparent);
-        batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-        shader.CurrentTechnique.Passes["Mask"].Apply();
-        device.Textures[1] = blurredTarget;
-        device.Textures[2] = uiTarget;
-        // 颜色是 Transparent，所以背景图是完全透明
-        batch.Draw(uiTarget, Vector2.Zero, Color.White);
-        batch.End();
-
-        // 复原
-        device.Textures[0] = null;
-        device.Textures[1] = null;
-        device.Textures[2] = null;
-    }
-
-    #endregion
 }

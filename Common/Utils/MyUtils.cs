@@ -29,11 +29,6 @@ partial class MyUtils
 
     public static bool AllowRenderTargets => Lighting.NotRetro && Terraria.Graphics.Effects.Filters.Scene.CanCapture();
 
-    //public static bool GlassVfxEnabled => AllowRenderTargets && UIConfigs.Instance.GlassVfxOn;
-
-    // Enabled和Available是不一样的，Available是能不能用，Enabled是有没有开
-    //public static bool GlassVfxAvailable => !Main.drawToScreen && !Main.mapFullscreen && GlassVfxEnabled;// && !Main.gameMenu
-
     public static string RemoveSpaces(string s) => s.Replace(" ", "", StringComparison.Ordinal);
 
     public static Matrix GetMatrix(bool ui)

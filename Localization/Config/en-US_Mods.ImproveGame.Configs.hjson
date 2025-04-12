@@ -1056,32 +1056,24 @@ UIConfigs: {
 		Tooltip: Restore all UI positions to default, especially useful when you can't find your Big Backpack UI
 	}
 
-	GlassVfxOn: {
-		Label: "[centeritem:MulticoloredStainedGlass] Glassmorphism Effect"
-		Tooltip:
-			'''
-			Applies glassmorphism effect to this mod's UI, making them prettier
-			Only takes effect when lighting mode is "Color" or "White"
-			May affect performance
-			'''
-	}
-
 	EnableBlur: {
-		Label: "[centeritem:1344] UI Blur (not under Retro lighting)"
+		Label: "[centeritem:MulticoloredStainedGlass] UI Blur"
 		Tooltip:
 			'''
+			Provides a blur effect to QoT UI
+			Not under Retro lighting
 			Tip: Larger "scale denominator" works better on high-resolution screens,
 			which is set by another config option
 			'''
 	}
 
 	SingleBlur: {
-		Label: "[centeritem:1344] Individual UI Blur (performance-heavy)"
+		Label: "[centeritem:MulticoloredStainedGlass] Individual UI Blur (performance-heavy)"
 		Tooltip: Individually blurs each UI window, which is prettier, but might pose compatibility issues
 	}
 
 	BlurZoomMultiplierDenominator: {
-		Label: "[centeritem:1344] Blur Scale (higher means lighter performance)"
+		Label: "[centeritem:MulticoloredStainedGlass] Blur Scale (higher means lighter performance)"
 		Tooltip:
 			'''
 			The higher this value is, the less computing power is required
@@ -1096,7 +1088,7 @@ UIConfigs: {
 	}
 
 	BlurIterationCount: {
-		Label: "[centeritem:1344] Iterations (higher means heavier performance)"
+		Label: "[centeritem:MulticoloredStainedGlass] Iterations (higher means heavier performance)"
 		Tooltip:
 			'''
 			The higher the value is, the more blurred the background is
@@ -1105,12 +1097,12 @@ UIConfigs: {
 	}
 
 	BlurIterationOffsetMultiplier: {
-		Label: "[centeritem:1344] Sampling Offset Coefficient (no performance impact)"
+		Label: "[centeritem:MulticoloredStainedGlass] Sampling Offset Coefficient (no performance impact)"
 		Tooltip: The higher the value is, the more blurred the background is, but stripes might show
 	}
 
 	BlurMixingNumber: {
-		Label: "[centeritem:1344] Color Sampling (higher means heavier performance)"
+		Label: "[centeritem:MulticoloredStainedGlass] Color Sampling (higher means heavier performance)"
 		Tooltip: The higher the value is, the more colors are sampled for blurring
 	}
 
@@ -1272,9 +1264,9 @@ TestData: {
 
 BlurMixingNumber: {
 	Tooltip: ""
-	One.Label: One
-	Two.Label: Two
-	Three.Label: Three
-	Four.Label: Four
-	Five.Label: Five
+	One.Label: 1
+	Two.Label: 2
+	Three.Label: 3
+	Four.Label: 4
+	Five.Label: 5
 }

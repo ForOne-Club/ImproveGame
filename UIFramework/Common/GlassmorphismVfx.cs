@@ -52,6 +52,7 @@ public class GlassmorphismVfx : ModSystem
         // IL_Main.DoDraw += RenderGlassmorphismVfx_ILEmit;
     }
 
+    [Obsolete("因模糊效果重制，该部分代码可能已经不管用")]
     private void RenderGlassmorphismVfx_ILEmit(ILContext il)
     {
         ILCursor cursor = new(il);

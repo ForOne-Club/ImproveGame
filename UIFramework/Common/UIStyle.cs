@@ -95,8 +95,6 @@ internal static class UIStyle
     static UIStyle()
     {
         SetUIColors(UIConfigs.Instance.ThemeType);
-        //if (GlassVfxAvailable)
-        //    AcrylicRedesign();
     }
 
     public static void SetUIColors(ThemeType theme)
@@ -238,52 +236,5 @@ internal static class UIStyle
         StatCardBg = new Color(5, 17, 20, 150);
 
         DropdownListBg = new Color(5, 17, 20, 230);
-    }
-
-    public static void AcrylicRedesign()
-    {
-        var theme = UIConfigs.Instance.ThemeType;
-
-        switch (theme)
-        {
-            case ThemeType.Blue:
-                //AcrylicIntensity = GlassVfxEnabled ? 0.113f : 0.11f;
-
-                PanelBg.A = (byte)(PanelBg.A * 0.5f);
-                PanelBg *= 0.8f;
-                PanelBgLight.A = (byte)(PanelBgLight.A * 0.5f);
-                PanelBgLight *= 0.8f;
-                PanelBgLightHover.A = (byte)(PanelBgLightHover.A * 0.5f);
-                PanelBgLightHover *= 0.8f;
-                ItemSlotBgFav.A = (byte)(ItemSlotBgFav.A * 0.6f);
-                ItemSlotBg *= 0.6f;
-                TrashSlotBg *= 0.6f;
-                TitleBg.A = (byte)(TitleBg.A * 0.9f);
-                TitleBg2.A = (byte)(TitleBg2.A * 0.9f);
-                SwitchBg.A = (byte)(SwitchBg.A * 0.5f);
-                SwitchBgHover.A = (byte)(SwitchBgHover.A * 0.5f);
-                StatCardBg *= 0.8f;
-                break;
-            case ThemeType.Stormdark:
-                //AcrylicIntensity = GlassVfxEnabled ? 0.117f : 0.12f;
-
-                PanelBg.A = (byte)(PanelBg.A * 0.9f);
-                PanelBgLight.A = (byte)(PanelBgLight.A * 0.9f);
-                PanelBgLightHover.A = (byte)(PanelBgLightHover.A * 0.9f);
-                ItemSlotBgFav.A = (byte)(ItemSlotBgFav.A * 0.8f);
-                ItemSlotBg.A = (byte)(ItemSlotBg.A * 0.8f);
-                TrashSlotBg *= 0.8f;
-                TitleBg.A = (byte)(TitleBg.A * 0.8f);
-                TitleBg2.A = (byte)(TitleBg2.A * 0.8f);
-                SwitchBg.A = (byte)(SwitchBg.A * 0.6f);
-                SwitchBgHover.A = (byte)(SwitchBgHover.A * 0.6f);
-                StatCardBg *= 1.1f;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(theme), theme, null);
-        }
-
-        ButtonBg.A = (byte)(ButtonBg.A * 0.7f);
-        ButtonBgHover.A = (byte)(ButtonBgHover.A * 0.7f);
     }
 }
