@@ -64,7 +64,7 @@ public class GameRectangleSystem : ModSystem
             layers.Insert(rulerIndex, new LegacyGameInterfaceLayer("ImproveGame: Matched Chests", delegate
                 {
                     if (ItemSearcherGUI.Instance is null ||
-                        !ItemSearcherGUI.Instance.Enabled || ItemSearcherGUI.MatchedChests is not {Count: > 0})
+                        !ItemSearcherGUI.Instance.Enabled || ItemSearcherGUI.MatchedChests is not { Count: > 0 })
                         return true;
 
                     var border = new Color(255, 231, 69);
@@ -78,7 +78,9 @@ public class GameRectangleSystem : ModSystem
                     {
                         var position = new Vector2(chest.x, chest.y) * 16f - Main.screenPosition;
                         position.X -= 2f;
-                        SDFRectangle.HasBorder(position, size, new Vector4(4f), background, 2f, border, Main.UIScaleMatrix);
+                        if (Main.LocalPlayer.gravDir == -1)
+                            position.Y = Main.screenHeight - position.Y - 37;
+                        SDFRectangle.HasBorder(position, size, new Vector4(4f), background, 2f, border, Main.GameViewMatrix.ZoomMatrix);
                     }
                     return true;
                 },

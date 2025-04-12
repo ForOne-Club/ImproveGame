@@ -52,6 +52,8 @@ namespace ImproveGame.UI.ExtremeStorage
             var font = FontAssets.DeathText.Value;
             var size = ChatManager.GetStringSize(font, tip, Vector2.One);
             var center = ExtremeStorageGUI.Storage.Position.ToWorldCoordinates(24, -12) - Main.screenPosition;
+            if (Main.LocalPlayer.gravDir == -1) // 记得处理重力翻转
+                center.Y = Main.screenHeight - center.Y;
             var realSize = size * scale;
             var position = center - realSize / 2f;
             var rectangle = new Rectangle((int)position.X, (int)position.Y, (int)realSize.X, (int)realSize.Y);
@@ -101,9 +103,12 @@ namespace ImproveGame.UI.ExtremeStorage
                     }
                 }
 
-                var drawPosition = positionInWorld.ToVector2() - Main.screenPosition - new Vector2(2f);
+                var drawPosition = positionInWorld.ToVector2() - Main.screenPosition;
+                drawPosition.X -= 2f;
+                if (Main.LocalPlayer.gravDir == -1)
+                    drawPosition.Y = Main.screenHeight - drawPosition.Y - 37;
                 SDFRectangle.HasBorder(drawPosition, hitbox.Size() + new Vector2(4f), new Vector4(4), color * 0.2f, 2f,
-                    color, Main.GameViewMatrix.EffectMatrix);
+                    color, Main.GameViewMatrix.ZoomMatrix);
             }
         }
     }

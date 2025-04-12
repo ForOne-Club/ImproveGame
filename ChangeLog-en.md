@@ -8,6 +8,7 @@
 
 # v1.8.1
 
+- [v1.8.1.6](Changelog/en/v1.8.1.6.md)
 - [v1.8.1.5](Changelog/en/v1.8.1.5.md)
 - [v1.8.1.4](Changelog/en/v1.8.1.4.md)
 - [v1.8.1.3](Changelog/en/v1.8.1.3.md)
