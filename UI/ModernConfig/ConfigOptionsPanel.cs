@@ -141,6 +141,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
     }
     public ConfigOptionsPanel(Color color) : base(color, color)
     {
+        EnableBlur = false;
         const int searchBarHeight = 30;
         const int gap = 6;
         Instance = this;

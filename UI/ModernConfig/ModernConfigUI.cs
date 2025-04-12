@@ -102,7 +102,8 @@ public sealed class ModernConfigUI : UIState
         CategoryPanel = new CategorySidePanel(ConfigColors.DarkBorderlessPanel * 0.75f)
         {
             RelativeMode = RelativeMode.Horizontal,
-            Rounded = ClassicStyle ? new Vector4(8) : new Vector4(10f, 0f, 10f, 0f)
+            Rounded = ClassicStyle ? new Vector4(8) : new Vector4(10f, 0f, 10f, 0f),
+            EnableBlur = false,
         };
         CategoryPanel.SetSize(sidePanelWidth, 0f, 0f, 1f);
         CategoryPanel.JoinParent(MainPanel);
@@ -238,13 +239,13 @@ public sealed class ModernConfigUI : UIState
         if (PathPanelTimer.Closing || PathPanelTimer.Opening)
             PathPanel.Recalculate();
 
-        if (Glass is not null && !DrawCalledForMakingGlass && GlassVfxEnabled && !Main.gameMenu)//
-        {
-            // 云母效果特殊处理
-            Main.spriteBatch.ReBegin(null, Matrix.Identity);
-            Main.spriteBatch.Draw(Glass, Vector2.Zero, Color.White);
-            Main.spriteBatch.ReBegin(null, Main.UIScaleMatrix);
-        }
+        //if (Glass is not null && !DrawCalledForMakingGlass && GlassVfxEnabled && !Main.gameMenu)//
+        //{
+        //    // 云母效果特殊处理
+        //    Main.spriteBatch.ReBegin(null, Matrix.Identity);
+        //    Main.spriteBatch.Draw(Glass, Vector2.Zero, Color.White);
+        //    Main.spriteBatch.ReBegin(null, Main.UIScaleMatrix);
+        //}
 
         CenteredItemTagHandler.ModernConfigDrawing = true;
         base.Draw(spriteBatch);

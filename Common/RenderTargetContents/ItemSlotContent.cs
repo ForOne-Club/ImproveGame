@@ -26,7 +26,7 @@ public class ItemSlotContent(ThemeType theme) : ARenderTargetContentByRequest
         
         float uiScale = Main.UIScale;
         Main.UIScale = 1f;
-        SDFRectangle.HasBorder(Vector2.Zero, size, round, bgColor, border, borderColor);
+        SDFRectangle.HasBorder(Vector2.Zero, size, round, bgColor, border, borderColor, Main.UIScaleMatrix);
         Main.UIScale = uiScale;
 
         spriteBatch.End();

@@ -108,7 +108,7 @@ public class ModNotificationPopup : IInGameNotification
         _isMouseHovering = r.Contains(mouseScreen.ToPoint());
         var panelBorder = UIStyle.PanelBorder * Opacity * (_isMouseHovering ? 0.75f : 0.5f);
         SDFRectangle.HasBorder(r.TopLeft(), r.Size(), new Vector4(UIStyle.ItemSlotBorderRound),
-            UIStyle.PanelBg * Opacity, UIStyle.ItemSlotBorderSize, panelBorder);
+            UIStyle.PanelBg * Opacity, UIStyle.ItemSlotBorderSize, panelBorder, Main.UIScaleMatrix);
 
         textCenter.Y += 4f * Scale;
         Color textColor = _notification.TextColor * (Main.mouseTextColor / 255f) * opacity;

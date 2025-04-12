@@ -101,7 +101,9 @@ public class GameRectangle
         Vector2 size = Rectangle.Size() * 16 + new Vector2(4);
         if (Main.LocalPlayer.gravDir is -1f)
             pos.X = Main.screenWidth - pos.X - size.X;
-        SDFRectangle.HasBorder(pos, size, new Vector4(2f), BackgroundColor, 2f, BorderColor, ui: false);
+        DrawBorder(pos, size.X, size.Y, BackgroundColor, BorderColor);
+        //SDFRectangle.HasBorder(pos, size,
+        //    new Vector4(2f), BackgroundColor, 2f, BorderColor, Main.GameViewMatrix.ZoomMatrix);
         // DrawBorderRect(Rectangle, backgroundColor, borderColor);
     }
 

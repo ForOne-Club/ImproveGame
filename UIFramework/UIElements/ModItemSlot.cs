@@ -150,7 +150,7 @@ namespace ImproveGame.UIFramework.UIElements
                 var borderColor = Item.favorited ? UIStyle.ItemSlotBorderFav : UIStyle.ItemSlotBorder;
                 var background = Item.favorited ? UIStyle.ItemSlotBgFav : UIStyle.ItemSlotBg;
                 SDFRectangle.HasBorder(dimensions.Position(), dimensions.Size(),
-                    new Vector4(UIStyle.ItemSlotBorderRound), background, UIStyle.ItemSlotBorderSize, borderColor);
+                    new Vector4(UIStyle.ItemSlotBorderRound), background, UIStyle.ItemSlotBorderSize, borderColor, Main.UIScaleMatrix);
             }
 
             // 这里设置inventoryScale原版也是这么干的

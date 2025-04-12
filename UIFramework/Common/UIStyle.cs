@@ -95,8 +95,8 @@ internal static class UIStyle
     static UIStyle()
     {
         SetUIColors(UIConfigs.Instance.ThemeType);
-        if (GlassVfxAvailable)
-            AcrylicRedesign();
+        //if (GlassVfxAvailable)
+        //    AcrylicRedesign();
     }
 
     public static void SetUIColors(ThemeType theme)
@@ -247,7 +247,7 @@ internal static class UIStyle
         switch (theme)
         {
             case ThemeType.Blue:
-                AcrylicIntensity = GlassVfxEnabled ? 0.113f : 0.11f;
+                //AcrylicIntensity = GlassVfxEnabled ? 0.113f : 0.11f;
 
                 PanelBg.A = (byte)(PanelBg.A * 0.5f);
                 PanelBg *= 0.8f;
@@ -265,7 +265,7 @@ internal static class UIStyle
                 StatCardBg *= 0.8f;
                 break;
             case ThemeType.Stormdark:
-                AcrylicIntensity = GlassVfxEnabled ? 0.117f : 0.12f;
+                //AcrylicIntensity = GlassVfxEnabled ? 0.117f : 0.12f;
 
                 PanelBg.A = (byte)(PanelBg.A * 0.9f);
                 PanelBgLight.A = (byte)(PanelBgLight.A * 0.9f);

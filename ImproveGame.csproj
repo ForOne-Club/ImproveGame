@@ -3,7 +3,7 @@
 	<Import Project="..\tModLoader.targets" />
 	<PropertyGroup>
 		<AssemblyName>ImproveGame</AssemblyName>
-		<LangVersion>latest</LangVersion>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="FuzzySearch.Net" Version="1.1.0" />

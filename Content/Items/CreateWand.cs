@@ -116,15 +116,24 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
 
     public override void LoadData(TagCompound tag)
     {
-        tag.TryGet(nameof(Block), out Block);
-        tag.TryGet(nameof(Wall), out Wall);
-        tag.TryGet(nameof(Platform), out Platform);
-        tag.TryGet(nameof(Torch), out Torch);
-        tag.TryGet(nameof(Chair), out Chair);
-        tag.TryGet(nameof(Workbench), out Workbench);
-        tag.TryGet(nameof(Bed), out Bed);
-        tag.TryGet(nameof(Table), out Table);
-        tag.TryGet(nameof(Door), out Door);
+        if (tag.TryGet(nameof(Block), out Item block))
+            Block = block;
+        if (tag.TryGet(nameof(Wall), out Item wall))
+            Wall = wall;
+        if (tag.TryGet(nameof(Platform), out Item platform))
+            Platform = platform;
+        if (tag.TryGet(nameof(Torch), out Item torch))
+            Torch = torch;
+        if (tag.TryGet(nameof(Chair), out Item chair))
+            Chair = chair;
+        if (tag.TryGet(nameof(Workbench), out Item workbench))
+            Workbench = workbench;
+        if (tag.TryGet(nameof(Bed), out Item bed))
+            Bed = bed;
+        if (tag.TryGet(nameof(Table), out Item table))
+            Table = table;
+        if (tag.TryGet(nameof(Door), out Item door))
+            Door = door;
     }
 
     public override void SetStaticDefaults()
@@ -312,7 +321,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
                 {
                     if (tileSort == TileSort.Torch || tileSort == TileSort.Chair ||
                         tileSort == TileSort.Workbench || tileSort == TileSort.Table ||
-                        tileSort == TileSort.Bed||tileSort == TileSort.Door) // 火把，椅子，工作台，桌子，床，门
+                        tileSort == TileSort.Bed || tileSort == TileSort.Door) // 火把，椅子，工作台，桌子，床，门
                     {
                         tileDatas.Add(new(tileSort, x, y));
                     }

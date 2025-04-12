@@ -10,6 +10,18 @@ A mod that aims to raise quality of gameplay to the next level, to benefit the c
 
 </div>
 
+## 📖 简介
+`更好的体验` 的主要更新与制作方向大致可以分为以下三大类：
+
+1. 针对 `原版机制修改&增强` 可供玩家自定义的功能，例如：`最大堆叠` `物品拾取范围` `工具使用速度` `城镇 NPC 多项控制能力` 等。
+2. 创意 `工具&道具`，例如：`法爆魔杖` `空间魔杖` `科技魔杖` `液体魔杖` `虚空魔杖` `稻草人` `钓鱼机` 等。
+3. 针对玩家的 `能力增强`，例如：`大背包` `自动&智能拾取` `无限药水&增益站 BUFF 效果` `自动垃圾桶` `自动开袋子` `钓鱼机` `自动开袋` `快速微光` `弹药链` 等。
+
+补充：
+- 一些玩家 `能力增强` 可能还需要某些道具解锁，例如：`天气之书` `定位球` `瓶中微光船` 等。
+- 如果你能注意到，`更好的体验` 有着与其他模组不太一样的 `UI`，这也是 `更好的体验` 的一大特色。
+
+
 ## ✨ Features
 
 For a detailed list, check mod configurations or changelog above
@@ -23,7 +35,8 @@ For a detailed list, check mod configurations or changelog above
 7. Features specially made for multiplayer, for example sharing your infinite buffs, portable crafting stations and even more with your teammates
 8. A Huge Inventory providing 100 item slots, no warries of storing your potions and banners
 9. Potion Bag and Banner Box, integrate all your potions or banners as a single item (and you are free to take them out)
-10. Most features are configurable, use on your own preference
+
+Most features are `configurable`, use on your own preference
 
 ## ⬇️ Download
 

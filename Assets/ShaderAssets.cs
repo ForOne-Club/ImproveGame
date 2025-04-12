@@ -2,19 +2,19 @@
 
 namespace ImproveGame.Assets;
 
-internal class ShaderAssets : ModSystem
-{
-    public override void Load()
-    {
-        if (Main.dedServ) return;
+//internal class ShaderAssets : ModSystem
+//{
+//    public override void Load()
+//    {
+//        if (Main.dedServ) return;
 
-        SDFRectangle.Load();
-    }
+//        SDFRectangle.Load();
+//    }
 
-    public override void Unload()
-    {
-        if (Main.dedServ) return;
+//    public override void Unload()
+//    {
+//        if (Main.dedServ) return;
 
-        SDFRectangle.Unload();
-    }
-}
+//        SDFRectangle.Unload();
+//    }
+//}

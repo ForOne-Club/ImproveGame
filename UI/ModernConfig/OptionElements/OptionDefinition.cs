@@ -394,7 +394,7 @@ public class DefinitionSUIDetour : ILoadable
         {
             if (OptionDefinition.InModernConfig)
             {
-                SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, true);
+                SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, Main.UIScaleMatrix);
 
                 return true;
             }
@@ -419,7 +419,7 @@ public class DefinitionSUIDetour : ILoadable
         {
             if (OptionDefinition.InModernConfig)
             {
-                SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, true);
+                SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, Main.UIScaleMatrix);
 
                 return true;
             }
@@ -445,7 +445,7 @@ public class DefinitionSUIDetour : ILoadable
             if (OptionDefinition.InModernConfig)
             {
                 var dimension = element.GetInnerDimensions();
-                SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, true);
+                SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(dimension.Width * .25f), UIStyle.PanelBg, 1f, UIStyle.PanelBorder, Main.UIScaleMatrix);
 
                 return true;
             }
@@ -458,7 +458,7 @@ public class DefinitionSUIDetour : ILoadable
         if (OptionDefinition.InModernConfig)
         {
             var dimension = self.GetDimensions();
-            SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(12f), UIStyle.PanelBg, 2f, UIStyle.PanelBorder, true);
+            SDFRectangle.HasBorder(dimension.Position(), dimension.Size(), new Vector4(12f), UIStyle.PanelBg, 2f, UIStyle.PanelBorder, Main.UIScaleMatrix);
         }
         else
             orig.Invoke(self, spriteBatch);

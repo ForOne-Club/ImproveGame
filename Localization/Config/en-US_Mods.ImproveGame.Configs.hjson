@@ -1066,6 +1066,54 @@ UIConfigs: {
 			'''
 	}
 
+	EnableBlur: {
+		Label: "[centeritem:1344] UI Blur (not under Retro lighting)"
+		Tooltip:
+			'''
+			Tip: Larger "scale denominator" works better on high-resolution screens,
+			which is set by another config option
+			'''
+	}
+
+	SingleBlur: {
+		Label: "[centeritem:1344] Individual UI Blur (performance-heavy)"
+		Tooltip: Individually blurs each UI window, which is prettier, but might pose compatibility issues
+	}
+
+	BlurZoomMultiplierDenominator: {
+		Label: "[centeritem:1344] Blur Scale (higher means lighter performance)"
+		Tooltip:
+			'''
+			The higher this value is, the less computing power is required
+			If blur is causing lag, try increasing this value
+			The suggested values are:
+			- normal GPU, 4K resolution: 4
+			- high-end GPU: 1
+			1 means the blurring is based on the original resolution
+			Increasing this value affects the scope of the blur
+			You may want to adjust options below accordingly
+			'''
+	}
+
+	BlurIterationCount: {
+		Label: "[centeritem:1344] Iterations (higher means heavier performance)"
+		Tooltip:
+			'''
+			The higher the value is, the more blurred the background is
+			If blur is causing lag, try decreasing this value
+			'''
+	}
+
+	BlurIterationOffsetMultiplier: {
+		Label: "[centeritem:1344] Sampling Offset Coefficient (no performance impact)"
+		Tooltip: The higher the value is, the more blurred the background is, but stripes might show
+	}
+
+	BlurMixingNumber: {
+		Label: "[centeritem:1344] Color Sampling (higher means heavier performance)"
+		Tooltip: The higher the value is, the more colors are sampled for blurring
+	}
+
 	AutoSummon: {
 		Label: "[centeritem:SlimeStaff] Auto Resummoning"
 		Tooltip:
@@ -1220,4 +1268,13 @@ TestData: {
 		Label: text
 		Tooltip: ""
 	}
+}
+
+BlurMixingNumber: {
+	Tooltip: ""
+	One.Label: One
+	Two.Label: Two
+	Three.Label: Three
+	Four.Label: Four
+	Five.Label: Five
 }

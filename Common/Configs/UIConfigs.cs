@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.UI.ModernConfig;
+using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -22,10 +23,10 @@ public class UIConfigs : ModConfig
     [CustomModConfigItem(typeof(SuicideButtonElement))]
     public object SuicideButton;
 
-    [Header("UIHeader")]
-    [DefaultValue(false)]
-    [DrawTicks]
-    public bool GlassVfxOn;
+    //[Header("UIHeader")]
+    //[DefaultValue(false)]
+    //[DrawTicks]
+    //public bool GlassVfxOn;
 
     [CustomModConfigItem(typeof(ThemeColorElement))]
     public ThemeType ThemeType;
@@ -54,6 +55,37 @@ public class UIConfigs : ModConfig
     [Slider]
     public float BigFontOffsetY;
 
+    [DefaultValue(false)]
+    public bool EnableBlur;
+
+    [DefaultValue(false)]
+    public bool SingleBlur;
+
+    [Slider]
+    [DefaultValue(2f)]
+    [Range(1f, 8f)]
+    [Increment(0.5f)]
+    public float BlurZoomMultiplierDenominator;
+
+    [Slider]
+    [DefaultValue(2)]
+    [Range(0, 10)]
+    [Increment(1)]
+    public int BlurIterationCount;
+
+    [Slider]
+    [DefaultValue(2f)]
+    [Range(1f, 10f)]
+    [Increment(1f)]
+    public float BlurIterationOffsetMultiplier;
+
+    [Slider]
+    [DefaultValue(BlurMixingNumber.Three)]
+    public BlurMixingNumber BlurMixingNumber;
+
+    /// <summary>
+    /// 显示调试数据
+    /// </summary>
     [Header("GameHeader")]
     [DefaultValue(false)]
     public bool ShowMoreData;
@@ -74,6 +106,9 @@ public class UIConfigs : ModConfig
     [Slider]
     public PAPDisplayMode PlyInfo;
 
+    /// <summary>
+    /// 自动垃圾桶
+    /// </summary>
     [DefaultValue(true)]
     public bool QoLAutoTrash;
 
@@ -86,19 +121,30 @@ public class UIConfigs : ModConfig
     [DefaultValue(true)]
     public bool ExplosionEffect;
 
+    /// <summary>
+    /// 隐藏无限续杯增益显示
+    /// </summary>
     [DefaultValue(false)]
     public bool HideNoConsumeBuffs;
 
+    /// <summary>
+    /// 狱火圈不透明度
+    /// </summary>
     [DefaultValue(0.3f)]
     [Range(0f, 1f)]
     [Increment(0.05f)]
     [Slider]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float InfernoTransparency;
 
+    /// <summary>
+    /// 隐身不透明度
+    /// </summary>
     [DefaultValue(0.3f)]
     [Range(0f, 1f)]
     [Increment(0.05f)]
     [Slider]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float InvisibleTransparency;
 
     [DefaultValue(true)]
@@ -127,6 +173,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkDungeon;
 
     [DefaultValue(1f)]
@@ -134,6 +181,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkTemple;
 
     [DefaultValue(1f)]
@@ -141,6 +189,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkAether;
 
     [DefaultValue(0.9f)]
@@ -148,6 +197,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkFloatingIsland;
 
     [DefaultValue(1f)]
@@ -155,6 +205,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkPyramid;
 
     [DefaultValue(0.8f)]
@@ -162,6 +213,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkPlantera;
 
     [DefaultValue(0.8f)]
@@ -169,6 +221,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkEnchantedSword;
 
     [DefaultValue(0.8f)]
@@ -176,6 +229,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkMarbleCave;
 
     [DefaultValue(0.8f)]
@@ -183,6 +237,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkGraniteCave;
 
     [DefaultValue(0.8f)]
@@ -190,10 +245,21 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkEmptyAutofisher;
 
     public override void OnLoaded()
     {
         Instance = this;
+    }
+
+    public override void OnChanged()
+    {
+        BlurMakeSystem.EnableBlur = EnableBlur;
+        BlurMakeSystem.SingleBlur = SingleBlur;
+        BlurMakeSystem.BlurZoomMultiplierDenominator = BlurZoomMultiplierDenominator;
+        BlurMakeSystem.BlurIterationCount = BlurIterationCount;
+        BlurMakeSystem.BlurIterationOffsetMultiplier = BlurIterationOffsetMultiplier;
+        BlurMakeSystem.BlurMixingNumber = BlurMixingNumber;
     }
 }

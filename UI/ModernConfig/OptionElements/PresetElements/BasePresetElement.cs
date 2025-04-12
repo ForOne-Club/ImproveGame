@@ -44,7 +44,7 @@ public class BasePresetElement : TimerView
         if (!Interactable)
             panelColor = Color.Gray * 0.3f;
 
-        SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor * 0.8f);
+        SDFRectangle.NoBorder(position, size, new Vector4(8f), panelColor * 0.8f, Main.UIScaleMatrix);
 
         // 提示
         if (!IsMouseHovering)
@@ -79,6 +79,6 @@ public class BasePresetElement : TimerView
     private bool CantOperateDueToPasswordVerification =>
         Main.netMode is NetmodeID.MultiplayerClient &&
         Config.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered;
-    
+
     internal bool CanShowInteractTip = true;
 }

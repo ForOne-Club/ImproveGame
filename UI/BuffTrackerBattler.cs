@@ -10,10 +10,18 @@ namespace ImproveGame.UI
     {
         public BattlerPanel() : base(Color.Black, UIStyle.TitleBg) { }
 
+        public string displayTextCache = string.Empty;
+
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer) && modPlayer.HasRequiredBuffs())
+            if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer) && modPlayer.HasRequiredBuffs()) 
+            {
                 base.Draw(spriteBatch);
+
+                if (IsMouseHovering)
+                    Main.instance.MouseTextNoOverride(displayTextCache, 0, 0);
+
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -53,6 +61,20 @@ namespace ImproveGame.UI
                 HAlign = 1.6f,
                 VAlign = 0f
             };
+            maxRateText.OnLeftClick += delegate
+            {
+                SoundEngine.PlaySound(SoundID.ResearchComplete);
+                PushChange(1.0f);
+            };
+            maxRateText.OnMouseOver += delegate
+            {
+                maxRateText.ShadowColor = Color.Yellow;
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            };
+            maxRateText.OnMouseOut += delegate
+            {
+                maxRateText.ShadowColor = Color.Black;
+            };
             MainPanel.Append(maxRateText);
 
             UIText element2 = new("x1")
@@ -61,11 +83,39 @@ namespace ImproveGame.UI
                 VAlign = 0.5f
             };
             MainPanel.Append(element2);
+            element2.OnLeftClick += delegate
+            {
+                SoundEngine.PlaySound(SoundID.ResearchComplete);
+                PushChange(0.5f);
+            };
+            element2.OnMouseOver += delegate
+            {
+                element2.ShadowColor = Color.Yellow;
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            };
+            element2.OnMouseOut += delegate
+            {
+                element2.ShadowColor = Color.Black;
+            };
 
             UIText element3 = new("x0")
             {
                 HAlign = 0.9f,
                 VAlign = 1f
+            };
+            element3.OnLeftClick += delegate
+            {
+                SoundEngine.PlaySound(SoundID.ResearchComplete);
+                PushChange(0f);
+            };
+            element3.OnMouseOver += delegate
+            {
+                element3.ShadowColor = Color.Yellow;
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            };
+            element3.OnMouseOut += delegate
+            {
+                element3.ShadowColor = Color.Black;
             };
             MainPanel.Append(element3);
         }
@@ -113,12 +163,13 @@ namespace ImproveGame.UI
                 if (_sliderCurrentValueCache == 0f)
                     originalText = Language.GetTextValue("CreativePowers.NPCSpawnRateSliderEnemySpawnsDisabled");
 
-                Main.instance.MouseTextNoOverride(originalText, 0, 0);
+                MainPanel.displayTextCache = originalText;
             }
             else if (MainPanel.GetDimensions().ToRectangle().Intersects(new(Main.mouseX, Main.mouseY, 1, 1)))
             {
                 string text = GetText("BuffTracker.NPCSpawnRatePanel");
-                Main.instance.MouseTextNoOverride(text, 0, 0);
+
+                MainPanel.displayTextCache = text;
             }
 
             AttemptPushingChange();

@@ -85,8 +85,10 @@ public class PlayerStatsGUI : BaseBody
         #endregion
 
         #region 控制窗口
-        Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg, 10, 2, true);
-        Window.FinallyDrawBorder = true;
+        Window = new SUIPanel(UIStyle.PanelBorder, UIStyle.PanelBg, 10, 2, true)
+        {
+            FinallyDrawBorder = true
+        };
 
         #region 标题栏
         // 标题
@@ -137,7 +139,8 @@ public class PlayerStatsGUI : BaseBody
 
         foreach (var item in PlayerStatsSystem.Instance.StatsCategories)
         {
-            StatsCard card = CreateCardForControl(Body, item.Value);
+            var card = CreateCardForControl(Body, item.Value);
+            card.EnableBlur = false;
 
             var list1 = StatsGrid.ListView.Children;
             var list2 = StatsGrid.ListView2.Children;
@@ -236,8 +239,8 @@ public class PlayerStatsGUI : BaseBody
     /// </summary>
     private void Body_OnUpdate(UIElement body)
     {
-        List<UIElement> list = body.Children.ToList();
-        HashSet<BaseStatsCategory> appeared = new HashSet<BaseStatsCategory>();
+        List<UIElement> list = [.. body.Children];
+        HashSet<BaseStatsCategory> appeared = [];
 
         for (int i = 0; i < list.Count; i++)
         {

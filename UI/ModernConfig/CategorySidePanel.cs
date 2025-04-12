@@ -106,6 +106,7 @@ public sealed class CategorySidePanel : SUIPanel
 
     public CategorySidePanel(Color color) : base(color, color)
     {
+        EnableBlur = false;
         // 自动添加没法直观地调节顺序，所以手动添加
         // Type[] types = Assembly.GetExecutingAssembly().GetTypes();
         // foreach (Type type in types)
