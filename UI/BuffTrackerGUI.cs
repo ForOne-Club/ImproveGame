@@ -117,8 +117,8 @@ public class BuffTrackerGUI : BaseBody
         HashSet<int> favIds = [];
         foreach (var favBuff in FavoritedBuffs) 
         {
-            if(!BuffID.Search.TryGetId(favBuff,out var id))
-                return;
+            if (!BuffID.Search.TryGetId(favBuff, out var id))
+                continue;
             favIds.Add(id);
             if (!HideBuffSystem.BuffTypesShouldHide[id])
                 continue;
