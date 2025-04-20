@@ -4,7 +4,7 @@ namespace ImproveGame.Content.NPCs.Dummy;
 
 public class DummyDPS
 {
-    public static readonly int ResetInterval = 120;
+    public static int ResetInterval { get; set; } = 120;
 
     public DummyNPC Parent;
     public bool IsStarted;
@@ -29,6 +29,10 @@ public class DummyDPS
         }
     }
 
+    /// <summary>
+    /// 对假人照成伤害时调用，计入累计伤害
+    /// </summary>
+    /// <param name="damage">本次伤害</param>
     public void Hurt(int damage)
     {
         IsStarted = true;
@@ -38,6 +42,9 @@ public class DummyDPS
         LastHitTime = SurvivalTimer;
     }
 
+    /// <summary>
+    /// 重置假人 DPS 数据
+    /// </summary>
     public void Reset()
     {
         IsStarted = false;
@@ -59,8 +66,8 @@ public class DummyDPS
                 S = IsStarted ? MathF.Round(TotalDamage / hitTick) : 0,
                 F = IsStarted ? MathF.Round(TotalDamage / hitFrame, 1) : 0
             })} ({TotalDamage})\n" +
-            $"{GetTextWith("NPC.Dummy_Time", new { S = Math.Round(hitTick, 1), F = hitFrame })}\n" +
-            $"{GetTextWith("NPC.Dummy_FinalBlow", new { FinalBlow })}";
+               $"{GetTextWith("NPC.Dummy_Time", new { S = Math.Round(hitTick, 1), F = hitFrame })}\n" +
+               $"{GetTextWith("NPC.Dummy_FinalBlow", new { FinalBlow })}";
     }
 
     public void DrawString(Vector2 position, Vector2 percentOrign)
@@ -68,6 +75,7 @@ public class DummyDPS
         string @string = ToString();
         Vector2 size = ChatManager.GetStringSize(FontAssets.ItemStack.Value, @string, new(1f));
 
-        MyUtils.DrawString(position, @string, Color.White, Color.Black, size * percentOrign, 1f, false, 2, Main.LocalPlayer.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None);
+        MyUtils.DrawString(position, @string, Color.White, Color.Black, size * percentOrign, 1f, false, 2,
+            Main.LocalPlayer.gravDir < 0 ? SpriteEffects.FlipVertically : SpriteEffects.None);
     }
 }

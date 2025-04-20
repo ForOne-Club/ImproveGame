@@ -68,7 +68,8 @@ public class SyncDummyModule : NetModule
             NoGravity = r.ReadBoolean(),
             NoTileCollide = r.ReadBoolean(),
             KnockBackResist = r.ReadSingle(),
-            customAIType = r.ReadByte()
+            customAIType = r.ReadByte(),
+            ResetTimer = r.ReadInt32(),
         };
     }
 
@@ -92,6 +93,7 @@ public class SyncDummyModule : NetModule
         p.Write(config.NoTileCollide);
         p.Write(config.KnockBackResist);
         p.Write((byte)config.customAIType);
+        p.Write(config.ResetTimer);
         base.Send(p);
     }
 
@@ -201,6 +203,7 @@ public class DummyNPC : ModNPC
             NPC.life = NPC.lifeMax;
             return false;
         }
+
         return true;
     }
 
@@ -302,6 +305,7 @@ public class DummyNPC : ModNPC
         npc.knockBackResist = Config.KnockBackResist;
 
         ResetAI();
+        DummyDPS.ResetInterval = Config.ResetTimer;
         DummyDPS.Update();
     }
 
@@ -336,6 +340,10 @@ public class DummyNPC : ModNPC
             NPC.velocity = Vector2.Zero;
     }
 
+    /// <summary>
+    /// 召唤 NPC 的玩家存在并且在指定范围内
+    /// </summary>
+    /// <returns>true 在范围内</returns>
     private bool IsPlayerInRange()
     {
         return Main.player[Owner].active &&
@@ -368,6 +376,9 @@ public class DummyNPC : ModNPC
         NPC.frameCounter = Math.Max(0, NPC.frameCounter - 1f);
     }
 
+    /// <summary>
+    /// 清除所有 BUFF
+    /// </summary>
     public void ClearBuffs()
     {
         if (!NPC.active) return;
@@ -409,10 +420,14 @@ public class DummyNPC : ModNPC
 
         if (Config.ShowBox)
         {
-            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 0) - Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
-            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 1) - Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
-            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(0, .5f) - Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
-            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(1, .5f) - Main.screenPosition, new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 0) - Main.screenPosition,
+                new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(.5f, 1) - Main.screenPosition,
+                new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(npc.Size.X, 2f), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(0, .5f) - Main.screenPosition,
+                new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
+            sb.Draw(TextureAssets.MagicPixel.Value, npc.position + npc.Size * new Vector2(1, .5f) - Main.screenPosition,
+                new Rectangle(0, 0, 1, 1), Color.White, 0, new Vector2(.5f), new Vector2(2f, npc.Size.Y), 0, 0);
         }
 
         sb.Draw(texture2D, center,
@@ -423,7 +438,7 @@ public class DummyNPC : ModNPC
         {
             DummyDPS.DrawString(position + new Vector2(fSize.X * npc.scale + 10f, 0f), new Vector2(0f, 0f));
         }
+
         return false;
     }
 }
-

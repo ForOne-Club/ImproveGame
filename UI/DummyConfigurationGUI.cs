@@ -1,4 +1,4 @@
-﻿﻿using ImproveGame.Content.NPCs.Dummy;
+﻿using ImproveGame.Content.NPCs.Dummy;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
@@ -158,7 +158,6 @@ namespace ImproveGame.UI
 
                     SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
                 }
-
             };
             customAIStyleBox.OnUpdate += (elem) =>
             {
@@ -166,7 +165,8 @@ namespace ImproveGame.UI
                 if (!customAIStyleBox.IsWritingText)
                     customAIStyleBox.Value = value;
             };
-            aiStyleWikiOpener = new SUIImageButton(TextureAssets.Item[ItemID.Book].Value, GetText("UI.DummyConfiguration.OpenWikiTip"), false)
+            aiStyleWikiOpener = new SUIImageButton(TextureAssets.Item[ItemID.Book].Value,
+                GetText("UI.DummyConfiguration.OpenWikiTip"), false)
             {
                 HAlign = 1f,
                 Left = new(Language.ActiveCulture.Name is not "zh-Hans" ? -140 : -125, 0),
@@ -208,7 +208,6 @@ namespace ImproveGame.UI
                     Height = new StyleDimension(40, 0),
                     Width = StyleDimension.Fill,
                     Left = new StyleDimension(10f, 0f)
-
                 };
                 fieldName.JoinParent(fPanel);
                 var fType = fInfo.FieldType;
@@ -222,7 +221,7 @@ namespace ImproveGame.UI
                             // fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), flag);
                             // SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
                         }, ""
-                        )
+                    )
                     {
                         HAlign = 1f,
                         Width = new StyleDimension(60, 0),
@@ -242,28 +241,28 @@ namespace ImproveGame.UI
                     if (fInfo.Name == "LifeMax")
                     {
                         SUINumericText numberBox =
-                        new SUINumericText
-                        {
-                            HAlign = 1f,
-                            Width = new(120f, 0),
-                            Height = new(0, 1f),
-                            BgColor = Color.Black * 0.4f,
-                            Rounded = new Vector4(14f),
-                            MinValue = 1,
-                            MaxValue = 2147483647,
-                            InnerText =
+                            new SUINumericText
                             {
-                                TextAlign = new Vector2(0.5f, 0.5f),
-                                TextOffset = new Vector2(0f, -2f),
-                                MaxCharacterCount = 10,
-                                MaxLines = 1,
-                                IsWrapped = false
-                            },
-                            MaxLength = 10,
-                            DefaultValue = 2000000000,
-                            Format = "0",
-                            VAlign = 0.5f
-                        };
+                                HAlign = 1f,
+                                Width = new(120f, 0),
+                                Height = new(0, 1f),
+                                BgColor = Color.Black * 0.4f,
+                                Rounded = new Vector4(14f),
+                                MinValue = 1,
+                                MaxValue = 2147483647,
+                                InnerText =
+                                {
+                                    TextAlign = new Vector2(0.5f, 0.5f),
+                                    TextOffset = new Vector2(0f, -2f),
+                                    MaxCharacterCount = 10,
+                                    MaxLines = 1,
+                                    IsWrapped = false
+                                },
+                                MaxLength = 10,
+                                DefaultValue = 2000000000,
+                                Format = "0",
+                                VAlign = 0.5f
+                            };
                         numberBox.ContentsChanged += (ref string content) =>
                         {
                             if (int.TryParse(content, out int value))
@@ -276,11 +275,9 @@ namespace ImproveGame.UI
                                 DummyNPC.LocalConfig.LifeMax = value;
                                 SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
                             }
-
                         };
                         numberBox.OnUpdate += (elem) =>
                         {
-
                             var value = DummyNPC.LocalConfig.LifeMax;
                             if (!numberBox.IsWritingText)
                                 numberBox.Value = value;
@@ -289,14 +286,24 @@ namespace ImproveGame.UI
                     }
                     else
                     {
-                        SUISlider<int> sUISlider = new SUISlider<int>(
-                        () => (int)fInfo.GetValue(DummyNPC.LocalConfig),
-                        obj =>
+                        int defaultValue = 0;
+                        int minValue = 0;
+                        int maxValue = 1000;
+                        if (fInfo.Name.Equals("ResetTimer"))
                         {
-                            fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
-                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                        }, "",
-                        0, 1000, 0
+                            defaultValue = 30;
+                            minValue = 30;
+                            maxValue = 60 * 60 * 60;
+                        }
+
+                        SUISlider<int> sUISlider = new SUISlider<int>(
+                            () => (int)fInfo.GetValue(DummyNPC.LocalConfig),
+                            obj =>
+                            {
+                                fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
+                                SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                            }, "",
+                            minValue, maxValue, defaultValue
                         )
                         {
                             HAlign = 1f,
@@ -308,43 +315,52 @@ namespace ImproveGame.UI
                 }
                 else if (fType == typeof(DummyConfig.AIType))
                 {
-                    SUIDropdownList<DummyConfig.AIType> list = new(() => (DummyConfig.AIType)fInfo.GetValue(DummyNPC.LocalConfig), obj =>
-                    {
-                        if ((DummyConfig.AIType)obj == DummyConfig.AIType.SelfDefine && !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
+                    SUIDropdownList<DummyConfig.AIType> list = new(
+                        () => (DummyConfig.AIType)fInfo.GetValue(DummyNPC.LocalConfig), obj =>
                         {
-                            DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
-                            AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Yellow, -1, () =>
+                            if ((DummyConfig.AIType)obj == DummyConfig.AIType.SelfDefine &&
+                                !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
                             {
-                                ModernConfigUI.Instance.Open(ImproveGame.Instance);
-                                ModernConfigUI.Instance.OpenFromMasterControl = true;
-                                ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["ModFeatures"].Category;
-                                ConfigOptionsPanel.Instance.SetSearchBarText(GetText("UI.DummyConfiguration.DummyConfigLabel"));
+                                DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
+                                AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Yellow, -1, () =>
+                                {
+                                    ModernConfigUI.Instance.Open(ImproveGame.Instance);
+                                    ModernConfigUI.Instance.OpenFromMasterControl = true;
+                                    ConfigOptionsPanel.CategoryToSelectOnOpen =
+                                        CategorySidePanel.Cards["ModFeatures"].Category;
+                                    ConfigOptionsPanel.Instance.SetSearchBarText(
+                                        GetText("UI.DummyConfiguration.DummyConfigLabel"));
+                                });
+                                SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                                return;
+                            }
 
-                            });
+                            var aistyle = (DummyConfig.AIType)obj;
+                            DummyNPC.LocalConfig.AIStyle = aistyle;
+                            if (aistyle != DummyConfig.AIType.Default && aistyle != DummyConfig.AIType.SelfDefine)
+                                DummyNPC.LocalConfig = aistyle switch
+                                {
+                                    DummyConfig.AIType.Slime or DummyConfig.AIType.Soilder
+                                        or DummyConfig.AIType.JellyFish or DummyConfig.AIType.GoldenFish
+                                        or DummyConfig.AIType.HugeMimic => DummyNPC.LocalConfig with
+                                        {
+                                            NoTileCollide = false, NoGravity = false
+                                        },
+                                    DummyConfig.AIType.EvilEye => DummyNPC.LocalConfig with { NoGravity = true },
+                                    _ => DummyNPC.LocalConfig
+                                };
                             SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                            return;
-                        }
-                        var aistyle = (DummyConfig.AIType)obj;
-                        DummyNPC.LocalConfig.AIStyle = aistyle;
-                        if (aistyle != DummyConfig.AIType.Default && aistyle != DummyConfig.AIType.SelfDefine)
-                            DummyNPC.LocalConfig = aistyle switch
+                            if (aistyle == DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent == null)
                             {
-                                DummyConfig.AIType.Slime or DummyConfig.AIType.Soilder or DummyConfig.AIType.JellyFish or DummyConfig.AIType.GoldenFish or DummyConfig.AIType.HugeMimic => DummyNPC.LocalConfig with { NoTileCollide = false, NoGravity = false },
-                                DummyConfig.AIType.EvilEye => DummyNPC.LocalConfig with { NoGravity = true },
-                                _ => DummyNPC.LocalConfig
-                            };
-                        SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                        if (aistyle == DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent == null)
-                        {
-                            customAIStyleBox.JoinParent(fPanel);
-                            aiStyleWikiOpener.JoinParent(fPanel);
-                        }
-                        else if (aistyle != DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent != null)
-                        {
-                            customAIStyleBox.Remove();
-                            aiStyleWikiOpener.Remove();
-                        }
-                    }, DropdownList, "")
+                                customAIStyleBox.JoinParent(fPanel);
+                                aiStyleWikiOpener.JoinParent(fPanel);
+                            }
+                            else if (aistyle != DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent != null)
+                            {
+                                customAIStyleBox.Remove();
+                                aiStyleWikiOpener.Remove();
+                            }
+                        }, DropdownList, "")
                     {
                         HAlign = 1f,
                         Width = new StyleDimension(180, 0),
@@ -353,36 +369,41 @@ namespace ImproveGame.UI
                     list.JoinParent(fPanel);
                     list.OnUpdate += elem =>
                     {
-                        if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine && !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
+                        if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine &&
+                            !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
                         {
                             if (customAIStyleBox.Parent != null)
                             {
                                 customAIStyleBox.Remove();
                                 aiStyleWikiOpener.Remove();
                             }
+
                             ;
                             DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
                             AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Yellow, -1, () =>
                             {
                                 ModernConfigUI.Instance.Open(ImproveGame.Instance);
                                 ModernConfigUI.Instance.OpenFromMasterControl = true;
-                                ConfigOptionsPanel.CategoryToSelectOnOpen = CategorySidePanel.Cards["ModFeatures"].Category;
-                                ConfigOptionsPanel.Instance.SetSearchBarText(GetText("UI.DummyConfiguration.DummyConfigLabel"));
+                                ConfigOptionsPanel.CategoryToSelectOnOpen =
+                                    CategorySidePanel.Cards["ModFeatures"].Category;
+                                ConfigOptionsPanel.Instance.SetSearchBarText(
+                                    GetText("UI.DummyConfiguration.DummyConfigLabel"));
                             });
                             SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
                         }
                     };
-                    if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent == null)
+                    if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine &&
+                        customAIStyleBox.Parent == null)
                     {
                         customAIStyleBox.JoinParent(fPanel);
                         aiStyleWikiOpener.JoinParent(fPanel);
                     }
-                    else if (DummyNPC.LocalConfig.AIStyle != DummyConfig.AIType.SelfDefine && customAIStyleBox.Parent != null)
+                    else if (DummyNPC.LocalConfig.AIStyle != DummyConfig.AIType.SelfDefine &&
+                             customAIStyleBox.Parent != null)
                     {
                         customAIStyleBox.Remove();
                         aiStyleWikiOpener.Remove();
                     }
-
                 }
                 else
                 {
@@ -390,13 +411,13 @@ namespace ImproveGame.UI
                     double maxValue = fInfo.Name == nameof(DummyConfig.Scale) ? 3 : 2;
 
                     SUISlider<float> sUISlider = new SUISlider<float>(
-                    () => (float)fInfo.GetValue(DummyNPC.LocalConfig),
-                    obj =>
-                    {
-                        fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
-                        SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                    }, "",
-                    minValue, maxValue, 0
+                        () => (float)fInfo.GetValue(DummyNPC.LocalConfig),
+                        obj =>
+                        {
+                            fInfo.SetValueDirect(__makeref(DummyNPC.LocalConfig), obj);
+                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                        }, "",
+                        minValue, maxValue, 0
                     )
                     {
                         HAlign = 1f,
@@ -404,7 +425,6 @@ namespace ImproveGame.UI
                         Height = StyleDimension.Fill,
                     };
                     sUISlider.JoinParent(fPanel);
-
                 }
             }
 

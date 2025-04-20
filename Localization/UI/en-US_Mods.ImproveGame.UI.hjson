@@ -440,6 +440,7 @@ DummyConfiguration: {
 		NoTileCollide: Disable Tile Collision
 		KnockBackResist: Knockback coefficient
 		AIStyle: Mimic NPC Behavior
+		ResetTimer: Reset Timer
 	}
 
 	AIType: {
