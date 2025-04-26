@@ -1266,9 +1266,9 @@ TestData: {
 
 BlurMixingNumber: {
 	// Tooltip: ""
-	// One.Label: One
-	// Two.Label: Two
-	// Three.Label: Three
-	// Four.Label: Four
-	// Five.Label: Five
+	// One.Label: "1"
+	// Two.Label: "2"
+	// Three.Label: "3"
+	// Four.Label: "4"
+	// Five.Label: "5"
 }

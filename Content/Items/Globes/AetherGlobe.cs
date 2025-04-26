@@ -49,6 +49,5 @@ public class AetherGlobe() : OnceForAllGlobe()
         recipe.AddIngredient(ItemID.Glass, 10)
             .AddIngredient(ItemID.StoneBlock, 80)
             .AddRecipeGroup(RecipeSystem.AnyGem, 6)
-            .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.EnableMinimapMarkC);
+            .AddTile(TileID.WorkBenches);
 }

@@ -1,13 +1,12 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace ImproveGame.Content.Items
 {
-    public class StarburstWand : MagickWand
+    public class StarburstWand : MagickWand, IConditionItem
     {
+        public new Condition UseCondition => ConfigCondition.AvailableStarburstWandC;
 
         public override void SetItemDefaults()
         {
@@ -26,7 +25,7 @@ namespace ImproveGame.Content.Items
         {
             if (player.noBuilding)
                 return false;
-            return base.CanUseItem(player);
+            return true;
         }
 
         public override void AddRecipes()
@@ -38,8 +37,6 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.SoulofLight, 6)
                 .AddIngredient(ItemID.SoulofNight, 6)
                 .AddTile(TileID.CrystalBall)
-                .AddCondition(ConfigCondition.NotAvailableMagickWandC)
-                .AddCondition(ConfigCondition.AvailableStarburstWandC)
                 .Register();
 
             CreateRecipe().AddIngredient(ModContent.ItemType<MagickWand>())
@@ -47,7 +44,6 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.SoulofLight, 6)
                 .AddIngredient(ItemID.SoulofNight, 6)
                 .AddTile(TileID.CrystalBall)
-                .AddCondition(ConfigCondition.AvailableStarburstWandC)
                 .Register();
         }
     }

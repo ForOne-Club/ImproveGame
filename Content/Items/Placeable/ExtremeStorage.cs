@@ -1,11 +1,12 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Items.Placeable
 {
-    public class ExtremeStorage : ModItem
+    public class ExtremeStorage : ModItem, IConditionItem
     {
+        public Condition UseCondition => ConfigCondition.AvailableExtremeStorageC;
         public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
         public override void SetDefaults()
@@ -23,7 +24,6 @@ namespace ImproveGame.Content.Items.Placeable
             Item.value = Item.sellPrice(gold: 5);
             Item.createTile = ModContent.TileType<Tiles.ExtremeStorage>();
         }
-
         public override void AddRecipes()
         {
             CreateRecipe()
@@ -31,7 +31,6 @@ namespace ImproveGame.Content.Items.Placeable
                 .AddIngredient(ItemID.FallenStar, 8)
                 .AddRecipeGroup(RecipeSystem.AnyGoldBar, 12)
                 .AddTile(TileID.Anvils)
-                .AddCondition(ConfigCondition.AvailableExtremeStorageC)
                 .Register();
         }
     }

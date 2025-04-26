@@ -1,19 +1,16 @@
-﻿using ImproveGame.Common.ModHooks;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.UI;
 using ImproveGame.UI.LiquidWandUI;
-using ImproveGame.UIFramework;
-using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
-using Terraria.ModLoader.IO;
-using Terraria.ID;
-using ImproveGame.Common.Conditions;
 
 namespace ImproveGame.Content.Items
 {
-    public class LiquidWand : SelectorItem, IItemOverrideHover, IItemMiddleClickable
+    public class LiquidWand : SelectorItem, IItemOverrideHover, IItemMiddleClickable, IConditionItem
     {
+        public Condition UseCondition => ConfigCondition.AvailableLiquidWandC;
         public bool IsAdvancedWand;
         public bool[] CanInfiniteUse = new bool[4];
 
@@ -53,7 +50,7 @@ namespace ImproveGame.Content.Items
             var shimmerDark = new Color(135, 98, 192);
             var shimmerColor = lerpFactor < 0.5f
                 ? Color.Lerp(shimmerLight, shimmerDark, lerpFactor * 2f)
-                :  Color.Lerp(shimmerLight, shimmerDark, (1f - lerpFactor) * 2f);
+                : Color.Lerp(shimmerLight, shimmerDark, (1f - lerpFactor) * 2f);
             return WandSystem.LiquidMode switch
             {
                 LiquidID.Lava => new Color(253, 32, 3),
@@ -261,7 +258,7 @@ namespace ImproveGame.Content.Items
             if (LiquidWandUI.Instance.Enabled)
                 tooltip = GetTextWith("Tips.LiquidWandOff", new { KeybindName = keybind });
 
-            tooltips.Add(new TooltipLine(Mod, "LiquidWand", tooltip) {OverrideColor = Color.LightGreen});
+            tooltips.Add(new TooltipLine(Mod, "LiquidWand", tooltip) { OverrideColor = Color.LightGreen });
         }
 
         public override void AddRecipes()
@@ -271,7 +268,6 @@ namespace ImproveGame.Content.Items
                 .AddRecipeGroup(RecipeSystem.AnyShadowScale, 8)
                 .AddRecipeGroup(RecipeSystem.AnyGoldBar, 6)
                 .AddTile(TileID.Anvils)
-                .AddCondition(ConfigCondition.AvailableLiquidWandC)
                 .Register();
         }
 

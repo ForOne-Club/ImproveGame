@@ -1,16 +1,17 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions.Construction;
 using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
 using System.Threading;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Items
 {
-    public class ConstructWand : SelectorItem
+    public class ConstructWand : SelectorItem, IConditionItem
     {
+        public Condition UseCondition => ConfigCondition.AvailableConstructWandC;
 
         public override bool ModifySelectedTiles(Player player, int i, int j) => true;
 
@@ -94,7 +95,6 @@ namespace ImproveGame.Content.Items
                 .AddRecipeGroup(RecipeGroupID.Wood, 80)
                 .AddIngredient(ItemID.StoneBlock, 80)
                 .AddTile(TileID.MythrilAnvil)
-                .AddCondition(ConfigCondition.AvailableConstructWandC)
                 .Register();
         }
     }

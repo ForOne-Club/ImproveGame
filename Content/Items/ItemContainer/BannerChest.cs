@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI.ItemContainer;
@@ -8,8 +9,9 @@ using Terraria.UI.Chat;
 namespace ImproveGame.Content.Items.ItemContainer;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable
+public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable, IConditionItem
 {
+    public Condition UseCondition => ConfigCondition.AvailableBannerChestC;
 
     string IItemContainer.Name => Item.Name;
     public List<Item> ItemContainer { get; private set; } = [];
@@ -244,13 +246,11 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
     {
         ItemContainer = new List<Item>(reader.ReadItemArray());
     }
-
     public override void AddRecipes()
     {
         CreateRecipe()
             .AddRecipeGroup(RecipeGroupID.IronBar, 12)
             .AddTile(TileID.Anvils)
-            .AddCondition(ConfigCondition.AvailableBannerChestC)
             .Register();
     }
 

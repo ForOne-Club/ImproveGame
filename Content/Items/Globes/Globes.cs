@@ -17,8 +17,7 @@ public class DungeonGlobe : OnceForAllGlobe
         recipe.AddRecipeGroup(RecipeGroupID.Sand, 10)
             .AddIngredient(ItemID.DirtBlock, 30)
             .AddIngredient(ItemID.StoneBlock, 50)
-            .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.EnableMinimapMarkC);
+            .AddTile(TileID.WorkBenches);
 }
 
 public class TempleGlobe : OnceForAllGlobe
@@ -35,8 +34,7 @@ public class TempleGlobe : OnceForAllGlobe
             .AddIngredient(ItemID.MudBlock, 100)
             .AddIngredient(ItemID.JungleSpores, 3)
             .AddIngredient(ItemID.Stinger, 3)
-            .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.EnableMinimapMarkC);
+            .AddTile(TileID.WorkBenches);
 }
 
 public class PyramidGlobe : OnceForAllGlobe
@@ -49,8 +47,7 @@ public class PyramidGlobe : OnceForAllGlobe
     }
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
         recipe.AddRecipeGroup(RecipeGroupID.Sand, 50)
-            .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.EnableMinimapMarkC);
+            .AddTile(TileID.WorkBenches);
 }
 
 public class FloatingIslandGlobe : OnceForAllGlobe
@@ -66,6 +63,5 @@ public class FloatingIslandGlobe : OnceForAllGlobe
         recipe.AddIngredient(ItemID.Glass, 18)
             .AddRecipeGroup(RecipeGroupID.Wood, 100)
             .AddIngredient(ItemID.Rope, 100)
-            .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.EnableMinimapMarkC);
+            .AddTile(TileID.WorkBenches);
 }

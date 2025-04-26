@@ -1,12 +1,14 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UIFramework;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items
 {
-    public class PaintWand : SelectorItem
+    public class PaintWand : SelectorItem, IConditionItem
     {
+        public Condition UseCondition => ConfigCondition.AvailablePaintWandC;
 
         public override bool ModifySelectedTiles(Player player, int i, int j)
         {
@@ -141,7 +143,6 @@ namespace ImproveGame.Content.Items
 
             return base.StartUseItem(player);
         }
-
         public override void AddRecipes()
         {
             CreateRecipe()
@@ -151,7 +152,6 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.PaintRoller, 1)
                 .AddIngredient(ItemID.PaintScraper, 1)
                 .AddTile(TileID.Anvils)
-                .AddCondition(ConfigCondition.AvailablePaintWandC)
                 .Register();
         }
     }

@@ -1,17 +1,18 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.Conditions;
 using ImproveGame.Common.Configs;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI;
-using ImproveGame.UI.ModernConfig.FakeCategories;
 using ImproveGame.UIFramework;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items;
 
-public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
+public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, IConditionItem
 {
+    public Condition UseCondition => ConfigCondition.AvailableCreateWandC;
     private record TileData(TileSort TileSort, int X, int Y);
 
     public enum TileSort { None, Block, Platform, Torch, Chair, Table, Workbench, Bed, Wall, NoWall, Door }
@@ -601,7 +602,6 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable
             .AddRecipeGroup(RecipeGroupID.Wood, 24)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 12)
             .AddIngredient(ItemID.FallenStar, 2)
-            .AddCondition(ConfigCondition.AvailableCreateWandC)
             .Register();
     }
 }

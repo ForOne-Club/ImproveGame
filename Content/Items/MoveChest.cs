@@ -12,8 +12,9 @@ using ImproveGame.Common.Conditions;
 
 namespace ImproveGame.Content.Items;
 
-public class MoveChest : ModItem
+public class MoveChest : ModItem, IConditionItem
 {
+    public Condition UseCondition => ConfigCondition.AvailableMoveChestC;
     /// <summary> 强制冷却，放置过快反复与服务器交换出bug </summary>
     public const ushort MaxForceCoolDown = 60;
 
@@ -352,7 +353,6 @@ public class MoveChest : ModItem
 
         return base.PreDrawTooltip(lines, ref x, ref y);
     }
-
     public override void AddRecipes()
     {
         CreateRecipe()
@@ -360,7 +360,6 @@ public class MoveChest : ModItem
             .AddRecipeGroup(RecipeGroupID.Wood, 18)
             .AddIngredient(ItemID.Diamond)
             .AddTile(TileID.Anvils)
-            .AddCondition(ConfigCondition.AvailableMoveChestC)
             .Register();
     }
 

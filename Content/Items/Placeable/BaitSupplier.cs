@@ -1,10 +1,12 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 
 namespace ImproveGame.Content.Items.Placeable;
 
-public class BaitSupplier : ModItem
+public class BaitSupplier : ModItem, IConditionItem
 {
+    public Condition UseCondition => ConfigCondition.AvailableBaitSupplierC;
     public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
     public override void SetDefaults()
@@ -22,7 +24,6 @@ public class BaitSupplier : ModItem
         Item.value = Item.sellPrice(gold: 2);
         Item.createTile = ModContent.TileType<Tiles.BaitSupplier>();
     }
-
     public override void AddRecipes()
     {
         CreateRecipe()
@@ -30,7 +31,6 @@ public class BaitSupplier : ModItem
             .AddIngredient(ItemID.StoneBlock, 50)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 10)
             .AddTile(TileID.Anvils)
-            .AddCondition(ConfigCondition.AvailableBaitSupplierC)
             .Register();
     }
 }

@@ -1,10 +1,12 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
+using ImproveGame.UIFramework.Graphics2D;
 
 namespace ImproveGame.Content.Items;
 
-public class ActuationRodMkII : SelectorItem
+public class ActuationRodMkII : SelectorItem,IConditionItem
 {
-
+    public Condition UseCondition => ConfigCondition.AvailableActuationRodMkIIC;
     public override bool IsNeedKill() => !Main.mouseLeft;
 
     // 修改选择的方块
@@ -59,7 +61,7 @@ public class ActuationRodMkII : SelectorItem
             .AddIngredient(ItemID.Wire, 500)
             .AddIngredient(ItemID.Lever, 10)
             .AddTile(TileID.AlchemyTable)
-            .AddCondition(ConfigCondition.AvailableActuationRodMkIIC)
+            .AddCondition()
             .Register();
     }
 }

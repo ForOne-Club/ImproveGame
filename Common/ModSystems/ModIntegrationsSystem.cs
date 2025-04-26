@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Conditions;
-using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
 using ImproveGame.Content.Functions.ChainedAmmo;
 using ImproveGame.Content.Functions.HomeTeleporting;
@@ -12,14 +11,11 @@ using ImproveGame.Packets;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.PlayerStats;
-using System.Collections.Generic;
-using System;
+using System.Collections;
 using System.Reflection;
 using Terraria.DataStructures;
 using Terraria.ModLoader.Config;
-using Terraria;
 using Terraria.ModLoader.Config.UI;
-using System.Collections;
 using TEAutofisher = ImproveGame.Content.Tiles.TEAutofisher;
 
 namespace ImproveGame.Common.ModSystems;
@@ -344,43 +340,38 @@ public class ModIntegrationsSystem : ModSystem
 
         mod.Call(3, ImproveGame.Instance, "Wand", TextureAssets.Item[ModContent.ItemType<StarburstWand>()].Value,
             new NPCShop(-1, "Wand")
-                .Add<CreateWand>(ConfigCondition.AvailableCreateWandC, gold: 10)
-                .Add<MagickWand>(ConfigCondition.AvailableMagickWandC, gold: 10)
-                .Add<PaintWand>(ConfigCondition.AvailablePaintWandC, gold: 5)
-                .Add<MoveChest>(ConfigCondition.AvailableMoveChestC, gold: 15)
-                .Add<WallPlace>(Item.buyPrice(gold: 8), Condition.DownedKingSlime, ConfigCondition.AvailableWallPlaceC)
-                .Add<SpaceWand>(Item.buyPrice(gold: 12, silver: 50), Condition.DownedKingSlime,
-                    ConfigCondition.AvailableSpaceWandC)
-                .Add<LiquidWand>(Item.buyPrice(gold: 20), Condition.DownedEowOrBoc,
-                    ConfigCondition.AvailableLiquidWandC)
-                .Add<StarburstWand>(Item.buyPrice(gold: 50), Condition.Hardmode,
-                    ConfigCondition.AvailableStarburstWandC)
-                .Add<ConstructWand>(Item.buyPrice(gold: 30), Condition.Hardmode,
-                    ConfigCondition.AvailableConstructWandC));
+                .Add<CreateWand>(gold: 10)
+                .Add<MagickWand>(gold: 10)
+                .Add<PaintWand>(gold: 5)
+                .Add<MoveChest>(gold: 15)
+                .Add<WallPlace>(Item.buyPrice(gold: 8), Condition.DownedKingSlime)
+                .Add<SpaceWand>(Item.buyPrice(gold: 12, silver: 50), Condition.DownedKingSlime)
+                .Add<LiquidWand>(Item.buyPrice(gold: 20), Condition.DownedEowOrBoc)
+                .Add<StarburstWand>(Item.buyPrice(gold: 50), Condition.Hardmode)
+                .Add<ConstructWand>(Item.buyPrice(gold: 30), Condition.Hardmode));
         mod.Call(3, ImproveGame.Instance, "Locator", TextureAssets.Item[ModContent.ItemType<AetherGlobe>()].Value,
             new NPCShop(-1, "Locator")
-                .Add<FloatingIslandGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 8)
-                .Add<PyramidGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 16)
-                .Add<AetherGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 30)
-                .Add<DungeonGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 1, silver: 80)
-                .Add<GraniteCaveGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 1)
-                .Add<MarbleCaveGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 1)
-                .Add<EnchantedSwordGlobe>(ConfigCondition.EnableMinimapMarkC, gold: 8)
-                .Add<PlanteraGlobe>(Item.buyPrice(gold: 16), Condition.Hardmode, ConfigCondition.EnableMinimapMarkC)
-                .Add<TempleGlobe>(Item.buyPrice(gold: 20), Condition.DownedPlantera, ConfigCondition.EnableMinimapMarkC));
+                .Add<FloatingIslandGlobe>(gold: 8)
+                .Add<PyramidGlobe>(gold: 16)
+                .Add<AetherGlobe>(gold: 30)
+                .Add<DungeonGlobe>(silver: 80)
+                .Add<GraniteCaveGlobe>(gold: 1)
+                .Add<MarbleCaveGlobe>(gold: 1)
+                .Add<EnchantedSwordGlobe>(gold: 8)
+                .Add<PlanteraGlobe>(Item.buyPrice(gold: 16), Condition.Hardmode)
+                .Add<TempleGlobe>(Item.buyPrice(gold: 20), Condition.DownedPlantera));
         mod.Call(3, ImproveGame.Instance, "Other", TextureAssets.Item[ModContent.ItemType<ExtremeStorage>()].Value,
             new NPCShop(-1, "Other")
-                .Add<BannerChest>(ConfigCondition.AvailableBannerChestC, gold: 2, silver: 50)
-                .Add<ExtremeStorage>(ConfigCondition.AvailableExtremeStorageC, gold: 12)
-                .Add<Autofisher>(ConfigCondition.AvailableAutofisherC, gold: 4)
-                .Add<DetectorDrone>(ConfigCondition.AvailableDetectorDroneC, gold: 2, silver: 20)
-                .Add<StorageCommunicator>(Item.buyPrice(gold: 50), Condition.Hardmode,
-                    ConfigCondition.AvailableExtremeStorageC)
-                .Add<BaitSupplier>(ConfigCondition.AvailableBaitSupplierC, gold: 30)
-                .Add<PotionBag>(ConfigCondition.AvailablePotionBagC, gold: 2, silver: 50)
+                .Add<BannerChest>(silver: 50)
+                .Add<ExtremeStorage>(gold: 12)
+                .Add<Autofisher>(gold: 4)
+                .Add<DetectorDrone>(silver: 20)
+                .Add<StorageCommunicator>(Item.buyPrice(gold: 50), Condition.Hardmode)
+                .Add<BaitSupplier>(gold: 30)
+                .Add<PotionBag>(silver: 50)
                 .Add<Dummy>(silver: 50)
-                .Add<ShellShipInBottle>(ConfigCondition.EnableQuickShimmerC, gold: 5)
-                .Add<WeatherBook>(Item.buyPrice(gold: 25, silver: 60), Condition.DownedEowOrBoc, ConfigCondition.EnableWeatherControlC));
+                .Add<ShellShipInBottle>(gold: 5)
+                .Add<WeatherBook>(Item.buyPrice(gold: 25, silver: 60), Condition.DownedEowOrBoc));
     }
 
     private static void DoLuiafkRebornIntegration()
@@ -698,7 +689,7 @@ public class ModIntegrationsSystem : ModSystem
                     //        break;
                     //    }
                     // 添加新的监狱
-                    case "AddPrison": 
+                    case "AddPrison":
                         {
                             CreateWand.AddNewPrisonStyle(args[1] as Texture2D, args[2] as Texture2D);
                             return true;

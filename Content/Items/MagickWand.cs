@@ -1,18 +1,17 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.Conditions;
 using ImproveGame.Common.Configs;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
-using Terraria.DataStructures;
-using Terraria.GameInput;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Items
 {
-    public class MagickWand : SelectorItem
+    public class MagickWand : SelectorItem, IConditionItem
     {
+        public Condition UseCondition => ConfigCondition.AvailableMagickWandC;
         public bool WallMode;
         public bool TileMode;
         public bool ChestMode;
@@ -84,7 +83,7 @@ namespace ImproveGame.Content.Items
             var rect = new Rectangle(minI, minJ, size.X, size.Y);
 
             if (Main.netMode is NetmodeID.Server)
-                NetMessage.SendTileSquare(-1, minI - 1, minJ - 1, size.X , size.Y);
+                NetMessage.SendTileSquare(-1, minI - 1, minJ - 1, size.X, size.Y);
 
             DoBoomPacket.Send(rect);
             PlaySoundPacket.SendSound(LegacySoundIDs.Item, center, style: 14);
@@ -253,7 +252,6 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.JungleSpores, 6)
                 .AddIngredient(ItemID.Ruby, 1)
                 .AddTile(TileID.WorkBenches)
-                .AddCondition(ConfigCondition.AvailableMagickWandC)
                 .Register();
         }
     }

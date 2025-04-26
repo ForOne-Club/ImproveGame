@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI;
@@ -9,8 +10,9 @@ using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items
 {
-    public class LiquidWandAdvanced : LiquidWand
+    public class LiquidWandAdvanced : LiquidWand, IConditionItem
     {
+        public Condition UseCondition => ConfigCondition.AvailableLiquidWandAdvancedC;
 
         public override bool AltFunctionUse(Player player) => true;
 
@@ -21,7 +23,6 @@ namespace ImproveGame.Content.Items
             MaxTilesPerFrame = 9999;
             IsAdvancedWand = true;
         }
-
         public override void AddRecipes()
         {
             CreateRecipe()
@@ -33,8 +34,6 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.BottomlessHoneyBucket)
                 .AddIngredient(ItemID.BottomlessShimmerBucket)
                 .AddTile(TileID.MythrilAnvil)
-                .AddCondition(ConfigCondition.NotAvailableLiquidWandC)
-                .AddCondition(ConfigCondition.AvailableLiquidWandAdvancedC)
                 .Register();
 
             CreateRecipe()
@@ -44,7 +43,6 @@ namespace ImproveGame.Content.Items
                 .AddIngredient(ItemID.BottomlessHoneyBucket)
                 .AddIngredient(ItemID.BottomlessShimmerBucket)
                 .AddTile(TileID.MythrilAnvil)
-                .AddCondition(ConfigCondition.AvailableLiquidWandAdvancedC)
                 .DisableDecraft() // 防止刷物品，因为月后基础液体法杖可以直接微光转化为终极液体法杖
                 .Register();
         }

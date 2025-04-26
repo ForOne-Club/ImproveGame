@@ -18,6 +18,5 @@ public class PlanteraGlobe() : GlobePlentyTooltip(ItemRarityID.Pink, Item.sellPr
             .AddIngredient(ItemID.MudBlock, 100)
             .AddIngredient(ItemID.RichMahogany, 30)
             .AddIngredient(ItemID.JungleSpores, 1)
-            .AddTile(TileID.MythrilAnvil)
-            .AddCondition(ConfigCondition.EnableMinimapMarkC);
+            .AddTile(TileID.MythrilAnvil);
 }

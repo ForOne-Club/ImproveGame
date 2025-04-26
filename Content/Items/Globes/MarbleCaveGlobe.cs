@@ -16,6 +16,5 @@ public class MarbleCaveGlobe () : GlobePlentyTooltip(ItemRarityID.Quest, Item.se
         recipe.AddIngredient(ItemID.Glass, 8)
             .AddRecipeGroup(RecipeGroupID.IronBar, 4)
             .AddIngredient(ItemID.Ruby)
-            .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.EnableMinimapMarkC);
+            .AddTile(TileID.WorkBenches);
 }

@@ -1,12 +1,14 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.Packets.Weather;
 
 namespace ImproveGame.Content.Items;
 
-public sealed class WeatherBook : ModItem
+public sealed class WeatherBook : ModItem, IConditionItem
 {
+    public Condition UseCondition => ConfigCondition.EnableWeatherControlC;
     public override void SetDefaults()
     {
         Item.CloneDefaults(ItemID.CombatBook);
@@ -31,7 +33,6 @@ public sealed class WeatherBook : ModItem
         WorldGen.BroadcastText(NetworkText.FromKey("Mods.ImproveGame.UI.WeatherGUI.Unlocked"), Color.Pink);
         return true;
     }
-
     public override void AddRecipes()
     {
         CreateRecipe()
@@ -41,7 +42,6 @@ public sealed class WeatherBook : ModItem
             .AddIngredient(ItemID.FallenStar, 3)
             .AddRecipeGroup(RecipeSystem.AnyShadowScale, 5)
             .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.EnableWeatherControlC)
             .Register();
     }
 }

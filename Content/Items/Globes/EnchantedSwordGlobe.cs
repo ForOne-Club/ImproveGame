@@ -18,6 +18,5 @@ public class EnchantedSwordGlobe() : GlobePlentyTooltip(ItemRarityID.Green, Item
         recipe.AddRecipeGroup(RecipeSystem.AnyGem, 5)
             .AddIngredient(ItemID.StoneBlock, 150)
             .AddIngredient(ItemID.FallenStar, 3)
-            .AddTile(TileID.Anvils)
-            .AddCondition(ConfigCondition.EnableMinimapMarkC);
+            .AddTile(TileID.Anvils);
 }

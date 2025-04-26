@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.Packets.Weather;
@@ -11,8 +12,9 @@ using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items;
 
-public class ShellShipInBottle : ModItem
+public class ShellShipInBottle : ModItem, IConditionItem
 {
+    public Condition UseCondition => ConfigCondition.EnableQuickShimmerC;
     public override void SetStaticDefaults()
     {
         ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<ShellShipInBottle_Shimmered>();
@@ -35,7 +37,6 @@ public class ShellShipInBottle : ModItem
             .AddIngredient(ItemID.Wood, 10)
             .AddIngredient(ItemID.FallenStar, 1)
             .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.EnableQuickShimmerC)
             .Register();
     }
 }

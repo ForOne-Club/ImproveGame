@@ -1,4 +1,6 @@
-﻿using ImproveGame.Packets.Notifications;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
+using ImproveGame.Packets.Notifications;
 using ImproveGame.Packets.WorldFeatures;
 using Terraria.Chat;
 using Terraria.DataStructures;
@@ -8,7 +10,9 @@ namespace ImproveGame.Content.Items.Globes.Core;
 /// <summary>
 /// 球基类
 /// </summary>
-public abstract class Globe : ModItem
+public abstract class Globe : ModItem, IConditionItem
+{
+    public Condition UseCondition => ConfigCondition.EnableMinimapMarkC;
 {
     public static Color hintTextColor = Color.PaleVioletRed * 1.4f;
     public static Color foundColor = Color.Pink;
@@ -47,7 +51,6 @@ public abstract class Globe : ModItem
         Item.rare = rarity;
         Item.value = itemValue;
     }
-
     protected abstract Recipe AddCraftingMaterials(Recipe recipe);
 
     public override void AddRecipes()

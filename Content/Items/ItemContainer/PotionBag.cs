@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
@@ -10,9 +11,9 @@ using Terraria.UI.Chat;
 
 namespace ImproveGame.Content.Items.ItemContainer;
 
-public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable
+public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, IItemContainer, IItemMiddleClickable, IConditionItem
 {
-
+    public Condition UseCondition => ConfigCondition.AvailablePotionBagC;
     string IItemContainer.Name => Item.Name;
     public List<Item> ItemContainer { get; private set; } = [];
     public bool AutoStorage { get; set; }
@@ -281,13 +282,11 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
     {
         ItemContainer = new(reader.ReadItemArray());
     }
-
     public override void AddRecipes()
     {
         CreateRecipe()
             .AddIngredient(ItemID.Silk, 8)
             .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.AvailablePotionBagC)
             .Register();
     }
 

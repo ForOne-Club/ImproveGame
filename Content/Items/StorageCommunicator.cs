@@ -26,6 +26,7 @@ SOFTWARE.
 */
 
 using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
@@ -37,8 +38,9 @@ using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items;
 
-public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClickable
+public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClickable, IConditionItem
 {
+    public Condition UseCondition => ConfigCondition.AvailableExtremeStorageC;
     public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
     [CloneByReference] internal Dictionary<string, Point16> locationsByWorld = new();
@@ -189,7 +191,6 @@ public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClick
             .AddRecipeGroup(RecipeGroupID.IronBar, 8)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 4)
             .AddTile(TileID.MythrilAnvil)
-            .AddCondition(ConfigCondition.AvailableExtremeStorageC)
             .Register();
     }
 }

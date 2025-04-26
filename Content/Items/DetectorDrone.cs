@@ -2,7 +2,6 @@
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Projectiles;
 using Terraria.DataStructures;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Items;
 
@@ -55,6 +54,8 @@ public class DetectorDrone : ModItem
 
     public override bool CanUseItem(Player player)
     {
+        if (!ConfigCondition.AvailableDetectorDroneC.IsMet())
+            return false;
         if (Main.myPlayer != player.whoAmI || player.ownedProjectileCounts[Item.shoot] <= 0)
             return true;
 
@@ -67,14 +68,12 @@ public class DetectorDrone : ModItem
 
         return false;
     }
-
     public override void AddRecipes()
     {
         CreateRecipe()
             .AddRecipeGroup(RecipeGroupID.IronBar, 6)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 2)
             .AddTile(TileID.Anvils)
-            .AddCondition(ConfigCondition.AvailableDetectorDroneC)
             .Register();
     }
 }

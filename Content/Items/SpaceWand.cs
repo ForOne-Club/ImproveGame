@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.ModSystems.MarqueeSystem;
 using ImproveGame.Content.Packets;
@@ -19,8 +20,9 @@ public enum ShapeType : byte
     Line, Corner, SquareEmpty, SquareFilled, CircleEmpty, CircleFilled
 }
 
-public partial class SpaceWand : ModItem, IMarqueeItem
+public partial class SpaceWand : ModItem, IMarqueeItem, IConditionItem
 {
+    public Condition UseCondition => ConfigCondition.AvailableSpaceWandC;
     public enum Direction
     {
         Right, Down, Left, Up, RightDown, LeftDown, LeftUp, RightUp
@@ -252,7 +254,6 @@ public partial class SpaceWand : ModItem, IMarqueeItem
         tag.Add("PlaceType", (byte)PlaceType);
         tag.Add("ShapeType", (byte)ShapeType);
     }
-
     public override void AddRecipes()
     {
         CreateRecipe()
@@ -260,7 +261,6 @@ public partial class SpaceWand : ModItem, IMarqueeItem
             .AddRecipeGroup(RecipeSystem.AnyDemoniteBar, 8)
             .AddIngredient(ItemID.Amethyst, 8)
             .AddTile(TileID.WorkBenches)
-            .AddCondition(ConfigCondition.AvailableSpaceWandC)
             .Register();
     }
 }
