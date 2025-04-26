@@ -438,7 +438,7 @@ DummyConfiguration: {
 		NoTileCollide: 关闭物块碰撞
 		KnockBackResist: 击退系数
 		AIStyle: 模拟NPC行为
-		ResetTimer: 重置计时（帧）
+		ResetTimer: 伤害数据重置延时（帧）
 	}
 
 	AIType: {
