@@ -1,6 +1,7 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
+using System.Threading;
 
 namespace ImproveGame.UIFramework.SUIElements
 {
@@ -109,11 +110,19 @@ namespace ImproveGame.UIFramework.SUIElements
             }
         }
 
+        public Vector2 DragIncrement = Vector2.One;
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Dragging)
             {
-                SetPosPixels(Main.mouseX - Offset.X, Main.mouseY - Offset.Y).Recalculate();
+                var left = Main.mouseX - Offset.X;
+                var top = Main.mouseY - Offset.Y;
+                if (DragIncrement.X > 0)
+                    left -= left % DragIncrement.X;
+                if (DragIncrement.Y > 0)
+                    top -= top % DragIncrement.Y;
+                SetPosPixels(left, top).Recalculate();
             }
 
             if (Resizing)

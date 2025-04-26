@@ -12,6 +12,8 @@ public class StatsCard : SUIPanel
 
     public StatsCard(BaseStatsCategory proCat, Color borderColor, Color backgroundColor, float rounded = 12, float border = 2, bool draggable = false) : base(borderColor, backgroundColor, rounded, border, draggable)
     {
+        DragIncrement = new Vector2(2.5f);
+
         StatsCategory = proCat;
         SetPadding(5);
 
