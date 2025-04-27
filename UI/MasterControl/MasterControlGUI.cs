@@ -187,7 +187,9 @@ public class MasterControlGUI : BaseBody
         ChangelogText.OnMouseOver += (_, _) => SoundEngine.PlaySound(SoundID.MenuTick);
         ChangelogText.OnLeftMouseDown += (_, _) =>
         {
-            string link = GetText("UI.MasterControl.ChangelogLink", ImproveGame.Instance.Version);
+            var versionArray = ImproveGame.Instance.Version.ToString().Split('.');
+            versionArray[3] = "x";
+            string link = GetText("UI.MasterControl.ChangelogLink", string.Join('.', versionArray));
             TrUtils.OpenToURL(link);
         };
         ChangelogText.Width.Pixels = ChangelogText.TextSize.X * ChangelogText.TextScale;
