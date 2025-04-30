@@ -447,7 +447,7 @@ DummyConfiguration: {
 		NoTileCollide: Игнорировать блоки
 		KnockBackResist: Получаемое отбрасывание
 		AIStyle: Тип ИИ
-		// ResetTimer: Damage Data Reset Delay (Frames)
+		ResetTimer: Таймер сброса данных (кадры)
 	}
 
 	AIType: {
