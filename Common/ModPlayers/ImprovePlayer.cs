@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.GlobalNPCs;
-using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Core;
@@ -83,11 +81,49 @@ public class ImprovePlayer : ModPlayer
         }
     }
 
+    /// <summary>
+    /// 设置玩家的放置范围和放置速度
+    /// </summary>
+    public override void UpdateEquips()
+    {
+        if (Player.whoAmI == Main.myPlayer)
+        {
+            // 设置放置范围
+            Player.tileRangeX += Config.ModifyPlayerTileRange;
+            Player.tileRangeY += Config.ModifyPlayerTileRange;
+
+            if (Player.HeldItem.IsAir || !Config.ModifyPlayerPlaceSpeed)
+            {
+                return;
+            }
+
+            // 《英文名》因为没法在非英语语言获取英文名，只能用内部名了
+            string internalName = ItemID.Search.GetName(Player.HeldItem.type).ToLower();
+            string currentLanguageName = Lang.GetItemNameValue(Player.HeldItem.type).ToLower();
+
+            if (Config.TileSpeed_Blacklist.Any(str => internalName.Contains(str) || currentLanguageName.Contains(str)))
+            {
+                return;
+            }
+
+            // 是特判捏嘿嘿
+            if (Player.HeldItem.ModItem is MoveChest)
+            {
+                return;
+            }
+
+            // 物块和墙放置速度
+            Player.tileSpeed = 3f;
+            Player.wallSpeed = 3f;
+        }
+    }
+
     public override void ResetEffects()
     {
         HasPiggyBank = false;
         HasSafe = false;
         HasDefendersForge = false;
+
         if (Config.SuperVoidVault)
         {
             if (!Player.IsVoidVaultEnabled)
@@ -103,7 +139,8 @@ public class ImprovePlayer : ModPlayer
 
         BannerChest = null;
         PotionBag = null;
-        // 玩家背包
+
+        // 从 玩家背包 寻找第一个旗帜盒和药水包
         foreach (var item in from i in Player.inventory where !i.IsAir select i)
         {
             if (BannerChest is null && item.ModItem is BannerChest bannerChest)
@@ -117,7 +154,7 @@ public class ImprovePlayer : ModPlayer
             }
         }
 
-        // 大背包
+        // 从 大背包 寻找第一个旗帜盒和药水包
         Item[] superVault = Player.GetModPlayer<DataPlayer>().SuperVault;
         foreach (var item in from i in superVault where !i.IsAir select i)
         {
@@ -141,36 +178,11 @@ public class ImprovePlayer : ModPlayer
                 ShouldUpdateTeam = false;
             }
         }
-
-        if (Player.whoAmI == Main.myPlayer)
-        {
-            Player.tileRangeX += Config.ModifyPlayerTileRange;
-            Player.tileRangeY += Config.ModifyPlayerTileRange;
-
-            if (Player.HeldItem.IsAir || !Config.ModifyPlayerPlaceSpeed)
-            {
-                return;
-            }
-
-            string internalName = ItemID.Search.GetName(Player.HeldItem.type).ToLower(); // 《英文名》因为没法在非英语语言获取英文名，只能用内部名了
-            string currentLanguageName = Lang.GetItemNameValue(Player.HeldItem.type).ToLower();
-
-            if (Config.TileSpeed_Blacklist.Any(str => internalName.Contains(str) || currentLanguageName.Contains(str)))
-            {
-                return;
-            }
-
-            // 是特判捏嘿嘿
-            if (Player.HeldItem.ModItem is MoveChest)
-            {
-                return;
-            }
-
-            Player.tileSpeed = 3f;
-            Player.wallSpeed = 3f;
-        }
     }
-    // 重生加速
+
+    /// <summary>
+    /// 重生加速
+    /// </summary>
     public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
     {
         // 判断有没有存活的 Boss
