@@ -44,6 +44,7 @@ public abstract class Globe : ModItem, IConditionItem
     public override void SetDefaults()
     {
         Item.DefaultToThrownWeapon(GlobeLookup.GetValueOrDefault(Type), 20, 12f, hasAutoReuse: true);
+        Item.DamageType = DamageClass.Default;
         Item.UseSound = SoundID.Item106;
         Item.width = 32;
         Item.height = 32;
