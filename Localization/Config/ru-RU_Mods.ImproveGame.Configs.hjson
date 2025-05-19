@@ -1213,7 +1213,7 @@ PAPDisplayMode: {
 ThemeType: {
 	Stormdark: {
 		Label: Stormdark
-		Tooltip: Цветовая схема «Stormdark». Соответствует текстурпаку «Stormdark» (доступен в мастерской Terraria).
+		Tooltip: Цветовая схема «Stormdark». Соответствует текстурпаку «Stormdark» (доступен в Мастерской Terraria).
 	}
 
 	Blue: {

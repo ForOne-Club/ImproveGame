@@ -91,10 +91,10 @@ Tips: {
 	Refreshing: Обновляется
 	Refresh: Обновить магазин
 	SummonSlot: Занятые слоты призыва: [c/22CC22:{Current}/{Total}]
-	SummonSlotFull: Занятые слоты призыва: [c/CC2222:{Current}/{Total} (Full!)]
+	SummonSlotFull: Занятые слоты призыва: [c/CC2222:{Current}/{Total} (Заполнены!)]
 	BuffTrackerOn: <left>, чтобы открыть трекер баффов
 	BuffTrackerOff: <left>, чтобы закрыть трекер баффов
-	HideMyBuffs: Чтобы скрыть, toggle it in 'Personal Config'
+	HideMyBuffs: Чтобы скрыть, переключите эту настройку в «Личных конфигурациях»
 	BankEnableOn: Нажмите {KeybindName}, чтобы открыть личное хранилище
 	BankEnableOff: Нажмите {KeybindName}, чтобы закрыть личное хранилище
 	MouseMiddleOpen: Нажмите {KeybindName}, чтобы открыть {ItemName}

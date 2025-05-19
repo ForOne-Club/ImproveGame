@@ -1,52 +1,52 @@
-NotEnabled: Нужно включить это в конфигурации мода
+NotEnabled: Нужно включить эту функцию в конфигурации мода
 
 SuperVault: {
 	DisplayName: Большой рюкзак
-	Description: Рюкзак на 100 слотов инвентаря
+	Description: Открывает рюкзак на 100 слотов инвентаря
 }
 
 PlayerStats: {
 	DisplayName: Характеристики игрока
-	Description: Различные характеристики игрока
+	Description: Показывает различные характеристики игрока
 }
 
 Spectating: {
 	DisplayName: Наблюдение
-	Description: Наблюдать за своими сокомандниками во время битв с боссами
+	Description: Позволяет наблюдать за своими сокомандниками во время битв с боссами
 }
 
 WeatherControl: {
 	DisplayName: "{$Mods.ImproveGame.UI.WeatherGUI.Title}"
-	Description: Меню для изменения времени, фазы луны, направления ветра и дождя
+	Description: Открывать меню для изменения времени, фазы луны, направления ветра и дождя
 }
 
 ItemSearcher: {
 	DisplayName: "{$Mods.ImproveGame.UI.ItemSearcher.Title}"
-	Description: Найти предметы в личных хранилищах и ближайших сундуках
+	Description: Помогает найти предметы в личных хранилищах и ближайших сундуках
 }
 
 BagOpener: {
-	Description: Меню для массового открытия мешков
+	Description: Открывает меню для массового открытия мешков
 	DisplayName: "{$Mods.ImproveGame.UI.OpenBag.Title}"
 }
 
 WorldFeature: {
-	Description: Активировать праздники или функции секретных сидов
+	Description: Активация праздников или функций секретных сидов
 	DisplayName: "{$Mods.ImproveGame.UI.WorldFeature.Title}"
 }
 
 PotionBag: {
-	Description: Первая сумка для зелий в вашем инвентаре
+	Description: Открывает первую сумку для зелий в вашем инвентаре
 	DisplayName: "{$Mods.ImproveGame.Items.PotionBag.DisplayName}"
 }
 
 BannerChest: {
-	Description: Первая коробка со знамёнами в вашем инвентаре
+	Description: Открывает первую коробку со знамёнами в вашем инвентаре
 	DisplayName: "{$Mods.ImproveGame.Items.BannerChest.DisplayName}"
 }
 
 ModConfig: {
-	DisplayName: Конфигурации мода
+	DisplayName: Открывает конфигурации мода
 	Description: Быстрый доступ к избранным конфигурациям
 }
 
@@ -57,5 +57,5 @@ AmmoChain: {
 
 QuickShimmer: {
 	DisplayName: Быстрое мерцание
-	Description: Пацаны, смотрите, трансмутации в инвентаре!
+	Description: Трансмутации вне Эфира!
 }

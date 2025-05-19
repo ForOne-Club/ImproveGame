@@ -1,4 +1,4 @@
-DummyControl.Name: Функции манекена
+DummyControl.Name: Функции пугала
 GrabBagInfo.Title: Детали о выпадающих предметах
 RecipeSearchUI.Tips:
 	'''
@@ -146,7 +146,7 @@ PlayerStats: {
 }
 
 ExtremeStorage: {
-	// QuickSearch: Press {0} to search for selected item
+	QuickSearch: Нажмите {0}, чтобы искать выбранный предмет
 	AddChest: Добавить сундук
 	AddChestTip: Нажмите ПКМ, чтобы отменить
 	RejectNearbyStack: Не удалось сложить предметы в сундуки. Возможно, другие игроки сейчас используют Storage Manager
@@ -365,7 +365,7 @@ ItemSearcher: {
 		Tooltip:
 			'''
 			Позволяет допустить 1 неточность при поиске
-			Например, "обсдиан" успешно найдёт "обсидиан"
+			Например, «обсдиан» успешно найдёт «обсидиан»
 			'''
 	}
 
@@ -426,7 +426,7 @@ QuickShimmer: {
 	Locked:
 		'''
 		Используйте [i:ImproveGame/ShellShipInBottle_Shimmered] {$Mods.ImproveGame.Items.ShellShipInBottle_Shimmered.DisplayName}, чтобы открыть быстрое мерцание
-		Попробуйте бросить ImproveGame/ShellShipInBottle] {$Mods.ImproveGame.Items.ShellShipInBottle.DisplayName} в мерцание!
+		Попробуйте бросить [i:ImproveGame/ShellShipInBottle] {$Mods.ImproveGame.Items.ShellShipInBottle.DisplayName} в мерцание!
 		'''
 }
 
