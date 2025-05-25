@@ -18,11 +18,11 @@ NPC: {
 	KnockBackResist: Получаемое отбрасывание, 0 значит иммунитет к отбрасыванию
 	AIStyle: Тип ИИ, можно изменить в настройках предмета
 	Dummy_Damage: Урон: {S}/сек., {F}/тик
-	Dummy_Time: Duration: {S} секунд(а), {F} тик(ов)
+	Dummy_Time: Длительность: {S} секунд(а), {F} тик(ов)
 	Dummy_FinalBlow: Последний удар: {FinalBlow}
 	DummyCommand_DummyAttributes: Хар-ки пугала
 	DummyCommand_Usage: Использование: /dummy <хар-ка> <знач.> (не чувствителен к регистру символов)
-	DummyCommand_Description: Команда в чате '/dummy info' выведет все доступные хар-ки, их тип и нынешние значения
+	DummyCommand_Description: Команда в чате «/dummy info» выведет все доступные хар-ки, их тип и нынешние значения
 	DummyCommand_Success: Успешно изменено: {name} {args}!
 	DummyCommand_Fail: Изменение провалено ({input})!
 	DummyCommand_Invalid: Неправильная команда ( {input} )!
