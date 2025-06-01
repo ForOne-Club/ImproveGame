@@ -165,19 +165,19 @@ public class ModIntegrationsSystem : ModSystem
         if (!ModLoader.TryGetMod("CalamityMod", out Mod calamityMod))
             return;
 
-        AddBuffIntegration(calamityMod, "WeightlessCandle", true, "CirrusBlueCandleBuff");
-        AddBuffIntegration(calamityMod, "VigorousCandle", true, "CirrusPinkCandleBuff");
-        AddBuffIntegration(calamityMod, "SpitefulCandle", true, "CirrusYellowCandleBuff");
-        AddBuffIntegration(calamityMod, "ResilientCandle", true, "CirrusPurpleCandleBuff");
+        AddBuffIntegration(calamityMod, "WeightlessCandle", true, "BlueCandleBuff");
+        AddBuffIntegration(calamityMod, "VigorousCandle", true, "PinkCandleBuff");
+        AddBuffIntegration(calamityMod, "SpitefulCandle", true, "YellowCandleBuff");
+        AddBuffIntegration(calamityMod, "ResilientCandle", true, "PurpleCandleBuff");
         AddBuffIntegration(calamityMod, "ChaosCandle", true, "ChaosCandleBuff");
         AddBuffIntegration(calamityMod, "TranquilityCandle", true, "TranquilityCandleBuff");
         AddBuffIntegration(calamityMod, "EffigyOfDecay", true, "EffigyOfDecayBuff");
         AddBuffIntegration(calamityMod, "CrimsonEffigy", true, "CrimsonEffigyBuff");
         AddBuffIntegration(calamityMod, "CorruptionEffigy", true, "CorruptionEffigyBuff");
-        AddBuffConflicts(calamityMod, "CirrusBlueCandleBuff", "CirrusPinkCandleBuff", "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff");
-        AddBuffConflicts(calamityMod, "CirrusPinkCandleBuff", "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff");
-        AddBuffConflicts(calamityMod, "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff");
-        AddBuffConflicts(calamityMod, "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff", "CirrusYellowCandleBuff");
+        AddBuffConflicts(calamityMod, "BlueCandleBuff", "PinkCandleBuff", "YellowCandleBuff", "PurpleCandleBuff");
+        AddBuffConflicts(calamityMod, "PinkCandleBuff", "YellowCandleBuff", "PurpleCandleBuff", "BlueCandleBuff");
+        AddBuffConflicts(calamityMod, "YellowCandleBuff", "PurpleCandleBuff", "BlueCandleBuff", "PinkCandleBuff");
+        AddBuffConflicts(calamityMod, "PurpleCandleBuff", "BlueCandleBuff", "PinkCandleBuff", "YellowCandleBuff");
         AddFishingAccIntegration(calamityMod, "EnchantedPearl", 2f, 10, false, false);
         AddFishingAccIntegration(calamityMod, "AlluringBait", 2f, 30, false, false);
         AddFishingAccIntegration(calamityMod, "SupremeBaitTackleBoxFishingStation", 5f, 80, true, true);
