@@ -1,9 +1,9 @@
-﻿using Terraria.ModLoader.Config.UI;
-using Terraria.ModLoader.Config;
-using Newtonsoft.Json;
-using ImproveGame.UIFramework.SUIElements;
+﻿using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UI.ModernConfig.Categories;
+using ImproveGame.UIFramework.SUIElements;
+using Newtonsoft.Json;
+using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {

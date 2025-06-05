@@ -1,7 +1,5 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
-using Terraria.ModLoader.Config;
-using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -40,7 +38,7 @@ public sealed class OptionEditableText : ModernConfigOption
             MaxLength = 200,
             VAlign = 0.5f,
             MaxWidth = new(0, 0.75f),
-            MinWidth = new(50,0)
+            MinWidth = new(50, 0)
         };
         _TextBox.ContentsChanged += (ref string text) =>
         {
@@ -67,7 +65,7 @@ public sealed class OptionEditableText : ModernConfigOption
     private void SetConfigValue(string value, bool broadcast)
     {
         //if (!Interactable) return;
-        SetValueDirect(value,broadcast);
+        SetValueDirect(value, broadcast);
         //ConfigHelper.SetConfigValue(Config, VariableInfo, value, Item, broadcast, path: path);
     }
 

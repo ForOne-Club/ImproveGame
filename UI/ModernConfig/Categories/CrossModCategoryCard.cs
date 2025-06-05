@@ -1,13 +1,6 @@
-﻿using FullSerializer;
-using ImproveGame.UI.ModernConfig.OptionElements;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ImproveGame.UI.ModernConfig.OptionElements;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
-using tModPorter;
 
 namespace ImproveGame.UI.ModernConfig.Categories
 {

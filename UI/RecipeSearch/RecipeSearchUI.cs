@@ -1,12 +1,9 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.UI.ExtremeStorage;
-using ImproveGame.UI.MasterControl;
-using ImproveGame.UI.MasterControl.Components;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using Microsoft.Xna.Framework.Input;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.RecipeSearch;

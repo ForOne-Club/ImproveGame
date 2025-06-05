@@ -78,7 +78,8 @@ namespace ImproveGame.UIFramework.UIElements
             };
             detailButton.SetSize(24f, 24f);
             detailButton.OnLeftClick += DetailButtonClick;
-            detailButton.OnUpdate += (_) => {
+            detailButton.OnUpdate += (_) =>
+            {
                 if (detailButton.IsMouseHovering)
                 {
                     _selectedButtonName = "tModLoader.ModsMoreInfo";
@@ -93,7 +94,8 @@ namespace ImproveGame.UIFramework.UIElements
             };
             deleteButton.SetSize(24f, 24f);
             deleteButton.OnLeftClick += DeleteButtonClick;
-            deleteButton.OnUpdate += (_) => {
+            deleteButton.OnUpdate += (_) =>
+            {
                 if (deleteButton.IsMouseHovering)
                 {
                     _selectedButtonName = "UI.Delete";
@@ -107,7 +109,8 @@ namespace ImproveGame.UIFramework.UIElements
                 Left = new StyleDimension(deleteButton.Left.Pixels - 24f, 1f)
             };
             RenameButton.SetSize(24f, 24f);
-            RenameButton.OnUpdate += (_) => {
+            RenameButton.OnUpdate += (_) =>
+            {
                 if (RenameButton.IsMouseHovering)
                 {
                     _selectedButtonName = "UI.Rename";

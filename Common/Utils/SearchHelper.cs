@@ -49,7 +49,7 @@ partial class MyUtils
         keyword = ProcessEnglish(keyword);
         // 获取关键词对应拼音内容
         string keywordPinyin = ProcessEnglish(PinyinConvert.GetPinyinForAutoComplete(keyword));
-        
+
         // 计算匹配度
         foreach (var item in processedTexts)
         {
@@ -72,7 +72,7 @@ partial class MyUtils
                 keyword,
                 item.Pinyin
             );
-            
+
             // 综合评分公式
             int score = 0;
             if (item.ContainsOriginalSubstring) score += 120;

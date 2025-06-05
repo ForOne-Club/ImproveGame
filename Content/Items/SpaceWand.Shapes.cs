@@ -20,7 +20,7 @@ public partial class SpaceWand
         const float unitWidthOver2 = unitWidth / 2f;
         return angle switch
         {
-            < unitWidthOver2 or > MathHelper.TwoPi - unitWidthOver2 =>                 Direction.Right,
+            < unitWidthOver2 or > MathHelper.TwoPi - unitWidthOver2 => Direction.Right,
             >= unitWidthOver2 + unitWidth * 0 and <= unitWidthOver2 + unitWidth * 1 => Direction.RightDown,
             >= unitWidthOver2 + unitWidth * 1 and <= unitWidthOver2 + unitWidth * 2 => Direction.Down,
             >= unitWidthOver2 + unitWidth * 2 and <= unitWidthOver2 + unitWidth * 3 => Direction.LeftDown,
@@ -223,7 +223,7 @@ public partial class SpaceWand
                 }
             }
         }
-        
+
         // 总共放置的物块数量
         _dataText += $" ({tileCount})";
     }

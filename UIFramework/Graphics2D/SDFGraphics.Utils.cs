@@ -1,7 +1,5 @@
 ﻿//本文件中的形状绘制全部改自iq大佬的SDF https://iquilezles.org/articles/distfunctions2d/
 
-using Terraria.ModLoader.IO;
-
 namespace ImproveGame.UIFramework.Graphics2D;
 partial class SDFGraphics
 {

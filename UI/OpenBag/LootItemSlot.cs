@@ -27,7 +27,7 @@ public class LootItemSlot : BaseItemSlot
     public override void LeftMouseDown(UIMouseEvent evt)
     {
         if (Main.LocalPlayer.ItemAnimationActive) return;
-        
+
         OperateInventory(true);
 
         if (Item.IsAir)

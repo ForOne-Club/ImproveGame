@@ -1,5 +1,4 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.ModernConfig.FakeCategories;

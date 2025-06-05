@@ -23,7 +23,7 @@ public static class ToolHandler
         RegisterFilterButton<MagicFilter>(ItemGroup.Weapon);
         RegisterFilterButton<SummonFilter>(ItemGroup.Weapon);
         RegisterFilterButton<OtherDamageFilter>(ItemGroup.Weapon);
-        
+
         RegisterFilterButton<PickaxeFilter>(ItemGroup.Tool);
         RegisterFilterButton<AxeFilter>(ItemGroup.Tool);
         RegisterFilterButton<HammerFilter>(ItemGroup.Tool);
@@ -31,29 +31,29 @@ public static class ToolHandler
         RegisterFilterButton<WiringFilter>(ItemGroup.Tool);
         RegisterFilterButton<FishingPoleFilter>(ItemGroup.Tool);
         RegisterFilterButton<OtherToolFilter>(ItemGroup.Tool);
-        
+
         RegisterFilterButton<ArrowFilter>(ItemGroup.Ammo);
         RegisterFilterButton<BulletFilter>(ItemGroup.Ammo);
         RegisterFilterButton<RocketFilter>(ItemGroup.Ammo);
         RegisterFilterButton<DartFilter>(ItemGroup.Ammo);
         RegisterFilterButton<OtherAmmoFilter>(ItemGroup.Ammo);
-        
+
         RegisterFilterButton<HeadgearFilter>(ItemGroup.Armor);
         RegisterFilterButton<TorsoFilter>(ItemGroup.Armor);
         RegisterFilterButton<PantsFilter>(ItemGroup.Armor);
         RegisterFilterButton<VanityArmorFilter>(ItemGroup.Armor);
-        
+
         RegisterFilterButton<BootFilter>(ItemGroup.Accessory);
         RegisterFilterButton<WingFilter>(ItemGroup.Accessory);
         RegisterFilterButton<ShieldFilter>(ItemGroup.Accessory);
         RegisterFilterButton<OtherAccessoryFilter>(ItemGroup.Accessory);
         RegisterFilterButton<VanityAccessoryFilter>(ItemGroup.Accessory);
-        
+
         RegisterFilterButton<SolidFilter>(ItemGroup.Block);
         RegisterFilterButton<WallFilter>(ItemGroup.Block);
         RegisterFilterButton<PlatformFilter>(ItemGroup.Block);
         RegisterFilterButton<OtherTileFilter>(ItemGroup.Block);
-        
+
         RegisterFilterButton<HerbFilter>(ItemGroup.Misc);
         RegisterFilterButton<SummonItemFilter>(ItemGroup.Misc);
         RegisterFilterButton<PetFilter>(ItemGroup.Misc);
@@ -66,7 +66,7 @@ public static class ToolHandler
     {
         buttons = Buttons
             .Where((pair => pair.Value is FilterButton filterButton && filterButton.Group == group))
-            .Select(pair => (FilterButton) pair.Value);
+            .Select(pair => (FilterButton)pair.Value);
         return buttons.Any();
     }
 
@@ -87,7 +87,7 @@ public static class ToolHandler
         if (ctor is null)
             throw new UsageException("ToolButton must have a parameterless constructor.");
         var instance = ctor.Invoke(null);
-        Buttons.Add(type, (ToolButton) instance);
+        Buttons.Add(type, (ToolButton)instance);
     }
 
     private static void RegisterFilterButton<T>(ItemGroup group) where T : FilterButton
@@ -96,7 +96,7 @@ public static class ToolHandler
         var ctor = type.GetConstructor(Type.EmptyTypes);
         if (ctor is null)
             throw new UsageException("FilterButton must have a parameterless constructor.");
-        var instance = (FilterButton) ctor.Invoke(null);
+        var instance = (FilterButton)ctor.Invoke(null);
         instance.Group = group;
         Buttons.Add(type, instance);
     }

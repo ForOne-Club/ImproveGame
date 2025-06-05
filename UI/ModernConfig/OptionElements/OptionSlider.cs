@@ -1,15 +1,10 @@
-﻿using ImproveGame.UIFramework;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
-using Microsoft.Xna.Framework.Graphics;
 using System.ComponentModel;
-using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
-using Terraria.ModLoader.UI;
-using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -157,10 +152,10 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             SDFGraphics.HasBorderRound(roundLeftTop, default, roundDiameter, innerColor, 2f, borderColor, GetMatrix(true));
         }
 
-        public void OutSideEditEnd()=> EndDraggingCallback?.Invoke();
+        public void OutSideEditEnd() => EndDraggingCallback?.Invoke();
     }
     private Utils.ColorLerpMethod _colorLerpMethod;
-    public void SetColorMethod(Utils.ColorLerpMethod colorMethod) 
+    public void SetColorMethod(Utils.ColorLerpMethod colorMethod)
     {
         _colorLerpMethod = colorMethod;
         _slideBox.ColorMethod = colorMethod;
@@ -242,8 +237,8 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
             var elem = Activator.CreateInstance(customConfigAttribute.Type);
             if (elem is RangeElement range)
             {
-                if(range.ColorMethod.Invoke(0.0f) != Color.Black && range.ColorMethod.Invoke(1.0f) != Color.White)
-                _colorLerpMethod = range.ColorMethod;
+                if (range.ColorMethod.Invoke(0.0f) != Color.Black && range.ColorMethod.Invoke(1.0f) != Color.White)
+                    _colorLerpMethod = range.ColorMethod;
             }
         }
         var sliderColor = GetAttribute<SliderColorAttribute>()?.Color;
@@ -364,7 +359,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
     {
         //if (!Interactable) return;
         object realValue = Convert.ChangeType(IsFractional ? value : Math.Round(value), VarType);
-        SetValueDirect(realValue,broadcast);
+        SetValueDirect(realValue, broadcast);
         //ConfigHelper.SetConfigValue(Config, VariableInfo, realValue, Item, broadcast, path: path);
     }
 
@@ -389,7 +384,7 @@ public class OptionSlider : ModernConfigOption //去掉了sealed
 
     private bool IsFractional => FractionTypes.Contains(VarType);
     private bool IsInt => !IsFractional;
-    public float LerpValue 
+    public float LerpValue
     {
         get => _slideBox.Value;
         set

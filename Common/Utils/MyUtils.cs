@@ -1,21 +1,18 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModPlayers;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content;
 using ImproveGame.Content.Items.Coin;
 using ImproveGame.Core;
 using ImproveGame.Packets.Items;
 using ImproveGame.UI.WorldFeature;
-using ImproveGame.UIFramework.Common;
 using ReLogic.Graphics;
 using System.Collections;
 using System.Diagnostics;
-using Terraria.DataStructures;
 using Terraria.GameInput;
+using Terraria.ModLoader.Config;
 using Terraria.UI.Chat;
 using static Microsoft.Xna.Framework.Vector2;
-using Terraria.ID;
-using ImproveGame.Common.ModSystems;
-using Terraria.ModLoader.Config;
 
 namespace ImproveGame;
 

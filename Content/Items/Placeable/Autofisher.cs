@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Items.Placeable;
 

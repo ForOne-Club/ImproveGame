@@ -55,9 +55,9 @@ public partial class WeatherAmbientElement : View
         float realFade = Main.numClouds / 150f;
         ref float fade = ref _cloudFade;
         if (fade > realFade)
-            fade -= 0.002f * (float) Main.dayRate;
+            fade -= 0.002f * (float)Main.dayRate;
         if (fade < realFade)
-            fade += 0.002f * (float) Main.dayRate;
+            fade += 0.002f * (float)Main.dayRate;
         // 移动
         float windSpeed = Main.windSpeedCurrent * 0.3f * (float)Main.dayRate;
         _cloudScroller1 += windSpeed;
@@ -98,7 +98,7 @@ public partial class WeatherAmbientElement : View
 
         var tipColor = Color.Lime;
         var dimensions = GetDimensions();
-        var boundary = new Rectangle((int) dimensions.X, (int) dimensions.Y, 400, 208);
+        var boundary = new Rectangle((int)dimensions.X, (int)dimensions.Y, 400, 208);
 
         // 风车和风速调节
         var pinWheelHitbox = new Rectangle(boundary.X + 160, boundary.Y + 136, 32, 48);
@@ -171,7 +171,7 @@ public partial class WeatherAmbientElement : View
 
         var tipColor = Color.Lime;
         var dimensions = GetDimensions();
-        var boundary = new Rectangle((int) dimensions.X, (int) dimensions.Y, 400, 208);
+        var boundary = new Rectangle((int)dimensions.X, (int)dimensions.Y, 400, 208);
 
         // 风车和风速调节
         var pinWheelHitbox = new Rectangle(boundary.X + 160, boundary.Y + 136, 32, 48);
@@ -220,10 +220,10 @@ public partial class WeatherAmbientElement : View
         _hoverText = "";
         var sb = Main.spriteBatch;
         var dimensions = GetDimensions();
-        var boundary = new Rectangle((int) dimensions.X, (int) dimensions.Y, 400, 208);
+        var boundary = new Rectangle((int)dimensions.X, (int)dimensions.Y, 400, 208);
 
         DrawAmbient(boundary);
-        
+
         if (string.IsNullOrWhiteSpace(_hoverText)) return;
 
         const float textScale = 0.8f;
@@ -232,7 +232,7 @@ public partial class WeatherAmbientElement : View
 
         // 给文字绘制个背景，至于这个偏移值是GetStringSize有问题造成的
         var textBackgroundDestination =
-            new Rectangle(boundary.X, boundary.Y - 1, (int) textSize.X + 10, (int) textSize.Y - 4);
+            new Rectangle(boundary.X, boundary.Y - 1, (int)textSize.X + 10, (int)textSize.Y - 4);
         sb.Draw(TextureAssets.MagicPixel.Value, textBackgroundDestination, Color.Black * 0.5f);
 
         ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, FontAssets.MouseText.Value, _hoverText,
@@ -278,9 +278,9 @@ public partial class WeatherAmbientElement : View
             B = (byte)((skiesColor.R + skiesColor.G + skiesColor.B + skiesColor.B * 7) / 10)
         };
         tileColor = SkyManager.Instance.ProcessTileColor(tileColor);
-        tileColor.R = (byte) MathHelper.Clamp(tileColor.R, 48, 255);
-        tileColor.G = (byte) MathHelper.Clamp(tileColor.G, 48, 255);
-        tileColor.B = (byte) MathHelper.Clamp(tileColor.B, 48, 255);
+        tileColor.R = (byte)MathHelper.Clamp(tileColor.R, 48, 255);
+        tileColor.G = (byte)MathHelper.Clamp(tileColor.G, 48, 255);
+        tileColor.B = (byte)MathHelper.Clamp(tileColor.B, 48, 255);
     }
 
     private static void DrawSunAndMoon(Rectangle boundary, Color sunColor, Color moonColor)
@@ -413,7 +413,7 @@ public partial class WeatherAmbientElement : View
     {
         if (!Main.hardMode) return;
 
-        float actualTime = (float) Main.time + (Main.dayTime ? 0 : 54000); // 以秒数表示的24小时制时间
+        float actualTime = (float)Main.time + (Main.dayTime ? 0 : 54000); // 以秒数表示的24小时制时间
         actualTime += 16200; // 修正4:30a.m. 泰拉里在4:30a.m.时Main.time为0
         if (actualTime >= 86400)
             actualTime -= 86400; // 修正24:00，确保0:00时该值为0，且值域为0 ~ 86400

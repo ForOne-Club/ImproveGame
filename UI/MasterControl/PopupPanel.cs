@@ -1,5 +1,4 @@
 ﻿using ImproveGame.UI.ModernConfig;
-using ImproveGame.UI.WeatherControl;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;

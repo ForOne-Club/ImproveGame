@@ -56,7 +56,7 @@ public class AutoSummonLogic : ModPlayer
         var allItems = GetAllInventoryItemsList(Player);
         var item = allItems.Find(item => item.type == _lastUsedStaffType);
         Player.slotsMinions = 0f;
-        
+
         if (item is null)
             yield break;
 

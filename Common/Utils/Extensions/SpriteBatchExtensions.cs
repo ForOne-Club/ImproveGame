@@ -9,7 +9,7 @@ internal static class SpriteBatchExtensions
     {
         var matrix = sb.transformMatrix;
         var effect = sb.customEffect;
-        
+
         sb.End();
         sb.Begin(mode, blendState, sb.GraphicsDevice.SamplerStates[0],
             sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, matrix);
@@ -22,7 +22,7 @@ internal static class SpriteBatchExtensions
     {
         var matrix = sb.transformMatrix;
         var effect = sb.customEffect;
-        
+
         sb.End();
         sb.Begin(mode, sb.GraphicsDevice.BlendState, sb.GraphicsDevice.SamplerStates[0],
             sb.GraphicsDevice.DepthStencilState, sb.GraphicsDevice.RasterizerState, effect, matrix);

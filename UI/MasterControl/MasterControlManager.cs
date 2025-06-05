@@ -3,7 +3,6 @@ using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
 using ImproveGame.Content.Items;
 using ImproveGame.UI.AmmoChainPanel;
-using ImproveGame.UI.DeathSpectating;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.ModernConfig;
@@ -12,8 +11,6 @@ using ImproveGame.UI.PlayerStats;
 using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UI.WeatherControl;
 using ImproveGame.UI.WorldFeature;
-using ImproveGame.UIFramework;
-using Terraria.ModLoader.Config;
 
 namespace ImproveGame.UI.MasterControl;
 
@@ -132,19 +129,19 @@ public class MasterControlManager : ModSystem
         #endregion
 
         #region 观战
-/*
-        var spectating = new MasterControlFunction("Spectating")
-        {
-            Icon = ModAsset.Spectating.Value,
-        }.Register();
+        /*
+                var spectating = new MasterControlFunction("Spectating")
+                {
+                    Icon = ModAsset.Spectating.Value,
+                }.Register();
 
-        spectating.OnMouseDown += tv =>
-        {
-            var body = SpectatingGUI.Instance;
+                spectating.OnMouseDown += tv =>
+                {
+                    var body = SpectatingGUI.Instance;
 
-            body.Enabled = !body.Enabled;
-        };
-*/
+                    body.Enabled = !body.Enabled;
+                };
+        */
         #endregion
 
         #region 旗帜盒

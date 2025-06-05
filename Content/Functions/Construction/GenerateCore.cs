@@ -423,7 +423,7 @@ namespace ImproveGame.Content.Functions.Construction
 
         public static IEnumerator TextSigns(QoLStructure structure, Point position)
         {
-            if (structure.SignTexts is not { Count: > 0})
+            if (structure.SignTexts is not { Count: > 0 })
                 yield break;
 
             int index = 0;

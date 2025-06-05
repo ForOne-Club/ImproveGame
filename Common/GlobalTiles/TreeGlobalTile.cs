@@ -1,8 +1,4 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-
-namespace ImproveGame.Common.GlobalTiles
+﻿namespace ImproveGame.Common.GlobalTiles
 {
     public class TreeGlobalTile : GlobalTile
     {

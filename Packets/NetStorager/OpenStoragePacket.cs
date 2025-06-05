@@ -14,7 +14,7 @@ public class OpenStoragePacket : NetModule
     public static OpenStoragePacket Get(int tileEntityID)
     {
         var packet = ModContent.GetInstance<OpenStoragePacket>();
-        packet._tileEntityID = (ushort) tileEntityID;
+        packet._tileEntityID = (ushort)tileEntityID;
         return packet;
     }
 
@@ -25,7 +25,7 @@ public class OpenStoragePacket : NetModule
         {
             return;
         }
-        
+
         switch (Main.netMode)
         {
             case NetmodeID.Server:

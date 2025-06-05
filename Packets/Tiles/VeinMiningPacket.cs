@@ -17,7 +17,7 @@ public class VeinMiningPacket : NetModule
     {
         var module = NetModuleLoader.Get<VeinMiningPacket>();
         module._center = center;
-        module._tileType = (ushort) tileType;
+        module._tileType = (ushort)tileType;
         return module;
     }
 

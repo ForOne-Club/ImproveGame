@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.Conditions;
-using ImproveGame.Content.Items.Globes.Core;
-using ImproveGame.Content.Projectiles;
+﻿using ImproveGame.Content.Items.Globes.Core;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items.Globes;
@@ -56,8 +54,8 @@ public class FloatingIslandGlobe : OnceForAllGlobe
     {
         public override StructureDatas.UnlockID StructureType => StructureDatas.UnlockID.FloatingIslands;
         public override bool NotFoundCheck() => StructureDatas.SkyHousePositions.Count is 0 && StructureDatas.SkyLakePositions.Count is 0;
-        public override Point16[] Positions => [..StructureDatas.SkyHousePositions];
-        public override Point16[] PositionsAnother => [..StructureDatas.SkyLakePositions];
+        public override Point16[] Positions => [.. StructureDatas.SkyHousePositions];
+        public override Point16[] PositionsAnother => [.. StructureDatas.SkyLakePositions];
     }
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
         recipe.AddIngredient(ItemID.Glass, 18)

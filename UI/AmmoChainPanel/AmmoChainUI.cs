@@ -1,13 +1,9 @@
-﻿using ImproveGame.Common.Configs;
-using ImproveGame.Content.Functions.ChainedAmmo;
+﻿using ImproveGame.Content.Functions.ChainedAmmo;
 using ImproveGame.Core;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using System.Diagnostics;
-using Terraria.GameContent.Drawing;
-using Terraria.GameInput;
 using Terraria.Graphics.Renderers;
 
 namespace ImproveGame.UI.AmmoChainPanel;
@@ -40,12 +36,12 @@ public class AmmoChainUI : BaseBody
     /// <summary>
     /// 两个页面之间滑动动画计时器
     /// </summary>
-    public AnimationTimer PageSlideTimer = new ();
+    public AnimationTimer PageSlideTimer = new();
 
     #region Components
 
     // 主面板
-    public SUIPanel MainPanel = new (UIStyle.PanelBorder, UIStyle.PanelBg)
+    public SUIPanel MainPanel = new(UIStyle.PanelBorder, UIStyle.PanelBg)
     {
         Shaded = true,
         Draggable = true,
@@ -90,10 +86,10 @@ public class AmmoChainUI : BaseBody
     };
 
     // 武器页
-    private WeaponPage.WeaponPage _weaponPage = new ();
+    private WeaponPage.WeaponPage _weaponPage = new();
 
     // 编辑页
-    private ChainEditPage.ChainEditPage _chainEditPage = new ();
+    private ChainEditPage.ChainEditPage _chainEditPage = new();
 
     private UIParticleLayer _particleSystem = new()
     {
@@ -136,7 +132,7 @@ public class AmmoChainUI : BaseBody
         var lightBulb = new LightBulbHelp
         {
             VAlign = 0.5f,
-            Left = {Pixels = -80f, Percent = 1f},
+            Left = { Pixels = -80f, Percent = 1f },
             BorderColor = Color.Transparent,
             BgColor = Color.Transparent
         };
@@ -146,7 +142,7 @@ public class AmmoChainUI : BaseBody
         var folder = new OpenFolderButton
         {
             VAlign = 0.5f,
-            Left = {Pixels = -124f, Percent = 1f},
+            Left = { Pixels = -124f, Percent = 1f },
             BorderColor = Color.Transparent,
             BgColor = Color.Transparent
         };
@@ -190,7 +186,7 @@ public class AmmoChainUI : BaseBody
 
     public void GenerateParticleAt(Vector2 position)
     {
-        Vector2 accelerationPerFrame = new (0f, 0.16350001f);
+        Vector2 accelerationPerFrame = new(0f, 0.16350001f);
         var texture = Main.Assets.Request<Texture2D>("Images/UI/Creative/Research_Spark");
 
         for (int i = 0; i < 12; i++)
@@ -295,5 +291,5 @@ public class AmmoChainUI : BaseBody
     public override float RenderTarget2DOpacity => StartTimer.Schedule;
     public override Vector2 RenderTarget2DOrigin => MainPanel.GetDimensionsCenter();
     public override Vector2 RenderTarget2DPosition => MainPanel.GetDimensionsCenter();
-    public override Vector2 RenderTarget2DScale => new (0.95f + StartTimer.Lerp(0, 0.05f));
+    public override Vector2 RenderTarget2DScale => new(0.95f + StartTimer.Lerp(0, 0.05f));
 }

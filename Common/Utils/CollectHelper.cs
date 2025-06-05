@@ -1,6 +1,5 @@
 ﻿using Terraria.Enums;
 using Terraria.Utilities;
-using Terraria.ID;
 
 namespace ImproveGame.Common.Utils
 {
@@ -76,8 +75,10 @@ namespace ImproveGame.Common.Utils
         /// </summary>
         /// <param name="treeType">树木TreeTypes</param>
         /// <returns>摇树物品ID</returns>
-        public static int GetShakeTreeFruit(TreeTypes treeType) {
-            switch (treeType) {
+        public static int GetShakeTreeFruit(TreeTypes treeType)
+        {
+            switch (treeType)
+            {
                 case TreeTypes.Forest:
                     WeightedRandom<short> weightedRandom = new();
                     weightedRandom.Add(ItemID.Apple);

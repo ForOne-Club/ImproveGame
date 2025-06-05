@@ -1,16 +1,10 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
 
 namespace ImproveGame.UIFramework.SUIElements
 {
-    public class SUIPlus:TimerView
+    public class SUIPlus : TimerView
     {
         public float PlusSize, PlusRounded, PlusBorder;
         public Color PlusBorderColor, PlusBorderHoverColor, PlusBeginColor, PlusEndColor;

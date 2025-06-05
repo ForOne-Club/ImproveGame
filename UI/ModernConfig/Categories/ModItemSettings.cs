@@ -1,6 +1,4 @@
-﻿using ImproveGame.Content.Items.Coin;
-
-namespace ImproveGame.UI.ModernConfig.Categories;
+﻿namespace ImproveGame.UI.ModernConfig.Categories;
 
 public sealed class ModItemSettings : Category
 {

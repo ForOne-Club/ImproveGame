@@ -91,7 +91,7 @@ public sealed class WeatherController : ModSystem
 
     public override void NetReceive(BinaryReader reader)
     {
-        var states = (BitsByte) reader.ReadByte();
+        var states = (BitsByte)reader.ReadByte();
         RainLocked = states[0];
         MoonPhaseLocked = states[1];
         WindLocked = states[2];

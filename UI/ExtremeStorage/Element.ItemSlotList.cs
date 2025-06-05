@@ -14,7 +14,7 @@ namespace ImproveGame.UI.ExtremeStorage
 
             // 计算物品总数
             int itemCount = 0;
-            
+
             foreach (var info in targetedItems)
             {
                 foreach (int itemIndex in info.DisplayedItemsIndexes)
@@ -27,7 +27,7 @@ namespace ImproveGame.UI.ExtremeStorage
                     Append(itemSlot);
                 }
             }
-            
+
             // 计算显示的列数
             int itemColumn = (int)Math.Ceiling(itemCount / 10f);
 

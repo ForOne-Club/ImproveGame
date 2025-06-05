@@ -14,7 +14,7 @@ public class PresetHandler
     private const string FileNameUIConfig = "UIConfigs.json";
     private const string FileNameModItemConfig = "AvailableModItemConfigs.json";
 
-    public static readonly JsonSerializerSettings SerializerSettings = new ()
+    public static readonly JsonSerializerSettings SerializerSettings = new()
     {
         Formatting = Formatting.Indented, // 缩进
         DefaultValueHandling = DefaultValueHandling.Include, // 包括所有默认值

@@ -17,7 +17,7 @@ public static class TextSnippetHelper
     {
         // 删除文本中回车 (怎么会有回车捏?)
         input = input.Replace("\r", "");
-        
+
         // 如果只转化成纯文字。。直接结束
         if (onlyTextSnippet)
             return [new TextSnippet(input, baseColor)];
@@ -104,7 +104,7 @@ public static class TextSnippetHelper
         float togetherSize = FontAssets.MouseText.Value.MeasureString(textBefore + textAfter).X;
         int kerning = (int)(togetherSize - (leftSize + rightSize));
 
-        if (textBefore is {Length: > 0 })
+        if (textBefore is { Length: > 0 })
             snippets.AddRange(ParseMessage(textBefore, baseColor, allPlainText));
 
         var cursorSnippet = CursorSnippet.Parse(result, kerning);
@@ -112,7 +112,7 @@ public static class TextSnippetHelper
             cursorSnippet.Color = Color.Transparent;
         snippets.Add(cursorSnippet);
 
-        if (textAfter is {Length: > 0 })
+        if (textAfter is { Length: > 0 })
             snippets.AddRange(ParseMessage(textAfter, baseColor, allPlainText));
 
         return snippets;
@@ -138,14 +138,14 @@ public static class TextSnippetHelper
             float togetherSize = FontAssets.MouseText.Value.MeasureString(textBefore + textAfter).X;
             int kerning = (int)(togetherSize - (leftSize + rightSize));
 
-            if (textBefore is {Length: > 0 })
+            if (textBefore is { Length: > 0 })
                 snippets.Add(new TextSnippet(textBefore, baseColor));
 
             Main.NewText(kerning);
 
             snippets.Add(CursorSnippet.Parse(result, kerning));
 
-            if (textAfter is {Length: > 0 })
+            if (textAfter is { Length: > 0 })
                 snippets.Add(new TextSnippet(textAfter, baseColor));
             return;
         }
@@ -184,7 +184,7 @@ public static class TextSnippetHelper
     {
         int lineCount = 1; // 行数
         float workingLineLength = 0f; // 当前行长度
-        List<TextSnippet> finalSnippets = new() {new TextSnippet()};
+        List<TextSnippet> finalSnippets = new() { new TextSnippet() };
 
         foreach (var snippet in originalSnippets)
         {

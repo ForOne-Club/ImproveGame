@@ -8,7 +8,7 @@ public class AmmoGapElement : TimerView
 {
     public int Index;
     public ChainEditPage Parent;
-    
+
     public AmmoGapElement(int index, ChainEditPage parent)
     {
         Index = index;

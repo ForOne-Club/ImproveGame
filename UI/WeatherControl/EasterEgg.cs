@@ -44,7 +44,7 @@ public partial class WeatherAmbientElement
     private void TryActiveEasterEgg()
     {
         var dimensions = GetDimensions();
-        var boundary = new Rectangle((int) dimensions.X, (int) dimensions.Y, 400, 208);
+        var boundary = new Rectangle((int)dimensions.X, (int)dimensions.Y, 400, 208);
         var mushroomHitbox = new Rectangle(boundary.X + 384, boundary.Y + 112, 16, 16);
         if (_easterEggActivated || !mushroomHitbox.Contains(Main.MouseScreen.ToPoint()))
             return;
@@ -67,21 +67,21 @@ public partial class WeatherAmbientElement
                 .Then(new Actions.NPCs.Fade(255)).With(new Actions.NPCs.Fade(-5, 50))
                 .Then(new Actions.NPCs.Move(new Vector2(0.7f, 0f), 180))
                 .Then(new Actions.NPCs.Wait(30));
-        totalTime += (int) bunnySegment.DedicatedTimeNeeded;
+        totalTime += (int)bunnySegment.DedicatedTimeNeeded;
         int bunnyStopTime = -totalTime; // 这里减，到兔兔准备动的时候再加上totalTime，就是这一段的时间了
 
         var lovingEmote = new Segments.EmoteSegment(EmoteID.EmotionLove, totalTime, 60, new Vector2(186, 160), SpriteEffects.None, Vector2.Zero);
-        totalTime += (int) lovingEmote.DedicatedTimeNeeded;
-        
+        totalTime += (int)lovingEmote.DedicatedTimeNeeded;
+
         var zombieSegment =
             new Segments.NPCSegment(totalTime, NPCID.Zombie, new Vector2(368, 128), new Vector2(0f, 1f))
                 .Then(new Actions.NPCs.Fade(255)).With(new Actions.NPCs.Fade(-5, 50))
                 .Then(new Actions.NPCs.Move(new Vector2(-0.7f, 0f), 40));
-        totalTime += (int) zombieSegment.DedicatedTimeNeeded;
+        totalTime += (int)zombieSegment.DedicatedTimeNeeded;
 
         zombieSegment.Then(new Actions.NPCs.Move(new Vector2(-0.7f, 0f), 30));
         var questionEmote = new Segments.EmoteSegment(EmoteID.EmoteConfused, totalTime, 60, new Vector2(186, 160), SpriteEffects.None, Vector2.Zero);
-        totalTime += (int) questionEmote.DedicatedTimeNeeded;
+        totalTime += (int)questionEmote.DedicatedTimeNeeded;
 
         zombieSegment
             .Then(new Actions.NPCs.Move(new Vector2(-0.7f, 0f), 40))

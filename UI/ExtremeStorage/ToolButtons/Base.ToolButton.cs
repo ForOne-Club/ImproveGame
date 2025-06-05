@@ -1,5 +1,4 @@
-﻿using ImproveGame.UIFramework;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.BaseViews;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.ExtremeStorage.ToolButtons;

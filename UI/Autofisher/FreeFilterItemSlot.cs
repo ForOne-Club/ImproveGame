@@ -7,7 +7,7 @@ namespace ImproveGame.UI.Autofisher;
 
 public class FreeFilterItemSlot : GenericItemSlot
 {
-    private readonly AnimationTimer _disableAnimTimer = new (3);
+    private readonly AnimationTimer _disableAnimTimer = new(3);
 
     public static TEAutofisher Autofisher => AutofishPlayer.LocalPlayer.Autofisher;
 
@@ -17,7 +17,7 @@ public class FreeFilterItemSlot : GenericItemSlot
 
         SetBaseItemSlotValues(true, false);
         SetSizePixels(44f, 44f);
-        
+
         bool disabled = Autofisher.ExcludedItems.Any(i => ItemExtensions.IsSameItem(i.Item, Item));
         if (disabled)
             _disableAnimTimer.Open();

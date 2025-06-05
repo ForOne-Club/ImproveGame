@@ -3,7 +3,6 @@ using ImproveGame.Packets;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
 using ImproveGame.UIFramework.UIElements;
 using Terraria.GameInput;
@@ -21,17 +20,16 @@ public class BigBagGUI : BaseBody
     {
         get
         {
-            if (_enabled && !Main.playerInventory)
+            if (field && !Main.playerInventory)
             {
-                _enabled = false;
+                field = false;
                 StartTimer.Close();
             }
 
-            return StartTimer.Closing || _enabled;
+            return StartTimer.Closing || field;
         }
-        set => _enabled = value;
+        set;
     }
-    private bool _enabled;
 
     public override bool CanSetFocusTarget(UIElement target)
         => target != this && (MainPanel.IsMouseHovering || MainPanel.IsLeftMousePressed);
@@ -272,6 +270,8 @@ public class BigBagGUI : BaseBody
         MainPanel.Recalculate();
     }
 
+    #region 开关 UI
+
     public void Open()
     {
         Enabled = true;
@@ -290,6 +290,11 @@ public class BigBagGUI : BaseBody
         AdditionalConfig.Save();
     }
 
+    #endregion
+
+    /// <summary>
+    /// 整理大背包
+    /// </summary>
     private void Sort()
     {
         SoundEngine.PlaySound(SoundID.Grab);
@@ -346,25 +351,34 @@ public class BigBagGUI : BaseBody
     private void PutAll()
     {
         SoundEngine.PlaySound(SoundID.Grab);
-        Item[] inventory = Main.LocalPlayer.inventory;
-        Item[] bigBag = ItemGrid.ItemList.items;
+
+        var inventory = Main.LocalPlayer.inventory;
+        var bigBag = ItemGrid.ItemList.items;
+
         for (int i = 10; i < 50; i++)
         {
-            if (!inventory[i].IsAir && !inventory[i].favorited && !inventory[i].IsACoin)
+            // 物品非空，且未收藏，且不是钱币
+            if (bigBag[i].IsNotAir && bigBag[i].NotFavorited && bigBag[i].IsNotACoin)
                 inventory[i] = ItemStackToInventory(bigBag, inventory[i], false);
         }
 
         Recipe.FindRecipes();
     }
 
+    /// <summary>
+    /// 移动大背包物品到玩家背包
+    /// </summary>
     private void QuickTakeOutToPlayerInventory()
     {
         SoundEngine.PlaySound(SoundID.Grab);
-        Item[] inventory = Main.LocalPlayer.inventory;
-        Item[] bigBag = ItemGrid.ItemList.items;
+
+        var inventory = Main.LocalPlayer.inventory;
+        var bigBag = ItemGrid.ItemList.items;
+
         for (int i = 0; i < bigBag.Length; i++)
         {
-            if (!bigBag[i].IsAir && !bigBag[i].favorited && !bigBag[i].IsACoin)
+            // 物品非空，且未收藏，且不是钱币
+            if (bigBag[i].IsNotAir && bigBag[i].NotFavorited && bigBag[i].IsNotACoin)
             {
                 bigBag[i] = ItemStackToInventory(inventory, bigBag[i], false, 50);
             }
@@ -378,15 +392,4 @@ public class BigBagGUI : BaseBody
     public override Vector2 RenderTarget2DOrigin => MainPanel.GetDimensionsCenter();
     public override Vector2 RenderTarget2DPosition => MainPanel.GetDimensionsCenter();
     public override Vector2 RenderTarget2DScale => new Vector2(0.95f + StartTimer.Lerp(0, 0.05f));
-
-    public override void DrawSelf(SpriteBatch spriteBatch)
-    {
-
-        base.DrawSelf(spriteBatch);
-    }
-
-    public override void DrawSDFRectangle()
-    {
-        base.DrawSDFRectangle();
-    }
 }

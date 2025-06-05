@@ -1,9 +1,7 @@
-﻿using ImproveGame.Content.Functions.ChainedAmmo;
-
-namespace ImproveGame.UI.AmmoChainPanel.WeaponPage;
+﻿namespace ImproveGame.UI.AmmoChainPanel.WeaponPage;
 
 [Obsolete("弃用，目前使用 LightBulbHelp", true)]
-public class GetHelpComponent (WeaponPage parent) : ToolComponent(parent)
+public class GetHelpComponent(WeaponPage parent) : ToolComponent(parent)
 {
     protected override string Key => "Mods.ImproveGame.UI.AmmoChain.GetHelp";
 

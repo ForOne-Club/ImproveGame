@@ -1,17 +1,11 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions.PortableBuff;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using System;
-using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.UI.Gamepad;
 
 namespace ImproveGame.Common.GlobalBuffs
@@ -23,7 +17,8 @@ namespace ImproveGame.Common.GlobalBuffs
         internal static bool UseRegularMethod_Inventory = false;
 
         // 先用IL，如果IL出错了才在本次加载中启用备用方案
-        public override void Load() {
+        public override void Load()
+        {
             UseRegularMethod_NoInventory = false;
             UseRegularMethod_Inventory = false;
             IL_Main.DrawInventory += TweakDrawInventoryBuffs;
@@ -45,8 +40,10 @@ namespace ImproveGame.Common.GlobalBuffs
 	        }
         }*/
         // 这里num28是拿来定位的，和索引n分开了，虽然不知道为啥，很显然更容易改了
-        private void TweakDrawInventoryBuffs(ILContext il) {
-            try {
+        private void TweakDrawInventoryBuffs(ILContext il)
+        {
+            try
+            {
                 ILCursor c = new(il);
 
                 #region 获取索引
@@ -62,13 +59,15 @@ namespace ImproveGame.Common.GlobalBuffs
                                    i => i.MatchLdsfld(typeof(Main), nameof(Main.myPlayer)),
                                    i => i.MatchLdelemRef(),
                                    i => i.MatchLdfld(typeof(Player), nameof(Player.buffType)),
-                                   i => i.Match(OpCodes.Ldloc_S))) {
+                                   i => i.Match(OpCodes.Ldloc_S)))
+                {
                     ErrorHappenedInventory();
                     return;
                 }
 
                 // 开一个EmitDelegate来获取索引
-                c.EmitDelegate<Func<int, int>>(returnValue => {
+                c.EmitDelegate<Func<int, int>>(returnValue =>
+                {
                     index = returnValue;
                     return returnValue;
                 });
@@ -79,13 +78,16 @@ namespace ImproveGame.Common.GlobalBuffs
                                    i => i.Match(OpCodes.Ldloc_S),
                                    i => i.Match(OpCodes.Ldloc_S),
                                    i => i.Match(OpCodes.Div),
-                                   i => i.Match(OpCodes.Stloc_S))) {
+                                   i => i.Match(OpCodes.Stloc_S)))
+                {
                     ErrorHappenedInventory();
                     return;
                 }
                 c.Index++;
-                c.EmitDelegate<Func<int, int>>(x => {
-                    if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]]) {
+                c.EmitDelegate<Func<int, int>>(x =>
+                {
+                    if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]])
+                    {
                         // x设置成-100000
                         return -100000;
                     }
@@ -96,13 +98,16 @@ namespace ImproveGame.Common.GlobalBuffs
                                    i => i.Match(OpCodes.Ldloc_S),
                                    i => i.Match(OpCodes.Ldloc_S),
                                    i => i.Match(OpCodes.Rem),
-                                   i => i.Match(OpCodes.Stloc_S))) {
+                                   i => i.Match(OpCodes.Stloc_S)))
+                {
                     ErrorHappenedInventory();
                     return;
                 }
                 c.Index++;
-                c.EmitDelegate<Func<int, int>>(y => {
-                    if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]]) {
+                c.EmitDelegate<Func<int, int>>(y =>
+                {
+                    if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]])
+                    {
                         // y设置成-100000
                         return -100000;
                     }
@@ -126,13 +131,16 @@ namespace ImproveGame.Common.GlobalBuffs
                                        i => i.Match(OpCodes.Newobj),
                                        i => i.MatchCall<UILinkPointNavigator>(nameof(UILinkPointNavigator.SetPosition)),
                                        i => i.Match(OpCodes.Ldloc_S),
-                                       i => i.Match(OpCodes.Ldc_I4_1))) {
+                                       i => i.Match(OpCodes.Ldc_I4_1)))
+                {
                     ErrorHappenedInventory();
                     return;
                 }
 
-                c.EmitDelegate<Func<int, int>>(add => {
-                    if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]]) {
+                c.EmitDelegate<Func<int, int>>(add =>
+                {
+                    if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[Main.LocalPlayer.buffType[index]])
+                    {
                         // 不让他+1，让他+0
                         return 0;
                     }
@@ -141,13 +149,15 @@ namespace ImproveGame.Common.GlobalBuffs
                 #endregion
 
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 ImproveGame.Instance.Logger.Error(e.Message);
                 ErrorHappenedInventory();
             }
         }
 
-        private static void ErrorHappenedInventory() {
+        private static void ErrorHappenedInventory()
+        {
             Console.WriteLine("Main.DrawInventory IL editing error! Alternative solutions enabled.");
             UseRegularMethod_Inventory = true;
         }
@@ -175,12 +185,16 @@ namespace ImproveGame.Common.GlobalBuffs
          */
         // 在原版代码中，"i"以"ldloc.3"读取，处于一个for循环中，既作为buffType的索引，也用于定位
         // 此处应只修改作为定位的部分，作为索引的部分不修改，不然就乱套了
-        private void TweakDrawInterfaceBuffs(ILContext il) {
-            try {
+        private void TweakDrawInterfaceBuffs(ILContext il)
+        {
+            try
+            {
                 ILCursor c = new(il);
 
-                static int ModifyDrawingIndex(int i, int buffType, bool addCount = false) {
-                    if (!UseRegularMethod_NoInventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[buffType]) {
+                static int ModifyDrawingIndex(int i, int buffType, bool addCount = false)
+                {
+                    if (!UseRegularMethod_NoInventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.BuffTypesShouldHide[buffType])
+                    {
                         // 作为-10000传入
                         if (addCount)
                             HidedBuffCountThisFrame++;
@@ -195,7 +209,8 @@ namespace ImproveGame.Common.GlobalBuffs
                 if (!c.TryGotoNext(MoveType.After,
                                    i => i.Match(OpCodes.Pop),
                                    i => i.Match(OpCodes.Ldc_I4_S, (sbyte)32),
-                                   i => i.Match(OpCodes.Ldloc_3))) {
+                                   i => i.Match(OpCodes.Ldloc_3)))
+                {
                     ErrorHappenedInterface();
                     return;
                 }
@@ -205,19 +220,22 @@ namespace ImproveGame.Common.GlobalBuffs
                 if (!c.TryGotoNext(MoveType.After,
                                    i => i.Match(OpCodes.Ldc_I4_S, (sbyte)76),
                                    i => i.Match(OpCodes.Stloc_S),
-                                   i => i.Match(OpCodes.Ldloc_3))) {
+                                   i => i.Match(OpCodes.Ldloc_3)))
+                {
                     ErrorHappenedInterface();
                     return;
                 }
                 c.EmitDelegate<Func<int, int>>(i => ModifyDrawingIndex(i, Main.LocalPlayer.buffType[i]));
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 ImproveGame.Instance.Logger.Error(e.Message);
                 ErrorHappenedInterface();
             }
         }
 
-        private static void ErrorHappenedInterface() {
+        private static void ErrorHappenedInterface()
+        {
             Console.WriteLine("Main.DrawInterface_Resources_Buffs IL editing error! Alternative solutions enabled.");
             UseRegularMethod_NoInventory = true;
         }
@@ -227,16 +245,20 @@ namespace ImproveGame.Common.GlobalBuffs
         /// </summary>
         internal static int HidedBuffCountThisFrame;
 
-        public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare) {
+        public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare)
+        {
             if (TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _) || IsDrawingBuffTracker)
                 return;
 
             tip += $"\n{GetText($"Tips.BuffTracker{(BuffTrackerGUI.Visible ? "Off" : "On")}")}";
-            if (Main.mouseLeft && Main.mouseLeftRelease) {
-                if (BuffTrackerGUI.Visible) {
+            if (Main.mouseLeft && Main.mouseLeftRelease)
+            {
+                if (BuffTrackerGUI.Visible)
+                {
                     UISystem.Instance.BuffTrackerGUI.Close();
                 }
-                else {
+                else
+                {
                     UISystem.Instance.BuffTrackerGUI.Open();
                 }
             }
@@ -245,8 +267,10 @@ namespace ImproveGame.Common.GlobalBuffs
                 tip += $"\n{GetText("Tips.HideMyBuffs")}";
         }
 
-        public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams) {
-            if (HideBuffSystem.BuffTypesShouldHide[type]) {
+        public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams)
+        {
+            if (HideBuffSystem.BuffTypesShouldHide[type])
+            {
                 // 不管咋样都不显示文本
                 drawParams.TextPosition = new Vector2(-114514f);
                 if (UIConfigs.Instance.HideNoConsumeBuffs)
@@ -260,12 +284,15 @@ namespace ImproveGame.Common.GlobalBuffs
                     return false;
                 }
             }
-            if (HidedBuffCountThisFrame > 0) {
+            if (HidedBuffCountThisFrame > 0)
+            {
                 int i = buffIndex - HidedBuffCountThisFrame;
-                if (UseRegularMethod_NoInventory) {
+                if (UseRegularMethod_NoInventory)
+                {
                     int x = 32 + i * 38;
                     int y = 76;
-                    if (i >= 11) { // 一行
+                    if (i >= 11)
+                    { // 一行
                         x = 32 + Math.Abs(i % 11) * 38;
                         y += 50 * (i / 11);
                     }
@@ -277,9 +304,11 @@ namespace ImproveGame.Common.GlobalBuffs
                     drawParams.MouseRectangle = new Rectangle(x, y, width, height);
                 }
                 // 装备栏下方绘制
-                if (Main.playerInventory && UseRegularMethod_Inventory) {
+                if (Main.playerInventory && UseRegularMethod_Inventory)
+                {
                     int mH = 0;
-                    if (Main.mapEnabled && !Main.mapFullscreen && Main.mapStyle == 1) {
+                    if (Main.mapEnabled && !Main.mapFullscreen && Main.mapStyle == 1)
+                    {
                         mH = 256;
                     }
                     if (mH + Main.instance.RecommendedEquipmentAreaPushUp > Main.screenHeight)

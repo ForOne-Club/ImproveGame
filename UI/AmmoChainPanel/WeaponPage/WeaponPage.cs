@@ -161,7 +161,7 @@ public class WeaponPage : View
         var oldHovered = _hoveredPreset;
         _hoveredPreset = null;
         foreach (var preset in from c in Presets.ListView.Children where c is PresetComponent
-                 select c as PresetComponent)
+                               select c as PresetComponent)
         {
             if (preset.IsMouseHovering)
             {
@@ -198,7 +198,7 @@ public class WeaponPage : View
                 RelativeMode = RelativeMode.Horizontal,
                 Spacing = new Vector2(4),
                 BgColor = slotBgColor,
-                Item = {stack = times}
+                Item = { stack = times }
             };
             itemSlot.JoinParent(CurrentPreview.ListView);
         }

@@ -2,17 +2,17 @@
 
 public interface ISidedView
 {
-public float SwapSlideFactor { get; set; }
+    public float SwapSlideFactor { get; set; }
 
     /// <summary>
     /// 开启GUI界面
     /// </summary>
-    public void Open() {}
+    public void Open() { }
 
     /// <summary>
     /// 关闭GUI界面
     /// </summary>
-    public void Close() {}
+    public void Close() { }
 
     /// <summary>
     /// 在什么样的条件下会强制关闭GUI界面

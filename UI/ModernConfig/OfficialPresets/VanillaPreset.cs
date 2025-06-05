@@ -1,7 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
-using System.Reflection;
 
 namespace ImproveGame.UI.ModernConfig.OfficialPresets;
 
@@ -96,7 +94,7 @@ public class VanillaPreset : OfficialPreset
         uiConfig.RemoveGraveyardMist = false;
         uiConfig.RemoveGraveyardMusic = false;
         uiConfig.RemoveGraveyardVisual = false;
-        
+
         /*
         // 全部不可获取
         foreach (var fieldInfo in modItemConfig.GetType().GetFields()) {

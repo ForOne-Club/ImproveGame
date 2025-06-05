@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace ImproveGame.Common.Utils.Extensions
+﻿namespace ImproveGame.Common.Utils.Extensions
 {
     public static class Vector2Extensions
     {

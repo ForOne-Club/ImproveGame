@@ -1,9 +1,7 @@
-﻿using ImproveGame.UI.ModernConfig;
-using ImproveGame.UIFramework.Common;
+﻿using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ReLogic.Graphics;
 using Terraria.GameInput;
-using Terraria.Social.Base;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Content;
@@ -70,7 +68,7 @@ public class ModNotificationPopup : IInGameNotification
         if (!_isMouseHovering || TimeLeft <= 24 || TimeLeft >= TimeLeftMax - 15)
             TimeLeft--;
 
-        if (_isMouseHovering && Main.mouseLeft && Main.hasFocus && clickCoolDown <= 0) 
+        if (_isMouseHovering && Main.mouseLeft && Main.hasFocus && clickCoolDown <= 0)
         {
             OnLeftMouseClick?.Invoke();
             clickCoolDown = 10;

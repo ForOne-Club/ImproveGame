@@ -4,9 +4,7 @@ using ImproveGame.Content.Functions;
 using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
-using Microsoft.Xna.Framework.Input;
 using System.Collections.ObjectModel;
-using System.Reflection;
 
 namespace ImproveGame.Common.GlobalItems
 {

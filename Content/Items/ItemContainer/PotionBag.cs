@@ -4,7 +4,6 @@ using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI.ItemContainer;
-using ImproveGame.UI.ModernConfig.FakeCategories;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;

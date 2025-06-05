@@ -1,8 +1,7 @@
-﻿using ImproveGame.UIFramework.SUIElements;
+﻿using ImproveGame.UIFramework.BaseViews;
+using ImproveGame.UIFramework.SUIElements;
 using System.Collections;
 using Terraria.ModLoader.Config;
-using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.Packets;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -144,7 +143,7 @@ public class OptionList : OptionCollections
     public override void DrawChildren(SpriteBatch spriteBatch)
     {
         base.DrawChildren(spriteBatch);
-        if (currentDraggingOption != null) 
+        if (currentDraggingOption != null)
         {
             float y = Main.mouseY;
             var en = OptionView.ListView.Children.GetEnumerator();

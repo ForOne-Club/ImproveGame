@@ -1,5 +1,4 @@
-﻿using ImproveGame.Core;
-using Terraria.ModLoader.IO;
+﻿using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Functions.ChainedAmmo;
 

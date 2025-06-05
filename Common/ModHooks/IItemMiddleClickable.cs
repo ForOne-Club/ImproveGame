@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.ModSystems;
-using Microsoft.Xna.Framework.Input;
 
 namespace ImproveGame.Common.ModHooks;
 
@@ -15,7 +14,7 @@ public interface IItemMiddleClickable
             _isHoveringInInventory = false;
         }
     }
-    
+
     private static bool _oldMiddlePressed; // 上一帧的状态
     private static bool _isHoveringInInventory; // 物品的context是否是InventoryItem，给ModifyTooltips用的
 
@@ -23,7 +22,7 @@ public interface IItemMiddleClickable
 
     bool MiddleClickable(Item item) => true;
 
-    void ManageHoverTooltips(Item item, List<TooltipLine> tooltips) {}
+    void ManageHoverTooltips(Item item, List<TooltipLine> tooltips) { }
 
     /// <summary>
     /// 在IItemOverrideHover的OverrideHover中调用该方法

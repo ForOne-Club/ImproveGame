@@ -8,7 +8,7 @@ namespace ImproveGame.Content.Items;
 public class AmmoChainItem : ModItem
 {
     public string ChainName = "";
-    public AmmoChain Chain = new ();
+    public AmmoChain Chain = new();
     public string PlayerName = "";
 
     public override void SetStaticDefaults()
@@ -50,7 +50,7 @@ public class AmmoChainItem : ModItem
     public static Item GetItemWithChainData(AmmoChain chain, string chainName, Player player)
     {
         var item = new Item(ModContent.ItemType<AmmoChainItem>());
-        var modItem = ((AmmoChainItem) item.ModItem);
+        var modItem = ((AmmoChainItem)item.ModItem);
         modItem.Chain = chain;
         modItem.ChainName = chainName;
         modItem.PlayerName = player.name;
@@ -199,7 +199,7 @@ public class AmmoChainItem : ModItem
     public override ModItem Clone(Item newEntity)
     {
         var clone = base.Clone(newEntity) as AmmoChainItem;
-        clone.Chain = (AmmoChain) Chain.Clone();
+        clone.Chain = (AmmoChain)Chain.Clone();
         clone.ChainName = ChainName;
         return clone;
     }

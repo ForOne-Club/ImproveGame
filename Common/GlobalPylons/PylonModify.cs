@@ -1,6 +1,4 @@
-﻿using Terraria.DataStructures;
-
-namespace ImproveGame.Common.GlobalPylons;
+﻿namespace ImproveGame.Common.GlobalPylons;
 
 public class PylonModify : GlobalPylon
 {

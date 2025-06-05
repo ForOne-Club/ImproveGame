@@ -49,10 +49,10 @@ public class InventoryItemDataPacket : NetModule
         packet._options = new BitsByte(ensureExistence, false, spawnItemIfWasFilled);
         return packet;
     }
-    
+
     public static InventoryItemDataPacket Get(byte playerIndex, int slot, bool ensureExistence) =>
         Get(new ItemPosition(playerIndex, slot), ensureExistence);
-    
+
     public static InventoryItemDataPacket Get(ItemPosition itemID, bool ensureExistence)
     {
         var packet = ModContent.GetInstance<InventoryItemDataPacket>();
@@ -80,7 +80,7 @@ public class InventoryItemDataPacket : NetModule
         {
             player.QuickSpawnItem(new EntitySource_Sync("SyncFromServer"), _item, _item.stack);
         }
-        
+
         if (setFavorite)
         {
             player.inventory[_slot] = _item;

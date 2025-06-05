@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Content.BuilderToggles;
 using Terraria.GameContent.UI;
-using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Functions.AutoPiggyBank;
 

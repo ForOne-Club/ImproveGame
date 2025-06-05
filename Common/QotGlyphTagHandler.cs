@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework.Input;
-using ReLogic.Graphics;
-using Terraria.GameContent.UI.Chat;
+﻿using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Common;

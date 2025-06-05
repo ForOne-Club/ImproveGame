@@ -9,7 +9,7 @@ public sealed class Everything : Category
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         var mod = ModernConfigUI.Instance.currentMod;
-        if (mod.Name == "ImproveGame") 
+        if (mod.Name == "ImproveGame")
         {
             var allCards = CategorySidePanel.CategoriesArray;
             foreach (var categoryCard in allCards)

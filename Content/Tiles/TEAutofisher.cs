@@ -190,7 +190,7 @@ namespace ImproveGame.Content.Tiles
             SpeedMultiplier = 1f;
             if (!accAvailable)
                 return;
-            
+
             LavaFishing = stat.LavaFishing;
             TackleBox = stat.TackleBox;
             FishingSkill = stat.Power;
@@ -988,7 +988,7 @@ namespace ImproveGame.Content.Tiles
 
             if (tag.TryGet("flags", out byte flags))
             {
-                var bitsByte = (BitsByte) flags;
+                var bitsByte = (BitsByte)flags;
                 CatchCrates = bitsByte[0];
                 CatchAccessories = bitsByte[1];
                 CatchTools = bitsByte[2];
@@ -1017,7 +1017,7 @@ namespace ImproveGame.Content.Tiles
             // tag["autoDeposit"] = AutoDeposit;
             var flags = new BitsByte(CatchCrates, CatchAccessories, CatchTools, CatchWhiteRarityCatches,
                 CatchNormalCatches, AutoDeposit);
-            tag["flags"] = (byte) flags;
+            tag["flags"] = (byte)flags;
 
             tag["excludedItemData"] = ExcludedItems;
         }

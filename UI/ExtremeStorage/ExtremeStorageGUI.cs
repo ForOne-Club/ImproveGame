@@ -1,6 +1,5 @@
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.NetStorager;
-using ImproveGame.UI.ExtremeStorage.ToolButtons;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;

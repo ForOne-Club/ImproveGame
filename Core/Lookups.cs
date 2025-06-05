@@ -10,7 +10,7 @@ public static class Lookups
     public static readonly HashSet<int> Bank3Items = [ItemID.Safe];
     public static readonly HashSet<int> Bank4Items = [ItemID.DefendersForge];
     public static readonly HashSet<int> Bank5Items = [ItemID.VoidLens, ItemID.VoidVault, ItemID.ClosedVoidBag];
-    
+
     // 特殊药水
     public static readonly HashSet<int> SpecialPotions =
     [

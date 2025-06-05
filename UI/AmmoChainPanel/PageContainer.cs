@@ -1,5 +1,4 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.AmmoChainPanel;
 

@@ -1,5 +1,4 @@
-﻿using ImproveGame.UI.MasterControl;
-using ImproveGame.UIFramework;
+﻿using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
@@ -25,7 +24,7 @@ public class LicensePanel : BaseBody
     private View TitlePanel;
 
     // 拖动条
-    private SUIScrollView2 ScrollView { get;  set; }
+    private SUIScrollView2 ScrollView { get; set; }
 
     public override void OnInitialize()
     {
@@ -110,7 +109,7 @@ public class LicensePanel : BaseBody
             IsWrapped = true,
             UseKey = false,
             TextOrKey = LicenseText,
-            Width = {Percent = 1f},
+            Width = { Percent = 1f },
             RelativeMode = RelativeMode.Vertical
         };
         text.OnRightMouseDown += (_, _) =>

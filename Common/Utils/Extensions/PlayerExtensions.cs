@@ -9,7 +9,7 @@ namespace ImproveGame.Common.Utils.Extensions
             Player player = Main.LocalPlayer;
             GetItem(player, source, item, toMouse);
         }
-        
+
         public static void GetItem(this Player player, IEntitySource source, Item item, bool toMouse)
         {
             if (toMouse && Main.playerInventory && Main.mouseItem.IsAir)

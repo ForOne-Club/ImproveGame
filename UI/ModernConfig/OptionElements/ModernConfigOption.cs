@@ -1,23 +1,18 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Configs.FavoritedSystem;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Packets;
 using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
 using Newtonsoft.Json;
-using ReLogic.Graphics;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
-using Terraria.UI.Chat;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 

@@ -1,9 +1,4 @@
 ﻿using ImproveGame.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Packets.WorldFeatures
@@ -17,7 +12,7 @@ namespace ImproveGame.Packets.WorldFeatures
         public override void Receive()
         {
             StructureDatas.StructuresUnlocked[(byte)_type] = true;
-            switch (_type) 
+            switch (_type)
             {
                 case StructureDatas.UnlockID.Shimmer:
                     StructureDatas.ShimmerPosition = _position[0];

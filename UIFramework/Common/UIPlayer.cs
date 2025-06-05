@@ -5,7 +5,6 @@ using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ExtremeStorage;
-using ImproveGame.UI.GrabBagInfo;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.MasterControl;
 using ImproveGame.UI.OpenBag;

@@ -1,11 +1,8 @@
 ﻿using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UI.ModernConfig.FakeCategories;
 using ImproveGame.UIFramework.SUIElements;
-using System.Collections;
-using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
-using tModPorter;
 
 namespace ImproveGame.UI.ModernConfig;
 

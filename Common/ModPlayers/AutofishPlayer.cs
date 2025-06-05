@@ -1,9 +1,7 @@
 ﻿using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.NetAutofisher;
-using ImproveGame.UI;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UIFramework;
-using Terraria.DataStructures;
 
 namespace ImproveGame.Common.ModPlayers
 {

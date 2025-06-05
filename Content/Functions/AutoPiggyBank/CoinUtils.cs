@@ -94,7 +94,7 @@ public static class CoinUtils
             for (int i = 0; i < chest.item.Length; i++)
             {
                 if (toIgnore.Contains(i)) continue;
-                 
+
                 if (chest.item[i].stack == 0)
                 {
                     chest.item[i] = item.Clone();

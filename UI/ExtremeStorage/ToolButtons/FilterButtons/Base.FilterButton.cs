@@ -1,12 +1,11 @@
 ﻿using ImproveGame.UIFramework;
-using ImproveGame.UIFramework.BaseViews;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI.ExtremeStorage.ToolButtons.FilterButtons;
 
 public abstract class FilterButton : ToolButton
 {
-    private readonly AnimationTimer _hoverTimer = new ();
+    private readonly AnimationTimer _hoverTimer = new();
     public ItemGroup Group;
     public bool Activated { get; private set; }
 

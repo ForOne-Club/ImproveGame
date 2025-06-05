@@ -3,7 +3,6 @@ using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.WorldFeatures;
 using Terraria.DataStructures;
 using Terraria.GameContent.Biomes;
-using Terraria.Graphics.Shaders;
 using Terraria.Map;
 using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
@@ -152,7 +151,7 @@ public class StructureDatas : ModSystem
 
         BaitlessAutofisherPositions ??= [];
         var existingBaitlessAutofishers = TileEntity.ByID
-            .Where(pair => pair.Value is TEAutofisher {HasBait: false})
+            .Where(pair => pair.Value is TEAutofisher { HasBait: false })
             .Select(pair => pair.Value.Position)
             .ToList();
         // 内置单人支持

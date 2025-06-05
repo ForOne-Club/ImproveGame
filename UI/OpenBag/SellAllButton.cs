@@ -7,8 +7,9 @@ public class SellAllButton : SUIButton
 {
     private bool _showingWarning;
     private Action _sellAllCallback;
-    
-    public SellAllButton(string text, Action sellAllCallback) : base(text) {
+
+    public SellAllButton(string text, Action sellAllCallback) : base(text)
+    {
         Width.Set(0f, 1f);
         TextAlign = new Vector2(0.5f);
         _sellAllCallback = sellAllCallback;
@@ -17,7 +18,7 @@ public class SellAllButton : SUIButton
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         base.DrawSelf(spriteBatch);
-        
+
         if (IsMouseHovering)
             UICommon.TooltipMouseText(GetText($"UI.OpenBag.{(_showingWarning ? "AreYouSure" : "SellAll")}.Tooltip"));
     }
@@ -43,7 +44,7 @@ public class SellAllButton : SUIButton
             TextColor = Color.Red;
             return;
         }
-        
+
         _sellAllCallback?.Invoke();
         _showingWarning = false;
         Text = GetText("UI.OpenBag.SellAll.Name");

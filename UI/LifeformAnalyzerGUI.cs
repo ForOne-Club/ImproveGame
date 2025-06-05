@@ -39,10 +39,10 @@ namespace ImproveGame.UI
                 Shaded = true,
                 ShadowThickness = UIStyle.ShadowThicknessThinnerer,
                 Draggable = true,
-                Left = {Pixels = PanelLeft},
-                Top = {Pixels = PanelTop},
-                Width = {Pixels = PanelWidth},
-                Height = {Pixels = PanelHeight},
+                Left = { Pixels = PanelLeft },
+                Top = { Pixels = PanelTop },
+                Width = { Pixels = PanelWidth },
+                Height = { Pixels = PanelHeight },
             });
 
             _basePanel.Append(CloseButton = new SUICross
@@ -50,12 +50,12 @@ namespace ImproveGame.UI
                 HAlign = 1f,
                 Height = StyleDimension.FromPixels(28f),
                 Width = StyleDimension.FromPixels(32f),
-                Left = {Pixels = 4},
+                Left = { Pixels = 4 },
                 BorderColor = Color.Transparent,
                 BgColor = Color.Transparent
             });
             CloseButton.OnLeftMouseDown += (_, _) => Close();
-            
+
             UIList = new UIList
             {
                 Width = StyleDimension.FromPixelsAndPercent(-6f, 1f),
@@ -71,14 +71,14 @@ namespace ImproveGame.UI
 
             Scrollbar = new()
             {
-                Left = {Pixels = -20f, Percent = 1f},
-                Top = {Pixels = 32f},
-                Height = {Pixels = -32f, Percent = 1f}
+                Left = { Pixels = -20f, Percent = 1f },
+                Top = { Pixels = 32f },
+                Height = { Pixels = -32f, Percent = 1f }
             };
             Scrollbar.SetView(100f, 1000f);
             SetupScrollBar();
             _basePanel.Append(Scrollbar);
-            
+
             UIElement searchArea = new()
             {
                 Height = new StyleDimension(28f, 0f),
@@ -92,76 +92,89 @@ namespace ImproveGame.UI
 
         #region 搜索栏
 
-		private void AddSearchBar(UIElement searchArea) {
-			UIImageButton uIImageButton = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search")) {
-				VAlign = 0.5f,
-				HAlign = 0f
-			};
+        private void AddSearchBar(UIElement searchArea)
+        {
+            UIImageButton uIImageButton = new(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search"))
+            {
+                VAlign = 0.5f,
+                HAlign = 0f
+            };
 
-			uIImageButton.OnLeftClick += Click_SearchArea;
-			uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
-			uIImageButton.SetVisibility(1f, 1f);
-			searchArea.Append(uIImageButton);
-            SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(UIStyle.SearchBarBorder, UIStyle.SearchBarBg) {
+            uIImageButton.OnLeftClick += Click_SearchArea;
+            uIImageButton.SetHoverImage(Main.Assets.Request<Texture2D>("Images/UI/Bestiary/Button_Search_Border"));
+            uIImageButton.SetVisibility(1f, 1f);
+            searchArea.Append(uIImageButton);
+            SUIPanel uIPanel = _searchBoxPanel = new SUIPanel(UIStyle.SearchBarBorder, UIStyle.SearchBarBg)
+            {
                 Left = new StyleDimension(4f, 0f),
-				Width = new StyleDimension(0f - uIImageButton.Width.Pixels - 3f, 1f),
-				Height = new StyleDimension(0f, 1f),
-				VAlign = 0.5f,
-				HAlign = 1f
-			};
-			uIPanel.SetPadding(0f);
-			searchArea.Append(uIPanel);
-			UISearchBar uISearchBar = _searchBar = new UISearchBar(Language.GetText("UI.PlayerNameSlot"), 0.8f) {
-				Width = new StyleDimension(0f, 1f),
-				Height = new StyleDimension(0f, 1f),
-				HAlign = 0f,
-				VAlign = 0.5f,
-				IgnoresMouseInteraction = true
-			};
+                Width = new StyleDimension(0f - uIImageButton.Width.Pixels - 3f, 1f),
+                Height = new StyleDimension(0f, 1f),
+                VAlign = 0.5f,
+                HAlign = 1f
+            };
+            uIPanel.SetPadding(0f);
+            searchArea.Append(uIPanel);
+            UISearchBar uISearchBar = _searchBar = new UISearchBar(Language.GetText("UI.PlayerNameSlot"), 0.8f)
+            {
+                Width = new StyleDimension(0f, 1f),
+                Height = new StyleDimension(0f, 1f),
+                HAlign = 0f,
+                VAlign = 0.5f,
+                IgnoresMouseInteraction = true
+            };
 
-			uIPanel.OnLeftClick += Click_SearchArea;
-			uISearchBar.OnContentsChanged += OnSearchContentsChanged;
-			uIPanel.Append(uISearchBar);
-			uISearchBar.OnStartTakingInput += OnStartTakingInput;
-			uISearchBar.OnEndTakingInput += OnEndTakingInput;
-			uISearchBar.OnCanceledTakingInput += OnCanceledInput;
-			UIImageButton uIImageButton2 = new(Main.Assets.Request<Texture2D>("Images/UI/SearchCancel")) {
-				HAlign = 1f,
-				VAlign = 0.5f,
-				Left = new StyleDimension(-2f, 0f)
-			};
+            uIPanel.OnLeftClick += Click_SearchArea;
+            uISearchBar.OnContentsChanged += OnSearchContentsChanged;
+            uIPanel.Append(uISearchBar);
+            uISearchBar.OnStartTakingInput += OnStartTakingInput;
+            uISearchBar.OnEndTakingInput += OnEndTakingInput;
+            uISearchBar.OnCanceledTakingInput += OnCanceledInput;
+            UIImageButton uIImageButton2 = new(Main.Assets.Request<Texture2D>("Images/UI/SearchCancel"))
+            {
+                HAlign = 1f,
+                VAlign = 0.5f,
+                Left = new StyleDimension(-2f, 0f)
+            };
 
-			uIImageButton2.OnMouseOver += SearchCancelButton_OnMouseOver;
-			uIImageButton2.OnLeftClick += SearchCancelButton_OnClick;
-			uIPanel.Append(uIImageButton2);
-		}
+            uIImageButton2.OnMouseOver += SearchCancelButton_OnMouseOver;
+            uIImageButton2.OnLeftClick += SearchCancelButton_OnClick;
+            uIPanel.Append(uIImageButton2);
+        }
 
-		private void SearchCancelButton_OnClick(UIMouseEvent evt, UIElement listeningElement) {
-			if (_searchBar.HasContents) {
-				_searchBar.SetContents(null, forced: true);
-				SoundEngine.PlaySound(SoundID.MenuClose);
-			}
-			else {
-				SoundEngine.PlaySound(SoundID.MenuTick);
-			}
-		}
+        private void SearchCancelButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (_searchBar.HasContents)
+            {
+                _searchBar.SetContents(null, forced: true);
+                SoundEngine.PlaySound(SoundID.MenuClose);
+            }
+            else
+            {
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            }
+        }
 
-		private void SearchCancelButton_OnMouseOver(UIMouseEvent evt, UIElement listeningElement) {
-			SoundEngine.PlaySound(SoundID.MenuTick);
-		}
+        private void SearchCancelButton_OnMouseOver(UIMouseEvent evt, UIElement listeningElement)
+        {
+            SoundEngine.PlaySound(SoundID.MenuTick);
+        }
 
-		private void OnCanceledInput() {
-			Main.LocalPlayer.ToggleInv();
-		}
+        private void OnCanceledInput()
+        {
+            Main.LocalPlayer.ToggleInv();
+        }
 
-		private void Click_SearchArea(UIMouseEvent evt, UIElement listeningElement) {
-			if (evt.Target.Parent != _searchBoxPanel) {
-				_searchBar.ToggleTakingText();
+        private void Click_SearchArea(UIMouseEvent evt, UIElement listeningElement)
+        {
+            if (evt.Target.Parent != _searchBoxPanel)
+            {
+                _searchBar.ToggleTakingText();
                 _didClickSearchBar = true;
-			}
-		}
+            }
+        }
 
-        private void OnSearchContentsChanged(string contents) {
+        private void OnSearchContentsChanged(string contents)
+        {
             _searchString = contents;
             SetupList();
         }
@@ -176,7 +189,8 @@ namespace ImproveGame.UI
             _searchBoxPanel.BorderColor = UIStyle.SearchBarBorder;
         }
 
-        private void SetupScrollBar(bool resetViewPosition = true) {
+        private void SetupScrollBar(bool resetViewPosition = true)
+        {
             float height = UIList.GetInnerDimensions().Height;
             Scrollbar.SetView(height, UIList.GetTotalHeight());
             if (resetViewPosition)
@@ -189,19 +203,22 @@ namespace ImproveGame.UI
             if (_basePanel.GetOuterDimensions().ToRectangle().Contains(evt.MousePosition.ToPoint()))
                 Scrollbar.BarTopBuffer += evt.ScrollWheelValue;
         }
-        
-        public override void LeftClick(UIMouseEvent evt) {
+
+        public override void LeftClick(UIMouseEvent evt)
+        {
             base.LeftClick(evt);
             AttemptStoppingUsingSearchbar(evt);
         }
 
-        private void AttemptStoppingUsingSearchbar(UIMouseEvent evt) {
+        private void AttemptStoppingUsingSearchbar(UIMouseEvent evt)
+        {
             _didClickSomething = true;
         }
 
         #endregion
 
-        public override void Update(GameTime gameTime) {
+        public override void Update(GameTime gameTime)
+        {
             base.Update(gameTime);
             if (_didClickSomething && !_didClickSearchBar && _searchBar.IsWritingText)
                 _searchBar.ToggleTakingText();
@@ -217,18 +234,19 @@ namespace ImproveGame.UI
                 UIList._innerList.Top.Set(-Scrollbar.BarTop, 0);
             }
             UIList.Recalculate();
-            
-            if (_basePanel.IsMouseHovering || Scrollbar.IsMouseHovering) {
+
+            if (_basePanel.IsMouseHovering || Scrollbar.IsMouseHovering)
+            {
                 PlayerInput.LockVanillaMouseScroll("ImproveGame: Lifeform Analyzer GUI");
             }
 
             base.DrawSelf(spriteBatch);
         }
-        
+
         public void SetupList()
         {
             UIList.Clear();
-            
+
             foreach (var npc in from npc in LifeAnalyzeCore.RaritiedNpcs orderby npc.rarity descending select npc) // 排序
             {
                 if (string.IsNullOrEmpty(_searchString) || Lang.GetNPCNameValue(npc.netID).ToLower().Contains(_searchString.Trim().ToLower()))
@@ -238,7 +256,7 @@ namespace ImproveGame.UI
             Recalculate();
             SetupScrollBar();
         }
-        
+
         public void Open()
         {
             _basePanel.IsLeftMousePressed = false;
@@ -246,7 +264,7 @@ namespace ImproveGame.UI
             SoundEngine.PlaySound(SoundID.MenuOpen);
             SetupList();
         }
-        
+
         public void Close()
         {
             Visible = false;

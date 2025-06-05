@@ -43,7 +43,8 @@ internal abstract class AutofisherFilterButton : UIElement
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         float filtersX = _panel.Left() + _panel.Width() + 10f;
-        if (Left.Pixels != filtersX) {
+        if (Left.Pixels != filtersX)
+        {
             Left.Set(filtersX, 0f);
             Recalculate();
         }
@@ -84,7 +85,7 @@ internal abstract class AutofisherFilterButton : UIElement
             Main.spriteBatch.End(); // End之后Begin恢复原状
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.SamplerStateForCursor, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.UIScaleMatrix);
         }
-            
+
         if (AutofishPlayer.LocalPlayer.Autofisher is null)
             return;
 

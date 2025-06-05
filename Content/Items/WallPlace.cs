@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Content.Projectiles;
-using Terraria;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items

@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.RenderTargetContents;
 using ReLogic.Graphics;
-using Terraria.DataStructures;
 
 namespace ImproveGame.Common.Utils.Extensions;
 

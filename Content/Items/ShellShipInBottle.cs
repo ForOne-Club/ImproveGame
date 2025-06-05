@@ -1,13 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Functions;
-using ImproveGame.Packets.Weather;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items;

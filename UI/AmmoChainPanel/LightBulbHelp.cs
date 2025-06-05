@@ -8,7 +8,7 @@ public class LightBulbHelp : TimerView
 {
     public LightBulbHelp()
     {
-        HoverTimer = new AnimationTimer (3);
+        HoverTimer = new AnimationTimer(3);
         SetSizePixels(30, 38);
     }
 
@@ -29,7 +29,7 @@ public class LightBulbHelp : TimerView
             SpriteEffects.None, 0f);
         spriteBatch.Draw(ModAsset.LightBulb_Highlight.Value, center, null, Color.White * HoverTimer.Schedule, 0f,
             ModAsset.LightBulb_Highlight.Size() / 2f, 1f, SpriteEffects.None, 0f);
-        
+
         if (IsMouseHovering)
             UICommon.TooltipMouseText(GetText("UI.AmmoChain.GetHelp"));
     }

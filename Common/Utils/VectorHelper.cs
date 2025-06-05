@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terraria;
-
-namespace ImproveGame
+﻿namespace ImproveGame
 {
     partial class MyUtils
     {

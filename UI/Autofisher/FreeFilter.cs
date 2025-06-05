@@ -58,7 +58,7 @@ public class FreeFilter : BaseBody
         TitleView.Width.Precent = 1f;
         TitleView.Height.Pixels = 44f;
         TitleView.JoinParent(Window);
-        
+
         Title = new SUIText
         {
             DragIgnore = true,
@@ -115,7 +115,7 @@ public class FreeFilter : BaseBody
     {
         if (Window.IsMouseHovering)
             PlayerInput.LockVanillaMouseScroll("ImproveGame: Autofisher Free Filter");
-        
+
         if (AutofishPlayer.LocalPlayer.Autofisher is null)
             Enabled = false;
 

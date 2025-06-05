@@ -1,8 +1,6 @@
 ﻿using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using Terraria.ModLoader.Config;
-using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
@@ -68,10 +66,10 @@ public sealed class OptionToggle : ModernConfigOption
         Vector2 boxSize2 = new(boxSize.Y - 10);
         Vector2 position2 = boxPosition + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),
             new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), _timer.Schedule);
-        SDFGraphics.NoBorderRound(position2,default, boxSize2.X, color3, GetMatrix(true));
+        SDFGraphics.NoBorderRound(position2, default, boxSize2.X, color3, GetMatrix(true));
     }
 
-    private readonly AnimationTimer _timer = new (4);
+    private readonly AnimationTimer _timer = new(4);
 
     public bool Enabled
     {

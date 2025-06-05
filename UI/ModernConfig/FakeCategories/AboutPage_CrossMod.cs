@@ -1,12 +1,5 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader.Config.UI;
-using Terraria.ModLoader.Config;
 
 namespace ImproveGame.UI.ModernConfig.FakeCategories
 {

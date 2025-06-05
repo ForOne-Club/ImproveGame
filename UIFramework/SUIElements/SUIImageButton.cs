@@ -2,7 +2,7 @@
 
 namespace ImproveGame.UIFramework.SUIElements;
 
-public class SUIImageButton (Texture2D texture, string hoverText = "", bool setSizeViaTexture = true)
+public class SUIImageButton(Texture2D texture, string hoverText = "", bool setSizeViaTexture = true)
     : SUIImage(texture, setSizeViaTexture)
 {
     public bool UseBorderedMouseText = false;

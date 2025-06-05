@@ -1,5 +1,4 @@
 ﻿using ImproveGame.UIFramework.UIElements;
-using Terraria.UI;
 
 namespace ImproveGame
 {

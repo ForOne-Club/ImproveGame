@@ -1,9 +1,7 @@
-﻿using ImproveGame.UI.AmmoChainPanel;
-using ImproveGame.UIFramework;
+﻿using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using ImproveGame.UIFramework.UIElements;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.GameInput;
 using Terraria.UI.Chat;

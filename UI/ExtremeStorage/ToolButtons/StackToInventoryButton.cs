@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Packets.Items;
 using ImproveGame.Packets.NetStorager;
-using ImproveGame.UIFramework;
 
 namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
 

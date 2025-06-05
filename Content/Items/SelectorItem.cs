@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common;
-using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Packets;
 using ImproveGame.Core;
 using System.Collections;
@@ -155,9 +154,9 @@ public abstract class SelectorItem : ModItem
                         int minJ = tileRect.Y;
                         int maxJ = tileRect.Y + tileRect.Height - 1;
                         for (int j = minJ; j <= maxJ; j++)
-                        for (int i = minI; i <= maxI; i++)
-                            if (WorldGen.InWorld(i, j) && !ModifySelectedTiles(player, i, j))
-                                PostModifyTiles(player, minI, minJ, i, j);
+                            for (int i = minI; i <= maxI; i++)
+                                if (WorldGen.InWorld(i, j) && !ModifySelectedTiles(player, i, j))
+                                    PostModifyTiles(player, minI, minJ, i, j);
                         PostModifyTiles(player, minI, minJ, maxI, maxJ);
                     }).Start();
             }

@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using ImproveGame.UIFramework.UIStructs;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using ReLogic.Graphics;
@@ -39,7 +38,8 @@ public class TerrariaVanillaUIResetter : ModSystem
                 var cursor = new ILCursor(ilContext);
                 cursor.RemoveRange(2);//第一行把this实例压到栈上，第二行调用函数，两行都踹了
             });
-        };
+        }
+        ;
 
 #else
         if (typeof(Hook).GetMethod("CheckSupported", BindingFlags.Instance | BindingFlags.NonPublic) is { } hook_CheckSupported)

@@ -61,7 +61,7 @@ public class DummyCommand : ModCommand
                             {
                                 field.SetValueDirect(__makeref(DummyNPC.LocalConfig),
                                     Convert.ChangeType(args[1], field.FieldType));
-                                caller.Reply(GetTextWith("NPC.DummyCommand_Success", new {name, args = args[1]}),
+                                caller.Reply(GetTextWith("NPC.DummyCommand_Success", new { name, args = args[1] }),
                                     MyColor.Success);
 
                                 SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
@@ -69,7 +69,7 @@ public class DummyCommand : ModCommand
                             }
                             catch
                             {
-                                caller.Reply(GetTextWith("NPC.DummyCommand_Fail", new {input}), MyColor.Fail);
+                                caller.Reply(GetTextWith("NPC.DummyCommand_Fail", new { input }), MyColor.Fail);
                                 return;
                             }
                         }
@@ -79,7 +79,7 @@ public class DummyCommand : ModCommand
                 }
         }
 
-        caller.Reply(GetTextWith("NPC.DummyCommand_Invalid", new {input}), MyColor.Fail);
+        caller.Reply(GetTextWith("NPC.DummyCommand_Invalid", new { input }), MyColor.Fail);
     }
 
     public record CommandColor(Color Normal, Color Success, Color Fail);

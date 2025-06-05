@@ -1,12 +1,6 @@
-﻿using ImproveGame.Core;
-using ImproveGame.UI.ModernConfig;
-using ImproveGame.UIFramework.Graphics2D;
+﻿using ImproveGame.UI.ModernConfig;
 using MonoMod.Cil;
 using System.Reflection;
-using Terraria.GameInput;
-using Terraria.Graphics.Effects;
-using Terraria.WorldBuilding;
-using static Terraria.Localization.NetworkText;
 
 namespace ImproveGame.UIFramework.Common;
 

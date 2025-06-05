@@ -15,7 +15,7 @@ public class DoBoomPacket : NetModule
 
     public static void Send(int x, int y, int width, int height, bool runLocally = false) =>
         Get(x, y, width, height).Send(runLocally: runLocally);
-        
+
     public static DoBoomPacket Get(int x, int y, int width, int height)
     {
         var packet = ModContent.GetInstance<DoBoomPacket>();

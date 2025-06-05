@@ -43,7 +43,7 @@ public class BannerPatches : ModSystem
             // 从TE中获取所有的无尽Buff物品
             foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
             {
-                if (tileEntity is not TEExtremeStorage {UsePortableBanner: true} storage)
+                if (tileEntity is not TEExtremeStorage { UsePortableBanner: true } storage)
                 {
                     continue;
                 }

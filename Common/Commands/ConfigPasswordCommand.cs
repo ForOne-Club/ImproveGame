@@ -10,7 +10,8 @@ namespace ImproveGame.Common.Commands
         public override string Command => "qotpassword";
         public override string Description => GetText("Configs.ImproveConfigs.OnlyHostByPassword.CommandDescription");
 
-        public override void Action(CommandCaller caller, string input, string[] args) {
+        public override void Action(CommandCaller caller, string input, string[] args)
+        {
             if (!Config.OnlyHostByPassword)
             {
                 caller.Reply(GetText("Configs.ImproveConfigs.OnlyHostByPassword.NotOn"), new(206, 212, 106));
@@ -19,11 +20,12 @@ namespace ImproveGame.Common.Commands
 
             if (caller.CommandType == CommandType.Console)
             {
-                caller.Reply(GetTextWith("Configs.ImproveConfigs.OnlyHostByPassword.ServerPasswordLog", new { Password = NetPasswordSystem.ConfigPassword}));
+                caller.Reply(GetTextWith("Configs.ImproveConfigs.OnlyHostByPassword.ServerPasswordLog", new { Password = NetPasswordSystem.ConfigPassword }));
                 return;
             }
 
-            if (args.Length != 1 || args[0].Length != 4) {
+            if (args.Length != 1 || args[0].Length != 4)
+            {
                 caller.Reply("Usage: /qotpassword <password>", new(240, 40, 40));
                 return;
             }
@@ -37,12 +39,14 @@ namespace ImproveGame.Common.Commands
             }
 
             string password = args[0];
-            if (password.ToUpper() == NetPasswordSystem.ConfigPassword) {
+            if (password.ToUpper() == NetPasswordSystem.ConfigPassword)
+            {
                 caller.Reply(GetText("Configs.ImproveConfigs.OnlyHostByPassword.Correct"), new(40, 240, 40));
                 NetPasswordSystem.Registered[caller.Player.whoAmI] = true;
                 AuthorizedPacket.Send(caller.Player.whoAmI); // 告诉玩家已认证
             }
-            else {
+            else
+            {
                 caller.Reply(GetText("Configs.ImproveConfigs.OnlyHostByPassword.Incorrect"), new(240, 40, 40));
             }
         }

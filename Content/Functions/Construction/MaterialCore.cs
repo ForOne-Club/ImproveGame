@@ -65,7 +65,7 @@ namespace ImproveGame.Content.Functions.Construction
                     PlusMaterial(wallItemType);
 
                 int wires = tileData.RedWire.ToInt() + tileData.GreenWire.ToInt() + tileData.BlueWire.ToInt() + tileData.YellowWire.ToInt();
-                if (wires > 0 )
+                if (wires > 0)
                     PlusMaterial(ItemID.Wire, wires);
                 if (tileData.HasActuator)
                     PlusMaterial(ItemID.Actuator);

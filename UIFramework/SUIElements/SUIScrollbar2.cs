@@ -28,7 +28,7 @@ public class SUIScrollbar2 : TimerView
     public Color BarHoverColor = Color.Black * 0.3f;
 
     public bool IsBarSizeLimited = true;
-    
+
     /// <summary>
     /// 若鼠标不在滚动条上，缩小滚动条内部部分宽度
     /// </summary>
@@ -169,7 +169,7 @@ public class SUIScrollbar2 : TimerView
             }
 
             UpdateScrollPosition();
-            
+
             ScrollTimer.UpdateHighFps();
             _shrinkTimer.UpdateHighFps();
 
@@ -183,7 +183,7 @@ public class SUIScrollbar2 : TimerView
     {
         // 这个不知放到if外面还是里面好，我就放外面了先
         base.Update(gameTime);
-        
+
         if (IsBeUsableH || IsBeUsableV)
         {
             if (IsMouseHovering || _isScrollbarDragging)
@@ -222,7 +222,7 @@ public class SUIScrollbar2 : TimerView
             barSize.X = _shrinkTimer.Lerp(barSize.X, barSize.X * shrinkFactor);
         }
 
-        if (barSize is {X: > 0, Y: > 0})
+        if (barSize is { X: > 0, Y: > 0 })
         {
             Color barBgColor = IsMouseOverScrollbar() || _isScrollbarDragging ? BarHoverColor : BarColor;
             SDFRectangle.NoBorder(barPos, barSize, new Vector4(Math.Min(barSize.X, barSize.Y) / 2f), barBgColor, Main.UIScaleMatrix);

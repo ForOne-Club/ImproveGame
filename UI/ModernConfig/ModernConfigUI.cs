@@ -1,15 +1,12 @@
 ﻿using ImproveGame.Common;
-using ImproveGame.Common.Configs;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
 using Microsoft.Xna.Framework.Input;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
-using Terraria.WorldBuilding;
 
 namespace ImproveGame.UI.ModernConfig;
 

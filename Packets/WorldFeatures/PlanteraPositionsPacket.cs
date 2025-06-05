@@ -6,7 +6,7 @@ namespace ImproveGame.Packets.WorldFeatures;
 public class PlanteraPositionsPacket : NetModule
 {
     private List<Point16> _positions;
-    
+
     public static void Sync()
     {
         if (Main.netMode is NetmodeID.MultiplayerClient)

@@ -2,11 +2,6 @@
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UIFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.ModSystems

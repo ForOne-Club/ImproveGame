@@ -1,5 +1,4 @@
-﻿using ImproveGame.UI.ModernConfig;
-using ImproveGame.UI.ModernConfig.OptionElements;
+﻿using ImproveGame.UI.ModernConfig.OptionElements;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 

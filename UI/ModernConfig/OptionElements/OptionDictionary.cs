@@ -1,12 +1,8 @@
-﻿using Terraria.ModLoader.Config.UI;
-using Terraria.ModLoader.Config;
-using ImproveGame.UIFramework.SUIElements;
+﻿using ImproveGame.UIFramework.SUIElements;
 using Newtonsoft.Json;
-using Terraria.ModLoader.UI;
 using System.Collections;
-using ImproveGame.UIFramework.BaseViews;
-using System.Reflection;
-using ImproveGame.Packets;
+using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
@@ -126,7 +122,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
                         int idx = i;
                         e.OnUpdate += (elem) =>
                         {
-                            if ((int)(Main.GlobalTimeWrappedHourly * 60) % 20 == 0) 
+                            if ((int)(Main.GlobalTimeWrappedHourly * 60) % 20 == 0)
                             {
                                 var keyObject = ConfigHelper.GetItemViaPath(Data, [idx.ToString(), "Key"], true);
                                 if (keyObject != proxy.Key)

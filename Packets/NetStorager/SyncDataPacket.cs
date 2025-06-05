@@ -10,7 +10,7 @@ namespace ImproveGame.Packets.NetStorager
         public static SyncDataPacket Get(int tileEntityID)
         {
             var packet = ModContent.GetInstance<SyncDataPacket>();
-            packet._tileEntityID = (ushort) tileEntityID;
+            packet._tileEntityID = (ushort)tileEntityID;
             return packet;
         }
 
@@ -20,7 +20,7 @@ namespace ImproveGame.Packets.NetStorager
             {
                 return;
             }
-            
+
             tileEntity.NetSend(p);
         }
 
@@ -30,7 +30,7 @@ namespace ImproveGame.Packets.NetStorager
             {
                 return;
             }
-            
+
             tileEntity.NetReceive(r);
         }
 

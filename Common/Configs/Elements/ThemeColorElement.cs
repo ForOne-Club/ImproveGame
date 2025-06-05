@@ -95,9 +95,9 @@ public class ThemeColorElement : EnumElement
 
         Scrollbar = new SUIScrollBar
         {
-            Left = {Pixels = -24f, Precent = 1f},
-            Height = {Precent = 1f},
-            Width = {Pixels = 20f}
+            Left = { Pixels = -24f, Precent = 1f },
+            Height = { Precent = 1f },
+            Width = { Pixels = 20f }
         };
         Scrollbar.JoinParent(itemsPanel);
 

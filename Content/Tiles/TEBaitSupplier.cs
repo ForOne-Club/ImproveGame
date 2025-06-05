@@ -68,8 +68,8 @@ public class TEBaitSupplier : ModTileEntity
             return;
 
         var existingBaitlessAutofishers = ByID
-            .Where(pair => pair.Value is TEAutofisher {HasBait: false})
-            .Select(pair => (TEAutofisher) pair.Value)
+            .Where(pair => pair.Value is TEAutofisher { HasBait: false })
+            .Select(pair => (TEAutofisher)pair.Value)
             .ToList();
 
         var chests = FindAllNearbyChests();
@@ -77,8 +77,8 @@ public class TEBaitSupplier : ModTileEntity
         foreach (var autofisher in existingBaitlessAutofishers)
         {
             foreach (var chest in from chestIndex in chests
-                     where !Chest.IsPlayerInChest(chestIndex) || Main.netMode is not NetmodeID.Server
-                     select Main.chest[chestIndex])
+                                  where !Chest.IsPlayerInChest(chestIndex) || Main.netMode is not NetmodeID.Server
+                                  select Main.chest[chestIndex])
             {
                 for (int i = 0; i < chest.item.Length; i++)
                 {
@@ -97,13 +97,13 @@ public class TEBaitSupplier : ModTileEntity
                     autofisher.bait = ItemLoader.TransferWithLimit(item, 15);
 
                     ItemSyncPacket.Get(autofisher.ID, ItemSyncPacket.Bait).Send(runLocally: false);
-                    
+
                     // 直接break到最外层循环
                     goto LargeBreak;
                 }
             }
-            
-            LargeBreak: ;
+
+            LargeBreak:;
         }
     }
 

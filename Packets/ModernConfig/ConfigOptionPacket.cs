@@ -1,14 +1,7 @@
-﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.UI.ModernConfig;
-using ImproveGame.UI.ModernConfig.OptionElements;
 using Newtonsoft.Json;
-using System.ComponentModel;
-using System.IO;
-using System.Reflection;
-using Terraria.Chat;
 using Terraria.ModLoader.Config;
-using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.Packets;
 
@@ -130,7 +123,7 @@ public class ConfigOptionPacket : NetModule
             value = null;
         else
         {
-            
+
             var valueTypeFullName = System.Type.GetType(_valueTypeFullName);
             //valueTypeFullName ??= TypeDescriptor.GetConverter(typeof(Type)).ConvertFrom(_valueTypeFullName) as Type;
             valueTypeFullName ??= ConfigHelper.GetTypeViaPath(modConfig, path, true); // 如果通过发来的信息没找到，通过path来直接查找到某个子对象的type

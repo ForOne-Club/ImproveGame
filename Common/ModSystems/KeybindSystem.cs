@@ -2,7 +2,6 @@
 using Terraria.GameContent.UI.States;
 using Terraria.GameInput;
 using Terraria.ModLoader.UI;
-using static Terraria.Localization.NetworkText;
 
 namespace ImproveGame.Common.ModSystems;
 

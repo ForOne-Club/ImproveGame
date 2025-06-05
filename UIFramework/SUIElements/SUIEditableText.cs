@@ -48,7 +48,7 @@ public class SUIEditableText : TimerView
             Color textColor;
 
             // 没在写字，没文字：显示占位符
-            if (Parent is SUIEditableText {IsWritingText: false }  && string.IsNullOrEmpty(OriginalString))
+            if (Parent is SUIEditableText { IsWritingText: false } && string.IsNullOrEmpty(OriginalString))
             {
                 text = Placeholder;
                 textColor = Color.Gray;
@@ -207,8 +207,8 @@ public class SUIEditableText : TimerView
         InnerText = new SUITextWithTicker
         {
             TextOrKey = initialText,
-            Height = {Percent = 1f},
-            Width = {Percent = 1f},
+            Height = { Percent = 1f },
+            Width = { Percent = 1f },
             HAlign = 0.5f,
             VAlign = 0.5f
         };
@@ -453,14 +453,14 @@ public class SUIEditableText : TimerView
             int input = Main.keyInt[i];
             switch (input)
             {
-                case (int) Keys.Enter:
+                case (int)Keys.Enter:
                     ToggleTakingText();
                     break;
-                case (int) Keys.Escape:
+                case (int)Keys.Escape:
                     ToggleTakingText();
                     CanceledTakingInput?.Invoke();
                     break;
-                case (int) Keys.Back:
+                case (int)Keys.Back:
                     Backspace();
                     break;
             }
@@ -507,7 +507,7 @@ public class SUIEditableText : TimerView
             string key = Main.keyString[i];
             switch (num)
             {
-                case >= (int) Keys.Space when num != (int) Keys.F16:
+                case >= (int)Keys.Space when num != (int)Keys.F16:
                     finalText += key;
                     break;
             }

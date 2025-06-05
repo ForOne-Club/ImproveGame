@@ -1,13 +1,11 @@
-﻿using ImproveGame.Common.Conditions;
-using ImproveGame.Content.Items.Globes.Core;
+﻿using ImproveGame.Content.Items.Globes.Core;
 using ImproveGame.Content.Projectiles;
-using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items.Globes;
 
-public class MarbleCaveGlobe () : GlobePlentyTooltip(ItemRarityID.Quest, Item.sellPrice(silver: 30))
+public class MarbleCaveGlobe() : GlobePlentyTooltip(ItemRarityID.Quest, Item.sellPrice(silver: 30))
 {
-    public class MarbleCaveGlobeProj() : GlobeProjBase<MarbleCaveGlobe>(new(132, 137, 164)) 
+    public class MarbleCaveGlobeProj() : GlobeProjBase<MarbleCaveGlobe>(new(132, 137, 164))
     {
         public override bool RevealOperation(bool onlyJudging) => GlobeRevealer.RevealMarble(Projectile, GetModItemDummy(), onlyJudging);
     }

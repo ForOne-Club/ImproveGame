@@ -1,9 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Content.Items.Globes;
 using ImproveGame.Content.Items.Globes.Core;
 using ImproveGame.Core;
-using Terraria;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Projectiles;
 

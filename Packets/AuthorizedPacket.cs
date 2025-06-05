@@ -7,7 +7,7 @@ namespace ImproveGame.Packets;
 /// </summary>
 public class AuthorizedPacket : NetModule
 {
-    public static void Send(int toClient) => ((NetModule) NetModuleLoader.Get<AuthorizedPacket>()).Send(toClient);
+    public static void Send(int toClient) => ((NetModule)NetModuleLoader.Get<AuthorizedPacket>()).Send(toClient);
 
     /// <summary>
     /// 只有多人模式客户端会收到这个包

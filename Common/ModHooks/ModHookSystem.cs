@@ -27,11 +27,11 @@ public class ModHookSystem : ModSystem
             bool result = false;
 
             foreach (var globalItem in from i in GlobalList<GlobalItem>.Globals where i is IItemOverrideLeftClick
-                     select i)
+                                       select i)
                 result |= ((IItemOverrideLeftClick)globalItem).OverrideLeftClick(inv, context, slot);
 
             if (inv[slot].ModItem is IItemOverrideLeftClick)
-                result |= ((IItemOverrideLeftClick) inv[slot].ModItem).OverrideLeftClick(inv, context, slot);
+                result |= ((IItemOverrideLeftClick)inv[slot].ModItem).OverrideLeftClick(inv, context, slot);
 
             if (!result)
                 return orig.Invoke(inv, context, slot);

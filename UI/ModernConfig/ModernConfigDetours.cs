@@ -1,7 +1,4 @@
-﻿using MonoMod.Cil;
-using System.Reflection;
-using Terraria.Graphics.Effects;
-using Terraria.ModLoader.Config;
+﻿using System.Reflection;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
 

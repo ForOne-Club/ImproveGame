@@ -11,7 +11,8 @@ internal abstract class WebpageElement : LargerPanelElement
 {
     protected abstract string Url { get; }
 
-    public override void LeftClick(UIMouseEvent evt) {
+    public override void LeftClick(UIMouseEvent evt)
+    {
         base.LeftClick(evt);
 
         // 打开网页

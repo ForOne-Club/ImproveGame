@@ -25,7 +25,7 @@ namespace ImproveGame.UIFramework.SUIElements
                 Height.Pixels = Texture.Height + this.VPadding();
             }
         }
-        
+
         public void ResetSize()
         {
             if (Texture == null)

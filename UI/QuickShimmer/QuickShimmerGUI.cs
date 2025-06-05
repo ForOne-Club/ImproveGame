@@ -1,24 +1,12 @@
-﻿using ImproveGame.Content.Functions.AutoPiggyBank;
-using ImproveGame.Core;
+﻿using ImproveGame.Core;
 using ImproveGame.UI.ExtremeStorage;
-using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using Steamworks;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.DataStructures;
-using Terraria.Enums;
-using Terraria.GameContent.Achievements;
-using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
-using Terraria.ID;
 
 namespace ImproveGame.UI.QuickShimmer;
 

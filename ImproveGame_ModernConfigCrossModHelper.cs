@@ -1,13 +1,6 @@
-using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Terraria.Localization;
-using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
-using Terraria.UI;
 namespace ImproveGame;
 // 复制到你的项目中之后记得右键解决方案资源管理器中的项目然后同步命名空间
 // Copy it to your project and sync the namespace

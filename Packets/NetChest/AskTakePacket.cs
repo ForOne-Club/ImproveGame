@@ -42,7 +42,7 @@ public class AskTakePacket : NetModule
 
         // 坐标修正到箱子左上角
         coord -= new Point((tile.TileFrameX / 18) - (style * 2), tile.TileFrameY / 18);
-        
+
         for (int i = 0; i < Main.chest.Length; i++)
         {
             var chest = Main.chest[i];

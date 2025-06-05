@@ -5,7 +5,6 @@ using ImproveGame.Content;
 using ImproveGame.Core;
 using ImproveGame.UIFramework.SUIElements;
 using System.Text;
-using Terraria.GameContent.UI.Chat;
 
 namespace ImproveGame.Common.GlobalItems;
 
@@ -16,7 +15,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
     {
         if (Config is null || item is null)
             return;
-        
+
         // 最大堆叠
         if (item.maxStack > 1 && Config.ItemMaxStack > item.maxStack && item.DamageType != DamageClass.Melee &&
             !ItemID.Sets.CommonCoin[item.type])
@@ -123,7 +122,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             return false;
 
         // 电线不消耗
-        if (Config.NoConsume_Wire &&  item.stack >= 3996 && item.type == ItemID.Wire)
+        if (Config.NoConsume_Wire && item.stack >= 3996 && item.type == ItemID.Wire)
             return false;
 
         return base.ConsumeItem(item, player);
@@ -202,7 +201,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             tooltips.Add(
                 new TooltipLine(Mod, "ShimmerResult",
                         GetText("Tips.ShimmerIntoWithCoinLuck", ItemID.Sets.CoinLuckValue[item.type]))
-                    { OverrideColor = new Color(241, 175, 233) });
+                { OverrideColor = new Color(241, 175, 233) });
             return;
         }
 

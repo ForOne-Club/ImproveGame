@@ -1,21 +1,11 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets;
-using rail;
-using System.IO;
-using System;
-using System.Reflection;
-using Terraria;
-using Terraria.Chat;
-using Terraria.ModLoader.Config;
-using Terraria.ModLoader.Config.UI;
-using System.Collections.Generic;
-using Terraria.ModLoader.UI;
-using System.Linq;
-using System.Collections;
 using ImproveGame.UI.ModernConfig.OptionElements;
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using ReLogic.Reflection;
+using System.Collections;
+using System.Reflection;
+using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.Common.Utils;
 

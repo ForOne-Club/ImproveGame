@@ -7,7 +7,6 @@ using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.GameInput;
-using Terraria.Utilities;
 
 namespace ImproveGame.UI.AmmoChainPanel.ChainEditPage;
 
@@ -33,7 +32,7 @@ public class ChainEditPage : View
 
     private EditChainScrollView _currentChain { get; set; }
 
-    private SUIScrollView2 _availableAmmos { get;  set; }
+    private SUIScrollView2 _availableAmmos { get; set; }
 
     public ChainEditPage()
     {
@@ -159,7 +158,7 @@ public class ChainEditPage : View
             AddNotification(GetText("UI.AmmoChain.Empty"), itemIconType: ModContent.ItemType<AmmoChainItem>());
             return;
         }
-        
+
         if (ChainName.IsPathIllegal())
         {
             AddNotification(GetText("PathIllegal"));
@@ -265,14 +264,14 @@ public class ChainEditPage : View
 
     private void SetupColorGrids(SUIScrollView2 scrollView)
     {
-        new WhiteColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
-        new OrangeColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
-        new YellowColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
-        new BlueColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
-        new GreenColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
-        new PinkColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
-        new RedColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
-        new BrownColorGrid(this) {RelativeMode = RelativeMode.Horizontal}.JoinParent(scrollView.ListView);
+        new WhiteColorGrid(this) { RelativeMode = RelativeMode.Horizontal }.JoinParent(scrollView.ListView);
+        new OrangeColorGrid(this) { RelativeMode = RelativeMode.Horizontal }.JoinParent(scrollView.ListView);
+        new YellowColorGrid(this) { RelativeMode = RelativeMode.Horizontal }.JoinParent(scrollView.ListView);
+        new BlueColorGrid(this) { RelativeMode = RelativeMode.Horizontal }.JoinParent(scrollView.ListView);
+        new GreenColorGrid(this) { RelativeMode = RelativeMode.Horizontal }.JoinParent(scrollView.ListView);
+        new PinkColorGrid(this) { RelativeMode = RelativeMode.Horizontal }.JoinParent(scrollView.ListView);
+        new RedColorGrid(this) { RelativeMode = RelativeMode.Horizontal }.JoinParent(scrollView.ListView);
+        new BrownColorGrid(this) { RelativeMode = RelativeMode.Horizontal }.JoinParent(scrollView.ListView);
     }
 
     public override void Update(GameTime gameTime)

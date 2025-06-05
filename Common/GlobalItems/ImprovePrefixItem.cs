@@ -1,5 +1,4 @@
 ﻿using Terraria.ModLoader.IO;
-using Terraria.Utilities;
 
 namespace ImproveGame.Common.GlobalItems;
 
@@ -23,7 +22,8 @@ public class ImprovePrefixItem : GlobalItem
     public override void NetSend(Item item, BinaryWriter writer)
     {
         writer.Write((ushort)Prefixs.Count);
-        foreach (var prefixInfo in Prefixs) {
+        foreach (var prefixInfo in Prefixs)
+        {
             writer.Write((ushort)prefixInfo.PrefixId);
             writer.Write(prefixInfo.Cost);
         }
@@ -33,7 +33,8 @@ public class ImprovePrefixItem : GlobalItem
     {
         Prefixs.Clear();
         ushort prefixCount = reader.ReadUInt16();
-        for (int i = 0; i < prefixCount; i++) {
+        for (int i = 0; i < prefixCount; i++)
+        {
             var prefixId = reader.ReadUInt16();
             var cost = reader.ReadInt32();
             Prefixs.Add(new PrefixInfo(prefixId, cost));
@@ -101,7 +102,7 @@ public class PrefixInfo : TagSerializable
 
         return info;
     }
-    
+
     public override bool Equals(object obj)
     {
         return obj is PrefixInfo info && info.PrefixId == PrefixId;

@@ -1,6 +1,4 @@
 ﻿using ImproveGame.Core;
-using ImproveGame.UI.AmmoChainPanel;
-using System.Threading.Tasks;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 

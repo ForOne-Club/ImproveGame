@@ -1,19 +1,5 @@
-﻿using ImproveGame.Content.Functions.AutoPiggyBank;
-using ImproveGame.Core;
-using ImproveGame.UI.OpenBag;
-using ImproveGame.UIFramework;
-using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.Graphics2D;
-using ImproveGame.UIFramework.SUIElements;
-using ReLogic.Graphics;
-using System.Diagnostics;
-using Terraria;
-using Terraria.GameInput;
-using Terraria.ID;
+﻿using ImproveGame.Core;
 using Terraria.Map;
-using Terraria.ModLoader.IO;
-using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Content.NPCs.Dummy;
 
