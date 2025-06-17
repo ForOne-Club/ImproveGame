@@ -425,3 +425,12 @@ ShellShipInBottle_Shimmered: {
 	DisplayName: Корабль в мерцающей бутылке
 	Tooltip: Открывает доступ к быстрому мерцанию на панели управления
 }
+
+ShimmerBucket: {
+	// DisplayName: Shimmer Bucket
+	/* Tooltip:
+		'''
+		Contains a small amount of shimmer
+		Can be poured out
+		''' */
+}

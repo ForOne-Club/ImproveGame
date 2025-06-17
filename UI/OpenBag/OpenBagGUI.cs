@@ -386,6 +386,9 @@ public class OpenBagGUI : BaseBody
 
     public void Open()
     {
+        UIPlayer.CheckPositionValid(ref UIPlayer.OpenBagPosition, UIPlayer.OpenBagDefPosition);
+        MainPanel.SetPos(UIPlayer.OpenBagPosition).Recalculate();
+
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Enabled = true;
         StartTimer.Open();

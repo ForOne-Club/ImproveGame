@@ -790,6 +790,11 @@ ImproveConfigs: {
 }
 
 AvailableModItemConfigs: {
+	/* AvailablityHint:
+		'''
+		It is unsable currently. 
+		Please modify the option in Mod Item Config
+		''' */
 	DisplayName: 3. Конфигурация предметов мода
 	Available: ": доступен(-на)"
 	Unavailable: ": недоступен(-на)"
@@ -883,6 +888,11 @@ AvailableModItemConfigs: {
 	AvailableActuationRodMkII: {
 		Label: "[centeritem:ImproveGame/ActuationRodMkII] {$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		Tooltip: ""
+	}
+
+	AvailableShimmerBucket: {
+		// Label: "[centeritem:ImproveGame/ShimmerBucket] {$Mods.ImproveGame.Items.ShimmerBucket.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		// Tooltip: ""
 	}
 }
 

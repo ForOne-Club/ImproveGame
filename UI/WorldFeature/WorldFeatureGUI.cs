@@ -171,6 +171,9 @@ public class WorldFeatureGUI : BaseBody
 
     public void Open()
     {
+        UIPlayer.CheckPositionValid(ref UIPlayer.WorldFeaturePosition, UIPlayer.WorldFeatureDefPosition);
+        MainPanel.SetPos(UIPlayer.WorldFeaturePosition).Recalculate();
+
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Enabled = true;
         StartTimer.Open();

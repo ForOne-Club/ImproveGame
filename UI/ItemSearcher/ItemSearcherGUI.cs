@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Packets.NetChest;
 using ImproveGame.UI.ExtremeStorage;
+using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -469,6 +470,9 @@ public class ItemSearcherGUI : BaseBody
 
     public void Open()
     {
+        UIPlayer.CheckPositionValid(ref UIPlayer.ItemSearcherPosition,  UIPlayer.ItemSearcherDefPosition);
+        MainPanel.SetPos(UIPlayer.ItemSearcherPosition).Recalculate();
+
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Enabled = true;
         StartTimer.Open();

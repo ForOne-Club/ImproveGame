@@ -132,9 +132,9 @@ public class UIPlayer : ModPlayer
 
     public static void CheckPositionValid(ref Vector2 position, Vector2 defaultPosition)
     {
-        if (position.X <= 0 && position.X >= Main.screenWidth)
+        if (position.X <= 0 || position.X >= Main.screenWidth - 16)
             position.X = defaultPosition.X;
-        if (position.Y <= 0 && position.Y >= Main.screenHeight)
+        if (position.Y <= 0 || position.Y >= Main.screenHeight - 16)
             position.Y = defaultPosition.Y;
     }
 

@@ -792,9 +792,14 @@ ImproveConfigs: {
 }
 
 AvailableModItemConfigs: {
-	DisplayName: 模组物品加载配置
-	Available: 可获取
-	Unavailable: 不可获取
+	AvailablityHint:
+		'''
+		现在这个物品无法使用 
+		请在模组物品可用性配置里进行修改
+		'''
+	DisplayName: 模组物品可用性配置
+	Available: 可使用
+	Unavailable: 不可使用
 	Enable: 启用
 
 	AvailableMagickWand: {
@@ -884,6 +889,11 @@ AvailableModItemConfigs: {
 
 	AvailableActuationRodMkII: {
 		// Label: "[centeritem:ImproveGame/ActuationRodMkII] {$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		// Tooltip: ""
+	}
+
+	AvailableShimmerBucket: {
+		// Label: "[centeritem:ImproveGame/ShimmerBucket] {$Mods.ImproveGame.Items.ShimmerBucket.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 }

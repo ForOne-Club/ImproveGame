@@ -250,6 +250,9 @@ public class BuffTrackerGUI : BaseBody
     /// </summary>
     public void Open()
     {
+        UIPlayer.CheckPositionValid(ref UIPlayer.BuffTrackerPosition, UIPlayer.BuffTrackerDefPosition);
+        MainPanel.SetPos(UIPlayer.BuffTrackerPosition).Recalculate();
+
         MainPanel.IsLeftMousePressed = false;
         Visible = true;
         SoundEngine.PlaySound(SoundID.MenuOpen);
