@@ -424,3 +424,12 @@ ShellShipInBottle_Shimmered: {
 	DisplayName: Shimmered Ship In Bottle
 	Tooltip: Unlocks Quick Shimmer on the Control Panel
 }
+
+ShimmerBucket: {
+	DisplayName: Shimmer Bucket
+	Tooltip:
+		'''
+		Contains a small amount of shimmer
+		Can be poured out
+		'''
+}

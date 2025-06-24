@@ -29,5 +29,6 @@ public sealed class ModItemSettings : Category
         panel.AddToggle(AvailableConfig, nameof(AvailableConfig.AvailableDetectorDrone));
         panel.AddToggle(AvailableConfig, nameof(AvailableConfig.AvailableBaitSupplier));
         panel.AddToggle(AvailableConfig, nameof(AvailableConfig.AvailableActuationRodMkII));
+        panel.AddToggle(AvailableConfig, nameof(AvailableConfig.AvailableShimmerBucket));
     }
 }

@@ -785,9 +785,14 @@ ImproveConfigs: {
 }
 
 AvailableModItemConfigs: {
+	AvailablityHint:
+		'''
+		It is unsable currently. 
+		Please modify the option in Mod Item Config
+		'''
 	DisplayName: Mod Item Config
-	Available: " Obtainable"
-	Unavailable: " Unobtainable"
+	Available: " Usable"
+	Unavailable: " Unusable"
 	Enable: Enable
 
 	AvailableMagickWand: {
@@ -877,6 +882,11 @@ AvailableModItemConfigs: {
 
 	AvailableActuationRodMkII: {
 		Label: "[centeritem:ImproveGame/ActuationRodMkII] {$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableShimmerBucket: {
+		Label: "[centeritem:ImproveGame/ShimmerBucket] {$Mods.ImproveGame.Items.ShimmerBucket.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		Tooltip: ""
 	}
 }

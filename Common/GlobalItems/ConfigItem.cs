@@ -1,4 +1,5 @@
-﻿namespace ImproveGame.Common.GlobalItems
+﻿
+namespace ImproveGame.Common.GlobalItems
 {
     public interface IConditionItem
     {
@@ -6,6 +7,18 @@
     }
     public class ConfigItem : GlobalItem
     {
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            if (item.ModItem is not IConditionItem config || config.UseCondition.IsMet()) return;
+            var index = tooltips.FindIndex(line => line.Name == "ItemName");
+            if (index == -1) return;
+            var newLine = new TooltipLine("AvailableHint", Language.GetTextValue("Mods.ImproveGame.Configs.AvailableModItemConfigs.AvailablityHint"))
+            {
+                OverrideColor = Main.DiscoColor
+            };
+            tooltips.Insert(index + 1,newLine);
+            base.ModifyTooltips(item, tooltips);
+        }
         public override bool CanUseItem(Item item, Player player)
         {
             if (item.ModItem is IConditionItem config && !config.UseCondition.IsMet())

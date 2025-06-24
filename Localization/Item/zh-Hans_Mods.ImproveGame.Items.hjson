@@ -422,3 +422,12 @@ ShellShipInBottle_Shimmered: {
 	DisplayName: 瓶中微光船
 	Tooltip: 使用后在总控面板解锁快速微光
 }
+
+ShimmerBucket: {
+	DisplayName: 微光桶
+	Tooltip:
+		'''
+		盛有少量微光
+		可以倒出
+		'''
+}

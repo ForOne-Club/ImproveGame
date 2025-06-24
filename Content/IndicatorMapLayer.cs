@@ -15,8 +15,7 @@ public class IndicatorMapLayer : ModMapLayer
     {
         byte columns = 8; // 列数
         byte rows = 2; // 行数
-
-        // 空钓鱼机
+                       // 空钓鱼机
         ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.BaitlessAutofisherPositions,
             UIConfigs.Instance.MarkEmptyAutofisher, "Mods.ImproveGame.UI.MapLayer.EmptyAutofisher",
             new SpriteFrame(columns, rows, 0, 1), new Vector2(1f, 1f));
@@ -133,6 +132,24 @@ public class StructureDatas : ModSystem
     public static List<Point16> GraniteCavePositions { get; set; }
     public static List<Point16> BaitlessAutofisherPositions { get; set; }
 
+    public static string QotVersionInWorldGeneration 
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(field)) return field;
+            // if (DungeonPosition != default) return field = true; // 原版会记录数据
+            // if (ShimmerPosition != default) return field = true; // 微光目前有补充检测
+            if (TemplePosition != default) return field = ImproveGame.Instance.Version.ToString();
+            if (PyramidPositions.Count != 0) return field = ImproveGame.Instance.Version.ToString();
+            if (SkyHousePositions.Count != 0) return field = ImproveGame.Instance.Version.ToString();
+            if (SkyLakePositions.Count != 0) return field = ImproveGame.Instance.Version.ToString();
+            return "";
+        }
+        set;
+    }
+
+    public static bool QotEanbledInWorldGeneration => !string.IsNullOrEmpty(QotVersionInWorldGeneration);
+
     private static int _autofisherValidateTimer;
 
     public override void PostUpdateWorld()
@@ -195,6 +212,7 @@ public class StructureDatas : ModSystem
     {
         On_WorldGen.Pyramid += (orig, x, y) =>
         {
+            QotVersionInWorldGeneration = Mod.Version.ToString();
             if (orig(x, y))
             {
                 PyramidPositions.Add(new Point16(x, y + 50));
@@ -285,6 +303,7 @@ public class StructureDatas : ModSystem
         tag["marbleCave"] = MarbleCavePositions ?? [];
         tag["allGraniteCave"] = AllGraniteCavePositions ?? [];
         tag["graniteCave"] = GraniteCavePositions ?? [];
+        tag["versionData"] = QotVersionInWorldGeneration;
     }
 
     public override void LoadWorldData(TagCompound tag)
@@ -301,6 +320,10 @@ public class StructureDatas : ModSystem
         MarbleCavePositions = tag.Get<List<Point16>>("marbleCave") ?? [];
         AllGraniteCavePositions = tag.Get<List<Point16>>("allGraniteCave") ?? [];
         GraniteCavePositions = tag.Get<List<Point16>>("graniteCave") ?? [];
+        if (tag.TryGet<string>("versionData", out var value))
+            QotVersionInWorldGeneration = value;
+        else
+            QotVersionInWorldGeneration = "";
     }
 
     public override void NetSend(BinaryWriter writer)

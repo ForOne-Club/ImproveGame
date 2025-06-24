@@ -274,6 +274,9 @@ public class BigBagGUI : BaseBody
 
     public void Open()
     {
+        UIPlayer.CheckPositionValid(ref UIPlayer.HugeInventoryUIPosition, UIPlayer.HugeInventoryDefPosition);
+        MainPanel.SetPos(UIPlayer.HugeInventoryUIPosition).Recalculate();
+
         Enabled = true;
         StartTimer.Open();
 

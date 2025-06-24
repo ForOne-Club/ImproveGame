@@ -70,13 +70,14 @@ public abstract class GlobePlentyTooltip(int rare, int itemValue) : Globe(rare, 
 }
 public static class GlobeRevealer
 {
-    public static void NotFoundNotification(Globe dummyItem, bool ForcedBaseDescription)
+    public static void NoDataNotification(Globe dummyItem)
     {
-        if ((dummyItem is OnceForAllGlobe && dummyItem is not AetherGlobe) || ForcedBaseDescription)
-            AddNotification(Language.GetText("Mods.ImproveGame.Items.GlobeBase.NotFound")
-            .WithFormatArgs(dummyItem.GetLocalizedValue("BiomeName")).Value, Globe.hintTextColor);
-        else
-            AddNotification(dummyItem.GetLocalizedValue("NotFound"), Globe.hintTextColor);
+        AddNotification(Language.GetText("Mods.ImproveGame.Items.GlobeBase.NotFound")
+        .WithFormatArgs(dummyItem.GetLocalizedValue("BiomeName")).Value, Globe.hintTextColor);
+    }
+    public static void NotFoundNotification(Globe dummyItem)
+    {
+        AddNotification(dummyItem.GetLocalizedValue("NotFound"), Globe.hintTextColor);
     }
     public static void AlreadyRevealedNotification(Globe dummyItem)
     {
@@ -196,7 +197,12 @@ public static class GlobeRevealer
         if (StructureDatas.AllMarbleCavePositions.Count <= StructureDatas.MarbleCavePositions.Count)//没有判定0的必要，因为如果是0一定满足这个
         {
             if (!onlyJudging && projectile.owner == Main.myPlayer)
-                NotFoundNotification(dummyItem, StructureDatas.MarbleCavePositions.Count == 0);
+            {
+                if (!StructureDatas.QotEanbledInWorldGeneration)
+                    NoDataNotification(dummyItem);
+                else
+                    NotFoundNotification(dummyItem);
+            }
             return false;
         }
         if (onlyJudging)
@@ -217,7 +223,12 @@ public static class GlobeRevealer
         if (StructureDatas.AllGraniteCavePositions.Count <= StructureDatas.GraniteCavePositions.Count)//没有判定0的必要，因为如果是0一定满足这个
         {
             if (!onlyJudging && projectile.owner == Main.myPlayer)
-                NotFoundNotification(dummyItem, StructureDatas.GraniteCavePositions.Count == 0);
+            {
+                if (!StructureDatas.QotEanbledInWorldGeneration)
+                    NoDataNotification(dummyItem);
+                else
+                    NotFoundNotification(dummyItem);
+            }
             return false;
         }
         if (onlyJudging)
@@ -240,7 +251,7 @@ public static class GlobeRevealer
         var onceForAll = projectile.ModProjectile as IOnceForAllGlobeProj;
         bool extraChecked = false;
         //这一遍是看看世界数据有没有记录
-        if (onceForAll.NotFoundCheck() && Main.netMode != NetmodeID.MultiplayerClient)
+        if ((!StructureDatas.QotEanbledInWorldGeneration || onceForAll.NotFoundCheck()) && Main.netMode != NetmodeID.MultiplayerClient)
         {
             //没有就当场另作检测
             onceForAll.ExtraCheckWhenNotRecorded();
@@ -250,8 +261,14 @@ public static class GlobeRevealer
         //你要再没我也没办法了
         if (onceForAll.NotFoundCheck())
         {
+
             if (!onlyJudging && projectile.owner == Main.myPlayer)
-                NotFoundNotification(dummyItem, false);
+            {
+                if (StructureDatas.QotEanbledInWorldGeneration)
+                    NotFoundNotification(dummyItem);
+                else
+                    NoDataNotification(dummyItem);
+            }
             return false;
         }
         if (StructureDatas.StructuresUnlocked[(byte)onceForAll.StructureType])
