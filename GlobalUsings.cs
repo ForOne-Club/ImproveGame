@@ -21,3 +21,4 @@ global using static ImproveGame.MyUtils;
 global using TrUtils = Terraria.Utils;
 
 // 全局引用列表
+// 这个一般放在根目录 25.6.18
