@@ -489,7 +489,8 @@ Projectiles: {
 BuilderToggles: {
 	PiggyToggle: {
 		OffText: Авто-выкладывание: Выкл.
-		OnText: Авто-выкладывание: Вкл.
+		// VanillaOnText: Auto-deposit: Coin
+		// AllOnText: Auto-deposit: All
 		RightFilter: ПКМ, чтобы открыть фильтр монет
 	}
 }

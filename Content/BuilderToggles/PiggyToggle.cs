@@ -8,7 +8,8 @@ public class PiggyToggle : BuilderToggle
 {
     public override string HoverTexture => Texture;
 
-    public static LocalizedText OnText { get; private set; }
+    public static LocalizedText AllOnText { get; private set; }
+    public static LocalizedText VanillaOnText { get; private set; }
     public static LocalizedText OffText { get; private set; }
     public static LocalizedText RightFilter { get; private set; }
 
@@ -17,20 +18,24 @@ public class PiggyToggle : BuilderToggle
 
     public override Position OrderPosition => new After(TorchBiome);
 
-    public override int NumberOfStates => 2;
+    public override int NumberOfStates => 3;
 
-    public static bool AutoSaveEnabled
+    /// <summary>
+    /// 0 关闭，1 原版，2 所有
+    /// </summary>
+    public static int AutoSaveEnabled
     {
         get
         {
             var instance = ModContent.GetInstance<PiggyToggle>();
-            return instance.Active() && instance.CurrentState is 0;
+            return instance.Active() ? instance.CurrentState : 0;
         }
     }
 
     public override void SetStaticDefaults()
     {
-        OnText = this.GetLocalization(nameof(OnText));
+        AllOnText = this.GetLocalization(nameof(AllOnText));
+        VanillaOnText = this.GetLocalization(nameof(VanillaOnText));
         OffText = this.GetLocalization(nameof(OffText));
         RightFilter = this.GetLocalization(nameof(RightFilter));
     }
@@ -50,18 +55,23 @@ public class PiggyToggle : BuilderToggle
 
     public override string DisplayValue()
     {
-        return (CurrentState == 0 ? OnText.Value : OffText.Value) + '\n' + RightFilter.Value;
+        return CurrentState switch
+        {
+            0 => OffText.Value,
+            1 => VanillaOnText.Value,
+            _ => AllOnText.Value,
+        } + '\n' + RightFilter.Value;
     }
 
     public override bool Draw(SpriteBatch spriteBatch, ref BuilderToggleDrawParams drawParams)
     {
-        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState % 2);
+        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState is 0 ? 1 : 0);
         return true;
     }
 
     public override bool DrawHover(SpriteBatch spriteBatch, ref BuilderToggleDrawParams drawParams)
     {
-        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState % 2, 1);
+        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState is 0 ? 1 : 0, 1);
         return true;
     }
 }

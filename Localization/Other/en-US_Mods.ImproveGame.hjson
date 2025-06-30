@@ -489,7 +489,8 @@ Projectiles: {
 BuilderToggles: {
 	PiggyToggle: {
 		OffText: Auto-deposit: Off
-		OnText: Auto-deposit: On
+		VanillaOnText: Auto-deposit: Coin
+		AllOnText: Auto-deposit: All
 		RightFilter: Right click to open currency filter
 	}
 }

@@ -50,14 +50,13 @@ public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
                 ItemID.PiggyBank, ItemID.ChesterPetItem, ItemID.MoneyTrough);
         }
 
-        if (!PiggyToggle.AutoSaveEnabled)
-            return;
+        if (PiggyToggle.AutoSaveEnabled is 0) return;
 
         // 10帧检测一次，仅存钱币槽
-        if (_detectCd % 10 == 0 && !ExcludedItems.Any(i => i.Item.type is ItemID.GoldCoin))
+        if (PiggyToggle.AutoSaveEnabled > 0 && (_detectCd % 10 == 0 && !ExcludedItems.Any(i => i.Item.type is ItemID.GoldCoin)))
             DetectCoins();
         // 60帧检测一次，自定义钱币
-        if (_detectCd % 60 == 0)
+        if (PiggyToggle.AutoSaveEnabled > 1 && _detectCd % 60 == 0)
             DetectCustomCurrency();
         // 30帧更新一下铂金最大堆叠
         if (_detectCd % 30 == 0)
