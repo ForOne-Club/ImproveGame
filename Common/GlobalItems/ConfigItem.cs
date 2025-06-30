@@ -9,7 +9,7 @@ namespace ImproveGame.Common.GlobalItems
     {
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (item.ModItem is not IConditionItem config || config.UseCondition.IsMet()) return;
+            if (item.ModItem is not IConditionItem config || config.UseCondition.IsMet() || item.useStyle == ItemUseStyleID.None) return;
             var index = tooltips.FindIndex(line => line.Name == "ItemName");
             if (index == -1) return;
             var newLine = new TooltipLine("AvailableHint", Language.GetTextValue("Mods.ImproveGame.Configs.AvailableModItemConfigs.AvailablityHint"))

@@ -792,6 +792,8 @@ AvailableModItemConfigs: {
 		'''
 	DisplayName: Mod Item Config
 	Available: " Usable"
+	Obtainable: " Obtainable"
+	Unobtainable: " Unobtainable"
 	Unavailable: " Unusable"
 	Enable: Enable
 
@@ -856,7 +858,7 @@ AvailableModItemConfigs: {
 	}
 
 	AvailableCoinOne: {
-		Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Obtainable}"
 		Tooltip: ""
 	}
 

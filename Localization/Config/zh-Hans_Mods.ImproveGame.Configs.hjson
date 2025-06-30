@@ -799,6 +799,8 @@ AvailableModItemConfigs: {
 		'''
 	DisplayName: 模组物品可用性配置
 	Available: 可使用
+	Obtainable: 可获取
+	Unobtainable: 不可获取
 	Unavailable: 不可使用
 	Enable: 启用
 
@@ -863,7 +865,7 @@ AvailableModItemConfigs: {
 	}
 
 	AvailableCoinOne: {
-		// Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		// Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Obtainable}"
 		// Tooltip: ""
 	}
 

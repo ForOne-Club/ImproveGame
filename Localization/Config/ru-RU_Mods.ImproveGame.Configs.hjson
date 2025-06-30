@@ -797,6 +797,8 @@ AvailableModItemConfigs: {
 		''' */
 	DisplayName: 3. Конфигурация предметов мода
 	Available: ": доступен(-на)"
+	Obtainable: ": доступен(-на)"
+	Unobtainable: ": недоступен(-на)"
 	Unavailable: ": недоступен(-на)"
 	Enable: ": настройка включена"
 

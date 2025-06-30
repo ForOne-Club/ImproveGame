@@ -1,12 +1,15 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Projectiles;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items;
 
-public class DetectorDrone : ModItem
+public class DetectorDrone : ModItem, IConditionItem
 {
+    public Condition UseCondition => ConfigCondition.AvailableDetectorDroneC;
+
     private class DroneRadioDrawLayer : PlayerDrawLayer
     {
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
@@ -54,8 +57,6 @@ public class DetectorDrone : ModItem
 
     public override bool CanUseItem(Player player)
     {
-        if (!ConfigCondition.AvailableDetectorDroneC.IsMet())
-            return false;
         if (Main.myPlayer != player.whoAmI || player.ownedProjectileCounts[Item.shoot] <= 0)
             return true;
 
