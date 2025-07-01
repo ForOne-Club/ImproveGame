@@ -796,10 +796,10 @@ AvailableModItemConfigs: {
 		Please modify the option in Mod Item Config
 		''' */
 	DisplayName: 3. Конфигурация предметов мода
-	Available: ": доступен(-на)"
+	// Available: " Usable"
+	// Unavailable: " Unusable"
 	Obtainable: ": доступен(-на)"
 	Unobtainable: ": недоступен(-на)"
-	Unavailable: ": недоступен(-на)"
 	Enable: ": настройка включена"
 
 	AvailableMagickWand: {

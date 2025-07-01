@@ -792,9 +792,9 @@ AvailableModItemConfigs: {
 		'''
 	DisplayName: Mod Item Config
 	Available: " Usable"
+	Unavailable: " Unusable"
 	Obtainable: " Obtainable"
 	Unobtainable: " Unobtainable"
-	Unavailable: " Unusable"
 	Enable: Enable
 
 	AvailableMagickWand: {

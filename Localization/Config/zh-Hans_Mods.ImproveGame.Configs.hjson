@@ -799,9 +799,9 @@ AvailableModItemConfigs: {
 		'''
 	DisplayName: 模组物品可用性配置
 	Available: 可使用
+	Unavailable: 不可使用
 	Obtainable: 可获取
 	Unobtainable: 不可获取
-	Unavailable: 不可使用
 	Enable: 启用
 
 	AvailableMagickWand: {
