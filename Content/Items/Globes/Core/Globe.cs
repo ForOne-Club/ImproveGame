@@ -251,7 +251,7 @@ public static class GlobeRevealer
         var onceForAll = projectile.ModProjectile as IOnceForAllGlobeProj;
         bool extraChecked = false;
         //这一遍是看看世界数据有没有记录
-        if ((!StructureDatas.QotEanbledInWorldGeneration || onceForAll.NotFoundCheck()) && Main.netMode != NetmodeID.MultiplayerClient)
+        if (true)//((!StructureDatas.QotEanbledInWorldGeneration || onceForAll.NotFoundCheck()) && Main.netMode != NetmodeID.MultiplayerClient)
         {
             //没有就当场另作检测
             onceForAll.ExtraCheckWhenNotRecorded();
@@ -271,7 +271,7 @@ public static class GlobeRevealer
             }
             return false;
         }
-        if (StructureDatas.StructuresUnlocked[(byte)onceForAll.StructureType])
+        if (StructureDatas.StructuresUnlocked[(byte)onceForAll.StructureType] && false)
         {
             if (!onlyJudging && projectile.owner == Main.myPlayer)
                 AlreadyRevealedNotification(dummyItem);

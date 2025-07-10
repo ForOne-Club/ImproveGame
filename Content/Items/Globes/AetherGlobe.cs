@@ -22,13 +22,27 @@ public class AetherGlobe() : OnceForAllGlobe()
                     if (tile.LiquidType != LiquidID.Shimmer)
                         continue;
 
-                    for (int x = i - 2; x <= i + 2; x++)
+                    bool skip = false;
+                    for (int x = i - 2; x <= i + 2; x++) 
+                    {
                         for (int y = j - 2; y <= j + 2; y++)
                         {
-                            tile = Framing.GetTileSafely(i, j);
+                            tile = Framing.GetTileSafely(x, y);
+                            // 一旦检测区域里有不符合条件的就退出循环并打上标记
                             if (tile.LiquidType != LiquidID.Shimmer)
-                                continue;
+                            {
+                                skip = true;
+                                break;
+                            }
                         }
+                        // 通过标记退出外层循环
+                        if (skip)
+                            break;
+                    }
+                    // 通过标记移动至下一个检测点
+                    if (skip)
+                        continue;
+
                     position = new Vector2(i, j).ToPoint16();
                     StructureDatas.ShimmerPosition = position;
                     break;
