@@ -340,6 +340,11 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
         return triangleList;
     }
 
+    public override bool? CanCutTiles()
+    {
+        return false;
+    }
+
     public abstract Globe GetModItemDummy();
 
     public virtual Color? GetEffectColor() => null;
@@ -354,17 +359,6 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
     public Color RealColor => GetEffectColor() ?? mainColor;
 
     public abstract bool RevealOperation(bool onlyJudging);
-
-
-    public override bool PreKill(int timeLeft)
-    {
-        return base.PreKill(timeLeft);
-    }
-
-    public override void OnKill(int timeLeft)
-    {
-        base.OnKill(timeLeft);
-    }
 }
 public abstract class GlobeProjBase<T>(Color mainColor) : GlobeProjBase(mainColor) where T : Globe
 {
