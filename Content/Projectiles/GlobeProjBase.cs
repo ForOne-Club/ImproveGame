@@ -310,15 +310,17 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
         }
         int maxIndex = actualLength - 1;
         Color color = RealColor;
-        for (var i = 1; i < actualLength; i++)
+        for (var i = 0; i < maxIndex; i++)
         {
-            Vector2 oldVel = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-            var factor = Utils.GetLerpValue(1, maxIndex, i);
+            Vector2 oldVel = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
+            var factor = Utils.GetLerpValue(0, maxIndex - 1, i);
             Vector2 correct = Vector2.Normalize(oldVel).RotatedBy(1.57f) * MathHelper.SmoothStep(30, 24, factor);
+            //var fac2 = (1 - MathF.Cos(MathHelper.TwoPi * MathF.Pow(factor, .25f))) * .5f;
+            var fac2 = i == 0 ? 0 :1 - factor;
             vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f + correct,
-                new Vector3(factor, 0f, 1 - factor), color));
+                new Vector3(factor, 0f, fac2), color));
             vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f - correct,
-                new Vector3(factor, 1f, 1 - factor), color));
+                new Vector3(factor, 1f, fac2), color));
         }
 
         if (vertices.Count > 2)
