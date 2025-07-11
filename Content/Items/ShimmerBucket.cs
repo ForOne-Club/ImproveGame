@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Items;
 
@@ -13,26 +14,35 @@ public class ShimmerBucket : ModItem, IConditionItem
     }
     public override void UseStyle(Player player, Rectangle heldItemFrame)
     {
+        if (player.whoAmI != Main.myPlayer) return;
+
+        var item = player.inventory[player.selectedItem];
+        if (item.type != Item.type) return;
+
         if (!Main.GamepadDisableCursorItemIcon)
         {
             player.cursorItemIconEnabled = true;
-            Main.ItemIconCacheUpdate(Item.type);
+            Main.ItemIconCacheUpdate(item.type);
         }
 
         if (!player.ItemTimeIsZero || player.itemAnimation <= 0 || !player.controlUseItem)
             return;
 
-        if (Main.tile[Player.tileTargetX, Player.tileTargetY].liquid == 0 || Main.tile[Player.tileTargetX, Player.tileTargetY].liquidType() == 3)
+        var pointedTile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+        if (pointedTile.liquid >= 200 || (pointedTile.nactive() && Main.tileSolid[pointedTile.type] && !Main.tileSolidTop[pointedTile.type] && pointedTile.type != TileID.Grate))
+            return;
+
+        if (pointedTile.liquid == 0 || pointedTile.liquidType() == LiquidID.Shimmer)
         {
             SoundEngine.PlaySound(SoundID.Splash, (int)player.position.X, (int)player.position.Y);
-            Main.tile[Player.tileTargetX, Player.tileTargetY].liquidType(3);
-            Main.tile[Player.tileTargetX, Player.tileTargetY].liquid = byte.MaxValue;
+            pointedTile.liquidType(LiquidID.Shimmer);
+            pointedTile.liquid = byte.MaxValue;
             WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY);
 
-            Item.stack--;
-            player.PutItemInInventoryFromItemUsage(205, player.selectedItem);
+            item.stack--;
+            player.PutItemInInventoryFromItemUsage(ItemID.EmptyBucket, player.selectedItem);
 
-            player.ApplyItemTime(Item);
+            player.ApplyItemTime(item);
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.sendWater(Player.tileTargetX, Player.tileTargetY);
         }
@@ -43,16 +53,20 @@ public class ShimmerBucketGlobalItem : GlobalItem
 {
     public override void UseStyle(Item item, Player player, Rectangle heldItemFrame)
     {
+        if (player.whoAmI != Main.myPlayer) return;
+
+        var sItem = player.inventory[player.selectedItem];
+
         if (!AvailableConfig.AvailableShimmerBucket) return;
-        if (item.type != ItemID.EmptyBucket) return;
+        if (sItem.type != ItemID.EmptyBucket) return;
         if (!player.ItemTimeIsZero || player.itemAnimation <= 0 || !player.controlUseItem)
             return;
 
         var tileTargetX = Player.tileTargetX;
         var tileTargetY = Player.tileTargetY;
-        var sItem = item;
+        var pointedTile = Main.tile[tileTargetX, y: tileTargetY];
 
-        int num = Main.tile[tileTargetX, tileTargetY].liquidType();
+        int num = pointedTile.liquidType();
         int num2 = 0;
         for (int i = tileTargetX - 1; i <= tileTargetX + 1; i++)
         {
@@ -63,11 +77,11 @@ public class ShimmerBucketGlobalItem : GlobalItem
             }
         }
 
-        if (Main.tile[tileTargetX, tileTargetY].liquid <= 0 || num2 <= 100)
+        if (pointedTile.liquid <= 0 || num2 <= 100)
             return;
 
-        int liquidType = Main.tile[tileTargetX, tileTargetY].liquidType();
-        if (Main.tile[tileTargetX, tileTargetY].shimmer())
+        int liquidType = pointedTile.liquidType();
+        if (pointedTile.shimmer())
         {
             sItem.stack--;
             player.PutItemInInventoryFromItemUsage(ModContent.ItemType<ShimmerBucket>(), player.selectedItem);
@@ -75,12 +89,12 @@ public class ShimmerBucketGlobalItem : GlobalItem
 
         SoundEngine.PlaySound(SoundID.Splash, (int)player.position.X, (int)player.position.Y);
         player.ApplyItemTime(sItem);
-        int num3 = Main.tile[tileTargetX, tileTargetY].liquid;
-        Main.tile[tileTargetX, tileTargetY].liquid = 0;
-        Main.tile[tileTargetX, tileTargetY].lava(lava: false);
-        Main.tile[tileTargetX, tileTargetY].honey(honey: false);
+        int num3 = pointedTile.liquid;
+        pointedTile.liquid = 0;
+        pointedTile.lava(lava: false);
+        pointedTile.honey(honey: false);
         WorldGen.SquareTileFrame(tileTargetX, tileTargetY, resetFrame: false);
-        if (Main.netMode == 1)
+        if (Main.netMode == NetmodeID.MultiplayerClient)
             NetMessage.sendWater(tileTargetX, tileTargetY);
         else
             Liquid.AddWater(tileTargetX, tileTargetY);
@@ -108,7 +122,7 @@ public class ShimmerBucketGlobalItem : GlobalItem
                     }
 
                     WorldGen.SquareTileFrame(k, l, resetFrame: false);
-                    if (Main.netMode == 1)
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
                         NetMessage.sendWater(k, l);
                     else
                         Liquid.AddWater(k, l);
