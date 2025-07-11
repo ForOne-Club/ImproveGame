@@ -4,6 +4,13 @@ using Terraria.DataStructures;
 
 namespace ImproveGame.Content.BuilderToggles;
 
+public enum PiggyToggleState
+{
+    Coin,
+    All,
+    Off,
+}
+
 public class PiggyToggle : BuilderToggle
 {
     public override string HoverTexture => Texture;
@@ -20,15 +27,22 @@ public class PiggyToggle : BuilderToggle
 
     public override int NumberOfStates => 3;
 
-    /// <summary>
-    /// 0 关闭，1 原版，2 所有
-    /// </summary>
-    public static int AutoSaveEnabled
+    public static PiggyToggleState AutoSaveEnabled
     {
         get
         {
             var instance = ModContent.GetInstance<PiggyToggle>();
-            return instance.Active() ? instance.CurrentState : 0;
+            if (instance is null || !instance.Active())
+            {
+                return PiggyToggleState.Off;
+            }
+
+            return instance.CurrentState switch
+            {
+                0 => PiggyToggleState.Coin,
+                1 => PiggyToggleState.All,
+                _ => PiggyToggleState.Off,
+            };
         }
     }
 
@@ -57,9 +71,9 @@ public class PiggyToggle : BuilderToggle
     {
         return CurrentState switch
         {
-            0 => OffText.Value,
-            1 => VanillaOnText.Value,
-            _ => AllOnText.Value,
+            0 => VanillaOnText.Value,
+            1 => AllOnText.Value,
+            _ => OffText.Value,
         } + '\n' + RightFilter.Value;
     }
 

@@ -11,7 +11,7 @@ public class AutoMoneyItemListener : GlobalItem
             player.TryGetModPlayer<AutoMoneyPlayerListener>(out var listener) && !listener.AutoSaveUnlocked)
             listener.AutoSaveUnlocked = true;
 
-        if (PiggyToggle.AutoSaveEnabled is 0 || (PiggyToggle.AutoSaveEnabled is 1 && item.ModItem != null))
+        if (PiggyToggle.AutoSaveEnabled is PiggyToggleState.Off || (PiggyToggle.AutoSaveEnabled is PiggyToggleState.Coin && item.ModItem != null))
             return base.OnPickup(item, player);
 
         // 没存成就执行原来的Pickup
