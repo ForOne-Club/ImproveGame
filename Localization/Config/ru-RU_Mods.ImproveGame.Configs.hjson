@@ -476,7 +476,7 @@ ImproveConfigs: {
 
 	ExtraToolSpeed: {
 		Label: "[centeritem:4056] Множитель скорости инструментов"
-		Tooltip: Выставьте значение на 0, чтобы отключить. Чем выше значение, тем больше скорость.
+		Tooltip: Setting it to 0 disables the config. The higher the value, the faster the speed. This will not affect the attack speed or dps.
 	}
 
 	MostTreeMin: {

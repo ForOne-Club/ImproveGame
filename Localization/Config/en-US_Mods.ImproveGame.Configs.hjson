@@ -475,7 +475,7 @@ ImproveConfigs: {
 
 	ExtraToolSpeed: {
 		Label: "[centeritem:4056] Tool Speed Multiplier"
-		Tooltip: Setting it to 0 disables the config. The higher the value, the faster the speed
+		Tooltip: Setting it to 0 disables the config. The higher the value, the faster the speed. This will not affect the attack speed or dps.
 	}
 
 	MostTreeMin: {

@@ -485,7 +485,7 @@ ImproveConfigs: {
 
 	ExtraToolSpeed: {
 		Label: "[centeritem:4056] 工具使用速度提升倍率"
-		Tooltip: 设置为 0 不会提升速度，值越大速度越快
+		Tooltip: 设置为 0 不会提升速度，值越大速度越快，不会影响攻击速度和DPS
 	}
 
 	MostTreeMin: {
