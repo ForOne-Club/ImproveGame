@@ -13,7 +13,6 @@ public class FloatingIslandGlobe : OnceForAllGlobe
         public override Point16[] PositionsAnother => [.. StructureDatas.SkyLakePositions];
         public override void ExtraCheckWhenNotRecorded()
         {
-            StructureDatas.SkyLakePositions.Clear();
             for (int i = 10; i < Main.maxTilesX - 10; i++)
             {
                 for (int j = 10; j < Main.maxTilesY - 10; j++)
