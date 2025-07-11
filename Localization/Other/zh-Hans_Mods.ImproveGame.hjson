@@ -166,6 +166,7 @@ Tips: {
 			'''
 		AutoCollect:
 			'''
+			你必须先在存钱罐中放入任意钱币才能使用此功能
 			钱币会自动存入存钱罐
 			此功能可在物品栏最左侧工具栏中开关
 			商人的生成条件会同时计算存钱罐内的钱币
@@ -482,9 +483,9 @@ Projectiles: {
 BuilderToggles: {
 	PiggyToggle: {
 		OffText: 自动存钱：关
-		VanillaOnText: 自动存钱：钱币
-		AllOnText: 自动存钱：所有
-		RightFilter: 右键点击以筛选货币
+		VanillaOnText: 自动存钱：仅钱币
+		AllOnText: 自动存钱：指定货币
+		RightFilter: 右键点击以精细筛选货币
 	}
 }
 

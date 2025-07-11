@@ -15,66 +15,35 @@ public class AutoMoneyItemListener : GlobalItem
             return base.OnPickup(item, player);
 
         // 没存成就执行原来的Pickup
-        return !TryDepositACoin(item, player);
+        return !TryDepositCustomCurrency(item, player);
     }
 
     /// <summary>
-    /// 存一个钱币物品
+    /// 存一个自定义货币，注意不能存钱币
     /// </summary>
     /// <param name="item">物品</param>
     /// <param name="player">玩家</param>
     /// <returns>是否成功</returns>
-    public static bool TryDepositACoin(Item item, Player player)
+    public static bool TryDepositCustomCurrency(Item item, Player player)
     {
+        if (!CustomCurrencyManager.IsCustomCurrency(item))
+            return false;
+
         // 无空位
         if (!player.bank.item.Any(i =>
-            {
-                // 铂金币和护卫奖章 - 有对应钱币且不到最大堆叠
-                if (item.type is ItemID.PlatinumCoin || (!item.IsACoin && CustomCurrencyManager.IsCustomCurrency(item)))
-                {
-                    if (item.type == i.type && i.stack < i.maxStack)
-                        return true;
-                }
-                // 非铂金币 - 有对应钱币就行
-                else if (item.IsACoin)
-                {
-                    if (item.type == i.type)
-                        return true;
-                }
+        {
+            if (item.type == i.type && i.stack < i.maxStack)
+                return true;
 
-                return i.IsAir;
-            }))
+            return i.IsAir;
+        }))
             return false;
 
         int type = item.type;
 
-        if (!item.IsACoin && CustomCurrencyManager.IsCustomCurrency(item))
-        {
-            PopupText.NewText(PopupTextContext.RegularItemPickup, item, item.stack);
-            SoundEngine.PlaySound(SoundID.Grab, player.position);
-            item.StackToArray(player.bank.item);
-            return item.IsAir;
-        }
-
-        if (!item.IsACoin)
-            return false;
-
-        ulong totalMoney = CoinUtils.CalculateCoinValue(type, (uint)item.stack);
-        totalMoney = player.bank.item.Aggregate(totalMoney,
-            (current, bItem) => current + CoinUtils.CalculateCoinValue(bItem.type, (uint)bItem.stack));
-
-        List<Item> toPlace = CoinUtils.ConvertCopperValueToCoins(totalMoney);
-        CoinUtils.ReplaceOrPlaceIntoChest(player.bank, toPlace);
-
-        // 看看有没有没放进去的，重新生成
-        toPlace.ForEach(coinLeft =>
-        {
-            if (coinLeft.IsAir) return;
-            player.QuickSpawnItem(player.GetSource_DropAsItem(), coinLeft, coinLeft.stack);
-        });
-
         PopupText.NewText(PopupTextContext.RegularItemPickup, item, item.stack);
-        SoundEngine.PlaySound(SoundID.CoinPickup, player.position);
-        return true;
+        SoundEngine.PlaySound(SoundID.Grab, player.position);
+        item.StackToArray(player.bank.item);
+        return item.IsAir;
     }
 }

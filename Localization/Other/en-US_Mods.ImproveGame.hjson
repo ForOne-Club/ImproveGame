@@ -169,6 +169,8 @@ Tips: {
 			'''
 		AutoCollect:
 			'''
+			You must put any coin in the Piggy Bank to
+			enable the feature.
 			Your coins in coin slots will be automatically
 			saved into the Piggy Bank.
 			This feature can be toggled in the upper-left
@@ -489,8 +491,8 @@ Projectiles: {
 BuilderToggles: {
 	PiggyToggle: {
 		OffText: Auto-deposit: Off
-		VanillaOnText: Auto-deposit: Coin
-		AllOnText: Auto-deposit: All
+		VanillaOnText: Auto-deposit: Coin Only
+		AllOnText: Auto-deposit: Filtered Currencies
 		RightFilter: Right click to open currency filter
 	}
 }

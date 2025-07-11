@@ -65,13 +65,13 @@ public class PiggyToggle : BuilderToggle
 
     public override bool Draw(SpriteBatch spriteBatch, ref BuilderToggleDrawParams drawParams)
     {
-        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState is 0 ? 1 : 0);
+        drawParams.Frame = drawParams.Texture.Frame(3, 2, CurrentState % 3);
         return true;
     }
 
     public override bool DrawHover(SpriteBatch spriteBatch, ref BuilderToggleDrawParams drawParams)
     {
-        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState is 0 ? 1 : 0, 1);
+        drawParams.Frame = drawParams.Texture.Frame(3, 2, CurrentState % 3, 1);
         return true;
     }
 }
