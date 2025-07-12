@@ -55,10 +55,10 @@ public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
         if (PiggyToggle.AutoSaveEnabled is PiggyToggleState.Off) return;
 
         // 10帧检测一次，仅存钱币槽
-        if (PiggyToggle.AutoSaveEnabled > PiggyToggleState.Off && (_detectCd % 10 == 0 && !ExcludedItems.Any(i => i.Item.type is ItemID.GoldCoin)))
+        if (PiggyToggle.AutoSaveEnabled is not PiggyToggleState.Off && (_detectCd % 10 == 0 && !ExcludedItems.Any(i => i.Item.type is ItemID.GoldCoin)))
             DetectCoins();
         // 60帧检测一次，自定义钱币
-        if (PiggyToggle.AutoSaveEnabled > PiggyToggleState.Coin && _detectCd % 60 == 0)
+        if (PiggyToggle.AutoSaveEnabled is PiggyToggleState.All && _detectCd % 60 == 0)
             DetectCustomCurrency();
         // 30帧更新一下铂金最大堆叠
         if (_detectCd % 30 == 0)
