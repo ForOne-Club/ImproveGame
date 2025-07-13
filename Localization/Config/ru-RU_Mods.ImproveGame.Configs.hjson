@@ -476,7 +476,7 @@ ImproveConfigs: {
 
 	ExtraToolSpeed: {
 		Label: "[centeritem:4056] Множитель скорости инструментов"
-		Tooltip: Setting it to 0 disables the config. The higher the value, the faster the speed. This will not affect the attack speed or dps.
+		Tooltip: Выставьте значение на 0, чтобы отключить. Чем выше значение, тем больше скорость. Не влияет на скорость атаки и урон.
 	}
 
 	MostTreeMin: {
@@ -796,10 +796,10 @@ AvailableModItemConfigs: {
 		Please modify the option in Mod Item Config
 		''' */
 	DisplayName: 3. Конфигурация предметов мода
-	// Available: " Usable"
-	// Unavailable: " Unusable"
-	Obtainable: ": доступен(-на)"
-	Unobtainable: ": недоступен(-на)"
+	Available: ": используем(а)"
+	Unavailable: ": неиспользуем(а)"
+	Obtainable: ": получаем(а)"
+	Unobtainable: ": неполучаем(а)"
 	Enable: ": настройка включена"
 
 	AvailableMagickWand: {
@@ -863,7 +863,7 @@ AvailableModItemConfigs: {
 	}
 
 	AvailableCoinOne: {
-		Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Obtainable}"
 		Tooltip: ""
 	}
 
