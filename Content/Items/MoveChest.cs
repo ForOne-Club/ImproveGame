@@ -1,14 +1,11 @@
 ﻿using ImproveGame.Common;
+using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.ModPlayers;
 using ImproveGame.Packets.Items;
 using ImproveGame.Packets.NetChest;
 using System.Collections.ObjectModel;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
-using Terraria.ObjectData;
-using Terraria.ID;
-using ImproveGame.Common.Conditions;
 
 namespace ImproveGame.Content.Items;
 

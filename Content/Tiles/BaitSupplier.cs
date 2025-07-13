@@ -54,7 +54,8 @@ public class BaitSupplier : TETileBase
         player.noThrow = 2;
     }
 
-    public override bool RightClick(int i, int j) {
+    public override bool RightClick(int i, int j)
+    {
         SoundEngine.PlaySound(SoundID.Mech, new Vector2(i * 16, j * 16));
         ToggleTile(i, j);
         return true;

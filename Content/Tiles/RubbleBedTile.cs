@@ -1,6 +1,5 @@
 ﻿using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.GameContent.ObjectInteractions;
 using Terraria.ObjectData;
 
 namespace ImproveGame.Content.Tiles;
@@ -20,7 +19,7 @@ public class RubbleBedTile : ModTile
 
         // Placement
         TileObjectData.newTile.CopyFrom(TileObjectData.Style4x2); // this style already takes care of direction for us
-        TileObjectData.newTile.CoordinateHeights = new[] {16, 18};
+        TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
         TileObjectData.newTile.CoordinatePaddingFix = new Point16(0, -2);
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);

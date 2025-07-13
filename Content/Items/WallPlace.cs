@@ -1,11 +1,14 @@
-﻿using ImproveGame.Content.Projectiles;
-using Terraria;
+﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.GlobalItems;
+using ImproveGame.Content.Projectiles;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items
 {
-    public class WallPlace : ModItem
+    public class WallPlace : ModItem, IConditionItem
     {
+        public Condition UseCondition => ConfigCondition.AvailableWallPlaceC;
+
         private static readonly int RobotType = ModContent.ProjectileType<WallRobot>();
 
         public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;

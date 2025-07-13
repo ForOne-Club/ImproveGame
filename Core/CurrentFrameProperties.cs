@@ -15,21 +15,21 @@ public static class CurrentFrameProperties
         /// 空字典，用于在方法中返回默认值（非null）
         /// </summary>
         private readonly static Dictionary<int, ItemTotalStack> EmptyDict = [];
-        
+
         /// <summary>
         /// 玩家当前帧物品栏中拥有此物品的数量
         /// </summary>
-        public readonly static Dictionary<int, ItemTotalStack> InventoryCount = new (60);
+        public readonly static Dictionary<int, ItemTotalStack> InventoryCount = new(60);
 
         /// <summary>
         /// 玩家当前帧大背包中拥有此物品的数量
         /// </summary>
-        public readonly static Dictionary<int, ItemTotalStack> BigBagCount = new (110);
+        public readonly static Dictionary<int, ItemTotalStack> BigBagCount = new(110);
 
         /// <summary>
         /// 玩家当前帧 Bank 中拥有此物品的数量
         /// </summary>
-        public readonly static Dictionary<int, ItemTotalStack> BanksCount = new (160);
+        public readonly static Dictionary<int, ItemTotalStack> BanksCount = new(160);
 
         public static int GetTotalStack(int type)
         {
@@ -88,7 +88,7 @@ internal class SystemUpdater : ModSystem
 
 internal class PlayerUpdater : ModPlayer
 {
-    internal readonly Dictionary<int, ItemTotalStack> InventoryCount = new (60);
+    internal readonly Dictionary<int, ItemTotalStack> InventoryCount = new(60);
 
     public override void PreUpdate()
     {

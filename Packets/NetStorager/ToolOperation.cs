@@ -175,7 +175,7 @@ public class ToolOperation : NetModule
             if (itemIdToInvSlot.ContainsKey(item.netID))
                 itemIdToInvSlot[item.netID].Add(i);
             else
-                itemIdToInvSlot.Add(item.netID, new List<int> {i});
+                itemIdToInvSlot.Add(item.netID, new List<int> { i });
         }
 
         foreach (var item in items)
@@ -244,7 +244,7 @@ public class ToolOperation : NetModule
             if (itemIdToStorageSlot.ContainsKey(item.netID))
                 itemIdToStorageSlot[item.netID].Add(i);
             else
-                itemIdToStorageSlot.Add(item.netID, new List<int> {i});
+                itemIdToStorageSlot.Add(item.netID, new List<int> { i });
         }
 
         for (int k = 10; k < 50; k++)
@@ -280,7 +280,7 @@ public class ToolOperation : NetModule
         }
 
         // playedSound = shouldPlaySound;
-        
+
         // 现在使用可见物品传输动画
         // if (shouldPlaySound)
         //     PlaySoundPacket.Get(LegacySoundIDs.Grab).Send(toClient: Sender, runLocally: true);
@@ -400,7 +400,7 @@ public class ToolOperation : NetModule
 
             var tilePosition = (worldPosition - new Vector2(16f)).ToTileCoordinates();
             if (!TryGetTileEntityAs<TEExtremeStorage>(tilePosition, out _)) return;
-            
+
             CoroutineSystem.MiscRunner.Run(duration - 10, DoRandomGrabSoundInner());
             return;
 
@@ -410,7 +410,7 @@ public class ToolOperation : NetModule
                 yield break;
             }
         };
-        
+
         // 排序设置物品栏颜色
         On_ItemSlot.SetGlow += (orig, index, hue, isChest) =>
         {

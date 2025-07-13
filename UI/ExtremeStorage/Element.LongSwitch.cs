@@ -3,7 +3,6 @@ using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using System.Threading;
 using Terraria.DataStructures;
 using Terraria.ModLoader.UI;
 
@@ -25,7 +24,7 @@ namespace ImproveGame.UI.ExtremeStorage
         private readonly Vector2 _textSize;
         private readonly Color _textColor = Color.White;
         private readonly Color _textBorderColor = Color.Black;
-        private readonly AnimationTimer _timer = new (4);
+        private readonly AnimationTimer _timer = new(4);
         private readonly bool _hasTooltip;
         private Asset<Texture2D> _icon;
         private SpriteFrame _iconFrame;
@@ -37,13 +36,13 @@ namespace ImproveGame.UI.ExtremeStorage
             this._getState = getState;
             this._setState = setState;
             _hasTooltip = hasTooltip;
-            
+
             Spacing = new Vector2(0f, 4f);
 
             Width.Set(0f, 1f);
             Height.Set(40f, 0f);
         }
-        
+
         public void SetIcon(Asset<Texture2D> icon, SpriteFrame frame)
         {
             _icon = icon;
@@ -89,14 +88,14 @@ namespace ImproveGame.UI.ExtremeStorage
             // 开关
             var boxSize = new Vector2(48, 26);
             var boxPosition = new Vector2(position.X + size.X - boxSize.X - 6f, position.Y);
-            
+
             Vector2 position1 = boxPosition + new Vector2(0, size.Y / 2 - boxSize.Y / 2);
             SDFRectangle.HasBorder(position1, boxSize, new Vector4(MathF.Min(boxSize.X, boxSize.Y) / 2), color, 2, color2, Main.UIScaleMatrix);
 
             Vector2 boxSize2 = new(boxSize.Y - 10);
             Vector2 position2 = boxPosition + Vector2.Lerp(new Vector2(3 + 2, size.Y / 2 - boxSize2.Y / 2),
                 new Vector2(boxSize.X - 3 - 2 - boxSize2.X, size.Y / 2 - boxSize2.Y / 2), _timer.Schedule);
-            SDFGraphics.NoBorderRound(position2,default, boxSize2.X, color3, GetMatrix(true));
+            SDFGraphics.NoBorderRound(position2, default, boxSize2.X, color3, GetMatrix(true));
 
             var textOffsetX = 0;
             if (_icon is not null)

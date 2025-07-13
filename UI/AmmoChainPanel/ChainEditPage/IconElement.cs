@@ -1,8 +1,6 @@
 ﻿using ImproveGame.Content.Functions.ChainedAmmo;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.SUIElements;
-using Terraria.Utilities;
 
 namespace ImproveGame.UI.AmmoChainPanel.ChainEditPage;
 
@@ -57,7 +55,7 @@ public class IconElement : TimerView
 
         var innerDimensions = GetInnerDimensions();
         var center = innerDimensions.Center();
-        
+
         if (Chain is null)
             return;
 

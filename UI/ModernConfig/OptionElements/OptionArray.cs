@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using ImproveGame.Packets;
-using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.Graphics2D;
+﻿using ImproveGame.UIFramework.BaseViews;
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class OptionArray : OptionCollections

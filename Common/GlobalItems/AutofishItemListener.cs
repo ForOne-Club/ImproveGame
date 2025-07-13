@@ -40,6 +40,6 @@ public class AutofishItemListener : GlobalItem
             text += $"\n{GetText("UI.Autofisher.AccBoostTackle")}";
         if (stat.LavaFishing)
             text += $"\n{GetText("UI.Autofisher.AccBoostLava")}";
-        tooltips.Add(new TooltipLine(Mod, "AutofisherAccBoost", text) {OverrideColor = Color.Pink});
+        tooltips.Add(new TooltipLine(Mod, "AutofisherAccBoost", text) { OverrideColor = Color.Pink });
     }
 }

@@ -56,7 +56,7 @@ public class InvToChestPacket : NetModule
     private void Operate(Dictionary<int, Item[]> itemsMap)
     {
         ref var invItem = ref Main.player[Sender].inventory[_inventoryIndex];
-        
+
         // 先填充和物品相同的
         foreach ((int chestIndex, Item[] chestItems) in itemsMap)
         {
@@ -64,7 +64,7 @@ public class InvToChestPacket : NetModule
             {
                 int oldStack = invItem.stack;
                 invItem = ItemStackToInventoryItem(chestItems, i, invItem, false);
-                
+
                 // 堆叠发生了改变，发送箱子更新包
                 if (oldStack != invItem.stack)
                 {
@@ -72,7 +72,7 @@ public class InvToChestPacket : NetModule
                 }
             }
         }
-        
+
         // 后填充空位
         foreach ((int chestIndex, Item[] chestItems) in itemsMap)
         {

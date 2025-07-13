@@ -1,16 +1,6 @@
-﻿using ImproveGame.UI.ModernConfig.OptionElements;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ID;
-using Terraria.ModLoader.Config;
-using Terraria.UI;
 
 namespace ImproveGame.UIFramework.SUIElements
 {
@@ -111,7 +101,7 @@ namespace ImproveGame.UIFramework.SUIElements
                 }
 
                 // 绘制
-                SDFGraphics.HasBorderRound(roundLeftTop,default, roundDiameter, innerColor, 2f, borderColor,GetMatrix(true));
+                SDFGraphics.HasBorderRound(roundLeftTop, default, roundDiameter, innerColor, 2f, borderColor, GetMatrix(true));
             }
         }
 

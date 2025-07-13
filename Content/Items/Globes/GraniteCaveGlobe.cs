@@ -1,10 +1,9 @@
-﻿using ImproveGame.Common.Conditions;
-using ImproveGame.Content.Items.Globes.Core;
+﻿using ImproveGame.Content.Items.Globes.Core;
 using ImproveGame.Content.Projectiles;
 
 namespace ImproveGame.Content.Items.Globes;
 
-public class GraniteCaveGlobe () : GlobePlentyTooltip(ItemRarityID.Quest, Item.sellPrice(silver: 30))
+public class GraniteCaveGlobe() : GlobePlentyTooltip(ItemRarityID.Quest, Item.sellPrice(silver: 30))
 {
     public class GraniteCaveGlobeProj() : GlobeProjBase<GraniteCaveGlobe>(new(77, 80, 136))
     {

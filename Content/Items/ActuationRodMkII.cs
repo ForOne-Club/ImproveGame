@@ -1,10 +1,9 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.UIFramework.Graphics2D;
 
 namespace ImproveGame.Content.Items;
 
-public class ActuationRodMkII : SelectorItem,IConditionItem
+public class ActuationRodMkII : SelectorItem, IConditionItem
 {
     public Condition UseCondition => ConfigCondition.AvailableActuationRodMkIIC;
     public override bool IsNeedKill() => !Main.mouseLeft;

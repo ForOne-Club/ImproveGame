@@ -4,7 +4,8 @@ namespace ImproveGame.UI.AmmoChainPanel.ChainEditPage;
 
 public class EditChainScrollView : SUIScrollView2
 {
-    public EditChainScrollView(Orientation scrollOrientation, bool fixedSize = true) : base(scrollOrientation, fixedSize) {
+    public EditChainScrollView(Orientation scrollOrientation, bool fixedSize = true) : base(scrollOrientation, fixedSize)
+    {
     }
 
     public override void ScrollWheel(UIScrollWheelEvent evt)

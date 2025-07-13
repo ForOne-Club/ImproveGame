@@ -114,8 +114,8 @@ public class PlayerStatsSystem : ModSystem
 
         #region 投掷属性 (出于跨模组考虑)
 
-        var throwingIcon = ModLoader.IsEnabled("ThoriumMod") 
-            ? ModAsset.ThrowingThorium.Value 
+        var throwingIcon = ModLoader.IsEnabled("ThoriumMod")
+            ? ModAsset.ThrowingThorium.Value
             : ModAsset.Throwing.Value;
         BaseStatsCategory throwing =
             new BaseStatsCategory(throwingIcon, "UI.PlayerStats.Throwing");

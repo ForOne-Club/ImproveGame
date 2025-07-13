@@ -8,13 +8,16 @@
 
 # v1.8.1
 
-- [v1.8.1.6](Changelog/zh/v1.8.1.6.md)
-- [v1.8.1.5](Changelog/zh/v1.8.1.5.md)
-- [v1.8.1.4](Changelog/zh/v1.8.1.4.md)
-- [v1.8.1.3](Changelog/zh/v1.8.1.3.md)
-- [v1.8.1.2](Changelog/zh/v1.8.1.2.md)
-- [v1.8.1.1](Changelog/zh/v1.8.1.1.md)
-- [v1.8.1.0](Changelog/zh/v1.8.1.0.md)
+- [v1.8.1.6](Changelog/zh/v1.8.1.x.md#v1819)
+- [v1.8.1.6](Changelog/zh/v1.8.1.x.md#v1818)
+- [v1.8.1.6](Changelog/zh/v1.8.1.x.md#v1817)
+- [v1.8.1.6](Changelog/zh/v1.8.1.x.md#v1816)
+- [v1.8.1.5](Changelog/zh/v1.8.1.x.md#v1815)
+- [v1.8.1.4](Changelog/zh/v1.8.1.x.md#v1814)
+- [v1.8.1.3](Changelog/zh/v1.8.1.x.md#v1813)
+- [v1.8.1.2](Changelog/zh/v1.8.1.x.md#v1812)
+- [v1.8.1.1](Changelog/zh/v1.8.1.x.md#v1811)
+- [v1.8.1.0](Changelog/zh/v1.8.1.x.md#v1810)
 
 # v1.8.0
 

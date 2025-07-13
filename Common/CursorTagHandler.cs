@@ -1,8 +1,5 @@
-﻿using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.Graphics2D;
-using ReLogic.Graphics;
+﻿using ReLogic.Graphics;
 using System.Globalization;
-using Terraria.GameContent.UI;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Common;
@@ -13,7 +10,7 @@ namespace ImproveGame.Common;
 public class CursorSnippet : TextSnippet
 {
     private int _kerningOffset; // 补偿指针前字符的kerning
-    
+
     public static TextSnippet Parse(string text, int kerning)
     {
         CursorSnippet textSnippet = new()

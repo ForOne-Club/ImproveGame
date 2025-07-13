@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.UI.ModernConfig.OptionElements;
 
 namespace ImproveGame.UI.ModernConfig.Categories;
 

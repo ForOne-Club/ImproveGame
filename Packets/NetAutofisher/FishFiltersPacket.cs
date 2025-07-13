@@ -65,7 +65,7 @@ namespace ImproveGame.Packets.NetAutofisher
                 return;
             }
 
-            var bitsByte = (BitsByte) _filterTypes;
+            var bitsByte = (BitsByte)_filterTypes;
             bool catchCrates = bitsByte[0];
             bool catchAccessories = bitsByte[1];
             bool catchTools = bitsByte[2];

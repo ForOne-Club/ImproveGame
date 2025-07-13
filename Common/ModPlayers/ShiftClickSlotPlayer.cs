@@ -159,8 +159,8 @@ public class ShiftClickSlotPlayer : ModPlayer
             if (!inventory[slot].IsAir && ArchitectureGUI.Visible)
             {
                 foreach (var itemSlot in from s in UISystem.Instance.ArchitectureGUI.ItemSlot
-                         where s.Value.CanPlaceItem(inventory[slot])
-                         select s)
+                                         where s.Value.CanPlaceItem(inventory[slot])
+                                         select s)
                 {
                     // 放到建筑GUI里面
                     ref Item slotItem = ref itemSlot.Value.Item;

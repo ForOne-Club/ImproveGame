@@ -1,7 +1,6 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using System.Threading;
 
 namespace ImproveGame.UIFramework.SUIElements
 {

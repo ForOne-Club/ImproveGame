@@ -14,7 +14,7 @@ namespace ImproveGame.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer) && modPlayer.HasRequiredBuffs()) 
+            if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer) && modPlayer.HasRequiredBuffs())
             {
                 base.Draw(spriteBatch);
 

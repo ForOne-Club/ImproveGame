@@ -17,12 +17,12 @@ namespace ImproveGame.Packets.Items
 
         public override void Send(ModPacket p)
         {
-            p.Write((ushort) items.Count);
+            p.Write((ushort)items.Count);
             for (var i = 0; i < items.Count; i++)
             {
                 // 为了减少传输包大小，只传输这俩
-                p.Write((ushort) items[i].stack);
-                p.Write((ushort) items[i].type);
+                p.Write((ushort)items[i].stack);
+                p.Write((ushort)items[i].type);
             }
         }
 

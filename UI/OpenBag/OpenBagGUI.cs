@@ -135,8 +135,8 @@ public class OpenBagGUI : BaseBody
         // 没有物品时显示的提示，这里先Append，要用到的时候调一下Left就行
         TipText = new UIText(GetText("UI.OpenBag.TipText"))
         {
-            Width = {Percent = 1f},
-            Height = {Percent = 1f},
+            Width = { Percent = 1f },
+            Height = { Percent = 1f },
             TextOriginX = 0.5f,
             TextOriginY = 0.5f
         };
@@ -146,7 +146,7 @@ public class OpenBagGUI : BaseBody
         LootsGrid.SetBaseValues(-1, 8, new Vector2(4f), new Vector2(43));
         LootsGrid.JoinParent(itemsPanel);
 
-        Scrollbar = new SUIScrollBar {HAlign = 1f};
+        Scrollbar = new SUIScrollBar { HAlign = 1f };
         Scrollbar.Left.Pixels = -1;
         Scrollbar.Height.Pixels = LootsGrid.Height();
         Scrollbar.SetView(itemsPanel.GetInnerSizePixels().Y, LootsGrid.Height.Pixels);
@@ -163,7 +163,7 @@ public class OpenBagGUI : BaseBody
         sellAllArea.SetPadding(0, 0, 0, 14);
         sellAllArea.SetSize(-30f, 52f, 1f, 0f);
         sellAllArea.JoinParent(MainPanel);
-        
+
         var sellAll = new SellAllButton(GetText("UI.OpenBag.SellAll.Name"), SellAll)
         {
             DragIgnore = true,
@@ -205,8 +205,8 @@ public class OpenBagGUI : BaseBody
 
         var openButton = new SUIButton(ModAsset.Open.Value, GetText("UI.OpenBag.Open"))
         {
-            Left = {Pixels = 80f},
-            Top = {Pixels = 8f}
+            Left = { Pixels = 80f },
+            Top = { Pixels = 8f }
         };
         openButton.OnLeftMouseDown += (_, _) =>
         {
@@ -229,9 +229,9 @@ public class OpenBagGUI : BaseBody
 
         var depositButton = new SUIButton(ModAsset.Quick.Value, Lang.inter[29].Value) // 强夺全部
         {
-            Left = {Pixels = openButton.Left.Pixels + openButton.Width.Pixels + 10f},
-            Top = {Pixels = 8f},
-            Width = {Pixels = 136f}
+            Left = { Pixels = openButton.Left.Pixels + openButton.Width.Pixels + 10f },
+            Top = { Pixels = 8f },
+            Width = { Pixels = 136f }
         };
         depositButton.OnLeftMouseDown += (_, _) =>
         {
@@ -276,7 +276,7 @@ public class OpenBagGUI : BaseBody
         {
             ulong coin = CoinUtils.CalculateCoinValue(item.type, (uint)item.stack);
             totalValue += coin;
-            
+
             if (coin > 0) return; // 只有是钱币，这个值才会大于0
 
             Main.LocalPlayer.GetItemExpectedPrice(item, out var calcForSelling, out _);
@@ -313,8 +313,8 @@ public class OpenBagGUI : BaseBody
                 {
                     var tip = new UIText(GetText("UI.OpenBag.NotFullyDisplayed", keeper.Loots.Count - 800))
                     {
-                        Width = {Percent = 1f},
-                        Height = {Pixels = 46f},
+                        Width = { Percent = 1f },
+                        Height = { Pixels = 46f },
                         TextOriginX = 0.5f,
                         TextOriginY = 0.5f
                     };
@@ -386,6 +386,9 @@ public class OpenBagGUI : BaseBody
 
     public void Open()
     {
+        UIPlayer.CheckPositionValid(ref UIPlayer.OpenBagPosition, UIPlayer.OpenBagDefPosition);
+        MainPanel.SetPos(UIPlayer.OpenBagPosition).Recalculate();
+
         SoundEngine.PlaySound(SoundID.MenuOpen);
         Enabled = true;
         StartTimer.Open();

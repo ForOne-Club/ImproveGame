@@ -18,7 +18,7 @@ internal class PortableStationSystem : ModSystem
 
     private void AddZoneStation(On_Recipe.orig_FindRecipes orig, bool canDelayCheck)
     {
-        if (!Config.PortableCraftingStation) 
+        if (!Config.PortableCraftingStation)
         {
             orig.Invoke(canDelayCheck);
             return;
@@ -31,29 +31,29 @@ internal class PortableStationSystem : ModSystem
             CheckTeamPlayers(Main.myPlayer, CheckZoneItemFromPlayer);
 
         orig.Invoke(canDelayCheck);
-        
+
         Main.LocalPlayer.ZoneGraveyard = flag;
         Main.LocalPlayer.ZoneSnow = flag2;
     }
-    static void CheckZoneItemFromPlayer(Player player) 
+    static void CheckZoneItemFromPlayer(Player player)
     {
         int counter = 0;
         int counter2 = 0;
-        HashSet<int> GraveStones = [ItemID.Tombstone,ItemID.GraveMarker,ItemID.CrossGraveMarker,ItemID.Headstone,ItemID.Gravestone,ItemID.Obelisk,ItemID.RichGravestone1, ItemID.RichGravestone2, ItemID.RichGravestone3, ItemID.RichGravestone4, ItemID.RichGravestone5];
+        HashSet<int> GraveStones = [ItemID.Tombstone, ItemID.GraveMarker, ItemID.CrossGraveMarker, ItemID.Headstone, ItemID.Gravestone, ItemID.Obelisk, ItemID.RichGravestone1, ItemID.RichGravestone2, ItemID.RichGravestone3, ItemID.RichGravestone4, ItemID.RichGravestone5];
         HashSet<int> snowAndIces = [ItemID.SnowBlock, ItemID.SnowBrick, ItemID.IceBlock, ItemID.PinkIceBlock, ItemID.PurpleIceBlock, ItemID.RedIceBlock];
-        foreach (var item in GetAllInventoryItemsList(player)) 
+        foreach (var item in GetAllInventoryItemsList(player))
         {
             if (GraveStones.Contains(item.type))
             {
                 counter += item.stack;
-                if (counter >= 5) 
+                if (counter >= 5)
                 {
                     Main.LocalPlayer.ZoneGraveyard = true;
                     goto Label;
                 }
 
             }
-            else if (snowAndIces.Contains(item.type)) 
+            else if (snowAndIces.Contains(item.type))
             {
                 counter2 += item.stack;
                 if (counter2 >= 1500)
@@ -67,7 +67,7 @@ internal class PortableStationSystem : ModSystem
             if (counter >= 5 && counter2 >= 1500)
                 break;
         }
-        
+
     }
     private void AddPortableStations(ILContext il)
     {
@@ -79,16 +79,16 @@ internal class PortableStationSystem : ModSystem
         {
             if (!Config.PortableCraftingStation)
                 return;
-            
+
             // 从玩家身上获取所有的无尽Buff物品
             CheckStationsFromPlayer(player);
             if (Config.ShareCraftingStation)
                 CheckTeamPlayers(player.whoAmI, CheckStationsFromPlayer);
-            
+
             // 从TE中获取所有的无尽Buff物品
             foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
             {
-                if (tileEntity is not TEExtremeStorage {UsePortableStations: true} storage)
+                if (tileEntity is not TEExtremeStorage { UsePortableStations: true } storage)
                 {
                     continue;
                 }

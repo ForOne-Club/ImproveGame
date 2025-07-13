@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Content.Tiles;
-using ImproveGame.UI;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UIFramework;
 using Terraria.ModLoader.IO;

@@ -1,9 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Content.Items.Globes;
 using ImproveGame.Content.Items.Globes.Core;
 using ImproveGame.Core;
-using Terraria;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Projectiles;
 
@@ -61,6 +58,7 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
         // ai进入二阶段
         if (Projectile.ai[2] < -180 && Projectile.ai[1] >= 0)
         {
+
             Player player = Main.player[Projectile.owner];
 
             // 穿墙，启动
@@ -69,8 +67,16 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
             // 目标速度
             var targetVel = Vector2.Normalize(player.Center - Projectile.Center) * (7f - Projectile.ai[2] / 60f);
             // 加权平均
-            Projectile.velocity = (targetVel + Projectile.velocity * (60 + Projectile.ai[2] / 10f)) /
-                                  (61f + Projectile.ai[2] / 10f);
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, targetVel, 0.03f);
+
+            #region 保证一定会追上的迫真插值
+            float fac = Utils.GetLerpValue(-180, -610, Projectile.ai[2], true);
+            float distance = Vector2.Distance(Projectile.Center, player.Center);
+            fac = MathF.Pow(fac, 5);
+            fac = MathHelper.Lerp(fac, 1, MathF.Exp(-distance / 64));
+            Projectile.Center = Vector2.Lerp(Projectile.Center, player.Center, fac);
+            #endregion
+
 
             Projectile.rotation = Projectile.velocity.ToRotation();
 
@@ -87,8 +93,8 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
                 SoundEngine.PlaySound(SoundID.Item13 with { MaxInstances = 114514 }, Projectile.Center);
 
             if (Main.rand.NextBool(2))
-                Dust.NewDustPerfect(Projectile.Center + (Vector2.Normalize(Projectile.velocity) * -16), DustID.Smoke,
-                    -Projectile.velocity.RotatedByRandom(0.3f) * 0.5f, 0, default, 2f);
+                Dust.NewDustPerfect(Projectile.Center + (Vector2.Normalize(Projectile.velocity) * -16), DustID.FireworksRGB,
+                    -Projectile.velocity.RotatedByRandom(0.3f) * 0.5f, 0, RealColor, 2f * Main.rand.NextFloat()).noGravity = true;
         }
 
         // 死亡缓至——无法预料，无法逃避
@@ -281,7 +287,7 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
         ModAsset.GlobeTrail.Value.Parameters["uTime"].SetValue(uTime);
 
         Main.graphics.GraphicsDevice.Textures[0] = projTex;
-        Main.graphics.GraphicsDevice.Textures[1] = ModAsset.TrailStyle2.Value;
+        Main.graphics.GraphicsDevice.Textures[1] = ModAsset.TrailStyle3.Value;
 
         ModAsset.GlobeTrail.Value.CurrentTechnique.Passes[0].Apply();
 
@@ -295,23 +301,26 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
     {
         List<VertexInfo2> vertices = [];
         List<VertexInfo2> triangleList = [];
-        for (var i = 1; i < Projectile.oldPos.Length; i++)
+        int actualLength = 0;
+        foreach (var vec in Projectile.oldPos)
         {
-            float actualLength = Projectile.oldPos.Count(vec => vec != Vector2.Zero);
-            if (Projectile.oldPos[i] == Vector2.Zero)
-                continue;
-
-            Vector2 oldVel = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-            var factor = i / actualLength; // 遍历时以0-1递增
-            var factorSquare = (float)Math.Pow(factor, 2);
-            var color = RealColor;
-            color.A = (byte)MathHelper.Lerp(150, 0, factorSquare);
-
-            Vector2 correct = Vector2.Normalize(oldVel).RotatedBy(1.57f) * MathHelper.SmoothStep(20, 0, factorSquare);
+            if (vec == Vector2.Zero)
+                break;
+            actualLength++;
+        }
+        int maxIndex = actualLength - 1;
+        Color color = RealColor;
+        for (var i = 0; i < maxIndex; i++)
+        {
+            Vector2 oldVel = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
+            var factor = Utils.GetLerpValue(0, maxIndex - 1, i);
+            Vector2 correct = Vector2.Normalize(oldVel).RotatedBy(1.57f) * MathHelper.SmoothStep(30, 24, factor);
+            //var fac2 = (1 - MathF.Cos(MathHelper.TwoPi * MathF.Pow(factor, .25f))) * .5f;
+            var fac2 = i == 0 ? 0 :1 - factor;
             vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f + correct,
-                new Vector3(factor, 0f, 0f), color));
+                new Vector3(factor, 0f, fac2), color));
             vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f - correct,
-                new Vector3(factor, 1f, 0f), color));
+                new Vector3(factor, 1f, fac2), color));
         }
 
         if (vertices.Count > 2)
@@ -331,6 +340,11 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
         }
 
         return triangleList;
+    }
+
+    public override bool? CanCutTiles()
+    {
+        return false;
     }
 
     public abstract Globe GetModItemDummy();

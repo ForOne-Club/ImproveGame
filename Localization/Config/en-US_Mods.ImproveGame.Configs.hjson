@@ -475,7 +475,7 @@ ImproveConfigs: {
 
 	ExtraToolSpeed: {
 		Label: "[centeritem:4056] Tool Speed Multiplier"
-		Tooltip: Setting it to 0 disables the config. The higher the value, the faster the speed
+		Tooltip: Setting it to 0 disables the config. The higher the value, the faster the speed. This will not affect the attack speed or dps.
 	}
 
 	MostTreeMin: {
@@ -785,9 +785,16 @@ ImproveConfigs: {
 }
 
 AvailableModItemConfigs: {
+	AvailablityHint:
+		'''
+		It is unsable currently. 
+		Please modify the option in Mod Item Config
+		'''
 	DisplayName: Mod Item Config
-	Available: " Obtainable"
-	Unavailable: " Unobtainable"
+	Available: " Usable"
+	Unavailable: " Unusable"
+	Obtainable: " Obtainable"
+	Unobtainable: " Unobtainable"
 	Enable: Enable
 
 	AvailableMagickWand: {
@@ -851,7 +858,7 @@ AvailableModItemConfigs: {
 	}
 
 	AvailableCoinOne: {
-		Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Obtainable}"
 		Tooltip: ""
 	}
 
@@ -877,6 +884,11 @@ AvailableModItemConfigs: {
 
 	AvailableActuationRodMkII: {
 		Label: "[centeritem:ImproveGame/ActuationRodMkII] {$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		Tooltip: ""
+	}
+
+	AvailableShimmerBucket: {
+		Label: "[centeritem:ImproveGame/ShimmerBucket] {$Mods.ImproveGame.Items.ShimmerBucket.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		Tooltip: ""
 	}
 }

@@ -476,7 +476,7 @@ ImproveConfigs: {
 
 	ExtraToolSpeed: {
 		Label: "[centeritem:4056] Множитель скорости инструментов"
-		Tooltip: Выставьте значение на 0, чтобы отключить. Чем выше значение, тем больше скорость.
+		Tooltip: Setting it to 0 disables the config. The higher the value, the faster the speed. This will not affect the attack speed or dps.
 	}
 
 	MostTreeMin: {
@@ -790,9 +790,16 @@ ImproveConfigs: {
 }
 
 AvailableModItemConfigs: {
+	/* AvailablityHint:
+		'''
+		It is unsable currently. 
+		Please modify the option in Mod Item Config
+		''' */
 	DisplayName: 3. Конфигурация предметов мода
-	Available: ": доступен(-на)"
-	Unavailable: ": недоступен(-на)"
+	// Available: " Usable"
+	// Unavailable: " Unusable"
+	Obtainable: ": доступен(-на)"
+	Unobtainable: ": недоступен(-на)"
 	Enable: ": настройка включена"
 
 	AvailableMagickWand: {
@@ -883,6 +890,11 @@ AvailableModItemConfigs: {
 	AvailableActuationRodMkII: {
 		Label: "[centeritem:ImproveGame/ActuationRodMkII] {$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		Tooltip: ""
+	}
+
+	AvailableShimmerBucket: {
+		// Label: "[centeritem:ImproveGame/ShimmerBucket] {$Mods.ImproveGame.Items.ShimmerBucket.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		// Tooltip: ""
 	}
 }
 

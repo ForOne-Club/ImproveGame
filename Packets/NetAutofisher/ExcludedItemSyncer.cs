@@ -24,7 +24,7 @@ public class MachineExcludedItemSyncer : NetModule
     {
         if (TryGetTileEntityAs<TEAutofisher>(_tileEntityID, out var autofisher))
             autofisher.ExcludedItems = _excludedItemData;
-        
+
         if (Main.netMode is NetmodeID.Server)
             Send(-1, Sender);
     }

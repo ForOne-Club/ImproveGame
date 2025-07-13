@@ -1,6 +1,4 @@
-﻿using ImproveGame.UIFramework.Graphics2D;
-
-namespace ImproveGame.Assets;
+﻿namespace ImproveGame.Assets;
 
 //internal class ShaderAssets : ModSystem
 //{

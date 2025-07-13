@@ -1,11 +1,8 @@
 ﻿using ImproveGame.Content.Functions.ChainedAmmo;
-using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UI.AmmoChainPanel.WeaponPage;
 
-public class AddChainComponent (WeaponPage parent) : ToolComponent(parent)
+public class AddChainComponent(WeaponPage parent) : ToolComponent(parent)
 {
     protected override string Key => "Mods.ImproveGame.UI.AmmoChain.AddChain";
 

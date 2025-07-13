@@ -1,5 +1,5 @@
-﻿using Terraria.ModLoader.Config.UI;
-using ReLogic.Graphics;
+﻿using ReLogic.Graphics;
+using Terraria.ModLoader.Config.UI;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.Common.Configs;
@@ -10,7 +10,7 @@ public class FontOffsetPreview : FloatElement
     protected Asset<DynamicSpriteFont> Font;
     protected float BaseOffset; // 基准偏移，用来让默认字体在默认值下贴合边缘
     protected string TextKey;
-    
+
     public override void OnBind()
     {
         base.OnBind();

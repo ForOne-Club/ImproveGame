@@ -21,6 +21,7 @@
         public static Condition AvailableCreateWandC = new Condition("Mods.ImproveGame.Conditions.AvailableCreateWand", () => AvailableConfig.AvailableCreateWand);
         public static Condition AvailableDetectorDroneC = new Condition("Mods.ImproveGame.Conditions.AvailableDetectorDrone", () => AvailableConfig.AvailableDetectorDrone);
         public static Condition AvailableMoveChestC = new Condition("Mods.ImproveGame.Conditions.AvailableMoveChest", () => AvailableConfig.AvailableMoveChest);
+        public static Condition AvailableShimmerBucketC = new Condition("Mods.ImproveGame.Conditions.AvailableShimmerBucket", () => AvailableConfig.AvailableShimmerBucket);
         public static Condition EnableQuickShimmerC = new Condition("Mods.ImproveGame.Conditions.EnableQuickShimmer", () => Config.QuickShimmer);
         public static Condition EnableMinimapMarkC = new Condition("Mods.ImproveGame.Conditions.EnableMinimapMark", () => Config.MinimapMark);
         public static Condition EnableWeatherControlC = new Condition("Mods.ImproveGame.Conditions.EnableWeatherControl", () => Config.WeatherControl);

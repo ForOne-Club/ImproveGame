@@ -1,13 +1,8 @@
 ﻿using ImproveGame.UIFramework.SUIElements;
 using System.Collections;
-using System.Linq;
 using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
-using Terraria.ModLoader.UI;
-using ImproveGame.UIFramework.BaseViews;
-using System.Collections.Generic;
-using ImproveGame.Packets;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 

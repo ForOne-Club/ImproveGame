@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace ImproveGame.UIFramework.SUIElements;
+﻿namespace ImproveGame.UIFramework.SUIElements;
 
 // 只能输入数字的文本框
 public class SUINumericText : SUIEditableText

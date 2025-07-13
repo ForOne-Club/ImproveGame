@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets.NetAutofisher;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Items.Coin;
 

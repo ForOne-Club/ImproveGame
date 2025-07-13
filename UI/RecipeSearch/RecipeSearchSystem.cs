@@ -9,7 +9,7 @@ namespace ImproveGame.UI.RecipeSearch;
 public class RecipeSearchSystem : ModSystem
 {
     private static bool _oldRecBigList;
-    
+
     public static bool UsingGuide => !Main.guideItem.IsAir && Main.guideItem.Name != "";
 
     public static bool SearchUnavailable(out RecipeSearchUI searchUI) =>

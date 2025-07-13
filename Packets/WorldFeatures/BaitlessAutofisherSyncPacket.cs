@@ -6,7 +6,7 @@ namespace ImproveGame.Packets.WorldFeatures;
 public class BaitlessAutofisherSyncPacket : NetModule
 {
     private List<Point16> _positions;
-    
+
     public static void Sync(List<Point16> positions)
     {
         if (Main.netMode is NetmodeID.MultiplayerClient)

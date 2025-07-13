@@ -52,7 +52,7 @@ public class ChestPreviewUISystem : ModSystem
             // Main.cursorOverride = CursorOverrideID.Magnifiers;
         }
     }
-    
+
     private static Item[] _previewItems;
     private static bool _hasChest;
     private static int _syncCooldown;

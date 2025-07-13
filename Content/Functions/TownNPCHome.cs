@@ -10,7 +10,7 @@ public class TownNPCHome : ModSystem
     private class TownNPCHomePacket : NetModule
     {
         public static void TeleportToHome() => NetModuleLoader.Get<TownNPCHomePacket>().Send(runLocally: true);
-    
+
         public override void Receive()
         {
             foreach (var npc in from n in Main.npc where n is not null && n.active && n.townNPC && !n.homeless select n)
@@ -23,7 +23,7 @@ public class TownNPCHome : ModSystem
     private static bool TownNPCHomeLoaded => ModLoader.HasMod("TownNPCHome");
     private static bool _callTeleportAll;
     private static int _indexReadyToTeleport = -1;
-    
+
     public override void Load()
     {
         On_WorldGen.moveRoom += WorldGen_moveRoom;
@@ -57,8 +57,8 @@ public class TownNPCHome : ModSystem
     {
         npc?.GetType().GetMethod("AI_007_TownEntities_TeleportToHome",
                 BindingFlags.Instance | BindingFlags.NonPublic,
-                new[] {typeof(int), typeof(int)})?
-            .Invoke(npc, new object[] {homeFloorX, homeFloorY});
+                new[] { typeof(int), typeof(int) })?
+            .Invoke(npc, new object[] { homeFloorX, homeFloorY });
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

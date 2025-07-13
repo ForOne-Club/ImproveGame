@@ -4,7 +4,6 @@ using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using Microsoft.Xna.Framework.Input;
 using Terraria.GameInput;
 
 namespace ImproveGame.UI.MasterControl;

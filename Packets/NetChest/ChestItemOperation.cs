@@ -13,7 +13,7 @@ public static class ChestItemOperation
         if (Main.netMode is NetmodeID.Server) throw new UsageException("This method can only be called on the client.");
         RequestForChestItem.Get(chestIndex, slot).Send();
     }
-    
+
     /// <inheritdoc cref="SendItemWithSync"/>
     public static void SendAllItemsWithSync(int chestIndex)
     {
@@ -23,7 +23,7 @@ public static class ChestItemOperation
             SendItemWithSync(chestIndex, k);
         }
     }
-    
+
     /// <summary>
     /// 发送带转发到全客户端的包，只应在客户端使用
     /// </summary>
@@ -34,7 +34,7 @@ public static class ChestItemOperation
         SendItem(chestIndex, slot);
         ChestOperationWithResend.Get(chestIndex, slot).Send();
     }
-    
+
     public static void SendItem(int chestIndex, int slot, int toClient = -1, int ignoreClient = -1)
     {
         NetMessage.TrySendData(MessageID.SyncChestItem, toClient, ignoreClient, null, chestIndex, slot);
@@ -48,7 +48,7 @@ public static class ChestItemOperation
             SendItem(chestIndex, k, toClient, ignoreClient);
         }
     }
-    
+
     /// <inheritdoc cref="TellServerToForwardItem"/>
     public static void TellServerToForwardAllItems(int chestIndex)
     {
@@ -58,7 +58,7 @@ public static class ChestItemOperation
             TellServerToForwardItem(chestIndex, k);
         }
     }
-    
+
     /// <summary>
     /// 发包告诉服务器某个箱子的物品要同步，只应在客户端使用
     /// </summary>
@@ -68,13 +68,13 @@ public static class ChestItemOperation
         if (Main.netMode is NetmodeID.Server) throw new UsageException("This method can only be called on the client.");
         ChestOperationWithResend.Get(chestIndex, slot).Send();
     }
-    
+
     [AutoSync]
     private class ChestOperationWithResend : NetModule
     {
         private short _chestIndex;
         private byte _slotIndex;
-        
+
         public static ChestOperationWithResend Get(int chestIndex, int slotIndex)
         {
             var packet = ModContent.GetInstance<ChestOperationWithResend>();
@@ -88,13 +88,13 @@ public static class ChestItemOperation
             SendItem(_chestIndex, _slotIndex, -1, Sender);
         }
     }
-    
+
     [AutoSync]
     private class RequestForChestItem : NetModule
     {
         private short _chestIndex;
         private sbyte _slotIndex;
-        
+
         public static RequestForChestItem Get(int chestIndex, int slotIndex)
         {
             var packet = ModContent.GetInstance<RequestForChestItem>();

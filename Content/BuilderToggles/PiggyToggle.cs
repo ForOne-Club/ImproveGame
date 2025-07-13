@@ -4,11 +4,19 @@ using Terraria.DataStructures;
 
 namespace ImproveGame.Content.BuilderToggles;
 
+public enum PiggyToggleState
+{
+    Coin,
+    All,
+    Off,
+}
+
 public class PiggyToggle : BuilderToggle
 {
     public override string HoverTexture => Texture;
 
-    public static LocalizedText OnText { get; private set; }
+    public static LocalizedText AllOnText { get; private set; }
+    public static LocalizedText VanillaOnText { get; private set; }
     public static LocalizedText OffText { get; private set; }
     public static LocalizedText RightFilter { get; private set; }
 
@@ -17,20 +25,31 @@ public class PiggyToggle : BuilderToggle
 
     public override Position OrderPosition => new After(TorchBiome);
 
-    public override int NumberOfStates => 2;
+    public override int NumberOfStates => 3;
 
-    public static bool AutoSaveEnabled
+    public static PiggyToggleState AutoSaveEnabled
     {
         get
         {
             var instance = ModContent.GetInstance<PiggyToggle>();
-            return instance.Active() && instance.CurrentState is 0;
+            if (instance is null || !instance.Active())
+            {
+                return PiggyToggleState.Off;
+            }
+
+            return instance.CurrentState switch
+            {
+                0 => PiggyToggleState.Coin,
+                1 => PiggyToggleState.All,
+                _ => PiggyToggleState.Off,
+            };
         }
     }
 
     public override void SetStaticDefaults()
     {
-        OnText = this.GetLocalization(nameof(OnText));
+        AllOnText = this.GetLocalization(nameof(AllOnText));
+        VanillaOnText = this.GetLocalization(nameof(VanillaOnText));
         OffText = this.GetLocalization(nameof(OffText));
         RightFilter = this.GetLocalization(nameof(RightFilter));
     }
@@ -50,18 +69,23 @@ public class PiggyToggle : BuilderToggle
 
     public override string DisplayValue()
     {
-        return (CurrentState == 0 ? OnText.Value : OffText.Value) + '\n' + RightFilter.Value;
+        return CurrentState switch
+        {
+            0 => VanillaOnText.Value,
+            1 => AllOnText.Value,
+            _ => OffText.Value,
+        } + '\n' + RightFilter.Value;
     }
 
     public override bool Draw(SpriteBatch spriteBatch, ref BuilderToggleDrawParams drawParams)
     {
-        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState % 2);
+        drawParams.Frame = drawParams.Texture.Frame(3, 2, CurrentState % 3);
         return true;
     }
 
     public override bool DrawHover(SpriteBatch spriteBatch, ref BuilderToggleDrawParams drawParams)
     {
-        drawParams.Frame = drawParams.Texture.Frame(2, 2, CurrentState % 2, 1);
+        drawParams.Frame = drawParams.Texture.Frame(3, 2, CurrentState % 3, 1);
         return true;
     }
 }

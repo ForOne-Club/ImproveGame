@@ -1,16 +1,14 @@
 ﻿using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Items;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using Terraria.GameContent.ItemDropRules;
 
 namespace ImproveGame.UI.LiquidWandUI;
 
 public class AbsorbElement : TimerView
 {
-    private readonly AnimationTimer _selectTimer = new ();
+    private readonly AnimationTimer _selectTimer = new();
 
     public AbsorbElement()
     {
@@ -23,14 +21,14 @@ public class AbsorbElement : TimerView
         Rounded = new Vector4(12f);
         PreventOverflow = true;
         DragIgnore = false;
-        
+
         UITextPanel<string> liquidName = new(GetText("UI.LiquidWandUI.Absorb"), 1f)
         {
             IgnoresMouseInteraction = true,
             DrawPanel = false,
             HAlign = 0f,
             VAlign = 0.5f,
-            Left = {Pixels = 34f}
+            Left = { Pixels = 34f }
         };
         Append(liquidName);
     }
@@ -48,7 +46,7 @@ public class AbsorbElement : TimerView
         else
             _selectTimer.Close();
         _selectTimer.UpdateHighFps();
-        
+
         // 绘制UI
         var item = new Item(ItemID.UltraAbsorbantSponge);
 

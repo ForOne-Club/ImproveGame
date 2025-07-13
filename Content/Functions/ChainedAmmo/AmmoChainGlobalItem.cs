@@ -3,7 +3,6 @@ using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.Core;
 using ImproveGame.UI.AmmoChainPanel;
-using System.Diagnostics.CodeAnalysis;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Functions.ChainedAmmo;
@@ -12,7 +11,7 @@ public class AmmoChainGlobalItem : GlobalItem, IItemOverrideHover, IItemOverride
 {
     public int Count;
     public int Index;
-    public AmmoChain Chain = new ();
+    public AmmoChain Chain = new();
     public static bool IsPickingAmmo = false;
 
     public override void Load()
@@ -228,7 +227,7 @@ public class AmmoChainGlobalItem : GlobalItem, IItemOverrideHover, IItemOverride
     {
         if (from.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalFrom))
         {
-            globalFrom.Chain = (AmmoChain) Chain?.Clone();
+            globalFrom.Chain = (AmmoChain)Chain?.Clone();
             return globalFrom;
         }
 

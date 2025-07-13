@@ -1,8 +1,5 @@
-﻿using ImproveGame.Common.Conditions;
-using ImproveGame.Content.Items.Globes.Core;
+﻿using ImproveGame.Content.Items.Globes.Core;
 using ImproveGame.Content.Projectiles;
-using ImproveGame.Packets.WorldFeatures;
-using Terraria;
 
 namespace ImproveGame.Content.Items.Globes;
 
@@ -10,7 +7,7 @@ public class PlanteraGlobe() : GlobePlentyTooltip(ItemRarityID.Pink, Item.sellPr
 {
     public class PlanteraGlobeProj() : GlobeProjBase<PlanteraGlobe>(new(228, 131, 212))
     {
-        public override bool RevealOperation(bool onlyJudging)=> GlobeRevealer.RevealPlantera(Projectile,GetModItemDummy(), onlyJudging);
+        public override bool RevealOperation(bool onlyJudging) => GlobeRevealer.RevealPlantera(Projectile, GetModItemDummy(), onlyJudging);
     }
 
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>

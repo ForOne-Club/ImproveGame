@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.UIFramework.Common;
 
 namespace ImproveGame.Common.RenderTargetContents;
 
@@ -27,11 +26,11 @@ public class RenderTargetContentSystem : ILoadable
                 ItemSlotTarget.Theme = UIConfigs.Instance.ThemeType;
             }
 
-            if (ItemSlotTarget is {IsReady: false })
+            if (ItemSlotTarget is { IsReady: false })
                 ItemSlotTarget.PrepareRenderTarget(Main.instance.GraphicsDevice, Main.spriteBatch);
 
             foreach (var stackNumberRenderTarget in StackNumberRenderTargets.Where(stackNumberRenderTarget =>
-                         stackNumberRenderTarget is {IsReady: false }))
+                         stackNumberRenderTarget is { IsReady: false }))
             {
                 stackNumberRenderTarget.PrepareRenderTarget(Main.instance.GraphicsDevice, Main.spriteBatch);
             }

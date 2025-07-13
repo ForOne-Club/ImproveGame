@@ -1,12 +1,5 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader.Config;
-using Terraria.ModLoader.Config.UI;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {
@@ -25,7 +18,7 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
             var variable = VariableInfo;
             //TODO 本地化+对多级嵌套的正确支持
 
-            
+
             var text = new SUIText
             {
                 TextOrKey = Language.GetTextValue("Mods.ImproveGame.ModernConfig.NotSupportText", [ConfigHelper.GetLabel(Config, variable.Name), variable.Name, variable.Type]),

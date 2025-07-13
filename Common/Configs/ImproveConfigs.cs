@@ -1,8 +1,6 @@
 ﻿using ImproveGame.Common.Configs.Elements;
 using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
-using ImproveGame.Common.GlobalPylons;
-using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.UI.ModernConfig;
 using Newtonsoft.Json;

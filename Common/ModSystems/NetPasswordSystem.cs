@@ -6,7 +6,7 @@ public class NetPasswordSystem : ModSystem
     /// 允许调节设置的密码，只会在服务器有值
     /// </summary>
     internal static string ConfigPassword;
-    
+
     /// <summary>
     /// 服务器端记录所有玩家是否已经认证的数组
     /// </summary>
@@ -17,15 +17,18 @@ public class NetPasswordSystem : ModSystem
     /// </summary>
     internal static bool LocalPlayerRegistered;
 
-    public override void Load() {
+    public override void Load()
+    {
         On_Netplay.StartServer += SendPassword;
     }
 
     // 关掉掉线玩家的认证
     public override void PreUpdateWorld()
     {
-        for (int i = 0; i < Main.maxPlayers; i++) {
-            if (Registered[i] && !Netplay.Clients[i].Socket.IsConnected()) {
+        for (int i = 0; i < Main.maxPlayers; i++)
+        {
+            if (Registered[i] && !Netplay.Clients[i].Socket.IsConnected())
+            {
                 Registered[i] = false;
             }
         }
@@ -37,24 +40,28 @@ public class NetPasswordSystem : ModSystem
         LocalPlayerRegistered = false;
     }
 
-    private void SendPassword(On_Netplay.orig_StartServer orig) {
+    private void SendPassword(On_Netplay.orig_StartServer orig)
+    {
         orig.Invoke();
 
         if (!Config.OnlyHostByPassword)
             return;
 
-        for (int i = 0; i < Main.maxPlayers; i++) {
+        for (int i = 0; i < Main.maxPlayers; i++)
+        {
             Registered[i] = false;
         }
-            
+
         for (int i = 0; i < 4; i++)
             ConfigPassword += (char)Main.rand.Next('A', 'Z' + 1);
 
-        ImproveGame.Instance.Logger.Info(GetTextWith("Configs.ImproveConfigs.OnlyHostByPassword.ServerPasswordLog", new {
+        ImproveGame.Instance.Logger.Info(GetTextWith("Configs.ImproveConfigs.OnlyHostByPassword.ServerPasswordLog", new
+        {
             Password = ConfigPassword
         }));
-            
-        Console.WriteLine(GetTextWith("Configs.ImproveConfigs.OnlyHostByPassword.ServerPassword", new {
+
+        Console.WriteLine(GetTextWith("Configs.ImproveConfigs.OnlyHostByPassword.ServerPassword", new
+        {
             Password = ConfigPassword
         }));
     }

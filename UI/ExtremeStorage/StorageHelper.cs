@@ -26,7 +26,7 @@ public static class StorageHelper
         // 不合规的
         return ItemGroup.Setting;
     }
-    
+
     /// <summary>
     /// 除了Everything, Furniture, Alchemy，其他的Group都是筛选组，不是实际的组，要重定向
     /// </summary>

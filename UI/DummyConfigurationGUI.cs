@@ -1,17 +1,10 @@
 ﻿using ImproveGame.Content.NPCs.Dummy;
+using ImproveGame.UI.ModernConfig;
+using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using ImproveGame.UIFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.GameInput;
-using System.Reflection;
-using Terraria.GameContent.UI.Elements;
-using ImproveGame.UI.ModernConfig;
 
 namespace ImproveGame.UI
 {
@@ -344,7 +337,8 @@ namespace ImproveGame.UI
                                         or DummyConfig.AIType.JellyFish or DummyConfig.AIType.GoldenFish
                                         or DummyConfig.AIType.HugeMimic => DummyNPC.LocalConfig with
                                         {
-                                            NoTileCollide = false, NoGravity = false
+                                            NoTileCollide = false,
+                                            NoGravity = false
                                         },
                                     DummyConfig.AIType.EvilEye => DummyNPC.LocalConfig with { NoGravity = true },
                                     _ => DummyNPC.LocalConfig

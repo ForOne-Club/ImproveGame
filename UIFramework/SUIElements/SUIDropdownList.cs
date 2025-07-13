@@ -1,14 +1,7 @@
 ﻿using ImproveGame.UI.ModernConfig.OptionElements;
-using ImproveGame.UI.ModernConfig;
 using ImproveGame.UIFramework.BaseViews;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
 using Terraria.UI.Chat;
 
 namespace ImproveGame.UIFramework.SUIElements
@@ -29,7 +22,7 @@ namespace ImproveGame.UIFramework.SUIElements
 
         public SUIDropdownListContainer container { get; private set; }
 
-        public SUIDropdownList(Func<T> getState, Action<object> setState,SUIDropdownListContainer container, string optionName)
+        public SUIDropdownList(Func<T> getState, Action<object> setState, SUIDropdownListContainer container, string optionName)
         {
             //CheckValid();
             this.container = container;
@@ -56,7 +49,7 @@ namespace ImproveGame.UIFramework.SUIElements
             _textBox.OnLeftMouseDown += (_, _) =>
             {
                 //if (!Interactable) return;
-                if (this.container.Enabled) 
+                if (this.container.Enabled)
                 {
                     this.container.Enabled = false;
                     return;

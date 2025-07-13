@@ -273,7 +273,7 @@ public class View : UIElement
     /// </summary>
     public void DisablePossibleTextEditing()
     {
-        if (this is not SUIEditableText && UISystem.FocusedEditableText is {IsWritingText: true} &&
+        if (this is not SUIEditableText && UISystem.FocusedEditableText is { IsWritingText: true } &&
             !UISystem.FocusedEditableText.IsMouseHovering && !DontDisableTextEditing)
         {
             UISystem.FocusedEditableText.ToggleTakingText();
@@ -342,11 +342,11 @@ public class View : UIElement
             Vector2 pos = Parent.GetDimensions().Position();
             Vector2 size = Parent.GetDimensions().Size();
             foreach (UIElement uie in from uie in Elements
-                     let dimensions2 = uie.GetDimensions()
-                     let position2 = dimensions2.Position()
-                     let size2 = dimensions2.Size()
-                     where Collision.CheckAABBvAABBCollision(pos, size, position2, size2)
-                     select uie)
+                                      let dimensions2 = uie.GetDimensions()
+                                      let position2 = dimensions2.Position()
+                                      let size2 = dimensions2.Size()
+                                      where Collision.CheckAABBvAABBCollision(pos, size, position2, size2)
+                                      select uie)
             {
                 uie.Draw(spriteBatch);
             }

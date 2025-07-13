@@ -1,17 +1,15 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Items;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using Terraria.GameContent.ItemDropRules;
 
 namespace ImproveGame.UI.LiquidWandUI;
 
 public class LiquidElement : TimerView
 {
-    private readonly AnimationTimer _selectTimer = new ();
+    private readonly AnimationTimer _selectTimer = new();
     private readonly UITextPanel<string> _percentageLeft;
     private readonly short _liquidID;
     public bool Infinite;
@@ -36,7 +34,7 @@ public class LiquidElement : TimerView
             DrawPanel = false,
             HAlign = 0f,
             VAlign = 0.5f,
-            Left = {Pixels = 34f}
+            Left = { Pixels = 34f }
         };
         Append(liquidName);
 

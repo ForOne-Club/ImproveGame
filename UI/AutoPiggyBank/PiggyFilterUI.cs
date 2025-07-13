@@ -58,7 +58,7 @@ public class PiggyFilterUI : BaseBody
         TitleView.Width.Precent = 1f;
         TitleView.Height.Pixels = 44f;
         TitleView.JoinParent(Window);
-        
+
         Title = new SUIText
         {
             DragIgnore = true,
@@ -115,7 +115,7 @@ public class PiggyFilterUI : BaseBody
     {
         if (Window.IsMouseHovering)
             PlayerInput.LockVanillaMouseScroll("ImproveGame: Piggy Filter UI");
-        
+
         if (AutoMoneyPlayerListener.LocalPlayer is null)
             Enabled = false;
 

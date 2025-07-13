@@ -485,7 +485,7 @@ ImproveConfigs: {
 
 	ExtraToolSpeed: {
 		Label: "[centeritem:4056] 工具使用速度提升倍率"
-		Tooltip: 设置为 0 不会提升速度，值越大速度越快
+		Tooltip: 设置为 0 不会提升速度，值越大速度越快，不会影响攻击速度和DPS
 	}
 
 	MostTreeMin: {
@@ -792,9 +792,16 @@ ImproveConfigs: {
 }
 
 AvailableModItemConfigs: {
-	DisplayName: 模组物品加载配置
-	Available: 可获取
-	Unavailable: 不可获取
+	AvailablityHint:
+		'''
+		现在这个物品无法使用 
+		请在模组物品可用性配置里进行修改
+		'''
+	DisplayName: 模组物品可用性配置
+	Available: 可使用
+	Unavailable: 不可使用
+	Obtainable: 可获取
+	Unobtainable: 不可获取
 	Enable: 启用
 
 	AvailableMagickWand: {
@@ -858,7 +865,7 @@ AvailableModItemConfigs: {
 	}
 
 	AvailableCoinOne: {
-		// Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		// Label: "[centeritem:ImproveGame/CoinOne] {$Mods.ImproveGame.Items.CoinOne.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Obtainable}"
 		// Tooltip: ""
 	}
 
@@ -884,6 +891,11 @@ AvailableModItemConfigs: {
 
 	AvailableActuationRodMkII: {
 		// Label: "[centeritem:ImproveGame/ActuationRodMkII] {$Mods.ImproveGame.Items.ActuationRodMkII.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
+		// Tooltip: ""
+	}
+
+	AvailableShimmerBucket: {
+		// Label: "[centeritem:ImproveGame/ShimmerBucket] {$Mods.ImproveGame.Items.ShimmerBucket.DisplayName}{$Mods.ImproveGame.Configs.AvailableModItemConfigs.Available}"
 		// Tooltip: ""
 	}
 }

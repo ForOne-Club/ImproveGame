@@ -7,7 +7,7 @@ namespace ImproveGame.Content.Functions
     {
         private bool _mouseLeftPrev;
         internal static List<NPC> RaritiedNpcs;
-        internal static Dictionary<int,bool> Blacklist = new();
+        internal static Dictionary<int, bool> Blacklist = new();
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
@@ -72,16 +72,18 @@ namespace ImproveGame.Content.Functions
                 return;
 
             displayName += "\n" + GetText("LifeAnalyzer.Tip");
-                
+
             const int maxDistance = 1300;
             int maxRarity = 0;
             int npcIndex = -1;
-            if (counter <= 0) {
+            if (counter <= 0)
+            {
                 counter = 15;
                 for (int k = 0; k < 200; k++)
                 {
                     var n = Main.npc[k];
-                    if (!LifeAnalyzeCore.Blacklist.GetValueOrDefault(n.netID) && n.active && n.rarity > maxRarity && (n.Center - Main.LocalPlayer.Center).Length() < maxDistance) {
+                    if (!LifeAnalyzeCore.Blacklist.GetValueOrDefault(n.netID) && n.active && n.rarity > maxRarity && (n.Center - Main.LocalPlayer.Center).Length() < maxDistance)
+                    {
                         npcIndex = k;
                         maxRarity = n.rarity;
                     }
@@ -89,17 +91,20 @@ namespace ImproveGame.Content.Functions
 
                 number = (byte)npcIndex;
             }
-            else {
+            else
+            {
                 counter--;
                 npcIndex = number;
             }
 
             displayValue = (npcIndex is < 0 or >= 200 || !Main.npc[npcIndex].active || Main.npc[npcIndex].rarity <= 0) ? Language.GetTextValue("GameUI.NoRareCreatures") : Main.npc[npcIndex].GivenOrTypeName;
-            if (npcIndex >= 0 && npcIndex < 200 && Main.npc[npcIndex].active && Main.npc[npcIndex].rarity > 0) {
+            if (npcIndex >= 0 && npcIndex < 200 && Main.npc[npcIndex].active && Main.npc[npcIndex].rarity > 0)
+            {
                 displayValue = Main.npc[npcIndex].GivenOrTypeName;
                 Main.instance.DrawInfoAccs_AdjustInfoTextColorsForNPC(Main.npc[npcIndex], ref displayColor, ref displayShadowColor);
             }
-            else {
+            else
+            {
                 displayValue = Language.GetTextValue("GameUI.NoRareCreatures");
                 displayColor = new Color(100, 100, 100, Main.mouseTextColor);
             }

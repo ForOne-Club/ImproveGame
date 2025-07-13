@@ -3,8 +3,6 @@ using ImproveGame.Packets.NetStorager;
 using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UIFramework;
 using Terraria.DataStructures;
-using Terraria.Enums;
-using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ObjectData;
 
@@ -70,7 +68,7 @@ public class ExtremeStorage : TETileBase
             Mod.Logger.Error("Failed to get TEExtremeStorage");
             return true;
         }
-        
+
         Player player = Main.LocalPlayer;
         Item item = player.HeldItem;
         if (!ServerOpenRequest && !item.IsAir && item.ModItem is StorageCommunicator locator)
@@ -109,7 +107,7 @@ public class ExtremeStorage : TETileBase
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
         TileObjectData.newTile.Origin = new Point16(1, 2);
         TileObjectData.newTile.LavaDeath = false;
-        TileObjectData.newTile.CoordinateHeights = new[] {16, 16, 18};
+        TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 18 };
     }
 
     #endregion
@@ -134,7 +132,7 @@ public class ExtremeStorage : TETileBase
         Texture2D highlightTexture = ModAsset.ExtremeStorage_Highlight.Value;
 
         if (!Main.ShouldShowInvisibleWalls() && tile.IsTileInvisible) return false;
-        
+
         if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
         {
             Main.instance.TilesRenderer.AddSpecialLegacyPoint(i, j);

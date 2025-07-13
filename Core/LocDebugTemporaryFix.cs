@@ -1,4 +1,3 @@
-using System;
 using Terraria.GameInput;
 using Terraria.ModLoader.Core;
 

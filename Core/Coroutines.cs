@@ -122,7 +122,7 @@ namespace ImproveGame.Core
             {
                 if (MoveNext((IEnumerator)routine.Current, index))
                     return true;
-                
+
                 delays[index] = 0f;
             }
 

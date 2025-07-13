@@ -1,6 +1,4 @@
-﻿using ImproveGame.UIFramework;
-
-namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
+﻿namespace ImproveGame.UI.ExtremeStorage.ToolButtons;
 
 public class RecipeToggleButton : ToolButton
 {

@@ -14,7 +14,7 @@ public abstract class Category
                 Main.instance.LoadItem(ItemIconId);
             return TextureAssets.Item[ItemIconId].Value;
         }
-        catch 
+        catch
         {
             return TextureAssets.MagicPixel.Value;
         }

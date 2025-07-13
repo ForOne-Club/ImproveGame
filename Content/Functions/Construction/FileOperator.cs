@@ -35,7 +35,7 @@ namespace ImproveGame.Content.Functions.Construction
 
             AddNotification(GetText("ConstructGUI.SavedAs") + name, Color.Yellow);
             // AddNotification(GetText("ConstructGUI.SavedAs") + thisPath, Color.Yellow);
-            
+
             CachedStructureDatas.Clear();
             if (StructureGUI.Visible && UISystem.Instance.StructureGUI is not null)
             {
@@ -59,7 +59,7 @@ namespace ImproveGame.Content.Functions.Construction
                 try
                 {
                     LoadFile(path);
-                } 
+                }
                 catch
                 {
                     AddNotification(GetText("ConstructGUI.FileInfo.LoadError"), Color.Red);

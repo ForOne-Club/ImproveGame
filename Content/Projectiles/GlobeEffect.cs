@@ -1,15 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
-using static Terraria.Localization.NetworkText;
-
-namespace ImproveGame.Content.Projectiles
+﻿namespace ImproveGame.Content.Projectiles
 {
     public class GlobeEffect : ModProjectile
     {

@@ -1,6 +1,5 @@
 ﻿using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Common.Extensions;
-using ImproveGame.UIFramework.Graphics2D;
 
 namespace ImproveGame.UIFramework;
 

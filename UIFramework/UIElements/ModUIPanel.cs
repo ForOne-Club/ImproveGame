@@ -79,7 +79,8 @@
 
                 spriteBatch.Draw(texture, position, BorderColor);
 
-                if (ResizeRectangle.Contains(Main.MouseScreen.ToPoint()) || Resizing) {
+                if (ResizeRectangle.Contains(Main.MouseScreen.ToPoint()) || Resizing)
+                {
                     Main.cursorOverride = CursorOverrideID.GamepadDefaultCursor;
                     Main.cursorColor = Color.SkyBlue;
                 }
@@ -90,7 +91,8 @@
         {
             base.Update(gameTime);
 
-            if (IsMouseHovering) {
+            if (IsMouseHovering)
+            {
                 Main.LocalPlayer.mouseInterface = true;
             }
 

@@ -3,7 +3,6 @@ using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using Terraria.GameInput;
 
 namespace ImproveGame.UI.LiquidWandUI;
 

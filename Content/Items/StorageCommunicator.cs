@@ -54,7 +54,7 @@ public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClick
     public override void ModifyTooltips(List<TooltipLine> lines)
     {
         Point16 location = Location;
-        bool isSet = location is {X: >= 0, Y: >= 0};
+        bool isSet = location is { X: >= 0, Y: >= 0 };
 
         if (!isSet)
         {
@@ -139,7 +139,7 @@ public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClick
     private void DoOpenStorage()
     {
         Point16 location = Location;
-        if (location is {X: >= 0, Y: >= 0})
+        if (location is { X: >= 0, Y: >= 0 })
         {
             Tile tile = Main.tile[location.X, location.Y];
             if (!tile.HasTile || tile.TileType != ModContent.TileType<ExtremeStorage>() || tile.TileFrameX != 0 ||

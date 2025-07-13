@@ -1,12 +1,6 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UIFramework.SUIElements
 {

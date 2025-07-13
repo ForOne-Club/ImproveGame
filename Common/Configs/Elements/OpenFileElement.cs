@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 using Terraria.ModLoader.Config;
-using Terraria.ModLoader.Config.UI;
-using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Common.Configs.Elements;
 
@@ -19,7 +17,8 @@ internal abstract class OpenFileElement : LargerPanelElement
 {
     protected abstract string FilePath { get; }
 
-    public override void LeftClick(UIMouseEvent evt) {
+    public override void LeftClick(UIMouseEvent evt)
+    {
         base.LeftClick(evt);
 
         if (!File.Exists(FilePath)) return;

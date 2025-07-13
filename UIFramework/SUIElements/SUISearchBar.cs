@@ -1,8 +1,5 @@
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
-using Terraria.GameInput;
-using Terraria.ID;
-using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UIFramework.SUIElements;
 

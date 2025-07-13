@@ -5,19 +5,21 @@ namespace ImproveGame.Common.Configs.Elements;
 
 public class LargerPanelElement : ConfigElement
 {
-    public override void OnBind() {
+    public override void OnBind()
+    {
         base.OnBind();
         Height.Set(36f, 0f);
         DrawLabel = false;
-        
-        Append(new UIText(Label, 0.4f, true) {
+
+        Append(new UIText(Label, 0.4f, true)
+        {
             TextOriginX = 0.5f,
             TextOriginY = 0.5f,
             Width = StyleDimension.Fill,
             Height = StyleDimension.Fill
         });
     }
-    
+
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
         var dimensions = GetDimensions();

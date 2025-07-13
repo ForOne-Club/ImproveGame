@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Content.Items;
 using ReLogic.Utilities;
 using Terraria.GameInput;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Projectiles;
 

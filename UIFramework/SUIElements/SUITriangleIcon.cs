@@ -1,17 +1,12 @@
 ﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImproveGame.UIFramework.SUIElements
 {
     public class SUITriangleIcon : TimerView
     {
-        public float  CrossBorder;
+        public float CrossBorder;
         public Color TriangleBorderColor, TriangleBorderHoverColor, TriangleBeginColor, TriangleEndColor;
         public Vector2[] trianglePercentCoord;
 
@@ -44,7 +39,7 @@ namespace ImproveGame.UIFramework.SUIElements
             Vector2 pos = GetDimensions().Position();
             Vector2 size = GetDimensions().Size();
             Color fork = HoverTimer.Lerp(TriangleBeginColor, TriangleEndColor);
-            SDFGraphics.HasBorderTriangle(pos + size * trianglePercentCoord[0], pos + size * trianglePercentCoord[1], pos + size * trianglePercentCoord[2],fork,CrossBorder,borderColor,GetMatrix(true));
+            SDFGraphics.HasBorderTriangle(pos + size * trianglePercentCoord[0], pos + size * trianglePercentCoord[1], pos + size * trianglePercentCoord[2], fork, CrossBorder, borderColor, GetMatrix(true));
         }
     }
 }

@@ -26,5 +26,4 @@ public abstract class OnceForAllGlobeProj<T>(Color mainColor) : GlobeProjBase<T>
     public virtual void ExtraCheckWhenNotRecorded() { }
     public abstract Point16[] Positions { get; }
     public virtual Point16[] PositionsAnother => null;
-
 }

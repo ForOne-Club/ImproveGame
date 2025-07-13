@@ -1,14 +1,13 @@
-﻿using Terraria.ModLoader.Config;
-using Terraria.ModLoader.Config.UI;
-using System.Reflection;
-using ImproveGame.UIFramework.Graphics2D;
-using Terraria.ModLoader.UI;
-using ImproveGame.UIFramework.SUIElements;
-using ImproveGame.UIFramework.BaseViews;
-using System.Collections;
-using Terraria.UI;
-using MonoMod.Cil;
+﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
+using ImproveGame.UIFramework.Graphics2D;
+using ImproveGame.UIFramework.SUIElements;
+using MonoMod.Cil;
+using System.Collections;
+using System.Reflection;
+using Terraria.ModLoader.Config;
+using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.UI;
 namespace ImproveGame.UI.ModernConfig.OptionElements;
 
 public class OptionDefinition : ModernConfigOption

@@ -188,7 +188,7 @@ internal static class UIStyle
         ShadowThicknessThinnerer = 8;
         ShadowThickness = 20;
 
-        ItemSlotBorderFav = new Color(0,255,222, 180);
+        ItemSlotBorderFav = new Color(0, 255, 222, 180);
         ItemSlotBorder = new Color(32, 59, 69, 180);
         ItemSlotBgFav = new Color(8, 24, 31, 180);
         ItemSlotBg = new Color(13, 16, 17, 180);

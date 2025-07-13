@@ -1,8 +1,10 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Content.BuilderToggles;
 using ImproveGame.Core;
+using Terraria.DataStructures;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader.IO;
+using Terraria.ID;
 
 namespace ImproveGame.Content.Functions.AutoPiggyBank;
 
@@ -50,14 +52,13 @@ public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
                 ItemID.PiggyBank, ItemID.ChesterPetItem, ItemID.MoneyTrough);
         }
 
-        if (!PiggyToggle.AutoSaveEnabled)
-            return;
+        if (PiggyToggle.AutoSaveEnabled is PiggyToggleState.Off) return;
 
         // 10帧检测一次，仅存钱币槽
-        if (_detectCd % 10 == 0 && !ExcludedItems.Any(i => i.Item.type is ItemID.GoldCoin))
+        if (PiggyToggle.AutoSaveEnabled is not PiggyToggleState.Off && (_detectCd % 10 == 0 && !ExcludedItems.Any(i => i.Item.type is ItemID.GoldCoin)))
             DetectCoins();
         // 60帧检测一次，自定义钱币
-        if (_detectCd % 60 == 0)
+        if (PiggyToggle.AutoSaveEnabled is PiggyToggleState.All && _detectCd % 60 == 0)
             DetectCustomCurrency();
         // 30帧更新一下铂金最大堆叠
         if (_detectCd % 30 == 0)
@@ -66,19 +67,20 @@ public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
 
     private void DetectCoins()
     {
-        bool isDepositSucceed = false;
-        for (var i = 50; i <= 53; i++)
-        {
-            var item = Player.inventory[i];
-            if (!item.IsAir && item.IsACoin && AutoMoneyItemListener.TryDepositACoin(item, Player))
-            {
-                isDepositSucceed = true;
-                item.TurnToAir();
-            }
-        }
+        if (Player is null || !HasCoin())
+            return;
+        ContainerTransferContext containerTransferContext = ContainerTransferContext.FromUnknown(Player);
+        ChestUI.MoveCoins(Player.inventory, Player.bank.item, containerTransferContext);
+    }
 
-        if (isDepositSucceed)
-            Recipe.FindRecipes();
+    public bool HasCoin()
+    {
+        for (int index = 50; index < 54; ++index)
+        {
+            if (Player.inventory[index].type > ItemID.None && Player.inventory[index].stack > 0 && Player.inventory[index].NotFavorited && Player.inventory[index].IsACoin)
+                return true;
+        }
+        return false;
     }
 
     private void DetectCustomCurrency()
@@ -89,7 +91,7 @@ public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
             var item = Player.inventory[i];
             bool disabled = ExcludedItems.Any(i => ItemExtensions.IsSameItem(i.Item, item));
             if (!item.IsAir && CustomCurrencyManager.IsCustomCurrency(item) && !disabled &&
-                AutoMoneyItemListener.TryDepositACoin(item, Player))
+                AutoMoneyItemListener.TryDepositCustomCurrency(item, Player))
             {
                 isDepositSucceed = true;
                 item.TurnToAir();

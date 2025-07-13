@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace ImproveGame.UIFramework.Graphics2D;
+﻿namespace ImproveGame.UIFramework.Graphics2D;
 
 public static class SDFRectangle
 {
@@ -86,7 +84,7 @@ public static class SDFRectangle
         DrawRectanglePrimitives(0f, position, size, borderRadius);
     }
 
-    public static void BarColor(Vector2 position, Vector2 size, Vector4 borderRadius,Texture2D texture, Vector2 direction,float time, Matrix matrix)
+    public static void BarColor(Vector2 position, Vector2 size, Vector4 borderRadius, Texture2D texture, Vector2 direction, float time, Matrix matrix)
     {
 
 

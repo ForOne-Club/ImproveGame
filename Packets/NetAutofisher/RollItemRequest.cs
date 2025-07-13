@@ -1,6 +1,4 @@
 ﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.ModPlayers;
-using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
 using Terraria.DataStructures;
 

@@ -78,7 +78,7 @@ public class FavoriteDetourSubscriber : ILoadable
         c.Emit(OpCodes.Ldarg_0);
         c.EmitDelegate<Func<string, ConfigElement, string>>((text, self) =>
         {
-            if (self.Item is not ImproveConfigs {IsRealImproveConfigs: true }  ||
+            if (self.Item is not ImproveConfigs { IsRealImproveConfigs: true } ||
                 !FavoritedOptionDatabase.FavoritedOptions.Contains(self.MemberInfo.Name))
                 return text;
 

@@ -1,6 +1,4 @@
-﻿using ImproveGame.UIFramework.BaseViews;
-using ImproveGame.UIFramework.SUIElements;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 

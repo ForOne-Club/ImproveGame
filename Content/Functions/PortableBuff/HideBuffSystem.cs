@@ -37,14 +37,14 @@ namespace ImproveGame.Content.Functions.PortableBuff
             SetupShouldHideArrayFromPlayer(Main.LocalPlayer);
             if (Config.ShareInfBuffs)
                 CheckTeamPlayers(Main.LocalPlayer.whoAmI, SetupShouldHideArrayFromPlayer);
-            
+
             // 从TE中获取所有的无尽Buff物品
             SetupShouldHideArray(InfBuffPlayer.Get(Main.LocalPlayer).ExStorageAvailableItems);
         }
 
         private static void SetupShouldHideArrayFromPlayer(Player player) =>
             SetupShouldHideArray(InfBuffPlayer.Get(player).AvailableItems);
-        
+
         /// <summary>
         /// 更新InventoryGlow和BuffTypesShouldHide
         /// </summary>

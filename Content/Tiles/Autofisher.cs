@@ -1,6 +1,5 @@
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Packets.NetAutofisher;
-using ImproveGame.UI;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UIFramework;
 using Terraria.Enums;
@@ -54,13 +53,13 @@ namespace ImproveGame.Content.Tiles
                 ServerOpenRequest = false;
 
                 AutofishPlayer.LocalPlayer.SetAutofisher(fisher);
-                
+
                 // 多人客户端下此时已经同步好了物品，则将 Refresh 标记为 true
                 if (Main.netMode is NetmodeID.MultiplayerClient)
                 {
                     AutofisherGUI.RequireRefresh = true;
                 }
-                
+
                 if (!AutofisherGUI.Visible)
                 {
                     SidedEventTrigger.ToggleViewBody(UISystem.Instance.AutofisherGUI);
@@ -102,7 +101,7 @@ namespace ImproveGame.Content.Tiles
             return true;
         }
 
-        public override IEnumerable<Item> GetItemDrops(int i, int j) => new[] {new Item(ItemType())};
+        public override IEnumerable<Item> GetItemDrops(int i, int j) => new[] { new Item(ItemType()) };
 
         //public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
         //    if (!MyUtils.TryGetTileEntityAs<TEAutofisher>(i, j, out var fisher))

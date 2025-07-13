@@ -2,7 +2,6 @@
 using ImproveGame.Core;
 using ImproveGame.UIFramework.Common;
 using PinyinNet;
-using Terraria.GameContent.Creative;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader.Default;
 
@@ -13,6 +12,24 @@ namespace ImproveGame.Common.Utils.Extensions;
 /// </summary>
 public static class ItemExtensions
 {
+    extension(Item item)
+    {
+        /// <summary>
+        /// 物品非空
+        /// </summary>
+        public bool IsNotAir => !item.IsAir;
+
+        /// <summary>
+        /// 物品是否未收藏
+        /// </summary>
+        public bool NotFavorited => !item.favorited;
+
+        /// <summary>
+        /// 物品非硬币
+        /// </summary>
+        public bool IsNotACoin => !item.IsACoin;
+    }
+
     #region 搜索 - Searching
 
     /// <summary>

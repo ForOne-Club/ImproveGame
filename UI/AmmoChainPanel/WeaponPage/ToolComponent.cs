@@ -1,5 +1,4 @@
-﻿using ImproveGame.Content.Functions.ChainedAmmo;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 

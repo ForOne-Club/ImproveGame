@@ -1,9 +1,6 @@
-﻿using ImproveGame.Common.Conditions;
-using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items.Globes.Core;
 using ImproveGame.Content.Projectiles;
-using ImproveGame.Packets.WorldFeatures;
-using Terraria;
 
 namespace ImproveGame.Content.Items.Globes;
 

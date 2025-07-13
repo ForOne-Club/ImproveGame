@@ -1,12 +1,6 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.UI;
-using ImproveGame.UIFramework;
-using Microsoft.Xna.Framework.Input;
-using Terraria.GameInput;
-using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items
 {

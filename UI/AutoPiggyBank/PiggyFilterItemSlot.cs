@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.ModPlayers;
-using ImproveGame.Content.Functions.AutoPiggyBank;
-using ImproveGame.Content.Tiles;
+﻿using ImproveGame.Content.Functions.AutoPiggyBank;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.SUIElements;
 
@@ -8,7 +6,7 @@ namespace ImproveGame.UI.AutoPiggyBank;
 
 public class PiggyFilterItemSlot : GenericItemSlot
 {
-    private readonly AnimationTimer _disableAnimTimer = new (3);
+    private readonly AnimationTimer _disableAnimTimer = new(3);
 
     public static AutoMoneyPlayerListener ModPlayer => AutoMoneyPlayerListener.LocalPlayer;
 

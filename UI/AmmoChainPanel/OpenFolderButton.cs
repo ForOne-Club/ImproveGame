@@ -9,7 +9,7 @@ public class OpenFolderButton : TimerView
 {
     public OpenFolderButton()
     {
-        HoverTimer = new AnimationTimer (3);
+        HoverTimer = new AnimationTimer(3);
         SetSizePixels(32, 32);
     }
 
@@ -28,7 +28,7 @@ public class OpenFolderButton : TimerView
             SpriteEffects.None, 0f);
         spriteBatch.Draw(ModAsset.Folder_Highlight.Value, center, null, Color.White * HoverTimer.Schedule, 0f,
             ModAsset.Folder_Highlight.Size() / 2f, 1f, SpriteEffects.None, 0f);
-        
+
         if (IsMouseHovering)
             UICommon.TooltipMouseText(GetText("UI.AmmoChain.OpenFolder"));
     }

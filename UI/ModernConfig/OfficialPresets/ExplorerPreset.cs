@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
-using tModPorter;
 
 namespace ImproveGame.UI.ModernConfig.OfficialPresets;
 

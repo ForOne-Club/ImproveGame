@@ -74,14 +74,14 @@ public class SearchItemsNearbyPacket : NetModule
                 Chest chest = Main.chest[chestIndex];
                 if (chest == null || Chest.IsLocked(chest.x, chest.y) || !ChestWithinRange(chest, itemSearchRange))
                     continue;
-                
+
                 var chestInfo = new ChestInfo((ushort)chestIndex, new HashSet<int>());
 
                 foreach (Item item in chest.item)
                     chestInfo.ItemTypes.Add(item.type);
-                
+
                 _chestInfos.Add(chestInfo);
-                
+
                 // 本来的思路是服务器匹配名字相应物品，但是服务器语言可能和客户端不一样，所以还是要把全部type发去
                 // if (DealWithItems(_itemTypes, chest.item))
                 //     _matchedChests.Add((short)chestIndex);
@@ -96,7 +96,7 @@ public class SearchItemsNearbyPacket : NetModule
         {
             var matchedChests = new HashSet<short>();
             var itemTypes = new HashSet<int>();
-            
+
             foreach ((ushort chestId, HashSet<int> types) in _chestInfos)
             {
                 if (DealWithItems(itemTypes, types))

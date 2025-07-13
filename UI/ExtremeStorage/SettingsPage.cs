@@ -13,7 +13,7 @@ namespace ImproveGame.UI.ExtremeStorage
             Left.Set(ExtremeStorageGUI.CurrentGroup is ItemGroup.Setting ? 0f : -9999f, 0f);
             Width.Set(0f, 1f);
             Height.Set(0f, 1f);
-            
+
             LongSwitch recipesSwitch = new(() => Storage.UseForCrafting,
                 state =>
                 {
@@ -26,7 +26,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 RelativeMode = RelativeMode.Vertical
             };
             recipesSwitch.JoinParent(this);
-            
+
             LongSwitch buffsSwitch = new(
                 () => Storage.UseUnlimitedBuffs,
                 state =>
@@ -39,7 +39,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 RelativeMode = RelativeMode.Vertical
             };
             buffsSwitch.JoinParent(this);
-            
+
             LongSwitch stationsSwitch = new(
                 () => Storage.UsePortableStations,
                 state =>
@@ -53,7 +53,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 RelativeMode = RelativeMode.Vertical
             };
             stationsSwitch.JoinParent(this);
-            
+
             LongSwitch bannersSwitch = new(
                 () => Storage.UsePortableBanner,
                 state =>
@@ -67,7 +67,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 RelativeMode = RelativeMode.Vertical
             };
             bannersSwitch.JoinParent(this);
-            
+
             var uiText = new UIText(GetText("UI.ExtremeStorage.BasicIntroduction"))
             {
                 // IsWrapped = true, // 为了看着舒服，使用手动换行

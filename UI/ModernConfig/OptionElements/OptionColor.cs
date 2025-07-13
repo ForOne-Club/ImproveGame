@@ -1,16 +1,8 @@
-﻿using ImproveGame.Content;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
-using Newtonsoft.Json;
 using ReLogic.OS;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 namespace ImproveGame.UI.ModernConfig.OptionElements

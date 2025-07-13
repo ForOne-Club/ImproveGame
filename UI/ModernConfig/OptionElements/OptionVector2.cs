@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader.Config.UI;
-using Terraria.ModLoader.Config;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
-using ImproveGame.UIFramework.Graphics2D;
-using ImproveGame.UIFramework.SUIElements;
-using System.ComponentModel;
-using System.Reflection;
-using Terraria.ModLoader.UI;
-using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace ImproveGame.UI.ModernConfig.OptionElements
 {

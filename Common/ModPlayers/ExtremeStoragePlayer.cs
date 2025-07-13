@@ -12,7 +12,7 @@ public class ExtremeStoragePlayer : ModPlayer
 {
     /// <summary> 用于服务器确定该玩家是否打开了某个储存，客户端无需设置，值为 tileEntityID </summary>
     public int UsingStorage = -1;
-    
+
     /// <summary>
     /// 获取所有正在被使用的储存
     /// </summary>
@@ -33,7 +33,7 @@ public class ExtremeStoragePlayer : ModPlayer
 
         return seenStorages;
     }
-    
+
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
         if (Main.netMode is not NetmodeID.Server) return;

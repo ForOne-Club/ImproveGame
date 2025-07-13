@@ -5,7 +5,6 @@ using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.Items;
 using ImproveGame.UI.ExtremeStorage;
-using System.Reflection;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.ModPlayers;

@@ -1,6 +1,4 @@
-﻿using Terraria.ID;
-
-namespace ImproveGame.UI.ExtremeStorage.Filters;
+﻿namespace ImproveGame.UI.ExtremeStorage.Filters;
 
 public class AmmoFilter : Filter
 {

@@ -16,6 +16,7 @@ using System.Reflection;
 using Terraria.DataStructures;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.Default;
 using TEAutofisher = ImproveGame.Content.Tiles.TEAutofisher;
 
 namespace ImproveGame.Common.ModSystems;
@@ -107,6 +108,17 @@ public class ModIntegrationsSystem : ModSystem
         WMITFLoaded = ModLoader.HasMod("WMITF");
     }
 
+    static void NotFindContentWarn(string methodName, string modName, string name) 
+        => ImproveGame.Instance.Logger.Warn($"{methodName} : Not found {name} in {modName}, the Integration might not take effect.");
+
+    static bool TryFindContent<T>(Mod mod, string name, out T value, string methodName/*, bool warn = true*/) where T : IModType
+    {
+        bool flag = mod.TryFind(name, out value);
+        if (!flag /*&& warn*/)
+            NotFindContentWarn(methodName, $"{mod.Name} {mod.Version}", name);
+        return flag;
+    }
+
     private static void DoRecipeBrowserIntegration()
     {
         if (!ModLoader.TryGetMod("RecipeBrowser", out Mod recipeBrowser))
@@ -165,19 +177,37 @@ public class ModIntegrationsSystem : ModSystem
         if (!ModLoader.TryGetMod("CalamityMod", out Mod calamityMod))
             return;
 
-        AddBuffIntegration(calamityMod, "WeightlessCandle", true, "CirrusBlueCandleBuff");
-        AddBuffIntegration(calamityMod, "VigorousCandle", true, "CirrusPinkCandleBuff");
-        AddBuffIntegration(calamityMod, "SpitefulCandle", true, "CirrusYellowCandleBuff");
-        AddBuffIntegration(calamityMod, "ResilientCandle", true, "CirrusPurpleCandleBuff");
+        if (calamityMod.Version is { Minor: 0, Build: <= 4 })
+        {
+            AddBuffIntegration(calamityMod, "WeightlessCandle", true, "CirrusBlueCandleBuff");
+            AddBuffIntegration(calamityMod, "VigorousCandle", true, "CirrusPinkCandleBuff");
+            AddBuffIntegration(calamityMod, "SpitefulCandle", true, "CirrusYellowCandleBuff");
+            AddBuffIntegration(calamityMod, "ResilientCandle", true, "CirrusPurpleCandleBuff");
+
+            AddBuffConflicts(calamityMod, "CirrusBlueCandleBuff", "CirrusPinkCandleBuff", "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff");
+            AddBuffConflicts(calamityMod, "CirrusPinkCandleBuff", "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff");
+            AddBuffConflicts(calamityMod, "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff");
+            AddBuffConflicts(calamityMod, "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff", "CirrusYellowCandleBuff");
+        }
+        else 
+        {
+            AddBuffIntegration(calamityMod, "WeightlessCandle", true, "BlueCandleBuff");
+            AddBuffIntegration(calamityMod, "VigorousCandle", true, "PinkCandleBuff");
+            AddBuffIntegration(calamityMod, "SpitefulCandle", true, "YellowCandleBuff");
+            AddBuffIntegration(calamityMod, "ResilientCandle", true, "PurpleCandleBuff");
+
+            AddBuffConflicts(calamityMod, "BlueCandleBuff", "PinkCandleBuff", "YellowCandleBuff", "PurpleCandleBuff");
+            AddBuffConflicts(calamityMod, "PinkCandleBuff", "YellowCandleBuff", "PurpleCandleBuff", "BlueCandleBuff");
+            AddBuffConflicts(calamityMod, "YellowCandleBuff", "PurpleCandleBuff", "BlueCandleBuff", "PinkCandleBuff");
+            AddBuffConflicts(calamityMod, "PurpleCandleBuff", "BlueCandleBuff", "PinkCandleBuff", "YellowCandleBuff");
+        }
+
         AddBuffIntegration(calamityMod, "ChaosCandle", true, "ChaosCandleBuff");
         AddBuffIntegration(calamityMod, "TranquilityCandle", true, "TranquilityCandleBuff");
         AddBuffIntegration(calamityMod, "EffigyOfDecay", true, "EffigyOfDecayBuff");
         AddBuffIntegration(calamityMod, "CrimsonEffigy", true, "CrimsonEffigyBuff");
         AddBuffIntegration(calamityMod, "CorruptionEffigy", true, "CorruptionEffigyBuff");
-        AddBuffConflicts(calamityMod, "CirrusBlueCandleBuff", "CirrusPinkCandleBuff", "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff");
-        AddBuffConflicts(calamityMod, "CirrusPinkCandleBuff", "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff");
-        AddBuffConflicts(calamityMod, "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff");
-        AddBuffConflicts(calamityMod, "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff", "CirrusYellowCandleBuff");
+
         AddFishingAccIntegration(calamityMod, "EnchantedPearl", 2f, 10, false, false);
         AddFishingAccIntegration(calamityMod, "AlluringBait", 2f, 30, false, false);
         AddFishingAccIntegration(calamityMod, "SupremeBaitTackleBoxFishingStation", 5f, 80, true, true);
@@ -266,13 +296,7 @@ public class ModIntegrationsSystem : ModSystem
         }
     }
 
-    private static void DoModLoaderIntegration()
-    {
-        if (!ModLoader.TryGetMod("ModLoader", out Mod modloader))
-            return;
-
-        UnloadedItemType = modloader.Find<ModItem>("UnloadedItem").Type;
-    }
+    private static void DoModLoaderIntegration() => UnloadedItemType = ModContent.ItemType<UnloadedItem>();
 
     private static void DoMechTransferIntegration()
     {
@@ -286,24 +310,28 @@ public class ModIntegrationsSystem : ModSystem
 
     private static void AddCraftStationIntegration(Mod mod, string itemName, List<int> tileIDs)
     {
-        PortableStations[mod.Find<ModItem>(itemName).Type] = tileIDs;
+        if (TryFindContent<ModItem>(mod, itemName, out var item, nameof(AddCraftStationIntegration)))
+            PortableStations[item.Type] = tileIDs;
     }
 
     private static void AddBuffIntegration(Mod mod, string itemName, bool isPlaceable, params string[] buffNames)
     {
         List<int> buffs = [];
         foreach (string buffName in buffNames)
-            buffs.Add(mod.Find<ModBuff>(buffName).Type);
+            if (TryFindContent<ModBuff>(mod, buffName, out var buff, nameof(AddBuffIntegration)))
+                buffs.Add(buff.Type);
 
+        if (!TryFindContent<ModItem>(mod, itemName, out var item, nameof(AddBuffIntegration))) return;
         if (isPlaceable)
-            ModdedPlaceableItemBuffs[mod.Find<ModItem>(itemName).Type] = buffs;
+            ModdedPlaceableItemBuffs[item.Type] = buffs;
         else
-            ModdedPotionBuffs[mod.Find<ModItem>(itemName).Type] = buffs;
+            ModdedPotionBuffs[item.Type] = buffs;
     }
 
     private static void AddInfBuffsConsume(Mod mod, string itemName)
     {
-        ModdedInfBuffsConsume.Add(mod.Find<ModItem>(itemName).Type);
+        if (TryFindContent<ModItem>(mod, itemName, out var item, nameof(AddInfBuffsConsume)))
+            ModdedInfBuffsConsume.Add(item.Type);
     }
 
     /// <param name="BuffIDOrName">填int（原版）或string（Mod）</param>
@@ -314,23 +342,25 @@ public class ModIntegrationsSystem : ModSystem
         foreach (object obj in removeBuffIDOrName)
         {
             if (obj is int removeBuffID) buffs.Add(removeBuffID);
-            if (obj is string removeBuffName) buffs.Add(mod.Find<ModBuff>(removeBuffName).Type);
+            if (obj is string removeBuffName && TryFindContent<ModBuff>(mod, removeBuffName, out var rbuff, nameof(AddBuffConflicts))) buffs.Add(rbuff.Type);
         }
 
         if (BuffIDOrName is int buffID) ModdedBuffConflicts[buffID] = buffs;
-        if (BuffIDOrName is string buffName) ModdedBuffConflicts[mod.Find<ModBuff>(buffName).Type] = buffs;
+        if (BuffIDOrName is string buffName && TryFindContent<ModBuff>(mod, buffName, out var buff, nameof(AddBuffConflicts))) ModdedBuffConflicts[buff.Type] = buffs;
     }
 
     private static void AddHomeTpIntegration(Mod mod, string itemName, bool isPotion, bool isComebackItem)
     {
         // 属于是自我测试了
-        Call("AddHomeTpItem", mod.Find<ModItem>(itemName).Type, isPotion, isComebackItem);
+        if (TryFindContent<ModItem>(mod, itemName, out var item, nameof(AddHomeTpIntegration)))
+            Call("AddHomeTpItem", item.Type, isPotion, isComebackItem);
     }
 
     private static void AddFishingAccIntegration(Mod mod, string itemName, float speed, int power, bool tackleBox,
         bool lavaFishing)
     {
-        FishingStatLookup[mod.Find<ModItem>(itemName).Type] = new FishingStat(power, speed, tackleBox, lavaFishing);
+        if (TryFindContent<ModItem>(mod, itemName, out var item, nameof(AddFishingAccIntegration)))
+            FishingStatLookup[item.Type] = new FishingStat(power, speed, tackleBox, lavaFishing);
     }
 
     private static void DoShopLookupIntegration()
@@ -380,7 +410,8 @@ public class ModIntegrationsSystem : ModSystem
             return;
 
         LuiafkRebornLoaded = true;
-        LuiafkTravellingMerchantType = mod.Find<ModNPC>("TravellingMerchant").Type;
+        if (TryFindContent<ModNPC>(mod, "TravellingMerchant", out var npc, nameof(DoLuiafkRebornIntegration)))
+            LuiafkTravellingMerchantType = npc.Type;
     }
 
     public override void Unload()

@@ -169,11 +169,11 @@ public class SUIText : TimerView
     /// </summary>
     public Vector2 TextSize { get; protected set; } = Vector2.Zero;
     #endregion
-    
+
     #region Actions
-    
+
     public Action OnRecalculateText;
-    
+
     #endregion
 
     /// <summary>

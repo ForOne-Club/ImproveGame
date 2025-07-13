@@ -1,14 +1,9 @@
 ﻿using ImproveGame.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.GameContent.UI.Chat;
 
 namespace ImproveGame.UI.ModernConfig
 {
-    public class ModernConfigSystem:ModSystem
+    public class ModernConfigSystem : ModSystem
     {
         public override void Load()
         {

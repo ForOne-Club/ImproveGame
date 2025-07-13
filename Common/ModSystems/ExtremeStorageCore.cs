@@ -1,13 +1,9 @@
-﻿using ImproveGame.Common.ModPlayers;
-using ImproveGame.Content.Tiles;
+﻿using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.NetChest;
 using ImproveGame.UI.ExtremeStorage;
-using ImproveGame.UI.ExtremeStorage.ToolButtons;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using Terraria.Chat;
 using Terraria.DataStructures;
-using Terraria.ID;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -22,7 +18,7 @@ public class ExtremeStorageCore : ModSystem
         {
             // 根据上面的IL代码，写出对应的查找代码
             var c = new ILCursor(il);
-            
+
             /* 第一部分: 把物品堆叠到同类物品内
              * IL_00d0: ldsfld       class Terraria.Chest[] Terraria.Main::chest
              * IL_00d5: ldloc.1      // i
@@ -65,7 +61,7 @@ public class ExtremeStorageCore : ModSystem
 
             c.Emit(OpCodes.Ldloc_1); // 箱子 index
             c.EmitDelegate<Action<int>>(chestIndex => TrySend(chestIndex, itemSlot));
-            
+
             /* 第二部分: 箱子里有空位，把物品放到空位里面
              * IL_017a: ldloc.0      // flag1
              * IL_017b: brfalse.s    IL_0199

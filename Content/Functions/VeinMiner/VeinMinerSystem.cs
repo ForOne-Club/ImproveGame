@@ -1,5 +1,4 @@
-﻿using ImproveGame.Core;
-using ImproveGame.Packets.Tiles;
+﻿using ImproveGame.Packets.Tiles;
 
 namespace ImproveGame.Content.Functions.VeinMiner;
 

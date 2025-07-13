@@ -5,7 +5,6 @@ using ImproveGame.Content.Items;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;

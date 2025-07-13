@@ -1,5 +1,4 @@
-﻿using ImproveGame.UI.AutoTrash;
-using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.UIFramework.BaseViews;
 
 namespace ImproveGame.UI.Autofisher;
 

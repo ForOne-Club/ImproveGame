@@ -3,7 +3,6 @@ using ImproveGame.UI.ModernConfig;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Common;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 

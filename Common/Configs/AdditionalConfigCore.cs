@@ -178,7 +178,7 @@ namespace ImproveGame.Common.Configs
             else
                 FavoritedOptionDatabase.FavoritedOptions = FavoritedModernConfigOptions;
 
-            if(FavoritedBuffs is not null)
+            if (FavoritedBuffs is not null)
                 BuffTrackerGUI.FavoritedBuffs = FavoritedBuffs;
 
             KeybindSystem.UseKeybindTranslation = UseKeybindTranslation;

@@ -1,5 +1,4 @@
-﻿using FuzzySearchNet;
-using ImproveGame.UI.ModernConfig.FakeCategories;
+﻿using ImproveGame.UI.ModernConfig.FakeCategories;
 using ImproveGame.UI.ModernConfig.OfficialPresets;
 using ImproveGame.UI.ModernConfig.OptionElements;
 using ImproveGame.UI.ModernConfig.OptionElements.PresetElements;

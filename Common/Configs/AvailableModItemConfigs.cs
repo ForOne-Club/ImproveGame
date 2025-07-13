@@ -62,6 +62,9 @@ public class AvailableModItemConfigs : ModConfig
     [DefaultValue(true)]
     public bool AvailableActuationRodMkII = true;
 
+    [DefaultValue(true)]
+    public bool AvailableShimmerBucket = true;
+
     public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref NetworkText message)
     {
         return MyUtils.AcceptClientChanges(Config, pendingConfig, whoAmI, ref message);

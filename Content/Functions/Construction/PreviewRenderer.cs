@@ -302,7 +302,7 @@ namespace ImproveGame.Content.Functions.Construction
                             }
                         }
                         EndSlopeDraw:;
-                        
+
                         // 旗帜和战争桌旗处于平台下的offsetY调节
                         if (multiTile && tileType is TileID.Banners or TileID.WarTableBanner)
                         {
@@ -313,8 +313,8 @@ namespace ImproveGame.Content.Functions.Construction
                             Point frame = new(subX / 18, subY / 18);
                             var leftTop = coord - frame;
                             leftTop.Y -= 1; // 坐标为左上角物块的上方物块
-                            
-                            if (leftTop is {X: >= 0, Y: >= 0})
+
+                            if (leftTop is { X: >= 0, Y: >= 0 })
                             {
                                 TileDefinition tileDataUp = data[leftTop.Y + leftTop.X * (height + 1)];
                                 int tileTypeUp = structure.ParseTileType(tileDataUp);

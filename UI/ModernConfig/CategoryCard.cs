@@ -1,17 +1,14 @@
-﻿using ImproveGame.Common.Configs;
-using ImproveGame.UI.ModernConfig.OptionElements;
+﻿using ImproveGame.UI.ModernConfig.OptionElements;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
-using ReLogic.Graphics;
-using Terraria.UI.Chat;
 
 namespace ImproveGame.UI.ModernConfig;
 
 public sealed class CategoryCard : TimerView
 {
     public readonly Category Category;
-    private readonly AnimationTimer _selectTimer = new (3);
+    private readonly AnimationTimer _selectTimer = new(3);
     private readonly SlideText _labelElement;
 
     public CategoryCard(Category category)
@@ -33,7 +30,7 @@ public sealed class CategoryCard : TimerView
         _labelElement = new SlideText(category.Label, 54)
         {
             VAlign = 0.5f,
-            Left = {Pixels = 44},
+            Left = { Pixels = 44 },
             RelativeMode = RelativeMode.None
         };
         _labelElement.JoinParent(this);
@@ -62,7 +59,8 @@ public sealed class CategoryCard : TimerView
         if (Category.Label != _labelElement.DisplayText)
             _labelElement.DisplayText = Category.Label;
         // 拉丁文长一点，因此缩小字体
-        float textScale = Language.ActiveCulture.Name switch {
+        float textScale = Language.ActiveCulture.Name switch
+        {
             "zh-Hans" => 1f,
             "ru-RU" => 0.8f,
             _ => 0.94f

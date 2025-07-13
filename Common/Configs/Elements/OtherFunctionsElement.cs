@@ -1,6 +1,4 @@
-﻿using ReLogic.Graphics;
-using System.Text;
-using Terraria.GameContent.UI.States;
+﻿using Terraria.GameContent.UI.States;
 using Terraria.ModLoader.Config.UI;
 using Terraria.ModLoader.UI;
 using Terraria.UI.Chat;
@@ -24,8 +22,8 @@ public class OtherFunctionsElement : ConfigElement
         {
             BorderColor = Color.Transparent,
             BackgroundColor = Color.Transparent,
-            Width = {Percent = 1f},
-            Height = {Pixels = RegularHeight}
+            Width = { Percent = 1f },
+            Height = { Pixels = RegularHeight }
         };
         _unexpandedPanel.SetPadding(0f);
 
@@ -43,16 +41,16 @@ public class OtherFunctionsElement : ConfigElement
         {
             BorderColor = Color.Transparent,
             BackgroundColor = Color.Transparent,
-            Width = {Percent = 1f},
-            Height = {Pixels = RegularHeight}
+            Width = { Percent = 1f },
+            Height = { Pixels = RegularHeight }
         };
         _expandedPanel.SetPadding(0f);
 
         _expandedPanel.Append(new UIText(Label, 0.6f, true)
         {
-            Top = {Pixels = 8f},
-            Width = {Percent = 1f},
-            Height = {Pixels = 40f},
+            Top = { Pixels = 8f },
+            Width = { Percent = 1f },
+            Height = { Pixels = 40f },
             TextOriginX = 0.5f,
             TextOriginY = 0.5f
         });
@@ -61,9 +59,9 @@ public class OtherFunctionsElement : ConfigElement
             GetText("Configs.ImproveConfigs.OtherFunctions.Subtitle"),
             0.7f)
         {
-            Top = {Pixels = 40f},
-            Width = {Percent = 1f},
-            Height = {Pixels = 40f},
+            Top = { Pixels = 40f },
+            Width = { Percent = 1f },
+            Height = { Pixels = 40f },
             TextOriginX = 0.5f,
             TextOriginY = 0.5f
         });

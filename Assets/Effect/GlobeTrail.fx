@@ -94,9 +94,7 @@ float4 PSFunc(PSInput input) : COLOR0
     if (maskX > 1.0)
         maskX -= 1.0;
     float4 maskColor = tex2D(maskImage, float2(maskX, coords.y));
-    if (maskColor.r < 0.05)
-        return float4(0, 0, 0, 0);
-    return input.Color * maskColor.r * 2;
+    return input.Color * maskColor.r * 2 * coords.z;
 }
 
 PSInput VSFunc(VSInput input)

@@ -8,7 +8,7 @@ namespace ImproveGame.Packets.Items;
 public class InventoryFavoritedPacket : NetModule
 {
     private BitArray _favoritedStates;
-    
+
     public static void Send(Item[] inventory = null)
     {
         inventory ??= Main.LocalPlayer.inventory;
@@ -18,7 +18,7 @@ public class InventoryFavoritedPacket : NetModule
         {
             flags[i] = inventory[i].favorited;
         }
-        
+
         var packet = ModContent.GetInstance<InventoryFavoritedPacket>();
         packet._favoritedStates = new BitArray(flags);
         packet.Send(-1);

@@ -2,7 +2,7 @@
 
 namespace ImproveGame.UI.AmmoChainPanel.WeaponPage;
 
-public class ItemSlotForPreview :BaseItemSlot
+public class ItemSlotForPreview : BaseItemSlot
 {
     private Item _realItem;
 

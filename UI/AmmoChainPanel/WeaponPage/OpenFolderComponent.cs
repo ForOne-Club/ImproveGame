@@ -3,7 +3,7 @@
 namespace ImproveGame.UI.AmmoChainPanel.WeaponPage;
 
 [Obsolete("弃用，目前使用 OpenFolderButton", true)]
-public class OpenFolderComponent (WeaponPage parent) : ToolComponent(parent)
+public class OpenFolderComponent(WeaponPage parent) : ToolComponent(parent)
 {
     protected override string Key => "Mods.ImproveGame.UI.AmmoChain.OpenFolder";
 

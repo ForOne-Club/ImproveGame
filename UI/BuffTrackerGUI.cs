@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.Configs.FavoritedSystem;
-using ImproveGame.Common.GlobalBuffs;
+﻿using ImproveGame.Common.GlobalBuffs;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions.PortableBuff;
 using ImproveGame.UIFramework;
@@ -7,9 +6,7 @@ using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using PinyinNet;
-using System.Linq;
 using Terraria.GameInput;
-using Terraria.ModLoader.Config;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UI;
@@ -115,7 +112,7 @@ public class BuffTrackerGUI : BaseBody
         string searchString = SearchContent?.Trim().ToLower();
 
         HashSet<int> favIds = [];
-        foreach (var favBuff in FavoritedBuffs) 
+        foreach (var favBuff in FavoritedBuffs)
         {
             if (!BuffID.Search.TryGetId(favBuff, out var id))
                 continue;
@@ -253,6 +250,9 @@ public class BuffTrackerGUI : BaseBody
     /// </summary>
     public void Open()
     {
+        UIPlayer.CheckPositionValid(ref UIPlayer.BuffTrackerPosition, UIPlayer.BuffTrackerDefPosition);
+        MainPanel.SetPos(UIPlayer.BuffTrackerPosition).Recalculate();
+
         MainPanel.IsLeftMousePressed = false;
         Visible = true;
         SoundEngine.PlaySound(SoundID.MenuOpen);
@@ -330,11 +330,11 @@ public class BuffButton : UIElement
             BuffTrackerGUI.FavoritedBuffs.Remove(name);
             _isFavorited = false;
         }
-        else 
+        else
         {
             SoundEngine.PlaySound(SoundID.ResearchComplete);
             BuffTrackerGUI.FavoritedBuffs.Add(name);
-            _isFavorited=true;
+            _isFavorited = true;
         }
         UISystem.Instance.BuffTrackerGUI.SetupBuffButtons();
         base.RightMouseDown(evt);
@@ -352,7 +352,7 @@ public class BuffButton : UIElement
         spriteBatch.Draw(texture, GetDimensions().Position(), new Color(grayScale, grayScale, grayScale));
 
         if (_isFavorited)
-            spriteBatch.Draw(TextureAssets.Cursors[3].Value, drawPosition+new Vector2(-4,-4), Color.White);
+            spriteBatch.Draw(TextureAssets.Cursors[3].Value, drawPosition + new Vector2(-4, -4), Color.White);
 
         if (!IsMouseHovering)
             return;

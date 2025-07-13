@@ -7,9 +7,9 @@ public class WeatherLockerPacket : NetModule
 {
     private byte _states;
 
-    private bool RainLocked => ((BitsByte) _states)[0];
-    private bool MoonPhaseLocked => ((BitsByte) _states)[1];
-    private bool WindLocked => ((BitsByte) _states)[2];
+    private bool RainLocked => ((BitsByte)_states)[0];
+    private bool MoonPhaseLocked => ((BitsByte)_states)[1];
+    private bool WindLocked => ((BitsByte)_states)[2];
 
     public static void ToggleRain() => SetRain(!WeatherController.RainLocked);
 
@@ -108,7 +108,7 @@ public class SetMoonPhasePacket : NetModule
         var module = NetModuleLoader.Get<SetMoonPhasePacket>();
         if (moonPhase >= 8)
             moonPhase = 0;
-        module._moonPhase = (byte) moonPhase;
+        module._moonPhase = (byte)moonPhase;
         module.Send(runLocally: true);
     }
 
@@ -136,7 +136,7 @@ public class SetWindPacket : NetModule
     public static void SetTo(WindStage stage)
     {
         var module = NetModuleLoader.Get<SetWindPacket>();
-        module._windStage = (sbyte) stage;
+        module._windStage = (sbyte)stage;
         module.Send(runLocally: true);
     }
 
