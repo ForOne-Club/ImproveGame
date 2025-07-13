@@ -343,7 +343,7 @@ UniversalAmmoIcon: {
 	DisplayName: Неопределённый боеприпас
 	Tooltip:
 		'''
-		[c/00ffff:Не][c/60ffff:уточняет] используемый боеприпас
+		[c/00ffff:Не] [c/60ffff:уточняет] используемый боеприпас
 		Считается за первый в инвентаре тип, который оружие [c/00ffff:мо][c/20ffff:жет] [c/40ffff:исполь][c/60ffff:зовать]
 		'''
 }
@@ -427,10 +427,10 @@ ShellShipInBottle_Shimmered: {
 }
 
 ShimmerBucket: {
-	// DisplayName: Shimmer Bucket
-	/* Tooltip:
+	DisplayName: Ведро мерцания
+	Tooltip:
 		'''
-		Contains a small amount of shimmer
-		Can be poured out
-		''' */
+		Содержит небольшое количество мерцания
+		Можно вылить
+		'''
 }
