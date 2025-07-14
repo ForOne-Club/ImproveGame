@@ -8,9 +8,9 @@
 
 # v1.8.1
 
-- [v1.8.1.6](Changelog/zh/v1.8.1.x.md#v1819)
-- [v1.8.1.6](Changelog/zh/v1.8.1.x.md#v1818)
-- [v1.8.1.6](Changelog/zh/v1.8.1.x.md#v1817)
+- [v1.8.1.9](Changelog/zh/v1.8.1.x.md#v1819)
+- [v1.8.1.8](Changelog/zh/v1.8.1.x.md#v1818)
+- [v1.8.1.7](Changelog/zh/v1.8.1.x.md#v1817)
 - [v1.8.1.6](Changelog/zh/v1.8.1.x.md#v1816)
 - [v1.8.1.5](Changelog/zh/v1.8.1.x.md#v1815)
 - [v1.8.1.4](Changelog/zh/v1.8.1.x.md#v1814)
