@@ -43,6 +43,9 @@ public partial class WeatherAmbientElement
 
     private void TryActiveEasterEgg()
     {
+        if (Main.dayTime)
+            return;
+
         var dimensions = GetDimensions();
         var boundary = new Rectangle((int)dimensions.X, (int)dimensions.Y, 400, 208);
         var mushroomHitbox = new Rectangle(boundary.X + 384, boundary.Y + 112, 16, 16);

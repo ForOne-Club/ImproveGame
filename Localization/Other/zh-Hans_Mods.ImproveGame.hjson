@@ -455,11 +455,6 @@ Keybinds: {
 		Tip: 按下后打开快捷微光界面，也可以在总控面板中打开
 	}
 
-	LocalizationDebugging: {
-		DisplayName: "[调试功能] 本地化调试"
-		Tip: 仅开发者使用。按下以从源文件重新加载本地化文本
-	}
-
 	ExtremeStorageSearch: {
 		DisplayName: 在储存管理器中搜索
 		Tip: 打开储存管理器界面时，将鼠标悬停于任意物品上并按下此快捷键以搜索物品

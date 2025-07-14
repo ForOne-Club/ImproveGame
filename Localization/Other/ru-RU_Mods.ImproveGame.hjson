@@ -464,11 +464,6 @@ Keybinds: {
 		Tip: Открывает интерфейс быстрого мерцания; также можно открыть через панель управления
 	}
 
-	LocalizationDebugging: {
-		DisplayName: "[DEBUG] Localization Debugging"
-		Tip: For Devs only. Press reload localization from source files.
-	}
-
 	ExtremeStorageSearch: {
 		DisplayName: Поиск в панели управления хранилищем
 		Tip: Когда панель управления хранилищем открыта, наведите на любой предмет и нажмите на эту клавину, чтобы начать поиск этого предмета.
