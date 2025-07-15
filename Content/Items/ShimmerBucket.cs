@@ -86,6 +86,7 @@ public class ShimmerBucketGlobalItem : GlobalItem
             sItem.stack--;
             player.PutItemInInventoryFromItemUsage(ModContent.ItemType<ShimmerBucket>(), player.selectedItem);
         }
+        else return;
 
         SoundEngine.PlaySound(SoundID.Splash, (int)player.position.X, (int)player.position.Y);
         player.ApplyItemTime(sItem);
