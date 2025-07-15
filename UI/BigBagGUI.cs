@@ -361,7 +361,7 @@ public class BigBagGUI : BaseBody
         for (int i = 10; i < 50; i++)
         {
             // 物品非空，且未收藏，且不是钱币
-            if (bigBag[i].IsNotAir && bigBag[i].NotFavorited && bigBag[i].IsNotACoin)
+            if (inventory[i].IsNotAir && inventory[i].NotFavorited && inventory[i].IsNotACoin)
                 inventory[i] = ItemStackToInventory(bigBag, inventory[i], false);
         }
 

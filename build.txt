@@ -1,6 +1,6 @@
 displayName = Quality of Terraria 更好的体验
 author = 局长, Cyril, 夜谷紫幽, delete, Lacewing, Lastprismer, 合作一号, Reits, 中学生, 错数螺线, Zavarski, Pengolin
-version = 1.8.1.10
+version = 1.8.1.11
 homepage = https://github.com/ForOne-Club/ImproveGame
 buildIgnore = *.gif, *.aseprite
 includeSource = true
