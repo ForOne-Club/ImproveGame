@@ -266,7 +266,7 @@ public class AmmoChainUI : BaseBody
 
     public void TryAddToChain(Item item)
     {
-        _chainEditPage.EditingChain.Chain.Add(new AmmoChain.Ammo(new ItemTypeData(item), 10));
+        _chainEditPage.EditingChain.Chain.Add(new AmmoChain.Ammo(new ItemTypeData(item.Clone()), 10));
         _chainEditPage.ShouldResetCurrentChain = true;
         SoundEngine.PlaySound(SoundID.MenuTick);
     }
