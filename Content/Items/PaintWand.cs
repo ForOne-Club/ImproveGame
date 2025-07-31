@@ -90,11 +90,11 @@ namespace ImproveGame.Content.Items
 
                 // 原版逻辑
                 if (item.paint > 0 && ((tileMode && WorldGen.paintTile(i, j, item.paint, broadCast: true)) ||
-                                       WorldGen.paintWall(i, j, item.paint, broadCast: true)))
+                                       (wallMode && WorldGen.paintWall(i, j, item.paint, broadCast: true))))
                     return ConsumeCurrentItem(item);
 
                 if (item.paintCoating > 0 && ((tileMode && WorldGen.paintCoatTile(i, j, item.paintCoating, broadcast: true)) ||
-                                              WorldGen.paintCoatWall(i, j, item.paintCoating, broadcast: true)))
+                                              (wallMode && WorldGen.paintCoatWall(i, j, item.paintCoating, broadcast: true))))
                     return ConsumeCurrentItem(item);
             }
 
