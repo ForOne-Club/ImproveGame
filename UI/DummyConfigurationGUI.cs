@@ -444,28 +444,29 @@ namespace ImproveGame.UI
             StartTimer.Open();
 
             var center = Main.MouseScreen;
-            center /= Main.UIScale;
             float zoom = Main.GameZoomTarget * Main.ForcedMinimumZoom;
             center = (center - Main.ScreenSize.ToVector2() * .5f) * zoom + Main.ScreenSize.ToVector2() * .5f;
+            center /= Main.UIScale;
 
             // 保证UI不超出屏幕范围
             // center是UI当前位置的坐标，需要修正这个坐标，使UI框在屏幕内
             var size = MainPanel.GetDimensions().Size();
-            Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
-            float margin = 20f;
+            Vector2 screenSizeScaled = new Vector2(Main.screenWidth, Main.screenHeight) / Main.UIScale;
+            const float margin = 20f;
 
-            // 计算实际显示尺寸（包含缩放）
-            Vector2 actualSize = size * zoom;
-
+            float min;
+            float max;
             // 限制X坐标
-            center.X = Math.Clamp(center.X,
-                actualSize.X / 2 + margin,
-                screenSize.X - actualSize.X / 2 - margin);
+            min = size.X / 2 + margin;
+            max = screenSizeScaled.X - min;
+            if (max > min)
+                center.X = Math.Clamp(center.X, min, max);
 
             // 限制Y坐标
-            center.Y = Math.Clamp(center.Y,
-                actualSize.Y / 2 + margin,
-                screenSize.Y - actualSize.Y / 2 - margin);
+            min = size.Y / 2 + margin;
+            max = screenSizeScaled.Y - min;
+            if (max > min)
+                center.Y = Math.Clamp(center.Y, min, max);
 
 
             MainPanel.SetCenterPixels(center.X, center.Y);
