@@ -1110,14 +1110,14 @@ partial class MyUtils
     {
         return moonPhase switch
         {
-            0 => GetText("MoonPhases.FullMoon"),
-            1 => GetText("MoonPhases.WaningGibbous"),
-            2 => GetText("MoonPhases.ThirdQuarter"),
-            3 => GetText("MoonPhases.WaningCrescent"),
-            4 => GetText("MoonPhases.NewMoon"),
-            5 => GetText("MoonPhases.WaxingCrescent"),
-            6 => GetText("MoonPhases.FirstQuarter"),
-            7 => GetText("MoonPhases.WaxingGibbous"),
+            0 => Language.GetTextValue("GameUI.FullMoon"),
+            1 => Language.GetTextValue("GameUI.WaningGibbous"),
+            2 => Language.GetTextValue("GameUI.ThirdQuarter"),
+            3 => Language.GetTextValue("GameUI.WaningCrescent"),
+            4 => Language.GetTextValue("GameUI.NewMoon"),
+            5 => Language.GetTextValue("GameUI.WaxingCrescent"),
+            6 => Language.GetTextValue("GameUI.FirstQuarter"),
+            7 => Language.GetTextValue("GameUI.WaxingGibbous"),
             _ => "Unknown"
         };
     }

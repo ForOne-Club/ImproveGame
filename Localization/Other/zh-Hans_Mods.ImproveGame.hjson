@@ -10,17 +10,6 @@ Tiles: {
 	FakeAltar.MapEntry: 伪造祭坛
 }
 
-MoonPhases: {
-	FullMoon: 满月
-	WaningGibbous: 盈凸月
-	ThirdQuarter: 下弦月
-	WaningCrescent: 残月
-	NewMoon: 新月
-	WaxingCrescent: 娥眉月
-	FirstQuarter: 上弦月
-	WaxingGibbous: 盈凸月
-}
-
 ItemDropRule: {
 	DropWhenEnabled: 开启了“{0}”时掉落
 	DropCoinOne: “敌人钱币掉落倍率”拉满且开启了“{$Mods.ImproveGame.Conditions.AvailableCoinOne}”时掉落

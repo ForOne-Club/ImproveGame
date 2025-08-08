@@ -10,17 +10,6 @@ Tiles: {
 	FakeAltar.MapEntry: Fake Altar
 }
 
-MoonPhases: {
-	FullMoon: Full Moon
-	WaningGibbous: Waning Gibbous
-	ThirdQuarter: Third Quarter
-	WaningCrescent: Waning Crescent
-	NewMoon: New Moon
-	WaxingCrescent: Waxing Crescent
-	FirstQuarter: First Quarter
-	WaxingGibbous: Waxing Gibbous
-}
-
 ItemDropRule: {
 	DropWhenEnabled: Drops when '{0}' is enabled
 	DropCoinOne: Drops when 'Enemy Money Drop Multiplier' is maxed out and '{$Mods.ImproveGame.Conditions.AvailableCoinOne}' is enabled

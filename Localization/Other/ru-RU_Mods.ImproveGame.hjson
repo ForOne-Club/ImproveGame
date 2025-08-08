@@ -10,17 +10,6 @@ Tiles: {
 	FakeAltar.MapEntry: Ложный алтарь
 }
 
-MoonPhases: {
-	FullMoon: Полнолуние
-	WaningGibbous: Убывающая Луна
-	ThirdQuarter: Последняя четверть
-	WaningCrescent: Убывающий месяц
-	NewMoon: Новолуние
-	WaxingCrescent: Растущий месяц
-	FirstQuarter: Первая четверть
-	WaxingGibbous: Растущая Луна
-}
-
 ItemDropRule: {
 	DropWhenEnabled: Выпадает, если настройка «{0}» включена
 	DropCoinOne: Выпадает, если значение настройки «Мультипликатор выпадающих из врагов монет» стоит на максимуме и настройка «{Mods.ImproveGame.Conditions.AvailableCoinOne}» включена
