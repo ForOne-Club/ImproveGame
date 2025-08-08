@@ -17,6 +17,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
     public List<Item> ItemContainer { get; private set; } = [];
     public bool AutoStorage { get; set; }
     public bool AutoSort { get; set; }
+    public bool Synthesis { get; set; }
 
     public void ItemIntoContainer(Item item) => ItemIntoContainer(item, true);
 

@@ -9,6 +9,7 @@ public interface IItemContainer
     List<Item> ItemContainer { get; }
     bool AutoStorage { get; set; }
     bool AutoSort { get; set; }
+    bool Synthesis { get; set; }
 
     void SortContainer();
 
@@ -26,6 +27,7 @@ public interface IItemContainer
     {
         tag["autoStorage"] = container.AutoStorage;
         tag["autoSort"] = container.AutoSort;
+        tag["synthesis"] = container.Synthesis;
     }
 
     static void LoadData(TagCompound tag, IItemContainer container)
@@ -38,6 +40,11 @@ public interface IItemContainer
         if (tag.TryGet("autoSort", out bool autoSort))
         {
             container.AutoSort = autoSort;
+        }
+
+        if (tag.TryGet("synthesis", out bool synthesis))
+        {
+            container.Synthesis = synthesis;
         }
     }
 }

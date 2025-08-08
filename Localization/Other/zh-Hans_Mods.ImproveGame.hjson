@@ -347,6 +347,7 @@ SpaceWandGUI: {
 PackageGUI: {
 	AutoStorage: 自动收纳
 	AutoSort: 自动排序
+	Synthesis: 参与合成
 	Incompatible: 此物品不能放入该容器
 }
 

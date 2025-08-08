@@ -163,6 +163,31 @@ public class ItemContainerGUI : BaseBody
         toggleSwitch2.SetSizePixels(32f, 20f);
 
         switchView2.JoinParent(SwitchView);
+
+        View switchView3 = SUIToggleSwitch.CreateTextSwitch(out var toggleSwitch3, out var text3);
+        switchView3.Width.Percent = 1f;
+        switchView3.IsAdaptiveHeight = true;
+        switchView3.RelativeMode = RelativeMode.Vertical;
+        switchView3.Spacing = new Vector2(8);
+
+        text3.TextScale = 0.8f;
+        text3.TextOrKey = GetText("PackageGUI.Synthesis");
+        text3.SetInnerPixels(text3.TextSize.X, 20f);
+        text3.SetSizePixels(text3.TextSize * text3.TextScale);
+
+        toggleSwitch3.Status += () => Container.Synthesis;
+        toggleSwitch3.Switch += () => Container.Synthesis = !Container.Synthesis;
+        toggleSwitch3.Rounded = new Vector4(10f);
+        toggleSwitch3.OnUpdate += _ =>
+        {
+            toggleSwitch3.BorderColor =
+                toggleSwitch3.SwitchTimer.Lerp(UIStyle.PanelBorder, UIStyle.ItemSlotBorderFav);
+            toggleSwitch3.ToggleCircleColor =
+                toggleSwitch3.SwitchTimer.Lerp(UIStyle.PanelBorder, UIStyle.ItemSlotBorderFav);
+        };
+        toggleSwitch3.SetSizePixels(32f, 20f);
+
+        switchView3.JoinParent(SwitchView);
         #endregion
 
         ItemContainerGrid.SetPadding(8f);

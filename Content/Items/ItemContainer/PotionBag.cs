@@ -17,6 +17,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
     public List<Item> ItemContainer { get; private set; } = [];
     public bool AutoStorage { get; set; }
     public bool AutoSort { get; set; }
+    public bool Synthesis { get; set; }
     public bool MeetEntryCriteria(Item item) => item.buffType > 0 && item.consumable;
 
     public void ItemIntoContainer(Item item) => ItemIntoContainer(item, true);

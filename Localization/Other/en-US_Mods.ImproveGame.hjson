@@ -355,6 +355,7 @@ SpaceWandGUI: {
 PackageGUI: {
 	AutoStorage: Auto Collection
 	AutoSort: Auto Sortation
+	Synthesis: 参与合成
 	Incompatible: The item cannot be contained in this inventory.
 }
 

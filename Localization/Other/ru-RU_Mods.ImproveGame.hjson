@@ -356,6 +356,7 @@ SpaceWandGUI: {
 PackageGUI: {
 	AutoStorage: Авто-сбор
 	AutoSort: Авто-сортировка
+	// Synthesis: 参与合成
 	Incompatible: Данный предмет не может храниться в данном хранилище.
 }
 

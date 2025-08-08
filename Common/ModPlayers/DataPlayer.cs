@@ -1,4 +1,5 @@
-﻿using ImproveGame.Packets;
+﻿using ImproveGame.Content.Items.ItemContainer;
+using ImproveGame.Packets;
 using ImproveGame.UIFramework.Common;
 using Terraria.ModLoader.IO;
 
@@ -152,11 +153,36 @@ namespace ImproveGame.Common.ModPlayers
 
         public override IEnumerable<Item> AddMaterialsForCrafting(out ItemConsumedCallback itemConsumedCallback)
         {
+            List<Item> items = [];
+
+            foreach (Item item in Main.LocalPlayer.inventory)
+            {
+                if (item is null || item.IsAir)
+                    continue;
+
+                if (item.ModItem is BannerChest bannerChest && bannerChest.Synthesis && bannerChest.ItemContainer.Count > 0)
+                {
+                    items.AddRange(bannerChest.ItemContainer);
+                    continue;
+                }
+
+                if (item.ModItem is PotionBag potionBag && potionBag.Synthesis && potionBag.ItemContainer.Count > 0)
+                {
+                    items.AddRange(potionBag.ItemContainer);
+                    continue;
+                }
+            }
+
             if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_ParticipateSynthesis &&
                 SuperVault is not null)
             {
+                items.AddRange(SuperVault);
+            }
+
+            if (items.Count > 0)
+            {
                 itemConsumedCallback = null;
-                return SuperVault;
+                return items;
             }
 
             return base.AddMaterialsForCrafting(out itemConsumedCallback);

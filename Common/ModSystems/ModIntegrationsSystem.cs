@@ -124,7 +124,7 @@ public class ModIntegrationsSystem : ModSystem
         if (!ModLoader.TryGetMod("RecipeBrowser", out Mod recipeBrowser))
             return;
 
-        // 给合成表的计量材料数量功能添加储存管理器和大背包支持
+        // 给合成表的计量材料数量功能添加储存管理器、大背包、药水袋和旗帜盒支持
         var providers = recipeBrowser.Code.GetTypes()
             .Where(t => !t.IsAbstract && !t.ContainsGenericParameters)
             .Where(t => t.IsAssignableTo(typeof(UIElement)));
