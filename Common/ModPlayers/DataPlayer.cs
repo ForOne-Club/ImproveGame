@@ -154,8 +154,9 @@ namespace ImproveGame.Common.ModPlayers
         public override IEnumerable<Item> AddMaterialsForCrafting(out ItemConsumedCallback itemConsumedCallback)
         {
             List<Item> items = [];
+            bool superVaultParticipateSynthesis = Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_ParticipateSynthesis && SuperVault is not null;
 
-            foreach (Item item in Main.LocalPlayer.inventory)
+            foreach (Item item in GetAllInventoryItemsList(Main.LocalPlayer, superVaultParticipateSynthesis ? "" : "mod", estimatedCapacity: 260))
             {
                 if (item is null || item.IsAir)
                     continue;
@@ -173,8 +174,7 @@ namespace ImproveGame.Common.ModPlayers
                 }
             }
 
-            if (Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_ParticipateSynthesis &&
-                SuperVault is not null)
+            if (superVaultParticipateSynthesis)
             {
                 items.AddRange(SuperVault);
             }
