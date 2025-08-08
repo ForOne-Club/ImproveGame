@@ -2,7 +2,7 @@
 
 public partial class SpaceWand
 {
-    private static readonly int[] GrassSeeds = { 2, 23, 60, 70, 199, 109, 82 };
+    private static readonly int[] GrassSeeds = [2, 23, 60, 70, 199, 109, 82, 633];
 
     public static void OperateTile(Player player, int x, int y, HashSet<Point> tilesHashSet, PlaceType placeType,
         BlockType blockType, ref bool playSound, Dictionary<int, int> itemsConsumed)
