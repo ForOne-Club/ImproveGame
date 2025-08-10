@@ -99,7 +99,7 @@ public class GameRectangle
         Vector2 pos = Rectangle.TopLeft() * 16 + new Vector2(-2) - Main.screenPosition;
         Vector2 size = Rectangle.Size() * 16 + new Vector2(4);
         if (Main.LocalPlayer.gravDir is -1f)
-            pos.X = Main.screenWidth - pos.X - size.X;
+            pos.Y = Main.screenHeight - pos.Y - size.Y;
         DrawBorder(pos, size.X, size.Y, BackgroundColor, BorderColor);
         //SDFRectangle.HasBorder(pos, size,
         //    new Vector4(2f), BackgroundColor, 2f, BorderColor, Main.GameViewMatrix.ZoomMatrix);
@@ -109,7 +109,13 @@ public class GameRectangle
     public void DrawPreView()
     {
         if (Texture2D is not null)
-            Main.spriteBatch.Draw(Texture2D, new Vector2(Rectangle.X, Rectangle.Y) * 16f - Main.screenPosition, null, Color.White * 0.5f, 0, Vector2.Zero, 1f, 0, 0);
+        {
+            Vector2 pos = new Vector2(Rectangle.X, Rectangle.Y) * 16f - Main.screenPosition;
+            bool reversal = Main.LocalPlayer.gravDir == -1;
+            if (reversal)
+                pos = new Vector2(pos.X + Texture2D.Size().X, Main.screenHeight - pos.Y);
+            Main.spriteBatch.Draw(Texture2D, pos, null, Color.White * 0.5f, (reversal ? 3.14f : 0), Vector2.Zero, 1f, (reversal ? SpriteEffects.FlipHorizontally : 0), 0);
+        }
     }
 
     public void DrawString()
