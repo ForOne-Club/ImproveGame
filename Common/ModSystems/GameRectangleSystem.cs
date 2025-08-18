@@ -5,6 +5,8 @@ using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Graphics2D;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.ModSystems;
@@ -89,7 +91,18 @@ public class GameRectangleSystem : ModSystem
                 {
                     if (AutofishPlayer.LocalPlayer.Autofisher is not null && AutofisherGUI.Visible)
                     {
+                        // 已在此处处理重力反转
+                        var matrix = Main.spriteBatch.transformMatrix;
+                        var effect = Main.spriteBatch.customEffect;
+
+                        Main.spriteBatch.End();
+                        RasterizerState rasterizerState = Main.LocalPlayer.gravDir == 1f ? RasterizerState.CullCounterClockwise : RasterizerState.CullClockwise;
+                        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, rasterizerState, effect, Main.GameViewMatrix.TransformationMatrix);
+
+                        // 绘制
                         DrawPoolsBorder();
+
+                        Main.spriteBatch.ReBegin(effect, matrix);
                     }
                     return true;
                 },
@@ -192,7 +205,7 @@ public class GameRectangleSystem : ModSystem
                     }
                     if (Lighting.Brightness(i, j) < 0.001f)
                         color = Color.Transparent;
-                    Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, blockDrawPosition, rect, color * opacity);
+                    Main.spriteBatch.Draw(TextureAssets.BlackTile.Value, blockDrawPosition, rect, color * opacity);
 
                     // 画边缘线，旁边不是可用水体或者是可选不可选分界线时
                     var leftTile = Framing.GetTileSafely(i - 1, j);
