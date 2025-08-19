@@ -1,4 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
+using Newtonsoft.Json;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.UI.ModernConfig.OfficialPresets;
@@ -16,37 +18,34 @@ public abstract class OfficialPreset
 
     public void OnApply()
     {
-        var modConfig = Config;
+        var mainConfig = Config;
         var uiConfig = UIConfigs.Instance;
         var modItemConfig = AvailableConfig;
 
-        ApplyPreset(modConfig, uiConfig, modItemConfig);
+        ApplyPreset(mainConfig, uiConfig, modItemConfig);
 
-        var modConfigToLoad = ConfigManager.Configs[ImproveGame.Instance].Find(i => i.Name == modConfig.Name);
+        var modConfigToLoad = ConfigManager.Configs[ImproveGame.Instance].Find(i => i.Name == mainConfig.Name);
         var uiConfigToLoad = ConfigManager.Configs[ImproveGame.Instance].Find(i => i.Name == uiConfig.Name);
         var modItemConfigToLoad = ConfigManager.Configs[ImproveGame.Instance].Find(i => i.Name == modItemConfig.Name);
 
-        ConfigManager.Save(modConfig); // 保存配置到文件
-        ConfigManager.Save(uiConfig); // 保存配置到文件
-        ConfigManager.Save(modItemConfig); // 保存配置到文件
-        ConfigManager.Load(modConfigToLoad); // 重新加载配置
-        ConfigManager.Load(uiConfigToLoad); // 重新加载配置
-        ConfigManager.Load(modItemConfigToLoad); // 重新加载配置
+        for (int n = 0; n < 3; n++)
+        {
+            ModConfig loadedConfig = n switch
+            {
+                0 => mainConfig,
+                1 => uiConfig,
+                2 or _ => modItemConfig,
+            };
+            ModConfig modConfig = n switch
+            {
+                0 => modConfigToLoad,
+                1 => uiConfigToLoad,
+                2 or _ => modItemConfigToLoad
+            };
+            loadedConfig.Name = modConfig.Name;
+            loadedConfig.Mod = modConfig.Mod;
 
-        // TML的注释：
-        // Main Menu: Save, leave reload for later
-        // MP with ServerSide: Send request to server
-        // SP or MP with ClientSide: Apply immediately if !NeedsReload
-        if (Main.gameMenu)
-        {
-            // modConfig.OnChanged(); delayed until ReloadRequired checked
-            // Reload will be forced by Back Button in UIMods if needed
-        }
-        // 处于游戏内
-        else
-        {
-            modConfig.OnChanged();
-            uiConfig.OnChanged();
+            PresetHandler.LoadAndApplyConfig(loadedConfig, modConfig);
         }
     }
 }

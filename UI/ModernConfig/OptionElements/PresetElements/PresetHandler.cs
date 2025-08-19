@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Core;
+using ImproveGame.Packets;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Terraria.ModLoader.Config;
@@ -123,29 +124,29 @@ public class PresetHandler
         loadedConfig.Name = modConfig.Name;
         loadedConfig.Mod = modConfig.Mod;
 
+        LoadAndApplyConfig(loadedConfig, modConfig);
+    }
+
+    public static void LoadAndApplyConfig(ModConfig pendingConfig, ModConfig modConfig)
+    {
         if (Main.gameMenu)
         {
-            ConfigManager.Save(loadedConfig);
+            ConfigManager.Save(pendingConfig);
             ConfigManager.Load(modConfig);
         }
         else
         {
             // 纠正ReloadRequired的字段
-            CorrectReloadRequiredFields(loadedConfig, modConfig);
+            CorrectReloadRequiredFields(pendingConfig, modConfig);
 
             // 游戏内发包
-            if (loadedConfig.Mode == ConfigScope.ServerSide && Main.netMode == NetmodeID.MultiplayerClient)
+            if (pendingConfig.Mode == ConfigScope.ServerSide && Main.netMode == NetmodeID.MultiplayerClient)
             {
-                var requestChanges = new ModPacket(MessageID.InGameChangeConfig);
-                requestChanges.Write(loadedConfig.Mod.Name);
-                requestChanges.Write(loadedConfig.Name);
-                string json = JsonConvert.SerializeObject(loadedConfig, ConfigManager.serializerSettingsCompact);
-                requestChanges.Write(json);
-                requestChanges.Send();
+                CompleteConfigPacket.Send(pendingConfig);
                 return;
             }
 
-            ConfigManager.Save(loadedConfig);
+            ConfigManager.Save(pendingConfig);
             ConfigManager.Load(modConfig);
             modConfig.OnChanged();
         }
