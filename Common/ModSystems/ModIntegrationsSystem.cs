@@ -3,6 +3,7 @@ using ImproveGame.Content.Functions;
 using ImproveGame.Content.Functions.ChainedAmmo;
 using ImproveGame.Content.Functions.HomeTeleporting;
 using ImproveGame.Content.Items;
+using ImproveGame.Content.Items.Coin;
 using ImproveGame.Content.Items.Globes;
 using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.Content.Items.ItemContainer;
@@ -13,6 +14,7 @@ using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.PlayerStats;
 using System.Collections;
 using System.Reflection;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
@@ -94,6 +96,7 @@ public class ModIntegrationsSystem : ModSystem
 
     public override void PostSetupContent()
     {
+        DoImproveGameModIntegration(); // 诶！更好的体验也是模组，也算处理跨模组集成！
         DoCalamityModIntegration();
         DoThoriumModIntegration();
         DoFargowiltasIntegration();
@@ -170,6 +173,11 @@ public class ModIntegrationsSystem : ModSystem
 
             return count >= stopCountingAt ? stopCountingAt : count;
         });
+    }
+
+    private static void DoImproveGameModIntegration()
+    {
+        FishingStatLookup[ModContent.ItemType<DevMark>()] = new FishingStat(0, 100, false, false);
     }
 
     private static void DoCalamityModIntegration()
