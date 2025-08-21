@@ -113,6 +113,8 @@ Autofisher: {
 		- Final speed = Base speed * Sum of all bonuses. The maximum speed is 300% of the manual fishing
 		[c/AAAAAA:Works with modded accessories, but only if that mod has the QoT support]
 		'''
+	Tip: The Fishing Machine at [c/15d36a:{0}, {1}] has no bait
+	DepthText: "{0} {1}"
 }
 
 PaintWand: {

@@ -1054,23 +1054,26 @@ partial class MyUtils
 
     public static void GetMeterCoords(Point point, out string compassText, out string depthText)
     {
+        GetMeterCoords(point, out NetworkText compass, out NetworkText depth);
+        compassText = compass.ToString();
+        depthText = depth.ToString();
+    }
+    public static void GetMeterCoords(Point point, out NetworkText compassText, out NetworkText depthText) 
+    {
         // 原版代码，不多评价
         int compass = point.X * 2 - Main.maxTilesX;
-        compassText = (compass > 0) ? Language.GetTextValue("GameUI.CompassEast", compass) : ((compass >= 0) ? Language.GetTextValue("GameUI.CompassCenter") : Language.GetTextValue("GameUI.CompassWest", -compass));
+        compassText = (compass > 0) ? NetworkText.FromKey("GameUI.CompassEast", compass) : ((compass >= 0) ? NetworkText.FromKey("GameUI.CompassCenter") : NetworkText.FromKey("GameUI.CompassWest", -compass));
 
         int depthToSurface = (int)(point.Y - Main.worldSurface) * 2;
         float num23 = Main.maxTilesX / 4200;
         num23 *= num23;
         int num24 = 1200;
         float num25 = (float)((point.Y - (65f + 10f * num23)) / (Main.worldSurface / 5.0));
-        var layer = ((point.Y > (float)((Main.maxTilesY - 204))) ? Language.GetTextValue("GameUI.LayerUnderworld") : ((point.Y > Main.rockLayer + num24 / 2 + 16.0) ? Language.GetTextValue("GameUI.LayerCaverns") : ((depthToSurface > 0) ? Language.GetTextValue("GameUI.LayerUnderground") : ((!(num25 >= 1f)) ? Language.GetTextValue("GameUI.LayerSpace") : Language.GetTextValue("GameUI.LayerSurface")))));
+        var layer = ((point.Y > (float)((Main.maxTilesY - 204))) ? NetworkText.FromKey("GameUI.LayerUnderworld") : ((point.Y > Main.rockLayer + num24 / 2 + 16.0) ? NetworkText.FromKey("GameUI.LayerCaverns") : ((depthToSurface > 0) ? NetworkText.FromKey("GameUI.LayerUnderground") : ((!(num25 >= 1f)) ? NetworkText.FromKey("GameUI.LayerSpace") : NetworkText.FromKey("GameUI.LayerSurface")))));
         depthToSurface = Math.Abs(depthToSurface);
-        string depth = ((depthToSurface != 0) ? Language.GetTextValue("GameUI.Depth", depthToSurface) : Language.GetTextValue("GameUI.DepthLevel"));
-        depthText = depth + " " + layer;
-        if (Language.ActiveCulture.CultureInfo.Name is "zh-Hans")
-            depthText = depth + layer; // 不要空格
+        NetworkText depth = (depthToSurface != 0) ? NetworkText.FromKey("GameUI.Depth", depthToSurface) : NetworkText.FromKey("GameUI.DepthLevel");
+        depthText = NetworkText.FromKey("Mods.ImproveGame.Items.Autofisher.DepthText", depth, layer);
     }
-
     /// <summary>
     /// 生成一个弹出提示，文字颜色默认为黄色
     /// </summary>
@@ -1178,8 +1181,7 @@ partial class MyUtils
         {
             if (!NetPasswordSystem.Registered[whoAmI])
             {
-                message = new NetworkText(
-                    GetText("Configs.ImproveConfigs.OnlyHostByPassword.Unaccepted"), NetworkText.Mode.Literal);
+                message = NetworkText.FromKey("Mods.ImproveGame.Configs.ImproveConfigs.OnlyHostByPassword.Unaccepted");
             }
             return NetPasswordSystem.Registered[whoAmI];
         }
@@ -1206,8 +1208,7 @@ partial class MyUtils
         if (NetMessage.DoesPlayerSlotCountAsAHost(whoAmI))
             return true;
 
-        message = new NetworkText(
-            GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted"), NetworkText.Mode.Literal);
+        message = NetworkText.FromKey("Mods.ImproveGame.Configs.ImproveConfigs.OnlyHost.Unaccepted");
         return false;
     }
 }

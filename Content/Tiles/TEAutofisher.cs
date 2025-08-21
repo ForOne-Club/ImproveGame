@@ -648,14 +648,8 @@ namespace ImproveGame.Content.Tiles
                     if (Config.EmptyAutofisher)
                     {
                         var center = new Point(Position.X + 1, Position.Y + 2);
-                        GetMeterCoords(center, out string compassText, out string depthText);
-
-                        string finalText = GetTextWith("Configs.ImproveConfigs.EmptyAutofisher.Tip", new
-                        {
-                            Compass = compassText,
-                            Depth = depthText
-                        });
-                        WorldGen.BroadcastText(NetworkText.FromLiteral(finalText), Color.OrangeRed);
+                        GetMeterCoords(center, out NetworkText compassText, out NetworkText depthText);
+                        WorldGen.BroadcastText(NetworkText.FromKey("Mods.ImproveGame.Items.Autofisher.Tip", compassText, depthText), Color.OrangeRed);
                     }
                 }
 

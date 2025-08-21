@@ -460,7 +460,6 @@ ImproveConfigs: {
 			开启后，若存储于钓鱼机的鱼饵用光，会在聊天栏显示一行信息:
 			“位于 [水平位置, 深度] 的自动钓鱼机已用光鱼饵”
 			'''
-		Tip: 位于 [c/15d36a:{Compass}, {Depth}] 的自动钓鱼机已用光鱼饵
 	}
 
 	OtherFunctions: {

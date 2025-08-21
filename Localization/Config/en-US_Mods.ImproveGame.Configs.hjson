@@ -450,7 +450,6 @@ ImproveConfigs: {
 			If a Fishing Machine runs out of bait, a message will be displayed: 
 			“\"The Fishing Machine at [horizontal position, depth] has no bait\"
 			'''
-		Tip: The Fishing Machine at [c/15d36a:{Compass}, {Depth}] has no bait
 	}
 
 	OtherFunctions: {
