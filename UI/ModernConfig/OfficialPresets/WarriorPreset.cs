@@ -40,6 +40,8 @@ public class WarriorPreset : OfficialPreset
         modConfig.AlchemyGrassGrowsFaster = true;
         modConfig.AlchemyGrassAlwaysBlooms = true;
         modConfig.PumpkinGrowsFaster = true;
+        modConfig.LifeFruitGrowsFaster = true;
+        modConfig.LifeFruitLimit = 30;
         modConfig.StaffOfRegenerationAutomaticPlanting = true;
         modConfig.NoBiomeSpread = true;
         modConfig.RespawnWithFullHP = true;

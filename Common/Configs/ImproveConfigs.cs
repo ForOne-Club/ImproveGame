@@ -272,6 +272,15 @@ public class ImproveConfigs : ModConfig
     public bool PumpkinGrowsFaster;
 
     [DefaultValue(false)]
+    public bool LifeFruitGrowsFaster;
+
+    [DefaultValue(-1)]
+    [Range(1, 60)]
+    [Increment(1)]
+    [Slider]
+    public int LifeFruitLimit;
+
+    [DefaultValue(false)]
     public bool StaffOfRegenerationAutomaticPlanting;
 
     [DefaultValue(true)]
