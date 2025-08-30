@@ -270,6 +270,8 @@ namespace ImproveGame.Content.Functions
             On_WorldGen.IsHarvestableHerbWithSeed += WorldGen_IsHarvestableHerbWithSeed;
             // “南瓜”生长速度
             On_WorldGen.GrowPumpkin += On_WorldGenOnGrowPumpkin;
+            // “生命果”生长解限and生长速度
+            IL_WorldGen.UpdateWorld_GrassGrowth += IL_WorldGen_UpdateWorld_GrassGrowth;
             // 旅商永远不离开
             On_WorldGen.UnspawnTravelNPC += TravelNPCStay;
             // 修改旗帜需求
@@ -402,6 +404,37 @@ namespace ImproveGame.Content.Functions
             On_Main.UpdateAudio += GraveyardMusicRemoval;
             // 墓地迷雾
             On_AmbientWindSystem.Update += GraveyardMistRemoval;
+        }
+
+        private void IL_WorldGen_UpdateWorld_GrassGrowth(ILContext il)
+        {
+            var c = new ILCursor(il);
+
+            if (c.TryGotoNext(MoveType.Before, i => i.MatchStloc(14)))
+            {
+                c.EmitDelegate<Func<int, int>>(maxValue2 =>
+                {
+                    return (Config.LifeFruitGrowsFaster ? 1 : maxValue2);
+                });
+            }
+
+            if (c.TryGotoNext(MoveType.Before, i => i.MatchStloc(20)))
+            {
+                c.EmitDelegate<Func<int, int>>((num7) =>
+                {
+                    int limit = Config.LifeFruitLimit;
+
+                    if (limit == -1)
+                        return num7;
+
+                    if (Main.expertMode)
+                        limit = Math.Max(limit, 11);
+                    else
+                        limit = Math.Max(limit, 1);
+
+                    return limit;
+                });
+            }
         }
 
         private void On_WorldGenOnGrowPumpkin(On_WorldGen.orig_GrowPumpkin orig, int i, int j, int type)

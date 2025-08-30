@@ -271,6 +271,21 @@ ImproveConfigs: {
 		Tooltip: Makes all the pumpkins grow faster
 	}
 
+	LifeFruitGrowsFaster: {
+		Label: "[centeritem:1291] 生命果迅速生长"
+		Tooltip: 使生命果生长得更快
+	}
+
+	LifeFruitLimit: {
+		Label: "[centeritem:1291] 生命果限制调整"
+		Tooltip:
+			'''
+			可以调整生命果对于周围生命果的判断范围，数值越小生命果长得越密集
+			当为-1时，则为原版限制（每隔 60（普通）/ 50（专家）图格生成一个）
+			调整时，需注意在专家及以上难度下，实际数值为该数值-10
+			'''
+	}
+
 	StaffOfRegenerationAutomaticPlanting: {
 		Label: "[centeritem:213] Staff/Axe of Regrowth Auto-Plant"
 		Tooltip: Automatically plants the gathered herb when using the Staff/Axe of Regrowth

@@ -40,6 +40,8 @@ public class ExplorerPreset : OfficialPreset
         modConfig.AlchemyGrassGrowsFaster = false;
         modConfig.AlchemyGrassAlwaysBlooms = false;
         modConfig.PumpkinGrowsFaster = false;
+        modConfig.LifeFruitGrowsFaster = false;
+        modConfig.LifeFruitLimit = 30;
         modConfig.StaffOfRegenerationAutomaticPlanting = true;
         modConfig.NoBiomeSpread = false;
         modConfig.RespawnWithFullHP = true;

@@ -41,6 +41,8 @@ public class VanillaPreset : OfficialPreset
         modConfig.AlchemyGrassGrowsFaster = false;
         modConfig.AlchemyGrassAlwaysBlooms = false;
         modConfig.PumpkinGrowsFaster = false;
+        modConfig.LifeFruitGrowsFaster = false;
+        modConfig.LifeFruitLimit = -1;
         modConfig.StaffOfRegenerationAutomaticPlanting = false;
         modConfig.NoBiomeSpread = false;
         modConfig.RespawnWithFullHP = false;
