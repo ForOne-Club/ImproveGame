@@ -4,7 +4,7 @@
 部分模组物品获得方式：
 旗帜盒: 铁锭(铅锭)x12
 药水袋: 丝绸x8
-自动钓鱼机: 铁锭(铅锭)x4 铜锭(锡锭)x2
+自动钓鱼机: 铁锭(铅锭)x10 铜锭(锡锭)x5 蜘蛛网x20
 储存管理器: 蓝玉x5 落星x8 金锭(铂金锭)x12
 科技魔杖: 史莱姆王掉落
 空间魔杖: 史莱姆王掉落
@@ -53,7 +53,7 @@ Only some functions are enabled by default, please check mod configurations for 
 How to obtain mod items: 
 Potion Bag: Any Iron Bar * 12
 Potion Bag: Silk * 8
-Fishing Machine: Any Iron Bar * 4 + Any Copper Bar * 2
+Fishing Machine: Any Iron Bar * 10 + Any Copper Bar * 5 + Cobweb * 20
 Storage Manager: Sapphire * 5 + Fallen Star * 8 + Any Gold Bar * 12
 Wand of Technology: Dropped by the King Slime
 Wand of Space: Dropped by the King Slime

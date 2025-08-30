@@ -10,7 +10,7 @@ Only some functions are enabled by default, please check mod config for details
 [list]
 	[*]Banner Box: Any Iron Bar * 12
 	[*]Potion Bag: Silk * 8
-	[*]Fishing Machine: Any Iron Bar * 4 + Any Copper Bar * 2
+	[*]Fishing Machine: Any Iron Bar * 10 + Any Copper Bar * 5 + Cobweb * 20
 	[*]Storage Manager: Sapphire * 5 + Fallen Star * 8 + Any Gold Bar * 12
 	[*]Wand of Technology: Dropped by the King Slime
 	[*]Wand of Space: Dropped by the King Slime
