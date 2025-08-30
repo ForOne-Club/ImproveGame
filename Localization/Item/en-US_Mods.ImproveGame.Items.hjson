@@ -107,7 +107,7 @@ Autofisher: {
 		You may also put in accessories to increase fishing power or grant ability to fish in lava
 		Bait consumption is only 40% of the manual fishing
 		The initial fishing speed is 30% of the manual fishing speed, but it can be increased in different ways:
-		- Each [i:Bass] stored will provide a 5% fishing speed bonus, caps at 500% ([i/s100:Bass])
+		- Each [i:Bass] Bass stored will provide a 5% fishing speed bonus, caps at 500% ([i/s100:Bass])
 		- [i:AnglerEarring], [i:AnglerTackleBag] and [i:LavaproofTackleBag] can increase fishing speed by 200%, 250%, and 300% respectively
 		- Fishing speed is increased by 200% in Hardmode
 		- Final speed = Base speed * Sum of all bonuses. The maximum speed is 300% of the manual fishing
