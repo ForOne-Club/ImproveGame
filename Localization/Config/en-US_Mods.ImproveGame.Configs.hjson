@@ -804,6 +804,11 @@ AvailableModItemConfigs: {
 		It is unsable currently. 
 		Please modify the option in Mod Item Config
 		'''
+	AvailablityDetailedHint:
+		'''
+		It is unsable currently. 
+		Please modify the option {0} in Main Config
+		'''
 	DisplayName: Mod Item Config
 	Available: " Usable"
 	Unavailable: " Unusable"
