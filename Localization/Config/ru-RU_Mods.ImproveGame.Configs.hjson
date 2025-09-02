@@ -1,4 +1,4 @@
-gImproveConfigs: {
+ImproveConfigs: {
 	DisplayName: 1. Основная конфигурация
 
 	ILoveBalance: {
@@ -804,16 +804,16 @@ gImproveConfigs: {
 }
 
 AvailableModItemConfigs: {
-	/* AvailablityHint:
+	AvailablityHint:
 		'''
-		It is unsable currently. 
-		Please modify the option in Mod Item Config
-		''' */
-	/* AvailablityDetailedHint:
+		Данный предмет недоступен. 
+		Пожалуйста, измените настройку в конфигурации модовых предметов.
 		'''
-		It is unsable currently. 
-		Please modify the option {0} in Main Config
-		''' */
+	AvailablityDetailedHint:
+		'''
+		Данный предмет недоступен. 
+		Пожалуйста, измените настройку {0} в главной конфигурации.
+		'''
 	DisplayName: 3. Конфигурация предметов мода
 	Available: ": используем(а)"
 	Unavailable: ": неиспользуем(а)"
