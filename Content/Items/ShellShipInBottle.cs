@@ -7,6 +7,7 @@ namespace ImproveGame.Content.Items;
 public class ShellShipInBottle : ModItem, IConditionItem
 {
     public Condition UseCondition => ConfigCondition.EnableQuickShimmerC;
+    string IConditionItem.ConfigKey => "QuickShimmer";
     public override void SetStaticDefaults()
     {
         ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<ShellShipInBottle_Shimmered>();

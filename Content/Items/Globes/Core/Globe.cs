@@ -12,7 +12,8 @@ namespace ImproveGame.Content.Items.Globes.Core;
 /// </summary>
 public abstract class Globe : ModItem, IConditionItem
 {
-    public Condition UseCondition => ConfigCondition.EnableMinimapMarkC;
+    Condition IConditionItem.UseCondition => ConfigCondition.EnableMinimapMarkC;
+    string IConditionItem.ConfigKey => "MinimapMark";
 
     public static Color hintTextColor = Color.PaleVioletRed * 1.4f;
     public static Color foundColor = Color.Pink;
