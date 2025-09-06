@@ -8,7 +8,8 @@ namespace ImproveGame.Content.Items;
 
 public sealed class WeatherBook : ModItem, IConditionItem
 {
-    public Condition UseCondition => ConfigCondition.EnableWeatherControlC;
+    Condition IConditionItem.UseCondition => ConfigCondition.EnableWeatherControlC;
+    string IConditionItem.ConfigKey => "WeatherControl";
     public override void SetDefaults()
     {
         Item.CloneDefaults(ItemID.CombatBook);
