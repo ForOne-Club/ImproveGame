@@ -1,34 +1,43 @@
-﻿
-<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="..\tModLoader.targets" />
-	<PropertyGroup>
-		<AssemblyName>ImproveGame</AssemblyName>
-		<LangVersion>preview</LangVersion>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="FuzzySearch.Net" Version="1.1.0" />
-		<PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />
-	</ItemGroup>
-	<PropertyGroup>
-		<!--自动打开DragonLens-->
-		<DebugMod>DragonLens</DebugMod>
-	</PropertyGroup>
-	<ItemGroup>
-		<Reference Include="lib\*.dll" />
-		<ModReference Include="lib\*.dll" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="./README.md;./README-en.md;./How-To-Use-Search.md">
-			<Visible>false</Visible>
-		</None>
-		<None Include="./icon.png;./icon_workshop.png">
-			<Visible>false</Visible>
-		</None>
-		<None Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt">
-			<Visible>true</Visible>
-		</None>
-		<None Include=".gitignore;.gitattributes;./LICENSE">
-			<Visible>false</Visible>
-		</None>
-	</ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="..\tModLoader.targets" />
+    <PropertyGroup>
+        <AssemblyName>ImproveGame</AssemblyName>
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="FuzzySearch.Net" Version="1.1.0" />
+        <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />
+    </ItemGroup>
+    <PropertyGroup>
+        <!--自动打开DragonLens-->
+        <DebugMod>DragonLens</DebugMod>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="lib\*.dll" />
+        <ModReference Include="lib\*.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="./README.md;./README-en.md;./How-To-Use-Search.md">
+            <Visible>true</Visible>
+        </None>
+        <None Include="./icon.png;./icon_workshop.png">
+            <Visible>false</Visible>
+        </None>
+        <None Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt">
+            <Visible>false</Visible>
+        </None>
+        <None Include=".gitignore;.gitattributes;./LICENSE">
+            <Visible>false</Visible>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SilkyUIAnalyzer\SilkyUIAnalyzer.csproj">
+            <OutputItemType>Analyzer</OutputItemType>
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+        </ProjectReference>
+        <ProjectReference Include="..\SilkyUIFramework\SilkyUIFramework.csproj" />
+    </ItemGroup>
 </Project>
