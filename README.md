@@ -36,7 +36,7 @@
 
 ## ✨ 功能
 
-绝大多数功能都是可以在模组配置中可见，具体还请在游戏中查看。
+绝大多数功能都在 **模组配置** 中可见，具体还请在游戏中查看。
 
 1. 物品最大堆叠等辅助模组普遍功能
 2. 非时装饰品也可放置在时装栏（启用模组直接生效）
@@ -52,13 +52,13 @@
 
 ## ⬇️ 下载
 
-模组已在 **Steam创意工坊** 发布，可直接订阅下载: <https://steamcommunity.com/sharedfiles/filedetails/?id=2797518634>
+模组已在 **Steam** 上 **tModLoader 创意工坊** 中发布，直接搜索：[更好的体验](https://steamcommunity.com/sharedfiles/filedetails/?id=2797518634)，即可找到此模组。
 
 ## 💻 构建项目
 
 更好的体验由于使用了 **NuGet**，因此无法使用 **tModLoader** 进行编译，需要使用 **IDE** 进行编译
 
-> 推荐 **IDE**：Visual Studio 2022、Rider、Visual Studio Code
+> 推荐 **IDE**：Rider、Visual Studio 2022、Visual Studio Code
 
 1. 使用 **IDE** 打开项目
 2. 使用 **IDE** 编译项目（通常使用快捷键 `F5` 可快速启动）
@@ -69,16 +69,16 @@
 
 上述版权声明和本许可声明应包含在本软件的所有副本或主要部分中。
 
-因此，该模组不存在版权侵犯问题。
-ChevyRay 的协程类也受 MIT 许可，与上面相同。
+因此，该模组不存在版权侵犯问题。\
+ChevyRay 的协程类也受 MIT 许可，与上面相同。\
 TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也受 MIT 许可，与上面相同。
 本模组的自动存钱功能大部分代码来自模组“Auto Piggy Bank”，该模组也受 MIT 许可，与上面相同。
 本模组的StorageCommunicator部分代码来自模组“Magic Storage”，该模组也受 MIT 许可，与上面相同。
 
-附:
-本模组开源链接: <https://github.com/ForOne-Club/ImproveGame>
-WMITF开源链接: <https://github.com/gardenappl/WMITF>
-ChevyRay的协程类: <https://github.com/ChevyRay/Coroutines>
-ProjectStarlight.Interchange: <https://github.com/ProjectStarlight/ProjectStarlight.Interchange>
-Auto Piggy Bank开源链接: <https://github.com/diniamo/auto-piggy-bank>
+附:\
+本模组开源链接: <https://github.com/ForOne-Club/ImproveGame>\
+WMITF开源链接: <https://github.com/gardenappl/WMITF>\
+ChevyRay的协程类: <https://github.com/ChevyRay/Coroutines>\
+ProjectStarlight.Interchange: <https://github.com/ProjectStarlight/ProjectStarlight.Interchange>\
+Auto Piggy Bank开源链接: <https://github.com/diniamo/auto-piggy-bank>\
 Magic Storage开源链接: <https://github.com/blushiemagic/MagicStorage>
