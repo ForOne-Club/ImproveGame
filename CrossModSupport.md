@@ -1,7 +1,13 @@
-﻿## 🤝 跨 Mod 支持
+﻿<div style="padding: 20px;display: flex;flex-direction: column;align-items: center;">
 
-> 如果你是一名玩家，并想要让其他模组修复与更好的体验不兼容的问题，你可以向其他模组作者提出请求，让他们阅读此文档并添加跨 **Mod** 支持。\
+<h1 align="center" style="border-bottom: 0">🤝 跨 Mod 支持</h1>
+
+如果你是一名玩家，并想要让其他模组修复与更好的体验不兼容的问题，\
+你可以向其他模组作者提出请求，让他们阅读此文档并添加跨 **Mod** 支持。
+
 除了以 `GetXX` 开头的，其他 **Mod.Call** 的返回值是一个 `bool`，指示这个操作是否成功执行。
+
+</div>
 
 ### GetAmmoChainSequence
 
