@@ -40,4 +40,8 @@
         </ProjectReference>
         <ProjectReference Include="..\SilkyUIFramework\SilkyUIFramework.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="**/*.xml" Exclude="bin/**/*;obj/**/*" Pack="true" ModPath="%(Identity)" />
+    </ItemGroup>
 </Project>
