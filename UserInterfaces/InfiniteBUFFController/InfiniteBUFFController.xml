@@ -1,22 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- Class 填写对应类名 -->
-<Body Class="ImproveGame.UserInterfaces.InfiniteBUFFController.InfiniteBUFFController"
-    Gap="0" BorderRadius="4" Width="400px" FitHeight="true" Left="50#" Top="50#" CrossAlignment="Stretch">
+<Body Class="ImproveGame.UserInterfaces.InfiniteBUFFController.InfiniteBUFFController" EnableBlur="true"
+    Gap="0" BorderRadius="8" OverflowHidden="true" FitWidth="true" FitHeight="true" Left="50#" Top="50#" CrossAlignment="Stretch">
     <DraggableView Name="Header" FitWidth="true" Height="36px"
         Padding="8 0" FlexDirection="Row" MainAlignment="SpaceBetween" CrossAlignment="Center">
         <TextView Name="Title" Text="增益控制器" TextScale="0.4"/>
         <Image Name="Close" Width="30px" ImageAlign="1 0.5"/>
     </DraggableView>
-    <HR/>
-    <ElementGroup Padding="4 4 4 0" Height="34px" CrossAlignment="Stretch">
-        <ElementGroup Gap="4" BorderRadius="4" FlexGrow="1" BackgroundColor="rgba(0,0,0,0.25)" CrossAlignment="Stretch">
-            <EditText Name="FilterBox" MaximumCharacters="22" MaxHeight="100%" Padding="8 0" FlexGrow="1" FlexShrink="1" TextAlign="0 0.5" TextScale="0.8"/>
-            <Image Name="ClearEditText" Width="30px" ImageScale="0.8" ImageAlign="0.5"/>
+    <HR BackgroundColor="rgba(0,0,0,0.75)"/>
+    <ElementGroup FitWidth="true" FitHeight="true" FlexDirection="Column" CrossAlignment="Stretch" Gap="6" Padding="6">
+        <ElementGroup Height="32px" CrossAlignment="Stretch">
+            <ElementGroup Name="EditContainer" Gap="4" BorderRadius="6" FlexGrow="1"
+                Border="2" BorderColor="rgba(0,0,0,0.5)" BackgroundColor="rgba(0,0,0,0.25)" CrossAlignment="Stretch">
+                <!-- 输入框 -->
+                <EditText Name="FilterBox"
+                    MaxHeight="100%" Padding="8 0" FlexGrow="1" FlexShrink="1"
+                    MaximumCharacters="22" TextAlign="0 0.5" TextScale="0.75"/>
+                <Image Name="ClearEditText" Width="28px" FitHeight="true" ImageScale="0.8" ImageAlign="0.5"/>
+            </ElementGroup>
         </ElementGroup>
+        <ScrollView Name="ScrollView" FitWidth="true" FitHeight="true" CrossAlignment="Stretch" Gap="4">
+            <M.Mask FitWidth="true" FitHeight="false" Height="200px"/>
+            <M.Container FitHeight="true" Width="378px" MinHeight="100%" Gap="2"
+                FlexDirection="Row" FlexWrap="true" MainAlignment="Start" CrossContentAlignment="Start" CrossAlignment="Start">
+            </M.Container>
+        </ScrollView>
     </ElementGroup>
-    <ScrollView Name="ScrollView" FitHeight="true" CrossAlignment="Stretch" Gap="4" Padding="4">
-        <M.Mask FitHeight="false" Height="200px"/>
-        <M.Container FitHeight="true" FlexDirection="Column" BackgroundColor="#00000033">
-        </M.Container>
-    </ScrollView>
 </Body>
