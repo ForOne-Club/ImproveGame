@@ -2,7 +2,7 @@
 
 Record some temporary tasks and development progress to facilitate recall and prevent forgetting (delete after completion)
 
-记录一些临时任务和开发进度，方便回忆防止遗忘（完成后删除）
+记录一些进行中的任务和开发进度，方便回忆防止遗忘（完成后删除）
 
 ## Temporary Tasks 临时任务
 
@@ -13,4 +13,4 @@ Record some temporary tasks and development progress to facilitate recall and pr
 
 ## Dev Progress 开发进度
 
-- [ ] Example Dev Progress
+- [ ] 无限增益、增益控制器重置 2025.9.8

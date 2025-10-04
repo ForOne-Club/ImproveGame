@@ -4,4 +4,5 @@ version = 1.8.1.14
 homepage = https://github.com/ForOne-Club/ImproveGame
 buildIgnore = *.gif, *.aseprite
 includeSource = true
+modReferences = SilkyUIFramework
 dllReferences = NetSimplified, PinyinNet

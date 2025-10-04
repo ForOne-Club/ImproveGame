@@ -1,29 +1,41 @@
-<h1 align="center">更好的体验</h1>
+<div align="center" style="padding-top: 25px;display: flex;flex-direction: column;align-items: center">
 
-<div align="center">
+<img src="./icon_workshop.png" width="150"/>
+<h3>更好的体验</h3>
 
 [English](README-en.md) | 简体中文
 
-[更新日志](ChangeLog.md)
-
-一个致力于给模组游玩体验提一个档次的辅助Mod
+[更新日志](ChangeLog.md)\
+[跨 Mod 支持](./CrossModSupport.md)
 
 </div>
 
 ## 📖 简介
-`更好的体验` 的主要更新与制作方向大致可以分为以下三大类：
 
-1. 针对 `原版机制修改&增强` 可供玩家自定义的功能，例如：`最大堆叠` `物品拾取范围` `工具使用速度` `城镇 NPC 多项控制能力` 等。
-2. 创意 `工具&道具`，例如：`法爆魔杖` `空间魔杖` `科技魔杖` `液体魔杖` `虚空魔杖` `稻草人` `钓鱼机` 等。
-3. 针对玩家的 `能力增强`，例如：`大背包` `自动&智能拾取` `无限药水&增益站 BUFF 效果` `自动垃圾桶` `自动开袋子` `钓鱼机` `自动开袋` `快速微光` `弹药链` 等。
+**更好的体验** 模组的开发方向主要围绕以下三大模块展开：
 
-补充：
-- 一些玩家 `能力增强` 可能还需要某些道具解锁，例如：`天气之书` `定位球` `瓶中微光船` 等。
-- 如果你能注意到，`更好的体验` 有着与其他模组不太一样的 `UI`，这也是 `更好的体验` 的一大特色。
+### 1. 原版基础机制
+允许玩家自由调整一些游戏基础机制，例如：
+**物品最大堆叠数量**、**物品拾取范围**、**工具使用速度**、**额外 BUFF 栏**、**草药正常不受**、**重生加速** 等。
 
-## ✨ 功能亮点
+### 2.强力道具
+新增一系列功能强大或玩法新颖的道具，例如：
+**法爆魔杖**、**空间魔杖**、**科技魔杖**、**液体魔杖**、**虚空魔杖**、**钓鱼机**、**存储管理器** 等。
 
-详细列表请到模组配置或更新日志中查看
+### 3. 玩家能力强化系统
+提升角色便利性与自动化体验，例如：
+**大背包扩容**、**扩展背包可拾取物品**、**无限药水 & 增益站**、**自动垃圾桶**、**自动开袋**、**快速微光净化**、**弹药链系统** 等。
+
+📌 补充说明：
+
+- 部分 **能力增强** 功能需通过特定道具激活，如：
+**天气之书**、**定位球**、**瓶中微光船** 等。
+
+- **更好的体验** 拥有独树一帜的 **UI 界面设计**，视觉风格与交互逻辑均与其他模组显著不同，是本模组的重要特色之一。
+
+## ✨ 功能
+
+绝大多数功能都在 **模组配置** 中可见，具体还请在游戏中查看。
 
 1. 物品最大堆叠等辅助模组普遍功能
 2. 非时装饰品也可放置在时装栏（启用模组直接生效）
@@ -35,21 +47,20 @@
 8. 含100格的超大背包，再也不用担心旗帜和药水放在哪了
 9. 药水袋与旗帜盒，更方便地将你的药水旗帜整合在一个物品，节省空间
 
-几乎所有功能都是 `可以调节` 的，自行选择适合你的功能！
+> 几乎所有功能都是 **可以调节** 的，自行选择适合你的功能！
 
 ## ⬇️ 下载
 
-本Mod已在Steam创意工坊发布，可直接订阅下载: <https://steamcommunity.com/sharedfiles/filedetails/?id=2797518634>
+模组已在 **Steam** 上 **tModLoader 创意工坊** 中发布，直接搜索：[更好的体验](https://steamcommunity.com/sharedfiles/filedetails/?id=2797518634)，即可找到此模组。
 
-## 💻 编译
+## 💻 构建项目
 
-更好的体验由于使用了NuGet，因此无法使用tModLoader进行编译，需要使用IDE进行编译
+更好的体验由于使用了 **NuGet**，因此无法使用 **tModLoader** 进行编译，需要使用 **IDE** 进行编译
 
-1. 使用IDE，如Visual Studio 2022、Rider等打开项目
-2. 如果先前在tModLoader中启用了此Mod，先禁用，然后重新加载
-3. 使用IDE编译项目
-4. 在tModLoader中打开此Mod，重新加载
-5. 成了
+> 推荐 **IDE**：Rider、Visual Studio 2022、Visual Studio Code
+
+1. 使用 **IDE** 打开项目
+2. 使用 **IDE** 编译项目（通常使用快捷键 `F5` 可快速启动）
 
 ## 📗 版权声明
 
@@ -57,371 +68,16 @@
 
 上述版权声明和本许可声明应包含在本软件的所有副本或主要部分中。
 
-因此，该模组不存在版权侵犯问题。
-ChevyRay 的协程类也受 MIT 许可，与上面相同。
+因此，该模组不存在版权侵犯问题。\
+ChevyRay 的协程类也受 MIT 许可，与上面相同。\
 TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也受 MIT 许可，与上面相同。
 本模组的自动存钱功能大部分代码来自模组“Auto Piggy Bank”，该模组也受 MIT 许可，与上面相同。
 本模组的StorageCommunicator部分代码来自模组“Magic Storage”，该模组也受 MIT 许可，与上面相同。
 
-附:
-本模组开源链接: <https://github.com/ForOne-Club/ImproveGame>
-WMITF开源链接: <https://github.com/gardenappl/WMITF>
-ChevyRay的协程类: <https://github.com/ChevyRay/Coroutines>
-ProjectStarlight.Interchange: <https://github.com/ProjectStarlight/ProjectStarlight.Interchange>
-Auto Piggy Bank开源链接: <https://github.com/diniamo/auto-piggy-bank>
+附:\
+本模组开源链接: <https://github.com/ForOne-Club/ImproveGame>\
+WMITF开源链接: <https://github.com/gardenappl/WMITF>\
+ChevyRay的协程类: <https://github.com/ChevyRay/Coroutines>\
+ProjectStarlight.Interchange: <https://github.com/ProjectStarlight/ProjectStarlight.Interchange>\
+Auto Piggy Bank开源链接: <https://github.com/diniamo/auto-piggy-bank>\
 Magic Storage开源链接: <https://github.com/blushiemagic/MagicStorage>
-
-## 🤝 跨Mod支持 (Mod.Call)
-
-如果你是一名玩家，并想要让其他模组修复与更好的体验不兼容的问题，你可以向其他模组作者提出请求，让他们阅读此文档并添加跨Mod支持。
-
-除了以 `GetXX` 开头的，其他Mod.Call的返回值是一个 `bool`，指示这个操作是否成功执行
-
-### GetAmmoChainSequence
-
-获取指定物品的弹药链序列
-建议将本模组源码的 [AmmoChain.cs](Content/Functions/ChainedAmmo/AmmoChain.cs) 和 [ItemTypeData.cs](Core/ItemTypeData.cs) 复制到你的模组源码中，以便操作弹药链
-
-#### 参数
-
-- `Item` 要获取弹药链序列的物品实例
-
-#### 返回值
-
-- `TagCompound` 以TagCompound形式存储的弹药链数据，数据读取方式参考 [AmmoChain.cs](Content/Functions/ChainedAmmo/AmmoChain.cs) 和 [ItemTypeData.cs](Core/ItemTypeData.cs)。如果物品没有弹药链，返回 `null`
-
-### GetUniversalAmmoId
-
-获取“任意弹药”物品的ID，这是一个用于弹药链中，表示该位置弹药任意的物品，搭配弹药链使用
-
-#### 参数
-
-无
-
-#### 返回值
-
-- `int` “任意弹药”物品的ID
-
-### GetBigBagItems
-
-获取大背包中的物品
-
-#### 参数
-
-- `Player` 大背包所属玩家的实例
-
-#### 返回值
-
-- `List<Item>` 大背包中共100格的物品的实例，包括空气
-
-### IgnoreInfItem
-
-为某个/些指定的物品添加无尽增益忽略，以防止在拥有30个时无限提供增益
-
-#### 参数
-
-- `int/List<int>` 不提供无限增益的某个物品/一些物品的ID
-
-### AddPotion
-
-为某个指定的物品添加无尽增益支持(药水类)，对于没有设置Item.buffType或拥有多个增益的物品十分有用，药水类指需要达到30堆叠才能提供增益
-
-#### 参数
-
-- `int` 添加药水类无尽增益支持的物品的ID
-- `int/List<int>` 该物品提供的一个/一些增益的ID
-
-### ConsumePotion
-
-让某个/些指定的物品在触发无尽增益的情况下也会被正常消耗
-
-#### 参数
-
-- `int/List<int>` 会被正常消耗的某个物品/一些物品的ID
-
-### BuffConflict
-
-设置当玩家拥有某个增益时，一个/些增益会被清除
-
-#### 参数
-
-- `int` 某个增益的ID
-- `int/List<int>` 会被清除的增益ID
-
-### AddStation
-
-为某个指定的物品添加无尽增益支持(放置站类)，放置站类指有一个即可提供增益。放置站一般需要手动提供支持
-
-#### 参数
-
-- `int` 添加放置站类无尽增益支持的物品的ID
-- `int/List<int>` 该物品提供的一个/一些增益的ID
-
-### AddPortableCraftingStation
-
-为某个指定的物品添加便携制作站支持，对于没有设置Item.createTile但是应该充当某种制作站的物品十分有用，你可以指定多个制作站。
-如果你想要使其充当水源，应将“该物品充当的制作站的物块ID”(即第二个参数)设置为水槽 (TileID.Sink)
-
-#### 参数
-
-- `int` 添加便携制作站支持的物品的ID
-- `int/List<int>` 该物品可充当的一个/一些制作站的物块ID
-
-### AddFishingAccessory
-
-为某个指定的物品添加自动钓鱼机的钓鱼饰品支持，可设置钓鱼速度加成、渔力加成、是否应被视为钓具箱和是否可在岩浆钓鱼。一般需要手动提供饰品支持
-
-#### 参数
-
-- `int` 添加自动钓鱼机的钓鱼饰品支持的物品的ID
-- `float` 该物品提供的钓鱼速度加成
-- `float` 该物品提供的渔力加成
-- `bool` 该物品是否应被视为钓具箱
-- `bool` 该物品是否给予在熔岩中钓鱼的能力
-
-### AddStatCategory
-
-向属性面板添加一个属性类别，后续可以使用 `AddStat` 添加属性
-
-#### 参数
-
-- `string` 添加的属性类别的字符串标识符
-- `Texture2D` 指示属性类别的图标
-- `string` 该属性类别的名称的本地化键
-- `Texture2D` 指示该属性类别所属模组的图标，建议使用模组的icon_small贴图
-
-### AddStat
-
-向某个属性类别添加一个属性
-
-#### 参数
-
-- `string` 该属性要被添加到的属性类别的字符串标识符
-- `string` 该属性的名称的本地化键
-- `Func<string>` 该属性的值的获取函数
-
-### AddHomeTpItem
-
-添加回家物品
-
-#### 参数
-
-- `int/List<int>` 你要添加的某个物品/一些物品的ID
-- `bool` 该物品是否应被视为药水，若为药水则需要堆叠超过无尽药水需求才能快捷使用
-- `bool` 该物品是否应被视为折返药水，在回程时会创造一个折返传送门
-
-### GetFisherItems
-获取指定自动钓鱼机内的物品
-#### 参数
-- `Point16/TEAutoFisher` 钓鱼机坐标/实例，支持钓鱼机覆盖的任一图格坐标
- 
-##### 另一种样式
- 
-- `int` 钓鱼机位置的横坐标，世界图格坐标
-- `int` 钓鱼机位置的纵坐标，世界图格坐标
- 
-#### 返回值
- 
-- `Item[]` 长度为43的数组，包括空气，槽位说明：
-  - 0-39: 渔获
-  - 40: 钓竿
-  - 41: 鱼饵
-  - 42: 钓鱼饰品
-  - 若钓鱼机获取失败返回空数组（`Array.Empty<Item>()`而非`null`，可以通过数组长度判断）
-- Note: 返回的数组为快照，玩家交互可能导致钓鱼机绑定物品实例改变，需要注意数据过期问题
- 
-### SyncFisherItems
- 
-同步指定自动钓鱼机内的物品，用于在单人模式请求钓鱼机UI刷新和多人模式服务器端物品同步
-#### 参数
-- `Point16/TEAutoFisher` 钓鱼机坐标/实例，支持钓鱼机覆盖的任一图格坐标
-- `int` 需要同步物品的栏位id，对应关系参考`GetFisherItems`返回值说明
-- `int` 物品数量的变化量
-##### 另一种样式
-- `int` 钓鱼机位置的横坐标，世界图格坐标
-- `int` 钓鱼机位置的纵坐标，世界图格坐标
-- `int` 需要同步物品的栏位id，同前
-- `int` 物品数量的变化量
-#### 行为说明
-- **单人模式**：  
-  - 强制刷新钓鱼机UI，`栏位id` 需在0-42范围内，`变化量` 参数值被忽略
-- **多人模式**：  
-  - `变化量` 为0时：同步指定槽位物品的完整状态（类型、数量、属性）  
-  - `变化量` 非0时：仅更新物品数量（支持增量修改）  
-- Note：多人模式中，客户端调用无效，会被拦截并直接返回false。
- 
-### 使用例
-
-以下是一个为自己的放置站添加支持的例子
-
-```CSharp
-public override void PostSetupContent() {
-    if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame)) {
-        improveGame.Call(
-            "AddStation",//加入你自己的增益站1
-            ModContent.ItemType<MyStation1>(), // 物品ID 1
-            ModContent.BuffType<MyStationBuff1>() // BuffID 1
-        );
-        improveGame.Call(
-            "AddStation",//加入你自己的增益站2
-            ModContent.ItemType<MyStation2>(), // 物品ID 2
-            ModContent.BuffType<MyStationBuff2>() // BuffID 2
-        );
-    }
-}
-```
-
-### RegisterCategory
-
-注册分类卡
-
-#### 参数
-
-- `Mod` 注册的分类卡所在的模组的实例
-- `List<KeyValuePair<string, ModConfig>>` 分类卡中的选项信息，键为字段/属性名，值为该模组设置的实例
-- `int` 分类卡的物品图标对应物品id，可选参数，默认值为0
-- `Func<Texture2D>` 获取分类卡图标的函数，会覆盖上面的物品图标id的效果，默认值为null
-- `Func<string>` 获取该分类卡的标签的函数，默认值为null
-- `Func<string>` 获取该分类卡的描述的函数，默认值为null
-
-### SetAboutPage
-
-注册 “关于” 页面
-
-#### 参数
-
-- `Mod` 注册的 “关于” 页面所在的模组的实例
-- `Func<string>` 获取 “关于” 页面中所写的文本的函数
-- `int`  “关于” 页面的物品图标对应物品id，可选参数，默认值为0
-- `Func<Texture2D>` 获取 “关于” 页面图标的函数，会覆盖上面的物品图标id的效果，默认值为null
-- `Func<string>` 获取该 “关于” 页面的标签的函数，默认值为null
-- `Func<string>` 获取该 “关于” 页面的描述的函数，默认值为null
-
-### RemoveCategory
-
-移除模组注册的所有分类卡
-
-#### 参数
-
-- `Mod` 目标模组的实例
-
-### RemoveAboutPage
-
-移除模组注册的 “关于” 页面
-
-#### 参数
-
-- `Mod` 目标模组的实例
-
-### AddModernConfigTitle
-
-设置模组的配置中心在模组设置入口处的文本标题
-
-#### 参数
-
-- `Mod` 目标模组的实例
-- `LocalizedText` 标题的本地化文本实例
-
-### RegisterPreview
-
-注册预览绘制
-
-#### 参数
-
-- `PropertyFieldWrapper` 注册的预览绘制对应的选项的字段/属性信息，注意需要直接属于某个Config才有效
-- `Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>`
-注册的预览绘制内容
-
-##### Action参数的参数
-
-- `UIElement` 绘制框元素
-- `ModConfig` 预览绘制的选项对应的设置实例
-- `PropertyFieldWrapper` 对应的选项的字段/属性信息
-- `object` 直接隶属对象
-- `IList` 直接隶属列表
-- `int` 列表中的下标
-
-### OnGlobalConfigPreview
-
-添加全局预览绘制，与上一个唯一的区别是这个不针对任何一个特定选项，用来批量添加绘制
-
-#### 参数
-
-- `Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>`
-参考上个条目的内容
-
-### 使用例
-
-```CSharp
-// 此处示例使用了ImproveGame_ModernConfigCrossModHelper.cs文件的内容
-// 这个是一个Mod类的Load函数
-public override void Load() 
-{
-    if (Main.netMode == NetmodeID.Server || 
-    !ModLoader.TryGetMod("ImproveGame", out var qot)) return;
-
-    //添加标题
-    AddModernConfigTitle(qot,  this, 
-    Language.GetOrRegister("Mods.MyMod.MyModernConfigTitle"));
-
-    SetAboutPage(qot, this, () => "自己适配配置中心好累哦\n不如反射生成(逃", 
-    (int)ItemID.IronShortsword, null, () => "关于示例", () => "请不要在意吐槽");
-    //上面三个文本自己写本地化获取文本吧(
-
-    //此处示例为给单个设置实例批量添加设置选项
-    //MyConfig.Instance为加载时获取的MyConfig实例
-    RegisterCategory(qot, this, MyConfig.Instance,
-    [
-        nameof(MyConfig.SomeField),
-        nameof(MyConfig.SomeProperty),
-        nameof(MyConfig.SomeArray),
-        nameof(MyConfig.SomeDefinition),
-    ],
-    ItemID.Cog, null, () => "这是一些数据", () => "我顺带告诉你这个支持哪些东西了");
-    //上面两个文本自己写本地化获取文本吧(
-
-    //此处示例为给多个设置示例批量添加设置选项
-    //一个选项名一个设置实例那种太麻烦了我就不写示例了
-    RegisterCategory(qot, this, 
-    [
-        (MyConfig.Instance, //上面水过的再水一遍(
-        [
-            nameof(MyConfig.SomeField),
-            nameof(MyConfig.SomeProperty),
-            nameof(MyConfig.SomeArray),
-            nameof(MyConfig.SomeDefinition),
-        ]),
-        (SeverConfig.Instance,
-        [
-            nameof(MyConfig.SomeVector2),
-            nameof(MyConfig.SomeColor),
-            nameof(MyConfig.SomePoint),
-            nameof(MyConfig.SomeClass),
-        ])
-    ],
-        ItemID.WireKite, null, () => "两家的拼在一起！", 
-        () => "也许有些内容同时需要客户端和服务端来管理，"
-            + "这时这个就大抵能派上很大用场了，嗯。");
-}
-```
-
-### AddPrison
-添加新的建造魔杖建筑样式
-#### 参数
-- `Texture2D` 记录了建筑信息的数据图
-- `Texture2D` 该建筑的一张预览图
-
-#### 数据图格式
-
-| 颜色  | Hex     | 代表的对象   |
-|-------|---------|--------------|
-| 红色  | FF0000  | 实心块       |
-| 黑色  | 000000  | 平台         |
-| 白色  | FFFFFF  | 火把         |
-| 黄色  | FFFF00  | 椅子         |
-| 粉色  | FF00FF  | 桌子         |
-| 蓝色  | 0000FF  | 工作台       |
-| 紫色  | 7F00FF  | 床           |
-| 青色  | 00FFFF  | 禁止放置墙体 |
-| 绿色  | 00FF00  | 门           |
-| 透明  |         | 墙体         |

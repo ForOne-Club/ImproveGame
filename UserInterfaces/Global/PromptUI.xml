@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Class 填写对应类名 -->
+<Body Class="ImproveGame.UserInterfaces.Global.PromptUI" CrossAlignment="CrossAlignment.Center"
+    FitWidth="true" FitHeight="true" Padding="8" Gap="4" Left="20px" Top="20px">
+
+    <Style>
+        <Part TextScale="0.8"/>
+    </Style>
+
+    <TextView Name="Title" Text="更好的体验" TextScale="0.5"/>
+    <TextView Text="阿巴阿巴阿巴阿巴阿巴阿巴" Style="Part"/>
+    <TextView Text="阿巴阿巴阿巴阿巴阿巴阿巴" Style="Part"/>
+    <TextView Text="阿巴阿巴阿巴阿巴阿巴阿巴" Style="Part"/>
+</Body>
