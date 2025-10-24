@@ -126,10 +126,7 @@ public class EventTrigger(string layerName, string name) : IComparable<EventTrig
 
     public virtual void Update(GameTime gameTime)
     {
-        if (RootBody is null or { Enabled: false })
-        {
-            return;
-        }
+        if (RootBody is not { Enabled: true }) return;
 
         UpdateMouseFocus();
 

@@ -12,7 +12,7 @@ namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
 /// <summary>
 /// 设计中不要动
 /// </summary>
-[RegisterUI("Vanilla: Radial Hotbars", "InfiniteBUFFController")]
+[RegisterUI]
 public partial class InfiniteBUFFController : BaseBody
 {
     public UIElementGroup ScrollContainer { get; private set; }

@@ -10,7 +10,7 @@ public class Dummy : ModItem
     public override void SetDefaults()
     {
         Item.SetBaseValues(34, 36, ItemRarityID.Red, Item.sellPrice(silver: 40), 1);
-        Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 5, 5);
+        Item.SetUseValues(ItemUseStyleID.Swing, SoundID.Item1, 15, 15);
     }
 
     public override bool? UseItem(Player player)

@@ -38,7 +38,7 @@ public class BuffTrackerGUI : BaseBody
         };
         MainPanel.SetPosPixels(630, 160).SetSizePixels(450, 220).JoinParent(this);
 
-        SUICross closeButton = new()
+        var closeButton = new SUICross()
         {
             Left = new StyleDimension(-28f, 1f),
             Width = StyleDimension.FromPixels(28f),
@@ -49,7 +49,7 @@ public class BuffTrackerGUI : BaseBody
         closeButton.OnLeftMouseDown += (_, _) => Close();
         MainPanel.Append(closeButton);
 
-        UIHorizontalSeparator separator = new()
+        var separator = new UIHorizontalSeparator()
         {
             Top = StyleDimension.FromPixels(closeButton.Width.Pixels + 5f),
             Width = StyleDimension.FromPercent(1f),
