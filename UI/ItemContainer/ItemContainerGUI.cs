@@ -1,8 +1,10 @@
 ﻿using ImproveGame.UI.ItemContainer.Elements;
+using ImproveGame.UI.ModernConfig.OptionElements;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
+using System.ComponentModel;
 using Terraria.GameInput;
 
 namespace ImproveGame.UI.ItemContainer;
@@ -69,13 +71,41 @@ public class ItemContainerGUI : BaseBody
         Border = 0f, BorderColor = Color.Transparent,
     };
 
+    public readonly SUITriangleIcon SwitchesButton = new()
+    {
+        Left = StyleDimension.FromPixels(-50),
+        HAlign = 1f, VAlign = 0.5f,
+        TriangleBeginColor = Color.Gray,
+        TriangleEndColor = Color.White,
+        TriangleBorderColor = Color.Transparent,
+        TriangleBorderHoverColor = Color.Transparent,
+        BgColor = Color.Transparent,
+        Border = 0f, BorderColor = Color.Transparent,
+    };
+
     // 开关按钮
     public readonly View SwitchView = new View();
+
+    public float SwitchViewMaxHeight;
 
     public readonly ItemContainerGridLayout ItemContainerGrid = new ItemContainerGridLayout
     {
         RelativeMode = RelativeMode.Vertical,
         Spacing = new Vector2(6f),
+    };
+
+    public readonly SUISearchBar SearchBar = new SUISearchBar
+    {
+        RelativeMode = RelativeMode.Vertical,
+        Spacing = new Vector2(6f),
+        MarginTop = 4,
+        MarginBottom = 4,
+        MarginLeft = 4,
+        MarginRight = 4,
+        HAlign = .5f,
+        Width = StyleDimension.FromPixelsAndPercent(-16, 1),
+        Height = StyleDimension.FromPixels(30),
+        BgColor = Color.Black * .1f
     };
 
     public override void OnInitialize()
@@ -103,6 +133,24 @@ public class ItemContainerGUI : BaseBody
         };
         Cross.OnLeftMouseDown += (_, _) => Close();
         Cross.JoinParent(TitlePanel);
+
+        SwitchesButton.JoinParent(TitlePanel);
+        SwitchesButton.Width.Pixels = 24f;
+        SwitchesButton.Height.Pixels = 24f;
+
+        SwitchesButton.OnLeftClick += delegate
+        {
+            IsSwitchesVisible = !IsSwitchesVisible;
+            if (IsSwitchesVisible)
+                SwitchesOpenTimer.Open();
+            else
+                SwitchesOpenTimer.Close();
+        };
+        SwitchesButton.OnUpdate += delegate
+        {
+            if (SwitchesOpenTimer.State is AnimationState.Opened or AnimationState.Closed) return;
+            UpdateSwitchView();
+        };
         #endregion
 
         #region Switch
@@ -190,9 +238,38 @@ public class ItemContainerGUI : BaseBody
         switchView3.JoinParent(SwitchView);
         #endregion
 
+        SearchBar.JoinParent(Window);
+        SearchBar.SearchBarInner.BgColor = Color.Black * .1f;
+        SearchBar.OnSearchContentsChanged += content =>
+        {
+            if (string.IsNullOrEmpty(content))
+                ItemContainerGrid.SetInventory(Container.ItemContainer);
+            else
+            {
+                // 找出所有匹配的选项，并着色（设置Highlighted）
+                var sortedOptions = new List<Item>();
+                var _allOptions = Container.ItemContainer;
+                // 转换成标准字符串搜索输入
+                var optionNames = _allOptions
+                    .Select(item => item.Name).ToList();
+                // 调用DeepSeek写的搜索方法
+                var results = TextSearch(content, optionNames);
+                // 对结果进行处理
+                foreach (SearchResult result in results)
+                {
+                    var option = _allOptions[result.OriginalIndex];
+                    // 将allOptions里的对应元素按照次序生成排序后的列表
+                    sortedOptions.Add(option);
+                }
+
+                ItemContainerGrid.SetInventory(sortedOptions);
+            }
+            Recalculate();
+        };
+
         ItemContainerGrid.SetPadding(8f);
         ItemContainerGrid.PaddingTop = 0f;
-        ItemContainerGrid.SetSizePixels(0, 220f);
+        ItemContainerGrid.SetSizePixels(0, 172f);
         ItemContainerGrid.OnLeftMouseDown += (_, _) =>
         {
             if (!Main.mouseItem.IsAir && !Main.LocalPlayer.ItemAnimationActive && Container.MeetEntryCriteria(Main.mouseItem))
@@ -202,10 +279,27 @@ public class ItemContainerGUI : BaseBody
         };
         ItemContainerGrid.JoinParent(Window);
     }
-
+    private void UpdateSwitchView()
+    {
+        float factor = SwitchesOpenTimer.Schedule;
+        SwitchesButton.trianglePercentCoord[0] = Vector2.Lerp(new Vector2(0.5f, 0f), new Vector2(0f, 0.5f), factor);
+        SwitchesButton.trianglePercentCoord[1] = Vector2.Lerp(new Vector2(0f, 0.5f), new Vector2(0.5f, 1f), factor);
+        SwitchesButton.trianglePercentCoord[2] = Vector2.Lerp(new Vector2(0.5f, 1f), new Vector2(1f, 0.5f), factor);
+        if (SwitchViewMaxHeight == 0)
+        {
+            SwitchViewMaxHeight = SwitchView.Height();
+            SwitchView.IsAdaptiveHeight = false;
+        }
+        SwitchView.MaxHeight = StyleDimension.FromPixels(SwitchViewMaxHeight * factor);
+        SwitchView.Height = StyleDimension.FromPixels(SwitchViewMaxHeight * factor);
+        SwitchView.BgColor = Color.Transparent;
+        SwitchView.OverflowHidden = true;
+        Recalculate();
+    }
     public override void Update(GameTime gameTime)
     {
         StartTimer.Update();
+        SwitchesOpenTimer.Update();
         base.Update(gameTime);
 
         if (Window.IsMouseHovering)
@@ -218,12 +312,14 @@ public class ItemContainerGUI : BaseBody
     {
         Enabled = true;
 
+        UpdateSwitchView();
         SoundEngine.PlaySound(SoundID.MenuOpen);
         OperateInventory(true);
         ItemContainerGrid.SetInventory(container.ItemContainer);
         Title.TextOrKey = container.Name;
         Title.SetInnerPixels(Title.TextSize);
         Container = container;
+        SearchBar.SearchBarInner.Text = "";
         Recalculate();
     }
 
@@ -240,6 +336,8 @@ public class ItemContainerGUI : BaseBody
 
     public AnimationTimer StartTimer = new(3);
 
+    public AnimationTimer SwitchesOpenTimer = new(3);
+    public bool IsSwitchesVisible;
     public override bool RenderTarget2DDraw => !StartTimer.Opened;
     public override Vector2 RenderTarget2DScale => new Vector2(0.95f + StartTimer * 0.05f);
     public override float RenderTarget2DOpacity => StartTimer.Schedule;
