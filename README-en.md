@@ -57,6 +57,17 @@ You can subscribe and download it via steam workshop: <https://steamcommunity.co
 
 This mod contains Nuget package, which means you should not use the compilation of tModLoader, but you should use the compilation function of the code IDE (such as Visual Studio, Rider) to compile this mod
 
+### Clone
+
+Since this project uses **Git submodules**, you need to clone the repository with the `--recurse-submodules` option. Also, because the projects referenced by the solution should be parallel to the `ImproveGame` folder, you need to run the `CreateLinks.bat` script after cloning to create the symbolic links (or manually clone these two repositories in the parent directory of `ImproveGame`).  
+Run the following command in Git Bash or a terminal:
+
+1.$ git clone --recurse-submodules https://github.com/ForOne-Club/ImproveGame.git
+2.$ cd ImproveGame
+3.$ .\CreateLinks.bat
+
+### Compile
+
 1. Open project with your IDE
 2. If you have enabled this mod in tModLoader, disable it and reload first
 3. Compile the project with IDE

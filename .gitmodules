@@ -1,0 +1,7 @@
+[submodule "SilkyUIFramework"]
+	path = SilkyUIFramework
+	url = https://github.com/487666123/SilkyUIFramework.git
+	branch = preview
+[submodule "SilkyUIAnalyzer"]
+	path = SilkyUIAnalyzer
+	url = https://github.com/487666123/SilkyUIAnalyzer.git
