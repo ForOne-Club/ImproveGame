@@ -64,9 +64,11 @@
 由于本项目使用了 **Git 子模块**，因此需要使用 `--recurse-submodules` 参数克隆项目。且由于解决方案引用的项目应与ImproveGame文件夹平行，克隆后需要运行 `CreateLinks.bat` 脚本创建符号链接。（或手动在ImproveGame父目录下分别克隆这两个仓库）
 在Git Bash或终端中运行以下命令：
 
-1.$ git clone --recurse-submodules https://github.com/ForOne-Club/ImproveGame.git
-2.$ cd ImproveGame
-3.$ .\CreateLinks.bat
+```cmd
+git clone --recurse-submodules https://github.com/ForOne-Club/ImproveGame.git
+cd ImproveGame
+.\CreateLinks.bat
+```
 
 ### 编译项目
 
