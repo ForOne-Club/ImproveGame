@@ -2,7 +2,28 @@
 
 public partial class SpaceWand
 {
-    private static readonly int[] GrassSeeds = [2, 23, 60, 70, 199, 109, 82, 633];
+    private static readonly int[] GrassSeeds = 
+        [
+        TileID.Grass, 
+        TileID.CorruptGrass, 
+        TileID.JungleGrass, 
+        TileID.MushroomGrass,
+        TileID.ImmatureHerbs,
+        TileID.HallowedGrass,
+        TileID.CrimsonGrass,
+        TileID.AshGrass,
+        TileID.GreenMoss,
+        TileID.BrownMoss,
+        TileID.RedMoss,
+        TileID.BlueMoss,
+        TileID.PurpleMoss,
+        TileID.LavaMoss,
+        TileID.KryptonMoss,
+        TileID.XenonMoss,
+        TileID.ArgonMoss,
+        TileID.VioletMoss,
+        TileID.RainbowMoss
+        ];
 
     public static void OperateTile(Player player, int x, int y, HashSet<Point> tilesHashSet, PlaceType placeType,
         BlockType blockType, ref bool playSound, Dictionary<int, int> itemsConsumed)
@@ -10,7 +31,6 @@ public partial class SpaceWand
         int oneIndex = EnoughItem(player, GetConditions(placeType));
         if (oneIndex <= -1)
             return;
-
         // 使用物块魔杖时，ignoreConsumable应为true，无论如何都消耗物品。这是原版的逻辑
         bool usingTileWand = false;
         int indexOfItemBeingConsumed = oneIndex;
