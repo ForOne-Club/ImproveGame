@@ -51,7 +51,7 @@ public static class BlurHelper
     {
         if (offsets.Length == 0) return;
 
-        var effect = ModAsset.BlurEffect.Value;
+        var effect = ModAsset.Effect_BlurEffect.Value;
         if (effect == null) return;
 
         var device = Main.graphics.GraphicsDevice;
@@ -61,7 +61,7 @@ public static class BlurHelper
 
         var renderTargetSwap = RenderTargetPool.Instance.Rent(renderTarget.Width, renderTarget.Height);
 
-        ModAsset.BlurEffect.Value.Parameters["uPixelSize"].SetValue(Vector2.One / new Vector2(renderTarget.Width, renderTarget.Height));
+        ModAsset.Effect_BlurEffect.Value.Parameters["uPixelSize"].SetValue(Vector2.One / new Vector2(renderTarget.Width, renderTarget.Height));
 
         SelectBlurEffectPasses(blurType, out var blurX, out var blurY);
 
@@ -89,7 +89,7 @@ public static class BlurHelper
 
     public static void SelectBlurEffectPasses(BlurMixingNumber blurType, out EffectPass blurX, out EffectPass blurY)
     {
-        var effect = ModAsset.BlurEffect.Value;
+        var effect = ModAsset.Effect_BlurEffect.Value;
         switch (blurType)
         {
             default:

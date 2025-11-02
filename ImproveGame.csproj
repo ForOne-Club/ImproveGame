@@ -31,6 +31,8 @@
         <None Include=".gitignore;.gitattributes;./LICENSE">
             <Visible>false</Visible>
         </None>
+        <None Remove="SilkyUIFramework\**" />
+        <None Remove="SilkyUIAnalyzer\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -43,5 +45,25 @@
 
     <ItemGroup>
         <AdditionalFiles Include="**/*.xml" Exclude="bin/**/*;obj/**/*" Pack="true" ModPath="%(Identity)" />
+        <AdditionalFiles Remove="SilkyUIFramework\**" />
+        <AdditionalFiles Remove="SilkyUIAnalyzer\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="SilkyUIFramework\**" />
+      <Compile Remove="SilkyUIAnalyzer\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="SilkyUIFramework\**" />
+      <EmbeddedResource Remove="SilkyUIAnalyzer\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="SilkyUIFramework\Assets\Shader\BlurEffect.fx" />
+      <UpToDateCheckInput Remove="SilkyUIFramework\Graphics2D\ColorBlock.fx" />
+      <UpToDateCheckInput Remove="SilkyUIFramework\Graphics2D\Mask.fx" />
+      <UpToDateCheckInput Remove="SilkyUIFramework\Graphics2D\SDFGraphics.fx" />
+      <UpToDateCheckInput Remove="SilkyUIFramework\Graphics2D\SDFRectangle.fx" />
     </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ namespace ImproveGame.UIFramework.Graphics2D;
 partial class SDFGraphics
 {
     const float root2Over2 = 1.414213562373f / 2f;
-    static Effect SDF_Effect => ModAsset.SDFGraphics.Value;
+    static Effect SDF_Effect => ModAsset.UIFramework_SDFRectangle.Value;
     static bool DrawFrame => false;
 
     private struct VertexPosCoord(Vector2 pos, Vector2 coord) : IVertexType

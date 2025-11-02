@@ -5,7 +5,7 @@ public static class SDFRectangle
     public static bool DontDrawShadow { get; set; }
     public static EffectPass SpriteEffectPass => Main.spriteBatch.spriteEffectPass;
     public static GraphicsDevice GraphicsDevice => Main.graphics.GraphicsDevice;
-    private static Effect Effect => ModAsset.SDFRectangle.Value;
+    private static Effect Effect => ModAsset.UIFramework_SDFRectangle.Value;
     private static void Transform2SDFMatrix(ref Matrix matrix)
     {
         var device = Main.graphics.GraphicsDevice;
