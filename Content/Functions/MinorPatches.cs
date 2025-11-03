@@ -206,7 +206,7 @@ public class MinorPatches : ModSystem
             if (Main.myPlayer != Player.whoAmI)
                 return;
 
-            var items = GetAllInventoryItemsList(Player, "inv");
+            var items = GetAllInventoryItemsList(Player, "inv void");
             foreach (var item in items)
             {
                 if (item.type != ItemID.EncumberingStone)
