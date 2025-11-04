@@ -22,6 +22,7 @@ public sealed class ModFeatures : Category
         panel.AddToggle(Config, nameof(Config.ImprovePrefix));
         panel.AddToggle(Config, nameof(Config.AmmoChain));
         panel.AddValueSlider(Config, nameof(Config.SpawnRateMaxValue));
+        panel.AddValueSlider(Config, nameof(Config.SpawnRateMinValue));
         panel.AddToggle(Config, nameof(Config.EmptyAutofisher));
         panel.AddValueSlider(Config, nameof(Config.ExStorageSearchDistance));
         panel.AddToggle(Config, nameof(Config.ICanSeeForeverAllBag));

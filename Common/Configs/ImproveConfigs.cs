@@ -418,6 +418,11 @@ public class ImproveConfigs : ModConfig
     [Range(1, 100)]
     public int SpawnRateMaxValue;
 
+    [DefaultValue(0f)]
+    [Range(0f, 10f)]
+    [Increment(0.1f)]
+    public float SpawnRateMinValue;
+
     [DefaultValue(true)]
     public bool EmptyAutofisher;
 

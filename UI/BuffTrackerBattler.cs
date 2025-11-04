@@ -35,6 +35,8 @@ namespace ImproveGame.UI
     {
         internal BattlerPanel MainPanel;
         internal UIText maxRateText;
+        internal UIText minRateText;
+        internal UIText midRateText;
         internal float _sliderCurrentValueCache;
         private float _currentTargetValue;
         private bool _needsToCommitChange;
@@ -97,6 +99,7 @@ namespace ImproveGame.UI
             {
                 element2.ShadowColor = Color.Black;
             };
+            midRateText = element2;
 
             UIText element3 = new("x0")
             {
@@ -118,6 +121,7 @@ namespace ImproveGame.UI
                 element3.ShadowColor = Color.Black;
             };
             MainPanel.Append(element3);
+            minRateText = element3;
         }
 
         private void AttemptPushingChange()
@@ -160,7 +164,7 @@ namespace ImproveGame.UI
             if (dimensions.ToRectangle().Intersects(new(Main.mouseX, Main.mouseY, 1, 1)))
             {
                 string originalText = "x" + BattlerPlayer.RemapSliderValueToPowerValue(GetSliderValue()).ToString("F2");
-                if (_sliderCurrentValueCache == 0f)
+                if (_sliderCurrentValueCache == 0f && Config.SpawnRateMinValue == 0)
                     originalText = Language.GetTextValue("CreativePowers.NPCSpawnRateSliderEnemySpawnsDisabled");
 
                 MainPanel.displayTextCache = originalText;
@@ -195,9 +199,22 @@ namespace ImproveGame.UI
         {
             if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var modPlayer) && modPlayer.HasRequiredBuffs())
             {
-                int rate = Config.SpawnRateMaxValue;
-                maxRateText.SetText($"x{rate}");
-                maxRateText.HAlign = rate < 100 ? rate < 10 ? 0.7f : 1f : 1.4f;
+                int rateMax = Config.SpawnRateMaxValue;
+                maxRateText.SetText($"x{rateMax}");
+                maxRateText.HAlign = rateMax < 100 ? rateMax < 10 ? 0.7f : 1f : 1.4f;
+
+                float rateMin = Config.SpawnRateMinValue;
+                if (rateMin > rateMax) rateMin = rateMax;
+                minRateText.SetText($"x{rateMin:0.0}");
+
+                string text;
+                if (rateMin < 1)
+                    text = "x1";
+                else if (rateMax < 10)
+                    text = rateMin > 1 ? $"x{(rateMax + rateMin) * .5f:0.0}" : "x1";
+                else
+                    text = "x10";
+                midRateText.SetText(text);
             }
             else
             {
