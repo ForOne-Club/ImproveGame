@@ -136,7 +136,7 @@ PlayerStats: {
 		HealingSpeed: 治疗速度
 		// 瑟银的一些牧师装备增加法术回血量
 		HealBonus: 法术治疗加成
-		Bard: 乐师
+		Bard: 吟游诗人
 	}
 }
 

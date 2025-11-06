@@ -215,6 +215,7 @@ namespace ImproveGame.Common.GlobalItems
                 {
                     BuffName = Lang.GetBuffName(buffType),
                     MaxSpawn = Config.SpawnRateMaxValue,
+                    MinSpawn = Math.Min(Config.SpawnRateMinValue,Config.SpawnRateMaxValue).ToString("0.0"),
                     KeybindName = keybind
                 };
                 if (ItemSlot.ShiftInUse)

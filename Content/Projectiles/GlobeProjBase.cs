@@ -103,7 +103,7 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
             Projectile.ai[1]--;
 
             // 物品只能在服务器/单人掉落
-            if (!RevealOperation(false) && Main.netMode is not NetmodeID.MultiplayerClient)
+            if (Main.netMode is not NetmodeID.MultiplayerClient && !RevealOperation(false))
                 Main.player[Projectile.owner].QuickSpawnItem(Projectile.GetItemSource_DropAsItem(), GetModItemDummy().Type);
 
             if (Projectile.ai[2] < 0)

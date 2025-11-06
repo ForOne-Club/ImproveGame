@@ -1,10 +1,5 @@
 ﻿using ImproveGame.Packets.Notifications;
 using ImproveGame.Packets.WorldFeatures;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.Chat;
 using Terraria.DataStructures;
 
@@ -12,29 +7,75 @@ namespace ImproveGame.Content.Items.Globes.Core;
 
 public static class GlobeRevealer
 {
-    public static void NoDataNotification(Globe dummyItem)
+    public static void NoDataNotification(Globe dummyItem, int owner)
     {
-        AddNotification(Language.GetText("Mods.ImproveGame.Items.GlobeBase.NotFound")
-        .WithFormatArgs(dummyItem.GetLocalizedValue("BiomeName")).Value, Globe.hintTextColor);
-    }
-    public static void NotFoundNotification(Globe dummyItem)
-    {
-        AddNotification(dummyItem.GetLocalizedValue("NotFound"), Globe.hintTextColor);
-    }
-    public static void AlreadyRevealedNotification(Globe dummyItem)
-    {
-        if (dummyItem is OnceForAllGlobe)
-            AddNotification(Language.GetText("Mods.ImproveGame.Items.GlobeBase.AlreadyRevealed")
-            .WithFormatArgs(dummyItem.GetLocalizedValue("BiomeName")).Value, Globe.hintTextColor);
+        string key = "Mods.ImproveGame.Items.GlobeBase.NotFound";
+        string argumentKey = dummyItem.GetLocalizationKey("BiomeName");
+        if (Main.dedServ)
+        {
+            GlobePopupMessagePacket.Get(false, key, argumentKey).Send(owner);
+        }
         else
-            AddNotification(dummyItem.GetLocalizedValue("AlreadyRevealed"), Globe.hintTextColor);
+        {
+            AddNotification(
+                Language.GetText(key)
+                .WithFormatArgs(Language.GetTextValue(argumentKey)).Value,
+                Globe.hintTextColor);
+        }
     }
-    public static void RevealNotification(Globe dummyItem, string name)
-        => AddNotification(Language.GetText("Mods.ImproveGame.Items.GlobeBase.Reveal")
-            .WithFormatArgs(dummyItem.GetLocalizedValue("BiomeName"), name).Value, Globe.foundColor);
-    public static void RevealBroadcast(Globe dummyItem, string name) =>
-        // 由于服务器和客户端使用的语言可能不一样，所以用FromKey并专门设了个翻译文本
-        ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Mods.ImproveGame.Items.GlobeBase.Reveal", dummyItem.GetLocalizedValue("BiomeName"), name), Globe.foundColor);
+    public static void NotFoundNotification(Globe dummyItem, int owner)
+    {
+        string key = dummyItem.GetLocalizationKey("NotFound");
+        if (Main.dedServ)
+        {
+            GlobePopupMessagePacket.Get(false, key).Send(owner);
+        }
+        else
+        {
+            AddNotification(Language.GetTextValue(key), Globe.hintTextColor);
+        }
+    }
+    public static void AlreadyRevealedNotification(Globe dummyItem, int owner)
+    {
+        string key = "Mods.ImproveGame.Items.GlobeBase.AlreadyRevealed";
+        string argumentKey = dummyItem.GetLocalizationKey("BiomeName");
+        if (Main.dedServ)
+        {
+            GlobePopupMessagePacket.Get(false, key, argumentKey).Send(owner);
+        }
+        else
+        {
+            AddNotification(
+                Language.GetText(key)
+                .WithFormatArgs(Language.GetTextValue(argumentKey)).Value,
+                Globe.hintTextColor);
+        }
+    }
+    public static void RevealBroadcast(Globe dummyItem, string name, int owner)
+    {
+        string key = "Mods.ImproveGame.Items.GlobeBase.Reveal";
+        string argumentKey = dummyItem.GetLocalizationKey("BiomeName");
+        if (Main.dedServ)
+        {
+            // 由于服务器和客户端使用的语言可能不一样，所以用FromKey并专门设了个翻译文本
+            ChatHelper.BroadcastChatMessage(
+                NetworkText.FromKey(
+                    "Mods.ImproveGame.Items.GlobeBase.Reveal",
+                    NetworkText.FromKey(argumentKey),
+                    name),
+                Globe.foundColor,
+                owner);
+            GlobePopupMessagePacket.Get(true, key, argumentKey, name).Send(owner);
+        }
+        else
+        {
+            AddNotification(
+                Language.GetText(key)
+                .WithFormatArgs(Language.GetTextValue(argumentKey), name).Value,
+                Globe.foundColor);
+        }
+    }
+
 
     //这两个都是实时查找，一次解锁一个型
     public static bool RevealPlantera(Projectile projectile, Globe dummyItem, bool onlyJudging)
@@ -80,10 +121,7 @@ public static class GlobeRevealer
         var module = NetModuleLoader.Get<RevealPlanteraPacket>();
         module._position = position;
         module.Send(runLocally: true);
-        if (Main.netMode == NetmodeID.SinglePlayer)
-            RevealNotification(dummyItem, player.name);
-        else
-            RevealBroadcast(dummyItem, player.name);
+        RevealBroadcast(dummyItem, player.name, player.whoAmI);
 
         return true;
     }
@@ -126,10 +164,7 @@ public static class GlobeRevealer
         var module = NetModuleLoader.Get<RevealEnchantedSwordPacket>();
         module._position = position;
         module.Send(runLocally: true);
-        if (Main.netMode == NetmodeID.SinglePlayer)
-            RevealNotification(dummyItem, player.name);
-        else
-            RevealBroadcast(dummyItem, player.name);
+        RevealBroadcast(dummyItem, player.name, player.whoAmI);
         return true;
     }
 
@@ -138,12 +173,12 @@ public static class GlobeRevealer
     {
         if (StructureDatas.AllMarbleCavePositions.Count <= StructureDatas.MarbleCavePositions.Count)//没有判定0的必要，因为如果是0一定满足这个
         {
-            if (!onlyJudging && projectile.owner == Main.myPlayer)
+            if (!onlyJudging)
             {
                 if (!StructureDatas.QotEanbledInWorldGeneration)
-                    NoDataNotification(dummyItem);
+                    NoDataNotification(dummyItem, projectile.owner);
                 else
-                    NotFoundNotification(dummyItem);
+                    NotFoundNotification(dummyItem, projectile.owner);
             }
             return false;
         }
@@ -154,22 +189,19 @@ public static class GlobeRevealer
             .Except(StructureDatas.MarbleCavePositions)
             .MinBy(position => projectile.Center.Distance(position.ToVector2() * 16)));
         var playerName = Main.player[projectile.owner].name;
-        if (projectile.owner == Main.myPlayer)
-            RevealNotification(dummyItem, playerName);
-        if (Main.netMode == NetmodeID.Server)
-            RevealBroadcast(dummyItem, playerName);
+        RevealBroadcast(dummyItem, playerName, projectile.owner);
         return true;
     }
     public static bool RevealGranite(Projectile projectile, Globe dummyItem, bool onlyJudging)
     {
         if (StructureDatas.AllGraniteCavePositions.Count <= StructureDatas.GraniteCavePositions.Count)//没有判定0的必要，因为如果是0一定满足这个
         {
-            if (!onlyJudging && projectile.owner == Main.myPlayer)
+            if (!onlyJudging)
             {
                 if (!StructureDatas.QotEanbledInWorldGeneration)
-                    NoDataNotification(dummyItem);
+                    NoDataNotification(dummyItem, projectile.owner);
                 else
-                    NotFoundNotification(dummyItem);
+                    NotFoundNotification(dummyItem, projectile.owner);
             }
             return false;
         }
@@ -180,10 +212,7 @@ public static class GlobeRevealer
             .Except(StructureDatas.GraniteCavePositions)
             .MinBy(position => projectile.Center.Distance(position.ToVector2() * 16)));
         var playerName = Main.player[projectile.owner].name;
-        if (projectile.owner == Main.myPlayer)
-            RevealNotification(dummyItem, playerName);
-        if (Main.netMode == NetmodeID.Server)
-            RevealBroadcast(dummyItem, playerName);
+        RevealBroadcast(dummyItem, playerName, projectile.owner);
         return true;
     }
 
@@ -204,19 +233,19 @@ public static class GlobeRevealer
         if (onceForAll.NotFoundCheck())
         {
 
-            if (!onlyJudging && projectile.owner == Main.myPlayer)
+            if (!onlyJudging)
             {
                 if (StructureDatas.QotEanbledInWorldGeneration)
-                    NotFoundNotification(dummyItem);
+                    NotFoundNotification(dummyItem, projectile.owner);
                 else
-                    NoDataNotification(dummyItem);
+                    NoDataNotification(dummyItem, projectile.owner);
             }
             return false;
         }
         if (StructureDatas.StructuresUnlocked[(byte)onceForAll.StructureType])
         {
-            if (!onlyJudging && projectile.owner == Main.myPlayer)
-                AlreadyRevealedNotification(dummyItem);
+            if (!onlyJudging)
+                AlreadyRevealedNotification(dummyItem, projectile.owner);
             return false;
         }
         if (onlyJudging)
@@ -224,13 +253,7 @@ public static class GlobeRevealer
         StructureDatas.StructuresUnlocked[(byte)onceForAll.StructureType] = true;
         string name = Main.player[projectile.owner].name;
 
-        //多人下只有自己看见弹窗
-        if (projectile.owner == Main.myPlayer)
-            RevealNotification(dummyItem, name);
-
-        //由服务器发送聊天信息
-        if (Main.netMode == NetmodeID.Server)
-            RevealBroadcast(dummyItem, name);
+        RevealBroadcast(dummyItem, name, projectile.owner);
 
         if (extraChecked) //只有额外检测了才有发包的意义
         {
@@ -243,5 +266,36 @@ public static class GlobeRevealer
         else
             StructureDatas.StructuresUnlocked[(byte)onceForAll.StructureType] = true;
         return true;
+    }
+}
+
+[AutoSync]
+public class GlobePopupMessagePacket : NetModule
+{
+    public bool IsFoundText;
+    public string LocalizationTextKey;
+    public string ArgumentKey;
+    public string playerName;
+    public static GlobePopupMessagePacket Get(bool isFound, string localizationTextKey, string argumentKey = "", string playerName = "")
+    {
+        var packet = NetModuleLoader.Get<GlobePopupMessagePacket>();
+        packet.IsFoundText = isFound;
+        packet.LocalizationTextKey = localizationTextKey;
+        packet.ArgumentKey = argumentKey;
+        packet.playerName = playerName;
+        return packet;
+    }
+    public override void Receive()
+    {
+        LocalizedText text = Language.GetText(LocalizationTextKey);
+        if (!string.IsNullOrEmpty(ArgumentKey))
+        {
+            if (!string.IsNullOrEmpty(playerName))
+                text = text.WithFormatArgs(Language.GetTextValue(ArgumentKey), playerName);
+            else
+                text = text.WithFormatArgs(Language.GetTextValue(ArgumentKey));
+
+        }
+        AddNotification(text.Value, IsFoundText ? Globe.foundColor : Globe.hintTextColor);
     }
 }

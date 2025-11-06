@@ -415,7 +415,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			单人模式下无用，调节需要重新加载模组。开启后，仅密码验证通过的玩家可以调节模组设置。
-			在服务器启动时，会在服务器控制台发送一串随机生成的八位数字密钥。可以从服务器控制台输入 /qotpassword 查询密码，玩家可以通过输入 /qotpassword <密码> 验证身份，若密码正确，将获得调节模组设置的权限
+			在服务器启动时，会在服务器控制台发送一串随机生成的八位数字密钥。可以从服务器控制台输入 qotpassword 查询密码，玩家可以通过输入 /qotpassword <密码> 验证身份，若密码正确，将获得调节模组设置的权限
 			对于端口映射手段开服有用，因为此时IP无法验证身份(均为127.0.0.1)
 			'''
 		Unaccepted: 无法更改：你没有通过密码验证！
@@ -442,6 +442,17 @@ ImproveConfigs: {
 			注意: 此面板只有同时拥有[向日葵][和平蜡烛][镇静药水][水蜡烛][战争药水]
 			的增益无限物品组合才会出现
 			服务器内如果你不想让玩家调节过高生成倍率，可以通过此选项限制
+			'''
+	}
+
+	SpawnRateMinValue: {
+		Label: "[centeritem:2649] 敌人生成速度倍率最小值"
+		Tooltip:
+			'''
+			玩家可通过敌人生成速度面板调节的最小生成倍率限制
+			注意: 此面板只有同时拥有[向日葵][和平蜡烛][镇静药水][水蜡烛][战争药水]
+			的增益无限物品组合才会出现
+			服务器内如果你不想让玩家调节过低生成倍率，可以通过此选项限制
 			'''
 	}
 
@@ -1182,8 +1193,16 @@ UIConfigs: {
 
 PAPDisplayMode: {
 	// Tooltip: ""
-	AlwaysDisplayed.Label: 始终显示
-	NotDisplayed.Label: 不显示
+
+	AlwaysDisplayed: {
+		Label: 始终显示
+		// Tooltip: ""
+	}
+
+	NotDisplayed: {
+		Label: 不显示
+		// Tooltip: ""
+	}
 
 	WhenOpeningBackpack: {
 		Label: 开启物品栏时显示
@@ -1213,7 +1232,11 @@ GlassType: {
 
 BombsNotDamageType: {
 	// Tooltip: ""
-	Disabled.Label: 关闭
+
+	Disabled: {
+		Label: 关闭
+		// Tooltip: ""
+	}
 
 	Item: {
 		Label: 爆炸物
@@ -1228,7 +1251,11 @@ BombsNotDamageType: {
 
 DisableNonPlayerBombsExplosionsType: {
 	// Tooltip: ""
-	Disabled.Label: 关闭
+
+	Disabled: {
+		Label: 关闭
+		// Tooltip: ""
+	}
 
 	FTW: {
 		Label: FTW特供
@@ -1262,9 +1289,21 @@ FavoritedConfigs: {
 
 FishQuestResetType: {
 	// Tooltip: ""
-	Disabled.Label: 关闭
-	NotResetFish.Label: 不刷新任务鱼
-	ResetFish.Label: 刷新任务鱼
+
+	Disabled: {
+		Label: 关闭
+		// Tooltip: ""
+	}
+
+	NotResetFish: {
+		Label: 不刷新任务鱼
+		// Tooltip: ""
+	}
+
+	ResetFish: {
+		Label: 刷新任务鱼
+		// Tooltip: ""
+	}
 }
 
 TestConfig: {
@@ -1297,9 +1336,29 @@ TestData: {
 
 BlurMixingNumber: {
 	// Tooltip: ""
-	// One.Label: "1"
-	// Two.Label: "2"
-	// Three.Label: "3"
-	// Four.Label: "4"
-	// Five.Label: "5"
+
+	One: {
+		// Label: "1"
+		// Tooltip: ""
+	}
+
+	Two: {
+		// Label: "2"
+		// Tooltip: ""
+	}
+
+	Three: {
+		// Label: "3"
+		// Tooltip: ""
+	}
+
+	Four: {
+		// Label: "4"
+		// Tooltip: ""
+	}
+
+	Five: {
+		// Label: "5"
+		// Tooltip: ""
+	}
 }

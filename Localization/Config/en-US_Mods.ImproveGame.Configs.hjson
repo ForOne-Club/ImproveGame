@@ -407,7 +407,7 @@ ImproveConfigs: {
 		Tooltip:
 			'''
 			Does nothing in singleplayer mode, reloading is required. After enabled, only the verified player(s) can change the mod configs
-			While starting the server, a random 8-digit password will be sent in the server console. The server console can query the password by typing /qotpassword.
+			While starting the server, a random 8-digit password will be sent in the server console. The server console can query the password by typing qotpassword.
 			Players can type /qotpassword <password> to verify themselves. If the password is correct, the player will be able to change mod configs
 			Effective to servers with port forwarding, as the IP verification does not work
 			'''
@@ -432,6 +432,18 @@ ImproveConfigs: {
 			This panel only appears when you have the infinite buff stations/potions combination of
 			[Sun Flower][Peace Candle][Calm Potion][Water Candle] and [Battle Potion]
 			If you don't want players in a server to raise the enemy spawn rate too high, you may use this function
+			'''
+	}
+
+	SpawnRateMinValue: {
+		Label: "[centeritem:2649] Min Enemy Spawn Rate Multiplier"
+		Tooltip:
+			'''
+			Allows players to adjust the minimum spawn rate of enemies
+			Notification:
+			This panel only appears when you have the infinite buff stations/potions combination of
+			[Sun Flower][Peace Candle][Calm Potion][Water Candle] and [Battle Potion]
+			If you don't want players in a server to raise the enemy spawn rate too low, you may use this function
 			'''
 	}
 
@@ -1180,8 +1192,16 @@ UIConfigs: {
 
 PAPDisplayMode: {
 	Tooltip: ""
-	AlwaysDisplayed.Label: Always
-	NotDisplayed.Label: Hidden
+
+	AlwaysDisplayed: {
+		Label: Always
+		Tooltip: ""
+	}
+
+	NotDisplayed: {
+		Label: Hidden
+		Tooltip: ""
+	}
 
 	WhenOpeningBackpack: {
 		Label: Inventory-only
@@ -1211,7 +1231,11 @@ GlassType: {
 
 BombsNotDamageType: {
 	Tooltip: ""
-	Disabled.Label: Off
+
+	Disabled: {
+		Label: Off
+		Tooltip: ""
+	}
 
 	Item: {
 		Label: Explosives Only
@@ -1226,7 +1250,11 @@ BombsNotDamageType: {
 
 DisableNonPlayerBombsExplosionsType: {
 	Tooltip: ""
-	Disabled.Label: Off
+
+	Disabled: {
+		Label: Off
+		Tooltip: ""
+	}
 
 	FTW: {
 		Label: For the Worthy Only
@@ -1260,9 +1288,21 @@ FavoritedConfigs: {
 
 FishQuestResetType: {
 	Tooltip: ""
-	Disabled.Label: Disabled
-	NotResetFish.Label: Don't Reset Fish
-	ResetFish.Label: Reset Fish
+
+	Disabled: {
+		Label: Disabled
+		Tooltip: ""
+	}
+
+	NotResetFish: {
+		Label: Don't Reset Fish
+		Tooltip: ""
+	}
+
+	ResetFish: {
+		Label: Reset Fish
+		Tooltip: ""
+	}
 }
 
 TestConfig: {
@@ -1295,9 +1335,29 @@ TestData: {
 
 BlurMixingNumber: {
 	Tooltip: ""
-	One.Label: "1"
-	Two.Label: "2"
-	Three.Label: "3"
-	Four.Label: "4"
-	Five.Label: "5"
+
+	One: {
+		Label: "1"
+		Tooltip: ""
+	}
+
+	Two: {
+		Label: "2"
+		Tooltip: ""
+	}
+
+	Three: {
+		Label: "3"
+		Tooltip: ""
+	}
+
+	Four: {
+		Label: "4"
+		Tooltip: ""
+	}
+
+	Five: {
+		Label: "5"
+		Tooltip: ""
+	}
 }

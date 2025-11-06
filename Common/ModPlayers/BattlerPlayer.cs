@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.Functions.PortableBuff;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ImproveGame.Common.ModPlayers
 {
@@ -38,11 +39,21 @@ namespace ImproveGame.Common.ModPlayers
 
         public static float RemapSliderValueToPowerValue(float sliderValue)
         {
-            float remappedValue = TrUtils.Remap(sliderValue, 0.5f, 1f, 1f, Config.SpawnRateMaxValue);
+            float rateMax = Config.SpawnRateMaxValue;
+            float rateMin = Config.SpawnRateMinValue;
+            if (rateMin > rateMax) rateMin = rateMax;
+            float rateMid;
+            if (rateMin < 1)
+                rateMid = 1;
+            else if (rateMax < 10)
+                rateMid = rateMin > 1 ? (rateMax + rateMin) * .5f : 1;
+            else
+                rateMid = 10;
+            float remappedValue = TrUtils.Remap(sliderValue, 0.5f, 1f, rateMid, rateMax);
             remappedValue = (float)Math.Round(remappedValue); // 取整
             if (sliderValue < 0.5f)
             {
-                remappedValue = TrUtils.Remap(sliderValue, 0f, 0.5f, 0.1f, 1f);
+                remappedValue = TrUtils.Remap(sliderValue, 0f, 0.5f, rateMin, rateMid);
                 remappedValue = (float)Math.Round(remappedValue * 20f) / 20f; // 0.5显示，不然强迫症了
             }
             return remappedValue;

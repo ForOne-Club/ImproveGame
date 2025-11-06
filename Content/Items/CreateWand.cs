@@ -7,6 +7,7 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
 using Terraria.ModLoader.IO;
+using Terraria.Utilities.FileBrowser;
 
 namespace ImproveGame.Content.Items;
 
@@ -19,14 +20,17 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, ICo
 
     public override bool AltFunctionUse(Player player) => true;
 
-    public static void AddNewPrisonStyle(Texture2D dataTexture, Texture2D previewTexture)
+    public static void AddNewPrisonStyle(Texture2D dataTexture, Texture2D previewTexture, bool useRunOnMainThread = true)
     {
         _prisons.Add(dataTexture);
         _prisonsPreView.Add(previewTexture);
-        Main.RunOnMainThread(() =>
-        {
+        if (useRunOnMainThread)
+            Main.RunOnMainThread(() =>
+            {
+                _colors.Add(GetColors(dataTexture));
+            });
+        else
             _colors.Add(GetColors(dataTexture));
-        });
     }
 
     private static List<Texture2D> _prisons;
@@ -163,6 +167,41 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, ICo
                 GameRectangle box = GameRectangleSystem.GameRectangles[boxIndex];
                 box.Texture2D = PrisonsPreView;
             }
+
+            if (KeybindSystem.ItemInteractKeybind.JustPressed && player.itemAnimation == 0)
+            {
+                ExtensionFilter[] extensions = [
+                     new ExtensionFilter("png files", "png")
+                ];
+
+                string text = FileBrowser.OpenFilePanel("Select config image", extensions);
+
+                if (text != null)
+                {
+                    using FileStream fileStream = new FileStream(text, FileMode.Open);
+                    using Texture2D texture = Texture2D.FromStream(Main.graphics.GraphicsDevice, fileStream);
+                    int w = texture.Width * 16;
+                    int h = texture.Height * 16;
+                    Texture2D previewTexture = new Texture2D(Main.graphics.GraphicsDevice, w, h);
+                    Color[] datas = new Color[texture.Width * texture.Height];
+                    texture.GetData(datas);
+                    Color[] colors = new Color[w * h];
+                    for (int i = 0; i < w; i++)
+                    {
+                        int x = i / 16;
+                        for (int j = 0; j < h; j++)
+                        {
+                            int y = j / 16;
+                            colors[j * w + i] = datas[y * texture.Width + x];
+                        }
+                    }
+                    previewTexture.SetData(colors);
+                    AddNewPrisonStyle(texture, previewTexture, false);
+                }
+
+                player.itemAnimation = player.itemAnimationMax = 5;
+                player.altFunctionUse = 1;
+            }
         }
     }
 
@@ -173,6 +212,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, ICo
             reduce = 0;
         }
     }
+
 
     public override bool CanUseItem(Player player)
     {
