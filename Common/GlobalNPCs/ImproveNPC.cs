@@ -41,10 +41,9 @@ namespace ImproveGame.Common.GlobalNPCs
             if (Config.SlimeExDrop)
             {
                 // 我复制的原版判定，然后把概率改成了100%
-                if (npc.type == NPCID.BlueSlime && npc.ai[1] == 0f && Main.netMode != NetmodeID.MultiplayerClient &&
+                if (npc.type == NPCID.BlueSlime && npc.ai[1] is 0 or -1 && Main.netMode != NetmodeID.MultiplayerClient &&
                     npc.value > 0f)
                 {
-                    npc.ai[1] = -1f;
                     if (Main.remixWorld && npc.ai[0] != -999f && Main.rand.NextBool(3))
                     {
                         npc.ai[1] = ItemID.FallenStar;
