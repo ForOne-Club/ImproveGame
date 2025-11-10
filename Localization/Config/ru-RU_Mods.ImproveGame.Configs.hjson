@@ -437,15 +437,15 @@ ImproveConfigs: {
 	}
 
 	SpawnRateMinValue: {
-		// Label: "[centeritem:2649] Min Enemy Spawn Rate Multiplier"
-		/* Tooltip:
+		Label: "[centeritem:2649] Мультипликатор минимальной скорости появления врагов"
+		Tooltip:
 			'''
-			Allows players to adjust the minimum spawn rate of enemies
-			Notification:
-			This panel only appears when you have the infinite buff stations/potions combination of
-			[Sun Flower][Peace Candle][Calm Potion][Water Candle] and [Battle Potion]
-			If you don't want players in a server to raise the enemy spawn rate too low, you may use this function
-			''' */
+			Позволяет игрокам изменять минимальную скорость появления врагов.
+			Внимание:
+			Данная панель появляется только при условии, если у вас есть бесконечные баффы:
+			[Подсолнух][Свеча спокойствия][Успокаивающее зелье][Водяная свеча] и [Зелье битвы].
+			Если вы не хотите, чтобы игроки на сервере занижали спавнрейт врагов ниже плинтуса, эта настройка поможет поставить лимит.
+			'''
 	}
 
 	ExStorageSearchDistance: {
