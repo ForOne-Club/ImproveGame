@@ -5,16 +5,41 @@ using ImproveGame.Content;
 using ImproveGame.Core;
 using ImproveGame.UIFramework.SUIElements;
 using System.Text;
+using Terraria.DataStructures;
 
 namespace ImproveGame.Common.GlobalItems;
 
+/// <summary>
+/// 让玩家放出的草蛉无法被捕获
+/// </summary>
+public class EmpressButterflyNPC : GlobalNPC
+{
+    public override bool AppliesToEntity(NPC entity, bool lateInstantiation) => entity.type == NPCID.EmpressButterfly;
+
+    public override void OnSpawn(NPC npc, IEntitySource source)
+    {
+        if (Config.NoConsume_SummonItem && source is EntitySource_Parent { Entity: Player })
+        {
+            npc.SpawnedFromStatue = true;
+        }
+    }
+}
+
+/// <summary>
+/// 这个类影响了什么：<br/>
+/// 物品最大堆叠<br/>
+/// 使用速度<br/>
+/// 任务可堆叠<br/>
+/// 工具使用速度<br/>
+/// 召唤物、抛射物、弹药、魔杖材料、电线消耗<br/>
+/// 更多信息<br/>
+/// 等等...
+/// </summary>
 public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
 {
-
     public override void SetDefaults(Item item)
     {
-        if (Config is null || item is null)
-            return;
+        if (Config is null || item is null) return;
 
         // 最大堆叠
         if (item.maxStack > 1 && Config.ItemMaxStack > item.maxStack && item.DamageType != DamageClass.Melee &&
@@ -39,6 +64,9 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         }
     }
 
+    /// <summary>
+    /// 修改工具使用速度
+    /// </summary>
     public override float UseTimeMultiplier(Item item, Player player)
     {
         if (item.pick > 0 || item.hammer > 0 || item.axe > 0 || item.type is ItemID.WireCutter)
@@ -48,7 +76,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
 
     public override void Load()
     {
-        // 锤子敲背景墙有特殊处理，要用On才能应用工具速度提升
+        // 锤子敲背景墙有特殊处理，要用 On 才能应用工具速度提升
         On_Player.ItemCheck_UseMiningTools_TryHittingWall += (orig, player, item, x, y) =>
         {
             orig.Invoke(player, item, x, y);
@@ -126,6 +154,13 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             return false;
 
         return base.ConsumeItem(item, player);
+    }
+
+    public override bool? CanConsumeBait(Player player, Item bait)
+    {
+        if (Config.NoConsume_SummonItem && bait.type == ItemID.TruffleWorm) return false;
+
+        return base.CanConsumeBait(player, bait);
     }
 
     public override bool CanBeConsumedAsAmmo(Item ammo, Item weapon, Player player)

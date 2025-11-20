@@ -100,6 +100,9 @@ public class ImproveConfigs : ModConfig
 
     public List<string> TileSpeed_Blacklist = ["torch"];
 
+    /// <summary>
+    /// 召唤物不消耗
+    /// </summary>
     [DefaultValue(false)]
     public bool NoConsume_SummonItem;
 
