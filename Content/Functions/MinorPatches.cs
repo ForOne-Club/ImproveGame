@@ -743,7 +743,7 @@ public class MinorPatches : ModSystem
     // “草药” 是否可以被 “再生法杖” 收割
     private static int _herbStyle;
     private static int _herbType;
-
+    private static int _herbImmatureImmuneTime;
     private static void Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(ILContext il)
     {
         var c = new ILCursor(il);
@@ -777,6 +777,7 @@ public class MinorPatches : ModSystem
                 _herbStyle);
             NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY,
                 TileID.ImmatureHerbs, _herbStyle);
+            _herbImmatureImmuneTime = 5;
         });
 
         if (!c.TryGotoNext(MoveType.After,
@@ -815,7 +816,21 @@ public class MinorPatches : ModSystem
                 _herbStyle);
             NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY,
                 TileID.ImmatureHerbs, _herbStyle);
+            _herbImmatureImmuneTime = 5;
         });
+
+        // 阻止再生法杖或者再生之斧破坏非种植盆内药草
+        if (!c.TryGotoNext(i => i.MatchLdcI4(380)))
+            return;
+        if (!c.TryGotoNext(i => i.MatchLdcI4(0)))
+            return;
+        if (!c.TryGotoNext(MoveType.After, i => i.MatchLdcI4(0)))
+            return;
+
+        c.Index++;
+        c.EmitPop();
+        c.EmitDelegate<Func<bool, bool>>(flag => flag && _herbImmatureImmuneTime-- <= 0);
+        c.EmitLdsflda(typeof(Main).GetField(nameof(Main.tile), BindingFlags.Static | BindingFlags.Public));
     }
 
     // 提升草药生长速度
