@@ -4,14 +4,18 @@ using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.Functions.Construction;
+using ImproveGame.Core;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
+using System.Collections.ObjectModel;
+using Terraria;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities.FileBrowser;
 
 namespace ImproveGame.Content.Items;
 
-public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, IConditionItem
+public partial class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, IConditionItem
 {
     public Condition UseCondition => ConfigCondition.AvailableCreateWandC;
     private record TileData(TileSort TileSort, int X, int Y);
@@ -39,6 +43,9 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, ICo
 
     private static bool _colorsLoaded;
     private static int _styleIndex;
+
+    private static bool _isWaitingPreview;
+    private static string _tempFilePath;
 
     public static Texture2D Prison => _prisons[_styleIndex];
     public static Texture2D PrisonsPreView => _prisonsPreView[_styleIndex];
@@ -168,41 +175,215 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, ICo
                 box.Texture2D = PrisonsPreView;
             }
 
-            if (KeybindSystem.ItemInteractKeybind.JustPressed && player.itemAnimation == 0)
+            HandleMiddleClick(player);
+
+            HandlePreviewRegister();
+        }
+    }
+
+
+    private static void HandleMiddleClick(Player player)
+    {
+        // 需要按下特殊物品交互键(默认中键)并且没在使用物品
+        if (!KeybindSystem.ItemInteractKeybind.JustPressed || player.itemAnimation != 0) return;
+
+        // 设置使用物品时间防止后续放置
+        player.itemAnimation = player.itemAnimationMax = 5;
+        player.altFunctionUse = 1;
+
+        //var coord = Main.MouseWorld.ToTileCoordinates();
+        //var tile = Framing.GetTileSafely(coord);
+
+        //Main.NewText((tile.TileFrameX / 18, tile.TileFrameY / 18, tile.WallFrameX / 18, tile.WallFrameY / 18));
+        //WorldGen.TileFrame(coord.X, coord.Y, true);
+        //return;
+
+        // 筛选png文件
+        ExtensionFilter[] extensions = [
+             new ExtensionFilter("png files", "png")
+        ];
+
+        // 打开文件选择窗口
+        string path = FileBrowser.OpenFilePanel("Select config image", extensions);
+
+        if (path == null) return;
+
+        // 进行注册
+        HandleRegister(path);
+    }
+
+    private static void HandleRegister(string path)
+    {
+
+        using FileStream fileStream = new FileStream(path, FileMode.Open);
+        using Texture2D texture = Texture2D.FromStream(Main.graphics.GraphicsDevice, fileStream);
+
+        /*
+        int w = texture.Width * 16;
+        int h = texture.Height * 16;
+        Texture2D previewTexture = new Texture2D(Main.graphics.GraphicsDevice, w, h);
+        Color[] datas = new Color[texture.Width * texture.Height];
+        texture.GetData(datas);
+        Color[] colors = new Color[w * h];
+        for (int i = 0; i < w; i++)
+        {
+            int x = i / 16;
+            for (int j = 0; j < h; j++)
             {
-                ExtensionFilter[] extensions = [
-                     new ExtensionFilter("png files", "png")
-                ];
-
-                string text = FileBrowser.OpenFilePanel("Select config image", extensions);
-
-                if (text != null)
-                {
-                    using FileStream fileStream = new FileStream(text, FileMode.Open);
-                    using Texture2D texture = Texture2D.FromStream(Main.graphics.GraphicsDevice, fileStream);
-                    int w = texture.Width * 16;
-                    int h = texture.Height * 16;
-                    Texture2D previewTexture = new Texture2D(Main.graphics.GraphicsDevice, w, h);
-                    Color[] datas = new Color[texture.Width * texture.Height];
-                    texture.GetData(datas);
-                    Color[] colors = new Color[w * h];
-                    for (int i = 0; i < w; i++)
-                    {
-                        int x = i / 16;
-                        for (int j = 0; j < h; j++)
-                        {
-                            int y = j / 16;
-                            colors[j * w + i] = datas[y * texture.Width + x];
-                        }
-                    }
-                    previewTexture.SetData(colors);
-                    AddNewPrisonStyle(texture, previewTexture, false);
-                }
-
-                player.itemAnimation = player.itemAnimationMax = 5;
-                player.altFunctionUse = 1;
+                int y = j / 16;
+                colors[j * w + i] = datas[y * texture.Width + x];
             }
         }
+        previewTexture.SetData(colors);
+        AddNewPrisonStyle(texture, previewTexture, false);
+        */
+        var colors = GetColors(texture);
+        _prisons.Add(texture);
+        _colors.Add(colors);
+
+        _isWaitingPreview = true;
+
+        var tag = CreateStructureTagFromColors(colors, texture.Width, texture.Height);
+        var tagPath = Path.Combine(ModLoader.ModPath, nameof(ImproveGame), "tempStructure.qotstruct");
+        TagIO.ToFile(tag, tagPath);
+        WandSystem.ConstructFilePath = tagPath;
+        _tempFilePath = tagPath;
+        PreviewRenderer.ResetPreviewTarget = PreviewRenderer.ResetState.WaitReset;
+        int width = texture.Width;
+        int height = texture.Height;
+        PreviewRenderer.PreviewTarget =
+            new RenderTarget2D(
+                Main.graphics.GraphicsDevice,
+                width * 16 + 20,
+                height * 16 + 20,
+                false,
+                default,
+                default,
+                default,
+                RenderTargetUsage.PreserveContents);
+    }
+
+    private static TagCompound CreateStructureTagFromColors(Color[] colors, int width, int height)
+    {
+        var Tag = new TagCompound
+        {
+            { "BuildTime", "" },
+            { "ModVersion", "" },
+            { "Width", (short)(width - 1) },
+            { "Height", (short)(height - 1) },
+            { "OriginX", (short)0 },
+            { "OriginY", (short)0 }
+        };
+        Dictionary<string, ushort> entries = [];
+        List<TileDefinition> data = [];
+        List<string> signTexts = [];
+
+        TileSort[,] sorts = new TileSort[width, height];
+        HashSet<Point> multitileOverrideCoords = [];
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+            {
+                if (multitileOverrideCoords.Contains(new(x, y))) continue;
+                var sort = sorts[x, y] = Color2TileSort(colors[x + y * width]);
+                if (sort is TileSort.Door)
+                {
+                    sorts[x, y - 1] = TileSort.Door;
+                    sorts[x, y - 2] = TileSort.Door;
+                }
+                if (sort is TileSort.Table)
+                {
+                    for (int u = 0; u < 3; u++)
+                    {
+                        for (int v = 0; v < 2; v++)
+                        {
+                            sorts[x + u - 1, y - v] = TileSort.Table;
+                            multitileOverrideCoords.Add(new(x + u - 1, y - v));
+                        }
+                    }
+                }
+                if (sort is TileSort.Workbench)
+                {
+                    sorts[x + 1, y] = TileSort.Workbench;
+                    multitileOverrideCoords.Add(new(x + 1, y));
+                }
+                if (sort is TileSort.Chair)
+                {
+                    sorts[x, y - 1] = TileSort.Chair;
+                }
+                if (sort is TileSort.Bed)
+                {
+                    for (int u = 0; u < 4; u++)
+                    {
+                        for (int v = 0; v < 2; v++)
+                        {
+                            sorts[x + u - 1, y - v] = TileSort.Bed;
+                            multitileOverrideCoords.Add(new(x + u - 1, y - v));
+                        }
+                    }
+                }
+            }
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                TileSort sort = sorts[x, y];
+                short tileIndex = (short)(sort switch
+                {
+                    TileSort.Block => TileID.WoodBlock,
+                    TileSort.Platform => TileID.Platforms,
+                    TileSort.Torch => TileID.Torches,
+                    TileSort.Chair => TileID.Chairs,
+                    TileSort.Table => TileID.Tables,
+                    TileSort.Workbench => TileID.WorkBenches,
+                    TileSort.Bed => TileID.Beds,
+                    TileSort.Door => TileID.ClosedDoor,
+                    _ => -1
+                });
+                short wallIndex = ShouldPlaceWall(sort) ? (short)WallID.Wood : (short)-1;
+                // 设置为Solid
+                var extraDatas = new BitsByte(b5: true);//TileDefinition.GetExtraData(tile);
+                var extraDatas2 = new BitsByte();
+                var tile = new Tile(); // TODO 提供墙壁帧等信息
+                FramingTiles(x, y, sort, sorts, width, height, out var tfx, out var tfy, out var wfx, out var wfy);
+                tile.TileFrameX = (short)tfx;
+                tile.TileFrameY = (short)tfy;
+                tile.WallFrameX = wfx;
+                tile.WallFrameY = wfy;
+                data.Add(
+                    new TileDefinition(
+                        tileIndex,
+                        wallIndex,
+                        tile,
+                        extraDatas,
+                        extraDatas2
+                    ));
+            }
+        }
+
+        Tag.Add("SignTexts", signTexts);
+        Tag.Add("StructureData", data);
+
+        var stringList = new List<string>();
+        var indexList = new List<ushort>();
+        Tag.Add("EntriesName", stringList);
+        Tag.Add("EntriesType", indexList);
+        return Tag;
+    }
+
+    private static void HandlePreviewRegister()
+    {
+        if (!_isWaitingPreview || PreviewRenderer.ResetPreviewTarget != PreviewRenderer.ResetState.Finished) return;
+
+        _isWaitingPreview = false;
+        if (!string.IsNullOrEmpty(_tempFilePath))
+            File.Delete(_tempFilePath);
+        FileOperator.CachedStructureDatas.Remove(_tempFilePath);
+        var pvRender = PreviewRenderer.PreviewTarget;
+        int width = pvRender.Width;
+        int height = pvRender.Height;
+        Texture2D previewTexture = new Texture2D(Main.graphics.GraphicsDevice, width, height);
+        previewTexture.SetData(GetColors(pvRender));
+        _prisonsPreView.Add(previewTexture);
     }
 
     public override void ModifyManaCost(Player player, ref float reduce, ref float mult)
@@ -395,7 +576,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, ICo
                         break;
                     // 目前似乎没有桌子的需求，而且我整UI的时候也没给桌子整
                     case TileSort.Table:
-                        TryPlace(ref Table, player, x, y, (Item item) => item.createTile is TileID.Tables or TileID.Tables2);
+                        TryPlace(ref Table, player, x, y, item => item.createTile is TileID.Tables or TileID.Tables2);
                         break;
                     case TileSort.Door:
                         TryPlace(ref Door, player, x, y, item => item.createTile == TileID.ClosedDoor);
@@ -458,7 +639,7 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, ICo
     /// 平台或实体块位置不放置
     /// </summary>
     public static bool ShouldPlaceWall(TileSort tileSort) =>
-        tileSort is not TileSort.Block and not TileSort.Platform and not TileSort.NoWall and not TileSort.Bed;
+        tileSort is not TileSort.Block and not TileSort.Platform and not TileSort.NoWall and not TileSort.Bed and not TileSort.Door;
 
     private static bool TryPlacePlatform(Item item) =>
         item.createTile >= TileID.Dirt && TileID.Sets.Platforms[item.createTile];
@@ -602,8 +783,17 @@ public class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClickable, ICo
                 tooltips.Add(new(Mod, $"MaterialConsume.{item.Key}", $"{neededText}   {hasText}"));
             }
         }
-    }
 
+        tooltips.Add(new TooltipLine(Mod, "TagDetailed.CreateWand", GetText("Tips.TagDetailed.CreateWand"))
+        { OverrideColor = Color.SkyBlue });
+        TagItem.AddShiftForMoreTooltip(tooltips);
+    }
+    public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
+    {
+        if (ItemSlot.ShiftInUse)
+            TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines), x, y);
+        return base.PreDrawTooltip(lines, ref x, ref y);
+    }
     /// <summary>
     /// 颜色对应的物块类型
     /// </summary>

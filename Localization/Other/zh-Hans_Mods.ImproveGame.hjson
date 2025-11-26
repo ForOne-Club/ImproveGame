@@ -116,6 +116,7 @@ Tips: {
 		NonHided: "[增益图标未隐藏]"
 		CombinedBuff: "[存在可用的增益组合]"
 		AutoCollect: "[自动存钱]"
+		CreateWand: "[自定义样式]"
 	}
 
 	TagDetailedTip: {
@@ -167,6 +168,27 @@ Tips: {
 			在增益追踪器右侧会显示一个生物生成
 			速度滑块，允许你将生物生成速度调至
 			x{MinSpawn}-x{MaxSpawn}
+			'''
+		CreateWand:
+			'''
+			中键使用物品以选择一张数据图导入建筑样式
+			在 [c/88CCEE:"文档/My Games/Terraria/tModLoader]
+			[c/88CCEE:/Mods/ImproveGame/CreateWand"]
+			目录下的会自动导入
+
+			格式如下：
+			| 颜色 |    Hex   |   代表的对象   |
+			| ------- | ---------- | ------------------- |
+			| [c/FF0000:红色] | FF0000 | 实心块           |
+			| [c/666666:黑色] | 000000 | 平台              |
+			| [c/FFFFFF:白色] | FFFFFF | 火把              |
+			| [c/FFFF00:黄色] | FFFF00 | 椅子              |
+			| [c/FF00FF:粉色] | FF00FF | 桌子              |
+			| [c/0000FF:蓝色] | 0000FF | 工作台           |
+			| [c/7F00FF:紫色] | 7F00FF | 床                 |
+			| [c/00FFFF:青色] | 00FFFF | 禁止放置墙体 |
+			| [c/00FF00:绿色] | 00FF00 | 门                 |
+			| 透明 |            | 墙体              |
 			'''
 	}
 }
