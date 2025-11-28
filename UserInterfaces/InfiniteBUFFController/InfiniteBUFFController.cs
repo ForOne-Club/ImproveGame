@@ -1,4 +1,6 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿#if DEBUG && false
+
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions.PortableBuff;
 using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
@@ -30,7 +32,9 @@ public partial class InfiniteBUFFController : BaseBody
         Header.ControlTarget = this;
         Title.UseDeathText();
 
-        Close.Texture2D = Main.Assets.Request<Texture2D>("Images/UI/SearchCancel");
+        var searchCancel = Main.Assets.Request<Texture2D>("Images/UI/SearchCancel");
+
+        Close.Texture2D = searchCancel;
         Close.LeftMouseDown += delegate { Enabled = false; };
         Close.OnUpdateStatus += delegate
         {
@@ -39,7 +43,7 @@ public partial class InfiniteBUFFController : BaseBody
 
         FilterBox.Placeholder = "请输入名称";
 
-        ClearEditText.Texture2D = Main.Assets.Request<Texture2D>("Images/UI/SearchCancel");
+        ClearEditText.Texture2D = searchCancel;
         ClearEditText.OnUpdateStatus += delegate
         {
             ClearEditText.ImageColor = Color.White * ClearEditText.HoverTimer.Lerp(0.5f, 1f);
@@ -152,3 +156,5 @@ public class SUIBuffItemPool
         return item;
     }
 }
+
+#endif
