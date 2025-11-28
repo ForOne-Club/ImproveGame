@@ -1,9 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Packets.Notifications;
-using ImproveGame.Packets.WorldFeatures;
-using Terraria.Chat;
-using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items.Globes.Core;
 

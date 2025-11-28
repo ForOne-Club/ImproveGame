@@ -420,11 +420,11 @@ public static class ConfigHelper
             return;
         }
         else foreach (var p in path)
-        {
-            var curType = item!.GetType();
-            var fld = curType.GetField(p, bindFlag);
-            var prop = curType.GetProperty(p, bindFlag);
-            if (count != max - 1)
+            {
+                var curType = item!.GetType();
+                var fld = curType.GetField(p, bindFlag);
+                var prop = curType.GetProperty(p, bindFlag);
+                if (count != max - 1)
                 {
                     lastItem = item;
                     if (fld != null)
@@ -451,7 +451,7 @@ public static class ConfigHelper
                     else
                         throw new Exception("Property or field doesn't exist in " + curType.Name);
                 }
-            else
+                else
                 {
                     if (lastItem is IDictionary dict)
                     {
@@ -559,8 +559,8 @@ public static class ConfigHelper
                         }
                     }
                 }
-            count++;
-        }
+                count++;
+            }
     }
 
     public static string GetModText(string modName, string str, out bool hasValue, params object[] arg)

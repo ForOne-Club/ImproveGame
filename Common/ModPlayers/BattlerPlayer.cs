@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Content.Functions.PortableBuff;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ImproveGame.Common.ModPlayers
 {

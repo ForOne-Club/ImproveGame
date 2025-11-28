@@ -316,7 +316,7 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
             var factor = Utils.GetLerpValue(0, maxIndex - 1, i);
             Vector2 correct = Vector2.Normalize(oldVel).RotatedBy(1.57f) * MathHelper.SmoothStep(30, 24, factor);
             //var fac2 = (1 - MathF.Cos(MathHelper.TwoPi * MathF.Pow(factor, .25f))) * .5f;
-            var fac2 = i == 0 ? 0 :1 - factor;
+            var fac2 = i == 0 ? 0 : 1 - factor;
             vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f + correct,
                 new Vector3(factor, 0f, fac2), color));
             vertices.Add(new VertexInfo2(Projectile.oldPos[i] + Projectile.Size / 2f - correct,

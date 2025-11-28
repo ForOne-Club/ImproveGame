@@ -18,7 +18,7 @@ public class TempleGlobe : OnceForAllGlobe
                 {
                     var tile = Framing.GetTileSafely(i, j);
 
-                    if (tile.TileType is TileID.LihzahrdAltar) 
+                    if (tile.TileType is TileID.LihzahrdAltar)
                     {
                         StructureDatas.TemplePosition = new(i, j);
                         return;

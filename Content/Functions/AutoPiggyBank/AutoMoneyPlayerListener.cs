@@ -4,7 +4,6 @@ using ImproveGame.Core;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader.IO;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Functions.AutoPiggyBank;
 

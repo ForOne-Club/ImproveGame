@@ -19,7 +19,7 @@ public class FloatingIslandGlobe : OnceForAllGlobe
                 {
                     if (ExtraCheckSkyHouse(i, j))
                         StructureDatas.SkyHousePositions.Add(new(i, j));
-                    else if (ExtraCheckSkyLake(i, j) || ExtraCheckSkyLake2(i,j))
+                    else if (ExtraCheckSkyLake(i, j) || ExtraCheckSkyLake2(i, j))
                         StructureDatas.SkyLakePositions.Add(new(i, j));
                     else
                         continue;
@@ -115,7 +115,7 @@ public class FloatingIslandGlobe : OnceForAllGlobe
 
             #region 前记录检测
             foreach (var p in StructureDatas.SkyLakePositions)
-                if (MathF.Abs(p.X - i) < 100 && MathF.Abs(p.Y - j) <100) return false;
+                if (MathF.Abs(p.X - i) < 100 && MathF.Abs(p.Y - j) < 100) return false;
 
             #endregion
 
@@ -156,7 +156,7 @@ public class FloatingIslandGlobe : OnceForAllGlobe
             return false;
         }
 
-        static bool ExtraCheckSkyLake2(int i, int j) 
+        static bool ExtraCheckSkyLake2(int i, int j)
         {
 
 
@@ -174,7 +174,7 @@ public class FloatingIslandGlobe : OnceForAllGlobe
             #endregion
 
             int count = 0;
-            for (int k = 1; k < 15; k++) 
+            for (int k = 1; k < 15; k++)
             {
                 tile = Framing.GetTileSafely(i, j - k);
                 if (tile.LiquidAmount > 0 && tile.LiquidType is LiquidID.Water)

@@ -132,7 +132,7 @@ public class StructureDatas : ModSystem
     public static List<Point16> GraniteCavePositions { get; set; }
     public static List<Point16> BaitlessAutofisherPositions { get; set; }
 
-    public static string QotVersionInWorldGeneration 
+    public static string QotVersionInWorldGeneration
     {
         get
         {

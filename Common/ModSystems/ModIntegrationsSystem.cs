@@ -14,7 +14,6 @@ using ImproveGame.UI.ModernConfig;
 using ImproveGame.UI.PlayerStats;
 using System.Collections;
 using System.Reflection;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
@@ -111,7 +110,7 @@ public class ModIntegrationsSystem : ModSystem
         WMITFLoaded = ModLoader.HasMod("WMITF");
     }
 
-    static void NotFindContentWarn(string methodName, string modName, string name) 
+    static void NotFindContentWarn(string methodName, string modName, string name)
         => ImproveGame.Instance.Logger.Warn($"{methodName} : Not found {name} in {modName}, the Integration might not take effect.");
 
     static bool TryFindContent<T>(Mod mod, string name, out T value, string methodName/*, bool warn = true*/) where T : IModType
@@ -197,7 +196,7 @@ public class ModIntegrationsSystem : ModSystem
             AddBuffConflicts(calamityMod, "CirrusYellowCandleBuff", "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff");
             AddBuffConflicts(calamityMod, "CirrusPurpleCandleBuff", "CirrusBlueCandleBuff", "CirrusPinkCandleBuff", "CirrusYellowCandleBuff");
         }
-        else 
+        else
         {
             AddBuffIntegration(calamityMod, "WeightlessCandle", true, "BlueCandleBuff");
             AddBuffIntegration(calamityMod, "VigorousCandle", true, "PinkCandleBuff");

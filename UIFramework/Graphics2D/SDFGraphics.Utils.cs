@@ -1,6 +1,7 @@
 ﻿//本文件中的形状绘制全部改自iq大佬的SDF https://iquilezles.org/articles/distfunctions2d/
 
 namespace ImproveGame.UIFramework.Graphics2D;
+
 partial class SDFGraphics
 {
     const float root2Over2 = 1.414213562373f / 2f;

@@ -1058,7 +1058,7 @@ partial class MyUtils
         compassText = compass.ToString();
         depthText = depth.ToString();
     }
-    public static void GetMeterCoords(Point point, out NetworkText compassText, out NetworkText depthText) 
+    public static void GetMeterCoords(Point point, out NetworkText compassText, out NetworkText depthText)
     {
         // 原版代码，不多评价
         int compass = point.X * 2 - Main.maxTilesX;

@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace ImproveGame.Content.Functions;
+﻿namespace ImproveGame.Content.Functions;
 
 public class TownNPCHome : ModSystem
 {
