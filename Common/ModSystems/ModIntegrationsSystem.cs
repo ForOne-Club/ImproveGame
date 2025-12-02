@@ -139,6 +139,10 @@ public class ModIntegrationsSystem : ModSystem
     /// 钓鱼事件订阅列表
     /// </summary>
     internal static List<FishingEventHandler> FishingEventHandlers = [];
+    /// <summary>
+    /// 钓鱼事件订阅列表，此列表用于进一步的简化调用参数，方便外部模组弱引用联动
+    /// </summary>
+    internal static List<Action<object>> FishingEventHandlersObjectActions = [];
 
     public override void PostSetupContent()
     {
@@ -789,6 +793,11 @@ public class ModIntegrationsSystem : ModSystem
                             if (args[1] is FishingEventHandler handler)
                             {
                                 FishingEventHandlers.Add(handler);
+                                return true;
+                            }
+                            else if (args[1] is Action<object> action) 
+                            {
+                                FishingEventHandlersObjectActions.Add(action);
                                 return true;
                             }
                             return false;

@@ -552,7 +552,7 @@ namespace ImproveGame.Content.Tiles
                     Cancel = false,
                     Player = player
                 };
-                
+
                 // 调用所有注册的事件
                 foreach (var handler in ModIntegrationsSystem.FishingEventHandlers)
                 {
@@ -565,11 +565,11 @@ namespace ImproveGame.Content.Tiles
                         ImproveGame.Instance.Logger.Error($"Error in fishing event handler: {ex}");
                     }
                 }
-                
+
                 // 如果事件取消了，直接返回
                 if (eventArgs.Cancel)
                     return;
-                
+
                 // 应用事件修改的物品类型和数量
                 if (eventArgs.ItemType != item.type || eventArgs.ItemStack != item.stack)
                 {
@@ -577,8 +577,46 @@ namespace ImproveGame.Content.Tiles
                     item.newAndShiny = true;
                 }
             }
-            // === 钓鱼事件调用结束 ===
-            
+            // 弱引用版本
+            if (ModIntegrationsSystem.FishingEventHandlersObjectActions?.Count > 0)
+            {
+                var fisher = GetFisher(out _);
+                var eventArgs = new FishingEventArgs
+                {
+                    Fisher = this,
+                    FishingAttempt = fisher,
+                    ItemType = item.type,
+                    ItemStack = item.stack,
+                    Cancel = false,
+                    Player = player
+                };
+
+                // 调用所有注册的事件
+                foreach (var handler in ModIntegrationsSystem.FishingEventHandlersObjectActions)
+                {
+                    try
+                    {
+                        handler?.Invoke(eventArgs);
+                    }
+                    catch (Exception ex)
+                    {
+                        ImproveGame.Instance.Logger.Error($"Error in fishing event handler: {ex}");
+                    }
+                }
+
+                // 如果事件取消了，直接返回
+                if (eventArgs.Cancel)
+                    return;
+
+                // 应用事件修改的物品类型和数量
+                if (eventArgs.ItemType != item.type || eventArgs.ItemStack != item.stack)
+                {
+                    item = new Item(eventArgs.ItemType, eventArgs.ItemStack);
+                    item.newAndShiny = true;
+                }
+            }
+            // 钓鱼事件调用结束
+
             var dummyItem = item.Clone();
             int oldStack = item.stack;
 
