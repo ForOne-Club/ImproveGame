@@ -357,3 +357,107 @@ public override void Load()
 | 青色 | 00FFFF | 禁止放置墙体 |
 | 绿色 | 00FF00 | 门           |
 | 透明 |        | 墙体         |
+
+### RegisterFishingEvent
+
+注册自动钓鱼机钓鱼事件，在钓鱼机钓起物品前触发，可修改钓鱼结果或取消钓鱼
+
+#### 参数
+
+- `FishingEventHandler` 钓鱼事件回调委托
+
+#### FishingEventHandler 委托定义
+
+```csharp
+public delegate void FishingEventHandler(FishingEventArgs args);
+
+/// <summary>
+/// 钓鱼事件参数
+/// </summary>
+public class FishingEventArgs
+{
+    /// <summary>
+    /// 钓鱼机实例
+    /// </summary>
+    public TileEntity Fisher { get; internal set; }
+    
+    /// <summary>
+    /// 钓鱼尝试数据
+    /// </summary>
+    public FishingAttempt FishingAttempt { get; internal set; }
+    
+    /// <summary>
+    /// 钓上的物品ID，如果重新赋值，可用于修改钓鱼结果
+    /// </summary>
+    public int ItemType { get; set; }
+
+    /// <summary>
+    /// 物品数量，如果重新赋值，可用于修改钓鱼结果
+    /// </summary>
+    public int ItemStack { get; set; }
+    
+    /// <summary>
+    /// 是否取消钓鱼事件
+    /// </summary>
+    public bool Cancel { get; set; }
+    
+    /// <summary>
+    /// 钓鱼的玩家
+    /// </summary>
+    public Player Player { get; internal set; }
+}
+```
+
+#### 使用示例
+
+```csharp
+public override void PostSetupContent()
+{
+    if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame))
+    {
+        // 注册钓鱼事件
+        improveGame.Call("RegisterFishingEvent", 
+            (Action<object>)OnFishing);
+    }
+}
+
+private void OnFishing(object argsObj)
+{
+    // 使用反射获取 FishingEventArgs 类型，避免直接引用
+    var argsType = argsObj.GetType();
+    
+    // 获取属性
+    int itemType = (int)argsType.GetProperty("ItemType").GetValue(argsObj);
+    int itemStack = (int)argsType.GetProperty("ItemStack").GetValue(argsObj);
+    
+    // 示例1: 将所有木箱替换为铁箱
+    if (itemType == ItemID.WoodenCrate)
+    {
+        argsType.GetProperty("ItemType").SetValue(argsObj, ItemID.IronCrate);
+    }
+    
+    // 示例2: 将所有鱼的数量翻倍
+    if (itemStack > 0)
+    {
+        argsType.GetProperty("ItemStack").SetValue(argsObj, itemStack * 2);
+    }
+    
+    // 示例3: 阻止钓到垃圾物品
+    if (itemType == ItemID.OldShoe || itemType == ItemID.TinCan)
+    {
+        argsType.GetProperty("Cancel").SetValue(argsObj, true);
+    }
+}
+```
+
+### UnregisterFishingEvent
+
+移除已注册的钓鱼事件
+
+#### 参数
+
+- `FishingEventHandler` 要移除的钓鱼事件回调委托（必须是之前注册的同一个委托实例）
+
+#### 返回值
+
+- `bool` 是否成功移除事件

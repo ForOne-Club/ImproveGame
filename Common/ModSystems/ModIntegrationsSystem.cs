@@ -25,6 +25,48 @@ namespace ImproveGame.Common.ModSystems;
 public record FishingStat(int Power = 0, float SpeedMultiplier = 1f, bool TackleBox = false, bool LavaFishing = false);
 
 /// <summary>
+/// 钓鱼事件参数
+/// </summary>
+public class FishingEventArgs
+{
+    /// <summary>
+    /// 钓鱼机实例
+    /// </summary>
+    public TileEntity Fisher { get; internal set; }
+    
+    /// <summary>
+    /// 钓鱼尝试数据
+    /// </summary>
+    public FishingAttempt FishingAttempt { get; internal set; }
+    
+    /// <summary>
+    /// 钓上的物品ID，如果重新赋值，可用于修改钓鱼结果
+    /// </summary>
+    public int ItemType { get; set; }
+
+    /// <summary>
+    /// 物品数量，如果重新赋值，可用于修改钓鱼结果
+    /// </summary>
+    public int ItemStack { get; set; }
+    
+    /// <summary>
+    /// 是否取消钓鱼事件
+    /// </summary>
+    public bool Cancel { get; set; }
+    
+    /// <summary>
+    /// 钓鱼的玩家
+    /// </summary>
+    public Player Player { get; internal set; }
+}
+
+/// <summary>
+/// 钓鱼事件回调委托
+/// </summary>
+/// <param name="args">事件参数</param>
+public delegate void FishingEventHandler(FishingEventArgs args);
+
+/// <summary>
 /// 处理几乎所有跨模组的集成
 /// </summary>
 public class ModIntegrationsSystem : ModSystem
@@ -92,6 +134,11 @@ public class ModIntegrationsSystem : ModSystem
     internal static int LuiafkTravellingMerchantType = NPCID.None;
 
     internal static int UnloadedItemType;
+
+    /// <summary>
+    /// 钓鱼事件订阅列表
+    /// </summary>
+    internal static List<FishingEventHandler> FishingEventHandlers = [];
 
     public override void PostSetupContent()
     {
@@ -426,6 +473,8 @@ public class ModIntegrationsSystem : ModSystem
         ModdedPlaceableItemBuffs = null;
         ModdedPotionBuffs = null;
         NoLakeSizePenaltyLoaded = false;
+        FishingEventHandlers?.Clear();
+        FishingEventHandlers = null;
     }
 
     public static object Call(params object[] args)
@@ -731,6 +780,27 @@ public class ModIntegrationsSystem : ModSystem
                         {
                             CreateWand.AddNewPrisonStyle(args[1] as Texture2D, args[2] as Texture2D);
                             return true;
+                        }
+                    // 注册钓鱼事件
+                    case "RegisterFishingEvent":
+                        {
+                            // Action<TEAutofisher, FishingAttempt, ref int, ref int, ref bool, Player> callback
+                            // 或简化版 Action<FishingEventArgs> callback
+                            if (args[1] is FishingEventHandler handler)
+                            {
+                                FishingEventHandlers.Add(handler);
+                                return true;
+                            }
+                            return false;
+                        }
+                    // 移除钓鱼事件
+                    case "UnregisterFishingEvent":
+                        {
+                            if (args[1] is FishingEventHandler handler)
+                            {
+                                return FishingEventHandlers.Remove(handler);
+                            }
+                            return false;
                         }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");
