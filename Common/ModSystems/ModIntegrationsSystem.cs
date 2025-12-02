@@ -479,6 +479,8 @@ public class ModIntegrationsSystem : ModSystem
         NoLakeSizePenaltyLoaded = false;
         FishingEventHandlers?.Clear();
         FishingEventHandlers = null;
+        FishingEventHandlersObjectActions?.Clear();
+        FishingEventHandlersObjectActions = null;
     }
 
     public static object Call(params object[] args)
