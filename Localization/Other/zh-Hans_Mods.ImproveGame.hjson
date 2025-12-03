@@ -176,19 +176,34 @@ Tips: {
 			[c/88CCEE:/Mods/ImproveGame/CreateWand"]
 			目录下的会自动导入
 
-			格式如下：
-			| 颜色 |    Hex   |   代表的对象   |
-			| ------- | ---------- | ------------------- |
-			| [c/FF0000:红色] | FF0000 | 实心块           |
-			| [c/666666:黑色] | 000000 | 平台              |
-			| [c/FFFFFF:白色] | FFFFFF | 火把              |
-			| [c/FFFF00:黄色] | FFFF00 | 椅子              |
-			| [c/FF00FF:粉色] | FF00FF | 桌子              |
-			| [c/0000FF:蓝色] | 0000FF | 工作台           |
-			| [c/7F00FF:紫色] | 7F00FF | 床                 |
-			| [c/00FFFF:青色] | 00FFFF | 禁止放置墙体 |
-			| [c/00FF00:绿色] | 00FF00 | 门                 |
-			| 透明 |            | 墙体              |
+			B通道为FF表示有墙壁，00表示没有墙壁
+			RG通道代表物块如下表：
+			| 颜色  |    Hex   |   代表的物块   |
+			| ------- | ---------- | -------------------- |
+			|   [c/000000:■]   |   0000  |        留空        |
+			|   [c/003F00:■]   |   003F  |       实心块      |
+			|   [c/007F00:■]   |   007F  |        平台        |
+			|   [c/00BF00:■]   |   00BF  |       工作台      |
+			|   [c/00FF00:■]   |   00FF  |        桌子        |
+			|   [c/3F0000:■]   |   3F00  |        椅子        |
+			|   [c/3F3F00:■]   |   3F3F  |         门          |
+			|   [c/3F7F00:■]   |   3F7F  |        箱子        |
+			|   [c/3FBF00:■]   |   3FBF  |         床          |
+			|   [c/3FFF00:■]   |   3FFF  |        书架        |
+			|   [c/7F0000:■]   |   7F00  |        浴缸        |
+			|   [c/7F3F00:■]   |   7F3F  |        烛台        |
+			|   [c/7F7F00:■]   |   7F7F  |        蜡烛        |
+			|   [c/7FBF00:■]   |   7FBF  |        吊灯        |
+			|   [c/7FFF00:■]   |   7FFF  |         钟          |
+			|   [c/BF0000:■]   |   BF00  |       梳妆台      |
+			|   [c/BF3F00:■]   |   BF3F  |         灯          |
+			|   [c/BF7F00:■]   |   BF7F  |        灯笼        |
+			|   [c/BFBF00:■]   |   BFBF  |        钢琴        |
+			|   [c/BFFF00:■]   |   BFFF  |        水槽        |
+			|   [c/FF0000:■]   |   FF00  |        沙发        |
+			|   [c/FF3F00:■]   |   FF3F  |        厕所        |
+			|   [c/FF7F00:■]   |   FF7F  |        火把        |
+			|   [c/FFBF00:■]   |   FFBF  |        篝火        |
 			'''
 	}
 }
@@ -346,6 +361,21 @@ Architecture: {
 	Wall: 墙
 	Bed: 床
 	Door: 门
+	Chest: 箱子
+	Bookcase: 书架
+	Bathtub: 浴缸
+	Candelabra: 烛台
+	Candle: 蜡烛
+	Chandelier: 吊灯
+	Clock: 钟
+	Dresser: 梳妆台
+	Lamp: 灯
+	Lantern: 灯笼
+	Piano: 钢琴
+	Sink: 水槽
+	Sofa: 沙发
+	Toilet: 马桶
+	Campfire: 篝火
 }
 
 PaintWandGUI: {
