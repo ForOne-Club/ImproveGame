@@ -5,7 +5,21 @@ namespace ImproveGame.Common.ModPlayers
     public class BattlerPlayer : ModPlayer
     {
         internal const float SliderDefaultValue = 0.5f;
-        internal float SpawnRateSliderValue = SliderDefaultValue;
+
+
+        public event EventHandler<float> SpawnRateSliderValueChanged;
+        private void OnSpawnRateSliderValueChanged(float value) => SpawnRateSliderValueChanged?.Invoke(this, value);
+
+        public float SpawnRateSliderValue
+        {
+            get; set
+            {
+                if (field == value) return;
+                field = value;
+                OnSpawnRateSliderValueChanged(field);
+            }
+        } = SliderDefaultValue;
+
         public bool GetShouldDisableSpawns => SpawnRateSliderValue == 0f;
 
         public override void OnEnterWorld()

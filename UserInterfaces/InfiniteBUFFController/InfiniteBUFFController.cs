@@ -1,7 +1,8 @@
-﻿#if DEBUG && false
+﻿#if DEBUG && true
 
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions.PortableBuff;
+using ImproveGame.Packets;
 using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
@@ -21,12 +22,11 @@ public partial class InfiniteBUFFController : BaseBody
 
     protected override void OnInitialize()
     {
-        Enabled = true;
-
         BorderColor = SUIColor.Border;
         BackgroundColor = SUIColor.Background * 0.75f;
 
         InitializeComponent();
+
         ScrollContainer = ScrollView.Container;
 
         Header.ControlTarget = this;
@@ -50,7 +50,36 @@ public partial class InfiniteBUFFController : BaseBody
         };
 
         ClearEditText.LeftMouseDown += delegate { FilterBox.Text = ""; };
+
+        // 订阅事件
+        if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer))
+        {
+            battlerPlayer.SpawnRateSliderValueChanged += OnSpawnRateSliderValueChanged;
+
+            MinButton.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 0f;
+
+            A2.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 0.25f;
+
+            DefaultButton.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 0.5f;
+
+            A4.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 0.75f;
+
+            MaxButton.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 1f;
+        }
+
+        // 发送数据
+        Slider.Drag += (_, value) => { SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true); };
+
+        foreach (var item in new UITextView[] { MinButton, DefaultButton, MaxButton, A2, A4 })
+        {
+            item.OnUpdateStatus += (_) =>
+            {
+                item.TextBorderColor = item.HoverTimer.Lerp(Color.Black, SUIColor.Highlight);
+            };
+        }
     }
+
+    private void OnSpawnRateSliderValueChanged(object sender, float value) => Slider.Value = value;
 
     protected override void UpdateStatus(GameTime gameTime)
     {
@@ -61,6 +90,7 @@ public partial class InfiniteBUFFController : BaseBody
 
     private void Refresh()
     {
+        if (ScrollContainer == null) return;
         ScrollContainer.RemoveAllChildren();
 
         for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
@@ -146,10 +176,7 @@ public class SUIBuffItemPool
 
     public SUIBuffItem GetSUIBuffItem(int buffType)
     {
-        if (_pool.TryGetValue(buffType, out var value))
-        {
-            return value;
-        }
+        if (_pool.TryGetValue(buffType, out var value)) return value;
 
         var item = new SUIBuffItem(buffType);
         _pool[buffType] = item;
