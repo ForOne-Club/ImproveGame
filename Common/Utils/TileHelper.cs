@@ -349,7 +349,17 @@ namespace ImproveGame
             }
             else
             {
-                success = WorldGen.PlaceTile(i, j, item.createTile, mute, forced, player.whoAmI, item.placeStyle);
+
+                if (item.createTile == TileID.Toilets)
+                {
+                    WorldGen.Place1x2(i, j, TileID.Toilets, item.placeStyle);
+                    success = Main.tile[i, j] is { HasTile: true, TileType: TileID.Toilets } && Main.tile[i, j - 1] is { HasTile: true, TileType: TileID.Toilets };
+                }
+                else 
+                {
+                    success = WorldGen.PlaceTile(i, j, item.createTile, mute, forced, player.whoAmI, item.placeStyle);
+                }
+
             }
             if (success && UIConfigs.Instance.ExplosionEffect)
             {
