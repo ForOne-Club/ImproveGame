@@ -364,100 +364,139 @@ public override void Load()
 
 #### 参数
 
-- `FishingEventHandler` 钓鱼事件回调委托
+钓鱼事件回调支持三种注册方式：
 
-#### FishingEventHandler 委托定义
-
-```csharp
-public delegate void FishingEventHandler(FishingEventArgs args);
-
-/// <summary>
-/// 钓鱼事件参数
-/// </summary>
-public class FishingEventArgs
-{
-    /// <summary>
-    /// 钓鱼机实例
-    /// </summary>
-    public TileEntity Fisher { get; internal set; }
-    
-    /// <summary>
-    /// 钓鱼尝试数据
-    /// </summary>
-    public FishingAttempt FishingAttempt { get; internal set; }
-    
-    /// <summary>
-    /// 钓上的物品ID，如果重新赋值，可用于修改钓鱼结果
-    /// </summary>
-    public int ItemType { get; set; }
-
-    /// <summary>
-    /// 物品数量，如果重新赋值，可用于修改钓鱼结果
-    /// </summary>
-    public int ItemStack { get; set; }
-    
-    /// <summary>
-    /// 是否取消钓鱼事件
-    /// </summary>
-    public bool Cancel { get; set; }
-    
-    /// <summary>
-    /// 钓鱼的玩家
-    /// </summary>
-    public Player Player { get; internal set; }
-}
-```
+1. **强类型委托** - `FishingEventHandler` (推荐用于强引用 ImproveGame 的模组)
+2. **弱引用委托** - `Action<object>` (推荐用于避免直接依赖 ImproveGame)
+3. **多参数委托** - `FishingEventCallback` (更灵活的参数传递，算是 `Action<object>` 版本的上位)
 
 #### 使用示例
 
-```csharp
-public override void PostSetupContent()
-{
-    if (ModLoader.TryGetMod("ImproveGame", out Mod improveGame))
-    {
-        // 注册钓鱼事件
-        improveGame.Call("RegisterFishingEvent", 
-            (Action<object>)OnFishing);
-    }
-}
+##### 示例1: 使用多参数委托方式，同样是弱引用，这个使用方式的关键是函数签名需要和委托定义一致
 
-private void OnFishing(object argsObj)
+```csharp
+public class MyMod : Mod
 {
-    // 使用反射获取 FishingEventArgs 类型，避免直接引用
-    var argsType = argsObj.GetType();
-    
-    // 获取属性
-    int itemType = (int)argsType.GetProperty("ItemType").GetValue(argsObj);
-    int itemStack = (int)argsType.GetProperty("ItemStack").GetValue(argsObj);
-    
-    // 示例1: 将所有木箱替换为铁箱
-    if (itemType == ItemID.WoodenCrate)
+    public override void PostSetupContent()
     {
-        argsType.GetProperty("ItemType").SetValue(argsObj, ItemID.IronCrate);
+        if (!ModLoader.TryGetMod("ImproveGame", out Mod improveGame))
+                return;
+
+        // 定义委托签名并转换
+        improveGame.Call("RegisterFishingEvent", (Delegate)OnFishingCallback);
     }
     
-    // 示例2: 将所有鱼的数量翻倍
-    if (itemStack > 0)
+    private void OnFishingCallback(TileEntity fisher, Player player, ref int itemType, ref int itemStack, ref bool cancel)//注意这里的签名需要和委托定义一致
     {
-        argsType.GetProperty("ItemStack").SetValue(argsObj, itemStack * 2);
+        // 直接通过 ref 参数修改
+        itemType = ItemID.IronCrate;//全部变成铁匣子
+    }
+
+    //这里可以偷懒不卸载委托，因为模组在重写加载时本身会自动卸载清理所有的委托
+}
+```
+
+##### 示例2: 使用反射弱引用方式，好处是连参数列表都不用管是什么，但坏处是代码不够只管，需要反射，算是示例1的下位替代
+
+```csharp
+public class MyMod : Mod
+{
+    private object _fishingEventHandler;
+    
+    public override void PostSetupContent()
+    {
+        if (!ModLoader.TryGetMod("ImproveGame", out Mod improveGame))
+            return;
+        
+        // 使用 Action<object> 弱引用方式注册
+        _fishingEventHandler = (Action<object>)OnFishingEvent;
+        bool success = (bool)improveGame.Call("RegisterFishingEvent", _fishingEventHandler);
+        
+        if (success)
+            Logger.Info("成功注册钓鱼事件");
     }
     
-    // 示例3: 阻止钓到垃圾物品
-    if (itemType == ItemID.OldShoe || itemType == ItemID.TinCan)
+    private void OnFishingEvent(object eventArgsObj)
     {
-        argsType.GetProperty("Cancel").SetValue(argsObj, true);
+        // 使用反射访问事件参数，避免直接引用 ImproveGame 类型
+        var argsType = eventArgsObj.GetType();
+        
+        // 获取当前钓上的物品信息
+        int itemType = (int)argsType.GetProperty("ItemType").GetValue(eventArgsObj);
+        int itemStack = (int)argsType.GetProperty("ItemStack").GetValue(eventArgsObj);
+        var player = argsType.GetProperty("Player").GetValue(eventArgsObj) as Player;
+        
+        // 示例1: 将所有木箱替换为铁箱
+        if (itemType == ItemID.WoodenCrate)
+        {
+            argsType.GetProperty("ItemType").SetValue(eventArgsObj, ItemID.IronCrate);
+            Main.NewText("木箱已替换为铁箱！", Color.Cyan);
+        }
+        
+        // 示例2: 将所有鱼的数量翻倍
+        if (itemStack > 0 && !ItemID.Sets.IsFishingCrate[itemType])
+        {
+            argsType.GetProperty("ItemStack").SetValue(eventArgsObj, itemStack * 2);
+        }
+        
+        // 示例3: 过滤垃圾物品
+        if (itemType == ItemID.OldShoe || itemType == ItemID.TinCan)
+        {
+            argsType.GetProperty("Cancel").SetValue(eventArgsObj, true);
+        }
+    }
+    
+    public override void Unload()
+    {
+        if (_fishingEventHandler != null && ModLoader.TryGetMod("ImproveGame", out Mod improveGame))
+        {
+            improveGame.Call("UnregisterFishingEvent", _fishingEventHandler);
+            _fishingEventHandler = null;
+        }
     }
 }
 ```
 
-### UnregisterFishingEvent
+##### 示例3: 使用强类型方式，推荐用于强引用 ImproveGame 的模组
 
-移除已注册的钓鱼事件
+```csharp
+// 需要在项目中引用 ImproveGame
+using ImproveGame.Common.ModSystems;
 
-#### 参数
-
-- `FishingEventHandler` 要移除的钓鱼事件回调委托（必须是之前注册的同一个委托实例）
-
-#### 返回值
-
-- `bool` 是否成功移除事件
+public class MyMod : Mod
+{
+    private FishingEventHandler _handler;
+    
+    public override void PostSetupContent()
+    {
+        if (!ModLoader.TryGetMod("ImproveGame", out Mod improveGame))
+            return;
+        
+        _handler = OnFishingEvent;
+        improveGame.Call("RegisterFishingEvent", _handler);
+    }
+    
+    private void OnFishingEvent(FishingEventArgs args)
+    {
+        // 直接访问类型化的属性
+        if (args.ItemType == ItemID.WoodenCrate)
+        {
+            args.ItemType = ItemID.IronCrate;
+        }
+        
+        if (args.ItemType == ItemID.OldShoe)
+        {
+            args.Cancel = true;
+        }
+    }
+    
+    public override void Unload()
+    {
+        if (_handler != null && ModLoader.TryGetMod("ImproveGame", out Mod improveGame))
+        {
+            improveGame.Call("UnregisterFishingEvent", _handler);
+            _handler = null;
+        }
+    }
+}
+```
