@@ -2,6 +2,7 @@
 using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
 using ImproveGame.Content.Items;
+using ImproveGame.Packets;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using System.Reflection;
@@ -747,10 +748,14 @@ public class MinorPatches : ModSystem
     private static void Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(ILContext il)
     {
         var c = new ILCursor(il);
+
+        // 移动到破坏草/草药的判定处
         if (!c.TryGotoNext(MoveType.After,
                 i => i.Match(OpCodes.Ldc_I4_S, (sbyte)84),
                 i => i.Match(OpCodes.Bne_Un_S)))
             return;
+
+        // 如果开了自动补种就记录当前物块的Type和Style
         c.EmitDelegate(() =>
         {
             if (Config.StaffOfRegenerationAutomaticPlanting)
@@ -761,13 +766,16 @@ public class MinorPatches : ModSystem
             }
         });
 
+        // 移动到KillTile后
         if (!c.TryGotoNext(MoveType.After,
                 i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Call)))
             return;
-        c.EmitDelegate(() =>
+
+        // 旧的逻辑：在KillTile和它的发包之间插入，满足条件时立刻补种并发包，这样有时候会同步失败
+        /*c.EmitDelegate(() =>
         {
             if (!Config.StaffOfRegenerationAutomaticPlanting ||
                 _herbType is not TileID.BloomingHerbs and not TileID.MatureHerbs)
@@ -778,8 +786,47 @@ public class MinorPatches : ModSystem
             NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY,
                 TileID.ImmatureHerbs, _herbStyle);
             _herbImmatureImmuneTime = 5;
+        });*/
+
+        // 移除原先的KillTile发包
+        int startIndex = c.Index;
+        if (!c.TryGotoNext(i => i.Match(OpCodes.Br))) return;
+        int endIndex = c.Index;
+        c.Index = startIndex;
+        c.RemoveRange(endIndex - startIndex);
+
+        // 如果开启了再生法杖补种就采用专用发包，否则采用原版操作
+        c.EmitDelegate(() =>
+        {
+            var tileTargetX = Player.tileTargetX;
+            var tileTargetY = Player.tileTargetY;
+            if (Main.netMode != NetmodeID.MultiplayerClient) return;
+            if (Config.StaffOfRegenerationAutomaticPlanting &&
+                _herbType is TileID.BloomingHerbs or TileID.MatureHerbs &&
+                _herbStyle >= 0)
+            {
+                WorldGen.PlaceTile(
+                    tileTargetX,
+                    tileTargetY,
+                    TileID.ImmatureHerbs,
+                    true,
+                    false,
+                    -1,
+                    _herbStyle);
+
+                AutomaticPlantingPacket.Get(tileTargetX, tileTargetY, (byte)_herbStyle).Send();
+
+                _herbType = -1;
+                _herbImmatureImmuneTime = 5;
+            }
+            else
+            {
+                if (!Main.tile[tileTargetX, tileTargetY].HasTile)
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, tileTargetX, tileTargetY);
+            }
         });
 
+        // 这里是对草药盆内草药的补充判定？
         if (!c.TryGotoNext(MoveType.After,
                 i => i.Match(OpCodes.Ldc_R8, 40500d),
                 i => i.Match(OpCodes.Ble_Un_S),
@@ -787,6 +834,8 @@ public class MinorPatches : ModSystem
                 i => i.Match(OpCodes.Stloc_S),
                 i => i.Match(OpCodes.Ldloc_S)))
             return;
+
+        // 同样记录Type和Style
         c.EmitDelegate<Func<bool, bool>>(flag =>
         {
             if (Config.StaffOfRegenerationAutomaticPlanting)
@@ -799,14 +848,17 @@ public class MinorPatches : ModSystem
             return Config.AlchemyGrassAlwaysBlooms || flag;
         });
 
+        // 移动到KillTile后面
         if (!c.TryGotoNext(MoveType.After,
-                i => i.Match(OpCodes.Ldc_R4),
+                // i => i.Match(OpCodes.Ldc_R4), // 原先是移动到发包后面
                 i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Ldc_I4_0),
                 i => i.Match(OpCodes.Call)))
             return;
-        c.EmitDelegate(() =>
+
+        // 旧的逻辑：在KillTile和它的发包之间插入，满足条件时立刻补种并发包，这样有时候会同步失败
+        /*c.EmitDelegate(() =>
         {
             if (!Config.StaffOfRegenerationAutomaticPlanting ||
                 _herbType is not TileID.BloomingHerbs and not TileID.MatureHerbs)
@@ -817,6 +869,44 @@ public class MinorPatches : ModSystem
             NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 1, Player.tileTargetX, Player.tileTargetY,
                 TileID.ImmatureHerbs, _herbStyle);
             _herbImmatureImmuneTime = 5;
+        });*/
+
+        // 移除原先的KillTile发包
+        startIndex = c.Index;
+        if (!c.TryGotoNext(MoveType.After, i => i.Match(OpCodes.Call))) return;
+        endIndex = c.Index;
+        c.Index = startIndex;
+        c.RemoveRange(endIndex - startIndex);
+
+        // 如果开启了再生法杖补种就采用专用发包，否则采用原版操作
+        c.EmitDelegate(() =>
+        {
+            var tileTargetX = Player.tileTargetX;
+            var tileTargetY = Player.tileTargetY;
+            if (Main.netMode != NetmodeID.MultiplayerClient) return;
+            if (Config.StaffOfRegenerationAutomaticPlanting &&
+                _herbType is TileID.BloomingHerbs or TileID.MatureHerbs &&
+                _herbStyle >= 0)
+            {
+                WorldGen.PlaceTile(
+                    tileTargetX,
+                    tileTargetY,
+                    TileID.ImmatureHerbs,
+                    true,
+                    false,
+                    -1,
+                    _herbStyle);
+
+                AutomaticPlantingPacket.Get(tileTargetX, tileTargetY, (byte)_herbStyle).Send();
+
+                _herbType = -1;
+                _herbImmatureImmuneTime = 5;
+            }
+            else
+            {
+                if (!Main.tile[tileTargetX, tileTargetY].HasTile)
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, tileTargetX, tileTargetY);
+            }
         });
 
         // 阻止再生法杖或者再生之斧破坏非种植盆内药草
