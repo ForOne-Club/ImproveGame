@@ -25,58 +25,6 @@ namespace ImproveGame.Common.ModSystems;
 public record FishingStat(int Power = 0, float SpeedMultiplier = 1f, bool TackleBox = false, bool LavaFishing = false);
 
 /// <summary>
-/// 钓鱼事件参数
-/// </summary>
-public class FishingEventArgs
-{
-    /// <summary>
-    /// 钓鱼机实例
-    /// </summary>
-    public TileEntity Fisher;
-
-    /// <summary>
-    /// 钓鱼尝试数据
-    /// </summary>
-    public FishingAttempt FishingAttempt;
-
-    /// <summary>
-    /// 钓上的物品ID，如果重新赋值，可用于修改钓鱼结果
-    /// </summary>
-    public int ItemType;
-
-    /// <summary>
-    /// 物品数量，如果重新赋值，可用于修改钓鱼结果
-    /// </summary>
-    public int ItemStack;
-
-    /// <summary>
-    /// 是否取消钓鱼事件
-    /// </summary>
-    public bool Cancel;
-
-    /// <summary>
-    /// 钓鱼的玩家
-    /// </summary>
-    public Player Player;
-}
-
-/// <summary>
-/// 钓鱼事件回调委托，多参数版本，推荐外部模组使用
-/// </summary>
-/// <param name="fisher">钓鱼机实例</param>
-/// <param name="player">钓鱼的玩家</param>
-/// <param name="itemType">钓上的物品ID（ref可修改）</param>
-/// <param name="itemStack">物品数量（ref可修改）</param>
-/// <param name="cancel">是否取消钓鱼事件（ref可修改）</param>
-public delegate void FishingEventCallback(TileEntity fisher, Player player, ref int itemType, ref int itemStack, ref bool cancel);
-
-/// <summary>
-/// 钓鱼事件回调委托
-/// </summary>
-/// <param name="args">事件参数</param>
-public delegate void FishingEventHandler(FishingEventArgs args);
-
-/// <summary>
 /// 处理几乎所有跨模组的集成
 /// </summary>
 public class ModIntegrationsSystem : ModSystem
@@ -144,19 +92,6 @@ public class ModIntegrationsSystem : ModSystem
     internal static int LuiafkTravellingMerchantType = NPCID.None;
 
     internal static int UnloadedItemType;
-
-    /// <summary>
-    /// 钓鱼事件订阅列表
-    /// </summary>
-    internal static List<FishingEventHandler> FishingEventHandlers = [];
-    /// <summary>
-    /// 钓鱼事件订阅列表
-    /// </summary>
-    internal static List<FishingEventCallback> FishingEventCallbacks = [];
-    /// <summary>
-    /// 钓鱼事件订阅列表，此列表用于进一步的简化调用参数，方便外部模组弱引用联动
-    /// </summary>
-    internal static List<Action<object>> FishingEventHandlersObjectActions = [];
 
     public override void PostSetupContent()
     {
@@ -491,12 +426,6 @@ public class ModIntegrationsSystem : ModSystem
         ModdedPlaceableItemBuffs = null;
         ModdedPotionBuffs = null;
         NoLakeSizePenaltyLoaded = false;
-        FishingEventHandlers?.Clear();
-        FishingEventHandlers = null;
-        FishingEventCallbacks?.Clear();
-        FishingEventCallbacks = null;
-        FishingEventHandlersObjectActions?.Clear();
-        FishingEventHandlersObjectActions = null;
     }
 
     public static object Call(params object[] args)
@@ -806,23 +735,13 @@ public class ModIntegrationsSystem : ModSystem
                     // 注册钓鱼事件
                     case "RegisterFishingEvent":
                         {
-                            if (args[1] is FishingEventHandler handler)
-                            {
-                                FishingEventHandlers.Add(handler);
-                                return true;
-                            }
-                            else if (args[1] is Action<object> action)
-                            {
-                                FishingEventHandlersObjectActions.Add(action);
-                                return true;
-                            }
-                            else if (args[1] is Delegate del)
+                            if (args[1] is Delegate del)
                             {
                                 // 尝试创建一个 FishingEventCallback 类型的代理
-                                Delegate converted = Delegate.CreateDelegate(typeof(FishingEventCallback), del.Target, del.Method, throwOnBindFailure: false);
+                                Delegate converted = Delegate.CreateDelegate(typeof(TEAutofisher.FishingEventCallback), del.Target, del.Method, throwOnBindFailure: false);
                                 if (converted != null)
                                 {
-                                    FishingEventCallbacks.Add((FishingEventCallback)converted);
+                                    TEAutofisher.FishingEvent += (TEAutofisher.FishingEventCallback)converted;
                                     return true;
                                 }
                             }
@@ -831,21 +750,14 @@ public class ModIntegrationsSystem : ModSystem
                     // 移除钓鱼事件
                     case "UnregisterFishingEvent":
                         {
-                            if (args[1] is FishingEventHandler handler)
-                            {
-                                return FishingEventHandlers.Remove(handler);
-                            }
-                            else if (args[1] is Action<object> action)
-                            {
-                                return FishingEventHandlersObjectActions.Remove(action);
-                            }
-                            else if (args[1] is Delegate del)
+                            if (args[1] is Delegate del)
                             {
                                 // 尝试创建一个 FishingEventCallback 类型的代理
-                                Delegate converted = Delegate.CreateDelegate(typeof(FishingEventCallback), del.Target, del.Method, throwOnBindFailure: false);
+                                Delegate converted = Delegate.CreateDelegate(typeof(TEAutofisher.FishingEventCallback), del.Target, del.Method, throwOnBindFailure: false);
                                 if (converted != null)
                                 {
-                                    return FishingEventCallbacks.Remove((FishingEventCallback)converted);
+                                    TEAutofisher.FishingEvent -= (TEAutofisher.FishingEventCallback)converted;
+                                    return true;
                                 }
                             }
                             return false;
