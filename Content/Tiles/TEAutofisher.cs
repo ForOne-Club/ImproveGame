@@ -13,6 +13,61 @@ namespace ImproveGame.Content.Tiles
 {
     public class TEAutofisher : ModTileEntity
     {
+        /// <summary>
+        /// 钓鱼事件参数
+        /// </summary>
+        public class FishingEventArgs
+        {
+            /// <summary>
+            /// 钓鱼机实例
+            /// </summary>
+            public TileEntity Fisher;
+
+            /// <summary>
+            /// 钓鱼尝试数据
+            /// </summary>
+            public FishingAttempt FishingAttempt;
+
+            /// <summary>
+            /// 钓上的物品ID，如果重新赋值，可用于修改钓鱼结果
+            /// </summary>
+            public int ItemType;
+
+            /// <summary>
+            /// 物品数量，如果重新赋值，可用于修改钓鱼结果
+            /// </summary>
+            public int ItemStack;
+
+            /// <summary>
+            /// 是否取消钓鱼事件
+            /// </summary>
+            public bool Cancel;
+
+            /// <summary>
+            /// 钓鱼的玩家
+            /// </summary>
+            public Player Player;
+        }
+
+        //从事件event这个设计本身来讲，确实应该放在这里比较合适，因为钓鱼事件是直接与钓鱼机这个实体相关的，
+        //同时事件的使用应该只在定义的类中发生，外部只应该进行订阅或者取消订阅操作
+
+        /// <summary>
+        /// 钓鱼事件回调委托
+        /// </summary>
+        /// <param name="fisher">钓鱼机实例</param>
+        /// <param name="fishingAttempt">钓鱼尝试数据</param>
+        /// <param name="player">钓鱼的玩家</param>
+        /// <param name="itemType">钓上的物品ID（ref可修改）</param>
+        /// <param name="itemStack">物品数量（ref可修改）</param>
+        /// <param name="cancel">是否取消钓鱼事件（ref可修改）</param>
+        public delegate void FishingEventCallback(TileEntity fisher, FishingAttempt fishingAttempt, Player player, ref int itemType, ref int itemStack, ref bool cancel);
+
+        /// <summary>
+        /// 钓鱼事件订阅列表
+        /// </summary>
+        public static event FishingEventCallback FishingEvent;
+
         public Point16 locatePoint = Point16.NegativeOne;
         public Item fishingPole = new();
         public Item bait = new();
@@ -36,6 +91,11 @@ namespace ImproveGame.Content.Tiles
                                (fish is null || fish.All(item => item.IsAir));
 
         public bool HasBait => !bait.IsAir;
+
+        public override void Unload()
+        {
+            FishingEvent = null;
+        }
 
         public override bool IsTileValidForEntity(int x, int y)
         {
@@ -538,6 +598,46 @@ namespace ImproveGame.Content.Tiles
             PlayerLoader.ModifyCaughtFish(player, item);
             ItemLoader.CaughtFishStack(item);
             item.newAndShiny = true;
+
+            #region 调用钓鱼事件
+
+            if (FishingEvent is not null)
+            {
+                var fisher = GetFisher(out _);
+                var eventArgs = new FishingEventArgs
+                {
+                    Fisher = this,
+                    FishingAttempt = fisher,
+                    Player = player,
+                    ItemType = item.type,
+                    ItemStack = item.stack,
+                    Cancel = false,
+                };
+
+                // 调用所有注册的事件
+                try
+                {
+                    FishingEvent?.Invoke(eventArgs.Fisher, eventArgs.FishingAttempt, eventArgs.Player, ref eventArgs.ItemType, ref eventArgs.ItemStack, ref eventArgs.Cancel);
+                }
+                catch (Exception ex)
+                {
+                    ImproveGame.Instance.Logger.Error($"Error in fishing event Callback: {ex}");
+                }
+
+                // 如果事件取消了，直接返回
+                if (eventArgs.Cancel)
+                    return;
+
+                // 应用事件修改的物品类型和数量
+                if (eventArgs.ItemType != item.type || eventArgs.ItemStack != item.stack)
+                {
+                    item = new Item(eventArgs.ItemType, eventArgs.ItemStack);
+                    item.newAndShiny = true;
+                }
+            }
+
+            #endregion 钓鱼事件调用结束
+
             var dummyItem = item.Clone();
             int oldStack = item.stack;
 

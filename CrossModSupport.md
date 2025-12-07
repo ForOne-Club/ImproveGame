@@ -357,3 +357,35 @@ public override void Load()
 | 青色 | 00FFFF | 禁止放置墙体 |
 | 绿色 | 00FF00 | 门           |
 | 透明 |        | 墙体         |
+
+### RegisterFishingEvent
+
+注册自动钓鱼机钓鱼事件，在钓鱼机钓起物品前触发，可修改钓鱼结果或取消钓鱼
+
+#### 参数
+
+委托实例，签名为 `void Method(TileEntity fisher, FishingAttempt fishingAttempt, Player player, ref int itemType, ref int itemStack, ref bool cancel)`
+
+#### 使用示例
+
+```csharp
+public class MyMod : Mod
+{
+    public override void PostSetupContent()
+    {
+        if (!ModLoader.TryGetMod("ImproveGame", out Mod improveGame))
+                return;
+
+        // 定义委托签名并转换
+        improveGame.Call("RegisterFishingEvent", (Delegate)OnFishingCallback);
+    }
+    
+    private void OnFishingCallback(TileEntity fisher, FishingAttempt fishingAttempt, Player player, ref int itemType, ref int itemStack, ref bool cancel)//注意这里的签名需要和委托定义一致
+    {
+        // 直接通过 ref 参数修改
+        itemType = ItemID.IronCrate;//全部变成铁匣子
+    }
+
+    //这里可以偷懒不卸载委托，因为模组在重新加载时本身会自动卸载清理所有的委托
+}
+```

@@ -732,6 +732,36 @@ public class ModIntegrationsSystem : ModSystem
                             CreateWand.AddNewPrisonStyle(args[1] as Texture2D, args[2] as Texture2D);
                             return true;
                         }
+                    // 注册钓鱼事件
+                    case "RegisterFishingEvent":
+                        {
+                            if (args[1] is Delegate del)
+                            {
+                                // 尝试创建一个 FishingEventCallback 类型的代理
+                                Delegate converted = Delegate.CreateDelegate(typeof(TEAutofisher.FishingEventCallback), del.Target, del.Method, throwOnBindFailure: false);
+                                if (converted != null)
+                                {
+                                    TEAutofisher.FishingEvent += (TEAutofisher.FishingEventCallback)converted;
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }
+                    // 移除钓鱼事件
+                    case "UnregisterFishingEvent":
+                        {
+                            if (args[1] is Delegate del)
+                            {
+                                // 尝试创建一个 FishingEventCallback 类型的代理
+                                Delegate converted = Delegate.CreateDelegate(typeof(TEAutofisher.FishingEventCallback), del.Target, del.Method, throwOnBindFailure: false);
+                                if (converted != null)
+                                {
+                                    TEAutofisher.FishingEvent -= (TEAutofisher.FishingEventCallback)converted;
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");
                         return false;
