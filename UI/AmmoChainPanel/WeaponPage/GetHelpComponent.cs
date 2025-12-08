@@ -12,6 +12,6 @@ public class GetHelpComponent(WeaponPage parent) : ToolComponent(parent)
         base.LeftMouseDown(evt);
         TrUtils.OpenToURL(Language.ActiveCulture.Name is "zh-Hans"
             ? "https://gitee.com/MyGoold/improve-game/wikis/%E5%BC%B9%E8%8D%AF%E9%93%BE"
-            : "https://github.com/ForOne-Club/ImproveGame/wiki/Ammo-Chain");
+            : "https://github.com/487666123/ImproveGame/wiki/Ammo-Chain");
     }
 }

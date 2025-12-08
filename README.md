@@ -77,7 +77,7 @@ TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也受
 本模组的StorageCommunicator部分代码来自模组“Magic Storage”，该模组也受 MIT 许可，与上面相同。
 
 附:\
-本模组开源链接: <https://github.com/ForOne-Club/ImproveGame>\
+本模组开源链接: <https://github.com/487666123/ImproveGame>\
 WMITF开源链接: <https://github.com/gardenappl/WMITF>\
 ChevyRay的协程类: <https://github.com/ChevyRay/Coroutines>\
 ProjectStarlight.Interchange: <https://github.com/ProjectStarlight/ProjectStarlight.Interchange>\

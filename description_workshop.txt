@@ -46,8 +46,8 @@
 [/list]
 
 [h2]开源仓库 与 更新日志[/h2]
-更新日志: https://github.com/ForOne-Club/ImproveGame/blob/1.4.4/ChangeLog.md
-开源链接: https://github.com/ForOne-Club/ImproveGame
+更新日志: https://github.com/487666123/ImproveGame/blob/1.4.4/ChangeLog.md
+开源链接: https://github.com/487666123/ImproveGame
 
 [h2]作者 与 特别鸣谢[/h2]
 贴图:

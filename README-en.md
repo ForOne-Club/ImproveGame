@@ -78,7 +78,7 @@ The code of the 'auto save money' function is mostly from mod 'Auto Piggy Bank' 
 
 p.s.
 Source code of:
-This mod: <https://github.com/ForOne-Club/ImproveGame>
+This mod: <https://github.com/487666123/ImproveGame>
 WMITF: <https://github.com/gardenappl/WMITF>
 ChevyRay's coroutine class: <https://github.com/ChevyRay/Coroutines>
 ProjectStarlight.Interchange: <https://github.com/ProjectStarlight/ProjectStarlight.Interchange>

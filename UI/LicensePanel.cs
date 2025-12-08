@@ -114,7 +114,7 @@ public class LicensePanel : BaseBody
         };
         text.OnRightMouseDown += (_, _) =>
         {
-            TrUtils.OpenToURL("https://github.com/ForOne-Club/ImproveGame");
+            TrUtils.OpenToURL("https://github.com/487666123/ImproveGame");
             SoundEngine.PlaySound(SoundID.MenuOpen);
         };
         text.SetPadding(0f, 0f);
@@ -152,7 +152,7 @@ public class LicensePanel : BaseBody
 
     private const string LicenseText =
         """
-        This project (ImproveGame) is licensed under the MIT License, open source on GitHub (https://github.com/ForOne-Club/ImproveGame).
+        This project (ImproveGame) is licensed under the MIT License, open source on GitHub (https://github.com/487666123/ImproveGame).
         Huge thanks to the following open-source projects and their contributors:
 
         --- tModLoader ---
