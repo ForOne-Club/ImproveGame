@@ -447,278 +447,278 @@ public class ModIntegrationsSystem : ModSystem
                 switch (msg)
                 {
                     case "IgnoreInfItem":
+                    {
+                        List<int> ignores = AsListOfInt(args[1]); // Potion IDs
+                        foreach (int ignore in ignores)
                         {
-                            List<int> ignores = AsListOfInt(args[1]); // Potion IDs
-                            foreach (int ignore in ignores)
-                            {
-                                ModdedInfBuffsIgnore.Add(ignore);
-                            }
-
-                            return true;
+                            ModdedInfBuffsIgnore.Add(ignore);
                         }
+
+                        return true;
+                    }
                     case "AddPotion":
-                        {
-                            int itemType = Convert.ToInt32(args[1]); // Item ID
-                            List<int> buffTypes = AsListOfInt(args[2]); // Buff IDs
-                            ModdedPotionBuffs[itemType] = buffTypes;
-                            return true;
-                        }
+                    {
+                        int itemType = Convert.ToInt32(args[1]); // Item ID
+                        List<int> buffTypes = AsListOfInt(args[2]); // Buff IDs
+                        ModdedPotionBuffs[itemType] = buffTypes;
+                        return true;
+                    }
                     case "ConsumePotion":
+                    {
+                        List<int> consumes = AsListOfInt(args[1]); // Potion IDs
+                        foreach (int consume in consumes)
                         {
-                            List<int> consumes = AsListOfInt(args[1]); // Potion IDs
-                            foreach (int consume in consumes)
-                            {
-                                ModdedInfBuffsConsume.Add(consume);
-                            }
+                            ModdedInfBuffsConsume.Add(consume);
+                        }
 
-                            return true;
-                        }
+                        return true;
+                    }
                     case "BuffConflict":
-                        {
-                            int buffType = Convert.ToInt32(args[1]); // Buff ID
-                            List<int> ClearedBuffTypes = AsListOfInt(args[2]); // Cleared Buff IDs
-                            ModdedBuffConflicts[buffType] = ClearedBuffTypes;
-                            return true;
-                        }
+                    {
+                        int buffType = Convert.ToInt32(args[1]); // Buff ID
+                        List<int> ClearedBuffTypes = AsListOfInt(args[2]); // Cleared Buff IDs
+                        ModdedBuffConflicts[buffType] = ClearedBuffTypes;
+                        return true;
+                    }
                     case "AddStation":
-                        {
-                            int itemType = Convert.ToInt32(args[1]); // Item ID
-                            List<int> buffTypes = AsListOfInt(args[2]); // Buff IDs
-                            ModdedPlaceableItemBuffs[itemType] = buffTypes;
-                            return true;
-                        }
+                    {
+                        int itemType = Convert.ToInt32(args[1]); // Item ID
+                        List<int> buffTypes = AsListOfInt(args[2]); // Buff IDs
+                        ModdedPlaceableItemBuffs[itemType] = buffTypes;
+                        return true;
+                    }
                     case "AddPortableCraftingStation":
-                        {
-                            int itemType = Convert.ToInt32(args[1]); // Item ID
-                            List<int> tileIDs = AsListOfInt(args[2]); // Tile IDs
-                            PortableStations[itemType] = tileIDs;
-                            return true;
-                        }
+                    {
+                        int itemType = Convert.ToInt32(args[1]); // Item ID
+                        List<int> tileIDs = AsListOfInt(args[2]); // Tile IDs
+                        PortableStations[itemType] = tileIDs;
+                        return true;
+                    }
                     case "AddFishingAccessory":
-                        {
-                            int itemType = Convert.ToInt32(args[1]); // Item ID
-                            float speed = Convert.ToSingle(args[2]); // Fishing Speed Bonus
-                            int power = Convert.ToInt32(args[3]); // Fishing Power
-                            bool tackleBox = Convert.ToBoolean(args[4]); // Tackle Box
-                            bool lavaFishing = Convert.ToBoolean(args[5]); // Lava Fishing
-                            FishingStatLookup[itemType] = new FishingStat(power, speed, tackleBox, lavaFishing);
-                            return true;
-                        }
+                    {
+                        int itemType = Convert.ToInt32(args[1]); // Item ID
+                        float speed = Convert.ToSingle(args[2]); // Fishing Speed Bonus
+                        int power = Convert.ToInt32(args[3]); // Fishing Power
+                        bool tackleBox = Convert.ToBoolean(args[4]); // Tackle Box
+                        bool lavaFishing = Convert.ToBoolean(args[5]); // Lava Fishing
+                        FishingStatLookup[itemType] = new FishingStat(power, speed, tackleBox, lavaFishing);
+                        return true;
+                    }
                     // 添加属性类别
                     case "AddStatCategory":
+                    {
+                        string category = Convert.ToString(args[1]);
+                        Texture2D texture = (Texture2D)args[2];
+                        string nameKey = Convert.ToString(args[3]);
+                        Texture2D modIcon = (Texture2D)args[4];
+
+                        if (PlayerStatsSystem.Instance.StatsCategories.ContainsKey(category))
                         {
-                            string category = Convert.ToString(args[1]);
-                            Texture2D texture = (Texture2D)args[2];
-                            string nameKey = Convert.ToString(args[3]);
-                            Texture2D modIcon = (Texture2D)args[4];
-
-                            if (PlayerStatsSystem.Instance.StatsCategories.ContainsKey(category))
-                            {
-                                return false;
-                            }
-
-                            PlayerStatsSystem.Instance.StatsCategories.Add(category,
-                                new BaseStatsCategory(texture, nameKey, true, modIcon));
-
-                            return true;
+                            return false;
                         }
+
+                        PlayerStatsSystem.Instance.StatsCategories.Add(category,
+                            new BaseStatsCategory(texture, nameKey, true, modIcon));
+
+                        return true;
+                    }
                     // 添加属性到指定类别
                     case "AddStat":
+                    {
+                        string category = Convert.ToString(args[1]);
+                        string nameKey = Convert.ToString(args[2]);
+                        Func<string> value = (Func<string>)args[3];
+
+                        if (PlayerStatsSystem.Instance.StatsCategories.TryGetValue(category,
+                                out BaseStatsCategory proCat))
                         {
-                            string category = Convert.ToString(args[1]);
-                            string nameKey = Convert.ToString(args[2]);
-                            Func<string> value = (Func<string>)args[3];
-
-                            if (PlayerStatsSystem.Instance.StatsCategories.TryGetValue(category,
-                                    out BaseStatsCategory proCat))
-                            {
-                                proCat.BaseProperties.Add(new BaseStat(proCat, nameKey, value, true));
-                                return true;
-                            }
-
-                            return false;
+                            proCat.BaseProperties.Add(new BaseStat(proCat, nameKey, value, true));
+                            return true;
                         }
+
+                        return false;
+                    }
                     // 添加回家物品
                     case "AddHomeTpItem":
+                    {
+                        List<int> items = AsListOfInt(args[1]); // Item IDs
+                        bool
+                            isPotion = Convert
+                                .ToBoolean(args[
+                                    2]); // Whether the item should meet the Infinite Potion requirement (stacked over 30 by default and can be changed via mod config)
+                        bool isComebackItem = Convert.ToBoolean(args[3]); // Potion of Return like item
+
+                        foreach (int item in items)
                         {
-                            List<int> items = AsListOfInt(args[1]); // Item IDs
-                            bool
-                                isPotion = Convert
-                                    .ToBoolean(args[
-                                        2]); // Whether the item should meet the Infinite Potion requirement (stacked over 30 by default and can be changed via mod config)
-                            bool isComebackItem = Convert.ToBoolean(args[3]); // Potion of Return like item
-
-                            foreach (int item in items)
-                            {
-                                HomeTeleportingPlayer.HomeTeleportingItems.Add(
-                                    new HomeTeleportingItem(item, isPotion, isComebackItem));
-                            }
-
-                            return false;
+                            HomeTeleportingPlayer.HomeTeleportingItems.Add(
+                                new HomeTeleportingItem(item, isPotion, isComebackItem));
                         }
+
+                        return false;
+                    }
                     // 获取弹药链序列
                     case "GetAmmoChainSequence":
-                        {
-                            Item item = (Item)args[1];
-                            if (item is null || item.IsAir ||
-                                !item.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) ||
-                                globalItem.Chain is null)
-                                return null;
-                            return globalItem.Chain.SerializeData();
-                        }
+                    {
+                        Item item = (Item)args[1];
+                        if (item is null || item.IsAir ||
+                            !item.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) ||
+                            globalItem.Chain is null)
+                            return null;
+                        return globalItem.Chain.SerializeData();
+                    }
                     // 获取大背包物品
                     case "GetBigBagItems":
-                        {
-                            Player player = (Player)args[1];
-                            return GetAllInventoryItemsList(player, "portable, inv", 110);
-                        }
+                    {
+                        Player player = (Player)args[1];
+                        return GetAllInventoryItemsList(player, "portable, inv", 110);
+                    }
                     // 获取“任意弹药”物品的ID
                     case "GetUniversalAmmoId":
-                        {
-                            return ModContent.ItemType<UniversalAmmoIcon>();
-                        }
+                    {
+                        return ModContent.ItemType<UniversalAmmoIcon>();
+                    }
                     // 获取钓鱼机物品
                     case "GetFisherItems":
+                    {
+                        // Item[] Call(string, Point16)
+                        // or Item[] Call(string, AutoFisher)
+                        // or Item[] Call(string, int, int);
+                        Point16 location = default;
+                        TEAutofisher fisher = null;
+                        bool ok = false;
+                        int argIndex = 1;
+                        object arg = args[argIndex++];
+                        if (arg is TEAutofisher autofisher)
                         {
-                            // Item[] Call(string, Point16)
-                            // or Item[] Call(string, AutoFisher)
-                            // or Item[] Call(string, int, int);
-                            Point16 location = default;
-                            TEAutofisher fisher = null;
-                            bool ok = false;
-                            int argIndex = 1;
-                            object arg = args[argIndex++];
-                            if (arg is TEAutofisher autofisher)
+                            fisher = autofisher;
+                            ok = TileEntity.ByID[autofisher.ID] == autofisher;
+                        }
+                        else
+                        {
+                            if (arg is Point16 point)
                             {
-                                fisher = autofisher;
-                                ok = TileEntity.ByID[autofisher.ID] == autofisher;
+                                location = point;
+                                ok = true;
                             }
-                            else
+                            else if (arg is int x && args[argIndex] is int y)
                             {
-                                if (arg is Point16 point)
-                                {
-                                    location = point;
-                                    ok = true;
-                                }
-                                else if (arg is int x && args[argIndex] is int y)
-                                {
-                                    location = new Point16(x, y);
-                                    ok = true;
-                                }
-                                if (ok)
-                                {
-                                    ok = AutoFisherAdapter.TryGetTEAutofisher(location.X, location.Y, out fisher);
-                                }
+                                location = new Point16(x, y);
+                                ok = true;
                             }
                             if (ok)
                             {
-                                Item[] items = [.. fisher.fish, fisher.fishingPole, fisher.bait, fisher.accessory];
-                                return items;
+                                ok = AutoFisherAdapter.TryGetTEAutofisher(location.X, location.Y, out fisher);
                             }
-                            return Array.Empty<Item>();
                         }
+                        if (ok)
+                        {
+                            Item[] items = [.. fisher.fish, fisher.fishingPole, fisher.bait, fisher.accessory];
+                            return items;
+                        }
+                        return Array.Empty<Item>();
+                    }
                     // 同步钓鱼机物品
                     case "SyncFisherItems":
+                    {
+                        // bool Call(string, Point16, int, int)
+                        // or bool Item[] Call(string, AutoFisher, int, int)
+                        // or bool Call(string, int, int, int, int)
+                        Point16 location = default;
+                        bool ok = false;
+                        int argIndex = 1;
+                        object arg = args[argIndex++];
+                        TEAutofisher fisher = null;
+                        if (arg is TEAutofisher autofisher)
                         {
-                            // bool Call(string, Point16, int, int)
-                            // or bool Item[] Call(string, AutoFisher, int, int)
-                            // or bool Call(string, int, int, int, int)
-                            Point16 location = default;
-                            bool ok = false;
-                            int argIndex = 1;
-                            object arg = args[argIndex++];
-                            TEAutofisher fisher = null;
-                            if (arg is TEAutofisher autofisher)
+                            fisher = autofisher;
+                            ok = TileEntity.ByID[autofisher.ID] == autofisher;
+                        }
+                        else
+                        {
+                            if (arg is Point16 point)
                             {
-                                fisher = autofisher;
-                                ok = TileEntity.ByID[autofisher.ID] == autofisher;
+                                location = point;
+                                ok = true;
                             }
-                            else
+                            else if (arg is int x && args[argIndex] is int y)
                             {
-                                if (arg is Point16 point)
-                                {
-                                    location = point;
-                                    ok = true;
-                                }
-                                else if (arg is int x && args[argIndex] is int y)
-                                {
-                                    location = new Point16(x, y);
-                                    ok = true;
-                                }
-                                if (ok)
-                                {
-                                    ok = AutoFisherAdapter.TryGetTEAutofisher(location.X, location.Y, out fisher);
-                                }
+                                location = new Point16(x, y);
+                                ok = true;
                             }
                             if (ok)
                             {
-                                int index = (int)args[argIndex++];
-                                if (index is > 0 and < ItemSyncPacket.All)
-                                {
-                                    int amount = (int)args[argIndex];
-                                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                                    {
-                                        // TODO: Send packet when in multiplayer client
-                                        return false;
-                                    }
-                                    AutoFisherAdapter.SyncItem(fisher, (byte)index, amount);
-                                    return true;
-                                }
+                                ok = AutoFisherAdapter.TryGetTEAutofisher(location.X, location.Y, out fisher);
                             }
-                            return false;
                         }
+                        if (ok)
+                        {
+                            int index = (int)args[argIndex++];
+                            if (index is > 0 and < ItemSyncPacket.All)
+                            {
+                                int amount = (int)args[argIndex];
+                                if (Main.netMode == NetmodeID.MultiplayerClient)
+                                {
+                                    // TODO: Send packet when in multiplayer client
+                                    return false;
+                                }
+                                AutoFisherAdapter.SyncItem(fisher, (byte)index, amount);
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
                     // 注册分类卡
                     case "RegisterCategory":
-                        {
-                            int length = args.Length;
-                            CategorySidePanel.RegisterCategory(args[1] as Mod, args[2] as List<KeyValuePair<string, Terraria.ModLoader.Config.ModConfig>>,
-                                length > 3 ? (int)args[3] : 0,
-                                length > 4 ? args[4] as Func<Texture2D> : null,
-                                length > 5 ? args[5] as Func<string> : null,
-                                length > 6 ? args[6] as Func<string> : null);
-                            return true;
-                        }
+                    {
+                        int length = args.Length;
+                        CategorySidePanel.RegisterCategory(args[1] as Mod, args[2] as List<KeyValuePair<string, Terraria.ModLoader.Config.ModConfig>>,
+                            length > 3 ? (int)args[3] : 0,
+                            length > 4 ? args[4] as Func<Texture2D> : null,
+                            length > 5 ? args[5] as Func<string> : null,
+                            length > 6 ? args[6] as Func<string> : null);
+                        return true;
+                    }
                     // 注册“关于”页面
                     case "SetAboutPage":
-                        {
-                            int length = args.Length;
-                            CategorySidePanel.SetAboutPage(args[1] as Mod, args[2] as Func<string>,
-                                length > 3 ? (int)args[3] : 0,
-                                length > 4 ? args[4] as Func<Texture2D> : null,
-                                length > 5 ? args[5] as Func<string> : null,
-                                length > 6 ? args[6] as Func<string> : null);
-                            return true;
-                        }
+                    {
+                        int length = args.Length;
+                        CategorySidePanel.SetAboutPage(args[1] as Mod, args[2] as Func<string>,
+                            length > 3 ? (int)args[3] : 0,
+                            length > 4 ? args[4] as Func<Texture2D> : null,
+                            length > 5 ? args[5] as Func<string> : null,
+                            length > 6 ? args[6] as Func<string> : null);
+                        return true;
+                    }
                     // 移除模组注册的所有分类卡
                     case "RemoveCategory":
-                        {
-                            CategorySidePanel.RemoveCategory(args[1] as Mod);
-                            return true;
-                        }
+                    {
+                        CategorySidePanel.RemoveCategory(args[1] as Mod);
+                        return true;
+                    }
                     // 移除模组注册的“关于”页面
                     case "RemoveAboutPage":
-                        {
-                            CategorySidePanel.RemoveAboutPage(args[1] as Mod);
-                            return true;
-                        }
+                    {
+                        CategorySidePanel.RemoveAboutPage(args[1] as Mod);
+                        return true;
+                    }
                     // 设置模组的配置中心在模组设置入口处的文本标题
                     case "AddModernConfigTitle":
-                        {
-                            CategorySidePanel.ModdedTitle[args[1] as Mod] = args[2] as LocalizedText;
-                            return true;
-                        }
+                    {
+                        CategorySidePanel.ModdedTitle[args[1] as Mod] = args[2] as LocalizedText;
+                        return true;
+                    }
                     // 注册预览绘制
                     case "RegisterPreview":
-                        {
-                            CategorySidePanel.ModdedPreviews[args[1] as PropertyFieldWrapper] = new PreviewDrawing(args[2] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
-                            return true;
-                        }
+                    {
+                        CategorySidePanel.ModdedPreviews[args[1] as PropertyFieldWrapper] = new PreviewDrawing(args[2] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
+                        return true;
+                    }
                     // 添加全局预览绘制
                     case "OnGlobalConfigPreview":
-                        {
-                            TooltipPanel.GlobalDrawing += new PreviewDrawing(args[1] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
-                            return true;
-                        }
+                    {
+                        TooltipPanel.GlobalDrawing += new PreviewDrawing(args[1] as Action<UIElement, ModConfig, PropertyFieldWrapper, object, IList, int>);
+                        return true;
+                    }
                     // 这个本来是LSL用来注册在UI层开启Render的条件的
                     // 但是仔细研究之后发现LSL那一套和现在的主页毛玻璃插入的内容可以兼容，就没必要搬运过来了
                     //case "AddRenderOnCondition": 
@@ -728,40 +728,35 @@ public class ModIntegrationsSystem : ModSystem
                     //    }
                     // 添加新的监狱
                     case "AddPrison":
-                        {
-                            CreateWand.AddNewPrisonStyle(args[1] as Texture2D, args[2] as Texture2D);
-                            return true;
-                        }
+                    {
+                        CreateWand.AddNewPrisonStyle(args[1] as Texture2D, args[2] as Texture2D);
+                        return true;
+                    }
                     // 注册钓鱼事件
                     case "RegisterFishingEvent":
+                    {
+                        if (args[1] is Delegate del &&
+                            Delegate.CreateDelegate(typeof(Content.Tiles.FishingEventHandler), del.Target, del.Method, false) is Content.Tiles.FishingEventHandler eventHandler)
                         {
-                            if (args[1] is Delegate del)
-                            {
-                                // 尝试创建一个 FishingEventCallback 类型的代理
-                                Delegate converted = Delegate.CreateDelegate(typeof(TEAutofisher.FishingEventCallback), del.Target, del.Method, throwOnBindFailure: false);
-                                if (converted != null)
-                                {
-                                    TEAutofisher.FishingEvent += (TEAutofisher.FishingEventCallback)converted;
-                                    return true;
-                                }
-                            }
-                            return false;
+                            TEAutofisher.FishingEventHandler += eventHandler;
+                            return true;
                         }
+                        return false;
+                    }
                     // 移除钓鱼事件
                     case "UnregisterFishingEvent":
+                    {
+                        if (args[1] is Delegate del &&
+                            Delegate.CreateDelegate(typeof(Content.Tiles.FishingEventHandler), del.Target, del.Method, false) is Content.Tiles.FishingEventHandler eventHandler)
                         {
-                            if (args[1] is Delegate del)
-                            {
-                                // 尝试创建一个 FishingEventCallback 类型的代理
-                                Delegate converted = Delegate.CreateDelegate(typeof(TEAutofisher.FishingEventCallback), del.Target, del.Method, throwOnBindFailure: false);
-                                if (converted != null)
-                                {
-                                    TEAutofisher.FishingEvent -= (TEAutofisher.FishingEventCallback)converted;
-                                    return true;
-                                }
-                            }
-                            return false;
+                            // CLR 判断是委托是否相同是通过 Target 与 Method
+                            // 所以注册的委托的 Target 与 Method 相同即可正常卸载
+
+                            TEAutofisher.FishingEventHandler -= eventHandler;
+                            return true;
                         }
+                        return false;
+                    }
                     default:
                         ImproveGame.Instance.Logger.Error($"Replacement type \"{msg}\" not found.");
                         return false;

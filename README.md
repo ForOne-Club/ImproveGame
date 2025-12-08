@@ -55,7 +55,9 @@
 
 ## 💻 构建项目
 
-更好的体验由于使用了 **NuGet**，因此无法使用 **tModLoader** 进行编译，需要使用 **IDE** 进行编译
+更好的体验由于使用了 **NuGet**，需使用 **IDE** 进行编译，无法使用 **tModLoader** 进行编译
+
+更好的体验依赖于 **SilkyUI**，所以需要克隆 SilkyUI 关联的两个项目，SilkyUI 具体使用步骤请在 [SilkyUIFramework](https://github.com/487666123/SilkyUIFramework) 仓库查看
 
 > 推荐 **IDE**：Rider、Visual Studio 2022、Visual Studio Code
 
