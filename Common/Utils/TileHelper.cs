@@ -318,6 +318,117 @@ namespace ImproveGame
             }
         }
 
+        internal static int PlaceChestNoSync(int x, int y, ushort type = 21, bool notNearOtherChests = false, int style = 0)
+        {
+            int num = -1;
+            if (TileID.Sets.Boulders[Main.tile[x, y + 1].type] || TileID.Sets.Boulders[Main.tile[x + 1, y + 1].type])
+                return -1;
+
+            if (TileObject.CanPlace(x, y, type, style, 1, out var objectData))
+            {
+                bool flag = true;
+                if (notNearOtherChests && Chest.NearOtherChests(x - 1, y - 1))
+                    flag = false;
+
+                if (flag)
+                {
+                    TileObject.Place(objectData);
+                    num = Chest.CreateChest(objectData.xCoord, objectData.yCoord);
+                }
+            }
+            else
+            {
+                num = -1;
+            }
+
+            return num;
+        }
+
+        internal static bool Place3x2NoSyncDresser(int x, int y, ushort type, int style = 0)
+        {
+            if (x < 5 || x > Main.maxTilesX - 5 || y < 5 || y > Main.maxTilesY - 5)
+                return false;
+
+            bool flag = false;
+            bool flag2 = true;
+
+            int num = y - 1;
+            if (flag)
+                num = y;
+
+            for (int i = x - 1; i < x + 2; i++)
+            {
+                for (int j = num; j < y + 1; j++)
+                {
+                    if (Main.tile[i, j] == null)
+                        Main.tile[i, j] = new Tile();
+
+                    if (Main.tile[i, j].active())
+                        flag2 = false;
+
+                    if (type == 215 && Main.tile[i, j].liquid > 0)
+                        flag2 = false;
+                }
+
+                if (Main.tile[i, y + 1] == null)
+                    Main.tile[i, y + 1] = new Tile();
+            }
+            if (TileID.Sets.BasicDresser[type])
+            {
+                if (Chest.CreateChest(x - 1, y - 1) == -1)
+                    flag2 = false;
+                /*else if (Main.netMode == 1)
+                    NetMessage.SendData(34, -1, -1, null, 2, x, y, style);*/
+            }
+
+            if (flag2)
+            {
+                short num2 = (short)(54 * style);
+                if (flag)
+                {
+                    Main.tile[x - 1, y].active(active: true);
+                    Main.tile[x - 1, y].frameY = 0;
+                    Main.tile[x - 1, y].frameX = num2;
+                    Main.tile[x - 1, y].type = type;
+                    Main.tile[x, y].active(active: true);
+                    Main.tile[x, y].frameY = 0;
+                    Main.tile[x, y].frameX = (short)(num2 + 18);
+                    Main.tile[x, y].type = type;
+                    Main.tile[x + 1, y].active(active: true);
+                    Main.tile[x + 1, y].frameY = 0;
+                    Main.tile[x + 1, y].frameX = (short)(num2 + 36);
+                    Main.tile[x + 1, y].type = type;
+                    return true;
+                }
+
+                Main.tile[x - 1, y - 1].active(active: true);
+                Main.tile[x - 1, y - 1].frameY = 0;
+                Main.tile[x - 1, y - 1].frameX = num2;
+                Main.tile[x - 1, y - 1].type = type;
+                Main.tile[x, y - 1].active(active: true);
+                Main.tile[x, y - 1].frameY = 0;
+                Main.tile[x, y - 1].frameX = (short)(num2 + 18);
+                Main.tile[x, y - 1].type = type;
+                Main.tile[x + 1, y - 1].active(active: true);
+                Main.tile[x + 1, y - 1].frameY = 0;
+                Main.tile[x + 1, y - 1].frameX = (short)(num2 + 36);
+                Main.tile[x + 1, y - 1].type = type;
+                Main.tile[x - 1, y].active(active: true);
+                Main.tile[x - 1, y].frameY = 18;
+                Main.tile[x - 1, y].frameX = num2;
+                Main.tile[x - 1, y].type = type;
+                Main.tile[x, y].active(active: true);
+                Main.tile[x, y].frameY = 18;
+                Main.tile[x, y].frameX = (short)(num2 + 18);
+                Main.tile[x, y].type = type;
+                Main.tile[x + 1, y].active(active: true);
+                Main.tile[x + 1, y].frameY = 18;
+                Main.tile[x + 1, y].frameX = (short)(num2 + 36);
+                Main.tile[x + 1, y].type = type;
+            }
+            return flag2; // 追加了是否放置成功的返回
+        }
+
         /// <summary>
         /// 先炸掉，然后再放物块
         /// </summary>
@@ -349,13 +460,21 @@ namespace ImproveGame
             }
             else
             {
-
                 if (item.createTile == TileID.Toilets)
                 {
                     WorldGen.Place1x2(i, j, TileID.Toilets, item.placeStyle);
                     success = Main.tile[i, j] is { HasTile: true, TileType: TileID.Toilets } && Main.tile[i, j - 1] is { HasTile: true, TileType: TileID.Toilets };
                 }
-                else 
+                else if (TileID.Sets.BasicChest[item.createTile])
+                {
+                    int index = PlaceChestNoSync(i, j, (ushort)item.createTile, false, item.placeStyle);
+                    success = index != -1;
+                }
+                else if (TileID.Sets.BasicDresser[item.createTile]) 
+                {
+                    success = Place3x2NoSyncDresser(i, j, (ushort)item.createTile, item.placeStyle);
+                }
+                else
                 {
                     success = WorldGen.PlaceTile(i, j, item.createTile, mute, forced, player.whoAmI, item.placeStyle);
                 }
@@ -594,47 +713,52 @@ namespace ImproveGame
             if (tileObjectData == null)
                 return null;
 
-            int num = frameX / tileObjectData.CoordinateFullWidth;
-            int num2 = frameY / tileObjectData.CoordinateFullHeight;
-            int num3 = tileObjectData.StyleWrapLimit;
-            if (num3 == 0)
-                num3 = 1;
+            int unitXCoord = frameX / tileObjectData.CoordinateFullWidth;
+            int unitYCoord = frameY / tileObjectData.CoordinateFullHeight;
+            int wrapLimit = tileObjectData.StyleWrapLimit;
+            if (wrapLimit == 0)
+                wrapLimit = 1;
 
-            int num4 = ((!tileObjectData.StyleHorizontal) ? (num * num3 + num2) : (num2 * num3 + num));
-            int num5 = num4 / tileObjectData.StyleMultiplier;
-            int num6 = num4 % tileObjectData.StyleMultiplier;
+            // 物品框这一项应为5，但是Re设置的1
+            var multiplier = type == TileID.ItemFrame ? 5 : tileObjectData.StyleMultiplier;
+
+            // 门这一项应为3，但是Re设置的1
+            var randomStyleRange = (TileID.Sets.OpenDoorID[type] != -1 || type == TileID.ClosedDoor) ? 3 : tileObjectData.RandomStyleRange; 
+
+            int unitID = ((!tileObjectData.StyleHorizontal) ? (unitXCoord * wrapLimit + unitYCoord) : (unitYCoord * wrapLimit + unitXCoord));
+            int subTileID = unitID / multiplier;
+            int randomStyleID = unitID % multiplier;
             int styleLineSkip = tileObjectData.StyleLineSkip;
             if (styleLineSkip > 1)
             {
                 if (tileObjectData.StyleHorizontal)
                 {
-                    num5 = num2 / styleLineSkip * num3 + num;
-                    num6 = num2 % styleLineSkip;
+                    subTileID = unitYCoord / styleLineSkip * wrapLimit + unitXCoord;
+                    randomStyleID = unitYCoord % styleLineSkip;
                 }
                 else
                 {
-                    num5 = num / styleLineSkip * num3 + num2;
-                    num6 = num % styleLineSkip;
+                    subTileID = unitXCoord / styleLineSkip * wrapLimit + unitYCoord;
+                    randomStyleID = unitXCoord % styleLineSkip;
                 }
             }
 
-            if (tileObjectData.SubTiles != null && num5 >= 0 && num5 < tileObjectData.SubTiles.Count)
+            if (tileObjectData.SubTiles != null && subTileID >= 0 && subTileID < tileObjectData.SubTiles.Count)
             {
-                TileObjectData tileObjectData2 = tileObjectData.SubTiles[num5];
-                if (tileObjectData2 != null)
-                    tileObjectData = tileObjectData2;
+                TileObjectData subTileObjectData = tileObjectData.SubTiles[subTileID];
+                if (subTileObjectData != null)
+                    tileObjectData = subTileObjectData;
             }
-
             if (tileObjectData._alternates != null)
             {
                 for (int i = 0; i < tileObjectData.Alternates.Count; i++)
                 {
-                    TileObjectData tileObjectData3 = tileObjectData.Alternates[i];
-                    if (tileObjectData3 != null && num6 >= tileObjectData3.Style && num6 <= tileObjectData3.Style + tileObjectData3.RandomStyleRange)
-                        return tileObjectData3;
+                    TileObjectData alternateObjectData = tileObjectData.Alternates[i];
+                    if (alternateObjectData != null && randomStyleID >= alternateObjectData.Style && randomStyleID <= alternateObjectData.Style + randomStyleRange)
+                        return alternateObjectData;
                 }
             }
-
+            
             return tileObjectData;
         }
     }

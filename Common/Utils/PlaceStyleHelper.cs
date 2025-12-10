@@ -60,9 +60,9 @@ partial class MyUtils
             case TileID.Candelabras:
             case TileID.Bathtubs:
             case TileID.Beds:
-            case TileID.HangingLanterns:
-            case TileID.Toilets: // 竖向排列 两格间隙 单排
+            case TileID.HangingLanterns: // 竖向排列 两格间隙 单排
                 return frameY / 36;
+            case TileID.Toilets:
             case TileID.Chairs: // 竖向排列 两格间隙 单排 (但椅子哥儿们居然是40px切分的)
                 return frameY / 40;
             // 双排特例
