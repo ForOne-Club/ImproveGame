@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.ModernConfig.Categories;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UI.ModernConfig.FakeCategories;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.ModLoader.Config;

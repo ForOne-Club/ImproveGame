@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Content.BuilderToggles;
 using ImproveGame.Core;
+using ImproveGame.Helpers.Extensions;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader.IO;

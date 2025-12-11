@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.Common.Utils;
+﻿namespace ImproveGame.Helpers;
 
 public static class NPCHelper
 {

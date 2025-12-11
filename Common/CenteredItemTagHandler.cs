@@ -1,4 +1,5 @@
-﻿using ReLogic.Graphics;
+﻿using ImproveGame.Helpers.Extensions;
+using ReLogic.Graphics;
 using Terraria.GameContent.UI;
 using Terraria.UI.Chat;
 

@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.ModernConfig.Categories;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
 using Newtonsoft.Json;

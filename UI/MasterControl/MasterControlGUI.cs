@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI.MasterControl.Components;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;

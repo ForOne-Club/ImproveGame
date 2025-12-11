@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Core;
+using ImproveGame.Helpers.Extensions;
 using System.Collections.ObjectModel;
 
 namespace ImproveGame.Common.GlobalItems

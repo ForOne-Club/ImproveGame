@@ -1,11 +1,12 @@
 ﻿using FuzzySearchNet;
 using ImproveGame.Core;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework.Common;
 using PinyinNet;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader.Default;
 
-namespace ImproveGame.Common.Utils.Extensions;
+namespace ImproveGame.Helpers.Extensions;
 
 /// <summary>
 /// <see cref="Item"/> 拓展

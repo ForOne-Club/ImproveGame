@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.RenderTargetContents;
+﻿using ImproveGame.Helpers.Extensions;
+
+namespace ImproveGame.Common.RenderTargetContents;
 
 public class StackNumberContent(string number) : ARenderTargetContentByRequest
 {

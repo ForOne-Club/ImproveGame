@@ -7,7 +7,7 @@ using System.Reflection;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
 
-namespace ImproveGame.Common.Utils;
+namespace ImproveGame.Helpers;
 
 public static class ConfigHelper
 {

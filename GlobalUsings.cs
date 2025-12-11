@@ -1,5 +1,5 @@
-﻿global using ImproveGame.Common.Utils;
-global using ImproveGame.Common.Utils.Extensions;
+﻿global using ImproveGame.Helpers;
+global using ImproveGame.Helpers.Extensions;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using NetSimplified;
@@ -17,7 +17,7 @@ global using Terraria.ID;
 global using Terraria.Localization;
 global using Terraria.ModLoader;
 global using Terraria.UI;
-global using static ImproveGame.MyUtils;
+global using static ImproveGame.Helpers.MyUtils;
 global using TrUtils = Terraria.Utils;
 
 // 全局引用列表

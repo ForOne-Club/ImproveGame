@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Core;
+using ImproveGame.Helpers;
 using Terraria.Map;
 
 namespace ImproveGame.Content.NPCs.Dummy;

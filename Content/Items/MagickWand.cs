@@ -3,6 +3,7 @@ using ImproveGame.Common.Conditions;
 using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.Packets;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;

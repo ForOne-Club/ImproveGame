@@ -1,7 +1,8 @@
 ﻿using ImproveGame.Common.RenderTargetContents;
+using ImproveGame.Helpers.Extensions;
 using ReLogic.Graphics;
 
-namespace ImproveGame.Common.Utils.Extensions;
+namespace ImproveGame.Helpers.Extensions;
 
 public static class TextDrawExtension
 {

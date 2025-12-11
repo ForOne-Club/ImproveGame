@@ -54,7 +54,9 @@ public partial class InfiniteBUFFController : BaseBody
         // 订阅事件
         if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer))
         {
-            battlerPlayer.SpawnRateSliderValueChanged += OnSpawnRateSliderValueChanged;
+            Slider.Value = battlerPlayer.SpawnRateSliderValue;
+
+            battlerPlayer.SpawnRateSliderValueChanged += (sender, value) => Slider.Value = value;
 
             MinButton.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 0f;
 
@@ -68,7 +70,10 @@ public partial class InfiniteBUFFController : BaseBody
         }
 
         // 发送数据
-        Slider.Drag += (_, value) => { SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true); };
+        Slider.Drag += (_, value) =>
+        {
+            SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true);
+        };
 
         foreach (var item in new UITextView[] { MinButton, DefaultButton, MaxButton, A2, A4 })
         {
@@ -79,36 +84,27 @@ public partial class InfiniteBUFFController : BaseBody
         }
     }
 
-    private void OnSpawnRateSliderValueChanged(object sender, float value) => Slider.Value = value;
-
     protected override void UpdateStatus(GameTime gameTime)
     {
         base.UpdateStatus(gameTime);
 
-        Refresh();
-    }
+        if (Slider.Thumb.IsMouseHovering || Slider.Thumb.LeftMousePressed)
+        {
+            UICommon.TooltipMouseText($"{Slider.Value:0.00}");
+        }
 
-    private void Refresh()
-    {
         if (ScrollContainer == null) return;
         ScrollContainer.RemoveAllChildren();
 
         for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
         {
             if (!HideBuffSystem.BuffTypesShouldHide[i]) continue;
-            if (!InfBuffPlayer.CheckInfBuffEnable(i)) continue;
-            SUIBuffItemPool.GetSUIBuffItem(i).Join(ScrollContainer);
-        }
-
-        for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
-        {
-            if (!HideBuffSystem.BuffTypesShouldHide[i]) continue;
-            if (InfBuffPlayer.CheckInfBuffEnable(i)) continue;
-            SUIBuffItemPool.GetSUIBuffItem(i).Join(ScrollContainer);
+            //if (!InfBuffPlayer.CheckInfBuffEnable(i)) continue;
+            _pool.GetOrAdd(i, key => new SUIBuffItem(key)).Join(ScrollContainer);
         }
     }
 
-    private readonly SUIBuffItemPool SUIBuffItemPool = new();
+    private readonly Dictionary<int, SUIBuffItem> _pool = [];
 }
 
 [XmlElementMapping("BuffItem")]
@@ -167,20 +163,6 @@ public class SUIBuffItem : UIElementGroup
     {
         base.OnLeftMouseDown(evt);
         InfBuffPlayer.Get(Main.LocalPlayer).ToggleInfBuff(BuffType);
-    }
-}
-
-public class SUIBuffItemPool
-{
-    private readonly Dictionary<int, SUIBuffItem> _pool = [];
-
-    public SUIBuffItem GetSUIBuffItem(int buffType)
-    {
-        if (_pool.TryGetValue(buffType, out var value)) return value;
-
-        var item = new SUIBuffItem(buffType);
-        _pool[buffType] = item;
-        return item;
     }
 }
 

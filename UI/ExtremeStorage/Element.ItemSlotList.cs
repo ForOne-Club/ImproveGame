@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework.UIElements;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.UIFramework.UIElements;
 
 namespace ImproveGame.UI.ExtremeStorage
 {

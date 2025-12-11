@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UIFramework.UIElements;
+﻿using ImproveGame.Helpers.Extensions;
+
+namespace ImproveGame.UIFramework.UIElements;
 
 public class RoundButton : UIElement
 {

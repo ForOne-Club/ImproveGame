@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.RenderTargetContents;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.Packets.NetStorager;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;

@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Helpers;
 using ImproveGame.UI.ModernConfig;
 using Newtonsoft.Json;
 using Terraria.ModLoader.Config;

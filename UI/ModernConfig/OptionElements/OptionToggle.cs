@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 

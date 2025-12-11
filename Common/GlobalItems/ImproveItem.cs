@@ -3,6 +3,8 @@ using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content;
 using ImproveGame.Core;
+using ImproveGame.Helpers;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework.SUIElements;
 using System.Text;
 using Terraria.DataStructures;

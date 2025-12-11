@@ -14,7 +14,7 @@ using Terraria.ModLoader.Config;
 using Terraria.UI.Chat;
 using static Microsoft.Xna.Framework.Vector2;
 
-namespace ImproveGame;
+namespace ImproveGame.Helpers;
 
 /// <summary>
 /// 局长自用工具

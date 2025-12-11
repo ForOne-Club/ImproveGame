@@ -2,6 +2,7 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI.ItemContainer;
 using Terraria.ModLoader.IO;
 using Terraria.UI.Chat;

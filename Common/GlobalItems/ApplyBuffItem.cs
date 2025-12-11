@@ -2,6 +2,7 @@
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.Core;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
 using System.Collections.ObjectModel;

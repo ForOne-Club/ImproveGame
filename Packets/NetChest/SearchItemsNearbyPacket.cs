@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.ItemSearcher;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.UI.ItemSearcher;
 
 namespace ImproveGame.Packets.NetChest;
 

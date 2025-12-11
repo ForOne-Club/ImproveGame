@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Content.Projectiles
+﻿using ImproveGame.Helpers.Extensions;
+
+namespace ImproveGame.Content.Projectiles
 {
     public class GlobeEffect : ModProjectile
     {

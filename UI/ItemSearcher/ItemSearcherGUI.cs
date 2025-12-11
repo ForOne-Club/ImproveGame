@@ -1,4 +1,5 @@
-﻿using ImproveGame.Packets.NetChest;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.Packets.NetChest;
 using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;

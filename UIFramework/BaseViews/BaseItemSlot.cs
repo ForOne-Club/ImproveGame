@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework.Common;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UIFramework.BaseViews;

@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.Configs.FavoritedSystem;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.Helpers;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI.ModernConfig.Categories;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;

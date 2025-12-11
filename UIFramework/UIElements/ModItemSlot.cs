@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework.Common;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;

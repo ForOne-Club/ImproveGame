@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework.BaseViews;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.UIFramework.BaseViews;
 
 namespace ImproveGame.UI.QuickShimmer;
 

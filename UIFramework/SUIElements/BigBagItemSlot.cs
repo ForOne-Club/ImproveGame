@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModHooks;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using Terraria.GameContent.UI.Chat;

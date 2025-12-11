@@ -1,6 +1,6 @@
 ﻿using PinyinNet;
 
-namespace ImproveGame;
+namespace ImproveGame.Helpers;
 
 partial class MyUtils
 {

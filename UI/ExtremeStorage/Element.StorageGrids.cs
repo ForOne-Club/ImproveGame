@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI.ExtremeStorage.ToolButtons;
 using ImproveGame.UI.ExtremeStorage.ToolButtons.FilterButtons;
 using ImproveGame.UIFramework;

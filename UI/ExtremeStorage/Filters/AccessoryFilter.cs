@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UI.ExtremeStorage.Filters;
+﻿using ImproveGame.Helpers.Extensions;
+
+namespace ImproveGame.UI.ExtremeStorage.Filters;
 
 public class AccessoryFilter : Filter
 {

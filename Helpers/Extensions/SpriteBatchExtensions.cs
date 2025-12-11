@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.Common.Utils.Extensions;
+﻿namespace ImproveGame.Helpers.Extensions;
 
 internal static class SpriteBatchExtensions
 {

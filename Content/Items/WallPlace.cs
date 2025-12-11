@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Content.Projectiles;
+using ImproveGame.Helpers.Extensions;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Items

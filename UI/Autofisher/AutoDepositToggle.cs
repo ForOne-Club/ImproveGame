@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Tiles;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;

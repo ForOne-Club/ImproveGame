@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;

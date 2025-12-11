@@ -1,4 +1,5 @@
-﻿using ImproveGame.UI.ModernConfig.OptionElements;
+﻿using ImproveGame.Helpers.Extensions;
+using ImproveGame.UI.ModernConfig.OptionElements;
 using ImproveGame.UIFramework.BaseViews;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;

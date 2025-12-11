@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Content.Tiles;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.Packets.WorldFeatures;
 using Terraria.DataStructures;
 using Terraria.GameContent.Biomes;

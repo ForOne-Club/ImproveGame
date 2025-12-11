@@ -1,6 +1,6 @@
 ﻿using Terraria.DataStructures;
 
-namespace ImproveGame.Common.Utils.Extensions;
+namespace ImproveGame.Helpers.Extensions;
 
 public static class PointExtensions
 {

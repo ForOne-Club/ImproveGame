@@ -1,8 +1,9 @@
 ﻿using ImproveGame.Content.Functions.ChainedAmmo;
 using ImproveGame.Core;
+using ImproveGame.Helpers.Extensions;
 using Terraria.DataStructures;
 
-namespace ImproveGame.Common.Utils.Extensions;
+namespace ImproveGame.Helpers.Extensions;
 
 public static class NetExtensions
 {

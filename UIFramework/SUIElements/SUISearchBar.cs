@@ -1,3 +1,4 @@
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 

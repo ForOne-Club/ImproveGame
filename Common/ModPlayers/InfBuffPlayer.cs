@@ -3,6 +3,7 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions.PortableBuff;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
+using ImproveGame.Helpers.Extensions;
 using ImproveGame.Packets.Items;
 using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;

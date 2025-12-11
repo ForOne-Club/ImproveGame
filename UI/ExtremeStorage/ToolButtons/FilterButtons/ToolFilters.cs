@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UI.ExtremeStorage.ToolButtons.FilterButtons;
+﻿using ImproveGame.Helpers.Extensions;
+
+namespace ImproveGame.UI.ExtremeStorage.ToolButtons.FilterButtons;
 
 public class PickaxeFilter : FilterButton
 {
