@@ -285,6 +285,7 @@ public class PrefixTab : SUIPanel
         }
 
         Main.LocalPlayer.BuyItem(Price);
+        ItemLoader.PreReforge(Item);
         Item.ResetPrefix();
         Item.Prefix(PrefixId);
         Item.position = Main.LocalPlayer.Center;
