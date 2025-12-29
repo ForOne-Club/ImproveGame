@@ -85,6 +85,9 @@ internal class PortableStationSystem : ModSystem
 
             foreach (var item in allItems)
             {
+                if (item is null)
+                    return;
+
                 if (GraveStones.Contains(item.type))
                 {
                     counter += item.stack;
