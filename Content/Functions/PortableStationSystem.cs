@@ -3,6 +3,7 @@ using ImproveGame.Content.Tiles;
 using ImproveGame.UI.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Terraria;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Functions;
@@ -68,6 +69,51 @@ internal class PortableStationSystem : ModSystem
                 break;
         }
 
+        if (counter >= 5 && counter2 >= 1500)
+            return;
+
+        // 从TE中获取所有的无尽Buff物品
+        foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
+        {
+            if (tileEntity is not TEExtremeStorage { UsePortableStations: true } storage)
+            {
+                continue;
+            }
+
+            var alchemyItems = storage.FindAllNearbyChestsWithGroup(ItemGroup.Furniture);
+            List<Item> allItems = [.. alchemyItems.SelectMany(i => Main.chest[i].item)];
+
+            foreach (var item in allItems)
+            {
+                if (GraveStones.Contains(item.type))
+                {
+                    counter += item.stack;
+                    if (counter >= 5)
+                    {
+                        Main.LocalPlayer.ZoneGraveyard = true;
+                        goto Label;
+                    }
+
+                }
+                else if (snowAndIces.Contains(item.type))
+                {
+                    counter2 += item.stack;
+                    if (counter2 >= 1500)
+                    {
+                        Main.LocalPlayer.ZoneSnow = true;
+                        goto Label;
+                    }
+                }
+                continue;
+                Label:
+                if (counter >= 5 && counter2 >= 1500)
+                    break;
+            }
+
+            if (counter >= 5 && counter2 >= 1500)
+                break;
+        }
+
     }
     private void AddPortableStations(ILContext il)
     {
@@ -105,7 +151,7 @@ internal class PortableStationSystem : ModSystem
     /// <summary>
     /// 从某个玩家的各种物品栏中拿效果
     /// </summary>
-    internal void CheckStations(IEnumerable<Item> items)
+    internal static void CheckStations(IEnumerable<Item> items)
     {
         foreach (var item in items)
         {

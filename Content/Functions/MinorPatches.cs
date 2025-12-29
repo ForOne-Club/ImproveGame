@@ -289,6 +289,7 @@ public class MinorPatches : ModSystem
         On_NPC.CountKillForBannersAndDropThem += NPC_CountKillForBannersAndDropThem;
         // 熔岩史莱姆不生成熔岩
         IL_NPC.VanillaHitEffect += LavalessLavaSlime;
+        On_NPC.VanillaHitEffect += LavalessGFB;
         // 死后保存Buff
         IL_Player.UpdateDead += KeepBuffOnUpdateDead;
         // 禁止腐化蔓延
@@ -711,6 +712,17 @@ public class MinorPatches : ModSystem
             return;
 
         c.EmitDelegate<Func<int, int>>(returnValue => Config.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue);
+    }
+
+    private void LavalessGFB(On_NPC.orig_VanillaHitEffect orig, NPC self, int hitDirection, double dmg, bool instantKill)
+    {
+        bool gfb = Main.getGoodWorld;
+        if (Config.LavalessLavaSlime && self.type is NPCID.Hellbat or NPCID.Lavabat)
+            Main.getGoodWorld = false;
+
+        orig(self, hitDirection, dmg, instantKill);
+
+        Main.getGoodWorld = gfb;
     }
 
     private void NPC_CountKillForBannersAndDropThem(On_NPC.orig_CountKillForBannersAndDropThem orig,
