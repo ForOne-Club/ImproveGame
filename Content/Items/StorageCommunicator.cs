@@ -174,12 +174,15 @@ public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClick
         Item.height = 48;
         Item.maxStack = 1;
         Item.useTurn = true;
-        Item.autoReuse = true;
         Item.useAnimation = 20;
         Item.useTime = 20;
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.rare = ItemRarityID.Cyan;
         Item.value = Item.sellPrice(gold: 2, silver: 60);
+    }
+    public override bool? CanAutoReuseItem(Player player)
+    {
+        return false;
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(-8f, -10f);

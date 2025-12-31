@@ -40,11 +40,12 @@ internal class PortableStationSystem : ModSystem
     {
         int counter = 0;
         int counter2 = 0;
-        HashSet<int> GraveStones = [ItemID.Tombstone, ItemID.GraveMarker, ItemID.CrossGraveMarker, ItemID.Headstone, ItemID.Gravestone, ItemID.Obelisk, ItemID.RichGravestone1, ItemID.RichGravestone2, ItemID.RichGravestone3, ItemID.RichGravestone4, ItemID.RichGravestone5];
-        HashSet<int> snowAndIces = [ItemID.SnowBlock, ItemID.SnowBrick, ItemID.IceBlock, ItemID.PinkIceBlock, ItemID.PurpleIceBlock, ItemID.RedIceBlock];
         foreach (var item in GetAllInventoryItemsList(player))
         {
-            if (GraveStones.Contains(item.type))
+            if (item.createTile == -1)
+                continue;
+
+            if (item.createTile == TileID.Tombstones)
             {
                 counter += item.stack;
                 if (counter >= 5)
@@ -54,9 +55,9 @@ internal class PortableStationSystem : ModSystem
                 }
 
             }
-            else if (snowAndIces.Contains(item.type))
+            else if (TileID.Sets.SnowBiome[item.createTile] > 0)
             {
-                counter2 += item.stack;
+                counter2 += item.stack * TileID.Sets.SnowBiome[item.createTile];
                 if (counter2 >= 1500)
                 {
                     Main.LocalPlayer.ZoneSnow = true;
@@ -88,7 +89,10 @@ internal class PortableStationSystem : ModSystem
                 if (item is null)
                     return;
 
-                if (GraveStones.Contains(item.type))
+                if (item.createTile == -1)
+                    continue;
+
+                if (item.createTile == TileID.Tombstones)
                 {
                     counter += item.stack;
                     if (counter >= 5)
@@ -98,9 +102,9 @@ internal class PortableStationSystem : ModSystem
                     }
 
                 }
-                else if (snowAndIces.Contains(item.type))
+                else if (TileID.Sets.SnowBiome[item.createTile] > 0)
                 {
-                    counter2 += item.stack;
+                    counter2 += item.stack * TileID.Sets.SnowBiome[item.createTile];
                     if (counter2 >= 1500)
                     {
                         Main.LocalPlayer.ZoneSnow = true;

@@ -7,6 +7,7 @@ using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.MasterControl;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;
+using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UI.WorldFeature;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Common;
@@ -76,6 +77,8 @@ namespace ImproveGame.Common.Configs
         public Vector2 PlayerInfoTogglePosition;
         public bool MasterControlPinned;
         public bool ExtremeStorageGUIDisplayCrafting;
+        public bool QuickShimmerGUIAutoStart;
+        public bool QuickShimmerGUIQuickMode;
 
         /// <summary>
         /// (根据模组内容)获取 Config
@@ -147,6 +150,8 @@ namespace ImproveGame.Common.Configs
             MasterControlPinned = MasterControlGUI.Pinned;
 
             ExtremeStorageGUIDisplayCrafting = ExtremeStorageGUI.DisplayCrafting;
+            QuickShimmerGUIAutoStart = QuickShimmerGUI.AutoStart;
+            QuickShimmerGUIQuickMode = QuickShimmerGUI.QuickMode;
         }
 
         /// <summary>
@@ -204,6 +209,8 @@ namespace ImproveGame.Common.Configs
             MasterControlGUI.Pinned = MasterControlPinned;
 
             ExtremeStorageGUI.DisplayCrafting = ExtremeStorageGUIDisplayCrafting;
+            QuickShimmerGUI.AutoStart = QuickShimmerGUIAutoStart;
+            QuickShimmerGUI.QuickMode = QuickShimmerGUIQuickMode;
         }
 
         public static void Load()
