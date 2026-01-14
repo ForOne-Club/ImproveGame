@@ -144,7 +144,8 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         // 魔杖 材料 999 不消耗
         if ((((item.createTile >= TileID.Dirt || item.createWall > WallID.None) && item.stack >= 999) ||
              ((item.createTile is TileID.WorkBenches or TileID.Chairs or TileID.Beds) && item.stack >= 99))
-            && ModItemID.NoConsumptionItems.Contains(player.HeldItem.type))
+            && ModItemID.NoConsumptionItems.Contains(player.HeldItem.type)
+            && !(ItemLoader.CanRightClick(item) && Main.ItemDropsDB.GetRulesForItemID(item.type).Count > 0))
             return !Config.WandMaterialNoConsume;
 
         // 抛射物不消耗
