@@ -325,32 +325,42 @@ public class TEAutofisher : ModTileEntity
         }
     }
 
+    // 伪装一个 proj，用来调用 Projectile.FishingCheck_RollItemDrop
+    // 缓存一个，不必要的 GC 压力
+    private readonly Projectile _disguisedProjectile = new Projectile() { owner = 255 };
+    private readonly Player _disguisedPlayer = new Player();
+
     public void RollItemDrop(ref FishingAttempt fisher)
     {
-        // 伪装一个proj，用来调用Projectile.FishingCheck_RollItemDrop
-        var fakeProj = new Projectile
+        var originalPlayer = Main.player[255];
+        Main.player[255] = _disguisedPlayer;
+
+        try
         {
-            owner = 255
-        };
+            _disguisedPlayer.Center = Position.ToWorldCoordinates();
+            _disguisedPlayer.whoAmI = 255; // 玩家不进入世界初始化，是没有 whoAmI 的
 
-        Main.player[255].Center = Position.ToWorldCoordinates();
-        Main.player[255].whoAmI = 255; // 玩家不进入世界初始化，是没有whoAmI的
-        TileCounter tileCounter = new();
-        tileCounter.ScanAndExportToMain(Position);
-        tileCounter.Simulate(Main.player[255]);
-        tileCounter.FargosFountainSupport(Main.player[255]);
+            var tileCounter = new TileCounter();
+            tileCounter.ScanAndExportToMain(Position);
+            tileCounter.Simulate(_disguisedPlayer);
+            tileCounter.FargosFountainSupport(_disguisedPlayer);
 
-        // AssemblyPublicizer 使得 FishingCheck_RollItemDrop 可以直接访问
-        fakeProj.FishingCheck_RollItemDrop(ref fisher);
+            // AssemblyPublicizer 使得 FishingCheck_RollItemDrop 可以直接访问
+            _disguisedProjectile.FishingCheck_RollItemDrop(ref fisher);
 
-        AdvancedPopupRequest sonar = new();
-        Vector2 sonarPosition = new(-1145141f, -919810f); // 直接fake到世界外面
-        PlayerLoader.CatchFish(Main.player[255], fisher, ref fisher.rolledItemDrop, ref fisher.rolledEnemySpawn,
-            ref sonar, ref sonarPosition);
+            var sonar = new AdvancedPopupRequest();
+            var sonarPosition = new Vector2(-1145141f, -919810f); // 直接fake到世界外面
+            PlayerLoader.CatchFish(_disguisedPlayer, fisher, ref fisher.rolledItemDrop, ref fisher.rolledEnemySpawn,
+                ref sonar, ref sonarPosition);
 
-        // 单人模式和客户端里这还作为视效的判定，因此得强制更新
-        if (Main.netMode is NetmodeID.SinglePlayer or NetmodeID.MultiplayerClient)
-            Main.LocalPlayer.ForceUpdateBiomes();
+            // 单人模式和客户端里这还作为视效的判定，因此得强制更新
+            if (Main.netMode is NetmodeID.SinglePlayer or NetmodeID.MultiplayerClient)
+                Main.LocalPlayer.ForceUpdateBiomes();
+        }
+        catch { throw; } finally
+        {
+            Main.player[255] = originalPlayer;
+        }
     }
 
     public FishingAttempt GetFisher(out bool inShimmer)

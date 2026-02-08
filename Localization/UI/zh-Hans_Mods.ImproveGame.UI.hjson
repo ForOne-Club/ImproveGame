@@ -6,6 +6,12 @@ RecipeSearchUI.Tips:
 	你可以在更好的体验的个人配置中关闭它
 	'''
 
+InfiniteBUFFController: {
+	DisplayName: 增益控制器
+	Placeholder: 请输入名称
+	EnemySpawnRate: 敌人生成率
+}
+
 LiquidWandUI: {
 	Name: 液体控制
 	Absorb: 吸取

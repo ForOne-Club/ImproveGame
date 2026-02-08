@@ -7,29 +7,47 @@ using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
 using SilkyUIFramework.Extensions;
+using SilkyUIFramework.Graphics2D;
 using System.Text;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
 
 /// <summary>
-/// 设计中不要动
+/// 无限增益控制器
 /// </summary>
 [RegisterUI]
 public partial class InfiniteBUFFController : BaseBody
 {
-    public UIElementGroup ScrollContainer { get; private set; }
+    /// <summary>
+    /// 获取当前 UI 的本地化文本
+    /// </summary>
+    public static string GetTextValue(string key) =>
+        Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
+
+    public UIElementGroup BuffsContainer { get; private set; }
+    public override IEnumerable<UIView> BlurElements => [BuffContainer, SliderContainer];
 
     protected override void OnInitialize()
     {
-        BorderColor = SUIColor.Border;
-        BackgroundColor = SUIColor.Background * 0.75f;
-
         InitializeComponent();
 
-        ScrollContainer = ScrollView.Container;
+        BorderColor = Color.Transparent;
+        BackgroundColor = Color.Transparent;
+
+        BuffContainer.Border = 2f;
+        BuffContainer.BorderColor = SUIColor.Border;
+        BuffContainer.BackgroundColor = SUIColor.Background * 0.75f;
+
+        SliderContainer.Border = 2f;
+        SliderContainer.BorderColor = SUIColor.Border;
+        SliderContainer.BackgroundColor = SUIColor.Background * 0.75f;
+
+        BuffsContainer = ScrollView.Container;
 
         Header.ControlTarget = this;
+
+        Title.Text = GetTextValue("DisplayName");
         Title.UseDeathText();
 
         var searchCancel = Main.Assets.Request<Texture2D>("Images/UI/SearchCancel");
@@ -41,7 +59,7 @@ public partial class InfiniteBUFFController : BaseBody
             Close.ImageColor = Color.White * Close.HoverTimer.Lerp(0.5f, 1f);
         };
 
-        FilterBox.Placeholder = "请输入名称";
+        FilterBox.Placeholder = GetTextValue("Placeholder");
 
         ClearEditText.Texture2D = searchCancel;
         ClearEditText.OnUpdateStatus += delegate
@@ -51,36 +69,58 @@ public partial class InfiniteBUFFController : BaseBody
 
         ClearEditText.LeftMouseDown += delegate { FilterBox.Text = ""; };
 
+        SliderTitle.Text = GetTextValue("EnemySpawnRate");
+
         // 订阅事件
         if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer))
         {
             Slider.Value = battlerPlayer.SpawnRateSliderValue;
-
             battlerPlayer.SpawnRateSliderValueChanged += (sender, value) => Slider.Value = value;
-
-            MinButton.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 0f;
-
-            A2.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 0.25f;
-
-            DefaultButton.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 0.5f;
-
-            A4.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 0.75f;
-
-            MaxButton.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = 1f;
         }
 
         // 发送数据
-        Slider.Drag += (_, value) =>
-        {
-            SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true);
-        };
+        Slider.Drag += (_, value) => SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true);
 
-        foreach (var item in new UITextView[] { MinButton, DefaultButton, MaxButton, A2, A4 })
+        UpdateScaleMarks(5);
+    }
+
+    /// <summary>
+    /// 更新刻度
+    /// </summary>
+    /// <param name="quantity">刻度线数量</param>
+    private void UpdateScaleMarks(int quantity)
+    {
+        if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer)) return;
+
+        ScaleMarks.RemoveAllChildren();
+
+        var half = quantity / 2.0f;
+
+        for (int i = 0; i < quantity; i++)
         {
-            item.OnUpdateStatus += (_) =>
+            var progress = i / ((float)quantity - 1f);
+            var item = new UITextView
+            {
+                TextScale = 0.8f,
+                TextAlign = new(0.5f),
+                FitWidth = false,
+                Width = new Dimension(35),
+                Text = $"{progress:0.##}",
+
+                Left = new Anchor(0f, progress - 0.5f, 0.5f - progress),
+            };
+
+            item.LeftMouseDown += delegate
+            {
+                battlerPlayer.SpawnRateSliderValue = progress;
+            };
+
+            item.OnUpdateStatus += delegate
             {
                 item.TextBorderColor = item.HoverTimer.Lerp(Color.Black, SUIColor.Highlight);
             };
+
+            ScaleMarks.AddChild(item);
         }
     }
 
@@ -90,23 +130,55 @@ public partial class InfiniteBUFFController : BaseBody
 
         if (Slider.Thumb.IsMouseHovering || Slider.Thumb.LeftMousePressed)
         {
-            UICommon.TooltipMouseText($"{Slider.Value:0.00}");
+            UICommon.TooltipMouseText($"{Slider.Value:0.##}");
         }
 
-        if (ScrollContainer == null) return;
-        ScrollContainer.RemoveAllChildren();
+        UpdateBuffsContainerChildren();
 
-        for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
-        {
-            if (!HideBuffSystem.BuffTypesShouldHide[i]) continue;
-            //if (!InfBuffPlayer.CheckInfBuffEnable(i)) continue;
-            _pool.GetOrAdd(i, key => new SUIBuffItem(key)).Join(ScrollContainer);
-        }
+        if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer)) return;
     }
 
     private readonly Dictionary<int, SUIBuffItem> _pool = [];
+
+    private void UpdateBuffsContainerChildren()
+    {
+        if (BuffsContainer == null) return;
+        BuffsContainer.RemoveAllChildren();
+
+        UpdateBuffIds();
+
+        foreach (var type in BuffIds)
+        {
+            BuffsContainer.AddChild(_pool.GetOrAdd(type, key => new SUIBuffItem(key)));
+        }
+    }
+
+    private readonly List<int> BuffIds = [];
+
+    /// <summary>
+    /// 获取启用的 Buff Type 列表
+    /// </summary>
+    private void UpdateBuffIds()
+    {
+        BuffIds.Clear();
+
+        var filterString = FilterBox?.Text ?? string.Empty;
+
+        for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
+        {
+            // 筛选未启用的
+            if (!HideBuffSystem.BuffTypesShouldHide[i]) continue;
+            // 筛选输入框过滤的
+            if (!string.IsNullOrWhiteSpace(filterString) && !Lang.GetBuffName(i).Contains(filterString)) continue;
+
+            BuffIds.Add(i);
+        }
+    }
 }
 
+/// <summary>
+/// Buff 项 UI 组件
+/// </summary>
 [XmlElementMapping("BuffItem")]
 public class SUIBuffItem : UIElementGroup
 {

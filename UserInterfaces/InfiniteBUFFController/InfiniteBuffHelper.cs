@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
 
+/// <summary>
+/// 无限 BUFF 帮助类
+/// </summary>
 internal static class InfiniteBuffHelper
 {
     public static string LeftClickDisable => GetText("BuffTracker.LeftClickDisable");

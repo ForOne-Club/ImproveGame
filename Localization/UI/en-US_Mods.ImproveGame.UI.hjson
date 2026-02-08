@@ -6,6 +6,12 @@ RecipeSearchUI.Tips:
 	You may disable it in Personal Config of Quality of Terraria
 	'''
 
+InfiniteBUFFController: {
+	DisplayName: BUFF Controller
+	Placeholder: Please enter the name
+	EnemySpawnRate: Enemy spawn rate
+}
+
 LiquidWandUI: {
 	Name: Liquid Control
 	Absorb: Absorb
