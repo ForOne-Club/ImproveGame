@@ -188,7 +188,7 @@ public sealed class KeybindChineseToggle : TimerView
     {
         base.LeftMouseDown(evt);
         Enabled = !Enabled;
-        AdditionalConfig.Save();
+        ClientConfigCore.SaveConfig();
         SoundEngine.PlaySound(SoundID.MenuTick);
     }
 

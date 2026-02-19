@@ -161,7 +161,7 @@ public class KeybindSystem : ModSystem
             button.OnLeftMouseDown += (_, _) =>
             {
                 UseKeybindTranslation = !UseKeybindTranslation;
-                AdditionalConfig.Save();
+                ClientConfigCore.SaveConfig();
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };
             button.OnUpdate += _ => buttonText.SetText(UseKeybindTranslation ? "快换回去" : "让我看看");

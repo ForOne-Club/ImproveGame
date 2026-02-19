@@ -6,9 +6,6 @@ using ImproveGame.Packets;
 using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
-using SilkyUIFramework.Extensions;
-using SilkyUIFramework.Graphics2D;
-using System.Text;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
@@ -19,11 +16,7 @@ namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
 [RegisterUI]
 public partial class InfiniteBUFFController : BaseBody
 {
-    /// <summary>
-    /// 获取当前 UI 的本地化文本
-    /// </summary>
-    public static string GetTextValue(string key) =>
-        Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
+    public static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
 
     public UIElementGroup BuffsContainer { get; private set; }
     public override IEnumerable<UIView> BlurElements => [BuffContainer, SliderContainer];
@@ -133,14 +126,32 @@ public partial class InfiniteBUFFController : BaseBody
             UICommon.TooltipMouseText($"{Slider.Value:0.##}");
         }
 
-        UpdateBuffsContainerChildren();
+        UpdateBuffsList();
 
-        if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer)) return;
+        if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out _)) return;
     }
 
     private readonly Dictionary<int, SUIBuffItem> _pool = [];
 
-    private void UpdateBuffsContainerChildren()
+    /// <summary>
+    /// 显示的 Buff Ids
+    /// </summary>
+    public static List<int> BuffIds { get; } = [];
+
+    /// <summary>
+    /// 收藏的 BuffIds
+    /// </summary>
+    public static List<int> StarBuffIds { get; } = [];
+
+    /// <summary>
+    /// 星标 Buff Name 们
+    /// </summary>
+    public static HashSet<string> StarBuffNames { get; } = [];
+
+    /// <summary>
+    /// 更新 Buff 列表 (UI)
+    /// </summary>
+    private void UpdateBuffsList()
     {
         if (BuffsContainer == null) return;
         BuffsContainer.RemoveAllChildren();
@@ -153,10 +164,8 @@ public partial class InfiniteBUFFController : BaseBody
         }
     }
 
-    private readonly List<int> BuffIds = [];
-
     /// <summary>
-    /// 获取启用的 Buff Type 列表
+    /// 更新 Buff Type 列表 (数据)
     /// </summary>
     private void UpdateBuffIds()
     {
@@ -173,68 +182,6 @@ public partial class InfiniteBUFFController : BaseBody
 
             BuffIds.Add(i);
         }
-    }
-}
-
-/// <summary>
-/// Buff 项 UI 组件
-/// </summary>
-[XmlElementMapping("BuffItem")]
-public class SUIBuffItem : UIElementGroup
-{
-    public int BuffType { get; }
-
-    public SUIImage IconImage { get; }
-    public SUIImage BorderImage { get; }
-    public SUIBuffItem(int buffType = 0)
-    {
-        SetSize(36f, 36f);
-        BuffType = buffType;
-
-        IconImage = new SUIImage()
-        {
-            Width = new Dimension(0f, 1f),
-            Height = new Dimension(0f, 1f),
-            ImageAlign = new Vector2(0.5f),
-            Texture2D = TextureAssets.Buff[buffType],
-        }.Join(this);
-
-        BorderImage = new SUIImage()
-        {
-            ZIndex = -1,
-            Positioning = Positioning.Absolute,
-            Texture2D = ModAsset.Buff_HoverBorder,
-            Width = new Dimension(0f, 1f),
-            Height = new Dimension(0f, 1f),
-        }.Join(this);
-    }
-
-    private bool BuffIsEnabled => InfBuffPlayer.CheckInfBuffEnable(BuffType);
-
-    protected override void UpdateStatus(GameTime gameTime)
-    {
-        base.UpdateStatus(gameTime);
-
-        IconImage.ImageColor = Color.Lerp(Color.Black, Color.White, (BuffIsEnabled ? 1f : 0.4f));
-        BorderImage.ImageColor = HoverTimer.Lerp(Color.Transparent, Color.White);
-
-        if (IsMouseHovering)
-        {
-            string buffName = Lang.GetBuffName(BuffType);
-            string buffTooltip = Main.GetBuffTooltip(Main.LocalPlayer, BuffType);
-
-            var sb = new StringBuilder($"{buffName}\n{buffTooltip}\n");
-
-            sb.AppendLine(InfiniteBuffHelper.GetLeftClickString(BuffIsEnabled));
-
-            UICommon.TooltipMouseText(sb.ToString());
-        }
-    }
-
-    public override void OnLeftMouseDown(SilkyUIFramework.UIMouseEvent evt)
-    {
-        base.OnLeftMouseDown(evt);
-        InfBuffPlayer.Get(Main.LocalPlayer).ToggleInfBuff(BuffType);
     }
 }
 

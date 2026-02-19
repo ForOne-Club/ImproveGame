@@ -264,10 +264,10 @@ partial class MyUtils
     /// <returns></returns>
     public static bool TryKillTile(int x, int y, Player player)
     {
-        Tile tile = Main.tile[x, y];
+        var tile = Main.tile[x, y];
         if (tile.HasTile && !Main.tileHammer[Main.tile[x, y].TileType])
         {
-            if (player.HasEnoughPickPowerToHurtTile(x, y))
+            if (HasEnoughPickPowerToHurtTile(player, x, y))
             {
                 if (TileID.Sets.Grass[tile.TileType] || TileID.Sets.GrassSpecial[tile.TileType] || Main.tileMoss[tile.TileType] || TileID.Sets.tileMossBrick[tile.TileType])
                 {
@@ -277,6 +277,19 @@ partial class MyUtils
             }
         }
         return !Main.tile[x, y].HasTile;
+    }
+
+    /// <summary>
+    /// <see cref="Player.HasEnoughPickPowerToHurtTile(int, int)"/> 的改版, 有最低的 5 稿力
+    /// </summary>
+    private static bool HasEnoughPickPowerToHurtTile(Player player, int x, int y)
+    {
+        var bestPickaxe = player.GetBestPickaxe();
+        var pickPower = bestPickaxe != null ? bestPickaxe.pick : 5;
+        var tile = Main.tile[x, y];
+        var hitBufferIndex = player.hitTile.HitObject(x, y, 1);
+
+        return player.GetPickaxeDamage(x, y, pickPower, hitBufferIndex, tile) != 0;
     }
 
     public static bool CanDestroyTileAnyCases(int x, int y, Player player)

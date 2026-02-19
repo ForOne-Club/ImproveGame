@@ -21,18 +21,18 @@ public class InfBuffPlayer : ModPlayer
     /// <summary>
     /// 用于记录玩家总获取的无尽Buff物品
     /// </summary>
-    internal List<Item> AvailableItems = new();
+    internal List<Item> AvailableItems = [];
 
     /// <summary>
     /// 储存管理器里面的无尽Buff物品
     /// </summary>
-    internal HashSet<Item> ExStorageAvailableItems = new();
+    internal HashSet<Item> ExStorageAvailableItems = [];
 
     /// <summary>
     /// 储存管理器+玩家储存里面的无尽Buff物品 <br/>
     /// 另见 <see cref="HandleClonedItem"/>
     /// </summary>
-    internal HashSet<Item> AvailableItemsHash = new();
+    internal HashSet<Item> AvailableItemsHash = [];
 
     /// <summary>
     /// 每隔多久统计一次Buff
