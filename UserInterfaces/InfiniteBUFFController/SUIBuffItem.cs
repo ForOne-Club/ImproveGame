@@ -11,19 +11,34 @@ using Terraria.ModLoader.UI;
 namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
 
 /// <summary>
-/// Buff 项 UI 组件
+/// 可点击的 Buff 项视图，负责展示图标、悬停高亮与收藏标识。
 /// </summary>
 public class SUIBuffItem : UIElementGroup
 {
+    /// <summary>
+    /// 当前项绑定的 Buff 类型 ID。
+    /// </summary>
     public int BuffType { get; }
 
-    // BUFF 图标
+    /// <summary>
+    /// Buff 主图标；启用状态会影响其显示亮度。
+    /// </summary>
     public SUIImage IconImage { get; }
-    // 选中边框
+
+    /// <summary>
+    /// 悬停边框层，用于提供鼠标反馈，不参与点击判定。
+    /// </summary>
     public SUIImage BorderImage { get; }
-    // 置顶 星标 (收藏)
+
+    /// <summary>
+    /// 收藏星标层，由父级控制显隐。
+    /// </summary>
     public SUIImage StarImage { get; }
 
+    /// <summary>
+    /// 创建一个 Buff 项视图。
+    /// </summary>
+    /// <param name="buffType">要绑定的 Buff 类型 ID。</param>
     public SUIBuffItem(int buffType = 0)
     {
         SetSize(36f, 36f);
@@ -34,7 +49,7 @@ public class SUIBuffItem : UIElementGroup
             Width = new Dimension(0f, 1f),
             Height = new Dimension(0f, 1f),
             ImageAlign = new Vector2(0.5f),
-            // Buff
+            // 直接按 Buff 类型索引贴图表，避免额外映射成本。
             Texture2D = TextureAssets.Buff[buffType],
         }.Join(this);
 
@@ -51,15 +66,22 @@ public class SUIBuffItem : UIElementGroup
         {
             ZIndex = 1,
             Positioning = Positioning.Absolute,
-            // 光标
+            // 光标贴图索引 3 作为星标图案，与本界面其他标识保持一致。
             Texture2D = TextureAssets.Cursors[3],
             Width = new Dimension(0f, 1f),
             Height = new Dimension(0f, 1f),
         }.Join(this);
     }
 
+    /// <summary>
+    /// 当前玩家是否已启用该 Buff 的无限效果。
+    /// </summary>
     private bool BuffIsEnabled => InfBuffPlayer.CheckInfBuffEnable(BuffType);
 
+    /// <summary>
+    /// 每帧刷新显示状态：根据启用状态调整图标亮度，悬停时显示说明与操作提示。
+    /// </summary>
+    /// <param name="gameTime">当前帧时间信息。</param>
     protected override void UpdateStatus(GameTime gameTime)
     {
         base.UpdateStatus(gameTime);
@@ -72,6 +94,7 @@ public class SUIBuffItem : UIElementGroup
             string buffName = Lang.GetBuffName(BuffType);
             string buffTooltip = Main.GetBuffTooltip(Main.LocalPlayer, BuffType);
 
+            // 统一拼接 Tooltip，避免多次调用覆盖已有提示内容。
             var sb = new StringBuilder($"{buffName}\n{buffTooltip}\n");
 
             sb.AppendLine(InfiniteBuffHelper.GetLeftClickString(BuffIsEnabled));
@@ -80,11 +103,19 @@ public class SUIBuffItem : UIElementGroup
         }
     }
 
+    /// <summary>
+    /// 左键切换当前 Buff 的无限状态。
+    /// </summary>
+    /// <param name="evt">鼠标事件参数。</param>
     public override void OnLeftMouseDown(SilkyUIFramework.UIMouseEvent evt)
     {
         base.OnLeftMouseDown(evt);
-        // 切换无限 BUFF 状态
         InfBuffPlayer.Get(Main.LocalPlayer).ToggleInfBuff(BuffType);
+    }
+
+    public override void OnRightMouseDown(SilkyUIFramework.UIMouseEvent evt)
+    {
+        base.OnRightMouseDown(evt);
     }
 }
 

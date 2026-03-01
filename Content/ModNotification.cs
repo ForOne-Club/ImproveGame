@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-using ImproveGame.UIFramework.Common;
+﻿using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using ReLogic.Graphics;
 using Terraria.GameInput;

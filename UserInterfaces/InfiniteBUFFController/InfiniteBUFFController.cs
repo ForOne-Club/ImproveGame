@@ -11,16 +11,34 @@ using Terraria.ModLoader.UI;
 namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
 
 /// <summary>
-/// 无限增益控制器
+/// 无限增益控制器 UI，负责：
+/// 1) 展示与筛选可无限化的 Buff；
+/// 2) 维护星标 Buff 集合；
+/// 3) 调整并同步刷怪倍率滑块。
 /// </summary>
 [RegisterUI]
 public partial class InfiniteBUFFController : BaseBody
 {
+    /// <summary>
+    /// 读取当前界面使用的本地化文本。
+    /// </summary>
+    /// <param name="key">本地化键名后缀。</param>
+    /// <returns>对应的本地化字符串。</returns>
     public static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
 
+    /// <summary>
+    /// Buff 列表滚动容器的内容区域。
+    /// </summary>
     public UIElementGroup BuffsContainer { get; private set; }
+
+    /// <summary>
+    /// 需要参与背景模糊的主要子视图。
+    /// </summary>
     public override IEnumerable<UIView> BlurElements => [BuffContainer, SliderContainer];
 
+    /// <summary>
+    /// 初始化界面元素、事件绑定与默认显示状态。
+    /// </summary>
     protected override void OnInitialize()
     {
         InitializeComponent();
@@ -64,24 +82,25 @@ public partial class InfiniteBUFFController : BaseBody
 
         SliderTitle.Text = GetTextValue("EnemySpawnRate");
 
-        // 订阅事件
+        // 同步滑块默认值，并监听玩家配置变化
         if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer))
         {
             Slider.Value = battlerPlayer.SpawnRateSliderValue;
             battlerPlayer.SpawnRateSliderValueChanged += (sender, value) => Slider.Value = value;
         }
 
-        // 发送数据
+        // 拖动滑块时同步刷新刷怪倍率
         Slider.Drag += (_, value) => SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true);
 
-        UpdateScaleMarks(5);
+        // 生成 0~1 的刻度标签（含首尾）
+        RefreshScaleMarks(5);
     }
 
     /// <summary>
-    /// 更新刻度
+    /// 根据给定数量重建滑块下方刻度标签。
     /// </summary>
-    /// <param name="quantity">刻度线数量</param>
-    private void UpdateScaleMarks(int quantity)
+    /// <param name="quantity">刻度数量，建议大于等于 2。</param>
+    private void RefreshScaleMarks(int quantity)
     {
         if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer)) return;
 
@@ -105,6 +124,7 @@ public partial class InfiniteBUFFController : BaseBody
 
             item.LeftMouseDown += delegate
             {
+                // 点击刻度可直接跳转到对应倍率
                 battlerPlayer.SpawnRateSliderValue = progress;
             };
 
@@ -117,6 +137,9 @@ public partial class InfiniteBUFFController : BaseBody
         }
     }
 
+    /// <summary>
+    /// 每帧更新：显示滑块提示并刷新 Buff 列表展示。
+    /// </summary>
     protected override void UpdateStatus(GameTime gameTime)
     {
         base.UpdateStatus(gameTime);
@@ -126,32 +149,35 @@ public partial class InfiniteBUFFController : BaseBody
             UICommon.TooltipMouseText($"{Slider.Value:0.##}");
         }
 
-        UpdateBuffsList();
+        RefreshBuffsList();
 
         if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out _)) return;
     }
 
+    /// <summary>
+    /// Buff 项对象池，避免频繁创建 UI 元素。
+    /// </summary>
     private readonly Dictionary<int, SUIBuffItem> _pool = [];
 
     /// <summary>
-    /// 显示的 Buff Ids
+    /// 当前筛选后需要显示的 Buff ID 列表
     /// </summary>
     public static List<int> BuffIds { get; } = [];
 
     /// <summary>
-    /// 收藏的 BuffIds
+    /// 玩家收藏（星标）的 Buff ID 列表
     /// </summary>
     public static List<int> StarBuffIds { get; } = [];
 
     /// <summary>
-    /// 星标 Buff Name 们
+    /// 星标 Buff 名称集合（用于快速匹配）
     /// </summary>
     public static HashSet<string> StarBuffNames { get; } = [];
 
     /// <summary>
-    /// 更新 Buff 列表 (UI)
+    /// 按当前 BuffIds 刷新滚动容器中的 Buff 项
     /// </summary>
-    private void UpdateBuffsList()
+    private void RefreshBuffsList()
     {
         if (BuffsContainer == null) return;
         BuffsContainer.RemoveAllChildren();
@@ -165,7 +191,7 @@ public partial class InfiniteBUFFController : BaseBody
     }
 
     /// <summary>
-    /// 更新 Buff Type 列表 (数据)
+    /// 按启用状态与搜索条件重建 BuffIds
     /// </summary>
     private void UpdateBuffIds()
     {
@@ -175,9 +201,9 @@ public partial class InfiniteBUFFController : BaseBody
 
         for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
         {
-            // 筛选未启用的
+            // 仅保留已启用隐藏（可无限）效果的 Buff
             if (!HideBuffSystem.BuffTypesShouldHide[i]) continue;
-            // 筛选输入框过滤的
+            // 若有搜索词，则按 Buff 名称过滤
             if (!string.IsNullOrWhiteSpace(filterString) && !Lang.GetBuffName(i).Contains(filterString)) continue;
 
             BuffIds.Add(i);

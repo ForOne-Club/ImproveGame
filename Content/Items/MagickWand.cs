@@ -55,7 +55,7 @@ public class MagickWand : SelectorItem, IConditionItem
         }
 
         var tile = Main.tile[i, j];
-        if (tile.WallType > 0 && WallMode)
+        if (tile.WallType > WallID.None && WallMode)
         {
             WorldGen.KillWall(i, j);
         }
@@ -218,7 +218,7 @@ public class MagickWand : SelectorItem, IConditionItem
                 PlaySoundPacket.PlaySound(LegacySoundIDs.Item, Main.MouseWorld, style: 14);
             ForeachTile(rectangle, (x, y) =>
             {
-                if (Main.tile[x, y].WallType > 0 && WandSystem.WallMode)
+                if (Main.tile[x, y].WallType > WallID.None && WandSystem.WallMode)
                 {
                     WorldGen.KillWall(x, y);
                     if (Main.netMode == NetmodeID.MultiplayerClient)
