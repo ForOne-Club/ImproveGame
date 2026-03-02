@@ -76,7 +76,7 @@ public class SUIBuffItem : UIElementGroup
     /// <summary>
     /// 当前玩家是否已启用该 Buff 的无限效果。
     /// </summary>
-    private bool BuffIsEnabled => InfBuffPlayer.CheckInfBuffEnable(BuffType);
+    private bool BuffIsEnabled => InfBuffPlayer.CheckInfiniteBuffEnable(BuffType);
 
     /// <summary>
     /// 每帧刷新显示状态：根据启用状态调整图标亮度，悬停时显示说明与操作提示。
@@ -110,7 +110,7 @@ public class SUIBuffItem : UIElementGroup
     public override void OnLeftMouseDown(SilkyUIFramework.UIMouseEvent evt)
     {
         base.OnLeftMouseDown(evt);
-        InfBuffPlayer.Get(Main.LocalPlayer).ToggleInfBuff(BuffType);
+        InfBuffPlayer.Get(Main.LocalPlayer).ToggleInfiniteBuff(BuffType);
     }
 
     public override void OnRightMouseDown(SilkyUIFramework.UIMouseEvent evt)

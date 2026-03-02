@@ -35,7 +35,7 @@ namespace ImproveGame.Common.GlobalItems
         /// </summary>
         public static void ModifyBuffTooltips(Mod mod, int itemType, int buffType, List<TooltipLine> tooltips)
         {
-            bool buffEnabled = InfBuffPlayer.CheckInfBuffEnable(buffType);
+            bool buffEnabled = InfBuffPlayer.CheckInfiniteBuffEnable(buffType);
 
             if (itemType is ItemID.GardenGnome)
             {

@@ -172,7 +172,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
                     // 有30个
                     if (available)
                     {
-                        if (!Config.NoConsume_Potion || !InfBuffPlayer.CheckInfBuffEnable(potion.buffType))
+                        if (!Config.NoConsume_Potion || !InfBuffPlayer.CheckInfiniteBuffEnable(potion.buffType))
                         {
                             // 被禁用了
                             text += $"  {GetText("Tips.PotionBagDisabled")}";
