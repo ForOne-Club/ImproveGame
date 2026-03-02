@@ -16,7 +16,7 @@ namespace ImproveGame.Common.ModPlayers;
 /// 2) 每帧遍历 <see cref="AvailableItems"/> 对于所有 <see cref="CheckInfiniteBuffEnable"/> 为 <see langword="true"/> 的Buff实现效果<br/>
 /// 节省性能
 /// </summary>
-public class InfBuffPlayer : ModPlayer
+public class InfiniteBuffPlayer : ModPlayer
 {
     public const int SetupBuffListCooldownTime = 120;
 
@@ -50,8 +50,8 @@ public class InfBuffPlayer : ModPlayer
 
     #region 杂项
 
-    public static InfBuffPlayer Get(Player player) => player.GetModPlayer<InfBuffPlayer>();
-    public static bool TryGet(Player player, out InfBuffPlayer modPlayer) => player.TryGetModPlayer(out modPlayer);
+    public static InfiniteBuffPlayer Get(Player player) => player.GetModPlayer<InfiniteBuffPlayer>();
+    public static bool TryGet(Player player, out InfiniteBuffPlayer infinitePlayer) => player.TryGetModPlayer(out infinitePlayer);
 
     public override void Load()
     {
@@ -426,44 +426,16 @@ public class InfBuffPlayer : ModPlayer
     /// </summary>
     public static bool CheckInfiniteBuffEnable(int buffType)
     {
-        if (!Main.LocalPlayer.TryGetModPlayer<InfBuffPlayer>(out var infinitePlayer)) throw new Exception("InfiniteBuffPlayer is not found.");
+        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) throw new Exception("InfiniteBuffPlayer is not found.");
 
-        var modBuff = BuffLoader.GetBuff(buffType);
-        if (modBuff is null)
-        {
-            return !infinitePlayer.Blacklist.Ids.Contains(buffType);
-        }
-        else
-        {
-            var fullName = $"{modBuff.Mod.Name}/{modBuff.Name}";
-
-            return !infinitePlayer.Blacklist.FullNames.Contains(fullName);
-        }
-    }
-
-    /// <summary>
-    /// 切换指定 Buff 的无限效果开关：若目标已在黑名单中则移除，否则加入黑名单。
-    /// </summary>
-    /// <param name="buffType">要切换的 Buff 类型 ID。</param>
-    public void ToggleInfiniteBuff(int buffType)
-    {
         if (BuffLoader.GetBuff(buffType) is { } modBuff)
         {
-            // Mod Buff 使用“模组名/Buff名”作为键，避免与原版或其他模组的数值 ID 冲突。
             var fullName = $"{modBuff.Mod.Name}/{modBuff.Name}";
-
-            if (!Blacklist.FullNames.Add(fullName))
-            {
-                Blacklist.FullNames.Remove(fullName);
-            }
+            return !infinitePlayer.Blacklist.FullNames.Contains(fullName);
         }
         else
         {
-            // 原版 Buff 直接以数值 ID 作为键进行开关切换。
-            if (!Blacklist.Ids.Add(buffType))
-            {
-                Blacklist.Ids.Remove(buffType);
-            }
+            return !infinitePlayer.Blacklist.Ids.Contains(buffType);
         }
     }
 
@@ -542,6 +514,57 @@ public class BuffKeySet
             [nameof(Ids)] = Ids.ToArray(),
             [nameof(FullNames)] = FullNames.ToArray()
         };
+    }
+
+    public void Toggle(int buffType)
+    {
+        if (BuffLoader.GetBuff(buffType) is { } modBuff)
+        {
+            // Mod Buff 使用“模组名/Buff名”作为键，避免与原版或其他模组的数值 ID 冲突。
+            var fullName = $"{modBuff.Mod.Name}/{modBuff.Name}";
+
+            if (!FullNames.Add(fullName))
+            {
+                FullNames.Remove(fullName);
+            }
+        }
+        else
+        {
+            // 原版 Buff 直接以数值 ID 作为键进行开关切换。
+            if (!Ids.Add(buffType))
+            {
+                Ids.Remove(buffType);
+            }
+        }
+    }
+
+    // 从 buffType 判断是否存在对应 buff
+    public bool ContainsByType(int buffType)
+    {
+        if (BuffLoader.GetBuff(buffType) is { } modBuff)
+        {
+            var fullName = $"{modBuff.Mod.Name}/{modBuff.Name}";
+            return !FullNames.Contains(fullName);
+        }
+
+        return !Ids.Contains(buffType);
+    }
+
+    public HashSet<int> GetBuffTypes()
+    {
+        var types = new HashSet<int>();
+
+        foreach (var id in Ids)
+        {
+            types.Add(id);
+        }
+
+        foreach (var fullName in FullNames)
+        {
+            types.Add(BuffID.Search.GetId(fullName));
+        }
+
+        return types;
     }
 
 }

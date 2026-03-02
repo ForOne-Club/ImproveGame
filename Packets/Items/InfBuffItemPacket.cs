@@ -7,7 +7,7 @@ namespace ImproveGame.Packets.Items
         [AutoSync] private byte whoAmI;
         private List<Item> items = new();
 
-        public static InfBuffItemPacket Get(InfBuffPlayer modPlayer)
+        public static InfBuffItemPacket Get(InfiniteBuffPlayer modPlayer)
         {
             var module = NetModuleLoader.Get<InfBuffItemPacket>();
             module.whoAmI = (byte)modPlayer.Player.whoAmI;
@@ -40,7 +40,7 @@ namespace ImproveGame.Packets.Items
 
         public override void Receive()
         {
-            if (!InfBuffPlayer.TryGet(Main.player[whoAmI], out var modPlayer))
+            if (!InfiniteBuffPlayer.TryGet(Main.player[whoAmI], out var modPlayer))
                 return;
 
             modPlayer.AvailableItems = items;

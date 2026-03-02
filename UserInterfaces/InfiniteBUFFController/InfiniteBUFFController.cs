@@ -19,11 +19,6 @@ namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
 [RegisterUI]
 public partial class InfiniteBUFFController : BaseBody
 {
-    /// <summary>
-    /// 读取当前界面使用的本地化文本。
-    /// </summary>
-    /// <param name="key">本地化键名后缀。</param>
-    /// <returns>对应的本地化字符串。</returns>
     public static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
 
     /// <summary>
@@ -36,9 +31,6 @@ public partial class InfiniteBUFFController : BaseBody
     /// </summary>
     public override IEnumerable<UIView> BlurElements => [BuffContainer, SliderContainer];
 
-    /// <summary>
-    /// 初始化界面元素、事件绑定与默认显示状态。
-    /// </summary>
     protected override void OnInitialize()
     {
         InitializeComponent();
@@ -92,7 +84,7 @@ public partial class InfiniteBUFFController : BaseBody
         // 拖动滑块时同步刷新刷怪倍率
         Slider.Drag += (_, value) => SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true);
 
-        // 生成 0~1 的刻度标签（含首尾）
+        // 生成 0~1 的刻度标签 (含首尾)
         RefreshScaleMarks(5);
     }
 
@@ -154,25 +146,8 @@ public partial class InfiniteBUFFController : BaseBody
         if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out _)) return;
     }
 
-    /// <summary>
-    /// Buff 项对象池，避免频繁创建 UI 元素。
-    /// </summary>
-    private readonly Dictionary<int, SUIBuffItem> _pool = [];
-
-    /// <summary>
-    /// 当前筛选后需要显示的 Buff ID 列表
-    /// </summary>
-    public static List<int> BuffIds { get; } = [];
-
-    /// <summary>
-    /// 玩家收藏（星标）的 Buff ID 列表
-    /// </summary>
-    public static List<int> StarBuffIds { get; } = [];
-
-    /// <summary>
-    /// 星标 Buff 名称集合（用于快速匹配）
-    /// </summary>
-    public static HashSet<string> StarBuffNames { get; } = [];
+    public static List<int> BuffTypes { get; } = [];
+    public static List<int> BuffTypesCache { get; } = [];
 
     /// <summary>
     /// 按当前 BuffIds 刷新滚动容器中的 Buff 项
@@ -180,22 +155,26 @@ public partial class InfiniteBUFFController : BaseBody
     private void RefreshBuffsList()
     {
         if (BuffsContainer == null) return;
-        BuffsContainer.RemoveAllChildren();
 
         UpdateBuffIds();
 
-        foreach (var type in BuffIds)
+        if (BuffTypesCache.SequenceEqual(BuffTypes)) return;
+        BuffTypesCache.Clear();
+        BuffTypesCache.AddRange(BuffTypes);
+
+        BuffsContainer.RemoveAllChildren();
+
+        foreach (var type in BuffTypes)
         {
-            BuffsContainer.AddChild(_pool.GetOrAdd(type, key => new SUIBuffItem(key)));
+            BuffsContainer.AddChild(ButtonPool.GetOrAdd(type, key => new SUIBuffButton() { BuffType = key }));
         }
     }
 
-    /// <summary>
-    /// 按启用状态与搜索条件重建 BuffIds
-    /// </summary>
+    private Dictionary<int, SUIBuffButton> ButtonPool { get; } = [];
+
     private void UpdateBuffIds()
     {
-        BuffIds.Clear();
+        BuffTypes.Clear();
 
         var filterString = FilterBox?.Text ?? string.Empty;
 
@@ -203,11 +182,27 @@ public partial class InfiniteBUFFController : BaseBody
         {
             // 仅保留已启用隐藏（可无限）效果的 Buff
             if (!HideBuffSystem.BuffTypesShouldHide[i]) continue;
-            // 若有搜索词，则按 Buff 名称过滤
-            if (!string.IsNullOrWhiteSpace(filterString) && !Lang.GetBuffName(i).Contains(filterString)) continue;
 
-            BuffIds.Add(i);
+            if (!string.IsNullOrWhiteSpace(filterString))
+            {
+                if (!Lang.GetBuffName(i).Contains(filterString)) continue;
+            }
+
+            BuffTypes.Add(i);
         }
+
+        if (!InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer)) return;
+
+        var types = infinitePlayer.Favorites.GetBuffTypes();
+
+        var array = BuffTypes.OrderBy(x => !types.Contains(x)).ToArray();
+        BuffTypes.Clear();
+        BuffTypes.AddRange(array);
+    }
+
+    protected override void HandleDirtyLayoutUpdate()
+    {
+        base.HandleDirtyLayoutUpdate();
     }
 }
 

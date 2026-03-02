@@ -319,7 +319,7 @@ public class BuffButton : UIElement
     public override void LeftMouseDown(UIMouseEvent evt)
     {
         SoundEngine.PlaySound(SoundID.MenuTick);
-        InfBuffPlayer.Get(Main.LocalPlayer).ToggleInfiniteBuff(BuffId);
+        InfiniteBuffPlayer.Get(Main.LocalPlayer).Blacklist.Toggle(BuffId);
     }
 
     public override void RightMouseDown(UIMouseEvent evt)
@@ -343,7 +343,7 @@ public class BuffButton : UIElement
 
     public override void DrawSelf(SpriteBatch spriteBatch)
     {
-        bool buffEnabled = InfBuffPlayer.CheckInfiniteBuffEnable(BuffId);
+        bool buffEnabled = InfiniteBuffPlayer.CheckInfiniteBuffEnable(BuffId);
 
         var drawPosition = GetDimensions().Position();
         Asset<Texture2D> buffAsset = TextureAssets.Buff[BuffId];

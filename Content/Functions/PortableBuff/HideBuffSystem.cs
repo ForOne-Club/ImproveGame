@@ -27,7 +27,7 @@ public class HideBuffSystem : ModSystem
     }
 
     /// <summary>
-    /// 与 <see cref="InfBuffPlayer.PostUpdateBuffs"/> 相关，要更改的时候记得改那边
+    /// 与 <see cref="InfiniteBuffPlayer.PostUpdateBuffs"/> 相关，要更改的时候记得改那边
     /// </summary>
     public override void PostDrawInterface(SpriteBatch spriteBatch)
     {
@@ -39,11 +39,11 @@ public class HideBuffSystem : ModSystem
             CheckTeamPlayers(Main.LocalPlayer.whoAmI, SetupShouldHideArrayFromPlayer);
 
         // 从TE中获取所有的无尽Buff物品
-        SetupShouldHideArray(InfBuffPlayer.Get(Main.LocalPlayer).ExStorageAvailableItems);
+        SetupShouldHideArray(InfiniteBuffPlayer.Get(Main.LocalPlayer).ExStorageAvailableItems);
     }
 
     private static void SetupShouldHideArrayFromPlayer(Player player) =>
-        SetupShouldHideArray(InfBuffPlayer.Get(player).AvailableItems);
+        SetupShouldHideArray(InfiniteBuffPlayer.Get(player).AvailableItems);
 
     /// <summary>
     /// 更新InventoryGlow和BuffTypesShouldHide

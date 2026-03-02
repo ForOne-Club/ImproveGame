@@ -19,7 +19,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             if (Main.gameMenu) return false;
 
-            if (InfBuffPlayer.TryGet(Main.LocalPlayer, out var infBuffPlayer) &&
+            if (InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infBuffPlayer) &&
                 infBuffPlayer.AvailableItemsHash.Contains(item))
                 return true;
 
