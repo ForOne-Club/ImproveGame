@@ -16,7 +16,7 @@ internal class ResetUIPositionsButton : LargerPanelElement
 
         // 重设UI的位置
         UIPlayer.HugeInventoryUIPosition = UIPlayer.HugeInventoryDefPosition;
-        UIPlayer.BuffTrackerPosition = UIPlayer.BuffTrackerDefPosition;
+        //UIPlayer.BuffTrackerPosition = UIPlayer.BuffTrackerDefPosition;
         UIPlayer.WorldFeaturePosition = UIPlayer.WorldFeatureDefPosition;
         UIPlayer.ItemSearcherPosition = UIPlayer.ItemSearcherDefPosition;
         UIPlayer.OpenBagPosition = UIPlayer.OpenBagDefPosition;
@@ -25,7 +25,7 @@ internal class ResetUIPositionsButton : LargerPanelElement
         // 应用
         UISystem uiSystem = UISystem.Instance;
         BigBagGUI.Instance.MainPanel.SetPos(UIPlayer.HugeInventoryUIPosition).Recalculate();
-        uiSystem.BuffTrackerGUI.MainPanel.SetPos(UIPlayer.BuffTrackerPosition).Recalculate();
+        //uiSystem.BuffTrackerGUI.MainPanel.SetPos(UIPlayer.BuffTrackerPosition).Recalculate();
         ItemSearcherGUI.Instance.MainPanel.SetPos(UIPlayer.ItemSearcherPosition).Recalculate();
         OpenBagGUI.Instance.MainPanel.SetPos(UIPlayer.OpenBagPosition).Recalculate();
         PlayerStatsGUI.Instance.ControllerSwitch.SetPosPixels(UIPlayer.PlayerInfoTogglePosition).Recalculate();

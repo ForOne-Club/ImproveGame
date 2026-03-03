@@ -18,6 +18,14 @@ public class BattlerPlayer : ModPlayer
         get; set
         {
             if (field == value) return;
+
+            // 猜猜猜猜猜猜猜猜猜猜猜猜猜猜猜猜猜猜
+            // 这段奇怪怪怪怪怪怪怪怪怪怪怪怪怪怪怪
+            // 的的的的的的的的的的的的的的的的代码
+            // 是干嘛嘛嘛嘛嘛嘛嘛嘛嘛嘛嘛嘛嘛嘛嘛的
+            value = RemapSliderToSpawnRate(value);
+            value = RemapSpawnRateToSlider(value);
+
             field = value;
             OnSpawnRateSliderValueChanged(field);
         }
@@ -38,12 +46,12 @@ public class BattlerPlayer : ModPlayer
 
     public bool GetShouldDisableSpawns => SpawnRateSliderValue == 0f;
 
-    public override void OnEnterWorld()
-    {
-        // SpawnRateSliderValue = SliderDefaultValue;
-        // UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Player.whoAmI);
-        // 被移到UIPlayer了
-    }
+    //public override void OnEnterWorld()
+    //{
+    //    SpawnRateSliderValue = SliderDefaultValue;
+    //    UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Player.whoAmI);
+    //    // 被移到UIPlayer了
+    //}
 
     private readonly List<int> BattlerRequiredBuffs = [
         BuffID.Sunflower,
@@ -66,26 +74,67 @@ public class BattlerPlayer : ModPlayer
         return buffsCount == BattlerRequiredBuffs.Count;
     }
 
-    public static float RemapSliderValueToPowerValue(float sliderValue)
+    /// <summary>
+    /// 重映射滑块至生成率
+    /// </summary>
+    public static float RemapSliderToSpawnRate(float value)
     {
-        float rateMax = Config.SpawnRateMaxValue;
-        float rateMin = Config.SpawnRateMinValue;
-        if (rateMin > rateMax) rateMin = rateMax;
-        float rateMid;
-        if (rateMin < 1)
-            rateMid = 1;
-        else if (rateMax < 10)
-            rateMid = rateMin > 1 ? (rateMax + rateMin) * .5f : 1;
-        else
-            rateMid = 10;
-        float remappedValue = TrUtils.Remap(sliderValue, 0.5f, 1f, rateMid, rateMax);
-        remappedValue = (float)Math.Round(remappedValue); // 取整
-        if (sliderValue < 0.5f)
+        var min = Config.SpawnRateMinValue;
+        var max = Config.SpawnRateMaxValue;
+
+        // 直接返回
+        if (min >= max) return max;
+
+        value = Math.Clamp(value, 0f, 1f);
+
+        if (min < 1)
         {
-            remappedValue = TrUtils.Remap(sliderValue, 0f, 0.5f, rateMin, rateMid);
-            remappedValue = (float)Math.Round(remappedValue * 20f) / 20f; // 0.5显示，不然强迫症了
+            value = value * 2f;
+
+            if (value < 1f)
+            {
+                return MathF.Round(MathHelper.Lerp(min, 1, value), 2);
+            }
+
+            value -= 1f;
+            return MathF.Round(MathHelper.Lerp(1, max, value));
         }
-        return remappedValue;
+
+        return MathF.Round(MathHelper.Lerp(min, max, value));
+    }
+
+    /// <summary>
+    /// 将生成率重新映射到滑块
+    /// </summary>
+    public static float RemapSpawnRateToSlider(float rate)
+    {
+        var min = Config.SpawnRateMinValue;
+        var max = Config.SpawnRateMaxValue;
+
+        // 直接返回
+        if (min >= max) return 0.5f;
+        if (max < 1) return 0.5f;
+
+        rate = Math.Clamp(rate, min, max);
+
+        // 最小值小于 1
+        if (min < 1)
+        {
+            if (rate < 1)
+            {
+                rate = MathF.Round(rate, 2);
+
+                return Math.Clamp((rate - min) / (1 - min) / 2f, 0f, 0.5f);
+            }
+
+            rate = MathF.Round(rate);
+
+            return Math.Clamp(((rate - 1) / (max - 1) + 1f) / 2f, 0.5f, 1f);
+        }
+
+        rate = MathF.Round(rate, 2);
+
+        return Math.Clamp((rate - min) / (max - min), 0f, 1f);
     }
 
     public override void Load()
@@ -98,7 +147,7 @@ public class BattlerPlayer : ModPlayer
                 orig.Invoke(plr);
                 return;
             }
-            float rate = RemapSliderValueToPowerValue(battlerPlayer.SpawnRateSliderValue);
+            float rate = RemapSliderToSpawnRate(battlerPlayer.SpawnRateSliderValue);
             if (rate >= 1f)
             {
                 // 我直接多运行几次

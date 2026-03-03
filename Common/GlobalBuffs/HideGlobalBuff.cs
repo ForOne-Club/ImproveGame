@@ -3,8 +3,10 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions.PortableBuff;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
+using ImproveGame.UserInterfaces.InfiniteBUFFController;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using SilkyUIFramework;
 using Terraria.DataStructures;
 using Terraria.UI.Gamepad;
 
@@ -250,17 +252,12 @@ namespace ImproveGame.Common.GlobalBuffs
             if (TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _) || IsDrawingBuffTracker)
                 return;
 
-            tip += $"\n{GetText($"Tips.BuffTracker{(BuffTrackerGUI.Visible ? "Off" : "On")}")}";
+            if (!SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBUFFController>(out var controller)) return;
+
+            tip += $"\n{GetText($"Tips.BuffTracker{(controller.Enabled ? "Off" : "On")}")}";
             if (Main.mouseLeft && Main.mouseLeftRelease)
             {
-                if (BuffTrackerGUI.Visible)
-                {
-                    UISystem.Instance.BuffTrackerGUI.Close();
-                }
-                else
-                {
-                    UISystem.Instance.BuffTrackerGUI.Open();
-                }
+                controller.Enabled = !controller.Enabled;
             }
 
             if (!UIConfigs.Instance.HideNoConsumeBuffs)

@@ -18,7 +18,7 @@ namespace ImproveGame.Common.GlobalNPCs
                 return;
             }
 
-            float rate = BattlerPlayer.RemapSliderValueToPowerValue(battlerPlayer.SpawnRateSliderValue);
+            float rate = BattlerPlayer.RemapSliderToSpawnRate(battlerPlayer.SpawnRateSliderValue);
             spawnRate = (int)(spawnRate / rate);
             maxSpawns = (int)(maxSpawns * rate);
         }

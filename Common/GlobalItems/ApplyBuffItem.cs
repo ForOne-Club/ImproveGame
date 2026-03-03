@@ -5,6 +5,8 @@ using ImproveGame.Core;
 using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
+using ImproveGame.UserInterfaces.InfiniteBUFFController;
+using SilkyUIFramework;
 using System.Collections.ObjectModel;
 
 namespace ImproveGame.Common.GlobalItems
@@ -168,10 +170,17 @@ namespace ImproveGame.Common.GlobalItems
                 if (KeybindSystem.ItemInteractKeybind.JustPressed && !_oldMiddlePressed)
                 {
                     _oldMiddlePressed = true;
-                    if (BuffTrackerGUI.Visible)
-                        UISystem.Instance.BuffTrackerGUI.Close();
-                    else
-                        UISystem.Instance.BuffTrackerGUI.Open();
+
+                    if (SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBUFFController>(out var controller))
+                    {
+                        controller.Enabled = !controller.Enabled;
+                    }
+
+                    // [old]
+                    //if (BuffTrackerGUI.Visible)
+                    //    UISystem.Instance.BuffTrackerGUI.Close();
+                    //else
+                    //    UISystem.Instance.BuffTrackerGUI.Open();
                 }
 
                 TagItem.ModifyBuffTooltips(Mod, item.type, buffType, tooltips);

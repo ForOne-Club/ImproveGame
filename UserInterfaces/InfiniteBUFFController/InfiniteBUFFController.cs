@@ -1,12 +1,11 @@
-﻿#if DEBUG && true
-
-using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions.PortableBuff;
 using ImproveGame.Packets;
 using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
 using Terraria.ModLoader.UI;
+using static tModPorter.ProgressUpdate;
 
 namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
 
@@ -102,7 +101,7 @@ public partial class InfiniteBUFFController : BaseBody
 
         for (int i = 0; i < quantity; i++)
         {
-            var progress = i / ((float)quantity - 1f);
+            var progress = i / (quantity - 1f);
             var item = new UITextView
             {
                 TextScale = 0.8f,
@@ -122,6 +121,8 @@ public partial class InfiniteBUFFController : BaseBody
 
             item.OnUpdateStatus += delegate
             {
+                var text = BattlerPlayer.RemapSliderToSpawnRate(progress);
+                item.Text = $"{text:0.##}";
                 item.TextBorderColor = item.HoverTimer.Lerp(Color.Black, SUIColor.Highlight);
             };
 
@@ -138,72 +139,117 @@ public partial class InfiniteBUFFController : BaseBody
 
         if (Slider.Thumb.IsMouseHovering || Slider.Thumb.LeftMousePressed)
         {
-            UICommon.TooltipMouseText($"{Slider.Value:0.##}");
+            var text = BattlerPlayer.RemapSliderToSpawnRate(Slider.Value);
+            UICommon.TooltipMouseText($"{text:0.##}");
         }
 
-        RefreshBuffsList();
+        Rebuild();
 
         if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out _)) return;
     }
 
-    public static List<int> BuffTypes { get; } = [];
-    public static List<int> BuffTypesCache { get; } = [];
+    private readonly BuffTypesState _typesState = new();
 
     /// <summary>
     /// 按当前 BuffIds 刷新滚动容器中的 Buff 项
     /// </summary>
-    private void RefreshBuffsList()
+    private void Rebuild()
     {
         if (BuffsContainer == null) return;
 
-        UpdateBuffIds();
-
-        if (BuffTypesCache.SequenceEqual(BuffTypes)) return;
-        BuffTypesCache.Clear();
-        BuffTypesCache.AddRange(BuffTypes);
+        _typesState.Rebuild(FilterBox?.Text ?? string.Empty);
+        if (!_typesState.ConsumeDirty()) return;
 
         BuffsContainer.RemoveAllChildren();
 
-        foreach (var type in BuffTypes)
+        foreach (var type in _typesState.Types)
         {
             BuffsContainer.AddChild(ButtonPool.GetOrAdd(type, key => new SUIBuffButton() { BuffType = key }));
         }
     }
 
     private Dictionary<int, SUIBuffButton> ButtonPool { get; } = [];
+}
 
-    private void UpdateBuffIds()
+/// <summary>
+/// 维护可无限化 Buff 类型的构建状态，负责筛选、收藏优先排序与脏标记管理。
+/// </summary>
+public class BuffTypesState
+{
+    /// <summary>
+    /// 当前构建得到的 Buff 类型列表。
+    /// </summary>
+    private readonly List<int> _types = [];
+
+    /// <summary>
+    /// 上一次构建结果的快照，用于判断列表是否变化。
+    /// </summary>
+    private readonly List<int> _typesCache = [];
+
+    /// <summary>
+    /// 标记当前列表是否发生变化并需要刷新 UI。
+    /// </summary>
+    public bool IsDirty { get; private set; }
+
+    /// <summary>
+    /// 当前可供 UI 展示的 Buff 类型序列。
+    /// </summary>
+    public IEnumerable<int> Types => _types;
+
+    /// <summary>
+    /// 读取并清除脏标记。
+    /// </summary>
+    /// <returns>
+    /// 若调用前状态为脏则返回 <see langword="true"/>，并将 <see cref="IsDirty"/> 重置为 <see langword="false"/>；
+    /// 否则返回 <see langword="false"/>。
+    /// </returns>
+    public bool ConsumeDirty()
     {
-        BuffTypes.Clear();
+        if (IsDirty)
+        {
+            IsDirty = false;
+            return true;
+        }
 
-        var filterString = FilterBox?.Text ?? string.Empty;
+        return false;
+    }
+
+    /// <summary>
+    /// 根据筛选关键字重建 Buff 类型列表，并在结果变化时设置脏标记。
+    /// </summary>
+    /// <param name="filterString">Buff 名称筛选关键字；为空或空白时不过滤。</param>
+    public void Rebuild(string filterString)
+    {
+        // 先重建基础列表：所有已启用“可无限化”的 Buff。
+        _types.Clear();
 
         for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
         {
             // 仅保留已启用隐藏（可无限）效果的 Buff
             if (!HideBuffSystem.BuffTypesShouldHide[i]) continue;
 
-            if (!string.IsNullOrWhiteSpace(filterString))
-            {
-                if (!Lang.GetBuffName(i).Contains(filterString)) continue;
-            }
+            if (!string.IsNullOrWhiteSpace(filterString) &&
+                !Lang.GetBuffName(i).Contains(filterString)) continue;
 
-            BuffTypes.Add(i);
+            _types.Add(i);
         }
 
-        if (!InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer)) return;
+        // 若无法读取玩家的收藏配置，则仅保留基础筛选结果。
+        if (InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer))
+        {
+            // 收藏 Buff 置顶，其他 Buff 维持相对顺序。
+            var types = infinitePlayer.Favorites.GetBuffTypes();
+            var array = _types.OrderBy(x => !types.Contains(x)).ToArray();
+            _types.Clear();
+            _types.AddRange(array);
+        }
 
-        var types = infinitePlayer.Favorites.GetBuffTypes();
+        // 与上次快照一致则无需刷新 UI。
+        if (_typesCache.SequenceEqual(_types)) return;
 
-        var array = BuffTypes.OrderBy(x => !types.Contains(x)).ToArray();
-        BuffTypes.Clear();
-        BuffTypes.AddRange(array);
-    }
+        _typesCache.Clear();
+        _typesCache.AddRange(_types);
 
-    protected override void HandleDirtyLayoutUpdate()
-    {
-        base.HandleDirtyLayoutUpdate();
+        IsDirty = true;
     }
 }
-
-#endif

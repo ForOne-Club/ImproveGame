@@ -11,6 +11,8 @@ using ImproveGame.UI.MasterControl;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UIFramework;
+using ImproveGame.UserInterfaces.InfiniteBUFFController;
+using SilkyUIFramework;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.GameInput;
@@ -238,10 +240,15 @@ public class ImprovePlayer : ModPlayer
 
     private static void PressBuffTrackerKeybind()
     {
-        if (BuffTrackerGUI.Visible)
-            UISystem.Instance.BuffTrackerGUI.Close();
-        else
-            UISystem.Instance.BuffTrackerGUI.Open();
+        if (!SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBUFFController>(out var controller)) return;
+
+        controller.Enabled = !controller.Enabled;
+
+        // [old]
+        //if (BuffTrackerGUI.Visible)
+        //    UISystem.Instance.BuffTrackerGUI.Close();
+        //else
+        //    UISystem.Instance.BuffTrackerGUI.Open();
     }
 
     private static void PressOpenBagKeybind()

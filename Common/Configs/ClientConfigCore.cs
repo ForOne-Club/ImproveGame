@@ -101,7 +101,7 @@ public class CommonClientConfig
 
     public HashSet<string> FavoritedModernConfigOptions;
 
-    public HashSet<string> StarBuffs;
+    //public HashSet<string> StarBuffs;
 
     public LifeformAnalyzerConfig LifeformAnalyzer = new();
     public WandModeConfig WandMode = new();
@@ -150,7 +150,7 @@ public class CommonClientConfig
 
         FavoritedModernConfigOptions = FavoritedOptionDatabase.FavoritedOptions;
 
-        StarBuffs = BuffTrackerGUI.FavoritedBuffs;
+        //StarBuffs = BuffTrackerGUI.FavoritedBuffs;
 
         UseKeybindTranslation = KeybindSystem.UseKeybindTranslation;
 
@@ -160,9 +160,9 @@ public class CommonClientConfig
             BigBagGUI.Instance?.MainPanel?.GetDimensions().Position() ?? new Vector2(150, 340);
         UIPlayer.HugeInventoryUIPosition = HugeInventoryUIPosition; // 在这里也保存一下
 
-        BuffTrackerPosition =
-            uiSystem.BuffTrackerGUI?.MainPanel?.GetDimensions().Position() ?? new Vector2(630, 160);
-        UIPlayer.BuffTrackerPosition = BuffTrackerPosition; // 在这里也保存一下
+        //BuffTrackerPosition =
+        //    uiSystem.BuffTrackerGUI?.MainPanel?.GetDimensions().Position() ?? new Vector2(630, 160);
+        //UIPlayer.BuffTrackerPosition = BuffTrackerPosition; // 在这里也保存一下
 
         WorldFeaturePosition =
             WorldFeatureGUI.Instance?.MainPanel?.GetDimensions().Position() ?? new Vector2(250, 280);
@@ -218,14 +218,14 @@ public class CommonClientConfig
         else
             FavoritedOptionDatabase.FavoritedOptions = FavoritedModernConfigOptions;
 
-        if (StarBuffs is not null)
-            BuffTrackerGUI.FavoritedBuffs = StarBuffs;
+        //if (StarBuffs is not null)
+        //    BuffTrackerGUI.FavoritedBuffs = StarBuffs;
 
         KeybindSystem.UseKeybindTranslation = UseKeybindTranslation;
         UIPlayer.HugeInventoryUIPosition =
             HugeInventoryUIPosition == Vector2.Zero ? new Vector2(150, 340) : HugeInventoryUIPosition;
-        UIPlayer.BuffTrackerPosition =
-            BuffTrackerPosition == Vector2.Zero ? new Vector2(630, 160) : BuffTrackerPosition;
+        //UIPlayer.BuffTrackerPosition =
+        //    BuffTrackerPosition == Vector2.Zero ? new Vector2(630, 160) : BuffTrackerPosition;
         UIPlayer.WorldFeaturePosition =
             WorldFeaturePosition == Vector2.Zero ? new Vector2(250, 280) : WorldFeaturePosition;
         UIPlayer.ItemSearcherPosition =
