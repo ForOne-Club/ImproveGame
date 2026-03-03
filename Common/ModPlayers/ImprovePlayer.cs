@@ -2,6 +2,7 @@
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Core;
+using ImproveGame.IndependentModules.InfiniteBuff.UserInterface;
 using ImproveGame.UI;
 using ImproveGame.UI.AutoTrash;
 using ImproveGame.UI.ExtremeStorage;
@@ -11,7 +12,6 @@ using ImproveGame.UI.MasterControl;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UIFramework;
-using ImproveGame.UserInterfaces.InfiniteBUFFController;
 using SilkyUIFramework;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;

@@ -26,14 +26,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="**/*.xml" Exclude="bin/**/*;obj/**/*" Pack="true"
-            ModPath="%(Identity)" />
+        <AdditionalFiles Include="**/*.xml" Exclude="bin/**/*;obj/**/*" Pack="true" ModPath="%(Identity)" />
 
         <!-- 不在解决方案管理器显示 -->
         <None Visible="False" Include="./README.md;./README-en.md;./How-To-Use-Search.md" />
         <None Visible="False" Include="./icon.png;./icon_workshop.png" />
-        <None Visible="False"
-            Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt" />
+        <None Visible="False" Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt" />
         <None Visible="False" Include="./.editorconfig;./.gitignore;./.gitattributes;././LICENSE" />
     </ItemGroup>
 </Project>

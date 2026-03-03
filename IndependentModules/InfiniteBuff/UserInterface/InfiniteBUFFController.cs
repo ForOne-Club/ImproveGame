@@ -4,10 +4,10 @@ using ImproveGame.Packets;
 using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
+using SilkyUIFramework.Extensions;
 using Terraria.ModLoader.UI;
-using static tModPorter.ProgressUpdate;
 
-namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
+namespace ImproveGame.IndependentModules.InfiniteBuff.UserInterface;
 
 /// <summary>
 /// 无限增益控制器 UI，负责：
@@ -74,10 +74,10 @@ public partial class InfiniteBUFFController : BaseBody
         SliderTitle.Text = GetTextValue("EnemySpawnRate");
 
         // 同步滑块默认值，并监听玩家配置变化
-        if (Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer))
+        if (Main.LocalPlayer.TryGetModPlayer<BattlerModPlayer>(out var battler))
         {
-            Slider.Value = battlerPlayer.SpawnRateSliderValue;
-            battlerPlayer.SpawnRateSliderValueChanged += (sender, value) => Slider.Value = value;
+            Slider.Value = battler.SpawnRateSliderValue;
+            battler.SpawnRateSliderValueChanged += (sender, value) => Slider.Value = value;
         }
 
         // 拖动滑块时同步刷新刷怪倍率
@@ -87,46 +87,32 @@ public partial class InfiniteBUFFController : BaseBody
         RefreshScaleMarks(5);
     }
 
+    public override bool ContainsPoint(Vector2 point)
+    {
+        return SliderContainer.Bounds.Contains(point) || base.ContainsPoint(point);
+    }
+
     /// <summary>
     /// 根据给定数量重建滑块下方刻度标签。
     /// </summary>
     /// <param name="quantity">刻度数量，建议大于等于 2。</param>
     private void RefreshScaleMarks(int quantity)
     {
-        if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out var battlerPlayer)) return;
+        if (!Main.LocalPlayer.TryGetModPlayer<BattlerModPlayer>(out var battlerPlayer)) return;
 
-        ScaleMarks.RemoveAllChildren();
+        MarkerContainer.RemoveAllChildren();
 
         var half = quantity / 2.0f;
 
         for (int i = 0; i < quantity; i++)
         {
             var progress = i / (quantity - 1f);
-            var item = new UITextView
+            var item = new SUIProgressMarker()
             {
-                TextScale = 0.8f,
-                TextAlign = new(0.5f),
-                FitWidth = false,
-                Width = new Dimension(35),
-                Text = $"{progress:0.##}",
+                Progress = progress
+            }.Join(MarkerContainer);
 
-                Left = new Anchor(0f, progress - 0.5f, 0.5f - progress),
-            };
-
-            item.LeftMouseDown += delegate
-            {
-                // 点击刻度可直接跳转到对应倍率
-                battlerPlayer.SpawnRateSliderValue = progress;
-            };
-
-            item.OnUpdateStatus += delegate
-            {
-                var text = BattlerPlayer.RemapSliderToSpawnRate(progress);
-                item.Text = $"{text:0.##}";
-                item.TextBorderColor = item.HoverTimer.Lerp(Color.Black, SUIColor.Highlight);
-            };
-
-            ScaleMarks.AddChild(item);
+            item.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = progress;
         }
     }
 
@@ -137,15 +123,18 @@ public partial class InfiniteBUFFController : BaseBody
     {
         base.UpdateStatus(gameTime);
 
+        Rebuild();
+
         if (Slider.Thumb.IsMouseHovering || Slider.Thumb.LeftMousePressed)
         {
-            var text = BattlerPlayer.RemapSliderToSpawnRate(Slider.Value);
+            var text = InfiniteBuffHelper.RemapSliderToSpawnRate(Slider.Value);
             UICommon.TooltipMouseText($"{text:0.##}");
         }
 
-        Rebuild();
-
-        if (!Main.LocalPlayer.TryGetModPlayer<BattlerPlayer>(out _)) return;
+        // 没有激活不显示控制器
+        if (!Main.LocalPlayer.TryGetModPlayer<BattlerModPlayer>(out var battler)) return;
+        SliderContainer.Invalid = !battler.MeetsActivationConditions(HideBuffSystem.BuffTypesShouldHide);
+        //SliderTitle.TextColor = battler.MeetsActivationConditions(HideBuffSystem.BuffTypesShouldHide) ? Color.White : Color.Red;
     }
 
     private readonly BuffTypesState _typesState = new();
@@ -155,7 +144,7 @@ public partial class InfiniteBUFFController : BaseBody
     /// </summary>
     private void Rebuild()
     {
-        if (BuffsContainer == null) return;
+        if (BuffsContainer is null) return;
 
         _typesState.Rebuild(FilterBox?.Text ?? string.Empty);
         if (!_typesState.ConsumeDirty()) return;
@@ -168,7 +157,42 @@ public partial class InfiniteBUFFController : BaseBody
         }
     }
 
-    private Dictionary<int, SUIBuffButton> ButtonPool { get; } = [];
+    private readonly Dictionary<int, SUIBuffButton> ButtonPool = [];
+}
+
+/// <summary>
+/// 标记
+/// </summary>
+public class SUIProgressMarker : UITextView
+{
+    public SUIProgressMarker()
+    {
+        TextScale = 0.8f;
+        TextAlign = new(0.5f);
+        FitWidth = false;
+        Width = new Dimension(35);
+    }
+
+    /// <summary>
+    /// 代表刻度值，修改随之改变位置和文本
+    /// </summary>
+    public required float Progress
+    {
+        get; set
+        {
+            field = value;
+            Text = $"{InfiniteBuffHelper.RemapSliderToSpawnRate(field, 1):0.##}";
+            Left = new Anchor(0f, field - 0.5f, 0.5f - field);
+        }
+    }
+
+    protected override void UpdateStatus(GameTime gameTime)
+    {
+        base.UpdateStatus(gameTime);
+
+        Text = $"{InfiniteBuffHelper.RemapSliderToSpawnRate(Progress, 1):0.##}";
+        TextBorderColor = HoverTimer.Lerp(Color.Black, SUIColor.Highlight);
+    }
 }
 
 /// <summary>

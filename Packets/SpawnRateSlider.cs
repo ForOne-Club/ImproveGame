@@ -1,4 +1,4 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.IndependentModules.InfiniteBuff;
 
 namespace ImproveGame.Packets
 {
@@ -18,7 +18,7 @@ namespace ImproveGame.Packets
 
         public override void Receive()
         {
-            if (!Main.player[whoAmI].TryGetModPlayer<BattlerPlayer>(out var modPlayer))
+            if (!Main.player[whoAmI].TryGetModPlayer<BattlerModPlayer>(out var modPlayer))
                 return;
 
             modPlayer.SpawnRateSliderValue = sliderValue;

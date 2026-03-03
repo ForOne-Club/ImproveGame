@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- Class 填写对应类名 -->
-<Body Class="ImproveGame.UserInterfaces.InfiniteBUFFController.InfiniteBUFFController"
+<Body Class="ImproveGame.IndependentModules.InfiniteBuff.UserInterface.InfiniteBUFFController"
 	Enabled="false" EnableBlur="true"
-	Gap="8" BorderRadius="8" FitWidth="true" FitHeight="true" Left="50#" Top="50#"
+	Gap="0" BorderRadius="8" FitWidth="true" FitHeight="true" Left="50#" Top="50#"
 	CrossAlignment="Stretch">
 	<!-- BUFF 列表控制 -->
 	<ElementGroup Name="BuffContainer" BorderRadius="8" FitWidth="true" FitHeight="true"
@@ -40,12 +40,12 @@
 		</ElementGroup>
 	</ElementGroup>
 	<!-- 敌人生成速度调节器 -->
-	<ElementGroup Name="SliderContainer" FlexDirection="Column" CrossAlignment="Stretch"
+	<ElementGroup Name="SliderContainer" Positioning="Absolute" Width="100%" Top="6px 100% 0#" FlexDirection="Column" CrossAlignment="Stretch"
 		FitHeight="true"
 		Padding="12 8" Gap="8" BackgroundColor="rgba(0,0,0,0.25)" BorderRadius="8">
 		<!-- Title -->
 		<TextView Name="SliderTitle" Text="敌人生成率" TextScale="0.8" Padding="4" />
 		<Slider Name="Slider" Height="20px" />
-		<ElementGroup Name="ScaleMarks" Padding="10 0" FitHeight="true" MainAlignment="SpaceBetween" />
+		<ElementGroup Name="MarkerContainer" Padding="10 0" FitHeight="true" MainAlignment="SpaceBetween" />
 	</ElementGroup>
 </Body>

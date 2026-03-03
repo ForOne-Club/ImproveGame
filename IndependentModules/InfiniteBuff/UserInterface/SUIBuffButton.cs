@@ -7,7 +7,7 @@ using SilkyUIFramework.Extensions;
 using System.Text;
 using Terraria.ModLoader.UI;
 
-namespace ImproveGame.UserInterfaces.InfiniteBUFFController;
+namespace ImproveGame.IndependentModules.InfiniteBuff.UserInterface;
 
 /// <summary>
 /// 可点击的 Buff 项视图，负责展示图标、悬停高亮与收藏标识。

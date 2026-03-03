@@ -1,9 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions.PortableBuff;
-using ImproveGame.UI;
-using ImproveGame.UIFramework;
-using ImproveGame.UserInterfaces.InfiniteBUFFController;
+using ImproveGame.IndependentModules.InfiniteBuff.UserInterface;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using SilkyUIFramework;
