@@ -89,6 +89,8 @@ public partial class InfiniteBUFFController : BaseBody
 
     public override bool ContainsPoint(Vector2 point)
     {
+        if (SliderContainer is null) return base.ContainsPoint(point);
+
         return SliderContainer.Bounds.Contains(point) || base.ContainsPoint(point);
     }
 

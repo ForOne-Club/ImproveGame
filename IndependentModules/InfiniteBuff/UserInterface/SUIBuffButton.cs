@@ -1,6 +1,4 @@
-﻿#if DEBUG && true
-
-using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.ModPlayers;
 using SilkyUIFramework;
 using SilkyUIFramework.Elements;
 using SilkyUIFramework.Extensions;
@@ -142,5 +140,3 @@ public class SUIBuffButton : UIElementGroup
         infinitePlayer.Favorites.Toggle(BuffType);
     }
 }
-
-#endif
