@@ -1,32 +1,31 @@
 ﻿using ImproveGame.IndependentModules.InfiniteBuff;
 
-namespace ImproveGame.Packets
+namespace ImproveGame.Packets;
+
+[AutoSync]
+public class SpawnRateSlider : NetModule
 {
-    [AutoSync]
-    public class SpawnRateSlider : NetModule
+    private byte whoAmI;
+    private float sliderValue;
+
+    public static SpawnRateSlider Get(int whoAmI, float sliderValue)
     {
-        private byte whoAmI;
-        private float sliderValue;
+        var module = NetModuleLoader.Get<SpawnRateSlider>();
+        module.sliderValue = sliderValue;
+        module.whoAmI = (byte)whoAmI;
+        return module;
+    }
 
-        public static SpawnRateSlider Get(int whoAmI, float sliderValue)
+    public override void Receive()
+    {
+        if (!Main.player[whoAmI].TryGetModPlayer<BattlerModPlayer>(out var battler))
+            return;
+
+        battler.SpawnRateSliderValue = sliderValue;
+
+        if (Main.netMode is NetmodeID.Server)
         {
-            var module = NetModuleLoader.Get<SpawnRateSlider>();
-            module.sliderValue = sliderValue;
-            module.whoAmI = (byte)whoAmI;
-            return module;
-        }
-
-        public override void Receive()
-        {
-            if (!Main.player[whoAmI].TryGetModPlayer<BattlerModPlayer>(out var modPlayer))
-                return;
-
-            modPlayer.SpawnRateSliderValue = sliderValue;
-
-            if (Main.netMode is NetmodeID.Server)
-            {
-                Send(-1, whoAmI, false);
-            }
+            Send(-1, whoAmI, false);
         }
     }
 }

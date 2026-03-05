@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.ModPlayers;
-using ImproveGame.Content.Functions.PortableBuff;
+﻿using ImproveGame.Content.Functions.PortableBuff;
 using ImproveGame.Packets;
 using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
@@ -23,29 +22,24 @@ public partial class InfiniteBUFFController : BaseBody
     /// <summary>
     /// Buff 列表滚动容器的内容区域。
     /// </summary>
-    public UIElementGroup BuffsContainer { get; private set; }
+    public SUIScrollContainer ScrollContainer { get; private set; }
 
     /// <summary>
     /// 需要参与背景模糊的主要子视图。
     /// </summary>
-    public override IEnumerable<UIView> BlurElements => [BuffContainer, SliderContainer];
+    public override IEnumerable<UIView> BlurElements => [MainContainer, SliderContainer];
 
     protected override void OnInitialize()
     {
         InitializeComponent();
 
-        BorderColor = Color.Transparent;
-        BackgroundColor = Color.Transparent;
+        MainContainer.BorderColor = SUIColor.Border;
+        MainContainer.BackgroundColor = SUIColor.Background * 0.75f;
 
-        BuffContainer.Border = 2f;
-        BuffContainer.BorderColor = SUIColor.Border;
-        BuffContainer.BackgroundColor = SUIColor.Background * 0.75f;
-
-        SliderContainer.Border = 2f;
         SliderContainer.BorderColor = SUIColor.Border;
         SliderContainer.BackgroundColor = SUIColor.Background * 0.75f;
 
-        BuffsContainer = ScrollView.Container;
+        ScrollContainer = ScrollView.Container;
 
         Header.ControlTarget = this;
 
@@ -81,7 +75,12 @@ public partial class InfiniteBUFFController : BaseBody
         }
 
         // 拖动滑块时同步刷新刷怪倍率
-        Slider.Drag += (_, value) => SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true);
+        Slider.Drag += (_, value) =>
+        {
+            SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true);
+            Main.NewText($"{value}");
+            Console.WriteLine(value);
+        };
 
         // 生成 0~1 的刻度标签 (含首尾)
         RefreshScaleMarks(5);
@@ -100,7 +99,7 @@ public partial class InfiniteBUFFController : BaseBody
     /// <param name="quantity">刻度数量，建议大于等于 2。</param>
     private void RefreshScaleMarks(int quantity)
     {
-        if (!Main.LocalPlayer.TryGetModPlayer<BattlerModPlayer>(out var battlerPlayer)) return;
+        if (!Main.LocalPlayer.TryGetModPlayer<BattlerModPlayer>(out var battler)) return;
 
         MarkerContainer.RemoveAllChildren();
 
@@ -114,7 +113,7 @@ public partial class InfiniteBUFFController : BaseBody
                 Progress = progress
             }.Join(MarkerContainer);
 
-            item.LeftMouseDown += (_, _) => battlerPlayer.SpawnRateSliderValue = progress;
+            item.LeftMouseDown += (_, _) => battler.SpawnRateSliderValue = progress;
         }
     }
 
@@ -125,18 +124,17 @@ public partial class InfiniteBUFFController : BaseBody
     {
         base.UpdateStatus(gameTime);
 
-        Rebuild();
+        UpdateBuffsContainer();
 
+        // 拖动条悬浮提示
         if (Slider.Thumb.IsMouseHovering || Slider.Thumb.LeftMousePressed)
         {
-            var text = InfiniteBuffHelper.RemapSliderToSpawnRate(Slider.Value);
-            UICommon.TooltipMouseText($"{text:0.##}");
+            UICommon.TooltipMouseText($"{InfiniteBuffHelper.RemapSliderToSpawnRate(Slider.Value):0.##}");
         }
 
-        // 没有激活不显示控制器
+        // 没有激活组合时不显示控制器
         if (!Main.LocalPlayer.TryGetModPlayer<BattlerModPlayer>(out var battler)) return;
-        SliderContainer.Invalid = !battler.MeetsActivationConditions(HideBuffSystem.BuffTypesShouldHide);
-        //SliderTitle.TextColor = battler.MeetsActivationConditions(HideBuffSystem.BuffTypesShouldHide) ? Color.White : Color.Red;
+        SliderContainer.Invalid = !battler.MeetsActivationConditions(HideBuffSystem.HideFlags);
     }
 
     private readonly BuffTypesState _typesState = new();
@@ -144,18 +142,19 @@ public partial class InfiniteBUFFController : BaseBody
     /// <summary>
     /// 按当前 BuffIds 刷新滚动容器中的 Buff 项
     /// </summary>
-    private void Rebuild()
+    private void UpdateBuffsContainer()
     {
-        if (BuffsContainer is null) return;
+        if (ScrollContainer is null) return;
 
-        _typesState.Rebuild(FilterBox?.Text ?? string.Empty);
+        var filterString = FilterBox?.Text ?? string.Empty;
+        _typesState.Rebuild(filterString);
         if (!_typesState.ConsumeDirty()) return;
 
-        BuffsContainer.RemoveAllChildren();
+        ScrollContainer.RemoveAllChildren();
 
         foreach (var type in _typesState.Types)
         {
-            BuffsContainer.AddChild(ButtonPool.GetOrAdd(type, key => new SUIBuffButton() { BuffType = key }));
+            ScrollContainer.AddChild(ButtonPool.GetOrAdd(type, key => new SUIBuffButton() { BuffType = key }));
         }
     }
 
@@ -249,10 +248,10 @@ public class BuffTypesState
         // 先重建基础列表：所有已启用“可无限化”的 Buff。
         _types.Clear();
 
-        for (int i = 0; i < HideBuffSystem.BuffTypesShouldHide.Length; i++)
+        for (int i = 0; i < HideBuffSystem.HideFlags.Length; i++)
         {
             // 仅保留已启用隐藏（可无限）效果的 Buff
-            if (!HideBuffSystem.BuffTypesShouldHide[i]) continue;
+            if (!HideBuffSystem.HideFlags[i]) continue;
 
             if (!string.IsNullOrWhiteSpace(filterString) &&
                 !Lang.GetBuffName(i).Contains(filterString)) continue;

@@ -1,8 +1,8 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
-using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
+using ImproveGame.IndependentModules.InfiniteBuff;
 using ImproveGame.UI.ItemContainer;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
@@ -172,7 +172,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
                     // 有30个
                     if (available)
                     {
-                        if (!Config.NoConsume_Potion || !InfiniteBuffPlayer.CheckInfiniteBuffEnable(potion.buffType))
+                        if (!Config.NoConsume_Potion || InfiniteBuffPlayer.InBlacklist(potion.buffType))
                         {
                             // 被禁用了
                             text += $"  {GetText("Tips.PotionBagDisabled")}";

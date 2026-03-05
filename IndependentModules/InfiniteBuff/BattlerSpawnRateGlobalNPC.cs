@@ -10,7 +10,7 @@ public class BattlerSpawnRateGlobalNPC : GlobalNPC
         On_NPC.SlimeRainSpawns += (orig, plr) =>
         {
             if (!Main.player[plr].TryGetModPlayer<BattlerModPlayer>(out var battler) ||
-                !battler.MeetsActivationConditions(HideBuffSystem.BuffTypesShouldHide))
+                !battler.MeetsActivationConditions(HideBuffSystem.HideFlags))
             {
                 orig.Invoke(plr);
                 return;
@@ -35,7 +35,7 @@ public class BattlerSpawnRateGlobalNPC : GlobalNPC
     public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
     {
         if (!player.TryGetModPlayer<BattlerModPlayer>(out var battler)) return;
-        if (!battler.MeetsActivationConditions(HideBuffSystem.BuffTypesShouldHide)) return;
+        if (!battler.MeetsActivationConditions(HideBuffSystem.HideFlags)) return;
 
         if (battler.SpawnRateSliderValue == 0f)
         {

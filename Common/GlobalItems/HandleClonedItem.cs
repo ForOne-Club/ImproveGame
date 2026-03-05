@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.ModPlayers;
-using ImproveGame.Content.Functions;
+﻿using ImproveGame.Content.Functions;
+using ImproveGame.IndependentModules.InfiniteBuff;
 
 namespace ImproveGame.Common.GlobalItems;
 

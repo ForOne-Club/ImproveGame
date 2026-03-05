@@ -12,7 +12,7 @@ indent_style = space
 tab_width = 4
 
 # 新行首选项
-end_of_line = crlf
+end_of_line = lf
 insert_final_newline = false
 
 #### .NET 编码约定 ####
@@ -225,7 +225,7 @@ csharp_style_prefer_top_level_statements = true:silent
 csharp_style_prefer_readonly_struct = true:suggestion
 
 [*.{cs,vb}]
-end_of_line = crlf
+end_of_line = lf
 dotnet_style_qualification_for_field = false:silent
 dotnet_style_qualification_for_property = false:silent
 dotnet_style_qualification_for_method = false:silent

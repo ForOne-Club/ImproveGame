@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Common.ModPlayers;
+using ImproveGame.IndependentModules.InfiniteBuff;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using System.Collections.ObjectModel;
@@ -38,7 +38,7 @@ public class TagItem : GlobalItem
     /// </summary>
     public static void ModifyBuffTooltips(Mod mod, int itemType, int buffType, List<TooltipLine> tooltips)
     {
-        bool buffEnabled = InfiniteBuffPlayer.CheckInfiniteBuffEnable(buffType);
+        bool buffEnabled = !InfiniteBuffPlayer.InBlacklist(buffType);
 
         if (itemType is ItemID.GardenGnome)
         {

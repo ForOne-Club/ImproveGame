@@ -1,5 +1,4 @@
-﻿using ImproveGame.Common.ModPlayers;
-using SilkyUIFramework;
+﻿using SilkyUIFramework;
 using SilkyUIFramework.Elements;
 using SilkyUIFramework.Extensions;
 using System.Text;
@@ -99,8 +98,8 @@ public class SUIBuffButton : UIElementGroup
     {
         base.UpdateStatus(gameTime);
 
-        IconImage.ImageColor = Blacklisted ? Color.White : Color.Lerp(Color.Black, Color.White, 0.4f);
-        FavoriteImage.ImageColor = Favorited ? Color.Transparent : Color.White;
+        IconImage.ImageColor = Blacklisted ? Color.Lerp(Color.Black, Color.White, 0.4f) : Color.White;
+        FavoriteImage.ImageColor = Favorited ? Color.White : Color.Transparent;
 
         BorderImage.ImageColor = HoverTimer.Lerp(Color.Transparent, Color.White);
 
