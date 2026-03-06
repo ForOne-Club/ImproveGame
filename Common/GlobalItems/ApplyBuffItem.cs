@@ -1,8 +1,8 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.Core;
-using ImproveGame.IndependentModules.InfiniteBuff;
-using ImproveGame.IndependentModules.InfiniteBuff.UserInterface;
+using ImproveGame.Modules.InfiniteBuff;
+using ImproveGame.Modules.InfiniteBuff.UserInterface;
 using SilkyUIFramework;
 using System.Collections.ObjectModel;
 
@@ -50,7 +50,7 @@ public class ApplyBuffItem : GlobalItem
         return false;
     }
 
-    public static List<int> GetItemBuffType(Item item)
+    public static List<int> GetItemBuffTypes(Item item)
     {
         if (ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type)) return [];
 
@@ -137,7 +137,7 @@ public class ApplyBuffItem : GlobalItem
         if (IsBuffTileItem(item, out _) || item.type is ItemID.HoneyBucket or ItemID.GardenGnome ||
             (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
         {
-            var buffTypes = GetItemBuffType(item);
+            var buffTypes = GetItemBuffTypes(item);
             if (buffTypes.Count != 1)
             {
                 if (buffTypes.Count is 0) return;
@@ -207,7 +207,7 @@ public class ApplyBuffItem : GlobalItem
         if (IsBuffTileItem(item, out _) || item.type is ItemID.HoneyBucket ||
             (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
         {
-            var buffTypes = GetItemBuffType(item);
+            var buffTypes = GetItemBuffTypes(item);
 
             if (buffTypes.Count != 1)
                 return base.PreDrawTooltip(item, lines, ref x, ref y);

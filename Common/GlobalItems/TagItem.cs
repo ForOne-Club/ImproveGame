@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.IndependentModules.InfiniteBuff;
+using ImproveGame.Modules.InfiniteBuff;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
 using System.Collections.ObjectModel;

@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.IndependentModules.InfiniteBuff;
+﻿namespace ImproveGame.Modules.InfiniteBuff;
 
 public class BattlerSpawnRateGlobalNPC : GlobalNPC
 {

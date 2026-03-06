@@ -2,7 +2,7 @@
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Core;
-using ImproveGame.IndependentModules.InfiniteBuff.UserInterface;
+using ImproveGame.Modules.InfiniteBuff.UserInterface;
 using ImproveGame.UI;
 using ImproveGame.UI.AutoTrash;
 using ImproveGame.UI.ExtremeStorage;

@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.IndependentModules.InfiniteBuff;
+﻿namespace ImproveGame.Modules.InfiniteBuff;
 
 /// <summary>
 /// 无限 BUFF 帮助类

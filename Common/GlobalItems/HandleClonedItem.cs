@@ -1,5 +1,5 @@
 ﻿using ImproveGame.Content.Functions;
-using ImproveGame.IndependentModules.InfiniteBuff;
+using ImproveGame.Modules.InfiniteBuff;
 
 namespace ImproveGame.Common.GlobalItems;
 

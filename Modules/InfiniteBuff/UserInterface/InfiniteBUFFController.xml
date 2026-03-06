@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- Class 填写对应类名 -->
-<Body Class="ImproveGame.IndependentModules.InfiniteBuff.UserInterface.InfiniteBUFFController"
+<Body Class="ImproveGame.Modules.InfiniteBuff.UserInterface.InfiniteBUFFController"
 	Enabled="false" EnableBlur="true" BorderColor="#00000000" BackgroundColor="#00000000"
 	Gap="0" BorderRadius="8" FitWidth="true" FitHeight="true" Left="50#" Top="50#"
 	CrossAlignment="Stretch">

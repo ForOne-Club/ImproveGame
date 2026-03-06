@@ -1,4 +1,4 @@
-﻿using ImproveGame.IndependentModules.InfiniteBuff;
+﻿using ImproveGame.Modules.InfiniteBuff;
 using System.Runtime.InteropServices;
 
 namespace ImproveGame.Packets.Items;

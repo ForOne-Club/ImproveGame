@@ -1,7 +1,7 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.IndependentModules.InfiniteBuff;
-using ImproveGame.IndependentModules.InfiniteBuff.UserInterface;
+using ImproveGame.Modules.InfiniteBuff;
+using ImproveGame.Modules.InfiniteBuff.UserInterface;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using SilkyUIFramework;

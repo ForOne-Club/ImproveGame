@@ -1,6 +1,6 @@
 ﻿using Terraria.ModLoader.IO;
 
-namespace ImproveGame.IndependentModules.InfiniteBuff;
+namespace ImproveGame.Modules.InfiniteBuff;
 
 /// <summary>
 /// Buff 键集合（兼容原版 ID 与 Mod 全名两种键）。

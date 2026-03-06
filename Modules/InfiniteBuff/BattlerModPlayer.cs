@@ -1,7 +1,7 @@
 ﻿using SilkyUIFramework;
 using Terraria.ModLoader.IO;
 
-namespace ImproveGame.IndependentModules.InfiniteBuff;
+namespace ImproveGame.Modules.InfiniteBuff;
 
 /// <summary>
 /// 保存并判定“刷怪倍率控制”所需的玩家侧状态。

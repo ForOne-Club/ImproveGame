@@ -1,6 +1,6 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
-using ImproveGame.IndependentModules.InfiniteBuff;
+using ImproveGame.Modules.InfiniteBuff;
 using ImproveGame.UI.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;

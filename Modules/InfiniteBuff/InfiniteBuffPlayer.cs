@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.GlobalItems;
-using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Components;
 using ImproveGame.Content.Items.ItemContainer;
@@ -9,7 +8,7 @@ using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
 
-namespace ImproveGame.IndependentModules.InfiniteBuff;
+namespace ImproveGame.Modules.InfiniteBuff;
 
 /// <summary>
 /// 无限 Buff 的玩家侧核心系统。
@@ -22,11 +21,7 @@ namespace ImproveGame.IndependentModules.InfiniteBuff;
 public class InfiniteBuffPlayer : ModPlayer
 {
     private readonly TickTimer _rebuild;
-
-    public InfiniteBuffPlayer()
-    {
-        _rebuild = new TickTimer(1d, RebuildAvailableItems);
-    }
+    public InfiniteBuffPlayer() => _rebuild = new TickTimer(1d, RebuildAvailableItems);
 
     /// <summary>
     /// 无限 Buff 黑名单：记录“本可无限但被用户禁用”的 Buff。
@@ -74,8 +69,6 @@ public class InfiniteBuffPlayer : ModPlayer
     /// </remarks>
     private static BuffKeySet ClearBuffBan { get; } = new();
 
-    #region 杂项
-
     /// <summary>
     /// 注册 AddBuff Hook，用于拦截黑名单 Buff 的添加。
     /// </summary>
@@ -93,15 +86,11 @@ public class InfiniteBuffPlayer : ModPlayer
         }
 
         // 黑名单 buff 不允许添加
-        if (infinitePlayer.Blacklist.ContainsByType(type) &&
-            !ClearBuffBan.ContainsByType(type)) return;
+        if (infinitePlayer.Blacklist.ContainsByType(type) && !ClearBuffBan.ContainsByType(type)) return;
 
         orig.Invoke(player, type, timeToAdd, quiet, foodHack);
     }
 
-    /// <summary>
-    /// 玩家进世界时立即建立一次可用物品缓存。
-    /// </summary>
     public override void OnEnterWorld() => RebuildAvailableItems();
 
     /// <summary>
@@ -112,8 +101,6 @@ public class InfiniteBuffPlayer : ModPlayer
         luck += LuckPotionBoost;
         LuckPotionBoost = 0;
     }
-
-    #endregion
 
     /// <summary>
     /// 本地玩家每帧预处理：清理黑名单 Buff。
@@ -224,7 +211,7 @@ public class InfiniteBuffPlayer : ModPlayer
             if (item.createTile is TileID.GardenGnome)
                 UniqueBoostFlags.HasGardenGnome = true;
 
-            ApplyBuffItem.GetItemBuffType(item).ForEach(buffType => buffTypes.Add(buffType));
+            ApplyBuffItem.GetItemBuffTypes(item).ForEach(buffType => buffTypes.Add(buffType));
 
             // 幸运药水取更高档位，统一在 ModifyLuck 中结算。
             infinitePlayer.LuckPotionBoost = item.type switch
@@ -398,7 +385,7 @@ public class InfiniteBuffPlayer : ModPlayer
     private static void CollectAvailableItemsFromItem(Item item, List<Item> availableItems, ref bool rpActivated)
     {
         // 常规可提供 Buff 的物品（含花园侏儒）。
-        if (ApplyBuffItem.GetItemBuffType(item).Count > 0 || item.createTile is TileID.GardenGnome)
+        if (ApplyBuffItem.GetItemBuffTypes(item).Count > 0 || item.createTile is TileID.GardenGnome)
         {
             availableItems.Add(item);
         }

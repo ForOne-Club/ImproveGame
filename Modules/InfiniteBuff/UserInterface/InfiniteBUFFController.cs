@@ -5,7 +5,7 @@ using SilkyUIFramework.Elements;
 using SilkyUIFramework.Extensions;
 using Terraria.ModLoader.UI;
 
-namespace ImproveGame.IndependentModules.InfiniteBuff.UserInterface;
+namespace ImproveGame.Modules.InfiniteBuff.UserInterface;
 
 /// <summary>
 /// 无限增益控制器 UI，负责：

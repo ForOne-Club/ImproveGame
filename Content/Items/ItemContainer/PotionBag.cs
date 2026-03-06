@@ -2,7 +2,7 @@
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.IndependentModules.InfiniteBuff;
+using ImproveGame.Modules.InfiniteBuff;
 using ImproveGame.UI.ItemContainer;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
