@@ -498,7 +498,7 @@ public static class ItemExtensions
         return lines.Select(line => line.Text);
     }
 
-    public static bool IsAvailableRedPotionExtension(this Item item)
+    public static bool CanActivateRedPotionExtension(this Item item)
     {
         bool isFtw = Config.RedPotionEverywhere || Main.getGoodWorld;
         return item.type is ItemID.RedPotion && Config.InfiniteRedPotion && isFtw &&
@@ -549,29 +549,29 @@ public static class ItemExtensions
             switch (item.type)
             {
                 case 5324:
-                    {
-                        Texture2D value10 = TextureAssets.Extra[257].Value;
-                        Rectangle rectangle5 = value10.Frame(3, 1, 2);
-                        Main.spriteBatch.Draw(value10, center + vector3 + new Vector2(16f) * itemScale, rectangle5,
-                            lightColor, 0f, rectangle5.Size() / 2f, 1f, SpriteEffects.None, 0f);
-                        break;
-                    }
+                {
+                    Texture2D value10 = TextureAssets.Extra[257].Value;
+                    Rectangle rectangle5 = value10.Frame(3, 1, 2);
+                    Main.spriteBatch.Draw(value10, center + vector3 + new Vector2(16f) * itemScale, rectangle5,
+                        lightColor, 0f, rectangle5.Size() / 2f, 1f, SpriteEffects.None, 0f);
+                    break;
+                }
                 case 5329:
-                    {
-                        Texture2D value9 = TextureAssets.Extra[257].Value;
-                        Rectangle rectangle4 = value9.Frame(3, 1, 1);
-                        Main.spriteBatch.Draw(value9, center + vector3 + new Vector2(16f) * itemScale, rectangle4,
-                            lightColor, 0f, rectangle4.Size() / 2f, 1f, SpriteEffects.None, 0f);
-                        break;
-                    }
+                {
+                    Texture2D value9 = TextureAssets.Extra[257].Value;
+                    Rectangle rectangle4 = value9.Frame(3, 1, 1);
+                    Main.spriteBatch.Draw(value9, center + vector3 + new Vector2(16f) * itemScale, rectangle4,
+                        lightColor, 0f, rectangle4.Size() / 2f, 1f, SpriteEffects.None, 0f);
+                    break;
+                }
                 case 5330:
-                    {
-                        Texture2D value8 = TextureAssets.Extra[257].Value;
-                        Rectangle rectangle3 = value8.Frame(3);
-                        Main.spriteBatch.Draw(value8, center + vector3 + new Vector2(16f) * itemScale, rectangle3,
-                            lightColor, 0f, rectangle3.Size() / 2f, 1f, SpriteEffects.None, 0f);
-                        break;
-                    }
+                {
+                    Texture2D value8 = TextureAssets.Extra[257].Value;
+                    Rectangle rectangle3 = value8.Frame(3);
+                    Main.spriteBatch.Draw(value8, center + vector3 + new Vector2(16f) * itemScale, rectangle3,
+                        lightColor, 0f, rectangle3.Size() / 2f, 1f, SpriteEffects.None, 0f);
+                    break;
+                }
             }
         }
     }

@@ -19,7 +19,7 @@ public class ApplyBuffItem : GlobalItem
         if (Main.gameMenu) return false;
 
         if (InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infBuffPlayer) &&
-            infBuffPlayer.AvailableItemsHash.Contains(item))
+            infBuffPlayer.AvailableItems.Contains(item))
             return true;
 
         // 非增益药剂
@@ -28,7 +28,7 @@ public class ApplyBuffItem : GlobalItem
             return true;
 
         // 红药水扩展
-        if (item.IsAvailableRedPotionExtension())
+        if (item.CanActivateRedPotionExtension())
             return true;
 
         // 随身增益站：旗帜
@@ -95,7 +95,7 @@ public class ApplyBuffItem : GlobalItem
             }
         }
 
-        return new List<int>();
+        return [];
     }
 
     public static bool IsBuffTileItem(Item item, out List<int> buffTypes)
@@ -183,7 +183,7 @@ public class ApplyBuffItem : GlobalItem
         }
 
         // 红药水扩展
-        if (item.IsAvailableRedPotionExtension())
+        if (item.CanActivateRedPotionExtension())
         {
             tooltips.Add(new TooltipLine(Mod, "TagDetailed.RedPotion", GetText("Tips.TagDetailed.RedPotion"))
             {
@@ -198,7 +198,7 @@ public class ApplyBuffItem : GlobalItem
         if (!IsItemAvailable(item))
             return base.PreDrawTooltip(item, lines, ref x, ref y);
 
-        if ((item.IsAvailableRedPotionExtension() || item.type is ItemID.GardenGnome) && ItemSlot.ShiftInUse)
+        if ((item.CanActivateRedPotionExtension() || item.type is ItemID.GardenGnome) && ItemSlot.ShiftInUse)
         {
             TagItem.DrawTagTooltips(lines, TagItem.GenerateDetailedTags(Mod, lines), x, y);
             return base.PreDrawTooltip(item, lines, ref x, ref y);

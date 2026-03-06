@@ -74,13 +74,13 @@ public class HideBuffSystem : ModSystem
         HideGlobalBuff.HidedBuffCountThisFrame = 0;
 
         // 1) 本地玩家可用物品
-        SetupHideFlags(InfiniteBuffPlayer.Get(Main.LocalPlayer).AvailableItems);
+        SetupHideFlags(InfiniteBuffPlayer.Get(Main.LocalPlayer).PlayerAvailableItems);
 
         // 2) 队友可共享物品（开启时）
         if (Config.ShareInfBuffs)
         {
-            CheckTeamPlayers(Main.LocalPlayer.whoAmI,
-                (player) => SetupHideFlags(InfiniteBuffPlayer.Get(player).AvailableItems));
+            InfiniteBuffPlayer.ForEachTeammate(Main.LocalPlayer.whoAmI,
+                (player) => SetupHideFlags(InfiniteBuffPlayer.Get(player).PlayerAvailableItems));
         }
 
         // 3) 储存系统可用物品

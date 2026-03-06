@@ -127,7 +127,7 @@ public class SUIBuffButton : UIElementGroup
 
         // 黑名单
         if (!InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer)) return;
-        infinitePlayer.Blacklist.Toggle(BuffType);
+        infinitePlayer.Blacklist.ToggleByType(BuffType);
     }
 
     public override void OnRightMouseDown(SilkyUIFramework.UIMouseEvent evt)
@@ -136,6 +136,6 @@ public class SUIBuffButton : UIElementGroup
 
         // 收藏
         if (!InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer)) return;
-        infinitePlayer.Favorites.Toggle(BuffType);
+        infinitePlayer.Favorites.ToggleByType(BuffType);
     }
 }

@@ -45,13 +45,13 @@ public class InfiniteBuffItemPacket : NetModule
     {
         if (!InfiniteBuffPlayer.TryGet(Main.player[_whoAmI], out var mp)) return;
 
-        mp.AvailableItems.Clear();
-        mp.AvailableItems.AddRange(_items);
+        mp.PlayerAvailableItems.Clear();
+        mp.PlayerAvailableItems.AddRange(_items);
 
         // 服务器转发到其他客户端
         if (Main.netMode is NetmodeID.Server)
         {
-            GetInstance(mp.Player.whoAmI, mp.AvailableItems).Send(-1, _whoAmI, false);
+            GetInstance(mp.Player.whoAmI, mp.PlayerAvailableItems).Send(-1, _whoAmI, false);
         }
     }
 }

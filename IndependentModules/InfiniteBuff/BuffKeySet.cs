@@ -17,6 +17,14 @@ public class BuffKeySet
     /// </summary>
     public HashSet<string> FullNames { get; } = [];
 
+    public void CopyFrom(BuffKeySet other)
+    {
+        Ids.Clear();
+        FullNames.Clear();
+        Ids.UnionWith(other.Ids);
+        FullNames.UnionWith(other.FullNames);
+    }
+
     /// <summary>
     /// 从存档读取键集合。
     /// </summary>
@@ -59,7 +67,7 @@ public class BuffKeySet
     /// 切换某个 Buff 对应键的存在状态（存在则移除，不存在则添加）。
     /// </summary>
     /// <param name="buffType">目标 BuffType。</param>
-    public void Toggle(int buffType)
+    public void ToggleByType(int buffType)
     {
         if (BuffLoader.GetBuff(buffType) is { } modBuff)
         {

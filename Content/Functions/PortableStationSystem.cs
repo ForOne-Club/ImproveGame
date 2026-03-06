@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
+using ImproveGame.IndependentModules.InfiniteBuff;
 using ImproveGame.UI.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
@@ -29,7 +30,7 @@ internal class PortableStationSystem : ModSystem
 
         CheckZoneItemFromPlayer(Main.LocalPlayer);
         if (Config.ShareCraftingStation)
-            CheckTeamPlayers(Main.myPlayer, CheckZoneItemFromPlayer);
+            InfiniteBuffPlayer.ForEachTeammate(Main.myPlayer, CheckZoneItemFromPlayer);
 
         orig.Invoke(canDelayCheck);
 
@@ -136,7 +137,7 @@ internal class PortableStationSystem : ModSystem
             // 从玩家身上获取所有的无尽Buff物品
             CheckStationsFromPlayer(player);
             if (Config.ShareCraftingStation)
-                CheckTeamPlayers(player.whoAmI, CheckStationsFromPlayer);
+                InfiniteBuffPlayer.ForEachTeammate(player.whoAmI, CheckStationsFromPlayer);
 
             // 从TE中获取所有的无尽Buff物品
             foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)

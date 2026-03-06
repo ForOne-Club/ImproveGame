@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Helpers;
+using ImproveGame.IndependentModules.InfiniteBuff;
 using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;
 
@@ -39,7 +40,7 @@ public class BannerPatches : ModSystem
 
             TryAddBuff(Main.LocalPlayer);
             if (Config.ShareInfBuffs)
-                CheckTeamPlayers(Main.myPlayer, TryAddBuff);
+                InfiniteBuffPlayer.ForEachTeammate(Main.myPlayer, TryAddBuff);
 
             // 从TE中获取所有的无尽Buff物品
             foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)
