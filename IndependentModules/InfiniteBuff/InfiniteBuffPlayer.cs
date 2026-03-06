@@ -78,11 +78,6 @@ public class InfiniteBuffPlayer : ModPlayer
     #region 杂项
 
     /// <summary>
-    /// 尝试获取玩家对应的 <see cref="InfiniteBuffPlayer"/>。
-    /// </summary>
-    public static bool TryGet(Player player, out InfiniteBuffPlayer infinitePlayer) => player.TryGetModPlayer(out infinitePlayer);
-
-    /// <summary>
     /// 注册 AddBuff Hook，用于拦截黑名单 Buff 的添加。
     /// </summary>
     public override void Load() => On_Player.AddBuff += BanBuffs;

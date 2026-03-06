@@ -18,7 +18,7 @@ public class ApplyBuffItem : GlobalItem
     {
         if (Main.gameMenu) return false;
 
-        if (InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infBuffPlayer) &&
+        if (Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infBuffPlayer) &&
             infBuffPlayer.AvailableItems.Contains(item))
             return true;
 

@@ -260,7 +260,7 @@ public class BuffTypesState
         }
 
         // 若无法读取玩家的收藏配置，则仅保留基础筛选结果。
-        if (InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer))
+        if (Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer))
         {
             // 收藏 Buff 置顶，其他 Buff 维持相对顺序。
             var types = infinitePlayer.Favorites.GetBuffTypes();

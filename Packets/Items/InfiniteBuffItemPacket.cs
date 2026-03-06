@@ -43,7 +43,7 @@ public class InfiniteBuffItemPacket : NetModule
 
     public override void Receive()
     {
-        if (!InfiniteBuffPlayer.TryGet(Main.player[_whoAmI], out var mp)) return;
+        if (!Main.player[_whoAmI].TryGetModPlayer<InfiniteBuffPlayer>(out var mp)) return;
 
         mp.PlayerAvailableItems.Clear();
         mp.PlayerAvailableItems.AddRange(_items);

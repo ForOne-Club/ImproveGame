@@ -76,7 +76,7 @@ public class SUIBuffButton : UIElementGroup
     {
         get
         {
-            if (!InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer)) return false;
+            if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return false;
             return infinitePlayer.Blacklist.ContainsByType(BuffType);
         }
     }
@@ -85,7 +85,7 @@ public class SUIBuffButton : UIElementGroup
     {
         get
         {
-            if (!InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer)) return false;
+            if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return false;
             return infinitePlayer.Favorites.ContainsByType(BuffType);
         }
     }
@@ -126,7 +126,7 @@ public class SUIBuffButton : UIElementGroup
         base.OnLeftMouseDown(evt);
 
         // 黑名单
-        if (!InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer)) return;
+        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return;
         infinitePlayer.Blacklist.ToggleByType(BuffType);
     }
 
@@ -135,7 +135,7 @@ public class SUIBuffButton : UIElementGroup
         base.OnRightMouseDown(evt);
 
         // 收藏
-        if (!InfiniteBuffPlayer.TryGet(Main.LocalPlayer, out var infinitePlayer)) return;
+        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return;
         infinitePlayer.Favorites.ToggleByType(BuffType);
     }
 }
