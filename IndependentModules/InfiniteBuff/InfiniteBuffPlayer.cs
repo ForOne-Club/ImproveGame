@@ -2,7 +2,6 @@
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Components;
-using ImproveGame.Content.Functions.PortableBuff;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
 using ImproveGame.Packets.Items;
@@ -64,7 +63,7 @@ public class InfiniteBuffPlayer : ModPlayer
     /// <remarks>
     /// 在 <see cref="ModifyLuck"/> 消费后会清零。
     /// </remarks>
-    public float LuckPotionBoost;
+    public float LuckPotionBoost { get; set; }
 
     /// <summary>
     /// 临时放行集合：本帧允许保留的黑名单 Buff。
@@ -82,31 +81,20 @@ public class InfiniteBuffPlayer : ModPlayer
     /// </summary>
     public override void Load() => On_Player.AddBuff += BanBuffs;
 
-    private void BanBuffs(On_Player.orig_AddBuff orig,
+    private static void BanBuffs(On_Player.orig_AddBuff orig,
         Player player, int type, int timeToAdd, bool quiet, bool foodHack)
     {
-        if (Main.myPlayer == player.whoAmI && DataPlayer.TryGet(player, out var dataPlayer))
+        // 非本地
+        if (Main.myPlayer != player.whoAmI ||
+            !player.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer))
         {
-            foreach (int buffType in Blacklist.Ids)
-            {
-                if (type == buffType && !ClearBuffBan.Ids.Contains(buffType))
-                {
-                    return;
-                }
-            }
-
-            foreach (string buffFullName in Blacklist.FullNames)
-            {
-                string[] names = buffFullName.Split('/');
-                string modName = names[0];
-                string buffName = names[1];
-                if (!ClearBuffBan.FullNames.Contains(buffFullName) &&
-                    ModContent.TryFind<ModBuff>(modName, buffName, out var modBuff) && type == modBuff.Type)
-                {
-                    return;
-                }
-            }
+            orig.Invoke(player, type, timeToAdd, quiet, foodHack);
+            return;
         }
+
+        // 黑名单 buff 不允许添加
+        if (infinitePlayer.Blacklist.ContainsByType(type) &&
+            !ClearBuffBan.ContainsByType(type)) return;
 
         orig.Invoke(player, type, timeToAdd, quiet, foodHack);
     }
@@ -114,10 +102,7 @@ public class InfiniteBuffPlayer : ModPlayer
     /// <summary>
     /// 玩家进世界时立即建立一次可用物品缓存。
     /// </summary>
-    public override void OnEnterWorld()
-    {
-        RebuildAvailableItems();
-    }
+    public override void OnEnterWorld() => RebuildAvailableItems();
 
     /// <summary>
     /// 注入本帧累计的幸运值加成（来自无限幸运药水），并重置缓存值。
@@ -131,6 +116,29 @@ public class InfiniteBuffPlayer : ModPlayer
     #endregion
 
     /// <summary>
+    /// 本地玩家每帧预处理：清理黑名单 Buff。
+    /// </summary>
+    public override void PreUpdateBuffs()
+    {
+        var player = Player;
+        if (player.whoAmI != Main.myPlayer) return;
+
+        // 清理
+        var maxQuantity = Player.MaxBuffs;
+        for (int i = 0; i < maxQuantity; i++)
+        {
+            var typeInSlot = player.buffType[i];
+            if (typeInSlot <= 0) continue;
+
+            if (Blacklist.ContainsByType(typeInSlot) &&
+                !ClearBuffBan.ContainsByType(typeInSlot))
+            {
+                player.DelBuff(i--);
+            }
+        }
+    }
+
+    /// <summary>
     /// 无限 Buff 的每帧执行入口。
     /// </summary>
     /// <remarks>
@@ -139,12 +147,13 @@ public class InfiniteBuffPlayer : ModPlayer
     /// </remarks>
     public override void PostUpdateBuffs()
     {
-
         var player = Player;
         if (player.whoAmI != Main.myPlayer || Main.netMode == NetmodeID.Server) return;
 
-        // 先重置“随身增益站”状态，再由本帧命中的 Buff 回填。
-        ApplyBuffStation.Reset();
+        _rebuild?.Tick(Main.gameTimeCache);
+
+        // 先重置 “随身增益站” 状态，再由本帧命中的 Buff 回填。
+        UniqueBoostFlags.ResetState();
 
         // 复制黑名单到“临时放行集合”；后续会按当前可用 Buff 逐步移除。
         ClearBuffBan.CopyFrom(Blacklist);
@@ -164,10 +173,8 @@ public class InfiniteBuffPlayer : ModPlayer
         // 3) 应用储存系统来源（TE）。
         ApplyAvailableBuffs(ExStorageAvailableItems);
 
-        _rebuild?.Tick(Main.gameTimeCache);
+        #region 清除冲突的 Buff (已废弃)
 
-        // #region 清除冲突的Buff
-        //
         // List<int> clearBuffTypes = [];
         // foreach ((int buffType, List<int> value) in ModIntegrationsSystem.ModdedBuffConflicts)
         // {
@@ -177,7 +184,6 @@ public class InfiniteBuffPlayer : ModPlayer
         //
         // clearBuffTypes.ForEach(Main.LocalPlayer.ClearBuff);
         //
-        // #endregion
 
         // 清除冲突的Buff
         // foreach (int buffType in ModIntegrationsSystem.ModdedBuffConflicts.Keys)
@@ -191,7 +197,7 @@ public class InfiniteBuffPlayer : ModPlayer
         //     }
         // }
 
-        // 定时重建可用物品缓存，避免每帧全量扫描背包/储存。
+        #endregion
     }
 
     /// <summary>
@@ -209,12 +215,14 @@ public class InfiniteBuffPlayer : ModPlayer
     {
         if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return;
 
-        HashSet<int> buffTypes = [];
+        // 可用的 BuffType
+        var buffTypes = new HashSet<int>();
+
         foreach (Item item in items)
         {
             // 侏儒不通过 AddBuff 生效，这里单独打标记。
             if (item.createTile is TileID.GardenGnome)
-                ApplyBuffStation.HasGardenGnome = true;
+                UniqueBoostFlags.HasGardenGnome = true;
 
             ApplyBuffItem.GetItemBuffType(item).ForEach(buffType => buffTypes.Add(buffType));
 
@@ -227,33 +235,29 @@ public class InfiniteBuffPlayer : ModPlayer
             };
         }
 
-        HashSet<string> hashModBuffs =
+        // 可用 Buff 的模组 Buff 名称。
+        var hashModBuffs = new HashSet<string>(
         [
             ..buffTypes
-                    .Select(BuffLoader.GetBuff)
-                    .Where(modBuff => modBuff != null)
-                    .Select(modBuff => $"{modBuff.Mod.Name}/{modBuff.Name}")
-        ];
+                .Select(BuffLoader.GetBuff)
+                .Where(modBuff => modBuff != null)
+                .Select(modBuff => $"{modBuff.Mod.Name}/{modBuff.Name}")
+        ]);
 
-        ClearBuffBan.FullNames.RemoveWhere(hashModBuffs.Contains);
+        ClearBuffBan.FullNames.ExceptWith(hashModBuffs);
 
-        #region 清除冲突 Buff
-
-        HashSet<int> clearBuffTypes = [];
-        foreach ((int buffType, List<int> value) in ModIntegrationsSystem.ModdedBuffConflicts)
+        // 收集清扫集合。
+        var cleaningMapping = ModIntegrationsSystem.ModdedBuffConflicts;
+        var cleaningCollection = new HashSet<int>();
+        foreach (var type in buffTypes.Where(type => !infinitePlayer.Blacklist.ContainsByType(type)))
         {
-            if (!buffTypes.Contains(buffType) || InBlacklist(buffType) || clearBuffTypes.Contains(buffType)) continue;
-            value.ForEach(i => clearBuffTypes.Add(i));
+            if (!cleaningMapping.TryGetValue(type, out var list)) continue;
+            cleaningCollection.UnionWith(list);
         }
 
-        // 不直接从候选集中删除，统一在应用阶段跳过，并在最后做二次清理。
-
-        #endregion
-
-        foreach (var buffType in buffTypes.Where(type => !InBlacklist(type)))
+        foreach (var buffType in buffTypes.Where(type => !infinitePlayer.Blacklist.ContainsByType(type)))
         {
-            if (clearBuffTypes.Contains(buffType))
-                continue;
+            if (cleaningCollection.Contains(buffType)) continue;
 
             switch (buffType)
             {
@@ -265,37 +269,13 @@ public class InfiniteBuffPlayer : ModPlayer
             }
 
             // 未开启“随身增益站”时不回填场景标记。
-            if (!Config.NoPlace_BUFFTile)
-                continue;
+            if (!Config.NoPlace_BUFFTile) continue;
 
-            switch (buffType)
-            {
-                case BuffID.Campfire:
-                    ApplyBuffStation.HasCampfire = true;
-                    break;
-                case BuffID.HeartLamp:
-                    ApplyBuffStation.HasHeartLantern = true;
-                    break;
-                case BuffID.StarInBottle:
-                    ApplyBuffStation.HasStarInBottle = true;
-                    break;
-                case BuffID.Sunflower:
-                    ApplyBuffStation.HasSunflower = true;
-                    break;
-                case BuffID.WaterCandle:
-                    ApplyBuffStation.HasWaterCandle = true;
-                    break;
-                case BuffID.PeaceCandle:
-                    ApplyBuffStation.HasPeaceCandle = true;
-                    break;
-                case BuffID.ShadowCandle:
-                    ApplyBuffStation.HasShadowCandle = true;
-                    break;
-            }
+            UniqueBoostFlags.UpdateStateByType(buffType);
         }
 
         // 二次清理：移除可能在本帧前半段已存在的冲突 Buff。
-        foreach (var buffType in clearBuffTypes)
+        foreach (var buffType in cleaningCollection)
         {
             Main.LocalPlayer.ClearBuff(buffType);
         }
@@ -305,18 +285,8 @@ public class InfiniteBuffPlayer : ModPlayer
     }
 
     /// <summary>
-    /// 遍历并对与指定玩家同队的其他玩家执行 <paramref name="teammateAction"/>。
+    /// 遍历队友，然后执行某个事件
     /// </summary>
-    /// <param name="whoAmI">自身玩家在 <see cref="Main.player"/> 中的索引。</param>
-    /// <param name="teammateAction">对每个满足条件的队友执行的操作。</param>
-    /// <param name="requireAlive">
-    /// 是否跳过死亡或幽灵状态的玩家；为 <c>true</c> 时会忽略 <see cref="Player.DeadOrGhost"/> 的玩家。
-    /// </param>
-    /// <remarks>
-    /// 仅在多人模式下生效；单人模式会直接返回。
-    /// 仅处理：已激活、与自身同队且队伍不为 0 的玩家（不包含自身）。
-    /// 当 <c>Config.ShareRange != -1</c> 时，还会要求队友与自身的距离（以格为单位）不超过该范围。
-    /// </remarks>
     public static void ForEachTeammate(int whoAmI, Action<Player> teammateAction, bool requireAlive = true)
     {
         var players = Main.player.AsSpan();
@@ -468,29 +438,6 @@ public class InfiniteBuffPlayer : ModPlayer
     }
 
     /// <summary>
-    /// 本地玩家每帧预处理：清理黑名单 Buff。
-    /// </summary>
-    public override void PreUpdateBuffs()
-    {
-        var player = Player;
-        if (player.whoAmI != Main.myPlayer) return;
-
-        // 清理
-        var maxQuantity = Player.MaxBuffs;
-        for (int i = 0; i < maxQuantity; i++)
-        {
-            var typeInSlot = player.buffType[i];
-            if (typeInSlot <= 0) continue;
-
-            if (Blacklist.ContainsByType(typeInSlot) &&
-                !ClearBuffBan.ContainsByType(typeInSlot))
-            {
-                player.DelBuff(i--);
-            }
-        }
-    }
-
-    /// <summary>
     /// 判断某个 Buff 在当前本地配置下是否允许作为 “无限 Buff” 生效。
     /// </summary>
     /// <param name="buffType">要检查的 BuffType。</param>
@@ -500,10 +447,9 @@ public class InfiniteBuffPlayer : ModPlayer
     /// </remarks>
     public static bool InBlacklist(int buffType)
     {
-        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer))
-            throw new Exception($"{nameof(InfiniteBuffPlayer)} is not found.");
-
-        return infinitePlayer.Blacklist.ContainsByType(buffType);
+        return !Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)
+            ? throw new Exception($"{nameof(InfiniteBuffPlayer)} is not found.")
+            : infinitePlayer.Blacklist.ContainsByType(buffType);
     }
 
     /// <summary>

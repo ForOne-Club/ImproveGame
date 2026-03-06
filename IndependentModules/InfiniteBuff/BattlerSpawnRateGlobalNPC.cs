@@ -1,6 +1,4 @@
-﻿using ImproveGame.Content.Functions.PortableBuff;
-
-namespace ImproveGame.IndependentModules.InfiniteBuff;
+﻿namespace ImproveGame.IndependentModules.InfiniteBuff;
 
 public class BattlerSpawnRateGlobalNPC : GlobalNPC
 {

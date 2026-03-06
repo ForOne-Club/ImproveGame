@@ -1,5 +1,4 @@
-﻿using ImproveGame.Content.Functions.PortableBuff;
-using SilkyUIFramework;
+﻿using SilkyUIFramework;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.IndependentModules.InfiniteBuff;

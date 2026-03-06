@@ -1,9 +1,8 @@
 ﻿using ImproveGame.Common.GlobalBuffs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Content.Items.ItemContainer;
-using ImproveGame.IndependentModules.InfiniteBuff;
 
-namespace ImproveGame.Content.Functions.PortableBuff;
+namespace ImproveGame.IndependentModules.InfiniteBuff;
 
 /// <summary>
 /// 生成并维护“本帧需要隐藏哪些 Buff”的查询表。
@@ -115,7 +114,8 @@ public class HideBuffSystem : ModSystem
                 // 药水袋内部药水达到阈值后，同样视为“可隐藏 Buff”。
                 if (!item.IsAir && item.ModItem is PotionBag potionBag && potionBag.ItemContainer.Count > 0)
                 {
-                    foreach (var potion in from p in potionBag.ItemContainer where p.stack >= Config.NoConsume_PotionRequirement select p)
+                    foreach (var potion in from p in potionBag.ItemContainer
+                             where p.stack >= Config.NoConsume_PotionRequirement select p)
                         _hideFlags[potion.buffType] = true;
                 }
             });
