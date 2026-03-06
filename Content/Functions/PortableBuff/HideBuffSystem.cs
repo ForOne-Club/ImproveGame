@@ -67,6 +67,9 @@ public class HideBuffSystem : ModSystem
     /// </remarks>
     public override void PostDrawInterface(SpriteBatch spriteBatch)
     {
+        var player = Main.LocalPlayer;
+        if (!player.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return;
+
         // 清空上一帧残留。
         Array.Clear(_hideFlags, 0, _hideFlags.Length);
 
@@ -74,17 +77,17 @@ public class HideBuffSystem : ModSystem
         HideGlobalBuff.HidedBuffCountThisFrame = 0;
 
         // 1) 本地玩家可用物品
-        SetupHideFlags(InfiniteBuffPlayer.Get(Main.LocalPlayer).PlayerAvailableItems);
+        SetupHideFlags(infinitePlayer.PlayerAvailableItems);
 
         // 2) 队友可共享物品（开启时）
         if (Config.ShareInfBuffs)
         {
-            InfiniteBuffPlayer.ForEachTeammate(Main.LocalPlayer.whoAmI,
-                (player) => SetupHideFlags(InfiniteBuffPlayer.Get(player).PlayerAvailableItems));
+            InfiniteBuffPlayer.ForEachTeammate(player.whoAmI,
+                (player) => SetupHideFlags(player.GetModPlayer<InfiniteBuffPlayer>().PlayerAvailableItems));
         }
 
         // 3) 储存系统可用物品
-        SetupHideFlags(InfiniteBuffPlayer.Get(Main.LocalPlayer).ExStorageAvailableItems);
+        SetupHideFlags(infinitePlayer.ExStorageAvailableItems);
     }
 
     /// <summary>

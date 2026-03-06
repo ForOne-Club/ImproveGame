@@ -78,11 +78,6 @@ public class InfiniteBuffPlayer : ModPlayer
     #region 杂项
 
     /// <summary>
-    /// 获取玩家对应的 <see cref="InfiniteBuffPlayer"/>。
-    /// </summary>
-    public static InfiniteBuffPlayer Get(Player player) => player.GetModPlayer<InfiniteBuffPlayer>();
-
-    /// <summary>
     /// 尝试获取玩家对应的 <see cref="InfiniteBuffPlayer"/>。
     /// </summary>
     public static bool TryGet(Player player, out InfiniteBuffPlayer infinitePlayer) => player.TryGetModPlayer(out infinitePlayer);
@@ -90,25 +85,10 @@ public class InfiniteBuffPlayer : ModPlayer
     /// <summary>
     /// 注册 AddBuff Hook，用于拦截黑名单 Buff 的添加。
     /// </summary>
-    public override void Load()
-    {
-        On_Player.AddBuff += BanBuffs;
-    }
+    public override void Load() => On_Player.AddBuff += BanBuffs;
 
-    /// <summary>
-    /// AddBuff Hook：拦截黑名单 Buff 的添加请求。
-    /// </summary>
-    /// <param name="orig">原始 AddBuff 调用。</param>
-    /// <param name="player">目标玩家。</param>
-    /// <param name="type">待添加 BuffType。</param>
-    /// <param name="timeToAdd">Buff 时长。</param>
-    /// <param name="quiet">是否静默。</param>
-    /// <param name="foodHack">原版食物相关参数。</param>
-    /// <remarks>
-    /// 若命中黑名单且不在 <see cref="ClearBuffBan"/> 中，直接吞掉本次 AddBuff。
-    /// </remarks>
-    private void BanBuffs(On_Player.orig_AddBuff orig, Player player, int type, int timeToAdd, bool quiet,
-        bool foodHack)
+    private void BanBuffs(On_Player.orig_AddBuff orig,
+        Player player, int type, int timeToAdd, bool quiet, bool foodHack)
     {
         if (Main.myPlayer == player.whoAmI && DataPlayer.TryGet(player, out var dataPlayer))
         {
@@ -182,7 +162,7 @@ public class InfiniteBuffPlayer : ModPlayer
             // 2) 应用同队共享来源（含距离规则，见 CheckTeamPlayers）。
             ForEachTeammate(player.whoAmI, (teammate) =>
             {
-                ApplyAvailableBuffs(Get(teammate).PlayerAvailableItems);
+                ApplyAvailableBuffs(teammate.GetModPlayer<InfiniteBuffPlayer>().PlayerAvailableItems);
             }, requireAlive: false);
         }
 
@@ -232,7 +212,7 @@ public class InfiniteBuffPlayer : ModPlayer
     /// </remarks>
     private static void ApplyAvailableBuffs(IEnumerable<Item> items)
     {
-        var infBuffPlayer = Get(Main.LocalPlayer);
+        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return;
 
         HashSet<int> buffTypes = [];
         foreach (Item item in items)
@@ -244,11 +224,11 @@ public class InfiniteBuffPlayer : ModPlayer
             ApplyBuffItem.GetItemBuffType(item).ForEach(buffType => buffTypes.Add(buffType));
 
             // 幸运药水取更高档位，统一在 ModifyLuck 中结算。
-            infBuffPlayer.LuckPotionBoost = item.type switch
+            infinitePlayer.LuckPotionBoost = item.type switch
             {
-                ItemID.LuckPotion => Math.Max(infBuffPlayer.LuckPotionBoost, 0.1f),
-                ItemID.LuckPotionGreater => Math.Max(infBuffPlayer.LuckPotionBoost, 0.2f),
-                _ => infBuffPlayer.LuckPotionBoost
+                ItemID.LuckPotion => Math.Max(infinitePlayer.LuckPotionBoost, 0.1f),
+                ItemID.LuckPotionGreater => Math.Max(infinitePlayer.LuckPotionBoost, 0.2f),
+                _ => infinitePlayer.LuckPotionBoost
             };
         }
 
