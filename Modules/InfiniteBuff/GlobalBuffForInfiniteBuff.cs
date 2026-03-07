@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Modules.InfiniteBuff;
 using ImproveGame.Modules.InfiniteBuff.UserInterface;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
@@ -8,7 +7,7 @@ using SilkyUIFramework;
 using Terraria.DataStructures;
 using Terraria.UI.Gamepad;
 
-namespace ImproveGame.Common.GlobalBuffs;
+namespace ImproveGame.Modules.InfiniteBuff;
 
 public class HideGlobalBuff : GlobalBuff
 {
@@ -40,6 +39,8 @@ public class HideGlobalBuff : GlobalBuff
 	        }
     }*/
 
+    private static int _index = -1;
+
     // 这里num28是拿来定位的，和索引n分开了，虽然不知道为啥，很显然更容易改了
     private void TweakDrawInventoryBuffs(ILContext il)
     {
@@ -54,7 +55,7 @@ public class HideGlobalBuff : GlobalBuff
             //IL_0B60: ldfld     int32[] Terraria.Player::buffType
             //IL_0B65: ldloc.s   n
             // 先获取到索引
-            int index = -1;
+            //int index = -1;
             if (!c.TryGotoNext(MoveType.After,
                                i => i.MatchLdsfld(typeof(Main), nameof(Main.player)),
                                i => i.MatchLdsfld(typeof(Main), nameof(Main.myPlayer)),
@@ -69,7 +70,7 @@ public class HideGlobalBuff : GlobalBuff
             // 开一个EmitDelegate来获取索引
             c.EmitDelegate<Func<int, int>>(returnValue =>
             {
-                index = returnValue;
+                _index = returnValue;
                 return returnValue;
             });
             #endregion
@@ -87,7 +88,11 @@ public class HideGlobalBuff : GlobalBuff
             c.Index++;
             c.EmitDelegate<Func<int, int>>(x =>
             {
-                if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.HideFlags[Main.LocalPlayer.buffType[index]])
+                var player = Main.LocalPlayer;
+                if (!player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return x;
+                var type = player.buffType[_index];
+
+                if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && infinitePlayer.ActivationFlags[type])
                 {
                     // x设置成-100000
                     return -100000;
@@ -107,7 +112,10 @@ public class HideGlobalBuff : GlobalBuff
             c.Index++;
             c.EmitDelegate<Func<int, int>>(y =>
             {
-                if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.HideFlags[Main.LocalPlayer.buffType[index]])
+                var player = Main.LocalPlayer;
+                if (!player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return y;
+
+                if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && infinitePlayer.ActivationFlags[Main.LocalPlayer.buffType[_index]])
                 {
                     // y设置成-100000
                     return -100000;
@@ -140,9 +148,12 @@ public class HideGlobalBuff : GlobalBuff
 
             c.EmitDelegate<Func<int, int>>(add =>
             {
-                if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.HideFlags[Main.LocalPlayer.buffType[index]])
+                var player = Main.LocalPlayer;
+                if (!player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return add;
+
+                if (!UseRegularMethod_Inventory && UIConfigs.Instance.HideNoConsumeBuffs && infinitePlayer.ActivationFlags[Main.LocalPlayer.buffType[_index]])
                 {
-                    // 不让他+1，让他+0
+                    // 不让他 +1，让他 +0
                     return 0;
                 }
                 return add;
@@ -194,7 +205,10 @@ public class HideGlobalBuff : GlobalBuff
 
             static int ModifyDrawingIndex(int i, int buffType, bool addCount = false)
             {
-                if (!UseRegularMethod_NoInventory && UIConfigs.Instance.HideNoConsumeBuffs && HideBuffSystem.HideFlags[buffType])
+                var player = Main.LocalPlayer;
+                if (!player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return i - HidedBuffCountThisFrame;
+
+                if (!UseRegularMethod_NoInventory && UIConfigs.Instance.HideNoConsumeBuffs && infinitePlayer.ActivationFlags[buffType])
                 {
                     // 作为-10000传入
                     if (addCount)
@@ -244,7 +258,7 @@ public class HideGlobalBuff : GlobalBuff
     /// <summary>
     /// 本帧被隐藏的Buff数量，便于后面的Buff重设绘制坐标
     /// </summary>
-    internal static int HidedBuffCountThisFrame;
+    internal static int HidedBuffCountThisFrame { get; set; }
 
     public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare)
     {
@@ -265,7 +279,8 @@ public class HideGlobalBuff : GlobalBuff
 
     public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams)
     {
-        if (HideBuffSystem.HideFlags[type])
+        var player = Main.LocalPlayer;
+        if (player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer) && infinitePlayer.ActivationFlags[type])
         {
             // 不管咋样都不显示文本
             drawParams.TextPosition = new Vector2(-114514f);
@@ -280,6 +295,7 @@ public class HideGlobalBuff : GlobalBuff
                 return false;
             }
         }
+
         if (HidedBuffCountThisFrame > 0)
         {
             int i = buffIndex - HidedBuffCountThisFrame;

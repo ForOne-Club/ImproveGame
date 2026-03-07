@@ -40,7 +40,7 @@ public class BannerPatches : ModSystem
 
             TryAddBuff(Main.LocalPlayer);
             if (Config.ShareInfBuffs)
-                InfiniteBuffPlayer.ForEachTeammate(Main.myPlayer, TryAddBuff);
+                PlayerHelper.ForEachTeammate(Main.myPlayer, TryAddBuff);
 
             // 从TE中获取所有的无尽Buff物品
             foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)

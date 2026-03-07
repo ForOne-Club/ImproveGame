@@ -332,12 +332,20 @@ SuperVault: {
 
 MoveChest.Heavy: 箱子的重量使你行动有些受限
 
+BuffController: {
+	LeftClick: {
+		Enable: "[c/CC88AA:<left>]以启用该无限增益"
+		Disable: "[c/CC88AA:<left>]以禁用该无限增益"
+	}
+
+	RightClick: {
+		Enable: "[c/CC88AA:<right>]以收藏置顶该buff"
+		Disable: "[c/CC88AA:<right>]以取消收藏"
+	}
+}
+
 BuffTracker: {
 	Title: 增益追踪器
-	LeftClickDisable: "[c/CC88AA:<left>]以禁用该无限增益"
-	LeftClickEnable: "[c/CC88AA:<left>]以启用该无限增益"
-	RightClickDisable: "[c/CC88AA:<right>]以取消收藏"
-	RightClickEnable: "[c/CC88AA:<right>]以收藏置顶该buff"
 	NoInfBuff: 当前没有可用的无限增益
 	NoInfBuffAlt: 请在模组配置中打开无限续杯功能
 	NPCSpawnRatePanel: 敌人生成速度面板

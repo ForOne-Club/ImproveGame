@@ -341,12 +341,20 @@ SuperVault: {
 
 MoveChest.Heavy: Вес сундука мешает вам в передвижении
 
+BuffController: {
+	LeftClick: {
+		Enable: "[c/CC88AA:<left>], чтобы включить этот бафф"
+		Disable: "[c/CC88AA:<left>], чтобы отключить этот бафф"
+	}
+
+	RightClick: {
+		Enable: "[c/CC88AA:<right>], чтобы пометить как избранное"
+		Disable: "[c/CC88AA:<right>], чтобы убрать из избранного"
+	}
+}
+
 BuffTracker: {
 	Title: Трекер юаффов
-	LeftClickDisable: "[c/CC88AA:<left>], чтобы отключить этот бафф"
-	LeftClickEnable: "[c/CC88AA:<left>], чтобы включить этот бафф"
-	RightClickDisable: "[c/CC88AA:<right>], чтобы убрать из избранного"
-	RightClickEnable: "[c/CC88AA:<right>], чтобы пометить как избранное"
 	NoInfBuff: На данный момент нет бесконечных баффов
 	NoInfBuffAlt: Включите «Бесконечные зелья» в конфигурации мода
 	NPCSpawnRatePanel: Панель управления скоростью появления мобов

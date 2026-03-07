@@ -6,6 +6,12 @@ RecipeSearchUI.Tips:
 	Вы можете выключить его в конфигурации «Quality of Terraria»
 	'''
 
+InfiniteBUFFController: {
+	// DisplayName: BUFF Controller
+	// Placeholder: Please enter the name
+	// EnemySpawnRate: Enemy spawn rate
+}
+
 LiquidWandUI: {
 	Name: Функции жидкостей
 	Absorb: Впитывать

@@ -7,8 +7,9 @@ public class BattlerSpawnRateGlobalNPC : GlobalNPC
         // SlimeRain 史莱姆雨
         On_NPC.SlimeRainSpawns += (orig, plr) =>
         {
-            if (!Main.player[plr].TryGetModPlayer<BattlerModPlayer>(out var battler) ||
-                !battler.MeetsActivationConditions(HideBuffSystem.HideFlags))
+            if (!Main.player[plr].TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler) ||
+                !Main.player[plr].TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer) ||
+                !infinitePlayer.MeetsBattlerCombination())
             {
                 orig.Invoke(plr);
                 return;
@@ -32,8 +33,9 @@ public class BattlerSpawnRateGlobalNPC : GlobalNPC
 
     public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
     {
-        if (!player.TryGetModPlayer<BattlerModPlayer>(out var battler)) return;
-        if (!battler.MeetsActivationConditions(HideBuffSystem.HideFlags)) return;
+        if (!player.TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler)) return;
+        if (!player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
+        if (!infinitePlayer.MeetsBattlerCombination()) return;
 
         if (battler.SpawnRateSliderValue == 0f)
         {

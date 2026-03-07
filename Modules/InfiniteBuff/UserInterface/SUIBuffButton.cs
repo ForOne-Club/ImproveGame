@@ -76,7 +76,7 @@ public class SUIBuffButton : UIElementGroup
     {
         get
         {
-            if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return false;
+            if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return false;
             return infinitePlayer.Blacklist.ContainsByType(BuffType);
         }
     }
@@ -85,7 +85,7 @@ public class SUIBuffButton : UIElementGroup
     {
         get
         {
-            if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return false;
+            if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return false;
             return infinitePlayer.Favorites.ContainsByType(BuffType);
         }
     }
@@ -113,8 +113,12 @@ public class SUIBuffButton : UIElementGroup
     /// </summary>
     private StringBuilder GetTooltipText()
     {
-        var name = Lang.GetBuffName(BuffType);
-        var tooltip = Main.GetBuffTooltip(Main.LocalPlayer, BuffType);
+        var type = BuffType;
+        var name = Lang.GetBuffName(type);
+        var tooltip = Main.GetBuffTooltip(Main.LocalPlayer, type);
+
+        var rare = Main.meleeBuff[type] ? -10 : 0;
+        BuffLoader.ModifyBuffText(type, ref name, ref tooltip, ref rare);
 
         return new StringBuilder($"{name}\n{tooltip}\n")
              .AppendLine(InfiniteBuffHelper.GetLeftClickString(Blacklisted))
@@ -126,7 +130,7 @@ public class SUIBuffButton : UIElementGroup
         base.OnLeftMouseDown(evt);
 
         // 黑名单
-        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return;
+        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
         infinitePlayer.Blacklist.ToggleByType(BuffType);
     }
 
@@ -135,7 +139,7 @@ public class SUIBuffButton : UIElementGroup
         base.OnRightMouseDown(evt);
 
         // 收藏
-        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer)) return;
+        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
         infinitePlayer.Favorites.ToggleByType(BuffType);
     }
 }

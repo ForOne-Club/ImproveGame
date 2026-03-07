@@ -38,7 +38,7 @@ public class TagItem : GlobalItem
     /// </summary>
     public static void ModifyBuffTooltips(Mod mod, int itemType, int buffType, List<TooltipLine> tooltips)
     {
-        bool buffEnabled = !InfiniteBuffPlayer.InBlacklist(buffType);
+        bool buffEnabled = !InfiniteBuffModPlayer.InBlacklist(buffType);
 
         if (itemType is ItemID.GardenGnome)
         {

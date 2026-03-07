@@ -30,7 +30,7 @@ internal class PortableStationSystem : ModSystem
 
         CheckZoneItemFromPlayer(Main.LocalPlayer);
         if (Config.ShareCraftingStation)
-            InfiniteBuffPlayer.ForEachTeammate(Main.myPlayer, CheckZoneItemFromPlayer);
+            PlayerHelper.ForEachTeammate(Main.myPlayer, CheckZoneItemFromPlayer);
 
         orig.Invoke(canDelayCheck);
 
@@ -137,7 +137,7 @@ internal class PortableStationSystem : ModSystem
             // 从玩家身上获取所有的无尽Buff物品
             CheckStationsFromPlayer(player);
             if (Config.ShareCraftingStation)
-                InfiniteBuffPlayer.ForEachTeammate(player.whoAmI, CheckStationsFromPlayer);
+                PlayerHelper.ForEachTeammate(player.whoAmI, CheckStationsFromPlayer);
 
             // 从TE中获取所有的无尽Buff物品
             foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)

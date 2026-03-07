@@ -17,14 +17,6 @@ public class BuffKeySet
     /// </summary>
     public HashSet<string> FullNames { get; } = [];
 
-    public void CopyFrom(BuffKeySet other)
-    {
-        Ids.Clear();
-        FullNames.Clear();
-        Ids.UnionWith(other.Ids);
-        FullNames.UnionWith(other.FullNames);
-    }
-
     /// <summary>
     /// 从存档读取键集合。
     /// </summary>

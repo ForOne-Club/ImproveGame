@@ -67,7 +67,7 @@ public partial class InfiniteBUFFController : BaseBody
         SliderTitle.Text = GetTextValue("EnemySpawnRate");
 
         // 同步滑块默认值，并监听玩家配置变化
-        if (Main.LocalPlayer.TryGetModPlayer<BattlerModPlayer>(out var battler))
+        if (Main.LocalPlayer.TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler))
         {
             Slider.Value = battler.SpawnRateSliderValue;
             battler.SpawnRateSliderValueChanged += (sender, value) => Slider.Value = value;
@@ -77,17 +77,17 @@ public partial class InfiniteBUFFController : BaseBody
         Slider.Drag += (_, value) =>
         {
             SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true);
-            Main.NewText($"{value}");
             Console.WriteLine(value);
         };
 
         // 生成 0~1 的刻度标签 (含首尾)
-        RefreshScaleMarks(5);
+        RefreshScaleMarks(3);
     }
 
     public override bool ContainsPoint(Vector2 point)
     {
-        if (SliderContainer is null) return base.ContainsPoint(point);
+        if (SliderContainer is null)
+            return base.ContainsPoint(point);
 
         return SliderContainer.Bounds.Contains(point) || base.ContainsPoint(point);
     }
@@ -98,7 +98,7 @@ public partial class InfiniteBUFFController : BaseBody
     /// <param name="quantity">刻度数量，建议大于等于 2。</param>
     private void RefreshScaleMarks(int quantity)
     {
-        if (!Main.LocalPlayer.TryGetModPlayer<BattlerModPlayer>(out var battler)) return;
+        if (!Main.LocalPlayer.TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler)) return;
 
         MarkerContainer.RemoveAllChildren();
 
@@ -132,8 +132,8 @@ public partial class InfiniteBUFFController : BaseBody
         }
 
         // 没有激活组合时不显示控制器
-        if (!Main.LocalPlayer.TryGetModPlayer<BattlerModPlayer>(out var battler)) return;
-        SliderContainer.Invalid = !battler.MeetsActivationConditions(HideBuffSystem.HideFlags);
+        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
+        SliderContainer.Invalid = !infinitePlayer.MeetsBattlerCombination();
     }
 
     private readonly BuffTypesState _typesState = new();
@@ -223,20 +223,7 @@ public class BuffTypesState
     /// <summary>
     /// 读取并清除脏标记。
     /// </summary>
-    /// <returns>
-    /// 若调用前状态为脏则返回 <see langword="true"/>，并将 <see cref="IsDirty"/> 重置为 <see langword="false"/>；
-    /// 否则返回 <see langword="false"/>。
-    /// </returns>
-    public bool ConsumeDirty()
-    {
-        if (IsDirty)
-        {
-            IsDirty = false;
-            return true;
-        }
-
-        return false;
-    }
+    public bool ConsumeDirty() => IsDirty && !(IsDirty = false);
 
     /// <summary>
     /// 根据筛选关键字重建 Buff 类型列表，并在结果变化时设置脏标记。
@@ -247,10 +234,14 @@ public class BuffTypesState
         // 先重建基础列表：所有已启用“可无限化”的 Buff。
         _types.Clear();
 
-        for (int i = 0; i < HideBuffSystem.HideFlags.Length; i++)
+        var player = Main.LocalPlayer;
+        if (!player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
+        var flags = infinitePlayer.ActivationFlags.AsSpan();
+
+        for (int i = 0; i < flags.Length; i++)
         {
             // 仅保留已启用隐藏（可无限）效果的 Buff
-            if (!HideBuffSystem.HideFlags[i]) continue;
+            if (!flags[i]) continue;
 
             if (!string.IsNullOrWhiteSpace(filterString) &&
                 !Lang.GetBuffName(i).Contains(filterString)) continue;
@@ -258,15 +249,11 @@ public class BuffTypesState
             _types.Add(i);
         }
 
-        // 若无法读取玩家的收藏配置，则仅保留基础筛选结果。
-        if (Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infinitePlayer))
-        {
-            // 收藏 Buff 置顶，其他 Buff 维持相对顺序。
-            var types = infinitePlayer.Favorites.GetBuffTypes();
-            var array = _types.OrderBy(x => !types.Contains(x)).ToArray();
-            _types.Clear();
-            _types.AddRange(array);
-        }
+        // 收藏 Buff 置顶，其他 Buff 维持相对顺序。
+        var types = infinitePlayer.Favorites.GetBuffTypes();
+        var array = _types.OrderBy(x => !types.Contains(x)).ToArray();
+        _types.Clear();
+        _types.AddRange(array);
 
         // 与上次快照一致则无需刷新 UI。
         if (_typesCache.SequenceEqual(_types)) return;

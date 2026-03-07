@@ -10,8 +10,8 @@ public class HandleClonedItem : GlobalItem
 {
     public override GlobalItem Clone(Item from, Item to)
     {
-        if (Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infBuffPlayer) && infBuffPlayer.AvailableItems.Contains(from))
-            infBuffPlayer.AvailableItems.Add(to);
+        if (Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infBuffPlayer) && infBuffPlayer.BuffItems.Contains(from))
+            infBuffPlayer.BuffItems.Add(to);
         if (BannerPatches.AvailableBanners.Contains(from))
             BannerPatches.AvailableBanners.Add(to);
         return base.Clone(from, to);

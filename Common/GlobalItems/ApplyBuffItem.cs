@@ -18,8 +18,8 @@ public class ApplyBuffItem : GlobalItem
     {
         if (Main.gameMenu) return false;
 
-        if (Main.LocalPlayer.TryGetModPlayer<InfiniteBuffPlayer>(out var infBuffPlayer) &&
-            infBuffPlayer.AvailableItems.Contains(item))
+        if (Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infBuffPlayer) &&
+            infBuffPlayer.BuffItems.Contains(item))
             return true;
 
         // 非增益药剂
