@@ -46,6 +46,6 @@ public class BattlerSpawnRateGlobalNPC : GlobalNPC
 
         var rate = InfiniteBuffHelper.RemapSliderToSpawnRate(battler.SpawnRateSliderValue);
         spawnRate = (int)(spawnRate / rate);
-        maxSpawns = (int)(maxSpawns * rate);
+        maxSpawns = (int)(maxSpawns * rate + rate);
     }
 }

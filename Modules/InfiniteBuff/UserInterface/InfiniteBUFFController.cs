@@ -76,8 +76,9 @@ public partial class InfiniteBUFFController : BaseBody
         // 拖动滑块时同步刷新刷怪倍率
         Slider.Drag += (_, value) =>
         {
-            SpawnRateSlider.Get(Main.myPlayer, value).Send();
-            Console.WriteLine(value);
+            if (!Main.LocalPlayer.TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler)) return;
+            battler.SpawnRateSliderValue = value;
+            SpawnRateSlider.Get(Main.myPlayer, battler.SpawnRateSliderValue).Send();
         };
 
         // 生成 0~1 的刻度标签 (含首尾)
