@@ -5,27 +5,24 @@ namespace ImproveGame.Packets;
 [AutoSync]
 public class SpawnRateSlider : NetModule
 {
-    private byte whoAmI;
-    private float sliderValue;
+    private int _whoAmI;
+    private float _sliderValue;
 
     public static SpawnRateSlider Get(int whoAmI, float sliderValue)
     {
         var module = NetModuleLoader.Get<SpawnRateSlider>();
-        module.sliderValue = sliderValue;
-        module.whoAmI = (byte)whoAmI;
+        module._sliderValue = sliderValue;
+        module._whoAmI = whoAmI;
         return module;
     }
 
     public override void Receive()
     {
-        if (!Main.player[whoAmI].TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler))
+        if (!Main.player[_whoAmI].TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler))
             return;
 
-        battler.SpawnRateSliderValue = sliderValue;
+        battler.SpawnRateSliderValue = _sliderValue;
 
-        if (Main.netMode is NetmodeID.Server)
-        {
-            Send(-1, whoAmI, false);
-        }
+        if (Main.netMode is NetmodeID.Server) Send(-1, _whoAmI, false);
     }
 }

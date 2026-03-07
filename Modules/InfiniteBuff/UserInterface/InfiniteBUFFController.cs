@@ -76,7 +76,7 @@ public partial class InfiniteBUFFController : BaseBody
         // 拖动滑块时同步刷新刷怪倍率
         Slider.Drag += (_, value) =>
         {
-            SpawnRateSlider.Get(Main.myPlayer, value).Send(runLocally: true);
+            SpawnRateSlider.Get(Main.myPlayer, value).Send();
             Console.WriteLine(value);
         };
 
@@ -112,7 +112,11 @@ public partial class InfiniteBUFFController : BaseBody
                 Progress = progress
             }.Join(MarkerContainer);
 
-            item.LeftMouseDown += (_, _) => battler.SpawnRateSliderValue = progress;
+            item.LeftMouseDown += (_, _) =>
+            {
+                battler.SpawnRateSliderValue = progress;
+                SpawnRateSlider.Get(Main.myPlayer, battler.SpawnRateSliderValue).Send();
+            };
         }
     }
 

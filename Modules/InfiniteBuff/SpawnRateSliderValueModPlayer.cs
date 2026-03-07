@@ -1,4 +1,5 @@
-﻿using SilkyUIFramework;
+﻿using ImproveGame.Packets;
+using SilkyUIFramework;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Modules.InfiniteBuff;
@@ -26,6 +27,11 @@ public class SpawnRateSliderValueModPlayer : ModPlayer
     }
     private void OnSpawnRateSliderValueChanged(float sliderValue) =>
         SpawnRateSliderValueChanged?.Invoke(this, sliderValue);
+
+    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+    {
+        SpawnRateSlider.Get(Player.whoAmI, SpawnRateSliderValue).Send();
+    }
 
     /// <summary>
     /// 从角色存档读取滑块值。

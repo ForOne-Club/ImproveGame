@@ -3,7 +3,7 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Components;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Packets.Items;
+using ImproveGame.Packets;
 using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
@@ -143,12 +143,10 @@ public class InfiniteBuffModPlayer : ModPlayer
         {
             PlayerBuffItemsCache.Clear();
             PlayerBuffItemsCache.AddRange(PlayerBuffItems);
-            var list = new List<ushort>();
+            var list = new List<short>();
             for (int i = 0; i < _activationFlags.Length; i++)
-            {
-                if (_activationFlags[i]) { list.Add((ushort)i); }
-            }
-            BuffDataPacket.GetInstance(Player.whoAmI, PlayerBuffItems, list).Send();
+                if (_activationFlags[i]) list.Add((short)i);
+            InfiniteBuffPacket.GetInstance(Player.whoAmI, PlayerBuffItems, list).Send();
         }
     }
 
@@ -399,27 +397,10 @@ public class InfiniteBuffModPlayer : ModPlayer
     /// </summary>
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
-        var list = new List<ushort>();
+        var list = new List<short>();
         for (int i = 0; i < _activationFlags.Length; i++)
-        {
-            if (_activationFlags[i]) { list.Add((ushort)i); }
-        }
-        BuffDataPacket.GetInstance(Player.whoAmI, PlayerBuffItems, list).Send(toWho, fromWho);
-    }
-
-    /// <summary>
-    /// 判断某个 Buff 在当前本地配置下是否允许作为 “无限 Buff” 生效。
-    /// </summary>
-    /// <param name="buffType">要检查的 BuffType。</param>
-    /// <returns>在本地玩家的黑名单中时返回 <see langword="true"/>。</returns>
-    /// <remarks>
-    /// 由于多人共享选项逻辑，这里统一以 <see cref="Main.LocalPlayer"/> 的配置为准。
-    /// </remarks>
-    public static bool InBlacklist(int buffType)
-    {
-        return !Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)
-            ? throw new Exception($"{nameof(InfiniteBuffModPlayer)} is not found.")
-            : infinitePlayer.Blacklist.ContainsByType(buffType);
+            if (_activationFlags[i]) list.Add((short)i);
+        InfiniteBuffPacket.GetInstance(Player.whoAmI, PlayerBuffItems, list).Send(toWho, fromWho);
     }
 
     /// <summary>
