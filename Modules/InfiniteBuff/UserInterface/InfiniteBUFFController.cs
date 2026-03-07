@@ -18,6 +18,8 @@ public partial class InfiniteBUFFController : BaseBody
 {
     public static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
 
+    private SpawnRateSliderViewModel _spawnRateVm;
+
     /// <summary>
     /// Buff 列表滚动容器的内容区域。
     /// </summary>
@@ -27,6 +29,14 @@ public partial class InfiniteBUFFController : BaseBody
     /// 需要参与背景模糊的主要子视图。
     /// </summary>
     public override IEnumerable<UIView> BlurElements => [MainContainer, SliderContainer];
+
+    public override bool ContainsPoint(Vector2 point)
+    {
+        if (SliderContainer is null)
+            return base.ContainsPoint(point);
+
+        return SliderContainer.Bounds.Contains(point) || base.ContainsPoint(point);
+    }
 
     protected override void OnInitialize()
     {
@@ -66,64 +76,32 @@ public partial class InfiniteBUFFController : BaseBody
 
         SliderTitle.Text = GetTextValue("EnemySpawnRate");
 
-        // 同步滑块默认值，并监听玩家配置变化
-        if (Main.LocalPlayer.TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler))
-        {
-            Slider.Value = battler.SpawnRateSliderValue;
-            battler.SpawnRateSliderValueChanged += (sender, value) => Slider.Value = value;
-        }
+        _spawnRateVm = new SpawnRateSliderViewModel();
+        _spawnRateVm.SliderValueChanged += (_, value) => Slider.Value = value;
 
-        // 拖动滑块时同步刷新刷怪倍率
-        Slider.Drag += (_, value) =>
-        {
-            if (!Main.LocalPlayer.TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler)) return;
-            battler.SpawnRateSliderValue = value;
-            SpawnRateSlider.Get(Main.myPlayer, battler.SpawnRateSliderValue).Send();
-        };
+        Slider.Value = _spawnRateVm.SliderValue;
+        // 拖动滑块时只上报给 VM
+        Slider.Drag += (_, value) => _spawnRateVm?.SetSliderValue(value);
 
-        // 生成 0~1 的刻度标签 (含首尾)
-        RefreshScaleMarks(3);
+        UpdateScaleMarks(3);
     }
 
-    public override bool ContainsPoint(Vector2 point)
+    private void UpdateScaleMarks(int quantity)
     {
-        if (SliderContainer is null)
-            return base.ContainsPoint(point);
-
-        return SliderContainer.Bounds.Contains(point) || base.ContainsPoint(point);
-    }
-
-    /// <summary>
-    /// 根据给定数量重建滑块下方刻度标签。
-    /// </summary>
-    /// <param name="quantity">刻度数量，建议大于等于 2。</param>
-    private void RefreshScaleMarks(int quantity)
-    {
-        if (!Main.LocalPlayer.TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler)) return;
-
+        if (_spawnRateVm is null) return;
         MarkerContainer.RemoveAllChildren();
-
-        var half = quantity / 2.0f;
-
         for (int i = 0; i < quantity; i++)
         {
-            var progress = i / (quantity - 1f);
-            var item = new SUIProgressMarker()
+            new UIScaleMarks()
             {
-                Progress = progress
-            }.Join(MarkerContainer);
-
-            item.LeftMouseDown += (_, _) =>
-            {
-                battler.SpawnRateSliderValue = progress;
-                SpawnRateSlider.Get(Main.myPlayer, battler.SpawnRateSliderValue).Send();
-            };
+                Progress = i / (quantity - 1f)
+            }.Join(MarkerContainer).LeftMouseDown += ClickScaleMarks;
         }
     }
 
-    /// <summary>
-    /// 每帧更新：显示滑块提示并刷新 Buff 列表展示。
-    /// </summary>
+    private void ClickScaleMarks(UIView view, SilkyUIFramework.UIMouseEvent _)
+        => _spawnRateVm.SetSliderValue((view as UIScaleMarks).Progress);
+
     protected override void UpdateStatus(GameTime gameTime)
     {
         base.UpdateStatus(gameTime);
@@ -131,9 +109,10 @@ public partial class InfiniteBUFFController : BaseBody
         UpdateBuffsContainer();
 
         // 拖动条悬浮提示
-        if (Slider.Thumb.IsMouseHovering || Slider.Thumb.LeftMousePressed)
+        if (_spawnRateVm != null &&
+            (Slider.Thumb.IsMouseHovering || Slider.Thumb.LeftMousePressed))
         {
-            UICommon.TooltipMouseText($"{InfiniteBuffHelper.RemapSliderToSpawnRate(Slider.Value):0.##}");
+            UICommon.TooltipMouseText(_spawnRateVm.SpawnRateText);
         }
 
         // 没有激活组合时不显示控制器
@@ -168,9 +147,9 @@ public partial class InfiniteBUFFController : BaseBody
 /// <summary>
 /// 标记
 /// </summary>
-public class SUIProgressMarker : UITextView
+public class UIScaleMarks : UITextView
 {
-    public SUIProgressMarker()
+    public UIScaleMarks()
     {
         TextScale = 0.8f;
         TextAlign = new(0.5f);

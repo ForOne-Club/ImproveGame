@@ -420,12 +420,12 @@ public class ImproveConfigs : ModConfig
 
     [Slider]
     [DefaultValue(50)]
-    [Range(1, 200)]
+    [Range(4, 100)]
     public int SpawnRateMaxValue;
 
     [Slider]
     [DefaultValue(0f)]
-    [Range(0f, 10f)]
+    [Range(0f, 2f)]
     [Increment(0.1f)]
     [CustomModConfigItem(typeof(RoundFloatElement))]
     public float SpawnRateMinValue;

@@ -37,14 +37,15 @@ public class BattlerSpawnRateGlobalNPC : GlobalNPC
         if (!player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
         if (!infinitePlayer.MeetsBattlerCombination()) return;
 
-        if (battler.SpawnRateSliderValue == 0f)
+        var rate = InfiniteBuffHelper.RemapSliderToSpawnRate(battler.SpawnRateSliderValue);
+
+        if (rate == 0f)
         {
             spawnRate += 114514;
             maxSpawns = 0;
             return;
         }
 
-        var rate = InfiniteBuffHelper.RemapSliderToSpawnRate(battler.SpawnRateSliderValue);
         spawnRate = (int)(spawnRate / rate);
         maxSpawns = (int)(maxSpawns * rate + rate);
     }
