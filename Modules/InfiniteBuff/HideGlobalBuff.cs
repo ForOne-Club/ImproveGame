@@ -47,6 +47,28 @@ class HideGlobalBuff : GlobalBuff
             i => i.MatchLdloc(3)
             )) return;
 
+        //for (int i = 0; i < Player.maxBuffs; i++)
+        //{
+        //    if (player[myPlayer].buffType[i] > 0)
+        //    {
+        //        _ = player[myPlayer].buffType[i];
+        //        int x = 32 + i * 38; << 这里的 i
+        //        int num3 = 76;
+        //        int num4 = i; << 这里的 i，同时根据是否是无限 Buff 决定是否 ++
+        //        while (num4 >= num2)
+        //        {
+        //            num4 -= num2;
+        //            x = 32 + num4 * 38;
+        //            num3 += 50;
+        //        }
+        //        num = DrawBuffIcon(num, i, x, num3);
+        //    }
+        //    else
+        //    {
+        //        buffAlpha[i] = 0.4f;
+        //    }
+        //}
+
         c.EmitDelegate<Func<int, int>>((i) => _count);
 
         // int num4 = i;
@@ -67,6 +89,7 @@ class HideGlobalBuff : GlobalBuff
         });
     }
 
+
     private void IL_Main_DrawInventory(ILContext il)
     {
         var c = new ILCursor(il);
@@ -83,6 +106,23 @@ class HideGlobalBuff : GlobalBuff
             i => i.MatchAdd(),
             i => i.MatchStloc(55)
             )) return;
+
+        //for (int n = 0; n < Player.maxBuffs; n++)
+        //{
+        //    if (player[myPlayer].buffType[n] != 0)
+        //    {
+        //        int num33 = num29 / num30;
+        //        int num34 = num29 % num30;
+        //        Point point = new Point(num24 + num33 * -num32, num25 + num34 * num32);
+        //        num28 = DrawBuffIcon(num28, n, point.X, point.Y);
+        //        UILinkPointNavigator.SetPosition(9000 + num29, new Vector2(point.X + 30, point.Y + 30));
+        //        num29++; << 这里
+        //        if (buffAlpha[n] < 0.65f)
+        //        {
+        //            buffAlpha[n] = 0.65f;
+        //        }
+        //    }
+        //}
 
         c.EmitLdloc(68);
         c.EmitLdloc(55);
