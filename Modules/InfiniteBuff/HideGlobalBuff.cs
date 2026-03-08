@@ -54,7 +54,7 @@ class HideGlobalBuff : GlobalBuff
         //        _ = player[myPlayer].buffType[i];
         //        int x = 32 + i * 38; << 这里的 i
         //        int num3 = 76;
-        //        int num4 = i; << 这里的 i，同时根据是否是无限 Buff 决定是否 ++
+        //        int num4 = i; << 这里的 i，同时根据是否是无限 Buff 决定是否 count++
         //        while (num4 >= num2)
         //        {
         //            num4 -= num2;
