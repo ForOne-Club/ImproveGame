@@ -11,7 +11,20 @@ namespace ImproveGame.Common.Configs;
 public class UIConfigs : ModConfig
 {
     public static UIConfigs Instance { get; set; }
+    public override void OnLoaded() => Instance = this;
+
     public override ConfigScope Mode => ConfigScope.ClientSide;
+
+    public override void OnChanged()
+    {
+        BlurMakeSystem.EnableBlur = EnableBlur;
+        BlurMakeSystem.SingleBlur = SingleBlur;
+        BlurMakeSystem.BlurZoomMultiplierDenominator = BlurZoomMultiplierDenominator;
+        BlurMakeSystem.BlurIterationCount = BlurIterationCount;
+        BlurMakeSystem.BlurIterationOffsetMultiplier = BlurIterationOffsetMultiplier;
+        BlurMakeSystem.BlurMixingNumber = BlurMixingNumber;
+    }
+
 
     [CustomModConfigItem(typeof(OpenUIConfigElement))]
     public object OpenConfig;
@@ -248,19 +261,4 @@ public class UIConfigs : ModConfig
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     [CustomModConfigItem(typeof(RoundFloatElement))]
     public float MarkEmptyAutofisher;
-
-    public override void OnLoaded()
-    {
-        Instance = this;
-    }
-
-    public override void OnChanged()
-    {
-        BlurMakeSystem.EnableBlur = EnableBlur;
-        BlurMakeSystem.SingleBlur = SingleBlur;
-        BlurMakeSystem.BlurZoomMultiplierDenominator = BlurZoomMultiplierDenominator;
-        BlurMakeSystem.BlurIterationCount = BlurIterationCount;
-        BlurMakeSystem.BlurIterationOffsetMultiplier = BlurIterationOffsetMultiplier;
-        BlurMakeSystem.BlurMixingNumber = BlurMixingNumber;
-    }
 }

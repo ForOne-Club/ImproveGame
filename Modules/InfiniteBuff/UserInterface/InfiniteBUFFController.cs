@@ -1,5 +1,4 @@
-﻿using ImproveGame.Packets;
-using SilkyUIFramework;
+﻿using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
 using SilkyUIFramework.Extensions;
@@ -7,12 +6,6 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface;
 
-/// <summary>
-/// 无限增益控制器 UI，负责：
-/// 1) 展示与筛选可无限化的 Buff；
-/// 2) 维护星标 Buff 集合；
-/// 3) 调整并同步刷怪倍率滑块。
-/// </summary>
 [RegisterUI]
 public partial class InfiniteBUFFController : BaseBody
 {

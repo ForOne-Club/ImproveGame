@@ -157,7 +157,7 @@ public class InfiniteBuffModPlayer : ModPlayer
         Array.Clear(_activationFlags);
 
         var player = Main.LocalPlayer;
-        HideGlobalBuff.HidedBuffCountThisFrame = 0;
+        //HideGlobalBuff.HidedBuffCountThisFrame = 0;
 
         // 1) 本地玩家可用物品
         SetupActivationFlags(BuffItems);

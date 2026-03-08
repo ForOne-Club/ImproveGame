@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace ImproveGame.Components;
+﻿namespace ImproveGame.Components;
 
 public sealed class TickTimer
 {
@@ -15,9 +13,7 @@ public sealed class TickTimer
         IntervalSeconds = intervalSeconds;
         _callback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
-    /// <summary>
-    /// 每帧调用一次；deltaTime 为本帧经过时间（秒）。
-    /// </summary>
+
     public void Tick(GameTime gameTime)
     {
         if ((gameTime.TotalGameTime - _last).TotalSeconds < IntervalSeconds) return;
