@@ -14,6 +14,33 @@ class HideGlobalBuff : GlobalBuff
     //static bool UseRegularMethod_NoInventory = false;
     //static bool UseRegularMethod_Inventory = false;
 
+    public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams)
+    {
+        var player = Main.LocalPlayer;
+        if (player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer) && infinitePlayer.ActivationFlags[type])
+        {
+            if (UIConfigs.Instance.HideNoConsumeBuffs)
+            {
+                // 关掉鼠标悬浮信息
+                drawParams.MouseRectangle = Rectangle.Empty;
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare)
+    {
+        if (TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _)) return;
+
+        if (!SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBUFFController>(out var controller)) return;
+
+        tip += $"\n{GetText($"Tips.BuffTracker{(controller.Enabled ? "Off" : "On")}")}";
+
+        if (!UIConfigs.Instance.HideNoConsumeBuffs) tip += $"\n{GetText("Tips.HideMyBuffs")}";
+    }
+
     // 先用 IL，如果 IL 出错了才在本次加载中启用备用方案
     public override void Load()
     {
@@ -30,10 +57,30 @@ class HideGlobalBuff : GlobalBuff
 
         // 物品栏下方 Buff 绘制的位置
         IL_Main.DrawInterface_Resources_Buffs += IL_Main_DrawInterface_Resources_Buffs;
+
+        // 右键点击 Buff 图标打开控制面板
+        IL_Main.DrawInventory += ClickBuff;
+        IL_Main.DrawInterface_Resources_Buffs += ClickBuff;
+    }
+
+    private static void ClickBuff(ILContext il)
+    {
+        var c = new ILCursor(il);
+        if (!c.TryGotoNext(MoveType.After,
+            i => i.MatchCall(typeof(BuffLoader), "ModifyBuffText")
+            )) return;
+
+        c.EmitDelegate(() =>
+        {
+            if (!Main.mouseLeft || !Main.mouseLeftRelease) return;
+            if (!SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBUFFController>(out var controller)) return;
+
+            controller.Enabled = !controller.Enabled;
+        });
     }
 
     private static int _count;
-    private void IL_Main_DrawInterface_Resources_Buffs(ILContext il)
+    private static void IL_Main_DrawInterface_Resources_Buffs(ILContext il)
     {
         var c = new ILCursor(il);
 
@@ -69,14 +116,14 @@ class HideGlobalBuff : GlobalBuff
         //    }
         //}
 
-        c.EmitDelegate<Func<int, int>>((i) => _count);
+        c.EmitDelegate<Func<int, int>>(static (i) => _count);
 
         // int num4 = i;
         if (!c.TryGotoNext(MoveType.After,
             i => i.MatchLdloc(3)
             )) return;
 
-        c.EmitDelegate<Func<int, int>>((i) =>
+        c.EmitDelegate<Func<int, int>>(static (i) =>
         {
             var player = Main.LocalPlayer;
             if (UIConfigs.Instance.HideNoConsumeBuffs &&
@@ -89,8 +136,7 @@ class HideGlobalBuff : GlobalBuff
         });
     }
 
-
-    private void IL_Main_DrawInventory(ILContext il)
+    private static void IL_Main_DrawInventory(ILContext il)
     {
         var c = new ILCursor(il);
 
@@ -126,7 +172,7 @@ class HideGlobalBuff : GlobalBuff
 
         c.EmitLdloc(68);
         c.EmitLdloc(55);
-        c.EmitDelegate<Func<int, int, int>>((index, count) =>
+        c.EmitDelegate<Func<int, int, int>>(static (index, count) =>
         {
             var player = Main.LocalPlayer;
             var type = player.buffType[index];
@@ -141,7 +187,7 @@ class HideGlobalBuff : GlobalBuff
         c.EmitStloc(55);
     }
 
-    private bool CompatibleWithInfiniteBuff(On_Main.orig_TryGetBuffTime orig, int buffSlotOnPlayer, out int buffTimeValue)
+    private static bool CompatibleWithInfiniteBuff(On_Main.orig_TryGetBuffTime orig, int buffSlotOnPlayer, out int buffTimeValue)
     {
         var player = Main.LocalPlayer;
         if (player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer) &&
@@ -153,37 +199,6 @@ class HideGlobalBuff : GlobalBuff
         }
 
         return orig.Invoke(buffSlotOnPlayer, out buffTimeValue);
-    }
-
-    public override bool PreDraw(SpriteBatch spriteBatch, int type, int buffIndex, ref BuffDrawParams drawParams)
-    {
-        var player = Main.LocalPlayer;
-        if (player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer) && infinitePlayer.ActivationFlags[type])
-        {
-            if (UIConfigs.Instance.HideNoConsumeBuffs)
-            {
-                // 关掉鼠标悬浮信息
-                drawParams.MouseRectangle = Rectangle.Empty;
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public override void ModifyBuffText(int type, ref string buffName, ref string tip, ref int rare)
-    {
-        if (TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _)) return;
-
-        if (!SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBUFFController>(out var controller)) return;
-
-        tip += $"\n{GetText($"Tips.BuffTracker{(controller.Enabled ? "Off" : "On")}")}";
-        if (Main.mouseLeft && Main.mouseLeftRelease)
-        {
-            controller.Enabled = !controller.Enabled;
-        }
-
-        if (!UIConfigs.Instance.HideNoConsumeBuffs) tip += $"\n{GetText("Tips.HideMyBuffs")}";
     }
 
     // 源码片段
