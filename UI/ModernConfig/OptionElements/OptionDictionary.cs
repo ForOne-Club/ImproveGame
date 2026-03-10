@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers;
-using ImproveGame.UIFramework.SUIElements;
+﻿using ImproveGame.UIFramework.SUIElements;
 using Newtonsoft.Json;
 using System.Collections;
 using Terraria.ModLoader.Config;

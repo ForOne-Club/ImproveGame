@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.RenderTargetContents;
-using ImproveGame.Helpers.Extensions;
 using ReLogic.Graphics;
 
 namespace ImproveGame.Helpers.Extensions;

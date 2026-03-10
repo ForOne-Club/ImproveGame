@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.Configs;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework.BaseViews;
 
 namespace ImproveGame.UIFramework.SUIElements;

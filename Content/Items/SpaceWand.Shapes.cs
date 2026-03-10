@@ -1,6 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-
-namespace ImproveGame.Content.Items;
+﻿namespace ImproveGame.Content.Items;
 
 public partial class SpaceWand
 {

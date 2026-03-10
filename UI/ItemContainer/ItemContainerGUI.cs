@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-using ImproveGame.UI.ItemContainer.Elements;
+﻿using ImproveGame.UI.ItemContainer.Elements;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;

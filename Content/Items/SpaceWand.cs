@@ -4,7 +4,6 @@ using ImproveGame.Common.ModSystems;
 using ImproveGame.Common.ModSystems.MarqueeSystem;
 using ImproveGame.Content.Packets;
 using ImproveGame.Core;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.Packets;
 using ImproveGame.UIFramework;
 using Terraria.ModLoader.IO;

@@ -1,7 +1,6 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Content.Packets;
 using ImproveGame.Core;
-using ImproveGame.Helpers.Extensions;
 using System.Collections;
 using System.Threading;
 

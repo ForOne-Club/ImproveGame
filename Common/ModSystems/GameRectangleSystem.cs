@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ItemSearcher;

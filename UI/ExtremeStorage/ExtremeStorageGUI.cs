@@ -1,5 +1,4 @@
 using ImproveGame.Content.Tiles;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.Packets.NetStorager;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;

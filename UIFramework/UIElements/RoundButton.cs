@@ -1,6 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-
-namespace ImproveGame.UIFramework.UIElements;
+﻿namespace ImproveGame.UIFramework.UIElements;
 
 public class RoundButton : UIElement
 {

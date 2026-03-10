@@ -271,7 +271,7 @@ namespace ImproveGame.Content.Functions.Construction
                         _ => 0
                     };
 
-                    bool _TryPlace(Item item) 
+                    bool _TryPlace(Item item)
                     {
                         if (TileID.Sets.BasicChest[item.createTile])
                             return PlaceChestNoSync(placePosition.X, placePosition.Y, (ushort)item.createTile, false, item.placeStyle) != -1;

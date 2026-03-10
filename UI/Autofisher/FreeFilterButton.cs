@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-using ImproveGame.UIFramework;
+﻿using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
 using Terraria.ModLoader.UI;

@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-using ImproveGame.UIFramework.SUIElements;
+﻿using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UIFramework.UIElements
 {

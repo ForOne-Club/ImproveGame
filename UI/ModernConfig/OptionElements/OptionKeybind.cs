@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;

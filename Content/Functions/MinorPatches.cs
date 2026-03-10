@@ -2,7 +2,6 @@
 using ImproveGame.Common.GlobalNPCs;
 using ImproveGame.Common.GlobalProjectiles;
 using ImproveGame.Content.Items;
-using ImproveGame.Helpers;
 using ImproveGame.Packets;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;

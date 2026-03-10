@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-using ImproveGame.UIFramework.Graphics2D;
+﻿using ImproveGame.UIFramework.Graphics2D;
 using ImproveGame.UIFramework.SUIElements;
 
 namespace ImproveGame.UIFramework.BaseViews;

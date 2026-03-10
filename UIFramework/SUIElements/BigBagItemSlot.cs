@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Common.ModHooks;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using Terraria.GameContent.UI.Chat;
@@ -220,12 +219,12 @@ namespace ImproveGame.UIFramework.SUIElements
             {
                 // 放大镜图标 - 输入到聊天框
                 case CursorOverrideID.Magnifiers:
-                    {
-                        if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item),
-                                Vector2.One))
-                            SoundEngine.PlaySound(SoundID.MenuTick);
-                        return;
-                    }
+                {
+                    if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item),
+                            Vector2.One))
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                    return;
+                }
                 // 收藏图标
                 case CursorOverrideID.FavoriteStar:
                     Item.favorited = !Item.favorited;

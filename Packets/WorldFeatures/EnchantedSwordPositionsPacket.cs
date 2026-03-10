@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Content;
-using ImproveGame.Helpers.Extensions;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Packets.WorldFeatures;

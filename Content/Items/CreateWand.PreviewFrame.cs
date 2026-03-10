@@ -26,7 +26,7 @@ public partial class CreateWand
             for (int y = 0; y < height; y++)
             {
                 var sort = Color2TileInfo(colors[x + y * width]);
-                if (multitileOverrideCoords.Contains(new(x, y))) 
+                if (multitileOverrideCoords.Contains(new(x, y)))
                 {
                     sorts[x, y].HasWall = sort.HasWall;
                     continue;
@@ -268,110 +268,110 @@ public partial class CreateWand
         switch (current.Sort)
         {
             case TileSort.Block:
+            {
+                bool leftLinked = i > 0 && datas[i - 1, j].Sort is TileSort.Block;
+                bool rightLinked = i < width - 1 && datas[i + 1, j].Sort is TileSort.Block;
+                bool upLinked = j > 0 && datas[i, j - 1].Sort is TileSort.Block;
+                bool downLinked = j < height - 1 && datas[i, j + 1].Sort is TileSort.Block;
+                int index = 0;
+                if (leftLinked) index += 1 << 0;
+                if (rightLinked) index += 1 << 1;
+                if (upLinked) index += 1 << 2;
+                if (downLinked) index += 1 << 3;
+                if (index != 15)
+                    (tileFrameX, tileFrameY) = index switch
+                    {
+                        0 => (Main.rand.Next(9, 12), 3), // 不和任意方块连接
+                        1 => (12, Main.rand.Next(0, 3)), // 仅和左侧相连
+                        2 => (9, Main.rand.Next(0, 3)), // 仅和右侧相连
+                        3 => (Main.rand.Next(6, 9), 4), // 和左右侧相连
+                        4 => (Main.rand.Next(6, 9), 3), // 仅和上侧相连
+                        5 => (Main.rand.Next([1, 3, 5]), 4), // 和左上侧相连
+                        6 => (Main.rand.Next([0, 2, 4]), 4), // 和右上侧相连
+                        7 => (Main.rand.Next(1, 4), 2), // 和左右上侧相连
+                        8 => (Main.rand.Next(6, 9), 0), // 仅和下侧相连
+                        9 => (Main.rand.Next([1, 3, 5]), 3), // 和左下侧相连
+                        10 => (Main.rand.Next([0, 2, 4]), 3), // 和右下侧相连
+                        11 => (Main.rand.Next(1, 4), 0), // 和左右下侧相连
+                        12 => (5, Main.rand.Next(0, 3)), // 和上下侧相连
+                        13 => (4, Main.rand.Next(0, 3)), // 和左上下侧相连
+                        14 => (0, Main.rand.Next(0, 3)), // 和右上下侧相连
+                        15 => (Main.rand.Next(6, 9), 1), // 和上下左右相连
+                        _ => (9, 3)
+                    };
+                else
                 {
-                    bool leftLinked = i > 0 && datas[i - 1, j].Sort is TileSort.Block;
-                    bool rightLinked = i < width - 1 && datas[i + 1, j].Sort is TileSort.Block;
-                    bool upLinked = j > 0 && datas[i, j - 1].Sort is TileSort.Block;
-                    bool downLinked = j < height - 1 && datas[i, j + 1].Sort is TileSort.Block;
-                    int index = 0;
-                    if (leftLinked) index += 1 << 0;
-                    if (rightLinked) index += 1 << 1;
-                    if (upLinked) index += 1 << 2;
-                    if (downLinked) index += 1 << 3;
-                    if (index != 15)
-                        (tileFrameX, tileFrameY) = index switch
-                        {
-                            0 => (Main.rand.Next(9, 12), 3), // 不和任意方块连接
-                            1 => (12, Main.rand.Next(0, 3)), // 仅和左侧相连
-                            2 => (9, Main.rand.Next(0, 3)), // 仅和右侧相连
-                            3 => (Main.rand.Next(6, 9), 4), // 和左右侧相连
-                            4 => (Main.rand.Next(6, 9), 3), // 仅和上侧相连
-                            5 => (Main.rand.Next([1, 3, 5]), 4), // 和左上侧相连
-                            6 => (Main.rand.Next([0, 2, 4]), 4), // 和右上侧相连
-                            7 => (Main.rand.Next(1, 4), 2), // 和左右上侧相连
-                            8 => (Main.rand.Next(6, 9), 0), // 仅和下侧相连
-                            9 => (Main.rand.Next([1, 3, 5]), 3), // 和左下侧相连
-                            10 => (Main.rand.Next([0, 2, 4]), 3), // 和右下侧相连
-                            11 => (Main.rand.Next(1, 4), 0), // 和左右下侧相连
-                            12 => (5, Main.rand.Next(0, 3)), // 和上下侧相连
-                            13 => (4, Main.rand.Next(0, 3)), // 和左上下侧相连
-                            14 => (0, Main.rand.Next(0, 3)), // 和右上下侧相连
-                            15 => (Main.rand.Next(6, 9), 1), // 和上下左右相连
-                            _ => (9, 3)
-                        };
+                    bool leftUp = i > 0 && j > 0 && datas[i - 1, j - 1].Sort is TileSort.Block;
+                    bool leftDown = i > 0 && j < height - 1 && datas[i - 1, j + 1].Sort is TileSort.Block;
+                    bool rightUp = i < width - 1 && j > 0 && datas[i + 1, j - 1].Sort is TileSort.Block;
+                    bool rightDown = i < width - 1 && j < height - 1 && datas[i + 1, j + 1].Sort is TileSort.Block;
+
+                    if ((leftUp && rightDown) ||
+                        (rightUp && leftDown))
+                    {
+                        // 1001
+                        // 1011
+                        // 1101
+                        // 1111
+                        // 0110
+                        // 0111
+                        // 1110
+
+                        (tileFrameX, tileFrameY) = (Main.rand.Next(1, 4), 1);
+                    }
+                    else if (leftUp && leftDown)
+                    {
+                        // 0011
+
+                        (tileFrameX, tileFrameY) = (11, Main.rand.Next(0, 3));
+                    }
+                    else if (rightUp && rightDown)
+                    {
+                        // 1100
+                        (tileFrameX, tileFrameY) = (10, Main.rand.Next(0, 3));
+                    }
+                    else if (leftUp || rightUp)
+                    {
+                        // 0001
+                        // 0101
+
+                        // 0100
+                        (tileFrameX, tileFrameY) = (Main.rand.Next(6, 9), 2);
+                    }
                     else
                     {
-                        bool leftUp = i > 0 && j > 0 && datas[i - 1, j - 1].Sort is TileSort.Block;
-                        bool leftDown = i > 0 && j < height - 1 && datas[i - 1, j + 1].Sort is TileSort.Block;
-                        bool rightUp = i < width - 1 && j > 0 && datas[i + 1, j - 1].Sort is TileSort.Block;
-                        bool rightDown = i < width - 1 && j < height - 1 && datas[i + 1, j + 1].Sort is TileSort.Block;
-
-                        if ((leftUp && rightDown) ||
-                            (rightUp && leftDown))
-                        {
-                            // 1001
-                            // 1011
-                            // 1101
-                            // 1111
-                            // 0110
-                            // 0111
-                            // 1110
-
-                            (tileFrameX, tileFrameY) = (Main.rand.Next(1, 4), 1);
-                        }
-                        else if (leftUp && leftDown)
-                        {
-                            // 0011
-
-                            (tileFrameX, tileFrameY) = (11, Main.rand.Next(0, 3));
-                        }
-                        else if (rightUp && rightDown)
-                        {
-                            // 1100
-                            (tileFrameX, tileFrameY) = (10, Main.rand.Next(0, 3));
-                        }
-                        else if (leftUp || rightUp)
-                        {
-                            // 0001
-                            // 0101
-
-                            // 0100
-                            (tileFrameX, tileFrameY) = (Main.rand.Next(6, 9), 2);
-                        }
-                        else
-                        {
-                            // 0000
-                            // 0010
-                            // 1000
-                            // 1010
-                            (tileFrameX, tileFrameY) = (Main.rand.Next(6, 9), 1);
-                        }
-
+                        // 0000
+                        // 0010
+                        // 1000
+                        // 1010
+                        (tileFrameX, tileFrameY) = (Main.rand.Next(6, 9), 1);
                     }
-                    tileFrameX *= 18;
-                    tileFrameY *= 18;
-                    break;
+
                 }
+                tileFrameX *= 18;
+                tileFrameY *= 18;
+                break;
+            }
 
             // 1x2
             case TileSort.Chair:
-                {
-                    tileFrameX = 18;
-                    tileFrameY = j > 0 && datas[i, j - 1].Sort is TileSort.Chair ? 18 : 0;
-                    break;
-                }
+            {
+                tileFrameX = 18;
+                tileFrameY = j > 0 && datas[i, j - 1].Sort is TileSort.Chair ? 18 : 0;
+                break;
+            }
             case TileSort.Toilet:
-                {
-                    tileFrameX = 18;
-                    tileFrameY = j > 0 && datas[i, j - 1].Sort is TileSort.Toilet ? 58 : 40;
-                    break;
-                }
+            {
+                tileFrameX = 18;
+                tileFrameY = j > 0 && datas[i, j - 1].Sort is TileSort.Toilet ? 58 : 40;
+                break;
+            }
             case TileSort.Lantern:
-                {
-                    tileFrameX = 0;
-                    tileFrameY = j > 0 && datas[i, j - 1].Sort is TileSort.Lantern ? 18 : 0;
-                    break;
-                }
+            {
+                tileFrameX = 0;
+                tileFrameY = j > 0 && datas[i, j - 1].Sort is TileSort.Lantern ? 18 : 0;
+                break;
+            }
 
             // 3x2
             case TileSort.Table:
@@ -379,115 +379,115 @@ public partial class CreateWand
             case TileSort.Piano:
             case TileSort.Sofa:
             case TileSort.Campfire:
-                {
-                    MultiTileFraming(datas, sort, i, j, 3, 2, out tileFrameX, out tileFrameY);
-                    break;
-                }
+            {
+                MultiTileFraming(datas, sort, i, j, 3, 2, out tileFrameX, out tileFrameY);
+                break;
+            }
 
             // 2x2
             case TileSort.Chest:
             case TileSort.Candelabra:
             case TileSort.Sink:
-                {
-                    MultiTileFraming(datas, sort, i, j, 2, 2, out tileFrameX, out tileFrameY);
-                    break;
-                }
+            {
+                MultiTileFraming(datas, sort, i, j, 2, 2, out tileFrameX, out tileFrameY);
+                break;
+            }
 
             // 3x4
             case TileSort.Bookcase:
-                {
-                    MultiTileFraming(datas, sort, i, j, 3, 4, out tileFrameX, out tileFrameY);
-                    break;
-                }
+            {
+                MultiTileFraming(datas, sort, i, j, 3, 4, out tileFrameX, out tileFrameY);
+                break;
+            }
 
             // 4x2
             case TileSort.Bed:
             case TileSort.Bathtub:
-                {
-                    MultiTileFraming(datas, sort, i, j, 4, 2, out tileFrameX, out tileFrameY);
-                    tileFrameX += 72;
-                    break;
-                }
+            {
+                MultiTileFraming(datas, sort, i, j, 4, 2, out tileFrameX, out tileFrameY);
+                tileFrameX += 72;
+                break;
+            }
 
 
             case TileSort.Platform:
+            {
+                tileFrameY = 0;
+                int index = 0;
+                if (i > 0)
                 {
-                    tileFrameY = 0;
-                    int index = 0;
-                    if (i > 0)
-                    {
-                        var info = datas[i - 1, j];
-                        if (info.Sort is TileSort.Block)
-                            index += 1;
-                        if (info.Sort is TileSort.Platform)
-                            index += 2;
-                    }
-                    if (i < width - 1)
-                    {
-                        var info = datas[i + 1, j];
-                        if (info.Sort is TileSort.Block)
-                            index += 3;
-                        if (info.Sort is TileSort.Platform)
-                            index += 6;
-                    }
-                    tileFrameX = index switch
-                    {
-                        1 => 6,
-                        2 => 1,
-                        3 => 7,
-                        5 => 4,
-                        6 => 2,
-                        7 => 3,
-                        8 => 0,
-                        0 or 4 or _ => 5
-                    };
-                    tileFrameX *= 18;
-                    break;
+                    var info = datas[i - 1, j];
+                    if (info.Sort is TileSort.Block)
+                        index += 1;
+                    if (info.Sort is TileSort.Platform)
+                        index += 2;
                 }
+                if (i < width - 1)
+                {
+                    var info = datas[i + 1, j];
+                    if (info.Sort is TileSort.Block)
+                        index += 3;
+                    if (info.Sort is TileSort.Platform)
+                        index += 6;
+                }
+                tileFrameX = index switch
+                {
+                    1 => 6,
+                    2 => 1,
+                    3 => 7,
+                    5 => 4,
+                    6 => 2,
+                    7 => 3,
+                    8 => 0,
+                    0 or 4 or _ => 5
+                };
+                tileFrameX *= 18;
+                break;
+            }
             case TileSort.Torch:
-                {
-                    bool leftLinked = i > 0 && datas[i - 1, j].Sort is TileSort.Block;
-                    bool rightLinked = i < width - 1 && datas[i + 1, j].Sort is TileSort.Block;
-                    if (leftLinked)
-                        tileFrameX = 1;
-                    else if (rightLinked)
-                        tileFrameX = 2;
-                    else tileFrameX = 0;
-                    tileFrameX *= 22;
-                    tileFrameY = 0;
-                    break;
-                }
+            {
+                bool leftLinked = i > 0 && datas[i - 1, j].Sort is TileSort.Block;
+                bool rightLinked = i < width - 1 && datas[i + 1, j].Sort is TileSort.Block;
+                if (leftLinked)
+                    tileFrameX = 1;
+                else if (rightLinked)
+                    tileFrameX = 2;
+                else tileFrameX = 0;
+                tileFrameX *= 22;
+                tileFrameY = 0;
+                break;
+            }
 
             // 1x3
             case TileSort.Lamp:
             case TileSort.Door:
-                {
-                    MultiTileFraming(datas, sort, i, j, 1, 3, out tileFrameX, out tileFrameY);
-                    if (sort is TileSort.Door)
-                        tileFrameX = Main.rand.Next(0, 3) * 18;
-                    break;
-                }
+            {
+                MultiTileFraming(datas, sort, i, j, 1, 3, out tileFrameX, out tileFrameY);
+                if (sort is TileSort.Door)
+                    tileFrameX = Main.rand.Next(0, 3) * 18;
+                break;
+            }
 
             // 2x1
             case TileSort.Workbench:
-                {
-                    MultiTileFraming(datas, sort, i, j, 2, 1, out tileFrameX, out tileFrameY);
-                    break;
-                }
+            {
+                MultiTileFraming(datas, sort, i, j, 2, 1, out tileFrameX, out tileFrameY);
+                break;
+            }
 
             // 3x3
             case TileSort.Chandelier:
-                {
-                    MultiTileFraming(datas, sort, i, j, 3, 3, out tileFrameX, out tileFrameY);
-                    break;
-                }
+            {
+                MultiTileFraming(datas, sort, i, j, 3, 3, out tileFrameX, out tileFrameY);
+                break;
+            }
 
             // 2x5
             case TileSort.Clock:
-                {
-                    MultiTileFraming(datas, sort, i, j, 2, 5, out tileFrameX, out tileFrameY);
-                    break;
-                }
+            {
+                MultiTileFraming(datas, sort, i, j, 2, 5, out tileFrameX, out tileFrameY);
+                break;
+            }
 
             case TileSort.Candle:
             default:

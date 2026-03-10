@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.UIElements;
 using Terraria.GameInput;

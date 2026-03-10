@@ -111,57 +111,57 @@ public partial class CreateWand
 
     public override void NetSend(BinaryWriter writer)
     {
-        ItemIO.Send(Block,writer,true,true);
-        ItemIO.Send(Platform,writer,true,true);
-        ItemIO.Send(Workbench,writer,true,true);
-        ItemIO.Send(Table,writer,true,true);
-        ItemIO.Send(Chair,writer,true,true);
-        ItemIO.Send(Door,writer,true,true);
-        ItemIO.Send(Chest,writer,true,true);
-        ItemIO.Send(Bed,writer,true,true);
-        ItemIO.Send(Bookcase,writer,true,true);
-        ItemIO.Send(Bathtub,writer,true,true);
-        ItemIO.Send(Candelabra,writer,true,true);
-        ItemIO.Send(Candle,writer,true,true);
-        ItemIO.Send(Chandelier,writer,true,true);
-        ItemIO.Send(Clock,writer,true,true);
-        ItemIO.Send(Dresser,writer,true,true);
-        ItemIO.Send(Lamp,writer,true,true);
-        ItemIO.Send(Lantern,writer,true,true);
-        ItemIO.Send(Piano,writer,true,true);
-        ItemIO.Send(Sink,writer,true,true);
-        ItemIO.Send(Sofa,writer,true,true);
-        ItemIO.Send(Toilet,writer,true,true);
-        ItemIO.Send(Torch,writer,true,true);
-        ItemIO.Send(Campfire,writer,true,true);
-        ItemIO.Send(Wall,writer,true,true);
+        ItemIO.Send(Block, writer, true, true);
+        ItemIO.Send(Platform, writer, true, true);
+        ItemIO.Send(Workbench, writer, true, true);
+        ItemIO.Send(Table, writer, true, true);
+        ItemIO.Send(Chair, writer, true, true);
+        ItemIO.Send(Door, writer, true, true);
+        ItemIO.Send(Chest, writer, true, true);
+        ItemIO.Send(Bed, writer, true, true);
+        ItemIO.Send(Bookcase, writer, true, true);
+        ItemIO.Send(Bathtub, writer, true, true);
+        ItemIO.Send(Candelabra, writer, true, true);
+        ItemIO.Send(Candle, writer, true, true);
+        ItemIO.Send(Chandelier, writer, true, true);
+        ItemIO.Send(Clock, writer, true, true);
+        ItemIO.Send(Dresser, writer, true, true);
+        ItemIO.Send(Lamp, writer, true, true);
+        ItemIO.Send(Lantern, writer, true, true);
+        ItemIO.Send(Piano, writer, true, true);
+        ItemIO.Send(Sink, writer, true, true);
+        ItemIO.Send(Sofa, writer, true, true);
+        ItemIO.Send(Toilet, writer, true, true);
+        ItemIO.Send(Torch, writer, true, true);
+        ItemIO.Send(Campfire, writer, true, true);
+        ItemIO.Send(Wall, writer, true, true);
     }
 
     public override void NetReceive(BinaryReader reader)
     {
-        Block = ItemIO.Receive(reader,true,true);
-        Platform = ItemIO.Receive(reader,true,true);
-        Workbench = ItemIO.Receive(reader,true,true);
-        Table = ItemIO.Receive(reader,true,true);
-        Chair = ItemIO.Receive(reader,true,true);
-        Door = ItemIO.Receive(reader,true,true);
-        Chest = ItemIO.Receive(reader,true,true);
-        Bed = ItemIO.Receive(reader,true,true);
-        Bookcase = ItemIO.Receive(reader,true,true);
-        Bathtub = ItemIO.Receive(reader,true,true);
-        Candelabra = ItemIO.Receive(reader,true,true);
-        Candle = ItemIO.Receive(reader,true,true);
-        Chandelier = ItemIO.Receive(reader,true,true);
-        Clock = ItemIO.Receive(reader,true,true);
-        Dresser = ItemIO.Receive(reader,true,true);
-        Lamp = ItemIO.Receive(reader,true,true);
-        Lantern = ItemIO.Receive(reader,true,true);
-        Piano = ItemIO.Receive(reader,true,true);
-        Sink = ItemIO.Receive(reader,true,true);
-        Sofa = ItemIO.Receive(reader,true,true);
-        Toilet = ItemIO.Receive(reader,true,true);
-        Torch = ItemIO.Receive(reader,true,true);
-        Campfire = ItemIO.Receive(reader,true,true);
-        Wall = ItemIO.Receive(reader,true,true);
+        Block = ItemIO.Receive(reader, true, true);
+        Platform = ItemIO.Receive(reader, true, true);
+        Workbench = ItemIO.Receive(reader, true, true);
+        Table = ItemIO.Receive(reader, true, true);
+        Chair = ItemIO.Receive(reader, true, true);
+        Door = ItemIO.Receive(reader, true, true);
+        Chest = ItemIO.Receive(reader, true, true);
+        Bed = ItemIO.Receive(reader, true, true);
+        Bookcase = ItemIO.Receive(reader, true, true);
+        Bathtub = ItemIO.Receive(reader, true, true);
+        Candelabra = ItemIO.Receive(reader, true, true);
+        Candle = ItemIO.Receive(reader, true, true);
+        Chandelier = ItemIO.Receive(reader, true, true);
+        Clock = ItemIO.Receive(reader, true, true);
+        Dresser = ItemIO.Receive(reader, true, true);
+        Lamp = ItemIO.Receive(reader, true, true);
+        Lantern = ItemIO.Receive(reader, true, true);
+        Piano = ItemIO.Receive(reader, true, true);
+        Sink = ItemIO.Receive(reader, true, true);
+        Sofa = ItemIO.Receive(reader, true, true);
+        Toilet = ItemIO.Receive(reader, true, true);
+        Torch = ItemIO.Receive(reader, true, true);
+        Campfire = ItemIO.Receive(reader, true, true);
+        Wall = ItemIO.Receive(reader, true, true);
     }
 }

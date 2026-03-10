@@ -8,7 +8,6 @@ using ImproveGame.Content.Items.Globes;
 using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Items.Placeable;
-using ImproveGame.Helpers;
 using ImproveGame.Packets;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UI.ModernConfig;

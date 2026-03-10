@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-using ImproveGame.UI;
+﻿using ImproveGame.UI;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UI.OpenBag;
 using ImproveGame.UI.PlayerStats;

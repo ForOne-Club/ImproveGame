@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Content.Functions.Construction;
-using ImproveGame.Helpers.Extensions;
 
 namespace ImproveGame.UIFramework.UIElements
 {

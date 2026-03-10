@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Helpers.Extensions;
 
 namespace ImproveGame.UIFramework.UIElements;
 

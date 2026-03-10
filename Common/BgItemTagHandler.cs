@@ -91,18 +91,18 @@ namespace ImproveGame.Common
                     switch (arg[0])
                     {
                         case 's':
-                            {
-                                if (int.TryParse(arg.AsSpan(1), out var result3))
-                                    item.stack = TrUtils.Clamp(result3, 1, item.maxStack);
+                        {
+                            if (int.TryParse(arg.AsSpan(1), out var result3))
+                                item.stack = TrUtils.Clamp(result3, 1, item.maxStack);
 
-                                break;
-                            }
+                            break;
+                        }
                         case 'f':
-                            {
-                                snippet.BorderColor = UIStyle.ItemSlotBorderFav;
-                                snippet.Background = UIStyle.ItemSlotBgFav;
-                                break;
-                            }
+                        {
+                            snippet.BorderColor = UIStyle.ItemSlotBorderFav;
+                            snippet.Background = UIStyle.ItemSlotBgFav;
+                            break;
+                        }
                     }
                 }
             }

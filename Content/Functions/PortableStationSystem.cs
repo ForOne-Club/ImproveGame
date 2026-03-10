@@ -1,10 +1,8 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Modules.InfiniteBuff;
 using ImproveGame.UI.ExtremeStorage;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using Terraria;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Content.Functions;

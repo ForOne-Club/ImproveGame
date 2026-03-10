@@ -2,8 +2,6 @@ using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Core;
-using ImproveGame.Helpers;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UI.Autofisher;
 using ImproveGame.UIFramework;

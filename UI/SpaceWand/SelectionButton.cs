@@ -1,6 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-
-namespace ImproveGame.UI.SpaceWand;
+﻿namespace ImproveGame.UI.SpaceWand;
 
 public sealed class SelectionButton : UIElement
 {

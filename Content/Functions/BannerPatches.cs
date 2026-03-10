@@ -1,7 +1,5 @@
 ﻿using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
-using ImproveGame.Helpers;
-using ImproveGame.Modules.InfiniteBuff;
 using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;
 

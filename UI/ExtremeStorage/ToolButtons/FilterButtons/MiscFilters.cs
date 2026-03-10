@@ -1,6 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-
-namespace ImproveGame.UI.ExtremeStorage.ToolButtons.FilterButtons;
+﻿namespace ImproveGame.UI.ExtremeStorage.ToolButtons.FilterButtons;
 
 public class HerbFilter : FilterButton
 {

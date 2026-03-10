@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Helpers.Extensions;
 
 namespace ImproveGame.Content.Items;
 

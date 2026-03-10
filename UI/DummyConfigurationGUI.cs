@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Content.NPCs.Dummy;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI.ModernConfig;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;

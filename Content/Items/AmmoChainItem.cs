@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Content.Functions.ChainedAmmo;
 using ImproveGame.Core;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI.AmmoChainPanel;
 using Terraria.ModLoader.IO;
 

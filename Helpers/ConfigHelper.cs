@@ -420,147 +420,147 @@ public static class ConfigHelper
             return;
         }
         else foreach (var p in path)
+        {
+            var curType = item!.GetType();
+            var fld = curType.GetField(p, bindFlag);
+            var prop = curType.GetProperty(p, bindFlag);
+            if (count != max - 1)
             {
-                var curType = item!.GetType();
-                var fld = curType.GetField(p, bindFlag);
-                var prop = curType.GetProperty(p, bindFlag);
-                if (count != max - 1)
+                lastItem = item;
+                if (fld != null)
+                    item = fld!.GetValue(item)!;
+                else if (prop != null)
+                    item = prop!.GetValue(item)!;
+                else if (item is IEnumerable collection && int.TryParse(p, out int index))
                 {
-                    lastItem = item;
-                    if (fld != null)
-                        item = fld!.GetValue(item)!;
-                    else if (prop != null)
-                        item = prop!.GetValue(item)!;
-                    else if (item is IEnumerable collection && int.TryParse(p, out int index))
+                    int counter = 0;
+                    bool flag = true;
+                    foreach (var i in collection)
                     {
-                        int counter = 0;
-                        bool flag = true;
-                        foreach (var i in collection)
+                        if (counter == index)
                         {
-                            if (counter == index)
-                            {
-                                item = i;
-                                flag = false;
-                                break;
-                            }
-                            counter++;
+                            item = i;
+                            flag = false;
+                            break;
                         }
-                        if (flag)
-                            throw new IndexOutOfRangeException();
+                        counter++;
                     }
-                    else
-                        throw new Exception("Property or field doesn't exist in " + curType.Name);
+                    if (flag)
+                        throw new IndexOutOfRangeException();
                 }
                 else
+                    throw new Exception("Property or field doesn't exist in " + curType.Name);
+            }
+            else
+            {
+                if (lastItem is IDictionary dict)
                 {
-                    if (lastItem is IDictionary dict)
-                    {
-                        object Key = ((dynamic)item).Key;
-                        object Value = ((dynamic)item).Value;
+                    object Key = ((dynamic)item).Key;
+                    object Value = ((dynamic)item).Value;
 
+                    List<object> cachedKeys = [];
+                    List<object> cachedValues = [];
+
+                    foreach (var key in dict.Keys)
+                        cachedKeys.Add(key);
+
+                    foreach (var valueDummy in dict.Values)
+                        cachedValues.Add(valueDummy);
+
+                    int idx = cachedKeys.FindIndex(obj => obj.Equals(Key));
+                    dict.Clear();
+                    for (int n = 0; n < idx; n++)
+                        dict.Add(cachedKeys[n], cachedValues[n]);
+
+                    if (p == "Key")
+                        dict.Add(value, Value);
+                    else
+                        dict.Add(Key, value);
+
+                    for (int n = idx + 1; n < cachedKeys.Count; n++)
+                        dict.Add(cachedKeys[n], cachedValues[n]);
+
+                    //if(p == "Key"){}
+                    //else
+                    //dict[Key] = value;//按说直接这样应该就行了，但是有时候会有问题，
+
+                    return;
+                }
+                fld?.SetValue(item, value);
+                prop?.SetValue(item, value);
+                if (item is IEnumerable collection && int.TryParse(p, out int index))
+                {
+                    if (item is Array array)
+                    {
+                        if (index < array.Length)
+                            array.SetValue(value, index);
+                        else
+                            throw new IndexOutOfRangeException();
+                    }
+                    else if (item is IList list)
+                    {
+                        if (index < list.Count)
+                            list[index] = value;
+                        else
+                            list.Add(value);
+                    }
+                    else if (item.GetType().IsGenericType && item.GetType().GetGenericTypeDefinition() == typeof(HashSet<>))
+                    {
+                        var addMethod = item.GetType().GetMethod("Add", bindFlag);
+                        var removeMethod = item.GetType().GetMethod("Remove", bindFlag);
+                        List<object> cache = [.. collection];
+                        cache.Reverse();
+                        int targetCount = cache.Count - index;
+                        foreach (var i in cache[0..targetCount])
+                        {
+                            removeMethod?.Invoke(item, [i]);
+                        }
+                        addMethod?.Invoke(item, [value]);
+                        for (int i = targetCount - 2; i >= 0; i--)
+                            addMethod?.Invoke(item, [cache[i]]);
+                    }
+                    else if (item is IDictionary dictionary)
+                    {
                         List<object> cachedKeys = [];
                         List<object> cachedValues = [];
 
-                        foreach (var key in dict.Keys)
+                        foreach (var key in dictionary.Keys)
                             cachedKeys.Add(key);
 
-                        foreach (var valueDummy in dict.Values)
+                        foreach (var valueDummy in dictionary.Values)
                             cachedValues.Add(valueDummy);
 
-                        int idx = cachedKeys.FindIndex(obj => obj.Equals(Key));
-                        dict.Clear();
-                        for (int n = 0; n < idx; n++)
-                            dict.Add(cachedKeys[n], cachedValues[n]);
-
-                        if (p == "Key")
-                            dict.Add(value, Value);
-                        else
-                            dict.Add(Key, value);
-
-                        for (int n = idx + 1; n < cachedKeys.Count; n++)
-                            dict.Add(cachedKeys[n], cachedValues[n]);
-
-                        //if(p == "Key"){}
-                        //else
-                        //dict[Key] = value;//按说直接这样应该就行了，但是有时候会有问题，
-
-                        return;
-                    }
-                    fld?.SetValue(item, value);
-                    prop?.SetValue(item, value);
-                    if (item is IEnumerable collection && int.TryParse(p, out int index))
-                    {
-                        if (item is Array array)
-                        {
-                            if (index < array.Length)
-                                array.SetValue(value, index);
-                            else
-                                throw new IndexOutOfRangeException();
-                        }
-                        else if (item is IList list)
-                        {
-                            if (index < list.Count)
-                                list[index] = value;
-                            else
-                                list.Add(value);
-                        }
-                        else if (item.GetType().IsGenericType && item.GetType().GetGenericTypeDefinition() == typeof(HashSet<>))
-                        {
-                            var addMethod = item.GetType().GetMethod("Add", bindFlag);
-                            var removeMethod = item.GetType().GetMethod("Remove", bindFlag);
-                            List<object> cache = [.. collection];
-                            cache.Reverse();
-                            int targetCount = cache.Count - index;
-                            foreach (var i in cache[0..targetCount])
-                            {
-                                removeMethod?.Invoke(item, [i]);
-                            }
-                            addMethod?.Invoke(item, [value]);
-                            for (int i = targetCount - 2; i >= 0; i--)
-                                addMethod?.Invoke(item, [cache[i]]);
-                        }
-                        else if (item is IDictionary dictionary)
-                        {
-                            List<object> cachedKeys = [];
-                            List<object> cachedValues = [];
-
-                            foreach (var key in dictionary.Keys)
-                                cachedKeys.Add(key);
-
-                            foreach (var valueDummy in dictionary.Values)
-                                cachedValues.Add(valueDummy);
-
-                            object Key = ((dynamic)value).Key;
-                            object Value = ((dynamic)value).Value;
+                        object Key = ((dynamic)value).Key;
+                        object Value = ((dynamic)value).Value;
 
 
-                            dictionary.Clear();
-                            for (int n = 0; n < index; n++)
-                                dictionary.Add(cachedKeys[n], cachedValues[n]);
-                            dictionary.Add(Key, Value);
-                            for (int n = index + 1; n < cachedKeys.Count; n++)
-                                dictionary.Add(cachedKeys[n], cachedValues[n]);
+                        dictionary.Clear();
+                        for (int n = 0; n < index; n++)
+                            dictionary.Add(cachedKeys[n], cachedValues[n]);
+                        dictionary.Add(Key, Value);
+                        for (int n = index + 1; n < cachedKeys.Count; n++)
+                            dictionary.Add(cachedKeys[n], cachedValues[n]);
 
-                            /*
-                            cachedKeys.Reverse();
-                            cachedValues.Reverse();
+                        /*
+                        cachedKeys.Reverse();
+                        cachedValues.Reverse();
 
-                            int targetCount = cachedKeys.Count - index;
-                            foreach (var i in cachedKeys[0..targetCount])
-                                dictionary.Remove(i);
+                        int targetCount = cachedKeys.Count - index;
+                        foreach (var i in cachedKeys[0..targetCount])
+                            dictionary.Remove(i);
 
-                            object Key = ((dynamic)value).Key;
-                            object Value = ((dynamic)value).Value;
+                        object Key = ((dynamic)value).Key;
+                        object Value = ((dynamic)value).Value;
 
-                            dictionary.Add(Key, Value);
-                            for (int i = targetCount - 2; i >= 0; i--)
-                                dictionary.Add(cachedKeys[i], cachedValues[i]);
-                            */
-                        }
+                        dictionary.Add(Key, Value);
+                        for (int i = targetCount - 2; i >= 0; i--)
+                            dictionary.Add(cachedKeys[i], cachedValues[i]);
+                        */
                     }
                 }
-                count++;
             }
+            count++;
+        }
     }
 
     public static string GetModText(string modName, string str, out bool hasValue, params object[] arg)

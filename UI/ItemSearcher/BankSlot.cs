@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.GlobalItems;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework.BaseViews;
 using System.Collections.ObjectModel;
 

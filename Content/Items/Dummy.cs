@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.NPCs.Dummy;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI;
 using Microsoft.Xna.Framework.Input;
 

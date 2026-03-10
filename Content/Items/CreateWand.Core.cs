@@ -103,7 +103,7 @@ public partial class CreateWand
                 _colorsLoaded = true;
 
                 string directory = Path.Combine(Main.SavePath, "Mods", "ImproveGame", "CreateWand");
-                if (!Directory.Exists(directory)) 
+                if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
 
@@ -582,7 +582,7 @@ public partial class CreateWand
                         break;
                 }
             }
-            
+
             if (Main.netMode == NetmodeID.MultiplayerClient)
                 NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, Prison.Width, Prison.Height);
 
@@ -615,7 +615,7 @@ public partial class CreateWand
                 box.Texture2D = PrisonsPreView;
             }
 
-            if (!_isWaitingPreview) 
+            if (!_isWaitingPreview)
             {
                 if (_customAutoLoadQueue.TryDequeue(out string path))
                     HandleRegister(path);

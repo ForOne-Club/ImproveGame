@@ -1,5 +1,4 @@
 ﻿using ImproveGame.Content.Functions.AutoPiggyBank;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.SUIElements;
 

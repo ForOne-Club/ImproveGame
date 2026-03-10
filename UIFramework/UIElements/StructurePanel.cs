@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions.Construction;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using Microsoft.Xna.Framework.Input;

@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-using ReLogic.Graphics;
+﻿using ReLogic.Graphics;
 using Terraria.GameContent.UI;
 using Terraria.UI.Chat;
 
@@ -85,19 +84,19 @@ public class CenteredItemTagHandler : ITagHandler
                 switch (arg[0])
                 {
                     case 's':
-                        {
-                            if (int.TryParse(arg[1..], out int stack))
-                                item.stack = stack;
+                    {
+                        if (int.TryParse(arg[1..], out int stack))
+                            item.stack = stack;
 
-                            break;
-                        }
+                        break;
+                    }
                     case 'h':
-                        {
-                            if (int.TryParse(arg[1..], out int height))
-                                heightOffset = height;
+                    {
+                        if (int.TryParse(arg[1..], out int height))
+                            heightOffset = height;
 
-                            break;
-                        }
+                        break;
+                    }
                 }
             }
         }

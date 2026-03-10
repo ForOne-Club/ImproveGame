@@ -2,7 +2,6 @@
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.Core;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UI.AmmoChainPanel;
 using Terraria.ModLoader.IO;
 

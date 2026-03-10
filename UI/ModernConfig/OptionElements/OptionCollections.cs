@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-using ImproveGame.Packets;
+﻿using ImproveGame.Packets;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.SUIElements;
 using Newtonsoft.Json;

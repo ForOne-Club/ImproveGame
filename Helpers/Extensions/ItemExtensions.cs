@@ -1,6 +1,5 @@
 ﻿using FuzzySearchNet;
 using ImproveGame.Core;
-using ImproveGame.Helpers.Extensions;
 using ImproveGame.UIFramework.Common;
 using PinyinNet;
 using Terraria.GameContent.UI;

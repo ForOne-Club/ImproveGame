@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers.Extensions;
-using ImproveGame.UIFramework;
+﻿using ImproveGame.UIFramework;
 
 namespace ImproveGame.UI.SpaceWand;
 

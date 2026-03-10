@@ -1,5 +1,4 @@
-﻿using ImproveGame.Helpers;
-using ImproveGame.UIFramework.SUIElements;
+﻿using ImproveGame.UIFramework.SUIElements;
 using System.Collections;
 using System.Reflection;
 using Terraria.ModLoader.Config;
