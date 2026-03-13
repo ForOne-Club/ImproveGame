@@ -1,4 +1,4 @@
-﻿namespace ImproveGame.Modules.InfiniteBuff;
+﻿namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
 
 public sealed class SpawnRateSliderViewModel : IDisposable
 {

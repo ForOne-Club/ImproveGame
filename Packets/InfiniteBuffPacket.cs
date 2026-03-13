@@ -4,78 +4,94 @@ namespace ImproveGame.Packets;
 
 public class InfiniteBuffPacket : NetModule
 {
-    private int WhoAmI { get; set; }
-    private readonly List<Item> Items = [];
-    private readonly List<short> Flags = [];
+    private int _whoAmI;
+    private readonly List<Item> _items = [];
+    private readonly List<short> _flags = [];
 
-    public static InfiniteBuffPacket GetInstance(int whoAmI, List<Item> buffItems, List<short> flags)
+    public static InfiniteBuffPacket GetInstance(int whoAmI, List<Item> buffItems, ReadOnlySpan<bool> flags)
+    {
+        var list = new List<short>(flags.Length);
+        for (int i = 0; i < flags.Length; i++)
+            if (flags[i]) list.Add((short)i);
+
+        return GetInstance(whoAmI, buffItems, list);
+    }
+
+    private static InfiniteBuffPacket GetInstance(int whoAmI, List<Item> buffItems, List<short> flags)
     {
         var module = ModContent.GetInstance<InfiniteBuffPacket>();
-        module.WhoAmI = whoAmI;
+        module._whoAmI = whoAmI;
 
-        module.Items.Clear();
-        module.Items.AddRange(buffItems);
+        module._items.Clear();
+        module._items.AddRange(buffItems);
 
-        module.Flags.Clear();
-        module.Flags.AddRange(flags);
+        module._flags.Clear();
+        module._flags.AddRange(flags);
         return module;
     }
 
     public override void Send(ModPacket p)
     {
-        p.Write(WhoAmI);
+        p.Write(_whoAmI);
 
-        p.Write(Items.Count);
-        for (var i = 0; i < Items.Count; i++)
+        p.Write(_items.Count);
+        for (var i = 0; i < _items.Count; i++)
         {
-            p.Write((short)Items[i].type);
-            p.Write((short)Items[i].stack);
+            p.Write((short)_items[i].type);
+            p.Write((short)_items[i].stack);
         }
 
-        p.Write(Flags.Count);
-        for (var i = 0; i < Flags.Count; i++)
+        p.Write(_flags.Count);
+        for (var i = 0; i < _flags.Count; i++)
         {
-            p.Write(Flags[i]);
+            p.Write(_flags[i]);
         }
     }
 
     public override void Read(BinaryReader r)
     {
-        WhoAmI = r.ReadInt32();
+        _whoAmI = r.ReadInt32();
 
-        Items.Clear();
+        _items.Clear();
         var itemCount = r.ReadInt32();
         for (var i = 0; i < itemCount; i++)
         {
             int type = r.ReadInt16();
             int stack = r.ReadInt16();
-            Items.Add(new Item(type, stack));
+            _items.Add(new Item(type, stack));
         }
 
-        Flags.Clear();
+        _flags.Clear();
         var flagCount = r.ReadInt32();
         for (var i = 0; i < flagCount; i++)
         {
-            Flags.Add(r.ReadInt16());
+            _flags.Add(r.ReadInt16());
         }
     }
 
     public override void Receive()
     {
-        if (!Main.player[WhoAmI].TryGetModPlayer<InfiniteBuffModPlayer>(out var infinite)) return;
+        if (!Main.player[_whoAmI].TryGetModPlayer<InfiniteBuffModPlayer>(out var infinite)) return;
 
         infinite.PlayerBuffItems.Clear();
-        infinite.PlayerBuffItems.AddRange(Items);
+        infinite.PlayerBuffItems.AddRange(_items);
 
-        foreach (var i in Flags)
+        foreach (var i in _flags)
         {
             infinite.ActivationFlags[i] = true;
         }
 
-        // 服务器转发到其他客户端
-        if (Main.netMode is NetmodeID.Server)
+        if (Main.netMode == NetmodeID.MultiplayerClient)
         {
-            GetInstance(WhoAmI, Items, Flags).Send(-1, WhoAmI, false);
+            Main.NewText(string.Join(", ", _items.Select(i => i.Name)));
         }
+
+        // 服务器转发到其他客户端
+        if (Main.netMode != NetmodeID.Server) return;
+
+        // NetModule 是单例的
+        // 这次错误是因为 List.Clear => List.AddRange(self) 实际是清空了
+        //GetInstance(_whoAmI, _items, _flags).Send(-1, _whoAmI);
+        Send(-1, _whoAmI);
     }
 }

@@ -10,17 +10,6 @@ using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Modules.InfiniteBuff;
 
-public static class InfiniteBuff
-{
-    public static HashSet<int> BattlerCombination { get; } = [
-        BuffID.Sunflower,
-        BuffID.Calm,
-        BuffID.PeaceCandle,
-        BuffID.WaterCandle,
-        BuffID.Battle
-    ];
-}
-
 /// <summary>
 /// 无限 Buff 的玩家侧核心系统。
 /// </summary>
@@ -32,9 +21,9 @@ public static class InfiniteBuff
 public class InfiniteBuffModPlayer : ModPlayer
 {
     public bool[] ActivationFlags => _activationFlags;
-    private bool[] _activationFlags = new bool[BuffLoader.BuffCount];
+    bool[] _activationFlags = new bool[BuffLoader.BuffCount];
 
-    private readonly TickTimer _rebuild;
+    readonly TickTimer _rebuild;
     public InfiniteBuffModPlayer() => _rebuild = new TickTimer(1d, RecollectBuffItems);
 
     /// <summary>
@@ -46,12 +35,12 @@ public class InfiniteBuffModPlayer : ModPlayer
     {
         var flags = _activationFlags.AsSpan();
 
-        var combinationLength = InfiniteBuff.BattlerCombination.Count;
+        var combinationLength = InfiniteBuffSets.BattlerCombination.Count;
         var count = 0;
 
         for (int i = 0; i < flags.Length; i++)
         {
-            if (flags[i] && InfiniteBuff.BattlerCombination.Contains(i))
+            if (flags[i] && InfiniteBuffSets.BattlerCombination.Contains(i))
             {
                 if (++count == combinationLength) return true;
             }
@@ -104,11 +93,6 @@ public class InfiniteBuffModPlayer : ModPlayer
     }
 
     /// <summary>
-    /// 本地玩家每帧预处理：清理黑名单 Buff。
-    /// </summary>
-    public override void PreUpdateBuffs() { }
-
-    /// <summary>
     /// 重建可用物品缓存（玩家来源 + 储存来源）。
     /// </summary>
     /// <remarks>
@@ -143,10 +127,7 @@ public class InfiniteBuffModPlayer : ModPlayer
         {
             PlayerBuffItemsCache.Clear();
             PlayerBuffItemsCache.AddRange(PlayerBuffItems);
-            var list = new List<short>();
-            for (int i = 0; i < _activationFlags.Length; i++)
-                if (_activationFlags[i]) list.Add((short)i);
-            InfiniteBuffPacket.GetInstance(Player.whoAmI, PlayerBuffItems, list).Send();
+            InfiniteBuffPacket.GetInstance(Player.whoAmI, PlayerBuffItems, _activationFlags).Send(ignoreClient: Main.myPlayer);
         }
     }
 
@@ -397,10 +378,7 @@ public class InfiniteBuffModPlayer : ModPlayer
     /// </summary>
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
-        var list = new List<short>();
-        for (int i = 0; i < _activationFlags.Length; i++)
-            if (_activationFlags[i]) list.Add((short)i);
-        InfiniteBuffPacket.GetInstance(Player.whoAmI, PlayerBuffItems, list).Send(toWho, fromWho);
+        InfiniteBuffPacket.GetInstance(Player.whoAmI, PlayerBuffItems, _activationFlags).Send(toWho, fromWho);
     }
 
     /// <summary>

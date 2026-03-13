@@ -1,4 +1,5 @@
-﻿using SilkyUIFramework;
+﻿using ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
+using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
 using SilkyUIFramework.Extensions;
