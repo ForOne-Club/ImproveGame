@@ -8,9 +8,10 @@
 	<ElementGroup Name="MainContainer" Border="2" BorderRadius="8" FitWidth="true" FitHeight="true"
 		FlexDirection="Column" CrossAlignment="Stretch">
 		<DraggableView Name="Header" FitWidth="true" Height="36px"
-			Padding="8 0" FlexDirection="Row" MainAlignment="SpaceBetween" CrossAlignment="Center">
+			Padding="8 0" FlexDirection="Row" MainAlignment="Start" CrossAlignment="Center">
 			<!-- Title -->
-			<TextView Name="Title" Text="增益控制器" TextScale="0.4" />
+			<TextView Name="Title" Text="增益控制器" TextScale="0.4" FlexGrow="1" DisableMouseInteraction="true" />
+			<Image Name="SliderSwitch" Width="30px" ImageAlign="1 0.5" />
 			<Image Name="Close" Width="30px" ImageAlign="1 0.5" />
 		</DraggableView>
 		<HR BackgroundColor="rgba(0,0,0,0.75)" />

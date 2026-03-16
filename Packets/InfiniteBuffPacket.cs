@@ -81,10 +81,11 @@ public class InfiniteBuffPacket : NetModule
             infinite.ActivationFlags[i] = true;
         }
 
-        if (Main.netMode == NetmodeID.MultiplayerClient)
-        {
-            Main.NewText(string.Join(", ", _items.Select(i => i.Name)));
-        }
+        // 调试代码
+        //if (Main.netMode == NetmodeID.MultiplayerClient)
+        //{
+        //    Main.NewText(string.Join(", ", _items.Select(i => i.Name)));
+        //}
 
         // 服务器转发到其他客户端
         if (Main.netMode != NetmodeID.Server) return;

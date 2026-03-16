@@ -26,7 +26,7 @@ public partial class InfiniteBUFFController : BaseBody
 
     public override bool ContainsPoint(Vector2 point)
     {
-        if (SliderContainer is null)
+        if (SliderContainer is not { Invalid: false })
             return base.ContainsPoint(point);
 
         return SliderContainer.Bounds.Contains(point) || base.ContainsPoint(point);
@@ -48,6 +48,8 @@ public partial class InfiniteBUFFController : BaseBody
 
         Title.Text = GetTextValue("DisplayName");
         Title.UseDeathText();
+
+        SliderSwitch.Texture2D = ModAsset.EyeSwitch;
 
         var searchCancel = Main.Assets.Request<Texture2D>("Images/UI/SearchCancel");
 
@@ -71,14 +73,23 @@ public partial class InfiniteBUFFController : BaseBody
         SliderTitle.Text = GetTextValue("EnemySpawnRate");
 
         _spawnRateVm = new SpawnRateSliderViewModel();
-        _spawnRateVm.SliderValueChanged += (_, value) => Slider.Value = value;
+        _spawnRateVm.SliderValueChanged += UpdateSliderValue;
+        _spawnRateVm.ShowSliderChanged += UpdateShowSlider;
 
-        Slider.Value = _spawnRateVm.SliderValue;
+        UpdateSliderValue(this, _spawnRateVm.SliderValue);
+        UpdateShowSlider(this, _spawnRateVm.ShowSlider);
+
         // 拖动滑块时只上报给 VM
         Slider.Drag += (_, value) => _spawnRateVm?.SetSliderValue(value);
+        SliderSwitch.LeftMouseDown += (_, _) => _spawnRateVm.ToggleShowSlider();
 
         UpdateScaleMarks(3);
     }
+
+    void UpdateSliderValue(object sender, float value) => Slider.Value = value;
+
+    void UpdateShowSlider(object sender, bool value) =>
+        SliderSwitch.ImageColor = value ? Color.White : Color.White * 0.5f;
 
     private void UpdateScaleMarks(int quantity)
     {
@@ -111,7 +122,13 @@ public partial class InfiniteBUFFController : BaseBody
 
         // 没有激活组合时不显示控制器
         if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
-        SliderContainer.Invalid = !infinitePlayer.MeetsBattlerCombination();
+        var meets = infinitePlayer.MeetsBattlerCombination();
+        SliderSwitch.Invalid = !meets;
+        var invalid = !_spawnRateVm.ShowSlider || !meets;
+        if (SliderContainer.Invalid == invalid) return;
+
+        SliderContainer.Invalid = invalid;
+        MarkLayoutDirty();
     }
 
     private readonly BuffTypesState _typesState = new();

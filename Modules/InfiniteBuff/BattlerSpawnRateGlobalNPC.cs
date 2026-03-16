@@ -46,7 +46,7 @@ public class BattlerSpawnRateGlobalNPC : GlobalNPC
             return;
         }
 
-        spawnRate = (int)(spawnRate / rate);
-        maxSpawns = (int)(maxSpawns * rate + rate);
+        spawnRate = (int)Math.Round(spawnRate / rate);
+        maxSpawns = (int)Math.Round(maxSpawns * rate);
     }
 }

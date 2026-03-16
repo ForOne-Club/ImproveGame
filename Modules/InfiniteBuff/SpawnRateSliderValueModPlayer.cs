@@ -6,6 +6,19 @@ namespace ImproveGame.Modules.InfiniteBuff;
 
 public class SpawnRateSliderValueModPlayer : ModPlayer
 {
+    public event EventHandler<bool> ShowSliderChanged;
+
+    public bool ShowSlider
+    {
+        get; set
+        {
+            if (ShowSlider == value) return;
+
+            field = value;
+            ShowSliderChanged?.Invoke(this, field);
+        }
+    }
+
     public event EventHandler<float> SpawnRateSliderValueChanged;
 
     /// <summary>
@@ -39,10 +52,16 @@ public class SpawnRateSliderValueModPlayer : ModPlayer
             SpawnRateSliderValue = spawnRateSliderValue;
         }
         else SpawnRateSliderValue = 0.5f;
+
+        if (tag.TryGet<bool>(nameof(ShowSlider), out var showSlider))
+        {
+            ShowSlider = showSlider;
+        }
     }
 
     public override void SaveData(TagCompound tag)
     {
         tag[nameof(SpawnRateSliderValue)] = SpawnRateSliderValue;
+        tag[nameof(ShowSlider)] = ShowSlider;
     }
 }
