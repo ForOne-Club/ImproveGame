@@ -57,6 +57,7 @@ public class SpawnRateSliderValueModPlayer : ModPlayer
         {
             ShowSlider = showSlider;
         }
+        else ShowSlider = true;
     }
 
     public override void SaveData(TagCompound tag)

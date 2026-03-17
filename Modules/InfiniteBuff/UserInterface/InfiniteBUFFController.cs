@@ -12,7 +12,7 @@ public partial class InfiniteBUFFController : BaseBody
 {
     public static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
 
-    private SpawnRateSliderViewModel _spawnRateVm;
+    private InfiniteBuffViewModel _vm;
 
     /// <summary>
     /// Buff 列表滚动容器的内容区域。
@@ -72,16 +72,16 @@ public partial class InfiniteBUFFController : BaseBody
 
         SliderTitle.Text = GetTextValue("EnemySpawnRate");
 
-        _spawnRateVm = new SpawnRateSliderViewModel();
-        _spawnRateVm.SliderValueChanged += UpdateSliderValue;
-        _spawnRateVm.ShowSliderChanged += UpdateShowSlider;
+        _vm = new InfiniteBuffViewModel();
+        _vm.SliderValueChanged += UpdateSliderValue;
+        _vm.ShowSliderChanged += UpdateShowSlider;
 
-        UpdateSliderValue(this, _spawnRateVm.SliderValue);
-        UpdateShowSlider(this, _spawnRateVm.ShowSlider);
+        UpdateSliderValue(this, _vm.SliderValue);
+        UpdateShowSlider(this, _vm.ShowSlider);
 
         // 拖动滑块时只上报给 VM
-        Slider.Drag += (_, value) => _spawnRateVm?.SetSliderValue(value);
-        SliderSwitch.LeftMouseDown += (_, _) => _spawnRateVm.ToggleShowSlider();
+        Slider.Drag += (_, value) => _vm?.SetSliderValue(value);
+        SliderSwitch.LeftMouseDown += (_, _) => _vm.ToggleShowSlider();
 
         UpdateScaleMarks(3);
     }
@@ -93,7 +93,7 @@ public partial class InfiniteBUFFController : BaseBody
 
     private void UpdateScaleMarks(int quantity)
     {
-        if (_spawnRateVm is null) return;
+        if (_vm is null) return;
         MarkerContainer.RemoveAllChildren();
         for (int i = 0; i < quantity; i++)
         {
@@ -105,7 +105,7 @@ public partial class InfiniteBUFFController : BaseBody
     }
 
     private void ClickScaleMarks(UIView view, SilkyUIFramework.UIMouseEvent _)
-        => _spawnRateVm.SetSliderValue((view as UIScaleMarks).Progress);
+        => _vm.SetSliderValue((view as UIScaleMarks).Progress);
 
     protected override void UpdateStatus(GameTime gameTime)
     {
@@ -114,17 +114,17 @@ public partial class InfiniteBUFFController : BaseBody
         UpdateBuffsContainer();
 
         // 拖动条悬浮提示
-        if (_spawnRateVm != null &&
+        if (_vm != null &&
             (Slider.Thumb.IsMouseHovering || Slider.Thumb.LeftMousePressed))
         {
-            UICommon.TooltipMouseText(_spawnRateVm.SpawnRateText);
+            UICommon.TooltipMouseText(_vm.SpawnRateText);
         }
 
         // 没有激活组合时不显示控制器
         if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
         var meets = infinitePlayer.MeetsBattlerCombination();
         SliderSwitch.Invalid = !meets;
-        var invalid = !_spawnRateVm.ShowSlider || !meets;
+        var invalid = !_vm.ShowSlider || !meets;
         if (SliderContainer.Invalid == invalid) return;
 
         SliderContainer.Invalid = invalid;

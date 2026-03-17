@@ -1,6 +1,6 @@
 ﻿namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
 
-public sealed class SpawnRateSliderViewModel : IDisposable
+public sealed class InfiniteBuffViewModel : IDisposable
 {
     private readonly SpawnRateSliderValueModPlayer _model;
 
@@ -8,7 +8,7 @@ public sealed class SpawnRateSliderViewModel : IDisposable
 
     public event EventHandler<bool> ShowSliderChanged;
 
-    public SpawnRateSliderViewModel()
+    public InfiniteBuffViewModel()
     {
         _model = Main.LocalPlayer.GetModPlayer<SpawnRateSliderValueModPlayer>();
         _model.SpawnRateSliderValueChanged += OnModelSliderValueChanged;
