@@ -113,7 +113,8 @@ public class BuffKeySet
 
         foreach (var fullName in FullNames)
         {
-            types.Add(BuffID.Search.GetId(fullName));
+            if (BuffID.Search.TryGetId(fullName, out var id))
+                types.Add(id);
         }
 
         return types;
