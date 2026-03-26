@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Content.Functions.AutoPiggyBank;
 using ImproveGame.Core;
+using ImproveGame.UI.QuickShimmer;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -12,6 +13,8 @@ namespace ImproveGame.UI.OpenBag;
 [AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Open Bag GUI")]
 public class OpenBagGUI : BaseBody
 {
+    private const string _context = $"{nameof(ImproveGame)}: {nameof(QuickShimmerGUI)}";
+
     public static OpenBagGUI Instance { get; private set; }
 
     public OpenBagGUI() => Instance = this;
@@ -322,7 +325,7 @@ public class OpenBagGUI : BaseBody
                     break;
                 }
 
-                var itemSlot = new LootItemSlot(keeper.Loots, i);
+                var itemSlot = new LootItemSlot(keeper.Loots, i, _context);
                 itemSlot.JoinParent(LootsGrid);
             }
 

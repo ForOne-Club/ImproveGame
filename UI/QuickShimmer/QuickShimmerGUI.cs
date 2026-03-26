@@ -13,6 +13,8 @@ namespace ImproveGame.UI.QuickShimmer;
 [AutoCreateGUI(LayerName.Vanilla.RadialHotbars, "Quick Shimmer GUI")]
 public class QuickShimmerGUI : BaseBody
 {
+    private const string _context = $"{nameof(ImproveGame)}: {nameof(QuickShimmerGUI)}";
+
     public static QuickShimmerGUI Instance { get; private set; }
 
     public QuickShimmerGUI() => Instance = this;
@@ -307,17 +309,6 @@ public class QuickShimmerGUI : BaseBody
     }
     public static bool AutoStart;
     public static bool QuickMode;
-    internal class EntitySource_Shimmer_QOT : IEntitySource
-    {
-        public string? Context { get; }
-        public int Type { get; }
-
-        public EntitySource_Shimmer_QOT(int type)
-        {
-            Type = type;
-            Context = "context";
-        }
-    }
     /// <summary>
     /// 协程开袋，在袋子很多的同时不卡，也有一个很好的动画效果
     /// </summary>
@@ -424,8 +415,7 @@ public class QuickShimmerGUI : BaseBody
                     LootsGrid.Append(tip);
                     break;
                 }
-
-                var itemSlot = new ShimmerLootItemSlot(keeper.Loots, i);
+                var itemSlot = new OpenBag.LootItemSlot(keeper.Loots, i, _context);
                 itemSlot.JoinParent(LootsGrid);
             }
 

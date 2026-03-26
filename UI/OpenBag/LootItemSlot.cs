@@ -6,19 +6,15 @@ public class LootItemSlot : BaseItemSlot
 {
     public readonly List<Item> Loots;
     public readonly int Index;
+    private readonly string _context;
 
-    public override Item Item
-    {
-        get
-        {
-            return Loots.IndexInRange(Index) ? Loots[Index] : AirItem;
-        }
-    }
+    public override Item Item => Loots.IndexInRange(Index) ? Loots[Index] : AirItem;
 
-    public LootItemSlot(List<Item> items, int index)
+    public LootItemSlot(List<Item> items, int index, string context = null)
     {
-        this.Loots = items;
+        Loots = items;
         Index = index;
+        _context = context;
         SetBaseItemSlotValues(true, true);
         SetSizePixels(43, 43);
         ItemIconMaxWidthAndHeight = 27;
@@ -32,8 +28,10 @@ public class LootItemSlot : BaseItemSlot
 
         if (Item.IsAir)
             return;
-
-        Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Loot(), Item, Item.stack);
+        if (Main.gamePaused && Main.mouseItem.type == ItemID.None)
+            Main.mouseItem = Item.Clone();
+        else
+            Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_FromThis(_context), Item, Item.stack);
         Item.TurnToAir();
     }
 
