@@ -17,7 +17,7 @@ public class SpawnRateSliderValueModPlayer : ModPlayer
             field = value;
             ShowSliderChanged?.Invoke(this, field);
         }
-    }
+    } = true;
 
     public event EventHandler<float> SpawnRateSliderValueChanged;
 
@@ -35,7 +35,7 @@ public class SpawnRateSliderValueModPlayer : ModPlayer
             field = value;
             SpawnRateSliderValueChanged?.Invoke(this, field);
         }
-    }
+    } = 0.5f;
 
     public void SetSpawnRateSliderValue(float value)
     {
