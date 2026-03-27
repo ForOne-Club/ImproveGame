@@ -35,8 +35,8 @@ namespace ImproveGame.Content.Functions.Construction
 
             _taskProcessed = 0;
             yield return KillTiles(structure, position);
-            yield return GenerateSingleTiles(structure, position);
             yield return GenerateWalls(structure, position);
+            yield return GenerateSingleTiles(structure, position);
             yield return GenerateMultiTiles(structure, position);
             yield return GenerateOutSet(structure, position);
             yield return SquareTiles(structure, position);
@@ -107,12 +107,11 @@ namespace ImproveGame.Content.Functions.Construction
                     }
 
                     var tileObjectData = TileObjectData.GetTileData(tileType, 0);
-                    if (tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 22 ||
-                                                       tileObjectData.CoordinateFullHeight > 22))
+                    if (tileObjectData is not null && (tileObjectData.CoordinateFullWidth > 18 ||
+                                                       tileObjectData.CoordinateFullHeight > 18))
                     {
                         continue;
                     }
-
                     if (!HasDevMark)
                     {
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
@@ -233,12 +232,11 @@ namespace ImproveGame.Content.Functions.Construction
                     if (tileType is -1)
                         continue;
                     var tileObjectData = GetTileData(tileType, tileData.TileFrameX, tileData.TileFrameY);
-                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 22 &&
-                                                   tileObjectData.CoordinateFullHeight <= 22))
+                    if (tileObjectData is null || (tileObjectData.CoordinateFullWidth <= 18 &&
+                                                   tileObjectData.CoordinateFullHeight <= 18))
                     {
                         continue;
                     }
-
                     // 转换为帧坐标
                     int subX = (tileData.TileFrameX / tileObjectData.CoordinateFullWidth) *
                                tileObjectData.CoordinateFullWidth;
@@ -249,7 +247,6 @@ namespace ImproveGame.Content.Functions.Construction
                     {
                         continue;
                     }
-
                     subX = tileData.TileFrameX % tileObjectData.CoordinateFullWidth;
                     subY = tileData.TileFrameY % tileObjectData.CoordinateFullHeight;
                     Point16 frame = new(subX / 18, subY / 18);
@@ -274,19 +271,30 @@ namespace ImproveGame.Content.Functions.Construction
                         _ => 0
                     };
 
+                    bool _TryPlace(Item item)
+                    {
+                        if (TileID.Sets.BasicChest[item.createTile])
+                            return PlaceChestNoSync(placePosition.X, placePosition.Y, (ushort)item.createTile, false, item.placeStyle) != -1;
+                        else if (TileID.Sets.BasicDresser[item.createTile])
+                            return Place3x2NoSyncDresser(placePosition.X, placePosition.Y, (ushort)item.createTile, item.placeStyle);
+                        else if (tileObjectData is { Width: 1, Height: 1 })
+                            return TryPlaceTile(placePosition.X, placePosition.Y, item, Main.LocalPlayer, forced: true);
+                        else
+                            return TryPlaceMultiTileDirect(placePosition, item.createTile, item.placeStyle, direction, out _);
+                    }
+
                     if (!HasDevMark)
                     {
                         var inventory = GetAllInventoryItemsList(Main.LocalPlayer, "portable").ToArray();
                         PickItemFromArray(Main.LocalPlayer, inventory, item =>
                                 item is not null && item.type == tileItemType &&
-                                TryPlaceMultiTileDirect(placePosition, item.createTile, item.placeStyle, direction,
-                                    out _),
+                                _TryPlace(item),
                             true);
                     }
                     else
                     {
                         var item = new Item(tileItemType);
-                        TryPlaceMultiTileDirect(placePosition, item.createTile, item.placeStyle, direction, out _);
+                        _TryPlace(item);
                     }
                 }
 

@@ -1,10 +1,8 @@
 ﻿using ImproveGame.UI.ItemContainer.Elements;
-using ImproveGame.UI.ModernConfig.OptionElements;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
-using System.ComponentModel;
 using Terraria.GameInput;
 
 namespace ImproveGame.UI.ItemContainer;

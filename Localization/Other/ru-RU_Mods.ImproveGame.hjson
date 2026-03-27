@@ -116,6 +116,7 @@ Tips: {
 		NonHided: "[Иконки баффов показаны]"
 		CombinedBuff: "[Доступна комбинация баффов]"
 		AutoCollect: "[Авто-сбор]"
+		// CreateWand: "[Customize]"
 	}
 
 	TagDetailedTip: {
@@ -176,6 +177,42 @@ Tips: {
 			слайдер скорости появления мобов, позволяя
 			увеличивать множитель скорости от x0 до x{MaxSpawn}
 			'''
+		/* CreateWand:
+			'''
+			Use the wand by Middle-Click and choose a png for customize buildings
+			Files in [c/88CCEE:"Document/My Games/Terraria/tModLoader]
+			[c/88CCEE:/Mods/ImproveGame/CreateWand"]
+			will import automatically
+
+			B channel of FF means there's wall, 00 means no wall.
+			RG channel's tile table as followed:
+			| Color |    Hex   |        Tile        |
+			| ------- | ---------- | ------------------- |
+			|   [c/000000:■]   |   0000  |      Empty       |
+			|   [c/003F00:■]   |   003F  |     SolidTile     |
+			|   [c/007F00:■]   |   007F  |     Platform     |
+			|   [c/00BF00:■]   |   00BF  |    Workbench  |
+			|   [c/00FF00:■]   |   00FF  |      Table        |
+			|   [c/3F0000:■]   |   3F00  |      Chair        |
+			|   [c/3F3F00:■]   |   3F3F  |       Door       |
+			|   [c/3F7F00:■]   |   3F7F  |      Chest       |
+			|   [c/3FBF00:■]   |   3FBF  |       Bed         |
+			|   [c/3FFF00:■]   |   3FFF  |    Bookcase    |
+			|   [c/7F0000:■]   |   7F00  |     Bathtub      |
+			|   [c/7F3F00:■]   |   7F3F  |   Candelabra   |
+			|   [c/7F7F00:■]   |   7F7F  |     Candle       |
+			|   [c/7FBF00:■]   |   7FBF  |    Chandler     |
+			|   [c/7FFF00:■]   |   7FFF  |      Clock        |
+			|   [c/BF0000:■]   |   BF00  |     Dresser      |
+			|   [c/BF3F00:■]   |   BF3F  |      Lamp        |
+			|   [c/BF7F00:■]   |   BF7F  |     Lantern      |
+			|   [c/BFBF00:■]   |   BFBF  |      Piano       |
+			|   [c/BFFF00:■]   |   BFFF  |      Sink         |
+			|   [c/FF0000:■]   |   FF00  |      Sofa         |
+			|   [c/FF3F00:■]   |   FF3F  |      Toilet        |
+			|   [c/FF7F00:■]   |   FF7F  |      Torch       |
+			|   [c/FFBF00:■]   |   FFBF  |    Campfire     |
+			''' */
 	}
 }
 
@@ -304,12 +341,20 @@ SuperVault: {
 
 MoveChest.Heavy: Вес сундука мешает вам в передвижении
 
+BuffController: {
+	LeftClick: {
+		Enable: "[c/CC88AA:<left>], чтобы включить этот бафф"
+		Disable: "[c/CC88AA:<left>], чтобы отключить этот бафф"
+	}
+
+	RightClick: {
+		Enable: "[c/CC88AA:<right>], чтобы пометить как избранное"
+		Disable: "[c/CC88AA:<right>], чтобы убрать из избранного"
+	}
+}
+
 BuffTracker: {
 	Title: Трекер юаффов
-	LeftClickDisable: "[c/CC88AA:<left>], чтобы отключить этот бафф"
-	LeftClickEnable: "[c/CC88AA:<left>], чтобы включить этот бафф"
-	RightClickDisable: "[c/CC88AA:<right>], чтобы убрать из избранного"
-	RightClickEnable: "[c/CC88AA:<right>], чтобы пометить как избранное"
 	NoInfBuff: На данный момент нет бесконечных баффов
 	NoInfBuffAlt: Включите «Бесконечные зелья» в конфигурации мода
 	NPCSpawnRatePanel: Панель управления скоростью появления мобов
@@ -333,6 +378,21 @@ Architecture: {
 	Wall: Стены
 	Bed: Кровати
 	Door: Двери
+	// Chest: Chest
+	// Bookcase: Bookcase
+	// Bathtub: Bathtub
+	// Candelabra: Candelabra
+	// Candle: Candle
+	// Chandelier: Chandelier
+	// Clock: Clock
+	// Dresser: Dresser
+	// Lamp: Lamp
+	// Lantern: Lantern
+	// Piano: Piano
+	// Sink: Sink
+	// Sofa: Sofa
+	// Toilet: Toilet
+	// Campfire: Campfire
 }
 
 PaintWandGUI: {

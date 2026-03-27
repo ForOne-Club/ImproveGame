@@ -6,6 +6,12 @@ RecipeSearchUI.Tips:
 	Вы можете выключить его в конфигурации «Quality of Terraria»
 	'''
 
+InfiniteBUFFController: {
+	// DisplayName: BUFF Controller
+	// Placeholder: Please enter the name
+	// EnemySpawnRate: Enemy spawn rate
+}
+
 LiquidWandUI: {
 	Name: Функции жидкостей
 	Absorb: Впитывать
@@ -30,7 +36,7 @@ MasterControl: {
 	PopupText: Вы не назначили горячую клавишу для панели управления Quality of Terraria. Назначьте горячую клавишу для панели управления, чтобы иметь быстрый доступ к функциям модификации. Данное сообщение пропадёт сразу после того, как вы сделаете это.
 	PopupPanelWidth: "290"
 	PopupPanelHeight: "200"
-	ChangelogLink: https://github.com/ForOne-Club/ImproveGame/blob/1.4.4/Changelog/en/v{0}.md
+	ChangelogLink: https://github.com/487666123/ImproveGame/blob/1.4.4/Changelog/en/v{0}.md
 }
 
 AmmoChain: {

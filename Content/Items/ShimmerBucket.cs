@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
 using ImproveGame.Common.GlobalItems;
-using Terraria.ID;
 
 namespace ImproveGame.Content.Items;
 

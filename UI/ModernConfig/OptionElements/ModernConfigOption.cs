@@ -441,38 +441,38 @@ public class ModernConfigOption : TimerView
             switch (defaultValue)
             {
                 case ISetElementWrapper setWrapper:
-                    {
-                        if (this is OptionObject objectOption && ConfigHelper.GetItemViaPath(objectOption, ["OptionView", "ListView", "Elements"], true) is IEnumerable elems)
-                            foreach (var elem in elems)
+                {
+                    if (this is OptionObject objectOption && ConfigHelper.GetItemViaPath(objectOption, ["OptionView", "ListView", "Elements"], true) is IEnumerable elems)
+                        foreach (var elem in elems)
+                        {
+                            if (elem is ModernConfigOption subOption && subOption.VariableInfo.Name == "Value")
                             {
-                                if (elem is ModernConfigOption subOption && subOption.VariableInfo.Name == "Value")
-                                {
-                                    subOption.SetValueDirect(setWrapper.Value);
-                                    break;
-                                }
+                                subOption.SetValueDirect(setWrapper.Value);
+                                break;
                             }
-                        break;
-                    }
+                        }
+                    break;
+                }
                 case IDictionaryElementWrapper dictWrapper:
-                    {
-                        if (this is OptionObject objectOption && ConfigHelper.GetItemViaPath(objectOption, ["OptionView", "ListView", "Elements"], true) is IEnumerable elems)
-                            foreach (var elem in elems)
+                {
+                    if (this is OptionObject objectOption && ConfigHelper.GetItemViaPath(objectOption, ["OptionView", "ListView", "Elements"], true) is IEnumerable elems)
+                        foreach (var elem in elems)
+                        {
+                            if (elem is ModernConfigOption subOption)
                             {
-                                if (elem is ModernConfigOption subOption)
-                                {
-                                    if (subOption.VariableInfo.Name == "Value")
-                                        subOption.SetValueDirect(dictWrapper.Value);
-                                    else if (subOption.VariableInfo.Name == "Key")
-                                        subOption.SetValueDirect(dictWrapper.Key);
-                                }
+                                if (subOption.VariableInfo.Name == "Value")
+                                    subOption.SetValueDirect(dictWrapper.Value);
+                                else if (subOption.VariableInfo.Name == "Key")
+                                    subOption.SetValueDirect(dictWrapper.Key);
                             }
-                        break;
-                    }
+                        }
+                    break;
+                }
                 default:
-                    {
-                        SetValueDirect(defaultValue);
-                        break;
-                    }
+                {
+                    SetValueDirect(defaultValue);
+                    break;
+                }
             }
             OnSetValueExternal(defaultValue);
             //Recalculate();

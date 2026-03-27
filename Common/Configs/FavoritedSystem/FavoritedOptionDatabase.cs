@@ -31,6 +31,6 @@ public class FavoritedOptionDatabase
         if (!FavoritedOptions.Add(name))
             FavoritedOptions.Remove(name);
 
-        AdditionalConfig.Save();
+        ClientConfigCore.SaveConfig();
     }
 }

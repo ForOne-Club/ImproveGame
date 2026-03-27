@@ -16,7 +16,7 @@ namespace ImproveGame.Common.GlobalItems
 
             string text;
             if (config.ConfigKey is { } key)
-                text = Language.GetTextValue("Mods.ImproveGame.Configs.AvailableModItemConfigs.AvailablityDetailedHint", 
+                text = Language.GetTextValue("Mods.ImproveGame.Configs.AvailableModItemConfigs.AvailablityDetailedHint",
                     Language.GetTextValue($"Mods.ImproveGame.Configs.ImproveConfigs.{key}.Label"));
             else
                 text = Language.GetTextValue("Mods.ImproveGame.Configs.AvailableModItemConfigs.AvailablityHint");

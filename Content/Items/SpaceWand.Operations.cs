@@ -2,11 +2,11 @@
 
 public partial class SpaceWand
 {
-    private static readonly int[] GrassSeeds = 
+    private static readonly int[] GrassSeeds =
         [
-        TileID.Grass, 
-        TileID.CorruptGrass, 
-        TileID.JungleGrass, 
+        TileID.Grass,
+        TileID.CorruptGrass,
+        TileID.JungleGrass,
         TileID.MushroomGrass,
         TileID.ImmatureHerbs,
         TileID.HallowedGrass,

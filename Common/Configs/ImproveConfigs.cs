@@ -87,6 +87,7 @@ public class ImproveConfigs : ModConfig
     [Range(0, 1f)]
     [Slider]
     [Increment(0.125f)]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float ExtraToolSpeed;
 
     [DefaultValue(false)]
@@ -100,6 +101,9 @@ public class ImproveConfigs : ModConfig
 
     public List<string> TileSpeed_Blacklist = ["torch"];
 
+    /// <summary>
+    /// 召唤物不消耗
+    /// </summary>
     [DefaultValue(false)]
     public bool NoConsume_SummonItem;
 
@@ -414,13 +418,16 @@ public class ImproveConfigs : ModConfig
     [ReloadRequired]
     public bool OnlyHostByPassword;
 
+    [Slider]
     [DefaultValue(50)]
-    [Range(1, 100)]
+    [Range(4, 100)]
     public int SpawnRateMaxValue;
 
+    [Slider]
     [DefaultValue(0f)]
-    [Range(0f, 10f)]
+    [Range(0f, 2f)]
     [Increment(0.1f)]
+    [CustomModConfigItem(typeof(RoundFloatElement))]
     public float SpawnRateMinValue;
 
     [DefaultValue(true)]

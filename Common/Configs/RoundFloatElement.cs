@@ -4,5 +4,5 @@ namespace ImproveGame.Common.Configs;
 
 public class RoundFloatElement : FloatElement
 {
-    public override void SetValue(object value) => base.SetValue(MathF.Round((float)value, 3));
+    public override void SetValue(object value) => base.SetValue(MathF.Round((float)value, 4));
 }

@@ -56,7 +56,9 @@ public static class Lookups
         ItemID.MechanicalSkull, // 机械骷髅王
         ItemID.LihzahrdPowerCell, // 石巨人
         ItemID.CelestialSigil, // 天界符
-        ItemID.MechdusaSummon // 机械美杜莎 - 奥库瑞姆剃刀
+        ItemID.MechdusaSummon, // 机械美杜莎 - 奥库瑞姆剃刀
+        ItemID.EmpressButterfly, // 七彩草蛉
+        //ItemID.TruffleWorm, // 松露虫 (不管用)
     });
 
     /// <summary>

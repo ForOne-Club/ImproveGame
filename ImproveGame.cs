@@ -1,7 +1,5 @@
 using ImproveGame.Common;
 using ImproveGame.Common.ModSystems;
-using System.Reflection;
-using Terraria.ModLoader.Core;
 using Terraria.UI.Chat;
 
 namespace ImproveGame;
@@ -10,10 +8,7 @@ public class ImproveGame : Mod
 {
     private class DisplayNameUpdater : ModSystem
     {
-        public override void OnLocalizationsLoaded()
-        {
-            Instance.DisplayName = GetText("ModName");
-        }
+        public override void OnLocalizationsLoaded() => Instance.DisplayName = GetText("ModName");
     }
 
     public static ImproveGame Instance => ModContent.GetInstance<ImproveGame>();
@@ -29,10 +24,7 @@ public class ImproveGame : Mod
         ChatManager.Register<QotGlyphTagHandler>("qotglyph");
     }
 
-    public override void Unload()
-    {
-        Config = null;
-    }
+    public override void Unload() => Config = null;
 
     public override void HandlePacket(BinaryReader reader, int whoAmI) => NetModule.ReceiveModule(reader, whoAmI);
 

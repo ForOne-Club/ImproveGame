@@ -23,7 +23,7 @@ public class AetherGlobe() : OnceForAllGlobe()
                         continue;
 
                     bool skip = false;
-                    for (int x = i - 2; x <= i + 2; x++) 
+                    for (int x = i - 2; x <= i + 2; x++)
                     {
                         for (int y = j - 2; y <= j + 2; y++)
                         {

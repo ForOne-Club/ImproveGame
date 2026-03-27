@@ -14,7 +14,7 @@ public class ItemContainerGridLayout : SUIScrollView2
     {
         FixedSize = false;
 
-        ScrollBar.ScrollMultiplier = 0.8f;
+        // ScrollBar.ScrollMultiplier = 0.8f;
 
         /*ListView.SetInnerPixels(new Vector2(GridSize(52f, 4f, 5)));
 

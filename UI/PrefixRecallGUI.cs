@@ -4,7 +4,6 @@ using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using ImproveGame.UIFramework.UIElements;
-using System.Diagnostics;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
 using UIImage = Terraria.GameContent.UI.Elements.UIImage;
@@ -122,7 +121,7 @@ public class PrefixRecallGUI : BaseBody, ISidedView
 
     private void UpdateList()
     {
-        if (!Main.reforgeItem.TryGetGlobalItem<ImprovePrefixItem>(out var prefixItem)) 
+        if (!Main.reforgeItem.TryGetGlobalItem<ImprovePrefixItem>(out var prefixItem))
         {
             Close();
             return;
@@ -285,6 +284,7 @@ public class PrefixTab : SUIPanel
         }
 
         Main.LocalPlayer.BuyItem(Price);
+        ItemLoader.PreReforge(Item);
         Item.ResetPrefix();
         Item.Prefix(PrefixId);
         Item.position = Main.LocalPlayer.Center;

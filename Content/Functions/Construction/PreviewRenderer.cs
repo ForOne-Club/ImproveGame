@@ -214,19 +214,19 @@ namespace ImproveGame.Content.Functions.Construction
                                 color *= 0.5f;
                                 break;
                             case TileID.RainbowBrick:
-                                {
-                                    color = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 255);
-                                    if (tileData.ExtraDatas[2])
-                                        color = color.MultiplyRGB(Color.White * 0.4f);
-                                    break;
-                                }
+                            {
+                                color = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB, 255);
+                                if (tileData.ExtraDatas[2])
+                                    color = color.MultiplyRGB(Color.White * 0.4f);
+                                break;
+                            }
                             case 129:
-                                {
-                                    color = new Color(255, 255, 255, 100);
-                                    if (tileData.TileFrameX >= 324)
-                                        color = Color.Transparent;
-                                    break;
-                                }
+                            {
+                                color = new Color(255, 255, 255, 100);
+                                if (tileData.TileFrameX >= 324)
+                                    color = Color.Transparent;
+                                break;
+                            }
                         }
 
                         Texture2D texture = GetTileDrawTexture(tileData.TileColor, tileType);

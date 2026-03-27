@@ -57,6 +57,8 @@ You can subscribe and download it via steam workshop: <https://steamcommunity.co
 
 This mod contains Nuget package, which means you should not use the compilation of tModLoader, but you should use the compilation function of the code IDE (such as Visual Studio, Rider) to compile this mod
 
+更好的体验依赖于 **SilkyUI**，所以需要克隆 SilkyUI 关联的两个项目，SilkyUI 具体使用步骤请在 [SilkyUIFramework](https://github.com/487666123/SilkyUIFramework) 仓库查看
+
 1. Open project with your IDE
 2. If you have enabled this mod in tModLoader, disable it and reload first
 3. Compile the project with IDE
@@ -76,7 +78,7 @@ The code of the 'auto save money' function is mostly from mod 'Auto Piggy Bank' 
 
 p.s.
 Source code of:
-This mod: <https://github.com/ForOne-Club/ImproveGame>
+This mod: <https://github.com/487666123/ImproveGame>
 WMITF: <https://github.com/gardenappl/WMITF>
 ChevyRay's coroutine class: <https://github.com/ChevyRay/Coroutines>
 ProjectStarlight.Interchange: <https://github.com/ProjectStarlight/ProjectStarlight.Interchange>

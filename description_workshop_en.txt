@@ -37,8 +37,8 @@ Only some functions are enabled by default, please check mod config for details
 	[*][b]Most features are configurable, use on your own preference[/b]
 [/olist]
 [h2]Open Source[/h2]
-Change log: https://github.com/ForOne-Club/ImproveGame/blob/1.4.4/ChangeLog-en.md
-Source code: https://github.com/ForOne-Club/ImproveGame
+Change log: https://github.com/487666123/ImproveGame/blob/1.4.4/ChangeLog-en.md
+Source code: https://github.com/487666123/ImproveGame
 
 [h2]Authors and Special Thanks[/h2]
 Spriter:

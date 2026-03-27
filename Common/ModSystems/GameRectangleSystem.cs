@@ -5,8 +5,6 @@ using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ItemSearcher;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.Graphics2D;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 
 namespace ImproveGame.Common.ModSystems;

@@ -116,6 +116,7 @@ Tips: {
 		NonHided: "[Buff icons shown]"
 		CombinedBuff: "[Has a buff combination available]"
 		AutoCollect: "[Auto-deposit]"
+		CreateWand: "[Customize]"
 	}
 
 	TagDetailedTip: {
@@ -174,6 +175,42 @@ Tips: {
 			above, a spawn rate slider will appear at the
 			right side of the Buff Tracker, allowing you
 			to multiply the spawn rate from x0-x{MaxSpawn}
+			'''
+		CreateWand:
+			'''
+			Use the wand by Middle-Click and choose a png for customize buildings
+			Files in [c/88CCEE:"Document/My Games/Terraria/tModLoader]
+			[c/88CCEE:/Mods/ImproveGame/CreateWand"]
+			will import automatically
+
+			B channel of FF means there's wall, 00 means no wall.
+			RG channel's tile table as followed:
+			| Color |    Hex   |        Tile        |
+			| ------- | ---------- | ------------------- |
+			|   [c/000000:■]   |   0000  |      Empty       |
+			|   [c/003F00:■]   |   003F  |     SolidTile     |
+			|   [c/007F00:■]   |   007F  |     Platform     |
+			|   [c/00BF00:■]   |   00BF  |    Workbench  |
+			|   [c/00FF00:■]   |   00FF  |      Table        |
+			|   [c/3F0000:■]   |   3F00  |      Chair        |
+			|   [c/3F3F00:■]   |   3F3F  |       Door       |
+			|   [c/3F7F00:■]   |   3F7F  |      Chest       |
+			|   [c/3FBF00:■]   |   3FBF  |       Bed         |
+			|   [c/3FFF00:■]   |   3FFF  |    Bookcase    |
+			|   [c/7F0000:■]   |   7F00  |     Bathtub      |
+			|   [c/7F3F00:■]   |   7F3F  |   Candelabra   |
+			|   [c/7F7F00:■]   |   7F7F  |     Candle       |
+			|   [c/7FBF00:■]   |   7FBF  |    Chandler     |
+			|   [c/7FFF00:■]   |   7FFF  |      Clock        |
+			|   [c/BF0000:■]   |   BF00  |     Dresser      |
+			|   [c/BF3F00:■]   |   BF3F  |      Lamp        |
+			|   [c/BF7F00:■]   |   BF7F  |     Lantern      |
+			|   [c/BFBF00:■]   |   BFBF  |      Piano       |
+			|   [c/BFFF00:■]   |   BFFF  |      Sink         |
+			|   [c/FF0000:■]   |   FF00  |      Sofa         |
+			|   [c/FF3F00:■]   |   FF3F  |      Toilet        |
+			|   [c/FF7F00:■]   |   FF7F  |      Torch       |
+			|   [c/FFBF00:■]   |   FFBF  |    Campfire     |
 			'''
 	}
 }
@@ -303,12 +340,20 @@ SuperVault: {
 
 MoveChest.Heavy: Weight of the chest limits your mobility
 
+BuffController: {
+	LeftClick: {
+		Enable: "[c/CC88AA:<left>] to enable this buff"
+		Disable: "[c/CC88AA:<left>] to disable this buff"
+	}
+
+	RightClick: {
+		Enable: "[c/CC88AA:<right>] to mark as favorite"
+		Disable: "[c/CC88AA:<right>] to remove from favorite"
+	}
+}
+
 BuffTracker: {
 	Title: Buff Tracker
-	LeftClickDisable: "[c/CC88AA:<left>] to disable this buff"
-	LeftClickEnable: "[c/CC88AA:<left>] to enable this buff"
-	RightClickDisable: "[c/CC88AA:<right>] to remove from favorite"
-	RightClickEnable: "[c/CC88AA:<right>] to mark as favorite"
 	NoInfBuff: Currently no infinite buff available
 	NoInfBuffAlt: Enable the Infinite Potions in the mod config
 	NPCSpawnRatePanel: Enemy Spawn Rate Panel
@@ -332,6 +377,21 @@ Architecture: {
 	Wall: Wall
 	Bed: Bed
 	Door: Door
+	Chest: Chest
+	Bookcase: Bookcase
+	Bathtub: Bathtub
+	Candelabra: Candelabra
+	Candle: Candle
+	Chandelier: Chandelier
+	Clock: Clock
+	Dresser: Dresser
+	Lamp: Lamp
+	Lantern: Lantern
+	Piano: Piano
+	Sink: Sink
+	Sofa: Sofa
+	Toilet: Toilet
+	Campfire: Campfire
 }
 
 PaintWandGUI: {

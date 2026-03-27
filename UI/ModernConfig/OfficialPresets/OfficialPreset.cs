@@ -1,6 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
 using ImproveGame.UI.ModernConfig.OptionElements.PresetElements;
-using Newtonsoft.Json;
 using Terraria.ModLoader.Config;
 
 namespace ImproveGame.UI.ModernConfig.OfficialPresets;

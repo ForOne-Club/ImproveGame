@@ -40,7 +40,7 @@ public sealed class AboutPage : Category
         };
         panel.AddToOptionsDirect(gapProvider);
 
-        GenerateLinkElement(panel, "Mods.ImproveGame.ModernConfig.AboutPage.LinkGitHub", "https://github.com/ForOne-Club/ImproveGame");
+        GenerateLinkElement(panel, "Mods.ImproveGame.ModernConfig.AboutPage.LinkGitHub", "https://github.com/487666123/ImproveGame");
         GenerateLinkElement(panel, "Mods.ImproveGame.ModernConfig.AboutPage.LinkDiscord", "https://discord.gg/rEmGMQv5z7");
 
         if (Language.ActiveCulture.Name is not "zh-Hans")

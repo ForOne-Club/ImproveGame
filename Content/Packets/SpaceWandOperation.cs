@@ -71,30 +71,30 @@ public class SpaceWandOperation : NetModule
                 });
                 break;
             case ShapeType.SquareFilled:
-                {
-                    var startingPoint = _startPoint.ToTileCoordinates();
-                    var nowPoint = _mousePosition.ToTileCoordinates();
-                    int maxSize = 60;
-                    nowPoint = ModifySize(startingPoint, nowPoint, maxSize, maxSize);
-                    var position = PointExtensions.Min(startingPoint, nowPoint);
-                    var size = (startingPoint - nowPoint).Abs();
-                    position.X -= 1;
-                    position.Y -= 1;
-                    size.X += 2;
-                    size.Y += 2;
-                    NetMessage.SendTileSquare(-1, position.X, position.Y, size.X, size.Y);
-                    break;
-                }
+            {
+                var startingPoint = _startPoint.ToTileCoordinates();
+                var nowPoint = _mousePosition.ToTileCoordinates();
+                int maxSize = 60;
+                nowPoint = ModifySize(startingPoint, nowPoint, maxSize, maxSize);
+                var position = PointExtensions.Min(startingPoint, nowPoint);
+                var size = (startingPoint - nowPoint).Abs();
+                position.X -= 1;
+                position.Y -= 1;
+                size.X += 2;
+                size.Y += 2;
+                NetMessage.SendTileSquare(-1, position.X, position.Y, size.X, size.Y);
+                break;
+            }
             case ShapeType.CircleFilled:
-                {
-                    var center = _startPoint.ToTileCoordinates();
-                    float maxSize = 49.5f;
-                    float radius = (int)(_startPoint.Distance(_mousePosition) / 16f) + 0.5f;
-                    radius = Math.Min(maxSize, radius);
-                    radius *= 2f; // 传入的是size，也就是直径
-                    NetMessage.SendTileSquare(-1, center.X, center.Y, (int)(radius + 2));
-                    break;
-                }
+            {
+                var center = _startPoint.ToTileCoordinates();
+                float maxSize = 49.5f;
+                float radius = (int)(_startPoint.Distance(_mousePosition) / 16f) + 0.5f;
+                radius = Math.Min(maxSize, radius);
+                radius *= 2f; // 传入的是size，也就是直径
+                NetMessage.SendTileSquare(-1, center.X, center.Y, (int)(radius + 2));
+                break;
+            }
             default:
                 throw new ArgumentOutOfRangeException();
         }

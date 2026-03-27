@@ -1,5 +1,5 @@
-﻿using ImproveGame.Common.ModPlayers;
-using ImproveGame.Content.Functions;
+﻿using ImproveGame.Content.Functions;
+using ImproveGame.Modules.InfiniteBuff;
 
 namespace ImproveGame.Common.GlobalItems;
 
@@ -10,8 +10,8 @@ public class HandleClonedItem : GlobalItem
 {
     public override GlobalItem Clone(Item from, Item to)
     {
-        if (InfBuffPlayer.TryGet(Main.LocalPlayer, out var infBuffPlayer) && infBuffPlayer.AvailableItemsHash.Contains(from))
-            infBuffPlayer.AvailableItemsHash.Add(to);
+        if (Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infBuffPlayer) && infBuffPlayer.BuffItems.Contains(from))
+            infBuffPlayer.BuffItems.Add(to);
         if (BannerPatches.AvailableBanners.Contains(from))
             BannerPatches.AvailableBanners.Add(to);
         return base.Clone(from, to);

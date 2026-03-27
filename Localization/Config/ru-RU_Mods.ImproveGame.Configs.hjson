@@ -219,8 +219,12 @@ ImproveConfigs: {
 	}
 
 	LavalessLavaSlime: {
-		Label: "[centeritem:LavaSlimeBanner] Лавовые слизни без слизней"
-		Tooltip: Убитые лавовые слизни больше не создают лаву в режиме Эксперта или выше.
+		Label: "[centeritem:LavaSlimeBanner] 熔岩史莱姆/地狱蝙蝠不生成熔岩"
+		Tooltip:
+			'''
+			Убитые лавовые слизни больше не создают лаву в режиме Эксперта или выше.
+			在GFB种子里，地狱蝙蝠和熔岩蝙蝠被击杀时不再会生成熔岩
+			'''
 	}
 
 	TravellingMerchantStay: {

@@ -55,7 +55,9 @@
 
 ## 💻 构建项目
 
-更好的体验由于使用了 **NuGet**，因此无法使用 **tModLoader** 进行编译，需要使用 **IDE** 进行编译
+更好的体验由于使用了 **NuGet**，需使用 **IDE** 进行编译，无法使用 **tModLoader** 进行编译
+
+更好的体验依赖于 **SilkyUI**，所以需要克隆 SilkyUI 关联的两个项目，SilkyUI 具体使用步骤请在 [SilkyUIFramework](https://github.com/487666123/SilkyUIFramework) 仓库查看
 
 > 推荐 **IDE**：Rider、Visual Studio 2022、Visual Studio Code
 
@@ -75,7 +77,7 @@ TextureGIF.cs的部分代码来自ProjectStarlight.Interchange，该项目也受
 本模组的StorageCommunicator部分代码来自模组“Magic Storage”，该模组也受 MIT 许可，与上面相同。
 
 附:\
-本模组开源链接: <https://github.com/ForOne-Club/ImproveGame>\
+本模组开源链接: <https://github.com/487666123/ImproveGame>\
 WMITF开源链接: <https://github.com/gardenappl/WMITF>\
 ChevyRay的协程类: <https://github.com/ChevyRay/Coroutines>\
 ProjectStarlight.Interchange: <https://github.com/ProjectStarlight/ProjectStarlight.Interchange>\

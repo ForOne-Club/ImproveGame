@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace ImproveGame.Content.Functions;
+﻿namespace ImproveGame.Content.Functions;
 
 public class TownNPCHome : ModSystem
 {
@@ -55,10 +53,9 @@ public class TownNPCHome : ModSystem
 
     private static void TownEntitiesTeleportToHome(NPC npc, int homeFloorX, int homeFloorY)
     {
-        npc?.GetType().GetMethod("AI_007_TownEntities_TeleportToHome",
-                BindingFlags.Instance | BindingFlags.NonPublic,
-                new[] { typeof(int), typeof(int) })?
-            .Invoke(npc, new object[] { homeFloorX, homeFloorY });
+        WorldGen.QuickFindHome(npc.whoAmI);
+
+        npc.AI_007_TownEntities_TeleportToHome(homeFloorX, homeFloorY);
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

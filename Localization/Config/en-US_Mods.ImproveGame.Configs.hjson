@@ -218,8 +218,12 @@ ImproveConfigs: {
 	}
 
 	LavalessLavaSlime: {
-		Label: "[centeritem:LavaSlimeBanner] Lavaless Lava Slime"
-		Tooltip: Killing Lava Slime no longer spawns lava in Expert or Master modes
+		Label: "[centeritem:LavaSlimeBanner] 熔岩史莱姆/地狱蝙蝠不生成熔岩"
+		Tooltip:
+			'''
+			Killing Lava Slime no longer spawns lava in Expert or Master modes
+			在GFB种子里，地狱蝙蝠和熔岩蝙蝠被击杀时不再会生成熔岩
+			'''
 	}
 
 	TravellingMerchantStay: {

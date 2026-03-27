@@ -34,17 +34,17 @@ public class WallPlaceSelectorMode : SelectorItem
                 WorldGen.KillWall(i, j);
                 break;
             case <= 0:
-                {
-                    WorldGen.PlaceWall(i, j, firstWall.createWall);
-                    NetMessage.SendTileSquare(-1, i, j);
-                    // 大于等于 999 不消耗墙
-                    // ItemLoader.ConsumeItem 判断手持物品是否是科技法杖，但是他是机器人放置墙体的，即使手持不是科技也可能不消耗
-                    bool vanillaHooks = firstWall.consumable && ItemLoader.ConsumeItem(firstWall, player);
-                    bool modSpecificChecks = firstWall.stack < 999 || !Config.WandMaterialNoConsume;
-                    if (vanillaHooks && modSpecificChecks && --firstWall.stack == 0)
-                        firstWall.SetDefaults();
-                    break;
-                }
+            {
+                WorldGen.PlaceWall(i, j, firstWall.createWall);
+                NetMessage.SendTileSquare(-1, i, j);
+                // 大于等于 999 不消耗墙
+                // ItemLoader.ConsumeItem 判断手持物品是否是科技法杖，但是他是机器人放置墙体的，即使手持不是科技也可能不消耗
+                bool vanillaHooks = firstWall.consumable && ItemLoader.ConsumeItem(firstWall, player);
+                bool modSpecificChecks = firstWall.stack < 999 || !Config.WandMaterialNoConsume;
+                if (vanillaHooks && modSpecificChecks && --firstWall.stack == 0)
+                    firstWall.SetDefaults();
+                break;
+            }
         }
 
         return true;
