@@ -46,7 +46,7 @@ AmmoChain: {
 	FileName: 弹药链
 	AddChain: 添加弹药链
 	OpenFolder: 打开文件夹
-	// 一个按钮，点击后打开帮助网页
+	# 一个按钮，点击后打开帮助网页
 	GetHelp: 这玩意咋用啊？
 	Cancel: 取消
 	Confirm: 确定
@@ -94,7 +94,7 @@ WeatherGUI: {
 }
 
 PlayerStats: {
-	// 翻译提示: 尽量简短，因为UI的空间有限，不要超过10个字符
+	# 翻译提示: 尽量简短，因为UI的空间有限，不要超过10个字符
 	Introduction:
 		'''
 		[c/CC88AA:属性面板]
@@ -108,13 +108,13 @@ PlayerStats: {
 	Magic: 魔法
 	Summon: 召唤
 	Throwing: 投掷
-	// 其他玩家属性
+	# 其他玩家属性
 	Other: 其他
 	LifeRegen: 生命回复
 	ArmorPenetration: 穿甲
-	// 魔力恢复，因为归在大类“魔法”下所以用Regen代替
+	# 魔力恢复，因为归在大类“魔法”下所以用Regen代替
 	Regen: 回复
-	// 魔力消耗，因为归在大类“魔法”下所以用Cost代替
+	# 魔力消耗，因为归在大类“魔法”下所以用Cost代替
 	Cost: 消耗
 	MaxMinions: 召唤栏
 	MaxTurrets: 哨兵栏
@@ -126,21 +126,21 @@ PlayerStats: {
 	SpecialistDamage: 其他伤害
 	Damage: 伤害
 	Crit: 暴击
-	// 攻击速度
+	# 攻击速度
 	Speed: 攻速
 	SummonMeleeSpeed: 鞭子攻速
 
 	CalamityMod: {
 		Rogue: 盗贼
-		// 盗贼弹幕速度，英文原文“Rogue Velocity”，这里归在大类“Rogue”下所以用Velocity代替
+		# 盗贼弹幕速度，英文原文“Rogue Velocity”，这里归在大类“Rogue”下所以用Velocity代替
 		RogueVelocity: 弹幕速度
 	}
 
 	ThoriumMod: {
 		Healer: 牧师
-		// 牧师治疗工具（法术）的攻击速度，英文原文即“Healing Speed”，由于UI空间有限去掉了"ing"
+		# 牧师治疗工具（法术）的攻击速度，英文原文即“Healing Speed”，由于UI空间有限去掉了"ing"
 		HealingSpeed: 治疗速度
-		// 瑟银的一些牧师装备增加法术回血量
+		# 瑟银的一些牧师装备增加法术回血量
 		HealBonus: 法术治疗加成
 		Bard: 吟游诗人
 	}
@@ -196,7 +196,7 @@ ExtremeStorage: {
 		该栏位所属箱子正在被另一名玩家使用
 		暂时无法进行任何操作
 		'''
-	// 介绍使用了手动换行让排版看起来舒服点
+	# 介绍使用了手动换行让排版看起来舒服点
 	BasicIntroduction:
 		'''
 		注意:
@@ -223,7 +223,7 @@ ExtremeStorage: {
 		Everything: 全部
 	}
 
-	// 筛选器的文本
+	# 筛选器的文本
 	Weapon: {
 		Melee: 近战
 		Ranged: 远程

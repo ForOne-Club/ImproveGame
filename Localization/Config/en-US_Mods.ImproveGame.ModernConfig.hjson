@@ -170,6 +170,6 @@ Minimap: {
 Keybinds: {
 	Label: Controls
 	Tooltip: Manage hotkeys, <right> on an entry to set it to default
-	// 快捷键会在Tooltip显示其默认绑定的键位
+	# 快捷键会在Tooltip显示其默认绑定的键位
 	Default: Default: {0}
 }

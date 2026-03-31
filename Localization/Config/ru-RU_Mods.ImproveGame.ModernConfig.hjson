@@ -170,6 +170,6 @@ Minimap: {
 Keybinds: {
 	Label: Управление
 	Tooltip: Редактирование горячих клавиш мода Quality of Terraria, <right> по позиции сбрасывает её по умолчанию.
-	// 快捷键会在Tooltip显示其默认绑定的键位
+	# 快捷键会在Tooltip显示其默认绑定的键位
 	Default: По умолчанию: {0}
 }
