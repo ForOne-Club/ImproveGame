@@ -30,22 +30,17 @@ public sealed class InfiniteBuffViewModel : IDisposable
     /// <summary>
     /// 用户拖动滑块
     /// </summary>
-    public void SetSliderValue(float value)
-    {
-        _model.SetSpawnRateSliderValue(value);
-    }
+    public void SetSliderValue(float value) => _model.SetSpawnRateSliderValue(value);
 
     private void OnModelSliderValueChanged(object sender, float value) => SliderValueChanged?.Invoke(this, value);
 
-    public void ToggleShowSlider()
-    {
-        _model.ShowSlider = !_model.ShowSlider;
-    }
+    public void ToggleShowSlider() => _model.ShowSlider = !_model.ShowSlider;
 
     private void OnShowSliderChanged(object sender, bool value) => ShowSliderChanged?.Invoke(this, value);
 
     public void Dispose()
     {
         _model.SpawnRateSliderValueChanged -= OnModelSliderValueChanged;
+        _model.ShowSliderChanged -= OnShowSliderChanged;
     }
 }

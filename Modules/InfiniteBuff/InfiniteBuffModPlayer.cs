@@ -21,9 +21,9 @@ namespace ImproveGame.Modules.InfiniteBuff;
 public class InfiniteBuffModPlayer : ModPlayer
 {
     public bool[] ActivationFlags => _activationFlags;
-    bool[] _activationFlags = new bool[BuffLoader.BuffCount];
+    private bool[] _activationFlags = new bool[BuffLoader.BuffCount];
 
-    readonly TickTimer _rebuild;
+    private readonly TickTimer _rebuild;
     public InfiniteBuffModPlayer() => _rebuild = new TickTimer(1d, RecollectBuffItems);
 
     /// <summary>
@@ -35,18 +35,12 @@ public class InfiniteBuffModPlayer : ModPlayer
     {
         var flags = _activationFlags.AsSpan();
 
-        var combinationLength = InfiniteBuffSets.BattlerCombination.Count;
-        var count = 0;
-
-        for (int i = 0; i < flags.Length; i++)
+        foreach (var type in InfiniteBuffSets.BattlerCombination)
         {
-            if (flags[i] && InfiniteBuffSets.BattlerCombination.Contains(i))
-            {
-                if (++count == combinationLength) return true;
-            }
+            if (!flags[type]) return false;
         }
 
-        return false;
+        return true;
     }
 
     /// <summary>
@@ -64,7 +58,7 @@ public class InfiniteBuffModPlayer : ModPlayer
     /// </summary>
     public List<Item> PlayerBuffItems { get; } = [];
 
-    public List<Item> PlayerBuffItemsCache { get; } = [];
+    public List<Item> BuffItemsCache { get; } = [];
 
     /// <summary>
     /// 储存系统来源
@@ -88,8 +82,7 @@ public class InfiniteBuffModPlayer : ModPlayer
     /// </summary>
     public override void ModifyLuck(ref float luck)
     {
-        luck += LuckPotionBoost;
-        LuckPotionBoost = 0;
+        luck += LuckPotionBoost; LuckPotionBoost = 0;
     }
 
     /// <summary>
@@ -123,11 +116,11 @@ public class InfiniteBuffModPlayer : ModPlayer
         UpdateActivationFlags();
 
         // 仅在列表发生变化时同步，避免无效网络包。
-        if (!PlayerBuffItemsCache.SequenceEqual(PlayerBuffItems))
+        if (!BuffItemsCache.SequenceEqual(BuffItems))
         {
-            PlayerBuffItemsCache.Clear();
-            PlayerBuffItemsCache.AddRange(PlayerBuffItems);
-            InfiniteBuffPacket.GetInstance(Player.whoAmI, PlayerBuffItems, _activationFlags).Send(ignoreClient: Main.myPlayer);
+            BuffItemsCache.Clear();
+            BuffItemsCache.AddRange(BuffItems);
+            InfiniteBuffPacket.GetInstance(Player.whoAmI, BuffItems, _activationFlags).Send(ignoreClient: Main.myPlayer);
         }
     }
 

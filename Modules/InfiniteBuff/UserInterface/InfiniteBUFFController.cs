@@ -14,6 +14,11 @@ public partial class InfiniteBUFFController : BaseBody
 
     private InfiniteBuffViewModel _vm;
 
+    protected override void OnExitTree()
+    {
+        _vm.Dispose();
+    }
+
     /// <summary>
     /// Buff 列表滚动容器的内容区域。
     /// </summary>
