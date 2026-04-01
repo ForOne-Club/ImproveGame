@@ -5,7 +5,6 @@ using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
 using System.Collections;
-using Terraria.DataStructures;
 using Terraria.GameInput;
 
 namespace ImproveGame.UI.QuickShimmer;

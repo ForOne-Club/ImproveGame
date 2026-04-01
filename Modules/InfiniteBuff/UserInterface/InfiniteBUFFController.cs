@@ -14,10 +14,7 @@ public partial class InfiniteBUFFController : BaseBody
 
     private InfiniteBuffViewModel _vm;
 
-    protected override void OnExitTree()
-    {
-        _vm.Dispose();
-    }
+    protected override void OnExitTree() => _vm.Dispose();
 
     /// <summary>
     /// Buff 列表滚动容器的内容区域。
@@ -31,8 +28,7 @@ public partial class InfiniteBUFFController : BaseBody
 
     public override bool ContainsPoint(Vector2 point)
     {
-        if (SliderContainer is not { Invalid: false })
-            return base.ContainsPoint(point);
+        if (SliderContainer is not { Invalid: false }) return base.ContainsPoint(point);
 
         return SliderContainer.Bounds.Contains(point) || base.ContainsPoint(point);
     }

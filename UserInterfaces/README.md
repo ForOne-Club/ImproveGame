@@ -6,3 +6,22 @@
 旧版 UI 不再做大型内容更新，仅进行 BUG 修复。
 
 后续 UI 主要更新调整将在这个目录下使用 SilkyUI 编写的 UI 上进行
+
+# SilkyUI & ImproveGame 风格设计规则
+
+## 必须遵守
+
+任何尺寸必须是 2 的倍数
+
+## 任何间距
+
+小面板：4px
+
+## Header 高度
+
+小面板：36px
+
+## 配色
+
+底框边框色：SUIColor.Boreder
+底框背景色：SUIColor.Background * 0.75f
