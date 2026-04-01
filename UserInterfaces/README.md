@@ -15,13 +15,16 @@
 
 ## 任何间距
 
-小面板：4px
+小面板：4
 
-## Header 高度
+## Header 规范
 
-小面板：36px
+小面板：36
+字体：大号
+字体大小：0.4
+控制按钮：只能使用同现在增益控制器相同风格贴图
 
 ## 配色
 
 底框边框色：SUIColor.Boreder
-底框背景色：SUIColor.Background * 0.75f
+底框背景色：SUIColor.Background * 0.75
