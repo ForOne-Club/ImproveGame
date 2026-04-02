@@ -148,7 +148,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1f)]
     [Increment(0.05f)]
     [Slider]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float InfernoTransparency;
 
     /// <summary>
@@ -158,7 +158,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1f)]
     [Increment(0.05f)]
     [Slider]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float InvisibleTransparency;
 
     [DefaultValue(true)]
@@ -187,7 +187,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkDungeon;
 
     [DefaultValue(1f)]
@@ -195,7 +195,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkTemple;
 
     [DefaultValue(1f)]
@@ -203,7 +203,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkAether;
 
     [DefaultValue(0.9f)]
@@ -211,7 +211,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkFloatingIsland;
 
     [DefaultValue(1f)]
@@ -219,7 +219,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkPyramid;
 
     [DefaultValue(0.8f)]
@@ -227,7 +227,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkPlantera;
 
     [DefaultValue(0.8f)]
@@ -235,7 +235,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkEnchantedSword;
 
     [DefaultValue(0.8f)]
@@ -243,7 +243,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkMarbleCave;
 
     [DefaultValue(0.8f)]
@@ -251,7 +251,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkGraniteCave;
 
     [DefaultValue(0.8f)]
@@ -259,6 +259,6 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkEmptyAutofisher;
 }

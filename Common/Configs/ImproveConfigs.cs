@@ -90,7 +90,7 @@ public class ImproveConfigs : ModConfig
     [Range(0, 1f)]
     [Slider]
     [Increment(0.125f)]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float ExtraToolSpeed;
 
     /// <summary> 提高物块放置速度 </summary>
@@ -292,7 +292,7 @@ public class ImproveConfigs : ModConfig
     [Range(0.1f, 10f)]
     [Increment(0.05f)]
     [DefaultValue(1f)]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float BannerRequirement;
 
     #endregion
@@ -510,7 +510,7 @@ public class ImproveConfigs : ModConfig
     [DefaultValue(0f)]
     [Range(0f, 2f)]
     [Increment(0.1f)]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float SpawnRateMinValue;
 
     /// <summary> 自动渔夫不消耗鱼饵 </summary>
